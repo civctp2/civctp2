@@ -932,3 +932,13 @@ TOOLTIP_DIPMAN_INTEL_TRUST_COLDWAR_BUTTON	"  Sie sind misstrauisch."
 TOOLTIP_DIPMAN_INTEL_TRUST_NEUTRAL_BUTTON	"  Sie sind wachsam."
 TOOLTIP_DIPMAN_INTEL_TRUST_FRIEND_BUTTON	"  Sie vertrauen uns."
 TOOLTIP_DIPMAN_INTEL_TRUST_ALLIED_BUTTON	"  Sie sind arglos."
+
+###	National Summary Window Extension (L. Hirth Added 6/2004)
+TOOLTIP_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON			"Sortiert die Liste nach Anzahl der Arbeiter."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON			"Sortiert die Liste nach Anzahl der Sklaven."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTENTERTAINER_BUTTON	"Sortiert die Liste nach Anzahl der Entertainer."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON			"Sortiert die Liste nach Anzahl der Bauern."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON		"Sortiert die Liste nach Anzahl der Fabrikarbeiter."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON		"Sortiert die Liste nach Anzahl der Händler."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON		"Sortiert die Liste nach Anzahl der Wissenschaftler."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON	"Sortiert die Liste nach Anzahl der Militäreinheiten."

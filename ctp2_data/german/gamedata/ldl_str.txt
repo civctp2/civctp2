@@ -3185,3 +3185,9 @@ str_tbl_ldl_Gamestate_Debug		"Gamestate_Debug (Playtest)"
 str_tbl_ldl_Rand_Test			"Rand_Test (Playtest)"
 str_tbl_ldl_Command_Enter		"Command Enter (Playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Command Enter Alternate (Playtest)"
+
+# Added for extended National Management 6/2004 L. Hirth
+str_ldl_ND_RTL_WORKER		"Arb."
+str_ldl_ND_RTL_SLAVE		"Skl."
+str_ldl_ND_RTL_COMBAT_UNITS	"Mil."
+

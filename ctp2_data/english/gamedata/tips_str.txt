@@ -927,3 +927,13 @@ STATUSBAR_RANKSCRN_SELECT_MEASURE_DISPLAY		"Select a metric from this menu to vi
 TOOLTIP_RANKSCRN_SELECT_MEASURE_DISPLAY		"Select a metric"
 STATUSBAR_RANKSCRN_CLOSE_BUTTON			"Click here to leave the rankings screen and return to you empire."
 TOOLTIP_RANKSCRN_CLOSE_BUTTON				"Exit"
+
+###	National Summary Window Extension (L. Hirth Added 6/2004)
+TOOLTIP_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON		"Click here to sort by the number of workers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON		"Click here to sort by the number of slaves."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTENTERTAINER_BUTTON	"Click here to sort by the number of entertainers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON		"Click here to sort by the number of farmers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON		"Click here to sort by the number of laborers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON		"Click here to sort by the number of merchants."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON		"Click here to sort by the number of scientists."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON	"Click here to sort by the number of military units."

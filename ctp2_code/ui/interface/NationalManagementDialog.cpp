@@ -35,7 +35,9 @@
 //   infrastructure or capitalization, by Martin Gühmann.
 // - Rush buy button is disabled when it is not the players turn, 
 //   by Martin Gühmann.
-//     
+// - #01 Added a third tab to the dialog that shows the nuber of experts and 
+//   military units in each city.
+//   (L. Hirth 6/2004)    
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -108,7 +110,18 @@ static const sint32 k_NMD_STAT_MAYOR		= 1;
 static const sint32 k_NMD_STAT_PRIORITY		= 2;
 static const sint32 k_NMD_STAT_BUILDING		= 3;
 static const sint32 k_NMD_STAT_TIME			= 4;
-
+#ifndef ACTIVISION_ORIGINAL
+static const sint32 k_NMD_SPEC_CITY_NAME	= 0;
+static const sint32 k_NMD_SPEC_POPULATION	= 1;
+static const sint32 k_NMD_SPEC_WORKER		= 2;
+static const sint32 k_NMD_SPEC_SLAVE		= 3;
+static const sint32 k_NMD_SPEC_ENTERTAINER	= 4;
+static const sint32 k_NMD_SPEC_FARMER		= 5;
+static const sint32 k_NMD_SPEC_LABORER		= 6;
+static const sint32 k_NMD_SPEC_MERCHANT		= 7;
+static const sint32 k_NMD_SPEC_SCIENTIST	= 8;
+static const sint32 k_NMD_SPEC_COMBAT_UNITS	= 9;
+#endif
 
 extern C3UI *g_c3ui;
 
@@ -125,20 +138,32 @@ void NationalManagementDialog::Open()
 
 	
 	g_nationalManagementDialog->Show();
-
 	
 	g_nationalManagementDialog->UpdateResourceList();
 	g_nationalManagementDialog->UpdateStatusList();
+#ifndef ACTIVISION_ORIGINAL	// #01 Added a third tab to the dialog
+	g_nationalManagementDialog->UpdateSpecialistList();
+#endif
 	g_nationalManagementDialog->UpdateBuildQueue();
 	g_nationalManagementDialog->UpdateGovernor();
 	g_nationalManagementDialog->UpdateRushBuy();
+
+#ifdef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	if(g_nationalManagementDialog->m_resourceList->IsHidden()) {
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_statusList);
 	} else {
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_resourceList);
+	} 
+#else
+	if(!g_nationalManagementDialog->m_resourceList->IsHidden()) {
+		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_resourceList);
+	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
+		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_statusList);
+	} else if (!g_nationalManagementDialog->m_specialistList->IsHidden()) {
+		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_specialistList);
 	}
+#endif
 }
-
 
 void NationalManagementDialog::Close()
 {
@@ -146,7 +171,6 @@ void NationalManagementDialog::Close()
 	if(g_nationalManagementDialog)
 		g_nationalManagementDialog->Hide();
 }
-
 
 void NationalManagementDialog::Cleanup()
 {
@@ -163,16 +187,52 @@ void NationalManagementDialog::Cleanup()
 	g_nationalManagementDialog = NULL;
 }
 
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+bool NationalManagementDialog::IsShown()
+{
+    if (!g_nationalManagementDialog) {
+		return false;
+	} else {
+		return  !g_nationalManagementDialog->m_window->IsHidden();
+	}
+}
+#endif
 
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::NationalManagementDialog()
+//
+// Description: Creates the National Managment Window
+//               
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 NationalManagementDialog::NationalManagementDialog() :
-m_window(static_cast<ctp2_Window*>(
-		 aui_Ldl::BuildHierarchyFromRoot("CityStatusWin"))),
+//
+// Create the Elements of the dialog
+//
+m_window(static_cast<ctp2_Window*>(aui_Ldl::BuildHierarchyFromRoot(
+	"CityStatusWin"))),
 m_closeButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"CityStatusWin.CloseButton"))),
 m_resourceList(static_cast<ctp2_ListBox*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab1.TabPanel.ResourceList"))),
 m_statusList(static_cast<ctp2_ListBox*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab2.TabPanel.StatusList"))),
+
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+m_specialistList(static_cast<ctp2_ListBox*>(aui_Ldl::GetObject(
+	"CityStatusWin.TabGroup.Tab3.TabPanel.SpecialistList"))),
+#endif
+
+	
 m_governorToggle(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab2.TabPanel.GovernorSelect.Toggle"))),
 m_governorDropDown(static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(
@@ -189,8 +249,14 @@ m_disbandButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"CityStatusWin.DisbandButton"))),
 m_resourceTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab1"))),
+
 m_statusTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab2")))
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+	,
+m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
+	"CityStatusWin.TabGroup.Tab3")))
+#endif
 {
 	g_c3ui->AddWindow(m_window);
 
@@ -198,6 +264,9 @@ m_statusTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	Assert(m_closeButton);
 	Assert(m_resourceList);
 	Assert(m_statusList);
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+	Assert(m_specialistList);
+#endif
 	Assert(m_governorToggle);
 	Assert(m_governorDropDown);
 
@@ -207,10 +276,11 @@ m_statusTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	Assert(m_disbandButton);
 
 	
-	m_resourceList->SetMultiSelect(true);
-	m_statusList->SetMultiSelect(true);
-
-	
+	m_resourceList->SetMultiSelect(true);		// Allow the selction of multiple
+	m_statusList->SetMultiSelect(true);         // items in the lists  
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+	m_specialistList->SetMultiSelect(true);         
+#endif	
 
 
 	
@@ -224,10 +294,16 @@ m_statusTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	m_disbandButton->SetActionFuncAndCookie(DisbandButtonActionCallback, this);
 	m_resourceList->SetActionFuncAndCookie(ResourceListSelectActionCallback, this);
 
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+	m_specialistList->SetActionFuncAndCookie(SpecialistListSelectActionCallback, this);
+#endif
+	
 	m_resourceTab->SetActionFuncAndCookie(TabActionCallback, this);
 	m_statusTab->SetActionFuncAndCookie(TabActionCallback, this);
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+	m_specialistTab->SetActionFuncAndCookie(TabActionCallback, this);
+#endif
 
-	
 	m_governorDropDown->Clear();
 
 	
@@ -268,6 +344,10 @@ void NationalManagementDialog::Update()
 {
 	UpdateResourceList();
 	UpdateStatusList();
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+	UpdateSpecialistList();
+#endif
+
 }
 
 
@@ -322,7 +402,48 @@ void NationalManagementDialog::UpdateStatusList()
 	m_statusList->BuildListEnd();
 }
 
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::UpdateSpecialistList
+//
+// Description: Fills the list of the specialist tabs
+//               
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void NationalManagementDialog::UpdateSpecialistList()
+{
+	
+	m_specialistList->BuildListStart();
 
+	
+	m_specialistList->Clear();
+
+	
+	UnitDynamicArray *cityList =
+		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
+
+	
+	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
+		
+		Unit city = cityList->Get(cityIndex);
+
+		
+		m_specialistList->AddItem(CreateSpecialistItem(city));
+	}
+
+	
+	m_specialistList->BuildListEnd();
+}
+#endif
 
 void NationalManagementDialog::UpdateGovernor()
 {
@@ -518,7 +639,7 @@ void NationalManagementDialog::UpdateRushBuy()
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
 
-#if defined(ACTIVISION_ORIGINAL)		
+#if defined(ACTIVISION_ORIGINAL)
 		if(city.GetCityData()->GetBuildQueue()->GetLen())
 				rushBuyTotal += city.GetCityData()->GetOvertimeCost();
 #else
@@ -824,6 +945,156 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 }
 
 
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::CreateSpecialistItem
+//
+// Description: Creates an item of the specialist list
+//               
+//
+// Parameters : Unit:	Cityunit from which the data is taken 
+//
+// Globals    : -
+//
+// Returns    : ctp2_ListItem: The item that was set up
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+ctp2_ListItem *NationalManagementDialog::CreateSpecialistItem(const Unit &city)
+{
+	
+	ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
+		aui_Ldl::BuildHierarchyFromRoot("NationalSpecialistListItem"));
+
+	
+	Assert(item);
+	if(!item)
+		return(NULL);
+
+	
+	item->SetUserData(reinterpret_cast<void*>(city.m_id));
+
+	
+	item->SetCompareCallback(CompareSpecialists);
+
+	
+	UpdateSpecialistItem(item, city);
+
+	
+	return(item);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::UpdateSpecialistItem
+//
+// Description: Updates the different columns of one item of the specialist list
+//               
+//
+// Parameters : *item:	The Item to update
+//				&city	The city from which the data will be taken
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void NationalManagementDialog::UpdateSpecialistItem(ctp2_ListItem *item,
+												  const Unit &city)
+{
+	const COLORREF colorNorm = g_colorSet->GetColorRef(COLOR_BLACK);
+	const COLORREF colorCritical = g_colorSet->GetColorRef(COLOR_RED);
+
+	
+	static MBCHAR stringBuffer[32];
+
+	
+	CityData *cityData = new CityData(city.GetCityData());
+
+	
+	CityWindow::Project(cityData);
+
+	BOOL cityCritical = false;
+	
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_POPULATION)) {
+		sint32 population = 0;
+		cityData->GetPop(population);
+		sprintf(stringBuffer, "%d", population);
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_WORKER)) {
+		sprintf(stringBuffer, "%d", (sint32)(cityData->WorkerCount()));
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_SLAVE)) {
+		sprintf(stringBuffer, "%d", (sint32)(cityData->SlaveCount()));
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_ENTERTAINER)) {
+		sprintf(stringBuffer, "%d", (sint32)(cityData->EntertainerCount()));
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_FARMER)) {
+		sprintf(stringBuffer, "%d", cityData->FarmerCount());
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_LABORER)) {
+		sprintf(stringBuffer, "%d", cityData->LaborerCount());
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_MERCHANT)) {
+		sprintf(stringBuffer, "%d", (sint32)(cityData->MerchantCount()));
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_SCIENTIST)) {
+		sprintf(stringBuffer, "%d", (sint32)(cityData->MerchantCount()));
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_COMBAT_UNITS)) {
+		sprintf(stringBuffer, "%d", (sint32)(cityData->GetCombatUnits()));
+		column->SetText(stringBuffer);
+		column->SetTextColor(colorNorm);
+	}
+
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_CITY_NAME)) {
+		column->SetText(cityData->GetName());
+		if (cityCritical)
+			column->SetTextColor(colorCritical);
+		else
+			column->SetTextColor(colorNorm);
+	}
+	delete cityData; 
+}
+#endif
+
+
+
 bool NationalManagementDialog::CanBuild(uint32 category, sint32 type)
 {
 	
@@ -1040,6 +1311,72 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 	}
 }
 
+
+#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::CompareSpecialists
+//
+// Description: compares a specific column of two list items 
+//               
+//
+// Parameters : *item1:	The first item for the compare
+//				*item2:	The second item for the compare
+//				column	The column that must be compared
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
+												  ctp2_ListItem *item2,
+												  sint32 column)
+{
+	
+	Unit city1, city2;
+	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
+
+	
+	Assert(city1.IsValid());
+	Assert(city2.IsValid());
+
+	CityData *cityData1 = city1.GetCityData();
+	CityData *cityData2 = city2.GetCityData();
+
+	sint32 result = 0;
+
+	ctp2_Static *column1 = GetListItemColumn(item1, column);
+	ctp2_Static *column2 = GetListItemColumn(item2, column);
+
+	
+	switch(column) {
+		case k_NMD_RES_CITY_NAME:
+			result =(stricmp(column1->GetText(), column2->GetText()));
+			break;
+		case k_NMD_SPEC_POPULATION:
+		case k_NMD_SPEC_WORKER:
+		case k_NMD_SPEC_SLAVE:
+		case k_NMD_SPEC_ENTERTAINER:
+		case k_NMD_SPEC_FARMER:
+		case k_NMD_SPEC_LABORER:
+		case k_NMD_SPEC_MERCHANT:
+		case k_NMD_SPEC_SCIENTIST:
+		case k_NMD_SPEC_COMBAT_UNITS:
+			result = atoi(column1->GetText()) - atoi(column2->GetText());
+			break;
+        
+		default:
+			Assert(false);
+			result =(0);
+	}
+
+	return result;
+}
+#endif
 
 void NationalManagementDialog::StatusListSelectActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
@@ -1403,6 +1740,48 @@ void NationalManagementDialog::ResourceListSelectActionCallback(aui_Control *con
 	dialog->MirrorSelectedCities();
 }
 
+
+#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::SpecialistListSelectActionCallback
+//
+// Description: Callback function for the specialist listbox
+//               
+//
+// Parameters : *control:	Which control was activated
+//				action:		Which action has happend
+//				data:	
+//				*cookie:
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void NationalManagementDialog::SpecialistListSelectActionCallback(aui_Control *control,
+	uint32 action, uint32 data, void *cookie)
+{
+	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
+		GotoSelectedCity();
+		return;
+	}
+
+	if(action != AUI_LISTBOX_ACTION_SELECT) return;
+
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+
+	if(dialog->m_mirroring)
+		return;
+
+	dialog->UpdateMainButtons((ctp2_ListBox *)control);
+
+	dialog->MirrorSelectedCities();
+}
+#endif
+
 void NationalManagementDialog::UpdateMainButtons(ctp2_ListBox *box)
 {
 	Assert(box);
@@ -1432,6 +1811,10 @@ void NationalManagementDialog::TabActionCallback(aui_Control *control,
 		dialog->UpdateMainButtons(dialog->m_resourceList);
 	} else if(dialog->m_statusTab == (ctp2_Tab *)control) {
 		dialog->UpdateMainButtons(dialog->m_statusList);
+#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
+	} else if(dialog->m_specialistTab == (ctp2_Tab *)control) {
+		dialog->UpdateMainButtons(dialog->m_specialistList);
+#endif
 	}
 }
 
@@ -1439,12 +1822,25 @@ Unit NationalManagementDialog::GetSelectedCity()
 {
 	Unit city;
 	if(!g_nationalManagementDialog) return city;
-
+#ifdef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	ctp2_ListBox *visList = g_nationalManagementDialog->m_resourceList;
 	if(!visList || visList->IsHidden()) {
 		visList = g_nationalManagementDialog->m_statusList;
 	}
+#else
+	ctp2_ListBox *visList;
 
+	if(!g_nationalManagementDialog->m_resourceList->IsHidden()) {
+		visList = g_nationalManagementDialog->m_resourceList;
+	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
+		visList = g_nationalManagementDialog->m_statusList;
+	} else if (!g_nationalManagementDialog->m_specialistList->IsHidden()) {
+		visList = g_nationalManagementDialog->m_specialistList;
+	} else {
+		Assert(false);
+		return city;
+	}
+#endif
 	Assert(visList);
 	if(!visList) return city;
 
@@ -1465,12 +1861,40 @@ void NationalManagementDialog::MirrorSelectedCities()
 	if(!city.IsValid())
 		return;
 
+#ifdef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	ctp2_ListBox *visList = g_nationalManagementDialog->m_resourceList;
 	ctp2_ListBox *invisList = g_nationalManagementDialog->m_statusList;
+
 	if(!visList || visList->IsHidden()) {
 		visList = g_nationalManagementDialog->m_statusList;
 		invisList = g_nationalManagementDialog->m_resourceList;
 	}
+#else
+	ctp2_ListBox *visList;
+	ctp2_ListBox *invisList;
+	ctp2_ListBox *invisList2;
+
+
+	if(!g_nationalManagementDialog->m_resourceList->IsHidden()) {
+		visList = g_nationalManagementDialog->m_resourceList;
+		invisList = g_nationalManagementDialog->m_specialistList;
+		invisList2 = g_nationalManagementDialog->m_statusList;
+
+	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
+		visList = g_nationalManagementDialog->m_statusList;
+		invisList = g_nationalManagementDialog->m_specialistList;
+		invisList2 = g_nationalManagementDialog->m_resourceList;
+		
+	} else if (!g_nationalManagementDialog->m_specialistList->IsHidden()) {
+		visList = g_nationalManagementDialog->m_specialistList;
+		invisList = g_nationalManagementDialog->m_statusList;
+		invisList2 = g_nationalManagementDialog->m_resourceList;
+	} else {
+		Assert(false);
+		return;
+	}
+
+#endif
 
 	tech_WLList<sint32> *selectedList = visList->GetSelectedList();
 
@@ -1485,6 +1909,9 @@ void NationalManagementDialog::MirrorSelectedCities()
 	sint32 i;
 	for(i = 0; i < invisList->NumItems(); i++) {
 		invisList->DeselectItem(i);
+#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
+		invisList2->DeselectItem(i);
+#endif
 	}
 
 	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
@@ -1505,6 +1932,17 @@ void NationalManagementDialog::MirrorSelectedCities()
 				break;
 			}
 		}
+#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
+		for(i = 0; i < invisList2->NumItems(); i++) {
+			Unit invisCity;
+			invisCity.m_id = reinterpret_cast<uint32>(
+				static_cast<ctp2_ListItem*>(invisList2->GetItemByIndex(i))->GetUserData());
+			if(invisCity.m_id == city.m_id) {
+				invisList2->SelectItem(i);
+				break;
+			}
+		}
+#endif
 	}
 		
 	g_nationalManagementDialog->m_mirroring = false;
