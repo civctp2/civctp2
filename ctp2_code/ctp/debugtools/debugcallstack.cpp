@@ -1,3 +1,27 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Stack class structure implementation for debugging stack.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+//
+// Modifications from the original Activision code:
+//
+// - Fix unreferenced warnings in regular compilation by placing intialization
+//   of buff and err inside #ifndef statements.
+//     
+//////////////////////////////////////////////////////////////////////////////
 
 #include "c3.h"
 
@@ -182,14 +206,25 @@ void Debug_AddFunction (char *name, unsigned address)
   
   if (name[0] == '?')
   {
-    char buff[BUFFER_SIZE];
+#if defined(ACTIVISION_ORIGINAL)
+	  char buff[BUFFER_SIZE];
 
-#ifndef _BFR_
-    if (UnDecorateSymbolName(name, buff, BUFFER_SIZE-1, 0))
-    {
-      new_function->name = strdup(buff);
-    }
-    else
+	#ifndef _BFR_
+		if (UnDecorateSymbolName(name, buff, BUFFER_SIZE-1, 0))
+		{
+		  new_function->name = strdup(buff);
+		}
+		else
+	#endif
+#else
+	#ifndef _BFR_
+	  char buff[BUFFER_SIZE];
+		if (UnDecorateSymbolName(name, buff, BUFFER_SIZE-1, 0))
+		{
+		  new_function->name = strdup(buff);
+		}
+		else
+	#endif
 #endif
     {
       new_function->name = strdup(name);
@@ -355,16 +390,29 @@ BOOL CALLBACK Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress,
 
 BOOL CALLBACK Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext)
 {
-	int					err;
+#if defined(ACTIVISION_ORIGINAL)
+		int					err;
 
-#ifndef _BFR_
-	
-	if (!SymEnumerateSymbols(hProc, dllBase, Debug_EnumSymbolsCallback, userContext)) {
-		err = GetLastError();
-		LOG ((LOG_FATAL, "SymEnumerateSymbols failed in module '%s' with error %d", moduleName, err));
-	
-		return FALSE;
-	}
+	#ifndef _BFR_
+		
+		if (!SymEnumerateSymbols(hProc, dllBase, Debug_EnumSymbolsCallback, userContext)) {
+			err = GetLastError();
+			LOG ((LOG_FATAL, "SymEnumerateSymbols failed in module '%s' with error %d", moduleName, err));
+		
+			return FALSE;
+		}
+	#endif
+#else
+	#ifndef _BFR_
+		int					err;
+		
+		if (!SymEnumerateSymbols(hProc, dllBase, Debug_EnumSymbolsCallback, userContext)) {
+			err = GetLastError();
+			LOG ((LOG_FATAL, "SymEnumerateSymbols failed in module '%s' with error %d", moduleName, err));
+		
+			return FALSE;
+		}
+	#endif
 #endif
 	
 	return TRUE;
