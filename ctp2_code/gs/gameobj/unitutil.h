@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Unit utilities
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added unitutil_GetSmallCityMaxSize to figure out the maximum population
+//   size a ring one city. - Oct. 6th 2004 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __UNIT_UTIL_H__
@@ -25,5 +56,8 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 
 void unitutil_ExecuteMadLaunch(Unit & unit);
 
+#if !defined(ACTIVSION_ORIGINAL)
+sint32 unitutil_GetSmallCityMaxSize();
+#endif
 
 #endif

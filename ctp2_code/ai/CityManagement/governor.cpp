@@ -48,6 +48,11 @@
 // - Modified FindBestTileImprovement function so that the AI can now 
 //   terraform if there is no food improvement for that terrain, and the
 //   according city needs more food. - Sep. 21st 2004 Martin Gühmann 
+// - Disabled the utilization factor for first ring food improvements, such
+//   cities benefit from food improvmements even if the ring is not filled.
+//   - Oct. 6th 2004 Martin Gühmann 
+// - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann 
+// - Fixed an error in the should terraform logic. - Oct. 6th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -112,7 +117,8 @@ extern CityAstar g_city_astar;
 #include "net_action.h"
 
 #if !defined(ACTIVISION_ORIGINAL)
-#include "TerrainRecord.h"
+#include "TerrainRecord.h" // Use terrain database
+#include "unitutil.h" // Use unit utilities
 #endif
 
 using namespace std;
@@ -1044,12 +1050,14 @@ void Governor::ComputeRoadPriorities()
 	Unit min_neighbor_unit;
 	sint32 neighbor_dist;
 	sint32 min_dist;
+#if defined(ACTIVISION_ORIGINAL)	
 	sint32 city_cont;
 	sint32 threat_rank;
 
-#if defined(ACTIVISION_ORIGINAL)	
 	for (sint16 city_index = 0; city_index < num_cities; city_index++)
 #else
+	sint32 threat_rank;
+
 	for (sint32 city_index = 0; city_index < num_cities; city_index++)
 #endif
 	{
@@ -1059,15 +1067,18 @@ void Governor::ComputeRoadPriorities()
 		if (city_unit.CD()->GetUseGovernor() == false)
 			continue;
 
-		threat_rank = 
 #if defined(ACTIVISION_ORIGINAL)
+		threat_rank = 
 			MapAnalysis::GetMapAnalysis().GetThreatRank(city_unit.CD());
-#else
-			(sint32)MapAnalysis::GetMapAnalysis().GetThreatRank(city_unit.CD());
-#endif
 		min_dist = g_mp_size.x * g_mp_size.y; 
 		min_neighbor_unit = Unit(0);
 		city_cont = g_theWorld->GetContinent( city_unit.RetPos() );
+#else
+		threat_rank = 
+			static_cast<sint32>(MapAnalysis::GetMapAnalysis().GetThreatRank(city_unit.CD()));
+		min_dist = g_mp_size.x * g_mp_size.y; 
+		min_neighbor_unit = Unit(0);
+#endif
 
 			
 		for (sint16 neighbor_index = 0; neighbor_index < num_cities; neighbor_index++)
@@ -1238,7 +1249,7 @@ void Governor::PlaceTileImprovements()
 #if defined(ACTIVISION_ORIGINAL)
 					if ( FindBestTileImprovement(it.Pos(), ti_goal) )
 #else
-					if ( FindBestTileImprovement(it.Pos(), ti_goal, bonusFood, bonusProduction, bonusCommerce, city) )
+					if ( FindBestTileImprovement(it.Pos(), ti_goal, bonusFood, bonusProduction, bonusCommerce) )
 #endif
 						{
 							
@@ -1310,41 +1321,10 @@ void Governor::PlaceTileImprovements()
 	
 	s_tiQueue.clear();
 }
-				
-//----------------------------------------------------------------------------
-//
-// Name       : Governor::FindBestTileImprovement
-//
-// Description: Determines the best tile improvement for a tile.
-//
-// Parameters : pos:             Position of the tile on the map
-//              city:            The city data of the current city radius
-//
-// Globals    : g_player:        List of players in the game
-//				g_theWorld:      Map information
-//
-// Returns    : bool:            The tile can be improved
-//              goal:            Type and priority value of the tile improvement 
-//              bonusFood:       Added food by the selected tile improvement
-//              bonusProduction: Added production(shields) by the selected tile improvement
-//              bonusCommerce:   Added commerce(gold) by the selected tile improvement
-//
-// Remark(s)  : The information in goal is only valid when true is returned.
-//
-//----------------------------------------------------------------------------
+
 #if defined(ACTIVISION_ORIGINAL)
 bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal & goal) const
-{					
-#else
-bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce, CityData* city) const{
-
-	sint32 tmp_bonus;
-	sint32 terrain;
-	const TerrainImprovementRecord *rec;
-	const TerrainImprovementRecord::Effect *effect;
-
-#endif
-
+{
 	Assert(g_player[m_playerId]);
 	Player *player_ptr = g_player[m_playerId];
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
@@ -1374,12 +1354,12 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	goal.type = -1;
 
 	
-#if defined(ACTIVISION_ORIGINAL)	
 	if (terrain_type == terrainutil_GetDead())
 	{
 		goal.type = terrainutil_GetTerraformPlainsImprovement();
 		goal.utility = 9999.0;
 	}
+	
 	// Forest (10 food, only 5 production) appears to trigger the condition,
 	// but does not have a growth improvement. Instead of just returning false,
 	// continue checking other improvement types. This should enable the AI to 
@@ -1390,12 +1370,8 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			
 			if (best_growth_improvement < 0)
 				return false;
-//	else if ((terr_food_rank > 0.2) &&
-//		     (terr_prod_rank < 1.0) &&
-//			 (best_growth_improvement >= 0)
-//           )
-//		{
-		
+
+			
 			goal.type = best_growth_improvement;
 			
 			
@@ -1417,128 +1393,13 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 					goal.utility += bonus;
 				}
 		}
-
-#else
-
-	sint32 food_ter = -1;
-	sint32 prod_ter = -1;
-	sint32 gold_ter = -1;
-
-//	if(best_growth_improvement < 0
-//	|| best_production_improvement < 0
-//	|| best_gold_improvement < 0
-
-
-
-	if(!g_theWorld->IsGood(pos)
-	){
-		bool shouldTerraform = true;
-		for(sint32 i = 0; i < g_theWorld->GetCell(pos)->GetNumDBImprovements() && shouldTerraform; ++i){
-			rec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(pos)->GetDBImprovement(i));
-			effect = terrainutil_GetTerrainEffect(rec, pos);
-
-			shouldTerraform =   shouldTerraform
-			                && !effect->GetBonusFood()
-			                && !effect->GetBonusProduction()
-			                && !effect->GetBonusGold()
-			                || !effect->GetEndgame();
-
-		}
-
-		if(shouldTerraform){
-			GetBestTerraformImprovement(pos, food_ter, prod_ter, gold_ter, true);
-		}
-	}
-
-	bool moreFoodNeeded = city->NeedMoreFood(bonusFood, true);
-
-	if((moreFoodNeeded 
-	|| (best_production_improvement < 0
-	&&  best_gold_improvement < 0))
-	&& (best_growth_improvement >= 0)
-	){
-
-		rec = g_theTerrainImprovementDB->Get(best_growth_improvement);
-		effect = terrainutil_GetTerrainEffect(rec, pos);
-
-		effect->GetBonusFood(tmp_bonus);
-		bonusFood += tmp_bonus;
-
-		effect->GetBonusProduction(tmp_bonus);
-		bonusProduction += tmp_bonus;
-
-		effect->GetBonusGold(tmp_bonus);
-		bonusCommerce += tmp_bonus;
-		
-		goal.type = best_growth_improvement;
 	
-		strategy.GetImproveGrowthBonus(bonus);
-		goal.utility = bonus * terr_food_rank;
-
-		if(growth_rank < 0.2){
-		    strategy.GetImproveSmallCityGrowthBonus(bonus);
-			goal.utility +=  bonus * (1.0 - growth_rank);
-		}
-
-		if(g_theWorld->IsGood(pos)){
-		    strategy.GetImproveGoodBonus(bonus);
-			goal.utility += bonus;
-		}
-	}
-	else if(moreFoodNeeded 
-	     && food_ter >= 0
-//		 && g_theWorld->GetCell(pos)->GetNumDBImprovements() == 0
-//		 && !g_theWorld->IsGood(pos)
-	     ){
-
-
-		if(g_theTerrainImprovementDB->Get(food_ter)->GetTerraformTerrainIndex(terrain)){
-			bonusFood += g_theWorld->GetCell(pos)->GetFoodFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetFoodFromTerrain();
-			bonusProduction += g_theWorld->GetCell(pos)->GetShieldsFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetShieldsFromTerrain();
-			bonusCommerce += g_theWorld->GetCell(pos)->GetGoldFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetGoldFromTerrain();
-	
-			goal.type = food_ter;
-	
-			if(terrain_type != terrainutil_GetDead()){
-				strategy.GetImproveGrowthBonus(bonus);
-				goal.utility = bonus * terr_food_rank;
-
-				if(growth_rank < 0.2){
-				    strategy.GetImproveSmallCityGrowthBonus(bonus);
-					goal.utility +=  bonus * (1.0 - growth_rank);
-				}
-			}
-			else{
-				goal.utility = 9999.0;
-			}
-		}
-
-	}
-#endif
-
-#if defined(ACTIVISION_ORIGINAL)	
 	else if ( terr_prod_rank > 0.2 ) 
 		{
 			
 			if (best_production_improvement < 0)
 				return false;
-#else
-	else if ((terr_prod_rank > 0.2) && 
-		     (best_production_improvement >= 0)
-            )
-		{
-			rec = g_theTerrainImprovementDB->Get(best_production_improvement);
-			effect = terrainutil_GetTerrainEffect(rec, pos);
 
-			effect->GetBonusFood(tmp_bonus);
-			bonusFood += tmp_bonus;
-
-			effect->GetBonusProduction(tmp_bonus);
-			bonusProduction += tmp_bonus;
-
-			effect->GetBonusGold(tmp_bonus);
-			bonusCommerce += tmp_bonus;
-#endif
 			
 			goal.type = best_production_improvement;
 			
@@ -1561,35 +1422,20 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 					goal.utility += bonus;
 				}
 		}
-#if defined(ACTIVISION_ORIGINAL)	
+	
 	else if ( gold_rank > 0.4 ) 
 		{
 			
 			if (best_gold_improvement < 0)
 				return false;
-#else
-	else if ((gold_rank > 0.4) &&
-		     (best_gold_improvement >= 0)
-            )
-		{
-			rec = g_theTerrainImprovementDB->Get(best_gold_improvement);
-			effect = terrainutil_GetTerrainEffect(rec, pos);
 
-			effect->GetBonusFood(tmp_bonus);
-			bonusFood += tmp_bonus;
-
-			effect->GetBonusProduction(tmp_bonus);
-			bonusProduction += tmp_bonus;
-
-			effect->GetBonusGold(tmp_bonus);
-			bonusCommerce += tmp_bonus;
-#endif
-
+			
 			goal.type = best_gold_improvement;
 			
 			
 			strategy.GetImproveProductionBonus(bonus);
 			goal.utility =  bonus * terr_gold_rank;
+			
 			
 			if ( production_rank > 0.8 )
 				{
@@ -1636,25 +1482,286 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 				}
 		}
 
-#if !defined(ACTIVISION_ORIGINAL)
+	return (goal.type >= 0);
+}
+	
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::FindBestTileImprovement
+//
+// Description: Determines the best tile improvement for a tile.
+//
+// Parameters : pos:             Position of the tile on the map
+//
+// Globals    : g_player:        List of players in the game
+//				g_theWorld:      Map information
+//
+// Returns    : bool:            The tile can be improved
+//              goal:            Type and priority value of the tile improvement 
+//              bonusFood:       Added food by the selected tile improvement
+//              bonusProduction: Added production(shields) by the selected tile improvement
+//              bonusCommerce:   Added commerce(gold) by the selected tile improvement
+//
+// Remark(s)  : The information in goal is only valid when true is returned.
+//
+//----------------------------------------------------------------------------
+bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const{
+
+	sint32 tmp_bonus;
+	sint32 terrain;
+	const TerrainImprovementRecord *rec;
+	const TerrainImprovementRecord::Effect *effect;
+
+	Assert(g_player[m_playerId]);
+	Player *player_ptr = g_player[m_playerId];
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+	MapAnalysis & the_map =  MapAnalysis::GetMapAnalysis();
+
+	Unit city_owner = g_theWorld->GetCell(pos)->GetCityOwner();
+	CityData* city = city_owner.GetCityData();
+	Assert(city);
+	
+	double growth_rank = the_map.GetGrowthRank(city, false);
+	double production_rank = the_map.GetProductionRank(city, false);
+	double gold_rank = the_map.GetCommerceRank(city, false);
+	double terr_food_rank = (g_theWorld->GetCell(pos)->GetFoodFromTerrain()) / 
+		(double) World::GetAvgFoodFromTerrain();
+	double terr_prod_rank = (g_theWorld->GetCell(pos)->GetShieldsFromTerrain()) /
+		(double) World::GetAvgShieldsFromTerrain();
+	double terr_gold_rank = (g_theWorld->GetCell(pos)->GetGoldFromTerrain()) /
+		(double) World::GetAvgGoldFromTerrain();
+	double bonus;
+	sint32 terrain_type = g_theWorld->GetCell(pos)->GetTerrainType();
+
+	sint32 best_growth_improvement;
+	sint32 best_production_improvement;
+	sint32 best_gold_improvement;
+	GetBestFoodProdGoldImprovement(pos,best_growth_improvement, best_production_improvement, best_gold_improvement);
+
+	
+	goal.pos = pos;
+
+	
+	goal.type = -1;
+
+	sint32 food_ter = -1;
+	sint32 prod_ter = -1;
+	sint32 gold_ter = -1;
+
+	sint32 citySize;
+	bool useUtilityFactor = true;
+
+	if(!g_theWorld->IsGood(pos)
+	){
+		bool shouldTerraform = true;
+		for(sint32 i = 0; i < g_theWorld->GetCell(pos)->GetNumDBImprovements() && shouldTerraform; ++i){
+			rec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(pos)->GetDBImprovement(i));
+			effect = terrainutil_GetTerrainEffect(rec, pos);
+
+			Assert(effect);
+			if(effect){
+				shouldTerraform =   shouldTerraform
+				                && !effect->GetBonusFood()
+				                && !effect->GetBonusProduction()
+				                && !effect->GetBonusGold()
+					            && !effect->GetEndgame();
+			}
+
+		}
+
+		if(shouldTerraform){
+			GetBestTerraformImprovement(pos, food_ter, prod_ter, gold_ter, true);
+		}
+	}
+
+	bool moreFoodNeeded = city->NeedMoreFood(bonusFood, true);
+
+	if((moreFoodNeeded 
+	|| (best_production_improvement < 0
+	&&  best_gold_improvement < 0))
+	&& (best_growth_improvement >= 0)
+	){
+
+		rec = g_theTerrainImprovementDB->Get(best_growth_improvement);
+		effect = terrainutil_GetTerrainEffect(rec, pos);
+
+		effect->GetBonusFood(tmp_bonus);
+		bonusFood += tmp_bonus;
+
+		effect->GetBonusProduction(tmp_bonus);
+		bonusProduction += tmp_bonus;
+
+		effect->GetBonusGold(tmp_bonus);
+		bonusCommerce += tmp_bonus;
+		
+		goal.type = best_growth_improvement;
+	
+		strategy.GetImproveGrowthBonus(bonus);
+		goal.utility = bonus * terr_food_rank;
+
+		if(growth_rank < 0.2){
+		    strategy.GetImproveSmallCityGrowthBonus(bonus);
+			goal.utility +=  bonus * (1.0 - growth_rank);
+		}
+
+		city->GetPop(citySize);
+
+		if(citySize <= unitutil_GetSmallCityMaxSize()){
+			useUtilityFactor = false;
+		}
+
+		if(g_theWorld->IsGood(pos)){
+		    strategy.GetImproveGoodBonus(bonus);
+			goal.utility += bonus;
+		}
+	}
+	else if(moreFoodNeeded 
+	&&      food_ter >= 0
+//  &&      g_theWorld->GetCell(pos)->GetNumDBImprovements() == 0
+//	&&     !g_theWorld->IsGood(pos)
+	){
+
+
+		if(g_theTerrainImprovementDB->Get(food_ter)->GetTerraformTerrainIndex(terrain)){
+			bonusFood += g_theWorld->GetCell(pos)->GetFoodFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetFoodFromTerrain();
+			bonusProduction += g_theWorld->GetCell(pos)->GetShieldsFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetShieldsFromTerrain();
+			bonusCommerce += g_theWorld->GetCell(pos)->GetGoldFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetGoldFromTerrain();
+	
+			goal.type = food_ter;
+	
+			if(terrain_type != terrainutil_GetDead()){
+				strategy.GetImproveGrowthBonus(bonus);
+				goal.utility = bonus * terr_food_rank;
+
+				if(growth_rank < 0.2){
+				    strategy.GetImproveSmallCityGrowthBonus(bonus);
+					goal.utility +=  bonus * (1.0 - growth_rank);
+				}
+		
+				city->GetPop(citySize);
+
+				if(citySize <= unitutil_GetSmallCityMaxSize()){
+					useUtilityFactor = false;
+				}
+			}
+			else{
+				goal.utility = 9999.0;
+			}
+		}
+
+	}
+	else if((terr_prod_rank > 0.2) 
+	&&      (best_production_improvement >= 0)
+	){
+		rec = g_theTerrainImprovementDB->Get(best_production_improvement);
+		effect = terrainutil_GetTerrainEffect(rec, pos);
+
+		effect->GetBonusFood(tmp_bonus);
+		bonusFood += tmp_bonus;
+
+		effect->GetBonusProduction(tmp_bonus);
+		bonusProduction += tmp_bonus;
+
+		effect->GetBonusGold(tmp_bonus);
+		bonusCommerce += tmp_bonus;
+			
+		goal.type = best_production_improvement;
+			
+			
+		strategy.GetImproveProductionBonus(bonus);
+		goal.utility =  bonus * terr_prod_rank;
+			
+			
+		if(production_rank > 0.8){
+			strategy.GetImproveLargeCityProductionBonus(bonus);
+			goal.utility += bonus *	production_rank;
+		}
+			
+		if(g_theWorld->IsGood(pos)){
+			strategy.GetImproveGoodBonus(bonus);
+			goal.utility += bonus;
+		}
+	}
+	else if((gold_rank > 0.4)
+	&&      (best_gold_improvement >= 0)
+	){
+		rec = g_theTerrainImprovementDB->Get(best_gold_improvement);
+		effect = terrainutil_GetTerrainEffect(rec, pos);
+
+		effect->GetBonusFood(tmp_bonus);
+		bonusFood += tmp_bonus;
+
+		effect->GetBonusProduction(tmp_bonus);
+		bonusProduction += tmp_bonus;
+
+		effect->GetBonusGold(tmp_bonus);
+		bonusCommerce += tmp_bonus;
+
+		goal.type = best_gold_improvement;
+			
+			
+		strategy.GetImproveProductionBonus(bonus);
+		goal.utility =  bonus * terr_gold_rank;
+			
+		if(production_rank > 0.8){
+			strategy.GetImproveLargeCityProductionBonus(bonus);
+			goal.utility += bonus *	production_rank;
+		}
+		if(g_theWorld->IsGood(pos)){
+			strategy.GetImproveGoodBonus(bonus);
+			goal.utility += bonus;
+		}
+	}
+	else if(g_theWorld->IsGood(pos) == FALSE){
+		ERR_BUILD_INST err;
+		if(terrain_type == terrainutil_GetGlacier() 
+		|| terrain_type == terrainutil_GetSwamp() 
+		|| terrain_type == terrainutil_GetTundra()
+		){
+			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformHillsImprovement(), pos, 0, FALSE, err)){
+				strategy.GetImproveProductionBonus(bonus);
+				goal.utility =  bonus * (1.0-production_rank);
+				goal.type = terrainutil_GetTerraformHillsImprovement();
+			}
+		}
+		else if(terrain_type == terrainutil_GetDesert()){
+			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformGrasslandImprovement(), pos, 0, FALSE, err)){
+				strategy.GetImproveGrowthBonus(bonus);
+				goal.utility =  bonus * (1.0-growth_rank);
+				goal.type = terrainutil_GetTerraformGrasslandImprovement();
+			}
+		}
+	}
+
 	// Moved to the end, so that if no terraform improvement selected
 	// the dead tiles are removed. Maybe should be else if.
-	if (terrain_type == terrainutil_GetDead())
-	{
-		goal.type = terrainutil_GetTerraformPlainsImprovement();
-		goal.utility = 9999.0;
+	else if(terrain_type == terrainutil_GetDead()){
+		if(food_ter >= 0){
+			goal.type = food_ter;
+			goal.utility = 9999.0;
+		}
+		else if(prod_ter >= 0){
+			goal.type = prod_ter;
+			goal.utility = 9999.0;
+		}
+		else if(gold_ter >= 0){
+			goal.type = gold_ter;
+			goal.utility = 9999.0;
+		}
 	}
-#endif
 
-#if defined(ACTIVISION_ORIGINAL) || defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
+#if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 	// CTP1: utilisation depends on worker placement, and is either 0 or 1.
 #else
 	// CTP2: utilisation depends on the number of available workers and the 
 	// (ring) distance from the city, and may be any fraction from 0.0 to 1.0.
-	if ((goal.type >= 0) && city_owner.GetCityData())
+	if ((goal.type >= 0) && city)
 	{
-		sint32 const	sqDist	= MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
-		goal.utility *= city_owner.GetCityData()->GetUtilisationRatio(sqDist);
+		if(useUtilityFactor){
+			sint32 const	sqDist	= MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
+			goal.utility *= city->GetUtilisationRatio(sqDist);
+		}
 	}
 	else
 	{
@@ -1664,6 +1771,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 
 	return (goal.type >= 0);
 }
+#endif
 
 
 //----------------------------------------------------------------------------
@@ -1692,7 +1800,7 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 #if defined(ACTIVISION_ORIGINAL)
 	sint32 old_move_cost = cell->GetMoveCost();
 #else
-	sint32 old_move_cost = (sint32)cell->GetMoveCost();
+	sint32 old_move_cost = static_cast<sint32>(cell->GetMoveCost());
 #endif
 	
 	Unit city = cell->GetCity();

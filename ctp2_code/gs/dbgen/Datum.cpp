@@ -199,7 +199,7 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 			else{
 				fprintf(outfile, "    bool             Get%s(double &value) const {\n", m_name);
 				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
-				fprintf(outfile, "                         return (m_flags%d & k_%s_%s_Bit) != 0);\n",
+				fprintf(outfile, "                         return ((m_flags%d & k_%s_%s_Bit) != 0);\n",
 					m_bitNum / 32, recordName, m_name);
 				fprintf(outfile, "                     }\n");
 			}

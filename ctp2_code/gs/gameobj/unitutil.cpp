@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit utilities
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added unitutil_GetSmallCityMaxSize to figure out the maximum population
+//   size a ring one city. - Oct. 6th 2004 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "UnitRecord.h"
@@ -20,6 +51,12 @@ extern UnitPool *g_theUnitPool;
 
 static sint32 s_maxDefenseRange;
 static sint32 s_maxVisionRange;
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include "CitySizeRecord.h"
+
+static sint32 s_smallCityMaxSize;
+#endif
 
 static const SpecialAttackInfoRecord *s_specialAttackMap[SPECATTACK_MAX];
 
@@ -76,7 +113,31 @@ void unitutil_Initialize()
 		DPRINTF(k_DBG_GAMESTATE, ("Unit %d: %s\n", i, g_theUnitDB->Get(i)->GetNameText()));
 	}
 #endif
+#if !defined(ACTIVISION_ORIGINAL)
+	sint32 min = 0x7fffffff;
+	sint32 candidate;
+	s_smallCityMaxSize = 0x7fffffff;
+
+	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+		candidate = g_theCitySizeDB->Get(i)->GetPopulation();
+		if(candidate < min){
+			s_smallCityMaxSize = min;
+			min = candidate;
+		}
+		else if(candidate >= min && candidate < s_smallCityMaxSize){
+			s_smallCityMaxSize = candidate;
+		}
+	}
+
+#endif
 }
+
+#if !defined(ACTIVISION_ORIGINAL)
+sint32 unitutil_GetSmallCityMaxSize()
+{
+	return s_smallCityMaxSize;
+}
+#endif
 
 sint32 unitutil_MaxActiveDefenseRange()
 {

@@ -365,4 +365,11 @@ Strategy {
 	// stop to consinder building food terrain improvements in the radius
 	// of the according city. Default value == 1.
 	Bit (Int) StopBuildingFoodBeforePopMax = 1
+
+	// The amount of costs reduction for tiles that already have a 
+	// road improvement to force the road path along that tile
+	// Default value == 0.5 means that tile only has a road
+	// improvement costs of just 50% in comparision to the
+	// situation without roads. 
+	Bit (Float) RoadAlreadyThereCostsCoefficient = 0.5
 }

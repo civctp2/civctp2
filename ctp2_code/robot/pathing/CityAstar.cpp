@@ -34,6 +34,10 @@
 // - Added owner argument to to FindRoadPath function so that m_owner 
 //   can be set in that function. The result is that the path finding
 //   routine takes unexplored tiles into consideration, by Martin Gühmann.
+// - Road path generation is no more dependent on tile move costs for units,
+//   but on pw costs per tile.
+// - Road path may go through foreign territory but is even more expensive 
+//   in comparision to unexplored territory. - Oct. 6th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -57,7 +61,10 @@
 //Added by Martin Gühmann to acces the terrain improvement database
 #include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
-#include "AgreementMatrix.h" //Allow alliance checking
+#include "TerrImprove.h"
+#include "AgreementMatrix.h" // Allow alliance checking
+#include "StrategyRecord.h"  // For accessing the strategy database
+#include "Diplomat.h"        // To be able to retrieve the current strategy
 #endif
 
 CityAstar g_city_astar; 
@@ -100,13 +107,12 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
         return TRUE; 
     }
 #else
+	sint32 i;
+
 	if(m_pathRoad){
 		
 		const TerrainImprovementRecord *rec = terrainutil_GetBestRoad(m_owner, pos);
 		if(g_player[m_owner]->IsExplored(pos) == FALSE 
-		||(g_theWorld->AccessCell(pos)->GetOwner() >= 0
-		&&(g_theWorld->AccessCell(pos)->GetOwner() != m_owner
-		&& !AgreementMatrix::s_agreements.HasAgreement(m_owner, g_theWorld->AccessCell(pos)->GetOwner(), PROPOSAL_TREATY_ALLIANCE)))
 		|| !rec
 		){ 
 			cost = k_ASTAR_BIG; 
@@ -121,9 +127,43 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 			return FALSE;
 		}
 
-        cost = float(g_theWorld->GetMoveCost(pos) * effect->GetProductionCost());
+//		cost = float(g_theWorld->GetMoveCost(pos) * effect->GetProductionCost());
+		cost = static_cast<float>(effect->GetProductionCost());
 		if(g_theWorld->AccessCell(pos)->GetOwner() == -1){
-			cost *= 10000;
+			cost *= 10000.0; // Should be calculated from most expensive tile improvement + 20 percent
+		}
+		else if((g_theWorld->AccessCell(pos)->GetOwner() >= 0
+		&&      (g_theWorld->AccessCell(pos)->GetOwner() != m_owner
+		&&       !AgreementMatrix::s_agreements.HasAgreement(m_owner, g_theWorld->AccessCell(pos)->GetOwner(), PROPOSAL_TREATY_ALLIANCE)))
+		){
+			cost *= 20000.0; // Should be calculated from most expensive tile improvement + 20 percent and everything times 2
+		}
+
+		sint32 type = rec->GetIndex();
+
+		const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
+		double roadCostsPercent;
+		strategy.GetRoadAlreadyThereCostsCoefficient(roadCostsPercent);
+
+
+		for(i = 0; i < g_theWorld->AccessCell(pos)->GetNumDBImprovements(); ++i){
+			rec = g_theTerrainImprovementDB->Get(g_theWorld->AccessCell(pos)->GetDBImprovement(i));
+			if(rec){
+				effect = terrainutil_GetTerrainEffect(rec, pos);
+				if(effect && effect->GetMoveCost()){
+					cost *= static_cast<float>(roadCostsPercent);
+					break;
+				}
+			}
+		}
+
+		if(i == g_theWorld->AccessCell(pos)->GetNumDBImprovements()){
+			for(i = 0; i < g_theWorld->AccessCell(pos)->GetNumImprovements(); ++i){
+				if(g_theWorld->AccessCell(pos)->AccessImprovement(i).GetType() == type){
+					cost *= static_cast<float>(roadCostsPercent);
+					break;
+				}
+			}
 		}
 
 		entry = ASTAR_CAN_ENTER;

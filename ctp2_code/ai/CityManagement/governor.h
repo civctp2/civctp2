@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ source
+// File type    : C++ header
 // Description  : AI and automated governor handling.
 //
 //----------------------------------------------------------------------------
@@ -32,6 +32,7 @@
 //   already given terrain boni for that city, by Martin Gühmann
 // - Added GetBestTerraformImprovement function to find the best terraform
 //   improvement. - Sep. 21st 2004 Martin Gühmann 
+// - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
 
@@ -363,7 +364,7 @@ private:
 #if defined(ACTIVSION_ORIGINAL)	
 	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const;
 #else
-	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce, CityData* city) const;
+	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const;
 #endif
 
 	
