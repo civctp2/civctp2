@@ -4484,16 +4484,15 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						}
 					}
 				}
-
-                InformAI(UNIT_ORDER_INTERCEPT_TRADE, m_pos); 
+				InformAI(UNIT_ORDER_INTERCEPT_TRADE, m_pos); 
 				g_director->AddSpecialEffect(m_pos, effectId, soundId);
-
 				ORDER_RESULT res = m_array[i].InterceptTrade();
 				if(res != ORDER_RESULT_ILLEGAL) {
 					AddSpecialActionUsed(m_array[i]);
 					m_isPirating = true;
 				}
-
+				// Line added by Ahenobarb to get the map to center on the location being pirated.
+				g_director->AddCenterMap(m_pos);
 				return res;
 			}
 	}
