@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Game settings
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Use the difficulty and barbarian risk as selected by the user.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "GameSettings.h"
@@ -10,13 +39,39 @@
 
 extern ProfileDB *g_theProfileDB;
 extern Player **g_player;
+#if !defined(ACTIVISION_ORIGINAL)
+extern BOOL			g_setDifficultyUponLaunch;
+extern sint32		g_difficultyToSetUponLaunch;
+extern BOOL			g_setBarbarianRiskUponLaunch;
+extern sint32		g_barbarianRiskUponLaunch;
+#endif
 
 GameSettings *g_theGameSettings = NULL;
 
 GameSettings::GameSettings()
 {
+#if defined(ACTIVISION_ORIGINAL)
 	m_difficulty = g_theProfileDB->GetDifficulty();
 	m_risk = g_theProfileDB->GetRiskLevel();
+#else
+	if (g_setDifficultyUponLaunch) 
+	{
+		m_difficulty	= g_difficultyToSetUponLaunch;
+	}
+	else
+	{
+		m_difficulty	= g_theProfileDB->GetDifficulty();
+	}
+
+	if (g_setBarbarianRiskUponLaunch) 
+	{
+		m_risk			= g_barbarianRiskUponLaunch;
+	}
+	else
+	{
+		m_risk			= g_theProfileDB->GetRiskLevel();
+	}
+#endif
 	m_alienEndGame = g_theProfileDB->IsAlienEndGameOn();
 	m_pollution = g_theProfileDB->IsPollutionRule();
 	m_keepScore = TRUE;
@@ -28,6 +83,18 @@ GameSettings::GameSettings()
 GameSettings::GameSettings(CivArchive &archive)
 {
 	Serialize(archive);
+
+#if !defined(ACTIVISION_ORIGINAL)
+	if (g_setDifficultyUponLaunch) 
+	{
+		m_difficulty	= g_difficultyToSetUponLaunch;
+	}
+
+	if (g_setBarbarianRiskUponLaunch) 
+	{
+		m_risk			= g_barbarianRiskUponLaunch;
+	}
+#endif
 }
 
 void GameSettings::SetKeepScore( BOOL keepScore )
