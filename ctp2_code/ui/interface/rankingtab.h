@@ -1,7 +1,7 @@
 
+//ranking.h
 
-
-
+//Pollution power graph added by Martin Gühmann on November the 2nd
 
 
 
@@ -30,6 +30,7 @@ enum eRankingCategories
 	kRankingMilitary, 
 	kRankingEconomic,
 	kRankingScientific,
+	kRankingPollution, //Added by Martin Gühmann
 	kRankingOverall,
 };
 
@@ -78,7 +79,8 @@ private:
 	
 	ctp2_ListBox *m_infoPlayerList;
 
-	sint32 m_rankingMilitary, m_rankingEconomic, m_rankingScientific, m_rankingOverall;
+	//m_rankingPollution added by Martin Gühmann
+	sint32 m_rankingMilitary, m_rankingEconomic, m_rankingScientific, m_rankingPollution, m_rankingOverall;
 
 	
 	void Show();

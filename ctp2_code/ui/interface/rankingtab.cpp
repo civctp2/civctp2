@@ -1,7 +1,7 @@
 
+//ranking.cpp
 
-
-
+//Pollution power graph added by Martin Gühmann on November the 2nd
 
 
 
@@ -105,6 +105,10 @@ RankingTab::RankingTab(ctp2_Window *parent) :
 	m_rankingEconomic = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_SCIENTIFIC");
 	m_rankingScientific = counter++;
+	//Added by Martin Gühmann
+	//str_ldl_RANKING_POLLUTION is already part of the ldl_str.txt
+	Add_Dropdown_Category("str_ldl_RANKING_POLLUTION");
+	m_rankingPollution = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_OVERALL");
 	m_rankingOverall = counter++;
 
@@ -292,6 +296,9 @@ void RankingTab::UpdateGraph()
 		category = kRankingEconomic;
 	else if (category == m_rankingScientific)
 		category = kRankingScientific;
+	//Added by Martin Gühmann
+	else if (category == m_rankingPollution)
+		category = kRankingPollution;
 
 	m_infoYCount = SetupRankingGraph(m_infoGraph, &m_infoGraphData, category);
 	m_info_window->Draw();
@@ -441,6 +448,11 @@ sint32 SetupRankingGraph(
 				{
 					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_KNOWLEDGE, round);
 				}
+				//Added by Martin Gühmann
+				else if (category == kRankingPollution)
+				{
+					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_POLLUTION, round);
+				}
 				else 
 				{
 					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_MILITARY, round);
@@ -496,6 +508,11 @@ sint32 SetupRankingGraph(
 			else if (category == kRankingScientific)
 			{
 				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_KNOWLEDGE, round);
+			}
+			//Added by Martin Gühmann
+			else if (category == kRankingPollution)
+			{
+				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_POLLUTION, round);
 			}
 			else 
 			{
