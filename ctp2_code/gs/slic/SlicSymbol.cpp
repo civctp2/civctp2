@@ -27,6 +27,8 @@
 //
 // - Repaired memory leak, by Martin Gühmann.
 // - Removed assert to prevent lots of pop-ups with e.g. the LOTR scenario.
+// - GetText function now returns FALSE if there is no proper string to 
+//   retrieve, so that this can be checked if. - Nov 5th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -669,6 +671,10 @@ BOOL SlicSymbolData::GetText(MBCHAR *text, sint32 maxLen) const
 			break;
 		default:
 			sprintf(text, "??? (Symbol type %d)", GetType());
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann to figure out whether there is a string for a given slic symbol.
+			return FALSE;
+#endif
 			break;
 	}
 

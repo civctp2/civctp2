@@ -1174,7 +1174,7 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 	return GEV_HD_Continue;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : CheckCityLimit_NextSStateEvent
@@ -1298,7 +1298,7 @@ void StrategicStateEventCallbacks::AddCallbacks()
 							  GEV_PRI_Pre, 
 							  &s_DefenseLevel_NextSStateEvent);
 
-#if defined(ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 	g_gevManager->AddCallback(GEV_NextStrategicState, 
 							  GEV_PRI_Pre, 
 							  &s_CheckCityLimit_NextSStateEvent);

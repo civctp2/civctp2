@@ -34,6 +34,19 @@
 //                       index in the game
 //   - g.max_player:     Gets the maximum number of players that is in a game
 //                       possible, currently it is 32 including the Barbarians.
+// - The following builtins are not only useful anymore in string replacement 
+//   but also in slic code (Changed by Martin Gühmann - Oct. 30th 2004):
+//   - player.capital:           The player's capital as string or city_t.
+//   - player.largestcity:       The player's largest city as string or city_t.
+//   - player.researching:       The database index or name of the current 
+//                               player's research project.
+//   - player.militarystate:     The player's military state as index or string.
+//   - player.leaderperonality:  The player's leader's personality type as
+//                               string or personality database index.
+//   - player.govttype:          The player's government type as string or 
+//                               government database index.
+//   Note: leaderperonality should be leaderpersonality but as it is used
+//   in the text files I don't fix it.
 //
 //----------------------------------------------------------------------------
 
@@ -703,6 +716,21 @@ class PlayerSymbol_Capital : public SlicStructMemberData {
 		}
 		return FALSE;
 	}
+#if !defined(ACTIVISION_ORIGINAL)
+	// Added by Martin Gühmann to allow to access the capital
+	// as city_t.
+	BOOL GetCity(Unit &city) const {
+		sint32 pl;
+		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
+		Assert(res);
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		{
+			city = Unit(g_player[pl]->m_capitol->m_id);
+			return TRUE;
+		}
+		return FALSE;
+	}
+#endif
 };
 
 class PlayerSymbol_LargestCity : public SlicStructMemberData {
@@ -712,8 +740,16 @@ class PlayerSymbol_LargestCity : public SlicStructMemberData {
 		sint32 lpop=0, lndx=0;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
+#if defined(ACTIVISION_ORIGINAL)
 		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
 		{
+#else
+		if(pl>=0 
+		&& pl<k_MAX_PLAYERS 
+		&& g_player[pl]!=NULL
+		&& g_player[pl]->m_all_cities->Num() > 0 // The player should at least have one city
+		){
+#endif
 			for(i=0; i<g_player[pl]->m_all_cities->Num(); i++)
 			{
 				if(g_player[pl]->m_all_cities->Get(i)->PopCount() > lpop)
@@ -727,6 +763,33 @@ class PlayerSymbol_LargestCity : public SlicStructMemberData {
 		}
 		return FALSE;
 	}
+#if !defined(ACTIVISION_ORIGINAL)
+	// Added by Martin Gühmann to allow to access the largest city
+	// as city_t.
+	BOOL GetCity(Unit &city) const {
+		sint32 pl,i;
+		sint32 lpop=0, lndx=0;
+		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
+		Assert(res);
+		if(pl>=0 
+		&& pl<k_MAX_PLAYERS 
+		&& g_player[pl]!=NULL
+		&& g_player[pl]->m_all_cities->Num() > 0  // The player should have at least have one city
+		){
+			for(i=0; i<g_player[pl]->m_all_cities->Num(); i++)
+			{
+				if(g_player[pl]->m_all_cities->Get(i)->PopCount() > lpop)
+				{
+					lpop=g_player[pl]->m_all_cities->Get(i)->PopCount();
+					lndx=i;
+				}
+			}
+			city = Unit(g_player[pl]->m_all_cities->Get(lndx)->m_id);
+			return TRUE;
+		}
+		return FALSE;
+	}
+#endif
 };
 
 class PlayerSymbol_Researching : public SlicStructMemberData {
@@ -750,6 +813,20 @@ class PlayerSymbol_Researching : public SlicStructMemberData {
 		}
 		return -1;
 	}
+#if !defined(ACTIVISION_ORIGINAL)
+	// Added by Martin Gühmann to allow to access the database index
+	// of the current research project.
+	BOOL GetIntValue(sint32 &value) const {
+		sint32 pl;
+		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
+		if(pl>= 0 && pl<k_MAX_PLAYERS && g_player[pl] != NULL) {
+			value = g_player[pl]->m_advances->GetResearching();
+			return TRUE;
+		}
+		value = -1;
+		return FALSE;
+	}
+#endif
 };
 
 class PlayerSymbol_MilitaryState : public SlicStructMemberData {
@@ -805,7 +882,20 @@ class PlayerSymbol_MilitaryState : public SlicStructMemberData {
 		}
 		return -1;
 	}
-		
+#if !defined(ACTIVISION_ORIGINAL)
+	// Added by Martin Gühmann to allow to access the index of 
+	// the current military readiness level.
+	BOOL GetIntValue(sint32 &value) const {
+		sint32 pl;
+		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
+		if(pl>= 0 && pl<k_MAX_PLAYERS && g_player[pl] != NULL) {
+			value = g_player[pl]->GetReadinessLevel();
+			return TRUE;
+		}
+		value = -1;
+		return FALSE;
+	}
+#endif	
 };
 
 class PlayerSymbol_LeaderPersonality : public SlicStructMemberData {
@@ -826,6 +916,22 @@ class PlayerSymbol_LeaderPersonality : public SlicStructMemberData {
 		}
 		return FALSE;
 	}
+#if !defined(ACTIVISION_ORIGINAL)
+	// Added by Martin Gühmann to allow access to the database personality
+	// index of the player leader's personality.
+	BOOL GetIntValue(sint32 &value) const {
+		sint32 pl;
+		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
+		Assert(res);
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		{
+			value = Diplomat::GetDiplomat(pl).GetPersonality()->GetIndex();
+			return TRUE;
+		}
+		value = -1;
+		return FALSE;
+	}
+#endif	
 };
 
 class PlayerSymbol_GovtType : public SlicStructMemberData {
@@ -853,6 +959,22 @@ class PlayerSymbol_GovtType : public SlicStructMemberData {
 		}
 		return -1;
 	}
+#if !defined(ACTIVISION_ORIGINAL)
+	// Added by Martin Gühmann to access the database index of the
+	// current player's government.
+	BOOL GetIntValue(sint32 &value) const {
+		sint32 pl;
+		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
+		Assert(res);
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		{
+			value = g_player[pl]->m_government_type;
+			return TRUE;
+		}
+		value = -1;
+		return FALSE;
+	}
+#endif
 };
 
 class PlayerSymbol_CivNamePlural : public SlicStructMemberData {
