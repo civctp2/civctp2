@@ -4262,24 +4262,27 @@ BOOL ArmyData::CanBombardTargetType(const CellUnitList & units) const
 //
 // Called by  : ArmyData::PerformOrderHere, ArmyData::Bombard
 // Additions by Peter Triggs Dec 18, 2004
+// And modified by Martin Gühmann to make it compile and to make it calculate
+// the min range.
 //----------------------------------------------------------------------------
 bool ArmyData::GetBombardRange(sint32 & min_rge, sint32 & max_rge)
 {
 	sint32 i;
-	min_rge = 99999;
+	min_rge = 0x7fffffff;
 	max_rge = 0;
 
-    for(i = 0; i < m_nElements; i++) {
-	const UnitRecord *rec = g_theUnitDB->Get(m_array[i]->GetType());
-	sint32 rge;
-        rec->GetBombardRange(rge);
-	if(rge){
-            if(rgemax_rge)
-	        max_rge = rge;
-            }
+	for(i = 0; i < m_nElements; i++) {
+		const UnitRecord *rec = g_theUnitDB->Get(m_array[i]->GetType());
+		sint32 rge;
+		rec->GetBombardRange(rge);
+
+		if(rge > max_rge)
+			max_rge = rge;
+		if(rge < min_rge)
+			min_rge = rge;
 	}
 	if(max_rge > 0)
-	    return true;
+		return true;
 	
 	return false;
 }
@@ -4445,19 +4448,19 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 
 			return ORDER_RESULT_ILLEGAL;
 		}
-		/*
-                             #if defined(ACTIVISION_ORIGINAL)
-		if(!point.IsNextTo(m_pos)) {//rem: this is why you can't bombard from range as in Civ:CTP
-                             #else //Peter Triggs added code 18 Dec 2004
-                                  sint32 dist = MapPoint::GetSquaredDistance(m_pos,point);
-                                  dist = sqrt(dist);
-                                  sint32 min_rge, max_rge;
-                                 GetBombardRange(min_rge,max_rge);
 
-                                 if(dist > max_rge) {//the target is out of this army's bombarding range
-                              #endif  //end of Peter's added code
+#if defined(ACTIVISION_ORIGINAL)
+		if(!point.IsNextTo(m_pos)) {//rem: this is why you can't bombard from range as in Civ:CTP
+#else //Peter Triggs added code 18 Dec 2004
+		sint32 dist = MapPoint::GetSquaredDistance(m_pos,point);
+		dist = sqrt(dist);
+		sint32 min_rge, max_rge;
+		GetBombardRange(min_rge,max_rge);
+
+		if(dist > max_rge) {//the target is out of this army's bombarding range
+#endif  //end of Peter's added code
 			return ORDER_RESULT_ILLEGAL;
-		}*/
+		}
 	}
 
 
@@ -8699,7 +8702,7 @@ void ArmyData::PerformOrder(const OrderRecord * order_rec)
 }
 
 
-void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path) // Additions by Peter Triggs Dec 18, 2004
+void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path)
 {
     Assert(path != NULL);
 
@@ -8740,15 +8743,17 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
             sint32 dist = MapPoint::GetSquaredDistance(m_pos,target_pos);
 	    dist=sqrt(dist);
             if(dist > max_rge){//target is out of range
-                for(sint32 i=0;iIncDir();			
+                for(sint32 i=0;i<moves;i++){//find a position in tmp_path to move to
+               
+                    tmp_path->IncDir();			
                     tmp_path->GetCurrentPoint(move_pos);
-                    dist =  MapPoint::GetSquaredDistance(move_pos,target_pos);
-
+                    dist = MapPoint::GetSquaredDistance(move_pos,target_pos);
 		    dist = sqrt(dist);
 
                     if(dist <= max_rge){ //we're now within range
 			tmp_path->Start(m_pos);//reset tmp_path
-			for(sint32 j=1; jSnipEnd();
+			for(sint32 j=1; j<moves-i; j++){//shorten move_path to end at move_pos 
+			    move_path->SnipEnd();
 			}
 			i=moves;//exit the loop and continue
 		    }
@@ -8771,14 +8776,14 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())//event needs target pos
 	    {
 	    	g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-		static_cast(game_event), 
+		static_cast<GAME_EVENT>(game_event), 
 		GEA_Army, Army(m_id), 
 		GEA_MapPoint, target_pos,
 		GEA_End);
 	}
         else {
 		g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-		static_cast(game_event), 
+		static_cast<GAME_EVENT>(game_event), 
 		GEA_Army, Army(m_id), 
 		GEA_End);
 	}
@@ -8799,7 +8804,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	     //bombard target_pos
 
 	     g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-	         static_cast(game_event), 
+	         static_cast<GAME_EVENT>(game_event), 
 		 GEA_Army, Army(m_id), 
 		 GEA_MapPoint, target_pos, 
 		 GEA_End);

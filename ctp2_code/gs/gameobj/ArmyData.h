@@ -350,7 +350,9 @@ public:
 	
 	
 	BOOL CanBombardTargetType(const CellUnitList & units) const;
-
+#if !defined(ACTIVISION_ORIGINAL)
+	bool GetBombardRange(sint32 & min_rge, sint32 & max_rge);
+#endif
 	BOOL CanBombard(const MapPoint &point) const;
 	BOOL CanBombard() const;
 	BOOL BombardCity(const MapPoint &point, BOOL doAnimations);

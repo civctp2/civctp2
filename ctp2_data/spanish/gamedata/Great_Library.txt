@@ -9309,7 +9309,7 @@ The classical period covers the epoch of the ascent Roman Republic, in particula
 [END]
 
 [CONCEPT_COMPUTER_AGE_HISTORICAL]
-Computers are great. If anybody has an better idea for that place, please post it.
+The rise of the information age was made possible through the development of the computer, the computer science and the incredible growth of the telecommunications. Like the industrial revolution, through the simplification of once tedious tasks and through the multiplication of information exchanges, the computers and the new technologies revolutionized the business world, deeply changed the organization of the companies and organisms in charge of our daily life and created new economical sectors.
 [END]
 
 [CONCEPT_INDUSTRIAL_AGE_GAMEPLAY]
