@@ -26,6 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Prevented crash (access to deleted memory).
+// - #01 Optimized sorting of list entries.
+//   (L. Hirth 7/2004)
 // - Corrected ambiguous function reference.
 //
 //----------------------------------------------------------------------------
@@ -392,13 +394,19 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 	
 	if (m_numRows <= 1) return AUI_ERRCODE_OK;
 
-	
+#ifndef ACTIVISION_ORIGINAL // #01 Optimized sorting of list entries 
+	sint32 cycles = 0;	
+#endif	
 	BOOL changed;
 	do
 	{
 		changed = FALSE;
 
+#ifdef ACTIVISION_ORIGINAL // #01 Optimized sorting of list entries 
 		for ( sint32 i = 0; i < m_numRows-1; i++ )
+#else
+		for ( sint32 i = 0; i < m_numRows-1-cycles; i++ )
+#endif
 		{
 			ListPos positionA = m_pane->ChildList()->FindIndex( i );
 			ListPos positionB = positionA;
@@ -414,6 +422,9 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 				changed = TRUE;
 			}
 		}
+#ifndef ACTIVISION_ORIGINAL // #01 Optimized sorting of list entries 
+	++cycles;	
+#endif
 	} while ( changed );
 
 	RepositionItems();

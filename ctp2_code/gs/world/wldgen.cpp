@@ -32,7 +32,6 @@
 //
 //----------------------------------------------------------------------------
 
-#define INITGUID
 #include "c3.h"
 #include "c3errors.h"
 #include "Globals.h"
@@ -66,11 +65,6 @@
 #include "CityInfluenceIterator.h"
 
 
-
-#include "IMapGen.h"
-#include "C3Rand.h"
-#include "IC3RobotAstar.h"
-
 #include "ResourceRecord.h"
 
 #include "terrainutil.h"
@@ -81,6 +75,12 @@
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
 #include "bmp_io.h"
 #endif
+
+
+#include <initguid.h>
+#include "C3Rand.h"
+#include "IC3RobotAstar.h"
+#include "IMapGen.h"
 
 extern	Player	**g_player ;
 extern	ConstDB	*g_theConstDB ;
