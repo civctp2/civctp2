@@ -1,4 +1,34 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit data
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #01 When calculating the score for the player, the population of the cities
+//    will be considered with realistic limits (2004/06/04 L. Hirth). 
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Score.h"
@@ -222,8 +252,13 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
-				if (pop < 30)
-					count++;
+				#if defined(ACTIVISION_ORIGINAL)
+					if (pop < 30)
+						count++;
+				#else  // #01 Setting realistic limits for considering cities
+					if (pop < 3)
+						count++;
+				#endif
 			}
 			break;
 		}
@@ -233,8 +268,13 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
-				if ((pop >= 30) && (pop < 100))
-					count++;
+				#if defined(ACTIVISION_ORIGINAL)
+					if ((pop >= 30) && (pop < 100))
+						count++;
+				#else  // #01 Setting realistic limits for considering cities
+					if ((pop >= 3) && (pop < 10))
+						count++;
+				#endif
 			}
 			break;
 		}
@@ -244,8 +284,13 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
-				if ((pop >= 100) && (pop < 500))
-					count++;
+				#if defined(ACTIVISION_ORIGINAL)
+					if ((pop >= 100) && (pop < 500))
+						count++;
+				#else // #01 Setting realistic limits for considering cities
+					if ((pop >= 10) && (pop < 50))
+						count++;
+				#endif
 			}
 			break;
 		}
@@ -255,8 +300,14 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
-				if (pop >= 500)
-					count++;
+				#if defined(ACTIVISION_ORIGINAL)
+					if (pop >= 500)
+						count++;
+				#else // #01 Setting realistic limits for considering cities
+					if (pop >= 50)
+						count++;
+				#endif
+
 			}
 			break;
 		}
