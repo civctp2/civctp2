@@ -1073,7 +1073,7 @@ void NationalManagementDialog::UpdateSpecialistItem(ctp2_ListItem *item,
 
 	
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_SPEC_SCIENTIST)) {
-		sprintf(stringBuffer, "%d", (sint32)(cityData->MerchantCount()));
+		sprintf(stringBuffer, "%d", (sint32)(cityData->ScientistCount()));
 		column->SetText(stringBuffer);
 		column->SetTextColor(colorNorm);
 	}
