@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Handles the const database
+// Description  : Game constants database
 //
 //----------------------------------------------------------------------------
 //
@@ -21,17 +21,28 @@
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
 //
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Fixed bug #12 ie forced cities to not revolt a second time before the 
-//   timeframe specified in const.txt expires.
+// - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be 
+//   modifiable in const.txt.
 //
 //----------------------------------------------------------------------------
 
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __CONSTDB_H__
 #define __CONSTDB_H__ 1
 

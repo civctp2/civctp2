@@ -47,9 +47,11 @@
 // - Can't rush buy capitalization/infrastructure
 // - Made the utilisation ratio function available for the tile improvement 
 //   placement governor.
-// - Fixed bug #12 ie forced cities to not revolt a second time before the 
-//   timeframe specified in const.txt expires.
-//
+// - #01 Fixed sometimes not correct filled m_shields_this_turn, that
+//   leads to wrong sorting sequence for number of turns until production
+//   is finished in NationalManager status window (maybe also to
+//   other wrong behaviours). (L. Hirth 7/2004) 
+// - Prevented cities from revolting twice in the same turn. By kaan.
 //----------------------------------------------------------------------------
 
 
@@ -193,10 +195,6 @@ extern SoundManager		*g_soundManager;
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
-#if !defined(ACTIVISION_ORIGINAL)
-// Modified by kaan to address bug # 12
-static uint8 const	MIN_TURNS_REVOLT_DEFAULT	= 0;
-#endif
 
 class HackCityArchive : public CivArchive
 {
@@ -256,10 +254,9 @@ extern TurnCount *g_turn;
 extern ProfileDB	*g_theProfileDB ;
 
 CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
-#if !defined(ACTIVISION_ORIGINAL)
-// Modified by kaan to address bug # 12                       
+#if !defined(ACTIVISION_ORIGINAL)                       
 :	m_cityStyle(CITY_STYLE_GENERIC),
-	m_min_turns_revolt(MIN_TURNS_REVOLT_DEFAULT)
+	m_min_turns_revolt(0)
 #endif
 { 
 	sint32 i;
@@ -458,7 +455,7 @@ void CityData::Serialize(CivArchive &archive)
 
 #if !defined(ACTIVISION_ORIGINAL)
 	// Create and read files in the format as created with the Activision 1.1 patch.
-	// Modified by kaan to address bug # 12
+	// Used to prevent cities revolting twice in the same turn.
 	if (archive.IsStoring())
 	{
 		archive << m_min_turns_revolt;
@@ -468,11 +465,10 @@ void CityData::Serialize(CivArchive &archive)
 		if (g_saveFileVersion >= 66) 
 		{
 			archive >> m_min_turns_revolt;
-			Assert(MIN_TURNS_REVOLT_DEFAULT == m_min_turns_revolt);
 		}
 		else
 		{
-			m_min_turns_revolt = MIN_TURNS_REVOLT_DEFAULT;
+			m_min_turns_revolt = 0;
 		}
 	}
 #endif
@@ -831,15 +827,26 @@ void CityData::AddShields(sint32 s)
 	m_shieldstore += s;
 }
 
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : ShouldRevolt
+//
+// Description: Determine whether a city should revolt.
+//
+// Parameters : inciteBonus		: extra revolt risk over the normal happiness
+//								  (e.g. from neighbouring revolting cities)
+//
+// Globals    : g_slicEngine	
+//
+// Returns    : -
+//
+// Remark(s)  : A city will not revolt
+//              - when playing the tutorial
+//				- when the civilisation is immune to revolts
+//              - when it has just revolted
+//              Otherwise, the revolt risk is determined by the happiness.
+//
+//----------------------------------------------------------------------------
 
 BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
 {
@@ -852,37 +859,51 @@ BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
 
 	if(m_home_city.Flag(k_UDF_CANT_RIOT_OR_REVOLT))
 		return FALSE;
+
 #if !defined(ACTIVISION_ORIGINAL)
 	// Modified by kaan to address bug # 12
-	if(m_min_turns_revolt != 0) 
+	if (m_min_turns_revolt != 0) 
 		return FALSE;
 #endif
+
 	return (m_happy->ShouldRevolt(inciteBonus)) ;
 }
 
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : NoRevoltCountdown
+//
+// Description: Decrease the number of turns that the city is free from revolt
+//              risk.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 
 #if !defined(ACTIVISION_ORIGINAL)
 // Modified by kaan to address bug # 12
-
-void CityData::NoRevoltCountdown() {
-	if (m_min_turns_revolt > 0) {
+void CityData::NoRevoltCountdown() 
+{
+	if (m_min_turns_revolt > 0) 
+	{
 		m_min_turns_revolt--;
 	}
-	/* this isn't usefull at the present 
-	else {
-		m_min_turns_revolt = 0;
-	}
-	*/
 }	
+
 #endif
+
+
+
+
+
+
+
 
 void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 	{
@@ -1032,9 +1053,10 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 			}
 		}
 	}
+
 #if !defined(ACTIVISION_ORIGINAL)
 	// Modified by kaan to address bug # 12
-	// TODO: gå i databasen og hent værdien der
+	// Prevent city from revolting twice in the same turn.
 	m_min_turns_revolt = g_theConstDB->GetMinTurnsBetweenRevolt(); 
 #endif
 }
@@ -1460,6 +1482,7 @@ void CityData::PayFederalProductionAbs (sint32 mil_paid,
 #endif
 
     m_shields_this_turn -= mil_paid;
+
     mat_paid = ComputeMaterialsPaid(percent_mat);
     m_shields_this_turn -= mat_paid;
 
@@ -4046,9 +4069,8 @@ sint32 CityData::HowMuchLonger() const
 
 	sint32 prod_remaining = m_build_queue.GetProductionRemaining(m_shieldstore);
 
-
-
 	sint32 prod, prodBeforeCrime;
+
 	GetDetailedProjectedProduction( prod, prodBeforeCrime );
 
 	if(m_contribute_military) {
@@ -6091,11 +6113,11 @@ void CityData::SplitScience(bool projectedOnly)
 	m_science = m_science - sint32(ceil(double(m_science) * m_happy->GetCrime()));
 	m_science = sint32(ceil(double(m_science) * g_player[m_owner]->GetKnowledgeCoef()));
 
-	DPRINTF(k_DBG_GAMESTATE, ("SplitScience: %lx: %d, %lf, %lf, %d, %lf, %lf\n", m_home_city.m_id, m_science,
-							  g_player[m_owner]->GetKnowledgeCoef(),
-							  m_happy->GetCrime(),
-							  GetScienceFromPops(),
-							  ws, s));
+  	DPRINTF(k_DBG_GAMESTATE, ("SplitScience: %lx: %d, %lf, %lf, %d, %lf, %lf\n", m_home_city.m_id, m_science,
+  							  g_player[m_owner]->GetKnowledgeCoef(),
+  							  m_happy->GetCrime(),
+  							  GetScienceFromPops(),
+  							  ws, s));
 
 	
 }
@@ -6207,7 +6229,9 @@ sint32 CityData::GetProjectedScience()
 	sint32 grossFood = m_gross_food_this_turn;
 	sint32 collectedProduction = m_collected_production_this_turn;
 	sint32 grossTrade = m_gross_trade;
+#ifdef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
 	sint32 shieldsThisTurn = m_shields_this_turn;
+#endif
 	sint32 foodThisTurn = m_food_produced_this_turn;
 	sint32 trade = m_trade;
 	sint32 science = m_science;
@@ -6216,6 +6240,9 @@ sint32 CityData::GetProjectedScience()
 	CollectResources();
 	DoSupport(true);
 	SplitScience(true);
+#ifndef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
+	ProcessProduction(true);
+#endif
 
 	sint32 scienceReturn = m_science;
 
@@ -6223,7 +6250,9 @@ sint32 CityData::GetProjectedScience()
 	m_gross_food_this_turn = grossFood;
 	m_collected_production_this_turn = collectedProduction;
 	m_gross_trade = grossTrade;
+#ifdef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
 	m_shields_this_turn = shieldsThisTurn;
+#endif
 	m_food_produced_this_turn = foodThisTurn;
 	m_trade = trade;
 	m_science = science;

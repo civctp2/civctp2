@@ -38,12 +38,11 @@
 // - Enable reading of files created with the Activision 1.1 patch.
 // - Prevent crash when settling in the Alexander scenario.
 // - Added GetUtilisationRatio function.
-// - Fixed bug #12 ie forced cities to not revolt a second time before the 
-//   timeframe specified in const.txt expires.
+// - Prevented cities to revolt twice in the same turn. By kaan.
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -280,12 +279,11 @@ class CityData : public CityRadiusCallback {
 // Changing the order below this line should not break anything.
 //----------------------------------------------------------------------------
 	
-    Unit m_home_city;
-#if !defined(ACTIVISION_ORIGINAL) 
-	// Modified by kaan to address bug # 12                      
-	uint8		m_min_turns_revolt;
+    Unit m_home_city; 
+#if !defined(ACTIVISION_ORIGINAL)                       
+	uint8		m_min_turns_revolt;	// Number of revolt risk free turns.
 #endif
-	BuildQueue m_build_queue; 
+    BuildQueue m_build_queue; 
     
 	TradeDynamicArray m_tradeSourceList;							
 	TradeDynamicArray m_tradeDestinationList;						
@@ -537,11 +535,11 @@ public:
     double GetDefendersBonus() const;
 	double GetDefendersBonusNoWalls() const;
 
-	BOOL ShouldRevolt(const sint32 inciteBonus) ;
 #if !defined(ACTIVISION_ORIGINAL)
 	// Modified by kaan to address bug # 12
-	void NoRevoltCountdown() ;
-#endif
+	void NoRevoltCountdown();
+#endif	
+	BOOL ShouldRevolt(const sint32 inciteBonus) ;					
 	void Revolt(sint32 &playerToJoin, BOOL causeIsExternal = FALSE) ;
 	void TeleportUnits(const MapPoint &pos,  BOOL &revealed_foreign_units, 
                              BOOL &revealed_unexplored, sint32 foreigner) ;						

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Handles the const database
+// Description  : Game constants database
 //
 //----------------------------------------------------------------------------
 //
@@ -25,11 +25,10 @@
 //
 // Modifications from the original Activision code:
 //
-// - Fixed bug #12 ie forced cities to not revolt a second time before the 
-//   timeframe specified in const.txt expires.
+// - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be 
+//   modifiable in const.txt.
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 
@@ -41,6 +40,118 @@
 #include "Globals.h"
 
 extern ConstDB *g_theConstDB; 
+
+#if !defined(ACTIVISION_ORIGINAL)
+extern sint32		g_abort_parse;
+extern TokenData	g_const_token_data[];
+
+namespace
+{
+
+// Default (original game) values when not present in const.txt.
+
+int const	DEFAULT_MAX_MATCH_LIST_CYCLES		= 6;
+int const	DEFAULT_MIN_TURNS_BETWEEN_REVOLT	= 1;
+
+//----------------------------------------------------------------------------
+//
+// Name       : ParseOptional
+//
+// Description: Parse an optional element from the input file
+//
+// Parameters : a_Token			: current token pointer
+//				t				: token to look for
+//				defaultVal		: value to return when the token is not found
+//
+// Globals    : g_abort_parse	: set when a parsing error occurs
+//
+// Returns    : bool			: set when the token was read from the file
+//				val				: value (from file or default)
+//
+// Remark(s)  : Modified version of token_ParseValNext
+//
+//----------------------------------------------------------------------------
+
+bool ParseOptional
+(
+	Token *			aToken, 
+	sint32 const	t, 
+	sint32 &		val, 
+	sint32 const	defaultVal
+)
+{
+	if ((aToken->GetType() == t) || (aToken->Next() == t))
+	{
+		// Keyword found: the number has to be valid
+		if (aToken->Next() == TOKEN_NUMBER)
+		{
+			aToken->GetNumber(val);
+			return true;
+		}
+		else
+		{ 
+			c3errors_ErrorDialog(aToken->ErrStr(), "Expected number not found");
+			g_abort_parse = TRUE; 
+		} 
+	} 
+
+	val = defaultVal; 
+	return false;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : ParseMandatoryAfterOptional
+//
+// Description: Parse a mandatory element from the input file
+//
+// Parameters : a_Token			: current token pointer
+//				t				: token to look for
+//
+// Globals    : g_abort_parse	: set when a parsing error occurs or 
+//								  the token is missing from the input file
+//
+// Returns    : bool			: set when the token was read from the file
+//				val				: value (from file or default)
+//
+// Remark(s)  : Modified version of token_ParseFloatNext
+//
+//----------------------------------------------------------------------------
+
+bool ParseMandatoryAfterOptional
+(
+	Token *			aToken, 
+	sint32 const	t, 
+	double &		val 
+)
+{
+	if ((aToken->GetType() == t) || (aToken->Next() == t))
+	{
+		// Keyword found: the number has to be valid
+		if (aToken->Next() == TOKEN_NUMBER)
+		{
+			aToken->GetFloat(val);
+			return true;
+		}
+		else
+		{ 
+			c3errors_ErrorDialog(aToken->ErrStr(), "Expected number not found");
+		} 
+	} 
+	else 
+	{ 
+		c3errors_ErrorDialog(aToken->ErrStr(), 
+							 "Expected keyword %s not found", 
+							 g_const_token_data[t - (TOKEN_MAX + 1)].keyword
+							);
+	}
+	
+	g_abort_parse = TRUE; 
+	return false;
+}
+
+} // namespace
+#endif
 
 ConstDB::ConstDB ()
 
@@ -93,6 +204,10 @@ ConstDB::ConstDB ()
 	m_border_int_radius = 4;
 	m_border_squared_radius = 20;
 	m_caravan_coef = 0.02;
+#if !defined(ACTIVISION_ORIGINAL)
+	m_max_match_list_cycles		= DEFAULT_MAX_MATCH_LIST_CYCLES;
+	m_min_turns_between_revolt	= DEFAULT_MIN_TURNS_BETWEEN_REVOLT;
+#endif
 	} 
 
 
@@ -120,7 +235,9 @@ ConstDB::ConstDB(CivArchive &archive)
 
 
 
-
+// Fortunately, this Serialize function is never used. The values are not 
+// stored in the save game, but are read from const.txt.
+// Otherwise, we would have had an incompatible save game again.
 
 void ConstDB::Serialize(CivArchive &archive)
 	{
@@ -628,11 +745,7 @@ enum TOKEN_CONST {
 	TOKEN_VERY_HAPPY_THRESHOLD,
 	TOKEN_CITY_GROWTH_COEFFICIENT,
 	TOKEN_RIOT_LEVEL,
-#if !defined(ACTIVISION_ORIGINAL)
-	TOKEN_MAX_MATCH_LIST_CYCLES, // added DWT
-	// Modified by kaan to address bug # 12
-	TOKEN_MIN_TURNS_BETWEEN_REVOLT,
-#endif
+
 	TOKEN_POWER_POINTS_TO_MATERIALS,
 
 	TOKEN_MAX_AIRLIFT_STACK_SIZE,
@@ -750,6 +863,11 @@ enum TOKEN_CONST {
 	TOKEN_CARAVAN_COEF,
 
 	TOKEN_POLLUTION_CAUSED_BY_NUKE,
+#if !defined(ACTIVISION_ORIGINAL)
+	TOKEN_MAX_MATCH_LIST_CYCLES, // added DWT
+	// Modified by kaan to address bug # 12
+	TOKEN_MIN_TURNS_BETWEEN_REVOLT,
+#endif
 
     TOKEN_CONST_MAX 
 
@@ -942,11 +1060,6 @@ TokenData g_const_token_data [] = {
 	{TOKEN_VERY_HAPPY_THRESHOLD, "VERY_HAPPY_THRESHOLD"},
 	{TOKEN_CITY_GROWTH_COEFFICIENT, "CITY_GROWTH_COEFFICIENT"},
 	{TOKEN_RIOT_LEVEL, "RIOT_LEVEL"},
-#if !defined(ACTIVISION_ORIGINAL)
-	{TOKEN_MAX_MATCH_LIST_CYCLES, "MAX_MATCH_LIST_CYCLES"}, // added DWT
-	// Modified by kaan to address bug # 12
-	{TOKEN_MIN_TURNS_BETWEEN_REVOLT, "MIN_TURNS_BETWEEN_REVOLT"},
-#endif
 	{TOKEN_POWER_POINTS_TO_MATERIALS, "POWER_POINTS_TO_MATERIALS"},
 	{TOKEN_MAX_AIRLIFT_STACK_SIZE, "MAX_AIRLIFT_STACK_SIZE"},
 	{TOKEN_GOLD_FROM_PIRACY, "GOLD_FROM_PIRACY"},
@@ -1043,6 +1156,11 @@ TokenData g_const_token_data [] = {
     {TOKEN_BASE_STARVATION_PROTECTION, "BASE_STARVATION_PROTECTION"},
     {TOKEN_CARAVAN_COEF, "CARAVAN_COEF"},
     {TOKEN_POLLUTION_CAUSED_BY_NUKE, "POLLUTION_CAUSED_BY_NUKE"},
+#if !defined(ACTIVISION_ORIGINAL)
+	{TOKEN_MAX_MATCH_LIST_CYCLES, "MAX_MATCH_LIST_CYCLES"}, // added DWT
+	// Modified by kaan to address bug # 12
+	{TOKEN_MIN_TURNS_BETWEEN_REVOLT, "MIN_TURNS_BETWEEN_REVOLT"},
+#endif
 };
 	
 
@@ -1489,16 +1607,39 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 							m_riot_level)) return FALSE;
 
 #if !defined(ACTIVISION_ORIGINAL)
-	// added DWT
-	if (!token_ParseValNext(const_token, TOKEN_MAX_MATCH_LIST_CYCLES,
-							m_max_match_list_cycles)) return FALSE;
-	// Modified by kaan to address bug # 12
-	if (!token_ParseValNext(const_token, TOKEN_MIN_TURNS_BETWEEN_REVOLT,
-							m_min_turns_between_revolt)) return FALSE;
-#endif
+	// Backwards compatibility code for the playtest releases up to 2004.06.28.
+	bool const	isOldPlayTest	= ParseOptional(const_token, 
+												TOKEN_MAX_MATCH_LIST_CYCLES, 
+												m_max_match_list_cycles, 
+												DEFAULT_MAX_MATCH_LIST_CYCLES
+											   );
 
+	if (isOldPlayTest)
+	{
+		if (!token_ParseFloatNext(const_token, 
+			                      TOKEN_POWER_POINTS_TO_MATERIALS,
+								  m_power_points_to_materials
+								 )
+		   ) 
+		{
+			return FALSE;
+		}
+	}
+	else
+	{
+		if (!ParseMandatoryAfterOptional(const_token, 
+									     TOKEN_POWER_POINTS_TO_MATERIALS, 
+										 m_power_points_to_materials
+										)
+		   )
+		{
+			return FALSE;
+		}
+	}
+#else
 	if(!token_ParseFloatNext(const_token, TOKEN_POWER_POINTS_TO_MATERIALS,
 							 m_power_points_to_materials)) return FALSE;
+#endif
 	if(!token_ParseValNext(const_token, TOKEN_MAX_AIRLIFT_STACK_SIZE,
 						   m_max_airlift_stack_size)) return FALSE;
 
@@ -1738,6 +1879,23 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 
 	if(!token_ParseValNext(const_token, TOKEN_POLLUTION_CAUSED_BY_NUKE,
 						   m_pollution_caused_by_nuke)) return FALSE;
+
+#if !defined(ACTIVISION_ORIGINAL)
+	if (!isOldPlayTest)
+	{
+		(void) ParseOptional(const_token, 
+							 TOKEN_MAX_MATCH_LIST_CYCLES, 
+							 m_max_match_list_cycles, 
+							 DEFAULT_MAX_MATCH_LIST_CYCLES
+							);	
+	}
+
+	(void) ParseOptional(const_token, 
+						 TOKEN_MIN_TURNS_BETWEEN_REVOLT,
+						 m_min_turns_between_revolt,
+						 DEFAULT_MIN_TURNS_BETWEEN_REVOLT
+						);
+#endif
 
 	return TRUE; 	
 }
