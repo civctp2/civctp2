@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fix movement cost of ships above tunnels.
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "ArmyData.h"
 
@@ -6490,8 +6521,13 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 			c = k_MOVE_AIR_COST;
 		} else if(g_theWorld->IsTunnel(pos)) {
 			if(!m_array[i].GetMovementTypeLand()) {
-				
+#if defined(ACTIVISION_ORIGINAL)
 				c = g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement();
+#else
+				sint32	icost;
+				(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
+				c = icost;
+#endif
 			} else {
 				c = cost;
 			}

@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : A* algorithm for units
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected movement rate of ships above tunnels.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3math.h"
@@ -254,8 +283,10 @@ sint32 UnitAstar::StraightLine(const MapPoint &start, const MapPoint &dest,
 
 float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	static const float move_cost_without_tunnel = 
 		(float) g_theTerrainDB->Access(TERRAIN_WATER_DEEP)->GetEnvBase()->GetMovement();
+
 	bool is_tunnel_and_boat = g_theWorld->IsTunnel(pos) &&
 
 		((m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
@@ -268,6 +299,26 @@ float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 		return float(min(m_army_minmax_move, move_cost_without_tunnel));
 	else
 		return float(min(m_army_minmax_move, the_pos_cell->GetMoveCost()));   
+#else
+	bool const	is_tunnel_and_boat	= 
+		g_theWorld->IsTunnel(pos) &&
+		((m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
+		 (m_move_intersection & k_Unit_MovementType_ShallowWater_Bit)
+		);
+		 
+	if (is_tunnel_and_boat)
+	{
+		sint32 icost_without_tunnel;
+		(void) g_theTerrainDB->Access(TERRAIN_WATER_DEEP)->GetEnvBase()->
+					GetMovement(icost_without_tunnel);
+		return min(m_army_minmax_move, static_cast<float>(icost_without_tunnel));
+	}
+	else
+	{
+		return static_cast<float>
+			(min(m_army_minmax_move, the_pos_cell->GetMoveCost()));
+	}
+#endif
 }
 
 BOOL UnitAstar::CanMoveIntoTransports(const MapPoint &pos) 

@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handling of a list of Units in the same cell
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Ships no longer get an underwater tunnel movement bonus, based on
+//   suggestions by NelsonAndBronte.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "CellUnitList.h"
@@ -19,6 +50,9 @@
 #include "MoveFlags.h"
 #include "wonderutil.h"
 #include "GameEventManager.h"
+#if !defined(ACTIVISION_ORIGINAL)
+#include "TerrainRecord.h"	// TerrainRecord
+#endif
 
 extern sint32 g_fog_toggle;
 
@@ -94,6 +128,37 @@ BOOL CellUnitList::CanEnter(const MapPoint &point) const
 		return TRUE;
 	}
 }
+
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : CellUnitList::GetMovementTypeLand
+//
+// Description: Determines whether all units can move on land.
+//
+// Parameters : -
+//
+// Globals	  : -
+//
+// Returns    : bool			: all units can move on land
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+bool CellUnitList::GetMovementTypeLand() const 
+{ 
+    for (int i = 0; i < m_nElements; ++i) 
+	{ 
+        if (!m_array[i].GetMovementTypeAir()) 
+		{
+            return false; 
+        }
+    }
+    
+    return true;
+}
+#endif
 
 BOOL CellUnitList::HasWormholeProbe() const
 {
@@ -570,13 +635,20 @@ BOOL CellUnitList::IsMovePointsEnough(const MapPoint &pos)
     
     if (GetMovementTypeAir()) { 
         cost = k_MOVE_AIR_COST; 
+#if !defined(ACTIVISION_ORIGINAL)
+	// Prevent ships from diving under and using tunnels.
+	} else if (g_theWorld->IsTunnel(pos) && !GetMovementTypeLand()) {
+		sint32 icost;
+		(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
+		cost = icost;
+#endif
     } else { 
         cost = g_theWorld->GetMoveCost(pos); 
     }
 
     return IsMovePointsEnough(cost); 
 }
-
+ 
 BOOL CellUnitList::GetMovementTypeAir() const 
 { 
     sint32 i; 
@@ -589,7 +661,6 @@ BOOL CellUnitList::GetMovementTypeAir() const
     
     return TRUE;
 }
-
 
 BOOL CellUnitList::CanBeCargoPodded() const
 {

@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Healing in fort handled as in city.
+// - Movement point handling for ships at tunnels corrected.
 //
 //----------------------------------------------------------------------------
 
@@ -827,6 +828,17 @@ BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
 
         if (g_theUnitDB->Get(GetType())->GetMovementTypeAir() ) { 
             cost = k_MOVE_AIR_COST; 
+#if !defined(ACTIVISION_ORIGINAL)
+		// Prevent ships from diving under and using tunnels.
+		} 
+		else if (g_theWorld->IsTunnel(pos) && 
+		         !g_theUnitDB->Get(m_type)->GetMovementTypeLand()
+		        ) 
+		{
+			sint32	icost;
+			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
+			cost = icost;
+#endif
         } else { 
             cost = g_theWorld->GetMoveCost(pos); 
         } 

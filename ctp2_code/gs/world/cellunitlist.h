@@ -1,6 +1,50 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Handling of a list of Units in the same cell
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Microsoft C++ extensions marked for future GCC compiliation.
+// - MovementTypeLand added, as suggested by NelsonAndBronte.
+//
+//----------------------------------------------------------------------------
 
-
+#if defined(_MSC_VER)
 #pragma once
+#else  // _MSC_VER
+// Obsolete pragma removed
+#endif // _MSC_VER
+
 #ifndef __CELL_UNIT_LIST_H__
 #define __CELL_UNIT_LIST_H__
 
@@ -104,6 +148,9 @@ public:
 	BOOL IsMovePointsEnough(const double cost) const;
 	BOOL IsMovePointsEnough(const MapPoint &pos);
     BOOL GetMovementTypeAir() const; 
+#if !defined(ACTIVISION_ORIGINAL)
+	bool GetMovementTypeLand() const; 
+#endif
 	BOOL CanBeCargoPodded() const;
 	BOOL CanSpaceLand() const;
 	BOOL CanSpaceLaunch() const;
