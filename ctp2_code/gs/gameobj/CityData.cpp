@@ -56,6 +56,7 @@
 // - Addition of new NeedMoreFood function to figure out wheather a city 
 //   needs more food, so that the AI can build new food tile improvements, 
 //   by Martin Gühmann.
+// - Possible solution for bug #14 by Klaus Kaan
 //
 //----------------------------------------------------------------------------
 
@@ -5307,6 +5308,14 @@ void CityData::Disband()
 		if(g_theUnitPool->IsValid(s)) {
 			s.ClearFlag(k_UDF_FIRST_MOVE);
 			s.SetMovementPoints(0);
+#ifndef ACTIVISION_ORIGINAL
+			//possible solution for bug #14
+			if(g_network.IsHost()) {
+				g_network.Block(s.GetOwner());
+				g_network.Enqueue(new NetInfo(NET_INFO_CODE_SET_MOVEMENT_TO_ZERO, s.m_id));
+				g_network.Unblock(s.GetOwner());
+			}
+#endif
 		}
 	}
 
