@@ -37,6 +37,8 @@
 // - Microsoft extensions embedded in _MSC_VER defines (no functional change).
 // - Import order modified to enable GCC compilation (no functional change).
 // - Option added to enable viewing info on actions that are too expensive.
+// - Modified GetWorldShape function to allow four possible shapes instead 
+//   of two by Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -618,9 +620,17 @@ public:
 	BOOL		IsZoomedCombatAlways() const	{ return m_zoomedCombatAlways; }
 	BOOL        IsAutoEndMulitpleTurns() const  { return m_autoEndMultiple; }
 	const double     *GetMapSettings(sint32 pass, sint32 &count);
-
+if defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann
 	sint32		GetWorldShape( void )			{ return m_yWrap && m_xWrap; }
-
+#else
+	sint32		GetWorldShape( void )			{ 
+												         if(!m_yWrap &&  m_xWrap)   return 0;
+												  else   if( m_yWrap &&  m_xWrap)   return 1;
+												  else   if( m_yWrap && !m_xWrap)   return 2;
+												  else /*if(!m_yWrap && !m_xWrap)*/ return 3;//That sould be else
+												}
+#endif
 	MBCHAR		*GetGameWatchDirectory(void)	{ return m_gameWatchDirectory; }
 
 	sint32      GetWetDry() { return m_wetdry; }

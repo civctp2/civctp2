@@ -1,4 +1,34 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Handling of user preferences.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Addion by Martin Gühmann: Two more world shape options, 
+//   flat world and Neptun world
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef SPNEWGAMEWINDOW_FLAG
@@ -46,6 +76,10 @@ enum SP_NEWGAME_STR {
 
 	SP_NEWGAME_STR_EARTH,
 	SP_NEWGAME_STR_DOUGHNUT,
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann
+	SP_NEWGAME_STR_NEPTUN,
+#endif
 	SP_NEWGAME_STR_FLAT,
 
 	SP_NEWGAME_STR_DEFAULT,
