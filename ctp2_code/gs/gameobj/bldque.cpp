@@ -1,13 +1,34 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Build queue handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Allow infastructure and capitalisation when loading the build queue
+//   (modification as posted by Peter Triggs).
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -267,6 +288,26 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 			case '#':
 				
 				continue;
+#if !defined(ACTIVISION_ORIGINAL)
+			case 'C':
+				Assert(buf[1] == 'A' && buf[2] == 'P');
+				if(buf[1] == 'A' && buf[2] == 'P') {
+					category = k_GAME_OBJ_TYPE_CAPITALIZATION;
+					type = 0;
+				} else {
+					continue;
+				}
+				break;
+			case 'I':
+				Assert(buf[1] == 'N' && buf[2] == 'F');
+				if(buf[1] == 'N' && buf[2] == 'F') {
+					category = k_GAME_OBJ_TYPE_INFRASTRUCTURE;
+					type = 0;
+				} else {
+					continue;
+				}
+				break;
+#endif				
 			default:
 				Assert(FALSE);
 				continue;
