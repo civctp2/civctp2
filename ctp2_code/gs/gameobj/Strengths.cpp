@@ -1,5 +1,34 @@
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Player strength history
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Crash prevented.
+// - Duplicate code removed.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Strengths.h"
@@ -25,12 +54,15 @@ Strengths::Strengths(sint32 owner)
 	if (g_turn==NULL)
 		return;
 
+#if defined(ACTIVISION_ORIGINAL)	// checked in NewTurnCount
 	sint32 curRound;
 	if(!g_player[g_selected_item->GetCurPlayer()])
 		curRound = 0;
 	else
 		curRound = NewTurnCount::GetCurrentRound();
-
+#else
+	sint32 const	curRound = NewTurnCount::GetCurrentRound();
+#endif
 	
 	sint32 c, y;
 	for(y = 1; y < curRound; y++) {
@@ -120,7 +152,13 @@ void Strengths::Calculate()
 
 sint32 Strengths::GetStrength(STRENGTH_CAT category)
 {
+#if defined(ACTIVISION_ORIGINAL)	// may crash
 	return m_strengthRecords[category].GetLast();
+#else
+	return m_strengthRecords[category].Num() 
+		   ? m_strengthRecords[category].GetLast()
+		   : 0;
+#endif
 }
 
 sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) 

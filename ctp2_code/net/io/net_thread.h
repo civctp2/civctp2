@@ -11,7 +11,9 @@
 #include "PointerList.h"
 #include "net_anet.h"
 
+#if defined(ACTIVISION_ORIGINAL)	// already defined in net_anet.h
 #define CIV3_SPECIES 1503
+#endif
 
 #define k_MAX_NETWORK_PLAYERS 32
 	

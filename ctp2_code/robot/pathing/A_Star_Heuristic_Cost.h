@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - X-wrap added, structure cleaned up 
+// - 
 //
 //----------------------------------------------------------------------------
 
@@ -41,8 +42,9 @@
 
 struct MapPointData;
 #include "MapPoint.h"
-
+#if defined(ACTIVISION_ORIGINAL)	// problematic defines
 #include "common.h"
+#endif
 #include "XY_Coordinates.h"
 #include "World.h"
 

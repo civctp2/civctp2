@@ -37,7 +37,9 @@
 
 #include "semi_dynamic_array.h"
 
+#if defined(ACTIVISION_ORIGINAL)	// problematic defines
 #include "common.h"
+#endif
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "RandGen.h"
@@ -452,8 +454,11 @@ void A_Star_Heuristic_Cost::Update_Raw_Movement_Costs()
 
 		} 
 
-		
+#if defined(ACTIVISION_ORIGINAL)	// problematic defines		
 		odd_row = not odd_row;
+#else
+		odd_row = !odd_row;
+#endif
 
 	} 
 

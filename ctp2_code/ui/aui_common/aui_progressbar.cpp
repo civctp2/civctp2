@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : User interface - progress bar handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Crash prevented
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -325,6 +345,13 @@ AUI_ERRCODE aui_ProgressBar::CalculateIntervals( double *start, double *stop )
 
 AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 {
+#if !defined(ACTIVISION_ORIGINAL)	// may crash later
+	if (!(g_ui && g_ui->TheBlitter()))
+	{
+		return AUI_ERRCODE_BLTFAILED;
+	}
+#endif
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	RECT destRect = *bound;
@@ -352,7 +379,11 @@ AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 		destRect.left += sint32(start * dimension + 0.5);
 		destRect.right = bound->left + sint32(stop * dimension + 0.5);
 
+#if defined(ACTIVISION_ORGINAL)	// crash when surface is NULL
 		if ( m_barImage )
+#else
+		if (m_barImage && m_barImage->TheSurface())
+#endif
 		{
 			RECT srcRect =
 			{
@@ -386,7 +417,11 @@ AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 		destRect.bottom -= sint32(start * dimension + 0.5);
 		destRect.top = bound->bottom - sint32(stop * dimension + 0.5);
 
+#if defined(ACTIVISION_ORGINAL)	// crash when surface is NULL
 		if ( m_barImage )
+#else
+		if (m_barImage && m_barImage->TheSurface())
+#endif
 		{
 			RECT srcRect =
 			{

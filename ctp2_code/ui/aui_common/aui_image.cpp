@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : User interface - image handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Crash prevented.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -72,7 +92,7 @@ aui_Image::~aui_Image()
 AUI_ERRCODE aui_Image::SetFilename( MBCHAR *filename )
 {
 	
-	Unload();
+	Unload();	// deletes and NULLs m_format and m_surface
 
 	memset( m_filename, '\0', sizeof( m_filename ) );
 
@@ -80,9 +100,16 @@ AUI_ERRCODE aui_Image::SetFilename( MBCHAR *filename )
 
 	strncpy( m_filename, filename, MAX_PATH );
 
-	
+#if defined(ACTIVISION_ORIGINAL)	// crash when g_ui->TheMemMap is NULL	
 	m_format = (aui_ImageFormat *)
 		g_ui->TheMemMap()->GetFileFormat( m_filename );
+#else
+	if (g_ui && g_ui->TheMemMap())
+	{
+		m_format = static_cast<aui_ImageFormat *>
+						(g_ui->TheMemMap()->GetFileFormat(m_filename));
+	}
+#endif
 	Assert( m_format != NULL );
 	if ( !m_format ) return AUI_ERRCODE_MEMALLOCFAILED;
 	

@@ -10,7 +10,11 @@
 #include "net_array.h"
 #include "PointerList.h"
 
+#if defined(ACTIVISION_ORIGINAL)
 #define CIV3_SPECIES 1503
+#else
+#define CIV3_SPECIES 1504
+#endif
 
 enum SESSION_STATE {
 	SESSION_STATE_READY,

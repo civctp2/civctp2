@@ -1,16 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Turn count handler
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Relaxed assert
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -290,7 +307,9 @@ sint32 NewTurnCount::GetCurrentRound()
 {
 	PLAYER_INDEX current_player = g_selected_item->GetCurPlayer();
 	Assert(g_player != NULL);
+#if defined(ACTIVISION_ORIGINAL)	// may happen when creating the barbarians
 	Assert(g_player[current_player] != NULL);
+#endif
 	if(!g_player || !g_player[current_player]) return 0;
 	
 	return g_player[current_player]->GetCurRound();

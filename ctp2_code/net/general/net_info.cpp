@@ -30,6 +30,7 @@
 // - Unblock the client user interface when start of turn processing is ready.
 // - Added NET_INFO_CODE_DISBANDED_CITY_SETTLER handling.
 // - Added NET_INFO_CODE_ACCOMPLISHED_FEAT handling.
+// - Include finish production handling in MP.
 //
 //----------------------------------------------------------------------------
 
@@ -1700,7 +1701,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				else
 				{
 					g_gevManager->AddEvent(GEV_INSERT_Tail, 
-										   GEV_StartMovePhase,
+										   GEV_FinishBuildPhase, // GEV_StartMovePhase,
 										   GEA_Player, m_data,
 										   GEA_End
 										  );

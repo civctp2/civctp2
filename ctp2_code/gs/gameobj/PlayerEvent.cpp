@@ -722,7 +722,9 @@ STDEHANDLER(FinishBuildPhaseEvent)
 #if !defined(ACTIVISION_ORIGINAL)
 	if (g_player[player] && !Player::IsThisPlayerARobot(player)) 
 	{
-		if (g_theProfileDB->IsAutoSave())
+		if (g_theProfileDB->IsAutoSave() && 
+			(!g_network.IsActive() || g_network.IsHost())
+		   )
 		{
 			g_civApp->AutoSave(player);
 		}
