@@ -1002,7 +1002,8 @@ SPNewGamePlayersScreen {
 		int xpix 38
 		int ypix 63
 		int widthpix 90
-		int minxval 3
+		# JJB changed the minimum value from 3 to 1
+		int minxval 1
 		int maxxval 32
 		int incxval 1
 		int xval 1
