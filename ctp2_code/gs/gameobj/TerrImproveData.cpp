@@ -203,8 +203,10 @@ sint32 TerrainImprovementData::PercentComplete() const
 	sint32 totalTurns, turnsDone;
 
 	MapPoint p = m_point;
-	totalTurns = terrainutil_GetTimeToBuild(p, m_type, m_transformType);
-
+	//Function replaced by Martin Gühmann
+	//Original function always returns 10 instead of the total production turns.
+//	totalTurns = terrainutil_GetTimeToBuild(p, m_type, m_transformType);
+	totalTurns = terrainutil_GetProductionTime(m_type, p, m_transformType);
 	turnsDone = totalTurns - m_turnsToComplete;
 	if (totalTurns == 0) return 100;
 	return (turnsDone * 100) / totalTurns;
