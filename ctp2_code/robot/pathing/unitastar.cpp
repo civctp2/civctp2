@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected movement rate of ships above tunnels.
+// - m_queue_index used.
 //
 //----------------------------------------------------------------------------
 
@@ -798,7 +799,7 @@ sint32 UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
     d->SetExpanded(FALSE); 
     d->m_pos = pos; 
     d->m_parent = parent;
-#ifdef _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
     d->m_queue_idx = -1; 
 #endif
     

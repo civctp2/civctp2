@@ -1,20 +1,48 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragma once marked as Microsoft specific
+// - queue index used
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __ASTAR_POINT__
 #define __ASTAR_POINT__ 1
 
@@ -38,7 +66,7 @@ class AstarPoint {
 	MapPoint m_pos; 
 	float m_past_cost, m_entry_cost, m_future_cost, m_total_cost; 
 	
-#ifdef _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
     sint32 m_queue_idx; 
 #endif
     AstarPoint *m_parent; 
@@ -93,7 +121,7 @@ public:
     
     inline void GetPos(MapPoint &pos) { pos = m_pos; }
 
-#ifdef _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
 	
 	
 	

@@ -1,5 +1,48 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragma once marked as Microsoft specific.
+// - Priority queue index used.
+// - Incorrect Asserts corrected.
+//
+//----------------------------------------------------------------------------
 
+#if defined(_MSC_VER)
 #pragma once
+#endif
 
 #ifndef __DA_PRIORITY_QUEUE__
 #define __DA_PRIORITY_QUEUE__ 1
@@ -111,7 +154,7 @@ template <class T> void DAPriorityQueue<T>::ShiftUp(const sint32 start_idx)
 		if (*pCur < *pParent) {
 			
 			
-#ifdef _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
 			pCur->SetPriorityQueueIndex(parent_idx);
 			pParent->SetPriorityQueueIndex(current_idx);
 #endif
@@ -157,7 +200,7 @@ template <class T> void DAPriorityQueue<T>::ShiftDown(const sint32 start_idx)
         if (*swap_me_ptr < *current_ptr) { 
             m_queue[current_idx] = swap_me_ptr;
             m_queue[swap_me] = current_ptr; 
-#ifdef _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
             current_ptr->SetPriorityQueueIndex(swap_me); 
             swap_me_ptr->SetPriorityQueueIndex(current_idx); 
 #endif
@@ -176,7 +219,7 @@ template <class T> void DAPriorityQueue<T>::Swap(const sint32 a, const sint32 b)
     m_queue[a] = m_queue[b];
     m_queue[b] = tmp_ptr; 
 
-#ifdef _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
     m_queue[a]->SetPriorityQueueIndex(a); 
     m_queue[b]->SetPriorityQueueIndex(b); 
 #endif
@@ -194,7 +237,7 @@ template <class T> void DAPriorityQueue<T>::Insert(T *add_me)
 
     Assert(add_me->GetPriorityQueueIndex() < 0); 
     m_queue.InsertFlat(add_me); 
-#ifdef _DEBUG    
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
 	add_me->SetPriorityQueueIndex(new_idx); 
 #endif
 
@@ -204,6 +247,7 @@ template <class T> void DAPriorityQueue<T>::Insert(T *add_me)
 template <class T> T* DAPriorityQueue<T>::Remove(sint32 del_idx)
 
 {
+#if defined(ACTIVISION_ORIGINAL)
     if (del_idx < 1)  { 
         Assert(0); 
         return NULL; 
@@ -211,19 +255,32 @@ template <class T> T* DAPriorityQueue<T>::Remove(sint32 del_idx)
         Assert(0); 
         return NULL; 
     } 
+#else
+	if ((del_idx < 0) || 
+	    (del_idx >= m_queue.Num()) ||
+		(m_queue[del_idx] == NULL)
+	   )	
+	{
+		// Invalid input 
+		Assert(0);
+		return NULL;
+	}
+#endif
 
     T* ret = m_queue[del_idx];
 
+#if defined(ACTIVISION_ORIGINAL)
     if (NULL == ret) {
         Assert(0); 
         return NULL; 
     } 
+#endif
 
     sint32 n = m_queue.Num()-1; 
 
     if (n == del_idx) { 
     
-#ifdef _DEBUG		
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
         m_queue[n]->SetPriorityQueueIndex(-1); 
 		Assert(ret->GetPriorityQueueIndex() < 0); 
 #endif
@@ -233,14 +290,14 @@ template <class T> T* DAPriorityQueue<T>::Remove(sint32 del_idx)
 		Assert(ret->GetPriorityQueueIndex() < 0); 
 #endif
     } else { 
-#ifdef _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
         ret->SetPriorityQueueIndex(-1); 
 #endif
 		Assert(ret->GetPriorityQueueIndex() < 0); 
 		Assert(m_queue[del_idx] != m_queue[n]);
 
         m_queue[del_idx] = m_queue[n]; 
-#ifdef _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
         m_queue[del_idx]->SetPriorityQueueIndex(del_idx); 
 #endif
         m_queue[n] = NULL; 

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : A-star pathfinding
 //
 //----------------------------------------------------------------------------
 //
@@ -26,6 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Prevent CtD (NULL-dereference)
+// - Made the algorithm behave more like A-star (recompute an open node when a
+//   new path is found that has a lower cost).
 //
 //----------------------------------------------------------------------------
 
@@ -225,7 +227,7 @@ sint32 Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
     d->SetExpanded(FALSE); 
     d->m_pos = pos; 
     d->m_parent = parent; 
-#if _DEBUG
+#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
     d->m_queue_idx = -1; 
 #endif
     
@@ -555,12 +557,8 @@ for  (tmp.x=0; tmp.x<size->x; tmp.x++) {
 
             c = g_theWorld->GetCell(next_pos);  
 
-#if defined(ACTIVISION_ORIGINAL)	// May crash
+#if defined(ACTIVISION_ORIGINAL)	// May crash + incorrect A-star implementation
             if (c->m_search_count == g_search_count) {  
-#else
-			if (c->m_point && (c->m_search_count == g_search_count))
-			{
-#endif
                 
                 
 #if 0               
@@ -593,6 +591,74 @@ for  (tmp.x=0; tmp.x<size->x; tmp.x++) {
 
                    }
                }   
+#else	// ACTIVISION_ORIGINAL
+			if (c->m_point && (c->m_search_count == g_search_count))
+			{
+				// When c has already been examined, we have to compute the G 
+				// value from the path via best, and check whether it is lower
+				// than the G value of the old path.
+
+				float				bMove;		// entry cost from best
+				BOOL				bZoc;		// zone of control from best
+				ASTAR_ENTRY_TYPE	bType;		// entry type from best
+
+				if (EntryCost(best->m_pos, next_pos, bMove, bZoc, bType))
+				{
+					DecayOrtho(best, c->m_point, bMove);	
+
+					float const		oldG	= 
+						c->m_point->m_past_cost + c->m_point->m_entry_cost;
+					float const		bestG	= past_cost + bMove;
+
+					if (bestG < oldG)
+					{
+						if (c->m_point->GetExpanded())	
+						{
+							// The node has already been expanded: propagate the 
+							// change.
+							// Inefficient implementation to test the function.
+							// Simply reinsert it in the open node list, so its 
+							// parents and children will be reevaluated 
+							// automatically. 
+							// Have to think about efficiency later.
+
+							InitPoint(best, c->m_point, next_pos, past_cost, dest);
+							m_priority_queue.Insert(c->m_point);
+#ifdef TRACK_ASTAR_NODES
+							--g_closed_nodes;
+#endif 
+						}
+						else
+						{
+							sint32 const	iList	= c->m_point->GetPriorityQueueIndex();
+
+							if (iList >= 0)
+							{
+								// Remove from old position in open node list.
+								m_priority_queue.Remove(iList);
+							}
+							else
+							{
+								// Not in open node list? Maybe the old path 
+								// had a ZoC problem.
+								++nodes_opened;
+#ifdef TRACK_ASTAR_NODES
+								++g_nodes_opened;
+
+#endif 
+							}
+
+							// Insert at the new - better - position.
+							InitPoint(best, c->m_point, next_pos, past_cost, dest);
+							m_priority_queue.Insert(c->m_point);
+						}
+					}
+					else
+					{
+						// No action: the path via best is not better.
+					}
+				}
+#endif	// ACTIVISION_ORIGINAL
            } else { 
                 
                 nodes_opened++;
