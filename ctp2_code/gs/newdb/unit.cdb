@@ -40,6 +40,7 @@ Unit {
 	Record Advance             EnableAdvance
 	Record Advance[0..5]        ObsoleteAdvance
 	Record Government[] GovernmentsModified
+	Record Terrain[] CantSettleOn //added by E
 
 	Bits Size {
 		Small,
@@ -346,6 +347,8 @@ Unit {
     Int ShieldCost
 
 	Int PowerPoints
+
+	Int UnitUpkeep // Add for future possibility of gold cost per turn per unit
 
     Int MaxHP
     Float MaxHPr = 1.0
