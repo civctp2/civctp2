@@ -27,6 +27,7 @@
 //
 // - Display the cost for the player, not the base advancement cost.
 // - Start the great library with the current research project of the player.
+// - Reduced the length of the generated advance effect string.
 //
 //----------------------------------------------------------------------------
 
@@ -645,7 +646,11 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				anyAdvance = true;
 			}
 
+#if defined(ACTIVISION_ORIGINAL)
 			sprintf(linkText, "  <L:DATABASE_UNITS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
+#else
+			sprintf(linkText, "  <L:DATABASE_UNITS,%s><e>\n", rec->GetIDText());
+#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
@@ -670,7 +675,11 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				anyAdvance = true;
 			}
 
+#if defined(ACTIVISION_ORIGINAL)
 			sprintf(linkText, "  <L:DATABASE_BUILDINGS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
+#else
+			sprintf(linkText, "  <L:DATABASE_BUILDINGS,%s><e>\n", rec->GetIDText());
+#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
@@ -696,7 +705,11 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				anyAdvance = true;
 			}
 
+#if defined(ACTIVISION_ORIGINAL)
 			sprintf(linkText, "  <L:DATABASE_WONDERS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
+#else
+			sprintf(linkText, "  <L:DATABASE_WONDERS,%s><e>\n", rec->GetIDText());
+#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
@@ -712,7 +725,12 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				isTileImp = true;
 				anyAdvance = true;
 			}
+
+#if defined(ACTIVISION_ORIGINAL)
 			sprintf(linkText, "  <L:DATABASE_TILE_IMPROVEMENTS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
+#else
+			sprintf(linkText, "  <L:DATABASE_TILE_IMPROVEMENTS,%s><e>\n", rec->GetIDText());
+#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
@@ -726,7 +744,12 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				isGov = true;
 				anyAdvance = true;
 			}
+
+#if defined(ACTIVISION_ORIGINAL)
 			sprintf(linkText, "  <L:DATABASE_GOVERNMENTS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
+#else
+			sprintf(linkText, "  <L:DATABASE_GOVERNMENTS,%s><e>\n", rec->GetIDText());
+#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}

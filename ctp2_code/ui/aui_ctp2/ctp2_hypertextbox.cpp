@@ -1,12 +1,36 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : User interface hypertext link box
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved robustness.
+// - Interpret a zero-length link text as display of the text from gl_str.txt.
+//   Example: <L:DATABASE_UNITS,UNIT_STEALTH_BOMBER><e> will display a
+//            "Stealth Bomber" hyperlink when using the English version.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -42,6 +66,231 @@ extern ColorSet		*g_colorSet;
 
 extern C3UI *g_c3ui;
 
+#if !defined(ACTIVISION_ORIGINAL)
+#include <algorithm>
+
+namespace
+{
+
+size_t const	MAX_SIZE_IDENTIFIER	= 255;
+
+//----------------------------------------------------------------------------
+//
+// Name       : IsIdentifierBegin
+//
+// Description: Test whether a character may start an identifier.
+//
+// Parameters : a_Char		: character under test
+//
+// Globals    : -
+//
+// Returns    : bool		: character may start an identifier
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+bool IsIdentifierBegin(MBCHAR a_Char)
+{
+	return isalnum(a_Char);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : IsNotInIdentifier
+//
+// Description: Test whether a character may belong to an identifier.
+//
+// Parameters : a_Char		: character under test
+//
+// Globals    : -
+//
+// Returns    : bool		: character does *not* belong to an identifier
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+bool IsNotInIdentifier(MBCHAR a_Char)
+{
+	return ('_' != a_Char) && !isalnum(a_Char);
+}
+
+} // namespace
+
+//----------------------------------------------------------------------------
+//
+// Name       : ctp2_HyperTextBox::FormatText
+//
+// Description: Format a text by wrapping it into a text box.
+//
+// Parameters : a_Text		: start of text to add
+//				a_TextEnd	: (one past) end of text to add
+//				a_Database	: link to database
+//				a_Index		: link to index within database
+//				a_IsLink	: text is a hyperlink
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+void ctp2_HyperTextBox::FormatText
+(
+	MBCHAR const *	a_Text,
+	MBCHAR const *	a_TextEnd,
+	sint32			a_Database,
+	sint32			a_Index,
+	bool			a_IsLink
+)
+{
+	for (MBCHAR const * ptr = a_Text; ptr < a_TextEnd; )
+	{
+		aui_Static *	hs		= 
+			CreateHyperStatic(ptr,
+							  a_TextEnd - ptr,	// may be corrected later
+							  m_hyperTtffile,
+							  m_hyperPointSize,
+							  m_hyperBold,
+							  m_hyperItalic,
+							  m_hyperColor,
+							  m_hyperUnderline,
+							  m_hyperShadow,
+							  m_hyperShadowColor,
+							  m_hyperFlags 
+							 );
+		Assert(hs);
+		if (!hs) return;
+
+		MBCHAR *		cReturn	= strrchr(hs->GetText(), '\r');
+		if (cReturn) 
+		{
+			*cReturn = ' ';
+		}
+
+		m_hyperStaticList->AddTail(hs);
+
+		sint32	nextX	= m_curStaticPos.x + hs->Width();
+		sint32	nextY	= m_curStaticPos.y + hs->Height();
+
+		if (nextX <= m_width)
+		{
+			// The whole text will fit on the current line.
+			hs->Move(m_curStaticPos.x, m_curStaticPos.y);
+			
+			m_curStaticPos.x = nextX;
+			if (nextY > m_virtualHeight)
+			{
+				m_virtualHeight = nextY;
+			}
+
+			ptr = a_TextEnd;
+		}
+		else
+		{
+			RECT			wrap	= { 0, 0, m_width - m_curStaticPos.x, 0 };
+			POINT			penPos	= { 0, 0 };
+			MBCHAR const *	start	= ptr;
+			
+			hs->GetTextFont()->GetLineInfo
+				(&wrap, &penPos, NULL, NULL, &ptr, a_TextEnd);
+			
+			if (ptr == a_TextEnd)
+			{
+				// Not even the first word will fit on the current line.
+				hs->Move(m_curStaticPos.x = 0,
+						 m_curStaticPos.y = m_virtualHeight 
+						);
+
+				m_virtualHeight += hs->Height();
+
+				if (hs->Width() > m_width)
+				{
+					m_curStaticPos.y = m_virtualHeight;
+				}
+				else
+				{
+					m_curStaticPos.x = hs->Width();
+				}
+			}
+			else
+			{
+				// The section from start to ptr may fit on the current line.
+				MBCHAR const *	testPtr		= start;
+				MBCHAR const *	testSubStop = ptr;
+
+				penPos.x = 0;
+				penPos.y = 0;
+				hs->GetTextFont()->GetLineInfo
+					(&wrap,	&penPos, NULL, NULL, &testPtr, testSubStop);
+
+				if (penPos.x > wrap.right)
+				{
+					// Move everything to the next line.
+					hs->Move(m_curStaticPos.x = 0,
+							 m_curStaticPos.y = m_virtualHeight 
+							);
+
+					m_virtualHeight += hs->Height();
+
+					if (hs->Width() > m_width)
+					{
+						m_curStaticPos.y = m_virtualHeight;
+					}
+					else
+					{
+						m_curStaticPos.x = hs->Width();
+					}
+
+					ptr = a_TextEnd;
+				}
+				else
+				{
+					// Put a part on this line, and continue on the next line.
+					hs->SetText(start, ptr - start);
+					hs->Move(m_curStaticPos.x, m_curStaticPos.y);
+					hs->Resize(penPos.x, hs->Height());
+
+					if (nextY > m_virtualHeight)
+					{
+						m_virtualHeight = nextY;
+					}
+	
+					m_curStaticPos.x = 0;
+					m_curStaticPos.y = m_virtualHeight;
+				}
+			}
+		}
+		
+		// Check for line breaks		
+		if (*(ptr - 1) == '\n')
+		{
+			m_curStaticPos.x = 0;
+			m_curStaticPos.y = m_virtualHeight;
+		} 
+
+		// Removed the arbitrary limit of k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS
+		// (= 100) hyperstatic list items, because it resulted in a mismatch
+		// between the hyperstatic and hyperlink lists, causing a crash later.
+
+		if (a_IsLink)
+		{
+			ctp2_HyperLink * hl	= new ctp2_HyperLink;
+			hl->m_static		= hs;
+			hl->m_db			= a_Database;
+			hl->m_index			= a_Index;
+			hl->m_frame			= FALSE;
+			hl->m_oldColor		= m_hyperColor;
+			hl->m_selectColor	= RGB(0,0,255);
+			m_hyperLinkList->AddTail(hl);
+		}
+	} // for
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 ctp2_HyperTextBox::ctp2_HyperTextBox(
 	AUI_ERRCODE *retval,
@@ -244,8 +493,9 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 	const MBCHAR *stop = ptr + len;
 
 
-	
+#if defined(ACTIVISION_ORIGINAL)	// not used anymore	
 	sint32 adjWidth = m_width;
+#endif
 
 	sint32 hyperLinkDB = 0;
 	sint32 hyperLinkIndex = 0;
@@ -324,10 +574,10 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				{
 
 				
+#if defined(ACTIVISION_ORIGINAL)	// Possible access past end of string				
 				char hyperLinkDB_name[255];
 				char hyperLinkIndex_name[255];
 
-				
 				char * copy_to = hyperLinkDB_name;
 
 				
@@ -336,7 +586,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				
 				ptr++;
 
-				
 				while (!isalnum(*ptr))
 					ptr++;
 
@@ -372,8 +621,36 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				
 				while (*ptr != '>' && *ptr)
 					ptr++;
-
 				
+#else	// ACTIVISION_ORIGINAL
+				MBCHAR			hyperLinkDB_name[GL_MAX_DB_NAME_SIZE];
+				MBCHAR			hyperLinkIndex_name[MAX_SIZE_IDENTIFIER + 1];
+				MBCHAR const *	copyBegin;
+				MBCHAR const *	copyEnd;
+				MBCHAR const *	copySafeEnd; 
+				
+				copyBegin	= std::find_if(ptr + 2, stop, IsIdentifierBegin);
+				copyEnd		= std::find_if(copyBegin, stop, IsNotInIdentifier);
+				copySafeEnd	= std::min(copyEnd, copyBegin + GL_MAX_DB_NAME_SIZE);
+
+				std::copy(copyBegin, copySafeEnd, hyperLinkDB_name);
+				std::fill(hyperLinkDB_name + (copySafeEnd - copyBegin),
+						  hyperLinkDB_name + GL_MAX_DB_NAME_SIZE,
+						  static_cast<MBCHAR const>(0)
+						 );
+
+				copyBegin	= std::find_if(copyEnd, stop, IsIdentifierBegin);
+				copyEnd		= std::find_if(copyBegin, stop, IsNotInIdentifier);
+				copySafeEnd	= std::min(copyEnd, copyBegin + MAX_SIZE_IDENTIFIER);
+
+				std::copy(copyBegin, copySafeEnd, hyperLinkIndex_name);
+				std::fill(hyperLinkIndex_name + (copySafeEnd - copyBegin),
+						  hyperLinkIndex_name + MAX_SIZE_IDENTIFIER + 1,
+						  static_cast<MBCHAR const>(0)
+						 );
+
+				ptr			= std::find(copyEnd, stop, '>');
+#endif	// ACTIVISION_ORIGINAL
 
 
 
@@ -402,6 +679,29 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				}
 
 			case 'e':
+#if !defined(ACTIVISION_ORIGINAL)
+				if (isHyperLink)
+				{
+					// <L> or <l> directly followed by <e>.
+					// Perform database text lookup.
+					if (hyperLinkDB)
+					{
+						MBCHAR const *	ptr	= g_greatLibrary->GetItemName
+												(hyperLinkDB, hyperLinkIndex);
+						
+						FormatText(ptr, 
+							       ptr + strlen(ptr), 
+								   hyperLinkDB, 
+								   hyperLinkIndex, 
+								   true
+								  );
+
+					}
+
+					m_hyperUnderline	= oldUnderline;
+					isHyperLink			= FALSE;
+				}
+#endif
 				m_hyperColor = m_hyperColorOld;
 				break;
 
@@ -411,16 +711,24 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				return AUI_ERRCODE_INVALIDPARAM;
 			}
 
+#if defined(ACTIVISION_ORIGINAL)	// Possible access past end of string
 			while ( *ptr++ != '>' )
 				;
+#else
+			ptr = std::find(ptr, stop, '>');
+			if (ptr != stop)
+			{
+				++ptr;
+			}
+#endif
 		}
 		else
 		{
+#if defined(ACTIVISION_ORIGINAL)	// Common code moved to FormatText
 			
 			
 			
 
-			
 			
 			
 			const MBCHAR *nextCmd = strchr( ptr, '<' );
@@ -434,7 +742,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			const MBCHAR *nextLine = strchr( ptr, '\n' );
 			if ( nextLine && ( !nextCmd || nextLine < nextCmd ) )
 				len = nextLine - ptr + 1;
-
 			
 			
 			
@@ -603,7 +910,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				
 
 				
-				
 				if ( m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS )
 				{
 					
@@ -622,7 +928,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					m_curStaticPos.y -= topY;
 				}
 
-				
 				if ( isHyperLink ) {
 					ctp2_HyperLink *hl;
 
@@ -639,6 +944,21 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					m_hyperLinkList->AddTail( hl );
 				}
 			}
+#else	// ACTIVISION_ORIGINAL
+
+			MBCHAR const *  nextLine	= std::find(ptr, stop, '\n');
+			MBCHAR const *	nextStop	= std::find(ptr, nextLine, '<');
+
+			if ((nextStop != stop) && (*nextStop == '\n'))
+			{
+				// Include the end of line marker in the string
+				++nextStop;
+			}
+
+			FormatText(ptr, nextStop, hyperLinkDB, hyperLinkIndex, isHyperLink);
+			ptr	= nextStop;
+
+#endif	// ACTIVISION_ORIGINAL
 			
 			if ( isHyperLink ) {
 				isHyperLink = FALSE;

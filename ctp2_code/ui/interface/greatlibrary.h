@@ -36,6 +36,7 @@
 //
 // - Microsoft extensions marked.
 // - Increased maximum library text size to support the German version.
+// - Exported database name size max.
 //
 //----------------------------------------------------------------------------
 
@@ -87,7 +88,8 @@
 #if defined(ACTIVISION_ORIGINAL)
 #define k_MAX_GL_ENTRY 4096
 #else
-#define k_MAX_GL_ENTRY 8192
+size_t const	k_MAX_GL_ENTRY		= 8192;
+size_t const	GL_MAX_DB_NAME_SIZE	= 30; 
 #endif
 
 enum DATABASE {

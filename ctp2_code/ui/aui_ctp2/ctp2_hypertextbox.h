@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : User interface hypertext link
+// Description  : User interface hypertext link box
 //
 //----------------------------------------------------------------------------
 //
@@ -17,19 +17,30 @@
 //
 // Compiler flags
 // 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
 // _MSC_VER		
-// - Use Microsoft C++ extensions when set.
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are active for _MSC_VER value 1200 are the original 
+//       Activision code.
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Event handlers declared in a notation that is more standard C++.
-// - #pragma once commented out.
+// - #pragma once marked as Microsoft specific.
+// - Common line formatting code factored out (FormatText).
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -119,6 +130,19 @@ protected:
 
 
 	sint32 m_bevelWidth;
+
+#if !defined(ACTIVISION_ORIGINAL)
+private:
+	void FormatText
+	(
+		MBCHAR const *	a_Text, 
+		MBCHAR const *	a_TextEnd,
+		sint32			a_Database,
+		sint32			a_Index,
+		bool			a_IsLink
+	);
+#endif
+
 };
 
 #endif 

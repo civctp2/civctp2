@@ -38,6 +38,7 @@
 // - Handle Japanese input data, by t.s. (2003.12).
 // - Memory leaks repaired at the root.
 // - Increased maximum library text size to support the German version.
+// - Exported database name size max.
 //
 //----------------------------------------------------------------------------
 
@@ -151,8 +152,11 @@ extern ProfileDB			*g_theProfileDB;
 
 extern aui_Surface			*g_sharedSurface;
 
-
+#if defined(ACTIVISION_ORIGINAL)
 static char s_database_names[DATABASE_MAX][200] =
+#else
+static char const s_database_names[DATABASE_MAX][GL_MAX_DB_NAME_SIZE] =
+#endif
 {
 	"DATABASE_DEFAULT",
 	"DATABASE_UNITS",
