@@ -20,6 +20,11 @@ messagebox '10aInvestigateCityFailed' {
 	Text(ID_INVESTIGATE_CITY_FAILED_VICTIM);
 	MessageType("INVESTIGATE_CITY_ICON");
 }
+messagebox '10aInvestigateCityFailedEsc' {
+	Show();
+	Text(ID_INVESTIGATE_CITY_FAILED_ESC_VICTIM);
+	MessageType("INVESTIGATE_CITY_ICON");
+}
 
 messagebox '10bStealTechnologyFailed' {
 	Show();
@@ -108,6 +113,12 @@ messagebox '10zStoppedBySpies' {
 messagebox '11aInvestigateCityFailed' {
 	Show();
 	Text(ID_INVESTIGATE_CITY_FAILED_AGRESSOR);
+	MessageType("INVESTIGATE_CITY_ICON");
+}
+
+messagebox '11aInvestigateCityFailedEsc' {
+	Show();
+	Text(ID_INVESTIGATE_CITY_FAILED_ESC_AGRESSOR);
 	MessageType("INVESTIGATE_CITY_ICON");
 }
 

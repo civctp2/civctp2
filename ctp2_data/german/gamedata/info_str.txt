@@ -167,7 +167,7 @@ UNIT_VETERAN 				"Als Würdigung für besondere Tapferkeit wurde {unit[0].name#PRO
 AGE_ONE_ENTERED 			"Unsere Nation entsteigt den Kinderschuhen: Wir sind in das Zeitalter der Antike vorgedrungen."
 AGE_TWO_ENTERED 			"Unsere Nation schreitet einer kulturellen und wissenschaftlichen Blütezeit entgegen: Wir haben das Zeitalter der Renaissance erreicht."
 AGE_THREE_ENTERED 			"Wir haben uns auf diesem Planeten behauptet und treten nun in das Zeitalter der Moderne ein."
-AGE_FOUR_ENTERED 			"Die Entschlüsselung der Mysterien des Lebens ist in greifbare Nähe gerückt, denn unser Volk steht an der Schwelle zu einer neuen, bahnbrechenden Epoche der wissenschaftlichen Erkenntnisse: Der Genetischen Ära."
+AGE_FOUR_ENTERED 			"Die Entschlüsselung der Mysterien des Lebens ist in greifbare Nähe gerückt, denn unser Volk steht an der Schwelle zu einer neuen, bahnbrechenden Epoche der wissenschaftlichen Erkenntnisse: der Genetischen Ära."
 AGE_FIVE_ENTERED 			"Mit großen Schritten nähern wir uns dem Zenith des menschlichen Strebens: Unsere Nation ist in das Diamantene Zeitalter vorangeschritten."
 
 ## Age Change Messages of CityMod2 ##
@@ -273,6 +273,10 @@ INFECTED_VIA_TRADE 			"Ein in {city[0].name} freigesetzter hoch infektiöser Wirk
 ## Cyberninja Attack ##
 INVESTIGATE_CITY_FAILED_VICTIM 		"Unsere geheimdienstlichen Operationen haben sich gelohnt: Wir konnten einen fremden Spion daran hindern, unsere Stadt {city[0].name} auszuspionieren."
 INVESTIGATE_CITY_FAILED_AGRESSOR 	"{unitrecord[0].name#OUR_SINGULAR_CAPS} wurde beim Ausspionieren der Stadt {city[0].name} gefangen genommen."
+# Added 7/2004 L. Hirth
+INVESTIGATE_CITY_FAILED_ESC_VICTIM	"Unsere geheimdienstlichen Operationen haben sich gelohnt: Wir konnten einen fremden Spion daran hindern, unsere Stadt {city[0].name} auszuspionieren. Leider konnten wir den Spion aber nicht gefangen nehmen."
+INVESTIGATE_CITY_FAILED_ESC_AGRESSOR 	"{unitrecord[0].name#OUR_SINGULAR_CAPS} war beim Ausspionieren der Stadt {city[0].name} nicht erfolgreich. Glücklicherweise konnte er aber entkommen."
+# Added End
 
 ## Nanite Cleansing ##
 ## Eco-Ranger Attack ##

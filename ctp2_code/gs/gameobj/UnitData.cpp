@@ -29,6 +29,7 @@
 // - Movement point handling for ships at tunnels corrected.
 // - Handle unit types that have CanCarry property, but have MaxCargo 0.
 // - Corrected movement type check for active defenders.
+// - Added second message after investigation of a city
 //
 //----------------------------------------------------------------------------
 
@@ -3833,6 +3834,7 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 	if(g_rand->Next(100) >= sint32(chance * 100.0)) {
 		DPRINTF(k_DBG_GAMESTATE, ("Spy failed\n"));
 
+#ifdef ACTIVISION_ORIGINAL
 		so = new SlicObject("10aInvestigateCityFailed") ;
 		so->AddRecipient(c.GetOwner()) ;
 		so->AddCivilisation(m_owner) ;
@@ -3845,12 +3847,42 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 		so->AddCity(c) ;
 		so->AddUnitRecord(m_type);
 		g_slicEngine->Execute(so) ;
-
+#endif
 		if(g_rand->Next(100) < sint32(deathChance * 100.0)) {
 			Unit me(m_id);
-			me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
-		}
+#ifndef ACTIVISION_ORIGINAL
+			so = new SlicObject("10aInvestigateCityFailed") ;
+			so->AddRecipient(c.GetOwner()) ;
+			so->AddCivilisation(m_owner) ;
+			so->AddCity(c) ;
+			so->AddUnitRecord(m_type);
+			g_slicEngine->Execute(so) ;
+	
+			so = new SlicObject("11aInvestigateCityFailed") ;
+			so->AddRecipient(m_owner) ;
+			so->AddCity(c) ;
+			so->AddUnitRecord(m_type);
+			g_slicEngine->Execute(so) ;
+#endif
 
+			me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
+		} 
+#ifndef ACTIVISION_ORIGINAL
+		  else {
+			so = new SlicObject("10aInvestigateCityFailedEsc") ;
+			so->AddRecipient(c.GetOwner()) ;
+			so->AddCivilisation(m_owner) ;
+			so->AddCity(c) ;
+			so->AddUnitRecord(m_type);
+			g_slicEngine->Execute(so) ;
+	
+			so = new SlicObject("11aInvestigateCityFailedEsc") ;
+			so->AddRecipient(m_owner) ;
+			so->AddCity(c) ;
+			so->AddUnitRecord(m_type);
+			g_slicEngine->Execute(so) ;
+		}
+#endif
 
 
 		return ORDER_RESULT_FAILED;
