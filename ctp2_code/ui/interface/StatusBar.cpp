@@ -1,9 +1,33 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The Status Bar
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed a memory leak by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -65,7 +89,10 @@ m_statusBar(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock, "StatusBar"))
 
 StatusBar::~StatusBar()
 {
-	
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann
+	delete m_text;
+#endif
 	m_list.remove(this);
 
 }
