@@ -26,6 +26,8 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - #pragma once commented out.
+// - #01 Allow shifing the X and Y axis in the radar map with RMouse click
+//   (L. Hirth 6/2004)
 //
 //----------------------------------------------------------------------------
 
@@ -202,17 +204,32 @@ private:
 	void RenderMapTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
 		uint8 borderFlags, Pixel16 borderColor);
 
-	
-	
-	
-	
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
+	Pixel16 RadarTileColor(const Player *player, const MapPoint &position, uint32 &flags);
+
 	void RenderTile(aui_Surface *surface, const MapPoint &position,
 		Player *player);
+
+	void RenderTrade(aui_Surface *surface, const MapPoint &position, Player *player);
 
 	void RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 		Player *player);
 
-	void RenderTrade(aui_Surface *surface, const MapPoint &position, Player *player);
+#else
+	Pixel16 RadarTileColor(const Player *player, const MapPoint &position,
+							const MapPoint &worldpos, uint32 &flags);
+
+	void RenderTile(aui_Surface *surface, const MapPoint &position,
+		const MapPoint &worldpos, Player *player);
+
+	void RenderTrade(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player);
+
+	void RenderTileBorder(aui_Surface *surface, const MapPoint &position,
+						  const MapPoint &worldpos, Player *player);
+
+	MapPoint MapOffset(const MapPoint oldPosition);
+	MapPoint PosWorldToPosRadar(const MapPoint worldpos);
+#endif
 
 	
 	bool		m_displayUnits;		
@@ -239,6 +256,10 @@ private:
 	RECT		m_mapViewRect;		
 	MapPoint	m_lastCenteredPoint;
 	Unit		m_selectedCity;
+#ifndef ACTIVISION_ORIGINAL  // #01 Allow shifing the X and Y axis 
+	MapPoint	m_displayOffset[k_MAX_PLAYERS]; // Shifted x and y value
+											    // for each player (Hotseat)
+#endif
 };
 
 

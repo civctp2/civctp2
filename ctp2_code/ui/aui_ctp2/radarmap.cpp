@@ -1,15 +1,37 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface radar map
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #01 Allow shifing the X and Y axis in the radar map with RMouse clicks
+//   (L. Hirth 6/2004)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
-
 #include "radarmap.h"
-
 
 #include <algorithm>
 
@@ -60,6 +82,11 @@ static const unsigned char k_SOUTH_EAST_BORDER_FLAG	= 0x10;
 static const unsigned char k_SOUTH_WEST_BORDER_FLAG	= 0x20;
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RadarMap
+//		
+//---------------------------------------------------------------------------
 RadarMap::RadarMap(AUI_ERRCODE *retval,
 							sint32 id,
 							MBCHAR *ldlBlock,
@@ -74,6 +101,11 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RadarMap
+//		
+//---------------------------------------------------------------------------
 RadarMap::RadarMap(AUI_ERRCODE *retval,
 							uint32 id,
 							sint32 x,
@@ -91,6 +123,12 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 	InitCommon();	
 }
 
+
+//---------------------------------------------------------------------------
+//
+//	RadarMap::~RadarMap
+//		
+//---------------------------------------------------------------------------
 RadarMap::~RadarMap()
 {
 	if (m_mapSurface)
@@ -102,6 +140,11 @@ RadarMap::~RadarMap()
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::InitCommonLdl
+//		
+//---------------------------------------------------------------------------
 void RadarMap::InitCommonLdl(MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
@@ -122,6 +165,11 @@ void RadarMap::InitCommonLdl(MBCHAR *ldlBlock)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::InitCommon
+//		
+//---------------------------------------------------------------------------
 void RadarMap::InitCommon(void)
 {
 	AUI_ERRCODE			errcode;
@@ -175,6 +223,11 @@ void RadarMap::InitCommon(void)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::ClearMapOverlay
+//		
+//---------------------------------------------------------------------------
 void RadarMap::ClearMapOverlay(void)
 {
 	delete[] m_mapOverlay;
@@ -182,6 +235,15 @@ void RadarMap::ClearMapOverlay(void)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::SetMapOverlayCell
+//		
+//---------------------------------------------------------------------------
+//	- Sets a position for the Gaia controller overlay and creates the over-
+//    lay it does not exists yet  
+//	
+//---------------------------------------------------------------------------
 void RadarMap::SetMapOverlayCell(MapPoint &pos, COLOR color)
 {
 	if (m_mapOverlay == NULL) {
@@ -197,7 +259,14 @@ void RadarMap::SetMapOverlayCell(MapPoint &pos, COLOR color)
 }
 
 
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::Resize
+//		
+//---------------------------------------------------------------------------
+//	- resize the radar map
+//	
+//---------------------------------------------------------------------------
 AUI_ERRCODE	RadarMap::Resize( sint32 width, sint32 height )
 {
 	AUI_ERRCODE		errcode;
@@ -221,6 +290,14 @@ AUI_ERRCODE	RadarMap::Resize( sint32 width, sint32 height )
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::CalculateMetrics
+//		
+//---------------------------------------------------------------------------
+//	- calculate some values depending on the current radar map size
+//	
+//---------------------------------------------------------------------------
 void RadarMap::CalculateMetrics(void)
 {
 	if (!g_theWorld) return;
@@ -231,35 +308,6 @@ void RadarMap::CalculateMetrics(void)
 		free(m_tempBuffer);
 
 	m_mapSize = g_theWorld->GetSize();
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	m_tilePixelWidth = ((double )m_width) / m_mapSize->x;
 	m_tilePixelHeight = ((double )m_height) / m_mapSize->y;
@@ -274,6 +322,14 @@ void RadarMap::CalculateMetrics(void)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::MapToPixel
+//		
+//---------------------------------------------------------------------------
+//	- Seems unused
+//	
+//---------------------------------------------------------------------------
 POINT RadarMap::MapToPixel(sint32 x, sint32 y)
 {
 	POINT		pt;
@@ -294,6 +350,14 @@ POINT RadarMap::MapToPixel(sint32 x, sint32 y)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::MapToPixel
+//		
+//---------------------------------------------------------------------------
+//	- Seems unused because calling function is unused
+//	
+//---------------------------------------------------------------------------
 POINT RadarMap::MapToPixel(MapPoint *pos)
 {
 	return MapToPixel(pos->x, pos->y);
@@ -302,6 +366,14 @@ POINT RadarMap::MapToPixel(MapPoint *pos)
 
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::GetVisiblePlayerToRender
+//		
+//---------------------------------------------------------------------------
+//	- Gives back the player that shall be shown currently
+//	
+//---------------------------------------------------------------------------
 Player *RadarMap::GetVisiblePlayerToRender()
 {
 	
@@ -325,8 +397,16 @@ Player *RadarMap::GetVisiblePlayerToRender()
 }
 
 
-
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RadarTileColor
+//		
+//---------------------------------------------------------------------------
+//	- Determines the color that has to be set for a position of the 
+//    RadarMap
+//	
+//---------------------------------------------------------------------------
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position, uint32 &flags)
 {
 	
@@ -334,12 +414,10 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 
 	flags = 0;
 
-	
 	if(player->m_vision->IsExplored(position)) {
 		if(m_displayTrade && g_theWorld->GetCell(position)->GetNumTradeRoutes() > 0) {
 			flags = 1;
 		}
-
 
 		
 		
@@ -349,8 +427,6 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 				return(g_colorSet->GetColor(color));
 		}
 
-		
-		
 		if(!g_theWorld->GetTopVisibleUnit(position, unit))
 			g_theWorld->GetTopRadarUnit(position, unit);
 
@@ -372,7 +448,7 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 					
 					
 					unit.m_id = 0;
-					g_theWorld->GetTopVisibleUnitNotCity(position, unit);
+						g_theWorld->GetTopVisibleUnitNotCity(position, unit);
 				}
 			}
 
@@ -391,6 +467,8 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 															   unseenCellCarton.m_unseenCell->GetTerrainType())));	
 			} else {
 				if(g_theWorld->IsLand(position) || g_theWorld->IsMountain(position)) {
+
+
 					return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
 																   TERRAIN_GRASSLAND));
 				} else {
@@ -402,12 +480,13 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 					
 
 		Cell *cell = g_theWorld->GetCell(position);
+
 		if(m_displayTerrain) {
 			
 			return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
 														   cell->GetTerrainType())));
 		} else {
-			if(g_theWorld->IsLand(position) || g_theWorld->IsMountain(position)) {
+		if(g_theWorld->IsLand(position) || g_theWorld->IsMountain(position)) {
 				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
 															   TERRAIN_GRASSLAND));
 			} else {
@@ -418,15 +497,118 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 	}
 
 	
-	
-	
 	if(g_theWorld->GetTopRadarUnit(position, unit))
 		return(g_colorSet->GetPlayerColor(unit.GetOwner()));
 	return(g_colorSet->GetColor(COLOR_BLACK));
 }
 
+#else // ACTIVISION_ORIGINAL
+Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
+								 const MapPoint &worldpos, uint32 &flags)
+{
+	
+	Unit unit;
+
+	flags = 0;
+
+	if(player->m_vision->IsExplored(worldpos)) {
+		if(m_displayTrade && g_theWorld->GetCell(worldpos)->GetNumTradeRoutes() > 0) {
+			flags = 1;
+		}
+
+		
+		if(m_displayOverlay && m_mapOverlay) {
+			COLOR color = m_mapOverlay[worldpos.y * m_mapSize->x + worldpos.x];
+			if(color != COLOR_MAX)	
+				return(g_colorSet->GetColor(color));
+		}
+
+		if(!g_theWorld->GetTopVisibleUnit(worldpos, unit))
+			g_theWorld->GetTopRadarUnit(worldpos, unit);
+
+		if(unit.IsValid()) {
+			
+			if(unit.IsCity()) {
+				
+				if(m_displayCities) {
+					
+					
+					if(unit.m_id == m_selectedCity.m_id)
+						return(g_colorSet->GetColor(COLOR_RED));
+					else
+						return(g_colorSet->GetPlayerColor(unit.GetOwner()));
+				} else {
+					
+					
+					
+					
+					unit.m_id = 0;
+					g_theWorld->GetTopVisibleUnitNotCity(worldpos, unit);
+				}
+			}
+
+			
+			
+			
+			if(m_displayUnits && unit.m_id)
+				return(g_colorSet->GetPlayerColor(unit.GetOwner()));
+		}
+
+		
+		UnseenCellCarton unseenCellCarton;
+		if(player->m_vision->GetLastSeen(worldpos, unseenCellCarton)) {
+			if(m_displayTerrain) {
+				return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
+															   unseenCellCarton.m_unseenCell->GetTerrainType())));	
+			} else {
+
+				if(g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos)) {
+
+					return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
+																   TERRAIN_GRASSLAND));
+				} else {
+					return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
+																   TERRAIN_WATER_DEEP));
+				}
+			}
+		}
+					
+
+		Cell *cell = g_theWorld->GetCell(worldpos);
+
+		if(m_displayTerrain) {
+			
+			return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
+														   cell->GetTerrainType())));
+		} else {
+		if(g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos)) {
+				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
+															   TERRAIN_GRASSLAND));
+			} else {
+				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
+															   TERRAIN_WATER_DEEP));
+			}
+		}
+	}
 
 
+	if(g_theWorld->GetTopRadarUnit(worldpos, unit))
+		return(g_colorSet->GetPlayerColor(unit.GetOwner()));
+
+	return(g_colorSet->GetColor(COLOR_BLACK));
+}
+#endif // ACTIVISION_ORIGINAL
+		
+
+
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RadarTileBorderColor	
+//		
+//---------------------------------------------------------------------------
+//	- Checks which color a border must be drawn for the current tile 
+//
+//---------------------------------------------------------------------------
 Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position)
 {
 	
@@ -439,7 +621,14 @@ Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position)
 }
 
 
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RadarTileBorder	
+//		
+//---------------------------------------------------------------------------
+//	- Checks which borders must be drawn for the current tile 
+//
+//---------------------------------------------------------------------------
 uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 {
 	
@@ -449,12 +638,11 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	if(!m_displayBorders)
 		return(borderFlags);
 
-	
 	if(!player->m_vision->IsExplored(position))
 		return(borderFlags);
 
-	
 	sint32 owner = g_theWorld->GetCell(position)->GetOwner();
+
 	if(owner < 0)
 		return(borderFlags);
 
@@ -466,8 +654,6 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 
 	
 	MapPoint neighborPosition;
-
-	
 	
 	if(position.GetNeighborPosition(EAST, neighborPosition) &&
 		(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
@@ -492,6 +678,15 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	return(borderFlags);
 }
 
+
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderTradeRoute	
+//		
+//---------------------------------------------------------------------------
+//	- Draws a trade route sign for the current tile
+//
+//---------------------------------------------------------------------------
 void RadarMap::RenderTradeRoute(aui_Surface *surface,
 								const RECT &tileRectangle)
 {
@@ -510,7 +705,15 @@ void RadarMap::RenderTradeRoute(aui_Surface *surface,
 
 
 
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderSpecialTile	
+//		
+//---------------------------------------------------------------------------
+//	- Renders the current special radar map area, tha means tiles that are
+//    on the max or min x value.
+//
+//---------------------------------------------------------------------------
 void RadarMap::RenderSpecialTile(aui_Surface *surface,
 								 const MapPoint &screenPosition,
 								 Pixel16 color, uint32 flags)
@@ -534,8 +737,15 @@ void RadarMap::RenderSpecialTile(aui_Surface *surface,
 }
 
 
-
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderSpecialTileBorder
+//		
+//---------------------------------------------------------------------------
+//	- Renders the current special radar map borders, tha means tiles that are
+//    on the max or min x value.
+//
+//---------------------------------------------------------------------------
 void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 								 const MapPoint &screenPosition,
 								 uint8 borderFlags,
@@ -593,7 +803,14 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 }
 
 
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderNormalTile
+//		
+//---------------------------------------------------------------------------
+//	- Renders the current normal radar map area
+//
+//---------------------------------------------------------------------------
 void RadarMap::RenderNormalTile(aui_Surface *surface,
 								const MapPoint &screenPosition,
 								Pixel16 color, uint32 flags)
@@ -603,12 +820,20 @@ void RadarMap::RenderNormalTile(aui_Surface *surface,
 	tileRectangle.right = tileRectangle.left + 2;
 	tileRectangle.top = screenPosition.y;
 	tileRectangle.bottom = screenPosition.y + 1;
-	
 	primitives_PaintRect16(surface, &tileRectangle, color);
 	
 	
 }
 
+
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderNormalTileBorder
+//		
+//---------------------------------------------------------------------------
+//	- Renders the current normal radar map borders
+//
+//---------------------------------------------------------------------------
 void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 		const MapPoint &screenPosition,
 		uint8 borderFlags, Pixel16 borderColor)
@@ -669,7 +894,15 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 }
 
 
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderMapTile
+//		
+//---------------------------------------------------------------------------
+//	- Controls which method renders the current radar map
+//    tile
+//
+//---------------------------------------------------------------------------
 void RadarMap::RenderMapTile(aui_Surface *surface, const MapPoint &screenPosition, Pixel16 color, uint32 flags)
 {
 	
@@ -681,7 +914,15 @@ void RadarMap::RenderMapTile(aui_Surface *surface, const MapPoint &screenPositio
 }
 
 
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderMapTileBorder
+//		
+//---------------------------------------------------------------------------
+//	- Controls which method renders the current radar map
+//    borders
+//
+//---------------------------------------------------------------------------
 void RadarMap::RenderMapTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
 							 uint8 borderFlags, Pixel16 borderColor)
 {
@@ -694,33 +935,61 @@ void RadarMap::RenderMapTileBorder(aui_Surface *surface, const MapPoint &screenP
 }
 
 
-
-
-
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderTile
+//		
+//---------------------------------------------------------------------------
+//	- Controls the rendering of the area for the current radar map
+//    tile	
+//
+//---------------------------------------------------------------------------
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 void RadarMap::RenderTile(aui_Surface *surface, const MapPoint &position,
 						  Player *player)
+#else
+void RadarMap::RenderTile(aui_Surface *surface, const MapPoint &position,
+						  const MapPoint &worldpos, Player *player)
+#endif
+
 {
 	uint32 flags;
 
-	
+#ifdef ACTIVISION_ORIGINAL	// #01 Allow shifing the X and Y axis 
 	Pixel16 color = RadarTileColor(player, MapPoint(position.x, position.y), flags);
-
-	
+			
 	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
 		% m_mapSize->x;
+#else
+	Pixel16 color = RadarTileColor(player, MapPoint(position.x, position.y), worldpos, flags);
+
+	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
+		% m_mapSize->x;
+#endif
+
+
 
 	
 	RenderMapTile(surface, MapPoint(x, position.y), color, flags);
+
 }
 
+
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderTileBorder
+//		
+//---------------------------------------------------------------------------
+//	- Controls the rendering of the borders for the current radar map
+//    position	
+//---------------------------------------------------------------------------
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 						  Player *player)
 {
 	
 	Pixel16 borderColor = RadarTileBorderColor(MapPoint(position.x, position.y));
 	uint8 borderFlags = RadarTileBorder(player, MapPoint(position.x, position.y));
-
 	
 	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
 		% m_mapSize->x;
@@ -730,17 +999,55 @@ void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 		RenderMapTileBorder(surface, MapPoint(x, position.y), borderFlags, borderColor);
 }
 
+#else
+void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
+						  const MapPoint &worldpos, Player *player)
+{
+	Pixel16 borderColor = RadarTileBorderColor(MapPoint(worldpos.x, worldpos.y));
+	uint8 borderFlags = RadarTileBorder(player, MapPoint(worldpos.x, worldpos.y));
+	
+	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
+		% m_mapSize->x;
+
+	
+	if (borderFlags)
+		RenderMapTileBorder(surface, MapPoint(x, position.y), borderFlags, borderColor);
+}
+#endif
+
+
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderTrade
+//		
+//---------------------------------------------------------------------------
+//  - Prepares and call the rendering of the trade routes
+//		
+//---------------------------------------------------------------------------
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, Player *player)
+#else
+void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player)
+#endif
 {
 	if(!m_displayTrade)
 		return;
 
 	
 	
-	MapPoint screenPosition((sint32)(ceil(position.y / 2) + position.x) % (m_mapSize->x), position.y);
 		 
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
+	MapPoint screenPosition((sint32)(ceil(position.y / 2) + position.x) % (m_mapSize->x), position.y);
+
 	if(!g_theWorld->GetCell(position)->GetNumTradeRoutes() ||
-	   !player->m_vision->IsExplored(position)) {
+		!player->m_vision->IsExplored(position)) {
+
+#else
+	MapPoint screenPosition((sint32)(ceil(worldpos.y / 2) + position.x) % (m_mapSize->x), position.y);
+
+	if(!g_theWorld->GetCell(worldpos)->GetNumTradeRoutes() ||
+	   !player->m_vision->IsExplored(worldpos)) {
+#endif
 		return;
 	}
 
@@ -763,6 +1070,14 @@ void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, Playe
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderMap
+//		
+//---------------------------------------------------------------------------
+//	- Redraws the complete radarmap
+//
+//---------------------------------------------------------------------------
 void RadarMap::RenderMap(aui_Surface *surface)
 {
 	
@@ -780,7 +1095,11 @@ void RadarMap::RenderMap(aui_Surface *surface)
 	for(y = 0; y < m_mapSize->y; y++)
 		for(x = 0; x < m_mapSize->x; x++)
 		{
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 			RenderTile(m_tempSurface, MapPoint(x, y), player);	
+#else
+			RenderTile(m_tempSurface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);	
+#endif
 		}
 
 	fRect sRect = {0, 0, m_tempSurface->Width(), m_tempSurface->Height()};
@@ -799,12 +1118,27 @@ void RadarMap::RenderMap(aui_Surface *surface)
 	for(y = 0; y < m_mapSize->y; y++)
 		for(x = 0; x < m_mapSize->x; x++)
 		{
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 			RenderTileBorder(surface, MapPoint(x, y), player);	
 			RenderTrade(surface, MapPoint(x, y), player);
+#else
+			RenderTileBorder(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);	
+			RenderTrade(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
+#endif
 		}
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderViewRect
+//
+//---------------------------------------------------------------------------
+//  - Draws the rectangle on the radar map that corresponds to the view of 
+//    the main tile map.  
+//		
+//---------------------------------------------------------------------------
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 void RadarMap::RenderViewRect
 (
 	aui_Surface *surf, 
@@ -818,32 +1152,25 @@ void RadarMap::RenderViewRect
 
 		if(!g_tiledMap->ReadyToDraw())
 			return;
+
 	}
+
 
 		
 	sint32 x1,x2,x3,x4;
 	sint32 y1,y2,y3,y4;
-
-	
 
 	if ( m_mapSize ) 
 	{
 		sint32 mapWidth = m_mapSize->x;
 		sint32 mapHeight = m_mapSize->y;
 
-
-
-
-
-
-
-
-
-		
+		// Set the X coordinate points		
 		if (!g_theWorld->IsXwrap() && (m_mapViewRect.left < 0 || m_mapViewRect.right > mapWidth)) 
 		{
 			x1 = x3 = m_mapViewRect.left;
 			x2 = x4 = m_mapViewRect.right;
+
 			if (m_mapViewRect.left < 0) 
 			{
 				x1 = x3 = 0;
@@ -854,10 +1181,9 @@ void RadarMap::RenderViewRect
 			}
 		}
 
-		
 		else 
 		{
-			
+		   	
 			if (m_mapViewRect.left < 0) 
 			{
 				x1 = m_mapViewRect.left + mapWidth;
@@ -899,16 +1225,13 @@ void RadarMap::RenderViewRect
 			} 
 		} 
 
-
-
-
-
 		x1 = (sint32) (x1 * m_tilePixelWidth) + x;
 		x2 = (sint32) (x2 * m_tilePixelWidth) + x - 1;
 		x3 = (sint32) (x3 * m_tilePixelWidth) + x;
 		x4 = (sint32) (x4 * m_tilePixelWidth) + x - 1;
 
-		
+
+		// Set the Y points
 		if ( !g_theWorld->IsYwrap() && ( m_mapViewRect.top < 0 || m_mapViewRect.bottom >= mapHeight)) 
 		{
 			
@@ -964,37 +1287,220 @@ void RadarMap::RenderViewRect
 			}
 		}
 
-
-
-
 		y1 = (sint32) (y1 * m_tilePixelHeight) + y;
 		y2 = (sint32) (y2 * m_tilePixelHeight) + y - 1;
 		y3 = (sint32) (y3 * m_tilePixelHeight) + y;
 		y4 = (sint32) (y4 * m_tilePixelHeight) + y - 1;
+
 	}
 	else 
-	{
+	{ // no map size
 		x1 = x3 = 0;
 		x2 = x4 = 0;
 		y1 = y3 = 0;
 		y2 = y4 = 0;		
 	}
 
-	
+	// Draw the rectangle
+	primitives_DrawLine16(surf,x1,y1,x2,y1,0xffff);
+	primitives_DrawLine16(surf,x1,y1,x1,y2,0xffff);
+	primitives_DrawLine16(surf,x3,y1,x4,y1,0xffff);
+	primitives_DrawLine16(surf,x4,y1,x4,y2,0xffff);
+	primitives_DrawLine16(surf,x1,y4,x2,y4,0xffff);
+	primitives_DrawLine16(surf,x1,y3,x1,y4,0xffff);
+	primitives_DrawLine16(surf,x3,y4,x4,y4,0xffff);
+ 	primitives_DrawLine16(surf,x4,y3,x4,y4,0xffff);
+}
+#else
+void RadarMap::RenderViewRect
+(
+	aui_Surface *surf, 
+	sint32 x,	
+	sint32 y	
+)
+{
+	RECT offsetRect;
+	sint32 nrplayer;
+
+	if (g_tiledMap) {
+
+		nrplayer = g_selected_item->GetVisiblePlayer();
+
+		RECT *temp = g_tiledMap->GetMapViewRect();
+		m_mapViewRect = *temp;
+
+		if(!g_tiledMap->ReadyToDraw())
+			return;
+
+		offsetRect.bottom = m_mapViewRect.bottom;
+		offsetRect.top = m_mapViewRect.top;
+		offsetRect.left = m_mapViewRect.left;
+		offsetRect.right = m_mapViewRect.right;
+
+		offsetRect.top += m_displayOffset[nrplayer].y;
+		offsetRect.bottom += m_displayOffset[nrplayer].y;
+		if (offsetRect.top + ((offsetRect.bottom - offsetRect.top)/2) > m_mapSize->y) {
+			// if view is now too far to the bottom subtract the y-mapsize
+			offsetRect.top -= m_mapSize->y;
+			offsetRect.bottom -= m_mapSize->y;
+		}
+
+		offsetRect.left += m_displayOffset[nrplayer].x;
+		offsetRect.right += m_displayOffset[nrplayer].x;
+		if (offsetRect.left + ((offsetRect.right - offsetRect.left)/2) > m_mapSize->x) {
+			// if view is now too far to the right subtract the x-mapsize
+			offsetRect.left -= m_mapSize->x;
+			offsetRect.right -= m_mapSize->x;
+		}		
+	}
 
 
+		
+	sint32 x1,x2,x3,x4;
+	sint32 y1,y2,y3,y4;
+
+	if ( m_mapSize ) 
+	{
+		sint32 mapWidth = m_mapSize->x;
+		sint32 mapHeight = m_mapSize->y;
+
+		// Set the X coordinate points		
+		if (!g_theWorld->IsXwrap() && (offsetRect.left < 0 || offsetRect.right > mapWidth)) 
+		{
+			x1 = x3 = offsetRect.left;
+			x2 = x4 = offsetRect.right;
+
+			if (offsetRect.left < 0) 
+			{
+				x1 = x3 = 0;
+			}
+			if (offsetRect.right > mapWidth) 
+			{
+				x2 = x4 = mapWidth;
+			}
+		}
+
+		else 
+		{
+		   	
+			if (offsetRect.left < 0) 
+			{
+				x1 = offsetRect.left + mapWidth;
+				x2 = mapWidth;
+
+				
+				if (offsetRect.right <= 0) 
+				{
+					x3 = mapWidth;
+					x4 = mapWidth;
+				}
+				
+				else 
+				{
+					x3 = 0;
+					x4 = offsetRect.right;
+				}
+			}
+			
+			else 
+			{
+				
+				if (offsetRect.right > mapWidth) 
+				{
+					x1 = offsetRect.left;
+					x2 = mapWidth;
+					x3 = 0;
+					x4 = offsetRect.right - mapWidth;
+				}
+				
+				
+				else 
+				{
+					x1 = offsetRect.left;
+					x2 = offsetRect.right;
+					x3 = offsetRect.left;
+					x4 = offsetRect.right;
+				}
+			} 
+		} 
+
+		x1 = (sint32) (x1 * m_tilePixelWidth) + x;
+		x2 = (sint32) (x2 * m_tilePixelWidth) + x - 1;
+		x3 = (sint32) (x3 * m_tilePixelWidth) + x;
+		x4 = (sint32) (x4 * m_tilePixelWidth) + x - 1;
 
 
+		// Set the Y points
+		if ( !g_theWorld->IsYwrap() && ( offsetRect.top < 0 || offsetRect.bottom >= mapHeight)) 
+		{
+			
+			y1 = y3 = offsetRect.top;
+			y2 = y4 = offsetRect.bottom;
+			if (offsetRect.top < 0) 
+			{
+				y1 = y3 = 0;
+			}
 
+			
+			if (offsetRect.bottom > mapHeight) 
+			{
+				y2 = y4 = mapHeight;
+			}
+		}
 
+		
+		else 
+		{
 
+			if ( offsetRect.top < 0 )
+			{
+				y1 = offsetRect.top + mapHeight;
+				y2 = mapHeight;
+				if (offsetRect.bottom <= 0) 
+				{
+					y3 = mapHeight;
+					y4 = mapHeight;
+				}
+				else 
+				{
+					y3 = 0;
+					y4 = offsetRect.bottom;
+				}
+			}
+			else
+			{
+				if (offsetRect.bottom > mapHeight)
+				{
+					y1 = offsetRect.top;
+					y2 = mapHeight;
+					y3 = 0;
+					y4 = offsetRect.bottom - mapHeight;
+				}
+				else 
+				{
+					y1 = offsetRect.top;
+					y2 = offsetRect.bottom;
+					y3 = offsetRect.top;
+					y4 = offsetRect.bottom;
+				}
+			}
+		}
 
+		y1 = (sint32) (y1 * m_tilePixelHeight) + y;
+		y2 = (sint32) (y2 * m_tilePixelHeight) + y - 1;
+		y3 = (sint32) (y3 * m_tilePixelHeight) + y;
+		y4 = (sint32) (y4 * m_tilePixelHeight) + y - 1;
 
+	}
+	else 
+	{ // no map size
+		x1 = x3 = 0;
+		x2 = x4 = 0;
+		y1 = y3 = 0;
+		y2 = y4 = 0;		
+	}
 
-
-
-
-	
+	// Draw the rectangle
 	primitives_DrawLine16(surf,x1,y1,x2,y1,0xffff);
 	primitives_DrawLine16(surf,x1,y1,x1,y2,0xffff);
 	primitives_DrawLine16(surf,x3,y1,x4,y1,0xffff);
@@ -1005,7 +1511,13 @@ void RadarMap::RenderViewRect
  	primitives_DrawLine16(surf,x4,y3,x4,y4,0xffff);
 }
 
+#endif
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::UpdateMap
+//		
+//---------------------------------------------------------------------------
 void RadarMap::UpdateMap(aui_Surface *surf, sint32 x, sint32 y)
 {
 	RECT		destRect = {x, y, x + Width(), y + Height() };
@@ -1021,7 +1533,11 @@ void RadarMap::UpdateMap(aui_Surface *surf, sint32 x, sint32 y)
 
 
 
-
+//---------------------------------------------------------------------------
+//
+//	RadarMap::ComputeCenteredMap
+//		
+//---------------------------------------------------------------------------
 MapPoint RadarMap::ComputeCenteredMap(MapPoint &pos, RECT *viewRect)
 {
 	RECT *mapViewRect = viewRect;
@@ -1039,25 +1555,18 @@ MapPoint RadarMap::ComputeCenteredMap(MapPoint &pos, RECT *viewRect)
 	mapViewRect->right = mapViewRect->left + w;
 	mapViewRect->bottom = mapViewRect->top + h;
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	return pos;
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::CenterMap
+//		
+//---------------------------------------------------------------------------
+//  - Used to focus the RadarMap to a specific point 
+//
+//---------------------------------------------------------------------------
 MapPoint RadarMap::CenterMap(MapPoint &pos)
 {
 	MapPoint LastPT = m_lastCenteredPoint;
@@ -1078,6 +1587,14 @@ MapPoint RadarMap::CenterMap(MapPoint &pos)
 
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::IncludePointInView
+//
+//---------------------------------------------------------------------------
+//	- seems unused
+//	
+//---------------------------------------------------------------------------
 BOOL RadarMap::IncludePointInView(MapPoint &pos, sint32 radius)
 {
 	RECT		*mapViewRect = g_tiledMap->GetMapViewRect();
@@ -1137,6 +1654,11 @@ BOOL RadarMap::IncludePointInView(MapPoint &pos, sint32 radius)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::Setup
+//		
+//---------------------------------------------------------------------------
 void RadarMap::Setup(void)
 {
 	CalculateMetrics();
@@ -1151,6 +1673,11 @@ void RadarMap::Setup(void)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::Update
+//		
+//---------------------------------------------------------------------------
 void RadarMap::Update( void )
 {
 	
@@ -1160,24 +1687,52 @@ void RadarMap::Update( void )
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RedrawTile
+//		
+//---------------------------------------------------------------------------
+//  - Refreshes the part of the radar map from and around the given point 
+//		
+//---------------------------------------------------------------------------
 void RadarMap::RedrawTile( const MapPoint *point )
 {
 	Player *player = GetVisiblePlayerToRender();
 	if(!player)
 		return;
 
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 	RenderTile(m_tempSurface, *point, player);
 
 	fRect sRect, dRect;
 	sint32 x0 = (point->y + 2 * point->x) % (2 * m_mapSize->x);
+
+#else
+	// modify with the offset values
+    MapPoint offsetpos = PosWorldToPosRadar( *point);
+    RenderTile(m_tempSurface, offsetpos, *point, player);
+
+	fRect sRect, dRect;
+	sint32 x0 = (offsetpos.y + 2 * offsetpos.x) % (2 * m_mapSize->x);
+
+#endif
+
+
+
 	float adjust = m_filter ? 0.5 : 0.0;
 	if (x0 == 2 * m_mapSize->x - 1)
 	{
 		
 		sRect.left = x0 - adjust;
 		sRect.right = x0 + 1;
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 		sRect.top = point->y - adjust;
 		sRect.bottom = point->y + 1 + adjust;
+#else
+		sRect.top = offsetpos.y - adjust;
+		sRect.bottom = offsetpos.y + 1 + adjust;
+#endif
+
 		if (sRect.top < 0) sRect.top = 0;
 		if (sRect.bottom > m_tempSurface->Height()) sRect.bottom = m_tempSurface->Height();
 		dRect.left = sRect.left * (m_tilePixelWidth/2);
@@ -1199,8 +1754,13 @@ void RadarMap::RedrawTile( const MapPoint *point )
 		
 		sRect.left = x0 - adjust;
 		sRect.right = x0 + 2 + adjust;
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 		sRect.top = point->y - adjust;
 		sRect.bottom = point->y + 1 + adjust;
+#else
+		sRect.top = offsetpos.y - adjust;
+		sRect.bottom = offsetpos.y + 1 + adjust;
+#endif
 		if (sRect.bottom > m_tempSurface->Height()) sRect.bottom = m_tempSurface->Height();
 		if (sRect.right > m_tempSurface->Width()) sRect.right = m_tempSurface->Width();
 		if (sRect.left < 0) sRect.left = 0;
@@ -1214,25 +1774,49 @@ void RadarMap::RedrawTile( const MapPoint *point )
 		primitives_Scale16(m_tempSurface, m_mapSurface, sRect, dRect, m_filter);
 	}
 
-	
-	RenderTileBorder(m_mapSurface, *point, player);
 
-	
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
+	RenderTileBorder(m_mapSurface, *point, player);
 	RenderTrade(m_mapSurface, *point, player);
+#else
+	RenderTileBorder(m_mapSurface, offsetpos, *point, player);
+	RenderTrade(m_mapSurface, offsetpos, *point, player);
+#endif
 
 	if (m_filter)
 	{
 		MapPoint neighbor;
+#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 		if (point->GetNeighborPosition(NORTHEAST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
 		if (point->GetNeighborPosition(NORTHWEST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
 		if (point->GetNeighborPosition(EAST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
 		if (point->GetNeighborPosition(WEST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
 		if (point->GetNeighborPosition(SOUTHEAST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
 		if (point->GetNeighborPosition(SOUTHWEST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
+#else
+		if (point->GetNeighborPosition(NORTHEAST, neighbor)) 
+				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
+		if (point->GetNeighborPosition(NORTHWEST, neighbor)) 
+				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
+		if (point->GetNeighborPosition(EAST, neighbor)) 
+				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
+		if (point->GetNeighborPosition(WEST, neighbor)) 
+				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
+		if (point->GetNeighborPosition(SOUTHEAST, neighbor)) 
+				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
+		if (point->GetNeighborPosition(SOUTHWEST, neighbor)) 
+				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
+#endif
+
 	}
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::DrawThis
+//		
+//---------------------------------------------------------------------------
 AUI_ERRCODE RadarMap::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 {
 	
@@ -1254,9 +1838,17 @@ AUI_ERRCODE RadarMap::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::MouseLGrabInside
+//
+//---------------------------------------------------------------------------
+//  - Processes a left mouse click in the radarmap region. Sets therefore
+//	  a rectangle which region is seen centered by the point the mouse click
+//    was located and call tiledmap methods to refresh the current view.	
+//---------------------------------------------------------------------------
 void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 {
-	
 	
 	if(IsDisabled() || !IsInteractive())
 		return;
@@ -1278,14 +1870,6 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 	
 	g_tiledMap->SetSmoothScrollOffsets(0,0);
 
-	
-	
-
-
-
-
-
-
 
 	sint32		mapWidth, mapHeight;
 	g_tiledMap->GetMapMetrics(&mapWidth, &mapHeight);
@@ -1303,6 +1887,12 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 		tileX = (sint32) ( ceil((double)data->position.x / m_tilePixelWidth) );
 	}
 
+#ifndef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
+	tileX = (sint32) ((tileX - m_displayOffset[g_selected_item->GetVisiblePlayer()].x 
+									+ m_mapSize->x) % m_mapSize->x);
+	tileY = (sint32) ((tileY - m_displayOffset[g_selected_item->GetVisiblePlayer()].y 
+									+ m_mapSize->y) % m_mapSize->y);
+#endif
 	
 	sint32 width = m_mapViewRect.right - m_mapViewRect.left;
 	sint32 height = m_mapViewRect.bottom - m_mapViewRect.top;
@@ -1315,16 +1905,6 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 	m_mapViewRect.top = (tileY - (sint32)offsetY) & ~0x01;	
 	m_mapViewRect.bottom = m_mapViewRect.top + height;
 
-	
-
-
-
-
-
-
-
-
-
 
 	RECT *mapViewRect = &m_mapViewRect;
 	RECT *realMapViewRect = g_tiledMap->GetMapViewRect();
@@ -1335,6 +1915,14 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 }
 
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::MouseRGrabInside
+//		
+//---------------------------------------------------------------------------
+//	- Handling of a right mouseclick over the radar map
+//	
+//---------------------------------------------------------------------------
 void RadarMap::MouseRGrabInside(aui_MouseEvent *data)
 {
 	
@@ -1350,7 +1938,31 @@ void RadarMap::MouseRGrabInside(aui_MouseEvent *data)
 
 	
 	data->position.x -= X();
-	data->position.y -= Y();
+	data->position.y -= Y(); 
+
+#ifndef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
+	
+	sint32 nrplayer = g_selected_item->GetVisiblePlayer();
+	
+	// compute the offsets after the MouseRClick to center the map with the
+	// desired point
+
+	if (g_theWorld->IsXwrap()) {
+		m_displayOffset[nrplayer].x  = 
+			(m_mapSize->x - ( m_mapSize->x * data->position.x / m_width) + (m_mapSize->x / 2)
+			  + m_mapSize->x + m_displayOffset[nrplayer].x) % m_mapSize->x;
+	} else {
+		m_displayOffset[nrplayer].x = 0;
+	}
+	if (g_theWorld->IsYwrap()) { 
+		m_displayOffset[nrplayer].y  = 
+			(m_mapSize->y - ((( m_mapSize->y * data->position.y / m_height) >>1)<<1)
+			  + (m_mapSize->y / 2) + m_mapSize->y + m_displayOffset[nrplayer].y) % m_mapSize->y;
+	} else {
+		m_displayOffset[nrplayer].y = 0;
+	}
+
+#endif
 
 	RenderMap(m_mapSurface);
 
@@ -1358,6 +1970,14 @@ void RadarMap::MouseRGrabInside(aui_MouseEvent *data)
 
 
 
+//---------------------------------------------------------------------------
+//
+// RadarMap::Idle
+//
+//---------------------------------------------------------------------------
+//  - Constantly called in the idle time
+//
+//---------------------------------------------------------------------------
 AUI_ERRCODE RadarMap::Idle( void )
 {
 	static uint32 lastDraw = 0;
@@ -1370,3 +1990,50 @@ AUI_ERRCODE RadarMap::Idle( void )
 	return AUI_ERRCODE_OK;
 }
 
+
+#ifndef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
+//---------------------------------------------------------------------------
+//
+// RadarMap::MapOffset
+//
+//---------------------------------------------------------------------------
+// - Gives Back a MapPoint that is modified  with the current X and Y
+//   offsets
+//
+//---------------------------------------------------------------------------
+MapPoint RadarMap::MapOffset(MapPoint oldPoint)
+{
+	MapPoint newPoint;
+
+	newPoint.x = 
+		(oldPoint.x + m_displayOffset[g_selected_item->GetVisiblePlayer()].x) % m_mapSize->x;
+
+	newPoint.y = 
+		(oldPoint.y + m_displayOffset[g_selected_item->GetVisiblePlayer()].y) % m_mapSize->y;
+	
+	return newPoint;
+}
+
+
+//---------------------------------------------------------------------------
+//
+// RadarMap::PosWorldToPosRadarCorrectedX
+//
+//---------------------------------------------------------------------------
+// - Calculates from a given world point the coresponding point of the 
+//   radar map for handling the offset of the X and/or the Y axis
+//
+//---------------------------------------------------------------------------
+MapPoint RadarMap::PosWorldToPosRadar(MapPoint worldpos)
+{
+	MapPoint posRadar;
+	sint32 nrplayer = g_selected_item->GetVisiblePlayer();
+
+	posRadar.x = (worldpos.x - m_displayOffset[nrplayer].y/2 + m_mapSize->x 
+					+ m_displayOffset[nrplayer].x) % m_mapSize->x;
+	
+	posRadar.y = (worldpos.y + m_displayOffset[nrplayer].y) % m_mapSize->y;
+	
+	return posRadar;
+}
+#endif
