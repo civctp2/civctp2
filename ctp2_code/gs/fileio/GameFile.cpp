@@ -27,7 +27,8 @@
 //
 // - Repaired multiple memory leaks.
 // - Readded Activision patch new magic number 66.
-//
+// - Fixed autosave directory name for scenarios to match normal directory.
+// - Fixed the scenario savegame bug (but not for autosave, that still needs to be done)
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -217,7 +218,7 @@ extern	SpriteStateDB				*g_theSpriteStateDB ;
 extern	SpriteStateDB				*g_theGoodsSpriteStateDB;
 extern	SpriteStateDB				*g_theCitySpriteStateDB;
 extern	DifficultyDB				*g_theDifficultyDB ;
-extern  RandomGenerator				*g_rand; 
+extern  RandomGenerator				*g_rand;
 extern  TurnCount					*g_turn; 
 extern	SelectedItem				*g_selected_item; 
 extern	PollutionDatabase			*g_thePollutionDB ;
@@ -445,7 +446,7 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 130 );
 
-	g_theCitySpriteStateDB->Serialize(archive);						
+	g_theCitySpriteStateDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 140 );
 
@@ -1982,9 +1983,17 @@ void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 	if(!g_isScenario) {
 		g_theProfileDB->SetGameName(info->gameName);
 	} else {
+#if defined(ACTIVISION_ORIGINAL)	// size does not match
 		MBCHAR name[6];
 		strncpy(name, g_theProfileDB->GetLeaderName(), 5);
 		name[5] = 0;
+#else
+		size_t const	SAVE_LEADER_NAME_SIZE	= 6;
+		MBCHAR	name[SAVE_LEADER_NAME_SIZE + 1];
+		strncpy(name, g_theProfileDB->GetLeaderName(), SAVE_LEADER_NAME_SIZE);
+		name[SAVE_LEADER_NAME_SIZE] = 0;
+		// TODO: check if this is OK for japanese.
+#endif
 		g_theProfileDB->SetGameName(name);
 	}
 
@@ -2867,11 +2876,6 @@ void GameMapFile::SetProfileFromExtendedInfo(SaveMapInfo *info)
 
 	Assert(info);
 	if (!info) return;
-
-
-
-
-
 
 
 
