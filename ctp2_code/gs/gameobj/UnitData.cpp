@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit data
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Healing in fort handled as in city.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -3316,6 +3335,7 @@ void UnitData::BeginTurn()
 	}
 
 	if(g_theWorld->IsInstallation(m_pos)) {
+#if defined(ACTIVISION_ORIGINAL)
 		sint32 wonderBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
 		if (terrainutil_HasFort(m_pos) &&
 			m_hp < rec->GetMaxHP())
@@ -3323,6 +3343,9 @@ void UnitData::BeginTurn()
 			m_hp = rec->GetMaxHP() + wonderBonus;
 			needsEnqueue = TRUE;
 		}
+#else
+		// Fort healing effect at end of turn, as for city/normal.
+#endif
 		if (rec->GetNoFuelThenCrash() && 
 			terrainutil_HasAirfield(m_pos) &&
 			g_theWorld->GetOwner(m_pos) == m_owner &&
@@ -3354,6 +3377,7 @@ void UnitData::EndTurn()
 	sint32 wonderBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
 	double origHP = m_hp;
 
+#if defined(ACTIVISION_ORIGINAL)	
 	if(g_theWorld->IsInstallation(m_pos)) {
 		
 		
@@ -3387,7 +3411,6 @@ void UnitData::EndTurn()
 		}
 	}
 
-	
 	if(Flag(k_UDF_FIRST_MOVE) && m_hp < rec->GetMaxHP() + wonderBonus) {
 		if(g_theWorld->HasCity(m_pos)) {
 			
@@ -3398,6 +3421,25 @@ void UnitData::EndTurn()
 		if(m_hp > rec->GetMaxHP() + wonderBonus)
 			m_hp = rec->GetMaxHP() + wonderBonus;
 	}
+#else	// ACTIVISION_ORIGINAL
+	double const	maxHp	= rec->GetMaxHP() + wonderBonus;
+
+	if (Flag(k_UDF_FIRST_MOVE) && (m_hp < maxHp))
+	{
+		if (g_theWorld->HasCity(m_pos) || 
+			(g_theWorld->IsInstallation(m_pos) && terrainutil_HasFort(m_pos))
+		   ) 
+		{
+			m_hp += maxHp * g_theConstDB->CityHealRate();
+		} 
+		else 
+		{
+			m_hp += maxHp * g_theConstDB->NormalHealRate();
+		}
+
+		m_hp = min(m_hp, maxHp);
+	}
+#endif	// ACTIVISION_ORIGINAL
 
 	if(rec->GetNoFuelThenCrash()) {
 		if(!CheckForRefuel() && !Flag(k_UDF_IN_SPACE)) {
