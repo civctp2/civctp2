@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Barbarian placement and generation
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Alter the algorithm used to place barbarians in single player games,
+//   making it the same as that used in multiplayer games - JJB 2004/12/13
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -167,6 +198,9 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 	return count != 0;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
+// The old barb placement method follows.
+// beneath that is the replacement method
 #define k_MAX_BARBARIAN_TRIES 400
 #define k_MAX_BARBARIAN_STEPS 4000
 
@@ -256,3 +290,42 @@ void Barbarians::BeginYear()
 		}
 	}
 }
+#else // !defined(ACTIVISION_ORIGINAL)
+// The new barb placement method (adapted from the above,
+// using only the algorithm previously used in MP):
+
+#define k_MAX_BARBARIAN_TRIES 400
+
+void Barbarians::BeginYear()
+{
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	if(g_turn->GetRound() < risk->m_firstBarbarianTurn)
+		return;
+
+	if(g_rand->Next(10000) < risk->m_barbarianChance * 10000) {
+		MapPoint point;
+		sint32 tries;
+		sint32 p;
+
+		for(tries = 0; tries < k_MAX_BARBARIAN_TRIES; tries++) {
+			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
+			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
+			
+			if (!g_theWorld->IsLand(point)) {
+				continue;
+			}
+			
+			for(p = 1; p < k_MAX_PLAYERS; p++) {
+				if(g_player[p] && g_player[p]->IsVisible(point))
+					break;
+			}
+			if(p >= k_MAX_PLAYERS) {
+				break;
+			}
+		}
+		if(tries < k_MAX_BARBARIAN_TRIES) {
+			AddBarbarians(point, -1, FALSE);
+		}
+	}
+}
+#endif // defined(ACTIVISION_ORIGINAL)
