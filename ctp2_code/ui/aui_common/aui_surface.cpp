@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Surface (part of the screen)
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected a reported memory leak.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -19,7 +39,11 @@
 
 
 sint32 aui_Surface::m_surfaceRefCount = 0;
+#if defined(ACTIVISION_ORIGINAL)
 LPCRITICAL_SECTION aui_Surface::m_lpcs = NULL;
+#else
+CRITICAL_SECTION	aui_Surface::m_cs;
+#endif
 uint32 aui_Surface::m_surfaceClassId = aui_UniqueId();
 
 extern sint32 g_is565Format;
@@ -113,12 +137,16 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 	
 	if ( !m_surfaceRefCount++ )
 	{
+#if defined(ACTIVISION_ORIGINAL)
 		m_lpcs = new CRITICAL_SECTION; 
 		Assert( m_lpcs != NULL );
 		if ( m_lpcs )
 			InitializeCriticalSection( m_lpcs );
 		else
 			return AUI_ERRCODE_MEMALLOCFAILED;
+#else
+		InitializeCriticalSection(&m_cs);
+#endif
 	}
 
 	
@@ -154,12 +182,16 @@ aui_Surface::~aui_Surface()
 
 	if ( !--m_surfaceRefCount )
 	{
+#if defined(ACTIVISION_ORIGINAL)
 		if ( m_lpcs )
 		{
 			DeleteCriticalSection( m_lpcs );
 			delete m_lpcs;
 			m_lpcs = NULL;
 		}
+#else
+		DeleteCriticalSection(&m_cs);
+#endif
 	}
 }
 
@@ -383,8 +415,11 @@ inline BOOL aui_Surface::IsLocked( LPVOID buffer )
 AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SURFACE_LOCKOP op )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
+#if defined(ACTIVISION_ORIGINAL)
 	EnterCriticalSection( m_lpcs );
+#else
+	EnterCriticalSection(&m_cs);
+#endif
 
 	switch ( op )
 	{
@@ -470,7 +505,11 @@ AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SUR
 		break;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	LeaveCriticalSection( m_lpcs );
+#else
+	LeaveCriticalSection(&m_cs);
+#endif
 
 	return errcode;
 }

@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Line graph
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired memory leaks.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui.h"
@@ -54,7 +83,7 @@ LineGraph::LineGraph(AUI_ERRCODE *retval,
 }
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 LineGraph::~LineGraph()
 {
 	if ( m_xAxisName ) delete m_xAxisName;
@@ -82,7 +111,40 @@ LineGraph::~LineGraph()
 		m_numLines = 0;
 	}
 }
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : LineGraph::~LineGraph
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Use delete [] for items that have been created with new [].
+//
+//----------------------------------------------------------------------------
 
+LineGraph::~LineGraph()
+{
+	delete [] m_xAxisName;
+    delete [] m_yAxisName;
+	delete m_surface;
+	delete [] m_data;
+
+	if (m_lineData) 
+	{
+		for (sint32 i = 0; i < m_numLines * 3; i++) 
+		{
+			delete [] m_lineData[i];
+		}
+		delete [] m_lineData;
+	}
+}
+#endif
 
 void LineGraph::InitCommonLdl(MBCHAR *ldlBlock)
 {
@@ -370,6 +432,7 @@ void LineGraph::SetLineData(sint32 numLines, sint32 numSamples, double **data, s
 	sint32		i,j;
 	double		sum,curYPos;
 
+#if defined(ACTIVISION_ORIGINAL)	// wrong delete used, 2/3 of m_lineData not deleted.
 	if (m_lineData) {
 		for ( i = 0;i < m_numLines;i++ ) {
 			delete m_lineData[i];
@@ -387,6 +450,21 @@ void LineGraph::SetLineData(sint32 numLines, sint32 numSamples, double **data, s
 
 	m_lineData = new double*[numLines*3];
 	m_data = new LineGraphData[numLines];
+#else
+	if (m_lineData) 
+	{
+		for (i = 0; i < (m_numLines * 3); i++) 
+		{
+			delete [] m_lineData[i];
+		}
+		delete [] m_lineData;
+	}
+	m_lineData  = new double *[numLines*3];
+	m_numLines	= numLines;
+
+	delete [] m_data;
+	m_data = new LineGraphData[numLines];
+#endif
 
 	sint32 defaultColor = (sint32)COLOR_RED;
 
@@ -426,8 +504,9 @@ void LineGraph::SetLineData(sint32 numLines, sint32 numSamples, double **data, s
 			}
 		}
 	}
-
+#if defined(ACTIVISION_ORIGINAL)	// moved up
 	m_numLines = numLines;
+#endif
 	m_numSamples = numSamples;
 }
 
