@@ -29,6 +29,8 @@
 //   city, by Martin Gühmann. However with or without the change
 //   the CaptureCityEvent leaks, maybe a problem of SlicObject.
 // - Prevented crash when reporting completion of the Solaris project.
+// - Corrected memory leaks for city captures.
+// - Corrected memory leaks and invalid arguments for Gaia Controller messages.
 //
 //----------------------------------------------------------------------------
 
@@ -115,17 +117,26 @@ STDEHANDLER(CaptureCityEvent)
 		if(newOwner == g_selected_item->GetVisiblePlayer())
 			g_selected_item->SetSelectCity(city);
 
+#if defined(ACTIVISION_ORIGINAL) // memory leak when no slaves in city.
 		SlicObject *so = new SlicObject("20IAFreeSlaves");
-		
+#endif		
 		
 		if (city.AccessData()->CountSlaves() > 0) {
+#if !defined(ACTIVISION_ORIGINAL)
+			SlicObject *	so = new SlicObject("20IAFreeSlaves");
+#endif
 			so->AddRecipient(newOwner);
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
 		}
 		
+#if defined(ACTIVISION_ORIGINAL) // memory leak when barbarians are involved.
 		so = new SlicObject("911CityNewOwner");
+#endif		
 		if(newOwner > 0 && originalOwner > 0 && city.IsValid()) {
+#if !defined(ACTIVISION_ORIGINAL)
+			SlicObject *	so = new SlicObject("911CityNewOwner");
+#endif
 			so->AddRecipient(originalOwner);
 			so->AddPlayer(originalOwner);
 			so->AddPlayer(newOwner);
@@ -152,7 +163,7 @@ STDEHANDLER(CaptureCityEvent)
 					if(canSteal[i]) {
 						if(which == count) {
 							g_player[newOwner]->m_advances->GiveAdvance(i, CAUSE_SCI_COMBAT);
-							so = new SlicObject("99AdvanceFromCapturingCity");
+							SlicObject * so = new SlicObject("99AdvanceFromCapturingCity");
 							so->AddCivilisation(newOwner);
 							so->AddCivilisation(originalOwner);
 							so->AddRecipient(newOwner);
@@ -580,9 +591,14 @@ STDEHANDLER(CreateBuildingEvent)
 		return GEV_HD_Continue;
 	}
 	if(g_player[player]->GetGaiaController()->HasMaxSatsBuilt()) {
+#if defined(ACTIVISION_ORIGINAL)	// memory leak when recently shown
 		so = new SlicObject("GCMaxSatsReached");
+#endif
 		seg = g_slicEngine->GetSegment("GCMaxSatsReached");
 		if(seg && !seg->TestLastShown(player, 10000)) {
+#if !defined(ACTIVISION_ORIGINAL)
+			so = new SlicObject("GCMaxSatsReached");
+#endif
 			so->AddRecipient(player);
 			so->AddPlayer(player);
 			g_slicEngine->Execute(so);
@@ -590,6 +606,8 @@ STDEHANDLER(CreateBuildingEvent)
 	}
 
 	if(g_player[player]->GetGaiaController()->HasMinSatsBuilt()) {
+#if defined(ACTIVISION_ORIGINAL)	// memory leak when recently shown, 
+									// can't put all players in 1 message
 		so = new SlicObject("GCMinSatsReachedUs");
 		seg = g_slicEngine->GetSegment("GCMinSatsReachedUs");
 		if(seg && !seg->TestLastShown(player, 10000)) {
@@ -607,9 +625,32 @@ STDEHANDLER(CreateBuildingEvent)
 			}
 			g_slicEngine->Execute(so);
 		}
+#else
+		seg = g_slicEngine->GetSegment("GCMinSatsReachedUs");
+		if (seg && !seg->TestLastShown(player, 10000)) 
+		{
+			so = new SlicObject("GCMinSatsReachedUs");
+			so->AddRecipient(player);
+			so->AddPlayer(player);
+			g_slicEngine->Execute(so);
+		}
+		
+		seg = g_slicEngine->GetSegment("GCMinSatsReachedThem");
+		for (i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) 
+		{
+			if (seg && !seg->TestLastShown(i, 10000) && i != player) 
+			{
+				so = new SlicObject("GCMinSatsReachedThem");
+				so->AddRecipient(i);
+				so->AddPlayer(player);
+				g_slicEngine->Execute(so);
+			}
+		}
+#endif
 	}
 
 	if(g_player[player]->GetGaiaController()->HasMinCoresBuilt()) {
+#if defined(ACTIVISION_ORIGINAL)	// Can't put all players in 1 message
 		so = new SlicObject("GCMinCoresReachedUs");
 		seg = g_slicEngine->GetSegment("GCMinCoresReachedUs");
 		if(seg && !seg->TestLastShown(player, 10000)) {
@@ -627,6 +668,28 @@ STDEHANDLER(CreateBuildingEvent)
 			}
 		}
 		g_slicEngine->Execute(so);
+#else
+		seg = g_slicEngine->GetSegment("GCMinCoresReachedUs");
+		if (seg && !seg->TestLastShown(player, 10000)) 
+		{
+			so = new SlicObject("GCMinCoresReachedUs");
+			so->AddRecipient(player);
+			so->AddPlayer(player);
+			g_slicEngine->Execute(so);
+		}
+	
+		seg = g_slicEngine->GetSegment("GCMinCoresReachedThem");
+		for(i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) 
+		{
+			if (seg && !seg->TestLastShown(i, 10000) && i != player) 
+			{
+				so = new SlicObject("GCMinCoresReachedThem");
+				so->AddRecipient(i);
+				so->AddPlayer(player);
+				g_slicEngine->Execute(so);
+			}
+		}
+#endif
 	}
 
 	return GEV_HD_Continue;

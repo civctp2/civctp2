@@ -29,6 +29,7 @@
 // - Moved the autosave file generation to just before the StartMovePhase 
 //   event, to prevent losing the advance that just was completed.
 // - Corrected GrantAdvanceEvent input handling.
+// - Corrected memory leaks and invalid arguments for Gaia Controller messages.
 //
 //----------------------------------------------------------------------------
 
@@ -190,6 +191,7 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 	g_player[player]->m_virtualGoldSpent = 0;
 
 	if(g_player[player]->GetGaiaController()->CanStartCountdown()) {
+#if defined(ACTIVISION_ORIGINAL)	// memory leaks, invalid message
 		so = new SlicObject("GCReadyToActivateUs");
 		seg = g_slicEngine->GetSegment("GCReadyToActivateUs");
 		if(!seg->TestLastShown(player, 10000)) {
@@ -207,6 +209,28 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 			}
 			g_slicEngine->Execute(so);
 		}
+#else
+		seg = g_slicEngine->GetSegment("GCReadyToActivateUs");
+		if (seg && !seg->TestLastShown(player, 10000)) 
+		{
+			so = new SlicObject("GCReadyToActivateUs");
+			so->AddRecipient(player);
+			so->AddPlayer(player);
+			g_slicEngine->Execute(so);
+		}
+
+		seg = g_slicEngine->GetSegment("GCReadyToActivateThem");
+		for (i = 1; seg && (i < g_theProfileDB->GetMaxPlayers()); i++) 
+		{
+			if (!seg->TestLastShown(i, 10000) && i != player) 
+			{
+				so = new SlicObject("GCReadyToActivateThem");
+				so->AddRecipient(i);
+				so->AddPlayer(player);
+				g_slicEngine->Execute(so);
+			}
+		}
+#endif
 	}
 
 	return GEV_HD_Continue;
@@ -539,6 +563,7 @@ STDEHANDLER(CreateImprovementEvent)
 	
 
 	if(g_player[pl] && g_player[pl]->GetGaiaController()->HasMinTowersBuilt()) {
+#if defined(ACTIVISION_ORIGINAL)	// memory leak, invalid message
 		so = new SlicObject("GCMinObelisksReachedUs");
 		seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
 		so->AddRecipient(pl);
@@ -555,6 +580,28 @@ STDEHANDLER(CreateImprovementEvent)
 			}	
 			g_slicEngine->Execute(so);
 		}
+#else
+		seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
+		if (seg && !seg->TestLastShown(pl, 10000)) 
+		{
+			so = new SlicObject("GCMinObelisksReachedUs");
+			so->AddRecipient(pl);
+			g_slicEngine->Execute(so);
+		}
+
+		seg = g_slicEngine->GetSegment("GCMinObelisksReachedThem");
+		for (i = 1; seg && (i < g_theProfileDB->GetMaxPlayers()); i++) 
+		{
+			if (!seg->TestLastShown(i, 10000) && i != pl) 
+			{
+				so = new SlicObject("GCMinObelisksReachedThem");
+				so->AddRecipient(i);
+				so->AddPlayer(pl);
+				g_slicEngine->Execute(so);
+			}	
+		}
+
+#endif
 	}
 
 	return GEV_HD_Continue;
