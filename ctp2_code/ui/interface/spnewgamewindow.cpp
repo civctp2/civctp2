@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Single Player New game Start Screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed crash when the game tries to display invalid text strings, 
+//   by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -241,6 +272,22 @@ SPNewGameWindow::~SPNewGameWindow()
 #undef mycleanup
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Update
+//
+// Description: Updates the settings information in the SPNewGameWindow.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : All sprintf function calls have now three arguments to
+//              prevent a crash if the last argument is invalid.
+//
+//----------------------------------------------------------------------------
 void SPNewGameWindow::Update( void )
 {
 	MBCHAR s[_MAX_PATH];
@@ -266,7 +313,14 @@ void SPNewGameWindow::Update( void )
 
 	
 	index = g_theProfileDB->GetDifficulty();
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 	sprintf( s, m_string->GetString(SP_NEWGAME_STR_CHIEFTAIN + index) );
+#else
+//Added by Martin Gühmann
+//Makes sure that the game doesn't crash if the according map size string is invalid.
+	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_CHIEFTAIN + index) );
+#endif
 	m_spDifficulty->SetText( s );
 
 	
@@ -301,13 +355,26 @@ void SPNewGameWindow::Update( void )
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 	sprintf( s, m_string->GetString(SP_NEWGAME_STR_SMALL + index) );
+#else
+//Added by Martin Gühmann
+//Makes sure that the game doesn't crash if the according map size string is invalid.
+	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_SMALL + index) );
+#endif
 	m_spMapSize->SetText( s );
 
 	
 	sint32 shape = g_theProfileDB->GetWorldShape();
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 	sprintf( s, m_string->GetString(SP_NEWGAME_STR_EARTH + shape) );
+#else
+//Added by Martin Gühmann
+//Makes sure that the game doesn't crash if the according world shape string is invalid.
+	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_EARTH + shape) );
+#endif
 	m_worldShapeButton->SetText( s );
 
 
