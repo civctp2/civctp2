@@ -467,6 +467,9 @@ CONCEPT_WAGES					"Salaires"
 CONCEPT_WONDERS					"Merveilles"
 CONCEPT_WORK_HOURS				"Heures de travail"
 CONCEPT_WORKER					"Travailleur"
+
+##citymod2 additions
+
 CONCEPT_CLASSIC_AGE				"Ere classique"
 CONCEPT_INDUSTRIAL_AGE				"Ere industriel"
 CONCEPT_COMPUTER_AGE				"Ere de l'information"

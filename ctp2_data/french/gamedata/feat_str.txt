@@ -1,0 +1,25 @@
+## FEATS OF WONDER STRINGS
+
+FEAT_ACCOMPISHED_TITLE		"EXPLOIT"
+
+## ADVANCE-RELATED FEATS
+FEAT_GOT_CONCRETE		"Félicitations ! Votre nation est la première à découvrir le béton ! Sa facilité d'emploi et son coût réduit en font un matériau de construction idéal. Votre production augmente de {FeatDB(Value[0]).EffectIncreaseProduction} % pendant les {FeatDB(Value[0]).Duration} tours suivants !"
+FEAT_GOT_GUNPOWDER		"Félicitations ! Vous avez inventé la poudre ! C'est un progrès décisif dans le domaine de l'artillerie. Les autres nations auront des difficultés à se défendre contre vos assauts. Au cours des {FeatDB(Value[0]).Duration} tours suivants, les remparts des autres villes seront plus vulnérables aux attaques de vos unités."
+FEAT_GOT_MASS_PRODUCTION	"Félicitations ! Votre nation est la première à mettre en oeuvre la production de masse. Votre industrie peut désormais bénéficier du travail à la chaîne, des tapis roulants et de la spécialisation de la main d'oeuvre. Votre production augmente de {FeatDB(Value[0]).EffectIncreaseProduction} % pendant les {FeatDB(Value[0]).Duration} prochains tours !"
+FEAT_GOT_COMPUTER		"Félicitations ! Votre nation invente l'informatique ! Vos laboratoires de recherche peuvent désormais traiter des nombres plus grands, multiplier leurs expériences et accroître leur efficacité. Votre production scientifique augmente de {FeatDB(Value[0]).EffectIncreaseScience} % pendant les {FeatDB(Value[0]).Duration} prochains tours !"  
+FEAT_GOT_ROBOTICS		"Félicitations ! Votre nation invente la robotique ! Cette force de travail affiche une productivité et une efficacité bien supérieures à celles des humains. Pendant les {FeatDB(Value[0]).Duration} prochains tours, votre production augmente de {FeatDB(Value[0]).EffectIncreaseProduction} % !"
+FEAT_GOT_LIFE_EXTENSION		"Félicitations ! Votre nation met au point le prolongement de la vie. Votre peuple est quasiment immortel : chacun peut échanger son corps décrépit contre un nouvel organisme plein de vigueur ! Le bonheur de votre nation augmente de {FeatDB(Value[0]).EffectIncreaseHappiness} points pendant les {FeatDB(Value[0]).Duration} tours suivants !"  
+
+## CONSTRUCTION-RELATED FEATS
+
+FEAT_BUILT_THEATERS		"Vous avez construit de nombreux théâtres dans tout votre empire et les oeuvres de vos dramaturges ont acquis une renommée mondiale. Votre nation est fière de son patrimoine culturel : elle accroît son niveau de bonheur de {FeatDB(Value[0]).EffectIncreaseHappiness} points pendant les {FeatDB(Value[0]).Duration} tours suivants."
+FEAT_BUILT_BROKERAGES		"Vous avez créé de nombreuses maisons de courtage, affirmant ainsi votre position de puissance économique dominante. Dans le monde entier, traders, marchands et banquiers estiment votre nation. Vous recevez un bonus de {FeatDB(Value[0]).EffectIncreaseCommerce} pièces d'or pour les {FeatDB(Value[0]).Duration} tours suivants."
+FEAT_BUILT_INTERNET		"Vous avez construit des centres informatiques dans plusieurs cités. Vos infrastructures militaires, universitaires et scientifiques sont ainsi connectées à un réseau national d'ordinateurs surpuissants. Vous obtenez un bonus de {FeatDB(Value[0]).EffectIncreaseScience} point en science pour les {FeatDB(Value[0]).Duration} prochains tours."
+FEAT_BUILT_SYNDICATE		"Vous avez construit plusieurs aménagements télévisuels, créant ainsi le premier réseau de chaînes. La télévision devient la première source d'informations et de divertissement de votre population. Vous augmentez votre niveau de bonheur de {FeatDB(Value[0]).EffectIncreaseHappiness} points aux {FeatDB(Value[0]).Duration} tours suivants."  
+FEAT_BUILT_ORBITAL_LABS		"Vous avez constitué un réseau de laboratoires orbitaux. Votre communauté scientifique est désormais reconnue dans le monde entier pour la qualité de ses recherches. Vous obtenez un bonus de {FeatDB(Value[0]).EffectIncreaseScience} en science pendant les {FeatDB(Value[0]).Duration/100} tours suivants."  
+
+## ACTION-RELATED FEATS
+FEAT_SAILED_AROUND_THE_WORLD	"Vos navires ont fait le tour du monde ! Votre marine a désormais une bonne connaissance des océans et a répertorié de nombreuses voies navigables sur ses cartes. Vos unités navales obtiennent un bonus de déplacement de {FeatDB(Value[0]).EffectBoatMovement} points pendant les {FeatDB(Value[0]).Duration} prochains tours."
+FEAT_CONQUERED_BY_FORCE		"Vous êtes un conquérant ! A force de stratégie, de courage et de détermination vous avez vaincu une puissante nation !"
+FEAT_RECAPTURED_CITY 		"Vous avez reconquis une cité qui appartenait autrefois à votre empire ! En reprenant ce territoire qui vous revenait de droit, vous avez remonté le moral de votre population. Le niveau de bonheur augmente de {FeatDB(Value[0]).EffectIncreaseHappiness} points dans tout votre empire durant les {FeatDB(Value[0]).Duration} prochains tours."
+

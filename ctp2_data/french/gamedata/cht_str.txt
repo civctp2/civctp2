@@ -1,0 +1,98 @@
+#################################
+#
+# BETA PATCH CHEAT TOOLS STRINGS
+#
+#################################
+# SAM032299
+#################################
+
+#
+# SAM032299 added for cheat toolbar enhancements
+#
+
+#
+# Single-Player Game Launch Screen
+#
+str_ldl_Editor					"Lancer éditeur"
+
+#
+# Cheat Toolbar
+#
+str_ldl_Tile_Pad				"Terrain"
+str_ldl_Civ						"Emp"
+str_ldl_Edit_City				"Editer ville"
+str_ldl_Unit_City				"Unité/ville"
+
+str_ldl_Toolbar_Title			"Mode triche de Call to Power"
+str_ldl_World_Settings			"Régl. monde"
+str_ldl_Player_Settings			"Régl. joueur"
+str_ldl_Player_Static_Text		"Joueur :"
+str_ldl_Player_Name_Text		"TNJ"
+str_ldl_Year_Static_Text		"Année partie :"
+str_ldl_Year_Text				"TA"
+str_ldl_Num_Players_Static_Text	"Nbre joueurs :"
+str_ldl_Num_Players_Text		"TNJ"
+str_ldl_Map_Size_Static_Text	"Taille carte :"
+str_ldl_Map_Size_Text			"TTC"
+str_ldl_Difficulty_Static_Text	"Difficulté :"
+str_ldl_Difficulty_Text			"TD"
+str_ldl_Save_As_SP				"Sauv. partie solo"
+str_ldl_Save_As_MP				"Sauv. partie multi"
+
+# SAM041599 added ResetLOS button to cheat mode screen
+str_ldl_Reset_LOS				"Modifier CdV"
+
+#
+# for Tile Pad
+#
+str_ldl_Forest					"Forêt"
+str_ldl_Plains					"Plaines"
+str_ldl_Tundra					"Toundra"
+str_ldl_Glacier					"Glacier"
+str_ldl_Grassland				"Prairie"
+str_ldl_Desert					"Désert"
+str_ldl_Swamp					"Marécages"
+str_ldl_Jungle					"Jungle"
+str_ldl_Mountain				"Montagne"
+str_ldl_Hills					"Collines"
+str_ldl_ShallowWater			"Eau peu profonde"
+str_ldl_DeepWater				"Eau profonde"
+str_ldl_Volcano					"Volcan"
+str_ldl_Space					"Espace"
+str_ldl_Beach					"Plage"
+str_ldl_Shelf					"Plateau continental"
+str_ldl_Trench					"Fosse sous-marine"
+str_ldl_Rift					"Dorsale océanique"
+str_ldl_Dead					"Terre détruite"
+str_ldl_BrownHill				"Colline désertique"
+str_ldl_BrownMountain			"Montagne désertique"
+str_ldl_WhiteHill				"Colline polaire"
+str_ldl_WhiteMountain			"Montagne polaire"
+str_ldl_Goody					"Ruines"
+str_ldl_River					"Rivière"
+
+#
+# for City Pad
+#
+str_ldl_City_Pad_Message		"Si vous activez la mini-fenêtre Ville, vous pouvez acheter d'urgence des aménagements et des merveilles pour la ville sélectionnée grâce à l'onglet Production."
+
+#
+# for Pollution Pad
+#
+str_ldl_Global_Pollution		"Pollution mondiale"
+str_ldl_Ozone_Damage			"Dégâts de la couche d'ozone"
+str_ldl_Flooding				"Inondations"
+str_ldl_never					"Jamais"
+str_ldl_O						"O"
+str_ldl_F						"I"
+
+#
+# for Unit Pad
+#
+str_ldl_Kill					"Supprimer"
+
+#
+# for Tile Improvements Pad
+#
+str_ldl_Tile_Imp_Pad_Message	"Si vous activez la mini-fenêtre Aménagements de case, vous pouvez placer des aménagements de case, des installations et activer la terraformation via l'interface du panneau de configuration."
+

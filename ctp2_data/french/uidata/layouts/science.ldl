@@ -1,5 +1,24 @@
 ################################################################################
-# Science and advance dialogs.
+#
+#  Project      : Call To Power 2
+#  File type    : LDL layout description 
+#  Description  : Science and advance dialogs
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Hypertext size set to 8192, to match the buffer size of the executable.
+# 
 ################################################################################
 
 ################################################################################
@@ -172,6 +191,9 @@ ScienceManagementDialog:CTP2_DIALOG_WINDOW {
 		Description:CTP2_HYPER_TEXT_BOX {
 			# Runtime instantiation type.
 			string	objecttype	"ctp2_hypertextbox"
+#not ACTIVISION_ORIGINAL
+                        int             hypermaxlength          8192
+#end ACTIVISION_ORIGINAL
 
 			# Background.
 			string pattern "uptg06e.tga"

@@ -2467,7 +2467,7 @@ Zur Ausweitung des Wohlstands innerhalb einer Nation können darüber hinaus auch 
 [END]
 
 [CONCEPT_COMPUTER_AGE_HISTORICAL]
-Computer sind Großartig. Falls irgendjemand eine bessere Idee hat, was hhier hin könnte solle er sich melden.
+Das Aufkommen des Informationszeitalters wurde durch die Entwicklung der Computer, der Informatik und durch das unglaubliche Wachstum der Telekommunikation ermöglicht. Wie die industrielle Revolution durch Vereinfachung einst langwierige Tätigkeiten und durch die Vervielfachung des Informationsaustausches. Die Computer und die neuen Technologien revolutionierten die Geschäftswelt, veränderten tiefgreifend die Organisation der Firmen und unseres alltäglichen Lebens und schufen neue ökonomische Sektoren.
 [END]
 
 [CONCEPT_CRIME_GAMEPLAY]
