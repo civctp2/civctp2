@@ -1465,7 +1465,7 @@ str_ldl_SPNGPS_MaxPlayerSpinner		"Nombre maximum de joueurs"
 str_ldl_SPNGPS_PlayerSpinner		"Premier joueur"
 
 str_ldl_SPNGPS_NumPlayerText	"Définit le nombre de joueurs dans une nouvelle partie."
-str_ldl_SPNGPS_MaxPlayerText	"Définit le nombre maximum de joueurs pouvant apparaître en cours de partie."
+str_ldl_SPNGPS_MaxPlayerText	"Définit le nombre maximal de civilisations pouvant être simultanément en jeu."
 str_ldl_SPNGPS_PlayerText	"Définit le premier joueur. Définit la couleur de la civilisation. (Ne marche pas encore.)"
 
 ### Added Disclaimer Strings ###
