@@ -6906,21 +6906,36 @@ SFN_ERROR Slic_CityHasWonder::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_ArmyIsValid
+//
+// Description: Determine whether an army is valid.
+//
+// Parameters : args	: army variable
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+// Remark(s)  : Fills m_result.m_int with an indication whether the army is
+//              valid. When the army is valid, 1 (true) is returned. When the
+//              army is invalid, 0 (false) is returned.
+//
+//----------------------------------------------------------------------------
+
 SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 {
 	m_result.m_int = 0;
 
-	if (args->m_numArgs != 1) {
+	if (args->m_numArgs != 1) 
+	{
 		return SFN_ERROR_NUM_ARGS;
 	}
 
-	Army a;
-	if (args->GetArmy(0, a))
+	Army	a;
+	if (args->GetArmy(0, a) && a.IsValid())
 	{
-		return SFN_ERROR_TYPE_ARGS;
-	}
-
-	if (a.IsValid()) {
 		m_result.m_int = 1;
 	}
 
