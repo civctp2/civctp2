@@ -1,14 +1,39 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : New game (SP, MP, scenario) initialitaion
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _DEBUG
+// - Generates debug information when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added player selection for new single player game and scenarios of
+//   all types, by Martin Gühmann.
+// - Fixed scenarios that allow players other than player 1 to be played,
+//   by Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h" 
 #include "c3debug.h"
@@ -1974,8 +1999,9 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			case STARTINFOTYPE_NONE:
 				break;
 			case STARTINFOTYPE_CIVS:
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 				{
-					
 					Assert(numPlayersLoaded == 0);
 					
 					CIV_INDEX civ = gameinit_GetCivForSlot(1);
@@ -2035,7 +2061,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 							}
 						}
 						
-						g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff, 
+						g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff,
 							PLAYER_TYPE_ROBOT,
 							CIV_INDEX(g_theWorld->GetStartingPointCiv(whichCiv)), 
 							GENDER_RANDOM);
@@ -2049,9 +2075,97 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					}
 					break;
 				}
-			case STARTINFOTYPE_POSITIONSFIXED:
+#else // ACTIVISION_ORIGINAL
+//Added by Martin Gühmann
 				{
+					//Has to be modified
+					MessageBox(NULL, "STARTINFOTYPE_CIVS", "STARTINFOTYPE_CIVS", MB_OK);
+					//
+					Assert(numPlayersLoaded == 0);
+					Assert(g_theProfileDB->GetPlayerIndex() <= g_theWorld->GetNumStartingPositions());
+					if(g_theProfileDB->GetPlayerIndex() > g_theWorld->GetNumStartingPositions()){
+						g_theProfileDB->SetPlayerIndex(g_theWorld->GetNumStartingPositions());
+					}
 					
+					CIV_INDEX civ = gameinit_GetCivForSlot(g_theProfileDB->GetPlayerIndex()); // Needs to be modified
+					if(civ == CIV_INDEX_RANDOM)
+						civ = g_theProfileDB->GetCivIndex();
+					
+					
+					sint32 usedPositions[k_MAX_START_POINTS];
+					sint32 usedCivs = 0;
+					memset(usedPositions, 0, sizeof(usedPositions));
+					
+					for(j = 0; j < g_theWorld->GetNumStartingPositions(); j++) {
+						if(g_theWorld->GetStartingPointCiv(j) == civ) {
+							usedPositions[j] = 1;
+							usedCivs++;
+							break;
+						}
+					}
+					Assert(j < g_theWorld->GetNumStartingPositions());
+					if(j >= g_theWorld->GetNumStartingPositions()) {
+						civ = CIV_INDEX(g_theWorld->GetStartingPointCiv(0));
+						usedPositions[0] = 1;
+						usedCivs++;
+						j = 0;
+					}
+					
+					g_player[g_theProfileDB->GetPlayerIndex()] = new Player(PLAYER_INDEX(g_theProfileDB->GetPlayerIndex()), diff, PLAYER_TYPE_HUMAN,
+						civ,
+						g_theProfileDB->GetGender());
+					g_player[g_theProfileDB->GetPlayerIndex()]->m_starting_index = j;
+					
+					
+					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
+					
+					
+					//Start of common code
+					for(i = 0; i < g_useScenarioCivs; i++) {
+						if(i + 1 != g_theProfileDB->GetPlayerIndex()){
+							civ = gameinit_GetCivForSlot(i + 1);
+							sint32 whichCiv = 0x7fffffff;
+						
+							if(civ != CIV_INDEX_RANDOM) {
+								for(whichCiv = 0; whichCiv < g_theWorld->GetNumStartingPositions(); whichCiv++) {
+									if(usedPositions[whichCiv])
+										continue;
+									if(g_theWorld->GetStartingPointCiv(whichCiv) == civ)
+										break;
+								}
+							}
+						
+						
+						
+							if(whichCiv >= g_theWorld->GetNumStartingPositions()) {
+								whichCiv = g_rand->Next(g_theWorld->GetNumStartingPositions() - usedCivs);
+								while(usedPositions[whichCiv]) {
+									whichCiv++;
+									if(whichCiv >= g_theWorld->GetNumStartingPositions())
+										whichCiv = 0;
+								}
+							}
+						
+							g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff,//Robot generation 
+								PLAYER_TYPE_ROBOT,
+								CIV_INDEX(g_theWorld->GetStartingPointCiv(whichCiv)), 
+								GENDER_RANDOM);
+							g_player[i + 1]->m_starting_index = whichCiv;
+							usedPositions[whichCiv] = 1;
+							usedCivs++;
+							if(usedCivs >= g_theWorld->GetNumStartingPositions()) {
+							
+								break;
+							}
+						}
+					}
+					break;
+				}
+#endif // ACTIVISION_ORIGINAL
+			case STARTINFOTYPE_POSITIONSFIXED:
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
+				{
 					Assert(numPlayersLoaded == 0);
 					
 					CIV_INDEX civ;
@@ -2083,9 +2197,56 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					}
 					break;
 				}
-			case STARTINFOTYPE_CIVSFIXED:
+#else // ACTIVISION_ORIGINAL
+//Added by Martin Gühmann
 				{
+					Assert(numPlayersLoaded == 0);					
+					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
 					
+					CIV_INDEX civ;
+
+					for(i = 0; i < g_useScenarioCivs; i++) {
+						if(i + 1 == g_theProfileDB->GetPlayerIndex()){
+					
+							civ = gameinit_GetCivForSlot(i + 1);
+						
+							if (civ == CIV_INDEX_RANDOM) {
+								civ = g_theProfileDB->GetCivIndex();
+							}
+					
+							g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff, 
+								PLAYER_TYPE_HUMAN,
+								civ,
+								g_theProfileDB->GetGender());
+					
+							g_player[i + 1]->m_starting_index = i;
+
+							g_selected_item->SetPlayerOnScreen(i + 1);
+
+							//Set current player the selected player so that the 
+							//game starts with the first turn and the correct player.
+							g_selected_item->SetCurPlayer(i + 1);
+							//Make sure that the current player is kept by turning it
+							//into the stop player.
+							NewTurnCount::SetStopPlayer(i + 1);
+						}
+						else{
+							civ = gameinit_GetCivForSlot(i + 1);
+						
+							g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff, 
+								PLAYER_TYPE_ROBOT,
+								gameinit_GetCivForSlot(i + 1),
+								GENDER_RANDOM);
+							g_player[i + 1]->m_starting_index = i;
+						}
+					}
+					break;
+				}
+#endif // ACTIVISION_ORIGINAL
+			case STARTINFOTYPE_CIVSFIXED:
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
+				{
 					Assert(numPlayersLoaded == 0);
 					
 					CIV_INDEX civ;
@@ -2116,9 +2277,59 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					}
 					break;
 				}
+#else // ACTIVISION_ORIGINAL
+//Added by Martin Gühmann
+//No idea what the diffrence between this and STARTINFOTYPE_POSITIONSFIXED the same code is used.
+				{
+					Assert(numPlayersLoaded == 0);					
+					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
+					
+					CIV_INDEX civ;
+
+					for(i = 0; i < g_useScenarioCivs; i++) {
+						if(i + 1 == g_theProfileDB->GetPlayerIndex()){
+					
+							civ = gameinit_GetCivForSlot(i + 1);
+						
+							if (civ == CIV_INDEX_RANDOM) {
+								civ = g_theProfileDB->GetCivIndex();
+							}
+					
+							g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff, 
+								PLAYER_TYPE_HUMAN,
+								civ,
+								g_theProfileDB->GetGender());
+					
+							g_player[i + 1]->m_starting_index = i;
+
+							g_selected_item->SetPlayerOnScreen(i + 1);
+
+							//Set current player the selected player so that the 
+							//game starts with the first turn and the correct player.
+							g_selected_item->SetCurPlayer(i + 1);
+							//Make sure that the current player is kept by turning it
+							//into the stop player.
+							NewTurnCount::SetStopPlayer(i + 1);
+						}
+						else{
+							civ = gameinit_GetCivForSlot(i + 1);
+						
+							g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff, 
+								PLAYER_TYPE_ROBOT,
+								gameinit_GetCivForSlot(i + 1),
+								GENDER_RANDOM);
+							g_player[i + 1]->m_starting_index = i;
+						}
+					}
+					break;
+				}
+#endif // ACTIVISION_ORIGINAL
 			}
 		}
-    } else { 
+    } else {
+		//
+		//	Normal game code
+
         Assert(3 <= k_MAX_PLAYERS && k_MAX_PLAYERS <= k_MAX_PLAYERS); 
         
         if (g_theProfileDB->IsAIOn()) { 
@@ -2137,7 +2348,10 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				civ = (CIV_INDEX)nspi->m_civ;
 			}
 		}
-        
+
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
+
 		g_player[1] = new Player(PLAYER_INDEX(1), 
 								 diff, 
 								 PLAYER_TYPE_HUMAN, 
@@ -2160,8 +2374,63 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 		sint32 firstRobot = -1;
 		
-        for (i=2; i<nPlayers; i++) { 
+        for (i=2; i<nPlayers; i++) {
+
+#else // ACTIVISION_ORIGINAL
+//Added by Martin Gühmann
+
+		sint32 firstRobot = -1;
+
+        for (i=1; i<nPlayers; i++) {
+
+			if(nspi && i == 1){
+
+				g_player[1] = new Player(PLAYER_INDEX(1), 
+										 diff, 
+										 PLAYER_TYPE_HUMAN, 
+										 civ, 
+										 g_theProfileDB->GetGender());
+
+				g_player[1]->m_gold->SetLevel(nspi->m_civpoints);
+				s_networkSettlers[1] = nspi->m_settlers;
+				if(strlen(nspi->m_name) > 0) {
+					g_player[1]->m_civilisation->AccessData()->SetLeaderName(nspi->m_name);
+				}
+			}
+			else if(i == g_theProfileDB->GetPlayerIndex()){
+
+				g_player[i] = new Player(PLAYER_INDEX(i), 
+										 diff, 
+										 PLAYER_TYPE_HUMAN, 
+										 civ, 
+										 g_theProfileDB->GetGender());
+
+
+				s_networkSettlers[i] = 1;
+				if ( strlen(g_theProfileDB->GetLeaderName()) > 0 &&
+					 !g_theProfileDB->IsTutorialAdvice()) {
+					g_player[i]->m_civilisation->AccessData()->SetLeaderName(g_theProfileDB->GetLeaderName());
+				}
+
+				g_selected_item->SetPlayerOnScreen(i);
+
+				//Set current player the selected player so that the 
+				//game starts with the first turn and the correct player.
+				g_selected_item->SetCurPlayer(i);
+				//Make sure that the current player is kept by turning it
+				//into the stop player.
+				NewTurnCount::SetStopPlayer(i);
+
+			}
+#endif // ACTIVISION_ORIGINAL
+
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 			if (g_theProfileDB->IsAIOn() && 
+#else
+//Added by Martin Gühmann
+			else if (g_theProfileDB->IsAIOn() && 
+#endif
 				((!g_network.IsNetworkLaunch() || i > g_network.GetNumHumanPlayers()) ||
 				 (g_network.IsNetworkLaunch() && g_theProfileDB->NoHumanPlayersOnHost() && i==g_network.GetNumHumanPlayers()))) {
 				
@@ -2583,6 +2852,17 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		
 		g_player[g_scenarioUsePlayerNumber]->m_playerType = PLAYER_TYPE_HUMAN;
 		g_selected_item->SetPlayerOnScreen(g_scenarioUsePlayerNumber);
+
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann
+		//Set current player the selected player so that the 
+		//game starts with the first turn and the correct player.
+		g_selected_item->SetCurPlayer(g_scenarioUsePlayerNumber);
+		//Make sure that the current player is kept by turning it
+		//into the stop player.
+		NewTurnCount::SetStopPlayer(g_scenarioUsePlayerNumber);
+#endif
+
 	} else {
 		g_scenarioUsePlayerNumber = 0;
 	}

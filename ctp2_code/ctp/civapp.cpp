@@ -40,6 +40,10 @@
 //
 // - Keep the user's leader name when the data is consistent.
 // - Skip begin turn handling when loading from a file.
+// - Fixed a repetitive memory leak in the Great Libary caused by 
+//   scenario loading, by Martin Gühmann.
+// - Removed some redundant code, because it is already done 
+//   somewhere else, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 //
@@ -54,7 +58,7 @@
 //     GovernmentsModified, to ensure that Governments would be able to be
 //     inspected by those other database classes.
 //     
-//////////////////////////////////////////////////////////////////////////////
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "civ3_main.h"
@@ -2205,6 +2209,11 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		InitializeAppDB((*(CivArchive *)(NULL)));
 
 		
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to fix a massive memory leak in the 
+//Great Libary by loading scenarios
+		GreatLibrary::Shutdown_Great_Library_Data();
+#endif
 		greatlibrary_Cleanup();
 		GreatLibrary::Initialize_Great_Library_Data();
 	}
@@ -2410,11 +2419,20 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 
 
-			
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
+//No idea why this is done here,
+//this is already done in gameinit.cpp.
+//No need to do it again.
 			if(g_scenarioUsePlayerNumber == 0 && !g_turn->IsHotSeat() &&
 				!g_turn->IsEmail()) {
 				g_selected_item->SetPlayerOnScreen(1);
+				
+				//If you really need to do it again better do it like this
+				//to allow player selection:
+				//g_selected_item->SetPlayerOnScreen(g_theProfileDB->GetPlayerIndex());	
 			}
+#endif
 			if (g_director)
 				g_director->AddCopyVision();
 		}
