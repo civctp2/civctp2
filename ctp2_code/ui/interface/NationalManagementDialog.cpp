@@ -476,7 +476,10 @@ void NationalManagementDialog::UpdateRushBuy()
 
 		
 		if(city.GetCityData()->GetBuildQueue()->GetLen())
-			rushBuyTotal += city.GetCityData()->GetOvertimeCost();
+			// JJB added this inner if so that things add up properly
+			if (!city.GetCityData()->AlreadyBoughtFront()) {
+				rushBuyTotal += city.GetCityData()->GetOvertimeCost();
+			}
 	}
 
 	
@@ -1249,8 +1252,13 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 		Unit city;
 		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
 
-		
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BuyFront, GEA_City, city, GEA_End);
+		// JJB removed the following:
+		// g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BuyFront, GEA_City, city, GEA_End);
+		// and replaced it with the following:
+		if (!city.GetCityData()->AlreadyBoughtFront()) {
+			city.GetCityData()->AddBuyFront();
+		}
+		// in the hope of fixing the rush buy bug.
 
 		
 		dialog->UpdateStatusItem(item, city);
