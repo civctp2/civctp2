@@ -501,9 +501,8 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 				int xpix 58
 				int ypix 63
 				int widthpix 90
-				int minxval 1
-				# Set maxxval from 200 to 999 by Martin Gühmann
-				int maxxval 999
+				int minxval 0
+				int maxxval 200
 				int incxval 1
 				int xval 1
 				string statustext "str_SE_PopSpinner"

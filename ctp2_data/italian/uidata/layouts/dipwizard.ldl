@@ -65,14 +65,13 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		int widthpix 250
 		int heightpix 320
 
-		Picture:CTP2_STATIC_IMAGE {
-			int xpix 4
-			int ypix 12
-			int widthpix 64
-			int heightpix 48
-#			string image00 "updf01.tga"
-			string image00 "error.tga"
-		}
+		#Picture:CTP2_STATIC_IMAGE {
+		#	int xpix 4
+		#	int ypix 12
+		#	int widthpix 64
+		#	int heightpix 48
+		#	string image00 "updf01.tga"
+		#}
 
 		Year:CTP2_STATIC_BASE {
 			int xpix 72
@@ -90,9 +89,9 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		}
 
 		Recipient:CTP2_STATIC_BASE {
-			int xpix 70
+			int xpix 5
 			int ypix 20
-			int widthpix 170
+			int widthpix 238
 			int heightpix 32
 			string text "str_ldl_DipWizRecipient"
 

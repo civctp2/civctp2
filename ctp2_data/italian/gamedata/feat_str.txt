@@ -1,0 +1,25 @@
+## FEATS OF WONDER STRINGS
+
+FEAT_ACCOMPISHED_TITLE		"IMPRESA COMPIUTA"
+
+## ADVANCE-RELATED FEATS
+FEAT_GOT_CONCRETE		"Congratulazioni! La tua nazione è stata la prima a scoprire il cemento! La sua facilità d'impiego e il basso costo ne fanno un materiale da costruzione ideale. Per i prossimi {FeatDB(Value[0]).Duration} turni, otterrai un aumento della produzione pari a +{FeatDB(Value[0]).EffectIncreaseProduction}%!"
+FEAT_GOT_GUNPOWDER		"Congratulazioni! Sei stato il primo a scoprire la polvere da sparo. È un progresso fondamentale nel campo degli armamenti: non sarà facile per le altre nazioni difendersi da te. Per i prossimi {FeatDB(Value[0]).Duration} turni, le mura delle altre città saranno molto meno efficaci nel contrastare gli attacchi delle tue unità."
+FEAT_GOT_MASS_PRODUCTION	"Congratulazioni! Sei stato il primo a scoprire la produzione di massa. Adesso le tue attività industriali potranno contare su catene di montaggio, nastri trasportatori e forza lavoro specializzata. Per i prossimi {FeatDB(Value[0]).Duration} turni, otterrai un aumento della produzione pari a +{FeatDB(Value[0]).EffectIncreaseProduction}%!"
+FEAT_GOT_COMPUTER		"Congratulazioni! La tua nazione è stata la prima a scoprire l'informatica. Adesso i tuoi centri di ricerca possono effettuare processi più complessi, eseguire un maggior numero di esperimenti e lavorare in maniera più efficiente. Per i prossimi {FeatDB(Value[0]).Duration} turni, otterrai un aumento dei risultati scientifici pari a +{FeatDB(Value[0]).EffectIncreaseScience}%!"
+FEAT_GOT_ROBOTICS		"Congratulazioni! Sei stato il primo a scoprire la robotica. Grazie alla maggiore efficienza e alla più elevata produttività garantite dalle unità lavorative non umane, per i prossimi {FeatDB(Value[0]).Duration} turni otterrai un aumento della produzione pari a +{FeatDB(Value[0]).EffectIncreaseProduction}%!"
+FEAT_GOT_LIFE_EXTENSION		"Congratulazioni! La tua nazione è stata la prima a scoprire l'allungamento della vita. Adesso il tuo popolo può raggiungere l'immortalità sostituendo i corpi vecchi e decrepiti con altri più nuovi e in buone condizioni di salute! Per i prossimi {FeatDB(Value[0]).Duration} turni, la tua nazione riceverà un bonus nel benessere pari a +{FeatDB(Value[0]).EffectIncreaseHappiness}."
+
+## CONSTRUCTION-RELATED FEATS
+
+FEAT_BUILT_THEATERS		"Hai costruito molti teatri nel tuo impero: le commedie e i drammi rappresentati dal tuo popolo stanno ottenendo un grande successo a livello mondiale. Per i prossimi {FeatDB(Value[0]).Duration} turni, la tua nazione riceverà un bonus nel benessere pari a +{FeatDB(Value[0]).EffectIncreaseHappiness}, per riflettere la soddisfazione per il livello culturale raggiunto."
+FEAT_BUILT_BROKERAGES		"Hai costruito molte agenzie finanziarie, consolidando la tua posizione di potenza economica di livello mondiale. I commercianti, i mercanti e i banchieri di tutto il pianeta nutrono per la tua nazione grande stima e ammirazione. Riceverai un bonus d'oro pari a +{FeatDB(Value[0]).EffectIncreaseCommerce} per i prossimi {FeatDB(Value[0]).Duration} turni."
+FEAT_BUILT_INTERNET		"Hai costruito centri informatici in molte delle tue città, collegando fra loro strutture militari, università e centri di ricerca tramite una velocissima rete nazionale di supercomputer. Per i prossimi {FeatDB(Value[0]).Duration} turni, i tuoi risultati scientifici registreranno un aumento pari a +{FeatDB(Value[0]).EffectIncreaseScience}."
+FEAT_BUILT_SYNDICATE		"Hai costruito numerose televisioni, dando vita al primo grande network. Adesso la popolazione vede nella televisione la principale fonte di informazione e di intrattenimento. La tua nazione riceverà un bonus nel benessere pari a +{FeatDB(Value[0]).EffectIncreaseHappiness} per i prossimi {FeatDB(Value[0]).Duration} turni."
+FEAT_BUILT_ORBITAL_LABS		"Hai creato una rete di laboratori orbitali, dando origine a un collettivo di ricerca a livello mondiale. Grazie alla saggia gestione dei programmi scientifici, la tua nazione riceverà un bonus nei risultati scientifici pari a +{FeatDB(Value[0]).EffectIncreaseScience} per i prossimi {FeatDB(Value[0]).Duration} turni." 
+
+## ACTION-RELATED FEATS
+FEAT_SAILED_AROUND_THE_WORLD	"Sei riuscito navigare intorno al mondo! I tuoi abili marinai conoscono alla perfezione i mari e hanno tracciato sulla carta un gran numero di rotte. Come risultato, tutte le tue unità navali otterranno un bonus di movimento pari a +{FeatDB(Value[0]).EffectBoatMovement/100} per i prossimi {FeatDB(Value[0]).Duration} turni." 
+FEAT_CONQUERED_BY_FORCE		"Sei un conquistatore! Grazie al valore militare, al coraggio e alla determinazione, sei riuscito a soggiogare una nazione molto potente!"  
+FEAT_RECAPTURED_CITY 		"Hai riconquistato una città che un tempo apparteneva al tuo impero! Riappropriandoti di ciò che un tempo era tuo, hai sollevato il morale del tuo popolo, ridandogli la forza di reagire alle aggressioni nemiche. Il tuo impero riceverà un bonus nel benessere pari a +{FeatDB(Value[0]).EffectIncreaseHappiness} per i prossimi {FeatDB(Value[0]).Duration} turni."
+

@@ -67,126 +67,54 @@ InitPlayWindow {
 	int	heightpix	600
 	string	objecttype	"C3Window"
 	SpriteTestButton:SP_BUTTON_BIG {
-		bool	nodatabase true	#1
+		int	nodatabase	1
 		int	xpix	677
 		int	ypix	50
 		string	text	"Sprite Test"
 		int	widthpix	78
 		int	heightpix	32
 	}
-#	SPButton:SP_BUTTON_BIG {
-#		string	text	"str_ldl_SINGLEPLAYER"
-#		int	xpix	615
-#		int	ypix	295
-#		int	widthpix	140
-#		int	heightpix	32
-#	}
+	SPButton:SP_BUTTON_BIG {
+		string	text	"str_ldl_SINGLEPLAYER"
+		int	xpix	478
+		int	ypix	455
+		int	widthpix	290
+		int	heightpix	32
+	}
 	EmailButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_EMAIL"
-		int	xpix	50
-		int	ypix	340
+		int	xpix	36
+		int	ypix	-490
 		int	widthpix	140
 		int	heightpix	32
 	}
 	HotseatButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_HOTSEAT"
-		int	xpix	50
-		int	ypix	385
+		int	xpix	186
+		int	ypix	-490
 		int	widthpix	140
 		int	heightpix	32
 	}
 	MPButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_MULTIPLAYER"
-		int	xpix	50
-		int	ypix	295
-		int	widthpix	140
+		int	xpix	36
+		int	ypix	455
+		int	widthpix	290
 		int	heightpix	32
 	}
 	QuitButton:SP_BUTTON_BIG_STONE {
-		string	text	"str_ldl_Quit"
+		string	text	"str_ldl_CAPS_QUIT"
 		int	xpix	624
-		int	ypix	556
+		int	ypix	558
 		int	widthpix	140
 		int	heightpix	32
 	}
 	CreditsButton:SP_BUTTON_BIG_STONE {
 		string	text	"str_ldl_CREDITS"
-		int	xpix	336
-		int	ypix	556
-		int	widthpix	140
-		int	heightpix	32
-	}
-	TutorialButton:SP_BUTTON_BIG {
-		int	widthpix	140
-		int	heightpix	32
-		string	text	"str_ldl_PLAY_TUTORIAL"
-		int	xpix	615
-		int	ypix	385
-	}
-	LoadGameButton:SP_BUTTON_BIG {
-		int	widthpix	140
-		int	heightpix	32
-		string	text	"str_ldl_LOAD_GAME"
-		int	xpix	615
-		int	ypix	340
-	}
-	NewGameButton:SP_BUTTON_BIG {
-		int	widthpix	140
-		int	heightpix	32
-		string	text	"str_ldl_NEW_GAME"
-		int	xpix	615
-		int	ypix	295
-	}
-	OptionsButton:SP_BUTTON_BIG_STONE {
-		int	widthpix	140
-		int	heightpix	32
-		string	text	"str_ldl_OPTIONS"
 		int	xpix	36
-		int	ypix	556
-	}
-	VersionString:CTP2_STATIC_BASE {
-		int fontcolorred 0
-		int fontcolorgreen 0
-		int fontcolorblue 0
-
-		string text "str_ldl_version"
-		int xpix 370
-		int ypix 203
-		int widthpix 60
-		int heightpix 24
-	}
-	Disclaimer1:CTP2_STATIC_BASE {
-		int fontcolorred 0
-		int fontcolorgreen 0
-		int fontcolorblue 0
-
-		string text "str_ldl_Disclaimer1"
-		int xpix 269 
-		int ypix 498
-		int widthpix 260
-		int heightpix 24
-	}
-	Disclaimer2:CTP2_STATIC_BASE {
-		int fontcolorred 0
-		int fontcolorgreen 0
-		int fontcolorblue 0
-
-		string text "str_ldl_Disclaimer2"
-		int xpix 125 
-		int ypix 515
-		int widthpix 260
-		int heightpix 24
-	}
-	Disclaimer3:CTP2_STATIC_BASE {
-		int fontcolorred 0
-		int fontcolorgreen 0
-		int fontcolorblue 0
-
-		string text "str_ldl_Disclaimer3"
-		int xpix 461 
-		int ypix 515
-		int widthpix 260
-		int heightpix 24
+		int	ypix	558
+		int	widthpix	140
+		int	heightpix	32
 	}
 	Background {
 		string	objecttype	"c3_Static"
@@ -349,24 +277,24 @@ template SPNEWGAME_BUTTONS:CTP2_STANDARD_FONT {
 ###	added template buttons
 
 
-template SPNEWGAME_GENERAL_LABEL:CTP2_STANDARD_FONT {
-	int	xpix	44
-	int	widthpix	84
-	int	heightpix	20
-	int	bevelwidth	0
-}
+#template SPNEWGAME_GENERAL_LABEL:CTP2_STANDARD_FONT {
+#	int	xpix	44
+#	int	widthpix	84
+#	int	heightpix	20
+#	int	bevelwidth	0
+#}
 
 
-template SPNEWGAME_WORLD_LABEL:CTP2_STANDARD_FONT {
-	int	xpix	267
-	int	widthpix	84
-	int	heightpix	20
-	int	bevelwidth	0
-}
+#template SPNEWGAME_WORLD_LABEL:CTP2_STANDARD_FONT {
+#	int	xpix	267
+#	int	widthpix	84
+#	int	heightpix	20
+#	int	bevelwidth	0
+#}
 
 
-template SPNEWGAME_CUSTOM_LABEL:CTP_GREY_TITLE_FONT {
-}
+#template SPNEWGAME_CUSTOM_LABEL:CTP_GREY_TITLE_FONT {
+#}
 
 
 template GENERAL_BUTTON:SP_BUTTON_SMALL {
@@ -419,14 +347,14 @@ SPNewGameWindow {
 	int	heightpix	600
 	int	xpix	400
 	int	ypix	300
-	MapTypeLabel:CTP_GREY_TITLE_FONT  {
-		string	text	"str_ldl_MAP_TYPE"
-		int	ypix	24
-	}
-	MapTypeButton:WORLD_BUTTON {
-		string	text	"str_ldl_RANDOM"
-		int	ypix	44
-	}
+#	MapTypeLabel:CTP_GREY_TITLE_FONT  {
+#		string	text	"str_ldl_MAP_TYPE"
+#		int	ypix	24
+#	}
+#	MapTypeButton:WORLD_BUTTON {
+#		string	text	"str_ldl_RANDOM"
+#		int	ypix	44
+#	}
 	CivilizationLabel:CTP_GREY_TITLE_FONT  {
 		string	text	"str_ldl_CAPS_CIVILIZATION"
 		int	xpix	310
@@ -915,10 +843,6 @@ SPNewGameWindow {
 		int	ypix	410
 		string	text	"str_ldl_Pollution"
 	}
-	SpriteEditor:RULES_BUTTONS {
-		int	ypix	470
-		string	text	"str_ldl_Pollution"
-	}
 	RTOP {
 		string	image0	"error.tga"
 		int	xpix	703
@@ -1024,11 +948,10 @@ SPWorldTypeStringTable {
 	string	string2		"str_tbl_ldl_Cecilias_Blade_Runner"
 }
 SPWorldShapeStringTable {
-	int 		numstrings		4
+	int 		numstrings		3
 	string 	string0		"str_tbl_ldl_East_West_Wrap_Only"
+	string	string1		"str_tbl_ldl_No_Wrap"
 	string	string2		"str_tbl_ldl_North_South_and_East_West"
-	string 	string3		"str_tbl_ldl_North_South_Wrap_Only"
-	string	string4		"str_tbl_ldl_No_Wrap"
 }
 SPDifficultyStringTable {
 	int 		numstrings		5
@@ -1107,7 +1030,7 @@ SPDropDownListItem {
 	}
 }
 SPNewGameStrings {
-	int	numstrings	18
+	int	numstrings	17
 	string	string0	"str_tbl_ldl_Chieftain"
 	string	string1	"str_tbl_ldl_Warlord"
 	string	string2	"str_tbl_ldl_Prince"
@@ -1122,11 +1045,10 @@ SPNewGameStrings {
 	string	string11	"str_tbl_ldl_Custom"
 	string	string12	"str_tbl_ldl_Earth_World"
 	string	string13	"str_tbl_ldl_Doughnut_World"
-	string	string14	"str_tbl_ldl_Uranus_World"
-	string	string15	"str_tbl_ldl_Flat_World"
-	string	string16	"str_tbl_ldl_Default"
-	string	string17	"str_tbl_ldl_Custom"
-#	string	string18				# environment
+	string	string14	"str_tbl_ldl_Flat_World"
+	string	string15	"str_tbl_ldl_Default"
+	string	string16	"str_tbl_ldl_Custom"
+#	string	string17				# environment
 }
 
 $

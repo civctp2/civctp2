@@ -1,0 +1,400 @@
+#######################################
+# File: battleview.ldl
+# Last Access: Thu Sep 10 01:18:45 1998
+#######################################
+
+
+##-----------------------------------##
+##                Data               ##
+##-----------------------------------##
+BattleViewWindow {
+	# Center.
+	string	xanchor	"center"
+	string	yanchor	"center"
+
+	# Size.
+	int	widthpix	752
+	int	heightpix	542
+
+################################################################################
+# Border and Information Background
+################################################################################
+	TopBorder:CTP2_STATIC_BACKGROUND {	
+		# Location.
+		int xpix		0
+		int ypix		0
+		int widthpix	752
+		int heightpix	145
+
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		6
+
+		# Background.
+		bool	layeralways0		true
+		string	image00				"uptg03a.tga"
+		bool	imagestretchx01		true
+		string	image01				"uptg03b.tga"
+		string	image02				"uptg03c.tga"
+		bool	imagenextrow03		true
+		bool	imagestretchy03		true
+		string	image03				"uptg03d.tga"
+		bool	imagestretchx04		true
+		bool	imagestretchy04		true
+		string	image04				"uptg20e.tga"
+		bool	imagestretchy05		true
+		string	image05				"uptg03f.tga"
+
+		# Prevent redraw on mouse over.
+		bool nohighlight true
+	}
+	LeftBorder:CTP2_STATIC_BACKGROUND {	
+		# Location.
+		int		xpix		0
+		int		ypix		145
+		int		widthpix	17
+		int		heightpix	397
+
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		2
+
+		# Background.
+		bool	layeralways0		true
+		bool	imagestretchy00		true
+		string	image00				"uptg03d.tga"
+		bool	imagenextrow01		true
+		string	image01				"uptg03g.tga"
+	}
+	RightBorder:CTP2_STATIC_BACKGROUND {	
+		# Location.
+		int		xpix		735
+		int		ypix		145
+		int		widthpix	17
+		int		heightpix	397
+
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		2
+
+		# Background.
+		bool	layeralways0		true
+		bool	imagestretchy00		true
+		string	image00				"uptg03f.tga"
+		bool	imagenextrow01		true
+		string	image01				"uptg03i.tga"
+	}
+	BottomBorder:CTP2_STATIC_BACKGROUND {	
+		# Location.
+		int		xpix		17
+		int		ypix		525
+		int		widthpix	718
+		int		heightpix	17
+
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		1
+
+		# Background.
+		bool	layeralways0		true
+		bool	imagestretchx00		true
+		string	image00				"uptg03h.tga"
+	}
+
+################################################################################
+# Battle Background
+################################################################################
+	BattleViewArea {
+		int xpix		17
+		int ypix		145
+		int widthpix	718
+		int heightpix	380
+	}
+#	CityBonusImage {
+#		int	xpix		411
+#		int	ypix		145
+#		int	widthpix	324
+#		int	heightpix	174
+#		string	imagebltflag	"chromakey"
+#	}
+
+################################################################################
+# City Name
+################################################################################
+	CityName:CTP_GREY_TITLE_FONT {
+		int xpix		520
+		int ypix		230
+		int widthpix	200
+		int fontsize	12
+		int heightpix	24
+		string pattern "upfg61.tga"
+		
+	}
+	
+################################################################################
+# Dialog Title
+################################################################################
+	TitleText:CTP_GREY_TITLE_FONT {
+		int	xpix	0
+		int	ypix	17
+		int	widthpix	752
+		int	heightpix	20
+		string	text	"str_ldl_BATTLE_VIEW"
+		bool	mouseblind	true
+	}
+
+################################################################################
+# Close Button
+################################################################################
+	ExitButton:CTP2_GENERIC_ARROW_BUTTON {
+		# Background.
+		string	image00				"upbt05u.tga"
+		string	image10				"upbt05h.tga"
+		string	image20				"upbt05d.tga"
+		string	image30				"upbt05x.tga"
+		int	xpix		704
+		int	ypix		18
+	}
+	
+################################################################################
+# Attacker
+################################################################################
+	AttackersText:CTP2_STATIC_BACKGROUND {
+		int	xpix		97
+		int	ypix		37
+		int	widthpix	190
+		int	heightpix	20
+		string	text	"str_ldl_Attackers"
+	}
+	AttackersName:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_20 {
+		int	xpix		97
+		int	ypix		57
+		int	widthpix	190
+	}
+	AttackersFlag {
+		int xpix		289
+		int ypix		54
+		int widthpix	23
+		int heightpix	23
+	}
+
+################################################################################
+# Retreat Button
+################################################################################
+	RetreatButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+		int	xpix		97
+		int	ypix		97
+		int	widthpix	190
+		string	text	"str_ldl_BV_RETREAT"
+	}
+
+################################################################################
+# Defender
+################################################################################
+	DefendersText:CTP2_STATIC_BACKGROUND {
+		int	xpix		439
+		int	ypix		37
+		int	widthpix	190
+		int	heightpix	20
+		string	text	"str_ldl_Defenders"
+	}
+	DefendersName:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_20 {
+		int	xpix		439
+		int	ypix		57
+		int	widthpix	190
+	}
+	DefendersFlag {
+		int xpix		631
+		int ypix		54
+		int widthpix	23
+		int heightpix	23
+	}
+
+################################################################################
+# Bonuses for Defender
+################################################################################
+	############################################################################
+	# Terrain
+	############################################################################
+	TerrainBonusText:CTP2_STATIC_BACKGROUND {
+		int	xpix		380
+		int	ypix		97
+		int	widthpix	74
+		int	heightpix	14
+		string	text	"str_ldl_Terrain_Bonus_COLON"
+		string	just	"left"
+	}
+	TerrainBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
+		int	xpix		484
+		int	ypix		97
+		int	widthpix	50
+		string	text	"str_ldl_0"
+	}
+	############################################################################
+	# City
+	############################################################################
+	CityBonusText:CTP2_STATIC_BACKGROUND {
+		int	xpix		380
+		int	ypix		117
+		int	widthpix	74
+		int	heightpix	14
+		string	just	"left"
+		string	text	"str_ldl_City_Bonus_COLON"
+	}
+	CityBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
+		int	xpix		484
+		int	ypix		117
+		int	widthpix	50
+		string	text	"str_ldl_0"
+	}
+	############################################################################
+	# Fort
+	############################################################################	
+	FortBonusText:CTP2_STATIC_BACKGROUND {
+		int	xpix		540
+		int	ypix		97
+		int	widthpix	74
+		int	heightpix	14
+		string	just	"left"
+		string	text	"str_ldl_Fort_Bonus_COLON"
+	}
+	FortBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
+		int	xpix		672
+		int	ypix		97
+		int	widthpix	50
+		string	text	"str_ldl_0"
+	}
+	############################################################################
+	# Fortification
+	############################################################################	
+	FortifiedBonusText:CTP2_STATIC_BACKGROUND {
+		int	xpix		540
+		int	ypix		117
+		int	widthpix	74
+		int	heightpix	14
+		string	just	"left"
+		string	text	"str_ldl_Entrench_Bonus_COLON"
+	}
+	FortifiedBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
+		int	xpix		672
+		int	ypix		117
+		int	widthpix	50
+		string	text	"str_ldl_0"
+	}
+}
+
+BattleViewTerrainTable {
+	int numstrings		26
+	bool	nodatabase	true
+	# Forest
+	string	string0		"upbg001.tga"
+	# Plains
+	string	string1		"upbg002.tga"
+	# Tundra
+	string	string2		"upbg005.tga"
+	# Glacier
+	string	string3		"upbg005.tga"
+	# Grassland
+	string	string4		"upbg001.tga"
+	# Desert
+	string	string5		"upbg003.tga"
+	# Swamp
+	string	string6		"upbg001.tga"
+	# Jungle
+	string	string7		"upbg001.tga"
+	# Mountain
+	string	string8		"upbg001.tga"
+	# Hill
+	string	string9		"upbg001.tga"
+	# Shallow Water
+	string	string10	"upbg004.tga"
+	# Deep Water
+	string	string11	"upbg004.tga"
+	# Volcano Water
+	string	string12	"upbg004.tga"
+	# Beach Water
+	string	string13	"upbg004.tga"
+	# Shelf Water
+	string	string14	"upbg004.tga"
+	# Trench Water
+	string	string15	"upbg004.tga"
+	# Rift Water
+	string	string16	"upbg004.tga"
+	# Dead
+	string	string17	"upbg007.tga"
+	# Brown Hill
+	string	string18	"upbg002.tga"
+	# Brown Mountain
+	string	string19	"upbg003.tga"
+	# White Hill
+	string	string20	"upbg005.tga"
+	# White Mountain
+	string	string21	"upbg005.tga"
+	# Kelp or Reef
+	string  string22    "upbg004.tga"
+	# Reef or Kelp
+	string  string23    "upbg004.tga"
+	# Special 1
+	string  string24    "upbg001.tga"
+	# Special 2
+	string  string25    "upbg006.tga"
+}
+
+BattleViewCityTable {
+	int numstrings		26
+	bool	nodatabase	true
+	# Forest
+	string	string0		"upbo001.tga"
+	# Plains
+	string	string1		"upbo002.tga"
+	# Tundra
+	string	string2		"upbo005.tga"
+	# Glacier
+	string	string3		"upbo005.tga"
+	# Grassland
+	string	string4		"upbo001.tga"
+	# Desert
+	string	string5		"upbo003.tga"
+	# Swamp
+	string	string6		"upbo001.tga"
+	# Jungle
+	string	string7		"upbo001.tga"
+	# Mountain
+	string	string8		"upbo001.tga"
+	# Hill
+	string	string9		"upbo001.tga"
+	# Shallow Water
+	string	string10	"upbo005.tga"
+	# Deep Water
+	string	string11	"upbo005.tga"
+	# Volcano Water
+	string	string12	"upbo005.tga"
+	# Beach Water
+	string	string13	"upbo005.tga"
+	# Shelf Water
+	string	string14	"upbo005.tga"
+	# Trench Water
+	string	string15	"upbo005.tga"
+	# Rift Water
+	string	string16	"upbo005.tga"
+	# Dead
+	string	string17	"upbo003.tga"
+	# Brown Hill
+	string	string18	"upbo002.tga"
+	# Brown Mountain
+	string	string19	"upbo003.tga"
+	# White Hill
+	string	string20	"upbo005.tga"
+	# White Mountain
+	string	string21	"upbo005.tga"
+	# Kelp or Reef
+	string  string22    "upbo005.tga"
+	# Reef or Kelp
+	string string23     "upbo005.tga"
+	# Special 1
+	string  string24    "upbo001.tga"
+	# Special 2
+	string  string25    "upbg006.tga"
+}
+
+$

@@ -1,0 +1,153 @@
+# template for our font settings
+
+template T_FONT4_12 {
+	string fontname 			"Arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		50			
+	int fontshadowcolorgreen 	50
+	int fontshadowcolorblue 	50
+	int fontsize				6
+}
+
+template T_FONT4_CAMEL {
+	string fontname 			"Arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		50			
+	int fontshadowcolorgreen 	50
+	int fontshadowcolorblue 	50
+	int fontsize				8
+}
+
+template T_FONT4_14 {
+	string fontname 			"Arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		50			
+	int fontshadowcolorgreen 	50
+	int fontshadowcolorblue 	50
+	int fontsize				7
+}
+
+template T_FONT4_SCI {
+	string fontname 			"Arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		50			
+	int fontshadowcolorgreen 	50
+	int fontshadowcolorblue 	50
+	int fontsize				8
+}
+
+
+template T_FONT4_NEWTITLE {
+	string fontname 			"Arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		50			
+	int fontshadowcolorgreen 	50
+	int fontshadowcolorblue 	50
+	int fontsize				8
+}
+
+
+template T_FONT4_18 {
+	string fontname 			"Arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		50			
+	int fontshadowcolorgreen 	50
+	int fontshadowcolorblue 	50
+	int fontsize				9
+}
+
+template T_FONT4_9 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				7
+}
+
+template T_FONT4_TIT {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				8
+}
+
+template T_FONT4_8 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				6
+}
+
+template T_FONT4_POPTITLE {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				8
+}
+
+template T_FONT4_POPMESSAGE {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				8
+}
+
+$

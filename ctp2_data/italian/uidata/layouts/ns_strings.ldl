@@ -234,15 +234,10 @@ strings {
 
 	startagestrings {
 		string	string0	"AGE_NAME_ANCIENT"
-#		string	string#	"AGE_NAME_CLASS"
-#		string	string#	"AGE_NAME_MEDIEVAL"
 		string	string1	"AGE_NAME_RENAISS"
-#		string	string#	"AGE_NAME_INDUST"
- 		string	string2	"AGE_NAME_MODERN"
-#		string	string#	"AGE_NAME_COMPUTER"
+		string	string2	"AGE_NAME_MODERN"
 		string	string3	"AGE_NAME_GENETIC"
 		string	string4	"AGE_NAME_DIAMOND"
-#		string	string#	"AGE_NAME_FUTURE"
 	}
 
 	endage {
@@ -291,10 +286,8 @@ strings {
 	}
 
 	worldshapestrings {
-		string	string0	"str_ldl_Earth_World"
+		string	string0	"str_tbl_ldl_Earth_World"
 		string	string1	"str_ldl_Doughnut_World"
-		string	string3	"str_ldl_Uranus_World"
-		string	string4	"str_ldl_Flat_World"
 	}
 
 	difficulty1 {

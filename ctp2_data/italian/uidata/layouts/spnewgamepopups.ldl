@@ -728,10 +728,7 @@ SPNewGameMapShapeScreen {
 
 	int	widthpix	500
 
-#	int	heightpix	150
-
-	#new value by Martin Gühmann
-	int	heightpix	219
+	int	heightpix	150
 
 	Name:CTP_GREY_TITLE_FONT {
 
@@ -756,7 +753,7 @@ SPNewGameMapShapeScreen {
 
 		int	xpix	190
 
-		int	ypix	50
+		int	ypix	51
 
 		string	just	"left"
 
@@ -767,34 +764,24 @@ SPNewGameMapShapeScreen {
 
 		int	xpix	190
 
-		int	ypix	85
+		int	ypix	84
 
 		string	just	"left"
 
 		string	text	"str_ldl_East_West_and_North_South_edges"
 	}
-	#Added by Martin Gühmann
-	UWLabel:SP_POPUP_LABEL {
-
-		int	xpix	190
-
-		int	ypix	120
-
-		string	just	"left"
-
-		string	text	"str_ldl_North_and_South_edges_of_the_map_connect"
-	}
 
 	FWLabel:SP_POPUP_LABEL {
 
-		int	xpix	190
+		int	xpix	150
 
-		int	ypix	155
+		int	ypix	116
 
 		string	just	"left"
 
 		string	text	"str_ldl_No_wrapping"
 	}
+
 
 
 	Group {
@@ -814,22 +801,13 @@ SPNewGameMapShapeScreen {
 			int	ypix	80
 
 		}
-		#Added by Martin Gühmann
-		MapShapeThree:POPUP_CHECKBOX {
 
-			string	text	"str_ldl_Uranus_World"
-			int	xpix	20
-
-			int	ypix	115
-
-		}
-
-		MapShapeFour:POPUP_CHECKBOX {
+		MapShapeThree:SP_POPUP_SWITCH_LARGE {
 
 			string	text	"str_ldl_Flat_World"
 			int	xpix	20
 
-			int	ypix	150
+			int	ypix	115
 
 		}
 
@@ -908,10 +886,7 @@ SPNewGamePlayersScreen {
 
 	string	yanchor		"center"
 
-#	int	widthpix	400
-
-	# New value by Martin Gühmann
-	int	widthpix	500
+	int	widthpix	400
 
 	int	heightpix	250
 
@@ -953,129 +928,52 @@ SPNewGamePlayersScreen {
 		string	text	"str_ldl_BACK"
 	}
 
-#	Group {
-#
-#		PlayerOne:POPUP_CHECKBOX {
-#
-#			string	text	"str_ldl_3"
-#			int	ypix	45
-#
-#		}
-#
-#		PlayerTwo:POPUP_CHECKBOX {
-#
-#			string	text	"str_ldl_4"
-#			int	ypix	75
-#
-#		}
-#
-#		PlayerThree:POPUP_CHECKBOX {
-#
-#			string	text	"str_ldl_5"
-#			int	ypix	105
-#
-#		}
-#
-#		PlayerFour:POPUP_CHECKBOX {
-#
-#			string	text	"str_ldl_6"
-#			int	ypix	135
-#
-#		}
-#
-#		PlayerFive:POPUP_CHECKBOX {
-#
-#			string	text	"str_ldl_7"
-#			int	ypix	165
-#
-#		}
-#
-#		PlayerSix:POPUP_CHECKBOX {
-#
-#			string	text	"str_ldl_8"
-#			int	ypix	195
-#
-#		}
-#
-#	}
-	NumPlayerSpinner:CTP2_SPINNER{
-		int xpix 38
-		int ypix 63
-		int widthpix 90
-		int minxval 3
-		int maxxval 32
-		int incxval 1
-		int xval 1
-		string statustext "str_ldl_SPNGPS_NumPlayerSpinner"
-		string tipwindow "str_ldl_SPNGPS_NumPlayerSpinner"
-	}
-	MaxPlayerSpinner:CTP2_SPINNER{
-		int xpix 38
-		int ypix 103
-		int widthpix 90
-		int minxval 0
-		int maxxval 32
-		int incxval 1
-		int xval 1
-		string statustext "str_ldl_SPNGPS_MaxPlayerSpinner"
-		string tipwindow "str_ldl_SPNGPS_MaxPlayerSpinner"
-	}
-	PlayerSpinner:CTP2_SPINNER{
-		int xpix 38
-		int ypix 143
-		int widthpix 90
-		#Set it to zero if you want to start with the Barbarians
-		int minxval 1
-		#Is overwritten by the game
-		int maxxval 32
-		int incxval 1
-		int xval 1
-		string statustext "str_ldl_SPNGPS_PlayerSpinner"
-		string tipwindow "str_ldl_SPNGPS_PlayerSpinner"
-	}
-	#Flag:CTP2_STATIC_IMAGE {
-	#	int xpix 78
-	#	int ypix 183
-	#	int widthpix 64
-	#	int heightpix 48
-	#	string image00 "upc023.tga"
-	#}
-	NumPlayerText:SP_POPUP_LABEL {
-		int fontcolorred 0
-		int fontcolorgreen 0
-		int fontcolorblue 0
+	Group {
 
-		string text "str_ldl_SPNGPS_NumPlayerText"
-		bool wordwrap TRUE
-		int xpix 158
-		int ypix 63
-		int widthpix 260
-		int heightpix 48
-	}
-	MaxPlayerText:SP_POPUP_LABEL {
-		int fontcolorred 0
-		int fontcolorgreen 0
-		int fontcolorblue 0
+		PlayerOne:POPUP_CHECKBOX {
 
-		string text "str_ldl_SPNGPS_MaxPlayerText"
-		bool wordwrap TRUE
-		int xpix 158
-		int ypix 103
-		int widthpix 260
-		int heightpix 48
-	}
-	PlayerText:SP_POPUP_LABEL {
-		int fontcolorred 255
-		int fontcolorgreen 0
-		int fontcolorblue 0
+			string	text	"str_ldl_3"
+			int	ypix	45
 
-		string text "str_ldl_SPNGPS_PlayerText"
-		bool wordwrap TRUE
-		int xpix 158
-		int ypix 143
-		int widthpix 260
-		int heightpix 48
+		}
+
+		PlayerTwo:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_4"
+			int	ypix	75
+
+		}
+
+		PlayerThree:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_5"
+			int	ypix	105
+
+		}
+
+		PlayerFour:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_6"
+			int	ypix	135
+
+		}
+
+		PlayerFive:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_7"
+			int	ypix	165
+
+		}
+
+		PlayerSix:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_8"
+			int	ypix	195
+
+		}
+
 	}
+
 }
 
 

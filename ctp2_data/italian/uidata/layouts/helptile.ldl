@@ -1,0 +1,482 @@
+HelpTileWindow {
+	string	pattern	"uptg20e.tga"
+#	int 	xpix		241
+#	int 	ypix		103
+	string	xanchor		"center"
+	string	yanchor		"center"
+	int	widthpix	546
+	int	heightpix	173
+	ExitButton:CTP2_STANDARD_CLOSE {
+		#string	image0	"error.tga"
+		int xpix		508
+		int ypix		9
+		#int	widthpix	28
+		#int	heightpix	23
+	}
+	TileName:CTP_GREY_TITLE_FONT {
+		#string xanchor "center"
+		#string yanchor "top"
+		int ypix 20
+		int xpix 200
+		string pattern "uptg20e.tga"
+		#int widthpct 50
+		#int heightpct 10
+		string text "str_ldl_BRACKET_TILENAME"
+	}
+	FoodN:CTP2_STANDARD_FONT {
+		string pattern "uptg20e.tga"
+		int 	xpix		25
+		int 	ypix		70
+		int widthpix 	100
+		int heightpix	15
+		string textblttype "fill"
+		string text	"str_ldl_Food_COLON"
+	}
+	FoodV:CTP2_STANDARD_FONT {
+		string pattern "uptg20e.tga"
+		int 	xpix		130
+		int 	ypix		70
+		int widthpix 	40
+		int heightpix	15
+		string textblttype "fill"
+	}
+	ProdN:CTP2_STANDARD_FONT {
+		string pattern "uptg20e.tga"
+		int 	xpix		25
+		int 	ypix		90
+		int widthpix	100
+		int heightpix	15
+		string textblttype "fill"
+		string text	"str_ldl_Production_COLON"
+	}
+	ProdV:CTP2_STANDARD_FONT {
+		string pattern "uptg20e.tga"
+		int 	xpix		130
+		int 	ypix		90
+		int widthpix	40
+		int heightpix	15
+		string textblttype "fill"
+	}
+	MoveN:CTP2_STANDARD_FONT {
+		string pattern "uptg20e.tga"
+		int 	xpix		25
+		int 	ypix		110
+		int widthpix	100
+		int heightpix	15
+		string textblttype "fill"
+		string text	"str_ldl_Movement_Cost_COLON"
+	}
+	MoveV:CTP2_STANDARD_FONT {
+		string pattern "uptg20e.tga"
+		int 	xpix		130
+		int 	ypix		110
+		int widthpix	40
+		int heightpix	15
+		string textblttype "fill"
+	}
+	GoodN:CTP2_STANDARD_FONT{
+		string pattern "uptg20e.tga"
+		int 	xpix		370
+		int 	ypix		90
+		int widthpix	70
+		int heightpix	15
+		string textblttype "fill"
+		string text	"str_ldl_Goods_COLON"
+	}
+	GoodV:CTP2_STANDARD_FONT{
+		string pattern "uptg20e.tga"
+		int 	xpix		440
+		int 	ypix		90
+		int widthpix	100
+		int heightpix	15
+		string textblttype "fill"
+	}
+	SaleN:CTP2_STANDARD_FONT{
+		string pattern "uptg20e.tga"
+		int 	xpix		370
+		int 	ypix		110
+		int widthpix	70
+		int heightpix	15
+		string textblttype "fill"
+		string text	"str_ldl_Sale_Value_COLON"
+	}
+	SaleV:CTP2_STANDARD_FONT{
+		string pattern "uptg20e.tga"
+		int 	xpix		440
+		int 	ypix		110
+		int widthpix	100
+		int heightpix	15
+		string textblttype "fill"
+	}	
+	GoldN:CTP2_STANDARD_FONT{
+		string pattern "uptg20e.tga"
+		int 	xpix		370
+		int 	ypix		70
+		int widthpix	70
+		int heightpix	15
+		string textblttype "fill"
+		string text	"str_ldl_Gold_COLON"
+	}
+	GoldV:CTP2_STANDARD_FONT{
+		string pattern "uptg20e.tga"
+		int 	xpix		440
+		int 	ypix		70
+		int widthpix	100
+		int heightpix	15
+		string textblttype "fill"
+	}
+	
+	TileImage {
+#		string pattern "uptg20e.tga"
+		int 	xpix		191
+		int 	ypix		60
+		int widthpix	159
+		int heightpix	80
+	}
+
+#### this border stuff needs to be removed
+#### uptg20j.tga is an all-skip-color image 
+#### -- dalzell
+
+	TileITop {
+		string image0 "uptg20j.tga"
+		int 	xpix		174
+		int 	ypix		45
+		string	imagebltflag	"chromakey"
+	}
+	TileIBottom {
+		string image0 "uptg20j.tga"
+		int 	xpix		176
+		int 	ypix		140
+		string	imagebltflag	"chromakey"
+	}
+	TileITL {
+		string image0 "uptg20j.tga"
+		int 	xpix		171
+		int 	ypix		60
+		string	imagebltflag	"chromakey"
+	}
+	TileITR {
+		string image0 "uptg20j.tga"
+		int 	xpix		350
+		int 	ypix		60
+		string	imagebltflag	"chromakey"
+	}
+	TileIBL {
+		string image0 "uptg20j.tga"
+		int 	xpix		171
+		int 	ypix		112
+		string	imagebltflag	"chromakey"
+	}
+	TileIBR {
+		string image0 "uptg20j.tga"
+		int 	xpix		350
+		int 	ypix		112
+		string	imagebltflag	"chromakey"
+	}
+}
+# ########################################################
+# WINDOW ART this should be in a general place
+# IT is important for resize to work correctly that that all dimension and position
+# values do not change there is a dependency base on the original size of the 
+# help tile box
+# ########################################################
+FancyTL {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		-16
+	int 	ypix		-16
+	int	widthpix	54
+	int	heightpix	54
+}
+FancyTR {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		508
+	int 	ypix		-16
+	int	widthpix	54
+	int	heightpix	54
+	ExitButton {
+		string xanchor "left"
+		string yanchor "bottom"
+		string	image0	"uptg20e.tga"
+		string	image1	"uptg20e.tga"
+		int	bevelwidth	0
+		int	widthpix	28
+		int	heightpix	28
+	}
+}
+FancyBL {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		-16
+	int 	ypix		136
+	int	widthpix	54
+	int	heightpix	54
+}
+FancyBR {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		508
+	int 	ypix		136
+	int	widthpix	54
+	int	heightpix	54
+}
+FancyTopL {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		38
+	int 	ypix		-9
+	int	widthpix	77
+	int	heightpix	16
+}
+FancyTopR {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		429
+	int 	ypix		-9
+	int	widthpix	79
+	int	heightpix	16
+}
+FancyBottom {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		38
+	int 	ypix		173
+	int	widthpix	470
+	int	heightpix	10
+}
+FancyLeft {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		-10
+	int 	ypix		38
+	int	widthpix	10
+	int	heightpix	98
+}
+FancyRight {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		546
+	int 	ypix		38
+	int	widthpix	10
+	int	heightpix	98
+}
+FancyHeader {
+	string	pattern	"uptg20e.tga"
+	int 	xpix		115
+	int 	ypix		-9
+	int	widthpix	314
+	int	heightpix	52
+}
+
+
+# ########################################################
+# String table for HelpTile
+# ########################################################
+HelpTileStringTable {
+	int		numstrings		2	
+	string	string0		"str_tbl_ldl_Sale_Value_COLON_"
+	string	string1		"str_tbl_ldl_None"
+}
+
+
+
+HelpUnitWindow {
+	string	pattern	"uptg06e.tga"
+#	int 	xpix		156
+#	int 	ypix		78
+	string	xanchor		"center"
+	string	yanchor		"center"
+
+	int	widthpix	530
+	int	heightpix	290
+# ########################################################
+# BUTTONS
+# ########################################################
+#	HelpUnitBattleOrderButton {
+#		string xanchor "left"
+#		string yanchor "bottom"
+#		string	pattern	"uptg20e.tga"
+#		int xpct		33
+#		int	widthpct	33
+#		int	heightpix	30
+#		string	text	"Battle Order"
+#	}
+# ########################################################
+# TEXT ENTRY
+# ########################################################
+	HelpUnitPower:CTP2_STANDARD_FONT {
+		int ypix	245
+		string xanchor "center"
+		int widthpix	300
+		int heightpix	20
+		int bevelwidth 2
+		int beveltype 1
+		string	text	"str_ldl_Estimated_Power_COLON"
+		string	pattern	"uptg20e2.tga"
+	}
+	HelpUnitName:CTP_GREY_TITLE_FONT {
+		#string	parent	"c3_PopupTitle"
+		#string xanchor "center"
+		#string yanchor "top"
+		int xpix 300
+		int ypix 20
+		#int widthpct 50
+		#int heightpix 20
+		string	text	"str_ldl_Unit_Help"
+	}
+# ########################################################
+# LIST BOX
+# ########################################################
+	HelpUnitStackInfo {
+		string xanchor "center"
+		int widthpix 440
+		int heightpix	140
+		int ypix	80
+		string pattern "uptg06e.tga"
+		int bevelwidth 2
+		int beveltype 2
+		header {
+			# veteran icon
+			switch0:CTP2_STANDARD_FONT {
+				int	widthpix	20
+				int	heightpix	20
+				string	pattern	"uptg20e2.tga"
+				string	image0	"error.tga"
+				string tipwindow "str_ldl_Veter"
+				string	imageblttype	"stretch"
+			}
+			# special forces icon
+			switch1:CTP2_STANDARD_FONT {
+				int	widthpix	20
+				int	heightpix	20
+				string	pattern	"uptg20e2.tga"
+				string	image0	"error.tga"
+				string	imageblttype	"stretch"
+				string tipwindow "str_ldl_Specforce"
+}
+			# unit icon
+			switch2:CTP2_STANDARD_FONT {
+				int	widthpix	30
+				int	heightpix	20
+				string text "str_ldl_Icon"
+				string	pattern	"uptg20e2.tga"
+			}
+			# unit name
+			switch3:CTP2_STANDARD_FONT {
+				int	widthpix	170
+				int	heightpix	20
+				string text "str_ldl_Name"
+				string	pattern	"uptg20e2.tga"
+			}
+			# unit stats
+			switch4:CTP2_STANDARD_FONT {
+				int	widthpix	100
+				int	heightpix	20
+				string text "str_ldl_ARDM_nospace"
+				string	pattern	"uptg20e2.tga"
+			}
+			# unit health
+			switch5:CTP2_STANDARD_FONT {
+				int	widthpix	60
+				int	heightpix	20
+				string text "str_ldl_Health"
+				string	pattern	"uptg20e2.tga"
+			}
+			# unit bombard
+			switch6:CTP2_STANDARD_FONT {
+				int	widthpix	20
+				int	heightpix	20
+				string	pattern	"uptg20e2.tga"
+				string	image0	"upic41.tga"
+				string tipwindow "str_ldl_Bomb"
+				string	imageblttype	"stretch"
+			}
+			# unit active defense
+			switch7:CTP2_STANDARD_FONT {
+				int	widthpix	20
+				int	heightpix	20
+				string	pattern	"uptg20e2.tga"
+				string tipwindow "str_ldl_Activ"
+				string	image0	"error.tga"
+				string	imageblttype	"stretch"
+			}
+		}
+	}
+}
+
+template helpunit_icon {
+	int	widthpix	20
+	int	heightpix	30
+	Icon {
+		
+		int xpix 0
+		int ypix 5
+		int	widthpix	20
+		int	heightpix	20
+		string	imageblttype	"stretch"
+	}
+}
+
+HelpUnitListItem {
+	string	pattern			"uptg06e.tga"
+	HU_VIcon:helpunit_icon{
+	}
+	HU_SFIcon:helpunit_icon{
+	}
+	HU_Icon:CTP2_STANDARD_FONT{
+		int		widthpix		30
+		int		heightpix		30
+#		string 	text			"str_ldl_0"
+	}
+	HU_Name:CTP2_STANDARD_FONT{
+		int		widthpix		170
+		int		heightpix		30
+	}
+	HU_Stats:CTP2_STANDARD_FONT{
+		int		widthpix		100
+		int		heightpix		30
+	}
+	HU_Health:CTP2_STANDARD_FONT{
+		int		widthpix		60
+		int		heightpix		30
+		Thermo {
+			int xpix 5
+			int ypix 10
+			int	widthpix		50
+			int heightpix		10			
+			int bevelwidth		1
+			int beveltype		2
+		}
+	}
+	HU_BIcon:helpunit_icon{
+	}
+	HU_ADIcon:helpunit_icon{
+	}
+}
+
+
+HELPGARBAGE {
+	TileImprovementListBox {
+		string xanchor "center"
+		int widthpct 70
+		int heightpct	25
+		int ypct	60
+#		string textblttype "fill"
+		int bevelwidth 2
+		int beveltype 1
+
+
+		HelpTile_ImprovementName {
+			int widthpct 50
+			int heightpct	20
+	#		string textblttype "fill"
+			int bevelwidth 2
+			int beveltype 1
+		}
+		HelpTile_ImprovementTime {
+			int widthpct 50
+			int heightpct	20
+#			string textblttype "fill"
+			int bevelwidth 2
+			int beveltype 1
+		}
+	}
+
+
+}
+
+
+$

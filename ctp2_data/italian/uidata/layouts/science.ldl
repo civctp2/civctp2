@@ -122,7 +122,6 @@ ScienceManagementDialog:CTP2_DIALOG_WINDOW {
 
 	# Advisor button.
 	AdvisorButton:CTP2_STANDARD_ADVISOR {
-	int xpix -100
 	}
 
 	# Change Research.
