@@ -169,11 +169,9 @@ private:
 	
 	Pixel16 RadarTileColor(const Player *player, const MapPoint &position, uint32 &flags);
 
-#if defined(ACTIVISION_ORIGINAL)	
-//	Pixel16 RadarTileBorderColor(const MapPoint &position);
-#else
-	Pixel16 RadarTileBorderColor(const MapPoint &position, Player *player);
-#endif
+	
+	Pixel16 RadarTileBorderColor(const MapPoint &position);
+
 	
 	uint8 RadarTileBorder(const Player *player, const MapPoint &position);
 

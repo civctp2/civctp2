@@ -364,7 +364,7 @@ void Scheduler::Initialize()
 	m_current_plan_iter = m_matches.end();
 
 #if !defined (ACTIVISION_ORIGINAL)
-	m_AllIsExplored = false;
+//	m_AllIsExplored = false;
 #endif
 }
 

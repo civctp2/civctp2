@@ -84,9 +84,9 @@ STRATEGY_DEFAULT {
     MaximumWagePercent  0.25
 
     // try to decrease food
-    SliderElement { Delta 2 Food }
-    SliderElement { Delta 1 Production }
-    SliderElement { Delta 1 Gold }
+    SliderElement { Delta 3 Food }
+    SliderElement { Delta 3 Production }
+    SliderElement { Delta 3 Gold }
 
     //
     // SCIENCE SETTINGS
@@ -249,7 +249,7 @@ STRATEGY_DEFAULT {
     SettlerUnitsCount       4
     SeaTransportUnitsCount  3
     AirTransportUnitsCount  1
-    SpecialUnitsCount       1
+    SpecialUnitsCount       6
 
 	// Do not certain items in cities where if it takes too many turns
 	MaxSettlerBuildTurns 30
@@ -716,6 +716,9 @@ STRATEGY_ATTACK {
     // Number of special units that should be built
     SeaTransportUnitsCount 6
     AirTransportUnitsCount 4
+    SpecialUnitsCount      8
+
+    SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec   3 }
@@ -1054,9 +1057,9 @@ STRATEGY_SCIENTIST_DEFAULT {
     MaximumWagePercent  0.25
 
     // try to decrease food
-    SliderElement { Delta 2 Food }
-    SliderElement { Delta 1 Production }
-    SliderElement { Delta 1 Gold }
+    SliderElement { Delta 3 Food }
+    SliderElement { Delta 3 Production }
+    SliderElement { Delta 3 Gold }
 
     //
     // SCIENCE SETTINGS
@@ -1219,7 +1222,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     SettlerUnitsCount       4
     SeaTransportUnitsCount  3
     AirTransportUnitsCount  2
-    SpecialUnitsCount       2
+    SpecialUnitsCount       6
 
 	// Do not certain items in cities where if it takes too many turns
 	MaxSettlerBuildTurns 30
@@ -1507,9 +1510,9 @@ STRATEGY_MILITARIST_DEFAULT {
     MaximumWagePercent  0.25
 
     // try to decrease food
-    SliderElement { Delta 2 Food }
-    SliderElement { Delta 1 Production }
-    SliderElement { Delta 1 Gold }
+    SliderElement { Delta 3 Food }
+    SliderElement { Delta 3 Production }
+    SliderElement { Delta 3 Gold }
 
     //
     // SCIENCE SETTINGS
@@ -1960,9 +1963,9 @@ STRATEGY_ECONOMIC_DEFAULT {
     MaximumWagePercent  0.25
 
     // try to decrease food
-    SliderElement { Delta 2 Food }
-    SliderElement { Delta 1 Production }
-    SliderElement { Delta 1 Gold }
+    SliderElement { Delta 3 Food }
+    SliderElement { Delta 3 Production }
+    SliderElement { Delta 3 Gold }
 
     //
     // SCIENCE SETTINGS
@@ -2125,7 +2128,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     SettlerUnitsCount       2
     SeaTransportUnitsCount  3
     AirTransportUnitsCount  2
-    SpecialUnitsCount       4
+    SpecialUnitsCount       6
 
 	// Do not certain items in cities where if it takes too many turns
 	MaxSettlerBuildTurns 35
@@ -2412,9 +2415,9 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     MaximumWagePercent  0.25
 
     // try to decrease food
-    SliderElement { Delta 2 Food }
-    SliderElement { Delta 1 Production }
-    SliderElement { Delta 1 Gold }
+    SliderElement { Delta 3 Food }
+    SliderElement { Delta 3 Production }
+    SliderElement { Delta 3 Gold }
 
     //
     // SCIENCE SETTINGS
@@ -2577,7 +2580,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     SettlerUnitsCount       2
     SeaTransportUnitsCount  3
     AirTransportUnitsCount  2
-    SpecialUnitsCount       4
+    SpecialUnitsCount       6
 
 	// Do not certain items in cities where if it takes too many turns
 	MaxSettlerBuildTurns 40
@@ -2863,9 +2866,9 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     MaximumWagePercent  0.25
 
     // try to decrease food
-    SliderElement { Delta 2 Food }
-    SliderElement { Delta 1 Production }
-    SliderElement { Delta 1 Gold }
+    SliderElement { Delta 3 Food }
+    SliderElement { Delta 3 Production }
+    SliderElement { Delta 3 Gold }
 
     //
     // SCIENCE SETTINGS
@@ -3028,7 +3031,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     SettlerUnitsCount       2
     SeaTransportUnitsCount  3
     AirTransportUnitsCount  2
-    SpecialUnitsCount       4
+    SpecialUnitsCount       5
 
 	// Do not certain items in cities where if it takes too many turns
 	MaxSettlerBuildTurns 30
