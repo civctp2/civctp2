@@ -280,19 +280,25 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 //
 // Name       : LoadText
 //
-// Description: ?
+// Description: Load an interpreted text in a user interface item.
 //
-// Parameters : ctp2_HyperTextBox *textbox
-//              char *filename
-//              SlicObject &so
+// Parameters : textbox					: user interface item
+//              filename				: name of the text to interpret
+//              so						: ?
 //
-// Globals    : ?
+// Globals    : m_great_library_info	: great library database
 //
-// Returns    : int: function?
+// Returns    : sint32 (bool)			: function result
 //
-// Remark(s)  : -
+// Remark(s)  : The function result is 1 (true?) when the requested name of
+//              the text exist in the database, 0 when it does not exist.
+//              
+//              However, the result is also 1 (illogical) when the passed 
+//              user interface item is NULL. In that case, this function does
+//              nothing.
 //
 //----------------------------------------------------------------------------
+
 sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, SlicObject &so)
 {
     char *text;
@@ -314,7 +320,9 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 	
 	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 
-
+#if !defined(ACTIVISION_ORIGINAL)
+	delete [] lower_case_filename;
+#endif
 
     if (text == NULL) {
 		textbox->SetHyperText(" ");
@@ -322,10 +330,11 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
     }
 
 	MBCHAR interpreted[k_MAX_GL_ENTRY];
-
+#if defined(ACTIVISION_ORIGINAL)
 	stringutils_Interpret(text, so, interpreted);
-
-	
+#else
+	stringutils_Interpret(text, so, interpreted, k_MAX_GL_ENTRY);
+#endif	
 
 	
 	
@@ -340,12 +349,6 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 
     textbox->SetHyperText(interpreted);
 
-#if !defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann
-	if (lower_case_filename)
-		delete [] lower_case_filename;
-		//free lower_case_filename like in SetTechMode
-#endif
 
     return(1);
 }

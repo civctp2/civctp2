@@ -37,6 +37,7 @@
 // - The tech goal can now also set for tile improvements, by Martin Gühmann.
 // - Handle Japanese input data, by t.s. (2003.12).
 // - Memory leaks repaired at the root.
+// - Increased maximum library text size to support the German version.
 //
 //----------------------------------------------------------------------------
 
@@ -275,10 +276,10 @@ void GreatLibrary::Load_Great_Library()
 		
 		
 		const int MAX_NAME = 1024;
-#if defined(ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)	// too small for the German version
 		const int MAX_ENTRY = 4096;
 #else
-		const int MAX_ENTRY = 8192;
+		const int MAX_ENTRY	= k_MAX_GL_ENTRY;
 #endif
 		char the_name[MAX_NAME];
 		char the_entry[MAX_ENTRY];

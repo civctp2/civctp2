@@ -1,14 +1,59 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Great library
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Microsoft extensions marked.
+// - Increased maximum library text size to support the German version.
+//
+//----------------------------------------------------------------------------
 
 
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
 
 #ifndef __GREATLIBRARY_H__
 #define __GREATLIBRARY_H__
 
 #include "ctp2_ListItem.h"
 #include "keyboardhandler.h"
+#if defined(ACTIVISION_ORIGINAL)
 #include <Vector>
-
+#else
+#include <vector>	// std::vector
+#endif
 
 
 
@@ -39,7 +84,11 @@
 
 #define k_GL_INDEX_INVALID		-1
 
+#if defined(ACTIVISION_ORIGINAL)
 #define k_MAX_GL_ENTRY 4096
+#else
+#define k_MAX_GL_ENTRY 8192
+#endif
 
 enum DATABASE {
 	DATABASE_DEFAULT,
