@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired.
+// - Accessor functionality added.
 //
 //----------------------------------------------------------------------------
 
@@ -65,6 +66,9 @@ SlicStructDescription::Member::~Member()
 }
 
 SlicStructDescription::SlicStructDescription(char *name, SLIC_BUILTIN type)
+#if !defined(ACTIVISION_ORIGINAL)
+:	m_accessors()
+#endif
 {
 	m_name = new char[strlen(name) + 1];
 	m_type = type;
@@ -88,7 +92,143 @@ SlicStructDescription::~SlicStructDescription()
 		}
 		delete [] m_members;
 	}
+#if !defined(ACTIVISION_ORIGINAL)
+	for 
+	(
+		std::vector<Member *>::iterator	p = m_accessors.begin();
+		p < m_accessors.end();
+		++p
+	)
+	{
+		delete *p;
+	}
+
+	m_accessors.clear();
+#endif
 }
+
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : SlicStructDescription::AddAccessor
+//
+// Description: Add an accessor member to a Slic structure.
+//
+// Parameters : name	: name of accessor
+//				symbol	: information of the accessor
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : In contrast to members, accessors will not be saved to file.
+//
+//----------------------------------------------------------------------------
+
+void SlicStructDescription::AddAccessor
+(
+	char *					name, 
+	SlicStructMemberData *	symbol
+)
+{
+	m_accessors.push_back(new Member(this, name, symbol));
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : SlicStructDescription::GetMemberSymbol
+//
+// Description: Get Slic structure symbol for a member.
+//
+// Parameters : index	: member number
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : When the member at the index is not found or NULL, 
+//              NULL is returned.
+//
+//----------------------------------------------------------------------------
+
+SlicStructMemberData * SlicStructDescription::GetMemberSymbol(sint32 index) const
+{
+	Member * memberAtIndex = NULL;
+
+	if (index < 0)
+	{
+		// Invalid index
+	}
+	else if (index < m_numMembers)
+	{
+		memberAtIndex = m_members[index];
+	}
+	else if (index < (m_numMembers + m_accessors.size()))
+	{
+		memberAtIndex = m_accessors[index - m_numMembers];
+	}
+	else
+	{
+		// Invalid index
+	}
+
+	return (memberAtIndex) ? memberAtIndex->m_symbol : NULL;
+};
+
+//----------------------------------------------------------------------------
+//
+// Name       : SlicStructDescription::GetMemberSymbolIndex
+//
+// Description: Get member index of a Slic structure symbol.
+//
+// Parameters : symbol	: Slic structure symbol
+//
+// Globals    : -
+//
+// Returns    : sint32	: member index
+//
+// Remark(s)  : - The index of the first matching member or accessor is 
+//                returned. 
+//              - When the name is not found, -1 is returned.
+//              - The members and accessors are ordered on time of adding,
+//                but the accessors are ordered behind the members. So,
+//                members have indices starting from 0, and accessors have
+//                indices starting from m_numMembers.
+//
+//----------------------------------------------------------------------------
+
+sint32 SlicStructDescription::GetMemberSymbolIndex(SlicStructMemberData * symbol) const
+{
+	sint32	i;
+	for (i = 0; i < m_numMembers; ++i)
+	{
+		if (symbol == m_members[i]->m_symbol)
+		{
+			return i;
+		}
+	}
+
+	// Continue counting while checking the accessors
+	for 
+	(
+		std::vector<Member *>::const_iterator	p = m_accessors.begin();
+		p < m_accessors.end();
+		++p
+	)
+	{
+		if (symbol == (*p)->m_symbol)
+		{
+			return i;
+		}
+		else
+		{
+			++i;	// not the symbol we are looking for
+		}
+	}
+
+	return -1;
+}
+#endif
 
 void SlicStructDescription::AddMember(SlicStructDescription::Member *member)
 {
@@ -119,6 +259,27 @@ void SlicStructDescription::AddMember(char *name, SlicStructMemberData *sym)
 	AddMember(new SlicStructDescription::Member(this, name, sym));
 }
 	
+//----------------------------------------------------------------------------
+//
+// Name       : SlicStructDescription::GetMemberIndex
+//
+// Description: Get index of member or accessor.
+//
+// Parameters : name	: name of member or accessor.
+//
+// Globals    : -
+//
+// Returns    : sint32	: index of member or accessor with given name.
+//
+// Remark(s)  : - The index of the first matching member or accessor is 
+//                returned. 
+//              - When the name is not found, -1 is returned.
+//              - The members and accessors are ordered on time of adding,
+//                but the accessors are ordered behind the members. So,
+//                members have indices starting from 0, and accessors have
+//                indices starting from m_numMembers.
+//
+//----------------------------------------------------------------------------
 sint32 SlicStructDescription::GetMemberIndex(char *name)
 {
 	sint32 i;
@@ -126,6 +287,27 @@ sint32 SlicStructDescription::GetMemberIndex(char *name)
 		if(!stricmp(name, m_members[i]->m_name))
 			return i;
 	}
+
+#if !defined(ACTIVISION_ORIGINAL)
+	// Continue counting while checking the accessors
+	for 
+	(
+		std::vector<Member *>::const_iterator	p = m_accessors.begin();
+		p < m_accessors.end();
+		++p
+	)
+	{
+		if (stricmp(name, (*p)->m_name))
+		{
+			++i;	// not the name we are looking for
+		}
+		else
+		{
+			return i;
+		}
+	}
+#endif
+
 	return -1;
 }
 
@@ -149,14 +331,52 @@ SlicSymbolData *SlicStructDescription::CreateDataSymbol()
 	return NULL;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SlicStructDescription::GetMemberName
+//
+// Description: Get the name of a member or accessor.
+//
+// Parameters : index	: index of member or accessor.
+//
+// Globals    : -
+//
+// Returns    : const char *	: name of member or accessor with given index.
+//
+// Remark(s)  : - When the index is invalid, "<Error>" is returned.
+//              - See GetMemberIndex for the numbering of the members and 
+//                accessors.
+//
+//----------------------------------------------------------------------------
+
 const char *SlicStructDescription::GetMemberName(sint32 index)
 {
 	Assert(index >= 0);
+#if defined(ACTIVISION_ORIGINAL)
 	Assert(index < m_numMembers);
 	if(index < 0 || index >= m_numMembers)
 		return "<Error>";
 	
 	return m_members[index]->m_name;
+#else
+	if (index >= 0)
+	{
+		if (index < m_numMembers)
+		{
+			return m_members[index]->m_name;
+		}
+		else 
+		{
+			size_t const	accessorIndex	= index - m_numMembers;
+			if (accessorIndex < m_accessors.size())
+			{
+				return m_accessors[accessorIndex]->m_name;
+			}
+		}
+	}
+
+	return "<Error>";
+#endif
 }
 	
 
@@ -220,7 +440,6 @@ SlicStructInstance::~SlicStructInstance()
 //Removed by Martin Gühmann
 				m_members[i] = NULL;
 				// NULLing unnecessary: deleting the container next
-				// It is actual harmfull, because it creates a set of NULL pointer.
 #endif
 			}
 		}
@@ -313,6 +532,7 @@ void SlicStructInstance::CreateMember(sint32 index)
 SlicSymbolData *SlicStructInstance::GetMemberSymbol(sint32 index)
 {
 	Assert(index >= 0);
+#if defined(ACTIVISION_ORIGINAL)
 	Assert(index < m_description->m_numMembers);
 	if(index < 0 || index >= m_description->m_numMembers)
 		return NULL;
@@ -322,6 +542,27 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbol(sint32 index)
 	}
 
 	return m_members[index];
+#else
+	if (index >= 0)
+	{
+		if (index < m_description->GetNumMembers())
+		{
+			// Make a copy when not done already
+			if (!m_members[index])
+			{
+				CreateMember(index);
+			}
+			return m_members[index];
+		}
+		else
+		{
+			// Use the original symbol
+			return m_description->GetMemberSymbol(index);
+		}
+	}
+	
+	return NULL;
+#endif
 }
 
 sint32 SlicStructInstance::GetMemberSymbolIndex(SlicStructMemberData *memb)
@@ -331,7 +572,12 @@ sint32 SlicStructInstance::GetMemberSymbolIndex(SlicStructMemberData *memb)
 		if(m_members[i] == memb)
 			return i;
 	}
+
+#if defined(ACTIVISION_ORIGINAL)
 	return -1;
+#else
+	return m_description->GetMemberSymbolIndex(memb);
+#endif
 }
 
 SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
@@ -345,7 +591,12 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
 			return m_members[i];
 		}
 	}
+
+#if defined(ACTIVISION_ORIGINAL)
 	return NULL;
+#else
+	return m_description->GetMemberSymbol(m_description->GetMemberIndex(name));
+#endif
 }
 
 SlicSymbolData *SlicStructInstance::GetDataSymbol()

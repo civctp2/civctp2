@@ -180,9 +180,9 @@ SlicStruct_Global::SlicStruct_Global() :
 	AddMember("year_str", new GlobalSymbol_YearString);
 	AddMember("player", new GlobalSymbol_Player);
 #if !defined(ACTIVISION_ORIGINAL)
-	AddMember("num_of_players", new GlobalSymbol_NumOfPlayers);
-	AddMember("last_player", new GlobalSymbol_LastPlayer);
-	AddMember("max_players", new GlobalSymbol_MaxPlayers);
+	AddAccessor("num_of_players", new GlobalSymbol_NumOfPlayers);
+	AddAccessor("last_player", new GlobalSymbol_LastPlayer);
+	AddAccessor("max_players", new GlobalSymbol_MaxPlayers);
 #endif
 	
 }
@@ -1168,7 +1168,7 @@ SlicStruct_Player::SlicStruct_Player() :
 	AddMember("militaryunits", new PlayerSymbol_MilitaryUnits);
 	AddMember("armies", new PlayerSymbol_Armies);
 #if !defined(ACTIVISION_ORIGINAL)
-	AddMember("government", new PlayerSymbol_Government);
+	AddAccessor("government", new PlayerSymbol_Government);
 #endif
 	AddMember("totalpopulation", new PlayerSymbol_TotalPopulation);
 	AddMember("totalpollution", new PlayerSymbol_TotalPollution);
