@@ -197,7 +197,7 @@ SPNewGameTribeScreen {
 
 	int	widthpix	650
 
-	int	heightpix	465
+	int	heightpix	600 # LOQ 2004-10-12: from 465
 
 
 

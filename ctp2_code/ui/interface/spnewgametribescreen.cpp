@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Repaired memory leak.
+// - Allow choice of 64 instead of 44 playable civs to be selected.
 //
 //----------------------------------------------------------------------------
 
@@ -70,7 +71,13 @@ extern sint32				g_isCheatModeOn;
 
 
 #define k_NUM_TRIBECOLS		4
-#define k_NUM_TRIBEROWS		11
+
+#if defined(ACTIVISION_ORIGINAL)	// allow choice of 64 (4x16) instead of 44 (4x11) playable civs to be selected
+	#define k_NUM_TRIBEROWS		11
+#else
+	#define k_NUM_TRIBEROWS		16
+#endif
+
 #define k_NUM_TRIBEBOXES	(k_NUM_TRIBECOLS*k_NUM_TRIBEROWS+1)
 
 c3_PopupWindow	*g_spNewGameTribeScreen	= NULL;
