@@ -1,6 +1,30 @@
-
-//slicfunc.cpp
-//GetNearestWater function fixed by Martin Gühmann November 2nd 2003
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : SLIC functions
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - GetNearestWater function fixed by Martin Gühmann November 2nd 2003.
+// - New Slic functions of CTP2.1 readded by Martin Gühmann and JJB.
+// - Enable automatic selection of a unit (or city) when clicking an eyepoint.
+// - Fixed cut-and-paste error (no apparent impact, but might prevent crash).
+// - FreeAllSlaves slic function added by The Big MC November 24th 2003.
+// - Filled code for GetRoundsToNextDisaster and GetCurrentPollutionLevel.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SlicFunc.h"
@@ -94,6 +118,9 @@
 #include "radarwindow.h"
 #include "ControlPanelWindow.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
+#include "Pollution.h"
+#endif
 
 #include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
@@ -117,7 +144,9 @@ extern GreatLibrary *g_greatLibrary;
 extern AttractWindow *g_attractWindow;
 extern SoundManager *g_soundManager;
 extern CivilisationDatabase *g_theCivilisationDB;
-
+#if !defined(ACTIVISION_ORIGINAL)
+extern Pollution *		g_thePollution;
+#endif
 
 #define k_MESSAGE_TYPE_HASH_SIZE 16
 
@@ -530,6 +559,7 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	res = args->GetPos(0, point);
+#if defined(ACTIVISION_ORIGINAL)
 	if(!res) {
 		
 #if 0
@@ -554,10 +584,23 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 			point = unit.RetPos();
 		}
 	}
-	
-	
-	
-	
+#else
+	// Attempt to find a city or army always, so unit will have been filled 
+	// when constructing the SlicEyePoint later.
+	if (args->GetCity(0, unit) || args->GetUnit(0, unit))
+	{ 
+		if ((!res) && unit.IsValid())
+		{
+			point	= unit.RetPos();
+			res		= true;
+		}
+	}
+
+	if (!res)
+	{
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+#endif // ACTIVISION_ORIGINAL	
 	
 
 	MBCHAR text[k_MAX_MSG_LEN];
@@ -1512,11 +1555,20 @@ SFN_ERROR Slic_MessageType::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	const char *tname = args->m_argValue[0].m_symbol->GetName();
+#if defined(ACTIVISION_ORIGINAL)
 	char fullselectedname[1024];
 	sprintf(fullselectedname, "%s_SELECTED", fullselectedname);
 
 	if(!tname)
 		return SFN_ERROR_NOT_MESSAGE_TYPE;
+#else
+	if (!tname)
+		return SFN_ERROR_NOT_MESSAGE_TYPE;
+
+	char fullselectedname[1024];
+	sprintf(fullselectedname, "%s_SELECTED", tname);
+#endif
+
 	sint32 msgTypeIndex = g_theMessageIconFileDB->FindTypeIndex(tname);
 	if(msgTypeIndex < 0) {
 		msgTypeIndex = 0;
@@ -6876,17 +6928,70 @@ SFN_ERROR Slic_GetMostAtRiskCity::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_GetRoundsToNextDisaster
+//
+// Description: Get estimated number of rounds until next disaster.
+//
+// Parameters : -
+//
+// Globals    : g_thePollution	: pollution information
+//
+// Returns    : SFN_ERROR		: execution result
+//
+// Remark(s)  : Fills m_result.m_int with the requested data. When no pollution 
+//              information is available, ROUNDS_COUNT_IMMEASURABLE (no 
+//              disaster expected for a long time) is returned. 
+//
+//----------------------------------------------------------------------------
+
 SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 {
-	m_result.m_int = 0;
+	if (g_thePollution)
+	{
+		m_result.m_int = g_thePollution->GetRoundsToNextDisaster();
+	}
+	else
+	{
+		m_result.m_int = Pollution::ROUNDS_COUNT_IMMEASURABLE;
+	}
+
 	return SFN_ERROR_OK;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_GetCurrentPollutionLevel
+//
+// Description: Get current pollution level.
+//
+// Parameters : -
+//
+// Globals    : g_thePollution	: pollution information
+//
+// Returns    : SFN_ERROR		: execution result
+//
+// Remark(s)  : Fills m_result.m_int with the requested data. When no pollution 
+//              information is available, 0 (no pollution) is returned.
+//
+//----------------------------------------------------------------------------
+
 SFN_ERROR Slic_GetCurrentPollutionLevel::Call(SlicArgList *args)
 {
-	m_result.m_int = 0;
+	if (g_thePollution)
+	{
+		m_result.m_int = g_thePollution->GetGlobalPollutionLevel();
+	}
+	else
+	{
+		m_result.m_int = 0;
+	}
+
 	return SFN_ERROR_OK;
 }
+
+//Added by The Big MC
 SFN_ERROR Slic_FreeAllSlaves::Call(SlicArgList *args)
 {
     if (args->m_numArgs > 0)
