@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected strange vision behaviour at the top row.
+// - Corrected strange visibility patterns ("see tile" counter underflow).
 //
 //----------------------------------------------------------------------------
 
@@ -824,7 +825,7 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			}
 			break;
 		case CIRCLE_OP_SUBTRACT:
-
+#if defined(ACTIVISION_ORIGINAL)	// complaining does not help
 			if(g_player[m_owner] && g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
 
                 
@@ -832,6 +833,13 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 				
 			}
 			*entry = *entry - 1;
+#else
+			if ((*entry) & k_VISIBLE_REFERENCE_MASK)
+			{
+				--(*entry);
+			}
+			// else: No action: keep counter at 0
+#endif
 			if(((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
 				Cell *cell = g_theWorld->GetCell(iso);
 				if(cell->GetNumImprovements() > 0 || 

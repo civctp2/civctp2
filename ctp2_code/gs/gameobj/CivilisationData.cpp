@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Fixed number of city styles removed.
+// - Update city style when resetting civilisation.
 //
 //----------------------------------------------------------------------------
 
@@ -507,6 +508,10 @@ void CivilisationData::ResetCiv(CIV_INDEX newCivIndex, GENDER gender)
 	
 	strId = g_theCivilisationDB->GetSingularCivName(newCivIndex) ;
 	SetSingularCivName(g_theStringDB->GetNameStr(strId)) ;
+
+#if !defined(ACTIVISION_ORIGINAL)
+	m_cityStyle	= g_theCivilisationDB->GetCityStyle(newCivIndex);
+#endif
 }
 
 void CivilisationData::ResetStrings()

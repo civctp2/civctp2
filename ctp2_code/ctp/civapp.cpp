@@ -65,6 +65,8 @@
 // - Removed some of Martin's library cleanup code, after correcting the 
 //   problem at the root in GreatLibrary.cpp.
 // - Used the new ColorSet option to select civilisation colors.
+// - Memory leak repaired: clean up the turn counter override information.
+// - Hot seat handling improved.
 //
 //----------------------------------------------------------------------------
 
@@ -1968,6 +1970,11 @@ sint32 CivApp::CleanupAppDB(void)
 		g_theDiplomacyThreatDB = NULL;
 	}
 
+#if !defined(ACTIVISION_ORIGINAL)	// repaired memory leak
+	delete [] g_pTurnLengthOverride;
+	g_pTurnLengthOverride = NULL;
+#endif
+
 	m_dbLoaded = FALSE;
 
 	return 0;
@@ -2429,41 +2436,25 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	
 	g_director->CatchUp();
 
+
 	if(!g_network.IsActive() && !g_network.IsNetworkLaunch()) {
 		
 		
 
+#if defined(ACTIVISION_ORIGINAL)	// double production when loading a saved scenario file
 		if(&archive == NULL ||
 			(g_startInfoType != STARTINFOTYPE_NONE)) {
-#if defined(ACTIVISION_ORIGINAL)	// double production in first turn after loading file
+#else
+		if ((&archive == NULL) ||										// launch button
+			((g_startInfoType != STARTINFOTYPE_NONE) && g_isScenario)	// scenario start
+		   )
+		{
+#endif
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 				GEV_BeginTurn,
 				GEA_Player, g_selected_item->GetCurPlayer(),
 				GEA_Int, g_player[g_selected_item->GetCurPlayer()]->m_current_round,
 				GEA_End);
-#else
-			if (&archive && !g_isScenario)
-			{
-				// Loading a saved game: jump to the move phase immediately.
-				g_gevManager->AddEvent
-					(GEV_INSERT_Tail,
-					 GEV_StartMovePhase,
-					 GEA_Player, g_selected_item->GetCurPlayer(),
-					 GEA_End
-					);
-			}
-			else
-			{
-				// Starting a new game (launch button or scenario)
-				g_gevManager->AddEvent
-					(GEV_INSERT_Tail,
-					 GEV_BeginTurn,
-					 GEA_Player, g_selected_item->GetCurPlayer(),
-					 GEA_Int, g_player[g_selected_item->GetCurPlayer()]->m_current_round,
-					 GEA_End
-					);
-			}
-#endif
 		}
 	}
 
@@ -2512,7 +2503,14 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	}
 
 	
+#if defined(ACTIVISION_ORIGINAL)
 	MainControlPanel::UpdateCityList();
+#else
+	if (!g_turn->IsHotSeat())
+	{
+		MainControlPanel::UpdateCityList();
+	}
+#endif
 
 	
 	g_scenarioUsePlayerNumber = 0;
@@ -2524,6 +2522,14 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 
 
+#if !defined(ACTIVISION_ORIGINAL)
+	if ((&archive) && g_turn->IsHotSeat())
+	{
+		// Indicate the resuming player when loading a saved hotseat game
+		g_turn->SendNextPlayerMessage();
+	}
+	else 
+#endif
 	if(g_selected_item) {
 		g_selected_item->Refresh();
 		if(g_director)
@@ -2533,7 +2539,14 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	
 	g_oldRandSeed = FALSE;
 
+#if defined(ACTIVISION_ORIGINAL)
 	MainControlPanel::UpdatePlayer(g_selected_item->GetCurPlayer());
+#else
+	if (!g_turn->IsHotSeat())
+	{
+		MainControlPanel::UpdatePlayer(g_selected_item->GetCurPlayer());
+	}
+#endif
 
 	
 	
@@ -3681,7 +3694,14 @@ sint32 CivApp::LoadSavedGame(MBCHAR *name)
 
 	g_tiledMap->InvalidateMap();
 
+#if defined(ACTIVISION_ORIGINAL)
 	g_selected_item->NextUnmovedUnit(TRUE, TRUE);
+#else
+	if (!g_turn->IsHotSeat())
+	{
+		g_selected_item->NextUnmovedUnit(TRUE, TRUE);
+	}
+#endif
 
 	return 0;
 }

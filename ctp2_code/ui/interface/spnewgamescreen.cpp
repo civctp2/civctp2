@@ -26,9 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Clean up any created subscreens when cleaning up the main screen.
-//
-// - Always return to main menu, never SP menu
-//   (JJB)
+// - Always return to main menu, never SP menu (JJB)
+// - Repaired memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -136,8 +135,13 @@ sint32	spnewgamescreen_displayMyWindow()
 	g_useCustomYear = false;
 	if (g_pTurnLengthOverride)
 	{
+#if defined(ACTIVISION_ORIGINAL)	// wrong delete
 		delete g_pTurnLengthOverride;
 		g_pTurnLengthOverride = false;
+#else
+		delete [] g_pTurnLengthOverride;
+		g_pTurnLengthOverride = NULL;
+#endif
 	}
 
 	if(!g_spNewGameWindow) { retval = spnewgamescreen_Initialize(); }
@@ -995,6 +999,10 @@ void spnewgamescreen_HotseatCallback(sint32 launch, sint32 player,
 		
 		g_hsPlayerSetup[player].civ = civ;
 		g_hsPlayerSetup[player].isHuman = human;
+#if !defined(ACTIVISION_ORIGINAL)
+		delete [] g_hsPlayerSetup[player].name;
+		delete [] g_hsPlayerSetup[player].email;
+#endif
 		g_hsPlayerSetup[player].name = new MBCHAR[strlen(name) + 1];
 		strcpy(g_hsPlayerSetup[player].name, name);
 		g_hsPlayerSetup[player].email = new MBCHAR[strlen(email) + 1];

@@ -40,6 +40,7 @@
 //   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
 //   - GetContinent      Gets the continent ID of an location.
 //   - IsWater           Gets whether a location is water.
+// - Enable end turn button when unblanking.
 //
 //----------------------------------------------------------------------------
 
@@ -2732,13 +2733,16 @@ void SlicEngine::BlankScreen(BOOL blank)
 		else
 		{
 			CheckPendingResearch();
+
+			PLAYER_INDEX const		player	= g_selected_item->GetVisiblePlayer();
+
+			MainControlPanel::UpdatePlayer(player);
 			MainControlPanel::UpdateCityList();
 			MainControlPanel::Update();
+
 			if (g_greatLibrary)
 			{
-				sint32 const		player	= g_selected_item->GetVisiblePlayer();
 				AdvanceType const	advance	= g_player[player]->m_advances->GetResearching();
-
 				g_greatLibrary->SetLibrary(advance, DATABASE_ADVANCES);
 			}
 		}
@@ -3149,6 +3153,7 @@ void SlicEngine::AddDatabases()
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
 {
+	Assert(m_dbHash);
 	return m_dbHash->Access(name);
 }
 
