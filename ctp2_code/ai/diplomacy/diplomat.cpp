@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : SLIC functions
+// Description  : Diplomacy
 //
 //----------------------------------------------------------------------------
 //
@@ -15,21 +15,21 @@
 //
 //----------------------------------------------------------------------------
 //
-// Modifications from the original Activision code:
-//
-// - Minor modification of the Diplomat::StartNegotiations funczion 
-//   by Peter Triggs to enable some minor AI-AI-Diplomacy  
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
 //
 //----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
+//
+// Modifications from the original Activision code:
+//
+// - Minor modification of the Diplomat::StartNegotiations function 
+//   by Peter Triggs to enable some minor AI-AI-Diplomacy.
+// - Corrected bug in list insertion.  
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -3073,14 +3073,23 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 				continue;
 		}
 
+		
+#if defined(ACTIVISION_ORIGINAL)		
+		if (m_foreigners[foreignerId].GetTurnsSinceGreeting() >= 0 &&
+			g_player[m_playerId] && g_player[m_playerId]->HasContactWith(foreignerId))
+		{
+			m_lastMotivation[foreignerId] = m_motivations.begin();
+
+			
+			ChooseNewProposal(foreignerId);
+			found = true;
+		}
+#else
 	//	Modification by Peter Triggs
 	//	from >=0 pt: 
 	//	if player has contact with foreignerId, 
     //	set m_lastMotivation[foreignerId] = the player's top motivation 
 	//	and choose a new proposal for foreignerId
-	//	Original code:
-	//	if (m_foreigners[foreignerId].GetTurnsSinceGreeting() >= 0 &&
-		
 		if (m_foreigners[foreignerId].GetTurnsSinceGreeting() >= -1 &&
 			g_player[m_playerId] && g_player[m_playerId]->HasContactWith(foreignerId))
 		{
@@ -3091,6 +3100,7 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 			ChooseNewProposal(foreignerId);
 			found = true;
 		}
+#endif
 		else
 		{
 			m_lastMotivation[foreignerId] = m_motivations.end();
@@ -3717,9 +3727,12 @@ void Diplomat::ConsiderStrategicState( const AiState & state ) {
 		m_bestStrategicStates.push_back(state);
 	}
 	
-	
+#if defined(ACTIVISION_ORIGINAL) // Logic error when at begin with size == max.
 	else if (ai_state_iter == m_bestStrategicStates.begin() &&
 		m_bestStrategicStates.size() < k_maxStategicState)
+#else
+	else if (ai_state_iter == m_bestStrategicStates.begin())
+#endif
 	{
 		m_bestStrategicStates.push_front(state);
 	}
