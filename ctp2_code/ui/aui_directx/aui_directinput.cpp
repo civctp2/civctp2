@@ -1,13 +1,36 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : DirectInput device handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// __AUI_USE_DIRECTX__
+// Has to be defined, or no code will be generated at all.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Enabled mousewheel for the non-debug versions.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -78,8 +101,10 @@ AUI_ERRCODE aui_DirectInput::Acquire( void )
 	HRESULT hr;
 
 #ifndef _DEBUG
+#if defined(ACTIVISION_ORIGINAL)	// Mousewheel processing inactive
 	if ( g_ui->DXVer() < 0x500 ) 
 	{
+#endif	// ACTIVISION_ORIGINAL
 		uint32 coopFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND;
 #else
 		uint32 coopFlags = DISCL_NONEXCLUSIVE | DISCL_BACKGROUND;
@@ -92,10 +117,11 @@ AUI_ERRCODE aui_DirectInput::Acquire( void )
 
 		hr = m_lpdid->SetCooperativeLevel( g_ui->TheHWND(), coopFlags );
 		if ( hr != DI_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
-
+#if defined(ACTIVISION_ORIGINAL)
 #ifndef _DEBUG
 	}
 #endif
+#endif	// ACTIVISION_ORIGINAL
 
 	hr = m_lpdid->Acquire();
 	if ( hr != DI_OK ) return AUI_ERRCODE_ACQUIREFAILED;
@@ -118,9 +144,11 @@ AUI_ERRCODE aui_DirectInput::Unacquire( void )
 	hr = m_lpdid->Unacquire();
 	if ( hr != DI_OK ) return AUI_ERRCODE_UNACQUIREFAILED;
 
+#if defined(ACTIVISION_ORIGINAL)
 #ifndef _DEBUG
 	if ( g_ui->DXVer() < 0x500 ) {
 #endif
+#endif	// ACTIVISION_ORIGINAL
 
 		uint32 coopFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND;
 		if ( m_exclusiveMode )
@@ -129,9 +157,11 @@ AUI_ERRCODE aui_DirectInput::Unacquire( void )
 		hr = m_lpdid->SetCooperativeLevel( g_ui->TheHWND(), coopFlags );
 		if ( hr != DI_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
 
+#if defined(ACTIVISION_ORIGINAL)
 #ifndef _DEBUG
 	}
 #endif
+#endif	// ACTIVISION_ORIGINAL
 
 	return AUI_ERRCODE_OK;
 }
