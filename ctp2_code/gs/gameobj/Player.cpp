@@ -32,8 +32,8 @@
 //   by Martin Gühmann.
 // - Moved the autosave file generation to PlayerEvent.cpp, to prevent losing 
 //   the advance that just has had its research completed.
-// - #01 Recalculating military support costs after government change
-//   (L. Hirth 7/2004)
+// - Fixed bug #12 ie forced cities to not revolt a second time before the 
+//   timeframe specified in const.txt expires.
 //
 //----------------------------------------------------------------------------
 
@@ -2139,12 +2139,7 @@ void Player::BeginTurnProduction()
 	if (mil_total < 1) { 
 		p = 0;
 	} else {
-#ifndef ACTIVISION_ORIGINAL // #01 Recalculating military support costs after government change
-							// this fixes the costs for old save games 
-		double oldReadCost = m_readiness->GetCost();
-		m_readiness->RecalcCost();
-		Assert(oldReadCost == m_readiness->GetCost()) // readiness costs were not correct
-#endif
+		
 		roundedCost = (sint32)(m_readiness->GetCost() + 0.0000001) - m_productionFromFranchises;
 		p = double(roundedCost)/double(mil_total);
 	}
@@ -2156,7 +2151,8 @@ void Player::BeginTurnProduction()
 
 	m_readiness->SetPecentLastTurn(p); 
 	
-	Assert (p <= 1.000001);
+	
+	Assert (p <= 1.000001); 
 	
 	sint32 mil_paid, mat_paid;
 	sint32 mil_paid_total=0; 
@@ -4294,18 +4290,15 @@ void Player::AttemptRevolt(void)
 {
 	BOOL	*revolution ;											
 
-	sint32	i, j,
-			cityNum,
-			inciteBonus = 0 ;
+	sint32	i, j, cityNum, inciteBonus = 0 ;
 
 	Unit	u ;
 
 	CityData	*cityData ;
 		
-	MapPoint	cityPos,
-				neighbourPos ;
+	MapPoint	cityPos, neighbourPos ;
 
-	m_num_revolted = 0;		
+	m_num_revolted = 0;
 	cityNum = m_all_cities->Num() ;
 
     if (cityNum < 1) 
@@ -4314,29 +4307,21 @@ void Player::AttemptRevolt(void)
 	revolution = new BOOL[cityNum] ;
 	memset(revolution, FALSE, sizeof(BOOL) * cityNum) ;
 
-	
-	for (i=0; i<cityNum; i++)
-		{
+	for (i=0; i<cityNum; i++) {
 		u = m_all_cities->Get(i) ;
 		cityData = u.GetData()->GetCityData() ;
 		u.GetPos(cityPos) ;
-		if (!revolution[i])											
-			{
-			if (cityData->ShouldRevolt(0))							
-				{
+		if (!revolution[i]) {
+			if (cityData->ShouldRevolt(0)) {
 				revolution[i] = TRUE ;
 
-				
-				for (j=0; j<cityNum; j++)
-					{
-					if (!revolution[j])
-						{
+				for (j=0; j<cityNum; j++) {
+					if (!revolution[j]) {
 						u = m_all_cities->Get(j) ;
 						u.GetPos(neighbourPos) ;
 						cityData = u.GetData()->GetCityData() ;
 						inciteBonus = g_theConstDB->GetRevoltInfluenceDistance() - MAX(abs(cityPos.x - neighbourPos.x), abs(cityPos.y - neighbourPos.y)) ;
-						if (inciteBonus >= 0)						
-							{
+						if (inciteBonus >= 0) {
 							if (cityData->ShouldRevolt(inciteBonus))
 								revolution[i] = TRUE ;
 
@@ -4350,29 +4335,31 @@ void Player::AttemptRevolt(void)
 
 			}
 
-		}
+	}
 
-	for (i=cityNum - 1; i>= 0; i--)
+	for (i=cityNum - 1; i>= 0; i--){
 		if (revolution[i])
 			{
 			u = m_all_cities->Get(i) ;
 			cityData = u.GetData()->GetCityData() ;
 			cityData->Revolt(m_civRevoltingCitiesShouldJoin) ;
 
-			
-			
 			CtpAi::AddOwnerGoalsForCity(u, u.GetOwner());
 			CtpAi::AddForeignerGoalsForCity(u, m_owner);
 
 			m_num_revolted++;
 			}
+#if !defined(ACTIVISION_ORIGINAL) 
+		// Modified by kaan to address bug # 12
+		else {
+			u = m_all_cities->Get(i) ;
+			cityData = u.GetData()->GetCityData() ;
+			cityData->NoRevoltCountdown();
+		}
+#endif
+	}
 
 	delete [] revolution ;
-
-	
-	
-	
-	
 	for(i = m_all_cities->Num() - 1; i >= 0; i--) {
 		cityData = m_all_cities->Get(i).GetData()->GetCityData();
 		if(cityData->NeedToDoUprising()) {
@@ -4380,17 +4367,6 @@ void Player::AttemptRevolt(void)
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 void Player::Revolt(const sint32 idx)
@@ -8385,10 +8361,7 @@ BOOL Player::ActuallySetGovernment(sint32 type)
 	m_tax_rate->SetTaxRates(s, m_owner);
 
 
-#ifndef ACTIVISION_ORIGINAL // #01 Recalculating military support costs after government change
-	// recalc the military support costs under the new government
-	m_readiness->RecalcCost();
-#endif
+
 
 
 	g_slicEngine->RunGovernmentChangedTriggers(m_owner);
@@ -9861,8 +9834,7 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
         if (!is_obsolete)
             continue;
 
-        // Wonder is obsolete, check if someone is building this wonder
-		// if the wonder is not already build
+        
         if(!wonderutil_IsBuilt(i)) {
             for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++) { 
                 if (g_player[player_idx] == NULL) continue;
@@ -9871,7 +9843,7 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
                 if (g_theWonderTracker->IsBuildingWonder(i, player_idx) &&
                     (GetCurRound() > 1)) {
 
-                    // Send the player a message, that the wonder he builds is obsolete
+                    
                     so = new SlicObject("097aWonderObsolete");
                     so->AddRecipient(player_idx);
                     so->AddAdvance(advance);
@@ -9883,7 +9855,7 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
             continue;
         }
 
-        // check if the wonder owner is valid
+        
         sint32 wowner = wonderutil_GetOwner(i);
         if ((wowner < 0) || (wowner >= k_MAX_PLAYERS) ||
             (g_player[wowner] == NULL) ||
@@ -9891,14 +9863,16 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
             continue;
         }
 
-        // recalculate values that could be changed by the
-		// now obsolete wonder
+		
+        
+        
+        
 
-		// Trade Route Costs
+        
         if(wrec->GetFreeTradeRoutes()) {
             g_player[wowner]->ReconsiderCostOfTrade();
         }
-		
+
         if(wrec->GetReduceReadinessCost()) {
             g_player[wowner]->m_readiness->RecalcCost();
         }

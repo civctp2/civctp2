@@ -1,13 +1,34 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Handles the const database
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed bug #12 ie forced cities to not revolt a second time before the 
+//   timeframe specified in const.txt expires.
+//
+//----------------------------------------------------------------------------
 
 
 #pragma once
@@ -319,9 +340,12 @@ typedef class ConstDB {
 	
 	sint32 m_riot_level;
 	
+#if !defined(ACTIVISION_ORIGINAL)
 	//added DWT 
 	sint32 m_max_match_list_cycles;
-	
+	// Modified by kaan to address bug # 12
+	sint32 m_min_turns_between_revolt;
+#endif
 	
 	
 	
@@ -580,8 +604,13 @@ public:
 	sint32 GetVeryHappyThreshold(void) const { return (m_veryHappyThreshold) ; }
 	double CityGrowthCoefficient(void) const { return m_city_growth_coefficient; }
 	sint32 GetRiotLevel() const { return m_riot_level; }
+
+#if !defined(ACTIVISION_ORIGINAL)
 	//added DWT
 	sint32 GetMaxMatchListCycles() const { return m_max_match_list_cycles; }
+	// Modified by kaan to address bug # 12
+	sint32 GetMinTurnsBetweenRevolt() const { return m_min_turns_between_revolt; }
+#endif
 
 	double PowerPointsToMaterialsConversion() const { return m_power_points_to_materials; }
 	sint32 MaxAirliftStackSize() const { return m_max_airlift_stack_size; }

@@ -1,12 +1,34 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handles the const database
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed bug #12 ie forced cities to not revolt a second time before the 
+//   timeframe specified in const.txt expires.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -379,8 +401,11 @@ void ConstDB::Serialize(CivArchive &archive)
 	archive.PutDoubleString( m_ai_cheat_eco_pact_max);
 	
 	archive << m_riot_level;
+#if !defined(ACTIVISION_ORIGINAL)
 	archive << m_max_match_list_cycles;
-
+	// Modified by kaan to address bug # 12
+	archive << m_min_turns_between_revolt;
+#endif
 		}
 	else
 		{
@@ -603,7 +628,11 @@ enum TOKEN_CONST {
 	TOKEN_VERY_HAPPY_THRESHOLD,
 	TOKEN_CITY_GROWTH_COEFFICIENT,
 	TOKEN_RIOT_LEVEL,
+#if !defined(ACTIVISION_ORIGINAL)
 	TOKEN_MAX_MATCH_LIST_CYCLES, // added DWT
+	// Modified by kaan to address bug # 12
+	TOKEN_MIN_TURNS_BETWEEN_REVOLT,
+#endif
 	TOKEN_POWER_POINTS_TO_MATERIALS,
 
 	TOKEN_MAX_AIRLIFT_STACK_SIZE,
@@ -913,7 +942,11 @@ TokenData g_const_token_data [] = {
 	{TOKEN_VERY_HAPPY_THRESHOLD, "VERY_HAPPY_THRESHOLD"},
 	{TOKEN_CITY_GROWTH_COEFFICIENT, "CITY_GROWTH_COEFFICIENT"},
 	{TOKEN_RIOT_LEVEL, "RIOT_LEVEL"},
+#if !defined(ACTIVISION_ORIGINAL)
 	{TOKEN_MAX_MATCH_LIST_CYCLES, "MAX_MATCH_LIST_CYCLES"}, // added DWT
+	// Modified by kaan to address bug # 12
+	{TOKEN_MIN_TURNS_BETWEEN_REVOLT, "MIN_TURNS_BETWEEN_REVOLT"},
+#endif
 	{TOKEN_POWER_POINTS_TO_MATERIALS, "POWER_POINTS_TO_MATERIALS"},
 	{TOKEN_MAX_AIRLIFT_STACK_SIZE, "MAX_AIRLIFT_STACK_SIZE"},
 	{TOKEN_GOLD_FROM_PIRACY, "GOLD_FROM_PIRACY"},
@@ -1454,9 +1487,15 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 							  m_city_growth_coefficient)) return FALSE;
 	if (!token_ParseValNext(const_token, TOKEN_RIOT_LEVEL,
 							m_riot_level)) return FALSE;
+
+#if !defined(ACTIVISION_ORIGINAL)
 	// added DWT
 	if (!token_ParseValNext(const_token, TOKEN_MAX_MATCH_LIST_CYCLES,
 							m_max_match_list_cycles)) return FALSE;
+	// Modified by kaan to address bug # 12
+	if (!token_ParseValNext(const_token, TOKEN_MIN_TURNS_BETWEEN_REVOLT,
+							m_min_turns_between_revolt)) return FALSE;
+#endif
 
 	if(!token_ParseFloatNext(const_token, TOKEN_POWER_POINTS_TO_MATERIALS,
 							 m_power_points_to_materials)) return FALSE;
