@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Event handlers declared in a notation that is more standard C++.
+// - Always focus on the latest message.
 //
 //----------------------------------------------------------------------------
 
@@ -247,8 +248,11 @@ public:
 	void BuildListStart(void);
 
 	
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	void BuildListEnd(void);
+#else
+	void BuildListEnd(bool isAddBottom = false);
+#endif
 
     
     

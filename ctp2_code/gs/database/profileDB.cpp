@@ -29,6 +29,7 @@
 // - Option added to close a messagebox automatically on eyepoint clicking.
 // - Option added to choose a color set.
 // - Option added to select which order buttons are displayed for an army.
+// - Option added to select message adding style (top or bottom).
 //
 //----------------------------------------------------------------------------
 
@@ -73,7 +74,8 @@ ProfileDB::ProfileDB()
 :	m_closeEyepoint(FALSE),
 	m_colorSet(0),
 	m_showExpensive(FALSE),
-	m_showOrderUnion(FALSE)
+	m_showOrderUnion(FALSE),
+	m_recentAtTop(FALSE)
 #endif
 {
 	m_vars = new PointerList<ProfileVar>;
@@ -380,6 +382,7 @@ ProfileDB::ProfileDB()
 	Var("ShowExpensive", PV_BOOL, &m_showExpensive, NULL);
 	Var("ColorSet", PV_NUM, &m_colorSet, NULL, false);
 	Var("ShowOrderUnion", PV_BOOL, &m_showOrderUnion, NULL);
+	Var("RecentAtTop", PV_BOOL, &m_recentAtTop, NULL);
 #endif
 }
 

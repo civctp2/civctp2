@@ -3175,6 +3175,7 @@ str_profile_ShowPoliticalBorders 		"Show National Borders"
 str_profile_CloseOnEyepoint			"Close Message When Clicking Eyeball"
 str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
+str_profile_RecentAtTop				"Put New Messages At Top"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"Music options"

@@ -23,6 +23,7 @@
 // - Do not display the world map of the first player at start-up for hotseat 
 //   play.
 // - Start the great library with the current research project of the player.
+// - Added option to add new messages at the top.
 //
 //----------------------------------------------------------------------------
 //
@@ -2567,8 +2568,18 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	
 	
 	
-	
+#if defined(ACTIVISION_ORIGINAL)
 	m_messageList->InsertItem(item,m_messageList->NumItems());
+#else
+	bool const 	isAddBottom	= !g_theProfileDB->GetValueByName("RecentAtTop");
+	m_messageList->InsertItem(item, isAddBottom ? m_messageList->NumItems() : 0);
+
+	if (initializing)
+	{
+		// Postpone ranger updates until all messages have been added.
+		return;	
+	}
+#endif
 
 	
 	aui_Ranger *ranger = m_messageList->GetVerticalRanger();
@@ -2576,7 +2587,14 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	if (!ranger)
 		return;
 
+#if defined(ACTIVISION_ORIGINAL)
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
+#else
+	ranger->SetValue
+		(ranger->GetValueX(), 
+		 isAddBottom ? ranger->GetMaximumY() : ranger->GetMinimumY()
+		);
+#endif
 
 	m_messageList->RangerMoved();
 }
@@ -2656,11 +2674,34 @@ void ControlPanelWindow::PopulateMessageList(PLAYER_INDEX player)
 
 	m_messageList->BuildListStart();
 
+#if defined(ACTIVISION_ORIGINAL)
 	for(sint32 i = playerMessages->Num() - 1; i >= 0; i--) {
 		AddMessage(playerMessages->Access(i),true);
 	}
 
 	m_messageList->BuildListEnd();
+#else
+	bool const 		isAddBottom	= !g_theProfileDB->GetValueByName("RecentAtTop");
+	sint32 const	copyCount	= playerMessages->Num();
+
+	if (isAddBottom)
+	{
+		for (sint32 i = copyCount - 1; i >= 0; --i)
+		{
+			AddMessage(playerMessages->Access(i), true);
+		}
+	}
+	else
+	{
+		// Reordered to have the most recent message at the top.
+		for (sint32 i = 0; i < copyCount; ++i) 
+		{
+			AddMessage(playerMessages->Access(i), true);
+		}
+	}
+
+	m_messageList->BuildListEnd(isAddBottom);
+#endif
 }
 
 

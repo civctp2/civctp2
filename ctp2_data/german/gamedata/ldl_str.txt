@@ -3170,6 +3170,7 @@ str_profile_ShowPoliticalBorders "Politische Grenzen ein"
 str_profile_CloseOnEyepoint "Meldung schließ. bei Klick auf Auge"
 str_profile_ShowExpensive "Kosten für Terrainverbes. immer anzeigen"
 str_profile_ShowOrderUnion "Alle Armeebefehle anzeigen"
+str_profile_RecentAtTop	"Neue Meldungen oben anzeigen"
 
 str_ldl_Pw_COLON_	"Siedler:"
 

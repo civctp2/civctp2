@@ -3062,6 +3062,7 @@ str_ldl_CreateProposal "Crea proposta"
 str_profile_CloseOnEyepoint			"Chiudi messaggi cliccando sull'occhio"
 str_profile_ShowExpensive			"Mostra effetti miglioramenti casella costosi"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
+str_profile_RecentAtTop				"Put New Messages At Top"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"Musicoptions"

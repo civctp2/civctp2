@@ -45,10 +45,11 @@
 //   supports by Martin Gühmann.
 // - Option added to choose a color set.
 // - Option added to select which order buttons are displayed for an army.
+// - Option added to select message adding style (top or bottom).
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -345,6 +346,7 @@ class ProfileDB {
 	sint32	m_colorSet;			// The # to use when opening colors#.txt.
 	sint32	m_showExpensive;	// Show cost and effects of expensive actions.
 	sint32	m_showOrderUnion;	// Show order button when any unit is capable.
+	sint32  m_recentAtTop;		// Add the most recent messages at the top.
 #endif
 	
 	PointerList<ProfileVar> *m_vars;

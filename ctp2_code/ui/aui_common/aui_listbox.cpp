@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : User interface element: list with rangers.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Always focus on the latest message.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -2151,6 +2171,23 @@ void aui_ListBox::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : aui_ListBox::BuildListStart
+//
+// Description: Start building a list.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : This suppresses some (e.g. ranger) automatic update actions 
+//              while building a list. When the list is complete, call  
+//              BuildListEnd to resume automatic updating.
+//
+//----------------------------------------------------------------------------
 void aui_ListBox::BuildListStart(void)
 {
 	
@@ -2165,8 +2202,26 @@ void aui_ListBox::BuildListStart(void)
 }
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 void aui_ListBox::BuildListEnd(void)
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : aui_ListBox::BuildListEnd
+//
+// Description: Finish building a list.
+//
+// Parameters : isAddBottom	: the newest element is at the bottom
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : To be called after BuildListStart.
+//
+//----------------------------------------------------------------------------
+void aui_ListBox::BuildListEnd(bool isAddBottom)
+#endif
 {
 	m_buildingTheList = FALSE;
 
@@ -2179,10 +2234,14 @@ void aui_ListBox::BuildListEnd(void)
 	CalculateDimensions();
 	RepositionHeaderSwitches();
 	RepositionRangers();
+#if !defined(ACTIVISION_ORIGINAL)	
+	sint32 const	verticalStart = isAddBottom 
+									? m_verticalRanger->GetMaximumY()
+									: m_verticalRanger->GetMinimumY();
+	m_verticalRanger->SetValue(m_verticalRanger->GetValueX(), verticalStart);
+#endif	
 	RepositionItems();
 
-	
-	
 	
 	
 	if ( m_forceSelect && !m_selectedList->L() )
