@@ -28,6 +28,10 @@
 //
 // _TEST
 //
+// Note: The following note no longer makes much sense (and is in fact
+//       inaccurate), since ACTIVISION_ORIGINAL
+//       is no longer used, but I have left it here for the record - JJB
+//
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
 //       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
 //       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 

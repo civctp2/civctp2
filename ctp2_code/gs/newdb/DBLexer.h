@@ -98,9 +98,7 @@ public:
 	sint32 GetToken();
 	sint32 PeekAhead();
 
-//	#if !defined(ACTIVISION_ORIGINAL) //GovMod
-//	const char *PeekAheadText();
-//	#endif
+//	const char *PeekAheadText(); //GovMod
 
 	const char *GetTokenText();
 

@@ -2077,7 +2077,6 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 	{
 
     //I want to see armytext even in optimized test version - Calvitix
-    //I dont' know how to encapsulate this in an ACTIVISION_ORIGINAL #define so I desactivate it
 	Utility val = Compute_Matching_Value(first_army);
 	uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
 	g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), goal_rec->GetNameText(), magnitude);

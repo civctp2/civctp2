@@ -21,7 +21,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added music screen key by ahenobarb. (No ACTIVISION_ORIGINAL compiler flags set.)
+// - Added music screen key by ahenobarb.
 // - Start the great library with the current research project of the player.
 // - Disabled restart key in network, hot seat and email gmase, by 
 //   Martin Gühmann.

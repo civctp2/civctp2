@@ -11,9 +11,6 @@
 // __AUI_USE_DIRECTMEDIA__	
 // should be set to have any meaningful code at all
 //
-// ACTIVISION_ORIGINAL		
-// when set, generates the original Activision code
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

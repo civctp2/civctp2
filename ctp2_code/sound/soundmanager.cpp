@@ -23,10 +23,6 @@
 // _MSC_VER		
 // - Use Microsoft C++ extensions when set.
 //
-// ACTIVISION_ORIGINAL
-// - Build original Activision binary
-//   ATTENTION: This collides with __GNUC__
-//
 // USE_SDL
 // - Compile with sdl support instead of mss (define: civsound.h)
 //----------------------------------------------------------------------------
@@ -117,9 +113,9 @@ SoundManager::SoundManager()
 # if defined(_DEBUG)
     m_SDLInitFlags |= SDL_INIT_NOPARACHUTE;
 # endif
-#else // ACTIVISION_ORIGINAL || !USE_SDL
+#else // !USE_SDL
 	m_redbook = 0;
-#endif // defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#endif // defined(USE_SDL)
 	m_timeToCheckCD = 0;
 
 	m_sfxSounds = new PointerList<CivSound>;
@@ -189,14 +185,14 @@ SoundManager::InitSoundDriver()
 	int output_rate;
 	Uint16 output_format;
 	int output_channels;
-#else // ACTIVISION_ORIGINAL || !USE_SDL
+#else // !USE_SDL
 	S32		errcode;
 	S32		use_digital;
 	S32		use_MIDI;
 	S32		output_rate;
 	S32		output_bits;
 	S32		output_channels;
-#endif // defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#endif // defined(USE_SDL)
 
 	use_digital = 1;						
 
@@ -225,14 +221,14 @@ SoundManager::InitSoundDriver()
             m_noSound = TRUE;
         }
     }
-#else // ACTIVISION_ORIGINAL || !USE_SDL
+#else // !USE_SDL
    	output_bits = 16;
 	errcode = AIL_quick_startup(use_digital, use_MIDI, output_rate, output_bits,
 								output_channels);
    	if (!errcode) {	
 		m_noSound = TRUE;
 	}
-#endif // #if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#endif // #if defined(USE_SDL)
 
 	InitRedbook();
 
@@ -254,9 +250,9 @@ SoundManager::CleanupSoundDriver()
         }
 
         // SDL_Quit() -> civ_main.cpp:AtExitProc()
-#else // ACTIVISION_ORIGINAL || !USE_SDL
+#else // !USE_SDL
 		AIL_quick_shutdown();
-#endif // #if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#endif // #if defined(USE_SDL)
 	}
 }
 
@@ -306,7 +302,7 @@ SoundManager::InitRedbook()
         }
         CDstatus status = SDL_CDStatus(m_cdrom);
     }
-#else // !USE_SDL || ACTIVISION_ORIGINAL
+#else // !USE_SDL
 	if (!m_redbook) {
 		MBCHAR drive = c3files_GetCTPCDDriveLetter();
 		m_redbook = AIL_redbook_open_drive(drive);
@@ -314,7 +310,7 @@ SoundManager::InitRedbook()
 			g_theProfileDB->SetUseRedbookAudio(FALSE);
 		}
 	}
-#endif // #if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#endif // #if defined(USE_SDL)
 }
 
 void

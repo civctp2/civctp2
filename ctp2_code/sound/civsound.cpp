@@ -26,10 +26,6 @@
 // USE_SDL
 // - USE SDL for sound, cdrom, ... TODO
 //
-// ACTIVISION_ORIGINAL
-// - Build original Activision binary
-//   ATTENTION: This collides with __GNUC__
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

@@ -192,7 +192,7 @@ ScienceManagementDialog:CTP2_DIALOG_WINDOW {
 			# Runtime instantiation type.
 			string	objecttype	"ctp2_hypertextbox"
 #not ACTIVISION_ORIGINAL
-                        int             hypermaxlength          8192
+			int             hypermaxlength          8192
 #end ACTIVISION_ORIGINAL
 
 			# Background.

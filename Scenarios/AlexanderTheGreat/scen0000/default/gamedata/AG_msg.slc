@@ -1261,7 +1261,7 @@ messagebox 'AGBarbDefeat' {
 	Text(ID_AG_BARB_DEFEAT);
 }
 
-// if not ACTIVISION_ORIGINAL
+// not ACTIVISION_ORIGINAL
 // Added Corinthian League defeat message, as suggested by Immortal Wombat.
 alertbox 'AGCLDefeat' {
 	Show(); Title(ID_AG_BLANK);

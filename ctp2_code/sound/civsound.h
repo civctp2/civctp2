@@ -26,10 +26,6 @@
 // USE_SDL
 // - Use SDL for sound, cdrom, ... (TODO)
 //
-// ACTIVISION_ORIGINAL
-// - Build original Activision binary
-//   ATTENTION: This collides with __GNUC__
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -54,10 +50,10 @@
 
 #if !defined(USE_SDL)
 #  include "mss.h"
-#else // !ACTIVISION_ORIGINAL
+#else
 #  include <SDL.h>
 #  include <SDL_mixer.h>
-#endif // ACTIVISION_ORIGINAL
+#endif
 
 class CivSound {
 public:

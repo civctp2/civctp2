@@ -35,10 +35,8 @@
 //
 //----------------------------------------------------------------------------
 
-// Multiple include guard !ACTIVISION_ORIGINAL
 #ifndef HOTSEATLIST_H
 #define HOTSEATLIST_H
-// End add
 
 #include "c3_listitem.h"
 #include "aui_action.h"
@@ -145,6 +143,4 @@ sint32 hotseatlist_NumEnabled(void);
 
 extern HotseatList *g_hotseatList;
 
-// Multiple include guard !ACTIVISION_ORIGINAL
 #endif
-// End add

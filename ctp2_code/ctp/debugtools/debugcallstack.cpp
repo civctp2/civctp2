@@ -29,9 +29,6 @@
 // GENERATE_ADDRESS_LOG
 // - ??
 //
-// ACTIVISION_ORIGINAL
-// - Build original Activision binary
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

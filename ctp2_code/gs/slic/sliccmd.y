@@ -19,10 +19,6 @@
 //----------------------------------------------------------------------------
 //                                                                                                                                                                         
 // Compiler flags
-//                                            
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
 //
 //----------------------------------------------------------------------------
 //
@@ -39,9 +35,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "sliccmd.h"
-#ifndef ACTIVISION_ORIGINAL
 #include <math.h>
-#endif
 
 /* Avoid silly warnings */
 #pragma warning( disable : 4013 )
@@ -182,7 +176,6 @@ expression: expression '+' expression
 		}
 	|   expression EXP expression
         {
-#ifndef ACTIVISION_ORIGINAL
 			if($1.v.type != EXP_VAL_INT ||
 			   $3.v.type != EXP_VAL_INT) {
 				sliccmd_type_error();
@@ -190,7 +183,6 @@ expression: expression '+' expression
 			$$.v.type = EXP_VAL_INT;
 				$$.v.value = (int)pow($1.v.value, $3.v.value); 
 			}
-#endif
 		}
 	|   expression LT  expression
         {

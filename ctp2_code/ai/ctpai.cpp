@@ -1913,7 +1913,7 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
        CtpAi::MoveOutofCityTransportUnits(player);
 
        CtpAi::UnGroupGarrisonUnits(player);	
-#endif //ACTIVISION_ORIGINAL
+#endif
 	}
 	
 	Governor::GetGovernor(player).FillEmptyBuildQueues();

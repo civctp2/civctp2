@@ -23,9 +23,6 @@
 
 // Misc variables
 
-// if  ACTIVISION_ORIGINAL (unused variable)
-// int_t		firstTurn;				// Flag for the first turn
-// end ACTIVISION_ORIGINAL 
 int_t		firstYear;				// Keeps generals from dying of old age in the first year
 int_t		firstSettler;			// Flag for the first time CL gives you a settler
 int_t		barsineMistress;		// counts 24 months after Barsine is your mistress
@@ -141,9 +138,6 @@ unit_t		tmpUnit;
 	if (tmpPlayer == 1) {
 //		if (firstTurn != 1) {
 //			alexHP = alexUnit.hp;
-// if  ACTIVISION_ORIGINAL (unused variable)	
-//			firstTurn = 1;
-// end ACTIVISION_ORIGINAL
 			// Center on and select Alexander 
 //			SelectUnit(alexUnit);
 //			AddCenter(alexUnit.location);
@@ -621,19 +615,6 @@ unit_t		tmpUnit;
 //----------------------------------------------------------------------------------
 
 HandleEvent(ArmySelected) 'AGCenterOnAlexander_F' post {
-// if  ACTIVISION_ORIGINAL (doesn't work, grrr....)
-// location_t	tmpLoc;
-//
-//	if (firstTurn != 1) {
-//		tmpLoc = army[0].location;
-//		if (tmpLoc != alexUnit.location) {
-//			SelectUnit(alexUnit);
-//			AddCenter(alexUnit.location);
-//		}
-//	} else {
-//		DisableTrigger('AGCenterOnAlexander_F');
-//	}
-// else ACTIVISION_ORIGINAL
     if (IsHumanPlayer(g.player))
     {
         if (g.player == 1) 
@@ -643,7 +624,6 @@ HandleEvent(ArmySelected) 'AGCenterOnAlexander_F' post {
 	      DisableTrigger('AGCenterOnAlexander_F');
         }
     }
-// end  ACTIVISION_ORIGINAL
 }
 
 
@@ -939,11 +919,7 @@ city_t		tmpCity;
 army_t		tmpArmy;
 location_t	tmpLoc;
 	tmpArmy = army[0];
-// if  ACTIVISION_ORIGINAL (invalid assignment)
-//	player[0] = tmpArmy;
-// else
 	player[0] = tmpArmy.owner;
-// end ACTIVISION_ORIGINAL 
 	if (player[0] == 1) {
 		tmpLoc = location[1];
 		if (Distance(tmpLoc, sidonLoc) < 3 ) {
@@ -1722,11 +1698,7 @@ HandleEvent(MoveUnits) 'AGBabylonCoronation_F' post {
 	if (babylonCoronation == 1) {
 		if (alexUnit.location == babylonLoc) {
 			HappyEmpire();				// Makes former Persian cities really happy
-// if  ACTIVISION_ORIGINAL (typo corrected as suggested by Immortal Wombat)
-//			Message(1, 'AGHappyEmpireA');
-// not ACTIVISION_ORIGINAL
 			Message(1, 'AGHappyEmpire');
-// end ACTIVISION_ORIGINAL
 			DisableTrigger('AGBabylonCoronation_F');
 		}
 	}

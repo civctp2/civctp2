@@ -42,10 +42,6 @@
  *----------------------------------------------------------------------------
  *
  * Compiler flags
- * 
- * ACTIVISION_ORIGINAL		
- * - When defined, generates the original Activision code.
- * - When not defined, generates the modified Apolyton code.
  *
  *----------------------------------------------------------------------------
  */
@@ -204,9 +200,7 @@ int yyparse();
 
 int main(int argc, char **argv)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	int	errorFound	= 1;	/* Not started yet */
-#endif
 	int arg;
 	char *outputDir = NULL;
 	g_generateRequirementWarnings = 1;
@@ -223,28 +217,16 @@ int main(int argc, char **argv)
 
 	if(!outputDir) {
 		fprintf(stderr, "Usage: [-r] %s <outputdir>\n", argv[0]);
-#if defined(ACTIVISION_ORIGINAL)
-		exit(0);
-#else
 		exit(errorFound);
-#endif
 	}
 
 	db_set_output_dir(outputDir);
-#if defined(ACTIVISION_ORIGINAL)
-	s_done = 0;
-	g_line_number = 1;
-	while(!s_done) {
-		yyparse();
-	}
-#else
 	g_line_number = 1;
 	for (s_done = 0; !s_done; /* s_done updated in yyparse */ )
 	{
 		errorFound = yyparse();
 	}
 	exit(errorFound);
-#endif
 }
 
 		

@@ -19,10 +19,6 @@
 //----------------------------------------------------------------------------
 //                                                                                                                                                                         
 // Compiler flags
-//                                            
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
 //
 //----------------------------------------------------------------------------
 //
@@ -347,14 +343,10 @@ expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 	|   expression '-' expression { slicif_add_op(SOP_SUB); }
 	|   expression '*' expression { slicif_add_op(SOP_MULT); }
 	|   expression EXP expression { 
-									#ifndef ACTIVISION_ORIGINAL 
 										slicif_add_op(SOP_EXP); 
-									#endif 
 									}
 	|   expression '&' expression { 
-									#ifndef ACTIVISION_ORIGINAL 
 										slicif_add_op(SOP_BAND); 
-									#endif 
 									}
 	|   expression '/' expression { slicif_add_op(SOP_DIV); }
 	|   expression '%' expression { slicif_add_op(SOP_MOD); }
@@ -389,10 +381,6 @@ expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 
 /*	    New code: */
 	|   DBREF '(' NAME ')' { 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	slicif_add_op(SOP_PUSHI, slicif_find_db_index($1.dbptr, $3.name));
-#else
 //Added by Martin Gühmann
 	if(slicif_is_name($1.dbptr, $3.name) < 0){
 		slicif_add_op(SOP_DBNAME, $1.dbptr, $3.name);
@@ -400,14 +388,9 @@ expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 	else{
 		slicif_add_op(SOP_PUSHI, slicif_find_db_index($1.dbptr, $3.name));
 	}
-#endif
 }
 
 	|   DBREF '(' NAME ')' REF NAME { 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-		slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name));
-#else
 //Added by Martin Gühmann
 	if(slicif_is_name($1.dbptr, $3.name) < 0){
 		slicif_add_op(SOP_DBNAMEREF, $1.dbptr, $3.name, $6.name);
@@ -415,35 +398,19 @@ expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 	else{
 		slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name));
 	}
-#endif
 }
 
 	|   DBREF '(' expression ')' {
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-//Do nothning in the original ctp2.exe
-#else
 	slicif_add_op(SOP_DB, $1.dbptr); 
-#endif
 }
 
 	|   DBREF '(' expression ')' REF NAME { 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	slicif_add_op(SOP_PUSHI, slicif_find_db_value_by_index($1.dbptr, $3.val, $6.name));
-#else
 //Added by Martin Gühmann
 	slicif_add_op(SOP_DBREF, $1.dbptr, $6.name); 
-#endif
 }
 
 	|   DBREF '(' ')' {
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-//Do nothning in the original ctp2.exe
-#else
 	slicif_add_op(SOP_DBSIZE, $1.dbptr); 
-#endif
 }
 
 /*	|   NAME '[' expression ']' REF NAME { slicif_add_op(SOP_PUSHAM, $1.name, $6.name); }*/

@@ -17,7 +17,7 @@
 //
 // Compiler flags
 // 
-// _JAPANESE (implies !ACTIVISION_ORIGINAL)
+// _JAPANESE
 // - Add provisions for handling SJIS characters.
 //
 //----------------------------------------------------------------------------

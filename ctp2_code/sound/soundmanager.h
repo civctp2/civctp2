@@ -23,10 +23,6 @@
 // _MSC_VER		
 // - Use Microsoft C++ extensions when set.
 //
-// ACTIVISION_ORIGINAL
-// - Build original Activision binary
-//   ATTENTION: This collides with __GNUC__
-//
 // USE_SDL
 // - Compile with sdl support instead of mss (define: civsound.h)
 //----------------------------------------------------------------------------

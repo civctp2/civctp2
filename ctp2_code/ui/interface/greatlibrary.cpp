@@ -17,7 +17,7 @@
 //
 // Compiler flags
 // 
-// _JAPANESE (implies !ACTIVISION_ORIGINAL)
+// _JAPANESE
 // - Handle Japanese 2-byte character input data.
 //
 //----------------------------------------------------------------------------

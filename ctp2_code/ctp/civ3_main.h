@@ -26,10 +26,6 @@
 // __GNUC__
 // - We are compiling with gcc
 //
-// ACTIVISION_ORIGINAL
-// - Build original Activision binary
-//   ATTENTION: This collides with __GNUC__
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
