@@ -20,7 +20,7 @@ TERRAIN_FOREST {
    }
 
    EnvBase {
-      Score 50
+      Score 70
       Food 10
       Shield 5
       Gold 10
@@ -162,7 +162,7 @@ TERRAIN_TUNDRA {
    }
 
    EnvRiver {
-      Score 10
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -220,7 +220,7 @@ TERRAIN_GLACIER {
    }
 
    EnvRiver {
-      Score 10
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -315,7 +315,7 @@ TERRAIN_DESERT {
    }
 
    EnvBase {
-      Score 10
+      Score 40
       Food 0
       Shield 0
       Gold 5
@@ -337,7 +337,7 @@ TERRAIN_DESERT {
    }
 
    EnvRiver {
-      Score 20
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -375,7 +375,7 @@ TERRAIN_SWAMP {
    }
 
    EnvBase {
-      Score 10
+      Score 40
       Food 5
       Shield 5
       Gold 5
@@ -397,7 +397,7 @@ TERRAIN_SWAMP {
    }
 
    EnvRiver {
-      Score 20
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -434,7 +434,7 @@ TERRAIN_JUNGLE {
    }
 
    EnvBase {
-      Score 40
+      Score 70
       Food 5
       Shield 10
       Gold 5
@@ -493,7 +493,7 @@ TERRAIN_MOUNTAIN {
    }
 
    EnvBase {
-      Score 40
+      Score 60
       Food 0
       Shield 15
       Gold 10
@@ -553,7 +553,7 @@ TERRAIN_HILL {
    }
 
    EnvBase {
-      Score 50
+      Score 70
       Food 5
       Shield 10
       Gold 10
@@ -742,7 +742,7 @@ TERRAIN_WATER_SHELF {
    InternalType: WaterShelf
 
    EnvBase {
-      Score 50
+      Score 70
       Food 5
       Shield 10
       Gold 5
@@ -775,7 +775,7 @@ TERRAIN_WATER_TRENCH {
    GLHidden
 
    EnvBase {
-      Score 50
+      Score 70
       Food 5
       Shield 10
       Gold 10
@@ -810,7 +810,7 @@ TERRAIN_WATER_RIFT {
    InternalType: WaterRift
 
    EnvBase {
-      Score 60
+      Score 90
       Food 5
       Shield 20
       Gold 5
@@ -890,7 +890,7 @@ TERRAIN_BROWN_HILL {
    }
 
    EnvBase {
-      Score 20
+      Score 50
       Food 0
       Shield 10
       Gold 5
@@ -912,7 +912,7 @@ TERRAIN_BROWN_HILL {
    }
 
    EnvRiver {
-      Score 20
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -949,7 +949,7 @@ TERRAIN_BROWN_MOUNTAIN {
    }
 
    EnvBase {
-      Score 20
+      Score 60
       Food 0
       Shield 10
       Gold 10
@@ -971,7 +971,7 @@ TERRAIN_BROWN_MOUNTAIN {
    }
 
    EnvRiver {
-      Score 20
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -1009,7 +1009,7 @@ TERRAIN_WHITE_HILL {
    }
 
    EnvBase {
-      Score 10
+      Score 50
       Food 0
       Shield 5
       Gold 5
@@ -1030,7 +1030,7 @@ TERRAIN_WHITE_HILL {
    }
 
    EnvRiver {
-      Score 10
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -1064,7 +1064,7 @@ TERRAIN_WHITE_MOUNTAIN {
    }
 
    EnvBase {
-      Score 10
+      Score 60
       Food 0
       Shield 10
       Gold 5
@@ -1085,7 +1085,7 @@ TERRAIN_WHITE_MOUNTAIN {
    }
 
    EnvRiver {
-      Score 10
+      Score 30
       Food 5
       Shield 5
       Gold 5
