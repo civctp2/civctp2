@@ -1476,7 +1476,7 @@ str_ldl_Disclaimer3 "Contact: ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-04-30"
+str_ldl_version "2004-05-19"
 
 
 
@@ -3090,3 +3090,17 @@ str_profile_ShowCityInfluence                   "Afficher influence ville"
 str_profile_ShowPoliticalBorders                "Afficher frontières nationales"
 str_profile_CloseOnEyePoint			"Fermer les messages en cliquant sur l'oeil"
 str_profile_ShowExpensive			"Afficher effets aménag. de case trop coûteux"
+
+# Added for extended keyboard mapping options keys 6/2004 L. Hirth
+str_tbl_ldl_Music_Options		"Musicoptions"
+str_tbl_ldl_Decend			"Decend"
+str_tbl_ldl_Execute_Eyepoint		"Focus on object (eye)"
+str_tbl_ldl_Move_Order			"Moveorder"
+str_tbl_ldl_End_Unit_Turn		"End unit turn"
+str_tbl_ldl_Process_Unit_Orders		"Process given unit orders"
+str_tbl_ldl_Group_Army			"Group all units to army"
+str_tbl_ldl_Ungroup_Army		"Ungroup armies"
+str_tbl_ldl_Gamestate_Debug		"Debug gamestate (playtest)"
+str_tbl_ldl_Rand_Test			"Rand test (playtest)"
+str_tbl_ldl_Command_Enter		"Command enter (playtest)"
+str_tbl_ldl_Command_Enter_Alternate	"Command enter alternate (playtest)"

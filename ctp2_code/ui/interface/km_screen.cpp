@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handling of the key mapping screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - 
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -303,8 +333,13 @@ sint32 km_screen_loadKeyList( void )
 			s_keyList->AddItem( (c3_ListItem *)item );
 		}
 		break;
+
 	case KM_UNIT:
+#if defined (ACTIVISION_ORIGINAL)
 		for ( i = KEY_FUNCTION_OPEN_WORK_VIEW;i <= KEY_FUNCTION_SPACE_LAUNCH;i++ ) {
+#else
+		for ( i = KEY_FUNCTION_OPEN_WORK_VIEW;i <= KEY_FUNCTION_PROCESS_UNIT_ORDERS;i++ ) {
+#endif
 			item = new KeyListItem( &errcode, i, theKeyMap->get_keycode(KEY_FUNCTION(i)), ldl );
 			Assert( AUI_NEWOK(item, errcode) );
 			if ( !AUI_NEWOK(item, errcode) ) return -1;
@@ -313,17 +348,12 @@ sint32 km_screen_loadKeyList( void )
 		}
 		break;
 
-
-
-
-
-
-
-
-
 	case KM_SCREEN:
+#if defined (ACTIVISION_ORIGINAL)
 		for ( i = KEY_FUNCTION_OPEN_CIV_STATUS;i <= KEY_FUNCTION_OPEN_SCENARIO_EDITOR;i++ ) {
-			
+#else
+		for ( i = KEY_FUNCTION_OPEN_CIV_STATUS;i <= KEY_FUNCTION_NO;i++ ) {
+#endif			
 			if ( i == KEY_FUNCTION_OPEN_CITY_VIEW ) continue;
 
 			item = new KeyListItem( &errcode, i, theKeyMap->get_keycode(KEY_FUNCTION(i)), ldl );
@@ -333,8 +363,17 @@ sint32 km_screen_loadKeyList( void )
 			s_keyList->AddItem( (c3_ListItem *)item );
 		}
 		break;
+
 	case KM_MAP:
+#if defined (ACTIVISION_ORIGINAL)
 		for ( i = KEY_FUNCTION_TOGGLE_CITY_NAMES;i <= KEY_FUNCTION_ZOOM_OUT1;i++ ) {
+#else
+#ifdef _PLAYTEST
+		for ( i = KEY_FUNCTION_TOGGLE_CITY_NAMES;i <= KEY_FUNCTION_TOGGLE_SPACE;i++ ) {
+#else 
+		for ( i = KEY_FUNCTION_TOGGLE_CITY_NAMES;i <= KEY_FUNCTION_ZOOM_OUT1;i++ ) {
+#endif
+#endif
 			item = new KeyListItem( &errcode, i, theKeyMap->get_keycode(KEY_FUNCTION(i)), ldl );
 			Assert( AUI_NEWOK(item, errcode) );
 			if ( !AUI_NEWOK(item, errcode) ) return -1;
@@ -343,7 +382,11 @@ sint32 km_screen_loadKeyList( void )
 		}
 		break;
 	case KM_GAME:
+#if defined (ACTIVISION_ORIGINAL)
 		for ( i = KEY_FUNCTION_REMAP_KEYBOARD;i <= KEY_FUNCTION_QUIT;i++ ) {
+#else
+		for ( i = KEY_FUNCTION_REMAP_KEYBOARD;i <= KEY_FUNCTION_MUSIC_OPTIONS;i++ ) {
+#endif
 			item = new KeyListItem( &errcode, i, theKeyMap->get_keycode(KEY_FUNCTION(i)), ldl );
 			Assert( AUI_NEWOK(item, errcode) );
 			if ( !AUI_NEWOK(item, errcode) ) return -1;

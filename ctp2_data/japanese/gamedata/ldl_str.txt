@@ -3169,7 +3169,7 @@ str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-04-18"
+str_ldl_version "2004-05-19"
 str_ldl_RANKING_POLLUTION		"âòêı"
 str_ldl_RANKING_WONDER		"éµïsévãc"
 
@@ -3182,3 +3182,16 @@ str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
 str_ldl_GreatLibraryGoalKnown		"%s is already known. No goal was set."
 str_ldl_GreatLibraryNoGoalPossible	"%s cannot be researched."
 
+# Added for extended keyboard mapping options keys 6/2004 L. Hirth
+str_tbl_ldl_Music_Options		"Musicoptions"
+str_tbl_ldl_Decend			"Decend"
+str_tbl_ldl_Execute_Eyepoint		"Focus on object (eye)"
+str_tbl_ldl_Move_Order			"Moveorder"
+str_tbl_ldl_End_Unit_Turn		"End unit turn"
+str_tbl_ldl_Process_Unit_Orders		"Process given unit orders"
+str_tbl_ldl_Group_Army			"Group all units to army"
+str_tbl_ldl_Ungroup_Army		"Ungroup armies"
+str_tbl_ldl_Gamestate_Debug		"Debug gamestate (playtest)"
+str_tbl_ldl_Rand_Test			"Rand test (playtest)"
+str_tbl_ldl_Command_Enter		"Command enter (playtest)"
+str_tbl_ldl_Command_Enter_Alternate	"Command enter alternate (playtest)"
