@@ -239,10 +239,12 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 #if defined(ACTIVISION_ORIGINAL)	// table never cleaned up
 	static aui_StringTable startagestrings( &errcode, "strings.startagestrings" );
+	s_numAges = g_theAgeDB->NumRecords();
 #else
 	aui_StringTable	startagestrings(&errcode, "strings.startagestrings");
-#endif
 	s_numAges = g_theAgeDB->NumRecords();
+	bool const		isLdlUsable = s_numAges == startagestrings.GetNumStrings();
+#endif
 	for ( i = 0; i < s_numAges; i++ )
 	{
 		
@@ -259,15 +261,17 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 #else
 //Added by Martin Gühmann so that no *.ldl needs to be edited
 //anymore when new ages are added.
-		MBCHAR const *		ageId	= g_theAgeDB->GetNameStr(i);
-		MBCHAR const *		name	= g_theAgeDB->Get(i)->GetNameText();
-		
-		if ((!name) || (0 == strcmp(ageId, name)))
+		MBCHAR const *	ageId	= g_theAgeDB->GetNameStr(i);
+		MBCHAR const *	name	= g_theAgeDB->Get(i)->GetNameText();
+
+		if (isLdlUsable && (0 == strcmp(ageId, name)))
 		{
-			// Age name not defined in gl_str.txt: attempt the old location.
-			MBCHAR const *	ldlText	= startagestrings.GetString(i);
-			
-			name = ldlText ? ldlText : ageId;
+			// Age name not defined in gl_str.txt: use the ldl file text.
+			name = startagestrings.GetString(i);
+		}
+		else if (!name)
+		{
+			name = ageId;
 		}
 #endif
 	
