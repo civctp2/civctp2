@@ -35,6 +35,7 @@
 // - Made Cleanup really clean up.
 // - Prevented crash on incorrect input (0 foreigners).
 // - Prevented crash on incorrect input (personality typo).
+// - Improved CleanupAll.
 //
 //----------------------------------------------------------------------------
 
@@ -197,6 +198,10 @@ void Diplomat::CleanupAll()
 		
 		s_theDiplomats[i].Cleanup();
 	}
+
+#if !defined(ACTIVISION_ORIGINAL)	// clean up the vector as well
+	s_theDiplomats.clear();
+#endif
 }
 
 
@@ -541,8 +546,7 @@ void Diplomat::Cleanup()
 	m_outstandingProposals			= 0;
 	m_personalityName.resize(0);
 	m_piracyHistory.clear();
-	m_strategy.Init();
-
+	
 	ClearEffectiveRegardCache();
 #endif
 }

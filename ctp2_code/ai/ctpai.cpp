@@ -43,6 +43,7 @@
 // - Add UngroupGarrison method (to ungroup units blocked by garrison 
 //   (for example seige force) - Calvitix
 // - Cleaned up data of dead player.
+// - Improved Diplomat cleanup.
 //
 //----------------------------------------------------------------------------
 
@@ -606,7 +607,7 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 		
 		for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 		{
-			
+#if defined(ACTIVISION_ORIGINAL)			
 			if (( g_theGoalDB->Get(goal_type)->GetTargetTypeAttackUnit() == false ) &&
 				( g_theGoalDB->Get(goal_type)->GetTargetTypeSpecialUnit() == false ))
 				continue;
@@ -628,6 +629,27 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 			
 			
 			Scheduler::GetScheduler(foreignerId).Add_New_Goal(goal_ptr);
+#else
+			// Speed-up only, no functional change.
+			GoalRecord const *	goal	= g_theGoalDB->Get(goal_type);
+
+			if (goal
+				&&
+				(goal->GetTargetTypeAttackUnit() || 
+				 goal->GetTargetTypeSpecialUnit()
+				)
+				&&
+				(goal->GetTargetOwnerSelf() == (foreignerId == playerId))
+               )
+			{
+				goal_ptr = new CTPGoal();
+				goal_ptr->Set_Type(goal_type);
+				goal_ptr->Set_Player_Index(foreignerId);
+				goal_ptr->Set_Target_Army(army);
+			
+				Scheduler::GetScheduler(foreignerId).Add_New_Goal(goal_ptr);
+			}
+#endif // ACTIVISION_ORIGINAL
 		}
 	}
 
@@ -1151,9 +1173,14 @@ void CtpAi::Cleanup()
 		
 		Governor::GetGovernor(player).Initialize();
 		
-		
+#if defined(ACTIVISION_ORIGINAL)	// have to do this only once
 		Diplomat::CleanupAll();
+#endif
 	}
+
+#if !defined(ACTIVISION_ORIGINAL)
+	Diplomat::CleanupAll();
+#endif
 }
 
 

@@ -28,6 +28,7 @@
 //
 // - Propagate PW each turn update.
 // - Unblock the client user interface when start of turn processing is ready.
+// - Added NET_INFO_CODE_DISBANDED_CITY_SETTLER handling.
 //
 //----------------------------------------------------------------------------
 
@@ -297,7 +298,8 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	2, // NET_INFO_CODE_SET_EMBASSIES
 #if !defined ACTIVISION_ORIGINAL
 	// propagate PW each turn update
-	2, // NET_INFO_CODE_MATERIALS,
+	2, // NET_INFO_CODE_MATERIALS, unconfirmed?
+	1, // NET_INFO_CODE_DISBANDED_CITY_SETTLER
 #endif
 };
 
@@ -1825,6 +1827,25 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_player[m_data]->m_materialPool->SetLevel((sint32)m_data2);
 			}
 			break;
+
+		// propagate the immobility of the settler created when disbanding a city
+		case NET_INFO_CODE_DISBANDED_CITY_SETTLER:
+		{
+			DPRINTF(k_DBG_NET, 
+					("Server says unit %lx is a disbanded city settler\n", m_data)
+				   );
+			Unit unit(m_data);
+			if (unit.IsValid()) 
+			{
+				unit.ClearFlag(k_UDF_FIRST_MOVE);
+				unit.SetMovementPoints(0.0);
+			}
+			else 
+			{
+				g_network.RequestResync(RESYNC_INVALID_UNIT);
+			}
+			break;
+		}
 #endif
 
 		default:

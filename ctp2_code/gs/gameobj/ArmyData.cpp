@@ -38,6 +38,8 @@
 // - Made some methods const.
 // - Improved handling of space launched units.
 // - Added a isstealth paramater in characterizeArmy method
+// - Prevented leak report from unused static variables.
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -5987,12 +5989,14 @@ BOOL ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 		return FALSE;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)	// waste of time + leak report
 	static UnitDynamicArray revealedUnits;
 	BOOL revealedUnexplored = FALSE;
 	revealedUnits.Clear();
 
 	static UnitDynamicArray diedInMove;
 	diedInMove.Clear();
+#endif
 
 	if(ExertsZOC()) {
 		UpdateZOCForMove(pos, d);
@@ -7772,7 +7776,7 @@ BOOL ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCos
 			sqrt(static_cast<double>(MapPoint::GetSquaredDistance(start, dest)));
 		distcost *= (1.0 - (distanceFromCapitol / p->GetMaxEmpireDistance()));
 	}
-#endif#endif
+#endif
 
 	if(distcost < 1)
 		distcost = 1;

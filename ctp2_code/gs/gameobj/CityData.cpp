@@ -58,6 +58,7 @@
 //   by Martin Gühmann.
 // - Possible solution for bug #14 by Klaus Kaan
 // - Make city growth/starvation work for PBEM.
+// - Modified the bug #14 solution: use a new - debugger confirmed - message.
 //
 //----------------------------------------------------------------------------
 
@@ -5322,9 +5323,10 @@ void CityData::Disband()
 			s.SetMovementPoints(0);
 #ifndef ACTIVISION_ORIGINAL
 			//possible solution for bug #14
-			if(g_network.IsHost()) {
+			if (g_network.IsHost()) 
+			{
 				g_network.Block(s.GetOwner());
-				g_network.Enqueue(new NetInfo(NET_INFO_CODE_SET_MOVEMENT_TO_ZERO, s.m_id));
+				g_network.Enqueue(new NetInfo(NET_INFO_CODE_DISBANDED_CITY_SETTLER, s.m_id));
 				g_network.Unblock(s.GetOwner());
 			}
 #endif
