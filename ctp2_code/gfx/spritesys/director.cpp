@@ -1,13 +1,34 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handling of the action on the screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented game freeze when an item gets deleted while the program is 
+//   waiting for it to finish.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -1278,6 +1299,13 @@ void Director::ActiveUnitRemove(UnitActor *unitActor)
 		{
 			m_activeUnitList->DeleteAt(pos);
 			unitActor->SetActive(false);
+#if !defined(ACTIVISION_ORIGINAL)
+			// Prevent getting stuck waiting for a deleted item.
+			if (m_activeUnitList->IsEmpty())
+			{
+				SetActionFinished(TRUE);
+			}
+#endif
 		}
 	} 
 }
