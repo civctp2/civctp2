@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Animation queue increased to 12 fixing bug #4
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __ACTOR_H__
@@ -19,7 +38,12 @@
 #define k_ACTOR_CENTER_OFFSET_X		48
 #define k_ACTOR_CENTER_OFFSET_Y		48
 
+#if defined (ACTIVISION_ORIGINAL)
 #define k_MAX_ACTION_QUEUE_SIZE		10
+else
+//fix bug #4 by kaan
+#define k_MAX_ACTION_QUEUE_SIZE		12
+#endif
 
 class SpriteState;
 class Anim;
