@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Combat handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Veteran effect added.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -107,6 +137,7 @@ static void combat_print(sint32 level, const char *fmt, ...)
 #endif
 
 #ifdef TEST_APP
+#if defined(ACTIVISION_ORIGINAL)
 CombatUnit::CombatUnit(double offense, double defense,
 		   double strength, double armor,
 		   double ranged, double hp,
@@ -118,6 +149,21 @@ CombatUnit::CombatUnit(double offense, double defense,
 	m_ranged(ranged),
 	m_hp(hp),
 	m_type(type)
+#else
+CombatUnit::CombatUnit(double offense, double defense,
+		   double strength, double armor,
+		   double ranged, double hp,
+		   UNIT_TYPE type,
+		   bool const	isVeteran) :
+	m_offense(offense),
+	m_defense(defense),
+	m_strength(strength),
+	m_armor(armor),
+	m_ranged(ranged),
+	m_hp(hp),
+	m_isVeteran(isVeteran),
+	m_type(type)
+#endif
 {
 	m_valid = true;
 
@@ -137,6 +183,11 @@ CombatUnit::CombatUnit(double offense, double defense,
 	m_armor(armor),
 	m_ranged(ranged),
 	m_hp(hp),
+#if !defined(ACTIVISION_ORIGINAL)
+	// Using a silly ?:-construction to prevent a compiler warning. 
+	// TODO: make Unit::IsVeteran return bool.
+	m_isVeteran(u.IsVeteran() ? true : false),
+#endif
 	m_unit(u)
 {
 	m_valid = true;
