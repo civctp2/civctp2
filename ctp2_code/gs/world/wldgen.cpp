@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - X-wrap added to A* heuristics costs
+// - Implemented CalcTerrainFreightCost by Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -2018,9 +2019,18 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 double World::CalcTerrainFreightCost(const MapPoint &pos) 
 
 {
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
    double tmp = 5;
 	
    return tmp;
+
+#else
+//Added by Martin Gühmann
+	
+	return AccessCell(pos)->CalcTerrainFreightCost();
+
+#endif
 }
 
 void World::SetAllMoveCost()
