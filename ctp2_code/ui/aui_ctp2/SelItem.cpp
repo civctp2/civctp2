@@ -24,16 +24,6 @@
 // _DEBUG
 // - Generates debug information when set.
 //
-// _DEBUG_MEMORY
-// _MEMORYLOGGING
-// - Generates extra memory debug information when both set, and _DEBUG set.
-//
-// _NO_GAME_WATCH
-// - Generates a game watch file when not set.  
-//
-// _WAS_ABOUT_TEST_WHEN_DAN_GOT_ME_REPRO_STEPS
-// - Have to ask Activision for this one.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
