@@ -61,8 +61,8 @@ extern CTPDatabase<StrategyRecord> *g_theStrategyDB;
 
 
 
-
-sint32 Scheduler::s_max_match_list_cycles = 6;
+// added DWT
+sint32 Scheduler::s_max_match_list_cycles = g_theConstDB->GetMaxMatchListCycles();
 
 Scheduler::Scheduler_Vector Scheduler::s_theSchedulers;
 

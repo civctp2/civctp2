@@ -379,6 +379,8 @@ void ConstDB::Serialize(CivArchive &archive)
 	archive.PutDoubleString( m_ai_cheat_eco_pact_max);
 	
 	archive << m_riot_level;
+	archive << m_max_match_list_cycles;
+
 		}
 	else
 		{
@@ -601,6 +603,7 @@ enum TOKEN_CONST {
 	TOKEN_VERY_HAPPY_THRESHOLD,
 	TOKEN_CITY_GROWTH_COEFFICIENT,
 	TOKEN_RIOT_LEVEL,
+	TOKEN_MAX_MATCH_LIST_CYCLES, // added DWT
 	TOKEN_POWER_POINTS_TO_MATERIALS,
 
 	TOKEN_MAX_AIRLIFT_STACK_SIZE,
@@ -910,6 +913,7 @@ TokenData g_const_token_data [] = {
 	{TOKEN_VERY_HAPPY_THRESHOLD, "VERY_HAPPY_THRESHOLD"},
 	{TOKEN_CITY_GROWTH_COEFFICIENT, "CITY_GROWTH_COEFFICIENT"},
 	{TOKEN_RIOT_LEVEL, "RIOT_LEVEL"},
+	{TOKEN_MAX_MATCH_LIST_CYCLES,, "MAX_MATCH_LIST_CYCLES"}, // added DWT
 	{TOKEN_POWER_POINTS_TO_MATERIALS, "POWER_POINTS_TO_MATERIALS"},
 	{TOKEN_MAX_AIRLIFT_STACK_SIZE, "MAX_AIRLIFT_STACK_SIZE"},
 	{TOKEN_GOLD_FROM_PIRACY, "GOLD_FROM_PIRACY"},
@@ -1450,6 +1454,10 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 							  m_city_growth_coefficient)) return FALSE;
 	if (!token_ParseValNext(const_token, TOKEN_RIOT_LEVEL,
 							m_riot_level)) return FALSE;
+	// added DWT
+	if (!token_ParseValNext(const_token, TOKEN_MAX_MATCH_LIST_CYCLES,
+							m_max_match_list_cycles)) return FALSE;
+
 	if(!token_ParseFloatNext(const_token, TOKEN_POWER_POINTS_TO_MATERIALS,
 							 m_power_points_to_materials)) return FALSE;
 	if(!token_ParseValNext(const_token, TOKEN_MAX_AIRLIFT_STACK_SIZE,

@@ -319,10 +319,8 @@ typedef class ConstDB {
 	
 	sint32 m_riot_level;
 	
-	
-	
-	
-	
+	//added DWT 
+	sint32 m_max_match_list_cycles;
 	
 	
 	
@@ -582,6 +580,9 @@ public:
 	sint32 GetVeryHappyThreshold(void) const { return (m_veryHappyThreshold) ; }
 	double CityGrowthCoefficient(void) const { return m_city_growth_coefficient; }
 	sint32 GetRiotLevel() const { return m_riot_level; }
+	//added DWT
+	sint32 GetMaxMatchListCycles() const { return m_max_match_list_cycles; }
+
 	double PowerPointsToMaterialsConversion() const { return m_power_points_to_materials; }
 	sint32 MaxAirliftStackSize() const { return m_max_airlift_stack_size; }
 	
