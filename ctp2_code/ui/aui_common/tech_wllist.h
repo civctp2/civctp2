@@ -1,20 +1,39 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : ???
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// NON_STANDART_C_PLUS_PLUS
+// - When defined, generates the original Activision non standart 
+//   compilant code.
+// - When defined, generates modified standart compilant code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Add typename in front of tech_WLList< T >::Link *tech_WLList< T >::NewLink
+//   to make the latest g++ and .NET compilers happy, by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __TECH_WLLIST_H__
 #define __TECH_WLLIST_H__
@@ -227,7 +246,14 @@ inline void tech_WLList< T >::SetAt( ListPos position, const T &newElement )
 
 
 template< class T >
+#if defined(NON_STANDART_C_PLUS_PLUS)
+//Removed by Martin Gühmann
 tech_WLList< T >::Link *tech_WLList< T >::NewLink(
+#else
+//Added by Martin Gühmann to allow compiling on compilers
+//that require standart C++ code.
+typename tech_WLList< T >::Link *tech_WLList< T >::NewLink(
+#endif
 	Link *pPrevLink,
 	Link *pNextLink )
 {
