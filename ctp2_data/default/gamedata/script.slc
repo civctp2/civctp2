@@ -1040,8 +1040,15 @@ messagebox '98GossipMap' {
 }
 
 messagebox '99AdvanceFromCapturingCity' {
+	Show();
 	Text(ID_ADVANCE_FROM_CAPTURING_CITY);
 	MessageType("KNOWLEDGE");
+}
+
+messagebox '99aAdvanceFromCapturingCityVictim' {
+	Show();
+	Text(ID_ADVANCE_FROM_CAPTURING_CITY_VICTIM);
+	MessageType("STEAL_ADVANCE_ICON");
 }
 
 messagebox '100CityRioting' {

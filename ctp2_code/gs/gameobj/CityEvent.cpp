@@ -1,3 +1,36 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : City Game Events
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Readded possibility to gain an advance from a just captured 
+//   city, by Martin Gühmann. However with or without the change
+//   the CaptureCityEvent leaks, maybe a problem of SlicObject.
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 
 #include "Events.h"
@@ -38,6 +71,9 @@
 #include "ArmyData.h"
 #include "GaiaController.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
+#include "AdvanceRecord.h"
+#endif
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
@@ -98,8 +134,49 @@ STDEHANDLER(CaptureCityEvent)
 		
 		if(g_rand->Next(100) < 
 		   g_theConstDB->CaptureCityAdvanceChance() * 100) {
-			
-			
+#if !defined(ACTIVISION_DEFAULT)
+//Added by Martin Gühmann to allow city advance gaining from
+//a captured city.
+
+			//Check if there are any advances to steal:
+			sint32 num;
+			uint8 *canSteal = g_player[newOwner]->m_advances->CanAskFor(
+			                  g_player[originalOwner]->m_advances, num);
+			if(num > 0){
+				sint32 i;
+				sint32 count = 0;
+				sint32 which = g_rand->Next(num);
+
+				for(i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
+					if(canSteal[i]) {
+						if(which == count) {
+							g_player[newOwner]->m_advances->GiveAdvance(i, CAUSE_SCI_COMBAT);
+							so = new SlicObject("99AdvanceFromCapturingCity");
+							so->AddCivilisation(newOwner);
+							so->AddCivilisation(originalOwner);
+							so->AddRecipient(newOwner);
+							so->AddCity(city);
+							so->AddAdvance(i);
+							g_slicEngine->Execute(so);
+
+							so = new SlicObject("99aAdvanceFromCapturingCityVictim");
+							so->AddCivilisation(originalOwner);
+							so->AddCivilisation(newOwner);
+							so->AddRecipient(originalOwner);
+							so->AddCity(city);
+							so->AddAdvance(i);
+							g_slicEngine->Execute(so);
+
+							break;
+						}
+						count++;
+					}
+				}
+				Assert(i < g_theAdvanceDB->NumRecords());
+			}
+
+			delete[] canSteal;
+#endif // ACTIVISION_DEFAULT
 		}
 		Assert(g_player[newOwner]); 
 		g_player[newOwner]->FulfillCaptureCityAgreement(city) ;	

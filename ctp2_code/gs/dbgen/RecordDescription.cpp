@@ -45,6 +45,9 @@
 //   * Code generates a conditional parser construct to deal with an
 //     addition to the standard parsed record syntax.
 //
+// - Added return type void to Init function to make .NET quiet about the
+//   missing return type, by Martin Gühmann.
+//
 //----------------------------------------------------------------------------
 
 
@@ -126,7 +129,6 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	ExportForwardDeclarations(outfile);
 
 	fprintf(outfile, "\nclass %sRecord : public CTPRecord\n{\npublic:\n", m_name);
-
 	
 	fprintf(outfile, "    typedef sint32 (%sRecord::*IntAccessor)() const;\n", m_name);
 	fprintf(outfile, "    typedef bool (%sRecord::*BoolAccessor)() const;\n", m_name);
@@ -138,18 +140,16 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	fprintf(outfile, "private:\n");
 	ExportData(outfile);
 
-	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	fprintf(outfile, "//GovMod Specific flag\n");
 	fprintf(outfile, "    bool m_hasGovernmentsModified;\n\n");
-	#endif
-
+#endif
 	
-
 	fprintf(outfile, "\npublic:\n");
 
 	ExportMethods(outfile);
 
-	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	fprintf(outfile, "//GovMod Specific accessors\n");
 	fprintf(outfile, "     bool GetHasGovernmentsModified() const { return m_hasGovernmentsModified; }\n\n");
 	fprintf(outfile, "");
@@ -167,12 +167,9 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	else
 		fprintf(outfile," return GetGovernmentsModifiedIndex(index); } \n\n\n");
 
-	#endif
-
+#endif
   
-
 	fprintf(outfile, "}; /* %sRecord */\n\n", m_name);
-
 	fprintf(outfile, "struct %sRecordAccessorInfo {\n", m_name);
 	fprintf(outfile, "    %sRecord::IntAccessor m_intAccessor;\n", m_name);
 	fprintf(outfile, "    %sRecord::BoolAccessor m_boolAccessor;\n", m_name);
@@ -194,7 +191,7 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	}
 
 	fprintf(outfile, "#define k_Num_%sRecord_Tokens %d\n\n", m_name, count);
-	
+
 	fprintf(outfile, "template <class T> class CTPDatabase;\n");
 	fprintf(outfile, "extern CTPDatabase<%sRecord> *g_the%sDB;\n\n", m_name, m_name);
 
@@ -222,6 +219,8 @@ void RecordDescription::ExportForwardDeclarations(FILE *outfile)
 	}
 }
 
+
+
 void RecordDescription::ExportDataCode(FILE *outfile)
 {
 	fprintf(outfile, "/*\n * Data accessors\n * (DO NOT EDIT!  Automatically generated file)\n */\n");
@@ -239,7 +238,6 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 {
 	if(m_addingToMemberClass) {
 		
-		
 		Assert(m_memberClasses.GetTail());
 		if(m_memberClasses.GetTail()) {
 			m_memberClasses.GetTail()->AddDatum(type, nameInfo,
@@ -248,7 +246,6 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 		}
 		return;
 	}
-
 	
 	Datum *dat = new Datum;
 	dat->m_type = type;
@@ -277,7 +274,6 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	m_datumList.AddTail(dat);
 
 	if(dat->m_type == DATUM_BIT) {
-		
 		
 		dat->m_bitNum = m_numBits;
 		m_numBits++;
@@ -366,7 +362,6 @@ void RecordDescription::ExportBits(FILE *outfile)
 {
 	sint32 bit = 0;
 	char nicename[k_MAX_RECORD_NAME];
-
 	
 	PointerList<Datum>::Walker walk(&m_datumList);
 	while(walk.IsValid()) {
@@ -381,7 +376,6 @@ void RecordDescription::ExportBits(FILE *outfile)
 		}
 		walk.Next();
 	}
-
 	
 	walk.SetList(&m_datumList);
 	while(walk.IsValid()) {
@@ -425,7 +419,6 @@ void RecordDescription::ExportData(FILE *outfile)
 {
 	if(m_numBits > 0) {
 		
-		
 		sint32 flag;
 		for(flag = 0; flag <= m_numBits / 32; flag++) {
 			fprintf(outfile, "    uint32 m_flags%d;\n", flag);
@@ -441,7 +434,6 @@ void RecordDescription::ExportData(FILE *outfile)
 		}
 		walk.Next();
 	}
-
 }
 
 void RecordDescription::ExportMethods(FILE *outfile)
@@ -449,20 +441,20 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	
 	fprintf(outfile, "    %sRecord() { Init(); };\n", m_name);
 	fprintf(outfile, "    ~%sRecord();\n", m_name);
+
+#if defined(ACTIVISION_ORIGINAL)
+	//Removed by Martin Gühmann
 	fprintf(outfile, "    Init();\n", m_name);
+#else
+	//Added by Martin Gühmann functions needs a return type
+	fprintf(outfile, "    void Init();\n", m_name);
+#endif
 
 	fprintf(outfile, "    // These methods are needed for records to conform to\n");
 	fprintf(outfile, "    // 'Orthodox Cannonical Form' and work with resizing STL vectors. \n");
 	fprintf(outfile, "    %sRecord(const %sRecord &rval) { Init(); *this = rval; }\n", m_name, m_name);
 	fprintf(outfile, "    void operator=(const %sRecord &rval);\n\n", m_name);
 	
-
-
-
-
-
-
-
 
 
 
@@ -480,21 +472,19 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->m_type == DATUM_BIT_GROUP) {
 			fprintf(outfile, "    sint32 Parse%sBit(DBLexer *lex);\n", walk.GetObj()->m_name);
-
 		}
 		walk.Next();
 	}
 
 	fprintf(outfile, "    //\n    // Accessors\n    //\n");
-
 	
 	walk.SetList(&m_datumList);
 	while(walk.IsValid()) {
 		Datum *dat = walk.GetObj();
 
-	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
 		if(strcmp("GovernmentsModified", walk.GetObj()->m_name)==0) m_hasGovernmentsModified=true;
-	#endif
+#endif
 
 		dat->ExportAccessor(outfile, 0, m_name);
 		walk.Next();
@@ -545,7 +535,6 @@ void RecordDescription::ExportOtherRecordIncludes(FILE *outfile)
 		if(walk.GetObj()->m_type == DATUM_RECORD) {
 			
 			
-			
 			fprintf(outfile, "#include \"%sRecord.h\"\n", walk.GetObj()->m_subType);
 		}
 		if(walk.GetObj()->m_type == DATUM_BIT_PAIR &&
@@ -564,10 +553,15 @@ void RecordDescription::ExportOtherRecordIncludes(FILE *outfile)
 
 void RecordDescription::ExportManagement(FILE *outfile)
 {
-	
-	fprintf(outfile, "%sRecord::Init()\n", m_name);
-	fprintf(outfile, "{\n");
 
+#if defined(ACTIVISION_ORIGINAL)
+	//Removed by Martin Gühmann
+	fprintf(outfile, "%sRecord::Init()\n", m_name);
+#else
+	//Added by Martin Gühmann function need a return type
+	fprintf(outfile, "void %sRecord::Init()\n", m_name);
+#endif
+	fprintf(outfile, "{\n");
 	
 	sint32 i;
 	for(i = 0; i  < ((m_numBits + 31)/ 32); i++) {
@@ -581,16 +575,15 @@ void RecordDescription::ExportManagement(FILE *outfile)
 		walk.Next();
 	}
 	
-	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	fprintf(outfile, "//GovMod Specific flag initialization\n");
 	if (m_hasGovernmentsModified)
 		fprintf(outfile, "    m_hasGovernmentsModified=true;\n\n");
 	else
 		fprintf(outfile, "    m_hasGovernmentsModified=false;\n\n");
-	#endif
+#endif
 
 	fprintf(outfile, "}\n\n");
-
 	
 	fprintf(outfile, "%sRecord::~%sRecord()\n", m_name, m_name);
 	fprintf(outfile, "{\n");
@@ -602,12 +595,10 @@ void RecordDescription::ExportManagement(FILE *outfile)
 		walk.Next();
 	}
 	fprintf(outfile, "}\n\n");
-
 	
 	fprintf(outfile, "void %sRecord::operator=(const %sRecord & rval)\n", m_name, m_name);
 	fprintf(outfile, "{\n");
 	fprintf(outfile, "\tint index = 0;\n");
-
 	
 	fprintf(outfile, "\tm_index = rval.m_index;\n");
 
@@ -657,7 +648,6 @@ void RecordDescription::ExportParser(FILE *outfile)
 	}
 
 	fprintf(outfile, "};\n\n");
-
 	
 	fprintf(outfile, "%sRecordAccessorInfo g_%sRecord_Accessors[] = \n", m_name, m_name);
 	fprintf(outfile, "{\n");
@@ -701,7 +691,6 @@ void RecordDescription::ExportParser(FILE *outfile)
 		walk.Next();
 	}
 	fprintf(outfile, "};\n\n");
-
 	
 	walk.SetList(&m_datumList);
 	sint32 numTokens = 0;
@@ -805,7 +794,6 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    if(!g_theStringDB->GetStringID(lex->GetTokenText(), m_name)) {\n");
 		
 		
-		
 		fprintf(outfile, "        g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());\n");
 		fprintf(outfile, "        if(!g_theStringDB->GetStringID(lex->GetTokenText(), m_name))\n");
 		fprintf(outfile, "            SetTextName(lex->GetTokenText());\n");
@@ -813,7 +801,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "\n");
 		fprintf(outfile, "    tok = lex->GetToken();\n");
 
-	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
 		if(m_hasGovernmentsModified) {
 		fprintf(outfile, "    // Start of GovMod Specific lexical analysis\n");
 		fprintf(outfile, "    if(tok == k_Token_Modified) {\n");
@@ -862,13 +850,10 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    return result;\n");
 		fprintf(outfile, "}\n\n");
 	}
-
 	
 	ExportResolver(outfile);
-
 	
 	ExportMemberClassParsers(outfile);
-
 	
 	ExportDataParsers(outfile);
 }
@@ -1019,7 +1004,6 @@ void RecordDescription::ExportMemberClassParsers(FILE *outfile)
 		walk.Next();
 	}
 }
-
 	
 void RecordDescription::ExportDataParsers(FILE *outfile)
 {

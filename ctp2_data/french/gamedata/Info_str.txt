@@ -151,11 +151,13 @@ ONE_OR_MORE_UNITS_WILL_CRASH 		"Votre {unit[1].name} risque de manquer de carbur
 UNIT_EXPELLED 				"Les {player[0].civ_name_plural} ont expulsé quelques-unes de nos unités de leur territoire."
 
 ## Warfare ##
-CITIES_CAPTURED_VICTIM 			"La ville de {city[0].name}  est tombée entre les mains des forces ennemies !"
+CITIES_CAPTURED_VICTIM 			"La ville de {city[0].name} est tombée entre les mains des forces ennemies !"
 CAPITAL_CITY_CAPTURED_VICTIM 		"Notre capitale, {city[0].name}, a été prise d'assaut par les forces ennemies !"
 CAPITAL_CITY_CAPTURED_ATTACKER 		"Quelle victoire ! Nous avons conquis la capitale des {player[0].civ_name_plural}."
 CIV_STARTED_WAR 			"Les {player[0].civ_name_plural} sont entrés en guerre avec les {player[1].civ_name_plural}."
-ADVANCE_FROM_CAPTURING_CITY 		"En pillant la ville de {city[0].name}, que vous venez de conquérir, vous découvrez le secret {advance[0].name#PREPOSITION}."
+#ADVANCE_FROM_CAPTURING_CITY 		"En pillant la ville de {city[0].name}, que vous venez de conquérir, vous découvrez le secret {advance[0].name#PREPOSITION}."
+ADVANCE_FROM_CAPTURING_CITY 		"{player[0].sir_cap}, while looting the recently conquered city of {city[0].name}, our troops took the secret of {advance[0].name}."
+ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, with horror we must find out, that the {player[1].civ_name_plural} were able not only to take our city of {city[0].name}, but also to steal us the secret of {advance[0].name}."
 
 ## Combat ##
 UNIT_VETERAN 				"Votre {unit[0].name} accède au statut de vétéran en raison de sa bravoure au combat."
@@ -166,6 +168,18 @@ AGE_TWO_ENTERED 			"Notre empire entre dans une phase d'expansion culturelle et 
 AGE_THREE_ENTERED 			"Nous avons assis notre connaissance de la planète. Nous venons d'entrer dans l'Ere moderne."
 AGE_FOUR_ENTERED 			"Les mystères de la vie sont sur le point de se révéler ; notre empire est au seuil d'un nouvel âge d'or de la science : l'Ere génétique."
 AGE_FIVE_ENTERED 			"Nous sommes bientôt à l'apogée de l'humanité. Nous sommes entrés dans l'Ere du diamant."
+
+## Age Change Messages of CityMod2 ##
+#AGE_ONE_ENTERED 			"Malgré sa jeunesse, notre empire évolue. Nous venons d'entrer dans l'Antiquité."
+#AGE_TWO_ENTERED			"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
+#AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
+#AGE_TWO_ENTERED 			"Notre empire entre dans une phase d'expansion culturelle et scientifique. Il s'agit de la Renaissance."
+#AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
+#AGE_SIX_ENTERED			"Nous avons assis notre connaissance de la planète. Nous venons d'entrer dans l'Ere moderne." 
+#AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
+#AGE_EIGHT_ENTERED			"Les mystères de la vie sont sur le point de se révéler ; notre empire est au seuil d'un nouvel âge d'or de la science : l'Ere génétique." 
+#AGE_NINE_ENTERED			"Nous sommes bientôt à l'apogée de l'humanité. Nous sommes entrés dans l'Ere du diamant." 
+#AGE_TEN_ENTERED			"The study of all technologies is final: Our empire awaits an unknown Future."
 
 ##                 ##
 ## Special Actions ##
