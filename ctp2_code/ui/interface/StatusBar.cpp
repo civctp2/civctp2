@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Fixed a memory leak by Martin Gühmann.
+// - None so far.
 //
 //----------------------------------------------------------------------------
 
@@ -89,10 +89,7 @@ m_statusBar(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock, "StatusBar"))
 
 StatusBar::~StatusBar()
 {
-#if !defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann
-	delete m_text;
-#endif
+
 	m_list.remove(this);
 
 }

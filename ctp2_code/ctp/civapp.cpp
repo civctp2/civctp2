@@ -67,6 +67,7 @@
 // - Used the new ColorSet option to select civilisation colors.
 // - Memory leak repaired: clean up the turn counter override information.
 // - Hot seat handling improved.
+// - Static member of StatusBar is now deleted correctly, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -1652,6 +1653,10 @@ sint32 CivApp::CleanupAppUI(void)
 	gameplayoptions_Cleanup();
 	soundscreen_Cleanup();
 
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann to clean up the status bar correctly.
+	StatusBar::CleanUp();
+#endif
 	
 	delete g_c3ui->TheMovieManager();
 	delete g_c3ui->TheKeyboard();
