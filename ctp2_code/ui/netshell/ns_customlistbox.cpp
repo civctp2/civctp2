@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Listbox for network game setup
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected strange access of non-static members from static data.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -750,15 +770,16 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 {
 	
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
-
+#if defined(ACTIVISION_ORIGINAL)
 	AUI_ERRCODE r;
-
+#endif
 	ns_Player *netShellObject = item->GetNetShellObject();
 	if ( !netShellObject )
 		netShellObject = ((ns_Item<NETFunc::Player, ns_Player> *)item->
 						  GetParent())->
 			GetNetShellObject();
 
+#if defined(ACTIVISION_ORIGINAL)
 	switch ( netShellObject->type( i ) )
 	{
 	case ns_Accessor<NETFunc::Player>::STRING:
@@ -766,8 +787,8 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 		{
 			
 			MBCHAR name[ dp_PNAMELEN + 1 ];
+ 
 			strncpy( name, (MBCHAR *)netShellObject->data( i ), dp_PNAMELEN );
-
 			
 			if ( !item->GetTextFont() )
 				item->TextReloadFont();
@@ -799,6 +820,44 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 		Assert( FALSE );
 		return AUI_ERRCODE_INVALIDPARAM;
 	}
+#else	// ACTIVISION_ORIGINAL
+	void *	dataPtr	= netShellObject->data(i);
+
+	if (dataPtr)
+	{
+		switch (netShellObject->type(i))
+		{
+		case ns_Accessor<T>::STRING:
+			{
+				MBCHAR name[dp_PNAMELEN + 1];
+				strncpy(name, * reinterpret_cast<MBCHAR const * *>(dataPtr), dp_PNAMELEN);
+			
+				if (!item->GetTextFont())
+				{
+					item->TextReloadFont();
+				}
+
+				item->GetTextFont()->TruncateString(name, item->Width());
+				item->SetTextBold(netShellObject->IsMine());
+				return item->SetText(name);
+			}
+
+		case ns_Accessor<T>::INT:
+			item->SetTextBold(netShellObject->IsMine());
+			return item->SetText
+				(itoa(* reinterpret_cast<sint32 const *>(dataPtr), scratch, 10));
+
+		case ns_Accessor<T>::ICON:
+			return item->SetIcon(* reinterpret_cast<MBCHAR * *>(dataPtr));
+
+		default:
+			break;
+		} // switch
+	}
+
+	Assert(FALSE);
+	return AUI_ERRCODE_INVALIDPARAM;
+#endif	// ACTIVISION_ORIGINAL
 }
 
 

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Listbox for network game setup
 //
 //----------------------------------------------------------------------------
 //
@@ -419,9 +419,9 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 {
 	
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
-
+#if defined(ACTIVISION_ORIGINAL)
 	AUI_ERRCODE r;
-
+#endif
 	NetShellT *netShellObject = item->GetNetShellObject();
 	if ( !netShellObject )
 		netShellObject = ((ns_Item<T,NetShellT> *)item->GetParent())->
@@ -442,6 +442,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 	if ( width )
 		item->Resize( width, item->Height() );
 
+#if defined(ACTIVISION_ORIGINAL)
 	switch ( netShellObject->type( i ) )
 	{
 	case ns_Accessor<T>::STRING:
@@ -482,6 +483,49 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 		Assert( FALSE );
 		return AUI_ERRCODE_INVALIDPARAM;
 	}
+#else	// ACTIVISION_ORIGINAL
+	void *	dataPtr	= netShellObject->data(i);
+
+	if (dataPtr)
+	{
+		switch (netShellObject->type(i))
+		{
+		case ns_Accessor<T>::STRING:
+			{
+				AUI_ERRCODE	const	r =
+					item->SetText(* reinterpret_cast<MBCHAR const * *>(dataPtr));
+			
+				MBCHAR name[256 + 1];
+				strncpy(name, item->GetText(), 256);
+			
+				if (!item->GetTextFont())
+				{
+					item->TextReloadFont();
+				}
+
+				item->GetTextFont()->TruncateString(name, item->Width());
+				item->SetText(name);
+				item->SetTextBold(netShellObject->IsMine());
+
+				return r;
+			}
+
+		case ns_Accessor<T>::INT:
+			item->SetTextBold(netShellObject->IsMine());
+			return item->SetText
+				(itoa(* reinterpret_cast<sint32 const *>(dataPtr), scratch, 10));
+
+		case ns_Accessor<T>::ICON:
+			return item->SetIcon(* reinterpret_cast<MBCHAR * *>(dataPtr));
+
+		default:
+			break;
+		} // switch
+	}
+
+	Assert(FALSE);
+	return AUI_ERRCODE_INVALIDPARAM;
+#endif	// ACTIVISION_ORIGINAL
 }
 
 
