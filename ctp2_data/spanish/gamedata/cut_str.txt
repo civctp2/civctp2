@@ -2,7 +2,7 @@
 #
 # Project      : Call To Power 2
 # File type    : String text file
-# Description  : Contains strings that were supposed to be cut (French)
+# Description  : Contains strings that were supposed to be cut (Spanish)
 #
 #----------------------------------------------------------------------------
 #

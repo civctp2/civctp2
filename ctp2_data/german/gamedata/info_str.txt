@@ -1,3 +1,29 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains main info meassage strings in German
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved TREATY_TO_EXPIRE message string from dip2_str.txt, was moved from
+#   cut_str.txt and updated by PFT before. - Mar. 25th 2005 Martin Gühmann
+# - Moved and updated the rest of the diplomacy messages from cut_str.txt 
+#   for later reimplementation. - Mar. 25th 2005 Martin Gühmann
+# 
+#----------------------------------------------------------------------------
+
 #### General Message Strings ####
 
 ## Instant Action Messages ##
@@ -29,6 +55,7 @@ IA_WAR_DISCONTENT_RISING 		"{player[0].leader_name#SIR_CAP}, weil sich so viele 
 
 
 ## Diplomacy Messages ##
+TREATY_TO_EXPIRE			"Unser Abkommen mit den {player[0].civ_name_plural#DAT} läuft bald ab."
 BROKE_TREATY 				"Die {player[0].civ_name_plural} haben gegen ein Abkommen mit den {player[1].civ_name_plural#DAT} verstoßen."
 NO_PIRACY_BROKEN 			"Die {player[0].civ_name_plural} wurden dabei erwischt, wie sie unsere Handelswege überfallen haben."
 ECOPACT_BROKEN 				"Die {player[0].civ_name_plural} haben gegen das mit uns geschlossene Umweltschutzabkommen verstoßen. Die Umweltverschmutzung ihrer Städte bedroht die ganze Welt!"
@@ -41,6 +68,20 @@ ALLIANCE_BROKEN 			"Die ehrlosen {player[1].civ_name_plural} haben uns angegriff
 ALLIANCE_BROKEN_BY_YOU 			"{player[0].leader_name#SIR_CAP}, wir haben entgegen unserer Bündnisvereinbarung mit den {player[1].civ_name_plural#DAT} gehandelt, so dass sie nun entsprechend schlecht auf uns zu sprechen sind! Auch andere Nationen werden diesen Vertrauensbruch nicht gutheißen!"
 ALLIANCE_BROKEN_BY_3RD 			"{player[0].leader_name#SIR_CAP}, wir haben erfahren, dass die {player[1].civ_name_plural} gegen ihre Allianz mit den {player[2].civ_name_plural} verstoßen haben."
 ALL_AGREEMENTS_BROKEN_BY_AI 		"{player[0].leader_name#SIR_CAP}, {player[1].leader_name} hat uns eine Nachricht zukommen lassen: Aufgrund äußerer Anlässe und Umstände {player[2].country_name#CAN_FRONT} die mit Ihnen getroffenen Vereinbarungen zukünftig nicht mehr einhalten. Betrachten Sie daher alle Abkommen und Bündnisse als null und nichtig."
+
+## Usful diplomacy messages that should be reimplemented ##
+CEASE_FIRE_BROKEN			"Die ehrlosen {player[0].civ_name_plural} haben gegen unser Friedensabkommen verstoßen, indem sie uns grundlos angreifen."
+LEAVE_OUR_LANDS_BROKEN			"Die {player[0].civ_name_plural} haben gegen unsere Vertreibungsvereinbarung verstoßen."
+LEAVE_OUR_LANDS_BROKEN_BY_YOU		"Ihr habt Euer Versprechen, Eure Truppen aus dem Territorium der {player[0].civ_name_plural} abzuziehen, gebrochen."
+REDUCE_POLLUTION_BROKEN			"Die {player[0].civ_name_plural} haben gegen unser Abkommen, die Umweltverschmutzung zu senken, verstoßen."
+REDUCE_POLLUTION_BROKEN_BY_YOU		"Ihr habt Eure Vereinbarung mit den {player[0].civ_name_plural#DAT}, die Umweltverschmutzung zu reduzieren, nicht eingehalten."
+STOP_TRADE_WITH_BROKEN			"Die unverfrorenen {player[0].civ_name_plural} haben ihre Zusage, die Handelsbeziehungen mit den {player[1].civ_name_plural#DAT} einzustellen, nicht eingehalten."
+STOP_TRADE_WITH_BROKEN_BY_YOU		"Ihr habt gegen Eure Vereinbarung mit den {player[0].civ_name_plural#DAT}, die Handelsbeziehungen mit den {player[1].civ_name_plural#DAT} einzustellen, verstoßen."
+END_POLLUTION_BROKEN			"Die {player[0].civ_name_plural} haben gegen unser Abkommen, der Umweltverschmutzung ein Ende zu bereiten, verstoßen."
+END_POLLUTION_BROKEN_BY_YOU		"Ihr habt gegen Euer Abkommen mit den {player[0].civ_name_plural#DAT}, der Umweltverschmutzung ein Ende zu bereiten, verstoßen."
+ATTACK_ENEMY_BROKEN			"Die {player[0].civ_name_plural} haben ihre Zusage, die {player[1].civ_name_plural} anzugreifen, nicht eingehalten."
+ATTACK_ENEMY_BROKEN_BY_YOU		"Ihr habt Eure Vereinbarung mit den {player[0].civ_name_plural#DAT}, die {player[1].civ_name_plural} anzugreifen, nicht eingehalten."
+
 
 ## Empire & City Related ##
 UNIT_COMPLETED 				"In {city[0].name} {unit[0].name#UNDEF_NEW_IS_READY} fertig gestellt."

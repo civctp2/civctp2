@@ -1,3 +1,29 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains main info meassage strings in Spanish
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved TREATY_TO_EXPIRE message string from dip2_str.txt, was moved from
+#   cut_str.txt and updated by PFT before. - Mar. 25th 2005 Martin Gühmann
+# - Moved and updated the rest of the diplomacy messages from cut_str.txt 
+#   for later reimplementation. - Mar. 25th 2005 Martin Gühmann
+# 
+#----------------------------------------------------------------------------
+
 #### General Message Strings ####
 
 ## Instant Action Messages ##
@@ -29,6 +55,7 @@ IA_WAR_DISCONTENT_RISING 		"{player[0].sir_cap}, tiene tantas unidades militares
 
 
 ## Diplomacy Messages ##
+TREATY_TO_EXPIRE			"Our treaty with the {player[0].civ_name_plural} is about to expire."
 BROKE_TREATY 				"Los {player[0].civ_name_plural} han roto un tratado con los {player[1].civ_name_plural}."
 NO_PIRACY_BROKEN 			"Los {player[0].civ_name_plural} han sido sorprendidos pirateando nuestras rutas comerciales."
 ECOPACT_BROKEN 				"Los {player[0].civ_name_plural} han roto el pacto de contaminación que tenían con nosotros. ¡Sus ciudades están destruyendo el mundo con tanta contaminación!"
@@ -41,6 +68,20 @@ ALLIANCE_BROKEN 			"Los {player[1].civ_name_plural} nos han atacado, ¡¡en una cl
 ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}, hemos violado nuestra alianza con {player[1].country_name}. ¡Están profundamente enfadados con nosotros!"
 ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}, nos han llegado noticias de que los {player[1].civ_name_plural} han roto su alianza con los {player[2].civ_name_plural}."
 ALL_AGREEMENTS_BROKEN_BY_AI 		"{player[1].leader_name} tiene un mensaje para nosotros, {player[0].sir}: Debido a ciertas fuerzas externas y circunstancias atenuantes, {player[2].country_name} ya no puede mantener sus acuerdos con ustedes. Considere todos sus pactos, tratados y acuerdos con nosotros revocados."
+
+## Usful diplomacy messages that should be reimplemented ##
+CEASE_FIRE_BROKEN			"The dishonorable {player[0].civ_name_plural} have violated our peace treaty agreement, attacking us without provocation."
+LEAVE_OUR_LANDS_BROKEN			"The {player[0].civ_name_plural} have violated the stop trespassing agreement."
+LEAVE_OUR_LANDS_BROKEN_BY_YOU		"You have violated your promise to pull your troops out of {player[0].civ_name_singular} territory."
+REDUCE_POLLUTION_BROKEN			"The{player[0].civ_name_plural} have violated the reduce pollution agreement."
+REDUCE_POLLUTION_BROKEN_BY_YOU		"You have violated your reduce pollution agreement with the {player[0].civ_name_plural}."
+STOP_TRADE_WITH_BROKEN			"The insolent {player[0].civ_name_plural} have violated their agreement to stop trading with the {player[1].civ_name_plural}."
+STOP_TRADE_WITH_BROKEN_BY_YOU		"You have violated your agreement with the {player[0].civ_name_plural} to stop trading with the {player[1].civ_name_plural}."
+END_POLLUTION_BROKEN			"The {player[0].civ_name_plural} have violated the pact to end pollution."
+END_POLLUTION_BROKEN_BY_YOU		"You have violated the pact to end pollution with the {player[0].civ_name_plural}."
+ATTACK_ENEMY_BROKEN			"The {player[0].civ_name_plural} have violated their agreement to attack the {player[1].civ_name_plural}."
+ATTACK_ENEMY_BROKEN_BY_YOU		"You have violated your agreement with the {player[0].civ_name_plural} to attack the {player[1].civ_name_plural}."
+
 
 ## Empire & City Related ##
 UNIT_COMPLETED 				"Un nuevo {unit[0].name} está listo en {city[0].name}."

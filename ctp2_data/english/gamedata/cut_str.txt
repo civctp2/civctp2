@@ -1,3 +1,27 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains strings that were supposed to be cut (English)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved diplomacy message strings to info_str.txt and updated them
+#   to CTP2 format. - Mar. 25th 2005 Martin Gühmann 
+# 
+#----------------------------------------------------------------------------
+
 ### Obsolete, irrelevant, inconsequential ###
 ### or otherwise needless strings that we ###
 ### should cut from the game with all speed. ###
@@ -34,20 +58,6 @@ IA_TILE_IMP_TIP     "Tile improvements must be placed within three tiles of a fr
 IA_SPECIAL_INVASION_TIP   "Only Marines may make amphibious assault attacks.  This message will appear once."
 IA_NOMOUNTAIN_UNIT_TIP   "Artillery, Tanks, and mounted units are unable to move through mountain tiles without a road, railroad, or maglev.  This message will appear once."
 IA_TRIREME_DEEPWATER_TIP  "This unit must stay within two tiles of a coastline.  This message will appear once."
-
-### Diplomacy Strings that should be cut ###
-
-LEAVE_OUR_LANDS_BROKEN "The [player.1.civ_name_plural] have violated the stop trespassing agreement."
-STOP_TRADE_WITH_BROKEN_BY_YOU "You have violated your agreement with the [player.1.civ_name_plural] to stop trading with the [player.2.civ_name_plural]."
-ATTACK_ENEMY_BROKEN_BY_YOU "You have violated your agreement with the [player.1.civ_name_plural] to attack the [player.2.civ_name_plural]."
-REDUCE_POLLUTION_BROKEN "The [player.1.civ_name_plural] have violated the reduce pollution agreement."
-END_POLLUTION_BROKEN "The [player.1.civ_name_plural] have violated the pact to end pollution."
-REDUCE_POLLUTION_BROKEN_BY_YOU "You have violated your reduce pollution agreement with the [player.1.civ_name_plural]."
-END_POLLUTION_BROKEN_BY_YOU "You have violated the pact to end pollution with the [player.1.civ_name_plural]."
-LEAVE_OUR_LANDS_BROKEN_BY_YOU "You have violated your promise to pull your troops out of [player.1.civ_name_singular] territory."
-STOP_TRADE_WITH_BROKEN "The insolent [player.1.ci_name_plural] have violated their agreement to stop trading with the [player.2.civ_name_plural]."
-ATTACK_ENEMY_BROKEN "The [player.1.civ_name_plural] have violated their agreement to attack the [player.2.civ_name_plural]."
-CEASE_FIRE_BROKEN "The dishonorable [player.1.civ_name_plural] have violated our peace treaty agreement, attacking us without provocation."
 
 ### Civ/City Related Strings that are no longer needed ###
 CITY_STARVING "{city[0].name} is not producing enough food to feed it's citizens"
