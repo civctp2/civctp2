@@ -57,6 +57,7 @@
 //   needs more food, so that the AI can build new food tile improvements, 
 //   by Martin Gühmann.
 // - Possible solution for bug #14 by Klaus Kaan
+// - Make city growth/starvation work for PBEM.
 //
 //----------------------------------------------------------------------------
 
@@ -1931,14 +1932,21 @@ sint32 CityData::GrowOrStarve()
 		m_partialPopulation += m_growth_rate;
 
 		if(m_partialPopulation >= k_PEOPLE_PER_POPULATION) {
+#if defined(ACTIVISION_ORIGINAL)
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
+#else
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
+#endif
 								   GEA_City, m_home_city.m_id,
 								   GEA_End);
-			
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
 			return TRUE;
 		} else if(m_partialPopulation < 0) {
+#if defined(ACTIVISION_ORIGINAL)
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillPop,
+#else
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillPop,
+#endif
 								   GEA_City, m_home_city.m_id,
 								   GEA_End);
 			
@@ -1951,7 +1959,11 @@ sint32 CityData::GrowOrStarve()
 		ResetStarvationTurns();
 
 		if(m_partialPopulation >= k_PEOPLE_PER_POPULATION) {
+#if defined(ACTIVISION_ORIGINAL)
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
+#else
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
+#endif
 								   GEA_City, m_home_city.m_id,
 								   GEA_End);
 			

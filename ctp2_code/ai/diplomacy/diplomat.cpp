@@ -34,6 +34,7 @@
 // - Add an isStealth parameter in CharacterizeArmy method - Calvitix
 // - Made Cleanup really clean up.
 // - Prevented crash on incorrect input (0 foreigners).
+// - Prevented crash on incorrect input (personality typo).
 //
 //----------------------------------------------------------------------------
 
@@ -549,7 +550,7 @@ void Diplomat::Cleanup()
 
 void Diplomat::Initialize()
 {
-
+#if defined(ACTIVISION_ORIGINAL)	// Possible uninitialised personality
 	if (m_playerId > -1)
 	{
 		
@@ -571,7 +572,28 @@ void Diplomat::Initialize()
 	{
 		m_personality = g_thePersonalityDB->Get(0);
 	}
+#else
+	if ((m_playerId >= 0) && (m_playerId < k_MAX_PLAYERS))
+	{
+		Player *		player	= g_player[m_playerId];
+		Civilisation *	civ		= player ? player->GetCivilisation() : NULL;
+		CivilisationRecord const *	
+						civRec	= civ ? civ->GetDBRec() : NULL;	
 
+		if (civRec)
+		{
+			SetPersonalityName(GENDER_MALE == civ->GetGender()
+							   ? civRec->GetMalePersonality()
+							   : civRec->GetFemalePersonality()
+							  );
+		}
+	}
+
+	if (!m_personality)
+	{
+		m_personality	= g_thePersonalityDB->Get(0);
+	}
+#endif
 	
 	m_motivations.clear();
 
