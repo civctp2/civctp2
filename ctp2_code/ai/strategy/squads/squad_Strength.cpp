@@ -38,6 +38,7 @@
 //   New methode take the sum of all strength (attack, defense, ranged,...)
 //   by Calvitix.
 // - Handled problem with invalid units.
+// - Added a test in > operator based on number of agent (to permit neversatisfied goals)
 // 
 //----------------------------------------------------------------------------
 
@@ -131,9 +132,9 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
     sint16 defenders_nb = (m_defenders - squad_strength.m_defenders);
     sint16 transport_nb = (m_transport - squad_strength.m_transport);
 
-    // the addition of all differences has to be greate than 0
+    // the addition of all differences has to be greater than 0
     // it is certainly better than only testing attack or defense
-    // but can be improved (for exemple, by applying a ratio on the greatter score
+    // but can be improved (for exemple, by applying a ratio on the greater score
     if ((attack_cpr + defense_cpr + ranged_cpr + value_cpr) > 0)
         greater = true;
 
@@ -141,6 +142,21 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
     // nb of transport too
     if (m_transport > 0 && transport_nb > 0)
         greater = true;
+
+    // test the nb of agent too
+    if (m_agent_count > 0 && squad_strength.m_agent_count > 0)
+	{
+        greater = greater || greater_agents;
+
+		//when only agent count is as criterion : (for special units for example)
+		if (m_attack_str + m_defense_str + m_ranged_str + m_value  == 0)
+		{
+			greater = greater_agents;
+		}
+
+	}
+
+
 #endif
 	return greater;
 }

@@ -37,7 +37,7 @@
 // - Added IsWounded method - Calvitix
 // - Made some methods const.
 // - Improved handling of space launched units.
-//
+// - Added a isstealth paramater in characterizeArmy method
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -7935,6 +7935,9 @@ Path *ArmyData::RemovePathedOrder()
 
 
 void ArmyData::CharacterizeArmy( bool & isspecial, 
+#if !defined (ACTIVISION_ORIGINAL)
+								 bool & isstealth,
+#endif
 								 sint32 & maxattack, 
 								 sint32 & maxdefense, 
 								 bool & cancapture,
@@ -7942,6 +7945,9 @@ void ArmyData::CharacterizeArmy( bool & isspecial,
 								 bool & canbombard) const
 {
 	isspecial = false;
+#if !defined (ACTIVISION_ORIGINAL)
+	isstealth = true;
+#endif
 	maxattack = 0;
 	maxdefense = 0;
 	cancapture = false;
@@ -7966,6 +7972,9 @@ void ArmyData::CharacterizeArmy( bool & isspecial,
 
 		isspecial |= ((rec->GetVisionClassStandard() == false) ||
 			(rec->GetAttack() <= 0));
+#if !defined (ACTIVISION_ORIGINAL)
+		isstealth &= ((rec->GetVisionClassStealth() == true));
+#endif
 		if (m_array[i].GetAttack() > maxattack)
 			maxattack = sint32(rec->GetAttack());
 		if (m_array[i].GetDefense() > maxdefense)

@@ -31,6 +31,7 @@
 // - Standardised min/max usage.
 // - Added method to check if there is a danger along the path (for civilian units). so units don't go near 
 //   enemy cities (and can't be bombarded). If no alternate path found, go on the first founded path.
+//   the method consider a danger if the owner is less than Neutral - Calvitix
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -41,6 +42,14 @@
 #include "DynArr.h"
 #include "Path.h"
 #include "UnitAstar.h"
+
+#if !defined (ACTIVISION_ORIGINAL)
+//Had to include thos files to determine if encounter army is a danger or not
+//(Danger only Ennemy and not Allies)
+#include "Diplomat.h"
+#include "AgreementMatrix.h"
+#include "ArmyData.h"
+#endif //ACTIVISION_ORIGINAL
 
 
 #include "Army.h"
@@ -68,11 +77,6 @@ extern World *g_theWorld;
 #include "A_Star_Heuristic_Cost.h"
 #include "terrainutil.h"
 
-#if !defined (ACTIVISION_ORIGINAL)
-
-#include "ArmyData.h"
-
-#endif //ACTIVISION_ORIGINAL
 
 DynamicArray<MapPoint> g_pixel; 
 
@@ -547,13 +551,13 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 			    	}
 				} 
 
-				if (m_check_dest && (k_MAX_ARMY_SIZE - dest_army->Num()) < m_nUnits) {   
+				if ((m_check_dest || (!m_check_dest && (pos != m_dest)))&& (k_MAX_ARMY_SIZE - dest_army->Num()) < m_nUnits) {   
 					cost = k_ASTAR_BIG; 
 					can_enter = FALSE;
 					entry = ASTAR_BLOCKED; 
                     return TRUE; 
 				}
-
+			}
         }
     }
 
@@ -572,7 +576,7 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 		}
 	}
 #endif
-	}
+	
     return FALSE; 
 }
 
@@ -1913,12 +1917,9 @@ BOOL UnitAstar::VerifyMem() const
 BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian)
 {
 
-	BOOL IsDanger = false;
-
 	Cell* c = g_theWorld->GetCell(myPos);
-	IsDanger = false;
-//    const Diplomat & diplomat = Diplomat::GetDiplomat(m_owner);
-//    ai::Regard baseRegard = NEUTRAL_REGARD;
+    Diplomat & diplomat = Diplomat::GetDiplomat(m_owner);
+    ai::Regard baseRegard = NEUTRAL_REGARD;
 
 	PLAYER_INDEX owner;
 
@@ -1926,6 +1927,7 @@ BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilia
 	MapPoint neighbor;
 	MapPoint start;
 	CellUnitList *the_army=NULL;
+	Unit the_city;
 	m_army->GetPos(start);
 
 
@@ -1940,43 +1942,48 @@ BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilia
 		
 	   //Check for hostile army
 	   the_army = g_theWorld->GetArmyPtr(neighbor);
-
-	   if (the_army) 
+	   the_city = g_theWorld->GetCity(neighbor);
+	   if (the_army || the_city.IsValid()) 
 	   {
-		    owner = the_army->GetOwner();
-//            baseRegard = diplomat.GetBaseRegard(owner);
-    		if (m_owner != owner)// && baseRegard == COLDWAR_REGARD)
+		    if (the_army) owner = the_army->GetOwner();
+		    else owner = the_city.GetOwner();
+
+            if (m_owner != owner)
+	   {
+				baseRegard = diplomat.GetBaseRegard(owner);
+				sint32 turnsatwar = AgreementMatrix::s_agreements.TurnsAtWar(m_owner, owner);
+    		    if (baseRegard <= NEUTRAL_REGARD || turnsatwar >= 0)
 			{
-				if (IsCivilian) //TO DO : Add conditions (in danger only if the_army not civilian
+					if (the_city.IsValid()) //TO DO : Add conditions (in danger only if the_army not civilian
 				{
-					IsDanger = true;
-					break;
+					/*	DPRINTF(k_DBG_MAPANALYSIS, 
+						("\t Danger for Pos (%3d,%3d) : City (%3d,%3d)\n",
+						myPos.x,
+						myPos.y,
+						neighbor.x,
+						neighbor.y));*/
+						return true;
 				}
 				
-				if (the_army->Num() > g_theWorld->GetArmyPtr(start)->Num())
+					if (the_army->Num() > g_theWorld->GetArmyPtr(start)->Num() || IsCivilian)
 				{
-					IsDanger = true;
-					break;
-				}
+					/*	DPRINTF(k_DBG_MAPANALYSIS, 
+						("\t Danger for Pos (%3d,%3d) : Bigger Army at (%3d,%3d)\n",
+						myPos.x,
+						myPos.y,
+						neighbor.x,
+						neighbor.y));
+						return true;					*/
 			}
  		}
-
-
-	   //Check for hostile city
-	   if(g_theWorld->HasCity(neighbor)) 
-	   { 
-		   
-		    owner = g_theWorld->GetCity(neighbor).GetOwner();
-//            baseRegard = diplomat.GetBaseRegard(owner);
-    		if (m_owner != owner)// && baseRegard == COLDWAR_REGARD)
-		   { 
-				IsDanger = true;
-				break;
 		   } 
-
 	   }
 	}
-	return IsDanger;
+    /*DPRINTF(k_DBG_MAPANALYSIS, 
+    ("\t No Danger for Pos (%3d,%3d)\n",
+	myPos.x,
+    myPos.y));*/
+	return false;
 }
 
 

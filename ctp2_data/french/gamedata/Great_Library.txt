@@ -2536,7 +2536,7 @@ Pour contrôler la distribution de nourriture au niveau de l'empire, le joueur pe
 [END]
 
 [CONCEPT_FUEL_GAMEPLAY]
-Toutes les unités aériennes disposent d'une certaine quantité de carburant. Lorsqu'elles se déplacent, celles-ci consomment une unité de carburant par case. Si une unité reste sur une case sans se déplacer, elle consomme une unité de carburant par tour. Pour éviter de s'écraser, les unités aériennes doivent atterrir sur une <L:DATABASE_CONCEPTS,CONCEPT_CITY>ville<e>, une <L:DATABASE_BUILDINGS,IMPROVE_AIR_BASE>base aérienne<e> ou un <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>porte-avions<e> avant que leurs réserves de carburant ne s'épuisent.
+Toutes les unités aériennes disposent d'une certaine quantité de carburant. Lorsqu'elles se déplacent, celles-ci consomment une unité de carburant par case. Si une unité reste sur une case sans se déplacer, elle consomme une unité de carburant par tour. Pour éviter de s'écraser, les unités aériennes doivent atterrir sur une <L:DATABASE_CONCEPTS,CONCEPT_CITY>ville<e>, une <L:DATABASE_BUILDINGS,IMPROVE_AIRPORT>base aérienne<e> ou un <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>porte-avions<e> avant que leurs réserves de carburant ne s'épuisent.
 [END]
 
 [CONCEPT_FUEL_HISTORICAL]
@@ -3030,14 +3030,14 @@ Le coton est cultivé dans les <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>prairies<e>.
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_ONE_GAMEPLAY]
-Les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e> et les <L:DATABASE_TERRAIN,TERRAIN_BEACH>plages<e> regorgent de crabes, convoités pour leur valeur nutritive.
+Les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e> et les <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>plages<e> regorgent de crabes, convoités pour leur valeur nutritive.
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_ONE_HISTORICAL]
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_GAMEPLAY]
-L'une des pierres les plus rares et les plus précieuses, le diamant, est extraite des <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>montagnes polaires<e> et des <L:DATABASE_TERRAIN,TERRAIN_VOLCANO>volcans<e>.
+L'une des pierres les plus rares et les plus précieuses, le diamant, est extraite des <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>montagnes polaires<e> et des <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>volcans<e>.
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_HISTORICAL]
@@ -3114,7 +3114,7 @@ Les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e> sont l'habit
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_GAMEPLAY]
-Extraits des <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>montagnes polaires<e> et des <L:DATABASE_TERRAIN,TERRAIN_VOLCANO>volcans<e>, les rubis sont l'une des pierres les plus précieuses au monde.
+Extraits des <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>montagnes polaires<e> et des <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>volcans sous-marins<e>, les rubis sont l'une des pierres les plus précieuses au monde.
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_HISTORICAL]
@@ -4222,7 +4222,7 @@ Coût :
 
 [IMPROVE_HOSPITAL_STATISTICS]
 Résultat :
-Réduit l'effet de la <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>surpopulation<e> de {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
+Réduit l'effet de <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>surpopulation<e>
 Accroît la taille maximale des villes
 [END]
 
@@ -5525,7 +5525,7 @@ Condition :
 [END]
 
 [TILEIMP_PORT_GAMEPLAY]
-Les ports assurent les liaisons maritimes entre les villes. Ils augmentent le rendement <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercial<e> de 15 unités par case. Ils ne peuvent être construits que sur des cases de <L:DATABASE_TERRAIN,TERRAIN_BEACH>plage<e>.
+Les ports assurent les liaisons maritimes entre les villes. Ils augmentent le rendement <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercial<e> de 15 unités par case. Ils ne peuvent être construits que sur des cases de <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>plage<e>.
 [END]
 
 [TILEIMP_PORT_HISTORICAL]
@@ -5713,7 +5713,7 @@ Condition :
 <L:DATABASE_ADVANCES,ADVANCE_NAVAL_AVIATION>Aviation navale<e>
 
 Capacités :
-Peut <L:DATABASE_CONCEPTS,CONCEPT_ BOARD_TRANSPORT> transporter<e> jusqu'à 5 unités aériennes
+Peut <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT> transporter<e> jusqu'à 5 unités aériennes
 [END]
 
 [UNIT_AIRCRAFT_CARRIER_STATISTICS]
@@ -5989,7 +5989,7 @@ Condition :
 <L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Construction navale<e>
 
 Capacités :
-Peut <L:DATABASE_CONCEPTS,CONCEPT_VETERANS>transporter<e> une unité terrestre
+Peut <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transporter<e> une unité terrestre
 [END]
 
 [UNIT_CATAMARAN_STATISTICS]
@@ -6008,7 +6008,7 @@ Peut <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transporter<e> une unité terrestre
 [END]
 
 [UNIT_CATAMARAN_GAMEPLAY]
-Le coracle est la première unité de <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transport<e> naval disponible dans le jeu. Indispensable à l'expansion de votre empire, il permet de transporter une unité terrestre. Ce navire ne convient cependant pas aux déplacements en <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>eau profonde<e> et ne doit pas s'éloigner des <L:DATABASE_TERRAIN,TERRAIN_BEACH>plages<e> et des <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e>.
+Le coracle est la première unité de <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transport<e> naval disponible dans le jeu. Indispensable à l'expansion de votre empire, il permet de transporter une unité terrestre. Ce navire ne convient cependant pas aux déplacements en <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>eau profonde<e> et ne doit pas s'éloigner des <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>plages<e> et des <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e>.
 [END]
 
 [UNIT_CATAMARAN_HISTORICAL]
@@ -6271,7 +6271,7 @@ Peut <L:DATABASE_ORDERS,ORDER_BOMBARD>bombarder<e>
 
 
 [UNIT_DESTROYER_GAMEPLAY]
-Le contre-torpilleur est une unité navale d'assaut polyvalente. Doté de capacités d'<L:DATABASE_ORDERS,ORDER_ATTACK>attaque<e>, d'<L:DATABASE_ORDERS,ORDER_PARADROP>attaque à distance<e> et de défense équivalentes, le contre-torpilleur peut <L:DATABASE_ORDERS,ORDER_BOMBARD>bombarder<e> des cibles terrestres et surtout fournir un <L:DATABASE_CONCEPTS,CONCEPT__ACTIVE_DEFENSE >support antiaérien<e> aux sorties navales, voire aux <L:DATABASE_CONCEPTS,CONCEPT_CITY>villes<e> de bord de mer.
+Le contre-torpilleur est une unité navale d'assaut polyvalente. Doté de capacités d'<L:DATABASE_ORDERS,ORDER_ATTACK>attaque<e>, d'<L:DATABASE_ORDERS,ORDER_PARADROP>attaque à distance<e> et de défense équivalentes, le contre-torpilleur peut <L:DATABASE_ORDERS,ORDER_BOMBARD>bombarder<e> des cibles terrestres et surtout fournir un <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE >support antiaérien<e> aux sorties navales, voire aux <L:DATABASE_CONCEPTS,CONCEPT_CITY>villes<e> de bord de mer.
 [END]
 
 [UNIT_DESTROYER_HISTORICAL]
@@ -6390,7 +6390,7 @@ Condition :
 <L:DATABASE_GOVERNMENTS,GOVERNMENT_ECOTOPIA>Ecotopie<e>
 
 Capacités :
-<L:DATABASE_ORDERS,ORDER_CONDUCT_HIT>Perpétrer des attentats<e>
+<L:DATABASE_ORDERS,ORDER_ASSASSINATE>Perpétrer des attentats<e>
 <L:DATABASE_ORDERS,ORDER_NANO_INFECT>Lancer une nano-attaque<e>
  [END]
 
@@ -6406,11 +6406,11 @@ Entretien : {UnitDB(UnitRecord[0]).ShieldHunger}
 [END]
 
 [UNIT_ECO_TERRORIST_SUMMARY]
-<L:DATABASE_ORDERS,ORDER_CONDUCT_HIT>Perpètre des attentats<e>
+<L:DATABASE_ORDERS,ORDER_ASSASSINATE>Perpètre des attentats<e>
 <L:DATABASE_ORDERS,ORDER_NANO_INFECT>Lance des nano-attaques<e>[END]
 
 [UNIT_ECO_TERRORIST_GAMEPLAY]
-L'écoterroriste est une <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>unité furtive<e> nano-technologique capable de toutes sortes d'<L:DATABASE_ORDERS,ORDER_ATTACK>attaques<e>. Il peut <L:DATABASE_ORDERS,ORDER_CONDUCT_HIT>perpétrer un attentat<e> contre une personnalité, ce qui suscite la panique et nuit au <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>bonheur<e> de la ville. Ses <L:DATABASE_ORDERS,ORDER_NANO_INFECT>nano-attaques<e> sont autrement plus dévastatrices : la bombe à nanites a en effet X % de chances de détruire tous les <L:DATABASE_CONCEPTS,CONCEPT_IMPROVEMENTS>aménagements<e> d'une ville. 
+L'écoterroriste est une <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>unité furtive<e> nano-technologique capable de toutes sortes d'<L:DATABASE_ORDERS,ORDER_ATTACK>attaques<e>. Il peut <L:DATABASE_ORDERS,ORDER_ASSASSINATE>perpétrer un attentat<e> contre une personnalité, ce qui suscite la panique et nuit au <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>bonheur<e> de la ville. Ses <L:DATABASE_ORDERS,ORDER_NANO_INFECT>nano-attaques<e> sont autrement plus dévastatrices : la bombe à nanites a en effet X % de chances de détruire tous les <L:DATABASE_CONCEPTS,CONCEPT_IMPROVEMENTS>aménagements<e> d'une ville. 
 [END]
 
 [UNIT_ECO_TERRORIST_HISTORICAL]
@@ -6619,7 +6619,7 @@ Condition :
 <L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
 
 Capacités : 
-Peut traverser les <L:DATABASE_TERRAIN,TERRAIN_BEACH>plages<e> et les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e>
+Peut traverser les <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>plages<e> et les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e>
 [END]
 
 [UNIT_FUSION_TANK_STATISTICS]
@@ -6634,11 +6634,11 @@ Entretien : {UnitDB(UnitRecord[0]).ShieldHunger}
 [END]
 
 [UNIT_FUSION_TANK_SUMMARY]
-Unité aéroportée capable de traverser les <L:DATABASE_TERRAIN,TERRAIN_BEACH>plages<e> et les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e>
+Unité aéroportée capable de traverser les <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>plages<e> et les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e>
 [END]
 
 [UNIT_FUSION_TANK_GAMEPLAY]
-Le char à fusion est l'unité d'assaut terrestre la plus polyvalente du jeu. Capable d'<L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>attaquer à distance<e>, il peut également circuler sur les <L:DATABASE_TERRAIN,TERRAIN_BEACH>plages<e> et dans les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e> et ainsi étendre sa portée. Le char à fusion est extrêmement mobile et peut couvrir une grande surface en un seul tour. 
+Le char à fusion est l'unité d'assaut terrestre la plus polyvalente du jeu. Capable d'<L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>attaquer à distance<e>, il peut également circuler sur les <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>plages<e> et dans les <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eaux peu profondes<e> et ainsi étendre sa portée. Le char à fusion est extrêmement mobile et peut couvrir une grande surface en un seul tour. 
 [END]
 
 [UNIT_FUSION_TANK_HISTORICAL]
@@ -6696,7 +6696,7 @@ Unité d'infanterie de l'ère du diamant
 [END]
 
 [UNIT_HOVER_INFANTRY_GAMEPLAY]
-L'infanterie aéroportée est l'unité d'infanterie la plus puissante du jeu. Elle négocie les terrains les plus dangereux avec aisance et lance des attaques proprement dévastatrices. Complément idéal des <L:DATABASE_UNITS,UNIT_FUSION_TANK>chars à fusion<e>, elle ne peut néanmoins se déplacer sur les cases de <L:DATABASE_TERRAIN,TERRAIN_BEACH>plage<e> et d'<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eau peu profonde<e>.
+L'infanterie aéroportée est l'unité d'infanterie la plus puissante du jeu. Elle négocie les terrains les plus dangereux avec aisance et lance des attaques proprement dévastatrices. Complément idéal des <L:DATABASE_UNITS,UNIT_FUSION_TANK>chars à fusion<e>, elle ne peut néanmoins se déplacer sur les cases de <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>plage<e> et d'<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>eau peu profonde<e>.
 [END]
 
 [UNIT_HOVER_INFANTRY_HISTORICAL]
@@ -9364,23 +9364,38 @@ A la fin du XXe siècle, la société occidentale est entrée dans l'ère des content
 
 [CONCEPT_CLASSIC_AGE_GAMEPLAY][END]
 
-[CONCEPT_CLASSIC_AGE_HISTORICAL]La période classique est celle de l'ascension de la République Romaine et plus particulièrement des cent dernières années de celle-ci. César, Salluste et Auguste ne sont que quelques uns des illustres représentants de cette ère. De nombreux documents écrits datant de cette période ont pu être préservés, ce qui différencie nettement cette époque des précédentes. Au cours de la République Romaine, ceux qui recevaient une éducation pouvaient accéder au pouvoir, la période classique est donc également le début de l'ère de l'éducation.[END]
+[CONCEPT_CLASSIC_AGE_HISTORICAL]
+La période classique est celle de l'ascension de la République Romaine et plus particulièrement des cent dernières années de celle-ci. César, Salluste et Auguste ne sont que quelques uns des illustres représentants de cette ère. De nombreux documents écrits datant de cette période ont pu être préservés, ce qui différencie nettement cette époque des précédentes. Au cours de la République Romaine, ceux qui recevaient une éducation pouvaient accéder au pouvoir, la période classique est donc également le début de l'ère de l'éducation.
+[END]
 
-[CONCEPT_COMPUTER_AGE_GAMEPLAY][END]
+[CONCEPT_COMPUTER_AGE_GAMEPLAY]
+[END]
 
-[CONCEPT_COMPUTER_AGE_HISTORICAL]L'avènement de l'ère de l'information a été rendu possible grâce à l'invention de l'ordinateur, au développement de l'informatique et à l'explosion des télécommunications. A l'image de la révolution industrielle, en simplifiant de nombreuses tâches autrefois fastidieuses et en permettant de multiplier les échanges d'informations, l'informatique et les nouvelles technologies ont bouleversé le monde des affaires, radicalement changé l'organisation des entreprises et des organismes chargés de gérer les divers aspects de la vie quotidienne et créé de nouveaux secteurs économiques.[END]
+[CONCEPT_COMPUTER_AGE_HISTORICAL]
+L'avènement de l'ère de l'information a été rendu possible grâce à l'invention de l'ordinateur, au développement de l'informatique et à l'explosion des télécommunications. A l'image de la révolution industrielle, en simplifiant de nombreuses tâches autrefois fastidieuses et en permettant de multiplier les échanges d'informations, l'informatique et les nouvelles technologies ont bouleversé le monde des affaires, radicalement changé l'organisation des entreprises et des organismes chargés de gérer les divers aspects de la vie quotidienne et créé de nouveaux secteurs économiques.
+[END]
 
-[CONCEPT_INDUSTRIAL_AGE_GAMEPLAY][END]
+[CONCEPT_INDUSTRIAL_AGE_GAMEPLAY]
+[END]
 
-[CONCEPT_INDUSTRIAL_AGE_HISTORICAL]La révolution industrielle a amené un nouvel ère de commerce, de découvertes et de production. La vapeur, les machines à vapeur et le développement du rail ont engendré une productivité et une croissance sans précédent. La révolution industrielle a radicalement transformé la société en créant des monopoles industriels et commerciaux ainsi qu'une nouvelle classe inférieure, celle des ouvriers, à laquelle devait bientôt appartenir la majeure partie de la population. Avec le développement exponentiel de la pollution pour corollaire, l'accélération du rythme de vie dépassa rapidement le seul cadre de la production pour atteindre l'individu lui-même. En lieu et place de la nature, la machine allait désormais dicter le rythme de vie de chacun.[END]
+[CONCEPT_INDUSTRIAL_AGE_HISTORICAL]
+La révolution industrielle a amené un nouvel ère de commerce, de découvertes et de production. La vapeur, les machines à vapeur et le développement du rail ont engendré une productivité et une croissance sans précédent. La révolution industrielle a radicalement transformé la société en créant des monopoles industriels et commerciaux ainsi qu'une nouvelle classe inférieure, celle des ouvriers, à laquelle devait bientôt appartenir la majeure partie de la population. Avec le développement exponentiel de la pollution pour corollaire, l'accélération du rythme de vie dépassa rapidement le seul cadre de la production pour atteindre l'individu lui-même. En lieu et place de la nature, la machine allait désormais dicter le rythme de vie de chacun.
+[END]
 
-[CONCEPT_FUTURE_AGE_GAMEPLAY][END]
+[CONCEPT_FUTURE_AGE_GAMEPLAY]
+[END]
 
-[CONCEPT_FUTURE_AGE_HISTORICAL]Le futur reste à découvrir et il nous est impossible de savoir ce qu'il nous réserve. Bon ou mauvais, personne ne peut en être sûr, y compris ceux qui croient le connaître. Alors que les diseurs de bonne aventure et autres prédicateurs auront toujours des clients crédules à leur disposition, la vraie nature de l'avenir demeurera toujours un mystère. Dans le futur, tout est possible ou rien ne l'est. C'est à nous de décider.[END]
 
-[CONCEPT_MEDIEVAL_AGE_GAMEPLAY][END]
+[CONCEPT_FUTURE_AGE_HISTORICAL]
+Le futur reste à découvrir et il nous est impossible de savoir ce qu'il nous réserve. Bon ou mauvais, personne ne peut en être sûr, y compris ceux qui croient le connaître. Alors que les diseurs de bonne aventure et autres prédicateurs auront toujours des clients crédules à leur disposition, la vraie nature de l'avenir demeurera toujours un mystère. Dans le futur, tout est possible ou rien ne l'est. C'est à nous de décider.
+[END]
 
-[CONCEPT_MEDIEVAL_AGE_HISTORICAL]Le moyen âge est le nom donné à la période située entre l'antiquité classique et la Renaissance. Cette ère résulte de la chute de l'empire romain au sein duquel la religion chrétienne promettait déjà au croyant le paradis après la mort et la fin des temps alors que les barbares semaient le désastre et la ruine aux quatre coins de l'empire. C'est donc naturellement que les masses ont tourné le dos au polythéisme pour embrasser une foi monothéiste promettant la rédemption et le salut éternel. Cette époque fut marquée par une grande religiosité et une profonde dévotion mais aussi par un fanatisme et une intolérance à la source d'un obscurantisme dévastateur. Les croisades trouvèrent ici le terreau fertile qui devait conduire à leur essor. Vers la fin du moyen âge, les flèches des cathédrales s'élançaient vers les cieux. La construction des ces bâtiments s'étalait parfois sur plusieurs siècles, à l'image de la cathédrale de Cologne dont l'édification exigea plus d'un demi-millénaire.[END]
+[CONCEPT_MEDIEVAL_AGE_GAMEPLAY]
+[END]
+
+[CONCEPT_MEDIEVAL_AGE_HISTORICAL]
+Le moyen âge est le nom donné à la période située entre l'antiquité classique et la Renaissance. Cette ère résulte de la chute de l'empire romain au sein duquel la religion chrétienne promettait déjà au croyant le paradis après la mort et la fin des temps alors que les barbares semaient le désastre et la ruine aux quatre coins de l'empire. C'est donc naturellement que les masses ont tourné le dos au polythéisme pour embrasser une foi monothéiste promettant la rédemption et le salut éternel. Cette époque fut marquée par une grande religiosité et une profonde dévotion mais aussi par un fanatisme et une intolérance à la source d'un obscurantisme dévastateur. Les croisades trouvèrent ici le terreau fertile qui devait conduire à leur essor. Vers la fin du moyen âge, les flèches des cathédrales s'élançaient vers les cieux. La construction des ces bâtiments s'étalait parfois sur plusieurs siècles, à l'image de la cathédrale de Cologne dont l'édification exigea plus d'un demi-millénaire.
+[END]
 
 
  

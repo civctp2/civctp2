@@ -189,8 +189,14 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	
 	
 	bool isspecial, cancapture, haszoc, canbombard;
+#if !defined (ACTIVISION_ORIGINAL)
+	bool isstealth;
+#endif
 	sint32 maxattack, maxdefense;
 	army->CharacterizeArmy( isspecial, 
+#if !defined (ACTIVISION_ORIGINAL)
+		isstealth, 
+#endif
 		maxattack, 
 		maxdefense, 
 		cancapture,

@@ -33,12 +33,17 @@
 // - Changed the task forces for goals (based on objectif's threat)
 // - Added a Debug Log (activated with k_dbg_scheduler_all) to see the goal priority computing
 //  (raw priority, plus value of each modifier)
-// - Added an Ungroup condition that can be associated to goals (as it exists RallyFirst)
+// - Added an Ungroup condition that can be associated to goals (as it exists RallyFirst) - Calvitix
 // - Added consitions for Treaspassing units : (to favorise their Retreat) - Calvitix
 // - Added conditions for wounded units : IsWoundedbonus (see goals.txt) - Calvitix
 // - Added conditions for territory owner and IsVisible (see goals.txt) - Calvitix
 // - Correct the determination of Empire Center and foreign Empire center - Calvitix
 // - Invalid goals if in territory with nontrespassing treaty - Calvitix
+// - Allow incursion permission to stealth units
+// - Rollback the determination of check_dest (problem with special units that couldn't find their path to goal anymore
+// - Added other conditions to determine the RETREAT goals (and set max of 2 units per city for that goals, hardcoded (to not depend on threat)
+// - Forbid to army with settlers to perform ATTACK or SEIGE goals
+// - Allow Units that are grouping to both move (if they are far enough)
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -475,6 +480,8 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 		else
 			m_current_needed_strength.Set_Attack(threat);
 #if !defined (ACTIVISION_ORIGINAL)
+        //to be sure that the global force of the army will be enough
+        // (not only a wounded unit for example)
 		m_current_needed_strength.Set_Value(threat);
 #endif
 
@@ -485,9 +492,16 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 	{
 
 #if !defined (ACTIVISION_ORIGINAL)
-		if (goal_record->GetTreaspassingArmyBonus() > 0) //Retreat Case
+        // tweak to obtain RETREAT Goal definition : TO DO - 'cleaner' method - Calvitix
+        // Set to 2 to so that units with no goals will retreat to the nearest city
+        // (I Prefer that method than the GARRISON troops, that are not able to leave the city)
+        // cities will be better defended if their is enough units, otherwise units will be affected
+        // to relevant goals
+		if (g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity() 
+		&& g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf() 
+		&& goal_record->GetTreaspassingArmyBonus() > 0) 
 		{
-			m_current_needed_strength.Set_Agent_Count(1);
+			m_current_needed_strength.Set_Agent_Count(2);
 		}
 		else
 		{
@@ -509,6 +523,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
         // added ranged units - Calvitix
         m_current_needed_strength.Set_Defense(threat * 2 / 3);
         m_current_needed_strength.Set_Ranged(threat / 3);
+        m_current_needed_strength.Set_Value(threat);        
 #endif //ACTIVISION_ORIGINAL
 
         //not used for the moment (only attack or defense strength is considerated
@@ -672,18 +687,20 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	{
 		
 		bool isspecial, cancapture, haszoc, canbombard;
+#if !defined (ACTIVISION_ORIGINAL)
+		bool isstealth;
+#endif
 		sint32 maxattack, maxdefense;
 		ctpagent_ptr->Get_Army()->CharacterizeArmy( isspecial, 
+#if !defined (ACTIVISION_ORIGINAL)
+			isstealth, 
+#endif
 			maxattack, 
 			maxdefense, 
 			cancapture,
 			haszoc,
 			canbombard);
-#if defined (ACTIVISION_ORIGINAL)
         if (!isspecial || maxattack > 0 || haszoc)
-#else
-		if (!isspecial || maxattack > 0 || maxdefense > 0|| haszoc)
-#endif
 		{
 			return BAD_UTILITY;
 		}
@@ -731,7 +748,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
     PLAYER_INDEX PosOwner = g_theWorld->GetOwner(armyPos);
 
     if (g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity() && g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf())
-	{
+	{   //For Defend or Retreat goals
 		if (ctpagent_ptr->Get_Army()->IsWounded()&& !ctpagent_ptr->Get_Army()->IsObsolete())
 		{
 				bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
@@ -744,7 +761,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	}
 	else if ((g_theGoalDB->Get(m_goal_type)->GetTargetOwnerColdEnemy() || g_theGoalDB->Get(m_goal_type)->GetTargetOwnerHotEnemy())
 		     && (g_theGoalDB->Get(m_goal_type)->GetTargetTypeAttackUnit() || g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()))
-	{
+	{   //For Attack goals (unit or city)
 		if (ctpagent_ptr->Get_Army()->IsWounded() && !ctpagent_ptr->Get_Army()->IsObsolete())
 		{
 				bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
@@ -753,7 +770,12 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		{
 			bonus+= g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
 		}
+		if (ctpagent_ptr->Get_Army()->CanSettle()) 
+		{   //if there is a settler in the army... 
+			bonus = BAD_UTILITY;
+	    }
 	}
+
 #endif //ACTIVISION_ORIGINAL
 
 #if defined _DEBUG  // Add a debug report of goal computing (raw priority and all modifiers)
@@ -924,6 +946,8 @@ Utility CTPGoal::Compute_Raw_Priority()
 	
 	if (target_owner > 0)
 #else
+    //alway compute a foreign center (even if the target if owned by the player
+    // otherwise it compute with coords (0,0) !!
 	MapPoint empire_center;
 	MapPoint foreign_empire_center;
 	empire_center = map.GetEmpireCenter(m_playerId);
@@ -1087,8 +1111,8 @@ Utility CTPGoal::Compute_Raw_Priority()
     #endif //_DEBUG
 
 
-
-	if (m_playerId == target_owner)
+	PLAYER_INDEX territoryOwner = g_theWorld->GetCell( target_pos )->GetOwner();
+	if (m_playerId == territoryOwner)
 	{
 		cell_value += goal_rec->GetInHomeTerritoryBonus();
 	}
@@ -1098,7 +1122,7 @@ Utility CTPGoal::Compute_Raw_Priority()
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
 
-	if (target_owner > 0)
+	if (m_playerId != territoryOwner && territoryOwner > 0)
 	{
 		cell_value += goal_rec->GetInEnemyTerritoryBonus();
 	}
@@ -1108,7 +1132,7 @@ Utility CTPGoal::Compute_Raw_Priority()
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
 
-	if (target_owner > 0)
+	if (territoryOwner == 0)
 	{
 		cell_value += goal_rec->GetNoOwnerTerritoryBonus();
 	}
@@ -1205,13 +1229,21 @@ GOAL_RESULT CTPGoal::Execute_Task()
 	bool rally_complete = true;
 #if defined (ACTIVISION_ORIGINAL) //Subtask_attribute
 	SUB_TASK_TYPE sub_task = SUB_TASK_GOAL;
+	if (Is_Satisfied() || Is_Execute_Incrementally())
 #else
 	Set_Sub_Task(SUB_TASK_GOAL);
+	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
+	sint32 cells;
+	//Add this condition to avoid that a 12 units army with SEIGE goal retreat at 1 tile near the city,
+	//because it has left 1 unit and has to group with another one.
+	//I Think it is better to go on an seige the city (if there is more than 2/3 left, if more than 8 units).
+	bool hastogowithoutgrouping = (goal_record->GetNeverSatisfied() && ctpagent_ptr->GetRounds(goto_pos,cells) <= 1)
+		                          && m_current_attacking_strength.Get_Agent_Count() > (2*k_MAX_ARMY_SIZE/3);
+    if (Is_Satisfied() || Is_Execute_Incrementally() || hastogowithoutgrouping) 
 #endif
-    if (Is_Satisfied() || Is_Execute_Incrementally())
     {
 	
-		if (g_theGoalDB->Get(m_goal_type)->GetRallyFirst()) 
+		if (goal_record->GetRallyFirst()) 
 		{
 			
 			if ( !RallyComplete() )
@@ -1232,10 +1264,13 @@ GOAL_RESULT CTPGoal::Execute_Task()
 				if ( RallyTroops() == false)
 					return GOAL_FAILED;
 
-				
+#if defined (ACTIVISION_ORIGINAL) //Subtask_attribute				
 				if (RallyComplete() == false)
 					return GOAL_IN_PROGRESS;
-#if !defined (ACTIVISION_ORIGINAL) //Subtask_attribute
+#else
+				//if hastogowithoutgrouping is true, execute the goal even if the rally is not complete
+				if (RallyComplete() == false)
+					return GOAL_IN_PROGRESS;
 				else
 				{
 					Set_Sub_Task(SUB_TASK_GOAL);
@@ -1243,8 +1278,13 @@ GOAL_RESULT CTPGoal::Execute_Task()
 #endif
 			}
 		}
-#if !defined (ACTIVISION_ORIGINAL) //Subtask_attribute
-		else if (g_theGoalDB->Get(m_goal_type)->GetUnGroupFirst()) 
+	
+	
+
+//Added an Ungroup method (sometimes, for example to explore, it is more interessant
+//to have a lot of small units rather than a huge army	
+#if !defined (ACTIVISION_ORIGINAL) 
+		else if (goal_record->GetUnGroupFirst()) 
 		{
 
 				Set_Sub_Task(SUB_TASK_UNGROUP);
@@ -1336,6 +1376,9 @@ bool CTPGoal::Get_Totally_Complete() const
 
 	
 	bool isspecial; 
+#if !defined (ACTIVISION_ORIGINAL)
+	bool isstealth = false;
+#endif		
 	sint32 maxattack;
 	bool iscivilian = false;
 	if ( goal_record->GetTargetTypeAttackUnit() ||
@@ -1350,8 +1393,11 @@ bool CTPGoal::Get_Totally_Complete() const
 		bool cancapture;
 		bool haszoc;
 		bool canbombard;
-		
+
 		m_target_army->CharacterizeArmy(isspecial, 
+#if !defined (ACTIVISION_ORIGINAL)
+			    isstealth,
+#endif		
 			maxattack, 
 			maxdefense, 
 			cancapture,
@@ -1449,15 +1495,19 @@ bool CTPGoal::Get_Totally_Complete() const
 				
 				regard_checked = true;
 			}
-			
-			if (!diplomat.IncursionPermission(target_owner) &&
+// If the goal is not executed by stealth units, forbid to execute it if their is no incursion permission			
+// (depending on alignement) - Calvitix
+#if !defined (ACTIVISION_ORIGINAL)			
+			if ((!diplomat.IncursionPermission(target_owner) &&
 				(diplomat.GetPersonality()->GetAlignmentGood() ||
 				 diplomat.GetPersonality()->GetAlignmentNeutral()))
+				 && !goal_record->GetSquadClassStealth())
 			{
                 AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
                 ("GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
 				return true;
 			}
+#endif
 
 
 			if ( diplomacy_match == false )
@@ -1663,13 +1713,17 @@ bool CTPGoal::Get_Totally_Complete() const
 			return true;
 	}
 
+
 #if !defined (ACTIVISION_ORIGINAL)
+    //Try to Steal Technology only if the other civ has more advances than player
+    //Otherwise, spy can do anithing else
 	if (order_record->GetUnitPretest_CanStealTechnology())
 	{
 		if (g_player[m_playerId]->NumAdvances() > g_player[target_owner]->NumAdvances())
 			return true;
 	}
 	
+    //Abolisionist has to go to cities with slaves
 	if (order_record->GetUnitPretest_CanInciteUprising() || order_record->GetUnitPretest_CanUndergroundRailway ())
 	{
 		if (m_target_city.GetCityData()->SlaveCount() <= 0)
@@ -2495,13 +2549,11 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 	
 	bool check_dest;
 	const GoalRecord * goal_rec = g_theGoalDB->Get(m_goal_type);
-#if defined (ACTIVISION_ORIGINAL) //Removed : Has to Always Check the Path (for enough room and danger...) - Calvitix
 	if (range > 0  || 
 		goal_rec->GetExecute()->GetTargetPretestAttackPosition() ||
 		(goal_rec->GetTargetTypeCity() && goal_rec->GetTargetOwnerSelf()))
 		check_dest = false; 
 	else
-#endif
 		check_dest = true;
 
     bool found = false;
@@ -2922,8 +2974,8 @@ bool CTPGoal::RallyTroops()
 					return false;
 			}
 #else // To avoid Groups to be blocked when an unit is in a city (problem with garrison -> not enough room)
-
-			if (!g_theWorld->GetCity(closest_agent_pos).IsValid())
+			sint32 cells;
+			if (!g_theWorld->GetCity(closest_agent_pos).IsValid() || ctpagent1_ptr->GetRounds(closest_agent_pos, cells) > 2)
 			{
        			if (GotoGoalTaskSolution(ctpagent1_ptr, closest_agent_pos, SUB_TASK_RALLY) == false)
 	       			return false;
@@ -2938,12 +2990,12 @@ bool CTPGoal::RallyTroops()
 				    g_graphicsOptions->AddTextToArmy(ctpagent1_ptr->Get_Army(), myString, magnitude);
                     delete[] myString;	
 			}
-			
-			if ( g_theWorld->GetCity(closest_agent_pos).IsValid())
-			{
 				MapPoint agent1_pos;
 				agent1_pos = ctpagent1_ptr->Get_Pos();
-				if (g_theWorld->GetCity(agent1_pos).IsValid()) //two units are in another town
+			if ( g_theWorld->GetCity(closest_agent_pos).IsValid() || closest_agent_ptr->GetRounds(agent1_pos, cells) > 2)
+			{
+				
+				if (g_theWorld->GetCity(agent1_pos).IsValid() && g_theWorld->GetCity(closest_agent_pos).IsValid()) //two units are in another town
 				{
 					MapPoint tempPos;
 					sint32 i;

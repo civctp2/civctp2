@@ -45,7 +45,10 @@ Goal {
         CanCaptureCity,
         CanBombard,
         Special,
-		CanTransport
+#not ACTIVISION_ORIGINAL 
+        Stealth,
+#end
+        CanTransport
 	}
 
 	Bits TargetType {

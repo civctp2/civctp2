@@ -31,7 +31,7 @@
 // - Corrected non-standard syntax and some compiler warnings.
 // - Prevented invalid strategies to be merged in. 
 // - Prevented crash on number of strategies wrap-around to negative. 
-//
+// - Add an isStealth parameter in CharacterizeArmy method - Calvitix
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -4643,6 +4643,9 @@ void Diplomat::UpdateAttributes()
 	sint32 num_armies;
 	MapPoint pos;
 	bool isspecial,cancapture,haszoc,canbombard;
+#if !defined (ACTIVISION_ORIGINAL)
+	bool isstealth;
+#endif
 	sint32 maxattack,maxdefense;
 	
 	Player *player_ptr = g_player[m_playerId];
@@ -4837,6 +4840,9 @@ void Diplomat::UpdateAttributes()
 				if (!is_threat)
 				{
 					army->CharacterizeArmy(isspecial,
+#if !defined (ACTIVISION_ORIGINAL)
+						isstealth,
+#endif
 						maxattack,
 						maxdefense,
 						cancapture,

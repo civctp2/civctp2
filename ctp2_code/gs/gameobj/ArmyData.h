@@ -37,6 +37,7 @@
 // - TestOrderAny added.
 // - CanTransport method added. - Calvitix
 // - Added IsWounded method - Calvitix
+// - Added a isstealth paramater in characterizeArmy method - Calvitix
 //
 //----------------------------------------------------------------------------
 
@@ -504,6 +505,9 @@ public:
 
 	
 	void CharacterizeArmy( bool & isspecial, 
+#if !defined (ACTIVISION_ORIGINAL)
+ 						   bool & isstealth,
+#endif
 		 			       sint32 & maxattack, 
 						   sint32 & maxdefense, 
 						   bool & cancapture,

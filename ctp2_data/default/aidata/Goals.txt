@@ -39,8 +39,8 @@ GOAL_DEFEND {
 
 GOAL_SEIGE {
   RallyFirst
-  NoRollBack  
-
+  NeverSatisfied
+  
   SquadClass:CanAttack
   SquadClass:CanDefend
   SquadClass:HasZoc
@@ -55,7 +55,7 @@ GOAL_SEIGE {
   EnemyValueBonus		 -250
   AlliedValueBonus		 1000
   PowerBonus			  500
-  DistanceToHomeBonus	  -10  
+  DistanceToHomeBonus	  -20  
   DistanceToEnemyBonus	   10  
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
@@ -77,7 +77,6 @@ GOAL_SEIGE {
 
 GOAL_ATTACK {
   RallyFirst
-  
 
   SquadClass:CanAttack
   SquadClass:CanCaptureCity
@@ -94,7 +93,7 @@ GOAL_ATTACK {
   PowerBonus			  500
   DistanceToHomeBonus	  -10
   DistanceToEnemyBonus	    0  
-  InHomeTerritoryBonus   1000
+  InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0 
   WoundedArmyBonus     -10000 
@@ -114,6 +113,7 @@ GOAL_ATTACK {
 
 GOAL_HARASS {
   RallyFirst
+  
 
   SquadClass:CanAttack
   SquadClass:CanBombard
@@ -256,12 +256,16 @@ GOAL_EXPLORE {
 GOAL_STEALTH_EXPLORE {
   UnGroupFirst
   
-  SquadClass:Special
+  SquadClass:Stealth 
+  SquadClass:CanExplore
   
   TargetType:Unexplored
   TargetOwner:HotEnemy
   TargetOwner:ColdEnemy
   TargetOwner:NoContact
+  TargetOwner:Ally
+  TargetOwner:Neutral
+
 
   Execute	ORDER_MOVE
   
@@ -292,12 +296,15 @@ GOAL_STEALTH_EXPLORE {
 
 
 GOAL_ENSLAVE_SETTLER {
-  NeedsEscort
+  UnGroupFirst
 
   SquadClass:Special
+  SquadClass:Stealth
 
   TargetType:SpecialUnit
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
+  TargetOwner:NoContact  
 
   Execute	ORDER_ENSLAVE_SETTLER
 
@@ -305,11 +312,11 @@ GOAL_ENSLAVE_SETTLER {
   EnemyValueBonus		  100
   AlliedValueBonus		  100
   PowerBonus			  100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
-  InHomeTerritoryBonus   1000
-  NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
+  DistanceToHomeBonus	   -1
+  DistanceToEnemyBonus	   -1 
+  InHomeTerritoryBonus  10000
+  NoOwnerTerritoryBonus  5000
+  InEnemyTerritoryBonus -1000 
   WoundedArmyBonus          0 
   NotVisibleBonus       -1000 
   ChokePointBonus		  100
@@ -328,6 +335,7 @@ GOAL_SLAVE_RAID {
   AvoidWatchfulCity
 
   SquadClass:Special
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -430,6 +438,7 @@ GOAL_CONVERT_CITY {
   AvoidWatchfulCity
 
   SquadClass:Special
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Neutral
@@ -465,6 +474,7 @@ GOAL_BIOTERROR_CITY {
   AvoidWatchfulCity
 
   SquadClass:Special
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -497,6 +507,7 @@ GOAL_NANOATTACK_CITY {
   AvoidWatchfulCity
 
   SquadClass:Special
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -767,6 +778,7 @@ GOAL_PLANT_NUKE {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -799,6 +811,7 @@ GOAL_PLANT_NUKE {
 
 GOAL_CREATE_PARK {
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -833,6 +846,7 @@ GOAL_SOOTHSAY {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -865,6 +879,7 @@ GOAL_ESTABLISH_EMBASSY {
   NeedsEscort
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Ally
@@ -899,6 +914,7 @@ GOAL_ESTABLISH_EMBASSY {
 
 GOAL_FRANCHISING {
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Neutral
@@ -933,6 +949,7 @@ GOAL_STEAL_TECHNOLOGY {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Neutral
@@ -967,6 +984,7 @@ GOAL_INVESTIGATE_CITY {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:ColdEnemy
@@ -1001,6 +1019,7 @@ GOAL_INCITE_REVOLUTION {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -1031,6 +1050,7 @@ GOAL_INCITE_REVOLUTION {
 
 GOAL_INJOIN {
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:ColdEnemy
@@ -1064,6 +1084,7 @@ GOAL_ASSASSINATE {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -1094,6 +1115,7 @@ GOAL_ASSASSINATE {
 
 GOAL_UNDERGROUND_RAILWAY {
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:ColdEnemy
@@ -1125,6 +1147,7 @@ GOAL_UNDERGROUND_RAILWAY {
 
 GOAL_NUKE_CITY {
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -1255,6 +1278,7 @@ GOAL_REFORM {
 
 GOAL_SUE_FRANCHISE {
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Self
@@ -1286,7 +1310,8 @@ GOAL_SUE_FRANCHISE {
 // Cause military units to pullback towards our city
 //
 GOAL_RETREAT {
-  UnGroupFirst    
+  UnGroupFirst
+  ExecuteIncrementally
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -1320,6 +1345,43 @@ GOAL_RETREAT {
   // no force matching to retreat
   ForceMatch:Special 
 }
+
+// Cause special units to pullback if no other goal
+//
+GOAL_RETREAT_SPECIAL {
+  UnGroupFirst
+  ExecuteIncrementally 
+
+  SquadClass:Special
+
+  TargetType:City
+  TargetOwner:Self
+
+  Execute	ORDER_MOVE
+ 
+  ThreatBonus			    0
+  EnemyValueBonus		    0
+  AlliedValueBonus		    0
+  PowerBonus			    0
+  DistanceToHomeBonus	    0
+  DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus  1000 
+  WoundedArmyBonus     100000 
+  NotVisibleBonus           0 
+  ChokePointBonus		    0
+  UnexploredBonus		    0
+  ObsoleteArmyBonus		    0
+  TreaspassingArmyBonus   100
+
+  ThreatenType:None
+  ThreatenBonus 0
+
+  // no force matching to retreat
+  ForceMatch:Special 
+}
+
 
 // Defend our endgame terrain improvements
 GOAL_PROTECT_ENDGAME
@@ -1398,6 +1460,7 @@ GOAL_ADVERTISING {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:ColdEnemy
@@ -1432,6 +1495,7 @@ GOAL_INCITE_UPRISING {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -1465,6 +1529,7 @@ GOAL_POISON_CITY {
   AvoidWatchfulCity
 
   SquadClass:Special
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -1497,6 +1562,7 @@ GOAL_THROW_PARTY {
   NeedsEscort
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Ally
@@ -1533,6 +1599,7 @@ GOAL_THROW_PARTY {
 
 GOAL_SUE {
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:SpecialUnit
   TargetOwner:Neutral
@@ -1568,6 +1635,7 @@ GOAL_INDULGENCE {
   AvoidWatchfulCity
 
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:ColdEnemy
@@ -1600,6 +1668,7 @@ GOAL_INDULGENCE {
 
 GOAL_FAITH_HEALING {
   SquadClass:Special  
+  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Neutral
