@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Repaired memory leak.
+// - Repaired multiple memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -2332,6 +2332,21 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 	return list;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SaveInfo::SaveInfo
+//
+// Description: Constructor 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 SaveInfo::SaveInfo()
 {
 	gameName[0] = '\0';
@@ -2378,6 +2393,23 @@ SaveInfo::SaveInfo()
 
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SaveInfo::SaveInfo
+//
+// Description: Copy constructor 
+//
+// Parameters : copyMe			: pointer to object to copy
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : * The pointer data in copyMe that has been allocated on the 
+//                heap is not shared, but freshly allocated. This enables
+//                both objects to be deallocated independently.
+//
+//----------------------------------------------------------------------------
 SaveInfo::SaveInfo(SaveInfo *copyMe)
 {
 	memcpy(this, copyMe, sizeof(SaveInfo));
@@ -2406,16 +2438,50 @@ SaveInfo::SaveInfo(SaveInfo *copyMe)
 		powerGraphData = new Pixel16[numPixels];
 		memcpy(powerGraphData, copyMe->powerGraphData, numBytes);
 	}
+
+#if !defined(ACTIVISION_ORIGINAL)	// 
+	if (copyMe->scenarioName)
+	{
+		size_t const	sizeHeap	= strlen(copyMe->scenarioName) + 1;
+		scenarioName				= new MBCHAR[sizeHeap];
+		memcpy(scenarioName, copyMe->scenarioName, sizeHeap);
+	}
+#endif
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SaveInfo::~SaveInfo
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : * powerGraphData, radarMapData, and scenarioName are allocated
+//                with new [] in GameFile::LoadBasicGameInfo and 
+//                GameFile::LoadBasicGameInfo.
+//
+//----------------------------------------------------------------------------
 SaveInfo::~SaveInfo()
 {
+#if defined(ACTIVISION_ORIGINAL)	// memory leak, they forgot scenarioName
 	if (radarMapData)
 		delete[] radarMapData;
 
 	if (powerGraphData)
 		delete[] powerGraphData;
+#else	// ACTIVISION_ORIGINAL
+	delete [] powerGraphData;
+	delete [] radarMapData;
+	delete [] scenarioName;
+#endif	// ACTIVISION_ORIGINAL
 }
+
+//----------------------------------------------------------------------------
 
 GameInfo::GameInfo()
 {

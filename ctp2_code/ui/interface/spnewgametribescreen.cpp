@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Single player tribe selection screen.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired memory leak.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3window.h"
@@ -472,9 +501,18 @@ AUI_ERRCODE spnewgametribescreen_Cleanup()
 	g_c3ui->RemoveWindow( g_spNewGameTribeScreen->Id() );
 	keypress_RemoveHandler(g_spNewGameTribeScreen);
 
+#if defined(ACTIVISION_ORIGINAL)	// memory leak, they forgot the container
 	for (sint32 i = 0;i < k_NUM_TRIBEBOXES;i++ ) {
 		mycleanup( s_checkBox[i] );
 	}
+#else
+	for (size_t i = 0; i < k_NUM_TRIBEBOXES; ++i)
+	{
+		delete s_checkBox[i];		// no NULLing: deleting the container next
+	}
+	delete [] s_checkBox;
+	s_checkBox	= NULL;
+#endif
 
 	mycleanup( s_group );
 
