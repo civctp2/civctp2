@@ -59,6 +59,7 @@
 // - Possible solution for bug #14 by Klaus Kaan
 // - Make city growth/starvation work for PBEM.
 // - Modified the bug #14 solution: use a new - debugger confirmed - message.
+// - Recompute the defense bonus when selling a building.
 //
 //----------------------------------------------------------------------------
 
@@ -4234,6 +4235,11 @@ void CityData::SellBuilding(sint32 which, BOOL byChoice)
 				g_player[m_owner]->m_capitol->m_id = 0;
 			}
 		}
+
+#if !defined(ACTIVISION_ORIGINAL)
+		// Selling a building may impact the defensive bonus 
+		buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+#endif
 
 		if(byChoice && g_network.IsHost()) {
 			g_network.Unblock(m_owner);

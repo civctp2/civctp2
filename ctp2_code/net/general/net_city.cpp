@@ -1,11 +1,33 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer city packet handling.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Activision patch reimplementation: propagate the defensive bonus.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -92,6 +114,9 @@ void NetCity::Packetize(uint8* buf, uint16& size)
 	PUSHLONG(cityData->m_workerFullUtilizationIndex);
 	PUSHLONG(cityData->m_workerPartialUtilizationIndex);
 
+#if !defined(ACTIVISION_ORIGINAL)
+	PUSHDOUBLE(cityData->m_defensiveBonus);
+#endif
 	PUSHBYTE((uint8)cityData->m_founder);
 
 	PacketizeResources(cityData->m_collectingResources, buf, size);
@@ -218,6 +243,9 @@ void NetCity::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		PLCHK(cityData->m_workerFullUtilizationIndex);
 		PLCHK(cityData->m_workerPartialUtilizationIndex);
 
+#if !defined(ACTIVISION_ORIGINAL)
+		PULLDOUBLE(cityData->m_defensiveBonus);
+#endif
 		PULLBYTE(cityData->m_founder);
 
 		UnpacketizeResources(cityData->m_collectingResources, buf, pos);
