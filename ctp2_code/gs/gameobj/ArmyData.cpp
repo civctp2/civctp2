@@ -33,7 +33,7 @@
 // - #02 TestOrderAny added.
 // - Ambiguous sqrt calls resolved.
 // - Standardised min/max usage.
-//
+// - Add CanTransport method
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -655,6 +655,23 @@ BOOL ArmyData::CanSettle() const
     }
     return FALSE;
 }
+
+#if !defined (ACTIVISION_ORIGINAL)
+BOOL ArmyData::CanTransport() const
+{
+    int i;
+    long cargo;
+
+    for (i = 0; i < m_nElements; i++)
+    {
+        cargo = m_array[i].AccessData()->GetCargoCapacity();
+        if (cargo > 0)
+            return TRUE;
+    }
+
+    return FALSE;
+}
+#endif
 
 BOOL ArmyData::CanPatrol() const
 {

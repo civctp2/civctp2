@@ -1,24 +1,50 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Main Ai File
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Add the same action to escort Transports as it exists for Settlers - Calvitix
+// - Allow army groups (size > 1) to escort settlers or transports - Calvitix
+//
+// - remove part of original code that are placed to optimize the Ai'times
+//   I don't think anyone cares about it now, with PC almost 2 or 3 times faster than when the game was released. - Calvitix
+//        - Place Tile Improvement every turn instead of every 5 turns - Calvitix
+//        - Add goals (Chokepoint - Goodyhuts) every turn (and not just when there isn't anymore (if one goal remain and isn't satisfied,
+//          it can freeze all the goals of this type) - Calvitix
+//        - Set a better explore resolution (an Explore goal every 2 tiles instead of every 5 tiles)
+//
+// - force to move the transport units out of city (12 units isn't much, and their is problems when a group want
+//   to enter in a transport that is in town(example : 5 - units group cannot enter transport
+//   if it is in a city and
+//   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
-
-
 #include "profileAi.h"
-
-
 #include "gfx_options.h"
-
-
 #include "Diplomat.h"
 #include "Scheduler.h"
 #include "CTPAgent.h"
@@ -40,8 +66,6 @@
 #include "EndGameObjectRecord.h"
 #include "DiffDB.h"
 #include "ProfileDB.h"
-
-
 #include "RegardEvent.h"
 #include "ReactEvent.h"
 #include "ProposalResponseEvent.h"
@@ -53,8 +77,6 @@
 #include "ResponseEvent.h"
 #include "SStateEvent.h"
 #include "DStateEvent.h"
-
-
 #include "player.h"
 #include "NewTurnCount.h"
 #include "CTPDatabase.h"
@@ -70,10 +92,7 @@
 #include "Cell.h"
 #include "Gold.h"
 #include "RandGen.h"
-
 #include "GameSettings.h"
-
-
 #include "SelItem.h"
 #include "network.h"
 #include "Director.h"
@@ -86,20 +105,14 @@ extern Director *g_director;
 extern RadarMap		*g_radarMap;
 #include "MoveFlags.h"
 #include <list>
-
 enum READINESS_LEVEL;
 
 
 #include "Events.h"
 #include "GameEventUser.h"
 #include "Unit.h"
-
-
 #include "SettleMap.h"
-
 #include "CtpAiDebug.h"
-
-
 #include "TurnCnt.h"
 //Added by Martin Gühmann to access the ConstDB
 #include "ConstDB.h"
@@ -321,19 +334,6 @@ STDEHANDLER(CtpAi_GrowCityEvent)
 
 	if(!args->GetCity(0, city)) 
 		return GEV_HD_Continue;
-
-	
-
-
-
-
-
-
-
-
-
-
-
 
 	
 	SettleMap::s_settleMap.HandleCityGrowth(city);
@@ -1476,8 +1476,10 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	t2 = GetTickCount();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
 
-	
+               // update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
+#if defined (ACTIVISION_ORIGINAL)
 	if (round % 5 == 0)
+#endif
 	{
 		
 		t1 = GetTickCount();
@@ -1511,7 +1513,10 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	else
 	{
 		
+// update : Place Tile Improvement every turn instead of every 5 turns (Calvitix)
+#if defined (ACTIVISION_ORIGINAL)
 		if (round % 5 == 0)
+#endif
 		{
 			t1 = GetTickCount();
 			DPRINTF(k_DBG_AI, ("\n\n"));
@@ -1583,16 +1588,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	}
 	
 
-
-
-
-
-
-
-
-
-
-	
 	AddSettleTargets(player);
 
 	
@@ -1620,6 +1615,84 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	}
 }
 
+#if !defined (ACTIVISION_ORIGINAL)
+void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId)
+{
+
+   Player * player_ptr = g_player[playerId];
+   Assert(player_ptr != NULL);
+   sint32 num_cities = player_ptr->m_all_cities->Num();
+
+   CellUnitList garrison;
+   Unit city;
+   Army move_army;
+   sint8 min_size;
+
+   sint32 i, j;
+   MapPoint pos, dest;
+   for (i = 0; i < num_cities; i++)
+   {
+       city = player_ptr->m_all_cities->Access(i);
+       Assert(g_theUnitPool->IsValid(city));
+       Assert(city->GetCityData() != NULL);
+
+       pos = city.RetPos();
+       g_theWorld->GetArmy(pos, garrison);
+       {
+
+           move_army.m_id = 0x0;
+           min_size = k_MAX_ARMY_SIZE;
+           for (j = 0; j < garrison.Num(); j++)
+           {
+               if (garrison.Access(j).GetArmy().GetData()->CanTransport() && garrison.Access(j).GetArmy().Num() < min_size)
+               {
+                   min_size = garrison.Access(j).GetArmy().Num();
+                   move_army = garrison.Access(j).GetArmy();
+               }
+           }
+
+
+           if (move_army.m_id == 0x0)
+           {
+               //         Assert(0);
+               continue;
+           }
+
+
+           bool found = false;
+           for (j = 0; j < NOWHERE && !found; j++)
+           {
+               if (pos.GetNeighborPosition((WORLD_DIRECTION)j, dest))
+               {
+                   if (move_army.CanEnter(dest))
+                   {
+
+                       Path * tmpPath = new Path;
+                       tmpPath->SetStart(pos);
+                       tmpPath->AddDir((WORLD_DIRECTION)j);
+                       tmpPath->Start(pos);
+
+
+                       g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveOrder,
+                       GEA_Army, move_army,
+                       GEA_Path, tmpPath,
+                       GEA_MapPoint, dest,
+                       GEA_Int, FALSE,
+                       GEA_End);
+
+   #ifdef _DEBUG
+                       uint8 magnitude = 255.0;
+                       g_graphicsOptions->AddTextToArmy(move_army, "Transport OutOfCity", magnitude);
+   #endif
+                       found = true;
+                   }
+               }
+           }
+
+       }
+   }
+}
+#endif //ACTIVISION_ORIGINAL
 
 void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 {
@@ -1729,7 +1802,11 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 	if (Player::IsThisPlayerARobot(player))
 	{
 		
-		CtpAi::MakeRoomForNewUnits(player);
+   	   CtpAi::MakeRoomForNewUnits(player);
+       #if !defined (ACTIVISION_ORIGINAL)
+       //to execute the new action :
+       CtpAi::MoveOutofCityTransportUnits(player);
+       #endif //ACTIVISION_ORIGINAL
 	}
 	
 	Governor::GetGovernor(player).FillEmptyBuildQueues();
@@ -1866,13 +1943,6 @@ void CtpAi::Resize()
 	sint32 resolution = 10;
 
 	
-	
-	
-	
-	
-	
-
-	
 	MapAnalysis::GetMapAnalysis().Resize( s_maxPlayers,
 										  (sint16) g_theWorld->GetWidth(), 
 										  (sint16) g_theWorld->GetHeight(), 
@@ -1881,9 +1951,6 @@ void CtpAi::Resize()
 	Governor::ResizeAll(s_maxPlayers);
 
 	
-	
-	
-
 }
 
 
@@ -1914,10 +1981,12 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 
 	CTPGoal_ptr goal_ptr;
 
-	
+#if defined (ACTIVISION_ORIGINAL)
 	sint16 explore_res = 5;
-
-	
+#else
+    // Set a better explore resolution (every 2 tiles)
+    sint16 explore_res = 2;
+#endif
 	GOAL_TYPE goal_type;
 	const StrategyRecord::GoalElement *goal_element_ptr;
 	sint16 goal_element;
@@ -1933,15 +2002,12 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 			if ( !g_theGoalDB->Get(goal_type)->GetTargetTypeUnexplored() )
 				continue;
 
-			
-			
-			
-			
-
-			
+//Add goals every turn (and not just when there isn't anymore (if one goal remain and isn't satisfied,
+// it can freeze all the goals of this type) - Calvitix
+#if defined (ACTIVISION_ORIGINAL)
 			if (scheduler.CountGoalsOfType(goal_type) > 0)
 				continue;
-
+#endif //ACTIVISION_ORIGINAL
 			
 			
 			if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
@@ -2091,9 +2157,12 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 				 !g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
 				 continue;
 
-			
+                   //Add goals every turn (and not just when there isn't anymore (if one goal remain and isn't satisfied,
+                   // it can freeze all the goals of this type) - Calvitix
+           #if defined (ACTIVISION_ORIGINAL)
 			if (scheduler.CountGoalsOfType(goal_type) > 0)
 				continue;
+           #endif //ACTIVISION_ORIGINAL
 
 			
 			if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
@@ -2131,7 +2200,6 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 }
 
 	
-
 void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 {
 	sint32 committed_units = 0;
@@ -2212,8 +2280,6 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		army = player_ptr->m_all_armies->Access(i);
 		Assert( g_theArmyPool->IsValid(army) );
 
-		
-		
 		if (army->NumOrders() > 0)
 			continue;
 
@@ -2779,87 +2845,5 @@ void CtpAi::SellRandomBuildings(const Unit & city, const double chance)
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

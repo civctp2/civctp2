@@ -1,13 +1,35 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Main Ai File
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - force to move the transport units out of city (12 units isn't much, and their is problems when a group want
+//   to enter in a transport that is in town(example : 5 - units group cannot enter transport
+//   if it is in a city and
+//   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
+//----------------------------------------------------------------------------
 
 
 #pragma once
@@ -25,12 +47,6 @@ public:
 	
 	static PLAYER_INDEX s_maxPlayers;
 
-	
-	
-	
-
-	
-	
 	
 	static void Cleanup();
 
@@ -53,14 +69,14 @@ public:
 	static void AddPlayer(const PLAYER_INDEX newPlayerId);
 
 	
-	
-	
-
-	
 	static void BeginTurn(const PLAYER_INDEX player);
 
 	
 	static void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId);
+
+#if !defined (ACTIVISION_ORIGINAL)
+    static void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId);
+#endif
 
 	
 	static void FinishBeginTurn(const PLAYER_INDEX player);

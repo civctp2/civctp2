@@ -1,11 +1,42 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Squad strength object 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Changed the > operator (used by Goal::IsSatisfied method)
+//   Original method only test attack or defense param.
+//   New methode take the sum of all strength (attack, defense, ranged,...) - Calvitix
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -14,22 +45,7 @@
 #include "CellUnitList.h"
 #include "World.h"
 #include "UnitRecord.h"
-
-
 #include "DebugAssert.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
 Squad_Strength::Squad_Strength()
 {
 	Init();
@@ -44,7 +60,6 @@ Squad_Strength::Squad_Strength(const Squad_Strength &squad_strength)
 
 Squad_Strength::~Squad_Strength()
 {
-	
 } 
 
 
@@ -96,11 +111,33 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 	bool greater_value = (m_value > squad_strength.m_value);
 	bool greater_agents = (m_agent_count > squad_strength.m_agent_count);
 
+#if !defined (ACTIVISION_ORIGINAL) // Calvitix
+    greater = false;
 	
-	
-	
-	
+    // Attack difference
+    sint16 attack_cpr = (m_attack_str - squad_strength.m_attack_str);
+    // Defense difference
+    sint16 defense_cpr = (m_defense_str - squad_strength.m_defense_str);
+    // ranged difference
+    sint16 ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
+    // value difference
+    sint16 value_cpr = (m_value - squad_strength.m_value);
 
+    sint16 ranged_nb = (m_ranged - squad_strength.m_ranged);
+    sint16 defenders_nb = (m_defenders - squad_strength.m_defenders);
+    sint16 transport_nb = (m_transport - squad_strength.m_transport);
+
+    // the addition of all differences has to be greate than 0
+    // it is certainly better than only testing attack or defense
+    // but can be improved (for exemple, by applying a ratio on the greatter score
+    if ((attack_cpr + defense_cpr + ranged_cpr + value_cpr) > 0)
+        greater = true;
+
+    // To be compatible with the original operator, test the
+    // nb of transport too
+    if (m_transport > 0 && transport_nb > 0)
+        greater = true;
+#endif
 	return greater;
 }
 
@@ -180,8 +217,6 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 
 	m_agent_count = army->Num();
 
-	
-	
 	
 	army->ComputeStrength(m_defense_str,	
 						  m_attack_str,		

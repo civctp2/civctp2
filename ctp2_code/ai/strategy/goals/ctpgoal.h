@@ -1,3 +1,38 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  : declarations for the Goal class
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Set the SUB_TASK_TYPE global - Calvitix
+// - Added an SUB_TASK_TYPE attribute (used for armytext display) - Calvitix
+// - Added methods to Ungroup armies - Calvitix
+//----------------------------------------------------------------------------
 
 
 #pragma once
@@ -14,9 +49,23 @@ typedef CTPGoal * CTPGoal_ptr;
 typedef CTPAgent * CTPAgent_ptr;
 
 
+//Now the enum is global and can be accessed by other objects
+    #if !defined (ACTIVISION_ORIGINAL)
+enum SUB_TASK_TYPE
+{
+    SUB_TASK_GOAL,
+    SUB_TASK_RALLY,
+    SUB_TASK_TRANSPORT_TO_BOARD,
+    SUB_TASK_CARGO_TO_BOARD,
+    SUB_TASK_AIRLIFT,
+	SUB_TASK_UNGROUP
+};
+
+
+    #endif
 class CTPGoal : public Goal
 {
-
+    #if defined (ACTIVISION_ORIGINAL)
     enum SUB_TASK_TYPE
     {
         SUB_TASK_GOAL,
@@ -26,6 +75,7 @@ class CTPGoal : public Goal
         SUB_TASK_AIRLIFT
     };
 
+    #endif
 public:
 
 
@@ -60,6 +110,13 @@ public:
 
 
     const Army & Get_Target_Army() const;
+
+    #if !defined (ACTIVISION_ORIGINAL) //add m_sub_task attribute
+    const SUB_TASK_TYPE & Get_Sub_Task() const;
+
+    void Set_Sub_Task(const SUB_TASK_TYPE & sub_task);
+
+    #endif //ACTIVISION_ORIGINAL
 
 
     const Unit & Get_Target_City() const;
@@ -123,7 +180,6 @@ protected:
     sint8 & garrison_count,
     double & garrison_strength) const;
 
-
     bool FindPathToTask(CTPAgent_ptr the_army,
     const MapPoint & goal_pos,
     const SUB_TASK_TYPE & sub_task,
@@ -153,6 +209,12 @@ protected:
 
     bool RallyTroops();
 
+#if !defined (ACTIVISION_ORIGINAL)
+
+    bool UnGroupTroops();
+
+    bool UnGroupComplete() const;
+#endif
 
     bool Goal_Too_Expensive() const;
 
@@ -171,6 +233,10 @@ protected:
     Unit m_target_city;
 
     Army m_target_army;
+
+    #if !defined (ACTIVISION_ORIGINAL) //add m_sub_task attribute
+    SUB_TASK_TYPE m_sub_task;
+    #endif
 };
 
 

@@ -1,26 +1,76 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Plan object (association Goal <-> squad
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Changed the > and < operator  (to change the Sort method see Sort_Matches) - Calvitix
+//   instead of only looking for the matching value, the new operator first
+//   compare the Goal Raw-priority. If it is equal, then compare matching value.
+//   it has the advantage to give the possibility for high priority goal that demands many units
+//   to be considered. 
+//   For example :  3 units available, 
+//                  3 Goals : 
+//                  GOAL1  priority 50000, demands 2 units to be satisfied
+//                  GOAL2  priority 40000, demands 1 unit to be satisfied
+//                  GOAL3  priority 30000, demands 1 unit to be satisfied
+//
+//      the matches are : 
+//
+//                  GOAL1 <-> UNIT1   52000
+//                  GOAL1 <-> UNIT2   49000
+//                  GOAL1 <-> UNIT3   47000
+//                  GOAL2 <-> UNIT1   54000
+//                  GOAL2 <-> UNIT2   53000
+//                  GOAL2 <-> UNIT3   52000
+//                  GOAL3 <-> UNIT1   52000
+//                  GOAL3 <-> UNIT2   53000
+//                  GOAL3 <-> UNIT3   55000
+//
+//      Original Sort_matches and agent committing : 
+//
+//              GOAL3  ->  UNIT3   --> OK
+//              GOAL2  ->  UNIT1   --> OK     
+//              GOAL1  ->  FAILED to Satisfy, and it has the greatest priority !!!!
+//
+//
+//      with new sort_matches (implied with thos operator changes)
+//
+//              GOAL1  -> UNIT1
+//                     -> UNIT2    --> OK
+//              GOAL2  -> UNIT3    --> OK
+//              GOAL3  -> FAILED to Satisfy       
+//
+//  - Added an method that determines if the matches can be reevaluated)
+//   (ie the agent can be rollbacked and eventually be used for another goal)
+      (for the moment, always return true)
+//----------------------------------------------------------------------------
+
 #include "c3.h"
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma warning(disable: 4786)
-
-
 #include "profileAi.h"
-
-
 #include "DebugAssert.h"
-
 #include "Plan.h"
 #include "Squad.h"
 #include "Goal.h"
@@ -31,16 +81,9 @@
 #include "Scheduler.h"
 #include "Squad_Strength.h"
 #include "CtpAiDebug.h"
-
-
 #include "ArmyPool.h"
 
 using namespace std;
-
-
-
-
-
 
 
 Plan::Plan()
@@ -49,46 +92,16 @@ Plan::Plan()
 }
 
 
-
-
-
-
-
-
-
-
-
-
 Plan::~Plan()
 { 
 	
 } 
 
 
-
-
-
-	
-
-
-
-
-
-
 Plan::Plan(const Plan &plan)
 {
 	*this = plan;
 }
-
-
-
-
-
-	
-
-
-
-
 
 
 Plan& Plan::operator= (const Plan &plan)
@@ -107,40 +120,55 @@ Plan& Plan::operator= (const Plan &plan)
 }
 
 
-
-
-
-
-
-
-
-
-
-
 bool Plan::operator< (const Plan &plan) const
 {
+    #if defined (ACTIVISION_ORIGINAL)
 	return (m_matching_value < plan.m_matching_value);
+    #else   
+    //instead of only looking for the matching value, the new operator first
+    //compare the Goal Raw-priority. If it is equal, then compare matching value.
+    //it has the advantage to give the possibility for high priority goal that demands many units
+    //to be considered.
+    CTPGoal_ptr myGoal = static_cast < CTPGoal_ptr > (this->Get_Goal());
+    CTPGoal_ptr planGoal = static_cast < CTPGoal_ptr > (plan.Get_Goal());
+    bool isLower = false;
+    if (myGoal->Get_Raw_Priority() < planGoal->Get_Raw_Priority())
+    {
+        isLower = true;
+    }
+    else if (myGoal->Get_Raw_Priority() == planGoal->Get_Raw_Priority())
+    {
+        isLower = (m_matching_value < plan.m_matching_value);
+    }
+    return isLower;
+    #endif
 }
-
-
-
-
-
-
-
-
-
-
 
 
 bool Plan::operator> (const Plan &plan) const
 {
+    #if defined (ACTIVISION_ORIGINAL)
 	return (m_matching_value > plan.m_matching_value);
+    #else   
+    //instead of only looking for the matching value, the new operator first
+    //compare the Goal Raw-priority. If it is equal, then compare matching value.
+    //it has the advantage to give the possibility for high priority goal that demands many units
+    //to be considered.
+    CTPGoal_ptr myGoal = static_cast < CTPGoal_ptr > (this->Get_Goal());
+    CTPGoal_ptr planGoal = static_cast < CTPGoal_ptr > (plan.Get_Goal());
+    bool isGreater = false;
+    if (myGoal->Get_Raw_Priority() > planGoal->Get_Raw_Priority())
+    {
+        isGreater = true;
+
+    }
+    else if (myGoal->Get_Raw_Priority() == planGoal->Get_Raw_Priority())
+    {
+        isGreater = (m_matching_value > plan.m_matching_value);
+    }
+    return isGreater;
+    #endif
 }
-
-
-
-
 
 
 bool Plan::operator== (const Plan &plan) const
@@ -156,11 +184,6 @@ bool Plan::operator!= (const Plan &plan) const
 }
 
 
-
-
-
-
-
 void Plan::Init()
 {
 	m_the_squad = NULL;
@@ -168,16 +191,6 @@ void Plan::Init()
 	m_matching_value = 0;
 	m_matches.resize(0);
 }
-
-
-
-
-
-
-
-
-
-
 
 
 GOAL_TYPE Plan::Get_Goal_Type() const
@@ -193,26 +206,11 @@ GOAL_TYPE Plan::Get_Goal_Type() const
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 bool Plan::Plan_Is_Needed_And_Valid() const
 { 
 	
     if (NULL == m_the_squad) 
         return false; 
-
-	
-    
-    
 
 	
     if (m_the_squad->Get_Num_Agents() < 1) 
@@ -223,22 +221,8 @@ bool Plan::Plan_Is_Needed_And_Valid() const
         return false; 
 
 	
-    
-    
-
     return true; 
 }	
-
-
-
-
-
-
-
-
-
-
-
 
 
 Utility Plan::Compute_Matching_Value()
@@ -290,32 +274,10 @@ Utility Plan::Compute_Matching_Value()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 Utility Plan::Get_Matching_Value() const
 {
 	return m_matching_value;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 void Plan::Set_Goal(Goal_ptr goal)
@@ -347,32 +309,10 @@ void Plan::Set_Goal(Goal_ptr goal)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 Goal_ptr Plan::Get_Goal() const
 {
 	return m_the_goal;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 void Plan::Set_Squad(Squad_ptr squad)
@@ -419,36 +359,10 @@ void Plan::Set_Squad(Squad_ptr squad)
 }
 
 
-
-
-
-
-
-
-
-
-
-
 Squad_ptr Plan::Get_Squad() const
 {
 	return m_the_squad;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 sint16 Plan::Commit_Agents()
@@ -477,15 +391,6 @@ sint16 Plan::Commit_Agents()
 	bool log_agent = false;
 
 	
-	
-	
-
-	
-	
-
-	
-    
-    
     for (match_iter = m_matches.begin();
 		 match_iter != m_matches.end() && !m_the_goal->Is_Satisfied();
 		 match_iter++) {
@@ -594,21 +499,6 @@ sint16 Plan::Commit_Agents()
 }
 
 
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
 GOAL_RESULT Plan::Execute_Task()
 {
 	Assert(m_the_goal);
@@ -617,19 +507,6 @@ GOAL_RESULT Plan::Execute_Task()
 	}
     return GOAL_FAILED;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 sint16 Plan::Rollback_Invalid_Agents()
@@ -682,10 +559,6 @@ sint16 Plan::Rollback_Invalid_Agents()
 }
 
 
-
-
-
-
 bool Plan::Commited_Agents_Need_Orders() const
 {
 	Assert(m_the_goal);
@@ -717,14 +590,25 @@ bool Plan::Commited_Agents_Need_Orders() const
 	return false;
 }
 
+#if !defined (ACTIVISION_ORIGINAL)
+bool Plan::CanMatchesBeReevaluated() const
+{
+    Assert(m_the_goal);
+    Assert(m_the_squad);
 
 
+    return true;
 
-
-
-
-
-
+    // To be tested : conditions when the agents don't have to be rollbacked - Calvitix
+    //    CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr)m_the_goal;
+    //    if (ctpgoal_ptr->Get_Sub_Task() == SUB_TASK_GOAL ||
+    //(ctpgoal_ptr->Get_Sub_Task() != SUB_TASK_GOAL && ctpgoal_ptr->GetAgentsMinDistance() > 5)) //parameter
+    //{
+    //return true;
+    //    }
+    //return false;
+}
+#endif
 
 sint16 Plan::Rollback_All_Agents()
 {
@@ -747,12 +631,6 @@ sint16 Plan::Rollback_All_Agents()
 
 		if (match_iter->committed)
 			{
-				
-				
-				
-				
-				
-
 				
 				
 				ctpgoal_ptr->Rollback_Agent(match_iter->goal_index);
@@ -784,22 +662,6 @@ sint16 Plan::Rollback_All_Agents()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 sint16 Plan::Move_All_Agents(Squad_ptr new_squad)
 {
 	Assert(m_the_goal);
@@ -828,9 +690,6 @@ sint16 Plan::Move_All_Agents(Squad_ptr new_squad)
 					Assert(SHOW_RICHARD_THIS_ASSERT_082900);
 				}
 #endif _DEBUG
-
-				
-				
 				agent_ptr = ctpgoal_ptr->Rollback_Agent((*match_iter).goal_index);
 
                 
@@ -851,10 +710,6 @@ sint16 Plan::Move_All_Agents(Squad_ptr new_squad)
                 
                 match_iter++; 
 
-                
-                
-                
-                
                 
 				m_the_squad->Remove_Agent(agent_iter, false);
 
@@ -878,18 +733,6 @@ sint16 Plan::Move_All_Agents(Squad_ptr new_squad)
 
 	return rollback_agents;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 bool Plan::Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter)

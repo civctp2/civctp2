@@ -7,6 +7,7 @@ Goal {
     Bit RemoveWhenComplete
 	Bit RallyFirst				// armies need to rally before going to target
 	Bit NoTransport			    // do not use transports to satisfy this goal
+    Bit UnGroupFirst
 
 	Bits SquadClass {
 		CanExplore,

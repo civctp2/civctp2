@@ -1,14 +1,38 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  : the Goal motherclass
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Consider a goal with max armies engaged as satisfied - the limitation of army size : 
+//     we cannot form a group with more armies than the max (can disturb the goals with RallyFirst() - Calvitix
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -26,7 +50,9 @@ const Utility Goal::MAX_UTILITY = 99999999;
 
 
 #include "DebugAssert.h"
-
+#if !defined (ACTIVISION_ORIGINAL)
+#include "gstypes.h"
+#endif
 #ifdef _DEBUG_SCHEDULER
 #include "CTPAgent.h"
 #include "ArmyData.h"
@@ -173,9 +199,12 @@ bool Goal::Is_Satisfied() const
 		return false;
 
 	
-	
-	
-	
+#if !defined (ACTIVISION_ORIGINAL) 
+// limitation of army size : cannot form a group with more
+// armies than the max (without that limitation, it can disturb the goals with RallyFirst() - Calvitix
+    if (m_agents.size() == k_MAX_ARMY_SIZE)
+        return true;
+#endif //ACTIVISION_ORIGINAL
 
 	if (m_current_needed_strength > m_current_attacking_strength)
 		return false;
@@ -393,36 +422,6 @@ GOAL_RESULT Goal::Execute_Task()
     
     if (Is_Satisfied() || Is_Execute_Incrementally())
     {
-        
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return GOAL_IN_PROGRESS;	
     }
 
@@ -464,27 +463,6 @@ bool Goal::Can_Be_Executed() const
 {
 	
 
-	
-    
-    
-
-	
-	
-    
-
-	
-	
-    
-
-	
-    
-    
-
-	
-    
-    
-
-	
 	bool can_be_executed = false;
 	Agent_List::const_iterator agent_iter;
 	for (agent_iter = m_agents.begin(); agent_iter != m_agents.end();agent_iter++) 

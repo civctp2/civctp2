@@ -30,6 +30,8 @@
 // Modifications from the original Activision code:
 //
 // - Marked MS version specific code.
+// - Add the CanMatchesBeReevaluated (implemented for the moment always at true)
+//   so, the matches are rollbacked and changed every turn... - Calvitix
 //
 //----------------------------------------------------------------------------
  
@@ -71,68 +73,21 @@ public:
     typedef std::list<Agent_Match> Agent_Match_List;
 
 
-  	
-  	
-  	
-  	
-  	
-
-	
-	
-	
-	
-	
-
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
     Plan();
 
-	
-	
-	
-	
-	
 	
     virtual ~Plan(); 
 
 	
-	
-	
-	
-	
-	
 	Plan(const Plan &plan);
-	
-	
-	
-	
-	
 	
 	
 	Plan& operator= (const Plan &plan);
 
 	
-	
-	
-	
-	
-	
 	bool operator< (const Plan &plan) const;
 
     
-	
-	
-	
-	
-	
 	bool operator> (const Plan &plan) const;
 
 	
@@ -142,155 +97,56 @@ public:
 	bool operator!= (const Plan &plan) const;
 
 
-	
-	
-	
-	
-	
-	
 	void Init();
 
     
-
-	
-	
-	
-	
-	
-	
 	GOAL_TYPE Get_Goal_Type() const;
 
-	
-	
-	
-	
-	
 	
     bool Plan_Is_Needed_And_Valid() const;
 
 	
-	
-	
-	
-	
-	
     Utility Compute_Matching_Value();
 
 
-	
-	
-	
-	
-	
-	
     Utility Get_Matching_Value() const;
 
-	
-	
-	
-	
-	
 	
     void Set_Goal(Goal_ptr goal);
 
 	
-	
-	
-	
-	
-	
     Goal_ptr Get_Goal() const;
 
-	
-	
-	
-	
-	
 	
     void Set_Squad(Squad_ptr squad);
 
 	
-	
-	
-	
-	
-	
     Squad_ptr Get_Squad() const;
 
 	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	sint16 Commit_Agents();
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
     GOAL_RESULT Execute_Task();
 
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	sint16 Rollback_Invalid_Agents();
 
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	sint16 Rollback_All_Agents();
 
  	
  	bool Commited_Agents_Need_Orders() const;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+#if !defined (ACTIVISION_ORIGINAL)
+    ///
+    /// Check if the agents can be rollbacked to eventually receive other priority 
+    /// (for example : not if they are too close to their goals and grouping)
+    ///
+    bool CanMatchesBeReevaluated() const;
+#endif
 	sint16 Move_All_Agents(Squad_ptr new_squad);
 
-	
-	
-	
-	
-	
-    
-    
 	
     bool Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter);
 
@@ -299,12 +155,6 @@ public:
 
 
 protected:
-
-	
-	
-	
-	
-	
 
 	
 	Utility m_matching_value;
@@ -319,14 +169,7 @@ protected:
 	Agent_Match_List m_matches;
 
 	
-	
-	
-	
-	
 };
-
-
-
 
 
 #endif __PLAN_H__

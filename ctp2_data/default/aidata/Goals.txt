@@ -5,7 +5,7 @@
 
 GOAL_DEFEND {
   ExecuteIncrementally
-  NoTransport
+  UnGroupFirst
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -36,6 +36,7 @@ GOAL_SEIGE {
   RallyFirst
 
   SquadClass:CanAttack
+  SquadClass:CanBombard
   SquadClass:CanDefend
   SquadClass:HasZoc
   SquadClass:CanCaptureCity
@@ -68,6 +69,7 @@ GOAL_ATTACK {
   RallyFirst
 
   SquadClass:CanAttack
+  SquadClass:CanCaptureCity
 
   TargetType:AttackUnit
   TargetType:SpecialUnit
@@ -98,6 +100,7 @@ GOAL_HARASS {
   RallyFirst
 
   SquadClass:CanAttack
+  SquadClass:CanBombard
 
   TargetType:AttackUnit
   TargetType:SpecialUnit
@@ -181,12 +184,15 @@ GOAL_SETTLE_SEA {
 }
 
 GOAL_EXPLORE {
+  UnGroupFirst
+  
   SquadClass:CanExplore
 
   TargetType:Unexplored
   TargetOwner:Self
   TargetOwner:Ally
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
   TargetOwner:NoContact
 
   Execute	ORDER_MOVE
@@ -197,7 +203,7 @@ GOAL_EXPLORE {
   EnemyValueBonus		    0
   AlliedValueBonus		    0
   PowerBonus			    0
-  DistanceToHomeBonus     -25
+  DistanceToHomeBonus     -50
   DistanceToEnemyBonus     -5
   ChokePointBonus		  100
   UnexploredBonus		  100
@@ -238,6 +244,7 @@ GOAL_ENSLAVE_SETTLER {
 }
 
 GOAL_SLAVE_RAID {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -266,7 +273,6 @@ GOAL_SLAVE_RAID {
 }
 
 GOAL_CHOKEPOINT {
-  NoTransport  
   RallyFirst
 
   SquadClass:CanAttack
@@ -410,7 +416,10 @@ GOAL_NANOATTACK_CITY {
 } 
 
 GOAL_HARASS_CITY {
+  RallyFirst
+
   SquadClass:CanAttack
+  SquadClass:CanBombard
   SquadClass:CanDefend
   SquadClass:HasZoc
   SquadClass:CanCaptureCity
@@ -472,6 +481,7 @@ GOAL_BOMBARD {
 
 GOAL_EXPEL {
   SquadClass:CanAttack
+  SquadClass:CanDefend
 
   TargetType:SpecialUnit
   TargetOwner:Neutral
@@ -699,6 +709,7 @@ GOAL_ESTABLISH_EMBASSY {
   TargetType:City
   TargetOwner:Ally
   TargetOwner:Neutral
+  TargetOwner:ColdEnemy
   TargetOwner:NoContact
 
   Execute	ORDER_ESTABLISH_EMBASSY
@@ -1050,8 +1061,8 @@ GOAL_SUE_FRANCHISE {
 // Cause military units to pullback towards our city
 //
 GOAL_RETREAT {
+  UnGroupFirst  
   ExecuteIncrementally
-  NeverSatisfied
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -1072,7 +1083,7 @@ GOAL_RETREAT {
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		    0
-  TreaspassingArmyBonus 10000
+  TreaspassingArmyBonus     0
 
   ThreatenType:None
   ThreatenBonus 0

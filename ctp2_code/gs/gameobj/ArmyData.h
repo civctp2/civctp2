@@ -35,6 +35,7 @@
 // Modifications from the original Activision code:
 //
 // - TestOrderAny added.
+// - CanTransport method added. - Calvitix
 //
 //----------------------------------------------------------------------------
 
@@ -167,6 +168,9 @@ public:
     BOOL CanSettle(const MapPoint &pos) const;
     BOOL CanSettle() const;
 
+#if !defined (ACTIVISION_ORIGINAL)
+    BOOL CanTransport() const;
+#endif
 
 	BOOL IsAsleep() const;
 	void Sleep();

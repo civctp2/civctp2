@@ -159,12 +159,12 @@ STRATEGY_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   4 }
+    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   7 }
     GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   355000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
-    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec   2 }
+    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  25  MaxExec  12 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -178,7 +178,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_PIRATE              Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_COUNTER_STEALTH     Priority   390000  MaxEval   0  MaxExec 0.1 PerCity }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
@@ -198,7 +198,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_RETREAT             Priority  -300000  MaxEval   1  MaxExec   1 PerCity}
     GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority   450000  MaxEval  20  MaxExec   5 }
     GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority   460000  MaxEval  30  MaxExec  15 }
-    GoalElement { Goal GOAL_ADVERTISING		Priority   450000  MaxEval   7  MaxExec   5 } //P1 added
+    GoalElement { Goal GOAL_ADVERTISING		    Priority   450000  MaxEval   7  MaxExec   5 } //P1 added
     GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
     GoalElement { Goal GOAL_POISON_CITY         Priority   460000  MaxEval   7  MaxExec   5 } //P1 added
     GoalElement { Goal GOAL_THROW_PARTY         Priority   440000  MaxEval   5  MaxExec   3 } //MG added
@@ -275,8 +275,8 @@ STRATEGY_DEFAULT {
 
 	// minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  0
+    RangedGarrisonCount     0
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -405,7 +405,7 @@ STRATEGY_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.5
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    1.2
     }
 
     Defensive {
@@ -421,7 +421,7 @@ STRATEGY_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 
     StealthAttack {
@@ -437,7 +437,7 @@ STRATEGY_DEFAULT {
         DefenseMatch  0.8
         RangedMatch   0.0
         BombardMatch  1.1
-        ValueMatch    0.0
+        ValueMatch    0.6
     }
 
     Special {
@@ -568,8 +568,8 @@ STRATEGY_BARBARIAN {
 
 	// minimum number of units to keep in cities as a garrison
 	OffensiveGarrisonCount 0
-	DefensiveGarrisonCount 1
-	RangedGarrisonCount 1
+	DefensiveGarrisonCount 0
+	RangedGarrisonCount 0
 
 	// For each city with an empty build queue, build from first sequence that applies
 
@@ -637,7 +637,7 @@ STRATEGY_SEIGE {
     AirTransportUnitsCount 4
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec   2 }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority   600000  MaxEval   3  MaxExec   1 }
     GoalElement { Goal GOAL_ATTACK              Priority   600000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_HARASS              Priority   595000  MaxEval  25  MaxExec  10 }
@@ -671,7 +671,7 @@ STRATEGY_SEIGE {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    0.5
+        ValueMatch    1.3
     }
 
     Harass {
@@ -679,7 +679,7 @@ STRATEGY_SEIGE {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.3
+        ValueMatch    1.1
     }
 }
 
@@ -714,11 +714,11 @@ STRATEGY_ATTACK {
     AirTransportUnitsCount 4
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval   5  MaxExec   2 }
-    GoalElement { Goal GOAL_ATTACK              Priority   605000  MaxEval  25  MaxExec  15 }
-    GoalElement { Goal GOAL_HARASS              Priority   600000  MaxEval  25  MaxExec  15 }
-    GoalElement { Goal GOAL_BOMBARD             Priority   607000  MaxEval  25  MaxExec   4 }
-    GoalElement { Goal GOAL_HARASS_CITY         Priority   595000  MaxEval   3  MaxExec   1 }
+    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_ATTACK              Priority   605000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_HARASS              Priority   600000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_BOMBARD             Priority   607000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority   595000  MaxEval  25  MaxExec  10 }
     // pillage like crazy if we do not care so much about taking cities
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
 
@@ -766,7 +766,7 @@ STRATEGY_ATTACK {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 
     Harass {
@@ -774,7 +774,7 @@ STRATEGY_ATTACK {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 }
 
@@ -805,9 +805,9 @@ STRATEGY_DEFEND {
     AirUnitsPercent       0.10
 
     GoalElement { Goal GOAL_DEFEND              Priority   657000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   450000  MaxEval   5  MaxExec   2 }
-    GoalElement { Goal GOAL_ATTACK              Priority   450000  MaxEval   5  MaxExec   2 }
-    GoalElement { Goal GOAL_BOMBARD             Priority   452000  MaxEval   5  MaxExec   2 }
+    GoalElement { Goal GOAL_SEIGE               Priority   450000  MaxEval  25  MaxExec   3 }
+    GoalElement { Goal GOAL_ATTACK              Priority   450000  MaxEval  25  MaxExec   3 }
+    GoalElement { Goal GOAL_BOMBARD             Priority   452000  MaxEval   5  MaxExec   3 }
 
 	BuildListSequenceElement {
 	  Priority 10500
@@ -834,7 +834,7 @@ STRATEGY_DEFEND {
         DefenseMatch  0.6
         RangedMatch   0.6
         BombardMatch  0.4
-        ValueMatch    0.6
+        ValueMatch    1.2
     }
 
     Harass {
@@ -842,7 +842,7 @@ STRATEGY_DEFEND {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 }
 
@@ -853,8 +853,8 @@ STRATEGY_CAREFUL_START {
 
 	// minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  0
+    RangedGarrisonCount     0
 
 	// Set so early cities will build offensive units to explore with after a granary
 	BuildListSequenceElement {
@@ -873,7 +873,7 @@ STRATEGY_AGRESSIVE_START {
 
     // same as careful start, but with no garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
+    DefensiveGarrisonCount  0
     RangedGarrisonCount     0
 
 	// Set so early cities will build offensive units to explore before a granary
@@ -910,18 +910,18 @@ STRATEGY_ISLAND_NATION {
 ////////////////////////////////////////
 
 STRATEGY_EXPLORE_NEAR {
-    GoalElement { Goal GOAL_EXPLORE             Priority    35000  MaxEval  15  MaxExec   2 }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority    45000  MaxEval  15  MaxExec   3 }
+    GoalElement { Goal GOAL_EXPLORE             Priority    35000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority    45000  MaxEval  25  MaxExec   5 }
 }
 
 STRATEGY_EXPLORE_FAR {
-    GoalElement { Goal GOAL_EXPLORE             Priority    80000  MaxEval  15  MaxExec   3 }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority    85000  MaxEval  15  MaxExec   3 }
+    GoalElement { Goal GOAL_EXPLORE             Priority    80000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority    85000  MaxEval  25  MaxExec  10 }
 }
 
 STRATEGY_EXPLORE_WIDE {
-    GoalElement { Goal GOAL_EXPLORE             Priority   120000  MaxEval  15  MaxExec   5 }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority   125000  MaxEval  15  MaxExec   3 }
+    GoalElement { Goal GOAL_EXPLORE             Priority   120000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority   125000  MaxEval  25  MaxExec  15 }
 }
 
 ////////////////////////////////////////
@@ -1127,7 +1127,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
-    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec   2 }
+    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -1238,8 +1238,8 @@ STRATEGY_SCIENTIST_DEFAULT {
 
 	// minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  0
+    RangedGarrisonCount     0
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -1368,7 +1368,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.8
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    1.2
     }
 
     Defensive {
@@ -1384,7 +1384,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 
     StealthAttack {
@@ -1573,12 +1573,12 @@ STRATEGY_MILITARIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   4 }
+    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   8 }
     GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
-    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec   2 }
+    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -1689,8 +1689,8 @@ STRATEGY_MILITARIST_DEFAULT {
 
 	// minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  0
+    RangedGarrisonCount     0
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -1819,7 +1819,7 @@ STRATEGY_MILITARIST_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.7
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    1.2
     }
 
     Defensive {
@@ -1835,7 +1835,7 @@ STRATEGY_MILITARIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 
     StealthAttack {
@@ -2029,7 +2029,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
-    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec   2 }
+    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -2140,8 +2140,8 @@ STRATEGY_ECONOMIC_DEFAULT {
 
 	// minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  0
+    RangedGarrisonCount     0
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -2270,7 +2270,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    0.5
+        ValueMatch    1.1
     }
 
     Defensive {
@@ -2286,7 +2286,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 
     StealthAttack {
@@ -2479,7 +2479,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
-    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec   2 }
+    GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -2590,8 +2590,8 @@ STRATEGY_ECOTOPIAN_DEFAULT {
 
 	// minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  0
+    RangedGarrisonCount     0
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -2720,7 +2720,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    1.2
     }
 
     Defensive {
@@ -2736,7 +2736,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 
     StealthAttack {
@@ -3039,8 +3039,8 @@ STRATEGY_DIPLOMATIC_DEFAULT {
 
 	// minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  0
+    RangedGarrisonCount     0
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -3169,7 +3169,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    1.2
     }
 
     Defensive {
@@ -3185,7 +3185,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.4
+        ValueMatch    1.0
     }
 
     StealthAttack {
@@ -3233,39 +3233,39 @@ STRATEGY_DEFENSE_VERY_LOW {
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
+    RangedGarrisonCount     0
 }
 
 STRATEGY_DEFENSE_LOW {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     2
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
 }
 
 STRATEGY_DEFENSE_MEDIUM {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     3
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     2
 }
 
 STRATEGY_DEFENSE_HIGH {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  3
-    RangedGarrisonCount     3
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     1
 }
 
 STRATEGY_DEFENSE_VERY_HIGH {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  4
-    RangedGarrisonCount     4
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     2
 }
 
 ////////////////////////////////////////
