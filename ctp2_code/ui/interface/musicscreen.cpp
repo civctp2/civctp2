@@ -1,4 +1,34 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Music settings screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Cleanup improved.
+// - Don't reset user changes when returning from the track selection window.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3window.h"
@@ -54,10 +84,16 @@ sint32	musicscreen_displayMyWindow()
 
 	AUI_ERRCODE auiErr;
 
+#if defined(ACTIVISION_ORIGINAL)	// changes lost when visiting track window
 	s_autoRepeat->SetState( s_useAutoRepeat = g_soundManager->IsAutoRepeat() );
 	s_randomOrder->SetState( s_useRandomOrder =
 		g_soundManager->GetMusicStyle() == MUSICSTYLE_RANDOM );
 	s_musicOn->SetState( s_useMusicOn = g_theProfileDB->IsUseRedbookAudio() );
+#else
+	s_autoRepeat->SetState(s_useAutoRepeat);
+	s_randomOrder->SetState(s_useRandomOrder);
+	s_musicOn->SetState(s_useMusicOn);
+#endif
 
 	auiErr = g_c3ui->AddWindow(s_musicScreen);
 	Assert( auiErr == AUI_ERRCODE_OK );
@@ -114,7 +150,11 @@ AUI_ERRCODE musicscreen_Initialize( void )
 	s_randomOrder->SetText( s_musicString->GetString(MS_STRING_RANDOM_OFF) );
 	s_musicOn		= spNew_c3_Switch(&errcode,windowBlock,"MusicOnSwitch",musicscreen_checkPress );
 
-
+#if !defined(ACTIVISION_ORIGINAL)	// moved here from musicscreen_displayMyWindow
+	s_useAutoRepeat		= g_soundManager->IsAutoRepeat();
+	s_useRandomOrder	= (MUSICSTYLE_RANDOM == g_soundManager->GetMusicStyle());
+	s_useMusicOn		= g_theProfileDB->IsUseRedbookAudio();
+#endif
 	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
@@ -126,12 +166,25 @@ AUI_ERRCODE musicscreen_Initialize( void )
 
 AUI_ERRCODE musicscreen_Cleanup()
 {
+#if defined(ACTIVISION_ORIGINAL)	// s_musicString not cleaned
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
 	if ( !s_musicScreen  ) return AUI_ERRCODE_OK; 
 
 	g_c3ui->RemoveWindow( s_musicScreen->Id() );
 	keypress_RemoveHandler(s_musicScreen);
+#else
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
+	musictrackscreen_Cleanup();
+
+	if (s_musicScreen)
+	{
+		g_c3ui->RemoveWindow(s_musicScreen->Id());
+		keypress_RemoveHandler(s_musicScreen);
+	}
+
+	mycleanup(s_musicString);
+#endif	// ACTIVISION_ORIGINAL
 
 
 	mycleanup(s_accept);

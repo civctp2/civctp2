@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Music track selection window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Cleanup improved.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3window.h"
@@ -145,11 +174,20 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 
 AUI_ERRCODE musictrackscreen_Cleanup()
 {
+#if defined(ACTIVISION_ORIGINAL)	// s_trackNames not cleaned up
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
 	if ( !s_musicTrackScreen  ) return AUI_ERRCODE_OK; 
 
 	g_c3ui->RemoveWindow( s_musicTrackScreen->Id() );
+#else
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
+	if (s_musicTrackScreen)
+	{
+		g_c3ui->RemoveWindow(s_musicTrackScreen->Id());
+	}
+	mycleanup(s_trackNames);
+#endif	// ACTIVISION_ORIGINAL
 
 	mycleanup(s_trackList);
 

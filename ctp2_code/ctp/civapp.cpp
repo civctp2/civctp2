@@ -68,6 +68,7 @@
 // - Memory leak repaired: clean up the turn counter override information.
 // - Hot seat handling improved.
 // - Static member of StatusBar is now deleted correctly, by Martin Gühmann.
+// - Cleaned up music screen.
 //
 //----------------------------------------------------------------------------
 
@@ -153,6 +154,8 @@
 #if defined(ACTIVISION_ORIGINAL)
 // Include no longer needed since SP screen removed
 #include "spwindow.h"
+#else
+#include "musicscreen.h"
 #endif
 
 #include "initialplaywindow.h"
@@ -1654,6 +1657,7 @@ sint32 CivApp::CleanupAppUI(void)
 	soundscreen_Cleanup();
 
 #if !defined(ACTIVISION_ORIGINAL)
+	musicscreen_Cleanup();
 	//Added by Martin Gühmann to clean up the status bar correctly.
 	StatusBar::CleanUp();
 #endif
@@ -2978,6 +2982,8 @@ AttractWindow::Cleanup();
 #if defined(ACTIVISION_ORIGINAL)
 	// Cleanup no longer needed since SP screen no longer used
 	spscreen_Cleanup();
+#else
+	musicscreen_Cleanup();
 #endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
