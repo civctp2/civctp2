@@ -1,38 +1,96 @@
 
 Personality {
-	// This describes the extent to which an AI will send out units to explore
-	Bits Exploration {
-		Wide,	
-		Medium,
-        Minimal
+
+	Record Strategy DefaultStrategy
+
+//	Struct StartStrategyData {
+//		Record Strategy Strategy
+//		Int Priority
+//		Int Turns
+//	}
+
+//	Struct IslandStrategyData {
+//		Record Strategy Strategy
+//		Int Priority
+//		Int MaxContinentSize
+//	}
+
+	//Common strategy struct
+	Struct StrategyData {
+		Record Strategy Strategy
+		Int Priority
 	}
+
+	Int MaxIslandSize = 100
+	Bit(Struct StrategyData) IslandNationStrategy
+	Bit(Struct StrategyData) StartStrategy
+	Bit(Struct StrategyData) StartLowDefenceStrategy
+	Bit(Struct StrategyData) StartHighDefenceStrategy
+	Int LastStartTurn = 75
+
+	Bit(Struct StrategyData) DefenceNoneStrategy
+	Bit(Struct StrategyData) DefenceVeryLowStrategy
+	Bit(Struct StrategyData) DefenceLowStrategy
+	Bit(Struct StrategyData) DefenceMediumStrategy
+	Bit(Struct StrategyData) DefenceHighStrategy
+	Bit(Struct StrategyData) DefenceVeryHighStrategy
+
+
+	// This describes the extent to which an AI will send out units to explore
+	Bit(Struct StrategyData) ExplorationStrategy
 
 	// This describes the magnitude of an AI's empire and the speed to
 	// which it will expand
-	Bits Expansion {
-		Maximum,
-		Average,
-        Minimum
-	}
+	Bit(Struct StrategyData) ExpansionStrategy
 
 	// This describes the degree to which the AI will focus on
 	// scientific discovery and the area or branch of specialization.
 	// As well as the primary motivation for diplomatic interactions.
+	Bit(Struct StrategyData) DiscoveryStrategy
+
+	// This describes the liklihood that the AI will attack.  This can
+	// also be considered the disposition of the personality.
+//	Bit(Struct StrategyData) ConquestStrategy
+
+	Bit(Struct StrategyData) FullAttackStrategy
+	Bit(Struct StrategyData) BuildupStrengthStrategy
+	Bit(Struct StrategyData) SeigeCitiesStrategy
+	Bit(Struct StrategyData) NuclearStrikeStrategy
+	Bit(Struct StrategyData) MinimumNukesStrategy
+	Bit(Struct StrategyData) LowNukesStrategy
+	Bit(Struct StrategyData) AverageNukesStrategy
+	Bit(Struct StrategyData) MaximumNukesStrategy
+
+	Bit ReduceSettlers
+	Int CitiesOverLimit = 0
+	Bit(Struct StrategyData) OverCityLimitStrategy
+	Bit(Struct StrategyData) NoRevolutionStrategy
+
+	Bits Exploration {
+		Wide,	
+		Medium,
+		Minimal
+	}
+
+	Bits Conquest {
+		Agressive,
+		Neutral,
+		Passive
+	}
+
+	Bits Expansion {
+		Maximum,
+		Average,
+		Minimum
+	}
+
 	Bits Discovery {
 		Scientist,
-        Military,
-        Economic,
+		Military,
+		Economic,
 		Ecotopian,
 		Diplomatic
-    }
-
-    // This describes the liklihood that the AI will attack.  This can
-	// also be considered the disposition of the personality.
-    Bits Conquest {
-        Agressive,
-        Neutral,
-        Passive
-    }
+	}
 
 	// This describes how likely the AI will be to violate agreements
 	// and follow through on threats.  It also specifies how the

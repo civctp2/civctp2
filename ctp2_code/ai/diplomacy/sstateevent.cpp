@@ -1,16 +1,36 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : AI startegy control
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Exposed startegies to personalities.txt by Martin Gühmann.
+// - Fixed advice string for BuildupStrength and SeigeCities 
+//   strategies by Martin Gühmann.
+// - Added over city limit strategy by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -33,12 +53,30 @@
 #include "AgreementMatrix.h"
 #include "CtpAi.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
+#include "GovernmentRecord.h"
+#include "wonderutil.h"
+#endif
 
 
 
 
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : InitSStateEvent
+//
+// Description: Initializes the default player's strategy 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(InitSStateEvent)
 {	
 	PLAYER_INDEX playerId;
@@ -48,6 +86,13 @@ STDEHANDLER(InitSStateEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to expose the 
+//default strategy to personalities.txt
+	sint32 index = diplomat.GetPersonality()->GetDefaultStrategyIndex();
+#else
+//Removed by Martin Gühmann
 	sint32 index = 0;
 
     if (diplomat.GetPersonality()->GetDiscoveryScientist())
@@ -74,7 +119,7 @@ STDEHANDLER(InitSStateEvent)
 	{
 		g_theStrategyDB->GetNamedItem("STRATEGY_DEFAULT", index);
 	}
-
+#endif
 	
 	diplomat.SetStrategy(index);
 
@@ -85,12 +130,21 @@ STDEHANDLER(InitSStateEvent)
 	return GEV_HD_Continue;
 }
 
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : NextSStateEvent
+//
+// Description: Computes the current player's strategy 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -106,15 +160,22 @@ STDEHANDLER(NextSStateEvent)
 	return GEV_HD_Continue;
 }
 
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : FullAttack_NextSStateEvent
+//
+// Description: Checks whether the player should use the full attack startegy
+//              and sets it if necessary. 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(FullAttack_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -161,11 +222,14 @@ STDEHANDLER(FullAttack_NextSStateEvent)
 		}
 
 		if (invaded) {
-			
+
+#if defined(ACTIVISION_ORIGINAL)			
 			state.priority = 250;		   
 			g_theStrategyDB->GetNamedItem("STRATEGY_ATTACK", state.dbIndex);
-
-			
+#else
+			state.priority = diplomat.GetPersonality()->GetFullAttackStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetFullAttackStrategyPtr()->GetStrategyIndex();
+#endif			
 			g_theStringDB->GetStringID("SPY_FULL_ATTACK_SS",state.spyStrId);
 			g_theStringDB->GetStringID("ADVICE_FULL_ATTACK_SS",state.adviceStrId);
 			g_theStringDB->GetStringID("NEWS_FULL_ATTACK_SS",state.newsStrId);
@@ -178,15 +242,22 @@ STDEHANDLER(FullAttack_NextSStateEvent)
 	return GEV_HD_Continue;
 }
 
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : BuildupStrength_NextSStateEvent
+//
+// Description: Checks whether the player should use the defend startegy 
+//              to build up its strength and sets it if necessary. 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(BuildupStrength_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -214,7 +285,7 @@ STDEHANDLER(BuildupStrength_NextSStateEvent)
 	if ( Governor::GetGovernor(playerId).PercentUnbuilt( Governor::BUILD_UNIT_LIST_DEFENSE ) < 0.50)
 		return GEV_HD_Continue;
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	state.priority = 75;		   
 	g_theStrategyDB->GetNamedItem("STRATEGY_DEFEND", state.dbIndex);
 
@@ -222,7 +293,15 @@ STDEHANDLER(BuildupStrength_NextSStateEvent)
 	g_theStringDB->GetStringID("SPY_REGROUP_SS",state.spyStrId);
 	g_theStringDB->GetStringID("ADVICE_REGROUP_SS",state.spyStrId);
 	g_theStringDB->GetStringID("NEWS_REGROUP_SS",state.newsStrId);
+#else
+	state.priority = diplomat.GetPersonality()->GetBuildupStrengthStrategyPtr()->GetPriority();		   
+	state.dbIndex = diplomat.GetPersonality()->GetBuildupStrengthStrategyPtr()->GetStrategyIndex();
 
+	
+	g_theStringDB->GetStringID("SPY_REGROUP_SS",state.spyStrId);
+	g_theStringDB->GetStringID("ADVICE_REGROUP_SS",state.adviceStrId);
+	g_theStringDB->GetStringID("NEWS_REGROUP_SS",state.newsStrId);
+#endif
 	
 	diplomat.ConsiderStrategicState(state);
 
@@ -230,6 +309,22 @@ STDEHANDLER(BuildupStrength_NextSStateEvent)
 	return GEV_HD_Continue;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SeigeCities_NextSStateEvent
+//
+// Description: Checks whether the player should use the siege cities startegy
+//              and sets it if necessary. 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(SeigeCities_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -263,7 +358,7 @@ STDEHANDLER(SeigeCities_NextSStateEvent)
 	{
 		AiState state;
 
-		
+#if defined(ACTIVISION_ORIGINAL)		
 		state.priority = 200;		   
 		g_theStrategyDB->GetNamedItem("STRATEGY_SEIGE", state.dbIndex);
 
@@ -271,7 +366,15 @@ STDEHANDLER(SeigeCities_NextSStateEvent)
 		g_theStringDB->GetStringID("SPY_REGROUP_SS",state.spyStrId);
 		g_theStringDB->GetStringID("ADVICE_REGROUP_SS",state.spyStrId);
 		g_theStringDB->GetStringID("NEWS_REGROUP_SS",state.newsStrId);
+#else
+		state.priority = diplomat.GetPersonality()->GetSeigeCitiesStrategyPtr()->GetPriority();
+		state.dbIndex = diplomat.GetPersonality()->GetSeigeCitiesStrategyPtr()->GetStrategyIndex();
 
+		
+		g_theStringDB->GetStringID("SPY_REGROUP_SS",state.spyStrId);
+		g_theStringDB->GetStringID("ADVICE_REGROUP_SS",state.adviceStrId);
+		g_theStringDB->GetStringID("NEWS_REGROUP_SS",state.newsStrId);
+#endif
 		
 		diplomat.ConsiderStrategicState(state);
 	}
@@ -279,6 +382,22 @@ STDEHANDLER(SeigeCities_NextSStateEvent)
 	return GEV_HD_Continue;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : OpeningGambit_NextSStateEvent
+//
+// Description: Sets the strategy for the start in the first turns. The number
+//              of turns is set in personalities.txt. 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(OpeningGambit_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -287,7 +406,7 @@ STDEHANDLER(OpeningGambit_NextSStateEvent)
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	if (NewTurnCount::GetCurrentRound() > 75)
 		return GEV_HD_Continue;
 
@@ -307,13 +426,38 @@ STDEHANDLER(OpeningGambit_NextSStateEvent)
 		g_theStrategyDB->GetNamedItem("STRATEGY_CAREFUL_START", state.dbIndex);
 		
 	}
+#else
+	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
+	if (NewTurnCount::GetCurrentRound() > diplomat.GetPersonality()->GetLastStartTurn())
+		return GEV_HD_Continue;
 
+	AiState state;
+	state.priority = diplomat.GetPersonality()->GetStartStrategyPtr()->GetPriority();
+	state.dbIndex = diplomat.GetPersonality()->GetStartStrategyPtr()->GetStrategyIndex();
+#endif
 	
 	diplomat.ConsiderStrategicState(state);
 
 	return GEV_HD_Continue;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NuclearStrike_NextSStateEvent
+//
+// Description: Checks whether the players's personality has a lunch nukes 
+//              strategy and sets it if the player's personalty has such a
+//              startegy. 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(NuclearStrike_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -325,6 +469,7 @@ STDEHANDLER(NuclearStrike_NextSStateEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	AiState state;
 
+#if defined(ACTIVISION_DEFAULT)
 	if ((diplomat.GetPersonality()->GetDiscoveryMilitary() ||
 		 diplomat.GetPersonality()->GetDiscoveryScientist()) &&
 		(diplomat.GetPersonality()->GetTrustworthinessChaotic() &&
@@ -337,10 +482,32 @@ STDEHANDLER(NuclearStrike_NextSStateEvent)
 		
 		diplomat.ConsiderStrategicState(state);
 	}
+#else
+	if(diplomat.GetPersonality()->GetNuclearStrikeStrategy()){
+		state.priority = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetPriority();
+		state.dbIndex = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetStrategyIndex();
+	}
+#endif
 
 	return GEV_HD_Continue;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NuclearReadiness_NextSStateEvent
+//
+// Description: Determines which nuklear readiness strategy should be used. 
+//              This is dependent on the nuclear threat level. 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(NuclearReadiness_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -370,7 +537,7 @@ STDEHANDLER(NuclearReadiness_NextSStateEvent)
 			}
 		}
 
-		
+#if defined(ACTIVISION_ORIGINAL)		
 		if (max_nukes > 75) {
 			state.priority = 100;		   
 			g_theStrategyDB->GetNamedItem("STRATEGY_MAXIMUM_NUKES", state.dbIndex);
@@ -424,11 +591,45 @@ STDEHANDLER(NuclearReadiness_NextSStateEvent)
 				diplomat.ConsiderStrategicState(state);
 			}
 		}
+#else
+		if (max_nukes > 75) {
+			state.priority = diplomat.GetPersonality()->GetMaximumNukesStrategyPtr()->GetPriority();		   
+			state.dbIndex = diplomat.GetPersonality()->GetMaximumNukesStrategyPtr()->GetStrategyIndex();
+		} 
+		else if (max_nukes > 50) {
+			state.priority = diplomat.GetPersonality()->GetAverageNukesStrategyPtr()->GetPriority();		   
+			state.dbIndex = diplomat.GetPersonality()->GetAverageNukesStrategyPtr()->GetStrategyIndex();
+		}
+		else if (max_nukes > 25) {
+			state.priority = diplomat.GetPersonality()->GetLowNukesStrategyPtr()->GetPriority();		   
+			state.dbIndex = diplomat.GetPersonality()->GetLowNukesStrategyPtr()->GetStrategyIndex();
+		}
+		else if (max_nukes > 10) {
+			state.priority = diplomat.GetPersonality()->GetMinimumNukesStrategyPtr()->GetPriority();		   
+			state.dbIndex = diplomat.GetPersonality()->GetMinimumNukesStrategyPtr()->GetStrategyIndex();
+		}
+		diplomat.ConsiderStrategicState(state);
+#endif
 	}
 
 	return GEV_HD_Continue;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SetExpansion_NextSStateEvent
+//
+// Description: Loads the player's personality's expansion startegy.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(SetExpansion_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -440,6 +641,7 @@ STDEHANDLER(SetExpansion_NextSStateEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	AiState state;
 
+#if defined(ACTIVISION_ORIGINAL)
 	if (diplomat.GetPersonality()->GetExpansionMinimum())
 	{
 		state.priority = 1100;
@@ -466,11 +668,31 @@ STDEHANDLER(SetExpansion_NextSStateEvent)
 
 		
 		diplomat.ConsiderStrategicState(state);
-	} 
+	}
+#else
+	state.priority = diplomat.GetPersonality()->GetExpansionStrategyPtr()->GetPriority();		   
+	state.dbIndex = diplomat.GetPersonality()->GetExpansionStrategyPtr()->GetStrategyIndex();
+	diplomat.ConsiderStrategicState(state);
+#endif
 
 	return GEV_HD_Continue;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SetExploration_NextSStateEvent
+//
+// Description: Loads the player's personality's exploration strategy. 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(SetExploration_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -482,6 +704,7 @@ STDEHANDLER(SetExploration_NextSStateEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	AiState state;
 
+#if defined(ACTIVISION_ORIGINAL)
 	if (diplomat.GetPersonality()->GetExplorationMinimal())
 	{
 		state.priority = 1000;
@@ -509,10 +732,32 @@ STDEHANDLER(SetExploration_NextSStateEvent)
 		
 		diplomat.ConsiderStrategicState(state);
 	}
+#else
+	state.priority = diplomat.GetPersonality()->GetExplorationStrategyPtr()->GetPriority();		   
+	state.dbIndex = diplomat.GetPersonality()->GetExplorationStrategyPtr()->GetStrategyIndex();
+	diplomat.ConsiderStrategicState(state);
+#endif
 
 	return GEV_HD_Continue;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : IslandNation_NextSStateEvent
+//
+// Description: Loads the player's personality's island nation startegy
+//              if the players start position is on a continent with less
+//              x squares. x is defined in personalities.txt.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(IslandNation_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -526,7 +771,7 @@ STDEHANDLER(IslandNation_NextSStateEvent)
 
 	sint32 avg_cont_size = MapAnalysis::GetMapAnalysis().AverageSettledContinentSize(playerId);
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	if (avg_cont_size < 100 && avg_cont_size > 0)
 	{
 		state.priority = 150;		   
@@ -536,10 +781,33 @@ STDEHANDLER(IslandNation_NextSStateEvent)
 		
 		diplomat.ConsiderStrategicState(state);
 	}
+#else
+	if (avg_cont_size < diplomat.GetPersonality()->GetMaxIslandSize() && avg_cont_size > 0)
+	{
+		state.priority = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetPriority();		   
+		state.dbIndex = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetStrategyIndex();
+		diplomat.ConsiderStrategicState(state);
+	}
+#endif
 
 	return GEV_HD_Continue;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : DefenseLevel_NextSStateEvent
+//
+// Description: Loads the defense strategy to threat level.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 STDEHANDLER(DefenseLevel_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
@@ -564,7 +832,7 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 #define MINIMUM_DEFENSE_LEVEL	1000
 	Player *player_ptr = g_player[playerId];
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	if (NewTurnCount::GetCurrentRound() < 75)
 	{
 		if (max_threat > MEDIUM_DEFENSE_LEVEL)
@@ -669,14 +937,123 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 			
 		}
 	}
-
-	
+#else
+	if (NewTurnCount::GetCurrentRound() < diplomat.GetPersonality()->GetLastStartTurn())
+	{
+		if (max_threat > MEDIUM_DEFENSE_LEVEL)
+		{
+			state.priority = diplomat.GetPersonality()->GetStartHighDefenceStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetStartHighDefenceStrategyPtr()->GetStrategyIndex();
+		}
+		else 
+		{
+			state.priority = diplomat.GetPersonality()->GetStartLowDefenceStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetStartLowDefenceStrategyPtr()->GetStrategyIndex();
+		}
+	}
+	else
+	{
+		if (max_threat > MAXIMUM_DEFENSE_LEVEL)
+		{
+			state.priority = diplomat.GetPersonality()->GetDefenceVeryHighStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetDefenceVeryHighStrategyPtr()->GetStrategyIndex();
+		}
+		else if (max_threat > HIGH_DEFENSE_LEVEL)
+		{
+			state.priority = diplomat.GetPersonality()->GetDefenceHighStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetDefenceHighStrategyPtr()->GetStrategyIndex();
+		}
+		else if (max_threat > MEDIUM_DEFENSE_LEVEL)
+		{
+			state.priority = diplomat.GetPersonality()->GetDefenceMediumStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetDefenceMediumStrategyPtr()->GetStrategyIndex();
+		}
+		else if (max_threat > LOW_DEFENSE_LEVEL)
+		{
+			state.priority = diplomat.GetPersonality()->GetDefenceLowStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetDefenceLowStrategyPtr()->GetStrategyIndex();
+		}
+		else if (max_threat > MINIMUM_DEFENSE_LEVEL)
+		{
+			state.priority = diplomat.GetPersonality()->GetDefenceVeryLowStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetDefenceVeryLowStrategyPtr()->GetStrategyIndex();
+		}
+		else 
+		{
+			state.priority = diplomat.GetPersonality()->GetDefenceNoneStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetDefenceNoneStrategyPtr()->GetStrategyIndex();
+		}
+	}
+#endif
 	diplomat.ConsiderStrategicState(state);
 
 	return GEV_HD_Continue;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : CheckCityLimit_NextSStateEvent
+//
+// Description: Loads the over city limit strategy 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+STDEHANDLER(CheckCityLimit_NextSStateEvent)
+{
+	PLAYER_INDEX playerId;
 
+	
+	if (!args->GetPlayer(0, playerId))
+		return GEV_HD_Continue;
+
+	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
+	AiState state;
+
+	const GovernmentRecord *government = 
+	g_theGovernmentDB->Get(g_player[playerId]->GetGovernmentType());
+
+	int acceptedCitxMaximum = diplomat.GetPersonality()->GetCitiesOverLimit() + government->GetTooManyCitiesThreshold();
+
+	if(g_player[playerId]->GetNumCities() > acceptedCitxMaximum){
+		state.priority = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetPriority();		   
+		state.dbIndex = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetStrategyIndex();
+		diplomat.ConsiderStrategicState(state);
+		if(wonderutil_GetRevoltingCitiesJoinPlayer(g_player[playerId]->m_builtWonders)){
+			state.priority = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetPriority();		   
+			state.dbIndex = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetStrategyIndex();
+			diplomat.ConsiderStrategicState(state);
+		}
+	}
+
+	return GEV_HD_Continue;
+}
+#endif
+
+//----------------------------------------------------------------------------
+//
+// Name       : StrategicStateEventCallbacks::AddCallbacks
+//
+// Description: Adds the functions above to the event manager callback,
+//              so that all these functions are executed on the 
+//              InitStrategicState or NextStrategicState event.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void StrategicStateEventCallbacks::AddCallbacks()
 {
     
@@ -732,4 +1109,10 @@ void StrategicStateEventCallbacks::AddCallbacks()
 	g_gevManager->AddCallback(GEV_NextStrategicState, 
 							  GEV_PRI_Pre, 
 							  &s_DefenseLevel_NextSStateEvent);
+
+#if defined(ACTIVISION_ORIGINAL)
+	g_gevManager->AddCallback(GEV_NextStrategicState, 
+							  GEV_PRI_Pre, 
+							  &s_CheckCityLimit_NextSStateEvent);
+#endif
 }
