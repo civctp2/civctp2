@@ -38,7 +38,9 @@
 // - Prevent instant messages showing out of turn in hotseat
 //   (J Bytheway 2004/09/15)
 // - Added extra checks to disable science victory in network games (bug #21)
-// - Propagate PW each turn update
+// - Propagate PW each turn update.
+// - Add new advance immediately when substracting cost, to prevent losing
+//   the advance in PBEM.
 //
 //----------------------------------------------------------------------------
 
@@ -3985,8 +3987,11 @@ void Player::AddScience(const sint32 delta)
 			m_science->SetLevel(0);
 		}
         gotadvance = m_advances->GetResearching();
-
+#if defined(ACTIVISION_ORIGINAL)
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GrantAdvance,
+#else
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GrantAdvance,
+#endif
 							   GEA_Player, m_owner,
 							   GEA_Int, gotadvance,
 							   GEA_Int, CAUSE_SCI_RESEARCH,

@@ -26,7 +26,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Propagate PW each turn update
+// - Propagate PW each turn update.
+// - Unblock the client user interface when start of turn processing is ready.
 //
 //----------------------------------------------------------------------------
 
@@ -1683,6 +1684,16 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(g_player[m_data]->m_playerType == PLAYER_TYPE_ROBOT) {
 					CtpAi::NetworkClientBeginTurn(m_data);
 				}
+#if !defined(ACTIVISION_ORIGINAL)
+				else
+				{
+					g_gevManager->AddEvent(GEV_INSERT_Tail, 
+										   GEV_StartMovePhase,
+										   GEA_Player, m_data,
+										   GEA_End
+										  );
+				}
+#endif
 				g_network.SetSensitiveUIBlocked(false);
 			}
 			MainControlPanel::SelectedCity();

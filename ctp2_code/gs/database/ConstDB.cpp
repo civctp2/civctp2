@@ -27,6 +27,7 @@
 //
 // - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be 
 //   modifiable in const.txt.
+// - Added compatibility handling to solve database out of synch problems.
 //
 //----------------------------------------------------------------------------
 
@@ -226,18 +227,25 @@ ConstDB::ConstDB(CivArchive &archive)
 	Serialize(archive) ;
 	}
 
-
-
-
-
-
-
-
-
-
-// Fortunately, this Serialize function is never used. The values are not 
-// stored in the save game, but are read from const.txt.
-// Otherwise, we would have had an incompatible save game again.
+//----------------------------------------------------------------------------
+//
+// Name       : ConstDB::Serialize
+//
+// Description: Serialize/unserialize the database
+//
+// Parameters : archive	: archive to serialize to or from
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : This function is only used for multiplayer games, to verify
+//              the consistency between the databases of the players.
+//              The values are never stored in the save game, nor transmitted.
+//              The values are read from const.txt, and the multiplayer
+//              verification is based on a CRC over the data.
+//
+//----------------------------------------------------------------------------
 
 void ConstDB::Serialize(CivArchive &archive)
 	{
@@ -519,9 +527,18 @@ void ConstDB::Serialize(CivArchive &archive)
 	
 	archive << m_riot_level;
 #if !defined(ACTIVISION_ORIGINAL)
-	archive << m_max_match_list_cycles;
-	// Modified by kaan to address bug # 12
-	archive << m_min_turns_between_revolt;
+	if ((DEFAULT_MAX_MATCH_LIST_CYCLES == m_max_match_list_cycles) &&
+		(DEFAULT_MIN_TURNS_BETWEEN_REVOLT == m_min_turns_between_revolt)
+       )
+	{
+		// No action, to keep compatibility with the original patch.
+	}
+	else
+	{
+		// Modified by kaan to address bug # 12
+		archive << m_min_turns_between_revolt;
+		archive << m_max_match_list_cycles;
+	}
 #endif
 		}
 	else
