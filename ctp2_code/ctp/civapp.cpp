@@ -39,6 +39,7 @@
 // Modifications from the original Activision code:
 //
 // - Keep the user's leader name when the data is consistent.
+// - Skip begin turn handling when loading from a file.
 //
 //----------------------------------------------------------------------------
 //
@@ -2364,12 +2365,35 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 		if(&archive == NULL ||
 			(g_startInfoType != STARTINFOTYPE_NONE)) {
-			
+#if defined(ACTIVISION_ORIGINAL)	// double production in first turn after loading file
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 				GEV_BeginTurn,
 				GEA_Player, g_selected_item->GetCurPlayer(),
 				GEA_Int, g_player[g_selected_item->GetCurPlayer()]->m_current_round,
 				GEA_End);
+#else
+			if (&archive && !g_isScenario)
+			{
+				// Loading a saved game: jump to the move phase immediately.
+				g_gevManager->AddEvent
+					(GEV_INSERT_Tail,
+					 GEV_StartMovePhase,
+					 GEA_Player, g_selected_item->GetCurPlayer(),
+					 GEA_End
+					);
+			}
+			else
+			{
+				// Starting a new game (launch button or scenario)
+				g_gevManager->AddEvent
+					(GEV_INSERT_Tail,
+					 GEV_BeginTurn,
+					 GEA_Player, g_selected_item->GetCurPlayer(),
+					 GEA_Int, g_player[g_selected_item->GetCurPlayer()]->m_current_round,
+					 GEA_End
+					);
+			}
+#endif
 		}
 	}
 
