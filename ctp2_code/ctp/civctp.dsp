@@ -32,7 +32,7 @@ CFG=CTP2 - WIN32 RELEASE
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""$/ctp", BAAAAAAA"
 # PROP Scc_LocalPath "."
-CPP=xicl6.exe
+CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
@@ -59,7 +59,7 @@ RSC=rc.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2r.exe"
 # SUBTRACT LINK32 /profile
@@ -87,7 +87,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
 # SUBTRACT LINK32 /verbose /profile
@@ -117,7 +117,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib ole32.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib ..\libs\anet\win\lib\anet2d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib imagehlp.lib vfw32.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"CivCTP.exe"
 # SUBTRACT BASE LINK32 /verbose /profile /map
 # ADD LINK32 MSVCRT.lib MSVCRTD.lib ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_test.exe"
@@ -148,7 +148,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2d.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib imagehlp.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
 # SUBTRACT BASE LINK32 /verbose /profile /map
 # ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_ndbg.exe"
@@ -169,7 +169,7 @@ LINK32=xilink6.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
-# ADD CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include\\" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /Yu"c3.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -177,7 +177,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2.lib strmbasd.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib imagehlp.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"civctp_rel.exe"
 # SUBTRACT BASE LINK32 /profile /debug
 # ADD LINK32 ..\libs\anet\win\lib\anet2.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"ctp2.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe"
@@ -208,7 +208,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
 # SUBTRACT BASE LINK32 /verbose /profile
 # ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
@@ -216,7 +216,7 @@ LINK32=xilink6.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                             exist                             R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                             copy                             C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                             R:\ctp2_project\ctp2_code\ctp\                            	rem     if                             exist                             R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                             copy                             C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                             R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                              exist                              R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                              copy                              C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                              R:\ctp2_project\ctp2_code\ctp\                             	rem      if                              exist                              R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                              copy                              C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                              R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -244,7 +244,7 @@ PostBuild_Cmds=if                             exist                             
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe"
 # SUBTRACT BASE LINK32 /profile
 # ADD LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe" /fixed:no
@@ -272,7 +272,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib SDL.lib SDL_image.lib SDL_mixer.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_SDL_dbg.exe"
 # SUBTRACT LINK32 /verbose /profile
@@ -300,7 +300,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2.lib strmbasd.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib SDL.lib SDL_image.lib SDL_mixer.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib imagehlp.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"civctp_rel.exe"
 # SUBTRACT BASE LINK32 /profile /debug
 # ADD LINK32 ..\libs\anet\win\lib\anet2.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib SDL.lib SDL_image.lib SDL_mixer.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"ctp2.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2_SDL.exe"
@@ -382,7 +382,7 @@ SOURCE=.\ctp2_utils\c3cmdline.cpp
 
 # ADD CPP /I "..\ai\personality"
 
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -1868,7 +1868,7 @@ SOURCE=..\gs\gameobj\Player.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
 
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -6460,6 +6460,14 @@ SOURCE=..\net\general\net_exclusions.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\net\general\net_feat.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\net\general\net_feat.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\net\general\net_gameobj.cpp
 # End Source File
 # Begin Source File
@@ -6935,24 +6943,24 @@ SOURCE=..\robot\aibackdoor\semi_dynamic_array.h
 
 # PROP Default_Filter ""
 # Begin Group "common"
-# PROP Default_Filter ""
 
+# PROP Default_Filter ""
 # End Group
 # Begin Group "include"
-# PROP Default_Filter ""
-# Begin Source File
 
-SOURCE=..\os\include\ctp2_config.h
-# End Source File
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=..\os\include\config_win32.h
 # End Source File
+# Begin Source File
 
+SOURCE=..\os\include\ctp2_config.h
+# End Source File
 # End Group
 # Begin Group "win32"
-# PROP Default_Filter ""
 
+# PROP Default_Filter ""
 # End Group
 # End Group
 # Begin Group "ui"
@@ -10741,7 +10749,6 @@ SOURCE=..\ui\aui_sdl\aui_sdlsurface.cpp
 
 SOURCE=..\ui\aui_sdl\aui_sdlsurface.h
 # End Source File
-
 # End Group
 # Begin Group "aui_ctp2"
 
