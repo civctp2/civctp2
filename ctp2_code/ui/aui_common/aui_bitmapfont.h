@@ -1,4 +1,10 @@
+/*
+	fixed for japanese by t.s. 2003.12
+		add uint16 GlyphInfo->c2
+			BOOL IsCached( uint16 c )
+		extract GlyphInfo m_glyphs
 
+*/
 
 
 
@@ -40,7 +46,6 @@ class aui_Surface;
 
 
 #define k_AUI_BITMAPFONT_MAXDESCLEN			(2*MAX_PATH)
-
 
 
 
@@ -122,7 +127,10 @@ public:
 	struct GlyphInfo
 	{
 		MBCHAR		c;			
-		aui_Surface	*surface;	
+#if defined(_JAPANESE)
+		uint16		c2;	
+#endif
+		aui_Surface	*surface;
 		RECT		bbox;		
 		sint16		bearingX;	
 		sint16		bearingY;	
@@ -131,13 +139,7 @@ public:
 
 	
 	GlyphInfo *GetGlyphInfo( MBCHAR c );
-
-	
-	
-	
-	
-	
-	
+	GlyphInfo *GetGlyphInfo( const MBCHAR *c );
 	
 	AUI_ERRCODE RenderLine(
 		aui_Surface *surface,
@@ -201,8 +203,15 @@ public:
 protected:
 	
 	
+#if !defined(_JAPANESE)
 	BOOL IsCached( MBCHAR c )
 	{ return m_glyphs[ (uint16)uint8(c) ].surface != NULL; }
+#else
+	BOOL IsCached( MBCHAR c )
+	{ return IsCached( (uint16)uint8(c) ); }
+	BOOL IsCached( uint16 c )
+	{ return m_glyphs[ c ].surface != NULL; }
+#endif
 
 
 	
@@ -218,7 +227,11 @@ protected:
 	tech_WLList<aui_Surface *> *m_surfaceList;
 
 	
+#if !defined(_JAPANESE)
 	GlyphInfo m_glyphs[ 256 ];
+#else
+	GlyphInfo m_glyphs[ 65536 ];
+#endif
 
 	sint32 m_curOffset;	
 	sint32 m_maxHeight; 

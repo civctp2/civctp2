@@ -32,6 +32,13 @@
 //
 //----------------------------------------------------------------------------
 
+/*
+	fixed for japanese by t.s. 2003.12
+		(fix to text can contain single '[')
+	fix void GreatLibrary::Load_Great_Library()
+*/
+
+
 #include "c3.h"
 
 
@@ -263,6 +270,10 @@ void GreatLibrary::Load_Great_Library()
 		int entry_pos;
 		char * end_ptr;		
 
+#if !defined(ACTIVISION_ORIGINAL)
+		int end_pos;
+		char * end_tag = "[END]";
+#endif
 		
 		Read_Library_State reading_what = LOOKING_FOR_NAME;
 
@@ -350,7 +361,9 @@ void GreatLibrary::Load_Great_Library()
 
 						
 						reading_what = IN_END;
-
+#if !defined(ACTIVISION_ORIGINAL)
+						end_pos = 0;
+#endif
 					}
 					else
 					{
@@ -389,16 +402,21 @@ void GreatLibrary::Load_Great_Library()
 					
 					the_entry[entry_pos++] = ch;
 
-					
+#if !defined(ACTIVISION_ORIGINAL)
+					end_pos ++;
+#endif
+
 					if (ch == ']')
 					{
 						
 						the_entry[entry_pos] = 0;
 
-						
+#if defined(ACTIVISION_ORIGINAL)
 						if (!strcmp(end_ptr, "[END]"))
+#else
+						if (!strcmp(end_ptr, end_tag))
+#endif
 						{
-							
 							*end_ptr = 0;
 
 							
@@ -429,6 +447,13 @@ void GreatLibrary::Load_Great_Library()
 							reading_what = IN_TEXT;
 						}
 
+#if !defined(ACTIVISION_ORIGINAL)
+					} else {
+						if ( ch != *(end_tag+end_pos) ) // not end tag
+						{
+							reading_what = IN_TEXT;
+						}
+#endif
 					}
 				}
 				break;

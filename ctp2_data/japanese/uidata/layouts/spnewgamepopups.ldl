@@ -1,0 +1,1186 @@
+template SP_POPUP_LABEL:CTP2_STANDARD_FONT {
+
+	int	widthpix	100
+
+	int	heightpix	42
+
+}
+
+
+
+template SP_POPUP_SWITCH_SMALL:CTP2_STANDARD_FONT {
+
+	bool	shadowfont	true
+
+	string	image0	"error.tga"
+
+	string	image1	"error.tga"
+
+	int	widthpix	89
+
+	int	heightpix	21
+
+	int	bevelwidth	0
+
+	string	imagebltflag	"chromakey"
+
+}
+
+
+
+template SP_POPUP_SWITCH_LARGE:CTP2_STANDARD_FONT {
+
+	bool	shadowfont	true
+
+	string	image0	"upba5700.tga"
+
+	string	image1	"upba5701.tga"
+
+	int	widthpix	123
+
+	int	heightpix	21
+
+	int	bevelwidth	0
+
+	string	imagebltflag	"chromakey"
+
+}
+
+
+
+#template POPUP_CHECKBOX:CTP2_STANDARD_FONT {
+#	string	pattern	"uptg20e.tga"
+#	int	xpix		125
+#	int	widthpix	150
+#	int	heightpix	20
+#}
+# EAS010899 - This is the new-and-improved checkbox art.
+# You should instantiate aui_Switch/Radio not c3_CheckBox for this to work.
+template POPUP_CHECKBOX:CTP2_STANDARD_FONT {
+
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	int	xpix		125
+
+	int	widthpix	146
+
+	int	heightpix	24
+
+}
+
+
+
+# EAS010899 - added this for use w/ switches that shouldn't be checkboxes.
+template POPUP_TOGGLESWITCH:CTP2_STANDARD_FONT {
+
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	int	xpix		50
+
+	int	widthpix	160
+
+	int	heightpix	24
+
+}
+
+
+
+template POPUP_CHECKBOX2:CTP2_STANDARD_FONT {
+
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	int	widthpix	146
+
+	int	heightpix	24
+
+	int	xpix		210
+}
+
+
+
+template POPUP_CHECKBOX3:CTP2_STANDARD_FONT {
+
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	int	widthpix	146
+
+	int	heightpix	24
+
+	int	xpix		40
+}
+
+
+
+template TRIBE_CHECKBOX1:CTP2_STANDARD_FONT {
+
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	int	widthpix	146
+
+	int	heightpix	24
+
+	int	xpix		25
+}
+
+
+
+template TRIBE_CHECKBOX2:CTP2_STANDARD_FONT {
+
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	int	widthpix	146
+
+	int	heightpix	24
+
+	int	xpix		176
+}
+
+
+
+template TRIBE_CHECKBOX3:CTP2_STANDARD_FONT {
+
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	int	widthpix	146
+
+	int	heightpix	24
+
+	int	xpix		327
+}
+
+
+
+template TRIBE_CHECKBOX4:CTP2_STANDARD_FONT {
+
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	int	widthpix	146
+
+	int	heightpix	24
+
+	int	xpix		478
+}
+
+
+
+SPNewGameTribeScreen {
+
+	string	pattern	"uptg20e.tga"
+
+	string	xanchor	"center"
+
+	string	yanchor	"center"
+
+	int	widthpix	650
+
+	int	heightpix	465
+
+
+
+	Name:CTP_GREY_TITLE_FONT {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int	ypix	20
+
+		int widthpct 50
+
+		int heightpix 20
+
+		string	text	"str_ldl_Tribe"
+#		string	pattern	"uptg20e.tga"
+
+	}
+
+	BackButton:CTP2_STANDARD_FONT {
+
+		int	xpix	550
+
+		int	ypix	345
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+#		string	imagebltflag	"chromakey"
+
+#		string	image0		"upba1807.tga"
+
+#		int	bevelwidth	0
+
+		string	text	"str_ldl_BACK"
+	}
+
+	Group {
+
+		TribeOne:TRIBE_CHECKBOX1 {
+
+			string	text	"str_ldl_col1"
+			int	ypix	45
+
+		}
+
+		TribeTwo:TRIBE_CHECKBOX2 {
+
+			string	text	"str_ldl_col2"
+			int	ypix	45
+
+		}
+
+		TribeThree:TRIBE_CHECKBOX3 {
+
+			string	text	"str_ldl_col3"
+			int	ypix	45
+
+		}
+
+		TribeFour:TRIBE_CHECKBOX4 {
+
+			string	text	"str_ldl_col4"
+			int	ypix	45
+
+		}
+
+	}
+
+	leadernamestatic:CTP2_STANDARD_FONT {
+
+		string	yanchor	"bottom"
+
+		int	xpix	20
+
+		int	ypix	42
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	just	"right"
+
+		bool	vertcenter	true
+
+		string	text	"str_ldl_Leader_Name_COLON"
+	}
+
+	leadernametextfield {
+
+		string	yanchor	"bottom"
+
+		int	ypix	30
+
+		int	xpix	120
+
+		int	widthpix	180
+
+		int	heightpix	30
+
+		int	maxfieldlen	23
+
+	}
+
+	malefemaleswitchgroup {
+
+		string	yanchor	"bottom"
+
+		int	xpix	327
+
+		int	ypix	42
+#		int	ypix	396
+
+		int	widthpix	320
+
+		int	heightpix	24
+
+		maleradio:CTP2_STANDARD_FONT {
+
+			string	image0	"upba2317.tga"
+			string	image1	"upba2318.tga"
+			string	disabledimage0	"upba2323.tga"
+			string	disabledimage1	"upba2324.tga"
+			int	xpix		0
+			int	widthpix	146
+			int	heightpix	24
+
+			string	text	"str_ldl_Male"
+
+			int	state	1
+
+		}
+
+		femaleradio:CTP2_STANDARD_FONT {
+
+			string	image0	"upba2317.tga"
+			string	image1	"upba2318.tga"
+			string	disabledimage0	"upba2323.tga"
+			string	disabledimage1	"upba2324.tga"
+			int	xpix		151
+			int	widthpix	146
+			int	heightpix	24
+
+			string	text	"str_ldl_Female"
+
+		}
+
+	}
+
+}
+
+
+
+SPNewGameDiffScreen {
+
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		46
+
+#	int 	ypix		180
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	400
+
+	int	heightpix	270
+
+	Name:CTP_GREY_TITLE_FONT {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		int	ypix	20
+
+		string	text	"str_ldl_Difficulty"
+#		string	pattern	"uptg20e.tga"
+
+	}
+
+	SkillLevel:CTP2_STANDARD_FONT {
+
+		int	xpix	30
+		int	ypix	35
+
+		int	widthpix	170
+		int	heightpix	20
+
+		int	srcxpix	30
+		int	srcypix	35
+		int	srcwidthpix	170
+		int	srcheightpix	20
+
+		string	text	"str_ldl_Skill_Level"
+
+		string	pattern	"uptg20e.tga"
+	}
+
+	BarbarianThreat:CTP2_STANDARD_FONT {
+
+		int	xpix	200
+		int	ypix	35
+
+		int	widthpix	170
+		int	heightpix	20
+
+		int	srcxpix	200
+		int	srcypix	35
+		int	srcwidthpix	170
+		int	srcheightpix	20
+
+		string	text	"str_ldl_Barbarian_Threat"
+
+		string	pattern	"uptg20e.tga"
+	}
+
+	BackButton:CTP2_STANDARD_FONT {
+
+		int	xpix	320
+
+		int	ypix	135
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+#		string	imagebltflag	"chromakey"
+
+#		string	image0		"upba1807.tga"
+
+#		int	bevelwidth	0
+
+		string	text	"str_ldl_BACK"
+	}
+
+	Group {
+
+		DiffOne:POPUP_CHECKBOX3 {
+
+			string	text	"str_ldl_Chieftain"
+			int	ypix	60
+
+		}
+
+		DiffTwo:POPUP_CHECKBOX3 {
+
+			string	text	"str_ldl_Warlord"
+			int	ypix	90
+
+		}
+
+		DiffThree:POPUP_CHECKBOX3 {
+
+			string	text	"str_ldl_Prince"
+			int	ypix	120
+
+		}
+
+		DiffFour:POPUP_CHECKBOX3 {
+
+			string	text	"str_ldl_King"
+			int	ypix	150
+
+		}
+
+		DiffFive:POPUP_CHECKBOX3 {
+
+			string	text	"str_ldl_Emperor"
+			int	ypix	180
+
+		}
+
+		DiffSix:POPUP_CHECKBOX3 {
+
+			string	text	"str_ldl_Deity"
+			int	ypix	210
+
+		}
+
+	}
+
+	GroupTwo {
+
+		RiskOne:POPUP_CHECKBOX2 {
+
+			string	text	"str_ldl_Villages_Only"
+			int	ypix	60
+
+		}
+
+		RiskTwo:POPUP_CHECKBOX2 {
+
+			string	text	"str_ldl_Roving_Bands"
+			int	ypix	90
+
+		}
+
+		RiskThree:POPUP_CHECKBOX2 {
+
+			string	text	"str_ldl_Restless_Tribes"
+			int	ypix	120
+
+		}
+
+		RiskFour:POPUP_CHECKBOX2 {
+
+			string	text	"str_ldl_Raging_Hordes"
+			int	ypix	150
+
+		}
+
+		RiskFive:POPUP_CHECKBOX2 {
+
+			string	text	"str_ldl_No_Danger_Here"
+			int	ypix	180
+
+		}
+
+	}
+
+}
+
+
+
+SPNewGameMapScreen {
+
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		506
+
+#	int 	ypix		250
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	400
+
+	int	heightpix	170
+
+	Name:CTP_GREY_TITLE_FONT {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		int	ypix	20
+
+		string	text	"str_ldl_Map"
+#		string	pattern	"uptg20e.tga"
+
+	}
+
+	BackButton:CTP2_STANDARD_FONT{
+
+		int	xpix	325
+
+		int	ypix	135
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+#		string	imagebltflag	"chromakey"
+
+#		string	image0		"upba1807.tga"
+
+#		int	bevelwidth	0
+
+		string	text	"str_ldl_BACK"
+	}
+
+	Group {
+
+		MapOne:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_1"
+			int	ypix	45
+
+		}
+
+		MapTwo:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_2"
+			int	ypix	75
+
+		}
+
+		MapThree:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_3"
+			int	ypix	105
+
+		}
+
+		MapFour:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_4"
+			int	ypix	135
+
+		}
+
+	}
+
+}
+
+
+
+SPNewGameMapSizeScreen {
+
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		316
+
+#	int 	ypix		185
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	400
+
+	int	heightpix	190
+
+	Name:CTP_GREY_TITLE_FONT {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		int	ypix	20
+
+		string	text	"str_ldl_Map_Size"
+#		string	pattern	"uptg20e.tga"
+
+	}
+
+	BackButton:CTP2_STANDARD_FONT {
+
+		int	xpix	325
+
+		int	ypix	135
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+#		string	imagebltflag	"chromakey"
+
+#		string	image0		"upba1807.tga"
+
+#		int	bevelwidth	0
+
+		string	text	"str_ldl_BACK"
+	}
+
+	Group {
+
+		MapSizeOne:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Small_24_x_48"
+			int	ypix	45
+
+		}
+
+		MapSizeTwo:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Medium_48_x_96"
+			int	ypix	75
+
+		}
+
+		MapSizeThree:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Large_64_x_128"
+			int	ypix	105
+
+		}
+
+		MapSizeFour:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Very_Large_70_x_140"
+			int	ypix	135
+
+		}
+
+	}
+
+}
+
+
+
+SPNewGameMapShapeScreen {
+
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		366
+
+#	int 	ypix		185
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	500
+
+#	int	heightpix	150
+
+	#new value by Martin Gühmann
+	int	heightpix	219
+
+	Name:CTP_GREY_TITLE_FONT {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		int	ypix	20
+
+		string	text	"str_ldl_Map_Shape"
+	}
+
+
+
+	EWLabel:SP_POPUP_LABEL {
+
+		int	xpix	190
+
+		int	ypix	50
+
+		string	just	"left"
+
+		string	text	"str_ldl_East_and_West_edges_of_the_map_connect"
+	}
+
+	DWLabel:SP_POPUP_LABEL {
+
+		int	xpix	190
+
+		int	ypix	85
+
+		string	just	"left"
+
+		string	text	"str_ldl_East_West_and_North_South_edges"
+	}
+	#Added by Martin Gühmann
+	NWLabel:SP_POPUP_LABEL {
+
+		int	xpix	190
+
+		int	ypix	120
+
+		string	just	"left"
+
+		string	text	"str_ldl_North_and_South_edges_of_the_map_connect"
+	}
+
+	FWLabel:SP_POPUP_LABEL {
+
+		int	xpix	190
+
+		int	ypix	155
+
+		string	just	"left"
+
+		string	text	"str_ldl_No_wrapping"
+	}
+
+
+	Group {
+
+		MapShapeOne:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Earth_World"
+			int	xpix	20
+			int	ypix	45
+
+		}
+
+		MapShapeTwo:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Doughnut_World"
+			int	xpix	20
+			int	ypix	80
+
+		}
+		#Added by Martin Gühmann
+		MapShapeThree:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Neptun_World"
+			int	xpix	20
+
+			int	ypix	115
+
+		}
+
+		MapShapeFour:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Flat_World"
+			int	xpix	20
+
+			int	ypix	150
+
+		}
+
+	}
+
+}
+
+
+
+SPNewGameRandomCustomScreen {
+
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		300
+
+#	int 	ypix		185
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	300
+
+	int	heightpix	150
+
+	Name:CTP_GREY_TITLE_FONT {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		int	ypix	20
+
+		string	text	"str_ldl_Random_Custom"
+	}
+
+	Group {
+
+		Random:POPUP_CHECKBOX {
+
+			string	text	"BUTTON_RANDOM"
+			int	xpix	20
+			int	ypix	45
+
+			int	state	1
+		}
+
+		Custom:POPUP_CHECKBOX {
+
+			string	text	"str_ldl_Custom"
+			int	xpix	20
+			int	ypix	80
+
+		}
+	}
+
+}
+
+
+
+SPNewGamePlayersScreen {
+
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		316
+
+#	int 	ypix		160
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+#	int	widthpix	400
+
+	# New value by Martin Gühmann
+	int	widthpix	500
+
+	int	heightpix	250
+
+	Name:CTP_GREY_TITLE_FONT {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		int	ypix	20
+
+		string	text	"str_ldl_Players"
+#		string	pattern	"uptg20e.tga"
+
+	}
+
+	BackButton:CTP2_STANDARD_FONT {
+
+		int	xpix	325
+
+		int	ypix	195
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+#		string	imagebltflag	"chromakey"
+
+#		string	image0		"upba1807.tga"
+
+#		int	bevelwidth	0
+
+		string	text	"str_ldl_BACK"
+	}
+
+#	Group {
+#
+#		PlayerOne:POPUP_CHECKBOX {
+#
+#			string	text	"str_ldl_3"
+#			int	ypix	45
+#
+#		}
+#
+#		PlayerTwo:POPUP_CHECKBOX {
+#
+#			string	text	"str_ldl_4"
+#			int	ypix	75
+#
+#		}
+#
+#		PlayerThree:POPUP_CHECKBOX {
+#
+#			string	text	"str_ldl_5"
+#			int	ypix	105
+#
+#		}
+#
+#		PlayerFour:POPUP_CHECKBOX {
+#
+#			string	text	"str_ldl_6"
+#			int	ypix	135
+#
+#		}
+#
+#		PlayerFive:POPUP_CHECKBOX {
+#
+#			string	text	"str_ldl_7"
+#			int	ypix	165
+#
+#		}
+#
+#		PlayerSix:POPUP_CHECKBOX {
+#
+#			string	text	"str_ldl_8"
+#			int	ypix	195
+#
+#		}
+#
+#	}
+	NumPlayerSpinner:CTP2_SPINNER{
+		int xpix 38
+		int ypix 63
+		int widthpix 90
+		int minxval 3
+		int maxxval 32
+		int incxval 1
+		int xval 1
+		string statustext "str_ldl_SPNGPS_NumPlayerSpinner"
+		string tipwindow "str_ldl_SPNGPS_NumPlayerSpinner"
+	}
+	MaxPlayerSpinner:CTP2_SPINNER{
+		int xpix 38
+		int ypix 103
+		int widthpix 90
+		int minxval 0
+		int maxxval 32
+		int incxval 1
+		int xval 1
+		string statustext "str_ldl_SPNGPS_MaxPlayerSpinner"
+		string tipwindow "str_ldl_SPNGPS_MaxPlayerSpinner"
+	}
+	PlayerSpinner:CTP2_SPINNER{
+		int xpix 38
+		int ypix 143
+		int widthpix 90
+		#Set it to zero if you want to start with the Barbarians
+		int minxval 1
+		#Is overwritten by the game
+		int maxxval 32
+		int incxval 1
+		int xval 1
+		string statustext "str_ldl_SPNGPS_PlayerSpinner"
+		string tipwindow "str_ldl_SPNGPS_PlayerSpinner"
+	}
+	#Flag:CTP2_STATIC_IMAGE {
+	#	int xpix 78
+	#	int ypix 183
+	#	int widthpix 64
+	#	int heightpix 48
+	#	string image00 "upc023.tga"
+	#}
+	NumPlayerText:SP_POPUP_LABEL {
+		int fontcolorred 0
+		int fontcolorgreen 0
+		int fontcolorblue 0
+
+		string text "str_ldl_SPNGPS_NumPlayerText"
+		bool wordwrap TRUE
+		int xpix 158
+		int ypix 63
+		int widthpix 260
+		int heightpix 48
+	}
+	MaxPlayerText:SP_POPUP_LABEL {
+		int fontcolorred 0
+		int fontcolorgreen 0
+		int fontcolorblue 0
+
+		string text "str_ldl_SPNGPS_MaxPlayerText"
+		bool wordwrap TRUE
+		int xpix 158
+		int ypix 103
+		int widthpix 260
+		int heightpix 48
+	}
+	PlayerText:SP_POPUP_LABEL {
+		int fontcolorred 255
+		int fontcolorgreen 0
+		int fontcolorblue 0
+
+		string text "str_ldl_SPNGPS_PlayerText"
+		bool wordwrap TRUE
+		int xpix 158
+		int ypix 143
+		int widthpix 260
+		int heightpix 48
+	}
+}
+
+
+
+SPNewGameRulesScreen {
+
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		506
+
+#	int 	ypix		275
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	250
+
+	int	heightpix	160
+
+	Name:CTP_GREY_TITLE_FONT {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		int	ypix	20
+
+		string	text	"str_ldl_Rules"
+#		string	pattern	"uptg20e.tga"
+
+	}
+
+	BackButton:CTP2_STANDARD_FONT {
+
+		int	xpix	325
+
+		int	ypix	165
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+#		string	imagebltflag	"chromakey"
+
+#		string	image0		"upba1807.tga"
+
+#		int	bevelwidth	0
+
+		string	text	"str_ldl_BACK"
+	}
+
+	RuleOne:POPUP_TOGGLESWITCH {
+
+		string	pattern	"uptg20e.tga"
+		int	ypix	50
+
+		stringtable {
+			string	string0	"str_tbl_ldl_Bloodlust_Off"
+			string	string1	"str_tbl_ldl_Bloodlust_On"
+		}
+	}
+
+	RuleTwo:POPUP_TOGGLESWITCH {
+
+		int	ypix	80
+
+		stringtable {
+			string	string0	"str_tbl_ldl_Pollution_Off"
+			string	string1	"str_tbl_ldl_Pollution_On"
+		}
+	}
+
+# Cut from spec.
+#	RuleTwo:POPUP_TOGGLESWITCH {
+#
+#		string	text	"str_ldl_Trade_Off"
+#		int	ypix	75
+#
+#	}
+
+# Cut from spec.
+#	RuleThree:POPUP_TOGGLESWITCH {
+#
+#		string	text	"str_ldl_Invulnerable_Trade"
+#		int	ypix	105
+#
+#	}
+
+# Cut from spec.
+#	RuleFive:POPUP_TOGGLESWITCH {
+#
+#		string	text	"str_ldl_Line_Of_Sight"
+#		int	ypix	165
+#
+#	}
+
+}
+
+
+
+$

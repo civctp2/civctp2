@@ -8,7 +8,6 @@
 
 
 
-
 #include "c3.h"
 #include "CivPaths.h"
 #include "c3files.h"
@@ -391,8 +390,8 @@ extern C3UI *g_c3ui;
 
 BOOL c3files_HasLegalCD()
 {
-	BOOL success = FALSE;
 
+	BOOL success = FALSE;
 	if (g_soundManager) {
 		g_soundManager->CleanupRedbook();
 	}

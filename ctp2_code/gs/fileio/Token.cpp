@@ -1,3 +1,8 @@
+/*
+	fix for japanese by t.s. 2003.12
+		fix Token::Next() for japanese sjis code
+*/
+
 
 
 
@@ -22,6 +27,10 @@
 #ifndef __MAKESPR__
 #include "AdvanceRecord.h"
 #include "BuildingRecord.h"
+#endif
+
+#if defined(_JAPANESE)
+#include "japanese.h"
 #endif
 
 sint32 g_parse_line; 
@@ -918,7 +927,6 @@ sint32 Token::CloseImport(void)
 sint32 Token::Next() 
 
 {
-	
 	while (1) { 
 		
 		
@@ -939,7 +947,8 @@ sint32 Token::Next()
 			break; 
 		} 
 	} 
-	
+
+
 	if (m_cur == EOF) {  
 		
 		if (m_importFile != NULL) {
@@ -1009,8 +1018,22 @@ sint32 Token::Next()
 				} 
 				
 				m_val_string[m_val_string_len] = m_cur; 
-				m_val_string_len++;        
+				m_val_string_len++;
+#if defined(_JAPANESE)
+				 // japanese sjis-code
+				if ( IS_SJIS_1ST(m_cur) ) {
+					m_cur =  getc(m_fin); 
+					if ( IS_SJIS_2ND(m_cur) ) {
+						m_val_string[m_val_string_len] = m_cur; 
+						m_val_string_len++;
+						m_cur =  getc(m_fin); 
+					}
+				} else {
+					m_cur =  getc(m_fin); 
+				}
+#else
 				m_cur =  getc(m_fin); 
+#endif
 			}
 		}
 		m_val_string[m_val_string_len] = 0; 

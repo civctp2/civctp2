@@ -1,4 +1,15 @@
+/*
+	fixed for japanese by t.s. 2003.12
 
+	fix
+		AUI_ERRCODE aui_BitmapFont::RenderLine
+		aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
+		AUI_ERRCODE aui_BitmapFont::DrawString
+		BOOL aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
+
+	add
+		aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo2( MBCHAR *c )
+*/
 
 
 
@@ -18,7 +29,11 @@
 
 #include "aui_bitmapfont.h"
 
+#include <locale.h>
 
+#if defined(_JAPANESE)
+#include "japanese.h"
+#endif
 
 sint32 aui_BitmapFont::m_bitmapFontRefCount = 0;
 TT_Engine aui_BitmapFont::m_ttEngine = { NULL };
@@ -80,7 +95,6 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR *descriptor )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	
 	memset( m_ttffile, '\0', sizeof( m_ttffile ) );
 	m_pointSize = 0;
 	m_bold = 0;
@@ -124,23 +138,10 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR *descriptor )
 
 	if ( !m_bitmapFontRefCount++ )
 	{
-		
 		sint32 error = TT_Init_FreeType( &m_ttEngine );
 		Assert( error == 0 );
 		if ( error ) return AUI_ERRCODE_HACK;
 
-
-
-
-
-
-
-
-
-
-
-
-		
 		static uint8 palette[ 5 ]=
 		{
 			0,		
@@ -167,7 +168,6 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR *descriptor )
 			g_ui->GetBitmapFontResource()->AddSearchPath( fontdir );
 		}
 	}
-
 	return AUI_ERRCODE_OK;
 }
 
@@ -336,6 +336,7 @@ AUI_ERRCODE aui_BitmapFont::SetPointSize( sint32 pointSize )
 		Assert( error == 0 );
 		if ( error ) return AUI_ERRCODE_MEMALLOCFAILED;
 
+		// load glyph of code i to ttGlyph
 		error = TT_Load_Glyph(
 			m_ttInstance,
 			ttGlyph,
@@ -345,13 +346,17 @@ AUI_ERRCODE aui_BitmapFont::SetPointSize( sint32 pointSize )
 		if ( error ) return AUI_ERRCODE_HACK;
 
 		static TT_Glyph_Metrics ttMetrics;
+		// extracts the ttGlyph's metrics and copy them to the ttMetrics.
 		error = TT_Get_Glyph_Metrics( ttGlyph, &ttMetrics );
 		Assert( error == 0 );
 		if ( error ) return AUI_ERRCODE_HACK;
 
+		// maxAscend = max ttMetrics.bearingY
 		sint32 units = ttMetrics.bearingY;
 		if ( units > maxAscend ) maxAscend = units;
 
+		// maxDescend = max ttMetrics.bbox.yMax
+		//		- ttMetrics.bbox.yMin - ttMetrics.bearingY
 		units = ttMetrics.bbox.yMax - ttMetrics.bbox.yMin - units;
 		if ( units > maxDescend ) maxDescend = units;
 
@@ -440,8 +445,6 @@ sint32 aui_BitmapFont::SetBaseLine( sint32 baseLine )
 }
 
 
-
-
 aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 {
 	if ( !IsCached( c ) )
@@ -457,14 +460,10 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 			Assert( space != NULL );
 			if ( !space ) return NULL;
 
-			
 			*gi = *space;
-
-			
 			gi->c = '\t';
-			if ( m_tabSkip < 0 ) m_tabSkip = ( gi->advance *= 4 );
-			
 
+			if ( m_tabSkip < 0 ) m_tabSkip = ( gi->advance *= 4 );
 			return gi;
 		}
 
@@ -476,11 +475,28 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 		Assert( error == 0 );
 		if ( error ) goto Error;
 
+#if defined(_JAPANESE)
+	    // to encode japanese katakana
+		// assume uni-code ttf
+		// only work on ms-windows
+		uint16 c16;
+		if ( IS_KATAKANA(c) ) {
+			setlocale (LC_ALL,"Japanese");
+			wchar_t wc;
+			int i = mbtowc( &wc, &c, MB_CUR_MAX );
+			c16 = (uint16) wc;
+			if ( i < 1 ) {
+				c16 = (uint16)uint8(c);
+			}
+		} else {
+			c16 = (uint16)uint8(c);
+		}
+#endif
+
 		error = TT_Load_Glyph(
 			m_ttInstance,
 			ttGlyph,
-			
-			TT_Char_Index( m_ttCharMap, (uint16)uint8(c) ),
+			TT_Char_Index( m_ttCharMap, c16 ),
 			TTLOAD_DEFAULT );
 		Assert( error == 0 );
 		if ( error ) goto Error;
@@ -490,7 +506,6 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 		Assert( error == 0 );
 		if ( error ) goto Error;
 
-		
 		SetRect(
 			&gi->bbox,
 			(sint32)floor( (double)ttMetrics.bbox.xMin / 64.0 + 0.5 ),
@@ -508,7 +523,9 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 		if ( !m_surfaceList->L()
 		||   nextOffset > k_AUI_BITMAPFONT_SURFACEWIDTH )
 		{
-			aui_Surface *cache = new aui_Surface(
+			aui_Surface *cache;
+
+			cache = new aui_Surface(
 				&errcode,
 				k_AUI_BITMAPFONT_SURFACEWIDTH,
 				m_maxHeight,
@@ -548,6 +565,8 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 			gi->surface->Width(),
 			bitmap.rows );
 
+		//	rect of gi->surface is "rocked".
+		//	bitmap.bitmap = ( top-left of rect in gi->surface.m_saveBuffer )
 		errcode = gi->surface->Lock( &rect, &bitmap.bitmap, 0 );
 		Assert( AUI_SUCCESS(errcode) );
 		if ( AUI_SUCCESS(errcode) )
@@ -557,35 +576,13 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 			Assert( error == 0 );
 			if ( !error )
 			{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				
 				TT_Translate_Outline(
 					&ttOutline,
 					-ttMetrics.bbox.xMin,
 					( bitmap.rows - m_baseLine ) * 64 );
 
+				// copy pixcel map of font to gi->surface.m_saveBuffer
 				error = TT_Get_Outline_Pixmap(
 					m_ttEngine,
 					&ttOutline,
@@ -593,6 +590,7 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 				Assert( error == 0 );
 			}
 
+			//	rect of gi->surface is "unrocked".
 			errcode = gi->surface->Unlock( bitmap.bitmap );
 			Assert( AUI_SUCCESS(errcode) );
 			if ( !AUI_SUCCESS(errcode) ) goto Error;
@@ -612,6 +610,153 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 		return m_glyphs + (sint32)uint8(c); 
 }
 
+
+#if defined(_JAPANESE)
+// alternative method for mult-ibyte c
+aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( const MBCHAR *pc )
+{
+	// assume uni-code ttf
+	// only work on ms-windows
+    setlocale (LC_ALL,"Japanese");
+	wchar_t wc;
+    int i = mbtowc( &wc, pc, MB_CUR_MAX );
+	uint16 c = (uint16) wc;
+
+	if ( !IsCached( c ) )
+	{
+		AUI_ERRCODE errcode;
+
+		GlyphInfo *gi = m_glyphs + (sint32) c; 
+
+		gi->c = *pc;
+		gi->c2 = c;
+
+		TT_Glyph ttGlyph;
+		ttGlyph.z = NULL;
+		sint32 error = TT_New_Glyph( m_ttFace, &ttGlyph );
+		Assert( error == 0 );
+		if ( error ) goto Error;
+
+		// gliph(c) >> ttGlyph
+		error = TT_Load_Glyph(
+			m_ttInstance,
+			ttGlyph,
+		
+			TT_Char_Index( m_ttCharMap, c ),
+			TTLOAD_DEFAULT );
+		Assert( error == 0 );
+		if ( error ) goto Error;
+
+		// metrix of gliph(c) >> ttMetrics
+		TT_Glyph_Metrics ttMetrics;
+		error = TT_Get_Glyph_Metrics( ttGlyph, &ttMetrics );
+		Assert( error == 0 );
+		if ( error ) goto Error;
+
+		SetRect(
+			&gi->bbox,
+			(sint32)floor( (double)ttMetrics.bbox.xMin / 64.0 + 0.5 ),
+			ttMetrics.bbox.yMin / 64,
+			(sint32)floor( (double)ttMetrics.bbox.xMax / 64.0 + 0.5 ),
+			ttMetrics.bbox.yMax / 64 );
+
+		gi->bearingX = (sint16)floor( (double)ttMetrics.bearingX / 64.0 + 0.5 );
+		gi->bearingY = -ttMetrics.bearingY / 64; 
+		gi->advance = (sint16)floor( (double)ttMetrics.advance / 64.0 + 0.5 );
+
+		uint32 nextOffset;
+		nextOffset = m_curOffset + gi->bbox.right - gi->bbox.left;
+
+		if ( !m_surfaceList->L()
+		||   nextOffset > k_AUI_BITMAPFONT_SURFACEWIDTH )
+		{
+			aui_Surface *cache;
+
+			cache = new aui_Surface(
+				&errcode,
+				k_AUI_BITMAPFONT_SURFACEWIDTH,
+				m_maxHeight,
+				8 ); 
+			Assert( AUI_NEWOK(cache,errcode) );
+			if ( !AUI_NEWOK(cache,errcode) ) goto Error;
+
+			m_surfaceList->AddTail( cache );
+
+			nextOffset -= m_curOffset;
+			m_curOffset = 0;
+		}
+
+		gi->surface = m_surfaceList->GetTail();
+
+		
+		OffsetRect(
+			&gi->bbox,
+			m_curOffset - gi->bbox.left,
+			m_baseLine - gi->bbox.top - gi->bbox.bottom );
+
+		TT_Raster_Map bitmap;
+		memset( &bitmap, 0, sizeof( bitmap ) );
+		bitmap.rows = gi->surface->Height();
+		bitmap.cols = gi->surface->Pitch();
+		bitmap.width = gi->surface->Width() - gi->bbox.left; 
+		bitmap.flow = TT_Flow_Down;
+
+		
+		bitmap.size = bitmap.rows * bitmap.cols;
+
+		RECT rect;
+		SetRect(
+			&rect,
+			gi->bbox.left,
+			0,
+			gi->surface->Width(),
+			bitmap.rows );
+
+		//	rect of gi->surface is "rocked".
+		//	bitmap.bitmap = ( top-left of rect in gi->surface.m_saveBuffer )
+		errcode = gi->surface->Lock( &rect, &bitmap.bitmap, 0 );
+		Assert( AUI_SUCCESS(errcode) );
+		if ( AUI_SUCCESS(errcode) )
+		{
+			TT_Outline ttOutline;
+			error = TT_Get_Glyph_Outline( ttGlyph, &ttOutline );
+			Assert( error == 0 );
+			if ( !error )
+			{
+				
+				TT_Translate_Outline(
+					&ttOutline,
+					-ttMetrics.bbox.xMin,
+					( bitmap.rows - m_baseLine ) * 64 );
+
+				// copy pixcel map of font to gi->surface.m_saveBuffer
+				error = TT_Get_Outline_Pixmap(
+					m_ttEngine,
+					&ttOutline,
+					&bitmap );
+				Assert( error == 0 );
+			}
+
+			//	rect of gi->surface is "unrocked".
+			errcode = gi->surface->Unlock( bitmap.bitmap );
+			Assert( AUI_SUCCESS(errcode) );
+			   if ( !AUI_SUCCESS(errcode) ) goto Error;
+		}
+
+		TT_Done_Glyph( ttGlyph );
+
+		m_curOffset = nextOffset;
+
+		return gi;
+
+	Error:
+		if ( ttGlyph.z ) TT_Done_Glyph( ttGlyph );
+		return NULL;
+	}
+	else
+		return m_glyphs + (sint32) c; 
+}
+#endif	// _JAPANESE
 
 
 
@@ -665,20 +810,20 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 
 	sint32 numLines = 1;
 
-	
-	
 	if ( flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP )
 	{
+
+		// copy string to wrapped
 		static MBCHAR wrapped[ k_AUI_BITMAPFONT_MAXSTRLEN + 1 ];
 		strncpy( wrapped, string, len );
 
 		MBCHAR *staticPtr = wrapped;
 		MBCHAR *staticStop = staticPtr + len;
 
+		// cut and wrap into lines and count them.
 		while ( staticPtr != staticStop )
 		{
 			penPos.x = bound->left;
-
 			
 			errcode = GetLineInfo(
 				bound,
@@ -692,7 +837,9 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 
 			if ( staticPtr != staticStop )
 			{
+#if !defined(_JAPANESE)
 				*(staticPtr - 1) = '\n';
+#endif
 				numLines++;
 			}
 
@@ -732,7 +879,6 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 		{
 			penPos.x = bound->left;
 
-			
 			errcode = RenderLine(
 				surface,
 				bound,
@@ -741,7 +887,14 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 				&ptr,
 				stop,
 				color,
+#if !defined(_JAPANESE)
 				underline );
+#else
+				underline,
+				NULL,	
+				NULL,	
+				(flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP) );
+#endif
 			Assert( AUI_SUCCESS(errcode) );
 			if ( !AUI_SUCCESS(errcode) ) return errcode;
 
@@ -782,7 +935,14 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 				&ptr,
 				stop,
 				color,
+#if !defined(_JAPANESE)
 				underline );
+#else
+				underline,
+				NULL,	
+				NULL,	
+				(flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP) );
+#endif
 			Assert( AUI_SUCCESS(errcode) );
 			if ( !AUI_SUCCESS(errcode) ) return errcode;
 
@@ -823,7 +983,14 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 				&ptr,
 				stop,
 				color,
+#if !defined(_JAPANESE)
 				underline );
+#else
+				underline,
+				NULL,	
+				NULL,	
+				(flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP) );
+#endif
 			Assert( AUI_SUCCESS(errcode) );
 			if ( !AUI_SUCCESS(errcode) ) return errcode;
 
@@ -838,7 +1005,7 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 
 
 
-
+// Draw each single line on the screen from (**start) to (*stop)
 AUI_ERRCODE aui_BitmapFont::RenderLine(
 	aui_Surface *surface,
 	RECT *bound,
@@ -921,7 +1088,22 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 		default:
 			if ( !gi )
 			{
+#if !defined(_JAPANESE)
 				gi = GetGlyphInfo( *ptr );
+#else
+				 // japanese sjis-code
+				if ( ptr < stop
+					&& IS_SJIS_1ST( *ptr )
+					&& IS_SJIS_2ND( *(ptr+1) ) ) {
+					gi = GetGlyphInfo( ptr );
+					ptr++;
+					lastBreakPtr = ptr;
+					lastBreakPos = penPos->x;
+				} else {
+					gi = GetGlyphInfo( *ptr );
+				}
+#endif
+
 				Assert( gi != NULL );
 				if ( !gi ) return AUI_ERRCODE_HACK;
 			}
@@ -957,7 +1139,11 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 			break;
 		}
 
+#if !defined(_JAPANESE)
 		if ( wrap && penPos->x > bound->right )
+#else
+		if ( wrap && penPos->x > bound->right - 12)
+#endif
 		{
 			if ( lastBreakPtr )
 			{
@@ -1287,8 +1473,15 @@ BOOL aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
 		Assert( end > 0 );
 		if ( end > 0 )
 		{
-			
+#if defined(_JAPANESE)
+			if( IS_SJIS_2ND( *(name+end) ) ){
+				strcpy( name + end + 1, ".." );
+			} else {
+				strcpy( name + end, "..." );
+			}
+# else
 			strcpy( name + end, "..." );
+# endif
 		}
 
 		

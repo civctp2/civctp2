@@ -1188,7 +1188,9 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 
 	
 	g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation->GetSingularCivName(civName);
+#if !defined(_JAPANESE)
 	civName[4] = 0;
+#endif
 
 	
 	
@@ -1262,7 +1264,9 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 	}
 
 	
+#if !defined(_JAPANESE)
 	theGameName[6] = '\0';
+#endif	
 	
 	
 	
@@ -1275,14 +1279,19 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 			g_startInfoType == STARTINFOTYPE_POSITIONSFIXED) {
 			MBCHAR tempName[k_MAX_NAME_LEN];
 			strcpy(tempName, g_theProfileDB->GetLeaderName());
+#if !defined(_JAPANESE)
 			tempName[6] = '\0';
 			c3files_StripSpaces(tempName);
 			sprintf(saveName, "%s-%s-%s", tempName, civName, theYear);
 		} else {
 			sprintf(saveName, "%s-%s-%s", theGameName, civName, theYear);
+#else
+			c3files_StripSpaces(tempName);
+			sprintf(saveName, "%s-%s", theYear, tempName);
+		} else {
+			sprintf(saveName, "%s-%s", theYear, theGameName);
+#endif
 		}
-
-	
 
 	strcpy(name, saveName);
 

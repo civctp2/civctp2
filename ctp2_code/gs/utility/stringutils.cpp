@@ -1,4 +1,9 @@
+/*
+	fixed for japanese by t.s. 2003.12
 
+	fix
+		void stringutils_Interpret(const MBCHAR *msg, SlicContext &slicObj, MBCHAR *sInterpreted)
+*/
 
 #include "c3.h"
 
@@ -37,6 +42,10 @@
 #include "sliccmd.h"
 #include "sc.tab.h"
 
+#if defined(_JAPANESE)
+#include "japanese.h"
+#endif
+
 void stringutils_HackColor(BOOL on)
 {
 }
@@ -53,22 +62,23 @@ void stringutils_Interpret(const MBCHAR *msg, SlicContext &slicObj, MBCHAR *sInt
 	char catString[k_MAX_INTERP_LEN];
 	bool filledBuiltins = false;
 
+	// '{','}','#' have no meanings in sjis second byte.
 	while(*input && (output < end)) {
-		if(*input != '{') {
+#if !defined(_JAPANESE)
+		if(*input != '{' || input != msg ) {
+#else
+		if(*input != '{' || ( input != msg && IS_SJIS_1ST( *(input-1) ) ) ) {
+#endif
 			*output++ = *input++;
 			continue;
 		}
 
-		
-		
-
-		
-		
-		
-		
-		
 		const char *closeBrace = input + 1;
-		while(*closeBrace && *closeBrace != '}' && *closeBrace != '#')
+#if !defined(_JAPANESE)
+			while(*closeBrace && *closeBrace != '}' && *closeBrace != '#' )
+#else
+			while(*closeBrace && ( *closeBrace != '}' && *closeBrace != '#' || IS_SJIS_1ST(*(closeBrace-1)) ) )
+#endif
 			closeBrace++;
 
 		Assert(*closeBrace);
@@ -83,7 +93,11 @@ void stringutils_Interpret(const MBCHAR *msg, SlicContext &slicObj, MBCHAR *sInt
 
 		if(*closeBrace == '#') {
 			const char *catStrPtr = closeBrace + 1;
-			while(*closeBrace && *closeBrace != '}') {
+#if !defined(_JAPANESE)
+			while(*closeBrace && *closeBrace != '}' ) {
+#else
+			while(*closeBrace && ( *closeBrace != '}' || IS_SJIS_1ST(*(closeBrace-1)) ) ) {
+#endif
 				closeBrace++;
 			}
 			Assert(*closeBrace);

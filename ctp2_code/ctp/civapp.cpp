@@ -1297,6 +1297,9 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 {
 	sint32		success;
 
+#if defined(_JAPANESE)
+	DPRINTF( k_DBG_ALL, ("Japanese Edition.\n"))
+#endif
 	
 
 	
@@ -3698,7 +3701,9 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 
 	
 	strcpy(leaderName, g_theProfileDB->GetLeaderName());
+#if !defined(_JAPANESE)
 	leaderName[6] = '\0';
+#endif
 	c3files_StripSpaces(leaderName);
 
 	
