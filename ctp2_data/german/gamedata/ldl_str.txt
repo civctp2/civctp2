@@ -1518,7 +1518,7 @@ str_ldl_SPNGPS_MaxPlayerSpinner		"Maximale Anzahl der Spieler"
 str_ldl_SPNGPS_PlayerSpinner		"Start Spieler"
 
 str_ldl_SPNGPS_NumPlayerText	"Setzt die Anzahl der Spieler im neuen Spiel."
-str_ldl_SPNGPS_MaxPlayerText	"Setzt die Maximalanzahl der Spieler, die in einem Spiel erscheinen können."
+str_ldl_SPNGPS_MaxPlayerText	"Setzt die Maximalanzahl der Zivilisationen, die gleichzeitig im Spiel sein können."
 str_ldl_SPNGPS_PlayerText	"Setzt den Startspieler. Bestimmt die Farbe der Zivilisation. (Funktioniert noch nicht.)"
 
 ### Added Disclaimer Strings ###

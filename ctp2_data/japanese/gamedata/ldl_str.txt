@@ -3169,7 +3169,7 @@ str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net."
 
 ### Version String ###
 
-str_ldl_version "2003-12-23"
+str_ldl_version "2003-02-21"
 str_ldl_RANKING_POLLUTION		"âòêı"
 str_ldl_RANKING_WONDER		"éµïsévãc"
 

@@ -1,0 +1,2863 @@
+// This is a SLIC file.
+
+// Variables used in this file
+int_t space_launch_count;
+int_t played_auto_unload_message;
+int_t saidPillageOK;
+
+int_t numberOfUpgradesAvailable;
+int_t savedThroneRoomScore;
+int_t throneRoomUpgradeAt;
+int_t AgeYear;
+
+messagebox '04CitiesKilledByCalamity' {
+	Text(ID_CITIES_KILLED_BY_CALAMITY);
+	MessageType("STARVE");
+}
+
+messagebox '10aInvestigateCityFailed' {
+	Show();
+	Text(ID_INVESTIGATE_CITY_FAILED_VICTIM);
+	MessageType("INVESTIGATE_CITY_ICON");
+}
+
+messagebox '10bStealTechnologyFailed' {
+	Show();
+	Text(ID_STEAL_TECHNOLOGY_FAILED_VICTIM);
+	MessageType("STEAL_ADVANCE_ICON");
+}
+
+messagebox '10cInciteRevolutionFailed' {
+	Show();
+	Text(ID_INCITE_REVOLUTION_FAILED_VICTIM);
+	MessageType("INCITE");
+}
+
+messagebox '10dAssassinationFailed' {
+	Show();
+	Text(ID_CONDUCTHIT_FAILED_VICTIM);
+	MessageType("BOMB_CABINET");
+}
+
+messagebox '10gNukeFailed' {
+	Show();
+	Text(ID_NUKE_FAILED_VICTIM) ;
+	MessageType("PLANT_NUKE_ICON");
+}
+
+messagebox '10gSafeFromNukes' {
+	Text(ID_SAFE_FROM_NUKES_VICTIM);
+	MessageType("MILITARY");
+}
+
+messagebox '10hImmuneToNanoTerror' {
+	Text(ID_IMMUNE_TO_NANO_TERROR_VICTIM);
+	MessageType("NANOVIRUS");
+}
+
+messagebox '10hNanoTerrorFailed' {
+	Show();
+	Text(ID_NANO_TERROR_FAILED_VICTIM);
+	MessageType("NANOVIRUS");
+}
+
+messagebox '10hNanoTerrorComplete' {
+	Text(ID_NANO_TERROR_COMPLETE_VICTIM);
+	MessageType("NANOVIRUS");
+}// String is not part of the ctp2.exe
+
+messagebox '10iImmuneToBioInfect' {
+	Text(ID_IMMUNE_TO_BIOINFECT_VICTIM);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '10iBioInfectComplete' {
+	Text(ID_BIOINFECT_COMPLETE_VICTIM);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '10iBioInfectFailed' {
+	Show();
+	Text(ID_BIOINFECT_FAILED_VICTIM);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '10jImmuneToPlague' {
+	Show();
+	Text(ID_IMMUNE_TO_PLAGUE_VICTIM);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '10jPlagueComplete' {
+	Text(ID_PLAGUE_COMPLETE_VICTIM);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '10jPlagueFailed' {
+	Show();
+	Text(ID_PLAGUE_FAILED_VICTIM);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '10zStoppedBySpies' {
+	Show();
+	Text(ID_STOPPED_BY_SPIES_VICTIM);
+	MessageType("SPY");
+}
+
+messagebox '11aInvestigateCityFailed' {
+	Show();
+	Text(ID_INVESTIGATE_CITY_FAILED_AGRESSOR);
+	MessageType("INVESTIGATE_CITY_ICON");
+}
+
+alertbox '11bStealTechnologyFailed' {
+	Show();
+	Text(ID_STEAL_TECHNOLOGY_FAILED_AGRESSOR);
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '11bNothingToSteal' {
+	Show();
+	Text(ID_NOTHING_TO_STEAL_AGRESSOR);
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '11bStoleTechnology' {
+	Text(ID_STOLE_TECHNOLOGY_AGRESSOR);
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+messagebox '11cInciteRevolutionFailed' {
+	Show();
+	Text(ID_INCITE_REVOLUTION_FAILED_AGRESSOR);
+	MessageType("INCITE");
+}
+
+messagebox '11dAssassinationFailed' {
+	Show();
+	Text(ID_CONDUCTHIT_FAILED_ATTACK);
+	MessageType("BOMB_CABINET");
+}
+
+messagebox '11gSafeFromNukes' {
+	Text(ID_SAFE_FROM_NUKES_AGRESSOR);
+	MessageType("MILITARY");
+}
+
+messagebox '11gNukeFailed' {
+	Show();
+	Text(ID_NUKE_FAILED_AGRESSOR);
+	MessageType("PLANT_NUKE_ICON");
+}
+
+messagebox '11hNanoTerrorFailed' {
+	Show();
+	Text(ID_NANO_TERROR_FAILED_AGRESSOR);
+	MessageType("NANOVIRUS");
+}
+
+messagebox '11hImmuneToNanoTerror' {
+	Show();
+	Text(ID_IMMUNE_TO_NANO_TERROR_AGRESSOR);
+	MessageType("NANOVIRUS");
+}
+
+messagebox '11iImmuneToBioInfect' {
+	Show();
+	Text(ID_IMMUNE_TO_BIOINFECT_AGRESSOR);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '11iBioInfectComplete' {
+	Text(ID_BIOINFECT_COMPLETE_AGRESSOR);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '11iBioInfectFailed' {
+	Show();
+	Text(ID_BIOINFECT_FAILED_AGRESSOR);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '11jImmuneToPlague' {
+	Show();
+	Text(ID_IMMUNE_TO_PLAGUE_AGRESSOR);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '11jPlagueComplete' {
+	Text(ID_PLAGUE_COMPLETE_AGRESSOR);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '11jPlagueFailed' {
+	Show();
+	Text(ID_PLAGUE_FAILED_AGRESSOR);
+	MessageType("INFECT_CITY");
+}
+
+messagebox '11zStoppedBySpies' {
+	Show();
+	Text(ID_STOPPED_BY_SPIES_AGRESSOR);
+	MessageType("SPY");
+}
+
+//============================================================================
+// New Diplomacy messages
+//============================================================================
+
+messagebox '01dipRequestGreetings' {
+	TEXT(ID_DIP_REQUEST_GREETINGS);
+	MessageType("DIPLOMATIC");
+}
+
+messagebox '01dipDemandGold' {
+	TEXT(ID_DIP_DEMAND_GOLD);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("DEMANDS");
+	MessageClass(2001);
+}
+
+//  messagebox '01dipDemandCity' {
+//  	TEXT(ID_DIP_DEMAND_CITY);
+//  	Button(ID_BUTTON_ACCEPT) { Accept(); }
+//  	Button(ID_BUTTON_REJECT) { Reject(); }
+//  	MessageType("DEMANDS");
+//  	MessageClass(2001);
+//  }
+
+messagebox '01dipDemandMaps' {
+	TEXT(ID_DIP_DEMAND_MAPS);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("DEMANDS");
+	MessageClass(2001);
+}
+
+messagebox '01dipDemandAdvance' {
+	TEXT(ID_DIP_DEMAND_ADVANCE);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("DEMANDS");
+	MessageClass(2001);
+}
+
+messagebox '01dipDemandPiracy' {
+	TEXT(ID_DIP_DEMAND_PIRACY);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("DEMANDS");
+	MessageClass(2001);
+}
+
+messagebox '01dipDemandStoptrade' {
+	TEXT(ID_DIP_DEMAND_STOPTRADE);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("DEMANDS");
+	MessageClass(2001);
+}
+
+messagebox '01dipDemandPollution' {
+	TEXT(ID_DIP_DEMAND_POLLUTION);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("DEMANDS");
+	MessageClass(2001);
+}
+
+messagebox '01dipDemandLeave' {
+	TEXT(ID_DIP_DEMAND_LEAVE);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("DEMANDS");
+	MessageClass(2001);
+}
+
+messagebox '01dipDemandAttack' {
+	TEXT(ID_DIP_DEMAND_ATTACK);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("DEMANDS");
+	MessageClass(2001);
+}
+
+messagebox '01dipOfferGold' {
+	TEXT(ID_DIP_OFFER_GOLD);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("GIFT");
+	MessageClass(2001);
+}
+
+//  messagebox '01dipOfferCity' {
+//  	TEXT(ID_DIP_OFFER_CITY);
+//  	Button(ID_BUTTON_ACCEPT) { Accept(); }
+//  	Button(ID_BUTTON_REJECT) { Reject(); }
+//  	MessageType("GIFT");
+//  	MessageClass(2001);
+//  }
+
+messagebox '01dipOfferMaps' {
+	TEXT(ID_DIP_OFFER_MAPS);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("GIFT");
+	MessageClass(2001);
+}
+
+messagebox '01dipOfferAdvance' {
+	TEXT(ID_DIP_OFFER_ADVANCE);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("GIFT");
+	MessageClass(2001);
+}
+
+messagebox '01dipTreatyCease' {
+	TEXT(ID_DIP_TREATY_CEASE);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("TREATY");
+	MessageClass(2001);
+}
+
+messagebox '01dipTreatyEco' {
+	TEXT(ID_DIP_TREATY_ECO);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("TREATY");
+	MessageClass(2001);
+}
+
+messagebox '01dipTreatyAlliance' {
+	TEXT(ID_DIP_TREATY_ALLIANCE);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("TREATY");
+	MessageClass(2001);
+}
+
+messagebox '01dipExchangeAdvance' {
+	TEXT(ID_DIP_EXCHANGE_ADVANCE);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("EXCHANGE");
+	MessageClass(2001);
+}
+
+//  messagebox '01dipExchangeCity' {
+//  	TEXT(ID_DIP_EXCHANGE_CITY);
+//  	Button(ID_BUTTON_ACCEPT) { Accept(); }
+//  	Button(ID_BUTTON_REJECT) { Reject(); }
+//  	MessageType("EXCHANGE");
+//  	MessageClass(2001);
+//  }
+
+messagebox '01dipExchangeMaps' {
+	TEXT(ID_DIP_EXCHANGE_MAPS);
+	Button(ID_BUTTON_ACCEPT) { Accept(); }
+	Button(ID_BUTTON_REJECT) { Reject(); }
+	MessageType("EXCHANGE");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptDemandGold' {
+	Text(ID_DIP_ACCEPT_DEMAND_GOLD);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+	
+}
+
+//  messagebox '01dipAcceptDemandCity' {
+//  	Text(ID_DIP_ACCEPT_DEMAND_CITY);
+//  	MessageType("DIPLOMATIC");
+//  	MessageClass(2001);
+//  }// String is not part of the ctp2.exe
+
+messagebox '01dipAcceptDemandMaps' {
+	Text(ID_DIP_ACCEPT_DEMAND_MAPS);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);	
+}
+
+messagebox '01dipAcceptDemandAdvance' {
+	Text(ID_DIP_ACCEPT_DEMAND_ADVANCE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptDemandPiracy' {
+	Text(ID_DIP_ACCEPT_DEMAND_PIRACY);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptDemandStoptrade' {
+	Text(ID_DIP_ACCEPT_DEMAND_STOPTRADE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptDemandPollution' {
+	Text(ID_DIP_ACCEPT_DEMAND_POLLUTION);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptDemandLeave' {
+	Text(ID_DIP_ACCEPT_DEMAND_LEAVE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptDemandAttack' {
+	Text(ID_DIP_ACCEPT_DEMAND_ATTACK);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptOfferGold' {
+	Text(ID_DIP_ACCEPT_OFFER_GOLD);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+//  messagebox '01dipAcceptOfferCity' {
+//  	Text(ID_DIP_ACCEPT_OFFER_CITY);
+//  	MessageType("DIPLOMATIC");
+//  	MessageClass(2001);
+//  }
+
+messagebox '01dipAcceptOfferMaps' {
+	Text(ID_DIP_ACCEPT_OFFER_MAPS);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptOfferAdvance' {
+	Text(ID_DIP_ACCEPT_OFFER_ADVANCE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptTreatyCease' {
+	Text(ID_DIP_ACCEPT_TREATY_CEASE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+	
+}
+
+messagebox '01dipAcceptTreatyEco' {
+	Text(ID_DIP_ACCEPT_TREATY_ECO);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptTreatyAlliance' {
+	Text(ID_DIP_ACCEPT_TREATY_ALLIANCE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipAcceptExchangeAdvance' {
+	Text(ID_DIP_ACCEPT_EXCHANGE_ADVANCE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+//  messagebox '01dipAcceptExchangeCity' {
+//  	Text(ID_DIP_ACCEPT_EXCHANGE_CITY);
+//  	MessageType("DIPLOMATIC");
+//  	MessageClass(2001);
+//  }// String is not part of the ctp2.exe
+
+messagebox '01dipAcceptExchangeMaps' {
+	Text(ID_DIP_ACCEPT_EXCHANGE_MAPS);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectDemandGold' {
+	Text(ID_DIP_REJECT_DEMAND_GOLD);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+//  messagebox '01dipRejectDemandCity' {
+//  	Text(ID_DIP_REJECT_DEMAND_CITY);
+//  	MessageType("DIPLOMATIC");
+//  	MessageClass(2001);
+//  }
+
+messagebox '01dipRejectDemandMaps' {
+	Text(ID_DIP_REJECT_DEMAND_MAPS);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectDemandAdvance' {
+	Text(ID_DIP_REJECT_DEMAND_ADVANCE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectDemandPiracy' {
+	Text(ID_DIP_REJECT_DEMAND_PIRACY);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectDemandStoptrade' {
+	Text(ID_DIP_REJECT_DEMAND_STOPTRADE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectDemandPollution' {
+	Text(ID_DIP_REJECT_DEMAND_POLLUTION);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectDemandLeave' {
+	Text(ID_DIP_REJECT_DEMAND_LEAVE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectDemandAttack' {
+	Text(ID_DIP_REJECT_DEMAND_ATTACK);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectOfferGold' {
+	Text(ID_DIP_REJECT_OFFER_GOLD);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+//  messagebox '01dipRejectOfferCity' {
+//  	Text(ID_DIP_REJECT_OFFER_CITY);
+//  	MessageType("DIPLOMATIC");
+//  	MessageClass(2001);
+//  }
+
+messagebox '01dipRejectOfferMaps' {
+	Text(ID_DIP_REJECT_OFFER_MAPS);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectOfferAdvance' {
+	Text(ID_DIP_REJECT_OFFER_ADVANCE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectTreatyCease' {
+	Text(ID_DIP_REJECT_TREATY_CEASE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectTreatyEco' {
+	Text(ID_DIP_REJECT_TREATY_ECO);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectTreatyAlliance' {
+	Text(ID_DIP_REJECT_TREATY_ALLIANCE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+messagebox '01dipRejectExchangeAdvance' {
+	Text(ID_DIP_REJECT_EXCHANGE_ADVANCE);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+//  messagebox '01dipRejectExchangeCity' {
+//  	Text(ID_DIP_REJECT_EXCHANGE_CITY);
+//  	MessageType("DIPLOMATIC");
+//  	MessageClass(2001);
+//  }
+
+messagebox '01dipRejectExchangeMaps' {
+	Text(ID_DIP_REJECT_EXCHANGE_MAPS);
+	MessageType("DIPLOMATIC");
+	MessageClass(2001);
+}
+
+
+messagebox '25aTariffsRaised' {
+//	Text(ID_TARIFFS_RAISED) ;
+// no longer used
+}// String is not part of the ctp2.exe
+
+messagebox '25bTariffsLowered' {
+//	Text(ID_TARIFFS_LOWERED) ;
+// no longer used
+}// String is not part of the ctp2.exe
+
+messagebox '26MonopolyDetected' {
+	Text(ID_MONOPOLY_DETECTED);
+	MessageType("TRADE");	
+}// String is not part of the ctp2.exe
+		
+messagebox '29SpecialDiscovery' {
+	Text(ID_SPECIAL_DISCOVERY_PLAYER);
+	MessageType("KNOWLEDGE");
+}// String is not part of the ctp2.exe
+
+messagebox '30SpecialDiscovery' {
+	Text(ID_SPECIAL_DISCOVERY_OTHER);
+	MessageType("KNOWLEDGE");
+}// String is not part of the ctp2.exe
+
+messagebox '31CrisisCitiesInRevolt' {
+	Text(ID_CRISIS_CITIES_IN_REVOLT);
+	MessageType("REVOLT");
+}// String is not part of the ctp2.exe
+
+messagebox '32CrisisStarvingCities' {
+	Text(ID_CRISIS_CITY_IS_STARVING);
+	MessageType("STARVE");
+	EyePoint(city[0]);
+}// String is not part of the ctp2.exe
+
+messagebox '33CrisisCityInfected' {
+	Text(ID_CRISIS_CITY_IS_INFECTED);
+}
+
+messagebox '37CityQueueIsEmpty' {
+	Text(ID_CITY_BUILD_QUEUE_IS_EMPTY);
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+	Duration(1);
+	MessageType("WASTING_WORK");
+	Title(ID_TITLE_CITY_BUILD_QUEUE_IS_EMPTY);
+}
+
+// rsh021299 - added
+messagebox 'OpenProductionCallback' {// called by the EyePoint
+	Abort();
+
+// SAM030600
+// removed the KILL of the message when the eyepoint's clicked
+//	KillEyepointMessage();
+
+	OpenProductionTab();
+}
+
+messagebox '38UnitCompleted' {
+	Text(ID_NEW_UNIT_COMPLETED);
+	Duration(1);
+	MessageType("NEXT_UNIT_ICON");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+}
+
+messagebox '38UnitCompletedQueueEmpty' {
+	Text(ID_UNIT_COMPLETED_QUEUE_EMPTY);
+	Duration(1);
+	MessageType("WASTING_WORK");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+}
+
+messagebox '38BuildingBuilt' {
+	Text(ID_BUILDING_BUILT);
+	Duration(1);
+	MessageType("NEW_BUILDING");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+}
+
+messagebox '38BuildingBuiltQueueEmpty' {
+	Text(ID_BUILDING_BUILT_QUEUE_EMPTY);
+	Duration(1);
+	MessageType("WASTING_WORK");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+}
+
+messagebox '38WonderBuilt' {
+	Text(ID_WONDER_BUILT);
+	Duration(1);
+	MessageType("IWONDER");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+}
+
+messagebox '38WonderBuiltQueueEmpty' {
+	Text(ID_WONDER_BUILT_QUEUE_EMPTY);
+	Duration(1);
+	MessageType("WASTING_WORK");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+}
+
+messagebox '38EndgameBuilt' {
+	Text(ID_ENDGAME_BUILT);
+	Duration(1);
+	MessageType("ENDGAME");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+}
+
+messagebox '38EndgameBuiltQueueEmpty' {
+	Text(ID_ENDGAME_BUILT_QUEUE_EMPTY);
+	Duration(1);
+	MessageType("WASTING_WORK");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');
+}
+
+messagebox '39CitiesInefficient' {
+	Text(ID_CITY_INEFFICIENCY);
+	EyePoint(city[0].location);
+	MessageType("WASTING_WORK");
+}// String is not part of the ctp2.exe
+
+messagebox '40CityIsCelebratingHappiness' {
+	Text(ID_CITY_IS_CELEBRATING_HAPPINESS);
+	Duration(1);
+}
+
+messagebox '41UnitDisbandedOnGovChange' {
+	Show();
+	Text(ID_UNIT_DISBANDED_ON_GOV_CHANGE);
+}
+
+messagebox '42UnitExpelled' {
+	MessageType("MILITARY");
+	Text(ID_UNIT_EXPELLED);
+}
+
+messagebox '44WonderStarted' {
+	Show();
+	MessageType("IWONDER");
+	Text(ID_WONDER_STARTED);
+	Duration(2);
+}
+
+messagebox '44aWonderStopped' {
+	Show();
+	MessageType("IWONDER");
+	Text(ID_WONDER_STOPPED);
+	Duration(2);
+}
+
+messagebox '45WonderAlmostFinished' {
+	Show();
+	MessageType("IWONDER");
+	Text(ID_WONDER_ALMOST_FINISHED);
+	Duration(2);
+}
+
+messagebox '46WonderComplete' {
+	MessageType("IWONDER");
+	Text(ID_WONDER_COMPLETE_OWNER);
+	Duration(2);
+}
+
+messagebox '47WonderComplete' {
+	Show();
+	MessageType("IWONDER");
+	Text(ID_WONDER_COMPLETE_ALL);
+	Duration(2);
+}
+
+messagebox '48WorldPollutionSpaceLaunch' {
+	if (space_launch_count == 9) {
+		space_launch_count = 0;
+		MessageType("POLLUTION");
+		Text(ID_WORLD_POLLUTION_SPACE_LAUNCH) ;
+        } else {
+		space_launch_count = space_launch_count + 1;
+		Abort();
+	}
+}// String is not part of the ctp2.exe
+
+messagebox '49WorldPollutionNuclearWar' {
+	Show();
+	MessageType("POLLUTION");
+	Text(ID_WORLD_POLLUTION_NUCLEAR_WAR) ;
+}
+
+messagebox '50WorldPollution' {
+	Show();
+	MessageType("POLLUTION");
+	Text(ID_WORLD_POLLUTION_GLOBAL_WARMING) ;
+}// String is not part of the ctp2.exe
+
+messagebox '51WorldPollutionOzoneLoss' {
+	Show();
+	MessageType("POLLUTION");
+	Text(ID_WORLD_POLLUTION_OZONE_LOSS_IMMINENT) ;
+}// String is not part of the ctp2.exe
+
+messagebox '52WorldPollutionFlooding' {
+	Show();
+	MessageType("POLLUTION");
+	Text(ID_WORLD_POLLUTION_FLOODING_MINOR) ;
+}// String is not part of the ctp2.exe
+
+messagebox '53WorldPollutionFlooding' {
+	Show();
+	MessageType("POLLUTION");
+	Text(ID_WORLD_POLLUTION_FLOODING_MAJOR) ;
+}// String is not part of the ctp2.exe
+
+messagebox '54WorldPollutionOzoneLoss' {
+//FIXMEBRAD	Text(ID_WORLD_POLLUTION_OZONE_LOSS) ;
+	Show();
+	MessageType("POLLUTION");
+	Text(ID_WORLD_POLLUTION_OZONE_LOSS_IMMINENT) ;
+}// String is not part of the ctp2.exe
+
+messagebox '55WorldPollutionWarning' {
+	Show();
+	MessageType("POLLUTION");
+	Text(ID_WORLD_POLLUTION_WARNING) ;
+}// String is not part of the ctp2.exe
+
+messagebox '57PlayerDiscoversNewGovernment' {
+	Show();
+	Text(ID_PLAYER_DISCOVERS_NEW_GOVERNMENT) ;
+	MessageType("CIVILIZATION");
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+
+	Button(ID_BUTTON_YES) {
+		SetGovernment(government[0]);
+		Kill();
+	}
+}
+
+messagebox '58UnitObsoleteCivwide' {// Just the string 114UnitObsoleteCivwide found in the ctp2.exe
+	Text(ID_UNIT_OBSOLETE_CIVWIDE) ;
+	MessageType("WARNING");
+}
+
+messagebox '73EndOfGameTimeIsRunningOut' {
+	Text(ID_END_OF_GAME_TIME_IS_RUNNING_OUT) ;
+	Show();
+	MessageType("CIVILIZATION");
+}
+
+alertbox '74EndOfGameOutOfTime' {
+	Text(ID_END_OF_GAME_OUT_OF_TIME);
+	MessageType("CIVILIZATION");
+	Button(ID_BUTTON_END_GAME) {
+		Kill();
+		GameOver(g.player, 0);
+	}
+	Button(ID_BUTTON_CONTINUE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+messagebox '75PlayerDefeated' {
+	Text(ID_PLAYER_DEFEATED) ;
+	Show();
+	MessageType("CIVILIZATION");
+}
+
+messagebox '76PlayerDefeatedBy' {
+	Text(ID_PLAYER_DEFEATED_BY) ;
+	Show();
+	MessageType("CIVILIZATION");
+}
+
+messagebox '77YouLose' {
+	Text(ID_YOU_LOSE);
+	Show();
+	MessageType("CIVILIZATION");
+}
+
+//// Found Stuff ////
+
+alertbox '79DiscoveredRemnantsOfAncientCivilisation' {
+	Text(ID_DISCOVERED_REMNANTS_OF_ANCIENT_CIV) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+	UseDirector();
+}
+
+alertbox '80RuinBecomesCity' {
+	Text(ID_RUIN_BECOMES_CITY) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+	UseDirector();
+}
+
+alertbox '81NomadsHaveJoinedYourCivilisation' {
+	Text(ID_NOMADS_HAVE_JOINED_YOU) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+	UseDirector();
+}
+
+alertbox '82MercenariesHaveJoinedYourCivilisation' {
+//	MessageType("MILITARY");
+	Text(ID_MERCENARIES_HAVE_JOINED_YOU) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+	UseDirector();
+}
+
+alertbox '83DiscoveredAncientTreasure' {
+//	MessageType("TRADE");
+	Text(ID_DISCOVERED_ANCIENT_TREASURE) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+	UseDirector();
+}
+
+alertbox '84BesetByVandals' {
+	Text(ID_BESET_BY_VANDALS) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+	UseDirector();
+}
+
+//  messagebox '85PactFulfilledCityCapturedFirstParty' {
+//  	Text(ID_PACT_FULFILLED_CITY_CAPTURED_FIRSTPARTY) ;
+//  }
+//  messagebox '86PactFulfilledCityCapturedSecondParty' {
+//  	Text(ID_PACT_FULFILLED_CITY_CAPTURED_SECONDPARTY) ;
+//  }
+
+messagebox '87PactFulfilledEnemyDestroyedFirstParty' {
+	Text(ID_PACT_FULFILLED_ENEMY_DESTROYED_FIRSTPARTY) ;
+}// String is not part of the ctp2.exe
+messagebox '88PactFulfilledEnemyDestroySecondParty' {
+	Text(ID_PACT_FULFILLED_ENEMY_DESTROYED_SECONDPARTY) ;
+}// String is not part of the ctp2.exe
+
+messagebox '89CityStarving' {
+	Text(ID_CITY_STARVING);
+	EyePoint(city[0].location);
+	Duration(1);
+	MessageType("STARVE");
+}// String is not part of the ctp2.exe
+
+messagebox '90AcceptTradeOffer' {
+	MessageType("TRADE");
+	Text(ID_ACCEPT_TRADE_OFFER);
+	Button(ID_BUTTON_YES) {
+		AcceptTradeOffer(1);
+		Kill();
+}
+
+	Button(ID_BUTTON_NO) {
+		DontAcceptTradeOffer(1);
+		Kill();
+	}
+}
+
+messagebox '90bAcceptSlaveTradeOffer' {
+	MessageType("TRADE");
+//FIXMEBRAD	Text(ID_ACCEPT_SLAVE_TRADE_OFFER);
+	Button(ID_BUTTON_YES) {
+		AcceptTradeOffer(1);
+		Kill();
+	}
+
+	Button(ID_BUTTON_NO) {
+		DontAcceptTradeOffer(1);
+		Kill();
+	}
+}
+
+//messagebox '90bAcceptSlaveTradeOffer' {//No need to have this 
+//	MessageType("TRADE");
+//FIXMEBRAD	Text(ID_ACCEPT_SLAVE_TRADE_OFFER);
+//	Button(ID_BUTTON_YES) {
+//		AcceptTradeOffer(1);
+//		Kill();
+//	}
+//
+//	Button(ID_BUTTON_NO) {
+//		DontAcceptTradeOffer(1);
+//		Kill();
+//	}
+//}
+
+messagebox '91OfferRejected' {
+	MessageType("TRADE");
+	Text(ID_OFFER_REJECTED);
+}
+
+alertbox '93BesetByNothing' {
+	Text(ID_BESET_BY_NOTHING);
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+	UseDirector();
+}
+
+messagebox '94GossipFullReadiness' {
+	Title(ID_GOSSIP_CAPTION);
+	//Caption(ID_GOSSIP_CAPTION); //Caption isn't implemented use Title instead
+	Text(ID_GOSSIP_WARTIME_READINESS);//presuming these messages are used by the game engine
+}
+
+messagebox '95GossipAlertReadiness' {
+	Title(ID_GOSSIP_CAPTION);
+	//Caption(ID_GOSSIP_CAPTION);
+	Text(ID_GOSSIP_ALERT_READINESS);
+}
+
+messagebox '96GossipPeacetimeReadiness' {
+	Title(ID_GOSSIP_CAPTION);
+	//Caption(ID_GOSSIP_CAPTION);
+	Text(ID_GOSSIP_PEACETIME_READINESS);
+}
+
+messagebox '97GossipBoring' {
+	Title(ID_GOSSIP_CAPTION);
+	//Caption(ID_GOSSIP_CAPTION);
+	Text(ID_GOSSIP_BORING);
+}
+
+messagebox '98GossipMap' {
+	Title(ID_GOSSIP_CAPTION);
+	//Caption(ID_GOSSIP_CAPTION);
+	Text(ID_GOSSIP_MAP);
+	EyePoint(location[0]);
+}
+
+messagebox '99AdvanceFromCapturingCity' {
+	Text(ID_ADVANCE_FROM_CAPTURING_CITY);
+	MessageType("KNOWLEDGE");
+}
+
+messagebox '100CityRioting' {
+	Text(ID_CITY_RIOTING);
+	EyePoint(city[0]);
+	Duration(1);
+	//MessageType("WARNING");
+	MessageType("UPRISING");
+}
+
+alertbox '101StealWhichAdvance' {
+	StealRandomAdvance();
+	Abort();
+}//Don't allow specific advance
+//
+//	Text(ID_STEAL_WHICH_ADVANCE);
+//
+//	Button(ID_BUTTON_CANCEL) {
+//		Kill();
+//	}
+//
+//	Button(ID_BUTTON_RANDOM) {
+//		StealRandomAdvance();
+//		Kill();
+//	}
+//
+//	Button(ID_BUTTON_STEAL_THIS) {
+//		StealSpecificAdvance();
+//		Kill();
+//	}
+//}
+
+
+messagebox '102NoAdvancesToSteal' {
+	Text(ID_NO_ADVANCES_TO_STEAL);
+	MessageType("INVESTIGATE_CITY_ICON");
+	MessageType("ZOOMEYE");
+}
+
+messageBox '103WageLevelReset' {
+	Text(ID_WAGE_LEVEL_RESET);
+	MessageType("CIVILIZATION");
+}
+
+alertBox '104NextHotSeatPlayer' {
+	Text(ID_NEXT_HOT_SEAT_PLAYER);
+	BlankScreen(1);
+	Button(ID_BUTTON_READY) {
+		BlankScreen(0);
+		Kill();
+	}
+}
+
+alertBox '105NextEmailPlayer' {
+	Text(ID_NEXT_EMAIL_PLAYER);
+	BlankScreen(1);
+	Button(ID_BUTTON_OK) {
+		Kill();
+		ExitToShell();
+	}
+	Button(ID_BUTTON_QUIT_GAME) {
+		Kill();
+		ExitToDesktop();
+	}
+}
+
+messageBox '106YouBrokeAlliance' {
+	Text(ID_YOU_BROKE_ALLIANCE);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messageBox '107AllianceBroken' {
+	Text(ID_ALLIANCE_BROKEN);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messageBox '108YouBrokeCeaseFire' {
+	Text(ID_YOU_BROKE_CEASE_FIRE);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messageBox '109CeaseFireBroken' {
+	Text(ID_CEASE_FIRE_BROKEN);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+alertBox '110CantAttackAllies' {
+	if(AllUnitsCanBeExpelled(location[0])) {
+		Text(ID_CANT_ATTACK_ALLIES_CAN_EXPEL);
+	} else {
+		Text(ID_CANT_ATTACK_ALLIES);
+	}
+
+	MessageType("DIPLOMATIC");
+	
+
+	Button(ID_BUTTON_NO) {
+		ClearOrders(unit[0]);
+		Kill();
+	}
+
+	Button(ID_BUTTON_YES) {
+		BreakAlliance(player[0]);
+		AddOrder(unit[0], location[0]);
+		Kill();
+	}
+
+	if(AllUnitsCanBeExpelled(location[0])) {
+		Button(ID_BUTTON_EXPEL) {
+			AddExpelOrder(unit[0], location[0]);
+			Kill();
+		}
+	}
+}
+
+alertBox '110aCantAttackTeammates' {
+	Text(ID_CANT_ATTACK_TEAMMATES);
+	MessageType("DIPLOMATIC");
+	
+	Button(ID_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertBox '110bCantAttackHaveTreaty' {
+	Text(ID_CANT_ATTACK_HAVE_TREATY);
+
+	MessageType("DIPLOMATIC");
+	
+
+	Button(ID_BUTTON_NO) {
+		ClearOrders(unit[0]);
+		Kill();
+	}
+
+	Button(ID_BUTTON_YES) {
+		BreakAlliance(player[0]);
+		AddOrder(unit[0], location[0]);
+		Kill();
+	}
+}
+
+alertBox '111BuildingSettlerCityOfOne' {
+	Text(ID_BUILDING_SETTLER_CITY_OF_ONE);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+
+	Button(ID_BUTTON_YES) {
+//		FinishBuilding(city[0]);
+		Event:DisbandCity(city[0]);
+		Kill();
+	}
+}
+
+//
+////////////////////////////////////////////////
+//
+
+alertbox '25IABreakEcopact' {
+	Text(ID_IA_BREAK_ECOPACT) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '26IAPollutionEndsGovernment' {
+	Text(ID_IA_POLLUTION_ENDS_GOVERNMENT) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '27IAWarDiscontentRising' {
+MessageClass(420);
+	Text(ID_IA_WAR_DISCONTENT_RISING) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '28IAMaxCitiesReached' {
+MessageClass(420);
+	Text(ID_IA_MAX_CITIES_REACHED) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '29IASettlingTooClose' {
+MessageClass(420);
+	Text(ID_IA_SETTLING_TOO_CLOSE) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '30IATooManyTradeRoutes' {
+MessageClass(420);
+	Text(ID_IA_TOO_MANY_TRADE_ROUTES) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '31IATileImpTip' {
+MessageClass(420);
+	Text(ID_IA_TILE_IMP_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '32IASendGoodTip' {
+	Text(ID_IA_SEND_GOOD_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '33IABuyGoodTip' {
+	Text(ID_IA_BUY_GOOD_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '34IASpecialInvasionTip' {
+MessageClass(420);
+	Text(ID_IA_SPECIAL_INVASION_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '35IANomountainUnitTip' {
+MessageClass(420);
+	Text(ID_IA_NOMOUNTAIN_UNIT_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '36IATriremeDeepwaterTip' {
+MessageClass(420);
+	Text(ID_IA_TRIREME_DEEPWATER_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '37IACannotCaptureCity' {
+MessageClass(420);
+	Text(ID_IA_CANNOT_CAPTURE_CITY) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '38IACapitolWarning' {
+MessageClass(420);
+	Text(ID_IA_CAPITOL_WARNING) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '39IASpaceBombardmentTip' {
+	Text(ID_IA_SPACE_BOMBARDMENT_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '40IALeftLands' {
+	Text(ID_IA_LEFT_LANDS) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+// Same text as 40IALeftLands, but doesn't has to be
+alertbox '40IALeftLandsButNotAll' {
+	Text(ID_IA_LEFT_LANDS);
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '41IAPillageSuicide' {
+	Text(ID_IA_PILLAGE_SUICIDE) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '42IAAirportTip' {
+	Abort();
+//	Text(ID_IA_AIRPORT_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+alertbox '43IABreakRoute' {
+	Text(ID_IA_BREAK_ROUTE) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '44IASpaceEngineerTip' {
+	Text(ID_IA_SPACE_ENGINEER_TIP) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertbox '45IATerraformDeadTile' {
+	Text(ID_IA_TERRAFORM_DEAD_TILE) ;
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertBox '10IABreakTreaty' {
+MessageClass(420);
+	Text(ID_IA_BREAK_TREATY);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertBox '11IABreakCeaseFire' {
+MessageClass(420);
+	Text(ID_IA_BREAK_CEASE_FIRE);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertBox '12IABreakNoPiracy' {
+MessageClass(420);
+	Text(ID_IA_BREAK_NO_PIRACY);
+	Button(ID_BUTTON_NO) {
+		ClearOrders(unit[0]);
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		BreakNoPiracy();
+		AddOrder(unit[0], location[0]);
+		Kill();
+	}
+}
+
+alertBox '13IAEnteringLands' {
+MessageClass(420);
+	Text(ID_IA_ENTERING_LANDS);
+	Button(ID_BUTTON_NO) {
+		ClearOrders(unit[0]);
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		BreakLeaveOurLands();
+		AddOrder(unit[0], location[0]);
+		Kill();
+	}
+}
+
+alertBox '14IAAutoUnload' {
+	MessageClass(420);
+	if(!played_auto_unload_message) {
+		Text(ID_IA_AUTO_UNLOAD);
+		Button(ID_BUTTON_NO) {
+			DoAutoUnload(location[0], 0);
+			Kill();
+		}
+		Button(ID_BUTTON_YES) {
+			DoAutoUnload(location[0], 1);
+			played_auto_unload_message = 1;
+			Kill();
+		}
+	} else {
+		DoAutoUnload(location[0], 1);
+		Abort();
+	}
+}
+
+alertBox '15IALandInOcean' {
+	Text(ID_IA_LAND_IN_OCEAN);
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+messageBox '16IAOutOfFuel' {
+	Show();
+	Text(ID_IA_OUT_OF_FUEL);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		EndTurn();
+		Kill();
+	}
+}
+
+alertBox '17IAPillageOwnLand' {
+MessageClass(420);
+	Text(ID_IA_PILLAGE_OWN_LAND);
+	if(saidPillageOK == g.year) {
+		DoPillageOwnLand();
+		Abort();
+	}		
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		saidPillageOK = g.year;
+		DoPillageOwnLand();
+		Kill();
+	}
+}
+
+alertBox '18IASellImprovement' {
+MessageClass(420);
+	Text(ID_IA_SELL_IMPROVEMENT);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		DoSellImprovement();
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+
+alertBox '19IACertainRevolution' {
+MessageClass(420);
+	Text(ID_IA_CERTAIN_REVOLUTION);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		DoCertainRevolution();
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+alertBox '20IAFreeSlaves' {
+MessageClass(420);
+	Text(ID_IA_FREE_SLAVES);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		DoFreeSlaves();
+		Kill();
+	}
+}
+
+messageBox '21IACannotAffordMaintenance' {
+	Show();
+MessageClass(420);
+	Text(ID_IA_CANNOT_AFFORD_MAINTENANCE);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		EndTurn();
+		Kill();
+	}
+}
+
+messageBox '22IACannotAffordSupport' {
+	Show();
+MessageClass(420);
+	Text(ID_IA_CANNOT_AFFORD_SUPPORT);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		EndTurn();
+		Kill();
+	}
+}
+
+messageBox '23IACityWillStarve' {
+	Show();
+	MessageType("STARVE");
+	Text(ID_IA_CITY_WILL_STARVE);
+	EyePoint(city[0]);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		EndTurn();
+		Kill();
+	}
+}
+
+alertBox '24IAYouWillBreakRoute' {
+MessageClass(420);
+	Text(ID_IA_YOU_WILL_BREAK_ROUTE);
+	Button(ID_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		DoYouWillBreakRoute();
+		Kill();
+	}
+}// String is not part of the ctp2.exe
+
+//
+////////////////////////////////////////////////
+//
+
+messagebox '001TreatyToExpire' {
+    Abort();
+//	Text(ID_TREATY_TO_EXPIRE) ;
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '002BrokeTreaty' {
+	Text(ID_BROKE_TREATY) ;
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox '004NoPiracyBroken' {
+	Text(ID_NO_PIRACY_BROKEN) ;
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '005EcopactBroken' {
+	Text(ID_ECOPACT_BROKEN) ;
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox '006CeaseFireBroken' {// Just the string 109CeaseFireBroken was found in the ctp2.exe
+	Text(ID_CEASE_FIRE_BROKEN) ;
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '007AllianceBroken' {// Just the string 107AllianceBroken is part of the ctp2.exe
+	Text(ID_ALLIANCE_BROKEN) ;
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '008StopTradeWithBroken' {
+	Text(ID_STOP_TRADE_WITH_BROKEN) ;
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '008StopTradeWithBrokenByYou' {
+	Text(ID_STOP_TRADE_WITH_BROKEN_BY_YOU) ;
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox '010NewCiv' {
+	Show();
+	Text(ID_NEW_CIV) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '011CityJoinedYourCiv' {
+	Text(ID_CITY_JOINE_YOUR_CIV) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '012CivNewGov' {
+//	Text(ID_CIV_NEW_GOV);
+	MessageType("DIPLOMATIC");
+	
+	Abort();
+}
+
+
+messagebox '012NewGovEnacted' {
+	Show();
+	Text(ID_NEW_GOV_ENACTED) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '013AiEntityRevolt' {
+	Text(ID_AI_ENTITY_REVOLT) ;
+	MessageType("REVOLT");
+}// String is not part of the ctp2.exe
+
+messagebox '014SpaceCityBuilder' {
+	Text(ID_SPACE_CITY_BUILDER) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '015SpaceCityOthers' {
+	Text(ID_SPACE_CITY_OTHERS) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '016SeaCityBuilder' {
+	Text(ID_SEA_CITY_BUILDER) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '017SeaCityOthers' {
+	Text(ID_SEA_CITY_OTHERS) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '027NotEnoughGold' {
+	Show();
+	Text(ID_NOT_ENOUGH_GOLD) ;
+}
+
+messagebox '029NoMaint' {
+	Text(ID_NO_MAINT) ;
+}
+
+messagebox '033BarbarianWarning' {
+	Text(ID_BARBARIAN_WARNING) ;
+	MessageType("MILITARY");
+}
+
+messagebox '040GrossPolluter' {
+	Text(ID_GROSS_POLLUTER) ;
+	MessageType("POLLUTION");
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');//Added by MG
+}
+
+messagebox '045TradePirated' {
+	Text(ID_TRADE_PIRATED) ;
+	MessageType("PIRATE");
+}// String is not part of the ctp2.exe
+
+messagebox '045aTradePiratedUnknown' {
+	Text(ID_TRADE_PIRATED_UNKOWN);
+	MessageType("PIRATE");
+}// String is not part of the ctp2.exe
+
+messagebox '046OfferAccepted' {
+	Text(ID_OFFER_ACCEPTED) ;
+	MessageType("TRADE");
+}// String is not part of the ctp2.exe
+
+messagebox '047InfectedViaTrade' {
+	Text(ID_INFECTED_VIA_TRADE) ;
+	MessageType("STARVE");
+}
+
+messagebox '052AlienBegunOthers' {
+//FIXMEBRAD	Text(ID_ALIEN_BEGUN_OTHERS) ;
+}// String is not part of the ctp2.exe
+
+messagebox '053AlienAlmostDone' {
+	Text(ID_ALIEN_ALMOST_DONE) ;
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox '054AlienAlmostDoneOthers' {
+	Text(ID_ALIEN_ALMOST_DONE_OTHERS) ;
+	MessageType("ENDGAME");
+}
+
+messagebox '055AlienFailureOthers' {
+//FIXMEBRAD	Text(ID_ALIEN_FAILURE_OTHERS) ;
+}// String is not part of the ctp2.exe
+
+messagebox '056AlienFailureOwner' {
+//FIXMEBRAD	Text(ID_ALIEN_FAILURE_OWNER) ;
+}// String is not part of the ctp2.exe
+
+messagebox '057AlienScrappedOthers' {
+//FIXMEBRAD	Text(ID_ALIEN_SCRAPPED_OTHERS) ;
+}// String is not part of the ctp2.exe
+
+messagebox '058AlienScrappedOwner' {
+	Text(ID_ALIEN_SCRAPPED_OWNER) ;
+	MessageType("ENDGAME");
+}
+
+messagebox '059EmbryoStage2' {
+	Text(ID_EMBRYO_STAGE_2) ;
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox '060EmbryoStage3' {
+	Text(ID_EMBRYO_STAGE_3) ;
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox '061NeedEcd' {
+	Text(ID_NEED_ECD) ;
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox '062NeedField' {
+	Text(ID_NEED_FIELD) ;
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox '063ShouldBuildSplicer' {
+	Text(ID_SHOULD_BUILD_SPLICER) ;
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox '080CityPollutionWarning' {
+	MessageType("POLLUTION");
+	Text(ID_CITY_POLLUTION_WARNING) ;
+	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');//Added by MG
+}
+
+messagebox '088WorldPollutionStable' {
+	MessageType("POLLUTION");
+	Text(ID_WORLD_POLLUTION_STABLE) ;
+}// String is not part of the ctp2.exe
+
+messagebox '097WonderDestroyed' {
+	Show();
+	Text(ID_WONDER_DESTROYED) ;
+	MessageType("IWONDER");
+	Duration(2);
+}
+
+messagebox '097aWonderObsolete' {
+	Show();
+	Text(ID_WONDER_OBSOLETE) ;
+	MessageType("IWONDER");
+	Duration(2);
+}
+
+messagebox '114UnitObsoleteCivwide' {
+	Text(ID_UNIT_OBSOLETE_CIVWIDE) ;
+	EyeDropdown(1, action[0]);
+	MessageType("CIVILIZATION");
+}
+
+messagebox '115EdisonDiscovery' {
+	Text(ID_EDISON_DISCOVERY) ;
+	MessageType("KNOWLEDGE");
+}
+
+messagebox '116InternetDiscovery' {
+	Text(ID_INTERNET_DISCOVERY) ;
+	MessageType("KNOWLEDGE");
+}
+
+messagebox '120NoSupport' {
+	Text(ID_NO_SUPPORT) ;
+}
+
+messagebox '123CitiesCapturedVictim' {
+	Text(ID_CITIES_CAPTURED_VICTIM) ;
+	MessageType("MILITARY");
+}
+
+messagebox '126CapitalCityCapturedAttacker' {
+	Text(ID_CAPITAL_CITY_CAPTURED_ATTACKER) ;
+	MessageType("MILITARY");
+}
+
+messagebox '127CapitalCityCapturedVictim' {
+	Text(ID_CAPITAL_CITY_CAPTURED_VICTIM) ;
+	MessageType("MILITARY");
+}
+
+messagebox '128CivStartedWar' {
+	Text(ID_CIV_STARTED_WAR) ;
+	MessageType("MILITARY");
+}
+
+messagebox '131NewAgeFirst' {
+	Text(ID_NEW_AGE_FIRST) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '132NewAgeOthers' {
+	Text(ID_NEW_AGE_OTHERS) ;
+	MessageType("CIVILIZATION");
+}
+
+messagebox '135ReformCity' {
+	Text(ID_REFORM_CITY) ;
+	MessageType("REFORM_CITY_ICON");
+}
+
+messagebox '137SlaveryCompleteAttacker' {
+	Text(ID_SLAVERY_COMPLETE_ATTACKER) ;
+	MessageType("CAPTURE_SLAVES");
+}
+
+messagebox '137SlaveCompleteVictim' {
+	Text(ID_SLAVE_COMPLETE_VICTIM) ;
+	MessageType("CAPTURE_SLAVES");
+}
+
+messagebox '138SlaveFailedVictim' {
+	Show();
+	Text(ID_SLAVE_FAILED_VICTIM) ;
+	MessageType("CAPTURE_SLAVES");
+}
+
+messagebox '139SettlerSlavedVictim' {
+	Text(ID_SETTLER_SLAVED_VICTIM) ;
+	MessageType("CAPTURE_SLAVES");
+}
+
+messagebox '140ProtectedFromSlaveryVictim' {
+	Text(ID_PROTECTED_FROM_SLAVERY_VICTIM) ;
+	MessageType("CAPTURE_SLAVES");
+}
+
+messagebox '141ProtectedFromSlaveryAttacker' {
+	Text(ID_PROTECTED_FROM_SLAVERY_ATTACKER) ;
+	MessageType("CAPTURE_SLAVES");
+}
+
+messagebox '143EmbassyVictim' {
+	Text(ID_EMBASSY_VICTIM) ;
+	MessageType("ESTABLISH_EMBASSY_ICON");
+}
+
+messagebox '144EmbassyAttacker' {
+	Text(ID_EMBASSY_ATTACKER) ;
+	MessageType("ESTABLISH_EMBASSY_ICON");
+}
+
+messagebox '145NoEmbassiesWonder' {
+	Show();
+	Text(ID_NO_EMBASSIES_WONDER);
+	MessageType("IWONDER");
+	Duration(2);
+}
+
+messagebox '146GossipCompleteAttacker' {
+	Text(ID_GOSSIP_COMPLETE_ATTACKER) ;
+}
+
+messagebox '149PartyCompleteVictim' {
+	Text(ID_PARTY_COMPLETE_VICTIM) ;
+	MessageType("THROW_PARTY_ICON");
+}
+
+messagebox '150PartyCompleteAttacker' {
+	Text(ID_PARTY_COMPLETE_ATTACKER);
+	MessageType("THROW_PARTY_ICON");
+}
+
+messagebox '151ConvertCompleteVictim' {
+	Text(ID_CONVERT_COMPLETE_VICTIM) ;
+	MessageType("CONVERT_CITY");
+}
+
+messagebox '152ConvertFailedVictim' {
+	Text(ID_CONVERT_FAILED_VICTIM) ;
+	MessageType("CONVERT_CITY");
+}
+
+messagebox '153ConvertFailedAttacker' {
+	Show();
+	Text(ID_CONVERT_FAILED_ATTACKER) ;
+	MessageType("CONVERT_CITY");
+}
+
+messagebox '155IndulgenceCompleteVictim' {
+	Text(ID_INDULGENCE_COMPLETE_VICTIM) ;
+	MessageType("INDULGENCE");
+}
+
+messagebox '157SoothsayCompleteVictim' {// Just 911SoothsayCompleteVictim in the ctp2.exe
+	Text(ID_SOOTHSAY_COMPLETE_VICTIM) ;
+	MessageType("SOOTHSAY_ICON");
+}
+
+messagebox '159InjunctionCompleteVictim' {
+	Text(ID_INJUNCTION_COMPLETE_VICTIM) ;
+	MessageType("FILE_INJUNCTION");
+	EyePoint(city[0]);
+}
+
+messagebox '161SueCompleteVictim' {
+	Text(ID_SUE_COMPLETE_VICTIM) ;
+	MessageType("SUE_ICON");
+	EyePoint(location[0]);
+}
+
+messagebox '163FreeslaveCompleteVictim' {
+	Text(ID_FREESLAVE_COMPLETE_VICTIM) ;
+	MessageType("FREE_SLAVE");
+}
+
+messagebox '164FreeslaveFailedVictim' {
+	Text(ID_FREESLAVE_FAILED_VICTIM) ;
+	MessageType("FREE_SLAVE");
+}
+
+messagebox '165FreeslaveCompleteAgressor' {
+	Text(ID_FREESLAVE_COMPLETE_AGRESSOR) ;
+	MessageType("FREE_SLAVE");
+}
+
+messagebox '166FreeslaveFailedAgressor' {
+	Show();
+	Text(ID_FREESLAVE_FAILED_AGRESSOR) ;
+	MessageType("FREE_SLAVE");
+}
+
+messagebox '167FreeslaveNoSlavesToFree' {
+	TEXT(ID_FREESLAVE_NO_SLAVES_TO_FREE) ;
+	MessageType("FREE_SLAVE");
+}
+
+messagebox '171InciteRevolutionCompleteVictim' {
+	Text(ID_INCITE_REVOLUTION_COMPLETE_VICTIM) ;
+	MessageType("REVOLT");
+}
+
+messagebox '176AssassinationCompleteVictim' {
+	Text(ID_CONDUCTHIT_COMPLETE_VICTIM) ;
+	MessageType("BOMB_CABINET");
+}
+
+messagebox '177AssassinationCompleteAggressor' {
+	Text(ID_CONDUCTHIT_COMPLETE_ATTACKER) ;
+	MessageType("BOMB_CABINET");
+}// String is not part of the ctp2.exe
+
+messagebox '178NukeCompleteVictim' {
+	Text(ID_NUKE_COMPLETE_VICTIM) ;
+	MessageType("PLANT_NUKE_ICON");
+}
+
+messagebox '186StealTechnologyVictim' {
+	Text(ID_STEAL_TECHNOLOGY_VICTIM) ;
+	MessageType("STEAL_ADVANCE_ICON");
+}
+
+messagebox '190DefuseMineCompleteVictim' {
+//FIXMEBRAD	Text(ID_DEFUSE_MINE_COMPLETE_VICTIM) ;
+}// String is not part of the ctp2.exe
+
+messagebox '193BranchCompleteVictim' {
+	Text(ID_BRANCH_COMPLETE_VICTIM) ;
+	MessageType("BRANCH");
+	EyePoint(city[0]);
+}
+
+messagebox '195BranchFailedVictim' {
+	Text(ID_BRANCH_FAILED_VICTIM) ;
+	MessageType("BRANCH");
+}
+
+messagebox '197AdvertiseCompleteVictim' {
+	Text(ID_ADVERTISE_COMPLETE_VICTIM) ;
+	MessageType("ADVERTISE");
+}
+
+messagebox '206CrisisSlaveRevolt' {
+	Text(ID_CRISIS_SLAVE_REVOLT) ;
+	MessageType("UPRISING");
+}
+
+messagebox '208UprisingCompleteVictim' {
+	Text(ID_UPRISING_COMPLETE_VICTIM) ;
+	MessageType("UPRISING");
+}
+
+messagebox '209UprisingFailedAttacker' {
+	Show();
+	Text(ID_UPRISING_FAILED_ATTACKER) ;
+	MessageType("UPRISING");
+}// String is not part of the ctp2.exe
+
+messagebox '210UprisingFailedVictim' {
+	Text(ID_UPRISING_FAILED_VICTIM) ;
+	MessageType("UPRISING");
+}// String is not part of the ctp2.exe
+
+messagebox '227TerrorhackCompleteAttacker' {
+	Text(ID_TERRORHACK_COMPLETE_ATTACKER) ;
+	MessageType("SPY");
+}
+
+messagebox '228TerrorhackCompleteVictim' {
+	Text(ID_TERRORHACK_COMPLETE_VICTIM) ;
+	MessageType("SPY");
+}
+
+messagebox '229TerrorhackFailedAttacker' {
+	Show();
+	Text(ID_TERRORHACK_FAILED_ATTACKER) ;
+	MessageType("SPY");
+}
+
+messagebox '230TerrorhackFailedVictim' {
+	Text(ID_TERRORHACK_FAILED_VICTIM) ;
+	MessageType("SPY");
+}
+
+messagebox '244RustleCattleCompleteVictim' {
+	//Text(ID_RUSTLE_CATTLE_COMPLETE_VICTIM) ;	
+}// String is not part of the ctp2.exe
+
+messagebox '250UnitGainedVeteranStatus' {
+	Text(ID_UNIT_VETERAN);
+	EyePoint(unit[0]);
+	MessageType("MILITARY");
+}
+
+messagebox '251NaniteDefuseEliminatesNukes' {
+	Show();
+	Text(ID_NANITE_DEFUSER_ELIMINATES_NUKES);
+	MessageType("IWONDER");
+	Duration(2);
+}
+
+messagebox '260LeaveOurLandsBroken' {
+	Text(ID_LEAVE_OUR_LANDS_BROKEN);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '261ReducePollutionBroken' {
+	Text(ID_REDUCE_POLLUTION_BROKEN);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '262CaptureCityBroken' {
+//FIXMEBRAD	Text(ID_CAPTURE_CITY_BROKEN);
+	MessageType("DIPLOMATIC");	
+}// String is not part of the ctp2.exe
+
+messagebox '263EndPollutionBroken' {
+	Text(ID_END_POLLUTION_BROKEN);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox '264AttackEnemyBroken' {
+	Text(ID_ATTACK_ENEMY_BROKEN);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '260LeaveOurLandsBrokenByYou' {
+	Text(ID_LEAVE_OUR_LANDS_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox '261ReducePollutionBrokenByYou' {
+	Text(ID_REDUCE_POLLUTION_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox '262CaptureCityBrokenByYou' {
+//FIXMEBRAD	Text(ID_CAPTURE_CITY_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox '263EndPollutionBrokenByYou' {
+	Text(ID_END_POLLUTION_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox '264AttackEnemyBrokenByYou' {
+	Text(ID_ATTACK_ENEMY_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messageBox '265CityDestroyedByStarving' {
+	Text(ID_CITY_DESTROYED_BY_STARVING);
+	MessageType("STARVE");
+	EyePoint(city[0].location);
+}
+
+messageBox '266CityDestroyedByWar' {
+	Text(ID_CITY_DESTROYED_BY_WAR);
+	MessageType("STARVE");
+}// String is not part of the ctp2.exe
+
+
+////New Stuff////
+messagebox '106CantBuildUnitCellIsFull' {
+	Show();
+	MessageType("WASTING_WORK");
+	Text(ID_CANT_BUILD_UNIT_CELL_IS_FULL);
+	Eyepoint(city[0]);
+}
+
+messagebox 'TradeBidSetPrice' {
+	MessageType("TRADE");
+	Text(ID_TRADE_BID_SET_PRICE);
+	EyeDropdown(1, city[0]);
+
+	Button(ID_BUTTON_CANCEL) {
+		Kill();
+	}
+	Button(ID_BUTTON_SET_PRICE) {
+		SendTradeBid();
+	}	
+}// String is not part of the ctp2.exe
+
+messagebox 'TradeBid' {
+	MessageType("TRADE");
+	Text(ID_TRADE_BID);
+	EyeDropdown(1, city[0]);
+	Button(ID_BUTTON_ACCEPT) {
+		AcceptTradeBid();
+	}
+	Button(ID_BUTTON_REJECT) {
+		RejectTradeBid();
+	}
+}
+
+messagebox 'TradeBidAccepted' {
+	MessageType("TRADE");
+	Text(ID_TRADE_BID_ACCEPTED);
+	EyeDropdown(1, city[0]);
+}
+
+messagebox 'TradeBidRejected' {
+	MessageType("TRADE");
+	Text(ID_TRADE_BID_REJECTED);
+	EyeDropdown(1, city[0]);
+}
+
+alertbox 'NoTraders' {
+	MessageType("TRADE");
+	Text(ID_NO_TRADERS);
+	Button(ID_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox '300EndGameCataclysm' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_CATACLYSM);
+}// String is not part of the ctp2.exe
+
+messagebox '301EndGameCataclysmOtherCiv' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_CATACLYSM_OTHER_CIV);
+}
+
+messagebox '302EndGameOtherCivBuiltLab' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_OTHER_CIV_BUILT_LAB);
+}
+
+messagebox '303EndGameOtherCivStartedSequence' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_OTHER_CIV_STARTED_SEQUENCE);
+}
+
+messagebox '304EndGameXLabCaptured' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_X_LAB_CAPTURED);
+}// String is not part of the ctp2.exe
+
+messagebox '305EndGameYouCapturedXLab' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_YOU_CAPTURED_X_LAB);
+}// String is not part of the ctp2.exe
+
+messagebox '306EndGameRecoveredProbe' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_RECOVERED_PROBE);
+}
+
+messagebox '307EndGameProbeReturned' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_PROBE_RETURNED);
+}// String is not part of the ctp2.exe
+
+messagebox '308EndGameFinishedXLab' {
+	MessageType("ENDGAME");
+	Text(ID_END_GAME_FINISHED_X_LAB);
+}// String is not part of the ctp2.exe
+
+alertbox '309EndGameWon' {
+	MessageType("ENDGAME");
+	Text(ID_ENDGAME_WON_OTHER);
+	Button(ID_BUTTON_CLOSE) {
+		Kill();
+	}
+}
+
+messagebox '350NetworkPlayerLeft' {
+	MessageType("NETWORK");
+	Text(ID_NETWORK_PLAYER_LEFT);
+	Show();
+}
+
+messagebox '351NetworkPlayerJoined' {
+	MessageType("NETWORK");
+	Text(ID_NETWORK_PLAYER_JOINED);
+}
+
+messagebox '352DifferentPlayerJoined' {
+	MessageType("NETWORK");
+	Text(ID_NETWORK_DIFFERENT_PLAYER_JOINED);
+	Button(ID_BUTTON_EJECT) {
+		NetworkEject(player[0]);
+		Kill();
+	}
+
+	Button(ID_BUTTON_LET_THEM_STAY) {
+		NetworkAccept(player[0]);
+		Kill();
+	}
+	Show();
+}
+
+messagebox '353YouAreNowHost' {
+	MessageType("NETWORK");
+	Text(ID_NETWORK_YOU_ARE_NOW_HOST);
+	Show();
+}
+
+messagebox '354NewHost' {
+	MessageType("NETWORK");
+	Text(ID_NETWORK_NEW_HOST);
+}
+
+alertbox '355SessionLost' {
+	MessageType("NETWORK");
+	Text(ID_NETWORK_SESSION_LOST);
+	BUTTON(ID_BUTTON_OK) {
+		Kill();
+		QuitToLobby();
+	}
+}
+
+messagebox '360SenderKilledTradeRoute' {
+	Text(ID_SENDER_KILLED_TRADE_ROUTE);
+	MessageType("TRADE");
+}
+
+messagebox '361IAProtectedFromConversionByWonder' {
+	Text(ID_PROTECTED_FROM_CONVERSION_BY_WONDER);
+}
+
+alertbox '362IAOneOrMoreUnitsWillCrash' {
+	Text(ID_ONE_OR_MORE_UNITS_WILL_CRASH);
+	Button(ID_BUTTON_OK) {
+		Kill();
+	}
+	UseDirector();
+}// String is not part of the ctp2.exe
+
+messagebox '363TradeOfferAccepted' {
+	Text(ID_BID_ACCEPTED);
+	MessageType("TRADE");
+}
+
+messagebox '364AtLeastOneArmyCouldntBeExpelled' {
+	Text(ID_AT_LEAST_ONE_COULDNT_BE_EXPELLED);
+	MessageType("DIPLOMATIC");
+}
+
+messagebox '401WarOver' {
+	Text(ID_WAR_OVER);
+	MessageType("CIVILIZATION");
+}
+
+messageBox '402VictoryEnslavement' {
+	Text(ID_VICTORY_ENSLAVEMENT_CITY);
+	MessageType("DEMANDS");
+}// String is not part of the ctp2.exe
+
+messageBox '410HotseatCityAttacked' {
+	Text(ID_HOTSEAT_CITY_ATTACKED);
+	MessageType("MILITARY");
+	Button(ID_SHOW_ME) {
+		Kill();
+	}
+
+	OnClose {
+		AddCenter(location[0]);
+		AddEffect(location[0], "SPECEFFECT_EXPLOSION_LAND_1", "SOUND_ID_DEFAULTATTACK");
+	}
+}
+
+messageBox '411HotseatArmyAttacked' {
+	Text(ID_HOTSEAT_ARMY_ATTACKED);
+	MessageType("MILITARY");
+	Button(ID_SHOW_ME) {
+		Kill();
+	}
+
+	OnClose {
+		AddCenter(location[0]);
+		AddEffect(location[0], "SPECEFFECT_EXPLOSION_LAND_1", "SOUND_ID_DEFAULTATTACK");
+	}
+}
+
+// Called from age.txt
+messagebox 'Age1Entered' {
+	Text(ID_AGE_ONE_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from age.txt
+messagebox 'Age2Entered' {
+	Text(ID_AGE_TWO_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from age.txt
+messagebox 'Age3Entered' {
+	Text(ID_AGE_THREE_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from age.txt
+messagebox 'Age4Entered' {
+	Text(ID_AGE_FOUR_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from age.txt
+messagebox 'Age5Entered' {
+	Text(ID_AGE_FIVE_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from CM2_age.txt
+//messagebox 'Age6Entered' {
+//	Text(ID_AGE_SIX_ENTERED);
+//	MessageType("CIVILIZATION");
+//}
+// Called from CM2_age.txt
+//messagebox 'Age7Entered' {
+//	Text(ID_AGE_SEVEN_ENTERED);
+//	MessageType("CIVILIZATION");
+//}
+// Called from CM2_age.txt
+//messagebox 'Age8Entered' {
+//	Text(ID_AGE_EIGHT_ENTERED);
+//	MessageType("CIVILIZATION");
+//}
+// Called from CM2_age.txt
+//messagebox 'Age9Entered' {
+//	Text(ID_AGE_NINE_ENTERED);
+//	MessageType("CIVILIZATION");
+//}
+// Called from CM2_age.txt
+//messagebox 'Age10Entered' {
+//	Text(ID_AGE_TEN_ENTERED);
+//	MessageType("CIVILIZATION");
+//}
+
+messagebox 'TANoKillCivilian' {
+	Show();
+	Text(ID_T_NO_KILL_CIVILIAN);
+	MessageType("CIVILIZATION");
+//	Button(ID_T_BUTTON_OK) {
+//		Kill();
+//	}
+}
+
+messagebox '911BreakLeaveOurLands' {
+	Text(ID_IA_BREAK_LEAVE_OUR_LANDS);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox 'RegEcopactBrokenByYou' {
+	Text(ID_ECOPACT_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox 'RegEcopactBrokenBy3rd' {
+	Text(ID_ECOPACT_BROKEN_BY_3RD);
+	MessageType("ANTIDIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox 'RegMilitaryPactBrokenByYou' {
+	Text(ID_MILITARY_PACT_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox 'RegAllianceBrokenByYou' {
+	Text(ID_ALLIANCE_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox 'RegAllianceBrokenBy3rd' {
+	Text(ID_ALLIANCE_BROKEN_BY_3RD);
+	MessageType("ANTIDIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox 'RegMilitaryPactBrokenByAI' {
+	Text(ID_MILITARY_PACT_BROKEN_BY_AI);
+	MessageType("ANTIDIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox 'RegMilitaryPactBrokenBy3rd' {
+	Text(ID_MILITARY_PACT_BROKEN_BY_3RD);
+	MessageType("ANTIDIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox 'RegAllAgreementsBrokenByAI' {
+	Text(ID_ALL_AGREEMENTS_BROKEN_BY_AI);
+	MessageType("ANTIDIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox '911CityWillStarveInitialWarning' {
+	Show();
+	Text(ID_IA_CITY_WILL_STARVE_INITIAL_WARNING);
+	MessageType("STARVE");
+}
+
+messagebox '911CityWillStarveFoodStoresLow' {
+	Show();
+	Text(ID_IA_CITY_WILL_STARVE_FOOD_STORES_LOW);
+	MessageType("STARVE");
+}
+
+messagebox '911CrisisCityIsNanoInfected' {
+	Text(ID_CRISIS_CITY_IS_NANO_INFECTED);
+	MessageType("NANOVIRUS");
+}
+
+messagebox '911NaniteCleanseCompleteVictim' {
+	Text(ID_NANITE_CLEANSE_COMPLETE_VICTIM);
+	MessageType("NANOVIRUS");
+}
+
+messagebox '911NaniteCleanseFailedVictim' {
+	Text(ID_NANITE_CLEANSE_FAILED_VICTIM);
+	MessageType("NANOVIRUS");
+}//String is not part of the ctp2.exe
+
+messagebox '911NaniteCleanseCompleteAttack' {
+	Text(ID_NANITE_CLEANSE_COMPLETE_ATTACK);
+	MessageType("NANOVIRUS");
+}//String is not part of the ctp2.exe
+
+messagebox '911NaniteCleanseFailedAttack' {
+	Text(ID_NANITE_CLEANSE_FAILED_ATTACK);
+	MessageType("NANOVIRUS");
+}//String is not part of the ctp2.exe
+
+messagebox '911CityNewOwner' {
+	Text(ID_CITY_NEW_OWNER);
+	MessageType("CIVILIZATION");
+}
+
+messagebox '911FaithHealVictim' {
+	Text(ID_FAITH_HEAL_VICTIM);
+	MessageType("SOOTHSAY_ICON");
+}
+
+messagebox '911FaithHealAttacker' {
+	Text(ID_FAITH_HEAL_ATTACKER);
+	MessageType("SOOTHSAY_ICON");
+}
+
+messagebox '911InjunctionCompleteAttack' {
+	Text(ID_INJUNCTION_COMPLETE_ATTACK);
+	MessageType("FILE_INJUNCTION");
+}
+
+messagebox '911NukeCompleteAggressor' {
+	Text(ID_NUKE_COMPLETE_AGRESSOR);
+	MessageType("PLANT_NUKE_ICON");
+}
+
+messagebox '911ForbiddenCityPeace' {
+	Text(ID_FORBIDDEN_CITY_PEACE);
+	MessageType("DIPLOMATIC");
+}
+messagebox '411CivStatusDisabled' {
+	Text(ID_CIV_STATUS_DISABLED);
+	MessageType("CIVILIZATION");
+}//String is not part of the ctp2.exe
+
+messagebox '411ScienceStatusDisabled' {
+	Text(ID_SCIENCE_STATUS_DISABLED);
+	MessageType("KNOWLEDGE");
+}//String is not part of the ctp2.exe
+
+messagebox '411CityStatusDisabled' {
+	Text(ID_CITY_STATUS_DISABLED);
+	MessageType("WARNING");
+}//String is not part of the ctp2.e
+
+messagebox '411DiplomacyStatusDisabled' {
+	Text(ID_DIPLOMACY_STATUS_DISABLED);
+	MessageType("DIPLOMATIC");
+}//String is not part of the ctp2.exe
+
+messagebox '411UnitStatusDisabled' {
+	Text(ID_UNIT_STATUS_DISABLED);
+	MessageType("NEXT_UNIT_ICON");
+}//String is not part of the ctp2.exe
+
+messagebox '411TradeStatusDisabled' {
+	Text(ID_TRADE_STATUS_DISABLED);
+	MessageType("TRADE");
+}//String is not part of the ctp2.exe
+
+messagebox '411DipOfferAdvanceNone' {
+	Text(ID_DIP_OFFER_ADVANCE_NONE);
+	MessageType("KNOWLEDGE");
+}//String is not part of the ctp2.exe
+
+messagebox '911AdvertiseCompleteAttacker' {
+	Text(ID_ADVERTISE_COMPLETE_ATTACKER);
+	MessageType("ADVERTISE");
+}
+
+messagebox '911ConductHitCompleteVictim' {
+	Text(ID_CONDUCTHIT_COMPLETE_VICTIM);
+	MessageType("CONDUCT_HIT");
+}
+
+messagebox '911ConductHitFailedVictim' {
+	Text(ID_CONDUCTHIT_FAILED_VICTIM);
+	MessageType("CONDUCT_HIT");
+}// String is not part of the ctp2.exe
+
+messagebox '911ConductHitCompleteAttacker' {
+	Text(ID_CONDUCTHIT_COMPLETE_ATTACKER);
+	MessageType("CONDUCT_HIT");
+}
+
+messagebox '911ConductHitFailedAttack' {
+	Text(ID_CONDUCTHIT_FAILED_ATTACK);
+	MessageType("CONDUCT_HIT");
+}
+
+messagebox '911IndulgenceCompleteVictim' {
+	Text(ID_INDULGENCE_COMPLETE_VICTIM);
+	MessageType("INDULGENCE");
+}
+
+messagebox '911IndulgenceFailedVictim' {
+	Text(ID_INDULGENCE_FAILED_VICTIM);
+	MessageType("INDULGENCE");
+}// String is not part of the ctp2.exe
+
+messagebox '911IndulgenceCompleteAttacker' {
+	Text(ID_INDULGENCE_COMPLETE_ATTACKER);
+	MessageType("INDULGENCE");
+}
+
+messagebox '911IndulgenceFailedAttacker' {
+	Text(ID_INDULGENCE_FAILED_ATTACKER);
+	MessageType("INDULGENCE");
+}// String is not part of the ctp2.exe
+
+messagebox '911SoothsayCompleteVictim' {
+	Text(ID_SOOTHSAY_COMPLETE_VICTIM);
+	MessageType("SOOTHSAY_ICON");
+}
+
+messagebox '911SoothsayFailedVictim' {
+	Text(ID_SOOTHSAY_FAILED_VICTIM);
+	MessageType("SOOTHSAY_ICON");
+}// String is not part of the ctp2.exe
+
+messagebox '911SoothsayCompleteAttacker' {
+	Text(ID_SOOTHSAY_COMPLETE_ATTACKER);
+	MessageType("SOOTHSAY_ICON");
+}
+
+messagebox '911SoothsayFailedAttacker' {
+	Text(ID_SOOTHSAY_FAILED_ATTACKER);
+	MessageType("SOOTHSAY_ICON");
+}// String is not part of the ctp2.exe
+
+messagebox '911SueCompleteVictim' {
+	Text(ID_SUE_COMPLETE_VICTIM);
+	MessageType("SUE_ICON");
+}
+
+messagebox '911SueFailedVictim' {
+	Text(ID_SUE_FAILED_VICTIM);
+	MessageType("SUE_ICON");
+}// String is not part of the ctp2.exe
+
+messagebox '911SueCompleteAttacker' {
+	Text(ID_SUE_COMPLETE_ATTACKER);
+	MessageType("SUE_ICON");
+}
+
+messagebox '911SueFailedAttacker' {
+	Text(ID_SUE_FAILED_ATTACKER);
+	MessageType("SUE_ICON");
+}// String is not part of the ctp2.exe
+
+messagebox '911SueFranchiseCompleteVictim' {
+	Text(ID_SUE_FRANCHISE_COMPLETE_VICTIM);
+	MessageType("SUE_ICON");
+}
+
+messagebox '911SueFranchiseFailedVictim' {
+	Text(ID_SUE_FRANCHISE_FAILED_VICTIM);
+	MessageType("SUE_ICON");
+}// String is not part of the ctp2.exe
+
+messagebox '911SueFranchiseCompleteAttacker' {
+	Text(ID_SUE_FRANCHISE_COMPLETE_ATTACKER);
+	MessageType("SUE_ICON");
+}
+
+messagebox '911SueFranchiseFailedAttacker' {
+	Text(ID_SUE_FRANCHISE_FAILED_ATTACKER);
+	MessageType("SUE_ICON");
+}// String is not part of the ctp2.exe
+
+messagebox '911PartyCompleteVictim' {
+	Text(ID_PARTY_COMPLETE_VICTIM);
+	MessageType("THROW_PARTY_ICON");
+}//No such string in the ctp2.exe just 149PartyCompleteVictim 
+
+messagebox '911PartyCompleteAttacker' {
+	Text(ID_PARTY_COMPLETE_ATTACKER);
+	MessageType("THROW_PARTY_ICON");
+}//No such string in the ctp2.exe just 150PartyCompleteAttacker 
+
+messagebox 'GCDiscoveredSolarisProjectUs' {
+	Show();
+	Text(ID_GC_DISCOVERED_SOLARIS_PROJECT_US);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCDiscoveredSolarisProjectThem' {
+	Show();
+	Text(ID_GC_DISCOVERED_SOLARIS_PROJECT_THEM);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCMustDiscoverGaiaController' {
+	Show();
+	Text(ID_GC_MUST_DISCOVER_GAIA_CONTROLLER);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCMinCoresReachedUs' {
+	Show();
+	Text(ID_GC_MIN_CORES_REACHED_US);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCMinCoresReachedThem' {
+	Show();
+	Text(ID_GC_MIN_CORES_REACHED_THEM);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCMinSatsReachedUs' {
+	Show();
+	Text(ID_GC_MIN_SATS_REACHED_US);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCMaxSatsReached' {
+	Show();
+	Text(ID_GC_MAX_SATS_REACHED);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCMinSatsReachedThem' {
+	Show();
+	Text(ID_GC_MIN_SATS_REACHED_THEM);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCMinObelisksReachedUs' {
+	Show();
+	Text(ID_GC_MIN_OBELISKS_REACHED_US);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCMinObelisksReachedThem' {
+	Show();
+	Text(ID_GC_MIN_OBELISKS_REACHED_THEM);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCReadyToActivateUs' {
+	Show();
+	Text(ID_GC_READY_TO_ACTIVATE_US);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCReadyToActivateThem' {
+	Show();
+	Text(ID_GC_READY_TO_ACTIVATE_THEM);
+	MessageType("ENDGAME");
+}
+
+messagebox 'GCHalfwayToWinUs' {
+	Show();
+	Text(ID_GC_HALFWAY_TO_WIN_US);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox 'GCHalfwayToWinThem' {
+	Show();
+	Text(ID_GC_HALFWAY_TO_WIN_THEM);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox 'GCObelisksDestroyed' {
+	Show();
+	Text(ID_GC_OBELISKS_DESTROYED);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox 'GCCoresDestroyed' {
+	Show();
+	Text(ID_GC_CORES_DESTROYED);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox 'GCCompletedFirstCoreThem' {
+	Show();
+	Text(ID_GC_COMPLETED_FIRST_CORE_THEM);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox 'GCCompletedFirstSatThem' {
+	Show();
+	Text(ID_GC_COMPLETED_FIRST_SAT_THEM);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox 'GCCompletedFirstObeliskThem' {
+	Show();
+	Text(ID_GC_COMPLETED_FIRST_OBELISK_THEM);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox 'GCEnemyActivationStoppedByUs' {
+	Show();
+	Text(ID_GC_ENEMY_ACTIVATION_STOPPED_BY_US);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox 'GCEnemyActivationStoppedByThem' {
+	Show();
+	Text(ID_GC_ENEMY_ACTIVATION_STOPPED_BY_THEM);
+	MessageType("ENDGAME");
+}// String is not part of the ctp2.exe
+
+messagebox '411SettlingTooClose' {
+	Text(ID_IA_SETTLING_TOO_CLOSE);
+	MessageType("CIVILIZATION");
+}// String is not part of the ctp2.exe
+
+messagebox 'TrustLostCivilianUnit' {
+	Text(ID_TRUST_LOST_KILLED_CIVILIAN_UNIT);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox 'TrustLossUnprovokedAttack' {
+	Text(ID_TRUST_LOSS_UNPROVOKED_ATTACK);
+	MessageType("ANTIDIPLOMATIC");
+}// String is not part of the ctp2.exe
+
+messagebox 'TrustLossViolatedMilitaryPact' {
+	Text(ID_MILITARY_PACT_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox 'TrustLossViolatedPeaceTreaty' {
+	Text(ID_TRUST_LOSS_VIOLATED_PEACE_TREATY);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox 'TrustLossViolatedAlliance' {
+	Text(ID_ALLIANCE_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox 'TrustLossFailToWithdraw' {
+	Text(ID_TRUST_LOSS_FAIL_TO_WITHDRAW);
+	MessageType("ANTIANTIDIPLOMATIC");
+}
+
+messagebox 'TrustLossFailToStopPiracy' {
+	Text(ID_TRUST_LOSS_FAIL_TO_STOP_PIRACY);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox 'TrustLossViolatedCeaseFire' {
+	Text(ID_TRUST_LOSS_VIOLATED_CEASE_FIRE);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox 'TrustLossViolatedResearchPact' {
+	Text(ID_TRUST_LOSS_VIOLATED_RESEARCH_PACT);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox 'TrustLossViolatedPollutionPact' {
+	Text(ID_ECOPACT_BROKEN_BY_YOU);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox 'TrustLossViolatedTradePact' {
+	Text(ID_TRUST_LOSS_VIOLATED_TRADE_PACT);
+	MessageType("ANTIDIPLOMATIC");
+}
+
+messagebox '911ImminentFlood' { 
+	Show();
+	Text(ID_WORLD_POLLUTION_FLOODING_IMMINENT);
+	MessageType("POLLUTION");
+}	
+
+#include "feats.slc"
+
+// #including scenario.slc here will pick up the empty scenario.slc in
+// this directory, unless a scenario provides a file named scenario.slc in
+// its own gamedata directory.
+#include "scenario.slc"
+
+#include "diplomacy.slc"
+

@@ -15,6 +15,24 @@
 //
 //----------------------------------------------------------------------------
 //
+// Compiler flags
+// 
+// _DEBUG
+// - Generate debug version
+//
+// _BFR_
+// - ??
+//
+// REQUIRE_CORRECT_LOG
+// - ??
+//
+// GENERATE_ADDRESS_LOG
+// - ??
+//
+// ACTIVISION_ORIGINAL
+// - Build original Activision binary
+//
+//----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
