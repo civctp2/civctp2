@@ -50,6 +50,16 @@
  * Set when generating the debug version.
  *
  *----------------------------------------------------------------------------
+ *
+ * Modifications from the original Activision code:
+ *
+ * - Addtion by Martin Gühmann to allow:
+ *   - Slic database access
+ *   - Slic database size access
+ * - Exponetiation operator '**' added.
+ * - Bitwise operators added
+ *
+ *----------------------------------------------------------------------------
  */
 
 #include <stdio.h>
@@ -104,12 +114,17 @@ int include_stack_ptr = 0;
 %token EXP
 
 %left REF
-%left AND OR '&'
+%left AND OR
+// The following are the precedences for bitwise operators to agree with C++
+// conventions:
+%left '^'
+%left '|'
+%left '&'
 %left GT LT GTE LTE EQ NEQ
 %left '-' '+'
-%left '*' '/' '%' 
-%left EXP
-%nonassoc UMINUS '!'
+%left '*' '/' '%'
+%right EXP
+%nonassoc UMINUS '!' '~'
 
 %%
 slic: objects END_OF_INPUT { slic_parser_done = 1; }
@@ -296,7 +311,7 @@ returntype: KW_INT_FUNC { slicif_function_return(SF_RET_INT); }
 
 functionarglist: functionargument
 			   | functionarglist ',' functionargument
-			   |
+			   | /* empty */
 			   ;
 
 functionargument: vartype NAME { slicif_add_parameter((SLIC_SYM)$1.val, $2.name); }				  
@@ -361,19 +376,27 @@ argument: expression { slicif_add_op(SOP_ARGE); }
 triggercondition: '(' expression ')' { slicif_add_op(SOP_TRIG); }
 	;
 
-expression: expression '+' expression { slicif_add_op(SOP_ADD); }
+expression:
+	// Arithmetic operations
+	    expression '+' expression { slicif_add_op(SOP_ADD); }
 	|   expression '-' expression { slicif_add_op(SOP_SUB); }
 	|   expression '*' expression { slicif_add_op(SOP_MULT); }
-	|   expression EXP expression { slicif_add_op(SOP_EXP); }
-	|   expression '&' expression { slicif_add_op(SOP_BAND); }
 	|   expression '/' expression { slicif_add_op(SOP_DIV); }
 	|   expression '%' expression { slicif_add_op(SOP_MOD); }
+	|   expression EXP expression { slicif_add_op(SOP_EXP); }
+	// Bitwise operations
+	|   expression '&' expression { slicif_add_op(SOP_BAND); }
+	|   expression '|' expression { slicif_add_op(SOP_BOR); }
+	|   expression '^' expression { slicif_add_op(SOP_BXOR); }
+	|   '~' expression            { slicif_add_op(SOP_BNOT); }
+	// Comparisons
 	|   expression LT  expression { slicif_add_op(SOP_LT); }
 	|   expression GT  expression { slicif_add_op(SOP_GT); }
 	|   expression GTE expression { slicif_add_op(SOP_GTE); }
 	|   expression LTE expression { slicif_add_op(SOP_LTE); }
 	|   expression EQ  expression { slicif_add_op(SOP_EQ); }
 	|   expression NEQ expression { slicif_add_op(SOP_NEQ); }
+	// Boolean operations
 	|	expression AND expression { slicif_add_op(SOP_AND); }
 	|	expression OR  expression { slicif_add_op(SOP_OR); }
 	|  	'!' expression %prec '!' { slicif_add_op(SOP_NOT); }

@@ -30,7 +30,7 @@
 // - Replaced slicif_is_sym by slicif_is_name function. This function is 
 //   modelled slicif_find_db_index but without error message if this 
 //   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
-// - Added debugging code for '&' operator
+// - Added debugging code for bitwise operator
 //
 //----------------------------------------------------------------------------
 
@@ -1201,6 +1201,9 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_MULT: fprintf(debuglog, "mult\n"); break;
 			case SOP_EXP: fprintf(debuglog, "pow\n"); break;
 			case SOP_BAND: fprintf(debuglog, "band\n"); break;
+			case SOP_BOR: fprintf(debuglog, "bor\n"); break;
+			case SOP_BXOR: fprintf(debuglog, "bxor\n"); break;
+			case SOP_BNOT: fprintf(debuglog, "bnot\n"); break;
 			case SOP_DIV:  fprintf(debuglog, "div\n"); break;
 			case SOP_MOD:  fprintf(debuglog, "mod\n"); break;
 			case SOP_EQ:   fprintf(debuglog, "eq\n"); break;

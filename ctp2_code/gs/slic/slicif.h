@@ -28,6 +28,7 @@
  * - Replaced slicif_is_sym by slicif_is_name function. This function is 
  *   modelled slicif_find_db_index but without error message if this 
  *   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
+ * - Added bitwise operators
  *
  *----------------------------------------------------------------------------
  */
@@ -122,6 +123,10 @@ typedef enum {
 	SOP_DBSIZE,
 //Added by tombom for bitwise support
 	SOP_BAND,
+//And some more bitwise operators (JJB)
+	SOP_BOR,
+	SOP_BXOR,
+	SOP_BNOT,
 
 	SOP_NOP 
 } SOP;
