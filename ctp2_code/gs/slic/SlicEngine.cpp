@@ -946,6 +946,54 @@ void SlicEngine::AddBuiltinFunctions()
 	
 	m_functionHash->Add(new Slic_IsUnitAtHead);
 	m_functionHash->Add(new Slic_OpenScenarioEditor);
+
+	//Readded Slic functions of CTP2.1 by Martin Gühmann
+	m_functionHash->Add(new Slic_DestroyBuilding);
+	m_functionHash->Add(new Slic_OpenBuildQueue);
+	m_functionHash->Add(new Slic_TileHasImprovement);
+	m_functionHash->Add(new Slic_PlayerHasWonder);
+	m_functionHash->Add(new Slic_WonderOwner);
+	m_functionHash->Add(new Slic_CityHasWonder);
+	m_functionHash->Add(new Slic_ArmyIsValid);
+	m_functionHash->Add(new Slic_GetBorderIncursionBy);
+	m_functionHash->Add(new Slic_GetLastNewProposalType);
+	m_functionHash->Add(new Slic_GetLastNewProposalArg);
+	m_functionHash->Add(new Slic_GetLastNewProposalTone);
+	m_functionHash->Add(new Slic_GetLastResponseType);
+	m_functionHash->Add(new Slic_GetLastCounterResponseType);
+	m_functionHash->Add(new Slic_GetLastCounterResponseArg);
+	m_functionHash->Add(new Slic_GetLastThreatResponseType);
+	m_functionHash->Add(new Slic_GetLastThreatResponseArg);
+	m_functionHash->Add(new Slic_GetAgreementDuration);
+	m_functionHash->Add(new Slic_GetNewProposalPriority);
+	m_functionHash->Add(new Slic_GetNextAdvance);
+	m_functionHash->Add(new Slic_GetDesiredAdvanceFrom);
+	m_functionHash->Add(new Slic_GetLastBorderIncursion);
+	m_functionHash->Add(new Slic_GetPersonalityType);
+	m_functionHash->Add(new Slic_GetAtRiskCitiesValue);
+	m_functionHash->Add(new Slic_GetRelativeStrength);
+	m_functionHash->Add(new Slic_GetDesireWarWith);
+	m_functionHash->Add(new Slic_RoundPercentReduction);
+	m_functionHash->Add(new Slic_RoundGold);
+	m_functionHash->Add(new Slic_GetPollutionLevelPromisedTo);
+	m_functionHash->Add(new Slic_GetPiracyIncomeFrom);
+	m_functionHash->Add(new Slic_GetProjectedScience);
+	m_functionHash->Add(new Slic_CanFormAlliance);
+	m_functionHash->Add(new Slic_GetStopResearchingAdvance);
+	m_functionHash->Add(new Slic_GetNanoWeaponsCount);
+	m_functionHash->Add(new Slic_GetBioWeaponsCount);
+	m_functionHash->Add(new Slic_GetNuclearWeaponsCount);
+	m_functionHash->Add(new Slic_FindCityToExtortFrom);
+	m_functionHash->Add(new Slic_GetEmbargo);
+	m_functionHash->Add(new Slic_SetEmbargo);
+	m_functionHash->Add(new Slic_GetTotalValue);
+	m_functionHash->Add(new Slic_GetNewProposalResult);
+	m_functionHash->Add(new Slic_GetCounterProposalResult);
+	m_functionHash->Add(new Slic_GetMostAtRiskCity);
+	m_functionHash->Add(new Slic_GetRoundsToNextDisaster);
+	m_functionHash->Add(new Slic_GetCurrentPollutionLevel);
+	// new one by the big mc
+	m_functionHash->Add(new Slic_FreeAllSlaves);
 }
 
 void SlicEngine::AddBuiltinVariables()

@@ -1,28 +1,6 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : SLIC functions
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - GetNearestWater function fixed by Martin Gühmann November 2nd 2003.
-// - New Slic functions of CTP2.1 readded by Martin Gühmann and JJB.
-// - Enable automatic selection of a unit (or city) when clicking an eyepoint.
-// - Fixed cut-and-paste error (no apparent impact, but might prevent crash).
-//
-//----------------------------------------------------------------------------
+
+//slicfunc.cpp
+//GetNearestWater function fixed by Martin Gühmann November 2nd 2003
 
 #include "c3.h"
 #include "SlicFunc.h"
@@ -552,7 +530,6 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	res = args->GetPos(0, point);
-#if defined(ACTIVISION_ORIGINAL)
 	if(!res) {
 		
 #if 0
@@ -577,23 +554,10 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 			point = unit.RetPos();
 		}
 	}
-#else
-	// Attempt to find a city or army always, so unit will have been filled 
-	// when constructing the SlicEyePoint later.
-	if (args->GetCity(0, unit) || args->GetUnit(0, unit))
-	{ 
-		if ((!res) && unit.IsValid())
-		{
-			point	= unit.RetPos();
-			res		= true;
-		}
-	}
-
-	if (!res)
-	{
-		return SFN_ERROR_TYPE_BUILTIN;
-	}
-#endif // ACTIVISION_ORIGINAL	
+	
+	
+	
+	
 	
 
 	MBCHAR text[k_MAX_MSG_LEN];
@@ -1548,20 +1512,11 @@ SFN_ERROR Slic_MessageType::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	const char *tname = args->m_argValue[0].m_symbol->GetName();
-#if defined(ACTIVISION_ORIGINAL)
 	char fullselectedname[1024];
 	sprintf(fullselectedname, "%s_SELECTED", fullselectedname);
 
 	if(!tname)
 		return SFN_ERROR_NOT_MESSAGE_TYPE;
-#else
-	if (!tname)
-		return SFN_ERROR_NOT_MESSAGE_TYPE;
-
-	char fullselectedname[1024];
-	sprintf(fullselectedname, "%s_SELECTED", tname);
-#endif
-
 	sint32 msgTypeIndex = g_theMessageIconFileDB->FindTypeIndex(tname);
 	if(msgTypeIndex < 0) {
 		msgTypeIndex = 0;
@@ -6932,4 +6887,22 @@ SFN_ERROR Slic_GetCurrentPollutionLevel::Call(SlicArgList *args)
 	m_result.m_int = 0;
 	return SFN_ERROR_OK;
 }
+SFN_ERROR Slic_FreeAllSlaves::Call(SlicArgList *args)
+{
+    if (args->m_numArgs > 0)
+        return SFN_ERROR_NUM_ARGS;
 
+	Unit city = g_slicEngine->GetContext()->GetCity(0);
+
+	if(!g_theUnitPool->IsValid(city)) {
+		return SFN_ERROR_OK;
+	}
+
+	if(g_network.IsClient()) 
+	{
+		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
+	}
+
+    	city.FreeSlaves();
+	return SFN_ERROR_OK;
+}
