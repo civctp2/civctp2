@@ -39,8 +39,11 @@
 //   (J Bytheway 2004/09/15)
 // - Added extra checks to disable science victory in network games (bug #21)
 // - Propagate PW each turn update.
-// - Add new advance immediately when substracting cost, to prevent losing
+// - Add new advance immediately when subtracting cost, to prevent losing
 //   the advance in PBEM.
+// - Changed the code which makes the science choice window appear to
+//   prevent it appearing inappropriately in PBEM/hotseat games
+//   (J Bytheway 2005/01/02)
 //
 //----------------------------------------------------------------------------
 
@@ -4097,34 +4100,25 @@ void Player::ObsoleteNotices(AdvanceType advance)
 
 void Player::BuildResearchDialog(AdvanceType advance)
 {
-    SlicContext sc;
-    const MBCHAR *dstring;
-    MBCHAR text[1024];
+	SlicContext sc;
+	const MBCHAR *dstring;
+	MBCHAR text[1024];
 
     
 	if(m_playerType == PLAYER_TYPE_ROBOT)
-        return;
-
-    
-    
-	
-    
-
-    
-    if (g_network.IsActive() && !(g_network.IsLocalPlayer(m_owner)))
-        return;
+		return;
+  
+	if (g_network.IsActive() && !(g_network.IsLocalPlayer(m_owner)))
+		return;
 
 	if(m_disableChooseResearch)
 		return;
 
-    dstring = g_theStringDB->GetNameStr("PICK_NEW_DISCOVERY");
-    if (dstring) {
-        sc.AddAdvance(advance);
+  dstring = g_theStringDB->GetNameStr("PICK_NEW_DISCOVERY");
+  
+	if (dstring) {
+    sc.AddAdvance(advance);
 
-		
-		
-		
-		
 		MBCHAR	tempStr[1024], 
 				messageStr[1024]; 
 		
@@ -4143,23 +4137,36 @@ void Player::BuildResearchDialog(AdvanceType advance)
 			}
 		}
 
-        stringutils_Interpret(messageStr, sc, text);
+		stringutils_Interpret(messageStr, sc, text);
 
 		
-		if((g_turn->IsHotSeat() || g_turn->IsEmail()) &&
-			(m_owner != g_selected_item->GetVisiblePlayer())) {
+		if((g_turn->IsHotSeat() || g_turn->IsEmail())
+#if defined(ACTIVISION_ORIGINAL)
+				// JJB removed this because it wasn't working properly
+				// (the visible player was changed before this code is reached,
+				// but with the screen still blank and before the dialog
+				// indicating that it's the next players turn)...
+				&& (m_owner != g_selected_item->GetVisiblePlayer())
+#else
+				// ... and replaced it with this, which makes much more sense,
+				// but doesn't work because BlankScreen() is called too late
+				//&& (g_slicEngine->ShouldScreenBeBlank())
+				// So, I've left it without a further condition,
+				// which means the window (probably) won't appear in PBEM/hotseat
+				// games when the advance currently
+				// being researched is obtained via other means (e.g. ruins).
+				// I have been unable to test this as yet.
+				// 2005/01/02
+				// (FIXME)
+#endif
+				) {
 			g_slicEngine->AddResearchOnUnblank(m_owner, text);
 		} else {
-
-			
 			g_director->AddInvokeResearchAdvance(text);
-			
 		}
-    } else {
-		
+	} else {
 		g_director->AddInvokeResearchAdvance(NULL);
-
-    }
+	}
 }
 
 
@@ -10066,17 +10073,17 @@ void Player::SetHasAdvance(AdvanceType advance)
 		g_controlPanel->TileImpPanelRedisplay();
 
     
-    sint32 player_idx; 
-    sint32 city_idx, city_num; 
-    for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++) { 
-        if (g_player[player_idx] == NULL) continue;
-        if (player_idx == m_owner) continue; 
-        
-        city_num = g_player[player_idx]->m_all_cities->Num(); 
-        for (city_idx=0; city_idx<city_num; city_idx++) { 
-            g_player[player_idx]->m_all_cities->Access(city_idx).GetData()->GetCityData()->GetBuildQueue()->RemoveIllegalItems(TRUE);
-        } 
-    } 
+	sint32 player_idx; 
+	sint32 city_idx, city_num; 
+	for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++) { 
+		if (g_player[player_idx] == NULL) continue;
+		if (player_idx == m_owner) continue; 
+
+		city_num = g_player[player_idx]->m_all_cities->Num(); 
+		for (city_idx=0; city_idx<city_num; city_idx++) { 
+			g_player[player_idx]->m_all_cities->Access(city_idx).GetData()->GetCityData()->GetBuildQueue()->RemoveIllegalItems(TRUE);
+		} 
+	} 
 
 	if(g_civApp->IsGameLoaded() && !ScenarioEditor::IsGivingAdvances()) {
 		
