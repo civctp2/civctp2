@@ -25,8 +25,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Production time calculation improved. 
-// - Prevented access to invalid memory.
+// - Production time calculation improved, and safeguarded against negative
+//   numbers. 
 //
 //----------------------------------------------------------------------------
 
@@ -160,19 +160,10 @@ BOOL TerrainImprovementData::Complete(void)
 
 	g_theWorld->GetCell(m_point)->SetColor(1000);
 
-
-#if defined(ACTIVISION_ORIGINAL)
+	// Restored the original Kill: the illegal access is prevented in 
+	// Improvementevent.cpp, and the object has to be killed to enable
+	// further tile improvements after terraforming.
 	imp.Kill();
-#else
-	if (rec->GetClassTerraform())
-	{
-		// Killed in CutImprovements already.
-	}
-	else
-	{
-		imp.Kill();
-	}
-#endif
 
 	return TRUE;
 }
@@ -232,21 +223,49 @@ void TerrainImprovementData::Serialize(CivArchive &archive)
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : TerrainImprovementData::PercentComplete
+//
+// Description: Get the completion percentage of the improvement.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32	: completion percentage
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 TerrainImprovementData::PercentComplete() const
 {
+#if defined(ACTIVISION_ORIGINAL)
 	sint32 totalTurns, turnsDone;
 
 	MapPoint p = m_point;
-#if defined(ACTIVISION_ORIGINAL)
 	totalTurns = terrainutil_GetTimeToBuild(p, m_type, m_transformType);
-#else
-	//Function replaced by Martin Gühmann
-	//Original function always returns 10 instead of the total production turns.
-	totalTurns = terrainutil_GetProductionTime(m_type, p, m_transformType);
-#endif
 	turnsDone = totalTurns - m_turnsToComplete;
 	if (totalTurns == 0) return 100;
 	return (turnsDone * 100) / totalTurns;
+#else
+	// Function replaced by Martin Gühmann
+	// Original function always returns 10 instead of the total production turns.
+	sint32 const	totalTurns = 
+		terrainutil_GetProductionTime(m_type, m_point, m_transformType);
+
+	// Guard against negative numbers and division by 0.
+	if ((m_turnsToComplete <= 0) || (totalTurns <= 0))
+	{
+		return 100;	
+	}
+	else if (m_turnsToComplete >= totalTurns)
+	{
+		return 0;
+	}
+
+	return (100 * (totalTurns - m_turnsToComplete)) / totalTurns;
+#endif
 }
 
 void TerrainImprovementData::StartBuilding()
