@@ -44,6 +44,7 @@
 // - Changed the code which makes the science choice window appear to
 //   prevent it appearing inappropriately in PBEM/hotseat games
 //   (J Bytheway 2005/01/02)
+// - Synchronise the turn count when adding a new civilisation.
 //
 //----------------------------------------------------------------------------
 
@@ -480,7 +481,11 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	}
 
 	m_is_turn_over = FALSE;
+#if defined(ACTIVISION_ORIGINAL)	// out of sync when revolts occur
 	m_current_round = 0;
+#else
+	m_current_round	= NewTurnCount::GetCurrentRound();
+#endif
 	m_end_turn_soon = FALSE;
 
 	m_powerPoints = 0;

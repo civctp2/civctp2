@@ -27,6 +27,7 @@
 //
 // - #01 Reordered the keymap to reflect the order needed for the display
 //   of the missing orders in the keyboard mapping options 
+// - Function table order and range corrections.
 //
 //----------------------------------------------------------------------------
 
@@ -159,9 +160,10 @@ static FUNC_TABLE func2key[] = {
 #endif
 };
 #else // ACTIVISION_ORIGINAL // #01 Reordered keymap
-static FUNC_TABLE func2key[] = {
+
+static FUNC_TABLE func2key[] = 
+{
   { 0, KEY_FUNCTION_NOOP, "NOOP"},
-      
 	   	 
   { 0, KEY_FUNCTION_MOVE_NORTH, "MOVE_NORTH"},
   { 0, KEY_FUNCTION_MOVE_NORTHWEST, "MOVE_NORTHWEST"},
@@ -201,7 +203,6 @@ static FUNC_TABLE func2key[] = {
   { 0, KEY_FUNCTION_EXECUTE_ORDERS, "EXECUTE_ORDERS"},				
   { 0, KEY_FUNCTION_PROCESS_UNIT_ORDERS, "PROCESS_UNIT_ORDERS" },
 
-	   
   { 0, KEY_FUNCTION_OPEN_CIV_STATUS, "OPEN_CIV_STATUS"},			
   { 0, KEY_FUNCTION_OPEN_CITY_STATUS, "OPEN_CITY_STATUS"},			
   { 0, KEY_FUNCTION_CITY_MANAGEMENT, "CITY_MANAGEMENT"},			
@@ -247,7 +248,6 @@ static FUNC_TABLE func2key[] = {
   // MUSIC added by ahenobarb
   { 0, KEY_FUNCTION_MUSIC_OPTIONS, "MUSIC_OPTIONS"},
 
-	   	
   { 0, KEY_FUNCTION_TOGGLE_CITY_NAMES, "CITY_NAMES"},
   { 0, KEY_FUNCTION_TOGGLE_TRADE_ROUTES, "TRADE_ROUTES"},
   { 0, KEY_FUNCTION_CENTER_MAP, "CENTER_MAP"},
@@ -257,7 +257,13 @@ static FUNC_TABLE func2key[] = {
   { 0, KEY_FUNCTION_TOGGLE_ALL, "TOGGLE_ALL"},						
   { 0, KEY_FUNCTION_ZOOM_IN1,  "ZOOM_IN1"},
   { 0, KEY_FUNCTION_ZOOM_OUT1, "ZOOM_OUT1"},
-
+#if defined(_PLAYTEST)
+  { 0, KEY_FUNCTION_RAND_TEST, "RAND_TEST"},
+  { 0, KEY_FUNCTION_GAMESTATE_DEBUG, "GAMESTATE_DEBUG"},
+  { 0, KEY_FUNCTION_ENTER_COMMAND, "ENTER_COMMAND"},
+  { 0, KEY_FUNCTION_ENTER_COMMAND_ALTERNATE, "ENTER_COMMAND_ALTERNATE"},
+#endif // _PLAYTEST
+  { 0, KEY_FUNCTION_TOGGLE_SPACE, "TOGGLE_SPACE"},
 	   
   { 0, KEY_FUNCTION_ZOOM_OUT2, "ZOOM_OUT2"},						
   { 0, KEY_FUNCTION_ZOOM_IN2, "ZOOM_IN2"},
@@ -266,17 +272,11 @@ static FUNC_TABLE func2key[] = {
   { 0, KEY_FUNCTION_OPEN_CITY_VIEW, "OPEN_CITY_VIEW"},				
   { 0, KEY_FUNCTION_CONTROL_BUILD, "CONTROL_BUILD"},
   { 0, KEY_FUNCTION_CONTROL_NEXT, "CONTROL_NEXT"},
-  { 0, KEY_FUNCTION_CONTROL_PREV, "CONTROL_PREV"},
+  { 0, KEY_FUNCTION_CONTROL_PREV, "CONTROL_PREV"}
 
-#ifdef _PLAYTEST
-  { 0, KEY_FUNCTION_RAND_TEST, "RAND_TEST"},
-  { 0, KEY_FUNCTION_GAMESTATE_DEBUG, "GAMESTATE_DEBUG"},
-  { 0, KEY_FUNCTION_ENTER_COMMAND, "ENTER_COMMAND"},
-  { 0, KEY_FUNCTION_ENTER_COMMAND_ALTERNATE, "ENTER_COMMAND_ALTERNATE"},
-  { 0, KEY_FUNCTION_TOGGLE_SPACE, "TOGGLE_SPACE"}
-#endif
 };
-#endif
+#endif	// ACTIVISION_ORIGINAL
+
 KEYMAP::KEYMAP(BOOL useDefault)
 
 { 
@@ -290,8 +290,9 @@ KEYMAP::KEYMAP(BOOL useDefault)
    
    for (i=0; i < KEY_FUNCTION_LAST_NOOP; i++) { 
       func2key[i].keycode=0; 
-
+#if defined(ACTIVISION_ORIGINAL)	// useless
       func2key[i].function = KEY_FUNCTION_NOOP;
+#endif
    } 
 
    
@@ -374,7 +375,12 @@ KEYMAP::KEYMAP(BOOL useDefault)
 
         searching = TRUE; 
 
+#if defined(ACTIVISION_ORIGINAL)	// wrong range
         for (i=0; i<MAX_KEYPRESS_MAP; i++) { 
+#else
+		for (i = 0; i < KEY_FUNCTION_LAST_NOOP; ++i)
+		{
+#endif
            if (strcmp(funcstr, func2key[i].str) == 0)  {         
                do { 
                   if (key2func[k].function == KEY_FUNCTION_NOOP) {  
@@ -382,9 +388,10 @@ KEYMAP::KEYMAP(BOOL useDefault)
                      key2func[k].keycode = val; 
                      searching = FALSE; 
                      func2key[i].keycode = val; 
+#if defined(ACTIVISION_ORIGINAL)	// useless and confusing
                      Assert(func2key[i].function == KEY_FUNCTION_NOOP); 
                      func2key[i].function = KEY_FUNCTION(i); 
-                     
+#endif                     
                      break;
                   } else { 
                        k = (k + 1) % MAX_KEYPRESS_MAP; 
@@ -452,12 +459,14 @@ sint32 KEYMAP::remap_key( KEY_FUNCTION keyFunc, uint32 wParam, uint32 oldKeycode
 
 	
 	func2key[oldFunc].keycode = 0;
+#if defined(ACTIVISION_ORIGINAL)	// useless
 	func2key[oldFunc].function = KEY_FUNCTION_NOOP;
-
+#endif
 	
 	func2key[keyFunc].keycode = wParam;
+#if defined(ACTIVISION_ORIGINAL)	// useless
 	func2key[keyFunc].function = keyFunc;
-
+#endif
 	
 	key2func[oldVal].keycode = 0;
 	key2func[oldVal].function = KEY_FUNCTION_NOOP;
