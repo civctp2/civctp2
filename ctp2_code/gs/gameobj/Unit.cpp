@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - IsValid marked as const.
+// - AddDisplayName added.
 //
 //----------------------------------------------------------------------------
 
@@ -371,6 +372,42 @@ const MBCHAR * Unit::GetName() const
 	}
 	StringId id = GetDBRec()->m_name;
 	return g_theStringDB->GetNameStr(id);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Unit::GetDisplayName
+//
+// Description: Get display name (string) of a unit.
+//
+// Parameters : -
+//
+// Globals    : g_theStringDB   : string database
+//              g_player        : player information
+//
+// Returns    : std::string     : text to display as name
+//
+// Remark(s)  : Differs from GetName only for units that have been marked as
+//              leader in unit.txt. In this case, the player name is appended 
+//              to the unit name.
+//
+//----------------------------------------------------------------------------
+std::string Unit::GetDisplayName(void) const
+{
+	UnitRecord const *	info	= GetDBRec();
+	Assert(info);
+
+	if (info->GetHasPopAndCanBuild())
+	{
+		return GetData()->GetCityData()->GetName();
+	}
+	else
+	{
+		std::string	unitName(g_theStringDB->GetNameStr(info->m_name));
+		return info->GetLeader() 
+			   ? unitName + " " + g_player[GetOwner()]->GetLeaderName() 
+			   : unitName;
+	}
 }
 
 PLAYER_INDEX Unit::GetOwner() const

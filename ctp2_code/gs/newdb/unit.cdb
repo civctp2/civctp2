@@ -1,3 +1,27 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Unit type descriptor
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Government specific options added (Martin Gühmann).
+#  - Leader option added.
+# 
+#-----------------------------------------------------------------------------
+
 Sprite : Int
 Sound : File
 SpecialEffect : Int
@@ -478,4 +502,6 @@ Unit {
 
     // set this flag for units that non-evil AI's should not attack
     Bit Civilian
+
+    Bit Leader	// Special "king" unit
 }

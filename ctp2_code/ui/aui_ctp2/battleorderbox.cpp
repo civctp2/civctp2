@@ -1,4 +1,29 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Battle order box.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added unit display name.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -443,10 +468,7 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 	sint32 healthPercent  = (sint32)( theUnit.GetHP() * 100  / theUnit.GetDBRec()->GetMaxHP() );
 	m_unitHealthBar->SetPercentFilled( healthPercent );
 
-	
-	sprintf( s, theUnit.GetName() );
-	m_unitName->SetText( s );
-
+	m_unitName->SetText(theUnit.GetDisplayName().c_str());
 	
 	if ( theUnit.GetMovementTypeAir() ) {
 		double fuel = theUnit.GetFuel() / 100.0;

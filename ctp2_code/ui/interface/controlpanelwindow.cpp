@@ -31,6 +31,7 @@
 // - Fixed crossed Sword bug. - Oct. 14th 2004 Martin Gühmann
 // - Fixed the crossed sword bug that was caused by the previous bug fix,
 //   cossed swords even if the city is hidden. - Oct. 15th 2004 Martin Gühmann
+// - Added unit display name.
 //
 //----------------------------------------------------------------------------
 //
@@ -186,6 +187,7 @@
 #include "helptile.h"
 
 #include "gameinit.h"		// g_startHotseatGame
+#include <string>			// std::string
 
 extern ProgressWindow *g_theProgressWindow;
 
@@ -3833,7 +3835,7 @@ ControlPanelWindow::UnitPanelRedisplay()
 	if (g_theArmyPool->IsValid(army))
 		unit=army[0];
 
-	const MBCHAR *name="None"; 
+	std::string   name("None");
 	const MBCHAR *order=""; 
 
 	double attack =0.0;
@@ -3842,7 +3844,7 @@ ControlPanelWindow::UnitPanelRedisplay()
 
 	if (unit.IsValid())
 	{
-		name	=unit.GetName();         
+		name.assign(unit.GetDisplayName());
 		attack  =unit.GetAttack();       
 		defense =unit.GetDefense();      
 		movement=unit.GetMovementPoints();
@@ -3856,8 +3858,7 @@ ControlPanelWindow::UnitPanelRedisplay()
 	
 	BuildUnitListBox();
 
-	
-	SetControlText((aui_Control *)m_unitType	,"%s"   ,name	);
+	SetControlText((aui_Control *)m_unitType	,"%s"	,name.c_str());
  	SetControlText((aui_Control *)m_unitAttack	,"%3.2f",attack  );
 	SetControlText((aui_Control *)m_unitDefense	,"%3.2f",defense );
 	SetControlText((aui_Control *)m_unitMove	,"%3.2f",movement); 

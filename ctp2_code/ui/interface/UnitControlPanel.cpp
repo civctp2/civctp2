@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Option added to select which order buttons are displayed for an army.
+// - Added unit display name.
 //
 //----------------------------------------------------------------------------
 
@@ -437,8 +438,7 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 		m_singleSelectionIcon->SetImageMapCallback(NULL, NULL);
 	}
 
-	
-	m_unitListLabel->SetText(unit.GetName());
+	m_unitListLabel->SetText(unit.GetDisplayName().c_str());
 }
 
 

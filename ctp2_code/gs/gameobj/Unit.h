@@ -20,18 +20,13 @@
 // _MSC_VER		
 // - Compiler version (for the Microsoft C++ compiler only)
 //
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
-//       1200 are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - #pragma marked as Microsoft extension.
 // - IsValid marked as const.
+// - GetDisplayName added.
 //
 //----------------------------------------------------------------------------
 
@@ -41,6 +36,8 @@
 
 #ifndef __UNIT_H__ 
 #define __UNIT_H__ 1
+
+#include <string>
 
 #include "ID.h"
 #include "dbtypes.h"
@@ -621,6 +618,8 @@ public:
 
 	CityData *GetCityData() const;
 	CityData *CD() { return GetCityData(); }
+
+	std::string	GetDisplayName(void) const;
 };
 
 uint32 Unit_Unit_GetVersion(void) ;
