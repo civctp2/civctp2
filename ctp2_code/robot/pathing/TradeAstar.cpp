@@ -1,32 +1,15 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : A-star pathfinding for trade routes
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Added avoidList Param
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "Globals.h"
@@ -87,14 +70,9 @@ sint32 TradeAstar::FindPath(const PLAYER_INDEX owner, const MapPoint &start, con
     sint32 cutoff = 2000000000; 
     sint32 nodes_opened=0;
     m_owner = owner; 
-#if defined (ACTIVISION_ORIGINAL)
+
     return Astar::FindPath(start, dest, a_path, total_cost, isunit, 
             cutoff, nodes_opened);
-#else
-	MapPoint_List avoidList;
-    return Astar::FindPath(start, dest, a_path, total_cost, isunit, 
-            cutoff, nodes_opened,avoidList);
-#endif
 
 }
 

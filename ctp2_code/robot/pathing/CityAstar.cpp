@@ -25,9 +25,18 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added avoidList Param
-// - Added method to build roads around dead tiles (using the avoidList)
+// - Modified EntryCost by Martin Gühmann to allow:
+//   - Bypassing of tiles without road improvement, e.g. polluted tiles
+//   - Bypassing of unowend tiles and foreign tiles
+//   - Bypassing of unexplored tiles
+//   - Linking cities on different continents.
+//   - Building of undersea tunnels
+// - Added owner argument to to FindRoadPath function so that m_owner 
+//   can be set in that function. The result is that the path finding
+//   routine takes unexplored tiles into consideration, by Martin Gühmann.
+//
 //----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "c3errors.h"
 #include "Globals.h"
@@ -44,6 +53,12 @@
 
 #include "MoveFlags.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to acces the terrain improvement database
+#include "TerrainImprovementRecord.h"
+#include "terrainutil.h"
+#include "AgreementMatrix.h" //Allow alliance checking
+#endif
 
 CityAstar g_city_astar; 
 
@@ -52,13 +67,14 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
                             float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry) 
 
 {
-    
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühamnn
 	if (m_pathRoad)
 	{
 		
 		
 		if (g_player[m_owner]->IsExplored(pos) == FALSE ||
-			g_theWorld->IsWater(pos)) { 
+			g_theWorld->IsWater(pos)) { //Cannot build undersea tunnels
 			cost = k_ASTAR_BIG; 
 			entry = ASTAR_BLOCKED; 
 			return FALSE;
@@ -73,6 +89,7 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 		return true;
 	}
 
+	//Never executed
     if (g_theWorld->IsMoveZOC (m_owner, prev, pos, FALSE)) { 
         cost = k_ASTAR_BIG; 
 		entry = ASTAR_BLOCKED;
@@ -82,6 +99,40 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 		entry = ASTAR_CAN_ENTER;
         return TRUE; 
     }
+#else
+	if(m_pathRoad){
+		
+		const TerrainImprovementRecord *rec = terrainutil_GetBestRoad(m_owner, pos);
+		if(g_player[m_owner]->IsExplored(pos) == FALSE 
+		||(g_theWorld->AccessCell(pos)->GetOwner() >= 0
+		&&(g_theWorld->AccessCell(pos)->GetOwner() != m_owner
+		&& !AgreementMatrix::s_agreements.HasAgreement(m_owner, g_theWorld->AccessCell(pos)->GetOwner(), PROPOSAL_TREATY_ALLIANCE)))
+		|| !rec
+		){ 
+			cost = k_ASTAR_BIG; 
+			entry = ASTAR_BLOCKED; 
+			return FALSE;
+		}
+		
+		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+		if(!effect){
+			cost = k_ASTAR_BIG; 
+			entry = ASTAR_BLOCKED; 
+			return FALSE;
+		}
+
+        cost = float(g_theWorld->GetMoveCost(pos) * effect->GetProductionCost());
+		if(g_theWorld->AccessCell(pos)->GetOwner() == -1){
+			cost *= 10000;
+		}
+
+		entry = ASTAR_CAN_ENTER;
+		return TRUE;
+	}
+	else{
+		return TRUE;
+	}
+#endif
 }
 
 sint32 CityAstar::GetMaxDir(MapPoint &pos) const
@@ -104,19 +155,16 @@ void CityAstar::FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const Ma
     sint32 cutoff = 2000000000; 
     sint32 nodes_opened=0;
 
-#if defined (ACTIVISION_ORIGINAL)
-    if (!FindPath(start, dest, tmp_path, cost,  FALSE, cutoff, nodes_opened)) 
-#else
-	MapPoint_List avoidList;
-    if (!FindPath(start, dest, tmp_path, cost,  FALSE, cutoff, nodes_opened, avoidList))
-#endif
-	{ 
+    if (!FindPath(start, dest, tmp_path, cost,  FALSE, cutoff, nodes_opened)) { 
          cost = float(g_player[m_owner]->GetMaxEmpireDistance()); 
     }
 }
 
 bool CityAstar::FindRoadPath(const MapPoint & start, 
 							 const MapPoint & dest,
+#if !defined(ACTIVISION_ORIGINAL)
+							 PLAYER_INDEX owner,
+#endif
 							 Path & new_path,
 							 float & total_cost)
 {
@@ -126,84 +174,14 @@ bool CityAstar::FindRoadPath(const MapPoint & start,
 
     sint32 cutoff = 2000000000; 
     sint32 nodes_opened=0;
-#if defined (ACTIVISION_ORIGINAL)
-    if (FindPath(start, dest, new_path, total_cost,  FALSE, cutoff, nodes_opened)) 
-	{		
+
+#if !defined(ACTIVISION_ORIGINAL)
+	m_owner = owner;
+#endif
+
+    if (FindPath(start, dest, new_path, total_cost,  FALSE, cutoff, nodes_opened)) { 
         return true;
     }
 	return false;
-#else
-	const sint32 MAX_PATH_CYCLES = 5;
-	sint32 cycles_count = 0;
-	sint32 GoodPathFound = 0;
-	Path last_good_path;
-	bool Is_last_good_path_valid = false;
-	MapPoint_List avoidList;
-    while(!GoodPathFound && cycles_count < MAX_PATH_CYCLES)
-	{	
-		GoodPathFound = FindPath(start, dest, last_good_path, total_cost,  FALSE, cutoff, nodes_opened,avoidList);
-		if (!GoodPathFound)
-		{
-			if(!Is_last_good_path_valid)
-				break;
-			else
-			{	//Use the last_good_path - even if it has not been checked safe
-				new_path = last_good_path;
-				return TRUE; 
-			}
-		}
-		else
-		{ //A path has been founded. Check if it's safe
-			if (CheckIsPollutionAlongPath(last_good_path, avoidList))
-			{
-				new_path = last_good_path;
-				return TRUE; 
-			}
-			{
-				GoodPathFound = 0; //to check another path with avoidList
-			}
-		}
-	}
-	if (!GoodPathFound && !Is_last_good_path_valid)
-	{
-	        new_path = last_good_path;
-			return FALSE;
-	}
-	else
-	{		//accept the last_good_path
-			return TRUE; 
-	}
-#endif		
 }
 
-#if !defined (ACTIVISION_ORIGINAL)
-BOOL CityAstar::CheckIsPollutionAlongPath(const Path & my_path, MapPoint_List & avoidList)
-{
-	BOOL IsPathClean = true;
-	Path test_path = my_path;
-	MapPoint myPos;
-	test_path.GetStartPoint(myPos);
-	if (myPos.x > 0 && myPos.y > 0)
-	{
-		test_path.Next(myPos); //the first point is not to check...
-		while (myPos != test_path.GetEnd())
-		{
-			Cell* c = g_theWorld->GetCell(myPos);
-			
-			if (c->IsDead()) //cell is polluted (dead)
-			{
-				if (!Astar::IsInAvoidList(myPos,avoidList))
-				{
-					avoidList.push_back(myPos);
-				}
-				IsPathClean = false;
-			}		
-			test_path.Next(myPos);
-			//myPos = test_path.GetCurrentPoint();
-		}
-		
-	}
-	return IsPathClean;
-}
-
-#endif

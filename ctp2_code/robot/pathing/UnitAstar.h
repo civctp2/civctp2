@@ -1,33 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : A-star pathfinding for Units
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Added avoidList Param
-// - Added methods to check room for army and danger along path
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef __UNIT_ASTAR__
@@ -108,14 +93,6 @@ public:
     BOOL CheckMoveIntersection(const MapPoint &prev, const MapPoint &pos,                           
         Cell *the_prev_cell, Cell *the_pos_cell, 
         float &cost, BOOL &is_zoc, const BOOL can_be_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter);
-
-
-#if !defined (ACTIVISION_ORIGINAL)
-	BOOL CheckIsRoomAlongPath(const Path & my_path, MapPoint_List & avoidList);
-
-	BOOL CheckIsDangerAlongPath(const Path & my_path, MapPoint_List & avoidList, BOOL IsCivilian);
-
-#endif
 
     virtual sint32 EntryCost(const MapPoint &prev, const MapPoint &pos,
        float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry);        

@@ -29,10 +29,7 @@
 // - m_queue_index used.
 // - Straight line corrected for worlds that do not have X-wrapping.
 // - Standardised min/max usage.
-// - Added avoidList param
-// - Added method to check if there is enough room for army along the path (if not search alternate path)
-// - Added methode to check if there is a danger along the path (for civilian units). so units don't go near 
-//   enemy cities (and can't be bombarded). If no alternate path found, go on the first founded path.
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -46,9 +43,6 @@
 
 
 #include "Army.h"
-#if !defined (ACTIVISION_ORIGINAL)
-#include "ArmyData.h"
-#endif
 #include "Unit.h"
 #include "CellUnitList.h"
 #include "XY_Coordinates.h"
@@ -1256,18 +1250,9 @@ sint32 UnitAstar::FindBrokenPath(const MapPoint &start, const MapPoint &dest,
         good_path = bad_path; 
         bad_path.Clear(); 
         r = TRUE; 
-    } 
-	else 
-	{        
-#if defined (ACTIVISION_ORIGINAL)
+    } else {        
         r = Astar::FindPath(start, no_enter_pos, good_path, total_cost,  FALSE, 
             cutoff, nodes_opened); 
-#else
-	MapPoint_List avoidList;
-        r = Astar::FindPath(start, no_enter_pos, good_path, total_cost,  FALSE, 
-            cutoff, nodes_opened,avoidList); 
-#endif
-
         if (r) { 
             bad_path.ClipStartToCurrent();
         } else { 
@@ -1315,15 +1300,9 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
     if (g_player[m_owner]->IsExplored(dest) && g_theWorld->CanEnter(dest, m_move_intersection)) {
        
        if ((start.x == no_enter_pos.x) && (no_enter_pos.y == start.y)) { 
-
-#if defined (ACTIVISION_ORIGINAL)
+            
           r = Astar::FindPath(start, dest, good_path, total_cost, FALSE, 
               cutoff, nodes_opened); 
-#else
-	MapPoint_List avoidList;
-          r = Astar::FindPath(start, dest, good_path, total_cost, FALSE, 
-              cutoff, nodes_opened,avoidList); 
-#endif		   
           if (r) { 
              return TRUE;
           } else if (no_bad_path) {
@@ -1338,14 +1317,8 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
     
            StraightLine(start, no_enter_pos, good_path);
            if (EnterPathPoints(good_path, tmp_point)) { 
-#if defined (ACTIVISION_ORIGINAL)
                r = Astar::FindPath(no_enter_pos, dest, bad_path, total_cost, 
                    FALSE, cutoff, nodes_opened); 
-#else
-	MapPoint_List avoidList;
-               r = Astar::FindPath(no_enter_pos, dest, bad_path, total_cost, 
-                   FALSE, cutoff, nodes_opened,avoidList); 
-#endif
                if (r) { 
                    good_path.Concat(bad_path); 
                    bad_path.Clear(); 
@@ -1359,14 +1332,8 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
                    return TRUE; 
                }
            } else { 
-#if defined (ACTIVISION_ORIGINAL)
                r = Astar::FindPath(start, dest, good_path, total_cost, FALSE,
                    cutoff, nodes_opened); 
-#else
-	MapPoint_List avoidList;
-               r = Astar::FindPath(start, dest, good_path, total_cost, FALSE,
-                   cutoff, nodes_opened,avoidList); 
-#endif
                if (r) { 
                    bad_path.Clear(); 
                    return TRUE; 
@@ -1405,14 +1372,8 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
                 if (EnterPathPoints(good_path, no_enter_pos)) { 
                     return TRUE; 
                 } else { 
-#if defined (ACTIVISION_ORIGINAL)
-			   return Astar::FindPath(start, vision_edge, good_path, total_cost,  FALSE, 
+                    return Astar::FindPath(start, vision_edge, good_path, total_cost,  FALSE, 
                         cutoff, nodes_opened);  
-#else
-	MapPoint_List avoidList;
-			   return Astar::FindPath(start, vision_edge, good_path, total_cost,  FALSE, 
-                        cutoff, nodes_opened,avoidList);  
-#endif
                 }
            }
        } else {                                
@@ -1421,14 +1382,8 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
            static MapPoint tmp_point;
            if (((no_enter_pos.x == start.x) && (no_enter_pos.y == start.y)) ||
                !EnterPathPoints(good_path, tmp_point)) { 
-#if defined (ACTIVISION_ORIGINAL)
                r = Astar::FindPath(start, vision_edge, good_path, total_cost,  FALSE, 
                    cutoff, nodes_opened); 
-#else
-	           MapPoint_List avoidList;
-               r = Astar::FindPath(start, vision_edge, good_path, total_cost,  FALSE, 
-                   cutoff, nodes_opened,avoidList); 
-#endif
                if (r) { 
                    StraightLine(vision_edge, dest, bad_path);
                    return TRUE; 
@@ -1442,14 +1397,8 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
 
                return r;
            } else {
-#if defined (ACTIVISION_ORIGINAL)
                r = Astar::FindPath(no_enter_pos, vision_edge, tmp_path, 
                    total_cost,  FALSE, cutoff, nodes_opened); 
-#else
-	           MapPoint_List avoidList;
-               r = Astar::FindPath(no_enter_pos, vision_edge, tmp_path, 
-                   total_cost,  FALSE, cutoff, nodes_opened,avoidList); 
-#endif
                if (r) { 
                    good_path.Concat(tmp_path); 
                    StraightLine(vision_edge, dest, bad_path);
@@ -1762,13 +1711,8 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
     Assert(VerifyMem());
 
     if (m_move_union != 0) { 
-#if defined (ACTIVISION_ORIGINAL)
-        if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) 
-#else
-	    MapPoint_List avoidList;
-        if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened,avoidList)) 
-#endif       
-		{ 
+       
+        if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) { 
             ClearMem(); 
             return TRUE; 
         } else if (no_bad_path) { 
@@ -1812,13 +1756,8 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
                         return TRUE; 
                     } 
                 }
-#if defined (ACTIVISION_ORIGINAL)
-                if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) 
-#else
-	            MapPoint_List avoidList;
-                if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened,avoidList)) 
-#endif 
-				{ 
+
+                if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) { 
                     ClearMem();
                     return TRUE; 
                 } else if (no_bad_path) { 
@@ -1846,87 +1785,16 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
             (g_theWorld->CanEnter(dest, m_move_intersection)) ||
 		    CanMoveIntoTransports(pos)
         )
-       ) 
-	{ 
-#if defined (ACTIVISION_ORIGINAL)
-        if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) 
-		{ 
-
+       ) { 
+    
+        if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) { 
             ClearMem(); 
             return TRUE; 
-        } 
-		else if (no_bad_path) 
-		{ 
+        } else if (no_bad_path) { 
             ClearMem(); 
             return FALSE;
         }
-#else
-		const sint32 MAX_PATH_CYCLES = 5;
-		sint32 cycles_count = 0;
-		sint32 GoodPathFound = 0;
-		Path last_good_path;
-		bool Is_last_good_path_valid = false;
-	    MapPoint_List avoidList;
-        while(!GoodPathFound && cycles_count < MAX_PATH_CYCLES)
-		{	
-		    GoodPathFound = Astar::FindPath(start, dest, last_good_path, total_cost, FALSE, cutoff, nodes_opened, avoidList);
-			if (!GoodPathFound)
-			{
-				if(!Is_last_good_path_valid)
-					break;
-				else
-				{	//Use the last_goo_path - even if it has not been checked safe
-					ClearMem(); 
-					return TRUE; 
-				}
-			}
-			else
-			{ //A path has been founded. Check if it's safe
-				if (CheckIsRoomAlongPath(last_good_path, avoidList))
-				{
-
-					if (CheckIsDangerAlongPath(last_good_path,avoidList,m_army->IsCivilian()))
-					{	
-						good_path = last_good_path;
-						Is_last_good_path_valid = true;
-						ClearMem(); 
-						return TRUE; 
-					}
-					else
-					{
-						if (!Is_last_good_path_valid)
-						{
-						good_path = last_good_path;
-						Is_last_good_path_valid = true;
-						}
-						GoodPathFound = 0;
-					}
-				}
-				else
-				{
-					GoodPathFound = 0; //to check another path with avoidList
-				}
-			}
-		}
-		if (!GoodPathFound && !Is_last_good_path_valid)
-		{
-			if (no_bad_path) 
-			{ 
-	            good_path = last_good_path;
-				ClearMem(); 
-				return FALSE;
-			}
-		}
-		else
-		{		//accept the last_good_path
-				//good_path = last_good_path;
-				ClearMem(); 
-				return TRUE; 
-		}	
-#endif     
-    } 
-	else if (no_bad_path) 
-	{ 
+    } else if (no_bad_path) { 
         ClearMem(); 
         return FALSE;
     }
@@ -2017,102 +1885,3 @@ BOOL UnitAstar::VerifyMem() const
 
     return TRUE; 
 }
-
-#if !defined (ACTIVISION_ORIGINAL)
-BOOL UnitAstar::CheckIsRoomAlongPath(const Path & my_path, MapPoint_List & avoidList)
-{
-	BOOL IsEnoughRoom = true;
-	Path test_path = my_path;
-	MapPoint myPos;
-	test_path.GetStartPoint(myPos);
-	test_path.Next(myPos); //the first point is not to check...
-	while (myPos != test_path.GetEnd())
-	{
-		Cell* c = g_theWorld->GetCell(myPos);
-		if (m_nUnits + c->GetNumUnits() > k_MAX_ARMY_SIZE) //cell too small...
-		{
-			if (!Astar::IsInAvoidList(myPos,avoidList))
-			{
-				avoidList.push_back(myPos);
-			}
-
-			IsEnoughRoom = false;
-		}		
-		test_path.Next(myPos);
-		//myPos = test_path.GetCurrentPoint();
-	}
-	return IsEnoughRoom;
-}
-
-BOOL UnitAstar::CheckIsDangerAlongPath(const Path & my_path, MapPoint_List & avoidList, BOOL IsCivilian)
-{
-	BOOL NoDangerAlongPath = true;
-	BOOL IsDanger = false;
-	Path test_path = my_path;
-	MapPoint myPos;
-	test_path.GetStartPoint(myPos);
-	MapPoint start = myPos;
-	MapPoint end = test_path.GetEnd();
-	test_path.Next(myPos); //the first point is not to check...
-	while (myPos != test_path.GetEnd())
-	{
-		Cell* c = g_theWorld->GetCell(myPos);
-		IsDanger = false;
-
-
-		sint32 i; 
-		MapPoint neighbor;
-		CellUnitList *the_army=NULL;
-
-		for (i=0; i <= SOUTH; i++) 
-		{ 		   
-		   if (!myPos.GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) continue;
-
-   
-		   if (neighbor == start || neighbor == end)
-		   { 
-			   continue;
-		   } 
-			
-		   //Check for hostile army
-		   the_army = g_theWorld->GetArmyPtr(neighbor);
-		   if (the_army) 
-		   {
-    			if (m_owner !=  the_army->GetOwner())
-				{
-					if (IsCivilian) //TO DO : Add conditions (in danger only if the_army not civilian
-					{
-						IsDanger = true;
-					}
-
-				}
- 			}
-
-    
-		   //Check for hostile city
-		   if(g_theWorld->HasCity(neighbor)) 
-		   { 
-			   if (g_theWorld->GetCity(neighbor).GetOwner() != m_owner) 
-			   { 
-					IsDanger = true;
-			   } 
-
-		   }
-		}
-
-		if (IsDanger)
-		{
-			if (!Astar::IsInAvoidList(myPos,avoidList))
-			{
-				avoidList.push_back(myPos);
-			}
-			NoDangerAlongPath = false;
-		}		
-		test_path.Next(myPos);
-		//myPos = test_path.GetCurrentPoint();
-	}
-	return NoDangerAlongPath;
-}
-
-
-#endif

@@ -1,27 +1,37 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : AI and automated governor handling.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// CTP1_HAS_RISEN_FROM_THE_GRAVE
+// - When defined, does not use the CTP2 worker utilisation style.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added terrain boni arguments to FindBestTileImprovement to record the 
+//   already given terrain boni for that city, by Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __GOVERNOR_H__
@@ -348,8 +358,11 @@ private:
 
 	
 	
-	
+#if defined(ACTIVSION_ORIGINAL)	
 	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const;
+#else
+	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce, CityData* city) const;
+#endif
 
 	
 	sint32 GetBestRoadImprovement(const MapPoint & pos) const;

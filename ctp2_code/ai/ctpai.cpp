@@ -28,15 +28,21 @@
 // - Add the same action to escort Transports as it exists for Settlers - Calvitix
 // - Allow army groups (size > 1) to escort settlers or transports - Calvitix
 // - Place Tile Improvement every turn instead of every 5 turns - Calvitix
-// - Add goals (Chokepoint - Goodyhuts) if there is only a third of maxeval (and not just when there isn't anymore (if one goal remain and isn't satisfied,
-//   it can freeze all the goals of this type) - Calvitix
+// - Add goals (Chokepoint - Goodyhuts) if there is only a third of maxeval 
+//   (and not just when there isn't anymore (if one goal remain and isn't 
+//   satisfied, it can freeze all the goals of this type)) - Calvitix
+// - AI now improves every turn its city tiles. - Calvitex
 // - Set explore resolution (an Explore goal every 4 tiles is a good compromise)
+// - Undid the last change as I still think it reduces game speed maybe 
+//   something else has to be improved to avaoid the long pauses caused 
+//   by some AIs. - Martin Gühmann
+// - force to move the transport units out of city (12 units isn't much, and 
+//   their is problems when a group want to enter in a transport that is in 
+//   town(example : 5 - units group cannot enter transport if it is in a city 
+//   and with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
+// - Add UngroupGarrison method (to ungroup units blocked by garrison 
+//   (for example seige force) - Calvitix
 //
-// - force to move the transport units out of city (12 units isn't much, and their is problems when a group want
-//   to enter in a transport that is in town(example : 5 - units group cannot enter transport
-//   if it is in a city and
-//   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
-// - Add UngroupGarrison method (to ungroup units blocked by garrison (for example seige force) - Calvitix
 //----------------------------------------------------------------------------
 
 
@@ -2042,7 +2048,7 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 
 	CTPGoal_ptr goal_ptr;
 
-#if defined (ACTIVISION_ORIGINAL)
+#if 1 || defined (ACTIVISION_ORIGINAL)
 	sint16 explore_res = 5;
 #else
     // Set a better explore resolution (every 2 tiles)

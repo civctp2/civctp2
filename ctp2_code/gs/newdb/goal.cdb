@@ -82,11 +82,11 @@ Goal {
 	Int DistanceToHomeBonus 
 	Int DistanceToEnemyBonus
 #not ACTIVISION_ORIGINAL    
-	Int InHomeTerritoryBonus
-	Int NoOwnerTerritoryBonus
-	Int InEnemyTerritoryBonus
-	Int WoundedArmyBonus
-	Int NotVisibleBonus 
+	Int InHomeTerritoryBonus = 0
+	Int NoOwnerTerritoryBonus = 0
+	Int InEnemyTerritoryBonus = 0
+	Int WoundedArmyBonus = 0
+	Int NotVisibleBonus = 0
 #end	
 	Int ChokePointBonus 
 	Int UnexploredBonus 

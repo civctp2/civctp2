@@ -25,8 +25,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added avoidList Param
-// - Added method to build roads around dead tiles (using the avoidList)
+// - Added owner argument to FindRoadPath function.
+//
 //----------------------------------------------------------------------------
 
 #pragma once
@@ -54,14 +54,11 @@ public:
 	
 	bool FindRoadPath(const MapPoint & start, 
 					  const MapPoint & dest,
+#if !defined(ACTIVISION_ORIGINAL)
+					  PLAYER_INDEX owner,
+#endif
 					  Path & new_path,
 					  float & total_cost);
-
-#if !defined (ACTIVISION_ORIGINAL)
-
-	BOOL CheckIsPollutionAlongPath(const Path & my_path, MapPoint_List & avoidList);
-
-#endif
 
 private:
 	bool m_pathRoad;

@@ -53,6 +53,10 @@
 //   other wrong behaviours). (L. Hirth 7/2004) 
 // - Prevented cities from revolting twice in the same turn. By kaan.
 // - Standardised min/max usage.
+// - Addition of new NeedMoreFood function to figure out wheather a city 
+//   needs more food, so that the AI can build new food tile improvements, 
+//   by Martin Gühmann.
+//
 //----------------------------------------------------------------------------
 
 
@@ -191,7 +195,9 @@ extern SoundManager		*g_soundManager;
 //Added by Martin Gühmann to handle 
 //city creation by Scenario Editor properly
 #include "ScenarioEditor.h"
-#include <algorithm>				// std::min
+#include "StrategyRecord.h"         // For accessing the strategy database
+#include "Diplomat.h"               // Do be able to retrieve the current strategy
+#include <algorithm>                // std::min
 #endif
 
 extern void player_ActivateSpaceButton(sint32 pl);
@@ -1058,7 +1064,7 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 #if !defined(ACTIVISION_ORIGINAL)
 	// Modified by kaan to address bug # 12
 	// Prevent city from revolting twice in the same turn.
-	m_min_turns_revolt = g_theConstDB->GetMinTurnsBetweenRevolt(); 
+	m_min_turns_revolt = (uint8)g_theConstDB->GetMinTurnsBetweenRevolt(); 
 #endif
 }
 
@@ -1361,6 +1367,7 @@ sint32 CityData::ComputeGrossProduction( double workday_per_person, sint32 colle
 	
 	sint32 gross_production = collected_production;
 
+#if defined(ACTIVISION_ORIGINAL)
 	gross_production = ceil(gross_production * workday_per_person);
 
 	double prodBonus;
@@ -1396,6 +1403,46 @@ sint32 CityData::ComputeGrossProduction( double workday_per_person, sint32 colle
 	}
 	else
 		franchise_loss = 0;
+
+#else
+	//Added missing casts in order to remove warnings
+	gross_production = (sint32)ceil(gross_production * workday_per_person);
+
+	double prodBonus;
+	buildingutil_GetProductionPercent(GetEffectiveBuildings(), prodBonus);
+	gross_production += (sint32)ceil(gross_production * prodBonus);
+
+	sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_PRODUCTION, m_owner);
+	gross_production += (sint32)ceil(double(gross_production) * (double(featPercent) / 100.0));
+	
+	gross_production += (sint32)ceil(gross_production *
+						   (double(wonderutil_GetIncreaseProduction(g_player[m_owner]->m_builtWonders)) * 0.01));
+
+	gross_production = (sint32)ceil((double)gross_production * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetProductionCoef());
+
+	if(m_specialistDBIndex[POP_LABORER] >= 0) {
+		gross_production += LaborerCount() *
+			g_thePopDB->Get(m_specialistDBIndex[POP_LABORER])->GetProduction();
+	}
+
+	if(m_bioInfectionTurns > 0) {
+		gross_production -= (sint32)ceil(double(gross_production) * g_theConstDB->GetBioInfectionProductionCoef());
+	}
+
+	crime_loss = sint32(ceil(gross_production * m_happy->GetCrime()));
+	
+	if (crime_loss < 0) 
+		crime_loss = 0;
+
+	sint32 net_production = gross_production - crime_loss;
+
+	if( m_franchise_owner >= 0 ) {
+		franchise_loss = (sint32)ceil(double(net_production) * g_theConstDB->GetFranchiseEffect());
+	}
+	else
+		franchise_loss = 0;
+
+#endif
 
 	return gross_production;
 }
@@ -1570,11 +1617,11 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 	sint32			partSquaredRadius;
 	GetFullAndPartialRadii(fullSquaredRadius, partSquaredRadius);
 
-	if (squaredDistance > partSquaredRadius)
+	if (squaredDistance > (uint32)partSquaredRadius)
 	{
 		return 0.0;	// Not in the city influence (yet).
 	}
-	else if (squaredDistance <= fullSquaredRadius)
+	else if (squaredDistance <= (uint32)fullSquaredRadius)
 	{
 		return 1.0;	// Within the fully utilised ring(s).
 	}
@@ -6227,13 +6274,19 @@ void CityData::CollectOtherTrade(const BOOL projectedOnly, BOOL changeResources)
 sint32 CityData::GetProjectedScience()
 {
 	
+#if defined(ACTIVISION_ORIGINAL)
 	sint32 grossFood = m_gross_food_this_turn;
 	sint32 collectedProduction = m_collected_production_this_turn;
 	sint32 grossTrade = m_gross_trade;
-#ifdef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
-	sint32 shieldsThisTurn = m_shields_this_turn;
-#endif
+	sint32 shieldsThisTurn = m_shields_this_turn; // #01 Fixed sometimes not correct filled m_shields_this_turn 
 	sint32 foodThisTurn = m_food_produced_this_turn;
+#else
+	//Added casts
+	sint32 grossFood = (sint32)m_gross_food_this_turn;
+	sint32 collectedProduction = m_collected_production_this_turn;
+	sint32 grossTrade = m_gross_trade;
+	sint32 foodThisTurn = (sint32)m_food_produced_this_turn;
+#endif
 	sint32 trade = m_trade;
 	sint32 science = m_science;
 	sint32 wagesPaid = m_wages_paid;
@@ -6241,7 +6294,7 @@ sint32 CityData::GetProjectedScience()
 	CollectResources();
 	DoSupport(true);
 	SplitScience(true);
-#ifndef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
+#if defined(ACTIVISION_ORIGINAL) // #01 Fixed sometimes not correct filled m_shields_this_turn 
 	ProcessProduction(true);
 #endif
 
@@ -6268,6 +6321,90 @@ sint32 CityData::GetFounder() const
 }
 
 #if !defined(ACTIVISION_ORIGINAL)
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::NeedMoreFood
+//
+// Description: Checks whether a new food terrain improvement should be 
+//              built in the area of the according city.
+//
+// Parameters : -
+//
+// Globals    : g_player:            List of players
+//              g_thePopDB:          The pop database
+//              g_theCitySizeDB      The city size database
+//              
+//
+// Returns    : Whether a new food terrain improvement should be built 
+//              in the area of the city.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool CityData::NeedMoreFood(sint32 bonusFood, bool considerFoodOnlyFromTerrain){
+
+	sint32 turnsForOnePop;
+	if(GetGrowthRate() != 0){
+		turnsForOnePop = k_PEOPLE_PER_POPULATION/GetGrowthRate();
+	}
+	else{
+		turnsForOnePop = k_PEOPLE_PER_POPULATION;
+	}
+
+	sint32 maxFoodFromTerrain = GetMaxFoodFromTerrain() + bonusFood;
+	sint32 currentFood = (sint32)(GetProducedFood() + bonusFood);
+
+	double foodBonus;
+	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus);
+	maxFoodFromTerrain += (sint32)(maxFoodFromTerrain * foodBonus);
+	currentFood += (sint32)(bonusFood * foodBonus);
+
+	maxFoodFromTerrain += sint32(ceil(((double)maxFoodFromTerrain * 
+		double(double(wonderutil_GetIncreaseFoodAllCities(
+			g_player[m_owner]->m_builtWonders)) / 100.0))));
+
+	currentFood += sint32(ceil(((double)bonusFood * 
+		double(double(wonderutil_GetIncreaseFoodAllCities(
+			g_player[m_owner]->m_builtWonders)) / 100.0))));
+
+	if(!considerFoodOnlyFromTerrain && m_specialistDBIndex[POP_FARMER] >= 0) {
+		maxFoodFromTerrain += FarmerCount() *
+			g_thePopDB->Get(m_specialistDBIndex[POP_FARMER])->GetFood();
+	}
+
+	const CitySizeRecord *nextRec = NULL;
+	if(m_workerPartialUtilizationIndex >= 0 
+	&& m_workerPartialUtilizationIndex < g_theCitySizeDB->NumRecords()){
+		nextRec = g_theCitySizeDB->Get(m_workerPartialUtilizationIndex);
+	} 
+	else{
+		nextRec = g_theCitySizeDB->Get(g_theCitySizeDB->NumRecords()-1);
+	}
+
+	sint32 foodForNextRing;
+	if(nextRec){
+		foodForNextRing = (sint32)((nextRec->GetPopulation() - SlaveCount()) * GetFoodRequiredPerCitizen());
+	}
+	else{
+		foodForNextRing = (sint32)((PopCount() - SlaveCount()) * GetFoodRequiredPerCitizen());
+	}
+
+	sint32 foodForNextPop = (sint32)((PopCount() + 1 - SlaveCount()) * GetFoodRequiredPerCitizen());
+
+	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
+	sint32 maxPop = rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease();
+
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
+
+	return((turnsForOnePop/GetOvercrowdingCoefficient() > strategy.GetTurnsAcceptedForOnePop()
+	&&      PopCount() < maxPop - strategy.GetStopBuildingFoodBeforePopMax()
+	&&      !GetIsRioting())
+	||     (maxFoodFromTerrain < foodForNextRing)
+	||     (currentFood < foodForNextPop));
+
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::GetCityStyle
@@ -6286,7 +6423,6 @@ sint32 CityData::GetFounder() const
 //              3. The style of the owner.
 //
 //----------------------------------------------------------------------------
-
 sint32 CityData::GetCityStyle() const
 {
 	if ((m_cityStyle >= 0) && (m_cityStyle < g_theCityStyleDB->NumRecords()))

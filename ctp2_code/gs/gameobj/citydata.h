@@ -39,6 +39,8 @@
 // - Prevent crash when settling in the Alexander scenario.
 // - Added GetUtilisationRatio function.
 // - Prevented cities to revolt twice in the same turn. By kaan.
+// - Added NeedMoreFood function to calculate whether a city should
+//   build food tile improvements, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -944,6 +946,7 @@ public:
 	sint32 GetFounder() const;
 
 #if !defined(ACTIVISION_ORIGINAL)
+	bool NeedMoreFood(sint32 foodBonus, bool considerFoodOnlyFromTerrain);
 	sint32 GetCityStyle() const;
 #endif
 	void SetCityStyle(sint32 style); 
