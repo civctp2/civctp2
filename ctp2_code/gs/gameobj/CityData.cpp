@@ -3807,6 +3807,8 @@ sint32 CityData::GetOvertimeCost()
 {
     
     if (m_build_queue.GetHead() == NULL) { 
+		// TODO: return 0 when nothing in queue. 
+		// But check usage (e.g. in ctpai.cpp) before doing so.
         return 1000000;
     }
 
@@ -5718,8 +5720,25 @@ void CityData::AddSellBuilding(sint32 building)
 	m_sellBuilding = building;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::PayForBuyFront
+//
+// Description: Attempt to pay for rush production.
+//
+// Parameters : -
+//
+// Globals    : g_player	: list of players
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 bool CityData::PayForBuyFront()
 {
+#if defined(ACTIVISION_ORIGINAL)
 	sint32 cost = GetOvertimeCost();
 
 	if(cost < 0)
@@ -5731,6 +5750,18 @@ bool CityData::PayForBuyFront()
 
 	g_player[m_owner]->SubGold(cost);
     g_player[m_owner]->m_gold->AddLostToRushBuy(cost);
+#else
+	Player *		player	= g_player[m_owner];
+	sint32 const	cost	= GetOvertimeCost();
+
+	if ((cost <= 0) || (player->GetGold() < cost))
+	{
+		return false;
+	}
+
+	player->SubGold(cost);
+	player->m_gold->AddLostToRushBuy(cost);
+#endif
 
 	m_paidForBuyFront = true;
 

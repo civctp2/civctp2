@@ -926,16 +926,6 @@ void CityWindow::UpdateBuildTabButtons()
 #if defined(ACTIVISION_ORIGINAL)	
 	if(m_cityData->AlreadyBoughtFront() || 
 	   g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()) {
-#else
-	if(m_cityData->AlreadyBoughtFront()
-	|| g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()
-	//Added by Martin Gühmann to disable the rush buy button when it is not the player's turn
-	|| g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
-	//Added by Martin Gühmann to disable the rush buy when capitalization or infrastructure is selected.
-	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
-	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
-	){
-#endif		
 		m_rushBuyButton->Enable(FALSE);
 	} else {
 		if(m_queueList->GetSelectedItemIndex() == 0) {
@@ -944,6 +934,25 @@ void CityWindow::UpdateBuildTabButtons()
 			m_rushBuyButton->Enable(FALSE);
 		}
 	}
+#else
+	sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
+	sint32 const	cost			= m_cityData->GetOvertimeCost();
+
+	if ((cost <= 0)									||
+		(cost > g_player[visiblePlayer]->GetGold())	||
+		m_cityData->AlreadyBoughtFront()			||
+		m_cityData->IsBuildingCapitalization()		||
+		m_cityData->IsBuildingInfrastructure()		||
+		(m_queueList->GetSelectedItemIndex() > 0)
+	   )	
+	{
+		m_rushBuyButton->Enable(FALSE);
+	}
+	else
+	{
+		m_rushBuyButton->Enable(TRUE);
+	}
+#endif		
 
 	if(m_cityData->SellingBuilding() >= 0 || 
 	   m_cityData->GetImprovements() == 0 ||
@@ -1518,23 +1527,31 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 
 #if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to update the turn count display of the image button
-	ctp2_Button *turnCountButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.RadialButton");
-	MBCHAR buf[20];
-	if(turnCountButton) {
+	ctp2_Button *	turnCountButton = (ctp2_Button *) aui_Ldl::GetObject
+		(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.RadialButton");
 
-		sint32 turns;
-		if(s_cityWindow->m_queueList->GetSelectedItemIndex() == 0)
-			turns = s_cityWindow->m_cityData->HowMuchLonger();
-		else
-			turns = s_cityWindow->m_cityData->HowMuchLonger(s_cityWindow->m_cityData->GetBuildQueue()->GetNodeByIndex(s_cityWindow->m_queueList->GetSelectedItemIndex())->m_cost);
+	if (lb && turnCountButton) 
+	{
+		BuildNode *		node	= s_cityWindow->m_cityData->GetBuildQueue()->GetNodeByIndex
+									(lb->GetSelectedItemIndex());
+		sint32 const	turns	= (lb->GetSelectedItemIndex() == 0) 
+						    	  ?	s_cityWindow->m_cityData->HowMuchLonger()
+							      : s_cityWindow->m_cityData->HowMuchLonger(node->m_cost);
 
 		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
-		if(turns >= 0 && turns < 0x7fffffff
-		&& s_cityWindow->m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
-		&& s_cityWindow->m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+		MBCHAR buf[20];
+		if ((turns >= 0)											&& 
+			(turns < 0x7fffffff)									&&
+			(node->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION)	&&
+			(node->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+		   )	
+		{
 			sprintf(buf, "%d", turns);
+		}
 		else
+		{
 			strcpy(buf, "---");
+		}
 		turnCountButton->SetText(buf);
 	}
 #endif

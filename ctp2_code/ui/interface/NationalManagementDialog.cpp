@@ -507,9 +507,6 @@ void NationalManagementDialog::UpdateBuildQueue()
 void NationalManagementDialog::UpdateRushBuy()
 {
 	sint32 rushBuyTotal = 0;
-#if !defined(ACTIVISION_ORIGINAL)
-	bool areAllCapInf = true;
-#endif
 	
 	tech_WLList<sint32> *selectedList = m_statusList->GetSelectedList();
 	
@@ -521,20 +518,26 @@ void NationalManagementDialog::UpdateRushBuy()
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
 
-		
+#if defined(ACTIVISION_ORIGINAL)		
 		if(city.GetCityData()->GetBuildQueue()->GetLen())
-#if !defined(ACTIVISION_ORIGINAL)
-			// JJB added this inner if so that things add up properly
-			if (!city.GetCityData()->AlreadyBoughtFront()) {
-#endif
 				rushBuyTotal += city.GetCityData()->GetOvertimeCost();
-#if !defined(ACTIVISION_ORIGINAL)
-			}
-			//Added by Martin Gühmann to determine if all of the items consits of capitalization and infrastructure
-			areAllCapInf =    areAllCapInf
-			               &&(city.GetCityData()->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
-			               || city.GetCityData()->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE);
+#else
+		CityData *		theCity	= city.GetCityData();
+		sint32 const	cost	= theCity ? theCity->GetOvertimeCost() : 0;
 
+		if ((cost <= 0)									||
+			(theCity->GetBuildQueue()->GetLen() == 0)	||
+			theCity->AlreadyBoughtFront()				||
+			theCity->IsBuildingCapitalization()			||
+			theCity->IsBuildingInfrastructure()
+		   )
+		{
+			// No action: nothing to rush buy in this city
+		}
+		else
+		{
+			rushBuyTotal += cost;
+		}
 #endif
 	}
 
@@ -553,28 +556,25 @@ void NationalManagementDialog::UpdateRushBuy()
 	m_rushBuyValue->SetText(stringBuffer);
 
 #else
-	// Extra conditions to prevent buying out of turn
-	if((rushBuyTotal <= 0) ||
-		(rushBuyTotal > g_player[g_selected_item->GetVisiblePlayer()]->GetGold())
-		|| g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
-		//Added by Martin Gühmann just in case someone figures out how to increase the costs for these two things:
-		|| areAllCapInf
-		)
-		m_rushBuyButton->Enable(false);
-	else
-		m_rushBuyButton->Enable(true);
+	// Extra conditions to prevent buying out of turn.
+	sint32 const	player	= g_selected_item->GetVisiblePlayer();
 
-	if(areAllCapInf){
+	m_rushBuyButton->Enable((rushBuyTotal > 0)								&&
+						    (rushBuyTotal <= g_player[player]->GetGold())	&&
+							(player == g_selected_item->GetCurPlayer())
+						   );
+
+	if (rushBuyTotal <= 0)
+	{
 		m_rushBuyValue->SetText("---");
 	}
-	else{
+	else
+	{
 		static MBCHAR stringBuffer[32];
 		sprintf(stringBuffer, "%d", rushBuyTotal);
 		m_rushBuyValue->SetText(stringBuffer);
 	}
-
 #endif
-
 }
 
 

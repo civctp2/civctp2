@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : City build queue handling.
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +25,8 @@
 // - If infrastructure or capitalization are at the front of the 
 //   build queue turns are shown anymore, by Martin Gühmann.
 // - Disabled rush buy button when it is not your turn by Martin Gühmann.
+// - Repaired CtD when double-clicking on an empty build queue - caused by
+//   the changes above.
 //
 //----------------------------------------------------------------------------
 
@@ -244,10 +246,14 @@ AUI_ERRCODE EditQueue::Initialize()
 	s_editQueue = new EditQueue(&err);
 
 	Assert(err == AUI_ERRCODE_OK);
+#if defined(ACTIVISION_ORIGINAL)	// needlessly complex
 	if(err != AUI_ERRCODE_OK)
 		return err;
 
 	return AUI_ERRCODE_OK;
+#else
+	return err;
+#endif
 }
 
 AUI_ERRCODE EditQueue::Display(CityData *city)
@@ -258,8 +264,10 @@ AUI_ERRCODE EditQueue::Display(CityData *city)
 		return AUI_ERRCODE_OK;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)	// double work: see Display()
 	if(!s_editQueue)
 		Initialize();
+#endif
 
 	AUI_ERRCODE err = Display();
 	
@@ -278,8 +286,10 @@ AUI_ERRCODE EditQueue::Display(CityData *city)
 
 AUI_ERRCODE EditQueue::Display(const UnitDynamicArray &cities)
 {
+#if defined(ACTIVISION_ORIGINAL)	// double work: see Display()
 	if(!s_editQueue)
 		Initialize();
+#endif
 
 	AUI_ERRCODE err = Display();
 
@@ -1050,26 +1060,9 @@ void EditQueue::UpdateButtons()
 		}
 
 #if defined(ACTIVISION_ORIGINAL)
-		//Removed by Martin Gühmann
 		if(m_queueList->GetSelectedItemIndex() == 0) {
 			if(!m_cityData || m_cityData->AlreadyBoughtFront() || m_cityData->GetOvertimeCost() < 0 ||
 			   g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()) {
-				m_rushBuyButton->Enable(FALSE);
-#else
-		//Added by Martin Gühmann to disable the rushbuy button and rush 
-		//buy costs if the first item is capitalization or infrastructure
-		if(m_queueList->GetSelectedItemIndex() == 0
-		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
-		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE) {
-
-			if(!m_cityData 
-			|| m_cityData->AlreadyBoughtFront() 
-			|| m_cityData->GetOvertimeCost() < 0 
-			|| g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()
-			//Added by Martin Gühmann to disable the rush buy button when it is not the players turn
-			|| g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
-			){
-#endif
 				m_rushBuyButton->Enable(FALSE);
 			} else {
 				m_rushBuyButton->Enable(TRUE);
@@ -1082,6 +1075,36 @@ void EditQueue::UpdateButtons()
 				sprintf(buf, "%d", m_cityData->GetOvertimeCost());
 				m_rushBuyCost->SetText(buf);
 			}
+#else
+		// Added by Martin Gühmann to disable the rushbuy button and rush 
+		// buy costs if the first item is capitalization or infrastructure
+
+		if (m_cityData && (m_queueList->GetSelectedItemIndex() == 0))
+		{
+			sint32 const	cost	= m_cityData->GetOvertimeCost();
+
+			if ((cost <= 0)								||	// switched with overproduction
+			    m_cityData->AlreadyBoughtFront()		||	// already rush-buying
+			    m_cityData->IsBuildingCapitalization()	||	// building capitalisation
+			    m_cityData->IsBuildingInfrastructure()	    // building infrastructure
+			   )
+			{
+				m_rushBuyCost->SetText("---");
+				m_rushBuyButton->Enable(FALSE);
+			}
+			else
+			{
+				char buf[20];
+				sprintf(buf, "%d", cost);
+				m_rushBuyCost->SetText(buf);
+
+				sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
+				m_rushBuyButton->Enable
+					((visiblePlayer == g_selected_item->GetCurPlayer())	&&	// my turn
+					 (g_player[visiblePlayer]->GetGold() >= cost)			// enough money
+				   	);
+			}
+#endif
 		} else {
 			m_rushBuyButton->Enable(FALSE);
 			m_rushBuyCost->SetText("---");

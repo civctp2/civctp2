@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : String hash table handling.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired memory leak or illegal access when loading a file with a 
+//   different table size.
+//
+//----------------------------------------------------------------------------
+
 #ifndef __STRING_HASH_H__
 #define __STRING_HASH_H__
 
@@ -139,6 +171,7 @@ template <class T> void StringHash<T>::Serialize(ARCHIVE archive)
 			}
 		}
 	} else {
+#if defined(ACTIVISION_ORIGINAL)	// Clear using wrong table size
 		archive >> m_table_size;
 
 		
@@ -151,6 +184,11 @@ template <class T> void StringHash<T>::Serialize(ARCHIVE archive)
 			delete [] m_table;
 
 		} 
+#else
+		Clear();
+		delete [] m_table;
+		archive >> m_table_size;
+#endif
 
 		m_table = new StringHashNode<T> *[m_table_size];
 		for(sint32 i = 0; i < m_table_size; i++) {
