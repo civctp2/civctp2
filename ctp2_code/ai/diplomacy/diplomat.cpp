@@ -1,3 +1,26 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : SLIC functions
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Minor modification of the Diplomat::StartNegotiations funczion 
+//   by Peter Triggs to enable some minor AI-AI-Diplomacy  
+//
+//----------------------------------------------------------------------------
 
 
 
@@ -3050,13 +3073,20 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 				continue;
 		}
 
+	//	Modification by Peter Triggs
+	//	from >=0 pt: 
+	//	if player has contact with foreignerId, 
+    //	set m_lastMotivation[foreignerId] = the player's top motivation 
+	//	and choose a new proposal for foreignerId
+	//	Original code:
+	//	if (m_foreigners[foreignerId].GetTurnsSinceGreeting() >= 0 &&
 		
-		
-		if (m_foreigners[foreignerId].GetTurnsSinceGreeting() >= 0 &&
+		if (m_foreigners[foreignerId].GetTurnsSinceGreeting() >= -1 &&
 			g_player[m_playerId] && g_player[m_playerId]->HasContactWith(foreignerId))
 		{
 			m_lastMotivation[foreignerId] = m_motivations.begin();
 
+			DPRINTF(k_DBG_AI, ("(Start Negotiations)%d choosing proposal for foreigner %d\n",m_playerId,foreignerId));
 			
 			ChooseNewProposal(foreignerId);
 			found = true;
