@@ -28,6 +28,7 @@
 // - Fix movement cost of ships above tunnels.
 // - Center on pirating (originally by Ahenobarb, slightly modified).
 // - Center on bombarding.
+// - Fix sueing of franchises.
 //
 //----------------------------------------------------------------------------
 
@@ -1598,7 +1599,11 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
+#if defined(ACTIVISION_ORIGINAL) // Franchises can not be sued until expired
 	if(cell->GetCity().GetFranchiseTurnsRemaining() >= 0) {
+#else
+	if(cell->GetCity().GetFranchiseTurnsRemaining() <= 0) {
+#endif
 		
 		return ORDER_RESULT_ILLEGAL;
 	}
