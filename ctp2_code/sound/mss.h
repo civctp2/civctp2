@@ -58,185 +58,132 @@ enum	RedbookStatus
 // Stubbed functions
 //----------------------------------------------------------------------------
 
-inline S32          AIL_digital_handle_reacquire
+extern "C" {
+
+__declspec(dllimport) S32         WINAPI AIL_digital_handle_reacquire
 (
     HDIGDRIVER const    a_Handle
-)
-{ 
-    return DSTAT_ERROR; 
-};
+);
 
-inline S32          AIL_digital_handle_release
+__declspec(dllimport) S32         WINAPI AIL_digital_handle_release
 (
     HDIGDRIVER const    a_Handle
-)
-{ 
-    return DSTAT_OK; 
-};
+);
 
-inline S32          AIL_digital_master_volume
+__declspec(dllimport) S32         WINAPI AIL_digital_master_volume
 (
     HDIGDRIVER const    a_Handle
-)
-{ 
-    return 0; 
-};
+);
 
-inline void         AIL_set_digital_master_volume
+__declspec(dllimport) void        WINAPI AIL_set_digital_master_volume
 (
     HDIGDRIVER const    a_Handle,
     S32 const           a_Volume
-)
-{ ; };
+);
 
-inline void         AIL_quick_handles
+__declspec(dllimport) void        WINAPI AIL_quick_handles
 (
     HDIGDRIVER * const	a_pHandleDig,
     HMDIDRIVER * const  a_pHandleMdi,
     HDLSDEVICE * const  a_pHandleDls
-)
-{
-    *a_pHandleDig   = INVALID_HANDLE_VALUE;
-    *a_pHandleMdi   = INVALID_HANDLE_VALUE;
-    *a_pHandleDls   = INVALID_HANDLE_VALUE;
-};
+);
 	
-inline HAUDIO       AIL_quick_load_mem
+__declspec(dllimport) HAUDIO      WINAPI AIL_quick_load_mem
 (
     void * const        a_Dataptr, 
-    sint32 const        a_Datasize
-)
-{   
-    return INVALID_HANDLE_VALUE;
-};
+    S32 const        a_Datasize
+);
 
-inline void         AIL_quick_halt
+__declspec(dllimport) void        WINAPI AIL_quick_halt
 (
     HAUDIO const        a_Handle
-)
-{ ; };
+);
 
-inline void         AIL_quick_play
+__declspec(dllimport) void        WINAPI AIL_quick_play
 (
     HAUDIO const        a_Handle,
     S32 const           a_Unknown            // 1
-)
-{ ; };
+);
 
-inline void         AIL_quick_set_volume
-(
-    HAUDIO const        a_Handle, 
-    sint32 const        a_ScaledVolume, 
-    S32 const           a_Unknown            // 64          
-)
-{ ; };
+__declspec(dllimport) void        WINAPI AIL_quick_shutdown();
 
-inline void         AIL_quick_shutdown()
-{ ; };
-
-inline void         AIL_quick_set_volume
+__declspec(dllimport) void        WINAPI AIL_quick_set_volume
 (
     HAUDIO const        a_Handle,
     S32 const           a_Volume,
     S32 const           a_PanValue
-)
-{ ; };
+);
 
-inline S32          AIL_quick_startup
+__declspec(dllimport) S32         WINAPI AIL_quick_startup
 (
      S32 const          a_UseDigital, 
      S32 const          a_UseMidi, 
      S32 const          a_OutputRate, 
      S32 const          a_OutputBits,
      S32 const          a_OutputChannels
-)
-{
-    return QSTAT_ERROR;
-};
+);
 
-inline S32          AIL_quick_status
+__declspec(dllimport) S32         WINAPI AIL_quick_status
 (
      HAUDIO const       a_Handle
-)
-{ 
-    return QSTAT_ERROR; 
-};
+);
 
-inline void         AIL_quick_unload
+__declspec(dllimport) void        WINAPI AIL_quick_unload
 (
     HAUDIO const        a_Handle
-)
-{ ; };
+);
 
-inline void         AIL_redbook_close
+__declspec(dllimport) void        WINAPI AIL_redbook_close
 (
     HREDBOOK const      a_Handle
-)
-{ ; };
+);
 
-inline HREDBOOK     AIL_redbook_open_drive
+__declspec(dllimport) HREDBOOK    WINAPI AIL_redbook_open_drive
 (
     MBCHAR const        a_Drive
-)
-{ 
-    return INVALID_HANDLE_VALUE;
-};
+);
 
-inline void         AIL_redbook_play
+__declspec(dllimport) void        WINAPI AIL_redbook_play
 (
     HREDBOOK const      a_Handle,
     U32 const           a_StartTrack,
     U32 const           a_EndTrack
-)
-{ ; };
+);
 
-inline void         AIL_redbook_set_volume
+__declspec(dllimport) void        WINAPI AIL_redbook_set_volume
 (
     HREDBOOK const      a_Handle,
     S32 const           a_Volume
-)
-{ ; };
+);
 
-inline U32          AIL_redbook_status
+__declspec(dllimport) U32         WINAPI AIL_redbook_status
 (
     HREDBOOK const      a_Handle
-)
-{
-    return REDBOOK_ERROR;
-};
+);
 
-inline void         AIL_redbook_stop
+__declspec(dllimport) void        WINAPI AIL_redbook_stop
 (
     HREDBOOK const      a_Handle
-)
-{ ; };
+);
 
-inline bool         AIL_redbook_track
+__declspec(dllimport) bool        WINAPI AIL_redbook_track
 (
     HREDBOOK const      a_Handle
-)
-{ 
-    return false;
-};
+);
 
-inline void         AIL_redbook_track_info
+__declspec(dllimport) void        WINAPI AIL_redbook_track_info
 (
     HREDBOOK const      a_Handle,
     S32 const           a_TrackNum, 
     U32 * const         a_pStartTrack, 
     U32 * const         a_pEndTrack
-)
-{
-    *a_pStartTrack  = 0;
-    *a_pEndTrack    = 0;
-};
+);
 
-inline S32          AIL_redbook_tracks
+__declspec(dllimport) S32         WINAPI AIL_redbook_tracks
 (
     HREDBOOK const      a_Handle
-)
-{
-    return 0;
-};
+);
+
+}
 
 #endif // Multiple include guard
