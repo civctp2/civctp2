@@ -33,6 +33,13 @@
 // - Corrected reported memory leak.
 // - Added database access to all databases in the new database format,
 //   even if it does not make sense, by Martin Gühmann.
+// - New slic functions added by Martin Gühmann:
+//   - CargoCapacity     Gets number of additional units a unit can carry.
+//   - MaxCargoSize      Gets the maximum number of units a unit can carry.
+//   - CargoSize         Gets the current number of units a unit is carrying.
+//   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
+//   - GetContinent      Gets the continent ID of an location.
+//   - IsWater           Gets whether a location is water.
 //
 //----------------------------------------------------------------------------
 
@@ -1073,6 +1080,13 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_RemoveGood);
 	// Added by Peter Triggs
 	m_functionHash->Add(new Slic_DeclareWar);
+	// Added by Martin Gühmann
+	m_functionHash->Add(new Slic_CargoCapacity);
+	m_functionHash->Add(new Slic_MaxCargoSize);
+	m_functionHash->Add(new Slic_CargoSize);
+	m_functionHash->Add(new Slic_GetUnitFromCargo);
+	m_functionHash->Add(new Slic_GetContinent);
+	m_functionHash->Add(new Slic_IsWater);
 #endif
 }
 

@@ -19,6 +19,13 @@
 //
 // - Readded all the slicfunctions of the patch, maybe some of them belong 
 //   better into slicfuncai.h, by Martin Gühmann.
+// - New slic functions added by Martin Gühmann:
+//   - CargoCapacity     Gets number of additional units a unit can carry.
+//   - MaxCargoSize      Gets the maximum number of units a unit can carry.
+//   - CargoSize         Gets the current number of units a unit is carrying.
+//   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
+//   - GetContinent      Gets the continent ID of an location.
+//   - IsWater           Gets whether a location is water.
 //
 //----------------------------------------------------------------------------
 
@@ -588,6 +595,14 @@ SLICFUNC(SFR_VOID, FreeAllSlaves);
 //New slicfunctions by MrBaggins
 SLICFUNC(SFR_VOID, PlantSpecificGood);
 SLICFUNC(SFR_VOID, RemoveGood);
+//New slicfunctions by Martin Gühmann
+SLICFUNC(SFR_INT, CargoCapacity);
+SLICFUNC(SFR_INT, MaxCargoSize);
+SLICFUNC(SFR_INT, CargoSize);
+SLICFUNC(SFR_INT, GetUnitFromCargo) 
+SLICFUNC(SFR_INT, GetContinent)
+SLICFUNC(SFR_INT, IsWater)
+
 
 #endif // ACTIVISION_ORIGINAL
 

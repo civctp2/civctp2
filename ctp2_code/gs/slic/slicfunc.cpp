@@ -28,6 +28,13 @@
 //   advance strings by Martin Gühmann.
 // - StringCompare function overloaded to allow the comparision between strings
 //   string IDs and strings retrieved from builtins, by Martin Gühmann.
+// - New slic functions added by Martin Gühmann:
+//   - CargoCapacity     Gets number of additional units a unit can carry.
+//   - MaxCargoSize      Gets the maximum number of units a unit can carry.
+//   - CargoSize         Gets the current number of units a unit is carrying.
+//   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
+//   - GetContinent      Gets the continent ID of an location.
+//   - IsWater           Gets whether a location is water.
 //
 //----------------------------------------------------------------------------
 
@@ -6975,6 +6982,213 @@ SFN_ERROR Slic_RemoveGood::Call(SlicArgList *args)
 	g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
 	g_tiledMap->TileChanged(pos);
 	g_tiledMap->RedrawTile(&pos);
+	
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_CargoCapacity
+//
+// Description: New function to figure out how much space is left for 
+//              cargo units.
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_CargoCapacity::Call(SlicArgList *args)
+{
+
+	if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit)) {
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+
+	m_result.m_int = unit.GetCargoCapacity();
+	
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_MaxCargoSize
+//
+// Description: New function to figure out how much cargo a unit can carry.
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : g_theUnitDB
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_MaxCargoSize::Call(SlicArgList *args)
+{
+
+	if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit)) {
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+
+	if (g_theUnitDB->Get(unit.GetType())->GetCargoDataPtr()){
+		m_result.m_int = g_theUnitDB->Get(unit.GetType())->GetCargoDataPtr()->GetMaxCargo();
+	}
+	else{
+		m_result.m_int = 0;
+	}
+	
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_CargoSize
+//
+// Description: New function to figure out how much cargo a unit is carrying.
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : g_theUnitDB
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_CargoSize::Call(SlicArgList *args)
+{
+
+	if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit)) {
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+
+	m_result.m_int = unit.GetNumCarried();
+	
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_GetUnitFromCargo
+//
+// Description: New function to figure out how much cargo a unit can carry.
+//
+// Parameters : SlicArg 0: unit
+//              SlicArg 1: int
+//              SlicArg 2: unit
+//
+// Globals    : g_theUnitDB
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_GetUnitFromCargo::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	Unit u;
+	sint32 index;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!args->GetInt(1, index))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(args->m_numArgs < 3) {
+		return SFN_ERROR_NUM_ARGS;
+	}
+
+	if(args->m_argType[2] != SA_TYPE_INT_VAR) {
+		return SFN_ERROR_TYPE_ARGS;
+	}
+	
+	if(index < 0 || index >= u.GetNumCarried()) {
+		return SFN_ERROR_OUT_OF_RANGE;
+	}
+
+	SlicSymbolData *sym = args->m_argValue[2].m_symbol;
+	Unit u2 = u.GetData()->GetCargoList()->Get(index);
+	sym->SetUnit(u2);
+	m_result.m_int = 1;
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_GetContinent
+//
+// Description: Gets the continent ID of a location.
+//
+// Parameters : SlicArg 0: location
+//
+// Globals    : g_theWorld
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_GetContinent::Call(SlicArgList *args)
+{
+
+	if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	MapPoint pos;
+	if(!args->GetPos(0, pos))
+		return SFN_ERROR_TYPE_ARGS;
+
+	m_result.m_int = g_theWorld->GetContinent(pos);
+	
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_IsWater
+//
+// Description: Gets whether this location is water.
+//
+// Parameters : SlicArg 0: location
+//
+// Globals    : g_theWorld
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_IsWater::Call(SlicArgList *args)
+{
+
+	if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	MapPoint pos;
+	if(!args->GetPos(0, pos))
+		return SFN_ERROR_TYPE_ARGS;
+
+	m_result.m_int = g_theWorld->IsWater(pos);
 	
 	return SFN_ERROR_OK;
 }

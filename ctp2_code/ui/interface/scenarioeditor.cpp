@@ -34,6 +34,13 @@
 // - Memory leaks fixed, by Martin Gühmann and Fromafar.
 // - Fixed switch to player 1 bug when the scenario editor is loaded for the
 //   first time in a game session, by Martin Gühmann.
+// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
+// - Fixed player spinners in the scenario editor so that the last player
+//   is still accessable even if players before in the row were killed,
+//   by Martin Gühmann. 
+//   Unfortunatly it looks like here are more problems. Soon after some turns
+//   with the dead player I got Asserts when I try to access the dead player.
+//
 //
 //----------------------------------------------------------------------------
 
@@ -279,7 +286,13 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 			spin->SetSpinnerCallback(PlayerSpinner, NULL);
 
 			spin->SetMinimum(0, 0);
+#if defined(ACTIVISION_ORIGINAL)
+			//Removed by Martin Gühmann
 			spin->SetMaximum(GetNumPlayers(), 0);
+#else
+			//Added by Martin Gühmann
+			spin->SetMaximum(GetLastPlayer(), 0);
+#endif
 		}
 	}
 
@@ -3354,7 +3367,19 @@ sint32 ScenarioEditor::GetNumPlayers()
 	return players;
 }
 
-
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to get the last player in the game.
+sint32 ScenarioEditor::GetLastPlayer() 
+{
+	sint32 players = 0;
+	sint32 i;
+	for(i = 1; i < k_MAX_PLAYERS; i++) {
+		if(g_player[i])
+			players = i;
+	}
+	return players;
+}
+#endif
 
 void ScenarioEditor::DisableErase(void)
 {

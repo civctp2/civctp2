@@ -28,6 +28,7 @@
 // -Added a private static variable and the accoriding access function
 //  to allow newly created cities to have the size displayed in the 
 //  city pop spinner, by Martin Gühmann.
+// -Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -305,6 +306,9 @@ class ScenarioEditor {
 	
 	void AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, char * item);
 	sint32 GetNumPlayers();
+#if !defined(ACTIVISION_ORIGINAL)
+	sint32 GetLastPlayer();
+#endif
 	static void LimitPlayerChoice(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ExcludeSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	

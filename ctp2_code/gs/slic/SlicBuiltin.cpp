@@ -28,6 +28,12 @@
 // - Added a built in field for player to be able to get the the database
 //   index of the player's current government, by Peter Triggs and 
 //   Martin Gühmann.
+// - Added three new globals by Martin Gühmann:
+//   - g.num_of_players: Gets the number of players in the current game
+//   - g.last_player:    Gets the last player, the player with the highest 
+//                       index in the game
+//   - g.max_player:     Gets the maximum number of players that is in a game
+//                       possible, currently it is 32 including the Barbarians.
 //
 //----------------------------------------------------------------------------
 
@@ -105,6 +111,67 @@ class GlobalSymbol_Player : public SlicStructMemberData {
 	}
 };
 
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann
+
+class GlobalSymbol_NumOfPlayers : public SlicStructMemberData {
+	DEF_MAKECOPY(GlobalSymbol_NumOfPlayers);
+
+	BOOL GetIntValue(sint32 &value) const {
+	//	sint32 players = 0;
+		value = 0;
+		sint32 i;
+		for(i = 0; i < k_MAX_PLAYERS; i++) {
+			if(g_player[i])
+	//			players++;
+				value++;
+		}
+	//	value = players;
+		return TRUE;
+	}
+};
+
+class GlobalSymbol_LastPlayer : public SlicStructMemberData {
+	DEF_MAKECOPY(GlobalSymbol_LastPlayer);
+
+	BOOL GetIntValue(sint32 &value) const {
+	//	sint32 players = 0;
+		value = 0;
+		sint32 i;
+		for(i = 0; i < k_MAX_PLAYERS; i++) {
+			if(g_player[i])
+				value = i;
+	//			players = i;
+		}
+	//	value = players;
+		return TRUE;
+	}
+
+	BOOL GetPlayer(sint32 &player) const {
+	//	sint32 players = 0;
+		player = 0;
+		sint32 i;
+		for(i = 0; i < k_MAX_PLAYERS; i++) {
+			if(g_player[i])
+				player = i;
+	//			players = i;
+		}
+	//	value = players;
+	//	player = players;
+		return TRUE;
+	}
+};
+
+class GlobalSymbol_MaxPlayers : public SlicStructMemberData {
+	DEF_MAKECOPY(GlobalSymbol_MaxPlayers);
+
+	BOOL GetIntValue(sint32 &value) const {
+		value = k_MAX_PLAYERS;
+		return TRUE;
+	}
+};
+
+#endif
 
 SlicStruct_Global::SlicStruct_Global() :
 	SlicStructDescription("g", SLIC_BUILTIN_GLOBAL)
@@ -112,6 +179,11 @@ SlicStruct_Global::SlicStruct_Global() :
 	AddMember("year", new GlobalSymbol_Year);
 	AddMember("year_str", new GlobalSymbol_YearString);
 	AddMember("player", new GlobalSymbol_Player);
+#if !defined(ACTIVISION_ORIGINAL)
+	AddMember("num_of_players", new GlobalSymbol_NumOfPlayers);
+	AddMember("last_player", new GlobalSymbol_LastPlayer);
+	AddMember("max_players", new GlobalSymbol_MaxPlayers);
+#endif
 	
 }
 
@@ -1096,7 +1168,7 @@ SlicStruct_Player::SlicStruct_Player() :
 	AddMember("militaryunits", new PlayerSymbol_MilitaryUnits);
 	AddMember("armies", new PlayerSymbol_Armies);
 #if !defined(ACTIVISION_ORIGINAL)
-	AddMember("government", new PlayerSymbol_Armies);
+	AddMember("government", new PlayerSymbol_Government);
 #endif
 	AddMember("totalpopulation", new PlayerSymbol_TotalPopulation);
 	AddMember("totalpollution", new PlayerSymbol_TotalPollution);
