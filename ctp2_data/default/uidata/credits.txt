@@ -24,6 +24,127 @@
 <font1>
 <font1>
 <font1>
+<font0>	CALL TO POWER II: APOLYTON EDITION
+<font1>
+<font1>
+<font1> Made possible by the generosity of
+<font2> ACTIVISION, INC
+<font1>
+<font1> and the selfless efforts of
+<font2> JOE "MR. OGRE" RUMSEY
+<font1>
+<font1>
+<font1>
+<font2> Thanks to APOLYTON CIVILIZATION SITE
+<font1> http://apolyton.net
+<font2> and its owners MARKOS GIANNOPOULOS and DANIEL QUICK
+<font1>
+<font1> for providing a platform for discussion and development
+<font1> and for supporting the Call to Power series for all these years
+;
+<page>
+<font1>
+<font1>
+<font0> ORGANISATION & MANAGEMENT
+<font1>   Asmodean   J Bytheway
+<font1>       kaan   Keygen
+<font1>    Locutus   MarkG  
+<font1>      Martin Gühmann
+<font3>	
+<font0>	PROGRAMMING
+<font1> ahenobarb
+<font1> ctplinuxfan
+<font1>	Fromafar
+<font1>	J Bytheway
+<font1> jonwil
+<font1> kaan
+<font1>	Martin Gühmann
+<font1> MrBaggins
+<font1> NelsonAndBronte
+<font1>	Peter Triggs
+<font3>	
+<font0>	ART
+<font1>	OnePresent
+<font1> Martin Gühmann
+<font1> The Big Mc
+;
+<page>
+<font1>		
+<font1>
+<font0>	MISCELLANEOUS
+<font1>      Admiral PJ   Dale           
+<font1>         DDowell   drulius        
+<font1>           Flinx   Gilgamensch    
+<font1>	Immortal Wombat   Keygen         
+<font1>       LDiCesare   Locutus        
+<font1>	    Maquiladora   Solver         
+<font1>        Tamerlin   The Big Mc     
+<font3>	
+<font0>	LOCALIZATION
+<font1>         4thmoon   Gilgamensch    
+<font1>      J Bytheway   Martin Gühmann 
+<font1>        Tamerlin   sandro         
+<font1>               Solver             
+<font3>
+<font0> MANUAL, FORUM & WEBSITE
+<font1>   child of Thor   Gilgamensch    
+<font1>      HuangShang   J Bytheway     
+<font1>          Keygen   Locutus        
+<font1>             MrBaggins
+<font3> 
+<font0> EXTERNAL CONSULTANTS
+<font1> Winnie "St. Swithin" Lee
+<font1> David "Pyaray" Ray
+<font1> Joe "Mr. Ogre" Rumsey
+;
+<page>
+<font1>
+<font1>
+<font0> COMPILATION
+<font1> Admiral PJ   Atahualpa
+<font1> berXpert   Dale
+<font1> DDowell   ErichG
+<font1> Fromafar   J Bytheway
+<font1> Joss   Locutus
+<font1> Martin Gühmann   mjs0
+<font1> MrBaggins   Peter Triggs
+<font1> RalphTrickey   Raster
+<font1> Solver   vovan
+<font3>
+<font0> LINUX PORT EFFORTS
+<font1> bfennema
+<font1> btb
+<font1> ctplinuxfan
+<font1> closms
+<font1> Leland
+<font1> uppi
+;
+<page>
+<font1>
+<font1>
+<font0> MULTIPLAYER PLAYTESTING
+<font1> drulius
+<font1> epeterson
+<font1> EPW
+<font1> Maquiladora
+<font3>
+<font0> PLAYTESTING
+<font1> 4thmoon   Admiral PJ   Aias   DDowell
+<font1> ahenobarb   beechworth   BureauBert   ctplinuxfan
+<font1> Dale   drulius   E   epeterson
+<font1> EPW   eRAZOR   Flinx   Frog_Gamer
+<font1> Fromafar   george03   Gilgamensch   GordonF
+<font1> Immortal Wombat   J Bytheway   Jedies   johnc214
+<font1> jonwil   kaan   Keygen   LDiCesare
+<font1> Locutus   Lui2   Maquiladora   Martin Gühmann
+<font1> mindlar   mog   MrBaggins   NelsonAndBronte
+<font1> Peter Triggs   SMIFFGIG   Solver   Tamerlin
+<font1> The Big Mc   tyrantpimp   visu
+<font1>
+<font1> Special thanks to everyone who posted on the CtP2 Source Code Project Forum
+<font1>  of Apolyton or who otherwise provided feedback or helped out
+;
+<page>
 <font1>
 <font1>
 <font1>
@@ -33,7 +154,12 @@
 <font1>
 <font1>
 <font1>
-<font0>	IN MEMORY OF LEE BRISKEN
+<font1>
+<font1>
+<font0> CALL TO POWER II: ORIGINAL VERSION
+<font1>
+<font1>
+<font2>	IN MEMORY OF LEE BRISKEN
 ;
 <page>
 <font1>		
