@@ -40,7 +40,11 @@
 //   by Martin Gühmann. 
 //   Unfortunatly it looks like here are more problems. Soon after some turns
 //   with the dead player I got Asserts when I try to access the dead player.
-//
+// - Fix of a crash by Martin Gühmann. If you selected a city changed the 
+//   player, the city was destroyed by in game events, conquest, starvation
+//   slic and you switch back via the Scenario Editor to that player the game
+//   crashed, the problem is solved by deselecting everything before player
+//   changing.
 //
 //----------------------------------------------------------------------------
 
@@ -2241,7 +2245,13 @@ void ScenarioEditor::PlayerSpinner(aui_Control *control, uint32 action, uint32 d
 
 	if(g_player[newPlayer]) {
 
-
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to prevent a crash if you use the
+//Scenario Editor to select a city, change the player without deselecting
+//it, destroy this city by conquest or slic or starvation and switching back
+//to that player.
+		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
+#endif
 
 		tf->SetFieldText(g_player[newPlayer]->m_civilisation->GetLeaderName());
 		g_selected_item->SetPlayerOnScreen(newPlayer);
