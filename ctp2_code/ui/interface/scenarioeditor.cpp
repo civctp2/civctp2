@@ -1,3 +1,14 @@
+
+//Scenarioeditor.cpp
+//Modified by Martin Gühmann to make the number 
+//of city styles you can place with the scenario
+//editor mod dependent.
+
+//Also implenmented a function changed the constructor
+//and changed another function to make shure that newly
+//created cities have the same size as displayed in the 
+//CityPopSpinner.
+
 #include "c3.h"
 #include "c3ui.h"
 #include "scenarioeditor.h"
@@ -22,6 +33,10 @@
 #include "Unit.h"
 #include "CityData.h"
 #include "UnitData.h"
+
+//Added by Martin Gühmann to have the appropiate number 
+//on the city style tab 
+#include "CityStyleRecord.h"
 
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
@@ -335,6 +350,10 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	m_brushSize = 1;
 	m_unitIndex = -1;
 	m_cityStyle = -2;
+	//Added by Martin Gühmann to initialize the pop number
+	//for newly created cities
+	m_newPopSize = 1;
+	//End Add
 	m_scenarioName[0] = 0;
 	m_startLocMode = SCEN_START_LOC_MODE_NONE;
 
@@ -787,8 +806,11 @@ void ScenarioEditor::PopulateCityList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
-
-	for(cs = 0; cs < CITY_STYLE_MAX; cs++) {
+	//Changed by Martin Gühmann so that there are now as much buttons
+	//available as city styles are there.
+	for(cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
+	//Original code
+//	for(cs = 0; cs < CITY_STYLE_MAX; cs++) {
 		if(col == 0) {
 			curItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ScenCityItem");
 			Assert(curItem);
@@ -997,6 +1019,17 @@ sint32 ScenarioEditor::CityStyle()
 	if(!s_scenarioEditor) return -2;
 	return s_scenarioEditor->m_cityStyle;
 }
+
+//Added by Martin Gühmann to make 
+//shure that newly created cities 
+//have the same pop size as displayed in
+//the CityPopSpinner
+sint32 ScenarioEditor::CitySize()
+{
+	if(!s_scenarioEditor) return 1;
+	return s_scenarioEditor->m_newPopSize;
+}
+//End Add
 
 bool ScenarioEditor::PlaceStartFlags()
 {
@@ -1369,6 +1402,11 @@ void ScenarioEditor::CityPopSpinner(aui_Control *control, uint32 action, uint32 
 
 	if(!spinner) return;
 	sint32 newPop = spinner->GetValueX();
+	//Added by Martin Gühmann to make shure 
+	//newly created cities have the same pop 
+	//size as displayed in the CityPopSpinner
+	s_scenarioEditor->m_newPopSize = newPop;
+	//End Add
 	Unit city;
 	if(!g_selected_item->GetSelectedCity(city))
 		return;

@@ -1,4 +1,10 @@
 
+//scenarioeditor.h
+//Added a private static variable and 
+//a public static function so that newly created
+//cities can have the bumber of pops displayed in 
+//city pop spinner, by Martin Gühmann
+
 #ifndef SCENARIO_EDITOR_H__
 #define SCENARIO_EDITOR_H__
 
@@ -100,6 +106,10 @@ class ScenarioEditor {
 	sint32 m_brushSize;
 	sint32 m_unitIndex;
 	sint32 m_cityStyle;
+	//Added by Martin Gühmann to add the pop number 
+	//displayed in the CityPopSpinner to new created cities.
+	sint32 m_newPopSize;
+	//End Add
 	SCEN_START_LOC_MODE m_startLocMode;
 	bool m_haveRegion;
 	SCEN_MAP_MODE m_mapMode;
@@ -148,6 +158,11 @@ class ScenarioEditor {
 	static sint32 UnitIndex();
 	static bool PlaceCityMode();
 	static sint32 CityStyle();
+	//Function added by Martin Gühmann so that the 
+	//pop size displayed in the CityPopSpinner can 
+	//be added to new created cities.
+	static sint32 CitySize();
+	//End Add
 	static bool PlaceStartFlags();
 	static bool ShowStartFlags();
 	static SCEN_START_LOC_MODE GetStartLocMode();
