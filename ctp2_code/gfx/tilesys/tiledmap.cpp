@@ -29,6 +29,7 @@
 //   their size. The last created city by the scenario editor is now selected.
 //	 By Martin Gühmann.
 // - Map wrapping corrected.
+// - Possible leaks/invalid accesses corrected.
 //
 //----------------------------------------------------------------------------
 
@@ -241,6 +242,20 @@ void TiledMap::InitLUT(void)
 }
 
 TiledMap::TiledMap(MapPoint &size)
+#if !defined(ACTIVISION_ORIGINAL)
+:	m_drawHilite	(false),
+	m_isScrolling	(false),
+	m_lockedSurface	(NULL),
+	m_overlayRec	(NULL),
+#if defined(_DEBUG)
+	m_showPopHack	(false),
+#endif
+	m_surfBase		(NULL),
+	m_surfHeight	(0),
+	m_surfIsLocked	(false),
+	m_surfPitch		(0),
+	m_surfWidth		(0)	
+#endif	// ACTIVISION_ORIGINAL
 {	
 	Assert(g_theWorld != NULL);
 	if (g_theWorld == NULL) 
@@ -1113,6 +1128,9 @@ void TiledMap::LoadTileset(void)
 
 	tileSet->QuickLoadMapped();
 
+#if !defined(ACTIVISION_ORIGINAL)
+	delete m_tileSet;
+#endif
 	m_tileSet = tileSet;
 }
 

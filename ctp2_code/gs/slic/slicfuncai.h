@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : SLIC functions
+// Description  : SLIC AI functions
 //
 //----------------------------------------------------------------------------
 //
@@ -28,14 +28,19 @@
 //
 // - Slic AI functions of the patch added, by Martin Gühmann.
 // - DeclareWar slic function added, by Peter Triggs.
+// - Marked Microsoft specific pragma, cleaned up export, voided DeclareWar.
 //
 //----------------------------------------------------------------------------
 
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __SLICFUNCAI_H__
 #define __SLICFUNCAI_H__
 
 
+#if defined(ACTIVISION_ORIGINAL)	// Functions are not used externally.
 struct ProposalData;
 struct Response;
 struct NewProposal;
@@ -48,17 +53,20 @@ struct NewProposal;
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
+
 bool ParseProposalDataSlicArgs(SlicArgList *args, sint32 &argNum, ProposalData &data);
-#else
-bool ParseProposalDataSlicArgs(sint32 num_types, SlicArgList *args, sint32 &argNum, ProposalData &data);
-#endif
+
 
 bool ParseResponseSlicArgs(SlicArgList *args, sint32 &argNum, Response &data);
 
 
 bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &data);
 
+#else	// ACTIVISION_ORIGINAL	
+
+#include "slicfunc.h"	// SLICFUNC, SFR
+
+#endif	// ACTIVISION_ORIGINAL
 
 
 
@@ -244,7 +252,7 @@ SLICFUNC(SFR_INT, GetTotalValue)
 SLICFUNC(SFR_INT, GetNewProposalResult)
 SLICFUNC(SFR_INT, GetCounterProposalResult)
 SLICFUNC(SFR_INT, GetMostAtRiskCity)//Not implemented
-SLICFUNC(SFR_INT, DeclareWar)
+SLICFUNC(SFR_VOID, DeclareWar)
 #endif
 
 

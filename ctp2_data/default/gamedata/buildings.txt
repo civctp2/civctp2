@@ -1,3 +1,27 @@
+################################################################################
+#
+#  Project      : Call To Power 2
+#  File type    : Text
+#  Description  : Buildings (city improvements)
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+# 
+#  - IMPROVE_ARENA and IMPROVE_AQUADUCT EnableAdvance matched with entry in 
+#    the great library.
+# 
+################################################################################
+
 IMPROVE_ACADEMY {
    DefaultIcon ICON_IMPROVE_ACADEMY
    Description DESCRIPTION_IMPROVE_ACADEMY
@@ -56,7 +80,11 @@ IMPROVE_AQUA_FILTER {
 IMPROVE_AQUEDUCT {
    DefaultIcon ICON_IMPROVE_AQUEDUCT
    Description DESCRIPTION_IMPROVE_AQUEDUCT
-   EnableAdvance ADVANCE_CONCRETE
+# if  ACTIVISION_ORIGINAL
+#   EnableAdvance ADVANCE_CONCRETE
+# not ACTIVISION_ORIGINAL
+   EnableAdvance ADVANCE_MASONRY
+# end ACTIVISION_ORIGINAL
    ProductionCost 875
    Upkeep 4
    RaiseOvercrowdingLevel 6
@@ -83,7 +111,11 @@ IMPROVE_ARCOLOGIES {
 IMPROVE_ARENA {
    DefaultIcon ICON_IMPROVE_ARENA
    Description DESCRIPTION_IMPROVE_ARENA
-   EnableAdvance ADVANCE_MASONRY
+# if  ACTIVISION_ORIGINAL
+#   EnableAdvance ADVANCE_MASONRY
+# not ACTIVISION_ORIGINAL
+   EnableAdvance ADVANCE_CONCRETE
+# end ACTIVISION_ORIGINAL
    ProductionCost 675
    Upkeep 2
    HappyInc 2

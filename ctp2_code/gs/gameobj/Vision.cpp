@@ -27,6 +27,7 @@
 //
 // - Corrected strange vision behaviour at the top row.
 // - Corrected strange visibility patterns ("see tile" counter underflow).
+// - Removed causes of memory leak reports (static variables).
 //
 //----------------------------------------------------------------------------
 
@@ -858,11 +859,11 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			break;
 		case CIRCLE_OP_ADD_RADAR:
 		{
-			static CellUnitList army;
-			army.Clear();
+			CellUnitList	army;
 			g_theWorld->GetArmy(iso, army);
-			sint32 i, n = army.Num();
-			for(i = 0; i < n; i++) {
+			sint32 const	n = army.Num();
+			for (sint32 i = 0; i < n; ++i) 
+			{
 				army[i].SetRadar(m_owner);
 			}
 			break;
@@ -1042,8 +1043,12 @@ void Vision::ModifyPoint(Vision *src, sint32 x, sint32 y)
 
 void Vision::DeleteUnseenCells()
 {
+#if defined(ACTIVISION_ORIGINAL)	// not really static: cleared every time
 	static DynamicArray<UnseenCellCarton> array;
 	array.Clear();
+#else
+	DynamicArray<UnseenCellCarton>	array;
+#endif
 	m_unseenCells->BuildList(array, 0xffffffff);
 
 	sint32 i;

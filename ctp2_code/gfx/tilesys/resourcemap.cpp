@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Wrapping corrected.
+// - Memory leak repaired.
 //
 //----------------------------------------------------------------------------
 
@@ -155,7 +156,7 @@ ResourceMap::ResourceMap(AUI_ERRCODE *retval,
 
 ResourceMap::~ResourceMap()
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	// m_string not deleted	
 	if (m_updateAction) {
 		delete m_updateAction;
 		m_updateAction = NULL;
@@ -165,6 +166,11 @@ ResourceMap::~ResourceMap()
 		delete m_surface;
 		m_surface = NULL;
 	}
+#else
+	delete m_surface;
+	delete m_string;
+	delete m_updateAction;
+#endif
 }
 
 

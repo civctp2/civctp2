@@ -1,9 +1,8 @@
-
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : SLIC functions
+// Description  : SLIC AI functions
 //
 //----------------------------------------------------------------------------
 //
@@ -33,6 +32,10 @@
 // int_t or a player builtin.
 //
 // Parameters surrounded by square brackets [ ] are optional.
+//
+// - Improved mod handling for Diplomod/WAW: reduces Asserts, restored 
+//   compatibility.
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -107,168 +110,172 @@ bool ParseProposalDataSlicArgs(SlicArgList *args, sint32 &argNum, ProposalData &
 }
 
 #else
-//Added by Peter Triggs
-// see ConsiderNewProposal
-bool ParseProposalDataSlicArgs(sint32 num_types, SlicArgList *args, sint32 &argNum, ProposalData &data) {
 
-	sint32 type;
-    Unit city;
+//----------------------------------------------------------------------------
+//
+// Name       : ParseProposalDataBlock
+//
+// Description: Parse the proposal data of a single - optional - block.
+//
+// Parameters : args		: arguments of proposal data block
+//				argNum		: (next) argument counter
+//				blockType	: kind of proposal
+//
+// Globals    : -
+//
+// Returns    : bool		: data block has been parsed without errors
+//				argNum		: updated
+//              blockArgs	: filled with parsed data				
+//
+// Remark(s)  : - Added by Peter Triggs.
+//              - Simple parameter (availability) checking only, no rollback
+//				  when anything fails.
+//				- A missing block (e.g. request without offer) will be 
+//                indicated by a PROPOSAL_NONE marker, without parameters.
+//
+//----------------------------------------------------------------------------
+
+bool ParseProposalDataBlock
+(
+	SlicArgList *		args, 
+	sint32 &			argNum, 
+	PROPOSAL_TYPE &		blockType,
+	DiplomacyArg &		blockArgs
+)
+{
+	sint32	type;
+    Unit	city;
 	// for clarity:
-    sint32 adv;
-    sint32 percent;
-    sint32 gold;
-    sint32 pollution;
-    sint32 plyr;
+    sint32	adv;
+    sint32	percent;
+    sint32	gold;
+    sint32	pollution;
+    sint32	plyr;
 
 	if(!args->GetInt(argNum++, type))
 		return false;
 
-	Assert(type > PROPOSAL_NONE);
+	Assert(type >= PROPOSAL_NONE);
 	Assert(type < PROPOSAL_MAX);
 
-	if (num_types == 1){
-	    data.first_type = static_cast<PROPOSAL_TYPE>(type);
-	}
-	else{
-        data.second_type = static_cast<PROPOSAL_TYPE>(type);
-	}
+	blockType = static_cast<PROPOSAL_TYPE>(type);
+	DPRINTF(k_DBG_SLIC, ("ParseProposalDataSlicArgs: type= %d\n", blockType));
+
 	// get the proposal's arg1, if it exists
-	switch (static_cast<PROPOSAL_TYPE>(type)) {
-	case PROPOSAL_NONE:
+	switch (blockType) 
+	{
+	default:
+		// No arguments expected.
 		break;
+
     case PROPOSAL_OFFER_GIVE_CITY:  
 	case PROPOSAL_REQUEST_GIVE_CITY:
-	    if(!args->GetCity(argNum++, city)) {
+	    if (!args->GetCity(argNum++, city)) 
+		{
 		    return false;
 		}
-		if(num_types == 1){
-            data.first_arg.cityId=city.m_id;
-		}
-		else{
-            data.second_arg.cityId=city.m_id;
-		}
+		blockArgs.cityId = city.m_id;
 		break;
-	case PROPOSAL_OFFER_WITHDRAW_TROOPS:
-	case PROPOSAL_REQUEST_WITHDRAW_TROOPS:
-	case PROPOSAL_OFFER_STOP_PIRACY:
-	case PROPOSAL_REQUEST_STOP_PIRACY:
-	case PROPOSAL_OFFER_BREAK_AGREEMENT:
-	case PROPOSAL_REQUEST_BREAK_AGREEMENT:
-        break;
+
 	case PROPOSAL_OFFER_STOP_RESEARCH:		
 	case PROPOSAL_REQUEST_STOP_RESEARCH:
-	
-	    if(!args->GetInt(argNum++, adv)) {
+	    if (!args->GetInt(argNum++, adv)) 
+		{
 		    return false;
 		}
-		if(num_types == 1){
-            data.first_arg.advanceType=adv;
-		}
-		else{
-            data.second_arg.advanceType=adv;
-		}
+		blockArgs.advanceType = adv;
 		break;
+
 	case PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS:
 	case PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS:
 	case PROPOSAL_OFFER_REDUCE_BIO_WEAPONS:
 	case PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS:
 	case PROPOSAL_OFFER_REDUCE_NANO_WEAPONS:
 	case PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS:
-        if(!args->GetInt(argNum++, percent)) {
+        if (!args->GetInt(argNum++, percent)) 
+		{
 		    return false;
 		}
-		if(num_types == 1){
-            data.first_arg.percent=((double)percent)/100.0;
-		}
-		else{
-            data.second_arg.percent=((double)percent)/100.0;
-		}		
-		break;
-	case PROPOSAL_OFFER_GIVE_ADVANCE:
-	case PROPOSAL_REQUEST_GIVE_ADVANCE:
-		if(!args->GetInt(argNum++, adv)) {
-		    return false;
-		}
-		if(num_types == 1){
-            data.first_arg.advanceType=adv;
-		}
-		else{
-            data.second_arg.advanceType=adv;
-		}
-		break;
-	case PROPOSAL_OFFER_GIVE_GOLD:
-	case PROPOSAL_REQUEST_GIVE_GOLD:
-	    if(!args->GetInt(argNum++, gold)) {
-		    return false;
-		}
-		if(num_types == 1){
-            data.first_arg.gold=gold;
-		}
-		else{
-            data.second_arg.gold=gold;
-		}
-		break;
-	case PROPOSAL_OFFER_REDUCE_POLLUTION:
-	case PROPOSAL_REQUEST_REDUCE_POLLUTION:
-        if(!args->GetInt(argNum++, pollution)) {
-		    return false;
-		}
-		if(num_types == 1){
-            data.first_arg.pollution=pollution;
-		}
-		else{
-            data.second_arg.pollution=pollution;
-		}		
-		break;
-	case PROPOSAL_OFFER_MAP:
-	case PROPOSAL_REQUEST_MAP:
-		break;		
-	case PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT:
-	case PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT:
-        if(!args->GetInt(argNum++, plyr)) {
-		    return false;
-		}
-		if(num_types == 1){
-            data.first_arg.playerId=plyr;
-		}
-		else{
-            data.second_arg.playerId=plyr;
-		}
+		blockArgs.percent= ((double) percent)/100.0;
 		break;
 
-	case PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT:
-	case PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT:
-    	if(!args->GetInt(argNum++, pollution)) {
+	case PROPOSAL_OFFER_GIVE_ADVANCE:
+	case PROPOSAL_REQUEST_GIVE_ADVANCE:
+		if (!args->GetInt(argNum++, adv)) 
+		{
 		    return false;
 		}
-		if(num_types == 1){
-            data.first_arg.pollution=pollution;
-		}
-		else{
-            data.second_arg.pollution=pollution;
-		}		
-		break;	
-	case PROPOSAL_OFFER_END_EMBARGO:
-	case PROPOSAL_REQUEST_END_EMBARGO:
-	case PROPOSAL_TREATY_DECLARE_WAR:
-	case PROPOSAL_TREATY_CEASEFIRE:
-	case PROPOSAL_TREATY_PEACE:
-	case PROPOSAL_TREATY_TRADE_PACT:
-	case PROPOSAL_TREATY_RESEARCH_PACT:
-	case PROPOSAL_TREATY_MILITARY_PACT:
-	case PROPOSAL_TREATY_POLLUTION_PACT:
-	case PROPOSAL_TREATY_ALLIANCE:
-	case PROPOSAL_MAX:
+		blockArgs.advanceType = adv;
 		break;
-	default:
-		
-		Assert(0);
+
+	case PROPOSAL_OFFER_GIVE_GOLD:
+	case PROPOSAL_REQUEST_GIVE_GOLD:
+	    if (!args->GetInt(argNum++, gold)) 
+		{
+		    return false;
+		}
+		blockArgs.gold = gold;
+		break;
+
+	case PROPOSAL_OFFER_REDUCE_POLLUTION:
+	case PROPOSAL_REQUEST_REDUCE_POLLUTION:
+	case PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT:
+	case PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT:
+        if (!args->GetInt(argNum++, pollution)) 
+		{
+		    return false;
+		}
+		blockArgs.pollution = pollution;
+		break;
+
+	case PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT:
+	case PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT:
+        if (!args->GetInt(argNum++, plyr)) 
+		{
+		    return false;
+		}
+		blockArgs.playerId = plyr;
+		break;
 	}
- DPRINTF(k_DBG_SLIC, ("ParseProposalDataSlicArgs: type= %d\n", data.first_type));
-	
+
 	return true;
 }
-#endif
+
+//----------------------------------------------------------------------------
+//
+// Name       : ParseProposalDataSlicArgs
+//
+// Description: Parse the request and offer data of a proposal.
+//
+// Parameters : args		: arguments of proposal data block
+//				argNum		: (next) argument counter
+//				blockType	: kind of proposal
+//
+// Globals    : -
+//
+// Returns    : bool		: data block has been parsed without errors
+//				argNum		: updated
+//              data		: filled with parsed data				
+//
+// Remark(s)  : - Simple parameter (availability) checking only, no rollback
+//				  when anything fails.
+//				- A missing block (e.g. request without offer) will be 
+//                indicated by a PROPOSAL_NONE marker, without parameters.
+//
+//----------------------------------------------------------------------------
+
+bool ParseProposalDataSlicArgs
+(
+	SlicArgList *	args, 
+	sint32 &		argNum, 
+	ProposalData &	data
+)
+{
+	return ParseProposalDataBlock(args, argNum, data.first_type, data.first_arg) &&
+		   ParseProposalDataBlock(args, argNum, data.second_type, data.second_arg);
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 
 #if defined(ACTIVISION_ORIGINAL)
@@ -401,13 +408,9 @@ DPRINTF(k_DBG_SLIC, ("ParseResponseSlicArgs: type= %d\n", response.type));
 		    return false;
 	    Assert( num_types >0 && num_types <3);
 
-        // now parse first counter response details
-	    if (!ParseProposalDataSlicArgs(1, args, argNum, response.counter))
+	    if (!ParseProposalDataSlicArgs(args, argNum, response.counter))
+		{
 		    return false;
-
-	    if (num_types>1){ // parse second counter response details
-            if (!ParseProposalDataSlicArgs(num_types, args, argNum, response.counter))
-		        return false;
 		}
 	} 
 	
@@ -435,7 +438,6 @@ DPRINTF(k_DBG_SLIC, ("ParseResponseSlicArgs: type= %d\n", response.type));
 }
 #endif
 
-#if defined(ACTIVISION_ORIGINAL)
 bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &new_proposal) {
 	sint32 priority;
 	if(!args->GetPlayer(argNum++, new_proposal.senderId))
@@ -456,7 +458,6 @@ bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &ne
 	if (!ParseProposalDataSlicArgs(args, argNum, new_proposal.detail))
 		return false;
 	
-	
 	if(!args->GetStringId(argNum++, new_proposal.explainStrId))
 		return false;
 
@@ -468,58 +469,36 @@ bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &ne
 	if(!args->GetStringId(argNum++, new_proposal.newsStrId))
 		return false;
 
-	return true;
-}
-#else
-// See ConsiderNewProposal
-//
-// Here, parse these:
-//
-// VOID ConsiderNewProposal(sender, receiver, priority, tone , num_types, details) 
-//
-// for details => ParseProposalDataSlicArgs
-
-bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &new_proposal) {
-	sint32 priority;
-	sint32 tone;
-	sint32 num_types; // 1 or 2
-
-	if(!args->GetPlayer(argNum++, new_proposal.senderId))
-		return false;
-	Assert(new_proposal.senderId > 0);
-	Assert(new_proposal.senderId < k_MAX_PLAYERS);
-
-	if(!args->GetPlayer(argNum++, new_proposal.receiverId))
-		return false;
-	Assert(new_proposal.receiverId > 0);
-	Assert(new_proposal.receiverId < k_MAX_PLAYERS);
-
-	if(!args->GetInt(argNum++, priority))
-		return false;
-	Assert( priority >= 0);
-	new_proposal.priority = static_cast<sint16>(priority);
-
-    if(!args->GetInt(argNum++, tone))
-		return false;
-	Assert( tone >= 0);
-	new_proposal.detail.tone=static_cast<DIPLOMATIC_TONE>(tone);
-
-    if(!args->GetInt(argNum++, num_types))// 1 or 2
-		return false;
-	Assert( num_types >0 && num_types <3);
-DPRINTF(k_DBG_SLIC, ("ParsingNewProposal:sender %d, receiver %d, priority %d, tone %d, num_types %d\n",
-		new_proposal.senderId,new_proposal.receiverId, priority,tone, num_types));
-    // now parse first proposal details
-	if (!ParseProposalDataSlicArgs(1, args, argNum, new_proposal.detail))
-		return false;
-
-	if (num_types>1){ // parse second proposal details
-        if (!ParseProposalDataSlicArgs(num_types, args, argNum, new_proposal.detail))
-		return false;
+#if !defined(ACTIVISION_ORIGINAL)
+	// Diplomatic tone as optional argument
+	sint32	tone;
+	if ((argNum < args->m_numArgs) && args->GetInt(argNum++, tone))
+	{
+		Assert((tone >= DIPLOMATIC_TONE_NOT_CHOSEN) && (tone < DIPLOMATIC_TONE_MAX));
+		new_proposal.detail.tone = static_cast<DIPLOMATIC_TONE>(tone);
 	}
+#endif
+
 	return true;
 }
-#endif
+
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_<function>::Call
+//
+// Description: Handle a SLIC <function> call (e.g. from a .slc script).
+//
+// Parameters : args		: list of arguments
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR	: execution indicator
+//
+// Remark(s)  : - The function will return SFN_ERROR_OK on correct input.
+//              - When applicable, data will be returned to the caller through
+//                m_result.
+//
+//----------------------------------------------------------------------------
 
 // VOID LogRegardEvent(<int|player>,         the current player
 //                     <int|player>,         foreigner
@@ -771,12 +750,20 @@ SFN_ERROR Slic_HasAgreement::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
+#if defined(ACTIVISION_ORIGINAL)	// 0 often used by mods 
 	Assert(player > 0);
+#else
+	Assert(player >= 0);
+#endif
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
+#if defined(ACTIVISION_ORIGINAL)	// 0 often used by mods 
 	Assert(foreigner > 0);
+#else
+	Assert(foreigner >= 0);
+#endif
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	if(!args->GetPlayer(argNum++, agreement_type))
@@ -1091,35 +1078,20 @@ SFN_ERROR Slic_ConsiderMotivation::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-SFN_ERROR Slic_ConsiderNewProposal::Call(SlicArgList *args)
-{
-	if(args->m_numArgs < 7)
-		return SFN_ERROR_NUM_ARGS;
-
-	sint32 argNum = 0;
-	NewProposal new_proposal;
-
-	if (!ParseNewProposalSlicArgs(args, argNum, new_proposal))
-		return SFN_ERROR_TYPE_ARGS;
-
-	Diplomat::GetDiplomat(new_proposal.senderId).
-		ConsiderNewProposal(new_proposal.receiverId, new_proposal);
-
-	return SFN_ERROR_OK;
-}
-#else
 // ----------------------------------------------------------------------------------------
 //
-//VOID ConsiderNewProposal(sender, 
-//                         receiver, 
-//                         priority,        - int, the proposal's priority 
-//                         tone,            - int, 0 (Magnanimous/Kind) to 4 (Hostile/Angry)
-//                         num_types,       - 1 or 2 (for 'in addition proposal')
-//                         first_type,      - int, ProposalDB index of first proposal
-//                         [first_arg,]     - if proposal has 'arg1' in ProposalDB, this is it
-//                         [second_type,    - int, optional ProposalDB index of 'in addition' proposal 
-//                         [second_arg]])   - if proposal has 'arg1' in ProposalDB, this is it
+// VOID ConsiderNewProposal
+// 1.	sender 
+// 2.	receiver 
+// 3.	priority			- int, the proposal's priority 
+// 4.   first_type			- int, ProposalDB index of first proposal
+//			[first_args]	- if proposal has 'arg1' in ProposalDB, this is it
+// 5.   second_type 		- int, optional ProposalDB index of 'in addition' proposal 
+//          [second_args]	- if proposal has 'arg1' in ProposalDB, this is it
+// 6.   stringID1
+// 7.   stringID2
+// 8.	stringID3
+//          [tone]			- int, 0 (Magnanimous/Kind) to 4 (Hostile/Angry)
 //
 // The type of first_arg and second_arg depends on first_type and second_type respectively.
 // See ParseProposalDataSlicArgs
@@ -1127,7 +1099,11 @@ SFN_ERROR Slic_ConsiderNewProposal::Call(SlicArgList *args)
 //-------------------------------------------------------------------------------------------
 SFN_ERROR Slic_ConsiderNewProposal::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 6)
+#if defined(ACTIVISION_ORIGINAL)
+	if(args->m_numArgs < 7)
+#else
+	if (args->m_numArgs < 8)
+#endif
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1135,49 +1111,33 @@ SFN_ERROR Slic_ConsiderNewProposal::Call(SlicArgList *args)
 
 	if (!ParseNewProposalSlicArgs(args, argNum, new_proposal))
 		return SFN_ERROR_TYPE_ARGS;
-
-//    Diplomat::GetDiplomat(new_proposal.senderId).
-//		SetMyLastNewProposal(new_proposal.receiverId, new_proposal);
 
 	Diplomat::GetDiplomat(new_proposal.senderId).
 		ConsiderNewProposal(new_proposal.receiverId, new_proposal);
+
+#if !defined(ACTIVISION_ORIGINAL)
 DPRINTF(k_DBG_SLIC, ("ConsiderNewProposal:sender %d, receiver %d, prop %d\n",
 		new_proposal.senderId,new_proposal.receiverId, new_proposal.detail.first_type));
-
-//Diplomat::GetDiplomat(new_proposal.senderId).SetReceiverHasInitiative( new_proposal.receiverId, true);    
-
-	return SFN_ERROR_OK;
-}
 #endif
 
-#if defined(ACTIVISION_ORIGINAL)
-SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
-{
-	if(args->m_numArgs < 7)
-		return SFN_ERROR_NUM_ARGS;
-
-	sint32 argNum = 0;
-	NewProposal new_proposal;
-
-	if (!ParseNewProposalSlicArgs(args, argNum, new_proposal))
-		return SFN_ERROR_TYPE_ARGS;
-
-	Diplomat::GetDiplomat(new_proposal.senderId).
-		SetMyLastNewProposal(new_proposal.receiverId, new_proposal);
-
 	return SFN_ERROR_OK;
 }
-#else
+
+
 // ----------------------------------------------------------------------------------------
 //
-//     VOID SetNewProposal(sender, 
-//                         receiver, 
-//                         tone,            - int, 0 (Magnanimous/Kind) to 4 (Hostile/Angry)
-//                         num_types,       - 1 or 2 (for 'in addition proposal')
-//                         first_type,      - int, ProposalDB index of first proposal
-//                         [first_arg,]     - if proposal has 'arg1' in ProposalDB, this is it
-//                         [second_type,    - int, optional ProposalDB index of 'in addition' proposal 
-//                         [second_arg]])   - if proposal has 'arg1' in ProposalDB, this is it
+// VOID SetNewProposal 
+// 1.	sender 
+// 2.	receiver 
+// 3.	priority			- int, the proposal's priority 
+// 4.   first_type			- int, ProposalDB index of first proposal
+//			[first_args]	- if proposal has 'arg1' in ProposalDB, this is it
+// 5.   second_type 		- int, optional ProposalDB index of 'in addition' proposal 
+//          [second_args]	- if proposal has 'arg1' in ProposalDB, this is it
+// 6.   stringID1
+// 7.   stringID2
+// 8.	stringID3
+//          [tone]			- int, 0 (Magnanimous/Kind) to 4 (Hostile/Angry)
 //
 // The type of first_arg and second_arg depends on first_type and second_type respectively.
 // See ParseProposalDataSlicArgs
@@ -1185,49 +1145,35 @@ SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
 //------------------------------------------------------------------------------------------- 
 SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 5)
+#if defined(ACTIVISION_ORIGINAL)
+	if(args->m_numArgs < 7)
+#else
+	if (args->m_numArgs < 8)
+#endif
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
-    sint32 tone;
-	sint32 num_types; // 1 or 2
 	NewProposal new_proposal;
 
-	if(!args->GetPlayer(argNum++, new_proposal.senderId))
-		return SFN_ERROR_TYPE_ARGS;
-	Assert(new_proposal.senderId > 0);
-	Assert(new_proposal.senderId < k_MAX_PLAYERS);
-
-	if(!args->GetPlayer(argNum++, new_proposal.receiverId))
-		return SFN_ERROR_TYPE_ARGS;
-	Assert(new_proposal.receiverId > 0);
-	Assert(new_proposal.receiverId < k_MAX_PLAYERS);
-
-    if(!args->GetInt(argNum++, tone))
-		return SFN_ERROR_TYPE_ARGS;
-	Assert( tone >= 0);
-	new_proposal.detail.tone=static_cast<DIPLOMATIC_TONE>(tone);
-
-    if(!args->GetInt(argNum++, num_types))// 1 or 2
-		return SFN_ERROR_TYPE_ARGS;
-	Assert( num_types >0 && num_types <3);
-
-
-    // now parse first proposal details
-	if (!ParseProposalDataSlicArgs(1, args, argNum, new_proposal.detail))
+	if (!ParseNewProposalSlicArgs(args, argNum, new_proposal))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if (num_types>1){ // parse second proposal details
-        if (!ParseProposalDataSlicArgs(num_types, args, argNum, new_proposal.detail))
-		return SFN_ERROR_TYPE_ARGS;
+#if !defined(ACTIVISION_ORIGINAL)
+	// Diplomatic tone as optional argument
+	sint32	tone;
+	if ((argNum < args->m_numArgs) && args->GetInt(argNum++, tone))
+	{
+		Assert((tone >= DIPLOMATIC_TONE_NOT_CHOSEN) && (tone < DIPLOMATIC_TONE_MAX));
+		new_proposal.detail.tone = static_cast<DIPLOMATIC_TONE>(tone);
 	}
+#endif
 
 	Diplomat::GetDiplomat(new_proposal.senderId).
 		SetMyLastNewProposal(new_proposal.receiverId, new_proposal);
 
 	return SFN_ERROR_OK;
 }
-#endif
+
 
 
 
@@ -1551,18 +1497,34 @@ SFN_ERROR Slic_AtWarWith::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
 
+#if defined(ACTIVISION_ORIGINAL)	// 0 often used by mods
 	Assert(player > 0);
+#else
+	Assert(player >= 0);
+#endif
 
 	Assert(player < k_MAX_PLAYERS);
 
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
+#if defined(ACTIVISION_ORIGINAL)	// 0 often used by mods
 	Assert(foreigner > 0);
+#else
+	Assert(foreigner >= 0);
+#endif
 
 	Assert(foreigner < k_MAX_PLAYERS);
 
+#if defined(ACTIVISION_ORIGINAL)
 	m_result.m_int = AgreementMatrix::s_agreements.HasAgreement(player,foreigner,PROPOSAL_TREATY_DECLARE_WAR);
+#else
+	// Everyone is always at war with the barbarians.
+	m_result.m_int = (PLAYER_INDEX_VANDALS == player)		||
+				     (PLAYER_INDEX_VANDALS == foreigner)	||
+					 AgreementMatrix::s_agreements.HasAgreement
+						(player, foreigner, PROPOSAL_TREATY_DECLARE_WAR);
+#endif
 
 	return SFN_ERROR_OK;
 }

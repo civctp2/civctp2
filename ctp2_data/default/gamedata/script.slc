@@ -24,6 +24,7 @@
 // - Added message box to notify the victim of a captured advance.
 // - Added/improved message box type indicators and eye points.
 // - Corrected some missing array indices.
+// - Added quit button to the hotseat interturn pop-up.
 //
 //----------------------------------------------------------------------------
 
@@ -1138,6 +1139,12 @@ alertBox '104NextHotSeatPlayer' {
 		BlankScreen(0);
 		Kill();
 	}
+// not ACTIVISION_ORIGINAL
+	Button(ID_BUTTON_QUIT_GAME) {
+		Kill();
+		ExitToDesktop();
+	}
+// end ACTIVISION_ORIGINAL
 }
 
 alertBox '105NextEmailPlayer' {
