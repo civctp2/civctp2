@@ -553,7 +553,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
-			sval3.m_int = ((Eval(type2, sval2) & Eval(type1, sval1));
+			sval3.m_int = Eval(type2, sval2) & Eval(type1, sval1);
 			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
 #endif

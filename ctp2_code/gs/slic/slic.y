@@ -302,6 +302,7 @@ statements: statement
 
 simplestatement: NAME '(' {slicif_add_op(SOP_SARGS);} arguments ')' { slicif_add_op(SOP_CALL, $1.name); }
 	| NAME '=' expression { slicif_add_op(SOP_ASSN, $1.name); }
+	| vartype NAME '=' expression { slicif_declare_sym($2.name, (SLIC_SYM)$1.val); slicif_add_op(SOP_ASSN, $2.name); }
 	| NAME '[' expression ']' '=' expression { slicif_add_op(SOP_ASSNA, $1.name); }
 	| NAME REF NAME '=' expression { slicif_add_op(SOP_ASSNM, $1.name, $3.name); }
 	| NAME '[' expression ']' REF NAME '=' expression { slicif_add_op(SOP_ASSNAM, $1.name, $6.name); }
