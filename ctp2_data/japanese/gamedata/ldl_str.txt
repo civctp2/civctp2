@@ -3164,12 +3164,12 @@ str_ldl_SPNGPS_PlayerText	"Sets the start player. Determines the civ color. "
 ### Added Disclaimer Strings ###
 
 str_ldl_Disclaimer1 "THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION."
-str_ldl_Disclaimer2 "This version of Call To Power 2 was developed at http://apolyton.net."
-str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net."
+str_ldl_Disclaimer2 "This version of Call To Power 2 was developed at http://apolyton.net"
+str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-03-28"
+str_ldl_version "2004-04-18"
 str_ldl_RANKING_POLLUTION		"âòêı"
 str_ldl_RANKING_WONDER		"éµïsévãc"
 

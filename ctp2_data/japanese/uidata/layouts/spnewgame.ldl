@@ -74,89 +74,117 @@ InitPlayWindow {
 		int	widthpix	78
 		int	heightpix	32
 	}
-	SPButton:SP_BUTTON_BIG {
-		string	text	"str_ldl_SINGLEPLAYER"
-		int	xpix	478
-		int	ypix	455
-		int	widthpix	290
-		int	heightpix	32
-	}
+#	SPButton:SP_BUTTON_BIG {
+#		string	text	"str_ldl_SINGLEPLAYER"
+#		int	xpix	615
+#		int	ypix	295
+#		int	widthpix	140
+#		int	heightpix	32
+#	}
 	EmailButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_EMAIL"
-		int	xpix	36
-		int	ypix	490
+		int	xpix	50
+		int	ypix	340
 		int	widthpix	140
 		int	heightpix	32
 	}
 	HotseatButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_HOTSEAT"
-		int	xpix	186
-		int	ypix	490
+		int	xpix	50
+		int	ypix	385
 		int	widthpix	140
 		int	heightpix	32
 	}
 	MPButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_MULTIPLAYER"
-		int	xpix	36
-		int	ypix	455
-		int	widthpix	290
+		int	xpix	50
+		int	ypix	295
+		int	widthpix	140
 		int	heightpix	32
 	}
 	QuitButton:SP_BUTTON_BIG_STONE {
-		string	text	"str_ldl_CAPS_QUIT"
+		string	text	"str_ldl_Quit"
 		int	xpix	624
-		int	ypix	558
+		int	ypix	556
 		int	widthpix	140
 		int	heightpix	32
 	}
 	CreditsButton:SP_BUTTON_BIG_STONE {
 		string	text	"str_ldl_CREDITS"
-		int	xpix	36
-		int	ypix	558
+		int	xpix	336
+		int	ypix	556
 		int	widthpix	140
 		int	heightpix	32
 	}
+	TutorialButton:SP_BUTTON_BIG {
+		int	widthpix	140
+		int	heightpix	32
+		string	text	"str_ldl_PLAY_TUTORIAL"
+		int	xpix	615
+		int	ypix	385
+	}
+	LoadGameButton:SP_BUTTON_BIG {
+		int	widthpix	140
+		int	heightpix	32
+		string	text	"str_ldl_LOAD_GAME"
+		int	xpix	615
+		int	ypix	340
+	}
+	NewGameButton:SP_BUTTON_BIG {
+		int	widthpix	140
+		int	heightpix	32
+		string	text	"str_ldl_NEW_GAME"
+		int	xpix	615
+		int	ypix	295
+	}
+	OptionsButton:SP_BUTTON_BIG_STONE {
+		int	widthpix	140
+		int	heightpix	32
+		string	text	"str_ldl_OPTIONS"
+		int	xpix	36
+		int	ypix	556
+	}
 	VersionString:CTP2_STATIC_BASE {
-		int fontcolorred 100
-		int fontcolorgreen 100
-		int fontcolorblue 255
+		int fontcolorred 0
+		int fontcolorgreen 0
+		int fontcolorblue 0
 
 		string text "str_ldl_version"
-		int xpix 710
-		int ypix 515
+		int xpix 370
+		int ypix 203
 		int widthpix 60
 		int heightpix 24
 	}
 	Disclaimer1:CTP2_STATIC_BASE {
-		int fontcolorred 255
+		int fontcolorred 0
 		int fontcolorgreen 0
 		int fontcolorblue 0
 
 		string text "str_ldl_Disclaimer1"
 		int xpix 269 
-		int ypix 20
+		int ypix 498
 		int widthpix 260
 		int heightpix 24
 	}
 	Disclaimer2:CTP2_STATIC_BASE {
-		int fontcolorred 255
+		int fontcolorred 0
 		int fontcolorgreen 0
 		int fontcolorblue 0
 
 		string text "str_ldl_Disclaimer2"
-		int xpix 269 
-		int ypix 558
+		int xpix 125 
+		int ypix 515
 		int widthpix 260
 		int heightpix 24
 	}
 	Disclaimer3:CTP2_STATIC_BASE {
-		int fontcolorred 255
+		int fontcolorred 0
 		int fontcolorgreen 0
 		int fontcolorblue 0
 
 		string text "str_ldl_Disclaimer3"
-		int xpix 269 
-		int ypix 574
+		int xpix 461 
+		int ypix 515
 		int widthpix 260
 		int heightpix 24
 	}

@@ -1,3 +1,37 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Dialog for altering map properties
+//                (dry/wet, ocean/land, etc.)
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed a strange reference to the SP menu which I don't understand, but
+//   could cause problems in the new interface (Its removal could also cause
+//   problems, but I'm not sure what it did, so I don't know...)
+//   (JJB)
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -18,7 +52,13 @@
 #include "CivApp.h"
 #include "ProfileDB.h"
 
+
+#if defined(ACTIVISION_ORIGINAL)
+// No longer need this include since the SP screen has been removed
+// from the interface
 #include "spwindow.h"
+#endif
+
 #include "spnewgamewindow.h"
 #include "custommapscreen.h"
 
@@ -244,7 +284,13 @@ void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data,
 	if(custommapscreen_removeMyWindow(action)) {
 
 		if ( s_useMode == 1 ) {
+#if defined(ACTIVISION_ORIGINAL)
+			// I hope this is no longer necessary, but maybe it should
+			// be replaced by initialscreen_removeMyWindow.
+			// Unfortunately I have no idea what it's doing here,
+			// which seems a very bizarre place for it...
 			spscreen_removeMyWindow(action);
+#endif
 
 			
 			g_theProfileDB->SetSaveNote("");

@@ -27,6 +27,9 @@
 //
 // - Clean up any created subscreens when cleaning up the main screen.
 //
+// - Always return to main menu, never SP menu
+//   (JJB)
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -66,7 +69,13 @@
 #include "spnewgamerulesscreen.h"
 
 #include "custommapscreen.h"
+
+#if defined(ACTIVISION_ORIGINAL)
+// No longer need this include since the SP screen has been removed
+// from the interface
 #include "spwindow.h"
+#endif
+
 #include "spnewgamewindow.h"
 
 #include "civ3_main.h"
@@ -382,11 +391,16 @@ spnewgamescreen_returnPress(aui_Control *control, uint32 action, uint32 data, vo
 	g_civPaths->ClearCurScenarioPackPath();
 
 	if(spnewgamescreen_removeMyWindow(action)) {
+#if defined(ACTIVISION_ORIGINAL)
 		if (wasPBEMOrHotseat) {
 			initialplayscreen_displayMyWindow();
 		} else {
 			spscreen_displayMyWindow();
 		}
+#else
+		// In the new interface there is no SP window
+		initialplayscreen_displayMyWindow();
+#endif
 	}
 	ScenarioWindow::Hide();
 }

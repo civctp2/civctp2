@@ -152,7 +152,13 @@
 #include "helptile.h"
 #include "messagewin.h"
 #include "spnewgamewindow.h"
+
+#if defined(ACTIVISION_ORIGINAL)
+// No longer need this include since the SP screen has been removed
+// from the interface
 #include "spwindow.h"
+#endif
+
 #include "scenariowindow.h"
 #include "initialplaywindow.h"
 #include "grabitem.h"

@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Main menu screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Shifted buttons from the "Single Player" subscreen into this one to
+//   simplify the interface.
+//   (JJB)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -22,10 +54,20 @@
 
 #include "screenutils.h"
 
+#if defined(ACTIVISION_ORIGINAL)
+// No longer need this include since the SP screen has been removed
+// from the interface
 #include "spwindow.h"
+#endif
+
 #include "loadsavewindow.h"
 #include "initialplayWindow.h"
 #include "scenariowindow.h"
+
+#if !defined(ACTIVISION_ORIGINAL)
+// Need more includes for the actions of the new buttons
+#include "optionswindow.h"
+#endif
 
 #include "gameinit.h"
 #include "profileDB.h"
@@ -99,9 +141,12 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
  	spriteTest->Hide();
 #endif
 
+#if defined(ACTIVISION_ORIGINAL)
+	// Cut out this code since the button is gone
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "SPButton", 
 											initialplayscreen_spPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
+#endif
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "EmailButton", 
 											initialplayscreen_emailPress, NULL);
@@ -123,71 +168,25 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 											initialplayscreen_creditsPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#if !defined(ACTIVISION_ORIGINAL)
+	// Code for new buttons, just copy/pasted and altered from the above
+
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "NewGameButton", 
+											initialplayscreen_newgamePress, NULL);
+	Assert(errcode == AUI_ERRCODE_OK);
+
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "LoadGameButton", 
+											initialplayscreen_loadgamePress, NULL);
+	Assert(errcode == AUI_ERRCODE_OK);
+
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "TutorialButton", 
+											initialplayscreen_tutorialPress, NULL);
+	Assert(errcode == AUI_ERRCODE_OK);
+
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "OptionsButton", 
+											initialplayscreen_optionsPress, NULL);
+	Assert(errcode == AUI_ERRCODE_OK);
+#endif // !defined(ACTIVISION_ORIGINAL)
 
 	return AUI_ERRCODE_OK;
 }
@@ -213,7 +212,8 @@ AUI_ERRCODE initialplayscreen_Cleanup()
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
+// Button removed
 void
 initialplayscreen_spPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -222,7 +222,7 @@ initialplayscreen_spPress(aui_Control *control, uint32 action, uint32 data, void
 	if(initialplayscreen_removeMyWindow(action))
 		spscreen_displayMyWindow();
 }
-
+#endif
 
 
 
@@ -330,15 +330,43 @@ initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data,
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	open_CreditsScreen();
-
-
-
-
-
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
+// Code for new buttons taked from spscreen.cpp (and altered)
+void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+	if(initialplayscreen_removeMyWindow(action)) 
+		spnewgamescreen_displayMyWindow();
+}
 
+void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
+	loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
+}
+
+void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+	
+	if (c3files_HasLegalCD()) {
+		if(initialplayscreen_removeMyWindow(action)) {
+			g_theProfileDB->SetTutorialAdvice(TRUE);
+			g_civApp->PostStartGameAction();
+		}
+	}
+}
+
+void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+
+	optionsscreen_displayMyWindow(0);
+}
+#endif //!defined(ACTIVISION_ORIGINAL)
 
 C3Window *GetInitialPlayScreen()
 {

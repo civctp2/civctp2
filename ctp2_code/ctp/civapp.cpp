@@ -57,7 +57,12 @@
 //     parsing Advances and Governments would occur before other DBs using 
 //     GovernmentsModified, to ensure that Governments would be able to be
 //     inspected by those other database classes.
-//     
+//
+//----------------------------------------------------------------------------
+// 
+// - When quitting to New Game, go to main menu rather than SP menu
+//   (JJB)
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -3708,8 +3713,14 @@ sint32 CivApp::QuitToSPShell(void)
 		StartMessageSystem();
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
+	// Old interface sends you to the SP menu
 	spscreen_displayMyWindow();
-
+#else
+	// We've removed that so go to main menu instead
+	// (Change by JJB)
+	initialplayscreen_displayMyWindow();
+#endif
 
 	return 0;
 }

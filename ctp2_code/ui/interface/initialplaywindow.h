@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Main menu screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Shifted buttons from the "Single Player" subscreen into this one to
+//   simplify the interface.
+//   (JJB)
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef INITIALPLAYWINDOW_FLAG
@@ -38,8 +70,13 @@ void
 initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
 void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-
+#if !defined(ACTIVISION_ORIGINAL)
+// Code for new buttons taken from spwindow.h and altered
+void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+#endif
 
 C3Window *GetInitialPlayScreen();
 
@@ -64,6 +101,14 @@ private:
 					*m_mp,
 					*m_credits,
 					*m_quit;
+
+#if !defined(ACTIVISION_ORIGINAL)
+// Code for new buttons taken from spwindow.h and altered
+	ctp2_Button	*m_tutorial,
+				*m_newgame,
+				*m_loadgame,
+				*m_options;
+#endif
 
 	c3_Button	   	*m_load,
 					*m_continue,

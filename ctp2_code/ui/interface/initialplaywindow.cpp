@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Main menu screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Shifted buttons from the "Single Player" subscreen into this one to
+//   simplify the interface.
+//   (JJB)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -42,6 +74,13 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 		: C3Window(retval,id,ldlBlock,bpp,type,bevel),
 		m_sp(NULL), m_mp(NULL), m_load(NULL), m_continue(NULL), m_instant(NULL),
 		m_mapeditor(NULL), m_quit(NULL), m_background(NULL), m_email(NULL),
+#if !defined(ACTIVISION_ORIGINAL)
+		// Code for new buttons taken from spwindow.cpp and altered
+		m_newgame(NULL), 
+		m_loadgame(NULL),
+		m_tutorial(NULL), 
+		m_options(NULL), 
+#endif
 		m_hotseat(NULL)
 {
 	ctp2_Static *testBox=new ctp2_Static(retval, aui_UniqueId(),"InitPlayWindow.TestTextBox");
@@ -58,13 +97,15 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 	m_spriteTest->Hide();
 #endif
 
-	
+#if defined(ACTIVISION_ORIGINAL)
+	// Cut out this code since button gone
  	m_sp = spNew_ctp2_Button(retval,
 		   					 ldlBlock, 
 		   					 "SPButton",
 		   					 "Single Player",
 		   					 initialplayscreen_spPress,
 		   					 "CTP2_BUTTON_TEXT_RIGHT_LARGE");
+#endif
 
 	
 	m_email	= spNew_ctp2_Button(retval,
@@ -106,11 +147,32 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 								  initialplayscreen_creditsPress,
 								  "CTP2_BUTTON_TEXT_RIGHT_LARGE");
 
+#if !defined(ACTIVISION_ORIGINAL)
+	// New buttons moved from the SP screen
+	// (code taken from spwindow.cpp (and altered))
+	// I'm slightly concerned that these call a
+	// different overload of spNew_ctp2_Button from
+	// those above...
+	m_newgame = spNew_ctp2_Button(retval,
+								  ldlBlock,
+								  "NewGameButton",
+								  initialplayscreen_newgamePress);
 
+	m_loadgame = spNew_ctp2_Button(retval,
+								   ldlBlock,
+								   "LoadGameButton",
+								   initialplayscreen_loadgamePress);
+	
+	m_tutorial = spNew_ctp2_Button(retval,
+								   ldlBlock,
+								   "TutorialButton",
+								   initialplayscreen_tutorialPress);
 
-
-
-
+	m_options = spNew_ctp2_Button(retval,
+								  ldlBlock,
+								  "OptionsButton",
+								  initialplayscreen_optionsPress);
+#endif //!defined(ACTIVISION_ORIGINAL)
 	
 	m_background = spNew_c3_Static(retval,ldlBlock,"Background");
 }
@@ -123,14 +185,19 @@ InitPlayWindow::~InitPlayWindow()
 	mycleanup(m_sp);
 	mycleanup(m_mp);
 
-
-
-
 	mycleanup(m_quit);
 	mycleanup(m_credits);
 	mycleanup(m_hotseat);
 	mycleanup(m_email);
-	
+
+#if !defined(ACTIVISION_ORIGINAL)
+	// Cleanup code for new buttons taken from spwindow.cpp and altered
+	mycleanup(m_newgame);
+	mycleanup(m_loadgame);
+	mycleanup(m_tutorial);
+	mycleanup(m_options );
+#endif
+
 	mycleanup(m_background);
 #undef mycleanup
 }

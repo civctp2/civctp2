@@ -1524,12 +1524,12 @@ str_ldl_SPNGPS_PlayerText	"Setzt den Startspieler. Bestimmt die Farbe der Zivili
 ### Added Disclaimer Strings ###
 
 str_ldl_Disclaimer1 "DIESES MATERIAL WIRD WEDER VON ACTIVISION HERGESTELLT NOCH UNTERSTÜTZT."
-str_ldl_Disclaimer2 "Diese Version von Call To Power 2 wurde bei http://apolyton.net entwickelt."
-str_ldl_Disclaimer3 "Kontakt: ctp2source@apolyton.net."
+str_ldl_Disclaimer2 "Diese Version von Call To Power 2 wurde bei http://apolyton.net entwickelt"
+str_ldl_Disclaimer3 "Kontakt: ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-03-28"
+str_ldl_version "2004-04-18"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
