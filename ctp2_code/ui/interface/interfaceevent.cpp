@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Event handlers for the user interface.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevent production errors when pressing F3 after end of turn.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "interfaceevent.h"
@@ -18,9 +48,9 @@
 #include "network.h"
 #include "gamesounds.h"
 
-
-
-
+#if !defined(ACTIVISION_ORIGINAL)
+extern sint32				g_modalWindow;
+#endif
 
 
 STDEHANDLER(InterfaceCreateCityEvent)
@@ -102,6 +132,13 @@ STDEHANDLER(InterfaceUpdateCityProjection)
 
 	if(pl == g_selected_item->GetVisiblePlayer()) {
 		MainControlPanel::SelectedCity();
+#if !defined(ACTIVISION_ORIGINAL)
+		// Reenable opening the city window - see InterfacePreBeginTurnEvent.
+		if (g_modalWindow > 0)
+		{
+			--g_modalWindow;	
+		}
+#endif
 	}
 
 	return GEV_HD_Continue;
@@ -136,6 +173,11 @@ STDEHANDLER(InterfacePreBeginTurn)
 
 	if(pl == g_selected_item->GetVisiblePlayer()) {
 		close_AllScreens();
+#if !defined(ACTIVISION_ORIGINAL)
+		// Prevent opening the city window during the production computations.
+		// It will be reenabled in InterfaceUpdateCityProjection.
+		++g_modalWindow;	
+#endif
 		if(g_controlPanel)
 			g_controlPanel->ClearTargetingMode();
 

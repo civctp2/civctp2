@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Start the great library with the current research project of the player.
+// - Prevent production errors when pressing F3 after end of turn.
 //
 //----------------------------------------------------------------------------
 
@@ -153,7 +154,11 @@ sint32 open_CityView( void )
 
 sint32 close_CityView( void )
 {
+#if defined(ACTIVISION_ORIGINAL) // does not release the data
 	CityWindow::Hide();
+#else
+	CityWindow::Close(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+#endif
 
 	return 0;
 }
