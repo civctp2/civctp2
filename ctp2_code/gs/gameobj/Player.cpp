@@ -32,6 +32,8 @@
 //   by Martin Gühmann.
 // - Moved the autosave file generation to PlayerEvent.cpp, to prevent losing 
 //   the advance that just has had its research completed.
+// - #01 Recalculating military support costs after government change
+//   (L. Hirth 7/2004)
 //
 //----------------------------------------------------------------------------
 
@@ -2137,7 +2139,12 @@ void Player::BeginTurnProduction()
 	if (mil_total < 1) { 
 		p = 0;
 	} else {
-		
+#ifndef ACTIVISION_ORIGINAL // #01 Recalculating military support costs after government change
+							// this fixes the costs for old save games 
+		double oldReadCost = m_readiness->GetCost();
+		m_readiness->RecalcCost();
+		Assert(oldReadCost == m_readiness->GetCost()) // readiness costs were not correct
+#endif
 		roundedCost = (sint32)(m_readiness->GetCost() + 0.0000001) - m_productionFromFranchises;
 		p = double(roundedCost)/double(mil_total);
 	}
@@ -2149,8 +2156,7 @@ void Player::BeginTurnProduction()
 
 	m_readiness->SetPecentLastTurn(p); 
 	
-	
-	Assert (p <= 1.000001); 
+	Assert (p <= 1.000001);
 	
 	sint32 mil_paid, mat_paid;
 	sint32 mil_paid_total=0; 
@@ -8379,7 +8385,10 @@ BOOL Player::ActuallySetGovernment(sint32 type)
 	m_tax_rate->SetTaxRates(s, m_owner);
 
 
-
+#ifndef ACTIVISION_ORIGINAL // #01 Recalculating military support costs after government change
+	// recalc the military support costs under the new government
+	m_readiness->RecalcCost();
+#endif
 
 
 	g_slicEngine->RunGovernmentChangedTriggers(m_owner);
@@ -9852,7 +9861,8 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
         if (!is_obsolete)
             continue;
 
-        
+        // Wonder is obsolete, check if someone is building this wonder
+		// if the wonder is not already build
         if(!wonderutil_IsBuilt(i)) {
             for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++) { 
                 if (g_player[player_idx] == NULL) continue;
@@ -9861,7 +9871,7 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
                 if (g_theWonderTracker->IsBuildingWonder(i, player_idx) &&
                     (GetCurRound() > 1)) {
 
-                    
+                    // Send the player a message, that the wonder he builds is obsolete
                     so = new SlicObject("097aWonderObsolete");
                     so->AddRecipient(player_idx);
                     so->AddAdvance(advance);
@@ -9873,7 +9883,7 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
             continue;
         }
 
-        
+        // check if the wonder owner is valid
         sint32 wowner = wonderutil_GetOwner(i);
         if ((wowner < 0) || (wowner >= k_MAX_PLAYERS) ||
             (g_player[wowner] == NULL) ||
@@ -9881,16 +9891,14 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
             continue;
         }
 
-		
-        
-        
-        
+        // recalculate values that could be changed by the
+		// now obsolete wonder
 
-        
+		// Trade Route Costs
         if(wrec->GetFreeTradeRoutes()) {
             g_player[wowner]->ReconsiderCostOfTrade();
         }
-
+		
         if(wrec->GetReduceReadinessCost()) {
             g_player[wowner]->m_readiness->RecalcCost();
         }
