@@ -28,6 +28,7 @@
 // - #pragma once commented out
 // - Import structure modified to allow mingw compilation.
 // - bool added to == and != operators.
+// - Added OrthogonalPoint to facilitate wrap computations.
 //
 //----------------------------------------------------------------------------
 
@@ -45,6 +46,24 @@ enum WORLD_DIRECTION;
 #define _SMALL_MAPPOINTS		(1)
 
 struct MapPointData { 
+#if !defined(ACTIVISION_ORIGINAL)
+#if defined(_SMALL_MAPPOINTS)
+	MapPointData(sint16 const a_X = 0, sint16 const a_Y = 0)
+	:	x(a_X),
+		y(a_Y)
+	{
+	};
+#else
+	MapPointData(sint16 const a_X = 0, sint16 const a_Y = 0, sint16 const a_Z = 0)
+	:	x(a_X),
+		y(a_Y),
+		z(a_Z)
+	{
+	};
+
+	sint16 z;
+#endif
+#endif	// ACTIVISION_ORIGINAL
 
 	sint16 x, y;
 
@@ -73,7 +92,7 @@ class CivArchive;
 // Compiler flags
 //----------------------------------------------------------------------------
 
-#define _SMALL_MAPPOINTS			(1)
+#define _SMALL_MAPPOINTS			(1)	
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -85,6 +104,7 @@ class CivArchive;
 
 class	MapPoint;
 struct	MapPointData;
+class	OrthogonalPoint;
 struct	TileUtility;
 
 #define k_MAPPOINT_VERSION_MAJOR	0								
@@ -104,6 +124,21 @@ struct	TileUtility;
 
 struct MapPointData 
 { 
+#if defined(_SMALL_MAPPOINTS)
+	MapPointData(sint16 const a_X = 0, sint16 const a_Y = 0)
+	:	x(a_X),
+		y(a_Y)
+	{ };
+#else
+	MapPointData(sint16 const a_X = 0, sint16 const a_Y = 0, sint16 const a_Z = 0)
+	:	x(a_X),
+		y(a_Y),
+		z(a_Z)
+	{ };
+
+	sint16			z;
+#endif
+
 	// Coordinates
 	sint16			x;
 	sint16			y;
@@ -142,9 +177,17 @@ public:
 
 	
 	
-
+#if defined(ACTIVISION_ORIGINAL)
 	MapPoint() {x=y=0;}
+#else
+	MapPoint()
+	:	MapPointData()
+	{ };
 
+	explicit MapPoint(MapPointData const & a_Data)
+	: MapPointData(a_Data)
+	{ };
+#endif
 
 
 #ifdef _SMALL_MAPPOINTS
@@ -221,6 +264,33 @@ public:
 		{return ((x< rval.x) && (y < rval.y)); }
 
 };
+
+#if !defined(ACTIVISION_ORIGINAL)
+class OrthogonalPoint
+{
+public:
+	OrthogonalPoint(MapPoint const & point);
+
+	MapPoint			GetRC(void);
+	bool				IsValid(void);
+	void				Move
+	(
+		MapPointData const &	delta
+	);
+	void				Move
+	(
+		WORLD_DIRECTION const	direction, 
+		size_t const			count		= 1
+	);
+
+private:
+	void				Normalise(void);
+
+	static MapPointData	Step(WORLD_DIRECTION const direction);
+
+	MapPoint			m_point;	// point in XY coordinates
+};
+#endif	// ACTIVISION_ORIGINAL
 
 uint32 MapPoint_MapPoint_GetVersion(void) ;
 #endif

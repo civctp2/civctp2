@@ -1,20 +1,36 @@
-
-//tiledmap.cpp
-//Modified by Martin Gühmann
-//to make sure that cities created 
-//by the scenario editor keep their 
-//style and their size. The last created 
-//city by the scenario editor is now selected.
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Tile map handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Make sure that cities created by the scenario editor keep their style and 
+//   their size. The last created city by the scenario editor is now selected.
+//	 By Martin Gühmann.
+// - Map wrapping corrected.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -1798,6 +1814,7 @@ void TiledMap::DrawHiliteMouseTile(aui_Surface *destSurf)
 		sint32 w = ScenarioEditor::GetRegionWidth();
 		sint32 h = ScenarioEditor::GetRegionHeight();
 
+#if defined(ACTIVISION_ORIGINAL)	// incorrect wrap function
 		MapPoint cur = ul;
 		MapPoint wrapped;
 		sint32 x, y;
@@ -1814,6 +1831,21 @@ void TiledMap::DrawHiliteMouseTile(aui_Surface *destSurf)
 				DrawHitMask(destSurf, wrapped);
 			}
 		}
+#else
+		// x and y are orthogonal coordinates now
+		for (sint32 y = 0; y < h; ++y)
+		{
+			for (sint32 x = (y & 1); x < (2 * w); x += 2)
+			{
+				OrthogonalPoint	cur(ul);
+				cur.Move(MapPointData(x, y));
+				if (cur.IsValid())
+				{
+					DrawHitMask(destSurf, cur.GetRC());
+				}
+			}
+		}
+#endif
 	}
 	DrawHitMask(destSurf, m_hiliteMouseTile);
 
@@ -4017,6 +4049,7 @@ sint32 TiledMap::DrawCityRadius(MapPoint &cpos, COLOR color, sint32 pop)
 	return 0;
 }
 
+#if defined(ACTIVISION_ORIGINAL)	// incorrect wrap computation
 sint32 TiledMap::DrawCityRadius1(MapPoint &cpos, COLOR color)
 {
 	MapPoint	pos;
@@ -4051,9 +4084,45 @@ sint32 TiledMap::DrawCityRadius1(MapPoint &cpos, COLOR color)
 	
 	return 0;
 }
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : TiledMap::DrawCityRadius1
+//
+// Description: Draw a "colored hit mask" in a radius of 1 around a city.
+//
+// Parameters : cpos	: city location on the map
+//              color	: color to use when drawing
+//
+// Globals    : g_screenManager
+//
+// Returns    : sint32	: useless value, always 0
+//
+// Remark(s)  : The tile NORTH of the city is not drawn.
+//				The tile of the city itself is drawn.
+//              TODO: check whether this is intentional, or the original code
+//                    was just wrong.
+//
+//----------------------------------------------------------------------------
 
+sint32 TiledMap::DrawCityRadius1(MapPoint &cpos, COLOR color)
+{
+	for (int dir = NORTHEAST; dir <= NOWHERE; ++dir)
+	{
+		OrthogonalPoint	neighbour(cpos);
+		neighbour.Move(WORLD_DIRECTION(dir));
+		if (neighbour.IsValid())
+		{
+			DrawColoredHitMask
+				(g_screenManager->GetSurface(), neighbour.GetRC(), color);
+		}
+	}
 
+	return 0;
+}
+#endif	// ACTIVISION_ORIGINAL
 
+#if defined(ACTIVISION_ORIGINAL)	// never used
 sint32 TiledMap::DrawCityRadius2(MapPoint &cpos, COLOR color)
 {
 	MapPoint	pos;
@@ -4106,6 +4175,7 @@ sint32 TiledMap::DrawCityRadius2(MapPoint &cpos, COLOR color)
 
 	return 0;
 }
+#endif
 
 
 sint32 TiledMap::PaintColoredTile(sint32 x, sint32 y, COLOR color)

@@ -1,6 +1,70 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : City influence handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Wrap handling corrected. 
+//
+//----------------------------------------------------------------------------
 
 #ifndef CITY_INFLUENCE_ITERATOR_H__
 #define CITY_INFLUENCE_ITERATOR_H__
+
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+class CityInfluenceIterator;
+class RadiusIterator;
+class SquareIterator;
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+#include "c3types.h"
+#include "MapPoint.h"	// MapPoint, OrthogonalPoint
+
+//----------------------------------------------------------------------------
+// Declarations
+//----------------------------------------------------------------------------
+#endif
 
 class CityInfluenceIterator {
 protected:
@@ -11,6 +75,9 @@ protected:
 	sint16 m_row;
 	sint16 m_intRadius;
 	uint32 m_cityId;
+#if !defined(ACTIVISION_ORIGINAL)
+	OrthogonalPoint	m_testXY;
+#endif
 
 public:
 	

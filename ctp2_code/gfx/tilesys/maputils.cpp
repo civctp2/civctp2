@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Map utilities
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Handling corrected for non-X-wrapping worlds.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui.h"
@@ -40,11 +59,32 @@ void maputils_WrapPoint(
 	*wrapX = x;
 	*wrapY = y;
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	while(*wrapX < 0)
 		*wrapX = *wrapX + mapWidth;
 	while(*wrapX >= mapWidth)
 		*wrapX = *wrapX - mapWidth;
+#else
+	if (g_theWorld->IsXwrap())
+	{
+		while(*wrapX < 0)
+			*wrapX = *wrapX + mapWidth;
+		while(*wrapX >= mapWidth)
+			*wrapX = *wrapX - mapWidth;
+	}
+	else
+	{
+		if (*wrapX < 0)
+		{
+			*wrapX = 0;
+		}
+		else if (*wrapX >= mapWidth)
+		{
+			*wrapX = mapWidth - 1;
+		}
+		// else: no action: *wrapX OK
+	}
+#endif
 
 	if (g_theWorld->IsYwrap()) {
 		

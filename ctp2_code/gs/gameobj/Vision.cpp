@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Map visibility handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected strange vision behaviour at the top row.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Vision.h"
@@ -101,8 +122,12 @@ void Vision::Clear()
 
 void Vision::AddExplored(MapPoint pos, double radius)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	Convert(pos);
 	FillCircle(pos.x, pos.y, radius, CIRCLE_OP_ADD);
+#else
+	FillCircle(pos, radius, CIRCLE_OP_ADD);
+#endif
 }
 
 
@@ -166,9 +191,14 @@ BOOL Vision::IsExplored(MapPoint pos) const
 void Vision::AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored,
 						DynamicArray<MapPoint> *removeadd)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	Convert(pos);
 	m_revealedUnexplored = FALSE;
 	FillCircle(pos.x, pos.y, radius, CIRCLE_OP_ADD, removeadd);
+#else
+	m_revealedUnexplored	= FALSE;
+	FillCircle(pos, radius, CIRCLE_OP_ADD, removeadd);
+#endif
 	if(m_revealedUnexplored)
 		revealed_unexplored = TRUE;
 
@@ -189,15 +219,23 @@ void Vision::AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored,
 void Vision::RemoveVisible(MapPoint pos, double radius,
 						   DynamicArray<MapPoint> *removeadd)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	Convert(pos);
 	FillCircle(pos.x, pos.y, radius, CIRCLE_OP_SUBTRACT, removeadd);
+#else
+	FillCircle(pos, radius, CIRCLE_OP_SUBTRACT, removeadd);
+#endif
 }
 
 
 void Vision::AddRadar(MapPoint pos, double radius)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	Convert(pos);
 	FillCircle(pos.x, pos.y, radius, CIRCLE_OP_ADD_RADAR);
+#else
+	FillCircle(pos, radius, CIRCLE_OP_ADD_RADAR);
+#endif
 }
 
 BOOL Vision::IsVisible(MapPoint pos) const 
@@ -387,6 +425,8 @@ BOOL Vision::MergePoint(sint32 x, sint32 y)
 	return FALSE;
 }
 
+
+#if defined(ACTIVISION_ORIGINAL)
 #define NEWFILLCIRCLE
 #ifdef NEWFILLCIRCLE
 void Vision::FillCircle(sint32 xc, sint32 yc,
@@ -498,6 +538,7 @@ BOOL Vision::CheckWrap(MapPoint &pos, const MapPoint &center)
 
 		sint16 centerRightEdge = (centerLeftEdge + m_width) % m_width;
 		sint16 posRightEdge = (posLeftEdge + m_width) % m_width;
+
 		if(isocenter.x < centerRightEdge &&
 		   checkpos.x >= posRightEdge)
 			return FALSE;
@@ -532,7 +573,6 @@ BOOL Vision::CheckWrap(MapPoint &pos, const MapPoint &center)
 		return FALSE;
 	return TRUE;
 }
-
 
 sint32 shut_up_you_bastard;
 
@@ -630,8 +670,214 @@ void Vision::DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op,
 		g_tiledMap->RedrawTile(&iso);
 	}
 }
+
 #endif
 						
+#else	// ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+//
+// Name       : Vision::FillCircle
+//
+// Description: Perform an operation within a circle of a certain point.
+//
+// Parameters : centerRC		: the point (RC coordinate)
+//				radius			: the radius of the circle
+//				op				: the operation to perform
+//
+// Globals    : g_theWorld		: world information
+//
+// Returns    : removeadd		: filled with changed points
+//
+// Remark(s)  : The center is now passed as an RC coordinate (used in most of 
+//              the game). dx and dy are still for Convert-ed coordinates,
+//              and map wrap checks are easier when using XY coordinates. 
+//              Quite a mess.
+//
+//					      Convert		   XY		   RC
+//              step          		
+//              N			+1 -1		 0 -2		+1 -2       
+//              NE          +1  0		+1 -1		+1 -1
+//              E           +1 +1		+2  0		+1  0
+//              SE           0 +1		+1 +1		 0 +1
+//
+//				Assumption: centerRC is valid and on the map.				
+//
+//----------------------------------------------------------------------------
+
+void Vision::FillCircle
+(
+	MapPoint const &			centerRC,
+	double const				radius, 
+	CIRCLE_OP const				op,
+	DynamicArray<MapPoint> *	removeadd
+)
+{
+	double const	r	= radius + 0.5;	
+	sint32 const	rsq	= sint32(r * r);
+
+	for (sint16 dx = sint16(r); dx >= 0; dx--) 
+	{
+		bool	incircle = false;
+		
+		for (sint16 dy = sint16(r); dy >= 0; dy--) 
+		{
+			if (incircle || ((dx * dx) + (dy * dy) <= rsq)) 
+			{ 
+				incircle = true;
+
+				// do always
+				{ 
+					OrthogonalPoint	testXY(centerRC);
+					testXY.Move(MapPointData(+ dx + dy, - dx + dy));
+					if (testXY.IsValid())
+					{
+						DoFillCircleOp(testXY.GetRC(), op, removeadd);
+					}
+				}
+
+				if (dx != 0) 
+				{
+					OrthogonalPoint	testXY(centerRC);
+					testXY.Move(MapPointData(- dx + dy, + dx + dy));
+					if (testXY.IsValid())
+					{
+						DoFillCircleOp(testXY.GetRC(), op, removeadd);
+					}
+				}
+
+				if (dy != 0) 
+				{
+					OrthogonalPoint testXY(centerRC);
+					testXY.Move(MapPointData(+ dx - dy, - dx - dy));
+					if (testXY.IsValid())
+					{
+						DoFillCircleOp(testXY.GetRC(), op, removeadd);
+					}
+				}
+
+				if ((dx != 0) && (dy != 0))
+				{
+					OrthogonalPoint testXY(centerRC);
+					testXY.Move(MapPointData(- dx - dy, + dx - dy)); 
+					if (testXY.IsValid())
+					{
+						DoFillCircleOp(testXY.GetRC(), op, removeadd);
+					}
+				}
+			}
+		}
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Vision::DoFillCircleOp
+//
+// Description: Handle the actual circle operation.
+//
+// Parameters : posRC			: the point (RC coordinate)
+//				op				: the operation
+//
+// Globals    : g_theWorld		: world information
+//
+// Returns    : removeadd		: filled with changed points
+//
+// Remark(s)  : Assumption: iso will be a valid map location after applying
+//              wrapping.
+//              Convert + Unconvert will take care of the wrap.
+//
+//----------------------------------------------------------------------------
+
+void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op, 
+							DynamicArray<MapPoint> *removeadd)
+{
+	MapPoint	pos(posRC);
+	Convert(pos);
+	MapPoint	iso(pos);
+	Unconvert(iso);
+
+	BOOL		redraw	= FALSE;
+	uint16 *	entry	= &m_array[pos.x][pos.y];
+	switch(op) 
+	{
+		case CIRCLE_OP_ADD:
+			if(!((*entry) & k_EXPLORED_BIT)) {
+				redraw = TRUE;
+				m_revealedUnexplored = TRUE;
+			} else if (((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
+				redraw = TRUE;
+				UnseenCellCarton ucell;
+				if(m_unseenCells->RemoveAt(iso, ucell)) {
+					delete ucell.m_unseenCell;
+				}
+			}
+			*entry = (*entry + 1) | k_EXPLORED_BIT;
+			if(redraw && removeadd) {
+				if(removeadd->Del(iso)) {
+					
+					redraw = FALSE;
+				} else {
+					removeadd->Insert(iso);
+					redraw = FALSE;
+				}
+			}
+			break;
+		case CIRCLE_OP_SUBTRACT:
+
+			if(g_player[m_owner] && g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
+
+                
+				    Assert(((*entry) & k_VISIBLE_REFERENCE_MASK) != 0);
+				
+			}
+			*entry = *entry - 1;
+			if(((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
+				Cell *cell = g_theWorld->GetCell(iso);
+				if(cell->GetNumImprovements() > 0 || 
+				   (cell->GetCity().IsValid() && cell->GetCity().GetOwner() != m_owner)) {
+					AddUnseen(iso);
+				}
+
+				if(removeadd) {
+					
+					removeadd->Insert(iso);
+					redraw = FALSE;
+				} else {
+					redraw = TRUE;
+				}
+			}
+			break;
+		case CIRCLE_OP_ADD_RADAR:
+		{
+			static CellUnitList army;
+			army.Clear();
+			g_theWorld->GetArmy(iso, army);
+			sint32 i, n = army.Num();
+			for(i = 0; i < n; i++) {
+				army[i].SetRadar(m_owner);
+			}
+			break;
+		}
+		case CIRCLE_OP_MERGE:
+			if(MergePoint(pos.x, pos.y)) {
+				if(g_selected_item->GetVisiblePlayer() == m_owner) {
+					g_tiledMap->GetLocalVision()->ModifyPoint(this, pos.x, pos.y);
+				}
+				redraw = TRUE;
+			}
+			break;
+		default:
+			Assert(FALSE);
+			break;
+	}
+
+	if(g_tiledMap && redraw && m_amOnScreen) 
+	{
+		g_tiledMap->RedrawTile(&iso);
+	}
+}
+#endif	// ACTIVISION_ORIGINAL
 
 void Vision::AddUnseen(const MapPoint &point)
 {
@@ -734,10 +980,14 @@ void Vision::Serialize(CivArchive &archive)
 void Vision::CopyCircle(Vision *src, const MapPoint &center, sint32 radius)
 {
 	m_mergeFrom = src;
+#if defined(ACTIVISION_ORIGINAL)
 	MapPoint pos = center;
 	Convert(pos);
 	FillCircle(pos.x, pos.y, (double)radius,
 			   CIRCLE_OP_MERGE);
+#else
+	FillCircle(center, (double) radius, CIRCLE_OP_MERGE);
+#endif
 }
 
 

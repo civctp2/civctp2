@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : ?
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected wrap handling.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "MapCopyBuffer.h"
@@ -50,6 +80,7 @@ void MapCopyBuffer::Copy(MapPoint &pos, sint32 w, sint32 h)
 	Assert(m_cells);
 	if(!m_cells) return;
 
+#if defined(ACTIVISION_ORIGINAL)
 	MapPoint cur, wrapped;
 	sint32 x, y;
 	for(x = 0; x < m_width; x++) {
@@ -67,6 +98,23 @@ void MapCopyBuffer::Copy(MapPoint &pos, sint32 w, sint32 h)
 			m_cells[x][y].m_env = cell->GetEnv();
 		}
 	}
+#else
+	// x and y are orthogonal coordinates now
+	for (sint32 y = 0; y < h; ++y)
+	{
+		for (sint32 x = (y & 1); x < (2 * w); x += 2)
+		{
+			OrthogonalPoint	cur(pos);
+			cur.Move(MapPointData((sint16) x, (sint16) y));
+			if (cur.IsValid())
+			{
+				Cell * cell = g_theWorld->GetCell(cur.GetRC());
+				m_cells[x][y].m_terrain = (uint8) cell->GetTerrain();
+				m_cells[x][y].m_env		= cell->GetEnv();
+			}
+		}
+	}
+#endif
 }
 
 void MapCopyBuffer::Paste(MapPoint &pos)
@@ -74,6 +122,7 @@ void MapCopyBuffer::Paste(MapPoint &pos)
 	Assert(m_cells);
 	if(!m_cells) return;
 
+#if defined(ACTIVISION_ORIGINAL)
 	MapPoint cur, wrapped;
 	sint32 x, y;
 	for(x = 0; x < m_width; x++) {
@@ -92,6 +141,24 @@ void MapCopyBuffer::Paste(MapPoint &pos)
 			g_theWorld->SmartSetTerrain(wrapped, m_cells[x][y].m_terrain, 0);
 		}
 	}
+#else
+	// x and y are orthogonal coordinates now
+	for (sint32 y = 0; y < m_height; ++y)
+	{
+		for (sint32 x = (y & 1); x < (2 * m_width); x += 2)
+		{
+			OrthogonalPoint	cur(pos);
+			cur.Move(MapPointData((sint16) x, (sint16) y));
+			if (cur.IsValid())
+			{
+				MapPoint	wrapped = cur.GetRC();
+				Cell * cell = g_theWorld->GetCell(wrapped);
+				cell->SetEnv(m_cells[x][y].m_env);
+				g_theWorld->SmartSetTerrain(wrapped, m_cells[x][y].m_terrain, 0);
+			}
+		}
+	}
+#endif
 }
 
 void MapCopyBuffer::Save(const MBCHAR *fileName)

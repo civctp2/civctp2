@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Map point handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added OrthogonalPoint to facilitate wrap computations.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -64,6 +84,7 @@ const MapPoint& MapPoint::operator += (const MapPoint &rhs)
 {
     x += rhs.x; 
     y += rhs.y; 
+
     return *this; 
 } 
 
@@ -1033,7 +1054,9 @@ sint32 MapPoint::GetSquaredDistance(const MapPoint &from, const MapPoint &to)
 	if (g_theWorld->IsXwrap())
 		dx = WrapDelta(dx, 2 * g_mp_size.x);
 	sint32 retval = (dx * dx + dy * dy) / 2;
+#if defined(ACTIVISION_ORIGINAL)	// Useless error pop-up in debug mode
 	Assert(retval <= OldSquaredDistance(from, to)); 
+#endif
 	return retval;
 }
 
@@ -1213,3 +1236,234 @@ void MapPoint::rc2xy(const MapPoint & rc_pos, const MapPoint & map_size )
 	while (x>=w) x -= w;
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
+
+//----------------------------------------------------------------------------
+//
+// Name       : OrthogonalPoint::OrthogonalPoint
+//
+// Description: Convert RC coordinates to orthogonal (XY) coordinates.
+//
+// Parameters : -
+//
+// Globals    : g_mp_size	: map size
+//
+// Returns    : -
+//
+// Remark(s)  : Constructor. Does not do any checking.
+//
+//----------------------------------------------------------------------------
+
+OrthogonalPoint::OrthogonalPoint(MapPoint const & rc)
+#if defined(_SMALL_MAPPOINTS)
+:	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y)
+#else
+:	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y, rc.z)
+#endif
+{ }
+
+//----------------------------------------------------------------------------
+//
+// Name       : OrthogonalPoint::GetRC
+//
+// Description: Convert to RC coordinates.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : MapPoint	: Point with RC coordinates.
+//
+// Remark(s)  : The returned value is only valid when the current point is 
+//              a valid map point. 
+//
+//----------------------------------------------------------------------------
+
+MapPoint OrthogonalPoint::GetRC(void)
+{
+	MapPoint	remap(m_point);
+
+	if (IsValid())
+	{
+		// Apply coordinate transformation
+		remap.xy2rc(m_point, g_mp_size);
+	}
+	else
+	{
+		// Invalid data
+		Assert(false);
+	}
+
+	return remap;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : OrthogonalPoint::IsValid
+//
+// Description: Test whether the point is valid (i.e. on the map).
+//
+// Parameters : -
+//
+// Globals    : g_mp_size
+//
+// Returns    : bool	: point is valid
+//
+// Remark(s)  : Apply wrapping first. 
+//
+//----------------------------------------------------------------------------
+
+bool OrthogonalPoint::IsValid(void)
+{
+	Normalise();
+
+	return (m_point.x >= 0) && (m_point.x < (2 * g_mp_size.x))	&&
+		   (m_point.y >= 0) && (m_point.y < g_mp_size.y)		&&
+#if !defined(_SMALL_MAPPOINTS)
+		   (m_point.z >= 0) && (m_point.z < g_mp_size.z)		&&
+#endif
+		   (((m_point.x + m_point.y) & 1) == 0);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : OrthogonalPoint::Move
+//
+// Description: Move the position of a point, and check whether it is still
+//              on the map.
+//
+// ParametersA: delta			: movement vector
+//
+// ParametersB: direction		: direction to move in
+//				count			: number of steps to move
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : The move is always applied - even when invalid.
+//
+//----------------------------------------------------------------------------
+
+void OrthogonalPoint::Move(MapPointData const & delta)
+{
+	m_point += MapPoint(delta);
+}
+
+//----------------------------------------------------------------------------
+
+void OrthogonalPoint::Move
+(
+	WORLD_DIRECTION const	direction,
+	size_t const			count
+)
+{
+	MapPointData	delta	= Step(direction);
+	delta.x	*= count;
+	delta.y	*= count;
+#if !defined(_SMALL_MAPPOINTS)
+	delta.z	*= count;
+#endif
+
+	m_point	+= MapPoint(delta);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : OrthogonalPoint::Normalise
+//
+// Description: Apply wrapping (when allowed) to bring the point coordinates
+//              in the "usual" range.
+//
+// Parameters : -
+//
+// Globals    : g_theWorld
+//				g_mp_size
+//
+// Returns    : -
+//
+// Remark(s)  : "Usual" range: 0 <= x < 2 * map width, 0 <= y < map height 
+//
+//----------------------------------------------------------------------------
+
+void OrthogonalPoint::Normalise(void)
+{
+	if (g_theWorld->IsXwrap())
+	{
+		while (m_point.x < 0)
+		{
+			m_point.x += 2 * g_mp_size.x;
+		}
+		while (m_point.x >= 2 * g_mp_size.x)
+		{
+			m_point.x -= 2 * g_mp_size.x;
+		}
+	}
+
+	if (g_theWorld->IsYwrap())
+	{
+		while (m_point.y < 0)
+		{
+			m_point.y += g_mp_size.y;
+		}
+		while (m_point.y >= g_mp_size.y)
+		{
+			m_point.y -= g_mp_size.y;
+		}
+	}
+
+	// There is no IsZwrap function, not even when !defined(_SMALL_MAPPOINTS).
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : OrthogonalPoint::Step
+//
+// Description: Convert a direction to an XY coordinate delta.
+//
+// Parameters : direction		: direction to move
+//
+// Globals    : -
+//
+// Returns    : MapPointData	: XY coordinate delta
+//
+// Remark(s)  : When the argument is not a valid direction, the returned delta
+//              is all 0.
+//			
+//----------------------------------------------------------------------------
+
+MapPointData OrthogonalPoint::Step
+(
+	WORLD_DIRECTION const	direction
+)
+{
+	switch (direction)
+	{
+	case NORTH:	
+		return MapPointData(0, -2);
+	case NORTHEAST:
+		return MapPointData(1, -1);
+	case EAST:
+		return MapPointData(2 , 0);
+	case SOUTHEAST:        
+		return MapPointData(1, 1);
+	case SOUTH:
+		return MapPointData(0, 2);
+	case SOUTHWEST:
+		return MapPointData(-1, 1);
+	case WEST:
+		return MapPointData(-2, 0);
+	case NORTHWEST:
+		return MapPointData(-1, -1);
+#if 0	// Not in WORLD_DIRECTION now, but could be used for space launches.
+	case UP:
+		return MapPointData(0, 0, 1);
+	case DOWN:
+		return MapPointData(0, 0, -1);
+#endif
+	default:
+		return MapPointData(0, 0);
+	}
+}
+
+#endif	// ACTIVISION_ORIGINAL

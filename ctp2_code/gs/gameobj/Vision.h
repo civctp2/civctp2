@@ -1,14 +1,48 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Map visibility handling 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragmas commented out
+// - Corrected strange vision behaviour at the top row.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef _VISION_H_
 #define _VISION_H_
 
@@ -34,6 +68,11 @@ class Vision
 {
 private:
 	
+//----------------------------------------------------------------------------
+// Do not change anything in the types or order of the following variable 
+// declarations. Doing so will break reading in of save files.
+// See the Serialize implementation for more details.
+//----------------------------------------------------------------------------
 	
 	sint16 m_width;
 	sint16 m_height;
@@ -41,6 +80,10 @@ private:
 	sint16 m_xyConversion;
 	BOOL   m_isYwrap;
 	BOOL   m_amOnScreen;
+	
+//----------------------------------------------------------------------------
+// Changing the order below this should not break anything.
+//----------------------------------------------------------------------------
 	
 	
 
@@ -61,10 +104,20 @@ private:
 
 	Vision *m_mergeFrom; 
 	BOOL m_revealedUnexplored; 
-	
+
+#if defined(ACTIVISION_ORIGINAL)	
 	void FillCircle(sint32 xc, sint32 yc, double r, CIRCLE_OP op,
 					DynamicArray<MapPoint> *removeadd = NULL);
 	BOOL CheckWrap(MapPoint &pos, const MapPoint &center);
+#else
+	void FillCircle
+	(
+		MapPoint const &			center, 
+		double const				radius, 
+		CIRCLE_OP					op,
+		DynamicArray<MapPoint> *	removeadd = NULL
+	);
+#endif
 	void DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op, 
 						DynamicArray<MapPoint> *removeadd);
 

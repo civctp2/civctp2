@@ -1,18 +1,48 @@
- 
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - pragma commented out
+// - unused function commmented out
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
- 
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __TILEDMAP_H__
 #define __TILEDMAP_H__
 
@@ -204,7 +234,9 @@ public:
 
 	sint32			DrawCityRadius(MapPoint &cpos, COLOR color,sint32 size=1);
 	sint32			DrawCityRadius1(MapPoint &cpos, COLOR color);
+#if defined(ACTIVISION_ORIGINAL)	// never used + wrong wrap detection used
 	sint32			DrawCityRadius2(MapPoint &cpos, COLOR color);
+#endif
 	sint32			PaintColoredTile(sint32 x, sint32 y, COLOR color);
 
 	void			ProcessLayerSprites(RECT *processRect, sint32 layer);

@@ -1,13 +1,37 @@
-
-//Scenarioeditor.cpp
-//Modified by Martin Gühmann to make the number 
-//of city styles you can place with the scenario
-//editor mod dependent.
-
-//Also implenmented a function changed the constructor
-//and changed another function to make shure that newly
-//created cities have the same size as displayed in the 
-//CityPopSpinner.
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Scenario editor
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Make the number of city styles you can place with the scenario editor mod
+//   dependent. By Martin Gühmann.
+// - Make sure that newly created cities have the size as displayed in the 
+//   CityPopSpinner. By Martin Gühmann.
+// - Corrected wrap handling.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3ui.h"
@@ -2484,6 +2508,7 @@ void ScenarioEditor::Cut()
 
 	Copy();
 
+#if defined(ACTIVISION_ORIGINAL)
 	sint32 x, y;
 	MapPoint cur, wrapped;
 	for(x = 0; x < m_regionWidth; x++) {
@@ -2498,6 +2523,21 @@ void ScenarioEditor::Cut()
 			}
 		}
 	}
+#else
+	// x and y are orthogonal coordinates now
+	for (sint32 y = 0; y < m_regionHeight; ++y)
+	{
+		for (sint32 x = (y & 1); x < (2 * m_regionWidth); x += 2)
+		{
+			OrthogonalPoint	cur(m_regionStart);
+			cur.Move(MapPointData((sint16) x, (sint16) y));
+			if (cur.IsValid())
+			{
+				g_theWorld->SmartSetTerrain(cur.GetRC(), TERRAIN_WATER_SHALLOW, 0);
+			}
+		}
+	}
+#endif
 }
 
 void ScenarioEditor::CutRegion(aui_Control *control, uint32 action, uint32 data, void *cookie)

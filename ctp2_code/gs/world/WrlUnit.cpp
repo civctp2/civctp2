@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handling of impact of units on the world
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Wrap computation corrected.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "XY_Coordinates.h"
@@ -631,6 +650,7 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 	}
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 BOOL World::AdjacentToZOCUnit(const MapPoint &cpos, sint32 player, const Army &notThisArmy, const Unit &notThisCity)
 {
 	static MapPoint pos;
@@ -799,6 +819,141 @@ void World::GetAdjacentUnits(UnitDynamicArray &units, const MapPoint &cpos)
 		}
 	}
 }
+
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : World::AdjacentToZOCUnit
+//
+// Description: Check whether a position is restricted by a ZoC 
+//              (zone of control) of a player.
+//
+// Parameters : cpos			: position to check
+//				player			: player to generate the ZoC
+//				notThisArmy		: army to skip when determining ZoC
+//				notThisCity		: city to skip when determining ZoC
+//
+// Globals    : -
+//
+// Returns    : BOOL			: cpos is under ZoC by player
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+BOOL World::AdjacentToZOCUnit(const MapPoint &cpos, sint32 player, const Army &notThisArmy, const Unit &notThisCity)
+{
+	for (int dir = 0; dir <= NOWHERE; ++dir)
+	{
+		OrthogonalPoint	testXY(cpos);
+		testXY.Move(WORLD_DIRECTION(dir));
+		if (testXY.IsValid())
+		{
+			MapPoint const	wpos	= testXY.GetRC();
+			Unit			city	= m_map[wpos.x][wpos.y]->GetCity();
+
+			if (city.m_id == 0) 
+			{
+				CellUnitList * units	= m_map[wpos.x][wpos.y]->m_unit_army;
+				if (units && units->GetOwner() == player && units->CanEnter(cpos)) 
+				{
+					for (sint32 i = units->Num() - 1; i >= 0; i--) 
+					{
+						if (!units->Access(i).IsNoZoc() && units->Access(i).GetArmy() != notThisArmy)
+							return TRUE;
+					}
+				}
+			}
+			else if (city != notThisCity && 
+			         city.GetOwner() == player && 
+			         g_theWorld->CanEnter(cpos, city.GetMovementType())
+					) 
+			{
+				return TRUE;
+			} 
+		}
+	}
+
+	return FALSE;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : World::GetAdjacentCities
+//
+// Description: Create a list of cities that are next to a position.
+//
+// Parameters : cpos		: position to check
+//
+// Globals    : -
+//
+// Returns    : city_list	: list of cities adjacent to cpos
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+void World::GetAdjacentCities(UnitDynamicArray &city_list, const MapPoint &cpos)
+{
+	city_list.Clear();
+
+	for (int dir = 0; dir <= NOWHERE; ++dir)
+	{
+		OrthogonalPoint testXY(cpos);
+		testXY.Move(WORLD_DIRECTION(dir));
+		if (testXY.IsValid())
+		{
+			MapPoint const	wpos		= testXY.GetRC();
+			Cell * 			cell		= m_map[wpos.x][wpos.y];
+			Unit			nth_city	= cell->GetCity();
+			if (nth_city.m_id != 0) 
+			{
+				city_list.Insert(nth_city);
+			}
+		}
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : World::GetAdjacentUnits
+//
+// Description: Create a list of armies that are next to a position.
+//
+// Parameters : cpos		: position to check
+//
+// Globals    : -
+//
+// Returns    : units		: list of armies adjacent to cpos
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+void World::GetAdjacentUnits(UnitDynamicArray &units, const MapPoint &cpos)
+{
+	units.Clear();
+
+	for (int dir = 0; dir <= NOWHERE; ++dir)
+	{
+		OrthogonalPoint testXY(cpos);
+		testXY.Move(WORLD_DIRECTION(dir));
+		if (testXY.IsValid())
+		{
+			MapPoint const	wpos		= testXY.GetRC();
+			Cell * 			cell		= m_map[wpos.x][wpos.y];
+			if(cell->UnitArmy()) 
+			{
+				for (sint32 i = 0; i < cell->UnitArmy()->Num(); i++) 
+				{
+					units.Insert(cell->UnitArmy()->Access(i));
+				}
+			}
+		}
+	}
+}
+
+#endif // ACTIVISION_ORIGINAL
 
 void World::RecalculateZOC()
 {
