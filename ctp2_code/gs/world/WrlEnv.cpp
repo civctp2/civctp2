@@ -1,14 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : part of the World class implementation
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented memory leak report (not an actual leak).
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -796,9 +814,7 @@ void World::CutImprovements(const MapPoint &point)
 											k_MASK_ENV_CANAL_TUNNEL));
 
 	
-
-	static DynamicArray<Installation> instArray;
-	instArray.Clear();
+	DynamicArray<Installation>	instArray;
 	if(g_theInstallationTree->GetAt(point, instArray)) {
 		sint32 i;
 		for(i = instArray.Num() - 1; i >= 0; i--) {

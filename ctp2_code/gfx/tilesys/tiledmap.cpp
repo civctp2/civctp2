@@ -30,6 +30,7 @@
 //   last visit if the fog of war is toggled off. - Dec 24th 2004 - Martin Gühmann
 // - With fog of war off the current city sprites and unit sprites at the
 //   right position are displayed. - Dec. 25th 2004 - Martin Gühmann
+// - Improved destructor (useless code removed, corrected delete [])
 //
 //----------------------------------------------------------------------------
 
@@ -347,64 +348,20 @@ TiledMap::~TiledMap()
 {
 	DeleteGrid();
 
-	if (m_font) {
-		g_c3ui->UnloadBitmapFont(m_font);
-		m_font = NULL;
-	}
-	if (m_mapSurface != NULL) {
-		delete m_mapSurface;
-		m_mapSurface = NULL;
-	}
-
-	if (m_mixDirtyList != NULL) {
-		delete m_mixDirtyList;
-		m_mixDirtyList = NULL;
-	}
-
-	if (m_oldMixDirtyList != NULL) {
-		delete m_oldMixDirtyList;
-		m_oldMixDirtyList = NULL;
-	}
-
-	if (m_mapDirtyList != NULL) {
-		delete m_mapDirtyList;
-		m_mapDirtyList = NULL;
-	}
-
-	
-	MapPoint		*size;
-	MapPoint		pos;
-
-	if (g_theWorld != NULL) {
-		size = g_theWorld->GetSize();
-		
-		sint32			width = size->x;
-		sint32			height = size->y;
-
-		
-		
-
-		
-		
-		
-
-		
-		
-		
-	}
-
-
-
-	if(	m_localVision != NULL)
+	if (m_font)
 	{
-		delete m_localVision;
-		m_localVision = NULL;
+		g_c3ui->UnloadBitmapFont(m_font);
 	}
-
-	if (m_tileSet) {
-		delete m_tileSet;
-		m_tileSet = NULL;
-	}
+	delete m_mapSurface;
+	delete m_mixDirtyList;
+	delete m_oldMixDirtyList;
+	delete m_mapDirtyList;
+	delete m_localVision;
+	delete m_tileSet;
+	// m_surface	    not deleted: reference only			
+	// m_surfBase       not deleted: reference only
+	// m_overlayRec     not deleted: reference only
+	// m_lockedSurface  not deleted: reference only	
 }
 
 sint32 TiledMap::Initialize(RECT *viewRect)
@@ -503,12 +460,11 @@ void TiledMap::InitGrid(sint32 maxPixelsPerGridRectX, sint32 maxPixelsPerGridRec
 void TiledMap::DeleteGrid(void)
 {
 	for (sint32 i=0; i<m_gridHeight; i++) {
-		if (m_gridRects[i])
-			delete m_gridRects[i];
+		delete m_gridRects[i];
 	}
 
-	if (m_gridRects)
-		delete m_gridRects;
+	delete [] m_gridRects;
+	m_gridRects = NULL;
 }
 
 

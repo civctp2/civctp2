@@ -41,6 +41,8 @@
 // - Function by Solver: IsOnSameContinent - Checks if two locations are 
 //   on same continent.
 // - Added AddSlaves function modelled after the AddPops function.
+// - Prevented crash with a missing Slic file.
+// - Memory leaks repaired.
 //
 //----------------------------------------------------------------------------
 
@@ -323,6 +325,7 @@ void SlicEngine::Cleanup()
 	sint32 i;
 	for(i = 0; i < TRIGGER_LIST_MAX; i++) {
 		if(m_triggerLists[i]) {
+			m_triggerLists[i]->DeleteAll();
 			delete m_triggerLists[i];
 		}
 	}
@@ -344,8 +347,11 @@ void SlicEngine::Cleanup()
 	if(m_disabledClasses)
 		delete m_disabledClasses;
 
-	if(m_uiExecuteObjects)
+	if (m_uiExecuteObjects)
+	{
+		m_uiExecuteObjects->DeleteAll();
 		delete m_uiExecuteObjects;
+	}
 
 	if(m_constHash)
 		delete m_constHash;
@@ -367,6 +373,7 @@ void SlicEngine::Cleanup()
 	}
 
 	if(m_contextStack) {
+		m_contextStack->DeleteAll();
 		delete m_contextStack;
 	}
 
@@ -2193,13 +2200,11 @@ void SlicEngine::RunDiscoveryTradedTriggers(sint32 pl1, sint32 pl2, AdvanceType 
 
 void SlicEngine::RunUITriggers(const MBCHAR *controlName)
 {
-	if(!this)
-		return;
-
 	DPRINTF(k_DBG_UI, ("SLIC: control %s used\n", controlName));
-	if(!controlName)
-		return;
-	SlicUITrigger *trig = m_uiHash->Access(controlName);
+
+	SlicUITrigger * trig = 
+		(controlName && m_uiHash) ? m_uiHash->Access(controlName) : NULL;
+
 	if(trig) {
 		SlicSegment *seg = trig->GetSegment();
 		if(seg && seg->IsEnabled()) {

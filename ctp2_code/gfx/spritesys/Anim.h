@@ -1,16 +1,37 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Animation handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired funny combination of protected data with non-virtual destructor.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __ANIM_H__
 #define __ANIM_H__
 
@@ -35,7 +56,7 @@ class Anim
 {
 public:
 	Anim();
-	~Anim();
+	virtual ~Anim();
 
 	uint16		GetType(void) { return m_type; }
 	uint16		GetNumFrames(void) { return m_numFrames; }

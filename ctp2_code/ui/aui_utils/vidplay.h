@@ -20,23 +20,31 @@
 // _MSC_VER		
 // - Compiler version (for the Microsoft C++ compiler only)
 //
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
-//       1200 are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Multiple include guard (VIDPLAY_H) added.
+// - Changed string handling to avoid using deprecated functions.
 //
 //----------------------------------------------------------------------------
 
-
 #ifndef VIDPLAY_H
 #define VIDPLAY_H
+
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+#include <string>           // std::basic_string
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+class	CBaseVideoPlayer;
+class CDVDPlayer;
+class CFilePlayer;
 
 typedef enum {
     Uninitialized = 0, Stopped, Paused, Playing, Scanning
@@ -68,11 +76,17 @@ public:
     BOOL    Play(void) ;
     BOOL    Pause(void) ;
     BOOL    Stop(void) ;
-    inline  void    SetFileName(LPCTSTR lpszFileName)   { lstrcpy(m_achFileName, lpszFileName) ; } ;
+    void    SetFileName(LPCTSTR lpszFileName)
+    {
+        m_achFileName.assign(lpszFileName);
+    };
     inline  BOOL    IsGraphReady(void)                  { return (Uninitialized != m_eState) ; } ;
     inline  PLAYER_STATE GetState(void)                 { return m_eState ; } ;
     inline  void    SetColorKey(DWORD dwColorKey)       { m_dwColorKey = dwColorKey ; } ;
-    inline  LPCTSTR GetFileName(void)                   { return m_achFileName ; } ;
+    LPCTSTR GetFileName(void) const	
+    {
+        return m_achFileName.c_str();
+    };
     
 protected:
     virtual void    ReleaseInterfaces(void) ;
@@ -85,9 +99,8 @@ protected:
     IGraphBuilder  *m_pGraph ;        
     
 private:    
-    PLAYER_STATE    m_eState ;        
-    TCHAR           m_achFileName[MAX_PATH] ; 
-    
+    PLAYER_STATE    m_eState ;    
+    std::basic_string<TCHAR>	m_achFileName;
     IMediaControl  *m_pMC ;           
     IMediaEventEx  *m_pME ;           
     

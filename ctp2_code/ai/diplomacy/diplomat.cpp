@@ -3779,7 +3779,8 @@ void Diplomat::ComputeCurrentStrategy()
 
 
 const StrategyRecord & Diplomat::GetCurrentStrategy() const {
-	Assert(m_strategy.GetIndex() >= 0);
+      // Relaxed assert (when loading a file)
+	Assert(m_strategy.GetIndex() >= -1);
 	return m_strategy;
 }
 

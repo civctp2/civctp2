@@ -1,18 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Video player
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Changed string handling to avoid using deprecated functions.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
+
+#define STRSAFE_NO_DEPRECATE
 
 #include "streams.h"
 
@@ -24,10 +40,9 @@
 
 
 CBaseVideoPlayer::CBaseVideoPlayer()
+:   m_achFileName    ()
 {
     m_eState = Uninitialized ;
-    ZeroMemory(m_achFileName, sizeof(m_achFileName)) ;
-    
     m_pGraph = NULL ;
     m_pMC = NULL ;
     m_pME = NULL ;
@@ -210,6 +225,7 @@ HRESULT CBaseVideoPlayer::GetColorKey(DWORD *pdwColorKey)
 
 
 CDVDPlayer::CDVDPlayer()
+:	CBaseVideoPlayer  ()
 {
     DbgLog((LOG_TRACE, 3, TEXT("CDVDPlayer c-tor entered"))) ;
     
@@ -328,14 +344,19 @@ HRESULT CDVDPlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWSU
     }
     if (S_FALSE == hr)  
     {
-        if (0 == GetStatusText(&Status, achBuffer, sizeof(achBuffer)))
-        {
-            lstrcpy(achBuffer, TEXT("An unknown error has occurred")) ;
+        std::basic_string<TCHAR>   l_Text;
+        if (GetStatusText(&Status, achBuffer, sizeof(achBuffer)))
+	    {
+            l_Text.assign(achBuffer);
         }
-        lstrcat(achBuffer, TEXT("\n\nDo you still want to continue?")) ;
-        if (IDNO == MessageBox(hWndApp, achBuffer, TEXT("Warning"), MB_YESNO))
+        else
         {
-            return E_FAIL ;
+            l_Text.assign(TEXT("An unknown error has occurred"));
+        }
+        l_Text.append(TEXT("\n\nDo you still want to continue?"));
+        if (IDNO == MessageBox(hWndApp, l_Text.c_str(), TEXT("Warning"), MB_YESNO))
+        {
+            return E_FAIL;
         }
     }
     
@@ -625,6 +646,7 @@ DWORD CDVDPlayer::GetStatusText(AM_DVD_RENDERSTATUS *pStatus,
 
 
 CFilePlayer::CFilePlayer(void)
+:   CBaseVideoPlayer   ()
 {
     DbgLog((LOG_TRACE, 3, TEXT("CFilePlayer c-tor entered"))) ;
     

@@ -1,13 +1,37 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Text base class
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialised all members in the default constructor, to prevent a crash 
+//   in the destructor.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#pragma once
+#endif
 
 #ifndef __AUI_TEXTBASE_H__
 #define __AUI_TEXTBASE_H__
@@ -75,12 +99,11 @@ public:
 		MBCHAR *ldlBlock,
 		const MBCHAR *text );
 	aui_TextBase(
-		const MBCHAR *text,
+		const MBCHAR *text = NULL,
 		uint32 maxLength = 0 );
 	virtual ~aui_TextBase();
 
 protected:
-	aui_TextBase() {}
 	AUI_ERRCODE InitCommonLdl(
 		MBCHAR *ldlBlock,
 		const MBCHAR *text );

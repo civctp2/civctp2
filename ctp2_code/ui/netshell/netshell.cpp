@@ -1,13 +1,30 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Network (multiplayer) user interface
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented memory leaks and debug exit popups.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -80,12 +97,16 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 	if ( bg )
 	{
 		
-		aui_Image *image = g_ui->LoadImage(bg->GetImage()->GetFilename());
-
-		g_ui->SetBackgroundImage(
-			image,
-			( g_ui->Width() - image->TheSurface()->Width() ) / 2,
-			( g_ui->Height() - image->TheSurface()->Height() ) / 2 );
+		aui_Image * image    = g_ui->LoadImage(bg->GetImage()->GetFilename());
+		aui_Image *	oldImage = g_ui->SetBackgroundImage
+			(image,
+			 (g_ui->Width() - image->TheSurface()->Width()) / 2,
+		     (g_ui->Height() - image->TheSurface()->Height()) / 2
+			);
+		if (oldImage)
+		{
+			g_ui->UnloadImage(oldImage);
+		}
 	}
 
 	
@@ -560,8 +581,9 @@ NetShell::~NetShell()
 
 	if ( m_bg )
 	{
+		aui_Image *	mpBackgroundImage = g_ui->SetBackgroundImage(NULL);
+		g_ui->UnloadImage(mpBackgroundImage);
 		delete m_bg;
-		m_bg = NULL;
 	}
 }
 

@@ -41,6 +41,7 @@
 //   prevent it appearing inappropriately in PBEM/hotseat games
 //   (J Bytheway 2005/01/02)
 // - Synchronise the turn count when adding a new civilisation.
+// - Prevented memory leak reports (not actual leaks)
 //
 //----------------------------------------------------------------------------
 
@@ -1067,9 +1068,7 @@ Unit Player::CreateUnit(const sint32 t,
 
 		return u;
 	} else {
-
-		static UnitDynamicArray revealed;
-		revealed.Clear();
+        UnitDynamicArray	revealed;
 
 		sint32 r = u.SetPosition(pos, revealed, revealed_unexplored); 
 
@@ -1820,10 +1819,9 @@ void Player::ResetAllMovement()
 {
     
     sint32 i; 
-    static UnitDynamicArray dead; 
-    dead.Clear();
+    UnitDynamicArray   dead;
 
-	if(g_network.IsHost()) {
+    if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 	}
     
@@ -1972,9 +1970,7 @@ void Player::BeginTurnAllCities()
 
 {
     int i, n; 
-    static UnitDynamicArray dead;
-	dead.Clear();
-
+    UnitDynamicArray    dead;
 	
 	m_pop_science = 0;
 
@@ -2727,9 +2723,7 @@ void Player::EndTurn()
 		g_network.Block(m_owner);
 	}
     
-    
-    static UnitDynamicArray tmpUnits;
-    tmpUnits = *m_all_units;
+    UnitDynamicArray	tmpUnits(*m_all_units);
 	n = tmpUnits.Num();
 	for(i = 0; i < n; i++) {
 		
@@ -4441,9 +4435,7 @@ void Player::GiveAdvance(PLAYER_INDEX recipient, AdvanceType adv, CAUSE_SCI caus
 
 void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 	{
-	static UnitDynamicArray revealed;
-	revealed.Clear();
-
+    UnitDynamicArray    revealed;
 	MapPoint	p ;
     BOOL revealed_unexplored; 
 	Unit	u = m_all_units->Get(unit_idx).m_id ;
@@ -5536,9 +5528,9 @@ void Player::BreakAllTreaties(PLAYER_INDEX with)
 void Player::BeginTurnAgreements()
 {
 	sint32 i, n = m_agreed->Num();
-	static DynamicArray<Agreement> agreed; 
-	agreed = *m_agreed;
-	for(i = n - 1; i >= 0; i--) {
+    DynamicArray<Agreement>   agreed(*m_agreed);
+
+    for(i = n - 1; i >= 0; i--) {
 		if(!g_theAgreementPool->IsValid(agreed[i]))
 			continue;
 		Agreement ag = agreed.Access(i);

@@ -1,36 +1,56 @@
+/*----------------------------------------------------------------------------
+ *
+ * Project      : Call To Power 2
+ * File type    : Yacc input file.
+ * Description  : Slic syntax parser
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Disclaimer
+ *
+ * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+ *
+ * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * Source Code Project. Contact the authors at ctp2source@apolyton.net.
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Modifications from the original Activision code:
+ * 
+ * - Addition by Martin Gühmann to allow:
+ *   - Slic database access                                                                            
+ *   - Slic database size access
+ * - Exponentiation operator '**' added.
+ * - Bitwise and '&' operator added.
+ * 
+ *----------------------------------------------------------------------------
+ */
 %{
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Defines what valid slic syntax is.
-//                This file slic.y is compiled to y.tab.c
-//                and therefore you find this text in both files.
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.                                                              
-//
-//----------------------------------------------------------------------------
-//                                                                                                                                                                         
-// Compiler flags
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Addtion by Martin Gühmann to allow:
-//   - Slic database access                                                                            
-//   - Slic database size access
-// - Exponetiation operator '**' added.
-// - Bitwise and '&' operator added
-//
-//----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------
+ *
+ * Project      : Call To Power 2
+ * File type    : C source
+ * Description  : Slic syntax parser
+ * CAUTION      : This file is generated. Do not edit it. Edit slic.y instead.
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Disclaimer
+ *
+ * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+ *
+ * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * Source Code Project. Contact the authors at ctp2source@apolyton.net.
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Compiler flags
+ * 
+ * _DEBUG
+ * Set when generating the debug version.
+ *
+ *----------------------------------------------------------------------------
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -87,7 +107,8 @@ int include_stack_ptr = 0;
 %left AND OR '&'
 %left GT LT GTE LTE EQ NEQ
 %left '-' '+'
-%left '*' '/' '%' EXP
+%left '*' '/' '%' 
+%left EXP
 %nonassoc UMINUS '!'
 
 %%
@@ -343,12 +364,8 @@ triggercondition: '(' expression ')' { slicif_add_op(SOP_TRIG); }
 expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 	|   expression '-' expression { slicif_add_op(SOP_SUB); }
 	|   expression '*' expression { slicif_add_op(SOP_MULT); }
-	|   expression EXP expression { 
-										slicif_add_op(SOP_EXP); 
-									}
-	|   expression '&' expression { 
-										slicif_add_op(SOP_BAND); 
-									}
+	|   expression EXP expression { slicif_add_op(SOP_EXP); }
+	|   expression '&' expression { slicif_add_op(SOP_BAND); }
 	|   expression '/' expression { slicif_add_op(SOP_DIV); }
 	|   expression '%' expression { slicif_add_op(SOP_MOD); }
 	|   expression LT  expression { slicif_add_op(SOP_LT); }
@@ -369,53 +386,34 @@ expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 	|   arrayref {slicif_add_op(SOP_AINDX); }
 	|   arrayref REF NAME { slicif_add_op(SOP_PUSHAM, $1.name, $3.name); }
 	|   NAME REF '#' { slicif_add_op(SOP_ASIZE, $1.name); }
-/*	    Original code: */
-/*	|   DBREF '(' NAME ')' { slicif_add_op(SOP_PUSHI, slicif_find_db_index($1.dbptr, $3.name)); }*/
-/*	|   DBREF '(' NAME ')' REF NAME { slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name)); }*/
-/*	|   DBREF '(' expression ')' REF NAME { slicif_add_op(SOP_PUSHI, slicif_find_db_value_by_index($1.dbptr, $3.val, $6.name)); }*/
-/*	|   NAME '[' expression ']' REF NAME { slicif_add_op(SOP_PUSHAM, $1.name, $6.name); }*/
-/*	    New original code: */
-/*	|   DBREF '(' NAME ')' { slicif_add_op(SOP_DBNAME, $1.dbptr, $3.name); }*/
-/*	|   DBREF '(' expression ')' {slicif_add_op(SOP_DB, $1.dbptr); }*/
-/*	|   DBREF '(' expression ')' REF NAME { slicif_add_op(SOP_DBREF, $1.dbptr, $6.name); }*/
-/*	|   DBREF '(' ')' {slicif_add_op(SOP_DBSIZE, $1.dbptr); }*/
-
-/*	    New code: */
-	|   DBREF '(' NAME ')' { 
-//Added by Martin Gühmann
-	if(slicif_is_name($1.dbptr, $3.name) < 0){
-		slicif_add_op(SOP_DBNAME, $1.dbptr, $3.name);
-	}
-	else{
-		slicif_add_op(SOP_PUSHI, slicif_find_db_index($1.dbptr, $3.name));
-	}
-}
-
-	|   DBREF '(' NAME ')' REF NAME { 
-//Added by Martin Gühmann
-	if(slicif_is_name($1.dbptr, $3.name) < 0){
-		slicif_add_op(SOP_DBNAMEREF, $1.dbptr, $3.name, $6.name);
-	}
-	else{
-		slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name));
-	}
-}
-
-	|   DBREF '(' expression ')' {
-	slicif_add_op(SOP_DB, $1.dbptr); 
-}
-
-	|   DBREF '(' expression ')' REF NAME { 
-//Added by Martin Gühmann
-	slicif_add_op(SOP_DBREF, $1.dbptr, $6.name); 
-}
-
-	|   DBREF '(' ')' {
-	slicif_add_op(SOP_DBSIZE, $1.dbptr); 
-}
-
+	|   DBREF '(' NAME ')' 
+	    { 
+	        if (slicif_is_name($1.dbptr, $3.name) < 0)
+			{
+		        slicif_add_op(SOP_DBNAME, $1.dbptr, $3.name);
+	        }
+	        else
+			{
+		        slicif_add_op(SOP_PUSHI, slicif_find_db_index($1.dbptr, $3.name));
+	        }
+        }
+	|   DBREF '(' NAME ')' REF NAME 
+	    { 
+            if (slicif_is_name($1.dbptr, $3.name) < 0)
+			{
+		        slicif_add_op(SOP_DBNAMEREF, $1.dbptr, $3.name, $6.name);
+	        }
+	        else
+			{
+		        slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name));
+	        }
+        }
+	|   DBREF '(' expression ')' { slicif_add_op(SOP_DB, $1.dbptr); }
+	|   DBREF '(' expression ')' REF NAME { slicif_add_op(SOP_DBREF, $1.dbptr, $6.name); }
+	|   DBREF '(' ')' {	slicif_add_op(SOP_DBSIZE, $1.dbptr); }
 /*	|   NAME '[' expression ']' REF NAME { slicif_add_op(SOP_PUSHAM, $1.name, $6.name); }*/
 	;
+
 arrayref: NAME { $$.name = $1.name; slicif_add_op(SOP_PUSHA, $1.name); } '[' expression ']' 
 	;
 %%

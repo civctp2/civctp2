@@ -1,13 +1,34 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : DirectX user interface handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// __AUI_USE_DIRECTX__
+// - When not set, this file does not do anything at all.
+//
+// __AUI_USE_DIRECTMEDIA__
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented crash
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -108,13 +129,12 @@ AUI_ERRCODE aui_DirectUI::InitCommon()
 
 AUI_ERRCODE aui_DirectUI::DestroyDirectScreen(void)
 {
-	
-	
-	
-	((aui_DirectSurface *)m_primary)->DDS()->Release();
-	
-	delete m_primary;
-	m_primary = NULL;
+    if (m_primary)
+    {
+    	((aui_DirectSurface *)m_primary)->DDS()->Release();
+		delete m_primary;
+	    m_primary = NULL;
+    }
 
 	return AUI_ERRCODE_OK;
 }
@@ -369,4 +389,4 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 }
 
 
-#endif 
+#endif  // __AUI_USE_DIRECTX__ 

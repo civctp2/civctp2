@@ -1,9 +1,30 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Turn display
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Crash prevented.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -200,6 +221,11 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 	
 	if(g_selected_item == NULL)
 		return AUI_ERRCODE_OK;
+
+	if (NULL == g_player)
+	{
+		return AUI_ERRCODE_OK;
+	}
 
 	if(!g_player[g_selected_item->GetVisiblePlayer()]) {
 		return AUI_ERRCODE_OK;

@@ -1,3 +1,30 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Database lexer (tokenizer/scanner)
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired memory leaks.
+// - Prevented files staying open.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "DBLexer.h"
@@ -15,7 +42,11 @@ extern "C" int dbllex();
 extern "C" int g_dblexerLineNumber;
 extern "C" void dblrestart(FILE *file);
 
-#define k_MAX_TOKEN_STRING 256
+namespace
+{
+	size_t const	SIZE_HASH_TABLE	= 64;
+	sint32 const	TOKEN_UNDEFINED	= 0;
+}
 
 DBToken::DBToken(const char *name, sint32 value)
 {
@@ -26,10 +57,7 @@ DBToken::DBToken(const char *name, sint32 value)
 
 DBToken::~DBToken()
 {
-	if(m_name) {
-		delete [] m_name;
-		m_name = NULL;
-	}
+	delete [] m_name;
 }
 
 
@@ -38,7 +66,7 @@ DBToken::~DBToken()
 DBLexer::DBLexer(const C3DIR & c3dir, const char *file)
 {
 	
-	m_tokenHash = new StringHash<DBToken>(64);
+	m_tokenHash = new StringHash<DBToken>(SIZE_HASH_TABLE);
 
 	strcpy(m_filename, file);
 	m_file = c3files_fopen(c3dir, m_filename, "r");
@@ -58,7 +86,7 @@ DBLexer::DBLexer(const C3DIR & c3dir, const char *file)
 	}
 
 	g_dblexerLineNumber = 1;
-	m_nextToken = 0;
+	m_nextToken = TOKEN_UNDEFINED;
 	m_whichTokenText = 0;
 
 	
@@ -68,15 +96,17 @@ DBLexer::DBLexer(const C3DIR & c3dir, const char *file)
 
 DBLexer::~DBLexer()
 {
-	if(m_tokenHash) {
-		delete m_tokenHash;
-	}
+	delete m_tokenHash;
 
 	if(m_customTokenStack) {
 		m_customTokenStack->DeleteAll();
 		delete m_customTokenStack;
 	}
-	
+
+	if (m_file)
+	{
+		fclose(m_file);
+	}	
 }
 
 void DBLexer::SetTokens(char **tokens, sint32 maxToken)
@@ -94,7 +124,7 @@ void DBLexer::SetTokens(char **tokens, sint32 maxToken)
 	
 	
 	delete m_tokenHash;
-	m_tokenHash = new StringHash<DBToken>(64);
+	m_tokenHash = new StringHash<DBToken>(SIZE_HASH_TABLE);
 
 
 	
@@ -109,14 +139,11 @@ void DBLexer::RestoreTokens()
 	
 	
 	delete m_tokenHash;
-	m_tokenHash = new StringHash<DBToken>(64);
+	m_tokenHash = new StringHash<DBToken>(SIZE_HASH_TABLE);
 
 	DBCustomTokens *old = m_customTokenStack->RemoveTail();
 	Assert(old);
-	if(old) {
-		delete old;
-	}
-
+	delete old;
 	
 	if(m_customTokenStack->GetTail()) {
 		DBCustomTokens *cust = m_customTokenStack->GetTail();
@@ -130,9 +157,10 @@ void DBLexer::RestoreTokens()
 
 sint32 DBLexer::GetToken()
 {
-	if(m_atEnd)
-		return 0;
-
+	if (m_atEnd)
+	{
+		return TOKEN_UNDEFINED;
+	}
 	
 	
 
@@ -157,10 +185,7 @@ sint32 DBLexer::GetToken()
 		m_tokenText[nextTokenText][strlen(m_tokenText[nextTokenText]) - 1] = 0;
 	}
 
-	if(m_nextToken == 0) { 
-		fclose(m_file);
-		m_atEnd = TRUE;
-	}
+	m_atEnd = (TOKEN_UNDEFINED == m_nextToken);
 
 	DBToken *dbtok;
 
@@ -222,6 +247,7 @@ bool DBLexer::GetFileAssignment(char *&filename)
 	if(tok != k_Token_String)
 		return false;
 
+	delete [] filename;
 	filename = new char[strlen(m_tokenText[m_whichTokenText]) + 1];
 	strcpy(filename, m_tokenText[m_whichTokenText]);
 	return true;

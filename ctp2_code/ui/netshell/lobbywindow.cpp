@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
+// - Memory leak report prevented.
 //
 //----------------------------------------------------------------------------
 
@@ -777,8 +778,8 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 
 	ns_PlayerListBox *listbox = (ns_PlayerListBox *)control;
 
-	static tech_WLList<sint32> justSelectedList;
-	static tech_WLList<sint32> justDeselectedList;
+	tech_WLList<sint32>	justSelectedList;
+	tech_WLList<sint32> justDeselectedList;
 	sint32 index;
 
 	listbox->WhatsChanged(justSelectedList,justDeselectedList);
@@ -816,6 +817,9 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 		}
 	}
 
+	justSelectedList.DeleteAll();
+	justDeselectedList.DeleteAll();
+
 	aui_Switch *s;
 	if(!chatbox->GetPlayer() || chatbox->GetPlayer()->IsMe()) {
 
@@ -824,6 +828,7 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 		s->SetState( k_PP_PUBLIC );
 		ms->SetState(0);
 	}
+
 }
 
 

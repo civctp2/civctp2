@@ -1,15 +1,29 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Background screen handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented crash
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -262,7 +276,8 @@ void Background::MouseMoveOver(aui_MouseEvent *data)
 
 
     MapPoint tmp;
-    if (g_tiledMap->GetMouseTilePos(tmp)){
+	if (g_tiledMap && g_tiledMap->GetMouseTilePos(tmp))
+	{
         m_current_mouse_tile = tmp; 
     }
 
@@ -491,4 +506,3 @@ void Background::MouseRDoubleClickInside(aui_MouseEvent *data)
     m_lbutton_isdown = TRUE; 
 
 }
-

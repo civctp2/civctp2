@@ -1,19 +1,37 @@
-/*
-	fix for japanese by t.s. 2003.12
-		fix Token::Next() for japanese sjis code
-*/
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Token handling for the old style database files.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// __MAKESPR__
+// __TILETOOL__
+//
+// _JAPANESE
+// - Use SJIS token parsing when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - fix for japanese by t.s. 2003.12
+//   fix Token::Next() for japanese sjis code
+// - Prevented crash on missing input file. 
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -687,88 +705,94 @@ return TRUE;
 
 
 
-Token::Token(
-			 char *fn,
-			 C3DIR	dir) 
-			 
+Token::Token
+(
+    char *      fn, 
+    C3DIR       dir
+) 
+:	m_fin		        (c3files_fopen(dir, fn, "r")),
+    m_len               (0),
+	m_index             (0),
+	m_val_string_len    (0), 
+	m_current_type		(TOKEN_UNKNOWN), 
+	m_val_number        (0),
+	m_cur               (' '),
+    m_num_it            (0),
+	m_imported_tokens   (0),
+	m_dir				(dir),
+	m_importFile		(NULL),
+	m_savedLineNumber   (0),
+	m_savedFin			(NULL)
 {
 	Assert(ValidateAllTokens()); 
 	
 	strcpy(m_filename, fn);
-	
-	
-	
-	
-	m_fin = c3files_fopen(dir, m_filename, "r");
-	m_dir = dir;
-	
-	if (!m_fin) { 
-		c3errors_ErrorDialog (ErrStr(), "Could not open %s", m_filename); 
-		g_abort_parse = TRUE; 
-		return;
+
+    if (m_fin)
+	{
+		g_parse_line		= 0;
+		g_saved_parse_line	= 0;
+		Next();
 	}
-	
-	m_index = 0; 
-	m_len = 0; 
-	g_parse_line = 0;
-	g_saved_parse_line = 0;
-	m_cur = ' '; 
-	m_current_type = TOKEN_UNKNOWN; 
-	m_num_it = 0; 
-	m_imported_tokens = NULL;
-
-	m_importFile = NULL;
-	m_savedFin = NULL;
-
-	Next(); 
-	
+	else
+	{
+		c3errors_ErrorDialog("Token.cpp", "Could not open %s", m_filename); 
+		g_abort_parse		= TRUE; 
+	}
 }
 
 
-Token::Token(
-			 char *fn,
-			 sint32 n, 
-			 TokenData *it,
-			 C3DIR	dir) 
-			 
+Token::Token
+(
+	 char *         fn,
+	 sint32         n, 
+	 TokenData *    it,
+	 C3DIR	        dir
+) 
+:	m_fin		        (c3files_fopen(dir, fn, "r")),
+    m_len               (0),
+	m_index             (0),
+	m_val_string_len    (0), 
+	m_current_type		(TOKEN_UNKNOWN), 
+	m_val_number        (0),
+	m_cur               (' '),
+    m_num_it            (n),
+	m_imported_tokens   (it),
+	m_dir				(dir),
+	m_importFile		(NULL),
+	m_savedLineNumber   (0),
+	m_savedFin			(NULL)
 {
 	Assert(ValidateAllTokens()); 
 	
 	strcpy(m_filename, fn);
 	
-	
-	
-	
-	m_fin = c3files_fopen(dir, m_filename, "r");
-	m_dir = dir;
-
-	if (!m_fin) { 
-		c3errors_ErrorDialog ("Token.cpp", "Could not open %s", m_filename); 
-		g_abort_parse = TRUE; 
-		return;
+	if (m_fin)
+	{
+		g_parse_line		= 0;
+		g_saved_parse_line	= 0;
+		Next();
 	}
-	
-	m_index = 0; 
-	m_len = 0; 
-	g_parse_line = 0;
-	g_saved_parse_line = 0;
-	m_cur = ' '; 
-	m_current_type = TOKEN_UNKNOWN; 
-	m_num_it = n; 
-	m_imported_tokens = it;
-
-	m_importFile = NULL;
-	m_savedFin = NULL;
-
-	Next(); 
-	
+	else
+	{
+		c3errors_ErrorDialog("Token.cpp", "Could not open %s", m_filename); 
+		g_abort_parse		= TRUE; 
+	}
 }
 
 
 Token::~Token()
 
 { 
-	fclose (m_fin); 
+	if (m_fin)
+	{
+		fclose(m_fin);
+	}
+
+	if (m_savedFin)
+	{
+		fclose(m_savedFin);
+	}
 }
 
 
@@ -916,6 +940,7 @@ sint32 Token::CloseImport(void)
 	fclose(m_importFile);
 
 	m_fin = m_savedFin;
+	m_savedFin   = NULL;	// for safe destruction
 	m_importFile = NULL;
 	strcpy(m_filename, m_savedFilename);
 	g_parse_line = g_saved_parse_line;

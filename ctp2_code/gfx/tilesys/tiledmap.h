@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Tile map handling
 //
 //----------------------------------------------------------------------------
 //
@@ -17,14 +17,14 @@
 //
 // Compiler flags
 // 
+// _DEBUG
+// - Debug version when set.
+// 
 // _MSC_VER		
-// - When defined, allows Microsoft C++ extensions.
-// - When not defined, generates standard C++.
+// - Microsoft C++ compiler version - when applicable.
 //
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
-//       between #if and #else are the original Activision code.
+// __SPRITETEST__
+// - ?
 //
 //----------------------------------------------------------------------------
 //
@@ -32,10 +32,11 @@
 //
 // - pragma commented out
 // - unused function commmented out
+// - Repaired funny combination of protected data with non-virtual destructor.
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -120,7 +121,7 @@ enum WORLD_DIRECTION;
 class TiledMap {
 public:
 	TiledMap(MapPoint &size);
-	~TiledMap();
+	virtual ~TiledMap();
 
 	void			AllocateTileInfoStorage(MapPoint *size);
 	void			DisposeTileInfoStorage(void);

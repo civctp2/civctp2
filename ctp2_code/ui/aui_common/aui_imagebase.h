@@ -1,13 +1,37 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Image base class
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialised all members in the default constructor, to prevent a crash 
+//   in the destructor.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#pragma once
+#endif
 
 #ifndef __AUI_IMAGEBASE_H__
 #define __AUI_IMAGEBASE_H__
@@ -85,14 +109,13 @@ public:
 		MBCHAR *ldlBlock,
 		bool loadOnDemand = false );
 	aui_ImageBase(
-		sint32 numStateImageGroups,
+		sint32 numStateImageGroups    = 0,
 		AUI_IMAGEBASE_BLTTYPE blttype = AUI_IMAGEBASE_BLTTYPE_COPY,
 		AUI_IMAGEBASE_BLTFLAG bltflag = AUI_IMAGEBASE_BLTFLAG_COPY,
 		bool loadOnDemand = false );
 	virtual ~aui_ImageBase();
 
 protected:
-	aui_ImageBase() {}
 	AUI_ERRCODE InitCommonLdl(
 		MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon(

@@ -18,12 +18,6 @@
 // _MSC_VER		
 // - Compiler version (for the Microsoft C++ compiler only)
 //
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are active for _MSC_VER value 1200 are the original 
-//       Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -37,7 +31,7 @@
 //   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
 //   - GetContinent      Gets the continent ID of an location.
 //   - IsWater           Gets whether a location is water.
-// - IsVeteran return type corrected.
+// - IsVeteran and AllUnitsCanBeExpelled return types corrected.
 // - New slic function by Solver: IsOnSameContinent - Checks whether two
 //   locations are on the same continent.
 // - Added AddSlaves function modelled after the AddPops function.
@@ -419,7 +413,7 @@ SLICFUNC(SFR_VOID, GrantAdvance)
 SLICFUNC(SFR_VOID, AddUnit)                       
 
 SLICFUNC(SFR_VOID, AddExpelOrder)                 
-SLICFUNC(SFR_VOID, AllUnitsCanBeExpelled)         
+SLICFUNC(SFR_INT,  AllUnitsCanBeExpelled)         
 SLICFUNC(SFR_VOID, GetMessageClass)               
 SLICFUNC(SFR_VOID, SetPlayer)                     
 

@@ -23,6 +23,7 @@
 //
 // - Added extra case statement to facilitate '**' operator
 // - Added stuff for '&' operator
+// - Prevented memory leaks
 //
 //----------------------------------------------------------------------------
 
@@ -193,25 +194,10 @@ SlicSegment::~SlicSegment()
 		m_filename = NULL;
 	}
 
-	if(m_trigger_symbols_indices) {
-		delete [] m_trigger_symbols_indices;
-		m_trigger_symbols_indices = NULL;
-	}
-
-	if(m_trigger_symbols) {
-		delete [] m_trigger_symbols;
-		m_trigger_symbols = NULL;
-	}
-
-	if(m_parameter_indices) {
-		delete [] m_parameter_indices;
-		m_parameter_indices = NULL;
-	}
-
-	if(m_parameter_symbols) {
-		delete [] m_parameter_symbols;
-		m_parameter_symbols = NULL;
-	}
+	delete [] m_trigger_symbols_indices;
+	delete [] m_trigger_symbols;
+	delete [] m_parameter_indices;
+	delete [] m_parameter_symbols;
 }
 
 void *SlicSegment::operator new(size_t size)
@@ -389,7 +375,7 @@ void SlicSegment::LinkParameterSymbols()
 	if(m_type != SLIC_OBJECT_FUNCTION)
 		return;
 
-	
+	delete [] m_parameter_symbols;	
 	m_parameter_symbols = new SlicSymbolData *[m_num_parameters ? m_num_parameters : 1];
 	for(sint32 i = 0; i < m_num_parameters; i++) {
 		m_parameter_symbols[i] = g_slicEngine->GetSymbol(m_parameter_indices[i]);
@@ -415,12 +401,10 @@ void SlicSegmentHash::LinkTriggerSymbols(StringHash<SlicUITrigger> *uiHash)
 
 void SlicSegmentHash::SetSize(sint32 size)
 {
-	if(m_segments) {
-		delete [] m_segments;
-	}
+	delete [] m_segments;
 	m_numSegments = size;
 	m_nextSegment = 0;
-	m_segments = new SlicSegment *[m_numSegments];
+	m_segments = new SlicSegment *[m_numSegments ? m_numSegments : 1];
 	memset(m_segments, 0, sizeof(SlicSegment *) * m_numSegments);
 }
 	
