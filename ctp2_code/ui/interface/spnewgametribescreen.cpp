@@ -27,6 +27,7 @@
 //
 // - Repaired memory leak.
 // - Allow choice of 64 instead of 44 playable civs to be selected.
+// - Crash prevention: improved box index checking.
 //
 //----------------------------------------------------------------------------
 
@@ -105,8 +106,44 @@ static MBCHAR			checknames[k_NUM_TRIBECOLS][50] = {
 	"TribeFour"
 };
 
+#if defined(ACTIVISION_ORIGINAL)
+static sint32 s_tribeIndex = -1;
+#else	
 
-static sint32 s_tribeIndex = -1; 
+namespace
+{
+sint32 const	INDEX_ILLEGAL	= -1;
+sint32			s_tribeIndex	= INDEX_ILLEGAL;
+
+//----------------------------------------------------------------------------
+//
+// Name       : LexicographicIndex
+//
+// Description: Get the index of a civilisation when ordered lexicographically
+//              on name.
+//
+// Parameters : a_DbIndex			: index of civilisation in the database
+//
+// Globals    : g_theCivilisationDB	: the civilisation database
+//
+// Returns    : sint32				: index in lexicographic ordering
+//
+// Remark(s)  : When the civilisation index is not in the database, 
+//              INDEX_ILLEGAL is returned.
+//
+//----------------------------------------------------------------------------
+
+sint32 LexicographicIndex(sint32 a_DbIndex)
+{
+	return (a_DbIndex < 0) || (a_DbIndex >= g_theCivilisationDB->GetNumRec())
+		   ? INDEX_ILLEGAL
+		   : g_theCivilisationDB->m_indexToAlpha[a_DbIndex];
+}
+
+} // namespace
+
+#endif	// ACTIVISION_ORIGINAL 
+
 sint32 spnewgametribescreen_getTribeIndex( void )
 {
 	return s_tribeIndex;
@@ -152,12 +189,27 @@ void spnewgametribescreen_setTribeIndex(
 	}
 
 	
+#if defined(ACTIVISION_ORIGINAL)	// Incorrect checks
 	if ( index < 0 || index >= k_NUM_TRIBEBOXES )
 		return;
 
 	for (sint32 i = 0;i < k_NUM_TRIBEBOXES; i++ )
 		s_checkBox[ i ]->SetState( 0 );
 	s_checkBox[ g_theCivilisationDB->m_indexToAlpha[ index ] ]->SetState( 1 );
+#else
+	sint32 const	alpha = LexicographicIndex(index);
+
+	if ((alpha < 0) || (alpha >= k_NUM_TRIBEBOXES)) 
+	{
+		return;
+	}
+
+	for (sint32 i = 0; i < k_NUM_TRIBEBOXES; ++i)
+	{
+		s_checkBox[i]->SetState(0);
+	}
+	s_checkBox[alpha]->SetState(1);
+#endif
 
 	s_tribeIndex = index;
 
@@ -238,7 +290,7 @@ void spnewgametribescreen_disableTribes( void )
 }
 void spnewgametribescreen_disableTribe( sint32 tribe )
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	// Incorrect checks
 	if ( tribe == -1 ) return;
 
 	if ( tribe >= k_NUM_TRIBEBOXES ) return;
@@ -246,13 +298,20 @@ void spnewgametribescreen_disableTribe( sint32 tribe )
 	const sint32 alpha = g_theCivilisationDB->m_indexToAlpha[ tribe ];
 	if ( alpha < k_NUM_TRIBEBOXES )
 	if ( s_checkBox[ alpha ] && !s_checkBox[ alpha ]->IsDisabled() )
+#else	// ACTIVISION_ORIGINAL
+	sint32 const alpha	= LexicographicIndex(tribe);
+
+	if ((alpha >= 0) && (alpha < k_NUM_TRIBEBOXES) &&
+		!s_checkBox[alpha]->IsDisabled()
+	   )
+#endif	// ACTIVISION_ORIGINAL
 	{
 		s_checkBox[ alpha ]->Enable( FALSE );
 	}
 }
 void spnewgametribescreen_enableTribe( sint32 tribe )
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	
  	if ( tribe == -1 ) return;
 
 	if ( tribe >= k_NUM_TRIBEBOXES ) return;
@@ -260,6 +319,16 @@ void spnewgametribescreen_enableTribe( sint32 tribe )
 	const sint32 alpha = g_theCivilisationDB->m_indexToAlpha[ tribe ];
 	if ( alpha < k_NUM_TRIBEBOXES )
 	if ( s_checkBox[ alpha ] && s_checkBox[ alpha ]->IsDisabled() )
+#else
+	sint32 const alpha	= LexicographicIndex(tribe);
+
+	if ((alpha < 0) || (alpha >= k_NUM_TRIBEBOXES))
+	{
+		return;
+	}
+	
+	if (s_checkBox[alpha]->IsDisabled())
+#endif
 	{
 		s_checkBox[ alpha ]->Enable( TRUE );
 	}
