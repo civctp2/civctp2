@@ -27,6 +27,9 @@
 //
 // - Production time calculation improved, and safeguarded against negative
 //   numbers. 
+// - Updates the graphics of tile improvements under contruction every 
+//   turn, so that the process to completeness of a tile improvements is 
+//   visualized. - Oct. 16th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -179,7 +182,17 @@ BOOL TerrainImprovementData::AddTurn(sint32 turns)
 	ENQUEUE();
 	g_network.Unblock(m_owner);
 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 	if(m_turnsToComplete <= 0) {
+#else
+// Added by Martin Gühmann to update the tileimprovement graphics,
+// to indicate increasing completeness.
+	if(m_turnsToComplete > 0){// Is more often true
+		g_tiledMap->RedrawTile(&m_point);
+	}
+	else{
+#endif
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_ImprovementComplete,
