@@ -1,0 +1,89 @@
+\documentclass[a4paper,11pt]{book}
+\usepackage[latin1]{inputenc}
+\usepackage{calc}
+\usepackage{longtable}
+\usepackage[english]{babel}
+\newif\ifpdf\ifx\pdfoutput\undefined\pdffalse\else\pdfoutput=1\pdftrue\fi
+
+\ifpdf
+   \usepackage[pdftex, bookmarks=true, pdfpagemode=None, pdfstartview=FitH, citecolor=blue, link
+color=blue, urlcolor=blue, colorlinks=true]{hyperref}
+   \usepackage[pdftex]{graphicx}
+   \setlength{\pdfhorigin}{0pt}
+   \setlength{\pdfvorigin}{0pt}
+   \pdfinfo{/Title      (CtP2 Source Code Project Documentation)
+   }
+\else
+   \usepackage[citecolor=blue, linkcolor=blue, urlcolor=blue, colorlinks=true]{hyperref}
+   \usepackage{graphicx}
+\fi
+
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\setlength{\topmargin}{10mm}
+\setlength{\headheight}{15mm}
+\setlength{\textheight}{\paperheight}
+\addtolength{\textheight}{-\topmargin}
+\addtolength{\textheight}{-\headheight}
+\addtolength{\textheight}{-\topmargin}
+\addtolength{\textheight}{-\topmargin}
+\addtolength{\textheight}{-\headheight}
+\setlength{\oddsidemargin}{25mm}
+\setlength{\evensidemargin}{25mm}
+\setlength{\textwidth}{\paperwidth}
+\addtolength{\textwidth}{-\oddsidemargin}
+\addtolength{\textwidth}{-\evensidemargin}
+
+\begin{document}
+
+\pagenumbering{roman}
+\title{CtP2 Source Code Project\\[5mm]
+Developer Documentation\\[20mm]
+\includegraphics[scale=0.5]{images/wallpaper1_640x480_2}\\[5mm]}
+\author{\href{http://ctp2files.apolyton.net/source/}{Apolyton}}
+\date{\today}
+\maketitle
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\mainmatter
+\chapter{Introduction\label{toc:introduction}}
+You should thoroughly read the EULA following this page; it contains important legal information on what you are allowed to do with the Civilization Call To Power 2 sources.\\
+\include{include/eula}
+\newpage
+\chapter{Setting up your build environment\label{toc:setupbenv}}
+This chapter deals with setting up your build environment, i.e. take the necessary step to get ready to build CtP2 from the source.\\
+If you have already setup your build environment, you can continue with the next chapter.
+\include{include/setup_win32}
+
+\chapter{Building Civilization Call To Power 2\label{cha:buildctp2}}
+This chapter contains information, how you start the build process.
+\include{include/make_win32}
+
+\newpage
+%\pagenumbering{Roman}
+\appendix
+\chapter{Definitions\label{cha:definitions}}
+On the next pages you will find the preprocessor definitions in the source and how they actually affect a build.
+\include{include/a_defines}
+
+\chapter{Build system\label{cha:buildsystem}}
+\include{include/a_dspconfig}
+
+\chapter{Code\label{cha:code}}
+This chapter deals with code. Currently, just dead code is listed.
+\include{include/a_deadcode}
+\chapter{FAQs}
+\newcommand{\addquestion}[2]{\begin{subsection}{#1}
+#2\\
+\end{subsection}
+}
+\include{include/a_faq_project}
+\include{include/a_faq_licence}
+
+\newpage
+\backmatter
+
+\end{document}
