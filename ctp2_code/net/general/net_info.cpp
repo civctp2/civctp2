@@ -29,6 +29,7 @@
 // - Propagate PW each turn update.
 // - Unblock the client user interface when start of turn processing is ready.
 // - Added NET_INFO_CODE_DISBANDED_CITY_SETTLER handling.
+// - Added NET_INFO_CODE_ACCOMPLISHED_FEAT handling.
 //
 //----------------------------------------------------------------------------
 
@@ -141,9 +142,9 @@ extern QuadTree<Unit> *g_theUnitTree;
 extern void player_ActivateSpaceButton(sint32 pl);
 extern void network_VerifyGameData();
 
-#ifndef ACTIVISION_ORIGINAL
-// Propagate PW each turn update
-#include "MaterialPool.h"
+#if !defined(ACTIVISION_ORIGINAL)
+#include "feattracker.h"	// Propagate feats
+#include "MaterialPool.h"	// Propagate PW
 #endif
 
 const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
@@ -297,9 +298,9 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	3, // NET_INFO_CODE_GAME_OVER
 	2, // NET_INFO_CODE_SET_EMBASSIES
 #if !defined ACTIVISION_ORIGINAL
-	// propagate PW each turn update
-	2, // NET_INFO_CODE_MATERIALS, unconfirmed?
+	3, // NET_INFO_CODE_ACCOMPLISHED_FEAT
 	1, // NET_INFO_CODE_DISBANDED_CITY_SETTLER
+	1, // NET_INFO_CODE_MATERIALS				(unconfirmed value)
 #endif
 };
 
@@ -334,6 +335,12 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 {
 	Assert(buf[0] == 'I' && buf[1] == 'I');
 	m_type = (NET_INFO_CODE)getshort(&buf[2]);
+
+#if !defined(ACTIVISION_ORIGINAL)	
+	// Test code for detection of unexpected messages
+	Assert(size == 4 + (4 * m_args[m_type]));
+#endif
+
 	if(m_args[m_type] > 0) {
 		m_data = getlong(&buf[4]);
 	}
@@ -542,6 +549,9 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			if(g_player[m_data]) {
 				g_player[m_data]->m_gold->SetLevel(m_data2);
 				g_player[m_data]->m_science->SetLevel(m_data3);
+#if !defined(ACTIVISION_ORIGINAL)
+				DPRINTF(k_DBG_NET, ("Set for player %d gold to %d, science to %d\n", m_data, m_data2, m_data3));
+#endif
 			}
 			break;
 		case NET_INFO_CODE_ADVANCE:
@@ -1819,12 +1829,16 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 
 #if !defined ACTIVISION_ORIGINAL
-		// propagate PW each turn update
-		case NET_INFO_CODE_MATERIALS:
-			DPRINTF(k_DBG_NET, ("Net: Setting player %d's materials to %d\n",
-								m_data, m_data2));
-			if(g_player[m_data]) {
-				g_player[m_data]->m_materialPool->SetLevel((sint32)m_data2);
+		// propagate the accomplishment of a feat
+		case NET_INFO_CODE_ACCOMPLISHED_FEAT:
+			DPRINTF(k_DBG_NET,
+				    ("Server says player %d accomplished feat %d in turn %d", 
+					 m_data2, m_data, m_data3
+					)
+				   );
+			if (g_player[m_data2])
+			{
+				g_featTracker->AddFeat(m_data, m_data2, m_data3);
 			}
 			break;
 
@@ -1846,6 +1860,16 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			break;
 		}
+
+		// propagate PW each turn update
+		case NET_INFO_CODE_MATERIALS:
+			DPRINTF(k_DBG_NET, ("Net: Setting player %d's materials to %d\n",
+								m_data, m_data2));
+			if(g_player[m_data]) {
+				g_player[m_data]->m_materialPool->SetLevel((sint32)m_data2);
+			}
+			break;
+
 #endif
 
 		default:

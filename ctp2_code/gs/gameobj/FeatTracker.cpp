@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
+// - Propagate feat accomplishments.
 //
 //----------------------------------------------------------------------------
 
@@ -50,14 +51,49 @@
 #include "EventTracker.h"
 #include "Score.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
+#include "net_info.h"
+#include "network.h"
+#endif
+
 FeatTracker *g_featTracker = NULL;
 
+#if defined(ACTIVISION_ORIGINAL)
 Feat::Feat(sint32 type, sint32 player)
 {
 	m_type = type;
 	m_player = player;
 	m_round = NewTurnCount::GetCurrentRound();
 }
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : Feat::Feat
+//
+// Description: Constructor for an accomplished feat
+//
+// Parameters : type			: feat identifier
+//				player			: player that accomplished the feat
+//				round			: the round in which the feat was accomplished
+//
+// Globals    : NewTurnCount	: the current round (when not provided)
+//
+// Returns    : -
+//
+// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to 
+//              indicate that the feat has been accomplished right now.
+//
+//----------------------------------------------------------------------------
+
+Feat::Feat(sint32 type, sint32 player, sint32 round)
+:	m_type		(type),
+	m_player	(player)
+{
+	m_round	= (USE_CURRENT_ROUND == round) 
+		      ? NewTurnCount::GetCurrentRound() 
+			  : round;
+}
+#endif
 
 Feat::Feat(CivArchive &archive)
 {
@@ -263,7 +299,31 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 	REMOVE_FROM_FEAT_LIST(GetEffectScriptedCity,			    FEAT_EFFECT_SCRIPTED_CITY);
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 void FeatTracker::AddFeat(sint32 type, sint32 player)
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : FeatTracker::AddFeat
+//
+// Description: Add an accomplished feat to the records
+//
+// Parameters : type			: feat identifier
+//				player			: player that accomplished the feat
+//				round			: the round in which the feat was accomplished
+//
+// Globals    : g_theFeatDB		: database of feat descriptions
+//				TODO: add more globals
+//
+// Returns    : -
+//
+// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to 
+//              indicate that the feat has been accomplished right now.
+//
+//----------------------------------------------------------------------------
+
+void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
+#endif
 {
 	const FeatRecord *rec = g_theFeatDB->Get(type);
 	Assert(rec);
@@ -314,7 +374,11 @@ void FeatTracker::AddFeat(sint32 type, sint32 player)
 
 	m_achieved[type] = true;
 
+#if defined(ACTIVISION_ORIGINAL)
 	Feat *theFeat = new Feat(type, player);
+#else
+	Feat * theFeat = new Feat(type, player, round);
+#endif
 	m_activeList->AddTail(theFeat);
 
 	AddFeatToEffectLists(theFeat);
@@ -333,7 +397,11 @@ void FeatTracker::AddFeat(sint32 type, sint32 player)
 
 	g_player[player]->m_score->AddFeat();
 
+#if defined(ACTIVISION_ORIGINAL)
 	g_eventTracker->AddEvent(EVENT_TYPE_FEAT,player,NewTurnCount::GetCurrentRound(),type);
+#else
+	g_eventTracker->AddEvent(EVENT_TYPE_FEAT, player, theFeat->GetRound(), type);
+#endif
 }
 
 void FeatTracker::AddFeat(const MBCHAR *name, sint32 player)
@@ -511,6 +579,24 @@ void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : AccomplishFeat::GEVHookCallback
+//
+// Description: Handler for GEV_AccomplishFeat events.
+//
+// Parameters : gameEventType	: should be GEV_AccomplishFeat
+//				args			: list of arguments				
+//
+// Globals    : -
+//
+// Returns    : GEV_HD_Continue always
+//
+// Remark(s)  : The arguments must contain the identifier of the accomplished
+//              feat and the player that accomplished it.
+//
+//----------------------------------------------------------------------------
+
 STDEHANDLER(AccomplishFeat)
 {
 	
@@ -519,6 +605,22 @@ STDEHANDLER(AccomplishFeat)
 	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;
 
 	g_featTracker->AddFeat(featIndex, player);
+
+#if !defined(ACTIVISION_ORIGINAL)
+	if (g_network.IsHost()) 
+	{
+		// Propagate the information to the clients.
+		// Remark: g_player[player] has been verified in GetPlayer.
+		g_network.Block(player);
+		g_network.Enqueue(new NetInfo(NET_INFO_CODE_ACCOMPLISHED_FEAT,
+									  featIndex, 
+									  player, 
+									  g_player[player]->GetCurRound()
+									 )
+						 );
+		g_network.Unblock(player);
+	}
+#endif
 
 	return GEV_HD_Continue;
 }

@@ -27,6 +27,7 @@
 //
 // - Propagate PW each turn update
 // - Added NET_INFO_CODE_DISBANDED_CITY_SETTLER message
+// - Added NET_INFO_CODE_ACCOMPLISHED_FEAT message
 //
 //----------------------------------------------------------------------------
 
@@ -184,10 +185,12 @@ enum NET_INFO_CODE {
 	NET_INFO_CODE_SET_EMBASSIES,
 
 #if !defined ACTIVISION_ORIGINAL
-	// Propagate PW each turn update
-	NET_INFO_CODE_MATERIALS,					// unconfirmed value
+	// Notify the accomplishment of a feat
+	NET_INFO_CODE_ACCOMPLISHED_FEAT				= 0x0083,
 	// Mark a settler as created by disbanding a city
 	NET_INFO_CODE_DISBANDED_CITY_SETTLER		= 0x0084,	
+	// Propagate PW each turn update
+	NET_INFO_CODE_MATERIALS,					// unconfirmed value
 #endif
 
 	NET_INFO_CODE_NULL

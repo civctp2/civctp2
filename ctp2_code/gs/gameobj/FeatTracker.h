@@ -1,6 +1,50 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Feat tracking 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are active for _MSC_VER value 1200 are the original 
+//       Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made NetFeatTracker a friend.
+// - Import structure improved.
+// - Added a round parameter to AddFeat and Feat.
+//
+//----------------------------------------------------------------------------
 
 #ifndef FEAT_TRACKER_H__
 #define FEAT_TRACKER_H__
+
+
+#if defined(ACTIVISION_ORIGINAL)
 
 class CivArchive;
 template <class T> class PointerList;
@@ -28,11 +72,67 @@ enum FEAT_EFFECT {
 	
 	FEAT_EFFECT_MAX
 };
+#else	// ACTIVISION_ORIGINAL
 
-	
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// None yet
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class	Feat;
+class	FeatTracker;
+
+enum	FEAT_EFFECT 
+{
+	FEAT_EFFECT_NONE						= -1,
+	FEAT_EFFECT_BOAT_MOVEMENT,  
+	FEAT_EFFECT_CITY_DEFENSE_BONUS,
+	FEAT_EFFECT_REDUCE_CITY_WALLS,
+	FEAT_EFFECT_INCREASE_CITY_VISION,
+	FEAT_EFFECT_INCREASE_PRODUCTION, 
+	FEAT_EFFECT_INCREASE_COMMERCE,   
+	FEAT_EFFECT_INCREASE_HAPPINESS,  
+	FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY,
+	FEAT_EFFECT_INCREASE_BOAT_VISION,
+	FEAT_EFFECT_INCREASE_SCIENCE, 
+	FEAT_EFFECT_GIVE_MAPS,
+	FEAT_EFFECT_INCREASE_HIT_POINTS,
+	FEAT_EFFECT_SCRIPTED_TURN,
+	FEAT_EFFECT_SCRIPTED_CITY,
+
+	FEAT_EFFECT_MAX							// dummy entry, used as counter
+};
+
+sint32 const	USE_CURRENT_ROUND			= -1;
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
+
+#include "c3types.h"			// MBCHAR, sint32 
+#include "civarchive.h"			// CivArchive
+#include "pointerlist.h"		// PointerList
+#include "unit.h"				// Unit
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+#endif	// ACTIVISION_ORIGINAL
+
+
 class Feat {
   public:
+#if defined(ACTIVISION_ORIGINAL)
 	Feat(sint32 type, sint32 player);
+#else
+	Feat(sint32 type, sint32 player, sint32 round = USE_CURRENT_ROUND);
+#endif
 
 	Feat(CivArchive &archive);
 	~Feat();
@@ -51,6 +151,11 @@ class Feat {
 };
 
 class FeatTracker {
+
+#if !defined(ACTIVISION_ORIGINAL)
+	friend class NetFeatTracker;
+#endif
+
   public:
 	FeatTracker();
 	FeatTracker(CivArchive &archive);
@@ -62,7 +167,11 @@ class FeatTracker {
 
 	void AddFeatToEffectLists(Feat *feat);
 	void RemoveFeatFromEffectLists(Feat *feat);
+#if defined(ACTIVISION_ORIGINAL)
 	void AddFeat(sint32 type, sint32 player);
+#else
+	void AddFeat(sint32 type, sint32 player, sint32 round = USE_CURRENT_ROUND);
+#endif
 	void AddFeat(const MBCHAR *name, sint32 player);
 
 	sint32 GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal);
