@@ -100,11 +100,15 @@ AZTEC_DIPLOMAT_PHOTO		"updp050.tga"
 ITALIAN_DIPLOMAT_PHOTO		"updp050.tga"
 BANTU_DIPLOMAT_PHOTO   		"updp050.tga"
 SLAVIC_DIPLOMAT_PHOTO  		"updp050.tga"
-MINOAN_DIPLOMAT_PHOTO  		"updp050.tga"
-HARAPPAN_DIPLOMAT_PHOTO  	"updp050.tga"
-HITTITE_DIPLOMAT_PHOTO  	"updp050.tga"
-SHANG_DIPLOMAT_PHOTO  		"updp050.tga"
-ETRUSCAN_DIPLOMAT_PHOTO  	"updp050.tga"
+MINOAN_DIPLOMAT_PHOTO  		"updp050.tga"  # Not used, see civilisation.txt
+HARAPPAN_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
+HITTITE_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
+SHANG_DIPLOMAT_PHOTO  		"updp050.tga"  # Not used, see civilisation.txt
+ETRUSCAN_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
+ABORIGINE_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
+ARGENTINIAN_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
+KHMER_DIPLOMAT_PHOTO  		"updp050.tga"  # Not used, see civilisation.txt
+MALIAN_DIPLOMAT_PHOTO  		"updp050.tga"  # Not used, see civilisation.txt
 
 
 ## Insert as portion of Strings.txt	
