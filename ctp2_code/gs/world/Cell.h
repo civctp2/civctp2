@@ -26,6 +26,9 @@
 // Modifications from the original Activision code:
 //
 // - Added CalcTerrainFreightCost by Martin Gühmann
+// - Added GetFoodFromTerrain, GetShieldsFromTerrain and GetGoldFromTerrain
+//   with a hypothetical terrain type argument to check whether there is a 
+//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
 
@@ -203,6 +206,12 @@ public:
 	sint32 GetGoldFromTerrain() const;
 	sint32 GetGoldProduced() const;
 	sint32 GetScore() const;
+
+#if !defined(ACTIVISION_ORIGINAL)
+	sint32 GetFoodFromTerrain(sint8 terrainType) const;
+	sint32 GetShieldsFromTerrain(sint8 terrainType) const;
+	sint32 GetGoldFromTerrain(sint8 terrainType) const;
+#endif
 
     TERRAIN_TYPES GetTerrainType() const { return TERRAIN_TYPES(m_terrain_type); } 
 

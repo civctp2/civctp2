@@ -30,6 +30,8 @@
 //
 // - Added terrain boni arguments to FindBestTileImprovement to record the 
 //   already given terrain boni for that city, by Martin Gühmann
+// - Added GetBestTerraformImprovement function to find the best terraform
+//   improvement. - Sep. 21st 2004 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
 
@@ -370,7 +372,9 @@ private:
 	
 	void GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp) const;
 
-	
+#if !defined(ACTIVSION_ORIGINAL)
+	void GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp, bool pwPerBonus) const;
+#endif
 	
 	
 

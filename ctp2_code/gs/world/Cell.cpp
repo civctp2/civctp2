@@ -30,6 +30,11 @@
 //   modifier.
 // - Standardised min/max usage.
 // - Prevented some crashes.
+// - Added GetFoodFromTerrain, GetShieldsFromTerrain and GetGoldFromTerrain
+//   with a hypothetical terrain type argument to check whether there is a 
+//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
+// - GetGoldProduced function now uses GetGoldFromTerrain function to avoid
+//   duplicating code. - Sep. 21st 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -316,6 +321,8 @@ BOOL Cell::GetCanDie(void) const
 	return (m_env & k_BIT_MOVEMENT_TYPE_LAND) != 0;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
+
 sint32 Cell::GetFoodFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
@@ -332,6 +339,81 @@ sint32 Cell::GetFoodFromTerrain() const
 	return food;
 }
 
+#else
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetFoodFromTerrain
+//
+// Description: Gets the food from the given cell with the given terrain.
+//
+// Parameters : terrainType: The terrain type from that the statitics 
+//                           should be calculated.
+//
+// Globals    : g_theTerrainDB: The terrain database
+//
+// Returns    : sint32 the ammount of food that can be produced in that cells
+//              without tile improvements and the given terrain.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Cell::GetFoodFromTerrain(sint8 terrainType) const
+{
+	const TerrainRecord *rec = g_theTerrainDB->Get(terrainType);
+	
+	sint32 food = rec->GetEnvBase()->GetFood();
+
+	if(HasCity() && rec->GetEnvCity()) {
+		food += rec->GetEnvCityPtr()->GetFood();
+	}
+
+	if(HasRiver() && rec->GetEnvRiver()) {
+		food += rec->GetEnvRiverPtr()->GetFood();
+	}
+	return food;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetFoodFromTerrain
+//
+// Description: Gets the food from the given cell with the current terrain.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32 the ammount of food that can be produced in that cells
+//              without tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Cell::GetFoodFromTerrain() const
+{
+	return GetFoodFromTerrain(m_terrain_type);
+}
+
+#endif
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetFoodProduced
+//
+// Description: Gets the food from the given cell with the current terrain 
+//              including tile improvement.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : sint32 the ammount of food that can be produced in that cells
+//              including tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 Cell::GetFoodProduced() const 
 {
 	sint32 food = GetFoodFromTerrain();
@@ -357,6 +439,7 @@ sint32 Cell::GetFoodProduced() const
 																					
     return food; 
 }
+#if defined(ACTIVISION_ORIGINAL)
 
 sint32 Cell::GetShieldsFromTerrain() const
 {
@@ -376,6 +459,83 @@ sint32 Cell::GetShieldsFromTerrain() const
 	return shield;
 }
 
+#else
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetShieldsFromTerrain
+//
+// Description: Gets the shields from the given cell with the given terrain.
+//
+// Parameters : terrainType: The terrain type from that the statitics 
+//                           should be calculated.
+//
+// Globals    : g_theTerrainDB: The terrain database
+//
+// Returns    : sint32 the ammount of shields that can be produced in that cells
+//              without tile improvements and the given terrain.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Cell::GetShieldsFromTerrain(sint8 terrainType) const
+{
+	const TerrainRecord *rec = g_theTerrainDB->Get(terrainType);
+
+	
+    sint32 shield = rec->GetEnvBase()->GetShield();
+
+	if(HasCity() && rec->GetEnvCity()) {
+		shield += rec->GetEnvCityPtr()->GetShield();
+	}
+
+	if(HasRiver() && rec->GetEnvRiver()) {
+		shield += rec->GetEnvRiverPtr()->GetShield();
+	}
+
+	return shield;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetShieldsFromTerrain
+//
+// Description: Gets the shields from the given cell with the current terrain.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32 the ammount of shields that can be produced in that cells
+//              without tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Cell::GetShieldsFromTerrain() const
+{
+	return GetShieldsFromTerrain(m_terrain_type);
+}
+
+#endif
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetShieldsProduced
+//
+// Description: Gets the shields from the given cell with the current terrain 
+//              including tile improvement.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : sint32 the ammount of shields that can be produced in that cells
+//              including tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 Cell::GetShieldsProduced() const 
 {
 	sint32 shield = GetShieldsFromTerrain();
@@ -403,6 +563,8 @@ sint32 Cell::GetShieldsProduced() const
     return shield; 
 }
 
+#if defined(ACTIVISION_ORIGINAL)
+
 sint32 Cell::GetGoldFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
@@ -421,9 +583,86 @@ sint32 Cell::GetGoldFromTerrain() const
 	return gold;
 }
 
-sint32 Cell::GetGoldProduced() const 
+#else
 
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetGoldFromTerrain
+//
+// Description: Gets the gold from the given cell with the given terrain.
+//
+// Parameters : terrainType: The terrain type from that the statitics 
+//                           should be calculated.
+//
+// Globals    : g_theTerrainDB: The terrain database
+//
+// Returns    : sint32 the ammount of gold that can be produced in that cells
+//              without tile improvements and the given terrain.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Cell::GetGoldFromTerrain(sint8 terrainType) const
 {
+	const TerrainRecord *rec = g_theTerrainDB->Get(terrainType);
+
+	
+    sint32 gold = rec->GetEnvBase()->GetGold();
+
+	if(HasCity() && rec->GetEnvCity()) {
+		gold += rec->GetEnvCityPtr()->GetGold();
+	}
+
+	if(HasRiver() && rec->GetEnvRiver()) {
+		gold += rec->GetEnvRiverPtr()->GetGold();
+	}
+
+	return gold;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetGoldFromTerrain
+//
+// Description: Gets the gold from the given cell with the current terrain.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32 the ammount of gold that can be produced in that cells
+//              without tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Cell::GetGoldFromTerrain() const
+{
+	return GetGoldFromTerrain(m_terrain_type);
+}
+#endif
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetGoldProduced
+//
+// Description: Gets the gold from the given cell with the current terrain 
+//              including tile improvement.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : sint32 the ammount of gold that can be produced in that cells
+//              including tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Cell::GetGoldProduced() const 
+{
+#if defined(ACTIVISION_ORIGINAL)
+// Same code in GetGoldFromTerrain no need for code duplication
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
 	
@@ -437,10 +676,12 @@ sint32 Cell::GetGoldProduced() const
 		gold += rec->GetEnvRiverPtr()->GetGold();
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	// May crash when m_objects is NULL.
+// May crash when m_objects is NULL.
 	sint32 i;
 	for(i = m_objects->Num() - 1; i >= 0; i--) {
 #else
+	sint32 gold = GetGoldFromTerrain(); // Like in GetShieldProduced and in GetFoodProduced functions
+
 	size_t const	count	= m_objects ? m_objects->Num() : 0;
 	for (size_t i = 0; i < count; ++i)
 	{
@@ -477,6 +718,7 @@ sint32 Cell::GetScore() const
 
 	
 	if ((m_env & k_MASK_ENV_GOOD) != 0x0) {
+		// Should be moved to Goods.txt
 		
 		score += rec->GetEnvBase()->GetScore();
 	}
