@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Save and load game window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired memory leak.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -250,6 +280,7 @@ AUI_ERRCODE LoadSaveWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	return AUI_ERRCODE_OK;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 LoadSaveWindow::~LoadSaveWindow()
 {
 	CleanUpSaveInfo();
@@ -291,7 +322,56 @@ LoadSaveWindow::~LoadSaveWindow()
 
 #undef mycleanup
 }
+#else	// ACTIVISION_ORIGINAL
+//----------------------------------------------------------------------------
+//
+// Name       : LoadSaveWindow::~LoadSaveWindow
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+LoadSaveWindow::~LoadSaveWindow()
+{
+	CleanUpSaveInfo();
 
+	if (m_fileList)
+	{
+		m_fileList->DeleteAll();
+	}
+
+	delete m_fileList;
+	delete m_nameString;
+	delete m_titlePanel;
+	delete m_gameText;
+	delete m_gameTextBox;
+	delete m_saveText;
+	delete m_saveTextBox;
+	delete m_noteText;
+	delete m_noteTextBox;
+	delete m_playerText;
+	delete m_civText;
+	delete m_listOne;
+	delete m_listTwo;
+	delete m_tabGroup;
+	delete m_powerTab;
+	delete m_powerTabImage;
+	delete m_powerTabImageBackup;
+	delete m_mapTab;
+	delete m_mapTabImage;
+	delete m_mapTabImageBackup;
+	delete m_civsTab;
+	delete m_civsList;
+	delete m_deleteButton;
+}
+#endif	// ACTIVISION_ORIGINAL
 
 
 void LoadSaveWindow::FillListOne(void)
@@ -516,6 +596,9 @@ void LoadSaveWindow::SetType(uint32 type)
 			m_fileList->DeleteAll();
 			FillListOne(); 
 		}
+#if !defined(ACTIVISION_ORIGINAL)
+		delete m_fileList;
+#endif
 		m_fileList = GameFile::BuildSaveList(C3SAVEDIR_GAME);
 		m_gameInfo = NULL; 
 		break;
@@ -525,6 +608,9 @@ void LoadSaveWindow::SetType(uint32 type)
 		if (m_fileList) {
 			m_fileList->DeleteAll();
 		}
+#if !defined(ACTIVISION_ORIGINAL)
+		delete m_fileList;
+#endif
 		m_fileList = GameFile::BuildSaveList(C3SAVEDIR_MP);
 		m_gameInfo = NULL; 
 		break;
@@ -535,6 +621,9 @@ void LoadSaveWindow::SetType(uint32 type)
 		if (m_fileList) {
 			m_fileList->DeleteAll();
 		}
+#if !defined(ACTIVISION_ORIGINAL)
+		delete m_fileList;
+#endif
 		m_fileList = GameFile::BuildSaveList(C3SAVEDIR_SCEN);
 		m_gameInfo = NULL; 
 		break;

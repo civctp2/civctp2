@@ -1,7 +1,81 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Critical messages preferences
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leak repaired.
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "c3files.h"
 
 #include "CriticalMessagesPrefs.h"
+
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : CriticalMessagesData::CriticalMessagesData
+//
+// Description: Constructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+CriticalMessagesData::CriticalMessagesData()
+:	m_messageName(NULL),
+	m_messageEnabled(false)
+{};
+
+//----------------------------------------------------------------------------
+//
+// Name       : CriticalMessagesData::~CriticalMessagesData
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : - 
+//
+//----------------------------------------------------------------------------
+CriticalMessagesData::~CriticalMessagesData()
+{
+	delete [] m_messageName;	// new [] in CriticalMessagesPrefs::SetEnabled 
+};
+
+#endif // ACTIVISION_ORIGINAL
 
 CriticalMessagesPrefs::CriticalMessagesPrefs()
 {
