@@ -3176,3 +3176,9 @@ str_ldl_RANKING_WONDER		"éµïsévãc"
 str_profile_CloseOnEyepoint			"Close Message When Clicking Eyeball"
 str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
 
+
+### Great Libary Strings ###
+
+str_ldl_GreatLibraryGoalKnown		"%s is already known. No goal was set."
+str_ldl_GreatLibraryNoGoalPossible	"%s cannot be researched."
+

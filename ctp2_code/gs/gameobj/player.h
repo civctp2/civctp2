@@ -1,10 +1,34 @@
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Player game object header
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Return type of SetResearchGoal function set from void to 
+//   sint32, by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 
@@ -1128,8 +1152,13 @@ public:
 	
 	void EnterNewAge(sint32 age);
 
-	
+#if defined(ACTIVISION_ORIGINAL)
+	//Removed by Martin Gühmann
 	void SetResearchGoal(enum DATABASE db, sint32 item);
+#else
+	//Added by Martin Gühmann
+	sint32 SetResearchGoal(enum DATABASE db, sint32 item);
+#endif
 
 	void StartResearchingAdvanceForGoal(sint32 goal);
 	bool RecursivelyStartResearching(sint32 advance);

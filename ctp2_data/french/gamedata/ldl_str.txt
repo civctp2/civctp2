@@ -2721,9 +2721,11 @@ str_tbl_ldl_InProgress			"Partie en cours :"
 str_tbl_ldl_Defeat			"Défaite :"
 	
 # Great Library
-str_ldl_GreatLibraryGoalSetTo 		"Objectif fixé à : %s"
-str_ldl_SEARCH_WORD 			"Recherche :"
-str_ldl_TECH_TREE 			"ARBORESCENCE"
+str_ldl_GreatLibraryGoalSetTo		"Objectif fixé à : %s"
+str_ldl_GreatLibraryGoalKnown		"%s is already known. No goal was set."
+str_ldl_GreatLibraryNoGoalPossible	"%s cannot be researched."
+str_ldl_SEARCH_WORD			"Recherche :"
+str_ldl_TECH_TREE			"ARBORESCENCE"
 str_ldl_SET_GOAL			"Fixer objectif"
 
 

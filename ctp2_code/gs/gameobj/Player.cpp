@@ -25,6 +25,11 @@
 //
 // Modifications from the original Activision code:
 //
+// - SetResearchGoal now clears research goal if the potential goal
+//   is already researched and returns now values whether the goal was
+//   set, cleared or nothing happened, by Martin Gühmann.
+// - Advances leading to tile improvements can now be set as goals, 
+//   by Martin Gühmann.
 // - Moved the autosave file generation to PlayerEvent.cpp, to prevent losing 
 //   the advance that just has had its research completed.
 //
@@ -10571,8 +10576,11 @@ void Player::EnterNewAge(sint32 age)
 	}
 }
 
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 void Player::SetResearchGoal(enum DATABASE db, sint32 index)
 {
+
 	sint32 advance;
 	switch(db) {
 		case DATABASE_DEFAULT:
@@ -10611,6 +10619,95 @@ void Player::SetResearchGoal(enum DATABASE db, sint32 index)
 
 	StartResearchingAdvanceForGoal(advance);
 }
+
+#else
+//Added by Martin Gühmann
+
+//----------------------------------------------------------------------------
+//
+// Name       : SetResearchGoal
+//
+// Description: Sets the research goal of a player given the item has an 
+//              enabling advance and that advance is not researched, yet.
+//
+// Parameters : enum DATABASE db - An database enum
+//              sint32 index - An index in the according database
+//
+// Globals    : -
+//
+// Returns    : Whether the research goal was set, cleared or the item
+//              has an enabling advance that can be researched.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
+{
+	//Added by Martin Gühmann
+	//Clears reseach goal if index is smaller 0:
+	if(index < 0){
+		m_researchGoal = -1;
+		return 2;
+	}
+
+	sint32 i;
+	sint32 tmpCosts;
+	sint32 tmpAdvance;
+	sint32 advance;
+
+	switch(db) {
+		case DATABASE_DEFAULT:
+		case DATABASE_SEARCH:
+		case DATABASE_ORDERS:
+		case DATABASE_RESOURCE:
+		case DATABASE_CONCEPTS:
+		case DATABASE_TERRAIN:
+			
+			return 2;
+		case DATABASE_UNITS:
+			advance = g_theUnitDB->Get(index)->GetEnableAdvanceIndex();
+			break;
+		case DATABASE_BUILDINGS:
+			advance = g_theBuildingDB->Get(index)->GetEnableAdvanceIndex();
+			break;
+		case DATABASE_WONDERS:
+			advance = g_theWonderDB->Get(index)->GetEnableAdvanceIndex();
+			break;
+		case DATABASE_ADVANCES:
+			advance = index; 
+			break;
+		case DATABASE_GOVERNMENTS:
+			advance = g_theGovernmentDB->Get(index)->GetEnableAdvanceIndex();
+			break;
+		case DATABASE_TILE_IMPROVEMENTS:
+			advance = g_theTerrainImprovementDB->Get(index)->GetTerrainEffect(0)->GetEnableAdvanceIndex();
+			tmpCosts = m_advances->GetCost(advance);
+			for(i = 1; i < g_theTerrainImprovementDB->Get(index)->GetNumTerrainEffect(); i++){
+				tmpAdvance = g_theTerrainImprovementDB->Get(index)->GetTerrainEffect(i)->GetEnableAdvanceIndex();
+				if(!m_advances->HasAdvance(tmpAdvance)){
+					if(tmpCosts > m_advances->GetCost(tmpAdvance)){
+						tmpCosts = m_advances->GetCost(tmpAdvance);
+						advance = tmpAdvance;
+					}
+				}
+			}
+			break;
+		default:
+			Assert(FALSE);
+			return 2;
+	}
+
+	if(m_advances->HasAdvance(advance)){
+		//Clears research goal if the advance is already known.
+		m_researchGoal = -1;
+		return 0;
+	}
+
+	StartResearchingAdvanceForGoal(advance);
+
+	return 1;
+}
+#endif
 
 void Player::StartResearchingAdvanceForGoal(sint32 goal)
 {

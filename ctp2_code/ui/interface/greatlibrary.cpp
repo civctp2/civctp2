@@ -29,6 +29,9 @@
 //   sint32 GreatLibrary::UpdateList( DATABASE database )
 //   to make sure that also goods with the GLHidden flag aren't shown.
 // - Start the great library with the current research project of the player.
+// - Clears the research goal of the player, when an item is selected that
+//   enabling advance has been researched already, by Martin Gühmann.
+// - The tech goal can now also set for tile improvements, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -1547,6 +1550,9 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	case DATABASE_TILE_IMPROVEMENTS:
 		g_greatLibrary->m_window->SetTechMode( theMode, DATABASE_TILE_IMPROVEMENTS );
 		so.AddInt(theMode);
+#if !defined(ACTIVISION_ORIGINAL)
+		enableGoal = true;
+#endif
 		m_itemLabel->SetText(g_theTerrainImprovementDB->Get(theMode)->GetNameText());
 		break;
 	}
@@ -1868,11 +1874,24 @@ sint32 GreatLibrary::ClearHistory( void )
 
 
 
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : HandleSetGoal
+//
+// Description: Handles the settings of goals, takes the items from the 
+//              Great Libary window, shows a message what will be researched.
+//              And make the civilization to set the goal if the advance is 
+//              not already researched.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 GreatLibrary::HandleSetGoal( void )
 {
 
@@ -1886,7 +1905,8 @@ sint32 GreatLibrary::HandleSetGoal( void )
 	if (!selection_name)
 		return -1;
 
-	
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 	const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
 	if(!fmt) fmt = "Goal set to: %s";
 	sprintf(goal_set_message, fmt, selection_name);
@@ -1895,6 +1915,31 @@ sint32 GreatLibrary::HandleSetGoal( void )
 	MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
 
 	g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
+
+#else // ACTIVISION_ORIGINAL
+//Added by Martin Gühmann
+
+	int tmp = g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
+	if(tmp == 1){
+		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
+		if(!fmt) fmt = "Goal set to: %s";
+		sprintf(goal_set_message, fmt, selection_name);
+		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
+	}
+	else if(tmp == 0){
+		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalKnown");
+		if(!fmt) fmt = "%s is already known. No goal was set.";
+		sprintf(goal_set_message, fmt, selection_name);
+		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
+	}
+	else{
+		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryNoGoalPossible");
+		if(!fmt) fmt = "%s cannot be researched.";
+		sprintf(goal_set_message, fmt, selection_name);
+		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
+	}
+
+#endif // ACTIVISION_ORIGINAL
 
 	return 0;
 }

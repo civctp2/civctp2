@@ -2822,6 +2822,8 @@ str_tbl_ldl_Defeat			"Niederlage:"
 	
 # Great Library
 str_ldl_GreatLibraryGoalSetTo 		"Forschungsziel: %s"
+str_ldl_GreatLibraryGoalKnown	 	"%s ist bereits bekannt. Es wurde kein Forschungsziel gesetzt."
+str_ldl_GreatLibraryNoGoalPossible	"%s kann nicht erforscht werden."
 str_ldl_SEARCH_WORD 			"Suchen:"
 str_ldl_TECH_TREE 			"Technologiebaum"
 str_ldl_SET_GOAL			"Projekt festlegen"
