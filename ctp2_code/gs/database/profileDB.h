@@ -39,6 +39,7 @@
 // - Option added to enable viewing info on actions that are too expensive.
 // - Modified GetWorldShape function to allow four possible shapes instead 
 //   of two by Martin Gühmann
+// - Option added to close a messagebox automatically on eyepoint clicking.
 //
 //----------------------------------------------------------------------------
 
@@ -335,6 +336,7 @@ class ProfileDB {
 	sint32 m_richness;
 
 #if !defined(ACTIVISION_ORIGINAL)
+	sint32	m_closeEyepoint;	// Close message box when clicking the eyepoint.
 	sint32	m_showExpensive;	// Show cost and effects of expensive actions.
 #endif
 	
@@ -620,7 +622,7 @@ public:
 	BOOL		IsZoomedCombatAlways() const	{ return m_zoomedCombatAlways; }
 	BOOL        IsAutoEndMulitpleTurns() const  { return m_autoEndMultiple; }
 	const double     *GetMapSettings(sint32 pass, sint32 &count);
-if defined(ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann
 	sint32		GetWorldShape( void )			{ return m_yWrap && m_xWrap; }
 #else

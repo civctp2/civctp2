@@ -1,29 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Message box action handlers
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Option added to close a message box automatically on eyepoint clicking.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -52,12 +56,12 @@
 #include "SelItem.h"
 #include "Player.h"
 #include "Director.h"
+#if !defined(ACTIVISION_ORIGINAL)
+#include "ProfileDB.h"				// g_theProfileDB
+#endif
 
 extern RadarMap			*g_radarMap;
 extern C3UI				*g_c3ui;
-
-
-
 
 
 void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 data )
@@ -169,11 +173,33 @@ void MessageLibraryAction::Execute( aui_Control *control, uint32 action, uint32 
 
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : MessageStandardEyePointAction::Execute
+//
+// Description: Handle eyepoint click on message box
+//
+// Parameters : control				: screen area of message box (not used)
+//              action				: type of click
+//				data				: not used
+//
+// Globals    : g_theProfileDB		: user preferences
+//				g_theMessagePool	: currently active messages
+//				
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 void MessageStandardEyePointAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	MapPoint pos;
+#if defined(ACTIVISION_ORIGINAL)
+	MapPoint pos;	// never used
+#endif
 	Message *message;
 	if ( m_window ) 
 		message = m_window->GetMessage();
@@ -184,6 +210,13 @@ void MessageStandardEyePointAction::Execute( aui_Control *control, uint32 action
 		return;
 
 	message->AccessData()->EyePointCallback( 0 );
+
+#if !defined(ACTIVISION_ORIGINAL)
+	if (g_theProfileDB->GetValueByName("CloseOnEyepoint"))
+	{
+		message->Minimize();
+	}
+#endif
 }
 
 

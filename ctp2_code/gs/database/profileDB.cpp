@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Option added to enable viewing info on actions that are too expensive.
+// - Option added to close a messagebox automatically on eyepoint clicking.
 //
 //----------------------------------------------------------------------------
 
@@ -68,7 +69,8 @@ extern Diplomacy_Log *g_theDiplomacyLog;
 
 ProfileDB::ProfileDB()
 #if !defined(ACTIVISION_ORIGINAL)
-:	m_showExpensive(FALSE)
+:	m_closeEyepoint(FALSE),
+	m_showExpensive(FALSE)
 #endif
 {
 	m_vars = new PointerList<ProfileVar>;
@@ -370,7 +372,8 @@ ProfileDB::ProfileDB()
 	Var("DisplayTrade", PV_BOOL, &m_displayTrade, NULL, false);
 	Var("DisplayTerrain", PV_BOOL, &m_displayTerrain, NULL, false);
 
-#if !defined(ACTIVISION_ORIGINAL)	
+#if !defined(ACTIVISION_ORIGINAL)
+	Var("CloseOnEyepoint", PV_BOOL, &m_closeEyepoint, NULL);
 	Var("ShowExpensive", PV_BOOL, &m_showExpensive, NULL);
 #endif
 }
