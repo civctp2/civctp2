@@ -13,6 +13,21 @@
 // This material has been developed at apolyton.net by the Apolyton CtP2 
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are active for _MSC_VER value 1200 are the original 
+//       Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,10 +41,14 @@
 //   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
 //   - GetContinent      Gets the continent ID of an location.
 //   - IsWater           Gets whether a location is water.
+// - IsVeteran return type corrected.
 //
 //----------------------------------------------------------------------------
 
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __SLICFUNC_H__
 #define __SLICFUNC_H__
 
@@ -467,9 +486,12 @@ SLICFUNC(SFR_INT,  Preference);
 SLICFUNC(SFR_INT,  SetPreference);                
 
 SLICFUNC(SFR_VOID, AddMovement);                  
-SLICFUNC(SFR_VOID, ToggleVeteran);                
+SLICFUNC(SFR_VOID, ToggleVeteran); 
+#if defined(ACTIVISION_ORIGINAL)               
 SLICFUNC(SFR_VOID, IsVeteran);					  
-
+#else
+SLICFUNC(SFR_INT,  IsVeteran);
+#endif
 SLICFUNC(SFR_VOID, CantAttackUnit);               
 SLICFUNC(SFR_VOID, CantAttackCity);               
 SLICFUNC(SFR_VOID, CityCantRiotOrRevolt);         

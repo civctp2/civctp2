@@ -33,6 +33,7 @@
 // - Prevented crash on number of strategies wrap-around to negative. 
 // - Add an isStealth parameter in CharacterizeArmy method - Calvitix
 // - Made Cleanup really clean up.
+// - Prevented crash on incorrect input (0 foreigners).
 //
 //----------------------------------------------------------------------------
 
@@ -379,8 +380,11 @@ void Diplomat::Load(CivArchive & archive)
 	
 	Assert(count == CtpAi::s_maxPlayers);
 
-	
+#if defined(ACTIVISION_ORIGINAL)	// No resizing when count is 0.
 	if (count != CtpAi::s_maxPlayers)
+#else
+	if (count > CtpAi::s_maxPlayers)
+#endif
 	{
 		Resize(count);
 	}
@@ -388,11 +392,23 @@ void Diplomat::Load(CivArchive & archive)
 	for (sint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
 		{
 			m_lastMotivation[foreigner] = m_motivations.end();
+#if defined(ACTIVISION_ORIGINAL)
 			m_foreigners[foreigner].Load(archive);
 
 			
 			archive.Load((uint8 *)&ai_state, sizeof(AiState));
-
+#else
+			if (foreigner < count)
+			{
+				m_foreigners[foreigner].Load(archive);
+				archive.Load((uint8 *)&ai_state, sizeof(AiState));
+			}
+			else
+			{
+				m_foreigners[foreigner].Initialize();
+				ai_state.dbIndex = -1;
+			}
+#endif
 			
 			
 			if (g_player[m_playerId] && g_player[foreigner])
@@ -5884,6 +5900,7 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 
 void Diplomat::ComputeAllDesireWarWith()
 {
+#if defined(ACTIVISION_ORIGINAL)	// Illegal access when size is 0
 	PLAYER_INDEX foreignerId;
 
 	
@@ -5904,6 +5921,14 @@ void Diplomat::ComputeAllDesireWarWith()
 			m_desireWarWith[foreignerId] = false;
 		}
 	}
+#else
+	size_t const	foreignerCount	= m_desireWarWith.size();
+	for (size_t foreignerId = 0; foreignerId < foreignerCount; ++foreignerId)
+	{
+		m_desireWarWith[foreignerId] =
+			(foreignerId != m_playerId) && ComputeDesireWarWith(foreignerId);
+	}
+#endif
 }
 
 
