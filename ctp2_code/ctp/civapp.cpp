@@ -39,6 +39,7 @@
 // Modifications from the original Activision code:
 //
 // - Keep the user's leader name when the data is consistent.
+// - Skip begin turn handling when loading from a file.
 //
 //----------------------------------------------------------------------------
 
@@ -106,7 +107,9 @@
 #include "c3_listitem.h"
 #include "bevellesswindow.h"
 #include "spnewgamewindow.h"
+#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgame
 #include "spnewgametribescreen.h"
+#endif
 #include "c3windows.h"
 #include "statswindow.h"
 #include "backgroundwin.h"
@@ -1297,9 +1300,6 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 {
 	sint32		success;
 
-#if defined(_JAPANESE)
-	DPRINTF( k_DBG_ALL, ("Japanese Edition.\n"))
-#endif
 	
 
 	
@@ -1551,7 +1551,9 @@ sint32 CivApp::CleanupAppUI(void)
 	
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
+#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgamescreen_Cleanup
 	spnewgametribescreen_Cleanup();
+#endif
 	spscreen_Cleanup();
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
@@ -1985,7 +1987,9 @@ sint32 CivApp::InitializeGameUI(void)
 
 	
 	spnewgamescreen_Cleanup();
+#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgamescreen_Cleanup
 	spnewgametribescreen_Cleanup();
+#endif
 	spscreen_Cleanup();
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
@@ -2338,12 +2342,35 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 		if(&archive == NULL ||
 			(g_startInfoType != STARTINFOTYPE_NONE)) {
-			
+#if defined(ACTIVISION_ORIGINAL)	// double production in first turn after loading file
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 				GEV_BeginTurn,
 				GEA_Player, g_selected_item->GetCurPlayer(),
 				GEA_Int, g_player[g_selected_item->GetCurPlayer()]->m_current_round,
 				GEA_End);
+#else
+			if (&archive && !g_isScenario)
+			{
+				// Loading a saved game: jump to the move phase immediately.
+				g_gevManager->AddEvent
+					(GEV_INSERT_Tail,
+					 GEV_StartMovePhase,
+					 GEA_Player, g_selected_item->GetCurPlayer(),
+					 GEA_End
+					);
+			}
+			else
+			{
+				// Starting a new game (launch button or scenario)
+				g_gevManager->AddEvent
+					(GEV_INSERT_Tail,
+					 GEV_BeginTurn,
+					 GEA_Player, g_selected_item->GetCurPlayer(),
+					 GEA_Int, g_player[g_selected_item->GetCurPlayer()]->m_current_round,
+					 GEA_End
+					);
+			}
+#endif
 		}
 	}
 
@@ -2445,7 +2472,9 @@ sint32 InitializeSpriteEditorUI(void)
 
 	
 	spnewgamescreen_Cleanup();
+#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgamescreen_Cleanup
 	spnewgametribescreen_Cleanup();
+#endif
 	spscreen_Cleanup();
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
@@ -2825,7 +2854,9 @@ AttractWindow::Cleanup();
 	
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
+#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgamescreen_Cleanup
 	spnewgametribescreen_Cleanup();
+#endif
 	spscreen_Cleanup();
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
@@ -3701,9 +3732,7 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 
 	
 	strcpy(leaderName, g_theProfileDB->GetLeaderName());
-#if !defined(_JAPANESE)
 	leaderName[6] = '\0';
-#endif
 	c3files_StripSpaces(leaderName);
 
 	
