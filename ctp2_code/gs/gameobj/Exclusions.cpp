@@ -99,7 +99,7 @@ void Exclusions::Serialize(CivArchive &archive)
 #else
 			memcpy(newBuildings, m_buildings, min(m_numBuildings, g_theBuildingDB->NumRecords()) * sizeof(sint32));
 			delete [] m_buildings;
-			m_units = newBuildings;
+			m_buildings = newBuildings;
 #endif
 			m_numBuildings = g_theBuildingDB->NumRecords();
 		}

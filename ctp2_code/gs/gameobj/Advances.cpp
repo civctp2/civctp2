@@ -902,7 +902,7 @@ sint32 Advances::FindLevel
 		throw std::overflow_error(REPORT_ADVANCE_LOOP);
 	}
 
-	sint32	maxLevel = 0;
+	sint32	maxLevel = fromLevel;
 
 	for (sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++) 
 	{			
@@ -914,7 +914,7 @@ sint32 Advances::FindLevel
 			maxLevel = level;
 	}
 
-	return maxLevel + fromLevel;
+	return maxLevel;
 }
 
 	
