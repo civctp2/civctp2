@@ -15,6 +15,14 @@
 //
 //----------------------------------------------------------------------------
 //
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
 // Modifications from the original Activision code:
 //
 // - Music added by ahenobarb.
@@ -24,6 +32,7 @@
 //   play.
 // - Start the great library with the current research project of the player.
 // - Added option to add new messages at the top.
+// - Fixed crossed Sword bug. - Oct. 14th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 //
@@ -1998,6 +2007,15 @@ ControlPanelWindow::OrderDeliveryUpdate()
 				} else {
 					g_cursorManager->SetCursor(CURSORINDEX_NOMOVE);
 				}
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann to fix the crossed sword bug
+			}
+			else if(g_theWorld->HasCity(pos)
+			&&      army->CanAtLeastOneCaptureCity()
+			&&      g_theWorld->GetCity(pos)->GetOwner() != army->GetOwner()
+			){
+				g_cursorManager->SetCursor(CURSORINDEX_ASSAULT);
+#endif
 			} else {
 				g_cursorManager->SetCursor(CURSORINDEX_MOVE);
 			}
