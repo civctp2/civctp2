@@ -53,6 +53,10 @@
 //   - Oct. 6th 2004 Martin Gühmann 
 // - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann 
 // - Fixed an error in the should terraform logic. - Oct. 6th 2004 Martin Gühmann
+// - Disabled the utilizíation factor for all first ring improvements, so that
+//   small ciries are more likly improved. - Feb. 21st 2005 Martin Gühmann
+// - Replaced c-sytle casts by by standart static_cast's. 
+//   - Feb. 21st 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -355,21 +359,21 @@ void Governor::NormalizeSliders(SlidersSetting & sliders_setting) const
 #else
 //Added casts
 		if (player_ptr->GetWorkdayExpectation() - sliders_setting.m_deltaProduction > 2)
-			sliders_setting.m_deltaProduction = -2 + (sint32)player_ptr->GetWorkdayExpectation();
+			sliders_setting.m_deltaProduction = -2 + static_cast<sint32>(player_ptr->GetWorkdayExpectation());
 		else if (player_ptr->GetWorkdayExpectation() - sliders_setting.m_deltaProduction < -2)
-			sliders_setting.m_deltaProduction = 2 + (sint32)player_ptr->GetWorkdayExpectation();
+			sliders_setting.m_deltaProduction = 2 + static_cast<sint32>(player_ptr->GetWorkdayExpectation());
 
 		
 		if (player_ptr->GetWagesExpectation() - sliders_setting.m_deltaGold > 2)
-			sliders_setting.m_deltaGold = -2 + (sint32)player_ptr->GetWagesExpectation();
+			sliders_setting.m_deltaGold = -2 + static_cast<sint32>(player_ptr->GetWagesExpectation());
 		else if (player_ptr->GetWagesExpectation() - sliders_setting.m_deltaGold < -2)
-			sliders_setting.m_deltaGold = 2 + (sint32)player_ptr->GetWagesExpectation();
+			sliders_setting.m_deltaGold = 2 + static_cast<sint32>(player_ptr->GetWagesExpectation());
 
 		
 		if (player_ptr->GetRationsExpectation() - sliders_setting.m_deltaFood > 2)
-			sliders_setting.m_deltaFood = -2 + (sint32)player_ptr->GetRationsExpectation();
+			sliders_setting.m_deltaFood = -2 + static_cast<sint32>(player_ptr->GetRationsExpectation());
 		else if (player_ptr->GetRationsExpectation() - sliders_setting.m_deltaFood < -2)
-			sliders_setting.m_deltaFood = 2 + (sint32)player_ptr->GetRationsExpectation();
+			sliders_setting.m_deltaFood = 2 + static_cast<sint32>(player_ptr->GetRationsExpectation());
 #endif
 }
 
@@ -392,9 +396,9 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 		player_ptr->SetRationsLevel(player_ptr->GetRationsExpectation() - sliders_setting.m_deltaFood );
 #else
 //Added casts
-		player_ptr->SetWorkdayLevel((sint32)player_ptr->GetWorkdayExpectation() - sliders_setting.m_deltaProduction);
-		player_ptr->SetWagesLevel((sint32)player_ptr->GetWagesExpectation() - sliders_setting.m_deltaGold);
-		player_ptr->SetRationsLevel((sint32)player_ptr->GetRationsExpectation() - sliders_setting.m_deltaFood );
+		player_ptr->SetWorkdayLevel(static_cast<sint32>(player_ptr->GetWorkdayExpectation()) - sliders_setting.m_deltaProduction);
+		player_ptr->SetWagesLevel(static_cast<sint32>(player_ptr->GetWagesExpectation()) - sliders_setting.m_deltaGold);
+		player_ptr->SetRationsLevel(static_cast<sint32>(player_ptr->GetRationsExpectation()) - sliders_setting.m_deltaFood );
 
 #endif
 		
@@ -1137,6 +1141,7 @@ void Governor::ComputeRoadPriorities()
 		}
 
 #if 0 && !defined (ACTIVISION_ORIGINAL) //to add roads around city - Calvitix
+		// Disabled Martin Gühmann
 		Path around_path;
 		found_path.Clear();
 		MapPoint neighbor;
@@ -1550,7 +1555,6 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	sint32 gold_ter = -1;
 
 	sint32 citySize;
-	bool useUtilityFactor = true;
 
 	if(!g_theWorld->IsGood(pos)
 	){
@@ -1576,6 +1580,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	}
 
 	bool moreFoodNeeded = city->NeedMoreFood(bonusFood, true);
+//	bool moreProdNeeded = city->NeedMoreProdOrGold(bonusProd, bonusGold, true);
 
 	if((moreFoodNeeded 
 	|| (best_production_improvement < 0
@@ -1605,12 +1610,6 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			goal.utility +=  bonus * (1.0 - growth_rank);
 		}
 
-		city->GetPop(citySize);
-
-		if(citySize <= unitutil_GetSmallCityMaxSize()){
-			useUtilityFactor = false;
-		}
-
 		if(g_theWorld->IsGood(pos)){
 		    strategy.GetImproveGoodBonus(bonus);
 			goal.utility += bonus;
@@ -1618,8 +1617,6 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	}
 	else if(moreFoodNeeded 
 	&&      food_ter >= 0
-//  &&      g_theWorld->GetCell(pos)->GetNumDBImprovements() == 0
-//	&&     !g_theWorld->IsGood(pos)
 	){
 
 
@@ -1639,11 +1636,6 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 					goal.utility +=  bonus * (1.0 - growth_rank);
 				}
 		
-				city->GetPop(citySize);
-
-				if(citySize <= unitutil_GetSmallCityMaxSize()){
-					useUtilityFactor = false;
-				}
 			}
 			else{
 				goal.utility = 9999.0;
@@ -1651,6 +1643,8 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		}
 
 	}
+//	else if(moreProdNeeded
+//	|| best_gold_improvement < 0
 	else if((terr_prod_rank > 0.2) 
 	&&      (best_production_improvement >= 0)
 	){
@@ -1713,7 +1707,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			goal.utility += bonus;
 		}
 	}
-	else if(g_theWorld->IsGood(pos) == FALSE){
+	else if(g_theWorld->IsGood(pos) == FALSE){ // Should be removed
 		ERR_BUILD_INST err;
 		if(terrain_type == terrainutil_GetGlacier() 
 		|| terrain_type == terrainutil_GetSwamp() 
@@ -1735,7 +1729,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	}
 
 	// Moved to the end, so that if no terraform improvement selected
-	// the dead tiles are removed. Maybe should be else if.
+	// the dead tiles are removed.
 	else if(terrain_type == terrainutil_GetDead()){
 		if(food_ter >= 0){
 			goal.type = food_ter;
@@ -1758,7 +1752,10 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	// (ring) distance from the city, and may be any fraction from 0.0 to 1.0.
 	if ((goal.type >= 0) && city)
 	{
-		if(useUtilityFactor){
+		city->GetPop(citySize);
+
+		// Only decrease utility if the city has grown beyond the first ring.
+		if(citySize > unitutil_GetSmallCityMaxSize()){
 			sint32 const	sqDist	= MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
 			goal.utility *= city->GetUtilisationRatio(sqDist);
 		}
@@ -1778,20 +1775,15 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 //
 // Name       : Governor::GetBestRoadImprovement
 //
-// Description: Determines the best terraform improvement for a tile.
+// Description: Determines the best road improvement for a tile.
 //
 // Parameters : pos: Position of the tile on the map
 //
 // Globals    : g_player:                  List of players in the game
-//				g_theWorld:                Map information
-//              g_theTerrainImprovementDB: The tile improvement database
 //
-// Returns    : food_imp: Best food tile improvement
-//              prod_imp: Best production tile improvement 
-//              gold_imp: Best gold tile improvement
+// Returns    : sin32 an index into the terrain improvement database.
 //
-// Remark(s)  : The return values are filled with -1 if there is no according
-//              tile improvement.
+// Remark(s)  : Returns -1 if no buildable road improvement was found.
 //
 //----------------------------------------------------------------------------
 sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
@@ -2248,7 +2240,8 @@ void Governor::AssignPopulation(CityData *city)
 #if defined(ACTIVISION_ORIGINAL)	
 	sint32 specialists = floor((city->PopCount() - (min_workers + min_entertainers)) * specialists_percent);
 #else
-	sint32 specialists = (sint32)floor((city->PopCount() - (min_workers + min_entertainers)) * specialists_percent);
+	sint32 specialists = static_cast<sint32>
+		(floor((city->PopCount()- (min_workers + min_entertainers)) * specialists_percent));
 #endif
 
 	sint32 non_specialists = (city->PopCount() - (specialists + min_entertainers));
@@ -2275,7 +2268,8 @@ void Governor::AssignPopulation(CityData *city)
 #if defined(ACTIVISION_ORIGINAL)
 		count = ceil(specialists * pop_assignment->GetEntertainerPercent());
 #else
-		count = (sint32)ceil(specialists * pop_assignment->GetEntertainerPercent());
+		count = static_cast<sint32>
+			(ceil(specialists * pop_assignment->GetEntertainerPercent()));
 #endif		
 		
 		count = (count >= min_entertainers ? count : min_entertainers);
@@ -2302,7 +2296,8 @@ void Governor::AssignPopulation(CityData *city)
 #if defined(ACTIVISION_ORIGINAL)
 	count = ceil(specialists * pop_assignment->GetFarmerPercent());
 #else
-	count = (sint32)ceil(specialists * pop_assignment->GetFarmerPercent());
+	count = static_cast<sint32>
+		(ceil(specialists * pop_assignment->GetFarmerPercent()));
 #endif
 	count = (count + assigned <= specialists ? count : (specialists - assigned));
 
@@ -2343,7 +2338,7 @@ void Governor::AssignPopulation(CityData *city)
 #if defined(ACTIVISION_ORIGINAL)
 	count = ceil(specialists * pop_assignment->GetLaborerPercent());
 #else
-	count = (sint32)ceil(specialists * pop_assignment->GetLaborerPercent());
+	count = static_cast<sint32>(ceil(specialists * pop_assignment->GetLaborerPercent()));
 #endif
 	count = (count + assigned <= specialists ? count : (specialists - assigned));
 
@@ -2384,7 +2379,8 @@ void Governor::AssignPopulation(CityData *city)
 #if defined(ACTIVISION_ORIGINAL)
 	count = ceil(specialists * pop_assignment->GetMerchantPercent());
 #else
-	count = (sint32)ceil(specialists * pop_assignment->GetMerchantPercent());
+	count = static_cast<sint32>
+		(ceil(specialists * pop_assignment->GetMerchantPercent()));
 #endif
 	count = (count + assigned <= specialists ? count : (specialists - assigned));
 
@@ -2424,7 +2420,8 @@ void Governor::AssignPopulation(CityData *city)
 #if defined(ACTIVISION_ORIGINAL)
 	count = ceil(specialists * pop_assignment->GetScientistPercent());
 #else
-	count = (sint32)ceil(specialists * pop_assignment->GetScientistPercent());
+	count = static_cast<sint32>
+		(ceil(specialists * pop_assignment->GetScientistPercent()));
 #endif
 	count = (count + assigned <= specialists ? count : (specialists - assigned));
 
@@ -2473,7 +2470,7 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sin
 #if defined(ACTIVISION_ORIGINAL)
 	sint32 current = city->GetHappiness();
 #else
-	sint32 current = (sint32)city->GetHappiness();
+	sint32 current = static_cast<sint32>(city->GetHappiness());
 #endif
 	double min_delta;
 	double max_delta;
@@ -2636,7 +2633,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 	total_unit_support = player_ptr->GetTotalProduction() * unit_support_percent;
 #else
-	total_unit_support = sint32(player_ptr->GetTotalProduction() * unit_support_percent);
+	total_unit_support = static_cast<sint32>
+		(player_ptr->GetTotalProduction() * unit_support_percent);
 #endif
 	
 	Assert(g_theUnitDB);
@@ -2721,7 +2719,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 			m_buildUnitList[list_num].m_perCityGarrison = garrison_count;
 #else
-			m_buildUnitList[list_num].m_perCityGarrison = (sint16)garrison_count;
+			m_buildUnitList[list_num].m_perCityGarrison = 
+				static_cast<sint16>(garrison_count);
 #endif
 			
 			Assert(strategy.GetOffensiveUnitsPercent());
@@ -2735,7 +2734,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 			m_buildUnitList[list_num].m_perCityGarrison = garrison_count;
 #else
-			m_buildUnitList[list_num].m_perCityGarrison = (sint16)garrison_count;
+			m_buildUnitList[list_num].m_perCityGarrison = 
+				static_cast<sint16>(garrison_count);
 #endif
 			
 			Assert(strategy.GetDefensiveUnitsPercent());
@@ -2749,7 +2749,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 			m_buildUnitList[list_num].m_perCityGarrison = garrison_count;
 #else
-			m_buildUnitList[list_num].m_perCityGarrison = (sint16)garrison_count;
+			m_buildUnitList[list_num].m_perCityGarrison = 
+				static_cast<sint16>(garrison_count);
 #endif
 			
 			Assert(strategy.GetRangedUnitsPercent());
@@ -2807,7 +2808,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 				desired_count = ceil(m_neededFreight / freight_per_unit);
 #else
-				desired_count = (sint32)ceil(m_neededFreight / freight_per_unit);
+				desired_count = 
+					static_cast<sint32>(ceil(m_neededFreight / freight_per_unit));
 #endif
 			}
 			break;
@@ -2835,8 +2837,8 @@ void Governor::ComputeDesiredUnits()
 			total_unit_support_by_type = total_unit_support * 
 				unit_support_percent_by_type;
 #else
-			total_unit_support_by_type = sint32(total_unit_support * 
-				unit_support_percent_by_type);
+			total_unit_support_by_type = 
+				static_cast<sint32>(total_unit_support * unit_support_percent_by_type);
 #endif			
 			
 			if (best_unit_type >= 0)
@@ -2871,7 +2873,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 					m_buildUnitList[list_num].m_maximumCount = total_unit_support_by_type;
 #else
-					m_buildUnitList[list_num].m_maximumCount = (sint16)total_unit_support_by_type;
+					m_buildUnitList[list_num].m_maximumCount = 
+						static_cast<sint16>(total_unit_support_by_type);
 #endif					
 					
 					total_unallocated_support = total_unit_support_by_type;
@@ -2904,7 +2907,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 				m_buildUnitList[list_num].m_maximumCount = 	needed_cities;
 #else
-				m_buildUnitList[list_num].m_maximumCount = 	(sint16)needed_cities;
+				m_buildUnitList[list_num].m_maximumCount = 	
+					static_cast<sint16>(needed_cities);
 #endif
 			}
 			else
@@ -2922,8 +2926,14 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 				m_buildUnitList[list_num].m_desiredCount = desired_count - m_currentUnitCount[best_unit_type];
 #else
-				m_buildUnitList[list_num].m_desiredCount = sint16(desired_count - m_currentUnitCount[best_unit_type]);
+				m_buildUnitList[list_num].m_desiredCount = 
+					static_cast<sint16>(desired_count - m_currentUnitCount[best_unit_type]);
 #endif
+	//			DPRINTF(k_DBG_GAMESTATE, ("Desired Special units: %lx\n", desired_count));
+	//			DPRINTF(k_DBG_GAMESTATE, ("Desired Special units in list: %lx\n", m_buildUnitList[list_num].m_desiredCount));
+	//			DPRINTF(k_DBG_GAMESTATE, ("Special unit count: %lx\n", m_currentUnitCount[best_unit_type]));
+	//			DPRINTF(k_DBG_GAMESTATE, ("Best Special unit type: %s\n", g_theUnitDB->Get(best_unit_type)->GetNameText()));
+	//			DPRINTF(k_DBG_GAMESTATE, ("Player: %lx\n", m_playerId));
 			}
 			break;
 		case BUILD_UNIT_LIST_SEA_TRANSPORT:
@@ -2933,7 +2943,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 					m_buildUnitList[list_num].m_desiredCount = desired_count;
 #else
-					m_buildUnitList[list_num].m_desiredCount = (sint16)desired_count;
+					m_buildUnitList[list_num].m_desiredCount = 
+						static_cast<sint16>(desired_count);
 #endif
 					
 					m_buildUnitList[list_num].m_desiredCount -= 
@@ -2951,7 +2962,8 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 						m_buildUnitList[list_num].m_desiredCount = desired_count;
 #else
-						m_buildUnitList[list_num].m_desiredCount = (sint16)desired_count;
+						m_buildUnitList[list_num].m_desiredCount = 
+							static_cast<sint16>(desired_count);
 #endif
 
 						
@@ -3042,7 +3054,7 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 						desired_offense;
 #else
-						(sint16)desired_offense;
+						static_cast<sint16>(desired_offense);
 #endif
 				}
 
@@ -3053,7 +3065,7 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 						desired_defense;
 #else
-						(sint16)desired_defense;
+						static_cast<sint16>(desired_defense);
 #endif
 				}
 
@@ -3064,7 +3076,7 @@ void Governor::ComputeDesiredUnits()
 #if defined(ACTIVISION_ORIGINAL)
 						desired_ranged;
 #else
-						(sint16)desired_ranged;
+						static_cast<sint16>(desired_ranged);
 #endif
 				}
 
@@ -3643,6 +3655,9 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 			type = ComputeBestUnitType(build_list_rec, city);
 		} 
 	}	
+				DPRINTF(k_DBG_GAMESTATE, ("Best Special unit type: %s\n", g_theUnitDB->Get(type)->GetNameText()));
+				DPRINTF(k_DBG_GAMESTATE, ("Player: %lx\n", m_playerId));
+
 	return type;
 }
 

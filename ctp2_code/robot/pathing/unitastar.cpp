@@ -29,9 +29,13 @@
 // - m_queue_index used.
 // - Straight line corrected for worlds that do not have X-wrapping.
 // - Standardised min/max usage.
-// - Added method to check if there is a danger along the path (for civilian units). so units don't go near 
-//   enemy cities (and can't be bombarded). If no alternate path found, go on the first founded path.
-//   the method consider a danger if the owner is less than Neutral - Calvitix
+// - Added method to check if there is a danger along the path (for civilian 
+//   units). so units don't go near enemy cities (and can't be bombarded).
+//   If no alternate path found, go on the first founded path. The method 
+//   considers a danger if the owner is less than neutral - Calvitix
+// - Disabled Calvitix check for danger. If an army encounter something on
+//   its way the goal should be reconsidered. - Feb. 21st 2005 Martin Gühmann
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -44,8 +48,10 @@
 #include "UnitAstar.h"
 
 #if !defined (ACTIVISION_ORIGINAL)
-//Had to include thos files to determine if encounter army is a danger or not
-//(Danger only Ennemy and not Allies)
+// Added by Calvitix
+// Had to include those files to determine if the army encounters a possible 
+// danger on its way. Of course the is only danger if an ennemy army is 
+// encountered and not an ally.
 #include "Diplomat.h"
 #include "AgreementMatrix.h"
 #include "ArmyData.h"
@@ -510,6 +516,7 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
     CellUnitList* dest_army = the_pos_cell->UnitArmy(); 
 
 #if defined (ACTIVISION_ORIGINAL)
+// Removed by Calvitix
     if (!dest_army)
         return FALSE; 
 #endif
@@ -561,7 +568,10 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
         }
     }
 
-#if !defined (ACTIVISION_ORIGINAL)			
+#if 0 && !defined (ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann should be reconsidered
+// Maybe a special avoid danger astar
+// Added by Calvitix
 	MapPoint start;
 	m_army->GetPos(start);
 	if (pos != start && pos != m_dest)

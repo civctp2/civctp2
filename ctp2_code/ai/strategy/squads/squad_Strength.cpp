@@ -38,7 +38,11 @@
 //   New methode take the sum of all strength (attack, defense, ranged,...)
 //   by Calvitix.
 // - Handled problem with invalid units.
-// - Added a test in > operator based on number of agent (to permit neversatisfied goals)
+// - Added a test in > operator based on number of agent (to permit 
+//   neversatisfied goals) - Calvitix
+// - Disabled Calvitix last change of the > operator as it slows down the
+//   game on maps with more than one continent massively. Nevertheless this
+//   operator needs to be reworked. - Feb. 21st 2005 Martin Gühmann
 // 
 //----------------------------------------------------------------------------
 
@@ -116,7 +120,11 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 	bool greater_value = (m_value > squad_strength.m_value);
 	bool greater_agents = (m_agent_count > squad_strength.m_agent_count);
 
-#if !defined (ACTIVISION_ORIGINAL) // Calvitix
+#if 0 && !defined (ACTIVISION_ORIGINAL) // Calvitix 
+// Removed by Martin Gühmann
+// Causes a severe slow down on maps with more than one continent.
+// Needs therefore be reconsidered. That is also true for the
+// original code, only the greater variable is used.
     greater = false;
 	
     // Attack difference

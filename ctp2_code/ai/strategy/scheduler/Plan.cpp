@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Plan object (association Goal <-> squad
+// Description  : Plan object (association Goal <-> squad)
 //
 //----------------------------------------------------------------------------
 //
@@ -27,9 +27,9 @@
 //
 // - Changed the > and < operator  (to change the Sort method see Sort_Matches) - Calvitix
 //   instead of only looking for the matching value, the new operator first
-//   compare the Goal Raw-priority. If it is equal, then compare matching value.
-//   it has the advantage to give the possibility for high priority goal that demands many units
-//   to be considered. 
+//   compare the Goal Raw-priority. If it is equal, then compare matching 
+//   value. It has the advantage to give the possibility for high priority
+//   goal that demands many units to be considered. 
 //   For example :  3 units available, 
 //                  3 Goals : 
 //                  GOAL1  priority 50000, demands 2 units to be satisfied
@@ -128,13 +128,15 @@ Plan& Plan::operator= (const Plan &plan)
 
 bool Plan::operator< (const Plan &plan) const
 {
-    #if defined (ACTIVISION_ORIGINAL)
+#if defined (ACTIVISION_ORIGINAL)
+// Removed by Calvitix
 	return (m_matching_value < plan.m_matching_value);
-    #else   
-    //instead of only looking for the matching value, the new operator first
-    //compare the Goal Raw-priority. If it is equal, then compare matching value.
-    //it has the advantage to give the possibility for high priority goal that demands many units
-    //to be considered.
+#else
+// Added by Calvitix
+    //Instead of only looking for the matching value, the new operator first
+    //compares the Goal Raw-priority. If it is equal, then compare matching 
+	//value. It has the advantage to give the possibility for high priority 
+	//goal that demands many units to be considered.
     CTPGoal_ptr myGoal = static_cast < CTPGoal_ptr > (this->Get_Goal());
     CTPGoal_ptr planGoal = static_cast < CTPGoal_ptr > (plan.Get_Goal());
     bool isLower = false;
@@ -147,19 +149,19 @@ bool Plan::operator< (const Plan &plan) const
         isLower = (m_matching_value < plan.m_matching_value);
     }
     return isLower;
-    #endif
+#endif
 }
 
 
 bool Plan::operator> (const Plan &plan) const
 {
-    #if defined (ACTIVISION_ORIGINAL)
+#if defined (ACTIVISION_ORIGINAL)
 	return (m_matching_value > plan.m_matching_value);
-    #else   
-    //instead of only looking for the matching value, the new operator first
-    //compare the Goal Raw-priority. If it is equal, then compare matching value.
-    //it has the advantage to give the possibility for high priority goal that demands many units
-    //to be considered.
+#else   
+    //Instead of only looking for the matching value, the new operator first
+    //compares the Goal Raw-priority. If it is equal, then compare matching 
+	//value. It has the advantage to give the possibility for high priority 
+	//goal that demands many units to be considered.
     CTPGoal_ptr myGoal = static_cast < CTPGoal_ptr > (this->Get_Goal());
     CTPGoal_ptr planGoal = static_cast < CTPGoal_ptr > (plan.Get_Goal());
     bool isGreater = false;
@@ -173,7 +175,7 @@ bool Plan::operator> (const Plan &plan) const
         isGreater = (m_matching_value > plan.m_matching_value);
     }
     return isGreater;
-    #endif
+#endif
 }
 
 

@@ -40,10 +40,18 @@
 // - Correct the determination of Empire Center and foreign Empire center - Calvitix
 // - Invalid goals if in territory with nontrespassing treaty - Calvitix
 // - Allow incursion permission to stealth units
-// - Rollback the determination of check_dest (problem with special units that couldn't find their path to goal anymore
-// - Added other conditions to determine the RETREAT goals (and set max of 2 units per city for that goals, hardcoded (to not depend on threat)
+// - Rollback the determination of check_dest (problem with special units that couldn't find 
+//   their path to goal anymore
+// - Added other conditions to determine the RETREAT goals (and set max of 2 units per city 
+//   for that goals, hardcoded (to not depend on threat)
 // - Forbid to army with settlers to perform ATTACK or SEIGE goals
 // - Allow Units that are grouping to both move (if they are far enough)
+// - Corrected condition to give unowned bonus in Compute_Raw_Priority, now it is 
+//   given if the according territory has owner -1 instead of 0 
+//   - Feb. 21st 2005 Martin Gühmann
+// - Removed unnecessary reinitialization in Compute_Needed_Troop_Flow for trade
+//   routes and tileimps. - Feb. 21st 2005 Martin Gühmann
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -137,7 +145,7 @@ void CTPGoal::Init()
 
 	m_target_army = ID(0);
 	m_target_city = ID(0);
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
     Set_Sub_Task(SUB_TASK_GOAL);
 #endif //ACTIVISION_ORIGINAL
 }
@@ -312,7 +320,7 @@ const Army & CTPGoal::Get_Target_Army() const
 }
 
 
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 void CTPGoal::Set_Sub_Task(const SUB_TASK_TYPE & sub_task)
 {
     m_sub_task = sub_task;
@@ -439,12 +447,12 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 
 	
 	m_current_needed_strength.Init();
-	m_current_needed_strength.Set_Agent_Count(1);
+	m_current_needed_strength.Set_Agent_Count(1); // Was zero after Init.
 	
 	
 	if ( goal_record->GetTargetTypeChokePoint() )
 	{
-#if defined (ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)
 		m_current_needed_strength.Set_Attack(threat);
 #else
         // Need also attack and ranged strength - Calvitix
@@ -458,11 +466,11 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 	else if ( goal_record->GetTargetTypeImprovement() ||
 			  goal_record->GetTargetTypeTradeRoute() )
 	{
-		m_current_needed_strength.Init();
-#if defined (ACTIVISION_ORIGINAL)
-		m_current_needed_strength.Set_Agent_Count(1);
+#if defined(ACTIVISION_ORIGINAL)
+		m_current_needed_strength.Init(); // Why resetting everything again to zero? Although everthing is zero.
+		m_current_needed_strength.Set_Agent_Count(1); // Except this one. -Martin Gühmann
 #else
-        // why only one unit ?
+        // why only one unit ? Why then zero units? - Martin Gühmann
         // by bringing a real army to pirate or pillage, it can be ready for seige or attack
         // a single unit is quite defenseless - Calvitix
         m_current_needed_strength.Set_Attack(threat / 2);
@@ -479,7 +487,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 		
 		else
 			m_current_needed_strength.Set_Attack(threat);
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
         //to be sure that the global force of the army will be enough
         // (not only a wounded unit for example)
 		m_current_needed_strength.Set_Value(threat);
@@ -491,12 +499,12 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 		 goal_record->GetTargetOwnerSelf() )
 	{
 
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
         // tweak to obtain RETREAT Goal definition : TO DO - 'cleaner' method - Calvitix
         // Set to 2 to so that units with no goals will retreat to the nearest city
         // (I Prefer that method than the GARRISON troops, that are not able to leave the city)
-        // cities will be better defended if their is enough units, otherwise units will be affected
-        // to relevant goals
+        // cities will be better defended if their is enough units, otherwise units will be 
+		// affected to relevant goals
 		if (g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity() 
 		&& g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf() 
 		&& goal_record->GetTreaspassingArmyBonus() > 0) 
@@ -516,7 +524,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 		strategy.GetDefensiveGarrisonCount(defensive_garrison);
 		strategy.GetRangedGarrisonCount(ranged_garrison);
 
-#if defined (ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)
 		m_current_needed_strength.Set_Defense(threat);
 #else
         // why only defensive units ?
@@ -532,7 +540,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 		m_current_needed_strength.Set_Ranged_Units(ranged_garrison);
 		}
 	
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 	}
     else if ((goal_record->GetTargetTypeAttackUnit() || goal_record->GetTargetTypeCity())
     && !goal_record->GetTargetOwnerSelf() && !goal_record->GetTargetTypeSpecialUnit())
@@ -547,7 +555,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 	
 	else if ( goal_record->GetTargetTypeBorder() )
 	{
-#if defined (ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)
 		m_current_needed_strength.Set_Defense(threat);
 		m_current_needed_strength.Set_Attack(threat);
 #else
@@ -687,12 +695,12 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	{
 		
 		bool isspecial, cancapture, haszoc, canbombard;
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 		bool isstealth;
 #endif
 		sint32 maxattack, maxdefense;
 		ctpagent_ptr->Get_Army()->CharacterizeArmy( isspecial, 
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 			isstealth, 
 #endif
 			maxattack, 
@@ -741,8 +749,9 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	
 	Utility bonus = 0;
    	
-//Set if unit is wounded and it is a retreat of defense goal, add bonus to goalpriority + matching
-#if !defined (ACTIVISION_ORIGINAL)
+//Set if unit is wounded and it is a retreat of defense goal, add bonus 
+//to goalpriority + matching
+#if !defined(ACTIVISION_ORIGINAL)
 
     MapPoint armyPos = ctpagent_ptr->Get_Pos();	
     PLAYER_INDEX PosOwner = g_theWorld->GetOwner(armyPos);
@@ -778,8 +787,8 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 #endif //ACTIVISION_ORIGINAL
 
-#if defined _DEBUG  // Add a debug report of goal computing (raw priority and all modifiers)
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG)  // Add a debug report of goal computing (raw priority and all modifiers)
+    #if !defined(ACTIVISION_ORIGINAL)
     double report_wounded = bonus;
     #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
@@ -787,8 +796,8 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	if ( ctpagent_ptr->Get_Army()->IsObsolete() )
 		bonus += g_theGoalDB->Get(m_goal_type)->GetObsoleteArmyBonus();
 
-#if defined _DEBUG  // Add a debug report of goal computing (raw priority and all modifiers)
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG)  // Add a debug report of goal computing (raw priority and all modifiers)
+    #if !defined(ACTIVISION_ORIGINAL)
     double report_obsolete = bonus - report_wounded;
     #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
@@ -808,10 +817,12 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	if (g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus() > 0)
 	{
 		PLAYER_INDEX pos_owner = g_theWorld->GetCell(ctpagent_ptr->Get_Pos())->GetOwner();
-#if defined (ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Calvitix
 		uint32 incursion_permissin = Diplomat::GetDiplomat(m_playerId).GetIncursionPermission();
 		if (pos_owner >= 0 && !(incursion_permissin & (0x1 << pos_owner)))
-#else		
+#else
+// Added by Calvitix
 		bool incursion_permissin = Diplomat::GetDiplomat(m_playerId).IncursionPermission(pos_owner);
 		if (pos_owner >= 0 && !(incursion_permissin))
 #endif
@@ -820,10 +831,10 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 		}
 	}
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers)
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
+    #if !defined(ACTIVISION_ORIGINAL)
             double report_Treaspassing = bonus - report_obsolete;
-    #endif //ACTIV
+    #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
 
     
@@ -831,10 +842,10 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	sint32 distance_modifier;
 	strategy.GetDistanceModifierFactor(distance_modifier);
 	Utility time_term = static_cast<Utility>( (eta * distance_modifier) + cell_dist);
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers)
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
+    #if !defined(ACTIVISION_ORIGINAL)
             double report_time_term = time_term;
-    #endif //ACTIV
+    #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
 	
 	if (!ctpagent_ptr->Get_Army()->HasCargo())
@@ -859,8 +870,8 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
     Utility match = bonus + time_term + raw_priority;
     
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if !defined(ACTIVISION_ORIGINAL)
     AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), m_goal_type, -1,
     ("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8d \n",
     this,
@@ -916,8 +927,8 @@ Utility CTPGoal::Compute_Raw_Priority()
 		return m_raw_priority;
 	}
 
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if !defined(ACTIVISION_ORIGINAL)
     double report_cell_value = 0.0;
     double report_cell_lastvalue = 0.0;
     double report_cell_threat = 0.0;
@@ -940,7 +951,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 
-#if defined (ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)
     MapPoint empire_center = map.GetEmpireCenter(m_playerId);
 	MapPoint foreign_empire_center;
 	
@@ -969,11 +980,11 @@ Utility CTPGoal::Compute_Raw_Priority()
 			strategy.GetGoalElement(m_goal_type)->GetPriority();
 	}
 
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if !defined(ACTIVISION_ORIGINAL)
     report_cell_value = cell_value;
     report_cell_lastvalue = cell_value;
-    #endif //ACTIV
+    #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
 
 	
@@ -985,11 +996,11 @@ Utility CTPGoal::Compute_Raw_Priority()
 		     maxThreat) * 
 		  g_theGoalDB->Get(m_goal_type)->GetThreatBonus() );
 	
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if !defined(ACTIVISION_ORIGINAL)
         report_cell_threat = cell_value - report_cell_lastvalue;
         report_cell_lastvalue = cell_value;
-    #endif //ACTIV
+    #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
     }
 	
@@ -1001,11 +1012,11 @@ Utility CTPGoal::Compute_Raw_Priority()
 		    maxEnemyValue ) * 
 		  goal_rec->GetEnemyValueBonus() );
 	
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if !defined(ACTIVISION_ORIGINAL)
         report_cell_EnemyValue = cell_value - report_cell_lastvalue;
         report_cell_lastvalue = cell_value;
-    #endif //ACTIV
+    #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
     }
 	
@@ -1017,11 +1028,11 @@ Utility CTPGoal::Compute_Raw_Priority()
 		    maxAlliedValue ) * 
 		  goal_rec->GetAlliedValueBonus() );
 	
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if !defined(ACTIVISION_ORIGINAL)
         report_cell_AlliedValue = cell_value - report_cell_lastvalue;
         report_cell_lastvalue = cell_value;
-    #endif //ACTIV
+    #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
     }
 	float maxPower = map.GetMaxPower( m_playerId );
@@ -1032,11 +1043,11 @@ Utility CTPGoal::Compute_Raw_Priority()
 		    maxPower ) * 
 		goal_rec->GetPowerBonus() );
 
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if !defined(ACTIVISION_ORIGINAL)
         report_cell_MaxPower = cell_value - report_cell_lastvalue;
         report_cell_lastvalue = cell_value;
-    #endif //ACTIV
+    #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
     }
 	
@@ -1063,18 +1074,18 @@ Utility CTPGoal::Compute_Raw_Priority()
 	cell_value += sqrt(static_cast<double>
     (MapPoint::GetSquaredDistance(target_pos, empire_center))) * goal_rec->GetDistanceToHomeBonus();
 
-    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_HomeDistance = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
 	
-	if (foreign_empire_center.x != 0 && foreign_empire_center.y != 0)
+	if (foreign_empire_center.x != 0 && foreign_empire_center.y != 0)//Dangerious if the empire center has coords (0,0)
 	{
 	    cell_value += sqrt(static_cast<double>
         (MapPoint::GetSquaredDistance(target_pos, foreign_empire_center))) * goal_rec->GetDistanceToEnemyBonus();
 	}
 
-    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_EnemyDistance = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
@@ -1084,7 +1095,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetChokePointBonus();
 	}
 	
-    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_Chokepoint = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
@@ -1095,7 +1106,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetUnexploredBonus();
 	}
 
-    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_Unexplored = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
@@ -1105,7 +1116,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetNotVisibleBonus();
 	}
 
-    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_NotVisible = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
@@ -1117,27 +1128,27 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetInHomeTerritoryBonus();
 	}
 
-    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_InHomeTerritory = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
 
-	if (m_playerId != territoryOwner && territoryOwner > 0)
+	if (m_playerId != territoryOwner && territoryOwner >= 0) // 0: Barbarian player
 	{
 		cell_value += goal_rec->GetInEnemyTerritoryBonus();
 	}
 
-    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_InEnemyTerritory = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
 
-	if (territoryOwner == 0)
+	if (territoryOwner == -1) // -1 stands for no owner 0 is Barbarian owner. -Martin Gühmann
 	{
 		cell_value += goal_rec->GetNoOwnerTerritoryBonus();
 	}
 
-    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_NoOwnerTerritory = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
@@ -1149,11 +1160,11 @@ Utility CTPGoal::Compute_Raw_Priority()
 	{
 		cell_value += SettleMap::s_settleMap.GetValue(target_pos);
 
-#if defined _DEBUG
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG)
+    #if !defined(ACTIVISION_ORIGINAL)
         report_cell_Settle = cell_value - report_cell_lastvalue;
         report_cell_lastvalue = cell_value;
-    #endif //ACTIV
+    #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
 
 
@@ -1173,8 +1184,8 @@ Utility CTPGoal::Compute_Raw_Priority()
 		m_raw_priority = Goal::BAD_UTILITY;
 
 
-#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-    #if !defined ACTIVISION_ORIGINAL
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    #if !defined(ACTIVISION_ORIGINAL)
     AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
     ("\t %9x,\t%s, rc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f \n",
     this,
@@ -1227,16 +1238,18 @@ GOAL_RESULT CTPGoal::Execute_Task()
 	MapPoint goto_pos = Get_Target_Pos(ctpagent_ptr->Get_Army());
 	MapPoint my_pos;
 	bool rally_complete = true;
-#if defined (ACTIVISION_ORIGINAL) //Subtask_attribute
+#if defined(ACTIVISION_ORIGINAL) //Subtask_attribute
 	SUB_TASK_TYPE sub_task = SUB_TASK_GOAL;
 	if (Is_Satisfied() || Is_Execute_Incrementally())
 #else
 	Set_Sub_Task(SUB_TASK_GOAL);
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
 	sint32 cells;
-	//Add this condition to avoid that a 12 units army with SEIGE goal retreat at 1 tile near the city,
-	//because it has left 1 unit and has to group with another one.
-	//I Think it is better to go on an seige the city (if there is more than 2/3 left, if more than 8 units).
+
+	// Add this condition to avoid that a 12 units army with SEIGE goal retreat 
+	// at 1 tile near the city, because it has left 1 unit and has to group with 
+	// another one. I Think it is better to go on an seige the city (if there is 
+	// more than 2/3 left, if more than 8 units).
 	bool hastogowithoutgrouping = (goal_record->GetNeverSatisfied() && ctpagent_ptr->GetRounds(goto_pos,cells) <= 1)
 		                          && m_current_attacking_strength.Get_Agent_Count() > (2*k_MAX_ARMY_SIZE/3);
     if (Is_Satisfied() || Is_Execute_Incrementally() || hastogowithoutgrouping) 
@@ -1248,7 +1261,7 @@ GOAL_RESULT CTPGoal::Execute_Task()
 			
 			if ( !RallyComplete() )
             {
-#if defined (ACTIVISION_ORIGINAL) //Subtask_attribute
+#if defined(ACTIVISION_ORIGINAL) //Subtask_attribute
 				sub_task = SUB_TASK_RALLY;
 #else
                 Set_Sub_Task(SUB_TASK_RALLY);
@@ -1264,11 +1277,12 @@ GOAL_RESULT CTPGoal::Execute_Task()
 				if ( RallyTroops() == false)
 					return GOAL_FAILED;
 
-#if defined (ACTIVISION_ORIGINAL) //Subtask_attribute				
+#if defined(ACTIVISION_ORIGINAL) //Subtask_attribute				
 				if (RallyComplete() == false)
 					return GOAL_IN_PROGRESS;
 #else
-				//if hastogowithoutgrouping is true, execute the goal even if the rally is not complete
+				// If hastogowithoutgrouping is true, execute the goal 
+				// even if the rally is not complete
 				if (RallyComplete() == false)
 					return GOAL_IN_PROGRESS;
 				else
@@ -1283,7 +1297,7 @@ GOAL_RESULT CTPGoal::Execute_Task()
 
 //Added an Ungroup method (sometimes, for example to explore, it is more interessant
 //to have a lot of small units rather than a huge army	
-#if !defined (ACTIVISION_ORIGINAL) 
+#if !defined(ACTIVISION_ORIGINAL) 
 		else if (goal_record->GetUnGroupFirst()) 
 		{
 
@@ -1294,7 +1308,7 @@ GOAL_RESULT CTPGoal::Execute_Task()
 				
 				if (UnGroupComplete() == false)
 					return GOAL_IN_PROGRESS;
-#if !defined (ACTIVISION_ORIGINAL) //Subtask_attribute
+#if !defined(ACTIVISION_ORIGINAL) //Subtask_attribute
 				else
 				{
 					Set_Sub_Task(SUB_TASK_GOAL);
@@ -1321,7 +1335,7 @@ GOAL_RESULT CTPGoal::Execute_Task()
 			if (ctpagent_ptr->Get_Can_Be_Executed() == false)
 				continue;
 
-#if defined (ACTIVISION_ORIGINAL) //Subtask_attribute
+#if defined(ACTIVISION_ORIGINAL) //Subtask_attribute
 			if (GotoGoalTaskSolution(ctpagent_ptr, goto_pos, sub_task) == false)
 #else
 			if (GotoGoalTaskSolution(ctpagent_ptr, goto_pos, m_sub_task) == false)
@@ -1376,7 +1390,7 @@ bool CTPGoal::Get_Totally_Complete() const
 
 	
 	bool isspecial; 
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 	bool isstealth = false;
 #endif		
 	sint32 maxattack;
@@ -1395,7 +1409,7 @@ bool CTPGoal::Get_Totally_Complete() const
 		bool canbombard;
 
 		m_target_army->CharacterizeArmy(isspecial, 
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 			    isstealth,
 #endif		
 			maxattack, 
@@ -1495,9 +1509,9 @@ bool CTPGoal::Get_Totally_Complete() const
 				
 				regard_checked = true;
 			}
-// If the goal is not executed by stealth units, forbid to execute it if their is no incursion permission			
-// (depending on alignement) - Calvitix
-#if !defined (ACTIVISION_ORIGINAL)			
+// If the goal is not executed by stealth units, forbid to execute it if their is no 
+// incursion permission	(depending on alignement) - Calvitix
+#if !defined(ACTIVISION_ORIGINAL) // Maybe needs to be reconsidered. -Martin Gühmann
 			if ((!diplomat.IncursionPermission(target_owner) &&
 				(diplomat.GetPersonality()->GetAlignmentGood() ||
 				 diplomat.GetPersonality()->GetAlignmentNeutral()))
@@ -1714,9 +1728,9 @@ bool CTPGoal::Get_Totally_Complete() const
 	}
 
 
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
     //Try to Steal Technology only if the other civ has more advances than player
-    //Otherwise, spy can do anithing else
+    //Otherwise, spy can do anything else
 	if (order_record->GetUnitPretest_CanStealTechnology())
 	{
 		if (g_player[m_playerId]->NumAdvances() > g_player[target_owner]->NumAdvances())
@@ -2164,7 +2178,7 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 #if defined(ACTIVISION_ORIGINAL)
 	if ( sub_task == SUB_TASK_GOAL ) 
 #else
-        if (m_sub_task == SUB_TASK_GOAL)
+	if (m_sub_task == SUB_TASK_GOAL)
 #endif
 	{
 		order_rec = goal_rec->GetExecute();
@@ -2264,7 +2278,7 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 	else
     {
 
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 		g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), "NULL", 0);
 #endif
 
@@ -2962,7 +2976,7 @@ bool CTPGoal::RallyTroops()
 			
 			closest_agent_pos = closest_agent_ptr->Get_Pos();
 
-#if defined (ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)
 			if (GotoGoalTaskSolution(ctpagent1_ptr, closest_agent_pos, SUB_TASK_RALLY) == false)
 				return false;			
 	        sint32 cells;
@@ -2973,10 +2987,13 @@ bool CTPGoal::RallyTroops()
 				if (GotoGoalTaskSolution(closest_agent_ptr, agent1_pos, SUB_TASK_RALLY ) == false)
 					return false;
 			}
-#else // To avoid Groups to be blocked when an unit is in a city (problem with garrison -> not enough room)
+#else 
+// To avoid Groups to be blocked when an unit is in a city 
+// (problem with garrison -> not enough room)
 			sint32 cells;
-			if (!g_theWorld->GetCity(closest_agent_pos).IsValid() || ctpagent1_ptr->GetRounds(closest_agent_pos, cells) > 2)
-			{
+			if(!g_theWorld->GetCity(closest_agent_pos).IsValid() 
+			||  ctpagent1_ptr->GetRounds(closest_agent_pos, cells) > 2
+			){
        			if (GotoGoalTaskSolution(ctpagent1_ptr, closest_agent_pos, SUB_TASK_RALLY) == false)
 	       			return false;
 			}
@@ -3034,17 +3051,16 @@ bool CTPGoal::RallyTroops()
 						result = closest_agent_pos.GetNeighborPosition(WORLD_DIRECTION(i),tempPos);
 					    if(result)
 						{
-						   CellUnitList *the_army=NULL;
-						   the_army = g_theWorld->GetArmyPtr(tempPos);
-						   if (!the_army)
-						   {  //search for cell without army
+							CellUnitList *the_army=NULL;
+							the_army = g_theWorld->GetArmyPtr(tempPos);
+							if (!the_army)
+							{  //search for cell without army
 								if (GotoGoalTaskSolution(closest_agent_ptr, tempPos, SUB_TASK_RALLY ) == false)
 									return false;
 								break;
-						   }						   
+							}						   
 						}
 					}
-
 				}
 			}
 #endif
@@ -3063,7 +3079,7 @@ bool CTPGoal::RallyTroops()
 	return true;
 }
 
-#if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 
 bool CTPGoal::UnGroupTroops() 
 {
@@ -3241,7 +3257,7 @@ bool CTPGoal::LoadTransport(CTPAgent_ptr agent_ptr, CTPAgent_ptr transport_ptr)
 		transport_ptr->Get_Army()->CanSpaceLaunch())
 	{
 		success = GotoTransportTaskSolution(agent_ptr, transport_ptr, SUB_TASK_AIRLIFT);
-#if !defined (ACTIVISION_ORIGINAL)				
+#if !defined(ACTIVISION_ORIGINAL)				
 		if (success)
 			{
 				Set_Sub_Task(SUB_TASK_CARGO_TO_BOARD);
@@ -3260,7 +3276,7 @@ bool CTPGoal::LoadTransport(CTPAgent_ptr agent_ptr, CTPAgent_ptr transport_ptr)
 
 			if (success)
 			{
-#if !defined (ACTIVISION_ORIGINAL)				
+#if !defined(ACTIVISION_ORIGINAL)				
 				Set_Sub_Task(SUB_TASK_CARGO_TO_BOARD);
 #endif
 				agent_ptr->Set_Can_Be_Executed(false);

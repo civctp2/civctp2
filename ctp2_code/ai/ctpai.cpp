@@ -44,9 +44,15 @@
 //   (for example seige force) - Calvitix
 // - Cleaned up data of dead player.
 // - Improved Diplomat cleanup.
+// - The explore resolution is now a constant. - Feb. 21st 2005 Martin Gühmann
+// - Set back explore resolution to five and set roads are now every second
+//   turn computed, tileimps every fifth turn. - Feb. 21st 2005 Martin Gühmann
+// - UnGroupGarrisionUnits and MoveOutofCityTransportUnits disabled,
+//   at least the later must be reconsidered as I got the feeling that we have
+//   in the city units that are waiting for being moved out. 
+//    - Feb. 21st 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "profileAi.h"
@@ -150,8 +156,9 @@ namespace
 	// Settings for periodic actions
 	// These should be > 0 (otherwise % will crash). 
 	// The original ACTIVISION values are 5 for all period.
-	size_t const	PERIOD_COMPUTE_ROADS				= 5;
-	size_t const	PERIOD_COMPUTE_TILE_IMPROVEMENTS	= 5;
+	size_t const    PERIOD_COMPUTE_ROADS                = 2; // From 5
+	size_t const    PERIOD_COMPUTE_TILE_IMPROVEMENTS    = 5;
+	size_t const    EXPLORE_RESOLUTION                  = 5;
 
 } // namespace
 
@@ -633,15 +640,11 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 			// Speed-up only, no functional change.
 			GoalRecord const *	goal	= g_theGoalDB->Get(goal_type);
 
-			if (goal
-				&&
-				(goal->GetTargetTypeAttackUnit() || 
-				 goal->GetTargetTypeSpecialUnit()
-				)
-				&&
-				(goal->GetTargetOwnerSelf() == (foreignerId == playerId))
-               )
-			{
+			if(goal
+			&&(goal->GetTargetTypeAttackUnit() 
+			|| goal->GetTargetTypeSpecialUnit())
+			&&(goal->GetTargetOwnerSelf() == (foreignerId == playerId))
+			){
 				goal_ptr = new CTPGoal();
 				goal_ptr->Set_Type(goal_type);
 				goal_ptr->Set_Player_Index(foreignerId);
@@ -1551,6 +1554,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 #if defined (ACTIVISION_ORIGINAL)
 	if (round % 5 == 0)
 #else
+	// Road computation round now a constant 
 	if (round % PERIOD_COMPUTE_ROADS == 0)
 #endif
 	{
@@ -1590,6 +1594,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 #if defined (ACTIVISION_ORIGINAL)
 		if (round % 5 == 0)
 #else
+	// Tile improment placement round now a constant
 		if (round % PERIOD_COMPUTE_TILE_IMPROVEMENTS == 0)
 #endif
 		{
@@ -1957,7 +1962,9 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 	{
 		
    	   CtpAi::MakeRoomForNewUnits(player);
-#if !defined(ACTIVISION_ORIGINAL)
+#if 0 && !defined(ACTIVISION_ORIGINAL)
+	   // No idea if this should be done like this, 
+	   // transport can also move out sleeping units
        //to execute the new action :
        CtpAi::MoveOutofCityTransportUnits(player);
 
@@ -2137,11 +2144,11 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 
 	CTPGoal_ptr goal_ptr;
 
-#if 1 || defined (ACTIVISION_ORIGINAL)
+#if defined (ACTIVISION_ORIGINAL)
 	sint16 explore_res = 5;
 #else
-    // Set a better explore resolution (every 2 tiles)
-    sint16 explore_res = 4;
+//Added by Martin Gühmann explore resolution is now constant
+    sint16 explore_res = EXPLORE_RESOLUTION;
 #endif
 	GOAL_TYPE goal_type;
 	const StrategyRecord::GoalElement *goal_element_ptr;
@@ -2316,8 +2323,8 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 				 !g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
 				 continue;
 
-                   //Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
-                   // it can freeze all the goals of this type) - Calvitix
+            //Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
+            // it can freeze all the goals of this type) - Calvitix
 #if defined (ACTIVISION_ORIGINAL)
 			if (scheduler.CountGoalsOfType(goal_type) > 0)
 				continue;
