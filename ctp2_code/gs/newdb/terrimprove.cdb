@@ -57,7 +57,7 @@ TerrainImprovement {
 		Bit(Int) BonusGold
 		Bit(Int) MoveCost
 		#Added by Martin Gühmann for Trade redirection
-		Int Freight
+		Bit(Int) Freight
 		Bit Radar
 		Bit Airport
 		Bit ListeningPost

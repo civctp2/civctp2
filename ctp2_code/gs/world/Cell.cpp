@@ -26,6 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Added CalcTerrainFreightCost by Martin Gühmann
+// - Corrected handling of tile improvements that did not have a Freight 
+//   modifier.
 //
 //----------------------------------------------------------------------------
 
@@ -911,39 +913,60 @@ void Cell::CalcTerrainMoveCost()
 
 #if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann
+
+//----------------------------------------------------------------------------
+//
+// Name       : Cell::CalcTerrainFreightCost
+//
+// Description: Compute the freight cost of entering this cell.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainDB				: terrain properties
+//              g_theTerrainImprovementDB	: terrain improvement properties
+//
+// Returns    : double	: freight cost of entering this cell
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 double Cell::CalcTerrainFreightCost()
 {
-	double tmp; 
-	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
-	sint32 base = rec->GetEnvBase()->GetFreight();
-	tmp = base;
+	// Base terrain cost
+	TerrainRecord const *	rec		= g_theTerrainDB->Get(m_terrain_type);
+	sint32					cost	= rec->GetEnvBase()->GetFreight();
 
-	sint32 m;
-	if(HasCity() && rec->GetEnvCity()) {
-		m = rec->GetEnvCityPtr()->GetFreight();
-		tmp = min(tmp, m);
+	// Modifications by special situations (city, river)
+	if (HasCity() && rec->GetEnvCity()) 
+	{
+		cost = min(cost, rec->GetEnvCityPtr()->GetFreight());
+	}
+	if (HasRiver() && rec->GetEnvRiver()) 
+	{
+		cost = min(cost, rec->GetEnvRiverPtr()->GetFreight());
 	}
 
-	if(HasRiver() && rec->GetEnvRiver()) {
-		m = rec->GetEnvRiverPtr()->GetFreight();
-		tmp = min(tmp, m);
-	}
+	// Modifications by tile improvements (roads, etc.)
+	for (sint32 i = m_objects->Num() - 1; i >= 0; --i) 
+	{
+		ID const &	object	= m_objects->Access(i);
+		if (k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB == (object.m_id & k_ID_TYPE_MASK)) 
+		{
+			TerrainImprovementRecord const *			impRec = 
+				g_theTerrainImprovementDB->Get(object.m_id & k_ID_KEY_MASK);
+			TerrainImprovementRecord::Effect const *	effect =
+				terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
-	sint32 i;
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
-		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
-			const TerrainImprovementRecord *impRec = 
-				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
-			const TerrainImprovementRecord::Effect *effect;
-			effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
-			if(effect) {
-				m = effect->GetFreight();
-				tmp = min(tmp, m);
+			sint32	modifiedFreight;
+			if (effect && effect->GetFreight(modifiedFreight)) 
+			{
+				cost = min(cost, modifiedFreight);
 			}
 		}
 	}																					
 	
-	return tmp;
+	return static_cast<double>(cost);
 }
 #endif
 
