@@ -1,37 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Player game object
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Moved the autosave file generation to PlayerEvent.cpp, to prevent losing 
+//   the advance that just has had its research completed.
+//
+//----------------------------------------------------------------------------
 
 #include "c3debug.h"
 
@@ -2573,13 +2570,14 @@ void Player::BeginTurn()
 	DPRINTF(k_DBG_GAMESTATE, ("It's player %d's turn - year %d.\n", m_owner, GetCurRound()));
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", m_gold->GetLevel()));
 
+#if defined(ACTIVISION_ORIGINAL)	// too early, moved to PlayerEvent.cpp
 	if (g_theProfileDB->IsAutoSave()) {
 		
 		if (m_playerType != PLAYER_TYPE_ROBOT) {
 			g_civApp->AutoSave(m_owner);
 		}
 	}
-
+#endif
 
 	
 	if ( m_owner == g_selected_item->GetVisiblePlayer() ) {

@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Fixed number of city styles removed.
+// - Prevented crashes due to uninitialised members.
 //
 //----------------------------------------------------------------------------
 
@@ -240,6 +241,11 @@ void UnitActor::Initialize(void)
 	m_needsToVictor = FALSE;
 	m_killNow = FALSE;
 	m_numOActors = 0;
+#if !defined(ACTIVISION_ORIGINAL)
+	m_curUnitAction			= UNITACTION_NONE;
+	m_transparency			= 0;
+	m_numRevealedActors		= 0;
+#endif
 
 	for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
 	{
@@ -792,8 +798,15 @@ void UnitActor::Process(void)
 
 	}
 
+#if defined(ACTIVISION_ORIGINAL)	// Crash later on when m_curAction is NULL
 	if (m_curAction)
 		m_curAction->Process();
+#else
+	if (!m_curAction)
+		return;
+
+	m_curAction->Process();
+#endif
 
 	if (m_curAction->Finished()) 
 	{

@@ -1,11 +1,35 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Player event handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Moved PBEM save file generation to the FinishBeginTurn event (by JJB).
+// - Moved the autosave file generation to just before the StartMovePhase 
+//   event, to prevent losing the advance that just was completed.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "PlayerEvent.h"
@@ -59,7 +83,6 @@ extern TurnCount *g_turn;
 extern CivApp *g_civApp;
 extern ControlPanelWindow	*g_controlPanel;
 extern C3UI						*g_c3ui;
-
 
 extern sint32 g_noai_stop_player;
 
@@ -329,6 +352,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 	DPRINTF(k_DBG_GAMESTATE, ("It's player %d's turn - year %d.\n", p->m_owner, p->GetCurRound()));
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", p->m_gold->GetLevel()));
 
+#if !defined(ACTIVISION_ORIGINAL)
 	// JJB added the following to save in a PBEM game:
 	// moved from newturncount.cpp where it was too early
 	if((g_turn->IsHotSeat() || g_turn->IsEmail()) &&
@@ -336,7 +360,9 @@ STDEHANDLER(FinishBeginTurnEvent)
 	  PLAYER_TYPE_ROBOT) {
 		g_turn->SendNextPlayerMessage();
 	}
+#endif
 	
+#if defined(ACTIVISION_ORIGINAL)		// moved to FinishBuildPhaseEvent
 	if (g_theProfileDB->IsAutoSave()) {
 		
 		if (p->m_playerType != PLAYER_TYPE_ROBOT) {
@@ -347,6 +373,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 		if(g_controlPanel)
 			g_controlPanel->GetWindow()->ShouldDraw(TRUE);
 	}
+#endif
 
 
 	
@@ -634,8 +661,23 @@ STDEHANDLER(FinishBuildPhaseEvent)
 	sint32 player;
 	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;
 
+#if !defined(ACTIVISION_ORIGINAL)
+	if (g_player[player] && !Player::IsThisPlayerARobot(player)) 
+	{
+		if (g_theProfileDB->IsAutoSave())
+		{
+			g_civApp->AutoSave(player);
+		}
+
+		// Not sure whether this is needed, but it seems logical to update the
+		// control panel data after the build phase.
+		if (g_controlPanel && g_controlPanel->GetWindow())
+		{
+			g_controlPanel->GetWindow()->ShouldDraw(TRUE);
+		}
+	}
+#endif
 	
-		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_StartMovePhase,
 							   GEA_Player, player,
 							   GEA_End);

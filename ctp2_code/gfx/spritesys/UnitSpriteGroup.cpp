@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Prevented crashes when accessing files that failed to open/create. 
+// - Prevented crashes due to uninitialised members.
 //
 //----------------------------------------------------------------------------
 
@@ -56,6 +57,7 @@ extern CivPaths			*g_civPaths;
 extern ScreenManager	*g_screenManager;
 extern ColorSet			*g_colorSet;
 
+#if defined(ACTIVISION_ORIGINAL)	// Missing and superfluous initialisations
 UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
 :
 SpriteGroup(type)
@@ -92,6 +94,30 @@ SpriteGroup(type)
 
 
 }
+#else
+UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
+:	SpriteGroup(type),
+	m_numFirePointsWork(0)
+{
+	POINT const	thePoint	= {24, 24};
+	POINT const	emptyPoint	= {0, 0};
+
+	for (sint32 j = 0; j < k_NUM_FACINGS; j++) 
+	{
+		m_moveOffsets[j]			= emptyPoint;
+
+		for (sint32 i = 0; i < UNITACTION_MAX; i++) 
+		{
+			m_shieldPoints[i][j]	= thePoint;
+		}
+
+		for (sint32 k = 0; k < k_NUM_FIREPOINTS; k++)
+		{
+			m_firePointsWork[k][j]	= emptyPoint;
+		}
+	}
+}
+#endif
 
 UnitSpriteGroup::~UnitSpriteGroup()
 {

@@ -31,8 +31,7 @@
 //   CityPopSpinner, By Martin Gühmann.
 // - Corrected wrap handling, by Fromafar.
 // - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gühmann.
-// - Memory leaks fixed by Martin Gühmann. (Obviously it looks like that 
-//   it does not work.)
+// - Memory leaks fixed, by Martin Gühmann and Fromafar.
 //
 //----------------------------------------------------------------------------
 
@@ -221,6 +220,12 @@ void scenarioeditor_SetSaveOptionsFromMode(void)
 }
 
 ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
+#if !defined(ACTIVISION_ORIGINAL)	// initialise to NULL to be able to delete safely later
+:	m_terrainImpSwitches(NULL),		
+	m_terrainSwitches(NULL),
+	m_xWrapButton(NULL),			// never used?
+	m_yWrapButton(NULL)				// never used?
+#endif
 {
 	m_initializing = true;
 
@@ -461,7 +466,7 @@ ScenarioEditor::~ScenarioEditor()
 		m_addStuffWindow = NULL;
 	}
 
-#if defined(ACTIVISION_ORIGINAL);
+#if defined(ACTIVISION_ORIGINAL)
 	//Removed by Martin Gühmann
 	if(m_terrainSwitches) {
 		delete [] m_terrainSwitches;
@@ -668,6 +673,9 @@ void ScenarioEditor::PopulateTerrainList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 
+#if !defined(ACTIVISION_ORIGINAL)
+	delete [] m_terrainSwitches;
+#endif
 	m_terrainSwitches = new ctp2_Switch *[g_theTerrainDB->NumRecords()];
 
 	for(t = 0; t < g_theTerrainDB->NumRecords(); t++) {
@@ -932,6 +940,9 @@ void ScenarioEditor::PopulateTerrainImprovementList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 
+#if !defined(ACTIVISION_ORIGINAL)
+	delete [] m_terrainImpSwitches;
+#endif
 	m_terrainImpSwitches = new ctp2_Switch *[g_theTerrainImprovementDB->NumRecords()];
 
 	for(t = 0; t < g_theTerrainImprovementDB->NumRecords(); t++) {
