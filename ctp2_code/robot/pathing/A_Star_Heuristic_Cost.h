@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Heuristic cost for the A* pathing algorithm
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - X-wrap added, structure cleaned up 
+//
+//----------------------------------------------------------------------------
+
 #ifndef __A_Star_Heuristic_Cost_h__
 #define __A_Star_Heuristic_Cost_h__
 
@@ -58,8 +89,10 @@ private:
 	sint32 world_columns;
 
 	
+#if !defined(ACTIVISION_ORIGINAL)
+	bool x_wrap;
+#endif
 	bool y_wrap;
-
 	
 	
 	
@@ -82,7 +115,7 @@ public:
 	
 	
 	
-	
+#if defined(ACTIVISION_ORIGINAL)	// old style, x-wrap not used
 	void Init
 	(
 		sint32 i_max_rows,
@@ -98,8 +131,16 @@ public:
 	
 	
 	void Trash();
-	
-
+#else	
+	A_Star_Heuristic_Cost
+	(
+		size_t const	a_RowCount,
+		size_t const	a_ColumnCount,
+		bool const		a_HasYWrap		= false,	// default: earth shape
+		bool const		a_HasXWrap		= true
+	);
+	virtual ~A_Star_Heuristic_Cost();
+#endif
 	
 	
 	

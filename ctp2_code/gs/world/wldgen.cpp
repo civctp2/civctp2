@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : World generator
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - X-wrap added to A* heuristics costs
+//
+//----------------------------------------------------------------------------
 
 #define INITGUID
 #include "c3.h"
@@ -124,10 +143,17 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 		
 		XY_Coords.Init(m_size.y, m_size.x);
 
-		
+#if defined(ACTIVISION_ORIGINAL)	// X-wrap added		
 		A_star_heuristic = new A_Star_Heuristic_Cost;
 		A_star_heuristic->Init(m_size.y, m_size.x, (m_isYwrap ? true : false));
-		
+#else
+		A_star_heuristic = new A_Star_Heuristic_Cost
+								(m_size.y, 
+								 m_size.x, 
+								 m_isYwrap ? true : false, 
+								 m_isXwrap ? true : false
+								);
+#endif		
 		s_randomGenerator->Release();
 		
 		m_continents_are_numbered= FALSE; 
@@ -196,19 +222,27 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	
 	XY_Coords.Init(m_size.y, m_size.x);
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	A_star_heuristic = new A_Star_Heuristic_Cost;
 
 	
 	A_star_heuristic->Init(m_size.y, m_size.x, (m_isYwrap ? true : false));
-
+#else
+	A_star_heuristic = new A_Star_Heuristic_Cost
+							(m_size.y, 
+							 m_size.x, 
+							 m_isYwrap ? true : false, 
+							 m_isXwrap ? true : false
+							);
+#endif
 	m_distanceQueue = NULL;
 }
 
 World::~World()
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	// cleaned up in destructor now
 	A_star_heuristic->Trash();
+#endif
 	delete A_star_heuristic;
 
 	FreeMap();

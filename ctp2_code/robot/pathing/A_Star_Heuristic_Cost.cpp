@@ -1,15 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Heuristic cost for the A* pathing algorithm
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - X-wrap added, structure cleaned up 
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -48,7 +66,7 @@
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)	// old style, x-wrap not used
 void A_Star_Heuristic_Cost::Init
 (
 	sint32 i_max_rows,
@@ -89,14 +107,150 @@ void A_Star_Heuristic_Cost::Init
 
 
 
-
-
 void A_Star_Heuristic_Cost::Trash()
 {
 	
 	FREE(raw_min_movement_costs);
 	FREE(relaxed_min_movement_costs);
 }
+#else
+
+#include <algorithm>
+
+namespace
+{
+
+//----------------------------------------------------------------------------
+//
+// Name       : DivCeil
+//
+// Description: Divide and round up to nearest integer
+//
+// Parameters : a_Value			: value to divide
+//				a_Divisor		: divisor
+//
+// Globals    : -
+//
+// Returns    : Rounded up division result
+//
+// Remark(s)  : Does not test for division by 0.
+//
+//----------------------------------------------------------------------------
+inline size_t	DivCeil
+(
+	size_t const	a_Value, 
+	size_t const	a_Divisor
+)
+{
+	return (a_Value + a_Divisor - 1) / a_Divisor;
+};
+
+//----------------------------------------------------------------------------
+//
+// Name       : IsInRange
+//
+// Description: Check
+//
+// Parameters : a_Test			: value to check
+//				a_Begin		    : start of range
+//              a_End			: one past end of range
+//              a_MayWrap   	: allow wrap around
+//
+// Globals    : -
+//
+// Returns    : bool			: test value is valid
+//              a_Real			: real value after wrap around - if any
+//
+// Remark(s)  : Assumes the test value is only slightly out of bounds.
+//
+//----------------------------------------------------------------------------
+inline bool		IsInRange
+(
+	int	const		a_Test, 
+	int const		a_Begin,
+	int const		a_End,
+	bool const		a_MayWrap,
+	int &			a_Real
+)
+{
+	if (a_Test < a_Begin)
+	{
+		a_Real	= a_Test + a_End;
+	}
+	else if (a_Test < a_End)
+	{
+		a_Real	= a_Test;
+	}
+	else
+	{
+		a_Real	= a_Test - a_End;
+	}
+
+	return a_MayWrap || (a_Test == a_Real);
+};
+
+} // namespace
+
+//----------------------------------------------------------------------------
+//
+// Name       : A_Star_Heuristic_Cost::A_Star_Heuristic_Cost
+//
+// Description: Constructor
+//
+// Parameters : a_RowCount		: number of map rows
+//				a_ColumnCount	: number of map columns
+//				a_HasYWrap		: map wraps at top and bottom
+//				a_HasXWrap		: map wraps at sides
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+A_Star_Heuristic_Cost::A_Star_Heuristic_Cost
+(
+	size_t const	a_RowCount,
+	size_t const	a_ColumnCount,
+	bool const		a_HasYWrap,
+	bool const		a_HasXWrap
+)
+:	rows(DivCeil(a_RowCount, HEURISTIC_TILES_PER_GRID)),
+	columns(DivCeil(2 * a_ColumnCount, HEURISTIC_TILES_PER_GRID)),
+	world_rows(a_RowCount),
+	world_columns(2 * a_ColumnCount),
+	x_wrap(a_HasXWrap),
+	y_wrap(a_HasYWrap)
+{
+	size_t const	blockCount	= rows * columns;
+
+	raw_min_movement_costs		= new double[blockCount];
+	relaxed_min_movement_costs	= new double[blockCount];
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : A_Star_Heuristic_Cost::~A_Star_Heuristic_Cost
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+A_Star_Heuristic_Cost::~A_Star_Heuristic_Cost()
+{
+	delete [] raw_min_movement_costs;
+	delete [] relaxed_min_movement_costs;
+}
+
+#endif
 
 
 
@@ -205,7 +359,7 @@ void A_Star_Heuristic_Cost::Update_One_Tiles_Cost
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 void A_Star_Heuristic_Cost::Clear_Raw_Movement_Costs()
 {
 	
@@ -230,7 +384,15 @@ void A_Star_Heuristic_Cost::Clear_Raw_Movement_Costs()
 
 	} 
 }
-
+#else
+void A_Star_Heuristic_Cost::Clear_Raw_Movement_Costs()
+{
+	std::fill(raw_min_movement_costs, 
+		      raw_min_movement_costs + (rows * columns),
+			  DBL_MAX
+			 );
+}
+#endif
 
 
 
@@ -406,7 +568,7 @@ void A_Star_Heuristic_Cost::Relax_Raw_Movement_Costs()
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)	// x-wrap always, first and last row incorrect
 void A_Star_Heuristic_Cost::Relax_One_Cost_Grid
 (
 	int row,
@@ -484,7 +646,60 @@ void A_Star_Heuristic_Cost::Relax_One_Cost_Grid
 	} 
 	
 }
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : A_Star_Heuristic_Cost::Relax_One_Cost_Grid
+//
+// Description: Sets a (relaxed) block value to the minimum (raw) value of 
+//              itself and its direct neighbours.
+//
+// Parameters : a_Row			: block row number
+//				a_Column		: block column number
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Assumes that input is valid.
+//
+//----------------------------------------------------------------------------
+void A_Star_Heuristic_Cost::Relax_One_Cost_Grid
+(
+	int		a_Row,
+	int		a_Column
+)
+{
+	int const	radius		= 1;	// how direct a neighbour should be
+	int const	ownIndex	= a_Column + (a_Row * columns);
 
+	// Initialise with own value (just to have something)
+	double &	relaxedMin	= relaxed_min_movement_costs[ownIndex];
+	relaxedMin = raw_min_movement_costs[ownIndex];
+
+	for (int i = a_Row - radius; i <= a_Row + radius; ++i)
+	{
+		int row;
+		if (IsInRange(i, 0, rows, y_wrap, row))
+		{
+			for (int j = a_Column - radius; j <= a_Column + radius; ++j)
+			{
+				int column;
+				if (IsInRange(j, 0, columns, x_wrap, column))
+				{
+					double const &	neighbourValue	= 
+						raw_min_movement_costs[column + (row * columns)];
+
+					if (neighbourValue < relaxedMin)
+					{
+						relaxedMin = neighbourValue;
+					}
+				}
+			}
+		}
+	}
+}
+#endif
 
 
 
