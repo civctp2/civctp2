@@ -1529,7 +1529,7 @@ str_ldl_Disclaimer3 "Kontakt: ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-06-28"
+str_ldl_version "2004-07-26"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
@@ -3169,7 +3169,7 @@ str_profile_ShowCityInfluence "Stadteinfluss ein"
 str_profile_ShowPoliticalBorders "Politische Grenzen ein"
 str_profile_CloseOnEyepoint "Meldung schließ. bei Klick auf Auge"
 str_profile_ShowExpensive "Kosten für Terrainverbes. immer anzeigen"
-str_profile_ShowOrderUnion "Alle ArmeeBefehle anzeigen"
+str_profile_ShowOrderUnion "Alle Armeebefehle anzeigen"
 
 str_ldl_Pw_COLON_	"Siedler:"
 
@@ -3182,10 +3182,10 @@ str_tbl_ldl_End_Unit_Turn		"Einheitenzug beenden"
 str_tbl_ldl_Process_Unit_Orders		"Alle Einheitenbefehle ausführen"
 str_tbl_ldl_Group_Army			"Einheiten Gruppieren"
 str_tbl_ldl_Ungroup_Army		"Einheitengruppierung aufheben"
-str_tbl_ldl_Gamestate_Debug		"Gamestate_Debug (Playtest)"
-str_tbl_ldl_Rand_Test			"Rand_Test (Playtest)"
-str_tbl_ldl_Command_Enter		"Command Enter (Playtest)"
-str_tbl_ldl_Command_Enter_Alternate	"Command Enter Alternate (Playtest)"
+str_tbl_ldl_Gamestate_Debug		"Debugspielstatus (Playtest)"
+str_tbl_ldl_Rand_Test			"Zufallstest (Playtest)"
+str_tbl_ldl_Command_Enter		"Kommando eingeben (Playtest)"
+str_tbl_ldl_Command_Enter_Alternate	"Alternativkommando eingeben (Playtest)"
 
 # Added for extended National Management 6/2004 L. Hirth
 str_ldl_ND_RTL_WORKER		"Arb."

@@ -953,13 +953,13 @@ Voraussetzung:
 [ADVANCE_GENETIC_TAILORING_STATISTICS]
 Ermöglicht:
 <L:DATABASE_UNITS,UNIT_KRAKEN>Krakengleiter<e>
-<L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VATS>Nahrungsreplikator<e>
+<L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VAT>Nahrungsreplikator<e>
 [END]
 
 [ADVANCE_GENETIC_TAILORING_GAMEPLAY]
 Die Genmanipulation bringt das <L:DATABASE_ADVANCES,ADVANCE_HUMAN_CLONING>Klonverfahren<e> einen weiteren Schritt voran, indem sie die bewusste Gestaltung menschlichen Lebens ermöglicht. Kinder werden nicht länger natürlich geboren, sondern vielmehr mit beliebig kombinierten, überlegenen mentalen und physischen Eigenschaften ausgestattet und sozusagen "gezüchtet".
 
-<L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VATS>Nahrungsreplikatoren<e> machen sich die Genmanipulation zunutze, um riesige <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungsmengen<e> zu produzieren und so die <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> von der Bürde der Hungersnöte zu befreien.
+<L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VAT>Nahrungsreplikatoren<e> machen sich die Genmanipulation zunutze, um riesige <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungsmengen<e> zu produzieren und so die <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> von der Bürde der Hungersnöte zu befreien.
 
 Der <L:DATABASE_UNITS,UNIT_KRAKEN>Krakengleiter<e> ist ein sehr gefährliches Unterwasser-Angriffsfahrzeug.
 [END]
@@ -2864,7 +2864,7 @@ Das <L:DATABASE_BUILDINGS,IMPROVE_GRANARY>Lagerhaus<e> erhöht die Dauer bis zum 
 
 Bei der <L:DATABASE_BUILDINGS,IMPROVE_FOOD_SILO>Siloanlage<e> beträgt diese Dauer 10 Runden.
 
-Nach der Errichtung eines <L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VATS>Nahrungsreplikators<e> ist in der betreffenden Stadt ein 100%iger Schutz vor Hungersnöten gewährleistet.
+Nach der Errichtung eines <L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VAT>Nahrungsreplikators<e> ist in der betreffenden Stadt ein 100%iger Schutz vor Hungersnöten gewährleistet.
 [END]
 
 [CONCEPT_STARVATION_HISTORICAL]

@@ -953,13 +953,13 @@ Requires:
 [ADVANCE_GENETIC_TAILORING_STATISTICS]
 Gives:
 <L:DATABASE_UNITS,UNIT_KRAKEN>Kraken<e>
-<L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VATS>Cornucopic Vats<e>
+<L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VAT>Cornucopic Vats<e>
 [END]
 
 [ADVANCE_GENETIC_TAILORING_GAMEPLAY]
 Genetic Tailoring takes <L:DATABASE_ADVANCES,ADVANCE_HUMAN_CLONING>Human Cloning<e> one step further, enabling the total customization of human life.  Children are no longer born as much as they are "grown," with any combination of superior mental and physical attributes.
 
-<L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VATS>Cornucopic Vats<e> take advantage of Genetic Tailoring to produce vast amounts of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>, eliminating hunger in <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>.
+<L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VAT>Cornucopic Vats<e> take advantage of Genetic Tailoring to produce vast amounts of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>, eliminating hunger in <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>.
 
 The <L:DATABASE_UNITS,UNIT_KRAKEN>Kraken<e> is a formidable underwater assault vehicle.
 [END]
@@ -2824,7 +2824,7 @@ Farms - enabled by <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURE>Agriculture<e> - Inc
 [CONCEPT_STARVATION_GAMEPLAY]
 The more people there are in a <L:DATABASE_CONCEPTS,CONCEPT_CITY>City<e>, the more <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> the city must produce to feed them.  For each turn a city fails to produce enough food, the city starves.  Each city can endure a state of starvation for up to three turns.  After three turns, the <L:DATABASE_CONCEPTS,CONCEPT_POPULATION>city size<e> decreases by one.
 
-Fortunately, there are three <L:DATABASE_CONCEPTS,CONCEPT_IMPROVEMENTS>Improvements<e> that increase a city's food storage capacity and, therefore, increase a city's starvation "protection."  The <L:DATABASE_BUILDINGS,IMPROVE_GRANARY>Granary<e> increases a city's starvation protection to five turns; the <L:DATABASE_BUILDINGS,IMPROVE_FOOD_SILO>Food Silo<e> increases it to ten turns. Build a <L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VATS>Cornucopic Vats<e> improvement will insure that a city will never starve.
+Fortunately, there are three <L:DATABASE_CONCEPTS,CONCEPT_IMPROVEMENTS>Improvements<e> that increase a city's food storage capacity and, therefore, increase a city's starvation "protection."  The <L:DATABASE_BUILDINGS,IMPROVE_GRANARY>Granary<e> increases a city's starvation protection to five turns; the <L:DATABASE_BUILDINGS,IMPROVE_FOOD_SILO>Food Silo<e> increases it to ten turns. Build a <L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VAT>Cornucopic Vats<e> improvement will insure that a city will never starve.
 [END]
 
 [CONCEPT_STARVATION_HISTORICAL]

@@ -1454,7 +1454,7 @@ str_ldl_Disclaimer3 "Per contattare gli autori scrivi all'indirizzo: ctp2source@
 
 ### Version String ###
 
-str_ldl_version "2004-05-19"
+str_ldl_version "2004-07-26"
 
 
 
@@ -3061,6 +3061,7 @@ str_profile_ShowPoliticalBorders 		"Mostra confini politici"
 str_ldl_CreateProposal "Crea proposta"
 str_profile_CloseOnEyepoint			"Chiudi messaggi cliccando sull'occhio"
 str_profile_ShowExpensive			"Mostra effetti miglioramenti casella costosi"
+str_profile_ShowOrderUnion                      "Show All Army Orders" 
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"Musicoptions"

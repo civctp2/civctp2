@@ -929,3 +929,13 @@ TOOLTIP_DIPMAN_INTEL_REG_COLDWAR_BUTTON	"Rapporti scadenti"
 TOOLTIP_DIPMAN_INTEL_REG_NEUTRAL_BUTTON	"Rapporti normali"
 TOOLTIP_DIPMAN_INTEL_REG_FRIEND_BUTTON	"Rapporti buoni"
 TOOLTIP_DIPMAN_INTEL_REG_ALLIED_BUTTON	"Rapporti ottimi"
+
+###	National Summary Window Extension (L. Hirth Added 6/2004)
+TOOLTIP_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON		"Click here to sort by the number of workers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON		"Click here to sort by the number of slaves."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTENTERTAINER_BUTTON	"Click here to sort by the number of entertainers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON		"Click here to sort by the number of farmers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON		"Click here to sort by the number of laborers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON		"Click here to sort by the number of merchants."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON		"Click here to sort by the number of scientists."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON	"Click here to sort by the number of military units."

@@ -1536,7 +1536,7 @@ str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-06-28"
+str_ldl_version "2004-07-26"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
@@ -3177,10 +3177,10 @@ str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
-str_tbl_ldl_Music_Options		"Musicoptions"
+str_tbl_ldl_Music_Options		"Music options"
 str_tbl_ldl_Decend			"Decend"
 str_tbl_ldl_Execute_Eyepoint		"Focus on object (eye)"
-str_tbl_ldl_Move_Order			"Moveorder"
+str_tbl_ldl_Move_Order			"Move order"
 str_tbl_ldl_End_Unit_Turn		"End unit turn"
 str_tbl_ldl_Process_Unit_Orders		"Process given unit orders"
 str_tbl_ldl_Group_Army			"Group all units to army"

@@ -272,6 +272,10 @@ INFECTED_VIA_TRADE 			"Un agente infeccioso está provocando estragos en {city[0]
 ## Cyberninja Attack ##
 INVESTIGATE_CITY_FAILED_VICTIM 		"Nuestros esfuerzos de contraespionaje han merecido la pena. Unos agentes han contrarrestado el intento de un espía extranjero de investigar la ciudad de {city[0].name}."
 INVESTIGATE_CITY_FAILED_AGRESSOR 	"Nuestro {unitrecord[0].name} ha sido capturado mientras intentaba investigar la ciudad de {city[0].name}."
+# Added 7/2004 L. Hirth
+INVESTIGATE_CITY_FAILED_ESC_VICTIM	"Our counterintelligence efforts have paid off.  Operatives have thwarted a foreign spy's attempt to investigate our city of {city[0].name}. But unfortunately we couldn't catch him."
+INVESTIGATE_CITY_FAILED_ESC_AGRESSOR 	"Our {unitrecord[0].name} was captured while attempting to investigate the city of {city[0].name}. But luckily he could escape."
+# Added End
 
 ## Nanite Cleansing ##
 ## Eco-Ranger Attack ##

@@ -3169,12 +3169,13 @@ str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-05-19"
+str_ldl_version "2004-07-26"
 str_ldl_RANKING_POLLUTION		"âòêı"
 str_ldl_RANKING_WONDER		"éµïsévãc"
 
 str_profile_CloseOnEyepoint			"Close Message When Clicking Eyeball"
 str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
+str_profile_ShowOrderUnion                      "Show All Army Orders" 
 
 
 ### Great Libary Strings ###
@@ -3195,3 +3196,10 @@ str_tbl_ldl_Gamestate_Debug		"Debug gamestate (playtest)"
 str_tbl_ldl_Rand_Test			"Rand test (playtest)"
 str_tbl_ldl_Command_Enter		"Command enter (playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Command enter alternate (playtest)"
+
+# Added for extended National Management 6/2004 L. Hirth
+str_ldl_ND_RTL_WORKER		"Wrk."
+str_ldl_ND_RTL_SLAVE		"Slv."
+str_ldl_ND_RTL_COMBAT_UNITS	"Mil."
+
+
