@@ -26,7 +26,7 @@ TERRAIN_FOREST {
       Gold 10
       Defense 0.25
       Movement 200
-      Freight 200
+      Freight 180
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -38,7 +38,7 @@ TERRAIN_FOREST {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -47,7 +47,7 @@ TERRAIN_FOREST {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_FOREST_GOOD_ONE
@@ -86,7 +86,7 @@ TERRAIN_PLAINS {
       Gold 5
       Defense 0
       Movement 100
-      Freight 100
+      Freight 90
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -98,7 +98,7 @@ TERRAIN_PLAINS {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -107,7 +107,7 @@ TERRAIN_PLAINS {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_PLAINS_GOOD_ONE
@@ -146,7 +146,7 @@ TERRAIN_TUNDRA {
       Gold 0
       Defense 0
       Movement 200
-      Freight 100
+      Freight 90
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -158,7 +158,7 @@ TERRAIN_TUNDRA {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -167,7 +167,7 @@ TERRAIN_TUNDRA {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_TUNDRA_GOOD_ONE
@@ -204,7 +204,7 @@ TERRAIN_GLACIER {
       Gold 0
       Defense 0
       Movement 300
-      Freight 500
+      Freight 450
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -216,7 +216,7 @@ TERRAIN_GLACIER {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -225,7 +225,7 @@ TERRAIN_GLACIER {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    MovementType: Air
@@ -261,7 +261,7 @@ TERRAIN_GRASSLAND {
       Gold 5
       Defense 0
       Movement 100
-      Freight 100
+      Freight 90
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -273,7 +273,7 @@ TERRAIN_GRASSLAND {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -282,7 +282,7 @@ TERRAIN_GRASSLAND {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_GRASSLAND_GOOD_TWO
@@ -321,7 +321,7 @@ TERRAIN_DESERT {
       Gold 5
       Defense 0
       Movement 200
-      Freight 100
+      Freight 90
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -333,7 +333,7 @@ TERRAIN_DESERT {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -342,7 +342,7 @@ TERRAIN_DESERT {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_DESERT_GOOD_ONE
@@ -381,7 +381,7 @@ TERRAIN_SWAMP {
       Gold 5
       Defense 0.25
       Movement 300
-      Freight 300
+      Freight 270
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -393,7 +393,7 @@ TERRAIN_SWAMP {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -402,7 +402,7 @@ TERRAIN_SWAMP {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_SWAMP_GOOD_ONE
@@ -440,7 +440,7 @@ TERRAIN_JUNGLE {
       Gold 5
       Defense 0.25
       Movement 300
-      Freight 600
+      Freight 540
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -452,7 +452,7 @@ TERRAIN_JUNGLE {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -461,7 +461,7 @@ TERRAIN_JUNGLE {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_JUNGLE_GOOD_TWO
@@ -499,7 +499,7 @@ TERRAIN_MOUNTAIN {
       Gold 10
       Defense 1
       Movement 400
-      Freight 600
+      Freight 540
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -511,7 +511,7 @@ TERRAIN_MOUNTAIN {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -520,7 +520,7 @@ TERRAIN_MOUNTAIN {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_MOUNTAIN_GOOD_ONE
@@ -559,7 +559,7 @@ TERRAIN_HILL {
       Gold 10
       Defense 0.5
       Movement 200
-      Freight 200
+      Freight 180
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -571,7 +571,7 @@ TERRAIN_HILL {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -580,7 +580,7 @@ TERRAIN_HILL {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_HILL_GOOD_TWO
@@ -606,7 +606,7 @@ TERRAIN_WATER_SHALLOW {
       Gold 5
       Defense 0
       Movement 100
-      Freight 33
+      Freight 50
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -642,7 +642,7 @@ TERRAIN_WATER_DEEP {
       Gold 5
       Defense 0
       Movement 100
-      Freight 33
+      Freight 50
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -677,7 +677,7 @@ TERRAIN_WATER_VOLCANO {
       Gold 15
       Defense 0
       Movement 100
-      Freight 33
+      Freight 50
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -712,7 +712,7 @@ TERRAIN_WATER_BEACH {
       Gold 10
       Defense 0
       Movement 100
-      Freight 33
+      Freight 50
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -748,7 +748,7 @@ TERRAIN_WATER_SHELF {
       Gold 5
       Defense 0
       Movement 100
-      Freight 33
+      Freight 50
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -781,7 +781,7 @@ TERRAIN_WATER_TRENCH {
       Gold 10
       Defense 0
       Movement 100
-      Freight 33
+      Freight 50
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -816,7 +816,7 @@ TERRAIN_WATER_RIFT {
       Gold 5
       Defense 0
       Movement 100
-      Freight 33
+      Freight 50
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -857,7 +857,7 @@ TERRAIN_DEAD {
       Gold 0
       Defense 0
       Movement 200
-      Freight 100
+      Freight 200
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -896,7 +896,7 @@ TERRAIN_BROWN_HILL {
       Gold 5
       Defense 0.5
       Movement 200
-      Freight 200
+      Freight 180
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -908,7 +908,7 @@ TERRAIN_BROWN_HILL {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -917,7 +917,7 @@ TERRAIN_BROWN_HILL {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_DESERT_GOOD_ONE
@@ -955,7 +955,7 @@ TERRAIN_BROWN_MOUNTAIN {
       Gold 10
       Defense 1
       Movement 400
-      Freight 600
+      Freight 540
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -967,7 +967,7 @@ TERRAIN_BROWN_MOUNTAIN {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -976,7 +976,7 @@ TERRAIN_BROWN_MOUNTAIN {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_MOUNTAIN_GOOD_ONE
@@ -1015,7 +1015,7 @@ TERRAIN_WHITE_HILL {
       Gold 5
       Defense 0.5
       Movement 200
-      Freight 200
+      Freight 180
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -1026,7 +1026,7 @@ TERRAIN_WHITE_HILL {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -1035,7 +1035,7 @@ TERRAIN_WHITE_HILL {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    MovementType: Air
@@ -1070,7 +1070,7 @@ TERRAIN_WHITE_MOUNTAIN {
       Gold 5
       Defense 1
       Movement 400
-      Freight 600
+      Freight 540
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -1081,7 +1081,7 @@ TERRAIN_WHITE_MOUNTAIN {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -1090,7 +1090,7 @@ TERRAIN_WHITE_MOUNTAIN {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE
@@ -1116,7 +1116,7 @@ TERRAIN_WATER_KELP {
       Gold 5
       Defense 0
       Movement 100
-      Freight 33
+      Freight 50
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -1151,7 +1151,7 @@ TERRAIN_WATER_REEF {
       Gold 5
       Defense 0
       Movement 100
-      Freight 33
+      Freight 110
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -1188,7 +1188,7 @@ TERRAIN_SPECIAL1 {
       Gold 5
       Defense 0
       Movement 100
-      Freight 100
+      Freight 90
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -1200,7 +1200,7 @@ TERRAIN_SPECIAL1 {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -1209,7 +1209,7 @@ TERRAIN_SPECIAL1 {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    MovementType: Air
@@ -1234,7 +1234,7 @@ TERRAIN_SPECIAL2 {
       Gold 5
       Defense 0
       Movement 200
-      Freight 100
+      Freight 90
       DeadFood 0
       DeadShield 0
       DeadGold 0
@@ -1246,7 +1246,7 @@ TERRAIN_SPECIAL2 {
       Shield 15
       Gold 15
       Movement 50
-      Freight 50
+      Freight 500
    }
 
    EnvRiver {
@@ -1255,7 +1255,7 @@ TERRAIN_SPECIAL2 {
       Shield 5
       Gold 5
       Movement 50
-      Freight 50
+      Freight 70
    }
 
    MovementType: Air

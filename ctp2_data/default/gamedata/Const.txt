@@ -223,7 +223,7 @@ INDUSTRIAL_POLLUTION_WARNING_THRESHOLD	10	# industrial pollution warning message
 VERY_HAPPY_THRESHOLD	85			# threshold at which a city is considered "very happy"
 CITY_GROWTH_COEFFICIENT 175          # Amount of food per citizen required to grow a city
 RIOT_LEVEL              73
-MAX_MATCH_LIST_CYCLES 10 # Amount of AI match list cycles
+MAX_MATCH_LIST_CYCLES 6 # Amount of AI match list cycles
 POWER_POINTS_TO_MATERIALS 1  # 1 power point can be converted to x materials
 MAX_AIRLIFT_STACK_SIZE 2
 GOLD_FROM_PIRACY 30
@@ -350,7 +350,7 @@ BIO_INFECTION_PRODUCTION_COEF 0.2
 NANO_BUILDING_KILL_PERCENTAGE 0.3
 BASE_STARVATION_PROTECTION 3
 
-CARAVAN_COEF 0.04
+CARAVAN_COEF 0.004
 
 POLLUTION_CAUSED_BY_NUKE 1000000
 

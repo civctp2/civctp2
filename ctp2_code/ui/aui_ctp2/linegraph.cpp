@@ -27,6 +27,7 @@
 //
 // - Repaired memory leaks.
 // - Resolved ambigious calls of std::max.
+// - Removed all warnings on .NET
 //
 //----------------------------------------------------------------------------
 
@@ -258,7 +259,7 @@ void LineGraph::LabelAxes(void)
 #if defined(ACTIVISION_ORIGINAL)
 		primitives_DrawText(m_surface, max(0, m_graphRect.right-35), m_graphRect.bottom + (m_events?20:0),
 #else
-		primitives_DrawText(m_surface, max((long)0, m_graphRect.right-35), m_graphRect.bottom + (m_events?20:0),
+		primitives_DrawText(m_surface, max(0L, m_graphRect.right-35L), m_graphRect.bottom + (m_events?20:0),
 #endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
@@ -280,7 +281,7 @@ void LineGraph::LabelAxes(void)
 #if defined(ACTIVISION_ORIGINAL)
 		primitives_DrawText(m_surface, max(0, m_graphRect.left-45), max(0, m_graphRect.bottom-15),
 #else
-		primitives_DrawText(m_surface, max((long)0, m_graphRect.left-45), max((long)0, m_graphRect.bottom-15),
+		primitives_DrawText(m_surface, max(0L, m_graphRect.left-45L), max(0L, m_graphRect.bottom-15L),
 #endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 
@@ -290,7 +291,7 @@ void LineGraph::LabelAxes(void)
 #if defined(ACTIVISION_ORIGINAL)
 		primitives_DrawText(m_surface, max(0, m_graphRect.left-45), m_graphRect.top,
 #else
-		primitives_DrawText(m_surface, max((long)0, m_graphRect.left-45), m_graphRect.top,
+		primitives_DrawText(m_surface, max(0L, m_graphRect.left-45L), m_graphRect.top,
 #endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
@@ -406,7 +407,11 @@ void LineGraph::DrawLines(int eventsOfset)
 			{
 				first=FALSE;
 				xpos=m_graphRect.left+(curData->m_turn-1)*width/m_numSamples;
+#if defined(ACTIVISION_ORIGINAL)
 				ypos=(((m_data[curData->m_playerNum-1].bottomArray[curData->m_turn-1] + 
+#else
+				ypos=((sint32)((m_data[curData->m_playerNum-1].bottomArray[curData->m_turn-1] + 
+#endif
 					m_data[curData->m_playerNum-1].topArray[curData->m_turn-1])/2.0)*height)+
 					m_graphRect.top;
 				primitives_DrawLine16(m_surface, xpos-1, ypos-1, xpos+1, ypos+1, g_colorSet->GetColor((COLOR)(m_data[curData->m_playerNum].color+1)));
