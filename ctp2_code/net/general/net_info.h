@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Propagate PW each turn update
+//
+//----------------------------------------------------------------------------
 #pragma once
 #ifndef _NET_INFO_H_
 #define _NET_INFO_H_
@@ -34,6 +55,10 @@ enum NET_INFO_CODE {
 	NET_INFO_CODE_KILL_INSTALLATION,
 	NET_INFO_CODE_GOLD,
 	NET_INFO_CODE_MATERIALS_TAX,
+#if !defined ACTIVISION_ORIGINAL
+	// propagate PW each turn update
+	NET_INFO_CODE_MATERIALS,
+#endif
 	NET_INFO_CODE_WORKDAY_LEVEL,
 	NET_INFO_CODE_WAGES_LEVEL,
 	NET_INFO_CODE_RATIONS_LEVEL,

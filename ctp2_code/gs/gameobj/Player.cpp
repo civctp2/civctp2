@@ -38,6 +38,7 @@
 // - Prevent instant messages showing out of turn in hotseat
 //   (J Bytheway 2004/09/15)
 // - Added extra checks to disable science victory in network games (bug #21)
+// - Propagate PW each turn update
 //
 //----------------------------------------------------------------------------
 
@@ -2613,6 +2614,11 @@ void Player::BeginTurn()
 		g_network.Block(m_owner);
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_GOLD,
 											   m_owner, m_gold->GetLevel()));
+#if !defined ACTIVISION_ORIGINAL
+		// propagate PW each turn update
+		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_MATERIALS,
+											   m_owner, m_materialPool->GetMaterials()));
+#endif
 		g_network.Unblock(m_owner);
 	}
 

@@ -1,12 +1,34 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : net_info is used to propagate misc information from host to 
+//				  player(s).
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Propagate PW each turn update
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -116,6 +138,11 @@ extern QuadTree<Unit> *g_theUnitTree;
 
 extern void player_ActivateSpaceButton(sint32 pl);
 extern void network_VerifyGameData();
+
+#ifndef ACTIVISION_ORIGINAL
+// Propagate PW each turn update
+#include "MaterialPool.h"
+#endif
 
 const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	
@@ -629,6 +656,16 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_player[m_data]->m_materialsTax = (double)((double)m_data2 / 100.0);
 			}
 			break;
+#if !defined ACTIVISION_ORIGINAL
+		// propagate PW each turn update
+		case NET_INFO_CODE_MATERIALS:
+			DPRINTF(k_DBG_NET, ("Net: Setting player %d's materials to %d\n",
+								m_data, m_data2));
+			if(g_player[m_data]) {
+				g_player[m_data]->m_materialPool->SetLevel((sint32)m_data2);
+			}
+			break;
+#endif
 		case NET_INFO_CODE_WORKDAY_LEVEL:
 			if(g_player[m_data])
 				g_player[m_data]->m_global_happiness->SetWorkdayLevel(m_data2);

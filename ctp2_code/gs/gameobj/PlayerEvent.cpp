@@ -31,6 +31,7 @@
 // - Corrected GrantAdvanceEvent input handling.
 // - Corrected memory leaks and invalid arguments for Gaia Controller messages.
 // - Corrected recipients for Gaia Controller messages.
+// - Propagate PW each turn update
 //
 //----------------------------------------------------------------------------
 
@@ -81,6 +82,11 @@
 #include "GaiaController.h"
 
 #include "ctp2_Window.h"
+
+#ifndef ACTIVISION_ORIGINAL
+// Propagate PW each turn update
+#include "MaterialPool.h"
+#endif
 
 extern TurnCount *g_turn;
 extern CivApp *g_civApp;
@@ -375,6 +381,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 	}
 	DPRINTF(k_DBG_GAMESTATE, ("It's player %d's turn - year %d.\n", p->m_owner, p->GetCurRound()));
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", p->m_gold->GetLevel()));
+	DPRINTF(k_DBG_GAMESTATE, ("Public Works: %d\n", p->m_materialPool->GetMaterials()));
 
 #if !defined(ACTIVISION_ORIGINAL)
 	// JJB added the following to save in a PBEM game:
@@ -415,6 +422,11 @@ STDEHANDLER(FinishBeginTurnEvent)
 		g_network.Block(p->m_owner);
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_GOLD,
 											   p->m_owner, p->m_gold->GetLevel()));
+#if !defined ACTIVISION_ORIGINAL
+		// propagate PW each turn update
+		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_MATERIALS,
+											   p->m_owner, p->m_materialPool->GetMaterials()));
+#endif
 		g_network.Unblock(p->m_owner);
 	}
 

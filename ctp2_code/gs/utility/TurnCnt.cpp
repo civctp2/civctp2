@@ -1,15 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : turncounter handles the clockwork of turn progression
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Propagate PW each turn update
+//
+//----------------------------------------------------------------------------
 #include "c3.h"
 
 
@@ -91,6 +109,11 @@
 #include "UnitRecord.h"
 
 #include "buildingutil.h"
+
+#ifndef ACTIVISION_ORIGINAL
+// Propagate PW each turn update
+#include "MaterialPool.h"
+#endif
 
 extern World *g_theWorld; 
 
@@ -244,6 +267,14 @@ void TurnCount::InformNetwork()
 			g_network.QueuePacket(g_network.IndexToId(g_selected_item->
 													  GetCurPlayer()),
 								  new NetReadiness(g_player[g_selected_item->GetCurPlayer()]->m_readiness));
+#if !defined ACTIVISION_ORIGINAL
+			// propagate PW each turn update
+			g_network.QueuePacket(g_network.IndexToId(g_selected_item->
+													  GetCurPlayer()),
+								  new NetInfo(NET_INFO_CODE_MATERIALS,
+											  g_selected_item->GetCurPlayer(),
+											  g_player[g_selected_item->GetCurPlayer()]->m_materialPool->GetMaterials()));
+#endif
         }            
 		g_network.BeginTurn(g_selected_item->GetCurPlayer());
         NetInfo* netInfo = new NetInfo(NET_INFO_CODE_BEGIN_TURN, 
