@@ -1,19 +1,19 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*******************************************************************
+ *
+ *  ftnameid.h
+ *
+ *    TrueType Name ID definitions
+ *
+ *  Copyright 1996-1999 by
+ *  David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ *  This file is part of the FreeType project, and may only be used
+ *  modified and distributed under the terms of the FreeType project
+ *  license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ *  this file you indicate that you have read the license and
+ *  understand and accept it fully.
+ *
+ ******************************************************************/
 
 #ifndef FREETYPE_H
 #error "Don't include this file! Use freetype.h instead."
@@ -22,10 +22,10 @@
 #ifndef FTNAMEID_H
 #define FTNAMEID_H
 
-
-
-
-
+/*
+ * possible values for the 'Platform' identifier code in the name
+ * records of the TTF "name" table
+ */
 
 #define TT_PLATFORM_APPLE_UNICODE       0
 #define TT_PLATFORM_MACINTOSH           1
@@ -33,11 +33,11 @@
 #define TT_PLATFORM_MICROSOFT           3
 
 
-
-
-
-
-
+/*
+ * possible values of the platform specific encoding identifier field in
+ * the name records of the TTF "name" table when the 'Platform' identifier
+ * code is TT_PLATFORM_APPLE_UNICODE
+ */
 
 #define TT_APPLE_ID_DEFAULT             0
 #define TT_APPLE_ID_UNICODE_1_1         1
@@ -45,11 +45,11 @@
 #define TT_APPLE_ID_UNICODE_2_0         3
 
 
-
-
-
-
-
+/*
+ * possible values of the platform specific encoding identifier field in
+ * the name records of the TTF "name" table when the 'Platform' identifier
+ * code is TT_PLATFORM_MACINTOSH
+ */
 
 #define TT_MAC_ID_ROMAN                 0
 #define TT_MAC_ID_JAPANESE              1
@@ -87,22 +87,22 @@
 #define TT_MAC_ID_UNINTERP              32
 
 
-
-
-
-
-
+/*
+ * possible values of the platform specific encoding identifier field in
+ * the name records of the TTF "name" table when the 'Platform' identifier
+ * code is TT_PLATFORM_ISO
+ */
 
 #define TT_ISO_ID_7BIT_ASCII    0
 #define TT_ISO_ID_10646         1
 #define TT_ISO_ID_8859_1        2
 
 
-
-
-
-
-
+/*
+ * possible values of the platform specific encoding identifier field in
+ * the name records of the TTF "name" table when the 'Platform' identifier
+ * code is TT_PLATFORM_MICROSOFT
+ */
 
 #define TT_MS_ID_SYMBOL_CS      0
 #define TT_MS_ID_UNICODE_CS     1
@@ -114,14 +114,14 @@
 
 
 
-
-
-
-
-
-
-
-
+/*
+ * possible values of the language identifier field in the name records of
+ * the TTF "name" table when the 'Platform' identifier code is
+ * TT_PLATFORM_MACINTOSH
+ *
+ * the canonical source for the Apple assigned Language ID's is at
+ * http://fonts.apple.com/TTRefMan/RM06/Chap6name.html
+ */
 
 #define TT_MAC_LANGID_ENGLISH                           0
 #define TT_MAC_LANGID_FRENCH                            1
@@ -236,14 +236,14 @@
 #define TT_MAC_LANGID_INUKTITUT                         143
 
 
-
-
-
-
-
-
-
-
+/*
+ * possible values of the language identifier field in the name records of
+ * the TTF "name" table when the 'Platform' identifier code is
+ * TT_PLATFORM_MICROSOFT
+ *
+ * the canonical source for the MS assigned LCID's is at
+ * http://www.microsoft.com/typography/OTSPEC/lcid-cp.txt
+ */
 
 #define TT_MS_LANGID_ARABIC_SAUDI_ARABIA                0x0401
 #define TT_MS_LANGID_ARABIC_IRAQ                        0x0801
@@ -398,10 +398,10 @@
 #define TT_MS_LANGID_KONKANI_INDIA                      0x0457
 
 
-
-
-
-
+/*
+ * possible values of the 'Name' identifier field in the name records of
+ * the TTF "name" table.  These values are platform independent.
+ */
 
 #define TT_NAME_ID_COPYRIGHT            0
 #define TT_NAME_ID_FONT_FAMILY          1
@@ -411,7 +411,7 @@
 #define TT_NAME_ID_VERSION_STRING       5
 #define TT_NAME_ID_PS_NAME              6
 #define TT_NAME_ID_TRADEMARK            7
-
+/* the following values are from the OpenType spec */
 #define TT_NAME_ID_MANUFACTURER         8
 #define TT_NAME_ID_DESIGNER             9
 #define TT_NAME_ID_DESCRIPTION          10
@@ -419,179 +419,210 @@
 #define TT_NAME_ID_DESIGNER_URL         12
 #define TT_NAME_ID_LICENSE              13
 #define TT_NAME_ID_LICENSE_URL          14
-
+/* number 15 is reserved */
 #define TT_NAME_ID_PREFERRED_FAMILY     16
 #define TT_NAME_ID_PREFERRED_SUBFAMILY  17
 #define TT_NAME_ID_MAC_FULL_NAME        18
 
 
-
-
-
-
-
-
-
-#define TT_UCR_BASIC_LATIN                      (1 <<  0) 
-
-#define TT_UCR_LATIN1_SUPPLEMENT                (1 <<  1) 
-
-#define TT_UCR_LATIN_EXTENDED_A                 (1 <<  2) 
-
-#define TT_UCR_LATIN_EXTENDED_B                 (1 <<  3) 
-
-#define TT_UCR_IPA_EXTENSIONS                   (1 <<  4) 
-
-#define TT_UCR_SPACING_MODIFIER                 (1 <<  5) 
-
-#define TT_UCR_COMBINING_DIACRITICAL_MARKS      (1 <<  6) 
-
-#define TT_UCR_GREEK                            (1 <<  7) 
-
-
-#define TT_UCR_CYRILLIC                         (1 <<  9) 
-
-#define TT_UCR_ARMENIAN                         (1 << 10) 
-
-#define TT_UCR_HEBREW                           (1 << 11) 
-
-
-#define TT_UCR_ARABIC                           (1 << 13) 
-
-
-#define TT_UCR_DEVANAGARI                       (1 << 15) 
-
-#define TT_UCR_BENGALI                          (1 << 16) 
-
-#define TT_UCR_GURMUKHI                         (1 << 17) 
-
-#define TT_UCR_GUJARATI                         (1 << 18) 
-
-#define TT_UCR_ORIYA                            (1 << 19) 
-
-#define TT_UCR_TAMIL                            (1 << 20) 
-
-#define TT_UCR_TELUGU                           (1 << 21) 
-
-#define TT_UCR_KANNADA                          (1 << 22) 
-
-#define TT_UCR_MALAYALAM                        (1 << 23) 
-
-#define TT_UCR_THAI                             (1 << 24) 
-
-#define TT_UCR_LAO                              (1 << 25) 
-
-#define TT_UCR_GEORGIAN                         (1 << 26) 
-
-
-#define TT_UCR_HANGUL_JAMO                      (1 << 28) 
-
-#define TT_UCR_LATIN_EXTENDED_ADDITIONAL        (1 << 29) 
-
-#define TT_UCR_GREEK_EXTENDED                   (1 << 30) 
-
-
-
-
-#define TT_UCR_GENERAL_PUNCTUATION              (1 << 31) 
-
-#define TT_UCR_SUPERSCRIPTS_SUBSCRIPTS          (1 <<  0) 
-
-#define TT_UCR_CURRENCY_SYMBOLS                 (1 <<  1) 
-
-#define TT_UCR_COMBINING_DIACRITICAL_MARKS_SYMB (1 <<  2) 
-
-#define TT_UCR_LETTERLIKE_SYMBOLS               (1 <<  3) 
-
-#define TT_UCR_NUMBER_FORMS                     (1 <<  4) 
-
-#define TT_UCR_ARROWS                           (1 <<  5) 
-
-#define TT_UCR_MATHEMATICAL_OPERATORS           (1 <<  6) 
-
-#define TT_UCR_MISCELLANEOUS_TECHNICAL          (1 <<  7) 
-
-#define TT_UCR_CONTROL_PICTURES                 (1 <<  8) 
-
-#define TT_UCR_OCR                              (1 <<  9) 
-
-#define TT_UCR_ENCLOSED_ALPHANUMERICS           (1 << 10) 
-
-#define TT_UCR_BOX_DRAWING                      (1 << 11) 
-
-#define TT_UCR_BLOCK_ELEMENTS                   (1 << 12) 
-
-#define TT_UCR_GEOMETRIC_SHAPES                 (1 << 13) 
-
-#define TT_UCR_MISCELLANEOUS_SYMBOLS            (1 << 14) 
-
-#define TT_UCR_DINGBATS                         (1 << 15) 
-
-
-
-
-#define TT_UCR_CJK_SYMBOLS                      (1 << 16) 
-
-#define TT_UCR_HIRAGANA                         (1 << 17) 
-
-#define TT_UCR_KATAKANA                         (1 << 18) 
-
-#define TT_UCR_BOPOMOFO                         (1 << 19) 
-
-#define TT_UCR_HANGUL_COMPATIBILITY_JAMO        (1 << 20) 
-
-#define TT_UCR_CJK_MISC                         (1 << 21) 
-
-#define TT_UCR_ENCLOSED_CJK_LETTERS_MONTHS      (1 << 22) 
-
-#define TT_UCR_CJK_COMPATIBILITY                (1 << 23) 
-
-
-
-
-#define TT_UCR_HANGUL                           (1 << 24) 
-
-
-
-
-#define TT_UCR_SURROGATES                       (1 << 25) 
-
-
-
-
-
-#define TT_UCR_CJK_UNIFIED_IDEOGRAPHS           (1 << 27) 
-
-
-
-
-#define TT_UCR_PRIVATE_USE                      (1 << 28) 
-
-
-
-
-#define TT_UCR_CJK_COMPATIBILITY_IDEOGRAPHS     (1 << 29) 
-
-#define TT_UCR_ALPHABETIC_PRESENTATION_FORMS    (1 << 30) 
-
-#define TT_UCR_ARABIC_PRESENTATION_FORMS_A      (1 << 31) 
-
-#define TT_UCR_COMBINING_HALF_MARKS             (1 <<  0) 
-
-#define TT_UCR_CJK_COMPATIBILITY_FORMS          (1 <<  1) 
-
-#define TT_UCR_SMALL_FORM_VARIANTS              (1 <<  2) 
-
-#define TT_UCR_ARABIC_PRESENTATION_FORMS_B      (1 <<  3) 
-
-#define TT_UCR_HALFWIDTH_FULLWIDTH_FORMS        (1 <<  4) 
-
-#define TT_UCR_SPECIALS                         (1 <<  5) 
-
-
-#define TT_UCR_TIBETAN                          (1 <<  6) 
-
-#endif 
-
-
-
+/*
+ * Bit Mask values for the Unicode Ranges from the TTF "OS2 " table.
+ */
+
+/* General Scripts Area */
+
+/* Bit  0   C0 Controls and Basic Latin */
+#define TT_UCR_BASIC_LATIN                     (1L <<  0) /* U+0000-U+007F */
+/* Bit  1   C1 Controls and Latin-1 Supplement */
+#define TT_UCR_LATIN1_SUPPLEMENT               (1L <<  1) /* U+0080-U+00FF */
+/* Bit  2   Latin Extended-A */
+#define TT_UCR_LATIN_EXTENDED_A                (1L <<  2) /* U+0100-U+017F */
+/* Bit  3   Latin Extended-B */
+#define TT_UCR_LATIN_EXTENDED_B                (1L <<  3) /* U+0180-U+024F */
+/* Bit  4   IPA Extensions */
+#define TT_UCR_IPA_EXTENSIONS                  (1L <<  4) /* U+0250-U+02AF */
+/* Bit  5   Spacing Modifier Letters */
+#define TT_UCR_SPACING_MODIFIER                (1L <<  5) /* U+02B0-U+02FF */
+/* Bit  6   Combining Diacritical Marks */
+#define TT_UCR_COMBINING_DIACRITICS            (1L <<  6) /* U+0300-U+036F */
+/* Bit  7   Greek */
+#define TT_UCR_GREEK                           (1L <<  7) /* U+0370-U+03FF */
+/* Bit 8 is reserved (was: Greek Symbols and Coptic) */
+/* Bit  9   Cyrillic */
+#define TT_UCR_CYRILLIC                        (1L <<  9) /* U+0400-U+04FF */
+/* Bit 10   Armenian */
+#define TT_UCR_ARMENIAN                        (1L << 10) /* U+0530-U+058F */
+/* Bit 11   Hebrew */
+#define TT_UCR_HEBREW                          (1L << 11) /* U+0590-U+05FF */
+/* Bit 12 is reserved (was: Hebrew Extended) */
+/* Bit 13   Arabic */
+#define TT_UCR_ARABIC                          (1L << 13) /* U+0600-U+06FF */
+/* Bit 14 is reserved (was: Arabic Extended) */
+/* Bit 15   Devanagari */
+#define TT_UCR_DEVANAGARI                      (1L << 15) /* U+0900-U+097F */
+/* Bit 16   Bengali */
+#define TT_UCR_BENGALI                         (1L << 16) /* U+0980-U+09FF */
+/* Bit 17   Gurmukhi */
+#define TT_UCR_GURMUKHI                        (1L << 17) /* U+0A00-U+0A7F */
+/* Bit 18   Gujarati */
+#define TT_UCR_GUJARATI                        (1L << 18) /* U+0A80-U+0AFF */
+/* Bit 19   Oriya */
+#define TT_UCR_ORIYA                           (1L << 19) /* U+0B00-U+0B7F */
+/* Bit 20   Tamil */
+#define TT_UCR_TAMIL                           (1L << 20) /* U+0B80-U+0BFF */
+/* Bit 21   Telugu */
+#define TT_UCR_TELUGU                          (1L << 21) /* U+0C00-U+0C7F */
+/* Bit 22   Kannada */
+#define TT_UCR_KANNADA                         (1L << 22) /* U+0C80-U+0CFF */
+/* Bit 23   Malayalam */
+#define TT_UCR_MALAYALAM                       (1L << 23) /* U+0D00-U+0D7F */
+/* Bit 24   Thai */
+#define TT_UCR_THAI                            (1L << 24) /* U+0E00-U+0E7F */
+/* Bit 25   Lao */
+#define TT_UCR_LAO                             (1L << 25) /* U+0E80-U+0EFF */
+/* Bit 26   Georgian */
+#define TT_UCR_GEORGIAN                        (1L << 26) /* U+10A0-U+10FF */
+/* Bit 27 is reserved (was Georgian Extended) */
+/* Bit 28   Hangul Jamo */
+#define TT_UCR_HANGUL_JAMO                     (1L << 28) /* U+1100-U+11FF */
+/* Bit 29   Latin Extended Additional */
+#define TT_UCR_LATIN_EXTENDED_ADDITIONAL       (1L << 29) /* U+1E00-U+1EFF */
+/* Bit 30   Greek Extended */
+#define TT_UCR_GREEK_EXTENDED                  (1L << 30) /* U+1F00-U+1FFF */
+
+/* Symbols Area */
+
+/* Bit 31   General Punctuation */
+#define TT_UCR_GENERAL_PUNCTUATION             (1L << 31) /* U+2000-U+206F */
+/* Bit 32   Superscripts And Subscripts */
+#define TT_UCR_SUPERSCRIPTS_SUBSCRIPTS         (1L <<  0) /* U+2070-U+209F */
+/* Bit 33   Currency Symbols */
+#define TT_UCR_CURRENCY_SYMBOLS                (1L <<  1) /* U+20A0-U+20CF */
+/* Bit 34   Combining Diacritical Marks For Symbols */
+#define TT_UCR_COMBINING_DIACRITICS_SYMB       (1L <<  2) /* U+20D0-U+20FF */
+/* Bit 35   Letterlike Symbols */
+#define TT_UCR_LETTERLIKE_SYMBOLS              (1L <<  3) /* U+2100-U+214F */
+/* Bit 36   Number Forms */
+#define TT_UCR_NUMBER_FORMS                    (1L <<  4) /* U+2150-U+218F */
+/* Bit 37   Arrows */
+#define TT_UCR_ARROWS                          (1L <<  5) /* U+2190-U+21FF */
+/* Bit 38   Mathematical Operators */
+#define TT_UCR_MATHEMATICAL_OPERATORS          (1L <<  6) /* U+2200-U+22FF */
+/* Bit 39 Miscellaneous Technical */
+#define TT_UCR_MISCELLANEOUS_TECHNICAL         (1L <<  7) /* U+2300-U+23FF */
+/* Bit 40   Control Pictures */
+#define TT_UCR_CONTROL_PICTURES                (1L <<  8) /* U+2400-U+243F */
+/* Bit 41   Optical Character Recognition */
+#define TT_UCR_OCR                             (1L <<  9) /* U+2440-U+245F */
+/* Bit 42   Enclosed Alphanumerics */
+#define TT_UCR_ENCLOSED_ALPHANUMERICS          (1L << 10) /* U+2460-U+24FF */
+/* Bit 43   Box Drawing */
+#define TT_UCR_BOX_DRAWING                     (1L << 11) /* U+2500-U+257F */
+/* Bit 44   Block Elements */
+#define TT_UCR_BLOCK_ELEMENTS                  (1L << 12) /* U+2580-U+259F */
+/* Bit 45   Geometric Shapes */
+#define TT_UCR_GEOMETRIC_SHAPES                (1L << 13) /* U+25A0-U+25FF */
+/* Bit 46   Miscellaneous Symbols */
+#define TT_UCR_MISCELLANEOUS_SYMBOLS           (1L << 14) /* U+2600-U+26FF */
+/* Bit 47   Dingbats */
+#define TT_UCR_DINGBATS                        (1L << 15) /* U+2700-U+27BF */
+
+/* CJK Phonetics and Symbols Area */
+
+/* Bit 48   CJK Symbols And Punctuation */
+#define TT_UCR_CJK_SYMBOLS                     (1L << 16) /* U+3000-U+303F */
+/* Bit 49   Hiragana */
+#define TT_UCR_HIRAGANA                        (1L << 17) /* U+3040-U+309F */
+/* Bit 50   Katakana */
+#define TT_UCR_KATAKANA                        (1L << 18) /* U+30A0-U+30FF */
+/* Bit 51   Bopomofo */
+#define TT_UCR_BOPOMOFO                        (1L << 19) /* U+3100-U+312F */
+/* Bit 52   Hangul Compatibility Jamo */
+#define TT_UCR_HANGUL_COMPATIBILITY_JAMO       (1L << 20) /* U+3130-U+318F */
+/* Bit 53   CJK Miscellaneous */
+#define TT_UCR_CJK_MISC                        (1L << 21) /* U+3190-U+319F */
+/* Bit 54   Enclosed CJK Letters And Months */
+#define TT_UCR_ENCLOSED_CJK_LETTERS_MONTHS     (1L << 22) /* U+3200-U+32FF */
+/* Bit 55   CJK Compatibility */
+#define TT_UCR_CJK_COMPATIBILITY               (1L << 23) /* U+3300-U+33FF */
+
+/* Hangul Syllables Area */
+
+/* Bit 56   Hangul */
+#define TT_UCR_HANGUL                          (1L << 24) /* U+AC00-U+D7A3 */
+
+/* Surrogates Area */
+
+/* Bit 57   Surrogates */
+#define TT_UCR_SURROGATES                      (1L << 25) /* U+D800-U+DFFF */
+/* Bit 58 is reserved for Unicode SubRanges */
+
+/* CJK Ideographs Area */
+
+/* Bit 59   CJK Unified Ideographs */
+#define TT_UCR_CJK_UNIFIED_IDEOGRAPHS          (1L << 27) /* U+4E00-U+9FFF */
+
+/* Private Use Area */
+
+/* Bit 60   Private Use */
+#define TT_UCR_PRIVATE_USE                     (1L << 28) /* U+E000-U+F8FF */
+
+/* Compatibility Area and Specials */
+
+/* Bit 61   CJK Compatibility Ideographs */
+#define TT_UCR_CJK_COMPATIBILITY_IDEOGRAPHS    (1L << 29) /* U+F900-U+FAFF */
+/* Bit 62   Alphabetic Presentation Forms */
+#define TT_UCR_ALPHABETIC_PRESENTATION_FORMS   (1L << 30) /* U+FB00-U+FB4F */
+/* Bit 63   Arabic Presentation Forms-A */
+#define TT_UCR_ARABIC_PRESENTATIONS_A          (1L << 31) /* U+FB50-U+FSFF */
+/* Bit 64   Combining Half Marks */
+#define TT_UCR_COMBINING_HALF_MARKS            (1L <<  0) /* U+FE20-U+FE2F */
+/* Bit 65   CJK Compatibility Forms */
+#define TT_UCR_CJK_COMPATIBILITY_FORMS         (1L <<  1) /* U+FE30-U+FE4F */
+/* Bit 66   Small Form Variants */
+#define TT_UCR_SMALL_FORM_VARIANTS             (1L <<  2) /* U+FE50-U+FE6F */
+/* Bit 67   Arabic Presentation Forms-B */
+#define TT_UCR_ARABIC_PRESENTATIONS_B          (1L <<  3) /* U+FE70-U+FEFF */
+/* Bit 68   Halfwidth And Fullwidth Forms */
+#define TT_UCR_HALFWIDTH_FULLWIDTH_FORMS       (1L <<  4) /* U+FF00-U+FFEF */
+/* Bit 69   Specials */
+#define TT_UCR_SPECIALS                        (1L <<  5) /* U+FEFF,
+                                                             U+FFF0-U+FFFF */
+/* Bit 70   Tibetan */
+#define TT_UCR_TIBETAN                         (1L <<  6) /* U+0F00-U+0FBF */
+
+
+/* Some compilers have a very limited length of identifiers. */
+#if defined( __TURBOC__ ) && __TURBOC__ < 0x0410 || defined( __PACIFIC__ )
+#define HAVE_LIMIT_ON_IDENTS
+#endif
+
+#ifndef HAVE_LIMIT_ON_IDENTS
+
+/*
+ *  Here some alias #defines in order to be clearer.
+ *
+ *  These are not always #defined to stay within the 31 character limit
+ *  which some compilers have.
+ *
+ *  Credits go to Dave Hoo <dhoo@flash.net> for pointing out that modern
+ *  Borland compilers (read: from BC++ 3.1 on) can increase this limit.
+ *  If you get a warning with such a compiler, use the -i40 switch.
+ */
+ 
+#define TT_UCR_ARABIC_PRESENTATION_FORMS_A      \
+         TT_UCR_ARABIC_PRESENTATIONS_A
+#define TT_UCR_ARABIC_PRESENTATION_FORMS_B      \
+         TT_UCR_ARABIC_PRESENTATIONS_B           
+
+#define TT_UCR_COMBINING_DIACRITICAL_MARKS      \
+         TT_UCR_COMBINING_DIACRITICS
+#define TT_UCR_COMBINING_DIACRITICAL_MARKS_SYMB \
+         TT_UCR_COMBINING_DIACRITICS_SYMB
+
+#endif /* ndef HAVE_LIMIT_ON_IDENTS */
+
+#endif /* FTNAMEID_H */
+
+
+/* END */
