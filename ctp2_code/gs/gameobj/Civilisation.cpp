@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Civilisation handling.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Recycle civilisation indices to prevent a game crash.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "CivArchive.h"
@@ -58,6 +78,9 @@ void Civilisation::KillCivilisation()
 
 void Civilisation::RemoveAllReferences()
 	{
+#if !defined(ACTIVISION_ORIGINAL)
+	g_theCivilisationPool->Release(GetCivilisation());
+#endif
 	g_theCivilisationPool->Del(*this) ;
 	}
 

@@ -1,13 +1,34 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Civilisation pool
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevent assigning the same civilisation index twice.
+// - Recycle civilisation indices to prevent a game crash.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -132,6 +153,7 @@ void CivilisationPool::Serialize(CivArchive &archive)
 
 Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requiredCiv, GENDER gender)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	sint32	civ ;
 
 	sint32	numCivs,
@@ -176,6 +198,7 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 	}
 
 	Assert((civ>=CIV_INDEX_CIV_0) && (civ<g_theCivilisationDB->GetCivilisations())) ;
+
 	Civilisation newCivilisation(NewKey(k_BIT_GAME_OBJ_TYPE_CIVILISATION));
 
 	if (gender == GENDER_RANDOM) {
@@ -190,7 +213,50 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 		strId = g_theCivilisationDB->GetLeaderName((CIV_INDEX)(civ)) ;
 	else
 		strId = g_theCivilisationDB->GetLeaderNameFemale((CIV_INDEX)(civ)) ;
+#else
+	sint32 const	numCivs	= g_theCivilisationDB->GetCivilisations();
+	CIV_INDEX		civ		= requiredCiv;
 
+	if (CIV_INDEX_RANDOM == civ)
+	{
+		if (g_theProfileDB->IsNonRandomCivs()) 
+		{
+			civ = static_cast<CIV_INDEX>(owner);
+		} 
+		else 
+		{
+			civ = static_cast<CIV_INDEX>(g_rand->Next(numCivs));
+		}
+	}
+
+	for (sint32 c = 0; m_usedCivs->IsPresent(civ) && (c < numCivs); ++c) 
+	{
+		civ = static_cast<CIV_INDEX>((civ + 1 < numCivs) ? civ + 1 : 1);
+	}
+
+	if (civ >= numCivs) 
+	{
+		c3errors_FatalDialogFromDB("CIVILIZATION_ERROR", "CIVILIZATION_NO_MORE_CIVS_AVAILABLE") ;
+		civ = CIV_INDEX_VANDALS;								
+	}
+
+	Assert((civ >= CIV_INDEX_CIV_0) && (civ < numCivs));
+
+	Civilisation newCivilisation(NewKey(k_BIT_GAME_OBJ_TYPE_CIVILISATION));
+
+	if (gender == GENDER_RANDOM) {
+		gender = (GENDER)(g_rand->Next() % 2);
+	}
+
+	CivilisationData *	newData = new CivilisationData(newCivilisation, owner, civ, gender);
+	
+	m_usedCivs->Insert(civ);
+
+	StringId	strId = (gender == GENDER_MALE) 
+						? g_theCivilisationDB->GetLeaderName(civ)
+						: g_theCivilisationDB->GetLeaderNameFemale(civ);
+
+#endif
     newData->SetLeaderName(g_theStringDB->GetNameStr(strId)) ;
 
     strId = g_theCivilisationDB->GetPersonalityDescription((CIV_INDEX)(civ));
@@ -215,3 +281,36 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 
 	return (newCivilisation) ;
 }
+
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : CivilisationPool::Release
+//
+// Description: Release a civilisation index for reuse.
+//
+// Parameters : civ		: civilisation index to release
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+void CivilisationPool::Release(CIV_INDEX const & civ)
+{
+	sint32 const	usedCount = m_usedCivs->Num();
+
+	for (sint32 i = 0; i < usedCount; ++i) 
+	{
+		if (civ == m_usedCivs->Access(i)) 
+		{
+			m_usedCivs->DelIndex(i);
+			return;
+		}
+	}
+}
+
+#endif
