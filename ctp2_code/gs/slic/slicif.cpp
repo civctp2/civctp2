@@ -2035,7 +2035,8 @@ int slicif_find_db_index(void *dbptr, const char *name)
 //              gives the value of the MaxMovePoints flag of the entry 
 //              in UnitDB with the internal name UNIT_SETTLER.
 //              
-// Remark(s)  : This function is called at copiling time.
+// Remark(s)  : This function is called at copiling time in normal slic 
+//              function but called at run time from the Great Libary.
 //
 //----------------------------------------------------------------------------
 int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
@@ -2052,10 +2053,14 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 		yyerror(errbuf);
 		return 0;
 	}
+#if 0
+	//Looks like it interferes at other places
+	//but I leave it in for possible later use.
 	if(!conduit->IsTokenInDB(valname)){
 		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
 		yyerror(errbuf);
 	}
+#endif
 
 	return conduit->GetValue(index, valname);
 				
@@ -2079,7 +2084,10 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 //              the value of the MaxMovePoints flag of the first entry in
 //              UnitDB.
 //              
-// Remark(s)  : This function is called both at copiling time and run time.
+// Remark(s)  : This function is called both at copiling time and run time 
+//              in normal slic function but called at run time from the 
+//              Great Libary.
+//
 //
 //----------------------------------------------------------------------------
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
@@ -2089,11 +2097,15 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 	if(!conduit)
 		return 0;
 
+#if 0
+	//Looks like it interferes at other places
+	//but I leave it in for possible later use.
 	if(!conduit->IsTokenInDB(valname)){
 		char errbuf[1024];
 		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
 		yyerror(errbuf);
 	}
+#endif
 	return conduit->GetValue(index, valname);
 }
 

@@ -1,9 +1,35 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Slic Built In 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added a built in field for player to be able to get the the database
+//   index of the player's current government, by Peter Triggs and 
+//   Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -513,6 +539,30 @@ class PlayerSymbol_Armies : public SlicStructMemberData {
 		}
 	}
 };
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by PFT: player[ ].government
+// And a minor improvement by Martin Gühmann
+
+class PlayerSymbol_Government : public SlicStructMemberData {
+	DEF_MAKECOPY(PlayerSymbol_Government);
+	BOOL GetIntValue(sint32 &value) const {
+		sint32 pl;
+		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
+		Assert(res);
+		if(res){
+			value = g_player[pl]->m_government_type;
+			return TRUE;
+		}
+		else{
+			//No idea what is done if the function returns true,
+			//but if the value is used here as government than
+			//index -1 is better than 0.
+			value = -1;
+			return FALSE;
+		}
+	}
+};
+#endif
 
 class PlayerSymbol_MilitaryUnits : public SlicStructMemberData {
 	DEF_MAKECOPY(PlayerSymbol_MilitaryUnits);
@@ -1045,6 +1095,9 @@ SlicStruct_Player::SlicStruct_Player() :
 	AddMember("units", new PlayerSymbol_Units);
 	AddMember("militaryunits", new PlayerSymbol_MilitaryUnits);
 	AddMember("armies", new PlayerSymbol_Armies);
+#if !defined(ACTIVISION_ORIGINAL)
+	AddMember("government", new PlayerSymbol_Armies);
+#endif
 	AddMember("totalpopulation", new PlayerSymbol_TotalPopulation);
 	AddMember("totalpollution", new PlayerSymbol_TotalPollution);
 	AddMember("capital", new PlayerSymbol_Capital);

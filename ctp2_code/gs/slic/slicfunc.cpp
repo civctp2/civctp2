@@ -24,6 +24,10 @@
 // - FreeAllSlaves slic function added by The Big MC November 24th 2003.
 // - Filled code for GetRoundsToNextDisaster and GetCurrentPollutionLevel.
 // - open_GreatLibrary calls with incorrect first argument type replaced.
+// - HasAdvance function now accepts also advance indices in addition to
+//   advance strings by Martin Gühmann.
+// - StringCompare function overloaded to allow the comparision between strings
+//   string IDs and strings retrieved from builtins, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -692,7 +696,6 @@ SFN_ERROR Slic_Return0::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-
 SFN_ERROR Slic_HasAdvance::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 2)
@@ -703,14 +706,29 @@ SFN_ERROR Slic_HasAdvance::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
+#if defined(ACTIVISION_ORIGINAL)
 	if(args->m_argType[1] != SA_TYPE_STRING)
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	sint32 adv;
 	for(adv = 0; adv < g_theAdvanceDB->NumRecords(); adv++) {
 		if(g_theAdvanceDB->Get(adv)->m_name == args->m_argValue[1].m_int)
 			break;
 	}
+#else
+	//Added by Martin Gühmann to overload this function to allow also advance
+	//indices directly instead of advance strings only.
+	sint32 adv;
+	if(args->m_argType[1] == SA_TYPE_STRING){
+		for(adv = 0; adv < g_theAdvanceDB->NumRecords(); adv++) {
+			if(g_theAdvanceDB->Get(adv)->m_name == args->m_argValue[1].m_int)
+				break;
+		}
+	}
+	else if(!args->GetInt(1, adv))
+		return SFN_ERROR_TYPE_ARGS;
+
+#endif
 	if(adv >= g_theAdvanceDB->NumRecords()) {
 		return SFN_ERROR_NOT_ADVANCE;
 	}
@@ -6255,9 +6273,7 @@ SFN_ERROR Slic_CityIsValid::Call(SlicArgList *args)
 	Unit city;
 
 	if(!args->GetCity(0, city)) {
-		//Changed by Martin Gühmann
-		return SFN_ERROR_TYPE_ARGS;
-	//	return SFN_ERROR_OK;
+		return SFN_ERROR_OK;
 	}
 
 	if(city.IsValid() && city.CD()) {
@@ -6322,12 +6338,43 @@ SFN_ERROR Slic_StringCompare::Call(SlicArgList *args)
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
+#if defined(ACTIVISION_ORIGINAL)
 	char *string1, *string2;
 	if(!args->GetString(0, string1))
 		return SFN_ERROR_TYPE_ARGS;
 	
 	if(!args->GetString(1, string2))
 		return SFN_ERROR_TYPE_ARGS;
+#else
+//Added by Martin Gühmann to allow string comparision, between string IDs and plain strings
+	const char *string1, *string2;
+	StringId stringId1, stringId2;
+
+	if(!args->GetString(0, string1)){
+		if(args->GetStringId(0, stringId1)){
+			string1 = g_theStringDB->GetNameStr(stringId1);
+		}
+		else if(args->m_argType[0] == SA_TYPE_INT_VAR){
+			string1 = g_theStringDB->GetNameStr(args->m_argValue[0].m_symbol->GetStringId());
+		}
+		else{
+			return SFN_ERROR_TYPE_ARGS;
+		}
+	}
+	
+	if(!args->GetString(1, string2)){
+		if(args->GetStringId(1, stringId2)){
+			string2 = g_theStringDB->GetNameStr(stringId2);
+		}
+		else if(args->m_argType[1] == SA_TYPE_INT_VAR){
+			string2 = g_theStringDB->GetNameStr(args->m_argValue[1].m_symbol->GetStringId());
+		}
+		else{
+			return SFN_ERROR_TYPE_ARGS;
+		}
+	}
+
+#endif
 
 	if ( !stricmp(string1, string2) )
 	{
@@ -6591,20 +6638,23 @@ SFN_ERROR Slic_ClearBattleFlag::Call(SlicArgList *args)
 
 SFN_ERROR Slic_OpenScenarioEditor::Call(SlicArgList *args)
 {
+#if !defined(ACTIVISION_ORIGINAL)
 	//Wrong number of arguments added by Martin Gühmann
 	if(args->m_numArgs != 0)
-	return SFN_ERROR_NUM_ARGS;
+		return SFN_ERROR_NUM_ARGS;
+#endif
 
 	open_ScenarioEditor();
 	return SFN_ERROR_OK;
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
 //New Slic functions of CTP2.1 readded by Martin Gühmann
 
 SFN_ERROR Slic_DestroyBuilding::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 2)
-	return SFN_ERROR_NUM_ARGS;
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit city;
 	if(!args->GetCity(0, city))
@@ -6749,223 +6799,10 @@ SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 	}
 
-	if(!args->GetArmy(0, a))
-		return SFN_ERROR_TYPE_ARGS;
-
 	if(a.IsValid()) {
 		m_result.m_int = 1;
 	}
 
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetBorderIncursionBy::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastNewProposalType::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastNewProposalArg::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastNewProposalTone::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastResponseType::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastCounterResponseType::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastCounterResponseArg::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastThreatResponseType::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastThreatResponseArg::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetAgreementDuration::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetNewProposalPriority::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetNextAdvance::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetDesiredAdvanceFrom::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetLastBorderIncursion::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetPersonalityType::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetAtRiskCitiesValue::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetRelativeStrength::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetDesireWarWith::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_RoundPercentReduction::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_RoundGold::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetPollutionLevelPromisedTo::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetPiracyIncomeFrom::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetProjectedScience::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_CanFormAlliance::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetStopResearchingAdvance::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetNanoWeaponsCount::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetBioWeaponsCount::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetNuclearWeaponsCount::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_FindCityToExtortFrom::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetEmbargo::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_SetEmbargo::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetTotalValue::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetNewProposalResult::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetCounterProposalResult::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
-	return SFN_ERROR_OK;
-}
-
-SFN_ERROR Slic_GetMostAtRiskCity::Call(SlicArgList *args)
-{
-	m_result.m_int = 0;
 	return SFN_ERROR_OK;
 }
 
@@ -6989,6 +6826,9 @@ SFN_ERROR Slic_GetMostAtRiskCity::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 {
+	if(args->m_numArgs != 0)
+		return SFN_ERROR_NUM_ARGS;
+
 	if (g_thePollution)
 	{
 		m_result.m_int = g_thePollution->GetRoundsToNextDisaster();
@@ -7020,6 +6860,9 @@ SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetCurrentPollutionLevel::Call(SlicArgList *args)
 {
+	if(args->m_numArgs != 0)
+		return SFN_ERROR_NUM_ARGS;
+
 	if (g_thePollution)
 	{
 		m_result.m_int = g_thePollution->GetGlobalPollutionLevel();
@@ -7035,8 +6878,8 @@ SFN_ERROR Slic_GetCurrentPollutionLevel::Call(SlicArgList *args)
 //Added by The Big MC
 SFN_ERROR Slic_FreeAllSlaves::Call(SlicArgList *args)
 {
-    if (args->m_numArgs > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->m_numArgs > 0)
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 
@@ -7049,6 +6892,91 @@ SFN_ERROR Slic_FreeAllSlaves::Call(SlicArgList *args)
 		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
 	}
 
-    	city.FreeSlaves();
+	city.FreeSlaves();
 	return SFN_ERROR_OK;
 }
+
+//----------------------------------------------------------------------------
+//
+// Authored   : MrBaggins
+//
+// Name       : Slic_PlantSpecificGood
+//
+// Description: Rather than planting a random good, as per the standard SLIC
+//              function, this allows the specification of which good subtype
+//              to plant
+//
+// Parameters : SlicArg 0: location
+//              SlicArg 1: int
+//
+// Globals    : g_theWorld	: World gamestate functionality
+//                   g_tiledMap  : UI update functionality
+//
+// Returns    : SFN_ERROR		: execution result
+//
+// Remark(s)  : Allows for the specification of a good sub
+//		a range of 0 (no good), or 1-4 (the specific good subtype,
+//		as defined in ctp2_data\default\gamedata\goods.txt//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_PlantSpecificGood::Call(SlicArgList *args)
+{
+
+	if(args->m_numArgs != 2)
+		return SFN_ERROR_NUM_ARGS;
+	
+	MapPoint pos;
+	if(!args->GetPos(0, pos))
+		return SFN_ERROR_TYPE_ARGS;
+	
+	sint32 goodsubtype;
+	if(!args->GetInt(1, goodsubtype))
+		return SFN_ERROR_TYPE_ARGS;
+	
+	if(goodsubtype<0 || goodsubtype>4)
+		return SFN_ERROR_OUT_OF_RANGE;
+
+
+	g_theWorld->SetGood(pos.x, pos.y, goodsubtype);
+	g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
+	g_tiledMap->TileChanged(pos);
+	g_tiledMap->RedrawTile(&pos);
+
+	return SFN_ERROR_OK;	
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : MrBaggins
+//
+// Name       : Slic_RemoveGood
+//
+// Description: New complimentary function to PlantGood
+//
+// Parameters : SlicArg 0: location
+//
+// Globals    : g_theWorld	: World gamestate functionality
+//				g_tiledMap  : UI update functionality
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_RemoveGood::Call(SlicArgList *args)
+{
+
+	if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	MapPoint pos;
+	if(!args->GetPos(0, pos))
+		return SFN_ERROR_TYPE_ARGS;
+
+	g_theWorld->SetGood(pos.x, pos.y, 0);
+	// plants a good of subtype 0 AKA no good, at location x,y.
+	g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
+	g_tiledMap->TileChanged(pos);
+	g_tiledMap->RedrawTile(&pos);
+	
+	return SFN_ERROR_OK;
+}
+
+#endif

@@ -1,3 +1,26 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : SLIC functions
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Readded all the slicfunctions of the patch, maybe some of them belong 
+//   better into slicfuncai.h, by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __SLICFUNC_H__
@@ -549,6 +572,7 @@ SLICFUNC(SFR_VOID, MinimizeAction)
 SLICFUNC(SFR_INT, IsUnitAtHead)					
 SLICFUNC(SFR_VOID, OpenScenarioEditor)
 
+#if !defined(ACTIVISION_ORIGINAL)
 //New Slicfunctions of CTP2.1 readded by Martin Gühmann
 SLICFUNC(SFR_VOID, DestroyBuilding)
 SLICFUNC(SFR_VOID, OpenBuildQueue)
@@ -557,45 +581,15 @@ SLICFUNC(SFR_INT, PlayerHasWonder)
 SLICFUNC(SFR_INT, WonderOwner)
 SLICFUNC(SFR_INT, CityHasWonder)
 SLICFUNC(SFR_INT, ArmyIsValid)
-SLICFUNC(SFR_INT, GetBorderIncursionBy)
-SLICFUNC(SFR_INT, GetLastNewProposalType)
-SLICFUNC(SFR_INT, GetLastNewProposalArg)
-SLICFUNC(SFR_INT, GetLastNewProposalTone)
-SLICFUNC(SFR_INT, GetLastResponseType)
-SLICFUNC(SFR_INT, GetLastCounterResponseType)
-SLICFUNC(SFR_INT, GetLastCounterResponseArg)
-SLICFUNC(SFR_INT, GetLastThreatResponseType)
-SLICFUNC(SFR_INT, GetLastThreatResponseArg)
-SLICFUNC(SFR_INT, GetAgreementDuration)
-SLICFUNC(SFR_INT, GetNewProposalPriority)
-SLICFUNC(SFR_INT, GetNextAdvance)
-SLICFUNC(SFR_INT, GetDesiredAdvanceFrom)
-SLICFUNC(SFR_INT, GetLastBorderIncursion)
-SLICFUNC(SFR_INT, GetPersonalityType)
-SLICFUNC(SFR_INT, GetAtRiskCitiesValue)
-SLICFUNC(SFR_INT, GetRelativeStrength)
-SLICFUNC(SFR_INT, GetDesireWarWith)
-SLICFUNC(SFR_INT, RoundPercentReduction)
-SLICFUNC(SFR_INT, RoundGold)
-SLICFUNC(SFR_INT, GetPollutionLevelPromisedTo)
-SLICFUNC(SFR_INT, GetPiracyIncomeFrom)
-SLICFUNC(SFR_INT, GetProjectedScience)
-SLICFUNC(SFR_INT, CanFormAlliance)
-SLICFUNC(SFR_INT, GetStopResearchingAdvance)
-SLICFUNC(SFR_INT, GetNanoWeaponsCount)
-SLICFUNC(SFR_INT, GetBioWeaponsCount)
-SLICFUNC(SFR_INT, GetNuclearWeaponsCount)
-SLICFUNC(SFR_INT, FindCityToExtortFrom)
-SLICFUNC(SFR_INT, GetEmbargo)
-SLICFUNC(SFR_INT, SetEmbargo)
-SLICFUNC(SFR_INT, GetTotalValue)
-SLICFUNC(SFR_INT, GetNewProposalResult)
-SLICFUNC(SFR_INT, GetCounterProposalResult)
-SLICFUNC(SFR_INT, GetMostAtRiskCity)
 SLICFUNC(SFR_INT, GetRoundsToNextDisaster)
 SLICFUNC(SFR_INT, GetCurrentPollutionLevel)
-//New Slicfunctions function by the big mc
-SLICFUNC(SFR_VOID, FreeAllSlaves);   			
+//New slicfunctions by The Big Mc
+SLICFUNC(SFR_VOID, FreeAllSlaves);
+//New slicfunctions by MrBaggins
+SLICFUNC(SFR_VOID, PlantSpecificGood);
+SLICFUNC(SFR_VOID, RemoveGood);
 
-#endif
+#endif // ACTIVISION_ORIGINAL
+
+#endif // __SLICFUNC_H__
 

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : The Slic Engine
 //
 //----------------------------------------------------------------------------
 //
@@ -25,9 +25,14 @@
 //
 // Modifications from the original Activision code:
 //
+// - Readded the new slicfunctions of the patch, by Martin Gühmann.
+// - Added FreeAllSlaves slicfunction by The Big Mc.
+// - Added PlantSpecificGood and RemoveGood slicfunctions by MrBaggins.
 // - Data blanked out at screen in between 2 players in hotseat play.
 // - Great library history cleared between 2 players in hotseat play.
 // - Corrected reported memory leak.
+// - Added database access to all databases in the new database format,
+//   even if it does not make sense, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -96,6 +101,33 @@ extern TutorialWin *g_tutorialWin;
 #include "GovernmentRecord.h"
 #include "StrategyRecord.h"
 #include "DiplomacyRecord.h"
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to support the rest of the databases in the new database format.
+#include "PersonalityRecord.h"
+#include "AdvanceBranchRecord.h"
+#include "AdvanceListRecord.h"
+#include "AgeCityStyleRecord.h"
+#include "AgeRecord.h"
+#include "BuildingBuildListRecord.h"
+#include "BuildListSequenceRecord.h"
+#include "CitySizeRecord.h"
+#include "CityStyleRecord.h"
+#include "DiplomacyProposalRecord.h"
+#include "DiplomacyThreatRecord.h"
+#include "EndGameObjectRecord.h"
+#include "GoalRecord.h"
+#include "IconRecord.h"
+#include "PopRecord.h"
+#include "ImprovementListRecord.h"
+#include "SoundRecord.h"
+#include "SpecialAttackInfoRecord.h"
+#include "SpecialEffectRecord.h"
+#include "SpriteRecord.h"
+#include "UnitBuildListRecord.h"
+#include "WonderBuildListRecord.h"
+#include "WonderMovieRecord.h"
+#endif
 
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
@@ -988,6 +1020,7 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_IsUnitAtHead);
 	m_functionHash->Add(new Slic_OpenScenarioEditor);
 
+#if !defined(ACTIVISION_ORIGINAL)
 	//Readded Slic functions of CTP2.1 by Martin Gühmann
 	m_functionHash->Add(new Slic_DestroyBuilding);
 	m_functionHash->Add(new Slic_OpenBuildQueue);
@@ -1033,8 +1066,14 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetMostAtRiskCity);
 	m_functionHash->Add(new Slic_GetRoundsToNextDisaster);
 	m_functionHash->Add(new Slic_GetCurrentPollutionLevel);
-	// new one by the big mc
+	// New slicfunction by The Big Mc
 	m_functionHash->Add(new Slic_FreeAllSlaves);
+	// New good functions by MrBaggins
+	m_functionHash->Add(new Slic_PlantSpecificGood);
+	m_functionHash->Add(new Slic_RemoveGood);
+	// Added by Peter Triggs
+	m_functionHash->Add(new Slic_DeclareWar);
+#endif
 }
 
 void SlicEngine::AddBuiltinVariables()
@@ -2980,6 +3019,118 @@ void SlicEngine::AddDatabases()
 																  g_DiplomacyRecord_Accessors,
 																  g_Diplomacy_Tokens,
 																  k_Num_DiplomacyRecord_Tokens));
+#if !defined(ACTIVISION_ORIGINAL)
+	//The rest of the new databases available through slic added by Martin Gühmann
+	m_dbHash->Add(new SlicDBConduit<PersonalityRecord, 
+									PersonalityRecordAccessorInfo>("PersonalityDB", g_thePersonalityDB,
+																  g_PersonalityRecord_Accessors,
+																  g_Personality_Tokens,
+																  k_Num_PersonalityRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<AdvanceBranchRecord, 
+									AdvanceBranchRecordAccessorInfo>("AdvanceBranchDB", g_theAdvanceBranchDB,
+																  g_AdvanceBranchRecord_Accessors,
+																  g_AdvanceBranch_Tokens,
+																  k_Num_AdvanceBranchRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<AdvanceListRecord, 
+									AdvanceListRecordAccessorInfo>("AdvanceListDB", g_theAdvanceListDB,
+																  g_AdvanceListRecord_Accessors,
+																  g_AdvanceList_Tokens,
+																  k_Num_AdvanceListRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<AgeCityStyleRecord, 
+									AgeCityStyleRecordAccessorInfo>("AgeCityStyleDB", g_theAgeCityStyleDB,
+																  g_AgeCityStyleRecord_Accessors,
+																  g_AgeCityStyle_Tokens,
+																  k_Num_AgeCityStyleRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<AgeRecord, AgeRecordAccessorInfo>("AgeDB", g_theAgeDB,
+																  g_AgeRecord_Accessors,
+																  g_Age_Tokens,
+																  k_Num_AgeRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<BuildingBuildListRecord, 
+									BuildingBuildListRecordAccessorInfo>("BuildingBuildListDB", g_theBuildingBuildListDB,
+																  g_BuildingBuildListRecord_Accessors,
+																  g_BuildingBuildList_Tokens,
+																  k_Num_BuildingBuildListRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<BuildListSequenceRecord, 
+									BuildListSequenceRecordAccessorInfo>("BuildListSequenceDB", g_theBuildListSequenceDB,
+																  g_BuildListSequenceRecord_Accessors,
+																  g_BuildListSequence_Tokens,
+																  k_Num_BuildListSequenceRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<CitySizeRecord, 
+									CitySizeRecordAccessorInfo>("CitySizeDB", g_theCitySizeDB,
+																  g_CitySizeRecord_Accessors,
+																  g_CitySize_Tokens,
+																  k_Num_CitySizeRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<CityStyleRecord, 
+									CityStyleRecordAccessorInfo>("CityStyleDB", g_theCityStyleDB,
+																  g_CityStyleRecord_Accessors,
+																  g_CityStyle_Tokens,
+																  k_Num_CityStyleRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<DiplomacyProposalRecord, 
+									DiplomacyProposalRecordAccessorInfo>("DiplomacyProposalDB", g_theDiplomacyProposalDB,
+																  g_DiplomacyProposalRecord_Accessors,
+																  g_DiplomacyProposal_Tokens,
+																  k_Num_DiplomacyProposalRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<DiplomacyThreatRecord, 
+									DiplomacyThreatRecordAccessorInfo>("DiplomacyThreatDB", g_theDiplomacyThreatDB,
+																  g_DiplomacyThreatRecord_Accessors,
+																  g_DiplomacyThreat_Tokens,
+																  k_Num_DiplomacyThreatRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<EndGameObjectRecord, 
+									EndGameObjectRecordAccessorInfo>("EndGameObjectDB", g_theEndGameObjectDB,
+																  g_EndGameObjectRecord_Accessors,
+																  g_EndGameObject_Tokens,
+																  k_Num_EndGameObjectRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<GoalRecord, GoalRecordAccessorInfo>("GoalDB", g_theGoalDB,
+																  g_GoalRecord_Accessors,
+																  g_Goal_Tokens,
+																  k_Num_GoalRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<IconRecord, IconRecordAccessorInfo>("IconDB", g_theIconDB,
+																  g_IconRecord_Accessors,
+																  g_Icon_Tokens,
+																  k_Num_IconRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<ImprovementListRecord, 
+									ImprovementListRecordAccessorInfo>("ImprovementListDB", g_theImprovementListDB,
+																  g_ImprovementListRecord_Accessors,
+																  g_ImprovementList_Tokens,
+																  k_Num_ImprovementListRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<PopRecord, PopRecordAccessorInfo>("PopDB", g_thePopDB,
+																  g_PopRecord_Accessors,
+																  g_Pop_Tokens,
+																  k_Num_PopRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<SoundRecord, SoundRecordAccessorInfo>("SoundDB", g_theSoundDB,
+																  g_SoundRecord_Accessors,
+																  g_Sound_Tokens,
+																  k_Num_SoundRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<SpecialAttackInfoRecord, 
+									SpecialAttackInfoRecordAccessorInfo>("SpecialAttackInfoDB", g_theSpecialAttackInfoDB,
+																  g_SpecialAttackInfoRecord_Accessors,
+																  g_SpecialAttackInfo_Tokens,
+																  k_Num_SpecialAttackInfoRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<SpecialEffectRecord, 
+									SpecialEffectRecordAccessorInfo>("SpecialEffectDB", g_theSpecialEffectDB,
+																  g_SpecialEffectRecord_Accessors,
+																  g_SpecialEffect_Tokens,
+																  k_Num_SpecialEffectRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<SpriteRecord, SpriteRecordAccessorInfo>("SpriteDB", g_theSpriteDB,
+																  g_SpriteRecord_Accessors,
+																  g_Sprite_Tokens,
+																  k_Num_SpriteRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<UnitBuildListRecord, 
+									UnitBuildListRecordAccessorInfo>("UnitBuildListDB", g_theUnitBuildListDB,
+																  g_UnitBuildListRecord_Accessors,
+																  g_UnitBuildList_Tokens,
+																  k_Num_UnitBuildListRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<WonderBuildListRecord, 
+									WonderBuildListRecordAccessorInfo>("WonderBuildListDB", g_theWonderBuildListDB,
+																  g_WonderBuildListRecord_Accessors,
+																  g_WonderBuildList_Tokens,
+																  k_Num_WonderBuildListRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<WonderMovieRecord, 
+									WonderMovieRecordAccessorInfo>("WonderMovieDB", g_theWonderMovieDB,
+																  g_WonderMovieRecord_Accessors,
+																  g_WonderMovie_Tokens,
+																  k_Num_WonderMovieRecord_Tokens));
+#endif // ACTIVISION_ORIGINAL
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
