@@ -415,9 +415,7 @@ LobbyWindow::~LobbyWindow( void )
 		}
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)
 	delete m_messageLobbyEnter;
-#endif
 
 	if ( m_PPStrings )
 	{

@@ -56,14 +56,12 @@
 extern C3UI *g_c3ui;
 extern ColorSet *g_colorSet;
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "ProfileDB.h"	// g_theProfileDB
 
 namespace
 {
 	COLOR				s_trackerBorderColor	= COLOR_GREEN;
 }
-#endif
 
 TileimpTrackerWindow	*g_tileImpTrackerWindow	= NULL;
 static c3_Static		*s_trackerTimeN			= NULL;
@@ -162,9 +160,6 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 
 	MBCHAR		mytext[256];
 	sint32		x, y;
-#if defined(ACTIVISION_ORIGINAL)
-	Pixel16		color;
-#endif
 	sint32		visPlayer = g_selected_item->GetVisiblePlayer();
 
 	
@@ -296,21 +291,6 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 
 
 		ERR_BUILD_INST err; 
-#if defined(ACTIVISION_ORIGINAL)
-		BOOL checkMaterials = TRUE;
-		
-		
-		
-		if(g_player[visPlayer]->CanCreateImprovement(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, 
-				extraData, checkMaterials, err)) {
-			color = g_colorSet->GetColor(COLOR_GREEN);
-			g_c3ui->AddWindow(g_tileImpTrackerWindow);
-		} else {
-			
-			color = g_colorSet->GetColor(COLOR_RED);
-			g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
-		}
-#else
 		bool const	checkMaterials	= !g_theProfileDB->GetValueByName("ShowExpensive");
 
 		if (g_player[visPlayer]->CanCreateImprovement
@@ -333,7 +313,6 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 		{
 			g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
 		}
-#endif
 		g_tileImpTrackerWindow->ShouldDraw();
 		
 
@@ -388,11 +367,7 @@ AUI_ERRCODE TileimpTrackerWindow::DrawThis( aui_Surface *surface, sint32 x, sint
 	
 	C3Window::DrawThis(surface,x,y);
 
-#if defined(ACTIVISION_ORIGINAL)
-	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(COLOR_GREEN));
-#else
 	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(s_trackerBorderColor));
-#endif	
 
 	return AUI_ERRCODE_OK;
 }

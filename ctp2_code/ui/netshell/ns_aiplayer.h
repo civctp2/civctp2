@@ -38,11 +38,7 @@
 class ns_AIPlayer : public ns_Object<NETFunc::AIPlayer, ns_AIPlayer>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)
-	ns_AIPlayer( NETFunc::AIPlayer *aiplayer ) : ns_Object<NETFunc::AIPlayer, ns_AIPlayer>(aiplayer) {};
-#else
 	ns_AIPlayer(NETFunc::AIPlayer * aiplayer);
-#endif
 
 	void Update( NETFunc::AIPlayer *aiplayer );
 

@@ -68,7 +68,6 @@ enum COLOR {
 	COLOR_PLAYER16,
 	COLOR_PLAYER17,
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to support 
 	//more players with colors
 	COLOR_PLAYER18,
@@ -87,7 +86,6 @@ enum COLOR {
 	COLOR_PLAYER31,
 	COLOR_PLAYER32,
 	COLOR_PLAYER33,
-#endif
 
 	COLOR_TERRAIN_0,
 	COLOR_TERRAIN_1,

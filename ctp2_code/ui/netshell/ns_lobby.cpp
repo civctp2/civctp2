@@ -36,14 +36,6 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_Lobby::count = 3;
-ns_Lobby::Struct ns_Lobby::list[] = {
-	{ICON,		(Data)&m_closed},
-	{STRING,	(Data)&m_name},
-	{INT,		(Data)&m_players}
-};
-#else
 ns_Lobby::ns_Lobby(NETFunc::Lobby * lobby) 
 :	ns_Object<NETFunc::Lobby, ns_Lobby>(lobby) 
 {
@@ -51,7 +43,6 @@ ns_Lobby::ns_Lobby(NETFunc::Lobby * lobby)
 	list.push_back(Struct(STRING,	&m_name));
 	list.push_back(Struct(INT,		&m_players));
 };
-#endif
 
 
 void ns_Lobby::Update( NETFunc::Lobby *lobby ) {

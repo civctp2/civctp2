@@ -128,11 +128,7 @@ public:
 	virtual AUI_ERRCODE GetDC( HDC *hdc );
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
 
-#if defined(ACTIVISION_ORIGINAL)
-	LPCRITICAL_SECTION LPCS( void ) const { return m_lpcs; }
-#else
 	LPCRITICAL_SECTION LPCS( void ) const { return &m_cs; };
-#endif
 	
 	virtual BOOL IsOK( void ) const { return m_saveBuffer != NULL; }
 
@@ -140,11 +136,7 @@ public:
 
 protected:
 	static sint32 m_surfaceRefCount;
-#if defined(ACTIVISION_ORIGINAL)
-	static LPCRITICAL_SECTION m_lpcs;
-#else
 	static	CRITICAL_SECTION	m_cs;
-#endif
 	
 	AUI_ERRCODE ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SURFACE_LOCKOP op );
 

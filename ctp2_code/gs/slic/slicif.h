@@ -117,7 +117,6 @@ typedef enum {
 	SOP_EVENT, 
 	SOP_ASIZE,
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database support
 	SOP_DBNAME,
 	SOP_DBNAMEREF,
@@ -127,7 +126,6 @@ typedef enum {
 	SOP_DBSIZE,
 //Added by tombom for bitwise support
 	SOP_BAND,
-#endif
 
 	SOP_NOP 
 } SOP;
@@ -200,9 +198,7 @@ SLIC_ERROR slicif_run_parser(char *filename, int symStart);
 void slicif_add_object(struct PSlicObject* obj);
 void slicif_add_op(SOP op, ...);
 void slicif_init();
-#if !defined(ACTIVISION_ORIGINAL)
 void slicif_cleanup();
-#endif
 void slicif_set_start(int symStart);
 void slicif_start();
 void slicif_dump_code(unsigned char *code, int size);
@@ -281,10 +277,8 @@ int slicif_is_valid_string(char *s);
 int slicif_find_db_value(void *dbptr, const char *recname, const char *valname);
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname);
 
-#if !defined(ACTIVISION_ORIGINAL)
 /* Added by Martin Gühmann */
 int slicif_is_name(void *dbptr, const char *name);
-#endif
 
 #if defined(__cplusplus)
 }

@@ -328,11 +328,7 @@ void Unit::FastKill()
 	Assert(r);
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-BOOL Unit::IsValid()
-#else
 BOOL Unit::IsValid() const
-#endif
 {
 	return g_theUnitPool->IsValid(*this);
 }

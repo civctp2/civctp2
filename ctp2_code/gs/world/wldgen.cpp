@@ -146,17 +146,12 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 		
 		XY_Coords.Init(m_size.y, m_size.x);
 
-#if defined(ACTIVISION_ORIGINAL)	// X-wrap added		
-		A_star_heuristic = new A_Star_Heuristic_Cost;
-		A_star_heuristic->Init(m_size.y, m_size.x, (m_isYwrap ? true : false));
-#else
 		A_star_heuristic = new A_Star_Heuristic_Cost
 								(m_size.y, 
 								 m_size.x, 
 								 m_isYwrap ? true : false, 
 								 m_isXwrap ? true : false
 								);
-#endif		
 		s_randomGenerator->Release();
 		
 		m_continents_are_numbered= FALSE; 
@@ -225,27 +220,17 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	
 	XY_Coords.Init(m_size.y, m_size.x);
 
-#if defined(ACTIVISION_ORIGINAL)	
-	A_star_heuristic = new A_Star_Heuristic_Cost;
-
-	
-	A_star_heuristic->Init(m_size.y, m_size.x, (m_isYwrap ? true : false));
-#else
 	A_star_heuristic = new A_Star_Heuristic_Cost
 							(m_size.y, 
 							 m_size.x, 
 							 m_isYwrap ? true : false, 
 							 m_isXwrap ? true : false
 							);
-#endif
 	m_distanceQueue = NULL;
 }
 
 World::~World()
 {
-#if defined(ACTIVISION_ORIGINAL)	// cleaned up in destructor now
-	A_star_heuristic->Trash();
-#endif
 	delete A_star_heuristic;
 
 	FreeMap();
@@ -1336,10 +1321,6 @@ void World::GenerateDeepWater()
 				if (m_map[i][j]->m_terrain_type == TERRAIN_WATER_DEEP) { 
 
 					hot = TRUE; 
-#if defined(ACTIVISION_ORIGINAL)
-					for (x = max(i-(radius-delta), 0);hot &&  x <= min(m_size.x-1, (i+(radius-delta))); x++) { 
-						for (y = max(j-(radius-delta), 0); hot && y <= min(m_size.y-1, (j+(radius-delta))); y++) {
-#else
 					for (x = std::max<sint32>(i-(radius-delta), 0); 
 						 hot &&  x <= std::min<sint32>(m_size.x-1, (i+(radius-delta))); 
 						 ++x
@@ -1351,7 +1332,6 @@ void World::GenerateDeepWater()
 							)
 						{
 
-#endif							
 							if (m_map[x][y]->m_search_count != m_map[i][j]->m_search_count) {
 								hot = FALSE; 
 								break;
@@ -1400,10 +1380,6 @@ void World::GenerateDeepWater()
 			oldval =   m_map[minx][miny]->m_search_count; 
 
 			rcount++; 
-#if defined(ACTIVISION_ORIGINAL)
-			for (i = max(minx-(radius), 0); i <= min(m_size.x-1, (minx+(radius))); i++) { 
-				for (j = max(miny-(radius), 0); j <= min(m_size.y-1, (miny+(radius))); j++) { 
-#else
 			for (i = std::max<sint32>(minx-(radius), 0); 
 				 i <= std::min<sint32>(m_size.x-1, (minx+(radius))); 
 				 ++i
@@ -1414,7 +1390,6 @@ void World::GenerateDeepWater()
 					 ++j
 					) 
 				{ 
-#endif					
 					if ((m_map[i][j]->m_search_count == oldval) || 
 						(m_map[i][j]->m_search_count == 0)) { 
 						m_map[i][j]->m_search_count = rcount;
@@ -1984,14 +1959,10 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
     }
 
 	sint32 maxSize = max(m_size.x, m_size.y);
-#if defined(ACTIVISION_ORIGINAL)
-	double someNumber = sqrt((maxSize * maxSize) / (2 * g_theProfileDB->GetNPlayers()));
-#else
 	double const someNumber = 
 		sqrt(static_cast<double>(maxSize * maxSize) / 
 			 (2 * g_theProfileDB->GetNPlayers())
 			);
-#endif
 	sint32 minDistance = sint32(g_theConstDB->MinStartDistanceCoefficient() * someNumber);
 	sint32 maxDistance = sint32(g_theConstDB->MaxStartDistanceCoefficient() * someNumber);
 	if(minDistance < g_theConstDB->MinAbsoluteStartDistance())
@@ -2054,18 +2025,10 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 double World::CalcTerrainFreightCost(const MapPoint &pos) 
 
 {
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-   double tmp = 5;
-	
-   return tmp;
-
-#else
 //Added by Martin Gühmann
 	
 	return AccessCell(pos)->CalcTerrainFreightCost();
 
-#endif
 }
 
 void World::SetAllMoveCost()

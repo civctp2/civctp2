@@ -47,12 +47,6 @@
 #include "c3slider.h"
 #include "c3ui.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-#include "aui_Radio.h"
-#include "aui_SwitchGroup.h"
-
-#else
 //Added by Martin Gühmann
 #include "ctp2_spinner.h"
 #include "ctp2_static.h"
@@ -60,7 +54,6 @@
 #include "ColorSet.h"
 extern ColorSet			*g_colorSet;
 
-#endif
 
 #include "aui_uniqueid.h"
 
@@ -73,31 +66,12 @@ extern ColorSet			*g_colorSet;
 extern C3UI			*g_c3ui;
 extern ProfileDB	*g_theProfileDB;
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-#define k_NUM_PLAYERSBOXES	6
-#endif
 
 static c3_PopupWindow	*s_spNewGamePlayersScreen	= NULL;
 static c3_Button	*s_back				= NULL;
 
 static c3_Static	*s_name				= NULL;
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-static aui_SwitchGroup	*s_group		= NULL;
-static aui_Radio	**s_checkBox;
-
-static MBCHAR	checknames[k_NUM_PLAYERSBOXES][50] = {
-	"PlayerOne",
-	"PlayerTwo",
-	"PlayerThree",
-	"PlayerFour",
-	"PlayerFive",
-	"PlayerSix"
-};
-
-#else
 //Added by Martin Gühmann
 static ctp2_Spinner *s_num_player_spinner = NULL;
 static ctp2_Spinner *s_max_player_spinner = NULL;
@@ -107,7 +81,6 @@ static c3_Static *s_num_player = NULL;
 static c3_Static *s_max_player = NULL;
 static c3_Static *s_player = NULL;
 
-#endif
 
 static sint32		s_maxPlayers=0;
 
@@ -170,21 +143,6 @@ sint32 spnewgameplayersscreen_removeMyWindow(uint32 action)
 
 	if (!s_spNewGamePlayersScreen) return 1;
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	if (!s_group) return 1;
-
-	uint32 id = s_group->WhichIsSelected();
-
-	if ( id ) {
-		for ( sint32 i = 0;i < k_NUM_PLAYERSBOXES;i ++ ) {
-			if ( id == s_checkBox[i]->Id() ) {
-
-				g_theProfileDB->SetNPlayers( (i + 3) + 1 );	
-			}
-		}
-	}
-#else
 //Added by Martin Gühmann
 	if(s_num_player_spinner){
 		g_theProfileDB->SetNPlayers(s_num_player_spinner->GetValueX()+1);
@@ -195,7 +153,6 @@ sint32 spnewgameplayersscreen_removeMyWindow(uint32 action)
 	if(s_player_spinner){
 		g_theProfileDB->SetPlayerIndex(s_player_spinner->GetValueX());
 	}
-#endif
 	AUI_ERRCODE auiErr;
 
 	auiErr = g_c3ui->RemoveWindow( s_spNewGamePlayersScreen->Id() );
@@ -233,16 +190,8 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	sint32 i;
-
-	s_maxPlayers = 8;
-#else
 //Added by Martin Gühmann
 	s_maxPlayers = k_MAX_PLAYERS;
-#endif
 
 	if ( s_spNewGamePlayersScreen ) {
 
@@ -251,13 +200,6 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-		for (sint32 i = 0;i < k_NUM_PLAYERSBOXES;i++ ) {
-			s_checkBox[i]->Enable(TRUE);
-			s_checkBox[i]->SetState(0);
-		}
-#endif
 		return AUI_ERRCODE_OK;		
 	}
 
@@ -284,37 +226,6 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 
 	s_spNewGamePlayersScreen->AddClose( callback );
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	sprintf( controlBlock, "%s.%s", windowBlock, "Group" );
-	s_group = new aui_SwitchGroup( &errcode, aui_UniqueId(), controlBlock );
-	Assert( AUI_NEWOK(s_group, errcode) );
-
-	if ( !AUI_NEWOK(s_group, errcode) ) return errcode;
-
-	s_checkBox = new aui_Radio*[k_NUM_PLAYERSBOXES];
-
-	for ( i = 0;i < k_NUM_PLAYERSBOXES;i++ ) {
-		sprintf( switchBlock, "%s.%s", controlBlock, checknames[i] );
-		s_checkBox[i] = new aui_Radio( &errcode, aui_UniqueId(), switchBlock );
-		Assert( AUI_NEWOK(s_checkBox[i], errcode) );
-		if ( !AUI_NEWOK(s_checkBox[i], errcode) ) return errcode;
-		s_group->AddSwitch( (aui_Radio *)s_checkBox[i] );
-	
-	}
-
-	
-	
-	if (g_theProfileDB->GetNPlayers() <= 3)
-		g_theProfileDB->SetNPlayers(4);
-
-	s_checkBox[(g_theProfileDB->GetNPlayers()-1)-3]->SetState( 1 );	
-
-	
-	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
-	Assert( AUI_SUCCESS(errcode) );
-
-#else
 //Added by Martin Gühmann
 	sprintf( controlBlock, "%s.%s", windowBlock, "NumPlayerSpinner");
 	s_num_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
@@ -360,7 +271,6 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	s_spNewGamePlayersScreen->AddControl(s_num_player);
 	s_spNewGamePlayersScreen->AddControl(s_max_player);
 	s_spNewGamePlayersScreen->AddControl(s_player);
-#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -390,7 +300,6 @@ AUI_ERRCODE spnewgameplayersscreen_Cleanup()
 
 	if ( !s_spNewGamePlayersScreen  ) return AUI_ERRCODE_OK; 
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann
 	s_spNewGamePlayersScreen->RemoveControl(s_num_player_spinner->Id());
 	s_spNewGamePlayersScreen->RemoveControl(s_max_player_spinner->Id());
@@ -398,18 +307,9 @@ AUI_ERRCODE spnewgameplayersscreen_Cleanup()
 	s_spNewGamePlayersScreen->RemoveControl(s_num_player->Id());
 	s_spNewGamePlayersScreen->RemoveControl(s_max_player->Id());
 	s_spNewGamePlayersScreen->RemoveControl(s_player->Id());
-#endif
 	g_c3ui->RemoveWindow( s_spNewGamePlayersScreen->Id() );
 	keypress_RemoveHandler(s_spNewGamePlayersScreen);
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	for (sint32 i = 0;i < k_NUM_PLAYERSBOXES;i++ ) {
-		mycleanup( s_checkBox[i] );
-	}
-
-	mycleanup( s_group );
-#else
 //Added by Martin Gühmann
 	mycleanup(s_num_player_spinner);
 	mycleanup(s_max_player_spinner);
@@ -418,7 +318,6 @@ AUI_ERRCODE spnewgameplayersscreen_Cleanup()
 	mycleanup(s_max_player);
 	mycleanup(s_player);
 
-#endif
 
 	delete s_spNewGamePlayersScreen;
 	s_spNewGamePlayersScreen = NULL;
@@ -476,32 +375,13 @@ void spnewgameplayersscreen_backPress(aui_Control *control, uint32 action, uint3
 
 void spnewgameplayersscreen_SetMaxPlayers(sint32 maxPlayers)
 {
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	if (maxPlayers > 8) maxPlayers = 8;
-#else
 //Added by Martin Gühmann
 	if (maxPlayers > k_MAX_PLAYERS) maxPlayers = k_MAX_PLAYERS;
-#endif
 
 	s_maxPlayers = maxPlayers;
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	for (sint32 i = 0;i < k_NUM_PLAYERSBOXES;i++ ) {
-		s_checkBox[i]->Enable(FALSE);
-		s_checkBox[i]->SetState(0);
-	}
-
-	for (i = 3;i <= s_maxPlayers;i++ ) {
-		s_checkBox[i-3]->Enable(TRUE);
-	}
-
-	s_checkBox[s_maxPlayers-3]->SetState(1);
-#endif
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
@@ -591,4 +471,3 @@ void spnewgameplayersscreen_PlayerSpinner(aui_Control *control, uint32 action, u
 	s_player->SetTextColor(g_colorSet->GetColorRef(g_colorSet->ComputePlayerColor(s_player_spinner->GetValueX())));
 	s_player->ShouldDraw();
 }
-#endif

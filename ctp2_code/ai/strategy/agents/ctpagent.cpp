@@ -182,9 +182,7 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 		return 0x0;
 
 	bool isspecial; 
-#if !defined (ACTIVISION_ORIGINAL)
 	bool isstealth;
-#endif
 	sint32 maxattack; 
 	sint32 maxdefense; 
 	bool cancapture;
@@ -200,9 +198,7 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 
 	m_army->CharacterizeArmy(
 		isspecial, 
-#if !defined (ACTIVISION_ORIGINAL)
 	    isstealth,
-#endif
 		maxattack, 
 		maxdefense, 
 		cancapture,
@@ -217,10 +213,8 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 	if ( isspecial )
 		m_squad_class |= k_Goal_SquadClass_Special_Bit;
 
-#if !defined (ACTIVISION_ORIGINAL)
 	if (isstealth)
 		m_squad_class |= k_Goal_SquadClass_Stealth_Bit;
-#endif
 
 	if ( maxattack > 0 )
 		m_squad_class |= k_Goal_SquadClass_CanAttack_Bit;
@@ -481,9 +475,6 @@ sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 
 	cells = MapPoint::GetSquaredDistance(Get_Pos(), pos);
 	if (cells > 0)
-#if defined(ACTIVISION_ORIGINAL)
-		move_point_cost =  100 * sqrt(cells);
-#else
 	{
 	   ///Improvement of rounds evaluation (based on minimum cost point between
 	   ///start and destination mappoints. - Calvitix
@@ -495,7 +486,6 @@ sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 		//To DO : instead of 100.0, compute the min of terraint cost (with implementation)
 		move_point_cost = movement * sqrt(static_cast<double>(cells)); //original : 100.0
 	}
-#endif
 
     Get_Army()->MinMovementPoints(min_move);
 	

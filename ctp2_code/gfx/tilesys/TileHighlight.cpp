@@ -94,14 +94,6 @@ extern ORDERMODE		g_orderModeOrder;
 #include "ControlPanelWindow.h"
 #include "OrderRecord.h"
 
-#if defined(ACTIVISION_ORIGINAL)	// never used
-
-static Unit GetUnitWithLeastMovePoints(void)
-{
-	return 0;
-}
-
-#else
 
 namespace // unnamed = static
 {
@@ -180,7 +172,6 @@ bool IsKnownEntryCost
 
 } // namespace
 
-#endif // ACTIVISION_ORIGINAL
 
 
 #define INSURFACE(x, y) (x >= 0 && y >= 0 && x < pSurface->Width() && y < pSurface->Height())
@@ -213,552 +204,6 @@ BOOL TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, MapPoint &o
     } 
 } 
 
-#if defined(ACTIVISION_ORIGINAL)
-void TiledMap::DrawLegalMove(
-	aui_Surface *pSurface	
-	)
-{
-
-	
-	
-
-    if (g_selected_item->GetIsPathing() == FALSE) 
-        return; 
-
-	if(!ReadyToDraw())
-		return;
-
-    PLAYER_INDEX pIndex;
-	ID id;
-	SELECT_TYPE sType;
-    g_selected_item->GetTopCurItem(pIndex,id,sType);
-    if (sType != SELECT_TYPE_LOCAL_ARMY && 
-		sType != SELECT_TYPE_LOCAL_ARMY_UNLOADING) { 
-        return; 
-    } 
-
-	
-	
-	Path goodPath(g_selected_item->GetGoodPath());
-	Path badPath = g_selected_item->GetBadPath();
-
-	
-	
-	
-	
-
-	sint32 badPath_old_index = badPath.GetNextIndex(); 
-
-	MapPoint currPos, prevPos;
-
-	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH*m_scale)/2);
-	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEIGHT*m_scale);
-    Army sel_army;
-    uint16 old_line_color = g_colorSet->GetColor(k_TURN_COLOR_GO);
-    uint16 actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_GO); 
-    uint16 lineColor = g_colorSet->GetColor(k_TURN_COLOR_STOP); 
-    BOOL draw_one_special = TRUE; 
-	double currMovementPoints = 0.0;
-	sint32 isFirstMove = FALSE;	
-	sint32 fuel = 0;
-	sint32 halfFuel = -1;
-      
-    sint32 line_segment_count=0; 
-    sint32 special_line_segment = -1;
-
-	if ((sType == SELECT_TYPE_LOCAL_ARMY) ||
-        (sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING))
-	{
-        sel_army = Army(id);
-        Assert(sel_army.m_id != (0)); 
-        sel_army.CurMinMovementPoints(currMovementPoints); 
-		if (currMovementPoints < 1.0)
-			currMovementPoints = -1.0;
-
-		isFirstMove =  sel_army.GetFirstMoveThisTurn();
-        
-
-        sel_army.GetPos(prevPos); 
-    }  else { 
-        return; 
-    } 
-
-    sint32 num_tiles_to_half;
-    sint32 num_tiles_to_empty;
-
-    sel_army.CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty);
-    sint32 owner = sel_army.GetOwner(); 
-
-
-
-	goodPath.Start(currPos);
-	
-	while (!goodPath.IsEnd()) {
-		prevPos = currPos;
-		goodPath.Next(currPos);
-        line_segment_count++; 
-
-		lineColor = g_colorSet->GetColor(k_TURN_COLOR_GO);
-		double old, cost;
-
-		if ( sel_army.m_id != (0) && sel_army.GetMovementTypeAir() ) {
-			fuel--;
-		}
-		
-		if (currMovementPoints > 0) {
-			
-			old = currMovementPoints;
-			if(sel_army.m_id != (0)) {
-				if (sel_army.GetMovementTypeAir()) { 
-					cost = k_MOVE_AIR_COST; 
-				} else if (((sel_army.IsAtLeastOneMoveShallowWater() ||
-							 sel_army.IsAtLeastOneMoveWater())) &&
-						   (!sel_army.IsAtLeastOneMoveLand())) { 
-					if(g_theWorld->GetTerrain(currPos)->GetEnvBase()->GetMovement()) {
-						sint32 icost;
-						g_theWorld->GetTerrain(currPos)->GetEnvBase()->GetMovement(icost);
-						cost=icost;
-					}
-				} else { 
-					cost = g_theWorld->GetMoveCost(currPos);
-				}
-			} else {
-				
-				cost = g_theWorld->GetMoveCost(currPos);
-			}
-			
-			
-			if (isFirstMove)
-			{
-				
-				if (cost > currMovementPoints)
-					currMovementPoints = 0;
-				else
-					currMovementPoints -= cost;
-				
-				isFirstMove = 0;
-			}
-			else
-				currMovementPoints -= cost;
-		}
-		
-		if (currMovementPoints < 0)	
-            lineColor = g_colorSet->GetColor(k_TURN_COLOR_WAIT);
-
-		else if (FEQUAL(currMovementPoints,0.0)) 
-			currMovementPoints = -1;
-
-
-		if (prevPos != currPos) 
-		{
-			sint32 x1, y1, x2, y2;
-			
-			
-			if (TileIsVisible(prevPos.x, prevPos.y) &&
-				TileIsVisible(currPos.x, currPos.y))
-			{
-				
-				maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
-				maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
-				
-				
-				x1 += xoffset;
-				y1 += yoffset;
-				x2 += xoffset;
-				y2 += yoffset;
-				
-				if (sType == SELECT_TYPE_LOCAL_ARMY || 
-					((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))) { 
-					
-					if (draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos)) { 
-						draw_one_special = FALSE; 
-						lineColor = g_colorSet->GetColor(k_TURN_COLOR_SPECIAL);
-						special_line_segment = line_segment_count; 
-						
-					} 
-				}
-				
-				
-				
-				if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) {
-					if (num_tiles_to_half < line_segment_count) {
-						primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, lineColor, k_DASH_LENGTH);
-					} else {
-						primitives_DrawAALine16(pSurface, x1, y1, x2, y2, lineColor);
-					}
-				}
-
-				AddDirtyTileToMix(prevPos);
-				AddDirtyTileToMix(currPos);
-			}
-		}
-
-		if(sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) { 
-			break;
-		}
-	} 
-
-
-    old_line_color = lineColor; 
-	
-	prevPos = currPos;
-	badPath.Start(currPos);
-
-	sint32 x1, y1, x2, y2;
-
-	
-	if (TileIsVisible(prevPos.x, prevPos.y) &&
-		TileIsVisible(currPos.x, currPos.y))
-	{
-		
-		maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
-		maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
-
-		
-		x1 += xoffset;
-		y1 += yoffset;
-		x2 += xoffset;
-		y2 += yoffset;
-
-		
-		
-
-        
-        
-        if (!g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos)) { 
-            if ((old_line_color == g_colorSet->GetColor(k_TURN_COLOR_GO)) ||
-                 (old_line_color == g_colorSet->GetColor(k_TURN_COLOR_WAIT))) {
-
-                if (sel_army.CanEnter(currPos)) { 
-                     actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_WAIT); 
-                } else { 
-                     actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_STOP); 
-                } 
-            } else { 
-                actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_STOP); 
-            } 
-        } else {
-             if ((sType == SELECT_TYPE_LOCAL_ARMY || 
-                   ((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))) &&
-                 (draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos))) { 
-                draw_one_special = FALSE; 
-                actual_line_color  = g_colorSet->GetColor(k_TURN_COLOR_SPECIAL);
-                special_line_segment = line_segment_count; 
-            } else { 
-                actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_STOP); 
-            }
-        }
-        line_segment_count++; 
-
-        if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) {
-			if (num_tiles_to_half < line_segment_count) {                            
-				primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, actual_line_color, k_DASH_LENGTH);
-            } else {
-				primitives_DrawAALine16(pSurface, x1, y1, x2, y2, actual_line_color);
-			}
-        }
-	
-		AddDirtyTileToMix(prevPos);
-		AddDirtyTileToMix(currPos);
-	}
-
-    old_line_color = actual_line_color;
-	
-	while (!badPath.IsEnd()) 
-	{
-		prevPos = currPos;
-		badPath.Next(currPos);
-        line_segment_count++; 
-
-
-		if (prevPos != currPos) 
-		{
-			sint32 x1, y1, x2, y2;
-
-			
-			if (TileIsVisible(prevPos.x, prevPos.y) &&
-				TileIsVisible(currPos.x, currPos.y))
-			{
-				
-				maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
-				maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
-
-				
-				x1 += xoffset;
-				y1 += yoffset;
-				x2 += xoffset;
-				y2 += yoffset;
-
-                
-                
-                if (!g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos)) { 
-                    if ((old_line_color ==  g_colorSet->GetColor(k_TURN_COLOR_GO)) ||
-                         (old_line_color ==  g_colorSet->GetColor(k_TURN_COLOR_WAIT))) {
-                             actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_WAIT); 
-                    } else { 
-                        actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_STOP); 
-                    } 
-                } else {
-                    
-                if ((sType == SELECT_TYPE_LOCAL_ARMY || 
-                   ((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 1))) &&
-                     (draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos))) { 
-                        draw_one_special = FALSE; 
-                        actual_line_color  = g_colorSet->GetColor(k_TURN_COLOR_SPECIAL);
-                        special_line_segment = line_segment_count; 
-                    } else { 
-                       actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_STOP); 
-                    }
-                }
-                old_line_color = actual_line_color; 
-
-				
-				
-				if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
-					primitives_DrawAALine16(pSurface, x1, y1, x2, y2, actual_line_color);
-
-				AddDirtyTileToMix(prevPos);
-				AddDirtyTileToMix(currPos);
-			}
-		}
-	}
-
-    old_line_color = actual_line_color; 
-	
-	
-	
-	goodPath = *g_selected_item->GetGoodPath();
-    line_segment_count = -1;
-	sint32 turn = 0;
-	currMovementPoints=0.0;
-	double prevMovementPoints=0.0;
-	double maxMovementPoints=0.0;
-	double count=0.0;
-	isFirstMove;
-
-	
-    BOOL special_box_done = FALSE; 
-
-            
-    sel_army = Army(id);
-    Assert(sel_army.m_id != (0)); 
-    sel_army.CurMinMovementPoints(currMovementPoints); 
-	count = currMovementPoints; 
-	sel_army.MinMovementPoints(maxMovementPoints); 
-	if (maxMovementPoints < 1.0)
-		maxMovementPoints = -1.0;
-
-	isFirstMove =  sel_army.GetFirstMoveThisTurn();
-	
-	if (currMovementPoints < 1.0)
-	{
-		currMovementPoints = -1;
-		prevMovementPoints = 0;
-		count = maxMovementPoints;
-		isFirstMove = 1;
-	}
-	
-	
-	goodPath.Start(currPos);
-	while (!goodPath.IsEnd())	{
-		line_segment_count++; 
-		prevPos = currPos;
-		goodPath.Next(currPos);
-
-		if (!g_player[owner]->IsExplored(currPos)) return; 
-
-		double cost;
-		if(sel_army.m_id != (0)) {
-			if (sel_army.GetMovementTypeAir()) { 
-				cost  = k_MOVE_AIR_COST; 
-			} else if (((sel_army.IsAtLeastOneMoveShallowWater() ||
-						 sel_army.IsAtLeastOneMoveWater())) &&
-					   (!sel_army.IsAtLeastOneMoveLand())) { 
-				if(g_theWorld->GetTerrain(currPos)->GetEnvBase()->GetMovement()) {
-					sint32 icost;
-					g_theWorld->GetTerrain(currPos)->GetEnvBase()->GetMovement(icost);
-					cost=icost;
-				}
-			} else { 
-				cost = g_theWorld->GetMoveCost(currPos);
-			}
-		} else {
-			cost = g_theWorld->GetMoveCost(currPos);
-		}
-
-		uint16 turnColor = g_colorSet->GetColor(k_TURN_COLOR_GO);
-		MapPoint drawPos = prevPos;
-		
-		
-		if (currMovementPoints > 0)
-		{
-			prevMovementPoints = currMovementPoints;
-			
-			if (isFirstMove)
-			{
-				if (cost > currMovementPoints) 
-					currMovementPoints = 0;
-				else
-					currMovementPoints -= cost;
-				
-				
-			}
-			else
-				currMovementPoints -= cost;
-		}
-		
-		if (prevMovementPoints < 1.0)		
-			turnColor = g_colorSet->GetColor(k_TURN_COLOR_WAIT);
-		else if (currMovementPoints <1.0)	
-			currMovementPoints = -1;
-		
-		if (count > 0)
-		{
-			
-			if (isFirstMove)
-			{
-				if (cost > count) 
-					count = 0;
-				else
-					count -= cost;
-				
-				isFirstMove = 0;
-			}
-			else 
-				count -= cost;
-		}
-		
-		sint32 countWasZero = 0;
-		if ((-0.01 < count) && (count < 0.01))
-		{
-			drawPos = currPos;
-			isFirstMove = 1;
-			countWasZero = 1;
-			count = -1;
-		}
-		
-		if (count < 0)
-		{
-			count = maxMovementPoints;
-			
-			if (!countWasZero)
-				if (cost > count)
-					count = -1;
-				else
-					count -= cost;
-				
-				turn++;
-				prevMovementPoints = 0;
-				
-				sint32 x,y;
-				
-				maputils_MapXY2PixelXY(drawPos.x,drawPos.y,&x,&y);
-				
-				x += xoffset;
-				y += yoffset;
-				
-				sint32	boxEdgeSize = (sint32)((double)k_TURN_BOX_SIZE * m_scale);
-				if (boxEdgeSize < k_TURN_BOX_SIZE_MINIMUM) boxEdgeSize = k_TURN_BOX_SIZE_MINIMUM;
-				
-				RECT turnRect = {x - boxEdgeSize, 
-					y - boxEdgeSize, 
-					x + boxEdgeSize, 
-					y + boxEdgeSize};
-				
-				if (TileIsVisible(drawPos.x,drawPos.y))
-				{
-					if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom)) {
-						
-						MBCHAR turnNumber[80];						
-                        if ((!special_box_done) && (special_line_segment == line_segment_count)) { 
-                            special_box_done = TRUE; 
-							sprintf(turnNumber,"*");
-							actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_SPECIAL);
-							
-                        } else { 
-							sprintf(turnNumber,"%d",turn);
-							actual_line_color = turnColor;
-                        } 
-						
-						primitives_PaintRect16(pSurface,&turnRect,actual_line_color);
-						primitives_FrameRect16(pSurface,&turnRect,0);
-
-						sint32 width = textutils_GetWidth((aui_DirectSurface *)pSurface, turnNumber);
-						sint32 height = textutils_GetHeight((aui_DirectSurface *)pSurface, turnNumber);
-						
-						sint32 textX = x - (width>>1);
-						sint32 textY = y - (height>>1);
-						
-						primitives_DrawText((aui_DirectSurface *)pSurface, textX, textY, turnNumber, 0, 1);
-						
-						
-                    } 
-                } 
-		} 
-     }
-     
-	 
-
-	 sint32 x, y; 
-	 MapPoint drawPos; 
-	 
-	 badPath.Start(drawPos); 
-	 if ((0 <= special_line_segment) && (!special_box_done) && !badPath.IsEnd()) { 
-		 if (!goodPath.IsEnd()) { 
-			 if (goodPath.Num() < 1) { 
-				 badPath.Next(drawPos); 
-			 } 
-		 } else { 
-			 badPath.Next(drawPos); 
-		 } 
-		 
-		 if (TileIsVisible(drawPos.x,drawPos.y)) {
-			 
-			if (!g_player[owner]->IsExplored(currPos)) return; 
-			 
-			 maputils_MapXY2PixelXY(drawPos.x,drawPos.y,&x,&y);
-			 
-			 x += xoffset;
-			 y += yoffset;
-			 
-			 sint32	boxEdgeSize = (sint32)((double)k_TURN_BOX_SIZE * m_scale);
-			 if (boxEdgeSize < k_TURN_BOX_SIZE_MINIMUM) boxEdgeSize = k_TURN_BOX_SIZE_MINIMUM;
-			 
-			 RECT turnRect = {x - boxEdgeSize, 
-				 y - boxEdgeSize, 
-				 x + boxEdgeSize, 
-				 y + boxEdgeSize};
-			 
-			 if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom)) {
-				 
-				 MBCHAR turnNumber[80];						
-				 sprintf(turnNumber,"*");
-				 actual_line_color = g_colorSet->GetColor(k_TURN_COLOR_SPECIAL);
-				 
-				 special_box_done = TRUE; 
-				 primitives_PaintRect16(pSurface,&turnRect,actual_line_color);
-				 primitives_FrameRect16(pSurface,&turnRect,0);
-				 
-				 sint32 width = textutils_GetWidth((aui_DirectSurface *)pSurface, turnNumber);
-				 sint32 height = textutils_GetHeight((aui_DirectSurface *)pSurface, turnNumber);
-				 
-				 sint32 textX = x - (width>>1);
-				 sint32 textY = y - (height>>1);
-				 
-				 primitives_DrawText((aui_DirectSurface *)pSurface, textX, textY, turnNumber, 0, 1);
-				 
-			 }
-		 }
-	 }
-	 
-	
-	
-	
-
-	
-	
-}
-#else	// ACTIVISION_ORIGINAL
 //----------------------------------------------------------------------------
 //
 // Name       : TiledMap::DrawLegalMove
@@ -1251,7 +696,6 @@ void TiledMap::DrawLegalMove
 		}
 	}
 }
-#endif	// ACTIVISION_ORIGINAL
 
 void TiledMap::DrawUnfinishedMove(
 	aui_Surface *pSurface	
@@ -1275,11 +719,6 @@ void TiledMap::DrawUnfinishedMove(
 
 	double currMovementPoints = 0.0;
 	sint32 isFirstMove = FALSE;
-#if defined(ACTIVISION_ORIGINAL)
-	// Never used
-	sint32 fuel = 0;
-	sint32 halfFuel = -1;
-#endif  
     sel_army = Army(id);
     Assert(sel_army.m_id != (0)); 
 
@@ -1317,16 +756,6 @@ void TiledMap::DrawUnfinishedMove(
 	}
 
 	
-#if defined(ACTIVISION_ORIGINAL)
-	// Would have liked some comment for this block.
-	uint16 
-		r = RGB (30, 0, 0), 
-		y = RGB (30, 30, 0); 
-	
-	y = 0x01ff; 
-	y = 0x3ff0; 
-	y = 0xff40;		
-#endif
 	
 	while (!goodPath.IsEnd()) 
 	{
@@ -1336,38 +765,14 @@ void TiledMap::DrawUnfinishedMove(
 		double old, cost;
 		line_segement_count++;
 		
-#if defined(ACTIVISION_ORIGINAL)		
-		if ( !m_localVision->IsExplored(currPos) ) break;
-		
-		if ( sel_army.GetMovementTypeAir() ) {
-			fuel--;
-		}
-#else
 		if (!(sel_army.GetMovementTypeAir() || m_localVision->IsExplored(currPos)))
 			break;
-#endif		
 		
 		if (currMovementPoints > 0)
 		{
 			old = currMovementPoints;
 			Assert(sel_army.m_id != (0)); 
-#if defined(ACTIVISION_ORIGINAL)
-			if (sel_army.GetMovementTypeAir()) { 
-				cost = k_MOVE_AIR_COST; 
-			} else if (((sel_army.IsAtLeastOneMoveShallowWater() ||
-						 sel_army.IsAtLeastOneMoveWater())) &&
-					   (!sel_army.IsAtLeastOneMoveLand())) { 
-				if(g_theWorld->GetTerrain(currPos)->GetEnvBase()->GetMovement()) {
-					sint32 icost;
-					g_theWorld->GetTerrain(currPos)->GetEnvBase()->GetMovement(icost);
-					cost=icost;
-				}
-			} else { 
-				cost = g_theWorld->GetMoveCost(currPos);
-			}
-#else
 			cost = GetEntryCost(sel_army, currPos);
-#endif
 			
 			if (isFirstMove)
 			{
@@ -1469,33 +874,12 @@ void TiledMap::DrawUnfinishedMove(
 		prevPos = currPos;
 		goodPath.Next(currPos);
 		
-#if defined(ACTIVISION_ORIGINAL)		
-		if ( !m_localVision->IsExplored(currPos) ) break;
-		
-		
-		double cost;
-		Assert(sel_army); 
-		if (sel_army.GetMovementTypeAir()) { 
-			cost  = k_MOVE_AIR_COST; 
-		} else if (((sel_army.IsAtLeastOneMoveShallowWater() ||
-					 sel_army.IsAtLeastOneMoveWater())) &&
-				   (!sel_army.IsAtLeastOneMoveLand())) { 
-			if(g_theWorld->GetTerrain(currPos)->GetEnvBase()->GetMovement()) {
-				sint32 icost;
-				g_theWorld->GetTerrain(currPos)->GetEnvBase()->GetMovement(icost);
-				cost=icost;
-			}
-		} else { 
-			cost = g_theWorld->GetMoveCost(currPos);
-		}
-#else
 		Assert(sel_army);
 
 		if (!(m_localVision->IsExplored(currPos) || sel_army.GetMovementTypeAir()))
 			break;
 
 		double const	cost	= GetEntryCost(sel_army, currPos);
-#endif
 		
 		uint16 turnColor = g_colorSet->GetColor(k_TURN_COLOR_UNFINISHED);
 		MapPoint drawPos = prevPos;

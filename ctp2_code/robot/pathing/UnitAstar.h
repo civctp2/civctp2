@@ -114,9 +114,7 @@ public:
 
     sint32 InitPoint(AstarPoint *parent, AstarPoint *point, const MapPoint &pos, 
         const float pc, const MapPoint &dest);
-#if !defined (ACTIVISION_ORIGINAL)
 	BOOL CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian);
-#endif
 
     void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entery_cost, 
         BOOL &new_is_zoc, ASTAR_ENTRY_TYPE &entry);

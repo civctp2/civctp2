@@ -207,11 +207,9 @@ public:
 	sint32 GetGoldProduced() const;
 	sint32 GetScore() const;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	sint32 GetFoodFromTerrain(sint8 terrainType) const;
 	sint32 GetShieldsFromTerrain(sint8 terrainType) const;
 	sint32 GetGoldFromTerrain(sint8 terrainType) const;
-#endif
 
     TERRAIN_TYPES GetTerrainType() const { return TERRAIN_TYPES(m_terrain_type); } 
 
@@ -341,10 +339,8 @@ public:
 	void CalcTerrainMoveCost();
 	void CalcMovementType();
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann
 	double CalcTerrainFreightCost();
-#endif	
 	
 	
 	

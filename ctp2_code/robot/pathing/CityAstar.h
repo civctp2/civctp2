@@ -54,9 +54,7 @@ public:
 	
 	bool FindRoadPath(const MapPoint & start, 
 					  const MapPoint & dest,
-#if !defined(ACTIVISION_ORIGINAL)
 					  PLAYER_INDEX owner,
-#endif
 					  Path & new_path,
 					  float & total_cost);
 

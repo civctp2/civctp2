@@ -106,11 +106,7 @@ class HotseatList : public KeyboardHandler
 {
 public:
 	HotseatList( HotseatListCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
-#if defined(ACTIVISION_ORIGINAL)
-	~HotseatList( void );
-#else
 	virtual ~HotseatList();
-#endif
 
 	c3_PopupWindow	*m_window;
 
@@ -122,9 +118,6 @@ public:
 
 public:
 	sint32 Initialize ( MBCHAR *ldlBlock );
-#if defined(ACTIVISION_ORIGINAL)	// never used
-	sint32 Cleanup ( void );
-#endif
 	sint32 UpdateData ( void );
 
 	sint32 EnableButtons( void );

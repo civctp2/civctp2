@@ -60,12 +60,6 @@ void maputils_WrapPoint(
 	*wrapX = x;
 	*wrapY = y;
 
-#if defined(ACTIVISION_ORIGINAL)	
-	while(*wrapX < 0)
-		*wrapX = *wrapX + mapWidth;
-	while(*wrapX >= mapWidth)
-		*wrapX = *wrapX - mapWidth;
-#else
 	if (g_theWorld->IsXwrap())
 	{
 		while(*wrapX < 0)
@@ -85,7 +79,6 @@ void maputils_WrapPoint(
 		}
 		// else: no action: *wrapX OK
 	}
-#endif
 
 	if (g_theWorld->IsYwrap()) {
 		
@@ -174,14 +167,7 @@ void maputils_TileX2MapXAbs(
 	
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
 		  
-#if defined(ACTIVISION_ORIGINAL)	
-	// useless ceil after integer division, modulo twice
-	*mapX = ((sint32)(tileX - ceil(tileY>>1))%mapWidth);
-
-	*mapX %= (mapWidth);
-#else
 	*mapX = (tileX - (tileY >> 1)) % mapWidth;
-#endif
 
 	while (*mapX<0)
 		*mapX+=mapWidth;

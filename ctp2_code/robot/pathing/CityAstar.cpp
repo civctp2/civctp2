@@ -57,7 +57,6 @@
 
 #include "MoveFlags.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to acces the terrain improvement database
 #include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
@@ -65,7 +64,6 @@
 #include "AgreementMatrix.h" // Allow alliance checking
 #include "StrategyRecord.h"  // For accessing the strategy database
 #include "Diplomat.h"        // To be able to retrieve the current strategy
-#endif
 
 CityAstar g_city_astar; 
 
@@ -74,39 +72,6 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
                             float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry) 
 
 {
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühamnn
-	if (m_pathRoad)
-	{
-		
-		
-		if (g_player[m_owner]->IsExplored(pos) == FALSE ||
-			g_theWorld->IsWater(pos)) { //Cannot build undersea tunnels
-			cost = k_ASTAR_BIG; 
-			entry = ASTAR_BLOCKED; 
-			return FALSE;
-		}
-        cost = float(g_theWorld->GetMoveCost(pos)); 
-		entry = ASTAR_CAN_ENTER;
-		return TRUE;
-	}
-	else
-	{
-
-		return true;
-	}
-
-	//Never executed
-    if (g_theWorld->IsMoveZOC (m_owner, prev, pos, FALSE)) { 
-        cost = k_ASTAR_BIG; 
-		entry = ASTAR_BLOCKED;
-        return FALSE; 
-    } else { 
-        cost = float(g_theWorld->GetMoveCost(pos)); 
-		entry = ASTAR_CAN_ENTER;
-        return TRUE; 
-    }
-#else
 	sint32 i;
 
 	if(m_pathRoad){
@@ -172,7 +137,6 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 	else{
 		return TRUE;
 	}
-#endif
 }
 
 sint32 CityAstar::GetMaxDir(MapPoint &pos) const
@@ -202,9 +166,7 @@ void CityAstar::FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const Ma
 
 bool CityAstar::FindRoadPath(const MapPoint & start, 
 							 const MapPoint & dest,
-#if !defined(ACTIVISION_ORIGINAL)
 							 PLAYER_INDEX owner,
-#endif
 							 Path & new_path,
 							 float & total_cost)
 {
@@ -215,9 +177,7 @@ bool CityAstar::FindRoadPath(const MapPoint & start,
     sint32 cutoff = 2000000000; 
     sint32 nodes_opened=0;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	m_owner = owner;
-#endif
 
     if (FindPath(start, dest, new_path, total_cost,  FALSE, cutoff, nodes_opened)) { 
         return true;

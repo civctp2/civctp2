@@ -58,44 +58,6 @@ extern CivPaths			*g_civPaths;
 extern ScreenManager	*g_screenManager;
 extern ColorSet			*g_colorSet;
 
-#if defined(ACTIVISION_ORIGINAL)	// Missing and superfluous initialisations
-UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
-:
-SpriteGroup(type)
-{
-	POINT		thePoint = {24,24};
-	POINT		emptyPoint = {0,0};
-	sint32		i,j;
-
-	for (i = UNITACTION_MOVE; i<UNITACTION_MAX; i++) {
-		m_sprites[i] = NULL;
-		m_anims[i] = NULL;
-
-		for (j=0; j<k_NUM_FACINGS; j++) {
-			m_shieldPoints[i][j] = thePoint;
-		}
-	}
-
-
-
- 
- 
- 
-
-
-
- 
-
-	m_width = 0;
-	m_height = 0;
-
-	m_hasDeath = FALSE;
-	m_hasDirectional = FALSE;
-
-
-
-}
-#else
 UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
 :	SpriteGroup(type),
 	m_numFirePointsWork(0)
@@ -118,21 +80,9 @@ UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
 		}
 	}
 }
-#endif
 
 UnitSpriteGroup::~UnitSpriteGroup()
 {
-#if defined(ACTIVISION_ORIGINAL)	// belongs to SpriteGroup destructor
-	DeallocateStorage();
-
-	for (int i = UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
-	{
-		if (m_anims[i]) 
-			delete m_anims[i];
-  
-		m_anims[i] = NULL;
-	}
-#endif
 }
 void UnitSpriteGroup::DeallocateStorage(void)
 {
@@ -461,20 +411,12 @@ void UnitSpriteGroup::LoadBasic(MBCHAR *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
-#if defined(ACTIVISION_ORIGINAL)	// crash when file open fails
-	file->Open(&type);
-	file->ReadBasic(this);
-	file->CloseRead();
-
-	m_loadType = LOADTYPE_BASIC;
-#else
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->ReadBasic(this);
 		file->CloseRead();
 		m_loadType = LOADTYPE_BASIC;
 	}
-#endif
 
 	delete file;
 }
@@ -486,20 +428,12 @@ void UnitSpriteGroup::LoadIndexed(MBCHAR *filename,GAME_ACTION index)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
-#if defined(ACTIVISION_ORIGINAL)	// crash when file open fails
-	file->Open(&type);
-	file->ReadIndexed(this,index);
-	file->CloseRead();
-
-	m_loadType = LOADTYPE_FULL;
-#else
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->ReadIndexed(this, index);
 		file->CloseRead();
 		m_loadType = LOADTYPE_FULL;
 	}
-#endif
 
 	delete file;
 }
@@ -510,20 +444,12 @@ void UnitSpriteGroup::LoadFull(MBCHAR *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
-#if defined(ACTIVISION_ORIGINAL)	// crash when file open fails
-	file->Open(&type);
-	file->ReadFull(this);
-	file->CloseRead();
-
-	m_loadType = LOADTYPE_FULL;
-#else
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->ReadFull(this);
 		file->CloseRead();
 		m_loadType = LOADTYPE_FULL;
 	}
-#endif
 
 	delete file;
 }
@@ -531,11 +457,6 @@ void UnitSpriteGroup::LoadFull(MBCHAR *filename)
 void UnitSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compression_mode)
 {
 	SpriteFile *file = new SpriteFile(filename);
-#if defined(ACTIVISION_ORIGINAL)	// crash when file create fails
-	file->Create(SPRITEFILETYPE_UNIT,version_id,compression_mode);
-	file->Write(this);
-	file->CloseWrite();
-#else
 	if (SPRITEFILEERR_OK == 
 			file->Create(SPRITEFILETYPE_UNIT, version_id, compression_mode)
 	   )
@@ -543,7 +464,6 @@ void UnitSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 		file->Write(this);
 		file->CloseWrite();
 	}
-#endif
 
 	delete file;
 }

@@ -334,25 +334,9 @@ void ThumbnailMap::CalculateMetrics(void)
 
 POINT ThumbnailMap::MapToPixel(sint32 x, sint32 y)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	POINT		pt;
-	sint32		k;
-	double		nudge;							// useless variable
-
-    Assert(0 < m_mapSize->x); 
-    Assert(0 < m_mapSize->y);					// useless test
-
-	k = sint32(ceil(y/2) + x) % m_mapSize->x;	// useless ceil after integer division
-
-	nudge = 0;									// useless statements
-	if (y&1) {
-		nudge = m_tilePixelWidth / 2.0;
-	}
-#else
     Assert(0 < m_mapSize->x); 
 	sint32 const	k = ((y / 2) + x) % m_mapSize->x;
 	POINT			pt;
-#endif
 
 	pt.x = (sint32)(k * m_tilePixelWidth) + m_centerX;
 	pt.y = (sint32)(y * m_tilePixelHeight) + m_centerY;
@@ -383,11 +367,7 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
 
 	for (i=0; i<m_mapSize->y; i++){
 		for (j=0; j<m_mapSize->x; j++) {
-#if defined(ACTIVISION_ORIGINAL)
-			k = sint32(ceil(i/2) + j) % m_mapSize->x;
-#else
 			k = ((i / 2) + j) % m_mapSize->x;
-#endif
 			nudge = 0;
 			if (i&1) {
 				nudge = m_tilePixelWidth / 2.0;

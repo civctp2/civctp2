@@ -37,7 +37,6 @@
 #ifndef _POINTER_LIST_H_
 #define _POINTER_LIST_H_
 
-#if !defined(ACTIVISION_ORIGINAL)
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -57,7 +56,6 @@ template <class T> class PointerList;
 // Class declarations
 //----------------------------------------------------------------------------
 
-#endif
 
 
 template <class T> class PointerList {
@@ -124,13 +122,6 @@ public:
 	T* GetHead();
 	T* GetTail();
 
-#if defined(ACTIVISION_ORIGINAL)
-	PointerListNode *GetHeadNode();
-	PointerListNode *GetTailNode();
-
-	void InsertAt(PointerList<T>::PointerListNode *node, T *obj);
-	void InsertBefore(PointerList<T>::PointerListNode *node, T *obj);
-#else
 	PointerListNode *GetHeadNode()
 	{
 		return m_head;
@@ -142,7 +133,6 @@ public:
 
 	void InsertAt(PointerListNode *node, T *obj);
 	void InsertBefore(PointerListNode *node, T *obj);
-#endif
 
 	void Remove(PointerListNode* node);
 	BOOL  IsEmpty() const { return m_head == NULL; };
@@ -366,23 +356,8 @@ template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
 	delete node;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-template <class T> inline PointerList<T>::PointerListNode *PointerList<T>::GetHeadNode()
-{
-	return m_head;
-}
 
-template <class T> inline PointerList<T>::PointerListNode *PointerList<T>::GetTailNode()
-{
-	return m_tail;
-}
-#endif
-
-#if defined(ACTIVISION_ORIGINAL)
-template <class T> inline void PointerList<T>::InsertAt(PointerList<T>::PointerListNode *node, T *obj)
-#else
 template <class T> inline void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
-#endif
 {
 	PointerListNode *newNode = new PointerListNode(obj);
 	if(!node) {
@@ -406,11 +381,7 @@ template <class T> inline void PointerList<T>::InsertAt(PointerListNode *node, T
 	m_count++;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-template <class T> inline void PointerList<T>::InsertBefore(PointerList<T>::PointerListNode *node, T *obj)
-#else
 template <class T> inline void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
-#endif
 {
 	PointerListNode *newNode = new PointerListNode(obj);
 	if(!node) {
@@ -434,11 +405,7 @@ template <class T> inline void PointerList<T>::InsertBefore(PointerListNode *nod
 	m_count++;
 }
 	
-#if defined(ACTIVISION_ORIGINAL)
-template <class T> PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
-#else
 template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
-#endif
 {
 	PointerListNode *search = m_head;
 	while(search) {
@@ -450,7 +417,4 @@ template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Fin
 }
 
 #else
-#if defined(ACTIVISION_ORIGINAL)
-class PointerList;
-#endif
 #endif

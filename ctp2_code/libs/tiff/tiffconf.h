@@ -59,7 +59,7 @@
 #ifndef HOST_FILLORDER
 #define	HOST_FILLORDER	FILLORDER_MSB2LSB
 #endif
-#ifndef	HOST_BIGENDIAN
+#ifndef HOST_BIGENDIAN
 #define	HOST_BIGENDIAN	1
 #endif
 

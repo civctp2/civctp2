@@ -34,15 +34,6 @@
 #ifndef __AUI_RESOURCE_H__
 #define __AUI_RESOURCE_H__
 
-#if defined(ACTIVISION_ORIGINAL)
-#include "tech_wllist.h"
-
-
-#include "c3files.h"
-#include "civpaths.h"
-extern CivPaths *g_civPaths;
-
-#else // ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -74,7 +65,6 @@ template <class T> struct	aui_ResourceElement;
 // Class declarations
 //----------------------------------------------------------------------------
 
-#endif // ACTIVISION_ORIGINAL
 
 
 
@@ -136,21 +126,17 @@ template<class TT>
 aui_ResourceElement<TT>::aui_ResourceElement(
 	MBCHAR *newName,
 	MBCHAR *fullPath )
-#if !defined(ACTIVISION_ORIGINAL)
 :	resource(NULL),
 	name((newName && fullPath) ? new MBCHAR[strlen(newName) + 1] : NULL),
 	hash(aui_UI::CalculateHash(newName)),
 	pathhash(aui_UI::CalculateHash(fullPath)),
 	refcount(1)
-#endif
 {
 	
 	Assert( newName != NULL && fullPath != NULL );
 	if ( !newName || !fullPath ) return;
-#if !defined(ACTIVISION_ORIGINAL)
 	// Temporary patch: modern code would use std::string and initialiser
 	strcpy(name, newName);
-#endif
 	
 	AUI_ERRCODE errcode;
 	resource = new TT( &errcode, fullPath );
@@ -162,53 +148,20 @@ aui_ResourceElement<TT>::aui_ResourceElement(
 	if ( !AUI_SUCCESS(errcode) )
 	{
 		delete resource;
-#if !defined(ACTIVISION_ORIGINAL)
 		// Temporary patch to prevent access to invalid memory
 		resource = NULL;
-#endif
 		return;
 	}
 	
 	
-#if defined(ACTIVISION_ORIGINAL)	// moved to initialiser
-	name = new MBCHAR[ strlen( newName ) + 1 ];
-	Assert( name != NULL );
-	if ( !name )
-	{
-		delete resource;
-		return;
-	}
-	
-	strcpy( name, newName );
-
-	hash = aui_UI::CalculateHash( name );
-	pathhash = aui_UI::CalculateHash( fullPath );
-
-	
-	refcount = 1;
-#endif
 }
 
 
 template<class TT>
 aui_ResourceElement<TT>::~aui_ResourceElement()
 {
-#if defined(ACTIVISION_ORIGINAL)    // archaic delete []
-	if ( resource )
-	{
-		delete resource;
-		resource = NULL;
-	}
-
-	if ( name )
-	{
-		delete[ strlen( name ) + 1 ] name;
-		name = NULL;
-	}
-#else
     delete resource;
 	delete [] name;
-#endif
 }
 
 
@@ -260,11 +213,7 @@ aui_Resource<T>::~aui_Resource()
 		for ( sint32 i = m_pathList->L(); i; i-- )
 		{
 			MBCHAR *path = m_pathList->GetNext( position );
-#if defined(ACTIVISION_ORIGINAL)	// archaic delete []
-			delete[ strlen( path ) + 1 ] path;
-#else
 			delete [] path;
-#endif
 		}
 		delete m_pathList;
 		m_pathList = NULL;
@@ -324,11 +273,7 @@ AUI_ERRCODE aui_Resource<T>::RemoveSearchPath( MBCHAR *path )
 		if ( strcmp( path, thisPath ) == 0 )
 		{
 			m_pathList->DeleteAt( prevPosition );
-#if defined(ACTIVISION_ORIGINAL)	// archaic delete []
-			delete[ strlen( thisPath ) + 1 ] thisPath;
-#else
 			delete [] thisPath;
-#endif
 			return AUI_ERRCODE_OK;
 		}
 	}
@@ -375,16 +320,11 @@ T *aui_Resource<T>::Load( MBCHAR *resName, C3DIR dir, uint32 size)
 	for ( sint32 i = m_resourceList->L(); i; i-- )
 	{
 		aui_ResourceElement<T> *re = m_resourceList->GetNext( position );
-#if defined(ACTIVISION_ORIGINAL)    // Possible crash
-		if ( (hash == re->hash && strcmp( name, re->name ) == 0)
-		||   (hash == re->pathhash && strcmp( name, re->resource->GetFilename() ) == 0) )
-#else
 		if (((hash == re->hash) && (strcmp(name, re->name) == 0))   ||
 		    ((hash == re->pathhash) &&
              (!re->resource || (strcmp(name, re->resource->GetFilename()) == 0))
             )
            )
-#endif
 		{
 			re->refcount++;
 			return re->resource;
@@ -445,9 +385,6 @@ T *aui_Resource<T>::Load( MBCHAR *resName, C3DIR dir, uint32 size)
 template<class T>
 BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, MBCHAR *name )
 {
-#if defined(ACTIVISION_ORIGINAL)
-	BOOL found = FALSE;
-#endif
 	
 	if ( !strchr( name, ':' ) && strncmp( name, "\\\\", 2 ) )
 	{
@@ -463,27 +400,15 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, MBCHAR *name )
 				
 				if ( GetFileAttributes( fullPath ) != 0xffffffff )
 				{
-#if defined(ACTIVISION_ORIGINAL)
-					found = TRUE;
-					break;
-#else
                     return TRUE;
-#endif
 				}
 			}
 
-#if defined(ACTIVISION_ORIGINAL)	// invalid scope for i
-			if ( !i )
-#endif
 				strncpy( fullPath, name, MAX_PATH );
 		}
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	return found;
-#else
     return FALSE;
-#endif
 }
 
 
@@ -496,14 +421,6 @@ AUI_ERRCODE aui_Resource<T>::Unload( T *resource )
 		ListPos prevPosition = position;
 
 		aui_ResourceElement<T> *re = m_resourceList->GetNext( position );
-#if defined(ACTIVISION_ORIGINAL)	// refcount should not prevent return
-		if ( resource == re->resource && !--re->refcount )
-		{
-			m_resourceList->DeleteAt( prevPosition );
-			delete re;
-			return AUI_ERRCODE_OK;
-		}
-#else
 		if (resource == re->resource)
         {
             if (!--re->refcount)
@@ -513,7 +430,6 @@ AUI_ERRCODE aui_Resource<T>::Unload( T *resource )
             }
 			return AUI_ERRCODE_OK;
 		}
-#endif
 	}
 
 	return AUI_ERRCODE_OK;
@@ -531,19 +447,6 @@ AUI_ERRCODE aui_Resource<T>::Unload( MBCHAR *name )
 		ListPos prevPosition = position;
 
 		aui_ResourceElement<T> *re = m_resourceList->GetNext( position );
-#if defined(ACTIVISION_ORIGINAL)
-        // possible crash, refcount should not prevent return
-		if ( (hash == re->hash && strcmp( name, re->name ) == 0)
-		||   (hash == re->pathhash && strcmp( name, re->resource->GetFilename() ) == 0) )
-		{
-			if ( !--re->refcount )
-			{
-				m_resourceList->DeleteAt( prevPosition );
-				delete re;
-				return AUI_ERRCODE_OK;
-			}
-		}
-#else
 		if (((hash == re->hash) && (strcmp(name, re->name) == 0))   ||
 		    ((hash == re->pathhash) &&
              (!re->resource || (strcmp(name, re->resource->GetFilename()) == 0))
@@ -557,7 +460,6 @@ AUI_ERRCODE aui_Resource<T>::Unload( MBCHAR *name )
             }
 			return AUI_ERRCODE_OK;
 		}
-#endif
 	}
 
 	return AUI_ERRCODE_OK;

@@ -66,9 +66,7 @@ SlicStructDescription::Member::~Member()
 }
 
 SlicStructDescription::SlicStructDescription(char *name, SLIC_BUILTIN type)
-#if !defined(ACTIVISION_ORIGINAL)
 :	m_accessors()
-#endif
 {
 	m_name = new char[strlen(name) + 1];
 	m_type = type;
@@ -92,7 +90,6 @@ SlicStructDescription::~SlicStructDescription()
 		}
 		delete [] m_members;
 	}
-#if !defined(ACTIVISION_ORIGINAL)
 	for 
 	(
 		std::vector<Member *>::iterator	p = m_accessors.begin();
@@ -104,10 +101,8 @@ SlicStructDescription::~SlicStructDescription()
 	}
 
 	m_accessors.clear();
-#endif
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : SlicStructDescription::AddAccessor
@@ -228,7 +223,6 @@ sint32 SlicStructDescription::GetMemberSymbolIndex(SlicStructMemberData * symbol
 
 	return -1;
 }
-#endif
 
 void SlicStructDescription::AddMember(SlicStructDescription::Member *member)
 {
@@ -288,7 +282,6 @@ sint32 SlicStructDescription::GetMemberIndex(char *name)
 			return i;
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Continue counting while checking the accessors
 	for 
 	(
@@ -306,7 +299,6 @@ sint32 SlicStructDescription::GetMemberIndex(char *name)
 			return i;
 		}
 	}
-#endif
 
 	return -1;
 }
@@ -352,13 +344,6 @@ SlicSymbolData *SlicStructDescription::CreateDataSymbol()
 const char *SlicStructDescription::GetMemberName(sint32 index)
 {
 	Assert(index >= 0);
-#if defined(ACTIVISION_ORIGINAL)
-	Assert(index < m_numMembers);
-	if(index < 0 || index >= m_numMembers)
-		return "<Error>";
-	
-	return m_members[index]->m_name;
-#else
 	if (index >= 0)
 	{
 		if (index < m_numMembers)
@@ -376,7 +361,6 @@ const char *SlicStructDescription::GetMemberName(sint32 index)
 	}
 
 	return "<Error>";
-#endif
 }
 	
 
@@ -386,18 +370,10 @@ SlicStructInstance::SlicStructInstance(SlicStructDescription *description, SlicS
 {
 	m_description = description;
 
-#if defined(ACTIVISION_ORIGINAL)	
-	m_members = new SlicStructMemberData *[m_description->m_numMembers];
-	sint32 i;
-	for(i = 0; i < m_description->m_numMembers; i++) {
-		m_members[i] = NULL;
-	}
-#else
 	m_validIndexCount	= 
 		m_description->GetNumMembers() + m_description->GetNumAccessors();
 	m_members			= new SlicStructMemberData *[m_validIndexCount];
 	std::fill(m_members, m_members + m_validIndexCount, (SlicStructMemberData *) NULL);
-#endif
 
 	if(!dataSym) {
 		m_dataSymbol = m_description->CreateDataSymbol();
@@ -438,20 +414,10 @@ SlicStructInstance::~SlicStructInstance()
 	}
 
 	if(m_members) {
-#if defined(ACTIVISION_ORIGINAL)
-		sint32 i;
-		for(i = 0; i < m_description->GetNumMembers(); i++) {
-			if(m_members[i]) {
-				delete m_members[i];
-				m_members[i] = NULL;
-			}
-		}
-#else
 		for (size_t i = 0; i < m_validIndexCount; ++i)
 		{
 			delete m_members[i];
 		}
-#endif
 		delete [] m_members;
 	}
 
@@ -486,28 +452,17 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 		archive << m_dataSymbolIndex;
 	} else {
 		m_description = g_slicEngine->GetStructDescription((SLIC_BUILTIN)archive.GetUINT8());
-#if defined(ACTIVISION_ORIGINAL)
-		m_members = new SlicStructMemberData *[m_description->GetNumMembers()];
-#else
 		m_validIndexCount	=
 			m_description->GetNumMembers() + m_description->GetNumAccessors();
 		m_members			= new SlicStructMemberData *[m_validIndexCount];
 		std::fill(m_members, m_members + m_validIndexCount, (SlicStructMemberData *) NULL);
-#endif
 		for(i = 0; i < m_description->GetNumMembers(); i++) {
 			SlicStructDescription::Member *memDesc = m_description->m_members[i];
-#if defined(ACTIVISION_ORIGINAL)	// in std::fill already
-			m_members[i] = NULL;
-#endif
 			archive >> haveData;
 			if(haveData) {
 				CreateMember(i);
 				(SlicStructMemberData *)slicsymbol_Load(archive, m_members[i]);
 				m_members[i]->SetParent(this);
-#if defined(ACTIVISION_ORIGINAL)	// superfluous
-			} else {
-				m_members[i] = NULL;
-#endif
 			}
 		}
 		archive >> haveData;
@@ -562,14 +517,10 @@ void SlicStructInstance::CreateMember(sint32 index)
 	if(m_members[index])
 		return;	// No action: cache exists.
 
-#if defined(ACTIVISION_ORIGINAL)
-	SlicStructDescription::Member *memDesc = m_description->m_members[index];
-#else
 	SlicStructDescription::Member *	memDesc	=
 		(index < m_description->GetNumMembers())
 		? m_description->m_members[index]
 		: m_description->m_accessors[index - m_description->GetNumMembers()];
-#endif
 
 	if(memDesc->m_symbol) {
 		m_members[index] = memDesc->m_symbol->MakeCopy(this);
@@ -581,15 +532,6 @@ void SlicStructInstance::CreateMember(sint32 index)
 SlicSymbolData *SlicStructInstance::GetMemberSymbol(sint32 index)
 {
 	Assert(index >= 0);
-#if defined(ACTIVISION_ORIGINAL)
-	Assert(index < m_description->m_numMembers);
-	if(index < 0 || index >= m_description->m_numMembers)
-		return NULL;
-
-	if(!m_members[index]) {
-		CreateMember(index);
-	}
-#else
 	Assert(index < m_validIndexCount);
 	if ((index < 0) || (index >= m_validIndexCount))
 	{
@@ -599,20 +541,14 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbol(sint32 index)
 	{
 		CreateMember(index);
 	}
-#endif
 
 	return m_members[index];
 }
 
 sint32 SlicStructInstance::GetMemberSymbolIndex(SlicStructMemberData *memb)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 i;
-	for(i = 0; i < m_description->m_numMembers; i++) {
-#else
 	for (size_t i = 0; i < m_validIndexCount; ++i)
 	{
-#endif
 		if(m_members[i] == memb)
 			return i;
 	}
@@ -622,19 +558,6 @@ sint32 SlicStructInstance::GetMemberSymbolIndex(SlicStructMemberData *memb)
 
 SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 i;
-	for(i = 0; i < m_description->m_numMembers; i++) {
-		if(!stricmp(m_description->m_members[i]->m_name, name)) {
-			if(!m_members[i]) {
-				CreateMember(i);
-			}
-			return m_members[i];
-		}
-	}
-
-	return NULL;
-#else
 	sint32 const	index	= m_description->GetMemberIndex(name);
 	if ((index < 0) || (index >= m_validIndexCount))
 	{
@@ -643,7 +566,6 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
 
 	CreateMember(index);
 	return m_members[index];
-#endif
 }
 
 SlicSymbolData *SlicStructInstance::GetDataSymbol()

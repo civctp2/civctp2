@@ -144,9 +144,7 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 
 		switch ( hr )
 		{
-#if !defined(ACTIVISION_ORIGINAL)
 		case DI_BUFFEROVERFLOW:
-#endif
 		case DI_OK:
 			break;
 

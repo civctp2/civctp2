@@ -60,7 +60,6 @@ void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	dat->m_maxSize = maxSize;
 	dat->m_subType = subType;
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to allow struct members to have default values
 	if((!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)) &&  
 	   (dat->m_maxSize <= 0)) {                         
@@ -77,7 +76,6 @@ void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	} else {
 		dat->SetValue(nameInfo->v);
 	}
-#endif
 
 	m_datumList.AddTail(dat);
 
@@ -94,35 +92,23 @@ void MemberClass::AddGroupedBits(char *name, struct namelist *list)
 	Assert("Group Bits in Member classes not yet supported" == 0);
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-void MemberClass::AddBitPair(char *name, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype)
-#else
 //Added by Martin Gühmann
 void MemberClass::AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype)
-#endif
 {
 	Datum *dat = new Datum;
 	dat->m_type = DATUM_BIT_PAIR;
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	dat->m_name = name;
-#else
 //Added by Martin Gühmann
 	dat->m_name = nameInfo->name;
-#endif
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
 	dat->m_subType = NULL;
 	dat->m_groupList = NULL;
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann for adding default values
 	if((nameInfo->flags & k_NAMEVALUE_HAS_VALUE)
 	|| (dat->m_maxSize > 0)
 	){
 		dat->SetValue(nameInfo->v);
 	}
-#endif
 	dat->m_bitNum = m_numBits;
 	m_numBits++;
 

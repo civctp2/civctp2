@@ -59,12 +59,8 @@ extern C3UI			*g_c3ui;
 extern ProfileDB	*g_theProfileDB;
 extern World		*g_theWorld;
 
-#if defined(ACTIVISION_ORIGINAL)
-#define k_NUM_MAPSHAPEBOXES	2
-#else
 //Allow more shape options by Martin Gühmann
 #define k_NUM_MAPSHAPEBOXES	4
-#endif
 
 static c3_PopupWindow	*s_spNewGameMapShapeScreen	= NULL;
 
@@ -74,23 +70,16 @@ static aui_SwitchGroup	*s_group		= NULL;
 static aui_Radio	**s_checkBox;
 static c3_Static	*s_ewLabel			= NULL; // Earth world
 static c3_Static	*s_dwLabel			= NULL; // Doughnut world
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann
 static c3_Static	*s_uwLabel			= NULL; // Uranus world
-#endif
 static c3_Static	*s_fwLabel			= NULL; // Flat world
 
 static MBCHAR	checknames[k_NUM_MAPSHAPEBOXES][50] = {
-#if defined(ACTIVISION_ORIGINAL)
-	"MapShapeOne",
-	"MapShapeTwo"
-#else
 	//Added two more shapes for more shape options by Martin Gühmann
 	"MapShapeOne",   //Earth world (West-East wrap world)
 	"MapShapeTwo",   //Doughnut world
 	"MapShapeThree", //Uranus world (North-South wrap world)
 	"MapShapeFour"   //Flat world
-#endif //ACTIVISION_ORIGINAL
 };
 
 static sint32 s_useMode = 0;
@@ -130,19 +119,15 @@ void spnewgamemapshapescreen_setMapShapeIndex( sint32 index )
 		break;
 	case 2:
 
-		#if !defined(ACTIVISION_ORIGINAL) // Added by Martin Gühmann
 		g_theProfileDB->SetXWrap( FALSE );
 		g_theProfileDB->SetYWrap( TRUE );
-		#endif
 
 		break;
-	#if !defined(ACTIVISION_ORIGINAL) // Added by Martin Gühmann
 	case 3:
 
 		g_theProfileDB->SetXWrap( FALSE );
 		g_theProfileDB->SetYWrap( FALSE );
 		break;
-	#endif
 
 	default:
 		
@@ -263,7 +248,6 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 			s_checkBox[0]->SetState(1); //Doughnut world (x-warp and y-warp)
 		}
 	}
-	#if !defined(ACTIVISION_ORIGINAL) // Added by Martin Gühmann
 	else {
 		if ( g_theProfileDB->IsYWrap() ) {
 			s_checkBox[2]->SetState(1); //Uranus world (y-warp only)
@@ -272,14 +256,11 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 			s_checkBox[3]->SetState(1); //Flat World (no warp)
 		}
 	}
-	#endif
 
 	s_ewLabel = spNew_c3_Static( &errcode, windowBlock, "EWLabel" );
 	s_dwLabel = spNew_c3_Static( &errcode, windowBlock, "DWLabel" );
-	#if !defined(ACTIVISION_ORIGINAL) // Added by Martin Gühmann
 	s_uwLabel = spNew_c3_Static( &errcode, windowBlock, "UWLabel" );
 	s_fwLabel = spNew_c3_Static( &errcode, windowBlock, "FWLabel" );
-	#endif
 
 
 	
@@ -289,37 +270,6 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	return AUI_ERRCODE_OK;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-
-AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
-{
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-
-	if ( !s_spNewGameMapShapeScreen  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( s_spNewGameMapShapeScreen->Id() );
-	keypress_RemoveHandler(s_spNewGameMapShapeScreen);
-
-	for (sint32 i = 0;i < k_NUM_MAPSHAPEBOXES;i++ ) {
-		mycleanup( s_checkBox[i] );
-	}
-
-	mycleanup( s_group );
-	mycleanup( s_ewLabel );//Earth like world: East-West wrap world
-	mycleanup( s_dwLabel );//Doughnut world
-
-
-
-
-	delete s_spNewGameMapShapeScreen;
-	s_spNewGameMapShapeScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
-}
-
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -372,7 +322,6 @@ AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
 	return AUI_ERRCODE_OK;
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 void spnewgamemapshapescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {

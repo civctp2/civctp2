@@ -535,12 +535,8 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 
 	if(cell->GetOwner() >= 0 && cell->GetOwner() != pl)
 	{
-#if defined(ACTIVISION_ORIGINAL)	// Non-standard syntax		
-		bool haveAlliance = AgreementMatrix.s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
-#else
 		bool const haveAlliance	= 
 			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
-#endif
 		if(cell->GetOwner() > 0 && haveAlliance) {
 			if(rec->GetClassRoad() ||
 				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {

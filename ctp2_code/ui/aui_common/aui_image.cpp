@@ -100,16 +100,11 @@ AUI_ERRCODE aui_Image::SetFilename( MBCHAR *filename )
 
 	strncpy( m_filename, filename, MAX_PATH );
 
-#if defined(ACTIVISION_ORIGINAL)	// crash when g_ui->TheMemMap is NULL	
-	m_format = (aui_ImageFormat *)
-		g_ui->TheMemMap()->GetFileFormat( m_filename );
-#else
 	if (g_ui && g_ui->TheMemMap())
 	{
 		m_format = static_cast<aui_ImageFormat *>
 						(g_ui->TheMemMap()->GetFileFormat(m_filename));
 	}
-#endif
 	Assert( m_format != NULL );
 	if ( !m_format ) return AUI_ERRCODE_MEMALLOCFAILED;
 	

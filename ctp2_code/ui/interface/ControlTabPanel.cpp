@@ -66,7 +66,6 @@ m_tilesControlPanel(new TilesControlPanel(m_ldlBlock.get()))
 {
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : ControlTabPanel::Blank
@@ -88,7 +87,6 @@ void ControlTabPanel::Blank()
 {
 	m_domesticControlPanel->Blank();
 }
-#endif
 
 void ControlTabPanel::Update()
 {

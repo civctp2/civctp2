@@ -498,11 +498,7 @@ bool NETFunc::ListHandler<NETFunc::Server>::Handle(Message *m) {
 					if(Find(&t) != end())
 						Change(Chg(&t));
 					else
-#if defined(ACTIVISION_ORIGINAL)
-						Insert(Add(new T(t)));
-#else
 						Insert(Add(new Server(t)));
-#endif
 
 				return true;
 			
@@ -1183,11 +1179,7 @@ bool NETFunc::ListHandler<NETFunc::Player>::Handle(Message *m) {
 				if(Find(&t) != end())
 					Change(Chg(&t));
 				else
-#if defined(ACTIVISION_ORIGINAL)
-					Insert(Add(new T(t)));
-#else
 					Insert(Add(new Player(t)));
-#endif
 				return true;
 			
 			case dp_RES_DELETED:
@@ -1586,11 +1578,7 @@ bool NETFunc::ListHandler<NETFunc::Session>::Handle(Message *m) {
 				if(Find(&t) != end())
 					Change(Chg(&t));
 				else
-#if defined(ACTIVISION_ORIGINAL)
-					Insert(Add(new T(t)));
-#else
 					Insert(Add(new Session(t)));
-#endif
 				return true;
 			
 			case dp_RES_DELETED:
@@ -1688,11 +1676,7 @@ bool NETFunc::ListHandler<NETFunc::Lobby>::Handle(Message *m) {
 				if(Find(&t) != end())
 					Change(Chg(&t));
 				else
-#if defined(ACTIVISION_ORIGINAL)
-					Insert(Add(new T(t)));
-#else
 					Insert(Add(new Lobby(t)));
-#endif
 				return true;
 			
 			case dp_RES_DELETED:
@@ -1741,11 +1725,7 @@ bool NETFunc::ListHandler<NETFunc::Game>::Handle(Message *m) {
 				if(Find(&t) != end())
 					Change(Chg(&t));
 				else
-#if defined(ACTIVISION_ORIGINAL)
-					Insert(Add(new T(t)));
-#else
 					Insert(Add(new Game(t)));
-#endif
 				return true;
 			
 			case dp_RES_DELETED:

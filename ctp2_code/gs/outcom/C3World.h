@@ -171,7 +171,7 @@ public:
     STDMETHODIMP_ (sint32) IsXwrap(); 
     STDMETHODIMP_ (sint32) IsYwrap(); 
 
-#ifdef  CELL_COLOR
+#ifdef CELL_COLOR
      STDMETHODIMP_ (BOOL) ClearColor (THIS_); 
      STDMETHODIMP_ (BOOL) SetColor (MapPointData *pos, sint32 r, sint32 g, sint32 b);
      STDMETHODIMP_ (BOOL) SetColor (MapPointData *pos, sint32 c);

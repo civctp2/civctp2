@@ -149,15 +149,6 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 		case DATUM_INT:
 		case DATUM_STRINGID:
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-			fprintf(outfile, "    bool             Get%s(sint32 &value) const {\n", m_name);
-			fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
-					m_bitNum / 32, recordName, m_name);
-			fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
-			fprintf(outfile, "                         return true;\n");
-			fprintf(outfile, "                     }\n");
-#else
 //Added by Martin Gühmann
 			if(!m_hasValue){
 				fprintf(outfile, "    bool             Get%s(sint32 &value) const {\n", m_name);
@@ -174,19 +165,9 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 					m_bitNum / 32, recordName, m_name);
 				fprintf(outfile, "                     }\n");
 			}
-#endif
 			break;
 		case DATUM_FLOAT:
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-			fprintf(outfile, "    bool             Get%s(double &value) const {\n", m_name);
-			fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
-					m_bitNum / 32, recordName, m_name);
-			fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
-			fprintf(outfile, "                         return true;\n");
-			fprintf(outfile, "                     }\n");
-#else
 //Added by Martin Gühmann
 			if(!m_hasValue){
 				fprintf(outfile, "    bool             Get%s(double &value) const {\n", m_name);
@@ -204,7 +185,6 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 				fprintf(outfile, "                     }\n");
 			}
 
-#endif
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
@@ -410,33 +390,6 @@ void Datum::ExportBitPairInitialization(FILE *outfile)
 	Assert(m_type == DATUM_BIT_PAIR);
 	Assert(m_bitPairDatum);
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	switch(m_bitPairDatum->m_type) {
-		case DATUM_INT:
-			fprintf(outfile, "    m_%s = 0;\n", m_bitPairDatum->m_name);
-			break;
-		case DATUM_FLOAT:
-			fprintf(outfile, "    m_%s = 0.0;\n", m_bitPairDatum->m_name);
-			break;
-		case DATUM_RECORD:
-			fprintf(outfile, "    m_%s = 0;\n", m_bitPairDatum->m_name);
-			break;
-		case DATUM_STRUCT:
-			fprintf(outfile, "    memset(&m_%s, 0, sizeof(m_%s));\n", m_bitPairDatum->m_name, m_bitPairDatum->m_name);
-			break;
-		case DATUM_FILE:
-		case DATUM_STRING:
-			fprintf(outfile, "    m_%s = NULL;\n", m_bitPairDatum->m_name);
-			break;
-		case DATUM_STRINGID:
-			fprintf(outfile, "    m_%s = 0;\n", m_bitPairDatum->m_name);
-			break;
-		default:
-			Assert(0);
-			break;
-	}
-#else
 // Added by Martin Gühmann
 	switch(m_bitPairDatum->m_type) {
 		case DATUM_INT:
@@ -465,7 +418,6 @@ void Datum::ExportBitPairInitialization(FILE *outfile)
 			Assert(0);
 			break;
 	}
-#endif
 }
 
 void Datum::ExportParseBitPairCase(FILE *outfile, char *recordName)

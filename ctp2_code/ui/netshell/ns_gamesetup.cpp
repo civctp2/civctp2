@@ -252,18 +252,11 @@ uint32 nf_GameSetup::GetSavedId( void )
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_GameSetup::count = 1;
-ns_GameSetup::Struct ns_GameSetup::list[] = {
-	{STRING,	(Data)&m_name},
-};
-#else
 ns_GameSetup::ns_GameSetup(nf_GameSetup * game) 
 :	ns_Object<nf_GameSetup, ns_GameSetup>(game) 
 {
 	list.push_back(Struct(STRING,	&m_name));
 };
-#endif
 
 
 void ns_GameSetup::Update( nf_GameSetup *gamesetup ) {

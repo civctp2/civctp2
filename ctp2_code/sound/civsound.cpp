@@ -46,14 +46,14 @@
 #include "SoundRecord.h"
 #include "prjfile.h"
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 #  include <SDL_rwops.h>
 #endif
 
 extern ProjectFile  *g_SoundPF;
 
 CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
   : m_hAudio(0),
 #else
   : m_Audio(0), m_Channel(-1),
@@ -83,7 +83,7 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
     
     m_dataptr = g_SoundPF->getData(m_soundFilename, &m_datasize);
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	m_hAudio = AIL_quick_load_mem(m_dataptr, m_datasize);
 #else
 # if 0
@@ -97,7 +97,7 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
 
 CivSound::~CivSound()
 {
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
     if (m_hAudio) {
         AIL_quick_unload(m_hAudio);
 	}
@@ -118,7 +118,7 @@ CivSound::GetAssociatedObject() const
 	return m_associatedObject;
 }
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 Mix_Chunk *
 CivSound::GetAudio() const
 {
@@ -169,7 +169,7 @@ CivSound::IsPlaying() const
 	return m_isPlaying;
 }
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 void
 CivSound::SetChannel(const int &channel)
 {
@@ -192,7 +192,7 @@ CivSound::SetIsPlaying(const BOOL &is)
 void
 CivSound::SetVolume(const sint32 &volume)
 {
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
     if (0 == m_hAudio) {
 #else
     if (0 == m_Audio) {
@@ -203,7 +203,7 @@ CivSound::SetVolume(const sint32 &volume)
 	// Assume max volume is 10...
 	sint32 scaledVolume = (sint32)((double)volume * 12.7);
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 	if (scaledVolume > MIX_MAX_VOLUME) {
 		Mix_VolumeChunk(m_Audio, MIX_MAX_VOLUME);
 	} else {

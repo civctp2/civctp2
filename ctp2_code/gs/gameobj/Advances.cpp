@@ -77,14 +77,12 @@
 #include "wonderutil.h"
 #include "MainControlPanel.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include <stdexcept>	// overflow_error
 
 namespace
 {
 	char const	REPORT_ADVANCE_LOOP[]	= "Advance: loop detected";
 }
-#endif
 
 extern Player** g_player;
 
@@ -852,29 +850,6 @@ sint32 Advances::GetCost(const AdvanceType adv)
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-sint32 Advances::FindLevel(AdvanceRecord* rec)
-{
-	if(rec->GetNumPrerequisites() == 0)
-		return 0;
-	else {
-		sint32 maxLevel = -1;
-		for(sint32 prereq = 0 ; prereq < rec->GetNumPrerequisites(); prereq++) {			
-			AdvanceRecord* prereqRecord = 
-				g_theAdvanceDB->Access(rec->GetPrerequisitesIndex(prereq));
-			if(rec == prereqRecord)
-				continue;
-
-			if(prereqRecord != rec) {
-				sint32 level = FindLevel(prereqRecord);
-				if(level > maxLevel)
-					maxLevel = level;
-			}
-		}
-		return 1 + maxLevel;
-	}
-}
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : Advances::FindLevel
@@ -919,7 +894,6 @@ sint32 Advances::FindLevel
 
 	
 
-#endif
 
 #ifdef _DEBUG
 
@@ -929,15 +903,10 @@ Advances::DebugDumpTree()
     Assert(0<m_size);
 	sint32* level = new sint32[m_size];
 	sint32 numLevels = 0;
-#if !defined(ACTIVISION_ORIGINAL)
 	sint32 const	LEVEL_LOOPED	= -1;
 	bool			isLoopDetected	= false;
-#endif
 	for(sint32 i = 0; i < m_size; i++) {
 		AdvanceRecord* rec = g_theAdvanceDB->Access(i);
-#if defined(ACTIVISION_ORIGINAL)
-		level[i] = FindLevel(rec);
-#else
 		try
 		{
 			level[i] = FindLevel(rec);
@@ -947,7 +916,6 @@ Advances::DebugDumpTree()
 			level[i]		= LEVEL_LOOPED;
 			isLoopDetected	= true;
 		}
-#endif
 		if(level[i] > numLevels - 1)
 			numLevels = level[i] + 1;
 	}
@@ -967,7 +935,6 @@ Advances::DebugDumpTree()
 		DPRINTF(k_DBG_INFO, ("\n"));
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)
 	if (isLoopDetected)
 	{
 		// Report loops
@@ -983,7 +950,6 @@ Advances::DebugDumpTree()
 		}
 		DPRINTF(k_DBG_INFO, ("\n"));
 	}
-#endif
 
 	delete [] level;
 }

@@ -108,7 +108,7 @@ SoundManager::SoundManager()
 	m_curTrack = 0;
 	m_lastTrack = 0;
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
     m_cdrom = 0;
     // Perhaps use 0 later on...
     m_SDLInitFlags = SDL_INIT_NOPARACHUTE;
@@ -182,7 +182,7 @@ SoundManager::DumpAllSounds()
 void
 SoundManager::InitSoundDriver()
 {
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 	int errcode;
 	int use_digital;
 	int use_MIDI;
@@ -198,11 +198,7 @@ SoundManager::InitSoundDriver()
 	S32		output_channels;
 #endif // defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
 
-#if defined(_DEBUG) && defined(ACTIVISION_ORIGINAL)
-	use_digital = AIL_QUICK_USE_WAVEOUT;	
-#else
 	use_digital = 1;						
-#endif // defined(_DEBUG) && defined(ACTIVISION_ORIGINAL)
 
 	// Always sound?
 	use_digital = 1;						
@@ -215,7 +211,7 @@ SoundManager::InitSoundDriver()
 
 	MBCHAR *smname = "Sound Manager";
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 	output_format = AUDIO_S16SYS;
     errcode = SDL_Init(SDL_INIT_AUDIO | m_SDLInitFlags);
 
@@ -252,7 +248,7 @@ SoundManager::CleanupSoundDriver()
 	if (s_initSuccessful && !m_usePlaySound) {
 		CleanupRedbook();
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
         if (!m_noSound) {
             Mix_CloseAudio();
         }
@@ -267,7 +263,7 @@ SoundManager::CleanupSoundDriver()
 void
 SoundManager::InitRedbook()
 {
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
     if (!m_cdrom) {
         int errcode = SDL_Init(SDL_INIT_CDROM | m_SDLInitFlags);
 
@@ -324,7 +320,7 @@ SoundManager::InitRedbook()
 void
 SoundManager::CleanupRedbook()
 {
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
     if (m_cdrom) {
         SDL_CDClose(m_cdrom);
         m_cdrom = 0;
@@ -357,7 +353,7 @@ SoundManager::ProcessRedbook()
 
 
 	if (GetTickCount() > m_timeToCheckCD) {
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
         CDstatus status;
         if (m_cdrom) {
             status = SDL_CDStatus(m_cdrom);
@@ -367,7 +363,7 @@ SoundManager::ProcessRedbook()
 			status = AIL_redbook_status(m_redbook);
 #endif
 			switch (status) {
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 			case REDBOOK_ERROR:
 #else
             case CD_TRAYEMPTY:
@@ -375,19 +371,19 @@ SoundManager::ProcessRedbook()
             case CD_ERROR:
 #endif
 				break;
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 			case REDBOOK_PLAYING:
 #else
             case CD_PLAYING:
 #endif
 				break;
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 			case REDBOOK_PAUSED:
 #else
             case CD_PAUSED:
 #endif
 				break;
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 			case REDBOOK_STOPPED:
 #else
             case CD_STOPPED:
@@ -426,7 +422,7 @@ void SoundManager::Process(const uint32 &target_milliseconds,
 			if (!sound) continue;
 			
 			if (sound->IsPlaying()) {
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 				if (AIL_quick_status(sound->GetHAudio()) == QSTAT_DONE) {
 #else
                 if (!Mix_Playing(sound->GetChannel())) {
@@ -450,7 +446,7 @@ void SoundManager::Process(const uint32 &target_milliseconds,
 			if (!sound) continue;
 			
 			if (sound->IsPlaying()) {
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 				if (AIL_quick_status(sound->GetHAudio()) == QSTAT_DONE) {
 #else
                 if ((-1 == sound->GetChannel()) ||
@@ -531,7 +527,7 @@ SoundManager::AddSound(const SOUNDTYPE &type,
 
 	if (!found)
 	{
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 		AIL_quick_play(sound->GetHAudio(), 1);	
 #else
         int channel = Mix_PlayChannel(-1, sound->GetAudio(), 0);
@@ -580,7 +576,7 @@ SoundManager::AddLoopingSound(const SOUNDTYPE &type,
 		break;
 	}
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	AIL_quick_play(sound->GetHAudio(), 0);	
 #else
     int channel = Mix_PlayChannel(-1, sound->GetAudio(), -1);
@@ -599,7 +595,7 @@ SoundManager::TerminateLoopingSound(const SOUNDTYPE &type,
 
 	if (!existingSound) return;
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	AIL_quick_halt(existingSound->GetHAudio());
 #else
     int channel = existingSound->GetChannel();
@@ -629,7 +625,7 @@ SoundManager::TerminateAllLoopingSounds(const SOUNDTYPE &type)
 	while (node) {
 		sound = node->GetObj();
 		if (sound && sound->IsLooping()) {
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 			AIL_quick_halt(sound->GetHAudio());
 #else
             int channel = sound->GetChannel();
@@ -662,7 +658,7 @@ SoundManager::TerminateSounds(const SOUNDTYPE &type)
 	while (node) {
 		sound = node->GetObj();
 		if (sound) {
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 			AIL_quick_halt(sound->GetHAudio());
 #else
             int channel = sound->GetChannel();
@@ -715,7 +711,7 @@ SoundManager::SetVolume(const SOUNDTYPE &type, const uint32 &volume)
 		break;
 	case SOUNDTYPE_MUSIC:
 		m_musicVolume = volume;
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 		if (m_redbook)
 			AIL_redbook_set_volume(m_redbook, (sint32)((double)volume * 12.7));
 #else
@@ -901,7 +897,7 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
 	
 	CivSound	*sound;
 	sint32		objectX, objectY, objectZ;
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	HAUDIO		hAudio;
 #else
     Mix_Chunk   *myChunk;
@@ -913,7 +909,7 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
 		sound = node->GetObj();
 		if (sound) {
 			if (sound->GetAssociatedObject() == associatedObject) {
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
                 sint32 panValue = 64;
 				hAudio = sound->GetHAudio();
                 if (hAudio) {
@@ -958,7 +954,7 @@ SoundManager::StartMusic(const sint32 &InTrackNum)
 
 	if (m_curTrack == -1) return;
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
     if (!m_redbook) {
         return;
     }
@@ -985,7 +981,7 @@ SoundManager::StartMusic(const sint32 &InTrackNum)
 #endif
 
 	sint32 numTracks = 0;
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	numTracks = AIL_redbook_tracks(m_redbook);
 #else
     numTracks = m_cdrom->numtracks;
@@ -1000,7 +996,7 @@ SoundManager::StartMusic(const sint32 &InTrackNum)
 
 	m_curTrack = trackNum;
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	U32 start, end;
 	AIL_redbook_track_info(m_redbook, trackNum, &start, &end);
 
@@ -1021,7 +1017,7 @@ void SoundManager::TerminateMusic(void)
 
 	if (m_usePlaySound) return;
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	if (!m_redbook) return;
 #else
     if (!m_cdrom) return;
@@ -1030,7 +1026,7 @@ void SoundManager::TerminateMusic(void)
 	
 	m_stopRedbookTemporarily = TRUE;
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	if (AIL_redbook_track(m_redbook)) {		
 		AIL_redbook_stop(m_redbook);
 	}
@@ -1093,7 +1089,7 @@ SoundManager::StupidPlaySound(const sint32 &soundID)
 	}
 }
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 S32 masterVolume;
 #endif
 
@@ -1103,7 +1099,7 @@ SoundManager::ReleaseSoundDriver()
 	if (m_usePlaySound) return;
 	if (m_noSound) return;
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	HDIGDRIVER		dig;
 	HMDIDRIVER		mdi;
 	HDLSDEVICE		dls;
@@ -1111,7 +1107,7 @@ SoundManager::ReleaseSoundDriver()
 
 	TerminateAllSounds();
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	AIL_quick_handles(&dig, &mdi, &dls);
 
 	S32 err;
@@ -1133,7 +1129,7 @@ SoundManager::ReacquireSoundDriver()
 	if (m_usePlaySound) return;
 	if (m_noSound) return;
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	HDIGDRIVER		dig;
 	HMDIDRIVER		mdi;
 	HDLSDEVICE		dls;

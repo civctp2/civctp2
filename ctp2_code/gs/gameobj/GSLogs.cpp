@@ -46,9 +46,7 @@
 #include "TaxRate.h"
 #include "PlayHap.h"
 #include "ProfileDB.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "c3math.h"		// AsPercentage
-#endif
 
 static s_initialized = 0;
 static s_dip_initialized = 0;
@@ -323,11 +321,7 @@ void gslog_LogPlayerStats(sint32 player)
 	double s;
 	g_player[player]->m_tax_rate->GetScienceTaxRate(s);
 	gslog_print("  Settings:\n");
-#if defined(ACTIVISION_ORIGINAL)
-	gslog_print("     Science Tax: %d\n", sint32(s * 100));
-#else
 	gslog_print("     Science Tax: %d\n", AsPercentage(s));
-#endif
 	gslog_print("              PW: %d\n", sint32(g_player[player]->m_materialsTax * 100));
 	gslog_print("         Workday: %d\n", g_player[player]->m_global_happiness->GetUnitlessWorkday());
 	gslog_print("           Wages: %d\n", g_player[player]->m_global_happiness->GetUnitlessWages());

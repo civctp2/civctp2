@@ -84,16 +84,9 @@ sint32	musicscreen_displayMyWindow()
 
 	AUI_ERRCODE auiErr;
 
-#if defined(ACTIVISION_ORIGINAL)	// changes lost when visiting track window
-	s_autoRepeat->SetState( s_useAutoRepeat = g_soundManager->IsAutoRepeat() );
-	s_randomOrder->SetState( s_useRandomOrder =
-		g_soundManager->GetMusicStyle() == MUSICSTYLE_RANDOM );
-	s_musicOn->SetState( s_useMusicOn = g_theProfileDB->IsUseRedbookAudio() );
-#else
 	s_autoRepeat->SetState(s_useAutoRepeat);
 	s_randomOrder->SetState(s_useRandomOrder);
 	s_musicOn->SetState(s_useMusicOn);
-#endif
 
 	auiErr = g_c3ui->AddWindow(s_musicScreen);
 	Assert( auiErr == AUI_ERRCODE_OK );
@@ -150,11 +143,9 @@ AUI_ERRCODE musicscreen_Initialize( void )
 	s_randomOrder->SetText( s_musicString->GetString(MS_STRING_RANDOM_OFF) );
 	s_musicOn		= spNew_c3_Switch(&errcode,windowBlock,"MusicOnSwitch",musicscreen_checkPress );
 
-#if !defined(ACTIVISION_ORIGINAL)	// moved here from musicscreen_displayMyWindow
 	s_useAutoRepeat		= g_soundManager->IsAutoRepeat();
 	s_useRandomOrder	= (MUSICSTYLE_RANDOM == g_soundManager->GetMusicStyle());
 	s_useMusicOn		= g_theProfileDB->IsUseRedbookAudio();
-#endif
 	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
@@ -166,14 +157,6 @@ AUI_ERRCODE musicscreen_Initialize( void )
 
 AUI_ERRCODE musicscreen_Cleanup()
 {
-#if defined(ACTIVISION_ORIGINAL)	// s_musicString not cleaned
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-
-	if ( !s_musicScreen  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( s_musicScreen->Id() );
-	keypress_RemoveHandler(s_musicScreen);
-#else
 #define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
 	musictrackscreen_Cleanup();
 
@@ -184,7 +167,6 @@ AUI_ERRCODE musicscreen_Cleanup()
 	}
 
 	mycleanup(s_musicString);
-#endif	// ACTIVISION_ORIGINAL
 
 
 	mycleanup(s_accept);

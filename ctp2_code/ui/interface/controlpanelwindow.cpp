@@ -189,9 +189,7 @@
 #include "ProfileDB.h"
 #include "helptile.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "gameinit.h"		// g_startHotseatGame
-#endif
 
 extern ProgressWindow *g_theProgressWindow;
 
@@ -995,11 +993,7 @@ void SciMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex,
 			open_ScienceStatus();
 			break;
 	case	CP_MENU_ITEM_1:	
-#if defined(ACTIVISION_ORIGINAL)
-			open_GreatLibrary(0);
-#else
 			open_GreatLibrary();
-#endif
 			break;
    	case	CP_MENU_ITEM_2:
 	case	CP_MENU_ITEM_3:	
@@ -1039,11 +1033,7 @@ void GLMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, 
 	
 	close_AllScreens();
 
-#if defined(ACTIVISION_ORIGINAL)	
-	open_GreatLibrary(0);
-#else
 	open_GreatLibrary();
-#endif
 }
 
 
@@ -1057,11 +1047,7 @@ void StatsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemInde
 	switch (itemIndex)
 	{
    	case	CP_MENU_ITEM_0:
-#if defined(ACTIVISION_ORIGINAL)
-			open_GreatLibrary(0);
-#else
 			open_GreatLibrary();
-#endif
 			break;
 	case	CP_MENU_ITEM_1:	
 			InfoWindow::SelectRankingTab();
@@ -1285,10 +1271,6 @@ m_mainWindow(NULL)
 	m_mainWindow->SetStencilFromImage("control_panel_stencil.tga");
 
 	g_c3ui->AddWindow(m_mainWindow);
-#if defined(ACTIVISION_ORIGINAL)
-	m_mainWindow->Show();
-	m_mainWindow->ShouldDraw(TRUE);
-#else
 	if (g_startHotseatGame)
 	{
 		// Do not display control panel yet.
@@ -1299,7 +1281,6 @@ m_mainWindow(NULL)
 		m_mainWindow->Show();
 		m_mainWindow->ShouldDraw(TRUE);
 	}
-#endif
 
 }
 
@@ -2009,7 +1990,6 @@ ControlPanelWindow::OrderDeliveryUpdate()
 				} else {
 					g_cursorManager->SetCursor(CURSORINDEX_NOMOVE);
 				}
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann to fix the crossed sword bug
 			}
 			else if(g_theWorld->HasCity(pos)
@@ -2018,7 +1998,6 @@ ControlPanelWindow::OrderDeliveryUpdate()
 			&&      army->CheckWasEnemyVisible(pos, true)
 			){
 				g_cursorManager->SetCursor(CURSORINDEX_ASSAULT);
-#endif
 			} else {
 				g_cursorManager->SetCursor(CURSORINDEX_MOVE);
 			}
@@ -2054,13 +2033,9 @@ ControlPanelWindow::TileImpUpdate()
 		
 	g_tiledMap->GetMouseTilePos(pos);
 
-#if defined(ACTIVISION_ORIGINAL)
-	if (!terrainutil_CanPlayerBuild(m_currentTerrainImpRec,player_id,true))
-#else
 	bool const 	hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
 
 	if (!terrainutil_CanPlayerBuild(m_currentTerrainImpRec,player_id, hideExpensive))
-#endif
 	{
 		tileimptracker_DisplayData(pos, -1);
 		ClearTargetingMode();
@@ -2589,9 +2564,6 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	
 	
 	
-#if defined(ACTIVISION_ORIGINAL)
-	m_messageList->InsertItem(item,m_messageList->NumItems());
-#else
 	bool const 	isAddBottom	= !g_theProfileDB->GetValueByName("RecentAtTop");
 	m_messageList->InsertItem(item, isAddBottom ? m_messageList->NumItems() : 0);
 
@@ -2600,7 +2572,6 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 		// Postpone ranger updates until all messages have been added.
 		return;	
 	}
-#endif
 
 	
 	aui_Ranger *ranger = m_messageList->GetVerticalRanger();
@@ -2608,14 +2579,10 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	if (!ranger)
 		return;
 
-#if defined(ACTIVISION_ORIGINAL)
-	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
-#else
 	ranger->SetValue
 		(ranger->GetValueX(), 
 		 isAddBottom ? ranger->GetMaximumY() : ranger->GetMinimumY()
 		);
-#endif
 
 	m_messageList->RangerMoved();
 }
@@ -2695,13 +2662,6 @@ void ControlPanelWindow::PopulateMessageList(PLAYER_INDEX player)
 
 	m_messageList->BuildListStart();
 
-#if defined(ACTIVISION_ORIGINAL)
-	for(sint32 i = playerMessages->Num() - 1; i >= 0; i--) {
-		AddMessage(playerMessages->Access(i),true);
-	}
-
-	m_messageList->BuildListEnd();
-#else
 	bool const 		isAddBottom	= !g_theProfileDB->GetValueByName("RecentAtTop");
 	sint32 const	copyCount	= playerMessages->Num();
 
@@ -2722,7 +2682,6 @@ void ControlPanelWindow::PopulateMessageList(PLAYER_INDEX player)
 	}
 
 	m_messageList->BuildListEnd(isAddBottom);
-#endif
 }
 
 
@@ -3971,13 +3930,9 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
    		return;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	
-   	grey_button = !terrainutil_CanPlayerBuild(rec,player_id,true);
-#else
 	bool const	hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
 
    	grey_button = !terrainutil_CanPlayerBuild(rec,player_id, hideExpensive);
-#endif
 	show_button = terrainutil_PlayerHasAdvancesFor(rec, player_id);
 
 	aui_TipWindow *tipwin = (aui_TipWindow *)m_tileImpButtons[button]->GetTipWindow();

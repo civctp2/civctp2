@@ -118,10 +118,8 @@ extern ProjectFile                  *g_GreatLibPF;
 
 #include "network.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include "ArmyPool.h"	// g_armyPool
-#endif
 
 
 static CityWindow *s_cityWindow = NULL;
@@ -355,32 +353,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_unhappyIcon = g_c3ui->LoadImage("updi43.tga");
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-CityWindow::~CityWindow()
-{
-	ClearInventoryUserData();
-
-	if(m_window) {
-		aui_Ldl::DeleteHierarchyFromRoot(s_cityWindowBlock);
-		m_window = NULL;
-	}
-
-	if(m_statsWindow) {
-		aui_Ldl::DeleteHierarchyFromRoot(s_cityStatsBlock);
-		m_statsWindow = NULL;
-	}
-
-	if(m_cities) {
-		m_cities->DeleteAll();
-		delete m_cities;
-		m_cities = NULL;
-	}
-
-	
-	m_cityData = NULL;
-
-}
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -445,7 +417,6 @@ CityWindow::~CityWindow()
 	}
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 AUI_ERRCODE CityWindow::Initialize()
 {
@@ -572,12 +543,10 @@ void CityWindow::SetCity(CityData *city)
 	Project();
 	Update();
 
-#if !defined(ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focusing
 	if(s_cityWindow->m_cityData && s_cityWindow->m_cityData->GetHomeCity().IsValid()) {
 		CityData *cd = s_cityWindow->m_cityData;
 		g_selected_item->SetSelectCity(cd->GetHomeCity());
 	}
-#endif
 }
 
 void CityWindow::Project(CityData *cityData)
@@ -837,16 +806,11 @@ void CityWindow::UpdateBuildTabs()
 	MBCHAR buf[20];
 	if(turnCountButton) {
 		sint32 turns = m_cityData->HowMuchLonger();
-#if defined(ACTIVISION_ORIGINAL)
-		if(turns >= 0 && turns < 0x7fffffff)
-			sprintf(buf, "%d", m_cityData->HowMuchLonger());
-#else
 		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
 		if(turns >= 0 && turns < 0x7fffffff
 		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
 		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
 			sprintf(buf, "%d", turns);
-#endif
 		else
 			strcpy(buf, "---");
 		turnCountButton->SetText(buf);
@@ -932,18 +896,6 @@ void CityWindow::UpdateBuildTabs()
 //----------------------------------------------------------------------------
 void CityWindow::UpdateBuildTabButtons()
 {
-#if defined(ACTIVISION_ORIGINAL)	
-	if(m_cityData->AlreadyBoughtFront() || 
-	   g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()) {
-		m_rushBuyButton->Enable(FALSE);
-	} else {
-		if(m_queueList->GetSelectedItemIndex() == 0) {
-			m_rushBuyButton->Enable(TRUE);
-		} else {
-			m_rushBuyButton->Enable(FALSE);
-		}
-	}
-#else
 	sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
 	sint32 const	cost			= m_cityData->GetOvertimeCost();
 
@@ -961,7 +913,6 @@ void CityWindow::UpdateBuildTabButtons()
 	{
 		m_rushBuyButton->Enable(TRUE);
 	}
-#endif		
 
 	if(m_cityData->SellingBuilding() >= 0 || 
 	   m_cityData->GetImprovements() == 0 ||
@@ -995,9 +946,6 @@ void CityWindow::UpdateCostsGives()
 	Assert(costsValue);
 	Assert(givesValue);
 
-#if defined(ACTIVISION_ORIGINAL)
-	if(m_cityData->GetBuildQueue()->GetLen() < 1 || m_cityData->AlreadyBoughtFront()) {
-#else
 	if(m_cityData->GetBuildQueue()->GetLen() < 1 
 	|| m_cityData->AlreadyBoughtFront()
 	//Added by Martin Gühmann to disable the rush buy cost in the case of infrastructure and capitalization
@@ -1006,7 +954,6 @@ void CityWindow::UpdateCostsGives()
 	// Make sure that costs aren't displayed if the first item is not selected
 	|| s_cityWindow->m_queueList->GetSelectedItemIndex() != 0
 	){
-#endif
 		costsValue->SetText("---");
 	} else {
 		MBCHAR buf[20];
@@ -1173,17 +1120,6 @@ void CityWindow::NextCity(aui_Control *control, uint32 action, uint32 data, void
 		s_cityWindow->SetCity(cityList->Access(i + 1).CD());
 	}
 
-#if defined(ACTIVISION_ORIGINAL) // #01 Done now in  CityWindow::SetCity
-	if(s_cityWindow->m_cityData && s_cityWindow->m_cityData->GetHomeCity().IsValid()) {
-		CityData *cd = s_cityWindow->m_cityData;
-		g_selected_item->SetSelectCity(cd->GetHomeCity());
-
-		MapPoint pos = cd->GetHomeCity().RetPos();
-		if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
-			g_director->AddCenterMap(pos);
-		}
-	}
-#endif
 }
 
 void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1217,17 +1153,6 @@ void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, 
 	} else {
 		s_cityWindow->SetCity(cityList->Access(i - 1).CD());
 	}
-#if defined(ACTIVISION_ORIGINAL) // #01 Done now in  CityWindow::SetCity
-	if(s_cityWindow->m_cityData && s_cityWindow->m_cityData->GetHomeCity().IsValid()) {
-		CityData *cd = s_cityWindow->m_cityData;
-		g_selected_item->SetSelectCity(cd->GetHomeCity());
-
-		MapPoint pos = cd->GetHomeCity().RetPos();
-		if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
-			g_director->AddCenterMap(pos);
-		}
-	}
-#endif
 }
 
 void CityWindow::SelectCity(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1364,27 +1289,6 @@ void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 da
 	s_cityWindow->Update();
 }
 
-#if defined(ACTIVISION_ORIGINAL)	// clears the wrong list
-void CityWindow::ClearInventoryUserData()
-{
-	sint32 i;
-	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.List");
-	Assert(lb);
-	if(lb) {
-		for(i = 0; i < lb->NumItems(); i++) {
-			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(i);
-			Assert(item);
-			if(item) {
-				InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserData();
-				if(info) {
-					delete info;
-					item->SetUserData(NULL);
-				}
-			}
-		}
-	}
-}
-#else	// ACTIVISION_ORIGINAL
 //----------------------------------------------------------------------------
 //
 // Name       : CityWindow::ClearInventoryUserData
@@ -1421,7 +1325,6 @@ void CityWindow::ClearInventoryUserData()
 	}
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -1539,7 +1442,6 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 	}
 	s_cityWindow->UpdateBuildTabButtons();
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to update the turn count display of the image button
 	ctp2_Button *	turnCountButton = (ctp2_Button *) aui_Ldl::GetObject
 		(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.RadialButton");
@@ -1568,7 +1470,6 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 		}
 		turnCountButton->SetText(buf);
 	}
-#endif
 }
 
 void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1654,11 +1555,7 @@ void CityWindow::HyperLink( aui_Control *control, uint32 action, uint32 data, vo
 	ctp2_HyperLink *hl = ((ctp2_HyperTextBox *)control)->GetSelectedHyperLink();
 
 	if ( hl ) {
-#if defined(ACTIVISION_ORIGINAL)
-		open_GreatLibrary(0);
-#else
 		open_GreatLibrary();
-#endif
 		g_greatLibrary->SetLibrary( hl->m_index, (DATABASE)hl->m_db );
 	}
 }
@@ -1733,17 +1630,12 @@ void CityWindow::PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlo
 					}
 				}
 				char buf[20];
-#if defined(ACTIVISION_ORIGINAL)
-				//Removed by Martin Gühmann
-				if(turns < 0 || turns == 0x7fffffff) 
-#else
 				//Added by Martin Gühmann to remove number of turn
 				//display in the Build Manager and City Manager
 				//if infrastructure or capilization is displayed.
 				if(turns < 0 || turns == 0x7fffffff
 				|| bn->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
 				|| bn->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION)
-#endif
 				{
 					strcpy(buf, "---");
 				} 
@@ -2395,105 +2287,6 @@ void CityWindow::FillPollutionList()
 	ctp2_ListItem *allPercentItems[64];
 	sint32 numAbsItems = 0, numPercentItems = 0;
 
-#if defined(ACTIVISION_ORIGINAL)	// memory leak when no population pollution
-	ctp2_ListItem *item;
-	double value;
-	item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
-	if(item && m_cityData->GetPopulationPollution()) 
-	{
-		
-		label = (ctp2_Static *)item->GetChildByIndex(0);
-		sublabel = (ctp2_Static *)label->GetChildByIndex(0);
-		sublabel->SetText(g_theStringDB->GetNameStr("str_ldl_PollutionList_Population"));
-		sublabel = (ctp2_Static *)label->GetChildByIndex(1);
-		sprintf(interp,"%i",m_cityData->GetPopulationPollution());
-		sublabel->SetText(interp);
-		item->SetUserData((void *)m_cityData->GetPopulationPollution());
-		
-		allAbsItems[numAbsItems++] = item;
-	}
-
-	item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
-	if(item && m_cityData->GetProductionPollution()) 
-	{
-		
-		label = (ctp2_Static *)item->GetChildByIndex(0);
-		sublabel = (ctp2_Static *)label->GetChildByIndex(0);
-		sublabel->SetText(g_theStringDB->GetNameStr("str_ldl_PollutionList_Production"));
-		sublabel = (ctp2_Static *)label->GetChildByIndex(1);
-		sprintf(interp,"%i",m_cityData->GetProductionPollution());
-		sublabel->SetText(interp);
-		item->SetUserData((void *)m_cityData->GetProductionPollution());
-		allAbsItems[numAbsItems++] = item;
-		
-	}
-	
-	
-	else if(item)
-	{
-		delete item;
-	}
-
-
-	for(sint32 i=0; i<g_theBuildingDB->NumRecords(); i++)
-	{
-		if(!m_cityData->HaveImprovement(i))
-			continue;
-
-		item=NULL;	
-
-		
-		if(g_theBuildingDB->Get(i)->GetPollutionAmount())
-		{
-			item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
-			label = (ctp2_Static *)item->GetChildByIndex(0);
-			sublabel = (ctp2_Static *)label->GetChildByIndex(0);
-			sublabel->SetText(g_theBuildingDB->Get(i)->GetNameText());
-			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
-			g_theBuildingDB->Get(i)->GetPollutionAmount(value);
-			sprintf(interp,"%d",(sint32)value);
-			sublabel->SetText(interp);
-			item->SetUserData((void *)(sint32)value);
-			allAbsItems[numAbsItems++] = item;
-			
-		}
-
-		
-		
-		double production_pollution_percent = 0;
-		double population_pollution_percent = 0;
-
-		
-		
-		if(g_theBuildingDB->Get(i)->GetProductionPollutionPercent(production_pollution_percent) ||
-		   g_theBuildingDB->Get(i)->GetPopulationPollutionPercent(population_pollution_percent))
-		{
-			if(!item)
-			{
-				item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
-			}
-			label = (ctp2_Static *)item->GetChildByIndex(0);
-			sublabel = (ctp2_Static *)label->GetChildByIndex(0);
-			sublabel->SetText(g_theBuildingDB->Get(i)->GetNameText());
-			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
-			
-			
-			g_theBuildingDB->Get(i)->GetProductionPollutionPercent(production_pollution_percent);
-			value = m_cityData->GetProductionPollution() * production_pollution_percent;
-			
-			
-			g_theBuildingDB->Get(i)->GetPopulationPollutionPercent(population_pollution_percent);
-			value += m_cityData->GetPopulationPollution() * population_pollution_percent;
-
-			sprintf(interp,"%d%",(sint32)value);
-			sublabel->SetText(interp);
-			item->SetUserData((void *)(sint32)value);
-			
-			allPercentItems[numPercentItems++] = item;
-		}
-	}
-
-#else	// ACTIVISION_ORIGINAL
 	if (m_cityData->GetPopulationPollution()) 
 	{
 		ctp2_ListItem *	item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
@@ -2571,7 +2364,6 @@ void CityWindow::FillPollutionList()
 			}
 		}
 	}
-#endif	// ACTIVISION_ORIGINAL
 
 	
 	qsort((void *)allAbsItems, numAbsItems, sizeof(ctp2_ListItem *), cw_comparePollutionItems);
@@ -2694,32 +2486,6 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 {
 	if(result) {
 
-#if defined(ACTIVISION_ORIGINAL)
-
-		static UnitDynamicArray units;
-		units.Clear();
-
-		sint32 b;
-		for(b = 0; b < k_MAX_ARMY_SIZE; b++) {
-			if(s_cityWindow->m_unitId[b] != 0) {
-				if(s_cityWindow->m_unitButtons[b]->GetToggleState()) {
-					Unit u(s_cityWindow->m_unitId[b]);
-					Assert(u.IsValid());
-					if(u.IsValid()) {
-						units.Insert(u);
-					}
-				}
-			}
-		}
-
-		for(b = 0; b < units.Num(); b++) {
-			g_gevManager->AddEvent(GEV_INSERT_Tail,
-								   GEV_DisbandUnit, 
-								   GEA_Unit, units[b].m_id,
-								   GEA_End);
-		}
-
-#else
 		// Create a temporary army to collect the units from the selected boxes.
 		Player *	owner	= g_player[g_selected_item->GetVisiblePlayer()];
 		Army		temp(owner->GetNewArmy(CAUSE_NEW_ARMY_GROUPING));
@@ -2748,7 +2514,6 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 							   temp.m_id,
 							   GEA_End
 							  );
-#endif	// ACTIVISION_ORIGINAL
 
 		// Remove the disbanded units from the display.
 		s_cityWindow->UpdateUnitButtons();

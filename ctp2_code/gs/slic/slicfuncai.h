@@ -40,33 +40,9 @@
 #define __SLICFUNCAI_H__
 
 
-#if defined(ACTIVISION_ORIGINAL)	// Functions are not used externally.
-struct ProposalData;
-struct Response;
-struct NewProposal;
-
-#include "slicfunc.h"
-
-
-
-
-
-
-
-
-bool ParseProposalDataSlicArgs(SlicArgList *args, sint32 &argNum, ProposalData &data);
-
-
-bool ParseResponseSlicArgs(SlicArgList *args, sint32 &argNum, Response &data);
-
-
-bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &data);
-
-#else	// ACTIVISION_ORIGINAL	
 
 #include "slicfunc.h"	// SLICFUNC, SFR
 
-#endif	// ACTIVISION_ORIGINAL
 
 
 
@@ -216,7 +192,6 @@ SLICFUNC(SFR_VOID, TargetNuclearAttack)
 
 SLICFUNC(SFR_VOID, SetArmyDetachState)
 
-#if !defined(ACTIVISION_ORIGINAL)
 SLICFUNC(SFR_INT, GetBorderIncursionBy)
 SLICFUNC(SFR_INT, GetLastNewProposalType)
 SLICFUNC(SFR_INT, GetLastNewProposalArg) //Not implemented
@@ -253,7 +228,6 @@ SLICFUNC(SFR_INT, GetNewProposalResult)
 SLICFUNC(SFR_INT, GetCounterProposalResult)
 SLICFUNC(SFR_INT, GetMostAtRiskCity)//Not implemented
 SLICFUNC(SFR_VOID, DeclareWar)
-#endif
 
 
 #endif __SLICFUNCAI_H__

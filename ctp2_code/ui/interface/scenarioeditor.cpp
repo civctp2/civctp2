@@ -75,11 +75,9 @@
 #include "CityData.h"
 #include "UnitData.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to have the appropiate number 
 //on the city style tab 
 #include "CityStyleRecord.h"
-#endif
 
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
@@ -235,12 +233,10 @@ void scenarioeditor_SetSaveOptionsFromMode(void)
 }
 
 ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
-#if !defined(ACTIVISION_ORIGINAL)	// initialise to NULL to be able to delete safely later
 :	m_terrainImpSwitches(NULL),		
 	m_terrainSwitches(NULL),
 	m_xWrapButton(NULL),			// never used?
 	m_yWrapButton(NULL)				// never used?
-#endif
 {
 	m_initializing = true;
 
@@ -283,22 +279,15 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin) {
 
-#if !defined(ACTIVISION_ORIGINAL)
 			//Added by Martin Gühmann to amke sure that the Scenario Editor 
 			//does not set the player to player 1 when the scenario editor
 			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
-#endif
 			spin->SetSpinnerCallback(PlayerSpinner, NULL);
 
 			spin->SetMinimum(0, 0);
-#if defined(ACTIVISION_ORIGINAL)
-			//Removed by Martin Gühmann
-			spin->SetMaximum(GetNumPlayers(), 0);
-#else
 			//Added by Martin Gühmann
 			spin->SetMaximum(GetLastPlayer(), 0);
-#endif
 		}
 	}
 
@@ -412,11 +401,9 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	m_brushSize = 1;
 	m_unitIndex = -1;
 	m_cityStyle = -2;
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to initialize the pop number
 	//for newly created cities
 	m_newPopSize = 1;
-#endif
 	m_scenarioName[0] = 0;
 	m_startLocMode = SCEN_START_LOC_MODE_NONE;
 
@@ -494,17 +481,9 @@ ScenarioEditor::~ScenarioEditor()
 		m_addStuffWindow = NULL;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	//Removed by Martin Gühmann
-	if(m_terrainSwitches) {
-		delete [] m_terrainSwitches;
-		m_terrainSwitches = NULL;
-	}
-#else
 	//Added by Martin Gühmann
 	delete [] m_terrainSwitches;
 	delete [] m_terrainImpSwitches;
-#endif
 
 	if(m_copyBuffer) {
 		delete m_copyBuffer;
@@ -701,9 +680,7 @@ void ScenarioEditor::PopulateTerrainList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	delete [] m_terrainSwitches;
-#endif
 	m_terrainSwitches = new ctp2_Switch *[g_theTerrainDB->NumRecords()];
 
 	for(t = 0; t < g_theTerrainDB->NumRecords(); t++) {
@@ -900,14 +877,9 @@ void ScenarioEditor::PopulateCityList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
-#if defined(ACTIVISION_ORIGINAL)
-	//Removed by Martin Gühmann
-	for(cs = 0; cs < CITY_STYLE_MAX; cs++) {
-#else
 	//Added by Martin Gühmann so that there are now as much buttons
 	//as city styles.
 	for(cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
-#endif
 		if(col == 0) {
 			curItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ScenCityItem");
 			Assert(curItem);
@@ -938,7 +910,6 @@ void ScenarioEditor::PopulateCityList()
 			curItemBox = NULL;
 		}
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to give the city buttons an icon.
 //Added by Martin Gühmann to show the according city style name in the tooltip.
 
@@ -966,7 +937,6 @@ void ScenarioEditor::PopulateCityList()
 				tipWindow->SetTipText(const_cast<char *>(rec->GetNameText()));
 			}
 		}
-#endif
 	}
 
 	if(col > 0) {
@@ -997,9 +967,7 @@ void ScenarioEditor::PopulateTerrainImprovementList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	delete [] m_terrainImpSwitches;
-#endif
 	m_terrainImpSwitches = new ctp2_Switch *[g_theTerrainImprovementDB->NumRecords()];
 
 	for(t = 0; t < g_theTerrainImprovementDB->NumRecords(); t++) {
@@ -1149,7 +1117,6 @@ sint32 ScenarioEditor::CityStyle()
 	return s_scenarioEditor->m_cityStyle;
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to make 
 //shure that newly created cities 
 //have the same pop size as displayed in
@@ -1159,7 +1126,6 @@ sint32 ScenarioEditor::CitySize()
 	if(!s_scenarioEditor) return 1;
 	return s_scenarioEditor->m_newPopSize;
 }
-#endif
 
 bool ScenarioEditor::PlaceStartFlags()
 {
@@ -1532,12 +1498,10 @@ void ScenarioEditor::CityPopSpinner(aui_Control *control, uint32 action, uint32 
 
 	if(!spinner) return;
 	sint32 newPop = spinner->GetValueX();
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to make shure 
 	//newly created cities have the same pop 
 	//size as displayed in the CityPopSpinner
 	s_scenarioEditor->m_newPopSize = newPop;
-#endif
 	Unit city;
 	if(!g_selected_item->GetSelectedCity(city))
 		return;
@@ -2276,13 +2240,11 @@ void ScenarioEditor::PlayerSpinner(aui_Control *control, uint32 action, uint32 d
 
 	if(g_player[newPlayer]) {
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to prevent a crash if you use the
 //Scenario Editor to select a city, change the player without deselecting
 //it, destroy this city by conquest or slic or starvation and switching back
 //to that player.
 		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
-#endif
 
 		tf->SetFieldText(g_player[newPlayer]->m_civilisation->GetLeaderName());
 		g_selected_item->SetPlayerOnScreen(newPlayer);
@@ -2621,22 +2583,6 @@ void ScenarioEditor::Cut()
 
 	Copy();
 
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 x, y;
-	MapPoint cur, wrapped;
-	for(x = 0; x < m_regionWidth; x++) {
-		for(y = 0; y < m_regionHeight; y++) {
-			cur.x = m_regionStart.x + x - (y / 2);
-			while(cur.x < 0)
-				cur.x += g_theWorld->GetXWidth();
-
-			cur.y = m_regionStart.y + y;
-			if(WrapPoint(m_regionStart, cur, wrapped)) {
-				g_theWorld->SmartSetTerrain(wrapped, TERRAIN_WATER_SHALLOW, 0);
-			}
-		}
-	}
-#else
 	// x and y are orthogonal coordinates now
 	for (sint32 y = 0; y < m_regionHeight; ++y)
 	{
@@ -2650,7 +2596,6 @@ void ScenarioEditor::Cut()
 			}
 		}
 	}
-#endif
 }
 
 void ScenarioEditor::CutRegion(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -2954,21 +2899,6 @@ void ScenarioEditor::UpdatePlayerCount()
 	st->SetText(tempstr);
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-
-void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
-		return;
-
-	ctp2_Button *sw = (ctp2_Button *)control;
-
-	sw->SetToggleState(!sw->GetToggleState());
-	g_theProfileDB->SetPollutionRule(sw->GetToggleState());
-}
-
-#else
 //Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
@@ -3007,7 +2937,6 @@ void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data,
 	//whole think work.
 	g_theProfileDB->SetPollutionRule(!g_theProfileDB->IsPollutionRule());
 }
-#endif
 
 class ReopenEditorAction : public aui_Action
 {
@@ -3408,7 +3337,6 @@ sint32 ScenarioEditor::GetNumPlayers()
 	return players;
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to get the last player in the game.
 sint32 ScenarioEditor::GetLastPlayer() 
 {
@@ -3420,7 +3348,6 @@ sint32 ScenarioEditor::GetLastPlayer()
 	}
 	return players;
 }
-#endif
 
 void ScenarioEditor::DisableErase(void)
 {

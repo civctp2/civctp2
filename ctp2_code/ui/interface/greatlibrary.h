@@ -50,11 +50,7 @@
 
 #include "ctp2_ListItem.h"
 #include "keyboardhandler.h"
-#if defined(ACTIVISION_ORIGINAL)
-#include <Vector>
-#else
 #include <vector>	// std::vector
-#endif
 
 
 
@@ -85,12 +81,8 @@
 
 #define k_GL_INDEX_INVALID		-1
 
-#if defined(ACTIVISION_ORIGINAL)
-#define k_MAX_GL_ENTRY 4096
-#else
 size_t const	k_MAX_GL_ENTRY		= 8192;
 size_t const	GL_MAX_DB_NAME_SIZE	= 30; 
-#endif
 
 enum DATABASE {
 	DATABASE_DEFAULT,

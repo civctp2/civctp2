@@ -246,7 +246,6 @@ void TiledMap::InitLUT(void)
 }
 
 TiledMap::TiledMap(MapPoint &size)
-#if !defined(ACTIVISION_ORIGINAL)
 :	m_drawHilite	(false),
 	m_isScrolling	(false),
 	m_lockedSurface	(NULL),
@@ -259,7 +258,6 @@ TiledMap::TiledMap(MapPoint &size)
 	m_surfIsLocked	(false),
 	m_surfPitch		(0),
 	m_surfWidth		(0)	
-#endif	// ACTIVISION_ORIGINAL
 {	
 	Assert(g_theWorld != NULL);
 	if (g_theWorld == NULL) 
@@ -1132,9 +1130,7 @@ void TiledMap::LoadTileset(void)
 
 	tileSet->QuickLoadMapped();
 
-#if !defined(ACTIVISION_ORIGINAL)
 	delete m_tileSet;
-#endif
 	m_tileSet = tileSet;
 }
 
@@ -1836,24 +1832,6 @@ void TiledMap::DrawHiliteMouseTile(aui_Surface *destSurf)
 		sint32 w = ScenarioEditor::GetRegionWidth();
 		sint32 h = ScenarioEditor::GetRegionHeight();
 
-#if defined(ACTIVISION_ORIGINAL)	// incorrect wrap function
-		MapPoint cur = ul;
-		MapPoint wrapped;
-		sint32 x, y;
-		for(x = 0; x < w; x++) {
-			for(y = 0; y < h; y++) {
-				cur.x = ul.x + x - (y / 2);
-				while(cur.x < 0)
-					cur.x += g_theWorld->GetXWidth();
-
-				cur.y = ul.y + y;
-				if(!WrapPoint(ul, cur, wrapped))
-					continue;
-
-				DrawHitMask(destSurf, wrapped);
-			}
-		}
-#else
 		// x and y are orthogonal coordinates now
 		for (sint32 y = 0; y < h; ++y)
 		{
@@ -1867,7 +1845,6 @@ void TiledMap::DrawHiliteMouseTile(aui_Surface *destSurf)
 				}
 			}
 		}
-#endif
 	}
 	DrawHitMask(destSurf, m_hiliteMouseTile);
 
@@ -2375,17 +2352,12 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 
 	bool visiblePlayerOwnsThis = g_selected_item->GetVisiblePlayer() == g_theWorld->GetOwner(pos);
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	if(m_localVision->GetLastSeen(pos, ucell) && !visiblePlayerOwnsThis) 
-#else
 // Added by Martin Gühmann
 	if(!g_fog_toggle // The sense of toogling off the fog is to see something
 	&& !visiblePlayerOwnsThis
 	&& m_localVision->GetLastSeen(pos, ucell) 
 //	&& ucell.m_unseenCell->GetImprovements()->GetCount() > 0
 	){
-#endif
 		env = ucell.m_unseenCell->GetEnv();
 		numImprovements = ucell.m_unseenCell->GetImprovements()->GetCount();
 		hasGoody = ucell.m_unseenCell->HasHut();
@@ -3145,16 +3117,11 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 
 			UnseenCellCarton		ucell;
 			
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-			if (m_localVision && m_localVision->GetLastSeen(pos, ucell))
-#else
 // Added by Martin Gühmann
 			// For visibility god mode and fog of war should be handled equally
 			if(!g_fog_toggle
 			&&  m_localVision 
 			&&  m_localVision->GetLastSeen(pos, ucell))
-#endif
 			{
 				
 				UnitActor	*actor = ucell.m_unseenCell->GetActor();
@@ -3211,12 +3178,6 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-				if(!( actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
-				   && !g_god && (g_player[g_selected_item->GetVisiblePlayer()] && !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar))
-					continue;
-#else
 // Added by Martin Gühmann
 				// For visibility god mode and fog of war should be handled equally
 				if(!( actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
@@ -3225,7 +3186,6 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 				&& (g_player[g_selected_item->GetVisiblePlayer()] 
 				&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar))
 					continue;
-#endif
 				
 				if (top.GetOwner() == g_selected_item->GetVisiblePlayer()
 					&& top.CanSettle(top.RetPos())) 
@@ -3326,18 +3286,12 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 						top = hypotheticalUnit;
 					}
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-					if (top.GetOwner() != g_selected_item->GetVisiblePlayer() && !g_god)
-						continue;
-#else
 // Added by Martin Gühmann
 					// For visibility god mode and fog of war should be handled equally
 					if (top.GetOwner() != g_selected_item->GetVisiblePlayer()
 					&& !g_fog_toggle
 					&& !g_god)
 						continue;
-#endif
 
 					actor = top.GetActor();
 					if(!actor) continue; 
@@ -3451,16 +3405,11 @@ void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-			if (m_localVision && m_localVision->GetLastSeen(pos, ucell))
-#else
 // Added by Martin Gühmann
 			// We want to something when we lift the fog of war
 			if(!g_fog_toggle
 			&&  m_localVision 
 			&&  m_localVision->GetLastSeen(pos, ucell))
-#endif
 			{
 				
 				curUnitActor = ucell.m_unseenCell->GetActor();
@@ -4113,42 +4062,6 @@ sint32 TiledMap::DrawCityRadius(MapPoint &cpos, COLOR color, sint32 pop)
 	return 0;
 }
 
-#if defined(ACTIVISION_ORIGINAL)	// incorrect wrap computation
-sint32 TiledMap::DrawCityRadius1(MapPoint &cpos, COLOR color)
-{
-	MapPoint	pos;
-	MapPoint	wpos;
-
-	pos.y = cpos.y-1;
-	pos.x = cpos.x+1;
-	
-	for(;pos.y<cpos.y+1;pos.y++) 
-	{
-		if(WrapPoint(cpos, pos, wpos))
-			DrawColoredHitMask(g_screenManager->GetSurface(), wpos, color);
-	}
-	
-	pos.y = cpos.y-1;
-	pos.x = cpos.x;
-	
-	for(;pos.y<cpos.y+2; pos.y++) 
-	{
-		if(WrapPoint(cpos, pos, wpos))
-			DrawColoredHitMask(g_screenManager->GetSurface(), wpos, color);
-	}
-	
-	pos.y = cpos.y;
-	pos.x = cpos.x-1;
-	
-	for(;pos.y<cpos.y+3; pos.y++) 
-	{
-		if(WrapPoint(cpos, pos, wpos))
-			DrawColoredHitMask(g_screenManager->GetSurface(), wpos, color);
-	}
-	
-	return 0;
-}
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : TiledMap::DrawCityRadius1
@@ -4184,62 +4097,7 @@ sint32 TiledMap::DrawCityRadius1(MapPoint &cpos, COLOR color)
 
 	return 0;
 }
-#endif	// ACTIVISION_ORIGINAL
 
-#if defined(ACTIVISION_ORIGINAL)	// never used
-sint32 TiledMap::DrawCityRadius2(MapPoint &cpos, COLOR color)
-{
-	MapPoint	pos;
-	MapPoint	wpos;
-
-	pos.y = cpos.y-3;
-	pos.x = cpos.x+2;
-	
-	for(; pos.y<cpos.y;pos.y++) 
-	{
-		if(WrapPoint(cpos, pos, wpos))	
-			DrawColoredHitMask(g_screenManager->GetSurface(), wpos, color);
-	}
-	
-	pos.y = cpos.y-3;
-	pos.x = cpos.x+1;
-	
-	for(;pos.y<cpos.y+2;pos.y++) 
-	{
-		if(WrapPoint(cpos, pos, wpos))
-			DrawColoredHitMask(g_screenManager->GetSurface(), wpos, color);
-	}
-	
-	pos.y = cpos.y-2;
-	pos.x = cpos.x;
-	
-	for(;pos.y<cpos.y+3; pos.y++) 
-	{
-		if(WrapPoint(cpos, pos, wpos))
-			DrawColoredHitMask(g_screenManager->GetSurface(), wpos, color);
-	}
-	
-	pos.y = cpos.y-1;
-	pos.x = cpos.x-1;
-	
-	for(;pos.y<cpos.y+4; pos.y++) 
-	{
-		if(WrapPoint(cpos, pos, wpos))
-			DrawColoredHitMask(g_screenManager->GetSurface(), wpos, color);
-	}
-	
-	pos.y = cpos.y+1;
-	pos.x = cpos.x-2;
-	
-	for(; pos.y<cpos.y+4;pos.y++) 
-	{
-		if(WrapPoint(cpos, pos, wpos))
-			DrawColoredHitMask(g_screenManager->GetSurface(), wpos, color);
-	}
-
-	return 0;
-}
-#endif
 
 
 sint32 TiledMap::PaintColoredTile(sint32 x, sint32 y, COLOR color)
@@ -6310,22 +6168,9 @@ void TiledMap::HandleCheat(MapPoint &pos)
 						}
 					}
 					Unit id1 = p->CreateCity(unitNum, pos, CAUSE_NEW_CITY_CHEAT, NULL, -1);
-#if !defined(ACTIVISION_ORIGINAL)
 					//Added by Martin Gühmann to make the created city selected.
 					g_selected_item->SetSelectCity(id1);
 					//End Add
-#else
-					//Removed by Martin Gühmann cheat editor city creation is now
-					//handled inside the CityData class were it does work actually.
-					if ( (id1 != Unit(0))) {
-						if(g_cityNum != -1) {
-							id1.SetCitySize( g_cityNum );
-						} else {
-							id1.SetCitySize(1);
-							id1.CD()->SetCityStyle(ScenarioEditor::CityStyle());
-						}
-					}
-#endif
 				} else {
 					
 					if (g_theWorld->HasCity(pos)) {

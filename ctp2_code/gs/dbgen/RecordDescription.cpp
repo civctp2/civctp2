@@ -67,9 +67,7 @@ RecordDescription::RecordDescription(char *name)
 	strncpy(m_name, name, k_MAX_RECORD_NAME);
 	m_numBits = 0;
 
-	#if !defined(ACTIVISION_ORIGINAL) //GovMod
 		m_hasGovernmentsModified = false;	
-	#endif
 
 	m_addingToMemberClass = false;
 	m_baseType = DATUM_NONE;
@@ -143,16 +141,13 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	fprintf(outfile, "private:\n");
 	ExportData(outfile);
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	fprintf(outfile, "//GovMod Specific flag\n");
 	fprintf(outfile, "    bool m_hasGovernmentsModified;\n\n");
-#endif
 	
 	fprintf(outfile, "\npublic:\n");
 
 	ExportMethods(outfile);
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	fprintf(outfile, "//GovMod Specific accessors\n");
 	fprintf(outfile, "     bool GetHasGovernmentsModified() const { return m_hasGovernmentsModified; }\n\n");
 	fprintf(outfile, "");
@@ -170,7 +165,6 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	else
 		fprintf(outfile," return GetGovernmentsModifiedIndex(index); } \n\n\n");
 
-#endif
   
 	fprintf(outfile, "}; /* %sRecord */\n\n", m_name);
 	fprintf(outfile, "struct %sRecordAccessorInfo {\n", m_name);
@@ -307,24 +301,14 @@ void RecordDescription::AddGroupedBits(char *groupName, struct namelist *list)
 	m_datumList.AddTail(dat);
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-void RecordDescription::AddBitPair(char *name, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype)
-#else
 // Added by Martin Gühmann
 void RecordDescription::AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype)
-#endif
 {
 	if(m_addingToMemberClass) {
 		Assert(m_memberClasses.GetTail());
 		if(m_memberClasses.GetTail()) {
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-			m_memberClasses.GetTail()->AddBitPair(name, minSize, maxSize, pairtype);
-#else
 // Added by Martin Gühmann
 			m_memberClasses.GetTail()->AddBitPair(nameInfo, minSize, maxSize, pairtype);
-#endif
 		}
 		return;
 	}
@@ -332,25 +316,18 @@ void RecordDescription::AddBitPair(struct namelist *nameInfo, sint32 minSize, si
 
 	Datum *dat = new Datum;
 	dat->m_type = DATUM_BIT_PAIR;
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	dat->m_name = name;
-#else
 // Added by Martin Gühmann
 	dat->m_name = nameInfo->name;
-#endif
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
 	dat->m_subType = NULL;
 	dat->m_groupList = NULL;
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann for adding default values
 	if((nameInfo->flags & k_NAMEVALUE_HAS_VALUE)
 	|| (dat->m_maxSize > 0)
 	){
 		dat->SetValue(nameInfo->v);
 	}
-#endif
 	dat->m_bitNum = m_numBits;
 	m_numBits++;
 
@@ -471,13 +448,8 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	fprintf(outfile, "    %sRecord() { Init(); };\n", m_name);
 	fprintf(outfile, "    ~%sRecord();\n", m_name);
 
-#if defined(ACTIVISION_ORIGINAL)
-	//Removed by Martin Gühmann
-	fprintf(outfile, "    Init();\n", m_name);
-#else
 	//Added by Martin Gühmann functions needs a return type
 	fprintf(outfile, "    void Init();\n", m_name);
-#endif
 
 	fprintf(outfile, "    // These methods are needed for records to conform to\n");
 	fprintf(outfile, "    // 'Orthodox Cannonical Form' and work with resizing STL vectors. \n");
@@ -511,9 +483,7 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	while(walk.IsValid()) {
 		Datum *dat = walk.GetObj();
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 		if(strcmp("GovernmentsModified", walk.GetObj()->m_name)==0) m_hasGovernmentsModified=true;
-#endif
 
 		dat->ExportAccessor(outfile, 0, m_name);
 		walk.Next();
@@ -583,13 +553,8 @@ void RecordDescription::ExportOtherRecordIncludes(FILE *outfile)
 void RecordDescription::ExportManagement(FILE *outfile)
 {
 
-#if defined(ACTIVISION_ORIGINAL)
-	//Removed by Martin Gühmann
-	fprintf(outfile, "%sRecord::Init()\n", m_name);
-#else
 	//Added by Martin Gühmann function need a return type
 	fprintf(outfile, "void %sRecord::Init()\n", m_name);
-#endif
 	fprintf(outfile, "{\n");
 	
 	sint32 i;
@@ -604,13 +569,11 @@ void RecordDescription::ExportManagement(FILE *outfile)
 		walk.Next();
 	}
 	
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	fprintf(outfile, "//GovMod Specific flag initialization\n");
 	if (m_hasGovernmentsModified)
 		fprintf(outfile, "    m_hasGovernmentsModified=true;\n\n");
 	else
 		fprintf(outfile, "    m_hasGovernmentsModified=false;\n\n");
-#endif
 
 	fprintf(outfile, "}\n\n");
 	
@@ -830,7 +793,6 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "\n");
 		fprintf(outfile, "    tok = lex->GetToken();\n");
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 		if(m_hasGovernmentsModified) {
 		fprintf(outfile, "    // Start of GovMod Specific lexical analysis\n");
 		fprintf(outfile, "    if(tok == k_Token_Modified) {\n");
@@ -846,7 +808,6 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "	  }\n");
 		fprintf(outfile, "    // End of GovMod Specific lexical analysis\n");
 		}
-	#endif
 
 		fprintf(outfile, "    if(tok != k_Token_OpenBrace) {\n");
 		fprintf(outfile, "        DBERROR((\"Missing open brace\"));\n");

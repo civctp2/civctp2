@@ -577,11 +577,7 @@ sint32 knowledgewin_UpdateData( sint32 flag )
 	double scienceTax;
 	
 	p->GetScienceTaxRate( scienceTax );
-#if defined(ACTIVISION_ORIGINAL)	
-	s_scienceTax = (sint32)(scienceTax * 100);
-#else
 	s_scienceTax = AsPercentage(scienceTax);
-#endif
 
 	sprintf(str,"%d",s_scienceTax);
 	s_sciPercentBox->SetText(str);

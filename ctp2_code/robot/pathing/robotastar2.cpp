@@ -133,11 +133,7 @@ BOOL RobotAstar2::DefensivePathCallback (const BOOL & can_enter,
 		if ((prev_owner == pos_owner) &&
 			!(m_incursionPermission & (0x1 << prev_owner)))
 		{
-#if defined (ACTIVISION_ORIGINAL)			
-			cost = k_ASTAR_BIG -1;
-#else
 			cost += k_MOVE_TREASPASSING_COST;
-#endif
 			return TRUE; 
 		} 
     }
@@ -189,14 +185,10 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	
 	
 	bool isspecial, cancapture, haszoc, canbombard;
-#if !defined (ACTIVISION_ORIGINAL)
 	bool isstealth;
-#endif
 	sint32 maxattack, maxdefense;
 	army->CharacterizeArmy( isspecial, 
-#if !defined (ACTIVISION_ORIGINAL)
 		isstealth, 
-#endif
 		maxattack, 
 		maxdefense, 
 		cancapture,

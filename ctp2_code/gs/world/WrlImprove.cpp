@@ -96,16 +96,10 @@ sint32 World::GetMaxFoodFromTerrain()
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
-#if defined(ACTIVISION_ORIGINAL)
-		food = rec->GetEnvBase()->GetShield();
-		if (rec->GetEnvRiver())
-			food += rec->GetEnvRiverPtr()->GetShield();
-#else
 		food = rec->GetEnvBase()->GetFood();
 		if (rec->GetEnvRiver())
 			food += rec->GetEnvRiverPtr()->GetFood();
 
-#endif
 		if (food > max_food)
 			max_food = food;
 	}
@@ -145,16 +139,10 @@ sint32 World::GetAvgFoodFromTerrain()
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
-#if defined(ACTIVISION_ORIGINAL)
-		food = rec->GetEnvBase()->GetShield();
-		if (rec->GetEnvRiver())
-			food += rec->GetEnvRiverPtr()->GetShield();
-#else
 		food = rec->GetEnvBase()->GetFood();
 		if (rec->GetEnvRiver())
 			food += rec->GetEnvRiverPtr()->GetFood();
 
-#endif
 		avg_food += food;
 	}
 	avg_food /= g_theTerrainDB->NumRecords();

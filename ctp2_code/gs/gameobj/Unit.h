@@ -116,11 +116,7 @@ public:
 	{ KillUnit(cause, killedBy); }
 	void FastKill(void);
 
-#if defined(ACTIVISION_ORIGINAL)
-	BOOL IsValid();
-#else
 	BOOL IsValid() const;
-#endif
 
 	PLAYER_INDEX GetOwner() const;
 	uint32 GetOwnerBit() const; 

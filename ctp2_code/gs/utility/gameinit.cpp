@@ -376,7 +376,6 @@ HotseatPlayerSetup g_hsPlayerSetup[k_MAX_PLAYERS];
 
 //----------------------------------------------------------------------------
 
-#if !defined(ACTIVISION_ORIGINAL)	// helper functions to make life easier
 
 namespace
 {
@@ -469,7 +468,6 @@ void CreateInitialHuman
 
 }; // namespace
 
-#endif // ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 
@@ -1386,18 +1384,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	sint32 numPlayersLoaded = 0;
 
     
-#if defined(ACTIVISION_ORIGINAL)    
-    Assert(3 <= k_MAX_PLAYERS && k_MAX_PLAYERS <= k_MAX_PLAYERS); 
-
-    if (g_theProfileDB->IsAIOn()) 
-        g_player[0] = new Player(PLAYER_INDEX(0), diff, PLAYER_TYPE_ROBOT, CIV_INDEX_VANDALS, GENDER_MALE);
-	else 
-        g_player[0] = new Player(PLAYER_INDEX(0), diff, PLAYER_TYPE_HUMAN, CIV_INDEX_RANDOM, GENDER_RANDOM);
-	
-	s_networkSettlers[0] = 0;
-#else
 	CreateBarbarians(diff);
-#endif
 
 	sint32 netIndex = 0; 
 	NSPlayerInfo *nspi = NULL;
@@ -2094,165 +2081,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		}
 
 		
-#if defined(ACTIVISION_ORIGINAL)			
-		if(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS) {
-			if (g_theProfileDB->IsAIOn()) { 
-				g_player[0] = new Player(PLAYER_INDEX(0), diff, PLAYER_TYPE_ROBOT, CIV_INDEX_VANDALS, GENDER_MALE);
-			} else { 
-				g_player[0] = new Player(PLAYER_INDEX(0), diff, PLAYER_TYPE_HUMAN, CIV_INDEX_RANDOM, GENDER_RANDOM);
-			}
-		}	
-
-		if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS) {
-			switch(g_startInfoType) {
-			case STARTINFOTYPE_NONE:
-				break;
-			case STARTINFOTYPE_CIVS:
-				{
-					
-					Assert(numPlayersLoaded == 0);
-					
-					CIV_INDEX civ = gameinit_GetCivForSlot(1);
-					if(civ == CIV_INDEX_RANDOM)
-						civ = g_theProfileDB->GetCivIndex();
-					
-					
-					sint32 usedPositions[k_MAX_START_POINTS];
-					sint32 usedCivs = 0;
-					memset(usedPositions, 0, sizeof(usedPositions));
-					
-					for(j = 0; j < g_theWorld->GetNumStartingPositions(); j++) {
-						if(g_theWorld->GetStartingPointCiv(j) == civ) {
-							usedPositions[j] = 1;
-							usedCivs++;
-							break;
-						}
-					}
-					Assert(j < g_theWorld->GetNumStartingPositions());
-					if(j >= g_theWorld->GetNumStartingPositions()) {
-						civ = CIV_INDEX(g_theWorld->GetStartingPointCiv(0));
-						usedPositions[0] = 1;
-						usedCivs++;
-						j = 0;
-					}
-					
-					g_player[1] = new Player(PLAYER_INDEX(1), diff, PLAYER_TYPE_HUMAN,
-						civ,
-						g_theProfileDB->GetGender());
-					g_player[1]->m_starting_index = j;
-					
-					
-					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
-					
-					
-					for(i = 1; i < g_useScenarioCivs; i++) {
-						civ = gameinit_GetCivForSlot(i + 1);
-						sint32 whichCiv = 0x7fffffff;
-						
-						if(civ != CIV_INDEX_RANDOM) {
-							for(whichCiv = 0; whichCiv < g_theWorld->GetNumStartingPositions(); whichCiv++) {
-								if(usedPositions[whichCiv])
-									continue;
-								if(g_theWorld->GetStartingPointCiv(whichCiv) == civ)
-									break;
-							}
-						}
-						
-						
-						
-						if(whichCiv >= g_theWorld->GetNumStartingPositions()) {
-							whichCiv = g_rand->Next(g_theWorld->GetNumStartingPositions() - usedCivs);
-							while(usedPositions[whichCiv]) {
-								whichCiv++;
-								if(whichCiv >= g_theWorld->GetNumStartingPositions())
-									whichCiv = 0;
-							}
-						}
-						
-						g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff, 
-							PLAYER_TYPE_ROBOT,
-							CIV_INDEX(g_theWorld->GetStartingPointCiv(whichCiv)), 
-							GENDER_RANDOM);
-						g_player[i + 1]->m_starting_index = whichCiv;
-						usedPositions[whichCiv] = 1;
-						usedCivs++;
-						if(usedCivs >= g_theWorld->GetNumStartingPositions()) {
-							
-							break;
-						}
-					}
-					break;
-				}
-			case STARTINFOTYPE_POSITIONSFIXED:
-				{
-					
-					Assert(numPlayersLoaded == 0);
-					
-					CIV_INDEX civ;
-					civ = gameinit_GetCivForSlot(1);
-					
-					if (civ == CIV_INDEX_RANDOM) {
-						civ = g_theProfileDB->GetCivIndex();
-					}
-					
-					
-					g_player[1] = new Player(PLAYER_INDEX(1), diff, PLAYER_TYPE_HUMAN,
-						civ,
-						g_theProfileDB->GetGender());
-					
-					
-					g_player[1]->m_starting_index = 0;
-					
-					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
-					
-					
-					for(i = 1; i < g_useScenarioCivs; i++) {
-						civ = gameinit_GetCivForSlot(i + 1);
-						
-						g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff, 
-							PLAYER_TYPE_ROBOT,
-							gameinit_GetCivForSlot(i + 1),
-							GENDER_RANDOM);
-						g_player[i + 1]->m_starting_index = i;
-					}
-					break;
-				}
-			case STARTINFOTYPE_CIVSFIXED:
-				{
-					
-					Assert(numPlayersLoaded == 0);
-					
-					CIV_INDEX civ;
-					civ = gameinit_GetCivForSlot(1);
-					
-					if (civ == CIV_INDEX_RANDOM) {
-						civ = g_theProfileDB->GetCivIndex();
-					}
-					
-					
-					g_player[1] = new Player(PLAYER_INDEX(1), diff, PLAYER_TYPE_HUMAN,
-						civ,
-						g_theProfileDB->GetGender());
-					
-					
-					g_player[1]->m_starting_index = 0;
-					
-					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
-					
-					
-					for(i = 1; i < g_useScenarioCivs; i++) {
-						civ = gameinit_GetCivForSlot(i + 1);
-						g_player[i + 1] = new Player(PLAYER_INDEX(i + 1), diff, 
-							PLAYER_TYPE_ROBOT,
-							civ,
-							GENDER_RANDOM);
-						g_player[i + 1]->m_starting_index = i;
-					}
-					break;
-				}
-			}
-		}
-#else		
 		if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS) 
 		{
 			CreateBarbarians(diff);
@@ -2399,23 +2227,10 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				break;
 			} // switch
 		}
-#endif // ACTIVISION_ORIGINAL
     } else {
 		//
 		//	Normal game code
-#if defined(ACTIVISION_ORIGINAL)
-        Assert(3 <= k_MAX_PLAYERS && k_MAX_PLAYERS <= k_MAX_PLAYERS); 
-        
-        if (g_theProfileDB->IsAIOn()) { 
-            g_player[0] = new Player(PLAYER_INDEX(0), diff, PLAYER_TYPE_ROBOT, CIV_INDEX_VANDALS, GENDER_MALE);
-        } else { 
-            g_player[0] = new Player(PLAYER_INDEX(0), diff, PLAYER_TYPE_HUMAN, CIV_INDEX_RANDOM, GENDER_RANDOM);
-        }
-
-		s_networkSettlers[0] = 0;
-#else
 		CreateBarbarians(diff);
-#endif
 
 		sint32 netIndex = 0; 
 		NSPlayerInfo *nspi = NULL;
@@ -2427,28 +2242,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			}
 		}
 
-#if defined(ACTIVISION_ORIGINAL)	// fixed human player index 1
-		g_player[1] = new Player(PLAYER_INDEX(1), 
-								 diff, 
-								 PLAYER_TYPE_HUMAN, 
-								 civ, 
-								 g_theProfileDB->GetGender());
-
-		if(nspi) {
-			g_player[1]->m_gold->SetLevel(nspi->m_civpoints);
-			s_networkSettlers[1] = nspi->m_settlers;
-			if(strlen(nspi->m_name) > 0) {
-				g_player[1]->m_civilisation->AccessData()->SetLeaderName(nspi->m_name);
-			}
-		} else {
-			s_networkSettlers[1] = 1;
-			if ( strlen(g_theProfileDB->GetLeaderName()) > 0 &&
-				 !g_theProfileDB->IsTutorialAdvice()) {
-				g_player[1]->m_civilisation->AccessData()->SetLeaderName(g_theProfileDB->GetLeaderName());
-			}
-		}
-
-#else // ACTIVISION_ORIGINAL
 		sint32 const		humanIndex	= 
 			(nspi) ? 1 : g_theProfileDB->GetPlayerIndex();
 		CreateInitialHuman(diff, humanIndex, civ);
@@ -2474,18 +2267,13 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					SetLeaderName(g_theProfileDB->GetLeaderName());
 			}
 		}
-#endif // ACTIVISION_ORIGINAL
 
 		sint32 firstRobot = -1;
 
-#if defined(ACTIVISION_ORIGINAL)	// fixed human player index 1		
-        for (i=2; i<nPlayers; i++) {
-#else
         for (i = 1; i < nPlayers; ++i) 
 		{
 		  if (i != humanIndex)
 		  {
-#endif
 			if (g_theProfileDB->IsAIOn() && 
 				((!g_network.IsNetworkLaunch() || i > g_network.GetNumHumanPlayers()) ||
 				 (g_network.IsNetworkLaunch() && g_theProfileDB->NoHumanPlayersOnHost() && i==g_network.GetNumHumanPlayers()))) {
@@ -2547,9 +2335,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					
 				}
 			}
-#if !defined(ACTIVISION_ORIGINAL)
 		  } // if (i != humanIndex)
-#endif
         } // for
 		
         
@@ -2768,44 +2554,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	if(&archive) {
 		g_theWorld->SetAllMoveCost();
 
-#if defined(ACTIVISION_ORIGINAL)	// Code doesn't do anything
-		uint32 oldHumanMask = 0;
-		uint32 newHumanMask = 0;
-		for(i = 0; i < k_MAX_PLAYERS; i++) {
-			if(g_player[i]) {
-				if(g_player[i]->GetPlayerType() == PLAYER_TYPE_HUMAN ||
-				   g_player[i]->GetPlayerType() == PLAYER_TYPE_NETWORK) {
-					oldHumanMask |= (1 << i);
-				}
-			}
-		}
-		
-		if(g_network.IsNetworkLaunch()) {
-			newHumanMask = g_network.GetHumanMask();
-		} else {
-			if(g_theProfileDB->IsAIOn())
-				newHumanMask = 0x02; 
-			else
-				newHumanMask = 0xffffffff; 
-		}
-
-		if(oldHumanMask != newHumanMask && g_network.IsNetworkLaunch()) {
-			
-			
-				
-					
-					
-						
-						
-					
-					
-						
-					
-					
-				
-			
-		}
-#else	// ACTIVISION_ORIGINAL
   #if defined(USE_TEST_MP_AS_SP)
 		if (g_network.IsActive() || g_network.IsNetworkLaunch() || 
 			g_turn->IsEmail()	 || g_turn->IsHotSeat()
@@ -2844,7 +2592,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			}
 		}
   #endif  // USE_TEST_MP_AS_SP
-#endif	// ACTIVISION_ORIGINAL
 
 		g_aPlayerIsDead = FALSE;
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
@@ -2865,15 +2612,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		}
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	
-	if ( g_selected_item && g_player[g_selected_item->GetVisiblePlayer()] ) {
-#else
 	if (g_selected_item && 
 		g_player[g_selected_item->GetVisiblePlayer()] &&
 		!g_turn->IsHotSeat()
 	   )
 	{
-#endif
 		
 			
 		
@@ -2960,7 +2703,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_player[g_scenarioUsePlayerNumber]->m_playerType = PLAYER_TYPE_HUMAN;
 		g_selected_item->SetPlayerOnScreen(g_scenarioUsePlayerNumber);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann
 		//Set current player the selected player so that the 
 		//game starts with the first turn and the correct player.
@@ -2968,7 +2710,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		//Make sure that the current player is kept by turning it
 		//into the stop player.
 		NewTurnCount::SetStopPlayer(g_scenarioUsePlayerNumber);
-#endif
 
 	} else {
 		g_scenarioUsePlayerNumber = 0;

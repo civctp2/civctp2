@@ -70,13 +70,11 @@ extern Diplomacy_Log *g_theDiplomacyLog;
 
 
 ProfileDB::ProfileDB()
-#if !defined(ACTIVISION_ORIGINAL)
 :	m_closeEyepoint(FALSE),
 	m_colorSet(0),
 	m_showExpensive(FALSE),
 	m_showOrderUnion(FALSE),
 	m_recentAtTop(FALSE)
-#endif
 {
 	m_vars = new PointerList<ProfileVar>;
 
@@ -377,13 +375,11 @@ ProfileDB::ProfileDB()
 	Var("DisplayTrade", PV_BOOL, &m_displayTrade, NULL, false);
 	Var("DisplayTerrain", PV_BOOL, &m_displayTerrain, NULL, false);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	Var("CloseOnEyepoint", PV_BOOL, &m_closeEyepoint, NULL);
 	Var("ShowExpensive", PV_BOOL, &m_showExpensive, NULL);
 	Var("ColorSet", PV_NUM, &m_colorSet, NULL, false);
 	Var("ShowOrderUnion", PV_BOOL, &m_showOrderUnion, NULL);
 	Var("RecentAtTop", PV_BOOL, &m_recentAtTop, NULL);
-#endif
 }
 
 void ProfileDB::DefaultSettings(void)

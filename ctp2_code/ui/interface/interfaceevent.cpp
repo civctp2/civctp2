@@ -48,9 +48,7 @@
 #include "network.h"
 #include "gamesounds.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 extern sint32				g_modalWindow;
-#endif
 
 
 STDEHANDLER(InterfaceCreateCityEvent)
@@ -132,13 +130,11 @@ STDEHANDLER(InterfaceUpdateCityProjection)
 
 	if(pl == g_selected_item->GetVisiblePlayer()) {
 		MainControlPanel::SelectedCity();
-#if !defined(ACTIVISION_ORIGINAL)
 		// Reenable opening the city window - see InterfacePreBeginTurnEvent.
 		if (g_modalWindow > 0)
 		{
 			--g_modalWindow;	
 		}
-#endif
 	}
 
 	return GEV_HD_Continue;
@@ -173,11 +169,9 @@ STDEHANDLER(InterfacePreBeginTurn)
 
 	if(pl == g_selected_item->GetVisiblePlayer()) {
 		close_AllScreens();
-#if !defined(ACTIVISION_ORIGINAL)
 		// Prevent opening the city window during the production computations.
 		// It will be reenabled in InterfaceUpdateCityProjection.
 		++g_modalWindow;	
-#endif
 		if(g_controlPanel)
 			g_controlPanel->ClearTargetingMode();
 

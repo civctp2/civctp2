@@ -51,7 +51,6 @@ typedef CTPAgent * CTPAgent_ptr;
 
 
 //Now the enum is global and can be accessed by other objects
-    #if !defined (ACTIVISION_ORIGINAL)
 enum SUB_TASK_TYPE
 {
     SUB_TASK_GOAL,
@@ -63,20 +62,8 @@ enum SUB_TASK_TYPE
 };
 
 
-    #endif
 class CTPGoal : public Goal
 {
-    #if defined (ACTIVISION_ORIGINAL)
-    enum SUB_TASK_TYPE
-    {
-        SUB_TASK_GOAL,
-        SUB_TASK_RALLY,
-        SUB_TASK_TRANSPORT_TO_BOARD,
-        SUB_TASK_CARGO_TO_BOARD,
-        SUB_TASK_AIRLIFT
-    };
-
-    #endif
 public:
 
 
@@ -112,12 +99,10 @@ public:
 
     const Army & Get_Target_Army() const;
 
-    #if !defined (ACTIVISION_ORIGINAL) //add m_sub_task attribute
     const SUB_TASK_TYPE & Get_Sub_Task() const;
 
     void Set_Sub_Task(const SUB_TASK_TYPE & sub_task);
 
-    #endif //ACTIVISION_ORIGINAL
 
 
     const Unit & Get_Target_City() const;
@@ -208,12 +193,10 @@ protected:
 
     bool RallyTroops();
 
-#if !defined (ACTIVISION_ORIGINAL)
 
     bool UnGroupTroops();
 
     bool UnGroupComplete() const;
-#endif
 
     bool Goal_Too_Expensive() const;
 
@@ -233,9 +216,7 @@ protected:
 
     Army m_target_army;
 
-    #if !defined (ACTIVISION_ORIGINAL) //add m_sub_task attribute
     SUB_TASK_TYPE m_sub_task;
-    #endif
 };
 
 

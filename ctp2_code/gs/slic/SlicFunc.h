@@ -490,11 +490,7 @@ SLICFUNC(SFR_INT,  SetPreference);
 
 SLICFUNC(SFR_VOID, AddMovement);                  
 SLICFUNC(SFR_VOID, ToggleVeteran); 
-#if defined(ACTIVISION_ORIGINAL)               
-SLICFUNC(SFR_VOID, IsVeteran);					  
-#else
 SLICFUNC(SFR_INT,  IsVeteran);
-#endif
 SLICFUNC(SFR_VOID, CantAttackUnit);               
 SLICFUNC(SFR_VOID, CantAttackCity);               
 SLICFUNC(SFR_VOID, CityCantRiotOrRevolt);         
@@ -604,7 +600,6 @@ SLICFUNC(SFR_VOID, MinimizeAction)
 SLICFUNC(SFR_INT, IsUnitAtHead)					
 SLICFUNC(SFR_VOID, OpenScenarioEditor)
 
-#if !defined(ACTIVISION_ORIGINAL)
 //New Slicfunctions of CTP2.1 readded by Martin Gühmann
 SLICFUNC(SFR_VOID, DestroyBuilding)
 SLICFUNC(SFR_VOID, OpenBuildQueue)
@@ -632,7 +627,6 @@ SLICFUNC(SFR_INT, IsWater)
 SLICFUNC(SFR_INT, IsOnSameContinent)
 
 
-#endif // ACTIVISION_ORIGINAL
 
 #endif // __SLICFUNC_H__
 

@@ -38,11 +38,7 @@
 class ns_Lobby : public ns_Object<NETFunc::Lobby, ns_Lobby>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_Lobby( NETFunc::Lobby *lobby ) : ns_Object<NETFunc::Lobby, ns_Lobby>(lobby) {};
-#else
 	ns_Lobby(NETFunc::Lobby * lobby);
-#endif
 	void Update( NETFunc::Lobby *lobby );
 
 	char *m_closed;

@@ -127,7 +127,6 @@ void MainControlPanel::Initialize(MBCHAR *ldlBlock)
 	g_mainControlPanel = new MainControlPanel(ldlBlock);
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : MainControlPanel::Blank
@@ -151,7 +150,6 @@ void MainControlPanel::Blank()
 		g_mainControlPanel->m_controlTabPanel->Blank();
 	}
 }
-#endif
 
 void MainControlPanel::CleanUp()
 {

@@ -108,7 +108,6 @@ protected:
 #if defined(_MSC_VER)
 	friend aui_UI;
 	friend aui_Mouse;
-#else
 #endif
 
 public:

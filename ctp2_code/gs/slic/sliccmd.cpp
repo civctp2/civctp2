@@ -133,14 +133,9 @@ int sliccmd_ref_has_int_value(char *structName, char *memberName)
 
 	
 	sint32 value;
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	if(!member->GetIntValue(value)) {
-#else
 // Added by Martin Gühmann
 	if(!member->GetIntValue(value)
 	|| sym->GetText(sliccmd_output, sliccmd_output_len)) {
-#endif
 		return 0;
 	}
 	return 1;
@@ -349,14 +344,9 @@ int sliccmd_has_int_value(char *symName)
 		return 0;
 
 	sint32 value;
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	if(sym->GetIntValue(value))
-#else
 // Added by Martin Gühmann
 	if(!sym->GetText(sliccmd_output, sliccmd_output_len) 
 	&& sym->GetIntValue(value))
-#endif
 		return 1;
 	else
 		return 0;
@@ -365,14 +355,9 @@ int sliccmd_has_int_value(char *symName)
 int sliccmd_sym_has_int_value(void *vsym, int *value)
 {
 	SlicSymbolData *sym = (SlicSymbolData *)vsym;
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	if(sym->GetIntValue((sint32 &)*value))
-#else
 // Added by Martin Gühmann
 	if(sym->GetIntValue((sint32 &)*value)
 	&&!sym->GetText(sliccmd_output, sliccmd_output_len))
-#endif
 		return 1;
 	return 0;
 }
@@ -577,11 +562,7 @@ SlicSymbolData *sliccmd_get_symbol(char *name)
 
 void *sliccmd_get_db_name_sym(void *dbptr, const char *name)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
-#else
 	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
-#endif
 	Assert(conduit);
 	if(!conduit)
 		return 0;
@@ -603,11 +584,7 @@ void *sliccmd_get_db_name_sym(void *dbptr, const char *name)
 
 void *sliccmd_get_db_name_sym_by_index(void *dbptr, int index)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
-#else
 	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
-#endif
 	Assert(conduit);
 	if(!conduit)
 		return 0;

@@ -78,9 +78,7 @@ void Civilisation::KillCivilisation()
 
 void Civilisation::RemoveAllReferences()
 	{
-#if !defined(ACTIVISION_ORIGINAL)
 	g_theCivilisationPool->Release(GetCivilisation());
-#endif
 	g_theCivilisationPool->Del(*this) ;
 	}
 

@@ -42,7 +42,6 @@
 
 #if defined(_MSC_VER)
 #pragma once
-#else
 #endif
 
 #ifndef ___BMH_CONTROL_PANEL_TAB_HEADER
@@ -65,9 +64,7 @@ public:
 	
 	ControlTabPanel(MBCHAR *ldlBlock);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	void Blank();
-#endif
 
 	void Update();
 

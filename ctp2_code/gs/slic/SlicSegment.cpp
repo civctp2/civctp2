@@ -552,10 +552,8 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 			case SOP_ADD:
 			case SOP_SUB:
 			case SOP_MULT:
-#ifndef ACTIVISION_ORIGINAL
 			case SOP_EXP:
 			case SOP_BAND:
-#endif
 			case SOP_DIV: 
 			case SOP_EQ:  
 			case SOP_GT:  

@@ -136,11 +136,7 @@ public:
 	sint32 GetDiscovered() const { return m_discovered; }
 
 	sint32 GetMinPrerequisites(sint32 adv) const;
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 FindLevel(AdvanceRecord* rec);
-#else
 	sint32 FindLevel(AdvanceRecord const * const rec, sint32 const fromLevel = 0) const;
-#endif
 
 #ifdef _DEBUG
 	void DebugDumpTree();

@@ -274,11 +274,7 @@ void ScienceManagementDialog::UpdateScience()
 	m_scienceCurrentValue->SetText(buffer);
 
 
-#if defined(ACTIVISION_ORIGINAL)	
-	sprintf(buffer, "%d", currentAdvanceRecord->GetCost());
-#else
 	sprintf(buffer, "%d", player->GetCurrentScienceCost());
-#endif
 	m_scienceTotalValue->SetText(buffer);
 
 	
@@ -479,11 +475,7 @@ void ScienceManagementDialog::HyperlinkActionCallback(aui_Control *control,
 
 	
 	if(hyperlink) {
-#if defined(ACTIVISION_ORIGINAL)		
-		open_GreatLibrary(0);
-#else
 		open_GreatLibrary();
-#endif
 		g_greatLibrary->SetLibrary(hyperlink->m_index,
 			static_cast<DATABASE>(hyperlink->m_db));
 	}
@@ -646,11 +638,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				anyAdvance = true;
 			}
 
-#if defined(ACTIVISION_ORIGINAL)
-			sprintf(linkText, "  <L:DATABASE_UNITS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
-#else
 			sprintf(linkText, "  <L:DATABASE_UNITS,%s><e>\n", rec->GetIDText());
-#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
@@ -675,11 +663,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				anyAdvance = true;
 			}
 
-#if defined(ACTIVISION_ORIGINAL)
-			sprintf(linkText, "  <L:DATABASE_BUILDINGS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
-#else
 			sprintf(linkText, "  <L:DATABASE_BUILDINGS,%s><e>\n", rec->GetIDText());
-#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
@@ -705,11 +689,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				anyAdvance = true;
 			}
 
-#if defined(ACTIVISION_ORIGINAL)
-			sprintf(linkText, "  <L:DATABASE_WONDERS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
-#else
 			sprintf(linkText, "  <L:DATABASE_WONDERS,%s><e>\n", rec->GetIDText());
-#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
@@ -726,11 +706,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				anyAdvance = true;
 			}
 
-#if defined(ACTIVISION_ORIGINAL)
-			sprintf(linkText, "  <L:DATABASE_TILE_IMPROVEMENTS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
-#else
 			sprintf(linkText, "  <L:DATABASE_TILE_IMPROVEMENTS,%s><e>\n", rec->GetIDText());
-#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
@@ -745,11 +721,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 				anyAdvance = true;
 			}
 
-#if defined(ACTIVISION_ORIGINAL)
-			sprintf(linkText, "  <L:DATABASE_GOVERNMENTS,%s>%s<e>\n", rec->GetIDText(), rec->GetNameText());
-#else
 			sprintf(linkText, "  <L:DATABASE_GOVERNMENTS,%s><e>\n", rec->GetIDText());
-#endif
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}

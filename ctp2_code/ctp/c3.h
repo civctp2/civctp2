@@ -66,10 +66,8 @@
 #pragma warning( disable : 4056 )
 #endif
 
-#if !defined(ACTIVISION_ORIGINAL)
 #pragma warning(disable:4786)	// identifier length over 255 (with templates)
 #pragma warning(disable:4800)	// BOOL to bool conversion
-#endif
 
 #pragma warning( error : 4700 )
 #endif	// _MSC_VER
@@ -79,9 +77,6 @@
 #include <crtdbg.h>
 #endif
 
-#if defined(ACTIVISION_ORIGINAL)
-#include <windows.h>
-#else
 // Do not define the min and max *macros* in <windows.h>.
 #define NOMINMAX	
 #include <windows.h>
@@ -110,7 +105,6 @@
 	// Allow usage of global min and max to reduce the number of code changes.
 	using std::min;
 	using std::max;
-#endif	// ACTIVISION_ORIGINAL
 
 #include <tchar.h>
 

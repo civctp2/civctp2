@@ -56,7 +56,6 @@ extern	nf_GameSetup	g_gamesetup;
 extern C3UI			*g_c3ui;
 extern StringDB		*g_theStringDB;
 
-#if !defined(ACTIVISION_ORIGINAL)
 namespace
 {
 
@@ -84,7 +83,6 @@ template <typename T> inline void DeleteAndNull(T * & a_Pointer)
 };
 
 };	// namespace
-#endif	// ACTIVISION_ORIGINAL
 
 static DialogBoxWindow *s_agesScreen	= NULL;
 
@@ -237,14 +235,9 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 	if ( !AUI_NEWOK(s_endDropDown, errcode) ) return errcode;
 
 
-#if defined(ACTIVISION_ORIGINAL)	// table never cleaned up
-	static aui_StringTable startagestrings( &errcode, "strings.startagestrings" );
-	s_numAges = g_theAgeDB->NumRecords();
-#else
 	aui_StringTable	startagestrings(&errcode, "strings.startagestrings");
 	s_numAges = g_theAgeDB->NumRecords();
 	bool const		isLdlUsable = s_numAges == startagestrings.GetNumStrings();
-#endif
 	for ( i = 0; i < s_numAges; i++ )
 	{
 		
@@ -255,10 +248,6 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-		const MBCHAR *name = startagestrings.GetString( i );
-#else
 //Added by Martin Gühmann so that no *.ldl needs to be edited
 //anymore when new ages are added.
 		MBCHAR const *	ageId	= g_theAgeDB->GetNameStr(i);
@@ -273,7 +262,6 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 		{
 			name = ageId;
 		}
-#endif
 	
 	
 	
@@ -328,36 +316,6 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-AUI_ERRCODE agesscreen_Cleanup()
-{
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-
-	if ( !s_agesScreen  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( s_agesScreen->Id() );
-
-	
-	
-	
-
-	mycleanup( s_startDropDown );
-	mycleanup( s_endDropDown );
-
-
-
-	mycleanup(s_name);
-	mycleanup(s_start);
-	mycleanup(s_end);
-
-	delete s_agesScreen;
-	s_agesScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
-}
-#else	// ACTIVISION_ORIGINAL
 //----------------------------------------------------------------------------
 //
 // Name       : agesscreen_Cleanup
@@ -400,7 +358,6 @@ AUI_ERRCODE agesscreen_Cleanup()
 
 	return AUI_ERRCODE_OK;
 }
-#endif	// ACTIVISION_ORIGINAL
 
 
 

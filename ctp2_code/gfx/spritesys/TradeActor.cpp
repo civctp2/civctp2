@@ -111,29 +111,17 @@ TradeActor::TradeActor(TradeRoute newRoute)
 TradeActor::TradeActor(TradeActor *copy)
 {
 	*this = *copy;
-#if !defined(ACTIVISION_ORIGINAL)	// Copy, to delete safely later
 	m_curAction	= new Action(m_curAction); 
-#endif
 }
 
 TradeActor::~TradeActor()
 {
-#if defined(ACTIVISION_ORIGINAL)	// Useless actions and tests	
-	if (m_goodSpriteGroup != NULL) m_goodSpriteGroup = NULL;
-
-	
-	
-	if(m_curAction) delete m_curAction;
-#else
 	delete m_curAction;
-#endif
 }
 
 void TradeActor::AddIdle(void)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	delete m_curAction;
-#endif
 	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_INTERRUPT);
 	m_curAction->SetAnim(GetAnim(GOODACTION_IDLE));
 	m_curGoodAction = GOODACTION_IDLE;

@@ -224,17 +224,6 @@ void Debug_AddFunction (char *name, unsigned address)
   
   if (name[0] == '?')
   {
-#if defined(ACTIVISION_ORIGINAL)
-	  char buff[BUFFER_SIZE];
-
-	#ifndef _BFR_
-		if (UnDecorateSymbolName(name, buff, BUFFER_SIZE-1, 0))
-		{
-		  new_function->name = strdup(buff);
-		}
-		else
-	#endif
-#else
 	#ifndef _BFR_
 	  char buff[BUFFER_SIZE];
 		if (UnDecorateSymbolName(name, buff, BUFFER_SIZE-1, 0))
@@ -243,7 +232,6 @@ void Debug_AddFunction (char *name, unsigned address)
 		}
 		else
 	#endif
-#endif
     {
       new_function->name = strdup(name);
     }
@@ -408,19 +396,6 @@ BOOL CALLBACK Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress,
 
 BOOL CALLBACK Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext)
 {
-#if defined(ACTIVISION_ORIGINAL)
-		int					err;
-
-	#ifndef _BFR_
-		
-		if (!SymEnumerateSymbols(hProc, dllBase, Debug_EnumSymbolsCallback, userContext)) {
-			err = GetLastError();
-			LOG ((LOG_FATAL, "SymEnumerateSymbols failed in module '%s' with error %d", moduleName, err));
-		
-			return FALSE;
-		}
-	#endif
-#else
 	#ifndef _BFR_
 		int					err;
 		
@@ -431,7 +406,6 @@ BOOL CALLBACK Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID u
 			return FALSE;
 		}
 	#endif
-#endif
 	
 	return TRUE;
 }

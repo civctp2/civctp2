@@ -1,6 +1,6 @@
 
 #pragma once
-#ifndef		OPTIONWARNING_FLAG
+#ifndef OPTIONWARNING_FLAG
 #define		OPTIONWARNING_FLAG
 
 #include "aui_action.h"

@@ -299,9 +299,6 @@ void UnitData::Create(const sint32 t,
     
   
     m_owner = o; 
-#if defined(ACTIVISION_ORIGINAL)	// Useless assert, preventing expansion
-    Assert(m_owner <32); 
-#endif    
 	Difficulty *diff = g_player[m_owner]->m_difficulty;
 
 	SetFlag(k_UDF_FIRST_MOVE);
@@ -321,18 +318,12 @@ void UnitData::Create(const sint32 t,
 	}
 
     
-#if defined(ACTIVISION_ORIGINAL)	// Fails when unit has MaxCargo is 0
-    if (g_theUnitDB->Get(t)->GetCanCarry() && g_theUnitDB->Get(t)->GetCargoDataPtr() != NULL) { 
-        m_cargo_list = new UnitDynamicArray (g_theUnitDB->Get(t)->GetCargoDataPtr()->GetMaxCargo()); 
-        Assert(m_cargo_list); 
-#else
     if (rec->GetCanCarry()		&& 
 		rec->GetCargoDataPtr()	&&	
 		(0 < rec->GetCargoDataPtr()->GetMaxCargo()) 
        )
 	{ 
 		m_cargo_list = new UnitDynamicArray(rec->GetCargoDataPtr()->GetMaxCargo());
-#endif
     } else { 
         m_cargo_list = NULL; 
     }
@@ -575,11 +566,7 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 {   
 	if(!Flag(k_UDF_PACMAN)) {
 		m_movement_points -= cost;
-#if defined(ACTIVISION_ORIGINAL)
-		m_movement_points = max(m_movement_points, 0.0f);   
-#else
 		m_movement_points = std::max(m_movement_points, 0.0);
-#endif
 		ClearFlag(k_UDF_FIRST_MOVE); 
 	}
 
@@ -644,12 +631,8 @@ sint32 UnitData::ResetMovement()
     if (rec->GetLossMoveToDmgNone()) { 
         m_movement_points = rec->GetMaxMovePoints(); 
     } else if (rec->GetLossMoveToDmgTwo()) { 
-#if defined(ACTIVISION_ORIGINAL)
-        m_movement_points = max(2.0f, rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr()); 
-#else
 		m_movement_points = 
 			std::max(2.0, rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr());
-#endif
     } else { 
         m_movement_points = rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr(); 
     }
@@ -859,7 +842,6 @@ BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
 
         if (g_theUnitDB->Get(GetType())->GetMovementTypeAir() ) { 
             cost = k_MOVE_AIR_COST; 
-#if !defined(ACTIVISION_ORIGINAL)
 		// Prevent ships from diving under and using tunnels.
 		} 
 		else if (g_theWorld->IsTunnel(pos) && 
@@ -869,7 +851,6 @@ BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
 			sint32	icost;
 			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 			cost = icost;
-#endif
         } else { 
             cost = g_theWorld->GetMoveCost(pos); 
         } 
@@ -1390,30 +1371,12 @@ sint32 UnitData::CanActivelyDefend(CellUnitList &attacker) const
 	if(rec->GetActiveDefenseRange() <= 0)
 		return 0;
 
-#if defined(ACTIVISION_ORIGINAL)	// incorrect (0 != TRUE) and inefficient
-	BOOL movesMatch = FALSE;
-	if(attacker.IsAtLeastOneMoveLand() &&  rec->GetDefendLand())
-		movesMatch = 0;
-
-	if(attacker.IsAtLeastOneMoveWater() && rec->GetDefendWater())
-		movesMatch = TRUE;
-
-	if(attacker.IsAtLeastOneMoveAir() && rec->GetDefendAir())
-		movesMatch = TRUE;
-
-	if(attacker.IsAtLeastOneMoveSpace() && rec->GetDefendSpace())
-		movesMatch = TRUE;
-
-	if(attacker.IsAtLeastOneMoveMountain() && rec->GetDefendMountain())
-		movesMatch = TRUE;
-#else
 	bool const	movesMatch	=
 		(attacker.IsAtLeastOneMoveLand()     && rec->GetDefendLand())	||
 		(attacker.IsAtLeastOneMoveWater()    && rec->GetDefendWater())	||
 		(attacker.IsAtLeastOneMoveAir()      && rec->GetDefendAir())	||
 		(attacker.IsAtLeastOneMoveSpace()    && rec->GetDefendSpace())	||
 		(attacker.IsAtLeastOneMoveMountain() && rec->GetDefendMountain());
-#endif
 
 	if(movesMatch) {
 		if(rec->GetActiveDefenseOnlyWhenCarryingEnablers()) {
@@ -1644,36 +1607,6 @@ void UnitData::DeductHP(double fp)
 //----------------------------------------------------------------------------
 BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos) 
 {
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 searching = TRUE;    
-	const UnitRecord *rec = g_theUnitDB->Get(unit_type);   
-  	sint32 t = rec->GetSettleCityTypeIndex();
-
-	if (t < 0) {
-		return FALSE; 
-	}
-
-	if (g_theUnitDB->Get(t)->GetHasPopAndCanBuild() == FALSE) {
-		return FALSE; 
-	}
-
-	if (g_theWorld->HasCity(pos)) 
-		return FALSE; 
-
-	if (rec->GetSettleLand() && g_theWorld->IsLand(pos))
-		searching = FALSE; 
-	else if (rec->GetSettleMountain() && g_theWorld->IsMountain(pos))
-		searching = FALSE; 
-	else if (rec->GetSettleWater() && g_theWorld->IsWater(pos))
-		searching = FALSE; 
-	else if (rec->GetSettleSpace() && g_theWorld->IsSpace(pos))
-		searching = FALSE; 
-     
-	if (searching) 
-		return FALSE; 
-
-	return TRUE; 
-#else
 	sint32 i;
 	const UnitRecord *rec = g_theUnitDB->Get(unit_type);   
 	sint32 t = rec->GetSettleCityTypeIndex();
@@ -1702,7 +1635,6 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
 		return TRUE;
 	
 	return FALSE;
-#endif
 }
 
 
@@ -2082,11 +2014,6 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 			}
 		}
 	}
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-   g_theWorld->RemoveUnitReference(m_pos, me); // Removing the city from the world ...
-   RemoveUnitVision(); // Needs to be done later.
-#endif
    
 	sint32 killedBy = newo;
 
@@ -2110,10 +2037,6 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
    
    m_city_data->DestroyCapitol();
  
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-   g_theWorld->InsertCity(m_pos, me); // ... just to insert it later again is a complete waste of time. 
-#endif
    BOOL revealedUnexplored;
 #if 0
 	double oldVisionRange = (g_theUnitDB->Get(m_type)->m_vision_range);
@@ -2167,19 +2090,6 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 	   }
    }
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-   m_owner = newo; 
-   AddUnitVision(revealedUnexplored);
-   m_city_data->ResetCityOwner(m_owner);
-
-   static UnitDynamicArray revealed_units;
-   revealed_units.Clear();
-   DoVision(revealed_units);
-
-   Assert(CAUSE_NEW_CITY_SETTLE != nc_cause); 
-   g_player[newo]->AddCityReferenceToPlayer(me, nc_cause); 
-#else
 // Added by Martin Gühmann
    m_city_data->ResetCityOwner(newo);
 
@@ -2194,7 +2104,6 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
    revealed_units.Clear();
    DoVision(revealed_units);
 
-#endif
 
 #if 0
 	
@@ -3485,17 +3394,7 @@ void UnitData::BeginTurn()
 	}
 
 	if(g_theWorld->IsInstallation(m_pos)) {
-#if defined(ACTIVISION_ORIGINAL)
-		sint32 wonderBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
-		if (terrainutil_HasFort(m_pos) &&
-			m_hp < rec->GetMaxHP())
-		{
-			m_hp = rec->GetMaxHP() + wonderBonus;
-			needsEnqueue = TRUE;
-		}
-#else
 		// Fort healing effect at end of turn, as for city/normal.
-#endif
 		if (rec->GetNoFuelThenCrash() && 
 			terrainutil_HasAirfield(m_pos) &&
 			g_theWorld->GetOwner(m_pos) == m_owner &&
@@ -3527,51 +3426,6 @@ void UnitData::EndTurn()
 	sint32 wonderBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
 	double origHP = m_hp;
 
-#if defined(ACTIVISION_ORIGINAL)	
-	if(g_theWorld->IsInstallation(m_pos)) {
-		
-		
-		
-		
-
-		if(Flag(k_UDF_FIRST_MOVE)) {
-			if(m_hp < rec->GetMaxHP() + wonderBonus) {
-				
-				
-				if (terrainutil_HasFort(m_pos)) {
-					m_hp = rec->GetMaxHP() + wonderBonus;
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				}
-			}
-		}
-	}
-
-	if(Flag(k_UDF_FIRST_MOVE) && m_hp < rec->GetMaxHP() + wonderBonus) {
-		if(g_theWorld->HasCity(m_pos)) {
-			
-			m_hp += (rec->GetMaxHP() + wonderBonus) * g_theConstDB->CityHealRate();
-		} else {
-			m_hp += (rec->GetMaxHP() + wonderBonus) * g_theConstDB->NormalHealRate();
-		}
-		if(m_hp > rec->GetMaxHP() + wonderBonus)
-			m_hp = rec->GetMaxHP() + wonderBonus;
-	}
-#else	// ACTIVISION_ORIGINAL
 	double const	maxHp	= rec->GetMaxHP() + wonderBonus;
 
 	if (Flag(k_UDF_FIRST_MOVE) && (m_hp < maxHp))
@@ -3589,7 +3443,6 @@ void UnitData::EndTurn()
 
 		m_hp = min(m_hp, maxHp);
 	}
-#endif	// ACTIVISION_ORIGINAL
 
 	if(rec->GetNoFuelThenCrash()) {
 		if(!CheckForRefuel() && !Flag(k_UDF_IN_SPACE)) {
@@ -3932,23 +3785,8 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 	if(g_rand->Next(100) >= sint32(chance * 100.0)) {
 		DPRINTF(k_DBG_GAMESTATE, ("Spy failed\n"));
 
-#ifdef ACTIVISION_ORIGINAL
-		so = new SlicObject("10aInvestigateCityFailed") ;
-		so->AddRecipient(c.GetOwner()) ;
-		so->AddCivilisation(m_owner) ;
-		so->AddCity(c) ;
-		so->AddUnitRecord(m_type);
-		g_slicEngine->Execute(so) ;
-
-		so = new SlicObject("11aInvestigateCityFailed") ;
-		so->AddRecipient(m_owner) ;
-		so->AddCity(c) ;
-		so->AddUnitRecord(m_type);
-		g_slicEngine->Execute(so) ;
-#endif
 		if(g_rand->Next(100) < sint32(deathChance * 100.0)) {
 			Unit me(m_id);
-#ifndef ACTIVISION_ORIGINAL
 			so = new SlicObject("10aInvestigateCityFailed") ;
 			so->AddRecipient(c.GetOwner()) ;
 			so->AddCivilisation(m_owner) ;
@@ -3961,11 +3799,9 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 			so->AddCity(c) ;
 			so->AddUnitRecord(m_type);
 			g_slicEngine->Execute(so) ;
-#endif
 
 			me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
 		} 
-#ifndef ACTIVISION_ORIGINAL
 		  else {
 			so = new SlicObject("10aInvestigateCityFailedEsc") ;
 			so->AddRecipient(c.GetOwner()) ;
@@ -3980,7 +3816,6 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 			so->AddUnitRecord(m_type);
 			g_slicEngine->Execute(so) ;
 		}
-#endif
 
 
 		return ORDER_RESULT_FAILED;

@@ -75,9 +75,7 @@
 #include "ArmyData.h"
 #include "GaiaController.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "AdvanceRecord.h"
-#endif
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
@@ -118,26 +116,16 @@ STDEHANDLER(CaptureCityEvent)
 		if(newOwner == g_selected_item->GetVisiblePlayer())
 			g_selected_item->SetSelectCity(city);
 
-#if defined(ACTIVISION_ORIGINAL) // memory leak when no slaves in city.
-		SlicObject *so = new SlicObject("20IAFreeSlaves");
-#endif		
 		
 		if (city.AccessData()->CountSlaves() > 0) {
-#if !defined(ACTIVISION_ORIGINAL)
 			SlicObject *	so = new SlicObject("20IAFreeSlaves");
-#endif
 			so->AddRecipient(newOwner);
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
 		}
 		
-#if defined(ACTIVISION_ORIGINAL) // memory leak when barbarians are involved.
-		so = new SlicObject("911CityNewOwner");
-#endif		
 		if(newOwner > 0 && originalOwner > 0 && city.IsValid()) {
-#if !defined(ACTIVISION_ORIGINAL)
 			SlicObject *	so = new SlicObject("911CityNewOwner");
-#endif
 			so->AddRecipient(originalOwner);
 			so->AddPlayer(originalOwner);
 			so->AddPlayer(newOwner);
@@ -575,12 +563,8 @@ STDEHANDLER(InjoinCityEvent)
 STDEHANDLER(CreateBuildingEvent)
 {
 	Unit c;
-#if defined(ACTIVISION_ORIGINAL)	// i unused now
-	sint32 building, player, i;
-#else
 	sint32		building;
 	sint32		player;
-#endif
 	SlicObject *so;
 	SlicSegment *seg;
 
@@ -597,14 +581,9 @@ STDEHANDLER(CreateBuildingEvent)
 		return GEV_HD_Continue;
 	}
 	if(g_player[player]->GetGaiaController()->HasMaxSatsBuilt()) {
-#if defined(ACTIVISION_ORIGINAL)	// memory leak when recently shown
-		so = new SlicObject("GCMaxSatsReached");
-#endif
 		seg = g_slicEngine->GetSegment("GCMaxSatsReached");
 		if(seg && !seg->TestLastShown(player, 10000)) {
-#if !defined(ACTIVISION_ORIGINAL)
 			so = new SlicObject("GCMaxSatsReached");
-#endif
 			so->AddRecipient(player);
 			so->AddPlayer(player);
 			g_slicEngine->Execute(so);
@@ -612,26 +591,6 @@ STDEHANDLER(CreateBuildingEvent)
 	}
 
 	if(g_player[player]->GetGaiaController()->HasMinSatsBuilt()) {
-#if defined(ACTIVISION_ORIGINAL)	// memory leak when recently shown, 
-									// can't put all players in 1 message
-		so = new SlicObject("GCMinSatsReachedUs");
-		seg = g_slicEngine->GetSegment("GCMinSatsReachedUs");
-		if(seg && !seg->TestLastShown(player, 10000)) {
-			so->AddRecipient(player);
-			so->AddPlayer(player);
-			g_slicEngine->Execute(so);
-		
-			so = new SlicObject("GCMinSatsReachedThem");
-			seg = g_slicEngine->GetSegment("GCMinSatsReachedThem");
-			for(i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) {
-				if(!seg->TestLastShown(i, 10000) && i != player) {
-					so->AddRecipient(i);
-					so->AddPlayer(player);
-				}
-			}
-			g_slicEngine->Execute(so);
-		}
-#else
 		seg = g_slicEngine->GetSegment("GCMinSatsReachedUs");
 		if (seg && !seg->TestLastShown(player, 10000)) 
 		{
@@ -645,29 +604,9 @@ STDEHANDLER(CreateBuildingEvent)
 			so->AddAllRecipientsBut(player);
 			g_slicEngine->Execute(so);
 		}
-#endif
 	}
 
 	if(g_player[player]->GetGaiaController()->HasMinCoresBuilt()) {
-#if defined(ACTIVISION_ORIGINAL)	// Can't put all players in 1 message
-		so = new SlicObject("GCMinCoresReachedUs");
-		seg = g_slicEngine->GetSegment("GCMinCoresReachedUs");
-		if(seg && !seg->TestLastShown(player, 10000)) {
-			so->AddRecipient(player);
-			so->AddPlayer(player);
-			g_slicEngine->Execute(so);
-	
-			so = new SlicObject("GCMinCoresReachedThem");
-			seg = g_slicEngine->GetSegment("GCMinCoresReachedThem");
-			for(i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) {
-				if(seg && !seg->TestLastShown(i, 10000) && i != player) {
-					so->AddRecipient(i);
-					so->AddPlayer(player);
-				}
-			}
-		}
-		g_slicEngine->Execute(so);
-#else
 		seg = g_slicEngine->GetSegment("GCMinCoresReachedUs");
 		if (seg && !seg->TestLastShown(player, 10000)) 
 		{
@@ -681,7 +620,6 @@ STDEHANDLER(CreateBuildingEvent)
 			so->AddAllRecipientsBut(player);
 			g_slicEngine->Execute(so);
 		}
-#endif
 	}
 
 	return GEV_HD_Continue;
@@ -728,11 +666,6 @@ STDEHANDLER(CreateWonderEvent)
 	}
 
 	if(wonder == wonderutil_GetGaiaIndex()) {
-#if defined(ACTIVISION_ORIGINAL)	// have to make a new object for each player
-		so = new SlicObject("GCMustDiscoverGaiaController");
-		for(sint32 i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) {
-			if(g_player[i] && i != c->GetOwner()) {
-#else
 		// Notify the other players that they have to hurry to win.
 		// Starting at 1: the Barbarians do not have to be notified.
 		for (sint32 i = 1; i < k_MAX_PLAYERS; ++i)
@@ -740,7 +673,6 @@ STDEHANDLER(CreateWonderEvent)
 			if (g_player[i] && !g_player[i]->IsDead() && (i != c.GetOwner()))
 			{
 				SlicObject * so	= new SlicObject("GCMustDiscoverGaiaController");
-#endif
 				so->AddRecipient(i);
 				so->AddPlayer(i);
 				so->AddPlayer(c.GetOwner());

@@ -55,61 +55,6 @@ extern StringDB *g_theStringDB;
 #include "Player.h"
 #include "ProposalAnalysis.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-bool ParseProposalDataSlicArgs(SlicArgList *args, sint32 &argNum, ProposalData &data) {
-
-	sint32 first_type;
-	sint32 second_type;
-
-	if(!args->GetInt(argNum++, first_type))
-		return false;
-
-
-	Assert(first_type >= PROPOSAL_NONE);
-	Assert(first_type < PROPOSAL_MAX);
-	data.first_type = static_cast<PROPOSAL_TYPE>(first_type);
-
-	
-	switch (data.first_type) {
-	case PROPOSAL_NONE:
-		break;
-	
-
-
-
-
-
-
-
-
-
-	}
-
-	if(!args->GetInt(argNum++, second_type))
-		return false;
-	Assert(second_type >= PROPOSAL_NONE);
-	Assert(second_type < PROPOSAL_MAX);
-	data.second_type = static_cast<PROPOSAL_TYPE>(second_type);
-
-	switch (data.second_type) {
-	case PROPOSAL_NONE:
-		break;
-	
-
-
-
-
-
-
-
-
-
-	}
-
-	return true;
-}
-
-#else
 
 //----------------------------------------------------------------------------
 //
@@ -275,80 +220,8 @@ bool ParseProposalDataSlicArgs
 		   ParseProposalDataBlock(args, argNum, data.second_type, data.second_arg);
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 
-#if defined(ACTIVISION_ORIGINAL)
-bool ParseResponseSlicArgs(SlicArgList *args, sint32 &argNum, Response &response) {
-
-	sint32 type;
-	sint32 threat_type;
-	sint32 priority;
-	sint32 value;
-	if(!args->GetPlayer(argNum++, response.senderId))
-		return false;
-	Assert(response.senderId > 0);
-	Assert(response.senderId < k_MAX_PLAYERS);
-
-	if(!args->GetPlayer(argNum++, response.receiverId))
-		return false;
-	Assert(response.receiverId > 0);
-	Assert(response.receiverId < k_MAX_PLAYERS);
-
-	if(!args->GetInt(argNum++, priority))
-		return false;
-	Assert( priority >= 0);
-	response.priority = static_cast<sint16>(priority);
-
-	if(!args->GetInt(argNum++, type))
-		return false;
-	Assert(type > RESPONSE_INVALID);
-	Assert(type < RESPONSE_MAX);
-	response.type = static_cast<RESPONSE_TYPE>(type);
-
-	
-	if ( type == RESPONSE_COUNTER ) {
-		
-		if (!ParseProposalDataSlicArgs(args, argNum, response.counter))
-			return false;
-	} 
-	
-	else if ( type ==  RESPONSE_THREATEN ) {
-		
-		if(!args->GetInt(argNum++, threat_type))
-			return false;
-		Assert(threat_type > THREAT_NONE);
-		Assert(threat_type < THREAT_MAX);
-		response.threat.type = static_cast<THREAT_TYPE>(threat_type);
-		switch(response.threat.type) {
-			
-		case THREAT_TRADE_EMBARGO:
-		case THREAT_DECLARE_WAR:
-			break;
-		
-		case THREAT_DESTROY_CITY:
-			if(!args->GetInt(argNum++, value))
-				return false;			
-			response.threat.arg.cityId = value;
-			break;
-		}
-	}
-
-	
-	if(!args->GetStringId(argNum++, response.explainStrId))
-		return false;
-
-	
-	if(!args->GetStringId(argNum++, response.adviceStrId))
-		return false;
-
-	
-	if(!args->GetStringId(argNum++, response.newsStrId))
-		return false;
-
-	return true;
-}
-#else
 //Added by Peter Triggs
 
 // a somewhat complicated function
@@ -436,7 +309,6 @@ DPRINTF(k_DBG_SLIC, ("ParseResponseSlicArgs: type= %d\n", response.type));
 	}
 	return true;
 }
-#endif
 
 bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &new_proposal) {
 	sint32 priority;
@@ -469,7 +341,6 @@ bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &ne
 	if(!args->GetStringId(argNum++, new_proposal.newsStrId))
 		return false;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Diplomatic tone as optional argument
 	sint32	tone;
 	if ((argNum < args->m_numArgs) && args->GetInt(argNum++, tone))
@@ -477,7 +348,6 @@ bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &ne
 		Assert((tone >= DIPLOMATIC_TONE_NOT_CHOSEN) && (tone < DIPLOMATIC_TONE_MAX));
 		new_proposal.detail.tone = static_cast<DIPLOMATIC_TONE>(tone);
 	}
-#endif
 
 	return true;
 }
@@ -750,20 +620,12 @@ SFN_ERROR Slic_HasAgreement::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)	// 0 often used by mods 
-	Assert(player > 0);
-#else
 	Assert(player >= 0);
-#endif
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)	// 0 often used by mods 
-	Assert(foreigner > 0);
-#else
 	Assert(foreigner >= 0);
-#endif
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	if(!args->GetPlayer(argNum++, agreement_type))
@@ -1099,11 +961,7 @@ SFN_ERROR Slic_ConsiderMotivation::Call(SlicArgList *args)
 //-------------------------------------------------------------------------------------------
 SFN_ERROR Slic_ConsiderNewProposal::Call(SlicArgList *args)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	if(args->m_numArgs < 7)
-#else
 	if (args->m_numArgs < 8)
-#endif
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1115,10 +973,8 @@ SFN_ERROR Slic_ConsiderNewProposal::Call(SlicArgList *args)
 	Diplomat::GetDiplomat(new_proposal.senderId).
 		ConsiderNewProposal(new_proposal.receiverId, new_proposal);
 
-#if !defined(ACTIVISION_ORIGINAL)
 DPRINTF(k_DBG_SLIC, ("ConsiderNewProposal:sender %d, receiver %d, prop %d\n",
 		new_proposal.senderId,new_proposal.receiverId, new_proposal.detail.first_type));
-#endif
 
 	return SFN_ERROR_OK;
 }
@@ -1145,11 +1001,7 @@ DPRINTF(k_DBG_SLIC, ("ConsiderNewProposal:sender %d, receiver %d, prop %d\n",
 //------------------------------------------------------------------------------------------- 
 SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	if(args->m_numArgs < 7)
-#else
 	if (args->m_numArgs < 8)
-#endif
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1158,7 +1010,6 @@ SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
 	if (!ParseNewProposalSlicArgs(args, argNum, new_proposal))
 		return SFN_ERROR_TYPE_ARGS;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Diplomatic tone as optional argument
 	sint32	tone;
 	if ((argNum < args->m_numArgs) && args->GetInt(argNum++, tone))
@@ -1166,7 +1017,6 @@ SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
 		Assert((tone >= DIPLOMATIC_TONE_NOT_CHOSEN) && (tone < DIPLOMATIC_TONE_MAX));
 		new_proposal.detail.tone = static_cast<DIPLOMATIC_TONE>(tone);
 	}
-#endif
 
 	Diplomat::GetDiplomat(new_proposal.senderId).
 		SetMyLastNewProposal(new_proposal.receiverId, new_proposal);
@@ -1331,7 +1181,6 @@ SFN_ERROR Slic_ChangeDiplomaticState::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetTradeFrom::Call(SlicArgList *args)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 //Implemented by Peter Triggs
 	if(args->m_numArgs < 2)
 		return SFN_ERROR_NUM_ARGS;
@@ -1347,7 +1196,6 @@ SFN_ERROR Slic_GetTradeFrom::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
     m_result.m_int = Diplomat::GetDiplomat(player).GetTradeFrom(foreigner);
-#endif
 	return SFN_ERROR_OK;
 }
 
@@ -1357,7 +1205,6 @@ SFN_ERROR Slic_GetTradeFrom::Call(SlicArgList *args)
  
 SFN_ERROR Slic_GetTributeFrom::Call(SlicArgList *args)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 //Implemented by Peter Triggs
 	if(args->m_numArgs < 2)
 		return SFN_ERROR_NUM_ARGS;
@@ -1373,7 +1220,6 @@ SFN_ERROR Slic_GetTributeFrom::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
     m_result.m_int = Diplomat::GetDiplomat(player).GetTributeFrom(foreigner);
-#endif
 	return SFN_ERROR_OK;
 }
 
@@ -1383,7 +1229,6 @@ SFN_ERROR Slic_GetTributeFrom::Call(SlicArgList *args)
  
 SFN_ERROR Slic_GetGoldSurplusPercent::Call(SlicArgList *args)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 //Implemented by Peter Triggs
 	if(args->m_numArgs < 1)
 		return SFN_ERROR_NUM_ARGS;
@@ -1395,7 +1240,6 @@ SFN_ERROR Slic_GetGoldSurplusPercent::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
     m_result.m_int = Diplomat::GetDiplomat(player).GetGoldSurplusPercent();
-#endif
 	return SFN_ERROR_OK;
 }
 
@@ -1403,9 +1247,7 @@ SFN_ERROR Slic_GetGoldSurplusPercent::Call(SlicArgList *args)
 
 SFN_ERROR Slic_CanBuySurplus::Call(SlicArgList *args)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	//Needs to be filled
-#endif
 	return SFN_ERROR_OK;
 }
  
@@ -1415,7 +1257,6 @@ SFN_ERROR Slic_CanBuySurplus::Call(SlicArgList *args)
  
 SFN_ERROR Slic_GetAdvanceLevelPercent::Call(SlicArgList *args)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 //Implemented by Peter Triggs
     if(args->m_numArgs < 2)
 		return SFN_ERROR_NUM_ARGS;
@@ -1431,7 +1272,6 @@ SFN_ERROR Slic_GetAdvanceLevelPercent::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	m_result.m_int = Diplomat::GetDiplomat(player).GetAdvanceLevelPercent(foreigner);
-#endif
 	return SFN_ERROR_OK;
 }
 
@@ -1497,34 +1337,22 @@ SFN_ERROR Slic_AtWarWith::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-#if defined(ACTIVISION_ORIGINAL)	// 0 often used by mods
-	Assert(player > 0);
-#else
 	Assert(player >= 0);
-#endif
 
 	Assert(player < k_MAX_PLAYERS);
 
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-#if defined(ACTIVISION_ORIGINAL)	// 0 often used by mods
-	Assert(foreigner > 0);
-#else
 	Assert(foreigner >= 0);
-#endif
 
 	Assert(foreigner < k_MAX_PLAYERS);
 
-#if defined(ACTIVISION_ORIGINAL)
-	m_result.m_int = AgreementMatrix::s_agreements.HasAgreement(player,foreigner,PROPOSAL_TREATY_DECLARE_WAR);
-#else
 	// Everyone is always at war with the barbarians.
 	m_result.m_int = (PLAYER_INDEX_VANDALS == player)		||
 				     (PLAYER_INDEX_VANDALS == foreigner)	||
 					 AgreementMatrix::s_agreements.HasAgreement
 						(player, foreigner, PROPOSAL_TREATY_DECLARE_WAR);
-#endif
 
 	return SFN_ERROR_OK;
 }
@@ -1637,7 +1465,6 @@ SFN_ERROR Slic_SetArmyDetachState::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 // INT GetBorderIncursionBy(<int|player>,<int|player>); 
 // returns 1 if second player is trespassing on first player
 
@@ -2625,4 +2452,3 @@ SFN_ERROR Slic_DeclareWar::Call(SlicArgList *args)
 
 	return SFN_ERROR_OK;
 }
-#endif

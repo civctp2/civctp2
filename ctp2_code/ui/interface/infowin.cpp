@@ -1523,21 +1523,6 @@ sint32 infowin_UpdatePollutionData( void )
 	
 
 	sint32 turnsLeft = g_thePollution->GetRoundsToNextDisaster();
-#if defined(ACTIVISION_ORIGINAL)
-	if (turnsLeft < 0) strcpy(strbuf,"-");
-	else sprintf(strbuf,"%d",turnsLeft);
-	s_pollutionBox->SetText(strbuf);
-
-	
-	double val0 = g_thePollution->GetGlobalPollutionLevel();
-	double val1 = g_thePollution->GetNextTrigger();
-
-	double percent = 100 * (val0 / val1);
-	if(turnsLeft < 0)
-		percent = 0;
-
-	s_pollutionTherm->SetPercentFilled((sint32)percent);
-#else	// ACTIVISION_ORIGINAL
 	sint32 percent;
 
 	if ((turnsLeft < 0) || (turnsLeft >= Pollution::ROUNDS_COUNT_IMMEASURABLE))
@@ -1555,7 +1540,6 @@ sint32 infowin_UpdatePollutionData( void )
 
 	s_pollutionBox->SetText(strbuf);
 	s_pollutionTherm->SetPercentFilled(percent);
-#endif	// ACTIVISION_ORIGINAL
 	
 
 	return 0;

@@ -200,9 +200,7 @@ void Diplomat::CleanupAll()
 		s_theDiplomats[i].Cleanup();
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)	// clean up the vector as well
 	s_theDiplomats.clear();
-#endif
 }
 
 
@@ -287,11 +285,7 @@ void Diplomat::AddDiplomacyArgToSlicContext(SlicContext & sc, const DiplomacyArg
 	else if (dip_arg.pollution != -1)
 		sc.AddInt(dip_arg.pollution);
 	else if (dip_arg.percent != -1.0)
-#if defined(ACTIVISION_ORIGINAL) // compiler warning
-		sc.AddInt((sint32) 100.0 * dip_arg.percent);
-#else
 		sc.AddInt(static_cast<sint32>(100.0 * dip_arg.percent));
-#endif
 	
 }
 
@@ -334,13 +328,8 @@ void Diplomat::Resize(const PLAYER_INDEX & newMaxPlayerId)
 
 void Diplomat::Load(CivArchive & archive)
 {
-#if defined(ACTIVISION_ORIGINAL)	// container sizes are never negative
-	sint16 count;
-	sint32 i;
-#else
 	uint16	count;
 	size_t	i;
-#endif
 	char *str;
 	ai::Agreement agreement;
 	Threat threat;
@@ -355,11 +344,7 @@ void Diplomat::Load(CivArchive & archive)
 	archive.Load((uint8 *)str, count);
 	str[count] = '\0';
 	SetPersonalityName(str);
-#if defined(ACTIVISION_ORIGINAL)	// incorrect delete
-	delete str;
-#else
 	delete [] str;
-#endif
 	 
 	archive >> count;
 	for (i = 0; i < count; i++)
@@ -384,11 +369,7 @@ void Diplomat::Load(CivArchive & archive)
 
 	Assert(count == CtpAi::s_maxPlayers);
 
-#if defined(ACTIVISION_ORIGINAL)	// No resizing when count is 0.
-	if (count != CtpAi::s_maxPlayers)
-#else
 	if (count > CtpAi::s_maxPlayers)
-#endif
 	{
 		Resize(count);
 	}
@@ -396,12 +377,6 @@ void Diplomat::Load(CivArchive & archive)
 	for (sint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
 		{
 			m_lastMotivation[foreigner] = m_motivations.end();
-#if defined(ACTIVISION_ORIGINAL)
-			m_foreigners[foreigner].Load(archive);
-
-			
-			archive.Load((uint8 *)&ai_state, sizeof(AiState));
-#else
 			if (foreigner < count)
 			{
 				m_foreigners[foreigner].Load(archive);
@@ -412,7 +387,6 @@ void Diplomat::Load(CivArchive & archive)
 				m_foreigners[foreigner].Initialize();
 				ai_state.dbIndex = -1;
 			}
-#endif
 			
 			
 			if (g_player[m_playerId] && g_player[foreigner])
@@ -448,18 +422,10 @@ void Diplomat::Load(CivArchive & archive)
 
 void Diplomat::Save(CivArchive & archive) const
 {
-#if defined(ACTIVISION_ORIGINAL)	
-	archive << (sint16) m_personalityName.size();
-#else
 	archive << static_cast<uint16>(m_personalityName.size());
-#endif
 	archive.Store((uint8 *) m_personalityName.c_str(), m_personalityName.size());
 
-#if defined(ACTIVISION_ORIGINAL)	 
-	archive << (sint16) m_bestStrategicStates.size();
-#else
 	archive << static_cast<uint16>(m_bestStrategicStates.size());
-#endif
 	AiStateList::const_iterator ai_state_iter = m_bestStrategicStates.begin();
 	while (ai_state_iter != m_bestStrategicStates.end())
 	{
@@ -468,11 +434,7 @@ void Diplomat::Save(CivArchive & archive) const
 	}
 	
 	
-#if defined(ACTIVISION_ORIGINAL)	 
-	archive << (sint16) m_threats.size();
-#else
 	archive << static_cast<uint16>(m_threats.size());
-#endif
 	ThreatList::const_iterator threat_iter = m_threats.begin();
 	while (threat_iter != m_threats.end())
 	{
@@ -481,11 +443,7 @@ void Diplomat::Save(CivArchive & archive) const
 	}
 
 	
-#if defined(ACTIVISION_ORIGINAL)	 
-	archive << (sint16) m_foreigners.size();
-#else
 	archive << static_cast<uint16>(m_foreigners.size());
-#endif
 	for (sint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
 		{
 			m_foreigners[foreigner].Save(archive);
@@ -533,7 +491,6 @@ void Diplomat::Cleanup()
 	m_launchedNukes = false;
 	m_launchedNanoAttack = false;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	m_bestStrategicStates.clear();
 	m_diplomcyVictoryCompleteTurn	= -1;
 	m_enemyCount					= 0;
@@ -546,35 +503,11 @@ void Diplomat::Cleanup()
 	m_piracyHistory.clear();
 	
 	ClearEffectiveRegardCache();
-#endif
 }
 
 
 void Diplomat::Initialize()
 {
-#if defined(ACTIVISION_ORIGINAL)	// Possible uninitialised personality
-	if (m_playerId > -1)
-	{
-		
-		Player *player_ptr = g_player[m_playerId];
-		
-		if (player_ptr && 
-			player_ptr->GetCivilisation() &&
-			player_ptr->GetCivilisation()->GetDBRec())
-		{
-			Assert(player_ptr->GetCivilisation()->GetDBRec());
-			
-			if (player_ptr->GetCivilisation()->GetGender() == GENDER_MALE)
-				SetPersonalityName(player_ptr->GetCivilisation()->GetDBRec()->GetMalePersonality());
-			else
-				SetPersonalityName(player_ptr->GetCivilisation()->GetDBRec()->GetFemalePersonality());
-		}
-	}
-	else
-	{
-		m_personality = g_thePersonalityDB->Get(0);
-	}
-#else
 	if ((m_playerId >= 0) && (m_playerId < k_MAX_PLAYERS))
 	{
 		Player *		player	= g_player[m_playerId];
@@ -595,7 +528,6 @@ void Diplomat::Initialize()
 	{
 		m_personality	= g_thePersonalityDB->Get(0);
 	}
-#endif
 	
 	m_motivations.clear();
 
@@ -2124,11 +2056,7 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 	case THREAT_DESTROY_CITY:
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetNukeCityRegardCost(regard_cost);
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetUsedNukesTrustCost(trust_cost);
-#if defined(ACTIVISION_ORIGINAL)	// compiler warning
-		trust_cost *= 0.5; 
-#else
 		trust_cost /= 2;
-#endif
 		str_buf = "Threatened to destroy our city.";
 		break;
 	
@@ -2147,11 +2075,7 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 		
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetEmbargoTradeRegardCost(regard_cost);
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetFollowThroughTrustBonus(trust_cost);
-#if defined(ACTIVISION_ORIGINAL)	// compiler warning
-		trust_cost *= -0.5; 
-#else
 		trust_cost /= -2;
-#endif
 		str_buf = "Threatened to embargo trade.";
 		break;
 	case THREAT_DECLARE_WAR:
@@ -2159,11 +2083,7 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 		
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetPreemptiveAttackRegardCost(regard_cost);
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetPreemptiveAttackTrustCost(trust_cost);
-#if defined(ACTIVISION_ORIGINAL)	// compiler warning
-		trust_cost *= 0.5; 
-#else
 		trust_cost /= 2;
-#endif
 		str_buf = "Threatened to declare war.";
 		break;
 	}
@@ -3173,17 +3093,6 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 		}
 
 		
-#if defined(ACTIVISION_ORIGINAL)		
-		if (m_foreigners[foreignerId].GetTurnsSinceGreeting() >= 0 &&
-			g_player[m_playerId] && g_player[m_playerId]->HasContactWith(foreignerId))
-		{
-			m_lastMotivation[foreignerId] = m_motivations.begin();
-
-			
-			ChooseNewProposal(foreignerId);
-			found = true;
-		}
-#else
 	//	Modification by Peter Triggs
 	//	from >=0 pt: 
 	//	if player has contact with foreignerId, 
@@ -3199,7 +3108,6 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 			ChooseNewProposal(foreignerId);
 			found = true;
 		}
-#endif
 		else
 		{
 			m_lastMotivation[foreignerId] = m_motivations.end();
@@ -3807,14 +3715,12 @@ void Diplomat::NextStrategicState() {
 
 
 void Diplomat::ConsiderStrategicState( const AiState & state ) {
-#if !defined(ACTIVISION_ORIGINAL)
 	if (state.dbIndex < 0) 
 	{
 		// Nothing to merge. This may happen with the new strategy definition
 		// when there are no nukes yet.
 		return;
 	}
-#endif	
 
 	AiStateList::iterator ai_state_iter = 
 		m_bestStrategicStates.begin();
@@ -3833,12 +3739,7 @@ void Diplomat::ConsiderStrategicState( const AiState & state ) {
 		m_bestStrategicStates.push_back(state);
 	}
 	
-#if defined(ACTIVISION_ORIGINAL) // Logic error when at begin with size == max.
-	else if (ai_state_iter == m_bestStrategicStates.begin() &&
-		m_bestStrategicStates.size() < k_maxStategicState)
-#else
 	else if (ai_state_iter == m_bestStrategicStates.begin())
-#endif
 	{
 		m_bestStrategicStates.push_front(state);
 	}
@@ -3955,7 +3856,6 @@ void Diplomat::NextDiplomaticState( const PLAYER_INDEX & foreignerId ) {
 			GEA_Player, foreignerId,
 			GEA_End);
 
-#if !defined(ACTIVISION_ORIGINAL)
     // added by PFT 05 MAR 05: some agreements have limited duration
     sint32 duration;
     sint32 send_warning;
@@ -4049,7 +3949,6 @@ void Diplomat::NextDiplomaticState( const PLAYER_INDEX & foreignerId ) {
 			}
         }
 	}// end: some aggreements have limited duration
-#endif
 }
 
 
@@ -4798,9 +4697,7 @@ void Diplomat::UpdateAttributes()
 	sint32 num_armies;
 	MapPoint pos;
 	bool isspecial,cancapture,haszoc,canbombard;
-#if !defined (ACTIVISION_ORIGINAL)
 	bool isstealth;
-#endif
 	sint32 maxattack,maxdefense;
 	
 	Player *player_ptr = g_player[m_playerId];
@@ -4995,9 +4892,7 @@ void Diplomat::UpdateAttributes()
 				if (!is_threat)
 				{
 					army->CharacterizeArmy(isspecial,
-#if !defined (ACTIVISION_ORIGINAL)
 						isstealth,
-#endif
 						maxattack,
 						maxdefense,
 						cancapture,
@@ -5925,18 +5820,10 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 	
 	if (!g_player[m_playerId]) 
 		return false;
-#if defined(ACTIVISION_ORIGINAL)	// improper syntax
-	sint32 turns_at_peace = 
-		AgreementMatrix.s_agreements.TurnsSinceLastWar(m_playerId, foreignerId);
-
-	sint32 turns_at_war = 
-		AgreementMatrix.s_agreements.TurnsAtWar(m_playerId, foreignerId);
-#else
 	sint32 const		turns_at_peace		= 
 		AgreementMatrix::s_agreements.TurnsSinceLastWar(m_playerId, foreignerId);
 	sint32 const		turns_at_war		=
 		AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, foreignerId);
-#endif
 	DIPLOMATIC_STRENGTH relative_strength = 
 		g_player[m_playerId]->GetRelativeStrength(foreignerId);
 
@@ -6021,35 +5908,12 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 
 void Diplomat::ComputeAllDesireWarWith()
 {
-#if defined(ACTIVISION_ORIGINAL)	// Illegal access when size is 0
-	PLAYER_INDEX foreignerId;
-
-	
-	m_desireWarWith[0] = true;
-
-	for ( foreignerId = 1;  foreignerId< m_desireWarWith.size(); foreignerId++ ) 
-	{
-		
-		if (foreignerId == m_playerId)
-			continue;
-
-		if (g_player[foreignerId])
-		{
-			m_desireWarWith[foreignerId] = ComputeDesireWarWith(foreignerId);
-		}
-		else
-		{
-			m_desireWarWith[foreignerId] = false;
-		}
-	}
-#else
 	size_t const	foreignerCount	= m_desireWarWith.size();
 	for (size_t foreignerId = 0; foreignerId < foreignerCount; ++foreignerId)
 	{
 		m_desireWarWith[foreignerId] =
 			(foreignerId != m_playerId) && ComputeDesireWarWith(foreignerId);
 	}
-#endif
 }
 
 

@@ -138,13 +138,11 @@ public:
  	
  	bool Commited_Agents_Need_Orders() const;
 
-#if !defined (ACTIVISION_ORIGINAL)
     ///
     /// Check if the agents can be rollbacked to eventually receive other priority 
     /// (for example : not if they are too close to their goals and grouping)
     ///
     bool CanMatchesBeReevaluated() const;
-#endif
 	sint16 Move_All_Agents(Squad_ptr new_squad);
 
 	

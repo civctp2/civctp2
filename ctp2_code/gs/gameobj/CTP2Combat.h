@@ -38,9 +38,7 @@ typedef long sint32;
 typedef unsigned long uint32;
 #else
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "ConstDB.h"	// g_theConstDB
-#endif
 #include "Unit.h"
 #include "MapPoint.h"
 #include "Battle.h"
@@ -75,9 +73,7 @@ private:
 	double m_offense, m_defense,
 		m_strength, m_armor,
 		m_ranged, m_hp;
-#if !defined(ACTIVISION_ORIGINAL)
 	bool m_isVeteran;
-#endif
 	UNIT_TYPE m_type;
 	sint32 m_preferredCol;
 	sint32 m_priority;
@@ -96,19 +92,12 @@ public:
 	CombatUnit() { m_valid = false; }
 
 #ifdef TEST_APP
-  #if defined(ACTIVISION_ORIGINAL)
-	CombatUnit(double offense, double defense,
-			   double strength, double armor,
-			   double ranged, double hp,
-			   UNIT_TYPE type);
-  #else
 	CombatUnit(double offense, double defense,
 			   double strength, double armor,
 			   double ranged, double hp,
 			   UNIT_TYPE type, 
 			   bool const isVeteran = false
 			  );
-  #endif
 #else
 	CombatUnit(double offense, double defense,
 			   double strength, double armor,
@@ -116,29 +105,21 @@ public:
 			   Unit &u);
 #endif
 
-#if defined(ACTIVISION_ORIGINAL)
-	double GetOffense() { return m_offense; }
-#else
 	double GetOffense() const
 	{
 		return (m_isVeteran) 
 			   ? m_offense + (m_offense * g_theConstDB->GetVetCoef())
 			   : m_offense;
 	}
-#endif
 	double GetDefense() { return m_defense; }
 	double GetStrength() { return m_strength; }
 	double GetArmor() { return m_armor; }
-#if defined(ACTIVISION_ORIGINAL)
-	double GetRangedAttack() { return m_ranged; }
-#else
 	double GetRangedAttack() const
 	{
 		return (m_isVeteran) 
 			   ? m_ranged + (m_ranged * g_theConstDB->GetVetCoef())
 			   : m_ranged;
 	}
-#endif
 	UNIT_TYPE GetCombatType() { return m_type; }
 	sint32 GetPreferredCol() { return m_preferredCol; }
 	void SetPreferredCol(sint32 col) { m_preferredCol = col; }

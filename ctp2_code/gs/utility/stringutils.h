@@ -55,9 +55,6 @@ class SlicContext;
 
 void stringutils_HackColor(BOOL on);
 
-#if defined(ACTIVISION_ORIGINAL)
-void stringutils_Interpret(const MBCHAR *msg, SlicContext &slicObj, MBCHAR *sInterpreted);
-#else
 void stringutils_Interpret
 (
 	MBCHAR const *	msg,
@@ -65,7 +62,6 @@ void stringutils_Interpret
 	MBCHAR *		sInterpreted,
 	size_t const	a_Capacity	= k_MAX_INTERP_LEN
 );
-#endif
 
 void stringutils_SetStaticStringId(StringId & stringId, char * stringName);
 

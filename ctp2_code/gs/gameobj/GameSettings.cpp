@@ -39,21 +39,15 @@
 
 extern ProfileDB *g_theProfileDB;
 extern Player **g_player;
-#if !defined(ACTIVISION_ORIGINAL)
 extern BOOL			g_setDifficultyUponLaunch;
 extern sint32		g_difficultyToSetUponLaunch;
 extern BOOL			g_setBarbarianRiskUponLaunch;
 extern sint32		g_barbarianRiskUponLaunch;
-#endif
 
 GameSettings *g_theGameSettings = NULL;
 
 GameSettings::GameSettings()
 {
-#if defined(ACTIVISION_ORIGINAL)
-	m_difficulty = g_theProfileDB->GetDifficulty();
-	m_risk = g_theProfileDB->GetRiskLevel();
-#else
 	if (g_setDifficultyUponLaunch) 
 	{
 		m_difficulty	= g_difficultyToSetUponLaunch;
@@ -71,7 +65,6 @@ GameSettings::GameSettings()
 	{
 		m_risk			= g_theProfileDB->GetRiskLevel();
 	}
-#endif
 	m_alienEndGame = g_theProfileDB->IsAlienEndGameOn();
 	m_pollution = g_theProfileDB->IsPollutionRule();
 	m_keepScore = TRUE;
@@ -84,7 +77,6 @@ GameSettings::GameSettings(CivArchive &archive)
 {
 	Serialize(archive);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	if (g_setDifficultyUponLaunch) 
 	{
 		m_difficulty	= g_difficultyToSetUponLaunch;
@@ -94,7 +86,6 @@ GameSettings::GameSettings(CivArchive &archive)
 	{
 		m_risk			= g_barbarianRiskUponLaunch;
 	}
-#endif
 }
 
 void GameSettings::SetKeepScore( BOOL keepScore )

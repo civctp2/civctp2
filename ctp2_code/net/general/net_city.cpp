@@ -114,9 +114,7 @@ void NetCity::Packetize(uint8* buf, uint16& size)
 	PUSHLONG(cityData->m_workerFullUtilizationIndex);
 	PUSHLONG(cityData->m_workerPartialUtilizationIndex);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	PUSHDOUBLE(cityData->m_defensiveBonus);
-#endif
 	PUSHBYTE((uint8)cityData->m_founder);
 
 	PacketizeResources(cityData->m_collectingResources, buf, size);
@@ -243,9 +241,7 @@ void NetCity::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		PLCHK(cityData->m_workerFullUtilizationIndex);
 		PLCHK(cityData->m_workerPartialUtilizationIndex);
 
-#if !defined(ACTIVISION_ORIGINAL)
 		PULLDOUBLE(cityData->m_defensiveBonus);
-#endif
 		PULLBYTE(cityData->m_founder);
 
 		UnpacketizeResources(cityData->m_collectingResources, buf, pos);

@@ -42,7 +42,6 @@
 
 #if defined(_MSC_VER)
 #pragma once
-#else
 #endif
 
 #ifndef ___BMH_DOMESTIC_CONTROL_PANEL_HEADER
@@ -59,9 +58,7 @@ public:
 	
 	DomesticControlPanel(MBCHAR *ldlBlock);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	void Blank();
-#endif
 	
 	void Update();
 

@@ -46,7 +46,6 @@ enum WORLD_DIRECTION;
 #define _SMALL_MAPPOINTS		(1)
 
 struct MapPointData { 
-#if !defined(ACTIVISION_ORIGINAL)
 #if defined(_SMALL_MAPPOINTS)
 	MapPointData(sint16 const a_X = 0, sint16 const a_Y = 0)
 	:	x(a_X),
@@ -63,7 +62,6 @@ struct MapPointData {
 
 	sint16 z;
 #endif
-#endif	// ACTIVISION_ORIGINAL
 
 	sint16 x, y;
 
@@ -177,9 +175,6 @@ public:
 
 	
 	
-#if defined(ACTIVISION_ORIGINAL)
-	MapPoint() {x=y=0;}
-#else
 	MapPoint()
 	:	MapPointData()
 	{ };
@@ -187,7 +182,6 @@ public:
 	explicit MapPoint(MapPointData const & a_Data)
 	: MapPointData(a_Data)
 	{ };
-#endif
 
 
 #ifdef _SMALL_MAPPOINTS
@@ -265,7 +259,6 @@ public:
 
 };
 
-#if !defined(ACTIVISION_ORIGINAL)
 class OrthogonalPoint
 {
 public:
@@ -290,7 +283,6 @@ private:
 
 	MapPoint			m_point;	// point in XY coordinates
 };
-#endif	// ACTIVISION_ORIGINAL
 
 uint32 MapPoint_MapPoint_GetVersion(void) ;
 #endif

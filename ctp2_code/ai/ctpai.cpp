@@ -126,10 +126,8 @@ enum READINESS_LEVEL;
 #include "SettleMap.h"
 #include "CtpAiDebug.h"
 #include "TurnCnt.h"
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to access the ConstDB
 #include "ConstDB.h"
-#endif	// ACTIVISION_ORIGINAL
 
 extern TurnCount *g_turn;
 
@@ -149,7 +147,6 @@ sint32 CtpAi::sm_goalDefendIndex = -1;
 sint32 CtpAi::sm_goalSeigeIndex = -1;
 sint32 CtpAi::sm_endgameWorldUnionIndex = -1;
 
-#if !defined(ACTIVISION_ORIGINAL)
 
 namespace
 {
@@ -162,7 +159,6 @@ namespace
 
 } // namespace
 
-#endif	// ACTIVISION_ORIGINAL
 
 STDEHANDLER(CtpAi_CaptureCityEvent)
 {
@@ -614,29 +610,6 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 		
 		for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 		{
-#if defined(ACTIVISION_ORIGINAL)			
-			if (( g_theGoalDB->Get(goal_type)->GetTargetTypeAttackUnit() == false ) &&
-				( g_theGoalDB->Get(goal_type)->GetTargetTypeSpecialUnit() == false ))
-				continue;
-
-			
-			if ( g_theGoalDB->Get(goal_type)->GetTargetOwnerSelf() &&
-				 foreignerId != playerId )
-				 continue;
-			
-			else if ( !g_theGoalDB->Get(goal_type)->GetTargetOwnerSelf() &&
-					  foreignerId == playerId )
-				 continue;
-
-			goal_ptr = new CTPGoal;
-			goal_ptr->Set_Type(goal_type);
-			goal_ptr->Set_Player_Index(foreignerId);
-			goal_ptr->Set_Target_Army(army);
-
-			
-			
-			Scheduler::GetScheduler(foreignerId).Add_New_Goal(goal_ptr);
-#else
 			// Speed-up only, no functional change.
 			GoalRecord const *	goal	= g_theGoalDB->Get(goal_type);
 
@@ -652,7 +625,6 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 			
 				Scheduler::GetScheduler(foreignerId).Add_New_Goal(goal_ptr);
 			}
-#endif // ACTIVISION_ORIGINAL
 		}
 	}
 
@@ -910,12 +882,8 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	if (g_theGameSettings->GetDifficulty() == (LEVELS_OF_DIFFICULTY - 1))
 		diff_cycles = 2;
 
-#if defined(ACTIVISION_ORIGINAL)
-	if ( cycle < Scheduler::s_max_match_list_cycles + diff_cycles)
-#else
 	// Modified by Martin Gühmann so that this can be exposed to const.txt
 	if ( cycle < g_theConstDB->GetMaxMatchListCycles() + diff_cycles)
-#endif
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
 								   GEA_Player, playerId,
@@ -1176,14 +1144,9 @@ void CtpAi::Cleanup()
 		
 		Governor::GetGovernor(player).Initialize();
 		
-#if defined(ACTIVISION_ORIGINAL)	// have to do this only once
-		Diplomat::CleanupAll();
-#endif
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)
 	Diplomat::CleanupAll();
-#endif
 }
 
 
@@ -1385,9 +1348,6 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	
 	Governor::GetGovernor(deadPlayerId).Initialize();
 
-#if defined(ACTIVISION_ORIGINAL)	// moved down as Cleanup	
-	Diplomat::GetDiplomat(deadPlayerId).Initialize();
-#endif
 
 	for (PLAYER_INDEX player=0; player < s_maxPlayers; player++)
 	{
@@ -1398,9 +1358,7 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	
 	AgreementMatrix::s_agreements.ClearAgreementsInvolving(deadPlayerId);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	Diplomat::GetDiplomat(deadPlayerId).Cleanup();
-#endif
 	
 	if (deadPlayerId + 1 >= s_maxPlayers)
 		Resize();
@@ -1551,12 +1509,8 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
 
     // update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
-#if defined (ACTIVISION_ORIGINAL)
-	if (round % 5 == 0)
-#else
 	// Road computation round now a constant 
 	if (round % PERIOD_COMPUTE_ROADS == 0)
-#endif
 	{
 		
 		t1 = GetTickCount();
@@ -1591,12 +1545,8 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	{
 		
 // update : Place Tile Improvement every turn instead of every 5 turns (Calvitix)
-#if defined (ACTIVISION_ORIGINAL)
-		if (round % 5 == 0)
-#else
 	// Tile improment placement round now a constant
 		if (round % PERIOD_COMPUTE_TILE_IMPROVEMENTS == 0)
-#endif
 		{
 			t1 = GetTickCount();
 			DPRINTF(k_DBG_AI, ("\n\n"));
@@ -1695,7 +1645,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	}
 }
 
-#if !defined (ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : MoveOutofCityTransportUnits
@@ -1851,7 +1800,6 @@ void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
 	} // for i
 }
 
-#endif //ACTIVISION_ORIGINAL
 
 void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 {
@@ -1962,7 +1910,7 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 	{
 		
    	   CtpAi::MakeRoomForNewUnits(player);
-#if 0 && !defined(ACTIVISION_ORIGINAL)
+#if 0
 	   // No idea if this should be done like this, 
 	   // transport can also move out sleeping units
        //to execute the new action :
@@ -2144,12 +2092,8 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 
 	CTPGoal_ptr goal_ptr;
 
-#if defined (ACTIVISION_ORIGINAL)
-	sint16 explore_res = 5;
-#else
 //Added by Martin Gühmann explore resolution is now constant
     sint16 explore_res = EXPLORE_RESOLUTION;
-#endif
 	GOAL_TYPE goal_type;
 	const StrategyRecord::GoalElement *goal_element_ptr;
 	sint16 goal_element;
@@ -2167,13 +2111,8 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 
 //Add goals every turn (and not just when there isn't anymore (if one goal remain and isn't satisfied,
 // it can freeze all the goals of this type) - Calvitix
-#if defined (ACTIVISION_ORIGINAL)
-			if (scheduler.CountGoalsOfType(goal_type) > 0)
-				continue;
-#else
 			if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
 				continue;
-#endif //ACTIVISION_ORIGINAL
 			
 			
 			if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
@@ -2325,13 +2264,8 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 
             //Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
             // it can freeze all the goals of this type) - Calvitix
-#if defined (ACTIVISION_ORIGINAL)
-			if (scheduler.CountGoalsOfType(goal_type) > 0)
-				continue;
-#else
 			if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
 				continue;					
-#endif //ACTIVISION_ORIGINAL
 
 			
 			if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)

@@ -70,18 +70,6 @@ const MBCHAR *glutil_LoadText(const char *filename, SlicContext &so)
 	
 	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 
-#if defined(ACTIVISION_ORIGINAL)
-    if (text == NULL) {
-		delete [] lower_case_filename;
-        return(NULL);
-    }
-
-	static MBCHAR interpreted[k_MAX_GL_ENTRY];
-	stringutils_Interpret(text, so, interpreted);
-	delete [] lower_case_filename;
-
-	return interpreted;
-#else
 	delete [] lower_case_filename;
 
     if (text) 
@@ -94,5 +82,4 @@ const MBCHAR *glutil_LoadText(const char *filename, SlicContext &so)
 	{
 		return NULL;
 	}
-#endif
 }

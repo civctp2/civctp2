@@ -38,11 +38,7 @@
 class ns_Session : public ns_Object<NETFunc::Session, ns_Session>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_Session( NETFunc::Session *session ) : ns_Object<NETFunc::Session, ns_Session>(session) {};
-#else
 	ns_Session(NETFunc::Session * session);
-#endif
 	void Update( NETFunc::Session *session );
 
 	char *m_locked;	

@@ -62,14 +62,10 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 {
 	
 	AgreementVector old_agreements(m_agreements);
-#if defined(ACTIVISION_ORIGINAL)
-	m_maxPlayers = newMaxPlayers;
-#else
 	// Just make sure that we can rely on testing against m_maxPlayers to have
 	// a valid index in g_player.
 	Assert(newMaxPlayers <= k_MAX_PLAYERS);
 	m_maxPlayers = std::min<sint16>(newMaxPlayers, k_MAX_PLAYERS);
-#endif 
 	
 	m_agreements.clear();
 	
@@ -90,20 +86,10 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 	
 	
 
-#if defined(ACTIVISION_ORIGINAL)	
-	sint16 index;
-	PLAYER_INDEX senderId;
-	PLAYER_INDEX receiverId;
-	for ( index = 0; index < old_agreements.size(); index++ )
-		{
-			senderId = old_agreements[index].senderId;
-			receiverId = old_agreements[index].receiverId;
-#else
 	for (size_t index = 0; index < old_agreements.size(); index++ )
 		{
 			PLAYER_INDEX const	senderId	= old_agreements[index].senderId;
 			PLAYER_INDEX const	receiverId	= old_agreements[index].receiverId;
-#endif
 			if (senderId > -1 && senderId < m_maxPlayers &&
 				receiverId > -1 && receiverId < m_maxPlayers &&
 				g_player[senderId] && !g_player[senderId]->IsDead() &&
@@ -118,23 +104,6 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 
 void AgreementMatrix::Load(CivArchive & archive)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	sint16 i,count;
-	ai::Agreement agreement;
-
-	
-	archive >> count;
-	m_maxPlayers = count;
-
-	
-	archive >> count;
-	m_agreements.resize(count);
-	for (i = 0; i < count; i++)
-	{
-		archive.Load((uint8 *)&agreement, sizeof(ai::Agreement));
-		m_agreements[i] = agreement;
-	}
-#else
 	archive >> m_maxPlayers;
 
 	uint16	count;
@@ -147,23 +116,11 @@ void AgreementMatrix::Load(CivArchive & archive)
 					 sizeof(ai::Agreement)
 					);
 	}
-#endif
 }
 
 
 void AgreementMatrix::Save(CivArchive & archive) const
 {
-#if defined(ACTIVISION_ORIGINAL)	
-	archive << (sint16) m_maxPlayers;
-
-	
-	archive << (sint16) m_agreements.size();
-
-	for (sint16 i = 0; i < m_agreements.size(); i++)
-	{
-		archive.Store((uint8 *) &(m_agreements[i]), sizeof(ai::Agreement));
-	}
-#else
 	archive << m_maxPlayers;
 
 	Assert(m_agreements.size() < 0x10000);	// Report when it is too large.
@@ -173,7 +130,6 @@ void AgreementMatrix::Save(CivArchive & archive) const
 	{
 		archive.Store((uint8 *) &(m_agreements[i]), sizeof(ai::Agreement));
 	}
-#endif
 }
 
 
@@ -361,19 +317,6 @@ bool AgreementMatrix::HasAgreement(const PLAYER_INDEX & sender_player,
 								   const PLAYER_INDEX & receiver_player,
 								   const PROPOSAL_TYPE type) const
 {
-#if defined(ACTIVISION_ORIGINAL)	// incorrect and insufficient checks
-	Assert(sender_player < k_MAX_PLAYERS);
-	Assert(sender_player >= 0);
-
-	if (sender_player > k_MAX_PLAYERS || sender_player <= 0)
-		return false;
-
-	Assert(receiver_player < k_MAX_PLAYERS);
-	Assert(receiver_player >= 0);
-	
-	if (receiver_player > k_MAX_PLAYERS || receiver_player <= 0)
-		return false;
-#else
 	Assert(sender_player < m_maxPlayers);
 	Assert(sender_player >= 0);
 
@@ -389,7 +332,6 @@ bool AgreementMatrix::HasAgreement(const PLAYER_INDEX & sender_player,
 	{
 		return false;
 	}
-#endif
 
 	Player *player_ptr = g_player[sender_player];
 	Assert(player_ptr != NULL);
@@ -546,11 +488,7 @@ void AgreementMatrix::SetAgreementFast(sint32 index, const ai::Agreement &agreem
 
 void AgreementMatrix::ClearAgreementsInvolving(const PLAYER_INDEX playerId)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	for (sint16 i = 0; i < m_agreements.size(); i++)
-#else
 	for (size_t i = 0; i < m_agreements.size(); i++)
-#endif
 	{
 		if ((m_agreements[i].senderId == playerId) ||
 			(m_agreements[i].receiverId == playerId))

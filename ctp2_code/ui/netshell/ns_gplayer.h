@@ -38,11 +38,7 @@
 class ns_GPlayer : public ns_Object<NETFunc::Player, ns_GPlayer>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_GPlayer( NETFunc::Player *player ) : ns_Object<NETFunc::Player, ns_GPlayer>(player) {}
-#else
 	ns_GPlayer(NETFunc::Player * player);
-#endif
 	void Update( NETFunc::Player *player );
 
 	char *m_host;

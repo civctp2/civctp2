@@ -346,13 +346,13 @@ aui_Region *aui_Region::SetWhichSeesMouse( aui_Region *region, BOOL force )
 	else
 		if ( !region || !region->IsBlind() ) m_whichSeesMouse = region;
 
-#if		FALSE
+#if FALSE
 		
-#ifdef	_DEBUG
+#ifdef _DEBUG
 		
 		
 #define STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
-#ifdef	STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
+#ifdef STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
 		StatusBar::SetText(aui_Ldl::GetBlock(GetWhichSeesMouse()));
 #endif	
 #endif	

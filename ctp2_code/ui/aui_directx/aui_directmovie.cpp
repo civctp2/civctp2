@@ -145,15 +145,7 @@ AUI_ERRCODE aui_DirectMovie::Open(
 			&MSPID_PrimaryAudio,
 			AMMSF_ADDDEFAULTRENDERER,
 			NULL );
-#if defined(ACTIVISION_ORIGINAL)
-		if ( FAILED(hr) )
-		{
-			Close();
-			return AUI_ERRCODE_LOADFAILED;
-		}
-#else
         (void) hr;  // Ignore audio failures: display movie without sound.
-#endif
 		
 		char fullPath[_MAX_PATH];
 		strcpy(fullPath, m_filename);

@@ -43,9 +43,6 @@
 
 #include "EffectSpriteGroup.h"
 #include "GoodSpriteGroup.h"
-#if defined(ACTIVISION_ORIGINAL)	// unused
-#include "SpriteList.h"
-#endif	// ACTIVISION_ORIGINAL
 #include "SpriteGroupList.h"
 
 #include "progresswindow.h"

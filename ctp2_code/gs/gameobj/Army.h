@@ -62,9 +62,7 @@ class MapPoint;
 enum CAUSE_REMOVE_ARMY;
 class Order;
 
-#if !defined(ACTIVISION_ORIGINAL)
 size_t const	MAX_UNIT_COUNT	= 100;	// TODO: check k_MAX_ARMY_SIZE
-#endif
 
 class Army : public ID
 { 
@@ -147,10 +145,6 @@ public:
 
     void GetActors(sint32 &n, UnitActor **moveActor, UnitActor *butnotthis);
 
-#if defined(ACTIVISION_ORIGINAL)
-    BOOL GetTopVisibleUnitOfMoveType(const sint32 looking_player, const uint32 move, sint32 &maxi) const;
-    Unit GetTopVisibleUnit(const sint32 looking_player) const; 
-#else
 	bool GetTopVisibleUnitOfMoveType
 	(
 		PLAYER_INDEX const	looker,
@@ -162,7 +156,6 @@ public:
 	(
 		PLAYER_INDEX const	looker
 	) const;
-#endif
     void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 
 
@@ -322,10 +315,6 @@ public:
 
     BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision);
 
-#if defined (ACTIVISION_ORIGINAL)
-    void GetCurrentHP(sint32 &n, sint32 unit_type[100], 
-        sint32 unit_hp[100]); 
-#else
 	void GetCurrentHP
 	(
 		sint32 &	n,
@@ -336,7 +325,6 @@ public:
 	bool CanTransport(void) const;
 	bool IsCivilian(void) const;
 	bool IsWounded(void) const;
-#endif
 
 	BOOL ExecutedThisTurn() const;
     void InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos);

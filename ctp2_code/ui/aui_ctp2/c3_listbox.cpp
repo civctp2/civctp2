@@ -120,11 +120,7 @@ c3_ListBox::c3_ListBox(
 	:
 	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
-#if defined(ACTIVISION_ORIGINAL)	// ambiguous with .NET
-	aui_TextBase((MBCHAR *)NULL, (uint32)0),
-#else
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
-#endif
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );

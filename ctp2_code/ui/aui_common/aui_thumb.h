@@ -82,7 +82,7 @@ public:
 protected:
 	POINT	m_grabPoint;	
 
-#if defined (_MSC_VER)	
+#if defined(_MSC_VER)	
 	virtual MouseEventCallback MouseLDragOver;
 	virtual MouseEventCallback MouseLDragAway;
 	virtual MouseEventCallback MouseLDragInside;

@@ -44,35 +44,6 @@
 #define FEAT_TRACKER_H__
 
 
-#if defined(ACTIVISION_ORIGINAL)
-
-class CivArchive;
-template <class T> class PointerList;
-class Unit;
-
-
-
-enum FEAT_EFFECT {
-	FEAT_EFFECT_NONE = -1,
-	FEAT_EFFECT_BOAT_MOVEMENT,  
-	FEAT_EFFECT_CITY_DEFENSE_BONUS,
-	FEAT_EFFECT_REDUCE_CITY_WALLS,
-	FEAT_EFFECT_INCREASE_CITY_VISION,
-	FEAT_EFFECT_INCREASE_PRODUCTION, 
-	FEAT_EFFECT_INCREASE_COMMERCE,   
-	FEAT_EFFECT_INCREASE_HAPPINESS,  
-	FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY,
-	FEAT_EFFECT_INCREASE_BOAT_VISION,
-	FEAT_EFFECT_INCREASE_SCIENCE, 
-	FEAT_EFFECT_GIVE_MAPS,
-	FEAT_EFFECT_INCREASE_HIT_POINTS,
-	FEAT_EFFECT_SCRIPTED_TURN,
-	FEAT_EFFECT_SCRIPTED_CITY,
-
-	
-	FEAT_EFFECT_MAX
-};
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -123,16 +94,11 @@ sint32 const	USE_CURRENT_ROUND			= -1;
 // Class declarations
 //----------------------------------------------------------------------------
 
-#endif	// ACTIVISION_ORIGINAL
 
 
 class Feat {
   public:
-#if defined(ACTIVISION_ORIGINAL)
-	Feat(sint32 type, sint32 player);
-#else
 	Feat(sint32 type, sint32 player, sint32 round = USE_CURRENT_ROUND);
-#endif
 
 	Feat(CivArchive &archive);
 	~Feat();
@@ -152,9 +118,7 @@ class Feat {
 
 class FeatTracker {
 
-#if !defined(ACTIVISION_ORIGINAL)
 	friend class NetFeatTracker;
-#endif
 
   public:
 	FeatTracker();
@@ -167,11 +131,7 @@ class FeatTracker {
 
 	void AddFeatToEffectLists(Feat *feat);
 	void RemoveFeatFromEffectLists(Feat *feat);
-#if defined(ACTIVISION_ORIGINAL)
-	void AddFeat(sint32 type, sint32 player);
-#else
 	void AddFeat(sint32 type, sint32 player, sint32 round = USE_CURRENT_ROUND);
-#endif
 	void AddFeat(const MBCHAR *name, sint32 player);
 
 	sint32 GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal);

@@ -51,7 +51,6 @@
 #define MAX(x,y) (((x) < (y)) ? (y) : (x))
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
 
-#if !defined(ACTIVISION_ORIGINAL)
 
 //----------------------------------------------------------------------------
 //
@@ -82,6 +81,5 @@ inline int AsPercentage(double const a_Factor)
 	return static_cast<int>((a_Factor * 100.0) + 0.5);
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 #endif

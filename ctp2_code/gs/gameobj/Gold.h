@@ -48,13 +48,6 @@
 #ifndef __GOLD_H__
 #define __GOLD_H__ 1
 
-#if defined(ACTIVISION_ORIGINAL)
-class CivArchive;
-
-#define k_GOLD_VERSION_MAJOR	0									
-#define k_GOLD_VERSION_MINOR	0
-									
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -81,7 +74,6 @@ class	Gold;
 // Class declarations
 //----------------------------------------------------------------------------
 
-#endif	// ACTIVISION_ORIGINAL
 
 class Gold { 
 
@@ -100,22 +92,12 @@ class Gold {
 
 	double m_consider_for_science; 
 	
-#if defined(ACTIVISION_ORIGINAL)
-
-	sint32 m_owner;
-
-public:
-	Gold(sint32 owner); 
-	Gold(void) ;
-
-#else	// ACTIVISION_ORIGINAL
 
     PLAYER_INDEX	m_owner;
 
 public:
 	Gold(PLAYER_INDEX const owner = PLAYER_INDEX_INVALID);
 
-#endif	// ACTIVISION_ORIGINAL
 
 	void AddGold(const Gold &amount) {
 		AddGold(amount.GetLevel()) ;
@@ -126,16 +108,12 @@ public:
     void AddIncome(const sint32 delta); 
     void SubIncome(const sint32 delta); 
     sint32  GetIncome() const { return m_income_this_turn; } 
-#if defined(ACTIVISION_ORIGINAL)
-    sint32 DeltaThisTurn() const { return(m_level - m_level_last_turn); }
-#else
 	sint32 DeltaThisTurn() const
 	{
 		// Do not count the rushbuy costs (incidental & under full control of
 		// the player) when determining whether the economy is sound.
 		return m_level + m_lost_to_rushbuy - m_level_last_turn;
 	};
-#endif
     BOOL BankruptcyImminent() const;
 
 	void SubGold(const Gold &amount) {
@@ -146,14 +124,10 @@ public:
 	sint32 GetLevel() const { return m_level; }; 
 	
 	void SetLevel(sint32 level) { m_level = level;};
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 GetOwner() { return m_owner; }
-#else
 	PLAYER_INDEX	GetOwner() const
 	{
 		return m_owner;
 	};
-#endif
 
 	
 	BOOL GiveGold(const Gold &amount) {

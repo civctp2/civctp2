@@ -90,14 +90,12 @@ public:
 	SlicStructDescription(char *name, SLIC_BUILTIN type);
 	~SlicStructDescription();
 
-#if !defined(ACTIVISION_ORIGINAL)
 	void AddAccessor(char * name, SlicStructMemberData * symbol);
 
 	SlicStructMemberData * GetMemberSymbol(sint32 index) const;
 	sint32 GetMemberSymbolIndex(SlicStructMemberData * symbol) const;
 	size_t GetNumAccessors(void) const 
 		{ return m_accessors.size(); };
-#endif
 
 	void AddMember(SlicStructDescription::Member *member);
 	void AddMember(char *name, SLIC_SYM type);
@@ -123,9 +121,7 @@ private:
 	SLIC_BUILTIN m_type;
 	SlicStructDescription::Member **m_members;
 	sint32 m_numMembers;
-#if !defined(ACTIVISION_ORIGINAL)
 	std::vector<Member *>			m_accessors;
-#endif
 };
 
 
@@ -138,11 +134,6 @@ protected:
 	SlicStructInstance *m_parent;
 
 public:
-#if defined(ACTIVISION_ORIGINAL)
-	SlicStructMemberData() {
-		m_parent = NULL;
-	}
-#endif
 
 	SlicStructMemberData(SlicStructInstance *parent, SlicSymbolData *data) :
 		SlicSymbolData(data)
@@ -150,13 +141,6 @@ public:
 		m_parent = parent;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	SlicStructMemberData(SlicStructInstance *parent, SLIC_SYM type) :
-		SlicSymbolData(type)
-	{
-		m_parent = parent;
-	}
-#else
 	SlicStructMemberData
 	(
 		SlicStructInstance *	parent	= NULL, 
@@ -165,7 +149,6 @@ public:
 	:	SlicSymbolData(type),
 		m_parent(parent)
 	{ };
-#endif
 
 	~SlicStructMemberData() {}
 
@@ -207,9 +190,7 @@ private:
 	SlicSymbolData *m_dataSymbol;
 	sint32 m_dataSymbolIndex;
 	bool m_createdData;
-#if !defined(ACTIVISION_ORIGINAL)
 	size_t				m_validIndexCount;	// members + accessors
-#endif
 };
 
 #endif

@@ -72,11 +72,7 @@ protected:
 class ns_AIPlayerSetup : public ns_Object<NETFunc::AIPlayer, ns_AIPlayerSetup>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_AIPlayerSetup( NETFunc::AIPlayer *aiplayer ) : ns_Object<NETFunc::AIPlayer, ns_AIPlayerSetup>(aiplayer) {};
-#else
 	ns_AIPlayerSetup(NETFunc::AIPlayer * player);
-#endif
 	void Update( NETFunc::AIPlayer *aiplayer );
 
 	char *m_name;

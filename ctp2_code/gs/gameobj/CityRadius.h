@@ -54,9 +54,6 @@ public:
 	virtual void CityRadiusFunc(const MapPoint &pos) = 0;
 };
 
-#if defined(ACTIVISION_ORIGINAL)	// incorrect, functionality to MapPoint
-BOOL WrapPoint(const MapPoint &start, const MapPoint &opos, MapPoint &pos);
-#endif
 
 
 

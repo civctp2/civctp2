@@ -42,9 +42,7 @@
 #include "ctp2_Window.h"
 #include "ctp2_Switch.h"
 #include "RadarMap.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "gameinit.h"		// g_startHotseatGame
-#endif
 
 ctp2_Window *g_radarWindow = NULL;
 
@@ -315,13 +313,11 @@ sint32 radarwindow_Initialize()
 
 	g_c3ui->AddWindow(g_radarWindow);
 
-#if !defined(ACTIVISION_ORIGINAL)	
 	if (g_startHotseatGame)
 	{
 		// Do not display map information before the user has pressed Ready.
 		g_radarWindow->Hide();
 	}
-#endif
 
 	return(0);
 }

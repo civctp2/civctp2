@@ -357,11 +357,7 @@ void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 				}
 				break;
 			case 4:
-#if defined(ACTIVISION_ORIGINAL)
-				open_GreatLibrary( 0 );
-#else
 				open_GreatLibrary();
-#endif
 				break;
 			case 5:
 				if ( g_statsWindow->CheckDiplomacy() ) {

@@ -36,10 +36,8 @@
 
 struct CriticalMessagesData
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	CriticalMessagesData();
 	virtual ~CriticalMessagesData();
-#endif
 
 	MBCHAR *m_messageName;
 	bool m_messageEnabled;

@@ -49,9 +49,7 @@
 #ifndef __CTPDATABASE_H__
 #define __CTPDATABASE_H__
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include <vector>
-#endif
 
 class DBLexer;
 enum C3DIR;
@@ -65,7 +63,6 @@ enum DBPARSE_ERROR {
 	DBPARSE_OTHER,
 };
 
-#if !defined(ACTIVISION_ORIGINAL)	// GovMod
 class GovernmentModifiedRecordNode
 {
 public:
@@ -81,7 +78,6 @@ public:
 	sint32 m_governmentModified;
 	sint32 m_modifiedRecord;
 };
-#endif
 
 
 template <class T> class CTPDatabase
@@ -91,10 +87,8 @@ protected:
 	sint32 m_numRecords;
 	sint32 m_allocatedSize;
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	PointerList<GovernmentModifiedRecordNode> **m_modifiedList;
 	std::vector<T *>	m_modifiedRecords;
-#endif
 
 	void Grow();
 
@@ -115,9 +109,6 @@ public:
 	
 	inline const T *Get(sint32 index)
 	{
-#if defined(ACTIVISION_ORIGINAL) // Do not report missing sounds all the time.
-		Assert(index >= 0);
-#endif
 		Assert(index < m_numRecords);
 		if((index < 0) || (index >= m_numRecords))
 			return NULL;
@@ -126,10 +117,8 @@ public:
 	}
 
 	T *Access(sint32 index);
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	T *Access(sint32 index, sint32 govIndex);
 	const T *Get(sint32 index, sint32 govIndex);
-#endif
 
 	sint32 GetName(sint32 index);
 	const char *GetNameStr(sint32 index);

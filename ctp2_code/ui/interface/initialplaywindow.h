@@ -70,13 +70,11 @@ void
 initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
 void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
-#if !defined(ACTIVISION_ORIGINAL)
 // Code for new buttons taken from spwindow.h and altered
 void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-#endif
 
 C3Window *GetInitialPlayScreen();
 
@@ -102,13 +100,11 @@ private:
 					*m_credits,
 					*m_quit;
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Code for new buttons taken from spwindow.h and altered
 	ctp2_Button	*m_tutorial,
 				*m_newgame,
 				*m_loadgame,
 				*m_options;
-#endif
 
 	c3_Button	   	*m_load,
 					*m_continue,

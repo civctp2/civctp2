@@ -153,11 +153,6 @@
 #include "messagewin.h"
 #include "spnewgamewindow.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-// No longer need this include since the SP screen has been removed
-// from the interface
-#include "spwindow.h"
-#endif
 
 #include "scenariowindow.h"
 #include "initialplaywindow.h"
@@ -179,7 +174,7 @@
 
 #include <locale.h>
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 #include <SDL.h>
 #include <SDL_mixer.h>
 #endif
@@ -1298,7 +1293,7 @@ void AtExitProc(void)
 {
 	printf("At exit.\n");
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 # if 0
     // What about this?
     Mix_CloseAudio();
@@ -1802,9 +1797,6 @@ void main_InitializeLogs(void)
 	time_t		ltime;
 	struct tm	*now;
 
-#if defined(ACTIVISION_ORIGINAL)
-	atexit(AtExitProc);
-#endif
 
 	
 	
@@ -1933,7 +1925,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 {
     // This stuff will have to be moved into a new int main(int argc, char **argv)
     // once graphics are also ported to SDL
-#if !defined(ACTIVISION_ORIGINAL)
 # if defined(WIN32) || defined(_WINDOWS)
     // Make sure old versions of DDHELP.EXE won't keep files open
     HINSTANCE handle = LoadLibrary("DDRAW.DLL");
@@ -1944,7 +1935,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 # endif // WIN32 || _WINDOWS
 
    	atexit(AtExitProc);
-#endif // !ACTIVISION_ORIGINAL
 
 	__try {
 		return CivWinMain(hInstance, hPrevInstance, szCmdLine, iCmdShow);

@@ -127,46 +127,6 @@ void SlicSymbolData::Init()
 	m_debugInfo = NULL;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-
-SlicSymbolData::~SlicSymbolData()
-{
-	if(GetType() == SLIC_SYM_REGION) {
-		if(m_val.m_region) {
-			delete m_val.m_region;
-			m_val.m_region = NULL;
-		}
-	}
-
-	if(GetType() == SLIC_SYM_COMPLEX_REGION) {
-		while(m_val.m_complexRegion) {
-			PSlicComplexRegion *next = m_val.m_complexRegion->next;
-			delete m_val.m_complexRegion;
-			m_val.m_complexRegion = next;
-		}
-	}
-
-	if(GetType() == SLIC_SYM_STRUCT) {
-		if(m_val.m_struct) {
-			delete m_val.m_struct;
-			m_val.m_struct = NULL;
-		}
-	}
-
-	if(GetType() == SLIC_SYM_ARRAY) {
-		if(m_val.m_array) {
-			delete m_val.m_array;
-			m_val.m_array = NULL;
-		}
-	}
-
-	if(m_debugInfo) {
-		delete m_debugInfo;
-		m_debugInfo = NULL;
-	}
-}
-#else //ACTIVISION_ORIGINAL
 //Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
@@ -214,7 +174,6 @@ SlicSymbolData::~SlicSymbolData()
 
 	delete m_debugInfo;
 }
-#endif //ACTIVISION_ORIGINAL
 
 BOOL SlicSymbolData::GetIntValue(sint32 &value) const
 {
@@ -381,7 +340,6 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 			}
 			return FALSE;
 			break;
-#if !defined(ACTIVISION_ORIGINAL)
 #ifdef SLIC_DOUBLES
 		case SLIC_SYM_DVAR:
 			// Modelled after SLIC_SYM_IVAR, untested.
@@ -416,7 +374,6 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 		case SLIC_SYM_UFUNC:
 		case SLIC_SYM_POP:
 		case SLIC_SYM_PATH:
-#endif	// ACTIVISION_ORIGINAL
 		default:
 			Assert(FALSE);
 			return FALSE;
@@ -671,10 +628,8 @@ BOOL SlicSymbolData::GetText(MBCHAR *text, sint32 maxLen) const
 			break;
 		default:
 			sprintf(text, "??? (Symbol type %d)", GetType());
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann to figure out whether there is a string for a given slic symbol.
 			return FALSE;
-#endif
 			break;
 	}
 

@@ -85,35 +85,6 @@ LineGraph::LineGraph(AUI_ERRCODE *retval,
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-LineGraph::~LineGraph()
-{
-	if ( m_xAxisName ) delete m_xAxisName;
-	m_xAxisName = NULL;
-
-	if ( m_yAxisName ) delete m_yAxisName;
-	m_yAxisName = NULL;
-
-	if (m_surface) delete m_surface;
-	m_surface = NULL;
-	
-	if (m_data) delete m_data;
-	m_data = NULL;
-
-	sint32		i;
-
-	if (m_lineData) {
-		for ( i = 0;i < m_numLines*3;i++ ) {
-			delete m_lineData[i];
-			m_lineData[i] = NULL;
-		}
-		delete m_lineData;
-		m_lineData = NULL;
-
-		m_numLines = 0;
-	}
-}
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : LineGraph::~LineGraph
@@ -146,7 +117,6 @@ LineGraph::~LineGraph()
 		delete [] m_lineData;
 	}
 }
-#endif
 
 void LineGraph::InitCommonLdl(MBCHAR *ldlBlock)
 {
@@ -256,11 +226,7 @@ void LineGraph::LabelAxes(void)
 		if (m_enablePrecision) sprintf(s, "%#.3f", m_xmax);
 		else sprintf(s, "%d", (sint32)m_xmax);
 
-#if defined(ACTIVISION_ORIGINAL)
-		primitives_DrawText(m_surface, max(0, m_graphRect.right-35), m_graphRect.bottom + (m_events?20:0),
-#else
 		primitives_DrawText(m_surface, max(0L, m_graphRect.right-35L), m_graphRect.bottom + (m_events?20:0),
-#endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 
@@ -278,21 +244,13 @@ void LineGraph::LabelAxes(void)
 		if (m_enablePrecision) sprintf(s, "%#.1f", m_ymin);
 		else sprintf(s, "%d", (sint32)m_ymin);
 
-#if defined(ACTIVISION_ORIGINAL)
-		primitives_DrawText(m_surface, max(0, m_graphRect.left-45), max(0, m_graphRect.bottom-15),
-#else
 		primitives_DrawText(m_surface, max(0L, m_graphRect.left-45L), max(0L, m_graphRect.bottom-15L),
-#endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 
 		if (m_enablePrecision) sprintf(s, "%#.1f", m_ymax);
 		else sprintf(s, "%d", (sint32)m_ymax);
 	
-#if defined(ACTIVISION_ORIGINAL)
-		primitives_DrawText(m_surface, max(0, m_graphRect.left-45), m_graphRect.top,
-#else
 		primitives_DrawText(m_surface, max(0L, m_graphRect.left-45L), m_graphRect.top,
-#endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 }
@@ -407,11 +365,7 @@ void LineGraph::DrawLines(int eventsOfset)
 			{
 				first=FALSE;
 				xpos=m_graphRect.left+(curData->m_turn-1)*width/m_numSamples;
-#if defined(ACTIVISION_ORIGINAL)
-				ypos=(((m_data[curData->m_playerNum-1].bottomArray[curData->m_turn-1] + 
-#else
 				ypos=((sint32)((m_data[curData->m_playerNum-1].bottomArray[curData->m_turn-1] + 
-#endif
 					m_data[curData->m_playerNum-1].topArray[curData->m_turn-1])/2.0)*height)+
 					m_graphRect.top;
 				primitives_DrawLine16(m_surface, xpos-1, ypos-1, xpos+1, ypos+1, g_colorSet->GetColor((COLOR)(m_data[curData->m_playerNum].color+1)));
@@ -450,25 +404,6 @@ void LineGraph::SetLineData(sint32 numLines, sint32 numSamples, double **data, s
 	sint32		i,j;
 	double		sum,curYPos;
 
-#if defined(ACTIVISION_ORIGINAL)	// wrong delete used, 2/3 of m_lineData not deleted.
-	if (m_lineData) {
-		for ( i = 0;i < m_numLines;i++ ) {
-			delete m_lineData[i];
-			m_lineData[i] = NULL;
-		}
-		delete m_lineData;
-		m_lineData = NULL;
-
-		m_numLines = 0;
-	}
-
-	if (m_data) delete m_data;
-	m_data = NULL;
-
-
-	m_lineData = new double*[numLines*3];
-	m_data = new LineGraphData[numLines];
-#else
 	if (m_lineData) 
 	{
 		for (i = 0; i < (m_numLines * 3); i++) 
@@ -482,7 +417,6 @@ void LineGraph::SetLineData(sint32 numLines, sint32 numSamples, double **data, s
 
 	delete [] m_data;
 	m_data = new LineGraphData[numLines];
-#endif
 
 	sint32 defaultColor = (sint32)COLOR_RED;
 
@@ -522,9 +456,6 @@ void LineGraph::SetLineData(sint32 numLines, sint32 numSamples, double **data, s
 			}
 		}
 	}
-#if defined(ACTIVISION_ORIGINAL)	// moved up
-	m_numLines = numLines;
-#endif
 	m_numSamples = numSamples;
 }
 

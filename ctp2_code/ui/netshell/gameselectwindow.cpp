@@ -76,10 +76,8 @@
 
 extern LoadSaveWindow *g_loadsaveWindow;
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "ProfileDB.h"
 #include "AgeRecord.h"
-#endif
 
 
 GameSelectWindow *g_gameSelectWindow = NULL;
@@ -819,7 +817,6 @@ void StartSelectingWindow::NewButtonAction::Execute(
 		}
 
 		s->SetName( name );
-#if !defined(ACTIVISION_ORIGINAL)
 		//Special rules
 		s->SetBloodlust(!g_theProfileDB->IsAlienEndGameOn());
 		s->SetPollution(g_theProfileDB->IsPollutionRule()); 
@@ -841,7 +838,6 @@ void StartSelectingWindow::NewButtonAction::Execute(
 		//Level of difficuilties
 		s->SetDifficulty1(g_theProfileDB->GetDifficulty());
 		s->SetDifficulty2(g_theProfileDB->GetRiskLevel());
-#endif
 		listbox->InsertItem( s );
 		listbox->SelectItem(listbox->FindItem(s));
 

@@ -38,11 +38,7 @@
 class ns_Server : public ns_Object<NETFunc::Server, ns_Server>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)
-	ns_Server( NETFunc::Server *server ) : ns_Object<NETFunc::Server, ns_Server>(server) {};
-#else
 	ns_Server(NETFunc::Server * server);
-#endif
 	void Update( NETFunc::Server *server );
 
 	char *m_name;

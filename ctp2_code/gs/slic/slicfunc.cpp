@@ -139,9 +139,7 @@
 #include "radarwindow.h"
 #include "ControlPanelWindow.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "Pollution.h"
-#endif
 
 #include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
@@ -165,9 +163,7 @@ extern GreatLibrary *g_greatLibrary;
 extern AttractWindow *g_attractWindow;
 extern SoundManager *g_soundManager;
 extern CivilisationDatabase *g_theCivilisationDB;
-#if !defined(ACTIVISION_ORIGINAL)
 extern Pollution *		g_thePollution;
-#endif
 
 #define k_MESSAGE_TYPE_HASH_SIZE 16
 
@@ -599,32 +595,6 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	res = args->GetPos(0, point);
-#if defined(ACTIVISION_ORIGINAL)
-	if(!res) {
-		
-#if 0
-		SlicSymbolData *sym = args->m_argValue[0].m_symbol;
-		if(args->m_argType[0] == SA_TYPE_INT_VAR) {
-			if(sym->GetType() == SLIC_SYM_UNIT ||
-			   sym->GetType() == SLIC_SYM_CITY) {
-				return SFN_ERROR_OK;
-			}
-		} else if(args->m_argType[0] == SA_TYPE_BUILTIN) {
-			return SFN_ERROR_TYPE_BUILTIN;
-		}
-#endif
-		res = args->GetUnit(0, unit);
-		if(!res) {
-			res = args->GetCity(0, unit);
-			if(!res) {
-				return SFN_ERROR_TYPE_BUILTIN;
-			}
-		}
-		if(unit.IsValid()) {
-			point = unit.RetPos();
-		}
-	}
-#else
 	// Attempt to find a city or army always, so unit will have been filled 
 	// when constructing the SlicEyePoint later.
 	if (args->GetCity(0, unit) || args->GetUnit(0, unit))
@@ -640,7 +610,6 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 	{
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
-#endif // ACTIVISION_ORIGINAL	
 	
 
 	MBCHAR text[k_MAX_MSG_LEN];
@@ -741,16 +710,6 @@ SFN_ERROR Slic_HasAdvance::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-#if defined(ACTIVISION_ORIGINAL)
-	if(args->m_argType[1] != SA_TYPE_STRING)
-		return SFN_ERROR_TYPE_ARGS;
-
-	sint32 adv;
-	for(adv = 0; adv < g_theAdvanceDB->NumRecords(); adv++) {
-		if(g_theAdvanceDB->Get(adv)->m_name == args->m_argValue[1].m_int)
-			break;
-	}
-#else
 	//Added by Martin Gühmann to overload this function to allow also advance
 	//indices directly instead of advance strings only.
 	sint32 adv;
@@ -763,7 +722,6 @@ SFN_ERROR Slic_HasAdvance::Call(SlicArgList *args)
 	else if(!args->GetInt(1, adv))
 		return SFN_ERROR_TYPE_ARGS;
 
-#endif
 	if(adv >= g_theAdvanceDB->NumRecords()) {
 		return SFN_ERROR_NOT_ADVANCE;
 	}
@@ -1609,19 +1567,11 @@ SFN_ERROR Slic_MessageType::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	const char *tname = args->m_argValue[0].m_symbol->GetName();
-#if defined(ACTIVISION_ORIGINAL)
-	char fullselectedname[1024];
-	sprintf(fullselectedname, "%s_SELECTED", fullselectedname);
-
-	if(!tname)
-		return SFN_ERROR_NOT_MESSAGE_TYPE;
-#else
 	if (!tname)
 		return SFN_ERROR_NOT_MESSAGE_TYPE;
 
 	char fullselectedname[1024];
 	sprintf(fullselectedname, "%s_SELECTED", tname);
-#endif
 
 	sint32 msgTypeIndex = g_theMessageIconFileDB->FindTypeIndex(tname);
 	if(msgTypeIndex < 0) {
@@ -2384,13 +2334,8 @@ SFN_ERROR Slic_LibraryUnit::Call(SlicArgList *args)
 		}
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(DATABASE_UNITS, FALSE);
-	if(g_greatLibrary) {
-#else
 	if (open_GreatLibrary())
 	{
-#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_UNITS);
 	}
 	return SFN_ERROR_OK;
@@ -2410,13 +2355,8 @@ SFN_ERROR Slic_LibraryBuilding::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(DATABASE_BUILDINGS, FALSE);
-	if(g_greatLibrary) {
-#else
 	if (open_GreatLibrary())
 	{
-#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_BUILDINGS);
 	}
 	return SFN_ERROR_OK;
@@ -2436,13 +2376,8 @@ SFN_ERROR Slic_LibraryWonder::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(DATABASE_WONDERS, FALSE);
-	if(g_greatLibrary) {
-#else
 	if (open_GreatLibrary())
 	{
-#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_WONDERS);
 	}
 	return SFN_ERROR_OK;
@@ -2462,13 +2397,8 @@ SFN_ERROR Slic_LibraryAdvance::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(DATABASE_ADVANCES, FALSE);
-	if(g_greatLibrary) {
-#else
 	if (open_GreatLibrary())
 	{
-#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_ADVANCES);
 	}
 	return SFN_ERROR_OK;
@@ -2488,13 +2418,8 @@ SFN_ERROR Slic_LibraryTerrain::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(DATABASE_TERRAIN, FALSE);
-	if(g_greatLibrary) {
-#else
 	if (open_GreatLibrary())
 	{
-#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_TERRAIN);
 	}
 	return SFN_ERROR_OK;
@@ -2514,13 +2439,8 @@ SFN_ERROR Slic_LibraryConcept::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(DATABASE_CONCEPTS, FALSE);
-	if(g_greatLibrary) {
-#else
 	if (open_GreatLibrary())
 	{
-#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_CONCEPTS);
 	}
 	return SFN_ERROR_OK;
@@ -2540,13 +2460,8 @@ SFN_ERROR Slic_LibraryGovernment::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(DATABASE_GOVERNMENTS, FALSE);
-	if(g_greatLibrary) {
-#else
 	if (open_GreatLibrary())
 	{
-#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_GOVERNMENTS);
 	}
 	return SFN_ERROR_OK;
@@ -2566,13 +2481,8 @@ SFN_ERROR Slic_LibraryTileImprovement::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(DATABASE_TILE_IMPROVEMENTS, FALSE);
-	if(g_greatLibrary) {
-#else
 	if (open_GreatLibrary())
 	{
-#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_TILE_IMPROVEMENTS);
 	}
 	return SFN_ERROR_OK;
@@ -3318,11 +3228,9 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 	}
 
 	const UnitRecord *rec = g_theUnitDB->Get(type);
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann
 // Check if the function was called with a valid unit type.
 	if(!rec) return SFN_ERROR_UNKNOWN_UNIT_TYPE;
-#endif
 
 	sint32 x, y;
 	BOOL found = FALSE;
@@ -4027,27 +3935,6 @@ SFN_ERROR Slic_GetRandomNeighbor::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 {
-#if defined(ACTIVISION_ORIGINAL)	
-	if(args->m_numArgs != 2)
-		return SFN_ERROR_NUM_ARGS;
-
-	sint32 player;
-	if(!args->GetInt(0, player))
-		return SFN_ERROR_TYPE_ARGS;
-
-	sint32 adv;
-	if(!args->GetInt(1, adv)) {
-		return SFN_ERROR_TYPE_ARGS;
-	}
-
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GrantAdvance,
-		GEA_Player, player,
-		GEA_Int, adv,
-		GEA_Int, 0,
-		GEA_End);
-
-	return SFN_ERROR_OK;
-#else
 	if ((args->m_numArgs < 2) || (args->m_numArgs > 3))
 	{
 		return SFN_ERROR_NUM_ARGS;
@@ -4105,7 +3992,6 @@ SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 						  );
 
 	return SFN_ERROR_OK;
-#endif
 }
 
 SFN_ERROR Slic_AddUnit::Call(SlicArgList *args)
@@ -4114,10 +4000,6 @@ SFN_ERROR Slic_AddUnit::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	Unit u;
-#if defined(ACTIVISION_ORIGINAL)	// already checked
-	if(args->m_numArgs != 1)
-		return SFN_ERROR_NUM_ARGS;
-#endif
 	if(!args->GetUnit(0, u)) {
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
@@ -6471,14 +6353,6 @@ SFN_ERROR Slic_StringCompare::Call(SlicArgList *args)
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
-#if defined(ACTIVISION_ORIGINAL)
-	char *string1, *string2;
-	if(!args->GetString(0, string1))
-		return SFN_ERROR_TYPE_ARGS;
-	
-	if(!args->GetString(1, string2))
-		return SFN_ERROR_TYPE_ARGS;
-#else
 //Added by Martin Gühmann to allow string comparision, between string IDs and plain strings
 	const char *string1, *string2;
 	StringId stringId1, stringId2;
@@ -6507,7 +6381,6 @@ SFN_ERROR Slic_StringCompare::Call(SlicArgList *args)
 		}
 	}
 
-#endif
 
 	if ( !stricmp(string1, string2) )
 	{
@@ -6771,17 +6644,14 @@ SFN_ERROR Slic_ClearBattleFlag::Call(SlicArgList *args)
 
 SFN_ERROR Slic_OpenScenarioEditor::Call(SlicArgList *args)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	//Wrong number of arguments added by Martin Gühmann
 	if(args->m_numArgs != 0)
 		return SFN_ERROR_NUM_ARGS;
-#endif
 
 	open_ScenarioEditor();
 	return SFN_ERROR_OK;
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //New Slic functions of CTP2.1 readded by Martin Gühmann
 
 SFN_ERROR Slic_DestroyBuilding::Call(SlicArgList *args)
@@ -7423,4 +7293,3 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 
 	return SFN_ERROR_OK;
 }
-#endif

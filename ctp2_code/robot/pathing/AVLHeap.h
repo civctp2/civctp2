@@ -14,7 +14,7 @@
 
 
 #pragma once
-#ifndef  __AVL_HEAP_H__
+#ifndef __AVL_HEAP_H__
 #define  __AVL_HEAP_H__
 
 #include "AstarPnt.h"

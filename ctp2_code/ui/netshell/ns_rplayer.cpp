@@ -35,20 +35,12 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_RPlayer::count = 2;
-ns_RPlayer::Struct ns_RPlayer::list[] = {
-	{STRING,	(Data)&m_name},
-	{INT,		(Data)&m_ping}
-};
-#else
 ns_RPlayer::ns_RPlayer(NETFunc::Player * player) 
 :	ns_Object<NETFunc::Player, ns_RPlayer>(player) 
 {
 	list.push_back(Struct(STRING,	&m_name));
 	list.push_back(Struct(INT,		&m_ping));
 };
-#endif
 
 
 

@@ -44,11 +44,9 @@
 #include "Globals.h"
 #include "terrainutil.h"
 #include "TerrainImprovementRecord.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "SoundRecord.h"
 #include "SoundManager.h"
 #include "SelItem.h"
-#endif
 
 TerrainImprovementPool::TerrainImprovementPool() 
 	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
@@ -61,51 +59,6 @@ TerrainImprovementPool::TerrainImprovementPool(CivArchive &archive)
 	Serialize(archive);
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-TerrainImprovement
-TerrainImprovementPool::Create(sint32 owner,
-							   MapPoint &point,
-							   sint32 type,
-							   sint32 extraData)
-{
-	TerrainImprovementData *newData;
-
-	if(!terrainutil_GetTerrainEffect(g_theTerrainImprovementDB->Get(type), point) &&
-	   !g_theTerrainImprovementDB->Get(type)->GetClassTerraform()) {
-		
-		return TerrainImprovement(0);
-	}
-
-	sint32 i;
-	for(i = 0; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i] && i != owner) {
-			g_player[i]->m_vision->AddUnseen(point);
-		}
-	}
-
-	if(g_tiledMap) {
-		
-		
-		
-		
-
-		
-		
-		g_tiledMap->GetLocalVision()->AddUnseen(point);
-	}
-
-	TerrainImprovement newImprovement(NewKey(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT));
-	
-	newData = new TerrainImprovementData(newImprovement,
-										 owner, point,
-										 type, extraData);
-	Insert(newData);
-	g_theWorld->InsertImprovement(newImprovement, point);
-	g_tiledMap->RedrawTile(&point);
-
-	return newImprovement;
-}
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : TerrainImprovementPool::Create
@@ -183,7 +136,6 @@ TerrainImprovementPool::Create(sint32 owner,
 
 	return newImprovement;
 }
-#endif
 
 void 
 TerrainImprovementPool::Serialize(CivArchive &archive)

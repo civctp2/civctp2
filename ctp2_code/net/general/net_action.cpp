@@ -1771,15 +1771,9 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Client %d clearing queue for city %lx\n",
 								index, m_data[0]));
 			Unit city(m_data[0]);
-#if !defined(ACTIVISION_ORIGINAL) // possible bug 26 solution
 			if(g_theUnitPool->IsValid(city) && city->GetOwner() == index) {
 				city.GetData()->GetCityData()->GetBuildQueue()->Clear();
 			}
-#else
-			if(g_theUnitPool->IsValid(city)) {
-				city.GetData()->GetCityData()->GetBuildQueue()->Clear();
-			}
-#endif
 			break;
 		}
 		case NET_ACTION_REQUEST_RESYNC:

@@ -80,9 +80,6 @@ void stringutils_HackColor(BOOL on)
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-void stringutils_Interpret(const MBCHAR *msg, SlicContext &slicObj, MBCHAR *sInterpreted)
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : stringutils_Interpret
@@ -118,15 +115,10 @@ void stringutils_Interpret
 	MBCHAR *		sInterpreted,
 	size_t const	a_Capacity
 )
-#endif
 {
 	const char *input = msg;
 	char *output = sInterpreted;
-#if defined(ACTIVISION_ORIGINAL)	// possible access after end of sInterpreted
-	char *end = sInterpreted + k_MAX_INTERP_LEN - 1;
-#else
 	MBCHAR * const	end	= sInterpreted + (a_Capacity - 1);
-#endif
 	char expression[k_MAX_INTERP_LEN];
 	char catString[k_MAX_INTERP_LEN];
 	bool filledBuiltins = false;

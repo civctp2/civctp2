@@ -51,14 +51,12 @@ public:
 	
 	StatusBar(MBCHAR *ldlBlock);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	static void CleanUp(){
 		if(m_text){ 
 			delete m_text; 
 			m_text = NULL;
 		}
 	}
-#endif
 	
 	~StatusBar();
 

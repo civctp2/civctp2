@@ -121,11 +121,9 @@ public:
 
 template <class T> StringHash<T>::StringHash(sint32 table_size)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	// Assert validity of % and cast to uint16.
 	Assert(table_size > 0);
 	Assert(table_size < 0x10000);
-#endif
 	m_table = new StringHashNode<T> *[table_size];
 	m_table_size = table_size;
 	for(sint32 i = 0; i < table_size; i++) {
@@ -177,24 +175,9 @@ template <class T> void StringHash<T>::Serialize(ARCHIVE archive)
 			}
 		}
 	} else {
-#if defined(ACTIVISION_ORIGINAL)	// Clear using wrong table size
-		archive >> m_table_size;
-
-		
-		if (m_table)
-		{
-			
-			Clear();
-
-			
-			delete [] m_table;
-
-		} 
-#else
 		Clear();
 		delete [] m_table;
 		archive >> m_table_size;
-#endif
 
 		m_table = new StringHashNode<T> *[m_table_size];
 		for(sint32 i = 0; i < m_table_size; i++) {
@@ -211,19 +194,6 @@ template <class T> void StringHash<T>::Serialize(ARCHIVE archive)
 
 template <class T> uint16 StringHash<T>::Key(const char *str)
 {
-#if defined(ACTIVISION_ORIGINAL)	
-	// zero-length string crash, non-standard loop scope
-	uint16 key = 0;
-	sint32 l = strlen(str);
-	for(uint16 i = 0; i < l-1; i++) {
-		key += uint16(tolower(str[i]) << 8 | tolower(str[i+1])) + i;
-	}
-	if(i < l) {
-		key += uint16(tolower(str[i]) << 8) + i;
-	}
-	key = uint16(sint32(key) % m_table_size);
-	return key;
-#else
 	uint16			key = 0;
 	size_t const	l	= strlen(str);
 
@@ -238,7 +208,6 @@ template <class T> uint16 StringHash<T>::Key(const char *str)
 	}
 
 	return static_cast<uint16>(key % m_table_size);
-#endif
 }
 
 template <class T> const T *StringHash<T>::Get(const char *str)

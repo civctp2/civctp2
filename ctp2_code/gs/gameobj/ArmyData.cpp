@@ -663,7 +663,6 @@ BOOL ArmyData::CanSettle() const
     return FALSE;
 }
 
-#if !defined (ACTIVISION_ORIGINAL)
 bool ArmyData::CanTransport() const
 {
     for (sint32 i = 0; i < m_nElements; ++i)
@@ -675,7 +674,6 @@ bool ArmyData::CanTransport() const
 
     return false;
 }
-#endif
 
 BOOL ArmyData::CanPatrol() const
 {
@@ -1624,11 +1622,7 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-#if defined(ACTIVISION_ORIGINAL) // Franchises can not be sued until expired
-	if(cell->GetCity().GetFranchiseTurnsRemaining() >= 0) {
-#else
 	if(cell->GetCity().GetFranchiseTurnsRemaining() <= 0) {
-#endif
 		
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -4244,7 +4238,6 @@ BOOL ArmyData::CanBombardTargetType(const CellUnitList & units) const
 
 
 
- #if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : ArmyData::GetBombardRange
@@ -4286,7 +4279,6 @@ bool ArmyData::GetBombardRange(sint32 & min_rge, sint32 & max_rge)
 	
 	return false;
 }
-#endif
 
 BOOL ArmyData::CanBombard(const MapPoint &point) const
 {
@@ -4449,16 +4441,12 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 			return ORDER_RESULT_ILLEGAL;
 		}
 
-#if defined(ACTIVISION_ORIGINAL)
-		if(!point.IsNextTo(m_pos)) {//rem: this is why you can't bombard from range as in Civ:CTP
-#else //Peter Triggs added code 18 Dec 2004
 		sint32 dist = MapPoint::GetSquaredDistance(m_pos,point);
 		dist = sqrt(dist);
 		sint32 min_rge, max_rge;
 		GetBombardRange(min_rge,max_rge);
 
 		if(dist > max_rge) {//the target is out of this army's bombarding range
-#endif  //end of Peter's added code
 			return ORDER_RESULT_ILLEGAL;
 		}
 	}
@@ -4487,31 +4475,17 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))
 			return ORDER_RESULT_ILLEGAL;
 
-#if defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
-	PLAYER_INDEX defense_owner = defender.GetOwner();
-
-    
-	Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
-
-	
-	defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
-
-    InformAI(UNIT_ORDER_BOMBARD, point); 
-#endif   
 
     sint32 numAttacks = 0;
 	sint32 numAlive = m_nElements;
 	BOOL out_of_fuel;
-#if !defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
     sint32 numPossibleAttacks = 0;
-#endif
 
     for (i = m_nElements - 1; i>= 0; i--) { 
 		if(!m_array[i].CanPerformSpecialAction())
 			continue;
 		
         if (m_array[i].CanBombard(defender)) { 
-#if !defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
 			numPossibleAttacks++;
 			if (numPossibleAttacks == 1) {
 				// Log attack and inform defender 
@@ -4520,14 +4494,11 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 				defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
 				InformAI(UNIT_ORDER_BOMBARD, point); 
 			}
-#endif
 			if(m_array[i].Bombard(defender, FALSE)) {
 				numAttacks++;
-#if !defined(ACTIVISION_ORIGINAL)
 				// * Added auto-center for bombardment
                 if (defender.GetOwner() == g_selected_item->GetVisiblePlayer())
                      g_director->AddCenterMap(point);
-#endif				
 				g_director->AddAttackPos(m_array[i], point);
 				
 				AddSpecialActionUsed(m_array[i]);
@@ -4665,15 +4636,6 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					}
 				}
 
-#if defined(ACTIVISION_ORIGINAL)
-				InformAI(UNIT_ORDER_INTERCEPT_TRADE, m_pos); 
-				g_director->AddSpecialEffect(m_pos, effectId, soundId);
-				ORDER_RESULT res = m_array[i].InterceptTrade();
-				if(res != ORDER_RESULT_ILLEGAL) {
-					AddSpecialActionUsed(m_array[i]);
-					m_isPirating = true;
-				}
-#else
 				ORDER_RESULT const	res	= m_array[i].InterceptTrade();
 
 				if (res == ORDER_RESULT_ILLEGAL)
@@ -4691,7 +4653,6 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					AddSpecialActionUsed(m_array[i]);
 					m_isPirating = true;
 				}
-#endif
 
 				return res;
 			}
@@ -6049,14 +6010,6 @@ BOOL ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 		return FALSE;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	// waste of time + leak report
-	static UnitDynamicArray revealedUnits;
-	BOOL revealedUnexplored = FALSE;
-	revealedUnits.Clear();
-
-	static UnitDynamicArray diedInMove;
-	diedInMove.Clear();
-#endif
 
 	if(ExertsZOC()) {
 		UpdateZOCForMove(pos, d);
@@ -6159,12 +6112,10 @@ void ArmyData::MoveActors(const MapPoint &pos,
 
 void ArmyData::MoveUnits(const MapPoint &pos)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	if (m_flags & k_CULF_IN_SPACE)
 	{
 		return;
 	}
-#endif
 
 	sint32 i, r; 
 
@@ -6700,13 +6651,9 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 			c = k_MOVE_AIR_COST;
 		} else if(g_theWorld->IsTunnel(pos)) {
 			if(!m_array[i].GetMovementTypeLand()) {
-#if defined(ACTIVISION_ORIGINAL)
-				c = g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement();
-#else
 				sint32	icost;
 				(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 				c = icost;
-#endif
 			} else {
 				c = cost;
 			}
@@ -7132,11 +7079,7 @@ void ArmyData::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to
         fuel_to_half = fuel_remaining - max_fuel / 2; 
         
         if (fuel_to_half < num_tiles_to_half) { 
-#if defined(ACTIVISION_ORIGINAL)
-            num_tiles_to_half = max (0, fuel_to_half); 
-#else
 			num_tiles_to_half = std::max<sint32>(fuel_to_half, 0);
-#endif
         }
 
         if (fuel_remaining < num_tiles_to_empty) { 
@@ -7685,38 +7628,6 @@ BOOL ArmyData::TurnOver()
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-void ArmyData::GetCurrentHP(sint32 &count, sint32 unit_type[100], 
-    sint32 unit_hp[100])
-{
-    sint32 n = Num(); 
-    sint32 unit_idx;
-    
-    count=0; 
-    for (unit_idx=0; unit_idx<n; unit_idx++) { 
-        Assert(count < 100); 
-        unit_type[count] = m_array[unit_idx].GetType(); 
-        unit_hp[count] = sint32(m_array[unit_idx].GetHP()); 
-		if (unit_hp[count] <= 0)
-		{
-			#ifdef _DEBUG
-			
-			unit_hp[count] = sint32(m_array[unit_idx].GetHP());
-			#endif
-			
-			
-			unit_hp[count] = 0;
-		}
-		Assert(unit_hp[count] >= 0);
-
-        count++; 
-		
-        
-        
-        
-    } 
-}
-#else
 void ArmyData::GetCurrentHP
 (
 	sint32 &	count,
@@ -7756,7 +7667,6 @@ bool ArmyData::IsWounded() const
 		//determined as full, it will be wise not to attack with unit that has 
 		//half than is normal HP.
 }
-#endif
 
 
 BOOL ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
@@ -7806,27 +7716,9 @@ BOOL ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCos
 
 	MapPoint start, dest;
 	Player *p = g_player[c.GetOwner()];
-#if defined(ACTIVISION_ORIGINAL)	// moved 
-	double distcost;
-#endif
 	if(!p)
 		return FALSE;
 
-#if defined(ACTIVISION_ORIGINAL)	// ambiguous sqrt, possible division by 0
-	if(p->GetCapitolPos(start)) {
-		c.GetPos(dest);
-		sint32 dist = MapPoint::GetSquaredDistance(start,dest);
-		
-		
-		distcost = g_theConstDB->InciteRevolutionCapitolPenalty() *
-			(1.0 - (sqrt(dist) / p->GetMaxEmpireDistance()));
-        
-        
-        
-	} else {
-		distcost = g_theConstDB->InciteRevolutionCapitolPenalty(); 
-	}
-#else
 	double distcost = g_theConstDB->InciteRevolutionCapitolPenalty();
 
 	if (p->GetCapitolPos(start) && p->GetMaxEmpireDistance()) 
@@ -7836,7 +7728,6 @@ BOOL ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCos
 			sqrt(static_cast<double>(MapPoint::GetSquaredDistance(start, dest)));
 		distcost *= (1.0 - (distanceFromCapitol / p->GetMaxEmpireDistance()));
 	}
-#endif
 
 	if(distcost < 1)
 		distcost = 1;
@@ -7888,14 +7779,9 @@ BOOL ArmyData::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost 
 	if(p->GetCapitolPos(start)) {
 		c.GetPos(dest);
 
-#if defined(ACTIVISION_ORIGINAL)
-		sint32 dist = MapPoint::GetSquaredDistance(start,dest);
-		distcost = 100.0 * sqrt(dist); 
-#else
 		float const distanceFromCapitol =
 			sqrt(static_cast<float>(MapPoint::GetSquaredDistance(start, dest)));
 		distcost = 100.0f * distanceFromCapitol;
-#endif        
         
         
 	} else {
@@ -7999,9 +7885,7 @@ Path *ArmyData::RemovePathedOrder()
 
 
 void ArmyData::CharacterizeArmy( bool & isspecial, 
-#if !defined (ACTIVISION_ORIGINAL)
 								 bool & isstealth,
-#endif
 								 sint32 & maxattack, 
 								 sint32 & maxdefense, 
 								 bool & cancapture,
@@ -8009,9 +7893,7 @@ void ArmyData::CharacterizeArmy( bool & isspecial,
 								 bool & canbombard) const
 {
 	isspecial = false;
-#if !defined (ACTIVISION_ORIGINAL)
 	isstealth = true;
-#endif
 	maxattack = 0;
 	maxdefense = 0;
 	cancapture = false;
@@ -8036,9 +7918,7 @@ void ArmyData::CharacterizeArmy( bool & isspecial,
 
 		isspecial |= ((rec->GetVisionClassStandard() == false) ||
 			(rec->GetAttack() <= 0));
-#if !defined (ACTIVISION_ORIGINAL)
 		isstealth &= ((rec->GetVisionClassStealth() == true));
-#endif
 		if (m_array[i].GetAttack() > maxattack)
 			maxattack = sint32(rec->GetAttack());
 		if (m_array[i].GetDefense() > maxdefense)
@@ -8299,7 +8179,6 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 }
 
 
-#if !defined(ACTIVISION_ORIGINAL) // #02
 //----------------------------------------------------------------------------
 //
 // Name       : ArmyData::TestOrderAny
@@ -8345,7 +8224,6 @@ bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 	return orderValid;
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 bool ArmyData::TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) const
 {
@@ -8733,7 +8611,6 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	Assert(range <= moves || order_rec->GetTargetPretestAdjacentPosition());            
     }
 
-#if !defined(ACTIVISION_ORIGINAL)
 
     sint32 min_rge, max_rge=0;
     MapPoint move_pos = m_pos;//move_pos will become a position to move to if trying to bombard out of range
@@ -8762,14 +8639,11 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
         }
     }
     else{
-#endif		
         for (sint32 i = 0; moves > 0 && i < range; i++){
 	    tmp_path->SnipEnd();
 	    moves--;
 	}
-#if !defined(ACTIVISION_ORIGINAL)
     }
-#endif	
     g_gevManager->Pause();
     //insert order's game_event here	
     if (game_event > 0)	{
@@ -8790,7 +8664,6 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
     }
     //insert GEV_MoveOrder here, i.e., move adjacent to target pos or within bombarding range of target pos	
     if (tmp_path->GetMovesRemaining() > 0 && !order_rec->GetIsTeleport() && !order_rec->GetIsTarget()) {
-#if !defined(ACTIVISION_ORIGINAL)
         if(max_rge){//max_rge >0 implys BombardOrder and army has bombarding units
 	    if(move_pos != m_pos){//then first move army to move_pos
 
@@ -8811,7 +8684,6 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 
 	 }
 	 else{//not a bombard order
-#endif
              g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 	         GEV_MoveOrder, 
 		 GEA_Army, Army(m_id),			
@@ -8820,9 +8692,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 		 GEA_Int, (game_event == -1), 
 		 GEA_End);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	}
-#endif
     }
     else {
 	     delete tmp_path;
@@ -8840,12 +8710,7 @@ void ArmyData::AssociateEventsWithOrdersDB()
 	
 	const char *event_name;
 
-#if defined(ACTIVISION_ORIGINAL)	// wrong delete	
-	if (s_orderDBToEventMap != NULL)
-		delete s_orderDBToEventMap;
-#else
 	delete [] s_orderDBToEventMap;
-#endif
 	
 	s_orderDBToEventMap = new sint32 [g_theOrderDB->NumRecords()];
 	

@@ -1054,9 +1054,6 @@ sint32 MapPoint::GetSquaredDistance(const MapPoint &from, const MapPoint &to)
 	if (g_theWorld->IsXwrap())
 		dx = WrapDelta(dx, 2 * g_mp_size.x);
 	sint32 retval = (dx * dx + dy * dy) / 2;
-#if defined(ACTIVISION_ORIGINAL)	// Useless error pop-up in debug mode
-	Assert(retval <= OldSquaredDistance(from, to)); 
-#endif
 	return retval;
 }
 
@@ -1236,7 +1233,6 @@ void MapPoint::rc2xy(const MapPoint & rc_pos, const MapPoint & map_size )
 	while (x>=w) x -= w;
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 
 //----------------------------------------------------------------------------
 //
@@ -1465,4 +1461,3 @@ MapPointData OrthogonalPoint::Step
 	}
 }
 
-#endif	// ACTIVISION_ORIGINAL

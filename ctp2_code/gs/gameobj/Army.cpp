@@ -296,12 +296,6 @@ void Army::GetActors(sint32 &n, UnitActor **moveActor, UnitActor *butnotthis)
 
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-BOOL Army::GetTopVisibleUnitOfMoveType(const sint32 looking_player, const uint32 move, sint32 &maxi) const
-{
-	return GetData()->GetTopVisibleUnitOfMoveType(looking_player, move, maxi);
-}
-#else
 bool Army::GetTopVisibleUnitOfMoveType
 (
 	PLAYER_INDEX const	looker,
@@ -313,19 +307,11 @@ bool Army::GetTopVisibleUnitOfMoveType
 	return GetData()->GetTopVisibleUnitOfMoveType
 						(looker, moveType, maxi, isResyncReported);
 }
-#endif
 
-#if defined(ACTIVISION_ORIGINAL)
-Unit Army::GetTopVisibleUnit(const sint32 looking_player) const
-{
-	return AccessData()->GetTopVisibleUnit(looking_player);
-}
-#else
 Unit Army::GetTopVisibleUnit(PLAYER_INDEX const looking_player) const
 {
 	return GetData()->GetTopVisibleUnit(looking_player);
 }
-#endif
 
 void Army::ForceVisibleThisTurn(const PLAYER_INDEX to_me)
 {
@@ -892,14 +878,6 @@ BOOL Army::CanAdvertise() const
 	return GetData()->CanAdvertise();
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-void Army::GetCurrentHP(sint32 &n, sint32 unit_type[100], 
-        sint32 unit_hp[100])
-{
-    AccessData()->GetCurrentHP(n, unit_type, unit_hp); 
-}
-
-#else
 void Army::GetCurrentHP
 (
 	sint32 &	count,
@@ -924,7 +902,6 @@ bool Army::IsWounded(void) const
 {
 	return GetData()->IsWounded();
 }
-#endif
 
 BOOL Army::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision)
 {

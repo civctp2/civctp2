@@ -350,7 +350,6 @@ STDEHANDLER(GaiaController_CutImprovements)
 	Cell *cell = g_theWorld->GetCell(pos);
 	owner = cell->GetOwner();
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to prevent
 	//the game from accessing an invalid
 	//area of memory, plain arrays don't
@@ -359,7 +358,6 @@ STDEHANDLER(GaiaController_CutImprovements)
 	//It is not very probably that you get 0.
 	if (owner == -1)
 		return GEV_HD_Continue;
-#endif
 
 	Player *owner_player = g_player[owner];
 	if (owner_player == NULL ||
@@ -398,7 +396,6 @@ STDEHANDLER(GaiaController_ImprovementComplete)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to prevent
 	//the game from accessing an invalid
 	//area of memory, plain arrays don't
@@ -407,7 +404,6 @@ STDEHANDLER(GaiaController_ImprovementComplete)
 	//It is not very probably that you get 0.
 	if (owner == -1)
 		return GEV_HD_Continue;
-#endif
 	
 	Player *owner_player = g_player[owner];
 	if (owner_player == NULL ||

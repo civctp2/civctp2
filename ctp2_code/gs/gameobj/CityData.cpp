@@ -195,14 +195,12 @@ extern SoundManager		*g_soundManager;
 
 #include "GameFile.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to handle 
 //city creation by Scenario Editor properly
 #include "ScenarioEditor.h"
 #include "StrategyRecord.h"         // For accessing the strategy database
 #include "Diplomat.h"               // Do be able to retrieve the current strategy
 #include <algorithm>                // std::min
-#endif
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
@@ -265,10 +263,8 @@ extern TurnCount *g_turn;
 extern ProfileDB	*g_theProfileDB ;
 
 CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
-#if !defined(ACTIVISION_ORIGINAL)                       
 :	m_cityStyle(CITY_STYLE_GENERIC),
 	m_min_turns_revolt(0)
-#endif
 { 
 	sint32 i;
 
@@ -358,15 +354,11 @@ CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
 	m_gold_from_capitalization = 0;
 	m_pw_from_infrastructure = 0;
 
-#if defined(ACTIVISION_ORIGINAL)
-	m_cityStyle = g_player[m_owner]->m_civilisation->GetCityStyle();
-#else
 	// Set the style of the founder of the city - if any.
 	if (g_player[o] && g_player[o]->GetCivilisation())
 	{
 		m_cityStyle = g_player[o]->GetCivilisation()->GetCityStyle();
 	}
-#endif
 
 	m_doUprising = UPRISING_CAUSE_NONE;
 
@@ -464,7 +456,6 @@ void CityData::Serialize(CivArchive &archive)
 	} else
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_is_rioting)+sizeof(m_is_rioting));
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Create and read files in the format as created with the Activision 1.1 patch.
 	// Used to prevent cities revolting twice in the same turn.
 	if (archive.IsStoring())
@@ -482,7 +473,6 @@ void CityData::Serialize(CivArchive &archive)
 			m_min_turns_revolt = 0;
 		}
 	}
-#endif
     m_home_city.Serialize(archive) ;
 	m_build_queue.Serialize(archive) ;
 	m_tradeSourceList.Serialize(archive);
@@ -510,12 +500,6 @@ void CityData::Serialize(CivArchive &archive)
 		archive.Load((uint8*)&m_defensiveBonus, sizeof(double));
 	}
 
-#if defined(ACTIVISION_ORIGINAL) // Invalid values are handled by GetCityStyle.
-	if(m_cityStyle < 0 || m_cityStyle >= g_theCityStyleDB->NumRecords()) {
-		
-		m_cityStyle = 0;
-	}
-#endif
 }
 
 BOOL NeedsCanalTunnel(MapPoint &center_point)
@@ -561,24 +545,13 @@ void CityData::Initialize(sint32 settlerType)
 		
 	} else {
 		settlerRec = NULL;
-#if !defined(ACTIVISION_ORIGINAL)
 		//Added by Martin Gühmann to make sure that also cities
 		//created by the Scenario editor have a size
 		if(settlerType == -2 && ScenarioEditor::PlaceCityMode() && ScenarioEditor::CitySize() > 0)
 			numPops = ScenarioEditor::CitySize();
-#endif
 	}
 
 	sint32 i;
-#if defined(ACTIVISION_ORIGINAL)
-	for(i = 0; i < numPops; i++) {
-		
-		if (settlerType != -2)
-			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
-							   GEA_City, m_home_city,
-							   GEA_End);
-	}
-#else
 	//Added by Martin Gühmann to make sure that also cities created by the editor
 	//have a size.
 	if((settlerType != -2) || ScenarioEditor::PlaceCityMode())
@@ -589,7 +562,6 @@ void CityData::Initialize(sint32 settlerType)
 								   GEA_End);
 		}
 	}
-#endif
 	
 	if(settlerRec && settlerRec->GetNumSettleBuilding() > 0) {
 		for(i = 0; i < settlerRec->GetNumSettleBuilding(); i++) {
@@ -669,14 +641,12 @@ void CityData::Initialize(sint32 settlerType)
 		name = civData->GetAnyCityName() ;							
 
 	m_cityStyle = civ->GetCityStyle();
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to make sure that cities created 
 	//by the scenario editor keep their style
 	if (settlerType == -2 && ScenarioEditor::PlaceCityMode())
 	{
 		m_cityStyle = ScenarioEditor::CityStyle();
 	}
-#endif
 
 	if (name != k_CITY_NAME_UNDEFINED)	{							
 		civData->GetCityName(name, s) ;								
@@ -871,11 +841,9 @@ BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
 	if(m_home_city.Flag(k_UDF_CANT_RIOT_OR_REVOLT))
 		return FALSE;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Modified by kaan to address bug # 12
 	if (m_min_turns_revolt != 0) 
 		return FALSE;
-#endif
 
 	return (m_happy->ShouldRevolt(inciteBonus)) ;
 }
@@ -897,7 +865,6 @@ BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
 //
 //----------------------------------------------------------------------------
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Modified by kaan to address bug # 12
 void CityData::NoRevoltCountdown() 
 {
@@ -907,7 +874,6 @@ void CityData::NoRevoltCountdown()
 	}
 }	
 
-#endif
 
 
 
@@ -1065,11 +1031,9 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 		}
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Modified by kaan to address bug # 12
 	// Prevent city from revolting twice in the same turn.
 	m_min_turns_revolt = (uint8)g_theConstDB->GetMinTurnsBetweenRevolt(); 
-#endif
 }
 
 
@@ -1371,44 +1335,6 @@ sint32 CityData::ComputeGrossProduction( double workday_per_person, sint32 colle
 	
 	sint32 gross_production = collected_production;
 
-#if defined(ACTIVISION_ORIGINAL)
-	gross_production = ceil(gross_production * workday_per_person);
-
-	double prodBonus;
-	buildingutil_GetProductionPercent(GetEffectiveBuildings(), prodBonus);
-	gross_production += ceil(gross_production * prodBonus);
-
-	sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_PRODUCTION, m_owner);
-	gross_production += ceil(double(gross_production) * (double(featPercent) / 100.0));
-	
-	gross_production += ceil(gross_production *
-						   (double(wonderutil_GetIncreaseProduction(g_player[m_owner]->m_builtWonders)) * 0.01));
-
-	gross_production = ceil((double)gross_production * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetProductionCoef());
-
-	if(m_specialistDBIndex[POP_LABORER] >= 0) {
-		gross_production += LaborerCount() *
-			g_thePopDB->Get(m_specialistDBIndex[POP_LABORER])->GetProduction();
-	}
-
-	if(m_bioInfectionTurns > 0) {
-		gross_production -= ceil(double(gross_production) * g_theConstDB->GetBioInfectionProductionCoef());
-	}
-
-	crime_loss = sint32(ceil(gross_production * m_happy->GetCrime()));
-	
-	if (crime_loss < 0) 
-		crime_loss = 0;
-
-	sint32 net_production = gross_production - crime_loss;
-
-	if( m_franchise_owner >= 0 ) {
-		franchise_loss = ceil(double(net_production) * g_theConstDB->GetFranchiseEffect());
-	}
-	else
-		franchise_loss = 0;
-
-#else
 	//Added missing casts in order to remove warnings
 	gross_production = (sint32)ceil(gross_production * workday_per_person);
 
@@ -1446,7 +1372,6 @@ sint32 CityData::ComputeGrossProduction( double workday_per_person, sint32 colle
 	else
 		franchise_loss = 0;
 
-#endif
 
 	return gross_production;
 }
@@ -1566,11 +1491,7 @@ void CityData::AddShieldsToBuilding()
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius)
-#else
 void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const
-#endif
 {
 	const CitySizeRecord *fullRec = NULL, *partRec = NULL;
 	if(m_workerFullUtilizationIndex >= 0) {
@@ -1597,7 +1518,6 @@ void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) co
 	}
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::GetUtilisationRatio
@@ -1639,11 +1559,7 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 	if (m_workerFullUtilizationIndex >= 0)
 	{
 		sint32 const	dbIndex			= 
-#if defined(ACTIVISION_ORIGINAL)
-			min(m_workerFullUtilizationIndex, dbMaxIndex - 1);
-#else
 			std::min<sint32>(m_workerFullUtilizationIndex, dbMaxIndex - 1);
-#endif
 		fullRingWorkers = g_theCitySizeDB->Get(dbIndex)->GetMaxWorkers();
 	}
 
@@ -1652,22 +1568,14 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 	if (m_workerPartialUtilizationIndex >= 0)
 	{
 		sint32 const	dbIndex			= 
-#if defined(ACTIVISION_ORIGINAL)
-			min(m_workerPartialUtilizationIndex, dbMaxIndex - 1);
-#else
 			std::min<sint32>(m_workerPartialUtilizationIndex, dbMaxIndex - 1);
-#endif
 
 		maxRingWorkers = g_theCitySizeDB->Get(dbIndex)->GetMaxWorkers();
 	}
 
 	// # of actually working in the partial ring.
 	sint32 const		partialRingWorkers	= 	
-#if defined(ACTIVISION_ORIGINAL)
-			min(maxRingWorkers, WorkerCount() + SlaveCount())
-#else
 			std::min(maxRingWorkers, WorkerCount() + SlaveCount())
-#endif
 				- fullRingWorkers;
 
 
@@ -1676,7 +1584,6 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 		   : static_cast<double>(partialRingWorkers) / 
 		     static_cast<double>(maxRingWorkers - fullRingWorkers);
 }
-#endif
 
 void CityData::CollectResources()
 {
@@ -1725,34 +1632,7 @@ void CityData::CollectResources()
 	}
 
 	
-#if defined(ACTIVISION_ORIGINAL)	// moved to function GetUtilisationRatio	
-	sint32 fullMaxWorkers = m_workerFullUtilizationIndex >= 0 
-		                  ? g_theCitySizeDB->Get(m_workerFullUtilizationIndex)->GetMaxWorkers() 
-						  : 0;
-
-	sint32 workerDiff;
-	sint32 numPartialWorkers = (WorkerCount() + SlaveCount()) - fullMaxWorkers;
-	if(m_workerPartialUtilizationIndex >= 0 && 
-	   m_workerPartialUtilizationIndex < g_theCitySizeDB->NumRecords()) {
-		workerDiff = g_theCitySizeDB->Get(m_workerPartialUtilizationIndex)->GetMaxWorkers() -
-			fullMaxWorkers;
-	} else {
-		numPartialWorkers = 0;
-		workerDiff = 0;
-	}
-
-	
-	double utilizationRatio = 0;
-
-	if(numPartialWorkers > 0) {
-		Assert(workerDiff > 0);
-		if(workerDiff > 0) {
-			utilizationRatio = (double)numPartialWorkers / (double)workerDiff;
-		}
-	}
-#else
 	double const	utilizationRatio	= GetUtilisationRatio(partSquaredRadius);
-#endif
 
 	m_max_food_from_terrain = fullFoodTerrainTotal + partFoodTerrainTotal;
 	m_max_production_from_terrain = fullProdTerrainTotal + partProdTerrainTotal;
@@ -1934,21 +1814,13 @@ sint32 CityData::GrowOrStarve()
 		m_partialPopulation += m_growth_rate;
 
 		if(m_partialPopulation >= k_PEOPLE_PER_POPULATION) {
-#if defined(ACTIVISION_ORIGINAL)
-			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
-#else
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
-#endif
 								   GEA_City, m_home_city.m_id,
 								   GEA_End);
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
 			return TRUE;
 		} else if(m_partialPopulation < 0) {
-#if defined(ACTIVISION_ORIGINAL)
-			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillPop,
-#else
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillPop,
-#endif
 								   GEA_City, m_home_city.m_id,
 								   GEA_End);
 			
@@ -1961,11 +1833,7 @@ sint32 CityData::GrowOrStarve()
 		ResetStarvationTurns();
 
 		if(m_partialPopulation >= k_PEOPLE_PER_POPULATION) {
-#if defined(ACTIVISION_ORIGINAL)
-			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
-#else
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
-#endif
 								   GEA_City, m_home_city.m_id,
 								   GEA_End);
 			
@@ -4042,11 +3910,9 @@ BOOL CityData::BuyFront()
 	if(!m_build_queue.GetHead())
 		return FALSE;
 
-#if !defined(ACTIVISION_ORIGINAL)
     // * Can't rush buy capitalization/infrastructure
 	if(m_buildInfrastructure || m_buildCapitalization )
         return FALSE;
-#endif
 
 	if(m_shieldstore >= m_build_queue.GetFrontCost()) {
 		
@@ -4236,10 +4102,8 @@ void CityData::SellBuilding(sint32 which, BOOL byChoice)
 			}
 		}
 
-#if !defined(ACTIVISION_ORIGINAL)
 		// Selling a building may impact the defensive bonus 
 		buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
-#endif
 
 		if(byChoice && g_network.IsHost()) {
 			g_network.Unblock(m_owner);
@@ -5327,7 +5191,6 @@ void CityData::Disband()
 		if(g_theUnitPool->IsValid(s)) {
 			s.ClearFlag(k_UDF_FIRST_MOVE);
 			s.SetMovementPoints(0);
-#ifndef ACTIVISION_ORIGINAL
 			//possible solution for bug #14
 			if (g_network.IsHost()) 
 			{
@@ -5335,7 +5198,6 @@ void CityData::Disband()
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_DISBANDED_CITY_SETTLER, s.m_id));
 				g_network.Unblock(s.GetOwner());
 			}
-#endif
 		}
 	}
 
@@ -5956,19 +5818,6 @@ void CityData::AddSellBuilding(sint32 building)
 
 bool CityData::PayForBuyFront()
 {
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 cost = GetOvertimeCost();
-
-	if(cost < 0)
-		return false;
-
-	if(g_player[m_owner]->GetGold() < cost) {
-		return false;
-	}
-
-	g_player[m_owner]->SubGold(cost);
-    g_player[m_owner]->m_gold->AddLostToRushBuy(cost);
-#else
 	Player *		player	= g_player[m_owner];
 	sint32 const	cost	= GetOvertimeCost();
 
@@ -5979,7 +5828,6 @@ bool CityData::PayForBuyFront()
 
 	player->SubGold(cost);
 	player->m_gold->AddLostToRushBuy(cost);
-#endif
 
 	m_paidForBuyFront = true;
 
@@ -6098,11 +5946,6 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 {
 	sint32 i;
 
-#if defined(ACTIVISION_ORIGINAL)
-	bool isLand = justTryLand || g_theWorld->IsLand(m_pos);
-
-	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(m_cityStyle);
-#else
 	// Added DWT
 	// We want to retreive the underlying terrain type
 	// not the terrain type as modified by improvements
@@ -6112,7 +5955,6 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 
 	// 
 	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle());
-#endif
 
 	if(!styleRec) return -1;
 
@@ -6303,19 +6145,11 @@ void CityData::CollectOtherTrade(const BOOL projectedOnly, BOOL changeResources)
 sint32 CityData::GetProjectedScience()
 {
 	
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 grossFood = m_gross_food_this_turn;
-	sint32 collectedProduction = m_collected_production_this_turn;
-	sint32 grossTrade = m_gross_trade;
-	sint32 shieldsThisTurn = m_shields_this_turn; // #01 Fixed sometimes not correct filled m_shields_this_turn 
-	sint32 foodThisTurn = m_food_produced_this_turn;
-#else
 	//Added casts
 	sint32 grossFood = (sint32)m_gross_food_this_turn;
 	sint32 collectedProduction = m_collected_production_this_turn;
 	sint32 grossTrade = m_gross_trade;
 	sint32 foodThisTurn = (sint32)m_food_produced_this_turn;
-#endif
 	sint32 trade = m_trade;
 	sint32 science = m_science;
 	sint32 wagesPaid = m_wages_paid;
@@ -6323,9 +6157,6 @@ sint32 CityData::GetProjectedScience()
 	CollectResources();
 	DoSupport(true);
 	SplitScience(true);
-#if defined(ACTIVISION_ORIGINAL) // #01 Fixed sometimes not correct filled m_shields_this_turn 
-	ProcessProduction(true);
-#endif
 
 	sint32 scienceReturn = m_science;
 
@@ -6333,9 +6164,6 @@ sint32 CityData::GetProjectedScience()
 	m_gross_food_this_turn = grossFood;
 	m_collected_production_this_turn = collectedProduction;
 	m_gross_trade = grossTrade;
-#ifdef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
-	m_shields_this_turn = shieldsThisTurn;
-#endif
 	m_food_produced_this_turn = foodThisTurn;
 	m_trade = trade;
 	m_science = science;
@@ -6349,7 +6177,6 @@ sint32 CityData::GetFounder() const
 	return m_founder;
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 
 //----------------------------------------------------------------------------
 //
@@ -6477,18 +6304,10 @@ sint32 CityData::GetCityStyle() const
 		return CITY_STYLE_DEFAULT;
 	}
 }
-#endif
 
 void CityData::SetCityStyle(sint32 style)
 {
 
 	m_cityStyle = style;
-#if defined(ACTIVISION_ORIGINAL) // Invalid values are handled by GetCityStyle.
-	Assert(m_cityStyle >= 0);
-	Assert(m_cityStyle < g_theCityStyleDB->NumRecords());
-	if(m_cityStyle < 0 || m_cityStyle >= g_theCityStyleDB->NumRecords()) {
-		m_cityStyle = 0;
-	}
-#endif
 	UpdateSprite();
 }

@@ -59,35 +59,6 @@ static c3_PopupWindow	*s_spNewGameDiffScreen	= NULL;
 
 
 
-#if defined(ACTIVISION_ORIGINAL)	// incomplete initialisation
-
-static c3_Static *s_skillLevel			= NULL;
-static c3_Static *s_barbarianThreat		= NULL;
-
-static aui_SwitchGroup	*s_group		= NULL;
-static aui_Radio	**s_checkBox;
-static aui_SwitchGroup	*s_groupTwo		= NULL;
-static aui_Radio	**s_riskBox;
-
-
-static MBCHAR	checknames[k_NUM_DIFFBOXES][50] = {
-	"DiffOne",
-	"DiffTwo",
-	"DiffThree",
-	"DiffFour",
-	"DiffFive",
-	"DiffSix"
-};
-
-static MBCHAR	risknames[k_NUM_RISKBOXES][50] = {
-	"RiskOne",
-	"RiskTwo",
-	"RiskThree",
-	"RiskFour"
-
-};
-
-#else	// ACTIVISION_ORIGINAL
 
 // Skill level selection
 static c3_Static *			s_skillLevel		= NULL;
@@ -115,7 +86,6 @@ static MBCHAR				risknames[k_NUM_RISKBOXES][50] =
 	"RiskFour"
 };
 
-#endif	// ACTIVISION_ORIGINAL
 
 
 static sint32 s_difficulty1 = 0;
@@ -318,43 +288,6 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-
-AUI_ERRCODE spnewgamediffscreen_Cleanup()
-{
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-
-	if ( !s_spNewGameDiffScreen  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( s_spNewGameDiffScreen->Id() );
-	keypress_RemoveHandler(s_spNewGameDiffScreen);
-
-	for ( sint32 i = 0;i < k_NUM_DIFFBOXES;i++ ) {
-		mycleanup( s_checkBox[i] );
-	}
-
-	for ( i = 0;i < k_NUM_RISKBOXES;i++ ) {
-		mycleanup( s_riskBox[i] );
-	}
-
-	mycleanup( s_group );
-	mycleanup( s_groupTwo );
-
-
-
-
-	mycleanup(s_skillLevel);
-	mycleanup(s_barbarianThreat);
-
-	delete s_spNewGameDiffScreen;
-	s_spNewGameDiffScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
-}
-
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -418,7 +351,6 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 	return AUI_ERRCODE_OK;
 }
 
-#endif // ACTIVISION_ORIGINAL
 
 
 

@@ -234,9 +234,6 @@ public:
 
 	sint32			DrawCityRadius(MapPoint &cpos, COLOR color,sint32 size=1);
 	sint32			DrawCityRadius1(MapPoint &cpos, COLOR color);
-#if defined(ACTIVISION_ORIGINAL)	// never used + wrong wrap detection used
-	sint32			DrawCityRadius2(MapPoint &cpos, COLOR color);
-#endif
 	sint32			PaintColoredTile(sint32 x, sint32 y, COLOR color);
 
 	void			ProcessLayerSprites(RECT *processRect, sint32 layer);

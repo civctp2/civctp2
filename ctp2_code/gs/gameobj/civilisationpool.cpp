@@ -153,67 +153,6 @@ void CivilisationPool::Serialize(CivArchive &archive)
 
 Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requiredCiv, GENDER gender)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	sint32	civ ;
-
-	sint32	numCivs,
-			i,
-			match ;
-
-	StringId	strId ;
-
-	CivilisationData* newData;
-
-	civ = requiredCiv ;
-	sint32 c;
-	numCivs = g_theCivilisationDB->GetCivilisations() ;
-	if (civ == CIV_INDEX_RANDOM) {
-		if(g_theProfileDB->IsNonRandomCivs()) {
-			civ = owner;
-		} else {
-			civ = g_rand->Next(numCivs);
-		}
-		for (c=0; c<numCivs; c++, civ++) {
-			if(civ >= numCivs) {
-				civ = 0;
-			}
-			match = FALSE ;
-			for (i=0; i<m_usedCivs->Num(); i++) {
-				if (m_usedCivs->Access(i) == civ) {
-					match = TRUE ;
-					break ;
-				}
-
-			}
-
-			if (!match)
-				break ;
-		}
-
-		if (civ == numCivs) {
-			c3errors_FatalDialogFromDB("CIVILIZATION_ERROR", "CIVILIZATION_NO_MORE_CIVS_AVAILABLE") ;
-			civ = CIV_INDEX_VANDALS ;								
-		}
-
-	}
-
-	Assert((civ>=CIV_INDEX_CIV_0) && (civ<g_theCivilisationDB->GetCivilisations())) ;
-
-	Civilisation newCivilisation(NewKey(k_BIT_GAME_OBJ_TYPE_CIVILISATION));
-
-	if (gender == GENDER_RANDOM) {
-		gender = (GENDER)(g_rand->Next() % 2);
-	}
-
-	newData = new CivilisationData(newCivilisation, owner, (CIV_INDEX)(civ), gender) ;
-	
-	m_usedCivs->Insert((CIV_INDEX)civ);
-
-	if (gender == GENDER_MALE)
-		strId = g_theCivilisationDB->GetLeaderName((CIV_INDEX)(civ)) ;
-	else
-		strId = g_theCivilisationDB->GetLeaderNameFemale((CIV_INDEX)(civ)) ;
-#else
 	sint32 const	numCivs	= g_theCivilisationDB->GetCivilisations();
 	CIV_INDEX		civ		= requiredCiv;
 
@@ -256,7 +195,6 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 						? g_theCivilisationDB->GetLeaderName(civ)
 						: g_theCivilisationDB->GetLeaderNameFemale(civ);
 
-#endif
     newData->SetLeaderName(g_theStringDB->GetNameStr(strId)) ;
 
     strId = g_theCivilisationDB->GetPersonalityDescription((CIV_INDEX)(civ));
@@ -282,7 +220,6 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 	return (newCivilisation) ;
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : CivilisationPool::Release
@@ -313,4 +250,3 @@ void CivilisationPool::Release(CIV_INDEX const & civ)
 	}
 }
 
-#endif

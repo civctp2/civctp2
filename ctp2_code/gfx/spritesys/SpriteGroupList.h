@@ -47,18 +47,6 @@
 #ifndef __SPRITEGROUPLIST_H__
 #define __SPRITEGROUPLIST_H__
 
-#if defined(ACTIVISION_ORIGINAL)
-
-#define k_MAX_SPRITES		200
-
-#include "SpriteList.h"
-#include "SpriteGroup.h"
-
-class SpriteGroup;
-
-class SpriteGroupList : public SpriteList {
-
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -98,7 +86,6 @@ uint8 const	k_MAX_SPRITES	= 255;
 
 class SpriteGroupList 
 {
-#endif	// ACTIVISION_ORIGINAL
 public:
 	SpriteGroupList();
 	virtual ~SpriteGroupList();

@@ -281,11 +281,7 @@ private:
 class ns_GameSetup : public ns_Object<nf_GameSetup, ns_GameSetup>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_GameSetup( nf_GameSetup *gamesetup ) : ns_Object<nf_GameSetup, ns_GameSetup>(gamesetup) {};
-#else
 	ns_GameSetup(nf_GameSetup * gamesetup);
-#endif
 	void Update( nf_GameSetup *gamesetup );
 
 	char *m_name;

@@ -97,17 +97,10 @@ bool db_files_differ(char *newFilePath, char *oldFilePath)
 
 	while(!feof(n) && !feof(o)) {
 		char nb[DIFF_SIZE], ob[DIFF_SIZE];
-#if defined(ACTIVISION_ORIGINAL)
-		int nr, or;
-		nr = fread(nb, 1, DIFF_SIZE, n);
-		or = fread(ob, 1, DIFF_SIZE, o);
-		if(nr != or) {
-#else
 		int const	nr      = fread(nb, 1, DIFF_SIZE, n);
 		int const	oldr	= fread(ob, 1, DIFF_SIZE, o);
 
 		if (nr != oldr) {
-#endif
 			fclose(n);
 			fclose(o);
 			return true;
@@ -382,13 +375,8 @@ void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpa
 {
 	Assert(g_record);
 	while(list) {
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-		g_record->AddBitPair(list->name, size->minSize, size->maxSize, pairtype);
-#else
 // Added by Martin Gühmann
 		g_record->AddBitPair(list, size->minSize, size->maxSize, pairtype);
-#endif
 		struct namelist *next = list->next;
 		free(list);
 		list = next;

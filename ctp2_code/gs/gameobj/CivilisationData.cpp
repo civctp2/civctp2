@@ -56,44 +56,6 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender) : GAMEOBJ(id.m_id)
-	{
-	
-	m_owner = owner ;
-	memset(m_cityname_count, 0, sizeof(m_cityname_count)) ;
-	m_civ = civ ;
-	m_gender = gender;
-	m_cityStyle	= CITY_STYLE_MAX - 1;
-	memset(m_leader_name, 0, k_MAX_NAME_LEN);
-    memset(m_personality_description, 0, k_MAX_NAME_LEN); 
-	memset(m_civilisation_name, 0, k_MAX_NAME_LEN);
-	memset(m_country_name, 0, k_MAX_NAME_LEN);
-	memset(m_singular_name, 0, k_MAX_NAME_LEN);
-	ENQUEUE();
-	}
-
-
-
-
-
-
-
-
-
-CivilisationData::CivilisationData(const ID &id) : GAMEOBJ(id.m_id)
-	{
-    m_gender = GENDER_MALE; 
-	m_cityStyle = CITY_STYLE_MAX - 1;
-	memset(m_cityname_count, 0, sizeof(m_cityname_count));
-	memset(m_leader_name, 0, k_MAX_NAME_LEN);
-    memset(m_personality_description, 0, k_MAX_NAME_LEN); 
-	memset(m_civilisation_name, 0, k_MAX_NAME_LEN);
-	memset(m_country_name, 0, k_MAX_NAME_LEN);
-	memset(m_singular_name, 0, k_MAX_NAME_LEN);
-	}
-
-#else	// ACTIVISION_ORIGINAL
 
 #include "CivilisationPool.h"	// CIV_INDEX_INVALID
 #include "CityStyleRecord.h"	// g_theCityStyleDB
@@ -166,7 +128,6 @@ CivilisationData::CivilisationData(const ID &id)
 	memset(m_singular_name, 0, k_MAX_NAME_LEN);
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 
 
@@ -509,9 +470,7 @@ void CivilisationData::ResetCiv(CIV_INDEX newCivIndex, GENDER gender)
 	strId = g_theCivilisationDB->GetSingularCivName(newCivIndex) ;
 	SetSingularCivName(g_theStringDB->GetNameStr(strId)) ;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	m_cityStyle	= g_theCivilisationDB->GetCityStyle(newCivIndex);
-#endif
 }
 
 void CivilisationData::ResetStrings()
@@ -528,7 +487,6 @@ void CivilisationData::ResetStrings()
 	SetSingularCivName(g_theStringDB->GetNameStr(g_theCivilisationDB->GetSingularCivName(m_civ)));
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : CivilisationData::GetCityStyle
@@ -565,4 +523,3 @@ sint32 CivilisationData::GetCityStyle(void) const
 		return CITY_STYLE_DEFAULT;
 	}
 }
-#endif

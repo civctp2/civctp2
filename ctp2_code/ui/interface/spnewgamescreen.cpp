@@ -69,11 +69,6 @@
 
 #include "custommapscreen.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-// No longer need this include since the SP screen has been removed
-// from the interface
-#include "spwindow.h"
-#endif
 
 #include "spnewgamewindow.h"
 
@@ -135,13 +130,8 @@ sint32	spnewgamescreen_displayMyWindow()
 	g_useCustomYear = false;
 	if (g_pTurnLengthOverride)
 	{
-#if defined(ACTIVISION_ORIGINAL)	// wrong delete
-		delete g_pTurnLengthOverride;
-		g_pTurnLengthOverride = false;
-#else
 		delete [] g_pTurnLengthOverride;
 		g_pTurnLengthOverride = NULL;
-#endif
 	}
 
 	if(!g_spNewGameWindow) { retval = spnewgamescreen_Initialize(); }
@@ -251,14 +241,6 @@ AUI_ERRCODE spnewgamescreen_Initialize( void )
 
 AUI_ERRCODE spnewgamescreen_Cleanup()
 {
-#if defined(ACTIVISION_ORIGINAL)
-	if ( !g_spNewGameWindow  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( g_spNewGameWindow->Id() );
-
-	delete g_spNewGameWindow;
-	g_spNewGameWindow = NULL;
-#else
 	// Clean up subscreens.
 	spnewgamediffscreen_Cleanup();
 	spnewgamemapshapescreen_Cleanup();
@@ -280,7 +262,6 @@ AUI_ERRCODE spnewgamescreen_Cleanup()
 		delete g_spNewGameWindow;
 		g_spNewGameWindow = NULL;
 	}
-#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -395,16 +376,8 @@ spnewgamescreen_returnPress(aui_Control *control, uint32 action, uint32 data, vo
 	g_civPaths->ClearCurScenarioPackPath();
 
 	if(spnewgamescreen_removeMyWindow(action)) {
-#if defined(ACTIVISION_ORIGINAL)
-		if (wasPBEMOrHotseat) {
-			initialplayscreen_displayMyWindow();
-		} else {
-			spscreen_displayMyWindow();
-		}
-#else
 		// In the new interface there is no SP window
 		initialplayscreen_displayMyWindow();
-#endif
 	}
 	ScenarioWindow::Hide();
 }
@@ -999,10 +972,8 @@ void spnewgamescreen_HotseatCallback(sint32 launch, sint32 player,
 		
 		g_hsPlayerSetup[player].civ = civ;
 		g_hsPlayerSetup[player].isHuman = human;
-#if !defined(ACTIVISION_ORIGINAL)
 		delete [] g_hsPlayerSetup[player].name;
 		delete [] g_hsPlayerSetup[player].email;
-#endif
 		g_hsPlayerSetup[player].name = new MBCHAR[strlen(name) + 1];
 		strcpy(g_hsPlayerSetup[player].name, name);
 		g_hsPlayerSetup[player].email = new MBCHAR[strlen(email) + 1];

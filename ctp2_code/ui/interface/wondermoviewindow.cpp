@@ -89,25 +89,6 @@ C3Window( retval, id, x, y, width, height, bpp, pattern, type )
 
 WonderMovieWindow::~WonderMovieWindow()
 {
-#if defined(ACTIVISION_ORIGINAL)	// leaking m_textBox
-	if (m_movieButton)
-		delete m_movieButton;
-
-	if (m_wonderName)
-		delete m_wonderName;
-
-	if (m_topBorder)
-		delete m_topBorder;
-
-	if (m_leftBorder)
-		delete m_leftBorder;
-
-	if (m_rightBorder)
-		delete m_rightBorder;
-
-	if (m_bottomBorder)
-		delete m_bottomBorder;
-#else
 	delete m_movieButton;
 	delete m_wonderName;
 	delete m_topBorder;
@@ -115,7 +96,6 @@ WonderMovieWindow::~WonderMovieWindow()
 	delete m_rightBorder;
 	delete m_bottomBorder;
 	delete m_textBox;
-#endif
 }
 
 

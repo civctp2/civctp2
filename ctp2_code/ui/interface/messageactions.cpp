@@ -56,9 +56,7 @@
 #include "SelItem.h"
 #include "Player.h"
 #include "Director.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "ProfileDB.h"				// g_theProfileDB
-#endif
 
 extern RadarMap			*g_radarMap;
 extern C3UI				*g_c3ui;
@@ -197,9 +195,6 @@ void MessageStandardEyePointAction::Execute( aui_Control *control, uint32 action
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
-#if defined(ACTIVISION_ORIGINAL)
-	MapPoint pos;	// never used
-#endif
 	Message *message;
 	if ( m_window ) 
 		message = m_window->GetMessage();
@@ -211,12 +206,10 @@ void MessageStandardEyePointAction::Execute( aui_Control *control, uint32 action
 
 	message->AccessData()->EyePointCallback( 0 );
 
-#if !defined(ACTIVISION_ORIGINAL)
 	if (g_theProfileDB->GetValueByName("CloseOnEyepoint"))
 	{
 		message->Minimize();
 	}
-#endif
 }
 
 

@@ -772,57 +772,12 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 {
 	
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
-#if defined(ACTIVISION_ORIGINAL)
-	AUI_ERRCODE r;
-#endif
 	ns_Player *netShellObject = item->GetNetShellObject();
 	if ( !netShellObject )
 		netShellObject = ((ns_Item<NETFunc::Player, ns_Player> *)item->
 						  GetParent())->
 			GetNetShellObject();
 
-#if defined(ACTIVISION_ORIGINAL)
-	switch ( netShellObject->type( i ) )
-	{
-	case ns_Accessor<NETFunc::Player>::STRING:
-
-		{
-			
-			MBCHAR name[ dp_PNAMELEN + 1 ];
- 
-			strncpy( name, (MBCHAR *)netShellObject->data( i ), dp_PNAMELEN );
-			
-			if ( !item->GetTextFont() )
-				item->TextReloadFont();
-
-			item->GetTextFont()->TruncateString(
-				name,
-				item->Width() );
-
-			r = item->SetText( name );
-		}
-		if(netShellObject->IsMine())
-			item->SetTextBold(true);
-		else
-			item->SetTextBold(false);
-		return r;
-	case ns_Accessor<NETFunc::Player>::INT:
-		r = item->SetText(
-			itoa( (sint32)netShellObject->data( i ), scratch, 10 ) );
-		if(netShellObject->IsMine())
-			item->SetTextBold(true);
-		else
-			item->SetTextBold(false);
-		return r;
-	case ns_Accessor<NETFunc::Player>::ICON:
-		return item->SetIcon( (MBCHAR *)netShellObject->data( i ) );
-
-	default:
-		
-		Assert( FALSE );
-		return AUI_ERRCODE_INVALIDPARAM;
-	}
-#else	// ACTIVISION_ORIGINAL
 	void *	dataPtr	= netShellObject->data(i);
 
 	if (dataPtr)
@@ -859,7 +814,6 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 
 	Assert(FALSE);
 	return AUI_ERRCODE_INVALIDPARAM;
-#endif	// ACTIVISION_ORIGINAL
 }
 
 

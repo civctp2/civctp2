@@ -64,15 +64,6 @@ enum GENDER {
 	GENDER_MAX
 };
 
-#if defined(ACTIVISION_ORIGINAL)	// Read from file now, see g_theCityStyleDB
-enum CITY_STYLE {
-	CITY_STYLE_ROMAN,
-	CITY_STYLE_ARABIAN,
-	CITY_STYLE_ASIAN,
-
-	CITY_STYLE_MAX
-};
-#else
 //----------------------------------------------------------------------------
 //
 // City style values
@@ -91,7 +82,6 @@ enum CITY_STYLE {
 	sint32 const	CITY_STYLE_EDITOR	= -2;
 	sint32 const	CITY_STYLE_GENERIC	= -1;
 	sint32 const	CITY_STYLE_DEFAULT	=  0;
-#endif
 
 class Civilisation : public ID
 	{

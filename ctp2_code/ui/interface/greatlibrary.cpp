@@ -152,11 +152,7 @@ extern ProfileDB			*g_theProfileDB;
 
 extern aui_Surface			*g_sharedSurface;
 
-#if defined(ACTIVISION_ORIGINAL)
-static char s_database_names[DATABASE_MAX][200] =
-#else
 static char const s_database_names[DATABASE_MAX][GL_MAX_DB_NAME_SIZE] =
-#endif
 {
 	"DATABASE_DEFAULT",
 	"DATABASE_UNITS",
@@ -192,9 +188,7 @@ void GreatLibrary::Initialize_Great_Library_Data()
 	
 	const int GREAT_LIBRARY_HASH_SIZE = 2000;
 
-#if !defined(ACTIVISION_ORIGINAL)	
 	delete m_great_library_info;
-#endif
 	m_great_library_info = new Text_Hasher<char *> 
 		(
 			GREAT_LIBRARY_HASH_SIZE,
@@ -220,9 +214,7 @@ void GreatLibrary::Shutdown_Great_Library_Data()
 {
 	
 	delete m_great_library_info;
-#if !defined(ACTIVISION_ORIGINAL)
 	m_great_library_info = NULL;
-#endif
 }
 
 
@@ -244,26 +236,11 @@ enum Read_Library_State
 
 void GreatLibrary::Load_Great_Library()
 {
-#if defined(ACTIVISION_ORIGINAL)	// Unused code: old path handling?
-	char gl_path[512];
-
-	MBCHAR path[_MAX_PATH];
-	int i=0;
-	while(g_civPaths->FindPath(C3DIR_GL, i++, path)) 
-	{
-		if (path[0]) 
-			break;
-	}
-
-	
-	sprintf(gl_path, "%s\\Great_Library.txt", path);
-#else
 	Assert(m_great_library_info);	// Using m_great_library_info-> later on.
 	if (!m_great_library_info)
 	{
 		return;
 	}
-#endif
 	
 	FILE * great_library = c3files_fopen(C3DIR_GL, "Great_Library.txt", "r");
 
@@ -280,11 +257,7 @@ void GreatLibrary::Load_Great_Library()
 		
 		
 		const int MAX_NAME = 1024;
-#if defined(ACTIVISION_ORIGINAL)	// too small for the German version
-		const int MAX_ENTRY = 4096;
-#else
 		const int MAX_ENTRY	= k_MAX_GL_ENTRY;
-#endif
 		char the_name[MAX_NAME];
 		char the_entry[MAX_ENTRY];
 		int name_pos;
@@ -1416,12 +1389,8 @@ void GreatLibrary::Display( void )
 	m_buttonString = LIB_STRING_INDEX;
 
 	ClearHistory();
-#if defined(ACTIVISION_ORIGINAL)
-	SetLibrary( 0, DATABASE_ADVANCES );
-#else
 	// This has already been set: no need to use some dummy advance.
 	SetLibrary(m_window->GetTechMode(), m_window->GetTechDatabase());
-#endif
 	
 	FixTabs();
 }
@@ -1568,9 +1537,7 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	case DATABASE_TILE_IMPROVEMENTS:
 		g_greatLibrary->m_window->SetTechMode( theMode, DATABASE_TILE_IMPROVEMENTS );
 		so.AddInt(theMode);
-#if !defined(ACTIVISION_ORIGINAL)
 		enableGoal = true;
-#endif
 		m_itemLabel->SetText(g_theTerrainImprovementDB->Get(theMode)->GetNameText());
 		break;
 	}
@@ -1778,11 +1745,7 @@ sint32 GreatLibrary::ClearHistory( void )
 {
 	m_history_position = 0;
 	m_history.clear();
-#if defined(ACTIVISION_ORIGINAL)
-	m_selectedIndex = 0;
-#else
 	m_selectedIndex = -1;
-#endif
 	return 0;
 }
 
@@ -1923,18 +1886,6 @@ sint32 GreatLibrary::HandleSetGoal( void )
 	if (!selection_name)
 		return -1;
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
-	if(!fmt) fmt = "Goal set to: %s";
-	sprintf(goal_set_message, fmt, selection_name);
-
-	
-	MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
-
-	g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
-
-#else // ACTIVISION_ORIGINAL
 //Added by Martin Gühmann
 
 	int tmp = g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
@@ -1957,7 +1908,6 @@ sint32 GreatLibrary::HandleSetGoal( void )
 		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
 	}
 
-#endif // ACTIVISION_ORIGINAL
 
 	return 0;
 }
@@ -2352,10 +2302,8 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		
 		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
-#if !defined(ACTIVISION_ORIGINAL)
 			//added by Martin Gühmann
 			if(HIDE(g_theResourceDB, index)) continue;
-#endif
 			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theResourceDB->GetName(
 						g_theResourceDB->m_alphaToIndex[ index ])), index);

@@ -114,7 +114,6 @@ extern TutorialWin *g_tutorialWin;
 #include "StrategyRecord.h"
 #include "DiplomacyRecord.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to support the rest of the databases in the new database format.
 #include "PersonalityRecord.h"
 #include "AdvanceBranchRecord.h"
@@ -139,7 +138,6 @@ extern TutorialWin *g_tutorialWin;
 #include "UnitBuildListRecord.h"
 #include "WonderBuildListRecord.h"
 #include "WonderMovieRecord.h"
-#endif
 
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
@@ -154,10 +152,8 @@ extern TutorialWin *g_tutorialWin;
 #include "MessageWindow.h"
 #include "ProfileDB.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "GreatLibrary.h"
 #include "MainControlPanel.h"
-#endif
 
 
 extern RadarMap *g_radarMap;
@@ -384,11 +380,7 @@ void SlicEngine::Cleanup()
 	}
 
 	
-#if defined(ACTIVISION_ORIGINAL)	
-	slicif_init();
-#else
 	slicif_cleanup();
-#endif
 
 	m_doResearchOnUnblank = FALSE;
 }
@@ -1032,7 +1024,6 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_IsUnitAtHead);
 	m_functionHash->Add(new Slic_OpenScenarioEditor);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Readded Slic functions of CTP2.1 by Martin Gühmann
 	m_functionHash->Add(new Slic_DestroyBuilding);
 	m_functionHash->Add(new Slic_OpenBuildQueue);
@@ -1095,7 +1086,6 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_IsWater);
 	//Added by Solver
 	m_functionHash->Add(new Slic_IsOnSameContinent);
-#endif
 }
 
 void SlicEngine::AddBuiltinVariables()
@@ -1112,11 +1102,7 @@ void SlicEngine::Link()
 
 	sint32 symStart;
 	if(!m_symTab) {
-#if defined (ACTIVISION_ORIGINAL)	// ;+ is a syntax error with .NET
-		symStart = 0;+
-#else
 		symStart = 0;
-#endif
 		m_symTab = new SlicSymTab(0);
 	} else {
 		symStart = m_symTab->GetNumEntries();
@@ -2721,18 +2707,6 @@ void SlicEngine::BlankScreen(BOOL blank)
 		g_tiledMap->Refresh();
 		g_radarMap->Update();
 
-#if defined(ACTIVISION_ORIGINAL)
-		if(!m_blankScreen)
-			CheckPendingResearch();
-
-		if(g_controlPanel) {
-			if(m_blankScreen) {
-
-			} else {
-
-			}
-		}
-#else
 		if (m_blankScreen)
 		{
 			MainControlPanel::Blank();
@@ -2757,7 +2731,6 @@ void SlicEngine::BlankScreen(BOOL blank)
 				g_greatLibrary->SetLibrary(advance, DATABASE_ADVANCES);
 			}
 		}
-#endif
 	}
 }
 
@@ -3048,7 +3021,6 @@ void SlicEngine::AddDatabases()
 																  g_DiplomacyRecord_Accessors,
 																  g_Diplomacy_Tokens,
 																  k_Num_DiplomacyRecord_Tokens));
-#if !defined(ACTIVISION_ORIGINAL)
 	//The rest of the new databases available through slic added by Martin Gühmann
 	m_dbHash->Add(new SlicDBConduit<PersonalityRecord, 
 									PersonalityRecordAccessorInfo>("PersonalityDB", g_thePersonalityDB,
@@ -3159,7 +3131,6 @@ void SlicEngine::AddDatabases()
 																  g_WonderMovieRecord_Accessors,
 																  g_WonderMovie_Tokens,
 																  k_Num_WonderMovieRecord_Tokens));
-#endif // ACTIVISION_ORIGINAL
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)

@@ -42,7 +42,6 @@
 
 #if defined(_MSC_VER)
 #pragma once
-#else
 #endif
 
 #ifndef ___BMH_MAIN_CONTROL_PANEL_HEADER
@@ -50,21 +49,6 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-#include <memory>
-
-#include "globals.h"
-
-
-class ControlTabPanel;
-class EndTurnButton;
-class ShortcutPad;
-class StatusBar;
-class TurnYearStatus;
-
-class aui_ProgressBar;
-class CellUnitList;
-#else
 //----------------------------------------------------------------------------
 // Library imports
 //----------------------------------------------------------------------------
@@ -94,7 +78,6 @@ class MainControlPanel;
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
-#endif
 
 class MainControlPanel {
 public:
@@ -104,9 +87,7 @@ public:
 	
 	static void InitializeEvents();
 
-#if !defined(ACTIVISION_ORIGINAL)
 	static void Blank();
-#endif
 
 	static void CleanUp();
 

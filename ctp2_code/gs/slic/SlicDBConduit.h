@@ -44,11 +44,9 @@ public:
 	virtual const MBCHAR *GetRecordNameByIndex(sint32 index) = 0;
 	virtual sint32 GetRecordNameID(const char *id) = 0;
 	virtual sint32 GetRecordNameIDByIndex(sint32 index) = 0;
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to get the number of records in a database via slic
 	virtual sint32 GetNumRecords() = 0;
 	virtual bool IsTokenInDB(const char *valname) = false;
-#endif
 	virtual ~SlicDBInterface() {};
 };
 
@@ -81,11 +79,9 @@ public:
 
 	sint32 GetValue(sint32 index, const char *valname) {
 		const T *rec = m_db->Get(index);
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to avoid an access violation
 		Assert(rec);
 		if(!rec)return 0;
-#endif
 		sint32 i;
 		for(i = 0; i < m_numTokens; i++) {
 			if(stricmp(valname, m_tokens[i]) == 0) {
@@ -145,7 +141,6 @@ public:
 		}
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to get the number of records in a database via slic
 
 //----------------------------------------------------------------------------
@@ -194,7 +189,6 @@ public:
 		}
 		return false;
 	}
-#endif
 
 private:
 	CTPDatabase<T> *m_db;

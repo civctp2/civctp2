@@ -86,10 +86,8 @@ extern SelectedItem		*g_selected_item;
 extern ColorSet			*g_colorSet;
 extern World			*g_theWorld;
 
-#if !defined(ACTIVISION_ORIGINAL)
 extern sint32 g_fog_toggle;
 extern sint32 g_god;
-#endif
 
 static const unsigned char k_EAST_BORDER_FLAG		= 0x01;
 static const unsigned char k_WEST_BORDER_FLAG		= 0x02;
@@ -352,11 +350,7 @@ POINT RadarMap::MapToPixel(sint32 x, sint32 y)
 	POINT		pt;
 	sint32		k;
 	double		nudge;
-#if defined(ACTIVISION_ORIGINAL)	// ceil after integer division?
-	k = sint32(ceil(y/2) + x) % m_mapSize->x;
-#else
 	k = ((y / 2) + x) % m_mapSize->x;
-#endif
 
 	nudge = 0;
 	if (y&1) {
@@ -426,103 +420,6 @@ Player *RadarMap::GetVisiblePlayerToRender()
 //    RadarMap
 //	
 //---------------------------------------------------------------------------
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position, uint32 &flags)
-{
-	
-	Unit unit;
-
-	flags = 0;
-
-	if(player->m_vision->IsExplored(position)) {
-		if(m_displayTrade && g_theWorld->GetCell(position)->GetNumTradeRoutes() > 0) {
-			flags = 1;
-		}
-
-		
-		
-		if(m_displayOverlay && m_mapOverlay) {
-			COLOR color = m_mapOverlay[position.y * m_mapSize->x + position.x];
-			if(color != COLOR_MAX)	
-				return(g_colorSet->GetColor(color));
-		}
-
-		if(!g_theWorld->GetTopVisibleUnit(position, unit))
-			g_theWorld->GetTopRadarUnit(position, unit);
-
-		
-		if(unit.IsValid()) {
-			
-			if(unit.IsCity()) {
-				
-				if(m_displayCities) {
-					
-					
-					if(unit.m_id == m_selectedCity.m_id)
-						return(g_colorSet->GetColor(COLOR_RED));
-					else
-						return(g_colorSet->GetPlayerColor(unit.GetOwner()));
-				} else {
-					
-					
-					
-					
-					unit.m_id = 0;
-						g_theWorld->GetTopVisibleUnitNotCity(position, unit);
-				}
-			}
-
-			
-			
-			
-			if(m_displayUnits && unit.m_id)
-				return(g_colorSet->GetPlayerColor(unit.GetOwner()));
-		}
-
-		
-		UnseenCellCarton unseenCellCarton;
-		if(player->m_vision->GetLastSeen(position, unseenCellCarton)) {
-			if(m_displayTerrain) {
-				return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-															   unseenCellCarton.m_unseenCell->GetTerrainType())));	
-			} else {
-				if(g_theWorld->IsLand(position) || g_theWorld->IsMountain(position)) {
-
-
-					return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-																   TERRAIN_GRASSLAND));
-				} else {
-					return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-																   TERRAIN_WATER_DEEP));
-				}
-			}
-		}
-					
-
-		Cell *cell = g_theWorld->GetCell(position);
-
-		if(m_displayTerrain) {
-			
-			return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-														   cell->GetTerrainType())));
-		} else {
-		if(g_theWorld->IsLand(position) || g_theWorld->IsMountain(position)) {
-				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-															   TERRAIN_GRASSLAND));
-			} else {
-				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-															   TERRAIN_WATER_DEEP));
-			}
-		}
-	}
-
-	
-	if(g_theWorld->GetTopRadarUnit(position, unit))
-		return(g_colorSet->GetPlayerColor(unit.GetOwner()));
-	return(g_colorSet->GetColor(COLOR_BLACK));
-}
-
-#else // ACTIVISION_ORIGINAL
 Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 								 const MapPoint &worldpos, uint32 &flags)
 {
@@ -627,7 +524,6 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 
 	return(g_colorSet->GetColor(COLOR_BLACK));
 }
-#endif // ACTIVISION_ORIGINAL
 		
 
 
@@ -642,13 +538,8 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position)
 {
 	
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	sint32 owner = g_theWorld->GetCell(position)->GetOwner();
-#else
 // Added by Martin Gühmann
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
-#endif
 	if(owner < 0)
 		return(g_colorSet->GetColor(COLOR_BLACK));
 
@@ -677,23 +568,12 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	if(!player->m_vision->IsExplored(position))
 		return(borderFlags);
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	sint32 owner = g_theWorld->GetCell(position)->GetOwner();
-#else
 // Added by Martin Gühmann
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
-#endif
 
 	if(owner < 0)
 		return(borderFlags);
 
-#if defined(ACTIVISION_ORIGINAL)
-	if(owner != player->m_owner && 
-	   !player->m_hasGlobalRadar &&
-	   !Scheduler::CachedHasContactWithExceptSelf(player->m_owner, owner))
-		return(borderFlags);
-#else
 	if(owner != player->m_owner
 	&& !player->m_hasGlobalRadar 
 	&& !Scheduler::CachedHasContactWithExceptSelf(player->m_owner, owner)
@@ -701,7 +581,6 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	&& !g_god
 	)
 		return(borderFlags);
-#endif
 
 	
 	MapPoint neighborPosition;
@@ -818,13 +697,8 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
 	};
 
-#if defined(ACTIVISION_ORIGINAL)	
-	tileRectangle.right = std::_MAX(tileRectangle.left, (tileRectangle.right - 1L));
-	tileRectangle.bottom = std::_MAX(tileRectangle.top, (tileRectangle.bottom - 1L));
-#else
 	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
 	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
-#endif
 	
 	if(borderFlags & k_WEST_BORDER_FLAG)
 		primitives_DrawLine16(surface, tileRectangle.left, tileRectangle.top,
@@ -841,11 +715,7 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 	tileRectangle.left = 0;
 	tileRectangle.right = static_cast<sint32>(ceil(m_tilePixelWidth / 2.0));
 
-#if defined(ACTIVISION_ORIGINAL)	
-	tileRectangle.right = std::_MAX(tileRectangle.left, (tileRectangle.right - 1L));
-#else
 	tileRectangle.right	= std::max(tileRectangle.left, (tileRectangle.right - 1L));
-#endif
 	
 	if(borderFlags & k_EAST_BORDER_FLAG)
 		primitives_DrawLine16(surface, tileRectangle.right, tileRectangle.top,
@@ -914,15 +784,9 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 	
 	sint32 middle = ceil(xPosition + m_tilePixelWidth/2);
 
-#if defined(ACTIVISION_ORIGINAL)	
-	tileRectangle.right = std::_MAX(tileRectangle.left, (tileRectangle.right - 1L));
-	tileRectangle.bottom = std::_MAX(tileRectangle.top, (tileRectangle.bottom - 1L));
-	middle = std::_MIN(middle, tileRectangle.right);
-#else
 	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
 	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
 	middle					= std::min(middle, tileRectangle.right);
-#endif
 	
 	
 	if(tileRectangle.right >= surface->Width())
@@ -1004,27 +868,15 @@ void RadarMap::RenderMapTileBorder(aui_Surface *surface, const MapPoint &screenP
 //    tile	
 //
 //---------------------------------------------------------------------------
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-void RadarMap::RenderTile(aui_Surface *surface, const MapPoint &position,
-						  Player *player)
-#else
 void RadarMap::RenderTile(aui_Surface *surface, const MapPoint &position,
 						  const MapPoint &worldpos, Player *player)
-#endif
 
 {
 	uint32 flags;
 
-#ifdef ACTIVISION_ORIGINAL	// #01 Allow shifing the X and Y axis 
-	Pixel16 color = RadarTileColor(player, MapPoint(position.x, position.y), flags);
-			
-	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
-		% m_mapSize->x;
-#else
 	Pixel16 const	color	= 
 		RadarTileColor(player, MapPoint(position.x, position.y), worldpos, flags);
 	sint32 const	x		= ((position.y / 2) + position.x) % m_mapSize->x;
-#endif
 
 
 
@@ -1042,23 +894,6 @@ void RadarMap::RenderTile(aui_Surface *surface, const MapPoint &position,
 //	- Controls the rendering of the borders for the current radar map
 //    position	
 //---------------------------------------------------------------------------
-#if defined(ACTIVISION_ORIGINAL) // #01 Allow shifing the X and Y axis 
-void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
-						  Player *player)
-{
-
-	Pixel16 borderColor = RadarTileBorderColor(MapPoint(position.x, position.y));
-	uint8 borderFlags = RadarTileBorder(player, MapPoint(position.x, position.y));
-	
-	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
-		% m_mapSize->x;
-
-	
-	if (borderFlags)
-		RenderMapTileBorder(surface, MapPoint(x, position.y), borderFlags, borderColor);
-}
-
-#else
 void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 						  const MapPoint &worldpos, Player *player)
 {
@@ -1073,7 +908,6 @@ void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 		RenderMapTileBorder(surface, MapPoint(x, position.y), borderFlags, borderColor);
 	}
 }
-#endif
 
 
 //---------------------------------------------------------------------------
@@ -1084,11 +918,7 @@ void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 //  - Prepares and call the rendering of the trade routes
 //		
 //---------------------------------------------------------------------------
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, Player *player)
-#else
 void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player)
-#endif
 {
 	if(!m_displayTrade)
 		return;
@@ -1096,18 +926,10 @@ void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, const
 	
 	
 		 
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-	MapPoint screenPosition((sint32)(ceil(position.y / 2) + position.x) % (m_mapSize->x), position.y);
-
-	if(!g_theWorld->GetCell(position)->GetNumTradeRoutes() ||
-		!player->m_vision->IsExplored(position)) {
-
-#else
 	MapPoint screenPosition(((worldpos.y / 2) + position.x) % (m_mapSize->x), position.y);
 
 	if(!g_theWorld->GetCell(worldpos)->GetNumTradeRoutes() ||
 	   !player->m_vision->IsExplored(worldpos)) {
-#endif
 		return;
 	}
 
@@ -1155,11 +977,7 @@ void RadarMap::RenderMap(aui_Surface *surface)
 	for(y = 0; y < m_mapSize->y; y++)
 		for(x = 0; x < m_mapSize->x; x++)
 		{
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-			RenderTile(m_tempSurface, MapPoint(x, y), player);	
-#else
 			RenderTile(m_tempSurface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);	
-#endif
 		}
 
 	fRect sRect = {0, 0, m_tempSurface->Width(), m_tempSurface->Height()};
@@ -1178,13 +996,8 @@ void RadarMap::RenderMap(aui_Surface *surface)
 	for(y = 0; y < m_mapSize->y; y++)
 		for(x = 0; x < m_mapSize->x; x++)
 		{
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-			RenderTileBorder(surface, MapPoint(x, y), player);	
-			RenderTrade(surface, MapPoint(x, y), player);
-#else
 			RenderTileBorder(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);	
 			RenderTrade(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
-#endif
 		}
 }
 
@@ -1198,180 +1011,6 @@ void RadarMap::RenderMap(aui_Surface *surface)
 //    the main tile map.  
 //		
 //---------------------------------------------------------------------------
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-void RadarMap::RenderViewRect
-(
-	aui_Surface *surf, 
-	sint32 x,	
-	sint32 y	
-)
-{
-	if (g_tiledMap) {
-		RECT *temp = g_tiledMap->GetMapViewRect();
-		m_mapViewRect = *temp;
-
-		if(!g_tiledMap->ReadyToDraw())
-			return;
-
-	}
-
-
-		
-	sint32 x1,x2,x3,x4;
-	sint32 y1,y2,y3,y4;
-
-	if ( m_mapSize ) 
-	{
-		sint32 mapWidth = m_mapSize->x;
-		sint32 mapHeight = m_mapSize->y;
-
-		// Set the X coordinate points		
-		if (!g_theWorld->IsXwrap() && (m_mapViewRect.left < 0 || m_mapViewRect.right > mapWidth)) 
-		{
-			x1 = x3 = m_mapViewRect.left;
-			x2 = x4 = m_mapViewRect.right;
-
-			if (m_mapViewRect.left < 0) 
-			{
-				x1 = x3 = 0;
-			}
-			if (m_mapViewRect.right > mapWidth) 
-			{
-				x2 = x4 = mapWidth;
-			}
-		}
-
-		else 
-		{
-		   	
-			if (m_mapViewRect.left < 0) 
-			{
-				x1 = m_mapViewRect.left + mapWidth;
-				x2 = mapWidth;
-
-				
-				if (m_mapViewRect.right <= 0) 
-				{
-					x3 = mapWidth;
-					x4 = mapWidth;
-				}
-				
-				else 
-				{
-					x3 = 0;
-					x4 = m_mapViewRect.right;
-				}
-			}
-			
-			else 
-			{
-				
-				if (m_mapViewRect.right > mapWidth) 
-				{
-					x1 = m_mapViewRect.left;
-					x2 = mapWidth;
-					x3 = 0;
-					x4 = m_mapViewRect.right - mapWidth;
-				}
-				
-				
-				else 
-				{
-					x1 = m_mapViewRect.left;
-					x2 = m_mapViewRect.right;
-					x3 = m_mapViewRect.left;
-					x4 = m_mapViewRect.right;
-				}
-			} 
-		} 
-
-		x1 = (sint32) (x1 * m_tilePixelWidth) + x;
-		x2 = (sint32) (x2 * m_tilePixelWidth) + x - 1;
-		x3 = (sint32) (x3 * m_tilePixelWidth) + x;
-		x4 = (sint32) (x4 * m_tilePixelWidth) + x - 1;
-
-
-		// Set the Y points
-		if ( !g_theWorld->IsYwrap() && ( m_mapViewRect.top < 0 || m_mapViewRect.bottom >= mapHeight)) 
-		{
-			
-			y1 = y3 = m_mapViewRect.top;
-			y2 = y4 = m_mapViewRect.bottom;
-			if (m_mapViewRect.top < 0) 
-			{
-				y1 = y3 = 0;
-			}
-
-			
-			if (m_mapViewRect.bottom > mapHeight) 
-			{
-				y2 = y4 = mapHeight;
-			}
-		}
-
-		
-		else 
-		{
-
-			if ( m_mapViewRect.top < 0 )
-			{
-				y1 = m_mapViewRect.top + mapHeight;
-				y2 = mapHeight;
-				if (m_mapViewRect.bottom <= 0) 
-				{
-					y3 = mapHeight;
-					y4 = mapHeight;
-				}
-				else 
-				{
-					y3 = 0;
-					y4 = m_mapViewRect.bottom;
-				}
-			}
-			else
-			{
-				if (m_mapViewRect.bottom > mapHeight)
-				{
-					y1 = m_mapViewRect.top;
-					y2 = mapHeight;
-					y3 = 0;
-					y4 = m_mapViewRect.bottom - mapHeight;
-				}
-				else 
-				{
-					y1 = m_mapViewRect.top;
-					y2 = m_mapViewRect.bottom;
-					y3 = m_mapViewRect.top;
-					y4 = m_mapViewRect.bottom;
-				}
-			}
-		}
-
-		y1 = (sint32) (y1 * m_tilePixelHeight) + y;
-		y2 = (sint32) (y2 * m_tilePixelHeight) + y - 1;
-		y3 = (sint32) (y3 * m_tilePixelHeight) + y;
-		y4 = (sint32) (y4 * m_tilePixelHeight) + y - 1;
-
-	}
-	else 
-	{ // no map size
-		x1 = x3 = 0;
-		x2 = x4 = 0;
-		y1 = y3 = 0;
-		y2 = y4 = 0;		
-	}
-
-	// Draw the rectangle
-	primitives_DrawLine16(surf,x1,y1,x2,y1,0xffff);
-	primitives_DrawLine16(surf,x1,y1,x1,y2,0xffff);
-	primitives_DrawLine16(surf,x3,y1,x4,y1,0xffff);
-	primitives_DrawLine16(surf,x4,y1,x4,y2,0xffff);
-	primitives_DrawLine16(surf,x1,y4,x2,y4,0xffff);
-	primitives_DrawLine16(surf,x1,y3,x1,y4,0xffff);
-	primitives_DrawLine16(surf,x3,y4,x4,y4,0xffff);
- 	primitives_DrawLine16(surf,x4,y3,x4,y4,0xffff);
-}
-#else
 void RadarMap::RenderViewRect
 (
 	aui_Surface *surf, 
@@ -1571,7 +1210,6 @@ void RadarMap::RenderViewRect
  	primitives_DrawLine16(surf,x4,y3,x4,y4,0xffff);
 }
 
-#endif
 
 //---------------------------------------------------------------------------
 //
@@ -1761,13 +1399,6 @@ void RadarMap::RedrawTile( const MapPoint *point )
 	if(!player)
 		return;
 
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-	RenderTile(m_tempSurface, *point, player);
-
-	fRect sRect, dRect;
-	sint32 x0 = (point->y + 2 * point->x) % (2 * m_mapSize->x);
-
-#else
 	// modify with the offset values
     MapPoint offsetpos = PosWorldToPosRadar( *point);
     RenderTile(m_tempSurface, offsetpos, *point, player);
@@ -1775,7 +1406,6 @@ void RadarMap::RedrawTile( const MapPoint *point )
 	fRect sRect, dRect;
 	sint32 x0 = (offsetpos.y + 2 * offsetpos.x) % (2 * m_mapSize->x);
 
-#endif
 
 
 
@@ -1785,13 +1415,8 @@ void RadarMap::RedrawTile( const MapPoint *point )
 		
 		sRect.left = x0 - adjust;
 		sRect.right = x0 + 1;
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-		sRect.top = point->y - adjust;
-		sRect.bottom = point->y + 1 + adjust;
-#else
 		sRect.top = offsetpos.y - adjust;
 		sRect.bottom = offsetpos.y + 1 + adjust;
-#endif
 
 		if (sRect.top < 0) sRect.top = 0;
 		if (sRect.bottom > m_tempSurface->Height()) sRect.bottom = m_tempSurface->Height();
@@ -1814,13 +1439,8 @@ void RadarMap::RedrawTile( const MapPoint *point )
 		
 		sRect.left = x0 - adjust;
 		sRect.right = x0 + 2 + adjust;
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-		sRect.top = point->y - adjust;
-		sRect.bottom = point->y + 1 + adjust;
-#else
 		sRect.top = offsetpos.y - adjust;
 		sRect.bottom = offsetpos.y + 1 + adjust;
-#endif
 		if (sRect.bottom > m_tempSurface->Height()) sRect.bottom = m_tempSurface->Height();
 		if (sRect.right > m_tempSurface->Width()) sRect.right = m_tempSurface->Width();
 		if (sRect.left < 0) sRect.left = 0;
@@ -1835,25 +1455,12 @@ void RadarMap::RedrawTile( const MapPoint *point )
 	}
 
 
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-	RenderTileBorder(m_mapSurface, *point, player);
-	RenderTrade(m_mapSurface, *point, player);
-#else
 	RenderTileBorder(m_mapSurface, offsetpos, *point, player);
 	RenderTrade(m_mapSurface, offsetpos, *point, player);
-#endif
 
 	if (m_filter)
 	{
 		MapPoint neighbor;
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
-		if (point->GetNeighborPosition(NORTHEAST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
-		if (point->GetNeighborPosition(NORTHWEST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
-		if (point->GetNeighborPosition(EAST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
-		if (point->GetNeighborPosition(WEST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
-		if (point->GetNeighborPosition(SOUTHEAST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
-		if (point->GetNeighborPosition(SOUTHWEST, neighbor)) RenderTileBorder(m_mapSurface, neighbor, player);
-#else
 		if (point->GetNeighborPosition(NORTHEAST, neighbor)) 
 				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
 		if (point->GetNeighborPosition(NORTHWEST, neighbor)) 
@@ -1866,7 +1473,6 @@ void RadarMap::RedrawTile( const MapPoint *point )
 				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
 		if (point->GetNeighborPosition(SOUTHWEST, neighbor)) 
 				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
-#endif
 
 	}
 }
@@ -1947,12 +1553,10 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 		tileX = (sint32) ( ceil((double)data->position.x / m_tilePixelWidth) );
 	}
 
-#ifndef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 	tileX = (sint32) ((tileX - m_displayOffset[g_selected_item->GetVisiblePlayer()].x 
 									+ m_mapSize->x) % m_mapSize->x);
 	tileY = (sint32) ((tileY - m_displayOffset[g_selected_item->GetVisiblePlayer()].y 
 									+ m_mapSize->y) % m_mapSize->y);
-#endif
 	
 	sint32 width = m_mapViewRect.right - m_mapViewRect.left;
 	sint32 height = m_mapViewRect.bottom - m_mapViewRect.top;
@@ -2000,7 +1604,6 @@ void RadarMap::MouseRGrabInside(aui_MouseEvent *data)
 	data->position.x -= X();
 	data->position.y -= Y(); 
 
-#ifndef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 	
 	sint32 nrplayer = g_selected_item->GetVisiblePlayer();
 	
@@ -2022,7 +1625,6 @@ void RadarMap::MouseRGrabInside(aui_MouseEvent *data)
 		m_displayOffset[nrplayer].y = 0;
 	}
 
-#endif
 
 	RenderMap(m_mapSurface);
 
@@ -2051,7 +1653,6 @@ AUI_ERRCODE RadarMap::Idle( void )
 }
 
 
-#ifndef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
 //---------------------------------------------------------------------------
 //
 // RadarMap::MapOffset
@@ -2096,4 +1697,3 @@ MapPoint RadarMap::PosWorldToPosRadar(MapPoint worldpos)
 	
 	return posRadar;
 }
-#endif

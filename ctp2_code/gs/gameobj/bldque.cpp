@@ -104,12 +104,6 @@ extern void player_ActivateSpaceButton(sint32 pl);
 
 BuildQueue::BuildQueue()
 { 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-    m_wonderStarted = 0;
-    m_wonderStopped = 0;
-	m_wonderComplete = 0;
-#else
 // Added by Martin Gühmann
 // These variables should store a 
 // wonder database index. 0 is also
@@ -117,7 +111,6 @@ BuildQueue::BuildQueue()
     m_wonderStarted  = -1;
     m_wonderStopped  = -1;
 	m_wonderComplete = -1;
-#endif
     m_settler_pending = FALSE;
 	m_list = new PointerList<BuildNode>;
 	m_frontWhenBuilt = NULL;
@@ -165,14 +158,9 @@ void BuildQueue::Serialize(CivArchive &archive)
 		if(g_saveFileVersion >= 62) {
 			archive >> m_wonderComplete;
 		} else {
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-			m_wonderComplete = 0;
-#else
 // Added by Martin Gühmann
 // 0 is a valid database index.
 			m_wonderComplete = -1;
-#endif
 		}
 
 		m_list->DeleteAll();
@@ -308,7 +296,6 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 			case '#':
 				
 				continue;
-#if !defined(ACTIVISION_ORIGINAL)
 			case 'C':
 				Assert(buf[1] == 'A' && buf[2] == 'P');
 				if(buf[1] == 'A' && buf[2] == 'P') {
@@ -327,7 +314,6 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 					continue;
 				}
 				break;
-#endif				
 			default:
 				Assert(FALSE);
 				continue;
@@ -395,22 +381,6 @@ void BuildQueue::EndTurn(void)
 {
 
     if (m_wonderStarted != m_wonderStopped) {
-#if defined(ACTIVISION_ORIGINAL)
-        if (m_wonderStopped) {
-            SendMsgWonderStopped(m_wonderStopped) ;
-            g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
-			
-        }
-        if (m_wonderStarted != m_wonderComplete) {
-            SendMsgWonderStarted(m_wonderStarted) ;
-            g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
-            
-        }
-    }
-
-    m_wonderStarted = 0;
-    m_wonderStopped = 0;
-#else
 //Added by Martin Gühmann
 // Correct the condition with the index shift
         if (m_wonderStopped >= 0) {
@@ -428,7 +398,6 @@ void BuildQueue::EndTurn(void)
 	// 0 is a valid database index
     m_wonderStarted = -1;
     m_wonderStopped = -1;
-#endif
     m_settler_pending = FALSE;
 }
 

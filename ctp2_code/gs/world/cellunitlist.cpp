@@ -55,9 +55,7 @@
 #include "MoveFlags.h"
 #include "wonderutil.h"
 #include "GameEventManager.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "TerrainRecord.h"	// TerrainRecord
-#endif
 
 extern sint32 g_fog_toggle;
 
@@ -134,7 +132,6 @@ BOOL CellUnitList::CanEnter(const MapPoint &point) const
 	}
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : CellUnitList::GetMovementTypeLand
@@ -163,7 +160,6 @@ bool CellUnitList::GetMovementTypeLand() const
     
     return true;
 }
-#endif
 
 BOOL CellUnitList::HasWormholeProbe() const
 {
@@ -342,79 +338,6 @@ BOOL CellUnitList::CanBeExpelled()
 
 extern sint32 g_god;
 
-#if defined(ACTIVISION_ORIGINAL)
-BOOL CellUnitList::GetTopVisibleUnitOfMoveType(const sint32 looking_player, const uint32 move, sint32 &maxi) const 
-{ 
-    uint32 vis;
-    BOOL is_found_unit = FALSE; 
-    double sum, max = -100000.0;
-    uint32 min_vis=0xffffffff; 
-	double minmove = -1;
-    sint32 i;
-
-	Army a(0);
-	g_selected_item->GetSelectedArmy(a);
-
-    for (i=(m_nElements-1); 0 <= i; i--) { 
-		if(!g_theUnitPool->IsValid(m_array[i].m_id)) {
-			if(g_network.IsClient()) {
-				g_network.RequestResync(RESYNC_INVALID_UNIT);
-				return FALSE;
-			} else {
-				Assert(g_theUnitPool->IsValid(m_array[i]));  
-				continue;
-			}
-		}
-
-        if (m_array[i].IsSameMovementType(move)) {
-            if (((m_array[i].GetVisibility() & (0x01 << looking_player)) == 0)
-				&& !g_god 
-				&& g_player[looking_player] 
-				&& !g_player[looking_player]->m_hasGlobalRadar
-				&& !g_fog_toggle
-				) {
-                continue; 
-			}
-            
-			
-			MapPoint pos;
-			GetPos(pos);
-			if(g_theWorld->GetCity(pos).m_id != 0 && 
-			   ((m_array[i].IsAsleep() || m_array[i].IsEntrenched() || m_array[i].IsEntrenching()) &&
-			    m_array[i].GetArmy().m_id != a.m_id))
-				continue;
-
-			if(m_array[0].GetOwner() == looking_player) {
-				if(m_array[i].GetMovementPoints() > minmove) {
-					maxi = i;
-					minmove = m_array[i].GetMovementPoints();
-					is_found_unit = TRUE;
-				}
-			} else {
-				vis = m_array[i].GetVisibilityClass(); 
-				if (vis <= min_vis) { 
-					
-					sum = m_array[i].GetAttack() + m_array[i].GetDefense(); 
-					
-					
-					
-					if (max < sum) {
-						max = sum; 
-						maxi = i; 
-						min_vis = vis; 
-						is_found_unit = TRUE; 
-					} 
-				}
-			}
-        }
-    }        
-    
-    if (is_found_unit) { 
-        return TRUE;
-    } 
-    return FALSE; 
-}
-#else	// ACTIVISION_ORIGINAL
 //----------------------------------------------------------------------------
 //
 // Name       : CellUnitList::GetTopVisibleUnitOfMoveType
@@ -522,7 +445,6 @@ bool CellUnitList::GetTopVisibleUnitOfMoveType
 	
 	return is_found_unit;
 }
-#endif
 
 
 
@@ -533,59 +455,6 @@ bool CellUnitList::GetTopVisibleUnitOfMoveType
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-Unit CellUnitList::GetTopVisibleUnit(const sint32 looking_player) const
-{
-    sint32 maxi; 
-    sint32 i; 
-    uint32 move_union = 0;
-    
-    for(i=0; i<m_nElements; i++) { 
-        move_union |= m_array[i].GetMovementType(); 
-    } 
-    
-    if (move_union & k_Unit_MovementType_Space_Bit) {
-        if (GetTopVisibleUnitOfMoveType(looking_player, k_Unit_MovementType_Space_Bit, maxi, noResyncReport)) {
-            return m_array[maxi]; 
-        }
-    }        
-    
-    if (move_union & k_Unit_MovementType_Air_Bit) {
-        if (GetTopVisibleUnitOfMoveType(looking_player, k_Unit_MovementType_Air_Bit, maxi)) {
-            return m_array[maxi]; 
-        }
-    }
-    
-    if (move_union & k_Unit_MovementType_Sea_Bit) {
-        if (GetTopVisibleUnitOfMoveType(looking_player,  k_Unit_MovementType_Sea_Bit, maxi)) {
-            return m_array[maxi]; 
-        }
-    }
-    
-    if (move_union & k_Unit_MovementType_ShallowWater_Bit) {
-        if (GetTopVisibleUnitOfMoveType(looking_player, k_Unit_MovementType_ShallowWater_Bit, maxi)) {
-            return m_array[maxi]; 
-        }
-    }
-    if (move_union & k_Unit_MovementType_Land_Bit) {
-        if (GetTopVisibleUnitOfMoveType(looking_player, k_Unit_MovementType_Land_Bit, maxi)) {
-            return m_array[maxi]; 
-        }
-    }                        
-    if (move_union & k_Unit_MovementType_Mountain_Bit) {
-        if (GetTopVisibleUnitOfMoveType(looking_player,k_Unit_MovementType_Mountain_Bit, maxi)) {
-            return m_array[maxi]; 
-        }
-    }                            
-    if (move_union & k_Unit_MovementType_Trade_Bit) {
-        if (GetTopVisibleUnitOfMoveType(looking_player,  k_Unit_MovementType_Trade_Bit, maxi)){
-            return m_array[maxi]; 
-        }
-    }                                
-    
-    return Unit(0); 
-}
-#else	// ACTIVISION_ORIGINAL
 Unit CellUnitList::GetTopVisibleUnit(PLAYER_INDEX const looker) const
 {
     uint32	move_union			= 0x0000;
@@ -677,7 +546,6 @@ Unit CellUnitList::GetTopVisibleUnit(PLAYER_INDEX const looker) const
     
     return Unit(0); 
 }
-#endif	// ACTIVISION_ORIGINAL
 
 BOOL CellUnitList::CanBeSued() const
 {
@@ -857,13 +725,11 @@ BOOL CellUnitList::IsMovePointsEnough(const MapPoint &pos)
     
     if (GetMovementTypeAir()) { 
         cost = k_MOVE_AIR_COST; 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Prevent ships from diving under and using tunnels.
 	} else if (g_theWorld->IsTunnel(pos) && !GetMovementTypeLand()) {
 		sint32 icost;
 		(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 		cost = icost;
-#endif
     } else { 
         cost = g_theWorld->GetMoveCost(pos); 
     }

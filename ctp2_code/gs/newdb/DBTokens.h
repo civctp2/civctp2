@@ -44,11 +44,9 @@
 #define k_Token_OpenBrace   '{'
 #define k_Token_CloseBrace  '}'
 
-#if !defined(ACTIVISION_ORIGINAL)//GovMod-See DBLexer.l also
 #define k_Token_Modified '>'
 #define k_Token_ModifiedDelimiter ','
 //EndGovMod
-#endif
 
 #define k_First_Special_Token 256
 #define k_Token_Name          ((k_First_Special_Token) + 1)

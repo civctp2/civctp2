@@ -1269,10 +1269,8 @@ void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *d
 
 void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	// Report the underlying terrain information. This is just being useful. 
 	TerrainContextClick(pos, data, doubleClick);
-#endif
 }
 
 //----------------------------------------------------------------------------
@@ -1293,12 +1291,10 @@ void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEve
 
 void SelectedItem::EnemyArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	// Report the underlying terrain information. For visible units, this is 
 	// just being useful. For invisible units, it will fix the bug that 
 	// detection is too easy.
 	TerrainContextClick(pos, data, doubleClick);
-#endif
 }
 
 void SelectedItem::TradeRouteContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)

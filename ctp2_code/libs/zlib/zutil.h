@@ -76,7 +76,7 @@ extern const char *z_errmsg[10];
 #ifdef MSDOS
 #  define OS_CODE  0x00
 #  if defined(__TURBOC__) || defined(__BORLANDC__)
-#    if(__STDC__ == 1) && (defined(__LARGE__) || defined(__COMPACT__))
+#    if (__STDC__ == 1) && (defined(__LARGE__) || defined(__COMPACT__))
        
        void _Cdecl farfree( void *block );
        void *_Cdecl farmalloc( unsigned long nbytes );

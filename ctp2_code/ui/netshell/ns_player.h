@@ -38,11 +38,7 @@
 class ns_Player : public ns_Object<NETFunc::Player, ns_Player>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_Player( NETFunc::Player *player ) : ns_Object<NETFunc::Player, ns_Player>(player) {};
-#else
 	ns_Player(NETFunc::Player * player); 
-#endif
 
 	void Update( NETFunc::Player *player );
 

@@ -280,26 +280,12 @@ AUI_ERRCODE aui_TextBase::InitCommon(
 
 aui_TextBase::~aui_TextBase()
 {
-#if defined(ACTIVISION_ORIGINAL)	// archaic delete []
-	if ( m_text )
-	{
-		delete[ m_maxLength + 1 ] m_text;
-		m_text = NULL;
-	}
-
-	if ( m_textfont )
-	{
-		g_ui->UnloadBitmapFont( m_textfont );
-		m_textfont = NULL;
-	}
-#else
 	delete [] m_text;
 
 	if (m_textfont)
 	{
 		g_ui->UnloadBitmapFont(m_textfont);
 	}
-#endif
 }
 
 
@@ -419,13 +405,6 @@ void aui_TextBase::TextReloadFont( void )
 
 	m_textfont = g_ui->LoadBitmapFont( descriptor );
 	Assert( m_textfont != NULL );
-#if defined(ACTIVISION_ORIGINAL)
-	if ( !m_textfont ) return;
-
-	if ( oldFont ) g_ui->UnloadBitmapFont( oldFont );
-
-	m_textreload = FALSE;
-#else
 	if (m_textfont)
 	{
 		if (oldFont)
@@ -439,7 +418,6 @@ void aui_TextBase::TextReloadFont( void )
 		g_ui->UnloadBitmapFont(descriptor);
 		m_textfont = oldFont;
 	}
-#endif
 }
 
 

@@ -56,18 +56,6 @@ aui_FileFormat *aui_MemMap::GetFileFormat( MBCHAR *filename )
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-void aui_MemMap::ReleaseFileFormat( aui_FileFormat *format )
-{
-	if ( format )
-	{
-		delete format;
-		format = NULL;
-	}
-}
-
-#else
 //Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
@@ -92,4 +80,3 @@ void aui_MemMap::ReleaseFileFormat( aui_FileFormat *format )
 {
 		delete format;
 }
-#endif

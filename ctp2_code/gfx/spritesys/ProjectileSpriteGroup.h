@@ -85,28 +85,12 @@ public:
 
 	sint32			GetNumFrames(PROJECTILEACTION action);
 
-#if defined(ACTIVISION_ORIGINAL)	// already in SpriteGroup
-	FacedSpriteWshadow	*GetGroupSprite(PROJECTILEACTION action) { return m_sprites[action]; }
-	void			SetGroupSprite(PROJECTILEACTION action, FacedSpriteWshadow *sprite) { m_sprites[action] = sprite; }
-
-	Anim			*GetGroupAnim(PROJECTILEACTION action) { return m_anims[action]; }
-	void			SetGroupAnim(PROJECTILEACTION action, Anim *anim) { m_anims[action] = anim; }
-#endif
 
 
 	POINT			*GetFirePoints(uint16 which) { return m_firePoints[which]; }
 
 	POINT			*GetMoveOffsets(void) { return m_moveOffsets; }
 
-#if defined(ACTIVISION_ORIGINAL)	// already in SpriteGroup
-	Anim			*GetAnim(PROJECTILEACTION action) { return m_anims[action]; }
-
-	BOOL			HasDeath(void) { return m_hasDeath; }
-	void			SetHasDeath(BOOL val) { m_hasDeath = val; }
-
-	BOOL			HasDirectional(void) { return m_hasDirectional; }
-	void			SetHasDirectional(BOOL val) { m_hasDirectional = val; }
-#endif
 	
 	uint16			GetNumFirePoints(void) { return m_numFirePoints; }
 	void			SetNumFirePoints(uint16 num) { m_numFirePoints = num; }
@@ -116,20 +100,11 @@ public:
 	POINT			GetHotPoint(PROJECTILEACTION action, sint32 facing);
 
 private:
-#if defined(ACTIVISION_ORIGINAL)	// already in SpriteGroup
-	sint32				m_width, m_height;
-	FacedSpriteWshadow	*m_sprites[PROJECTILEACTION_MAX];
-	Anim				*m_anims[PROJECTILEACTION_MAX];
-#endif
 	uint16				m_numFirePoints;
 	POINT				m_firePoints[k_NUM_FIREPOINTS][k_NUM_FACINGS];
 	
 	POINT				m_moveOffsets[k_NUM_FACINGS];
 
-#if defined(ACTIVISION_ORIGINAL)	// already in SpriteGroup
-	BOOL				m_hasDeath;
-	BOOL				m_hasDirectional;
-#endif	
 
 
 };

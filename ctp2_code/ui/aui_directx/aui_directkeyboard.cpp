@@ -137,9 +137,7 @@ AUI_ERRCODE aui_DirectKeyboard::GetInput( void )
 
 		switch ( hr )
 		{
-#if !defined(ACTIVISION_ORIGINAL)	
 		case DI_BUFFEROVERFLOW:
-#endif
 		case DI_OK:
 			break;
 

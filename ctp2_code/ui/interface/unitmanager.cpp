@@ -934,13 +934,6 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 	ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 	if(!item) return;
 
-#if defined(ACTIVISION_ORIGINAL)
-	Unit u; u.m_id = (uint32)item->GetUserData();
-	Assert(u.IsValid());
-	if(!u.IsValid()) return;
-
-	if(!u.GetArmy().IsValid()) return;
-#else
 	Unit u(reinterpret_cast<uint32>(item->GetUserData()));
 	Assert(u.IsValid());
 
@@ -961,7 +954,6 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 			return;
 		}
 	}
-#endif
 	g_selected_item->SetSelectUnit(u);
 	g_director->AddCenterMap(u.RetPos());
 }

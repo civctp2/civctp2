@@ -49,11 +49,9 @@ const Utility Goal::MAX_UTILITY = 99999999;
 #include "ArmyPool.h"
 #include "DebugAssert.h"
 
-#if !defined (ACTIVISION_ORIGINAL)
 #include "gstypes.h"
 #include "gfx_options.h"
 #include "CTPAgent.h"
-#endif
 
 #ifdef _DEBUG_SCHEDULER
 #include "CTPAgent.h"
@@ -201,12 +199,10 @@ bool Goal::Is_Satisfied() const
 		return false;
 
 	
-#if !defined (ACTIVISION_ORIGINAL) 
 // limitation of army size : cannot form a group with more
 // armies than the max (without that limitation, it can disturb the goals with RallyFirst() - Calvitix
     if (m_current_attacking_strength.Get_Agent_Count() == k_MAX_ARMY_SIZE)
         return true;
-#endif //ACTIVISION_ORIGINAL
 
 	if (m_current_needed_strength > m_current_attacking_strength)
 		return false;
@@ -652,12 +648,10 @@ bool Goal::Satisfied_By(const Squad_Strength & army_strength) const
 	}
 
 	
-#if !defined (ACTIVISION_ORIGINAL)
 	//Check if the army has too much units to fit in one tile - Calvitix
 	if (m_current_attacking_strength.Get_Agent_Count() + 
 		army_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
 	return false;
-#endif	
 	
 	
 

@@ -133,11 +133,9 @@ class ScenarioEditor {
 	sint32 m_brushSize;
 	sint32 m_unitIndex;
 	sint32 m_cityStyle;
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to add the pop number 
 	//displayed in the CityPopSpinner to new created cities.
 	sint32 m_newPopSize;
-#endif
 	SCEN_START_LOC_MODE m_startLocMode;
 	bool m_haveRegion;
 	SCEN_MAP_MODE m_mapMode;
@@ -186,12 +184,10 @@ class ScenarioEditor {
 	static sint32 UnitIndex();
 	static bool PlaceCityMode();
 	static sint32 CityStyle();
-#if !defined(ACTIVISION_ORIGINAL)
 	//Function added by Martin Gühmann so that the 
 	//pop size displayed in the CityPopSpinner can 
 	//be added to newly created cities.
 	static sint32 CitySize();
-#endif
 	static bool PlaceStartFlags();
 	static bool ShowStartFlags();
 	static SCEN_START_LOC_MODE GetStartLocMode();
@@ -306,9 +302,7 @@ class ScenarioEditor {
 	
 	void AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, char * item);
 	sint32 GetNumPlayers();
-#if !defined(ACTIVISION_ORIGINAL)
 	sint32 GetLastPlayer();
-#endif
 	static void LimitPlayerChoice(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ExcludeSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	

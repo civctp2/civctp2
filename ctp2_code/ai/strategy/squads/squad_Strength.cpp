@@ -104,7 +104,7 @@ Squad_Strength & Squad_Strength::operator= (const Squad_Strength &squad_strength
     return *this;
 }
 
-#if 1 || defined(ACTIVISION_ORIGINAL)
+#if 1
 // A better operator implemented than that of Calvitix
 // but it is still experimental and therefore here disabled.
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
@@ -252,14 +252,6 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 	
 	m_value = 0.0;
 	m_transport = 0;
-#if defined(ACTIVISION_ORIGINAL)	// crash on invalid unit
-	for (int i = 0; i < army->Num(); i++)
-	{
-		
-        m_value += army->Get(i).GetDBRec()->GetShieldCost();
-		m_transport += ( army->Get(i).GetCargoCapacity() - army->Get(i).GetNumCarried() );
-	} 
-#else
 	for (int i = m_agent_count; i > 0; --i)
 	{
 		Unit const &	unit	= army->Get(i - 1);
@@ -276,7 +268,6 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 			--m_agent_count;
 		}
 	}
-#endif
 }
 
 

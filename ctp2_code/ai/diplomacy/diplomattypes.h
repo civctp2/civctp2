@@ -313,14 +313,6 @@ struct ThreatData {
 
 
 struct NewProposal {
-#if defined(ACTIVISION_ORIGINAL)	// conversion compiler warnings
-	NewProposal() {
-		id = priority = senderId = receiverId = -1;
-		explainStrId = -1;
-		adviceStrId = -1;
-		newsStrId = -1;
-	}
-#else
 	NewProposal()
 	:	id(-1),
 		priority(-1),
@@ -331,7 +323,6 @@ struct NewProposal {
 		adviceStrId(-1),
 		newsStrId(-1)
 	{ };
-#endif
 	bool operator==(const NewProposal & a) const {
 		return ((senderId == a.senderId) &&
 			(receiverId == a.receiverId) &&
@@ -364,15 +355,6 @@ struct NewProposal {
 
 
 struct Response {
-#if defined(ACTIVISION_ORIGINAL)	// conversion compiler warnings
-	Response() {
-		id = priority = senderId = receiverId = -1;
-		type = RESPONSE_INVALID;
-		explainStrId = -1;
-		adviceStrId = -1;
-		newsStrId = -1;
-	}
-#else
 	Response()
 	:	id(-1),
 		priority(-1),
@@ -385,7 +367,6 @@ struct Response {
 		adviceStrId(-1),
 		newsStrId(-1)
 	{ };
-#endif
 	bool operator==(const Response & a) const {
 		return (id == a.id &&
                 type == a.type &&

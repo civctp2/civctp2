@@ -47,7 +47,6 @@
 #include "ConstDB.h"
 #include "TiledMap.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 namespace
 {
 
@@ -88,22 +87,17 @@ void ClearScratch(MapPoint const & a_Center, size_t const a_Radius)
 
 }; // namespace
 
-#endif	// ACTIVISION_ORIGINAL
 
 CityInfluenceIterator::CityInfluenceIterator(const MapPoint &center, sint32 size)
-#if !defined(ACTIVISION_ORIGINAL)
 :	m_testXY(center),
 	m_wrappedCur(center)
-#endif
 {
 	Init(center, size);
 }
 
 CityInfluenceIterator::CityInfluenceIterator()
-#if !defined(ACTIVISION_ORIGINAL)
 :	m_testXY(MapPoint()),
 	m_wrappedCur()
-#endif
 {
 	m_intRadius = 0;
 	m_cur.Set(-1,-1);
@@ -130,13 +124,6 @@ void CityInfluenceIterator::Start()
 	m_row = 0;
 	m_cur.y = m_center.y + m_row;
 
-#if defined(ACTIVISION_ORIGINAL)	// incorrect wrap computation
-	if(!WrapPoint(m_center, m_cur, m_wrappedCur) ||
-	   g_theWorld->GetCell(m_wrappedCur)->GetCityOwner().m_id != m_cityId) {
-		
-		Next();
-	}
-#else
 	m_testXY = OrthogonalPoint(m_center);
 	m_testXY.Move(WEST, m_intRadius);
 	if (m_testXY.IsValid() &&
@@ -150,7 +137,6 @@ void CityInfluenceIterator::Start()
 	{
 		Next();
 	}
-#endif
 }
 
 bool CityInfluenceIterator::End()
@@ -160,19 +146,6 @@ bool CityInfluenceIterator::End()
 
 void CityInfluenceIterator::Next()
 {
-#if defined(ACTIVISION_ORIGINAL)
-	do {
-		m_cur.x++;
-		m_cur.y--;
-		if(m_cur.x > m_endX) {
-			m_row++;
-			m_cur.x = m_startX;
-			m_cur.y = m_center.y + m_row;
-		}
-	} while (((!WrapPoint(m_center, m_cur, m_wrappedCur)) ||
-			  g_theWorld->GetCell(m_wrappedCur)->GetCityOwner().m_id != m_cityId) &&
-			 !End());
-#else
 	bool	isValid	= false;
 	
 	while (!isValid && !End())  
@@ -198,7 +171,6 @@ void CityInfluenceIterator::Next()
 	{
 		m_wrappedCur = m_testXY.GetRC();
 	}
-#endif
 }
 
 MapPoint &CityInfluenceIterator::Pos()
@@ -207,31 +179,20 @@ MapPoint &CityInfluenceIterator::Pos()
 }
 
 RadiusIterator::RadiusIterator(const MapPoint &center, sint32 size)
-#if !defined(ACTIVISION_ORIGINAL)
 :	CityInfluenceIterator(center, size)
-#endif
 {
 	Init(center, size, size * size);
 }
 
 RadiusIterator::RadiusIterator(const MapPoint &center, sint32 size, sint32 squaredSize)
-#if !defined(ACTIVISION_ORIGINAL)
 :	CityInfluenceIterator(center, size)
-#endif
 {
 	Init(center, size, squaredSize);
 }
 
 RadiusIterator::RadiusIterator()
-#if !defined(ACTIVISION_ORIGINAL)
 :	CityInfluenceIterator()
-#endif
 {
-#if defined(ACTIVISION_ORIGINAL)
-	m_intRadius = 0;
-	m_cur.Set(-1,-1);
-	m_cityId = 0;
-#endif
 }
 
 
@@ -252,13 +213,6 @@ void RadiusIterator::Start()
 	m_row = 0;
 	m_cur.y = m_center.y + m_row;
 	
-#if defined(ACTIVISION_ORIGINAL)	// incorrect wrap computation
-	if(!WrapPoint(m_center, m_cur, m_wrappedCur) ||
-		MapPoint::GetSquaredDistance(m_cur,m_center) > (m_squaredRadius)) {
-		
-		Next();
-	}
-#else
 	m_testXY = OrthogonalPoint(m_center);
 	m_testXY.Move(WEST, m_intRadius);
 	if ( m_testXY.IsValid() &&
@@ -272,24 +226,10 @@ void RadiusIterator::Start()
 	{
 		Next();
 	}
-#endif
 }
 
 void RadiusIterator::Next()
 {
-#if defined(ACTIVISION_ORIGINAL)
-	do {
-		m_cur.x++;
-		m_cur.y--;
-		if(m_cur.x > m_endX) {
-			m_row++;
-			m_cur.x = m_startX;
-			m_cur.y = m_center.y + m_row;
-		}
-	} while (((!WrapPoint(m_center, m_cur, m_wrappedCur)) ||
-		MapPoint::GetSquaredDistance(m_cur,m_center) > (m_squaredRadius)) &&
-		!End());
-#else
 	bool	isValid	= false;
 	
 	while (!isValid && !End())  
@@ -315,27 +255,17 @@ void RadiusIterator::Next()
 	{
 		m_wrappedCur = m_testXY.GetRC();
 	}
-#endif
 }
 
 SquareIterator::SquareIterator(const MapPoint &center, sint32 size)
-#if !defined(ACTIVISION_ORIGINAL)
 :	CityInfluenceIterator(center, size)
-#endif
 {
 	Init(center, size);
 }
 
 SquareIterator::SquareIterator()
-#if !defined(ACTIVISION_ORIGINAL)
 :	CityInfluenceIterator()
-#endif
 {
-#if defined(ACTIVISION_ORIGINAL)
-	m_intRadius = 0;
-	m_cur.Set(-1,-1);
-	m_cityId = 0;
-#endif
 }
 
 
@@ -355,12 +285,6 @@ void SquareIterator::Start()
 	m_row = 0;
 	m_cur.y = m_center.y + m_row;
 	
-#if defined(ACTIVISION_ORIGINAL)	// incorrect wrap computation
-	if(!WrapPoint(m_center, m_cur, m_wrappedCur)) {
-		
-		Next();
-	}
-#else
 	m_testXY = OrthogonalPoint(m_center);
 	m_testXY.Move(WEST, m_intRadius);
 	if (m_testXY.IsValid())
@@ -372,22 +296,10 @@ void SquareIterator::Start()
 	{
 		Next();
 	}
-#endif
 }
 
 void SquareIterator::Next()
 {
-#if defined(ACTIVISION_ORIGINAL)
-	do {
-		m_cur.x++;
-		m_cur.y--;
-		if(m_cur.x > m_endX) {
-			m_row++;
-			m_cur.x = m_startX;
-			m_cur.y = m_center.y + m_row;
-		}
-	} while ((!WrapPoint(m_center, m_cur, m_wrappedCur)) && !End());
-#else
 	bool	isValid	= false;
 	
 	while (!isValid && !End())  
@@ -412,54 +324,12 @@ void SquareIterator::Next()
 	{
 		m_wrappedCur = m_testXY.GetRC();
 	}
-#endif
 }
 
 bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 					 const CitySizeRecord *rec);
 
 
-#if defined(ACTIVISION_ORIGINAL)
-void GenerateCityInfluence(const MapPoint &cpos, sint32 size)
-{
-	MapPoint cur, wrappedCur;
-	sint16 row = 0;
-	const CitySizeRecord *rec = g_theCitySizeDB->Get(size);
-
-	sint16 intRadius = (sint16)rec->GetIntRadius();
-
-	
-	Assert(g_theWorld->GetCell(cpos)->HasCity());
-
-	Unit city = g_theWorld->GetCell(cpos)->GetCity();
-
-	
-	
-	while(row <= (2 * intRadius)) {
-		sint32 i;
-		cur.x = cpos.x - intRadius;
-		cur.y = cpos.y + row;
-		for(i = 0; i <= 2 * intRadius; i++) {
-			if(WrapPoint(cpos, cur, wrappedCur)) {
-				g_theWorld->GetCell(wrappedCur)->SetScratch(0);
-			}
-			cur.x++;
-			cur.y--;
-		}
-		row++;
-	}
-
-	g_theWorld->GetCell(cpos)->SetScratch(1);
-
-	if(cpos.GetNeighborPosition(NORTHEAST, cur)) ExpandInfluence(city, cpos, cur, rec);
-	if(cpos.GetNeighborPosition(SOUTHEAST, cur)) ExpandInfluence(city, cpos, cur, rec);
-	if(cpos.GetNeighborPosition(SOUTHWEST, cur)) ExpandInfluence(city, cpos, cur, rec);
-	if(cpos.GetNeighborPosition(NORTHWEST, cur)) ExpandInfluence(city, cpos, cur, rec);
-
-	if(g_tiledMap)
-		g_tiledMap->RedrawTile(&cpos);
-}
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : GenerateCityInfluence
@@ -497,7 +367,6 @@ void GenerateCityInfluence(const MapPoint &cpos, sint32 size)
 	if(g_tiledMap)
 		g_tiledMap->RedrawTile(&cpos);
 }
-#endif
 
 bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 					 const CitySizeRecord *rec)
@@ -557,32 +426,9 @@ bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint3
 
 void GenerateBorders(const MapPoint &cpos, sint32 player, sint32 intRadius, sint32 squaredRadius)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	MapPoint cur, wrappedCur;
-	sint16 row = 0;
-	
-	sint16 intRad = (sint16) intRadius;
-
-	
-	
-	while(row <= (2 * intRad)) {
-		sint32 i;
-		cur.x = cpos.x - intRad;
-		cur.y = cpos.y + row;
-		for(i = 0; i <= 2 * intRad; i++) {
-			if(WrapPoint(cpos, cur, wrappedCur)) {
-				g_theWorld->GetCell(wrappedCur)->SetScratch(0);
-			}
-			cur.x++;
-			cur.y--;
-		}
-		row++;
-	}
-#else
 	ClearScratch(cpos, intRadius);
 
 	MapPoint cur;
-#endif
 
 	Cell *cell = g_theWorld->GetCell(cpos);
 	cell->SetOwner(player);

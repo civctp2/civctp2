@@ -248,14 +248,7 @@ AUI_ERRCODE EditQueue::Initialize()
 	s_editQueue = new EditQueue(&err);
 
 	Assert(err == AUI_ERRCODE_OK);
-#if defined(ACTIVISION_ORIGINAL)	// needlessly complex
-	if(err != AUI_ERRCODE_OK)
-		return err;
-
-	return AUI_ERRCODE_OK;
-#else
 	return err;
-#endif
 }
 
 AUI_ERRCODE EditQueue::Display(CityData *city)
@@ -266,10 +259,6 @@ AUI_ERRCODE EditQueue::Display(CityData *city)
 		return AUI_ERRCODE_OK;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	// double work: see Display()
-	if(!s_editQueue)
-		Initialize();
-#endif
 
 	AUI_ERRCODE err = Display();
 	
@@ -288,10 +277,6 @@ AUI_ERRCODE EditQueue::Display(CityData *city)
 
 AUI_ERRCODE EditQueue::Display(const UnitDynamicArray &cities)
 {
-#if defined(ACTIVISION_ORIGINAL)	// double work: see Display()
-	if(!s_editQueue)
-		Initialize();
-#endif
 
 	AUI_ERRCODE err = Display();
 
@@ -1061,23 +1046,6 @@ void EditQueue::UpdateButtons()
 			m_upButton->Enable(TRUE);
 		}
 
-#if defined(ACTIVISION_ORIGINAL)
-		if(m_queueList->GetSelectedItemIndex() == 0) {
-			if(!m_cityData || m_cityData->AlreadyBoughtFront() || m_cityData->GetOvertimeCost() < 0 ||
-			   g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()) {
-				m_rushBuyButton->Enable(FALSE);
-			} else {
-				m_rushBuyButton->Enable(TRUE);
-			}
-
-			if(!m_cityData || m_cityData->GetOvertimeCost() < 0 || m_cityData->AlreadyBoughtFront()) {
-				m_rushBuyCost->SetText("---");
-			} else {
-				char buf[20];
-				sprintf(buf, "%d", m_cityData->GetOvertimeCost());
-				m_rushBuyCost->SetText(buf);
-			}
-#else
 		// Added by Martin Gühmann to disable the rushbuy button and rush 
 		// buy costs if the first item is capitalization or infrastructure
 
@@ -1106,7 +1074,6 @@ void EditQueue::UpdateButtons()
 					 (g_player[visiblePlayer]->GetGold() >= cost)			// enough money
 				   	);
 			}
-#endif
 		} else {
 			m_rushBuyButton->Enable(FALSE);
 			m_rushBuyCost->SetText("---");
@@ -1227,11 +1194,9 @@ void EditQueue::SetCity(CityData *city)
 	SetMode(EDIT_QUEUE_MODE_SINGLE);
 	s_editQueue->Update();
 
-#if !defined(ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focusing
 	if(city && city->GetHomeCity().IsValid()) {
 		g_selected_item->SetSelectCity(city->GetHomeCity());
 	}
-#endif
 
 
 }
@@ -1505,11 +1470,7 @@ void EditQueue::Library(aui_Control *control, uint32 action, uint32 data, void *
 		return;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(0);	
-#else
 	open_GreatLibrary();
-#endif
 	switch(s_editQueue->m_itemCategory) {
 		case k_GAME_OBJ_TYPE_UNIT:
 			g_greatLibrary->SetLibrary(s_editQueue->m_itemType, DATABASE_UNITS);

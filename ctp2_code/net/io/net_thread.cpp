@@ -36,9 +36,6 @@
 #include "SimpleDynArr.h"
 #include "zlib.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-static CRITICAL_SECTION *s_mutex = NULL;
-#endif
 
 TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf, sint32 len,
 						 BOOL sendPacket)
@@ -152,9 +149,7 @@ NetThread::~NetThread()
 	if(m_origDP) {
 		dpSetActiveThread(m_origDP);
 	}
-#if !defined(ACTIVISION_ORIGINAL)
 	m_incoming->DeleteAll();
-#endif
 	delete m_incoming;
 	sint32 i;
 	for(i = 0; i < k_MAX_NETWORK_PLAYERS; i++) {
@@ -188,12 +183,7 @@ NetThread::NetThread()
 	m_anet = NULL;
 	m_exit = m_exited = FALSE;
 
-#if defined(ACTIVISION_ORIGINAL)
-	s_mutex = new CRITICAL_SECTION;
-	InitializeCriticalSection(s_mutex);
-#else
 	InitializeCriticalSection(&m_mutex);
-#endif
 	m_setMaxPlayers = -1;
 	m_kickPlayers = new SimpleDynamicArray<uint16>;
 }
@@ -293,20 +283,12 @@ void NetThread::Run()
 
 void NetThread::Lock()
 {
-#if defined(ACTIVISION_ORIGINAL)
-	EnterCriticalSection(s_mutex);
-#else
 	EnterCriticalSection(&m_mutex);
-#endif
 }
 
 void NetThread::Unlock()
 {
-#if defined(ACTIVISION_ORIGINAL)
-	LeaveCriticalSection(s_mutex);
-#else
 	LeaveCriticalSection(&m_mutex);
-#endif
 }
 
 void NetThread::SetDP(dp_t *dp)
@@ -528,11 +510,7 @@ NET_ERR NetThread::SetLobby(char* serverName)
 BOOL NetThread::ReadyForData()
 {
 	Lock();
-#if defined(ACTIVISION_ORIGINAL)
-	BOOL ready = m_anet->ReadyForData();
-#else
 	BOOL const	ready = m_anet ? m_anet->ReadyForData() : false;
-#endif
 	Unlock();
 	return ready;
 }

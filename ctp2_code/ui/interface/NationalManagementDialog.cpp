@@ -112,7 +112,6 @@ static const sint32 k_NMD_STAT_MAYOR		= 1;
 static const sint32 k_NMD_STAT_PRIORITY		= 2;
 static const sint32 k_NMD_STAT_BUILDING		= 3;
 static const sint32 k_NMD_STAT_TIME			= 4;
-#ifndef ACTIVISION_ORIGINAL
 static const sint32 k_NMD_SPEC_CITY_NAME	= 0;
 static const sint32 k_NMD_SPEC_POPULATION	= 1;
 static const sint32 k_NMD_SPEC_WORKER		= 2;
@@ -123,7 +122,6 @@ static const sint32 k_NMD_SPEC_LABORER		= 6;
 static const sint32 k_NMD_SPEC_MERCHANT		= 7;
 static const sint32 k_NMD_SPEC_SCIENTIST	= 8;
 static const sint32 k_NMD_SPEC_COMBAT_UNITS	= 9;
-#endif
 
 extern C3UI *g_c3ui;
 
@@ -143,20 +141,11 @@ void NationalManagementDialog::Open()
 	
 	g_nationalManagementDialog->UpdateResourceList();
 	g_nationalManagementDialog->UpdateStatusList();
-#ifndef ACTIVISION_ORIGINAL	// #01 Added a third tab to the dialog
 	g_nationalManagementDialog->UpdateSpecialistList();
-#endif
 	g_nationalManagementDialog->UpdateBuildQueue();
 	g_nationalManagementDialog->UpdateGovernor();
 	g_nationalManagementDialog->UpdateRushBuy();
 
-#ifdef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
-	if(g_nationalManagementDialog->m_resourceList->IsHidden()) {
-		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_statusList);
-	} else {
-		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_resourceList);
-	} 
-#else
 	if(!g_nationalManagementDialog->m_resourceList->IsHidden()) {
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_resourceList);
 	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
@@ -164,7 +153,6 @@ void NationalManagementDialog::Open()
 	} else if (!g_nationalManagementDialog->m_specialistList->IsHidden()) {
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_specialistList);
 	}
-#endif
 }
 
 void NationalManagementDialog::Close()
@@ -189,7 +177,6 @@ void NationalManagementDialog::Cleanup()
 	g_nationalManagementDialog = NULL;
 }
 
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 bool NationalManagementDialog::IsShown()
 {
     if (!g_nationalManagementDialog) {
@@ -198,7 +185,6 @@ bool NationalManagementDialog::IsShown()
 		return  !g_nationalManagementDialog->m_window->IsHidden();
 	}
 }
-#endif
 
 //----------------------------------------------------------------------------
 //
@@ -229,10 +215,8 @@ m_resourceList(static_cast<ctp2_ListBox*>(aui_Ldl::GetObject(
 m_statusList(static_cast<ctp2_ListBox*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab2.TabPanel.StatusList"))),
 
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 m_specialistList(static_cast<ctp2_ListBox*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab3.TabPanel.SpecialistList"))),
-#endif
 
 	
 m_governorToggle(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
@@ -254,11 +238,9 @@ m_resourceTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 
 m_statusTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab2")))
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 	,
 m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab3")))
-#endif
 {
 	g_c3ui->AddWindow(m_window);
 
@@ -266,9 +248,7 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	Assert(m_closeButton);
 	Assert(m_resourceList);
 	Assert(m_statusList);
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 	Assert(m_specialistList);
-#endif
 	Assert(m_governorToggle);
 	Assert(m_governorDropDown);
 
@@ -280,9 +260,7 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	
 	m_resourceList->SetMultiSelect(true);		// Allow the selction of multiple
 	m_statusList->SetMultiSelect(true);         // items in the lists  
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 	m_specialistList->SetMultiSelect(true);         
-#endif	
 
 
 	
@@ -296,15 +274,11 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	m_disbandButton->SetActionFuncAndCookie(DisbandButtonActionCallback, this);
 	m_resourceList->SetActionFuncAndCookie(ResourceListSelectActionCallback, this);
 
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 	m_specialistList->SetActionFuncAndCookie(SpecialistListSelectActionCallback, this);
-#endif
 	
 	m_resourceTab->SetActionFuncAndCookie(TabActionCallback, this);
 	m_statusTab->SetActionFuncAndCookie(TabActionCallback, this);
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 	m_specialistTab->SetActionFuncAndCookie(TabActionCallback, this);
-#endif
 
 	m_governorDropDown->Clear();
 
@@ -346,9 +320,7 @@ void NationalManagementDialog::Update()
 {
 	UpdateResourceList();
 	UpdateStatusList();
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 	UpdateSpecialistList();
-#endif
 
 }
 
@@ -404,7 +376,6 @@ void NationalManagementDialog::UpdateStatusList()
 	m_statusList->BuildListEnd();
 }
 
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 //----------------------------------------------------------------------------
 //
 // Name       : NationalManagementDialog::UpdateSpecialistList
@@ -445,7 +416,6 @@ void NationalManagementDialog::UpdateSpecialistList()
 	
 	m_specialistList->BuildListEnd();
 }
-#endif
 
 void NationalManagementDialog::UpdateGovernor()
 {
@@ -641,10 +611,6 @@ void NationalManagementDialog::UpdateRushBuy()
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
 
-#if defined(ACTIVISION_ORIGINAL)
-		if(city.GetCityData()->GetBuildQueue()->GetLen())
-				rushBuyTotal += city.GetCityData()->GetOvertimeCost();
-#else
 		CityData *		theCity	= city.GetCityData();
 		sint32 const	cost	= theCity ? theCity->GetOvertimeCost() : 0;
 
@@ -661,24 +627,9 @@ void NationalManagementDialog::UpdateRushBuy()
 		{
 			rushBuyTotal += cost;
 		}
-#endif
 	}
 
 	
-#if defined(ACTIVISION_ORIGINAL)
-
-	if((rushBuyTotal <= 0) ||
-		(rushBuyTotal > g_player[g_selected_item->GetVisiblePlayer()]->GetGold()))
-		m_rushBuyButton->Enable(false);
-	else
-		m_rushBuyButton->Enable(true);
-
-	
-	static MBCHAR stringBuffer[32];
-	sprintf(stringBuffer, "%d", rushBuyTotal);
-	m_rushBuyValue->SetText(stringBuffer);
-
-#else
 	// Extra conditions to prevent buying out of turn.
 	sint32 const	player	= g_selected_item->GetVisiblePlayer();
 
@@ -697,7 +648,6 @@ void NationalManagementDialog::UpdateRushBuy()
 		sprintf(stringBuffer, "%d", rushBuyTotal);
 		m_rushBuyValue->SetText(stringBuffer);
 	}
-#endif
 }
 
 
@@ -927,15 +877,10 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 		if(queue->GetLen()) {
 			static MBCHAR stringBuffer[32];
 			sint32 turns = cityData->HowMuchLonger();
-#if defined(ACTIVISION_ORIGINAL)
-			//Removed by Martin Gühmann
-			if (turns == 0x7fffffff)
-#else
 			if (turns == 0x7fffffff
 			//Added by Martin Gühmann to disable the turn display in case of capitalization and infrastructure
 			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
 			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE)
-#endif
 				sprintf(stringBuffer, "---");
 			else
 				sprintf(stringBuffer, "%d", turns);
@@ -947,7 +892,6 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 }
 
 
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 //----------------------------------------------------------------------------
 //
 // Name       : NationalManagementDialog::CreateSpecialistItem
@@ -1093,7 +1037,6 @@ void NationalManagementDialog::UpdateSpecialistItem(ctp2_ListItem *item,
 	}
 	delete cityData; 
 }
-#endif
 
 
 
@@ -1293,19 +1236,11 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 				(cityData2->GetUseGovernor() ? 0 : 1) :
 				(cityData2->GetUseGovernor() ? -1 : 0));
 		case k_NMD_STAT_PRIORITY:
-#ifdef ACTIVISION_ORIGINAL // #02 Fixed sorting sequence for governor type in status tab
-			return(stricmp(
-				g_theBuildListSequenceDB->Get(
-				cityData1->GetBuildListSequenceIndex())->GetNameText(),
-				g_theBuildListSequenceDB->Get(
-				cityData2->GetBuildListSequenceIndex())->GetNameText()));
-#else
 			return(stricmp(
 				cityData1->GetUseGovernor() ?
 				g_theBuildListSequenceDB->Get(cityData1->GetBuildListSequenceIndex())->GetNameText() : " ",
 				cityData2->GetUseGovernor() ?
 				g_theBuildListSequenceDB->Get(cityData2->GetBuildListSequenceIndex())->GetNameText() : " "));
-#endif
 		case k_NMD_STAT_BUILDING:
 			return(stricmp(
 				queue1->GetLen() ?
@@ -1322,7 +1257,6 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 }
 
 
-#if !defined (ACTIVISION_ORIGINAL) // #01 Added a third tab to the dialog
 //----------------------------------------------------------------------------
 //
 // Name       : NationalManagementDialog::CompareSpecialists
@@ -1386,7 +1320,6 @@ sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
 
 	return result;
 }
-#endif
 
 void NationalManagementDialog::StatusListSelectActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
@@ -1707,9 +1640,6 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
 
 		// JJB removed the following:
-#if defined(ACTIVISION_ORIGINAL)
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BuyFront, GEA_City, city, GEA_End);
-#else
 		// and replaced it with the following:
 		if (!city.GetCityData()->AlreadyBoughtFront()
 		  && city.GetOwner() == g_selected_item->GetCurPlayer()) {
@@ -1718,7 +1648,6 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 		// in the hope of fixing the rush buy bug.
 		// We only allow rush buying when it is the player's turn, and only
 		// when the given item has not yet been rush bought this turn.
-#endif
 		
 		dialog->UpdateStatusItem(item, city);
 	}
@@ -1751,7 +1680,6 @@ void NationalManagementDialog::ResourceListSelectActionCallback(aui_Control *con
 }
 
 
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 //----------------------------------------------------------------------------
 //
 // Name       : NationalManagementDialog::SpecialistListSelectActionCallback
@@ -1790,7 +1718,6 @@ void NationalManagementDialog::SpecialistListSelectActionCallback(aui_Control *c
 
 	dialog->MirrorSelectedCities();
 }
-#endif
 
 void NationalManagementDialog::UpdateMainButtons(ctp2_ListBox *box)
 {
@@ -1821,10 +1748,8 @@ void NationalManagementDialog::TabActionCallback(aui_Control *control,
 		dialog->UpdateMainButtons(dialog->m_resourceList);
 	} else if(dialog->m_statusTab == (ctp2_Tab *)control) {
 		dialog->UpdateMainButtons(dialog->m_statusList);
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	} else if(dialog->m_specialistTab == (ctp2_Tab *)control) {
 		dialog->UpdateMainButtons(dialog->m_specialistList);
-#endif
 	}
 }
 
@@ -1832,12 +1757,6 @@ Unit NationalManagementDialog::GetSelectedCity()
 {
 	Unit city;
 	if(!g_nationalManagementDialog) return city;
-#ifdef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
-	ctp2_ListBox *visList = g_nationalManagementDialog->m_resourceList;
-	if(!visList || visList->IsHidden()) {
-		visList = g_nationalManagementDialog->m_statusList;
-	}
-#else
 	ctp2_ListBox *visList;
 
 	if(!g_nationalManagementDialog->m_resourceList->IsHidden()) {
@@ -1850,7 +1769,6 @@ Unit NationalManagementDialog::GetSelectedCity()
 		Assert(false);
 		return city;
 	}
-#endif
 	Assert(visList);
 	if(!visList) return city;
 
@@ -1871,15 +1789,6 @@ void NationalManagementDialog::MirrorSelectedCities()
 	if(!city.IsValid())
 		return;
 
-#ifdef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
-	ctp2_ListBox *visList = g_nationalManagementDialog->m_resourceList;
-	ctp2_ListBox *invisList = g_nationalManagementDialog->m_statusList;
-
-	if(!visList || visList->IsHidden()) {
-		visList = g_nationalManagementDialog->m_statusList;
-		invisList = g_nationalManagementDialog->m_resourceList;
-	}
-#else
 	ctp2_ListBox *visList;
 	ctp2_ListBox *invisList;
 	ctp2_ListBox *invisList2;
@@ -1904,7 +1813,6 @@ void NationalManagementDialog::MirrorSelectedCities()
 		return;
 	}
 
-#endif
 
 	tech_WLList<sint32> *selectedList = visList->GetSelectedList();
 
@@ -1919,9 +1827,7 @@ void NationalManagementDialog::MirrorSelectedCities()
 	sint32 i;
 	for(i = 0; i < invisList->NumItems(); i++) {
 		invisList->DeselectItem(i);
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 		invisList2->DeselectItem(i);
-#endif
 	}
 
 	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
@@ -1942,7 +1848,6 @@ void NationalManagementDialog::MirrorSelectedCities()
 				break;
 			}
 		}
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 		for(i = 0; i < invisList2->NumItems(); i++) {
 			Unit invisCity;
 			invisCity.m_id = reinterpret_cast<uint32>(
@@ -1952,7 +1857,6 @@ void NationalManagementDialog::MirrorSelectedCities()
 				break;
 			}
 		}
-#endif
 	}
 		
 	g_nationalManagementDialog->m_mirroring = false;

@@ -49,17 +49,10 @@
 #include "network.h"
 #include "netshell.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 // New includes for the new interface
 // because we return to the main menu now, not the SP menu
 #include "initialplaywindow.h"
-#endif
 
-#if defined(ACTIVISION_ORIGINAL)
-// No longer need this include since the SP screen has been removed
-// from the interface
-#include "spwindow.h"
-#endif
 
 #include "graphicsscreen.h"
 #include "soundscreen.h"
@@ -93,11 +86,6 @@ extern aui_Surface			*g_sharedSurface;
 
 extern Network				g_network;
 
-#if defined(ACTIVISION_ORIGINAL)
-// No longer need this since the SP screen has been removed
-// from the interface
-extern SPWindow				*g_spWindow;
-#endif
 
 extern sint32				g_isCheatModeOn;
 extern sint32				g_modalWindow;
@@ -132,34 +120,19 @@ sint32	optionsscreen_displayMyWindow( sint32 from )
 	
 	g_optionsWindow->SaveGameButton()->Enable(
 		!(g_netfunc && !g_network.IsHost()) &&
-#if defined(ACTIVISION_ORIGINAL)
-		// This check replaced with test on from parameter
-		!g_spWindow &&
-#else
 		from &&
-#endif
 		!g_isCheatModeOn );
 
 	
 	
 	g_optionsWindow->LoadGameButton()->Enable(
 		!g_netfunc
-#if defined(ACTIVISION_ORIGINAL)
-		// This check replaced with test on from parameter
-		&& !g_spWindow
-#else
 		&& from
-#endif
 		);
 
 	
 	if ( !g_network.IsActive() &&
-#if defined(ACTIVISION_ORIGINAL)
-		// This check replaced with test on from parameter
-		!g_spWindow &&
-#else
 		from &&
-#endif
 		!g_turn->IsHotSeat() && !g_turn->IsEmail())
 	{
 		if(!g_theProfileDB->IsScenario() && !g_isScenario) {
@@ -179,20 +152,10 @@ sint32	optionsscreen_displayMyWindow( sint32 from )
 
 	
 	g_optionsWindow->NewGameButton()->Enable(
-#if defined(ACTIVISION_ORIGINAL)
-		// This check replaced with test on from parameter
-		!g_spWindow
-#else
 		from
-#endif
 		);
 	
-#if defined(ACTIVISION_ORIGINAL)
-	// This check replaced with test on from parameter
-	if ( g_spWindow )
-#else
 	if ( !from )
-#endif
 		g_optionsWindow->RemoveQuitToWindowsButton();
 	else
 		g_optionsWindow->AddQuitToWindowsButton();
@@ -219,13 +182,8 @@ sint32 optionsscreen_removeMyWindow(uint32 action)
 	gamesounds_WindowClosed();
 
 	if ( !s_return ) {
-#if defined(ACTIVISION_ORIGINAL)
-		// The old behaviour is to return to the SP screen
-		spscreen_displayMyWindow();
-#else
 		//But we have remove that screen, so just go to the main menu
 		initialplayscreen_displayMyWindow();
-#endif
 	}
 
 	g_modalWindow--;

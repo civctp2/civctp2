@@ -130,11 +130,7 @@ private:
 class ns_PlayerSetup : public ns_Object<nf_PlayerSetup, ns_PlayerSetup>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_PlayerSetup( nf_PlayerSetup *playersetup ) : ns_Object<nf_PlayerSetup, ns_PlayerSetup>(playersetup) {};
-#else
 	ns_PlayerSetup(nf_PlayerSetup * playersetup);
-#endif
 	void Update( nf_PlayerSetup *playersetup );
 
 	char *m_name;

@@ -81,9 +81,7 @@
 #include "net_strengths.h"
 #include "net_endgame.h"
 #include "net_world.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "net_feat.h"
-#endif
 
 #ifdef _PLAYTEST
 #include "net_cheat.h"
@@ -226,7 +224,6 @@ void network_AbortCallback( sint32 type )
 	
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 namespace
 {
 
@@ -265,7 +262,6 @@ namespace
 	};
 
 } // namespace
-#endif // ACTIVISION_ORIGINAL
 
 Network::Network() :
 	m_initialized(FALSE),
@@ -469,11 +465,6 @@ Network::Cleanup()
 	
 	
 	
-#if defined(ACTIVISION_ORIGINAL)	// already done 
-	for(i = 0; i < k_MAX_PLAYERS; i++) {
-		m_playerData[i] = NULL;
-	}
-#endif
 	m_transport = 5;
 	m_sessionIndex = -1;
 	m_setupMode = FALSE;
@@ -889,24 +880,16 @@ void Network::ProcessSends()
 #ifdef _DEBUG
 						LogSentPacket(sbuf[0], sbuf[1], size);
 #endif
-#if defined(ACTIVISION_ORIGINAL)	// moved to common code
-						packet->Release();
-#endif
 						break;
 					case NET_ERR_WOULDBLOCK:
 						
 						isBusy = TRUE;
-#if defined(ACTIVISION_ORIGINAL)
-						if(m_playerData[pl])
-							packetList->AddHead(packet);
-#else
 						if (m_playerData[pl])
 						{
 							// Reinsert for retry
 							packet->AddRef();
 							packetList->AddHead(packet);
 						}
-#endif
 						break;
 					case NET_ERR_INVALIDADDR:
 						RemovePlayer(m_playerData[pl]->m_id);
@@ -915,9 +898,7 @@ void Network::ProcessSends()
 						Assert(FALSE);
 						break;
 				}
-#if !defined(ACTIVISION_ORIGINAL)
 				packet->Release();
-#endif
 			}
 
 			if(!m_playerData[pl])
@@ -1094,9 +1075,7 @@ Network::GetHandler(uint8* buf,
 		case k_PACKET_UNGROUP_REQUEST_ID: handler = new NetUngroupRequest; break;
 		case k_PACKET_SCORES_ID:          handler = new NetScores; break;
 
-#if !defined(ACTIVISION_ORIGINAL)
 		case k_PACKET_FEAT_TRACKER_ID:	handler = new NetFeatTracker(); break;
-#endif
 
 #ifdef _DEBUG
 		case k_PACKET_CHEAT_ID:         handler = new NetCheat; break;
@@ -1170,11 +1149,9 @@ void Network::RemovePlayer(uint16 id)
 
 	if(id == m_pid) {
 		SessionLost();
-#if !defined(ACTIVISION_ORIGINAL) // possible bug 30 solution
 		// removing object bookkeeping
 		delete m_gameObjects;
 		m_gameObjects = new NetGameObj();
-#endif 
 	}
 
 	if(m_deleting)
@@ -1613,9 +1590,7 @@ void Network::SetReady(uint16 id)
 
 	chunkPackets.AddTail( new NetWonderTracker());
 	chunkPackets.AddTail( new NetAchievementTracker());
-#if !defined(ACTIVISION_ORIGINAL)
 	chunkPackets.AddTail( new NetFeatTracker());
-#endif	
 	chunkPackets.AddTail( new NetExclusions());
 
 	chunkPackets.AddTail( new NetWorld());
@@ -1647,10 +1622,6 @@ void Network::SetReady(uint16 id)
 	chunkPackets.AddTail( new NetRand());
 
 	chunkPackets.AddTail( new NetKeys());
-#if defined(ACTIVISION_ORIGINAL)	// already sent between 85 and 90
-	chunkPackets.AddTail( new NetWonderTracker);
-	chunkPackets.AddTail( new NetAchievementTracker);
-#endif
 	chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_YEAR,
 										  g_turn->GetRound(),
 										  g_turn->GetYear()));
@@ -1903,9 +1874,7 @@ Network::EnqueuePollution()
 void
 Network::Enqueue(NetOrder *order)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	PacketManager	l_AutoRelease(order);
-#endif
 
 	if(m_iAmHost) {
 		QueuePacketToAll(order);
@@ -2014,9 +1983,7 @@ void
 Network::QueuePacket(uint16 id, 
 					 Packetizer* packet) 
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	PacketManager	l_AutoRelease(packet);
-#endif
 
 	if(m_iAmClient && m_waitingOnResync)
 		return;
@@ -2055,9 +2022,7 @@ void
 Network::QueuePacketBookmark(uint16 id, 
 							 Packetizer* packet) 
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	PacketManager	l_AutoRelease(packet);
-#endif
 	sint32 index = IdToIndex(id);
 	Assert(m_playerData[index]);
 
@@ -2098,9 +2063,7 @@ Network::QueuePacketBookmark(uint16 id,
 void
 Network::QueuePacketToAll(Packetizer* packet)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	PacketManager	l_AutoRelease(packet);
-#endif
 
 	if(!g_player) {
 		

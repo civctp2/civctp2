@@ -227,9 +227,7 @@ sint32 Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
     d->SetExpanded(FALSE); 
     d->m_pos = pos; 
     d->m_parent = parent; 
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
     d->m_queue_idx = -1; 
-#endif
     
 	d->m_past_cost = pc;
     if (parent == NULL) { 
@@ -557,41 +555,6 @@ for  (tmp.x=0; tmp.x<size->x; tmp.x++) {
 
             c = g_theWorld->GetCell(next_pos);  
 
-#if defined(ACTIVISION_ORIGINAL)	// May crash + incorrect A-star implementation
-            if (c->m_search_count == g_search_count) {  
-                
-                
-#if 0               
-				if (c->m_point->GetEntry() == ASTAR_CAN_ENTER) {
-				   if (past_cost < c->m_point->m_past_cost) 
-					{ 
-
-						g_propagate_depth=0;
-
-						
-
-						
-						if (g_full_propagate_path)
-						{
-	                        PropagatePathCost(c->m_point, best, start, dest, &cost_tree);
-
-						} 
-                   }                
-			   
-			   } else 
-#endif				   
-				if (c->m_point->GetEntry() == ASTAR_RETRY_DIRECTION) { 
-                        
-				   if (InitPoint(best, c->m_point, next_pos, past_cost, dest)) { 
-                       Assert(c->m_point->m_queue_idx < 0); 
-
-					   if (c->m_point->GetEntry() == ASTAR_CAN_ENTER)  { 
-	                       m_priority_queue.Insert(c->m_point); 
-					   }
-
-                   }
-               }   
-#else	// ACTIVISION_ORIGINAL
 			if (c->m_point && (c->m_search_count == g_search_count))
 			{
 				// When c has already been examined, we have to compute the G 
@@ -658,7 +621,6 @@ for  (tmp.x=0; tmp.x<size->x; tmp.x++) {
 						// No action: the path via best is not better.
 					}
 				}
-#endif	// ACTIVISION_ORIGINAL
            } else { 
                 
                 nodes_opened++;

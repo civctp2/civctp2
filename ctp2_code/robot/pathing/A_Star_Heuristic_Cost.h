@@ -42,9 +42,6 @@
 
 struct MapPointData;
 #include "MapPoint.h"
-#if defined(ACTIVISION_ORIGINAL)	// problematic defines
-#include "common.h"
-#endif
 #include "XY_Coordinates.h"
 #include "World.h"
 
@@ -91,9 +88,7 @@ private:
 	sint32 world_columns;
 
 	
-#if !defined(ACTIVISION_ORIGINAL)
 	bool x_wrap;
-#endif
 	bool y_wrap;
 	
 	
@@ -117,23 +112,6 @@ public:
 	
 	
 	
-#if defined(ACTIVISION_ORIGINAL)	// old style, x-wrap not used
-	void Init
-	(
-		sint32 i_max_rows,
-		sint32 i_max_columns,
-		bool i_y_wrap
-	);
-	
-
-	
-	
-	
-	
-	
-	
-	void Trash();
-#else	
 	A_Star_Heuristic_Cost
 	(
 		size_t const	a_RowCount,
@@ -142,7 +120,6 @@ public:
 		bool const		a_HasXWrap		= true
 	);
 	~A_Star_Heuristic_Cost();
-#endif
 	
 	
 	

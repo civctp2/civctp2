@@ -35,18 +35,11 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_Transport::count = 1;
-ns_Transport::Struct ns_Transport::list[] = {
-	{STRING,	(Data)&m_name},
-};
-#else
 ns_Transport::ns_Transport(NETFunc::Transport * transport) 
 :	ns_Object<NETFunc::Transport, ns_Transport>(transport) 
 {
 	list.push_back(Struct(STRING,	&m_name));
 };
-#endif
 
 
 void ns_Transport::Update( NETFunc::Transport *transport ) {

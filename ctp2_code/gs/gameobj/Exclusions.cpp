@@ -92,29 +92,17 @@ void Exclusions::Serialize(CivArchive &archive)
 		if(m_numBuildings != g_theBuildingDB->NumRecords()) {
 			sint32 *newBuildings = new sint32[g_theBuildingDB->NumRecords()];
 			memset(newBuildings, 0, g_theBuildingDB->NumRecords() * sizeof(sint32));
-#if defined(ACTIVISION_ORIGINAL)	// cut & paste error
-			memcpy(newBuildings, m_units, min(m_numBuildings, g_theBuildingDB->NumRecords()) * sizeof(sint32));
-			delete [] m_units;
-			m_units = newBuildings;
-#else
 			memcpy(newBuildings, m_buildings, min(m_numBuildings, g_theBuildingDB->NumRecords()) * sizeof(sint32));
 			delete [] m_buildings;
 			m_buildings = newBuildings;
-#endif
 			m_numBuildings = g_theBuildingDB->NumRecords();
 		}
 		if(m_numWonders != g_theWonderDB->NumRecords()) {
 			sint32 *newWonders = new sint32[g_theWonderDB->NumRecords()];
 			memset(newWonders, 0, g_theWonderDB->NumRecords() * sizeof(sint32));
-#if defined(ACTIVISION_ORIGINAL)	// cut & paste error
-			memcpy(newWonders, m_units, min(m_numWonders, g_theWonderDB->NumRecords()) * sizeof(sint32));
-			delete [] m_units;
-			m_units = newWonders;
-#else
 			memcpy(newWonders, m_wonders, min(m_numWonders, g_theWonderDB->NumRecords()) * sizeof(sint32));
 			delete [] m_wonders;
 			m_wonders = newWonders;
-#endif
 			m_numWonders = g_theWonderDB->NumRecords();
 		}
 	}

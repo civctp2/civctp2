@@ -51,11 +51,9 @@ AUI_ERRCODE spnewgameplayersscreen_Cleanup();
 void spnewgameplayersscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgameplayersscreen_SetMaxPlayers(sint32 maxPlayers);
 
-#if !defined(ACTIVISION_ORIGINAL) //Added by Martin Gühmann
 void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
 void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
 void spnewgameplayersscreen_PlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-#endif //ACTIVISION_ORIGINAL
 
 #endif

@@ -248,11 +248,7 @@ public:
 	void BuildListStart(void);
 
 	
-#if defined(ACTIVISION_ORIGINAL)	
-	void BuildListEnd(void);
-#else
 	void BuildListEnd(bool isAddBottom = false);
-#endif
 
     
     

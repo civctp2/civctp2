@@ -81,18 +81,11 @@ void nf_AIPlayer::Reset()
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_AIPlayerSetup::count = 1;
-ns_AIPlayerSetup::Struct ns_AIPlayerSetup::list[] = {
-	{STRING,	(Data)&m_name}
-};
-#else
 ns_AIPlayerSetup::ns_AIPlayerSetup(NETFunc::AIPlayer * player) 
 :	ns_Object<NETFunc::AIPlayer, ns_AIPlayerSetup>(player) 
 {
 	list.push_back(Struct(STRING,	&m_name));
 };
-#endif
 
 
 void ns_AIPlayerSetup::Update( NETFunc::AIPlayer *aiplayer ) {

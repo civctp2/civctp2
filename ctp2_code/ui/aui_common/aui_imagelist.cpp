@@ -71,12 +71,10 @@ void aui_ImageList::aui_ImageListInfo::Load()
 			delete [] m_imageName;
 			m_imageName = NULL;
 		}
-#if !defined(ACTIVISION_ORIGINAL)
 		else
 		{
 			g_ui->UnloadImage(m_imageName);
 		}
-#endif
 	}
 }
 
@@ -200,12 +198,10 @@ void aui_ImageList::ExchangeImage(sint32 state, sint32 imageIndex,
 		info->m_image->SetChromakey(info->m_chromaRed,
 			info->m_chromaGreen, info->m_chromaBlue);
 		}
-#if !defined(ACTIVISION_ORIGINAL)
 		else
 		{
 			g_ui->UnloadImage(const_cast<MBCHAR *>(imageFileName));
 		}
-#endif
 	}
 	if(oldImage)
 		g_ui->UnloadImage(oldImage);

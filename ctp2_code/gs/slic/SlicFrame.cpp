@@ -62,11 +62,9 @@
 #include "ProfileDB.h"
 
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database access
 #include "SlicDBConduit.h"
 #include <math.h>
-#endif
 
 extern "C" extern FILE *debuglog;
 extern TurnCount *g_turn;
@@ -100,22 +98,6 @@ SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset, SlicStack *stack)
 	m_resultObject = NULL;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-SlicFrame::~SlicFrame()
-{
-	if(m_stack) {
-		delete m_stack;
-		m_stack = NULL;
-	}
-
-	if(m_messageData)
-		delete m_messageData;
-
-	if(m_resultObject)
-		m_resultObject->Release();
-}
-
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : ~SlicFrame
@@ -142,7 +124,6 @@ SlicFrame::~SlicFrame()
 	if(m_resultObject)
 		m_resultObject->Release();
 }
-#endif
 
 BOOL SlicFrame::ArrayLookup(SS_TYPE arrayType, SlicStackValue array,
 							SS_TYPE indexType, SlicStackValue indexValue,
@@ -360,11 +341,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 	sint32 res;
 	BOOL calcOffset = TRUE;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann for database access
 	SlicDBInterface *conduit;
 	char* name;
-#endif
 
 	switch(op) {
 		case SOP_PUSHI:
@@ -538,7 +517,6 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-#ifndef ACTIVISION_ORIGINAL
 		case SOP_EXP: 
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
@@ -556,7 +534,6 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			sval3.m_int = Eval(type2, sval2) & Eval(type1, sval1);
 			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
-#endif
 		case SOP_DIV:  
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
@@ -564,17 +541,12 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			if(Eval(type1, sval1) == 0) {
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-				Assert(Eval(type1, sval1) != 0);
-#else
 //Added by Martin Gühmann
 //It is a problem of slic code and not of the ctp2.exe,
 //the slicer has to solve the problem.
 				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 					c3errors_ErrorDialog("Slic", "In object %s: Division by 0.", m_segment->GetName());
 				}
-#endif
 				sval3.m_int = 0;
 				m_stack->Push(SS_TYPE_INT, sval3);
 				break;
@@ -588,15 +560,6 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
-#if defined(ACTIVISION_ORIGINAL)    // Assert replaced with SLIC debug report
-			if(Eval(type1, sval1) == 0) {
-				Assert(Eval(type1, sval1) != 0);
-				sval3.m_int = 0;
-				m_stack->Push(SS_TYPE_INT, sval3);
-				break;
-			}
-			sval3.m_int = Eval(type2, sval2) % Eval(type1, sval1);
-#else
             {
                 sint32 const    divisor = Eval(type1, sval1);
                 if (0 == divisor)
@@ -615,7 +578,6 @@ BOOL SlicFrame::DoInstruction(SOP op)
                     sval3.m_int = Eval(type2, sval2) % divisor;
                 }
             }
-#endif
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
@@ -1124,7 +1086,6 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval1);
 			break;
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database support
 		case SOP_DBNAME:
 		{
@@ -1291,7 +1252,6 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 			break;
 		}
-#endif
 
 		default:
 			DPRINTF(k_DBG_SLIC, ("???\n"));

@@ -143,7 +143,6 @@ void slicif_init()
 	s_temp_name_counter = 0;
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : slicif_cleanup
@@ -168,7 +167,6 @@ void slicif_cleanup()
 	s_allocated_code	= 0;
 
 }
-#endif
 
 void slicif_start()
 {
@@ -382,12 +380,10 @@ void slicif_add_op(SOP op, ...)
 	char *sptr;
 	char internalName[k_MAX_FUNCTION_NAME];
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann for database access
 	SlicDBInterface *conduit;
 	char *dbName;
 //	string dbName;
-#endif
 
 	char errbuf[1024];
 
@@ -841,7 +837,6 @@ void slicif_add_op(SOP op, ...)
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
 			break;
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database support
 		case SOP_DBNAME:
 		{
@@ -1025,7 +1020,6 @@ void slicif_add_op(SOP op, ...)
 			s_argSymbol = NULL;
 			break;
 		}
-#endif
 		default:
 			break;
 	}
@@ -1124,12 +1118,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 	double dval;
 	int ival, ival2;
 	SlicNamedSymbol *symval;
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann for database access
 //	SlicDBInterface *conduit;
 	char* name;
 	const char* dbName;
-#endif
 
 	extern FILE *debuglog;
 
@@ -1211,10 +1203,8 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_ADD:  fprintf(debuglog, "add\n"); break;
 			case SOP_SUB:  fprintf(debuglog, "sub\n"); break;
 			case SOP_MULT: fprintf(debuglog, "mult\n"); break;
-#ifndef ACTIVISION_ORIGINAL
 			case SOP_EXP: fprintf(debuglog, "pow\n"); break;
 			case SOP_BAND: fprintf(debuglog, "band\n"); break;
-#endif
 			case SOP_DIV:  fprintf(debuglog, "div\n"); break;
 			case SOP_MOD:  fprintf(debuglog, "mod\n"); break;
 			case SOP_EQ:   fprintf(debuglog, "eq\n"); break;
@@ -1405,7 +1395,6 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 					fprintf(debuglog, "asize %s(%d)\n", symval->GetName(), ival);
 				}
 				break;
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database support
 			case SOP_DBNAME:
 			{
@@ -1530,7 +1519,6 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				}
 				break;
 			}
-#endif
 			default:
 				fprintf(debuglog, "???\n");
 				break;
@@ -2116,11 +2104,7 @@ int slicif_find_db(const char *dbname, void **dbptr)
 //----------------------------------------------------------------------------
 int slicif_find_db_index(void *dbptr, const char *name)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
-#else
 	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
-#endif
 	Assert(conduit);
 	if(!conduit)
 		return 0;
@@ -2159,11 +2143,7 @@ int slicif_find_db_index(void *dbptr, const char *name)
 //----------------------------------------------------------------------------
 int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
-#else
 	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
-#endif
 	char errbuf[1024];
 	Assert(conduit);
 	if(!conduit)
@@ -2214,11 +2194,7 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 //----------------------------------------------------------------------------
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
-#else
 	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
-#endif
 	Assert(conduit);
 	if(!conduit)
 		return 0;
@@ -2235,7 +2211,6 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 	return conduit->GetValue(index, valname);
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
@@ -2273,4 +2248,3 @@ int slicif_is_name(void *dbptr, const char *name)
 	return conduit->GetIndex(name);
 
 }
-#endif

@@ -80,25 +80,6 @@ void MapCopyBuffer::Copy(MapPoint &pos, sint32 w, sint32 h)
 	Assert(m_cells);
 	if(!m_cells) return;
 
-#if defined(ACTIVISION_ORIGINAL)
-	MapPoint cur, wrapped;
-	sint32 x, y;
-	for(x = 0; x < m_width; x++) {
-		for(y = 0; y < m_height; y++) {
-			cur.x = pos.x + x - (y / 2);
-			while(cur.x < 0)
-				cur.x += (sint16)g_theWorld->GetXWidth();
-
-			cur.y = pos.y + (sint16)y;
-			if(!WrapPoint(pos, cur, wrapped))
-				continue;
-
-			Cell *cell = g_theWorld->GetCell(wrapped);
-			m_cells[x][y].m_terrain = (uint8)cell->GetTerrain();
-			m_cells[x][y].m_env = cell->GetEnv();
-		}
-	}
-#else
 	// x and y are orthogonal coordinates now
 	for (sint32 y = 0; y < h; ++y)
 	{
@@ -114,7 +95,6 @@ void MapCopyBuffer::Copy(MapPoint &pos, sint32 w, sint32 h)
 			}
 		}
 	}
-#endif
 }
 
 void MapCopyBuffer::Paste(MapPoint &pos)
@@ -122,26 +102,6 @@ void MapCopyBuffer::Paste(MapPoint &pos)
 	Assert(m_cells);
 	if(!m_cells) return;
 
-#if defined(ACTIVISION_ORIGINAL)
-	MapPoint cur, wrapped;
-	sint32 x, y;
-	for(x = 0; x < m_width; x++) {
-		for(y = 0; y < m_height; y++) {
-			cur.x = pos.x + x - (y / 2);
-			while(cur.x < 0)
-				cur.x += (sint16)g_theWorld->GetXWidth();
-
-			cur.y = pos.y + (sint16)y;
-			if(!WrapPoint(pos, cur, wrapped))
-				continue;
-
-			Cell *cell = g_theWorld->GetCell(wrapped);
-			
-			cell->SetEnv(m_cells[x][y].m_env);
-			g_theWorld->SmartSetTerrain(wrapped, m_cells[x][y].m_terrain, 0);
-		}
-	}
-#else
 	// x and y are orthogonal coordinates now
 	for (sint32 y = 0; y < m_height; ++y)
 	{
@@ -158,7 +118,6 @@ void MapCopyBuffer::Paste(MapPoint &pos)
 			}
 		}
 	}
-#endif
 }
 
 void MapCopyBuffer::Save(const MBCHAR *fileName)

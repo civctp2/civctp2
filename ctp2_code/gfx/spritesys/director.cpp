@@ -1300,13 +1300,11 @@ void Director::ActiveUnitRemove(UnitActor *unitActor)
 		{
 			m_activeUnitList->DeleteAt(pos);
 			unitActor->SetActive(false);
-#if !defined(ACTIVISION_ORIGINAL)
 			// Prevent getting stuck waiting for a deleted item.
 			if (m_activeUnitList->IsEmpty())
 			{
 				SetActionFinished(TRUE);
 			}
-#endif
 		}
 	} 
 }
@@ -4232,14 +4230,12 @@ void dh_message(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 				messagewin_CreateMessage( action->message );
 			}
 			if(action->message.IsInstantMessage()
-#ifndef ACTIVISION_ORIGINAL
 					// JJB added this to prevent instant messages showing
 					// out of turn in hotseat games.
 					// With the existing behaviour they would show immediately
 					// which would often mean that they show on the wrong players
 					// turn.
 					 && g_selected_item->GetVisiblePlayer() == action->message.GetOwner()
-#endif
 				) {
 				action->message.Show();
 			}

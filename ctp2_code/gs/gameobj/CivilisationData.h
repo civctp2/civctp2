@@ -146,11 +146,7 @@ class CivilisationData : public GAMEOBJ
 		void GetSingularCivName(MBCHAR *s) ;
 		void SetSingularCivName(const MBCHAR *s) ;
 
-#if defined(ACTIVISION_ORIGINAL)
-		sint32 GetCityStyle( void ) { return m_cityStyle; }
-#else
 		sint32 GetCityStyle(void) const;
-#endif
 		void SetCityStyle( sint32 cityStyle ) { m_cityStyle = cityStyle; }
 
 		

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#ifndef  MEMORY_MANAGER
+#ifndef MEMORY_MANAGER
 #define  MEMORY_MANAGER 1
 
 

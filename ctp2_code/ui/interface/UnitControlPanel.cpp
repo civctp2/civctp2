@@ -48,9 +48,7 @@
 #include "OrderRecord.h"
 #include "PixelTypes.h"
 #include "Player.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "ProfileDB.h"
-#endif
 #include "SelItem.h"
 #include "UnitRecord.h"
 #include "World.h"
@@ -738,10 +736,8 @@ void UnitControlPanel::UpdateOrderButtons()
 		
 		ArmyData *armyData = army.AccessData();
 		if(armyData) {
-#if !defined(ACTIVISION_ORIGINAL)
 			bool const 	isShowOrderIntersection	= 
 				!g_theProfileDB->GetValueByName("ShowOrderUnion");
-#endif	
 			
 			for(sint32 index = 0; index < g_theOrderDB->NumRecords(); index++) {
 				
@@ -752,11 +748,6 @@ void UnitControlPanel::UpdateOrderButtons()
 					continue;
 
 				
-#if defined(ACTIVISION_ORIGINAL)				
-				if(((m_armySelectionUnit >= 0) &&
-					armyData->TestOrderUnit(orderRecord, m_armySelectionUnit)) ||
-					armyData->TestOrderAll(orderRecord)) {
-#else
 				bool const	isSelectedCapable	= 
 					(m_armySelectionUnit >= 0) &&
 					armyData->TestOrderUnit(orderRecord, m_armySelectionUnit);
@@ -768,7 +759,6 @@ void UnitControlPanel::UpdateOrderButtons()
 
 				if (isArmyCapable) 
 				{
-#endif					
 					sint32 orderButtonIndex = orderRecord->GetButtonLocation();
 
 					

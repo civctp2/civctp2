@@ -284,11 +284,7 @@ void MapAnalysis::BeginTurn()
             defense_strength,
             ranged_strength,
             total_value);
-#if defined(ACTIVISION_ORIGINAL)
-            Assert(total_value > 0);
-#else
 			Assert(total_value >= 0);
-#endif
 
             m_nuclearWeapons[player] += army->CountNuclearUnits();
             m_bioWeapons[player] += army->CountBioUnits();
@@ -822,14 +818,6 @@ const MapPoint & MapAnalysis::GetNearestForeigner(const PLAYER_INDEX player, con
         if (i == player)
             continue;
 
-#if defined (ACTIVISION_ORIGINAL)
-        tmp_squared_distance = MapPoint::GetSquaredDistance(m_empireCenter[i], pos);
-        if (tmp_squared_distance < min_squared_distance)
-        {
-            min_squared_distance = tmp_squared_distance;
-            closest_player = i;
-        }
-#else
 		if (m_empireCenter[i].x != 0 && m_empireCenter[i].y != 0)
 		{
             tmp_squared_distance = MapPoint::GetSquaredDistance(m_empireCenter[i], pos);
@@ -839,7 +827,6 @@ const MapPoint & MapAnalysis::GetNearestForeigner(const PLAYER_INDEX player, con
                 closest_player = i;
             }
 		}
-#endif
     }
     Assert(closest_player < m_empireCenter.size());
     return m_empireCenter[closest_player];

@@ -64,9 +64,7 @@ public:
 	
 	static void Cleanup();
 
-#if !defined (ACTIVISION_ORIGINAL)
 	static bool IsShown();
-#endif
 	
 	NationalManagementDialog();
 
@@ -87,9 +85,7 @@ private:
 	
 	void UpdateStatusList();
 
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	void UpdateSpecialistList();
-#endif	
 
 	void UpdateGovernor();
 
@@ -116,13 +112,11 @@ private:
 	void UpdateStatusItem(ctp2_ListItem *item,
 		const Unit &city);
 
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	ctp2_ListItem *CreateSpecialistItem(const Unit &city);
 
 	
 	void UpdateSpecialistItem(ctp2_ListItem *item,
 		const Unit &city);
-#endif
 	
 	bool CanBuild(uint32 category, sint32 type);
 
@@ -137,10 +131,8 @@ private:
 	static sint32 CompareStatus(ctp2_ListItem *item1, ctp2_ListItem *item2,
 		sint32 column);
 
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	static sint32 CompareSpecialists(ctp2_ListItem *item1, ctp2_ListItem *item2,
 		sint32 column);
-#endif
 	
 	static void StatusListSelectActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
@@ -180,10 +172,8 @@ private:
 	static void ResourceListSelectActionCallback(aui_Control *control,
 												 uint32 action, uint32 data, void *cookie);
 
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	static void SpecialistListSelectActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
-#endif
 	
 
 	void UpdateMainButtons(ctp2_ListBox *box);
@@ -205,9 +195,7 @@ private:
 	
 	ctp2_ListBox	*m_resourceList;	
 	ctp2_ListBox	*m_statusList;		
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	ctp2_ListBox    *m_specialistList;         
-#endif
 
 	
 	ctp2_Button		*m_governorToggle;		
@@ -223,9 +211,7 @@ private:
 	
 	ctp2_Tab        *m_statusTab;           
 	ctp2_Tab        *m_resourceTab;         
-#ifndef ACTIVISION_ORIGINAL // #01 Added a third tab to the dialog
 	ctp2_Tab        *m_specialistTab;         
-#endif
 
 	bool m_mirroring; 
 };

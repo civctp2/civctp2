@@ -163,10 +163,8 @@ private:
 	UnitActor *m_actor;
 
 	sint32 m_poolIndex;
-#if !defined(ACTIVISION_ORIGINAL)
 	// Contains the ID of the city that owns the tile.
 	uint32  m_visibleCityOwner;
-#endif
 public:
 	UnseenCell(const MapPoint &point);
 	UnseenCell();
@@ -187,9 +185,7 @@ public:
 	PointerList<UnseenImprovementInfo> *GetImprovements() { return m_improvements; }
 	sint32 GetCityOwner() { return m_cityOwner; }
 	sint32 GetCitySize() { return m_citySize; }
-#if !defined(ACTIVISION_ORIGINAL)
 	uint32 GetVisibleCityOwner() { return m_visibleCityOwner; }
-#endif
 	const MBCHAR *GetCityName() { return m_cityName; }
 	UnitActor *GetActor() { return m_actor; }
 
@@ -231,7 +227,6 @@ public:
 
 	uint32	GetSlaveBits(void) { return m_slaveBits; }	
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann to generate these pieces of information
 // for hidden tiles correctly as well.
 
@@ -241,7 +236,6 @@ public:
     sint32 GetShieldsProduced() const;
 	sint32 GetGoldFromTerrain() const;
 	sint32 GetGoldProduced() const;
-#endif
 
 
 	void Serialize(CivArchive &archive);

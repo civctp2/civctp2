@@ -38,11 +38,7 @@
 class ns_Transport : public ns_Object<NETFunc::Transport, ns_Transport>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_Transport( NETFunc::Transport *transport ) : ns_Object<NETFunc::Transport, ns_Transport>(transport) {};
-#else
 	ns_Transport(NETFunc::Transport * transport);
-#endif
 	void Update( NETFunc::Transport *transport );
 
 	char *m_name;

@@ -156,21 +156,9 @@ ResourceMap::ResourceMap(AUI_ERRCODE *retval,
 
 ResourceMap::~ResourceMap()
 {
-#if defined(ACTIVISION_ORIGINAL)	// m_string not deleted	
-	if (m_updateAction) {
-		delete m_updateAction;
-		m_updateAction = NULL;
-	}
-
-	if (m_surface) {
-		delete m_surface;
-		m_surface = NULL;
-	}
-#else
 	delete m_surface;
 	delete m_string;
 	delete m_updateAction;
-#endif
 }
 
 
@@ -628,12 +616,10 @@ BOOL ResourceMap::DrawATile(aui_Surface *pSurface, MapPoint &pos, void *context)
 		
 		x -= mapWidth * g_tiledMap->GetZoomTilePixelWidth();
 	}
-#if !defined(ACTIVISION_ORIGINAL)
 	if (y >= mapHeight * g_tiledMap->GetZoomTilePixelHeight() / 2)
 	{
 		y -= mapHeight * g_tiledMap->GetZoomTilePixelHeight() / 2;
 	}
-#endif
 
 	sint32 tileX;
 	maputils_MapX2TileX(pos.x, pos.y, &tileX);

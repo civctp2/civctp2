@@ -66,7 +66,6 @@ extern ColorSet		*g_colorSet;
 
 extern C3UI *g_c3ui;
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include <algorithm>
 
 namespace
@@ -290,7 +289,6 @@ void ctp2_HyperTextBox::FormatText
 	} // for
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 ctp2_HyperTextBox::ctp2_HyperTextBox(
 	AUI_ERRCODE *retval,
@@ -493,9 +491,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 	const MBCHAR *stop = ptr + len;
 
 
-#if defined(ACTIVISION_ORIGINAL)	// not used anymore	
-	sint32 adjWidth = m_width;
-#endif
 
 	sint32 hyperLinkDB = 0;
 	sint32 hyperLinkIndex = 0;
@@ -574,55 +569,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				{
 
 				
-#if defined(ACTIVISION_ORIGINAL)	// Possible access past end of string				
-				char hyperLinkDB_name[255];
-				char hyperLinkIndex_name[255];
-
-				char * copy_to = hyperLinkDB_name;
-
-				
-				ptr++;
-
-				
-				ptr++;
-
-				while (!isalnum(*ptr))
-					ptr++;
-
-				
-				while (isalnum(*ptr) || (*ptr == '_'))
-				{
-					*copy_to = *ptr;
-					ptr++;
-					copy_to++;
-				}
-
-				
-				*copy_to = 0;
-
-				
-				while (!isalnum(*ptr))
-					ptr++;
-
-				
-				copy_to = hyperLinkIndex_name;
-
-				
-				while (isalnum(*ptr) || (*ptr == '_'))
-				{
-					*copy_to = *ptr;
-					ptr++;
-					copy_to++;
-				}
-
-				
-				*copy_to = 0;
-
-				
-				while (*ptr != '>' && *ptr)
-					ptr++;
-				
-#else	// ACTIVISION_ORIGINAL
 				MBCHAR			hyperLinkDB_name[GL_MAX_DB_NAME_SIZE];
 				MBCHAR			hyperLinkIndex_name[MAX_SIZE_IDENTIFIER + 1];
 				MBCHAR const *	copyBegin;
@@ -650,7 +596,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 						 );
 
 				ptr			= std::find(copyEnd, stop, '>');
-#endif	// ACTIVISION_ORIGINAL
 
 
 
@@ -679,7 +624,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				}
 
 			case 'e':
-#if !defined(ACTIVISION_ORIGINAL)
 				if (isHyperLink)
 				{
 					// <L> or <l> directly followed by <e>.
@@ -701,7 +645,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					m_hyperUnderline	= oldUnderline;
 					isHyperLink			= FALSE;
 				}
-#endif
 				m_hyperColor = m_hyperColorOld;
 				break;
 
@@ -711,240 +654,14 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				return AUI_ERRCODE_INVALIDPARAM;
 			}
 
-#if defined(ACTIVISION_ORIGINAL)	// Possible access past end of string
-			while ( *ptr++ != '>' )
-				;
-#else
 			ptr = std::find(ptr, stop, '>');
 			if (ptr != stop)
 			{
 				++ptr;
 			}
-#endif
 		}
 		else
 		{
-#if defined(ACTIVISION_ORIGINAL)	// Common code moved to FormatText
-			
-			
-			
-
-			
-			
-			const MBCHAR *nextCmd = strchr( ptr, '<' );
-			len = nextCmd ? nextCmd - ptr : strlen( ptr );
-
-			
-			
-			
-			
-			
-			const MBCHAR *nextLine = strchr( ptr, '\n' );
-			if ( nextLine && ( !nextCmd || nextLine < nextCmd ) )
-				len = nextLine - ptr + 1;
-			
-			
-			
-			const MBCHAR *subStop = ptr + len;
-
-			
-			while ( ptr != subStop )
-			{
-				
-				
-				
-				
-
-#if 0
-				if (*ptr == '\n' && len == 1) {
-					ptr++;
-					
-					
-					
-					m_curStaticPos.x = 0;
-					sint32 offset = m_virtualHeight - m_curStaticPos.y;
-					m_curStaticPos.y += offset;
-					m_virtualHeight += offset;
-					continue;
-				}
-#endif
-
-				
-				aui_Static *hs = CreateHyperStatic(
-					ptr,
-					len,
-					m_hyperTtffile,
-					m_hyperPointSize,
-					m_hyperBold,
-					m_hyperItalic,
-					m_hyperColor,
-					m_hyperUnderline,
-					m_hyperShadow,
-					m_hyperShadowColor,
-					m_hyperFlags );
-				Assert( hs != NULL );
-				if ( !hs ) return AUI_ERRCODE_MEMALLOCFAILED;
-
-				
-				MBCHAR *cReturn = strrchr( hs->GetText(), '\r' );
-				if ( cReturn ) {
-					*cReturn = ' ';
-				}
-
-				
-				
-				m_hyperStaticList->AddTail( hs );
-
-				
-				
-				
-				sint32 nextX = m_curStaticPos.x + hs->Width();
-				sint32 nextY = m_curStaticPos.y + hs->Height();
-
-				
-				if ( nextX > adjWidth )
-				{
-					RECT wrap =
-					{
-						0,
-						0,
-						adjWidth - m_curStaticPos.x,
-						0
-					};
-
-					POINT penPos = { 0, 0 };
-
-					const MBCHAR *start = ptr;
-					hs->GetTextFont()->GetLineInfo(
-						&wrap,
-						&penPos,
-						NULL,
-						NULL,
-						&ptr,
-						subStop );
-
-					if ( ptr == subStop )
-					{
-						hs->Move(
-							m_curStaticPos.x = 0,
-							m_curStaticPos.y = m_virtualHeight );
-
-						m_virtualHeight += hs->Height();
-
-						if ( hs->Width() > adjWidth  )
-							m_curStaticPos.y = m_virtualHeight;
-						else
-							m_curStaticPos.x = hs->Width();
-					}
-					else
-					{
-						uint32 truncLen = ptr - start;
-
-						penPos.x = penPos.y = 0;
-						const MBCHAR *testPtr = start;
-						const MBCHAR *testSubStop = testPtr + truncLen;
-						hs->GetTextFont()->GetLineInfo(
-							&wrap,
-							&penPos,
-							NULL,
-							NULL,
-							&testPtr,
-							testSubStop );
-
-						if ( penPos.x > wrap.right )
-						{
-							hs->Move(
-								m_curStaticPos.x = 0,
-								m_curStaticPos.y = m_virtualHeight );
-
-							m_virtualHeight += hs->Height();
-
-							if ( hs->Width() > adjWidth  )
-								m_curStaticPos.y = m_virtualHeight;
-							else
-								m_curStaticPos.x = hs->Width();
-
-							ptr = subStop;
-						}
-						else
-						{
-							len -= truncLen;
-							hs->SetText( start, truncLen );
-
-							hs->Move( m_curStaticPos.x, m_curStaticPos.y );
-							hs->Resize( penPos.x, hs->Height() );
-
-							if ( nextY > m_virtualHeight )
-								m_virtualHeight = nextY;
-
-							m_curStaticPos.x = 0;
-							m_curStaticPos.y = m_virtualHeight;
-						}
-					}
-				}
-				else
-				{
-					
-					
-					ptr = subStop;
-
-					
-					
-					hs->Move( m_curStaticPos.x, m_curStaticPos.y );
-
-					m_curStaticPos.x = nextX;
-
-					if ( nextY > m_virtualHeight )
-						m_virtualHeight = nextY;
-				}
-
-				
-				
-				if ( *(ptr - 1) == '\n' )
-				{
-					m_curStaticPos.x = 0;
-					m_curStaticPos.y = m_virtualHeight;
-				} 
-
-				
-				
-
-				
-				if ( m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS )
-				{
-					
-					DestroyHyperStatic( m_hyperStaticList->RemoveHead() );
-
-					
-					sint32 topY = m_hyperStaticList->GetHead()->Y();
-				
-					
-					ListPos pos = m_hyperStaticList->GetHeadPosition();
-					for ( sint32 i = m_hyperStaticList->L()-1; i; i-- )
-						m_hyperStaticList->GetNext( pos )->Offset( 0, -topY );
-					
-					
-					m_virtualHeight -= topY;
-					m_curStaticPos.y -= topY;
-				}
-
-				if ( isHyperLink ) {
-					ctp2_HyperLink *hl;
-
-					hl = new ctp2_HyperLink;
-
-					
-					hl->m_static = hs;
-					hl->m_db = hyperLinkDB;
-					hl->m_index = hyperLinkIndex;
-					hl->m_frame = FALSE;
-					hl->m_oldColor = m_hyperColor;
-					hl->m_selectColor = RGB(0,0,255);
-
-					m_hyperLinkList->AddTail( hl );
-				}
-			}
-#else	// ACTIVISION_ORIGINAL
 
 			MBCHAR const *  nextLine	= std::find(ptr, stop, '\n');
 			MBCHAR const *	nextStop	= std::find(ptr, nextLine, '<');
@@ -958,7 +675,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			FormatText(ptr, nextStop, hyperLinkDB, hyperLinkIndex, isHyperLink);
 			ptr	= nextStop;
 
-#endif	// ACTIVISION_ORIGINAL
 			
 			if ( isHyperLink ) {
 				isHyperLink = FALSE;

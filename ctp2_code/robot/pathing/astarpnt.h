@@ -66,9 +66,7 @@ class AstarPoint {
 	MapPoint m_pos; 
 	float m_past_cost, m_entry_cost, m_future_cost, m_total_cost; 
 	
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
     sint32 m_queue_idx; 
-#endif
     AstarPoint *m_parent; 
     AstarPoint *m_next; 
 
@@ -121,7 +119,6 @@ public:
     
     inline void GetPos(MapPoint &pos) { pos = m_pos; }
 
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
 	
 	
 	
@@ -133,7 +130,6 @@ public:
         Assert(new_idx < SHRT_MAX); 
         m_queue_idx = sint16(new_idx); 
     } 
-#endif
 
     inline void SetEntry(const ASTAR_ENTRY_TYPE e)
     {

@@ -341,13 +341,11 @@ class ProfileDB {
 	double m_homogenous;
 	sint32 m_richness;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	sint32	m_closeEyepoint;	// Close message box when clicking the eyepoint.
 	sint32	m_colorSet;			// The # to use when opening colors#.txt.
 	sint32	m_showExpensive;	// Show cost and effects of expensive actions.
 	sint32	m_showOrderUnion;	// Show order button when any unit is capable.
 	sint32  m_recentAtTop;		// Add the most recent messages at the top.
-#endif
 	
 	PointerList<ProfileVar> *m_vars;
 	BOOL m_loadedFromTutorial;
@@ -386,13 +384,8 @@ public:
 	
 
 	
-#if defined(ACTIVISION_ORIGINAL)
-	//Removed by Martin Gühmann
-	void SetNPlayers(uint32 n)					{ Assert((n>2) && (n<17)); m_nPlayers = n; }
-#else
 	//Added by Martin Gühmann to avoid an assert if NumPlayer is under the maximum supported players.
 	void SetNPlayers(uint32 n)					{ Assert((n>2) && (n<=k_MAX_PLAYERS)); m_nPlayers = n; }
-#endif
 
 	void SetLeaderName(MBCHAR *name)			{ strcpy(m_leaderName, name); }
 	void SetCivName(MBCHAR *name)				{ strcpy(m_civName, name); }
@@ -635,17 +628,12 @@ public:
 	BOOL		IsZoomedCombatAlways() const	{ return m_zoomedCombatAlways; }
 	BOOL        IsAutoEndMulitpleTurns() const  { return m_autoEndMultiple; }
 	const double     *GetMapSettings(sint32 pass, sint32 &count);
-#if defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann
-	sint32		GetWorldShape( void )			{ return m_yWrap && m_xWrap; }
-#else
 	sint32		GetWorldShape( void )			{ 
 												         if(!m_yWrap &&  m_xWrap)   return 0;
 												  else   if( m_yWrap &&  m_xWrap)   return 1;
 												  else   if( m_yWrap && !m_xWrap)   return 2;
 												  else /*if(!m_yWrap && !m_xWrap)*/ return 3;//That sould be else
 												}
-#endif
 	MBCHAR		*GetGameWatchDirectory(void)	{ return m_gameWatchDirectory; }
 
 	sint32      GetWetDry() { return m_wetdry; }

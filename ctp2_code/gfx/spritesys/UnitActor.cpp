@@ -128,13 +128,11 @@ extern ProfileDB		*g_theProfileDB;
 #define STOMPCHECK() ;
 #endif
 
-#if !defined(ACTIVISION_ORIGINAL)
 namespace
 {
 	sint32 const	CITY_TYPE_LAND	= 0;
 	sint32 const	CITY_TYPE_WATER	= 1;
 };	// namespace
-#endif	// ACTIVISION_ORIGINAL
 
 UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner, BOOL isUnseenCellActor,
 					 double visionRange, sint32 citySprite)
@@ -252,11 +250,9 @@ void UnitActor::Initialize(void)
 	m_needsToVictor = FALSE;
 	m_killNow = FALSE;
 	m_numOActors = 0;
-#if !defined(ACTIVISION_ORIGINAL)
 	m_curUnitAction			= UNITACTION_NONE;
 	m_transparency			= 0;
 	m_numRevealedActors		= 0;
-#endif
 
 	for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
 	{
@@ -331,55 +327,6 @@ void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unit
 	isCity = g_theUnitDB->Get(unitType)->GetHasPopAndCanBuild();
 
 	if (isCity) {
-#if defined(ACTIVISION_ORIGINAL)	// Lots of unused stuff, and a crash			
-		sint32			style;
-		sint32			terrain;
-		sint32			size;
-		
-		const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTileInfo(pos)->GetTerrainType());
-		if(rec->GetMovementTypeLand() || rec->GetMovementTypeMountain()) {
-			terrain = 0;
-		} else {
-			terrain = 1;
-		}
-
-		if (m_size == 0) 
-			size = 1;
-		else
-			size = m_size;
-
-		
-		sint32 spriteIndex;
-		if(g_player[owner]) {
-			
-			
-			
-			Civilisation *civ = g_player[owner]->GetCivilisation();
-			style = civ->GetCityStyle();
-
-			if ( style == CITY_STYLE_MAX ) {
-				style = g_theCivilisationDB->GetCityStyle( civ->GetCivilisation() );
-			}
-			
-			
-			
-			
-			
-			if(id.IsValid()) {
-				spriteIndex = id.CD()->GetDesiredSpriteIndex();
-			} else {
-				spriteIndex = -1;
-			}
-
-		} else {
-			spriteIndex = -1;
-		}
-
-		if (spriteIndex == -1) 
-			*spriteID = -1;
-		else
-			*spriteID = spriteIndex; 
-#else	// ACTIVISION_ORIGINAL
 		if (id.IsValid() && id.CD())
 		{
 			*spriteID = id.CD()->GetDesiredSpriteIndex();
@@ -392,7 +339,6 @@ void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unit
 		{
 			*spriteID = -1;
 		}
-#endif
 
 		*groupType = GROUPTYPE_CITY;
 	} else {
@@ -584,16 +530,11 @@ void UnitActor::AddIdle(BOOL NoIdleJustDelay)
 
 	Action		*idleAction;
 
-#if defined(ACTIVISION_ORIGINAL)	// may crash	
-	if(GetActionQueueNumItems() > 0 || NoIdleJustDelay == TRUE)
-		anim->SetNoIdleJustDelay(TRUE);
-#else
 	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
 	{
 		anim->SetNoIdleJustDelay(TRUE);
 	}
 
-#endif
 
 	if(NoIdleJustDelay == TRUE) {
 		idleAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 
@@ -631,21 +572,6 @@ void UnitActor::ActionQueueUpIdle(BOOL NoIdleJustDelay)
 		Assert(anim != NULL);
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	// may crash
-	if(GetActionQueueNumItems() > 0 || NoIdleJustDelay == TRUE)
-		anim->SetNoIdleJustDelay(TRUE);
-
-	Action *tempCurAction;
-
-	if(NoIdleJustDelay == TRUE)
-	{
-		tempCurAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, TRUE);
-	}
-	else
-	{
-		tempCurAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT);
-	}
-#else
 	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
 	{
 		anim->SetNoIdleJustDelay(TRUE);
@@ -653,7 +579,6 @@ void UnitActor::ActionQueueUpIdle(BOOL NoIdleJustDelay)
 
 	Action *	tempCurAction	= 
 		new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
-#endif	
 
 	tempCurAction->SetAnim(anim);
 
@@ -676,13 +601,11 @@ void UnitActor::GetNextAction(BOOL isVisible)
 		
 		m_actionQueue.Dequeue(m_curAction);
 
-#if !defined(ACTIVISION_ORIGINAL)
 		Assert(m_curAction);
 		if (!m_curAction)
 		{
 			return;
 		}
-#endif
 		
 		if (m_curAction->GetActionType() != m_curUnitAction)
 			m_frame = 0;
@@ -696,11 +619,6 @@ void UnitActor::GetNextAction(BOOL isVisible)
 	}
 
 	
-#if defined(ACTIVISION_ORIGINAL)	// Too late
-	Assert(m_curAction);
-	if (!m_curAction)
-		return;
-#endif
 	
 	if(m_curAction->m_actionType == UNITACTION_ATTACK )
 	{
@@ -831,15 +749,10 @@ void UnitActor::Process(void)
 
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	// Crash later on when m_curAction is NULL
-	if (m_curAction)
-		m_curAction->Process();
-#else
 	if (!m_curAction)
 		return;
 
 	m_curAction->Process();
-#endif
 
 	if (m_curAction->Finished()) 
 	{
@@ -1418,15 +1331,6 @@ void UnitActor::DrawFortifying(BOOL fogged)
 
 void UnitActor::DrawCityWalls(BOOL fogged)
 {
-#if defined(ACTIVISION_ORIGINAL)	
-	Pixel16			*cityImage;
-
-	if (0 ) {
-		cityImage = g_tiledMap->GetTileSet()->GetImprovementData(153);
-	} else {
-		cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
-	}
-#else	// ACTIVISION_ORIGINAL
 	TileSet const *	tileSet		= g_tiledMap->GetTileSet();
 	Pixel16 *		cityImage	= tileSet->GetImprovementData(38);	// default
 	Unit			unit(GetUnitID());
@@ -1477,7 +1381,6 @@ void UnitActor::DrawCityWalls(BOOL fogged)
 		}
 	}
 	// else: keep default
-#endif
 
 	sint32	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale()), 
 			nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
@@ -1766,12 +1669,8 @@ BOOL UnitActor::Draw(BOOL fogged)
 
 #endif
 
-#if defined(ACTIVISION_ORIGINAL)	// unit may have been killed or destroyed
-	if(m_unitSpriteGroup) {
-#else
 	if (m_unitSpriteGroup && m_unitID.IsValid())
 	{
-#endif
 		if (IsFortified())
 			DrawFortified(fogged);
 

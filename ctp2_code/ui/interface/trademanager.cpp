@@ -377,15 +377,6 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					if(!g_player[op]) continue;
 					if(player_id != op && !p->HasContactWith(op)) continue;
 					if(m_showCities == TRADE_CITIES_OWN && op != g_selected_item->GetVisiblePlayer()) continue;
-#if defined(ACTIVISION_ORIGINAL)	// Non-standard syntax
-					if(m_showCities == TRADE_CITIES_ALL && op != g_selected_item->GetVisiblePlayer() &&
-						AgreementMatrix.s_agreements.TurnsAtWar(player_id, op) >= 0) 
-						continue;
-
-					if(m_showCities == TRADE_CITIES_FRIENDLY && op != g_selected_item->GetVisiblePlayer() &&
-					   !AgreementMatrix.s_agreements.HasAgreement(player_id, op, PROPOSAL_TREATY_PEACE))
-						continue;
-#else
 					if ((m_showCities == TRADE_CITIES_ALL)			&& 
 						(op != g_selected_item->GetVisiblePlayer()) &&
 						(AgreementMatrix::s_agreements.TurnsAtWar(player_id, op) >= 0)
@@ -399,7 +390,6 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						)
 					   )
 						continue;
-#endif
 
 					
 					if(Diplomat::GetDiplomat(op).GetEmbargo(player_id))

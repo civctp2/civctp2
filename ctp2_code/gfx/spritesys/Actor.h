@@ -38,12 +38,8 @@
 #define k_ACTOR_CENTER_OFFSET_X		48
 #define k_ACTOR_CENTER_OFFSET_Y		48
 
-#if defined (ACTIVISION_ORIGINAL)
-#define k_MAX_ACTION_QUEUE_SIZE		10
-#else
 //fix bug #4 by kaan
 #define k_MAX_ACTION_QUEUE_SIZE		12
-#endif
 
 class SpriteState;
 class Anim;

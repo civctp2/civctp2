@@ -481,11 +481,7 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	}
 
 	m_is_turn_over = FALSE;
-#if defined(ACTIVISION_ORIGINAL)	// out of sync when revolts occur
-	m_current_round = 0;
-#else
 	m_current_round	= NewTurnCount::GetCurrentRound();
-#endif
 	m_end_turn_soon = FALSE;
 
 	m_powerPoints = 0;
@@ -2133,11 +2129,9 @@ void Player::BeginTurnProduction()
 	
 	
 	
-#if !defined(ACTIVISION_ORIGINAL)
 	// #01 Recalculating military support costs after government change
 	// this fixes the costs for old save games 
 	m_readiness->RecalcCost();
-#endif
 	
 	
 	
@@ -2595,14 +2589,6 @@ void Player::BeginTurn()
 	DPRINTF(k_DBG_GAMESTATE, ("It's player %d's turn - year %d.\n", m_owner, GetCurRound()));
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", m_gold->GetLevel()));
 
-#if defined(ACTIVISION_ORIGINAL)	// too early, moved to PlayerEvent.cpp
-	if (g_theProfileDB->IsAutoSave()) {
-		
-		if (m_playerType != PLAYER_TYPE_ROBOT) {
-			g_civApp->AutoSave(m_owner);
-		}
-	}
-#endif
 
 	
 	if ( m_owner == g_selected_item->GetVisiblePlayer() ) {
@@ -2624,11 +2610,9 @@ void Player::BeginTurn()
 		g_network.Block(m_owner);
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_GOLD,
 											   m_owner, m_gold->GetLevel()));
-#if !defined ACTIVISION_ORIGINAL
 		// propagate PW each turn update
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_MATERIALS,
 											   m_owner, m_materialPool->GetMaterials()));
-#endif
 		g_network.Unblock(m_owner);
 	}
 
@@ -2823,17 +2807,10 @@ void Player::EndTurn()
 	EndTurnPollution();
 
 	
-#if defined(ACTIVISION_ORIGINAL)
-	if (GetGaiaController()->TurnsToComplete() == 0)
-	{
-		GameOver(GAME_OVER_WON_SCIENCE, -1);
-	}
-#else // possible bug 21 solution
 	if (!g_network.IsActive() && GetGaiaController()->TurnsToComplete() == 0)
 	{
 		GameOver(GAME_OVER_WON_SCIENCE, -1);
 	}
-#endif
 }
 
 
@@ -3995,11 +3972,7 @@ void Player::AddScience(const sint32 delta)
 			m_science->SetLevel(0);
 		}
         gotadvance = m_advances->GetResearching();
-#if defined(ACTIVISION_ORIGINAL)
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GrantAdvance,
-#else
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GrantAdvance,
-#endif
 							   GEA_Player, m_owner,
 							   GEA_Int, gotadvance,
 							   GEA_Int, CAUSE_SCI_RESEARCH,
@@ -4146,13 +4119,6 @@ void Player::BuildResearchDialog(AdvanceType advance)
 
 		
 		if((g_turn->IsHotSeat() || g_turn->IsEmail())
-#if defined(ACTIVISION_ORIGINAL)
-				// JJB removed this because it wasn't working properly
-				// (the visible player was changed before this code is reached,
-				// but with the screen still blank and before the dialog
-				// indicating that it's the next players turn)...
-				&& (m_owner != g_selected_item->GetVisiblePlayer())
-#else
 				// ... and replaced it with this, which makes much more sense,
 				// but doesn't work because BlankScreen() is called too late
 				//&& (g_slicEngine->ShouldScreenBeBlank())
@@ -4163,7 +4129,6 @@ void Player::BuildResearchDialog(AdvanceType advance)
 				// I have been unable to test this as yet.
 				// 2005/01/02
 				// (FIXME)
-#endif
 				) {
 			g_slicEngine->AddResearchOnUnblank(m_owner, text);
 		} else {
@@ -4386,21 +4351,6 @@ void Player::AttemptRevolt(void)
 		}
 
 	for (i=cityNum - 1; i>= 0; i--)
-#if defined(ACTIVISION_ORIGINAL)
-		if (revolution[i])
-			{
-			u = m_all_cities->Get(i) ;
-			cityData = u.GetData()->GetCityData() ;
-			cityData->Revolt(m_civRevoltingCitiesShouldJoin) ;
-
-			
-			
-			CtpAi::AddOwnerGoalsForCity(u, u.GetOwner());
-			CtpAi::AddForeignerGoalsForCity(u, m_owner);
-
-			m_num_revolted++;
-			}
-#else
 	{
 		// Modified by kaan to address bug # 12
 		u = m_all_cities->Get(i);
@@ -4418,7 +4368,6 @@ void Player::AttemptRevolt(void)
 			cityData->NoRevoltCountdown();
 		}
 	}
-#endif
 
 	delete [] revolution ;
 
@@ -6963,14 +6912,12 @@ void Player::AddMessage(Message &msg)
 				} else {
 					messagewin_CreateMessage( msg );
 					if(msg.IsInstantMessage() &&
-#ifndef ACTIVISION_ORIGINAL
 						// JJB added this to prevent instant messages showing
 						// out of turn in hotseat games.
 						// With the existing behaviour they would show immediately
 						// which would often mean that they show on the wrong players
 						// turn.
 						 g_selected_item->GetVisiblePlayer() == m_owner &&
-#endif
 					   ((!g_currentMessageWindow) ||
 					    (!g_currentMessageWindow->GetMessage()) ||
 					    (!g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())))) {
@@ -8444,10 +8391,8 @@ BOOL Player::ActuallySetGovernment(sint32 type)
 	m_tax_rate->SetTaxRates(s, m_owner);
 
 
-#ifndef ACTIVISION_ORIGINAL // #01 Recalculating military support costs after government change
 	// recalc the military support costs under the new government
 	m_readiness->RecalcCost();
-#endif
 
 
 	g_slicEngine->RunGovernmentChangedTriggers(m_owner);
@@ -8801,23 +8746,6 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 			break;
 		
 		case GAME_OVER_WON_SCIENCE:
-#if defined(ACTIVISION_ORIGINAL)
-            GenerateDescriptionString(TRUE);
-			m_hasWonTheGame = TRUE;
-			for(i = 1; i < k_MAX_PLAYERS; i++) {
-				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
-					
-					
-					
-					
-					
-					if(!g_network.IsClient()) {
-						
-						g_player[i]->GameOver(GAME_OVER_LOST_SCIENCE, -1);
-					}
-				}
-			}
-#else // possible bug 21 solution
 			if (!g_network.IsActive()) { 
 				GenerateDescriptionString(TRUE);
 				m_hasWonTheGame = TRUE;
@@ -8835,7 +8763,6 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 					}
 				}
 			} 
-#endif
 			break;
 
 		case GAME_OVER_LOST_CONQUERED:
@@ -10663,51 +10590,6 @@ void Player::EnterNewAge(sint32 age)
 	}
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-void Player::SetResearchGoal(enum DATABASE db, sint32 index)
-{
-
-	sint32 advance;
-	switch(db) {
-		case DATABASE_DEFAULT:
-		case DATABASE_SEARCH:
-		case DATABASE_ORDERS:
-		case DATABASE_RESOURCE:
-		case DATABASE_CONCEPTS:
-		case DATABASE_TERRAIN:
-			
-			return;
-		case DATABASE_UNITS:
-			advance = g_theUnitDB->Get(index)->GetEnableAdvanceIndex();
-			break;
-		case DATABASE_BUILDINGS:
-			advance = g_theBuildingDB->Get(index)->GetEnableAdvanceIndex();
-			break;
-		case DATABASE_WONDERS:
-			advance = g_theWonderDB->Get(index)->GetEnableAdvanceIndex();
-			break;
-		case DATABASE_ADVANCES:
-			advance = index; 
-			break;
-		case DATABASE_GOVERNMENTS:
-			advance = g_theGovernmentDB->Get(index)->GetEnableAdvanceIndex();
-			break;
-		case DATABASE_TILE_IMPROVEMENTS:
-			
-			return;
-		default:
-			Assert(FALSE);
-			return;
-	}
-
-	if(m_advances->HasAdvance(advance))
-		return;
-
-	StartResearchingAdvanceForGoal(advance);
-}
-
-#else
 //Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
@@ -10794,7 +10676,6 @@ sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 
 	return 1;
 }
-#endif
 
 void Player::StartResearchingAdvanceForGoal(sint32 goal)
 {

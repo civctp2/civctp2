@@ -147,14 +147,7 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 	}
 
 	hr = pAMStream->AddMediaStream(NULL, &MSPID_PrimaryAudio, AMMSF_ADDDEFAULTRENDERER, NULL);
-#if defined(ACTIVISION_ORIGINAL)
-	if (FAILED(hr)) {
-		c3errors_ErrorDialog("Video", "Could not add primary video stream to AMStream.  Error#%d.", hr);
-		goto Exit;
-	}
-#else
 	(void) hr;  // Ignore failures: display video without sound. 
-#endif
 	
     WCHAR       wPath[_MAX_PATH];
 	MultiByteToWideChar(CP_ACP, 0, name, -1, wPath, sizeof(wPath)/sizeof(wPath[0]));

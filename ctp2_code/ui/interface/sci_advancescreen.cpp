@@ -142,11 +142,7 @@ void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint3
 	ctp2_HyperLink *hl = ((ctp2_HyperTextBox *)control)->GetSelectedHyperLink();
 
 	if ( hl ) {
-#if defined(ACTIVISION_ORIGINAL)
-		open_GreatLibrary(0);
-#else
 		open_GreatLibrary();
-#endif
 		g_greatLibrary->SetLibrary( hl->m_index, (DATABASE)hl->m_db );
 	}
 }
@@ -155,11 +151,7 @@ void sci_advancescreen_GoalCallback(aui_Control *control, uint32 action, uint32 
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-#if defined(ACTIVISION_ORIGINAL)
-	open_GreatLibrary(0);
-#else
 	open_GreatLibrary();
-#endif
 }
 
 void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -527,9 +519,6 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 
 sint32 sci_advancescreen_loadList( void ) 
 {
-#if defined(ACTIVISION_ORIGINAL)	// never used	
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];	
-#endif
 
 	
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
@@ -557,31 +546,18 @@ sint32 sci_advancescreen_loadList( void )
 	
 	ctp2_ListItem *item = NULL;
 	ctp2_Static *child = NULL;
-#if defined(ACTIVISION_ORIGINAL)	// never used
-	strcpy(ldlBlock, "SciListItem");
-#endif
 	
 	s_advanceList->Clear();
 
 	
 
 	
-#if defined(ACTIVISION_ORIGINAL)	// Index before sorting is useless
-	PLAYER_INDEX	player = g_selected_item->GetVisiblePlayer();
-	uint8 *advances = g_player[player]->m_advances->CanResearch();
-	sint32 i, n = g_theAdvanceDB->NumRecords();
-	sint32 researching = g_player[player]->m_advances->GetResearching();
-	sint32 researchingItemIndex = -1, curItemIndex = 0;
-
-	for(i = 0; i < n; i++) {
-#else
 	uint8 *			advances		= p->m_advances->CanResearch();
 	sint32 const	advanceCount	= g_theAdvanceDB->NumRecords();
 	sint32			curItemIndex	= 0;
 
 	for (sint32 i = 0; i < advanceCount; ++i)
 	{
-#endif
 
 		if( advances[i] ) {
 			if(s_scienceGoalTree[i])
@@ -603,11 +579,6 @@ sint32 sci_advancescreen_loadList( void )
 			item->SetCompareCallback(ScienceSortCallback);
 
 			s_advanceList->AddItem( item );
-#if defined(ACTIVISION_ORIGINAL)	// Index before sorting is useless
-			if(researching == i) {
-				researchingItemIndex = curItemIndex;
-			}
-#endif
 			curItemIndex++;
 		}
 	}
@@ -615,12 +586,8 @@ sint32 sci_advancescreen_loadList( void )
 	
 	delete advances;
 
-#if defined(ACTIVISION_ORIGINAL)	// Index before sorting is useless
-	s_advanceList->SelectItem((sint32) researchingItemIndex);
-#endif
 	s_advanceList->SortByColumn(0,TRUE);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Find the current research in the sorted list.
 	// If not found, index 0 (the cheapest) will be selected.
 	sint32 const	research	= p->m_advances->GetResearching();
@@ -633,7 +600,6 @@ sint32 sci_advancescreen_loadList( void )
 			reinterpret_cast<ctp2_ListItem *>(s_advanceList->GetSelectedItem());
 		isIndexOk = (research == reinterpret_cast<sint32>(item->GetUserData()));
 	}
-#endif
 
 	s_sci_advanceScreen->ShouldDraw(TRUE);
 

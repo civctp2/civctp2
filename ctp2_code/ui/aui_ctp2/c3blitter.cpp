@@ -52,7 +52,7 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	if ((flags & k_AUI_BLITTER_FLAG_FAST)) 
 	{
 		
-#ifdef  _TRY_ALL_BLITTERS	
+#ifdef _TRY_ALL_BLITTERS	
 	  
   	   	switch(which_blit)
   	   	{

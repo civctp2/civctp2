@@ -1,7 +1,7 @@
 
 
 #pragma once
-#ifndef	SCENARIOWINDOW_FLAG
+#ifndef SCENARIOWINDOW_FLAG
 #define	SCENARIOWINDOW_FLAG
 
 #include "c3_popupwindow.h"

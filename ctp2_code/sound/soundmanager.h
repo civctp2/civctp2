@@ -49,7 +49,7 @@
 #include "civsound.h"
 #include "pointerlist.h"
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
 #include <SDL.h>
 #include <SDL_mixer.h>
 #endif
@@ -152,7 +152,7 @@ public:
 	void ReleaseSoundDriver();
 	void ReacquireSoundDriver();
 
-#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL)
     void SDL_ChannelCompleteCB(int channel);
 #endif
 
@@ -171,7 +171,7 @@ private:
 	BOOL					m_noSound;
 	BOOL					m_usePlaySound;
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	HREDBOOK				m_redbook;
 #else
     SDL_CD                  *m_cdrom;

@@ -61,7 +61,6 @@
 
 #include "ResourceRecord.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann
 #include "unseencell.h" //Unseen cell info is needed
 #include "TiledMap.h"
@@ -70,7 +69,6 @@
 
 extern sint32		g_fog_toggle;
 extern sint32		g_god;
-#endif
 
 extern C3UI						*g_c3ui;
 extern World					*g_theWorld;
@@ -273,48 +271,6 @@ void helptile_displayData(const MapPoint &p)
 	sint32 goods=0;
 	const Cell *myTile = g_theWorld->GetCell(p);
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	strcpy(myname, g_theWorld->GetTerrainName(p));
-
-	g_helpTileWindow->TitleText()->SetText( myname );
-
-	sprintf( mytext , "%d\n", myTile->GetFoodProduced());
-	s_tileFoodV->SetText(mytext);
-
-	sprintf( mytext , "%d\n", myTile->GetShieldsProduced());
-	s_tileProdV->SetText(mytext);
-
-	if(g_theWorld->IsGood(p)) {
-		StringId	goodStrID;
-
-		myTile->GetGoodsIndex(goods);
-		
-		goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
-		sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
-		s_tileGoodV->SetText(mytext);
-
-
-
-
-
-		s_tileSaleV->SetText("\0");
-		s_tileSale->SetText("\0");
-		sprintf( mytext, "%d", myTile->GetGoldProduced()); 
-		s_tileGoldV->SetText(mytext);
-	}
-	else {
-		sprintf( mytext , "%s\n", s_stringTable->GetString(STR_NONE));
-		s_tileGoodV->SetText(mytext);
-		s_tileSaleV->SetText("\0");
-		s_tileSale->SetText("\0");
-		sprintf( mytext, "%d", myTile->GetGoldProduced());
-		s_tileGoldV->SetText(mytext);
-	}
-
-	sprintf( mytext , "%.1f\n", (float)(myTile->GetMoveCost() / 100.0) );
-	s_tileMoveV->SetText(mytext);
-#else
 // Added by Martin Gühmann
 
 	UnseenCellCarton ucell;
@@ -398,7 +354,6 @@ void helptile_displayData(const MapPoint &p)
 		s_tileMoveV->SetText(mytext);
 	}
 
-#endif
 
 	if(s_tileImage)
 		s_tileImage->SetMouseTile(p);

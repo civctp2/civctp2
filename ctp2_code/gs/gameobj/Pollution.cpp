@@ -66,9 +66,7 @@
 	extern	PollutionDatabase	*g_thePollutionDB ;
 
 
-#if !defined(ACTIVISION_ORIGINAL)
 sint32 const	Pollution::ROUNDS_COUNT_IMMEASURABLE	= 9999;
-#endif
 
 
 Pollution::Pollution()
@@ -170,31 +168,6 @@ void Pollution::Serialize(CivArchive &archive)
 
 void Pollution::WarnPlayers()
 {
-#if defined(ACTIVISION_ORIGINAL)	
-	// Memory leak at return in loop, does nothing when MaxPlayers is 0.
-    int i;
-    SlicObject *so = new SlicObject("911ImminentFlood");
-    SlicSegment *seg = g_slicEngine->GetSegment("911ImminentFlood");
-
-    
-    for(i=1; i < g_theProfileDB->GetMaxPlayers(); i++) {
-        if ((g_player[i] && !g_player[i]->m_isDead) &&
-            !(seg->TestLastShown(i, k_ROUNDS_BEFORE_DISASTER))) {
-            return;
-        }
-    }
-
-
-
-    for(i=1; i < g_theProfileDB->GetMaxPlayers(); i++) {
-        if (g_player[i] && !g_player[i]->m_isDead)
-            so->AddRecipient(i) ;
-    }
-
-	
-
-    g_slicEngine->Execute(so) ;
-#else
 	SlicObject *	so	= new SlicObject("911ImminentFlood");
 	SlicSegment *	seg	= g_slicEngine->GetSegment("911ImminentFlood");
 	
@@ -218,7 +191,6 @@ void Pollution::WarnPlayers()
 	{
 		delete so;
 	}
-#endif
 }
 
 
@@ -574,57 +546,6 @@ sint32 Pollution::GetTrend(void) const
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-
-sint32 Pollution::GetRoundsToNextDisaster(void)
-{
-	sint32	r;
-
-	sint32 i;
-	bool gaia = false;
-	for(i = 0; i < k_MAX_PLAYERS; i++) {
-		if(!g_player[i])
-			continue;
-
-		if(wonderutil_GetReduceWorldPollution(g_player[i]->GetBuiltWonders())) {
-			r = 0;
-			gaia = true;
-			break;
-		}
-	}
-
-	if(!gaia) {
-		if (m_history[0] <= 0) {
-			r = 0;
-		} else {
-			
-			
-			
-			
-			sint32 pollutionThisTurn = m_history[0];
-			sint32 pollutionLastTurn = m_history[1];
-			
-			sint32 pollutionUntilTrigger = g_thePollutionDB->GetTrigger(g_theProfileDB->GetMapSize(), 
-																		m_phase) - pollutionThisTurn;
-			
-			sint32 pollutionDeltaPerTurn = pollutionThisTurn - pollutionLastTurn;
-			if (pollutionDeltaPerTurn > 0) {
-				r = pollutionUntilTrigger / pollutionDeltaPerTurn;
-			} else {
-				r = 0;
-			}
-			
-			
-
-
-
-
-		}
-	}
-	return (r) ;
-}
-
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -673,7 +594,6 @@ sint32 Pollution::GetRoundsToNextDisaster(void)
 	return pollutionUntilTrigger / pollutionDeltaPerTurn;
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 void pollution_NukeCell(MapPoint &pos, Cell *cell)
 {

@@ -149,9 +149,7 @@ class CivilisationPool : public ObjPool
 		CivilisationData* GetData(const Civilisation id) const { return ((CivilisationData*)Get(id)) ; }
 
 		Civilisation Create(const PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender) ;
-#if !defined(ACTIVISION_ORIGINAL)
 		void Release(CIV_INDEX const & civ);
-#endif
 
 		void Serialize(CivArchive &archive) ;
 

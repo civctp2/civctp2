@@ -72,15 +72,11 @@ public:
 	
 	static void BeginTurn(const PLAYER_INDEX player);
 
-#if defined (ACTIVISION_ORIGINAL)
-	static void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId);
-#else
 	static void MakeRoomForNewUnits(const PLAYER_INDEX playerId);
     
 	static void MoveOutofCityTransportUnits(const PLAYER_INDEX playerId);
 
 	static void UnGroupGarrisonUnits(const PLAYER_INDEX playerId);
-#endif
 
 	
 	static void FinishBeginTurn(const PLAYER_INDEX player);

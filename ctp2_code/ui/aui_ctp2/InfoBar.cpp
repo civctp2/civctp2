@@ -67,14 +67,12 @@
 #include "TerrainImprovementRecord.h"
 #include "CityData.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann
 #include "UnitData.h"
 #include "unseencell.h" //Unseen cell info is needed
 
 extern sint32		g_fog_toggle;
 extern sint32		g_god;
-#endif
 
 extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;
@@ -212,16 +210,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 #endif _DEBUG
 
 	} else {
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-		if(cell->GetOwner() > 0 && g_player[cell->GetOwner()]) {
-			
-			MBCHAR buf[k_MAX_NAME_LEN];
-			g_player[cell->GetOwner()]->m_civilisation->GetSingularCivName(buf);
-			Concat(buf);
-			Concat(" - ");
-		}
-#else
 // Added by Martin Gühmann
 		// Use the information from the last visit of that cell
 		sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(point));
@@ -237,7 +225,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			Concat(buf);
 			Concat(" - ");
 		}
-#endif
 		
 #if defined(ACTIVISION_DEFAULT)
 // Removed by Martin Gühmann
@@ -325,11 +312,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				Concat(civName);
 				Concat(")");
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-				//And why is this displayed on the map?
-				if(city.GetOwner() == g_selected_item->GetVisiblePlayer()) {
-#endif
 				if(city.CD()->IsBioInfected()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_BIO_INFECTION"));
 				}
@@ -362,16 +344,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			Concat("     ");
 		} else {
 			sint32 i;
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-			for(i = 0; i < cell->GetNumDBImprovements(); i++) {
-				Concat(" ");
-				Concat(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->Get(cell->GetDBImprovement(i))->GetName()));
-				if(i < cell->GetNumDBImprovements() - 1) {
-					Concat(",");
-				}
-			}
-#else
 // Added by Martin Gühmann
 			if(hasUnseen){
 				// Use hidden information if necessary
@@ -406,19 +378,12 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 					}
 				}
 			}
-#endif
 
 			if(cell->HasRiver()) {
 				Concat(g_theStringDB->GetNameStr("INFOBAR_RIVER"));
 			}
 
 			sint32 gold, food, prod;
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-			food = cell->GetFoodProduced();
-			prod = cell->GetShieldsProduced();
-			gold = cell->GetGoldProduced();
-#else
 // Added by Martin Gühmann
 			if(hasUnseen){
 				// Use the values from the hidden info if the tile is hidden
@@ -431,7 +396,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				prod = cell->GetShieldsProduced();
 				gold = cell->GetGoldProduced();
 			}
-#endif
 
 			Concat("(");
 			char numBuf[20];

@@ -59,11 +59,7 @@ static c3_PopupWindow	*s_spNewGameRulesScreen	= NULL;
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-static aui_Switch **s_checkBox;
-#else
 static aui_Switch **	s_checkBox	= NULL;
-#endif
 
 static MBCHAR	checknames[k_NUM_RULESBOXES][50] = {
 	"RuleOne",
@@ -167,35 +163,6 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)	// Incomplete cleanup
-AUI_ERRCODE spnewgamerulesscreen_Cleanup()
-{
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-
-	if ( !s_spNewGameRulesScreen  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( s_spNewGameRulesScreen->Id() );
-	keypress_RemoveHandler(s_spNewGameRulesScreen);
-
-	for (sint32 i = 0;i < k_NUM_RULESBOXES;i++ ) {
-		mycleanup( s_checkBox[i] );
-	}
-
-
-
-
-
-
-
-	delete s_spNewGameRulesScreen;
-	s_spNewGameRulesScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
-}
-
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -236,7 +203,6 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 	return AUI_ERRCODE_OK;
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 
 void spnewgamerulesscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )

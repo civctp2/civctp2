@@ -316,14 +316,9 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 
 	
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	if (m_localVision->GetLastSeen(pos, ucell) )
-#else
 // Added by Martin Gühmann
 // Do not forget fog of war
 	if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle)
-#endif
 	{
 		env = ucell.m_unseenCell->GetEnv();
 	}
@@ -363,12 +358,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		
 		
 		
-#if defined(ACTIVISION_ORIGINAL)
-		if (pos.x&1) 
-			data = m_tileSet->GetImprovementData(150);
-		else 
-			data = m_tileSet->GetImprovementData(151);
-#else
 		// Modified by Martin Gühmann to allow modders to customize the graphics of ruins/huts.
 		sint32 const			terrain = 
 			(cell) ? cell->GetTerrain() : ucell.m_unseenCell->GetTerrainType();
@@ -377,7 +366,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			data = m_tileSet->GetImprovementData((uint16)rec->GetHutTilesetIndexA());
 		else 
 			data = m_tileSet->GetImprovementData((uint16)rec->GetHutTilesetIndexB());
-#endif // ACTIVISION_ORIGINAL
 		DrawAnImprovement(surface,data,x,y,fog);
 		drewSomething = true;
 	}
@@ -402,11 +390,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else 
 				break;
 			sint32 type = cell->AccessImprovement(i).GetData()->GetType();
-#if defined(ACTIVISION_ORIGINAL)
-			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog);
-#else
 			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
-#endif
 			drewSomething = true;
 		}
 	} 
@@ -425,17 +409,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			uint16 index;
 
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-			if (percent < 50) 
-				index = 0;
-			else 
-				if (percent < 100) index = 1;
-			else
-				index = 2;
-
-			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog);
-#else
 // Added by Martin Gühmann
 			if (percent < 50){
 				index = 0;
@@ -463,7 +436,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 					DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
 				}
 			}
-#endif
 			drewSomething = true;
 
 			walker->Next();
@@ -475,16 +447,10 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 	return drewSomething;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
-												   sint32 type, sint32 x, sint32 y, 
-												   uint16 index, BOOL fog)
-#else
 void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
 												   sint32 type, sint32 x, sint32 y, 
 												   uint16 index, BOOL fog, sint32 percentComplete)
 												   //Added sint32 percentComplete by Martin Gühmann
-#endif
 {
 	
 
@@ -614,19 +580,6 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 
 #endif
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
-#if defined(ACTIVISION_ORIGINAL)
-	if(index >= rec->GetNumConstructionTiles()) {
-		if(rec->GetNumConstructionTiles() < 1) {
-			data = m_tileSet->GetImprovementData(1);
-		} else {
-			data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(rec->GetNumConstructionTiles() - 1));
-		}
-	} else {
-		data =  m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(index));
-	}
-
-
-#else
 	if (rec->GetNumConstructionTiles() < 1) 
 	{
 		data = m_tileSet->GetImprovementData(1);
@@ -651,7 +604,6 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 			}
 		}
 	}
-#endif
 
 	if(!data)
 		return;
@@ -4807,17 +4759,8 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 						happinessAttackOwner=0;
 
 				UnseenCellCarton	ucell;
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-
-				// Why twice?
-				if (m_localVision->GetLastSeen(pos, ucell)) {
-
-					if(m_localVision->GetLastSeen(pos, ucell)) {
-#else
 				// Don't forget if fog was toggled
 				if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle) {
-#endif
 						pop = ucell.m_unseenCell->GetCitySize();
 						name = (MBCHAR *)ucell.m_unseenCell->GetCityName();
 						owner = ucell.m_unseenCell->GetCityOwner();
@@ -4848,13 +4791,7 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 						if (pop > 0)
 							drawCity = TRUE;
 					}
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-				// No need to do it twice
-				} else
-#else
 				else
-#endif
 				{
 
 					
@@ -5823,7 +5760,6 @@ sint32 TiledMap::GetVisibleCellOwner(MapPoint &pos)
 
 uint32 TiledMap::GetVisibleCityOwner(MapPoint &pos)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann
 	if(!m_localVision->IsVisible(pos) 
 	// Show the city influence radius from the last visit.
@@ -5834,7 +5770,6 @@ uint32 TiledMap::GetVisibleCityOwner(MapPoint &pos)
 			return ucell.m_unseenCell->GetVisibleCityOwner(); 
 		}
 	}
-#endif
 	return g_theWorld->GetCell(pos)->GetCityOwner().m_id;
 }
 
@@ -5890,16 +5825,12 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 	if(pos.GetNeighborPosition(SOUTHWEST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
-#if defined(ACTIVISION_ORIGINAL)
-		if(neighborOwner != myOwner && visP->HasSeen(myOwner) && g_theProfileDB->GetShowPoliticalBorders()) {
-#else
 		if(neighborOwner != myOwner 
 		&&(visP->HasSeen(myOwner)
 		|| g_fog_toggle
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-#endif
 			DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID);
 		}		
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
@@ -5914,16 +5845,12 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 	if(pos.GetNeighborPosition(NORTHEAST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
-#if defined(ACTIVISION_ORIGINAL)
-		if(neighborOwner != myOwner && visP->HasSeen(myOwner) && g_theProfileDB->GetShowPoliticalBorders()) {
-#else
 		if(neighborOwner != myOwner 
 		&&(visP->HasSeen(myOwner)
 		|| g_fog_toggle
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-#endif
 			DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);
 		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
@@ -5938,16 +5865,12 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 	if(pos.GetNeighborPosition(SOUTHEAST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
-#if defined(ACTIVISION_ORIGINAL)
-		if(neighborOwner != myOwner && visP->HasSeen(myOwner) && g_theProfileDB->GetShowPoliticalBorders()) {
-#else
 		if(neighborOwner != myOwner 
 		&&(visP->HasSeen(myOwner)
 		|| g_fog_toggle
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-#endif
 			DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID);
 		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);

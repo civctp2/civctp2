@@ -105,11 +105,6 @@ private:
 	Vision *m_mergeFrom; 
 	BOOL m_revealedUnexplored; 
 
-#if defined(ACTIVISION_ORIGINAL)	
-	void FillCircle(sint32 xc, sint32 yc, double r, CIRCLE_OP op,
-					DynamicArray<MapPoint> *removeadd = NULL);
-	BOOL CheckWrap(MapPoint &pos, const MapPoint &center);
-#else
 	void FillCircle
 	(
 		MapPoint const &			center, 
@@ -117,7 +112,6 @@ private:
 		CIRCLE_OP					op,
 		DynamicArray<MapPoint> *	removeadd = NULL
 	);
-#endif
 	void DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op, 
 						DynamicArray<MapPoint> *removeadd);
 

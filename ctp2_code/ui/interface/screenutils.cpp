@@ -154,11 +154,7 @@ sint32 open_CityView( void )
 
 sint32 close_CityView( void )
 {
-#if defined(ACTIVISION_ORIGINAL) // does not release the data
-	CityWindow::Hide();
-#else
 	CityWindow::Close(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-#endif
 
 	return 0;
 }
@@ -340,43 +336,6 @@ sint32 close_InfoScreen( void )
 	return 0;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-sint32 open_GreatLibrary( sint32 index, BOOL sci )
-{
-	if(g_e3Demo) return 0;
-
-#ifdef _DEBUG
-	SET_TIME
-#endif _DEBUG
-
-
-	sint32 err;
-
-
-	err = greatlibrary_Initialize( index, sci );
-	Assert( !err );
-	if ( err ) return -1;
-
-
-
-
-
-	g_greatLibrary->Display();
-#ifdef _DEBUG
-	GET_ELAPSED_TIME( "Great Library" );
-#endif _DEBUG
-
-	return 0;
-}
-
-sint32 open_GreatLibrary( void )
-{
-	open_GreatLibrary(0);
-
-	return 0;
-}
-
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -445,7 +404,6 @@ sint32 open_GreatLibrary( void )
 	return open_GreatLibrary(advance);
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 sint32 close_GreatLibrary( void )
 {

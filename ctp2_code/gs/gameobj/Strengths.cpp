@@ -54,15 +54,7 @@ Strengths::Strengths(sint32 owner)
 	if (g_turn==NULL)
 		return;
 
-#if defined(ACTIVISION_ORIGINAL)	// checked in NewTurnCount
-	sint32 curRound;
-	if(!g_player[g_selected_item->GetCurPlayer()])
-		curRound = 0;
-	else
-		curRound = NewTurnCount::GetCurrentRound();
-#else
 	sint32 const	curRound = NewTurnCount::GetCurrentRound();
-#endif
 	
 	sint32 c, y;
 	for(y = 1; y < curRound; y++) {
@@ -152,13 +144,9 @@ void Strengths::Calculate()
 
 sint32 Strengths::GetStrength(STRENGTH_CAT category)
 {
-#if defined(ACTIVISION_ORIGINAL)	// may crash
-	return m_strengthRecords[category].GetLast();
-#else
 	return m_strengthRecords[category].Num() 
 		   ? m_strengthRecords[category].GetLast()
 		   : 0;
-#endif
 }
 
 sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) 

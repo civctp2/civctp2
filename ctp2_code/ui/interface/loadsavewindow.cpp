@@ -280,49 +280,6 @@ AUI_ERRCODE LoadSaveWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	return AUI_ERRCODE_OK;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-LoadSaveWindow::~LoadSaveWindow()
-{
-	CleanUpSaveInfo();
-
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-
-	mycleanup(m_nameString);
-
-	
-	mycleanup(m_titlePanel);
-	mycleanup(m_gameText);
-	mycleanup(m_gameTextBox);
-	mycleanup(m_saveText);
-	mycleanup(m_saveTextBox);
-	mycleanup(m_noteText);
-	mycleanup(m_noteTextBox);
-	
-	mycleanup(m_playerText);
-	mycleanup(m_civText);
-
-	mycleanup(m_listOne);
-	mycleanup(m_listTwo);
-	
-	mycleanup(m_tabGroup);
-	mycleanup(m_powerTab);
-	mycleanup(m_powerTabImage);
-	mycleanup(m_powerTabImageBackup);
-	mycleanup(m_mapTab);
-	mycleanup(m_mapTabImage);
-	mycleanup(m_mapTabImageBackup);
-	mycleanup(m_civsTab);
-	mycleanup(m_civsList);
-
-	mycleanup(m_deleteButton);
-
-	
-	if(m_fileList)
-		m_fileList->DeleteAll();
-
-#undef mycleanup
-}
-#else	// ACTIVISION_ORIGINAL
 //----------------------------------------------------------------------------
 //
 // Name       : LoadSaveWindow::~LoadSaveWindow
@@ -371,7 +328,6 @@ LoadSaveWindow::~LoadSaveWindow()
 	delete m_civsList;
 	delete m_deleteButton;
 }
-#endif	// ACTIVISION_ORIGINAL
 
 
 void LoadSaveWindow::FillListOne(void)
@@ -596,9 +552,7 @@ void LoadSaveWindow::SetType(uint32 type)
 			m_fileList->DeleteAll();
 			FillListOne(); 
 		}
-#if !defined(ACTIVISION_ORIGINAL)
 		delete m_fileList;
-#endif
 		m_fileList = GameFile::BuildSaveList(C3SAVEDIR_GAME);
 		m_gameInfo = NULL; 
 		break;
@@ -608,9 +562,7 @@ void LoadSaveWindow::SetType(uint32 type)
 		if (m_fileList) {
 			m_fileList->DeleteAll();
 		}
-#if !defined(ACTIVISION_ORIGINAL)
 		delete m_fileList;
-#endif
 		m_fileList = GameFile::BuildSaveList(C3SAVEDIR_MP);
 		m_gameInfo = NULL; 
 		break;
@@ -621,9 +573,7 @@ void LoadSaveWindow::SetType(uint32 type)
 		if (m_fileList) {
 			m_fileList->DeleteAll();
 		}
-#if !defined(ACTIVISION_ORIGINAL)
 		delete m_fileList;
-#endif
 		m_fileList = GameFile::BuildSaveList(C3SAVEDIR_SCEN);
 		m_gameInfo = NULL; 
 		break;

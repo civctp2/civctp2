@@ -56,9 +56,7 @@
 #include "WonderUtil.h"
 #include "DomesticManagementDialog.h"
 #include "network.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "c3math.h"		// AsPercentage
-#endif
 
 
 extern ColorSet *g_colorSet;
@@ -365,16 +363,10 @@ void CauseAndEffectTab::UpdateCommerceSpinners()
 	
 	double currentScienceTax = 0.0;
 	player->GetScienceTaxRate(currentScienceTax);
-#if defined(ACTIVISION_ORIGINAL)
-	m_commerceScienceTaxSpinner->SetMaximum(g_theGovernmentDB->Get(g_player[g_selected_item->GetVisiblePlayer()]->GetGovernmentType())->GetMaxScienceRate()*100.0,0);
-	m_commerceScienceTaxSpinner->SetValue(
-		static_cast<sint32>((currentScienceTax * 100.0) + 0.5), 0);
-#else
 	double const	maxScienceTax	= 
 		g_theGovernmentDB->Get(player->GetGovernmentType())->GetMaxScienceRate();
 	m_commerceScienceTaxSpinner->SetMaximum(AsPercentage(maxScienceTax), 0);
 	m_commerceScienceTaxSpinner->SetValue(AsPercentage(currentScienceTax), 0);
-#endif
 }
 
 
@@ -863,13 +855,8 @@ void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
 	sint32 scienceTaxLevelSet = spinner->GetValueX();
 	double currentScienceTax = 0.0;
 	player->GetScienceTaxRate(currentScienceTax);
-#if defined(ACTIVISION_ORIGINAL)
-	if(scienceTaxLevelSet !=
-		static_cast<sint32>((currentScienceTax * 100.0) + 0.5))	{ 
-#else
 	if (scienceTaxLevelSet != AsPercentage(currentScienceTax))
 	{
-#endif
 		player->SetTaxes(
 			static_cast<double>(scienceTaxLevelSet) / 100.0);
 		UpdateCities();

@@ -62,12 +62,8 @@ STDEHANDLER(ImprovementCompleteEvent)
 	args->Add(new GameEventArgument(GEA_Int, imptype));
 	args->Add(new GameEventArgument(GEA_Player, owner));
 
-#if defined(ACTIVISION_ORIGINAL)	// deletes its own memory while executing
-	imp->Complete();
-#else
 	TerrainImprovementData	tmpData(ID(imp), owner, pos, imptype, 0);
 	tmpData.Complete();
-#endif
 
 	return GEV_HD_Continue;
 }

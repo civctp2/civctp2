@@ -46,12 +46,8 @@
 #include "aui_action.h"
 
 
-#if defined(ACTIVISION_ORIGINAL)
-#define GAMEID 1503
-#else
 // Should match the value in anet.inf
 #define GAMEID 1504	
-#endif
 
 
 class DestroyInitialPlayScreenAction : public aui_Action

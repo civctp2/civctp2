@@ -40,19 +40,6 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_GPlayer::count = 7;
-ns_GPlayer::Struct ns_GPlayer::list[] = {
-	{ICON,		(Data)&m_host},
-	{ICON,		(Data)&m_launched},
-	{STRING,	(Data)&m_name},
-	{INT,		(Data)&m_ping},
-	{STRING,	(Data)&m_tribe},
-
-	{INT,		(Data)&m_civpoints},
-	{INT,		(Data)&m_pwpoints}
-};
-#else
 ns_GPlayer::ns_GPlayer(NETFunc::Player * player) 
 :	ns_Object<NETFunc::Player, ns_GPlayer>(player) 
 {
@@ -64,7 +51,6 @@ ns_GPlayer::ns_GPlayer(NETFunc::Player * player)
 	list.push_back(Struct(INT,		&m_civpoints));
 	list.push_back(Struct(INT,		&m_pwpoints));
 };
-#endif
 
 
 

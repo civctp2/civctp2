@@ -1352,9 +1352,7 @@ AllinoneWindow::~AllinoneWindow()
 		m_PPTStrings = NULL;
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)
 	delete m_messageRequestDenied;
-#endif
 
 	agesscreen_Cleanup();
 	spnewgamemapsizescreen_Cleanup();

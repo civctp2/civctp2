@@ -61,13 +61,8 @@ public:
 				  char *subType = NULL);
 	void AddGroupedBits(char *name, struct namelist *list);
 
-#if defined(ACTIVISION_ORIGINAL)
-// Added by Martin Gühmann
-	void AddBitPair(char *name, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
-#else
 // Removed by Martin Gühmann
 	void AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
-#endif
 
 	void StartMemberClass(char *name);
 	void EndMemberClass(char *name);
@@ -103,9 +98,7 @@ private:
 	PointerList<Datum> m_datumList;
 	PointerList<MemberClass> m_memberClasses;
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	bool m_hasGovernmentsModified;
-#endif
 
 	sint32 m_numBits;
 	bool m_addingToMemberClass;

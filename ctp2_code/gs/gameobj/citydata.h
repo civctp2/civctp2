@@ -282,9 +282,7 @@ class CityData : public CityRadiusCallback {
 //----------------------------------------------------------------------------
 	
     Unit m_home_city; 
-#if !defined(ACTIVISION_ORIGINAL)                       
 	uint8		m_min_turns_revolt;	// Number of revolt risk free turns.
-#endif
     BuildQueue m_build_queue; 
     
 	TradeDynamicArray m_tradeSourceList;							
@@ -537,10 +535,8 @@ public:
     double GetDefendersBonus() const;
 	double GetDefendersBonusNoWalls() const;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Modified by kaan to address bug # 12
 	void NoRevoltCountdown();
-#endif	
 	BOOL ShouldRevolt(const sint32 inciteBonus) ;					
 	void Revolt(sint32 &playerToJoin, BOOL causeIsExternal = FALSE) ;
 	void TeleportUnits(const MapPoint &pos,  BOOL &revealed_foreign_units, 
@@ -848,12 +844,8 @@ public:
 					 sint32 origOwner);
 
 	
-#if defined(ACTIVISION_ORIGINAL)
-	void GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius);
-#else
 	void	GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const;
 	double	GetUtilisationRatio(uint32 const squaredDistance) const;
-#endif
 	sint32 PopCount() const;
 	sint32 SpecialistCount(POP_TYPE type) const;
 	sint32 SlaveCount() const;
@@ -945,10 +937,8 @@ public:
 	sint32 GetProjectedScience();
 	sint32 GetFounder() const;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	bool NeedMoreFood(sint32 foodBonus, bool considerFoodOnlyFromTerrain);
 	sint32 GetCityStyle() const;
-#endif
 	void SetCityStyle(sint32 style); 
 }; 
 

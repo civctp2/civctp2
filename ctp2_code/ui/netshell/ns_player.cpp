@@ -34,14 +34,6 @@
 #include "netshell.h"
 #include "ns_player.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_Player::count = 3;
-ns_Player::Struct ns_Player::list[] = {
-	{ICON,		(Data)&m_mute},
-	{STRING,	(Data)&m_name},
-	{INT,		(Data)&m_ping}
-};
-#else
 ns_Player::ns_Player(NETFunc::Player * player) 
 :	ns_Object<NETFunc::Player, ns_Player>(player) 
 {
@@ -49,7 +41,6 @@ ns_Player::ns_Player(NETFunc::Player * player)
 	list.push_back(Struct(STRING,	&m_name));
 	list.push_back(Struct(INT,		&m_ping));
 };
-#endif
 
 void ns_Player::Update( NETFunc::Player *player ) {
 	SetMine(player->IsMe());

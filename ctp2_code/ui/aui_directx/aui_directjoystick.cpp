@@ -3,7 +3,7 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-#if(DIRECTINPUT_VERSION >= 0x0500)
+#if (DIRECTINPUT_VERSION >= 0x0500)
 
 #include "aui_ui.h"
 

@@ -40,16 +40,6 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_AIPlayer::count = 4;
-ns_AIPlayer::Struct ns_AIPlayer::list[] = {
-	{STRING,	(Data)&m_name},
-
-	{STRING,	(Data)&m_tribe},
-	{INT,		(Data)&m_civpoints},
-	{INT,		(Data)&m_pwpoints}
-};
-#else
 ns_AIPlayer::ns_AIPlayer(NETFunc::AIPlayer * player) 
 :	ns_Object<NETFunc::AIPlayer, ns_AIPlayer>(player) 
 {
@@ -58,7 +48,6 @@ ns_AIPlayer::ns_AIPlayer(NETFunc::AIPlayer * player)
 	list.push_back(Struct(INT,		&m_civpoints));
 	list.push_back(Struct(INT,		&m_pwpoints));
 };
-#endif
 
 
 void ns_AIPlayer::Update( NETFunc::AIPlayer *aiplayer ) {

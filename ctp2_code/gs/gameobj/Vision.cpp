@@ -126,12 +126,7 @@ void Vision::Clear()
 
 void Vision::AddExplored(MapPoint pos, double radius)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	Convert(pos);
-	FillCircle(pos.x, pos.y, radius, CIRCLE_OP_ADD);
-#else
 	FillCircle(pos, radius, CIRCLE_OP_ADD);
-#endif
 }
 
 
@@ -195,14 +190,8 @@ BOOL Vision::IsExplored(MapPoint pos) const
 void Vision::AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored,
 						DynamicArray<MapPoint> *removeadd)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	Convert(pos);
-	m_revealedUnexplored = FALSE;
-	FillCircle(pos.x, pos.y, radius, CIRCLE_OP_ADD, removeadd);
-#else
 	m_revealedUnexplored	= FALSE;
 	FillCircle(pos, radius, CIRCLE_OP_ADD, removeadd);
-#endif
 	if(m_revealedUnexplored)
 		revealed_unexplored = TRUE;
 
@@ -223,23 +212,13 @@ void Vision::AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored,
 void Vision::RemoveVisible(MapPoint pos, double radius,
 						   DynamicArray<MapPoint> *removeadd)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	Convert(pos);
-	FillCircle(pos.x, pos.y, radius, CIRCLE_OP_SUBTRACT, removeadd);
-#else
 	FillCircle(pos, radius, CIRCLE_OP_SUBTRACT, removeadd);
-#endif
 }
 
 
 void Vision::AddRadar(MapPoint pos, double radius)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	Convert(pos);
-	FillCircle(pos.x, pos.y, radius, CIRCLE_OP_ADD_RADAR);
-#else
 	FillCircle(pos, radius, CIRCLE_OP_ADD_RADAR);
-#endif
 }
 
 BOOL Vision::IsVisible(MapPoint pos) const 
@@ -332,18 +311,6 @@ void Vision::MergeMap(Vision *src)
 							}
 						}
 					}
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-					if(cell->GetCity().m_id != (0) ||
-					   cell->GetNumImprovements() > 0) {
-						if(cell->GetCity().m_id != 0)
-							cell->GetCity().SetVisible(m_owner);
-
-						
-						ucell.m_unseenCell = new UnseenCell(point);
-						m_unseenCells->Insert(ucell);
-					}
-#else
 // Added by Martin Gühmann
 					// Create always an unseen cell
 					if(cell->GetCity().m_id != 0)
@@ -351,7 +318,6 @@ void Vision::MergeMap(Vision *src)
 						
 					ucell.m_unseenCell = new UnseenCell(point);
 					m_unseenCells->Insert(ucell);
-#endif
 				}
 				
 			} else {
@@ -441,254 +407,6 @@ BOOL Vision::MergePoint(sint32 x, sint32 y)
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-#define NEWFILLCIRCLE
-#ifdef NEWFILLCIRCLE
-void Vision::FillCircle(sint32 xc, sint32 yc,
-						double r,
-						CIRCLE_OP op,
-						DynamicArray<MapPoint> *removeadd)
-{
-	
-	
-	r += 0.5;
-	sint32 rsq = sint32(r * r);
-	sint32 x, y;
-	BOOL incircle;
-	sint32 dx, dy;
-	MapPoint center(xc, yc);
-
-	
-	for(x = center.x + sint32(r); x >= center.x; x--) {
-		incircle = FALSE;
-		
-		for(y = center.y + sint32(r); y >= center.y; y--) {
-			dx = x - center.x;
-			dy = y - center.y;
-			if(incircle || ((dx*dx) + (dy*dy) <= rsq)) { 
-				incircle = TRUE;
-				
-				
-				MapPoint cpos;
-				cpos.Set(x,y);
-				
-				
-				
-				if(CheckWrap(cpos, center)) {
-					DoFillCircleOp(cpos, op, removeadd);
-				}
-
-				if(dx != 0) {
-					cpos.Set(center.x - dx, y);
-					if(CheckWrap(cpos, center)) {
-						DoFillCircleOp(cpos, op, removeadd);
-					}
-				}
-
-				if(dy != 0) {
-					cpos.Set(x, center.y - dy);
-					if(CheckWrap(cpos, center)) {
-						DoFillCircleOp(cpos, op, removeadd);
-					}
-
-					if(dx != 0) {
-						cpos.Set(center.x - dx, center.y - dy);
-						if(CheckWrap(cpos, center)) {
-							DoFillCircleOp(cpos, op, removeadd);
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-BOOL Vision::CheckWrap(MapPoint &pos, const MapPoint &center)
-{
-	
-	Assert(center.x >= 0);
-	Assert(center.x < m_width);
-	Assert(center.y >= 0);
-	Assert(center.y < m_height);
-
-	if(center.x < 0 || center.x >= m_width || center.y < 0 || center.y >= m_height)
-		return FALSE;
-
-	
-	
-	
-	
-	MapPoint isocenter(center);
-	Unconvert(isocenter);
-	MapPoint delta;
-	delta.x = pos.x - center.x;
-	delta.y = pos.y - center.y;
-	delta.y -= delta.x;
-
-	if((isocenter.y + delta.y) < 0) {
-		
-		if(!m_isYwrap)
-			return FALSE;
-		
-		
-		pos.x -= m_xyConversion;
-		pos.y -= m_xyConversion;
-	} else if(isocenter.y + delta.y >= m_height) {
-		
-		if(!m_isYwrap)
-			return FALSE;
-		pos.x += m_xyConversion;
-		pos.y += m_xyConversion;
-	}
-		
-	
-	if(!g_theWorld->IsXwrap()) {
-		sint16 centerLeftEdge = (m_width - (isocenter.y / 2)) % m_width;
-		MapPoint checkpos(isocenter.x + delta.x, isocenter.y + delta.y);
-		sint16 posLeftEdge = (m_width - (checkpos.y/2)) % m_width;
-
-		if((isocenter.x >= centerLeftEdge) &&
-		   ((checkpos.x) < posLeftEdge))
-			return FALSE;
-
-		sint16 centerRightEdge = (centerLeftEdge + m_width) % m_width;
-		sint16 posRightEdge = (posLeftEdge + m_width) % m_width;
-
-		if(isocenter.x < centerRightEdge &&
-		   checkpos.x >= posRightEdge)
-			return FALSE;
-	}
-
-	if(pos.x < 0) {
-		
-		pos.x += m_width;
-		pos.y = (pos.y + m_width) % m_height;
-	} else if(pos.x >= m_width) {
-		
-		pos.x -= m_width;
-		pos.y = pos.y - m_width;
-		if(pos.y < 0)
-			pos.y += m_height;
-	}
-
-	if(pos.y >= m_height) {
-		
-		pos.y -= m_height;
-	}
-	if(pos.y < 0) {
-		
-		pos.y += m_height;
-	}
-
-	Assert(pos.x >= 0);
-	Assert(pos.x < m_width);
-	Assert(pos.y >= 0);
-	Assert(pos.y < m_height);
-	if(pos.x < 0 || pos.x >= m_width || pos.y < 0 || pos.y >= m_height)
-		return FALSE;
-	return TRUE;
-}
-
-sint32 shut_up_you_bastard;
-
-void Vision::DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op, 
-							DynamicArray<MapPoint> *removeadd)
-{
-	MapPoint iso;
-	BOOL redraw = FALSE;
-	uint16 *entry = &m_array[pos.x][pos.y];
-	switch(op) {
-		case CIRCLE_OP_ADD:
-			if(!((*entry) & k_EXPLORED_BIT)) {
-				iso = pos;
-				Unconvert(iso);
-				redraw = TRUE;
-				m_revealedUnexplored = TRUE;
-			} else if (((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
-				iso = pos;
-				Unconvert(iso);
-				redraw = TRUE;
-				UnseenCellCarton ucell;
-				if(m_unseenCells->RemoveAt(iso, ucell)) {
-					delete ucell.m_unseenCell;
-				}
-			}
-			*entry = (*entry + 1) | k_EXPLORED_BIT;
-			if(redraw && removeadd) {
-				if(removeadd->Del(iso)) {
-					
-					redraw = FALSE;
-				} else {
-					removeadd->Insert(iso);
-					redraw = FALSE;
-				}
-			}
-			break;
-		case CIRCLE_OP_SUBTRACT:
-
-			if(g_player[m_owner] && g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
-
-                
-				    Assert(((*entry) & k_VISIBLE_REFERENCE_MASK) != 0);
-				
-			}
-			*entry = *entry - 1;
-			if(((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
-				iso = pos;
-				Unconvert(iso);
-
-				
-				
-				Cell *cell = g_theWorld->GetCell(iso);
-				if(cell->GetNumImprovements() > 0 || 
-				   (cell->GetCity().IsValid() && cell->GetCity().GetOwner() != m_owner)) {
-					AddUnseen(iso);
-				}
-
-				if(removeadd) {
-					
-					removeadd->Insert(iso);
-					redraw = FALSE;
-				} else {
-					redraw = TRUE;
-				}
-			}
-			break;
-		case CIRCLE_OP_ADD_RADAR:
-		{
-			static CellUnitList army;
-			army.Clear();
-			iso = pos;
-			Unconvert(iso);
-			g_theWorld->GetArmy(iso, army);
-			sint32 i, n = army.Num();
-			for(i = 0; i < n; i++) {
-				army[i].SetRadar(m_owner);
-			}
-			break;
-		}
-		case CIRCLE_OP_MERGE:
-			if(MergePoint(pos.x, pos.y)) {
-				if(g_selected_item->GetVisiblePlayer() == m_owner) {
-					g_tiledMap->GetLocalVision()->ModifyPoint(this, pos.x, pos.y);
-				}
-				iso = pos;
-				Unconvert(iso);
-				redraw = TRUE;
-			}
-			break;
-		default:
-			Assert(FALSE);
-			break;
-	}
-	if(g_tiledMap && redraw && m_amOnScreen) {
-		g_tiledMap->RedrawTile(&iso);
-	}
-}
-
-#endif
-						
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -837,34 +555,15 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			}
 			break;
 		case CIRCLE_OP_SUBTRACT:
-#if defined(ACTIVISION_ORIGINAL)	// complaining does not help
-			if(g_player[m_owner] && g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
-
-                
-				    Assert(((*entry) & k_VISIBLE_REFERENCE_MASK) != 0);
-				
-			}
-			*entry = *entry - 1;
-#else
 			if ((*entry) & k_VISIBLE_REFERENCE_MASK)
 			{
 				--(*entry);
 			}
 			// else: No action: keep counter at 0
-#endif
 			if(((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
 				Cell *cell = g_theWorld->GetCell(iso);
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-				// This should be hidden if it is outside of the view, even if there are no tileimps under construction.
-				if(cell->GetNumImprovements() > 0 || 
-				   (cell->GetCity().IsValid() && cell->GetCity().GetOwner() != m_owner)) {
-					AddUnseen(iso);
-				}
-#else
 // Added by Martin Gühmann
 				AddUnseen(iso);
-#endif
 
 				if(removeadd) {
 					
@@ -904,7 +603,6 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 		g_tiledMap->RedrawTile(&iso);
 	}
 }
-#endif	// ACTIVISION_ORIGINAL
 
 void Vision::AddUnseen(const MapPoint &point)
 {
@@ -912,13 +610,6 @@ void Vision::AddUnseen(const MapPoint &point)
 		return;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	// Already checked in IsVisible - no need to do it twice
-	if(g_player[m_owner] && g_player[m_owner]->m_hasGlobalRadar) {
-		return;
-	}
-#endif
 
 	if(!IsVisible(point)) {
 		UnseenCellCarton alreadyUnseen;
@@ -1011,14 +702,7 @@ void Vision::Serialize(CivArchive &archive)
 void Vision::CopyCircle(Vision *src, const MapPoint &center, sint32 radius)
 {
 	m_mergeFrom = src;
-#if defined(ACTIVISION_ORIGINAL)
-	MapPoint pos = center;
-	Convert(pos);
-	FillCircle(pos.x, pos.y, (double)radius,
-			   CIRCLE_OP_MERGE);
-#else
 	FillCircle(center, (double) radius, CIRCLE_OP_MERGE);
-#endif
 }
 
 
@@ -1065,12 +749,7 @@ void Vision::ModifyPoint(Vision *src, sint32 x, sint32 y)
 
 void Vision::DeleteUnseenCells()
 {
-#if defined(ACTIVISION_ORIGINAL)	// Not really static: Cleared every time
-	static DynamicArray<UnseenCellCarton> array;
-	array.Clear();
-#else
 	DynamicArray<UnseenCellCarton>	array;
-#endif
 	m_unseenCells->BuildList(array, 0xffffffff);
 
 	sint32 i;

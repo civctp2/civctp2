@@ -307,9 +307,6 @@ sint32 NewTurnCount::GetCurrentRound()
 {
 	PLAYER_INDEX current_player = g_selected_item->GetCurPlayer();
 	Assert(g_player != NULL);
-#if defined(ACTIVISION_ORIGINAL)	// may happen when creating the barbarians
-	Assert(g_player[current_player] != NULL);
-#endif
 	if(!g_player || !g_player[current_player]) return 0;
 	
 	return g_player[current_player]->GetCurRound();

@@ -91,18 +91,11 @@ void nf_PlayerSetup::Reset()
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_PlayerSetup::count = 1;
-ns_PlayerSetup::Struct ns_PlayerSetup::list[] = {
-	{STRING,	(Data)&m_name},
-};
-#else
 ns_PlayerSetup::ns_PlayerSetup(nf_PlayerSetup * player) 
 :	ns_Object<nf_PlayerSetup, ns_PlayerSetup>(player) 
 {
 	list.push_back(Struct(STRING,	&m_name));
 };
-#endif
 
 
 void ns_PlayerSetup::Update( nf_PlayerSetup *playersetup ) {

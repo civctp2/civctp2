@@ -43,11 +43,7 @@ public:
 	void AddDatum(DATUM_TYPE type, struct namelist *nameInfo, sint32 minSize, sint32 maxSize,
 				  char *subType);
 	void AddGroupedBits(char *name, struct namelist *list);
-#if defined(ACTIVISION_ORIGINAL)
-	void AddBitPair(char *name, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
-#else
 	void AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
-#endif
 	
 	void ExportHeader(FILE *outfile);
 	void ExportBits(FILE *outfile);

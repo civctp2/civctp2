@@ -151,12 +151,7 @@
 #include "greatlibrarywindow.h"
 #include "scenariowindow.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-// Include no longer needed since SP screen removed
-#include "spwindow.h"
-#else
 #include "musicscreen.h"
-#endif
 
 #include "initialplaywindow.h"
 #include "optionswindow.h"
@@ -478,7 +473,6 @@ extern sint32 g_scenarioUsePlayerNumber;
 bool g_tempLeakCheck = false;
 sint32 g_allocatedAtStart;
 
-#if !defined(ACTIVISION_ORIGINAL)
 
 extern ColorSet	*			g_colorSet;	// TODO: export from ColorSet.h
 
@@ -518,7 +512,6 @@ void SelectColorSet(void)
 
 } // namespace
 
-#endif	// ACTIVISION_ORIGINAL
 
 void check_leak()
 {
@@ -852,13 +845,11 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 200 );
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	if(g_theGovernmentDB) {
 		if(!g_theGovernmentDB->Parse(C3DIR_GAMEDATA, g_government_filename))
 			return FALSE;
 		Assert(g_theGovernmentDB);
 	}
-#endif
 	
 
 	if (g_theUnitDB) {
@@ -924,13 +915,6 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 260 );
 
-#if defined(ACTIVISION_ORIGINAL) //GovMod
-	if(g_theGovernmentDB) {
-		if(!g_theGovernmentDB->Parse(C3DIR_GAMEDATA, g_government_filename))
-			return FALSE;
-		Assert(g_theGovernmentDB);
-	}
-#endif
 
 	g_theProgressWindow->StartCountingTo( 270 );
 
@@ -1553,9 +1537,6 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	
 	CivScenarios::Initialize();
 
-#if defined(ACTIVISION_ORIGINAL)	
-	g_theProfileDB->DefaultSettings();
-#else
 	{
 		// Maintain consistency between the CivIndex and CivName entries.
 		// When inconsistent, the CivIndex is leading.
@@ -1575,7 +1556,6 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 			g_theProfileDB->DefaultSettings();
 		}
 	}
-#endif
 
 	
 	StartMessageSystem();
@@ -1644,10 +1624,6 @@ sint32 CivApp::CleanupAppUI(void)
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
-#if defined(ACTIVISION_ORIGINAL)
-	// Cleanup no longer needed since screen no longer used
-	spscreen_Cleanup();
-#endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
 	optionsscreen_Cleanup();
@@ -1656,11 +1632,9 @@ sint32 CivApp::CleanupAppUI(void)
 	gameplayoptions_Cleanup();
 	soundscreen_Cleanup();
 
-#if !defined(ACTIVISION_ORIGINAL)
 	musicscreen_Cleanup();
 	//Added by Martin Gühmann to clean up the status bar correctly.
 	StatusBar::CleanUp();
-#endif
 	
 	delete g_c3ui->TheMovieManager();
 	delete g_c3ui->TheKeyboard();
@@ -1979,10 +1953,8 @@ sint32 CivApp::CleanupAppDB(void)
 		g_theDiplomacyThreatDB = NULL;
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)	// repaired memory leak
 	delete [] g_pTurnLengthOverride;
 	g_pTurnLengthOverride = NULL;
-#endif
 
 	m_dbLoaded = FALSE;
 
@@ -2078,11 +2050,7 @@ sint32 CivApp::InitializeGameUI(void)
 {
 	AUI_ERRCODE		auiErr;
 
-#if defined(ACTIVISION_ORIGINAL)	
-	g_colorSet->Import(0);
-#else
 	SelectColorSet();
-#endif	
 
 	
 	
@@ -2093,10 +2061,6 @@ sint32 CivApp::InitializeGameUI(void)
 	
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
-#if defined(ACTIVISION_ORIGINAL)
-	// Cleanup no longer needed since SP screen no longer used
-	spscreen_Cleanup();
-#endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
 
@@ -2254,11 +2218,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	
 	
-#if defined(ACTIVISION_ORIGINAL)
-	//Removed by Martin Gühmann
-	//Who needs this stop player is already initialized with 1.
-	NewTurnCount::SetStopPlayer(1);
-#endif
 
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
@@ -2450,15 +2409,10 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		
 		
 
-#if defined(ACTIVISION_ORIGINAL)	// double production when loading a saved scenario file
-		if(&archive == NULL ||
-			(g_startInfoType != STARTINFOTYPE_NONE)) {
-#else
 		if ((&archive == NULL) ||										// launch button
 			((g_startInfoType != STARTINFOTYPE_NONE) && g_isScenario)	// scenario start
 		   )
 		{
-#endif
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 				GEV_BeginTurn,
 				GEA_Player, g_selected_item->GetCurPlayer(),
@@ -2480,16 +2434,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-//No idea why this is done here,
-//this is already done in gameinit.cpp.
-//No need to do it again.
-			if(g_scenarioUsePlayerNumber == 0 && !g_turn->IsHotSeat() &&
-				!g_turn->IsEmail()) {
-				g_selected_item->SetPlayerOnScreen(1);
-			}
-#endif
 			if (g_director)
 				g_director->AddCopyVision();
 		}
@@ -2512,14 +2456,10 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	}
 
 	
-#if defined(ACTIVISION_ORIGINAL)
-	MainControlPanel::UpdateCityList();
-#else
 	if (!g_turn->IsHotSeat())
 	{
 		MainControlPanel::UpdateCityList();
 	}
-#endif
 
 	
 	g_scenarioUsePlayerNumber = 0;
@@ -2531,14 +2471,12 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 
 
-#if !defined(ACTIVISION_ORIGINAL)
 	if ((&archive) && g_turn->IsHotSeat())
 	{
 		// Indicate the resuming player when loading a saved hotseat game
 		g_turn->SendNextPlayerMessage();
 	}
 	else 
-#endif
 	if(g_selected_item) {
 		g_selected_item->Refresh();
 		if(g_director)
@@ -2548,14 +2486,10 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	
 	g_oldRandSeed = FALSE;
 
-#if defined(ACTIVISION_ORIGINAL)
-	MainControlPanel::UpdatePlayer(g_selected_item->GetCurPlayer());
-#else
 	if (!g_turn->IsHotSeat())
 	{
 		MainControlPanel::UpdatePlayer(g_selected_item->GetCurPlayer());
 	}
-#endif
 
 	
 	
@@ -2585,21 +2519,13 @@ sint32 InitializeSpriteEditorUI(void)
 	AUI_ERRCODE		auiErr;
 	sint32          errcode;
 	
-#if defined(ACTIVISION_ORIGINAL)
-	g_colorSet->Import(0);
-#else
 	SelectColorSet();
-#endif	
 	
 	
 
 	
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
-#if defined(ACTIVISION_ORIGINAL)
-	// Cleanup no longer needed since SP screen no longer used
-	spscreen_Cleanup();
-#endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
 
@@ -2979,12 +2905,7 @@ AttractWindow::Cleanup();
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
-#if defined(ACTIVISION_ORIGINAL)
-	// Cleanup no longer needed since SP screen no longer used
-	spscreen_Cleanup();
-#else
 	musicscreen_Cleanup();
-#endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
 	optionsscreen_Cleanup();
@@ -3705,14 +3626,10 @@ sint32 CivApp::LoadSavedGame(MBCHAR *name)
 
 	g_tiledMap->InvalidateMap();
 
-#if defined(ACTIVISION_ORIGINAL)
-	g_selected_item->NextUnmovedUnit(TRUE, TRUE);
-#else
 	if (!g_turn->IsHotSeat())
 	{
 		g_selected_item->NextUnmovedUnit(TRUE, TRUE);
 	}
-#endif
 
 	return 0;
 }
@@ -3806,14 +3723,9 @@ sint32 CivApp::QuitToSPShell(void)
 		StartMessageSystem();
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
-	// Old interface sends you to the SP menu
-	spscreen_displayMyWindow();
-#else
 	// We've removed that so go to main menu instead
 	// (Change by JJB)
 	initialplayscreen_displayMyWindow();
-#endif
 
 	return 0;
 }

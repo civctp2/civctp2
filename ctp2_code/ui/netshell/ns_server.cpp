@@ -35,14 +35,6 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_Server::count = 3;
-ns_Server::Struct ns_Server::list[] = {
-	{STRING,	(Data)&m_name},
-	{INT,		(Data)&m_players},
-	{INT,		(Data)&m_ping}
-};
-#else
 ns_Server::ns_Server(NETFunc::Server * server) 
 :	ns_Object<NETFunc::Server, ns_Server>(server) 
 {
@@ -50,7 +42,6 @@ ns_Server::ns_Server(NETFunc::Server * server)
 	list.push_back(Struct(INT,		&m_players));
 	list.push_back(Struct(INT,		&m_ping));
 };
-#endif
 
 
 void ns_Server::Update( NETFunc::Server *server ) {

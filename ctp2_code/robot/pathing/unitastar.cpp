@@ -47,7 +47,6 @@
 #include "Path.h"
 #include "UnitAstar.h"
 
-#if !defined (ACTIVISION_ORIGINAL)
 // Added by Calvitix
 // Had to include those files to determine if the army encounters a possible 
 // danger on its way. Of course the is only danger if an ennemy army is 
@@ -55,7 +54,6 @@
 #include "Diplomat.h"
 #include "AgreementMatrix.h"
 #include "ArmyData.h"
-#endif //ACTIVISION_ORIGINAL
 
 
 #include "Army.h"
@@ -99,78 +97,6 @@ UnitAstar::UnitAstar()
 
 
 
-#if defined(ACTIVISION_ORIGINAL)	// Unused stuff
-
-extern MapPoint g_mp_size;
-
-//----------------------------------------------------------------------------
-//
-// Name       : AddToPath
-//
-// Description: Add a step between 2 adjacent points to the path.
-//
-// Parameters : the_path		: the path to add the step to
-//				oldpx, oldpy	: coordinates of the last point in the path
-//				px, py			: coordinates of the new point in the path
-//
-// Globals    : -
-//
-// Returns    : the_path		: updated with the step
-//
-// Remark(s)  : All coordinates are in a "diagonal" coordinate system - i.e.
-//              an orthogonal coordinate system with X and Y axis 45 degrees 
-//              rotated from the usual horizontal and vertical axis.
-//              These are converted to a map direction before adding to the 
-//              path.
-//
-//              This function is not needed any more, 
-//				because OldNormalizedSubtract is not used any more.
-//
-//----------------------------------------------------------------------------
-
-void AddToPath(Path &the_path, sint32 &oldpx, sint32 &oldpy, 
-               const sint32 px, const sint32 py) 
-{ 
-    sint32 dx = px - oldpx;
-    sint32 dy = py - oldpy; 
-
-    switch (dy) { 
-    case 1:
-        switch(dx) { 
-        case 1: the_path.AddDir(NORTH); break; 
-        case 0: the_path.AddDir(NORTHEAST); break;
-        case -1: the_path.AddDir(EAST); break;
-        default:
-            Assert(0); 
-        } 
-        break; 
-    case 0:
-        switch(dx) { 
-        case 1: the_path.AddDir(NORTHWEST); break; 
-        case 0: Assert(0); break;
-        case -1: the_path.AddDir(SOUTHEAST); break;
-        default:
-            Assert(0); 
-        } 
-        break; 
-    case -1:
-        switch(dx) { 
-        case 1: the_path.AddDir(WEST); break; 
-        case 0: the_path.AddDir(SOUTHWEST); break;
-        case -1: the_path.AddDir(SOUTH); break;
-        default:
-            Assert(0); 
-        } 
-        break; 
-    default:
-        Assert(0); 
-    }
-
-    oldpx = px; 
-    oldpy = py; 
-} 
-
-#endif // ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -191,97 +117,6 @@ void AddToPath(Path &the_path, sint32 &oldpx, sint32 &oldpy,
 //
 //----------------------------------------------------------------------------
 
-#if defined(ACTIVISION_ORIGINAL)	// OldNormalizedSubtract requires X-wrap.
-
-sint32 UnitAstar::StraightLine(const MapPoint &start, const MapPoint &dest, 
-                               Path &a_path) const
-                               
-{
-    
-    if (start == dest) {
-        a_path.Clear(); 
-        return FALSE; 
-    }
-    
-    sint32 dx,dy,sdx,sdy,absdx,absdy,num,den,px,py;
-    
-    
-    px = 0;  
-    py = 0;
-    
-    static MapPoint diff; 
-    static MapPoint diff2;
-
-    start.OldNormalizedSubtract(dest, diff); 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-    
-    dx = diff.x; 
-    dy = diff.y; 
-        
-    sdx = SGN(dx);
-    sdy = SGN(dy);
-    absdx = ABS(dx);
-    absdy = ABS(dy) ;
-    num = (absdx >> 1) + 1;
-    den = (absdy >> 1) + 1;
-    
-    a_path.SetStart(start);
-
-    sint32 oldpx, oldpy;
-    oldpx = px; 
-    oldpy = py; 
-
-    if (absdx >= absdy) {	
-        for (sint32 i=0;i < absdx; i++) {
-            num += absdy;
-            if (num > absdx){ 
-                num -= absdx;
-                py += sdy;
-            }
-            px += sdx;
-            
-            AddToPath(a_path, oldpx, oldpy, px, py);
-        }
-    }else {			
-        for (int i=0;i < absdy;i++)	{
-            den += absdx;
-            if (den > absdy){   
-                den -= absdy;
-                px += sdx;
-            }
-            py += sdy;
-            
-            AddToPath(a_path, oldpx, oldpy, px, py);
-        }
-        
-    }
-    
-
-    return TRUE;
-}
-
-#else	// ACTIVISION_ORIGINAL
 
 sint32 UnitAstar::StraightLine
 (
@@ -333,7 +168,6 @@ sint32 UnitAstar::StraightLine
     return TRUE;
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 
 
@@ -405,23 +239,6 @@ sint32 UnitAstar::StraightLine
 
 float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	static const float move_cost_without_tunnel = 
-		(float) g_theTerrainDB->Access(TERRAIN_WATER_DEEP)->GetEnvBase()->GetMovement();
-
-	bool is_tunnel_and_boat = g_theWorld->IsTunnel(pos) &&
-
-		((m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
-		 (m_move_intersection & k_Unit_MovementType_ShallowWater_Bit));
-		 
-	
-	
-	
-	if (is_tunnel_and_boat)
-		return float(min(m_army_minmax_move, move_cost_without_tunnel));
-	else
-		return float(min(m_army_minmax_move, the_pos_cell->GetMoveCost()));   
-#else
 	bool const	is_tunnel_and_boat	= 
 		g_theWorld->IsTunnel(pos) &&
 		((m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
@@ -443,7 +260,6 @@ float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 						static_cast<float>(the_pos_cell->GetMoveCost())
 					   );
 	}
-#endif
 }
 
 BOOL UnitAstar::CanMoveIntoTransports(const MapPoint &pos) 
@@ -515,11 +331,6 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 
     CellUnitList* dest_army = the_pos_cell->UnitArmy(); 
 
-#if defined (ACTIVISION_ORIGINAL)
-// Removed by Calvitix
-    if (!dest_army)
-        return FALSE; 
-#endif
 
     if (0 < dest_army->Num()) {  
 		if(m_is_robot || dest_army->IsVisible(m_owner)) {
@@ -568,7 +379,7 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
         }
     }
 
-#if 0 && !defined (ACTIVISION_ORIGINAL)
+#if 0
 // Removed by Martin Gühmann should be reconsidered
 // Maybe a special avoid danger astar
 // Added by Calvitix
@@ -944,9 +755,7 @@ sint32 UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
     d->SetExpanded(FALSE); 
     d->m_pos = pos; 
     d->m_parent = parent;
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
     d->m_queue_idx = -1; 
-#endif
     
 	d->m_past_cost = pc;
     if (parent == NULL) { 
@@ -1923,7 +1732,6 @@ BOOL UnitAstar::VerifyMem() const
 
     return TRUE; 
 }
-#if !defined (ACTIVISION_ORIGINAL)
 BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian)
 {
 
@@ -1997,4 +1805,3 @@ BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilia
 }
 
 
-#endif

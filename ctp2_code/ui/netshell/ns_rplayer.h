@@ -38,11 +38,7 @@
 class ns_RPlayer : public ns_Object<NETFunc::Player, ns_RPlayer>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_RPlayer( NETFunc::Player *player ) : ns_Object<NETFunc::Player, ns_RPlayer>(player) {};
-#else
 	ns_RPlayer(NETFunc::Player * player);
-#endif
 	void Update( NETFunc::Player *player );
 
 	char *m_name;

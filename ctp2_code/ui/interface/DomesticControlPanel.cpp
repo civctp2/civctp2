@@ -56,9 +56,7 @@
 #include "GovernmentRecord.h"
 
 #include "aui_bitmapfont.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "c3math.h"		// AsPercentage
-#endif
 
 extern ColorSet				*g_colorSet;
 extern Pollution *g_thePollution;
@@ -236,7 +234,6 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : DomesticControlPanel::Blank
@@ -266,7 +263,6 @@ void DomesticControlPanel::Blank()
 	m_menuPublicWorksValue->SetText("");
 	m_currentPW		= -1;
 }
-#endif
 
 void DomesticControlPanel::Update()
 {
@@ -386,11 +382,7 @@ void DomesticControlPanel::UpdateStats()
 	government = g_player[g_selected_item->GetVisiblePlayer()]->GetGovernmentType();
 
 	g_player[g_selected_item->GetVisiblePlayer()]->GetScienceTaxRate(scienceTax);
-#if defined(ACTIVISION_ORIGINAL)
-	science = (scienceTax * 100.0) + 0.5;
-#else
 	science = AsPercentage(scienceTax);
-#endif
 	pollution = g_player[g_selected_item->GetVisiblePlayer()]->GetPollutionLevel();
 
 	if(cities == m_currentCities && population == m_currentPopulation &&

@@ -32,39 +32,6 @@
 #ifndef __AUI_UI_H__
 #define __AUI_UI_H__
 
-#if defined(ACTIVISION_ORIGINAL)
-#include "aui_region.h"
-#include "aui_audiomanager.h"
-#include "aui_moviemanager.h"
-#include "aui_image.h"			
-#include "aui_cursor.h"			
-#include "aui_bitmapfont.h"		
-#include "aui_resource.h"		
-#include "aui_surface.h"
-
-#include "c3files.h"	
-
-
-#define k_AUI_UI_NOCOLOR	0xff000000
-
-
-class aui_Ldl;
-class aui_Blitter;
-class aui_Mouse;
-class aui_Keyboard;
-class aui_Joystick;
-class aui_MemMap;
-class aui_Window;
-class aui_DirtyList;
-class aui_Static;
-class aui_Action;
-class aui_Control;
-
-
-class aui_UI;
-extern aui_UI *g_ui;
-
-#else // ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -114,7 +81,6 @@ extern aui_UI *	g_ui;
 // Class declarations
 //----------------------------------------------------------------------------
 
-#endif // ACTIVISION_ORIGINAL
 
 
 class aui_UI : public aui_Region

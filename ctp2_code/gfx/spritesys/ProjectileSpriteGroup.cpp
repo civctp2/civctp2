@@ -58,37 +58,6 @@ extern ScreenManager *g_screenManager;
 ProjectileSpriteGroup::ProjectileSpriteGroup(GROUPTYPE type)
 :SpriteGroup(type)
 {
-#if defined(ACTIVISION_ORIGINAL)	// some of this belongs in SpriteGroup
-	POINT		thePoint = {24,24};
-	POINT		emptyPoint = {0,0};
-	sint32		i,j;
-
-	for (i = PROJECTILEACTION_MOVE; i<PROJECTILEACTION_MAX; i++) 
-	{
-		m_sprites[i] = NULL;
-		m_anims[i] = NULL;
-
-	}
-
-	for (i=0; i<k_NUM_FIREPOINTS; i++) 
-	{
-		for (j=0; j<k_NUM_FACINGS; j++) 
-		{
-			m_firePoints[i][j] = emptyPoint;
-		}
-	}
-	for (j=0; j<k_NUM_FACINGS; j++) 
-	{
-		m_moveOffsets[j] = emptyPoint;
-	}
-
-	m_width = 0;
-	m_height = 0;
-
-	m_hasDeath = FALSE;
-	m_hasDirectional = FALSE;
-
-#else
 	POINT		emptyPoint = {0, 0};
 
 	for (int i = 0; i < k_NUM_FACINGS; ++i) 
@@ -99,22 +68,11 @@ ProjectileSpriteGroup::ProjectileSpriteGroup(GROUPTYPE type)
 			m_firePoints[j][i] = emptyPoint;
 		}
 	}
-#endif
 	m_numFirePoints = 0;
 }
 
 ProjectileSpriteGroup::~ProjectileSpriteGroup()
 {
-#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup destructor
-	for (int i = PROJECTILEACTION_NONE+1; i<PROJECTILEACTION_MAX; i++) 
-	{
-		if (m_sprites[i]) 
-		{
-			delete m_sprites[i];
-			m_sprites[i] = NULL;
-		}
-	}
-#endif
 }
 
 void ProjectileSpriteGroup::Draw(PROJECTILEACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY,
@@ -264,13 +222,6 @@ void ProjectileSpriteGroup::Load(MBCHAR *filename)
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 
-#if defined(ACTIVISION_ORIGINAL)
-	file->Open(&type);
-	file->Read(this);
-	file->CloseRead();
-
-	m_loadType = LOADTYPE_FULL;
-#else
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->Read(this);
@@ -279,18 +230,10 @@ void ProjectileSpriteGroup::Load(MBCHAR *filename)
 	}
 
 	delete file;
-#endif
 }
 
 void ProjectileSpriteGroup::Save(MBCHAR *filename)
 {
-#if defined(ACTIVISION_ORIGINAL)
-	SpriteFile *file = new SpriteFile(filename);
-
-	file->Create(SPRITEFILETYPE_PROJECTILE);
-	file->Write(this);
-	file->CloseWrite();
-#else
 	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	if (SPRITEFILEERR_OK == file->Create(SPRITEFILETYPE_PROJECTILE))
@@ -298,7 +241,6 @@ void ProjectileSpriteGroup::Save(MBCHAR *filename)
 		file->Write(this);
 		file->CloseWrite();
 	}
-#endif
 }
 
 
@@ -339,11 +281,7 @@ sint32 ProjectileSpriteGroup::Parse(uint16 id)
 
 	char			prefixStr[80];
 
-#if defined(ACTIVISION_ORIGINAL)	// magic number	
-	for (j=0; j<5; j++) 
-#else
 	for (j = 0; j < k_NUM_FACINGS; ++j)
-#endif
 	{
 		for (i=0; i<k_MAX_NAMES; i++) 
 		{
@@ -446,11 +384,7 @@ printf("Processing '%s'\n", scriptName);
 
 	delete theToken;
 
-#if defined(ACTIVISION_ORIGINAL)	// magic number
-	for (j=0; j<5; j++) 
-#else
 	for (j = 0; j < k_NUM_FACINGS; ++j)
-#endif
 	{
 		for (i=0; i<k_MAX_NAMES; i++) 
 		{

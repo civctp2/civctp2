@@ -46,10 +46,8 @@
 
 extern TiledMap			*g_tiledMap;
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann
 extern sint32			g_isFastCpu; // Actual permernent set to 1
-#endif
 
 
 
@@ -147,17 +145,6 @@ sint32 TileControl::DrawTile(
 
 	g_tiledMap->LockThisSurface(surface);
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	g_tiledMap->DrawTransitionTile(NULL, pos, x, y);
-
-	
-	g_tiledMap->DrawOverlay(NULL, baseTile->GetHatData(), x, y);
-		
-	if (river != -1)
-		g_tiledMap->DrawOverlay(NULL, g_tiledMap->GetTileSet()->GetRiverData(river), x, y);
-
-#else
 // Added by Martin Gühmann
 	bool fog =((   g_tiledMap->GetLocalVision() 
 	            && g_tiledMap->GetLocalVision()->IsExplored(pos) 
@@ -183,7 +170,6 @@ sint32 TileControl::DrawTile(
 				g_tiledMap->DrawDitheredOverlay(NULL, g_tiledMap->GetTileSet()->GetRiverData(river),x,y,k_FOW_COLOR);
 		}
 	}
-#endif
 
 	g_tiledMap->DrawImprovementsLayer(NULL, pos, x, y);
 

@@ -182,17 +182,12 @@ BOOL TerrainImprovementData::AddTurn(sint32 turns)
 	ENQUEUE();
 	g_network.Unblock(m_owner);
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-	if(m_turnsToComplete <= 0) {
-#else
 // Added by Martin Gühmann to update the tileimprovement graphics,
 // to indicate increasing completeness.
 	if(m_turnsToComplete > 0){// Is more often true
 		g_tiledMap->RedrawTile(&m_point);
 	}
 	else{
-#endif
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_ImprovementComplete,
@@ -253,15 +248,6 @@ void TerrainImprovementData::Serialize(CivArchive &archive)
 //----------------------------------------------------------------------------
 sint32 TerrainImprovementData::PercentComplete() const
 {
-#if defined(ACTIVISION_ORIGINAL)
-	sint32 totalTurns, turnsDone;
-
-	MapPoint p = m_point;
-	totalTurns = terrainutil_GetTimeToBuild(p, m_type, m_transformType);
-	turnsDone = totalTurns - m_turnsToComplete;
-	if (totalTurns == 0) return 100;
-	return (turnsDone * 100) / totalTurns;
-#else
 	// Function replaced by Martin Gühmann
 	// Original function always returns 10 instead of the total production turns.
 	sint32 const	totalTurns = 
@@ -278,7 +264,6 @@ sint32 TerrainImprovementData::PercentComplete() const
 	}
 
 	return (100 * (totalTurns - m_turnsToComplete)) / totalTurns;
-#endif
 }
 
 void TerrainImprovementData::StartBuilding()

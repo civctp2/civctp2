@@ -91,9 +91,7 @@ extern World		*g_theWorld;
 #include "TiledMap.h"
 extern TiledMap		*g_tiledMap;
 
-#if !defined ACTIVISION_ORIGINAL//PFT 07 Mar 05
 #include "gfx_options.h"
-#endif
 
 ChatBox				*g_chatBox = NULL;
 extern MBCHAR g_slic_filename[_MAX_PATH];
@@ -559,7 +557,6 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			}
 		}
 	}
-#if !defined ACTIVISION_ORIGINAL //PFT 07 Mar 05
     else
 	if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) {
 		
@@ -579,7 +576,6 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		else
             g_graphicsOptions->CellTextOn();
 	}
-#endif
 	return FALSE;
 }
 

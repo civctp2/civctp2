@@ -688,11 +688,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	case KEY_FUNCTION_OPEN_GREAT_LIBRARY:
 		if ( !g_modalWindow ) {
 			close_AllScreens();
-#if defined(ACTIVISION_ORIGINAL)
-			open_GreatLibrary(0);
-#else
 			open_GreatLibrary();
-#endif
 		}
 		break;
 	case KEY_FUNCTION_OPEN_OPTIONS_SCREEN:
@@ -1367,10 +1363,6 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 	
 	case KEY_FUNCTION_RESTART:
-#if defined(ACTIVISION_ORIGINAL)
-		//Removed by Martin Gühmann
-		if(!g_modalWindow && !g_theProfileDB->IsScenario() && !g_isScenario) {
-#else
 		//Added by Martin Gühmann to disable also the restart key in network
 		//games, hot seat games and email games.
 		if(!g_modalWindow 
@@ -1380,7 +1372,6 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		&& !g_turn->IsHotSeat() 
 		&& !g_turn->IsEmail()
 		) {
-#endif
 			optionwarningscreen_displayMyWindow(OWS_RESTART) ;
 		}
 		break;

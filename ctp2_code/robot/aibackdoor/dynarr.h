@@ -50,9 +50,7 @@
 #ifndef __DYNAMIC_ARRAY_H__
 #define __DYNAMIC_ARRAY_H__ 1
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "c3.h"
-#endif
 
 class CivArchive; 
 
@@ -107,12 +105,7 @@ public:
 		m_maxElements = 0; 
 		m_nElements = 0; 
 
-#if defined(ACTIVISION_ORIGINAL)	// wrong delete		
-		if (m_array)
-			delete m_array;
-#else
 		delete [] m_array;
-#endif
 
 		m_array = NULL; 
 	}
@@ -218,11 +211,7 @@ template <class T> DynamicArray<T>::DynamicArray (
     m_array = new T[size]; 
     Assert(m_array != NULL); 
     m_nElements = 0; 
-#if defined(ACTIVISION_ORIGINAL)
-    m_maxElements = max(1,size);
-#else
 	m_maxElements = std::max<sint32>(1, size);
-#endif
 }
 
 
@@ -266,16 +255,7 @@ template <class T> DynamicArray<T>::DynamicArray (
 template <class T> DynamicArray<T>::~DynamicArray()
 
 {
-#if defined(ACTIVISION_ORIGINAL)	// needlessly complex
-    if(m_array) { 
-       delete[] m_array;    
-       m_array = NULL;
-    } 
-
-    m_array=NULL; 
-#else
 	delete [] m_array;
-#endif
 }
 
 
@@ -294,13 +274,7 @@ template <class T> DynamicArray<T> & DynamicArray<T>::operator= (
     Assert(this != &copyme);
 
     Assert(copyme.m_array!= NULL); 
-#if defined(ACTIVISION_ORIGINAL)   // needlessly complex
-    if (m_array)
-       delete[] m_array; 
-    m_array = NULL;	// new later
-#else
 	delete [] m_array;
-#endif
     Assert(0<copyme.m_maxElements);
    
     m_maxElements = copyme.m_maxElements; 
@@ -341,19 +315,11 @@ template <class T> void DynamicArray<T>::ResizeCreate(const sint32 new_size,
     tmp = new T[new_size]; 
     Assert(tmp); 
 
-#if defined(ACTIVISION_ORIGINAL)    
-    sint32 i; 
-    sint32 n = min(new_size, m_nElements); 
-    for (i=0; i<n; i++) { 
-       tmp[i] = m_array[i]; 
-    } 
-#else
 	sint32 const	n = std::min(new_size, m_nElements);
 	for (sint32 i = 0; i < n; ++i)
 	{
 		tmp[i] = m_array[i];
 	}
-#endif
 
 }
 
@@ -816,11 +782,7 @@ template <class T> void DynamicArray<T>::Serialize(CivArchive &archive)
         
     } else {
 		archive>>m_maxElements ;
-#if defined(ACTIVISION_ORIGINAL)
-		m_maxElements=max(1,m_maxElements);
-#else
 		m_maxElements = std::max<sint32>(1, m_maxElements);
-#endif
 		archive>>m_nElements ;
 		if (m_array != NULL)
 			delete[] m_array;    

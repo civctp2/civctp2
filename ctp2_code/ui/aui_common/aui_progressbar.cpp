@@ -345,12 +345,10 @@ AUI_ERRCODE aui_ProgressBar::CalculateIntervals( double *start, double *stop )
 
 AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 {
-#if !defined(ACTIVISION_ORIGINAL)	// may crash later
 	if (!(g_ui && g_ui->TheBlitter()))
 	{
 		return AUI_ERRCODE_BLTFAILED;
 	}
-#endif
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

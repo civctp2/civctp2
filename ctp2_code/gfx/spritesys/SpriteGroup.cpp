@@ -67,13 +67,11 @@ SpriteGroup::SpriteGroup(GROUPTYPE type)
 
 SpriteGroup::~SpriteGroup()
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	for (int i = 0; i < ACTION_MAX; ++i) 
 	{
 		delete m_anims[i];
 		delete m_sprites[i];
 	}
-#endif
 }
 
 

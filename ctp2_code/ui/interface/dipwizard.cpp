@@ -108,10 +108,8 @@ ctp2_Static *DipWizard::m_createButtons = NULL,
 	*DipWizard::m_parchment = NULL,
 	*DipWizard::m_responseDiplomat;
 
-#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to display the emissary photo of recipient
 ctp2_Static	*DipWizard::m_emissary_photo = NULL;
-#endif
 
 ctp2_DropDown *DipWizard::m_nations = NULL;
 
@@ -235,10 +233,8 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	
 	m_parchment = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Parchment");
 	m_responseDiplomat = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage3.Diplomat");
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to display the emissary photo of recipient
 	m_emissary_photo = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Picture");
-#endif
 
 	m_threatList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage4.List");
 	m_threatList->SetActionFuncAndCookie(ThreatListCallback, NULL);
@@ -265,14 +261,12 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	m_viewThreat = -1;
 
 	m_sendCounter = false;
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to display the emissary photo of recipient
 	//Makes shure that the default image is never shown not even for one or two seconds
 	if (m_emissary_photo)
 	{
 		m_emissary_photo->ExchangeImage(0,0, NULL);
 	}
-#endif
 }
 
 DipWizard::~DipWizard()
@@ -1299,10 +1293,8 @@ void DipWizard::UpdateDetails()
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Recipient");
 	if(st) {
 		if(!viewingProposal) {
-#if !defined(ACTIVISION_ORIGINAL)
 			//Added by Martin Gühmann to display the emissary photo of recipient
 			DisplayDiplomat(m_recipient);
-#endif
 			DisplayParchment(g_selected_item->GetVisiblePlayer());
 			if(m_recipient >= 0) {
 				SlicObject so;
@@ -1320,41 +1312,29 @@ void DipWizard::UpdateDetails()
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizSender"), so, text);
 				st->SetText(text);
 
-				#if !defined(ACTIVISION_ORIGINAL)
 				//Modified by Martin Gühmann to display the emissary photo of recipient
 				DisplayDiplomat(-1);
-				#else
-				DisplayDiplomat(m_viewSender);
-				#endif
 				DisplayParchment(m_viewSender);
 
 			} else if(m_viewResponseType == RESPONSE_COUNTER) {
-				#if !defined(ACTIVISION_ORIGINAL)
 				//Modified by Martin Gühmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewSender);
-				#else
-				DisplayDiplomat(m_viewRecipient);
-				#endif
 				DisplayParchment(m_viewRecipient);
 				SlicObject so;
 				so.AddPlayer(m_viewRecipient);
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizSender"), so, text);
 				st->SetText(text);
 			} else if(m_viewSender == g_selected_item->GetVisiblePlayer()) {
-				#if !defined(ACTIVISION_ORIGINAL)
 				//Added by Martin Gühmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewRecipient);
-				#endif
 				DisplayParchment(g_selected_item->GetVisiblePlayer());
 				SlicObject so;
 				so.AddPlayer(m_viewRecipient);
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizRecipient"), so, text);
 				st->SetText(text);
 			} else {
-				#if !defined(ACTIVISION_ORIGINAL)
 				//Added by Martin Gühmann to display the emissary photo of recipient
 				DisplayDiplomat(-1);
-				#endif
 				DisplayParchment(g_selected_item->GetVisiblePlayer());
 				st->SetText("");
 			}
@@ -1688,9 +1668,7 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 		Response response;
 		response.senderId = m_recipient;
 		response.receiverId = g_selected_item->GetVisiblePlayer();
-#if !defined(ACTIVISION_ORIGINAL)
         response.priority = 9999;
-#endif
 		FillInProposalData(response.counter, true);
 		response.type = RESPONSE_COUNTER;
 		response.counter.tone = (DIPLOMATIC_TONE)m_tone;
@@ -1711,9 +1689,7 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 		
 		prop.senderId = g_selected_item->GetVisiblePlayer();
 		prop.receiverId = m_recipient;
-#if !defined(ACTIVISION_ORIGINAL)
         prop.priority=9999;
-#endif
 		FillInProposalData(prop.detail);
 
 		
@@ -1732,9 +1708,7 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 		resp.receiverId = m_viewRecipient;
 		resp.threat.type = diplomacyutil_GetThreatType(m_threat);
 		resp.threat.arg = m_threatArg;
-#if !defined(ACTIVISION_ORIGINAL)
         resp.priority=9999;
-#endif
 		if(g_network.IsActive()) {
 			SetStage(DIP_WIZ_STAGE_RECIPIENT);
 		}
@@ -2652,7 +2626,6 @@ void DipWizard::NotifyThreatRejected(const Response &resp, const Response &sende
 
 void DipWizard::DisplayDiplomat(sint32 player)
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to display the emissary photo of recipient
 	if (m_emissary_photo)
 	{
@@ -2666,7 +2639,6 @@ void DipWizard::DisplayDiplomat(sint32 player)
 
 		m_emissary_photo->ExchangeImage(0,0, fileName);
 	}
-#endif
 }
 
 AUI_ERRCODE DrawDiplomatColor(ctp2_Static *control,

@@ -130,10 +130,6 @@ public:
     BOOL CanBeExpelled(); 
 
 	BOOL IsVisible(PLAYER_INDEX player) const;
-#if defined(ACTIVISION_ORIGINAL)
-	BOOL GetTopVisibleUnitOfMoveType(const sint32 looking_player, const uint32 move, sint32 &maxi) const;
-	Unit GetTopVisibleUnit(PLAYER_INDEX looker) const;
-#else
 	bool GetTopVisibleUnitOfMoveType
 	(
 		PLAYER_INDEX const	looker,
@@ -145,7 +141,6 @@ public:
 	(
 		PLAYER_INDEX const	looker
 	) const;
-#endif
 	
 	BOOL CanBeSued() const;
 	BOOL ExertsZOC() const;
@@ -161,9 +156,7 @@ public:
 	BOOL IsMovePointsEnough(const double cost) const;
 	BOOL IsMovePointsEnough(const MapPoint &pos);
     BOOL GetMovementTypeAir() const; 
-#if !defined(ACTIVISION_ORIGINAL)
 	bool GetMovementTypeLand() const; 
-#endif
 	BOOL CanBeCargoPodded() const;
 	BOOL CanSpaceLand() const;
 	BOOL CanSpaceLaunch() const;

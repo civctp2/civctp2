@@ -34,7 +34,6 @@
 
 #include "CriticalMessagesPrefs.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 //
 // Name       : CriticalMessagesData::CriticalMessagesData
@@ -75,7 +74,6 @@ CriticalMessagesData::~CriticalMessagesData()
 	delete [] m_messageName;	// new [] in CriticalMessagesPrefs::SetEnabled 
 };
 
-#endif // ACTIVISION_ORIGINAL
 
 CriticalMessagesPrefs::CriticalMessagesPrefs()
 {

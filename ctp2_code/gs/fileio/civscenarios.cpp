@@ -206,19 +206,12 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 			walker.Next();
 			i++;
 		}
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-		scenList->DeleteAll();	
-		delete scenList;
-	}
-#else
 //Added by Martin Gühmann
 	}
 
 	//This must be deleted always
 	scenList->DeleteAll();	
 	delete scenList;
-#endif
 
 
 

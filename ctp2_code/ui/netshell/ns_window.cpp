@@ -272,12 +272,7 @@ ns_Window::~ns_Window()
 			}
 		}
 
-#if defined(ACTIVISION_ORIGINAL)	// incorrect delete type
-		delete m_controls;
-		m_controls = NULL;
-#else
 		delete [] m_controls;
-#endif
 	}
 }
 

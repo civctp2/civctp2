@@ -156,17 +156,12 @@ void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 		Assert(anim != NULL);
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	// may crash + possible leak	
-	if(GetActionQueueNumItems() > 0 || NoIdleJustDelay == TRUE)
-		anim->SetNoIdleJustDelay(TRUE);
-#else
 	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
 	{
 		anim->SetNoIdleJustDelay(TRUE);
 	}
 
 	delete m_curAction;
-#endif
 
 	m_curAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT);
 	m_curAction->SetAnim(anim);

@@ -84,10 +84,8 @@
 #include "CtpAiDebug.h"
 #include "ArmyPool.h"
 
-#if !defined (ACTIVISION_ORIGINAL)
 #include "GoalRecord.h"
 extern CTPDatabase<GoalRecord> *g_theGoalDB;
-#endif
 
 using namespace std;
 
@@ -128,10 +126,6 @@ Plan& Plan::operator= (const Plan &plan)
 
 bool Plan::operator< (const Plan &plan) const
 {
-#if defined (ACTIVISION_ORIGINAL)
-// Removed by Calvitix
-	return (m_matching_value < plan.m_matching_value);
-#else
 // Added by Calvitix
     //Instead of only looking for the matching value, the new operator first
     //compares the Goal Raw-priority. If it is equal, then compare matching 
@@ -149,15 +143,11 @@ bool Plan::operator< (const Plan &plan) const
         isLower = (m_matching_value < plan.m_matching_value);
     }
     return isLower;
-#endif
 }
 
 
 bool Plan::operator> (const Plan &plan) const
 {
-#if defined (ACTIVISION_ORIGINAL)
-	return (m_matching_value > plan.m_matching_value);
-#else   
     //Instead of only looking for the matching value, the new operator first
     //compares the Goal Raw-priority. If it is equal, then compare matching 
 	//value. It has the advantage to give the possibility for high priority 
@@ -175,7 +165,6 @@ bool Plan::operator> (const Plan &plan) const
         isGreater = (m_matching_value > plan.m_matching_value);
     }
     return isGreater;
-#endif
 }
 
 
@@ -598,7 +587,6 @@ bool Plan::Commited_Agents_Need_Orders() const
 	return false;
 }
 
-#if !defined (ACTIVISION_ORIGINAL)
 bool Plan::CanMatchesBeReevaluated() const
 {
     Assert(m_the_goal);
@@ -610,7 +598,6 @@ bool Plan::CanMatchesBeReevaluated() const
 	return (!g_theGoalDB->Get(my_goal_type)->GetNoRollback());
 
 }
-#endif
 
 sint16 Plan::Rollback_All_Agents()
 {

@@ -123,17 +123,6 @@ STDMETHODIMP Crater::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 					ay += outheight;
 				if(y >= outheight)
 					ay -= outheight;
-#if defined(ACTIVISION_ORIGINAL)
-				double distance = sqrt(rx*rx + ry*ry);
-				if(distance <= radius) {
-					
-					sint32 origh = sint32(outmap[ay * outwidth + ax]);
-					sint32 newh = origh - sint32(distance * distance) - maxRadiusSq;
-					if(newh < -127)
-						newh = -127;
-					outmap[ay * outwidth + ax] = sint8(newh);
-				}
-#else
 				sint32 const	dist_square	= (rx * rx) + (ry * ry);
 				if (dist_square <= rsq)
 				{
@@ -146,7 +135,6 @@ STDMETHODIMP Crater::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 					outmap[ay * outwidth + ax]	= sint8(newh);
 
 				}
-#endif
 			}
 		}
 	}

@@ -1152,13 +1152,8 @@ public:
 	
 	void EnterNewAge(sint32 age);
 
-#if defined(ACTIVISION_ORIGINAL)
-	//Removed by Martin Gühmann
-	void SetResearchGoal(enum DATABASE db, sint32 item);
-#else
 	//Added by Martin Gühmann
 	sint32 SetResearchGoal(enum DATABASE db, sint32 item);
-#endif
 
 	void StartResearchingAdvanceForGoal(sint32 goal);
 	bool RecursivelyStartResearching(sint32 advance);

@@ -34,9 +34,6 @@
 #ifdef _PLAYTEST
 #include "c3cmdline.h"
 
-#if defined(ACTIVISION_ORIGINAL)	// never used, file missing with MSVC.NET
-#include <iostream.h>
-#endif
 
 #include "CivilisationDB.h"
 #include "ConstDB.h"
@@ -6325,11 +6322,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 
 void DRayTestCode::Execute(sint32 argc, char **argv)
 {	
-#if defined(ACTIVISION_ORIGINAL)
-	int curRound = min(NewTurnCount::GetCurrentRound(),200);
-#else
 	int const curRound	= std::min<sint32>(NewTurnCount::GetCurrentRound(), 200);
-#endif
 	int turnStrength[200];
 	int i;
 	for(i=0; i<curRound; i++)

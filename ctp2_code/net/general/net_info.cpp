@@ -143,10 +143,8 @@ extern QuadTree<Unit> *g_theUnitTree;
 extern void player_ActivateSpaceButton(sint32 pl);
 extern void network_VerifyGameData();
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "feattracker.h"	// Propagate feats
 #include "MaterialPool.h"	// Propagate PW
-#endif
 
 const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	// this array tells how many arguments each NET_INFO has
@@ -298,11 +296,9 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	2, // NET_INFO_CODE_CREATED_WONDER
 	3, // NET_INFO_CODE_GAME_OVER
 	2, // NET_INFO_CODE_SET_EMBASSIES
-#if !defined ACTIVISION_ORIGINAL
 	3, // NET_INFO_CODE_ACCOMPLISHED_FEAT
 	1, // NET_INFO_CODE_DISBANDED_CITY_SETTLER
 	1, // NET_INFO_CODE_MATERIALS				(unconfirmed value)
-#endif
 };
 
 
@@ -337,10 +333,8 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	Assert(buf[0] == 'I' && buf[1] == 'I');
 	m_type = (NET_INFO_CODE)getshort(&buf[2]);
 
-#if !defined(ACTIVISION_ORIGINAL)	
 	// Test code for detection of unexpected messages
 	Assert(size == 4 + (4 * m_args[m_type]));
-#endif
 
 	if(m_args[m_type] > 0) {
 		m_data = getlong(&buf[4]);
@@ -550,9 +544,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			if(g_player[m_data]) {
 				g_player[m_data]->m_gold->SetLevel(m_data2);
 				g_player[m_data]->m_science->SetLevel(m_data3);
-#if !defined(ACTIVISION_ORIGINAL)
 				DPRINTF(k_DBG_NET, ("Set for player %d gold to %d, science to %d\n", m_data, m_data2, m_data3));
-#endif
 			}
 			break;
 		case NET_INFO_CODE_ADVANCE:
@@ -1697,7 +1689,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(g_player[m_data]->m_playerType == PLAYER_TYPE_ROBOT) {
 					CtpAi::NetworkClientBeginTurn(m_data);
 				}
-#if !defined(ACTIVISION_ORIGINAL)
 				else
 				{
 					g_gevManager->AddEvent(GEV_INSERT_Tail, 
@@ -1706,7 +1697,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 										   GEA_End
 										  );
 				}
-#endif
 				g_network.SetSensitiveUIBlocked(false);
 			}
 			MainControlPanel::SelectedCity();
@@ -1829,7 +1819,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			break;
 		}
 
-#if !defined ACTIVISION_ORIGINAL
 		// propagate the accomplishment of a feat
 		case NET_INFO_CODE_ACCOMPLISHED_FEAT:
 			DPRINTF(k_DBG_NET,
@@ -1871,7 +1860,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			break;
 
-#endif
 
 		default:
 			Assert(FALSE);

@@ -32,17 +32,12 @@
 #ifndef AVL_H
 #define AVL_H
 
-#if defined(ACTIVISION_ORIGINAL)	// file missing with MSVC .NET
-#include <iostream.h>
-#endif
 
 #include <iostream>
 #include <utility>
 #include <ostream>
 
-#if !defined(ACTIVISION_ORIGINAL)
 using std::ostream;
-#endif
 
 
 

@@ -52,7 +52,7 @@
 #undef STREAM_TYPE
 #endif
 
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 #  include "mss.h"
 #else // !ACTIVISION_ORIGINAL
 #  include <SDL.h>
@@ -65,7 +65,7 @@ public:
 	~CivSound();
 
 	const uint32 GetAssociatedObject() const;
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	HAUDIO       GetHAudio() const;
 #else
 	Mix_Chunk    *GetAudio() const;
@@ -82,7 +82,7 @@ public:
 	void         SetVolume(const sint32 &volume);
 
 private:
-#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#if !defined(USE_SDL)
 	HAUDIO			m_hAudio;
 #else
 	Mix_Chunk      *m_Audio;

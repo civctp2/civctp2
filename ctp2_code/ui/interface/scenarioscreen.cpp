@@ -18,11 +18,6 @@
 #include "c3_listbox.h"
 #include "c3_listitem.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-// No longer need this include since the SP screen has been removed
-// from the interface
-#include "spwindow.h"
-#endif
 
 #include "spnewgamewindow.h"
 #include "ScenarioWindow.h"

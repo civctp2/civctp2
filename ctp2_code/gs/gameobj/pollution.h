@@ -85,13 +85,11 @@ public:
 
 	sint32	m_next_level ;											
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// An arbitrary (large) number that will be returned by GetRoundsToNextDisaster
 	// when there is no pollution at all.
 	// It should be larger than k_ROUNDS_BEFORE_DISASTER, and larger than the values
 	// that appear in FearPollution_MotivationEvent in MotivationEvent.cpp.
 	static sint32 const	ROUNDS_COUNT_IMMEASURABLE;	
-#endif
 	
 	static uint32 GetPollutionAtRound(const PLAYER_INDEX player, const sint32 round);
 

@@ -52,11 +52,9 @@ extern UnitPool *g_theUnitPool;
 static sint32 s_maxDefenseRange;
 static sint32 s_maxVisionRange;
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "CitySizeRecord.h"
 
 static sint32 s_smallCityMaxSize;
-#endif
 
 static const SpecialAttackInfoRecord *s_specialAttackMap[SPECATTACK_MAX];
 
@@ -113,7 +111,6 @@ void unitutil_Initialize()
 		DPRINTF(k_DBG_GAMESTATE, ("Unit %d: %s\n", i, g_theUnitDB->Get(i)->GetNameText()));
 	}
 #endif
-#if !defined(ACTIVISION_ORIGINAL)
 	sint32 min = 0x7fffffff;
 	sint32 candidate;
 	s_smallCityMaxSize = 0x7fffffff;
@@ -129,15 +126,12 @@ void unitutil_Initialize()
 		}
 	}
 
-#endif
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 sint32 unitutil_GetSmallCityMaxSize()
 {
 	return s_smallCityMaxSize;
 }
-#endif
 
 sint32 unitutil_MaxActiveDefenseRange()
 {

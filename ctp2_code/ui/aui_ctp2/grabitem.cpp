@@ -66,13 +66,7 @@ GrabItem::~GrabItem()
 
 void GrabItem::Init(void)
 {
-#if defined(ACTIVISION_ORIGINAL)	// only deleting when already NULL
-	if (!g_grabbedItem) {
-		delete g_grabbedItem;
-	}
-#else
 	delete g_grabbedItem;
-#endif
 
 	g_grabbedItem = new GrabItem;
 }

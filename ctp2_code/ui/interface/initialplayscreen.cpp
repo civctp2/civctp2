@@ -55,21 +55,14 @@
 
 #include "screenutils.h"
 
-#if defined(ACTIVISION_ORIGINAL)
-// No longer need this include since the SP screen has been removed
-// from the interface
-#include "spwindow.h"
-#endif
 
 #include "loadsavewindow.h"
 #include "initialplayWindow.h"
 #include "scenariowindow.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Need more includes for the actions of the new buttons
 #include "ctp2_static.h"
 #include "optionswindow.h"
-#endif
 
 #include "gameinit.h"
 #include "profileDB.h"
@@ -143,12 +136,6 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
  	spriteTest->Hide();
 #endif
 
-#if defined(ACTIVISION_ORIGINAL)
-	// Cut out this code since the button is gone
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "SPButton", 
-											initialplayscreen_spPress, NULL);
-	Assert(errcode == AUI_ERRCODE_OK);
-#endif
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "EmailButton", 
 											initialplayscreen_emailPress, NULL);
@@ -170,7 +157,6 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 											initialplayscreen_creditsPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Code for new buttons, just copy/pasted and altered from the above
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "NewGameButton", 
@@ -230,7 +216,6 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 #endif  // _MSC_VER
 	}
 
-#endif // !defined(ACTIVISION_ORIGINAL)
 
 	return AUI_ERRCODE_OK;
 }
@@ -256,17 +241,6 @@ AUI_ERRCODE initialplayscreen_Cleanup()
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-// Button removed
-void
-initialplayscreen_spPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
-{
-	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
-
-	if(initialplayscreen_removeMyWindow(action))
-		spscreen_displayMyWindow();
-}
-#endif
 
 
 
@@ -376,7 +350,6 @@ initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data,
 	open_CreditsScreen();
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Code for new buttons taked from spscreen.cpp (and altered)
 void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -410,7 +383,6 @@ void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 
 
 	optionsscreen_displayMyWindow(0);
 }
-#endif //!defined(ACTIVISION_ORIGINAL)
 
 C3Window *GetInitialPlayScreen()
 {

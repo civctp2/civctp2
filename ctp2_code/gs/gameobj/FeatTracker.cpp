@@ -51,21 +51,11 @@
 #include "EventTracker.h"
 #include "Score.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "net_info.h"
 #include "network.h"
-#endif
 
 FeatTracker *g_featTracker = NULL;
 
-#if defined(ACTIVISION_ORIGINAL)
-Feat::Feat(sint32 type, sint32 player)
-{
-	m_type = type;
-	m_player = player;
-	m_round = NewTurnCount::GetCurrentRound();
-}
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : Feat::Feat
@@ -93,7 +83,6 @@ Feat::Feat(sint32 type, sint32 player, sint32 round)
 		      ? NewTurnCount::GetCurrentRound() 
 			  : round;
 }
-#endif
 
 Feat::Feat(CivArchive &archive)
 {
@@ -141,13 +130,6 @@ FeatTracker::FeatTracker(CivArchive &archive)
 		m_effectList[i] = NULL;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)	// memory leak: overwritten in Serialize
-	m_achieved = new bool[g_theFeatDB->NumRecords()];
-	memset(m_achieved, 0, sizeof(bool) * g_theFeatDB->NumRecords());
-	
-	m_buildingFeat = new bool[g_theBuildingDB->NumRecords()];
-	memset(m_buildingFeat, 0, sizeof(bool) * g_theBuildingDB->NumRecords());
-#endif
 
 	Serialize(archive);
 }
@@ -221,11 +203,7 @@ void FeatTracker::Serialize(CivArchive & archive)
 		archive.Load((uint8*)m_buildingFeat, count * sizeof(bool));
 
 		if(count != g_theBuildingDB->NumRecords()) {
-#if defined(ACTIVISION_ORIGINAL)	// wrong delete
-			delete m_buildingFeat;
-#else
 			delete [] m_buildingFeat;
-#endif
 			m_buildingFeat = new bool[g_theBuildingDB->NumRecords()];
 			memset(m_buildingFeat, 0, g_theBuildingDB->NumRecords() * sizeof(bool));
 		}
@@ -299,9 +277,6 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 	REMOVE_FROM_FEAT_LIST(GetEffectScriptedCity,			    FEAT_EFFECT_SCRIPTED_CITY);
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-void FeatTracker::AddFeat(sint32 type, sint32 player)
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : FeatTracker::AddFeat
@@ -323,7 +298,6 @@ void FeatTracker::AddFeat(sint32 type, sint32 player)
 //----------------------------------------------------------------------------
 
 void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
-#endif
 {
 	const FeatRecord *rec = g_theFeatDB->Get(type);
 	Assert(rec);
@@ -374,11 +348,7 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 
 	m_achieved[type] = true;
 
-#if defined(ACTIVISION_ORIGINAL)
-	Feat *theFeat = new Feat(type, player);
-#else
 	Feat * theFeat = new Feat(type, player, round);
-#endif
 	m_activeList->AddTail(theFeat);
 
 	AddFeatToEffectLists(theFeat);
@@ -397,11 +367,7 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 
 	g_player[player]->m_score->AddFeat();
 
-#if defined(ACTIVISION_ORIGINAL)
-	g_eventTracker->AddEvent(EVENT_TYPE_FEAT,player,NewTurnCount::GetCurrentRound(),type);
-#else
 	g_eventTracker->AddEvent(EVENT_TYPE_FEAT, player, theFeat->GetRound(), type);
-#endif
 }
 
 void FeatTracker::AddFeat(const MBCHAR *name, sint32 player)
@@ -606,7 +572,6 @@ STDEHANDLER(AccomplishFeat)
 
 	g_featTracker->AddFeat(featIndex, player);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	if (g_network.IsHost()) 
 	{
 		// Propagate the information to the clients.
@@ -620,7 +585,6 @@ STDEHANDLER(AccomplishFeat)
 						 );
 		g_network.Unblock(player);
 	}
-#endif
 
 	return GEV_HD_Continue;
 }

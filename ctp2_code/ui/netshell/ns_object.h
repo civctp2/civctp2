@@ -42,13 +42,6 @@ class ns_Object : public ns_Accessor<NetShellT>, public NETFunc::Key
 	T *nf_object;
 	bool mine;
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_Object( T *t ):Key(t) {
-		nf_object = t;
-		mine = false;
-		((NetShellT *)this)->Update(t);
-	}
-#else
 	ns_Object(T * t)
 	:	ns_Accessor<NetShellT>(),
 		NETFunc::Key(t),
@@ -57,7 +50,6 @@ public:
 	{
 		((NetShellT *) this)->Update(t);
 	};
-#endif
 
 
 

@@ -59,42 +59,10 @@ GoodSpriteGroup::GoodSpriteGroup(GROUPTYPE type)
 :
 SpriteGroup(type)
 {
-#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup constructor
-	POINT		thePoint = {0,0};
-	sint32		i;
-
-	for (i = GOODACTION_IDLE; i<GOODACTION_MAX; i++) {
-		m_sprites[i] = NULL;
-		m_anims[i] = NULL;
-
-	}
-
-	m_width = 0;
-	m_height = 0;
-
-	m_hasDeath = FALSE;
-#endif
 }
 
 GoodSpriteGroup::~GoodSpriteGroup()
 {
-#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup destructor
-	int i;
-
-	for ( i = GOODACTION_IDLE; i<GOODACTION_MAX; i++) {
-		if (m_sprites[i]) {
-			delete m_sprites[i];
-			m_sprites[i] = NULL;
-		}
-	}
-
-	for (i = GOODACTION_IDLE; i<GOODACTION_MAX; i++) {
-		if (m_anims[i]) {
-			delete m_anims[i];
-			m_anims[i] = NULL;
-		}
-	}
-#endif
 }
 
 void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
@@ -250,20 +218,12 @@ void GoodSpriteGroup::LoadBasic(MBCHAR *filename)
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 
-#if defined(ACTIVISION_ORIGINAL)
-	file->Open(&type);
-	file->ReadBasic(this);
-	file->CloseRead();
-
-	m_loadType = LOADTYPE_BASIC;
-#else
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->ReadBasic(this);
 		file->CloseRead();
 		m_loadType = LOADTYPE_BASIC;
 	}
-#endif
 
 	delete file;
 }
@@ -273,20 +233,12 @@ void GoodSpriteGroup::LoadFull(MBCHAR *filename)
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 
-#if defined(ACTIVISION_ORIGINAL)
-	file->Open(&type);
-	file->ReadFull(this);
-	file->CloseRead();
-
-	m_loadType = LOADTYPE_FULL;
-#else
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->ReadFull(this);
 		file->CloseRead();
 		m_loadType = LOADTYPE_FULL;
 	}
-#endif
 
 	delete file;
 }
@@ -295,11 +247,6 @@ void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 {
 	SpriteFile *file = new SpriteFile(filename);
 
-#if defined(ACTIVISION_ORIGINAL)
-	file->Create(SPRITEFILETYPE_GOOD,version_id,compression_mode);
-	file->Write(this);
-	file->CloseWrite();
-#else
 	if (SPRITEFILEERR_OK == 
 			file->Create(SPRITEFILETYPE_GOOD, version_id, compression_mode)
        )
@@ -307,7 +254,6 @@ void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 		file->Write(this);
 		file->CloseWrite();
 	}
-#endif
 
 	delete file;
 }

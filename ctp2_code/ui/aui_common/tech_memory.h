@@ -227,12 +227,8 @@ void tech_Memory< T >::UnuseElement( T *t )
 
 	
 	unsigned long offset;
-#if defined(ACTIVISION_ORIGINAL)
-	for ( Block *pBlock = m_pFirst; pBlock; pBlock = pBlock->pNext )
-#else
 	Block *			pBlock = m_pFirst;
 	for ( ; pBlock ; pBlock = pBlock->pNext )
-#endif
 	{
 		offset = t - pBlock->data;
 		if ( offset < m_blockSize )

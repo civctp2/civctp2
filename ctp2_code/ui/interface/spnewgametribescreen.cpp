@@ -73,11 +73,7 @@ extern sint32				g_isCheatModeOn;
 
 #define k_NUM_TRIBECOLS		4
 
-#if defined(ACTIVISION_ORIGINAL)	// allow choice of 64 (4x16) instead of 44 (4x11) playable civs to be selected
-	#define k_NUM_TRIBEROWS		11
-#else
 	#define k_NUM_TRIBEROWS		16
-#endif
 
 #define k_NUM_TRIBEBOXES	(k_NUM_TRIBECOLS*k_NUM_TRIBEROWS+1)
 
@@ -106,9 +102,6 @@ static MBCHAR			checknames[k_NUM_TRIBECOLS][50] = {
 	"TribeFour"
 };
 
-#if defined(ACTIVISION_ORIGINAL)
-static sint32 s_tribeIndex = -1;
-#else	
 
 namespace
 {
@@ -142,7 +135,6 @@ sint32 LexicographicIndex(sint32 a_DbIndex)
 
 } // namespace
 
-#endif	// ACTIVISION_ORIGINAL 
 
 sint32 spnewgametribescreen_getTribeIndex( void )
 {
@@ -189,14 +181,6 @@ void spnewgametribescreen_setTribeIndex(
 	}
 
 	
-#if defined(ACTIVISION_ORIGINAL)	// Incorrect checks
-	if ( index < 0 || index >= k_NUM_TRIBEBOXES )
-		return;
-
-	for (sint32 i = 0;i < k_NUM_TRIBEBOXES; i++ )
-		s_checkBox[ i ]->SetState( 0 );
-	s_checkBox[ g_theCivilisationDB->m_indexToAlpha[ index ] ]->SetState( 1 );
-#else
 	sint32 const	alpha = LexicographicIndex(index);
 
 	if ((alpha < 0) || (alpha >= k_NUM_TRIBEBOXES)) 
@@ -209,7 +193,6 @@ void spnewgametribescreen_setTribeIndex(
 		s_checkBox[i]->SetState(0);
 	}
 	s_checkBox[alpha]->SetState(1);
-#endif
 
 	s_tribeIndex = index;
 
@@ -290,36 +273,17 @@ void spnewgametribescreen_disableTribes( void )
 }
 void spnewgametribescreen_disableTribe( sint32 tribe )
 {
-#if defined(ACTIVISION_ORIGINAL)	// Incorrect checks
-	if ( tribe == -1 ) return;
-
-	if ( tribe >= k_NUM_TRIBEBOXES ) return;
-
-	const sint32 alpha = g_theCivilisationDB->m_indexToAlpha[ tribe ];
-	if ( alpha < k_NUM_TRIBEBOXES )
-	if ( s_checkBox[ alpha ] && !s_checkBox[ alpha ]->IsDisabled() )
-#else	// ACTIVISION_ORIGINAL
 	sint32 const alpha	= LexicographicIndex(tribe);
 
 	if ((alpha >= 0) && (alpha < k_NUM_TRIBEBOXES) &&
 		!s_checkBox[alpha]->IsDisabled()
 	   )
-#endif	// ACTIVISION_ORIGINAL
 	{
 		s_checkBox[ alpha ]->Enable( FALSE );
 	}
 }
 void spnewgametribescreen_enableTribe( sint32 tribe )
 {
-#if defined(ACTIVISION_ORIGINAL)	
- 	if ( tribe == -1 ) return;
-
-	if ( tribe >= k_NUM_TRIBEBOXES ) return;
-
-	const sint32 alpha = g_theCivilisationDB->m_indexToAlpha[ tribe ];
-	if ( alpha < k_NUM_TRIBEBOXES )
-	if ( s_checkBox[ alpha ] && s_checkBox[ alpha ]->IsDisabled() )
-#else
 	sint32 const alpha	= LexicographicIndex(tribe);
 
 	if ((alpha < 0) || (alpha >= k_NUM_TRIBEBOXES))
@@ -328,7 +292,6 @@ void spnewgametribescreen_enableTribe( sint32 tribe )
 	}
 	
 	if (s_checkBox[alpha]->IsDisabled())
-#endif
 	{
 		s_checkBox[ alpha ]->Enable( TRUE );
 	}
@@ -577,18 +540,12 @@ AUI_ERRCODE spnewgametribescreen_Cleanup()
 	g_c3ui->RemoveWindow( g_spNewGameTribeScreen->Id() );
 	keypress_RemoveHandler(g_spNewGameTribeScreen);
 
-#if defined(ACTIVISION_ORIGINAL)	// memory leak, they forgot the container
-	for (sint32 i = 0;i < k_NUM_TRIBEBOXES;i++ ) {
-		mycleanup( s_checkBox[i] );
-	}
-#else
 	for (size_t i = 0; i < k_NUM_TRIBEBOXES; ++i)
 	{
 		delete s_checkBox[i];		// no NULLing: deleting the container next
 	}
 	delete [] s_checkBox;
 	s_checkBox	= NULL;
-#endif
 
 	mycleanup( s_group );
 

@@ -37,17 +37,6 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_Game::count = 5;
-ns_Game::Struct ns_Game::list[] = {
-	{ICON,		(Data)&m_launched},
-	{STRING,	(Data)&m_name},
-	{ICON,		(Data)&m_locked},
-	{ICON,		(Data)&m_closed},
-	{INT,		(Data)&m_players}
-
-};
-#else
 ns_Game::ns_Game(NETFunc::Game * game) 
 :	ns_Object<NETFunc::Game, ns_Game>(game)
 {
@@ -57,7 +46,6 @@ ns_Game::ns_Game(NETFunc::Game * game)
 	list.push_back(Struct(ICON,		&m_closed));
 	list.push_back(Struct(INT,		&m_players));
 };
-#endif
 
 
 void ns_Game::Update( NETFunc::Game *game ) {

@@ -261,11 +261,7 @@ aui_Redbook::SetVolume( uint8 volume )
 	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
 	sint32 mci_retval = 0;
 	DWORD CDvolume = 0;
-#if defined(ACTIVISION_ORIGINAL)
-	m_volume = min( volume, 0xff );
-#else
 	m_volume = std::min(volume, (unsigned char) 0xff);
-#endif
 	
 	CDvolume = (DWORD)( ( ( m_volume + 1 ) << 8 ) - 1 );	
 	CDvolume |= ( CDvolume << 16 );								

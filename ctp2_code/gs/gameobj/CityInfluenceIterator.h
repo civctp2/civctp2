@@ -41,7 +41,6 @@
 #ifndef CITY_INFLUENCE_ITERATOR_H__
 #define CITY_INFLUENCE_ITERATOR_H__
 
-#if !defined(ACTIVISION_ORIGINAL)
 //----------------------------------------------------------------------------
 // Library imports
 //----------------------------------------------------------------------------
@@ -64,7 +63,6 @@ class SquareIterator;
 //----------------------------------------------------------------------------
 // Declarations
 //----------------------------------------------------------------------------
-#endif
 
 class CityInfluenceIterator {
 protected:
@@ -75,9 +73,7 @@ protected:
 	sint16 m_row;
 	sint16 m_intRadius;
 	uint32 m_cityId;
-#if !defined(ACTIVISION_ORIGINAL)
 	OrthogonalPoint	m_testXY;
-#endif
 
 public:
 	

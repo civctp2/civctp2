@@ -155,11 +155,7 @@ extern QuadTree<Unit>              *g_theUnitTree;
 
 const uint32 k_MAPFILE_NAME_LEN = 32;
 
-#if defined(ACTIVISION_ORIGINAL)	// non-standard sizeof(enum)
-const uint32 k_CIVS_BLOCK_LENGTH = k_MAX_PLAYERS * (sizeof(enum) + k_MAPFILE_NAME_LEN); 
-#else
 const uint32 k_CIVS_BLOCK_LENGTH = k_MAX_PLAYERS * (sizeof(uint32) + k_MAPFILE_NAME_LEN); 
-#endif
 
 
 bool MapFileChunk::Save(FILE *outfile)
@@ -714,11 +710,7 @@ bool MapFile::SaveCivilizations(FILE *outfile)
 			
 			*longPtr = 0;
 		}
-#if defined(ACTIVISION_ORIGINAL)	// non-standard sizeof(enum)
-		ptr += sizeof(enum);
-#else
 		ptr += sizeof(uint32);
-#endif
 		
 		size_t length;
 		MBCHAR *pName;

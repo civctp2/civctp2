@@ -252,13 +252,8 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
-				#if defined(ACTIVISION_ORIGINAL)
-					if (pop < 30)
-						count++;
-				#else  // #01 Setting realistic limits for considering cities
 					if (pop < 3)
 						count++;
-				#endif
 			}
 			break;
 		}
@@ -268,13 +263,8 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
-				#if defined(ACTIVISION_ORIGINAL)
-					if ((pop >= 30) && (pop < 100))
-						count++;
-				#else  // #01 Setting realistic limits for considering cities
 					if ((pop >= 3) && (pop < 10))
 						count++;
-				#endif
 			}
 			break;
 		}
@@ -284,13 +274,8 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
-				#if defined(ACTIVISION_ORIGINAL)
-					if ((pop >= 100) && (pop < 500))
-						count++;
-				#else // #01 Setting realistic limits for considering cities
 					if ((pop >= 10) && (pop < 50))
 						count++;
-				#endif
 			}
 			break;
 		}
@@ -300,13 +285,8 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
-				#if defined(ACTIVISION_ORIGINAL)
-					if (pop >= 500)
-						count++;
-				#else // #01 Setting realistic limits for considering cities
 					if (pop >= 50)
 						count++;
-				#endif
 
 			}
 			break;

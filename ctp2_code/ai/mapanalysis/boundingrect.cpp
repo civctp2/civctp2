@@ -167,7 +167,6 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
         return false;
 
 
-#if !defined (ACTIVISION_ORIGINAL)
 
 	bool is_add_rect_ul_xWrapOk = false;
 	bool is_add_rect_ul_yWrapOk = false;
@@ -194,13 +193,8 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
 	
 	}
 
-#endif
 	
-#if defined (ACTIVISION_ORIGINAL)
-    if (m_ul_x_wrap != add_rect.m_ul_x_wrap)
-#else
 	if ((m_ul_x_wrap != add_rect.m_ul_x_wrap) || (is_add_rect_ul_xWrapOk && (m_ul_x_wrap == add_rect.m_ul_x_wrap)))
-#endif
     {
         if (add_rect.m_upperLeft.x > m_upperLeft.x)
         { m_upperLeft.x = add_rect.m_upperLeft.x; }
@@ -210,11 +204,7 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
     { m_upperLeft.x = add_rect.m_upperLeft.x; }
 
 
-#if defined (ACTIVISION_ORIGINAL)
-    if (m_ul_y_wrap != add_rect.m_lr_x_wrap)
-#else
     if ((m_ul_y_wrap != add_rect.m_ul_y_wrap) || (is_add_rect_ul_yWrapOk && (m_ul_y_wrap == add_rect.m_ul_y_wrap)))
-#endif
     {
         if (add_rect.m_upperLeft.y > m_upperLeft.y)
         { m_upperLeft.y = add_rect.m_upperLeft.y; }
@@ -223,11 +213,7 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
     else if (add_rect.m_upperLeft.y < m_upperLeft.y)
     { m_upperLeft.y = add_rect.m_upperLeft.y; }
 
-#if defined (ACTIVISION_ORIGINAL)
-    if (m_lr_x_wrap != add_rect.m_lr_x_wrap)
-#else
     if ((m_lr_x_wrap != add_rect.m_lr_x_wrap) || (is_add_rect_lr_xWrapOk && (m_lr_x_wrap == add_rect.m_lr_x_wrap))) 
-#endif
     {
         if (add_rect.m_lowerRight.x < m_lowerRight.x)
         { m_lowerRight.x = add_rect.m_lowerRight.x; }
@@ -237,11 +223,7 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
     { m_lowerRight.x = add_rect.m_lowerRight.x; }
 
 
-#if defined (ACTIVISION_ORIGINAL)
-    if (m_lr_y_wrap != add_rect.m_lr_y_wrap)
-#else
     if ((m_lr_y_wrap != add_rect.m_lr_y_wrap) || (is_add_rect_lr_yWrapOk && (m_lr_y_wrap == add_rect.m_lr_y_wrap))) 
-#endif
     {
         if (add_rect.m_lowerRight.y < m_lowerRight.y)
         { m_lowerRight.y = add_rect.m_lowerRight.y; }
@@ -250,20 +232,12 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
     else if (add_rect.m_lowerRight.y > m_lowerRight.y)
     { m_lowerRight.y = add_rect.m_lowerRight.y; }
 
-#if defined (ACTIVISION_ORIGINAL)
-    m_ul_x_wrap |= add_rect.m_ul_x_wrap;
-    m_ul_y_wrap |= add_rect.m_ul_y_wrap;
-    m_lr_x_wrap |= add_rect.m_lr_x_wrap;
-    m_lr_y_wrap |= add_rect.m_lr_y_wrap;
-
-#else
 
     m_ul_x_wrap |= add_rect.m_ul_x_wrap || is_add_rect_ul_xWrapOk;
     m_ul_y_wrap |= add_rect.m_ul_y_wrap || is_add_rect_ul_yWrapOk;
     m_lr_x_wrap |= add_rect.m_lr_x_wrap || is_add_rect_lr_xWrapOk;
     m_lr_y_wrap |= add_rect.m_lr_y_wrap || is_add_rect_lr_yWrapOk;
 
-#endif
 
 	
 

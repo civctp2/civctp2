@@ -115,9 +115,7 @@
 #include "keypress.h"
 
 #include "AdvanceBranchRecord.h"
-#if !defined(ACTIVISION_ORIGINAL)
 #include "c3math.h"		// AsPercentage
-#endif
 
 
 extern C3UI					*g_c3ui;
@@ -1421,11 +1419,7 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	
 	p->GetScienceTaxRate( scienceTax );
 
-#if defined(ACTIVISION_ORIGINAL)	
-	s_scienceTax = (sint32)(scienceTax * 100);
-#else
 	s_scienceTax = AsPercentage(scienceTax);
-#endif
 
 	sprintf(str,"%d%%",s_scienceTax);
 	m_percentBox->SetText(str);

@@ -32,9 +32,7 @@
 #ifndef __NS_ACCESSOR_H__
 #define __NS_ACCESSOR_H__
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include <vector>
-#endif
 
 
 
@@ -68,26 +66,6 @@ public:
 		ICON,
 		ERR
 	};
-#if defined(ACTIVISION_ORIGINAL)
-	struct Struct {
-		Type type;
-		Data data;
-	};
-	static int count;
-	static Struct list[];
-	Type type(int i) {
-		if(i < count)
-			return list[i].type;
-		else
-			return ERR;
-	}
-	void *data(int i) {
-		if (i < count)
-			return ((T *)this)->*(list[i].data);
-		else
-			return NULL;
-	}
-#else
 	struct Struct 
 	{
 		Struct(Type t, void * d)
@@ -116,7 +94,6 @@ public:
 	{
 		return (i < list.size()) ? list[i].data : NULL;
 	};
-#endif
 	int comp(int i, T *p) {
 		Type t = ((T *)this)->type(i);
 		void *a = ((T *)this)->data(i);

@@ -198,99 +198,6 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 	return count != 0;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-// The old barb placement method follows.
-// beneath that is the replacement method
-#define k_MAX_BARBARIAN_TRIES 400
-#define k_MAX_BARBARIAN_STEPS 4000
-
-void Barbarians::BeginYear()
-{
-	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-	if(g_turn->GetRound() < risk->m_firstBarbarianTurn)
-		return;
-
-	if(g_rand->Next(10000) < risk->m_barbarianChance * 10000) {
-		MapPoint point;
-		sint32 tries;
-		sint32 p;
-
-		sint32 nonRobots = 0;
-		sint32 aNonRobot = -1;
-		for(p = 0; p < k_MAX_PLAYERS; p++) {
-			if(g_player[p] && g_player[p]->GetPlayerType() != PLAYER_TYPE_ROBOT) {
-				nonRobots++;
-				aNonRobot = p;
-			}
-		}
-
-		if(nonRobots > 1 || aNonRobot < 0) {
-			for(tries = 0; tries < k_MAX_BARBARIAN_TRIES; tries++) {
-				point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
-				point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
-				
-				
-				for(p = 1; p < k_MAX_PLAYERS; p++) {
-					if(g_player[p] && g_player[p]->IsVisible(point))
-						break;
-				}
-				if(p >= k_MAX_PLAYERS) {
-					
-					break;
-				}
-			}
-			if(tries < k_MAX_BARBARIAN_TRIES) {
-				AddBarbarians(point, -1, FALSE);
-			}
-		} else {
-			sint32 step;
-			MapPoint pos;
-			if(g_player[aNonRobot]->m_all_cities->Num() > 0) {
-				g_player[aNonRobot]->m_all_cities->
-					Access(g_rand->Next(g_player[aNonRobot]->m_all_cities->Num())).GetPos(pos);
-			} else {
-				
-				return;
-			}
-			sint32 d;
-			sint32 x, y;
-			for(x = 0; x < g_theWorld->GetXWidth(); x++) {
-				for(y = 0; y < g_theWorld->GetYHeight(); y++) {
-					g_theWorld->GetCell(x, y)->SetScratch(0);
-				}
-			}
-
-			MapPoint next;
-			g_theWorld->GetCell(pos)->SetScratch(1);
-
-			for(step = 0; step < k_MAX_BARBARIAN_STEPS; step++) {
-				d = g_rand->Next(sint32(NOWHERE));
-				if(pos.GetNeighborPosition((WORLD_DIRECTION)d, next) &&
-					!g_theWorld->GetCell(next)->GetScratch()) {
-					pos = next;
-					g_theWorld->GetCell(pos)->SetScratch(1);
-					for(p = 1; p < k_MAX_PLAYERS; p++) {
-						if(g_player[p] && g_player[p]->IsVisible(next))
-							continue;
-					}
-					if(!g_player[aNonRobot]->IsVisible(pos) && g_theWorld->IsLand(pos)) {
-						Unit nearestCity;
-						double distance;
-						g_player[aNonRobot]->GetNearestCity(pos, nearestCity,
-															distance, FALSE);
-						if(distance < risk->m_minimumBarbarianDistance)
-							continue;
-
-						AddBarbarians(pos, -1, FALSE);
-						break;
-					}
-				}
-			}
-			g_theWorld->ClearScratch();			
-		}
-	}
-}
-#else // !defined(ACTIVISION_ORIGINAL)
 // The new barb placement method (adapted from the above,
 // using only the algorithm previously used in MP):
 
@@ -328,4 +235,3 @@ void Barbarians::BeginYear()
 		}
 	}
 }
-#endif // defined(ACTIVISION_ORIGINAL)

@@ -301,12 +301,8 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 	
 	if ( item->GetNetShellObject() )
 	{
-#if defined(ACTIVISION_ORIGINAL)
-		sint32 numProperties = item->GetNetShellObject()->count;
-#else
 		sint32 const	numProperties = 
 			item->GetNetShellObject()->list.size();
-#endif
 		for ( sint32 i = 1; i < numProperties; i++ )
 		{
 			
@@ -388,12 +384,8 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::UpdateNetShellItem(
 	if ( item->GetNetShellObject() )
 	{
 		StoreAppropriateData( item, 0 );
-#if defined(ACTIVISION_ORIGINAL)
-		sint32 numProperties = item->GetNetShellObject()->count;
-#else
 		sint32 const numProperties = 
 			item->GetNetShellObject()->list.size();
-#endif
 		ListPos position = item->ChildList()->GetHeadPosition();
 		for ( sint32 i = 1; i < numProperties; i++ )
 		{
@@ -419,9 +411,6 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 {
 	
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
-#if defined(ACTIVISION_ORIGINAL)
-	AUI_ERRCODE r;
-#endif
 	NetShellT *netShellObject = item->GetNetShellObject();
 	if ( !netShellObject )
 		netShellObject = ((ns_Item<T,NetShellT> *)item->GetParent())->
@@ -442,48 +431,6 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 	if ( width )
 		item->Resize( width, item->Height() );
 
-#if defined(ACTIVISION_ORIGINAL)
-	switch ( netShellObject->type( i ) )
-	{
-	case ns_Accessor<T>::STRING:
-		r = item->SetText( (MBCHAR *)netShellObject->data( i ) );
-		if(netShellObject->IsMine())
-			item->SetTextBold(true);
-		else
-			item->SetTextBold(false);
-		{
-			
-			MBCHAR name[ 256 + 1 ];
-			strncpy( name, item->GetText(), 256 );
-
-			
-			if ( !item->GetTextFont() )
-				item->TextReloadFont();
-
-			item->GetTextFont()->TruncateString(
-				name,
-				item->Width() );
-
-			item->SetText( name );
-		}
-		return r;
-	case ns_Accessor<T>::INT:
-		r = item->SetText(
-			itoa( (sint32)netShellObject->data( i ), scratch, 10 ) );
-		if(netShellObject->IsMine())
-			item->SetTextBold(true);
-		else
-			item->SetTextBold(false);
-		return r;
-	case ns_Accessor<T>::ICON:
-		return item->SetIcon( (MBCHAR *)netShellObject->data( i ) );
-
-	default:
-		
-		Assert( FALSE );
-		return AUI_ERRCODE_INVALIDPARAM;
-	}
-#else	// ACTIVISION_ORIGINAL
 	void *	dataPtr	= netShellObject->data(i);
 
 	if (dataPtr)
@@ -525,7 +472,6 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 
 	Assert(FALSE);
 	return AUI_ERRCODE_INVALIDPARAM;
-#endif	// ACTIVISION_ORIGINAL
 }
 
 

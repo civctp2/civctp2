@@ -351,12 +351,10 @@ typedef class ConstDB {
 	
 	sint32 m_riot_level;
 	
-#if !defined(ACTIVISION_ORIGINAL)
 	//added DWT 
 	sint32 m_max_match_list_cycles;
 	// Modified by kaan to address bug # 12
 	sint32 m_min_turns_between_revolt;
-#endif
 	
 	
 	
@@ -616,12 +614,10 @@ public:
 	double CityGrowthCoefficient(void) const { return m_city_growth_coefficient; }
 	sint32 GetRiotLevel() const { return m_riot_level; }
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//added DWT
 	sint32 GetMaxMatchListCycles() const { return m_max_match_list_cycles; }
 	// Modified by kaan to address bug # 12
 	sint32 GetMinTurnsBetweenRevolt() const { return m_min_turns_between_revolt; }
-#endif
 
 	double PowerPointsToMaterialsConversion() const { return m_power_points_to_materials; }
 	sint32 MaxAirliftStackSize() const { return m_max_airlift_stack_size; }

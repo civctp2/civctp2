@@ -2202,9 +2202,6 @@ void aui_ListBox::BuildListStart(void)
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)
-void aui_ListBox::BuildListEnd(void)
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : aui_ListBox::BuildListEnd
@@ -2221,7 +2218,6 @@ void aui_ListBox::BuildListEnd(void)
 //
 //----------------------------------------------------------------------------
 void aui_ListBox::BuildListEnd(bool isAddBottom)
-#endif
 {
 	m_buildingTheList = FALSE;
 
@@ -2234,12 +2230,10 @@ void aui_ListBox::BuildListEnd(bool isAddBottom)
 	CalculateDimensions();
 	RepositionHeaderSwitches();
 	RepositionRangers();
-#if !defined(ACTIVISION_ORIGINAL)	
 	sint32 const	verticalStart = isAddBottom 
 									? m_verticalRanger->GetMaximumY()
 									: m_verticalRanger->GetMinimumY();
 	m_verticalRanger->SetValue(m_verticalRanger->GetValueX(), verticalStart);
-#endif	
 	RepositionItems();
 
 	

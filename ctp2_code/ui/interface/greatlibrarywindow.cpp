@@ -320,9 +320,7 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 	
 	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	delete [] lower_case_filename;
-#endif
 
     if (text == NULL) {
 		textbox->SetHyperText(" ");
@@ -330,11 +328,7 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
     }
 
 	MBCHAR interpreted[k_MAX_GL_ENTRY];
-#if defined(ACTIVISION_ORIGINAL)
-	stringutils_Interpret(text, so, interpreted);
-#else
 	stringutils_Interpret(text, so, interpreted, k_MAX_GL_ENTRY);
-#endif	
 
 	
 	

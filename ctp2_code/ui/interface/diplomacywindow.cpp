@@ -3174,16 +3174,6 @@ void DiplomacyWindow::DeclareWar(aui_Control *control, uint32 action, uint32 dat
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	IntelligenceWindow::DeclareWarOnSelected();
-#if defined(ACTIVISION_ORIGINAL)	// Too soon, player may cancel.	
-	sm_warButton->Enable( FALSE );
-
-	
-	ctp2_ListBox *intList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.List");
-	Assert(intList);
-	if(intList) {
-		intList->DeselectItem(intList->GetSelectedItemIndex());
-	}
-#endif
 }
 
 void DiplomacyWindow::DeclareEmbargo(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3191,9 +3181,6 @@ void DiplomacyWindow::DeclareEmbargo(aui_Control *control, uint32 action, uint32
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	IntelligenceWindow::DeclareEmbargoOnSelected();
-#if defined(ACTIVISION_ORIGINAL)	// Too soon, player may cancel.
-	sm_embargoButton->Enable( FALSE );
-#endif
 }
 
 

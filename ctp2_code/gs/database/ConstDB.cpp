@@ -42,7 +42,6 @@
 
 extern ConstDB *g_theConstDB; 
 
-#if !defined(ACTIVISION_ORIGINAL)
 extern sint32		g_abort_parse;
 extern TokenData	g_const_token_data[];
 
@@ -152,7 +151,6 @@ bool ParseMandatoryAfterOptional
 }
 
 } // namespace
-#endif
 
 ConstDB::ConstDB ()
 
@@ -205,10 +203,8 @@ ConstDB::ConstDB ()
 	m_border_int_radius = 4;
 	m_border_squared_radius = 20;
 	m_caravan_coef = 0.02;
-#if !defined(ACTIVISION_ORIGINAL)
 	m_max_match_list_cycles		= DEFAULT_MAX_MATCH_LIST_CYCLES;
 	m_min_turns_between_revolt	= DEFAULT_MIN_TURNS_BETWEEN_REVOLT;
-#endif
 	} 
 
 
@@ -526,7 +522,6 @@ void ConstDB::Serialize(CivArchive &archive)
 	archive.PutDoubleString( m_ai_cheat_eco_pact_max);
 	
 	archive << m_riot_level;
-#if !defined(ACTIVISION_ORIGINAL)
 	if ((DEFAULT_MAX_MATCH_LIST_CYCLES == m_max_match_list_cycles) &&
 		(DEFAULT_MIN_TURNS_BETWEEN_REVOLT == m_min_turns_between_revolt)
        )
@@ -539,7 +534,6 @@ void ConstDB::Serialize(CivArchive &archive)
 		archive << m_min_turns_between_revolt;
 		archive << m_max_match_list_cycles;
 	}
-#endif
 		}
 	else
 		{
@@ -880,11 +874,9 @@ enum TOKEN_CONST {
 	TOKEN_CARAVAN_COEF,
 
 	TOKEN_POLLUTION_CAUSED_BY_NUKE,
-#if !defined(ACTIVISION_ORIGINAL)
 	TOKEN_MAX_MATCH_LIST_CYCLES, // added DWT
 	// Modified by kaan to address bug # 12
 	TOKEN_MIN_TURNS_BETWEEN_REVOLT,
-#endif
 
     TOKEN_CONST_MAX 
 
@@ -1173,11 +1165,9 @@ TokenData g_const_token_data [] = {
     {TOKEN_BASE_STARVATION_PROTECTION, "BASE_STARVATION_PROTECTION"},
     {TOKEN_CARAVAN_COEF, "CARAVAN_COEF"},
     {TOKEN_POLLUTION_CAUSED_BY_NUKE, "POLLUTION_CAUSED_BY_NUKE"},
-#if !defined(ACTIVISION_ORIGINAL)
 	{TOKEN_MAX_MATCH_LIST_CYCLES, "MAX_MATCH_LIST_CYCLES"}, // added DWT
 	// Modified by kaan to address bug # 12
 	{TOKEN_MIN_TURNS_BETWEEN_REVOLT, "MIN_TURNS_BETWEEN_REVOLT"},
-#endif
 };
 	
 
@@ -1623,7 +1613,6 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if (!token_ParseValNext(const_token, TOKEN_RIOT_LEVEL,
 							m_riot_level)) return FALSE;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// Backwards compatibility code for the playtest releases up to 2004.06.28.
 	bool const	isOldPlayTest	= ParseOptional(const_token, 
 												TOKEN_MAX_MATCH_LIST_CYCLES, 
@@ -1653,10 +1642,6 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 			return FALSE;
 		}
 	}
-#else
-	if(!token_ParseFloatNext(const_token, TOKEN_POWER_POINTS_TO_MATERIALS,
-							 m_power_points_to_materials)) return FALSE;
-#endif
 	if(!token_ParseValNext(const_token, TOKEN_MAX_AIRLIFT_STACK_SIZE,
 						   m_max_airlift_stack_size)) return FALSE;
 
@@ -1897,7 +1882,6 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if(!token_ParseValNext(const_token, TOKEN_POLLUTION_CAUSED_BY_NUKE,
 						   m_pollution_caused_by_nuke)) return FALSE;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	if (!isOldPlayTest)
 	{
 		(void) ParseOptional(const_token, 
@@ -1912,7 +1896,6 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 						 m_min_turns_between_revolt,
 						 DEFAULT_MIN_TURNS_BETWEEN_REVOLT
 						);
-#endif
 
 	return TRUE; 	
 }

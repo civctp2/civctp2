@@ -170,10 +170,8 @@ public:
     BOOL CanSettle(const MapPoint &pos) const;
     BOOL CanSettle() const;
 
-#if !defined (ACTIVISION_ORIGINAL)
     bool CanTransport() const;
 	bool IsWounded() const;
-#endif
 
 	BOOL IsAsleep() const;
 	void Sleep();
@@ -299,17 +297,12 @@ public:
 	BOOL CanAdvertise() const;
 	ORDER_RESULT Advertise(const MapPoint &point);
 
-#if defined(ACTIVISION_ORIGINAL)
-    void GetCurrentHP(sint32 &n, sint32 unit_type[100], 
-        sint32 unit_hp[100]);
-#else
 	void GetCurrentHP
 	(
 		sint32 &	count,
 		sint32		unit_type[MAX_UNIT_COUNT],
 		sint32		unit_hp[MAX_UNIT_COUNT] 
 	) const;
-#endif
 
 	BOOL AbleToPlantNukeTarget(const MapPoint &point, sint32 &uindex);
 	BOOL AbleToMakeParkTarget(const MapPoint &point, sint32 &uindex);
@@ -350,9 +343,7 @@ public:
 	
 	
 	BOOL CanBombardTargetType(const CellUnitList & units) const;
-#if !defined(ACTIVISION_ORIGINAL)
 	bool GetBombardRange(sint32 & min_rge, sint32 & max_rge);
-#endif
 	BOOL CanBombard(const MapPoint &point) const;
 	BOOL CanBombard() const;
 	BOOL BombardCity(const MapPoint &point, BOOL doAnimations);
@@ -507,9 +498,7 @@ public:
 
 	
 	void CharacterizeArmy( bool & isspecial, 
-#if !defined (ACTIVISION_ORIGINAL)
  						   bool & isstealth,
-#endif
 		 			       sint32 & maxattack, 
 						   sint32 & maxdefense, 
 						   bool & cancapture,
@@ -556,9 +545,7 @@ public:
 	
 	
 	bool TestOrderAll(const OrderRecord *order_rec) const;
-#if !defined(ACTIVISION_ORIGINAL)
 	bool TestOrderAny(const OrderRecord * order_rec) const;
-#endif
 	
 	
 	bool TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) const;

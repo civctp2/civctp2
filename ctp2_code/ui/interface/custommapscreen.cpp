@@ -53,11 +53,6 @@
 #include "ProfileDB.h"
 
 
-#if defined(ACTIVISION_ORIGINAL)
-// No longer need this include since the SP screen has been removed
-// from the interface
-#include "spwindow.h"
-#endif
 
 #include "spnewgamewindow.h"
 #include "custommapscreen.h"
@@ -284,13 +279,6 @@ void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data,
 	if(custommapscreen_removeMyWindow(action)) {
 
 		if ( s_useMode == 1 ) {
-#if defined(ACTIVISION_ORIGINAL)
-			// I hope this is no longer necessary, but maybe it should
-			// be replaced by initialscreen_removeMyWindow.
-			// Unfortunately I have no idea what it's doing here,
-			// which seems a very bizarre place for it...
-			spscreen_removeMyWindow(action);
-#endif
 
 			
 			g_theProfileDB->SetSaveNote("");

@@ -58,9 +58,7 @@
 #include "UnitRecord.h"
 #include "GameEventManager.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include "MainControlPanel.h"
-#endif
 
 extern Player **g_player;
 extern RandomGenerator *g_rand;
@@ -271,17 +269,6 @@ void GoodyHut::OpenGoody(sint32 owner, const MapPoint &point)
 			g_slicEngine->Execute(so) ;
 			DPRINTF(k_DBG_GAMESTATE, ("You get %d gold!\n", m_value));
 			g_player[owner]->AddGold(m_value);
-#if defined(ACTIVISION_ORIGINAL)
-			if (g_soundManager) {
-				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-				if (visiblePlayer == owner) {
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
-											gamesounds_GetGameSoundID(GAMESOUNDS_TOOEXPENSIVE),
-											point.x,
-											point.y);
-				}
-			}
-#else
 			if (owner == g_selected_item->GetVisiblePlayer())
 			{
 				if (g_soundManager)
@@ -296,7 +283,6 @@ void GoodyHut::OpenGoody(sint32 owner, const MapPoint &point)
 
 				MainControlPanel::Update();	// the received gold may enable rush buying
 			}
-#endif
 			break;
 		case GOODY_ADVANCE:
 			so = new SlicObject("79DiscoveredRemnantsOfAncientCivilisation") ;

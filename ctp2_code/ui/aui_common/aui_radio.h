@@ -64,7 +64,7 @@ protected:
 
 protected:
 	
-#if defined (_MSC_VER)	
+#if defined(_MSC_VER)	
 	virtual MouseEventCallback MouseLDropInside;
 	virtual MouseEventCallback MouseRDropInside;
 #else

@@ -83,10 +83,8 @@
 
 #include "ctp2_Window.h"
 
-#ifndef ACTIVISION_ORIGINAL
 // Propagate PW each turn update
 #include "MaterialPool.h"
-#endif
 
 extern TurnCount *g_turn;
 extern CivApp *g_civApp;
@@ -169,13 +167,7 @@ STDEHANDLER(PollutionTurnEvent)
 
 STDEHANDLER(BeginTurnAllCitiesEvent)
 {
-#if defined(ACTIVISION_ORIGINAL)	// not used (yet) 
-	sint32 player, i;
-	SlicObject *so;
-	SlicSegment *seg;
-#else
 	sint32 player;
-#endif
 
 	if(!args->GetPlayer(0, player))
 		return GEV_HD_Continue;
@@ -202,26 +194,6 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 	g_player[player]->m_virtualGoldSpent = 0;
 
 	if(g_player[player]->GetGaiaController()->CanStartCountdown()) {
-#if defined(ACTIVISION_ORIGINAL)	
-		// memory leaks, invalid message, no "them" messages when MaxPlayers is 0.
-		so = new SlicObject("GCReadyToActivateUs");
-		seg = g_slicEngine->GetSegment("GCReadyToActivateUs");
-		if(!seg->TestLastShown(player, 10000)) {
-			so->AddRecipient(player);
-			so->AddPlayer(player);
-			g_slicEngine->Execute(so);
-		
-			so = new SlicObject("GCReadyToActivateThem");
-			seg = g_slicEngine->GetSegment("GCReadyToActivateThem");
-			for(i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) {
-				if(!seg->TestLastShown(i, 10000) && i != player) {
-					so->AddRecipient(i);
-					so->AddPlayer(player);
-				}
-			}
-			g_slicEngine->Execute(so);
-		}
-#else
 		SlicSegment *	seg = g_slicEngine->GetSegment("GCReadyToActivateUs");
 		if (seg && !seg->TestLastShown(player, 10000)) 
 		{
@@ -235,7 +207,6 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 			so->AddAllRecipientsBut(player);
 			g_slicEngine->Execute(so);
 		}
-#endif
 	}
 
 	return GEV_HD_Continue;
@@ -383,7 +354,6 @@ STDEHANDLER(FinishBeginTurnEvent)
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", p->m_gold->GetLevel()));
 	DPRINTF(k_DBG_GAMESTATE, ("Public Works: %d\n", p->m_materialPool->GetMaterials()));
 
-#if !defined(ACTIVISION_ORIGINAL)
 	// JJB added the following to save in a PBEM game:
 	// moved from newturncount.cpp where it was too early
 	if((g_turn->IsHotSeat() || g_turn->IsEmail()) &&
@@ -391,20 +361,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 	  PLAYER_TYPE_ROBOT) {
 		g_turn->SendNextPlayerMessage();
 	}
-#endif
 	
-#if defined(ACTIVISION_ORIGINAL)		// moved to FinishBuildPhaseEvent
-	if (g_theProfileDB->IsAutoSave()) {
-		
-		if (p->m_playerType != PLAYER_TYPE_ROBOT) {
-			g_civApp->AutoSave(p->m_owner);
-		}
-
-		
-		if(g_controlPanel)
-			g_controlPanel->GetWindow()->ShouldDraw(TRUE);
-	}
-#endif
 
 
 	
@@ -422,11 +379,9 @@ STDEHANDLER(FinishBeginTurnEvent)
 		g_network.Block(p->m_owner);
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_GOLD,
 											   p->m_owner, p->m_gold->GetLevel()));
-#if !defined ACTIVISION_ORIGINAL
 		// propagate PW each turn update
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_MATERIALS,
 											   p->m_owner, p->m_materialPool->GetMaterials()));
-#endif
 		g_network.Unblock(p->m_owner);
 	}
 
@@ -562,11 +517,6 @@ STDEHANDLER(CreateImprovementEvent)
 	MapPoint pos;
 	sint32 pl;
 	sint32 imptype;
-#if defined(ACTIVISION_ORIGINAL)	// unused or later
-	sint32 i;
-	SlicObject *so;
-	SlicSegment *seg;
-#endif
 
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
@@ -576,25 +526,6 @@ STDEHANDLER(CreateImprovementEvent)
 	
 
 	if(g_player[pl] && g_player[pl]->GetGaiaController()->HasMinTowersBuilt()) {
-#if defined(ACTIVISION_ORIGINAL)
-		// memory leaks, invalid message, no "them" messages when MaxPlayers is 0.
-		so = new SlicObject("GCMinObelisksReachedUs");
-		seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
-		so->AddRecipient(pl);
-		if(!seg->TestLastShown(pl, 10000)) {
-			g_slicEngine->Execute(so);
-		
-			so = new SlicObject("GCMinObelisksReachedThem");
-			seg = g_slicEngine->GetSegment("GCMinObelisksReachedThem");
-			for(i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) {
-				if(!seg->TestLastShown(i, 10000) && i != pl) {
-					so->AddRecipient(i);
-					so->AddPlayer(pl);
-				}
-			}	
-			g_slicEngine->Execute(so);
-		}
-#else
 		SlicSegment *	seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
 		if (seg && !seg->TestLastShown(pl, 10000)) 
 		{
@@ -607,7 +538,6 @@ STDEHANDLER(CreateImprovementEvent)
 			so->AddAllRecipientsBut(pl);
 			g_slicEngine->Execute(so);
 		}
-#endif
 	}
 
 	return GEV_HD_Continue;
@@ -621,11 +551,7 @@ STDEHANDLER(GrantAdvanceEvent)
 
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 	if(!args->GetInt(0, advance)) return GEV_HD_Continue;
-#if defined(ACTIVISION_ORIGINAL)	// incorrect argument number
-	if(!args->GetInt(0, cause)) return GEV_HD_Continue;
-#else
 	if (!args->GetInt(1, cause)) return GEV_HD_Continue;
-#endif
 
 	g_player[pl]->m_advances->GiveAdvance(advance, (CAUSE_SCI)cause, FALSE);
 	return GEV_HD_Continue;
@@ -719,7 +645,6 @@ STDEHANDLER(FinishBuildPhaseEvent)
 	sint32 player;
 	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	if (g_player[player] && !Player::IsThisPlayerARobot(player)) 
 	{
 		if (g_theProfileDB->IsAutoSave() && 
@@ -736,7 +661,6 @@ STDEHANDLER(FinishBuildPhaseEvent)
 			g_controlPanel->GetWindow()->ShouldDraw(TRUE);
 		}
 	}
-#endif
 	
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_StartMovePhase,
 							   GEA_Player, player,

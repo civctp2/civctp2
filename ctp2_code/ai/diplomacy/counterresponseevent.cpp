@@ -548,13 +548,6 @@ STDEHANDLER(ActionForValue_CounterResponseEvent)
 			break;
 		case PROPOSAL_OFFER_STOP_PIRACY:
 			
-#if defined(ACTIVISION_ORIGINAL)
-			if (receiver_piracy <= 0 &&
-				(sender_result_value > sender_piracy * 5))
-			{
-				sender_diplomat.ConsiderResponse(receiver, RESPONSE_ACCEPT, accept_priority);
-			}
-#else
 			// made AI consider more - tombom
 			if ((receiver_piracy <= 0 &&
 				(sender_result_value > sender_piracy * 4)) && 
@@ -562,7 +555,6 @@ STDEHANDLER(ActionForValue_CounterResponseEvent)
 			{
 				sender_diplomat.ConsiderResponse(receiver, RESPONSE_ACCEPT, accept_priority);
 			}
-#endif
 			break;
 		case PROPOSAL_OFFER_END_EMBARGO:
 			

@@ -238,12 +238,10 @@ SelectedItem::SelectedItem(CivArchive &archive)
 
 	SetPlayerOnScreen(m_current_player);
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann
 	//To make sure that save games saved with other players than
 	//player one can be continued without usiing the cheat editor.
 	NewTurnCount::SetStopPlayer(m_current_player);
-#endif
 }
 
 SelectedItem::~SelectedItem()
@@ -421,7 +419,6 @@ void SelectedItem::NextItem()
 					curIndex = 0;
 				m_selected_city[player] = g_player[player]->m_all_cities->Access(curIndex);
 
-#if !defined (ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focus handling  
 				MapPoint pos;
 				m_selected_city[player].GetPos( pos );
 				m_select_pos[player] = pos;
@@ -430,7 +427,6 @@ void SelectedItem::NextItem()
 						g_director->AddCenterMap(pos);
 					}
 				}
-#endif
 				if ( g_controlPanel ) {
 					g_selected_item->SetSelectCity(m_selected_city[player]);
 				}
@@ -992,7 +988,7 @@ void SelectedItem::SetSelectCity(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 {
 	
-#if defined (ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
+#if defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
 	if(!m_ignoreCitySelect) {
 		SetSelectUnit(u, all, isDoubleClick);
 	}
@@ -1049,14 +1045,12 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 		g_c3ui->AddAction( new WorkWinUpdateAction );
 
-#if !defined (ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focus handling  
 		// Focus on city if option is activated  
 		if(IsAutoCenterOn()) { 
 			if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 				g_director->AddCenterMap(pos);
 			}
 		}
-#endif
 	} else { 
         n = g_player[o]->m_all_armies->Num(); 
         

@@ -71,7 +71,7 @@
 #  define UNALIGNED_OK
 #endif
 
-#if (defined(MSDOS) || defined(_WINDOWS) || defined(WIN32))  && !defined(STDC)
+#if (defined(MSDOS) || defined(_WINDOWS) || defined(WIN32)) && !defined(STDC)
 #  define STDC
 #endif
 #if defined(__STDC__) || defined(__cplusplus) || defined(__OS2__)
@@ -87,7 +87,7 @@
 #endif
 
 
-#if defined(__MWERKS__) || defined(applec) ||defined(THINK_C) ||defined(__SC__)
+#if defined(__MWERKS__) || defined(applec) || defined(THINK_C) || defined(__SC__)
 #  define NO_DUMMY_DECL
 #endif
 
@@ -174,13 +174,13 @@
 #      define ZEXPORTVA  FAR _cdecl _export
 #    endif
 #  endif
-#  if defined (__BORLANDC__)
-#    if (__BORLANDC__ >= 0x0500) && defined (WIN32)
+#  if defined(__BORLANDC__)
+#    if (__BORLANDC__ >= 0x0500) && defined(WIN32)
 #      include <windows.h>
 #      define ZEXPORT __declspec(dllexport) WINAPI
 #      define ZEXPORTRVA __declspec(dllexport) WINAPIV
 #    else
-#      if defined (_Windows) && defined (__DLL__)
+#      if defined(_Windows) && defined(__DLL__)
 #        define ZEXPORT _export
 #        define ZEXPORTVA _export
 #      endif
@@ -188,8 +188,8 @@
 #  endif
 #endif
 
-#if defined (__BEOS__)
-#  if defined (ZLIB_DLL)
+#if defined(__BEOS__)
+#  if defined(ZLIB_DLL)
 #    define ZEXTERN extern __declspec(dllexport)
 #  else
 #    define ZEXTERN extern __declspec(dllimport)

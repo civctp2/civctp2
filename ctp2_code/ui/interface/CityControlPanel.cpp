@@ -77,12 +77,10 @@
 
 extern C3UI *g_c3ui;
 
-#if !defined(ACTIVISION_ORIGINAL)
 namespace
 {
 	sint32 const CITY_PRODUCTION_HALTED	= 0x7fffffff;
 }
-#endif
 
 CityControlPanel::CityControlPanel(MBCHAR *ldlBlock) :
 m_buildItemLabel(static_cast<ctp2_Static*>(
@@ -316,9 +314,7 @@ void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control *control,
 		return;
 	}
 	theCity->AddBuyFront();
-#if !defined(ACTIVISION_ORIGINAL)
 	((CityControlPanel*)cookie)->m_currentTurns = 0;	// Force update of city control panel
-#endif
 	((CityControlPanel*)cookie)->Update();
 }
 
@@ -446,9 +442,7 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
  				// City has changed, do the neccessary
 				g_selected_item->SetSelectCity(cd->GetHomeCity());
 
-#if !defined(ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focus handling  
 				MapPoint pos = cd->GetHomeCity().RetPos(); // Not needed         
-#endif
 
 			}
 		}
@@ -480,148 +474,6 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 //----------------------------------------------------------------------------
 
 void CityControlPanel::UpdateBuildItem()
-#if defined(ACTIVISION_ORIGINAL)
-{
-	
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
-	if(!player) {
-		ClearBuildItem();
-		return;
-	}
-
-	
-	sint32 numberOfItems =
-		m_cityListDropDown->GetListBox()->NumItems();
-
-	
-	if(player->GetNumCities() <= 0) {
-		ClearBuildItem();
-		return;
-	}
-
-	
-	sint32 city_index = m_cityListDropDown->GetSelectedItem();
-
-	
-	if (city_index == -1)
-		return; 
-
-	
-	
-	if(city_index >= player->GetNumCities())
-		city_index = 0;
-	Unit city = player->GetCityFromIndex(city_index);
-
-	
-	BuildQueue *queue = city.GetCityData()->GetBuildQueue();
-	BuildNode *head = queue->GetHead();
-
-	sint32 turns;
-	if(g_network.IsActive()) {
-		turns = city.CD()->HowMuchLonger();
-	} else if(g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) {
-		turns = m_currentTurns;
-	} else {
-		turns = city.CD()->HowMuchLonger();
-	}
-
-	if((m_currentCity.m_id == city.m_id) &&
-	   (m_currentNumItems == numberOfItems) &&
-	   (m_currentCategory == (head ? head->m_category : -1)) &&
-	   (m_currentItem == (head ? head->m_type : -1)) &&
-	   (m_currentTurns == turns)) {
-		
-		return;
-	}
-
-	m_currentCity.m_id = city.m_id;
-	m_currentNumItems = numberOfItems;
-	m_currentCategory = head ? head->m_category : -1;
-	m_currentItem = head ? head->m_type : -1;
-	m_currentTurns = turns;
-
-	m_buildItemProgressBar->SetDrawCallbackAndCookie(ProgressDrawCallback, (void *)m_currentCity.m_id);
-
-	
-	CityData *theCity=city.CD();
-	if(theCity && theCity->GetBuildQueue()->GetHead())
-	{
-		m_buildRushBuy->Enable(theCity->GetOvertimeCost() <= g_player[g_selected_item->GetVisiblePlayer()]->GetGold() && theCity->HowMuchLonger()>1);
-		if(!theCity->AlreadyBoughtFront()) {
-			char buf[20];
-			sprintf(buf, "%d", theCity->GetOvertimeCost());
-			m_rushBuyCost->SetText(buf);
-		} else {
-			m_rushBuyCost->SetText("---");
-		}
-	}
-	else
-	{
-		m_buildRushBuy->Enable(false);
-		m_rushBuyCost->SetText("---");
-	}
-
-	
-	
-	if(numberOfItems < 1) {
-		ClearBuildItem();
-		return;
-	}
-
-	if(city_index < 0) {
-		ClearBuildItem();
-		return;
-	}
-	
-	if(m_buildItemIconButton->IsDisabled())
-		m_buildItemIconButton->Enable(true);
-	if(m_buildItemTurnButton->IsDisabled())
-		m_buildItemTurnButton->Enable(true);
-
-	
-	if(queue->GetLen() < 1) {
-		NoBuildItem();
-		return;
-	}
-
-	
-	MBCHAR tempStr[100];
-
-	strncpy(tempStr, GetBuildName(queue->GetHead()), 99);
-	tempStr[99] = 0;
-	m_buildItemLabel->GetTextFont()->TruncateString(tempStr, m_buildItemLabel->Width());
-	m_buildItemLabel->SetText(tempStr);
-
-	
-	const MBCHAR *buildIconName = GetBuildIcon(queue->GetHead());
-
-	
-	
-	if(buildIconName && strcmp(buildIconName, "NULL")) {
-		
-		m_buildItemIconButton->SetText("");
-		m_buildItemIconButton->ExchangeImage(4, 0, buildIconName);
-	} else {
-		
-		m_buildItemIconButton->SetText("---");
-		m_buildItemIconButton->ExchangeImage(4, 0, NULL);
-	}
-
-	
-	
-	
-	MBCHAR numTurns[50];
-	if (turns == 0x7fffffff)
-		sprintf(numTurns, "---");
-	else
-		sprintf(numTurns, "%d", turns);
-	m_buildItemTurnButton->SetText(numTurns); 
-
-
-
-
-}
-#else	// ACTIVISION_ORIGINAL
 {
 	sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
 	Player *		player			= g_player[visiblePlayer];
@@ -736,7 +588,6 @@ void CityControlPanel::UpdateBuildItem()
 	}
 	m_buildItemTurnButton->SetText(numTurns); 
 }
-#endif	// ACTIVISION_ORIGINAL
 
 void CityControlPanel::NoBuildItem()
 {

@@ -82,19 +82,15 @@
 
 
 template <class T> CTPDatabase<T>::CTPDatabase()
-#if !defined(ACTIVISION_ORIGINAL)	// Initialise to be able to delete later. 
 :	m_indexToAlpha(NULL),
 	m_alphaToIndex(NULL),
 	m_modifiedRecords()
-#endif
 {
 	m_numRecords = 0;
 	m_allocatedSize = k_INITIAL_DB_SIZE;
 	m_records = new T *[m_allocatedSize];
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	m_modifiedList = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize];
-#endif
 }
 
 
@@ -119,7 +115,6 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 	}
 
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	for (size_t j = 0; j < m_modifiedRecords.size(); ++j)
 	{
 		delete m_modifiedRecords[j];
@@ -139,11 +134,9 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 		delete [] m_modifiedList;
 	}
 
-#endif
 
 }
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 template <class T> T *CTPDatabase<T>::Access(sint32 index,sint32 govIndex)
 {
 	sint32 numberGovernmentRecords;
@@ -223,18 +216,15 @@ template <class T> const T *CTPDatabase<T>::Get(sint32 index,sint32 govIndex)
 	else
 		return m_records[index];
 }
-#endif
 
 
 template <class T> void CTPDatabase<T>::Grow()
 {
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	PointerList<GovernmentModifiedRecordNode> **oldList = m_modifiedList;
 	m_modifiedList = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize + k_GROW_DB_STEP];
 	memcpy(m_modifiedList, oldList, m_allocatedSize * sizeof(PointerList<GovernmentModifiedRecordNode> *));
 	delete [] oldList;	
-#endif
 
   
 
@@ -251,7 +241,6 @@ template <class T> void CTPDatabase<T>::Grow()
 
 template <class T> void CTPDatabase<T>::Add(T *obj)
 {
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	if (obj->GetHasGovernmentsModified() && 
 	    (obj->GenericGetNumGovernmentsModified() > 0)
 	   ) 
@@ -314,7 +303,6 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 	}
 	else 
 	{
-#endif
 
 		if (m_numRecords >= m_allocatedSize)
 			Grow();
@@ -323,16 +311,12 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 		m_records[m_numRecords] = obj;
 
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 		m_modifiedList[m_numRecords] = new PointerList<GovernmentModifiedRecordNode>();
 		m_modifiedList[m_numRecords]->AddHead(new GovernmentModifiedRecordNode());
-#endif 
 		m_numRecords++;
 		
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	}
-#endif
 
 }
 
@@ -368,31 +352,6 @@ template <class T> const char *CTPDatabase<T>::GetNameStr(sint32 index)
  
 template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 {
-#if defined(ACTIVISION_ORIGINAL)	// Memory leaks
-	T *obj = NULL;
-	sint32 err = 0;
-
-	while(!lex->EndOfInput()) {
-		obj = new T();
-		if(!obj->Parse(lex)) {
-			err = 1;
-			break;
-		} else {
-			Add(obj);
-		}
-	}
-
-	m_indexToAlpha = new sint32[m_numRecords];
-	m_alphaToIndex = new sint32[m_numRecords];
-	
-	sint32 i;
-	for(i = 0; i < m_numRecords; i++) {
-		m_indexToAlpha[i] = i;
-		m_alphaToIndex[i] = i;
-	}
-
-	return !err;
-#else
 	sint32	isOk	= 1;
 
 	while (!lex->EndOfInput())
@@ -422,7 +381,6 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 	}
 
 	return isOk;
-#endif
 }
 
 template <class T> sint32 CTPDatabase<T>::Parse(const C3DIR & c3dir, const char *filename)

@@ -586,13 +586,13 @@ aui_Control *aui_Control::SetMouseOwnership( void )
 	if ( prevOwner ) prevOwner->ReleaseMouseOwnership();
 	m_whichOwnsMouse = this;
 
-#if		FALSE
+#if FALSE
 		
-#ifdef	_DEBUG
+#ifdef _DEBUG
 		
 		
 #define STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
-#ifdef	STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
+#ifdef STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
 		StatusBar::SetText(aui_Ldl::GetBlock(GetMouseOwnership()));
 #endif	
 #endif	
@@ -1392,11 +1392,7 @@ aui_Control::FillSize aui_Control::WidthToFill(ldl_datablock *theBlock,
 			result.first++;
 		} else {
 			
-#if defined(ACTIVISION_ORIGINAL)			
-			result.second = std::_MAX(0L,
-#else
 				result.second = std::max(0L,
-#endif
 				result.second -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
 		}
@@ -1456,11 +1452,7 @@ bool aui_Control::FillWidth(ldl_datablock *theBlock,
 				desiredWidth;
 		}
 
-#if defined(ACTIVISION_ORIGINAL)					
-		width = std::_MAX(width,
-#else
 		width = std::max(width,
-#endif
 			m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
 	}
 

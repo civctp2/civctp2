@@ -125,11 +125,7 @@ ctp2_ListBox::ctp2_ListBox(
 	:
 	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
-#if defined(ACTIVISION_ORIGINAL)	// ambiguous with .NET
-	aui_TextBase((MBCHAR *)NULL, (uint32)0),
-#else
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
-#endif
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
@@ -162,12 +158,10 @@ ctp2_ListBox::ctp2_ListBox(
 
 ctp2_ListBox::~ctp2_ListBox()
 {
-#if !defined(ACTIVISION_ORIGINAL)
 	if (this == ms_mouseFocusListBox)
 	{
 		ms_mouseFocusListBox = NULL;
 	}
-#endif	
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
@@ -394,19 +388,13 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 	
 	if (m_numRows <= 1) return AUI_ERRCODE_OK;
 
-#ifndef ACTIVISION_ORIGINAL // #01 Optimized sorting of list entries 
 	sint32 cycles = 0;	
-#endif	
 	BOOL changed;
 	do
 	{
 		changed = FALSE;
 
-#ifdef ACTIVISION_ORIGINAL // #01 Optimized sorting of list entries 
-		for ( sint32 i = 0; i < m_numRows-1; i++ )
-#else
 		for ( sint32 i = 0; i < m_numRows-1-cycles; i++ )
-#endif
 		{
 			ListPos positionA = m_pane->ChildList()->FindIndex( i );
 			ListPos positionB = positionA;
@@ -422,9 +410,7 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 				changed = TRUE;
 			}
 		}
-#ifndef ACTIVISION_ORIGINAL // #01 Optimized sorting of list entries 
 	++cycles;	
-#endif
 	} while ( changed );
 
 	RepositionItems();

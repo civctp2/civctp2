@@ -436,9 +436,7 @@ AUI_ERRCODE aui_ImageBase::DrawImage(
 
 	aui_Surface *srcSurf = image->TheSurface();
 
-#if !defined(ACTIVISION_ORIGINAL)	// crash when srcSurf is NULL
 	if (!srcSurf) return AUI_ERRCODE_OK;
-#endif
 
 	RECT srcRect =
 	{

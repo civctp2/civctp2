@@ -38,11 +38,7 @@
 class ns_Game : public ns_Object<NETFunc::Game, ns_Game>
 {
 public:
-#if defined(ACTIVISION_ORIGINAL)	
-	ns_Game( NETFunc::Game *game ) : ns_Object<NETFunc::Game, ns_Game>(game) {};
-#else
 	ns_Game(NETFunc::Game * game);
-#endif
 	void Update( NETFunc::Game *game );
 
 	char *m_locked;	

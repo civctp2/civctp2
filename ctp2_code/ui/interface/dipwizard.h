@@ -88,10 +88,8 @@ class DipWizard
 
 	static ctp2_Static *m_parchment, *m_responseDiplomat;
 
-#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to display the emissary photo of recipient
 	static ctp2_Static *m_emissary_photo;
-#endif
 
 	static ctp2_ListBox *m_propList[DIP_WIZ_PROP_TAB_MAX];
 	static ctp2_ListBox *m_exchList[DIP_WIZ_PROP_TAB_MAX];

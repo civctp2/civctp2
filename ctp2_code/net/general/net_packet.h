@@ -107,9 +107,7 @@
 #define k_PACKET_UNGROUP_REQUEST_ID  MAKE_CIV3_ID('A', 'U')
 #define k_PACKET_SCORES_ID            MAKE_CIV3_ID('S', 'C')
 
-#if !defined(ACTIVISION_ORIGINAL)
 #define k_PACKET_FEAT_TRACKER_ID			MAKE_CIV3_ID('F', 'T')
-#endif
 
 #ifdef _PLAYTEST
 #define k_PACKET_CHEAT_ID        MAKE_CIV3_ID('C', 'H')

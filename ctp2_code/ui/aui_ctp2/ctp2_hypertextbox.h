@@ -131,7 +131,6 @@ protected:
 
 	sint32 m_bevelWidth;
 
-#if !defined(ACTIVISION_ORIGINAL)
 private:
 	void FormatText
 	(
@@ -141,7 +140,6 @@ private:
 		sint32			a_Index,
 		bool			a_IsLink
 	);
-#endif
 
 };
 

@@ -45,9 +45,6 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(ACTIVISION_ORIGINAL)	// Already in c3.h as project wide setting
-#pragma warning(disable: 4786)
-#endif
 
 #include "c3.h"
 
@@ -81,7 +78,6 @@ using namespace std ;
 #include "c3math.h"
 #include "CtpAgent.h"
 #include "agreementmatrix.h"
-#if !defined (ACTIVISION_ORIGINAL)
 #include "gfx_options.h"
 #include "Army.h"
 #include "ArmyData.h"
@@ -116,7 +112,6 @@ bool IsValid
 };
 
 } // namespace
-#endif
 
 
 
@@ -363,9 +358,7 @@ void Scheduler::Initialize()
 	
 	m_current_plan_iter = m_matches.end();
 
-#if !defined (ACTIVISION_ORIGINAL)
 //	m_AllIsExplored = false;
-#endif
 }
 
 
@@ -614,11 +607,7 @@ bool Scheduler::Sort_Matches()
 		
 		
 		
-#if defined (ACTIVISION_ORIGINAL)		
-		if (first_turn_of_war || plan_iter->Commited_Agents_Need_Orders() || m_playerId == 0)
-#else
         if (first_turn_of_war || plan_iter->Commited_Agents_Need_Orders() || m_playerId == 0 || plan_iter->CanMatchesBeReevaluated())
-#endif //ACTIVISION_ORIGINAL
 			m_committed_agents -= plan_iter->Rollback_All_Agents();
 		
 		
@@ -755,7 +744,6 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 	sint32 agent_count;
 
-#if !defined (ACTIVISION_ORIGINAL)
 	bool AreAllGoalsSatisfied = true;
 	plan_iter = m_matches.begin();
 	while (plan_iter != m_matches.end()) {
@@ -769,7 +757,6 @@ void Scheduler::Match_Resources(const bool move_armies)
 		plan_iter++;
 	}
 
-#endif
 
 	plan_iter = m_matches.begin();
 	while (plan_iter != m_matches.end()) {
@@ -1123,28 +1110,6 @@ Scheduler::Sorted_Goal_List Scheduler::Get_Top_Goals(const int &number) const
 
 sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const 
 {
-#if defined(ACTIVISION_ORIGINAL)			
-	Sorted_Goal_List::const_iterator sorted_goal_iter;
-	CTPGoal_ptr ctp_goal_ptr;
-	sint32 total_value = 0;
-	sint32 value;
-
-	for ( sorted_goal_iter = m_goals_of_type[type].begin();
-		  sorted_goal_iter != m_goals_of_type[type].end(); 
-		  sorted_goal_iter++)
-		 {
-			ctp_goal_ptr = (CTPGoal_ptr) sorted_goal_iter->second;
-
-			if ( (ctp_goal_ptr->Is_Satisfied() == false) || 
-				 (ctp_goal_ptr->ArmiesAtGoal() == false) )
-			{
-				value = ctp_goal_ptr->Get_Target_Value();
-			
-				
-				total_value += value;
-			}
-		 }
-#else
 	sint32	total_value	= 0;
 
 	if (IsValid(type, m_goals_of_type))
@@ -1173,7 +1138,6 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 			}	
 		}
 	}
-#endif
 
 	return total_value;
 }
@@ -1202,37 +1166,6 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 
 Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const 
 {
-#if defined(ACTIVISION_ORIGINAL)
-	Sorted_Goal_List::const_iterator sorted_goal_iter;
-	CTPGoal_ptr ctp_goal_ptr = NULL;
-	sint32 total_value = 0;
-	const GoalRecord *rec = g_theGoalDB->Get(type);
-
-	for ( sorted_goal_iter = m_goals_of_type[type].begin();
-		  sorted_goal_iter != m_goals_of_type[type].end(); 
-		  sorted_goal_iter++)
-		  {
-			  ctp_goal_ptr = (CTPGoal_ptr) sorted_goal_iter->second;
-			  
-			  
-			  if ( (satisfied == false) &&
-				   ( (ctp_goal_ptr->Is_Satisfied() == false) || 
-				     (ctp_goal_ptr->ArmiesAtGoal() == false) ) )
-					 break;
-			  
-			  else if ( (satisfied == true) &&
-					    (ctp_goal_ptr->Is_Satisfied() == true) &&
-						(ctp_goal_ptr->ArmiesAtGoal() == false) )
-					 break;
-		  }
-
-	
-	if (sorted_goal_iter == m_goals_of_type[type].end())
-		return NULL;
-
-
-	return ctp_goal_ptr;
-#else
 	if (IsValid(type, m_goals_of_type)) 
 	{
 		for 
@@ -1261,7 +1194,6 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 	}
 
 	return NULL; // No matching goal available.
-#endif
 }
 
 
@@ -1275,13 +1207,9 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 
 sint16 Scheduler::CountGoalsOfType(const GOAL_TYPE & type) const
 {
-#if defined(ACTIVISION_ORIGINAL)
-	return m_goals_of_type[type].size();
-#else
 	return IsValid(type, m_goals_of_type) 
 		   ? m_goals_of_type[type].size() 
 		   : 0;
-#endif
 }
 
 

@@ -61,11 +61,9 @@
 #include "terrainutil.h"
 #include "TerrImprovePool.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann to support unseen terrain stat calculation
 #include "TerrainRecord.h"
 #include "TerrainImprovementRecord.h"
-#endif
 
 extern Director				*g_director;
 extern World				*g_theWorld;
@@ -109,7 +107,6 @@ UnseenCell::UnseenCell(const MapPoint &point)
 	m_improvements = new PointerList<UnseenImprovementInfo>;
 
 	sint32 i;
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann
 
 	// Same as well information about existing
@@ -124,7 +121,6 @@ UnseenCell::UnseenCell(const MapPoint &point)
 		rec = g_theTerrainImprovementDB->Get(imp);
 		m_improvements->AddTail(new UnseenImprovementInfo(imp, 100));
 	}
-#endif
 	for(i = 0; i < cell->GetNumImprovements(); i++) {
 		TerrainImprovement imp = cell->AccessImprovement(i);
 		if(g_theTerrainImprovementPool->IsValid(imp)) {
@@ -142,11 +138,9 @@ UnseenCell::UnseenCell(const MapPoint &point)
 	}
 	
 	m_cell_owner = (sint8) cell->GetOwner();
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann
 	// Store the city that controlls this tile.
 	m_visibleCityOwner = g_theWorld->GetCell(point)->GetCityOwner().m_id;
-#endif
 
 	if(cell->GetCity().m_id != (0)) {
 		Unit		city = cell->GetCity();
@@ -157,16 +151,8 @@ UnseenCell::UnseenCell(const MapPoint &point)
 		m_cityName = new MBCHAR[strlen(name) + 1];
 		strcpy(m_cityName, name);
 		
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-		// Doesn't show the correct owner of a city after conquest 
-		// of this city if the old owner is the selected player.
-		// The old owner has to stay until vision is removed.
-		m_cityOwner = (sint16)city.GetOwner();
-#else
 // Added by Martin Gühmann
 		m_cityOwner = static_cast<sint16>(city.GetCityData()->GetOwner());
-#endif
 
 		CityData *cityData = city.GetData()->GetCityData();
 
@@ -324,10 +310,8 @@ UnseenCell::UnseenCell()
 	m_slaveBits = 0;
 
 	m_cell_owner = -1;
-#if !defined(ACTIVISION_ORIGINAL)
 	// Added by Martin Gühmann
 	m_visibleCityOwner = 0;
-#endif
 
 	m_actor = NULL;
 #ifdef BATTLE_FLAGS
@@ -636,7 +620,6 @@ sint32 UnseenCell::IsHealUnits(void)
 }
 
 
-#if !defined(ACTIVISION_ORIGINAL)
 
 //----------------------------------------------------------------------------
 //
@@ -886,7 +869,6 @@ sint32 UnseenCell::GetGoldProduced() const
     return gold; 
 }
 
-#endif // ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -911,7 +893,6 @@ void UnseenCell::Serialize(CivArchive &archive)
 		archive.StoreChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
 
 		{
-#if !defined(ACTIVISION_ORIGINAL)
 // Added by Martin Gühmann
 			// A dirty workaround in order not to change the save game format.
 			// UnseenInstallationInfo is now abused to store m_visibleCityOwner
@@ -921,7 +902,6 @@ void UnseenCell::Serialize(CivArchive &archive)
 			// this class but it isn't aceessed. Maybe a mistake or a left
 			// over from CTP1.
 			m_installations->AddTail(new UnseenInstallationInfo(-1, m_visibleCityOwner));
-#endif
 			archive << m_installations->GetCount();
 			PointerList<UnseenInstallationInfo>::Walker walk(m_installations);
 			while(walk.IsValid()) {
@@ -986,12 +966,6 @@ void UnseenCell::Serialize(CivArchive &archive)
         m_installations = new PointerList<UnseenInstallationInfo>;
 		archive >> l;
 
-#if defined(ACTIVISION_ORIGINAL)
-// Removed by Martin Gühmann
-		for(i = 0; i < l; i++) {
-			m_installations->AddTail(new UnseenInstallationInfo(archive));
-		}
-#else
 // Added by Martin Gühmann
 		UnseenInstallationInfo* tmpUII;
 		bool vCityOwnerNotSet = true;
@@ -1011,7 +985,6 @@ void UnseenCell::Serialize(CivArchive &archive)
 		}
 		// Backwards compartibility: If this UnseenCell didn't have an m_visibleCityOwner
 		if(vCityOwnerNotSet) m_visibleCityOwner = g_theWorld->GetCell(m_point)->GetCityOwner().m_id;
-#endif
 
 		
 

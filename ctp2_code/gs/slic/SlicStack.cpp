@@ -94,26 +94,6 @@ SlicSymbolData *SlicStack::GetSymbol(SS_TYPE symType, SlicStackValue symVal)
 
 sint32 SlicStack::Eval(SS_TYPE type, SlicStackValue value)
 {
-#if defined(ACTIVISION_ORIGINAL)	// Unitialised & untested GetSymbol return.
-	SlicSymbolData *sym;
-	sint32 retval;
-
-	switch(type) {
-		case SS_TYPE_INT:
-			return value.m_int;
-		case SS_TYPE_VAR:
-			sym = g_slicEngine->GetSymbol(value.m_int);
-			sym->GetIntValue(retval);
-			return retval;
-		case SS_TYPE_SYM:
-			sym = value.m_sym;
-			sym->GetIntValue(retval);
-			return retval;
-		default:
-			Assert(FALSE);
-			return 0;
-	}
-#else
 	if (SS_TYPE_INT == type)
 	{
 		return value.m_int;
@@ -133,118 +113,29 @@ sint32 SlicStack::Eval(SS_TYPE type, SlicStackValue value)
 
 	Assert(FALSE);	// Or issue a SLIC error?
 	return 0;		// Questionable, but what else?
-#endif
 }
 
 BOOL SlicStack::GetUnit(SS_TYPE type, SlicStackValue symVal, Unit &u)
 {
-#if defined(ACTIVISION_ORIGINAL)	// Uninitialised: may CtD in default case.
-	SlicSymbolData *sym;
-
-	switch(type) {
-		case SS_TYPE_INT:
-			return FALSE;
-		case SS_TYPE_VAR:
-			sym = g_slicEngine->GetSymbol(symVal.m_int);
-			break;
-		case SS_TYPE_SYM:
-			sym = symVal.m_sym;
-			break;
-		default:
-			Assert(FALSE);
-			break;
-	}
-	if(sym) {
-		return sym->GetUnit(u);
-	}
-	return FALSE;
-#else
 	SlicSymbolData const *	sym = GetSymbol(type, symVal);
 	return (sym) ? sym->GetUnit(u) : FALSE;
-#endif
 }
 
 BOOL SlicStack::GetCity(SS_TYPE type, SlicStackValue symVal, Unit &city)
 {
-#if defined(ACTIVISION_ORIGINAL)	// Uninitialised: may CtD in default case.
-	SlicSymbolData *sym;
-
-	switch(type) {
-		case SS_TYPE_INT:
-			return FALSE;
-		case SS_TYPE_VAR:
-			sym = g_slicEngine->GetSymbol(symVal.m_int);
-			break;
-		case SS_TYPE_SYM:
-			sym = symVal.m_sym;
-			break;
-		default:
-			Assert(FALSE);
-			break;
-	}
-	if(sym) {
-		return sym->GetCity(city);
-	}
-	return FALSE;
-#else
 	SlicSymbolData const *	sym = GetSymbol(type, symVal);
 	return (sym) ? sym->GetCity(city) : FALSE;
-#endif
 }
 
 
 BOOL SlicStack::GetPos(SS_TYPE type, SlicStackValue symVal, MapPoint &pos)
 {
-#if defined(ACTIVISION_ORIGINAL)	// Uninitialised: may CtD in default case.
-	SlicSymbolData *sym;
-
-	switch(type) {
-		case SS_TYPE_INT:
-			return FALSE;
-		case SS_TYPE_VAR:
-			sym = g_slicEngine->GetSymbol(symVal.m_int);
-			break;
-		case SS_TYPE_SYM:
-			sym = symVal.m_sym;
-			break;
-		default:
-			Assert(FALSE);
-			break;
-	}
-	if(sym) {
-		return sym->GetPos(pos);
-	}
-	return FALSE;
-#else
 	SlicSymbolData const *	sym = GetSymbol(type, symVal);
 	return (sym) ? sym->GetPos(pos) : FALSE;
-#endif
 }
 
 BOOL SlicStack::GetArmy(SS_TYPE type, SlicStackValue symVal, Army &a)
 {
-#if defined(ACTIVISION_ORIGINAL)	// Uninitialised: may CtD in default case.
-	SlicSymbolData *sym;
-
-	switch(type) {
-		case SS_TYPE_INT:
-			return FALSE;
-		case SS_TYPE_VAR:
-			sym = g_slicEngine->GetSymbol(symVal.m_int);
-			break;
-		case SS_TYPE_SYM:
-			sym = symVal.m_sym;
-			break;
-		default:
-			Assert(FALSE);
-			break;
-	}
-	if(sym) {
-		return sym->GetArmy(a);
-	}
-	return FALSE;
-#else
 	SlicSymbolData const *	sym = GetSymbol(type, symVal);
 	return (sym) ? sym->GetArmy(a) : FALSE;
-#endif
 }

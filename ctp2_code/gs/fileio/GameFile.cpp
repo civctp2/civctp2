@@ -149,11 +149,7 @@ extern PointerList<Player> *g_deadPlayer;
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-#define k_GAME_MAGIC_VALUE		"CTP0065"
-#else
 #define k_GAME_MAGIC_VALUE		"CTP0066"
-#endif
 
 
 
@@ -166,11 +162,7 @@ struct MagicValue {
 	sint32 version;
 };
 
-#if defined(ACTIVISION_ORIGINAL)
-#define k_NUM_MAGIC_VALUES 17
-#else
 #define k_NUM_MAGIC_VALUES 18
-#endif
 MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
 	{ "CTP0049", 49 },
     { "CTP0050", 50},
@@ -189,9 +181,7 @@ MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
     { "CTP0063", 63},
     { "CTP0064", 64},
     { "CTP0065", 65},
-#if !defined(ACTIVISION_ORIGINAL)
 	{ "CTP0066", 66}
-#endif
 };
 
 sint32 gamefile_CurrentVersion() 
@@ -1983,17 +1973,11 @@ void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 	if(!g_isScenario) {
 		g_theProfileDB->SetGameName(info->gameName);
 	} else {
-#if defined(ACTIVISION_ORIGINAL)	// size does not match
-		MBCHAR name[6];
-		strncpy(name, g_theProfileDB->GetLeaderName(), 5);
-		name[5] = 0;
-#else
 		size_t const	SAVE_LEADER_NAME_SIZE	= 6;
 		MBCHAR	name[SAVE_LEADER_NAME_SIZE + 1];
 		strncpy(name, g_theProfileDB->GetLeaderName(), SAVE_LEADER_NAME_SIZE);
 		name[SAVE_LEADER_NAME_SIZE] = 0;
 		// TODO: check if this is OK for japanese.
-#endif
 		g_theProfileDB->SetGameName(name);
 	}
 
@@ -2056,13 +2040,11 @@ void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 		g_soundManager->DisableMusic();
 
 	if(g_saveFileVersion >= 42) {
-#if !defined(ACTIVISION_ORIGINAL)
         if(!info->isScenario){// exclude starting new scenarios
             if (info->scenarioName != NULL && strlen(info->scenarioName) > 0) {//same as in beginloadprocess
 		        strcpy(g_scenarioName,info->scenarioName);
 			}
 		}
-#endif
 		g_isScenario = info->isScenario;
 		g_startInfoType = info->startInfoType;
 	} else {
@@ -2465,14 +2447,12 @@ SaveInfo::SaveInfo(SaveInfo *copyMe)
 		memcpy(powerGraphData, copyMe->powerGraphData, numBytes);
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)
 	if (copyMe->scenarioName)
 	{
 		size_t const	sizeHeap	= strlen(copyMe->scenarioName) + 1;
 		scenarioName				= new MBCHAR[sizeHeap];
 		memcpy(scenarioName, copyMe->scenarioName, sizeHeap);
 	}
-#endif
 }
 
 //----------------------------------------------------------------------------
@@ -2494,17 +2474,9 @@ SaveInfo::SaveInfo(SaveInfo *copyMe)
 //----------------------------------------------------------------------------
 SaveInfo::~SaveInfo()
 {
-#if defined(ACTIVISION_ORIGINAL)	// memory leak, they forgot scenarioName
-	if (radarMapData)
-		delete[] radarMapData;
-
-	if (powerGraphData)
-		delete[] powerGraphData;
-#else	// ACTIVISION_ORIGINAL
 	delete [] powerGraphData;
 	delete [] radarMapData;
 	delete [] scenarioName;
-#endif	// ACTIVISION_ORIGINAL
 }
 
 //----------------------------------------------------------------------------
@@ -2521,9 +2493,7 @@ GameInfo::~GameInfo()
 	if (files) {
 		files->DeleteAll();
 	}
-#if !defined(ACTIVISION_ORIGINAL)
 	delete files;
-#endif
 }
 
 

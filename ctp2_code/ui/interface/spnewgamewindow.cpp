@@ -313,14 +313,9 @@ void SPNewGameWindow::Update( void )
 
 	
 	index = g_theProfileDB->GetDifficulty();
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	sprintf( s, m_string->GetString(SP_NEWGAME_STR_CHIEFTAIN + index) );
-#else
 //Added by Martin Gühmann
 //Makes sure that the game doesn't crash if the according map size string is invalid.
 	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_CHIEFTAIN + index) );
-#endif
 	m_spDifficulty->SetText( s );
 
 	
@@ -355,26 +350,16 @@ void SPNewGameWindow::Update( void )
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	sprintf( s, m_string->GetString(SP_NEWGAME_STR_SMALL + index) );
-#else
 //Added by Martin Gühmann
 //Makes sure that the game doesn't crash if the according map size string is invalid.
 	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_SMALL + index) );
-#endif
 	m_spMapSize->SetText( s );
 
 	
 	sint32 shape = g_theProfileDB->GetWorldShape();
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-	sprintf( s, m_string->GetString(SP_NEWGAME_STR_EARTH + shape) );
-#else
 //Added by Martin Gühmann
 //Makes sure that the game doesn't crash if the according world shape string is invalid.
 	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_EARTH + shape) );
-#endif
 	m_worldShapeButton->SetText( s );
 
 

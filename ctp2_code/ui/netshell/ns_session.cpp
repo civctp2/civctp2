@@ -36,15 +36,6 @@
 
 
 
-#if defined(ACTIVISION_ORIGINAL)
-int ns_Session::count = 4;
-ns_Session::Struct ns_Session::list[] = {
-	{ICON,		(Data)&m_locked},
-	{ICON,		(Data)&m_closed},
-	{STRING,	(Data)&m_name},
-	{INT,		(Data)&m_players}
-};
-#else
 ns_Session::ns_Session(NETFunc::Session * session) 
 :	ns_Object<NETFunc::Session, ns_Session>(session) 
 {
@@ -53,7 +44,6 @@ ns_Session::ns_Session(NETFunc::Session * session)
 	list.push_back(Struct(STRING,	&m_name));
 	list.push_back(Struct(INT,		&m_players));
 };
-#endif
 
 void ns_Session::Update( NETFunc::Session *session ) {
 	SetMine(session->IsCurrentSession());

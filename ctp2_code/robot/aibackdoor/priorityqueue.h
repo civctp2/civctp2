@@ -154,10 +154,8 @@ template <class T> void DAPriorityQueue<T>::ShiftUp(const sint32 start_idx)
 		if (*pCur < *pParent) {
 			
 			
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
 			pCur->SetPriorityQueueIndex(parent_idx);
 			pParent->SetPriorityQueueIndex(current_idx);
-#endif
 			m_queue[current_idx] = pParent;
 			m_queue[parent_idx] = pCur;
 			current_idx = parent_idx;
@@ -200,10 +198,8 @@ template <class T> void DAPriorityQueue<T>::ShiftDown(const sint32 start_idx)
         if (*swap_me_ptr < *current_ptr) { 
             m_queue[current_idx] = swap_me_ptr;
             m_queue[swap_me] = current_ptr; 
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
             current_ptr->SetPriorityQueueIndex(swap_me); 
             swap_me_ptr->SetPriorityQueueIndex(current_idx); 
-#endif
             current_idx = swap_me;
         } else { 
             return; 
@@ -219,10 +215,8 @@ template <class T> void DAPriorityQueue<T>::Swap(const sint32 a, const sint32 b)
     m_queue[a] = m_queue[b];
     m_queue[b] = tmp_ptr; 
 
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
     m_queue[a]->SetPriorityQueueIndex(a); 
     m_queue[b]->SetPriorityQueueIndex(b); 
-#endif
 }
 
 
@@ -237,9 +231,7 @@ template <class T> void DAPriorityQueue<T>::Insert(T *add_me)
 
     Assert(add_me->GetPriorityQueueIndex() < 0); 
     m_queue.InsertFlat(add_me); 
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
 	add_me->SetPriorityQueueIndex(new_idx); 
-#endif
 
     ShiftUp(new_idx); 
 }
@@ -247,15 +239,6 @@ template <class T> void DAPriorityQueue<T>::Insert(T *add_me)
 template <class T> T* DAPriorityQueue<T>::Remove(sint32 del_idx)
 
 {
-#if defined(ACTIVISION_ORIGINAL)
-    if (del_idx < 1)  { 
-        Assert(0); 
-        return NULL; 
-    } else if (m_queue.Num() <= del_idx) { 
-        Assert(0); 
-        return NULL; 
-    } 
-#else
 	if ((del_idx < 0) || 
 	    (del_idx >= m_queue.Num()) ||
 		(m_queue[del_idx] == NULL)
@@ -265,41 +248,28 @@ template <class T> T* DAPriorityQueue<T>::Remove(sint32 del_idx)
 		Assert(0);
 		return NULL;
 	}
-#endif
 
     T* ret = m_queue[del_idx];
 
-#if defined(ACTIVISION_ORIGINAL)
-    if (NULL == ret) {
-        Assert(0); 
-        return NULL; 
-    } 
-#endif
 
     sint32 n = m_queue.Num()-1; 
 
     if (n == del_idx) { 
     
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
         m_queue[n]->SetPriorityQueueIndex(-1); 
 		Assert(ret->GetPriorityQueueIndex() < 0); 
-#endif
         m_queue[n] = NULL; 
         m_queue.ShortenByOne();
 #ifdef _DEBUG
 		Assert(ret->GetPriorityQueueIndex() < 0); 
 #endif
     } else { 
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
         ret->SetPriorityQueueIndex(-1); 
-#endif
 		Assert(ret->GetPriorityQueueIndex() < 0); 
 		Assert(m_queue[del_idx] != m_queue[n]);
 
         m_queue[del_idx] = m_queue[n]; 
-#if !defined(ACTIVISION_ORIGINAL) || defined(_DEBUG)
         m_queue[del_idx]->SetPriorityQueueIndex(del_idx); 
-#endif
         m_queue[n] = NULL; 
 		Assert(ret->GetPriorityQueueIndex() < 0); 
         m_queue.ShortenByOne(); 

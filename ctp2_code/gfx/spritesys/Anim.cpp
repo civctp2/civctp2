@@ -68,19 +68,12 @@ Anim::~Anim()
 	if(m_specialCopyDelete == ANIMXEROX_ORIGINAL)
 	{
 		
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-		if (m_frames) delete m_frames;
-		if (m_moveDeltas) delete m_moveDeltas;
-		if (m_transparencies) delete m_transparencies;
-#else
 //Added by Martin Gühmann
 		//These fields are initialized with new[] therefore use
 		//delete[] to delete them.
 		if (m_frames) delete[] m_frames;
 		if (m_moveDeltas) delete[] m_moveDeltas;
 		if (m_transparencies) delete[] m_transparencies;
-#endif
 	}
 }
 

@@ -288,10 +288,8 @@ void loadsavescreen_HotseatCallback(sint32 launch, sint32 player,
 		
 		g_hsPlayerSetup[player].civ = civ;
 		g_hsPlayerSetup[player].isHuman = human;
-#if !defined(ACTIVISION_ORIGINAL)	// possible memory leak
 		delete [] g_hsPlayerSetup[player].name;
 		delete [] g_hsPlayerSetup[player].email;
-#endif
 		g_hsPlayerSetup[player].name = new MBCHAR[strlen(name) + 1];
 		strcpy(g_hsPlayerSetup[player].name, name);
 		g_hsPlayerSetup[player].email = new MBCHAR[strlen(email) + 1];
@@ -756,9 +754,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		
 		
 		strcpy(s_tempPath, path);
-#if !defined(ACTIVISION_ORIGINAL)	// possible memory leak
 		delete s_tempSaveInfo;
-#endif
 		s_tempSaveInfo = new SaveInfo(saveInfo);
 
 		if(g_e3Demo) {
@@ -852,11 +848,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		g_useCustomYear = false;
 		if (g_pTurnLengthOverride)
 		{
-#if defined(ACTIVISION_ORIGINAL)	// wrong delete
-			delete g_pTurnLengthOverride;
-#else
 			delete [] g_pTurnLengthOverride;
-#endif
 			g_pTurnLengthOverride = NULL;
 		}
 	}

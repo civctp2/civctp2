@@ -34,9 +34,7 @@
 
 #include "CreditsScreen.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
 #include <algorithm>	// std::fill
-#endif
 
 #include "aui_action.h"
 #include "aui_uniqueid.h"
@@ -216,35 +214,6 @@ sint32 creditsscreen_Cleanup()
 class c3_SimpleAnimation : public aui_Static {
 public:
 
-#if defined(ACTIVISION_ORIGINAL)	// possible ambiguities	
-	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
-		aui_Static(retval, id, ldlBlock),
-		aui_ImageBase( ldlBlock, true ),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
-		{ 	
-			
-			m_frames = NULL;
-			m_currentFrame = 0;
-			m_animationSpeed = 100;
-			lastIdle = GetTickCount();
-			InitCommonLdl(ldlBlock);
-		}
-	
-	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
-		const MBCHAR *text = NULL, uint32 maxLength = 0 ) :
-		aui_Static(retval, id, x, y, width, height, text, maxLength),
-		aui_ImageBase( (sint32)0, AUI_IMAGEBASE_BLTTYPE_COPY, AUI_IMAGEBASE_BLTFLAG_COPY, true),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
-		{
-			
-			m_frames = NULL;
-			m_currentFrame = 0;
-			m_animationSpeed = 100;
-			lastIdle = GetTickCount();
-		}
-
-	virtual ~c3_SimpleAnimation() { if(m_frames) delete m_frames; }
-#else
 	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) 
 	:	aui_Static(retval, id, ldlBlock),
 		m_frames(NULL),
@@ -269,7 +238,6 @@ public:
 	{ 
 		delete m_frames; 
 	};
-#endif
 	
 
 	
@@ -278,15 +246,11 @@ public:
 
 protected:
 
-#if defined(ACTIVISION_ORIGINAL)	
-	c3_SimpleAnimation() : aui_Static() {}
-#else
 	c3_SimpleAnimation()
 	:	aui_Static(),
 		m_frames(NULL)
 	{
 	};
-#endif
 
 	
 	void InitCommonLdl(MBCHAR *ldlBlock);
@@ -404,39 +368,6 @@ class c3_TriggeredAnimation : public aui_Static {
 public:
 
 	
-#if defined(ACTIVISION_ORIGINAL)	// possible ambiguities	
-	c3_TriggeredAnimation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
-		aui_Static(retval, id, ldlBlock),
-		aui_ImageBase( ldlBlock, true ),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
-		{ 	
-			
-			m_frames = NULL;
-			m_currentFrame = 0;
-			m_blendSpeed = 100;
-			m_blendVal = k_C3_ANIMATION_MAXBLEND;
-			lastIdle = GetTickCount();
-			InitCommonLdl(ldlBlock);
-		}
-
-	
-	c3_TriggeredAnimation(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
-		const MBCHAR *text = NULL, uint32 maxLength = 0 ) :
-		aui_Static(retval, id, x, y, width, height, text, maxLength),
-		aui_ImageBase( (sint32)0, AUI_IMAGEBASE_BLTTYPE_COPY, AUI_IMAGEBASE_BLTFLAG_COPY, true),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
-		{
-			
-			m_frames = NULL;
-			m_currentFrame = 0;
-			m_blendSpeed = 100;
-			m_blendVal = k_C3_ANIMATION_MAXBLEND;
-			lastIdle = GetTickCount();
-		}
-
-	
-	virtual ~c3_TriggeredAnimation() { if(m_frames) delete m_frames; }
-#else
 	c3_TriggeredAnimation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) 
 	:	aui_Static(retval, id, ldlBlock),
 		m_frames(NULL),
@@ -463,7 +394,6 @@ public:
 	{ 
 		delete m_frames; 
 	};
-#endif
 	
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL, sint32 x = 0, sint32 y = 0);
 
@@ -481,15 +411,11 @@ public:
 protected:
 
 	
-#if defined(ACTIVISION_ORIGINAL)	
-	c3_TriggeredAnimation() : aui_Static() {}
-#else
 	c3_TriggeredAnimation()
 	:	aui_Static(),
 		m_frames(NULL)
 	{
 	};
-#endif
 
 	
 	virtual AUI_ERRCODE DrawBlendImage(aui_Surface *destSurf, RECT *destRect);
@@ -816,75 +742,6 @@ public:
 	void Draw(aui_Surface *surface);
 	void ResetPages();
 
-#if defined(ACTIVISION_ORIGINAL)	
-	c3_CreditsText(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
-		aui_Static(retval, id, ldlBlock),
-		aui_ImageBase( ldlBlock, true ),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
-		{ 	
-			m_numPages = 0;
-			m_pPages = NULL;
-			m_pCurrPage = NULL;
-			for (int i = 0; i < kCreditsTextNumFonts; i++)
-			{
-				m_fonts[i] = NULL;
-			}
-
-			m_numFonts = 0;
-
-			m_definingFont = FALSE;
-			m_currFontNumber = 0;
-			m_currFontSize = 0;
-
-			
-
-			
-			aui_Ldl *theLdl = g_c3ui->GetLdl();
-
-			
-			BOOL valid = theLdl->IsValid( ldlBlock );
-			Assert(valid);
-			if(!valid) return;
-
-			
-			ldl_datablock *datablock = theLdl->GetLdl()->FindDataBlock( ldlBlock );
-			Assert(datablock != NULL);
-			if(!datablock) return;
-
-			
-			m_animationSpeed			= datablock->GetInt(k_C3_ANIMATION_SPEED);
-
-			m_lastIdle = GetTickCount();
-
-			InitCommonLdl(ldlBlock);
-		};
-
-
-	
-	c3_CreditsText(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
-		const MBCHAR *text = NULL, uint32 maxLength = 0 ) :
-		aui_Static(retval, id, x, y, width, height, text, maxLength),
-		aui_ImageBase( (sint32)0, AUI_IMAGEBASE_BLTTYPE_COPY, AUI_IMAGEBASE_BLTFLAG_COPY, true),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
-		{
-			m_numPages = 0;
-			m_pPages = NULL;
-			m_pCurrPage = NULL;
-			for (int i = 0; i < kCreditsTextNumFonts; i++)
-			{
-				m_fonts[i] = NULL;
-			}
-			m_numFonts = 0;
-
-			m_definingFont = FALSE;
-			m_currFontNumber = 0;
-			m_currFontSize = 0;
-
-			m_animationSpeed = 3000;
-			m_lastIdle = GetTickCount();
-
-		}
-#else
 	c3_CreditsText
 	(
 		AUI_ERRCODE *	retval, 
@@ -941,7 +798,6 @@ public:
 		std::fill(m_fonts, m_fonts + kCreditsTextNumFonts, (aui_BitmapFont *) NULL);
 	};
 
-#endif
 
 	virtual ~c3_CreditsText(void)
 	{

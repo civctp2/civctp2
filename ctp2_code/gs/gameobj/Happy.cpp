@@ -216,14 +216,7 @@ double Happy::CalcBase(Player *p)
 double Happy::CalcSize(CityData &cd, Player *p)
 
 {  
-#if defined(ACTIVISION_ORIGINAL)	
-    m_size = p->GetBigCityScale() * 
-        min (p->GetBigCityOffset() - 
-			 0  - 
-			 0 , 0);
-#else
 	m_size	= p->GetBigCityScale() * std::min(p->GetBigCityOffset(), 0.0);
-#endif
 	m_tracker->SetHappiness(HAPPY_REASON_CITY_SIZE, m_size);
     return m_size; 
 }
@@ -715,15 +708,6 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
     
     
     
-#if defined(ACTIVISION_ORIGINAL)    
-    sint32 mlt = p->GetMartialLawThreshold();
-    double new_happiness; 
-    if (m_happiness < mlt) { 
-       
-        new_happiness = min(CalcMartialLaw(cd, p) + m_happiness,  mlt); 
-        delta_martial_law = sint32 (new_happiness - m_happiness + 0.5); 
-        m_happiness = new_happiness; 
-#else
     double const		mlt = static_cast<double>(p->GetMartialLawThreshold());
     if (m_happiness < mlt) 
 	{ 
@@ -732,7 +716,6 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
         delta_martial_law = sint32 (new_happiness - m_happiness + 0.5); 
         m_happiness = new_happiness; 
 
-#endif
     } else { 
         delta_martial_law = 0; 
     } 
@@ -826,22 +809,12 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
     
     
     
-#if defined(ACTIVISION_ORIGINAL)    
-    sint32 mlt = p->GetMartialLawThreshold();
-    double new_happiness; 
-    if (local_happiness < mlt) { 
-
-        new_happiness = min(CalcMartialLaw(cd, p) + local_happiness,  mlt); 
-        local_happiness = new_happiness; 
-    } 
-#else
 	double const	mlt	= static_cast<double>(p->GetMartialLawThreshold());
 	if (local_happiness < mlt)
 	{
 		local_happiness	= 
 			std::min(CalcMartialLaw(cd, p) + local_happiness, mlt);
 	}
-#endif
     
     local_happiness += 
         CalcImprovementContentment(cd, p) +  

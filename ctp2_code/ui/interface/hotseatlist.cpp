@@ -233,32 +233,6 @@ sint32 HotseatList::Initialize( MBCHAR *windowBlock )
 	return 0;
 }
 
-#if defined(ACTIVISION_ORIGINAL)	// m_list not cleared
-HotseatList::~HotseatList( void )
-{
-	Cleanup();
-}
-
-sint32 HotseatList::Cleanup( void )
-{
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-
-	g_c3ui->RemoveWindow( m_window->Id() );
-
-
-	mycleanup( m_list );
-	
-	m_callback = NULL;
-
-	delete m_window;
-	m_window = NULL;
-
-	return 0 ;
-
-#undef mycleanup
-}
-
-#else	// ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 //
@@ -292,7 +266,6 @@ HotseatList::~HotseatList()
 	delete m_window;
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 void HotseatList::DisplayWindow( void )
 {

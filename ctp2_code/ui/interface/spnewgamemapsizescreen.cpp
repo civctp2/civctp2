@@ -264,35 +264,6 @@ AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallbac
 }
 
 
-#if defined(ACTIVISION_ORIGINAL)	// Incomplete cleanup
-
-AUI_ERRCODE spnewgamemapsizescreen_Cleanup()
-{
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-
-	if ( !s_spNewGameMapSizeScreen  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( s_spNewGameMapSizeScreen->Id() );
-	keypress_RemoveHandler(s_spNewGameMapSizeScreen);
-
-	for (sint32 i = 0;i < k_NUM_MAPSIZEBOXES;i++ ) {
-		mycleanup( s_checkBox[i] );
-	}
-
-	mycleanup( s_group );
-
-
-
-
-	delete s_spNewGameMapSizeScreen;
-	s_spNewGameMapSizeScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
-}
-
-#else	// ACTIVISION_ORIGINAL
 //----------------------------------------------------------------------------
 //
 // Name       : spnewgamemapsizescreen_Cleanup
@@ -335,7 +306,6 @@ AUI_ERRCODE spnewgamemapsizescreen_Cleanup()
 	return AUI_ERRCODE_OK;
 }
 
-#endif	// ACTIVISION_ORIGINAL
 
 
 void spnewgamemapsizescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )

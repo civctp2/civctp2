@@ -36,14 +36,6 @@
 #ifndef __AUI_ACTION_H__
 #define __AUI_ACTION_H__
 
-#if defined(ACTIVISION_ORIGINAL)
-
-#include "aui_base.h"
-
-
-class aui_Control;
-
-#else // ACTIVISION_ORIGINAL
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -69,7 +61,6 @@ class aui_Action;
 // Class declarations
 //----------------------------------------------------------------------------
 
-#endif // ACTIVISION_ORIGINAL
 
 
 class aui_Action : public aui_Base
