@@ -1,9 +1,33 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Army event handlers
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Do not generate an Assert popup when slaves revolt and take over a city.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -1028,9 +1052,16 @@ STDEHANDLER(AftermathEvent)
 			army[i].ClearFlag(k_UDF_WAS_TOP_UNIT_BEFORE_BATTLE);
 			army[i].SetFlag(k_UDF_FIRST_MOVE);
 		}
+#if defined(ACTIVISION_ORIGINAL)
 		MapPoint apos;
 		army.GetPos(apos);
 		WORLD_DIRECTION d = apos.GetNeighborDirection(pos);
+#else
+		// The above piece of code doesn't do anything, except for filling 2 
+		// unused variables and triggering an Assert popup when slaves revolt
+		// and win the ensuing battle. The slave army does not move in from a 
+		// neighbouring tile, but starts the fight from within the city.
+#endif
 		g_director->IncrementPendingGameActions();
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_VictoryMoveOrder,
 							   GEA_Army, army,

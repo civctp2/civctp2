@@ -1,27 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Consider other tile improvements when there is no fitting one for the 
+//   preferred type.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -1202,15 +1209,25 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal & goal) const
 		goal.type = terrainutil_GetTerraformPlainsImprovement();
 		goal.utility = 9999.0;
 	}
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	else if ( terr_food_rank > 0.2 &&
 		 terr_prod_rank < 1.0 ) 
 		{
 			
 			if (best_growth_improvement < 0)
 				return false;
-
-			
+#else
+	// Forest (10 food, only 5 production) appears to trigger the condition,
+	// but does not have a growth improvement. Instead of just returning false,
+	// continue checking other improvement types. This should enable the AI to 
+	// build trading posts and other gold improvements on forest tiles.
+	else if ((terr_food_rank > 0.2) &&
+		     (terr_prod_rank < 1.0) &&
+			 (best_growth_improvement >= 0)
+            )
+		{
+#endif
+		
 			goal.type = best_growth_improvement;
 			
 			
@@ -1232,13 +1249,18 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal & goal) const
 					goal.utility += bonus;
 				}
 		}
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	else if ( terr_prod_rank > 0.2 ) 
 		{
 			
 			if (best_production_improvement < 0)
 				return false;
-
+#else
+	else if ((terr_prod_rank > 0.2) && 
+		     (best_production_improvement >= 0)
+            )
+		{
+#endif
 			
 			goal.type = best_production_improvement;
 			
@@ -1261,20 +1283,24 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal & goal) const
 					goal.utility += bonus;
 				}
 		}
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	else if ( gold_rank > 0.4 ) 
 		{
 			
 			if (best_gold_improvement < 0)
 				return false;
+#else
+	else if ((gold_rank > 0.4) &&
+		     (best_gold_improvement >= 0)
+            )
+		{
+#endif
 
-			
 			goal.type = best_gold_improvement;
 			
 			
 			strategy.GetImproveProductionBonus(bonus);
 			goal.utility =  bonus * terr_gold_rank;
-			
 			
 			if ( production_rank > 0.8 )
 				{

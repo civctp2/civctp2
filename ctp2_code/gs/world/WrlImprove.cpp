@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handling of tile improvements
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - GetShield calls replaced with GetFood calls in the food functions.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "XY_Coordinates.h"
@@ -75,9 +96,16 @@ sint32 World::GetMaxFoodFromTerrain()
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
+#if defined(ACTIVISION_ORIGINAL)
 		food = rec->GetEnvBase()->GetShield();
 		if (rec->GetEnvRiver())
 			food += rec->GetEnvRiverPtr()->GetShield();
+#else
+		food = rec->GetEnvBase()->GetFood();
+		if (rec->GetEnvRiver())
+			food += rec->GetEnvRiverPtr()->GetFood();
+
+#endif
 		if (food > max_food)
 			max_food = food;
 	}
@@ -117,9 +145,16 @@ sint32 World::GetAvgFoodFromTerrain()
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
+#if defined(ACTIVISION_ORIGINAL)
 		food = rec->GetEnvBase()->GetShield();
 		if (rec->GetEnvRiver())
 			food += rec->GetEnvRiverPtr()->GetShield();
+#else
+		food = rec->GetEnvBase()->GetFood();
+		if (rec->GetEnvRiver())
+			food += rec->GetEnvRiverPtr()->GetFood();
+
+#endif
 		avg_food += food;
 	}
 	avg_food /= g_theTerrainDB->NumRecords();
