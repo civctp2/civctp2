@@ -28,7 +28,8 @@
 // - Minor modification of the Diplomat::StartNegotiations function 
 //   by Peter Triggs to enable some minor AI-AI-Diplomacy.
 // - Corrected bug in list insertion.
-// - Corrected non-standard syntax and some compiler warnings.  
+// - Corrected non-standard syntax and some compiler warnings.
+// - Prevented invalid strategies to be merged in.  
 //
 //----------------------------------------------------------------------------
 
@@ -338,8 +339,11 @@ void Diplomat::Load(CivArchive & archive)
 	archive.Load((uint8 *)str, count);
 	str[count] = '\0';
 	SetPersonalityName(str);
+#if defined(ACTIVISION_ORIGINAL)	// incorrect delete
 	delete str;
-
+#else
+	delete [] str;
+#endif
 	 
 	archive >> count;
 	for (i = 0; i < count; i++)
@@ -3724,8 +3728,14 @@ void Diplomat::NextStrategicState() {
 
 
 void Diplomat::ConsiderStrategicState( const AiState & state ) {
-	
-	
+#if !defined(ACTIVISION_ORIGINAL)
+	if (state.dbIndex < 0) 
+	{
+		// Nothing to merge. This may happen with the new strategy definition
+		// when there are no nukes yet.
+		return;
+	}
+#endif	
 
 	AiStateList::iterator ai_state_iter = 
 		m_bestStrategicStates.begin();

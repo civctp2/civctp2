@@ -35,7 +35,10 @@
 //
 // - Changed the > operator (used by Goal::IsSatisfied method)
 //   Original method only test attack or defense param.
-//   New methode take the sum of all strength (attack, defense, ranged,...) - Calvitix
+//   New methode take the sum of all strength (attack, defense, ranged,...)
+//   by Calvitix.
+// - Handled problem with invalid units.
+// 
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -46,6 +49,7 @@
 #include "World.h"
 #include "UnitRecord.h"
 #include "DebugAssert.h"
+
 Squad_Strength::Squad_Strength()
 {
 	Init();
@@ -211,7 +215,7 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 	if (army == NULL)
 	{
 		Init();
-		m_agent_count = 1;
+		m_agent_count = 1;	// why not 0 ??? 
 		return;
 	}
 
@@ -230,12 +234,31 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 	
 	m_value = 0.0;
 	m_transport = 0;
+#if defined(ACTIVISION_ORIGINAL)	// crash on invalid unit
 	for (int i = 0; i < army->Num(); i++)
 	{
 		
         m_value += army->Get(i).GetDBRec()->GetShieldCost();
 		m_transport += ( army->Get(i).GetCargoCapacity() - army->Get(i).GetNumCarried() );
 	} 
+#else
+	for (int i = m_agent_count; i > 0; --i)
+	{
+		Unit const &	unit	= army->Get(i - 1);
+		
+		if (unit.IsValid())
+		{
+			m_value		+= unit.GetDBRec()->GetShieldCost();
+			m_transport	+= (unit.GetCargoCapacity() - unit.GetNumCarried());
+		}
+		else
+		{
+			// Remove the invalid unit
+			army->DelIndex(i - 1);
+			--m_agent_count;
+		}
+	}
+#endif
 }
 
 
