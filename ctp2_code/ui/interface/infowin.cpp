@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Do not trigger disaster warnings when there is no pollution at all.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -1500,7 +1521,9 @@ sint32 infowin_UpdatePollutionData( void )
 	}
 
 	
+
 	sint32 turnsLeft = g_thePollution->GetRoundsToNextDisaster();
+#if defined(ACTIVISION_ORIGINAL)
 	if (turnsLeft < 0) strcpy(strbuf,"-");
 	else sprintf(strbuf,"%d",turnsLeft);
 	s_pollutionBox->SetText(strbuf);
@@ -1512,8 +1535,28 @@ sint32 infowin_UpdatePollutionData( void )
 	double percent = 100 * (val0 / val1);
 	if(turnsLeft < 0)
 		percent = 0;
-	
+
 	s_pollutionTherm->SetPercentFilled((sint32)percent);
+#else	// ACTIVISION_ORIGINAL
+	sint32 percent;
+
+	if ((turnsLeft < 0) || (turnsLeft >= Pollution::ROUNDS_COUNT_IMMEASURABLE))
+	{
+		strcpy(strbuf, "-");
+		percent	= 0;
+	}
+	else
+	{
+		sprintf(strbuf, "%d", turnsLeft);
+		double const	val0 = g_thePollution->GetGlobalPollutionLevel();
+		double const	val1 = g_thePollution->GetNextTrigger();
+		percent	= 100 * (val0 / val1);
+	}
+
+	s_pollutionBox->SetText(strbuf);
+	s_pollutionTherm->SetPercentFilled(percent);
+#endif	// ACTIVISION_ORIGINAL
+	
 
 	return 0;
 }

@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Pollution handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Do not trigger disaster warnings when there is no pollution at all.
+//
+//----------------------------------------------------------------------------
 
 #include "c3debug.h"
 #include "c3.h"
@@ -45,14 +64,9 @@
 	extern	PollutionDatabase	*g_thePollutionDB ;
 
 
-
-
-
-
-
-
-
-
+#if !defined(ACTIVISION_ORIGINAL)
+sint32 const	Pollution::ROUNDS_COUNT_IMMEASURABLE	= 9999;
+#endif
 
 
 Pollution::Pollution()
@@ -521,15 +535,7 @@ sint32 Pollution::GetTrend(void) const
 
 
 
-
-
-
-
-
-
-
-
-
+#if defined(ACTIVISION_ORIGINAL)
 
 sint32 Pollution::GetRoundsToNextDisaster(void)
 {
@@ -578,6 +584,57 @@ sint32 Pollution::GetRoundsToNextDisaster(void)
 	}
 	return (r) ;
 }
+
+#else	// ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+//
+// Name       : Pollution::GetRoundsToNextDisaster
+//
+// Description: Estimate number of turns to next disaster.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32			: estimated number of turns to next disaster
+//
+// Remark(s)  : Will return ROUNDS_COUNT_INMEASURABLE when there is no 
+//              pollution at all.
+//
+//				m_history[0]	: pollution level this turn
+//				m_history[1]	: pollution level previous turn
+//
+//----------------------------------------------------------------------------
+
+sint32 Pollution::GetRoundsToNextDisaster(void)
+{
+	// Check if there has been any pollution at all in this turn.
+	if ((m_history[0] <= 0) || (m_history[0] <= m_history[1]))
+	{
+		return ROUNDS_COUNT_IMMEASURABLE;
+	}
+
+	// Check for a pollution suppressing wonder built by some player.
+	for (int i = 0; i < k_MAX_PLAYERS; ++i)
+	{
+		
+		if (g_player[i] && 
+			wonderutil_GetReduceWorldPollution(g_player[i]->GetBuiltWonders())
+		   )
+		{
+			return ROUNDS_COUNT_IMMEASURABLE;
+		}
+	}
+
+	// Estimate the number of turns until the next disaster.
+	sint32 const pollutionDeltaPerTurn	= m_history[0] - m_history[1];
+	sint32 const pollutionUntilTrigger	= 
+		g_thePollutionDB->GetTrigger(g_theProfileDB->GetMapSize(), m_phase) - m_history[0];
+	return pollutionUntilTrigger / pollutionDeltaPerTurn;
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 void pollution_NukeCell(MapPoint &pos, Cell *cell)
 {

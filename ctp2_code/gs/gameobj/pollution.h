@@ -1,16 +1,48 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Microsoft C++ extensions marked for future GCC compilation.
+// - Do not trigger disaster warnings when there is no pollution at all.
+//
+//----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
 
 #ifndef __POLLUTION_H__
 #define __POLLUTION_H__
@@ -26,7 +58,10 @@ class MapPoint;
 #define k_TREND_DOWNWARD	-1
 #define k_TREND_UPWARD		1
 #define k_TREND_LEVEL		0
-#define k_ROUNDS_BEFORE_DISASTER 10
+
+// A warning is triggered when the estimated number of rounds until disaster is 
+// less than this number.
+#define k_ROUNDS_BEFORE_DISASTER 10		
 
 class Pollution
 	{ 
@@ -50,16 +85,13 @@ public:
 
 	sint32	m_next_level ;											
 
-
-	
-	
-
-	
-	
-	
-	
-	
-
+#if !defined(ACTIVISION_ORIGINAL)
+	// An arbitrary (large) number that will be returned by GetRoundsToNextDisaster
+	// when there is no pollution at all.
+	// It should be larger than k_ROUNDS_BEFORE_DISASTER, and larger than the values
+	// that appear in FearPollution_MotivationEvent in MotivationEvent.cpp.
+	static sint32 const	ROUNDS_COUNT_IMMEASURABLE;	
+#endif
 	
 	static uint32 GetPollutionAtRound(const PLAYER_INDEX player, const sint32 round);
 
