@@ -362,6 +362,10 @@ void Scheduler::Initialize()
 
 	
 	m_current_plan_iter = m_matches.end();
+
+#if !defined (ACTIVISION_ORIGINAL)
+	m_AllIsExplored = false;
+#endif
 }
 
 
@@ -1327,11 +1331,8 @@ bool Scheduler::Prioritize_Goals()
 		Sorted_Goal_Iter tmp_goal_iter = 
 			m_goals_of_type[goal_type].begin();
 
-// delete the goal if it appears two times - not only for Settle goal but for all - Calvitix
-#if defined (ACTIVISION_ORIGINAL)
 		if ( g_theGoalDB->Get(goal_type)->GetTargetTypeSettleLand() ||
 			 g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea())
-#endif
 		{
 			while (tmp_goal_iter != m_goals_of_type[goal_type].end())
 			{

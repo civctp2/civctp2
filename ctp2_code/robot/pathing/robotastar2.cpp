@@ -133,8 +133,11 @@ BOOL RobotAstar2::DefensivePathCallback (const BOOL & can_enter,
 		if ((prev_owner == pos_owner) &&
 			!(m_incursionPermission & (0x1 << prev_owner)))
 		{
-			
+#if defined (ACTIVISION_ORIGINAL)			
 			cost = k_ASTAR_BIG -1;
+#else
+			cost += k_MOVE_TREASPASSING_COST;
+#endif
 			return TRUE; 
 		} 
     }

@@ -29,7 +29,8 @@
 // - m_queue_index used.
 // - Straight line corrected for worlds that do not have X-wrapping.
 // - Standardised min/max usage.
-//
+// - Added method to check if there is a danger along the path (for civilian units). so units don't go near 
+//   enemy cities (and can't be bombarded). If no alternate path found, go on the first founded path.
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -66,6 +67,12 @@ extern World *g_theWorld;
 
 #include "A_Star_Heuristic_Cost.h"
 #include "terrainutil.h"
+
+#if !defined (ACTIVISION_ORIGINAL)
+
+#include "ArmyData.h"
+
+#endif //ACTIVISION_ORIGINAL
 
 DynamicArray<MapPoint> g_pixel; 
 
@@ -498,12 +505,14 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 
     CellUnitList* dest_army = the_pos_cell->UnitArmy(); 
 
+#if defined (ACTIVISION_ORIGINAL)
     if (!dest_army)
         return FALSE; 
+#endif
 
     if (0 < dest_army->Num()) {  
 		if(m_is_robot || dest_army->IsVisible(m_owner)) {
-			dest_owner= dest_army->GetOwner(); 
+			dest_owner = dest_army->GetOwner(); 
 			if (dest_owner != m_owner) { 
 
 				if (pos != m_dest) { 
@@ -544,11 +553,26 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 					entry = ASTAR_BLOCKED; 
                     return TRUE; 
 				}
-				
-			}
+
         }
     }
 
+#if !defined (ACTIVISION_ORIGINAL)			
+	MapPoint start;
+	m_army->GetPos(start);
+	if (pos != start && pos != m_dest)
+	{
+		if (CheckIsDangerForPos(pos,m_army->IsCivilian()))
+		{
+			if (cost < 1) cost = 1;
+			cost *= k_MOVE_ISDANGER_COST; 
+			can_enter = TRUE;
+			entry = ASTAR_CAN_ENTER; 
+			return TRUE; 
+		}
+	}
+#endif
+	}
     return FALSE; 
 }
 
@@ -1885,3 +1909,75 @@ BOOL UnitAstar::VerifyMem() const
 
     return TRUE; 
 }
+#if !defined (ACTIVISION_ORIGINAL)
+BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian)
+{
+
+	BOOL IsDanger = false;
+
+	Cell* c = g_theWorld->GetCell(myPos);
+	IsDanger = false;
+//    const Diplomat & diplomat = Diplomat::GetDiplomat(m_owner);
+//    ai::Regard baseRegard = NEUTRAL_REGARD;
+
+	PLAYER_INDEX owner;
+
+	sint32 i; 
+	MapPoint neighbor;
+	MapPoint start;
+	CellUnitList *the_army=NULL;
+	m_army->GetPos(start);
+
+
+	for (i=0; i <= SOUTH; i++) 
+	{ 		   
+	   if (!myPos.GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) continue;
+
+	   if (neighbor == start || neighbor == m_dest)
+	   { 
+		   continue;
+	   } 
+		
+	   //Check for hostile army
+	   the_army = g_theWorld->GetArmyPtr(neighbor);
+
+	   if (the_army) 
+	   {
+		    owner = the_army->GetOwner();
+//            baseRegard = diplomat.GetBaseRegard(owner);
+    		if (m_owner != owner)// && baseRegard == COLDWAR_REGARD)
+			{
+				if (IsCivilian) //TO DO : Add conditions (in danger only if the_army not civilian
+				{
+					IsDanger = true;
+					break;
+				}
+				
+				if (the_army->Num() > g_theWorld->GetArmyPtr(start)->Num())
+				{
+					IsDanger = true;
+					break;
+				}
+			}
+ 		}
+
+
+	   //Check for hostile city
+	   if(g_theWorld->HasCity(neighbor)) 
+	   { 
+		   
+		    owner = g_theWorld->GetCity(neighbor).GetOwner();
+//            baseRegard = diplomat.GetBaseRegard(owner);
+    		if (m_owner != owner)// && baseRegard == COLDWAR_REGARD)
+		   { 
+				IsDanger = true;
+				break;
+		   } 
+
+	   }
+	}
+	return IsDanger;
+}
+
+
+#endif

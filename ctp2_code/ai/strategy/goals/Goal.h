@@ -112,12 +112,7 @@ public:
 
     virtual void Compute_Needed_Troop_Flow() = 0;
 
-#if defined (ACTIVISION_ORIGINAL)
     virtual Utility Compute_Matching_Value(const Agent_ptr agent) const = 0;
-#else
-    virtual Utility Compute_Matching_Value(const Agent_ptr agent) = 0;
-#endif
-
 
     virtual Utility Compute_Raw_Priority() = 0;
 

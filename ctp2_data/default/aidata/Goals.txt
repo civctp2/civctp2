@@ -245,7 +245,7 @@ GOAL_EXPLORE {
   ChokePointBonus		   10
   UnexploredBonus		 1000
   ObsoleteArmyBonus		   10
-  TreaspassingArmyBonus     0
+  TreaspassingArmyBonus -10000
 
   ThreatenType:None
   ThreatenBonus 0
@@ -281,7 +281,7 @@ GOAL_STEALTH_EXPLORE {
   ChokePointBonus		   10
   UnexploredBonus		 1000
   ObsoleteArmyBonus		   10
-  TreaspassingArmyBonus     0
+  TreaspassingArmyBonus   100
 
   ThreatenType:None
   ThreatenBonus 0
@@ -1302,17 +1302,17 @@ GOAL_RETREAT {
   EnemyValueBonus		    0
   AlliedValueBonus		    0
   PowerBonus			    0
-  DistanceToHomeBonus	    0
+  DistanceToHomeBonus	    1
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
+  InEnemyTerritoryBonus  1000 
   WoundedArmyBonus     100000 
   NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		    0
-  TreaspassingArmyBonus 100000
+  TreaspassingArmyBonus 50000
 
   ThreatenType:None
   ThreatenBonus 0
