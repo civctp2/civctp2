@@ -1,28 +1,59 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Scheduler for AI goals
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, uses Microsoft C++ specific features.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Do not consider invalid goals (e.g. threatened city that has been 
+//   destroyed already).
+// - Marked _MSC_VER
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma warning(disable: 4786)
+#endif
 
 #include "c3.h"
 
 
 #include "profileAi.h"
 
-
+#if defined(_MSC_VER)
 #include <list-fixed>
+#else
+#include <list>
+#endif
 #include <algorithm>
 using namespace std ;
 
@@ -61,8 +92,8 @@ extern CTPDatabase<StrategyRecord> *g_theStrategyDB;
 
 
 
-// added DWT
-sint32 Scheduler::s_max_match_list_cycles = g_theConstDB->GetMaxMatchListCycles();
+
+sint32 Scheduler::s_max_match_list_cycles = 6;
 
 Scheduler::Scheduler_Vector Scheduler::s_theSchedulers;
 
@@ -1089,9 +1120,25 @@ Scheduler::Sorted_Goal_List Scheduler::Get_Top_Goals(const int &number) const
 
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : Scheduler::GetValueUnsatisfiedGoals
+//
+// Description: Get the total value of all unsatisfied goals of a given type.
+//
+// Parameters : type	: type of goal
+//
+// Globals    : -
+//
+// Returns    : sint32	: sum of value of the unsatisfied goals of type type.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 
 sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const 
 {
+#if defined(ACTIVISION_ORIGINAL)			
 	Sorted_Goal_List::const_iterator sorted_goal_iter;
 	CTPGoal_ptr ctp_goal_ptr;
 	sint32 total_value = 0;
@@ -1103,7 +1150,6 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 		 {
 			ctp_goal_ptr = (CTPGoal_ptr) sorted_goal_iter->second;
 
-			
 			if ( (ctp_goal_ptr->Is_Satisfied() == false) || 
 				 (ctp_goal_ptr->ArmiesAtGoal() == false) )
 			{
@@ -1113,13 +1159,58 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 				total_value += value;
 			}
 		 }
+#else
+	sint32	total_value	= 0;
+
+	for 
+	(
+		Sorted_Goal_List::const_iterator sorted_goal_iter = 
+			m_goals_of_type[type].begin();
+		sorted_goal_iter != m_goals_of_type[type].end(); 
+		sorted_goal_iter++
+	)
+	{
+		CTPGoal_ptr	ctp_goal_ptr = (CTPGoal_ptr) sorted_goal_iter->second;
+
+		if (ctp_goal_ptr->Get_Invalid()		||
+			ctp_goal_ptr->Is_Satisfied()	||
+			ctp_goal_ptr->ArmiesAtGoal()
+		   )
+		{
+			// Goal has become invalid or has been satisfied: try next.
+		}
+		else
+		{
+			total_value += ctp_goal_ptr->Get_Target_Value();
+		}	
+	}
+#endif
 
 	return total_value;
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : Scheduler::GetHighestPriorityGoal
+//
+// Description: Get the highest valued goal of a given type.
+//
+// Parameters : type		: type of goal
+//				satisfied	: consider satisfied/unsatisfied goals only
+//
+// Globals    : -
+//
+// Returns    : sint32	: sum of value of the unsatisfied goals of type type.
+//
+// Remark(s)  : Actually returns the first found goal that matches the
+//              parameters. Is the list ordered?
+//
+//----------------------------------------------------------------------------
+
 Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const 
 {
+#if defined(ACTIVISION_ORIGINAL)
 	Sorted_Goal_List::const_iterator sorted_goal_iter;
 	CTPGoal_ptr ctp_goal_ptr = NULL;
 	sint32 total_value = 0;
@@ -1147,7 +1238,34 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 	if (sorted_goal_iter == m_goals_of_type[type].end())
 		return NULL;
 
+
 	return ctp_goal_ptr;
+#else
+	for 
+	( 
+		Sorted_Goal_List::const_iterator sorted_goal_iter = 
+			m_goals_of_type[type].begin();
+		sorted_goal_iter != m_goals_of_type[type].end(); 
+		sorted_goal_iter++
+	)
+	{
+		CTPGoal_ptr	ctp_goal_ptr = (CTPGoal_ptr) sorted_goal_iter->second;
+		
+		if (ctp_goal_ptr->Get_Invalid()					||
+			(satisfied != ctp_goal_ptr->Is_Satisfied())	||
+			ctp_goal_ptr->ArmiesAtGoal()
+		   )
+		{
+			// Goal does not match: try next.
+		}
+		else
+		{
+			return ctp_goal_ptr;
+		}
+	}
+
+	return NULL; // No matching goal available.
+#endif
 }
 
 

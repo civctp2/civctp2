@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Fix movement cost of ships above tunnels.
+// - Center on pirating (originally by Ahenobarb, slightly modified).
 //
 //----------------------------------------------------------------------------
 
@@ -4460,6 +4461,28 @@ BOOL ArmyData::CanInterceptTrade(uint32 &uindex) const
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::InterceptTrade
+//
+// Description: Attempt to pirate a trade route.
+//
+// Parameters : -
+//
+// Globals    : g_director				: display manager
+//				g_network				: multiplayer manager
+//				g_player				: list of active players
+//				g_selectedItem			: selected unit or city
+//				g_theSoundDB			: sound database
+//				g_theSpecialEffectDB	: special effect database
+//				g_theWorld				: the map
+//				
+// Returns    : ORDER_RESULT			: attempt success/failure indication
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 ORDER_RESULT ArmyData::InterceptTrade()
 {
 	sint32 i;
@@ -4515,6 +4538,8 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						}
 					}
 				}
+
+#if defined(ACTIVISION_ORIGINAL)
 				InformAI(UNIT_ORDER_INTERCEPT_TRADE, m_pos); 
 				g_director->AddSpecialEffect(m_pos, effectId, soundId);
 				ORDER_RESULT res = m_array[i].InterceptTrade();
@@ -4522,8 +4547,26 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					AddSpecialActionUsed(m_array[i]);
 					m_isPirating = true;
 				}
-				// Line added by Ahenobarb to get the map to center on the location being pirated.
-				g_director->AddCenterMap(m_pos);
+#else
+				ORDER_RESULT const	res	= m_array[i].InterceptTrade();
+
+				if (res == ORDER_RESULT_ILLEGAL)
+				{
+					// No action: nothing has happened yet.
+				}
+				else
+				{
+					InformAI(UNIT_ORDER_INTERCEPT_TRADE, m_pos); 
+					if (g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)) 
+					{
+						g_director->AddCenterMap(m_pos);
+					}
+					g_director->AddSpecialEffect(m_pos, effectId, soundId);
+					AddSpecialActionUsed(m_array[i]);
+					m_isPirating = true;
+				}
+#endif
+
 				return res;
 			}
 	}
