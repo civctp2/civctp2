@@ -95,6 +95,8 @@
 #include "TradeManager.h"
 #include "EditQueue.h"
 #include "soundscreen.h"
+// music added by ahenobarb
+#include "musicscreen.h"
 #include "graphicsscreen.h"
 #include "gameplayoptions.h"
 #include "OrderRecord.h"
@@ -1354,6 +1356,13 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	case KEY_FUNCTION_SOUND_OPTIONS:
 		if(!g_modalWindow) {
 			soundscreen_displayMyWindow();
+		}
+		break;
+		
+// MUSIC added by ahenobarb
+	case KEY_FUNCTION_MUSIC_OPTIONS:
+		if(!g_modalWindow) {
+			musicscreen_displayMyWindow();
 		}
 		break;
 		

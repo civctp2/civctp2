@@ -44,6 +44,8 @@
 #include "gameplayoptions.h"
 #include "graphicsscreen.h"
 #include "soundscreen.h"
+// music added by ahenobarb
+#include "musicscreen.h"
 #include "optionwarningscreen.h"
 #include "loadsavewindow.h"
 #include "km_screen.h"
@@ -1101,6 +1103,9 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			g_tiledMap->ZoomIn();
 		}
 		break;
+	case	CP_MENU_ITEM_12:	
+		musicscreen_displayMyWindow(); 
+		break;
 	}
 }
 
@@ -1402,6 +1407,9 @@ void ControlPanelWindow::RebuildMenus()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_GRAPHICS_OPTIONS)),(void *)CP_MENU_ITEM_1);
 	mb->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Sound"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_SOUND_OPTIONS)),(void *)CP_MENU_ITEM_2);
+// MUSIC added by ahenobarb
+	mb->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Music"),
+		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_MUSIC_OPTIONS)),(void *)CP_MENU_ITEM_12);
 	mb->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Advanced"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ADVANCED_OPTIONS)),(void *)CP_MENU_ITEM_3);
 	mb->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Cheat_Mode_Case"),
@@ -1684,6 +1692,10 @@ ControlPanelWindow::BuildOptionsMenu()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_GRAPHICS_OPTIONS)),(void *)CP_MENU_ITEM_1);
 	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Sound"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_SOUND_OPTIONS)),(void *)CP_MENU_ITEM_2);
+	// MUSIC added by ahenobarb
+	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Music"),
+		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_MUSIC_OPTIONS)),(void *)CP_MENU_ITEM_12);
+	
 	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Advanced"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ADVANCED_OPTIONS)),(void *)CP_MENU_ITEM_3);
 	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Cheat_Mode_Case"),
