@@ -13,11 +13,16 @@ CAPITALIZATION 	"Capitalization "
 INFRASTRUCTURE 	"Infrastructure "
 
 #Age Names#	
-AGE_NAME_ANCIENT	"Ancient"
-AGE_NAME_RENAISS	"Renaissance"
+AGE_NAME_ANCIENT		"Ancient"
+#AGE_NAME_CLASS		"Classic"
+#AGE_NAME_MEDIEVAL	"Midieval"
+AGE_NAME_RENAISS		"Renaissance"
+#AGE_NAME_INDUST		"Industrial"
 AGE_NAME_MODERN		"Modern"
-AGE_NAME_GENETIC	"Genetic"
-AGE_NAME_DIAMOND	"Diamond"
+#AGE_NAME_COMPUTER	"Computer"
+AGE_NAME_GENETIC		"Genetic"
+AGE_NAME_DIAMOND		"Diamond"
+#AGE_NAME_FUTURE		"The Future"
 
 YOU_BROKE_ALLIANCE "You have broken an alliance with the [player.1.civ_name_plural]."
 YOU_BROKE_CEASE_FIRE "You have broken a peace treaty with the [player.1.civ_name_plural]."
@@ -1506,7 +1511,12 @@ str_tbl_ldl_Random_Order_On	"Random Order On"
 str_tbl_ldl_Random_Order_Off  "Random Order Off"
 str_ldl_Fuel_COLON  "Fuel:"
 
+### New World Shape Strings ###
 
+str_tbl_ldl_North_South_Wrap_Only			"North-South Wrap Only"
+str_ldl_North_and_South_edges_of_the_map_connect	"Noth and South edges of the map connect."
+str_ldl_Neptun_World					"Neptun World"
+str_tbl_ldl_Neptun_World					"Neptun World"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
@@ -2806,14 +2816,16 @@ str_ldl_SET_GOAL	"Set Goal"
 
 
 # Ranking Tab
-str_ldl_RANKING_MILITARY "Military"
-str_ldl_RANKING_ECONOMIC "Economic"
-str_ldl_RANKING_SCIENTIFIC "Scientific"
-str_ldl_RANKING_OVERALL "Overall"
-str_ldl_INFO_RANKING_TAB "Ranking"
-str_ldl_RANKING_RANK "Rank:"
-str_ldl_LINE_BUTTON "Line Graph"
-str_ldl_ZEROSUM_BUTTON "Zero Sum Graph"
+str_ldl_RANKING_MILITARY		"Military"
+str_ldl_RANKING_ECONOMIC		"Economic"
+str_ldl_RANKING_SCIENTIFIC		"Scientific"
+str_ldl_RANKING_OVERALL		"Overall"
+str_ldl_INFO_RANKING_TAB		"Ranking"
+str_ldl_RANKING_POLLUTION		"Pollution"
+str_ldl_RANKING_WONDER		"Wonder"
+str_ldl_RANKING_RANK			"Rank:"
+str_ldl_LINE_BUTTON			"Line Graph"
+str_ldl_ZEROSUM_BUTTON		"Zero Sum Graph"
 
 # Timeline Tab
 str_ldl_INFO_TIMELINE_TAB "Timeline"

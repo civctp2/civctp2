@@ -101,6 +101,9 @@ enum READINESS_LEVEL;
 
 
 #include "TurnCnt.h"
+//Added by Martin Gühmann to access the ConstDB
+#include "ConstDB.h"
+//End Add
 extern TurnCount *g_turn;
 
 extern CTPDatabase<GoalRecord> *g_theGoalDB;
@@ -118,7 +121,6 @@ const OrderRecord * CtpAi::sm_moveOrderRec = NULL;
 sint32 CtpAi::sm_goalDefendIndex = -1;
 sint32 CtpAi::sm_goalSeigeIndex = -1;
 sint32 CtpAi::sm_endgameWorldUnionIndex = -1;
-
 
 STDEHANDLER(CtpAi_CaptureCityEvent)
 {
@@ -862,7 +864,9 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	if (g_theGameSettings->GetDifficulty() == (LEVELS_OF_DIFFICULTY - 1))
 		diff_cycles = 2;
 
-	if ( cycle < Scheduler::s_max_match_list_cycles + diff_cycles)
+	//Modified by Martin Gühmann so that this can be exposed to const.txt
+	//if ( cycle < Scheduler::s_max_match_list_cycles + diff_cycles)
+	if ( cycle < g_theConstDB->GetMaxMatchListCycles() + diff_cycles)
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
 								   GEA_Player, playerId,

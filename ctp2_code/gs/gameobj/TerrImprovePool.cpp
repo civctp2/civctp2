@@ -22,6 +22,10 @@
 #include "Globals.h"
 #include "terrainutil.h"
 #include "TerrainImprovementRecord.h"
+//Added by Martin Gühmann
+#include "SoundRecord.h"
+#include "SoundManager.h"
+#include "SelItem.h"
 
 TerrainImprovementPool::TerrainImprovementPool() 
 	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
@@ -74,6 +78,17 @@ TerrainImprovementPool::Create(sint32 owner,
 	Insert(newData);
 	g_theWorld->InsertImprovement(newImprovement, point);
 	g_tiledMap->RedrawTile(&point);
+
+	//Added by Martin Gühmann to make a sound play when a tile improvement is build.
+	sint32 soundID = g_theTerrainImprovementDB->Get(newData->GetType())->GetSound()->GetIndex();
+	if (soundID != -1) {
+		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
+		if ((visiblePlayer == owner)/* || 
+			(m_visibility & (1 << visiblePlayer))*/) {
+
+			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, point.x, point.y);
+		}
+	}
 
 	return newImprovement;
 }

@@ -1,4 +1,8 @@
 
+//building.cpp
+//Fixed buildingutil_GetOffenseBonusAir and buildingutil_GetOffenseBonusWater
+//Fix by NelsonAndBronte on 04-11-2003
+
 
 #include "c3.h"
 #include "c3errors.h"
@@ -468,17 +472,14 @@ double buildingutil_GetOffenseBonusLand(const uint64 built_improvements)
 
 double buildingutil_GetOffenseBonusWater(const uint64 built_improvements)
 {
-	// Iterate through all the buildings in the city
-	// and return the value of the MAXMIMUM bonus only,
-	// This bonus is not additive
 	double best = 0;
 	FOREACH_BUILT(GetOffenseBonusWater) {
 		double cur;
 		if(rec->GetOffenseBonusWater(cur) && cur > best)
+	//	Original code:
+	//	if(rec->GetOffenseBonusLand(cur) && cur > best)
+	//	Fix by NelsonAndBronte on 04-11-2003
 			best = cur;
-		// original code below checked for the wrong bonus
-		//	if(rec->GetOffenseBonusLand(cur) && cur > best)
-		//		best = cur;
 	}
 	return best;
 }
@@ -487,17 +488,14 @@ double buildingutil_GetOffenseBonusAir(const uint64 built_improvements)
 {
 	double best = 0;
 	FOREACH_BUILT(GetOffenseBonusAir) {
+//	Original code:
+//	FOREACH_BUILT(GetOffenseBonusWater) {
 		double cur;
 		if(rec->GetOffenseBonusAir(cur) && cur > best)
+	//	Original code:
+	//	if(rec->GetOffenseBonusLand(cur) && cur > best)
+	//	Fix by NelsonAndBronte on 04-11-2003
 			best = cur;
 	}
 	return best;
-
-	// original code below checked for the wrong bonus
-	//	FOREACH_BUILT(GetOffenseBonusWater) {
-	//		double cur;
-	//		if(rec->GetOffenseBonusLand(cur) && cur > best)
-	//			best = cur;
-	//	}
-	//	return best;
 }

@@ -1,4 +1,10 @@
 
+//CityData.cpp
+//Modified by NelsonAndBronte to fix Sea City Sprite bug (7.11.2003)
+//Modified by Martin Gühmann (9.11.2003)
+//to make sure cities created by the scenario editor
+//keep their size and style.
+
 #include "c3.h"
 #include "c3errors.h"
 
@@ -129,6 +135,11 @@ extern SoundManager		*g_soundManager;
 #include "TradePool.h"
 
 #include "GameFile.h"
+
+//Added by Martin Gühmann to handle 
+//city creation by Scenario Editor properly
+#include "ScenarioEditor.h"
+//End Add
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
@@ -453,17 +464,27 @@ void CityData::Initialize(sint32 settlerType)
 		
 	} else {
 		settlerRec = NULL;
+		//Added by Martin Gühmann to make shure that also cities
+		//created by the Scenario editor have a size
+		if(settlerType == -2 && ScenarioEditor::PlaceCityMode() && ScenarioEditor::CitySize() > 0)
+			numPops = ScenarioEditor::CitySize();
+		//End Add
 	}
 
 	sint32 i;
-	for(i = 0; i < numPops; i++) {
-		
-		if (settlerType != -2)
-			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
-							   GEA_City, m_home_city,
-							   GEA_End);
+	//Added by Martin Gühmann to make sure that also cities created by the
+	//have a size.
+	if((settlerType != -2) || settlerType == -2 && ScenarioEditor::PlaceCityMode()){
+	//End Add
+		for(i = 0; i < numPops; i++) {
+		//Outcommented by Martin Gühmann to move out the loop this if statement
+		//to accelerate the code a little bit
+		//	if (settlerType != -2)
+				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
+								   GEA_City, m_home_city,
+								   GEA_End);
+		}
 	}
-
 	
 	if(settlerRec && settlerRec->GetNumSettleBuilding() > 0) {
 		for(i = 0; i < settlerRec->GetNumSettleBuilding(); i++) {
@@ -542,7 +563,13 @@ void CityData::Initialize(sint32 settlerType)
 	else
 		name = civData->GetAnyCityName() ;							
 
-	m_cityStyle = civ->GetCityStyle();
+	if (settlerType != -2)
+		m_cityStyle = civ->GetCityStyle();
+	//Added by Martin Gühmann to make sure that cities created 
+	//by the scenario editor keep their style
+	else if (settlerType == -2 && ScenarioEditor::PlaceCityMode())
+		m_cityStyle = ScenarioEditor::CityStyle();
+	//End Add
 
 	if (name != k_CITY_NAME_UNDEFINED)	{							
 		civData->GetCityName(name, s) ;								
@@ -5725,21 +5752,16 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 	sint32 i;
 
 	// removed DWT
-	// bool isLand = justTryLand || g_theWorld->IsLand(m_pos);
-	
-	
+	//bool isLand = justTryLand || g_theWorld->IsLand(m_pos);
+
 	// Get the terrain type of the cell the city sits on
-	
 	const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 
-
 	// Added DWT
-	// We want to see if its a land cty by checking the underlying terrain type
+	// We want to retreive the underlying terrain type
 	// not the terrain type as modified by improvements
 	// as a sea city on a tunnel will turn into a land city
-
 	bool isLand = justTryLand || !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater());
-
 
 	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(m_cityStyle);
 	if(!styleRec) return -1;
@@ -5750,7 +5772,6 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 	const AgeCityStyleRecord::SizeSprite *spr = NULL;
 	const AgeCityStyleRecord::SizeSprite *lastTypeSpr = NULL;
 
-	// GetType() below is 0 = land, 1 = ocean
 	for(i = 0; i < ageStyleRec->GetNumSprites(); i++) {
 		if(spr = ageStyleRec->GetSprites(i)) {
 			if((isLand && spr->GetType() == 0) ||

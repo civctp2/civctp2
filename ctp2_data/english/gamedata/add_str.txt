@@ -441,3 +441,7 @@ CONTEXT_TILE_INFO "Map Info"
 
 # One more reason for happiness display on city manager
 HAPPY_REASON_FEATS "Feats of Wonder"
+
+# A different kind of disconnection message for network games
+NETWORK_ACTIVENET_LOST "Connection to Activenet server lost, attempting to return to lobby."
+

@@ -1,5 +1,8 @@
 
-
+//File greatlibrary.cpp
+//modified by Martin Gühmann on October the 28th
+//line added in sint32 GreatLibrary::UpdateList( DATABASE database )
+//to make shure that also goods with the GLHidden flag aren't shown.
 
 #include "c3.h"
 
@@ -2231,8 +2234,8 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		{
 			//added by Martin Gühmann
 			if(HIDE(g_theResourceDB, index)) continue;
-			
 
+			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theResourceDB->GetName(
 						g_theResourceDB->m_alphaToIndex[ index ])), index);
 
