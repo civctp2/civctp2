@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Single player new game rules screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leaks repaired.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3window.h"
@@ -30,8 +59,11 @@ static c3_PopupWindow	*s_spNewGameRulesScreen	= NULL;
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 static aui_Switch **s_checkBox;
+#else
+static aui_Switch **	s_checkBox	= NULL;
+#endif
 
 static MBCHAR	checknames[k_NUM_RULESBOXES][50] = {
 	"RuleOne",
@@ -135,7 +167,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 }
 
 
-
+#if defined(ACTIVISION_ORIGINAL)	// Incomplete cleanup
 AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
@@ -163,7 +195,48 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 #undef mycleanup
 }
 
+#else	// ACTIVISION_ORIGINAL
 
+//----------------------------------------------------------------------------
+//
+// Name       : spnewgamerulesscreen_Cleanup
+//
+// Description: Release the memory of the single player new game rules screen.
+//
+// Parameters : -
+//
+// Globals    : s_spNewGameRulesScreen
+//				s_checkBox
+//
+// Returns    : AUI_ERRCODE	: always AUI_ERRCODE_OK
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+AUI_ERRCODE spnewgamerulesscreen_Cleanup()
+{
+	if (s_spNewGameRulesScreen)
+	{
+		g_c3ui->RemoveWindow(s_spNewGameRulesScreen->Id());
+		keypress_RemoveHandler(s_spNewGameRulesScreen);
+
+		for (sint32 i = 0; i < k_NUM_RULESBOXES; i++) 
+		{
+			delete s_checkBox[i];
+			// NULLing unnecessary: deleting the container next
+		}
+		delete [] s_checkBox;
+		s_checkBox	= NULL;
+
+		delete s_spNewGameRulesScreen;
+		s_spNewGameRulesScreen = NULL;
+	}
+
+	return AUI_ERRCODE_OK;
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 
 void spnewgamerulesscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )

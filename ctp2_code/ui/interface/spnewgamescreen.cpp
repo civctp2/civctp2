@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Single player new game screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Clean up any created subscreens when cleaning up the main screen.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -190,16 +219,52 @@ AUI_ERRCODE spnewgamescreen_Initialize( void )
 	return AUI_ERRCODE_OK;
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : spnewgamescreen_Cleanup
+//
+// Description: Release the memory of the single player new game screen(s).
+//
+// Parameters : -
+//
+// Globals    : g_spNewGameWindow
+//				g_c3ui
+//
+// Returns    : AUI_ERRCODE	: always AUI_ERRCODE_OK
+//
+// Remark(s)  : Clean up the subscreens as well.
+//
+//----------------------------------------------------------------------------
 
 AUI_ERRCODE spnewgamescreen_Cleanup()
 {
+#if defined(ACTIVISION_ORIGINAL)
 	if ( !g_spNewGameWindow  ) return AUI_ERRCODE_OK; 
 
 	g_c3ui->RemoveWindow( g_spNewGameWindow->Id() );
 
 	delete g_spNewGameWindow;
 	g_spNewGameWindow = NULL;
+#else
+	// Clean up subscreens.
+	spnewgamediffscreen_Cleanup();
+	spnewgamemapshapescreen_Cleanup();
+	spnewgamemapsizescreen_Cleanup();
+	spnewgameplayersscreen_Cleanup();
+	spnewgamerandomcustomscreen_Cleanup();
+	spnewgamerulesscreen_Cleanup();
+	spnewgametribescreen_Cleanup();
+	custommapscreen_Cleanup();
+	scenarioscreen_Cleanup();
+
+	// Clean up main screen
+	if (g_spNewGameWindow)
+	{
+		g_c3ui->RemoveWindow(g_spNewGameWindow->Id());
+		delete g_spNewGameWindow;
+		g_spNewGameWindow = NULL;
+	}
+#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -353,7 +418,6 @@ void spnewgamescreen_tribePress( aui_Control *control, uint32 action, uint32 dat
 
 	spnewgametribescreen_setTribeIndex( index, lname );
 }
-
 void spnewgamescreen_malePress( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -495,8 +559,6 @@ void spnewgamescreen_worldShapePress( aui_Control *control, uint32 action, uint3
 
 	spnewgamemapshapescreen_displayMyWindow();
 }
-
-
 
 
 

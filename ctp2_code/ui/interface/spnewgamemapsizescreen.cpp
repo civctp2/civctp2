@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Single player new game map size selection screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leak repaired.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3window.h"
@@ -235,6 +264,7 @@ AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallbac
 }
 
 
+#if defined(ACTIVISION_ORIGINAL)	// Incomplete cleanup
 
 AUI_ERRCODE spnewgamemapsizescreen_Cleanup()
 {
@@ -262,7 +292,50 @@ AUI_ERRCODE spnewgamemapsizescreen_Cleanup()
 #undef mycleanup
 }
 
+#else	// ACTIVISION_ORIGINAL
+//----------------------------------------------------------------------------
+//
+// Name       : spnewgamemapsizescreen_Cleanup
+//
+// Description: Release the memory of the screen.
+//
+// Parameters : -
+//
+// Globals    : s_spNewGameMapSizeScreen
+//				s_checkBox
+//				s_group
+//
+// Returns    : AUI_ERRCODE	: always AUI_ERRCODE_OK
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 
+AUI_ERRCODE spnewgamemapsizescreen_Cleanup()
+{
+	if (s_spNewGameMapSizeScreen) 
+	{
+		g_c3ui->RemoveWindow(s_spNewGameMapSizeScreen->Id());
+		keypress_RemoveHandler(s_spNewGameMapSizeScreen);
+
+		for (sint32 i = 0; i < k_NUM_MAPSIZEBOXES; ++i) 
+		{
+			delete s_checkBox[i];
+			// NULLing unnecessary: deleting container next
+		}
+		delete [] s_checkBox;
+		s_checkBox = NULL;
+		
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
+		mycleanup(s_group);
+		mycleanup(s_spNewGameMapSizeScreen);
+#undef mycleanup
+	}
+
+	return AUI_ERRCODE_OK;
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 
 void spnewgamemapsizescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )

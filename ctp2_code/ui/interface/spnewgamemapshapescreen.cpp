@@ -26,7 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Addion by Martin Gühmann: Two more world shape options, 
-//   flat world and Neptun world
+//   flat world and Neptun world.
+// - Memory leak repaired.
 //
 //----------------------------------------------------------------------------
 
@@ -288,7 +289,7 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	return AUI_ERRCODE_OK;
 }
 
-
+#if defined(ACTIVISION_ORIGINAL)
 
 AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
 {
@@ -306,11 +307,6 @@ AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
 	mycleanup( s_group );
 	mycleanup( s_ewLabel );//Earth like world: East-West wrap world
 	mycleanup( s_dwLabel );//Doughnut world
-#if !defined(ACTIVISION_ORIGINAL)
-	//Added by Martin Gühmann
-	mycleanup( s_nwLabel );//Neptun like world: North-South wrap world
-	mycleanup( s_fwLabel );//Flat world
-#endif //ACTIVISION_ORIGINAL
 
 
 
@@ -323,8 +319,60 @@ AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
 #undef mycleanup
 }
 
+#else	// ACTIVISION_ORIGINAL
 
+//----------------------------------------------------------------------------
+//
+// Name       : spnewgamediffscreen_Cleanup
+//
+// Description: Release the memory of the screen.
+//
+// Parameters : -
+//
+// Globals    : s_spNewGameMapShapeScreen
+//				s_checkBox
+//				s_group
+//				s_ewLabel
+//				s_dwLabel
+//				s_nwLabel
+//				s_fwLabel
+//
+// Returns    : AUI_ERRCODE	: always AUI_ERRCODE_OK
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 
+AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
+{
+	if (s_spNewGameMapShapeScreen) 
+	{
+		g_c3ui->RemoveWindow(s_spNewGameMapShapeScreen->Id());
+		keypress_RemoveHandler(s_spNewGameMapShapeScreen);
+
+		for (sint32 i = 0; i < k_NUM_MAPSHAPEBOXES; i++ ) 
+		{
+			delete s_checkBox[i];
+			// NULLing unnecessary: deleting the container next
+		}
+		delete [] s_checkBox;
+		s_checkBox = NULL;
+
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
+		mycleanup(s_group);
+		mycleanup(s_ewLabel);//Earth like world: East-West wrap world
+		mycleanup(s_dwLabel);//Doughnut world
+		// Added by Martin Gühmann
+		mycleanup(s_nwLabel);//Neptun like world: North-South wrap world
+		mycleanup(s_fwLabel);//Flat world
+		mycleanup(s_spNewGameMapShapeScreen);
+#undef mycleanup
+	}
+
+	return AUI_ERRCODE_OK;
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 void spnewgamemapshapescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {

@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Single player new game difficulty screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leaks repaired.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3window.h"
@@ -30,6 +59,7 @@ static c3_PopupWindow	*s_spNewGameDiffScreen	= NULL;
 
 
 
+#if defined(ACTIVISION_ORIGINAL)	// incomplete initialisation
 
 static c3_Static *s_skillLevel			= NULL;
 static c3_Static *s_barbarianThreat		= NULL;
@@ -38,6 +68,7 @@ static aui_SwitchGroup	*s_group		= NULL;
 static aui_Radio	**s_checkBox;
 static aui_SwitchGroup	*s_groupTwo		= NULL;
 static aui_Radio	**s_riskBox;
+
 
 static MBCHAR	checknames[k_NUM_DIFFBOXES][50] = {
 	"DiffOne",
@@ -55,6 +86,36 @@ static MBCHAR	risknames[k_NUM_RISKBOXES][50] = {
 	"RiskFour"
 
 };
+
+#else	// ACTIVISION_ORIGINAL
+
+// Skill level selection
+static c3_Static *			s_skillLevel		= NULL;
+static aui_SwitchGroup *	s_group				= NULL;	
+static aui_Radio **			s_checkBox			= NULL;
+static MBCHAR				checknames[k_NUM_DIFFBOXES][50] = 
+{
+	"DiffOne",
+	"DiffTwo",
+	"DiffThree",
+	"DiffFour",
+	"DiffFive",
+	"DiffSix"
+};
+
+// Barbarian threat selection
+static c3_Static *			s_barbarianThreat	= NULL;
+static aui_SwitchGroup *	s_groupTwo			= NULL;
+static aui_Radio **			s_riskBox			= NULL;
+static MBCHAR				risknames[k_NUM_RISKBOXES][50] = 
+{
+	"RiskOne",
+	"RiskTwo",
+	"RiskThree",
+	"RiskFour"
+};
+
+#endif	// ACTIVISION_ORIGINAL
 
 
 static sint32 s_difficulty1 = 0;
@@ -257,6 +318,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 }
 
 
+#if defined(ACTIVISION_ORIGINAL)
 
 AUI_ERRCODE spnewgamediffscreen_Cleanup()
 {
@@ -292,6 +354,71 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 #undef mycleanup
 }
 
+#else	// ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+//
+// Name       : spnewgamediffscreen_Cleanup
+//
+// Description: Release the memory of the screen.
+//
+// Parameters : -
+//
+// Globals    : s_spNewGameDiffScreen
+//				s_barbarianThreat
+//				s_checkBox
+//				s_riskBox
+//				s_skillLevel
+//				s_group
+//				s_groupTwo
+//
+// Returns    : AUI_ERRCODE	: always AUI_ERRCODE_OK
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+AUI_ERRCODE spnewgamediffscreen_Cleanup()
+{
+	if (s_spNewGameDiffScreen)
+	{
+		g_c3ui->RemoveWindow(s_spNewGameDiffScreen->Id());
+		keypress_RemoveHandler(s_spNewGameDiffScreen);
+
+		for (sint32 i = 0; i < k_NUM_DIFFBOXES; i++) 
+		{
+			delete s_checkBox[i];
+			// NULLing not necessary: deleting container next
+		}
+		delete [] s_checkBox;
+		s_checkBox	= NULL;
+
+
+#if defined(_MSC_VER)	// MS C++ has incorrect scopes: i is still defined?!
+		for (i = 0; i < k_NUM_RISKBOXES; ++i) 
+#else
+		for (sint32 i = 0; i < k_NUM_RISKBOXES; i++)
+#endif
+		{
+			delete s_riskBox[i];
+			// NULLing not necessary: deleting container next
+		}
+		delete [] s_riskBox;
+		s_riskBox	= NULL;
+
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
+		mycleanup(s_group);
+		mycleanup(s_groupTwo);
+		mycleanup(s_skillLevel);
+		mycleanup(s_barbarianThreat);
+		mycleanup(s_spNewGameDiffScreen);
+#undef mycleanup
+	}
+
+	return AUI_ERRCODE_OK;
+}
+
+#endif // ACTIVISION_ORIGINAL
 
 
 
