@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Diplomacy window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Keep the embargo and war buttons enabled until confirmed by the player.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "diplomacywindow.h"
@@ -3144,7 +3174,7 @@ void DiplomacyWindow::DeclareWar(aui_Control *control, uint32 action, uint32 dat
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	IntelligenceWindow::DeclareWarOnSelected();
-	
+#if defined(ACTIVISION_ORIGINAL)	// Too soon, player may cancel.	
 	sm_warButton->Enable( FALSE );
 
 	
@@ -3153,7 +3183,7 @@ void DiplomacyWindow::DeclareWar(aui_Control *control, uint32 action, uint32 dat
 	if(intList) {
 		intList->DeselectItem(intList->GetSelectedItemIndex());
 	}
-
+#endif
 }
 
 void DiplomacyWindow::DeclareEmbargo(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3161,8 +3191,9 @@ void DiplomacyWindow::DeclareEmbargo(aui_Control *control, uint32 action, uint32
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	IntelligenceWindow::DeclareEmbargoOnSelected();
-	
+#if defined(ACTIVISION_ORIGINAL)	// Too soon, player may cancel.
 	sm_embargoButton->Enable( FALSE );
+#endif
 }
 
 

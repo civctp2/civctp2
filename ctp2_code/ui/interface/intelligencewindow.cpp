@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Intelligence window (diplomacy subwindow)
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Update the state of the embargo and war buttons after confirmation.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "intelligencewindow.h"
@@ -786,6 +816,9 @@ void intelligence_DeclareWarCallback(bool response, void *cookie)
 			g_network.SendAction(new NetAction(NET_ACTION_DECLARE_WAR, (sint32)cookie));
 		}
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DeclareWar((sint32)cookie);
+#if !defined(ACTIVISION_ORIGINAL)
+		DiplomacyWindow::EnableButtons(TRUE, reinterpret_cast<sint32>(cookie));
+#endif
 	}
 }
 
@@ -793,6 +826,9 @@ void intelligence_DeclarEmbargoCallback(bool response, void *cookie)
 {
 	if(response) {
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).SetEmbargo((sint32)cookie, 1);
+#if !defined(ACTIVISION_ORIGINAL)
+		DiplomacyWindow::EnableButtons(TRUE, reinterpret_cast<sint32>(cookie));
+#endif
 	}
 }
 
