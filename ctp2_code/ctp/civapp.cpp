@@ -60,7 +60,8 @@
 //
 //----------------------------------------------------------------------------
 // 
-// - When quitting to New Game, go to main menu rather than SP menu
+// - When quitting to New Game, go to main menu rather than SP screen
+// - Removed cleanup code for SP screen
 //   (JJB)
 //
 //----------------------------------------------------------------------------
@@ -143,7 +144,12 @@
 #include "ancientwindows.h"
 #include "greatlibrarywindow.h"
 #include "scenariowindow.h"
+
+#if defined(ACTIVISION_ORIGINAL)
+// Include no longer needed since SP screen removed
 #include "spwindow.h"
+#endif
+
 #include "initialplaywindow.h"
 #include "optionswindow.h"
 #include "optionwarningscreen.h"
@@ -1588,7 +1594,10 @@ sint32 CivApp::CleanupAppUI(void)
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
+#if defined(ACTIVISION_ORIGINAL)
+	// Cleanup no longer needed since screen no longer used
 	spscreen_Cleanup();
+#endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
 	optionsscreen_Cleanup();
@@ -2022,7 +2031,10 @@ sint32 CivApp::InitializeGameUI(void)
 	
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
+#if defined(ACTIVISION_ORIGINAL)
+	// Cleanup no longer needed since SP screen no longer used
 	spscreen_Cleanup();
+#endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
 
@@ -2518,7 +2530,10 @@ sint32 InitializeSpriteEditorUI(void)
 	
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
+#if defined(ACTIVISION_ORIGINAL)
+	// Cleanup no longer needed since SP screen no longer used
 	spscreen_Cleanup();
+#endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
 
@@ -2898,7 +2913,10 @@ AttractWindow::Cleanup();
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
+#if defined(ACTIVISION_ORIGINAL)
+	// Cleanup no longer needed since SP screen no longer used
 	spscreen_Cleanup();
+#endif
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
 	optionsscreen_Cleanup();

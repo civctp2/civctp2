@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Single player screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed the content of this file completely since it's no longer needed
+//   (JJB)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -29,15 +60,13 @@
 
 #include "spWindow.h"
 
+#if defined(ACTIVISION_ORIGINAL)
+
 extern C3UI					*g_c3ui;
 extern CivApp				*g_civApp;
 extern ProfileDB			*g_theProfileDB;
 
-
 SPWindow					*g_spWindow		= NULL;
-
-
-
 
 sint32	spscreen_displayMyWindow()
 {
@@ -136,25 +165,6 @@ void spscreen_loadScenarioGameCallback(aui_Control *control, uint32 action, uint
 	loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void
 spscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -195,14 +205,12 @@ spscreen_mapPress(aui_Control *control, uint32 action, uint32 data, void *cookie
 
 	spnewgamemapsizescreen_displayMyWindow( FALSE, 1 );
 }
+
 void
 spscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
-	
-	
-
-		optionsscreen_displayMyWindow(0);
+	optionsscreen_displayMyWindow(0);
 }
+#endif // defined(ACTIVISION_ORIGINAL)
