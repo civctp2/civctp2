@@ -1,28 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevent CtD (NULL-dereference)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -549,8 +554,13 @@ for  (tmp.x=0; tmp.x<size->x; tmp.x++) {
             
 
             c = g_theWorld->GetCell(next_pos);  
-            
+
+#if defined(ACTIVISION_ORIGINAL)	// May crash
             if (c->m_search_count == g_search_count) {  
+#else
+			if (c->m_point && (c->m_search_count == g_search_count))
+			{
+#endif
                 
                 
 #if 0               

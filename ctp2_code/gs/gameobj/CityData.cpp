@@ -1,9 +1,52 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : City data
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// - Generate debug version when set.
+//
+// _SLOW_BUT_SAFE
+// - Define 2 other symbols (PROJECTED_CHECK_START and PROJECTED_CHECK_END) 
+//   when set. But the defined symbols are never used, so this doesn't do
+//   anything at all. This makes preprocessing and compilation slower, but
+//   should be safe.
+//
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// USE_LOGGING
+// - Enable logging when set, even when not a debug version. This is not
+//   original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fix sea city sprite bug. (7.11.2003) by NelsonAndBronte. 
+// - Make sure cities created by the scenario editor keep their size and 
+//   style. (9.11.2003) by Martin Gühmann.
+// - Enable log generation for the non-debug versions.
+// - Enable reading of files created with the Activision 1.1 patch.
+// - Prevent crash when settling in the Alexander scenario.
+//
+//----------------------------------------------------------------------------
 
-//CityData.cpp
-//Modified by NelsonAndBronte to fix Sea City Sprite bug (7.11.2003)
-//Modified by Martin Gühmann (9.11.2003)
-//to make sure cities created by the scenario editor
-//keep their size and style.
 
 #include "c3.h"
 #include "c3errors.h"
@@ -136,12 +179,17 @@ extern SoundManager		*g_soundManager;
 
 #include "GameFile.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to handle 
 //city creation by Scenario Editor properly
 #include "ScenarioEditor.h"
-//End Add
+#endif
 
 extern void player_ActivateSpaceButton(sint32 pl);
+
+#if !defined(ACTIVISION_ORIGINAL)
+static uint8 const	UNKNOWN_DEFAULT	= 0;
+#endif
 
 class HackCityArchive : public CivArchive
 {
@@ -201,6 +249,10 @@ extern TurnCount *g_turn;
 extern ProfileDB	*g_theProfileDB ;
 
 CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
+#if !defined(ACTIVISION_ORIGINAL)                       
+:	m_cityStyle(CITY_STYLE_GENERIC),
+	m_unknown_from_patch(UNKNOWN_DEFAULT)
+#endif
 { 
 	sint32 i;
 
@@ -290,7 +342,15 @@ CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
 	m_gold_from_capitalization = 0;
 	m_pw_from_infrastructure = 0;
 
+#if defined(ACTIVISION_ORIGINAL)
 	m_cityStyle = g_player[m_owner]->m_civilisation->GetCityStyle();
+#else
+	// Set the style of the founder of the city - if any.
+	if (g_player[o] && g_player[o]->GetCivilisation())
+	{
+		m_cityStyle = g_player[o]->GetCivilisation()->GetCityStyle();
+	}
+#endif
 
 	m_doUprising = UPRISING_CAUSE_NONE;
 
@@ -388,12 +448,31 @@ void CityData::Serialize(CivArchive &archive)
 	} else
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_is_rioting)+sizeof(m_is_rioting));
 
-
+#if !defined(ACTIVISION_ORIGINAL)
+	// Create and read files in the format as created with the Activision 1.1 patch.
+	if (archive.IsStoring())
+	{
+		archive << m_unknown_from_patch;
+	}
+	else
+	{
+		if (g_saveFileVersion >= 66) 
+		{
+			archive >> m_unknown_from_patch;
+			Assert(UNKNOWN_DEFAULT == m_unknown_from_patch);
+		}
+		else
+		{
+			m_unknown_from_patch = UNKNOWN_DEFAULT;
+		}
+	}
+#endif
     m_home_city.Serialize(archive) ;
 	m_build_queue.Serialize(archive) ;
 	m_tradeSourceList.Serialize(archive);
 	m_tradeDestinationList.Serialize(archive);
 
+	// To check later: next 3 lines are invalid when CTP1_TRADE has been defined. See CityData.h.
 	m_collectingResources.Serialize(archive);
 	m_buyingResources.Serialize(archive);
 	m_sellingResources.Serialize(archive);
@@ -414,11 +493,13 @@ void CityData::Serialize(CivArchive &archive)
 		archive.Load((uint8*)m_distanceToGood, sizeof(sint32) * g_theResourceDB->NumRecords());
 		archive.Load((uint8*)&m_defensiveBonus, sizeof(double));
 	}
-	
+
+#if defined(ACTIVISION_ORIGINAL) // Invalid values are handled by GetCityStyle.
 	if(m_cityStyle < 0 || m_cityStyle >= g_theCityStyleDB->NumRecords()) {
 		
 		m_cityStyle = 0;
 	}
+#endif
 }
 
 BOOL NeedsCanalTunnel(MapPoint &center_point)
@@ -464,27 +545,35 @@ void CityData::Initialize(sint32 settlerType)
 		
 	} else {
 		settlerRec = NULL;
-		//Added by Martin Gühmann to make shure that also cities
+#if !defined(ACTIVISION_ORIGINAL)
+		//Added by Martin Gühmann to make sure that also cities
 		//created by the Scenario editor have a size
 		if(settlerType == -2 && ScenarioEditor::PlaceCityMode() && ScenarioEditor::CitySize() > 0)
 			numPops = ScenarioEditor::CitySize();
-		//End Add
+#endif
 	}
 
 	sint32 i;
-	//Added by Martin Gühmann to make sure that also cities created by the
+#if defined(ACTIVISION_ORIGINAL)
+	for(i = 0; i < numPops; i++) {
+		
+		if (settlerType != -2)
+			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
+							   GEA_City, m_home_city,
+							   GEA_End);
+	}
+#else
+	//Added by Martin Gühmann to make sure that also cities created by the editor
 	//have a size.
-	if((settlerType != -2) || settlerType == -2 && ScenarioEditor::PlaceCityMode()){
-	//End Add
+	if((settlerType != -2) || ScenarioEditor::PlaceCityMode())
+	{
 		for(i = 0; i < numPops; i++) {
-		//Outcommented by Martin Gühmann to move out the loop this if statement
-		//to accelerate the code a little bit
-		//	if (settlerType != -2)
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 								   GEA_City, m_home_city,
 								   GEA_End);
 		}
 	}
+#endif
 	
 	if(settlerRec && settlerRec->GetNumSettleBuilding() > 0) {
 		for(i = 0; i < settlerRec->GetNumSettleBuilding(); i++) {
@@ -563,13 +652,15 @@ void CityData::Initialize(sint32 settlerType)
 	else
 		name = civData->GetAnyCityName() ;							
 
-	if (settlerType != -2)
-		m_cityStyle = civ->GetCityStyle();
+	m_cityStyle = civ->GetCityStyle();
+#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to make sure that cities created 
 	//by the scenario editor keep their style
-	else if (settlerType == -2 && ScenarioEditor::PlaceCityMode())
+	if (settlerType == -2 && ScenarioEditor::PlaceCityMode())
+	{
 		m_cityStyle = ScenarioEditor::CityStyle();
-	//End Add
+	}
+#endif
 
 	if (name != k_CITY_NAME_UNDEFINED)	{							
 		civData->GetCityName(name, s) ;								
@@ -1295,7 +1386,7 @@ void CityData::PayFederalProduction (double percent_military,
 {
     
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	sint32 origShields = m_shields_this_turn;
 #endif
 
@@ -5751,19 +5842,22 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 {
 	sint32 i;
 
-	// removed DWT
-	//bool isLand = justTryLand || g_theWorld->IsLand(m_pos);
+#if defined(ACTIVISION_ORIGINAL)
+	bool isLand = justTryLand || g_theWorld->IsLand(m_pos);
 
-	// Get the terrain type of the cell the city sits on
-	const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
-
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(m_cityStyle);
+#else
 	// Added DWT
 	// We want to retreive the underlying terrain type
 	// not the terrain type as modified by improvements
 	// as a sea city on a tunnel will turn into a land city
+	const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 	bool isLand = justTryLand || !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater());
 
-	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(m_cityStyle);
+	// 
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle());
+#endif
+
 	if(!styleRec) return -1;
 
 	const AgeCityStyleRecord *ageStyleRec = styleRec->GetAgeStyle(g_player[m_owner]->m_age);
@@ -5986,14 +6080,57 @@ sint32 CityData::GetFounder() const
 	return m_founder;
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetCityStyle
+//
+// Description: Get the style of the city.
+//
+// Parameters : -
+//
+// Globals    : g_player	: list of players
+//
+// Returns    : -
+//
+// Remark(s)  : Order of checking:
+//              1. The value of m_cityStyle for the individual city.
+//              2. The style of the founder.
+//              3. The style of the owner.
+//
+//----------------------------------------------------------------------------
+
+sint32 CityData::GetCityStyle() const
+{
+	if ((m_cityStyle >= 0) && (m_cityStyle < g_theCityStyleDB->NumRecords()))
+	{
+		return m_cityStyle;
+	}
+	else if (g_player[m_founder] && g_player[m_founder]->GetCivilisation()) 
+	{
+		return g_player[m_founder]->GetCivilisation()->GetCityStyle();
+	}
+	else if (g_player[m_owner] && g_player[m_owner]->GetCivilisation())
+	{
+		return g_player[m_owner]->GetCivilisation()->GetCityStyle();
+	}
+	else
+	{
+		return CITY_STYLE_DEFAULT;
+	}
+}
+#endif
+
 void CityData::SetCityStyle(sint32 style)
 {
-	
+
 	m_cityStyle = style;
+#if defined(ACTIVISION_ORIGINAL) // Invalid values are handled by GetCityStyle.
 	Assert(m_cityStyle >= 0);
 	Assert(m_cityStyle < g_theCityStyleDB->NumRecords());
 	if(m_cityStyle < 0 || m_cityStyle >= g_theCityStyleDB->NumRecords()) {
 		m_cityStyle = 0;
 	}
+#endif
 	UpdateSprite();
 }

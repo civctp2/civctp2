@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed number of city styles removed.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -294,6 +314,7 @@ void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unit
 	isCity = g_theUnitDB->Get(unitType)->GetHasPopAndCanBuild();
 
 	if (isCity) {
+#if defined(ACTIVISION_ORIGINAL)	// Lots of unused stuff, and a crash			
 		sint32			style;
 		sint32			terrain;
 		sint32			size;
@@ -319,11 +340,9 @@ void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unit
 			Civilisation *civ = g_player[owner]->GetCivilisation();
 			style = civ->GetCityStyle();
 
-			
 			if ( style == CITY_STYLE_MAX ) {
 				style = g_theCivilisationDB->GetCityStyle( civ->GetCivilisation() );
 			}
-
 			
 			
 			
@@ -343,6 +362,20 @@ void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unit
 			*spriteID = -1;
 		else
 			*spriteID = spriteIndex; 
+#else	// ACTIVISION_ORIGINAL
+		if (id.IsValid() && id.CD())
+		{
+			*spriteID = id.CD()->GetDesiredSpriteIndex();
+		}
+		else if (ss)
+		{
+			*spriteID = ss->GetIndex();
+		}
+		else
+		{
+			*spriteID = -1;
+		}
+#endif
 
 		*groupType = GROUPTYPE_CITY;
 	} else {

@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Improvement event handler
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented access to invalid memory.
+//
+//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 #include "GameEventUser.h"
@@ -31,7 +62,13 @@ STDEHANDLER(ImprovementCompleteEvent)
 	args->Add(new GameEventArgument(GEA_Int, imptype));
 	args->Add(new GameEventArgument(GEA_Player, owner));
 
+#if defined(ACTIVISION_ORIGINAL)	// deletes its own memory while executing
 	imp->Complete();
+#else
+	TerrainImprovementData	tmpData(ID(imp), owner, pos, imptype, 0);
+	tmpData.Complete();
+#endif
+
 	return GEV_HD_Continue;
 }
 

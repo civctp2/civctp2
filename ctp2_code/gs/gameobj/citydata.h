@@ -1,4 +1,49 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragma once commented out
+// - Enable reading of files created with the Activision 1.1 patch.
+// - Prevent crash when settling in the Alexander scenario.
+//
+//----------------------------------------------------------------------------
+
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __CITY_DATA_H__
 #define __CITY_DATA_H__ 1
 
@@ -89,8 +134,12 @@ struct TerrainValue;
 
 class CityData : public CityRadiusCallback { 
 
-    
-	
+//----------------------------------------------------------------------------
+// Do not change anything in the types or order of the following variable 
+// declarations. Doing so will break reading in of save files.
+// See the Serialize implementation for more details.
+//----------------------------------------------------------------------------
+
     PLAYER_INDEX m_owner; 
     uint32 m_slaveBits; 
 	sint32 m_accumulated_food;
@@ -224,14 +273,14 @@ class CityData : public CityRadiusCallback {
 	
 	BOOL m_is_rioting;
 
-	
-	
-
-	
+//----------------------------------------------------------------------------
+// Changing the order below this line should not break anything.
+//----------------------------------------------------------------------------
 	
     Unit m_home_city; 
-                       
-
+#if !defined(ACTIVISION_ORIGINAL)                       
+	uint8		m_unknown_from_patch;
+#endif
     BuildQueue m_build_queue; 
     
 	TradeDynamicArray m_tradeSourceList;							
@@ -883,6 +932,9 @@ public:
 	sint32 GetProjectedScience();
 	sint32 GetFounder() const;
 
+#if !defined(ACTIVISION_ORIGINAL)
+	sint32 GetCityStyle() const;
+#endif
 	void SetCityStyle(sint32 style); 
 }; 
 

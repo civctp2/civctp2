@@ -1,16 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit & city sprite handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented crashes when accessing files that failed to open/create. 
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -415,12 +432,20 @@ void UnitSpriteGroup::LoadBasic(MBCHAR *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
-
+#if defined(ACTIVISION_ORIGINAL)	// crash when file open fails
 	file->Open(&type);
 	file->ReadBasic(this);
 	file->CloseRead();
 
 	m_loadType = LOADTYPE_BASIC;
+#else
+	if (SPRITEFILEERR_OK == file->Open(&type))
+	{
+		file->ReadBasic(this);
+		file->CloseRead();
+		m_loadType = LOADTYPE_BASIC;
+	}
+#endif
 
 	delete file;
 }
@@ -432,12 +457,20 @@ void UnitSpriteGroup::LoadIndexed(MBCHAR *filename,GAME_ACTION index)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
-
+#if defined(ACTIVISION_ORIGINAL)	// crash when file open fails
 	file->Open(&type);
 	file->ReadIndexed(this,index);
 	file->CloseRead();
 
 	m_loadType = LOADTYPE_FULL;
+#else
+	if (SPRITEFILEERR_OK == file->Open(&type))
+	{
+		file->ReadIndexed(this, index);
+		file->CloseRead();
+		m_loadType = LOADTYPE_FULL;
+	}
+#endif
 
 	delete file;
 }
@@ -448,12 +481,20 @@ void UnitSpriteGroup::LoadFull(MBCHAR *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
-
+#if defined(ACTIVISION_ORIGINAL)	// crash when file open fails
 	file->Open(&type);
 	file->ReadFull(this);
 	file->CloseRead();
 
 	m_loadType = LOADTYPE_FULL;
+#else
+	if (SPRITEFILEERR_OK == file->Open(&type))
+	{
+		file->ReadFull(this);
+		file->CloseRead();
+		m_loadType = LOADTYPE_FULL;
+	}
+#endif
 
 	delete file;
 }
@@ -461,10 +502,19 @@ void UnitSpriteGroup::LoadFull(MBCHAR *filename)
 void UnitSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compression_mode)
 {
 	SpriteFile *file = new SpriteFile(filename);
-
+#if defined(ACTIVISION_ORIGINAL)	// crash when file create fails
 	file->Create(SPRITEFILETYPE_UNIT,version_id,compression_mode);
 	file->Write(this);
 	file->CloseWrite();
+#else
+	if (SPRITEFILEERR_OK == 
+			file->Create(SPRITEFILETYPE_UNIT, version_id, compression_mode)
+	   )
+	{
+		file->Write(this);
+		file->CloseWrite();
+	}
+#endif
 
 	delete file;
 }

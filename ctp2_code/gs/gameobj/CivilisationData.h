@@ -27,6 +27,7 @@
 //
 // - #pragma once commented out
 // - Import structure modified to allow mingw compilation.
+// - Prevent crash when settling in the Alexander scenario.
 //
 //----------------------------------------------------------------------------
 
@@ -37,7 +38,7 @@
 #ifndef __CIVILISATION_DATA_H__
 #define __CIVILISATION_DATA_H__
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) 
 
 #include "Gameobj.h"
 #include "ID.h"
@@ -145,7 +146,11 @@ class CivilisationData : public GAMEOBJ
 		void GetSingularCivName(MBCHAR *s) ;
 		void SetSingularCivName(const MBCHAR *s) ;
 
+#if defined(ACTIVISION_ORIGINAL)
 		sint32 GetCityStyle( void ) { return m_cityStyle; }
+#else
+		sint32 GetCityStyle(void) const;
+#endif
 		void SetCityStyle( sint32 cityStyle ) { m_cityStyle = cityStyle; }
 
 		

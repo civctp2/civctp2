@@ -1329,8 +1329,7 @@ bool OrthogonalPoint::IsValid(void)
 //
 // Name       : OrthogonalPoint::Move
 //
-// Description: Move the position of a point, and check whether it is still
-//              on the map.
+// Description: Move the position of a point.
 //
 // ParametersA: delta			: movement vector
 //

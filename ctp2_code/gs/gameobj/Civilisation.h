@@ -1,22 +1,59 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - pragma commented out
+// - Fixed city style enumeration removed. 
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __CIVILISATION_H__
 #define __CIVILISATION_H__
 
 #include "ID.h"
 #include "CivilisationData.h"
 
+#if defined(_MSC_VER)
 enum CIV_INDEX ;
+#else
+#include "CivilisationPool.h"	// CIV_INDEX
+#endif
 
 enum GENDER {
 	GENDER_MALE,
@@ -27,6 +64,7 @@ enum GENDER {
 	GENDER_MAX
 };
 
+#if defined(ACTIVISION_ORIGINAL)	// Read from file now, see g_theCityStyleDB
 enum CITY_STYLE {
 	CITY_STYLE_ROMAN,
 	CITY_STYLE_ARABIAN,
@@ -34,6 +72,26 @@ enum CITY_STYLE {
 
 	CITY_STYLE_MAX
 };
+#else
+//----------------------------------------------------------------------------
+//
+// City style values
+//
+// Valid values range from 0 up to (not including) the number of records of
+// g_theCityStyleDB. Some special values have been defined here, because 
+// CityStyleRecord is a generated file.
+// 
+// CITY_STYLE_EDITOR	: use the value from the scenario editor.
+// CITY_STYLE_GENERIC	: use the value from a less specific object (e.g. a
+//                        city may inherit the style from its civilisation).
+// CITY_STYLE_DEFAULT	: use when all else fails.
+//
+//----------------------------------------------------------------------------
+
+	sint32 const	CITY_STYLE_EDITOR	= -2;
+	sint32 const	CITY_STYLE_GENERIC	= -1;
+	sint32 const	CITY_STYLE_DEFAULT	=  0;
+#endif
 
 class Civilisation : public ID
 	{

@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Repaired multiple memory leaks.
+// - Readded Activision patch new magic number 66.
 //
 //----------------------------------------------------------------------------
 
@@ -147,9 +148,11 @@ extern PointerList<Player> *g_deadPlayer;
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 #define k_GAME_MAGIC_VALUE		"CTP0065"
-
+#else
+#define k_GAME_MAGIC_VALUE		"CTP0066"
+#endif
 
 
 
@@ -162,7 +165,11 @@ struct MagicValue {
 	sint32 version;
 };
 
+#if defined(ACTIVISION_ORIGINAL)
 #define k_NUM_MAGIC_VALUES 17
+#else
+#define k_NUM_MAGIC_VALUES 18
+#endif
 MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
 	{ "CTP0049", 49 },
     { "CTP0050", 50},
@@ -181,6 +188,9 @@ MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
     { "CTP0063", 63},
     { "CTP0064", 64},
     { "CTP0065", 65},
+#if !defined(ACTIVISION_ORIGINAL)
+	{ "CTP0066", 66}
+#endif
 };
 
 sint32 gamefile_CurrentVersion() 
@@ -2439,7 +2449,7 @@ SaveInfo::SaveInfo(SaveInfo *copyMe)
 		memcpy(powerGraphData, copyMe->powerGraphData, numBytes);
 	}
 
-#if !defined(ACTIVISION_ORIGINAL)	// 
+#if !defined(ACTIVISION_ORIGINAL)
 	if (copyMe->scenarioName)
 	{
 		size_t const	sizeHeap	= strlen(copyMe->scenarioName) + 1;

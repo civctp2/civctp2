@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Civilisation data 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed number of city styles removed.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Globals.h"
@@ -35,7 +55,7 @@
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender) : GAMEOBJ(id.m_id)
 	{
 	
@@ -43,7 +63,7 @@ CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX c
 	memset(m_cityname_count, 0, sizeof(m_cityname_count)) ;
 	m_civ = civ ;
 	m_gender = gender;
-	m_cityStyle = CITY_STYLE_MAX - 1;
+	m_cityStyle	= CITY_STYLE_MAX - 1;
 	memset(m_leader_name, 0, k_MAX_NAME_LEN);
     memset(m_personality_description, 0, k_MAX_NAME_LEN); 
 	memset(m_civilisation_name, 0, k_MAX_NAME_LEN);
@@ -71,6 +91,81 @@ CivilisationData::CivilisationData(const ID &id) : GAMEOBJ(id.m_id)
 	memset(m_country_name, 0, k_MAX_NAME_LEN);
 	memset(m_singular_name, 0, k_MAX_NAME_LEN);
 	}
+
+#else	// ACTIVISION_ORIGINAL
+
+#include "CivilisationPool.h"	// CIV_INDEX_INVALID
+#include "CityStyleRecord.h"	// g_theCityStyleDB
+
+//----------------------------------------------------------------------------
+//
+// Name       : CivilisationData::CivilisationData
+//
+// Description: Constructor
+//
+// Parameters : id		: unique civilisation id
+//				owner	: player index
+//				civ		: civilisation index
+//				gender	: leader gender
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Notifies other (network) players of its existence.
+//
+//----------------------------------------------------------------------------
+
+CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender) 
+:	GAMEOBJ(id.m_id),
+	m_owner(owner),
+	m_civ(civ),
+	m_gender(gender),
+	m_cityStyle(CITY_STYLE_GENERIC)
+{
+	memset(m_cityname_count, 0, sizeof(m_cityname_count)) ;
+	memset(m_leader_name, 0, k_MAX_NAME_LEN);
+    memset(m_personality_description, 0, k_MAX_NAME_LEN); 
+	memset(m_civilisation_name, 0, k_MAX_NAME_LEN);
+	memset(m_country_name, 0, k_MAX_NAME_LEN);
+	memset(m_singular_name, 0, k_MAX_NAME_LEN);
+
+	ENQUEUE();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CivilisationData::CivilisationData
+//
+// Description: Constructor
+//
+// Parameters : id		: unique civilisation id
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Incomplete default initialisation: other (network) players
+//              are not notified yet.
+//
+//----------------------------------------------------------------------------
+
+CivilisationData::CivilisationData(const ID &id) 
+:	GAMEOBJ(id.m_id),
+	m_owner(-1),
+	m_civ(CIV_INDEX_INVALID),
+	m_gender(GENDER_RANDOM),
+	m_cityStyle(CITY_STYLE_GENERIC)
+{
+	memset(m_cityname_count, 0, sizeof(m_cityname_count)) ;
+	memset(m_leader_name, 0, k_MAX_NAME_LEN);
+    memset(m_personality_description, 0, k_MAX_NAME_LEN); 
+	memset(m_civilisation_name, 0, k_MAX_NAME_LEN);
+	memset(m_country_name, 0, k_MAX_NAME_LEN);
+	memset(m_singular_name, 0, k_MAX_NAME_LEN);
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 
 
@@ -427,3 +522,42 @@ void CivilisationData::ResetStrings()
 	SetCountryName(g_theStringDB->GetNameStr(g_theCivilisationDB->GetCountryName(m_civ)));
 	SetSingularCivName(g_theStringDB->GetNameStr(g_theCivilisationDB->GetSingularCivName(m_civ)));
 }
+
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : CivilisationData::GetCityStyle
+//
+// Description: Get the style of the cities of a civilisation.
+//
+// Parameters : -
+//
+// Globals    : g_theCivilisationDB	: civilisation database
+//
+// Returns    : -
+//
+// Remark(s)  : Order of checking:
+//              1. The value of m_cityStyle for the civilisation.
+//              2. The default style from the civilisation database.
+//			
+//
+//----------------------------------------------------------------------------
+
+sint32 CivilisationData::GetCityStyle(void) const
+{
+	if ((m_cityStyle >= 0) && (m_cityStyle < g_theCityStyleDB->NumRecords()))
+	{
+		return m_cityStyle;
+	}
+	else if (g_theCivilisationDB && 
+		     (m_civ >= 0) && (m_civ < g_theCivilisationDB->GetCivilisations())
+			)
+	{
+		return g_theCivilisationDB->GetCityStyle(m_civ);
+	}
+	else
+	{
+		return CITY_STYLE_DEFAULT;
+	}
+}
+#endif
