@@ -65,7 +65,7 @@ void stringutils_Interpret(const MBCHAR *msg, SlicContext &slicObj, MBCHAR *sInt
 	// '{','}','#' have no meanings in sjis second byte.
 	while(*input && (output < end)) {
 #if !defined(_JAPANESE)
-		if(*input != '{' || input != msg ) {
+		if(*input != '{') {
 #else
 		if(*input != '{' || ( input != msg && IS_SJIS_1ST( *(input-1) ) ) ) {
 #endif

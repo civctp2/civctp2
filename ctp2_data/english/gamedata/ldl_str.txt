@@ -1515,8 +1515,8 @@ str_ldl_Fuel_COLON  "Fuel:"
 
 str_tbl_ldl_North_South_Wrap_Only			"North-South Wrap Only"
 str_ldl_North_and_South_edges_of_the_map_connect	"Noth and South edges of the map connect."
-str_ldl_Neptun_World					"Neptun World"
-str_tbl_ldl_Neptun_World					"Neptun World"
+str_ldl_Neptun_World					"Neptune World"
+str_tbl_ldl_Neptun_World					"Neptune World"
 
 ### New Single Player Game Player Screen Strings ###
 
