@@ -33,7 +33,6 @@
 //   - Slic database size access
 // - Exponetiation operator '**' added.
 // - Bitwise and '&' operator added
-// - Hopefully allowed declaration and setting at same time; e.g. "int_t a = 1;"
 //
 //----------------------------------------------------------------------------
 
@@ -303,7 +302,6 @@ statements: statement
 
 simplestatement: NAME '(' {slicif_add_op(SOP_SARGS);} arguments ')' { slicif_add_op(SOP_CALL, $1.name); }
 	| NAME '=' expression { slicif_add_op(SOP_ASSN, $1.name); }
-	| vartype NAME '=' expression { slicif_declare_sym($2.name, (SLIC_SYM)$1.val); slicif_add_op(SOP_ASSN, $2.name); }
 	| NAME '[' expression ']' '=' expression { slicif_add_op(SOP_ASSNA, $1.name); }
 	| NAME REF NAME '=' expression { slicif_add_op(SOP_ASSNM, $1.name, $3.name); }
 	| NAME '[' expression ']' REF NAME '=' expression { slicif_add_op(SOP_ASSNAM, $1.name, $6.name); }
@@ -323,8 +321,6 @@ statement: simplestatement ';'
                  { slicif_for_continue(); } simplestatement ')' 
 				 { slicif_start_for_body(); } body { slicif_end_for(); } 
 	| KW_EVENT ':' NAME '(' {slicif_start_event($3.name); } arguments ')' ';'{ slicif_add_op(SOP_EVENT, $3.name); }
-
-	| typedef 
 /*	| KW_STRUCT NAME NAME ';' { slicif_add_local_struct($2.name, $3.name); }*/
 	;
 
