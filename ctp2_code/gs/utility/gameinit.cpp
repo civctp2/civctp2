@@ -2078,9 +2078,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 #else // ACTIVISION_ORIGINAL
 //Added by Martin Gühmann
 				{
-					//Has to be modified
-					MessageBox(NULL, "STARTINFOTYPE_CIVS", "STARTINFOTYPE_CIVS", MB_OK);
-					//
 					Assert(numPlayersLoaded == 0);
 					Assert(g_theProfileDB->GetPlayerIndex() <= g_theWorld->GetNumStartingPositions());
 					if(g_theProfileDB->GetPlayerIndex() > g_theWorld->GetNumStartingPositions()){
@@ -2116,6 +2113,14 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 						g_theProfileDB->GetGender());
 					g_player[g_theProfileDB->GetPlayerIndex()]->m_starting_index = j;
 					
+					g_selected_item->SetPlayerOnScreen(g_theProfileDB->GetPlayerIndex());
+
+					//Set current player the selected player so that the 
+					//game starts with the first turn and the correct player.
+					g_selected_item->SetCurPlayer(g_theProfileDB->GetPlayerIndex());
+					//Make sure that the current player is kept by turning it
+					//into the stop player.
+					NewTurnCount::SetStopPlayer(g_theProfileDB->GetPlayerIndex());
 					
 					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
 					
@@ -2203,6 +2208,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					Assert(numPlayersLoaded == 0);					
 					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
 					
+					Assert(g_theProfileDB->GetPlayerIndex() <= g_useScenarioCivs);
+					if(g_theProfileDB->GetPlayerIndex() > g_useScenarioCivs){
+						g_theProfileDB->SetPlayerIndex(g_useScenarioCivs);
+					}
+
 					CIV_INDEX civ;
 
 					for(i = 0; i < g_useScenarioCivs; i++) {
@@ -2284,6 +2294,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					Assert(numPlayersLoaded == 0);					
 					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
 					
+					Assert(g_theProfileDB->GetPlayerIndex() <= g_useScenarioCivs);
+					if(g_theProfileDB->GetPlayerIndex() > g_useScenarioCivs){
+						g_theProfileDB->SetPlayerIndex(g_useScenarioCivs);
+					}
+
 					CIV_INDEX civ;
 
 					for(i = 0; i < g_useScenarioCivs; i++) {
