@@ -1,9 +1,33 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handling for the city tab of the control panel 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made rush buy button behaviour consistent with other windows.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -276,6 +300,9 @@ void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control *control,
 		return;
 	}
 	theCity->AddBuyFront();
+#if !defined(ACTIVISION_ORIGINAL)
+	((CityControlPanel*)cookie)->m_currentTurns = 0;	// Force update of city control panel
+#endif
 	((CityControlPanel*)cookie)->Update();
 }
 
@@ -466,6 +493,7 @@ void CityControlPanel::UpdateBuildItem()
 
 	
 	CityData *theCity=city.CD();
+#if defined(ACTIVISION_ORIGINAL)
 	if(theCity && theCity->GetBuildQueue()->GetHead())
 	{
 		m_buildRushBuy->Enable(theCity->GetOvertimeCost() <= g_player[g_selected_item->GetVisiblePlayer()]->GetGold() && theCity->HowMuchLonger()>1);
@@ -477,6 +505,17 @@ void CityControlPanel::UpdateBuildItem()
 			m_rushBuyCost->SetText("---");
 		}
 	}
+#else
+	if (theCity && theCity->GetBuildQueue()->GetHead() && !theCity->AlreadyBoughtFront())
+	{
+		// Allow rush buying when the player has enough gold, even when "turns to completion" is 1.
+		m_buildRushBuy->Enable
+				(theCity->GetOvertimeCost() <= g_player[g_selected_item->GetVisiblePlayer()]->GetGold());
+		char buf[20];
+		sprintf(buf, "%d", theCity->GetOvertimeCost());
+		m_rushBuyCost->SetText(buf);
+	}
+#endif
 	else
 	{
 		m_buildRushBuy->Enable(false);
