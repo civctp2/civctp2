@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Handling of user preferences.
+// File type    : C++ source
+// Description  : Tile drawing.
 //
 //----------------------------------------------------------------------------
 //
@@ -32,18 +32,9 @@
 //   to add a percent complete variable to allow more then three construction
 //   per tile improvement by Martin Gühmann.
 // - Allows now to use costumized graphics for ruins/huts by Martin Gühmann
+// - Fixed CtD when drawing ruins or huts on an unseen cell.
 //
 //----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
 
 #include "c3.h"
 
@@ -339,20 +330,21 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		
 		
 		
-	//Modified by Martin Gühmann to allow modders to costumize the graphics of ruins/huts.
-	#if !defined(ACTIVISION_ORIGINAL)
-		const TerrainRecord *rec = g_theTerrainDB->Get(cell->GetTerrain());
-		if (pos.x&1) 
-			data = m_tileSet->GetImprovementData((uint16)rec->GetHutTilesetIndexA());
-		else 
-			data = m_tileSet->GetImprovementData((uint16)rec->GetHutTilesetIndexB());
-	#else // ACTIVISION_ORIGINAL
-	//	Original code:
+#if defined(ACTIVISION_ORIGINAL)
 		if (pos.x&1) 
 			data = m_tileSet->GetImprovementData(150);
 		else 
 			data = m_tileSet->GetImprovementData(151);
-	#endif // ACTIVISION_ORIGINAL
+#else
+		// Modified by Martin Gühmann to allow modders to customize the graphics of ruins/huts.
+		sint32 const			terrain = 
+			(cell) ? cell->GetTerrain() : ucell.m_unseenCell->GetTerrainType();
+		const TerrainRecord *	rec		= g_theTerrainDB->Get(terrain);
+		if (pos.x&1) 
+			data = m_tileSet->GetImprovementData((uint16)rec->GetHutTilesetIndexA());
+		else 
+			data = m_tileSet->GetImprovementData((uint16)rec->GetHutTilesetIndexB());
+#endif // ACTIVISION_ORIGINAL
 		DrawAnImprovement(surface,data,x,y,fog);
 		drewSomething = true;
 	}
@@ -377,7 +369,11 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else 
 				break;
 			sint32 type = cell->AccessImprovement(i).GetData()->GetType();
+#if defined(ACTIVISION_ORIGINAL)
+			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog);
+#else
 			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+#endif
 			drewSomething = true;
 		}
 	} 
@@ -402,8 +398,11 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else
 				index = 2;
 
-
+#if defined(ACTIVISION_ORIGINAL)
+			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog);
+#else
 			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+#endif
 			drewSomething = true;
 
 			walker->Next();
@@ -415,11 +414,16 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 	return drewSomething;
 }
 
-
+#if defined(ACTIVISION_ORIGINAL)
+void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
+												   sint32 type, sint32 x, sint32 y, 
+												   uint16 index, BOOL fog)
+#else
 void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
 												   sint32 type, sint32 x, sint32 y, 
 												   uint16 index, BOOL fog, sint32 percentComplete)
 												   //Added sint32 percentComplete by Martin Gühmann
+#endif
 {
 	
 
@@ -549,7 +553,7 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 
 #endif
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
-/*	//MG: Origianal code outcommented and replaced by the code below
+#if defined(ACTIVISION_ORIGINAL)
 	if(index >= rec->GetNumConstructionTiles()) {
 		if(rec->GetNumConstructionTiles() < 1) {
 			data = m_tileSet->GetImprovementData(1);
@@ -558,7 +562,10 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 		}
 	} else {
 		data =  m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(index));
-	}*/
+	}
+
+
+#else
 	if(rec->GetNumConstructionTiles() < 1) {
 		data = m_tileSet->GetImprovementData(1);
 	}
@@ -579,9 +586,8 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 				data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(rec->GetNumConstructionTiles() - 1));
 			}
 		}
-	//	Original code:
-	//	data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(index));
 	}
+#endif
 
 	if(!data)
 		return;
