@@ -19,6 +19,12 @@
 //
 // - Switched INF/CAP typo corrected by Peter Triggs
 // - Start the great library with the current research project of the player.
+// - Made rush buy button behaviour consistent with other windows.
+// - Disabled rushbuy button if infrastructure or captalization are
+//   at the front of the build queue, by Martin Gühmann.
+// - If infrastructure or capitalization are at the front of the 
+//   build queue turns are shown anymore, by Martin Gühmann.
+// - Disabled rush buy button when it is not your turn by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -995,6 +1001,22 @@ void EditQueue::UpdateCityLists()
 
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : EditQueue::UpdateButtons
+//
+// Description: Updates all the buttons of the build manager including
+//              the rush buy button and the cost display.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void EditQueue::UpdateButtons()
 {
 	ctp2_ListBox *visList = GetVisibleItemList();
@@ -1027,9 +1049,27 @@ void EditQueue::UpdateButtons()
 			m_upButton->Enable(TRUE);
 		}
 
+#if defined(ACTIVISION_ORIGINAL)
+		//Removed by Martin Gühmann
 		if(m_queueList->GetSelectedItemIndex() == 0) {
 			if(!m_cityData || m_cityData->AlreadyBoughtFront() || m_cityData->GetOvertimeCost() < 0 ||
 			   g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()) {
+				m_rushBuyButton->Enable(FALSE);
+#else
+		//Added by Martin Gühmann to disable the rushbuy button and rush 
+		//buy costs if the first item is capitalization or infrastructure
+		if(m_queueList->GetSelectedItemIndex() == 0
+		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
+		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE) {
+
+			if(!m_cityData 
+			|| m_cityData->AlreadyBoughtFront() 
+			|| m_cityData->GetOvertimeCost() < 0 
+			|| g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()
+			//Added by Martin Gühmann to disable the rush buy button when it is not the players turn
+			|| g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
+			){
+#endif
 				m_rushBuyButton->Enable(FALSE);
 			} else {
 				m_rushBuyButton->Enable(TRUE);

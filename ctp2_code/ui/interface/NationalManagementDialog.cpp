@@ -28,6 +28,13 @@
 // - Added extra checks on the rush buy code to fix the infinite rush buy bug,
 //   and also altered the code that adds up the total rush buy cost so that
 //   it displays the correct value.  John Bytheway, late 2003
+// - Disabled rush buy button when it is not the players turn by John Bytheway.
+// - No rush buy costs are displayed if all selected items are capitalization 
+//   or infrastructure, by Martin Gühmann.
+// - No turn numbers aren't shown anymore in the listbox if the build item is
+//   infrastructure or capitalization, by Martin Gühmann.
+// - Rush buy button is disabled when it is not the players turn, 
+//   by Martin Gühmann.
 //     
 //----------------------------------------------------------------------------
 
@@ -481,9 +488,28 @@ void NationalManagementDialog::UpdateBuildQueue()
 #endif
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::UpdateRushBuy
+//
+// Description: Updates the status of the rush buy button, and calculates 
+//              the costs of all selected items.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NationalManagementDialog::UpdateRushBuy()
 {
 	sint32 rushBuyTotal = 0;
+#if !defined(ACTIVISION_ORIGINAL)
+	bool areAllCapInf = true;
+#endif
 	
 	tech_WLList<sint32> *selectedList = m_statusList->GetSelectedList();
 	
@@ -504,19 +530,19 @@ void NationalManagementDialog::UpdateRushBuy()
 				rushBuyTotal += city.GetCityData()->GetOvertimeCost();
 #if !defined(ACTIVISION_ORIGINAL)
 			}
+			//Added by Martin Gühmann to determine if all of the items consits of capitalization and infrastructure
+			areAllCapInf =    areAllCapInf
+			               &&(city.GetCityData()->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+			               || city.GetCityData()->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE);
+
 #endif
 	}
 
 	
 #if defined(ACTIVISION_ORIGINAL)
+
 	if((rushBuyTotal <= 0) ||
 		(rushBuyTotal > g_player[g_selected_item->GetVisiblePlayer()]->GetGold()))
-#else
-	// Extra conditions to prevent buying out of turn
-	if((rushBuyTotal <= 0) ||
-		(rushBuyTotal > g_player[g_selected_item->GetVisiblePlayer()]->GetGold())
-		|| g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())
-#endif
 		m_rushBuyButton->Enable(false);
 	else
 		m_rushBuyButton->Enable(true);
@@ -525,6 +551,30 @@ void NationalManagementDialog::UpdateRushBuy()
 	static MBCHAR stringBuffer[32];
 	sprintf(stringBuffer, "%d", rushBuyTotal);
 	m_rushBuyValue->SetText(stringBuffer);
+
+#else
+	// Extra conditions to prevent buying out of turn
+	if((rushBuyTotal <= 0) ||
+		(rushBuyTotal > g_player[g_selected_item->GetVisiblePlayer()]->GetGold())
+		|| g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
+		//Added by Martin Gühmann just in case someone figures out how to increase the costs for these two things:
+		|| areAllCapInf
+		)
+		m_rushBuyButton->Enable(false);
+	else
+		m_rushBuyButton->Enable(true);
+
+	if(areAllCapInf){
+		m_rushBuyValue->SetText("---");
+	}
+	else{
+		static MBCHAR stringBuffer[32];
+		sprintf(stringBuffer, "%d", rushBuyTotal);
+		m_rushBuyValue->SetText(stringBuffer);
+	}
+
+#endif
+
 }
 
 
@@ -687,6 +737,23 @@ ctp2_ListItem *NationalManagementDialog::CreateStatusItem(const Unit &city)
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::UpdateStatusItem
+//
+// Description: Updates the status of items including
+//              the number of turns in the list box.
+//
+// Parameters : ctp2_ListItem *item
+//              const Unit &city
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 												const Unit &city)
 {
@@ -737,7 +804,15 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 		if(queue->GetLen()) {
 			static MBCHAR stringBuffer[32];
 			sint32 turns = cityData->HowMuchLonger();
+#if defined(ACTIVISION_ORIGINAL)
+			//Removed by Martin Gühmann
 			if (turns == 0x7fffffff)
+#else
+			if (turns == 0x7fffffff
+			//Added by Martin Gühmann to disable the turn display in case of capitalization and infrastructure
+			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+#endif
 				sprintf(stringBuffer, "---");
 			else
 				sprintf(stringBuffer, "%d", turns);

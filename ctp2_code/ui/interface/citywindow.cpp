@@ -30,6 +30,17 @@
 // - Repaired memory leaks.
 // - Prevent buildings occurring twice in the pollution list.
 // - Unloaded icons. These were causing an exit-popup in the debug version.
+// - Turn display for capitalization and infrastructure does not show
+//   anymore the number of turns to completion in the list box of the build
+//   manager and city manager, by Martin Gühmann.
+// - Turn display on the turn button under the image button is disabled for
+//   capitalization and infrastructure as well, by Martin Gühmann.
+// - Rush buy costs aren't shown anymore for capitalization and 
+//   infrastructure, by Martin Gühmann.
+// - Rush buy costs aren't shown anymore for items that aren't at the front
+//   of the build queue, by Martin Gühmann.
+// - Turn count on the turn count button is now updated when another item is
+//   selected than the first item of the build queue, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -786,6 +797,22 @@ void CityWindow::Update()
 	UpdateUnitButtons();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::UpdateBuildTabs
+//
+// Description: Updates the build tab, one thing is the update of the
+//              turn count button.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void CityWindow::UpdateBuildTabs()
 {
 	
@@ -801,8 +828,16 @@ void CityWindow::UpdateBuildTabs()
 	MBCHAR buf[20];
 	if(turnCountButton) {
 		sint32 turns = m_cityData->HowMuchLonger();
+#if defined(ACTIVISION_ORIGINAL)
 		if(turns >= 0 && turns < 0x7fffffff)
 			sprintf(buf, "%d", m_cityData->HowMuchLonger());
+#else
+		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
+		if(turns >= 0 && turns < 0x7fffffff
+		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
+		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+			sprintf(buf, "%d", turns);
+#endif
 		else
 			strcpy(buf, "---");
 		turnCountButton->SetText(buf);
@@ -870,11 +905,37 @@ void CityWindow::UpdateBuildTabs()
 	UpdateBuildTabButtons();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::UpdateBuildTabButtons
+//
+// Description: Enables disables the rush buy button and the sell 
+//              building button.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void CityWindow::UpdateBuildTabButtons()
-{	
+{
+#if defined(ACTIVISION_ORIGINAL)	
 	if(m_cityData->AlreadyBoughtFront() || 
 	   g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()) {
-		
+#else
+	if(m_cityData->AlreadyBoughtFront()
+	|| g_player[g_selected_item->GetVisiblePlayer()]->m_gold->GetLevel() < m_cityData->GetOvertimeCost()
+	//Added by Martin Gühmann to disable the rush buy button when it is not the player's turn
+	|| g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
+	//Added by Martin Gühmann to disable the rush buy when capitalization or infrastructure is selected.
+	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
+	){
+#endif		
 		m_rushBuyButton->Enable(FALSE);
 	} else {
 		if(m_queueList->GetSelectedItemIndex() == 0) {
@@ -894,6 +955,21 @@ void CityWindow::UpdateBuildTabButtons()
 		
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::UpdateCostsGives
+//
+// Description: Updates the rush buy costs of the current item.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void CityWindow::UpdateCostsGives()
 {
 	ctp2_Static *costsValue = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.CostsValue");
@@ -901,8 +977,18 @@ void CityWindow::UpdateCostsGives()
 	Assert(costsValue);
 	Assert(givesValue);
 
-	
+#if defined(ACTIVISION_ORIGINAL)
 	if(m_cityData->GetBuildQueue()->GetLen() < 1 || m_cityData->AlreadyBoughtFront()) {
+#else
+	if(m_cityData->GetBuildQueue()->GetLen() < 1 
+	|| m_cityData->AlreadyBoughtFront()
+	//Added by Martin Gühmann to disable the rush buy cost in the case of infrastructure and capitalization
+	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
+	// Make sure that costs aren't displayed if the first item is not selected
+	|| s_cityWindow->m_queueList->GetSelectedItemIndex() != 0
+	){
+#endif
 		costsValue->SetText("---");
 	} else {
 		MBCHAR buf[20];
@@ -1333,6 +1419,26 @@ void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, voi
 	s_cityWindow->Update();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::BuildListSelect
+//
+// Description: Select the data for the image button and the hyper text box.
+//              Now it also handles the turn count button below the image
+//              button.
+//
+// Parameters : aui_Control *control
+//              uint32 action
+//              uint32 data
+//              void *cookie
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if((action != AUI_LISTBOX_ACTION_SELECT) &&
@@ -1409,6 +1515,29 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 						   imageButton);
 	}
 	s_cityWindow->UpdateBuildTabButtons();
+
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann to update the turn count display of the image button
+	ctp2_Button *turnCountButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.RadialButton");
+	MBCHAR buf[20];
+	if(turnCountButton) {
+
+		sint32 turns;
+		if(s_cityWindow->m_queueList->GetSelectedItemIndex() == 0)
+			turns = s_cityWindow->m_cityData->HowMuchLonger();
+		else
+			turns = s_cityWindow->m_cityData->HowMuchLonger(s_cityWindow->m_cityData->GetBuildQueue()->GetNodeByIndex(s_cityWindow->m_queueList->GetSelectedItemIndex())->m_cost);
+
+		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
+		if(turns >= 0 && turns < 0x7fffffff
+		&& s_cityWindow->m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
+		&& s_cityWindow->m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+			sprintf(buf, "%d", turns);
+		else
+			strcpy(buf, "---");
+		turnCountButton->SetText(buf);
+	}
+#endif
 }
 
 void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1511,6 +1640,22 @@ void CityWindow::CityList( aui_Control *control, uint32 action, uint32 data, voi
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::PopulateQueueList
+//
+// Description: Looks like it initializes the queue list boxes and
+//              updates them. The turn count calculatation is done here.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void CityWindow::PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlock)
 {
 	BuildQueue *bq = cd->GetBuildQueue();
@@ -1557,7 +1702,17 @@ void CityWindow::PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlo
 					}
 				}
 				char buf[20];
+#if defined(ACTIVISION_ORIGINAL)
+				//Removed by Martin Gühmann
 				if(turns < 0 || turns == 0x7fffffff) 
+#else
+				//Added by Martin Gühmann to remove number of turn
+				//display in the Build Manager and City Manager
+				//if infrastructure or capilization is displayed.
+				if(turns < 0 || turns == 0x7fffffff
+				|| bn->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
+				|| bn->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION)
+#endif
 				{
 					strcpy(buf, "---");
 				} 

@@ -26,6 +26,12 @@
 // Modifications from the original Activision code:
 //
 // - Made rush buy button behaviour consistent with other windows.
+// - Disabled rushbuy button if infrastructure or captalization are
+//   at the front of the build queue, by Martin Gühmann.
+// - If infrastructure or capitalization are at the front of the 
+//   build queue no cost or turns are shown anymore, by Martin Gühmann.
+// - Rush buy button should be disabled when it is not the player's turn
+//   unfortunatly the button state is not updated on the end turn event.
 //
 //----------------------------------------------------------------------------
 
@@ -429,6 +435,23 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityControlPanel::UpdateBuildItem
+//
+// Description: Updates all the data concerning city build items of the
+//              city tab including rush buy button, turn button rush buy 
+//              costs.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void CityControlPanel::UpdateBuildItem()
 {
 	
@@ -506,11 +529,21 @@ void CityControlPanel::UpdateBuildItem()
 		}
 	}
 #else
-	if (theCity && theCity->GetBuildQueue()->GetHead() && !theCity->AlreadyBoughtFront())
+	if (theCity 
+	&& theCity->GetBuildQueue()->GetHead() 
+	&& !theCity->AlreadyBoughtFront()
+	//Added by Martin Gühmann to disable the rush buy button when
+	//capitalization or infrastructure are at the front of the city
+	//build queue.
+	&& theCity->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
+	&& theCity->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE
+	)
 	{
 		// Allow rush buying when the player has enough gold, even when "turns to completion" is 1.
-		m_buildRushBuy->Enable
-				(theCity->GetOvertimeCost() <= g_player[g_selected_item->GetVisiblePlayer()]->GetGold());
+		m_buildRushBuy->Enable(
+		        theCity->GetOvertimeCost() <= g_player[g_selected_item->GetVisiblePlayer()]->GetGold()
+		        //Added by Martin Gühmann to make sure rush buying is only possible during the players turn.
+		        && g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer());
 		char buf[20];
 		sprintf(buf, "%d", theCity->GetOvertimeCost());
 		m_rushBuyCost->SetText(buf);
@@ -572,7 +605,17 @@ void CityControlPanel::UpdateBuildItem()
 	
 	
 	MBCHAR numTurns[50];
+#if defined(ACTIVISION_ORIGINAL)
+	//Removed by Martin Gühmann
 	if (turns == 0x7fffffff)
+#else
+	//Added by Martin Gühmann to fix the turn count in the case of
+	//captalization and infrastructure.
+	if (turns == 0x7fffffff
+	|| theCity->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+	|| theCity->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
+	)
+#endif
 		sprintf(numTurns, "---");
 	else
 		sprintf(numTurns, "%d", turns);

@@ -3835,7 +3835,7 @@ BOOL CityData::BuyFront()
 	if(!m_build_queue.GetHead())
 		return FALSE;
 
-#if defined(ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
     // * Can't rush buy capitalization/infrastructure
 	if(m_buildInfrastructure || m_buildCapitalization )
         return FALSE;
