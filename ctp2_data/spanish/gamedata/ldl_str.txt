@@ -1514,32 +1514,6 @@ str_ldl_CAPS_RETURN	"VOLVER"
 str_ldl_CAPS_SEARCH	"BUSCAR"
 str_ldl_CAPS_SPECIAL	"ESPECIAL"
 
-### New World Shape Strings ###
-
-str_tbl_ldl_North_South_Wrap_Only			"Engrape Norte-Sur"
-str_ldl_North_and_South_edges_of_the_map_connect	"Los Bordes Norte y Sur del mapa se conectan"
-str_ldl_Neptun_World					"Mundo Neptuniano"
-str_tbl_ldl_Neptun_World					"Mundo Neptuniano"
-
-### New Single Player Game Player Screen Strings ###
-
-str_ldl_SPNGPS_NumPlayerSpinner	"Número de jugadores"
-str_ldl_SPNGPS_MaxPlayerSpinner		"Número de jugadores máximo"
-str_ldl_SPNGPS_PlayerSpinner		"Jugador inicial"
-
-str_ldl_SPNGPS_NumPlayerText	"Ajusta el número de jugadores en un juego nuevo."
-str_ldl_SPNGPS_MaxPlayerText	"Ajusta el número máximo de jugadores que pueden ocurrir dentro del juego."
-str_ldl_SPNGPS_PlayerText	"Ajusta el jugador inicial. Determina el color de la civilización. (No funciona, todavía)"
-
-### Added Disclaimer Strings ###
-
-str_ldl_Disclaimer1 "ESTE MATERIAL NO ESTA HECHO O MANTENIDO POR ACTIVISION."
-str_ldl_Disclaimer2 "Esta versión de Call to Power 2 fue desarrollada en http://apolyton.net."
-str_ldl_Disclaimer3 "Contacte a los autores en ctp2source@apolyton.net."
-
-### Version String ###
-
-str_ldl_version "2003-12-23"
 
 str_ldl_Carbon_Dioxide	"Dióxido de Carbono"
 str_ldl_Cautious	"Cauto"
@@ -2861,18 +2835,6 @@ T_TURN0 					"Éste es el turno 0"
 T_CREATE_CITY 				"Se ha creado una ciudad"
 
 ARMY_NAME_PREFIX 				"Ejército #"
-
-# Ranking Tab
-str_ldl_RANKING_MILITARY		"Militar"
-str_ldl_RANKING_ECONOMIC		"Económico"
-str_ldl_RANKING_SCIENTIFIC		"Científico"
-str_ldl_RANKING_OVERALL		"Total"
-str_ldl_INFO_RANKING_TAB		"Comparación"
-str_ldl_RANKING_POLLUTION		"Contaminación"
-str_ldl_RANKING_WONDER		"Maravillas"
-str_ldl_RANKING_RANK			"Comparar:"
-str_ldl_LINE_BUTTON			"Gráfica por Líneas"
-str_ldl_ZEROSUM_BUTTON		"Gráfica por Suma Cero"
 
 #Context menu strings
 CONTEXT_CITY_VIEW 			"Administración de la ciudad"
