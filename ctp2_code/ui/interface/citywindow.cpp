@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : City window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Disband units as an army, to get the shields for the city.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3math.h"
@@ -71,6 +101,12 @@ extern ProjectFile                  *g_GreatLibPF;
 #include "Director.h"
 
 #include "network.h"
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include "AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
+#include "ArmyPool.h"	// g_armyPool
+#endif
+
 
 static CityWindow *s_cityWindow = NULL;
 extern  C3UI				*g_c3ui;
@@ -2258,10 +2294,27 @@ void CityWindow::ActivateUnitCallback(aui_Control *control, uint32 action, uint3
 	s_cityWindow->UpdateUnitButtons();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::DisbandQuery
+//
+// Description: Disband the units in the selected boxes (when confirmed).
+//
+// Parameters : result		: the user has confirmed disbanding.
+//              ud			: ? (not used)
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 void CityWindow::DisbandQuery(bool result, void *ud)
 {
 	if(result) {
-		
+
+#if defined(ACTIVISION_ORIGINAL)
+
 		static UnitDynamicArray units;
 		units.Clear();
 
@@ -2285,6 +2338,38 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 								   GEA_End);
 		}
 
+#else
+		// Create a temporary army to collect the units from the selected boxes.
+		Player *	owner	= g_player[g_selected_item->GetVisiblePlayer()];
+		Army		temp(owner->GetNewArmy(CAUSE_NEW_ARMY_GROUPING));
+
+		for (sint32 b = 0; b < k_MAX_ARMY_SIZE; b++)
+		{
+			if ((s_cityWindow->m_unitId[b] != 0) &&				 // box filled
+				s_cityWindow->m_unitButtons[b]->GetToggleState() // box selected
+			   )	
+			{
+				Unit u(s_cityWindow->m_unitId[b]);
+				Assert(u.IsValid());
+				if (u.IsValid())
+				{
+					// Transfer the unit to the temporary army.
+					u.GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
+					u.ChangeArmy(temp, CAUSE_NEW_ARMY_GROUPING);
+				}
+			}
+		} // for
+
+		// Perform the actual disbanding. 
+		g_gevManager->AddEvent(GEV_INSERT_Tail, 
+							   GEV_DisbandArmyOrder,
+							   GEA_Army, 
+							   temp.m_id,
+							   GEA_End
+							  );
+#endif	// ACTIVISION_ORIGINAL
+
+		// Remove the disbanded units from the display.
 		s_cityWindow->UpdateUnitButtons();
 	}
 }
