@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : A-star pathfinding for City
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added avoidList Param
+// - Added method to build roads around dead tiles (using the avoidList)
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __CITY_ASTAR_H__
@@ -26,6 +56,12 @@ public:
 					  const MapPoint & dest,
 					  Path & new_path,
 					  float & total_cost);
+
+#if !defined (ACTIVISION_ORIGINAL)
+
+	BOOL CheckIsPollutionAlongPath(const Path & my_path, MapPoint_List & avoidList);
+
+#endif
 
 private:
 	bool m_pathRoad;

@@ -31,7 +31,7 @@
 //
 // - Consider a goal with max armies engaged as satisfied - the limitation of army size : 
 //     we cannot form a group with more armies than the max (can disturb the goals with RallyFirst() - Calvitix
-//
+// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will be changed on wounded case) - Calvitix
 //----------------------------------------------------------------------------
 
 
@@ -397,8 +397,11 @@ void Goal::Compute_Needed_Troop_Flow()
 
 
 
-
+#if defined (ACTIVISION_ORIGINAL)
 Utility Goal::Compute_Matching_Value( const Agent_ptr agent ) const
+#else
+Utility Goal::Compute_Matching_Value( const Agent_ptr agent )
+#endif
 {
     #ifdef TEST_DRIVER
     return 100;

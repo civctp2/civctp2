@@ -32,6 +32,7 @@
 // - Set the SUB_TASK_TYPE global - Calvitix
 // - Added an SUB_TASK_TYPE attribute (used for armytext display) - Calvitix
 // - Added methods to Ungroup armies - Calvitix
+// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will be changed on wounded case) - Calvitix
 //----------------------------------------------------------------------------
 
 
@@ -136,9 +137,11 @@ public:
 
     void Compute_Needed_Troop_Flow();
 
-
+#if defined (ACTIVISION_ORIGINAL)
     Utility Compute_Matching_Value(const Agent_ptr agent) const;
-
+#else
+    Utility Compute_Matching_Value(const Agent_ptr agent);
+#endif
 
     Utility Compute_Raw_Priority();
 

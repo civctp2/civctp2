@@ -15,12 +15,17 @@ GOAL_DEFEND {
 
   Execute	ORDER_MOVE
 
-  ThreatBonus			 1000
+  ThreatBonus			 2000
   EnemyValueBonus		    0
   AlliedValueBonus		 1000
   PowerBonus			 -100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  DistanceToHomeBonus	  100
+  DistanceToEnemyBonus	  -10
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus      10000 
+  NotVisibleBonus           0 
   ChokePointBonus		  250
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		 -500
@@ -34,9 +39,9 @@ GOAL_DEFEND {
 
 GOAL_SEIGE {
   RallyFirst
+  NoRollBack  
 
   SquadClass:CanAttack
-  SquadClass:CanBombard
   SquadClass:CanDefend
   SquadClass:HasZoc
   SquadClass:CanCaptureCity
@@ -50,8 +55,13 @@ GOAL_SEIGE {
   EnemyValueBonus		 -250
   AlliedValueBonus		 1000
   PowerBonus			  500
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  DistanceToHomeBonus	  -10  
+  DistanceToEnemyBonus	   10  
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus     -10000 
+  NotVisibleBonus           0 
   ChokePointBonus		  500
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  100
@@ -67,6 +77,7 @@ GOAL_SEIGE {
 
 GOAL_ATTACK {
   RallyFirst
+  
 
   SquadClass:CanAttack
   SquadClass:CanCaptureCity
@@ -81,8 +92,13 @@ GOAL_ATTACK {
   EnemyValueBonus		 -250
   AlliedValueBonus		 1500
   PowerBonus			  500
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  DistanceToHomeBonus	  -10
+  DistanceToEnemyBonus	    0  
+  InHomeTerritoryBonus   1000
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus     -10000 
+  NotVisibleBonus       -1000     
   ChokePointBonus		   50
   UnexploredBonus	  -999999 
   ObsoleteArmyBonus		  100
@@ -112,8 +128,13 @@ GOAL_HARASS {
   EnemyValueBonus		 -500
   AlliedValueBonus		 1500
   PowerBonus			  500    
-  DistanceToHomeBonus	    0
+  DistanceToHomeBonus	  -10
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus   1000
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus     -10000 
+  NotVisibleBonus       -1000 
   ChokePointBonus		   50
   UnexploredBonus	  -999999 
   ObsoleteArmyBonus		  100
@@ -129,6 +150,7 @@ GOAL_HARASS {
 
 GOAL_SETTLE_LAND {
   NeedsEscort
+  
 
   SquadClass:Special
 
@@ -142,8 +164,13 @@ GOAL_SETTLE_LAND {
   EnemyValueBonus		 -100
   AlliedValueBonus		  100
   PowerBonus			  100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus     15
+  DistanceToHomeBonus	  -50
+  DistanceToEnemyBonus     -2
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus		 -100
   ObsoleteArmyBonus		    0
@@ -170,8 +197,13 @@ GOAL_SETTLE_SEA {
   EnemyValueBonus		  100
   AlliedValueBonus		  100
   PowerBonus			  100
-  DistanceToHomeBonus	    0
+  DistanceToHomeBonus	  -50
   DistanceToEnemyBonus     15
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus		 -100
   ObsoleteArmyBonus		    0
@@ -203,18 +235,61 @@ GOAL_EXPLORE {
   EnemyValueBonus		    0
   AlliedValueBonus		    0
   PowerBonus			    0
-  DistanceToHomeBonus     -50
-  DistanceToEnemyBonus     -5
-  ChokePointBonus		  100
-  UnexploredBonus		  100
+  DistanceToHomeBonus     -10
+  DistanceToEnemyBonus      0
+  InHomeTerritoryBonus   1000
+  NoOwnerTerritoryBonus   100
+  InEnemyTerritoryBonus  -100
+  WoundedArmyBonus       -100    
+  NotVisibleBonus        1000 
+  ChokePointBonus		   10
+  UnexploredBonus		 1000
   ObsoleteArmyBonus		   10
-  TreaspassingArmyBonus   500
+  TreaspassingArmyBonus     0
 
   ThreatenType:None
   ThreatenBonus 0
 
   ForceMatch:Special
 }
+
+GOAL_STEALTH_EXPLORE {
+  UnGroupFirst
+  
+  SquadClass:Special
+  
+  TargetType:Unexplored
+  TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
+  TargetOwner:NoContact
+
+  Execute	ORDER_MOVE
+  
+  // Try to explore away from home, but close
+  // to enemies/foreigners.
+  ThreatBonus			    0
+  EnemyValueBonus		    0
+  AlliedValueBonus		    0
+  PowerBonus			    0
+  DistanceToHomeBonus     100
+  DistanceToEnemyBonus     -5
+  InHomeTerritoryBonus  -1000
+  NoOwnerTerritoryBonus  1000
+  InEnemyTerritoryBonus  1000
+  WoundedArmyBonus          0 
+  NotVisibleBonus        1000 
+  ChokePointBonus		   10
+  UnexploredBonus		 1000
+  ObsoleteArmyBonus		   10
+  TreaspassingArmyBonus     0
+
+  ThreatenType:None
+  ThreatenBonus 0
+
+  ForceMatch:Special
+}
+
+
 
 GOAL_ENSLAVE_SETTLER {
   NeedsEscort
@@ -232,6 +307,11 @@ GOAL_ENSLAVE_SETTLER {
   PowerBonus			  100
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus   1000
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus       -1000 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -259,8 +339,13 @@ GOAL_SLAVE_RAID {
   EnemyValueBonus		  100
   AlliedValueBonus		  100
   PowerBonus			  100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  DistanceToHomeBonus	   -1
+  DistanceToEnemyBonus	   -1
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -290,6 +375,11 @@ GOAL_CHOKEPOINT {
   PowerBonus			    0
   DistanceToHomeBonus	 -100 
   DistanceToEnemyBonus	   -1
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus  1000
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus         100 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  -50
@@ -320,6 +410,11 @@ GOAL_PATROL {
   PowerBonus			 -100
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -350,6 +445,11 @@ GOAL_CONVERT_CITY {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -377,6 +477,11 @@ GOAL_BIOTERROR_CITY {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -404,6 +509,11 @@ GOAL_NANOATTACK_CITY {
   PowerBonus			  100
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -435,6 +545,11 @@ GOAL_HARASS_CITY {
   PowerBonus			  500
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  500
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  100
@@ -466,6 +581,11 @@ GOAL_BOMBARD {
   PowerBonus			  150
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus        -100 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -495,6 +615,11 @@ GOAL_EXPEL {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus        -100 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -520,8 +645,13 @@ GOAL_PILLAGE {
   EnemyValueBonus		   25
   AlliedValueBonus		    0
   PowerBonus			  100
-  DistanceToHomeBonus	    0
+  DistanceToHomeBonus	 -100
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus       -1000 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -552,6 +682,11 @@ GOAL_PIRATE {
   PowerBonus			  100
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus   1000
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus       -1000 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -579,6 +714,11 @@ GOAL_COUNTER_STEALTH {
   PowerBonus			  100
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -606,7 +746,12 @@ GOAL_GOODY_HUT {
   AlliedValueBonus		    0
   PowerBonus			    0
   DistanceToHomeBonus	   -5 
-  DistanceToEnemyBonus	   -1
+  DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus   1000
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -633,7 +778,12 @@ GOAL_PLANT_NUKE {
   AlliedValueBonus		  -30
   PowerBonus			  -30
   DistanceToHomeBonus	   10
-  DistanceToEnemyBonus	  -10
+  DistanceToEnemyBonus	  -1
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -660,7 +810,12 @@ GOAL_CREATE_PARK {
   AlliedValueBonus		  -30
   PowerBonus			  -30
   DistanceToHomeBonus	   10
-  DistanceToEnemyBonus	  -10
+  DistanceToEnemyBonus	  -1
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -690,6 +845,11 @@ GOAL_SOOTHSAY {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -721,6 +881,11 @@ GOAL_ESTABLISH_EMBASSY {
   PowerBonus			    0
   DistanceToHomeBonus	   -1 
   DistanceToEnemyBonus	    1 
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	    -1500
   ObsoleteArmyBonus		    0
@@ -745,9 +910,14 @@ GOAL_FRANCHISING {
   ThreatBonus			  -50
   EnemyValueBonus		  100
   AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  PowerBonus			   10
+  DistanceToHomeBonus	  -10
+  DistanceToEnemyBonus	   10
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -775,8 +945,13 @@ GOAL_STEAL_TECHNOLOGY {
   EnemyValueBonus		  100
   AlliedValueBonus		  100
   PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  DistanceToHomeBonus	   -1
+  DistanceToEnemyBonus	    1
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -806,6 +981,11 @@ GOAL_INVESTIGATE_CITY {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -833,6 +1013,11 @@ GOAL_INCITE_REVOLUTION {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -859,6 +1044,11 @@ GOAL_INJOIN {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -886,6 +1076,11 @@ GOAL_ASSASSINATE {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -912,6 +1107,11 @@ GOAL_UNDERGROUND_RAILWAY {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -936,7 +1136,12 @@ GOAL_NUKE_CITY {
   AlliedValueBonus		  -30
   PowerBonus			  -30
   DistanceToHomeBonus	   10
-  DistanceToEnemyBonus	  -10
+  DistanceToEnemyBonus	  -1
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -969,6 +1174,11 @@ GOAL_WANDER {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	  -10
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		    0
@@ -997,6 +1207,11 @@ GOAL_SALLY {
   PowerBonus			  100
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1022,6 +1237,11 @@ GOAL_REFORM {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		  100
@@ -1047,6 +1267,11 @@ GOAL_SUE_FRANCHISE {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1061,8 +1286,7 @@ GOAL_SUE_FRANCHISE {
 // Cause military units to pullback towards our city
 //
 GOAL_RETREAT {
-  UnGroupFirst  
-  ExecuteIncrementally
+  UnGroupFirst    
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -1080,10 +1304,15 @@ GOAL_RETREAT {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus     100000 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		    0
-  TreaspassingArmyBonus     0
+  TreaspassingArmyBonus 100000
 
   ThreatenType:None
   ThreatenBonus 0
@@ -1112,6 +1341,11 @@ GOAL_PROTECT_ENDGAME
   PowerBonus			 -100
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  -10
@@ -1142,8 +1376,13 @@ GOAL_DESTROY_ENDGAME
   EnemyValueBonus		  100
   AlliedValueBonus		  100
   PowerBonus			  100
-  DistanceToHomeBonus	    0
+  DistanceToHomeBonus	 -100   
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -1171,8 +1410,13 @@ GOAL_ADVERTISING {
   EnemyValueBonus		  100
   AlliedValueBonus		    0
   PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  DistanceToHomeBonus	  -10
+  DistanceToEnemyBonus	  100
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1201,6 +1445,11 @@ GOAL_INCITE_UPRISING {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1228,6 +1477,11 @@ GOAL_POISON_CITY {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1259,6 +1513,11 @@ GOAL_THROW_PARTY {
   PowerBonus			    0
   DistanceToHomeBonus	   -1 
   DistanceToEnemyBonus	    1 
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	    -1500
   ObsoleteArmyBonus		    0
@@ -1289,6 +1548,11 @@ GOAL_SUE {
   PowerBonus			    0
   DistanceToHomeBonus	    2
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1318,6 +1582,11 @@ GOAL_INDULGENCE {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1346,6 +1615,11 @@ GOAL_FAITH_HEALING {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1371,6 +1645,11 @@ GOAL_REFUEL {
   PowerBonus			    0
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus     100000 
+  NotVisibleBonus           0 
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1400,6 +1679,11 @@ GOAL_PARADROP {
   PowerBonus			  500
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		  500
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  100
@@ -1430,6 +1714,11 @@ GOAL_RANGED_ATTACK {
   PowerBonus			  500
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0 
+  WoundedArmyBonus          0 
+  NotVisibleBonus           0 
   ChokePointBonus		   50
   UnexploredBonus	         -999999 
   ObsoleteArmyBonus		    100

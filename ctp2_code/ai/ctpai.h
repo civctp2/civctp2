@@ -29,6 +29,7 @@
 //   to enter in a transport that is in town(example : 5 - units group cannot enter transport
 //   if it is in a city and
 //   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
+// - force garrison units to ungroup.
 //----------------------------------------------------------------------------
 
 
@@ -71,11 +72,14 @@ public:
 	
 	static void BeginTurn(const PLAYER_INDEX player);
 
-	
+#if defined (ACTIVISION_ORIGINAL)
 	static void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId);
+#else
+	static void MakeRoomForNewUnits(const PLAYER_INDEX playerId);
+    
+	static void MoveOutofCityTransportUnits(const PLAYER_INDEX playerId);
 
-#if !defined (ACTIVISION_ORIGINAL)
-    static void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId);
+	static void UnGroupGarrisonUnits(const PLAYER_INDEX playerId);
 #endif
 
 	

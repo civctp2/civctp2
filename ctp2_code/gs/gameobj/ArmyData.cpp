@@ -33,7 +33,8 @@
 // - #02 TestOrderAny added.
 // - Ambiguous sqrt calls resolved.
 // - Standardised min/max usage.
-// - Add CanTransport method
+// - Add CanTransport method - Calvitix
+// - Added IsWounded method - Calvitix
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -7643,6 +7644,29 @@ void ArmyData::GetCurrentHP(sint32 &count, sint32 unit_type[100],
         
     } 
 }
+
+#if !defined (ACTIVISION_ORIGINAL)
+BOOL ArmyData::IsWounded()
+{
+		sint32 nb;
+		sint32  unittypes[100];
+		sint32  unithp[100];
+		sint32 totalcurrentHP = 0;
+		sint32 totalHP = 0;
+
+		GetCurrentHP(nb,unittypes,unithp);
+		for (int i = 0 ; i < nb ; i ++)
+		{
+			totalcurrentHP += unithp[i];
+			totalHP+= g_theUnitDB->Get(unittypes[i])->GetMaxHP();
+		}
+		return (totalcurrentHP < totalHP/2); 
+		//criterion can be changed, but seems relevant. Even if support isn't
+		//determined as full, it will be wise not to attack with unit that has 
+		//half than is normal HP.
+}
+#endif
+
 
 BOOL ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
 {

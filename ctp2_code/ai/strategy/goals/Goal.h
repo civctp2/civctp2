@@ -1,278 +1,229 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  : the Goal motherclass header
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will be changed on wounded case) - Calvitix
+//
+//----------------------------------------------------------------------------
 
 #ifndef __GOAL_H__
-#define __GOAL_H__
-
-
-
-#pragma warning(disable: 4786)
-
-#include "Plan.h"
-
-
-#include "Scheduler_Types.h"
-
-
-#include "Squad_Strength.h"
-
-
-#include <string>
-
+    #define __GOAL_H__
+    #pragma warning(disable: 4786)
+    #include "Plan.h"
+    #include "Scheduler_Types.h"
+    #include "Squad_Strength.h"
+    #include <string>
 class Goal
 {
 public:
 
-  	
-	
-	
-	
-  	
 
-	
-	enum REMOVAL_TIME
-	{
-		REMOVE_WHEN_COMPLETE,
-		DONT_REMOVE,
-		
-		
-	};
-
-    const static Utility BAD_UTILITY; 
-    const static Utility MAX_UTILITY; 
-
-  	
-  	
-    
-	
-  	
-
-	
-	
-	
-
-  	
-	Goal();
-
-	
-	Goal(const Goal &goal);
-	
-  	
-  	virtual ~Goal();
-
-	
-	
-	virtual void Init();
-
-	
-	virtual Goal & operator= (const Goal &goal);
+    enum REMOVAL_TIME
+    {
+        REMOVE_WHEN_COMPLETE,
+        DONT_REMOVE,
 
 
-	
-	bool operator< (const Goal &goal) const;
+    };
 
-	
-	GOAL_TYPE Get_Goal_Type() const;
+    const static Utility BAD_UTILITY;
 
-	
-	void Set_Player_Index(const PLAYER_INDEX &player_index);
+    const static Utility MAX_UTILITY;
 
-	
-	PLAYER_INDEX Get_Player_Index() const;
 
-  	
-  	
-  	
-	
-	
-  	virtual bool Is_Satisfied() const;
+    Goal();
 
-	
-  	
-  	
-  	virtual bool Is_Goal_Undercommitted() const;
 
-	
-  	sint16 Get_Agent_Count() const;
+    Goal(const Goal & goal);
 
-	
-	bool Is_Single_Squad() const;
 
-	
-	
-	
-	bool Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & agent_list_iter);
+    virtual ~Goal();
 
-	
-	const Agent_List & Goal::Get_Agent_List() const;
 
-  	
-	
-  	Agent_ptr Rollback_Agent(Agent_List::const_iterator & agent_iter);
+    virtual void Init();
 
-	
-	
-	
-  	virtual bool Is_Execute_Incrementally() const;
 
-  	
-  	
-  	virtual void Compute_Needed_Troop_Flow() = 0;
+    virtual Goal & operator = (const Goal & goal);
 
-  	
-  	
-  	
-  	virtual Utility Compute_Matching_Value( const Agent_ptr agent ) const = 0;
 
-  	
-  	
-  	
-  	virtual Utility Compute_Raw_Priority() = 0;
+    bool operator < (const Goal & goal) const;
 
-	
-	Utility Get_Raw_Priority() const;
 
-	
-	virtual GOAL_RESULT Execute_Task() = 0;
+    GOAL_TYPE Get_Goal_Type() const;
 
-	
-	virtual bool Get_Totally_Complete() const = 0;
 
-	
-	virtual bool Pretest_Bid(const Agent_ptr agent_ptr) const = 0;
+    void Set_Player_Index(const PLAYER_INDEX & player_index);
 
-	
-	virtual void Set_Invalid(const bool &is_invalid); 
 
-	
-	virtual bool Get_Invalid() const;
+    PLAYER_INDEX Get_Player_Index() const;
 
-	
-    virtual bool Get_Removal_Time() const; 
 
-	
-    void Set_Removal_Time(const REMOVAL_TIME & removal_time); 
+    virtual bool Is_Satisfied() const;
 
-	
+
+    virtual bool Is_Goal_Undercommitted() const;
+
+
+    sint16 Get_Agent_Count() const;
+
+
+    bool Is_Single_Squad() const;
+
+
+    bool Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & agent_list_iter);
+
+
+    const Agent_List & Goal::Get_Agent_List() const;
+
+
+    Agent_ptr Rollback_Agent(Agent_List::const_iterator & agent_iter);
+
+
+    virtual bool Is_Execute_Incrementally() const;
+
+
+    virtual void Compute_Needed_Troop_Flow() = 0;
+
+#if defined (ACTIVISION_ORIGINAL)
+    virtual Utility Compute_Matching_Value(const Agent_ptr agent) const = 0;
+#else
+    virtual Utility Compute_Matching_Value(const Agent_ptr agent) = 0;
+#endif
+
+
+    virtual Utility Compute_Raw_Priority() = 0;
+
+
+    Utility Get_Raw_Priority() const;
+
+
+    virtual GOAL_RESULT Execute_Task() = 0;
+
+
+    virtual bool Get_Totally_Complete() const = 0;
+
+
+    virtual bool Pretest_Bid(const Agent_ptr agent_ptr) const = 0;
+
+
+    virtual void Set_Invalid(const bool & is_invalid);
+
+
+    virtual bool Get_Invalid() const;
+
+
+    virtual bool Get_Removal_Time() const;
+
+
+    void Set_Removal_Time(const REMOVAL_TIME & removal_time);
+
+
     bool Can_Be_Executed() const;
 
-	
-    void Set_Can_Be_Executed(const bool &can_be_executed);
 
-	
-	
-	
+    void Set_Can_Be_Executed(const bool & can_be_executed);
 
-	
-    virtual bool Validate() const; 
 
-	
-	virtual void Log_Debug_Info(const int & log) const;
+    virtual bool Validate() const;
 
-	
-	
-	
 
-	
-	void Add_Match_Reference(const Plan_List::iterator &plan_iter);
+    virtual void Log_Debug_Info(const int & log) const;
 
-	
-	void Remove_Match_Reference(const Plan_List::iterator &plan_iter);
 
-	
-	std::list<Plan_List::iterator> & Get_Match_References();
+    void Add_Match_Reference(const Plan_List::iterator & plan_iter);
 
-	
-	void Set_Type(const GOAL_TYPE & type);
 
-	
-	void Set_Raw_Priority(const Utility & priority);
+    void Remove_Match_Reference(const Plan_List::iterator & plan_iter);
 
-	
+
+    std::list < Plan_List::iterator > & Get_Match_References();
+
+
+    void Set_Type(const GOAL_TYPE & type);
+
+
+    void Set_Raw_Priority(const Utility & priority);
+
+
     bool Get_Is_Appropriate() const;
 
-	
-	bool Satisfied_By(const Squad_Strength & army_strength) const;
 
-	
-	bool Needs_Transport() const;
+    bool Satisfied_By(const Squad_Strength & army_strength) const;
 
-	
-	const Squad_Strength Get_Strength_Needed() const;
+
+    bool Needs_Transport() const;
+
+
+    const Squad_Strength Get_Strength_Needed() const;
 
 protected:
 
-	
-	
-	
-	
-	
 
-	
-	GOAL_TYPE m_goal_type;
+    GOAL_TYPE m_goal_type;
 
-	
-	Utility m_raw_priority;
 
-	
-	REMOVAL_TIME m_removal_time;	
+    Utility m_raw_priority;
 
-	
-	bool m_is_invalid;
 
-	
-	bool m_execute_incrementally;
+    REMOVAL_TIME m_removal_time;
 
-	
-    
 
-	
+    bool m_is_invalid;
+
+
+    bool m_execute_incrementally;
+
+
     Squad_Strength m_current_needed_strength;
 
-	
-	Squad_Strength m_current_attacking_strength;
 
-	
-	std::list<Plan_List::iterator> m_match_references;
+    Squad_Strength m_current_attacking_strength;
 
-	
-	Agent_List m_agents;
 
-   	
-	PLAYER_INDEX m_playerId;
+    std::list < Plan_List::iterator > m_match_references;
 
-    
-    std::pair<sint16, sint16> m_pos;
 
-	
-	
-	
-	
-	
+    Agent_List m_agents;
+
+
+    PLAYER_INDEX m_playerId;
+
+
+    std::pair < sint16, sint16 > m_pos;
+
 
 private:
 
-	
-	
-	
-	
-	
 
 };
 
 
-
-
-
-
-#endif 
+#endif

@@ -35,7 +35,7 @@
 // Modifications from the original Activision code:
 //
 // - Added option to reduce resync reporting.
-//
+// - Added IsWounded method
 //----------------------------------------------------------------------------
 
 #if defined(_MSC_VER) && (_MSC_VER > 1000)
@@ -317,6 +317,10 @@ public:
 
     void GetCurrentHP(sint32 &n, sint32 unit_type[100], 
         sint32 unit_hp[100]); 
+
+#if !defined (ACTIVISION_ORIGINAL)
+	BOOL IsWounded();
+#endif
 
 	BOOL ExecutedThisTurn() const;
     void InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos);

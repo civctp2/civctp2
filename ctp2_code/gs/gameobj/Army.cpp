@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Added option to reduce resync reporting.
-//
+// - Added IsWounded method
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -895,6 +895,13 @@ void Army::GetCurrentHP(sint32 &n, sint32 unit_type[100],
 {
     AccessData()->GetCurrentHP(n, unit_type, unit_hp); 
 }
+
+#if !defined (ACTIVISION_ORIGINAL)
+BOOL Army::IsWounded()
+{
+	return AccessData()->IsWounded();
+}
+#endif
 
 
 BOOL Army::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision)

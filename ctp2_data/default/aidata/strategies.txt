@@ -159,12 +159,13 @@ STRATEGY_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   7 }
+    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   3 }
     GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   355000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  25  MaxExec   4 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -405,7 +406,7 @@ STRATEGY_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.5
         BombardMatch  0.0
-        ValueMatch    1.2
+        ValueMatch    1.7
     }
 
     Defensive {
@@ -421,7 +422,7 @@ STRATEGY_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 
     StealthAttack {
@@ -499,6 +500,7 @@ STRATEGY_BARBARIAN {
     GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0	MaxExec   0 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority        0  MaxEval   0	MaxExec   0 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0	MaxExec   0 }
     GoalElement { Goal GOAL_PATROL              Priority        0  MaxEval   0	MaxExec   0 }
     GoalElement { Goal GOAL_EXPEL               Priority        0  MaxEval   0  MaxExec   0 }
@@ -637,7 +639,7 @@ STRATEGY_SEIGE {
     AirTransportUnitsCount 4
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority   600000  MaxEval   3  MaxExec   1 }
     GoalElement { Goal GOAL_ATTACK              Priority   600000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_HARASS              Priority   595000  MaxEval  25  MaxExec  10 }
@@ -671,7 +673,7 @@ STRATEGY_SEIGE {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.3
+        ValueMatch    1.8
     }
 
     Harass {
@@ -679,7 +681,7 @@ STRATEGY_SEIGE {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.1
+        ValueMatch    1.6
     }
 }
 
@@ -714,7 +716,7 @@ STRATEGY_ATTACK {
     AirTransportUnitsCount 4
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec   3 }
     GoalElement { Goal GOAL_ATTACK              Priority   605000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   600000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_BOMBARD             Priority   607000  MaxEval  25  MaxExec  10 }
@@ -766,7 +768,7 @@ STRATEGY_ATTACK {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 
     Harass {
@@ -774,7 +776,7 @@ STRATEGY_ATTACK {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 }
 
@@ -834,7 +836,7 @@ STRATEGY_DEFEND {
         DefenseMatch  0.6
         RangedMatch   0.6
         BombardMatch  0.4
-        ValueMatch    1.2
+        ValueMatch    1.1
     }
 
     Harass {
@@ -842,7 +844,7 @@ STRATEGY_DEFEND {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 }
 
@@ -911,16 +913,19 @@ STRATEGY_ISLAND_NATION {
 
 STRATEGY_EXPLORE_NEAR {
     GoalElement { Goal GOAL_EXPLORE             Priority    35000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority    35000  MaxEval  25  MaxExec   3 }
     GoalElement { Goal GOAL_GOODY_HUT           Priority    45000  MaxEval  25  MaxExec   5 }
 }
 
 STRATEGY_EXPLORE_FAR {
     GoalElement { Goal GOAL_EXPLORE             Priority    80000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority    80000  MaxEval  25  MaxExec   4 }
     GoalElement { Goal GOAL_GOODY_HUT           Priority    85000  MaxEval  25  MaxExec  10 }
 }
 
 STRATEGY_EXPLORE_WIDE {
     GoalElement { Goal GOAL_EXPLORE             Priority   120000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority   120000  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_GOODY_HUT           Priority   125000  MaxEval  25  MaxExec  15 }
 }
 
@@ -1128,6 +1133,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -1368,7 +1374,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.8
         BombardMatch  0.0
-        ValueMatch    1.2
+        ValueMatch    1.7
     }
 
     Defensive {
@@ -1384,7 +1390,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 
     StealthAttack {
@@ -1573,12 +1579,13 @@ STRATEGY_MILITARIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   8 }
+    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   3 }
     GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -1819,7 +1826,7 @@ STRATEGY_MILITARIST_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.7
         BombardMatch  0.0
-        ValueMatch    1.2
+        ValueMatch    1.7
     }
 
     Defensive {
@@ -1835,7 +1842,7 @@ STRATEGY_MILITARIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 
     StealthAttack {
@@ -2030,6 +2037,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -2270,7 +2278,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.1
+        ValueMatch    1.6
     }
 
     Defensive {
@@ -2286,7 +2294,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 
     StealthAttack {
@@ -2480,6 +2488,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -2720,7 +2729,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.2
+        ValueMatch    1.7
     }
 
     Defensive {
@@ -2736,7 +2745,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 
     StealthAttack {
@@ -2929,6 +2938,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec   2 }
+    GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   400000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
@@ -3169,7 +3179,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.2
+        ValueMatch    1.7
     }
 
     Defensive {
@@ -3185,7 +3195,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.0
+        ValueMatch    1.5
     }
 
     StealthAttack {

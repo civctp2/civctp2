@@ -27,18 +27,16 @@
 //
 // - Add the same action to escort Transports as it exists for Settlers - Calvitix
 // - Allow army groups (size > 1) to escort settlers or transports - Calvitix
-//
-// - remove part of original code that are placed to optimize the Ai'times
-//   I don't think anyone cares about it now, with PC almost 2 or 3 times faster than when the game was released. - Calvitix
-//        - Place Tile Improvement every turn instead of every 5 turns - Calvitix
-//        - Add goals (Chokepoint - Goodyhuts) every turn (and not just when there isn't anymore (if one goal remain and isn't satisfied,
-//          it can freeze all the goals of this type) - Calvitix
-//        - Set a better explore resolution (an Explore goal every 2 tiles instead of every 5 tiles)
+// - Place Tile Improvement every turn instead of every 5 turns - Calvitix
+// - Add goals (Chokepoint - Goodyhuts) if there is only a third of maxeval (and not just when there isn't anymore (if one goal remain and isn't satisfied,
+//   it can freeze all the goals of this type) - Calvitix
+// - Set explore resolution (an Explore goal every 4 tiles is a good compromise)
 //
 // - force to move the transport units out of city (12 units isn't much, and their is problems when a group want
 //   to enter in a transport that is in town(example : 5 - units group cannot enter transport
 //   if it is in a city and
 //   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
+// - Add UngroupGarrison method (to ungroup units blocked by garrison (for example seige force) - Calvitix
 //----------------------------------------------------------------------------
 
 
@@ -1476,7 +1474,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	t2 = GetTickCount();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
 
-               // update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
+    // update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
 #if defined (ACTIVISION_ORIGINAL)
 	if (round % 5 == 0)
 #endif
@@ -1692,6 +1690,67 @@ void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId)
        }
    }
 }
+
+
+void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
+{
+ Player * player_ptr = g_player[playerId];
+   Assert(player_ptr != NULL);
+   sint32 num_cities = player_ptr->m_all_cities->Num();
+
+   CellUnitList garrison;
+   Unit city;
+   Army move_army;
+   sint8 min_size;
+
+   sint32 i, j;
+   MapPoint pos, dest;
+   for (i = 0; i < num_cities; i++)
+   {
+       city = player_ptr->m_all_cities->Access(i);
+       Assert(g_theUnitPool->IsValid(city));
+       Assert(city->GetCityData() != NULL);
+
+       pos = city.RetPos();
+       g_theWorld->GetArmy(pos, garrison);
+       {
+
+           move_army.m_id = 0x0;
+           min_size = k_MAX_ARMY_SIZE;
+           for (j = 0; j < garrison.Num(); j++)
+           {
+			   //there is a problem to determine if units are in garrison or just pathing through the city
+			   // If fear it will also ungroup all the units of the tile (garrison points on a cellunitlist that
+			   // cannot know which units is group tu another.
+			   // Don't really affect the game, as units with a real goal and rallyrfirst will regroup them to continue... (I hope...) - Calvitix
+			   if (garrison.Access(j).GetArmy().Num() > 1) //Num() gives the total units on the tile (and not only the num of the army group)
+			   {
+					if (garrison.Access(j).GetArmy().IsEntrenched() || garrison.Access(j).GetArmy().IsEntrenched())
+					{
+						
+							g_gevManager->AddEvent( GEV_INSERT_Tail, 
+							GEV_UngroupOrder, 
+							GEA_Army, garrison.Access(j).GetArmy(), 
+							GEA_End);
+							
+							break;	
+					}
+        
+               }
+           }
+
+
+           if (move_army.m_id == 0x0)
+           {
+               //         Assert(0);
+               continue;
+           }
+       }
+   }
+
+
+
+}
 #endif //ACTIVISION_ORIGINAL
 
 void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
@@ -1806,6 +1865,8 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
        #if !defined (ACTIVISION_ORIGINAL)
        //to execute the new action :
        CtpAi::MoveOutofCityTransportUnits(player);
+
+       CtpAi::UnGroupGarrisonUnits(player);	
        #endif //ACTIVISION_ORIGINAL
 	}
 	
@@ -1985,7 +2046,7 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 	sint16 explore_res = 5;
 #else
     // Set a better explore resolution (every 2 tiles)
-    sint16 explore_res = 2;
+    sint16 explore_res = 4;
 #endif
 	GOAL_TYPE goal_type;
 	const StrategyRecord::GoalElement *goal_element_ptr;
@@ -2007,6 +2068,9 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 #if defined (ACTIVISION_ORIGINAL)
 			if (scheduler.CountGoalsOfType(goal_type) > 0)
 				continue;
+#else
+			if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
+				continue;
 #endif //ACTIVISION_ORIGINAL
 			
 			
@@ -2014,9 +2078,9 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 				continue;
 			
 			MapPoint pos;
-			for ( pos.x = 0; pos.x < g_theWorld->GetWidth(); pos.x += explore_res) 
+			for ( pos.x = 0; pos.x <  g_theWorld->GetWidth(); pos.x += explore_res) 
 				{
-					for (pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y += explore_res) 
+					for (pos.y = 0; pos.y <  g_theWorld->GetHeight(); pos.y += explore_res) 
 						{
 							
 							if ( player_ptr->IsExplored(pos) == TRUE)
@@ -2157,11 +2221,14 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 				 !g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
 				 continue;
 
-                   //Add goals every turn (and not just when there isn't anymore (if one goal remain and isn't satisfied,
+                   //Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
                    // it can freeze all the goals of this type) - Calvitix
            #if defined (ACTIVISION_ORIGINAL)
 			if (scheduler.CountGoalsOfType(goal_type) > 0)
 				continue;
+			#else
+			if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
+				continue;					
            #endif //ACTIVISION_ORIGINAL
 
 			

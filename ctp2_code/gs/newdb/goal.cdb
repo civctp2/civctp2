@@ -1,3 +1,28 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Goals descriptor
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Added UngroupFirst & NoRollback Token
+#  - Added Bonuses depending on territory owner
+#  - Added IsVisible Bonus
+#  - Added IsWounded Bonus
+#-----------------------------------------------------------------------------
+
 Goal {
 	Bit NeedsEscort
 	Bit IsSally
@@ -7,7 +32,10 @@ Goal {
     Bit RemoveWhenComplete
 	Bit RallyFirst				// armies need to rally before going to target
 	Bit NoTransport			    // do not use transports to satisfy this goal
+#not ACTIVISION_ORIGINAL    
     Bit UnGroupFirst
+    Bit NoRollback
+#end
 
 	Bits SquadClass {
 		CanExplore,
@@ -53,6 +81,13 @@ Goal {
 	Int PowerBonus 
 	Int DistanceToHomeBonus 
 	Int DistanceToEnemyBonus
+#not ACTIVISION_ORIGINAL    
+	Int InHomeTerritoryBonus
+	Int NoOwnerTerritoryBonus
+	Int InEnemyTerritoryBonus
+	Int WoundedArmyBonus
+	Int NotVisibleBonus 
+#end	
 	Int ChokePointBonus 
 	Int UnexploredBonus 
 	Int ObsoleteArmyBonus

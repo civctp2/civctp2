@@ -36,7 +36,7 @@
 //
 // - TestOrderAny added.
 // - CanTransport method added. - Calvitix
-//
+// - Added IsWounded method - Calvitix
 //----------------------------------------------------------------------------
 
 #if defined(_MSC_VER)
@@ -298,6 +298,10 @@ public:
 
     void GetCurrentHP(sint32 &n, sint32 unit_type[100], 
         sint32 unit_hp[100]);
+
+#if !defined (ACTIVISION_ORIGINAL)
+	BOOL IsWounded();
+#endif
 
 	BOOL AbleToPlantNukeTarget(const MapPoint &point, sint32 &uindex);
 	BOOL AbleToMakeParkTarget(const MapPoint &point, sint32 &uindex);

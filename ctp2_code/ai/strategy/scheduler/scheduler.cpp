@@ -36,7 +36,6 @@
 // - Do not consider invalid goals (e.g. threatened city that has been 
 //   destroyed already).
 // - Marked MS version specific code.
-// - Added armytext entry (NO_GOAL) by default
 // - Added CanMatchesBeReevaluated() check -> to reevaluate the goals each turn
 //   (not only first turn of war...)
 // - Activated the double Goal check for all goals (not only settle goals)
@@ -83,6 +82,8 @@ using namespace std ;
 #include "agreementmatrix.h"
 #if !defined (ACTIVISION_ORIGINAL)
 #include "gfx_options.h"
+#include "Army.h"
+#include "ArmyData.h"
 #endif
 
 
@@ -473,28 +474,7 @@ void Scheduler::Reset_Squad_Execution()
 		
 		
 		(*squad_ptr_iter)->Set_Can_Be_Executed(true);
-#if !defined (ACTIVISION_ORIGINAL)
-        if (player_ptr == NULL)
-        {
-            player_ptr = g_player[m_playerId];
-            Assert(player_ptr != NULL);
-        }
-        if (player_ptr->GetPlayerType() == PLAYER_TYPE_ROBOT)
-        {
-            Agent_List::iterator agent_iter;
-            Agent_List & agent_list = (* squad_ptr_iter)->Get_Agent_List();
-            for (agent_iter = agent_list.begin(); agent_iter != agent_list.end(); agent_iter++)
-            {
-
-                CTPAgent_ptr myAgent = (CTPAgent_ptr)(* agent_iter);
-                uint8 magnitude = 220;
-                g_graphicsOptions->AddTextToArmy(myAgent->Get_Army(), "NO GOAL", magnitude);
-	}
-}
-
-#endif //ACTIVISION_ORIGINAL
         squad_ptr_iter++;
-
     }
 }
 
@@ -739,7 +719,22 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 	sint32 agent_count;
 
-	
+#if !defined (ACTIVISION_ORIGINAL)
+	bool AreAllGoalsSatisfied = true;
+	plan_iter = m_matches.begin();
+	while (plan_iter != m_matches.end()) {
+
+		goal_ptr = plan_iter->Get_Goal();
+		if (!goal_ptr->Is_Satisfied())
+		{
+			AreAllGoalsSatisfied = false;
+		}
+
+		plan_iter++;
+	}
+
+#endif
+
 	plan_iter = m_matches.begin();
 	while (plan_iter != m_matches.end()) {
 
@@ -1322,11 +1317,15 @@ bool Scheduler::Prioritize_Goals()
 		m_goals_of_type[goal_type].
 			push_back(Sorted_Goal_ptr(Goal::BAD_UTILITY, *goal_ptr_iter));
 		
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
-			("\tAdded New Goal: %x (%s) to Goal Class: %d\n",
+
+	/*	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
+			("\tAdded New Goal: %x %d(%s) - (%3d,%3d)\n",
 			*goal_ptr_iter,
+			goal_type,
 			g_theGoalDB->Get(goal_type)->GetNameText(),
-			goal_type));
+			(*goal_ptr_iter)->GetTargetPos().x,
+			(*goal_ptr_iter)->GetTargetPos().y
+			));*/
 	}
 
 	
@@ -1340,12 +1339,16 @@ bool Scheduler::Prioritize_Goals()
 	sint16 committed_agents = 0;
 	const StrategyRecord &strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
-    DPRINTF(k_DBG_AI,
-    ("\t %9x,\tGOAL,\tINIT_VALUE,\tLAST_VALUE,\tTHREAT,\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\tHOMEDIST,\tENEMYDIST,\tSETTLE,\tCHOKE,\tUNEXPLORED,\tTHREATEN, \n",
-    this));
 	
 	for (goal_type = 0;	goal_type < g_theGoalDB->NumRecords(); goal_type++) {
 		
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n\n "));
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n"));
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// %s \n",g_theGoalDB->Get(goal_type)->GetNameText()));
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n\n"));
+    AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
+    ("\t %9x,\tGOAL\t\t,\tCOORDS\t\t,\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\t\tALLIEDVAL,\t\tMAXPOW,\t\tHOMEDIST \t(   )\t,\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\t\tTHREATEN, \n",
+    this));
 		
 		sorted_goal_iter = m_goals_of_type[goal_type].begin();
 		while (sorted_goal_iter != m_goals_of_type[goal_type].end()) {
@@ -1577,7 +1580,7 @@ bool Scheduler::Prune_Goals()
 
 #ifdef _DEBUG
 		sint32 count = 0;
-		CTPGoal_ptr ctpgoal_ptr;
+//		CTPGoal_ptr ctpgoal_ptr;
 		for (goal_ptr_iter = m_pruned_goals_of_type[goal_type];
 			 goal_ptr_iter != m_goals_of_type[goal_type].end();
 			 goal_ptr_iter++) {
@@ -1612,10 +1615,10 @@ bool Scheduler::Prune_Goals()
 
 				 if (goal_ptr_iter->first > Goal::BAD_UTILITY + 0.5)
 				 {
-					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
+			/*		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
 						("\t%3d: [%x]", count, goal_ptr_iter->second));
 					ctpgoal_ptr = (CTPGoal_ptr) goal_ptr_iter->second;
-					ctpgoal_ptr->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
+					ctpgoal_ptr->Log_Debug_Info(k_DBG_SCHEDULER_ALL);*/
 				 }
 				 count++;
 		}
@@ -1683,13 +1686,13 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
 		goal_iter->second->Add_Match_Reference(plan_iter);
 		(*squad_iter)->Add_Match_Reference(plan_iter);
 
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_iter->second->Get_Goal_Type(), -1, 
+	/*	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_iter->second->Get_Goal_Type(), -1, 
 			("\tAdded match for goal: %x squad: %x  value = %d\n",
 			 goal_iter->second,
 			 (*squad_iter),
 			 matching_value));
 
-		
+	*/	
 		return true;
 
 	} 
@@ -1697,12 +1700,12 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
 		
 		
 
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_iter->second->Get_Goal_Type(), -1, 
+	/*	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_iter->second->Get_Goal_Type(), -1, 
         ("\tMatch for goal: %x (%d) squad: %x has BAD_UTILITY.\n",
 			 goal_iter->second,
         goal_iter->second->Get_Goal_Type(),
 			 (*squad_iter)));
-
+*/ 
 		return false;
 	}
 }

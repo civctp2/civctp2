@@ -34,7 +34,11 @@
 // - Added a Debug Log (activated with k_dbg_scheduler_all) to see the goal priority computing
 //  (raw priority, plus value of each modifier)
 // - Added an Ungroup condition that can be associated to goals (as it exists RallyFirst)
-//
+// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will be changed on wounded case) - Calvitix
+// - Added conditions for wounded units : IsWoundedbonus (see goals.txt) - Calvitix
+// - Added conditions for territory owner and IsVisible (see goals.txt) - Calvitix
+// - Correct the determination of Empire Center and foreign Empire center - Calvitix
+// - Invalid goals if in territory with nontrespassing treaty - Calvitix
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -510,9 +514,9 @@ void CTPGoal::Compute_Needed_Troop_Flow()
     && !goal_record->GetTargetOwnerSelf() && !goal_record->GetTargetTypeSpecialUnit())
     {
         // a real Attack force, depending on threat
-        m_current_needed_strength.Set_Attack(threat / 2); 
-        m_current_needed_strength.Set_Defense(threat / 2);
-        m_current_needed_strength.Set_Ranged(threat / 2);
+        m_current_needed_strength.Set_Attack(threat); 
+        m_current_needed_strength.Set_Defense(threat);
+        m_current_needed_strength.Set_Ranged(threat);
 		m_current_needed_strength.Set_Value(threat);
     }
 #endif //ACTIVISION_ORIGINAL
@@ -623,8 +627,11 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 
 
 
-
+#if defined (ACTIVISION_ORIGINAL)
 Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
+#else
+Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent )
+#endif
 {
 	
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent;
@@ -666,7 +673,11 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 			cancapture,
 			haszoc,
 			canbombard);
-		if (!isspecial || maxattack > 0 || haszoc)
+#if defined (ACTIVISION_ORIGINAL)
+        if (!isspecial || maxattack > 0 || haszoc)
+#else
+		if (!isspecial || maxattack > 0 || maxdefense > 0|| haszoc)
+#endif
 		{
 			return BAD_UTILITY;
 		}
@@ -680,7 +691,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		return BAD_UTILITY;
 	}
 
-	
+
 	
 	
 	sint32 transports, max,empty;
@@ -707,13 +718,39 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	
 	Utility bonus = 0;
    	
+//Set if unit is wounded and it is a retreat of defense goal, add bonus to goalpriority + matching
+#if !defined (ACTIVISION_ORIGINAL)
+
+	if (g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity() && g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf())
+	{
+		if (ctpagent_ptr->Get_Army()->IsWounded()&& !ctpagent_ptr->Get_Army()->IsObsolete())
+		{
+				bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
+				this->Set_Raw_Priority(Get_Raw_Priority()+g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus());
+		}
+	}
+	else if ((g_theGoalDB->Get(m_goal_type)->GetTargetOwnerColdEnemy() || g_theGoalDB->Get(m_goal_type)->GetTargetOwnerHotEnemy())
+		     && (g_theGoalDB->Get(m_goal_type)->GetTargetTypeAttackUnit() || g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()))
+	{
+		if (ctpagent_ptr->Get_Army()->IsWounded() && !ctpagent_ptr->Get_Army()->IsObsolete())
+		{
+				bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
+		}
+	}
+#endif
+
+#if defined _DEBUG  // Add a debug report of goal computing (raw priority and all modifiers)
+    #if !defined ACTIVISION_ORIGINAL
+    double report_wounded = bonus;
+    #endif //ACTIVISION_ORIGINAL
+#endif //_DEBUG
 	
 	if ( ctpagent_ptr->Get_Army()->IsObsolete() )
 		bonus += g_theGoalDB->Get(m_goal_type)->GetObsoleteArmyBonus();
 
 #if defined _DEBUG  // Add a debug report of goal computing (raw priority and all modifiers)
     #if !defined ACTIVISION_ORIGINAL
-    double report_obsolete = bonus;
+    double report_obsolete = bonus - report_wounded;
     #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
     
@@ -732,26 +769,34 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	if (g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus() > 0)
 	{
 		PLAYER_INDEX pos_owner = g_theWorld->GetCell(ctpagent_ptr->Get_Pos())->GetOwner();
+#if defined (ACTIVISION_ORIGINAL)
 		uint32 incursion_permissin = Diplomat::GetDiplomat(m_playerId).GetIncursionPermission();
 		if (pos_owner >= 0 && !(incursion_permissin & (0x1 << pos_owner)))
+#else		
+		bool incursion_permissin = Diplomat::GetDiplomat(m_playerId).IncursionPermission(pos_owner);
+		if (pos_owner >= 0 && !(incursion_permissin))
+#endif
 		{
 			bonus += g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
 
+		}
+	}
 #if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers)
     #if !defined ACTIVISION_ORIGINAL
             double report_Treaspassing = bonus - report_obsolete;
     #endif //ACTIV
 #endif //_DEBUG
 
-		}
-	}
-
     
     
 	sint32 distance_modifier;
 	strategy.GetDistanceModifierFactor(distance_modifier);
 	Utility time_term = static_cast<Utility>( (eta * distance_modifier) + cell_dist);
-
+#if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers)
+    #if !defined ACTIVISION_ORIGINAL
+            double report_time_term = time_term;
+    #endif //ACTIV
+#endif //_DEBUG
 	
 	if (!ctpagent_ptr->Get_Army()->HasCargo())
 	{
@@ -778,13 +823,22 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 #if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     #if !defined ACTIVISION_ORIGINAL
     AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), m_goal_type, -1,
-    ("\t %9x,\t%9x,\t%s,\t%8d,\t%8f,\t%8f,\t%8f,\n",
+    ("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8d \n",
     this,
     ctpagent_ptr,
+	ctpagent_ptr->Get_Pos().x,
+    ctpagent_ptr->Get_Pos().y,
     g_theGoalDB->Get(m_goal_type)->GetNameText(),
+	this->Get_Target_Pos().x,
+    this->Get_Target_Pos().y,
     match,
     raw_priority,
+	cell_dist,
+	eta,
     bonus,
+	report_wounded,
+	report_obsolete,
+	report_Treaspassing,
     time_term));
     #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
@@ -836,6 +890,10 @@ Utility CTPGoal::Compute_Raw_Priority()
     double report_cell_Chokepoint = 0.0;
     double report_cell_MaxPower = 0.0;
     double report_cell_Unexplored = 0.0;
+	double report_cell_NotVisible = 0.0;
+	double report_cell_NoOwnerTerritory = 0.0;
+	double report_cell_InHomeTerritory = 0.0;
+	double report_cell_InEnemyTerritory = 0.0;
     #endif //ACTIVISION_ORIGINAL
 #endif //_DEBUG
 	
@@ -843,17 +901,24 @@ Utility CTPGoal::Compute_Raw_Priority()
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 
-	MapPoint empire_center = map.GetEmpireCenter(m_playerId);
+#if defined (ACTIVISION_ORIGINAL)
+    MapPoint empire_center = map.GetEmpireCenter(m_playerId);
 	MapPoint foreign_empire_center;
 	
 	if (target_owner > 0)
+#else
+	MapPoint empire_center;
+	MapPoint foreign_empire_center;
+	empire_center = map.GetEmpireCenter(m_playerId);
+	if (target_owner > 0 && m_playerId != target_owner)
+#endif
 		foreign_empire_center = map.GetEmpireCenter(target_owner);
 	else
 		foreign_empire_center = map.GetNearestForeigner(m_playerId, target_pos);
 
-	
-	
-	
+
+
+
 	Assert(m_goal_type < strategy.GetNumGoalElement());
 	Assert(strategy.GetGoalElement(m_goal_type) != NULL);
 	
@@ -962,10 +1027,12 @@ Utility CTPGoal::Compute_Raw_Priority()
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
 	
-	
-	cell_value += sqrt(static_cast<double>
-    (MapPoint::GetSquaredDistance(target_pos, foreign_empire_center))) * goal_rec->GetDistanceToEnemyBonus();
-	
+	if (foreign_empire_center.x != 0 && foreign_empire_center.y != 0)
+	{
+	    cell_value += sqrt(static_cast<double>
+        (MapPoint::GetSquaredDistance(target_pos, foreign_empire_center))) * goal_rec->GetDistanceToEnemyBonus();
+	}
+
     #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_EnemyDistance = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
@@ -989,6 +1056,48 @@ Utility CTPGoal::Compute_Raw_Priority()
 
     #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     report_cell_Unexplored = cell_value - report_cell_lastvalue;
+    report_cell_lastvalue = cell_value;
+    #endif //_DEBUG
+
+	if (!player_ptr->IsVisible(target_pos))
+	{
+		cell_value += goal_rec->GetNotVisibleBonus();
+	}
+
+    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    report_cell_NotVisible = cell_value - report_cell_lastvalue;
+    report_cell_lastvalue = cell_value;
+    #endif //_DEBUG
+
+
+
+	if (m_playerId == target_owner)
+	{
+		cell_value += goal_rec->GetInHomeTerritoryBonus();
+	}
+
+    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    report_cell_InHomeTerritory = cell_value - report_cell_lastvalue;
+    report_cell_lastvalue = cell_value;
+    #endif //_DEBUG
+
+	if (target_owner > 0)
+	{
+		cell_value += goal_rec->GetInEnemyTerritoryBonus();
+	}
+
+    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    report_cell_InEnemyTerritory = cell_value - report_cell_lastvalue;
+    report_cell_lastvalue = cell_value;
+    #endif //_DEBUG
+
+	if (target_owner > 0)
+	{
+		cell_value += goal_rec->GetNoOwnerTerritoryBonus();
+	}
+
+    #if defined (_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+    report_cell_NoOwnerTerritory = cell_value - report_cell_lastvalue;
     report_cell_lastvalue = cell_value;
     #endif //_DEBUG
 
@@ -1026,9 +1135,11 @@ Utility CTPGoal::Compute_Raw_Priority()
 #if defined _DEBUG // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
     #if !defined ACTIVISION_ORIGINAL
     AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
-    ("\t %9x,\t%s,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f \n",
+    ("\t %9x,\t%s, rc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f \n",
     this,
     goal_rec->GetNameText(),
+    target_pos.x,
+    target_pos.y,
     report_cell_value,
     report_cell_lastvalue,
     report_cell_threat,
@@ -1036,10 +1147,15 @@ Utility CTPGoal::Compute_Raw_Priority()
     report_cell_AlliedValue,
     report_cell_MaxPower,
     report_cell_HomeDistance,
+    empire_center.x,
+    empire_center.y,
     report_cell_EnemyDistance,
+    foreign_empire_center.x,
+    foreign_empire_center.y,
     report_cell_Settle,
     report_cell_Chokepoint,
     report_cell_Unexplored,
+    report_cell_NotVisible,
     threaten_bonus));
     #endif //ACTIV
 #endif //_DEBUG
@@ -1317,21 +1433,30 @@ bool CTPGoal::Get_Totally_Complete() const
 				regard_checked = true;
 			}
 			
-			
+			if (!diplomat.IncursionPermission(target_owner) &&
+				(diplomat.GetPersonality()->GetAlignmentGood() ||
+				 diplomat.GetPersonality()->GetAlignmentNeutral()))
+			{
+                AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+                ("GOAL %x (%s): Diplomacy match failed : No permission to enter territory\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+				return true;
+			}
+
+
 			if ( diplomacy_match == false )
 			{
-                          AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+                /*          AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
                 ("GOAL %x (%s): Diplomacy match failed.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText()));
-                
+                */
 				return true;
 			}
 		}
 		else if ( goal_record->GetTargetOwnerNoContact() == FALSE )
 		{
 			
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-            ("GOAL %x (%d): Target owner not contacted.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText()));
-            
+		/*	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+            ("GOAL %x (%s): Target owner not contacted.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+          */  
 
 			
 			return true;
@@ -1383,9 +1508,9 @@ bool CTPGoal::Get_Totally_Complete() const
 	
 	if (g_player[m_playerId]->GetGold() < order_record->GetGold())
 	{
-            AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+       /*     AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
         ("GOAL %x (%s): Not enough gold to perform goal.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText()));
-        
+        */
 		return true;
 	}
 
@@ -2761,15 +2886,17 @@ bool CTPGoal::RallyTroops()
 			
 			
 			
+#if defined (ACTIVISION_ORIGINAL)
 			sint32 cells;
 			if (ctpagent1_ptr->GetRounds(closest_agent_pos, cells) <= 1)
 			{
 				MapPoint agent1_pos;
 				agent1_pos = ctpagent1_ptr->Get_Pos();
 				if (GotoGoalTaskSolution(closest_agent_ptr, agent1_pos, SUB_TASK_RALLY ) == false)
-					return false;
-			}
+				return false;
 
+			}
+#endif
 			
 			
 			tmp_agents.insert(tmp_agents.begin(), *closest_agent_iter);

@@ -64,7 +64,8 @@
 //
 //  - Added an method that determines if the matches can be reevaluated)
 //   (ie the agent can be rollbacked and eventually be used for another goal)
-      (for the moment, always return true)
+//     depending on NoRollback flag.
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -82,6 +83,11 @@
 #include "Squad_Strength.h"
 #include "CtpAiDebug.h"
 #include "ArmyPool.h"
+
+#if !defined (ACTIVISION_ORIGINAL)
+#include "GoalRecord.h"
+extern CTPDatabase<GoalRecord> *g_theGoalDB;
+#endif
 
 using namespace std;
 
@@ -597,16 +603,10 @@ bool Plan::CanMatchesBeReevaluated() const
     Assert(m_the_squad);
 
 
-    return true;
+    CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr)m_the_goal;
+	GOAL_TYPE my_goal_type = ctpgoal_ptr->Get_Goal_Type();
+	return (!g_theGoalDB->Get(my_goal_type)->GetNoRollback());
 
-    // To be tested : conditions when the agents don't have to be rollbacked - Calvitix
-    //    CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr)m_the_goal;
-    //    if (ctpgoal_ptr->Get_Sub_Task() == SUB_TASK_GOAL ||
-    //(ctpgoal_ptr->Get_Sub_Task() != SUB_TASK_GOAL && ctpgoal_ptr->GetAgentsMinDistance() > 5)) //parameter
-    //{
-    //return true;
-    //    }
-    //return false;
 }
 #endif
 
