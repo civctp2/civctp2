@@ -962,7 +962,7 @@ str_ldl_Move	"Déplacement"
 str_ldl_Movement_COLON	"Déplacement :"
 str_ldl_Movement_Cost_COLON	"Coût déplac. :"
 str_ldl_MP	"Pts Dp"
-str_ldl_MULTIPLAYER	"Multijoueurs"
+str_ldl_MULTIPLAYER	"Jeu en Réseau"
 str_ldl_MUSIC	"MUSIQUE"
 str_ldl_Music_Volume	"Volume de la musique"
 str_ldl_Mute	"Muet"
@@ -1472,11 +1472,11 @@ str_ldl_SPNGPS_PlayerText	"Définit le premier joueur. Définit la couleur de la c
 
 str_ldl_Disclaimer1 "CETTE VERSION N'A ETE NI CONCUE NI APPROUVEE PAR ACTIVISION."
 str_ldl_Disclaimer2 "Cette version de Call to Power 2 a été développée sur le site http://apolyton.net"
-str_ldl_Disclaimer3 "Contactez les auteurs à l'adresse ctp2source@apolyton.net"
+str_ldl_Disclaimer3 "Contact: ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-04-18"
+str_ldl_version "2004-04-30"
 
 
 
