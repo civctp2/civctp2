@@ -5724,7 +5724,22 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 {
 	sint32 i;
 
-	bool isLand = justTryLand || g_theWorld->IsLand(m_pos);
+	// removed DWT
+	// bool isLand = justTryLand || g_theWorld->IsLand(m_pos);
+	
+	
+	// Get the terrain type of the cell the city sits on
+	
+	const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
+
+
+	// Added DWT
+	// We want to see if its a land cty by checking the underlying terrain type
+	// not the terrain type as modified by improvements
+	// as a sea city on a tunnel will turn into a land city
+
+	bool isLand = justTryLand || !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater());
+
 
 	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(m_cityStyle);
 	if(!styleRec) return -1;
@@ -5735,6 +5750,7 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 	const AgeCityStyleRecord::SizeSprite *spr = NULL;
 	const AgeCityStyleRecord::SizeSprite *lastTypeSpr = NULL;
 
+	// GetType() below is 0 = land, 1 = ocean
 	for(i = 0; i < ageStyleRec->GetNumSprites(); i++) {
 		if(spr = ageStyleRec->GetSprites(i)) {
 			if((isLand && spr->GetType() == 0) ||
