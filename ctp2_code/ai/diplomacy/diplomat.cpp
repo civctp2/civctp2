@@ -27,7 +27,8 @@
 //
 // - Minor modification of the Diplomat::StartNegotiations function 
 //   by Peter Triggs to enable some minor AI-AI-Diplomacy.
-// - Corrected bug in list insertion.  
+// - Corrected bug in list insertion.
+// - Corrected non-standard syntax and some compiler warnings.  
 //
 //----------------------------------------------------------------------------
 
@@ -274,7 +275,11 @@ void Diplomat::AddDiplomacyArgToSlicContext(SlicContext & sc, const DiplomacyArg
 	else if (dip_arg.pollution != -1)
 		sc.AddInt(dip_arg.pollution);
 	else if (dip_arg.percent != -1.0)
+#if defined(ACTIVISION_ORIGINAL) // compiler warning
 		sc.AddInt((sint32) 100.0 * dip_arg.percent);
+#else
+		sc.AddInt(static_cast<sint32>(100.0 * dip_arg.percent));
+#endif
 	
 }
 
@@ -2037,7 +2042,11 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 	case THREAT_DESTROY_CITY:
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetNukeCityRegardCost(regard_cost);
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetUsedNukesTrustCost(trust_cost);
+#if defined(ACTIVISION_ORIGINAL)	// compiler warning
 		trust_cost *= 0.5; 
+#else
+		trust_cost /= 2;
+#endif
 		str_buf = "Threatened to destroy our city.";
 		break;
 	
@@ -2056,7 +2065,11 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 		
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetEmbargoTradeRegardCost(regard_cost);
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetFollowThroughTrustBonus(trust_cost);
+#if defined(ACTIVISION_ORIGINAL)	// compiler warning
 		trust_cost *= -0.5; 
+#else
+		trust_cost /= -2;
+#endif
 		str_buf = "Threatened to embargo trade.";
 		break;
 	case THREAT_DECLARE_WAR:
@@ -2064,7 +2077,11 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 		
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetPreemptiveAttackRegardCost(regard_cost);
 		receiver_diplomat.GetCurrentDiplomacy(threat.senderId).GetPreemptiveAttackTrustCost(trust_cost);
+#if defined(ACTIVISION_ORIGINAL)	// compiler warning
 		trust_cost *= 0.5; 
+#else
+		trust_cost /= 2;
+#endif
 		str_buf = "Threatened to declare war.";
 		break;
 	}
@@ -5717,13 +5734,18 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 	
 	if (!g_player[m_playerId]) 
 		return false;
-
+#if defined(ACTIVISION_ORIGINAL)	// improper syntax
 	sint32 turns_at_peace = 
 		AgreementMatrix.s_agreements.TurnsSinceLastWar(m_playerId, foreignerId);
 
 	sint32 turns_at_war = 
 		AgreementMatrix.s_agreements.TurnsAtWar(m_playerId, foreignerId);
-
+#else
+	sint32 const		turns_at_peace		= 
+		AgreementMatrix::s_agreements.TurnsSinceLastWar(m_playerId, foreignerId);
+	sint32 const		turns_at_war		=
+		AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, foreignerId);
+#endif
 	DIPLOMATIC_STRENGTH relative_strength = 
 		g_player[m_playerId]->GetRelativeStrength(foreignerId);
 

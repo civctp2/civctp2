@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Map file handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Replaced non-standard sizeof(enum) occurrences.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "MapFile.h"
@@ -125,8 +155,11 @@ extern QuadTree<Unit>              *g_theUnitTree;
 
 const uint32 k_MAPFILE_NAME_LEN = 32;
 
+#if defined(ACTIVISION_ORIGINAL)	// non-standard sizeof(enum)
 const uint32 k_CIVS_BLOCK_LENGTH = k_MAX_PLAYERS * (sizeof(enum) + k_MAPFILE_NAME_LEN); 
-
+#else
+const uint32 k_CIVS_BLOCK_LENGTH = k_MAX_PLAYERS * (sizeof(uint32) + k_MAPFILE_NAME_LEN); 
+#endif
 
 
 bool MapFileChunk::Save(FILE *outfile)
@@ -681,7 +714,11 @@ bool MapFile::SaveCivilizations(FILE *outfile)
 			
 			*longPtr = 0;
 		}
+#if defined(ACTIVISION_ORIGINAL)	// non-standard sizeof(enum)
 		ptr += sizeof(enum);
+#else
+		ptr += sizeof(uint32);
+#endif
 		
 		size_t length;
 		MBCHAR *pName;

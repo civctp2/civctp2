@@ -41,6 +41,7 @@
 //   - GetContinent      Gets the continent ID of an location.
 //   - IsWater           Gets whether a location is water.
 // - Enable end turn button when unblanking.
+// - Removed a syntax error by Klaus Kaan
 //
 //----------------------------------------------------------------------------
 
@@ -1105,7 +1106,11 @@ void SlicEngine::Link()
 
 	sint32 symStart;
 	if(!m_symTab) {
+#if defined (ACTIVISION_ORIGINAL)	// ;+ is a syntax error with .NET
 		symStart = 0;+
+#else
+		symStart = 0;
+#endif
 		m_symTab = new SlicSymTab(0);
 	} else {
 		symStart = m_symTab->GetNumEntries();

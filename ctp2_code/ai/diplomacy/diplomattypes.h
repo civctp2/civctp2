@@ -1,10 +1,48 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       holds: the (_MSC_VER) preprocessor directive lines, and the blocks 
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are inactiThe blocks that are active for _MSC_VER 
+//       value 1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Marked Microsoft extensions.
+// - Corrected compiler warnings.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __DIPLOMAT_TYPES_H__
 #define __DIPLOMAT_TYPES_H__
 
@@ -275,12 +313,25 @@ struct ThreatData {
 
 
 struct NewProposal {
+#if defined(ACTIVISION_ORIGINAL)	// conversion compiler warnings
 	NewProposal() {
 		id = priority = senderId = receiverId = -1;
 		explainStrId = -1;
 		adviceStrId = -1;
 		newsStrId = -1;
 	}
+#else
+	NewProposal()
+	:	id(-1),
+		priority(-1),
+		senderId(-1),
+		receiverId(-1),
+		detail(),
+		explainStrId(-1),
+		adviceStrId(-1),
+		newsStrId(-1)
+	{ };
+#endif
 	bool operator==(const NewProposal & a) const {
 		return ((senderId == a.senderId) &&
 			(receiverId == a.receiverId) &&
@@ -313,6 +364,7 @@ struct NewProposal {
 
 
 struct Response {
+#if defined(ACTIVISION_ORIGINAL)	// conversion compiler warnings
 	Response() {
 		id = priority = senderId = receiverId = -1;
 		type = RESPONSE_INVALID;
@@ -320,6 +372,20 @@ struct Response {
 		adviceStrId = -1;
 		newsStrId = -1;
 	}
+#else
+	Response()
+	:	id(-1),
+		priority(-1),
+		senderId(-1),
+		receiverId(-1),
+		type(RESPONSE_INVALID),
+		counter(),
+		threat(),
+		explainStrId(-1),
+		adviceStrId(-1),
+		newsStrId(-1)
+	{ };
+#endif
 	bool operator==(const Response & a) const {
 		return (id == a.id &&
                 type == a.type &&

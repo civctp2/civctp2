@@ -29,6 +29,7 @@
 // - Added a way to find out the size of a slic database by Martin Gühmann
 // - slicif_cleanup() added.
 // - Fixed slic database access after a reload by Martin Gühmann.
+// - Types corrected.
 //
 //----------------------------------------------------------------------------
 
@@ -839,7 +840,7 @@ void slicif_add_op(SOP op, ...)
 //Added by Martin Gühmann for database support
 		case SOP_DBNAME:
 		{
-			conduit = va_arg(vl, SlicDBConduit*);
+			conduit = va_arg(vl, SlicDBInterface *);
 			Assert(conduit);
 
 			name = va_arg(vl, char*);
@@ -879,7 +880,7 @@ void slicif_add_op(SOP op, ...)
 		}
 		case SOP_DBNAMEREF:
 		{
-			conduit = va_arg(vl, SlicDBConduit*);
+			conduit = va_arg(vl, SlicDBInterface *);
 			Assert(conduit);
 
 			//Get get variable name in the argument list.
@@ -935,7 +936,7 @@ void slicif_add_op(SOP op, ...)
 		}
 		case SOP_DB:
 		{
-			conduit = va_arg(vl, SlicDBConduit*);
+			conduit = va_arg(vl, SlicDBInterface *);
 			Assert(conduit);
 
 			//Save the database name to the code data, by saving every
@@ -958,7 +959,7 @@ void slicif_add_op(SOP op, ...)
 		}
 		case SOP_DBREF:
 		{
-			conduit = va_arg(vl, SlicDBConduit*);
+			conduit = va_arg(vl, SlicDBInterface *);
 			Assert(conduit);
 
 			name = va_arg(vl, char *);
@@ -999,7 +1000,7 @@ void slicif_add_op(SOP op, ...)
 		{
 			//Added by Martin Gühmann to figure out via 
 			//slic how many records the database contains
-			conduit = va_arg(vl, SlicDBConduit*);
+			conduit = va_arg(vl, SlicDBInterface *);
 			Assert(conduit);
 
 			//Save the database name to the code data, by saving every
@@ -2106,7 +2107,11 @@ int slicif_find_db(const char *dbname, void **dbptr)
 //----------------------------------------------------------------------------
 int slicif_find_db_index(void *dbptr, const char *name)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
+#else
+	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
+#endif
 	Assert(conduit);
 	if(!conduit)
 		return 0;
@@ -2145,7 +2150,11 @@ int slicif_find_db_index(void *dbptr, const char *name)
 //----------------------------------------------------------------------------
 int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
+#else
+	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
+#endif
 	char errbuf[1024];
 	Assert(conduit);
 	if(!conduit)
@@ -2196,7 +2205,11 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 //----------------------------------------------------------------------------
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
+#else
+	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
+#endif
 	Assert(conduit);
 	if(!conduit)
 		return 0;

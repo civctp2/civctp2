@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : SLIC command handling 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Types corrected.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -524,7 +554,11 @@ SlicSymbolData *sliccmd_get_symbol(char *name)
 
 void *sliccmd_get_db_name_sym(void *dbptr, const char *name)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
+#else
+	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
+#endif
 	Assert(conduit);
 	if(!conduit)
 		return 0;
@@ -546,7 +580,11 @@ void *sliccmd_get_db_name_sym(void *dbptr, const char *name)
 
 void *sliccmd_get_db_name_sym_by_index(void *dbptr, int index)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
+#else
+	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
+#endif
 	Assert(conduit);
 	if(!conduit)
 		return 0;

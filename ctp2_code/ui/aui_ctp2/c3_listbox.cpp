@@ -1,6 +1,47 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected ambiguous function reference.
+// - Marked MS version specific code.
+//
+//----------------------------------------------------------------------------
 
 
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
 
 #include "c3.h"
 #include "aui.h"
@@ -79,7 +120,11 @@ c3_ListBox::c3_ListBox(
 	:
 	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
+#if defined(ACTIVISION_ORIGINAL)	// ambiguous with .NET
 	aui_TextBase((MBCHAR *)NULL, (uint32)0),
+#else
+	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
+#endif
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );

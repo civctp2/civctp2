@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Trade manager window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected non-standard syntax.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui.h"
@@ -347,13 +377,29 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					if(!g_player[op]) continue;
 					if(player_id != op && !p->HasContactWith(op)) continue;
 					if(m_showCities == TRADE_CITIES_OWN && op != g_selected_item->GetVisiblePlayer()) continue;
+#if defined(ACTIVISION_ORIGINAL)	// Non-standard syntax
 					if(m_showCities == TRADE_CITIES_ALL && op != g_selected_item->GetVisiblePlayer() &&
-					   AgreementMatrix.s_agreements.TurnsAtWar(player_id, op) >= 0) 
+						AgreementMatrix.s_agreements.TurnsAtWar(player_id, op) >= 0) 
 						continue;
 
 					if(m_showCities == TRADE_CITIES_FRIENDLY && op != g_selected_item->GetVisiblePlayer() &&
 					   !AgreementMatrix.s_agreements.HasAgreement(player_id, op, PROPOSAL_TREATY_PEACE))
 						continue;
+#else
+					if ((m_showCities == TRADE_CITIES_ALL)			&& 
+						(op != g_selected_item->GetVisiblePlayer()) &&
+						(AgreementMatrix::s_agreements.TurnsAtWar(player_id, op) >= 0)
+					   )
+						continue;
+
+					if ((m_showCities == TRADE_CITIES_FRIENDLY)		&& 
+						(op != g_selected_item->GetVisiblePlayer()) &&
+						(!AgreementMatrix::s_agreements.HasAgreement
+							(player_id, op, PROPOSAL_TREATY_PEACE)
+						)
+					   )
+						continue;
+#endif
 
 					
 					if(Diplomat::GetDiplomat(op).GetEmbargo(player_id))
