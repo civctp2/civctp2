@@ -29,7 +29,8 @@
 // - Center on pirating (originally by Ahenobarb, slightly modified).
 // - Center on bombarding.
 // - Fix sueing of franchises.
-// - TestOrderAny added.
+// - #01 Inform AI only about bombard if it was really possible (L. Hirth 6/2004).
+// - #02 TestOrderAny added.
 //
 //----------------------------------------------------------------------------
 
@@ -4404,7 +4405,8 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))
 			return ORDER_RESULT_ILLEGAL;
 
-    PLAYER_INDEX defense_owner = defender.GetOwner();
+#if defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
+	PLAYER_INDEX defense_owner = defender.GetOwner();
 
     
 	Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
@@ -4413,17 +4415,30 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 	defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
 
     InformAI(UNIT_ORDER_BOMBARD, point); 
-   
+#endif   
 
     sint32 numAttacks = 0;
 	sint32 numAlive = m_nElements;
 	BOOL out_of_fuel;
+#if !defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
+    sint32 numPossibleAttacks = 0;
+#endif
 
     for (i = m_nElements - 1; i>= 0; i--) { 
 		if(!m_array[i].CanPerformSpecialAction())
 			continue;
 		
         if (m_array[i].CanBombard(defender)) { 
+#if !defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
+			numPossibleAttacks++;
+			if (numPossibleAttacks == 1) {
+				// Log attack and inform defender 
+				PLAYER_INDEX defense_owner = defender.GetOwner();
+				Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
+				defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
+				InformAI(UNIT_ORDER_BOMBARD, point); 
+			}
+#endif
 			if(m_array[i].Bombard(defender, FALSE)) {
 				numAttacks++;
 #if !defined(ACTIVISION_ORIGINAL)
@@ -8089,7 +8104,6 @@ bool ArmyData::GetNextPathPoint(MapPoint & next_pos) const
 //              incapable of doing anything.
 //
 //----------------------------------------------------------------------------
-
 bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 {
 	
@@ -8119,8 +8133,8 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 	return(orderValid);
 }
 
-#if !defined(ACTIVISION_ORIGINAL)
 
+#if !defined(ACTIVISION_ORIGINAL) // #02
 //----------------------------------------------------------------------------
 //
 // Name       : ArmyData::TestOrderAny
@@ -8138,7 +8152,6 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 {
 	if (order_rec->GetUnitPretest_CanPlantNuke() &&
