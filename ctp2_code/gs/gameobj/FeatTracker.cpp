@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Feat tracking
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leak repaired.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "FeatTracker.h"
@@ -75,11 +105,13 @@ FeatTracker::FeatTracker(CivArchive &archive)
 		m_effectList[i] = NULL;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)	// memory leak: overwritten in Serialize
 	m_achieved = new bool[g_theFeatDB->NumRecords()];
 	memset(m_achieved, 0, sizeof(bool) * g_theFeatDB->NumRecords());
 	
 	m_buildingFeat = new bool[g_theBuildingDB->NumRecords()];
 	memset(m_buildingFeat, 0, sizeof(bool) * g_theBuildingDB->NumRecords());
+#endif
 
 	Serialize(archive);
 }
@@ -153,7 +185,11 @@ void FeatTracker::Serialize(CivArchive & archive)
 		archive.Load((uint8*)m_buildingFeat, count * sizeof(bool));
 
 		if(count != g_theBuildingDB->NumRecords()) {
+#if defined(ACTIVISION_ORIGINAL)	// wrong delete
 			delete m_buildingFeat;
+#else
+			delete [] m_buildingFeat;
+#endif
 			m_buildingFeat = new bool[g_theBuildingDB->NumRecords()];
 			memset(m_buildingFeat, 0, g_theBuildingDB->NumRecords() * sizeof(bool));
 		}

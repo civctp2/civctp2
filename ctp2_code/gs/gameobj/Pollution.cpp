@@ -26,6 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Do not trigger disaster warnings when there is no pollution at all.
+// - Memory leak repaired.
+// - Improved pollution warning recipient handling.
 //
 //----------------------------------------------------------------------------
 
@@ -149,16 +151,27 @@ void Pollution::Serialize(CivArchive &archive)
 
 	}
 
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : Pollution::WarnPlayers
+//
+// Description: Warn all players about an imminent pollution disaster.
+//
+// Parameters : -
+//
+// Globals    : g_slicEngine	: message display handler
+//				g_player		: list of players
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 
 void Pollution::WarnPlayers()
 {
+#if defined(ACTIVISION_ORIGINAL)	
+	// Memory leak at return in loop, does nothing when MaxPlayers is 0.
     int i;
     SlicObject *so = new SlicObject("911ImminentFlood");
     SlicSegment *seg = g_slicEngine->GetSegment("911ImminentFlood");
@@ -177,9 +190,35 @@ void Pollution::WarnPlayers()
         if (g_player[i] && !g_player[i]->m_isDead)
             so->AddRecipient(i) ;
     }
+
 	
 
     g_slicEngine->Execute(so) ;
+#else
+	SlicObject *	so	= new SlicObject("911ImminentFlood");
+	SlicSegment *	seg	= g_slicEngine->GetSegment("911ImminentFlood");
+	
+	// Start at 1: skip the barbarians.
+	for (PLAYER_INDEX i = 1; i < k_MAX_PLAYERS; ++i)
+	{
+		if (g_player[i]				&& 
+			!g_player[i]->IsDead()	&&
+			!seg->TestLastShown(i, k_ROUNDS_BEFORE_DISASTER)
+		   )
+		{
+			so->AddRecipient(i);
+		}
+	}
+	
+	if (so->GetNumRecipients())
+	{
+		g_slicEngine->Execute(so);
+	}
+	else
+	{
+		delete so;
+	}
+#endif
 }
 
 
@@ -212,7 +251,7 @@ sint32 Pollution::AtTriggerLevel(void)
 	}
 
     if (pollution > trigger) {
-        
+
         switch (g_thePollutionDB->GetDisasterType(g_theProfileDB->GetMapSize(), m_phase)) {
           case POLLUTION_DISASTER_TYPE_OZONE: {
 
