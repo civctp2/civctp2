@@ -27,6 +27,8 @@
 //
 // - Disband units as an army, to get the shields for the city.
 // - Start the great library with the current research project of the player.
+// - Repaired memory leaks.
+// - Prevent buildings occurring twice in the pollution list.
 //
 //----------------------------------------------------------------------------
 
@@ -340,6 +342,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_unhappyIcon = g_c3ui->LoadImage("updi43.tga");
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 CityWindow::~CityWindow()
 {
 	ClearInventoryUserData();
@@ -364,6 +367,61 @@ CityWindow::~CityWindow()
 	m_cityData = NULL;
 
 }
+#else	// ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::~CityWindow
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : - Member pointer variables that have been initialised with 
+//                GetObject are references, and do not have to be deleted.
+//              - Member pointer variables that have been initialised with
+//                BuildHierarchyFromRoot have to be deleted with 
+//                DeleteHierarchyFromRoot.
+//              - Containers have to be cleared, but setting member variables 
+//                (to NULL) *in a destructor* is a waste of time.
+//
+//----------------------------------------------------------------------------
+
+CityWindow::~CityWindow()
+{
+	if (m_cities)			// container + created with new
+	{
+		m_cities->DeleteAll();
+	}
+	delete m_cities;
+
+	if (m_inventoryList)	// container + reference
+	{
+		ClearInventoryUserData();
+		m_inventoryList->Clear();
+	}
+
+	if (m_queueList)		// container + reference
+	{
+		m_queueList->Clear();
+	}
+
+	if (m_statsWindow)		// hierarchy
+	{
+		aui_Ldl::DeleteHierarchyFromRoot(s_cityStatsBlock);
+	}
+
+	if (m_window)			// hierarchy
+	{
+		aui_Ldl::DeleteHierarchyFromRoot(s_cityWindowBlock);
+	}
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 AUI_ERRCODE CityWindow::Initialize()
 {
@@ -1185,6 +1243,7 @@ void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 da
 	s_cityWindow->Update();
 }
 
+#if defined(ACTIVISION_ORIGINAL)	// clears the wrong list
 void CityWindow::ClearInventoryUserData()
 {
 	sint32 i;
@@ -1204,6 +1263,44 @@ void CityWindow::ClearInventoryUserData()
 		}
 	}
 }
+#else	// ACTIVISION_ORIGINAL
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::ClearInventoryUserData
+//
+// Description: Clear the user data of the inventory list.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Does not clear the list itself.
+//
+//----------------------------------------------------------------------------
+
+void CityWindow::ClearInventoryUserData()
+{
+	Assert(m_inventoryList);
+	if (m_inventoryList)
+	{
+		for (int i = 0; i < m_inventoryList->NumItems(); ++i)
+		{
+			ctp2_ListItem * const	item	= 
+				static_cast<ctp2_ListItem *>(m_inventoryList->GetItemByIndex(i));
+			if (item)
+			{
+				InventoryItemInfo	* info	= 
+					reinterpret_cast<InventoryItemInfo *>(item->GetUserData());
+				delete info;
+				item->SetUserData(NULL);
+			}
+		} // for
+	}
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -2100,6 +2197,7 @@ void CityWindow::FillPollutionList()
 	ctp2_ListItem *allPercentItems[64];
 	sint32 numAbsItems = 0, numPercentItems = 0;
 
+#if defined(ACTIVISION_ORIGINAL)	// memory leak when no population pollution
 	ctp2_ListItem *item;
 	double value;
 	item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
@@ -2138,7 +2236,7 @@ void CityWindow::FillPollutionList()
 		delete item;
 	}
 
-	
+
 	for(sint32 i=0; i<g_theBuildingDB->NumRecords(); i++)
 	{
 		if(!m_cityData->HaveImprovement(i))
@@ -2196,6 +2294,86 @@ void CityWindow::FillPollutionList()
 			allPercentItems[numPercentItems++] = item;
 		}
 	}
+
+#else	// ACTIVISION_ORIGINAL
+	if (m_cityData->GetPopulationPollution()) 
+	{
+		ctp2_ListItem *	item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
+		if (item)
+		{
+			label = (ctp2_Static *)item->GetChildByIndex(0);
+			sublabel = (ctp2_Static *)label->GetChildByIndex(0);
+			sublabel->SetText(g_theStringDB->GetNameStr("str_ldl_PollutionList_Population"));
+			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
+			sprintf(interp,"%i",m_cityData->GetPopulationPollution());
+			sublabel->SetText(interp);
+			item->SetUserData((void *)m_cityData->GetPopulationPollution());
+			allAbsItems[numAbsItems++] = item;
+		}
+	}
+
+	if (m_cityData->GetProductionPollution()) 
+	{
+		ctp2_ListItem * item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
+		if (item)
+		{
+			label = (ctp2_Static *)item->GetChildByIndex(0);
+			sublabel = (ctp2_Static *)label->GetChildByIndex(0);
+			sublabel->SetText(g_theStringDB->GetNameStr("str_ldl_PollutionList_Production"));
+			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
+			sprintf(interp,"%i",m_cityData->GetProductionPollution());
+			sublabel->SetText(interp);
+			item->SetUserData((void *)m_cityData->GetProductionPollution());
+			allAbsItems[numAbsItems++] = item;
+		}
+	}
+
+	for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+	{
+		if (m_cityData->HaveImprovement(i))
+		{
+			// For an improvement, there are 3 values that contribute to or 
+			// decrease the pollution:
+			// - an intrinsic (fixed) building pollution value
+			// - a modifier to the production pollution of the city
+			// - a modifier to the population pollution of the city
+
+			// intrinsic
+			double	value							= 0;	// running total
+			g_theBuildingDB->Get(i)->GetPollutionAmount(value);
+
+			// production pollution modifier
+			double	production_pollution_percent	= 0;	
+			g_theBuildingDB->Get(i)->GetProductionPollutionPercent(production_pollution_percent);
+			value += m_cityData->GetProductionPollution() * production_pollution_percent;
+
+			// population pollution modifier
+			double	population_pollution_percent	= 0;	// population pollution modifier
+			g_theBuildingDB->Get(i)->GetPopulationPollutionPercent(population_pollution_percent);
+			value += m_cityData->GetPopulationPollution() * population_pollution_percent;
+
+			if (fabs(value) < 1)
+			{
+				// Do not report when impact is small.
+			}
+			else
+			{
+				ctp2_ListItem * item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
+				if (item)
+				{
+					label = (ctp2_Static *)item->GetChildByIndex(0);
+					sublabel = (ctp2_Static *)label->GetChildByIndex(0);
+					sublabel->SetText(g_theBuildingDB->Get(i)->GetNameText());
+					sublabel = (ctp2_Static *)label->GetChildByIndex(1);
+					sprintf(interp,"%d",(sint32) value);
+					sublabel->SetText(interp);
+					item->SetUserData((void *)(sint32)value);
+					allAbsItems[numAbsItems++] = item;
+				}
+			}
+		}
+	}
+#endif	// ACTIVISION_ORIGINAL
 
 	
 	qsort((void *)allAbsItems, numAbsItems, sizeof(ctp2_ListItem *), cw_comparePollutionItems);
