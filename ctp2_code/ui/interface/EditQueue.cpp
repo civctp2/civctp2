@@ -27,6 +27,8 @@
 // - Disabled rush buy button when it is not your turn by Martin Gühmann.
 // - Repaired CtD when double-clicking on an empty build queue - caused by
 //   the changes above.
+// - #01 Standardization of city selection and focus handling  
+//   (L. Hirth 6/2004)
 //
 //----------------------------------------------------------------------------
 
@@ -1224,6 +1226,14 @@ void EditQueue::SetCity(CityData *city)
 	s_editQueue->m_cityData = city;
 	SetMode(EDIT_QUEUE_MODE_SINGLE);
 	s_editQueue->Update();
+
+#if !defined(ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focusing
+	if(city && city->GetHomeCity().IsValid()) {
+		g_selected_item->SetSelectCity(city->GetHomeCity());
+	}
+#endif
+
+
 }
 
 void EditQueue::SetMultiCities(const UnitDynamicArray &cities)

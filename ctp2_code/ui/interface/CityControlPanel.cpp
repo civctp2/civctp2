@@ -2,6 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
+// File name    : \UI\Interface\CityControlPanel.cpp
 // Description  : Handling for the city tab of the control panel 
 //
 //----------------------------------------------------------------------------
@@ -34,6 +35,8 @@
 //   unfortunatly the button state is not updated on the end turn event.
 // - Made update of rush buy button possible when (only) the gold of the 
 //   player has changed.
+// - #01 Standardization of city selection and focus handling  
+//   (L. Hirth 6/2004)
 //
 //----------------------------------------------------------------------------
 
@@ -223,7 +226,6 @@ void CityControlPanel::PrevCityButtonActionCallback(aui_Control *control,
 	if(numberOfItems < 2)
 		return;
 
-	
 	cityControlPanel->m_cityListDropDown->SetSelectedItem(
 		(cityControlPanel->m_cityListDropDown->GetSelectedItem() +
 		numberOfItems - 1) % numberOfItems);
@@ -236,29 +238,29 @@ void CityControlPanel::PrevCityButtonActionCallback(aui_Control *control,
 void CityControlPanel::NextCityButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+	// if button wasn't pushed, exit
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
+	// set the class instance
 	CityControlPanel *cityControlPanel =
 		static_cast<CityControlPanel*>(cookie);
 
-	
+	// get the number of items (cities) in the list
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
 
 	
-	
+	// If only one or zero city exists, no change needed
 	if(numberOfItems < 2)
 		return;
 
-	
+	// set the next city as the actual (modulo to get back to 1)
 	cityControlPanel->m_cityListDropDown->SetSelectedItem(
 		(cityControlPanel->m_cityListDropDown->GetSelectedItem() + 1) %
 		numberOfItems);
 
-	
+	// Update the BuildItem and the Governor
 	cityControlPanel->Update();
 }
 
@@ -410,33 +412,48 @@ CityData *CityControlPanel::GetSelectedCity()
 	return u.CD();
 }
 
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityControlPanel::CitySelectActionCallback
+//
+// Description: Will be called when a city is selected on the control panel 
+//              city list.  
+//              
+//----------------------------------------------------------------------------
+
 void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 												uint32 action, uint32 data, void *cookie)
 {
 	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
 		return;
 
-	
+	// set the class
 	CityControlPanel *cityControlPanel =
 		static_cast<CityControlPanel*>(cookie);
 
+    // Get the currently selected city of the list
 	CityData *cd = cityControlPanel->GetSelectedCity();
-	if(cd) {
+
+	if(cd) {  // City data pointer is valid
 		if(g_selected_item) {
 			Unit oldCity;
 			if(g_selected_item->GetSelectedCity(oldCity) && (oldCity.m_id == cd->GetHomeCity().m_id)) {
-				
+			// same city selected as before, nothing to do
+
+
 			} else {
+ 				// City has changed, do the neccessary
 				g_selected_item->SetSelectCity(cd->GetHomeCity());
-				MapPoint pos = cd->GetHomeCity().RetPos();
 
-
-
+#if !defined(ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focus handling  
+				MapPoint pos = cd->GetHomeCity().RetPos(); // Not needed         
+#endif
 
 			}
 		}
 		if(!g_network.IsClient()) {
-			CityWindow::Project(cd);
+			CityWindow::Project(cd);  // Update calculated fields of the city
 		}
 	}
 }
@@ -828,21 +845,38 @@ void CityControlPanel::UpdateGovernor()
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityControlPanel::UpdateCityList
+//
+// Description: Clears and refills the dropdown selection list of cities
+//              located on the CityControlPanel 
+//
+// Parameters : -
+//
+// Globals    : g_player		: list of players
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 void CityControlPanel::UpdateCityList()
 {
-	
+	// clear the list
 	m_cityListDropDown->Clear();
 
-	
+	// set the player
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!player)
 		return;
 
-	
+	// How many cities has player
 	sint32 numberOfCities = player->GetNumCities();
 
-	
-	
+	// deactivate prev and next button if less than 2 cities
+	// activate if there are more than one city
 	if(numberOfCities < 2) {
 		m_cityListPreviousButton->Enable(false);
 		m_cityListDropDown->Enable(false);
@@ -853,25 +887,25 @@ void CityControlPanel::UpdateCityList()
 		m_cityListNextButton->Enable(true);
 	}
 
-	
+	// If no city exists, nothing more to do
 	if(numberOfCities < 1)
 		return;
 
-	
+	// loop throgh the cities to fill the drop down list
 	for(sint32 cityIndex = 0; cityIndex < numberOfCities; cityIndex++) {
-		
+		// create the item
 		ctp2_ListItem *listItem = static_cast<ctp2_ListItem*>(
 			aui_Ldl::BuildHierarchyFromRoot("CityListItem"));
 
-		
+		// set the cityname as text
 		ctp2_Static *label = static_cast<ctp2_Static*>(
 			listItem->GetChildByIndex(0));
 		label->SetText(player->GetCityFromIndex(cityIndex).GetName());
 
-		
+		// fill userdata of the dropdown list with the city ID
 		listItem->SetUserData(reinterpret_cast<void*>(player->GetCityFromIndex(cityIndex).m_id));
 
-		
+		// add the item to the list
 		m_cityListDropDown->AddItem(listItem);
 	}
 }

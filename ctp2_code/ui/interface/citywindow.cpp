@@ -41,7 +41,8 @@
 //   of the build queue, by Martin Gühmann.
 // - Turn count on the turn count button is now updated when another item is
 //   selected than the first item of the build queue, by Martin Gühmann.
-//
+// - #01 Standardization of city selection and focus handling  
+//   (L. Hirth 6/2004)
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -567,8 +568,16 @@ void CityWindow::SetCity(CityData *city)
 {
 	m_cityData = GetCityData(city->GetHomeCity().m_id);
 
+
 	Project();
 	Update();
+
+#if !defined(ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focusing
+	if(s_cityWindow->m_cityData && s_cityWindow->m_cityData->GetHomeCity().IsValid()) {
+		CityData *cd = s_cityWindow->m_cityData;
+		g_selected_item->SetSelectCity(cd->GetHomeCity());
+	}
+#endif
 }
 
 void CityWindow::Project(CityData *cityData)
@@ -1164,14 +1173,17 @@ void CityWindow::NextCity(aui_Control *control, uint32 action, uint32 data, void
 		s_cityWindow->SetCity(cityList->Access(i + 1).CD());
 	}
 
+#if defined(ACTIVISION_ORIGINAL) // #01 Done now in  CityWindow::SetCity
 	if(s_cityWindow->m_cityData && s_cityWindow->m_cityData->GetHomeCity().IsValid()) {
 		CityData *cd = s_cityWindow->m_cityData;
 		g_selected_item->SetSelectCity(cd->GetHomeCity());
+
 		MapPoint pos = cd->GetHomeCity().RetPos();
 		if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 			g_director->AddCenterMap(pos);
 		}
 	}
+#endif
 }
 
 void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1205,15 +1217,17 @@ void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, 
 	} else {
 		s_cityWindow->SetCity(cityList->Access(i - 1).CD());
 	}
-
+#if defined(ACTIVISION_ORIGINAL) // #01 Done now in  CityWindow::SetCity
 	if(s_cityWindow->m_cityData && s_cityWindow->m_cityData->GetHomeCity().IsValid()) {
 		CityData *cd = s_cityWindow->m_cityData;
 		g_selected_item->SetSelectCity(cd->GetHomeCity());
+
 		MapPoint pos = cd->GetHomeCity().RetPos();
 		if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 			g_director->AddCenterMap(pos);
 		}
 	}
+#endif
 }
 
 void CityWindow::SelectCity(aui_Control *control, uint32 action, uint32 data, void *cookie)

@@ -2,6 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
+// File name    : ui\aui_ctp2\SetItem.cpp
 // Description  : Handles stuff about selected items.
 //
 //----------------------------------------------------------------------------
@@ -30,6 +31,8 @@
 //
 // - Fixed archieve constructor to make sure that the
 //   correct stop player is set.
+// - #01 Standardization of city selection and focus handling  
+//   (L. Hirth 6/2004)
 //
 //----------------------------------------------------------------------------
 
@@ -296,7 +299,7 @@ void SelectedItem::Init()
 	m_player_on_screen = -1;
 	m_gotClickSinceLastAutoEnd = FALSE;
 	m_selected_something_since_director_select = FALSE;
-	m_ignoreCitySelect = FALSE;
+	m_ignoreCitySelect = FALSE;  // completely unused now #01
 	m_isDragging = false;
 	m_gotClick = false;
 
@@ -417,21 +420,19 @@ void SelectedItem::NextItem()
 				if(curIndex >= g_player[player]->m_all_cities->Num())
 					curIndex = 0;
 				m_selected_city[player] = g_player[player]->m_all_cities->Access(curIndex);
-				
-				
+
+#if !defined (ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focus handling  
 				MapPoint pos;
 				m_selected_city[player].GetPos( pos );
 				m_select_pos[player] = pos;
-				if(IsAutoCenterOn()) {
+				if(IsAutoCenterOn()) { 
 					if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 						g_director->AddCenterMap(pos);
 					}
 				}
-
-				
+#endif
 				if ( g_controlPanel ) {
 					g_selected_item->SetSelectCity(m_selected_city[player]);
-
 				}
 
 			} else {
@@ -973,11 +974,14 @@ void SelectedItem::Refresh()
 				} else {
 					SetSelectUnit(Unit(0));
 				}
-			} else {
+			} 
+#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
+			  else {
 				m_ignoreCitySelect = TRUE;
 
 				m_ignoreCitySelect = FALSE;
 			}
+#endif
 
 		}
 	}
@@ -988,14 +992,13 @@ void SelectedItem::SetSelectCity(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 {
 	
-	
-	
-	
-	
-
+#if defined (ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
 	if(!m_ignoreCitySelect) {
 		SetSelectUnit(u, all, isDoubleClick);
 	}
+#else
+    SetSelectUnit(u, all, isDoubleClick);
+#endif
 }
 
 void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
@@ -1015,7 +1018,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 	m_waypoints.Clear();
 
-	g_controlPanel->SetStack(Army(0), NULL);
+	g_controlPanel->SetStack(Army(0), NULL); // empty function
 
 	if(!g_theUnitPool->IsValid(u))
 		return;
@@ -1046,6 +1049,14 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 		g_c3ui->AddAction( new WorkWinUpdateAction );
 
+#if !defined (ACTIVISION_ORIGINAL) // #01 Standardization of city selection and focus handling  
+		// Focus on city if option is activated  
+		if(IsAutoCenterOn()) { 
+			if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
+				g_director->AddCenterMap(pos);
+			}
+		}
+#endif
 	} else { 
         n = g_player[o]->m_all_armies->Num(); 
         
@@ -1144,6 +1155,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 			{
 				g_controlPanel->SetTab(CP_TAB_CITY);
 			}
+
 		} 
 		else
 		{
@@ -1206,6 +1218,7 @@ BOOL SelectedItem::ResumePatrol()
 	return FALSE;
 }
 
+
 void SelectedItem::ForgetPatrol()
 {
 }
@@ -1221,13 +1234,12 @@ void SelectedItem::Deselect(PLAYER_INDEX player)
 	if(GetSelectedCity(c))
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityDeselected, GEA_City, c, GEA_End);
 	
+#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
 	if (g_controlPanel) {
-		
 		m_ignoreCitySelect = TRUE;
-		
 		m_ignoreCitySelect = FALSE;
 	}
-
+#endif
 	m_select_state[player] = SELECT_TYPE_NONE;
 
 	if(m_good_path) {
@@ -1773,6 +1785,7 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 
 	m_waypoints.Clear();
 }
+
 
 void SelectedItem::ProcessUnitOrders()
 {
