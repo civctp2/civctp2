@@ -359,12 +359,10 @@ Strategy {
 
 	// Maximum number of turns required for city growth of one pop that
 	// is accepted for the AI and mayors. Default value == 30.
-//	Bit (Int) TurnsAcceptedForOnePop = 30
-	Int TurnsAcceptedForOnePop = 30
+	Bit (Int) TurnsAcceptedForOnePop = 30
 
 	// The number of pops before the current pop maximum the AI and mayors
 	// stop to consinder building food terrain improvements in the radius
 	// of the according city. Default value == 1.
-//	Bit (Int) StopBuildingFoodBeforePopMax = 1
-	Int StopBuildingFoodBeforePopMax = 1
+	Bit (Int) StopBuildingFoodBeforePopMax = 1
 }

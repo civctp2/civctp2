@@ -28,7 +28,7 @@
 // - Added slic database access, by Martin Gühmann.
 // - Added a way to find out the size of a slic database, by Martin Gühmann.
 // - Repaired memory leak caused by one of the contructors, by Martin Gühmann.
-// - Replaced Debug Assertion for slic devision by 0 by slic error message
+// - Replaced Debug Assertion for slic division by 0 by slic error message
 //   the problem must be solved by the slicer not by a c++ coder, 
 //   by Martin Gühmann
 // - Treat modulo (%) 0 errors in the same way as errors with division by 0.
@@ -327,7 +327,7 @@ void SlicFrame::AddArg(SS_TYPE type, SlicStackValue value)
 //
 // Parameters : SOP op
 //
-// Globals    : Unknown (function very large)
+// Globals    : This function is so big no idea.
 //
 // Returns    : -
 //

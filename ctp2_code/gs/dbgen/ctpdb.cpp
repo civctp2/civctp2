@@ -26,6 +26,9 @@
 // Modifications from the original Activision code:
 //
 // - Variable 'or' renamed, because this a reserved symbol (same as ||) now.
+// - Modifed db_add_bit_pair function to allow bit pairs to have default 
+//   values so that when two records are merged, only the bit is merged 
+//   in that is set. - Sep. 28th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -379,7 +382,13 @@ void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpa
 {
 	Assert(g_record);
 	while(list) {
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 		g_record->AddBitPair(list->name, size->minSize, size->maxSize, pairtype);
+#else
+// Added by Martin Gühmann
+		g_record->AddBitPair(list, size->minSize, size->maxSize, pairtype);
+#endif
 		struct namelist *next = list->next;
 		free(list);
 		list = next;

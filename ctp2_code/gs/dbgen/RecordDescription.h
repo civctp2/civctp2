@@ -32,6 +32,9 @@
 //   more details  _____ by MrBaggins Jan-04
 //
 //   * Added bool m_hasGovernmentsModified to the RecordDescription class
+// - Modified AddBitPair function to allow bit pairs to have default values
+//   so that when two records are merged, only the bit is merged 
+//   in that is set. - Sep. 28th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -57,7 +60,14 @@ public:
 	void AddDatum(DATUM_TYPE type, struct namelist *nameInfo, sint32 minSize, sint32 maxSize,
 				  char *subType = NULL);
 	void AddGroupedBits(char *name, struct namelist *list);
+
+#if defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
 	void AddBitPair(char *name, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
+#else
+// Removed by Martin Gühmann
+	void AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
+#endif
 
 	void StartMemberClass(char *name);
 	void EndMemberClass(char *name);

@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Database record file generator
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Modified ExportBitPairInitialization function to allow bit pairs to 
+//   have default values so that when two records are merged, only the bit 
+//   is merged in that is set. - Sep. 28th 2004 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include <stdio.h>
 #include <string.h>
@@ -333,6 +365,8 @@ void Datum::ExportBitPairInitialization(FILE *outfile)
 	Assert(m_type == DATUM_BIT_PAIR);
 	Assert(m_bitPairDatum);
 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 	switch(m_bitPairDatum->m_type) {
 		case DATUM_INT:
 			fprintf(outfile, "    m_%s = 0;\n", m_bitPairDatum->m_name);
@@ -357,6 +391,36 @@ void Datum::ExportBitPairInitialization(FILE *outfile)
 			Assert(0);
 			break;
 	}
+#else
+// Added by Martin Gühmann
+	switch(m_bitPairDatum->m_type) {
+		case DATUM_INT:
+		case DATUM_STRINGID:
+			fprintf(outfile, "    m_%s = %d;\n", m_bitPairDatum->m_name, m_hasValue ? val.intValue : 0);
+			break;
+		case DATUM_FLOAT:
+			fprintf(outfile, "    m_%s = %lf;\n", m_bitPairDatum->m_name, m_hasValue ? val.floatValue : 0);
+			break;
+		case DATUM_STRUCT:
+			fprintf(outfile, "    memset(&m_%s, 0, sizeof(m_%s));\n", m_bitPairDatum->m_name, m_bitPairDatum->m_name);
+			break;
+		case DATUM_FILE:
+		case DATUM_STRING:
+			if(!m_hasValue) {
+				fprintf(outfile, "    m_%s = NULL;\n", m_bitPairDatum->m_name);
+			} else {
+				fprintf(outfile, "    m_%s = new char[%d];\n", m_bitPairDatum->m_name, strlen(val.textValue) + 1);
+				fprintf(outfile, "    strcpy(m_%s, \"%s\");\n", m_bitPairDatum->m_name, val.textValue);
+			}
+			break;
+		case DATUM_RECORD:
+			fprintf(outfile, "    m_%s = 0;\n", m_bitPairDatum->m_name);
+			break;
+		default:
+			Assert(0);
+			break;
+	}
+#endif
 }
 
 void Datum::ExportParseBitPairCase(FILE *outfile, char *recordName)
