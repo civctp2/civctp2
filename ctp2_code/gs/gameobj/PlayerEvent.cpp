@@ -28,6 +28,7 @@
 // - Moved PBEM save file generation to the FinishBeginTurn event (by JJB).
 // - Moved the autosave file generation to just before the StartMovePhase 
 //   event, to prevent losing the advance that just was completed.
+// - Corrected GrantAdvanceEvent input handling.
 //
 //----------------------------------------------------------------------------
 
@@ -567,7 +568,11 @@ STDEHANDLER(GrantAdvanceEvent)
 
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 	if(!args->GetInt(0, advance)) return GEV_HD_Continue;
+#if defined(ACTIVISION_ORIGINAL)	// incorrect argument number
 	if(!args->GetInt(0, cause)) return GEV_HD_Continue;
+#else
+	if (!args->GetInt(1, cause)) return GEV_HD_Continue;
+#endif
 
 	g_player[pl]->m_advances->GiveAdvance(advance, (CAUSE_SCI)cause, FALSE);
 	return GEV_HD_Continue;

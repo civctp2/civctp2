@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Slic stack handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented random memory access and NULL-dereferencing crashes. 
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SlicStack.h"
@@ -64,6 +94,7 @@ SlicSymbolData *SlicStack::GetSymbol(SS_TYPE symType, SlicStackValue symVal)
 
 sint32 SlicStack::Eval(SS_TYPE type, SlicStackValue value)
 {
+#if defined(ACTIVISION_ORIGINAL)	// Unitialised & untested GetSymbol return.
 	SlicSymbolData *sym;
 	sint32 retval;
 
@@ -82,10 +113,32 @@ sint32 SlicStack::Eval(SS_TYPE type, SlicStackValue value)
 			Assert(FALSE);
 			return 0;
 	}
+#else
+	if (SS_TYPE_INT == type)
+	{
+		return value.m_int;
+	}
+
+	SlicSymbolData const *	sym = GetSymbol(type, value);
+
+	if (sym)
+	{
+		sint32	retValue;
+
+		if (sym->GetIntValue(retValue))
+		{
+			return retValue;
+		}
+	}
+
+	Assert(FALSE);	// Or issue a SLIC error?
+	return 0;		// Questionable, but what else?
+#endif
 }
 
 BOOL SlicStack::GetUnit(SS_TYPE type, SlicStackValue symVal, Unit &u)
 {
+#if defined(ACTIVISION_ORIGINAL)	// Uninitialised: may CtD in default case.
 	SlicSymbolData *sym;
 
 	switch(type) {
@@ -105,10 +158,15 @@ BOOL SlicStack::GetUnit(SS_TYPE type, SlicStackValue symVal, Unit &u)
 		return sym->GetUnit(u);
 	}
 	return FALSE;
+#else
+	SlicSymbolData const *	sym = GetSymbol(type, symVal);
+	return (sym) ? sym->GetUnit(u) : FALSE;
+#endif
 }
 
 BOOL SlicStack::GetCity(SS_TYPE type, SlicStackValue symVal, Unit &city)
 {
+#if defined(ACTIVISION_ORIGINAL)	// Uninitialised: may CtD in default case.
 	SlicSymbolData *sym;
 
 	switch(type) {
@@ -128,11 +186,16 @@ BOOL SlicStack::GetCity(SS_TYPE type, SlicStackValue symVal, Unit &city)
 		return sym->GetCity(city);
 	}
 	return FALSE;
+#else
+	SlicSymbolData const *	sym = GetSymbol(type, symVal);
+	return (sym) ? sym->GetCity(city) : FALSE;
+#endif
 }
 
 
 BOOL SlicStack::GetPos(SS_TYPE type, SlicStackValue symVal, MapPoint &pos)
 {
+#if defined(ACTIVISION_ORIGINAL)	// Uninitialised: may CtD in default case.
 	SlicSymbolData *sym;
 
 	switch(type) {
@@ -152,10 +215,15 @@ BOOL SlicStack::GetPos(SS_TYPE type, SlicStackValue symVal, MapPoint &pos)
 		return sym->GetPos(pos);
 	}
 	return FALSE;
+#else
+	SlicSymbolData const *	sym = GetSymbol(type, symVal);
+	return (sym) ? sym->GetPos(pos) : FALSE;
+#endif
 }
 
 BOOL SlicStack::GetArmy(SS_TYPE type, SlicStackValue symVal, Army &a)
 {
+#if defined(ACTIVISION_ORIGINAL)	// Uninitialised: may CtD in default case.
 	SlicSymbolData *sym;
 
 	switch(type) {
@@ -175,4 +243,8 @@ BOOL SlicStack::GetArmy(SS_TYPE type, SlicStackValue symVal, Army &a)
 		return sym->GetArmy(a);
 	}
 	return FALSE;
+#else
+	SlicSymbolData const *	sym = GetSymbol(type, symVal);
+	return (sym) ? sym->GetArmy(a) : FALSE;
+#endif
 }

@@ -35,6 +35,9 @@
 //   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
 //   - GetContinent      Gets the continent ID of an location.
 //   - IsWater           Gets whether a location is water.
+// - ArmyIsValid	: added reading of the argument - to make a valid result 
+//                    possible.
+// - GrantAdvance	: added input checks and an (optional) reason argument.
 //
 //----------------------------------------------------------------------------
 
@@ -400,6 +403,25 @@ SlicFunc::~SlicFunc()
 		delete [] m_name;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_...::Call
+//
+// Description: Execute a SLIC command.
+//
+// Parameters : args			: variable length argument list
+//
+// Globals    : various
+//
+// Returns    : SFN_ERROR		: indication whether the execution of the 
+//                                command has started.
+//
+// Remark(s)  : SFN_ERROR_OK is returned when the execution of the command 
+//              has started. 
+//              Other return values indicate errors in the number or type of 
+//              the arguments.
+//
+//----------------------------------------------------------------------------
 
 SFN_ERROR Slic_PrintInt::Call(SlicArgList *args)
 {
@@ -3965,8 +3987,35 @@ SFN_ERROR Slic_GetRandomNeighbor::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_GrantAdvance::Call
+//
+// Description: Give an advance to a player.
+//
+// Parameters : args[0]				: the player to receive the advance
+//				args[1]				: the advance
+//				args[2] (optional)	: a reason why the advance is given
+//
+// Globals    : g_gevManager		: game event handler
+//
+// Returns    : SFN_ERROR			: indication whether the command has been
+//									  passed to the game event handler 
+//
+// Remark(s)  : * SFN_ERROR_OK is returned when the command has been passed to
+// 			      the event handler.  
+//                Other return values indicate errors in the number or type of 
+//                the arguments.
+//
+//				* SFN_ERROR_OK does not indicate the result of the command 
+//				  execution: when e.g. the player already has the advance, 
+//				  SFN_ERROR_OK will be returned, but nothing will happen.
+//
+//----------------------------------------------------------------------------
+
 SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 {
+#if defined(ACTIVISION_ORIGINAL)	
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -3986,6 +4035,65 @@ SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 		GEA_End);
 
 	return SFN_ERROR_OK;
+#else
+	if ((args->m_numArgs < 2) || (args->m_numArgs > 3))
+	{
+		return SFN_ERROR_NUM_ARGS;
+	}
+
+	PLAYER_INDEX	player;
+	if (args->GetPlayer(0, player))
+	{
+		if ((player < 0) || (player >= k_MAX_PLAYERS))
+		{
+			return SFN_ERROR_OUT_OF_RANGE;
+		}
+
+	}
+	else
+	{
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	sint32			adv;
+	if (args->GetInt(1, adv)) 
+	{
+		if (adv >= g_theAdvanceDB->NumRecords()) 
+		{
+			return SFN_ERROR_NOT_ADVANCE;
+		}
+	}
+	else
+	{
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	sint32			reason	= CAUSE_SCI_UNKNOWN;
+	if (args->m_numArgs >= 3)
+	{
+		if (args->GetInt(2, reason))
+		{
+			if ((reason < 0) || (reason > CAUSE_SCI_INITIAL))
+			{
+				return SFN_ERROR_OUT_OF_RANGE;
+			}
+		}
+		else
+		{
+			return SFN_ERROR_TYPE_ARGS;
+		}
+	}
+
+	g_gevManager->AddEvent(GEV_INSERT_Tail, 
+						   GEV_GrantAdvance,
+						   GEA_Player,	player,
+						   GEA_Int,		adv,
+						   GEA_Int,		reason,
+						   GEA_End
+						  );
+
+	return SFN_ERROR_OK;
+#endif
 }
 
 SFN_ERROR Slic_AddUnit::Call(SlicArgList *args)
@@ -3994,9 +4102,10 @@ SFN_ERROR Slic_AddUnit::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	Unit u;
-
+#if defined(ACTIVISION_ORIGINAL)	// already checked
 	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
+#endif
 	if(!args->GetUnit(0, u)) {
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
@@ -6800,13 +6909,18 @@ SFN_ERROR Slic_CityHasWonder::Call(SlicArgList *args)
 SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 {
 	m_result.m_int = 0;
-	Army a;
 
-	if(args->m_numArgs != 1) {
+	if (args->m_numArgs != 1) {
 		return SFN_ERROR_NUM_ARGS;
 	}
 
-	if(a.IsValid()) {
+	Army a;
+	if (args->GetArmy(0, a))
+	{
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	if (a.IsValid()) {
 		m_result.m_int = 1;
 	}
 
