@@ -56,6 +56,8 @@ TerrainImprovement {
 		Bit(Int) BonusProduction
 		Bit(Int) BonusGold
 		Bit(Int) MoveCost
+		#Added by Martin Gühmann for Trade redirection
+		Int Freight
 		Bit Radar
 		Bit Airport
 		Bit ListeningPost
@@ -70,6 +72,8 @@ TerrainImprovement {
 		Int TilesetIndex
 	}
 
+	#Added Sound by Martin Gühmann
+	Record Sound Sound
 	Record Terrain[] CantBuildOn
 
 	Bit(Struct Effect) Effect
@@ -81,7 +85,8 @@ TerrainImprovement {
 	StringId Statusbar
 
 	Int Level # If a farm, is it farm 1, farm 2, farm 3?  same thing for any type.
-	Int[3] ConstructionTiles
+	#Removed limit of three for Construction Tile by Martin Gühmann
+	Int[] ConstructionTiles
 
 	Bit(Record Terrain) TerraformTerrain # Only meaningful if Class == Terraform
 	Bit(Int) Column # ignored except for terraforms
