@@ -28,6 +28,7 @@
 // - X-wrap added to A* heuristics costs
 // - Implemented CalcTerrainFreightCost by Martin Gühmann
 // - Resolved ambiguous sqrt call.
+// - Standardised min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -1335,8 +1336,22 @@ void World::GenerateDeepWater()
 				if (m_map[i][j]->m_terrain_type == TERRAIN_WATER_DEEP) { 
 
 					hot = TRUE; 
+#if defined(ACTIVISION_ORIGINAL)
 					for (x = max(i-(radius-delta), 0);hot &&  x <= min(m_size.x-1, (i+(radius-delta))); x++) { 
-						for (y = max(j-(radius-delta), 0); hot && y <= min(m_size.y-1, (j+(radius-delta))); y++) { 
+						for (y = max(j-(radius-delta), 0); hot && y <= min(m_size.y-1, (j+(radius-delta))); y++) {
+#else
+					for (x = std::max<sint32>(i-(radius-delta), 0); 
+						 hot &&  x <= std::min<sint32>(m_size.x-1, (i+(radius-delta))); 
+						 ++x
+						) 
+					{ 
+						for (y = std::max<sint32>(j-(radius-delta), 0); 
+							 hot && y <= std::min<sint32>(m_size.y-1, (j+(radius-delta))); 
+							 ++y
+							)
+						{
+
+#endif							
 							if (m_map[x][y]->m_search_count != m_map[i][j]->m_search_count) {
 								hot = FALSE; 
 								break;
@@ -1385,9 +1400,21 @@ void World::GenerateDeepWater()
 			oldval =   m_map[minx][miny]->m_search_count; 
 
 			rcount++; 
+#if defined(ACTIVISION_ORIGINAL)
 			for (i = max(minx-(radius), 0); i <= min(m_size.x-1, (minx+(radius))); i++) { 
 				for (j = max(miny-(radius), 0); j <= min(m_size.y-1, (miny+(radius))); j++) { 
-					
+#else
+			for (i = std::max<sint32>(minx-(radius), 0); 
+				 i <= std::min<sint32>(m_size.x-1, (minx+(radius))); 
+				 ++i
+				) 
+			{ 
+				for (j = std::max<sint32>(miny-(radius), 0); 
+					 j <= std::min<sint32>(m_size.y-1, (miny+(radius))); 
+					 ++j
+					) 
+				{ 
+#endif					
 					if ((m_map[i][j]->m_search_count == oldval) || 
 						(m_map[i][j]->m_search_count == 0)) { 
 						m_map[i][j]->m_search_count = rcount;

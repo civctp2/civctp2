@@ -1,6 +1,58 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Dynamic array (of armies)
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Standardised min/max usage.
+// - Microsoft extensions marked.
+//
+//----------------------------------------------------------------------------
+//
+// Probably to be replaced with a std::vector implementation later.
+//
+//----------------------------------------------------------------------------
+
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __DYNAMIC_ARRAY_H__
 #define __DYNAMIC_ARRAY_H__ 1
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include "c3.h"
+#endif
 
 class CivArchive; 
 
@@ -55,9 +107,12 @@ public:
 		m_maxElements = 0; 
 		m_nElements = 0; 
 
-		
+#if defined(ACTIVISION_ORIGINAL)	// wrong delete		
 		if (m_array)
 			delete m_array;
+#else
+		delete [] m_array;
+#endif
 
 		m_array = NULL; 
 	}
@@ -163,8 +218,11 @@ template <class T> DynamicArray<T>::DynamicArray (
     m_array = new T[size]; 
     Assert(m_array != NULL); 
     m_nElements = 0; 
-    m_maxElements = max(1,size); 
-    
+#if defined(ACTIVISION_ORIGINAL)
+    m_maxElements = max(1,size);
+#else
+	m_maxElements = std::max<sint32>(1, size);
+#endif
 }
 
 
@@ -208,12 +266,16 @@ template <class T> DynamicArray<T>::DynamicArray (
 template <class T> DynamicArray<T>::~DynamicArray()
 
 {
+#if defined(ACTIVISION_ORIGINAL)	// needlessly complex
     if(m_array) { 
        delete[] m_array;    
        m_array = NULL;
     } 
 
     m_array=NULL; 
+#else
+	delete [] m_array;
+#endif
 }
 
 
@@ -232,10 +294,13 @@ template <class T> DynamicArray<T> & DynamicArray<T>::operator= (
     Assert(this != &copyme);
 
     Assert(copyme.m_array!= NULL); 
-   
+#if defined(ACTIVISION_ORIGINAL)   // needlessly complex
     if (m_array)
        delete[] m_array; 
-    m_array = NULL;
+    m_array = NULL;	// new later
+#else
+	delete [] m_array;
+#endif
     Assert(0<copyme.m_maxElements);
    
     m_maxElements = copyme.m_maxElements; 
@@ -276,12 +341,20 @@ template <class T> void DynamicArray<T>::ResizeCreate(const sint32 new_size,
     tmp = new T[new_size]; 
     Assert(tmp); 
 
-    
+#if defined(ACTIVISION_ORIGINAL)    
     sint32 i; 
     sint32 n = min(new_size, m_nElements); 
     for (i=0; i<n; i++) { 
        tmp[i] = m_array[i]; 
     } 
+#else
+	sint32 const	n = std::min(new_size, m_nElements);
+	for (sint32 i = 0; i < n; ++i)
+	{
+		tmp[i] = m_array[i];
+	}
+#endif
+
 }
 
 template <class T> void DynamicArray<T>::ResizeCleanup(const sint32 new_size, T *tmp)
@@ -743,7 +816,11 @@ template <class T> void DynamicArray<T>::Serialize(CivArchive &archive)
         
     } else {
 		archive>>m_maxElements ;
+#if defined(ACTIVISION_ORIGINAL)
 		m_maxElements=max(1,m_maxElements);
+#else
+		m_maxElements = std::max<sint32>(1, m_maxElements);
+#endif
 		archive>>m_nElements ;
 		if (m_array != NULL)
 			delete[] m_array;    

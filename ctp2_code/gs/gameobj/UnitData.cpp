@@ -29,7 +29,8 @@
 // - Movement point handling for ships at tunnels corrected.
 // - Handle unit types that have CanCarry property, but have MaxCargo 0.
 // - Corrected movement type check for active defenders.
-// - Added second message after investigation of a city
+// - Added second message after investigation of a city.
+// - Standardised min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -565,7 +566,11 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 {   
 	if(!Flag(k_UDF_PACMAN)) {
 		m_movement_points -= cost;
+#if defined(ACTIVISION_ORIGINAL)
 		m_movement_points = max(m_movement_points, 0.0f);   
+#else
+		m_movement_points = std::max(m_movement_points, 0.0);
+#endif
 		ClearFlag(k_UDF_FIRST_MOVE); 
 	}
 
@@ -630,7 +635,12 @@ sint32 UnitData::ResetMovement()
     if (rec->GetLossMoveToDmgNone()) { 
         m_movement_points = rec->GetMaxMovePoints(); 
     } else if (rec->GetLossMoveToDmgTwo()) { 
+#if defined(ACTIVISION_ORIGINAL)
         m_movement_points = max(2.0f, rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr()); 
+#else
+		m_movement_points = 
+			std::max(2.0, rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr());
+#endif
     } else { 
         m_movement_points = rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr(); 
     }

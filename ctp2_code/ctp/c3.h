@@ -45,16 +45,50 @@
 #if defined(_TEST) || !defined(_DEBUG)
 #pragma warning( disable : 4056 )
 #endif
-
-#pragma warning( error : 4700 )
-
+#if !defined(ACTIVISION_ORIGINAL)
+#pragma warning(disable:4786)  // '255' characters in the debug information
 #endif
+#pragma warning( error : 4700 )
+#endif	// _MSC_VER
 
 #include <limits.h>
 #if !defined(__GNUC__)
 #include <crtdbg.h>
 #endif
+
+#if defined(ACTIVISION_ORIGINAL)
 #include <windows.h>
+#else
+// Do not define the min and max *macros* in <windows.h>.
+#define NOMINMAX	
+#include <windows.h>
+
+#if defined(_MSC_VER) && (_MSC_VER < 1300)
+	// MSVC 6.0 does not even have std::min and std::max.
+	namespace std
+	{
+		template <typename T>
+		inline T const & min(T const & a, T const & b)
+		{
+			return (a < b) ? a : b;
+		};
+
+		template <typename T>
+		inline T const & max(T const & a, T const & b)
+		{
+			return (a < b) ? b : a;
+		};
+	};	// namespace std
+
+#else
+	#include <algorithm>
+#endif	// _MSC_VER < 1300
+
+	// Allow usage of global min and max to reduce the number of code changes.
+	using std::min;
+	using std::max;
+#endif	// ACTIVISION_ORIGINAL
+
 #include <tchar.h>
 
 #define DIRECTINPUT_VERSION 0x0700

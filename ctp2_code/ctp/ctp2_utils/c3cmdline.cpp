@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Removed non-standard include file <iostream.h>.
+// - Standardised min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -6324,7 +6325,11 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 
 void DRayTestCode::Execute(sint32 argc, char **argv)
 {	
+#if defined(ACTIVISION_ORIGINAL)
 	int curRound = min(NewTurnCount::GetCurrentRound(),200);
+#else
+	int const curRound	= std::min<sint32>(NewTurnCount::GetCurrentRound(), 200);
+#endif
 	int turnStrength[200];
 	int i;
 	for(i=0; i<curRound; i++)

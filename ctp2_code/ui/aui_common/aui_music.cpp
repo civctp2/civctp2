@@ -1,23 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Music
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Standardised min/max usage.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -251,9 +261,11 @@ aui_Redbook::SetVolume( uint8 volume )
 	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
 	sint32 mci_retval = 0;
 	DWORD CDvolume = 0;
-
+#if defined(ACTIVISION_ORIGINAL)
 	m_volume = min( volume, 0xff );
-
+#else
+	m_volume = std::min(volume, (unsigned char) 0xff);
+#endif
 	
 	CDvolume = (DWORD)( ( ( m_volume + 1 ) << 8 ) - 1 );	
 	CDvolume |= ( CDvolume << 16 );								

@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Standardised min/max usage.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -1372,8 +1392,11 @@ aui_Control::FillSize aui_Control::WidthToFill(ldl_datablock *theBlock,
 			result.first++;
 		} else {
 			
-			
+#if defined(ACTIVISION_ORIGINAL)			
 			result.second = std::_MAX(0L,
+#else
+				result.second = std::max(0L,
+#endif
 				result.second -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
 		}

@@ -26,6 +26,7 @@
 //
 // - #01 Allow shifing the X and Y axis in the radar map with RMouse clicks
 //   (L. Hirth 6/2004)
+// - Standardised ceil/min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -335,8 +336,11 @@ POINT RadarMap::MapToPixel(sint32 x, sint32 y)
 	POINT		pt;
 	sint32		k;
 	double		nudge;
-
+#if defined(ACTIVISION_ORIGINAL)	// ceil after integer division?
 	k = sint32(ceil(y/2) + x) % m_mapSize->x;
+#else
+	k = ((y / 2) + x) % m_mapSize->x;
+#endif
 
 	nudge = 0;
 	if (y&1) {
@@ -767,10 +771,13 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
 	};
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	tileRectangle.right = std::_MAX(tileRectangle.left, (tileRectangle.right - 1L));
 	tileRectangle.bottom = std::_MAX(tileRectangle.top, (tileRectangle.bottom - 1L));
-
+#else
+	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
+	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
+#endif
 	
 	if(borderFlags & k_WEST_BORDER_FLAG)
 		primitives_DrawLine16(surface, tileRectangle.left, tileRectangle.top,
@@ -787,9 +794,11 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 	tileRectangle.left = 0;
 	tileRectangle.right = static_cast<sint32>(ceil(m_tilePixelWidth / 2.0));
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	tileRectangle.right = std::_MAX(tileRectangle.left, (tileRectangle.right - 1L));
-
+#else
+	tileRectangle.right	= std::max(tileRectangle.left, (tileRectangle.right - 1L));
+#endif
 	
 	if(borderFlags & k_EAST_BORDER_FLAG)
 		primitives_DrawLine16(surface, tileRectangle.right, tileRectangle.top,
@@ -858,11 +867,15 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 	
 	sint32 middle = ceil(xPosition + m_tilePixelWidth/2);
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	tileRectangle.right = std::_MAX(tileRectangle.left, (tileRectangle.right - 1L));
 	tileRectangle.bottom = std::_MAX(tileRectangle.top, (tileRectangle.bottom - 1L));
 	middle = std::_MIN(middle, tileRectangle.right);
-
+#else
+	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
+	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
+	middle					= std::min(middle, tileRectangle.right);
+#endif
 	
 	
 	if(tileRectangle.right >= surface->Width())
@@ -961,10 +974,9 @@ void RadarMap::RenderTile(aui_Surface *surface, const MapPoint &position,
 	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
 		% m_mapSize->x;
 #else
-	Pixel16 color = RadarTileColor(player, MapPoint(position.x, position.y), worldpos, flags);
-
-	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
-		% m_mapSize->x;
+	Pixel16 const	color	= 
+		RadarTileColor(player, MapPoint(position.x, position.y), worldpos, flags);
+	sint32 const	x		= ((position.y / 2) + position.x) % m_mapSize->x;
 #endif
 
 
@@ -1003,15 +1015,16 @@ void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 						  const MapPoint &worldpos, Player *player)
 {
-	Pixel16 borderColor = RadarTileBorderColor(MapPoint(worldpos.x, worldpos.y));
-	uint8 borderFlags = RadarTileBorder(player, MapPoint(worldpos.x, worldpos.y));
-	
-	sint32 x = static_cast<sint32>(ceil(position.y / 2) + position.x)
-		% m_mapSize->x;
-
+	uint8 const	borderFlags = 
+		RadarTileBorder(player, MapPoint(worldpos.x, worldpos.y));
 	
 	if (borderFlags)
+	{
+		Pixel16 const	borderColor = 
+			RadarTileBorderColor(MapPoint(worldpos.x, worldpos.y));
+		sint32 const	x	= ((position.y / 2) + position.x) % m_mapSize->x;
 		RenderMapTileBorder(surface, MapPoint(x, position.y), borderFlags, borderColor);
+	}
 }
 #endif
 
@@ -1043,7 +1056,7 @@ void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, const
 		!player->m_vision->IsExplored(position)) {
 
 #else
-	MapPoint screenPosition((sint32)(ceil(worldpos.y / 2) + position.x) % (m_mapSize->x), position.y);
+	MapPoint screenPosition(((worldpos.y / 2) + position.x) % (m_mapSize->x), position.y);
 
 	if(!g_theWorld->GetCell(worldpos)->GetNumTradeRoutes() ||
 	   !player->m_vision->IsExplored(worldpos)) {

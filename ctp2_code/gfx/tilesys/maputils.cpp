@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Handling corrected for non-X-wrapping worlds.
+// - Ambiguous ceil call resolved.
 //
 //----------------------------------------------------------------------------
 
@@ -173,10 +174,14 @@ void maputils_TileX2MapXAbs(
 	
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
 		  
-	
+#if defined(ACTIVISION_ORIGINAL)	
+	// useless ceil after integer division, modulo twice
 	*mapX = ((sint32)(tileX - ceil(tileY>>1))%mapWidth);
 
 	*mapX %= (mapWidth);
+#else
+	*mapX = (tileX - (tileY >> 1)) % mapWidth;
+#endif
 
 	while (*mapX<0)
 		*mapX+=mapWidth;

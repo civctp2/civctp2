@@ -28,6 +28,7 @@
 // - Corrected movement rate of ships above tunnels.
 // - m_queue_index used.
 // - Straight line corrected for worlds that do not have X-wrapping.
+// - Standardised min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -415,12 +416,15 @@ float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 		sint32 icost_without_tunnel;
 		(void) g_theTerrainDB->Access(TERRAIN_WATER_DEEP)->GetEnvBase()->
 					GetMovement(icost_without_tunnel);
-		return min(m_army_minmax_move, static_cast<float>(icost_without_tunnel));
+		return std::min(m_army_minmax_move, 
+						static_cast<float>(icost_without_tunnel)
+					   );
 	}
 	else
 	{
-		return static_cast<float>
-			(min(m_army_minmax_move, the_pos_cell->GetMoveCost()));
+		return std::min(m_army_minmax_move, 
+						static_cast<float>(the_pos_cell->GetMoveCost())
+					   );
 	}
 #endif
 }

@@ -32,6 +32,7 @@
 // - #01 Inform AI only about bombard if it was really possible (L. Hirth 6/2004).
 // - #02 TestOrderAny added.
 // - Ambiguous sqrt calls resolved.
+// - Standardised min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -7041,7 +7042,11 @@ void ArmyData::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to
         fuel_to_half = fuel_remaining - max_fuel / 2; 
         
         if (fuel_to_half < num_tiles_to_half) { 
+#if defined(ACTIVISION_ORIGINAL)
             num_tiles_to_half = max (0, fuel_to_half); 
+#else
+			num_tiles_to_half = std::max<sint32>(fuel_to_half, 0);
+#endif
         }
 
         if (fuel_remaining < num_tiles_to_empty) { 

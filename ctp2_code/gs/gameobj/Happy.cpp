@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Happiness handling 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Standardised min/max usage.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -194,11 +215,15 @@ double Happy::CalcBase(Player *p)
 
 double Happy::CalcSize(CityData &cd, Player *p)
 
-{    
+{  
+#if defined(ACTIVISION_ORIGINAL)	
     m_size = p->GetBigCityScale() * 
         min (p->GetBigCityOffset() - 
 			 0  - 
 			 0 , 0);
+#else
+	m_size	= p->GetBigCityScale() * std::min(p->GetBigCityOffset(), 0.0);
+#endif
 	m_tracker->SetHappiness(HAPPY_REASON_CITY_SIZE, m_size);
     return m_size; 
 }
@@ -690,7 +715,7 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
     
     
     
-    
+#if defined(ACTIVISION_ORIGINAL)    
     sint32 mlt = p->GetMartialLawThreshold();
     double new_happiness; 
     if (m_happiness < mlt) { 
@@ -698,6 +723,16 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
         new_happiness = min(CalcMartialLaw(cd, p) + m_happiness,  mlt); 
         delta_martial_law = sint32 (new_happiness - m_happiness + 0.5); 
         m_happiness = new_happiness; 
+#else
+    double const		mlt = static_cast<double>(p->GetMartialLawThreshold());
+    if (m_happiness < mlt) 
+	{ 
+        double const	new_happiness = 
+			std::min(CalcMartialLaw(cd, p) + m_happiness,  mlt); 
+        delta_martial_law = sint32 (new_happiness - m_happiness + 0.5); 
+        m_happiness = new_happiness; 
+
+#endif
     } else { 
         delta_martial_law = 0; 
     } 
@@ -791,7 +826,7 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
     
     
     
-    
+#if defined(ACTIVISION_ORIGINAL)    
     sint32 mlt = p->GetMartialLawThreshold();
     double new_happiness; 
     if (local_happiness < mlt) { 
@@ -799,7 +834,14 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
         new_happiness = min(CalcMartialLaw(cd, p) + local_happiness,  mlt); 
         local_happiness = new_happiness; 
     } 
-	
+#else
+	double const	mlt	= static_cast<double>(p->GetMartialLawThreshold());
+	if (local_happiness < mlt)
+	{
+		local_happiness	= 
+			std::min(CalcMartialLaw(cd, p) + local_happiness, mlt);
+	}
+#endif
     
     local_happiness += 
         CalcImprovementContentment(cd, p) +  

@@ -21,6 +21,9 @@
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
 //
+// USE_STOP_ZERO_MOVEMENT
+// - When defined, prevents unit without movement points from moving.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,6 +31,7 @@
 // - Draw paths in unexplored territory red for land and water based armies,
 //	 to not give away land and/or water locations.
 // - Added comments and cleaned up the code somewhat.
+// - Standardised min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -90,7 +94,14 @@ extern ORDERMODE		g_orderModeOrder;
 #include "ControlPanelWindow.h"
 #include "OrderRecord.h"
 
-#if !defined(ACTIVISION_ORIGINAL)
+#if defined(ACTIVISION_ORIGINAL)	// never used
+
+static Unit GetUnitWithLeastMovePoints(void)
+{
+	return 0;
+}
+
+#else
 
 namespace // unnamed = static
 {
@@ -170,11 +181,6 @@ bool IsKnownEntryCost
 } // namespace
 
 #endif // ACTIVISION_ORIGINAL
-
-static Unit GetUnitWithLeastMovePoints(void)
-{
-	return 0;
-}
 
 
 #define INSURFACE(x, y) (x >= 0 && y >= 0 && x < pSurface->Width() && y < pSurface->Height())
@@ -802,6 +808,12 @@ void TiledMap::DrawLegalMove
 	
 	double			currMovementPoints;
     sel_army.CurMinMovementPoints(currMovementPoints); 
+#if defined(USE_STOP_ZERO_MOVEMENT)
+	if (currMovementPoints == 0.0)
+	{
+		return;	// The selected army contains a non-mover.
+	}
+#endif
 	if (currMovementPoints < 1.0)
 	{
 		currMovementPoints = -1.0;
@@ -820,7 +832,6 @@ void TiledMap::DrawLegalMove
 
 	sint32 const	xoffset				= (sint32) ((k_TILE_PIXEL_WIDTH * m_scale) / 2);
 	sint32 const	yoffset				= (sint32) (k_TILE_PIXEL_HEIGHT * m_scale);
-
 
 	Path			goodPath(g_selected_item->GetGoodPath());
 	MapPoint		currPos;
@@ -853,7 +864,7 @@ void TiledMap::DrawLegalMove
 			currMovementPoints	   -= GetEntryCost(sel_army, currPos);
 			if (isFirstMove)
 			{
-				currMovementPoints	= max(currMovementPoints, 0);
+				currMovementPoints  = std::max(currMovementPoints, 0.0);
 				isFirstMove			= false;
 			}
 		}
@@ -1047,7 +1058,9 @@ void TiledMap::DrawLegalMove
     line_segment_count		= -1;
 
 	sint32 const	boxEdgeSize			= 
-		max(k_TURN_BOX_SIZE_MINIMUM, (sint32)((double) k_TURN_BOX_SIZE * m_scale));
+		std::max(static_cast<sint32>(k_TURN_BOX_SIZE_MINIMUM), 
+				 static_cast<sint32>(k_TURN_BOX_SIZE * m_scale)
+				);
     bool			special_box_done	= false; 
 	sint32			turn				= 0;
 
@@ -1091,7 +1104,7 @@ void TiledMap::DrawLegalMove
 			
 			if (isFirstMove)
 			{
-				currMovementPoints = max(currMovementPoints, 0);
+				currMovementPoints = std::max(currMovementPoints, 0.0);
 				// isFirstMove not reset yet: used for count later.
 			}
 		}
@@ -1111,7 +1124,7 @@ void TiledMap::DrawLegalMove
 			count -= cost;
 			if (isFirstMove)
 			{
-				count= max(0, count);
+				count		= max(count, 0.0);
 				isFirstMove = false;
 			}
 		}

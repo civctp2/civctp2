@@ -28,6 +28,7 @@
 // - Added CalcTerrainFreightCost by Martin Gühmann
 // - Corrected handling of tile improvements that did not have a Freight 
 //   modifier.
+// - Standardised min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -881,11 +882,19 @@ void Cell::CalcTerrainMoveCost()
 
 	sint32 m;
 	if(HasCity() && rec->GetEnvCity() && rec->GetEnvCityPtr()->GetMovement(m)) {
+#if defined(ACTIVISION_ORIGINAL)
 		tmp = min(tmp, m);
+#else
+		tmp = std::min(tmp, static_cast<double>(m));
+#endif
 	}
 
 	if(HasRiver() && rec->GetEnvRiver() && rec->GetEnvRiverPtr()->GetMovement(m)) {
+#if defined(ACTIVISION_ORIGINAL)
 		tmp = min(tmp, m);
+#else
+		tmp = std::min(tmp, static_cast<double>(m));
+#endif
 	}
 
 	sint32 i;
@@ -897,7 +906,11 @@ void Cell::CalcTerrainMoveCost()
 			effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 			sint32 cost;
 			if(effect && effect->GetMoveCost(cost)) {
+#if defined(ACTIVISION_ORIGINAL)
 				tmp = min(tmp, cost);
+#else
+				tmp = std::min(tmp, static_cast<double>(cost));
+#endif
 			}
 		}
 	}																					

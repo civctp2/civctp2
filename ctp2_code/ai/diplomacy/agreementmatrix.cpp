@@ -27,6 +27,7 @@
 //
 // - Input checks corrected, preventing a crash to desktop.
 // - Made some sizes unsigned, to allow more than 28 players.
+// - Standardised min/max usage.
 //
 //----------------------------------------------------------------------------
 
@@ -46,11 +47,6 @@ using namespace std;
 #include "MoveFlags.h"
 #include "Diplomat.h"
 
-#if !defined(ACTIVISION_ORIGINAL) 
-  #if !defined(_MSC_VER)
-    #include <algorithm>		// std::min
-  #endif
-#endif
 
 ai::Agreement AgreementMatrix::s_badAgreement;
 AgreementMatrix AgreementMatrix::s_agreements;
@@ -72,11 +68,7 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 	// Just make sure that we can rely on testing against m_maxPlayers to have
 	// a valid index in g_player.
 	Assert(newMaxPlayers <= k_MAX_PLAYERS);
-  #if defined(_MSC_VER)
-	m_maxPlayers = min(newMaxPlayers, k_MAX_PLAYERS);
-  #else
 	m_maxPlayers = std::min<sint16>(newMaxPlayers, k_MAX_PLAYERS);
-  #endif
 #endif 
 	
 	m_agreements.clear();

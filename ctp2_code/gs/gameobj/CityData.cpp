@@ -52,6 +52,7 @@
 //   is finished in NationalManager status window (maybe also to
 //   other wrong behaviours). (L. Hirth 7/2004) 
 // - Prevented cities from revolting twice in the same turn. By kaan.
+// - Standardised min/max usage.
 //----------------------------------------------------------------------------
 
 
@@ -1587,10 +1588,10 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 	if (m_workerFullUtilizationIndex >= 0)
 	{
 		sint32 const	dbIndex			= 
-#if defined(_MSC_VER)
+#if defined(ACTIVISION_ORIGINAL)
 			min(m_workerFullUtilizationIndex, dbMaxIndex - 1);
 #else
-			std::min(m_workerFullUtilizationIndex, dbMaxIndex - 1);
+			std::min<sint32>(m_workerFullUtilizationIndex, dbMaxIndex - 1);
 #endif
 		fullRingWorkers = g_theCitySizeDB->Get(dbIndex)->GetMaxWorkers();
 	}
@@ -1600,10 +1601,10 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 	if (m_workerPartialUtilizationIndex >= 0)
 	{
 		sint32 const	dbIndex			= 
-#if defined(_MSC_VER)
+#if defined(ACTIVISION_ORIGINAL)
 			min(m_workerPartialUtilizationIndex, dbMaxIndex - 1);
 #else
-			std::min(m_workerPartialUtilizationIndex, dbMaxIndex - 1);
+			std::min<sint32>(m_workerPartialUtilizationIndex, dbMaxIndex - 1);
 #endif
 
 		maxRingWorkers = g_theCitySizeDB->Get(dbIndex)->GetMaxWorkers();
@@ -1611,7 +1612,7 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 
 	// # of actually working in the partial ring.
 	sint32 const		partialRingWorkers	= 	
-#if defined(_MSC_VER)
+#if defined(ACTIVISION_ORIGINAL)
 			min(maxRingWorkers, WorkerCount() + SlaveCount())
 #else
 			std::min(maxRingWorkers, WorkerCount() + SlaveCount())
