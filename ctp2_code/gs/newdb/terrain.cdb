@@ -6,6 +6,7 @@ Resource {
 	Float Probability
 	Record Sound Sound
 	Record Icon Icon
+	Record Government[] GovernmentsModified	
 	Bit GLHidden
 }
 	
