@@ -33,6 +33,8 @@
 // - Start the great library with the current research project of the player.
 // - Added option to add new messages at the top.
 // - Fixed crossed Sword bug. - Oct. 14th 2004 Martin Gühmann
+// - Fixed the crossed sword bug that was caused by the previous bug fix,
+//   cossed swords even if the city is hidden. - Oct. 15th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 //
@@ -2011,8 +2013,9 @@ ControlPanelWindow::OrderDeliveryUpdate()
 // Added by Martin Gühmann to fix the crossed sword bug
 			}
 			else if(g_theWorld->HasCity(pos)
-			&&      army->CanAtLeastOneCaptureCity()
 			&&      g_theWorld->GetCity(pos)->GetOwner() != army->GetOwner()
+			&&      army->CanAtLeastOneCaptureCity()
+			&&      army->CheckWasEnemyVisible(pos, true)
 			){
 				g_cursorManager->SetCursor(CURSORINDEX_ASSAULT);
 #endif

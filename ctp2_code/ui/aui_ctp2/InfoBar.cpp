@@ -1,7 +1,34 @@
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Info/status handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Hidden cities are no longer displayed in the info bar. 
+//   - Oct. 15th 2004 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3ui.h"
@@ -23,6 +50,10 @@
 #include "TiledMap.h"
 #include "TerrainImprovementRecord.h"
 #include "CityData.h"
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include "UnitData.h"
+#endif
 
 extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;
@@ -173,6 +204,10 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 
 		if(cell->HasCity()) {
 			Unit city = cell->GetCity();
+#if !defined(ACTIVISION_DEFAULT)
+// To hide the city name if the city is hidden
+			if(city->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())){
+#endif
 			if(g_theStringDB->GetNameStr("INFOBAR_CITY")) {
 				Concat(g_theStringDB->GetNameStr("INFOBAR_CITY"));
 			}
@@ -215,6 +250,9 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			}
 			wroteOwner = true;
 			Concat("     ");
+#if !defined(ACTIVISION_ORIGINAL)
+			}
+#endif
 		} else {
 			sint32 i;
 			for(i = 0; i < cell->GetNumDBImprovements(); i++) {
