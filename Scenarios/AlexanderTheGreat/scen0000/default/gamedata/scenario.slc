@@ -4,6 +4,8 @@
 /////////////////////////////////////////////////
 // Apolyton modifications
 // - Center on Alexander at the start
+// - Repaired Sidon event
+// - Repaired Babylon coronation event
 /////////////////////////////////////////////////
 
 #include "AG_func.slc"		// Functions
@@ -937,7 +939,11 @@ city_t		tmpCity;
 army_t		tmpArmy;
 location_t	tmpLoc;
 	tmpArmy = army[0];
-	player[0] = tmpArmy;
+// if  ACTIVISION_ORIGINAL (invalid assignment)
+//	player[0] = tmpArmy;
+// else
+	player[0] = tmpArmy.owner;
+// end ACTIVISION_ORIGINAL 
 	if (player[0] == 1) {
 		tmpLoc = location[1];
 		if (Distance(tmpLoc, sidonLoc) < 3 ) {
@@ -1716,7 +1722,11 @@ HandleEvent(MoveUnits) 'AGBabylonCoronation_F' post {
 	if (babylonCoronation == 1) {
 		if (alexUnit.location == babylonLoc) {
 			HappyEmpire();				// Makes former Persian cities really happy
-			Message(1, 'AGHappyEmpireA');
+// if  ACTIVISION_ORIGINAL (typo corrected as suggested by Immortal Wombat)
+//			Message(1, 'AGHappyEmpireA');
+// not ACTIVISION_ORIGINAL
+			Message(1, 'AGHappyEmpire');
+// end ACTIVISION_ORIGINAL
 			DisableTrigger('AGBabylonCoronation_F');
 		}
 	}
