@@ -31,7 +31,10 @@
 // - Corrected movement type check for active defenders.
 // - Added second message after investigation of a city.
 // - Standardised min/max usage.
-// - CanSettleOn added to Settle to allow for terrain-specific settling. - E
+// - Modified UDUnitTypeCanSettle so that it checks for a CanSettleOn 
+//   unit property so that modders can make  settling terrain-specific. - E
+// - Fixed a broken comparision in UDUnitTypeCanSettle so that it now allows 
+//   settling again. - Mar. 1st 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -1612,29 +1615,33 @@ void UnitData::DeductHP(double fp)
 
 //----------------------------------------------------------------------------
 //
-// Name       :  UDUnitTypeCanSettle
+// Name       : UDUnitTypeCanSettle
 //
-// Description:  Checks unit properties to see if it can settle a city on a tile
+// Description: Checks unit properties to see if it can settle a city on 
+//              a tile
 //
-// Parameters :  sint32 unit_type		: Variable for the type of unit 
-//		     const MapPoint &pos	: Variable for tile on map
+// Parameters : sint32 unit_type       : Variable for the type of unit 
+//              const MapPoint &pos    : Variable for tile on map
 //
-// Globals    :   g_theWorld		: The game world properties
-//		      g_theUnitDB   	: Unit properties 
+// Globals    : g_theWorld             : The game world properties
+//              g_theUnitDB            : Unit properties 
 //
-// Returns    :   BOOL			: Returns TRUE if an unit-type can Settle on a tile
-//						  FALSE if the unit cannot settle a city there
+// Returns    : BOOL                   : Returns TRUE if an unit-type can 
+//                                       settle on a tile.
+//                                       Returns FALSE if the unit cannot 
+//                                       settle a city there.
 //
-// Remark(s)  :   a new unit attribute CanSettleOn was added by E.
-//		      Modders will define this in Unit.txt as CanSettleOn: X.  
-//		      The flag adds an additional option in order to restrict where cities can be built. 
+// Remark(s)  : A new unit attribute CanSettleOn was added by E.
+//              Modders will define this in Unit.txt as CanSettleOn: X.  
+//              The flag adds an additional option in order to restrict 
+//              where cities can be built. 
 //              
 //
 //----------------------------------------------------------------------------
 BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos) 
 {
 #if defined(ACTIVISION_ORIGINAL)
-sint32 searching = TRUE;    
+	sint32 searching = TRUE;    
 	const UnitRecord *rec = g_theUnitDB->Get(unit_type);   
   	sint32 t = rec->GetSettleCityTypeIndex();
 
@@ -1669,14 +1676,14 @@ sint32 searching = TRUE;
 	if (t < 0) {
 		return FALSE;      
 	}
-	if (g_theUnitDB->Get(t)->GetHasPopAndCanBuild() == TRUE) {
+	if (g_theUnitDB->Get(t)->GetHasPopAndCanBuild() == FALSE) {
 		return FALSE;                               
 	}
 	if (g_theWorld->HasCity(pos)) 
 		return FALSE;
 
 	for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
-		if(rec->GetCanSettleOnIndex(i) == cell->GetTerrain()) {
+		if(rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
 			return TRUE;
 		}
 	}
