@@ -277,7 +277,8 @@ public:
 	bool			DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y,bool clip=false);
 	void			DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
 													sint32 type, sint32 x, sint32 y, 
-													uint16 index, BOOL fog);
+													uint16 index, BOOL fog, sint32 percentComplete);
+													//Added by Martin Gühmann sint32 percentComplete by Martin Gühmann
 	
 	
 	

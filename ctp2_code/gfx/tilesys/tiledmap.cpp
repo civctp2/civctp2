@@ -1,6 +1,10 @@
 
-
-
+//tiledmap.cpp
+//Modified by Martin Gühmann
+//to make sure that cities created 
+//by the scenario editor keep their 
+//style and their size. The last created 
+//city by the scenario editor is now selected.
 
 
 
@@ -6172,17 +6176,19 @@ void TiledMap::HandleCheat(MapPoint &pos)
 						}
 					}
 					Unit id1 = p->CreateCity(unitNum, pos, CAUSE_NEW_CITY_CHEAT, NULL, -1);
-
-					
-					if ( (id1 != Unit(0))) {
+					//Added by Martin Gühmann to make the created city selected.
+					g_selected_item->SetSelectCity(id1);
+					//End Add
+					//Removed by Martin Gühmann cheat editor city creation is now
+					//handled inside the CityData class were it does work actually.
+					/*if ( (id1 != Unit(0))) {
 						if(g_cityNum != -1) {
 							id1.SetCitySize( g_cityNum );
 						} else {
-							
 							id1.SetCitySize(1);
 							id1.CD()->SetCityStyle(ScenarioEditor::CityStyle());
 						}
-					}
+					}*/
 				} else {
 					
 					if (g_theWorld->HasCity(pos)) {
