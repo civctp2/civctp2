@@ -40,9 +40,9 @@
 //   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
 //   - GetContinent      Gets the continent ID of an location.
 //   - IsWater           Gets whether a location is water.
-// - Enable end turn button when unblanking.
-// - Removed a syntax error by Klaus Kaan
 //
+//   Function by Solver:
+//   IsOnSameContinent   Checks if two locations are on same continent
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -1089,6 +1089,8 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetUnitFromCargo);
 	m_functionHash->Add(new Slic_GetContinent);
 	m_functionHash->Add(new Slic_IsWater);
+	//Added by Solver
+	m_functionHash->Add(new Slic_IsOnSameContinent);
 #endif
 }
 
@@ -1106,11 +1108,7 @@ void SlicEngine::Link()
 
 	sint32 symStart;
 	if(!m_symTab) {
-#if defined (ACTIVISION_ORIGINAL)	// ;+ is a syntax error with .NET
 		symStart = 0;+
-#else
-		symStart = 0;
-#endif
 		m_symTab = new SlicSymTab(0);
 	} else {
 		symStart = m_symTab->GetNumEntries();
@@ -2738,16 +2736,13 @@ void SlicEngine::BlankScreen(BOOL blank)
 		else
 		{
 			CheckPendingResearch();
-
-			PLAYER_INDEX const		player	= g_selected_item->GetVisiblePlayer();
-
-			MainControlPanel::UpdatePlayer(player);
 			MainControlPanel::UpdateCityList();
 			MainControlPanel::Update();
-
 			if (g_greatLibrary)
 			{
+				sint32 const		player	= g_selected_item->GetVisiblePlayer();
 				AdvanceType const	advance	= g_player[player]->m_advances->GetResearching();
+
 				g_greatLibrary->SetLibrary(advance, DATABASE_ADVANCES);
 			}
 		}
@@ -3158,7 +3153,6 @@ void SlicEngine::AddDatabases()
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
 {
-	Assert(m_dbHash);
 	return m_dbHash->Access(name);
 }
 
