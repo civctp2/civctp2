@@ -1,15 +1,26 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Music added by ahenobarb.
+// - Added option to show info of tile improvements that are too expensive.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -189,7 +200,12 @@ extern ColorSet				*g_colorSet;
 
 extern KEYMAP		*theKeyMap;
 
-
+#if !defined(ACTIVISION_ORIGINAL)
+namespace
+{
+	bool					s_hideExpensive	= true;
+}
+#endif
 
 ctp2_MenuBar				*s_menubar=NULL;
 ControlPanelWindow			*g_controlPanel;
@@ -566,6 +582,9 @@ sint32 controlpanelwindow_Initialize()
 	
 	g_controlPanel->ActivateTileImpBank(CP_TILEIMP_LAND);
 
+#if !defined(ACTIVISION_ORIGINAL)
+	s_hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
+#endif
 
 	return 0;
 }
@@ -1979,7 +1998,11 @@ ControlPanelWindow::TileImpUpdate()
 		
 	g_tiledMap->GetMouseTilePos(pos);
 
+#if defined(ACTIVISION_ORIGINAL)
 	if (!terrainutil_CanPlayerBuild(m_currentTerrainImpRec,player_id,true))
+#else
+	if (!terrainutil_CanPlayerBuild(m_currentTerrainImpRec,player_id, s_hideExpensive))
+#endif
 	{
 		tileimptracker_DisplayData(pos, -1);
 		ClearTargetingMode();
@@ -3851,8 +3874,12 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
    		m_tileImpButtons[button]->Enable(false);
    		return;
 	}
-   
+
+#if defined(ACTIVISION_ORIGINAL)	
    	grey_button = !terrainutil_CanPlayerBuild(rec,player_id,true);
+#else
+   	grey_button = !terrainutil_CanPlayerBuild(rec,player_id, s_hideExpensive);
+#endif
 	show_button = terrainutil_PlayerHasAdvancesFor(rec, player_id);
 
 	aui_TipWindow *tipwin = (aui_TipWindow *)m_tileImpButtons[button]->GetTipWindow();

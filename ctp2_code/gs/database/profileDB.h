@@ -1,8 +1,53 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Handling of user preferences.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _BFR_
+// - Force CD checking when set (build final release).
+// 
+// _DEBUG
+// - Allow the usage of "cheat age" for an excellerated start when set.
+//
+// _MSC_VER		
+// - Allow usage of Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Microsoft extensions embedded in _MSC_VER defines (no functional change).
+// - Import order modified to enable GCC compilation (no functional change).
+// - Option added to enable viewing info on actions that are too expensive.
+//
+//----------------------------------------------------------------------------
 
+#if defined(_MSC_VER)
 #pragma once
+#endif
 
 #ifndef __PROFILE_DB_H__
 #define __PROFILE_DB_H__ 1
+
+#if defined(_MSC_VER)
 
 #include "MapPoint.h"
 #include "dbtypes.h"
@@ -30,6 +75,52 @@ enum PROF_VAR_TYPE {
 	PV_NUM,
 	PV_STRING
 };
+
+#else	// _MSC_VER
+
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+#include <string.h>				// strcpy
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+class	ProfileDB;
+class	ProfileVar;
+
+enum	PROF_VAR_TYPE 
+{
+	PV_BOOL,
+	PV_NUM,
+	PV_STRING
+};
+
+#define k_MAX_PERSONALITY_LEN	20
+#define k_NUM_MAP_PASSES		4
+#define k_NUM_MAP_SETTINGS		2
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+#include "c3debug.h"			// Assert
+#include "c3types.h"			// MBCHAR, sint..., uint...
+#include "civarchive.h"			// CivArchive
+#include "Civilisation.h"		// GENDER
+#include "CivilisationPool.h"	// CIV_INDEX
+#include "gstypes.h"			// PLAYER_INDEX
+#include "MapPoint.h"			// MapPoint
+#include "PointerList.h"		// PointerList
+#include "SimpleDynArr.h"		// SimpleDynamicArray
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+#endif	// _MSC_VER
 
 class ProfileVar {
 public:
@@ -240,8 +331,10 @@ class ProfileDB {
 	double m_continent;
 	double m_homogenous;
 	sint32 m_richness;
-	
 
+#if !defined(ACTIVISION_ORIGINAL)
+	sint32	m_showExpensive;	// Show cost and effects of expensive actions.
+#endif
 	
 	PointerList<ProfileVar> *m_vars;
 	BOOL m_loadedFromTutorial;

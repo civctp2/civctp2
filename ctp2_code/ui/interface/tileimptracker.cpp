@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Tile improvement handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added option to show info for tile improvements that are too expensive.
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 
 #include "aui.h"
@@ -18,12 +49,21 @@
 #include "World.h"
 #include "Cell.h"
 #include "ColorSet.h"
-
 #include "terrainutil.h"
 #include "TerrainRecord.h"
 
 extern C3UI *g_c3ui;
 extern ColorSet *g_colorSet;
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include "ProfileDB.h"	// g_theProfileDB
+
+namespace
+{
+	bool				s_hideExpensive			= true;
+	COLOR				s_trackerBorderColor	= COLOR_GREEN;
+}
+#endif
 
 TileimpTrackerWindow	*g_tileImpTrackerWindow	= NULL;
 static c3_Static		*s_trackerTimeN			= NULL;
@@ -105,6 +145,10 @@ sint32 tileimptracker_Initialize()
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
 
+#if !defined(ACTIVISION_ORIGINAL)
+	s_hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
+#endif
+
 	return 0;
 }
 
@@ -122,7 +166,9 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 
 	MBCHAR		mytext[256];
 	sint32		x, y;
+#if defined(ACTIVISION_ORIGINAL)
 	Pixel16		color;
+#endif
 	sint32		visPlayer = g_selected_item->GetVisiblePlayer();
 
 	
@@ -254,12 +300,11 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 
 
 		ERR_BUILD_INST err; 
-
+#if defined(ACTIVISION_ORIGINAL)
 		BOOL checkMaterials = TRUE;
 		
 		
 		
-
 		if(g_player[visPlayer]->CanCreateImprovement(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, 
 				extraData, checkMaterials, err)) {
 			color = g_colorSet->GetColor(COLOR_GREEN);
@@ -269,7 +314,28 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 			color = g_colorSet->GetColor(COLOR_RED);
 			g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
 		}
-
+#else
+		if (g_player[visPlayer]->CanCreateImprovement
+				(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, extraData, s_hideExpensive, err)
+		   ) 
+		{
+			if (g_player[visPlayer]->CanCreateImprovement
+					(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, extraData, true, err)
+			   ) 
+			{
+				s_trackerBorderColor = COLOR_GREEN;
+			}
+			else
+			{
+				s_trackerBorderColor = COLOR_RED;
+			}
+			g_c3ui->AddWindow(g_tileImpTrackerWindow);
+		} 
+		else 
+		{
+			g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
+		}
+#endif
 		g_tileImpTrackerWindow->ShouldDraw();
 		
 
@@ -324,9 +390,12 @@ AUI_ERRCODE TileimpTrackerWindow::DrawThis( aui_Surface *surface, sint32 x, sint
 	
 	C3Window::DrawThis(surface,x,y);
 
+#if defined(ACTIVISION_ORIGINAL)
 	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(COLOR_GREEN));
-	
-	return AUI_ERRCODE_OK;
+#else
+	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(s_trackerBorderColor));
+#endif	
 
+	return AUI_ERRCODE_OK;
 }
 
