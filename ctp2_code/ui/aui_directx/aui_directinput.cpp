@@ -17,10 +17,6 @@
 //
 // Compiler flags
 // 
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
 // __AUI_USE_DIRECTX__
 // Has to be defined, or no code will be generated at all.
 //

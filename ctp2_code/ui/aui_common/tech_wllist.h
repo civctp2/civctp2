@@ -17,10 +17,6 @@
 //
 // Compiler flags
 // 
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
 // NON_STANDART_C_PLUS_PLUS
 // - When defined, generates the original Activision non standart 
 //   compilant code.

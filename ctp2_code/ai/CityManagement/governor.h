@@ -17,10 +17,6 @@
 //
 // Compiler flags
 // 
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
 // CTP1_HAS_RISEN_FROM_THE_GRAVE
 // - When defined, does not use the CTP2 worker utilisation style.
 //

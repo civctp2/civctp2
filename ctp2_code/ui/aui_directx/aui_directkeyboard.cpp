@@ -21,10 +21,6 @@
 // - When defined, use DirectX.
 // - When not defined, this file is not used at all.
 //
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

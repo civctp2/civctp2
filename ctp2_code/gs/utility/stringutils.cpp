@@ -17,10 +17,6 @@
 //
 // Compiler flags
 // 
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
 // _JAPANESE (implies !ACTIVISION_ORIGINAL)
 // - Add provisions for handling SJIS characters.
 //

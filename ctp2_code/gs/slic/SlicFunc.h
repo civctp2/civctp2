@@ -15,10 +15,6 @@
 //
 // Compiler flags
 // 
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
 // _MSC_VER		
 // - Compiler version (for the Microsoft C++ compiler only)
 //

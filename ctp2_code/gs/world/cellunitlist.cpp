@@ -17,10 +17,6 @@
 //
 // Compiler flags
 // 
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
 // USE_STOP_ZERO_MOVEMENT
 // - When defined, prevents unit without movement points from moving.
 //
