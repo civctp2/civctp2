@@ -386,12 +386,18 @@ SlicStructInstance::SlicStructInstance(SlicStructDescription *description, SlicS
 {
 	m_description = description;
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	m_members = new SlicStructMemberData *[m_description->m_numMembers];
 	sint32 i;
 	for(i = 0; i < m_description->m_numMembers; i++) {
 		m_members[i] = NULL;
 	}
+#else
+	m_validIndexCount	= 
+		m_description->GetNumMembers() + m_description->GetNumAccessors();
+	m_members			= new SlicStructMemberData *[m_validIndexCount];
+	std::fill(m_members, m_members + m_validIndexCount, (SlicStructMemberData *) NULL);
+#endif
 
 	if(!dataSym) {
 		m_dataSymbol = m_description->CreateDataSymbol();
@@ -432,17 +438,20 @@ SlicStructInstance::~SlicStructInstance()
 	}
 
 	if(m_members) {
+#if defined(ACTIVISION_ORIGINAL)
 		sint32 i;
 		for(i = 0; i < m_description->GetNumMembers(); i++) {
 			if(m_members[i]) {
 				delete m_members[i];
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
 				m_members[i] = NULL;
-				// NULLing unnecessary: deleting the container next
-#endif
 			}
 		}
+#else
+		for (size_t i = 0; i < m_validIndexCount; ++i)
+		{
+			delete m_members[i];
+		}
+#endif
 		delete [] m_members;
 	}
 
@@ -454,6 +463,7 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 	uint8 haveData;
 	if(archive.IsStoring()) {
 		archive.PutUINT8(m_description->GetType());
+		// Store the members. Don't store the accessors.
 		for(i = 0; i < m_description->GetNumMembers(); i++) {
 			haveData = m_members[i] != NULL;
 			archive << haveData;
@@ -476,17 +486,28 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 		archive << m_dataSymbolIndex;
 	} else {
 		m_description = g_slicEngine->GetStructDescription((SLIC_BUILTIN)archive.GetUINT8());
+#if defined(ACTIVISION_ORIGINAL)
 		m_members = new SlicStructMemberData *[m_description->GetNumMembers()];
+#else
+		m_validIndexCount	=
+			m_description->GetNumMembers() + m_description->GetNumAccessors();
+		m_members			= new SlicStructMemberData *[m_validIndexCount];
+		std::fill(m_members, m_members + m_validIndexCount, (SlicStructMemberData *) NULL);
+#endif
 		for(i = 0; i < m_description->GetNumMembers(); i++) {
 			SlicStructDescription::Member *memDesc = m_description->m_members[i];
+#if defined(ACTIVISION_ORIGINAL)	// in std::fill already
 			m_members[i] = NULL;
+#endif
 			archive >> haveData;
 			if(haveData) {
 				CreateMember(i);
 				(SlicStructMemberData *)slicsymbol_Load(archive, m_members[i]);
 				m_members[i]->SetParent(this);
+#if defined(ACTIVISION_ORIGINAL)	// superfluous
 			} else {
 				m_members[i] = NULL;
+#endif
 			}
 		}
 		archive >> haveData;
@@ -516,12 +537,40 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SlicStructInstance::CreateMember
+//
+// Description: Create a new member instance when not already existing.
+//
+// Parameters : index	: member number
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Assumption: index is valid.
+//
+//				Cache-like functionality: a clone of the descriptor data will 
+//				be created upon first entry. If the clone has already been 
+//              created before, this function does nothing.
+//
+//----------------------------------------------------------------------------
+
 void SlicStructInstance::CreateMember(sint32 index)
 {
 	if(m_members[index])
-		return;
+		return;	// No action: cache exists.
 
+#if defined(ACTIVISION_ORIGINAL)
 	SlicStructDescription::Member *memDesc = m_description->m_members[index];
+#else
+	SlicStructDescription::Member *	memDesc	=
+		(index < m_description->GetNumMembers())
+		? m_description->m_members[index]
+		: m_description->m_accessors[index - m_description->GetNumMembers()];
+#endif
+
 	if(memDesc->m_symbol) {
 		m_members[index] = memDesc->m_symbol->MakeCopy(this);
 	} else {
@@ -540,48 +589,40 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbol(sint32 index)
 	if(!m_members[index]) {
 		CreateMember(index);
 	}
+#else
+	Assert(index < m_validIndexCount);
+	if ((index < 0) || (index >= m_validIndexCount))
+	{
+		return NULL;
+	}
+	else
+	{
+		CreateMember(index);
+	}
+#endif
 
 	return m_members[index];
-#else
-	if (index >= 0)
-	{
-		if (index < m_description->GetNumMembers())
-		{
-			// Make a copy when not done already
-			if (!m_members[index])
-			{
-				CreateMember(index);
-			}
-			return m_members[index];
-		}
-		else
-		{
-			// Use the original symbol
-			return m_description->GetMemberSymbol(index);
-		}
-	}
-	
-	return NULL;
-#endif
 }
 
 sint32 SlicStructInstance::GetMemberSymbolIndex(SlicStructMemberData *memb)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	sint32 i;
 	for(i = 0; i < m_description->m_numMembers; i++) {
+#else
+	for (size_t i = 0; i < m_validIndexCount; ++i)
+	{
+#endif
 		if(m_members[i] == memb)
 			return i;
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
 	return -1;
-#else
-	return m_description->GetMemberSymbolIndex(memb);
-#endif
 }
 
 SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	sint32 i;
 	for(i = 0; i < m_description->m_numMembers; i++) {
 		if(!stricmp(m_description->m_members[i]->m_name, name)) {
@@ -592,10 +633,16 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
 		}
 	}
 
-#if defined(ACTIVISION_ORIGINAL)
 	return NULL;
 #else
-	return m_description->GetMemberSymbol(m_description->GetMemberIndex(name));
+	sint32 const	index	= m_description->GetMemberIndex(name);
+	if ((index < 0) || (index >= m_validIndexCount))
+	{
+		return NULL;
+	}
+
+	CreateMember(index);
+	return m_members[index];
 #endif
 }
 
