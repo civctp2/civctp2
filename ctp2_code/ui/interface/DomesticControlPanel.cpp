@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Empire control panel tab handling
 //
 //----------------------------------------------------------------------------
 //
@@ -26,7 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Blank function added to hide the data of the previous player for hotseat
-//   games.  
+//   games. 
+// - Use the same science percentage everywhere.
 //
 //----------------------------------------------------------------------------
 
@@ -55,6 +56,9 @@
 #include "GovernmentRecord.h"
 
 #include "aui_bitmapfont.h"
+#if !defined(ACTIVISION_ORIGINAL)
+#include "c3math.h"		// AsPercentage
+#endif
 
 extern ColorSet				*g_colorSet;
 extern Pollution *g_thePollution;
@@ -382,8 +386,11 @@ void DomesticControlPanel::UpdateStats()
 	government = g_player[g_selected_item->GetVisiblePlayer()]->GetGovernmentType();
 
 	g_player[g_selected_item->GetVisiblePlayer()]->GetScienceTaxRate(scienceTax);
+#if defined(ACTIVISION_ORIGINAL)
 	science = (scienceTax * 100.0) + 0.5;
-
+#else
+	science = AsPercentage(scienceTax);
+#endif
 	pollution = g_player[g_selected_item->GetVisiblePlayer()]->GetPollutionLevel();
 
 	if(cities == m_currentCities && population == m_currentPopulation &&

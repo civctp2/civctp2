@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Science window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Use the same science percentage everywhere.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -86,6 +115,9 @@
 #include "keypress.h"
 
 #include "AdvanceBranchRecord.h"
+#if !defined(ACTIVISION_ORIGINAL)
+#include "c3math.h"		// AsPercentage
+#endif
 
 
 extern C3UI					*g_c3ui;
@@ -1388,8 +1420,12 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	double scienceTax;
 	
 	p->GetScienceTaxRate( scienceTax );
-	
+
+#if defined(ACTIVISION_ORIGINAL)	
 	s_scienceTax = (sint32)(scienceTax * 100);
+#else
+	s_scienceTax = AsPercentage(scienceTax);
+#endif
 
 	sprintf(str,"%d%%",s_scienceTax);
 	m_percentBox->SetText(str);
