@@ -37,7 +37,9 @@
 //   by Martin Gühmann.
 // - #01 Added a third tab to the dialog that shows the nuber of experts and 
 //   military units in each city.
-//   (L. Hirth 6/2004)    
+//   (L. Hirth 6/2004)
+// - #02 // #02 Fixed sorting sequence for governor type in status tab
+//   (L. Hirth 7/2004)     
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -1291,11 +1293,19 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 				(cityData2->GetUseGovernor() ? 0 : 1) :
 				(cityData2->GetUseGovernor() ? -1 : 0));
 		case k_NMD_STAT_PRIORITY:
+#ifdef ACTIVISION_ORIGINAL // #02 Fixed sorting sequence for governor type in status tab
 			return(stricmp(
 				g_theBuildListSequenceDB->Get(
 				cityData1->GetBuildListSequenceIndex())->GetNameText(),
 				g_theBuildListSequenceDB->Get(
 				cityData2->GetBuildListSequenceIndex())->GetNameText()));
+#else
+			return(stricmp(
+				cityData1->GetUseGovernor() ?
+				g_theBuildListSequenceDB->Get(cityData1->GetBuildListSequenceIndex())->GetNameText() : " ",
+				cityData2->GetUseGovernor() ?
+				g_theBuildListSequenceDB->Get(cityData2->GetBuildListSequenceIndex())->GetNameText() : " "));
+#endif
 		case k_NMD_STAT_BUILDING:
 			return(stricmp(
 				queue1->GetLen() ?

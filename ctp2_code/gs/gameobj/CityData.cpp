@@ -47,7 +47,10 @@
 // - Can't rush buy capitalization/infrastructure
 // - Made the utilisation ratio function available for the tile improvement 
 //   placement governor.
-//
+// - #01 Fixed sometimes not correct filled m_shields_this_turn, that
+//   leads to wrong sorting sequence for number of turns until production
+//   is finished in NationalManager status window (maybe also to
+//   other wrong behaviours). (L. Hirth 7/2004) 
 //----------------------------------------------------------------------------
 
 
@@ -1431,6 +1434,7 @@ void CityData::PayFederalProductionAbs (sint32 mil_paid,
 #endif
 
     m_shields_this_turn -= mil_paid;
+
     mat_paid = ComputeMaterialsPaid(percent_mat);
     m_shields_this_turn -= mat_paid;
 
@@ -4017,9 +4021,8 @@ sint32 CityData::HowMuchLonger() const
 
 	sint32 prod_remaining = m_build_queue.GetProductionRemaining(m_shieldstore);
 
-
-
 	sint32 prod, prodBeforeCrime;
+
 	GetDetailedProjectedProduction( prod, prodBeforeCrime );
 
 	if(m_contribute_military) {
@@ -6062,11 +6065,11 @@ void CityData::SplitScience(bool projectedOnly)
 	m_science = m_science - sint32(ceil(double(m_science) * m_happy->GetCrime()));
 	m_science = sint32(ceil(double(m_science) * g_player[m_owner]->GetKnowledgeCoef()));
 
-	DPRINTF(k_DBG_GAMESTATE, ("SplitScience: %lx: %d, %lf, %lf, %d, %lf, %lf\n", m_home_city.m_id, m_science,
-							  g_player[m_owner]->GetKnowledgeCoef(),
-							  m_happy->GetCrime(),
-							  GetScienceFromPops(),
-							  ws, s));
+  	DPRINTF(k_DBG_GAMESTATE, ("SplitScience: %lx: %d, %lf, %lf, %d, %lf, %lf\n", m_home_city.m_id, m_science,
+  							  g_player[m_owner]->GetKnowledgeCoef(),
+  							  m_happy->GetCrime(),
+  							  GetScienceFromPops(),
+  							  ws, s));
 
 	
 }
@@ -6178,7 +6181,9 @@ sint32 CityData::GetProjectedScience()
 	sint32 grossFood = m_gross_food_this_turn;
 	sint32 collectedProduction = m_collected_production_this_turn;
 	sint32 grossTrade = m_gross_trade;
+#ifdef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
 	sint32 shieldsThisTurn = m_shields_this_turn;
+#endif
 	sint32 foodThisTurn = m_food_produced_this_turn;
 	sint32 trade = m_trade;
 	sint32 science = m_science;
@@ -6187,6 +6192,9 @@ sint32 CityData::GetProjectedScience()
 	CollectResources();
 	DoSupport(true);
 	SplitScience(true);
+#ifndef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
+	ProcessProduction(true);
+#endif
 
 	sint32 scienceReturn = m_science;
 
@@ -6194,7 +6202,9 @@ sint32 CityData::GetProjectedScience()
 	m_gross_food_this_turn = grossFood;
 	m_collected_production_this_turn = collectedProduction;
 	m_gross_trade = grossTrade;
+#ifdef ACTIVISION_ORIGINAL // #01 Fixed sometimes not correct filled m_shields_this_turn 
 	m_shields_this_turn = shieldsThisTurn;
+#endif
 	m_food_produced_this_turn = foodThisTurn;
 	m_trade = trade;
 	m_science = science;
