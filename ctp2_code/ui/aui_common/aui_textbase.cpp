@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : General text handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Unload font when something fails.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -260,6 +280,7 @@ AUI_ERRCODE aui_TextBase::InitCommon(
 
 aui_TextBase::~aui_TextBase()
 {
+#if defined(ACTIVISION_ORIGINAL)	// archaic delete []
 	if ( m_text )
 	{
 		delete[ m_maxLength + 1 ] m_text;
@@ -271,6 +292,14 @@ aui_TextBase::~aui_TextBase()
 		g_ui->UnloadBitmapFont( m_textfont );
 		m_textfont = NULL;
 	}
+#else
+	delete [] m_text;
+
+	if (m_textfont)
+	{
+		g_ui->UnloadBitmapFont(m_textfont);
+	}
+#endif
 }
 
 
@@ -390,11 +419,27 @@ void aui_TextBase::TextReloadFont( void )
 
 	m_textfont = g_ui->LoadBitmapFont( descriptor );
 	Assert( m_textfont != NULL );
+#if defined(ACTIVISION_ORIGINAL)
 	if ( !m_textfont ) return;
 
 	if ( oldFont ) g_ui->UnloadBitmapFont( oldFont );
 
 	m_textreload = FALSE;
+#else
+	if (m_textfont)
+	{
+		if (oldFont)
+		{
+			g_ui->UnloadBitmapFont(oldFont);
+		}
+		m_textreload = FALSE;
+	}
+	else
+	{
+		g_ui->UnloadBitmapFont(descriptor);
+		m_textfont = oldFont;
+	}
+#endif
 }
 
 

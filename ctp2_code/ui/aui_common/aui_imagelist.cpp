@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : User interface image list handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Unload image info when not found.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -50,6 +71,12 @@ void aui_ImageList::aui_ImageListInfo::Load()
 			delete [] m_imageName;
 			m_imageName = NULL;
 		}
+#if !defined(ACTIVISION_ORIGINAL)
+		else
+		{
+			g_ui->UnloadImage(m_imageName);
+		}
+#endif
 	}
 }
 
@@ -173,6 +200,12 @@ void aui_ImageList::ExchangeImage(sint32 state, sint32 imageIndex,
 		info->m_image->SetChromakey(info->m_chromaRed,
 			info->m_chromaGreen, info->m_chromaBlue);
 		}
+#if !defined(ACTIVISION_ORIGINAL)
+		else
+		{
+			g_ui->UnloadImage(const_cast<MBCHAR *>(imageFileName));
+		}
+#endif
 	}
 	if(oldImage)
 		g_ui->UnloadImage(oldImage);

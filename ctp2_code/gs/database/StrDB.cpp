@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : String database
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Crash prevention.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3files.h"
@@ -20,10 +39,16 @@
 
 extern sint32	g_abort_parse;
 
+#if !defined(ACTIVISION_ORIGINAL)
 
+namespace
+{
+	
+	StringId const	INDEX_INVALID	= -1;
 
+} // namespace
 
-
+#endif
 
 
 
@@ -209,7 +234,12 @@ char * StringDB::GetIdStr(const StringId index) const
 { 
 Assert(0 <= index);
 Assert(index < m_nStr); 
-
+#if !defined(ACTIVISION_ORIGINAL)
+	if ((index < 0) || (index > m_nStr))
+	{
+		return NULL;
+	}
+#endif
 return m_all[index]->m_id;
 }
 
@@ -323,6 +353,9 @@ sint32 StringDB::GetIndexNode(StringRecord * ptr,
 	sint32 r;
 	
 	if (ptr == NULL) { 
+#if !defined(ACTIVISION_ORIGINAL)
+		index = INDEX_INVALID;
+#endif
 		return FALSE;
 	} else { 
 		
