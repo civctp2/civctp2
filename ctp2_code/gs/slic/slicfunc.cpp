@@ -1,4 +1,28 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : SLIC functions
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - GetNearestWater function fixed by Martin Gühmann November 2nd 2003.
+// - New Slic functions of CTP2.1 readded by Martin Gühmann and JJB.
+// - Enable automatic selection of a unit (or city) when clicking an eyepoint.
+// - Fixed cut-and-paste error (no apparent impact, but might prevent crash).
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SlicFunc.h"
@@ -100,6 +124,7 @@
 #include "Diplomat.h"
 
 #include "ScenarioEditor.h"
+#include "EditQueue.h"
 
 bool g_forceTurnDisplay = false;
 
@@ -527,6 +552,7 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	res = args->GetPos(0, point);
+#if defined(ACTIVISION_ORIGINAL)
 	if(!res) {
 		
 #if 0
@@ -551,10 +577,23 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 			point = unit.RetPos();
 		}
 	}
-	
-	
-	
-	
+#else
+	// Attempt to find a city or army always, so unit will have been filled 
+	// when constructing the SlicEyePoint later.
+	if (args->GetCity(0, unit) || args->GetUnit(0, unit))
+	{ 
+		if ((!res) && unit.IsValid())
+		{
+			point	= unit.RetPos();
+			res		= true;
+		}
+	}
+
+	if (!res)
+	{
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+#endif // ACTIVISION_ORIGINAL	
 	
 
 	MBCHAR text[k_MAX_MSG_LEN];
@@ -1509,11 +1548,20 @@ SFN_ERROR Slic_MessageType::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	const char *tname = args->m_argValue[0].m_symbol->GetName();
+#if defined(ACTIVISION_ORIGINAL)
 	char fullselectedname[1024];
 	sprintf(fullselectedname, "%s_SELECTED", fullselectedname);
 
 	if(!tname)
 		return SFN_ERROR_NOT_MESSAGE_TYPE;
+#else
+	if (!tname)
+		return SFN_ERROR_NOT_MESSAGE_TYPE;
+
+	char fullselectedname[1024];
+	sprintf(fullselectedname, "%s_SELECTED", tname);
+#endif
+
 	sint32 msgTypeIndex = g_theMessageIconFileDB->FindTypeIndex(tname);
 	if(msgTypeIndex < 0) {
 		msgTypeIndex = 0;
@@ -4048,12 +4096,20 @@ SFN_ERROR Slic_GetNearestWater::Call(SlicArgList *args)
 	}
 
 	SlicSymbolData *sym = args->m_argValue[1].m_symbol;
-	if(sym->GetType() == SLIC_SYM_LOCATION) {
+	//Outcommented by Martin Gühmann
+	//in order to fix this function
+	//The porpose of this if statement is check whether 
+	//the second argument is a location_t or not unfortunatly
+	//it only accepts something's location like location[0].location.
+	//But in this case SetPos function fails.
+	//As it is now the function accepts also a city[0] as second argument
+	//but can't fill it with a location obviously.
+//	if(sym->GetType() == SLIC_SYM_LOCATION) {
 		m_result.m_int = minDist;
 		sym->SetPos(nearest);
 		return SFN_ERROR_OK;
-	}
-	return SFN_ERROR_TYPE_ARGS;
+//	}
+//	return SFN_ERROR_TYPE_ARGS;
 }
 
 SFN_ERROR Slic_IsPlayerAlive::Call(SlicArgList *args)
@@ -6151,7 +6207,9 @@ SFN_ERROR Slic_CityIsValid::Call(SlicArgList *args)
 	Unit city;
 
 	if(!args->GetCity(0, city)) {
-		return SFN_ERROR_OK;
+		//Changed by Martin Gühmann
+		return SFN_ERROR_TYPE_ARGS;
+	//	return SFN_ERROR_OK;
 	}
 
 	if(city.IsValid() && city.CD()) {
@@ -6188,7 +6246,9 @@ SFN_ERROR Slic_CityIsNamed::Call(SlicArgList *args)
 	Unit city;
 
 	if(!args->GetCity(0, city)) {
-		return SFN_ERROR_OK;
+		//Changed by Martin Gühmann
+		return SFN_ERROR_TYPE_ARGS;
+	//	return SFN_ERROR_OK;
 	}
 
 	char *city_name;
@@ -6483,6 +6543,393 @@ SFN_ERROR Slic_ClearBattleFlag::Call(SlicArgList *args)
 
 SFN_ERROR Slic_OpenScenarioEditor::Call(SlicArgList *args)
 {
+	//Wrong number of arguments added by Martin Gühmann
+	if(args->m_numArgs != 0)
+	return SFN_ERROR_NUM_ARGS;
+
 	open_ScenarioEditor();
 	return SFN_ERROR_OK;
 }
+
+//New Slic functions of CTP2.1 readded by Martin Gühmann
+
+SFN_ERROR Slic_DestroyBuilding::Call(SlicArgList *args)
+{
+	if(args->m_numArgs != 2)
+	return SFN_ERROR_NUM_ARGS;
+
+	Unit city;
+	if(!args->GetCity(0, city))
+		return SFN_ERROR_TYPE_BUILTIN;
+
+	sint32 building;
+	if(!args->GetInt(1, building))
+		return SFN_ERROR_TYPE_ARGS;
+
+	g_gevManager->Pause();
+	city->GetCityData()->DestroyImprovement(building);
+	g_gevManager->Resume();
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_OpenBuildQueue::Call(SlicArgList *args)
+{
+	if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit city;
+
+	if(!args->GetCity(0, city))
+		return SFN_ERROR_TYPE_BUILTIN;
+
+	EditQueue::Display(city->GetCityData());
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_TileHasImprovement::Call(SlicArgList *args)
+{
+	if(args->m_numArgs != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	MapPoint pos;
+	if(!args->GetPos(0, pos))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 imp;
+	if(!args->GetInt(1, imp))
+		return SFN_ERROR_TYPE_ARGS;
+
+	m_result.m_int = 0;
+	Cell *cell = g_theWorld->GetCell(pos);
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+
+		if(imp == cell->GetDBImprovement(i)){
+			m_result.m_int = 1;
+			return SFN_ERROR_OK;
+		}
+	}
+	return SFN_ERROR_OK;
+}
+
+// JJB filled this function
+SFN_ERROR Slic_PlayerHasWonder::Call(SlicArgList *args)
+{
+	if(args->m_numArgs != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	sint32 pl;
+	if(!args->GetPlayer(0, pl))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(pl < 0 || pl >= k_MAX_PLAYERS)
+		return SFN_ERROR_OUT_OF_RANGE;
+
+	if(!g_player[pl]) {
+		return SFN_ERROR_DEAD_PLAYER;
+	}
+	
+	sint32 wonder;
+
+	if(!args->GetInt(1, wonder)) {
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	sint32 owner = wonderutil_GetOwner(wonder);
+
+	if (owner == pl)
+		m_result.m_int = 1;
+	else
+		m_result.m_int = 0;
+
+	return SFN_ERROR_OK;
+}
+
+// JJB filled this function
+SFN_ERROR Slic_WonderOwner::Call(SlicArgList *args)
+{
+	if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	sint32 wonder;
+
+	if(!args->GetInt(0, wonder)) {
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	sint32 owner = wonderutil_GetOwner(wonder);
+
+	if (owner == PLAYER_INDEX_INVALID)
+		m_result.m_int = -1;
+	else
+		m_result.m_int = owner;
+
+	return SFN_ERROR_OK;
+}
+
+// JJB filled this function
+SFN_ERROR Slic_CityHasWonder::Call(SlicArgList *args)
+{
+	if(args->m_numArgs != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit city;
+
+	if(!args->GetCity(0, city))
+		return SFN_ERROR_TYPE_BUILTIN;
+
+	sint32 wonder;
+
+	if(!args->GetInt(1, wonder)) {
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	if (city.GetCityData()->GetBuiltWonders() & ((uint64)1 << wonder)) {
+		m_result.m_int = 1;
+		return SFN_ERROR_OK;
+	}
+
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	Army a;
+
+	if(args->m_numArgs != 1) {
+		return SFN_ERROR_NUM_ARGS;
+	}
+
+	if(!args->GetArmy(0, a))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(a.IsValid()) {
+		m_result.m_int = 1;
+	}
+
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetBorderIncursionBy::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastNewProposalType::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastNewProposalArg::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastNewProposalTone::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastResponseType::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastCounterResponseType::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastCounterResponseArg::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastThreatResponseType::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastThreatResponseArg::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetAgreementDuration::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetNewProposalPriority::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetNextAdvance::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetDesiredAdvanceFrom::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetLastBorderIncursion::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetPersonalityType::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetAtRiskCitiesValue::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetRelativeStrength::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetDesireWarWith::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_RoundPercentReduction::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_RoundGold::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetPollutionLevelPromisedTo::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetPiracyIncomeFrom::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetProjectedScience::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_CanFormAlliance::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetStopResearchingAdvance::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetNanoWeaponsCount::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetBioWeaponsCount::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetNuclearWeaponsCount::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_FindCityToExtortFrom::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetEmbargo::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_SetEmbargo::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetTotalValue::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetNewProposalResult::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetCounterProposalResult::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetMostAtRiskCity::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_GetCurrentPollutionLevel::Call(SlicArgList *args)
+{
+	m_result.m_int = 0;
+	return SFN_ERROR_OK;
+}
+
