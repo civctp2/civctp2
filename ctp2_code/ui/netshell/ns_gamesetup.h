@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected strange access of non-static members from static data.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __NS_GAMESETUP_H__
 #define __NS_GAMESETUP_H__
@@ -261,9 +281,11 @@ private:
 class ns_GameSetup : public ns_Object<nf_GameSetup, ns_GameSetup>
 {
 public:
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	ns_GameSetup( nf_GameSetup *gamesetup ) : ns_Object<nf_GameSetup, ns_GameSetup>(gamesetup) {};
-	
+#else
+	ns_GameSetup(nf_GameSetup * gamesetup);
+#endif
 	void Update( nf_GameSetup *gamesetup );
 
 	char *m_name;

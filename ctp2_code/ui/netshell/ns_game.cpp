@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected strange access of non-static members from static data.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -16,6 +37,7 @@
 
 
 
+#if defined(ACTIVISION_ORIGINAL)
 int ns_Game::count = 5;
 ns_Game::Struct ns_Game::list[] = {
 	{ICON,		(Data)&m_launched},
@@ -25,6 +47,17 @@ ns_Game::Struct ns_Game::list[] = {
 	{INT,		(Data)&m_players}
 
 };
+#else
+ns_Game::ns_Game(NETFunc::Game * game) 
+:	ns_Object<NETFunc::Game, ns_Game>(game)
+{
+	list.push_back(Struct(ICON,		&m_launched));
+	list.push_back(Struct(STRING,	&m_name));
+	list.push_back(Struct(ICON,		&m_locked));
+	list.push_back(Struct(ICON,		&m_closed));
+	list.push_back(Struct(INT,		&m_players));
+};
+#endif
 
 
 void ns_Game::Update( NETFunc::Game *game ) {

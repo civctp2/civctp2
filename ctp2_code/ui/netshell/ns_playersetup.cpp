@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected strange access of non-static members from static data.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -71,10 +91,18 @@ void nf_PlayerSetup::Reset()
 
 
 
+#if defined(ACTIVISION_ORIGINAL)
 int ns_PlayerSetup::count = 1;
 ns_PlayerSetup::Struct ns_PlayerSetup::list[] = {
 	{STRING,	(Data)&m_name},
 };
+#else
+ns_PlayerSetup::ns_PlayerSetup(nf_PlayerSetup * player) 
+:	ns_Object<nf_PlayerSetup, ns_PlayerSetup>(player) 
+{
+	list.push_back(Struct(STRING,	&m_name));
+};
+#endif
 
 
 void ns_PlayerSetup::Update( nf_PlayerSetup *playersetup ) {

@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected strange access of non-static members from static data.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __NS_LISTBOX_H__
 #define __NS_LISTBOX_H__
@@ -281,7 +301,12 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 	
 	if ( item->GetNetShellObject() )
 	{
+#if defined(ACTIVISION_ORIGINAL)
 		sint32 numProperties = item->GetNetShellObject()->count;
+#else
+		sint32 const	numProperties = 
+			item->GetNetShellObject()->list.size();
+#endif
 		for ( sint32 i = 1; i < numProperties; i++ )
 		{
 			
@@ -363,8 +388,12 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::UpdateNetShellItem(
 	if ( item->GetNetShellObject() )
 	{
 		StoreAppropriateData( item, 0 );
-
+#if defined(ACTIVISION_ORIGINAL)
 		sint32 numProperties = item->GetNetShellObject()->count;
+#else
+		sint32 const numProperties = 
+			item->GetNetShellObject()->list.size();
+#endif
 		ListPos position = item->ChildList()->GetHeadPosition();
 		for ( sint32 i = 1; i < numProperties; i++ )
 		{

@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected strange access of non-static members from static data.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -19,6 +40,7 @@
 
 
 
+#if defined(ACTIVISION_ORIGINAL)
 int ns_GPlayer::count = 7;
 ns_GPlayer::Struct ns_GPlayer::list[] = {
 	{ICON,		(Data)&m_host},
@@ -30,6 +52,20 @@ ns_GPlayer::Struct ns_GPlayer::list[] = {
 	{INT,		(Data)&m_civpoints},
 	{INT,		(Data)&m_pwpoints}
 };
+#else
+ns_GPlayer::ns_GPlayer(NETFunc::Player * player) 
+:	ns_Object<NETFunc::Player, ns_GPlayer>(player) 
+{
+	list.push_back(Struct(ICON,		&m_host));
+	list.push_back(Struct(ICON,		&m_launched));
+	list.push_back(Struct(STRING,	&m_name));
+	list.push_back(Struct(INT,		&m_ping));
+	list.push_back(Struct(STRING,	&m_tribe));
+	list.push_back(Struct(INT,		&m_civpoints));
+	list.push_back(Struct(INT,		&m_pwpoints));
+};
+#endif
+
 
 
 void ns_GPlayer::Update( NETFunc::Player *player ) {

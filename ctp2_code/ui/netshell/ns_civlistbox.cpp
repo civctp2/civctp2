@@ -1,5 +1,33 @@
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented a compiler error (ambiguity) for .NET.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -78,7 +106,11 @@ ns_CivListBox::ns_CivListBox(
 	:
 	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
+#if defined(ACTIVISION_ORIGINAL)
 	aui_TextBase((MBCHAR *)NULL, (uint32)0),
+#else
+	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
+#endif
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
@@ -459,7 +491,11 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 		retval, id, x, y, width, height, pattern, bevelWidth, bevelType,
 		ActionFunc, cookie ),
 	aui_ImageBase((sint32) 0),
+#if defined(ACTIVISION_ORIGINAL)
 	aui_TextBase((MBCHAR *)NULL, (uint32)0)
+#else
+	aui_TextBase((MBCHAR const *) NULL, (uint32) 0)
+#endif
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
