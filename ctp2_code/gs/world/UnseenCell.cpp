@@ -1,12 +1,38 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Map fog of war visibility handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Finished tile improvements are now stored as well in the improvements
+//   list to be able to draw or access them later. - Dec. 21st 2004 Martin Gühmann
+// - Added new functions to calculate the food, shields and gold values produced 
+//   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gühmann
+// - Modified constructors and serialize method to support the new 
+//   m_visibleCityOwner member. - Dec. 26th 2004 - Martin Gühmann 
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "UnseenCell.h"
@@ -31,12 +57,33 @@
 #include "terrainutil.h"
 #include "TerrImprovePool.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann to support unseen terrain stat calculation
+#include "TerrainRecord.h"
+#include "TerrainImprovementRecord.h"
+#endif
+
 extern Director				*g_director;
 extern World				*g_theWorld;
 extern	TiledMap			*g_tiledMap ;
 extern SelectedItem			*g_selected_item;
 extern Pool<UnseenCell>     *g_theUnseenPond;
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::UnseenCell
+//
+// Description: Constructor
+//
+// Parameters : point			: The point (RC coordinate)
+//
+// Globals    : g_theWorld		: World information
+//
+// Returns    : -
+//
+// Remark(s)  : The constructor to use normally.
+//
+//----------------------------------------------------------------------------
 UnseenCell::UnseenCell(const MapPoint &point)
 {
 	Cell* cell = g_theWorld->GetCell(point);
@@ -58,6 +105,22 @@ UnseenCell::UnseenCell(const MapPoint &point)
 	m_improvements = new PointerList<UnseenImprovementInfo>;
 
 	sint32 i;
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
+
+	// Same as well information about existing
+	// tile improvments, except roadlike ones,
+	// so that this information is available
+	// later as well.
+	// And in order not to break anythink use the existing
+	// list for unfinished tile improvements.
+	const TerrainImprovementRecord *rec;
+	for(i = 0; i < cell->GetNumDBImprovements(); i++) {
+		sint32 imp = cell->GetDBImprovement(i);
+		rec = g_theTerrainImprovementDB->Get(imp);
+		m_improvements->AddTail(new UnseenImprovementInfo(imp, 100));
+	}
+#endif
 	for(i = 0; i < cell->GetNumImprovements(); i++) {
 		TerrainImprovement imp = cell->AccessImprovement(i);
 		if(g_theTerrainImprovementPool->IsValid(imp)) {
@@ -75,6 +138,11 @@ UnseenCell::UnseenCell(const MapPoint &point)
 	}
 	
 	m_cell_owner = (sint8) cell->GetOwner();
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
+	// Store the city that controlls this tile.
+	m_visibleCityOwner = g_theWorld->GetCell(point)->GetCityOwner().m_id;
+#endif
 
 	if(cell->GetCity().m_id != (0)) {
 		Unit		city = cell->GetCity();
@@ -201,6 +269,21 @@ UnseenCell::UnseenCell(const MapPoint &point)
 	SetHasHut(hut != NULL);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::UnseenCell
+//
+// Description: Constructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : The constructor to construct an empty object.
+//
+//----------------------------------------------------------------------------
 UnseenCell::UnseenCell()
 {
 	m_tileInfo = NULL;
@@ -228,6 +311,10 @@ UnseenCell::UnseenCell()
 	m_slaveBits = 0;
 
 	m_cell_owner = -1;
+#if !defined(ACTIVISION_ORIGINAL)
+	// Added by Martin Gühmann
+	m_visibleCityOwner = 0;
+#endif
 
 	m_actor = NULL;
 #ifdef BATTLE_FLAGS
@@ -242,6 +329,21 @@ UnseenCell::UnseenCell()
 	m_improvements = new PointerList<UnseenImprovementInfo>;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::UnseenCell
+//
+// Description: Copy-Constructor
+//
+// Parameters : old			: The UnseenCell object to copy.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : The constructor for copying.
+//
+//----------------------------------------------------------------------------
 UnseenCell::UnseenCell(UnseenCell *old)
 {
 	int realPoolIndex = m_poolIndex;
@@ -281,6 +383,21 @@ UnseenCell::UnseenCell(UnseenCell *old)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::UnseenCell
+//
+// Description: Constructor
+//
+// Parameters : archive			: The source archive
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : The constructor for loading.
+//
+//----------------------------------------------------------------------------
 UnseenCell::UnseenCell(CivArchive &archive)
 {
 	m_installations = NULL;
@@ -292,6 +409,21 @@ UnseenCell::UnseenCell(CivArchive &archive)
 	Serialize(archive);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::~UnseenCell
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 UnseenCell::~UnseenCell()
 {
 	if (m_actor) {
@@ -358,11 +490,45 @@ void UnseenCell::operator delete(void *ptr)
 }
 #endif
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::IsAirfield
+//
+// Description: Gets whether this location has an airfield post.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32: 1 if location has an airfield, 0 otherwise.
+//
+// Remark(s)  : Does not seem to depend on hidden tile information as it 
+//              should be. Return type should be bool. But does not seem
+//              to be used.
+//
+//----------------------------------------------------------------------------
 sint32 UnseenCell::IsAirfield(void)
 {
 	return terrainutil_HasAirfield(m_point);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::IsListeningPost
+//
+// Description: Gets whether this location has a listening post.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32: 1 if location has a listening post, 0 otherwise.
+//
+// Remark(s)  : Does not seem to depend on hidden tile information as it 
+//              should be. Return type should be bool. But does not seem
+//              to be used.
+//
+//----------------------------------------------------------------------------
 sint32 UnseenCell::IsListeningPost(void)
 {
 	return terrainutil_HasListeningPost(m_point);
@@ -390,22 +556,340 @@ sint32 UnseenCell::IsListeningPost(void)
 
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::IsFort
+//
+// Description: Gets whether this location has a fort.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32: 1 if location has a fort, 0 otherwise.
+//
+// Remark(s)  : Does not seem to depend on hidden tile information as it 
+//              should be. Return type should be bool. But does not seem
+//              to be used.
+//
+//----------------------------------------------------------------------------
 sint32 UnseenCell::IsFort(void)
 {
 	return terrainutil_HasFort(m_point);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::IsRadar
+//
+// Description: Gets whether this location has a radar.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32: 1 if location has a radar, 0 otherwise.
+//
+// Remark(s)  : Does not seem to depend on hidden tile information as it 
+//              should be. Return type should be bool. But does not seem
+//              to be used.
+//
+//----------------------------------------------------------------------------
 sint32 UnseenCell::IsRadar(void)
 {
 	return terrainutil_HasRadar(m_point);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::IsHealUnits
+//
+// Description: Gets whether this location can heal units.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32: 1 if location can heal units, 0 otherwise.
+//
+// Remark(s)  : Does not seem to depend on hidden tile information as it 
+//              should be. Return type should be bool. But does not seem
+//              to be used.
+//
+//----------------------------------------------------------------------------
 sint32 UnseenCell::IsHealUnits(void)
 {
 	return terrainutil_HasFort(m_point);
 }
 
 
+#if !defined(ACTIVISION_ORIGINAL)
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::GetFoodFromTerrain
+//
+// Description: Gets the food from the given cell with terrain presumed the 
+//              terrain type did not change since the last visit.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainDB: The terrain database
+//
+// Returns    : sint32 the ammount of food that can be produced in that cell
+//              without tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 UnseenCell::GetFoodFromTerrain() const
+{
+	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
+	
+	sint32 food = rec->GetEnvBase()->GetFood();
+
+	if(m_cityName != NULL && rec->GetEnvCity()) {
+		food += rec->GetEnvCityPtr()->GetFood();
+	}
+
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+		food += rec->GetEnvRiverPtr()->GetFood();
+	}
+	return food;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::GetFoodProduced
+//
+// Description: Gets the food from the given cell with terrain presumed the 
+//              terrain type did not change since the last visit including
+//              tile improvements.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : sint32 the ammount of food that can be produced in that cells
+//              including tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 UnseenCell::GetFoodProduced() const 
+{
+	sint32 food = GetFoodFromTerrain();
+
+	PointerList<UnseenImprovementInfo>::Walker *walker = 
+			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+
+	while(walker->IsValid()){
+		sint32 type		= walker->GetObj()->m_type;
+		sint32 percent	= walker->GetObj()->m_percentComplete;
+		if(percent < 100){
+			break;
+		}
+
+		const TerrainImprovementRecord *impRec = 
+			g_theTerrainImprovementDB->Get(type);
+		const TerrainImprovementRecord::Effect *effect;
+		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		sint32 bonus;
+		if(effect && effect->GetBonusFood(bonus)) {
+			food += bonus;
+		}
+		walker->Next();
+	}
+	
+	delete walker;
+
+    return food; 
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::GetShieldsFromTerrain
+//
+// Description: Gets the shields from the given cell with terrain presumed the 
+//              terrain type did not change since the last visit.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainDB: The terrain database
+//
+// Returns    : sint32 the ammount of shields that can be produced in that cells
+//              without tile improvements and the given terrain.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 UnseenCell::GetShieldsFromTerrain() const
+{
+	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
+
+	
+    sint32 shield = rec->GetEnvBase()->GetShield();
+
+	if(m_cityName != NULL && rec->GetEnvCity()) {
+		shield += rec->GetEnvCityPtr()->GetShield();
+	}
+
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+		shield += rec->GetEnvRiverPtr()->GetShield();
+	}
+
+	return shield;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::GetShieldsProduced
+//
+// Description: Gets the shields from the given cell with terrain presumed the 
+//              terrain type did not change since the last visit including
+//              tile improvements.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : sint32 the ammount of shields that can be produced in that cells
+//              including tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 UnseenCell::GetShieldsProduced() const 
+{
+	sint32 shield = GetShieldsFromTerrain();
+
+	PointerList<UnseenImprovementInfo>::Walker *walker = 
+			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+
+	while(walker->IsValid()){
+		sint32 type		= walker->GetObj()->m_type;
+		sint32 percent	= walker->GetObj()->m_percentComplete;
+		if(percent < 100){
+			break;
+		}
+
+		const TerrainImprovementRecord *impRec = 
+			g_theTerrainImprovementDB->Get(type);
+		const TerrainImprovementRecord::Effect *effect;
+		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		sint32 bonus;
+		if(effect && effect->GetBonusProduction(bonus)) {
+			shield += bonus;
+		}
+		walker->Next();
+	}
+
+	delete walker;
+																					
+    return shield; 
+}
+
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::GetGoldFromTerrain
+//
+// Description: Gets the gold from the given cell with terrain presumed the 
+//              terrain type did not change since the last visit.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainDB: The terrain database
+//
+// Returns    : sint32 the ammount of gold that can be produced in that cells
+//              without tile improvements and the given terrain.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 UnseenCell::GetGoldFromTerrain() const
+{
+	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
+
+	
+    sint32 gold = rec->GetEnvBase()->GetGold();
+
+	if(m_cityName != NULL && rec->GetEnvCity()) {
+		gold += rec->GetEnvCityPtr()->GetGold();
+	}
+
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+		gold += rec->GetEnvRiverPtr()->GetGold();
+	}
+
+	return gold;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::GetGoldProduced
+//
+// Description: Gets the gold from the given cell with terrain presumed the 
+//              terrain type did not change since the last visit including
+//              tile improvements.
+//
+// Parameters : -
+//
+// Globals    : g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : sint32 the ammount of gold that can be produced in that cells
+//              including tile improvements.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 UnseenCell::GetGoldProduced() const 
+{
+	sint32 gold = GetGoldFromTerrain();
+
+	PointerList<UnseenImprovementInfo>::Walker *walker = 
+			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+
+	while(walker->IsValid()){
+		sint32 type		= walker->GetObj()->m_type;
+		sint32 percent	= walker->GetObj()->m_percentComplete;
+		if(percent < 100){
+			break;
+		}
+
+		const TerrainImprovementRecord *impRec = 
+			g_theTerrainImprovementDB->Get(type);
+		const TerrainImprovementRecord::Effect *effect;
+		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		sint32 bonus;
+		if(effect && effect->GetBonusGold(bonus)) {
+			gold += bonus;
+		}
+		walker->Next();
+	}
+
+	delete walker;
+
+    return gold; 
+}
+
+#endif // ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenCell::Serialize
+//
+// Description: Serialization method
+//
+// Parameters : archive			: The source/target archive
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void UnseenCell::Serialize(CivArchive &archive)
 {
 	sint32 l,i;
@@ -414,6 +898,17 @@ void UnseenCell::Serialize(CivArchive &archive)
 		archive.StoreChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
 
 		{
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
+			// A dirty workaround in order not to change the save game format.
+			// UnseenInstallationInfo is now abused to store m_visibleCityOwner
+			// as visibility memeber. As both are of type uint32 it is not a 
+			// problem. Its type is marked as -1. At least this doesn't interfere
+			// with anything else, as the installation data is just stored in
+			// this class but it isn't aceessed. Maybe a mistake or a left
+			// over from CTP1.
+			m_installations->AddTail(new UnseenInstallationInfo(-1, m_visibleCityOwner));
+#endif
 			archive << m_installations->GetCount();
 			PointerList<UnseenInstallationInfo>::Walker walk(m_installations);
 			while(walk.IsValid()) {
@@ -477,9 +972,33 @@ void UnseenCell::Serialize(CivArchive &archive)
 
         m_installations = new PointerList<UnseenInstallationInfo>;
 		archive >> l;
+
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 		for(i = 0; i < l; i++) {
 			m_installations->AddTail(new UnseenInstallationInfo(archive));
 		}
+#else
+// Added by Martin Gühmann
+		UnseenInstallationInfo* tmpUII;
+		bool vCityOwnerNotSet = true;
+		for(i = 0; i < l; i++) {
+			tmpUII = new UnseenInstallationInfo(archive);
+
+			// Only store the additional UnseenInstallationInfo in the
+			// save file but not in the UnseenCell object itsself.
+			if(tmpUII->m_type >= 0){
+				m_installations->AddTail(tmpUII);
+			}
+			else{
+				m_visibleCityOwner = tmpUII->m_visibility;
+				vCityOwnerNotSet = false;
+				delete tmpUII;
+			}
+		}
+		// Backwards compartibility: If this UnseenCell didn't have an m_visibleCityOwner
+		if(vCityOwnerNotSet) m_visibleCityOwner = g_theWorld->GetCell(m_point)->GetCityOwner().m_id;
+#endif
 
 		
 
@@ -534,11 +1053,41 @@ void UnseenCell::Serialize(CivArchive &archive)
 
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenInstallationInfo::UnseenInstallationInfo
+//
+// Description: Constructor
+//
+// Parameters : archive			: The source archive
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : The constructor for loading
+//
+//----------------------------------------------------------------------------
 UnseenInstallationInfo::UnseenInstallationInfo(CivArchive &archive)
 {
 	archive.Load((uint8*)&m_type, sizeof(UnseenInstallationInfo));
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnseenInstallationInfo::UnseenInstallationInfo
+//
+// Description: Constructor
+//
+// Parameters : archive			: The source archive
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : The constructor for loading
+//
+//----------------------------------------------------------------------------
 UnseenImprovementInfo::UnseenImprovementInfo(CivArchive &archive)
 {
 	archive.Load((uint8*)&m_type, sizeof(UnseenImprovementInfo));

@@ -27,6 +27,15 @@
 // - #01 Allow shifing the X and Y axis in the radar map with RMouse clicks
 //   (L. Hirth 6/2004)
 // - Standardised ceil/min/max usage.
+// - Radar tile boarder color determined by the visual cell owner instead by
+//   the actual cell owner. - Nov 1st 2004 - Martin Gühmann
+// - Radar tile boarder is now fully determined by the visible tile onwer
+//   instead of being determined half by the actual tile owner and half by the
+//   the the visible tile owner this fixes the bug that appears after conquest
+//   of a city. - Nov. 1st 2004 - Martin Gühmann
+// - The radar map now shows the current terrain and the current units and
+//   cities if fog of war is off, otherwise it only displays the kind of 
+//   information it should display. - Dec. 25th 2004 - Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -74,6 +83,9 @@ extern SelectedItem		*g_selected_item;
 extern ColorSet			*g_colorSet;
 extern World			*g_theWorld;
 
+#if !defined(ACTIVISION_ORIGINAL)
+extern sint32 g_fog_toggle;
+#endif
 
 static const unsigned char k_EAST_BORDER_FLAG		= 0x01;
 static const unsigned char k_WEST_BORDER_FLAG		= 0x02;
@@ -530,37 +542,47 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 		if(!g_theWorld->GetTopVisibleUnit(worldpos, unit))
 			g_theWorld->GetTopRadarUnit(worldpos, unit);
 
+		UnseenCellCarton unseenCellCarton;
+		int uCellValid = !g_fog_toggle && player->m_vision->GetLastSeen(worldpos, unseenCellCarton);
+
 		if(unit.IsValid()) {
-			
 			if(unit.IsCity()) {
-				
-				if(m_displayCities) {
-					
-					
-					if(unit.m_id == m_selectedCity.m_id)
-						return(g_colorSet->GetColor(COLOR_RED));
-					else
-						return(g_colorSet->GetPlayerColor(unit.GetOwner()));
-				} else {
-					
-					
-					
+				if(m_displayCities){
+					// Added distinction between hidden and non hidden tiles, by Martin Gühmann.
+					if(uCellValid){
+						
+						if(unseenCellCarton.m_unseenCell->GetActor()){
+						// Only if there was a city at the last visit
+							if(unit.m_id == m_selectedCity.m_id)
+								return(g_colorSet->GetColor(COLOR_RED));
+							else
+								return(g_colorSet->GetPlayerColor(unseenCellCarton.m_unseenCell->GetCityOwner()));
+						}
+						else{
+							// Check wether something else is visible. At least invalidize the unit.
+							unit.m_id = 0;
+							g_theWorld->GetTopVisibleUnitNotCity(worldpos, unit);
+						}
+					}
+					else{
+						if(unit.m_id == m_selectedCity.m_id)
+							return(g_colorSet->GetColor(COLOR_RED));
+						else
+							return(g_colorSet->GetPlayerColor(unit.GetOwner()));
+					}
+				}
+				else {
 					
 					unit.m_id = 0;
 					g_theWorld->GetTopVisibleUnitNotCity(worldpos, unit);
 				}
 			}
-
-			
-			
-			
 			if(m_displayUnits && unit.m_id)
 				return(g_colorSet->GetPlayerColor(unit.GetOwner()));
 		}
 
 		
-		UnseenCellCarton unseenCellCarton;
-		if(player->m_vision->GetLastSeen(worldpos, unseenCellCarton)) {
+		if(uCellValid) {
 			if(m_displayTerrain) {
 				return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
 															   unseenCellCarton.m_unseenCell->GetTerrainType())));	
@@ -585,7 +607,7 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 			return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
 														   cell->GetTerrainType())));
 		} else {
-		if(g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos)) {
+			if(g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos)) {
 				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
 															   TERRAIN_GRASSLAND));
 			} else {
@@ -616,7 +638,13 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position)
 {
 	
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 	sint32 owner = g_theWorld->GetCell(position)->GetOwner();
+#else
+// Added by Martin Gühmann
+	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
+#endif
 	if(owner < 0)
 		return(g_colorSet->GetColor(COLOR_BLACK));
 
@@ -645,7 +673,13 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	if(!player->m_vision->IsExplored(position))
 		return(borderFlags);
 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 	sint32 owner = g_theWorld->GetCell(position)->GetOwner();
+#else
+// Added by Martin Gühmann
+	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
+#endif
 
 	if(owner < 0)
 		return(borderFlags);
@@ -714,7 +748,7 @@ void RadarMap::RenderTradeRoute(aui_Surface *surface,
 //	RadarMap::RenderSpecialTile	
 //		
 //---------------------------------------------------------------------------
-//	- Renders the current special radar map area, tha means tiles that are
+//	- Renders the current special radar map area, that means tiles that are
 //    on the max or min x value.
 //
 //---------------------------------------------------------------------------
@@ -746,7 +780,7 @@ void RadarMap::RenderSpecialTile(aui_Surface *surface,
 //	RadarMap::RenderSpecialTileBorder
 //		
 //---------------------------------------------------------------------------
-//	- Renders the current special radar map borders, tha means tiles that are
+//	- Renders the current special radar map borders, that means tiles that are
 //    on the max or min x value.
 //
 //---------------------------------------------------------------------------
@@ -995,11 +1029,11 @@ void RadarMap::RenderTile(aui_Surface *surface, const MapPoint &position,
 //	- Controls the rendering of the borders for the current radar map
 //    position	
 //---------------------------------------------------------------------------
-#ifdef ACTIVISION_ORIGINAL // #01 Allow shifing the X and Y axis 
+#if defined(ACTIVISION_ORIGINAL) // #01 Allow shifing the X and Y axis 
 void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 						  Player *player)
 {
-	
+
 	Pixel16 borderColor = RadarTileBorderColor(MapPoint(position.x, position.y));
 	uint8 borderFlags = RadarTileBorder(player, MapPoint(position.x, position.y));
 	

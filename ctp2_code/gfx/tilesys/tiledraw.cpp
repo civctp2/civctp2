@@ -33,6 +33,18 @@
 //   per tile improvement by Martin Gühmann.
 // - Allows now to use costumized graphics for ruins/huts by Martin Gühmann
 // - Fixed CtD when drawing ruins or huts on an unseen cell.
+// - City names and sizes are now drawn if game is in god mode or the fog
+//   fog of war is toggled of. - Oct. 22nd 2004 Martin Gühmann
+// - Tile improvements under construction with 100% completeness or more
+//   are now drawn as complete tile improvements, this allows to retrieve them
+//   from the unseen cell without the need to change the unseen cell data 
+//   structure. - Dec. 21st 2004 Martin Gühmann
+// - Current terrain improvements are displayed instead of those from the
+//   last visit if the fog of war is toggled off. - Dec 24th 2004 - Martin Gühmann
+// - Road like tile improvements are drawn according to the real state
+//   instead to the state from the last visit. - Dec. 25th 2004 - Martin Gühmann
+// - Draws the city radius from the last visit instead the current one.
+//   - Dec. 26th 2004 - Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -215,7 +227,17 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 	if (g_selected_item->GetVisiblePlayer()==g_theWorld->GetOwner(pos)) 
 		visiblePlayerOwnsThis = TRUE;
 
+#if defined(ACTIVISION_OEIGINAL)
+// Removed by Martin Gühmann
 	if (m_localVision->GetLastSeen(pos, ucell) && !visiblePlayerOwnsThis) 
+#else
+// Added by Martin Gühmann
+	if(!g_fog_toggle // Draw the right stuff if fog of war is off
+	&& !visiblePlayerOwnsThis
+	&&  m_localVision->GetLastSeen(pos, ucell)
+//	&&  ucell.m_unseenCell->GetImprovements()->GetCount() > 0
+	) 
+#endif
 	{
 		env = ucell.m_unseenCell->GetEnv();
 
@@ -290,7 +312,14 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 
 	
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 	if (m_localVision->GetLastSeen(pos, ucell) )
+#else
+// Added by Martin Gühmann
+// Do not forget fog of war
+	if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle)
+#endif
 	{
 		env = ucell.m_unseenCell->GetEnv();
 	}
@@ -391,6 +420,9 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			sint32 percent	= walker->GetObj()->m_percentComplete;
 			uint16 index;
 
+
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 			if (percent < 50) 
 				index = 0;
 			else 
@@ -398,10 +430,35 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else
 				index = 2;
 
-#if defined(ACTIVISION_ORIGINAL)
 			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog);
 #else
-			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+// Added by Martin Gühmann
+			if (percent < 50){
+				index = 0;
+				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+			}
+			else if (percent < 100){
+				index = 1;
+				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+			}
+			else{
+
+		 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
+				const TerrainImprovementRecord::Effect *effect;
+				if(rec!=NULL)
+					effect = terrainutil_GetTerrainEffect(rec, pos);
+
+				if(rec!=NULL && effect!=NULL){
+					if(!rec->GetClassRoad() && !rec->GetClassOceanRoad()){
+						data = m_tileSet->GetImprovementData(effect->GetTilesetIndex());
+						DrawAnImprovement(surface,data,x,y,fog);
+					}
+				}
+				else{
+					index = 2;
+					DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+				}
+			}
 #endif
 			drewSomething = true;
 
@@ -4746,13 +4803,20 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 						happinessAttackOwner=0;
 
 				UnseenCellCarton	ucell;
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+
+				// Why twice?
 				if (m_localVision->GetLastSeen(pos, ucell)) {
-					
+
 					if(m_localVision->GetLastSeen(pos, ucell)) {
+#else
+				// Don't forget if fog was toggled
+				if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle) {
+#endif
 						pop = ucell.m_unseenCell->GetCitySize();
 						name = (MBCHAR *)ucell.m_unseenCell->GetCityName();
 						owner = ucell.m_unseenCell->GetCityOwner();
-						
 						isBioInfected = ucell.m_unseenCell->IsBioInfected();
 						isNanoInfected = ucell.m_unseenCell->IsNanoInfected();
 						isConverted = ucell.m_unseenCell->IsConverted();
@@ -4780,7 +4844,13 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 						if (pop > 0)
 							drawCity = TRUE;
 					}
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+				// No need to do it twice
 				} else
+#else
+				else
+#endif
 				{
 
 					
@@ -5726,7 +5796,16 @@ TiledMap::DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint3
 
 sint32 TiledMap::GetVisibleCellOwner(MapPoint &pos)
 {
-	if(!m_localVision->IsVisible(pos) && !g_fog_toggle && !g_god && (g_player[g_selected_item->GetVisiblePlayer()] && !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)) {
+	if(!m_localVision->IsVisible(pos) 
+#if defined(ACTIVISIO_ORIGINAL)
+// Removed by Martin Gühmann already checked in IsVisible
+// no need to do it twice.
+	&& !g_fog_toggle
+	&& !g_god 
+	&& (g_player[g_selected_item->GetVisiblePlayer()] 
+	&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)
+#endif
+	){
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(pos, ucell)) {
 			return ucell.m_unseenCell->m_cell_owner;
@@ -5736,7 +5815,18 @@ sint32 TiledMap::GetVisibleCellOwner(MapPoint &pos)
 }
 
 uint32 TiledMap::GetVisibleCityOwner(MapPoint &pos)
-{	
+{
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
+	if(!m_localVision->IsVisible(pos) 
+	// Show the city influence radius from the last visit.
+	){
+		UnseenCellCarton ucell;
+		if(m_localVision->GetLastSeen(pos, ucell)) {
+			return ucell.m_unseenCell->GetVisibleCityOwner(); 
+		}
+	}
+#endif
 	return g_theWorld->GetCell(pos)->GetCityOwner().m_id;
 }
 

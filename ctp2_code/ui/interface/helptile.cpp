@@ -1,20 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Info/status tile window handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Does not show anymore the current tarrain stats but those from
+//   the last visit. - Dec. 23rd 2004 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui.h"
@@ -47,6 +61,16 @@
 
 #include "ResourceRecord.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
+#include "unseencell.h" //Unseen cell info is needed
+#include "TiledMap.h"
+#include "SelItem.h"
+#include "Player.h"
+
+extern sint32		g_fog_toggle;
+extern sint32		g_god;
+#endif
 
 extern C3UI						*g_c3ui;
 extern World					*g_theWorld;
@@ -249,6 +273,8 @@ void helptile_displayData(const MapPoint &p)
 	sint32 goods=0;
 	const Cell *myTile = g_theWorld->GetCell(p);
 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 	strcpy(myname, g_theWorld->GetTerrainName(p));
 
 	g_helpTileWindow->TitleText()->SetText( myname );
@@ -288,7 +314,91 @@ void helptile_displayData(const MapPoint &p)
 
 	sprintf( mytext , "%.1f\n", (float)(myTile->GetMoveCost() / 100.0) );
 	s_tileMoveV->SetText(mytext);
+#else
+// Added by Martin Gühmann
 
+	UnseenCellCarton ucell;
+	BOOL hasUnseen = FALSE;
+	if(!g_tiledMap->GetLocalVision()->IsVisible(p) 
+	&& !g_fog_toggle 
+	&& !g_god 
+	&& (g_player[g_selected_item->GetVisiblePlayer()] 
+	&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)
+	&& g_tiledMap->GetLocalVision()->GetLastSeen(p, ucell)
+	){
+
+		strcpy(myname, g_theStringDB->GetNameStr(g_theTerrainDB->Get(ucell.m_unseenCell->GetTerrainType())->GetName()));
+		g_helpTileWindow->TitleText()->SetText( myname );
+
+		sprintf( mytext , "%d\n", ucell.m_unseenCell->GetFoodProduced());
+		s_tileFoodV->SetText(mytext);
+
+		sprintf( mytext , "%d\n", ucell.m_unseenCell->GetShieldsProduced());
+		s_tileProdV->SetText(mytext);
+
+		// Unfortunatly this kind of information is not stored in the
+		// UnseenCell object.
+		if(g_theWorld->IsGood(p)) {
+			StringId	goodStrID;
+
+			myTile->GetGoodsIndex(goods);
+		
+			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
+			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
+			s_tileGoodV->SetText(mytext);
+			s_tileSaleV->SetText("\0");
+			s_tileSale->SetText("\0");
+		}
+		else {
+			sprintf( mytext , "%s\n", s_stringTable->GetString(STR_NONE));
+			s_tileGoodV->SetText(mytext);
+			s_tileSaleV->SetText("\0");
+			s_tileSale->SetText("\0");
+		}
+
+		sprintf( mytext, "%d", ucell.m_unseenCell->GetGoldProduced()); 
+		s_tileGoldV->SetText(mytext);
+
+		sprintf( mytext , "%.1f\n", (float)(ucell.m_unseenCell->m_move_cost / 100.0) );
+		s_tileMoveV->SetText(mytext);
+	}
+	else{
+
+		strcpy(myname, g_theWorld->GetTerrainName(p));
+		g_helpTileWindow->TitleText()->SetText( myname );
+
+		sprintf( mytext , "%d\n", myTile->GetFoodProduced());
+		s_tileFoodV->SetText(mytext);
+
+		sprintf( mytext , "%d\n", myTile->GetShieldsProduced());
+		s_tileProdV->SetText(mytext);
+
+		if(g_theWorld->IsGood(p)) {
+			StringId	goodStrID;
+
+			myTile->GetGoodsIndex(goods);
+		
+			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
+			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
+			s_tileGoodV->SetText(mytext);
+			s_tileSaleV->SetText("\0");
+			s_tileSale->SetText("\0");
+		}
+		else {
+			sprintf( mytext , "%s\n", s_stringTable->GetString(STR_NONE));
+			s_tileGoodV->SetText(mytext);
+			s_tileSaleV->SetText("\0");
+			s_tileSale->SetText("\0");
+		}
+
+		sprintf( mytext, "%d", myTile->GetGoldProduced()); 
+		s_tileGoldV->SetText(mytext);
+
+		sprintf( mytext , "%.1f\n", (float)(myTile->GetMoveCost() / 100.0) );
+		s_tileMoveV->SetText(mytext);
+	}
+
+#endif
 
 	if(s_tileImage)
 		s_tileImage->SetMouseTile(p);

@@ -27,6 +27,16 @@
 //
 // - Hidden cities are no longer displayed in the info bar. 
 //   - Oct. 15th 2004 Martin Gühmann
+// - Hidden tile improvements are no longer displayed.
+// - Does not show anymore the current tarrain stats but those from
+//   the last visit.
+// - Displays terrain from last visit, not the one since the last
+//   terraforming event.
+// - Displays now if a foreign city has been speacial attacked
+//   as this is shown as well on the map.
+//   - Last 4 on Dec. 22nd 2004 Martin Gühmann
+// - InfoBar does not display anymore players without contact and player
+//   fog of war is toggled on. - Dec. 24th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -52,7 +62,12 @@
 #include "CityData.h"
 
 #if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
 #include "UnitData.h"
+#include "unseencell.h" //Unseen cell info is needed
+
+extern sint32		g_fog_toggle;
+extern sint32		g_god;
 #endif
 
 extern sint32 g_ScreenWidth;
@@ -191,6 +206,8 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 #endif _DEBUG
 
 	} else {
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 		if(cell->GetOwner() > 0 && g_player[cell->GetOwner()]) {
 			
 			MBCHAR buf[k_MAX_NAME_LEN];
@@ -198,28 +215,109 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			Concat(buf);
 			Concat(" - ");
 		}
+#else
+// Added by Martin Gühmann
+		// Use the information from the last visit iof that cell
+		sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(point));
+
+		if(owner >= 0 
+		&& g_player[owner]
+		&&(g_player[owner]->HasContactWith(g_selected_item->GetVisiblePlayer())
+		|| g_fog_toggle)
+		){
+			
+			MBCHAR buf[k_MAX_NAME_LEN];
+			g_player[owner]->m_civilisation->GetSingularCivName(buf);
+			Concat(buf);
+			Concat(" - ");
+		}
+#endif
 		
+#if defined(ACTIVISION_DEFAULT)
+// Removed by Martin Gühmann
 		Concat(g_theStringDB->GetNameStr(g_theTerrainDB->Get(cell->GetTerrainType())->GetName()));
 		Concat("     ");
 
 		if(cell->HasCity()) {
 			Unit city = cell->GetCity();
-#if !defined(ACTIVISION_DEFAULT)
+#else
+// Added by Martin Gühmann
+		UnseenCellCarton ucell;
+		BOOL hasUnseen = FALSE;
+		if(!g_tiledMap->GetLocalVision()->IsVisible(point) 
+		&& !g_fog_toggle 
+		&& !g_god 
+		&& (g_player[g_selected_item->GetVisiblePlayer()] 
+		&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)) {
+			hasUnseen = g_tiledMap->GetLocalVision()->GetLastSeen(point, ucell);
+		}
+
+		if(hasUnseen){
+			Concat(g_theStringDB->GetNameStr(g_theTerrainDB->Get(ucell.m_unseenCell->GetTerrainType())->GetName()));
+			Concat("     ");
+		}
+		else{
+			Concat(g_theStringDB->GetNameStr(g_theTerrainDB->Get(cell->GetTerrainType())->GetName()));
+			Concat("     ");
+		}
+
 // To hide the city name if the city is hidden
-			if(city->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())){
-#endif
-			if(g_theStringDB->GetNameStr("INFOBAR_CITY")) {
-				Concat(g_theStringDB->GetNameStr("INFOBAR_CITY"));
+		Unit city = cell->GetCity();
+		if(city.m_id
+		&&(city->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+		){
+			if(hasUnseen){
+				if(g_theStringDB->GetNameStr("INFOBAR_CITY")) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_CITY"));
+				}
+				Concat(ucell.m_unseenCell->GetCityName());
+
+				MBCHAR civName[k_MAX_INFOBAR_TEXT];
+				g_player[ucell.m_unseenCell->GetCityOwner()]->m_civilisation->GetSingularCivName(civName);
+				Concat("(");
+				Concat(civName);
+				Concat(")");
+
+				if(ucell.m_unseenCell->IsBioInfected()) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_BIO_INFECTION"));
+				}
+				if(ucell.m_unseenCell->IsNanoInfected()) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_NANO_INFECTION"));
+				}
+				if(ucell.m_unseenCell->IsConverted()) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_CONVERTED"));
+				}
+				if(ucell.m_unseenCell->IsFranchised()) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_FRANCHISED"));
+				}
+				if(ucell.m_unseenCell->IsInjoined()) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_INJOINED"));
+				}
+				if(ucell.m_unseenCell->IsRioting()) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_RIOTING"));
+				}
+				if(ucell.m_unseenCell->IsWatchful()) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_WATCHFUL"));
+				}
 			}
-			Concat(city.GetName());
+			else{
+#endif
+				if(g_theStringDB->GetNameStr("INFOBAR_CITY")) {
+					Concat(g_theStringDB->GetNameStr("INFOBAR_CITY"));
+				}
+				Concat(city.GetName());
 
-			MBCHAR civName[k_MAX_INFOBAR_TEXT];
-			g_player[cell->GetCity().GetOwner()]->m_civilisation->GetSingularCivName(civName);
-			Concat("(");
-			Concat(civName);
-			Concat(")");
+				MBCHAR civName[k_MAX_INFOBAR_TEXT];
+				g_player[cell->GetCity().GetOwner()]->m_civilisation->GetSingularCivName(civName);
+				Concat("(");
+				Concat(civName);
+				Concat(")");
 
-			if(city.GetOwner() == g_selected_item->GetVisiblePlayer()) {				
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+				//And why is this displayed on the map?
+				if(city.GetOwner() == g_selected_item->GetVisiblePlayer()) {
+#endif
 				if(city.CD()->IsBioInfected()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_BIO_INFECTION"));
 				}
@@ -227,7 +325,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				if(city.CD()->IsNanoInfected()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_NANO_INFECTION"));
 				}
-
+	
 				if(city.CD()->IsConverted()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_CONVERTED"));
 				}
@@ -243,18 +341,17 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				if(city.CD()->GetIsRioting()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_RIOTING"));
 				}
-				
+			
 				if(city.CD()->IsWatchful()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_WATCHFUL"));
 				}
 			}
 			wroteOwner = true;
 			Concat("     ");
-#if !defined(ACTIVISION_ORIGINAL)
-			}
-#endif
 		} else {
 			sint32 i;
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 			for(i = 0; i < cell->GetNumDBImprovements(); i++) {
 				Concat(" ");
 				Concat(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->Get(cell->GetDBImprovement(i))->GetName()));
@@ -262,15 +359,67 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 					Concat(",");
 				}
 			}
+#else
+// Added by Martin Gühmann
+			if(hasUnseen){
+				// Use hidden information if necessary
+
+				PointerList<UnseenImprovementInfo> *improvements = ucell.m_unseenCell->GetImprovements();
+
+				PointerList<UnseenImprovementInfo>::Walker *walker = 
+					new PointerList<UnseenImprovementInfo>::Walker(improvements);
+
+				while(walker->IsValid()){
+					sint32 type		= walker->GetObj()->m_type;
+					sint32 percent	= walker->GetObj()->m_percentComplete;
+					if(percent < 100){
+						break;
+					}
+					Concat(" ");
+					Concat(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->Get(type)->GetName()));
+					walker->Next();
+					if(walker->IsValid() || cell->HasRiver()){
+						Concat(",");
+					}
+				}
+		
+				delete walker;
+			}
+			else{
+				for(i = 0; i < cell->GetNumDBImprovements(); i++) {
+					Concat(" ");
+					Concat(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->Get(cell->GetDBImprovement(i))->GetName()));
+					if(i < cell->GetNumDBImprovements() - 1 || cell->HasRiver()) {
+						Concat(",");
+					}
+				}
+			}
+#endif
 
 			if(cell->HasRiver()) {
 				Concat(g_theStringDB->GetNameStr("INFOBAR_RIVER"));
 			}
 
 			sint32 gold, food, prod;
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 			food = cell->GetFoodProduced();
 			prod = cell->GetShieldsProduced();
 			gold = cell->GetGoldProduced();
+#else
+// Added by Martin Gühmann
+			if(hasUnseen){
+				// Use the values from the hidden info if the tile is hidden
+				food = ucell.m_unseenCell->GetFoodProduced();
+				prod = ucell.m_unseenCell->GetShieldsProduced();
+				gold = ucell.m_unseenCell->GetGoldProduced();
+			}
+			else{
+				food = cell->GetFoodProduced();
+				prod = cell->GetShieldsProduced();
+				gold = cell->GetGoldProduced();
+			}
+#endif
 
 			Concat("(");
 			char numBuf[20];

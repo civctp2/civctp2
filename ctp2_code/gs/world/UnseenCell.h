@@ -1,12 +1,37 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Map fog of war visibility handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added new functions to calculate the food, shields and gold values produced 
+//   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gühmann
+// - Added visible city oner flag and get method to be able to figure out
+//   the city in whose radius the tile was at the last visit.
+//   - Dec. 26th 2994 - Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef _UNSEEN_CELL_H_
@@ -138,6 +163,10 @@ private:
 	UnitActor *m_actor;
 
 	sint32 m_poolIndex;
+#if !defined(ACTIVISION_ORIGINAL)
+	// Contains the ID of the city that owns the tile.
+	uint32  m_visibleCityOwner;
+#endif
 public:
 	UnseenCell(const MapPoint &point);
 	UnseenCell();
@@ -158,6 +187,9 @@ public:
 	PointerList<UnseenImprovementInfo> *GetImprovements() { return m_improvements; }
 	sint32 GetCityOwner() { return m_cityOwner; }
 	sint32 GetCitySize() { return m_citySize; }
+#if !defined(ACTIVISION_ORIGINAL)
+	uint32 GetVisibleCityOwner() { return m_visibleCityOwner; }
+#endif
 	const MBCHAR *GetCityName() { return m_cityName; }
 	UnitActor *GetActor() { return m_actor; }
 
@@ -198,6 +230,19 @@ public:
 	sint32 IsFort(void);
 
 	uint32	GetSlaveBits(void) { return m_slaveBits; }	
+
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann to generate these pieces of information
+// for hidden tiles correctly as well.
+
+	sint32 GetFoodFromTerrain() const;
+    sint32 GetFoodProduced() const;
+	sint32 GetShieldsFromTerrain() const;
+    sint32 GetShieldsProduced() const;
+	sint32 GetGoldFromTerrain() const;
+	sint32 GetGoldProduced() const;
+#endif
+
 
 	void Serialize(CivArchive &archive);
 };

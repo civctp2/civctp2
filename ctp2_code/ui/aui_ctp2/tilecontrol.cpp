@@ -1,15 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Tile help window draw handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Tile help window now dims tiles under the fog of war.
+//   - Dec. 23rd 2004 - Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -27,7 +46,10 @@
 
 extern TiledMap			*g_tiledMap;
 
-
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
+extern sint32			g_isFastCpu; // Actual permernent set to 1
+#endif
 
 
 
@@ -119,20 +141,49 @@ sint32 TileControl::DrawTile(
 	
 	BaseTile *baseTile = g_tiledMap->GetTileSet()->GetBaseTile(tileInfo->GetTileNum());
 	if (baseTile == NULL) return -1;
-	
-	
-	
+
+
+
 
 	g_tiledMap->LockThisSurface(surface);
 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 	g_tiledMap->DrawTransitionTile(NULL, pos, x, y);
 
 	
 	g_tiledMap->DrawOverlay(NULL, baseTile->GetHatData(), x, y);
-	
-	
+		
 	if (river != -1)
 		g_tiledMap->DrawOverlay(NULL, g_tiledMap->GetTileSet()->GetRiverData(river), x, y);
+
+#else
+// Added by Martin Gühmann
+	bool fog =((   g_tiledMap->GetLocalVision() 
+	            && g_tiledMap->GetLocalVision()->IsExplored(pos) 
+	            &&!g_tiledMap->GetLocalVision()->IsVisible(pos)));
+
+	if (!fog) {
+		g_tiledMap->DrawTransitionTile(NULL, pos, x, y);
+		g_tiledMap->DrawOverlay(NULL, baseTile->GetHatData(), x, y);
+		if (river != -1)
+			g_tiledMap->DrawOverlay(NULL, g_tiledMap->GetTileSet()->GetRiverData(river), x, y);
+	} 
+	else {
+		if (g_isFastCpu) {
+			g_tiledMap->DrawBlendedTile(NULL, pos,x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
+			g_tiledMap->DrawBlendedOverlay(NULL, baseTile->GetHatData(),x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
+			if (river != -1)
+				g_tiledMap->DrawBlendedOverlay(NULL, g_tiledMap->GetTileSet()->GetRiverData(river),x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
+		} 
+		else {
+			g_tiledMap->DrawDitheredTile(NULL, x,y,k_FOW_COLOR);
+			g_tiledMap->DrawDitheredOverlay(NULL, baseTile->GetHatData(),x,y,k_FOW_COLOR);
+			if (river != -1)
+				g_tiledMap->DrawDitheredOverlay(NULL, g_tiledMap->GetTileSet()->GetRiverData(river),x,y,k_FOW_COLOR);
+		}
+	}
+#endif
 
 	g_tiledMap->DrawImprovementsLayer(NULL, pos, x, y);
 

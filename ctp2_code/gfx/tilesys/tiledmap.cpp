@@ -30,6 +30,10 @@
 //	 By Martin Gühmann.
 // - Map wrapping corrected.
 // - Possible leaks/invalid accesses corrected.
+// - Current terrain improvements are displayed instead of those from the
+//   last visit if the fog of war is toggled off. - Dec 24th 2004 - Martin Gühmann
+// - With fog of war off the current city sprites and unit sprites at the
+//   right position are displayed. - Dec. 25th 2004 - Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -2371,8 +2375,17 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 
 	bool visiblePlayerOwnsThis = g_selected_item->GetVisiblePlayer() == g_theWorld->GetOwner(pos);
 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 	if(m_localVision->GetLastSeen(pos, ucell) && !visiblePlayerOwnsThis) 
-	{
+#else
+// Added by Martin Gühmann
+	if(!g_fog_toggle // The sense of toogling off the fog is to see something
+	&& !visiblePlayerOwnsThis
+	&& m_localVision->GetLastSeen(pos, ucell) 
+//	&& ucell.m_unseenCell->GetImprovements()->GetCount() > 0
+	){
+#endif
 		env = ucell.m_unseenCell->GetEnv();
 		numImprovements = ucell.m_unseenCell->GetImprovements()->GetCount();
 		hasGoody = ucell.m_unseenCell->HasHut();
@@ -2908,9 +2921,12 @@ void TiledMap::PaintUnitActor(UnitActor *actor, BOOL fog)
 {
 	Assert(actor != NULL);
 	if (actor == NULL) return;
-
 	
+#if 1 || defined(ACTIVISION_ORIGINAL)
 	if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+#else
+	if (1 || (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())))
+#endif
 	{
 		
 		if (actor->Draw(fog)) {
@@ -3133,7 +3149,16 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 
 			UnseenCellCarton		ucell;
 			
-			if (m_localVision && m_localVision->GetLastSeen(pos, ucell)) 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+			if (m_localVision && m_localVision->GetLastSeen(pos, ucell))
+#else
+// Added by Martin Gühmann
+			// For visibility god mode and fog of war should be handled equally
+			if(!g_fog_toggle
+			&&  m_localVision 
+			&&  m_localVision->GetLastSeen(pos, ucell))
+#endif
 			{
 				
 				UnitActor	*actor = ucell.m_unseenCell->GetActor();
@@ -3190,11 +3215,21 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 
 
 
-				
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 				if(!( actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
 				   && !g_god && (g_player[g_selected_item->GetVisiblePlayer()] && !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar))
 					continue;
-				
+#else
+// Added by Martin Gühmann
+				// For visibility god mode and fog of war should be handled equally
+				if(!( actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+				&& !g_fog_toggle
+				&& !g_god 
+				&& (g_player[g_selected_item->GetVisiblePlayer()] 
+				&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar))
+					continue;
+#endif
 				
 				if (top.GetOwner() == g_selected_item->GetVisiblePlayer()
 					&& top.CanSettle(top.RetPos())) 
@@ -3295,14 +3330,21 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 						top = hypotheticalUnit;
 					}
 
-					
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 					if (top.GetOwner() != g_selected_item->GetVisiblePlayer() && !g_god)
 						continue;
+#else
+// Added by Martin Gühmann
+					// For visibility god mode and fog of war should be handled equally
+					if (top.GetOwner() != g_selected_item->GetVisiblePlayer()
+					&& !g_fog_toggle
+					&& !g_god)
+						continue;
+#endif
 
 					actor = top.GetActor();
 					if(!actor) continue; 
-
-
 
 
 
@@ -3413,8 +3455,16 @@ void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
 
 
 
-			
-			if (m_localVision && m_localVision->GetLastSeen(pos, ucell)) 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+			if (m_localVision && m_localVision->GetLastSeen(pos, ucell))
+#else
+// Added by Martin Gühmann
+			// We want to something when we lift the fog of war
+			if(!g_fog_toggle
+			&&  m_localVision 
+			&&  m_localVision->GetLastSeen(pos, ucell))
+#endif
 			{
 				
 				curUnitActor = ucell.m_unseenCell->GetActor();
@@ -6264,19 +6314,22 @@ void TiledMap::HandleCheat(MapPoint &pos)
 						}
 					}
 					Unit id1 = p->CreateCity(unitNum, pos, CAUSE_NEW_CITY_CHEAT, NULL, -1);
+#if !defined(ACTIVISION_ORIGINAL)
 					//Added by Martin Gühmann to make the created city selected.
 					g_selected_item->SetSelectCity(id1);
 					//End Add
+#else
 					//Removed by Martin Gühmann cheat editor city creation is now
 					//handled inside the CityData class were it does work actually.
-					/*if ( (id1 != Unit(0))) {
+					if ( (id1 != Unit(0))) {
 						if(g_cityNum != -1) {
 							id1.SetCitySize( g_cityNum );
 						} else {
 							id1.SetCitySize(1);
 							id1.CD()->SetCityStyle(ScenarioEditor::CityStyle());
 						}
-					}*/
+					}
+#endif
 				} else {
 					
 					if (g_theWorld->HasCity(pos)) {

@@ -28,6 +28,8 @@
 // - Corrected strange vision behaviour at the top row.
 // - Corrected strange visibility patterns ("see tile" counter underflow).
 // - Removed causes of memory leak reports (static variables).
+// - Unseen cells are now always created and not only in the case if a 
+//   tile improvement is under construction there. - Dec. 21st 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -330,6 +332,8 @@ void Vision::MergeMap(Vision *src)
 							}
 						}
 					}
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 					if(cell->GetCity().m_id != (0) ||
 					   cell->GetNumImprovements() > 0) {
 						if(cell->GetCity().m_id != 0)
@@ -339,6 +343,15 @@ void Vision::MergeMap(Vision *src)
 						ucell.m_unseenCell = new UnseenCell(point);
 						m_unseenCells->Insert(ucell);
 					}
+#else
+// Added by Martin Gühmann
+					// Create always an unseen cell
+					if(cell->GetCity().m_id != 0)
+						cell->GetCity().SetVisible(m_owner);
+						
+					ucell.m_unseenCell = new UnseenCell(point);
+					m_unseenCells->Insert(ucell);
+#endif
 				}
 				
 			} else {
@@ -706,7 +719,6 @@ void Vision::DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op,
 //				Assumption: centerRC is valid and on the map.				
 //
 //----------------------------------------------------------------------------
-
 void Vision::FillCircle
 (
 	MapPoint const &			centerRC,
@@ -790,7 +802,6 @@ void Vision::FillCircle
 //              Convert + Unconvert will take care of the wrap.
 //
 //----------------------------------------------------------------------------
-
 void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op, 
 							DynamicArray<MapPoint> *removeadd)
 {
@@ -843,10 +854,17 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 #endif
 			if(((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
 				Cell *cell = g_theWorld->GetCell(iso);
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+				// This should be hidden if it is outside of the view, even if there are no tileimps under construction.
 				if(cell->GetNumImprovements() > 0 || 
 				   (cell->GetCity().IsValid() && cell->GetCity().GetOwner() != m_owner)) {
 					AddUnseen(iso);
 				}
+#else
+// Added by Martin Gühmann
+				AddUnseen(iso);
+#endif
 
 				if(removeadd) {
 					
@@ -859,11 +877,11 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			break;
 		case CIRCLE_OP_ADD_RADAR:
 		{
-			CellUnitList	army;
+			static CellUnitList army;
+			army.Clear();
 			g_theWorld->GetArmy(iso, army);
-			sint32 const	n = army.Num();
-			for (sint32 i = 0; i < n; ++i) 
-			{
+			sint32 i, n = army.Num();
+			for(i = 0; i < n; i++) {
 				army[i].SetRadar(m_owner);
 			}
 			break;
@@ -894,9 +912,13 @@ void Vision::AddUnseen(const MapPoint &point)
 		return;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+	// Already checked in IsVisible - no need to do it twice
 	if(g_player[m_owner] && g_player[m_owner]->m_hasGlobalRadar) {
 		return;
 	}
+#endif
 
 	if(!IsVisible(point)) {
 		UnseenCellCarton alreadyUnseen;
@@ -1043,7 +1065,7 @@ void Vision::ModifyPoint(Vision *src, sint32 x, sint32 y)
 
 void Vision::DeleteUnseenCells()
 {
-#if defined(ACTIVISION_ORIGINAL)	// not really static: cleared every time
+#if defined(ACTIVISION_ORIGINAL)	// Not really static: Cleared every time
 	static DynamicArray<UnseenCellCarton> array;
 	array.Clear();
 #else
