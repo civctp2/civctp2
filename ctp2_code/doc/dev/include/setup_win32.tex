@@ -1,3 +1,6 @@
+\chapter{Setting up your build environment\label{toc:setupbenv}}
+This chapter deals with setting up your build environment, i.e. take the necessary step to get ready to build CtP2 from the source.\\
+If you have already setup your build environment, you can continue with the next chapter.
 \begin{section}{Windows}
 \begin{subsection}{System requirements}
 Your system is supposed to meet the following system requirements:
@@ -13,10 +16,10 @@ if you already installed everything into different named directories, you might 
 \end{subsection}% System requirements
 
 \begin{subsection}{Install Civilization Call to Power II}
-Provided you haven't already installed Windows and Civilization Call to Power II, you need to install them now. Make sure each directoryname of the full installation path only contains letters and numbers.\\
-\\
-For Call to Power II, choose a full setup (e.g. to \textit{C:\textbackslash{}Program\_Files\textbackslash{}Activision\textbackslash{}CtP2}). (\textbf{Note the underscore})\\
-\\
+Provided you haven't already installed Windows and Civilization Call to Power II, you need to install them now. Make sure each directoryname of the full installation path only contains letters and numbers.
+
+For Call to Power II, choose a full setup (e.g. to \textit{C:\textbackslash{}Program\_Files\textbackslash{}Activision\textbackslash{}CtP2}). (\textbf{Note the underscore})
+
 Refer to the documentation bundled with your software on how to do this.
 \end{subsection}% Install Civilization Call to Power II
 
@@ -29,27 +32,28 @@ Create a copy of your CtP2 installation.
 \end{subsection}% Backup your CtP2 directory
 
 \begin{subsection}{Install MS Visual C++ 6.0}
-Install MS Visual C++ 6.0, if you did not do so already (e.g. to C:\textbackslash{}MSVC).\\
-\\
+Install MS Visual C++ 6.0, if you did not do so already (e.g. to C:\textbackslash{}MSVC).
+
 Refer to the documentation bundled with your software on how to do this.
-Afterwards, download \href{http://msdn.microsoft.com/vstudio/downloads/updates/sp/vs6/sp6/default.aspx}{Visual Studio 6.0 Service Pack 6} and follow the installation instructions on the same link.\\
-\\
-Note: Instead of MS Visual C++ 6.0, you may also install the Visual C++ 6.0 Introductory Edition, MS Visual C++ 6.0 Authorenedition or any other localized version of the Introductory Edition. You still find it shipped with some C++-Books, and you may succeed upgrading them with Visual C++ 6.0 SP6.\\
-\\
+Afterwards, download \href{http://msdn.microsoft.com/vstudio/downloads/updates/sp/vs6/sp6/default.aspx}{Visual Studio 6.0 Service Pack 6} and follow the installation instructions on the same link.
+
+Note: Instead of MS Visual C++ 6.0, you may also install the Visual C++ 6.0 Introductory Edition, MS Visual C++ 6.0 Authorenedition or any other localized version of the Introductory Edition. You still find it shipped with some C++-Books, and you may succeed upgrading them with Visual C++ 6.0 SP6.
+
 If you intend to use .NET, you may need to do some porting work (keeping backwards compatibility to Visual Studio 6.0).
 \end{subsection}% Install MS Visual C++ 6.0
 
 \begin{subsection}{DirectX SDK Setup}
-There are two possible and tested DirectX setups for now.\\
-You can choose between the DirectX SDK 7.0 and DirectX SDK 9.0b. If you choose the first one, you have the same SDK versions that CtP2 was compiled with. This means that additionally you'll have to install the Direct Media SDK 6.0 as well.\\
+There are two possible and tested DirectX setups for now.
+
+You can choose between the DirectX SDK 7.0 and DirectX SDK 9.0b. If you choose the first one, you have the same SDK versions that CtP2 was compiled with. This means that additionally you'll have to install the Direct Media SDK 6.0 as well.
+
 If you choose to use DirectX SDK 9.0b, you don't need the Direct Media SDK 6.0, but have to compile the DirectShow BaseClasses shipped with the DirectX SDK yourself.
 
 \begin{subsubsection}{Alternative 1: Using DirectX SDK 7.0}
-At the time of writing, DirectX SDK 7.0 has become unavailable. If you have a link, please place a post in the \href{http://apolyton.net/forums/forumdisplay.php?s=&forumid=213}{CtP2-Source Code Project} forum.\\
-\\
-Install the DirectX 7.0 SDK. Then, download the \href{http://www.microsoft.com/downloads/details.aspx?FamilyId=FD044A42-9912-42A3-9A9E-D857199F888E&displaylang=en}{Direct Media 6.0 SDK} and follow the installation instructions.\\
-\\
-\\
+At the time of writing, DirectX SDK 7.0 has become unavailable. If you have a link, please place a post in the \href{http://apolyton.net/forums/forumdisplay.php?s=&forumid=213}{CtP2-Source Code Project} forum.
+
+Install the DirectX 7.0 SDK. Then, download the \href{http://www.microsoft.com/downloads/details.aspx?FamilyId=FD044A42-9912-42A3-9A9E-D857199F888E&displaylang=en}{Direct Media 6.0 SDK} and follow the installation instructions.
+
 Launch the Visual C++ IDE. Select menu \textit{Tools}, then submenu \textit{options}. Within the upcoming dialog, select tab \textit{Directories}. Select the include directories path, and make sure, these directories are at the top of the path:
 \begin{verbatim}
 C:\DXSDK\Include
@@ -57,47 +61,51 @@ C:\DXMedia\Include
 C:\DXMedia\Classes\Base
 \end{verbatim}
 
-Then, select the lib directories path, and make sure, these directories are at the top of the path:\\
+Then, select the lib directories path, and make sure, these directories are at the top of the path:
 \begin{verbatim}
 C:\DXSDK\Lib
 C:\DXMedia\Lib
 \end{verbatim}
 
-Note: If you installed the SDKs to somewhere different, of course the paths C:\textbackslash{}DXSDK and C:\textbackslash{}DXMedia must be replaced with the locations of your installations.\\
-\\
+Note: If you installed the SDKs to somewhere different, of course the paths C:\textbackslash{}DXSDK and C:\textbackslash{}DXMedia must be replaced with the locations of your installations.
+
 Note: The download link to the DXMedia SDK may become inactive soon, the SDKs are not listed at the official site at \href{http://www.microsoft.com/downloads/details.aspx?FamilyId=FD044A42-9912-42A3-9A9E-D857199F888E&displaylang=en}{DirectX download site}.
 \end{subsubsection}% Alternative 1: Using DirectX SDK 7.0
 \begin{subsubsection}{Alternative 2: Using the latest DirectX SDK}
 At time of writing, the latest DirectX SDK can be downloaded \href{http://www.microsoft.com/downloads/details.aspx?FamilyId=FD044A42-9912-42A3-9A9E-D857199F888E\&displaylang=en}{here}. If the link doesn't work, download the latest DirectX SDK from \href{http://www.microsoft.com/downloads/details.aspx?FamilyId=FD044A42-9912-42A3-9A9E-D857199F888E&displaylang=en}{here}.
+
 Then, follow the instructions on the bottom of the link to install the SDK. Newer SDKs will suggest a path containing whitespace and brackets, so you must choose a different installation path, e.g. C:\textbackslash{}DXSDK.
-Make sure you select "Headers and Libraries" and the C++ Samples as well.\\
-\\
-Launch the Visual C++ IDE. Select menu \textit{Tools}, then submenu \textit{options}. Within the upcoming dialog, select tab \textit{Directories}. Select the include directories path, and make sure, these directories are at the top of the pathi, if the installer did not already enter them at the correct position:\\
+Make sure you select "Headers and Libraries" and the C++ Samples as well.
+
+Launch the Visual C++ IDE. Select menu \textit{Tools}, then submenu \textit{options}. Within the upcoming dialog, select tab \textit{Directories}. Select the include directories path, and make sure, these directories are at the top of the pathi, if the installer did not already enter them at the correct position:
+
 \begin{verbatim}
 C:\DXSDK\Include
 \end{verbatim}
 
-Then, select the lib directories path, and make sure, these directories are at the top of the path:\\
+Then, select the lib directories path, and make sure, these directories are at the top of the path:
+
 \begin{verbatim}
 C:\DXSDK\Lib
 \end{verbatim}
 
-Afterwards, open the DirectShow BaseClasses workspace by loading the file\\ \textit{C:\textbackslash{}DXSDK\textbackslash{}Samples\textbackslash{}C++\textbackslash{}DirectShow\textbackslash{}BaseClasses\textbackslash{}baseclasses.dsw}.\\
-\\
-Build the release version (strmbase.lib):\\
-Open \textit{Build - Set active configuration} and select \textit{BaseClasses - Win32 Release}. Then run \textit{Build - strmbase.lib}.\\
-\\
-Build the debug version (strmbased.lib):\\
-Open \textit{Build - Set active configuration} and select \textit{BaseClasses - Win32 Debug}. Then run \textit{Build - strmbased.lib}.\\
-\\
-\\
-Again, select menu \textit{Tools}, then submenu \textit{options}. Within the upcoming dialog, select tab \textit{Directories}. Select the include directories path, and make sure, these directories are at the top of the path in this order:\\
+Afterwards, open the DirectShow BaseClasses workspace by loading the file\\ \textit{C:\textbackslash{}DXSDK\textbackslash{}Samples\textbackslash{}C++\textbackslash{}DirectShow\textbackslash{}BaseClasses\textbackslash{}baseclasses.dsw}.
+
+Build the release version (strmbase.lib):
+Open \textit{Build - Set active configuration} and select \textit{BaseClasses - Win32 Release}. Then run \textit{Build - strmbase.lib}.
+
+Build the debug version (strmbased.lib):
+Open \textit{Build - Set active configuration} and select \textit{BaseClasses - Win32 Debug}. Then run \textit{Build - strmbased.lib}.
+
+Again, select menu \textit{Tools}, then submenu \textit{options}. Within the upcoming dialog, select tab \textit{Directories}. Select the include directories path, and make sure, these directories are at the top of the path in this order:
+
 \begin{verbatim}
 C:\DXSDK\Samples\C++\DirectShow\BaseClasses
 C:\DXSDK\Include
 \end{verbatim}
 
-Then, select the lib directories path, and make sure, these directories are at the top of the path, in that order:\\
+Then, select the lib directories path, and make sure, these directories are at the top of the path, in that order:
+
 \begin{verbatim}
 C:\DXSDK\Samples\C++\DirectShow\BaseClasses\Debug
 C:\DXSDK\Samples\C++\DirectShow\BaseClasses\Release
@@ -125,14 +133,16 @@ If the download doesn't work, proceed so with the latest version from \href{http
 \end{subsubsection}% Install SDL\_mixer 1.2.5a
 
 \begin{subsubsection}{Add the SDL libraries to your Visual Studio library paths}
-Launch the Visual C++ IDE. Select menu \textit{Tools}, then submenu \textit{options}. Within the dialog showing up, select tab \textit{Directories}. Select the include directories path, and make sure, these directories are at the top of the path:\\
+Launch the Visual C++ IDE. Select menu \textit{Tools}, then submenu \textit{options}. Within the dialog showing up, select tab \textit{Directories}. Select the include directories path, and make sure, these directories are at the top of the path:
+
 \begin{verbatim}
 C:\libs\SDL-1.2.7\include
 C:\libs\SDL_image-1.2.3\include
 C:\libs\SDL_mixer-1.2.5\include
 \end{verbatim}
 
-Finally, select the lib directories path, and make sure, these directories are at the top of the path:\\
+Finally, select the lib directories path, and make sure, these directories are at the top of the path:
+
 \begin{verbatim}
 C:\libs\SDL-1.2.7\lib
 C:\libs\SDL_image-1.2.3\lib
@@ -142,8 +152,9 @@ C:\libs\SDL_mixer-1.2.5\lib
 \end{subsection}% Optional: Install SDL
 
 \begin{subsection}{Unpacking the source}
-If not already done so, download the source from \href{http://ctp2files.apolyton.net/source/}{apolyton.net}.\\
-Install or unzip the source to a directory of your choice (e.g. C:\textbackslash{}ctp2source).\\
+If not already done so, download the source from \href{http://ctp2files.apolyton.net/source/}{apolyton.net}.
+
+Install or unzip the source to a directory of your choice (e.g. C:\textbackslash{}ctp2source).
 \end{subsection}% Unpacking the source
 
 \begin{subsection}{Setup your environment variables}
@@ -180,8 +191,9 @@ Beginning from the post where you found the latest ALL patch, descend to the lat
 
 \begin{enumerate}
 \item{Download posted files}
-\item{Foreach posted file, do the following:}
-\item{If posted file is a .zip or .rar archive, and there are no instructions, unzip it to your ctp2 source code directory.\\
+\item{For each posted file, do the following:}
+\item{If posted file is a .zip or .rar archive, and there are no instructions,
+unzip it to your ctp2 source code directory.\\
 Perhaps you get warnings by your zip-Software regarding files to be overwritten. This is ok, so let your packer replace your local files by the newer ones in the archives you downloaded.}
 \item{If the previous didn't apply, follow the instructions of the post where you got the file from to apply the changes to your ctp2 source code directory.}
 \end{enumerate}

@@ -9,8 +9,8 @@
    \usepackage[pdftex, bookmarks=true, pdfpagemode=None, pdfstartview=FitH, citecolor=blue, link
 color=blue, urlcolor=blue, colorlinks=true]{hyperref}
    \usepackage[pdftex]{graphicx}
-   \setlength{\pdfhorigin}{0pt}
-   \setlength{\pdfvorigin}{0pt}
+%   \setlength{\pdfhorigin}{0pt}
+%   \setlength{\pdfvorigin}{0pt}
    \pdfinfo{/Title      (CtP2 Source Code Project Documentation)
    }
 \else
@@ -18,23 +18,30 @@ color=blue, urlcolor=blue, colorlinks=true]{hyperref}
    \usepackage{graphicx}
 \fi
 
+\usepackage[a4paper,
+		top=20mm, bottom=20mm, left=25mm, right=25mm
+	]{geometry}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
 \setcounter{tocdepth}{4}
 \setcounter{secnumdepth}{4}
-\setlength{\LTleft}{0pt}
-\setlength{\LTright}{0pt}
-\setlength{\topmargin}{10mm}
-\setlength{\headheight}{15mm}
-\setlength{\textheight}{\paperheight}
-\addtolength{\textheight}{-\topmargin}
-\addtolength{\textheight}{-\headheight}
-\addtolength{\textheight}{-\topmargin}
-\addtolength{\textheight}{-\topmargin}
-\addtolength{\textheight}{-\headheight}
-\setlength{\oddsidemargin}{25mm}
-\setlength{\evensidemargin}{25mm}
-\setlength{\textwidth}{\paperwidth}
-\addtolength{\textwidth}{-\oddsidemargin}
-\addtolength{\textwidth}{-\evensidemargin}
+%\setlength{\LTleft}{0pt}
+%\setlength{\LTright}{0pt}
+%\setlength{\topmargin}{10mm}
+%\setlength{\headheight}{15mm}
+%\setlength{\textheight}{\paperheight}
+%\addtolength{\textheight}{-\topmargin}
+%\addtolength{\textheight}{-\headheight}
+%\addtolength{\textheight}{-\topmargin}
+%\addtolength{\textheight}{-\topmargin}
+%\addtolength{\textheight}{-\headheight}
+%\setlength{\oddsidemargin}{25mm}
+%\setlength{\evensidemargin}{25mm}
+%\setlength{\textwidth}{\paperwidth}
+%\addtolength{\textwidth}{-\oddsidemargin}
+%\addtolength{\textwidth}{-\evensidemargin}
 
 \begin{document}
 
@@ -49,41 +56,32 @@ Developer Documentation\\[20mm]
 \newpage
 \pagenumbering{arabic}
 \mainmatter
+
 \chapter{Introduction\label{toc:introduction}}
-You should thoroughly read the EULA following this page; it contains important legal information on what you are allowed to do with the Civilization Call To Power 2 sources.\\
+You should thoroughly read the EULA following this page; it contains important legal information on what you are allowed to do with the Civilization Call To Power 2 sources.
+
 \include{include/eula}
-\newpage
-\chapter{Setting up your build environment\label{toc:setupbenv}}
-This chapter deals with setting up your build environment, i.e. take the necessary step to get ready to build CtP2 from the source.\\
-If you have already setup your build environment, you can continue with the next chapter.
+%\newpage
 \include{include/setup_win32}
 
-\chapter{Building Civilization Call To Power 2\label{cha:buildctp2}}
-This chapter contains information, how you start the build process.
 \include{include/make_win32}
 
-\newpage
+%\newpage
 %\pagenumbering{Roman}
 \appendix
-\chapter{Definitions\label{cha:definitions}}
-On the next pages you will find the preprocessor definitions in the source and how they actually affect a build.
 \include{include/a_defines}
 
-\chapter{Build system\label{cha:buildsystem}}
 \include{include/a_dspconfig}
 
-\chapter{Code\label{cha:code}}
-This chapter deals with code. Currently, just dead code is listed.
 \include{include/a_deadcode}
 \chapter{FAQs}
-\newcommand{\addquestion}[2]{\begin{subsection}{#1}
-#2\\
-\end{subsection}
+\newcommand{\addquestion}[2]{\subsection{#1}
+#2
 }
 \include{include/a_faq_project}
 \include{include/a_faq_licence}
 
-\newpage
+%\newpage
 \backmatter
 
 \end{document}

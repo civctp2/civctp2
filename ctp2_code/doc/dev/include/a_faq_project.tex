@@ -2,13 +2,13 @@
 % SRC: http://apolyton.net/forums/showthread.php?s=&threadid=112274
 \begin{section}{CtP2 Source Code Project FAQ (v2)}
 \addquestion{What is this FAQ for?}{
-This FAQ is for general questions related to the CtP2 Source Code Project as a whole and general questions regarding the source code. If you have a such question but it's not listed here, feel free to post it. If you have specific question about the code itself, what is or isn't in it, if we can implement specific features, etc, please start a new thread about it (or use an existing one).\\
-\\
+This FAQ is for general questions related to the CtP2 Source Code Project as a whole and general questions regarding the source code. If you have a such question but it's not listed here, feel free to post it. If you have specific question about the code itself, what is or isn't in it, if we can implement specific features, etc, please start a new thread about it (or use an existing one).
+
 This is the second version of the FAQ, the old one ran out of space. You can still find it here: \href{http://apolyton.net/forums/showthread.php?s=\&threadid=100290}{http://apolyton.net/forums/showthread.php?s=\&threadid=100290}. Note that this FAQ extends over several posts, don't stop reading after the end of this post
 }
 
 \addquestion{Why document the code?}{
-Of course, the CtP2 source code is an extremely complex piece of work. It is expected to be extremely difficult to understand, and there will be an infinite number of ways to change it once we do. There are an estimated 1.8 million lines of coude -- too much for a single person to work through on his/her own. That's why this Source Code Project exists: if everyone involving in the code works together to document it (what can be found where, and how everything works), this will make it much easier for everyone to understand and modify the code. 
+Of course, the CtP2 source code is an extremely complex piece of work. It is expected to be extremely difficult to understand, and there will be an infinite number of ways to change it once we do. There are an estimated 1.8 million lines of code -- too much for a single person to work through on his/her own. That's why this Source Code Project exists: if everyone involving in the code works together to document it (what can be found where, and how everything works), this will make it much easier for everyone to understand and modify the code. 
 }
 
 \addquestion{What about changing the code?}{
@@ -20,57 +20,56 @@ Once we start making changes to the code, there is a huge risk that everyone wil
 }
 
 \addquestion{What is the CtP2 source code?}{
-The source code for any software product is like its recipe. If you buy for example a cake in the shop, you normally just eat it. Similarly, if you buy a game, you just play it. CtP2 (and CtP1 as well) has always been somewhat of an exception to this, as you could always modify a lot about the game (and increasingly this is true for other PC games as well). One could say that CtP is a not a finished cake but just a set of ready-made 'sub-products' that you can put together and mix yourself, in whatever way you like best. The source code takes this one step further: instead of just ready-made 'prefab' subcomponents, you get the raw ingredients and the recipe, and can make the cake from scratch all by yourself. This of course also allows you to change anything about the recipe you don't like, replacing or adding ingredients as you please.\\
-\\
+The source code for any software product is like its recipe. If you buy for example a cake in the shop, you normally just eat it. Similarly, if you buy a game, you just play it. CtP2 (and CtP1 as well) has always been somewhat of an exception to this, as you could always modify a lot about the game (and increasingly this is true for other PC games as well). One could say that CtP is a not a finished cake but just a set of ready-made 'sub-products' that you can put together and mix yourself, in whatever way you like best. The source code takes this one step further: instead of just ready-made 'prefab' subcomponents, you get the raw ingredients and the recipe, and can make the cake from scratch all by yourself. This of course also allows you to change anything about the recipe you don't like, replacing or adding ingredients as you please.
+
 For CtP2 this means that we can do anything with the game we want, there are no boundaries whatsoever to what we can change (contrary to the mods). If we wanted to, we could turn this game into a Real-Time Strategy game, or even a First Person Shooter (though in that case we'd have to change so much code it'd probably be better to start from scratch ) The only boundaries to what we can do with the source code are our own capabilities to understand and change the code (since most of us aren't professional game designers and there are a few caveats to the release of this source code, some things may simply prove to be too difficult to be worthwhile).
 }
 
 \addquestion{Where can I get the source code? And how can I view it?}{
-The code can be downloaded right here from Apolyton, \href{http://apolyton.net/go.php?http://apolyton.net/ctp2/files/CTP2_Source.exe}{get it here}. It's an 8 MB file. It's an executable: double-click and it will extract the files. But before it does so, it will first show you a user agreement: this is the screen where you usually just click 'I agree' and continue. However, in this case I highly recommend you read it carefully! At least parts of it are not your standard legal disclaimer but were written specifically for this source code and detail what you are and aren't allowed to do with it. Anyway, after you agreed to the End User License Agreement (EULA) about 2650 files and 200 folders are extracted to the folder you specified. Most of these files can be viewed them by opening them in any text editor (e.g. Notepad or Word).\\
-\\
+The code can be downloaded right here from Apolyton, \href{http://apolyton.net/go.php?http://apolyton.net/ctp2/files/CTP2_Source.exe}{get it here}. It's an 8 MB file. It's an executable: double-click and it will extract the files. But before it does so, it will first show you a user agreement: this is the screen where you usually just click 'I agree' and continue. However, in this case I highly recommend you read it carefully! At least parts of it are not your standard legal disclaimer but were written specifically for this source code and detail what you are and aren't allowed to do with it. Anyway, after you agreed to the End User License Agreement (EULA) about 2650 files and 200 folders are extracted to the folder you specified. Most of these files can be viewed them by opening them in any text editor (e.g. Notepad or Word).
+
 \textbf{Update} (2003-11-6): A zip version of the source code is now also available for download: \href{http://apolyton.net/go.php?http://apolyton.net/csd.php?http://ctp2files.apolyton.net/source/ctp2source.zip}{ctp2source.zip}. Note that if you want to link/redistribute this zip file elsewhere, you must ensure that anyone must agree to the EULA before being able to gain access to the files.
 }
 
 \addquestion{How can turn I this code into a working game?}{
-If you just want to have a look at the source code, to see what the code for a professional game looks like, the above file is all you need. If you want to help understand and document the code, you probably won't need much else either. However, if you actually want to be able to compile the game (make it into a executable file that actually works) and modify and test it, you'll need more than that. For one thing, you'll need a compiler, a software program that can transform the code into a working game. For another, you'll need to download about 270 MB worth of DirectX SDK (= Software Development Kit) files from the Microsoft website, as detailed in the \href{http://apolyton.net/ctp2/files/CTP2\%20Source\%20Code\_Readme.htm}{readme}. The discussion about the details of how to make the file running without errors can be found \href{http://apolyton.net/forums/showthread.php?threadid=100265}{here}. If downloading 270 MB worth of files is a bit much for you, you can also find a workaround for that in that thread.\\
-\\
+If you just want to have a look at the source code, to see what the code for a professional game looks like, the above file is all you need. If you want to help understand and document the code, you probably won't need much else either. However, if you actually want to be able to compile the game (make it into a executable file that actually works) and modify and test it, you'll need more than that. For one thing, you'll need a compiler, a software program that can transform the code into a working game. For another, you'll need to download about 270 MB worth of DirectX SDK (= Software Development Kit) files from the Microsoft website, as detailed in the \href{http://apolyton.net/ctp2/files/CTP2\%20Source\%20Code\_Readme.htm}{readme}. The discussion about the details of how to make the file running without errors can be found \href{http://apolyton.net/forums/showthread.php?threadid=100265}{here}. If downloading 270 MB worth of files is a bit much for you, you can also find a workaround for that in that thread.
+
 \textbf{Update} (2004-04-06): Several people have independantly successfully compiled the code, and most of the problems you might encounter in doing so yourself should be addressed in the \href{http://apolyton.net/forums/showthread.php?threadid=100265}{thread mentioned above}. For a brief description of the steps needed to get the code compiling, see the attachment to \href{http://apolyton.net/forums/showthread.php?postid=2472431\#post2472431}{this post}.
 }
 
-\addquestion{Why did Activision release the source code?\\
-How about making a no-CD patch?}{
+\addquestion{Why did Activision release the source code?  How about making a no-CD patch?}{
 You may wonder why Activision would release the source code: surely, if anyone can compile the game and edit it as they see fit, can't they just remove the copyright protection and play the game without paying for it? The answer is that they covered this option: the data and media files are not included in the source code file, so you still need to buy a copy of the CD to be able to use the code. Also, in the EULA (user agreement) is set up in such a way that changing the game so that the original game is no longer needed to be able play is strictly forbidden (this means no no-cd patches). Basically, we may edit the game as we see fit, as long as resulting updates/new products still requires the CtP2 CD to play. Releasing the source code was a very generous act of Activision which most software companies would never even consider.
 }
 
-\addquestion{Do I still need to own a copy of CtP2 to be able to play it/\\
+\addquestion{Do I still need to own a copy of CtP2 to be able to play it /
 use the source code?}{
 As you can read above, yes, you still need a copy of the game to be able to play it, or you'll miss the data and media files. If you're only interested in understanding how the game works, you can do without the original product, but in that case you need to realized that you can never actually test what will happen if you change certain things about the code, which is often a great help in trying to understand complex products.
 }
 
 \addquestion{This all still sounds too good to be true. What's the catch?}{
-Yes, unfortunately there is a catch. Actually, there are two. The first one is sound: the game uses an external commercial package to control the sound in the game: the \href{http://www.radgametools.com/miles.htm}{Miles Sound Library}. Because this is a commercial package not owned by Activision, they had to remove it from the game. This leaves you with a bunch of 'mss.h not found' errors when you try to compile the game. The references to this file and other Miles Sound Library related stuff will need to be removed before the code will run, which will leave you with a working but soundless game.\\
-\\
-\textbf{Update} (2003-11-6): Thanks to the excellent work of jonwil, we now have sound working again. See \href{http://apolyton.net/forums/showthread.php?s=\&threadid=100743}{this thread} for the files required to reinstate it.\\
-\\
+Yes, unfortunately there is a catch. Actually, there are two. The first one is sound: the game uses an external commercial package to control the sound in the game: the \href{http://www.radgametools.com/miles.htm}{Miles Sound Library}. Because this is a commercial package not owned by Activision, they had to remove it from the game. This leaves you with a bunch of 'mss.h not found' errors when you try to compile the game. The references to this file and other Miles Sound Library related stuff will need to be removed before the code will run, which will leave you with a working but soundless game.
+
+\textbf{Update} (2003-11-6): Thanks to the excellent work of jonwil, we now have sound working again. See \href{http://apolyton.net/forums/showthread.php?s=\&threadid=100743}{this thread} for the files required to reinstate it.
+
 The second caveat is that Activision had to remove all the comments from the code. These comments don't affect the way the code runs, but they greatly facilitate in understanding how it works. The reason for removing these comments is that some of them may have made references that could in some way embarrass Activision of (ex-)Activision employees, or worse: get them into legal or other problems. Because going through millions of lines of code and removing such undesirable comments by hand would have taking a huge amount of resources (and time), it was decided to simply delete all comments (though 'all' is a big word as we've already found a whole bunch of interesting comments in various places in the code, so some remnants are still left).
 }
 
-\addquestion{What leftovers from CtP1 are still present in the source code?\\
+\addquestion{What leftovers from CtP1 are still present in the source code?
 Are the space layer, Fuzzy AI or the UI still there?}{
 Much of that is still unclear at this point, but it was made very clear by Activision that most of the CtP1 features that were actually cut, completely removed from the game. The exception here may be the Fuzzy AI: there still seem to be a lot of references to CtP1-related AI stuff that was no longer supposed to be there in CtP2. How much exactly is left is unclear at this point.
 }
 
 \addquestion{Is it now possible to make a Linux/Mac/other port of CtP2?}{
-Again, it's still too early to tell, but yes, in theory that should be possible. How much work it is, in other words, is it practical enough to actually do it, remains to be seen. However, things are looking good in this department, as the CtP2 code is based on CtP1 code, which was ported to numerous other platforms (even obscure and no longer existing ones such as BeOS). It will require rewriting significant parts of the (most I/O) code though, so don't count on seeing ports appear in the next few weeks. How long that will take will also depends on how much manpower will be available and how much demand for certain ports exists.\\
-\\
-\textbf{Update} (2003-11-6): An early start with a Linux port has been made, as you can read \href{http://apolyton.net/forums/showthread.php?s=&threadid=100677}{here}.\\
-\\
+Again, it's still too early to tell, but yes, in theory that should be possible. How much work it is, in other words, is it practical enough to actually do it, remains to be seen. However, things are looking good in this department, as the CtP2 code is based on CtP1 code, which was ported to numerous other platforms (even obscure and no longer existing ones such as BeOS). It will require rewriting significant parts of the (most I/O) code though, so don't count on seeing ports appear in the next few weeks. How long that will take will also depends on how much manpower will be available and how much demand for certain ports exists.
+
+\textbf{Update} (2003-11-6): An early start with a Linux port has been made, as you can read \href{http://apolyton.net/forums/showthread.php?s=&threadid=100677}{here}.
+
 \textbf{Update} (2004-04-06): The linux port has been reported to successfully compile (see \href{http://apolyton.net/forums/showthread.php?postid=2692309\#post2692309}{this post}), and there is even a report that someone has managed to get the game working far enough to play a few turns under linux.
 }
 
 \addquestion{Can I use other compilers than Visual Studio 6 to compile the code?}{
-At this point (but it's still early), the answer seems to be no. .NET compilers give a lot more errors than Visual Studio and for now we have no way of working around those other errors yet. For completely different compilers, such as gcc, the necessary makefile is missing, for one thing. However, we hope that we'll eventually get the code working on as many compilers as possible, and if you can help us out with that we would greatly appreciate that.\\
-\\
+At this point (but it's still early), the answer seems to be no. .NET compilers give a lot more errors than Visual Studio and for now we have no way of working around those other errors yet. For completely different compilers, such as gcc, the necessary makefile is missing, for one thing. However, we hope that we'll eventually get the code working on as many compilers as possible, and if you can help us out with that we would greatly appreciate that.
+
 \textbf{Update} (2004-04-06): There are reports of successful compilation to the point of having a playable game both on VS.NET (\href{http://apolyton.net/forums/showthread.php?postid=2447707\#post2447707}{here} and \href{http://apolyton.net/forums/showthread.php?postid=2447870\#post2447870}{here}) and under linux (\href{http://apolyton.net/forums/showthread.php?postid=2692309\#post2692309}{here}). The changes necessary for this have not, however, moved into the mainstream of the project.
 }
 
@@ -79,8 +78,8 @@ If you want to help out with the project, we're eternally grateful as we can use
 }
 
 \addquestion{How can I see what has been done so far?}{
-"Official" changes to the source code are posted in \href{http://apolyton.net/forums/showthread.php?s=\&threadid=100609}{this thread} - collections of all the changes made are fairly regular, so look near the bottom of the thread if you wish to download a complete update.\\
-\\
+"Official" changes to the source code are posted in \href{http://apolyton.net/forums/showthread.php?s=\&threadid=100609}{this thread} - collections of all the changes made are fairly regular, so look near the bottom of the thread if you wish to download a complete update.
+
 If you just want to play with the updated version of the game, playtest versions of the executable are posted in \href{http://apolyton.net/forums/showthread.php?s=\&threadid=103817}{this thread}. Bear in mind that, while it should be fairly playable, it`s intended for playtesting only: there may be serious bugs in it and it might theoretically break your game (or worse). It is strongly recommended you backup any data before installing. Use at your own risk.
 }
 
@@ -89,3 +88,4 @@ We don't know. We have a rough plan of what we wish to achieve \href{http://apol
 }
 
 \end{section}% CtP2 Source Code Project FAQ (v2)
+

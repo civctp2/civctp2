@@ -52,3 +52,4 @@ clean:
 view: ctp2_dev.pdf
 	$(VIEWPDF) $<
 
+.DELETE_ON_ERROR:
