@@ -1,0 +1,9 @@
+[ActiveNet]
+Cmdline=
+Name=CivCTP
+Run=ctp2.exe
+SessionType=1503
+Version=127.127
+Language=1
+Platform=1
+ShellOpts=

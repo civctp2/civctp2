@@ -1,0 +1,66 @@
+
+WonderMovie : File
+
+Wonder {
+	Int ProductionCost
+	Record Icon DefaultIcon
+	Record WonderMovie Movie
+	StringId Description
+	Record Advance EnableAdvance
+	Record Advance [0..5] ObsoleteAdvance
+
+	# Flags
+	Bit(Int) ReduceReadinessCost
+	Bit EmbassiesEverywhere
+	Bit(Int) DecCrimePercent
+	Bit(Int) IncKnowledgePercent
+	Bit(Int) DecEmpireSize
+	Bit(Int) IncHappinessEmpire
+	Bit CloseEmbassies
+	Bit ReformCities
+	Bit FreeSlaves
+	Bit(Int) IncConvertedCitiesFeePercent
+	Bit(Int) GoldPerWaterTradeRoute
+	Bit(Int) GoldPerTelevision
+	Bit GlobalRadar
+	Bit SpiesEverywhere
+	Bit(Int) GoldPerInternationalTradeRoute
+	Bit ProtectFromBiologicalWarfare
+	Bit(Int) PollutersToParks
+	Bit EnableParkRangers
+	Bit(Int) ReduceWorldPollution
+	Bit AllCitizensContent
+	Bit EliminateNukes
+	Bit AllBoatsDeepWater
+	Bit(Int) IncreaseBoatMovement
+	Bit FreeTradeRoutes
+	Bit(Int) DecreaseMaintenance
+	Bit(Int) RandomAdvanceChance
+	Bit(Int) IncreaseHp
+	Bit(Int) MultiplyTradeRoutes
+	Bit ForcefieldEverywhere
+	Bit(Int) IncreaseScientists
+	Bit(Int) OtherCivRandomAdvanceChance
+	Bit(Int) IncreaseProduction
+	Bit(Int) BonusGold
+
+	Bit(Int) IncreaseFoodAllCities
+	Bit(Int) TemporaryFullHappiness
+	Bit RevoltingCitiesJoinPlayer
+	Bit NoPollutionUnhappiness
+	Bit EmbassiesEverywhereEvenAtWar
+	Bit(Int) IncreaseSpecialists
+	Bit(Int) IncreaseCathedrals
+	Bit(Int) IncreaseBrokerages
+	Bit(Int) IncreaseRegard
+	Bit PreventConversion
+	Bit ProtectFromBarbarians
+	Bit StartGaiaController
+	Bit GLHidden
+
+	Bit(Record Building) BuildingEverywhere
+
+	Bit(Float) PollutionPercent
+	Bit(Float) PollutionAmount
+}
+

@@ -1,0 +1,84 @@
+Goal {
+	Bit NeedsEscort
+	Bit IsSally
+	Bit AvoidWatchfulCity		// do not target watchful cities
+    Bit ExecuteIncrementally	// execute while undercommited
+	Bit NeverSatisfied          // retreat goals are never satisfied
+    Bit RemoveWhenComplete
+	Bit RallyFirst				// armies need to rally before going to target
+	Bit NoTransport			    // do not use transports to satisfy this goal
+
+	Bits SquadClass {
+		CanExplore,
+		CanAttack,
+        CanDefend,
+        HasZoc,
+        CanCaptureCity,
+        CanBombard,
+        Special,
+		CanTransport
+	}
+
+	Bits TargetType {
+		AttackUnit,
+		SpecialUnit,
+		SettleLand,
+		SettleSea,
+        City,
+	    ChokePoint,
+        GoodyHut,
+        TradeRoute,
+        Improvement,
+		Unexplored,
+		Border,
+		Endgame,
+		Random
+	}
+
+	Bits TargetOwner {
+		Self,
+		Ally,
+		Neutral,
+        ColdEnemy,
+        HotEnemy,
+		NoContact
+	}
+
+	Record Order Execute
+
+    Int ThreatBonus
+    Int EnemyValueBonus
+	Int AlliedValueBonus
+	Int PowerBonus 
+	Int DistanceToHomeBonus 
+	Int DistanceToEnemyBonus
+	Int ChokePointBonus 
+	Int UnexploredBonus 
+	Int ObsoleteArmyBonus
+	Int TreaspassingArmyBonus
+
+	// type of threat this goal follows through
+	Bits ThreatenType {
+		AttackCity,
+		Pirate,
+		SpecialAttackCity,
+		DestroyCity,
+		None
+	}
+
+	// amount of bonus to give for goals that follow through threats
+	Int ThreatenBonus
+
+	// type of force matching ratio to use
+	Bits ForceMatch {
+		Offensive,
+		Defensive,
+        StealthAttack,
+		Bombard,
+		Special,
+		Harass
+	}	
+
+	// wonders of this type protect owner against this goal
+	Bit (Record Wonder) TargetProtectionWonder
+}

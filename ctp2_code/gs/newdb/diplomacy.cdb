@@ -1,0 +1,98 @@
+
+Diplomacy {
+	Record Diplomacy[0..1] Inherit
+
+	Struct RegardDecay {
+        Float PositiveDecay
+        Float NegativeDecay
+	}
+
+	Bit(Struct RegardDecay) ScenarioEvent
+	Bit(Struct RegardDecay) MilitaryPowerEvent
+	Bit(Struct RegardDecay) MilitarySafetyEvent
+	Bit(Struct RegardDecay) DiplomacyEvent
+	Bit(Struct RegardDecay) GoldEvent
+	Bit(Struct RegardDecay) KnowledgeEvent
+	Bit(Struct RegardDecay) ProductionEvent
+
+	// chance of threatening
+    Bit (Int) Threaten
+
+	// regard cost of selected events
+	Bit (Int) IncursionRegardCost
+	Bit (Int) IncursionOfAllieRegardCost
+	Bit (Int) InvaderMovementRegardCost
+	Bit (Int) PerRoutePiracyRegardCost
+	Bit (Int) ShareContinentRegardCost
+	Bit (Int) AttackCivilianRegardCost
+	Bit (Int) PreemptiveAttackRegardCost
+	Bit (Int) EmbargoTradeRegardCost
+	Bit (Int) TakeCityRegardCost
+	Bit (Int) InciteRevolutionRegardCost
+	Bit (Int) AssassinateRulerRegardCost
+	Bit (Int) FranchiseCityRegardCost
+	Bit (Int) PlantNukeRegardCost
+	Bit (Int) SlaveRaidRegardCost
+	Bit (Int) LawsuitRegardCost
+	Bit (Int) ExpelUnitsRegardCost
+	Bit (Int) NukeCityRegardCost
+	Bit (Int) ConvertCityRegardCost
+	Bit (Int) EnslaveSettlerRegardCost
+	Bit (Int) UndergroundRailwayRegardCost
+	Bit (Int) InciteUprisingRegardCost
+	Bit (Int) BioInfectedCityRegardCost
+	Bit (Int) PlagueCityRegardCost
+	Bit (Int) NanoInfectCityRegardCost
+	Bit (Int) CreateParkRegardCost
+	Bit (Int) InjoinCityRegardCost
+	Bit (Int) PillageRegardCost
+
+	// how much regard from empathic diplomats holding receptions (once every 10 turns)
+	Bit (Int) HoldReceptionRegardBonus
+
+    // every turn with pact, add trust
+	Bit (Int) HasPactTrustBonus
+
+    // every turn not at war, increase trust (up to 500 only)
+	Bit (Int) NoWarTrustBonus
+
+	// every time a civilian is killed (settler, diplomat, cleric)
+	Bit (Int) AttackCivilianTrustCost
+
+	// every time we are attacked less than a round after war is declared
+	Bit (Int) PreemptiveAttackTrustCost
+
+	// every time foreigner follows through with agreement, add trust
+	Bit (Int) FollowThroughTrustBonus
+
+	// every time a player uses nukes, the world trusts them less
+	Bit (Int) UsedNukesTrustCost
+
+	// minimum time before wanting to see map again
+	Bit (Int) WantMapTurns
+
+	struct ProposalElement {
+		Record DiplomacyProposal Proposal
+		Bit(Int) SendPriority
+		Bit(Int) AcceptPriority
+		Bit(Int) RejectPriority
+
+		// Accepted proposal effect on regard to sender
+		Bit(Int) SenderRegardResult
+
+		// Accepted proposal effect on regard to receiver
+		Bit(Int) ReceiverRegardResult
+
+		// Regard cost to foreigner who violates this proposal
+		Bit(Int) ViolationRegardCost
+
+		// Trust cost to foreigner who violates this proposal
+		Bit(Int) ViolationTrustCost
+	}
+
+	// ordered sequence of build lists
+	struct ProposalElement[] ProposalElement
+
+}
+
+

@@ -1,0 +1,15 @@
+
+AgeCityStyle {
+	Struct SizeSprite {
+		Int Type # 0 = land, 1 = ocean
+		Int MinSize
+		Int MaxSize
+		Int Sprite
+	}
+
+	Struct SizeSprite[] Sprites
+}
+
+CityStyle {
+	Record AgeCityStyle[] AgeStyle
+}

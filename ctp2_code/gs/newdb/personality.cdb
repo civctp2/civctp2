@@ -1,0 +1,71 @@
+
+Personality {
+	// This describes the extent to which an AI will send out units to explore
+	Bits Exploration {
+		Wide,	
+		Medium,
+        Minimal
+	}
+
+	// This describes the magnitude of an AI's empire and the speed to
+	// which it will expand
+	Bits Expansion {
+		Maximum,
+		Average,
+        Minimum
+	}
+
+	// This describes the degree to which the AI will focus on
+	// scientific discovery and the area or branch of specialization.
+	// As well as the primary motivation for diplomatic interactions.
+	Bits Discovery {
+		Scientist,
+        Military,
+        Economic,
+		Ecotopian,
+		Diplomatic
+    }
+
+    // This describes the liklihood that the AI will attack.  This can
+	// also be considered the disposition of the personality.
+    Bits Conquest {
+        Agressive,
+        Neutral,
+        Passive
+    }
+
+	// This describes how likely the AI will be to violate agreements
+	// and follow through on threats.  It also specifies how the
+	// regard of an AI will be changed by the dishonest actions of 
+	// others.
+	Bits Trustworthiness {
+		Chaotic,
+		Neutral,
+		Lawful
+	}
+
+	// This describes in general terms the methodology used by an AI
+	// to accomplish its goals and whether or not the AI cares if its
+	// actions cost the regard of other empires.  Evil actions might
+	// include killing settlers, the use of slavery and the first
+	// strike launch of nuclear weapons.  The regard consequences of
+	// an evil act will be less for an evil empire than a neutral or
+	// good one.
+	Bits Alignment {
+		Evil,
+		Neutral,
+		Good
+	}
+
+	// Send this greeting if stronger militarily
+	StringId StrongGreeting
+
+	// Send this greeting if weaker militarily
+	StringId WeakGreeting
+
+	// Follow through percent
+	Float ThreatFollowThrough
+
+	// Description show in Intelligence Details
+	StringId Description
+}

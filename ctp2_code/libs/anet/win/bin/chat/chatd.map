@@ -1,0 +1,176 @@
+ chatd
+
+ Timestamp is 3726f05d (Wed Apr 28 04:26:21 1999)
+
+ Preferred load address is 00400000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000f08H .text                   CODE
+ 0002:00000000 00000074H .rdata                  DATA
+ 0002:00000074 00000000H .edata                  DATA
+ 0003:00000000 00000004H .CRT$XCA                DATA
+ 0003:00000004 00000004H .CRT$XCZ                DATA
+ 0003:00000008 00000004H .CRT$XIA                DATA
+ 0003:0000000c 00000004H .CRT$XIZ                DATA
+ 0003:00000010 0000052cH .data                   DATA
+ 0003:0000053c 0000000cH .bss                    DATA
+ 0004:00000000 0000003cH .idata$2                DATA
+ 0004:0000003c 00000014H .idata$3                DATA
+ 0004:00000050 000000d4H .idata$4                DATA
+ 0004:00000124 000000d4H .idata$5                DATA
+ 0004:000001f8 000002faH .idata$6                DATA
+
+  Address         Publics by Value              Rva+Base   Lib:Object
+
+ 0001:00000000       @foo@0                     00401000 f chat.obj
+ 0001:00000020       @chat_broadcast@8          00401020 f chat.obj
+ 0001:00000090       @usage@0                   00401090 f chat.obj
+ 0001:000000b0       @chat@8                    004010b0 f chat.obj
+ 0001:000009a0       _main                      004019a0 f chat.obj
+ 0001:00000a40       @raw_set_stdio@4           00401a40 f raw.obj
+ 0001:00000a50       @raw_kbhit@0               00401a50 f raw.obj
+ 0001:00000a60       @raw_getc@0                00401a60 f raw.obj
+ 0001:00000a70       @eclock_win32@0            00401a70 f eclock.obj
+ 0001:00000af0       _dpSend                    00401af0 f anet2d:anet2d.dll
+ 0001:00000af6       _dp_dprintf                00401af6 f anet2d:anet2d.dll
+ 0001:00000afc       _dpGetPlayerName           00401afc f anet2d:anet2d.dll
+ 0001:00000b02       _dpReceive                 00401b02 f anet2d:anet2d.dll
+ 0001:00000b08       _dpShutdown                00401b08 f anet2d:anet2d.dll
+ 0001:00000b0e       _dpGetGameServerEx         00401b0e f anet2d:anet2d.dll
+ 0001:00000b14       _dpRequestObjectDeltas     00401b14 f anet2d:anet2d.dll
+ 0001:00000b1a       _dpGetSessionId            00401b1a f anet2d:anet2d.dll
+ 0001:00000b20       _dpGetSessionDesc          00401b20 f anet2d:anet2d.dll
+ 0001:00000b26       _dpCreate                  00401b26 f anet2d:anet2d.dll
+ 0001:00000b2c       _dpDestroy                 00401b2c f anet2d:anet2d.dll
+ 0001:00000b32       _dpReportCrash             00401b32 f anet2d:anet2d.dll
+ 0001:00000b38       _exit                      00401b38 f MSVCRTD:MSVCRTD.dll
+ 0001:00000b3e       _printf                    00401b3e f MSVCRTD:MSVCRTD.dll
+ 0001:00000b44       __assert                   00401b44 f MSVCRTD:MSVCRTD.dll
+ 0001:00000b4a       __CrtCheckMemory           00401b4a f MSVCRTD:MSVCRTD.dll
+ 0001:00000b50       _putchar                   00401b50 f MSVCRTD:MSVCRTD.dll
+ 0001:00000b56       _fflush                    00401b56 f MSVCRTD:MSVCRTD.dll
+ 0001:00000b5c       ___p__iob                  00401b5c f MSVCRTD:MSVCRTD.dll
+ 0001:00000b62       _strchr                    00401b62 f MSVCRTD:MSVCRTD.dll
+ 0001:00000b68       _strrchr                   00401b68 f MSVCRTD:MSVCRTD.dll
+ 0001:00000b6e       __isctype                  00401b6e f MSVCRTD:MSVCRTD.dll
+ 0001:00000b74       ___p___mb_cur_max          00401b74 f MSVCRTD:MSVCRTD.dll
+ 0001:00000b7a       ___p__pctype               00401b7a f MSVCRTD:MSVCRTD.dll
+ 0001:00000b80       __except_handler3          00401b80 f MSVCRTD:MSVCRTD.dll
+ 0001:00000b90       _mainCRTStartup            00401b90 f MSVCRTD:crtexe.obj
+ 0001:00000d08       __exit                     00401d08 f MSVCRTD:MSVCRTD.dll
+ 0001:00000d0e       __XcptFilter               00401d0e f MSVCRTD:MSVCRTD.dll
+ 0001:00000d14       ___p___initenv             00401d14 f MSVCRTD:MSVCRTD.dll
+ 0001:00000d1a       __initterm                 00401d1a f MSVCRTD:MSVCRTD.dll
+ 0001:00000d20       ___getmainargs             00401d20 f MSVCRTD:MSVCRTD.dll
+ 0001:00000d30       __setdefaultprecision      00401d30 f MSVCRTD:fp8.obj
+ 0001:00000d4e       ___setusermatherr          00401d4e f MSVCRTD:MSVCRTD.dll
+ 0001:00000d60       __matherr                  00401d60 f MSVCRTD:merr.obj
+ 0001:00000d80       __setargv                  00401d80 f MSVCRTD:dllargv.obj
+ 0001:00000d8c       ___p__commode              00401d8c f MSVCRTD:MSVCRTD.dll
+ 0001:00000d92       ___p__fmode                00401d92 f MSVCRTD:MSVCRTD.dll
+ 0001:00000da0       __onexit                   00401da0 f MSVCRTD:atonexit.obj
+ 0001:00000e70       _atexit                    00401e70 f MSVCRTD:atonexit.obj
+ 0001:00000ea0       ___set_app_type            00401ea0 f MSVCRTD:MSVCRTD.dll
+ 0001:00000ea6       __controlfp                00401ea6 f MSVCRTD:MSVCRTD.dll
+ 0001:00000eac       ___dllonexit               00401eac f MSVCRTD:MSVCRTD.dll
+ 0001:00000ec0       _GetProcAddress@8          00401ec0 f kernel32:KERNEL32.dll
+ 0001:00000ec6       _LoadLibraryA@4            00401ec6 f kernel32:KERNEL32.dll
+ 0001:00000ecc       _SetCurrentDirectoryA@4    00401ecc f kernel32:KERNEL32.dll
+ 0001:00000ed2       _GetModuleFileNameA@12     00401ed2 f kernel32:KERNEL32.dll
+ 0001:00000ed8       _GetCommandLineA@0         00401ed8 f kernel32:KERNEL32.dll
+ 0001:00000ede       _GetTickCount@0            00401ede f kernel32:KERNEL32.dll
+ 0001:00000ee4       _GetSystemTime@4           00401ee4 f kernel32:KERNEL32.dll
+ 0001:00000eea       _Sleep@4                   00401eea f kernel32:KERNEL32.dll
+ 0001:00000ef0       _GetVersion@0              00401ef0 f kernel32:KERNEL32.dll
+ 0001:00000ef6       __getcwd                   00401ef6 f MSVCRTD:MSVCRTD.dll
+ 0001:00000efc       __getch                    00401efc f MSVCRTD:MSVCRTD.dll
+ 0001:00000f02       __kbhit                    00401f02 f MSVCRTD:MSVCRTD.dll
+ 0003:00000000       ___xc_a                    00403000   MSVCRTD:cinitexe.obj
+ 0003:00000004       ___xc_z                    00403004   MSVCRTD:cinitexe.obj
+ 0003:00000008       ___xi_a                    00403008   MSVCRTD:cinitexe.obj
+ 0003:0000000c       ___xi_z                    0040300c   MSVCRTD:cinitexe.obj
+ 0003:00000010       _my_id                     00403010   chat.obj
+ 0003:00000014       _quitState                 00403014   chat.obj
+ 0003:00000520       __dowildcard               00403520   MSVCRTD:wildcard.obj
+ 0003:00000524       __newmode                  00403524   MSVCRTD:_newmode.obj
+ 0003:00000528       ___defaultmatherr          00403528   MSVCRTD:merr.obj
+ 0003:0000052c       __commode                  0040352c   MSVCRTD:xncommod.obj
+ 0003:00000530       __fmode                    00403530   MSVCRTD:xtxtmode.obj
+ 0003:00000534       ___win32sflag              00403534   MSVCRTD:atonexit.obj
+ 0003:0000053c       ___onexitend               0040353c   <common>
+ 0003:00000540       ___onexitbegin             00403540   <common>
+ 0003:00000544       __adjust_fdiv              00403544   <common>
+ 0004:00000000       __IMPORT_DESCRIPTOR_anet2d 00404000   anet2d:anet2d.dll
+ 0004:00000014       __IMPORT_DESCRIPTOR_MSVCRTD 00404014   MSVCRTD:MSVCRTD.dll
+ 0004:00000028       __IMPORT_DESCRIPTOR_KERNEL32 00404028   kernel32:KERNEL32.dll
+ 0004:0000003c       __NULL_IMPORT_DESCRIPTOR   0040403c   anet2d:anet2d.dll
+ 0004:00000124       __imp__GetTickCount@0      00404124   kernel32:KERNEL32.dll
+ 0004:00000128       __imp__GetVersion@0        00404128   kernel32:KERNEL32.dll
+ 0004:0000012c       __imp__Sleep@4             0040412c   kernel32:KERNEL32.dll
+ 0004:00000130       __imp__GetSystemTime@4     00404130   kernel32:KERNEL32.dll
+ 0004:00000134       __imp__GetProcAddress@8    00404134   kernel32:KERNEL32.dll
+ 0004:00000138       __imp__GetCommandLineA@0   00404138   kernel32:KERNEL32.dll
+ 0004:0000013c       __imp__GetModuleFileNameA@12 0040413c   kernel32:KERNEL32.dll
+ 0004:00000140       __imp__SetCurrentDirectoryA@4 00404140   kernel32:KERNEL32.dll
+ 0004:00000144       __imp__LoadLibraryA@4      00404144   kernel32:KERNEL32.dll
+ 0004:00000148       \177KERNEL32_NULL_THUNK_DATA 00404148   kernel32:KERNEL32.dll
+ 0004:0000014c       __imp___exit               0040414c   MSVCRTD:MSVCRTD.dll
+ 0004:00000150       __imp___adjust_fdiv        00404150   MSVCRTD:MSVCRTD.dll
+ 0004:00000154       __imp____setusermatherr    00404154   MSVCRTD:MSVCRTD.dll
+ 0004:00000158       __imp__exit                00404158   MSVCRTD:MSVCRTD.dll
+ 0004:0000015c       __imp__printf              0040415c   MSVCRTD:MSVCRTD.dll
+ 0004:00000160       __imp___assert             00404160   MSVCRTD:MSVCRTD.dll
+ 0004:00000164       __imp___CrtCheckMemory     00404164   MSVCRTD:MSVCRTD.dll
+ 0004:00000168       __imp__putchar             00404168   MSVCRTD:MSVCRTD.dll
+ 0004:0000016c       __imp__fflush              0040416c   MSVCRTD:MSVCRTD.dll
+ 0004:00000170       __imp____p__iob            00404170   MSVCRTD:MSVCRTD.dll
+ 0004:00000174       __imp__strchr              00404174   MSVCRTD:MSVCRTD.dll
+ 0004:00000178       __imp__strrchr             00404178   MSVCRTD:MSVCRTD.dll
+ 0004:0000017c       __imp___isctype            0040417c   MSVCRTD:MSVCRTD.dll
+ 0004:00000180       __imp____p___mb_cur_max    00404180   MSVCRTD:MSVCRTD.dll
+ 0004:00000184       __imp____p__pctype         00404184   MSVCRTD:MSVCRTD.dll
+ 0004:00000188       __imp___except_handler3    00404188   MSVCRTD:MSVCRTD.dll
+ 0004:0000018c       __imp____dllonexit         0040418c   MSVCRTD:MSVCRTD.dll
+ 0004:00000190       __imp___XcptFilter         00404190   MSVCRTD:MSVCRTD.dll
+ 0004:00000194       __imp____p___initenv       00404194   MSVCRTD:MSVCRTD.dll
+ 0004:00000198       __imp___initterm           00404198   MSVCRTD:MSVCRTD.dll
+ 0004:0000019c       __imp____getmainargs       0040419c   MSVCRTD:MSVCRTD.dll
+ 0004:000001a0       __imp__getch               004041a0   MSVCRTD:MSVCRTD.dll
+ 0004:000001a0       __imp___getch              004041a0   MSVCRTD:MSVCRTD.dll
+ 0004:000001a4       __imp___kbhit              004041a4   MSVCRTD:MSVCRTD.dll
+ 0004:000001a4       __imp__kbhit               004041a4   MSVCRTD:MSVCRTD.dll
+ 0004:000001a8       __imp____p__commode        004041a8   MSVCRTD:MSVCRTD.dll
+ 0004:000001ac       __imp____p__fmode          004041ac   MSVCRTD:MSVCRTD.dll
+ 0004:000001b0       __imp____set_app_type      004041b0   MSVCRTD:MSVCRTD.dll
+ 0004:000001b4       __imp___controlfp          004041b4   MSVCRTD:MSVCRTD.dll
+ 0004:000001b8       __imp___onexit             004041b8   MSVCRTD:MSVCRTD.dll
+ 0004:000001bc       __imp__getcwd              004041bc   MSVCRTD:MSVCRTD.dll
+ 0004:000001bc       __imp___getcwd             004041bc   MSVCRTD:MSVCRTD.dll
+ 0004:000001c0       \177MSVCRTD_NULL_THUNK_DATA 004041c0   MSVCRTD:MSVCRTD.dll
+ 0004:000001c4       __imp__dpCreate            004041c4   anet2d:anet2d.dll
+ 0004:000001c8       __imp__dpGetSessionDesc    004041c8   anet2d:anet2d.dll
+ 0004:000001cc       __imp__dpGetSessionId      004041cc   anet2d:anet2d.dll
+ 0004:000001d0       __imp__dpDestroy           004041d0   anet2d:anet2d.dll
+ 0004:000001d4       __imp__dpSend              004041d4   anet2d:anet2d.dll
+ 0004:000001d8       __imp__dpGetGameServerEx   004041d8   anet2d:anet2d.dll
+ 0004:000001dc       __imp__dpShutdown          004041dc   anet2d:anet2d.dll
+ 0004:000001e0       __imp__dpReceive           004041e0   anet2d:anet2d.dll
+ 0004:000001e4       __imp__dpGetPlayerName     004041e4   anet2d:anet2d.dll
+ 0004:000001e8       __imp__dp_dprintf          004041e8   anet2d:anet2d.dll
+ 0004:000001ec       __imp__dpRequestObjectDeltas 004041ec   anet2d:anet2d.dll
+ 0004:000001f0       __imp__dpReportCrash       004041f0   anet2d:anet2d.dll
+ 0004:000001f4       \177anet2d_NULL_THUNK_DATA 004041f4   anet2d:anet2d.dll
+
+ entry point at        0001:00000b90
+
+ Static symbols
+
+ 0001:000007a0       @quit@8                    004017a0 f chat.obj
+ 0001:000007f0       @status2a@4                004017f0 f chat.obj
+ 0001:00000830       @cdToAppDir@0              00401830 f chat.obj
+ 0001:00000890       @getargv@8                 00401890 f chat.obj
+ 0001:00000a10       _Debug_ExceptionFilter     00401a10 f chat.obj
+
+FIXUPS: 1e46 35 fffffec6 fffffed1 20 f 39 25 36 fffff3a0 70 c 71 2b 34
+FIXUPS: 11eb 1a 20 12 23 18 23 1a 23 29 64 10 40 24 db 3f 96 a4 79 7e 8e
+FIXUPS: 17b6 5f 1c0 e 36

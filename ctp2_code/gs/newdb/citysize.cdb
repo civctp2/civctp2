@@ -1,0 +1,14 @@
+
+
+CitySize {
+	Int Population
+	Int SquaredRadius
+	Int IntRadius
+	Float VisionRadius
+	Int MaxWorkers
+	Int GrowthRate
+	Int MinGrowthRate
+	Int MaxSurplusFood
+	Int BaseOvercrowding
+	Int BaseMaxPop
+}

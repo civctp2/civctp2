@@ -1,0 +1,1313 @@
+ gtest2d
+
+ Timestamp is 3726ef4c (Wed Apr 28 04:21:48 1999)
+
+ Preferred load address is 00400000
+
+ Start         Length     Name                   Class
+ 0001:00000000 0005a28aH .text                   CODE
+ 0002:00000000 000000f4H .rdata                  DATA
+ 0002:00000100 000001c1H .edata                  DATA
+ 0003:00000000 00000004H .CRT$XCA                DATA
+ 0003:00000004 00000004H .CRT$XCZ                DATA
+ 0003:00000008 00000004H .CRT$XIA                DATA
+ 0003:0000000c 00000004H .CRT$XIZ                DATA
+ 0003:00000010 0002bc6cH .data                   DATA
+ 0003:0002bc80 00009f7cH .bss                    DATA
+ 0004:00000000 00000050H .idata$2                DATA
+ 0004:00000050 00000014H .idata$3                DATA
+ 0004:00000064 00000200H .idata$4                DATA
+ 0004:00000264 00000200H .idata$5                DATA
+ 0004:00000464 00000688H .idata$6                DATA
+
+  Address         Publics by Value              Rva+Base   Lib:Object
+
+ 0001:00000000       _dp_avgstat_init           00401000 f avgstat.obj
+ 0001:00000137       _mymax                     00401137 f avgstat.obj
+ 0001:000001ca       _subtract                  004011ca f avgstat.obj
+ 0001:0000030b       _dp_avgstat_poll           0040130b f avgstat.obj
+ 0001:0000066f       _dp_avgstat_print          0040166f f avgstat.obj
+ 0001:00000750       _dp_crc32_inc              00401750 f dpcrc32.obj
+ 0001:0000083c       _dp_crc32                  0040183c f dpcrc32.obj
+ 0001:00000860       _dp_fil_crc32              00401860 f dpcrc32.obj
+ 0001:00000900       _eclock_win32              00401900 f eclock.obj
+ 0001:00000990       _enumGroupsByNameCallback@16 00401990 f gtest.obj
+ 0001:00000a02       _enumGroupsByName          00401a02 f gtest.obj
+ 0001:00000a81       _stuffChatText             00401a81 f gtest.obj
+ 0001:00000aca       _spam_packets              00401aca f gtest.obj
+ 0001:00000be5       _enumTransports_cb@12      00401be5 f gtest.obj
+ 0001:00000d84       _listServersEx_cb@24       00401d84 f gtest.obj
+ 0001:00000e86       _listServers_cb@20         00401e86 f gtest.obj
+ 0001:00000eb3       _listSessions_cb@16        00401eb3 f gtest.obj
+ 0001:00000fdd       _listPlayers_cb@16         00401fdd f gtest.obj
+ 0001:000010f8       _listPlayersEx_cb@20       004020f8 f gtest.obj
+ 0001:0000127f       _listGroups_cb@16          0040227f f gtest.obj
+ 0001:00001306       _delGroups_cb@16           00402306 f gtest.obj
+ 0001:00001390       _countMyPlayers            00402390 f gtest.obj
+ 0001:000014b1       _create_sess_cb@16         004024b1 f gtest.obj
+ 0001:0000152a       _openHdl_cb                0040252a f gtest.obj
+ 0001:0000164b       _connection_cb@28          0040264b f gtest.obj
+ 0001:000017ca       _join_sess_cb@16           004027ca f gtest.obj
+ 0001:00001892       _joinSessionByName         00402892 f gtest.obj
+ 0001:000019c0       _create_player_cb@16       004029c0 f gtest.obj
+ 0001:00001a76       _ping_callback@12          00402a76 f gtest.obj
+ 0001:00001ade       _pingPlayerCallback@16     00402ade f gtest.obj
+ 0001:00001bc5       _PingPlayerByName          00402bc5 f gtest.obj
+ 0001:00001cce       _listApps_cb@8             00402cce f gtest.obj
+ 0001:00001e6e       _pickApp                   00402e6e f gtest.obj
+ 0001:00001f1f       _SendChatMessage           00402f1f f gtest.obj
+ 0001:00001f7c       _process_turn              00402f7c f gtest.obj
+ 0001:00001f87       _statprint_fn              00402f87 f gtest.obj
+ 0001:00001fa3       _processChatCommand        00402fa3 f gtest.obj
+ 0001:00008dcc       _usage                     00409dcc f gtest.obj
+ 0001:00008de5       _ProcessCommandLine        00409de5 f gtest.obj
+ 0001:0000934c       _main                      0040a34c f gtest.obj
+ 0001:0000ad20       _raw_set_stdio             0040bd20 f raw.obj
+ 0001:0000ad2b       _raw_kbhit                 0040bd2b f raw.obj
+ 0001:0000ad41       _raw_getc                  0040bd41 f raw.obj
+ 0001:0000ad60       _alarm                     0040bd60 f unistd.obj
+ 0001:0000ae36       _sleep                     0040be36 f unistd.obj
+ 0001:0000ae60       _dp_assertValidSessionContexts 0040be60 f dp2d:dp2.obj
+ 0001:0000b5b1       _dp_assertValid            0040c5b1 f dp2d:dp2.obj
+ 0001:0000b7c3       _dumpAdrTable              0040c7c3 f dp2d:dp2.obj
+ 0001:0000b8d9       _dumpSessContext           0040c8d9 f dp2d:dp2.obj
+ 0001:0000ba63       _dumpSessionContexts       0040ca63 f dp2d:dp2.obj
+ 0001:0000bb11       _dpid2commHdl              0040cb11 f dp2d:dp2.obj
+ 0001:0000bbda       _dp_commHdl2dpid           0040cbda f dp2d:dp2.obj
+ 0001:0000bcc9       _commHdl4dpid              0040ccc9 f dp2d:dp2.obj
+ 0001:0000be4e       _dp_pack_session           0040ce4e f dp2d:dp2.obj
+ 0001:0000c3b5       _dp_unpack_session         0040d3b5 f dp2d:dp2.obj
+ 0001:0000c77e       _dp_sessions_cb@48         0040d77e f dp2d:dp2.obj
+ 0001:0000cbd2       _dp_unpack_playerId        0040dbd2 f dp2d:dp2.obj
+ 0001:0000ccca       _dp_playervars_cb@48       0040dcca f dp2d:dp2.obj
+ 0001:0000cf98       _dp_hosts_cb@48            0040df98 f dp2d:dp2.obj
+ 0001:0000e082       _dp_myplayers_cb@48        0040f082 f dp2d:dp2.obj
+ 0001:0000e421       _dp_players_cb@48          0040f421 f dp2d:dp2.obj
+ 0001:0000e99f       _dp_groups_cb@48           0040f99f f dp2d:dp2.obj
+ 0001:0000ec2b       _dp_group_players_cb@48    0040fc2b f dp2d:dp2.obj
+ 0001:0000ef1a       _dp_sessionContext_freeze  0040ff1a f dp2d:dp2.obj
+ 0001:0000f38d       _dp_sessionContext_thaw    0041038d f dp2d:dp2.obj
+ 0001:0000f7a0       _dpFreeze                  004107a0 f dp2d:dp2.obj
+ 0001:000102a1       _dpCommThaw                004112a1 f dp2d:dp2.obj
+ 0001:00011723       __daoot                    00412723 f dp2d:dp2.obj
+ 0001:0001176f       _dpCreate                  0041276f f dp2d:dp2.obj
+ 0001:00013482       _dpDestroy                 00414482 f dp2d:dp2.obj
+ 0001:000135c4       _dpCloseGameServer         004145c4 f dp2d:dp2.obj
+ 0001:00013768       _dpResolveHostname         00414768 f dp2d:dp2.obj
+ 0001:00013b18       _dpSetGameServer           00414b18 f dp2d:dp2.obj
+ 0001:00013b74       _dpSetGameServerEx         00414b74 f dp2d:dp2.obj
+ 0001:000140cd       _dpGetGameServerEx         004150cd f dp2d:dp2.obj
+ 0001:0001419d       _dpGetSessionDesc          0041519d f dp2d:dp2.obj
+ 0001:000143ac       _dpGetSessionDescById      004153ac f dp2d:dp2.obj
+ 0001:000146b8       _dpSetSessionDesc          004156b8 f dp2d:dp2.obj
+ 0001:00014791       _dpGetCaps                 00415791 f dp2d:dp2.obj
+ 0001:0001490e       _dpGetPlayerCaps           0041590e f dp2d:dp2.obj
+ 0001:00014a76       __daC                      00415a76 f dp2d:dp2.obj
+ 0001:00014c8e       _dpOpen                    00415c8e f dp2d:dp2.obj
+ 0001:0001808a       _dpClose                   0041908a f dp2d:dp2.obj
+ 0001:0001904e       _dpCastoffSession          0041a04e f dp2d:dp2.obj
+ 0001:000193c7       _dpEnumSessions            0041a3c7 f dp2d:dp2.obj
+ 0001:00019744       _dpDeclareLobby            0041a744 f dp2d:dp2.obj
+ 0001:00019805       _dpPrunePlayerSubscriptions 0041a805 f dp2d:dp2.obj
+ 0001:00019a37       _dpPruneSessionSubscription 0041aa37 f dp2d:dp2.obj
+ 0001:00019b09       _dpCreatePlayer            0041ab09 f dp2d:dp2.obj
+ 0001:00019e12       _dpDestroyPlayer           0041ae12 f dp2d:dp2.obj
+ 0001:00019ed3       _dpNumPlayers              0041aed3 f dp2d:dp2.obj
+ 0001:00019f1c       _dpGetCurrentHostId        0041af1c f dp2d:dp2.obj
+ 0001:00019fcf       _dpGetPlayerName           0041afcf f dp2d:dp2.obj
+ 0001:0001a202       _dpSetPlayerName           0041b202 f dp2d:dp2.obj
+ 0001:0001a3fb       _dpGetPlayerBlob           0041b3fb f dp2d:dp2.obj
+ 0001:0001a587       _dpSetPlayerBlob           0041b587 f dp2d:dp2.obj
+ 0001:0001a7ab       _dpEnumPlayers             0041b7ab f dp2d:dp2.obj
+ 0001:0001ae6b       _dpEnumPlayersEx           0041be6b f dp2d:dp2.obj
+ 0001:0001b4ca       _dpEnableNewPlayers        0041c4ca f dp2d:dp2.obj
+ 0001:0001d1fd       _dp_uid2sessid             0041e1fd f dp2d:dp2.obj
+ 0001:0001d2ca       _dp_sessid4uid             0041e2ca f dp2d:dp2.obj
+ 0001:0001d423       _dpReceive                 0041e423 f dp2d:dp2.obj
+ 0001:00020221       _dpSend                    00421221 f dp2d:dp2.obj
+ 0001:000204c4       _dpFlush                   004214c4 f dp2d:dp2.obj
+ 0001:00020500       _dpSetPingIntervals        00421500 f dp2d:dp2.obj
+ 0001:0002065f       _dpPingUser                0042165f f dp2d:dp2.obj
+ 0001:000207ed       _dpCreateGroup             004217ed f dp2d:dp2.obj
+ 0001:00020a1a       _dpDestroyGroup            00421a1a f dp2d:dp2.obj
+ 0001:00020ce5       _dpAddPlayerToGroup        00421ce5 f dp2d:dp2.obj
+ 0001:00021186       _dpDeletePlayerFromGroup   00422186 f dp2d:dp2.obj
+ 0001:0002141a       _dpEnumGroups              0042241a f dp2d:dp2.obj
+ 0001:000215cd       _dpEnumGroupPlayers        004225cd f dp2d:dp2.obj
+ 0001:0002196b       _dpSetPlayerData           0042296b f dp2d:dp2.obj
+ 0001:00021c6b       _dpSendPlayerData          00422c6b f dp2d:dp2.obj
+ 0001:00021fc3       _dpGetPlayerData           00422fc3 f dp2d:dp2.obj
+ 0001:00022301       _dpReadyToFreeze           00423301 f dp2d:dp2.obj
+ 0001:0002242a       _dpSetConnCallback         0042342a f dp2d:dp2.obj
+ 0001:000224d1       _dpGetParameterLong        004234d1 f dp2d:dp2.obj
+ 0001:000225e0       _dpGetCurrentTransportInfo 004235e0 f dp2d:dp2.obj
+ 0001:000226ba       _dpTurnInit                004236ba f dp2d:dp2.obj
+ 0001:000226e8       _dpTurnFinish              004236e8 f dp2d:dp2.obj
+ 0001:00022716       _dpTurnPutMove             00423716 f dp2d:dp2.obj
+ 0001:00022744       _dpTurnGetMove             00423744 f dp2d:dp2.obj
+ 0001:00022772       _dpTurnPoll                00423772 f dp2d:dp2.obj
+ 0001:000227a0       _dpGetStats                004237a0 f dp2d:dp2.obj
+ 0001:00022870       _dp_flushLog               00423870 f dp2d:dprint.obj
+ 0001:000228a4       _dp_getLogFP               004238a4 f dp2d:dprint.obj
+ 0001:000228b9       _dp_setLogFP               004238b9 f dp2d:dprint.obj
+ 0001:000228dd       _dp_setLogFname            004238dd f dp2d:dprint.obj
+ 0001:00022944       _dp_enableDebugPrint       00423944 f dp2d:dprint.obj
+ 0001:000229bb       _dp_dprintf                004239bb f dp2d:dprint.obj
+ 0001:000231d0       _commNoOp                  004241d0 f dp2d:Dpdllwin.obj
+ 0001:000231f1       _commInit                  004241f1 f dp2d:Dpdllwin.obj
+ 0001:00023212       _commTerm                  00424212 f dp2d:Dpdllwin.obj
+ 0001:00023233       _commDriverInfo            00424233 f dp2d:Dpdllwin.obj
+ 0001:00023254       _commPlayerInfo            00424254 f dp2d:Dpdllwin.obj
+ 0001:00023275       _commTxFull                00424275 f dp2d:Dpdllwin.obj
+ 0001:00023296       _commTxPkt                 00424296 f dp2d:Dpdllwin.obj
+ 0001:000232b7       _commPeekPkt               004242b7 f dp2d:Dpdllwin.obj
+ 0001:000232d8       _commRxPkt                 004242d8 f dp2d:Dpdllwin.obj
+ 0001:000232f9       _commScanAddr              004242f9 f dp2d:Dpdllwin.obj
+ 0001:0002331a       _commPrintAddr             0042431a f dp2d:Dpdllwin.obj
+ 0001:0002333b       _commGroupAlloc            0042433b f dp2d:Dpdllwin.obj
+ 0001:0002335c       _commGroupFree             0042435c f dp2d:Dpdllwin.obj
+ 0001:0002337d       _commGroupAdd              0042437d f dp2d:Dpdllwin.obj
+ 0001:0002339e       _commSetParam              0042439e f dp2d:Dpdllwin.obj
+ 0001:000233bf       _commSayHi                 004243bf f dp2d:Dpdllwin.obj
+ 0001:000233e0       _commSayBye                004243e0 f dp2d:Dpdllwin.obj
+ 0001:00023401       _commEnumPorts             00424401 f dp2d:Dpdllwin.obj
+ 0001:00023422       _dpGetTransportInfo        00424422 f dp2d:Dpdllwin.obj
+ 0001:000235a6       _dpEnumTransports          004245a6 f dp2d:Dpdllwin.obj
+ 0001:000237cf       _dpLoadDLL                 004247cf f dp2d:Dpdllwin.obj
+ 0001:000238b3       _dpUnloadDLL               004248b3 f dp2d:Dpdllwin.obj
+ 0001:000238e1       _dpEnumPorts               004248e1 f dp2d:Dpdllwin.obj
+ 0001:000239b0       _dpLaunchApp               004249b0 f dp2d:launchap.obj
+ 0001:000239ce       _dpLaunchApp2              004249ce f dp2d:launchap.obj
+ 0001:00023d50       _dp_freezeAppsList         00424d50 f dp2d:enumapp.obj
+ 0001:00023f66       _dp_createAppsList         00424f66 f dp2d:enumapp.obj
+ 0001:0002416b       _dp_subscribeAppsList      0042516b f dp2d:enumapp.obj
+ 0001:000242a4       _dpCheckAppVersion         004252a4 f dp2d:enumapp.obj
+ 0001:00024563       _dpGetAppVersion           00425563 f dp2d:enumapp.obj
+ 0001:00024747       _dpDownloadUpdate          00425747 f dp2d:enumapp.obj
+ 0001:0002492b       _dpEnumApp                 0042592b f dp2d:enumapp.obj
+ 0001:00024f40       _dp_rplayers_cb@48         00425f40 f dp2d:deltas.obj
+ 0001:0002504d       _dp_rplayers_enumEx_cb@20  0042604d f dp2d:deltas.obj
+ 0001:0002510f       _dpRequestObjectDeltas     0042610f f dp2d:deltas.obj
+ 0001:00025912       _dpGetSessionId            00426912 f dp2d:deltas.obj
+ 0001:00025a2b       _dpSendObjectDelta         00426a2b f dp2d:deltas.obj
+ 0001:00025ed0       _dpscore_client_init       00426ed0 f dp2d:dpscore.obj
+ 0001:00026019       _dpscore_client_cleanup    00427019 f dp2d:dpscore.obj
+ 0001:000260f1       _dpscore_client_playerLeaving 004270f1 f dp2d:dpscore.obj
+ 0001:000264a0       _dpReportScore             004274a0 f dp2d:dpscore.obj
+ 0001:000264b2       __dax7                     004274b2 f dp2d:dpscore.obj
+ 0001:000264ef       __dax8                     004274ef f dp2d:dpscore.obj
+ 0001:000265da       _dpReportScoreBuf          004275da f dp2d:dpscore.obj
+ 0001:000268b5       __dax9                     004278b5 f dp2d:dpscore.obj
+ 0001:000268f2       _dpscores_cb@48            004278f2 f dp2d:dpscore.obj
+ 0001:00026955       _dpscore_client_subscribe  00427955 f dp2d:dpscore.obj
+ 0001:00026b5f       _dpGetMyId                 00427b5f f dp2d:dpscore.obj
+ 0001:00026bd0       __dalw                     00427bd0 f dp2d:dpuser.obj
+ 0001:00026c22       __dala                     00427c22 f dp2d:dpuser.obj
+ 0001:00026c74       __daaw                     00427c74 f dp2d:dpuser.obj
+ 0001:00026cc2       __daaa                     00427cc2 f dp2d:dpuser.obj
+ 0001:00026d10       _dpRequestEmail            00427d10 f dp2d:dpuser.obj
+ 0001:00026d5d       _dpGetPlayerUid            00427d5d f dp2d:dpuser.obj
+ 0001:00026f00       _dp_servers_cb@48          00427f00 f dp2d:enumsrv2.obj
+ 0001:00027374       _dp_serverpings_cb@48      00428374 f dp2d:enumsrv2.obj
+ 0001:000273fd       _dp_initEnumServers        004283fd f dp2d:enumsrv2.obj
+ 0001:00027d61       _dp_saveServerList         00428d61 f dp2d:enumsrv2.obj
+ 0001:00027de2       _dp_endEnumServers         00428de2 f dp2d:enumsrv2.obj
+ 0001:00027e37       _dpEnumServers             00428e37 f dp2d:enumsrv2.obj
+ 0001:00027f20       _dpEnumServersEx           00428f20 f dp2d:enumsrv2.obj
+ 0001:00028273       _dpEnumServersPoll         00429273 f dp2d:enumsrv2.obj
+ 0001:000283ab       _dpHandleServerPingResponsePacket 004293ab f dp2d:enumsrv2.obj
+ 0001:00028700       _dpio_dprintAdr            00429700 f dp2d:dpio.obj
+ 0001:000287ce       _dpio_assertReliableValid  004297ce f dp2d:dpio.obj
+ 0001:000288e8       _dpio_get_latency          004298e8 f dp2d:dpio.obj
+ 0001:00028a9c       _dpio_get_player_latency   00429a9c f dp2d:dpio.obj
+ 0001:00028e6c       _dpio_setIncomingCallback  00429e6c f dp2d:dpio.obj
+ 0001:000291d1       _dpio_setMaxPlayerHdls     0042a1d1 f dp2d:dpio.obj
+ 0001:00029436       __dpbs                     0042a436 f dp2d:dpio.obj
+ 0001:000297e6       _dpio_printAdr             0042a7e6 f dp2d:dpio.obj
+ 0001:00029ba4       _dpio_openHdlRaw           0042aba4 f dp2d:dpio.obj
+ 0001:00029bc8       _dpio_openHdlRaw2          0042abc8 f dp2d:dpio.obj
+ 0001:0002a01a       _dpio_closeHdlRaw          0042b01a f dp2d:dpio.obj
+ 0001:0002a076       _dpio_freezeHdl            0042b076 f dp2d:dpio.obj
+ 0001:0002a605       _dpio_thawHdl              0042b605 f dp2d:dpio.obj
+ 0001:0002a8d0       _dpio_freeze               0042b8d0 f dp2d:dpio.obj
+ 0001:0002ae38       _dpio_forceRxDropPercent   0042be38 f dp2d:dpio.obj
+ 0001:0002af66       _dpio_setPingIntervals     0042bf66 f dp2d:dpio.obj
+ 0001:0002b1a4       _dpio_set_clocks           0042c1a4 f dp2d:dpio.obj
+ 0001:0002b326       _dpio_hdl2adr              0042c326 f dp2d:dpio.obj
+ 0001:0002b350       _dpio_hdl2adr2             0042c350 f dp2d:dpio.obj
+ 0001:0002b45d       _dpio_hdl2name             0042c45d f dp2d:dpio.obj
+ 0001:0002b530       _dpio_destroy              0042c530 f dp2d:dpio.obj
+ 0001:0002b738       _dpio_create               0042c738 f dp2d:dpio.obj
+ 0001:0002c8a4       _dpio_q_packet             0042d8a4 f dp2d:dpio.obj
+ 0001:0002d4bf       _dpio_getHdlTxPktsFree     0042e4bf f dp2d:dpio.obj
+ 0001:0002d8dc       _dpio_getHdlState          0042e8dc f dp2d:dpio.obj
+ 0001:0002dc7f       _dpio_getHdlAge            0042ec7f f dp2d:dpio.obj
+ 0001:0002e028       _dpio_getHdlRemoteCapabilities 0042f028 f dp2d:dpio.obj
+ 0001:0002e2ab       _dpio_openHdl              0042f2ab f dp2d:dpio.obj
+ 0001:0002e2cd       _dpio_openHdl2             0042f2cd f dp2d:dpio.obj
+ 0001:0002ee15       _dpio_closeHdl             0042fe15 f dp2d:dpio.obj
+ 0001:0002f48b       _dpio_closeHdlImmed        0043048b f dp2d:dpio.obj
+ 0001:0002f9d2       _dpio_ReadyToFreeze        004309d2 f dp2d:dpio.obj
+ 0001:0002fdfa       _dpio_higherLevelBlanketAck 00430dfa f dp2d:dpio.obj
+ 0001:00030b63       _dpio_flush                00431b63 f dp2d:dpio.obj
+ 0001:00030f29       _dpio_get                  00431f29 f dp2d:dpio.obj
+ 0001:000354a0       _dpio_put_unreliable       004364a0 f dp2d:dpio.obj
+ 0001:00035912       _dpio_put_reliable2        00436912 f dp2d:dpio.obj
+ 0001:000364e1       _dpio_localQ_npkts         004374e1 f dp2d:dpio.obj
+ 0001:0003650c       _dpio_getBroadcastHdls     0043750c f dp2d:dpio.obj
+ 0001:00036828       _dpio_findTimedOutHost     00437828 f dp2d:dpio.obj
+ 0001:000373fd       _dpio_setHandleOptions     004383fd f dp2d:dpio.obj
+ 0001:0003797d       _dpio_update               0043897d f dp2d:dpio.obj
+ 0001:00038020       _dp_publishExceptions      00439020 f dp2d:dpexcept.obj
+ 0001:000383b1       _dp_setExceptionCb         004393b1 f dp2d:dpexcept.obj
+ 0001:000383fb       _dp_subscribeExceptions    004393fb f dp2d:dpexcept.obj
+ 0001:00038474       _dp_handleExceptionRecords 00439474 f dp2d:dpexcept.obj
+ 0001:000384df       _StupidExceptionFilter     004394df f dp2d:dpexcept.obj
+ 0001:000384f4       _dpReportCrash             004394f4 f dp2d:dpexcept.obj
+ 0001:00038512       _dpReportCrashEx           00439512 f dp2d:dpexcept.obj
+ 0001:00038ee9       _dpReportAssertionFailure  00439ee9 f dp2d:dpexcept.obj
+ 0001:00038f10       _dpini_SetFile             00439f10 f dp2d:ini.obj
+ 0001:00038f4b       _dpini_GetFile             00439f4b f dp2d:ini.obj
+ 0001:00038f72       _dpini_findSection         00439f72 f dp2d:ini.obj
+ 0001:000391e9       _dpini_readParameter       0043a1e9 f dp2d:ini.obj
+ 0001:0003939e       _dpReadAnetInf             0043a39e f dp2d:ini.obj
+ 0001:00039b20       _dptab_assertXfers         0043ab20 f dp2d:dptab.obj
+ 0001:00039d48       _dptab_assertPeerXfers     0043ad48 f dp2d:dptab.obj
+ 0001:00039e06       __dad                      0043ae06 f dp2d:dptab.obj
+ 0001:00039f52       __dam                      0043af52 f dp2d:dptab.obj
+ 0001:0003a0e2       __dag                      0043b0e2 f dp2d:dptab.obj
+ 0001:0003a2d9       __daa                      0043b2d9 f dp2d:dptab.obj
+ 0001:0003a4f0       __dae                      0043b4f0 f dp2d:dptab.obj
+ 0001:0003aa72       __dav                      0043ba72 f dp2d:dptab.obj
+ 0001:0003af50       __daw                      0043bf50 f dp2d:dptab.obj
+ 0001:0003b3c2       _dptab_getTableContext     0043c3c2 f dp2d:dptab.obj
+ 0001:0003b7c1       __daj                      0043c7c1 f dp2d:dptab.obj
+ 0001:0003bd06       __dao                      0043cd06 f dp2d:dptab.obj
+ 0001:0003be9b       __dac                      0043ce9b f dp2d:dptab.obj
+ 0001:0003c1bd       __dai                      0043d1bd f dp2d:dptab.obj
+ 0001:0003c29c       _dptab_handleSubscriptionRequest 0043d29c f dp2d:dptab.obj
+ 0001:0003c405       _dptab_handleUnsubscriptionRequest 0043d405 f dp2d:dptab.obj
+ 0001:0003c58a       __darr                     0043d58a f dp2d:dptab.obj
+ 0001:0003c70c       _dptab_requestUnsubscription 0043d70c f dp2d:dptab.obj
+ 0001:0003c8a6       _dptab_shutdownMatchingSubscription 0043d8a6 f dp2d:dptab.obj
+ 0001:0003ca70       __dab                      0043da70 f dp2d:dptab.obj
+ 0001:0003cc19       __dah                      0043dc19 f dp2d:dptab.obj
+ 0001:0003cd88       _dptab_changePublisher     0043dd88 f dp2d:dptab.obj
+ 0001:0003d3cc       __dau                      0043e3cc f dp2d:dptab.obj
+ 0001:0003dd1c       __daf                      0043ed1c f dp2d:dptab.obj
+ 0001:0003e3a3       _dptab_deleteIfSrc         0043f3a3 f dp2d:dptab.obj
+ 0001:0003e4a6       __dal                      0043f4a6 f dp2d:dptab.obj
+ 0001:0003e8cb       __dak                      0043f8cb f dp2d:dptab.obj
+ 0001:0003ecf2       __daq                      0043fcf2 f dp2d:dptab.obj
+ 0001:0003f1e1       __dap                      004401e1 f dp2d:dptab.obj
+ 0001:0003f4b0       __dax                      004404b0 f dp2d:dptab.obj
+ 0001:0003f4d9       __das                      004404d9 f dp2d:dptab.obj
+ 0001:0003fc47       __dat                      00440c47 f dp2d:dptab.obj
+ 0001:0003ff32       __daz                      00440f32 f dp2d:dptab.obj
+ 0001:00041914       __dar                      00442914 f dp2d:dptab.obj
+ 0001:00042446       _dptab_tableRef_freeze     00443446 f dp2d:dptab.obj
+ 0001:000425eb       _dptab_tableRef_thaw       004435eb f dp2d:dptab.obj
+ 0001:000427ec       __darz                     004437ec f dp2d:dptab.obj
+ 0001:00042ce5       __dars                     00443ce5 f dp2d:dptab.obj
+ 0001:000433d2       __dan                      004443d2 f dp2d:dptab.obj
+ 0001:00043ec8       __day                      00444ec8 f dp2d:dptab.obj
+ 0001:00044ad0       _getTempDir                00445ad0 f dp2d:dpprivy.obj
+ 0001:00044b37       _writeSwap                 00445b37 f dp2d:dpprivy.obj
+ 0001:00044b60       _readSwap                  00445b60 f dp2d:dpprivy.obj
+ 0001:00044b89       _key2buf                   00445b89 f dp2d:dpprivy.obj
+ 0001:00044c30       _assoctab_create           00445c30 f dp2d:assoctab.obj
+ 0001:00044c4f       _assoctab_destroy          00445c4f f dp2d:assoctab.obj
+ 0001:00044c66       _assoctab_subscript_grow   00445c66 f dp2d:assoctab.obj
+ 0001:00044d01       _assoctab_subscript_insert 00445d01 f dp2d:assoctab.obj
+ 0001:00044d46       _assoctab_subscript        00445d46 f dp2d:assoctab.obj
+ 0001:00044dae       _assoctab_subscript_delete 00445dae f dp2d:assoctab.obj
+ 0001:00044e70       _tserv_create              00445e70 f dp2d:tserv.obj
+ 0001:00045030       _tserv_destroy             00446030 f dp2d:tserv.obj
+ 0001:000450d5       _tserv_Freeze              004460d5 f dp2d:tserv.obj
+ 0001:00045661       _tserv_Thaw                00446661 f dp2d:tserv.obj
+ 0001:00045bef       _tserv_uid2hdl             00446bef f dp2d:tserv.obj
+ 0001:00045d6c       _tserv_hdl2uid             00446d6c f dp2d:tserv.obj
+ 0001:00045e4f       _tserv_uid2info            00446e4f f dp2d:tserv.obj
+ 0001:0004601f       _tserv_client_add          0044701f f dp2d:tserv.obj
+ 0001:0004627b       _tserv_client_delete       0044727b f dp2d:tserv.obj
+ 0001:000462f6       _tserv_poll                004472f6 f dp2d:tserv.obj
+ 0001:00046f03       _tserv_send_credentials    00447f03 f dp2d:tserv.obj
+ 0001:0004717e       _tserv_handle_packet       0044817e f dp2d:tserv.obj
+ 0001:0004897d       _tserv_server_add          0044997d f dp2d:tserv.obj
+ 0001:00048a7c       _tserv_account_loginW      00449a7c f dp2d:tserv.obj
+ 0001:00048c82       _tserv_account_createW     00449c82 f dp2d:tserv.obj
+ 0001:00048fe3       _tserv_account_activateW   00449fe3 f dp2d:tserv.obj
+ 0001:000490e3       _tserv_change_passwordW    0044a0e3 f dp2d:tserv.obj
+ 0001:00049388       _tserv_request_email       0044a388 f dp2d:tserv.obj
+ 0001:0004947c       _tserv_server_delete       0044a47c f dp2d:tserv.obj
+ 0001:00049520       _dp_launchParams_parse     0044a520 f dp2d:launchparams.obj
+ 0001:000499a0       _dynatab_create            0044a9a0 f dp2d:dynatab.obj
+ 0001:00049a23       _dynatab_destroy           0044aa23 f dp2d:dynatab.obj
+ 0001:00049a82       _dynatab_removeAll         0044aa82 f dp2d:dynatab.obj
+ 0001:00049ac0       _dynatab_remove            0044aac0 f dp2d:dynatab.obj
+ 0001:00049b7b       _dynatab_subscript_grow    0044ab7b f dp2d:dynatab.obj
+ 0001:00049ccf       _dynatab_subscript_insert  0044accf f dp2d:dynatab.obj
+ 0001:00049e8f       _dynatab_find              0044ae8f f dp2d:dynatab.obj
+ 0001:00049f55       _dynatab_freeze            0044af55 f dp2d:dynatab.obj
+ 0001:0004a040       _dynatab_thaw              0044b040 f dp2d:dynatab.obj
+ 0001:0004a1a0       _tca_create                0044b1a0 f dp2d:tca.obj
+ 0001:0004a1ff       _tca_openpw                0044b1ff f dp2d:tca.obj
+ 0001:0004a23f       _tca_destroy               0044b23f f dp2d:tca.obj
+ 0001:0004a2e0       _tca_Freeze                0044b2e0 f dp2d:tca.obj
+ 0001:0004a384       _tca_Thaw                  0044b384 f dp2d:tca.obj
+ 0001:0004a431       _tca_uname2uid             0044b431 f dp2d:tca.obj
+ 0001:0004a48b       _tca_uid2uname             0044b48b f dp2d:tca.obj
+ 0001:0004a4fa       _tca_challenge_generate    0044b4fa f dp2d:tca.obj
+ 0001:0004a62e       _tca_response_validate     0044b62e f dp2d:tca.obj
+ 0001:0004a80a       _tca_response_generate     0044b80a f dp2d:tca.obj
+ 0001:0004a94e       _tca_pwchange_generate     0044b94e f dp2d:tca.obj
+ 0001:0004ab00       _tca_pwchange_validate     0044bb00 f dp2d:tca.obj
+ 0001:0004ad45       _tca_newuser_generate      0044bd45 f dp2d:tca.obj
+ 0001:0004af29       _tca_newuser_validate      0044bf29 f dp2d:tca.obj
+ 0001:0004b165       _tca_secretcode_validate   0044c165 f dp2d:tca.obj
+ 0001:0004b330       _scorerep_create           0044c330 f dp2d:scorerep.obj
+ 0001:0004b3cf       _scorerep_destroy          0044c3cf f dp2d:scorerep.obj
+ 0001:0004b52c       _scorerep_setSelf          0044c52c f dp2d:scorerep.obj
+ 0001:0004b5f8       _scorerep_setLeaver        0044c5f8 f dp2d:scorerep.obj
+ 0001:0004b6c4       _scorerep_set              0044c6c4 f dp2d:scorerep.obj
+ 0001:0004ba39       _scorerep_toBuf            0044ca39 f dp2d:scorerep.obj
+ 0001:0004cb1a       _scorerep_fromBuf          0044db1a f dp2d:scorerep.obj
+ 0001:0004d045       _scorerep_player_toBuf     0044e045 f dp2d:scorerep.obj
+ 0001:0004d1f5       _scorerep_player_fromBuf   0044e1f5 f dp2d:scorerep.obj
+ 0001:0004d330       _tserv_account_loginA      0044e330 f dp2d:tserva.obj
+ 0001:0004d3b6       _tserv_account_createA     0044e3b6 f dp2d:tserva.obj
+ 0001:0004d472       _tserv_account_activateA   0044e472 f dp2d:tserva.obj
+ 0001:0004d4c6       _tserv_change_passwordA    0044e4c6 f dp2d:tserva.obj
+ 0001:0004d590       _q_create                  0044e590 f dp2d:Q.obj
+ 0001:0004d5da       _q_destroy                 0044e5da f dp2d:Q.obj
+ 0001:0004d61e       _q_put                     0044e61e f dp2d:Q.obj
+ 0001:0004d6cb       _q_get                     0044e6cb f dp2d:Q.obj
+ 0001:0004d750       _q_nfree                   0044e750 f dp2d:Q.obj
+ 0001:0004d78d       _q_freeze                  0044e78d f dp2d:Q.obj
+ 0001:0004daf6       _q_thaw                    0044eaf6 f dp2d:Q.obj
+ 0001:0004df50       _delay_setBytesPerSec      0044ef50 f dp2d:delay.obj
+ 0001:0004df7f       _delay_setDelayMillisec    0044ef7f f dp2d:delay.obj
+ 0001:0004dfd6       _delay_create              0044efd6 f dp2d:delay.obj
+ 0001:0004e038       _delay_destroy             0044f038 f dp2d:delay.obj
+ 0001:0004e04d       _delay_avail               0044f04d f dp2d:delay.obj
+ 0001:0004e087       _delay_put                 0044f087 f dp2d:delay.obj
+ 0001:0004e231       _delay_get                 0044f231 f dp2d:delay.obj
+ 0001:0004e300       _aehlog_Create             0044f300 f dp2d:aehlog.obj
+ 0001:0004e40d       _aehlog_close              0044f40d f dp2d:aehlog.obj
+ 0001:0004e456       _aehlog_delete             0044f456 f dp2d:aehlog.obj
+ 0001:0004e489       _aehlog_getfsize           0044f489 f dp2d:aehlog.obj
+ 0001:0004e506       _aehlog_tell               0044f506 f dp2d:aehlog.obj
+ 0001:0004e54d       _aehlog_seek               0044f54d f dp2d:aehlog.obj
+ 0001:0004e792       _aehlog_readfrombuf        0044f792 f dp2d:aehlog.obj
+ 0001:0004e887       _aehlog_writetobuf         0044f887 f dp2d:aehlog.obj
+ 0001:0004e949       _aehlog_writeExceptionRecord 0044f949 f dp2d:aehlog.obj
+ 0001:0004ef46       _aehlog_appendMultExceptionRecords 0044ff46 f dp2d:aehlog.obj
+ 0001:0004f020       _aehlog_appendExceptionRecord 00450020 f dp2d:aehlog.obj
+ 0001:0004f0e2       _aehlog_readExceptionRecord 004500e2 f dp2d:aehlog.obj
+ 0001:0004f1c0       _aeh_SetCurrent            004501c0 f dp2d:aeh.obj
+ 0001:0004f1ea       _aeh_GetCurrent            004501ea f dp2d:aeh.obj
+ 0001:0004f212       _MemoryAccessExceptionFilter 00450212 f dp2d:aeh.obj
+ 0001:0004f2b6       _aehmod_Destroy            004502b6 f dp2d:aeh.obj
+ 0001:0004f3b7       _getExceptionInstruction   004503b7 f dp2d:aeh.obj
+ 0001:0004f3dd       _aeh_Create                004503dd f dp2d:aeh.obj
+ 0001:00050863       _aeh_Destroy               00451863 f dp2d:aeh.obj
+ 0001:00050bbd       _aeh_getSignature          00451bbd f dp2d:aeh.obj
+ 0001:00050ca8       _aeh_signature_toString    00451ca8 f dp2d:aeh.obj
+ 0001:00050cda       _aeh_addComment            00451cda f dp2d:aeh.obj
+ 0001:00050dd5       _aeh_getAllInfo            00451dd5 f dp2d:aeh.obj
+ 0001:00051381       _codetostring              00452381 f dp2d:aeh.obj
+ 0001:00051728       _aeh_toString              00452728 f dp2d:aeh.obj
+ 0001:00052c4f       _aeh_writeOutputStream     00453c4f f dp2d:aeh.obj
+ 0001:00053a2e       _aeh_readInputStream       00454a2e f dp2d:aeh.obj
+ 0001:000549a1       _aeh_stripSysDesc          004559a1 f dp2d:aeh.obj
+ 0001:00054a17       _aeh_stripInfoId           00455a17 f dp2d:aeh.obj
+ 0001:00054bd3       _aeh_stripExceptionAddress 00455bd3 f dp2d:aeh.obj
+ 0001:00054c10       _GetPrimaryDisplayDesc     00455c10 f dp2d:detect.obj
+ 0001:00054efe       _FindDeviceInRegistry      00455efe f dp2d:detect.obj
+ 0001:00055065       _FindRendition@0           00456065 f dp2d:detect.obj
+ 0001:000550cf       _FindATI@0                 004560cf f dp2d:detect.obj
+ 0001:00055139       _FindMystique@0            00456139 f dp2d:detect.obj
+ 0001:000551a3       _FindMonster3D@0           004561a3 f dp2d:detect.obj
+ 0001:000551d5       _FindS3ViRGE@0             004561d5 f dp2d:detect.obj
+ 0001:0005523f       _FindSTB@0                 0045623f f dp2d:detect.obj
+ 0001:000552a9       _FindOrchid@0              004562a9 f dp2d:detect.obj
+ 0001:000552db       _FindPowerVR@0             004562db f dp2d:detect.obj
+ 0001:0005532c       _Get3DHardware             0045632c f dp2d:detect.obj
+ 0001:00055610       _hkeytab_create            00456610 f dp2d:hkeytab.obj
+ 0001:0005562f       _hkeytab_destroy           0045662f f dp2d:hkeytab.obj
+ 0001:00055646       _hkeytab_subscript_grow    00456646 f dp2d:hkeytab.obj
+ 0001:00055714       _hkeytab_subscript         00456714 f dp2d:hkeytab.obj
+ 0001:0005579a       _hkeytab_subscript_delete  0045679a f dp2d:hkeytab.obj
+ 0001:00055880       _mywcs_wchar2netchar       00456880 f dp2d:mywcs.obj
+ 0001:00055923       _mywcs_netchar2wchar       00456923 f dp2d:mywcs.obj
+ 0001:000559c2       _mywcs_lenn                004569c2 f dp2d:mywcs.obj
+ 0001:00055a0a       _mywcs_ncpy0               00456a0a f dp2d:mywcs.obj
+ 0001:00055a91       _mywcs_swabncpy0           00456a91 f dp2d:mywcs.obj
+ 0001:00055b30       _mywcs_frommbs             00456b30 f dp2d:mywcs.obj
+ 0001:00055bd6       _mywcs_tombs               00456bd6 f dp2d:mywcs.obj
+ 0001:00055c80       _mywcs_ncmp                00456c80 f dp2d:mywcs.obj
+ 0001:00055d00       _tcapw_u2ascii             00456d00 f dp2d:tcapw.obj
+ 0001:00055d65       _tcapw_hexprint            00456d65 f dp2d:tcapw.obj
+ 0001:00055def       _tcapw_create              00456def f dp2d:tcapw.obj
+ 0001:00055e4c       _tcapw_destroy             00456e4c f dp2d:tcapw.obj
+ 0001:00055e94       _tcapw_open                00456e94 f dp2d:tcapw.obj
+ 0001:00055f77       _tcapw_close               00456f77 f dp2d:tcapw.obj
+ 0001:00056009       _tcapw_password_hash       00457009 f dp2d:tcapw.obj
+ 0001:000560a1       _tcapw_entry_create        004570a1 f dp2d:tcapw.obj
+ 0001:000562be       _tcapw_entry_delete        004572be f dp2d:tcapw.obj
+ 0001:0005631a       _tcapw_entry_change        0045731a f dp2d:tcapw.obj
+ 0001:000563aa       _tcapw_entry_find_byid     004573aa f dp2d:tcapw.obj
+ 0001:00056425       _tcapw_entry_find_byname   00457425 f dp2d:tcapw.obj
+ 0001:00056509       _tcapw_get_secretcode      00457509 f dp2d:tcapw.obj
+ 0001:000565b0       _MD5Init                   004575b0 f dp2d:md5c.obj
+ 0001:000565f8       _MD5Update                 004575f8 f dp2d:md5c.obj
+ 0001:000566f2       _MD5Final                  004576f2 f dp2d:md5c.obj
+ 0001:00057550       _deskey                    00458550 f dp2d:d3des.obj
+ 0001:00057933       _cpkey                     00458933 f dp2d:d3des.obj
+ 0001:0005797d       _usekey                    0045897d f dp2d:d3des.obj
+ 0001:000579c7       _des                       004589c7 f dp2d:d3des.obj
+ 0001:00057e83       _des2key                   00458e83 f dp2d:d3des.obj
+ 0001:00057ef0       _Ddes                      00458ef0 f dp2d:d3des.obj
+ 0001:00057f56       _D2des                     00458f56 f dp2d:d3des.obj
+ 0001:00058055       _makekey                   00459055 f dp2d:d3des.obj
+ 0001:00058181       _make2key                  00459181 f dp2d:d3des.obj
+ 0001:000582ad       _des3key                   004592ad f dp2d:d3des.obj
+ 0001:00058348       _cp3key                    00459348 f dp2d:d3des.obj
+ 0001:000583dc       _use3key                   004593dc f dp2d:d3des.obj
+ 0001:00058470       _make3key                  00459470 f dp2d:d3des.obj
+ 0001:00058700       _InitSnapshot              00459700 f dp2d:tlstuff.obj
+ 0001:000587fb       _InitUnDecorateSymbolName  004597fb f dp2d:tlstuff.obj
+ 0001:00058880       _aeh_map_Find              00459880 f dp2d:aehmap.obj
+ 0001:000593c5       _aeh_mapcat_Create         0045a3c5 f dp2d:aehmap.obj
+ 0001:000596fc       _aeh_mapcat_Destroy        0045a6fc f dp2d:aehmap.obj
+ 0001:000597b0       _dynatab_freeze_encrypted  0045a7b0 f dp2d:crypttab.obj
+ 0001:00059a0b       _dynatab_thaw_encrypted    0045aa0b f dp2d:crypttab.obj
+ 0001:00059c6a       _GetTickCount@0            0045ac6a f kernel32:KERNEL32.dll
+ 0001:00059c70       _GetSystemTime@4           0045ac70 f kernel32:KERNEL32.dll
+ 0001:00059c76       _Sleep@4                   0045ac76 f kernel32:KERNEL32.dll
+ 0001:00059c7c       _GetCurrentProcessId@0     0045ac7c f kernel32:KERNEL32.dll
+ 0001:00059c82       _CreateThread@24           0045ac82 f kernel32:KERNEL32.dll
+ 0001:00059c88       _TerminateThread@8         0045ac88 f kernel32:KERNEL32.dll
+ 0001:00059c8e       _GetCurrentThreadId@0      0045ac8e f kernel32:KERNEL32.dll
+ 0001:00059c94       _GlobalAlloc@8             0045ac94 f kernel32:KERNEL32.dll
+ 0001:00059c9a       _GlobalFree@4              0045ac9a f kernel32:KERNEL32.dll
+ 0001:00059ca0       _OutputDebugStringA@4      0045aca0 f kernel32:KERNEL32.dll
+ 0001:00059ca6       _FindClose@4               0045aca6 f kernel32:KERNEL32.dll
+ 0001:00059cac       _FindNextFileA@8           0045acac f kernel32:KERNEL32.dll
+ 0001:00059cb2       _FindFirstFileA@8          0045acb2 f kernel32:KERNEL32.dll
+ 0001:00059cb8       _GetModuleFileNameA@12     0045acb8 f kernel32:KERNEL32.dll
+ 0001:00059cbe       _FreeLibrary@4             0045acbe f kernel32:KERNEL32.dll
+ 0001:00059cc4       _GetProcAddress@8          0045acc4 f kernel32:KERNEL32.dll
+ 0001:00059cca       _LoadLibraryA@4            0045acca f kernel32:KERNEL32.dll
+ 0001:00059cd0       _CloseHandle@4             0045acd0 f kernel32:KERNEL32.dll
+ 0001:00059cd6       _CreateProcessA@40         0045acd6 f kernel32:KERNEL32.dll
+ 0001:00059cdc       _GetLastError@0            0045acdc f kernel32:KERNEL32.dll
+ 0001:00059ce2       _WriteFile@20              0045ace2 f kernel32:KERNEL32.dll
+ 0001:00059ce8       _GetEnvironmentVariableA@12 0045ace8 f kernel32:KERNEL32.dll
+ 0001:00059cee       _DuplicateHandle@28        0045acee f kernel32:KERNEL32.dll
+ 0001:00059cf4       _GetCurrentProcess@0       0045acf4 f kernel32:KERNEL32.dll
+ 0001:00059cfa       _LocalFree@4               0045acfa f kernel32:KERNEL32.dll
+ 0001:00059d00       _FormatMessageA@28         0045ad00 f kernel32:KERNEL32.dll
+ 0001:00059d06       _SetEnvironmentVariableA@8 0045ad06 f kernel32:KERNEL32.dll
+ 0001:00059d0c       _GetModuleHandleA@4        0045ad0c f kernel32:KERNEL32.dll
+ 0001:00059d12       _GlobalReAlloc@12          0045ad12 f kernel32:KERNEL32.dll
+ 0001:00059d18       _GetTempPathA@8            0045ad18 f kernel32:KERNEL32.dll
+ 0001:00059d1e       _MultiByteToWideChar@24    0045ad1e f kernel32:KERNEL32.dll
+ 0001:00059d24       _WideCharToMultiByte@32    0045ad24 f kernel32:KERNEL32.dll
+ 0001:00059d2a       _RegEnumValueA@32          0045ad2a f advapi32:ADVAPI32.dll
+ 0001:00059d30       _RegQueryInfoKeyA@48       0045ad30 f advapi32:ADVAPI32.dll
+ 0001:00059d36       _RegOpenKeyExA@20          0045ad36 f advapi32:ADVAPI32.dll
+ 0001:00059d3c       _RegEnumKeyA@16            0045ad3c f advapi32:ADVAPI32.dll
+ 0001:00059d42       _RegCloseKey@4             0045ad42 f advapi32:ADVAPI32.dll
+ 0001:00059d48       _RegQueryValueExA@24       0045ad48 f advapi32:ADVAPI32.dll
+ 0001:00059d4e       _RegEnumKeyExA@32          0045ad4e f advapi32:ADVAPI32.dll
+ 0001:00059d54       _GetForegroundWindow@0     0045ad54 f user32:USER32.dll
+ 0001:00059d5a       _memset                    0045ad5a f MSVCRTD:MSVCRTD.dll
+ 0001:00059d60       _time                      0045ad60 f MSVCRTD:MSVCRTD.dll
+ 0001:00059d66       _sprintf                   0045ad66 f MSVCRTD:MSVCRTD.dll
+ 0001:00059d6c       _fread                     0045ad6c f MSVCRTD:MSVCRTD.dll
+ 0001:00059d80       __chkstk                   0045ad80   MSVCRTD:chkstk.obj
+ 0001:00059d80       __alloca_probe             0045ad80   MSVCRTD:chkstk.obj
+ 0001:00059db0       _strlen                    0045adb0 f MSVCRTD:MSVCRTD.dll
+ 0001:00059db6       _fflush                    0045adb6 f MSVCRTD:MSVCRTD.dll
+ 0001:00059dbc       ___p__iob                  0045adbc f MSVCRTD:MSVCRTD.dll
+ 0001:00059dc2       _printf                    0045adc2 f MSVCRTD:MSVCRTD.dll
+ 0001:00059dc8       _strcmp                    0045adc8 f MSVCRTD:MSVCRTD.dll
+ 0001:00059dce       _strcpy                    0045adce f MSVCRTD:MSVCRTD.dll
+ 0001:00059dd4       __strdup                   0045add4 f MSVCRTD:MSVCRTD.dll
+ 0001:00059dda       _strcat                    0045adda f MSVCRTD:MSVCRTD.dll
+ 0001:00059de0       _exit                      0045ade0 f MSVCRTD:MSVCRTD.dll
+ 0001:00059de6       _free                      0045ade6 f MSVCRTD:MSVCRTD.dll
+ 0001:00059dec       _sscanf                    0045adec f MSVCRTD:MSVCRTD.dll
+ 0001:00059df2       ___p__pctype               0045adf2 f MSVCRTD:MSVCRTD.dll
+ 0001:00059df8       __isctype                  0045adf8 f MSVCRTD:MSVCRTD.dll
+ 0001:00059dfe       ___p___mb_cur_max          0045adfe f MSVCRTD:MSVCRTD.dll
+ 0001:00059e04       _malloc                    0045ae04 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e0a       _fclose                    0045ae0a f MSVCRTD:MSVCRTD.dll
+ 0001:00059e10       _fopen                     0045ae10 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e16       _strncpy                   0045ae16 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e1c       __errno                    0045ae1c f MSVCRTD:MSVCRTD.dll
+ 0001:00059e22       _atoi                      0045ae22 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e28       __ftol                     0045ae28 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e2e       _strchr                    0045ae2e f MSVCRTD:MSVCRTD.dll
+ 0001:00059e40       _fseek                     0045ae40 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e46       _ftell                     0045ae46 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e4c       _toupper                   0045ae4c f MSVCRTD:MSVCRTD.dll
+ 0001:00059e52       _perror                    0045ae52 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e58       __except_handler3          0045ae58 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e5e       __assert                   0045ae5e f MSVCRTD:MSVCRTD.dll
+ 0001:00059e64       _putchar                   0045ae64 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e6a       _puts                      0045ae6a f MSVCRTD:MSVCRTD.dll
+ 0001:00059e70       _fgets                     0045ae70 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e76       _srand                     0045ae76 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e7c       _rand                      0045ae7c f MSVCRTD:MSVCRTD.dll
+ 0001:00059e82       _raise                     0045ae82 f MSVCRTD:MSVCRTD.dll
+ 0001:00059e90       _mainCRTStartup            0045ae90 f MSVCRTD:crtexe.obj
+ 0001:0005a008       _memcpy                    0045b008 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a00e       _memcmp                    0045b00e f MSVCRTD:MSVCRTD.dll
+ 0001:0005a014       _fwrite                    0045b014 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a01a       _rewind                    0045b01a f MSVCRTD:MSVCRTD.dll
+ 0001:0005a020       _vfprintf                  0045b020 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a026       _fprintf                   0045b026 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a02c       _vprintf                   0045b02c f MSVCRTD:MSVCRTD.dll
+ 0001:0005a032       _vsprintf                  0045b032 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a038       _getc                      0045b038 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a03e       __makepath                 0045b03e f MSVCRTD:MSVCRTD.dll
+ 0001:0005a044       __splitpath                0045b044 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a04a       _strstr                    0045b04a f MSVCRTD:MSVCRTD.dll
+ 0001:0005a050       __strlwr                   0045b050 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a056       __CrtCheckMemory           0045b056 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a05c       _realloc                   0045b05c f MSVCRTD:MSVCRTD.dll
+ 0001:0005a062       _strncat                   0045b062 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a068       _strspn                    0045b068 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a06e       _strcspn                   0045b06e f MSVCRTD:MSVCRTD.dll
+ 0001:0005a074       _memmove                   0045b074 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a07a       _strtol                    0045b07a f MSVCRTD:MSVCRTD.dll
+ 0001:0005a080       _strtok                    0045b080 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a086       _remove                    0045b086 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a08c       _fsetpos                   0045b08c f MSVCRTD:MSVCRTD.dll
+ 0001:0005a092       _fgetpos                   0045b092 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a098       _strncmp                   0045b098 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a09e       _strrchr                   0045b09e f MSVCRTD:MSVCRTD.dll
+ 0001:0005a0a4       __exit                     0045b0a4 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a0aa       __XcptFilter               0045b0aa f MSVCRTD:MSVCRTD.dll
+ 0001:0005a0b0       ___p___initenv             0045b0b0 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a0b6       __initterm                 0045b0b6 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a0bc       ___getmainargs             0045b0bc f MSVCRTD:MSVCRTD.dll
+ 0001:0005a0d0       __setdefaultprecision      0045b0d0 f MSVCRTD:fp8.obj
+ 0001:0005a0ee       ___setusermatherr          0045b0ee f MSVCRTD:MSVCRTD.dll
+ 0001:0005a100       __matherr                  0045b100 f MSVCRTD:merr.obj
+ 0001:0005a120       __setargv                  0045b120 f MSVCRTD:dllargv.obj
+ 0001:0005a12c       ___p__commode              0045b12c f MSVCRTD:MSVCRTD.dll
+ 0001:0005a132       ___p__fmode                0045b132 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a140       __onexit                   0045b140 f MSVCRTD:atonexit.obj
+ 0001:0005a210       _atexit                    0045b210 f MSVCRTD:atonexit.obj
+ 0001:0005a240       ___set_app_type            0045b240 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a246       __controlfp                0045b246 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a24c       ___dllonexit               0045b24c f MSVCRTD:MSVCRTD.dll
+ 0001:0005a260       _GetVersion@0              0045b260 f kernel32:KERNEL32.dll
+ 0001:0005a266       __strnicmp                 0045b266 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a26c       __stricmp                  0045b26c f MSVCRTD:MSVCRTD.dll
+ 0001:0005a272       __kbhit                    0045b272 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a278       __getch                    0045b278 f MSVCRTD:MSVCRTD.dll
+ 0001:0005a27e       __getcwd                   0045b27e f MSVCRTD:MSVCRTD.dll
+ 0001:0005a284       __strupr                   0045b284 f MSVCRTD:MSVCRTD.dll
+ 0002:00000080       _newuser_magic             0045c080   dp2d:tca.obj
+ 0002:00000090       _newuser_magic2            0045c090   dp2d:tca.obj
+ 0002:000000e0       _freezekey                 0045c0e0   dp2d:tcapw.obj
+ 0003:00000000       ___xc_a                    0045d000   MSVCRTD:cinitexe.obj
+ 0003:00000004       ___xc_z                    0045d004   MSVCRTD:cinitexe.obj
+ 0003:00000008       ___xi_a                    0045d008   MSVCRTD:cinitexe.obj
+ 0003:0000000c       ___xi_z                    0045d00c   MSVCRTD:cinitexe.obj
+ 0003:00000224       _myGameHost                0045d224   gtest.obj
+ 0003:00000228       _myID                      0045d228   gtest.obj
+ 0003:0000022c       _mylowestId                0045d22c   gtest.obj
+ 0003:00000230       _myDP                      0045d230   gtest.obj
+ 0003:00000234       _dpio                      0045d234   gtest.obj
+ 0003:00000238       _exitCode                  0045d238   gtest.obj
+ 0003:0000023c       _n_sessions                0045d23c   gtest.obj
+ 0003:00000240       _n_players                 0045d240   gtest.obj
+ 0003:00000244       _n_apps                    0045d244   gtest.obj
+ 0003:00000248       _thisPlayer                0045d248   gtest.obj
+ 0003:0000024c       _thisGroup                 0045d24c   gtest.obj
+ 0003:00000250       _anyPlayer                 0045d250   gtest.obj
+ 0003:00000254       _anyGroup                  0045d254   gtest.obj
+ 0003:00000258       _myUID                     0045d258   gtest.obj
+ 0003:0000025c       _app_pick                  0045d25c   gtest.obj
+ 0003:00000260       _theError                  0045d260   gtest.obj
+ 0003:00000264       _pleaseQuit                0045d264   gtest.obj
+ 0003:00000268       _dontCreate                0045d268   gtest.obj
+ 0003:0000026c       _busyTime                  0045d26c   gtest.obj
+ 0003:00000270       _busyLoops                 0045d270   gtest.obj
+ 0003:00000274       _loops_done                0045d274   gtest.obj
+ 0003:00000278       _firstLoop                 0045d278   gtest.obj
+ 0003:0000027c       _spam_pktsz                0045d27c   gtest.obj
+ 0003:00000280       _spam_To                   0045d280   gtest.obj
+ 0003:00000284       _nextSpam                  0045d284   gtest.obj
+ 0003:00000288       _spam_time                 0045d288   gtest.obj
+ 0003:0000028c       _spams_received            0045d28c   gtest.obj
+ 0003:00000290       _spam_recsz                0045d290   gtest.obj
+ 0003:00000294       _frst_recSpam              0045d294   gtest.obj
+ 0003:00000298       _scriptfname               0045d298   gtest.obj
+ 0003:0000029c       _scriptfp                  0045d29c   gtest.obj
+ 0003:000002a0       _use_dpio                  0045d2a0   gtest.obj
+ 0003:000002a4       _callbacksFinished         0045d2a4   gtest.obj
+ 0003:000002a8       _waiting                   0045d2a8   gtest.obj
+ 0003:000002ac       _sleep_until               0045d2ac   gtest.obj
+ 0003:000002b0       _cur_species               0045d2b0   gtest.obj
+ 0003:000006bc       _theVar                    0045d6bc   gtest.obj
+ 0003:0002bc60       __dowildcard               00488c60   MSVCRTD:wildcard.obj
+ 0003:0002bc64       __newmode                  00488c64   MSVCRTD:_newmode.obj
+ 0003:0002bc68       ___defaultmatherr          00488c68   MSVCRTD:merr.obj
+ 0003:0002bc6c       __commode                  00488c6c   MSVCRTD:xncommod.obj
+ 0003:0002bc70       __fmode                    00488c70   MSVCRTD:xtxtmode.obj
+ 0003:0002bc74       ___win32sflag              00488c74   MSVCRTD:atonexit.obj
+ 0003:0002d730       _dpio_now                  0048a730   <common>
+ 0003:0002d740       _commInitReq               0048a740   <common>
+ 0003:0002d770       _avgstat                   0048a770   <common>
+ 0003:000329cc       _id_notifier               0048f9cc   <common>
+ 0003:000329d0       _apps                      0048f9d0   <common>
+ 0003:00033050       _CommDLLName               00490050   <common>
+ 0003:000330d0       _sessions                  004900d0   <common>
+ 0003:000355f0       _phonenum                  004925f0   <common>
+ 0003:000356f0       _modeministr               004926f0   <common>
+ 0003:000357f0       _key2a_buf                 004927f0   <common>
+ 0003:000358f0       _key2a_buf4                004928f0   <common>
+ 0003:000359f0       _key2a_buf2                004929f0   <common>
+ 0003:00035af0       _key2a_buf3                00492af0   <common>
+ 0003:00035bf0       ___onexitend               00492bf0   <common>
+ 0003:00035bf4       ___onexitbegin             00492bf4   <common>
+ 0003:00035bf8       __adjust_fdiv              00492bf8   <common>
+ 0004:00000000       __IMPORT_DESCRIPTOR_KERNEL32 00493000   kernel32:KERNEL32.dll
+ 0004:00000014       __IMPORT_DESCRIPTOR_ADVAPI32 00493014   advapi32:ADVAPI32.dll
+ 0004:00000028       __IMPORT_DESCRIPTOR_USER32 00493028   user32:USER32.dll
+ 0004:0000003c       __IMPORT_DESCRIPTOR_MSVCRTD 0049303c   MSVCRTD:MSVCRTD.dll
+ 0004:00000050       __NULL_IMPORT_DESCRIPTOR   00493050   kernel32:KERNEL32.dll
+ 0004:00000264       __imp__RegEnumKeyExA@32    00493264   advapi32:ADVAPI32.dll
+ 0004:00000268       __imp__RegQueryValueExA@24 00493268   advapi32:ADVAPI32.dll
+ 0004:0000026c       __imp__RegEnumKeyA@16      0049326c   advapi32:ADVAPI32.dll
+ 0004:00000270       __imp__RegOpenKeyExA@20    00493270   advapi32:ADVAPI32.dll
+ 0004:00000274       __imp__RegCloseKey@4       00493274   advapi32:ADVAPI32.dll
+ 0004:00000278       __imp__RegEnumValueA@32    00493278   advapi32:ADVAPI32.dll
+ 0004:0000027c       __imp__RegQueryInfoKeyA@48 0049327c   advapi32:ADVAPI32.dll
+ 0004:00000280       \177ADVAPI32_NULL_THUNK_DATA 00493280   advapi32:ADVAPI32.dll
+ 0004:00000284       __imp__OutputDebugStringA@4 00493284   kernel32:KERNEL32.dll
+ 0004:00000288       __imp__FindClose@4         00493288   kernel32:KERNEL32.dll
+ 0004:0000028c       __imp__FindNextFileA@8     0049328c   kernel32:KERNEL32.dll
+ 0004:00000290       __imp__GlobalFree@4        00493290   kernel32:KERNEL32.dll
+ 0004:00000294       __imp__GlobalAlloc@8       00493294   kernel32:KERNEL32.dll
+ 0004:00000298       __imp__FindFirstFileA@8    00493298   kernel32:KERNEL32.dll
+ 0004:0000029c       __imp__FreeLibrary@4       0049329c   kernel32:KERNEL32.dll
+ 0004:000002a0       __imp__GetProcAddress@8    004932a0   kernel32:KERNEL32.dll
+ 0004:000002a4       __imp__LoadLibraryA@4      004932a4   kernel32:KERNEL32.dll
+ 0004:000002a8       __imp__CloseHandle@4       004932a8   kernel32:KERNEL32.dll
+ 0004:000002ac       __imp__CreateProcessA@40   004932ac   kernel32:KERNEL32.dll
+ 0004:000002b0       __imp__GetModuleFileNameA@12 004932b0   kernel32:KERNEL32.dll
+ 0004:000002b4       __imp__CreateThread@24     004932b4   kernel32:KERNEL32.dll
+ 0004:000002b8       __imp__GetTickCount@0      004932b8   kernel32:KERNEL32.dll
+ 0004:000002bc       __imp__DuplicateHandle@28  004932bc   kernel32:KERNEL32.dll
+ 0004:000002c0       __imp__GetCurrentProcess@0 004932c0   kernel32:KERNEL32.dll
+ 0004:000002c4       __imp__LocalFree@4         004932c4   kernel32:KERNEL32.dll
+ 0004:000002c8       __imp__FormatMessageA@28   004932c8   kernel32:KERNEL32.dll
+ 0004:000002cc       __imp__SetEnvironmentVariableA@8 004932cc   kernel32:KERNEL32.dll
+ 0004:000002d0       __imp__GetModuleHandleA@4  004932d0   kernel32:KERNEL32.dll
+ 0004:000002d4       __imp__GlobalReAlloc@12    004932d4   kernel32:KERNEL32.dll
+ 0004:000002d8       __imp__GetTempPathA@8      004932d8   kernel32:KERNEL32.dll
+ 0004:000002dc       __imp__MultiByteToWideChar@24 004932dc   kernel32:KERNEL32.dll
+ 0004:000002e0       __imp__WideCharToMultiByte@32 004932e0   kernel32:KERNEL32.dll
+ 0004:000002e4       __imp__GetCurrentThreadId@0 004932e4   kernel32:KERNEL32.dll
+ 0004:000002e8       __imp__TerminateThread@8   004932e8   kernel32:KERNEL32.dll
+ 0004:000002ec       __imp__GetSystemTime@4     004932ec   kernel32:KERNEL32.dll
+ 0004:000002f0       __imp__GetCurrentProcessId@0 004932f0   kernel32:KERNEL32.dll
+ 0004:000002f4       __imp__Sleep@4             004932f4   kernel32:KERNEL32.dll
+ 0004:000002f8       __imp__GetLastError@0      004932f8   kernel32:KERNEL32.dll
+ 0004:000002fc       __imp__WriteFile@20        004932fc   kernel32:KERNEL32.dll
+ 0004:00000300       __imp__GetEnvironmentVariableA@12 00493300   kernel32:KERNEL32.dll
+ 0004:00000304       __imp__GetVersion@0        00493304   kernel32:KERNEL32.dll
+ 0004:00000308       \177KERNEL32_NULL_THUNK_DATA 00493308   kernel32:KERNEL32.dll
+ 0004:0000030c       __imp__strncpy             0049330c   MSVCRTD:MSVCRTD.dll
+ 0004:00000310       __imp__memset              00493310   MSVCRTD:MSVCRTD.dll
+ 0004:00000314       __imp__time                00493314   MSVCRTD:MSVCRTD.dll
+ 0004:00000318       __imp__sprintf             00493318   MSVCRTD:MSVCRTD.dll
+ 0004:0000031c       __imp__fread               0049331c   MSVCRTD:MSVCRTD.dll
+ 0004:00000320       __imp__strlen              00493320   MSVCRTD:MSVCRTD.dll
+ 0004:00000324       __imp__fflush              00493324   MSVCRTD:MSVCRTD.dll
+ 0004:00000328       __imp____p__iob            00493328   MSVCRTD:MSVCRTD.dll
+ 0004:0000032c       __imp__printf              0049332c   MSVCRTD:MSVCRTD.dll
+ 0004:00000330       __imp__strcmp              00493330   MSVCRTD:MSVCRTD.dll
+ 0004:00000334       __imp__strcpy              00493334   MSVCRTD:MSVCRTD.dll
+ 0004:00000338       __imp___strdup             00493338   MSVCRTD:MSVCRTD.dll
+ 0004:00000338       __imp__strdup              00493338   MSVCRTD:MSVCRTD.dll
+ 0004:0000033c       __imp__strcat              0049333c   MSVCRTD:MSVCRTD.dll
+ 0004:00000340       __imp__exit                00493340   MSVCRTD:MSVCRTD.dll
+ 0004:00000344       __imp__free                00493344   MSVCRTD:MSVCRTD.dll
+ 0004:00000348       __imp__sscanf              00493348   MSVCRTD:MSVCRTD.dll
+ 0004:0000034c       __imp____p__pctype         0049334c   MSVCRTD:MSVCRTD.dll
+ 0004:00000350       __imp___isctype            00493350   MSVCRTD:MSVCRTD.dll
+ 0004:00000354       __imp____p___mb_cur_max    00493354   MSVCRTD:MSVCRTD.dll
+ 0004:00000358       __imp__malloc              00493358   MSVCRTD:MSVCRTD.dll
+ 0004:0000035c       __imp__fclose              0049335c   MSVCRTD:MSVCRTD.dll
+ 0004:00000360       __imp__fopen               00493360   MSVCRTD:MSVCRTD.dll
+ 0004:00000364       __imp__strncat             00493364   MSVCRTD:MSVCRTD.dll
+ 0004:00000368       __imp___errno              00493368   MSVCRTD:MSVCRTD.dll
+ 0004:0000036c       __imp__atoi                0049336c   MSVCRTD:MSVCRTD.dll
+ 0004:00000370       __imp___ftol               00493370   MSVCRTD:MSVCRTD.dll
+ 0004:00000374       __imp__strchr              00493374   MSVCRTD:MSVCRTD.dll
+ 0004:00000378       __imp__fseek               00493378   MSVCRTD:MSVCRTD.dll
+ 0004:0000037c       __imp__ftell               0049337c   MSVCRTD:MSVCRTD.dll
+ 0004:00000380       __imp__toupper             00493380   MSVCRTD:MSVCRTD.dll
+ 0004:00000384       __imp__perror              00493384   MSVCRTD:MSVCRTD.dll
+ 0004:00000388       __imp___except_handler3    00493388   MSVCRTD:MSVCRTD.dll
+ 0004:0000038c       __imp___assert             0049338c   MSVCRTD:MSVCRTD.dll
+ 0004:00000390       __imp__putchar             00493390   MSVCRTD:MSVCRTD.dll
+ 0004:00000394       __imp__puts                00493394   MSVCRTD:MSVCRTD.dll
+ 0004:00000398       __imp__fgets               00493398   MSVCRTD:MSVCRTD.dll
+ 0004:0000039c       __imp__srand               0049339c   MSVCRTD:MSVCRTD.dll
+ 0004:000003a0       __imp__rand                004933a0   MSVCRTD:MSVCRTD.dll
+ 0004:000003a4       __imp__raise               004933a4   MSVCRTD:MSVCRTD.dll
+ 0004:000003a8       __imp__memcpy              004933a8   MSVCRTD:MSVCRTD.dll
+ 0004:000003ac       __imp__memcmp              004933ac   MSVCRTD:MSVCRTD.dll
+ 0004:000003b0       __imp__fwrite              004933b0   MSVCRTD:MSVCRTD.dll
+ 0004:000003b4       __imp__rewind              004933b4   MSVCRTD:MSVCRTD.dll
+ 0004:000003b8       __imp__vfprintf            004933b8   MSVCRTD:MSVCRTD.dll
+ 0004:000003bc       __imp__fprintf             004933bc   MSVCRTD:MSVCRTD.dll
+ 0004:000003c0       __imp__vprintf             004933c0   MSVCRTD:MSVCRTD.dll
+ 0004:000003c4       __imp__vsprintf            004933c4   MSVCRTD:MSVCRTD.dll
+ 0004:000003c8       __imp__getc                004933c8   MSVCRTD:MSVCRTD.dll
+ 0004:000003cc       __imp___makepath           004933cc   MSVCRTD:MSVCRTD.dll
+ 0004:000003d0       __imp___splitpath          004933d0   MSVCRTD:MSVCRTD.dll
+ 0004:000003d4       __imp__strstr              004933d4   MSVCRTD:MSVCRTD.dll
+ 0004:000003d8       __imp___strlwr             004933d8   MSVCRTD:MSVCRTD.dll
+ 0004:000003dc       __imp___CrtCheckMemory     004933dc   MSVCRTD:MSVCRTD.dll
+ 0004:000003e0       __imp__realloc             004933e0   MSVCRTD:MSVCRTD.dll
+ 0004:000003e4       __imp____setusermatherr    004933e4   MSVCRTD:MSVCRTD.dll
+ 0004:000003e8       __imp__strspn              004933e8   MSVCRTD:MSVCRTD.dll
+ 0004:000003ec       __imp__strcspn             004933ec   MSVCRTD:MSVCRTD.dll
+ 0004:000003f0       __imp__memmove             004933f0   MSVCRTD:MSVCRTD.dll
+ 0004:000003f4       __imp__strtol              004933f4   MSVCRTD:MSVCRTD.dll
+ 0004:000003f8       __imp__strtok              004933f8   MSVCRTD:MSVCRTD.dll
+ 0004:000003fc       __imp__remove              004933fc   MSVCRTD:MSVCRTD.dll
+ 0004:00000400       __imp__fsetpos             00493400   MSVCRTD:MSVCRTD.dll
+ 0004:00000404       __imp__fgetpos             00493404   MSVCRTD:MSVCRTD.dll
+ 0004:00000408       __imp__strncmp             00493408   MSVCRTD:MSVCRTD.dll
+ 0004:0000040c       __imp__strrchr             0049340c   MSVCRTD:MSVCRTD.dll
+ 0004:00000410       __imp___exit               00493410   MSVCRTD:MSVCRTD.dll
+ 0004:00000414       __imp___XcptFilter         00493414   MSVCRTD:MSVCRTD.dll
+ 0004:00000418       __imp____p___initenv       00493418   MSVCRTD:MSVCRTD.dll
+ 0004:0000041c       __imp___initterm           0049341c   MSVCRTD:MSVCRTD.dll
+ 0004:00000420       __imp____getmainargs       00493420   MSVCRTD:MSVCRTD.dll
+ 0004:00000424       __imp___onexit             00493424   MSVCRTD:MSVCRTD.dll
+ 0004:00000428       __imp___adjust_fdiv        00493428   MSVCRTD:MSVCRTD.dll
+ 0004:0000042c       __imp____p__commode        0049342c   MSVCRTD:MSVCRTD.dll
+ 0004:00000430       __imp____p__fmode          00493430   MSVCRTD:MSVCRTD.dll
+ 0004:00000434       __imp____set_app_type      00493434   MSVCRTD:MSVCRTD.dll
+ 0004:00000438       __imp___controlfp          00493438   MSVCRTD:MSVCRTD.dll
+ 0004:0000043c       __imp____dllonexit         0049343c   MSVCRTD:MSVCRTD.dll
+ 0004:00000440       __imp___getcwd             00493440   MSVCRTD:MSVCRTD.dll
+ 0004:00000440       __imp__getcwd              00493440   MSVCRTD:MSVCRTD.dll
+ 0004:00000444       __imp___strnicmp           00493444   MSVCRTD:MSVCRTD.dll
+ 0004:00000444       __imp__strnicmp            00493444   MSVCRTD:MSVCRTD.dll
+ 0004:00000448       __imp___stricmp            00493448   MSVCRTD:MSVCRTD.dll
+ 0004:00000448       __imp__stricmp             00493448   MSVCRTD:MSVCRTD.dll
+ 0004:0000044c       __imp__kbhit               0049344c   MSVCRTD:MSVCRTD.dll
+ 0004:0000044c       __imp___kbhit              0049344c   MSVCRTD:MSVCRTD.dll
+ 0004:00000450       __imp__getch               00493450   MSVCRTD:MSVCRTD.dll
+ 0004:00000450       __imp___getch              00493450   MSVCRTD:MSVCRTD.dll
+ 0004:00000454       __imp___strupr             00493454   MSVCRTD:MSVCRTD.dll
+ 0004:00000454       __imp__strupr              00493454   MSVCRTD:MSVCRTD.dll
+ 0004:00000458       \177MSVCRTD_NULL_THUNK_DATA 00493458   MSVCRTD:MSVCRTD.dll
+ 0004:0000045c       __imp__GetForegroundWindow@0 0049345c   user32:USER32.dll
+ 0004:00000460       \177USER32_NULL_THUNK_DATA 00493460   user32:USER32.dll
+
+ entry point at        0001:00059e90
+
+ Static symbols
+
+ 0001:0000adee       _ThreadFunc@4              0040bdee f unistd.obj
+ 0001:0000143a       _my_listPlayers_cb@16      0040243a f gtest.obj
+ 0001:00008642       _burn10msec                00409642 f gtest.obj
+ 0001:00008722       _my_filesize               00409722 f gtest.obj
+ 0001:0000877c       _setval                    0040977c f gtest.obj
+ 0001:0000882e       _dwUser1                   0040982e f gtest.obj
+ 0001:0000893e       _getval                    0040993e f gtest.obj
+ 0001:00008b4a       _doop                      00409b4a f gtest.obj
+ 0001:00008cac       _help                      00409cac f gtest.obj
+ 0001:00008d7b       _quit                      00409d7b f gtest.obj
+ 0001:000093d8       _Debug_ExceptionFilter     0040a3d8 f gtest.obj
+ 0001:00009416       _gtest                     0040a416 f gtest.obj
+ 0001:0000a811       _dp_objectDelta2string     0040b811 f gtest.obj
+ 0001:0000a9df       _key2buf                   0040b9df f gtest.obj
+ 0001:0000aa7d       _key2bufh                  0040ba7d f gtest.obj
+ 0001:0000ab1b       _dp_playerId_t_toString    0040bb1b f gtest.obj
+ 0001:0000aba5       _dp_session_t_toString     0040bba5 f gtest.obj
+ 0001:0000acc9       _dp_serverInfo_t_toString  0040bcc9 f gtest.obj
+ 0001:000007b9       _init_crc32                004017b9 f dpcrc32.obj
+ 0001:00058932       _aeh_map_Load              00459932 f dp2d:aehmap.obj
+ 0001:00058bfa       _aeh_map_addFunc           00459bfa f dp2d:aehmap.obj
+ 0001:00058de8       _aeh_map_algRead           00459de8 f dp2d:aehmap.obj
+ 0001:0005904b       _aeh_map_Unload            0045a04b f dp2d:aehmap.obj
+ 0001:00059121       _aeh_map_algWrite          0045a121 f dp2d:aehmap.obj
+ 0001:00057830       _cookey                    00458830 f dp2d:d3des.obj
+ 0001:00057a0b       _scrunch                   00458a0b f dp2d:d3des.obj
+ 0001:00057aa6       _unscrun                   00458aa6 f dp2d:d3des.obj
+ 0001:00057b2b       _desfunc                   00458b2b f dp2d:d3des.obj
+ 0001:0005859c       _D3des                     0045959c f dp2d:d3des.obj
+ 0001:00056792       _MD5Transform              00457792 f dp2d:md5c.obj
+ 0001:000573c8       _Encode                    004583c8 f dp2d:md5c.obj
+ 0001:00057452       _Decode                    00458452 f dp2d:md5c.obj
+ 0001:000574d2       _MD5_memcpy                004584d2 f dp2d:md5c.obj
+ 0001:00057512       _MD5_memset                00458512 f dp2d:md5c.obj
+ 0001:0004fb5f       _aehmod_Create             00450b5f f dp2d:aeh.obj
+ 0001:0004fd3b       _aehmod_add                00450d3b f dp2d:aeh.obj
+ 0001:0004ff64       _aeh_StackandModDump       00450f64 f dp2d:aeh.obj
+ 0001:0005026e       _aehmod_PosGet             0045126e f dp2d:aeh.obj
+ 0001:0005049d       _aehmod_NameGet            0045149d f dp2d:aeh.obj
+ 0001:00050544       _aeh_setStackandModInfo    00451544 f dp2d:aeh.obj
+ 0001:00050fbb       _aeh_modfunc_Fill          00451fbb f dp2d:aeh.obj
+ 0001:00052668       _aeh_StkModName            00453668 f dp2d:aeh.obj
+ 0001:00052767       _aeh_StkModCrc             00453767 f dp2d:aeh.obj
+ 0001:00052800       _parseSystemInfo           00453800 f dp2d:aeh.obj
+ 0001:00052b0a       _parseDispCardInfo         00453b0a f dp2d:aeh.obj
+ 0001:00053864       _putStream                 00454864 f dp2d:aeh.obj
+ 0001:000538f3       _putCharStream             004548f3 f dp2d:aeh.obj
+ 0001:000539e5       _putStreamErrFull          004549e5 f dp2d:aeh.obj
+ 0001:000547d9       _getStream                 004557d9 f dp2d:aeh.obj
+ 0001:00054868       _getCharStream             00455868 f dp2d:aeh.obj
+ 0001:0004e3d9       _aehlog_clear              0044f3d9 f dp2d:aehlog.obj
+ 0001:0004ea51       _aehlog_writetofile        0044fa51 f dp2d:aehlog.obj
+ 0001:0004eb04       _initExceptionFileStream   0044fb04 f dp2d:aehlog.obj
+ 0001:0004ecec       _checkDupException         0044fcec f dp2d:aehlog.obj
+ 0001:0004ee3a       _aehlog_readfromfile       0044fe3a f dp2d:aehlog.obj
+ 0001:0004da87       _freeze_element            0044ea87 f dp2d:Q.obj
+ 0001:0004deab       _thaw_element              0044eeab f dp2d:Q.obj
+ 0001:0004b9af       _hexstring                 0044c9af f dp2d:scorerep.obj
+ 0001:0004c9e5       _scorerep_print            0044d9e5 f dp2d:scorerep.obj
+ 0001:00046118       _tserv_send_challenge      00447118 f dp2d:tserv.obj
+ 0001:00046590       _tserv_send_response       00447590 f dp2d:tserv.obj
+ 0001:00046ae9       _tserv_send_pwchange       00447ae9 f dp2d:tserv.obj
+ 0001:00046cd9       _tserv_send_validate       00447cd9 f dp2d:tserv.obj
+ 0001:00046e05       _tserv_send_pwvalidate     00447e05 f dp2d:tserv.obj
+ 0001:00046fac       _tserv_send_credentials1   00447fac f dp2d:tserv.obj
+ 0001:000486b8       _tserv_hdl2pci             004496b8 f dp2d:tserv.obj
+ 0001:0004872c       _tserv_handle_credentials1 0044972c f dp2d:tserv.obj
+ 0001:00048ef0       _tserv_check_email         00449ef0 f dp2d:tserv.obj
+ 0001:0003cff4       _dptab_changeSrc           0043dff4 f dp2d:dptab.obj
+ 0001:0003dbbd       _dptab_varCreate           0043ebbd f dp2d:dptab.obj
+ 0001:0003e28b       _dptab_varDelete           0043f28b f dp2d:dptab.obj
+ 0001:0003ef7b       _dptab_get_bykey2          0043ff7b f dp2d:dptab.obj
+ 0001:0003f8d0       _dptab_xfer_insert         004408d0 f dp2d:dptab.obj
+ 0001:0003faa1       _compare_xfer_keys         00440aa1 f dp2d:dptab.obj
+ 0001:00040148       _dptab_update_destination  00441148 f dp2d:dptab.obj
+ 0001:000407cc       _dptab_update_send_delete  004417cc f dp2d:dptab.obj
+ 0001:000409e9       _dptab_xferBuffer_init     004419e9 f dp2d:dptab.obj
+ 0001:00040a30       _dptab_xferBuffer_flush    00441a30 f dp2d:dptab.obj
+ 0001:00040d24       _dptab_update_send_small   00441d24 f dp2d:dptab.obj
+ 0001:0004119d       _dptab_update_send_large   0044219d f dp2d:dptab.obj
+ 0001:000418af       _dprint_buf                004428af f dp2d:dptab.obj
+ 0001:0004232b       _dptab_mapIncomingTable    0044332b f dp2d:dptab.obj
+ 0001:00043776       _dptab_peer_freeze         00444776 f dp2d:dptab.obj
+ 0001:00043c6e       _dptab_xfer_freeze         00444c6e f dp2d:dptab.obj
+ 0001:000441ec       _dptab_peer_thaw           004451ec f dp2d:dptab.obj
+ 0001:000446f4       _dptab_xfer_thaw           004456f4 f dp2d:dptab.obj
+ 0001:000390d7       _stripSurroundingWhiteSpace 0043a0d7 f dp2d:ini.obj
+ 0001:0003986c       _reltoabspath              0043a86c f dp2d:ini.obj
+ 0001:0003825c       _getExceptionTable         0043925c f dp2d:dpexcept.obj
+ 0001:000382d3       _dp_makeExceptionRecords   004392d3 f dp2d:dpexcept.obj
+ 0001:0003883f       _getAppParam               0043983f f dp2d:dpexcept.obj
+ 0001:00038981       _getSystemInfo             00439981 f dp2d:dpexcept.obj
+ 0001:00038c41       _sendtoserver              00439c41 f dp2d:dpexcept.obj
+ 0001:00038e86       _buf2hex                   00439e86 f dp2d:dpexcept.obj
+ 0001:0002ac6a       _dpio_pc                   0042bc6a f dp2d:dpio.obj
+ 0001:0002acc4       _dpio_pw                   0042bcc4 f dp2d:dpio.obj
+ 0001:0002ad3f       _dpio_print                0042bd3f f dp2d:dpio.obj
+ 0001:0002c3fb       _dpio_thaw1                0042d3fb f dp2d:dpio.obj
+ 0001:0002c575       _dpio_thaw2                0042d575 f dp2d:dpio.obj
+ 0001:0002d213       _dpio_setNextTxTime        0042e213 f dp2d:dpio.obj
+ 0001:0002f36d       _dpio_countHdlClosing      0043036d f dp2d:dpio.obj
+ 0001:0003030d       _dpio_gotAck               0043130d f dp2d:dpio.obj
+ 0001:00030ac7       _dpio_update_RTT           00431ac7 f dp2d:dpio.obj
+ 0001:00030ccc       _dpio_sendAck              00431ccc f dp2d:dpio.obj
+ 0001:000344dc       _dpio_window_get           004354dc f dp2d:dpio.obj
+ 0001:00034659       _dpio_handle_ping_response 00435659 f dp2d:dpio.obj
+ 0001:0003480a       _dpio_sendAckLater         0043580a f dp2d:dpio.obj
+ 0001:00034839       _dpio_getReliable          00435839 f dp2d:dpio.obj
+ 0001:00034ab1       _dpio_getRaw               00435ab1 f dp2d:dpio.obj
+ 0001:00034ed0       _dpio_flushPacketsForHandle 00435ed0 f dp2d:dpio.obj
+ 0001:0003511c       _dpio_current_pingInterval 0043611c f dp2d:dpio.obj
+ 0001:00035241       _dpio_put_unreliable_unbuffered 00436241 f dp2d:dpio.obj
+ 0001:00035311       _dpio_put_unreliable_buffered 00436311 f dp2d:dpio.obj
+ 0001:00027009       _sendServerPing            00428009 f dp2d:enumsrv2.obj
+ 0001:000271b9       _addServer                 004281b9 f dp2d:enumsrv2.obj
+ 0001:0002785b       _get_bootstrap_list        0042885b f dp2d:enumsrv2.obj
+ 0001:00027c26       _dp_subscribeServerList    00428c26 f dp2d:enumsrv2.obj
+ 0001:00027eb7       _serversEx_cb@24           00428eb7 f dp2d:enumsrv2.obj
+ 0001:00028193       _calc_delay                00429193 f dp2d:enumsrv2.obj
+ 0001:000243f7       _getLatest                 004253f7 f dp2d:enumapp.obj
+ 0001:00023bf5       _notifystub                00424bf5 f dp2d:launchap.obj
+ 0001:0002312b       _readDebugParam            0042412b f dp2d:dprint.obj
+ 0001:0000c186       _printAdr                  0040d186 f dp2d:dp2.obj
+ 0001:0000c2e5       _dprint_sess               0040d2e5 f dp2d:dp2.obj
+ 0001:0000cb59       _dumpBuf                   0040db59 f dp2d:dp2.obj
+ 0001:0000d9df       _dpOpenLocalResult         0040e9df f dp2d:dp2.obj
+ 0001:0000dba2       _dp_unpack_host            0040eba2 f dp2d:dp2.obj
+ 0001:0000dcf0       _dp_player_notify          0040ecf0 f dp2d:dp2.obj
+ 0001:0000dffd       _dp_getDesiredHandleOptions 0040effd f dp2d:dp2.obj
+ 0001:0000e34b       _dp_pack_playerId          0040f34b f dp2d:dp2.obj
+ 0001:000113e4       _open_sess_cb@16           004123e4 f dp2d:dp2.obj
+ 0001:0001147c       _listSessions_cb@16        0041247c f dp2d:dp2.obj
+ 0001:00011626       _create_player_cb@16       00412626 f dp2d:dp2.obj
+ 0001:0001168f       _chopnl                    0041268f f dp2d:dp2.obj
+ 0001:000116d5       _allzeros                  004126d5 f dp2d:dp2.obj
+ 0001:00011db6       _dp_openHdl_cb             00412db6 f dp2d:dp2.obj
+ 0001:0001233e       _dpThaw                    0041333e f dp2d:dp2.obj
+ 0001:0001389f       _dp_setSessionTablePeer    0041489f f dp2d:dp2.obj
+ 0001:00014529       _dp_setSessionDesc         00415529 f dp2d:dp2.obj
+ 0001:0001556a       _dpSendJoinSession         0041656a f dp2d:dp2.obj
+ 0001:00015860       _dpHandleJoinSession       00416860 f dp2d:dp2.obj
+ 0001:000164ac       _dpSendErrorPacket         004174ac f dp2d:dp2.obj
+ 0001:00016530       _dp_pack_host              00417530 f dp2d:dp2.obj
+ 0001:0001661e       _dp_subscribe_client       0041761e f dp2d:dp2.obj
+ 0001:00016a4c       _dp_selectSessionForHost   00417a4c f dp2d:dp2.obj
+ 0001:00016ef2       _dpSendIndirectJoin        00417ef2 f dp2d:dp2.obj
+ 0001:00016fdc       _initOpenSession           00417fdc f dp2d:dp2.obj
+ 0001:00017e8d       _dp_subscribe_host         00418e8d f dp2d:dp2.obj
+ 0001:00017f73       _findSessionWithKarma      00418f73 f dp2d:dp2.obj
+ 0001:00018076       _dpOpen_dummy_cb@16        00419076 f dp2d:dp2.obj
+ 0001:00018b53       _dpSendLeaveSession        00419b53 f dp2d:dp2.obj
+ 0001:00018c19       _dpHandleLeaveSession      00419c19 f dp2d:dp2.obj
+ 0001:0001aa9f       _dpRemoteEnumPlayers       0041ba9f f dp2d:dp2.obj
+ 0001:0001b14d       _dpRemoteEnumPlayersEx     0041c14d f dp2d:dp2.obj
+ 0001:0001b54e       _dp_election_start         0041c54e f dp2d:dp2.obj
+ 0001:0001b7cc       _dp_election_end           0041c7cc f dp2d:dp2.obj
+ 0001:0001b917       _dp_election_peer_deleted  0041c917 f dp2d:dp2.obj
+ 0001:0001b978       _dpHandleVote              0041c978 f dp2d:dp2.obj
+ 0001:0001be6a       _dp_election_set_master    0041ce6a f dp2d:dp2.obj
+ 0001:0001c033       _dp_election_register_vote 0041d033 f dp2d:dp2.obj
+ 0001:0001c0cb       _dp_election_tally         0041d0cb f dp2d:dp2.obj
+ 0001:0001c32b       _dp_election_inaugerate_winner 0041d32b f dp2d:dp2.obj
+ 0001:0001c636       _dp_election_become_master 0041d636 f dp2d:dp2.obj
+ 0001:0001cbd0       _dpSendVote                0041dbd0 f dp2d:dp2.obj
+ 0001:0001cd70       _dpSendVictory             0041dd70 f dp2d:dp2.obj
+ 0001:0001ce6f       _dpElectMaster             0041de6f f dp2d:dp2.obj
+ 0001:0001cfd6       _dpSendSessionLostPacket   0041dfd6 f dp2d:dp2.obj
+ 0001:0001d057       _dp_findLowestHost         0041e057 f dp2d:dp2.obj
+ 0001:0001d5c7       _dp_receive                0041e5c7 f dp2d:dp2.obj
+ 0001:0001eaed       _dpHandleSelectedSession   0041faed f dp2d:dp2.obj
+ 0001:0001ed93       _dpSetPlayerUid            0041fd93 f dp2d:dp2.obj
+ 0001:0001ef16       _dpHandleVictory           0041ff16 f dp2d:dp2.obj
+ 0001:0001f14a       _dpPoll                    0042014a f dp2d:dp2.obj
+ 0001:0001f792       _dp_election_poll          00420792 f dp2d:dp2.obj
+ 0001:0001f852       _dpHandlePingPacket        00420852 f dp2d:dp2.obj
+ 0001:0001f910       _dpPollPing                00420910 f dp2d:dp2.obj
+ 0001:0001fc17       _dp_sendLatencyDelta       00420c17 f dp2d:dp2.obj
+ 0001:0001fd58       _dp_getBroadcastHdls       00420d58 f dp2d:dp2.obj
+ 0001:0001ff48       _dp_getHdls                00420f48 f dp2d:dp2.obj
+ 0001:0001ffde       _dp_getGroupHdls           00420fde f dp2d:dp2.obj
+ 0001:00059d80       _$$$00001                  0045ad80 f MSVCRTD:chkstk.obj
+
+FIXUPS: 5afd5 fffc84da c 39 2b 1a 17 38 1e 27 33 2b 2b 51 1f c 22 c 22
+FIXUPS: 2372e 22 c 22 c d1 3798b 35 fffffec6 fffffe31 20 f 39 25 fffc7fe6
+FIXUPS: 22fa3 43 1a 23 c 20 23 c 9c 23 c 26 1a c 49 c 25 c 54 1e c 49 c
+FIXUPS: 2330f b2 36 22 31 16 2f c fffff64e c 50 c 25 c 69 2f 1e c 14 39
+FIXUPS: 22cb4 23 c 2a c 17 23 c 20 1e c 48 c 5a 1a c 50 c 25 c fffff751
+FIXUPS: 2267c 5c 16 d 40 23 c 74 1a c 16 e c 36 22 c 33 23 c 2c 32 36 1a
+FIXUPS: 229cb c 20 1e c 48 c 5a fffff6fd 1a 74 1a c 51 46 2e c 33 1a c
+FIXUPS: 223cf 1e d c 23 21 c 24 1c 21 c 19 39 1a c 31 4e 36 2b 24 fffff7a2
+FIXUPS: 21e2b 23 c 1a 23 c 20 1e c 5a 23 c 46 1a c 26 1e c 40 1e c 33 1a
+FIXUPS: 220f5 33 1e c 15 c 36 16 fffff81b c 15 c 36 16 d 1d c 23 a1 1a
+FIXUPS: 21b73 16 36 1e c 23 1e c 51 1e c 15 c 22 17 c 24 c 74 1a fffff6db
+FIXUPS: 214d2 61 21 1e 46 41 25 29 2d c 27 c 1a 30 c 54 15 68 36 2b 16
+FIXUPS: 2185e 1d c 24 c 3a c 1f 62 3e fffff59a 21 18 2c f 22 5b 74 19 16
+FIXUPS: 21127 19 2d 94 c 3a 47 16 1d c 29 c 75 1b 23 c 2a c f 33 3d 2e
+FIXUPS: 20896 c 22 10 c 1f 22 1c 4a 4c 2a 58 2e 16 56 68 84 30 1e 28 3c
+FIXUPS: 20cb0 1e 2d 2b 1e 22 2f 30 e2 81 c fffff33a c 49 f 1c 29 18 46
+FIXUPS: 20395 15 44 27 119 36 36 f 30 36 1c 3c 45 48 1a 2d 1b 1c c 4c 26
+FIXUPS: 2083a c 17 fffff4b7 14 19 c 1d 4f 16 31 32 19 1e 25 c 29 30 f 37
+FIXUPS: 1ff4f 28 2f 27 1b 10 1f 10 34 34 1a 68 1e 3a f6 fffff674 38 51
+FIXUPS: 1f968 40 c 42 1d 26 1b c c 3f 2f 36 24 c 24 c 24 c 3f c 1f 20 2c
+FIXUPS: 1fc62 c 32 22 c c fffff584 1a 1a 31 37 29 17 24 26 3b 10 1c d 1c
+FIXUPS: 1f421 1c d 17 2a 1e 2e 42 3b 1b 1b 22 c 28 c 291 1e c fffff3fb
+FIXUPS: 1ece3 37 36 79 78 1a 50 31 3a 2a 28 52 3f 93 17 26 17 1c d 1c d
+FIXUPS: 1f155 25 1d 1c 17 35 15 c 15 1c fffff5c2 12 f 3c 2c 39 28 23 26
+FIXUPS: 1e96e c 26 28 26 21 26 28 26 2b c 26 2b c 26 31 51 19 2e 1d c 3d
+FIXUPS: 1ec96 fffff50f 25 70 2a 24 b4 24 1c 42 1e 22 12 28 21 41 12 53
+FIXUPS: 1e57c 37 3c 19 c 87 3d 1a 34 2c 48 19 1e c 2a fffff58f 31 16 1c
+FIXUPS: 1de0e 15 29 f 2d c 12 11 c c 23 24 30 3f 33 12 21 10 18 d 1f c
+FIXUPS: 1e074 36 61 29 16 2d fffff6f9 21 28 42 1a c 26 1a 59 1e c 2c 30
+FIXUPS: 1dad6 52 d 1e d c 21 1a 16 39 31 16 3b 1f 4b 27 21 26 c fffff57f
+FIXUPS: 1d30d 39 10 23 18 23 33 23 28 3a 1a 1c 2d 2b 1e 1d 3c 6b 2c 16
+FIXUPS: 1d648 63 28 18 2c 10 23 1c 30 15 3f fffff49c 1e 3e 57 3f 1d 39
+FIXUPS: 1cdde 29 26 1e c 25 1d 25 2c 4d 1d 1e 2c 4c 22 c 33 33 59 ea 4a
+FIXUPS: 1d223 29 16 1b fffff49a 40 b2 59 3e 3b 1e 48 19 12 33 19 22 17
+FIXUPS: 1ca19 3f 2d 24 14 1f 39 15 18 10 12 2b f 1c 24 3d 10 1f fffff5dc
+FIXUPS: 1c232 2d 1a c 1b 2c c 27 1a c 27 1a c 26 13 36 1e c 31 2d c 42
+FIXUPS: 1c4f8 37 c 50 9a 47 36 18 46 fffff715 27 1c 36 2b 16 27 13 17 1a
+FIXUPS: 1bf49 22 1e 19 e f 39 1e 2c 2d c 44 23 2d 1e d 21 4a 25 1a c 1c
+FIXUPS: 1ba3a 29 1c d 21 4a 25 1a c 1c 1a c 2d 1a c 1b 2c c 27 1a c 27
+FIXUPS: 1bcc0 c 2e 27 36 1e c 31 2d c fffff7d8 84 32 19 1e 25 c 1e 19 30
+FIXUPS: 1b788 f 37 2b 16 8 b 43 15 1a f 22 1c 19 e f 39 1e 2c 2d c 44 fffff68c
+FIXUPS: 1b0bc 3b 16 26 19 1e 25 c 54 39 16 5c 32 19 1e 25 c 34 30 40 f
+FIXUPS: 1b41e 16 74 19 1e 25 c 58 c 39 fffff63d 1f 21 e c 1c c 34 18 3d
+FIXUPS: 1ad6f 36 1e c 17 d c 21 2e c 3b 1e c 3d f 1c 1a 20 31 2a 36 16
+FIXUPS: 1a651 1a c 2e 15 77 21 12 1c 22 11 1d 12 f fe 40 4a 1e 1f 28 1d
+FIXUPS: 1aa15 79 21 1f 28 24 11 31 c 3c c fffff47f c 22 c 30 23 59 1e 16
+FIXUPS: 1a182 7f 1e 19 1e 7d 1e 63 47 19 39 2b 2b 2e 2e 2e 16 1b 1d 41
+FIXUPS: 1a5f6 e 1b fffff542 10 3b 16 16 11 1f 34 16 2f 1d c 49 17 19 25
+FIXUPS: 19d61 25 19 64 21 35 61 1c 17 17 34 26 17 17 34 5e fffff4d7 1e
+FIXUPS: 19537 9a c 23 4b 1f 9a c 34 3e 35 3a 2b 52 3d 80 1e 2a 14 20 14
+FIXUPS: 199fd 16 5f 22 54 1f a 23 c fffff319 15 c 25 17 1a 22 3f 22 f6
+FIXUPS: 19063 3f 21 27 4c c c 77 25 25 67 3e 29 2c 3e 59 22 39 39 47 2d
+FIXUPS: 194d7 fffff4d1 c 48 1e c c 4a 1e c c 52 28 c c 78 1e c c 5e 2c
+FIXUPS: 18c88 c 71 1e c c 53 28 c c 57 28 fffff718 c 4b 53 28 c c 21 17
+FIXUPS: 186a5 48 28 c c 39 28 c c 21 17 4d 1e 35 e 31 1e c c 37 e 3c 28
+FIXUPS: 180ab 10 2f 2f 59 1c c 3d c 1f 26 a 25 1a 2e 32 a5 1e c 25 40 c
+FIXUPS: 18432 19 32 c c 48 c 1d 2b 28 fffff3a4 c 52 22 c 71 26 c 40 4f
+FIXUPS: 17ae4 120 18 43 20 fc 1c 26 fa 2a 23 35 1a 24 e 22 1a 3c 40 18
+FIXUPS: 1806d 18 fffff414 21 3a c 1f 38 10 31 1d 1f 13 13 d 7c 17 13 2c
+FIXUPS: 176e5 5c 39 22 c 22 22 c 22 22 c 22 22 c 3f fffff75e 2c 16 17 1e
+FIXUPS: 170ca c 1b 59 53 28 36 d 1c 1f 1a d 19 d 59 5a 22 1e c 19 16 1a
+FIXUPS: 173e4 1e 36 17 3e fffff6bb 1e c 42 21 3d 29 21 1e 1e c 76 27 3b
+FIXUPS: 16d9a c 3b 1a 1e c 3a 19 1e c 35 1e 2f 15 e 1e c 86 fffff645 53
+FIXUPS: 166a8 d 21 d 21 d 3d 19 4b 18 11 2e 1a 2c 37 2b 3f 73 c 21 59 2d
+FIXUPS: 16a3a 1e c 52 28 1e c 22 fffff529 47 18 54 c 21 16 1d 59 6f 6f
+FIXUPS: 162d0 48 2f 15 4b c c 9f 25 25 25 11 f 29 1f 22 36 45 29 1f 12
+FIXUPS: 15af9 1e 62 24 1f 1e 1e 2b 1e 1b 1e 3a 2e 34 73 33 41 16 5a 1a
+FIXUPS: 15e93 24 c 24 c 49 c 35 c 49 15 c fffff687 1b c 3a 2b 16 12 29
+FIXUPS: 1576c 14 31 2e 34 2b 16 10 6a 21 c 36 2e 31 34 2b 16 14 1f 10 1b
+FIXUPS: 15a92 13 28 fffff620 2b 32 26 50 2b 16 3a c 66 19 46 15 39 29 16
+FIXUPS: 153cf 2b 16 6b 1c 24 19 2d 15 39 2b 16 1d c 36 38 fffff736 27 1a
+FIXUPS: 14dc5 1a 64 25 c c 20 23 c c 23 26 c c 23 25 c c 1f 25 c c 36 c
+FIXUPS: 15052 1e 16 1e 16 fffff920 22 c 22 22 c 1e 1e c 1d 28 c 14 2b 33
+FIXUPS: 14b97 16 1a 24 16 2b 1e c 1d 16 1c 2c c 2a c 1a c fffff849 13 17
+FIXUPS: 145b4 33 16 c 2e f 1e 1d 36 20 11 13 22 1f 19 36 16 31 2f 48 25
+FIXUPS: 1488c 36 16 1a 13 2c c 7b fffff6e0 28 4b 5e 23 25 23 24 23 20 27
+FIXUPS: 14285 23 26 20 1e 14 21 4b 4b 42 56 33 1b c 19 c 22 1f 1c 13 12
+FIXUPS: 13a5f 21 22 23 f 13 36 35 1b c 43 1e 22 4f 22 4f 22 27 1e 9a 22
+FIXUPS: 13dff 22 70 26 32 22 3b 3f 7f 44 22 fffff397 20 1d 1e 222 24 1e
+FIXUPS: 136e4 1e 1f 1a 1e 22 1e 22 1e 22 1e 22 1e 22 1e 24 1e 20 1b 3c
+FIXUPS: 13982 1c 2a 59 20 fffff479 16 23 1e 43 c 1a 1a 16 43 3f 1c 1c 1c
+FIXUPS: 130b9 21 16 16 42 f d6 21 20 25 10 35 17 43 32 2b 35 24 fffff5b7
+FIXUPS: 129bc 1e 25 19 15 16 11 52 8 1f 28 10 2a f 2a a 2f a 4d 44 41 28
+FIXUPS: 12cca c b9 56 16 24 28 27 28 fffff380 26 32 7e 9c 27 17 69 1b 96
+FIXUPS: 12555 2a dc 12 30 a6 56 35 1b 17 16 17 16 17 16 40 a 15 3f 3d 14
+FIXUPS: 12983 fffff082 83 2c b 53 81 b 20 ba 27 33 3e 21 5a 28 27 21 24
+FIXUPS: 11e5d 26 e 39 3b 27 4f b2 38 27 7b 93 17 45 fffff03d 39 16 c 10f
+FIXUPS: 113d5 19 14 15 3a 14 21 27 19 20 82 6f 2c 18 23 43 3b 32 5c 61
+FIXUPS: 1185b 58 20 3c 41 5d b fffff2ec 1e c 28 1e c 28 1e c 28 1e c 28
+FIXUPS: 10e0a c 2b 1e c 39 2a 36 68 da 35 1a 1e c 4d 31 c b6 1b fffff422
+FIXUPS: 1066d 1e 41 22 46 22 37 3d 2b 16 30 c 1d 1e c 3f 2a 1e c 22f c
+FIXUPS: 10b8d 1e c 32 1e c 2c 13 1e c fffff289 3c 2b 48 125 1e 27 1e 27
+FIXUPS: 10181 27 1e 4a 1e 6b 22 70 22 1f e 3a 2b 2b 1a b9 30 1e 3d 1e 3d
+FIXUPS: 105e1 3d fffff360 c 70 15 1c 1a 4e 1b 1c 3b e 24 54 1e 43 1e c
+FIXUPS: fc72 15 1c 1a 4e 1b 70 1c c 3b e 70 1e 46 1e fffff426 1e c7 60
+FIXUPS: f479 1c 1a 4e 1b 6d 1e 93 31 24 31 66 22 51 77 21 c 23 e 14 2d
+FIXUPS: f8b7 21 c 30 1a c 2c fffff39b 21 1e 20 20 60 3a 5c 14 55 1e 4b
+FIXUPS: ef66 1c 45 1e c d4 15 1c 1a 4e 1b 60 34 26 38 13 13 2f 1e c fffff45f
+FIXUPS: e76b 19 40 62 33 27 65 2c 2e c 30 1e 20 11 8d 2c 13 20 12 47 25
+FIXUPS: eb68 1e 9a 29 10 26 13 13 1c 18 fffff589 1f 15 15 19 d 17 17 10
+FIXUPS: e326 1e 26 1a c 31 31 12 13 3d 4f 30 42 1a 36 2c 19 be 22 19 3c
+FIXUPS: e701 19 fffff35f 6f 33 29 4f 21 12 57 21 3b 2a 6e 15 1c 1a 5f 1b
+FIXUPS: de55 1c c 7c e 52 1e c 5f 172 3d 25 49 19 1d fffff344 21 34 21
+FIXUPS: d61d 14 65 6d d 1a d 24 c 6b 20 24 10 45 14 28 26 30 1e 2f 27 32
+FIXUPS: d9fa d 1e d c 21 fffff423 15 34 134 5c e 1a d 21 26 1c 1a d 29
+FIXUPS: d22c 4f 39 25 2f 22 3a 11 d 1a d 20 5f 17 15 18 53 17 fffff3f2
+FIXUPS: c919 20 26 12 2e 3d 43 38 2c 7d 1f 1d c 31 19 26 c cf 21 23 1d
+FIXUPS: cd00 36 29 c 20 1a c 2b 52 14 17876 47 72 1c0 25 10 23 12 ffffef6c
+FIXUPS: 23938 cf d 2e 2f 2f 2f 2e 2e 30 32 30 30 30 32 30 32 27 463 fffe84df
+FIXUPS: c732 c ff 195b2 16 44 12 23 27 55 12 ffffeab1 23 2a 25 16 10 10
+FIXUPS: 24a80 8 64 6c 4f 16 67 5b 30 70 fffff735 7b 45 3a 45 43 f dc0 3f
+FIXUPS: 25493 90 1a 4c 2b 17 36 48 40 27 86 8e 4f 71 4c 27 88 17 53 1e
+FIXUPS: 25a1d 1e 46 7d 7c 1c 45 87 136 43 ffffefde 22 15 42 64 27 1e 4f
+FIXUPS: 24f52 3e 17 1d 6f 27 1e 15 1d 1a 36 38 1e 45 26 1e 4c 1e 28 1e
+FIXUPS: 252c4 2b 1a 37 1535 87 36 2e 2b 2b 2b 37 39 2b 2b 2b 16 16 11 5f
+FIXUPS: 26ba0 9f 4b 34 35 32 20 52 6b 3c 21 17 34 f ffffdebe 2b 1446 9c
+FIXUPS: 26292 1b 2c 1a c 28 1e 1e 9f 43 27 41 1a c 32 1e 40 9b 27 3b 47
+FIXUPS: 266c5 3e 1e 25 4d 1e 2f 56 21 ed6 48 4d 1a 4a 26 4e 3b 45 1e 90
+FIXUPS: 27a16 2a 55 2a 55 6e 1a ffffe3d2 2c 2d c 1f 20 1e a9 1e 3b 28 35
+FIXUPS: 261ae 12 dbe 2e 52 2a 19 70 74 1a 23 24 4d 6a 2b 2b 4e 60 e0 56
+FIXUPS: 27485 4d 40 2e 27 1c 27 15 3e 4a 53 1f 32 1e 1a72 21f 56 68 2b
+FIXUPS: 294b5 34 14a c 34 28 ffffe552 24 2e 24 2e 20 2e 20 31 1c 34 16
+FIXUPS: 27e19 26 27 c 1b 25 c fffff04e 27 1a80 13 16 47 100 36 1b 9c 36
+FIXUPS: 28ca2 1a 2e 1a 28 1a 83 28 5c 26 33 96 26 c 42 3c e 12 42 54 1e
+FIXUPS: 29122 22 fffff14a 1a 14 6e 70 30 1e 73 1e 15 1d 22 3d 2c 24 22
+FIXUPS: 285b8 87 1e 20 71 2d 41 3e 2b 20 23 29 1e da 18 4b fbac 106 1d
+FIXUPS: 38675 106 1a 1d5 11b 14a 106 160 1e 32 67 11d fffeef1c 2d 33 3b
+FIXUPS: 27ff4 60 15 20 29 44 32 2e 1e 39 8e e 2b eea3 6d 1a 15 11e 53 70
+FIXUPS: 374bf 38 11d ce 2c 106 11c b4 106 2a 1c 30 6a 63 121 76 13c 96
+FIXUPS: 3809c d6 13 149 119 11e 15 ffffdd85 1b a1 32 45 22 41 31 14 135
+FIXUPS: 365cd 106 56 1a 15 42 24 22 10b 30 106 2a 106 28 106 23 106 7a
+FIXUPS: 36f40 23 31 7d ffffe5f9 145 90 18 36 130 83 3e 33 d7 25 43 3b 70
+FIXUPS: 35c71 1a 2c 1e 2d 31 22 2d 2f 7f 3b 1e 34 ea 1a 100 2b 18a ffffe28e
+FIXUPS: 3453f 10 106 26 106 3f 106 53 127 38 1a 106 24 106 51 106 6b 7e
+FIXUPS: 34f2f 2f 1d 28 4c 106 63 112 54 4e 1bd d5 39 ffffe200 d 1f 4c d4
+FIXUPS: 3393d 35 49 119 1c 2e 1a 106 39 48 167 12a 54 2f 31 38 43 106 25
+FIXUPS: 341ba 17 106 43 23 58 106 44 ffffeec5 1a 106 3f 36 16 d 1b 24 15
+FIXUPS: 335cb d 1f 15 21 2e 15 1f 24 15 d 1b d 1b d 24 1f d 1b d 1b d fffff3b9
+FIXUPS: 32bbd 12d 3e 41 106 11c 4b 34 63 22 15 1f 15 12 25 15 19 19 d d
+FIXUPS: 33194 d d 16 d 48 15 1e 24 106 1b ffffe4c9 9f 45 5f 116 cd c8 31
+FIXUPS: 31db2 2e 28 106 12b 30 30 1b 106 23 131 2b 123 117 2c 11d 36 44
+FIXUPS: 3283c 125 5b 1f d1 b3 ffffd8ee 146 13 1e 106 55 ff 7a 13 106 10
+FIXUPS: 30a50 106 17c 115 3d 2b 2b 2e 110 34 113 a2 32 113 141 3b 106 13b
+FIXUPS: 316c0 55 99 ffffdfad 106 20 20 13 106 103 1b 1b 6d 27 6d 5a 1b
+FIXUPS: 2fc76 2d 25 136 32 21 110 13 1e 106 1e 47 2d 4e 5d 49 13c 7a ffffdd26
+FIXUPS: 2e200 126 7f 106 11c 4f 1e 106 181 129 4d 1e 106 10f 123 4c 1e
+FIXUPS: 2eef7 110 12f 13 1e 29 106 26 11c 16 179 21 17d 43 ffffde10 40
+FIXUPS: 2d5c3 35 3b 14 15 18 31 1a 2b 15 1d 25 12 15 17 c 106 11b 44 106
+FIXUPS: 2db58 106 55 106 91 9d 17 5d 106 37 ffffed4e 1b 15 f 92 f 49 37
+FIXUPS: 2cf5c f 9f 19 9f 2c 42 19 1b 1f 77 42 29 1c 1d f 11a 17 40 2b 1d
+FIXUPS: 2d48b 12 15 fffff3ce 50 1a 40 8 13 85 15 1e 61 41 2b 39 1a 1f 19
+FIXUPS: 2cb61 ed 1a 22 19 27 16 36 15 e 17 1b 24 15 1b d fffff609 28 19
+FIXUPS: 2c42d 10 d 2b 1a 19 16 1e 1c 10 15 11b 13 18 19 c d 22 1c 22 20
+FIXUPS: 2c72c 40 41 1a 47 1f 37 d fffff364 16 2a 16 13 43 d c d 11 35 34
+FIXUPS: 2bd33 45 70 2f 10 116 11 13d 106 75 f 5b 1b 5f 30 25 29 1a 19 1e
+FIXUPS: 2b4a3 19 e2 16 17 16 11 36 2b 2b e3 3d 35 24 23 1e 1e 1d 16 d 16
+FIXUPS: 2b8bd 36 2b 110 19 c 13 88 17 8b 2c ffffed32 10 10 2d 1a 19 106
+FIXUPS: 2aa8b 106 26 119 4c 15 16 17 16 11 106 1d 16 17 16 15 106 36 1d
+FIXUPS: 2b09d 2b 110 117 139 61 e8eb 1e 10 13 be fffef8a9 a6 e9 81 106
+FIXUPS: 29ba4 13 1e 106 161 135 d 123 14 106 11b 23 18 119 114 24 19 1a
+FIXUPS: 2a5b2 106 14 106 f0e1 36 16 6f 24 1c 15 19 11 6a 19 f 17 15 1c
+FIXUPS: 39af1 c 11 1f 3d 2f 20 c 11 1f 40 53 13 15 3e 61 16 fffff5e2 15
+FIXUPS: 39376 24 25 2b 23 31 22 52 19 36 8f 17 c 78 19 19 f 12 18 12 69
+FIXUPS: 39744 15 3e c 15 c 19 18 5e f82 74 f 44 13 f 23 23 26 23 23 8a
+FIXUPS: 3aae7 13 13 ffffe51c d f 62 35 15 23 34 2b 1b 72 1a 1c 3e 2d 5b
+FIXUPS: 39335 e0f 7c 83 98 4b 61 145 f 45 14 14 8 13 14 f d 1e 1b f f 10
+FIXUPS: 3a609 10 f 10 f 20 39 3b 32 25 32 adf8 1a 48 1e 3f 1e 20 1a 38
+FIXUPS: 456e1 3c 2b 2b 2a 2b 24 38 22 b7 1e 17 1a 5b 15 43 5d 1a 39 ffff4490
+FIXUPS: 39f5c 61 c6 af41 77 15 1b 32 1e 1e 32 1e 3b 3b 15 25 3c 2b 2b 2a
+FIXUPS: 452b3 f 10 39 35 24 1e 1a 1d 11 a9 23 6e 1e 1a fffff012 20 a3 31
+FIXUPS: 446b4 4c 63 3d 2d 2e 2e 2b 2b 29 3c 26 e1 f1 b6 a5 24 3d 2b 2c
+FIXUPS: 44d2b e8 a2 36 2e 2d 2e 2b ffffee28 53 73 1f e 19 e 24 1a 25 e
+FIXUPS: 43f64 15 af 49 43 1e b2 e 2f 1e 1b 19 80 e 154 2e 2d 2e 2b 25 d
+FIXUPS: 436ac 1b 5e 23 e 14 26 e 2d e 3d 2b 2b 33 e 43 e f1 e 12 160 14
+FIXUPS: 43ba5 24 a3 22 36 e 36 2b 2b 45 fffff33b 26 e 22 1e e 18 14 78
+FIXUPS: 4322e 2a 40 1a 5f 54 17 27 26 e 1e 26 e 40 36 43 2e e ac e 36 2b
+FIXUPS: 4367e fffff450 26 26 e 22 1a 54 2e 22 e 80 35 25 42 27 1e 1c 3b
+FIXUPS: 42df5 26 28 5d 1c 26 e 87 35 30 1e 98 16 1a fffff1d3 1b 22 22 22
+FIXUPS: 423db 4e 10 fd 44 38 1a 33 56 81 37 1e 56 22 e a1 40 64 12 4a 42
+FIXUPS: 429a7 1e 1e 85 16 1e ffffef10 13 16 95 35 3a 34 90 22 e df 6c 66
+FIXUPS: 41da9 2e 4e 42 1b 22 29 a5 2e 57 10 1f 89 4f 1d b4 2e 2b 2b ffffeefe
+FIXUPS: 41172 2b 2d 2b 2d 42 13 38 62 73 6a 31 1eb 32 4d 2e e 18 6a 43
+FIXUPS: 417b9 69 22 15 42 38 44 2c 22 22 e ffffefac 96 1a 53 17 1e c8 62
+FIXUPS: 40bc5 22 1c 22 e 37 2b 35 42 131 1e 38 1e 1a 2a 1c e 3d 42 cb 56
+FIXUPS: 410d3 2b 1e ffffee82 13e 28 16 e a6 36 2b 2b 2b 17c 81 7a 2b 32
+FIXUPS: 40575 e 2b 42 13a 28 16 e 1b 1e 44 1e 1a 39 1c e 5b ffffec50 42
+FIXUPS: 3f6c1 e 68 38 71 19 18 1b 4a 3f 40 2b 42 186 38 79 30 3e 19 18
+FIXUPS: 3fc53 4a 3f 39 2b 2b 13e 28 16 e fffff04d d 54 1c 62 38 2d 20 1a
+FIXUPS: 3f0f8 38 89 20 22 38 45 4d 16 45 5c 16 2f 22 1c e 34 1c e 24 31
+FIXUPS: 3f4e1 2b fffff3c8 e 38 32 15 1b 15 19 15 4a 102 22 38 45 4d 16
+FIXUPS: 3ec2b 38 a5 37 2b 35 2d 42 15 1c e 16 1a 38 59 1f fffff199 14a
+FIXUPS: 3e21e 68 38 71 19 19 1b 3d 54 12e 46 38 36 1c e 25 38 28 38 20
+FIXUPS: 3e754 e 21 3b 38 20 24 22 e 38 fffff239 38 25 16 12 17 45 4a 4d
+FIXUPS: 3dc6c e 13 45 21 40 42 4d 15 13 1e 38 1d 1e 38 25 a6 2d 31 2f 21
+FIXUPS: 3e057 2d fffff43e 27 e 1e 22 40 5c 42 23 e 31 38 27 22 5d 42 23
+FIXUPS: 3d7c8 31 18 38 27 22 36 1d 1e 38 28 90 44 73 13 fffff389 3f 50
+FIXUPS: 3d006 40 25 17 40 1a 1f 3d 1a 1b 3d 4a 13 40 42 4d 1a 21 25 23
+FIXUPS: 3d380 e 1a 38 14 4b 1a 21 25 ffffec8e e 145 e 275 28 2b9 42 19
+FIXUPS: 3c84d 16 22 e 38 3d e 38 2c e 38 b7 f 140 b4 1c 1b 42 82 15 e 4c
+FIXUPS: 3ce01 ffffe7ed 22 e 20 38 38 38 1a 16 22 e 42 4d 19 14 49 14 4b
+FIXUPS: 3b8d2 15 e 16a 36 2b 177 e 76 e 145 e 157 2b fffff075 87 13 f 10
+FIXUPS: 3b11c 13 1e 38 26 e f f 13 9f 3d 36 42 15 13 1e 38 14 d 3d 16 45
+FIXUPS: 3b4a5 38 36 2b 42 ecfd 1c 12 1c 4d 55 c 39 2e 2d 3e 1a 3b ffffb7a2
+FIXUPS: 45c5a 74 45 133 fffffd06 29 8a ffff51e7 f 3a 35 a 10 3a 1a 10 5c
+FIXUPS: 3af9b ec98 c 66 2e 30 57 37 1f 12 1c 41 c 1e 4a e c 156 2b 27 27
+FIXUPS: 4a09d 27 c 36 2e 30 27 27 27 61 f 21 fffff16a 60 47 1e 68 3e 1d
+FIXUPS: 495cc 101 2f 50 59 29 21 1c 44 11 17 1d 4a bf 2b 96 41 2e 30 57
+FIXUPS: 49b8b 1f 12 1c 4d ffffee9d 3c 59 2c 24 35 68 41 1d 7d 38 47 13
+FIXUPS: 48f27 38 38 13 15 e1 23 26 3c 59 2b 80 23 26 3c 59 2b 2c 50 ffffef7b
+FIXUPS: 4834c 26 3c 59 2b 19 4e 27 6b 17 44 2a 1e 68 1e 42 40 1d 79 23
+FIXUPS: 487b5 3c 59 2b 6c 1e 94 50 1d 79 23 fffff1c9 22 1f 1f 3a 2b 2b
+FIXUPS: 47dae 1a 2a 39 2b 2b 4e 1a 45 44 29 92 4e 18 4e 34 4e 55 2b 2b
+FIXUPS: 48261 17 42 2f 19 fffff322 54 27 37 24 31 3c 24 42 3c 27 2a e 21
+FIXUPS: 4789c 31 68 29 52 42 15 2a 15 29 15 51 3a 47 2e 27 4e 1e ffffef79
+FIXUPS: 46df5 80 2e 2b 6a 5d ad 2e 2b 1d 4f 37 2d 2b 2b 20 2f 21 1a 1d
+FIXUPS: 4729b 2b 1d 1d c5 c f3 29 29 a0 2d 31b9 1a 1a 32 5e 11 5f ffffb5c3
+FIXUPS: 45efc 23 3f 11e 13 69 2b 53 e2 22 f6 25 293 1e 3e 2b 43 31 22 1b
+FIXUPS: 468b1 1e 293 1e 56fa e e 10 f 15 13 12 16 e ffffe962 173 93 af
+FIXUPS: 4afb4 2f 51 4a 2a 1c 24 1e 48 1a 19 fffff3c5 5d 60 1a 48 33 5d
+FIXUPS: 4bf6e e e e 15 13 12 10 13 e 10 16 16 19 e 1d 1f 60 e e e 28 4b
+FIXUPS: 4c1bb e 19 1e 21 16 19 e e fffff974 10 e e 11 e e e 12 16 e 5f
+FIXUPS: 4bcec e 19 21 79 f e e e 15 12 58 13 12 10 e 10 14 e e fffff9b6
+FIXUPS: 4b8b3 17 f e e e e e 90 e e e e e c 4b 10 f 15 13 e e 10 13 7e
+FIXUPS: 4bb76 10 f 15 13 12 fffff9dd c 12 13 10 12 e e 4d 26 17 f e 1e
+FIXUPS: 4b6fc 1e 19 e e e 11 10 c 12 10 12 16 e 7e 10 c 12 2698 36 44 92
+FIXUPS: 4e068 36 5f 17 21 47 5c 40 93 21 1d ffffcee0 65 35 28 24 10 41
+FIXUPS: 4b32b 48 37 2b 4b 40 5d 2a 4b 65 1bdc 17 27 29 f1 17 a5 2c 150
+FIXUPS: 4d54f 154 2c 3f 17 3d 15a e9 1f e 4c 1a 30 83 1e 34 2b 3c 18f 13
+FIXUPS: 4dd91 31 f5 547 2b 38 2e 26 2e 2b 2b 38 ffffde1d 111 47 225 28
+FIXUPS: 4c775 24 65 e7 20e 21 2b 2e ba cf 49 1be 23 24 59 1e 126 40 14cb
+FIXUPS: 4e6ab 116 58 76 32 39 5b 32 39 41 32 39 b7 24 5d 7d 32 3e 26 60
+FIXUPS: 4ed49 3e 26 46 32 3e 26 fffff4c4 2b 2d 2e 1624 27 1f 35 12 12 82
+FIXUPS: 4fbaf 2b 53 3f 19 54 2a 7d 4f 58 78 12 12 c8 e0 56 67 66 ffffee77
+FIXUPS: 4f016 e 71 78 1ce fffff2eb d48 3c 17 10 23 c 17 f 21 34 2f 1a c
+FIXUPS: 4f58c a5 7f 3a 12 12 30 96 12 12 73 85 12 12 19 30 49 12 18 5b8b
+FIXUPS: 55586 2b 2b 1a 3a 1a 4b 24 21 24 29 1f 80 24 31 28 12 2e 31 1c
+FIXUPS: 55901 45 22 26 24 1c 36 27 30 137 2e fffff473 1a 21 1a 21 1a 21
+FIXUPS: 550fe 21 1a 4c 1c 1b 3d 71 24 20 1a 4b 24 20 2b 2b 2b 2b 2b 2b
+FIXUPS: 55484 2b 2b 2b 2b fffff5bb 35 20 1a 1f 1f 3a 21 21 1a 2c 24 1f
+FIXUPS: 54cd0 1a 1a 45 25 3d 2a 1a 3f 55 25 3d 1a 28 1f 4f 1f 33 1a fffff64e
+FIXUPS: 5467a 2b 1a 10 37 1a 10 2b 10 21 27 1a 10 52 22 24 31 28 12 2e
+FIXUPS: 5493f 20 39 20 1a 24 22 2a 26 1a 4f fffff727 1e 1a 10 1e 1a 10
+FIXUPS: 542a6 1a 10 1e 1a 10 42 1a 10 48 1a 10 2a 2b 2b 2b 2b 2b 2b 2b
+FIXUPS: 54578 2b 2b 2b 2b fffff86d 10 17 1f 1a 10 17 43 2a 1a 12 10 1c
+FIXUPS: 53ffc 1a 10 17 43 26 1a 12 10 1c 1d 1a 10 17 19 18 17 2a 1a fffff732
+FIXUPS: 539a4 38 59 6e 20 30 37 2e 21 44 21 42 1c 27 26 34 1a 10 3a 1f
+FIXUPS: 53d5a 10 27 19 19 21 21 1a 10 29 1f fffff38a 20 22 61 19 b0 1d
+FIXUPS: 5339b 11 37 1d 80 87 25 11 50 3c 25 1b 3e f 23 47 43 21 1c 80 19
+FIXUPS: 53809 2e 59 3f fffff1d6 23 2d 23 25 ab 63 9c 89 89 40 63 2a 51
+FIXUPS: 52f84 2d 28 2f 11 2c 2d 11 2c 5f 11 2c 1d 17 f 14 14 29 fffff286
+FIXUPS: 5247b 16 16 16 16 16 16 16 16 16 16 1da 12 5b 39 2d 23 25 20 1b
+FIXUPS: 528c5 f 29 39 39 25 2b 22 39 25 39 fffff117 22 b8 21 15f 26 29
+FIXUPS: 51e87 33 1b 78 2f 2c 27 55 9a 1c 91 1c 132 1c 7d 1c 31 16 16 16
+FIXUPS: 523f7 16 16 16 16 ffffeefe 41 28 c 31 27 2e 38 31 4d 30 52 26 47
+FIXUPS: 5160d 12 42 27 6f 74 41 99 32 cf 7d 2f 2f 2f 51 2e 2e 2e fffff1a4
+FIXUPS: 50cff 29 27 33 34 1c 10 12 52 1c 22 9e 2f 51 26 3d 20 21 17 42
+FIXUPS: 510dd 39 3d 18 3e 9e c 56 1f 35 21 fffff27a 38 1d 61 1a 32 4e 24
+FIXUPS: 5091a 2a 17 13 19 1a 66 46 1c 1c c 1a 2c 1c 1b 3e 2a 16 1f 2e 26
+FIXUPS: 50c42 30 1a 57f9 15 27 11 15 27 11 15 27 11 15 27 11 15 ffff9c52
+FIXUPS: 50239 27 2a 19 4f 84 2c 4f 1c 30 1a 3a 1e 23 19 1e 1c 60f9 1c 67
+FIXUPS: 566cc 29 7a 86 5b fffff47a ce 77 1b0 68 64 6a 6a 5f 3d 6a 5f 32
+FIXUPS: 56315 78 11 15 27 11 15 27 11 15 27 8a5 1e 18 d7 d 35 13 5a 11
+FIXUPS: 56f12 21 27 8f 58 1f c 12 10 74 c3 34 3f 15 44 5f 70 18 6e 2c b8
+FIXUPS: 574e7 b3 1dbc 94 9a f da 1e 23 13 13 11 11 11 35 11 11 35 11 11
+FIXUPS: 596c5 13 13 ffffdf7f 13 31 38 23 49 12 12 10 43 bf3 af9 d 10 d
+FIXUPS: 58f02 11 11 11 10 2f 13 11 11 2b 11 2b 11 10 13 25 f da 1e 25 f
+FIXUPS: 5927e 1e 61 d 10 d 10 70d 7a fd 48 43 20 18b 15d 38 47 54 4e 47
+FIXUPS: 5a0c9 61 105 b0 ef 10b b3 41 112 73 ffffefc6 3a 7d 19 fffff037
+FIXUPS: 58922 b7 11 10 fffb32af ffff5abe e6 1c 1f 52 fffff7a5 8d 18 d1
+FIXUPS: 1221 15c 73 99 9e a6 77 59262 e b8 4c 106 33 e fd 2e 1d ffffecb1
+FIXUPS: 5993b 31 33 13 fffb19f1 6e 6e 17 21 35 a7 3f 3c 171 b 21 19 1a
+FIXUPS: b83f 1d 1d 51 1d 1d 3c 15 11 15 11 15 b4 9e 92 38 81 25 ffffefd2
+FIXUPS: ac64 6a 23 17 35 4d 2b 74 2a e 2f 3a e 3f 3f 44 44 52 61 84 43
+FIXUPS: b16f 51 84 31 28 2a 17 17 1b 14 fffff217 a 2e 2d 70 50 2c 14 43
+FIXUPS: a700 21 3b 8 6f 2f 2c 3b fe d 14 e 2c c6 22 8 11 27 4d 64 43 15
+FIXUPS: ac01 ffffec58 43 3d 43 1f6 24 2a 3d 3d 3d 59 28 4c 39 8 12 14 24
+FIXUPS: 9d97 a 5a 302 1ae d7 18 1e 30 37 19 19 42 73 ffffebef 24 4e 24
+FIXUPS: 91a4 10 1e 58 6f 73 8e 46 50 2a 46 44 14 51 17 21 3a 16 3a 21 53
+FIXUPS: 968a 11 2b 4b bf 32 20 fffff3b7 1f 14 33 5f 37 33 29 1f 38 1e 2f
+FIXUPS: 8df5 37 c 34 3c 14 2b 1f 2a 28 16 4a 13 18 30 15 3a 1c 14 3a fffff324
+FIXUPS: 8436 54 4f 14 99 25 21 46 47 54 3f 36 64 4f 24 2f 20 37 2b 29 38
+FIXUPS: 8930 14 8b 17 1c 3a 64 14 30 bb fffff003 46 23 60 59 14 5f 57 2b
+FIXUPS: 7dff 43 37 3a 14 a0 2c 21 46 18 25 54 19 40 14 a0 2c 21 46 5f 19
+FIXUPS: 830d 6d fffff149 46 14 30 26 3a 14 2f 20 2c 5a 14 2f 20 25 3a 14
+FIXUPS: 77ce 89 2f 21 46 28 46 23 60 59 14 99 2f 21 46 fffff32a 41 29 17
+FIXUPS: 6f39 2f 20 25 2d 29 38 35 3e 14 8b 1b 21 46 1c 46 46 14 51 34 1c
+FIXUPS: 7372 46 14 51 34 f 1d fffff250 7e 7b 1b 44 3a 77 14 30 42 3a 14
+FIXUPS: 6a1a c 79 4d 45 3a 14 30 42 3a 14 70 c 79 4d 45 3a 14 51 2a fffff013
+FIXUPS: 5eb6 3a 34 3a 14 3a 3e 3a 41 14 92 3a 24 17 14 ad 3a 44 17 14 7e
+FIXUPS: 6407 f 7f 3d 1c 3a 2d 30 af 1b fffff2d6 4e 3a 3c 14 2e 3a 30 3a
+FIXUPS: 5af7 3a 1c 14 2f 20 37 1c 41 14 51 1d 30 25 1b 3b 12 3d 2b 41 14
+FIXUPS: 5e79 12 fffff49a 2d 1c 1e 3d 23 3a 37 14 3b 1c 17 14 3e 1a 30 15
+FIXUPS: 55d3 1c 10 1e 3d 2a 1f 3e 41 14 89 20 32 14 d0 fffff46f 46 1e 2e
+FIXUPS: 4e48 4d 14 52 26 3a 33 14 46 1f 3a 33 14 3a 18 3a 33 14 2e 3a 12
+FIXUPS: 51f3 3a 45 1e 2d 1e 2c fffff58a 2c 12 14 31 3a 14 4d 3a 12 1c 3a
+FIXUPS: 4a63 1c 3a 12 1c 3a 12 1c 3a 14 49 13 12 20 3a 14 39 42 22 3a fffff42c
+FIXUPS: 41a8 25 30 14 54 3d 3e 48 41 14 9c 25 90 41 4b 14 3d 2a 1a 61 1f
+FIXUPS: 46b2 2c 10 1e 3e 1a 1f 29 6b 27 fffff2e4 7e 34 e 8 25 3d 29 28
+FIXUPS: 3cd7 2c 12 14 5f 40 4b 38 1b 29 40 3a 14 55 32 4a 3a 14 2c 43 15
+FIXUPS: 40f3 14 fffff31d 14 77 12 13 d 13 17 14 33 93 3d 46 a 14 47 20
+FIXUPS: 3724 14 3a 19 44 14 59 a4 7b 27 49 9e 14 55 29 fffff19a 2d 173
+FIXUPS: 2e5a 55 c 85 25 32 15 21 11 f9 7f 40 14 32 32 26 11 58 14 32 25
+FIXUPS: 3321 21 1f 19 21 1f 1c 14 ffffef46 43 4e 1e 28 20 3f 1a 4c 21 12f
+FIXUPS: 262d 4b 144 4d 60 73 c 60 2a 3a 62 46 41 31 6e 4d 25 52 32 27 26
+FIXUPS: 19bf 56 3a 1e 3e eb 43 39 1c 53 2b 43 82 39 1c a8 35 31 26 1f ac
+FIXUPS: 2010 5a 46 30 4b 9c 2a 46 30 66 21

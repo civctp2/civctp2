@@ -1,0 +1,478 @@
+Sprite : Int
+Sound : File
+SpecialEffect : Int
+
+SpecialAttackInfo {
+	Record Sound         SoundID
+	Record SpecialEffect SpriteID
+}
+
+Unit {
+	Bits MovementType {
+		Land,
+		Sea,
+		Air,
+		Mountain,
+		Trade,
+		ShallowWater,
+		Space
+	}
+
+	#uint32 cargo_flag;
+	Bits CanCarry {
+		SmallLand,
+		MedLand,
+		LargeLand,
+
+		SmallAir,
+		MedAir,
+		LargeAir,
+		
+		SmallWater,
+		MedWater,
+		LargeWater,
+
+		SmallSpace,
+		MedSpace,
+		LargeSpace
+	}
+
+	Record Advance             EnableAdvance
+	Record Advance[0..5]        ObsoleteAdvance
+
+	Bits Size {
+		Small,
+		Medium,
+		Large
+	}
+
+	Struct SuccessDeath {
+		Float Chance, DeathChance
+	}
+
+	Struct SuccessDeathEffect {
+		Float Chance, DeathChance
+		Record Sound Sound
+		Record SpecialEffect Effect
+	}
+
+	Bit LossMoveToDmgNone
+	Bit LossMoveToDmgTwo
+	Bit NoFuelThenCrash
+	Bit TransformPartial
+
+	Bit IgnoreZOC
+	Bit NoZoc
+
+	Bits CanBombard {
+		Land,
+		Air,
+		Water,
+		Space,
+		Mountain
+	}
+
+	Bit CanCounterBombard
+
+	Bit CanLiftOff					
+
+	Bits Settle { 
+		Land,
+		Water,
+		Mountain,
+		Space
+	}
+	Record Unit SettleCityType
+	Int SettleSize = 1
+	Record Building[] SettleBuilding
+
+	# Int is number of turns to stay in space
+	Bit(Int) SpaceLaunch
+	Bit SpaceLand
+
+	Bit CantCaptureCity
+	Bit HasPopAndCanBuild
+	Bit IsTrader
+	Bit ExertsMartialLaw
+
+	Bit CanEntrench
+	Bit CanPatrol
+
+	Bit NeedsNoSupport
+	Bit CanExpelPop
+	Bit IsFlanker
+	Bit CanBeachAssault
+
+
+	Bits Defend {
+		Land, Air, Water, Space, Mountain
+	}
+
+	Bit(Float) DefendAgainstSpies
+	Bit CanBeExpelled		
+	Bit CanBeSued		
+	Bit AttackFromSpaceship	
+	Bit CantBeAttacked		
+	Bit CargoPod			
+	Bit IsMounted				
+	Bit IgnoreCityWalls		
+	Bit IsSubmarine			
+
+	Bit NoLandAttack			
+	Bit NoSeaAttack			
+	Bit NoAirAttack			
+	Bit NoSpaceAttack		
+	Bit NoUnderwaterAttack	
+	Bit NoMountainAttack
+	Bit NoShallowWaterAttack
+
+	Bit Paratrooper			
+	Bit AssistedDrops			
+	Bit BonusAgainstMounted	
+	Bit SingleUse				
+	Bit BonusAirDefense		
+
+	Bit WoodenShip			
+	Bit AttackWoodenShipBonus	
+	Bit HasAttackCityBonus		
+	Bit HasAttackBonusSubmarine	
+
+	Bit(Int) ReplaceWithCargoModule	
+	Bit VisibileAttacking		
+
+	Bit(struct SoundAndEffect) NuclearAttack
+
+	Bit CanSue				
+	Bit IsStealthy			
+	Bit SeeSurfaceFromSpace	
+
+	Bit EstablishEmbassy		
+	Bit ThrowParty			
+	Bit HearGossip			
+
+	Struct StealTechnologyData {
+		Float RandomChance
+		Float SpecificChance
+		Float DeathChance
+		Record Sound Sound
+		Record SpecialEffect Effect
+	}
+	Bit(Struct StealTechnologyData) StealTechnology
+
+	Struct InciteRevolutionData {
+		Float Chance
+		Float EliteChance
+		Float DeathChance
+		Record Sound Sound	
+		Record SpecialEffect Effect
+	}
+
+	Bit(struct InciteRevolutionData) InciteRevolution		
+
+	Struct AssasinateRulerData {
+		Float Chance
+		Float EliteChance
+		Float DeathChance
+	}
+	Bit(Struct AssasinateRulerData) AssasinateRuler
+
+	Struct InvestigateReadinessData {
+		Float Chance
+		Float EliteChance
+		Float DeathChance
+	}
+
+	Bit(Struct InvestigateReadinessData) InvestigateReadiness	
+	Bit NullifyCityWalls		
+
+	struct ChanceEffect {
+		Float Chance
+		Record Sound Sound
+		Record SpecialEffect Effect
+	}
+
+	Bit(Struct ChanceEffect) CreateFranchise
+
+	Struct CauseUnhappinessData {
+		Float Chance
+		Int   Timer
+		Int   Amount
+		Record Sound Sound
+		Record SpecialEffect Effect
+	}
+
+	Bit(Struct CauseUnhappinessData) CauseUnhappiness
+
+	Bit(struct SoundAndEffect) ConductHits
+	Bit(struct ChanceEffect) BioTerror
+	Bit(struct ChanceEffect) NanoTerror
+	Bit(struct ChanceEffect) Plague
+
+	Struct SlaveRaidsData {
+		Float Chance, DeathChance
+		Int Timer, Amount
+		Record Sound Sound
+		Record SpecialEffect Effect
+	}
+	Bit(Struct SlaveRaidsData) SlaveRaids
+
+	Struct SoundAndEffect {
+		Record Sound Sound
+		Record SpecialEffect Effect
+	}
+	Bit(struct SoundAndEffect) SettlerSlaveRaids	
+
+	Bit(struct SoundAndEffect) SlaveUprising
+
+	Bit(struct SuccessDeathEffect) UndergroundRailway	
+	Bit VictoryEnslavement	
+
+	Bit DefuseLandMines		
+	Bit DefuseSeaMines		
+	Bit DefuseXrayMines		
+
+	Bit(struct SoundAndEffect) IndulgenceSales		
+	Bit(struct SuccessDeathEffect) ConvertCities			
+	Bit BuildXrayMines		
+
+	Bit BuildWonder			
+	Record Government[] GovernmentType
+	Bit NoSlaves				
+	Bit CreateRift			
+	Bit CanCloak				
+	Bit ParatrooperTransport
+	Bit CantBuild
+
+	Struct PlantNukeData {
+		Float Chance, EscapeChance
+		Record Sound Sound
+		Record SpecialEffect Effect
+	}
+	Bit(Struct PlantNukeData) PlantNuke
+
+	Bit IsTelevangelist
+	Bit(struct SoundAndEffect) CanSoothsay
+
+	Bit CanBeRustled
+	Bit(struct SoundAndEffect) CreateParks
+	
+	Bit (struct SoundAndEffect) CanInjoin
+
+	Bit WormholeProbe
+	Bit HasBonusFood
+	Bit LandCityCanBuild
+	Bit SeaCityCanBuild
+	Bit SpaceCityCanBuild
+	Bit IsSpecialForces
+	Bit NotAffectedByLandMines
+	Bit InternalReserved
+
+
+	Bit DeathEffectsHappy
+	Bit EnableCarrierDefenses
+	Bit ActiveDefenseOnlyWhenCarryingEnablers
+	Bit BuildingRemovesAPop
+	Bit Explodes				
+	Bit Advertise
+	Bit CanRustle
+	Bit OnlyBuildOne
+
+	Bit CanExpel
+
+	Bit(struct SoundAndEffect) CanReform
+	Bit CanPillage
+	Bit CanPirate
+
+	#uint32 visibility_classes;
+	Bits VisionClass {
+		Standard,
+		Underwater,
+		Stealth,
+		UnusedBit3,
+		UnusedBit4,
+		UnusedBit5,
+		UnusedBit6,
+		UnusedBit7,
+		UnusedBit8,
+		UnusedBit9,
+		UnusedBit10,
+		UnusedBit11,
+		UnusedBit12,
+		UnusedBit13,
+		UnusedBit14,
+		UnusedBit15
+	}
+
+	#uint32 visibility_abilities;
+	Bits CanSee {
+		Standard,
+		Underwater,
+		Stealth,
+		UnusedBit3,
+		UnusedBit4,
+		UnusedBit5,
+		UnusedBit6,
+		UnusedBit7,
+		UnusedBit8,
+		UnusedBit9,
+		UnusedBit10,
+		UnusedBit11,
+		UnusedBit12,
+		UnusedBit13,
+		UnusedBit14,
+		UnusedBit15
+	}
+
+	# uint32 attackFlags;
+	Bits CanAttack {
+		Land,
+		Sea,
+		Air,
+		Mountain,
+		Trade,
+		ShallowWater,
+		Space,
+		Underwater
+	}
+			
+	Struct CargoData {
+		Int MaxCargo
+		Record Sound Load
+		Record Sound Unload
+	}
+	Bit(Struct CargoData) CargoData
+
+    Int ShieldCost
+
+	Int PowerPoints
+
+    Int MaxHP
+    Float MaxHPr = 1.0
+    Float Attack
+    Float Defense
+    Int Firepower
+	Int ZBRangeAttack
+	Float Armor
+
+    Bit(Int) BRange
+    Bit (Int) BRadius
+
+    Int VisionRange
+    Int ActiveDefenseRange
+    Bit (Int) ElectronicCombatFactor
+
+    Float MaxMovePoints
+    Int MaxFuel
+
+	Bit(Int) TransType
+
+	Bit(Int) ProbOfBombHit
+    Bit(Int) BombRounds
+
+    Int ShieldHunger
+    Int FoodHunger
+    Record Sprite DefaultSprite
+
+	
+	Bit(Int) LaunchPollution 
+	Bit(Int) DeathPollution 
+
+	Bit(Float) MountedBonus
+	Bit(Float) AirBonus
+	Bit(Float) WoodenShipBonus
+	Bit(Float) AttackCityBonus
+	Bit(Float) AttackBonusSubmarine
+
+	Bit(Int) CargoModule
+
+	Bit(Float) SpyVsSpy
+
+	Struct InvestigateCityData {
+		Float Chance,
+			  EliteChance,
+			  DeathChance
+	}
+	Bit(Struct InvestigateCityData) InvestigateCity
+
+	Bit(Int) BonusFood
+
+	#uint32 govs
+	#Record Government[] Govs
+
+	Bit(Int) BombardRange
+
+	struct RevolutionData {
+		Record Sound Sound
+		Record SpecialEffect Effect
+	}	
+	
+	Bit(struct RevolutionData) Revolution
+
+	Record Sound SoundSelect1			
+	Record Sound SoundSelect2			
+	Record Sound SoundMove				
+	Record Sound SoundAcknowledge		
+	Record Sound SoundCantMove			
+	Record Sound SoundAttack
+
+	Record Sound SoundWork
+	Record Sound SoundVictory
+	Record Sound SoundDeath
+	Record Sound SoundLoad
+	Record Sound SoundUnload
+
+	# This doesn't need to be here any more.
+    Record SpecialAttackInfo[0..8] SpecialAttacks
+
+	Bit(Float) CityGrowthCoefficient
+
+#	uint32 userFlags
+
+	Bits UserFlags {
+	  UF1,
+	  UF2,
+	  UF3,
+	  UF4,
+	  UF5,
+	  UF6,
+	  UF7,
+	  UF8,
+	  UF9,
+	  UF10,
+	  UF11,
+	  UF12,
+	  UF13,
+	  UF14,
+	  UF15,
+	  UF16,
+	  UF17,
+	  UF18,
+	  UF19,
+	  UF20,
+	  UF21,
+	  UF22,
+	  UF23,
+	  UF24,
+	  UF25,
+	  UF26,
+	  UF27,
+	  UF28,
+	  UF29,
+	  UF30,
+	  UF31
+	}
+
+	Record Icon DefaultIcon
+	Bit NoIndex			
+	Bit (int) CheatIndex
+	StringId Description
+    Bit (StringId) Advice
+    StringId Category
+
+	Bit GLHidden
+
+    Bit CantMove
+
+    // set this flag for units that non-evil AI's should not attack
+    Bit Civilian
+}

@@ -1,0 +1,359 @@
+
+// Improvement names from Improve.txt
+BuildingBuildList {
+	Record Building[] Building
+}
+
+// Wonder names from Wonder.txt
+WonderBuildList {
+	Record Wonder[] Wonder
+}
+
+// Unit records from Units.txt
+UnitBuildList {
+	Record Unit[] Unit
+}
+
+AdvanceList {
+	Record Advance[] Advance
+}
+
+// Sequence of Build Lists
+BuildListSequence {
+
+	struct BuildListElement {
+		// specify a list record from one of the possible list types
+		Bit(Record WonderBuildList) WonderBuildList
+		Bit(Record BuildingBuildList) BuildingBuildList
+		Bit AllUnitBuildList
+		Bit GarrisonUnitBuildList
+		Bit Capitalization
+		Bit Infrastructure
+		Bit Freight
+	}
+
+	// ordered sequence of build lists
+	struct BuildListElement[] BuildListElement
+}
+
+ImprovementList {
+	Record TerrainImprovement[] Improvement
+}
+
+Strategy {
+	Record Strategy[0..1] Inherit
+	
+	//
+	// POPULATION ASSIGNMENTS
+	//
+
+	struct PopAssignmentElement {
+		// percent of workers after minimums have been achieved that
+		// should be used as specialists
+		Float Specialists
+
+		// Percent of allocation to different specialist types 
+		Float FarmerPercent
+		Float LaborerPercent
+		Float MerchantPercent
+		Float EntertainerPercent
+		Float ScientistPercent
+
+		Bit (Float) Top
+        Bit (Float) Bottom
+		Bit ProductionCities
+		Bit GrowthCities
+		Bit GoldCities
+		Bit Default
+	}
+
+    // how to assign populations for cities meeting various criteria
+	struct PopAssignmentElement[] PopAssignmentElement
+
+	// 
+	// GOVERNMENT LIST
+	//
+
+	// progression from most to least desired government
+    Record Government[] Government
+
+	//
+	//  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
+	//
+
+	// set how unhappy our most unhappy city be
+	bit(Int) MinimumHappiness
+
+	// set maximum deficit spending percent (ie. spend up to 10% of our savings each turn)
+	bit(Float) DeficitSpending
+
+	// set maximum percent of gold that should ever be spent on wages to not choke science
+	bit(Float) MaximumWagePercent
+
+	struct SliderElement {
+		Int Delta				// setting changes from baseline (-3 to 3)
+		Bit Production			// increase workday
+		Bit Gold				// decrease wages
+		Bit Food				// decrease food
+	}
+	struct SliderElement[] SliderElement
+
+	//
+	// SCIENCE SETTINGS
+	//
+
+	// percent of gold to put into science (ie. SetTaxes)
+	bit(Int) SciencePercent
+
+	//
+	// MILITARY READINESS SETTING
+	//
+
+	// maximum percent of production used for military readiness
+	bit(Int) MaxSupportCostPercent
+
+	// Peace = 0, Alert = 1, War = 2
+	bit(Int) ReadinessLevel
+
+	//
+	// TERRAIN IMPROVEMENTS
+	//
+
+	// percent of gold to put into science (ie. SetMaterialsTax)
+	bit(Int) PublicWorksPercent
+
+	// amount of public works (materials) to keep in reserve
+	Bit(Int) PublicWorksReserve
+
+	// only consider building best n tile improvements
+	Bit(Int) MaxEvalTileImprovements
+	
+    // rounds to wait before fixing roads
+	Bit(Int) TimeToFixRoads
+
+    // rounds to wait before fixing polluted tiles
+	Bit(Int) TimeToFixPollution
+
+    // stored PW must exceed cost to fix + threshold
+	Bit(Int) FixPollutionThreshold
+
+    // bonus for building road improvements
+	Bit(Float) RoadUtilityBonus
+      
+    // bonus for building production improvements
+	Bit(Float) ImproveProductionBonus
+
+    // bonus for building growth improvements
+	Bit(Float) ImproveGrowthBonus
+
+    // bonus to apply to cells with goods
+	Bit(Float) ImproveGoodBonus
+
+    // bonus for growth improvements in smallest 20% of our cities
+	Bit(Float) ImproveSmallCityGrowthBonus   
+
+    // bonus for production improvements in largest 20% of our cities
+	Bit(Float) ImproveLargeCityProductionBonus
+
+	// ordered list of terrain improvements that increase growth
+    Record ImprovementList ImproveGrowthList
+
+	// ordered list of terrain improvements that increase production
+    Record ImprovementList ImproveProductionList
+
+	// ordered list of terrain improvements to be randomly spread around
+    Record ImprovementList ImproveRandomList
+
+	//
+	// GOALS
+	//
+
+	struct GoalElement {
+		Record Goal Goal
+		Int Priority     // settle_priority
+		Float MaxEval    // MAX_EVAL_SETTLE_GOALS
+		Float MaxExec    // MAX_EXEC_SETTLE_GOALS
+		Bit ExecPerCity  // Exec per city, Eval absolute count
+		Bit EvalPerCity  // Eval per city, Exec absolute count
+		Bit PerCity		 // Both Eval and Exec per city (default absolute count)
+	}
+	struct GoalElement[] GoalElement
+
+    // multiplied by #rounds to target
+	Bit(Int) DistanceModifierFactor
+
+	// number of armies to try and disband units from per round
+	Bit(Int) DisbandArmyCount
+
+	// minimum distance between settled cities 
+	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+	Bit(Int) MinSettleDistance
+
+	// cells with settle scores below this threshold will not be used
+	Bit(Int) MinSettleScore
+
+	//
+	// BUILD LISTS
+	//
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	Bit (Int) RushBuyThreatBonus
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	Bit (Float) RushBuyReservePercent
+
+	// Percent of civilization support dedicated to units
+	Bit (Float) UnitSupportPercent
+
+	// Do not certain items in cities where if it takes too many turns
+	Bit (Int) MaxSettlerBuildTurns
+	Bit (Int) MaxUnitBuildTurns
+	Bit (Int) MaxWonderBuildTurns
+
+	// maximum percent of conventional units to build before building
+	// special units of specified type
+	Bit (Float) BuildTransportProductionLevel
+	Bit (Float) BuildSettlerProductionLevel
+
+	// Unit Percents must total to 1 (100%)
+	Bit (Float) OffensiveUnitsPercent
+	Bit (Float) DefensiveUnitsPercent
+	Bit (Float) RangedUnitsPercent
+	Bit (Float) SeaUnitsPercent
+	Bit (Float) AirUnitsPercent
+
+	// Number of special units that should be built
+	Bit (Int) SettlerUnitsCount
+	Bit (Int) SpecialUnitsCount
+	Bit (Int) SeaTransportUnitsCount
+	Bit (Int) AirTransportUnitsCount
+
+	// Types of standard units that should be built
+	Bit (Record UnitBuildList) OffensiveUnitList
+	Bit (Record UnitBuildList) DefensiveUnitList
+	Bit (Record UnitBuildList) RangedUnitList
+	Bit (Record UnitBuildList) SeaUnitList
+	Bit (Record UnitBuildList) AirUnitList
+
+	// Types of special units that should be built
+	Bit (Record UnitBuildList) SettlerUnitList
+	Bit (Record UnitBuildList) SpecialUnitList
+	Bit (Record UnitBuildList) SeaTransportUnitList
+	Bit (Record UnitBuildList) AirTransportUnitList
+	Bit (Record UnitBuildList) FreightUnitList
+
+	// minimum number of units to keep in cities as a garrison
+	Bit (Int) OffensiveGarrisonCount
+	Bit (Int) DefensiveGarrisonCount
+	Bit (Int) RangedGarrisonCount
+
+	struct BuildListSequenceElement {
+		// A city that matches more than one criteria uses the one
+		// with the higher priority.
+		Int Priority
+
+		// sequence of build lists for city matching criteria
+		Record BuildListSequence BuildListSequence
+
+		// city criteria
+		Bit (Float) Top       // top percent of cities
+		Bit (Float) Bottom    // bottom percent of cities
+		Bit ProductionCities  // based on production
+		Bit GrowthCities      // based growth
+		Bit CommerceCities    // based on commerce income
+		Bit HappyCities		  // based on happiness
+		Bit ThreatenedCities  // based on enemy threat
+		Bit PowerCities		  // based on domestic attack strength
+		Bit Default           // if neither top or bottom, then use default
+		Bit (StringId) Advice // Advice to give player if selected
+	}
+
+	// for each city with an empty build queue, build from first sequence that applies
+	struct BuildListSequenceElement[] BuildListSequenceElement
+
+	//
+	//  ADVANCES
+	//
+
+	// list of advances we want to have, in the order we want them
+	Bit (Record AdvanceList) Research
+
+	// list of advances we do not want our enemies to have
+	Bit (Record AdvanceList) StopResearch 
+
+	//
+	//  MOTIVATIONS
+	//
+
+	// priority for fear motivations
+	Bit (Int) FearInvasion
+	Bit (Int) FearCityDefense
+	Bit (Int) FearPiracy
+	Bit (Int) FearScienceRank
+	Bit (Int) FearMilitaryRank
+	Bit (Int) FearTradeRank
+	Bit (Int) FearPollution
+
+	// priority for desire motivations
+	Bit (Int) DesireAttack
+	Bit (Int) DesireGold
+	Bit (Int) DesireScience
+	Bit (Int) DesireMakeFriend
+	Bit (Int) DesireEnlistFriend
+
+	//
+	// TRADE
+	//
+
+	// only accumulate count of piracy if it occurs within memory of last piracy
+	Bit (Int) PiracyMemoryTurns
+
+	// number of piracy events to accumulate before we kill the route
+	Bit (Int) MaxPiracyEvents
+
+	//
+	// FORCE MATCHING
+	//
+
+	struct ForceMatch {
+		Float AttackMatch  // ratio of army's attack strength to target's defense strength
+		Float DefenseMatch // ratio of army's defense strength to target's attack strength
+		Float RangedMatch  // ratio of army's ranged strength to target's ranged strength
+		Float BombardMatch // ratio of army's bombard strength to target's bombard strength
+		Float ValueMatch   // ratio of army's value to target's value
+	}
+
+	// force matching values
+	Bit (struct ForceMatch) Offensive
+	Bit (struct ForceMatch) Defensive
+    Bit (struct ForceMatch) StealthAttack
+    Bit (struct ForceMatch) Bombard
+	Bit (struct ForceMatch) Special
+	Bit (struct ForceMatch) Harass
+
+	// set to disable first strike with nuclear weapons
+	Bits NuclearFirstStrike	{
+		Enabled,
+		Disabled
+	}
+
+	// set to disable targeting of nuclear weapons
+	Bits NuclearTargeting {
+		Enabled,
+		Disabled
+	}
+
+	// do not perform first strike if our regard is above some limit
+	Bit (Int) PreemptiveStrikeRegard
+
+	// how many foreign boom booms are enough to wipe us off the map?
+	// (eg. if more than 1 foreign nuke to every 4 of our cities would be
+	//  enough to prevent us from launching, specify 0.25)
+	Bit (Float) PreemptiveStrikeRiskRatio
+
+	// when do we have enough nukes to wipe them off the map?
+	// (eg. if having less than 3 nukes to every 4 enemy cities prevents 
+	//  us from launching, specify 0.75)
+	Bit (Float) PreemptiveStrikeSuperiorityRatio
+}
