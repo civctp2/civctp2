@@ -187,7 +187,7 @@ player[0] = city[0].owner;
 HandleEvent(ArmySelected) 'TSelectUnit' post {
 unit_t tmpUnit;
 player[0] = army[0].owner;
-	if(FIRST_UNIT && NEW_ARMY) {
+	if(FIRST_UNIT.valid && NEW_ARMY) {
 		if(LocCompare(army[0].location)) {
 			if(CheckForUnit(army[0], FIRST_UNIT)) {
 			Message(g.player, 'TMMoveUnit2');

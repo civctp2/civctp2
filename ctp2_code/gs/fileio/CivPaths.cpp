@@ -23,6 +23,7 @@
 // Modifications from the original Activision code:
 //
 // - Added option to use multiple data directories.
+// - Memory leak/crash fix
 //
 //----------------------------------------------------------------------------
 
@@ -43,6 +44,7 @@ extern ProjectFile *g_ImageMapPF;
 
 void CivPaths_InitCivPaths() 
 { 
+    delete g_civPaths;
 	g_civPaths = new CivPaths; 
 } 
 
@@ -50,8 +52,6 @@ void CivPaths_InitCivPaths()
 
 void CivPaths_CleanupCivPaths()
 { 
-	Assert(g_civPaths != NULL);
-
     delete g_civPaths;
 	g_civPaths = NULL;
 } 
@@ -59,75 +59,55 @@ void CivPaths_CleanupCivPaths()
 
 
 CivPaths::CivPaths ()
-:	m_extraDataPaths()
+:	m_hdPath                (new MBCHAR[_MAX_PATH]),
+	m_cdPath                (new MBCHAR[_MAX_PATH]),
+    m_defaultPath           (new MBCHAR[_MAX_PATH]),		
+	m_localizedPath         (new MBCHAR[_MAX_PATH]),	
+	m_dataPath              (new MBCHAR[_MAX_PATH]),
+    m_extraDataPaths        (),
+	m_scenariosPath         (new MBCHAR[_MAX_PATH]),	
+    m_savePath              (new MBCHAR[_MAX_PATH]),			
+	m_saveGamePath          (new MBCHAR[_MAX_PATH]),		
+	m_saveQueuePath         (new MBCHAR[_MAX_PATH]),	
+	m_saveMPPath            (new MBCHAR[_MAX_PATH]),		
+	m_saveSCENPath          (new MBCHAR[_MAX_PATH]),		
+	m_saveMapPath           (new MBCHAR[_MAX_PATH]),		
+	m_saveClipsPath         (new MBCHAR[_MAX_PATH]),    
+    m_curScenarioPath       (NULL),	
+	m_curScenarioPackPath   (NULL)
 { 
-    FILE			*fin = NULL; 
-    sint32			dir;
+    std::fill(m_desktopPath, m_desktopPath + _MAX_PATH, 0);	
 
-    memset(this, 0, sizeof(*this)); 
-
-	m_curScenarioPath = NULL;
-
-	m_curScenarioPackPath = NULL;
-
-    fin = fopen ("civpaths.txt", "r");		
+    FILE *  fin = fopen("civpaths.txt", "r");
     Assert(fin); 
 
-	m_hdPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_hdPath);
-
-	m_cdPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_cdPath);
-
-	m_defaultPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_defaultPath);
-
-	m_localizedPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_localizedPath);
-
-	m_dataPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_dataPath);
-
-	m_scenariosPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_scenariosPath);
-
-	m_savePath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_savePath);
-
-	m_saveGamePath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_saveGamePath);
-
-	m_saveQueuePath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_saveQueuePath);
-
-	m_saveMPPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_saveMPPath);
-
-	m_saveSCENPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_saveSCENPath);
-
-	m_saveMapPath = new MBCHAR[_MAX_PATH];
-	fscanf (fin, "%s", m_saveMapPath);
-
-	m_saveClipsPath = new MBCHAR[_MAX_PATH];
+	fscanf(fin, "%s", m_hdPath);
+	fscanf(fin, "%s", m_cdPath);
+	fscanf(fin, "%s", m_defaultPath);
+	fscanf(fin, "%s", m_localizedPath);
+	fscanf(fin, "%s", m_dataPath);
+	fscanf(fin, "%s", m_scenariosPath);
+	fscanf(fin, "%s", m_savePath);
+	fscanf(fin, "%s", m_saveGamePath);
+	fscanf(fin, "%s", m_saveQueuePath);
+	fscanf(fin, "%s", m_saveMPPath);
+	fscanf(fin, "%s", m_saveSCENPath);
+	fscanf(fin, "%s", m_saveMapPath);
 	fscanf(fin, "%s", m_saveClipsPath);
 
-	
-	for (dir = C3DIR_GAMEDATA; dir < C3DIR_MAX; dir++) {
+	for (size_t dir = 0; dir < C3DIR_MAX; ++dir) 
+    {
 		m_assetPaths[dir] = new MBCHAR[_MAX_PATH];
 		fscanf (fin, "%s", m_assetPaths[dir]);
 	}
 
-	fclose(fin); 
-
-	
+    fclose(fin); 
 
 	MBCHAR	tempPath[_MAX_PATH];
 	MBCHAR	fullPath[_MAX_PATH];
 	MBCHAR	*s;
 
 	sprintf(tempPath, "%s\\%s", m_hdPath, m_savePath);
-
 	s = _fullpath(fullPath, tempPath, _MAX_PATH);
 	Assert(s != NULL);
 
@@ -138,34 +118,28 @@ CivPaths::CivPaths ()
 
 CivPaths::~CivPaths()
 {
-    sint32			dir;
-
-	if (m_curScenarioPath)
-		delete[] m_curScenarioPath;
-
-	
-	if (m_curScenarioPackPath)
-		delete[] m_curScenarioPackPath;
-
-	delete[] m_hdPath;
-	delete[] m_cdPath;
-	delete[] m_defaultPath;
-	delete[] m_localizedPath;
-	delete[] m_dataPath;
-	delete[] m_scenariosPath;
-	delete[] m_savePath;
-	delete[] m_saveGamePath;
-	delete[] m_saveQueuePath;
-	delete[] m_saveMPPath;
-	delete[] m_saveSCENPath;
-	delete[] m_saveMapPath;
-	delete[] m_saveClipsPath;
-
-	for (dir = C3DIR_GAMEDATA; dir < C3DIR_MAX; dir++) {
-		delete[] m_assetPaths[dir];
-	}
-
 	ResetExtraDataPaths();
+
+	delete [] m_curScenarioPath;
+	delete [] m_curScenarioPackPath;
+	delete [] m_hdPath;
+	delete [] m_cdPath;
+	delete [] m_defaultPath;
+	delete [] m_localizedPath;
+	delete [] m_dataPath;
+	delete [] m_scenariosPath;
+	delete [] m_savePath;
+	delete [] m_saveGamePath;
+	delete [] m_saveQueuePath;
+	delete [] m_saveMPPath;
+	delete [] m_saveSCENPath;
+	delete [] m_saveMapPath;
+	delete [] m_saveClipsPath;
+
+	for (size_t dir = 0; dir < C3DIR_MAX; ++dir) 
+    {
+		delete [] m_assetPaths[dir];
+	}
 }
 
 void CivPaths::CreateSaveFolders(MBCHAR *path) 
@@ -498,39 +472,56 @@ BOOL CivPaths::FindPath(C3DIR dir, int num, MBCHAR *path)
 		return(TRUE);
 			}
 		
-	case 4: {
-		sprintf(tempPath, "%s\\%s\\%s\\%s", m_hdPath,
-			m_dataPath, m_localizedPath, m_assetPaths[dir]);
-		if (_fullpath(path, tempPath, _MAX_PATH) == NULL) {
-			path[0] = 0;
-		}
-		return(TRUE);
-			}          
-	case 5: {
-		sprintf(tempPath, "%s\\%s\\%s\\%s", m_hdPath,
-			m_dataPath, m_defaultPath, m_assetPaths[dir]);
-		if (_fullpath(path, tempPath, _MAX_PATH) == NULL) {
-			path[0] = 0;
-		}
-		return(TRUE);
-			}
-	case 6: {
-		sprintf(tempPath, "%s\\%s\\%s\\%s", m_cdPath,
-			m_dataPath, m_localizedPath, m_assetPaths[dir]);
-		if (_fullpath(path, tempPath, _MAX_PATH) == NULL) {
-			path[0] = 0;
-		}
-		return(TRUE);
-			}
-	case 7: {
-		sprintf(tempPath, "%s\\%s\\%s\\%s", m_cdPath,
-			m_dataPath, m_defaultPath, m_assetPaths[dir]);
-		if (_fullpath(path, tempPath, _MAX_PATH) == NULL) {
-			path[0] = 0;
-		}
-		return(TRUE);
-			}
-	}
+    default:
+        {
+            size_t const    i   = (num - 4) / 2;
+
+            if (i < m_extraDataPaths.size())
+            {
+                if (num & 1)    // even: language dependent, odd: default
+                {
+		            sprintf(tempPath, "%s\\%s\\%s\\%s", m_hdPath,
+			                m_extraDataPaths[i], m_defaultPath, m_assetPaths[dir]);
+                }
+                else
+                {
+		            sprintf(tempPath, "%s\\%s\\%s\\%s", m_hdPath,
+			                m_extraDataPaths[i], m_localizedPath, m_assetPaths[dir]);
+                }
+            }
+            else
+            {
+                switch (num - 2 * m_extraDataPaths.size())
+                {
+	            case 4:
+		            sprintf(tempPath, "%s\\%s\\%s\\%s", m_hdPath,
+			                m_dataPath, m_localizedPath, m_assetPaths[dir]);
+                    break;
+        	    case 5:
+		            sprintf(tempPath, "%s\\%s\\%s\\%s", m_hdPath,
+			                m_dataPath, m_defaultPath, m_assetPaths[dir]);
+                    break;
+	            case 6:
+		            sprintf(tempPath, "%s\\%s\\%s\\%s", m_cdPath,
+			                m_dataPath, m_localizedPath, m_assetPaths[dir]);
+                    break;
+	            case 7: 
+		            sprintf(tempPath, "%s\\%s\\%s\\%s", m_cdPath,
+			                m_dataPath, m_defaultPath, m_assetPaths[dir]);
+                    break;
+                default:
+                    return FALSE;
+                } // switch
+            }
+
+            if (_fullpath(path, tempPath, _MAX_PATH) == NULL) 
+            {
+		        path[0] = 0;
+            }
+
+            return TRUE;
+        } // scope default
+    } // switch
 	
 	return(FALSE);
 }

@@ -1,9 +1,20 @@
 [ActiveNet]
 Cmdline=
-Name=CivCTP
+Name=Call to Power 2
 Run=ctp2.exe
-SessionType=1503
-Version=127.127
-Language=1
+SessionType=1504
+Version=1208.11
+Language=255
 Platform=1
 ShellOpts=
+
+[Version Info]
+Branch=0.0
+Version=1.11
+QA=2254
+
+[Product Info]
+ProductID=ctp2w98
+ProductName=Call to Power 2
+WebReg=http://cgi.activision.com/cgi/webreg/webreg
+RegNum=

@@ -148,7 +148,7 @@ template <class T> void StringHash<T>::Clear()
 			while(m_table[i]) {
 				StringHashNode<T> *node = m_table[i];
 				m_table[i] = node->m_next;
-				node->m_obj = NULL;
+				delete node->m_obj;
 				delete node;
 			}
 		}
