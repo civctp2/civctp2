@@ -27,6 +27,7 @@
 //
 // - Corrected movement rate of ships above tunnels.
 // - m_queue_index used.
+// - Straight line corrected for worlds that do not have X-wrapping.
 //
 //----------------------------------------------------------------------------
 
@@ -80,8 +81,34 @@ UnitAstar::UnitAstar()
 
 
 
+#if defined(ACTIVISION_ORIGINAL)	// Unused stuff
 
-extern MapPoint g_mp_size; 
+extern MapPoint g_mp_size;
+
+//----------------------------------------------------------------------------
+//
+// Name       : AddToPath
+//
+// Description: Add a step between 2 adjacent points to the path.
+//
+// Parameters : the_path		: the path to add the step to
+//				oldpx, oldpy	: coordinates of the last point in the path
+//				px, py			: coordinates of the new point in the path
+//
+// Globals    : -
+//
+// Returns    : the_path		: updated with the step
+//
+// Remark(s)  : All coordinates are in a "diagonal" coordinate system - i.e.
+//              an orthogonal coordinate system with X and Y axis 45 degrees 
+//              rotated from the usual horizontal and vertical axis.
+//              These are converted to a map direction before adding to the 
+//              path.
+//
+//              This function is not needed any more, 
+//				because OldNormalizedSubtract is not used any more.
+//
+//----------------------------------------------------------------------------
 
 void AddToPath(Path &the_path, sint32 &oldpx, sint32 &oldpy, 
                const sint32 px, const sint32 py) 
@@ -124,6 +151,29 @@ void AddToPath(Path &the_path, sint32 &oldpx, sint32 &oldpy,
     oldpx = px; 
     oldpy = py; 
 } 
+
+#endif // ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnitAstar::StraightLine
+//
+// Description: Compute a straight path from start to destination.
+//
+// Parameters : start			: start
+//				dest			: destination
+//
+// Globals    : -
+//
+// Returns    : sint32 (bool)	: a_path has meaning (i.e. we are not at the
+//                                destination already).
+//				a_path			: the computed straight line path
+//
+// Remark(s)  : Does not handle vertical (UP/DOWN) movements.
+//
+//----------------------------------------------------------------------------
+
+#if defined(ACTIVISION_ORIGINAL)	// OldNormalizedSubtract requires X-wrap.
 
 sint32 UnitAstar::StraightLine(const MapPoint &start, const MapPoint &dest, 
                                Path &a_path) const
@@ -213,6 +263,59 @@ sint32 UnitAstar::StraightLine(const MapPoint &start, const MapPoint &dest,
     return TRUE;
 }
 
+#else	// ACTIVISION_ORIGINAL
+
+sint32 UnitAstar::StraightLine
+(
+	const MapPoint &		start, 
+	const MapPoint &		dest, 
+    Path &					a_path
+) const
+{
+    if (start == dest) 
+	{
+		a_path.Clear(); 
+        return FALSE; 
+    }
+    
+    a_path.SetStart(start);
+
+	// Shortest distance vector from start to dest, using XY coordinates, and
+	// taking world wrap properties into account.
+	MapPoint				diff;	
+	start.NormalizedSubtract(dest, diff);
+	
+	WORLD_DIRECTION	const	dirX		= (diff.x > 0) ? EAST  : WEST;
+	WORLD_DIRECTION const	dirY		= (diff.y > 0) ? SOUTH : NORTH;
+	WORLD_DIRECTION	const	dirDiagonal	= 
+		(EAST == dirX) ? ((SOUTH == dirY) ? SOUTHEAST : NORTHEAST)
+					   : ((SOUTH == dirY) ? SOUTHWEST : NORTHWEST);
+
+	sint32					absdx		= ABS(diff.x);
+	sint32					absdy		= ABS(diff.y);
+
+	// Start with diagonal moves to make the path straight.
+	for ( ;	(absdx > 0) && (absdy > 0); --absdx, --absdy)
+	{
+		a_path.AddDir(dirDiagonal);
+	}
+
+	// Pure X leftover - if any.
+	for ( ; absdx > 0 ; absdx -=2)
+	{
+		a_path.AddDir(dirX);
+	}
+
+	// Pure Y leftover - if any.
+	for ( ; absdy > 0 ; absdy -=2)
+	{
+		a_path.AddDir(dirY);
+	}
+
+    return TRUE;
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 
 
