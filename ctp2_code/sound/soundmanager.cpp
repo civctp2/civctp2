@@ -20,7 +20,15 @@ SoundManager		*g_soundManager = NULL;
 static BOOL			s_initSuccessful = FALSE;
 
 #define k_CHECK_CD_PERIOD		4000	
-										
+	
+// JJB removed much content from this class
+// in order to make it compile
+
+// Also arranged that
+// always the constructor returns failure,
+// so all the rest of the content
+// can (hopefully) be safely outcommented
+									
 
 void SoundManager::Initialize(void)
 {
@@ -51,6 +59,10 @@ void SoundManager::Cleanup(void)
 
 SoundManager::SoundManager()
 {
+	// JJB added the following line so that
+	// construction invariably fails:
+	return;
+
 	if (g_theProfileDB) {
 		m_sfxVolume = g_theProfileDB->GetSFXVolume();
 		m_voiceVolume = g_theProfileDB->GetVoiceVolume();
@@ -138,7 +150,7 @@ void SoundManager::DumpAllSounds(void)
 
 void SoundManager::InitSoundDriver(void)
 {
-	
+	/*
 	S32		errcode;
 	S32		use_digital;
 	S32		use_MIDI;
@@ -186,7 +198,7 @@ use_digital = 1;
 	SetVolume(SOUNDTYPE_SFX, m_sfxVolume);
 	SetVolume(SOUNDTYPE_VOICE, m_voiceVolume);
 	SetVolume(SOUNDTYPE_MUSIC, m_musicVolume);
-
+	*/
 }
 
 void SoundManager::CleanupSoundDriver(void)
@@ -195,7 +207,7 @@ void SoundManager::CleanupSoundDriver(void)
 		CleanupRedbook();
 
 		
-		AIL_quick_shutdown();
+		//AIL_quick_shutdown();
 	}
 }
 
@@ -204,7 +216,7 @@ void SoundManager::InitRedbook(void)
 	
 	if (!m_redbook) {
 		MBCHAR drive = c3files_GetCTPCDDriveLetter();
-		m_redbook = AIL_redbook_open_drive(drive);
+		//m_redbook = AIL_redbook_open_drive(drive);
 		if (!m_redbook) {
 			
 			g_theProfileDB->SetUseRedbookAudio(FALSE);
@@ -216,8 +228,10 @@ void SoundManager::CleanupRedbook(void)
 {
 	
 	if (m_redbook) {
+		/*
 		AIL_redbook_stop(m_redbook);
 		AIL_redbook_close(m_redbook);
+		*/
 		m_redbook = NULL;
 	}
 }
@@ -235,7 +249,7 @@ void SoundManager::ProcessRedbook(void)
 	if (!g_theProfileDB->IsUseRedbookAudio()) return;
 
 	if (!m_musicEnabled) return;
-
+	/*
 	if (GetTickCount() > m_timeToCheckCD) {
 		U32 status;
 		if (m_redbook) {
@@ -259,10 +273,12 @@ void SoundManager::ProcessRedbook(void)
 		}
 		m_timeToCheckCD = GetTickCount() + k_CHECK_CD_PERIOD;
 	}
+	*/
 }
 
 void SoundManager::Process(const uint32 target_milliseconds, uint32 &used_milliseconds)
 {
+	/*
 	CivSound						*sound;
 
     sint32 start_time_ms = GetTickCount(); 
@@ -315,6 +331,7 @@ void SoundManager::Process(const uint32 target_milliseconds, uint32 &used_millis
 	ProcessRedbook();
 
     used_milliseconds = GetTickCount() - start_time_ms; 
+	*/
 }
 
 
@@ -377,7 +394,7 @@ void SoundManager::AddSound(SOUNDTYPE type, uint32 associatedObject, sint32 soun
 	if (!found)
 	{
 		
-		AIL_quick_play(sound->GetHAudio(), 1);	
+		//AIL_quick_play(sound->GetHAudio(), 1);	
 
 		sound->SetIsPlaying(TRUE);
 	} else {
@@ -421,7 +438,7 @@ void SoundManager::AddLoopingSound(SOUNDTYPE type, uint32 associatedObject, sint
 	}
 
 	
-	AIL_quick_play(sound->GetHAudio(), 0);	
+	//AIL_quick_play(sound->GetHAudio(), 0);	
 
 	sound->SetIsLooping(TRUE);
 	sound->SetIsPlaying(TRUE);
@@ -434,7 +451,7 @@ void SoundManager::TerminateLoopingSound(SOUNDTYPE type, uint32 associatedObject
 
 	if (!existingSound) return;
 
-	AIL_quick_halt(existingSound->GetHAudio());
+	//AIL_quick_halt(existingSound->GetHAudio());
 }
 
 void SoundManager::TerminateAllLoopingSounds(SOUNDTYPE type)
@@ -455,7 +472,7 @@ void SoundManager::TerminateAllLoopingSounds(SOUNDTYPE type)
 	while (node) {
 		sound = node->GetObj();
 		if (sound && sound->IsLooping()) {
-			AIL_quick_halt(sound->GetHAudio());
+			//AIL_quick_halt(sound->GetHAudio());
 		}
 		node = node->GetNext();
 	}
@@ -479,7 +496,7 @@ void SoundManager::TerminateSounds(SOUNDTYPE type)
 	while (node) {
 		sound = node->GetObj();
 		if (sound) {
-			AIL_quick_halt(sound->GetHAudio());
+			//AIL_quick_halt(sound->GetHAudio());
 		}
 		node = node->GetNext();
 	}
@@ -524,7 +541,7 @@ void SoundManager::SetVolume(SOUNDTYPE type, uint32 volume)
 	case SOUNDTYPE_MUSIC:
 		m_musicVolume = volume;
 		if (m_redbook)
-			AIL_redbook_set_volume(m_redbook, (sint32)((double)volume * 12.7));
+			//AIL_redbook_set_volume(m_redbook, (sint32)((double)volume * 12.7));
 		break;
 	}
 }
@@ -633,7 +650,7 @@ void SoundManager::SetPosition(SOUNDTYPE type, uint32 associatedObject, sint32 x
 				sint32 panValue = 64;	
 
 				if (hAudio) {
-					AIL_quick_set_volume(hAudio, volume, panValue);
+					//AIL_quick_set_volume(hAudio, volume, panValue);
 				}
 			}
 		}
@@ -655,7 +672,7 @@ void SoundManager::StartMusic(sint32 trackNum)
 	if (m_curTrack == -1) return;
 
 	if (!m_redbook) return;
-
+/*
 	U32 status = AIL_redbook_status(m_redbook);
 
 	if (status == REDBOOK_ERROR) return;
@@ -687,6 +704,7 @@ void SoundManager::StartMusic(sint32 trackNum)
 	TerminateAllSounds();
 
 	AIL_redbook_play(m_redbook, start, end);
+	*/
 }
 
 void SoundManager::TerminateMusic(void)
@@ -702,11 +720,12 @@ void SoundManager::TerminateMusic(void)
 	
 	m_stopRedbookTemporarily = TRUE;
 
-	
+	/*
 	if (AIL_redbook_track(m_redbook)) {
 		
 		AIL_redbook_stop(m_redbook);
 	}
+	*/
 }
 
 void SoundManager::PickNextTrack(void)
@@ -766,7 +785,7 @@ void SoundManager::ReleaseSoundDriver(void)
 {
 	if (m_usePlaySound) return;
 	if (m_noSound) return;
-
+	/*
 	HDIGDRIVER		dig;
 	HMDIDRIVER		mdi;
 	HDLSDEVICE		dls;
@@ -784,6 +803,7 @@ void SoundManager::ReleaseSoundDriver(void)
 
 	err = AIL_digital_handle_release(dig);
 	Assert(err);
+	*/
 }
 
 
@@ -791,7 +811,7 @@ void SoundManager::ReacquireSoundDriver(void)
 {
 	if (m_usePlaySound) return;
 	if (m_noSound) return;
-
+	/*
 	HDIGDRIVER		dig;
 	HMDIDRIVER		mdi;
 	HDLSDEVICE		dls;
@@ -805,4 +825,5 @@ void SoundManager::ReacquireSoundDriver(void)
 
 	
 	AIL_set_digital_master_volume(dig, masterVolume);
+	*/
 }
