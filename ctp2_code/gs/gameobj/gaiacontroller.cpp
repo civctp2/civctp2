@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Gaia Controller 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed neutral tile improvment bug by preventing the game
+//   from reading invalid memory, by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "FeatTracker.h"
@@ -319,7 +350,17 @@ STDEHANDLER(GaiaController_CutImprovements)
 	Cell *cell = g_theWorld->GetCell(pos);
 	owner = cell->GetOwner();
 
-	
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann to prevent
+	//the game from accessing an invalid
+	//area of memory, plain arrays don't
+	//have out of bounds array, so accessing
+	//g_player[-1] may give you everything.
+	//It is not very probably that you get 0.
+	if (owner == -1)
+		return GEV_HD_Continue;
+#endif
+
 	Player *owner_player = g_player[owner];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
@@ -357,6 +398,16 @@ STDEHANDLER(GaiaController_ImprovementComplete)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann to prevent
+	//the game from accessing an invalid
+	//area of memory, plain arrays don't
+	//have out of bounds array, so accessing
+	//g_player[-1] may give you everything.
+	//It is not very probably that you get 0.
+	if (owner == -1)
+		return GEV_HD_Continue;
+#endif
 	
 	Player *owner_player = g_player[owner];
 	if (owner_player == NULL ||
