@@ -481,16 +481,11 @@ void NationalManagementDialog::UpdateBuildQueue()
 #endif
 }
 
-
 void NationalManagementDialog::UpdateRushBuy()
 {
-	
 	sint32 rushBuyTotal = 0;
-
 	
 	tech_WLList<sint32> *selectedList = m_statusList->GetSelectedList();
-
-	
 	
 	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		
@@ -513,8 +508,15 @@ void NationalManagementDialog::UpdateRushBuy()
 	}
 
 	
+#if defined(ACTIVISION_ORIGINAL)
 	if((rushBuyTotal <= 0) ||
 		(rushBuyTotal > g_player[g_selected_item->GetVisiblePlayer()]->GetGold()))
+#else
+	// Extra conditions to prevent buying out of turn
+	if((rushBuyTotal <= 0) ||
+		(rushBuyTotal > g_player[g_selected_item->GetVisiblePlayer()]->GetGold())
+		|| g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())
+#endif
 		m_rushBuyButton->Enable(false);
 	else
 		m_rushBuyButton->Enable(true);
@@ -1287,10 +1289,13 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BuyFront, GEA_City, city, GEA_End);
 #else
 		// and replaced it with the following:
-		if (!city.GetCityData()->AlreadyBoughtFront()) {
+		if (!city.GetCityData()->AlreadyBoughtFront()
+		  && city.GetOwner() == g_selected_item->GetCurPlayer()) {
 			city.GetCityData()->AddBuyFront();
 		}
 		// in the hope of fixing the rush buy bug.
+		// We only allow rush buying when it is the player's turn, and only
+		// when the given item has not yet been rush bought this turn.
 #endif
 		
 		dialog->UpdateStatusItem(item, city);
