@@ -1,7 +1,34 @@
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Bug fix: prevent easy invisible unit detection, by reporting the basic 
+//   terrain info when (right-)clicking on an enemy object.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SelItem.h"
@@ -1155,6 +1182,21 @@ void SelectedItem::UnloadClick(const MapPoint &pos, const aui_MouseEvent *data, 
 						   GEA_End);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SelectedItem::TerrainContextClick
+//
+// Description: Handle mouse click on an unoccupied tile.
+//
+// Parameters : pos			: position on the map
+//				data		: click properties (right, left, etc.)
+//              doubleClick	: is it a double click?
+//
+// Returns    : -
+//
+// Remark(s)  : When the tile is unexplored, nothing will be shown.
+//
+//----------------------------------------------------------------------------
 
 void SelectedItem::TerrainContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
@@ -1163,12 +1205,44 @@ void SelectedItem::TerrainContextClick(const MapPoint &pos, const aui_MouseEvent
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SelectedItem::ArmyContextClick
+//
+// Description: Handle mouse click on an army of our own.
+//
+// Parameters : pos			: position on the map
+//				data		: click properties (right, left, etc.)
+//              doubleClick	: is it a double click?
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 void SelectedItem::ArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	SelectArmyClick(pos, data, FALSE);
 
 	g_controlPanel->ActivateSelectedInfo(SELECT_TYPE_LOCAL_ARMY);
 }
+
+//----------------------------------------------------------------------------
+//
+// Name       : SelectedItem::CityContextClick
+//
+// Description: Handle mouse click on a city of our own.
+//
+// Parameters : pos			: position on the map
+//				data		: click properties (right, left, etc.)
+//              doubleClick	: is it a double click?
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 
 void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
@@ -1177,12 +1251,54 @@ void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *d
 	g_controlPanel->ActivateSelectedInfo(SELECT_TYPE_LOCAL_CITY);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SelectedItem::EnemyCityContextClick
+//
+// Description: Handle mouse click on an enemy city.
+//
+// Parameters : pos			: position on the map
+//				data		: click properties (right, left, etc.)
+//              doubleClick	: is it a double click?
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
+#if !defined(ACTIVISION_ORIGINAL)
+	// Report the underlying terrain information. This is just being useful. 
+	TerrainContextClick(pos, data, doubleClick);
+#endif
 }
+
+//----------------------------------------------------------------------------
+//
+// Name       : SelectedItem::EnemyArmyContextClick
+//
+// Description: Handle mouse click on an enemy army.
+//
+// Parameters : pos			: position on the map
+//				data		: click properties (right, left, etc.)
+//              doubleClick	: is it a double click?
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 
 void SelectedItem::EnemyArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
+#if !defined(ACTIVISION_ORIGINAL)
+	// Report the underlying terrain information. For visible units, this is 
+	// just being useful. For invisible units, it will fix the bug that 
+	// detection is too easy.
+	TerrainContextClick(pos, data, doubleClick);
+#endif
 }
 
 void SelectedItem::TradeRouteContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
