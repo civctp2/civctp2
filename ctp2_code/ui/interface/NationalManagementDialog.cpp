@@ -1,9 +1,35 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Behaviour of the National Management dialog
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added extra checks on the rush buy code to fix the infinite rush buy bug,
+//   and also altered the code that adds up the total rush buy cost so that
+//   it displays the correct value.  John Bytheway, late 2003
+//     
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -476,10 +502,14 @@ void NationalManagementDialog::UpdateRushBuy()
 
 		
 		if(city.GetCityData()->GetBuildQueue()->GetLen())
+#if !defined(ACTIVISION_ORIGINAL)
 			// JJB added this inner if so that things add up properly
 			if (!city.GetCityData()->AlreadyBoughtFront()) {
+#endif
 				rushBuyTotal += city.GetCityData()->GetOvertimeCost();
+#if !defined(ACTIVISION_ORIGINAL)
 			}
+#endif
 	}
 
 	
@@ -1253,13 +1283,15 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
 
 		// JJB removed the following:
-		// g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BuyFront, GEA_City, city, GEA_End);
+#if defined(ACTIVISION_ORIGINAL)
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BuyFront, GEA_City, city, GEA_End);
+#else
 		// and replaced it with the following:
 		if (!city.GetCityData()->AlreadyBoughtFront()) {
 			city.GetCityData()->AddBuyFront();
 		}
 		// in the hope of fixing the rush buy bug.
-
+#endif
 		
 		dialog->UpdateStatusItem(item, city);
 	}
