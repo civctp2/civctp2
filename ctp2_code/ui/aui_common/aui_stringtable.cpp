@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : String table user interface object
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leaks repaired.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -27,7 +47,9 @@ aui_StringTable::aui_StringTable(
 {
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
+#if defined(ACTIVISION_ORIGINAL)	// useless
 	if ( !AUI_SUCCESS(*retval) ) return;
+#endif
 }
 
 
@@ -38,7 +60,9 @@ aui_StringTable::aui_StringTable(
 {
 	*retval = InitCommon( numStrings );
 	Assert( AUI_SUCCESS(*retval) );
+#if defined(ACTIVISION_ORIGINAL)	// useless
 	if ( !AUI_SUCCESS(*retval) ) return;
+#endif
 }
 
 
@@ -135,6 +159,7 @@ aui_StringTable::~aui_StringTable()
 {
 	if ( m_strings )
 	{
+#if defined(ACTIVISION_ORIGINAL)	// archaic style
 		for ( sint32 i = 0; i < m_numStrings; i++ )
 			if ( m_strings[ i ] )
 				delete[ strlen( m_strings[ i ] ) + 1 ] m_strings[ i ];
@@ -143,6 +168,13 @@ aui_StringTable::~aui_StringTable()
 		m_strings = 0;
 
 		m_numStrings = 0;
+#else
+		for (sint32 i = 0; i < m_numStrings; ++i)
+		{
+			delete [] m_strings[i];
+		}
+		delete [] m_strings;
+#endif
 	}
 }
 
@@ -155,6 +187,7 @@ sint32 aui_StringTable::SetNumStrings( sint32 numStrings )
 
 	sint32 prevNumStrings = m_numStrings;
 
+#if defined(ACTIVISION_ORIGINAL)	// memory leak
 	if ( numStrings == 0 )
 	{
 		if ( m_strings ) delete[ m_numStrings ] m_strings;
@@ -172,13 +205,33 @@ sint32 aui_StringTable::SetNumStrings( sint32 numStrings )
 
 			memset( strings, 0, numStrings * sizeof( MBCHAR * ) );
 			memcpy( strings, m_strings, minNumStrings * sizeof( MBCHAR * ) );
-
 			delete[ m_numStrings ] m_strings;
+
 			m_strings = strings;
 
 			m_numStrings = numStrings;
 		}
 	}
+#else
+	MBCHAR **		strings	= NULL;
+	size_t const	copyEnd	= std::min(m_numStrings, numStrings);
+
+	if (numStrings)
+	{
+		strings	= new MBCHAR *[numStrings];
+		std::copy(m_strings, m_strings + copyEnd, strings);
+		std::fill(strings + copyEnd, strings + numStrings, (MBCHAR *) NULL);
+	}
+
+	for (sint32 i = copyEnd; i < m_numStrings; ++i)
+	{
+		delete [] m_strings[i];
+	}
+	delete [] m_strings;
+
+	m_strings		= strings;
+	m_numStrings	= numStrings;
+#endif
 
 	return prevNumStrings;
 }
@@ -200,6 +253,7 @@ AUI_ERRCODE aui_StringTable::SetString( const MBCHAR *text, sint32 index )
 	Assert( index >= 0 && index < m_numStrings );
 	if ( index < 0 || index >= m_numStrings ) return AUI_ERRCODE_INVALIDPARAM;
 
+#if defined(ACTIVISION_ORIGINAL)	// archaic style 
 	if ( !text )
 	{
 		if ( m_strings[ index ] )
@@ -221,6 +275,26 @@ AUI_ERRCODE aui_StringTable::SetString( const MBCHAR *text, sint32 index )
 
 		strcpy( m_strings[ index ], text );
 	}
+#else
+	if (text)
+	{
+		size_t const oldSize = m_strings[index] ? 1 + strlen(m_strings[index]) : 0;
+		size_t const newSize = 1 + strlen(text);
+
+		if (oldSize < newSize)
+		{
+			delete m_strings[index];
+			m_strings[index] = new MBCHAR[newSize];
+		}
+
+		strcpy(m_strings[index], text);
+	}
+	else
+	{
+		delete m_strings[index];
+		m_strings[index] = NULL;
+	}
+#endif
 
 	return AUI_ERRCODE_OK;
 }

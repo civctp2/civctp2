@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ source
+// File type    : C++ header
 // Description  : Sprite List
 //
 //----------------------------------------------------------------------------
@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _DEBUG
-// - Generate debug version when set.
-//
 // ACTIVISION_ORIGINAL		
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
@@ -28,21 +25,16 @@
 //
 // Modifications from the original Activision code:
 //
-// - Increased sprite limit from 200 to 500 by Martin Gühmann
+// - Completely deactivated. SPRITELISTERR moved to SpriteGroupList.h
 //
 //----------------------------------------------------------------------------
+
+#if defined(ACTIVISION_ORIGINAL)
 
 #pragma once
 #ifndef __SPRITELIST_H__
 #define __SPRITELIST_H__
 
-#if defined(ACTIVISION_ORIGINAL)
-//Removed by Martin Gühmann
-#define k_MAX_SPRITES		200
-#else
-//Added by Martin Gühmann
-#define k_MAX_SPRITES		500
-#endif
 
 
 enum SPRITELISTERR {
@@ -71,4 +63,7 @@ private:
 	sint32					m_listSize;
 };
 
+
 #endif
+
+#endif	// ACTIVISION_ORIGINAL

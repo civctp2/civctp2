@@ -26,7 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Starting and ending age selection screen now uses the age names from
-//   gl_str.txt, Martin Gühmann. 
+//   gl_str.txt, Martin Gühmann.
+// - Compatibility restored. 
 //
 //----------------------------------------------------------------------------
 
@@ -205,8 +206,11 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 	if ( !AUI_NEWOK(s_endDropDown, errcode) ) return errcode;
 
 
-
+#if defined(ACTIVISION_ORIGINAL)	// table never cleaned up
 	static aui_StringTable startagestrings( &errcode, "strings.startagestrings" );
+#else
+	aui_StringTable	startagestrings(&errcode, "strings.startagestrings");
+#endif
 	s_numAges = g_theAgeDB->NumRecords();
 	for ( i = 0; i < s_numAges; i++ )
 	{
@@ -224,7 +228,13 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 #else
 //Added by Martin Gühmann so that no *.ldl needs to be edited
 //anymore when new ages are added.
-		const MBCHAR *name = g_theAgeDB->Get(i)->GetNameText();
+		MBCHAR const *	name	= g_theAgeDB->Get(i)->GetNameText();
+		
+		if (!name)
+		{
+			// Age name not defined in gl_str.txt: attempt the old location.
+			name = startagestrings.GetString(i);
+		}
 #endif
 	
 	

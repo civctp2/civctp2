@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Unit 
+// Description  : Unit
 //
 //----------------------------------------------------------------------------
 //
@@ -126,6 +126,14 @@ extern ProfileDB		*g_theProfileDB;
 #else
 #define STOMPCHECK() ;
 #endif
+
+#if !defined(ACTIVISION_ORIGINAL)
+namespace
+{
+	sint32 const	CITY_TYPE_LAND	= 0;
+	sint32 const	CITY_TYPE_WATER	= 1;
+};	// namespace
+#endif	// ACTIVISION_ORIGINAL
 
 UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner, BOOL isUnseenCellActor,
 					 double visionRange, sint32 citySprite)
@@ -1386,63 +1394,88 @@ void UnitActor::DrawFortifying(BOOL fogged)
 		0);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnitActor::DrawCityWalls
+//
+// Description: Draw city walls
+//
+// Parameters : fogged	: city is under fog of war
+//
+// Globals    : g_tiledMap
+//				g_theCityStyleDB
+//				g_player
+//				g_theTerrainDB
+//				g_theWorld
+//
+// Returns    : -
+//
+// Remark(s)  : Assumption: unit is a valid city with walls.
+//              Does not draw force fields: use DrawForceField for that.
+//
+//----------------------------------------------------------------------------
 
 void UnitActor::DrawCityWalls(BOOL fogged)
 {
+#if defined(ACTIVISION_ORIGINAL)	
 	Pixel16			*cityImage;
 
-#if defined(ACTIVISION_ORIGINAL)	
 	if (0 ) {
 		cityImage = g_tiledMap->GetTileSet()->GetImprovementData(153);
 	} else {
 		cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
 	}
-#else
-	Unit		unit;
+#else	// ACTIVISION_ORIGINAL
+	TileSet const *	tileSet		= g_tiledMap->GetTileSet();
+	Pixel16 *		cityImage	= tileSet->GetImprovementData(38);	// default
+	Unit			unit(GetUnitID());
 
-	unit.m_id = GetUnitID();
-	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(unit.CD()->GetCityStyle());
-	if(styleRec){
-		const AgeCityStyleRecord *ageStyleRec = styleRec->GetAgeStyle(g_player[unit->GetOwner()]->m_age);
-		if(ageStyleRec){
-			const AgeCityStyleRecord::SizeSprite *spr = NULL;
-			const AgeCityStyleRecord::SizeSprite *lastTypeSpr = NULL;
-			
-			const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
-			bool isLand = !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater());
-			sint32 i;
-			sint32 p;
+	// Test city style overrides.
+	CityStyleRecord const *	styleRec	= 
+		g_theCityStyleDB->Get(unit.CD()->GetCityStyle());
 
-			for(i = 0; i < ageStyleRec->GetNumSprites(); i++) {
-				if(spr = ageStyleRec->GetSprites(i)) {
-					if((isLand && spr->GetType() == 0) 
-					||(!isLand && spr->GetType() != 0)) {
-						lastTypeSpr = spr;
-						unit.CD()->GetPop(p);
-						if(spr->GetMinSize() <= p 
-						&& spr->GetMaxSize() >= p) {
-							break;
-						}
+	if (styleRec)
+	{
+		AgeCityStyleRecord const *	ageStyleRec = 
+			styleRec->GetAgeStyle(g_player[unit->GetOwner()]->m_age);
+
+		if (ageStyleRec)
+		{
+			bool const		isWater			= g_theWorld->IsWater(m_pos);
+			sint32 const	spriteCount		= ageStyleRec->GetNumSprites();
+			AgeCityStyleRecord::SizeSprite const *		
+							matchingSprite	= NULL;
+
+			for (sint32 i = 0; i < spriteCount; ++i) 
+			{
+				AgeCityStyleRecord::SizeSprite const *	spr	= 
+					ageStyleRec->GetSprites(i);
+				
+				if (spr && (isWater == (CITY_TYPE_WATER == spr->GetType()))) 
+				{
+					matchingSprite = spr;
+
+					// Check city size
+					sint32 p;
+					unit.CD()->GetPop(p);
+					if ((spr->GetMinSize() <= p) && (spr->GetMaxSize() >= p))
+					{
+						break;	// exact match found
 					}
+
+					// When no exact match has been found, the last (largest?) 
+					// of the correct type will be used.
 				}
 			}
-			if(lastTypeSpr) {
-				cityImage = g_tiledMap->GetTileSet()->GetImprovementData(lastTypeSpr->GetWalls());
+
+			if (matchingSprite) 
+			{
+				cityImage = tileSet->GetImprovementData(matchingSprite->GetWalls());
 			}
-			else if(spr) {
-				cityImage = g_tiledMap->GetTileSet()->GetImprovementData(spr->GetWalls());
-			}
-			else{
-				cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
-			}
-		}
-		else{
-			cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
+			// else: keep default
 		}
 	}
-	else{
-		cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
-	}
+	// else: keep default
 #endif
 
 	sint32	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale()), 
@@ -1467,12 +1500,33 @@ void UnitActor::DrawCityWalls(BOOL fogged)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnitActor::DrawForceField
+//
+// Description: Draw city force field
+//
+// Parameters : fogged	: city is under fog of war
+//
+// Globals    : g_tiledMap
+//				g_theCityStyleDB
+//				g_player
+//				g_theTerrainDB
+//				g_theWorld
+//
+// Returns    : -
+//
+// Remark(s)  : Assumption: unit is a valid city with a force field.
+//              Does not draw walls: use DrawCityWalls for that.
+//
+//----------------------------------------------------------------------------
+
 void UnitActor::DrawForceField(BOOL fogged)
 {
 	sint32 which;
+#if defined(ACTIVISION_DEFAULT)
 	sint32 nudgeX, nudgeY;
 
-#if defined(ACTIVISION_DEFAULT)
 	if (g_theWorld->IsLand(m_pos)) {
 		nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
 		nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
@@ -1488,58 +1542,73 @@ void UnitActor::DrawForceField(BOOL fogged)
 		which = 156;
 	}
 #else
+	sint32 const	nudgeX	= 
+		(sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
+	sint32 const	nudgeY = 
+		(sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
 
-	Unit		unit;
+	// Default
+	if (g_theWorld->IsLand(m_pos)) 
+	{
+		which = 154;
+	} 
+	else if (g_theWorld->IsWater(m_pos)) 
+	{
+		which = 155;
+	} 
+	else 
+	{
+		which = 156;	// space?
+	}
 
-	unit.m_id = GetUnitID();
-	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(unit.CD()->GetCityStyle());
-	if(styleRec){
-		const AgeCityStyleRecord *ageStyleRec = styleRec->GetAgeStyle(g_player[unit->GetOwner()]->m_age);
-		if(ageStyleRec){
-			const AgeCityStyleRecord::SizeSprite *spr = NULL;
-			const AgeCityStyleRecord::SizeSprite *lastTypeSpr = NULL;
-			
-			const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
-			bool isLand = !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater());
-			sint32 i;
-			sint32 p;
+	Unit			unit(GetUnitID());
 
-			for(i = 0; i < ageStyleRec->GetNumSprites(); i++) {
-				if(spr = ageStyleRec->GetSprites(i)) {
-					if((isLand && spr->GetType() == 0) 
-					||(!isLand && spr->GetType() != 0)) {
-						lastTypeSpr = spr;
-						unit.CD()->GetPop(p);
-						if(spr->GetMinSize() <= p 
-						&& spr->GetMaxSize() >= p) {
-							break;
-						}
+	// Test city style overrides.
+	CityStyleRecord const *	styleRec	= 
+		g_theCityStyleDB->Get(unit.CD()->GetCityStyle());
+
+	if (styleRec)
+	{
+		AgeCityStyleRecord const *	ageStyleRec = 
+			styleRec->GetAgeStyle(g_player[unit->GetOwner()]->m_age);
+
+		if (ageStyleRec)
+		{
+			bool const		isWater			= g_theWorld->IsWater(m_pos);
+			sint32 const	spriteCount		= ageStyleRec->GetNumSprites();
+			AgeCityStyleRecord::SizeSprite const *		
+							matchingSprite	= NULL;
+
+			for (sint32 i = 0; i < spriteCount; ++i) 
+			{
+				AgeCityStyleRecord::SizeSprite const *	spr	= 
+					ageStyleRec->GetSprites(i);
+				
+				if (spr && (isWater == (CITY_TYPE_WATER == spr->GetType()))) 
+				{
+					matchingSprite = spr;
+
+					// Check city size
+					sint32 p;
+					unit.CD()->GetPop(p);
+					if ((spr->GetMinSize() <= p) && (spr->GetMaxSize() >= p))
+					{
+						break;	// exact match found
 					}
+
+					// When no exact match has been found, the last (largest?) 
+					// of the correct type will be used.
 				}
 			}
-			if(lastTypeSpr) {
-				which = lastTypeSpr->GetForceField();
+
+			if (matchingSprite) 
+			{
+				which = matchingSprite->GetForceField();
 			}
-			else if(spr) {
-				which = spr->GetForceField();
-			}
-			else{
-				which = 156;
-			}
-		}
-		else{
-			Assert(0);
-			which = 154;
+			// else: keep default
 		}
 	}
-	else{
-		Assert(0);
-		which = 154;
-	}
-
-	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
-	nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
-
+	// else: keep default
 #endif
 
 	
