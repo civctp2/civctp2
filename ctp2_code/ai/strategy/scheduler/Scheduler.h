@@ -1,21 +1,45 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Scheduler
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Marked MS version specific code.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __SCHEDULER_H__
 #define __SCHEDULER_H__
 
 
-
+#if defined(_MSC_VER)
 #pragma warning(disable: 4786)
+#endif
 
 #include "Plan.h"
 
@@ -74,9 +98,11 @@ public:
 	typedef std::vector<Sorted_Goal_List, dbgallocator<Sorted_Goal_List> > Sorted_Goal_List_Vector;
     typedef std::vector<Sorted_Goal_List::iterator, dbgallocator<Sorted_Goal_List::iterator> > Sorted_Goal_List_Iter_Vector;
 	typedef std::vector<Squad_List, dbgallocator<Squad_List> > Squad_List_Vector;
-	
+#if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version	
 	typedef std::deque<Scheduler, dbga<Scheduler> > Scheduler_Vector;
-
+#else
+	typedef std::vector<Scheduler, dbgallocator<Scheduler> > Scheduler_Vector;
+#endif
 	
 
 
@@ -102,7 +128,11 @@ public:
     typedef std::vector<Sorted_Goal_List::iterator> Sorted_Goal_List_Iter_Vector;
 	typedef std::vector<Squad_List> Squad_List_Vector;
 	
+#if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version	
 	typedef std::deque<Scheduler> Scheduler_Vector;
+#else
+	typedef std::vector<Scheduler> Scheduler_Vector;
+#endif
 #endif
 
   	

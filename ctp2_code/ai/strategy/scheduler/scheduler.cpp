@@ -22,13 +22,12 @@
 // - When not defined, generates the modified Apolyton code.
 //
 // _MSC_VER		
-// - When defined, uses Microsoft C++ specific features.
-// - When not defined, generates standard C++.
+// - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
 //       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
-//       between #if and #else are the original Activision code.
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -36,7 +35,7 @@
 //
 // - Do not consider invalid goals (e.g. threatened city that has been 
 //   destroyed already).
-// - Marked _MSC_VER
+// - Marked MS version specific code.
 //
 //----------------------------------------------------------------------------
 
@@ -49,7 +48,7 @@
 
 #include "profileAi.h"
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER < 1300)
 #include <list-fixed>
 #else
 #include <list>
