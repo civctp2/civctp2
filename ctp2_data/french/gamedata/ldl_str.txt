@@ -1465,12 +1465,12 @@ str_ldl_SPNGPS_MaxPlayerSpinner		"Nombre maximum de joueurs"
 str_ldl_SPNGPS_PlayerSpinner		"Premier joueur"
 
 str_ldl_SPNGPS_NumPlayerText	"Définit le nombre de joueurs dans une nouvelle partie."
-str_ldl_SPNGPS_MaxPlayerText	"Définit le nombre maximum de joueurs qu'il peut y avoir au cours d'une partie."
+str_ldl_SPNGPS_MaxPlayerText	"Définit le nombre maximum de joueurs pouvant apparaître en cours de partie."
 str_ldl_SPNGPS_PlayerText	"Définit le premier joueur. Définit la couleur de la civilisation. (Ne marche pas encore.)"
 
 ### Added Disclaimer Strings ###
 
-str_ldl_Disclaimer1 "CE DOCUMENT N'A ETE NI CONCU NI APPROUVE PAR ACTIVISION."
+str_ldl_Disclaimer1 "CETTE VERSION N'A ETE NI CONCUE NI APPROUVEE PAR ACTIVISION."
 str_ldl_Disclaimer2 "Cette version de Call to Power 2 a été développée sur le site http://apolyton.net."
 str_ldl_Disclaimer3 "Contactez les auteurs à l'adresse ctp2source@apolyton.net."
 
