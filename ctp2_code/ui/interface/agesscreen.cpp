@@ -28,6 +28,7 @@
 // - Starting and ending age selection screen now uses the age names from
 //   gl_str.txt, Martin Gühmann.
 // - Compatibility restored. 
+// - Memory leak repaired.
 //
 //----------------------------------------------------------------------------
 
@@ -54,6 +55,36 @@ extern	nf_GameSetup	g_gamesetup;
 
 extern C3UI			*g_c3ui;
 extern StringDB		*g_theStringDB;
+
+#if !defined(ACTIVISION_ORIGINAL)
+namespace
+{
+
+//----------------------------------------------------------------------------
+//
+// Name       : DeleteAndNull
+//
+// Description: Delete and NULL a pointer.
+//
+// Parameters : a_Pointer	: the pointer to delete
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Only works for regular pointers (delete).
+//				Do not use for arrays (delete [])!
+//
+//----------------------------------------------------------------------------
+
+template <typename T> inline void DeleteAndNull(T * & a_Pointer)
+{
+	delete a_Pointer;
+	a_Pointer = NULL;
+};
+
+};	// namespace
+#endif	// ACTIVISION_ORIGINAL
 
 static DialogBoxWindow *s_agesScreen	= NULL;
 
@@ -228,12 +259,15 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 #else
 //Added by Martin Gühmann so that no *.ldl needs to be edited
 //anymore when new ages are added.
-		MBCHAR const *	name	= g_theAgeDB->Get(i)->GetNameText();
+		MBCHAR const *		ageId	= g_theAgeDB->GetNameStr(i);
+		MBCHAR const *		name	= g_theAgeDB->Get(i)->GetNameText();
 		
-		if (!name)
+		if ((!name) || (0 == strcmp(ageId, name)))
 		{
 			// Age name not defined in gl_str.txt: attempt the old location.
-			name = startagestrings.GetString(i);
+			MBCHAR const *	ldlText	= startagestrings.GetString(i);
+			
+			name = ldlText ? ldlText : ageId;
 		}
 #endif
 	
@@ -290,6 +324,7 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 
 
+#if defined(ACTIVISION_ORIGINAL)
 AUI_ERRCODE agesscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
@@ -318,6 +353,51 @@ AUI_ERRCODE agesscreen_Cleanup()
 
 #undef mycleanup
 }
+#else	// ACTIVISION_ORIGINAL
+//----------------------------------------------------------------------------
+//
+// Name       : agesscreen_Cleanup
+//
+// Description: Release the memory of all static data from this file.
+//
+// Parameters : -
+//
+// Globals    : All static variables.
+//
+// Returns    : Useless error code (always AUI_ERRCODE_OK).
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+AUI_ERRCODE agesscreen_Cleanup()
+{
+	if (s_startDropDown)
+	{
+		s_startDropDown->Clear();
+		DeleteAndNull(s_startDropDown);
+	}
+	if (s_endDropDown)
+	{
+		s_endDropDown->Clear();
+		DeleteAndNull(s_endDropDown);
+	}
+
+	DeleteAndNull(s_name);
+	DeleteAndNull(s_start);
+	DeleteAndNull(s_end);
+	DeleteAndNull(s_back);
+
+	if (s_agesScreen)
+	{
+		g_c3ui->RemoveWindow(s_agesScreen->Id());
+		DeleteAndNull(s_agesScreen);
+	}
+
+	return AUI_ERRCODE_OK;
+}
+#endif	// ACTIVISION_ORIGINAL
+
 
 
 
