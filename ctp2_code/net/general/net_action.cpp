@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added check for clear queue actions from clients received after they lost 
+//   the city to another player (bug #26)
+//
+//----------------------------------------------------------------------------
 #include "c3.h"
 
 #include "cell.h"
@@ -1750,10 +1771,15 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Client %d clearing queue for city %lx\n",
 								index, m_data[0]));
 			Unit city(m_data[0]);
-			
+#if !defined(ACTIVISION_ORIGINAL) // possible bug 26 solution
+			if(g_theUnitPool->IsValid(city) && city->GetOwner() == index) {
+				city.GetData()->GetCityData()->GetBuildQueue()->Clear();
+			}
+#else
 			if(g_theUnitPool->IsValid(city)) {
 				city.GetData()->GetCityData()->GetBuildQueue()->Clear();
 			}
+#endif
 			break;
 		}
 		case NET_ACTION_REQUEST_RESYNC:

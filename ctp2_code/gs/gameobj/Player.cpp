@@ -37,6 +37,7 @@
 // - Prevent cities from revolting twice in the same turn. By kaan.
 // - Prevent instant messages showing out of turn in hotseat
 //   (J Bytheway 2004/09/15)
+// - Added extra checks to disable science victory in network games (bug #21)
 //
 //----------------------------------------------------------------------------
 
@@ -2806,10 +2807,17 @@ void Player::EndTurn()
 	EndTurnPollution();
 
 	
+#if defined(ACTIVISION_ORIGINAL)
 	if (GetGaiaController()->TurnsToComplete() == 0)
 	{
 		GameOver(GAME_OVER_WON_SCIENCE, -1);
 	}
+#else // possible bug 21 solution
+	if (!g_network.IsActive() && GetGaiaController()->TurnsToComplete() == 0)
+	{
+		GameOver(GAME_OVER_WON_SCIENCE, -1);
+	}
+#endif
 }
 
 
@@ -8770,6 +8778,7 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 			break;
 		
 		case GAME_OVER_WON_SCIENCE:
+#if defined(ACTIVISION_ORIGINAL)
             GenerateDescriptionString(TRUE);
 			m_hasWonTheGame = TRUE;
 			for(i = 1; i < k_MAX_PLAYERS; i++) {
@@ -8785,6 +8794,25 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 					}
 				}
 			}
+#else // possible bug 21 solution
+			if (!g_network.IsActive()) { 
+				GenerateDescriptionString(TRUE);
+				m_hasWonTheGame = TRUE;
+				for(i = 1; i < k_MAX_PLAYERS; i++) {
+					if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
+						
+						
+						
+						
+						
+						if(!g_network.IsClient()) {
+							
+							g_player[i]->GameOver(GAME_OVER_LOST_SCIENCE, -1);
+						}
+					}
+				}
+			} 
+#endif
 			break;
 
 		case GAME_OVER_LOST_CONQUERED:
