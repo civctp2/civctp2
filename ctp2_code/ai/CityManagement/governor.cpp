@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : AI and automated governor handling.
 //
 //----------------------------------------------------------------------------
 //
@@ -21,12 +21,17 @@
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
 //
+// CTP1_HAS_RISEN_FROM_THE_GRAVE
+// - When defined, does not use the CTP2 worker utilisation style.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Consider other tile improvements when there is no fitting one for the 
 //   preferred type.
+// - Adapted the tile improvement choice to take the CTP2 ringwise fractional 
+//   worker utilisation into account.
 //
 //----------------------------------------------------------------------------
 
@@ -1136,15 +1141,17 @@ void Governor::PlaceTileImprovements()
 	
 	std::partial_sort(s_tiQueue.begin(), max_iter, s_tiQueue.end(), greater<TiGoal>());
 
+#if defined(ACTIVISION_ORIGINAL)	// spent_pw is not needed
 	sint32 spent_pw = 0;
 	sint32 needed_pw;
+#endif
 	sint32 avail_pw = player_ptr->GetMaterialsStored() - reserve_pw;
 
 	
 	TiGoalQueue::const_iterator iter;
 	for (iter = s_tiQueue.begin(); iter != max_iter; iter++)
 		{
-			
+#if defined(ACTIVISION_ORIGINAL)	// Will always leave 1 PW unspent
 			needed_pw = terrainutil_GetProductionCost( iter->type, iter->pos, 0 );
 			
 			
@@ -1160,6 +1167,21 @@ void Governor::PlaceTileImprovements()
 										   GEA_End);
 					spent_pw += needed_pw;
 				}
+#else
+			sint32 const	needed_pw	= 
+				terrainutil_GetProductionCost(iter->type, iter->pos, 0);
+			if (needed_pw <= avail_pw)
+			{
+				g_gevManager->AddEvent(GEV_INSERT_Tail, 
+									   GEV_CreateImprovement,
+									   GEA_Player,		m_playerId,
+									   GEA_MapPoint,	iter->pos,
+									   GEA_Int,			iter->type,
+									   GEA_Int,			0, 
+									   GEA_End);
+				avail_pw -= needed_pw;
+			}
+#endif
 			else
 				
 				break;
@@ -1169,9 +1191,23 @@ void Governor::PlaceTileImprovements()
 	s_tiQueue.clear();
 }
 				
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::FindBestTileImprovement
+//
+// Description: Determine the best tile improvement for a tile.
+//
+// Parameters : pos			: position of the tile on the map
+//
+// Globals    : g_player	: list of players in the game
+//				g_theWorld	: map information
+//
+// Returns    : bool		: the tile can be improved
+//              goal		: type and priority value of the tile improvement 
+//
+// Remark(s)  : The information in goal is only valid when true is returned.
+//
+//----------------------------------------------------------------------------
 
 bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal & goal) const
 {					
@@ -1346,6 +1382,22 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal & goal) const
 					}
 				}
 		}
+
+#if defined(ACTIVISION_ORIGINAL) || defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
+	// CTP1: utilisation depends on worker placement, and is either 0 or 1.
+#else
+	// CTP2: utilisation depends on the number of available workers and the 
+	// (ring) distance from the city, and may be any fraction from 0.0 to 1.0.
+	if ((goal.type >= 0) && city_owner.GetCityData())
+	{
+		sint32 const	sqDist	= MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
+		goal.utility *= city_owner.GetCityData()->GetUtilisationRatio(sqDist);
+	}
+	else
+	{
+		goal.utility = 0.0;
+	}
+#endif
 
 	return (goal.type >= 0);
 }

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : City data
 //
 //----------------------------------------------------------------------------
 //
@@ -37,6 +37,7 @@
 // - #pragma once commented out
 // - Enable reading of files created with the Activision 1.1 patch.
 // - Prevent crash when settling in the Alexander scenario.
+// - Added GetUtilisationRatio function.
 //
 //----------------------------------------------------------------------------
 
@@ -840,7 +841,12 @@ public:
 					 sint32 origOwner);
 
 	
+#if defined(ACTIVISION_ORIGINAL)
 	void GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius);
+#else
+	void	GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const;
+	double	GetUtilisationRatio(uint32 const squaredDistance) const;
+#endif
 	sint32 PopCount() const;
 	sint32 SpecialistCount(POP_TYPE type) const;
 	sint32 SlaveCount() const;

@@ -45,6 +45,8 @@
 // - Enable reading of files created with the Activision 1.1 patch.
 // - Prevent crash when settling in the Alexander scenario.
 // - Can't rush buy capitalization/infrastructure
+// - Made the utilisation ratio function available for the tile improvement 
+//   placement governor.
 //
 //----------------------------------------------------------------------------
 
@@ -184,6 +186,7 @@ extern SoundManager		*g_soundManager;
 //Added by Martin Gühmann to handle 
 //city creation by Scenario Editor properly
 #include "ScenarioEditor.h"
+#include <algorithm>				// std::min
 #endif
 
 extern void player_ActivateSpaceButton(sint32 pl);
@@ -1459,8 +1462,11 @@ void CityData::AddShieldsToBuilding()
 }
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius)
+#else
+void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const
+#endif
 {
 	const CitySizeRecord *fullRec = NULL, *partRec = NULL;
 	if(m_workerFullUtilizationIndex >= 0) {
@@ -1486,6 +1492,87 @@ void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius)
 		partRadius = 0;
 	}
 }
+
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetUtilisationRatio
+//
+// Description: Get the current ratio for the worked tiles in the ring with
+//              the given distance.
+//
+// Parameters : squaredDistance	: square of the distance
+//
+// Globals    : -
+//
+// Returns    : double			: utilisation ratio (in the range [0.0, 1.0])
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
+{
+	sint32			fullSquaredRadius;
+	sint32			partSquaredRadius;
+	GetFullAndPartialRadii(fullSquaredRadius, partSquaredRadius);
+
+	if (squaredDistance > partSquaredRadius)
+	{
+		return 0.0;	// Not in the city influence (yet).
+	}
+	else if (squaredDistance <= fullSquaredRadius)
+	{
+		return 1.0;	// Within the fully utilised ring(s).
+	}
+
+	// Compute the fraction for the partially utilised ring.
+
+	sint32 const	dbMaxIndex			= g_theCitySizeDB->NumRecords();
+	
+	// # of working in the inner rings (fully employed)
+	sint32			fullRingWorkers		= 0;
+	if (m_workerFullUtilizationIndex >= 0)
+	{
+		sint32 const	dbIndex			= 
+#if defined(_MSC_VER)
+			min(m_workerFullUtilizationIndex, dbMaxIndex - 1);
+#else
+			std::min(m_workerFullUtilizationIndex, dbMaxIndex - 1);
+#endif
+		fullRingWorkers = g_theCitySizeDB->Get(dbIndex)->GetMaxWorkers();
+	}
+
+	// # of working when the outer ring would have been filled to the max.
+	sint32          maxRingWorkers		= 0;	
+	if (m_workerPartialUtilizationIndex >= 0)
+	{
+		sint32 const	dbIndex			= 
+#if defined(_MSC_VER)
+			min(m_workerPartialUtilizationIndex, dbMaxIndex - 1);
+#else
+			std::min(m_workerPartialUtilizationIndex, dbMaxIndex - 1);
+#endif
+
+		maxRingWorkers = g_theCitySizeDB->Get(dbIndex)->GetMaxWorkers();
+	}
+
+	// # of actually working in the partial ring.
+	sint32 const		partialRingWorkers	= 	
+#if defined(_MSC_VER)
+			min(maxRingWorkers, WorkerCount() + SlaveCount())
+#else
+			std::min(maxRingWorkers, WorkerCount() + SlaveCount())
+#endif
+				- fullRingWorkers;
+
+
+	return (partialRingWorkers <= 0)
+		   ? 0.0 
+		   : static_cast<double>(partialRingWorkers) / 
+		     static_cast<double>(maxRingWorkers - fullRingWorkers);
+}
+#endif
 
 void CityData::CollectResources()
 {
@@ -1534,7 +1621,7 @@ void CityData::CollectResources()
 	}
 
 	
-	
+#if defined(ACTIVISION_ORIGINAL)	// moved to function GetUtilisationRatio	
 	sint32 fullMaxWorkers = m_workerFullUtilizationIndex >= 0 
 		                  ? g_theCitySizeDB->Get(m_workerFullUtilizationIndex)->GetMaxWorkers() 
 						  : 0;
@@ -1559,6 +1646,9 @@ void CityData::CollectResources()
 			utilizationRatio = (double)numPartialWorkers / (double)workerDiff;
 		}
 	}
+#else
+	double const	utilizationRatio	= GetUtilisationRatio(partSquaredRadius);
+#endif
 
 	m_max_food_from_terrain = fullFoodTerrainTotal + partFoodTerrainTotal;
 	m_max_production_from_terrain = fullProdTerrainTotal + partProdTerrainTotal;
