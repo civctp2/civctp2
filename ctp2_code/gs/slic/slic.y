@@ -317,6 +317,7 @@ statement: simplestatement ';'
                  { slicif_for_continue(); } simplestatement ')' 
 				 { slicif_start_for_body(); } body { slicif_end_for(); } 
 	| KW_EVENT ':' NAME '(' {slicif_start_event($3.name); } arguments ')' ';'{ slicif_add_op(SOP_EVENT, $3.name); }
+	| typedef
 /*	| KW_STRUCT NAME NAME ';' { slicif_add_local_struct($2.name, $3.name); }*/
 	;
 
