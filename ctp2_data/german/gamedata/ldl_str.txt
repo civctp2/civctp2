@@ -1511,6 +1511,26 @@ str_ldl_North_and_South_edges_of_the_map_connect	"Nord-/Süd-Scrolling der Karte.
 str_ldl_Neptun_World					"Neptunwelt"
 str_tbl_ldl_Neptun_World					"Neptunwelt"
 
+### New Single Player Game Player Screen Strings ###
+
+str_ldl_SPNGPS_NumPlayerSpinner	"Anzahl der Spieler"
+str_ldl_SPNGPS_MaxPlayerSpinner		"Maximale Anzahl der Spieler"
+str_ldl_SPNGPS_PlayerSpinner		"Start Spieler"
+
+str_ldl_SPNGPS_NumPlayerText	"Setzt die Anzahl der Spieler im neuen Spiel."
+str_ldl_SPNGPS_MaxPlayerText	"Setzt die maximale Anzahl der Spieler, die in einem Spiel auftauchen können."
+str_ldl_SPNGPS_PlayerText	"Setzt den Startspieler. Bestimmt die Farbe der Zivilisation. (Funktioniert noch nicht.)"
+
+### Added Disclaimer Strings ###
+
+str_ldl_Disclaimer1 "DIESES MATERIAL WIRD WEDER VON ACTIVISION HERGESTELLT NOCH UNTERSTÜTZT."
+str_ldl_Disclaimer2 "Diese Version von Call To Power 2 wurde bei http://apolyton.net entwickelt."
+str_ldl_Disclaimer3 "Kontakt: ctp2source@apolyton.net."
+
+### Version String ###
+
+str_ldl_version "2003-12-23"
+
 
 ###   DO NOT TRANSLATE   #############################################################################################
 
@@ -3145,7 +3165,7 @@ str_profile_AutoOpenCityWindow "Baumanager bei Stadtgründung ein"
 str_profile_ShowEnemyHealth "Lebenspunkte Feindeinheit ein"
 str_profile_ShowCityInfluence "Stadteinfluss ein"
 str_profile_ShowPoliticalBorders "Politische Grenzen ein"
-str_profile_CloseOnEyepoint "Meldung schließen nach klicken des Auges"
-str_profile_ShowExpensive "Teuere staatl. Bautruppsauswirkungen zeigen"
+str_profile_CloseOnEyepoint "Meldung schließen beim Klicken auf das Auge"
+str_profile_ShowExpensive "Kosten für Terrainverbes. auch bei Überschreitung der SB Reserve anzeigen"
 
 str_ldl_Pw_COLON_	"Siedler:"

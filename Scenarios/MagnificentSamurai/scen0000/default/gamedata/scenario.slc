@@ -1364,7 +1364,11 @@ unit_t	tmpUnit;
 		shichinenReturn = 1;
 		if (villageDestroyed == 0) {
 			Message(1, 'SSReturnToShichinen');
-			Event:CreateImprovement(1, shichinenLoc, 7, 0);	// Create Fort in Shichinen
+		//	Fixed by Martin Gühmann the Fort has index 8 in the database not 7, 
+		//	with the TerrainImprovementDB it is not a problem if it is changed again.
+		//	Event:CreateImprovement(1, shichinenLoc, 7, 0);	// Create Fort in Shichinen
+		//	Create Fort in Shichinen
+			Event:CreateImprovement(1, shichinenLoc, TerrainImprovementDB(TILEIMP_FORTIFICATIONS), 0);
 			DisableTrigger('SSMoveStuff_F');				// Turn off random combat encounters
 			EnableTrigger('SSShichinenRaided_F');
 			for (i = 0; i < 7; i = i + 1) {					// Bring all your units together in Shichinen for the Bandit attack

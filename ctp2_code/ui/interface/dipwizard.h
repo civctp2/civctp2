@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handling of user preferences.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added emissary photo to the diplomatic manager by Martin Gühmann
+//
+//----------------------------------------------------------------------------
+
 
 #ifndef DIPWIZARD_H__
 #define DIPWIZARD_H__
@@ -56,6 +87,11 @@ class DipWizard
 	static ctp2_Static *m_createButtons, *m_viewButtons;
 
 	static ctp2_Static *m_parchment, *m_responseDiplomat;
+
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann to display the emissary photo of recipient
+	static ctp2_Static *m_emissary_photo;
+#endif
 
 	static ctp2_ListBox *m_propList[DIP_WIZ_PROP_TAB_MAX];
 	static ctp2_ListBox *m_exchList[DIP_WIZ_PROP_TAB_MAX];

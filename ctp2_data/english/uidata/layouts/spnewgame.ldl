@@ -121,11 +121,43 @@ InitPlayWindow {
 		int fontcolorgreen 100
 		int fontcolorblue 255
 
-		bool nodatabase true
-		string text "2003121401"
-		int xpix 720
+		string text "str_ldl_version"
+		int xpix 710
 		int ypix 515
 		int widthpix 60
+		int heightpix 24
+	}
+	Disclaimer1:CTP2_STATIC_BASE {
+		int fontcolorred 255
+		int fontcolorgreen 0
+		int fontcolorblue 0
+
+		string text "str_ldl_Disclaimer1"
+		int xpix 269 
+		int ypix 20
+		int widthpix 260
+		int heightpix 24
+	}
+	Disclaimer2:CTP2_STATIC_BASE {
+		int fontcolorred 255
+		int fontcolorgreen 0
+		int fontcolorblue 0
+
+		string text "str_ldl_Disclaimer2"
+		int xpix 269 
+		int ypix 558
+		int widthpix 260
+		int heightpix 24
+	}
+	Disclaimer3:CTP2_STATIC_BASE {
+		int fontcolorred 255
+		int fontcolorgreen 0
+		int fontcolorblue 0
+
+		string text "str_ldl_Disclaimer3"
+		int xpix 269 
+		int ypix 574
+		int widthpix 260
 		int heightpix 24
 	}
 	Background {

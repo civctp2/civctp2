@@ -1153,7 +1153,7 @@ TILEIMP_OUTLET_MALL {
       Terrain TERRAIN_PLAINS
 
       BonusGold 20
-      EnableAdvance ADVANCE_ECONOMICS
+      EnableAdvance ADVANCE_MASS_MEDIA
       ProductionCost 600
       ProductionTime 2
       TilesetIndex 26
