@@ -52,8 +52,6 @@
 #undef STREAM_TYPE
 #endif
 
-#define USE_SDL 1
-
 #if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
 #  include "mss.h"
 #else // !ACTIVISION_ORIGINAL

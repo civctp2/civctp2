@@ -169,11 +169,13 @@ CivSound::IsPlaying() const
 	return m_isPlaying;
 }
 
+#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
 void
 CivSound::SetChannel(const int &channel)
 {
     m_Channel = channel;
 }
+#endif
 
 void
 CivSound::SetIsLooping(const BOOL &looping)
@@ -194,9 +196,9 @@ CivSound::SetVolume(const sint32 &volume)
     if (0 == m_hAudio) {
 #else
     if (0 == m_Audio) {
+#endif
         return;
     }
-#endif
 
 	// Assume max volume is 10...
 	sint32 scaledVolume = (sint32)((double)volume * 12.7);

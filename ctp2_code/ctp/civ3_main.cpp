@@ -173,7 +173,7 @@
 
 #include <locale.h>
 
-#if !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
 #include <SDL.h>
 #include <SDL_mixer.h>
 #endif
@@ -1292,7 +1292,7 @@ void AtExitProc(void)
 {
 	printf("At exit.\n");
 
-#if !defined(ACTIVISION_ORIGINAL)
+#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
 # if 0
     // What about this?
     Mix_CloseAudio();
