@@ -32,6 +32,8 @@
 // - Prevented invalid strategies to be merged in. 
 // - Prevented crash on number of strategies wrap-around to negative. 
 // - Add an isStealth parameter in CharacterizeArmy method - Calvitix
+// - Made Cleanup really clean up.
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -510,6 +512,22 @@ void Diplomat::Cleanup()
 	m_lastParty = -1;
 	m_launchedNukes = false;
 	m_launchedNanoAttack = false;
+
+#if !defined(ACTIVISION_ORIGINAL)
+	m_bestStrategicStates.clear();
+	m_diplomcyVictoryCompleteTurn	= -1;
+	m_enemyCount					= 0;
+	m_enemyThreat					= 0;
+	m_friendCount					= 0;
+	m_friendPower					= 0;
+	m_incursionPermission			= 1 << PLAYER_INDEX_VANDALS;
+	m_outstandingProposals			= 0;
+	m_personalityName.resize(0);
+	m_piracyHistory.clear();
+	m_strategy.Init();
+
+	ClearEffectiveRegardCache();
+#endif
 }
 
 

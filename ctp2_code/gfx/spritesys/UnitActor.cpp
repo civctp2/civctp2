@@ -30,6 +30,7 @@
 // - Prevented some NULL-dereferencing crashes.
 // - Exposed city walls and force field graphics to agecitystyle.txt, 
 //   by Martin Gühmann.
+// - Prevented crashes with invalid (i.e. killed or destroyed) units.
 //
 //----------------------------------------------------------------------------
 
@@ -1765,10 +1766,12 @@ BOOL UnitActor::Draw(BOOL fogged)
 
 #endif
 
+#if defined(ACTIVISION_ORIGINAL)	// unit may have been killed or destroyed
 	if(m_unitSpriteGroup) {
-		
-		
-
+#else
+	if (m_unitSpriteGroup && m_unitID.IsValid())
+	{
+#endif
 		if (IsFortified())
 			DrawFortified(fogged);
 

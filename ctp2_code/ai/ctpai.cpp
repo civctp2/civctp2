@@ -42,6 +42,7 @@
 //   and with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
 // - Add UngroupGarrison method (to ungroup units blocked by garrison 
 //   (for example seige force) - Calvitix
+// - Cleaned up data of dead player.
 //
 //----------------------------------------------------------------------------
 
@@ -118,9 +119,11 @@ enum READINESS_LEVEL;
 #include "SettleMap.h"
 #include "CtpAiDebug.h"
 #include "TurnCnt.h"
+#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to access the ConstDB
 #include "ConstDB.h"
-//End Add
+#endif	// ACTIVISION_ORIGINAL
+
 extern TurnCount *g_turn;
 
 extern CTPDatabase<GoalRecord> *g_theGoalDB;
@@ -138,6 +141,20 @@ const OrderRecord * CtpAi::sm_moveOrderRec = NULL;
 sint32 CtpAi::sm_goalDefendIndex = -1;
 sint32 CtpAi::sm_goalSeigeIndex = -1;
 sint32 CtpAi::sm_endgameWorldUnionIndex = -1;
+
+#if !defined(ACTIVISION_ORIGINAL)
+
+namespace
+{
+	// Settings for periodic actions
+	// These should be > 0 (otherwise % will crash). 
+	// The original ACTIVISION values are 5 for all period.
+	size_t const	PERIOD_COMPUTE_ROADS				= 5;
+	size_t const	PERIOD_COMPUTE_TILE_IMPROVEMENTS	= 5;
+
+} // namespace
+
+#endif	// ACTIVISION_ORIGINAL
 
 STDEHANDLER(CtpAi_CaptureCityEvent)
 {
@@ -868,9 +885,12 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	if (g_theGameSettings->GetDifficulty() == (LEVELS_OF_DIFFICULTY - 1))
 		diff_cycles = 2;
 
-	//Modified by Martin Gühmann so that this can be exposed to const.txt
-	//if ( cycle < Scheduler::s_max_match_list_cycles + diff_cycles)
+#if defined(ACTIVISION_ORIGINAL)
+	if ( cycle < Scheduler::s_max_match_list_cycles + diff_cycles)
+#else
+	// Modified by Martin Gühmann so that this can be exposed to const.txt
 	if ( cycle < g_theConstDB->GetMaxMatchListCycles() + diff_cycles)
+#endif
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
 								   GEA_Player, playerId,
@@ -1309,6 +1329,22 @@ void CtpAi::Save(CivArchive & archive)
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : CtpAi::RemovePlayer
+//
+// Description: Remove AI data of a dead player.
+//
+// Parameters : deadPlayerId	: index of the dead player
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 {
 	Assert(deadPlayerId < s_maxPlayers);
@@ -1319,8 +1355,9 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	
 	Governor::GetGovernor(deadPlayerId).Initialize();
 
-	
+#if defined(ACTIVISION_ORIGINAL)	// moved down as Cleanup	
 	Diplomat::GetDiplomat(deadPlayerId).Initialize();
+#endif
 
 	for (PLAYER_INDEX player=0; player < s_maxPlayers; player++)
 	{
@@ -1331,6 +1368,9 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	
 	AgreementMatrix::s_agreements.ClearAgreementsInvolving(deadPlayerId);
 
+#if !defined(ACTIVISION_ORIGINAL)
+	Diplomat::GetDiplomat(deadPlayerId).Cleanup();
+#endif
 	
 	if (deadPlayerId + 1 >= s_maxPlayers)
 		Resize();
@@ -1483,6 +1523,8 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
     // update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
 #if defined (ACTIVISION_ORIGINAL)
 	if (round % 5 == 0)
+#else
+	if (round % PERIOD_COMPUTE_ROADS == 0)
 #endif
 	{
 		
@@ -1520,6 +1562,8 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 // update : Place Tile Improvement every turn instead of every 5 turns (Calvitix)
 #if defined (ACTIVISION_ORIGINAL)
 		if (round % 5 == 0)
+#else
+		if (round % PERIOD_COMPUTE_TILE_IMPROVEMENTS == 0)
 #endif
 		{
 			t1 = GetTickCount();
@@ -1620,143 +1664,161 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 }
 
 #if !defined (ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : MoveOutofCityTransportUnits
+//
+// Description: Move the smallest transport army out of every city?
+//
+// Parameters : playerId	: index of - computer - player
+//
+// Globals    : g_player
+//				g_theWorld
+//				g_gevManager
+//
+// Returns    : -
+//
+// Remark(s)  : Assumption: playerId points to a valid computer player.
+//
+//----------------------------------------------------------------------------
+
 void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId)
 {
+	Player *		player_ptr	= g_player[playerId];
+	sint32 const	num_cities	= player_ptr->m_all_cities->Num();
+	CellUnitList	garrison;
 
-   Player * player_ptr = g_player[playerId];
-   Assert(player_ptr != NULL);
-   sint32 num_cities = player_ptr->m_all_cities->Num();
+	for (sint32 i = 0; i < num_cities; ++i)
+	{
+		Unit		city		= player_ptr->m_all_cities->Access(i);
+		Assert(city.IsValid());
+		Assert(city.GetCityData());
 
-   CellUnitList garrison;
-   Unit city;
-   Army move_army;
-   sint8 min_size;
+		MapPoint	pos(city.RetPos());
+		g_theWorld->GetArmy(pos, garrison);
+		
+        Army		move_army;
+        sint32		min_size	= k_MAX_ARMY_SIZE;
 
-   sint32 i, j;
-   MapPoint pos, dest;
-   for (i = 0; i < num_cities; i++)
-   {
-       city = player_ptr->m_all_cities->Access(i);
-       Assert(g_theUnitPool->IsValid(city));
-       Assert(city->GetCityData() != NULL);
+        for (sint32 j = 0; j < garrison.Num(); ++j)
+        {
+			Unit const &	candidate	= garrison[j];
 
-       pos = city.RetPos();
-       g_theWorld->GetArmy(pos, garrison);
-       {
+            if (candidate.IsValid())
+			{
+				Army const &	candidateArmy	= candidate.GetArmy();
+				
+				if (candidateArmy.IsValid()				&& 
+					candidateArmy.CanTransport()		&&
+					(candidateArmy.Num() < min_size)
+				   )
+				{
+					move_army	= candidateArmy;
+					min_size	= candidateArmy.Num();
+				}
+			}
+		}
 
-           move_army.m_id = 0x0;
-           min_size = k_MAX_ARMY_SIZE;
-           for (j = 0; j < garrison.Num(); j++)
-           {
-               if (garrison.Access(j).GetArmy().GetData()->CanTransport() && garrison.Access(j).GetArmy().Num() < min_size)
-               {
-                   min_size = garrison.Access(j).GetArmy().Num();
-                   move_army = garrison.Access(j).GetArmy();
-               }
-           }
+        if (move_army.IsValid())
+        {
+	        bool found = false;
 
+		    for (int dir = 0; !found && (dir < NOWHERE); ++dir)
+			{
+				MapPoint	dest;
 
-           if (move_army.m_id == 0x0)
-           {
-               //         Assert(0);
-               continue;
-           }
+				if (pos.GetNeighborPosition
+						(static_cast<WORLD_DIRECTION>(dir), dest) &&
+					move_army.CanEnter(dest)
+				   )
+				{
+					Path * tmpPath = new Path;
+					tmpPath->SetStart(pos);
+					tmpPath->AddDir(static_cast<WORLD_DIRECTION>(dir));
+					tmpPath->Start(pos);
 
+					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveOrder,
+										   GEA_Army,		move_army,
+										   GEA_Path,		tmpPath,
+										   GEA_MapPoint,	dest,
+										   GEA_Int,			FALSE,
+										   GEA_End
+										  );
 
-           bool found = false;
-           for (j = 0; j < NOWHERE && !found; j++)
-           {
-               if (pos.GetNeighborPosition((WORLD_DIRECTION)j, dest))
-               {
-                   if (move_army.CanEnter(dest))
-                   {
-
-                       Path * tmpPath = new Path;
-                       tmpPath->SetStart(pos);
-                       tmpPath->AddDir((WORLD_DIRECTION)j);
-                       tmpPath->Start(pos);
-
-
-                       g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveOrder,
-                       GEA_Army, move_army,
-                       GEA_Path, tmpPath,
-                       GEA_MapPoint, dest,
-                       GEA_Int, FALSE,
-                       GEA_End);
-
-   #ifdef _DEBUG
-                       uint8 magnitude = 255.0;
-                       g_graphicsOptions->AddTextToArmy(move_army, "Transport OutOfCity", magnitude);
-   #endif
-                       found = true;
-                   }
-               }
-           }
-
-       }
-   }
+#ifdef _DEBUG
+                    uint8 const	magnitude	= 255;
+                    g_graphicsOptions->AddTextToArmy
+						(move_army, "Transport OutOfCity", magnitude);
+#endif
+                    found = true;
+                }
+			} // for dir
+		}
+	} // for i
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnGroupGarrisionUnits
+//
+// Description: -
+//
+// Parameters : playerId	: index of - computer - player
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Assumption: playerId points to a valid computer player.
+//
+//----------------------------------------------------------------------------
 
 void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
 {
- Player * player_ptr = g_player[playerId];
-   Assert(player_ptr != NULL);
-   sint32 num_cities = player_ptr->m_all_cities->Num();
+	Player *		player_ptr = g_player[playerId];
+	sint32 const	num_cities = player_ptr->m_all_cities->Num();
 
-   CellUnitList garrison;
-   Unit city;
-   Army move_army;
-   sint8 min_size;
+	CellUnitList	garrison;
 
-   sint32 i, j;
-   MapPoint pos, dest;
-   for (i = 0; i < num_cities; i++)
-   {
-       city = player_ptr->m_all_cities->Access(i);
-       Assert(g_theUnitPool->IsValid(city));
-       Assert(city->GetCityData() != NULL);
+	for (sint32 i = 0; i < num_cities; ++i)
+	{
+		Unit		city		= player_ptr->m_all_cities->Access(i);
+		Assert(city.IsValid());
+		Assert(city.GetCityData());
 
-       pos = city.RetPos();
-       g_theWorld->GetArmy(pos, garrison);
-       {
+		MapPoint	pos(city.RetPos());
+		g_theWorld->GetArmy(pos, garrison);
+       
+        Army		move_army();
+        sint32		min_size	= k_MAX_ARMY_SIZE;
 
-           move_army.m_id = 0x0;
-           min_size = k_MAX_ARMY_SIZE;
-           for (j = 0; j < garrison.Num(); j++)
-           {
-			   //there is a problem to determine if units are in garrison or just pathing through the city
-			   // If fear it will also ungroup all the units of the tile (garrison points on a cellunitlist that
-			   // cannot know which units is group tu another.
-			   // Don't really affect the game, as units with a real goal and rallyrfirst will regroup them to continue... (I hope...) - Calvitix
-			   if (garrison.Access(j).GetArmy().Num() > 1) //Num() gives the total units on the tile (and not only the num of the army group)
-			   {
-					if (garrison.Access(j).GetArmy().IsEntrenched() || garrison.Access(j).GetArmy().IsEntrenched())
-					{
-						
-							g_gevManager->AddEvent( GEV_INSERT_Tail, 
-							GEV_UngroupOrder, 
-							GEA_Army, garrison.Access(j).GetArmy(), 
-							GEA_End);
-							
-							break;	
-					}
-        
-               }
-           }
+		for (sint32 j = 0; j < garrison.Num(); ++j)
+        {
+			//there is a problem to determine if units are in garrison or just pathing through the city
+			// If fear it will also ungroup all the units of the tile (garrison points on a cellunitlist that
+			// cannot know which units is group tu another.
+			// Don't really affect the game, as units with a real goal and rallyrfirst will regroup them to continue... (I hope...) - Calvitix
+			Unit const &	candidate	= garrison[j];
 
-
-           if (move_army.m_id == 0x0)
-           {
-               //         Assert(0);
-               continue;
-           }
-       }
-   }
-
-
-
+            if (candidate.IsValid())
+			{
+				Army const &	candidateArmy	= candidate.GetArmy();
+				
+				if (candidateArmy.IsValid()				&& 
+					(candidateArmy.Num() > 1)			&&
+					(candidateArmy.IsEntrenched() || candidateArmy.IsEntrenching())
+				   )
+				{
+					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_UngroupOrder, 
+										   GEA_Army,		candidateArmy, 
+										   GEA_End
+										  );
+				}
+        	}
+        } // for j
+	} // for i
 }
+
 #endif //ACTIVISION_ORIGINAL
 
 void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
@@ -1868,12 +1930,12 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 	{
 		
    	   CtpAi::MakeRoomForNewUnits(player);
-       #if !defined (ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
        //to execute the new action :
        CtpAi::MoveOutofCityTransportUnits(player);
 
        CtpAi::UnGroupGarrisonUnits(player);	
-       #endif //ACTIVISION_ORIGINAL
+#endif //ACTIVISION_ORIGINAL
 	}
 	
 	Governor::GetGovernor(player).FillEmptyBuildQueues();
@@ -2229,13 +2291,13 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 
                    //Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
                    // it can freeze all the goals of this type) - Calvitix
-           #if defined (ACTIVISION_ORIGINAL)
+#if defined (ACTIVISION_ORIGINAL)
 			if (scheduler.CountGoalsOfType(goal_type) > 0)
 				continue;
-			#else
+#else
 			if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
 				continue;					
-           #endif //ACTIVISION_ORIGINAL
+#endif //ACTIVISION_ORIGINAL
 
 			
 			if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
