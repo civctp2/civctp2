@@ -23,6 +23,7 @@
 //
 // - Alter the algorithm used to place barbarians in single player games,
 //   making it the same as that used in multiplayer games - JJB 2004/12/13
+// - Add a NoBarbarian flag which makes the unit not appear as barbarian
 //
 //----------------------------------------------------------------------------
 
@@ -97,6 +98,8 @@ sint32 Barbarians::ChooseUnitType()
 			continue;
 
 		if(g_exclusions && g_exclusions->IsUnitExcluded(i))
+			continue;
+		if(rec->GetNoBarbarian())
 			continue;
 	
 		

@@ -503,5 +503,7 @@ Unit {
     // set this flag for units that non-evil AI's should not attack
     Bit Civilian
 
+    Bit NoBarbarian
+
     Bit Leader	// Special "king" unit
 }
