@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : ?
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired memory leak, by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "c3errors.h"
 #include "SlicFunc.h"
@@ -93,6 +124,9 @@ void SlicSymbolData::Init()
 	m_debugInfo = NULL;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
+
 SlicSymbolData::~SlicSymbolData()
 {
 	if(GetType() == SLIC_SYM_REGION) {
@@ -129,7 +163,55 @@ SlicSymbolData::~SlicSymbolData()
 		m_debugInfo = NULL;
 	}
 }
+#else //ACTIVISION_ORIGINAL
+//Added by Martin Gühmann
 
+//----------------------------------------------------------------------------
+//
+// Name       : ~SlicSymbolData
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : No need for valid checks.
+//              No need for nulling.
+//              Also Strings are now cleaned up.
+//
+//----------------------------------------------------------------------------
+SlicSymbolData::~SlicSymbolData()
+{
+	if(GetType() == SLIC_SYM_REGION) {
+		delete m_val.m_region;
+	}
+
+	if(GetType() == SLIC_SYM_COMPLEX_REGION) {
+		while(m_val.m_complexRegion) {
+			PSlicComplexRegion *next = m_val.m_complexRegion->next;
+			delete m_val.m_complexRegion;
+			m_val.m_complexRegion = next;
+		}
+	}
+
+	if(GetType() == SLIC_SYM_STRUCT) {
+		delete m_val.m_struct;
+	}
+
+	if(GetType() == SLIC_SYM_ARRAY) {
+		delete m_val.m_array;
+	}
+
+	if(GetType() == SLIC_SYM_STRING) {
+		delete m_val.m_hard_string;
+	}
+
+	delete m_debugInfo;
+}
+#endif //ACTIVISION_ORIGINAL
 
 BOOL SlicSymbolData::GetIntValue(sint32 &value) const
 {

@@ -25,8 +25,12 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added slic database access Martin Gühmann
-// - Added a way to find out the size of a slic database by Martin Gühmann
+// - Added slic database access, by Martin Gühmann.
+// - Added a way to find out the size of a slic database, by Martin Gühmann.
+// - Repaired memory leak caused by one of the contructors, by Martin Gühmann.
+// - Replaced Debug Assertion for slic devision by 0 by slic error message
+//   the problem must be solved by the slicer not by a c++ coder, 
+//   by Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -91,6 +95,7 @@ SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset, SlicStack *stack)
 	m_resultObject = NULL;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 SlicFrame::~SlicFrame()
 {
 	if(m_stack) {
@@ -105,7 +110,34 @@ SlicFrame::~SlicFrame()
 		m_resultObject->Release();
 }
 
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : ~SlicFrame
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : No need for valid check of m_stack and m_messageData.
+//              No need to null m_stack.
+//              m_resultObject can only be released if it is valid.
+//
+//----------------------------------------------------------------------------
+SlicFrame::~SlicFrame()
+{
+	delete m_stack;
 
+	delete m_messageData;
+
+	if(m_resultObject)
+		m_resultObject->Release();
+}
+#endif
 
 BOOL SlicFrame::ArrayLookup(SS_TYPE arrayType, SlicStackValue array,
 							SS_TYPE indexType, SlicStackValue indexValue,
@@ -507,7 +539,18 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
 			if(Eval(type1, sval1) == 0) {
+
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 				Assert(Eval(type1, sval1) != 0);
+#else
+//Added by Martin Gühmann
+//It is a problem of slic code and not of the ctp2.exe, 
+//the slicer has to solve the problem.
+				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
+					c3errors_ErrorDialog("Slic", "In object %s: Devision by 0.", m_segment->GetName());
+				}
+#endif
 				sval3.m_int = 0;
 				m_stack->Push(SS_TYPE_INT, sval3);
 				break;
@@ -1086,7 +1129,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			else{
-				c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
+				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
+					c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
+				}
 				sval3.m_int = 0;
 				m_stack->Push(SS_TYPE_INT, sval3);
 			}
@@ -1130,7 +1175,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			else{
-				c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval2.m_int, conduit->GetName());
+				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
+					c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval2.m_int, conduit->GetName());
+				}
 				sval2.m_int = 0;
 				m_stack->Push(SS_TYPE_INT, sval2);
 			}
