@@ -1,3 +1,39 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Database lexer (Lexical Analyzer Generator) header
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Implemented GovernmentsModified subclass (allowing cdb files including
+//   a GovernmentsModified record to produce parsers capable of reading and
+//   storing subrecords for Government types.)
+//   See http://apolyton.net/forums/showthread.php?s=&threadid=107916 for
+//   more details  _____ by MrBaggins Jan-04
+//
+//   * Added PeekAheadText member function prototype
+//
+//----------------------------------------------------------------------------
 
 #ifndef __DBLEXER_H__
 #define __DBLEXER_H__
@@ -65,6 +101,11 @@ public:
 
 	sint32 GetToken();
 	sint32 PeekAhead();
+
+//	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+//	const char *PeekAheadText();
+//	#endif
+
 	const char *GetTokenText();
 
 	void ReportError(char *fmt, ...);

@@ -1,3 +1,52 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Database record generator
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Implemented GovernmentsModified subclass (allowing cdb files including
+//   a GovernmentsModified record to produce parsers capable of reading and
+//   storing subrecords for Government types.)
+//   See http://apolyton.net/forums/showthread.php?s=&threadid=107916 for
+//   more details  _____ by MrBaggins Jan-04
+//
+//   * Added m_hasGovernmentsModified (bool,) used throughout to incorporate
+//     appropriate code for each parser
+//   * Code dynamically generates m_hasGovernmentsModified into the record 
+//     parser, and sets it, accordingly.
+//   * Code dynamically generates (along with a public accessor for 
+//     m_hasGovernmentsModified,) generic accessors...
+//     - sint32 GenericGetNumGovernmentsModified()
+//     - sint32 GenericGetGovernmentsModifiedIndex(sint32 index)
+//     because a template requires access to these properties which may or
+//     may not exist in the templated class.  These functions return an
+//     appropriate value in those cases.
+//   * Code generates a conditional parser construct to deal with an
+//     addition to the standard parsed record syntax.
+//
+//----------------------------------------------------------------------------
+
 
 #include <stdio.h>
 #include <string.h>
@@ -11,6 +60,11 @@ RecordDescription::RecordDescription(char *name)
 {
 	strncpy(m_name, name, k_MAX_RECORD_NAME);
 	m_numBits = 0;
+
+	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+		m_hasGovernmentsModified = false;	
+	#endif
+
 	m_addingToMemberClass = false;
 	m_baseType = DATUM_NONE;
 }
@@ -83,10 +137,39 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	ExportMemberClasses(outfile);
 	fprintf(outfile, "private:\n");
 	ExportData(outfile);
+
+	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+	fprintf(outfile, "//GovMod Specific flag\n");
+	fprintf(outfile, "    bool m_hasGovernmentsModified;\n\n");
+	#endif
+
 	
+
 	fprintf(outfile, "\npublic:\n");
 
 	ExportMethods(outfile);
+
+	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+	fprintf(outfile, "//GovMod Specific accessors\n");
+	fprintf(outfile, "     bool GetHasGovernmentsModified() const { return m_hasGovernmentsModified; }\n\n");
+	fprintf(outfile, "");
+	fprintf(outfile, "");
+	fprintf(outfile, "     sint32 GenericGetNumGovernmentsModified() {");
+	
+	if(!m_hasGovernmentsModified) 
+		fprintf(outfile," return 0; } \n\n\n");
+	else
+		fprintf(outfile," return m_numGovernmentsModified; } \n\n\n");
+
+	fprintf(outfile, "     sint32 GenericGetGovernmentsModifiedIndex(sint32 index) {");
+	if(!m_hasGovernmentsModified) 
+		fprintf(outfile," return -1; } \n\n\n");
+	else
+		fprintf(outfile," return GetGovernmentsModifiedIndex(index); } \n\n\n");
+
+	#endif
+
+  
 
 	fprintf(outfile, "}; /* %sRecord */\n\n", m_name);
 
@@ -397,6 +480,7 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->m_type == DATUM_BIT_GROUP) {
 			fprintf(outfile, "    sint32 Parse%sBit(DBLexer *lex);\n", walk.GetObj()->m_name);
+
 		}
 		walk.Next();
 	}
@@ -407,6 +491,11 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	walk.SetList(&m_datumList);
 	while(walk.IsValid()) {
 		Datum *dat = walk.GetObj();
+
+	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+		if(strcmp("GovernmentsModified", walk.GetObj()->m_name)==0) m_hasGovernmentsModified=true;
+	#endif
+
 		dat->ExportAccessor(outfile, 0, m_name);
 		walk.Next();
 	}
@@ -491,6 +580,15 @@ void RecordDescription::ExportManagement(FILE *outfile)
 		dat->ExportInitialization(outfile);
 		walk.Next();
 	}
+	
+	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+	fprintf(outfile, "//GovMod Specific flag initialization\n");
+	if (m_hasGovernmentsModified)
+		fprintf(outfile, "    m_hasGovernmentsModified=true;\n\n");
+	else
+		fprintf(outfile, "    m_hasGovernmentsModified=false;\n\n");
+	#endif
+
 	fprintf(outfile, "}\n\n");
 
 	
@@ -714,6 +812,25 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    }\n");
 		fprintf(outfile, "\n");
 		fprintf(outfile, "    tok = lex->GetToken();\n");
+
+	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+		if(m_hasGovernmentsModified) {
+		fprintf(outfile, "    // Start of GovMod Specific lexical analysis\n");
+		fprintf(outfile, "    if(tok == k_Token_Modified) {\n");
+		fprintf(outfile, "         do {\n");
+		fprintf(outfile, "				  tok = lex->PeekAhead();\n");
+		fprintf(outfile, "				  if(tok != k_Token_Name) {\n");
+		fprintf(outfile, "					  DBERROR((\"Modified record invalid- must be Government identifier or description.  No quotes, No spaces.\"));\n");
+		fprintf(outfile, "					  return 0;\n");
+		fprintf(outfile, "				  }\n");
+		fprintf(outfile, "                g_theGovernmentDB->ParseRecordInArray(lex, (sint32 **)&m_GovernmentsModified, &m_numGovernmentsModified, err);\n");
+		fprintf(outfile, "				  tok = lex->GetToken();\n");
+		fprintf(outfile, "         } while (tok == k_Token_ModifiedDelimiter);\n");
+		fprintf(outfile, "	  }\n");
+		fprintf(outfile, "    // End of GovMod Specific lexical analysis\n");
+		}
+	#endif
+
 		fprintf(outfile, "    if(tok != k_Token_OpenBrace) {\n");
 		fprintf(outfile, "        DBERROR((\"Missing open brace\"));\n");
 		fprintf(outfile, "        return 0;\n");

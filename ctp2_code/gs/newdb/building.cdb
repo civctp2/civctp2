@@ -6,6 +6,7 @@ Building {
 	Record Advance EnableAdvance
 	Record Advance[0..5] ObsoleteAdvance
 	Record Building[] PrerequisiteBuilding
+	Record Government[] GovernmentsModified
 	Int ProductionCost
 	Int Upkeep
 

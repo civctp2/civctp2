@@ -37,6 +37,7 @@ records: records record
        ;
 
 record: NAME '{' { db_start_record($1.name); } data '}' { db_end_record($1.name); }
+		| name '>' names '{' { db_start_record($1.name); } data '}' { db_end_record($1.name); }
 		| NAME ':' INT { db_make_int_db($1.name); }
 		| NAME ':' FLOAT { db_make_float_db($1.name); }
 		| NAME ':' FILENAME  { db_make_string_db($1.name); }

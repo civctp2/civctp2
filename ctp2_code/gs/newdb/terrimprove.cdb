@@ -75,7 +75,7 @@ TerrainImprovement {
 	#Added Sound by Martin Gühmann
 	Record Sound Sound
 	Record Terrain[] CantBuildOn
-
+	Record Government[] GovernmentsModified
 	Bit(Struct Effect) Effect
 	Struct Effect[] TerrainEffect
 

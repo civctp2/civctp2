@@ -24,6 +24,7 @@ Feat {
 	Record Advance[] ExcludeAdvance
 	Record Wonder[] ExcludeWonder
 	Record Feat[] ExcludeFeat
+	Record Government[] GovernmentsModified
 	Bit(String) ExcludeFunction # A SLIC function name, if(ExcludeFunction(featindex)) { don't allow feat }
 
 	# Things that cancel the effect of this feat (see also duration)

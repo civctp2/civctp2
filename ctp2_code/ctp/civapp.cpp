@@ -39,9 +39,21 @@
 // Modifications from the original Activision code:
 //
 // - Keep the user's leader name when the data is consistent.
-// - Skip begin turn handling when loading from a file.
 //
 //----------------------------------------------------------------------------
+//
+// - Implemented GovernmentsModified subclass (allowing cdb files including
+//   a GovernmentsModified record to produce parsers capable of reading and
+//   storing subrecords for Government types.)
+//   See http://apolyton.net/forums/showthread.php?s=&threadid=107916 for
+//   more details  _____ by MrBaggins Jan-04
+//
+//   * Reordered parsing of CTPDatabase templated classes to ensure that
+//     parsing Advances and Governments would occur before other DBs using 
+//     GovernmentsModified, to ensure that Governments would be able to be
+//     inspected by those other database classes.
+//     
+//////////////////////////////////////////////////////////////////////////////
 
 #include "c3.h"
 #include "civ3_main.h"
@@ -107,9 +119,7 @@
 #include "c3_listitem.h"
 #include "bevellesswindow.h"
 #include "spnewgamewindow.h"
-#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgame
 #include "spnewgametribescreen.h"
-#endif
 #include "c3windows.h"
 #include "statswindow.h"
 #include "backgroundwin.h"
@@ -631,7 +641,9 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 20 );
 
-	
+
+
+
 	Assert(g_theSoundDB);
 	if (g_theSoundDB) {
 		lex = new DBLexer(C3DIR_GAMEDATA, g_sounddb_filename);
@@ -774,7 +786,15 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 200 );
 
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
+	if(g_theGovernmentDB) {
+		if(!g_theGovernmentDB->Parse(C3DIR_GAMEDATA, g_government_filename))
+			return FALSE;
+		Assert(g_theGovernmentDB);
+	}
+#endif
 	
+
 	if (g_theUnitDB) {
 		if (!g_theUnitDB->Parse(C3DIR_GAMEDATA, g_unitdb_filename)) 
 			return FALSE;
@@ -838,9 +858,13 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 260 );
 
-	if(!g_theGovernmentDB->Parse(C3DIR_GAMEDATA, g_government_filename))
-		return FALSE;
-    Assert(g_theGovernmentDB); 
+#if defined(ACTIVISION_ORIGINAL) //GovMod
+	if(g_theGovernmentDB) {
+		if(!g_theGovernmentDB->Parse(C3DIR_GAMEDATA, g_government_filename))
+			return FALSE;
+		Assert(g_theGovernmentDB);
+	}
+#endif
 
 	g_theProgressWindow->StartCountingTo( 270 );
 
@@ -1159,6 +1183,8 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 		if(!g_thePopDB->Parse(C3DIR_GAMEDATA, g_pop_filename))
 			return FALSE;
 	}
+
+
 
 	
 	if(!g_theUnitDB->ResolveReferences()) return FALSE;
@@ -1551,9 +1577,7 @@ sint32 CivApp::CleanupAppUI(void)
 	
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
-#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgamescreen_Cleanup
 	spnewgametribescreen_Cleanup();
-#endif
 	spscreen_Cleanup();
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
@@ -1987,9 +2011,7 @@ sint32 CivApp::InitializeGameUI(void)
 
 	
 	spnewgamescreen_Cleanup();
-#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgamescreen_Cleanup
 	spnewgametribescreen_Cleanup();
-#endif
 	spscreen_Cleanup();
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
@@ -2342,35 +2364,12 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 		if(&archive == NULL ||
 			(g_startInfoType != STARTINFOTYPE_NONE)) {
-#if defined(ACTIVISION_ORIGINAL)	// double production in first turn after loading file
+			
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 				GEV_BeginTurn,
 				GEA_Player, g_selected_item->GetCurPlayer(),
 				GEA_Int, g_player[g_selected_item->GetCurPlayer()]->m_current_round,
 				GEA_End);
-#else
-			if (&archive && !g_isScenario)
-			{
-				// Loading a saved game: jump to the move phase immediately.
-				g_gevManager->AddEvent
-					(GEV_INSERT_Tail,
-					 GEV_StartMovePhase,
-					 GEA_Player, g_selected_item->GetCurPlayer(),
-					 GEA_End
-					);
-			}
-			else
-			{
-				// Starting a new game (launch button or scenario)
-				g_gevManager->AddEvent
-					(GEV_INSERT_Tail,
-					 GEV_BeginTurn,
-					 GEA_Player, g_selected_item->GetCurPlayer(),
-					 GEA_Int, g_player[g_selected_item->GetCurPlayer()]->m_current_round,
-					 GEA_End
-					);
-			}
-#endif
 		}
 	}
 
@@ -2472,9 +2471,7 @@ sint32 InitializeSpriteEditorUI(void)
 
 	
 	spnewgamescreen_Cleanup();
-#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgamescreen_Cleanup
 	spnewgametribescreen_Cleanup();
-#endif
 	spscreen_Cleanup();
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();
@@ -2854,9 +2851,7 @@ AttractWindow::Cleanup();
 	
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
-#if defined(ACTIVISION_ORIGINAL)	// moved to spnewgamescreen_Cleanup
 	spnewgametribescreen_Cleanup();
-#endif
 	spscreen_Cleanup();
 	initialplayscreen_Cleanup();
 	scenarioscreen_Cleanup();

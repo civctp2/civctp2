@@ -1,6 +1,7 @@
 
 Pop {
 	Record Advance EnableAdvance
+	Record Government[] GovernmentsModified
 
 	Int Science = 0
 	Int Happiness = 0

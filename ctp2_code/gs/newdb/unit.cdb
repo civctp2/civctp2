@@ -39,6 +39,7 @@ Unit {
 
 	Record Advance             EnableAdvance
 	Record Advance[0..5]        ObsoleteAdvance
+	Record Government[] GovernmentsModified
 
 	Bits Size {
 		Small,

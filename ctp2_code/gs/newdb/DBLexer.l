@@ -14,6 +14,8 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 =           { return k_Token_Equals; }
 \{          { return k_Token_OpenBrace; }
 \}          { return k_Token_CloseBrace; }
+>			{ return k_Token_Modified; }
+,			{ return k_Token_ModifiedDelimiter; }
 {name}      { return k_Token_Name; }
 {string}    { return k_Token_String; }
 

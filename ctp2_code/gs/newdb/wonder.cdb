@@ -8,6 +8,7 @@ Wonder {
 	StringId Description
 	Record Advance EnableAdvance
 	Record Advance [0..5] ObsoleteAdvance
+	Record Government[] GovernmentsModified
 
 	# Flags
 	Bit(Int) ReduceReadinessCost

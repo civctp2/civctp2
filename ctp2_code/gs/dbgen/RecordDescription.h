@@ -1,3 +1,39 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Database record generator header
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Implemented GovernmentsModified subclass (allowing cdb files including
+//   a GovernmentsModified record to produce parsers capable of reading and
+//   storing subrecords for Government types.)
+//   See http://apolyton.net/forums/showthread.php?s=&threadid=107916 for
+//   more details  _____ by MrBaggins Jan-04
+//
+//   * Added bool m_hasGovernmentsModified to the RecordDescription class
+//
+//----------------------------------------------------------------------------
 
 #ifndef __RECORD_DESCRIPTION_H__
 #define __RECORD_DESCRIPTION_H__
@@ -56,6 +92,10 @@ private:
 	char m_name[k_MAX_RECORD_NAME];
 	PointerList<Datum> m_datumList;
 	PointerList<MemberClass> m_memberClasses;
+
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
+	bool m_hasGovernmentsModified;
+#endif
 
 	sint32 m_numBits;
 	bool m_addingToMemberClass;
