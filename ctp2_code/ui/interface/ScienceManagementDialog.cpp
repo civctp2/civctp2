@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Display the cost for the player, not the base advancement cost.
+// - Start the great library with the current research project of the player.
 //
 //----------------------------------------------------------------------------
 
@@ -477,8 +478,11 @@ void ScienceManagementDialog::HyperlinkActionCallback(aui_Control *control,
 
 	
 	if(hyperlink) {
-		
+#if defined(ACTIVISION_ORIGINAL)		
 		open_GreatLibrary(0);
+#else
+		open_GreatLibrary();
+#endif
 		g_greatLibrary->SetLibrary(hyperlink->m_index,
 			static_cast<DATABASE>(hyperlink->m_db));
 	}

@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Disband units as an army, to get the shields for the city.
+// - Start the great library with the current research project of the player.
 //
 //----------------------------------------------------------------------------
 
@@ -1384,7 +1385,11 @@ void CityWindow::HyperLink( aui_Control *control, uint32 action, uint32 data, vo
 	ctp2_HyperLink *hl = ((ctp2_HyperTextBox *)control)->GetSelectedHyperLink();
 
 	if ( hl ) {
+#if defined(ACTIVISION_ORIGINAL)
 		open_GreatLibrary(0);
+#else
+		open_GreatLibrary();
+#endif
 		g_greatLibrary->SetLibrary( hl->m_index, (DATABASE)hl->m_db );
 	}
 }

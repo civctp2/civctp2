@@ -1,8 +1,36 @@
-
-//File greatlibrary.cpp
-//modified by Martin Gühmann on October the 28th
-//line added in sint32 GreatLibrary::UpdateList( DATABASE database )
-//to make shure that also goods with the GLHidden flag aren't shown.
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Great library handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Modified by Martin Gühmann on October the 28th: line added in 
+//   sint32 GreatLibrary::UpdateList( DATABASE database )
+//   to make sure that also goods with the GLHidden flag aren't shown.
+// - Start the great library with the current research project of the player.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -1342,11 +1370,12 @@ void GreatLibrary::Display( void )
 	m_buttonString = LIB_STRING_INDEX;
 
 	ClearHistory();
+#if defined(ACTIVISION_ORIGINAL)
 	SetLibrary( 0, DATABASE_ADVANCES );
-
-	
-	
-	
+#else
+	// This has already been set: no need to use some dummy advance.
+	SetLibrary(m_window->GetTechMode(), m_window->GetTechDatabase());
+#endif
 	
 	FixTabs();
 }
@@ -1700,8 +1729,11 @@ sint32 GreatLibrary::ClearHistory( void )
 {
 	m_history_position = 0;
 	m_history.clear();
-
+#if defined(ACTIVISION_ORIGINAL)
 	m_selectedIndex = 0;
+#else
+	m_selectedIndex = -1;
+#endif
 	return 0;
 }
 
@@ -2232,9 +2264,10 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		
 		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
+#if !defined(ACTIVISION_ORIGINAL)
 			//added by Martin Gühmann
 			if(HIDE(g_theResourceDB, index)) continue;
-
+#endif
 			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theResourceDB->GetName(
 						g_theResourceDB->m_alphaToIndex[ index ])), index);

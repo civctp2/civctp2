@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Science window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Start the great library with the current research project of the player.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_uniqueid.h"
@@ -112,7 +141,11 @@ void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint3
 	ctp2_HyperLink *hl = ((ctp2_HyperTextBox *)control)->GetSelectedHyperLink();
 
 	if ( hl ) {
+#if defined(ACTIVISION_ORIGINAL)
 		open_GreatLibrary(0);
+#else
+		open_GreatLibrary();
+#endif
 		g_greatLibrary->SetLibrary( hl->m_index, (DATABASE)hl->m_db );
 	}
 }
@@ -120,7 +153,12 @@ void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint3
 void sci_advancescreen_GoalCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(0);
+#else
+	open_GreatLibrary();
+#endif
 }
 
 void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 data, void *cookie )

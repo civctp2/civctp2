@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Control panel handling
 //
 //----------------------------------------------------------------------------
 //
@@ -21,6 +21,7 @@
 // - Added option to show info of tile improvements that are too expensive.
 // - Do not display the world map of the first player at start-up for hotseat 
 //   play.
+// - Start the great library with the current research project of the player.
 //
 //----------------------------------------------------------------------------
 //
@@ -990,7 +991,11 @@ void SciMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex,
 			open_ScienceStatus();
 			break;
 	case	CP_MENU_ITEM_1:	
+#if defined(ACTIVISION_ORIGINAL)
 			open_GreatLibrary(0);
+#else
+			open_GreatLibrary();
+#endif
 			break;
    	case	CP_MENU_ITEM_2:
 	case	CP_MENU_ITEM_3:	
@@ -1030,8 +1035,11 @@ void GLMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, 
 	
 	close_AllScreens();
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	open_GreatLibrary(0);
+#else
+	open_GreatLibrary();
+#endif
 }
 
 
@@ -1045,7 +1053,11 @@ void StatsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemInde
 	switch (itemIndex)
 	{
    	case	CP_MENU_ITEM_0:
+#if defined(ACTIVISION_ORIGINAL)
 			open_GreatLibrary(0);
+#else
+			open_GreatLibrary();
+#endif
 			break;
 	case	CP_MENU_ITEM_1:	
 			InfoWindow::SelectRankingTab();

@@ -1,5 +1,33 @@
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Screen utilities
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Start the great library with the current research project of the player.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -307,7 +335,7 @@ sint32 close_InfoScreen( void )
 	return 0;
 }
 
-
+#if defined(ACTIVISION_ORIGINAL)
 sint32 open_GreatLibrary( sint32 index, BOOL sci )
 {
 	if(g_e3Demo) return 0;
@@ -336,13 +364,83 @@ sint32 open_GreatLibrary( sint32 index, BOOL sci )
 	return 0;
 }
 
-
 sint32 open_GreatLibrary( void )
 {
 	open_GreatLibrary(0);
 
 	return 0;
 }
+
+#else	// ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+//
+// Name       : open_GreatLibrary
+//
+// Description: (Re)open the great library window.
+//
+// Parameters : index				: advance to display on opening
+//              sci					: force display of index, even when the
+//                                    library was open
+//
+// Globals    : g_e3Demo			: flag to indicate special E3 demo without
+//                                    great library functionality
+//
+// Returns    : sint32				: opening succeeded
+//
+// Remark(s)  : When the library is not open already, or the sci parameter is
+//              set, it will open with the indicated advance.
+//
+//----------------------------------------------------------------------------
+
+sint32 open_GreatLibrary(sint32 index, BOOL sci)
+{
+	if (g_e3Demo) return false;
+
+#ifdef _DEBUG
+	SET_TIME
+#endif _DEBUG
+
+	sint32 const	err	= greatlibrary_Initialize(index, sci);
+	Assert(!err);
+	if (err) return false;
+
+	g_greatLibrary->Display();
+
+#ifdef _DEBUG
+	GET_ELAPSED_TIME("Great Library");
+#endif _DEBUG
+
+	return true;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : open_GreatLibrary
+//
+// Description: (Re)open the great library window.
+//
+// Parameters : -
+//
+// Globals    : g_selected_item		: object selected at screen
+//				g_player			: list of players
+//
+// Returns    : sint32				: opening succeeded
+//
+// Remark(s)  : When the library is not open already, it will open with the 
+//              advance that is being researched by the current player.
+//
+//----------------------------------------------------------------------------
+
+sint32 open_GreatLibrary( void )
+{
+	sint32 const		player	= g_selected_item->GetVisiblePlayer();
+	AdvanceType const	advance	= g_player[player]->m_advances->GetResearching();
+
+	return open_GreatLibrary(advance);
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 sint32 close_GreatLibrary( void )
 {

@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Data blanked out at screen in between 2 players in hotseat play.
+// - Great library history cleared between 2 players in hotseat play.
 //
 //----------------------------------------------------------------------------
 
@@ -109,6 +110,7 @@ extern TutorialWin *g_tutorialWin;
 #include "ProfileDB.h"
 
 #if !defined(ACTIVISION_ORIGINAL)
+#include "GreatLibrary.h"
 #include "MainControlPanel.h"
 #endif
 
@@ -2665,12 +2667,23 @@ void SlicEngine::BlankScreen(BOOL blank)
 		if (m_blankScreen)
 		{
 			MainControlPanel::Blank();
+			if (g_greatLibrary)
+			{
+				g_greatLibrary->ClearHistory();
+			}
 		}
 		else
 		{
 			CheckPendingResearch();
 			MainControlPanel::UpdateCityList();
 			MainControlPanel::Update();
+			if (g_greatLibrary)
+			{
+				sint32 const		player	= g_selected_item->GetVisiblePlayer();
+				AdvanceType const	advance	= g_player[player]->m_advances->GetResearching();
+
+				g_greatLibrary->SetLibrary(advance, DATABASE_ADVANCES);
+			}
 		}
 #endif
 	}

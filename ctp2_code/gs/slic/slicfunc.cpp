@@ -23,6 +23,7 @@
 // - Fixed cut-and-paste error (no apparent impact, but might prevent crash).
 // - FreeAllSlaves slic function added by The Big MC November 24th 2003.
 // - Filled code for GetRoundsToNextDisaster and GetCurrentPollutionLevel.
+// - open_GreatLibrary calls with incorrect first argument type replaced.
 //
 //----------------------------------------------------------------------------
 
@@ -2330,8 +2331,13 @@ SFN_ERROR Slic_LibraryUnit::Call(SlicArgList *args)
 		}
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(DATABASE_UNITS, FALSE);
 	if(g_greatLibrary) {
+#else
+	if (open_GreatLibrary())
+	{
+#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_UNITS);
 	}
 	return SFN_ERROR_OK;
@@ -2351,8 +2357,13 @@ SFN_ERROR Slic_LibraryBuilding::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(DATABASE_BUILDINGS, FALSE);
 	if(g_greatLibrary) {
+#else
+	if (open_GreatLibrary())
+	{
+#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_BUILDINGS);
 	}
 	return SFN_ERROR_OK;
@@ -2372,8 +2383,13 @@ SFN_ERROR Slic_LibraryWonder::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(DATABASE_WONDERS, FALSE);
 	if(g_greatLibrary) {
+#else
+	if (open_GreatLibrary())
+	{
+#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_WONDERS);
 	}
 	return SFN_ERROR_OK;
@@ -2393,8 +2409,13 @@ SFN_ERROR Slic_LibraryAdvance::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(DATABASE_ADVANCES, FALSE);
 	if(g_greatLibrary) {
+#else
+	if (open_GreatLibrary())
+	{
+#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_ADVANCES);
 	}
 	return SFN_ERROR_OK;
@@ -2414,8 +2435,13 @@ SFN_ERROR Slic_LibraryTerrain::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(DATABASE_TERRAIN, FALSE);
 	if(g_greatLibrary) {
+#else
+	if (open_GreatLibrary())
+	{
+#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_TERRAIN);
 	}
 	return SFN_ERROR_OK;
@@ -2435,8 +2461,13 @@ SFN_ERROR Slic_LibraryConcept::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(DATABASE_CONCEPTS, FALSE);
 	if(g_greatLibrary) {
+#else
+	if (open_GreatLibrary())
+	{
+#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_CONCEPTS);
 	}
 	return SFN_ERROR_OK;
@@ -2456,8 +2487,13 @@ SFN_ERROR Slic_LibraryGovernment::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(DATABASE_GOVERNMENTS, FALSE);
 	if(g_greatLibrary) {
+#else
+	if (open_GreatLibrary())
+	{
+#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_GOVERNMENTS);
 	}
 	return SFN_ERROR_OK;
@@ -2477,8 +2513,13 @@ SFN_ERROR Slic_LibraryTileImprovement::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(DATABASE_TILE_IMPROVEMENTS, FALSE);
 	if(g_greatLibrary) {
+#else
+	if (open_GreatLibrary())
+	{
+#endif
 		g_greatLibrary->SetLibrary(type, DATABASE_TILE_IMPROVEMENTS);
 	}
 	return SFN_ERROR_OK;

@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Key press handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Start the great library with the current research project of the player.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -666,7 +685,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	case KEY_FUNCTION_OPEN_GREAT_LIBRARY:
 		if ( !g_modalWindow ) {
 			close_AllScreens();
+#if defined(ACTIVISION_ORIGINAL)
 			open_GreatLibrary(0);
+#else
+			open_GreatLibrary();
+#endif
 		}
 		break;
 	case KEY_FUNCTION_OPEN_OPTIONS_SCREEN:

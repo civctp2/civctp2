@@ -1,3 +1,26 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Switched INF/CAP typo corrected by Peter Triggs
+// - Start the great library with the current research project of the player.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "EditQueue.h"
@@ -1409,7 +1432,11 @@ void EditQueue::Library(aui_Control *control, uint32 action, uint32 data, void *
 		return;
 	}
 
+#if defined(ACTIVISION_ORIGINAL)
 	open_GreatLibrary(0);	
+#else
+	open_GreatLibrary();
+#endif
 	switch(s_editQueue->m_itemCategory) {
 		case k_GAME_OBJ_TYPE_UNIT:
 			g_greatLibrary->SetLibrary(s_editQueue->m_itemType, DATABASE_UNITS);
@@ -1877,10 +1904,10 @@ void EditQueue::Save(const MBCHAR *saveFileName)
 					c3files_fprintf(saveFile, "W %s\n", g_theWonderDB->Get(walk.GetObj()->m_type)->GetIDText());
 					break;
 				case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
-					c3files_fprintf(saveFile, "CAP\n");
+					c3files_fprintf(saveFile, "INF\n");
 					break;
 				case k_GAME_OBJ_TYPE_CAPITALIZATION:
-					c3files_fprintf(saveFile, "INF\n");
+					c3files_fprintf(saveFile, "CAP\n");
 					break;
 			}
 			walk.Next();
