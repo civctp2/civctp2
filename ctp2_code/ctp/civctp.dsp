@@ -24,6 +24,8 @@ CFG=CTP2 - WIN32 RELEASE
 !MESSAGE "ctp2 - Win32 Final" (based on "Win32 (x86) Application")
 !MESSAGE "ctp2 - Win32 Debug Browse" (based on "Win32 (x86) Application")
 !MESSAGE "ctp2 - Win32 Optimized Test" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - SDL Debug" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - SDL Final" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -48,7 +50,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /G5 /MD /W3 /GX /Zd /Og /Oi /Os /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /G5 /MD /W3 /GX /Zd /Og /Oi /Os /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
 # SUBTRACT CPP /Ox
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -76,7 +78,7 @@ LINK32=xilink6.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "_PLAYTEST" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "_PLAYTEST" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /Yu"c3.h" /FD /c
 # SUBTRACT CPP /X /Fr
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -104,9 +106,9 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "Test"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\ctp2\\" /I "..\ctp2\ctp2_utils\\" /I "..\ctp2\ctp2_rsrc\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\ctp2\debugtools" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AI_BACKDOOR" /Yu"c3.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\ctp2\\" /I "..\ctp2\ctp2_utils\\" /I "..\ctp2\ctp2_rsrc\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\ctp2\debugtools" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AI_BACKDOOR" /Yu"c3.h" /FD /c
 # SUBTRACT BASE CPP /X /Fr
-# ADD CPP /nologo /G6 /MD /W3 /Gm /GX /Zi /Ot /Og /Ob2 /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "_PLAYTEST" /D "_AI_BACKDOOR" /D "_DEBUG" /D "_TEST" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /G6 /MD /W3 /Gm /GX /Zi /Ot /Og /Ob2 /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "_PLAYTEST" /D "_AI_BACKDOOR" /D "_DEBUG" /D "_TEST" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
 # SUBTRACT CPP /Ox /Ow /Oi
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -135,9 +137,9 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "ctp2___W"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
 # SUBTRACT BASE CPP /X /Fr
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "USE_NDBG" /U "_DEBUG" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "USE_NDBG" /U "_DEBUG" /Yu"c3.h" /FD /c
 # SUBTRACT CPP /X /Fr
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -166,8 +168,8 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "final"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
-# ADD CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /Yu"c3.h" /FD /c
+# ADD BASE CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /Yu"c3.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -195,9 +197,9 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /Yu"c3.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /Yu"c3.h" /FD /c
 # SUBTRACT BASE CPP /X /Fr
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "_PLAYTEST" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /Fr /Yu"c3.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "_PLAYTEST" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /Fr /Yu"c3.h" /FD /c
 # SUBTRACT CPP /X
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -231,9 +233,9 @@ PostBuild_Cmds=if                             exist                             
 # PROP Intermediate_Dir "ctp2___Win32_Optimized_Test1"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /G5 /MD /W3 /GX /Zd /Og /Oi /Os /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
+# ADD BASE CPP /nologo /G5 /MD /W3 /GX /Zd /Og /Oi /Os /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
 # SUBTRACT BASE CPP /Ox
-# ADD CPP /nologo /G5 /MD /W3 /GX /Zd /Og /Oi /Os /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_PLAYTEST" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /G5 /MD /W3 /GX /Zd /Og /Oi /Os /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_PLAYTEST" /Yu"c3.h" /FD /c
 # SUBTRACT CPP /Ox /Ot
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -247,6 +249,63 @@ LINK32=xilink6.exe
 # SUBTRACT BASE LINK32 /profile
 # ADD LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe" /fixed:no
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "ctp2_-_SDL_Debug"
+# PROP BASE Intermediate_Dir "ctp2_-_SDL_Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "ctp2_-_SDL_Debug"
+# PROP Intermediate_Dir "ctp2_-_SDL_Debug"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "USE_SDL" /YX /FD /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "_PLAYTEST" /D "_DEBUG" /D "_AI_BACKDOOR" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /D "USE_SDL" /Yu"c3.h" /FD /c
+# SUBTRACT CPP /X /Fr
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=xilink6.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib SDL.lib SDL_image.lib SDL_mixer.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_SDL_dbg.exe"
+# SUBTRACT LINK32 /verbose /profile
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ctp2_-_SDL_Final"
+# PROP BASE Intermediate_Dir "ctp2_-_SDL_Final"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ctp2_-_SDL_Final"
+# PROP Intermediate_Dir "ctp2_-_SDL_Final"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "USE_SDL" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /D "USE_SDL" /Yu"c3.h" /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=xilink6.exe
+# ADD BASE LINK32 ..\libs\anet\win\lib\anet2.lib strmbasd.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib SDL.lib SDL_image.lib SDL_mixer.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib imagehlp.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"civctp_rel.exe"
+# SUBTRACT BASE LINK32 /profile /debug
+# ADD LINK32 ..\libs\anet\win\lib\anet2.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib SDL.lib SDL_image.lib SDL_mixer.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"ctp2.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2_SDL.exe"
+# SUBTRACT LINK32 /profile /debug
+
 !ENDIF 
 
 # Begin Target
@@ -258,6 +317,8 @@ LINK32=xilink6.exe
 # Name "ctp2 - Win32 Final"
 # Name "ctp2 - Win32 Debug Browse"
 # Name "ctp2 - Win32 Optimized Test"
+# Name "ctp2 - SDL Debug"
+# Name "ctp2 - SDL Final"
 # Begin Group "CTP"
 
 # PROP Default_Filter ""
@@ -316,6 +377,12 @@ SOURCE=.\ctp2_utils\c3cmdline.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # ADD CPP /Zd /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /I "..\ai\personality"
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
 
 !ENDIF 
 
@@ -562,6 +629,12 @@ SOURCE=.\display.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -633,6 +706,10 @@ SOURCE=..\gfx\spritesys\BattleViewActor.cpp
 
 # ADD BASE CPP /FAcs
 # ADD CPP /FAcs
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -890,6 +967,10 @@ SOURCE=..\gfx\tilesys\TiledMap.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -919,6 +1000,10 @@ SOURCE=..\gfx\tilesys\tiledraw.cpp
 
 # ADD BASE CPP /FAcs
 # ADD CPP /FAcs
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -1271,6 +1356,10 @@ SOURCE=..\gs\database\StrDB.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -1397,6 +1486,10 @@ SOURCE=..\gs\gameobj\ArmyEvent.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -1773,6 +1866,10 @@ SOURCE=..\gs\gameobj\Player.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
 !ENDIF 
 
 # End Source File
@@ -2007,6 +2104,10 @@ SOURCE=..\gs\gameobj\Unit.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -2297,6 +2398,12 @@ SOURCE=..\gs\world\UnseenCell.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /FAcs
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -2338,6 +2445,14 @@ SOURCE=..\gs\world\WldGen.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2467,6 +2582,14 @@ SOURCE=..\gs\slic\lex.sc.c
 # SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
 !ENDIF 
 
 # End Source File
@@ -2513,6 +2636,14 @@ SOURCE=..\gs\slic\sc.tab.c
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -2595,6 +2726,28 @@ InputPath=..\gs\slic\slic.l
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # Begin Custom Build
+ProjDir=.
+InputPath=..\gs\slic\slic.l
+
+"$(ProjDir)\..\gs\slic\lex.yy.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -o$(ProjDir)\..\gs\slic\lex.yy.c $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build - snorkeling slic.l
+ProjDir=.
+InputPath=..\gs\slic\slic.l
+
+"$(ProjDir)\..\gs\slic\lex.yy.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -o$(ProjDir)\..\gs\slic\lex.yy.c $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build - snorkeling...
 ProjDir=.
 InputPath=..\gs\slic\slic.l
 
@@ -2722,6 +2875,38 @@ BuildCmds= \
    $(BuildCmds)
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build - burgling...
+ProjDir=.
+InputPath=..\gs\slic\slic.y
+
+BuildCmds= \
+	$(CDKDIR)\byacc -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y
+
+"$(ProjDir)\..\gs\slic\y.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\gs\slic\y.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build - burgling...
+ProjDir=.
+InputPath=..\gs\slic\slic.y
+
+BuildCmds= \
+	$(CDKDIR)\byacc -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y
+
+"$(ProjDir)\..\gs\slic\y.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\gs\slic\y.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -2752,6 +2937,10 @@ SOURCE=..\gs\slic\SlicBuiltin.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -2849,6 +3038,28 @@ InputPath=..\gs\slic\sliccmd.l
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # Begin Custom Build - Combobulating sliccmd.l
+ProjDir=.
+InputPath=..\gs\slic\sliccmd.l
+
+"$(ProjDir)\..\gs\slic\lex.sc.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -Psc -o$(ProjDir)\..\gs\slic\lex.sc.c $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build - combobulating sliccmd.l
+ProjDir=.
+InputPath=..\gs\slic\sliccmd.l
+
+"$(ProjDir)\..\gs\slic\lex.sc.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -Psc -o$(ProjDir)\..\gs\slic\lex.sc.c $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build - combobulating sliccmd.l
 ProjDir=.
 InputPath=..\gs\slic\sliccmd.l
 
@@ -2976,6 +3187,38 @@ BuildCmds= \
    $(BuildCmds)
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build - discombobulating sliccmd.y
+ProjDir=.
+InputPath=..\gs\slic\sliccmd.y
+
+BuildCmds= \
+	$(CDKDIR)\byacc -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y
+
+"$(ProjDir)\..\gs\slic\sc.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\gs\slic\sc.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build - discombobulating sliccmd.y
+ProjDir=.
+InputPath=..\gs\slic\sliccmd.y
+
+BuildCmds= \
+	$(CDKDIR)\byacc -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y
+
+"$(ProjDir)\..\gs\slic\sc.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\gs\slic\sc.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -3058,6 +3301,12 @@ SOURCE=..\gs\slic\SlicFunc.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /I "..\ai\personality"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -3087,6 +3336,12 @@ SOURCE=..\gs\slic\slicfuncai.cpp
 # ADD CPP /I "..\ai\personality"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /I "..\ai\personality"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -3375,6 +3630,30 @@ InputPath=..\gs\newdb\diplomacy.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__DIPLO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\diplomacy.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__DIPLO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\diplomacy.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -3463,6 +3742,30 @@ InputPath=..\gs\newdb\Goal.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__GOAL_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Goal.cdb
+
+"$(ProjDir)\..\gs\newdb\GoalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__GOAL_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Goal.cdb
+
+"$(ProjDir)\..\gs\newdb\GoalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__GOAL_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -3574,6 +3877,28 @@ InputPath=..\gs\newdb\personality.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\personality.cdb
+
+"$(ProjDir)\..\gs\newdb\PersonalityRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\personality.cdb
+
+"$(ProjDir)\..\gs\newdb\PersonalityRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -3662,6 +3987,30 @@ InputPath=..\gs\newdb\Strategy.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__STRAT="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Strategy.cdb
+
+"$(ProjDir)\..\gs\newdb\StrategyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__STRAT="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Strategy.cdb
+
+"$(ProjDir)\..\gs\newdb\StrategyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__STRAT="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -3778,6 +4127,30 @@ InputPath=..\gs\newdb\advance.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__ADVAN="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\advance.cdb
+
+"$(ProjDir)\..\gs\newdb\AdvanceRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__ADVAN="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\advance.cdb
+
+"$(ProjDir)\..\gs\newdb\AdvanceRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__ADVAN="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -3916,6 +4289,30 @@ InputPath=..\gs\newdb\building.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__BUILD="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\building.cdb
+
+"$(ProjDir)\..\gs\newdb\BuildingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__BUILD="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\building.cdb
+
+"$(ProjDir)\..\gs\newdb\BuildingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -4004,6 +4401,30 @@ InputPath=..\gs\newdb\citysize.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__CITYS="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\citysize.cdb
+
+"$(ProjDir)\..\gs\newdb\CitySizeRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__CITYS="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\citysize.cdb
+
+"$(ProjDir)\..\gs\newdb\CitySizeRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__CITYS="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -4149,6 +4570,40 @@ BuildCmds= \
    $(BuildCmds)
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__CITYST="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\citystyle.cdb
+
+BuildCmds= \
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+"$(ProjDir)\..\gs\newdb\AgeCityStyleRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\gs\newdb\CityStyleRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__CITYST="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\citystyle.cdb
+
+BuildCmds= \
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+"$(ProjDir)\..\gs\newdb\AgeCityStyleRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\gs\newdb\CityStyleRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -4257,6 +4712,28 @@ InputPath=..\gs\newdb\DBLexer.l
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # Begin Custom Build - Pummeling DBLexer.l
+ProjDir=.
+InputPath=..\gs\newdb\DBLexer.l
+
+"$(ProjDir)\..\gs\newdb\lex.dbl.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -Pdbl -o$(ProjDir)\..\gs\newdb\lex.dbl.c $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build - pummeling DBLexer.l
+ProjDir=.
+InputPath=..\gs\newdb\DBLexer.l
+
+"$(ProjDir)\..\gs\newdb\lex.dbl.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -Pdbl -o$(ProjDir)\..\gs\newdb\lex.dbl.c $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build - pummeling DBLexer.l
 ProjDir=.
 InputPath=..\gs\newdb\DBLexer.l
 
@@ -4376,6 +4853,30 @@ InputPath=..\gs\newdb\dipproposal.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\dipproposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\dipproposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -4467,6 +4968,30 @@ InputPath=..\gs\newdb\dipthreat.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\dipthreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\dipthreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -4541,6 +5066,28 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\EndGameObject.cdb
+
+"$(ProjDir)\..\gs\newdb\EndGameObjectRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\EndGameObject.cdb
+
+"$(ProjDir)\..\gs\newdb\EndGameObjectRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # Begin Custom Build
 ProjDir=.
@@ -4638,6 +5185,30 @@ InputPath=..\gs\newdb\feat.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__FEAT_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\feat.cdb
+
+"$(ProjDir)\..\gs\newdb\FeatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__FEAT_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\feat.cdb
+
+"$(ProjDir)\..\gs\newdb\FeatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__FEAT_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -4748,6 +5319,30 @@ InputPath=..\gs\newdb\government.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__GOVER="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\government.cdb
+
+"$(ProjDir)\..\gs\newdb\GovernmentRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__GOVER="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\government.cdb
+
+"$(ProjDir)\..\gs\newdb\GovernmentRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -4847,6 +5442,30 @@ InputPath=..\gs\newdb\icon.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__ICON_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\icon.cdb
+
+"$(ProjDir)\..\gs\newdb\IconRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__ICON_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\icon.cdb
+
+"$(ProjDir)\..\gs\newdb\IconRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -4888,6 +5507,14 @@ SOURCE=..\gs\newdb\lex.dbl.c
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -4970,6 +5597,30 @@ InputPath=..\gs\newdb\order.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__ORDER="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\order.cdb
+
+"$(ProjDir)\..\gs\newdb\OrderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__ORDER="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\order.cdb
+
+"$(ProjDir)\..\gs\newdb\OrderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__ORDER="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -5069,6 +5720,30 @@ InputPath=..\gs\newdb\pop.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__POP_C="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\pop.cdb
+
+"$(ProjDir)\..\gs\newdb\PopRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__POP_C="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\pop.cdb
+
+"$(ProjDir)\..\gs\newdb\PopRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__POP_C="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -5219,6 +5894,30 @@ InputPath=..\gs\newdb\terrain.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__TERRA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\terrain.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__TERRA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\terrain.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -5326,6 +6025,30 @@ InputPath=..\gs\newdb\terrimprove.cdb
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\terrimprove.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\terrimprove.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -5406,6 +6129,30 @@ InputPath=..\gs\newdb\unit.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__UNIT_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unit.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__UNIT_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unit.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__UNIT_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -5505,6 +6252,30 @@ InputPath=..\gs\newdb\wonder.cdb
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__WONDE="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\wonder.cdb
+
+"$(ProjDir)\..\gs\newdb\WonderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__WONDE="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\wonder.cdb
+
+"$(ProjDir)\..\gs\newdb\WonderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 USERDEP__WONDE="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
@@ -6042,6 +6813,12 @@ SOURCE=..\robot\pathing\RobotAstar.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -6084,6 +6861,10 @@ SOURCE=..\robot\pathing\UnitAstar.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -6150,6 +6931,30 @@ SOURCE=..\robot\aibackdoor\semi_dynamic_array.h
 # End Source File
 # End Group
 # End Group
+# Begin Group "os"
+
+# PROP Default_Filter ""
+# Begin Group "common"
+# PROP Default_Filter ""
+
+# End Group
+# Begin Group "include"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\os\include\ctp2_config.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\os\include\config_win32.h
+# End Source File
+
+# End Group
+# Begin Group "win32"
+# PROP Default_Filter ""
+
+# End Group
+# End Group
 # Begin Group "ui"
 
 # PROP Default_Filter ""
@@ -6190,6 +6995,15 @@ SOURCE=..\ui\aui_common\aui_action.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6235,6 +7049,15 @@ SOURCE=..\ui\aui_common\aui_animate.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6272,6 +7095,15 @@ SOURCE=..\ui\aui_common\aui_audiomanager.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6317,6 +7149,15 @@ SOURCE=..\ui\aui_common\aui_base.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6354,6 +7195,15 @@ SOURCE=..\ui\aui_common\aui_bitmapfont.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6399,6 +7249,15 @@ SOURCE=..\ui\aui_common\aui_blitter.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6436,6 +7295,15 @@ SOURCE=..\ui\aui_common\aui_button.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6481,6 +7349,15 @@ SOURCE=..\ui\aui_common\aui_control.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6518,6 +7395,15 @@ SOURCE=..\ui\aui_common\aui_cursor.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6563,6 +7449,15 @@ SOURCE=..\ui\aui_common\aui_dimension.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6600,6 +7495,15 @@ SOURCE=..\ui\aui_common\aui_dirtylist.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6645,6 +7549,15 @@ SOURCE=..\ui\aui_common\aui_dragdropwindow.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6682,6 +7595,15 @@ SOURCE=..\ui\aui_common\aui_dropdown.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6727,6 +7649,15 @@ SOURCE=..\ui\aui_common\aui_font.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6758,6 +7689,13 @@ SOURCE=..\ui\aui_common\aui_gamespecific.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6803,6 +7741,15 @@ SOURCE=..\ui\aui_common\aui_header.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6840,6 +7787,15 @@ SOURCE=..\ui\aui_common\aui_hypertextbase.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -6885,6 +7841,15 @@ SOURCE=..\ui\aui_common\aui_hypertextbox.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6926,6 +7891,15 @@ SOURCE=..\ui\aui_common\aui_image.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -6963,6 +7937,15 @@ SOURCE=..\ui\aui_common\aui_imagebase.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7016,6 +7999,15 @@ SOURCE=..\ui\aui_common\aui_input.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7053,6 +8045,15 @@ SOURCE=..\ui\aui_common\aui_item.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7098,6 +8099,15 @@ SOURCE=..\ui\aui_common\aui_joystick.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7135,6 +8145,15 @@ SOURCE=..\ui\aui_common\aui_keyboard.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7180,6 +8199,15 @@ SOURCE=..\ui\aui_common\aui_ldl.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7217,6 +8245,15 @@ SOURCE=..\ui\aui_common\aui_listbox.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7262,6 +8299,15 @@ SOURCE=..\ui\aui_common\aui_memmap.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7299,6 +8345,15 @@ SOURCE=..\ui\aui_common\aui_mouse.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7346,6 +8401,15 @@ SOURCE=..\ui\aui_common\aui_movie.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7385,6 +8449,15 @@ SOURCE=..\ui\aui_common\aui_moviebutton.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7432,6 +8505,15 @@ SOURCE=..\ui\aui_common\aui_moviemanager.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7469,6 +8551,15 @@ SOURCE=..\ui\aui_common\aui_music.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7514,6 +8605,15 @@ SOURCE=..\ui\aui_common\aui_pixel.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7551,6 +8651,15 @@ SOURCE=..\ui\aui_common\aui_progressbar.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7596,6 +8705,15 @@ SOURCE=..\ui\aui_common\aui_radio.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7633,6 +8751,15 @@ SOURCE=..\ui\aui_common\aui_ranger.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7678,6 +8805,15 @@ SOURCE=..\ui\aui_common\aui_rectangle.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7715,6 +8851,15 @@ SOURCE=..\ui\aui_common\aui_region.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7760,6 +8905,15 @@ SOURCE=..\ui\aui_common\aui_regiondispatch.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7797,6 +8951,15 @@ SOURCE=..\ui\aui_common\aui_screen.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7842,6 +9005,15 @@ SOURCE=..\ui\aui_common\aui_shell.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7879,6 +9051,15 @@ SOURCE=..\ui\aui_common\aui_sound.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -7924,6 +9105,15 @@ SOURCE=..\ui\aui_common\aui_soundbase.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -7961,6 +9151,15 @@ SOURCE=..\ui\aui_common\aui_static.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8006,6 +9205,15 @@ SOURCE=..\ui\aui_common\aui_stringtable.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8043,6 +9251,15 @@ SOURCE=..\ui\aui_common\aui_surface.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8088,6 +9305,15 @@ SOURCE=..\ui\aui_common\aui_switch.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8125,6 +9351,15 @@ SOURCE=..\ui\aui_common\aui_switchgroup.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8170,6 +9405,15 @@ SOURCE=..\ui\aui_common\aui_tab.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8207,6 +9451,15 @@ SOURCE=..\ui\aui_common\aui_tabgroup.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8252,6 +9505,15 @@ SOURCE=..\ui\aui_common\aui_textbase.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8289,6 +9551,15 @@ SOURCE=..\ui\aui_common\aui_textbox.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8334,6 +9605,15 @@ SOURCE=..\ui\aui_common\aui_textfield.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8371,6 +9651,15 @@ SOURCE=..\ui\aui_common\aui_thumb.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8416,6 +9705,15 @@ SOURCE=..\ui\aui_common\aui_tipwindow.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8453,6 +9751,15 @@ SOURCE=..\ui\aui_common\aui_ui.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8498,6 +9805,15 @@ SOURCE=..\ui\aui_common\aui_undo.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8535,6 +9851,15 @@ SOURCE=..\ui\aui_common\aui_uniqueid.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8580,6 +9905,15 @@ SOURCE=..\ui\aui_common\aui_win.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8617,6 +9951,15 @@ SOURCE=..\ui\aui_common\aui_window.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8674,6 +10017,15 @@ SOURCE=..\ui\aui_common\tech_memmap.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8759,6 +10111,15 @@ SOURCE=..\ui\aui_directx\aui_directaudiomanager.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8796,6 +10157,15 @@ SOURCE=..\ui\aui_directx\aui_directblitter.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8841,6 +10211,15 @@ SOURCE=..\ui\aui_directx\aui_directinput.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8878,6 +10257,15 @@ SOURCE=..\ui\aui_directx\aui_directjoystick.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -8923,6 +10311,15 @@ SOURCE=..\ui\aui_directx\aui_directkeyboard.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -8960,6 +10357,15 @@ SOURCE=..\ui\aui_directx\aui_directmouse.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -9007,6 +10413,15 @@ SOURCE=..\ui\aui_directx\aui_directmovie.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -9046,6 +10461,15 @@ SOURCE=..\ui\aui_directx\aui_directmoviemanager.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -9091,6 +10515,15 @@ SOURCE=..\ui\aui_directx\aui_directsound.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -9128,6 +10561,15 @@ SOURCE=..\ui\aui_directx\aui_directsurface.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
@@ -9173,6 +10615,15 @@ SOURCE=..\ui\aui_directx\aui_directui.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -9214,6 +10665,15 @@ SOURCE=..\ui\aui_directx\aui_directx.cpp
 # ADD BASE CPP /Yu
 # ADD CPP /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# ADD BASE CPP /Yu
+# ADD CPP /Yu
+
 !ENDIF 
 
 # End Source File
@@ -9221,6 +10681,67 @@ SOURCE=..\ui\aui_directx\aui_directx.cpp
 
 SOURCE=..\ui\aui_directx\aui_directx.h
 # End Source File
+# End Group
+# Begin Group "aui_sdl"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlinput.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlinput.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdljoystick.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdljoystick.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlkeyboard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlkeyboard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlmouse.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlmouse.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlsound.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlsound.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlsurface.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\ui\aui_sdl\aui_sdlsurface.h
+# End Source File
+
 # End Group
 # Begin Group "aui_ctp2"
 
@@ -9719,6 +11240,10 @@ SOURCE=..\ui\aui_ctp2\keypress.cpp
 # ADD BASE CPP /FAcs
 # ADD CPP /FAcs
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -9820,6 +11345,10 @@ SOURCE=..\ui\aui_ctp2\SelItem.cpp
 
 # ADD BASE CPP /FAcs
 # ADD CPP /FAcs
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -10207,6 +11736,30 @@ InputPath=..\ui\ldl\ldl.l
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__LDL_L="..\ui\ldl\ldl.y"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\ui\ldl\ldl.l
+
+"$(ProjDir)\..\ui\ldl\lex.ldl.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -Pldl -o$(ProjDir)\..\ui\ldl\lex.ldl.c $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__LDL_L="..\ui\ldl\ldl.y"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\ui\ldl\ldl.l
+
+"$(ProjDir)\..\ui\ldl\lex.ldl.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -Pldl -o$(ProjDir)\..\ui\ldl\lex.ldl.c $(InputPath)
+
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -10239,6 +11792,14 @@ SOURCE=..\ui\ldl\ldl.tab.c
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -10364,6 +11925,38 @@ BuildCmds= \
    $(BuildCmds)
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\ui\ldl\ldl.y
+
+BuildCmds= \
+	$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
+
+"$(ProjDir)\..\ui\ldl\ldl.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\ui\ldl\ldl.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\ui\ldl\ldl.y
+
+BuildCmds= \
+	$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
+
+"$(ProjDir)\..\ui\ldl\ldl.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\ui\ldl\ldl.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
 !ENDIF 
 
 # End Source File
@@ -10397,6 +11990,15 @@ SOURCE=..\ui\ldl\ldl_attr.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
@@ -10442,6 +12044,15 @@ SOURCE=..\ui\ldl\ldl_data.cpp
 # SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
 !ENDIF 
 
 # End Source File
@@ -10483,6 +12094,15 @@ SOURCE=..\ui\ldl\ldl_data_info.cpp
 # SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
 !ENDIF 
 
 # End Source File
@@ -10516,6 +12136,15 @@ SOURCE=..\ui\ldl\ldl_file.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
@@ -10557,6 +12186,15 @@ SOURCE=..\ui\ldl\ldl_memmap.cpp
 # ADD CPP /Yu
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
@@ -10605,6 +12243,14 @@ SOURCE=..\ui\ldl\lex.ldl.c
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
@@ -10717,6 +12363,10 @@ SOURCE=..\ui\interface\StatusBar.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -10910,6 +12560,10 @@ SOURCE=..\ui\interface\dipwizard.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -10939,6 +12593,10 @@ SOURCE=..\ui\interface\editqueue.cpp
 
 # ADD BASE CPP /FAcs
 # ADD CPP /FAcs
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -11165,6 +12823,10 @@ SOURCE=..\ui\interface\messagelist.cpp
 
 # ADD BASE CPP /FAcs
 # ADD CPP /FAcs
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -11684,6 +13346,10 @@ SOURCE=..\ui\interface\BattleEvent.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -11710,6 +13376,10 @@ SOURCE=..\ui\interface\BattleView.cpp
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -12320,6 +13990,12 @@ SOURCE=..\ai\diplomacy\Diplomat.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /I "..\ai\personality" /I "..\ctp\ctp2_utils"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -12358,6 +14034,12 @@ SOURCE=..\ai\diplomacy\Foreigner.cpp
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /I "..\ai\personality"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
 !ENDIF 
 
 # End Source File
@@ -12387,6 +14069,12 @@ SOURCE=..\ai\diplomacy\ProposalAnalysis.cpp
 # ADD CPP /I "..\ai\personality"
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /I "..\ai\personality"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 
@@ -12444,6 +14132,12 @@ SOURCE=..\ai\strategy\Scheduler\Scheduler.cpp
 # ADD CPP /GR-
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# ADD CPP /GR-
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
 !ENDIF 
 

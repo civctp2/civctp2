@@ -47,6 +47,7 @@
 // - #pragmas commented out
 // - Standardised min/max usage.
 // - Prevented useless warnings.
+// - Moved DirectX API-Version to use into "ctp2_config.h"
 //
 //----------------------------------------------------------------------------
 
@@ -56,6 +57,8 @@
 
 #ifndef __C3_H__
 #define __C3_H__
+
+#include "ctp2_config.h"
 
 #if defined(_MSC_VER)
 
@@ -110,8 +113,6 @@
 #endif	// ACTIVISION_ORIGINAL
 
 #include <tchar.h>
-
-#define DIRECTINPUT_VERSION 0x0700
 
 #include "ddraw.h"
 #include "dinput.h"
