@@ -2,6 +2,10 @@
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
 
+# More Stuuf for LDL_STR
+# Multiplayer Disclaimer String
+str_ldl_MultiplayerDisclaimer	"Activision recommende a maximum de 4 joueurs pour les Jeux en réseau de Call to Power."
+
 ## Stuff for LDL_STR.txt
 str_ldl_AutoCenter_On	"Centrage auto activé"
 str_ldl_AutoCenter_Off	"Centrage auto désact."
@@ -14,11 +18,6 @@ str_ldl_ShowTradeRoutes_Off			"Masquer routes comm."
 
 # Got lost somehow, City manager button.
 str_ldl_DisbandUnit                 "Démanteler"
-
-
-##DELETED Feats (feat_str.txt)
-##DELETED changeme
-##DELETEDFEAT_RECAPTURED_CITY "En récupérant ce qui vous appartenait, vous avez remonté le moral de vos citoyens."
 
 # City advisor
 #  str_ldl_CityAdvisor "Conseiller ville"
@@ -101,6 +100,7 @@ str_ldl_RADAR_MAP_FILTER	"Filtrée"
 # Replaces string in ldl_str.txt, changed to Status from Modifiers
 str_ldl_CityWinStatisticsTab "Statut"
 
+#revised below
 # Added
 ##str_code_CityWinTotalHappinessFormat "Total : %d"
 
@@ -127,10 +127,6 @@ str_ldl_DontShowAgain		"Ne plus afficher ce message."
 
 # In science picker, when the advance gives you tile improvements:
 ADVANCE_GIVES_TILE_IMPROVEMENTS "Aménagements de terrain :"
-
-# Toggle buttons on radar map
-#STATUSBAR_MINIMAP_SHOW_TRADE_BUTTON "Aff./masquer routes comm."
-#STATUSBAR_MINIMAP_SHOW_TERRAIN_BUTTON "Aff./masquer terrain"
 
 str_ldl_RADAR_MAP_TRADE "Echanges"
 str_ldl_RADAR_MAP_TERRAIN "Terrain"
@@ -221,37 +217,43 @@ str_ldl_LoadQueueColon "Charger liste :"
 #Main title for Intelligence Dialog box
 str_ldl_IntelligenceTitle "RENSEIGNEMENTS"
 
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 10/01/00
+##############################################
 str_ldl_PosField "Pos:"
-
-# remove the string REGARD_EVENT_DIPLOMACY_RESULT string!!!
 
 
 #JBR1003 - moved from cut_str
 SENDER_KILLED_TRADE_ROUTE "{player[0].leader_name} a annulé la route commerciale permettant de transporter {good[0].name#SOME} de {city[0].name} à {city[1].name}."
 NETWORK_TIME_LEFT "Temps restant"
+
 str_ldl_CityEspionage "Espionnage de ville"
-str_ldl_NatlManagerHotKey "F2"
-str_ldl_EmpireManagerHotKey "F1"
-str_ldl_ScienceHotKey "F6"
-str_ldl_UnitManagerHotKey "F8"
-str_ldl_TradeScreenHotKey "F4"
-str_ldl_IntelligenceHotKey "F7"
-str_ldl_ScoreHotKey "F9"
-str_ldl_GreatLibraryHotKey "F5"
+str_ldl_NatlManagerHotKey "F1"
+str_ldl_EmpireManagerHotKey "F2"
+str_ldl_ScienceHotKey "F3"
+str_ldl_UnitManagerHotKey "F4"
+str_ldl_TradeScreenHotKey "F5"
+str_ldl_IntelligenceHotKey "F6"
+str_ldl_ScoreHotKey "F7"
+str_ldl_GreatLibraryHotKey "F8"
 str_ldl_AdvancedHotKey "F9"
-str_ldl_ArmyManagementHotKey "`"
+str_ldl_ArmyManagementHotKey "G"
 str_ldl_Cheat_Mode_CaseHotKey "Ctrl+s"
 str_ldl_QuitHotKey "Q"
 str_ldl_SaveGameHotKey "S"
 str_ldl_LoadGameHotKey "L"
+
 str_ldl_TradeSummaryHotKey "Ctrl+t"
 str_ldl_GaiaHotkey "Ctrl+g"
 str_ldl_BuildQueueHotKey "Ctrl+b"
 str_ldl_CityManagementHotKey "F3"
 str_ldl_NewProposalHotKey "Ctrl+d"
+
 str_ldl_TimelineHotKey "Ctrl+l"
 str_ldl_RankHotKey "Ctrl+k"
 str_ldl_RestartHotKey "Ctrl+z"
+
 str_ldl_NewGameHotKey "Ctrl+x"
 str_ldl_SoundHotKey "Ctrl+v"
 str_ldl_MusicHotKey "Ctrl+m"
@@ -274,7 +276,6 @@ str_tbl_ldl_Gaia "Gaia"
 str_tbl_ldl_Open_Wonders "Merveilles"
 str_tbl_ldl_Open_Ranking "Classement"
 str_tbl_ldl_Msg_Tab "Onglet Message"
-
 str_tbl_ldl_TileImp_Tab "Onglet Case"
 str_tbl_ldl_Open_Scenario_Editor "Editeur de scénario"
 str_tbl_ldl_Sound_Options "Options sonores"
@@ -287,9 +288,9 @@ str_tbl_ldl_Toggle_Ctl_Panel "Aff./masquer panneau contrôle"
 str_tbl_ldl_Toggle_All "Aff./masquer tout"
 str_tbl_ldl_Open_Army_Mgmt "Ouvrir Gestionnaire d'armée"
 str_ldl_UNIT_CONTROLS "COMMANDES UNITE"
-
 str_ldl_GreatLibrary "Grande bibliothèque"
 str_control_key "Ctrl"
+
 str_ldl_EnableAllMessages "Activer tous les messages"
 
 
@@ -358,6 +359,8 @@ str_SE_FindMe "Cliquer pour centrer les coordonnées"
 str_SE_RemoveGoods "Supprimer toutes les marchandises de la carte"
 str_SE_GenerateGoods "Ajouter des marchandises à la carte"
 
+### Changed Strings
+## add {city[0].name}
 #IA_SETTLING_TOO_CLOSE    		"Vous ne pouvez pas construire de ville à l'intérieur de {city[0].name}. Il serait préférable que nous trouvions un emplacement plus favorable à notre expansion."
 
 ### Trust Warning Messages ###
@@ -368,21 +371,17 @@ MILITARY_PACT_BROKEN_BY_YOU       "{player[0].sir_cap}, en refusant d'envoyer de
 TRUST_LOSS_VIOLATED_PEACE_TREATY        "{player[0].sir_cap}, en attaquant les {player[1].civ_name_plural}, nous avons violé notre traité de paix ! Vu leur indignation, ils risquent de conseiller aux autres nations de se méfier de nous."
 ALLIANCE_BROKEN_BY_YOU            "{player[0].sir_cap}, nous avons violé notre alliance avec les {player[1].civ_name_plural} ! Ceux-ci sont furieux contre nous ! Plus aucune nation ne nous fera confiance après une telle traîtrise !"
 
-
 ### Nation-specific Trust Loss ###
 IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, nous avons accepté de respecter les frontières des {player[1].civ_name_plural}. Allez-vous vous risquer à susciter leur courroux en déplaçant des unités sur leur territoire ?"
 TRUST_LOSS_FAIL_TO_WITHDRAW             "{player[0].sir_cap}, nous n'avons pas retiré nos troupes du territoire des {player[1].civ_name_plural}. Désormais, ils se méfient et risquent de rechigner à signer des accords avec nous."
 TRUST_LOSS_FAIL_TO_STOP_PIRACY          "Les {player[1].civ_name_plural} sont furieux car nous n'avons pas cessé de pirater leurs routes commerciales. A l'avenir, les {player[1].civ_name_plural} ne nous feront plus confiance."
-TRUST_LOSS_FAIL_TO_REDUCE_WEAPONS       ""
-TRUST_LOSS_FAIL_TO_REDUCE_POLLUTION     ""
 TRUST_LOSS_VIOLATED_CEASE_FIRE          "{player[0].sir_cap}, nous avons violé l'accord de cessez-le-feu signé avec les {player[1].civ_name_plural}. Ils sont furieux contre nous et risquent de ne plus nous faire confiance."
 TRUST_LOSS_VIOLATED_RESEARCH_PACT       "{player[0].sir_cap}, nos récentes actions ont constitué une violation de notre pacte de recherche avec les {player[1].civ_name_plural}. Désormais, ils se méfient de nous et s'interrogent sur nos intentions."
+TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, nos récentes actions nous ont forcé à renégocier notre Pacte Commercial avec les {player[1].civ_name_plural}.  Ils ne vont pas oublier de si tôt cet abus de confiance !"
 ECO_PACT_BROKEN_BY_YOU      "{player[0].sir_cap}, nous avons violé l'éco-pacte que nous avons signé avec {player[1].civ_name_plural}. Ceux-ci nous en veulent."
-
 
 # Filename prefix for quicksaves.
 QUICKSAVE_NAME "SAUV. RAPIDE"
-
 
 # Scenario editor <CHANGEME>
 str_ldl_Confirm_Restart		"Etes-vous sûr de vouloir recommencer ?"
@@ -395,7 +394,6 @@ str_tbl_ldl_Advanced_Options "Options avancées"
 str_ldl_ZoomOut "Zoom arr"
 str_ldl_ZoomIn "Zoom avt"
 
-
 # Added for network games, there are more restrictions on when you can initiate diplomacy
 str_code_CantInitiateDiplomacyNow "Vous ne pouvez pas envoyer de nouvelle proposition lorsque ce n'est pas votre tour ou lorsque vous attendez une réponse à une proposition formulée précédemment."
 
@@ -404,21 +402,15 @@ str_code_CantInitiateDiplomacyNow "Vous ne pouvez pas envoyer de nouvelle propos
 STATUSBAR_MINIMAP_MINIMIZE "Cliquez ici pour réduire la fenêtre"
 str_player_choice "Choix des joueurs"
 
-
 # Entry on right click menu for the cargo view
 CONTEXT_VIEW_CARGO "Voir cargaison"
 
 # For netshell list header
 str_ldl_Settlers "Colons"
 
-
 # Diplomacy Manager Embargo Button
 TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Frapper d'embargo"
 STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Cliquez ici pour empêcher une nation étrangère de réaliser des échanges avec vous."
-
-# More Stuuf for LDL_STR
-# Multiplayer Disclaimer String
-str_ldl_MultiplayerDisclaimer	"Activision recommande un maximum de 4 joueurs pour les parties multijoueurs de Call to Power."
 
 # Default Build List Sequence
 BUILD_LIST_SEQUENCE_DEFAULT "Par défaut"
@@ -451,7 +443,6 @@ CONTEXT_TILE_INFO "Info carte"
 # One more reason for happiness display on city manager
 HAPPY_REASON_FEATS "Exploits"
 
-str_ldl_EditQueueReallyDelete "Supprimer définitivement la liste %s ?"
-
 # A different kind of disconnection message for network games
 NETWORK_ACTIVENET_LOST "Connexion au serveur Activenet perdue, retour à la salle d'attente."
+

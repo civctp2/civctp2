@@ -1,5 +1,4 @@
 ##Happiness Lines##
-
 HAPPY_REASON_CITY_SIZE "Taille de la ville"
 HAPPY_REASON_DISTANCE_FROM_CAPITOL "Distance du palais"
 
@@ -52,4 +51,3 @@ SCORE_CAT_UNKNOWN "***Inconnu***"
 
 
 SET_PRICE "Définir prix"
-

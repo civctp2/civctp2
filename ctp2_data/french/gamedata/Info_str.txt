@@ -171,15 +171,15 @@ AGE_FIVE_ENTERED 			"Nous sommes bientôt à l'apogée de l'humanité. Nous sommes e
 
 ## Age Change Messages of CityMod2 ##
 #AGE_ONE_ENTERED 			"Malgré sa jeunesse, notre empire évolue. Nous venons d'entrer dans l'Antiquité."
-#AGE_TWO_ENTERED			"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
-#AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
+#AGE_TWO_ENTERED			"Les premiers écrits remplace la transmission verbale. nous entamons l'Age Classique." 
+#AGE_THREE_ENTERED			"Sur les ruines de la Rome antique, notre nation continue de s'étendre. Le moyen age commence." 
 #AGE_TWO_ENTERED 			"Notre empire entre dans une phase d'expansion culturelle et scientifique. Il s'agit de la Renaissance."
-#AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
+#AGE_FIVE_ENTERED			"Notre Empire débute une ère de croissance insoupçonnée, entraîné par une explosion de la productivité. En vivant cette Révolution industrielle, nous entrons dans l'Age Industriel. " 
 #AGE_SIX_ENTERED			"Nous avons assis notre connaissance de la planète. Nous venons d'entrer dans l'Ere moderne." 
-#AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
-#AGE_EIGHT_ENTERED			"Les mystères de la vie sont sur le point de se révéler ; notre empire est au seuil d'un nouvel âge d'or de la science : l'Ere génétique." 
+#AGE_SEVEN_ENTERED			"Décoder les mystères de la science devient aisé, notre peuple a atteint une époque de prospérité, d'innovation scientifique... : L'Ere de l'Informatique " 
+#AGE_EIGHT_ENTERED			"Les mystères de la vie sont sur le point de se révéler. Notre empire est au seuil d'un nouvel âge d'or de la science : l'Ere génétique." 
 #AGE_NINE_ENTERED			"Nous sommes bientôt à l'apogée de l'humanité. Nous sommes entrés dans l'Ere du diamant." 
-#AGE_TEN_ENTERED			"The study of all technologies is final: Our empire awaits an unknown Future."
+#AGE_TEN_ENTERED			"La recherche des toutes les technologies est achevée. Notre Empire attend un futur inconnu..."
 
 ##                 ##
 ## Special Actions ##
@@ -274,6 +274,10 @@ INFECTED_VIA_TRADE 			"Un agent infectieux fait des ravages à {city[0].name}. Il
 ## Cyberninja Attack ##
 INVESTIGATE_CITY_FAILED_VICTIM 		"Notre travail de contre-espionnage s'est avéré payant. Des agents ont arrêté un espion étranger en train d'enquêter sur la ville de {city[0].name}."
 INVESTIGATE_CITY_FAILED_AGRESSOR 	"Notre {unitrecord[0].name} s'est fait capturer en train d'espionner la ville de {city[0].name}."
+# Added 7/2004 L. Hirth
+INVESTIGATE_CITY_FAILED_ESC_VICTIM	"Notre travail de contre-espionnage s'est avéré payant. Des agents ont empêché une tentative d'infiltration d'un espion étranger dans la ville de {city[0].name}. Nous n'avons malheureusement pas pu le capturer."
+INVESTIGATE_CITY_FAILED_ESC_AGRESSOR 	"Notre {unitrecord[0].name} s'est fait surprendre en train d'espionner la ville de {city[0].name}. Il a heureusement réussi à s'échapper."
+# Added End
 
 ## Nanite Cleansing ##
 ## Eco-Ranger Attack ##

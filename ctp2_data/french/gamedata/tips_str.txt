@@ -946,3 +946,12 @@ TOOLTIP_UNIT_UNITSTATS_ARM_DISPLAY      "Armure"
 STATUSBAR_UNIT_UNITSTATS_FUL_DISPLAY    "Indique les réserves en carburant de l'unité."
 TOOLTIP_UNIT_UNITSTATS_FUL_DISPLAY      "Carburant"
 
+###	National Summary Window Extension (L. Hirth Added 6/2004)
+TOOLTIP_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON		"Cliquez ici pour trier la liste par nombre de travailleurs."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON		"Cliquez ici pour trier la liste par nombre d'esclaves."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTENTERTAINER_BUTTON	"Cliquez ici pour trier la liste par nombre de comédiens."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON		"Cliquez ici pour trier la liste par nombre de fermiers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON		"Cliquez ici pour trier la liste par nombre d'ouvriers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON		"Cliquez ici pour trier la liste par nombre de marchands."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON		"Cliquez ici pour trier la liste par nombre de scientifiques."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON	"Cliquez ici pour trier la liste par nombre d'unités militaires."
