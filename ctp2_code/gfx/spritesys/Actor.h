@@ -40,7 +40,7 @@
 
 #if defined (ACTIVISION_ORIGINAL)
 #define k_MAX_ACTION_QUEUE_SIZE		10
-else
+#else
 //fix bug #4 by kaan
 #define k_MAX_ACTION_QUEUE_SIZE		12
 #endif
