@@ -156,7 +156,8 @@ CITIES_CAPTURED_VICTIM 			"¡{city[0].name} ha caído en las manos de fuerzas enem
 CAPITAL_CITY_CAPTURED_VICTIM 		"¡Nuestra capital, {city[0].name}, ha sido capturada por fuerzas enemigas!"
 CAPITAL_CITY_CAPTURED_ATTACKER 		"¡Una victoria decisiva! Hemos capturado la capital {player[0].civ_name_singular}."
 CIV_STARTED_WAR 			"Los {player[0].civ_name_plural} han entrado en guerra con los {player[1].civ_name_plural}."
-ADVANCE_FROM_CAPTURING_CITY 		"Saqueando la recién conquistada ciudad de {city[0].name}, hemos encontrado el secreto de {advance[0].name}."
+ADVANCE_FROM_CAPTURING_CITY		"{player[0].sir_cap}, mientras saqueabamos la recién conquistada ciudad de {city[0].name}, nuestras tropas tomaron el secreto de {advance[0].name}."
+ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, nos encontramos horrorizados al descubrir que los {player[1].civ_name_plural}, no solo tomaron nuestra ciudad de {city[0].name}, sino que también nos han robado el secreto de {advance[0].name}."
 
 ## Combat ##
 UNIT_VETERAN 				"Por valor en el combate, su {unit[0].name} ha sido promocionado al rango de veterano."
@@ -167,6 +168,18 @@ AGE_TWO_ENTERED 			"Nuestro imperio empieza a florecer cultural y científicament
 AGE_THREE_ENTERED 			"Hemos establecido firmemente nuestro control del planeta. Hemos entrado en la Edad Moderna."
 AGE_FOUR_ENTERED 			"Los misterios de la vida están empezando a desplegarse ante nuestros ojos, y nuestra gente se encuentra en el umbral de una época totalmente nueva en el conocimiento científico: la Edad Genética."
 AGE_FIVE_ENTERED 			"Nos estamos acercando rápidamente al cenit del logro humano. Nuestro imperio ha entrado en la Edad del Diamante."
+
+## Age Change Messages of CityMod2 ##
+#AGE_ONE_ENTERED			"Nuestro joven imperio está evolucionando. Hemos entrado en la Edad Antigua."
+#AGE_TWO_ENTERED			"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
+#AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
+#AGE_FOUR_ENTERED			"Nuestro imperio empieza a florecer cultural y científicamente. Hemos entrado en la Edad del Renacimiento." 
+#AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
+#AGE_SIX_ENTERED			"Hemos establecido firmemente nuestro control del planeta. Hemos entrado en la Edad Moderna." 
+#AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
+#AGE_EIGHT_ENTERED			"Los misterios de la vida están empezando a desplegarse ante nuestros ojos, y nuestra gente se encuentra en el umbral de una época totalmente nueva en el conocimiento científico: la Edad Genética." 
+#AGE_NINE_ENTERED			"Nos estamos acercando rápidamente al cenit del logro humano. Nuestro imperio ha entrado en la Edad del Diamante." 
+#AGE_TEN_ENTERED			"The study of all technologies is final: Our empire awaits an unknown Future."
 
 ##                 ##
 ## Special Actions ##

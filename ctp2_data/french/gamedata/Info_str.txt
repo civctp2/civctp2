@@ -156,8 +156,8 @@ CAPITAL_CITY_CAPTURED_VICTIM 		"Notre capitale, {city[0].name}, a été prise d'as
 CAPITAL_CITY_CAPTURED_ATTACKER 		"Quelle victoire ! Nous avons conquis la capitale des {player[0].civ_name_plural}."
 CIV_STARTED_WAR 			"Les {player[0].civ_name_plural} sont entrés en guerre avec les {player[1].civ_name_plural}."
 #ADVANCE_FROM_CAPTURING_CITY 		"En pillant la ville de {city[0].name}, que vous venez de conquérir, vous découvrez le secret {advance[0].name#PREPOSITION}."
-ADVANCE_FROM_CAPTURING_CITY 		"{player[0].sir_cap}, while looting the recently conquered city of {city[0].name}, our troops took the secret of {advance[0].name}."
-ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, with horror we must find out, that the {player[1].civ_name_plural} were able not only to take our city of {city[0].name}, but also to steal us the secret of {advance[0].name}."
+ADVANCE_FROM_CAPTURING_CITY 		"{player[0].sir_cap}, lors du pillage de la cité de {city[0].name} que nous venons de conquérir, nos troupes se sont emparées du secret de {advance[0].name}."
+ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, c'est avec horreur que nous apprenons que les {player[1].civ_name_plural} nous ont pris la cité de {city[0].name} et qu'ils se sont également emparés du secret de {advance[0].name}."
 
 ## Combat ##
 UNIT_VETERAN 				"Votre {unit[0].name} accède au statut de vétéran en raison de sa bravoure au combat."

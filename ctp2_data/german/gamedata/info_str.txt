@@ -167,7 +167,7 @@ UNIT_VETERAN 				"Als Würdigung für besondere Tapferkeit wurde {unit[0].name#PRO
 AGE_ONE_ENTERED 			"Unsere Nation entsteigt den Kinderschuhen: Wir sind in das Zeitalter der Antike vorgedrungen."
 AGE_TWO_ENTERED 			"Unsere Nation schreitet einer kulturellen und wissenschaftlichen Blütezeit entgegen: Wir haben das Zeitalter der Renaissance erreicht."
 AGE_THREE_ENTERED 			"Wir haben uns auf diesem Planeten behauptet und treten nun in das Zeitalter der Moderne ein."
-AGE_FOUR_ENTERED 			"Die Entschlüsselung der Mysterien des Lebens ist in greifbare Nähe gerückt, denn unser Volk steht an der Schwelle zu einer neuen, bahnbrechenden Epoche der wissenschaftlichen Erkenntnisse: der Genetischen Ära."
+AGE_FOUR_ENTERED 			"Die Entschlüsselung der Mysterien des Lebens ist in greifbare Nähe gerückt, denn unser Volk steht an der Schwelle zu einer neuen, bahnbrechenden Epoche der wissenschaftlichen Erkenntnisse: Der Genetischen Ära."
 AGE_FIVE_ENTERED 			"Mit großen Schritten nähern wir uns dem Zenith des menschlichen Strebens: Unsere Nation ist in das Diamantene Zeitalter vorangeschritten."
 
 ## Age Change Messages of CityMod2 ##

@@ -164,22 +164,22 @@ ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, we were horrified to di
 UNIT_VETERAN 				"For valor in combat, your {unit[0].name} has been promoted to veteran status."
 
 ## Age Change Messages ##
-AGE_ONE_ENTERED 			"Our fledgling empire is evolving.  We have entered the Ancient Age."
-AGE_TWO_ENTERED 			"Our empire is beginning to flourish culturally and scientifically.  We have entered the Renaissance Age."
-AGE_THREE_ENTERED 			"We have firmly established our mastery of the planet.  We have entered the Modern Age."
+AGE_ONE_ENTERED 			"Our fledgling empire is evolving. We have entered the Ancient Age."
+AGE_TWO_ENTERED 			"Our empire is beginning to flourish culturally and scientifically. We have entered the Renaissance Age."
+AGE_THREE_ENTERED 			"We have firmly established our mastery of the planet. We have entered the Modern Age."
 AGE_FOUR_ENTERED 			"The mysteries of life are beginning to unfold before us, and our people stand at the threshold of a bold new epoch in scientific understanding.  We have entered the Genetic Age."
 AGE_FIVE_ENTERED 			"We are fast approaching the zenith of human achievement. Our empire has entered the Diamond Age."
 
 ## Age Change Messages of CityMod2 ##
-#AGE_ONE_ENTERED			"Our fledgling empire is evolving.  We have entered the Ancient Age."
+#AGE_ONE_ENTERED			"Our fledgling empire is evolving: We have entered the Ancient Age."
 #AGE_TWO_ENTERED			"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
 #AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
-#AGE_FOUR_ENTERED			"Our empire is beginning to flourish culturally and scientifically.  We have entered the Renaissance Age." 
+#AGE_FOUR_ENTERED			"Our empire is beginning to flourish culturally and scientifically: We have entered the Renaissance Age." 
 #AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
-#AGE_SIX_ENTERED			"We have firmly established our mastery of the planet.  We have entered the Modern Age." 
+#AGE_SIX_ENTERED			"We have firmly established our mastery of the planet: We have entered the Modern Age." 
 #AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
-#AGE_EIGHT_ENTERED			"The mysteries of life are beginning to unfold before us, and our people stand at the threshold of a bold new epoch in scientific understanding.  We have entered the Genetic Age." 
-#AGE_NINE_ENTERED			"We are fast approaching the zenith of human achievement. Our empire has entered the Diamond Age." 
+#AGE_EIGHT_ENTERED			"The mysteries of life are beginning to unfold before us, and our people stand at the threshold of a bold new epoch in scientific understanding:  We have entered the Genetic Age." 
+#AGE_NINE_ENTERED			"We are fast approaching the zenith of human achievement: Our empire has entered the Diamond Age."
 #AGE_TEN_ENTERED			"The study of all technologies is final: Our empire awaits an unknown Future."
 
 ##                 ##
@@ -189,7 +189,7 @@ AGE_FIVE_ENTERED 			"We are fast approaching the zenith of human achievement. Ou
 ## Advertise ##
 ## Corporate Branch Attack ##
 ADVERTISE_COMPLETE_VICTIM 		"The {player[0].civ_name_plural} have managed to attack {city[0].name} with a pervasive advertising campaign."
-ADVERTISE_COMPLETE_ATTACKER		"Our advertising campaign has been successful.  We are now generating profits in the foreign city of {city[0].name}."
+ADVERTISE_COMPLETE_ATTACKER		"Our advertising campaign has been successful. We are now generating profits in the foreign city of {city[0].name}."
 
 ## Aid Uprising ##
 ## Abolitionist Attack ##
