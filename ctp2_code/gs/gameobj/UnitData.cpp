@@ -27,6 +27,8 @@
 //
 // - Healing in fort handled as in city.
 // - Movement point handling for ships at tunnels corrected.
+// - Handle unit types that have CanCarry property, but have MaxCargo 0.
+// - Corrected movement type check for active defenders.
 //
 //----------------------------------------------------------------------------
 
@@ -286,8 +288,9 @@ void UnitData::Create(const sint32 t,
     
   
     m_owner = o; 
+#if defined(ACTIVISION_ORIGINAL)	// Useless assert, preventing expansion
     Assert(m_owner <32); 
-    
+#endif    
 	Difficulty *diff = g_player[m_owner]->m_difficulty;
 
 	SetFlag(k_UDF_FIRST_MOVE);
@@ -307,10 +310,18 @@ void UnitData::Create(const sint32 t,
 	}
 
     
- 
+#if defined(ACTIVISION_ORIGINAL)	// Fails when unit has MaxCargo is 0
     if (g_theUnitDB->Get(t)->GetCanCarry() && g_theUnitDB->Get(t)->GetCargoDataPtr() != NULL) { 
         m_cargo_list = new UnitDynamicArray (g_theUnitDB->Get(t)->GetCargoDataPtr()->GetMaxCargo()); 
         Assert(m_cargo_list); 
+#else
+    if (rec->GetCanCarry()		&& 
+		rec->GetCargoDataPtr()	&&	
+		(0 < rec->GetCargoDataPtr()->GetMaxCargo()) 
+       )
+	{ 
+		m_cargo_list = new UnitDynamicArray(rec->GetCargoDataPtr()->GetMaxCargo());
+#endif
     } else { 
         m_cargo_list = NULL; 
     }
@@ -1335,12 +1346,32 @@ sint32 UnitData::CanCounterBombard(CellUnitList &defender) const
    }
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CanActivelyDefend
+//
+// Description: Check how many times this unit can actively defend against a
+//              passing army.
+//
+// Parameters : attacker	: the army (list of units) to defend against
+//
+// Globals    : g_theUnitDB	: unit properties database
+//
+// Returns    : sint32		: number of active defense strikes that can be
+//                            executed by this unit.
+//
+// Remark(s)  : The movement types of attacker and defender have to match to 
+//              be able to actively defend.
+//
+//----------------------------------------------------------------------------
+
 sint32 UnitData::CanActivelyDefend(CellUnitList &attacker) const
 {
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
 	if(rec->GetActiveDefenseRange() <= 0)
 		return 0;
 
+#if defined(ACTIVISION_ORIGINAL)	// incorrect (0 != TRUE) and inefficient
 	BOOL movesMatch = FALSE;
 	if(attacker.IsAtLeastOneMoveLand() &&  rec->GetDefendLand())
 		movesMatch = 0;
@@ -1356,6 +1387,14 @@ sint32 UnitData::CanActivelyDefend(CellUnitList &attacker) const
 
 	if(attacker.IsAtLeastOneMoveMountain() && rec->GetDefendMountain())
 		movesMatch = TRUE;
+#else
+	bool const	movesMatch	=
+		(attacker.IsAtLeastOneMoveLand()     && rec->GetDefendLand())	||
+		(attacker.IsAtLeastOneMoveWater()    && rec->GetDefendWater())	||
+		(attacker.IsAtLeastOneMoveAir()      && rec->GetDefendAir())	||
+		(attacker.IsAtLeastOneMoveSpace()    && rec->GetDefendSpace())	||
+		(attacker.IsAtLeastOneMoveMountain() && rec->GetDefendMountain());
+#endif
 
 	if(movesMatch) {
 		if(rec->GetActiveDefenseOnlyWhenCarryingEnablers()) {

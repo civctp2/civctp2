@@ -31,6 +31,7 @@
 // - Replaced Debug Assertion for slic devision by 0 by slic error message
 //   the problem must be solved by the slicer not by a c++ coder, 
 //   by Martin Gühmann
+// - Treat modulo (%) 0 errors in the same way as errors with division by 0.
 //
 //----------------------------------------------------------------------------
 
@@ -545,7 +546,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				Assert(Eval(type1, sval1) != 0);
 #else
 //Added by Martin Gühmann
-//It is a problem of slic code and not of the ctp2.exe, 
+//It is a problem of slic code and not of the ctp2.exe,
 //the slicer has to solve the problem.
 				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 					c3errors_ErrorDialog("Slic", "In object %s: Devision by 0.", m_segment->GetName());
@@ -564,6 +565,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
+#if defined(ACTIVISION_ORIGINAL)    // Assert replaced with SLIC debug report
 			if(Eval(type1, sval1) == 0) {
 				Assert(Eval(type1, sval1) != 0);
 				sval3.m_int = 0;
@@ -571,6 +573,26 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				break;
 			}
 			sval3.m_int = Eval(type2, sval2) % Eval(type1, sval1);
+#else
+            {
+                sint32 const    divisor = Eval(type1, sval1);
+                if (0 == divisor)
+                {
+                    // Handle error as for SOP_DIV.
+                    if (g_theProfileDB && g_theProfileDB->IsDebugSlic())
+                    {
+                        c3errors_ErrorDialog("Slic", "In object %s: modulo 0.",
+                                             m_segment->GetName()
+                                            );
+                    }
+                    sval3.m_int = 0;
+                }
+                else
+                {
+                    sval3.m_int = Eval(type2, sval2) % divisor;
+                }
+            }
+#endif
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
