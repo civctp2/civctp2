@@ -655,8 +655,8 @@ AGE_TEN		"Future"
 ### City Style Strings ###
 
 CITY_STYLE_ROMAN	"Roman Style"
-CITY_STYLE_ARAB		"Asian Style"
-CITY_STYLE_ASIAN	"Arabian Style"
+CITY_STYLE_ARAB		"Arabian Style"
+CITY_STYLE_ASIAN	"Asian Style"
 CITY_STYLE_AMERICAN	"American Style"
 CITY_STYLE_CASTLE	"Castle Style"
 CITY_STYLE_EGYPTAIN	"Egyptian Style"

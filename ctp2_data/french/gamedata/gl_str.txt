@@ -595,8 +595,7 @@ ORDER_ASSASSINATE				"Assassiner dirigeant"
 
 PERSONALITY_KAHN_DESCRIPTION			"Tyran sanguinaire"
 PERSONALITY_GHANDI_DESCRIPTION			"Pacifiste diplomate"
-PERSONALITY_STALIN_DESCRIPTION			"Autocrate isolationiste et
- militariste"
+PERSONALITY_STALIN_DESCRIPTION			"Autocrate isolationiste et militariste"
 PERSONALITY_CEASAR_DESCRIPTION			"Impérialiste agressif"
 PERSONALITY_DEGAULLE_DESCRIPTION		"Noble patriote"
 PERSONALITY_MEDICI_DESCRIPTION			"Habile négociateur"
@@ -607,3 +606,27 @@ PERSONALITY_CALLENBACH_DESCRIPTION		"Populiste zélé"
 CONCEPT_EMBARGO                                 "Embargo"
 ORDER_EXPEL                                     "Renvoyer unité"
 ORDER_SPACE_LAUNCH                              "Lancer dans l'espace"
+
+### Age Strings ###
+
+AGE_ONE		"Antiquité"
+AGE_TWO		"Médiéval"
+AGE_THREE	"Middle Ages"
+AGE_FOUR	"Renaissance"
+AGE_FIVE	"Industrielle"
+AGE_SIX		"Moderne"
+AGE_SEVEN	"Informatique"
+AGE_EIGHT	"Genetique"
+AGE_NINE	"Diamant"
+AGE_TEN		"Le Futur"
+
+### City Style Strings ###
+
+CITY_STYLE_ROMAN	"Style Romain"
+CITY_STYLE_ARAB		"Style Arabe"
+CITY_STYLE_ASIAN	"Style Asiatique"
+CITY_STYLE_AMERICAN	"Style Américain"
+CITY_STYLE_CASTLE	"Style Château"
+CITY_STYLE_EGYPTAIN	"Style Egyptien"
+CITY_STYLE_PALACE	"Style Palais"
+
