@@ -1612,27 +1612,29 @@ void UnitData::DeductHP(double fp)
 
 //----------------------------------------------------------------------------
 //
-// Name       : CanSettleOn by E
+// Name       :  UDUnitTypeCanSettle
 //
-// Description: Adds additional check for a flag to see what terrain 
-//              types the unit can settle on
+// Description:  Checks unit properties to see if it can settle a city on a tile
 //
-// Parameters : Settler		: the units that can settle
+// Parameters :  sint32 unit_type		: Variable for the type of unit 
+//		     const MapPoint &pos	: Variable for tile on map
 //
-// Globals    : g_theWorld	: terrain properties database
+// Globals    :   g_theWorld		: The game world properties
+//		      g_theUnitDB   	: Unit properties 
 //
-// Returns    : sint32		: terrain index value
+// Returns    :   BOOL			: Returns TRUE if an unit-type can Settle on a tile
+//						  FALSE if the unit cannot settle a city there
 //
-// Remark(s)  : Modders will define this in Unit.txt as CanSettleOn: X 
+// Remark(s)  :   a new unit attribute CanSettleOn was added by E.
+//		      Modders will define this in Unit.txt as CanSettleOn: X.  
+//		      The flag adds an additional option in order to restrict where cities can be built. 
 //              
 //
 //----------------------------------------------------------------------------
-
-
 BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos) 
 {
 #if defined(ACTIVISION_ORIGINAL)
-     sint32 searching = TRUE;    
+sint32 searching = TRUE;    
 	const UnitRecord *rec = g_theUnitDB->Get(unit_type);   
   	sint32 t = rec->GetSettleCityTypeIndex();
 
@@ -1658,6 +1660,8 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
      
 	if (searching) 
 		return FALSE; 
+
+	return TRUE; 
 #else
 	sint32 i;
 	const UnitRecord *rec = g_theUnitDB->Get(unit_type);   
@@ -1666,8 +1670,8 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
 		return FALSE;      
 	}
 	if (g_theUnitDB->Get(t)->GetHasPopAndCanBuild() == TRUE) {
-			return FALSE;                               
-		}
+		return FALSE;                               
+	}
 	if (g_theWorld->HasCity(pos)) 
 		return FALSE;
 
@@ -1677,7 +1681,7 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
 		}
 	}
 
-	else if (rec->GetSettleLand() && g_theWorld->IsLand(pos))
+	if (rec->GetSettleLand() && g_theWorld->IsLand(pos))
 		return TRUE; 
 	else if (rec->GetSettleMountain() && g_theWorld->IsMountain(pos))
 		return TRUE; 
@@ -1685,8 +1689,8 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
 		return TRUE; 
 	else if (rec->GetSettleSpace() && g_theWorld->IsSpace(pos))
 		return TRUE;
-
-return FALSE;
+	
+	return FALSE;
 #endif
 }
 
