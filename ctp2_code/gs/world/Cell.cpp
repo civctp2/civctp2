@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Everything about a terrain cell
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added CalcTerrainFreightCost by Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -889,6 +908,44 @@ void Cell::CalcTerrainMoveCost()
 	}
 	Assert(m_move_cost > 0);
 }
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann
+double Cell::CalcTerrainFreightCost()
+{
+	double tmp; 
+	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
+	sint32 base = rec->GetEnvBase()->GetFreight();
+	tmp = base;
+
+	sint32 m;
+	if(HasCity() && rec->GetEnvCity()) {
+		m = rec->GetEnvCityPtr()->GetFreight();
+		tmp = min(tmp, m);
+	}
+
+	if(HasRiver() && rec->GetEnvRiver()) {
+		m = rec->GetEnvRiverPtr()->GetFreight();
+		tmp = min(tmp, m);
+	}
+
+	sint32 i;
+	for(i = m_objects->Num() - 1; i >= 0; i--) {
+		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
+			const TerrainImprovementRecord *impRec = 
+				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
+			const TerrainImprovementRecord::Effect *effect;
+			effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+			if(effect) {
+				m = effect->GetFreight();
+				tmp = min(tmp, m);
+			}
+		}
+	}																					
+	
+	return tmp;
+}
+#endif
 
 GoodyHut *Cell::GetGoodyHut()
 {
