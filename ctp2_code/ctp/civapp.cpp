@@ -63,6 +63,8 @@
 // - When quitting to New Game, go to main menu rather than SP screen
 // - Removed cleanup code for SP screen
 //   (JJB)
+// - Fixed another repetitive memory leak in the Great Libary caused by 
+//   savegame loading, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -1591,7 +1593,15 @@ sint32 CivApp::CleanupAppUI(void)
 
 	
 	
-	greatlibrary_Cleanup();
+/*#if !defined(ACTIVISION_ORIGINAL)
+//So far this is commented out. Last time it seemed 
+//to be harmfull. Maybe there is still something missing.
+//Added by Martin Gühmann to prevent a memory leak
+//that would appear if the Great Libary is cleaned up
+//alone.
+		GreatLibrary::Shutdown_Great_Library_Data();
+#endif*/
+		greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
 #if defined(ACTIVISION_ORIGINAL)
@@ -2909,8 +2919,13 @@ AttractWindow::Cleanup();
 	
 	
 
-	
-	greatlibrary_Cleanup();
+/*#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to prevent a memory leak
+//that would appear if the Great Libary is cleaned up
+//alone.
+		GreatLibrary::Shutdown_Great_Library_Data();
+#endif*/
+		greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
 #if defined(ACTIVISION_ORIGINAL)
@@ -3624,6 +3639,12 @@ sint32 CivApp::LoadSavedGame(MBCHAR *name)
 		InitializeAppDB((*(CivArchive *)(NULL)));
 
 		
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to prevent a memory leak
+//that would appear if the Great Libary is cleaned up
+//alone.
+		GreatLibrary::Shutdown_Great_Library_Data();
+#endif
 		greatlibrary_Cleanup();
 		GreatLibrary::Initialize_Great_Library_Data();
 		
