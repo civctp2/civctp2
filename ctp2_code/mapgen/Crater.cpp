@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented an unnecessary call to the overloaded sqrt function to support
+//   VC++ .NET compilation.
+//
+//----------------------------------------------------------------------------
+
 
 #define INITGUID
 
@@ -91,6 +123,7 @@ STDMETHODIMP Crater::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 					ay += outheight;
 				if(y >= outheight)
 					ay -= outheight;
+#if defined(ACTIVISION_ORIGINAL)
 				double distance = sqrt(rx*rx + ry*ry);
 				if(distance <= radius) {
 					
@@ -100,6 +133,20 @@ STDMETHODIMP Crater::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 						newh = -127;
 					outmap[ay * outwidth + ax] = sint8(newh);
 				}
+#else
+				sint32 const	dist_square	= (rx * rx) + (ry * ry);
+				if (dist_square <= rsq)
+				{
+					sint32 const	origh	= sint32(outmap[ay * outwidth + ax]);
+					sint32			newh	= origh - dist_square - maxRadiusSq;
+					if (newh < -127)
+					{
+						newh = -127;
+					}
+					outmap[ay * outwidth + ax]	= sint8(newh);
+
+				}
+#endif
 			}
 		}
 	}

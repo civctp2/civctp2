@@ -70,7 +70,8 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			int ypix 12
 			int widthpix 64
 			int heightpix 48
-			string image00 "updf01.tga"
+#			string image00 "updf01.tga"
+			string image00 "error.tga"
 		}
 
 		Year:CTP2_STATIC_BASE {

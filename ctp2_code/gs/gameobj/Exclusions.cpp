@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Lists of things that may not be built.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Cut and paste errors corrected.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Exclusions.h"
@@ -63,17 +92,29 @@ void Exclusions::Serialize(CivArchive &archive)
 		if(m_numBuildings != g_theBuildingDB->NumRecords()) {
 			sint32 *newBuildings = new sint32[g_theBuildingDB->NumRecords()];
 			memset(newBuildings, 0, g_theBuildingDB->NumRecords() * sizeof(sint32));
+#if defined(ACTIVISION_ORIGINAL)	// cut & paste error
 			memcpy(newBuildings, m_units, min(m_numBuildings, g_theBuildingDB->NumRecords()) * sizeof(sint32));
 			delete [] m_units;
 			m_units = newBuildings;
+#else
+			memcpy(newBuildings, m_buildings, min(m_numBuildings, g_theBuildingDB->NumRecords()) * sizeof(sint32));
+			delete [] m_buildings;
+			m_units = newBuildings;
+#endif
 			m_numBuildings = g_theBuildingDB->NumRecords();
 		}
 		if(m_numWonders != g_theWonderDB->NumRecords()) {
 			sint32 *newWonders = new sint32[g_theWonderDB->NumRecords()];
 			memset(newWonders, 0, g_theWonderDB->NumRecords() * sizeof(sint32));
+#if defined(ACTIVISION_ORIGINAL)	// cut & paste error
 			memcpy(newWonders, m_units, min(m_numWonders, g_theWonderDB->NumRecords()) * sizeof(sint32));
 			delete [] m_units;
 			m_units = newWonders;
+#else
+			memcpy(newWonders, m_wonders, min(m_numWonders, g_theWonderDB->NumRecords()) * sizeof(sint32));
+			delete [] m_wonders;
+			m_wonders = newWonders;
+#endif
 			m_numWonders = g_theWonderDB->NumRecords();
 		}
 	}

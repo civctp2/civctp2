@@ -2,6 +2,9 @@
   // Script for the Alexander the Great scenario //
  //     last update 11-17-00 by Tony Evans      //
 /////////////////////////////////////////////////
+// Apolyton modifications
+// - Center on Alexander at the start
+/////////////////////////////////////////////////
 
 #include "AG_func.slc"		// Functions
 #include "AG_mod.slc"		// Mod Functions
@@ -18,7 +21,9 @@
 
 // Misc variables
 
-int_t		firstTurn;				// Flag for the first turn
+// if  ACTIVISION_ORIGINAL (unused variable)
+// int_t		firstTurn;				// Flag for the first turn
+// end ACTIVISION_ORIGINAL 
 int_t		firstYear;				// Keeps generals from dying of old age in the first year
 int_t		firstSettler;			// Flag for the first time CL gives you a settler
 int_t		barsineMistress;		// counts 24 months after Barsine is your mistress
@@ -134,7 +139,9 @@ unit_t		tmpUnit;
 	if (tmpPlayer == 1) {
 //		if (firstTurn != 1) {
 //			alexHP = alexUnit.hp;
-			firstTurn = 1;
+// if  ACTIVISION_ORIGINAL (unused variable)	
+//			firstTurn = 1;
+// end ACTIVISION_ORIGINAL
 			// Center on and select Alexander 
 //			SelectUnit(alexUnit);
 //			AddCenter(alexUnit.location);
@@ -612,17 +619,29 @@ unit_t		tmpUnit;
 //----------------------------------------------------------------------------------
 
 HandleEvent(ArmySelected) 'AGCenterOnAlexander_F' post {
-location_t	tmpLoc;
-
-	if (firstTurn != 1) {
-		tmpLoc = army[0].location;
-		if (tmpLoc != alexUnit.location) {
-			SelectUnit(alexUnit);
-			AddCenter(alexUnit.location);
-		}
-	} else {
-		DisableTrigger('AGCenterOnAlexander_F');
-	}
+// if  ACTIVISION_ORIGINAL (doesn't work, grrr....)
+// location_t	tmpLoc;
+//
+//	if (firstTurn != 1) {
+//		tmpLoc = army[0].location;
+//		if (tmpLoc != alexUnit.location) {
+//			SelectUnit(alexUnit);
+//			AddCenter(alexUnit.location);
+//		}
+//	} else {
+//		DisableTrigger('AGCenterOnAlexander_F');
+//	}
+// else ACTIVISION_ORIGINAL
+    if (IsHumanPlayer(g.player))
+    {
+        if (g.player == 1) 
+        {
+	      SelectUnit(alexUnit);
+	      AddCenter(alexUnit);
+	      DisableTrigger('AGCenterOnAlexander_F');
+        }
+    }
+// end  ACTIVISION_ORIGINAL
 }
 
 
