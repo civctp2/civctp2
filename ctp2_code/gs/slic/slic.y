@@ -33,6 +33,7 @@
 //   - Slic database size access
 // - Exponetiation operator '**' added.
 // - Bitwise and '&' operator added
+// - Hopefully allowed declaration and setting at same time; e.g. "int_t a = 1;"
 //
 //----------------------------------------------------------------------------
 
