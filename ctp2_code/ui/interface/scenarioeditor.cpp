@@ -26,12 +26,14 @@
 // Modifications from the original Activision code:
 //
 // - Make the number of city styles you can place with the scenario editor mod
-//   dependent, By Martin Gühmann.
+//   dependent, by Martin Gühmann.
 // - Make sure that newly created cities have the size as displayed in the 
-//   CityPopSpinner, By Martin Gühmann.
+//   CityPopSpinner, by Martin Gühmann.
 // - Corrected wrap handling, by Fromafar.
 // - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gühmann.
 // - Memory leaks fixed, by Martin Gühmann and Fromafar.
+// - Fixed switch to player 1 bug when the scenario editor is loaded for the
+//   first time in a game session, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -267,6 +269,13 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	for(i = 0; i < k_NUM_PLAYER_SPINNERS; i++) {
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin) {
+
+#if !defined(ACTIVISION_ORIGINAL)
+			//Added by Martin Gühmann to amke sure that the Scenario Editor 
+			//does not set the player to player 1 when the scenario editor
+			//is loaded for the first time in a session.
+			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
+#endif
 			spin->SetSpinnerCallback(PlayerSpinner, NULL);
 
 			spin->SetMinimum(0, 0);

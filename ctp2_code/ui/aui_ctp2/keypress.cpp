@@ -17,7 +17,7 @@
 //
 // Compiler flags
 // 
-// ACTIVISION_ORIGINAL		
+// ACTIVISION_ORIGINAL
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
 //
@@ -25,7 +25,10 @@
 //
 // Modifications from the original Activision code:
 //
+// - Added music screen key by ahenobarb. (No ACTIVISION_ORIGINAL compiler flags set.)
 // - Start the great library with the current research project of the player.
+// - Disabled restart key in network, hot seat and email gmase, by 
+//   Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -1364,7 +1367,20 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 	
 	case KEY_FUNCTION_RESTART:
+#if defined(ACTIVISION_ORIGINAL)
+		//Removed by Martin Gühmann
 		if(!g_modalWindow && !g_theProfileDB->IsScenario() && !g_isScenario) {
+#else
+		//Added by Martin Gühmann to disable also the restart key in network
+		//games, hot seat games and email games.
+		if(!g_modalWindow 
+		&& !g_theProfileDB->IsScenario() 
+		&& !g_isScenario
+		&& !g_network.IsActive()
+		&& !g_turn->IsHotSeat() 
+		&& !g_turn->IsEmail()
+		) {
+#endif
 			optionwarningscreen_displayMyWindow(OWS_RESTART) ;
 		}
 		break;
