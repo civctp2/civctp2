@@ -1,5 +1,8 @@
 	## New DIPLOMACY strings ##
 
+##re-implemented (moved from cut_str.txt) PFT
+TREATY_TO_EXPIRE "Our treaty with the {player[0].civ_name_plural} is about to expire."
+
 ##
 ## Regard Events
 ##

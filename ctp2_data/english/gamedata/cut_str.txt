@@ -36,7 +36,7 @@ IA_NOMOUNTAIN_UNIT_TIP   "Artillery, Tanks, and mounted units are unable to move
 IA_TRIREME_DEEPWATER_TIP  "This unit must stay within two tiles of a coastline.  This message will appear once."
 
 ### Diplomacy Strings that should be cut ###
-TREATY_TO_EXPIRE "Our treaty with the [player.1.civ_name_plural] is about to expire."
+
 LEAVE_OUR_LANDS_BROKEN "The [player.1.civ_name_plural] have violated the stop trespassing agreement."
 STOP_TRADE_WITH_BROKEN_BY_YOU "You have violated your agreement with the [player.1.civ_name_plural] to stop trading with the [player.2.civ_name_plural]."
 ATTACK_ENEMY_BROKEN_BY_YOU "You have violated your agreement with the [player.1.civ_name_plural] to attack the [player.2.civ_name_plural]."

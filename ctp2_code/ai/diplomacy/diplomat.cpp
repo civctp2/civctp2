@@ -36,6 +36,7 @@
 // - Prevented crash on incorrect input (0 foreigners).
 // - Prevented crash on incorrect input (personality typo).
 // - Improved CleanupAll.
+// - Some agreements have limited duration, PFT 05 MAR 05
 //
 //----------------------------------------------------------------------------
 
@@ -380,10 +381,7 @@ void Diplomat::Load(CivArchive & archive)
 
 	
 	archive >> count;
-	
-	
 
-	
 	Assert(count == CtpAi::s_maxPlayers);
 
 #if defined(ACTIVISION_ORIGINAL)	// No resizing when count is 0.
@@ -3778,6 +3776,7 @@ void Diplomat::InitStrategicState() {
 							   GEA_Player, m_playerId,
 							   GEA_End);
 	}
+
 }
 
 
@@ -3955,6 +3954,102 @@ void Diplomat::NextDiplomaticState( const PLAYER_INDEX & foreignerId ) {
 			GEA_Player, m_playerId,
 			GEA_Player, foreignerId,
 			GEA_End);
+
+#if !defined(ACTIVISION_ORIGINAL)
+    // added by PFT 05 MAR 05: some agreements have limited duration
+    sint32 duration;
+    sint32 send_warning;
+    sint32 cancel_agt;
+
+	for (sint32 prop_type=1; prop_type<PROPOSAL_MAX; prop_type++){
+
+	    if (AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, (const enum PROPOSAL_TYPE)prop_type)){
+
+			duration=AgreementMatrix::s_agreements.GetAgreementDuration(m_playerId, foreignerId, (const enum PROPOSAL_TYPE)prop_type);
+				
+			send_warning=0;
+            cancel_agt=0;
+			switch (prop_type) {
+	            case PROPOSAL_NONE:
+	            case PROPOSAL_OFFER_GIVE_CITY:
+	            case PROPOSAL_REQUEST_GIVE_CITY:
+		            break;
+
+	            case PROPOSAL_OFFER_WITHDRAW_TROOPS:
+                case PROPOSAL_REQUEST_WITHDRAW_TROOPS:
+                case PROPOSAL_OFFER_STOP_PIRACY:
+	            case PROPOSAL_REQUEST_STOP_PIRACY:
+					if(duration==17){send_warning=1;}
+                    else if (duration==20){cancel_agt=1;}
+		            break;
+
+	            case PROPOSAL_OFFER_BREAK_AGREEMENT:
+		        case PROPOSAL_REQUEST_BREAK_AGREEMENT:
+		            break;
+	
+	            case PROPOSAL_OFFER_STOP_RESEARCH:
+	            case PROPOSAL_REQUEST_STOP_RESEARCH:
+		        case PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS:
+                case PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS:
+                case PROPOSAL_OFFER_REDUCE_BIO_WEAPONS:
+                case PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS:
+                case PROPOSAL_OFFER_REDUCE_NANO_WEAPONS:
+                case PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS:
+                    if(duration==27){send_warning=1;}
+                    else if (duration==30){cancel_agt=1;}
+		            break;
+
+	            case PROPOSAL_OFFER_GIVE_ADVANCE:
+	            case PROPOSAL_REQUEST_GIVE_ADVANCE:
+	            case PROPOSAL_OFFER_GIVE_GOLD:
+	            case PROPOSAL_REQUEST_GIVE_GOLD:
+	            case PROPOSAL_OFFER_REDUCE_POLLUTION:
+	            case PROPOSAL_REQUEST_REDUCE_POLLUTION:		
+	            case PROPOSAL_OFFER_MAP:
+	            case PROPOSAL_REQUEST_MAP:
+	            case PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT:
+	            case PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT:
+	            case PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT:
+	            case PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT:   		
+	            case PROPOSAL_OFFER_END_EMBARGO:// possible term ?
+	            case PROPOSAL_REQUEST_END_EMBARGO:
+		            break;
+	
+	            case PROPOSAL_TREATY_DECLARE_WAR:
+		            break;
+	            case PROPOSAL_TREATY_CEASEFIRE:
+                    if(duration==17){send_warning=1;}
+                    else if (duration==20){cancel_agt=1;}
+		            break;
+	            case PROPOSAL_TREATY_PEACE:
+
+	            case PROPOSAL_TREATY_TRADE_PACT:
+	            case PROPOSAL_TREATY_RESEARCH_PACT:
+	            case PROPOSAL_TREATY_MILITARY_PACT:
+	            case PROPOSAL_TREATY_POLLUTION_PACT:
+                    if(duration==37){send_warning=1;}
+                    else if (duration==40){cancel_agt=1;}
+		            break;
+
+	            case PROPOSAL_TREATY_ALLIANCE:// possible term ?
+		            break;
+	            case PROPOSAL_MAX:
+	            default:
+		            Assert(0);
+			}
+			if(send_warning){
+                SlicObject *so = new SlicObject("001TreatyToExpire");
+				so->AddRecipient(m_playerId);
+				so->AddCivilisation(foreignerId);
+			    g_slicEngine->Execute(so);
+			}
+			else if (cancel_agt){
+
+                AgreementMatrix::s_agreements.CancelAgreement(m_playerId, foreignerId, (const enum PROPOSAL_TYPE)prop_type);
+			}
+        }
+	}// end: some aggreements have limited duration
+#endif
 }
 
 
@@ -6275,8 +6370,6 @@ bool Diplomat::FirstTurnOfWar() const
 			continue;
 
 		duration = AgreementMatrix::s_agreements.GetAgreementDuration(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR);
-		
-		
 		
 		if (duration > 1)
 			return false;

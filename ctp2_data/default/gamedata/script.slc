@@ -25,6 +25,8 @@
 // - Added/improved message box type indicators and eye points.
 // - Corrected some missing array indices.
 // - Added quit button to the hotseat interturn pop-up.
+// - Re-implemented messagebox '001TreatyToExpire' to warn when dip agreements
+//   are about to expire. See Diplomat::NextDiplomaticState. 
 //
 //----------------------------------------------------------------------------
 
@@ -1616,10 +1618,10 @@ MessageClass(420);
 //
 ////////////////////////////////////////////////
 //
-
+// re-implemented, PFT: 
 messagebox '001TreatyToExpire' {
-    Abort();
-//	Text(ID_TREATY_TO_EXPIRE) ;
+    Show();
+	Text(ID_TREATY_TO_EXPIRE) ;
 	MessageType("ANTIDIPLOMATIC");
 }
 
