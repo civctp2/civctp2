@@ -1,7 +1,48 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Hotseat (and e-mail) game setup screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Code strucure improvements: multiple include guard added, cleanup in
+//   destructor.
+//
+//----------------------------------------------------------------------------
 
-
-
-
+// Multiple include guard !ACTIVISION_ORIGINAL
+#ifndef HOTSEATLIST_H
+#define HOTSEATLIST_H
+// End add
 
 #include "c3_listitem.h"
 #include "aui_action.h"
@@ -65,7 +106,11 @@ class HotseatList : public KeyboardHandler
 {
 public:
 	HotseatList( HotseatListCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
+#if defined(ACTIVISION_ORIGINAL)
 	~HotseatList( void );
+#else
+	virtual ~HotseatList();
+#endif
 
 	c3_PopupWindow	*m_window;
 
@@ -77,7 +122,9 @@ public:
 
 public:
 	sint32 Initialize ( MBCHAR *ldlBlock );
+#if defined(ACTIVISION_ORIGINAL)	// never used
 	sint32 Cleanup ( void );
+#endif
 	sint32 UpdateData ( void );
 
 	sint32 EnableButtons( void );
@@ -108,3 +155,7 @@ sint32 hotseatlist_NumEnabled(void);
 
 
 extern HotseatList *g_hotseatList;
+
+// Multiple include guard !ACTIVISION_ORIGINAL
+#endif
+// End add

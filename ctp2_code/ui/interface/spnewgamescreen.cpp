@@ -257,6 +257,9 @@ AUI_ERRCODE spnewgamescreen_Cleanup()
 	custommapscreen_Cleanup();
 	scenarioscreen_Cleanup();
 
+	delete g_hotseatList;
+	g_hotseatList = NULL;
+
 	// Clean up main screen
 	if (g_spNewGameWindow)
 	{

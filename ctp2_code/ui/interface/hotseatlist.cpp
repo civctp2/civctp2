@@ -1,8 +1,33 @@
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leaks repaired, cleanup in destructor.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -208,6 +233,7 @@ sint32 HotseatList::Initialize( MBCHAR *windowBlock )
 	return 0;
 }
 
+#if defined(ACTIVISION_ORIGINAL)	// m_list not cleared
 HotseatList::~HotseatList( void )
 {
 	Cleanup();
@@ -231,6 +257,42 @@ sint32 HotseatList::Cleanup( void )
 
 #undef mycleanup
 }
+
+#else	// ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+//
+// Name       : HotseatList::~HotseatList
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : g_c3ui			: main user interface
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+HotseatList::~HotseatList()
+{
+	if (g_c3ui && m_window)
+	{
+		g_c3ui->RemoveWindow(m_window->Id());
+	}
+
+	if (m_list)
+	{
+		m_list->Clear();
+		delete m_list;
+	}
+
+	delete m_window;
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 void HotseatList::DisplayWindow( void )
 {
