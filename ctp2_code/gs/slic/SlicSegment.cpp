@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Slic - reading files (?)
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added extra case statement to facilitate '**' operator
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SlicSegment.h"
@@ -521,6 +551,9 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 			case SOP_ADD:
 			case SOP_SUB:
 			case SOP_MULT:
+#ifndef ACTIVISION_ORIGINAL
+			case SOP_EXP:
+#endif
 			case SOP_DIV: 
 			case SOP_EQ:  
 			case SOP_GT:  

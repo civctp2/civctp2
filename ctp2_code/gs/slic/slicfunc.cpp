@@ -29,12 +29,21 @@
 // - StringCompare function overloaded to allow the comparision between strings
 //   string IDs and strings retrieved from builtins, by Martin Gühmann.
 // - New slic functions added by Martin Gühmann:
-//   - CargoCapacity     Gets number of additional units a unit can carry.
-//   - MaxCargoSize      Gets the maximum number of units a unit can carry.
-//   - CargoSize         Gets the current number of units a unit is carrying.
-//   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
-//   - GetContinent      Gets the continent ID of an location.
-//   - IsWater           Gets whether a location is water.
+//   - CargoCapacity:    Gets number of additional units a unit can carry.
+//   - MaxCargoSize:     Gets the maximum number of units a unit can carry.
+//   - CargoSize:        Gets the current number of units a unit is carrying.
+//   - GetUnitFromCargo: Gets the i'th unit a unit is carrying.
+//   - GetContinent:     Gets the continent ID of an location.
+//   - IsWater:          Gets whether a location is water.
+// - ArmyIsValid	: Added reading of the argument - to make a valid result 
+//                    possible.
+// - GrantAdvance	: Added input checks and an (optional) reason argument.
+// - Ambiguous sqrt resolved.
+// - CreateUnit function doesn't crash anymore if the unit type argument
+//   represents an invalid unit type. - Feb. 24th 2005 Martin Gühmann
+// - New slic function by Solver: IsOnSameContinent - Checks whether two
+//   locations are on the same continent.
+// - Added AddSlaves function modelled after the AddPops function.
 //
 //----------------------------------------------------------------------------
 
@@ -400,6 +409,25 @@ SlicFunc::~SlicFunc()
 		delete [] m_name;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_...::Call
+//
+// Description: Execute a SLIC command.
+//
+// Parameters : args			: variable length argument list
+//
+// Globals    : various
+//
+// Returns    : SFN_ERROR		: indication whether the execution of the 
+//                                command has started.
+//
+// Remark(s)  : SFN_ERROR_OK is returned when the execution of the command 
+//              has started. 
+//              Other return values indicate errors in the number or type of 
+//              the arguments.
+//
+//----------------------------------------------------------------------------
 
 SFN_ERROR Slic_PrintInt::Call(SlicArgList *args)
 {
@@ -3290,6 +3318,12 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 	}
 
 	const UnitRecord *rec = g_theUnitDB->Get(type);
+#if !defined(ACTIVISION_ORIGINAL)
+// Added by Martin Gühmann
+// Check if the function was called with a valid unit type.
+	if(!rec) return SFN_ERROR_UNKNOWN_UNIT_TYPE;
+#endif
+
 	sint32 x, y;
 	BOOL found = FALSE;
 	static DynamicArray<MapPoint> legalPoints;
@@ -3965,8 +3999,35 @@ SFN_ERROR Slic_GetRandomNeighbor::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_GrantAdvance::Call
+//
+// Description: Give an advance to a player.
+//
+// Parameters : args[0]				: the player to receive the advance
+//				args[1]				: the advance
+//				args[2] (optional)	: a reason why the advance is given
+//
+// Globals    : g_gevManager		: game event handler
+//
+// Returns    : SFN_ERROR			: indication whether the command has been
+//									  passed to the game event handler 
+//
+// Remark(s)  : * SFN_ERROR_OK is returned when the command has been passed to
+// 			      the event handler.  
+//                Other return values indicate errors in the number or type of 
+//                the arguments.
+//
+//				* SFN_ERROR_OK does not indicate the result of the command 
+//				  execution: when e.g. the player already has the advance, 
+//				  SFN_ERROR_OK will be returned, but nothing will happen.
+//
+//----------------------------------------------------------------------------
+
 SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 {
+#if defined(ACTIVISION_ORIGINAL)	
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -3986,6 +4047,65 @@ SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 		GEA_End);
 
 	return SFN_ERROR_OK;
+#else
+	if ((args->m_numArgs < 2) || (args->m_numArgs > 3))
+	{
+		return SFN_ERROR_NUM_ARGS;
+	}
+
+	PLAYER_INDEX	player;
+	if (args->GetPlayer(0, player))
+	{
+		if ((player < 0) || (player >= k_MAX_PLAYERS))
+		{
+			return SFN_ERROR_OUT_OF_RANGE;
+		}
+
+	}
+	else
+	{
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	sint32			adv;
+	if (args->GetInt(1, adv)) 
+	{
+		if (adv >= g_theAdvanceDB->NumRecords()) 
+		{
+			return SFN_ERROR_NOT_ADVANCE;
+		}
+	}
+	else
+	{
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	sint32			reason	= CAUSE_SCI_UNKNOWN;
+	if (args->m_numArgs >= 3)
+	{
+		if (args->GetInt(2, reason))
+		{
+			if ((reason < 0) || (reason > CAUSE_SCI_INITIAL))
+			{
+				return SFN_ERROR_OUT_OF_RANGE;
+			}
+		}
+		else
+		{
+			return SFN_ERROR_TYPE_ARGS;
+		}
+	}
+
+	g_gevManager->AddEvent(GEV_INSERT_Tail, 
+						   GEV_GrantAdvance,
+						   GEA_Player,	player,
+						   GEA_Int,		adv,
+						   GEA_Int,		reason,
+						   GEA_End
+						  );
+
+	return SFN_ERROR_OK;
+#endif
 }
 
 SFN_ERROR Slic_AddUnit::Call(SlicArgList *args)
@@ -3994,9 +4114,10 @@ SFN_ERROR Slic_AddUnit::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	Unit u;
-
+#if defined(ACTIVISION_ORIGINAL)	// already checked
 	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
+#endif
 	if(!args->GetUnit(0, u)) {
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
@@ -6231,7 +6352,12 @@ SFN_ERROR Slic_Distance::Call(SlicArgList *args)
 	if(!args->GetPos(1, p2))
 		return SFN_ERROR_TYPE_ARGS;
 
+#if defined(ACTIVISIION_ORIGINAL)
 	m_result.m_int = (sint32)sqrt(MapPoint::GetSquaredDistance(p1, p2));
+#else
+	m_result.m_int = static_cast<sint32>
+		(sqrt(static_cast<double>(MapPoint::GetSquaredDistance(p1, p2))));
+#endif
 	return SFN_ERROR_OK;
 }
 
@@ -6797,16 +6923,36 @@ SFN_ERROR Slic_CityHasWonder::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Slic_ArmyIsValid
+//
+// Description: Determine whether an army is valid.
+//
+// Parameters : args	: army variable
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+// Remark(s)  : Fills m_result.m_int with an indication whether the army is
+//              valid. When the army is valid, 1 (true) is returned. When the
+//              army is invalid, 0 (false) is returned.
+//
+//----------------------------------------------------------------------------
+
 SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 {
 	m_result.m_int = 0;
-	Army a;
 
-	if(args->m_numArgs != 1) {
+	if (args->m_numArgs != 1) 
+	{
 		return SFN_ERROR_NUM_ARGS;
 	}
 
-	if(a.IsValid()) {
+	Army	a;
+	if (args->GetArmy(0, a) && a.IsValid())
+	{
 		m_result.m_int = 1;
 	}
 
@@ -7225,11 +7371,56 @@ SFN_ERROR Slic_IsOnSameContinent::Call(SlicArgList *args)
 
 	if (g_theWorld->GetContinent(pos) ==
 		g_theWorld->GetContinent(pos2)) {
-		m_result.m_int = 1; }
+		m_result.m_int = 1; 
+	}
 	else {
-		m_result.m_int = 0; }
+		m_result.m_int = 0; 
+	}
 	
 	return SFN_ERROR_OK;
 }
 
+SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
+{
+	if(args->m_numArgs != 3)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit city;
+	if(!args->GetCity(0, city))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 count;
+	if(!args->GetInt(1, count))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 victim;
+	if(!args->GetPlayer(2, victim))
+		return SFN_ERROR_TYPE_ARGS;
+
+	MapPoint pos; 
+	city.GetPos(pos);
+	
+	sint32 i;
+	if(count > 0) {
+		for (i=0;  i<count; i++) {
+			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
+						   GEA_City, city.m_id,
+						   GEA_Player, victim,
+						   GEA_End);
+			
+		}
+	} else {
+		// Add code to convert count slaves to normal pops here later.
+		for(i = count; i < 0; i++) {
+			// Add pop remove code here later (KillPop event).
+		}
+	}
+
+	
+	sint32 delta_martial_law;
+	CityData *cd = city.GetData()->GetCityData();
+	cd->GetHappy()->CalcHappiness(*cd, FALSE, delta_martial_law, TRUE);
+
+	return SFN_ERROR_OK;
+}
 #endif

@@ -1,4 +1,37 @@
 %{
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Defines what valid slic commands are.
+//                This file sliccmd.y is compiled to sc.tab.c
+//                and therefore you find this text in both files.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.                                                              
+//
+//----------------------------------------------------------------------------
+//                                                                                                                                                                         
+// Compiler flags
+//                                            
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Exponetiation operator '**' added.
+//
+//----------------------------------------------------------------------------
+
 #include "y.tab.h"
 #include <stdlib.h>
 #include <string.h>
@@ -164,6 +197,11 @@ Return      { return KW_RETURN; }
 \>=		{ return GTE; }
 !=      { return NEQ; }
 &&      { return AND; }
+\*\*    { 
+		#ifndef ACTIVISION_ORIGINAL 
+		return EXP;
+	    #endif 
+		}
 \|\|    { return OR; }
 \n		{ 
             g_slicLineNumber++;

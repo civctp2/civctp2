@@ -33,6 +33,7 @@
 //   by Martin Gühmann
 // - Treat modulo (%) 0 errors in the same way as errors with division by 0.
 // - Fixed slic database access after a reload by Martin Gühmann.
+// - Added '**' operator handling
 //
 //----------------------------------------------------------------------------
 
@@ -63,6 +64,7 @@
 #if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database access
 #include "SlicDBConduit.h"
+#include <math.h>
 #endif
 
 extern "C" extern FILE *debuglog;
@@ -535,6 +537,17 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
+#ifndef ACTIVISION_ORIGINAL
+		case SOP_EXP: 
+			sp = m_stack->Pop(type1, sval1);
+			Assert(sp >= 0);
+			sp = m_stack->Pop(type2, sval2);
+			Assert(sp >= 0);
+			sval3.m_int = (int)pow(Eval(type2, sval2), Eval(type1, sval1));
+			m_stack->Push(SS_TYPE_INT, sval3);
+
+			break;
+#endif
 		case SOP_DIV:  
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);

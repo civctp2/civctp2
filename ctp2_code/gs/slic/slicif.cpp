@@ -30,6 +30,10 @@
 // - slicif_cleanup() added.
 // - Fixed slic database access after a reload by Martin Gühmann.
 // - Types corrected.
+// - Added debugging code for '**' operator
+// - Replaced slicif_is_sym by slicif_is_name function. This function is 
+//   modelled slicif_find_db_index but without error message if this 
+//   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -1206,6 +1210,9 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_ADD:  fprintf(debuglog, "add\n"); break;
 			case SOP_SUB:  fprintf(debuglog, "sub\n"); break;
 			case SOP_MULT: fprintf(debuglog, "mult\n"); break;
+#ifndef ACTIVISION_ORIGINAL
+			case SOP_EXP: fprintf(debuglog, "pow\n"); break;
+#endif
 			case SOP_DIV:  fprintf(debuglog, "div\n"); break;
 			case SOP_MOD:  fprintf(debuglog, "mod\n"); break;
 			case SOP_EQ:   fprintf(debuglog, "eq\n"); break;
@@ -2231,32 +2238,37 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 
 //----------------------------------------------------------------------------
 //
-// Name       : slicif_is_sym
+// Name       : slicif_is_name
 //
-// Description: Checks whether a given name is registered as symbol or 
-//              variable name.
+// Description: Retrieves the database index of the given, same as 
+//              slicif_find_db_index but without an error message 
+//              if it fails.
 //
-// Parameters : char *name
+// Parameters : const char *name
+//              void *dbptr
 //
 // Globals    : -
 //
-// Returns    : 1 if the given name is a registered symbol or variable
-//              name to allow overloading of the database access slic
-//              functions.
+// Returns    : The database index of an given name in the given
+//              database.
 //
 // Remark(s)  : This function is only used at compiling time, to determine
-//              wheather a given name is a slic variable name or an internal
-//              database name.
+//              wheather a given name represents a name in the given 
+//              database. That is double work as it is also done in the 
+//              slicif_find_db_index if it is called. But as it is only
+//              done at compile time, the additional time needed shouldn't
+//              be a problem.
 //
 //----------------------------------------------------------------------------
-int slicif_is_sym(char *name){
-	SlicNamedSymbol *symval;
-	symval = slicif_get_symbol(name);
-	if(symval != NULL){
-		return 1;
-	}
-	else{
+int slicif_is_name(void *dbptr, const char *name)
+{
+	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
+
+	Assert(conduit);
+	if(!conduit)
 		return 0;
-	}
+
+	return conduit->GetIndex(name);
+
 }
 #endif

@@ -29,6 +29,9 @@
  *   - Slic database access
  *   - Slic database size access
  * - slicif_cleanup() added.
+ * - Replaced slicif_is_sym by slicif_is_name function. This function is 
+ *   modelled slicif_find_db_index but without error message if this 
+ *   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
  *
  *----------------------------------------------------------------------------
  */
@@ -278,7 +281,7 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname);
 
 #if !defined(ACTIVISION_ORIGINAL)
 /* Added by Martin Gühmann */
-int slicif_is_sym(char *name);
+int slicif_is_name(void *dbptr, const char *name);
 #endif
 
 #if defined(__cplusplus)

@@ -1,4 +1,37 @@
 %{
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Defines what valid slic commands are.
+//                This file sliccmd.y is compiled to sc.tab.c
+//                and therefore you find this text in both files.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.                                                              
+//
+//----------------------------------------------------------------------------
+//                                                                                                                                                                         
+// Compiler flags
+//                                            
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Exponetiation operator '**' added.
+//
+//----------------------------------------------------------------------------
+
 /* Change all yy* symbols to sc* for this parser */
 #include "scyaccdefs.h"
 
@@ -6,6 +39,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "sliccmd.h"
+#ifndef ACTIVISION_ORIGINAL
+#include <math.h>
+#endif
 
 /* Avoid silly warnings */
 #pragma warning( disable : 4013 )
@@ -35,12 +71,13 @@ char *sliccmd_cat_string;
 %token AND OR
 %token STRING
 %token SLICCMD_WATCH SLICCMD_ASSN SLICCMD_EVAL SLICCMD_REPLACE
+%token EXP
 
 %left REF
 %left AND OR
 %left GT LT GTE LTE EQ NEQ
 %left '-' '+'
-%left '*' '/'
+%left '*' '/' EXP
 %nonassoc UMINUS '!'
 
 %%
@@ -142,6 +179,18 @@ expression: expression '+' expression
 			$$.v.type = EXP_VAL_INT;
 				$$.v.value = $1.v.value / $3.v.value; 
 			}
+		}
+	|   expression EXP expression
+        {
+#ifndef ACTIVISION_ORIGINAL
+			if($1.v.type != EXP_VAL_INT ||
+			   $3.v.type != EXP_VAL_INT) {
+				sliccmd_type_error();
+			} else {
+			$$.v.type = EXP_VAL_INT;
+				$$.v.value = (int)pow($1.v.value, $3.v.value); 
+			}
+#endif
 		}
 	|   expression LT  expression
         {

@@ -14,12 +14,12 @@
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
 // This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.                                                              
 //
 //----------------------------------------------------------------------------
-//
+//                                                                                                                                                                         
 // Compiler flags
-// 
+//                                            
 // ACTIVISION_ORIGINAL		
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
@@ -29,8 +29,9 @@
 // Modifications from the original Activision code:
 //
 // - Addtion by Martin Gühmann to allow:
-//   - Slic database access
+//   - Slic database access                                                                            
 //   - Slic database size access
+// - Exponetiation operator '**' added.
 //
 //----------------------------------------------------------------------------
 
@@ -83,12 +84,13 @@ int include_stack_ptr = 0;
 %token KW_PRE KW_POST
 %token KW_EVENT
 %token DBREF
+%token EXP
 
 %left REF
 %left AND OR
 %left GT LT GTE LTE EQ NEQ
 %left '-' '+'
-%left '*' '/' '%'
+%left '*' '/' '%' EXP
 %nonassoc UMINUS '!'
 
 %%
@@ -345,6 +347,11 @@ triggercondition: '(' expression ')' { slicif_add_op(SOP_TRIG); }
 expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 	|   expression '-' expression { slicif_add_op(SOP_SUB); }
 	|   expression '*' expression { slicif_add_op(SOP_MULT); }
+	|   expression EXP expression { 
+									#ifndef ACTIVISION_ORIGINAL 
+										slicif_add_op(SOP_EXP); 
+									#endif 
+									}
 	|   expression '/' expression { slicif_add_op(SOP_DIV); }
 	|   expression '%' expression { slicif_add_op(SOP_MOD); }
 	|   expression LT  expression { slicif_add_op(SOP_LT); }
@@ -383,7 +390,7 @@ expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 	slicif_add_op(SOP_PUSHI, slicif_find_db_index($1.dbptr, $3.name));
 #else
 //Added by Martin Gühmann
-	if(slicif_is_sym($3.name) == 1){
+	if(slicif_is_name($1.dbptr, $3.name) < 0){
 		slicif_add_op(SOP_DBNAME, $1.dbptr, $3.name);
 	}
 	else{
@@ -398,13 +405,10 @@ expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 		slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name));
 #else
 //Added by Martin Gühmann
-	if(slicif_is_sym($3.name) == 1){
-//	if(slicif_find_db_index($1.dbptr, $3.name) >= 0){
-//		slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name));
+	if(slicif_is_name($1.dbptr, $3.name) < 0){
 		slicif_add_op(SOP_DBNAMEREF, $1.dbptr, $3.name, $6.name);
 	}
 	else{
-//		slicif_add_op(SOP_DBREF, $1.dbptr, $6.name);
 		slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name));
 	}
 #endif

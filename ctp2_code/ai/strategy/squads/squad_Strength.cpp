@@ -43,6 +43,8 @@
 // - Disabled Calvitix last change of the > operator as it slows down the
 //   game on maps with more than one continent massively. Nevertheless this
 //   operator needs to be reworked. - Feb. 21st 2005 Martin Gühmann
+// - Better version of Calvitix' operator added, but still experimental and
+//   therefore disabled. - Feb. 24th 2005 Martin Gühmann
 // 
 //----------------------------------------------------------------------------
 
@@ -102,7 +104,9 @@ Squad_Strength & Squad_Strength::operator= (const Squad_Strength &squad_strength
     return *this;
 }
 
-
+#if 1 || defined(ACTIVISION_ORIGINAL)
+// A better operator implemented than that of Calvitix
+// but it is still experimental and therefore here disabled.
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 {
 	
@@ -120,54 +124,44 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 	bool greater_value = (m_value > squad_strength.m_value);
 	bool greater_agents = (m_agent_count > squad_strength.m_agent_count);
 
-#if 0 && !defined (ACTIVISION_ORIGINAL) // Calvitix 
-// Removed by Martin Gühmann
-// Causes a severe slow down on maps with more than one continent.
-// Needs therefore be reconsidered. That is also true for the
-// original code, only the greater variable is used.
-    greater = false;
-	
-    // Attack difference
-    sint16 attack_cpr = (m_attack_str - squad_strength.m_attack_str);
-    // Defense difference
-    sint16 defense_cpr = (m_defense_str - squad_strength.m_defense_str);
-    // ranged difference
-    sint16 ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
-    // value difference
-    sint16 value_cpr = (m_value - squad_strength.m_value);
-
-    sint16 ranged_nb = (m_ranged - squad_strength.m_ranged);
-    sint16 defenders_nb = (m_defenders - squad_strength.m_defenders);
-    sint16 transport_nb = (m_transport - squad_strength.m_transport);
-
-    // the addition of all differences has to be greater than 0
-    // it is certainly better than only testing attack or defense
-    // but can be improved (for exemple, by applying a ratio on the greater score
-    if ((attack_cpr + defense_cpr + ranged_cpr + value_cpr) > 0)
-        greater = true;
-
-    // To be compatible with the original operator, test the
-    // nb of transport too
-    if (m_transport > 0 && transport_nb > 0)
-        greater = true;
-
-    // test the nb of agent too
-    if (m_agent_count > 0 && squad_strength.m_agent_count > 0)
-	{
-        greater = greater || greater_agents;
-
-		//when only agent count is as criterion : (for special units for example)
-		if (m_attack_str + m_defense_str + m_ranged_str + m_value  == 0)
-		{
-			greater = greater_agents;
-		}
-
-	}
-
-
-#endif
 	return greater;
 }
+#else
+bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
+{
+
+	// To be compatible with the original operator, test the
+	// nb of transport too
+	sint16 transport_nb = (m_transport - squad_strength.m_transport);
+	if(m_transport > 0 && transport_nb > 0)
+		return true;
+
+	// Attack difference
+	sint16 attack_cpr = (m_attack_str - squad_strength.m_attack_str);
+	// Defense difference
+	sint16 defense_cpr = (m_defense_str - squad_strength.m_defense_str);
+	// ranged difference
+	sint16 ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
+	// value difference
+	sint16 value_cpr = (m_value - squad_strength.m_value);
+
+	// the addition of all differences has to be greater than 0
+	// it is certainly better than only testing attack or defense
+	// but can be improved (for exemple, by applying a ratio on the greater score
+	if((attack_cpr + defense_cpr + ranged_cpr + value_cpr) > 0)
+		return true;
+
+	// test the nb of agent too
+	if(m_agent_count > 0 && squad_strength.m_agent_count > 0){
+
+		//when only agent count is as criterion : (for special units for example)
+		if (m_attack_str + m_defense_str + m_ranged_str + m_value  == 0){
+			return (m_agent_count > squad_strength.m_agent_count);
+		}
+	}
+	return false;
+}
+#endif
 
 
 Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)

@@ -27,6 +27,8 @@
 //
 // - Allow infastructure and capitalisation when loading the build queue
 //   (modification as posted by Peter Triggs).
+// - Players are now notified if someone starts to build the first wonder
+//   from the database. - Feb. 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -102,9 +104,20 @@ extern void player_ActivateSpaceButton(sint32 pl);
 
 BuildQueue::BuildQueue()
 { 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
     m_wonderStarted = 0;
     m_wonderStopped = 0;
 	m_wonderComplete = 0;
+#else
+// Added by Martin Gühmann
+// These variables should store a 
+// wonder database index. 0 is also
+// a valid database index.
+    m_wonderStarted  = -1;
+    m_wonderStopped  = -1;
+	m_wonderComplete = -1;
+#endif
     m_settler_pending = FALSE;
 	m_list = new PointerList<BuildNode>;
 	m_frontWhenBuilt = NULL;
@@ -152,7 +165,14 @@ void BuildQueue::Serialize(CivArchive &archive)
 		if(g_saveFileVersion >= 62) {
 			archive >> m_wonderComplete;
 		} else {
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
 			m_wonderComplete = 0;
+#else
+// Added by Martin Gühmann
+// 0 is a valid database index.
+			m_wonderComplete = -1;
+#endif
 		}
 
 		m_list->DeleteAll();
@@ -373,9 +393,14 @@ sint32 BuildQueue::Save(const MBCHAR *file)
 
 void BuildQueue::EndTurn(void)
 {
-    
+
     if (m_wonderStarted != m_wonderStopped) {
+#if defined(ACTIVISION_ORIGINAL)
         if (m_wonderStopped) {
+#else
+// Correct the condition with the index shift
+        if (m_wonderStopped >= 0) {
+#endif
             SendMsgWonderStopped(m_wonderStopped) ;
             g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
 			
@@ -385,9 +410,17 @@ void BuildQueue::EndTurn(void)
             g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
             
         }
-    }        
+    }
+#if defined(ACTIVISION_ORIGINAL)
     m_wonderStarted = 0;
     m_wonderStopped = 0;
+#else
+//Added by Martin Gühmann
+	// These values reperesent an index into the good's database
+	// 0 is a valid database index
+    m_wonderStarted = -1;
+    m_wonderStopped = -1;
+#endif
     m_settler_pending = FALSE;
 }
 
