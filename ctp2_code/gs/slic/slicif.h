@@ -125,6 +125,8 @@ typedef enum {
 	SOP_DBREF,
 	SOP_DBARRAY,
 	SOP_DBSIZE,
+//Added by tombom for bitwise support
+	SOP_AND,
 #endif
 
 	SOP_NOP 

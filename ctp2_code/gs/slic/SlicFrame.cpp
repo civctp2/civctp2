@@ -34,6 +34,7 @@
 // - Treat modulo (%) 0 errors in the same way as errors with division by 0.
 // - Fixed slic database access after a reload by Martin Gühmann.
 // - Added '**' operator handling
+// - Added '&' operator handling
 //
 //----------------------------------------------------------------------------
 
@@ -546,6 +547,14 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			sval3.m_int = (int)pow(Eval(type2, sval2), Eval(type1, sval1));
 			m_stack->Push(SS_TYPE_INT, sval3);
 
+			break;
+		case SOP_BAND: 
+			sp = m_stack->Pop(type1, sval1);
+			Assert(sp >= 0);
+			sp = m_stack->Pop(type2, sval2);
+			Assert(sp >= 0);
+			sval3.m_int = ((Eval(type2, sval2) & Eval(type1, sval1));
+			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
 #endif
 		case SOP_DIV:  

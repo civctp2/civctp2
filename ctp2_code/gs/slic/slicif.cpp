@@ -34,6 +34,7 @@
 // - Replaced slicif_is_sym by slicif_is_name function. This function is 
 //   modelled slicif_find_db_index but without error message if this 
 //   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
+// - Added debugging code for '&' operator
 //
 //----------------------------------------------------------------------------
 
@@ -1212,6 +1213,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_MULT: fprintf(debuglog, "mult\n"); break;
 #ifndef ACTIVISION_ORIGINAL
 			case SOP_EXP: fprintf(debuglog, "pow\n"); break;
+			case SOP_BAND: fprintf(debuglog, "band\n"); break;
 #endif
 			case SOP_DIV:  fprintf(debuglog, "div\n"); break;
 			case SOP_MOD:  fprintf(debuglog, "mod\n"); break;

@@ -32,6 +32,7 @@
 //   - Slic database access                                                                            
 //   - Slic database size access
 // - Exponetiation operator '**' added.
+// - Bitwise and '&' operator added
 //
 //----------------------------------------------------------------------------
 
@@ -87,7 +88,7 @@ int include_stack_ptr = 0;
 %token EXP
 
 %left REF
-%left AND OR
+%left AND OR '&'
 %left GT LT GTE LTE EQ NEQ
 %left '-' '+'
 %left '*' '/' '%' EXP
@@ -350,6 +351,11 @@ expression: expression '+' expression { slicif_add_op(SOP_ADD); }
 	|   expression EXP expression { 
 									#ifndef ACTIVISION_ORIGINAL 
 										slicif_add_op(SOP_EXP); 
+									#endif 
+									}
+	|   expression '&' expression { 
+									#ifndef ACTIVISION_ORIGINAL 
+										slicif_add_op(SOP_BAND); 
 									#endif 
 									}
 	|   expression '/' expression { slicif_add_op(SOP_DIV); }
