@@ -1,13 +1,23 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : DirectMedia video handling
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// when set, generates the original Activision code
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Allow movies to be displayed on a system without a sound card.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -137,10 +147,14 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 	}
 
 	hr = pAMStream->AddMediaStream(NULL, &MSPID_PrimaryAudio, AMMSF_ADDDEFAULTRENDERER, NULL);
+#if defined(ACTIVISION_ORIGINAL)
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Could not add primary video stream to AMStream.  Error#%d.", hr);
 		goto Exit;
 	}
+#else
+	(void) hr;  // Ignore failures: display video without sound. 
+#endif
 	
     WCHAR       wPath[_MAX_PATH];
 	MultiByteToWideChar(CP_ACP, 0, name, -1, wPath, sizeof(wPath)/sizeof(wPath[0]));

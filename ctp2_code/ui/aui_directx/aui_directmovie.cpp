@@ -1,13 +1,26 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : DirectMedia movie handling
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// __AUI_USE_DIRECTMEDIA__	
+// should be set to have any meaningful code at all
+//
+// ACTIVISION_ORIGINAL		
+// when set, generates the original Activision code
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Allow movies to be displayed on a system without a sound card.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -132,12 +145,15 @@ AUI_ERRCODE aui_DirectMovie::Open(
 			&MSPID_PrimaryAudio,
 			AMMSF_ADDDEFAULTRENDERER,
 			NULL );
+#if defined(ACTIVISION_ORIGINAL)
 		if ( FAILED(hr) )
 		{
 			Close();
 			return AUI_ERRCODE_LOADFAILED;
 		}
-
+#else
+        (void) hr;  // Ignore audio failures: display movie without sound.
+#endif
 		
 		char fullPath[_MAX_PATH];
 		strcpy(fullPath, m_filename);
