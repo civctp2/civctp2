@@ -30,6 +30,7 @@
 //   event, to prevent losing the advance that just was completed.
 // - Corrected GrantAdvanceEvent input handling.
 // - Corrected memory leaks and invalid arguments for Gaia Controller messages.
+// - Corrected recipients for Gaia Controller messages.
 //
 //----------------------------------------------------------------------------
 
@@ -162,9 +163,13 @@ STDEHANDLER(PollutionTurnEvent)
 
 STDEHANDLER(BeginTurnAllCitiesEvent)
 {
+#if defined(ACTIVISION_ORIGINAL)	// not used (yet) 
 	sint32 player, i;
 	SlicObject *so;
 	SlicSegment *seg;
+#else
+	sint32 player;
+#endif
 
 	if(!args->GetPlayer(0, player))
 		return GEV_HD_Continue;
@@ -191,7 +196,8 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 	g_player[player]->m_virtualGoldSpent = 0;
 
 	if(g_player[player]->GetGaiaController()->CanStartCountdown()) {
-#if defined(ACTIVISION_ORIGINAL)	// memory leaks, invalid message
+#if defined(ACTIVISION_ORIGINAL)	
+		// memory leaks, invalid message, no "them" messages when MaxPlayers is 0.
 		so = new SlicObject("GCReadyToActivateUs");
 		seg = g_slicEngine->GetSegment("GCReadyToActivateUs");
 		if(!seg->TestLastShown(player, 10000)) {
@@ -210,25 +216,18 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 			g_slicEngine->Execute(so);
 		}
 #else
-		seg = g_slicEngine->GetSegment("GCReadyToActivateUs");
+		SlicSegment *	seg = g_slicEngine->GetSegment("GCReadyToActivateUs");
 		if (seg && !seg->TestLastShown(player, 10000)) 
 		{
-			so = new SlicObject("GCReadyToActivateUs");
-			so->AddRecipient(player);
+			SlicObject *	so	= new SlicObject("GCReadyToActivateUs");
 			so->AddPlayer(player);
+			so->AddRecipient(player);
 			g_slicEngine->Execute(so);
-		}
 
-		seg = g_slicEngine->GetSegment("GCReadyToActivateThem");
-		for (i = 1; seg && (i < g_theProfileDB->GetMaxPlayers()); i++) 
-		{
-			if (!seg->TestLastShown(i, 10000) && i != player) 
-			{
-				so = new SlicObject("GCReadyToActivateThem");
-				so->AddRecipient(i);
-				so->AddPlayer(player);
-				g_slicEngine->Execute(so);
-			}
+			so = new SlicObject("GCReadyToActivateThem");
+			so->AddPlayer(player);
+			so->AddAllRecipientsBut(player);
+			g_slicEngine->Execute(so);
 		}
 #endif
 	}
@@ -551,9 +550,11 @@ STDEHANDLER(CreateImprovementEvent)
 	MapPoint pos;
 	sint32 pl;
 	sint32 imptype;
+#if defined(ACTIVISION_ORIGINAL)	// unused or later
 	sint32 i;
 	SlicObject *so;
 	SlicSegment *seg;
+#endif
 
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
@@ -563,7 +564,8 @@ STDEHANDLER(CreateImprovementEvent)
 	
 
 	if(g_player[pl] && g_player[pl]->GetGaiaController()->HasMinTowersBuilt()) {
-#if defined(ACTIVISION_ORIGINAL)	// memory leak, invalid message
+#if defined(ACTIVISION_ORIGINAL)
+		// memory leaks, invalid message, no "them" messages when MaxPlayers is 0.
 		so = new SlicObject("GCMinObelisksReachedUs");
 		seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
 		so->AddRecipient(pl);
@@ -581,26 +583,18 @@ STDEHANDLER(CreateImprovementEvent)
 			g_slicEngine->Execute(so);
 		}
 #else
-		seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
+		SlicSegment *	seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
 		if (seg && !seg->TestLastShown(pl, 10000)) 
 		{
-			so = new SlicObject("GCMinObelisksReachedUs");
+			SlicObject *	so = new SlicObject("GCMinObelisksReachedUs");
 			so->AddRecipient(pl);
 			g_slicEngine->Execute(so);
-		}
 
-		seg = g_slicEngine->GetSegment("GCMinObelisksReachedThem");
-		for (i = 1; seg && (i < g_theProfileDB->GetMaxPlayers()); i++) 
-		{
-			if (!seg->TestLastShown(i, 10000) && i != pl) 
-			{
-				so = new SlicObject("GCMinObelisksReachedThem");
-				so->AddRecipient(i);
-				so->AddPlayer(pl);
-				g_slicEngine->Execute(so);
-			}	
+			so = new SlicObject("GCMinObelisksReachedThem");
+			so->AddPlayer(pl);
+			so->AddAllRecipientsBut(pl);
+			g_slicEngine->Execute(so);
 		}
-
 #endif
 	}
 

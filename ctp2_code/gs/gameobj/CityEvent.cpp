@@ -31,6 +31,7 @@
 // - Prevented crash when reporting completion of the Solaris project.
 // - Corrected memory leaks for city captures.
 // - Corrected memory leaks and invalid arguments for Gaia Controller messages.
+// - Corrected message recipients for the Gaia Controller messages.
 //
 //----------------------------------------------------------------------------
 
@@ -574,7 +575,12 @@ STDEHANDLER(InjoinCityEvent)
 STDEHANDLER(CreateBuildingEvent)
 {
 	Unit c;
+#if defined(ACTIVISION_ORIGINAL)	// i unused now
 	sint32 building, player, i;
+#else
+	sint32		building;
+	sint32		player;
+#endif
 	SlicObject *so;
 	SlicSegment *seg;
 
@@ -630,21 +636,14 @@ STDEHANDLER(CreateBuildingEvent)
 		if (seg && !seg->TestLastShown(player, 10000)) 
 		{
 			so = new SlicObject("GCMinSatsReachedUs");
-			so->AddRecipient(player);
 			so->AddPlayer(player);
+			so->AddRecipient(player);
 			g_slicEngine->Execute(so);
-		}
-		
-		seg = g_slicEngine->GetSegment("GCMinSatsReachedThem");
-		for (i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) 
-		{
-			if (seg && !seg->TestLastShown(i, 10000) && i != player) 
-			{
-				so = new SlicObject("GCMinSatsReachedThem");
-				so->AddRecipient(i);
-				so->AddPlayer(player);
-				g_slicEngine->Execute(so);
-			}
+
+			so	= new SlicObject("GCMinSatsReachedThem");
+			so->AddPlayer(player);
+			so->AddAllRecipientsBut(player);
+			g_slicEngine->Execute(so);
 		}
 #endif
 	}
@@ -676,18 +675,11 @@ STDEHANDLER(CreateBuildingEvent)
 			so->AddRecipient(player);
 			so->AddPlayer(player);
 			g_slicEngine->Execute(so);
-		}
 	
-		seg = g_slicEngine->GetSegment("GCMinCoresReachedThem");
-		for(i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) 
-		{
-			if (seg && !seg->TestLastShown(i, 10000) && i != player) 
-			{
-				so = new SlicObject("GCMinCoresReachedThem");
-				so->AddRecipient(i);
-				so->AddPlayer(player);
-				g_slicEngine->Execute(so);
-			}
+			so = new SlicObject("GCMinCoresReachedThem");
+			so->AddPlayer(player);
+			so->AddAllRecipientsBut(player);
+			g_slicEngine->Execute(so);
 		}
 #endif
 	}
@@ -743,9 +735,9 @@ STDEHANDLER(CreateWonderEvent)
 #else
 		// Notify the other players that they have to hurry to win.
 		// Starting at 1: the Barbarians do not have to be notified.
-		for (sint32 i = 1; i < g_theProfileDB->GetMaxPlayers(); ++i)
+		for (sint32 i = 1; i < k_MAX_PLAYERS; ++i)
 		{
-			if (g_player[i] && (i != c.GetOwner()))
+			if (g_player[i] && !g_player[i]->IsDead() && (i != c.GetOwner()))
 			{
 				SlicObject * so	= new SlicObject("GCMustDiscoverGaiaController");
 #endif
