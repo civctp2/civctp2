@@ -157,11 +157,12 @@ void NewTurnCount::StartNextPlayer(bool stop)
 			stop = true;
 		}
 
-		
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
-		   PLAYER_TYPE_ROBOT) {
-			g_turn->SendNextPlayerMessage();
-		}
+		// JJB cut out the following and moved
+		// to PlayerEvent.cpp
+		//if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
+		//   PLAYER_TYPE_ROBOT) {
+		//	g_turn->SendNextPlayerMessage();
+		//}
 		
 		g_director->NextPlayer(); 
 		
@@ -222,10 +223,10 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	} else {
 
 		
+
 		
 		g_director->NextPlayer();
 	}
-
 	
 	g_thePollution->BeginTurn();
 }

@@ -329,6 +329,14 @@ STDEHANDLER(FinishBeginTurnEvent)
 	DPRINTF(k_DBG_GAMESTATE, ("It's player %d's turn - year %d.\n", p->m_owner, p->GetCurRound()));
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", p->m_gold->GetLevel()));
 
+	// JJB added the following to save in a PBEM game:
+	// moved from newturncount.cpp where it was too early
+	if((g_turn->IsHotSeat() || g_turn->IsEmail()) &&
+	  g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
+	  PLAYER_TYPE_ROBOT) {
+		g_turn->SendNextPlayerMessage();
+	}
+	
 	if (g_theProfileDB->IsAutoSave()) {
 		
 		if (p->m_playerType != PLAYER_TYPE_ROBOT) {
