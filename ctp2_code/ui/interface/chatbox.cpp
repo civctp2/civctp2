@@ -1,5 +1,35 @@
 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : user interface for chatbox
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - added toggles for army and cell text graphic options. PFT, 07 Mar 05
+//
+//
+//----------------------------------------------------------------------------
 #include "c3.h"
 
 #include "aui_surface.h"
@@ -60,6 +90,10 @@ extern World		*g_theWorld;
 
 #include "TiledMap.h"
 extern TiledMap		*g_tiledMap;
+
+#if !defined ACTIVISION_ORIGINAL//PFT 07 Mar 05
+#include "gfx_options.h"
+#endif
 
 ChatBox				*g_chatBox = NULL;
 extern MBCHAR g_slic_filename[_MAX_PATH];
@@ -525,8 +559,27 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			}
 		}
 	}
+#if !defined ACTIVISION_ORIGINAL //PFT 07 Mar 05
+    else
+	if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) {
+		
+        if(g_graphicsOptions->IsArmyTextOn()){
+			g_graphicsOptions->ArmyTextOff();
+        }
+		else
+            g_graphicsOptions->ArmyTextOn();
+	}
 
+    else
+	if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive()) {
 
+		if(g_graphicsOptions->IsCellTextOn()){
+			g_graphicsOptions->CellTextOff();
+        }
+		else
+            g_graphicsOptions->CellTextOn();
+	}
+#endif
 	return FALSE;
 }
 
