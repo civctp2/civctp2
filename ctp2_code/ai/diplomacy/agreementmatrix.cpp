@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Input checks corrected, preventing a crash to desktop.
+// - Made some sizes unsigned, to allow more than 28 players.
 //
 //----------------------------------------------------------------------------
 
@@ -97,7 +98,7 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 	
 	
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	sint16 index;
 	PLAYER_INDEX senderId;
 	PLAYER_INDEX receiverId;
@@ -105,6 +106,12 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 		{
 			senderId = old_agreements[index].senderId;
 			receiverId = old_agreements[index].receiverId;
+#else
+	for (size_t index = 0; index < old_agreements.size(); index++ )
+		{
+			PLAYER_INDEX const	senderId	= old_agreements[index].senderId;
+			PLAYER_INDEX const	receiverId	= old_agreements[index].receiverId;
+#endif
 			if (senderId > -1 && senderId < m_maxPlayers &&
 				receiverId > -1 && receiverId < m_maxPlayers &&
 				g_player[senderId] && !g_player[senderId]->IsDead() &&
@@ -119,6 +126,7 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 
 void AgreementMatrix::Load(CivArchive & archive)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	sint16 i,count;
 	ai::Agreement agreement;
 
@@ -134,12 +142,26 @@ void AgreementMatrix::Load(CivArchive & archive)
 		archive.Load((uint8 *)&agreement, sizeof(ai::Agreement));
 		m_agreements[i] = agreement;
 	}
+#else
+	archive >> m_maxPlayers;
+
+	uint16	count;
+	archive >> count;
+	m_agreements.resize(count);
+
+	for (size_t i = 0; i < count; ++i)
+	{
+		archive.Load(reinterpret_cast<uint8 *>(&(m_agreements[i])),
+					 sizeof(ai::Agreement)
+					);
+	}
+#endif
 }
 
 
 void AgreementMatrix::Save(CivArchive & archive) const
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	archive << (sint16) m_maxPlayers;
 
 	
@@ -149,6 +171,17 @@ void AgreementMatrix::Save(CivArchive & archive) const
 	{
 		archive.Store((uint8 *) &(m_agreements[i]), sizeof(ai::Agreement));
 	}
+#else
+	archive << m_maxPlayers;
+
+	Assert(m_agreements.size() < 0x10000);	// Report when it is too large.
+	archive << static_cast<uint16>(m_agreements.size());
+
+	for (size_t i = 0; i < m_agreements.size(); ++i)
+	{
+		archive.Store((uint8 *) &(m_agreements[i]), sizeof(ai::Agreement));
+	}
+#endif
 }
 
 
@@ -521,7 +554,11 @@ void AgreementMatrix::SetAgreementFast(sint32 index, const ai::Agreement &agreem
 
 void AgreementMatrix::ClearAgreementsInvolving(const PLAYER_INDEX playerId)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	for (sint16 i = 0; i < m_agreements.size(); i++)
+#else
+	for (size_t i = 0; i < m_agreements.size(); i++)
+#endif
 	{
 		if ((m_agreements[i].senderId == playerId) ||
 			(m_agreements[i].receiverId == playerId))
