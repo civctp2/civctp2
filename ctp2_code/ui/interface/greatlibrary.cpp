@@ -21,6 +21,9 @@
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
 //
+// _JAPANESE (implies !ACTIVISION_ORIGINAL)
+// - Handle Japanese 2-byte character input data.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,15 +35,10 @@
 // - Clears the research goal of the player, when an item is selected that
 //   enabling advance has been researched already, by Martin Gühmann.
 // - The tech goal can now also set for tile improvements, by Martin Gühmann.
+// - Handle Japanese input data, by t.s. (2003.12).
+// - Memory leaks repaired at the root.
 //
 //----------------------------------------------------------------------------
-
-/*
-	fixed for japanese by t.s. 2003.12
-		(fix to text can contain single '[')
-	fix void GreatLibrary::Load_Great_Library()
-*/
-
 
 #include "c3.h"
 
@@ -189,7 +187,9 @@ void GreatLibrary::Initialize_Great_Library_Data()
 	
 	const int GREAT_LIBRARY_HASH_SIZE = 2000;
 
-	
+#if !defined(ACTIVISION_ORIGINAL)	
+	delete m_great_library_info;
+#endif
 	m_great_library_info = new Text_Hasher<char *> 
 		(
 			GREAT_LIBRARY_HASH_SIZE,
@@ -215,6 +215,9 @@ void GreatLibrary::Shutdown_Great_Library_Data()
 {
 	
 	delete m_great_library_info;
+#if !defined(ACTIVISION_ORIGINAL)
+	m_great_library_info = NULL;
+#endif
 }
 
 
@@ -236,7 +239,7 @@ enum Read_Library_State
 
 void GreatLibrary::Load_Great_Library()
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	// Unused code: old path handling?
 	char gl_path[512];
 
 	MBCHAR path[_MAX_PATH];
@@ -249,7 +252,13 @@ void GreatLibrary::Load_Great_Library()
 
 	
 	sprintf(gl_path, "%s\\Great_Library.txt", path);
-
+#else
+	Assert(m_great_library_info);	// Using m_great_library_info-> later on.
+	if (!m_great_library_info)
+	{
+		return;
+	}
+#endif
 	
 	FILE * great_library = c3files_fopen(C3DIR_GL, "Great_Library.txt", "r");
 

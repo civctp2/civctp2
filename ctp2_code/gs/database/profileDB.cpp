@@ -27,9 +27,9 @@
 //
 // - Option added to enable viewing info on actions that are too expensive.
 // - Option added to close a messagebox automatically on eyepoint clicking.
+// - Option added to choose a color set.
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "c3errors.h"
@@ -70,6 +70,7 @@ extern Diplomacy_Log *g_theDiplomacyLog;
 ProfileDB::ProfileDB()
 #if !defined(ACTIVISION_ORIGINAL)
 :	m_closeEyepoint(FALSE),
+	m_colorSet(0),
 	m_showExpensive(FALSE)
 #endif
 {
@@ -375,6 +376,7 @@ ProfileDB::ProfileDB()
 #if !defined(ACTIVISION_ORIGINAL)
 	Var("CloseOnEyepoint", PV_BOOL, &m_closeEyepoint, NULL);
 	Var("ShowExpensive", PV_BOOL, &m_showExpensive, NULL);
+	Var("ColorSet", PV_NUM, &m_colorSet, NULL, false);
 #endif
 }
 

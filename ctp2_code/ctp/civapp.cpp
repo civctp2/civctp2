@@ -61,10 +61,10 @@
 //----------------------------------------------------------------------------
 // 
 // - When quitting to New Game, go to main menu rather than SP screen
-// - Removed cleanup code for SP screen
-//   (JJB)
-// - Fixed another repetitive memory leak in the Great Libary caused by 
-//   savegame loading, by Martin Gühmann.
+// - Removed cleanup code for SP screen (JJB)
+// - Removed some of Martin's library cleanup code, after correcting the 
+//   problem at the root in GreatLibrary.cpp.
+// - Used the new ColorSet option to select civilisation colors.
 //
 //----------------------------------------------------------------------------
 
@@ -471,6 +471,48 @@ extern sint32 g_scenarioUsePlayerNumber;
 
 bool g_tempLeakCheck = false;
 sint32 g_allocatedAtStart;
+
+#if !defined(ACTIVISION_ORIGINAL)
+
+extern ColorSet	*			g_colorSet;	// TODO: export from ColorSet.h
+
+namespace
+{
+
+//----------------------------------------------------------------------------
+//
+// Name       : SelectColorSet
+//
+// Description: Select which color set (colors##.txt file) to use.
+//
+// Parameters : -
+//
+// Globals    : g_theProfileDB	: user preferences (read)
+//				g_colorSet		: color set in use during the game (updated)
+//
+// Returns    : -
+//
+// Remark(s)  : - When the user preference is invalid, color set 0 is used.
+//				- The existence of the file is not checked.
+//
+//----------------------------------------------------------------------------
+
+void SelectColorSet(void)
+{
+
+	sint32	useColorSet = g_theProfileDB->GetValueByName("ColorSet");
+
+	if ((useColorSet < 0) || (useColorSet >= k_MAX_COLOR_SET))
+	{
+		useColorSet = 0;
+	}
+
+	g_colorSet->Import(useColorSet);
+}
+
+} // namespace
+
+#endif	// ACTIVISION_ORIGINAL
 
 void check_leak()
 {
@@ -1593,15 +1635,7 @@ sint32 CivApp::CleanupAppUI(void)
 
 	
 	
-/*#if !defined(ACTIVISION_ORIGINAL)
-//So far this is commented out. Last time it seemed 
-//to be harmfull. Maybe there is still something missing.
-//Added by Martin Gühmann to prevent a memory leak
-//that would appear if the Great Libary is cleaned up
-//alone.
-		GreatLibrary::Shutdown_Great_Library_Data();
-#endif*/
-		greatlibrary_Cleanup();
+	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
 #if defined(ACTIVISION_ORIGINAL)
@@ -2028,9 +2062,11 @@ sint32 CivApp::InitializeGameUI(void)
 {
 	AUI_ERRCODE		auiErr;
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	g_colorSet->Import(0);
-	
+#else
+	SelectColorSet();
+#endif	
 
 	
 	
@@ -2239,11 +2275,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		InitializeAppDB((*(CivArchive *)(NULL)));
 
 		
-#if !defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann to fix a massive memory leak in the 
-//Great Libary by loading scenarios
-		GreatLibrary::Shutdown_Great_Library_Data();
-#endif
 		greatlibrary_Cleanup();
 		GreatLibrary::Initialize_Great_Library_Data();
 	}
@@ -2532,8 +2563,11 @@ sint32 InitializeSpriteEditorUI(void)
 	AUI_ERRCODE		auiErr;
 	sint32          errcode;
 	
+#if defined(ACTIVISION_ORIGINAL)
 	g_colorSet->Import(0);
-	
+#else
+	SelectColorSet();
+#endif	
 	
 	
 
@@ -2919,13 +2953,8 @@ AttractWindow::Cleanup();
 	
 	
 
-/*#if !defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann to prevent a memory leak
-//that would appear if the Great Libary is cleaned up
-//alone.
-		GreatLibrary::Shutdown_Great_Library_Data();
-#endif*/
-		greatlibrary_Cleanup();
+	
+	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
 #if defined(ACTIVISION_ORIGINAL)
@@ -3639,12 +3668,6 @@ sint32 CivApp::LoadSavedGame(MBCHAR *name)
 		InitializeAppDB((*(CivArchive *)(NULL)));
 
 		
-#if !defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann to prevent a memory leak
-//that would appear if the Great Libary is cleaned up
-//alone.
-		GreatLibrary::Shutdown_Great_Library_Data();
-#endif
 		greatlibrary_Cleanup();
 		GreatLibrary::Initialize_Great_Library_Data();
 		
