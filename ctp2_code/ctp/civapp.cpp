@@ -1,4 +1,46 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Main application initilisation, processing, and cleanup.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _DEBUG
+// - Generates debug information when set.
+//
+// _DEBUG_MEMORY
+// _MEMORYLOGGING
+// - Generates extra memory debug information when both set, and _DEBUG set.
+//
+// _NO_GAME_WATCH
+// - Generates a game watch file when not set.  
+//
+// _WAS_ABOUT_TEST_WHEN_DAN_GOT_ME_REPRO_STEPS
+// - Have to ask Activision for this one.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Keep the user's leader name when the data is consistent.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "civ3_main.h"
@@ -1416,8 +1458,29 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	
 	CivScenarios::Initialize();
 
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	g_theProfileDB->DefaultSettings();
+#else
+	{
+		// Maintain consistency between the CivIndex and CivName entries.
+		// When inconsistent, the CivIndex is leading.
+
+		CIV_INDEX const			userCivIndex	= g_theProfileDB->GetCivIndex();
+		MBCHAR const * const	dbCivName		= 
+			g_theStringDB->GetNameStr
+				(g_theCivilisationDB->GetPluralCivName(userCivIndex));
+
+		if (0 == strcmp(dbCivName, g_theProfileDB->GetCivName()))
+		{
+			// No action: keep the leader name of the user.
+		}
+		else
+		{
+			// Restore civilisation default country and leader names.
+			g_theProfileDB->DefaultSettings();
+		}
+	}
+#endif
 
 	
 	StartMessageSystem();
