@@ -2229,7 +2229,10 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		
 		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
+			//added by Martin Gühmann
+			if(HIDE(g_theResourceDB, index)) continue;
 			
+
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theResourceDB->GetName(
 						g_theResourceDB->m_alphaToIndex[ index ])), index);
 
