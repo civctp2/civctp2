@@ -1,3 +1,50 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : Text file
+// Description  : The AI startegy's data
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// Note: Possibly incomplte
+//
+// - Added STRATEGY_TOO_MANY_CITIES and STRATEGY_NO_REVOLUTON to allow the AI
+//   to adjust its strategy if it is too many cities and if it has too many 
+//   cities and the wonder build that gives revolting cities to the wonder
+//   owner.
+// - Added new goals so that the AI can use the according orders.
+// - Reduced garrison counts to free the according units to other tasks.
+// - Reduced MinSettleDistance if it was 7 to 6 to avoid gaps in the territory
+//   of the AI.
+// - Doubled SeaTransportUnitsCount for the default strategies so that the AI 
+//   has more transporters available. This is only good for maps with more 
+//   than one continent. Some source code modifications are necessary.
+// - Increased SpecialUnitsCount so that the AI builds more special units.
+//   However here seems to be something broken as the AI only builds a few
+//   special units.
+// - Set EntertainerPercent to 0 in all PopAssignmentElement's, as it stands
+//   now full happiness is not a very big advantage and partial happiness
+//   doesn't add so much. And a minimum amount of entertainers is added 
+//   anyway to keep the city from rioting.
+// - Lowered MinimumHappiness to 72 so that the AI adjusts the sliders later.
+// - Redesigned BuildListSequenceElement entries based on MedPack/ApolytonPack/GoodMod
+// - Replaced build list by those from GoodMod/Mymod, this sepeartes defense 
+//   and offense build lists and seperates the special untit build lists. So
+//   that there are now civs building Abolitionists.
+//
+//----------------------------------------------------------------------------
+
 # 24
 
 STRATEGY_DEFAULT {
@@ -30,7 +77,7 @@ STRATEGY_DEFAULT {
         FarmerPercent       0.4
         LaborerPercent      0.2
         MerchantPercent     0.1
-        EntertainerPercent  0.1
+        EntertainerPercent  0.0 // From 0.1, minimum needed entertainers are set automaticly
         ScientistPercent    0.2
 
         Bottom 0.2 GrowthCities
@@ -45,7 +92,7 @@ STRATEGY_DEFAULT {
         FarmerPercent       0.2
         LaborerPercent      0.2
         MerchantPercent     0.2
-        EntertainerPercent  0.2
+        EntertainerPercent  0.0 // From 0.2, minimum needed entertainers are set automaticly
         ScientistPercent    0.2
 
         Default
@@ -200,7 +247,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_RETREAT_SPECIAL     Priority  -600000  MaxEval   1  MaxExec   1 PerCity}
     GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority   450000  MaxEval  20  MaxExec   5 }
     GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority   460000  MaxEval  30  MaxExec  15 }
-    GoalElement { Goal GOAL_ADVERTISING		    Priority   450000  MaxEval   7  MaxExec   5 } //P1 added
+    GoalElement { Goal GOAL_ADVERTISING	        Priority   450000  MaxEval   7  MaxExec   5 } //P1 added
     GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
     GoalElement { Goal GOAL_POISON_CITY         Priority   460000  MaxEval   7  MaxExec   5 } //P1 added
     GoalElement { Goal GOAL_THROW_PARTY         Priority   440000  MaxEval   5  MaxExec   3 } //MG added
@@ -224,42 +271,42 @@ STRATEGY_DEFAULT {
     // cells with settle scores below this threshold will not be used
     MinSettleScore 600
 
-	//
-	// BUILD LISTS
-	//
+    //
+    // BUILD LISTS
+    //
 
-	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
-	// used when deciding what city to rush buy in
-	RushBuyThreatBonus 10
+    // Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+    // used when deciding what city to rush buy in
+    RushBuyThreatBonus 10
 
-	// Percent of gold expenses last turn to keep in reserve when rush buying
-	RushBuyReservePercent 2.0
+    // Percent of gold expenses last turn to keep in reserve when rush buying
+    RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
     UnitSupportPercent      0.15
 
-	// Unit Percents must total to 1 (100%)
-	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+    // Unit Percents must total to 1 (100%)
+    OffensiveUnitsPercent 0.20
+    DefensiveUnitsPercent 0.40
+    RangedUnitsPercent    0.40
+    SeaUnitsPercent       0.0
+    AirUnitsPercent       0.0
 
     // Number of special units that should be built
     SettlerUnitsCount       4
-    SeaTransportUnitsCount  3
+    SeaTransportUnitsCount  6
     AirTransportUnitsCount  1
     SpecialUnitsCount       6
 
-	// Do not certain items in cities where if it takes too many turns
-	MaxSettlerBuildTurns 30
-	MaxUnitBuildTurns 20
-	MaxWonderBuildTurns 35
+    // Do not certain items in cities where if it takes too many turns
+    MaxSettlerBuildTurns 30
+    MaxUnitBuildTurns 20
+    MaxWonderBuildTurns 35
 
-	// maximum percent of conventional units to build before building
-	// special units of specified type
-	BuildTransportProductionLevel 0.25
-	BuildSettlerProductionLevel 0.25
+    // maximum percent of conventional units to build before building
+    // special units of specified type
+    BuildTransportProductionLevel 0.25
+    BuildSettlerProductionLevel 0.25
 
     // Types of standard units that should be built
     OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
@@ -269,16 +316,19 @@ STRATEGY_DEFAULT {
     AirUnitList         UNIT_BUILD_LIST_AIR
 
     // Types of special units that should be built
-    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
+    SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
-    AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL
-    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+    AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
+    SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
+    FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
-	// minimum number of units to keep in cities as a garrison
+    // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
+
+    // For each city with an empty build queue, build from
+    // first sequence that applies
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -292,39 +342,39 @@ STRATEGY_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 9000
+        Priority 6000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
-        Bottom 0.2
+        Top 0.4
         ProductionCities
         Advice BUILD_PRODUCTION_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 6000
+        Priority 4000
         BuildListSequence BUILD_LIST_SEQUENCE_GOLD
-        Bottom 0.2
+        Top 0.4
         CommerceCities
         Advice BUILD_GOLD_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 4000
+        Priority 7000
         BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
         Top 0.2 
-        ThreatenedCities
+        ProductionCities
         Advice BUILD_OFFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 8000
+        Priority 5000
         BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
-        Top 0.1 
-        ProductionCities
+        Top 0.4
+        CommerceCities
         Advice BUILD_SCIENCE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 5000
+        Priority 8000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         Top 0.1 
         ProductionCities
@@ -332,17 +382,17 @@ STRATEGY_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 7000
+        Priority 9000
         BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-        Bottom 0.2
-        PowerCities	  
+        Top 0.2
+        ThreatenedCities
         Advice BUILD_DEFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 3000
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
-        Bottom 0.2
+        Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
     }
@@ -577,11 +627,11 @@ STRATEGY_BARBARIAN {
 
 	// For each city with an empty build queue, build from first sequence that applies
 
-	BuildListSequenceElement {
-      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
-	  Top 1.0 
-      ProductionCities
-	  Advice BUILD_OFFENSE_ADVICE
+    BuildListSequenceElement {
+        BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+        Top 1.0 
+        ProductionCities
+        Advice BUILD_OFFENSE_ADVICE
     }
 
 	//
@@ -629,6 +679,10 @@ STRATEGY_SEIGE {
     // Percent of civilization support dedicated to units
     UnitSupportPercent 0.35
 
+    // Types of special units that should be built
+    SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
+
     // Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.30
     DefensiveUnitsPercent 0.20
@@ -650,20 +704,20 @@ STRATEGY_SEIGE {
     // multiplied by #rounds to target
 	DistanceModifierFactor		     -150
 
-	BuildListSequenceElement {
-	  Priority 10500
-      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
-      Top 0.35
-	  ProductionCities
-	  Advice BUILD_OFFENSE_ADVICE
+    BuildListSequenceElement {
+        Priority 11000 //WW from 10500
+        BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+        Top 0.5   //WW from .35
+        ProductionCities
+        Advice BUILD_OFFENSE_ADVICE
     }
 
-	BuildListSequenceElement {
-	  Priority 11000
-      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-	  Top 0.35 
-      ThreatenedCities
-	  Advice BUILD_DEFENSE_ADVICE
+    BuildListSequenceElement {
+        Priority 10500 //WW from 11000
+        BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+        Top 0.2       //WW from .35
+        ThreatenedCities
+        Advice BUILD_DEFENSE_ADVICE
     }
 
     //
@@ -706,6 +760,7 @@ STRATEGY_ATTACK {
     // Percent of civilization support dedicated to units
     UnitSupportPercent 0.35
 
+
     // Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.30
     DefensiveUnitsPercent 0.20
@@ -718,6 +773,9 @@ STRATEGY_ATTACK {
     AirTransportUnitsCount 4
     SpecialUnitsCount      8
 
+    // Types of special units that should be built
+    SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
@@ -748,20 +806,20 @@ STRATEGY_ATTACK {
 	//  us from launching, specify 0.75)
 	PreemptiveStrikeSuperiorityRatio 0.75
 
-	BuildListSequenceElement {
-	  Priority 10500
-      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
-      Top 0.35
-	  ProductionCities
-	  Advice BUILD_OFFENSE_ADVICE
+    BuildListSequenceElement {
+        Priority 11000        //WW from 10500
+        BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+        Top 0.5   //WW from .35
+        ProductionCities
+        Advice BUILD_OFFENSE_ADVICE
     }
 
-	BuildListSequenceElement {
-	  Priority 11000
-      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-	  Top 0.35 
-      ThreatenedCities
-	  Advice BUILD_DEFENSE_ADVICE
+    BuildListSequenceElement {
+        Priority 10500        //WW from 11000
+        BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+        Top 0.2       //WW from .35
+        ThreatenedCities
+        Advice BUILD_DEFENSE_ADVICE
     }
 
     //
@@ -804,6 +862,9 @@ STRATEGY_DEFEND {
     // Percent of civilization support dedicated to units
     UnitSupportPercent 0.35
 
+    // Types of special units that should be built
+    AirTransportUnitList UNIT_BUILD_LIST_AIR
+
     // Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.10
     DefensiveUnitsPercent 0.40
@@ -816,20 +877,20 @@ STRATEGY_DEFEND {
     GoalElement { Goal GOAL_ATTACK              Priority   450000  MaxEval  25  MaxExec   3 }
     GoalElement { Goal GOAL_BOMBARD             Priority   452000  MaxEval   5  MaxExec   3 }
 
-	BuildListSequenceElement {
-	  Priority 10500
-      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
-      Top 0.35
-	  ProductionCities
-	  Advice BUILD_OFFENSE_ADVICE
+    BuildListSequenceElement {
+        Priority 10500
+        BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+        Top 0.5 //WW from .35
+        ProductionCities
+        Advice BUILD_OFFENSE_ADVICE
     }
 
-	BuildListSequenceElement {
-	  Priority 11000
-      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-	  Top 0.35 
-      ThreatenedCities
-	  Advice BUILD_DEFENSE_ADVICE
+    BuildListSequenceElement {
+        Priority 11000
+        BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+        Top 0.5 //WW from .7 
+        ThreatenedCities
+        Advice BUILD_DEFENSE_ADVICE
     }
 
     //
@@ -855,21 +916,21 @@ STRATEGY_DEFEND {
 
 STRATEGY_CAREFUL_START {
 
-	// Percent of civilization support dedicated to units
+    // Percent of civilization support dedicated to units
     UnitSupportPercent 0.30
 
-	// minimum number of units to keep in cities as a garrison
+    // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
 
 	// Set so early cities will build offensive units to explore with after a granary
-	BuildListSequenceElement {
-	  Priority 9100
-      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
-	  Top 0.6 
-      ProductionCities
-	  Advice BUILD_OFFENSE_ADVICE
+    BuildListSequenceElement {
+        Priority 9100
+        BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+        Top 0.6 
+        ProductionCities
+        Advice BUILD_OFFENSE_ADVICE
     }
 }
 
@@ -883,13 +944,13 @@ STRATEGY_AGRESSIVE_START {
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
 
-	// Set so early cities will build offensive units to explore before a granary
-	BuildListSequenceElement {
-	  Priority 10100
-      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
-	  Top 0.6 
-      ProductionCities
-	  Advice BUILD_OFFENSE_ADVICE
+    // Set so early cities will build offensive units to explore before a granary
+    BuildListSequenceElement {
+        Priority 10100
+        BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+        Top 0.6 
+        ProductionCities
+        Advice BUILD_OFFENSE_ADVICE
     }
 }
 
@@ -901,7 +962,7 @@ STRATEGY_ISLAND_NATION {
 	SeaUnitsPercent       0.30
 	AirUnitsPercent       0.00
 
-	SeaTransportUnitsCount 3
+	SeaTransportUnitsCount 6
 
 	// decreased maximum percent of conventional units to build before
 	// building special units of specified type
@@ -1018,7 +1079,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         FarmerPercent       0.3
         LaborerPercent      0.2
         MerchantPercent     0.1
-        EntertainerPercent  0.1
+        EntertainerPercent  0.0 // From 0.1, minimum needed entertainers are set automaticly
         ScientistPercent    0.3
 
         Default
@@ -1220,7 +1281,7 @@ STRATEGY_SCIENTIST_DEFAULT {
 
     // Number of special units that should be built
     SettlerUnitsCount       4
-    SeaTransportUnitsCount  3
+    SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
     SpecialUnitsCount       6
 
@@ -1242,13 +1303,13 @@ STRATEGY_SCIENTIST_DEFAULT {
     AirUnitList         UNIT_BUILD_LIST_AIR
 
     // Types of special units that should be built
-    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
-    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
-    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
-    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+    SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
+    SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_SCIENTIST
+    FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
-	// minimum number of units to keep in cities as a garrison
+    // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
@@ -1256,76 +1317,85 @@ STRATEGY_SCIENTIST_DEFAULT {
     // For each city with an empty build queue, build from
     // first sequence that applies
 
-	BuildListSequenceElement {
-	  Priority 10000
-      BuildListSequence BUILD_LIST_SEQUENCE_GROWTH
-	  Bottom 0.2 
-	  GrowthCities
-	  Advice BUILD_GROWTH_ADVICE
-    }
-
-	BuildListSequenceElement {
-	  Priority 9000
-      BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
-      Bottom 0.2
-	  ProductionCities
-	  Advice BUILD_PRODUCTION_ADVICE
+    BuildListSequenceElement {
+        Priority 10000
+        BuildListSequence BUILD_LIST_SEQUENCE_GROWTH
+        Bottom 0.2 
+        GrowthCities
+        Advice BUILD_GROWTH_ADVICE
     }
 
     BuildListSequenceElement {
-      Priority 8000
-      BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
-      Top 0.3
-      ProductionCities
-	  Advice BUILD_SCIENCE_ADVICE
+        Priority 5000
+        BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+        Top 0.4
+        ProductionCities
+        Advice BUILD_PRODUCTION_ADVICE
     }
 
     BuildListSequenceElement {
-      Priority 6000
-      BuildListSequence BUILD_LIST_SEQUENCE_GOLD
-	  Top 0.2 
-      CommerceCities
-	  Advice BUILD_GOLD_ADVICE
+        Priority 4000
+        BuildListSequence BUILD_LIST_SEQUENCE_GOLD
+        Top 0.4
+        CommerceCities
+        Advice BUILD_GOLD_ADVICE
     }
 
     BuildListSequenceElement {
-      Priority 7000
-      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-	  Bottom 0.2
-      PowerCities	  
-	  Advice BUILD_DEFENSE_ADVICE
+        Priority 7000
+        BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+        Top 0.2 
+        ProductionCities
+        Advice BUILD_OFFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-      Priority 4000
-      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
-	  Top 0.2 
-      ThreatenedCities
-	  Advice BUILD_OFFENSE_ADVICE
+        Priority 6000
+        BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
+        Top 0.4
+        CommerceCities
+        Advice BUILD_SCIENCE_ADVICE
     }
 
-	BuildListSequenceElement {
-      Priority 5000
-      BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
-	  Top 0.1 
-      ProductionCities
-	  Advice BUILD_WONDERS_ADVICE
+    BuildListSequenceElement {
+        Priority 0
+        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
+        Top 0.1 
+        ProductionCities
+        Advice BUILD_WONDERS_ADVICE
     }
 
-	BuildListSequenceElement {
-	  Priority 3000
-      BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
-	  Bottom 0.2
-	  HappyCities
-	  Advice BUILD_HAPPINESS_ADVICE
+    BuildListSequenceElement {
+        Priority 8000
+        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST
+        Top 0.1 
+        ProductionCities
+        Advice BUILD_WONDERS_ADVICE
     }
 
-	BuildListSequenceElement {
-	  Priority 2000
-      BuildListSequence BUILD_LIST_SEQUENCE_DEFAULT
-	  Default
-	  Advice BUILD_DEFAULT_ADVICE
+    BuildListSequenceElement {
+        Priority 9000
+        BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+        Top 0.2
+        ThreatenedCities
+        Advice BUILD_DEFENSE_ADVICE
     }
+
+    BuildListSequenceElement {
+        Priority 11000
+        BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        Bottom 0.1
+        HappyCities
+        Advice BUILD_HAPPINESS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 2000
+        BuildListSequence BUILD_LIST_SEQUENCE_DEFAULT
+        Default
+        Advice BUILD_DEFAULT_ADVICE
+    }
+
 
     //
     //  ADVANCE LIST
@@ -1440,7 +1510,7 @@ STRATEGY_MILITARIST_DEFAULT {
         FarmerPercent       0.1
         LaborerPercent      0.5
         MerchantPercent     0.1
-        EntertainerPercent  0.1
+        EntertainerPercent  0.0 // From 0.1, minimum needed entertainers are set automaticly
         ScientistPercent    0.2
 
         Top 0.2 ProductionCities
@@ -1455,7 +1525,7 @@ STRATEGY_MILITARIST_DEFAULT {
         FarmerPercent       0.4
         LaborerPercent      0.3
         MerchantPercent     0.1
-        EntertainerPercent  0.1
+        EntertainerPercent  0.0 // From 0.1, minimum needed entertainers are set automaticly
         ScientistPercent    0.1
 
         Bottom 0.2 GrowthCities
@@ -1470,7 +1540,7 @@ STRATEGY_MILITARIST_DEFAULT {
         FarmerPercent       0.3
         LaborerPercent      0.2
         MerchantPercent     0.2
-        EntertainerPercent  0.1
+        EntertainerPercent  0.0 // From 0.1, minimum needed entertainers are set automaticly
         ScientistPercent    0.2
 
         Default
@@ -1673,7 +1743,7 @@ STRATEGY_MILITARIST_DEFAULT {
 
     // Number of special units that should be built
     SettlerUnitsCount       1
-    SeaTransportUnitsCount  3
+    SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
     SpecialUnitsCount       6
 
@@ -1695,13 +1765,13 @@ STRATEGY_MILITARIST_DEFAULT {
     AirUnitList         UNIT_BUILD_LIST_AIR
 
     // Types of special units that should be built
-    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
-    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
-    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_MILITARIST
-    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+    SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
+    SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
+    FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
-	// minimum number of units to keep in cities as a garrison
+    // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
@@ -1718,19 +1788,19 @@ STRATEGY_MILITARIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 9000
+        Priority 6000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
-        Bottom 0.2
+        Top 0.4
         ProductionCities
         Advice BUILD_PRODUCTION_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 8000
-        BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-        Top 0.2
-        ThreatenedCities
-        Advice BUILD_DEFENSE_ADVICE
+        Priority 4000
+        BuildListSequence BUILD_LIST_SEQUENCE_GOLD
+        Top 0.4
+        CommerceCities
+        Advice BUILD_GOLD_ADVICE
     }
 
     BuildListSequenceElement {
@@ -1743,22 +1813,14 @@ STRATEGY_MILITARIST_DEFAULT {
 
     BuildListSequenceElement {
         Priority 5000
-        BuildListSequence BUILD_LIST_SEQUENCE_GOLD
-        Bottom 0.2
-        CommerceCities
-        Advice BUILD_GOLD_ADVICE
-    }
-
-    BuildListSequenceElement {
-        Priority 6000
         BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
-        Top 0.1 
-        ProductionCities
+        Top 0.4
+        CommerceCities
         Advice BUILD_SCIENCE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 4000
+        Priority 0
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         Top 0.1 
         ProductionCities
@@ -1766,9 +1828,25 @@ STRATEGY_MILITARIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 3000
+        Priority 8000
+        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_MILITARIST
+        Top 0.1 
+        ProductionCities
+        Advice BUILD_WONDERS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 9000
+        BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+        Top 0.2
+        ThreatenedCities
+        Advice BUILD_DEFENSE_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
-        Bottom 0.2
+        Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
     }
@@ -1923,7 +2001,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         FarmerPercent       0.2
         LaborerPercent      0.2
         MerchantPercent     0.3
-        EntertainerPercent  0.1
+        EntertainerPercent  0.0 // From 0.1, minimum needed entertainers are set automaticly
         ScientistPercent    0.2
 
         Default
@@ -2126,7 +2204,7 @@ STRATEGY_ECONOMIC_DEFAULT {
 
     // Number of special units that should be built
     SettlerUnitsCount       2
-    SeaTransportUnitsCount  3
+    SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
     SpecialUnitsCount       6
 
@@ -2148,13 +2226,13 @@ STRATEGY_ECONOMIC_DEFAULT {
     AirUnitList         UNIT_BUILD_LIST_AIR
 
     // Types of special units that should be built
-    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
-    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
-    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
-    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+    SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
+    SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_ECONOMIC
+    FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
-	// minimum number of units to keep in cities as a garrison
+    // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
@@ -2171,9 +2249,9 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 9000
+        Priority 5000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
-        Bottom 0.2
+        Top 0.4
         ProductionCities
         Advice BUILD_PRODUCTION_ADVICE
     }
@@ -2181,29 +2259,29 @@ STRATEGY_ECONOMIC_DEFAULT {
     BuildListSequenceElement {
         Priority 6000
         BuildListSequence BUILD_LIST_SEQUENCE_GOLD
-        Top 0.2
-        ProductionCities
+        Top 0.4
+        CommerceCities
         Advice BUILD_GOLD_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 4000
+        Priority 7000
         BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
         Top 0.2 
-        ThreatenedCities
+        ProductionCities
         Advice BUILD_OFFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 7000
+        Priority 4000
         BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
-        Top 0.1 
-        ProductionCities
+        Top 0.4
+        CommerceCities
         Advice BUILD_SCIENCE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 5000
+        Priority 0
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         Top 0.1 
         ProductionCities
@@ -2212,16 +2290,24 @@ STRATEGY_ECONOMIC_DEFAULT {
 
     BuildListSequenceElement {
         Priority 8000
+        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC
+        Top 0.1 
+        ProductionCities
+        Advice BUILD_WONDERS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 9000
         BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-        Bottom 0.2
-        PowerCities
+        Top 0.2
+        ThreatenedCities
         Advice BUILD_DEFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 3000
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
-        Bottom 0.2
+        Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
     }
@@ -2361,7 +2447,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         FarmerPercent       0.5
         LaborerPercent      0.1
         MerchantPercent     0.1
-        EntertainerPercent  0.1
+        EntertainerPercent  0.0 // From 0.1, minimum needed entertainers are set automaticly
         ScientistPercent    0.2
 
         Bottom 0.2 GrowthCities
@@ -2376,7 +2462,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         FarmerPercent       0.2
         LaborerPercent      0.3
         MerchantPercent     0.1
-        EntertainerPercent  0.1
+        EntertainerPercent  0.0 // From 0.1, minimum needed entertainers are set automaticly
         ScientistPercent    0.3
 
         Default
@@ -2578,7 +2664,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
 
     // Number of special units that should be built
     SettlerUnitsCount       2
-    SeaTransportUnitsCount  3
+    SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
     SpecialUnitsCount       6
 
@@ -2600,13 +2686,13 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     AirUnitList         UNIT_BUILD_LIST_AIR
 
     // Types of special units that should be built
-    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
-    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
-    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL
-    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+    SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
+    SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_ECOTOPIAN
+    FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
-	// minimum number of units to keep in cities as a garrison
+    // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
@@ -2623,9 +2709,9 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 9000
+        Priority 6000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
-        Bottom 0.2
+        Top 0.4
         ProductionCities
         Advice BUILD_PRODUCTION_ADVICE
     }
@@ -2633,29 +2719,29 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     BuildListSequenceElement {
         Priority 5000
         BuildListSequence BUILD_LIST_SEQUENCE_GOLD
-        Bottom 0.2
+        Top 0.4
         CommerceCities
         Advice BUILD_GOLD_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 4000
+        Priority 7000
         BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
         Top 0.2 
-        ThreatenedCities
+        ProductionCities
         Advice BUILD_OFFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 8000
+        Priority 4000
         BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
-        Top 0.1 
-        ProductionCities
+        Top 0.4
+        CommerceCities
         Advice BUILD_SCIENCE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 6000
+        Priority 0
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         Top 0.1 
         ProductionCities
@@ -2663,17 +2749,25 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 7000
+        Priority 8000
+        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN
+        Top 0.1 
+        ProductionCities
+        Advice BUILD_WONDERS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 9000
         BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-        Bottom 0.2
-        PowerCities
+        Top 0.2
+        ThreatenedCities
         Advice BUILD_DEFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 3000
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
-        Bottom 0.2
+        Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
     }
@@ -3029,7 +3123,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
 
     // Number of special units that should be built
     SettlerUnitsCount       2
-    SeaTransportUnitsCount  3
+    SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
     SpecialUnitsCount       5
 
@@ -3051,13 +3145,13 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     AirUnitList         UNIT_BUILD_LIST_AIR
 
     // Types of special units that should be built
-    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
-    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
-    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
-    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+    SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
+    SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_DIPLOMATIC
+    FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
-	// minimum number of units to keep in cities as a garrison
+    // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
@@ -3074,39 +3168,39 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 9000
+        Priority 5000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
-        Bottom 0.2
+        Top 0.4
         ProductionCities
         Advice BUILD_PRODUCTION_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 6000
+        Priority 4000
         BuildListSequence BUILD_LIST_SEQUENCE_GOLD
-        Bottom 0.2
+        Top 0.4
         CommerceCities
         Advice BUILD_GOLD_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 4000
+        Priority 7000
         BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
         Top 0.2 
-        ThreatenedCities
+        ProductionCities
         Advice BUILD_OFFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 8000
+        Priority 6000
         BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
-        Top 0.1 
-        ProductionCities
+        Top 0.4
+        CommerceCities
         Advice BUILD_SCIENCE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 5000
+        Priority 0
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         Top 0.1 
         ProductionCities
@@ -3114,17 +3208,25 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 7000
+        Priority 8000
+        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC
+        Top 0.1 
+        ProductionCities
+        Advice BUILD_WONDERS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 9000
         BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
-        Bottom 0.2
-        PowerCities	  
+        Top 0.2
+        ThreatenedCities
         Advice BUILD_DEFENSE_ADVICE
     }
 
     BuildListSequenceElement {
-        Priority 3000
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
-        Bottom 0.2
+        Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
     }

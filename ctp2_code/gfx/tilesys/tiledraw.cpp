@@ -44,7 +44,11 @@
 // - Road like tile improvements are drawn according to the real state
 //   instead to the state from the last visit. - Dec. 25th 2004 - Martin Gühmann
 // - Draws the city radius from the last visit instead the current one.
-//   - Dec. 26th 2004 - Martin Gühmann
+//   - Dec. 26th 2004 Martin Gühmann
+// - Positions that you own and are explored are now shown as yours.
+//   - Mar. 4th 2005 Martin Gühmann
+// - If fog of war is off or god mode is on all borders are now shown. Even 
+//   those of the civs you have no contact to. - Mar. 4th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -5804,6 +5808,9 @@ sint32 TiledMap::GetVisibleCellOwner(MapPoint &pos)
 	&& !g_god 
 	&& (g_player[g_selected_item->GetVisiblePlayer()] 
 	&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)
+#else
+// Added by Martin Gühmann
+	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
 #endif
 	){
 		UnseenCellCarton ucell;
@@ -5820,6 +5827,7 @@ uint32 TiledMap::GetVisibleCityOwner(MapPoint &pos)
 // Added by Martin Gühmann
 	if(!m_localVision->IsVisible(pos) 
 	// Show the city influence radius from the last visit.
+	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
 	){
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(pos, ucell)) {
@@ -5857,7 +5865,16 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 	if(pos.GetNeighborPosition(NORTHWEST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
+#if defined(ACTIVSION_ORIGINAL)
 		if(neighborOwner != myOwner && (visP->HasSeen(myOwner)) && g_theProfileDB->GetShowPoliticalBorders()) {
+#else
+		if(neighborOwner != myOwner 
+		&&(visP->HasSeen(myOwner)
+		|| g_fog_toggle // The sense of fog of and god mode is to see something.
+		|| g_god)
+		&& g_theProfileDB->GetShowPoliticalBorders()
+		){
+#endif
 			DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID);
 		}
 
@@ -5873,7 +5890,16 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 	if(pos.GetNeighborPosition(SOUTHWEST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
+#if defined(ACTIVISION_ORIGINAL)
 		if(neighborOwner != myOwner && visP->HasSeen(myOwner) && g_theProfileDB->GetShowPoliticalBorders()) {
+#else
+		if(neighborOwner != myOwner 
+		&&(visP->HasSeen(myOwner)
+		|| g_fog_toggle
+		|| g_god)
+		&& g_theProfileDB->GetShowPoliticalBorders()
+		){
+#endif
 			DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID);
 		}		
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
@@ -5888,7 +5914,16 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 	if(pos.GetNeighborPosition(NORTHEAST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
+#if defined(ACTIVISION_ORIGINAL)
 		if(neighborOwner != myOwner && visP->HasSeen(myOwner) && g_theProfileDB->GetShowPoliticalBorders()) {
+#else
+		if(neighborOwner != myOwner 
+		&&(visP->HasSeen(myOwner)
+		|| g_fog_toggle
+		|| g_god)
+		&& g_theProfileDB->GetShowPoliticalBorders()
+		){
+#endif
 			DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);
 		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
@@ -5903,7 +5938,16 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 	if(pos.GetNeighborPosition(SOUTHEAST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
+#if defined(ACTIVISION_ORIGINAL)
 		if(neighborOwner != myOwner && visP->HasSeen(myOwner) && g_theProfileDB->GetShowPoliticalBorders()) {
+#else
+		if(neighborOwner != myOwner 
+		&&(visP->HasSeen(myOwner)
+		|| g_fog_toggle
+		|| g_god)
+		&& g_theProfileDB->GetShowPoliticalBorders()
+		){
+#endif
 			DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID);
 		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);

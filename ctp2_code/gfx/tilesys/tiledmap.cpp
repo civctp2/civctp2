@@ -2922,11 +2922,7 @@ void TiledMap::PaintUnitActor(UnitActor *actor, BOOL fog)
 	Assert(actor != NULL);
 	if (actor == NULL) return;
 	
-#if 1 || defined(ACTIVISION_ORIGINAL)
 	if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
-#else
-	if (1 || (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())))
-#endif
 	{
 		
 		if (actor->Draw(fog)) {

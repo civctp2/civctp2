@@ -36,6 +36,9 @@
 // - The radar map now shows the current terrain and the current units and
 //   cities if fog of war is off, otherwise it only displays the kind of 
 //   information it should display. - Dec. 25th 2004 - Martin Gühmann
+// - Borders on the minimap are now shown if fog of war is off or god mode
+//   is on, even if the there is no contact to that civilisation.
+//   - Mar. 4th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -85,6 +88,7 @@ extern World			*g_theWorld;
 
 #if !defined(ACTIVISION_ORIGINAL)
 extern sint32 g_fog_toggle;
+extern sint32 g_god;
 #endif
 
 static const unsigned char k_EAST_BORDER_FLAG		= 0x01;
@@ -684,11 +688,20 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	if(owner < 0)
 		return(borderFlags);
 
-	
+#if defined(ACTIVISION_ORIGINAL)
 	if(owner != player->m_owner && 
 	   !player->m_hasGlobalRadar &&
 	   !Scheduler::CachedHasContactWithExceptSelf(player->m_owner, owner))
 		return(borderFlags);
+#else
+	if(owner != player->m_owner
+	&& !player->m_hasGlobalRadar 
+	&& !Scheduler::CachedHasContactWithExceptSelf(player->m_owner, owner)
+	&& !g_fog_toggle // Don't forget if fog of war is off
+	&& !g_god
+	)
+		return(borderFlags);
+#endif
 
 	
 	MapPoint neighborPosition;

@@ -35,6 +35,11 @@
 //   unit property so that modders can make  settling terrain-specific. - E
 // - Fixed a broken comparision in UDUnitTypeCanSettle so that it now allows 
 //   settling again. - Mar. 1st 2005 Martin Gühmann
+// - When a city is conquered vision is now removed afterwards the city data
+//   has changed hand. That allows the creation of UnseenCell's with the 
+//   current owner. If you loose a city to someone else you know who the 
+//   b*st*rd is. When changing hands the city isn't anymore removed and
+//   then added back to the wolrd. - Mar. 4th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -1379,7 +1384,6 @@ sint32 UnitData::CanCounterBombard(CellUnitList &defender) const
 //              be able to actively defend.
 //
 //----------------------------------------------------------------------------
-
 sint32 UnitData::CanActivelyDefend(CellUnitList &attacker) const
 {
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
@@ -2078,8 +2082,11 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 			}
 		}
 	}
-   g_theWorld->RemoveUnitReference(m_pos, me);     
-   RemoveUnitVision();
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+   g_theWorld->RemoveUnitReference(m_pos, me); // Removing the city from the world ...
+   RemoveUnitVision(); // Needs to be done later.
+#endif
    
 	sint32 killedBy = newo;
 
@@ -2103,8 +2110,10 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
    
    m_city_data->DestroyCapitol();
  
-
-   g_theWorld->InsertCity(m_pos, me);
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+   g_theWorld->InsertCity(m_pos, me); // ... just to insert it later again is a complete waste of time. 
+#endif
    BOOL revealedUnexplored;
 #if 0
 	double oldVisionRange = (g_theUnitDB->Get(m_type)->m_vision_range);
@@ -2158,6 +2167,8 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 	   }
    }
 
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
    m_owner = newo; 
    AddUnitVision(revealedUnexplored);
    m_city_data->ResetCityOwner(m_owner);
@@ -2168,6 +2179,22 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 
    Assert(CAUSE_NEW_CITY_SETTLE != nc_cause); 
    g_player[newo]->AddCityReferenceToPlayer(me, nc_cause); 
+#else
+// Added by Martin Gühmann
+   m_city_data->ResetCityOwner(newo);
+
+   Assert(CAUSE_NEW_CITY_SETTLE != nc_cause);
+   g_player[newo]->AddCityReferenceToPlayer(me, nc_cause);
+
+   RemoveUnitVision(); // Now remove unit vision, the old owner knows what happend.
+   m_owner = newo; // Now change owner
+   AddUnitVision(revealedUnexplored);
+
+   static UnitDynamicArray revealed_units;
+   revealed_units.Clear();
+   DoVision(revealed_units);
+
+#endif
 
 #if 0
 	

@@ -37,6 +37,12 @@
 //   - Last 4 on Dec. 22nd 2004 Martin Gühmann
 // - InfoBar does not display anymore players without contact and player
 //   fog of war is toggled on. - Dec. 24th 2004 Martin Gühmann
+// - Game doesn't crash anymore if the the cursor is moved over the city
+//   that belonged to the selected player and the sprite is missing.
+// - Game doesn't crash anymore if the cursor is moved over a city that is
+//   displayed as city belonging to a civilisation that was destroyed.
+//   - Last 2 on Mar. 4th 2004 Martin Gühmann
+//
 //
 //----------------------------------------------------------------------------
 
@@ -217,7 +223,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 		}
 #else
 // Added by Martin Gühmann
-		// Use the information from the last visit iof that cell
+		// Use the information from the last visit of that cell
 		sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(point));
 
 		if(owner >= 0 
@@ -245,10 +251,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 		UnseenCellCarton ucell;
 		BOOL hasUnseen = FALSE;
 		if(!g_tiledMap->GetLocalVision()->IsVisible(point) 
-		&& !g_fog_toggle 
-		&& !g_god 
-		&& (g_player[g_selected_item->GetVisiblePlayer()] 
-		&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)) {
+		){
 			hasUnseen = g_tiledMap->GetLocalVision()->GetLastSeen(point, ucell);
 		}
 
@@ -270,13 +273,22 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				if(g_theStringDB->GetNameStr("INFOBAR_CITY")) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_CITY"));
 				}
-				Concat(ucell.m_unseenCell->GetCityName());
+				Assert(ucell.m_unseenCell->GetCityName());
+				if(ucell.m_unseenCell->GetCityName()){
+					Concat(ucell.m_unseenCell->GetCityName());
+				}
+				else{
+					// Shouldn't happen
+					Concat(city.GetName());
+				}
 
-				MBCHAR civName[k_MAX_INFOBAR_TEXT];
-				g_player[ucell.m_unseenCell->GetCityOwner()]->m_civilisation->GetSingularCivName(civName);
-				Concat("(");
-				Concat(civName);
-				Concat(")");
+				if(g_player[ucell.m_unseenCell->GetCityOwner()]){ // Check whether player is still alive.
+					MBCHAR civName[k_MAX_INFOBAR_TEXT];
+					g_player[ucell.m_unseenCell->GetCityOwner()]->m_civilisation->GetSingularCivName(civName);
+					Concat("(");
+					Concat(civName);
+					Concat(")");
+				}
 
 				if(ucell.m_unseenCell->IsBioInfected()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_BIO_INFECTION"));

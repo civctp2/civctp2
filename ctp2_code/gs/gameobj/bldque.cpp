@@ -397,10 +397,6 @@ void BuildQueue::EndTurn(void)
     if (m_wonderStarted != m_wonderStopped) {
 #if defined(ACTIVISION_ORIGINAL)
         if (m_wonderStopped) {
-#else
-// Correct the condition with the index shift
-        if (m_wonderStopped >= 0) {
-#endif
             SendMsgWonderStopped(m_wonderStopped) ;
             g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
 			
@@ -411,11 +407,23 @@ void BuildQueue::EndTurn(void)
             
         }
     }
-#if defined(ACTIVISION_ORIGINAL)
+
     m_wonderStarted = 0;
     m_wonderStopped = 0;
 #else
 //Added by Martin Gühmann
+// Correct the condition with the index shift
+        if (m_wonderStopped >= 0) {
+            SendMsgWonderStopped(m_wonderStopped) ;
+            g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
+			
+        }
+        if (m_wonderStarted != m_wonderComplete && m_wonderStarted >= 0) {
+            SendMsgWonderStarted(m_wonderStarted) ;
+            g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
+            
+        }
+    }
 	// These values reperesent an index into the good's database
 	// 0 is a valid database index
     m_wonderStarted = -1;

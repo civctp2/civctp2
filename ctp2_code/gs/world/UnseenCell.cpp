@@ -31,6 +31,10 @@
 //   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gühmann
 // - Modified constructors and serialize method to support the new 
 //   m_visibleCityOwner member. - Dec. 26th 2004 - Martin Gühmann 
+// - When an UnseenCell object is created and the according cell contains a
+//   city the owner is now taken from the CityData instead of the Unit 
+//   itsself this allows to get the right owner info when a city changes 
+//   hands. - Mar. 4th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -153,7 +157,16 @@ UnseenCell::UnseenCell(const MapPoint &point)
 		m_cityName = new MBCHAR[strlen(name) + 1];
 		strcpy(m_cityName, name);
 		
+#if defined(ACTIVISION_ORIGINAL)
+// Removed by Martin Gühmann
+		// Doesn't show the correct owner of a city after conquest 
+		// of this city if the old owner is the selected player.
+		// The old owner has to stay until vision is removed.
 		m_cityOwner = (sint16)city.GetOwner();
+#else
+// Added by Martin Gühmann
+		m_cityOwner = static_cast<sint16>(city.GetCityData()->GetOwner());
+#endif
 
 		CityData *cityData = city.GetData()->GetCityData();
 

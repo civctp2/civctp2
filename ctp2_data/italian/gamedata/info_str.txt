@@ -201,7 +201,6 @@ CONDUCTHIT_FAILED_ATTACK		"Brutta faccenda, {player[0].sir}. Il nostro ecoterror
 
 ## Convert City ##
 ## Cleric Attack ##
-
 ## Televangelist Attack ##
 CONVERT_COMPLETE_VICTIM 		"{unitrecord[0].name#ARTICLE_FOREIGN_CAP} ha convertito la città di {city[0].name} a una fede eretica."
 CONVERT_FAILED_VICTIM 			"Abbiamo catturato {unitrecord[0].name#ARTICLE_FOREIGN} mentre tentava di convertire la città di {city[0].name}."

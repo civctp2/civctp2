@@ -119,7 +119,7 @@ CITIES_KILLED_BY_CALAMITY 		"Die Stadt {city[0].name} wurde durch eine Flutkatas
 ## Wonders ##
 WONDER_STARTED 				"Der Wettlauf um die Errichtung eines Weltwunders hat begonnen: {player[0].leader_name}, das Staatsoberhaupt {player[0].civ_name_plural#ARTICLE_GEN}, hat mit der Errichtung {wonder[0].name#ARTICLE_GEN} begonnen."
 WONDER_STOPPED 				"Unsere Konkurrenten werden ihr ruhmreiches Ziel in nächster Zeit nicht erreichen: {player[0].leader_name} hat die Arbeiten zur Errichtung {wonder[0].name#ARTICLE_GEN} eingestellt."
-WONDER_ALMOST_FINISHED 			"Uns läuft die Zeit davon: {player[0].leader_name} hat die Errichtung {wonder[0].name#article#ARTICLE_GEN} beinahe abgeschlossen."
+WONDER_ALMOST_FINISHED 			"Uns läuft die Zeit davon: {player[0].leader_name} hat die Errichtung {wonder[0].name#ARTICLE_GEN} beinahe abgeschlossen."
 WONDER_COMPLETE_OWNER 			"Die Überlegenheit unserer Nation findet Bestätigung in dem Werk unseres Volkes: In der Stadt {city[0].name} wurde {wonder[0].name#ARTICLE_SMALL} fertig gestellt!"
 WONDER_COMPLETE_ALL 			"Besorgniserregende Neuigkeiten, {player[0].leader_name#SIR_CAP}: {player[0].leader_name} hat die Errichtung {wonder[0].name#ARTICLE_GEN} abgeschlossen."
 WONDER_DESTROYED 			"Während des Angriffs auf die Stadt {city[0].name} wurde {wonder[0].name#ARTICLE_SMALL} zerstört. Unser Planet ist um ein Weltwunder ärmer."  
