@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Science window
+// Description  : Window to select next advance to research
 //
 //----------------------------------------------------------------------------
 //
@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Start the great library with the current research project of the player.
+// - Start the "change to"-list with the current research selected.
 //
 //----------------------------------------------------------------------------
 
@@ -481,6 +482,7 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( s_oldResearching );
+
 	if(g_scienceManagementDialog) {
 		g_scienceManagementDialog->Update();
 	}
@@ -500,10 +502,34 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : sci_advancescreen_loadList
+//
+// Description: Generate the list of advances that may be researched next.
+//
+// Parameters : -
+//
+// Globals    : g_player			: list of players
+//				g_selected_item		: determines currently active player
+//				g_theAdvanceDB		: advance database
+//				g_theStringDB		: language dependent text to display
+//				s_scienceGoalTree	: list of advances that lead to the goal
+//
+// Returns    : s_advanceList		: filled with the generated list
+//				s_goaltext			: set from current research goal
+//				s_sci_advanceScreen	: redrawn
+//				s_scienceGoalTree	: created (empty) when not existing yet
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
 sint32 sci_advancescreen_loadList( void ) 
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	// never used	
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];	
+#endif
 
 	
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
@@ -531,22 +557,31 @@ sint32 sci_advancescreen_loadList( void )
 	
 	ctp2_ListItem *item = NULL;
 	ctp2_Static *child = NULL;
-
+#if defined(ACTIVISION_ORIGINAL)	// never used
 	strcpy(ldlBlock, "SciListItem");
-
+#endif
 	
 	s_advanceList->Clear();
 
 	
 
 	
+#if defined(ACTIVISION_ORIGINAL)	// Index before sorting is useless
 	PLAYER_INDEX	player = g_selected_item->GetVisiblePlayer();
 	uint8 *advances = g_player[player]->m_advances->CanResearch();
 	sint32 i, n = g_theAdvanceDB->NumRecords();
 	sint32 researching = g_player[player]->m_advances->GetResearching();
-
 	sint32 researchingItemIndex = -1, curItemIndex = 0;
+
 	for(i = 0; i < n; i++) {
+#else
+	uint8 *			advances		= p->m_advances->CanResearch();
+	sint32 const	advanceCount	= g_theAdvanceDB->NumRecords();
+	sint32			curItemIndex	= 0;
+
+	for (sint32 i = 0; i < advanceCount; ++i)
+	{
+#endif
 
 		if( advances[i] ) {
 			if(s_scienceGoalTree[i])
@@ -568,10 +603,11 @@ sint32 sci_advancescreen_loadList( void )
 			item->SetCompareCallback(ScienceSortCallback);
 
 			s_advanceList->AddItem( item );
-
+#if defined(ACTIVISION_ORIGINAL)	// Index before sorting is useless
 			if(researching == i) {
 				researchingItemIndex = curItemIndex;
 			}
+#endif
 			curItemIndex++;
 		}
 	}
@@ -579,8 +615,26 @@ sint32 sci_advancescreen_loadList( void )
 	
 	delete advances;
 
+#if defined(ACTIVISION_ORIGINAL)	// Index before sorting is useless
 	s_advanceList->SelectItem((sint32) researchingItemIndex);
+#endif
 	s_advanceList->SortByColumn(0,TRUE);
+
+#if !defined(ACTIVISION_ORIGINAL)
+	// Find the current research in the sorted list.
+	// If not found, index 0 (the cheapest) will be selected.
+	sint32 const	research	= p->m_advances->GetResearching();
+	bool			isIndexOk	= false;
+
+	for (sint32 index = curItemIndex - 1; (index >= 0) && !isIndexOk; --index)
+	{
+		s_advanceList->SelectItem(index);
+		ctp2_ListItem *	item = 
+			reinterpret_cast<ctp2_ListItem *>(s_advanceList->GetSelectedItem());
+		isIndexOk = (research == reinterpret_cast<sint32>(item->GetUserData()));
+	}
+#endif
+
 	s_sci_advanceScreen->ShouldDraw(TRUE);
 
 	return 0;

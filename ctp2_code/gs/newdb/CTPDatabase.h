@@ -38,10 +38,20 @@
 //     pointers to a PointerList as a templated class) for relation of
 //     m_modifiedRecords to m_records (by government index)
 //
+// - Removed an Assert which is annoyingly triggered all the time when having
+//   an improvement file without sound defintions.
+// - Removed some completely unused code.
+// - Modernised some code: e.g. implemented the modified records list as a 
+//   std::vector, so we don't have to do the memory management ourselves. 
+//
 //----------------------------------------------------------------------------
 
 #ifndef __CTPDATABASE_H__
 #define __CTPDATABASE_H__
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include <vector>
+#endif
 
 class DBLexer;
 enum C3DIR;
@@ -55,52 +65,38 @@ enum DBPARSE_ERROR {
 	DBPARSE_OTHER,
 };
 
+#if !defined(ACTIVISION_ORIGINAL)	// GovMod
 class GovernmentModifiedRecordNode
 {
 public:
+	GovernmentModifiedRecordNode
+	(
+		sint32	a_governmentModified	= -1,
+		sint32	a_modifiedRecord		= -1
+	) 
+	:	m_governmentModified(a_governmentModified),
+		m_modifiedRecord(a_modifiedRecord)
+	{ };
+
 	sint32 m_governmentModified;
 	sint32 m_modifiedRecord;
 };
-
+#endif
 
 
 template <class T> class CTPDatabase
 {
-
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
-protected:
-	PointerList<GovernmentModifiedRecordNode> **m_modifiedList;
-
-
-	sint32* m_recordsModifiedLink;
-	sint32 m_numRecordsModifiedLink;
-	sint32 m_allocatedRecordsModifiedLinkSize;
-
-	sint32* m_modList;
-	sint32 m_numModList;
-	sint32 m_allocatedListSize;
-
-	T **m_modifiedRecords;
-	sint32 m_numModifiedRecords;
-	sint32 m_allocatedModifiedSize;
-
-  void GrowModified();
-
-public:
-	T *Access(sint32 index,sint32 govIndex);
-	const T *Get(sint32 index,sint32 govIndex);
-#endif
-
-
-
 protected:
 	T **m_records;
 	sint32 m_numRecords;
 	sint32 m_allocatedSize;
 
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
+	PointerList<GovernmentModifiedRecordNode> **m_modifiedList;
+	std::vector<T *>	m_modifiedRecords;
+#endif
+
 	void Grow();
-
-
 
 public:
 	sint32 *m_indexToAlpha;
@@ -119,7 +115,9 @@ public:
 	
 	inline const T *Get(sint32 index)
 	{
+#if defined(ACTIVISION_ORIGINAL) // Do not report missing sounds all the time.
 		Assert(index >= 0);
+#endif
 		Assert(index < m_numRecords);
 		if((index < 0) || (index >= m_numRecords))
 			return NULL;
@@ -128,6 +126,10 @@ public:
 	}
 
 	T *Access(sint32 index);
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
+	T *Access(sint32 index, sint32 govIndex);
+	const T *Get(sint32 index, sint32 govIndex);
+#endif
 
 	sint32 GetName(sint32 index);
 	const char *GetNameStr(sint32 index);

@@ -63,6 +63,10 @@
 //     m_modifiedRecords object is returned, otherwise the regular
 //     m_records object is returned (as per normal.)
 //
+// - Repaired memory leaks.
+// - Removed some completely unused code.
+// - Modernised some code: e.g. implemented the modified records list as a 
+//   std::vector, so we don't have to do the memory management ourselves. 
 //
 //----------------------------------------------------------------------------
 
@@ -78,18 +82,19 @@
 
 
 template <class T> CTPDatabase<T>::CTPDatabase()
+#if !defined(ACTIVISION_ORIGINAL)	// Initialise to be able to delete later. 
+:	m_indexToAlpha(NULL),
+	m_alphaToIndex(NULL),
+	m_modifiedRecords()
+#endif
 {
 	m_numRecords = 0;
 	m_allocatedSize = k_INITIAL_DB_SIZE;
 	m_records = new T *[m_allocatedSize];
 
-	#if !defined(ACTIVISION_ORIGINAL) //GovMod
+#if !defined(ACTIVISION_ORIGINAL) //GovMod
 	m_modifiedList = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize];
-
-	m_numModifiedRecords = 0;
-	m_allocatedModifiedSize = k_INITIAL_DB_SIZE;
-	m_modifiedRecords = new T *[m_allocatedModifiedSize];
-	#endif
+#endif
 }
 
 
@@ -115,20 +120,19 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 
 
 #if !defined(ACTIVISION_ORIGINAL) //GovMod
-	if(m_modifiedRecords) {
-		sint32 j;
-		for(j = 0; j < m_numModifiedRecords; j++) {
-			if(m_modifiedRecords[j]) {
-				delete m_modifiedRecords[j];
-			}
-		}
-		delete [] m_modifiedRecords;
+	for (size_t j = 0; j < m_modifiedRecords.size(); ++j)
+	{
+		delete m_modifiedRecords[j];
 	}
+	m_modifiedRecords.clear();
 
-	if(m_modifiedList) {
-		sint32 k;
-		for(k = 0; k< m_numRecords; k++) {
-			if(m_modifiedList[k]) {
+	if (m_modifiedList) 
+	{
+		for (sint32 k = 0; k < m_numRecords; k++) 
+		{
+			if (m_modifiedList[k]) 
+			{
+				m_modifiedList[k]->DeleteAll();
 				delete m_modifiedList[k];
 			}
 		}
@@ -143,12 +147,15 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 template <class T> T *CTPDatabase<T>::Access(sint32 index,sint32 govIndex)
 {
 	sint32 numberGovernmentRecords;
-	  if(g_theGovernmentDB)
-			numberGovernmentRecords=g_theGovernmentDB->NumRecords();
-	  else {
+	if (g_theGovernmentDB)
+	{
+		numberGovernmentRecords=g_theGovernmentDB->NumRecords();
+	}
+	else 
+	{
 		numberGovernmentRecords=0;
 		DPRINTF(k_DBG_FIX, ("GovMod- No Government Records \n"));
-	  }
+	}
 
 	Assert(index >= 0);
 	Assert(index < m_numRecords);
@@ -241,79 +248,75 @@ template <class T> void CTPDatabase<T>::Grow()
 
 }
 
-#if !defined(ACTIVISION_ORIGINAL) //GovMod
-template <class T> void CTPDatabase<T>::GrowModified()
-{
-	
-	T **oldRecords = m_modifiedRecords;
-	m_modifiedRecords = new T *[m_allocatedModifiedSize + k_GROW_DB_STEP];
-	memcpy(m_modifiedRecords, oldRecords, m_allocatedModifiedSize * sizeof(T *));
-	delete [] oldRecords;
-	m_allocatedModifiedSize += k_GROW_DB_STEP;
-}
-#endif
-
-
 
 template <class T> void CTPDatabase<T>::Add(T *obj)
 {
-
 #if !defined(ACTIVISION_ORIGINAL) //GovMod
-
-  if ((obj->GetHasGovernmentsModified()) && ((obj->GenericGetNumGovernmentsModified())>0) ) {
-	  sint32 numberGovernmentRecords;
-	  if(g_theGovernmentDB)
+	if (obj->GetHasGovernmentsModified() && 
+	    (obj->GenericGetNumGovernmentsModified() > 0)
+	   ) 
+	{
+		sint32 numberGovernmentRecords;
+		if (g_theGovernmentDB)
+		{
 			numberGovernmentRecords=g_theGovernmentDB->NumRecords();
-	  else {
-		numberGovernmentRecords=0;
-		DPRINTF(k_DBG_FIX, ("GovMod- No Government Records \n"));
-	  }
+		}
+		else 
+		{
+			numberGovernmentRecords=0;
+			DPRINTF(k_DBG_FIX, ("GovMod- No Government Records \n"));
+		}
 
 
-	  sint32 validIndex=0;
-      for(sint32 j=0;j<(obj->GenericGetNumGovernmentsModified());j++)
-		  if (obj->GenericGetGovernmentsModifiedIndex(j)>=0 && obj->GenericGetGovernmentsModifiedIndex(j)<numberGovernmentRecords)
-			 validIndex++;
+		sint32 validIndex = 0;
+		for (sint32 j = 0; j < obj->GenericGetNumGovernmentsModified(); j++)
+		{
+			if ((obj->GenericGetGovernmentsModifiedIndex(j) >= 0) && 
+				(obj->GenericGetGovernmentsModifiedIndex(j) < numberGovernmentRecords)
+			   )
+			{
+				validIndex++;
+			}
+		}
 	  
-	  sint32 mainRecord=FindRecordNameIndex(obj->GetIDText());
-	  if (mainRecord>-1 && validIndex>0) {
+		sint32 mainRecord=FindRecordNameIndex(obj->GetIDText());
+		if ((mainRecord >= 0) && (validIndex > 0))
+		{
+			// Add the new object to the list of modified records.
+			sint32 const	newIndex	= m_modifiedRecords.size();	
+			obj->SetIndex(newIndex);
+			m_modifiedRecords.push_back(obj);
 
-			if(m_numModifiedRecords >= m_allocatedModifiedSize)
-				GrowModified();
-			Assert(m_numModifiedRecords < m_allocatedModifiedSize);
-			obj->SetIndex(m_numModifiedRecords);
-			m_modifiedRecords[m_numModifiedRecords]=obj;
-
+			// Add references to the modified list
 			if (!m_modifiedList[mainRecord])
+			{
 				m_modifiedList[mainRecord] = new PointerList<GovernmentModifiedRecordNode>;
-
-
-			GovernmentModifiedRecordNode *gmrn = NULL;
-			for(sint32 i=0;i<(obj->GenericGetNumGovernmentsModified());i++) {
-				if(obj->GenericGetGovernmentsModifiedIndex(i)>=0 && obj->GenericGetGovernmentsModifiedIndex(i)<numberGovernmentRecords) {
-					DPRINTF(k_DBG_FIX, ("GovMod- Adding modified record %s, Gov Index %d \n",obj->GetIDText(),obj->GenericGetGovernmentsModifiedIndex(i)));
-					gmrn = new GovernmentModifiedRecordNode();
-					gmrn->m_governmentModified=obj->GenericGetGovernmentsModifiedIndex(i);
-					gmrn->m_modifiedRecord=m_numModifiedRecords;
-					m_modifiedList[mainRecord]->AddHead(gmrn);
-				}
 			}
 
-			m_numModifiedRecords++;
-
-
-	  }
-	  else
-	  {
+			for (sint32 i = 0; i < obj->GenericGetNumGovernmentsModified(); i++)
+			{
+				if ((obj->GenericGetGovernmentsModifiedIndex(i) >= 0) && 
+					(obj->GenericGetGovernmentsModifiedIndex(i) < numberGovernmentRecords)
+				   ) 
+				{
+					DPRINTF(k_DBG_FIX, ("GovMod- Adding modified record %s, Gov Index %d \n",obj->GetIDText(),obj->GenericGetGovernmentsModifiedIndex(i)));
+					m_modifiedList[mainRecord]->AddHead
+						(new GovernmentModifiedRecordNode
+							(obj->GenericGetGovernmentsModifiedIndex(i), newIndex)
+						);
+				}
+			}
+		}
+		else
+		{
 			DPRINTF(k_DBG_FIX, ("GovMod- No main record, or no valid GovernmentsModified %s \n",obj->GetIDText()));
-	  }
-
-
-  }
-  else {
+		}
+	}
+	else 
+	{
 #endif
 
-	  if(m_numRecords >= m_allocatedSize)
+		if (m_numRecords >= m_allocatedSize)
 			Grow();
 		Assert(m_numRecords < m_allocatedSize);
 		obj->SetIndex(m_numRecords);
@@ -321,20 +324,14 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 
 
 #if !defined(ACTIVISION_ORIGINAL) //GovMod
-
-		GovernmentModifiedRecordNode *gmrn = NULL;
-		gmrn = new GovernmentModifiedRecordNode();
-		gmrn->m_governmentModified=-1; 
-		gmrn->m_modifiedRecord=-1;
-		m_modifiedList[m_numRecords] = new PointerList<GovernmentModifiedRecordNode>;
-		m_modifiedList[m_numRecords]->AddHead(gmrn);
-		
+		m_modifiedList[m_numRecords] = new PointerList<GovernmentModifiedRecordNode>();
+		m_modifiedList[m_numRecords]->AddHead(new GovernmentModifiedRecordNode());
 #endif 
 		m_numRecords++;
 		
 
 #if !defined(ACTIVISION_ORIGINAL) //GovMod
-  }
+	}
 #endif
 
 }
@@ -371,6 +368,7 @@ template <class T> const char *CTPDatabase<T>::GetNameStr(sint32 index)
  
 template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 {
+#if defined(ACTIVISION_ORIGINAL)	// Memory leaks
 	T *obj = NULL;
 	sint32 err = 0;
 
@@ -394,6 +392,37 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 	}
 
 	return !err;
+#else
+	sint32	isOk	= 1;
+
+	while (!lex->EndOfInput())
+	{
+		T *	obj		= new T();
+
+		if (obj->Parse(lex))
+		{
+			Add(obj);
+		}
+		else
+		{
+			delete obj;
+			isOk	= 0;
+		}
+	}
+
+	delete [] m_indexToAlpha;
+	m_indexToAlpha	= new sint32[m_numRecords];
+	delete [] m_alphaToIndex;
+	m_alphaToIndex	= new sint32[m_numRecords];
+
+	for (sint32 i = 0; i < m_numRecords; ++i)
+	{
+		m_indexToAlpha[i]	= i;
+		m_alphaToIndex[i]	= i;
+	}
+
+	return isOk;
+#endif
 }
 
 template <class T> sint32 CTPDatabase<T>::Parse(const C3DIR & c3dir, const char *filename)
