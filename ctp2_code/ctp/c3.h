@@ -17,19 +17,36 @@
 //
 // Compiler flags
 // 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
 // _DEBUG
-// - Generate debug version
+// - Generate debug version.
 //
 // _MSC_VER		
-// - Use Microsoft C++ extensions when set.
+// - Compiler version (for the Microsoft C++ compiler only).
+//
+// __GNUC__
+// - Compiler version (for the GNU C++ compiler only).
 //
 // _TEST
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are active for _MSC_VER value 1200 are the original 
+//		 Activision code, unless explicitly embedded in !ACTIVISION_ORIGINAL 
+//		 blocks.
+//		 The _GNUC_ blocks are modified Apolyton code.
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - #pragmas commented out
+// - Standardised min/max usage.
+// - Prevented useless warnings.
 //
 //----------------------------------------------------------------------------
 
@@ -45,9 +62,12 @@
 #if defined(_TEST) || !defined(_DEBUG)
 #pragma warning( disable : 4056 )
 #endif
+
 #if !defined(ACTIVISION_ORIGINAL)
-#pragma warning(disable:4786)  // '255' characters in the debug information
+#pragma warning(disable:4786)	// identifier length over 255 (with templates)
+#pragma warning(disable:4800)	// BOOL to bool conversion
 #endif
+
 #pragma warning( error : 4700 )
 #endif	// _MSC_VER
 

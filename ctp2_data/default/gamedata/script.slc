@@ -1,4 +1,31 @@
-// This is a SLIC file.
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : SLIC source
+// Description  : Main SLIC entry point. Defines message boxes.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Investigate city handling changed: there are now message boxes to report
+//   an escaping (vs. killed) investigator, for both the agressor and the 
+//   victim. 
+// - Replaced - unimplemented - Caption occurrences with Title ones.
+// - Added message box to notify the victim of a captured advance.
+// - Added/improved message box type indicators and eye points.
+// - Corrected some missing array indices.
+//
+//----------------------------------------------------------------------------
 
 // Variables used in this file
 int_t space_launch_count;
@@ -2836,7 +2863,7 @@ messagebox 'TrustLossViolatedAlliance' {
 
 messagebox 'TrustLossFailToWithdraw' {
 	Text(ID_TRUST_LOSS_FAIL_TO_WITHDRAW);
-	MessageType("ANTIANTIDIPLOMATIC");
+	MessageType("ANTIDIPLOMATIC");
 }
 
 messagebox 'TrustLossFailToStopPiracy' {

@@ -35,6 +35,9 @@
 // - Standardised min/max usage.
 // - Add CanTransport method - Calvitix
 // - Added IsWounded method - Calvitix
+// - Made some methods const.
+// - Improved handling of space launched units.
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -658,19 +661,16 @@ BOOL ArmyData::CanSettle() const
 }
 
 #if !defined (ACTIVISION_ORIGINAL)
-BOOL ArmyData::CanTransport() const
+bool ArmyData::CanTransport() const
 {
-    int i;
-    long cargo;
-
-    for (i = 0; i < m_nElements; i++)
+    for (sint32 i = 0; i < m_nElements; ++i)
     {
-        cargo = m_array[i].AccessData()->GetCargoCapacity();
+        sint32 const	cargo = m_array[i].AccessData()->GetCargoCapacity();
         if (cargo > 0)
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 #endif
 
@@ -6095,6 +6095,13 @@ void ArmyData::MoveActors(const MapPoint &pos,
 
 void ArmyData::MoveUnits(const MapPoint &pos)
 {
+#if !defined(ACTIVISION_ORIGINAL)
+	if (m_flags & k_CULF_IN_SPACE)
+	{
+		return;
+	}
+#endif
+
 	sint32 i, r; 
 
 	WakeUp();
@@ -6107,6 +6114,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 	MapPoint oldPos = m_pos;
 	bool anyVisible = false;
 	for(i = 0; i < m_nElements; i++) {
+
 		if(m_array[i].IsEntrenching() || m_array[i].IsEntrenched()) {
 			Detrench();
 		}
@@ -7613,7 +7621,7 @@ BOOL ArmyData::TurnOver()
 }
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 void ArmyData::GetCurrentHP(sint32 &count, sint32 unit_type[100], 
     sint32 unit_hp[100])
 {
@@ -7644,17 +7652,36 @@ void ArmyData::GetCurrentHP(sint32 &count, sint32 unit_type[100],
         
     } 
 }
+#else
+void ArmyData::GetCurrentHP
+(
+	sint32 &	count,
+	sint32		unit_type[MAX_UNIT_COUNT],
+	sint32		unit_hp[MAX_UNIT_COUNT] 
+) const
+{
+    sint32 const	n	= Num(); 
+    
+	count = 0; 
+    
+    for (sint32 unit_idx = 0; unit_idx < n; ++unit_idx) 
+	{ 
+        Assert(count < MAX_UNIT_COUNT); 
+        unit_type[count]	= m_array[unit_idx].GetType(); 
+        unit_hp[count]		= std::max<sint32>(m_array[unit_idx].GetHP(), 0);
+        ++count; 
+    } 
+}
 
-#if !defined (ACTIVISION_ORIGINAL)
-BOOL ArmyData::IsWounded()
+bool ArmyData::IsWounded() const
 {
 		sint32 nb;
-		sint32  unittypes[100];
-		sint32  unithp[100];
+		sint32  unittypes[MAX_UNIT_COUNT];
+		sint32  unithp[MAX_UNIT_COUNT];
 		sint32 totalcurrentHP = 0;
 		sint32 totalHP = 0;
 
-		GetCurrentHP(nb,unittypes,unithp);
+		GetCurrentHP(nb, unittypes, unithp);
 		for (int i = 0 ; i < nb ; i ++)
 		{
 			totalcurrentHP += unithp[i];

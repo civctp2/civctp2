@@ -27,6 +27,8 @@
 //
 // - Added option to reduce resync reporting.
 // - Added IsWounded method
+// - Added CanTransport and IsCivilian methods.
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -890,19 +892,39 @@ BOOL Army::CanAdvertise() const
 	return GetData()->CanAdvertise();
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 void Army::GetCurrentHP(sint32 &n, sint32 unit_type[100], 
         sint32 unit_hp[100])
 {
     AccessData()->GetCurrentHP(n, unit_type, unit_hp); 
 }
 
-#if !defined (ACTIVISION_ORIGINAL)
-BOOL Army::IsWounded()
+#else
+void Army::GetCurrentHP
+(
+	sint32 &	count,
+	sint32		unit_type[MAX_UNIT_COUNT],
+	sint32		unit_hp[MAX_UNIT_COUNT] 
+) const
 {
-	return AccessData()->IsWounded();
+	GetData()->GetCurrentHP(count, unit_type, unit_hp);
+}
+
+bool Army::CanTransport(void) const
+{
+	return GetData()->CanTransport();
+}
+
+bool Army::IsCivilian(void) const
+{
+	return GetData()->IsCivilian();
+}
+
+bool Army::IsWounded(void) const
+{
+	return GetData()->IsWounded();
 }
 #endif
-
 
 BOOL Army::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision)
 {

@@ -27,7 +27,7 @@
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
 //       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
 //       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       The blocks that are active for _MSC_VER value 
 //       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -35,7 +35,10 @@
 // Modifications from the original Activision code:
 //
 // - Added option to reduce resync reporting.
-// - Added IsWounded method
+// - Added IsWounded method.
+// - Added CanTransport and IsCivilian methods.
+// - Made GetCurrentHP const.
+//
 //----------------------------------------------------------------------------
 
 #if defined(_MSC_VER) && (_MSC_VER > 1000)
@@ -58,6 +61,10 @@ typedef sint32 PLAYER_INDEX;
 class MapPoint;
 enum CAUSE_REMOVE_ARMY;
 class Order;
+
+#if !defined(ACTIVISION_ORIGINAL)
+size_t const	MAX_UNIT_COUNT	= 100;	// TODO: check k_MAX_ARMY_SIZE
+#endif
 
 class Army : public ID
 { 
@@ -315,11 +322,20 @@ public:
 
     BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision);
 
+#if defined (ACTIVISION_ORIGINAL)
     void GetCurrentHP(sint32 &n, sint32 unit_type[100], 
         sint32 unit_hp[100]); 
+#else
+	void GetCurrentHP
+	(
+		sint32 &	n,
+		sint32		unit_type[MAX_UNIT_COUNT],
+		sint32		unit_hp[MAX_UNIT_COUNT]
+	) const;
 
-#if !defined (ACTIVISION_ORIGINAL)
-	BOOL IsWounded();
+	bool CanTransport(void) const;
+	bool IsCivilian(void) const;
+	bool IsWounded(void) const;
 #endif
 
 	BOOL ExecutedThisTurn() const;

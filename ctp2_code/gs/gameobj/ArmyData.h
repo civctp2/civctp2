@@ -37,9 +37,10 @@
 // - TestOrderAny added.
 // - CanTransport method added. - Calvitix
 // - Added IsWounded method - Calvitix
+//
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -169,7 +170,8 @@ public:
     BOOL CanSettle() const;
 
 #if !defined (ACTIVISION_ORIGINAL)
-    BOOL CanTransport() const;
+    bool CanTransport() const;
+	bool IsWounded() const;
 #endif
 
 	BOOL IsAsleep() const;
@@ -296,11 +298,16 @@ public:
 	BOOL CanAdvertise() const;
 	ORDER_RESULT Advertise(const MapPoint &point);
 
+#if defined(ACTIVISION_ORIGINAL)
     void GetCurrentHP(sint32 &n, sint32 unit_type[100], 
         sint32 unit_hp[100]);
-
-#if !defined (ACTIVISION_ORIGINAL)
-	BOOL IsWounded();
+#else
+	void GetCurrentHP
+	(
+		sint32 &	count,
+		sint32		unit_type[MAX_UNIT_COUNT],
+		sint32		unit_hp[MAX_UNIT_COUNT] 
+	) const;
 #endif
 
 	BOOL AbleToPlantNukeTarget(const MapPoint &point, sint32 &uindex);
