@@ -19,7 +19,19 @@
 //
 // - Music added by ahenobarb.
 // - Added option to show info of tile improvements that are too expensive.
+// - Do not display the world map of the first player at start-up for hotseat 
+//   play.
 //
+//----------------------------------------------------------------------------
+//
+// Code remarks:
+//
+// - Some of the functionality in this file seems to be duplicated in or from 
+//   MainControlPanel. Actually, some functions in this file (e.g. InitCityTab, 
+//   CityPanelRebuild - notice the strange immediate return) are never called,
+//   and some variables (e.g. m_mainDropDown) are not NULL-initialised in the 
+//   constructor. Maybe this is some leftover of the CTP1 code?
+// 
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -162,6 +174,10 @@
 
 #include "ProfileDB.h"
 #include "helptile.h"
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include "gameinit.h"		// g_startHotseatGame
+#endif
 
 extern ProgressWindow *g_theProgressWindow;
 
@@ -1251,9 +1267,23 @@ m_mainWindow(NULL)
 	
 	m_mainWindow->SetTransparent(TRUE);
 	m_mainWindow->SetStencilFromImage("control_panel_stencil.tga");
+
 	g_c3ui->AddWindow(m_mainWindow);
+#if defined(ACTIVISION_ORIGINAL)
 	m_mainWindow->Show();
 	m_mainWindow->ShouldDraw(TRUE);
+#else
+	if (g_startHotseatGame)
+	{
+		// Do not display control panel yet.
+		Hide();
+	}
+	else
+	{
+		m_mainWindow->Show();
+		m_mainWindow->ShouldDraw(TRUE);
+	}
+#endif
 
 }
 
@@ -3610,12 +3640,10 @@ ControlPanelWindow::CityPanelGetCurrent()
 	return city;
 }
 
-
 void
 ControlPanelWindow::CityPanelRebuild()
 {
 	return;
-
 	
 	if (m_mainDropDown==NULL)
 		return;

@@ -1,9 +1,33 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Radar window (mini map)
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Separate creation and display of the radar window for hotseat play.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -18,7 +42,9 @@
 #include "ctp2_Window.h"
 #include "ctp2_Switch.h"
 #include "RadarMap.h"
-
+#if !defined(ACTIVISION_ORIGINAL)
+#include "gameinit.h"		// g_startHotseatGame
+#endif
 
 ctp2_Window *g_radarWindow = NULL;
 
@@ -286,10 +312,17 @@ sint32 radarwindow_Initialize()
 	terrainButton->SetActionFuncAndCookie(TerrainToggleButtonActionCallback, NULL);
 	minimizeButton->SetActionFuncAndCookie(MinimizeCallback, NULL);
 
-	
+
 	g_c3ui->AddWindow(g_radarWindow);
 
-	
+#if !defined(ACTIVISION_ORIGINAL)	
+	if (g_startHotseatGame)
+	{
+		// Do not display map information before the user has pressed Ready.
+		g_radarWindow->Hide();
+	}
+#endif
+
 	return(0);
 }
 

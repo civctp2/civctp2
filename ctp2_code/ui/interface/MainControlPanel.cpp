@@ -1,9 +1,34 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Collection of control panels during actual play.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Blank function added to hide the data of the previous player for hotseat
+//   games.  
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -102,6 +127,31 @@ void MainControlPanel::Initialize(MBCHAR *ldlBlock)
 	g_mainControlPanel = new MainControlPanel(ldlBlock);
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : MainControlPanel::Blank
+//
+// Description: Blank out the data of the previous player in between turns for
+//              hotseat play.
+//
+// Parameters : -
+//
+// Globals    : g_mainControlPanel	: control panel to blank
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void MainControlPanel::Blank()
+{
+	if (g_mainControlPanel)
+	{
+		g_mainControlPanel->m_controlTabPanel->Blank();
+	}
+}
+#endif
 
 void MainControlPanel::CleanUp()
 {

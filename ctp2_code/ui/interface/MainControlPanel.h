@@ -1,17 +1,57 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Collection of control panels during actual play.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Microsoft C++ extensions marked for future GCC compilation.
+// - Blank function added to hide the data of the previous player for hotseat
+//   games.  
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#else
+#endif
+
 #ifndef ___BMH_MAIN_CONTROL_PANEL_HEADER
 #define ___BMH_MAIN_CONTROL_PANEL_HEADER
 
 
-#include <memory>
 
+#if defined(ACTIVISION_ORIGINAL)
+#include <memory>
 
 #include "globals.h"
 
@@ -24,7 +64,37 @@ class TurnYearStatus;
 
 class aui_ProgressBar;
 class CellUnitList;
+#else
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
 
+#include <memory>				// std::auto_ptr
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+class MainControlPanel;
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+#include "aui_ProgressBar.h"	// aui_ProgressBar
+#include "c3types.h"			// MBCHAR
+#include "CellUnitList.h"		// CellUnitList
+#include "ControlTabPanel.h"	// ControlTabPanel
+#include "EndTurnButton.h"		// EndTurnButton
+#include "Player.h"				// PLAYER_INDEX
+#include "ShortCutPad.h"		// ShortCutPad
+#include "StatusBar.h"			// StatusBar
+#include "TurnYearStatus.h"		// TurnYearStatus
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+#endif
 
 class MainControlPanel {
 public:
@@ -34,7 +104,10 @@ public:
 	
 	static void InitializeEvents();
 
-	
+#if !defined(ACTIVISION_ORIGINAL)
+	static void Blank();
+#endif
+
 	static void CleanUp();
 
 	
@@ -68,7 +141,11 @@ public:
 	MainControlPanel(MBCHAR *ldlBlock);
 
 	
+#if defined(_MSC_VER)
 	MainControlPanel::~MainControlPanel();
+#else
+	virtual ~MainControlPanel();
+#endif
 
 private:
 	

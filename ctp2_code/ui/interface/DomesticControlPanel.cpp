@@ -1,9 +1,34 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Blank function added to hide the data of the previous player for hotseat
+//   games.  
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -207,6 +232,37 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : DomesticControlPanel::Blank
+//
+// Description: Blank out the data of the previous player in between turns for
+//              hotseat play.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Only the top bar data is blanked out now. The other panels are 
+//              hidden later anyway.
+//
+//----------------------------------------------------------------------------
+void DomesticControlPanel::Blank()
+{
+	m_menuGoldValue->SetText("");
+	m_currentGold	= -1;
+
+ // m_menuHappinessValue: TODO (or let it be: not too much info from it)
+
+ // m_menuPollutionValue not blanked out: this is global data for all players.
+
+	m_menuPublicWorksValue->SetText("");
+	m_currentPW		= -1;
+}
+#endif
 
 void DomesticControlPanel::Update()
 {

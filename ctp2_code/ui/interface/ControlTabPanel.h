@@ -1,11 +1,50 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Collection of control panels during actual play.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Microsoft C++ extensions marked for future GCC compilation.
+// - Blank function added to hide the data of the previous player for hotseat
+//   games.  
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#else
+#endif
+
 #ifndef ___BMH_CONTROL_PANEL_TAB_HEADER
 #define ___BMH_CONTROL_PANEL_TAB_HEADER
 
@@ -26,7 +65,10 @@ public:
 	
 	ControlTabPanel(MBCHAR *ldlBlock);
 
-	
+#if !defined(ACTIVISION_ORIGINAL)
+	void Blank();
+#endif
+
 	void Update();
 
 	
