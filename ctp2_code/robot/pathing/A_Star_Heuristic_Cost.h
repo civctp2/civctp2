@@ -139,7 +139,7 @@ public:
 		bool const		a_HasYWrap		= false,	// default: earth shape
 		bool const		a_HasXWrap		= true
 	);
-	virtual ~A_Star_Heuristic_Cost();
+	~A_Star_Heuristic_Cost();
 #endif
 	
 	

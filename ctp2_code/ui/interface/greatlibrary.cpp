@@ -270,7 +270,7 @@ void GreatLibrary::Load_Great_Library()
 		int entry_pos;
 		char * end_ptr;		
 
-#if !defined(ACTIVISION_ORIGINAL)
+#if defined(_JAPANESE)
 		int end_pos;
 		char * end_tag = "[END]";
 #endif
@@ -361,7 +361,7 @@ void GreatLibrary::Load_Great_Library()
 
 						
 						reading_what = IN_END;
-#if !defined(ACTIVISION_ORIGINAL)
+#if defined(_JAPANESE)
 						end_pos = 0;
 #endif
 					}
@@ -402,7 +402,7 @@ void GreatLibrary::Load_Great_Library()
 					
 					the_entry[entry_pos++] = ch;
 
-#if !defined(ACTIVISION_ORIGINAL)
+#if defined(_JAPANESE)
 					end_pos ++;
 #endif
 
@@ -411,7 +411,7 @@ void GreatLibrary::Load_Great_Library()
 						
 						the_entry[entry_pos] = 0;
 
-#if defined(ACTIVISION_ORIGINAL)
+#if !defined(_JAPANESE)
 						if (!strcmp(end_ptr, "[END]"))
 #else
 						if (!strcmp(end_ptr, end_tag))
@@ -447,7 +447,7 @@ void GreatLibrary::Load_Great_Library()
 							reading_what = IN_TEXT;
 						}
 
-#if !defined(ACTIVISION_ORIGINAL)
+#if defined(_JAPANESE)
 					} else {
 						if ( ch != *(end_tag+end_pos) ) // not end tag
 						{

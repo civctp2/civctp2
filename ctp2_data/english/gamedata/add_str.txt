@@ -4,26 +4,26 @@
 
 # More Stuuf for LDL_STR
 # Multiplayer Disclaimer String
-str_ldl_MultiplayerDisclaimer	"Call to Power IIのマルチプレイヤー ゲームの場合､多くてもプレイヤーは4人までに抑えるようお勧めしています｡"
+str_ldl_MultiplayerDisclaimer	"Activision recommends a maximum of 4 players for Call to Power multiplayer games."
 
 ## Stuff for LDL_STR.txt
-str_ldl_AutoCenter_On	"自動センタリングを使用"
-str_ldl_AutoCenter_Off	"自動センタリングを不使用"
+str_ldl_AutoCenter_On	"Auto Center On"
+str_ldl_AutoCenter_Off	"Auto Center Off"
 
-str_ldl_ShowPoliticalBorders_On		"国境の表示"
-str_ldl_ShowPoliticalBorders_Off	"国境の非表示"
+str_ldl_ShowPoliticalBorders_On		"Show Political Borders"
+str_ldl_ShowPoliticalBorders_Off	"Hide Political Borders"
 
-str_ldl_ShowTradeRoutes_On			"貿易ルートの表示"
-str_ldl_ShowTradeRoutes_Off			"貿易ルートの非表示"
+str_ldl_ShowTradeRoutes_On			"Show Trade Routes"
+str_ldl_ShowTradeRoutes_Off			"Hide Trade Routes"
 
 # Got lost somehow, City manager button.
-str_ldl_DisbandUnit                 "解散"
+str_ldl_DisbandUnit                 "Disband"
 
 # City advisor
 # str_ldl_CityAdvisor "City Advisor"
 
 # City Window
-str_ldl_CityWindowUpkeep "表示"
+str_ldl_CityWindowUpkeep "Upkeep"
 
 # Diplomat pictures.  Bit weird storing these in a string file, but it works.
 # Transplanted, and modified (filenames are updp* now, ctp1 was upd*), from civ_str.txt 
@@ -71,115 +71,115 @@ NICARAGUAN_DIPLOMAT_PHOTO	"updp036.tga"
 
 # Dip wizard strings
 # Gets displayed on the "Accept" button depending on context
-str_ldl_DipWizardClose "閉じる" 
-str_ldl_DipWizardCheckIntelligence "情報収集活動のチェック"
+str_ldl_DipWizardClose "Close" 
+str_ldl_DipWizardCheckIntelligence "Check Intelligence"
 
 # Empire Manager
-str_ldl_People_ "民衆:"
-str_ldl_Cities_ "都市:"
+str_ldl_People_ "People:"
+str_ldl_Cities_ "Cities:"
 
 
-T_NO_KILL_CIVILIAN "{unitrecord[0].name}が{player[0].civ_name_singular}を攻撃したため､外交問題が発生しました｡\n\n今後は､国外への強制送還で{unitrecord[0].name}のような非軍事ユニットに対応すれば､他の国の信頼を失わないで済みます｡これを実行するには､軍事ユニットを選択して､<c:0,50,200>強制送還<e>を命令してください｡" 
+T_NO_KILL_CIVILIAN "Attacking the {player[0].civ_name_singular} {unitrecord[0].name} has caused diplomatic tension.\n\nIn the future, you can Expel civilian units like the {unitrecord[0].name} and not risk losing the trust of other nations.  Select any of your military units and use the <c:0,50,200>Expel<e> order." 
 
 # Info screen score tab list headers.  I don't know how to label these.  This is just so there's something
 # here for someone who does.
-str_ldl_SCORE_VALUE "計算"
-str_ldl_SCORE_TOTAL "スコア"
+str_ldl_SCORE_VALUE "Calculation:"
+str_ldl_SCORE_TOTAL "Score:"
 
 # List headers on wonder tab of info screen
-str_ldl_InfoScreenWonder "七不思議"
-str_ldl_InfoScreenYear "年"
-str_ldl_InfoScreenCity "都市"
-str_ldl_InfoScreenPlayer "プレイヤー"
-str_ldl_INFO_WONDER_TAB "七不思議"
+str_ldl_InfoScreenWonder "Wonder"
+str_ldl_InfoScreenYear "Year"
+str_ldl_InfoScreenCity "City"
+str_ldl_InfoScreenPlayer "Player"
+str_ldl_INFO_WONDER_TAB "Wonders"
 
 
-str_ldl_DipDetails_EmbassyReq			"大使館が必要"
-str_ldl_RADAR_MAP_FILTER	"フィルター使用"
+str_ldl_DipDetails_EmbassyReq			"Embassy Required"
+str_ldl_RADAR_MAP_FILTER	"Filtered"
 
 # Replaces string in ldl_str.txt, changed to Status from Modifiers
-str_ldl_CityWinStatisticsTab "状態"
+str_ldl_CityWinStatisticsTab "Status"
 
 #revised below
 # Added
 #str_code_CityWinTotalHappinessFormat "Total: %d"
 
-str_code_QueryRebuildCapitol "本当に行政府を移転しますか？"
+str_code_QueryRebuildCapitol "Are you sure you wish to rebuild your capitol?"
 
 # Trade manager strings
-str_ldl_TradeManagerCities "都市の表示:"
-str_ldl_TradeManagerOwnCities "自国"
-str_ldl_TradeManagerFriendlyCities "友好国"
-str_ldl_TradeManagerAllCities "全ての国"
-str_ldl_TradeManagerCitiesPerGood "表示都市数:"
+str_ldl_TradeManagerCities "Show Cities:"
+str_ldl_TradeManagerOwnCities "Own"
+str_ldl_TradeManagerFriendlyCities "Friendly"
+str_ldl_TradeManagerAllCities "All"
+str_ldl_TradeManagerCitiesPerGood "Cities Per Good:"
 
 # Moved from info_str.txt, had an error (string[0] no good, need action[0])
-NEXT_EMAIL_PLAYER 			"デスクトップにセーブしたゲームを{player[0].civ_name_plural}の{player[0].leader_name} ({action[0].name})に送信してください｡"
+NEXT_EMAIL_PLAYER 			"Please mail the saved game on your desktop to {player[0].leader_name} ({action[0].name}) of the {player[0].civ_name_plural}."
 
 # Added strings for the science screen.
-str_ldl_ResearchGoal		"* 目標:"
+str_ldl_ResearchGoal		"* Goal:"
 
 # TURN in all caps for control panel close button lable
-str_ldl_endbuttonTURN	"ターン"
+str_ldl_endbuttonTURN	"TURN"
 
 # String for not showing dialogs again.
-str_ldl_DontShowAgain		"このメッセージを再び表示しない｡"
+str_ldl_DontShowAgain		"Don't show this message again."
 
 # In science picker, when the advance gives you tile improvements:
-ADVANCE_GIVES_TILE_IMPROVEMENTS "地形改善:"
+ADVANCE_GIVES_TILE_IMPROVEMENTS "Terrain Improvements:"
 
-str_ldl_RADAR_MAP_TRADE "貿易"
-str_ldl_RADAR_MAP_TERRAIN "地形"
+str_ldl_RADAR_MAP_TRADE "Trade"
+str_ldl_RADAR_MAP_TERRAIN "Terrain"
 
 ##############################################
 ## PLEASE ENTER NEW STUFF BELOW THIS LINE
 ## Strings above sent to be localized 9/18/00
 ##############################################
 
-BC_YEAR_FORMAT "BC %d"
-AD_YEAR_FORMAT "AD %d"
+BC_YEAR_FORMAT "%d BC"
+AD_YEAR_FORMAT "%d AD"
 
 
 # Advanced Options Title
-str_ldl_AdvancedOptions "高度なオプション"
+str_ldl_AdvancedOptions "ADVANCED OPTIONS"
 
 #updated from ldl_str
-str_ldl_INFORMATION_DIALOG_TITLE 			"ゲームの詳細データ"
+str_ldl_INFORMATION_DIALOG_TITLE 			"S T A T I S T I C S"
 
-str_COMPUTER_TURNS		"処理中..."
+str_COMPUTER_TURNS		"Computer turns..."
 
-str_ldl_CAPS_GREAT_LIBRARY	"百科事典"
+str_ldl_CAPS_GREAT_LIBRARY	"G R E A T    L I B R A R Y"
 
 #revised from ldl_str.txt
 str_code_TotalPollutionFormat "%d"
-str_ldl_CityWinHappiness "幸福度"
-str_ldl_CityWinPollution "汚染レベル:"
+str_ldl_CityWinHappiness "Happiness:"
+str_ldl_CityWinPollution "Pollution:"
 
 #revised from above to eliminate phrase 'Total: '
 str_code_CityWinTotalHappinessFormat "%d"
 
-str_ldl_Starving "飢餓"
+str_ldl_Starving "Starving"
 
-str_ldl_reloadSlic "Slic再ﾛｰﾄﾞ"
-str_ReloadSlic_OK "Slicの再ロード完了!"
-str_ReloadSlic_Fail "Slicの再ロード失敗!  構文エラーをチェックしてください!"
-str_ldl_scen_notes "注意:"
+str_ldl_reloadSlic "Reload Slic"
+str_ReloadSlic_OK "Slic Reload OK!"
+str_ReloadSlic_Fail "Slic Reload Fail!  Check for syntax errors!"
+str_ldl_scen_notes "NOTES:"
 
 #Unit Manager Advisor Window Title -- this is completely new
-str_ldl_MilitaryAdvisor "軍事アドバイザー"
+str_ldl_MilitaryAdvisor "MILITARY ADVISOR"
 
 #Trade Manager Advisor Window Title -- this is completely new
-str_ldl_TradeAdvisor	"貿易アドバイザー"
+str_ldl_TradeAdvisor	"TRADE ADVISOR"
 
 #City Manager Advisor Window Title -- this is a revision from title to ALL CAPS
 # the original can be found in add_str, above.
-str_ldl_CityAdvisor	"都市アドバイザー"
-str_ldl_DeclareEmbargo "貿易禁止"
-str_ldl_IW_CONFIRM_EMBARGO "{player[0].country_name}に貿易禁止を宣言する？"
-str_Goods_Generated "交易品の生産完了!"
-str_Goods_All_Gone "交易品の削除完了!"
-str_ldl_RemoveGoods "全交易品の削除"
-str_ldl_GenerateGoods "交易品の作成"
+str_ldl_CityAdvisor	"CITY ADVISOR"
+str_ldl_DeclareEmbargo "Embargo"
+str_ldl_IW_CONFIRM_EMBARGO "Declare embargo on {player[0].country_name}?"
+str_Goods_Generated "Goods Generated OK!"
+str_Goods_All_Gone "Goods Removed OK!"
+str_ldl_RemoveGoods "Remove All Goods"
+str_ldl_GenerateGoods "Generate Goods"
 
 ##############################################
 ## PLEASE ENTER NEW STUFF BELOW THIS LINE
@@ -189,46 +189,46 @@ str_ldl_GenerateGoods "交易品の作成"
 #
 # Network strings: Commented out in ldl_str.txt, converted to ctp2 format
 #
-NETWORK_PLAYER_LEFT "{action[0].name}は､ゲームを中断しました｡プレイヤーが使用していた既存の帝国は､コンピュータ プレイヤーによって統治されます｡"
-NETWORK_PLAYER_JOINED "{action[0].name}は､{player[0].civ_name_plural}の統治を行っています｡"
-NETWORK_DIFFERENT_PLAYER_JOINED "{action[0].name}は､{player[0].civ_name_plural}として参加しようとしています｡しかし､この帝国は､元々別のプレイヤーが使用していたものです｡彼の参加を拒否しますか？"
-BUTTON_EJECT "拒否する"
-BUTTON_LET_THEM_STAY "参加させる"
-NETWORK_YOU_ARE_NOW_HOST "このゲームのホストになりました｡"
-NETWORK_NEW_HOST "{action[0].name}がこのゲームのホストになりました｡"
-NETWORK_YOU_ARE_NOW_HOST "このゲームのホストになりました｡"
-NETWORK_NEW_HOST "{action[0].name}がこのゲームのホストになりました｡"
-NETWORK_SESSION_LOST "ホストの接続が切れたので､ロビーに戻ります｡"
-NETWORK_WAITING_ON_PLAYERS "プレイヤーを待っています"
-NETWORK_WAITING_FOR_DATA "データを待っています"
-NETWORK_RESYNCING "同期を取っています"
+NETWORK_PLAYER_LEFT "{action[0].name} has left the game.  A computer player will take control of the exiting player's empire."
+NETWORK_PLAYER_JOINED "{action[0].name} has taken control of the {player[0].civ_name_plural}"
+NETWORK_DIFFERENT_PLAYER_JOINED "{action[0].name} is joining as the {player[0].civ_name_plural}, but that empire originally belonged to someone else.  Do you wish to eject them?"
+BUTTON_EJECT "Eject"
+BUTTON_LET_THEM_STAY "Let Them Stay"
+NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
+NETWORK_NEW_HOST "{action[0].name} is now the host of this game."
+NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
+NETWORK_NEW_HOST "{action[0].name} is now the host of this game."
+NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
+NETWORK_WAITING_ON_PLAYERS "Waiting on players"
+NETWORK_WAITING_FOR_DATA "Waiting for data"
+NETWORK_RESYNCING "Resynchronizing"
 
 # This one is new.  Used as the "sender" of chat messages that are sent by the engine, not another player.
-NETWORK_SENDER_SYSTEM "システム"
+NETWORK_SENDER_SYSTEM "System"
 
-str_ldl_AddStuff "ユニットや改善施設の追加"
-str_ldl_SelectCity "都市の選択!"
-str_ldl_AddPW "公共労働力の追加:"
-str_ldl_AddGold "ゴールドの追加:"
+str_ldl_AddStuff "A D D  S T U F F"
+str_ldl_SelectCity "Select a City!"
+str_ldl_AddPW "Add Public Works:"
+str_ldl_AddGold "Add Gold:"
 
 # in Build Queue Editor Laod Screen
-str_ldl_LoadQueueColon "創設リストのロード:"
+str_ldl_LoadQueueColon "Load Queue:"
 
 #Main title for Intelligence Dialog box
-str_ldl_IntelligenceTitle "情報収集活動"
+str_ldl_IntelligenceTitle "I N T E L L I G E N C E"
 
 ##############################################
 ## PLEASE ENTER NEW STUFF BELOW THIS LINE
 ## Strings above sent to be localized 10/01/00
 ##############################################
-str_ldl_PosField "位置:"
+str_ldl_PosField "Pos:"
 
 
 #JBR1003 - moved from cut_str
-SENDER_KILLED_TRADE_ROUTE "{player[0].leader_name}は､{city[0].name}から{city[1].name}まで{good[0].name}を運ぶ貿易ルートを放棄しました｡"
-NETWORK_TIME_LEFT "残り時間"
+SENDER_KILLED_TRADE_ROUTE "{player[0].leader_name} has cancelled the trade route carrying {good[0].name} from {city[0].name} to {city[1].name}."
+NETWORK_TIME_LEFT "Time Left"
 
-str_ldl_CityEspionage "都市の探索"
+str_ldl_CityEspionage "City Espionage"
 str_ldl_NatlManagerHotKey "F1"
 str_ldl_EmpireManagerHotKey "F2"
 str_ldl_ScienceHotKey "F3"
@@ -256,107 +256,108 @@ str_ldl_RestartHotKey "ctl+z"
 
 str_ldl_NewGameHotKey "ctl+x"
 str_ldl_SoundHotKey "ctl+v"
+str_ldl_MusicHotKey "ctl+m"
 str_ldl_GraphicsHotKey "ctl+f"
 str_ldl_GameplayHotKey "ctl+p"
 str_ldl_CityEspionageHotKey "ctl+e"
-str_ldl_FindMeButton "移動!"
+str_ldl_FindMeButton "Locate!"
 str_ldl_FindX "X"
 str_ldl_FindY "Y"
-str_ldl_FindPosLabel "現在位置:"
-str_ldl_CityManager "都市管理"
+str_ldl_FindPosLabel "Find Pos:"
+str_ldl_CityManager "City Manager"
 
 # Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
-NETWORK_CURRENT_PLAYER "現在のプレイヤー"
-str_tbl_ldl_Open_City_Management "都市管理"
-str_tbl_ldl_Open_Build_Queue "生産管理"
-str_tbl_ldl_Open_Trade_Summary "貿易の概要"
-str_tbl_ldl_Open_Dip_Wizard "新しい提案"
-str_tbl_ldl_Gaia "ガイア"
-str_tbl_ldl_Open_Wonders "七不思議"
-str_tbl_ldl_Open_Ranking "ランク"
-str_tbl_ldl_Msg_Tab "メッセージ タブ"
-str_tbl_ldl_TileImp_Tab "地形改善"
-str_tbl_ldl_Open_Scenario_Editor "シナリオ エディター"
-str_tbl_ldl_Sound_Options "サウンド オプション"
-str_tbl_ldl_Graphics_Options "グラフィック オプション"
-str_tbl_ldl_Gameplay_Options "ゲームプレイ オプション"
-str_tbl_ldl_Restart_Game "ゲームの再スタート"
-str_tbl_ldl_New_Game "新しいゲーム"
-str_tbl_ldl_Toggle_Radar "全体マップの表示/非表示"
-str_tbl_ldl_Toggle_Ctl_Panel "ｺﾝﾄﾛｰﾙ ﾊﾟﾈﾙの表示/非表示"
-str_tbl_ldl_Toggle_All "すべての表示/非表示"
-str_tbl_ldl_Open_Army_Mgmt "軍管理の表示"
-str_ldl_UNIT_CONTROLS "ユニット コントロール"
-str_ldl_GreatLibrary "百科事典"
+NETWORK_CURRENT_PLAYER "Current player"
+str_tbl_ldl_Open_City_Management "City Manager"
+str_tbl_ldl_Open_Build_Queue "City Build Queue"
+str_tbl_ldl_Open_Trade_Summary "Trade Summary"
+str_tbl_ldl_Open_Dip_Wizard "New Proposal"
+str_tbl_ldl_Gaia "Gaia"
+str_tbl_ldl_Open_Wonders "Wonders"
+str_tbl_ldl_Open_Ranking "Rank"
+str_tbl_ldl_Msg_Tab "Message Tab"
+str_tbl_ldl_TileImp_Tab "Terrain Improvements"
+str_tbl_ldl_Open_Scenario_Editor "Scenario Editor"
+str_tbl_ldl_Sound_Options "Sound Options"
+str_tbl_ldl_Graphics_Options "Graphics Options"
+str_tbl_ldl_Gameplay_Options "Gameplay Options"
+str_tbl_ldl_Restart_Game "Restart Game"
+str_tbl_ldl_New_Game "New Game"
+str_tbl_ldl_Toggle_Radar "Hide/show Radar"
+str_tbl_ldl_Toggle_Ctl_Panel "Hide/show Control Panel"
+str_tbl_ldl_Toggle_All "Hide/show All"
+str_tbl_ldl_Open_Army_Mgmt "Open Army Manager"
+str_ldl_UNIT_CONTROLS "UNIT CONTROLS"
+str_ldl_GreatLibrary "Great Library"
 str_control_key "ctrl"
 
-str_ldl_EnableAllMessages "全メッセージの表示"
+str_ldl_EnableAllMessages "Enable all messages"
 
 
 #################################
 #status text for scenario editor#
 #################################
-str_SE_MapSize "[マップ サイズの変更]で新しいマップをロード"
-str_SE_YearSpinner "ターン数 - 対応する年のために[年表示]を参照"
-str_SE_YearDisplay "年表示"
-str_SE_Difficulty "ゲームの難易度を選択"
-str_SE_Barbarians "バーバリアンの脅威を選択"
-str_SE_SaveMap "マップだけをセーブ"
-str_SE_LoadMap "マップだけをロード"
-str_SE_SaveScenario "ゲームとしてシナリオをセーブ"
-str_SE_LoadScenario "シナリオのロード"
-str_SE_WorldTab "世界タブ - すべてのグローバル オプション"
-str_SE_UnitTab "ユニット タブ - プレイヤーのユニットを表示"
-str_SE_CityTab "都市タブ - プレイヤーの都市の作成/変更"
-str_SE_Civ_Button "帝国タブ - プレイヤーが設定を変更"
-str_SE_Hut "遺跡の配置/削除"
-str_SE_River "河川の配置/削除"
-str_SE_Good1 "交易品1の配置/削除"
-str_SE_Good2 "交易品2の配置/削除"
-str_SE_Good3 "*交易品3の配置/削除 - terrain.txtで定義必要"
-str_SE_Good4 "*交易品4の配置/削除 - terrain.txtで定義必要"
-str_SE_Pollution "汚染のオン/オフ"
-str_SE_Land "地上ユニットの表示"
-str_SE_Sea "艦船ユニットの表示"
-str_SE_Air "航空ユニットの表示"
-str_SE_Special "非通常/特殊ユニットの表示"
-str_SE_PopSpinner "選択した都市の人口を設定"
-str_SE_AddBuildings "選択した都市に建物を追加"
-str_SE_AddWonders "選択した都市に七不思議を追加"
-str_SE_PlayerSelect "プレイヤーの選択"
-str_SE_FullMode "プレイヤーで開始位置を指定 - 全ての国家が選択出来ます"
-str_SE_NoCiv "プレイヤーで開始位置を指定 - 国家選択は出来ません"
-str_SE_WithCiv "国家で開始位置を指定､プレイヤーの選択も出来ます"
-str_SE_JustCiv "国家で開始位置を指定､プレイヤーの選択は出来ません"
-str_SE_AddPW "公共労働力の追加 - 数値を入力してEnterキーを押す"
-str_SE_AddGold "ゴールドの追加 - 数値を入力してEnterキーを押す"
-str_SE_Erase "ユニットまたは都市の削除"
-str_SE_ClearWorld "マップで全ての陸地タイルをクリア"
-str_SE_ReloadSlic "SLICファイルの再ロード"
-str_SE_Fog "戦場の霧のオン/オフ"
-str_SE_Copy "コピー モードをオン - クリック アンド ドラッグで領域を選択"
-str_SE_Paste "ペースト モードをオン - カーソルは選択位置の左上に配置"
-str_SE_SaveClip "選択領域をクリップ ボードにセーブ"
-str_SE_SmallBrush "1タイルの配置"
-str_SE_MedBrush "2x2タイルの配置"
-str_SE_LargeBrush "8x8タイルの配置"
-str_SE_LoadClip "選択領域をクリップ ボードからロード"
-str_SE_Explore "全世界を探検済みに"
-str_SE_Unexplore "全世界を未探検に"
-str_SE_XWrap "X方向のマップ端の接続オン/オフ"
-str_SE_YWrap "Y方向のマップ端の接続オン/オフ"
-str_SE_Pos "カーソルの現在位置"
-str_SE_LegalOnly "プレイヤーが実現した進歩のユニットだけを配置"
-str_SE_ShowLabels "ラベルのオン/オフ"
-str_SE_AddAdvances "プレイヤーの進歩を追加/削除"
-str_SE_Nation "プレイヤーの国を選択"
-str_SE_LeaderName "指導者の名前を表示/非表示"
-str_SE_CityName "選択した都市の名前を表示/変更"
-str_SE_FindPosX "X座標の入力"
-str_SE_FindPosY "Y座標の入力"
-str_SE_FindMe "X､Y座標でクリックした場所を表示"
-str_SE_RemoveGoods "マップから全交易品を削除"
-str_SE_GenerateGoods "マップに交易品を追加"
+str_SE_MapSize "Change Map Size loads a new map"
+str_SE_YearSpinner "Number of turns - see Year Display for corresponding year"
+str_SE_YearDisplay "Year Display"
+str_SE_Difficulty "Select game Difficulty"
+str_SE_Barbarians "Select Barbarian Threat"
+str_SE_SaveMap "Save Map ONLY"
+str_SE_LoadMap "Load Map ONLY"
+str_SE_SaveScenario "Save Scenario as a saved game"
+str_SE_LoadScenario "Load Scenario"
+str_SE_WorldTab "World Tab - all global options"
+str_SE_UnitTab "Unit Tab - place units for any player"
+str_SE_CityTab "City Tab - create/change cities for any player"
+str_SE_Civ_Button "Empire Tab - change settings for each player"
+str_SE_Hut "Place/remove Ruins"
+str_SE_River "Place/remove Rivers"
+str_SE_Good1 "Place/remove good 1"
+str_SE_Good2 "Place/remove good 2"
+str_SE_Good3 "*Place/remove good 3 - you must define this in terrain.txt"
+str_SE_Good4 "*Place/remove good 4 - you must define this in terrain.txt"
+str_SE_Pollution "Turn Pollution on/off"
+str_SE_Land "Display Land Units"
+str_SE_Sea "Display Sea Units"
+str_SE_Air "Display Air Units"
+str_SE_Special "Display Unconventional/Special units"
+str_SE_PopSpinner "Set the population of the selected city"
+str_SE_AddBuildings "Add Buildings to the selected city"
+str_SE_AddWonders "Add Wonders to the selected city"
+str_SE_PlayerSelect "Select a player"
+str_SE_FullMode "Place start locations by Player, with nation choice, for all nations"
+str_SE_NoCiv "Place start locations by player, with no nation choice"
+str_SE_WithCiv "Place start locations by Nation, with player choice"
+str_SE_JustCiv "Place start locations by Nation, regardless of player"
+str_SE_AddPW "Add Public Works - enter a number and hit 'Enter'"
+str_SE_AddGold "Add Gold - enter a number and hit 'Enter'"
+str_SE_Erase "Remove any unit or city"
+str_SE_ClearWorld "Clear all land tiles from the world"
+str_SE_ReloadSlic "Reload SLIC files"
+str_SE_Fog "Turn Fog of War on/off "
+str_SE_Copy "Set Copy mode ON - click and drag to select an area"
+str_SE_Paste "Set Paste mode ON - cursor places upper left of selection"
+str_SE_SaveClip "Save the selected area to the clipboard"
+str_SE_SmallBrush "Single tile placement"
+str_SE_MedBrush "2x2 tile placement"
+str_SE_LargeBrush "8x8 tile placement"
+str_SE_LoadClip "Load selection from clipboard"
+str_SE_Explore "Set the entire world Explored"
+str_SE_Unexplore "Set the entire world Unexplored"
+str_SE_XWrap "Turn X wrap on/off"
+str_SE_YWrap "Turn Y wrap on/off"
+str_SE_Pos "Current position of cursor"
+str_SE_LegalOnly "Place only units for which player has enabling advances"
+str_SE_ShowLabels "Turn labels on/off"
+str_SE_AddAdvances "Add/Remove player Advances"
+str_SE_Nation "Select player Nation"
+str_SE_LeaderName "Display/Change the Leader Name"
+str_SE_CityName "Display/Change city name for selected city"
+str_SE_FindPosX "Enter an X coordinate"
+str_SE_FindPosY "Enter a Y coordinate"
+str_SE_FindMe "Click to center on the X,Y coordinate"
+str_SE_RemoveGoods "Remove all goods from the map"
+str_SE_GenerateGoods "Add goods to the map"
 
 ### Changed Strings
 ## add {city[0].name}
@@ -364,88 +365,83 @@ str_SE_GenerateGoods "マップに交易品を追加"
 
 ### Trust Warning Messages ###
 ### Global Trust Loss ###
-TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}､我国は{player[1].civ_name_singular}の非軍事ユニットを攻撃しましたが､世界中がこの行為を戦争犯罪と考えているようです｡{player[1].civ_name_plural}だけではなく､他の全ての国まで怒らせてしまったようです｡"
-TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}､我国は警告も挑発もなく､{player[1].civ_name_plural}を攻撃しました！　この行為は常識に反した裏切り行為だと､彼らに強い衝撃を与えたようです｡もっと厄介なことに､世界中が我国の信頼性に疑問を抱いています｡"
-MILITARY_PACT_BROKEN_BY_YOU 		"{player[0].sir_cap}､我国は{player[1].civ_name_singular}の前線に部隊を送り込んでいないため､軍事協定を破ったことになります｡彼らは裏切られたと感じています｡"
-TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}､{player[1].civ_name_plural}を攻撃したため､彼らと結んだ平和条約に違反したことになります！　彼らは激怒しており､我国に警戒するように他の国々にも呼びかけているに違いありません｡"
-ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}､我国は{player[1].civ_name_plural}と結んだ同盟に違反しました！　彼らは非常に怒っています！　このようなやり方で信頼を踏みにじれば､他の国々も我国を信用しなくなる恐れがあります！"
+TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, we have killed a {player[1].civ_name_singular} civilian unit!  This is considered a war crime in the eyes of the world.  We have not only upset the {player[1].civ_name_plural}, but every other nation."
+TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}, we have attacked the {player[1].civ_name_plural} without warning or provocation!  They feel deeply betrayed at our violation of standard conduct.  To make matters worse, the world community is now questioning our trustworthiness."
+MILITARY_PACT_BROKEN_BY_YOU 		"{player[0].sir_cap}, by not sending our troops to the {player[1].civ_name_singular} front lines, we have violated our Military Pact with them.  They are feeling betrayed."
+TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}, by attacking the {player[1].civ_name_plural} we have violated our established peace treaty with them!  They are outraged and will certainly warn the other nations of the world to be wary of us in the future."
+ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}, we have violated our Alliance with the {player[1].civ_name_plural}!  They are deeply upset with us!  It is doubtful that any nation will trust us after such an egregious violation of trust!"
 
 ### Nation-specific Trust Loss ###
-IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}､我国は{player[1].civ_name_singular}の国境を侵犯しないと合意しています｡領土にユニットを侵入させるなどとは､彼らをわざわざ怒らせたいのですか？"
-TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}､まだ{player[1].civ_name_singular}の領土から部隊を引き揚げていません｡彼らの不満が高まっているようです｡今後は､我国との合意に難色を示すようになるでしょう｡"
-TRUST_LOSS_FAIL_TO_STOP_PIRACY		"我国が{player[1].civ_name_singular}の貿易ルートで海賊行為を続けているため､彼らは我国に憎しみを感じています｡今後､{player[1].civ_name_plural}は我国を信用しないでしょう｡"
-TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}､我国は{player[1].civ_name_plural}と結んだ停戦協定を破りました｡彼らは深い憎しみを感じています｡これで彼らは､もはや我国を信用しないでしょう｡"
-TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}､最近の我国の行動は､{player[1].civ_name_plural}と結んだ研究協定に違反しています｡彼らは我国を警戒しており､我国の真意に疑いを抱いています｡"
-TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}､{player[1].civ_name_plural}と結んだ貿易協定によると､我国の最近の活動は違反行為に当たります｡彼らの信頼を傷つけてしまったので､今後しばらく彼らの怒りは治まらないでしょう！"
-ECOPACT_BROKEN_BY_YOU 			"{player[0].sir_cap}､{player[1].country_name}と結んだ汚染防止協定に違反しました｡彼らは､我国に不快感を表しています！"
+IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, we have agreed to respect {player[1].civ_name_singular} borders.  Would you like to risk angering them by moving units onto their territory?"
+TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}, we have failed to withdraw our troops from {player[1].civ_name_singular} lands.  They are growing wary of us, and will be hesitant to enter agreements with us in the future."
+TRUST_LOSS_FAIL_TO_STOP_PIRACY		"Because we have continued to pirate {player[1].civ_name_singular} trade routes, they are angry with us.  The {player[1].civ_name_plural} may not trust us in the future."
+TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}, we have violated our cease fire with the {player[1].civ_name_plural}.  They are deeply upset with us, and may no longer trust us as a result."
+TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}, our recent actions have constituted a violation of our Research Pact with the {player[1].civ_name_plural}.  They are now wary of us, and question our intentions."
+TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, our recent actions have forced us to renege on our Trade Pact with the {player[1].civ_name_plural}.  This is a violation of trust that they will not soon forget!"
+ECOPACT_BROKEN_BY_YOU 			"{player[0].sir_cap}, we have violated our Pollution Pact with {player[1].country_name}.  They are not happy with us!"
 
 # Filename prefix for quicksaves.
-QUICKSAVE_NAME "クイック セーブ"
+QUICKSAVE_NAME "QUICKSAVE"
 
 # Scenario editor <CHANGEME>
-str_ldl_Confirm_Restart		"ゲームを本当に再スタートしますか？"
-REGARD_EVENT_WONDER "{player[0].civ_name_plural}は､我国が所有している素晴らしい七不思議に感動しております｡"
+str_ldl_Confirm_Restart		"This will restart the game, are you sure?"
+REGARD_EVENT_WONDER "The {player[0].civ_name_plural} are impressed by the amazing wonders our nation possessess."
 
 # for the keymap screen
-str_tbl_ldl_Advanced_Options "高度なｵﾌﾟｼｮﾝ"
+str_tbl_ldl_Advanced_Options "Advanced Options"
 
 # Two items on the options menu
-str_ldl_ZoomOut "ズームアウト"
-str_ldl_ZoomIn "ズームイン"
+str_ldl_ZoomOut "Zoom Out"
+str_ldl_ZoomIn "Zoom In"
 
 # Added for network games, there are more restrictions on when you can initiate diplomacy
-str_code_CantInitiateDiplomacyNow "自分のターンでない場合､あるいは前の提案の返事を待っている場合､新しい提案は送信できません｡"
+str_code_CantInitiateDiplomacyNow "You cannot send a new proposal when it is not your turn, or when you are waiting for a response to a previous proposal."
 
 # Status text for minimize button on radar map
-STATUSBAR_MINIMAP_MINIMIZE "ウィンドウの最小化/最大化はここをクリック"
-str_player_choice "プレイヤーの選択"
+STATUSBAR_MINIMAP_MINIMIZE "Click here to minimize/maximize this window"
+str_player_choice "Player Choice"
 
 # Entry on right click menu for the cargo view
-CONTEXT_VIEW_CARGO "  貨物の表示"
+CONTEXT_VIEW_CARGO "  View Cargo"
 
 # For netshell list header
-str_ldl_Settlers "開拓者"
+str_ldl_Settlers "Settlers"
 
 # Diplomacy Manager Embargo Button
-TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"貿易禁止の宣言"
-STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"他国に自国との貿易を禁止する場合､ここをクリックします｡"
+TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Declare an Embargo"
+STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Click here to prevent a foreign nation from trading with you."
 
 # Default Build List Sequence
-BUILD_LIST_SEQUENCE_DEFAULT "デフォルト"
+BUILD_LIST_SEQUENCE_DEFAULT "Default"
 
 # When units will be disbanded due to a government change, ask first:
-str_code_GovernmentChangeDisbandsUnits "新しい政治体制にすると､一部のユニットが解散してしまいますが､本当によろしいですか？"
+str_code_GovernmentChangeDisbandsUnits "Enacting this government will cause some of your units to be disbanded, are you sure you wish to enact it?"
 
 # For the science picker
-ADVANCE_GIVES_GOVS "政治体制:"
+ADVANCE_GIVES_GOVS "Governments:"
 
 # New Status text strings
-STATUSBAR_TRADEMAN_OPEN_CITIES_SLIDER			"交易品別に都市を表示する場合､これを使用します｡"
-STATUSBAR_TRADEMAN_OPEN_SORTBY_NATION_BUTTON	"受け取った国でリストを並び替える場合､ここをクリックします｡"
-STATUSBAR_CITYMAN_MAIN_CLEAR_BUTTON				"創設リストで全ユニットや改善施設をクリアする場合､ここをクリックします｡"
-STATUSBAR_DIPMAN_TABLE_DECLAREWAR_BUTTON		"他国に宣戦布告する場合は､ここをクリックします｡"
-STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON		"この国の情報をチェックする場合､ここをクリックします｡"
-STATUSBAR_ARMYMAN_ADD_BUTTON					"部隊に選択ユニットを追加する場合､ここをクリックします｡"
-STATUSBAR_ARMYMAN_ADD_ALL_BUTTON				"部隊に全ユニットを追加する場合､ここをクリックします｡"
-STATUSBAR_ARMYMAN_REMOVE_BUTTON					"部隊から選択ユニットを外す場合､ここをクリックします｡"
-STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON				"部隊から全ユニットを外す場合､ここをクリックします｡"
-STATUSBAR_ARMYMAN_CLOSE_BUTTON					"軍管理画面を閉じる場合､ここをクリックします｡"
-STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"新しい部隊を編成する場合､ここをクリックします｡"
+STATUSBAR_TRADEMAN_OPEN_CITIES_SLIDER			"Use this to set the cities shown per good."
+STATUSBAR_TRADEMAN_OPEN_SORTBY_NATION_BUTTON	"Click here to sort list by the nations that receive them."
+STATUSBAR_CITYMAN_MAIN_CLEAR_BUTTON				"Click here to clear all items from the build queue."
+STATUSBAR_DIPMAN_TABLE_DECLAREWAR_BUTTON		"Click here to declare war on a foreign nation."
+STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON		"Click here to check intelligence on this nation."
+STATUSBAR_ARMYMAN_ADD_BUTTON					"Click here to add selected units to this army."
+STATUSBAR_ARMYMAN_ADD_ALL_BUTTON				"Click here to add all units to this army."
+STATUSBAR_ARMYMAN_REMOVE_BUTTON					"Click here to remove selected units from this army."
+STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON				"Click here to remove all units from this army."
+STATUSBAR_ARMYMAN_CLOSE_BUTTON					"Click here to close the army manager."
+STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Click here to create a new army."
 
 # Fix for localization
-str_profile_EndTurnSound "ターン サウンドの停止"
+str_profile_EndTurnSound "End Turn Sound"
 
 # For the context menu, lets you get the tile info window for squares with cities/units.
-CONTEXT_TILE_INFO "地形情報"
+CONTEXT_TILE_INFO "Map Info"
 
 # One more reason for happiness display on city manager
-HAPPY_REASON_FEATS "七不思議の祝祭"
+HAPPY_REASON_FEATS "Feats of Wonder"
 
 # A different kind of disconnection message for network games
-NETWORK_ACTIVENET_LOST "サーバーの接続が切れましたので､ロビーに戻ります｡"
+NETWORK_ACTIVENET_LOST "Connection to Activenet server lost, attempting to return to lobby."
 
-############################################################################
-#                 Here after,   Added by altered source project            #
-############################################################################
-
-str_ldl_MusicHotKey "ctl+m"

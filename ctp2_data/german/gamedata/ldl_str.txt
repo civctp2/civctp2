@@ -1529,7 +1529,7 @@ str_ldl_Disclaimer3 "Kontakt: ctp2source@apolyton.net."
 
 ### Version String ###
 
-str_ldl_version "2003-12-23"
+str_ldl_version "2004-01-31"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################

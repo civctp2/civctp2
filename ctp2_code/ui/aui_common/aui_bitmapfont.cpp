@@ -496,7 +496,7 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 		error = TT_Load_Glyph(
 			m_ttInstance,
 			ttGlyph,
-			TT_Char_Index( m_ttCharMap, c16 ),
+			TT_Char_Index( m_ttCharMap, (uint16)uint8(c) ),
 			TTLOAD_DEFAULT );
 		Assert( error == 0 );
 		if ( error ) goto Error;
