@@ -327,7 +327,7 @@ void SlicFrame::AddArg(SS_TYPE type, SlicStackValue value)
 //
 // Parameters : SOP op
 //
-// Globals    : This function is so big no idea.
+// Globals    : Unknown (function very large)
 //
 // Returns    : -
 //
@@ -550,7 +550,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 //It is a problem of slic code and not of the ctp2.exe,
 //the slicer has to solve the problem.
 				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
-					c3errors_ErrorDialog("Slic", "In object %s: Devision by 0.", m_segment->GetName());
+					c3errors_ErrorDialog("Slic", "In object %s: Division by 0.", m_segment->GetName());
 				}
 #endif
 				sval3.m_int = 0;

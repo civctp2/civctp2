@@ -35,6 +35,8 @@
 // - #01 Recalculating military support costs after government change
 //   (L. Hirth 7/2004)
 // - Prevent cities from revolting twice in the same turn. By kaan.
+// - Prevent instant messages showing out of turn in hotseat
+//   (J Bytheway 2004/09/15)
 //
 //----------------------------------------------------------------------------
 
@@ -6889,9 +6891,7 @@ void Player::AddMessage(Message &msg)
 	if(!g_network.IsActive() || 
 	   g_network.GetPlayerIndex() == m_owner ||
 	   m_playerType != PLAYER_TYPE_NETWORK )
-
-
-		{
+	{
 		m_messages->Insert(msg) ;
 #ifdef _DEBUG
 		{
@@ -6932,6 +6932,14 @@ void Player::AddMessage(Message &msg)
 				} else {
 					messagewin_CreateMessage( msg );
 					if(msg.IsInstantMessage() &&
+#ifndef ACTIVISION_ORIGINAL
+						// JJB added this to prevent instant messages showing
+						// out of turn in hotseat games.
+						// With the existing behaviour they would show immediately
+						// which would often mean that they show on the wrong players
+						// turn.
+						 g_selected_item->GetVisiblePlayer() == m_owner &&
+#endif
 					   ((!g_currentMessageWindow) ||
 					    (!g_currentMessageWindow->GetMessage()) ||
 					    (!g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())))) {

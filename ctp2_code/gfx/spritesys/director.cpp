@@ -27,6 +27,7 @@
 //
 // - Prevented game freeze when an item gets deleted while the program is 
 //   waiting for it to finish.
+// - Prevented messages appearing out of turn in hoseat mode
 //
 //----------------------------------------------------------------------------
 
@@ -4230,7 +4231,16 @@ void dh_message(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 			if(!action->message.AccessData()->GetMessageWindow()) {
 				messagewin_CreateMessage( action->message );
 			}
-			if(action->message.IsInstantMessage()) {
+			if(action->message.IsInstantMessage()
+#ifndef ACTIVISION_ORIGINAL
+					// JJB added this to prevent instant messages showing
+					// out of turn in hotseat games.
+					// With the existing behaviour they would show immediately
+					// which would often mean that they show on the wrong players
+					// turn.
+					 && g_selected_item->GetVisiblePlayer() == action->message.GetOwner()
+#endif
+				) {
 				action->message.Show();
 			}
 		}

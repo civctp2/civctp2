@@ -372,24 +372,40 @@ void SlicObject::Execute()
 	Finish();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Finish
+//
+// Description: Displays any messagebox defined by this SlicObject
+//              and then deletes the associated SlicFrame
+//
+// Parameters : -
+//
+// Globals    : Unknown
+//
+// Returns    : -
+//
+// Remark(s)  : This gets the MessageData object from m_frame, finishes
+//              initializing its fields and uses it to construct a
+//              Message object which is then added to g_theMessagePool.
+//              
+//              It appears to do this once for each recipient, and it seems
+//              to use the same MessageData object every time, so a great
+//              deal of the work could be superfluous, and could be moved
+//              out of the for loop.
+//
+//----------------------------------------------------------------------------
 void SlicObject::Finish() 
 {
 	if(m_segment->GetType() == SLIC_OBJECT_MESSAGEBOX) {
 		
-		
-		
-		
 		if (m_numRecipients == 0 && !g_civApp->IsGameLoaded()) {
-			
-			
 			
 			MessageData *messageData = m_frame->GetMessageData();
 
 			if(m_segment->IsHelp()) {
 				messageData->SetIsHelpBox();
 			}
-
-			
 			
 			MessageData *newData;
 			Message newMessage(g_theMessagePool->NewKey(k_BIT_GAME_OBJ_TYPE_MESSAGE));
@@ -405,7 +421,7 @@ void SlicObject::Finish()
 			}
 		} else {
 			for(sint32 i = 0; i < m_numRecipients; i++) {
-                m_segment->SetLastShown(m_recipientList[i], g_turn->GetRound());
+				m_segment->SetLastShown(m_recipientList[i], g_turn->GetRound());
 
 				if(g_slicEngine->IsMessageClassDisabled(m_class))
 					continue;
