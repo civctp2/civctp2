@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The window of the Great Libary
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leaks repaired in LoadText by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -246,6 +276,23 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 	return AUI_ERRCODE_OK;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : LoadText
+//
+// Description: ?
+//
+// Parameters : ctp2_HyperTextBox *textbox
+//              char *filename
+//              SlicObject &so
+//
+// Globals    : ?
+//
+// Returns    : int: function?
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, SlicObject &so)
 {
     char *text;
@@ -293,7 +340,12 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 
     textbox->SetHyperText(interpreted);
 
-
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann
+	if (lower_case_filename)
+		delete [] lower_case_filename;
+		//free lower_case_filename like in SetTechMode
+#endif
 
     return(1);
 }

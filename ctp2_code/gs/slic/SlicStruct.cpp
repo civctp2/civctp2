@@ -1,5 +1,33 @@
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Slic Structure
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leaks repaired.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SlicStruct.h"
@@ -161,6 +189,21 @@ SlicStructInstance::SlicStructInstance(CivArchive &archive)
 	Serialize(archive);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : ~SlicStructInstance
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 SlicStructInstance::~SlicStructInstance()
 {
 	if(m_dataSymbol && m_createdData) {
@@ -173,7 +216,12 @@ SlicStructInstance::~SlicStructInstance()
 		for(i = 0; i < m_description->GetNumMembers(); i++) {
 			if(m_members[i]) {
 				delete m_members[i];
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 				m_members[i] = NULL;
+				// NULLing unnecessary: deleting the container next
+				// It is actual harmfull, because it creates a set of NULL pointer.
+#endif
 			}
 		}
 		delete [] m_members;
