@@ -28,6 +28,7 @@
 // - Added slic database access by Martin Gühmann
 // - Added a way to find out the size of a slic database by Martin Gühmann
 // - slicif_cleanup() added.
+// - Fixed slic database access after a reload by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -378,6 +379,8 @@ void slicif_add_op(SOP op, ...)
 #if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann for database access
 	SlicDBInterface *conduit;
+	char *dbName;
+//	string dbName;
 #endif
 
 	char errbuf[1024];
@@ -835,6 +838,7 @@ void slicif_add_op(SOP op, ...)
 #if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database support
 		case SOP_DBNAME:
+		{
 			conduit = va_arg(vl, SlicDBConduit*);
 			Assert(conduit);
 
@@ -846,8 +850,16 @@ void slicif_add_op(SOP op, ...)
 				symval = g_slicEngine->GetOrMakeSymbol(name);
 			}
 
-			*((SlicDBInterface**)s_code_ptr) = conduit;
-			s_code_ptr += sizeof(SlicDBInterface*);
+			//Save the database name to the code data, by saving every
+			//single char including the /0 char.
+			int i;
+			dbName = const_cast<char*>(conduit->GetName());
+			for(i = 0; dbName[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = dbName[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = dbName[i];
+			s_code_ptr += sizeof(char);
 
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
@@ -864,7 +876,9 @@ void slicif_add_op(SOP op, ...)
 			}
 
 			break;
+		}
 		case SOP_DBNAMEREF:
+		{
 			conduit = va_arg(vl, SlicDBConduit*);
 			Assert(conduit);
 
@@ -885,14 +899,27 @@ void slicif_add_op(SOP op, ...)
 				yyerror(errbuf);
 			}
 
-			*((SlicDBInterface**)s_code_ptr) = conduit;
-			s_code_ptr += sizeof(SlicDBInterface*);
+			//Save the database name to the code data, by saving every
+			//single char including the /0 char.
+			int i;
+			dbName = const_cast<char*>(conduit->GetName());
+			for(i = 0; dbName[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = dbName[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = dbName[i];
+			s_code_ptr += sizeof(char);
 
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
 
-			*((char**)s_code_ptr) = name;
-			s_code_ptr += sizeof(char*);
+			//Do the same thing with the record member name:
+			for(i = 0; name[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = name[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = name[i];
+			s_code_ptr += sizeof(char);
 
 			if(!s_argValuePushed && (s_parenLevel > 0)) {
 				
@@ -905,13 +932,22 @@ void slicif_add_op(SOP op, ...)
 			}
 
 			break;
+		}
 		case SOP_DB:
 		{
 			conduit = va_arg(vl, SlicDBConduit*);
 			Assert(conduit);
 
-			*((SlicDBInterface**)s_code_ptr) = conduit;
-			s_code_ptr += sizeof(SlicDBInterface*);
+			//Save the database name to the code data, by saving every
+			//single char including the /0 char.
+			int i;
+			dbName = const_cast<char*>(conduit->GetName());
+			for(i = 0; dbName[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = dbName[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = dbName[i];
+			s_code_ptr += sizeof(char);
 
 			if(!s_argValuePushed && s_parenLevel > 0) {
 				s_argValuePushed = true;
@@ -931,10 +967,24 @@ void slicif_add_op(SOP op, ...)
 				yyerror(errbuf);
 			}
 			
-			*((SlicDBInterface**)s_code_ptr) = conduit;
-			s_code_ptr += sizeof(SlicDBInterface*);
-			*((char**)s_code_ptr) = name;
-			s_code_ptr += sizeof(char*);
+			//Save the database name to the code data, by saving every
+			//single char including the /0 char.
+			int i;
+			dbName = const_cast<char*>(conduit->GetName());
+			for(i = 0; dbName[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = dbName[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = dbName[i];
+			s_code_ptr += sizeof(char);
+
+			//Do the same thing with the record member name:
+			for(i = 0; name[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = name[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = name[i];
+			s_code_ptr += sizeof(char);
 			
 			if(!s_argValuePushed && s_parenLevel > 0) {
 				s_argValuePushed = true;
@@ -946,19 +996,29 @@ void slicif_add_op(SOP op, ...)
 		case SOP_DBARRAY:
 			break;
 		case SOP_DBSIZE:
+		{
 			//Added by Martin Gühmann to figure out via 
 			//slic how many records the database contains
 			conduit = va_arg(vl, SlicDBConduit*);
 			Assert(conduit);
 
-			*((SlicDBInterface**)s_code_ptr) = conduit;
-			s_code_ptr += sizeof(SlicDBInterface*);
+			//Save the database name to the code data, by saving every
+			//single char including the /0 char.
+			int i;
+			dbName = const_cast<char*>(conduit->GetName());
+			for(i = 0; dbName[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = dbName[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = dbName[i];
+			s_code_ptr += sizeof(char);
 
 			if(!s_argValuePushed && s_parenLevel > 0) {
 				s_argValuePushed = true;
 			}
 			s_argSymbol = NULL;
 			break;
+		}
 #endif
 		default:
 			break;
@@ -1060,8 +1120,9 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 	SlicNamedSymbol *symval;
 #if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann for database access
-	SlicDBInterface *conduit;
+//	SlicDBInterface *conduit;
 	char* name;
+	const char* dbName;
 #endif
 
 	extern FILE *debuglog;
@@ -1337,85 +1398,128 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 #if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database support
 			case SOP_DBNAME:
-				conduit = *((SlicDBConduit**)codePtr);
-				codePtr += sizeof(SlicDBConduit*);
+			{
+				//Get the database name:
+				int i;
+				dbName = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
 
 				ival = *((int*)codePtr);
 				codePtr += sizeof(int);
 
-				if(!conduit) {
+				if(!g_slicEngine->GetDBConduit(dbName)) {
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf(debuglog, "%s\n", conduit->GetName());
+					fprintf(debuglog, "%s\n", dbName);
 
 					symval = g_slicEngine->GetSymbol(ival);
 					if(!symval) {
 						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 						return;
 					}
-					fprintf(debuglog, "%s %s(%d)\n", conduit->GetName(), symval->GetName(), ival);
+					fprintf(debuglog, "%s %s(%d)\n", dbName, symval->GetName(), ival);
 				}
 				break;
+			}
 			case SOP_DBNAMEREF:
-				conduit = *((SlicDBConduit**)codePtr);
-				codePtr += sizeof(SlicDBConduit*);
+			{
+				//Get the database name:
+				int i;
+				dbName = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
 
 				ival = *((int*)codePtr);
 				codePtr += sizeof(int);
 
-				name = *((char**)codePtr);
-				codePtr += sizeof(char*);
+				//Get the member name:
+				name = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
 
-				if(!conduit) {
+				if(!g_slicEngine->GetDBConduit(dbName)) {
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf(debuglog, "%s\n", conduit->GetName());
+					fprintf(debuglog, "%s\n", dbName);
 
 					symval = g_slicEngine->GetSymbol(ival);
 					if(!symval) {
 						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 						return;
 					}
-					fprintf(debuglog, "%s(%s).%s, %s == (%d)\n", conduit->GetName(), symval->GetName(), name, symval->GetName(), ival);
+					fprintf(debuglog, "%s(%s).%s, %s == (%d)\n", dbName, symval->GetName(), name, symval->GetName(), ival);
 				}
 				break;
+			}
 			case SOP_DB:
 			{
-				conduit = *((SlicDBConduit**)codePtr);
-				codePtr += sizeof(SlicDBConduit*);
-				if(!conduit) {
+				//Get the database name:
+				int i;
+				dbName = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				if(!g_slicEngine->GetDBConduit(dbName)) {
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf(debuglog, "%s\n", conduit->GetName());
+					fprintf(debuglog, "%s\n", dbName);
 				}
 				break;
 			}
 			case SOP_DBREF:
 			{
-				conduit = *((SlicDBConduit**)codePtr);
-				codePtr += sizeof(SlicDBConduit*);
-				name = *((char**)codePtr);
-				codePtr += sizeof(char*);
-				if(!conduit) {
+				//Get the database name:
+				int i;
+				dbName = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				//Get the member name:
+				name = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				if(!g_slicEngine->GetDBConduit(dbName)) {
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf(debuglog, "%s(..).%s\n", conduit->GetName(), name);
+					fprintf(debuglog, "%s(..).%s\n", dbName, name);
 				}
 				break;
 			}
 			case SOP_DBARRAY:
 				break;
 			case SOP_DBSIZE:
+			{
 				//Added by Martin Gühmann to figure out via 
 				//slic how many records the database contains
-				conduit = *((SlicDBConduit**)codePtr);
-				codePtr += sizeof(SlicDBConduit*);
-				if(!conduit) {
+				//Get the database name:
+				int i;
+				dbName = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				if(!g_slicEngine->GetDBConduit(dbName)) {
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf(debuglog, "%s\n", conduit->GetName());
+					fprintf(debuglog, "%s\n", dbName);
 				}
 				break;
+			}
 #endif
 			default:
 				fprintf(debuglog, "???\n");

@@ -32,6 +32,7 @@
 //   the problem must be solved by the slicer not by a c++ coder, 
 //   by Martin Gühmann
 // - Treat modulo (%) 0 errors in the same way as errors with division by 0.
+// - Fixed slic database access after a reload by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -1104,8 +1105,15 @@ BOOL SlicFrame::DoInstruction(SOP op)
 #if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann for database support
 		case SOP_DBNAME:
-			conduit = *((SlicDBConduit**)codePtr);
-			codePtr += sizeof(SlicDBConduit*);
+		{
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
 			Assert(conduit);
 
 			ival = *((sint32*)codePtr);
@@ -1127,10 +1135,19 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			break;
+		}
 		case SOP_DBNAMEREF:
-			conduit = *((SlicDBConduit**)codePtr);
-			codePtr += sizeof(SlicDBConduit*);
+		{
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
 			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+			Assert(conduit);
+
 			ival = *((sint32*)codePtr);
 			codePtr += sizeof(int);
 			symval = g_slicEngine->GetSymbol(ival);
@@ -1140,8 +1157,13 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				break;
 			}
 
-			name = *((char**)codePtr);
-			codePtr += sizeof(char*);
+			//Get the member:
+			name = (char*)codePtr;
+			Assert(name);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
 
 			sval1.m_sym = symval;
 			sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
@@ -1158,10 +1180,17 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			break;
+		}
 		case SOP_DB:
 		{
-			conduit = *((SlicDBConduit**)codePtr);
-			codePtr += sizeof(SlicDBConduit*);
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
 			Assert(conduit);
 
 			sp = m_stack->Pop(type1, sval1);
@@ -1181,11 +1210,22 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		}
 		case SOP_DBREF:
 		{
-			conduit = *((SlicDBConduit**)codePtr);
-			codePtr += sizeof(SlicDBConduit*);
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
 			Assert(conduit);
-			name = *((char**)codePtr);
-			codePtr += sizeof(char*);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+
+			//Get the member:
+			name = (char*)codePtr;
+			Assert(name);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
 
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
@@ -1208,11 +1248,16 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		case SOP_DBARRAY:
 			break;
 		case SOP_DBSIZE:
+		{
 			//Added by Martin Gühmann to figure out via 
 			//slic how many records the database contains
-			conduit = *((SlicDBConduit**)codePtr);
-			codePtr += sizeof(SlicDBConduit*);
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
 			Assert(conduit);
+			for(int i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
 
 			if(conduit){
 				sval3.m_int = conduit->GetNumRecords();
@@ -1223,6 +1268,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			break;
+		}
 #endif
 
 		default:
