@@ -27,6 +27,7 @@
 //
 // - Prevented crashes when accessing files that failed to open/create. 
 // - Prevented crashes due to uninitialised members.
+// - Moved common SpriteGroup member handling to SpriteGroup.
 //
 //----------------------------------------------------------------------------
 
@@ -121,6 +122,7 @@ UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
 
 UnitSpriteGroup::~UnitSpriteGroup()
 {
+#if defined(ACTIVISION_ORIGINAL)	// belongs to SpriteGroup destructor
 	DeallocateStorage();
 
 	for (int i = UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
@@ -130,6 +132,7 @@ UnitSpriteGroup::~UnitSpriteGroup()
   
 		m_anims[i] = NULL;
 	}
+#endif
 }
 void UnitSpriteGroup::DeallocateStorage(void)
 {

@@ -1,16 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Moved common SpriteGroup member handling to SpriteGroup.
+// - Prevent crashes on failed file operations.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -41,6 +59,7 @@ GoodSpriteGroup::GoodSpriteGroup(GROUPTYPE type)
 :
 SpriteGroup(type)
 {
+#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup constructor
 	POINT		thePoint = {0,0};
 	sint32		i;
 
@@ -54,11 +73,12 @@ SpriteGroup(type)
 	m_height = 0;
 
 	m_hasDeath = FALSE;
-
+#endif
 }
 
 GoodSpriteGroup::~GoodSpriteGroup()
 {
+#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup destructor
 	int i;
 
 	for ( i = GOODACTION_IDLE; i<GOODACTION_MAX; i++) {
@@ -74,6 +94,7 @@ GoodSpriteGroup::~GoodSpriteGroup()
 			m_anims[i] = NULL;
 		}
 	}
+#endif
 }
 
 void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
@@ -229,11 +250,20 @@ void GoodSpriteGroup::LoadBasic(MBCHAR *filename)
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 
+#if defined(ACTIVISION_ORIGINAL)
 	file->Open(&type);
 	file->ReadBasic(this);
 	file->CloseRead();
 
 	m_loadType = LOADTYPE_BASIC;
+#else
+	if (SPRITEFILEERR_OK == file->Open(&type))
+	{
+		file->ReadBasic(this);
+		file->CloseRead();
+		m_loadType = LOADTYPE_BASIC;
+	}
+#endif
 
 	delete file;
 }
@@ -243,11 +273,20 @@ void GoodSpriteGroup::LoadFull(MBCHAR *filename)
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 
+#if defined(ACTIVISION_ORIGINAL)
 	file->Open(&type);
 	file->ReadFull(this);
 	file->CloseRead();
 
 	m_loadType = LOADTYPE_FULL;
+#else
+	if (SPRITEFILEERR_OK == file->Open(&type))
+	{
+		file->ReadFull(this);
+		file->CloseRead();
+		m_loadType = LOADTYPE_FULL;
+	}
+#endif
 
 	delete file;
 }
@@ -256,9 +295,19 @@ void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 {
 	SpriteFile *file = new SpriteFile(filename);
 
+#if defined(ACTIVISION_ORIGINAL)
 	file->Create(SPRITEFILETYPE_GOOD,version_id,compression_mode);
 	file->Write(this);
 	file->CloseWrite();
+#else
+	if (SPRITEFILEERR_OK == 
+			file->Create(SPRITEFILETYPE_GOOD, version_id, compression_mode)
+       )
+	{
+		file->Write(this);
+		file->CloseWrite();
+	}
+#endif
 
 	delete file;
 }

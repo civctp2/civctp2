@@ -1,16 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Moved common SpriteGroup member handling to SpriteGroup.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -36,23 +53,26 @@ CitySpriteGroup::CitySpriteGroup(GROUPTYPE type)
 SpriteGroup(type)
 {
 	m_currentSize = CITYSIZE_1;
-
+#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup constructor
 	for (int i = CITYSIZE_1; i<CITYSIZE_MAX; i++) {
 		m_sprites[i] = NULL;
 	}
 
 	m_width = 0;
 	m_height = 0;
+#endif
 }
 
 CitySpriteGroup::~CitySpriteGroup()
 {
+#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup destructor
 	for (int i = CITYSIZE_1; i<CITYSIZE_MAX; i++) {
 		if (m_sprites[i]) {
 			delete m_sprites[i];
 			m_sprites[i] = NULL;
 		}
 	}
+#endif
 }
 
 void CitySpriteGroup::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 

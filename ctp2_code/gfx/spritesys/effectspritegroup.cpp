@@ -1,16 +1,35 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Moved common SpriteGroup member handling to SpriteGroup.
+// - Prevent crashes on failed file operations.
+// - Repaired memory leak.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -46,11 +65,15 @@
 	#endif
 #endif
 
+#if !defined(ACTIVISION_ORIGINAL)
+#include <memory>	// std::auto_ptr
+#endif
 
 EffectSpriteGroup::EffectSpriteGroup(GROUPTYPE type)
 :
 SpriteGroup(type)
 {
+#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup constructor
 	POINT		thePoint = {24,24};
 	POINT		emptyPoint = {0,0};
 	sint32		i;
@@ -64,10 +87,12 @@ SpriteGroup(type)
 
 	m_width = 0;
 	m_height = 0;
+#endif
 }
 
 EffectSpriteGroup::~EffectSpriteGroup()
 {
+#if defined(ACTIVISION_ORIGINAL)	// belongs in SpriteGroup destructor
 	for (int i = EFFECTACTION_NONE+1; i<EFFECTACTION_MAX; i++) 
 
 	{
@@ -77,6 +102,7 @@ EffectSpriteGroup::~EffectSpriteGroup()
 			m_sprites[i] = NULL;
 		}
 	}
+#endif
 }
 
 void EffectSpriteGroup::Draw(EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY,
@@ -141,27 +167,49 @@ void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint3
 
 void EffectSpriteGroup::Load(MBCHAR *filename)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 
 	file->Open(&type);
 	file->Read(this);
 	file->CloseRead();
-
-	
 	
 	delete file;
 
 	m_loadType = LOADTYPE_FULL;
+#else
+	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	SPRITEFILETYPE				type;
+
+	if (SPRITEFILEERR_OK == file->Open(&type))
+	{
+		file->Read(this);
+		file->CloseRead();
+		m_loadType = LOADTYPE_FULL;
+	}
+#endif	
 }
 
 void EffectSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compression_mode)
 {
+#if defined(ACTIVISION_ORIGINAL)
 	SpriteFile *file = new SpriteFile(filename);
 
 	file->Create(SPRITEFILETYPE_EFFECT,version_id,compression_mode);
 	file->Write(this);
 	file->CloseWrite();
+#else
+	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+
+	if (SPRITEFILEERR_OK == 
+			file->Create(SPRITEFILETYPE_EFFECT, version_id, compression_mode)
+	   )
+	{
+		file->Write(this);
+		file->CloseWrite();
+	}
+#endif
 }
 
 

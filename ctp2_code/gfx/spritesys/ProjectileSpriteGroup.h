@@ -1,18 +1,47 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are active for _MSC_VER value 1200 are the original 
+//       Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Moved common SpriteGroup member handling to SpriteGroup.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
- 
-
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __PROJECTILESPRITEGROUP_H__
 #define __PROJECTILESPRITEGROUP_H__
 
@@ -56,17 +85,20 @@ public:
 
 	sint32			GetNumFrames(PROJECTILEACTION action);
 
+#if defined(ACTIVISION_ORIGINAL)	// already in SpriteGroup
 	FacedSpriteWshadow	*GetGroupSprite(PROJECTILEACTION action) { return m_sprites[action]; }
 	void			SetGroupSprite(PROJECTILEACTION action, FacedSpriteWshadow *sprite) { m_sprites[action] = sprite; }
 
 	Anim			*GetGroupAnim(PROJECTILEACTION action) { return m_anims[action]; }
 	void			SetGroupAnim(PROJECTILEACTION action, Anim *anim) { m_anims[action] = anim; }
+#endif
 
 
 	POINT			*GetFirePoints(uint16 which) { return m_firePoints[which]; }
 
 	POINT			*GetMoveOffsets(void) { return m_moveOffsets; }
 
+#if defined(ACTIVISION_ORIGINAL)	// already in SpriteGroup
 	Anim			*GetAnim(PROJECTILEACTION action) { return m_anims[action]; }
 
 	BOOL			HasDeath(void) { return m_hasDeath; }
@@ -74,6 +106,7 @@ public:
 
 	BOOL			HasDirectional(void) { return m_hasDirectional; }
 	void			SetHasDirectional(BOOL val) { m_hasDirectional = val; }
+#endif
 	
 	uint16			GetNumFirePoints(void) { return m_numFirePoints; }
 	void			SetNumFirePoints(uint16 num) { m_numFirePoints = num; }
@@ -83,18 +116,22 @@ public:
 	POINT			GetHotPoint(PROJECTILEACTION action, sint32 facing);
 
 private:
+#if defined(ACTIVISION_ORIGINAL)	// already in SpriteGroup
 	sint32				m_width, m_height;
-
 	FacedSpriteWshadow	*m_sprites[PROJECTILEACTION_MAX];
 	Anim				*m_anims[PROJECTILEACTION_MAX];
-
+#endif
 	uint16				m_numFirePoints;
 	POINT				m_firePoints[k_NUM_FIREPOINTS][k_NUM_FACINGS];
 	
 	POINT				m_moveOffsets[k_NUM_FACINGS];
-	
+
+#if defined(ACTIVISION_ORIGINAL)	// already in SpriteGroup
 	BOOL				m_hasDeath;
 	BOOL				m_hasDirectional;
+#endif	
+
+
 };
 
 

@@ -1,15 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Moved common SpriteGroup member handling to SpriteGroup.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
- 
 #include "c3.h"
 
 #include "pixelutils.h"
@@ -48,6 +67,13 @@ SpriteGroup::SpriteGroup(GROUPTYPE type)
 
 SpriteGroup::~SpriteGroup()
 {
+#if !defined(ACTIVISION_ORIGINAL)
+	for (int i = 0; i < ACTION_MAX; ++i) 
+	{
+		delete m_anims[i];
+		delete m_sprites[i];
+	}
+#endif
 }
 
 
