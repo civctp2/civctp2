@@ -26,6 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Added emissary photo to the diplomatic manager by Martin Gühmann
+// - Diplomatic proposals/responses sent from UI get the highest priority possible
+//   so that the AI won't override them: DipWizard::SendCallback
 //
 //----------------------------------------------------------------------------
 
@@ -1655,7 +1657,25 @@ void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data,
 		Hide();
 	}
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : DipWizard::SendCallback
+//
+// Description: Send a NewProposal/Counter/Threat by pressing the 'Send' button
+//
+// Parameters : action                  : an AUI_BUTTON_ACTION (aui_button.h)
+//            : control                   ?
+//            : data                      ?
+//            : cookie                    ?  
+//
+// Globals    : g_network				: multiplayer manager
+//				g_selectedItem			: selected player
+//				
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
@@ -1664,6 +1684,9 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 		Response response;
 		response.senderId = m_recipient;
 		response.receiverId = g_selected_item->GetVisiblePlayer();
+#if !defined(ACTIVISION_ORIGINAL)
+        response.priority = 9999;
+#endif
 		FillInProposalData(response.counter, true);
 		response.type = RESPONSE_COUNTER;
 		response.counter.tone = (DIPLOMATIC_TONE)m_tone;
@@ -1684,7 +1707,9 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 		
 		prop.senderId = g_selected_item->GetVisiblePlayer();
 		prop.receiverId = m_recipient;
-
+#if !defined(ACTIVISION_ORIGINAL)
+        prop.priority=9999;
+#endif
 		FillInProposalData(prop.detail);
 
 		
@@ -1703,7 +1728,9 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 		resp.receiverId = m_viewRecipient;
 		resp.threat.type = diplomacyutil_GetThreatType(m_threat);
 		resp.threat.arg = m_threatArg;
-
+#if !defined(ACTIVISION_ORIGINAL)
+        resp.priority=9999;
+#endif
 		if(g_network.IsActive()) {
 			SetStage(DIP_WIZ_STAGE_RECIPIENT);
 		}

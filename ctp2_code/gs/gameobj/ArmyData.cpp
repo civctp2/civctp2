@@ -27,6 +27,7 @@
 //
 // - Fix movement cost of ships above tunnels.
 // - Center on pirating (originally by Ahenobarb, slightly modified).
+// - Center on bombarding.
 //
 //----------------------------------------------------------------------------
 
@@ -4334,7 +4335,26 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 	return FALSE;
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::Bombard
+//
+// Description: Attempt to bombard a MapPoint (location).
+//
+// Parameters : MapPoint
+//
+// Globals    : g_director				: display manager
+//				g_network				: multiplayer manager
+//				g_player				: list of active players
+//				g_selectedItem			: selected unit or city
+//				g_theWorld				: the map
+//				
+// Returns    : ORDER_RESULT			: attempt success/failure indication
+//
+// Remark(s)  :	No special effects. 
+//
+//
+//----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 {
 
@@ -4350,7 +4370,7 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 		
 		return ORDER_RESULT_ILLEGAL;
 	} else {
-		if(!point.IsNextTo(m_pos)) {
+		if(!point.IsNextTo(m_pos)) {//rem: this is why you can't bombard from range as in Civ:CTP
 			return ORDER_RESULT_ILLEGAL;
 		}
 	}
@@ -4400,8 +4420,11 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
         if (m_array[i].CanBombard(defender)) { 
 			if(m_array[i].Bombard(defender, FALSE)) {
 				numAttacks++;
-				
-				
+#if !defined(ACTIVISION_ORIGINAL)
+				// * Added auto-center for bombardment
+                if (defender.GetOwner() == g_selected_item->GetVisiblePlayer())
+                     g_director->AddCenterMap(point);
+#endif				
 				g_director->AddAttackPos(m_array[i], point);
 				
 				AddSpecialActionUsed(m_array[i]);
@@ -4560,8 +4583,8 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					if (g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)) 
 					{
 						g_director->AddCenterMap(m_pos);
-					}
-					g_director->AddSpecialEffect(m_pos, effectId, soundId);
+                        g_director->AddSpecialEffect(m_pos, effectId, soundId);
+					}	
 					AddSpecialActionUsed(m_array[i]);
 					m_isPirating = true;
 				}

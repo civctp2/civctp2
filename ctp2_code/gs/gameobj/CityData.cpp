@@ -44,6 +44,7 @@
 // - Enable log generation for the non-debug versions.
 // - Enable reading of files created with the Activision 1.1 patch.
 // - Prevent crash when settling in the Alexander scenario.
+// - Can't rush buy capitalization/infrastructure
 //
 //----------------------------------------------------------------------------
 
@@ -3833,6 +3834,12 @@ BOOL CityData::BuyFront()
 {
 	if(!m_build_queue.GetHead())
 		return FALSE;
+
+#if defined(ACTIVISION_ORIGINAL)
+    // * Can't rush buy capitalization/infrastructure
+	if(m_buildInfrastructure || m_buildCapitalization )
+        return FALSE;
+#endif
 
 	if(m_shieldstore >= m_build_queue.GetFrontCost()) {
 		
