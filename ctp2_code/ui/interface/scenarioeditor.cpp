@@ -46,6 +46,7 @@
 //   crashed, the problem is solved by deselecting everything before player
 //   changing.
 // - Added icons and tooltips to city style buttons, by Martin Gühmann.
+// - Repaired backwards compatibility and possible crashes.
 //
 //----------------------------------------------------------------------------
 
@@ -928,32 +929,44 @@ void ScenarioEditor::PopulateCityList()
 		Assert(sw);
 		if(!sw) break;
 
-#if !defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann to give the city buttons an icon.
-		const CityStyleRecord *rec = g_theCityStyleDB->Get(cs);
-		Assert(rec);
-		if(!rec)
-			break;
-
-		const MBCHAR *iconname = rec->GetCPIcon();
-		Assert(iconname);
-		if(iconname) {
-			sw->SetImage((char *)iconname, 0);
-			sw->SetImage((char *)iconname, 1);
-		}
-#endif
 		
 		sw->SetActionFuncAndCookie(ScenarioEditor::CityStyleSwitch, (void *)cs);
-#if !defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann to show the according city style name in the tooltip.
-		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)rec->GetNameText());
-#endif
 		col++;
 		if(col >= k_CITY_COLS_PER_ROW) {
 			col = 0;
 			curItem = NULL;
 			curItemBox = NULL;
 		}
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to give the city buttons an icon.
+//Added by Martin Gühmann to show the according city style name in the tooltip.
+
+// Modified to allow buttons not to have an icon:
+// - moved down check to prevent a premature break
+// - removed annoying popups 
+// - prevented crashes when TipWindow would be NULL.
+		CityStyleRecord const *	rec		= g_theCityStyleDB->Get(cs);
+
+		if (rec)
+		{
+			MBCHAR const *	iconName;
+			if (rec->GetCPIcon(iconName))
+			{
+				sw->SetImage(const_cast<char *>(iconName), 0);
+				sw->SetImage(const_cast<char *>(iconName), 1);
+			}
+		
+			aui_TipWindow *	tipWindow	= 
+				static_cast<aui_TipWindow *>(sw->GetTipWindow());
+				// should be dynamic_cast, but RTTI has been disabled
+
+			if (tipWindow)
+			{
+				tipWindow->SetTipText(const_cast<char *>(rec->GetNameText()));
+			}
+		}
+#endif
 	}
 
 	if(col > 0) {

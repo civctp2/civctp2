@@ -22,13 +22,13 @@
 // - When not defined, generates the modified Apolyton code.
 //
 // _MSC_VER		
-// - When defined, allows Microsoft C++ extensions.
-// - When not defined, generates standard C++.
+// - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
-//       between #if and #else are the original Activision code.
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -36,13 +36,12 @@
 //
 // - Microsoft C++ extensions marked for future GCC compiliation.
 // - MovementTypeLand added, as suggested by NelsonAndBronte.
+// - Option added to report sync errors only once.
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
-#else  // _MSC_VER
-// Obsolete pragma removed
 #endif // _MSC_VER
 
 #ifndef __CELL_UNIT_LIST_H__
@@ -131,8 +130,22 @@ public:
     BOOL CanBeExpelled(); 
 
 	BOOL IsVisible(PLAYER_INDEX player) const;
+#if defined(ACTIVISION_ORIGINAL)
 	BOOL GetTopVisibleUnitOfMoveType(const sint32 looking_player, const uint32 move, sint32 &maxi) const;
 	Unit GetTopVisibleUnit(PLAYER_INDEX looker) const;
+#else
+	bool GetTopVisibleUnitOfMoveType
+	(
+		PLAYER_INDEX const	looker,
+		uint32 const		moveType,
+		sint32 &			maxi,
+		bool &				isResyncReported
+	) const;
+	Unit GetTopVisibleUnit
+	(
+		PLAYER_INDEX const	looker
+	) const;
+#endif
 	
 	BOOL CanBeSued() const;
 	BOOL ExertsZOC() const;

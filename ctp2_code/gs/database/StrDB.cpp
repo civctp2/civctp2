@@ -69,8 +69,11 @@ StringDB::~StringDB()
     for (i=0; i<m_nStr; i++) { 
         delete m_all[i]; 
     }
-
+#if defined(ACTIVISION_ORIGINAL)	// wrong type of delete
     delete m_all; 
+#else
+	delete [] m_all;
+#endif
     free(m_head);
 }
 StringRecord **StringDB::GetHead(const char *id) const
@@ -117,6 +120,9 @@ sint32 StringDB::InsertStr(const char *add_id, const char *new_text)
 	r = AddStrNode(GetHead(add_id), add_id, new_text, newRec); 
 	
 	if (r) { 
+#if defined(ACTIVISION_ORIGINAL)
+		// Does not create new entry when m_all == NULL, which may
+		// cause a crashing destructor (m_nStr is incremented!).
 		if(m_all) {
 			
 			
@@ -132,6 +138,20 @@ sint32 StringDB::InsertStr(const char *add_id, const char *new_text)
 		} else {
 			m_nStr++;
 		}
+#else
+		StringRecord **	newArray = new StringRecord* [m_nStr + 1];
+		if (m_all)
+		{
+			// Copy any old information.
+			memcpy(newArray, m_all, m_nStr * sizeof(StringRecord *));
+			delete [] m_all;
+		}
+		m_all = newArray;
+
+		sint32	count	= m_nStr;
+		++m_nStr;
+		AssignIndex(newRec, count);
+#endif
 	} else {
         
         

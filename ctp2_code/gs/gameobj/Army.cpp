@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Army interface
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added option to reduce resync reporting.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "globals.h"
@@ -265,16 +294,36 @@ void Army::GetActors(sint32 &n, UnitActor **moveActor, UnitActor *butnotthis)
 
 }
 
-
+#if defined(ACTIVISION_ORIGINAL)
 BOOL Army::GetTopVisibleUnitOfMoveType(const sint32 looking_player, const uint32 move, sint32 &maxi) const
 {
 	return GetData()->GetTopVisibleUnitOfMoveType(looking_player, move, maxi);
 }
+#else
+bool Army::GetTopVisibleUnitOfMoveType
+(
+	PLAYER_INDEX const	looker,
+	uint32 const		moveType,
+	sint32 &			maxi,
+	bool &				isResyncReported
+) const
+{
+	return GetData()->GetTopVisibleUnitOfMoveType
+						(looker, moveType, maxi, isResyncReported);
+}
+#endif
 
+#if defined(ACTIVISION_ORIGINAL)
 Unit Army::GetTopVisibleUnit(const sint32 looking_player) const
 {
 	return AccessData()->GetTopVisibleUnit(looking_player);
 }
+#else
+Unit Army::GetTopVisibleUnit(PLAYER_INDEX const looking_player) const
+{
+	return GetData()->GetTopVisibleUnit(looking_player);
+}
+#endif
 
 void Army::ForceVisibleThisTurn(const PLAYER_INDEX to_me)
 {

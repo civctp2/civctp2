@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - IsValid marked as const.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
  
@@ -309,7 +328,11 @@ void Unit::FastKill()
 	Assert(r);
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 BOOL Unit::IsValid()
+#else
+BOOL Unit::IsValid() const
+#endif
 {
 	return g_theUnitPool->IsValid(*this);
 }
@@ -2595,3 +2618,4 @@ CityData *Unit::GetCityData() const
 {
 	return AccessData()->GetCityData();
 }
+

@@ -28,6 +28,7 @@
 // - Added emissary photo to the diplomatic manager by Martin Gühmann
 // - Diplomatic proposals/responses sent from UI get the highest priority possible
 //   so that the AI won't override them: DipWizard::SendCallback
+// - Repaired crashes when the emissary photo is missing.
 //
 //----------------------------------------------------------------------------
 
@@ -267,7 +268,10 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 #if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to display the emissary photo of recipient
 	//Makes shure that the default image is never shown not even for one or two seconds
-	m_emissary_photo->ExchangeImage(0,0, NULL);
+	if (m_emissary_photo)
+	{
+		m_emissary_photo->ExchangeImage(0,0, NULL);
+	}
 #endif
 }
 
@@ -1295,10 +1299,10 @@ void DipWizard::UpdateDetails()
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Recipient");
 	if(st) {
 		if(!viewingProposal) {
-			#if !defined(ACTIVISION_ORIGINAL)
+#if !defined(ACTIVISION_ORIGINAL)
 			//Added by Martin Gühmann to display the emissary photo of recipient
 			DisplayDiplomat(m_recipient);
-			#endif
+#endif
 			DisplayParchment(g_selected_item->GetVisiblePlayer());
 			if(m_recipient >= 0) {
 				SlicObject so;
@@ -2650,13 +2654,17 @@ void DipWizard::DisplayDiplomat(sint32 player)
 {
 #if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to display the emissary photo of recipient
-	Assert(m_emissary_photo);
-	if(m_emissary_photo && player >= 0) {
-		StringId strID = g_player[player]->m_civilisation->GetDBRec()->GetEmissaryPhoto();
-		m_emissary_photo->ExchangeImage(0,0, g_theStringDB->GetNameStr(strID));
-	}
-	else{
-		m_emissary_photo->ExchangeImage(0,0, NULL);
+	if (m_emissary_photo)
+	{
+		MBCHAR const *	fileName	= NULL;
+		if ((player >= 0) && (player < k_MAX_PLAYERS) && g_player[player])
+		{
+			StringId const strID = 
+				g_player[player]->GetCivilisation()->GetDBRec()->GetEmissaryPhoto();
+			fileName = g_theStringDB->GetNameStr(strID);
+		}
+
+		m_emissary_photo->ExchangeImage(0,0, fileName);
 	}
 #endif
 }

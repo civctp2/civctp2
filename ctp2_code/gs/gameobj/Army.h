@@ -1,5 +1,47 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Army interface
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       1200 are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added option to reduce resync reporting.
+//
+//----------------------------------------------------------------------------
 
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __ARMY_H__
 #define __ARMY_H__ 1
 
@@ -98,8 +140,22 @@ public:
 
     void GetActors(sint32 &n, UnitActor **moveActor, UnitActor *butnotthis);
 
+#if defined(ACTIVISION_ORIGINAL)
     BOOL GetTopVisibleUnitOfMoveType(const sint32 looking_player, const uint32 move, sint32 &maxi) const;
     Unit GetTopVisibleUnit(const sint32 looking_player) const; 
+#else
+	bool GetTopVisibleUnitOfMoveType
+	(
+		PLAYER_INDEX const	looker,
+		uint32 const		moveType,
+		sint32 &			maxi,
+		bool &				isResyncReported
+	) const;
+	Unit GetTopVisibleUnit
+	(
+		PLAYER_INDEX const	looker
+	) const;
+#endif
     void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 
 

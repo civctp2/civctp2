@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : ?
+// Description  : Handling of SLIC variables.
 //
 //----------------------------------------------------------------------------
 //
@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Repaired memory leak, by Martin Gühmann.
+// - Removed assert to prevent lots of pop-ups with e.g. the LOTR scenario.
 //
 //----------------------------------------------------------------------------
 
@@ -378,6 +379,42 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 			}
 			return FALSE;
 			break;
+#if !defined(ACTIVISION_ORIGINAL)
+#ifdef SLIC_DOUBLES
+		case SLIC_SYM_DVAR:
+			// Modelled after SLIC_SYM_IVAR, untested.
+			m_val.m_double_value = SlicStack::Eval(type, value);
+			NotifyChange();
+			return TRUE;
+
+#endif
+		case SLIC_SYM_SVAR:
+			// Modelled after SLIC_SYM_IVAR, untested.
+			m_val.m_string_value = SlicStack::Eval(type, value);
+			NotifyChange();
+			return TRUE;
+
+		case SLIC_SYM_IMPROVEMENT:
+			// Assert removed to get the LOTR scenario somewhat debuggable..
+			// This code is reached when having a statement of the form 
+			//	"improvement_t" var = "int_t" value;
+			// Probably these statements are rubbish anyway, because the 
+			// improvement_t var expects to get the  - unique game object - ID, 
+			// but the value is usually filled with the database index of the 
+			// improvement descriptor.
+			return FALSE;
+
+		case SLIC_SYM_ID:
+		case SLIC_SYM_REGION:
+		case SLIC_SYM_COMPLEX_REGION:
+		case SLIC_SYM_ARRAY:
+		case SLIC_SYM_BUILTIN:
+		case SLIC_SYM_STRUCT_MEMBER:
+		case SLIC_SYM_PLAYER:
+		case SLIC_SYM_UFUNC:
+		case SLIC_SYM_POP:
+		case SLIC_SYM_PATH:
+#endif	// ACTIVISION_ORIGINAL
 		default:
 			Assert(FALSE);
 			return FALSE;

@@ -29,6 +29,7 @@
 // - Corrected handling of tile improvements that did not have a Freight 
 //   modifier.
 // - Standardised min/max usage.
+// - Prevented some crashes.
 //
 //----------------------------------------------------------------------------
 
@@ -334,8 +335,14 @@ sint32 Cell::GetFoodFromTerrain() const
 sint32 Cell::GetFoodProduced() const 
 {
 	sint32 food = GetFoodFromTerrain();
+#if defined(ACTIVISION_ORIGINAL)	// May crash when m_objects is NULL.
 	sint32 i;
 	for(i = m_objects->Num() - 1; i >= 0; i--) {
+#else
+	size_t const	count	= m_objects ? m_objects->Num() : 0;
+	for (size_t i = 0; i < count; ++i)
+	{
+#endif
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
 			const TerrainImprovementRecord *impRec = 
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
@@ -373,8 +380,14 @@ sint32 Cell::GetShieldsProduced() const
 {
 	sint32 shield = GetShieldsFromTerrain();
 
+#if defined(ACTIVISION_ORIGINAL)	// May crash when m_objects is NULL.
 	sint32 i;
 	for(i = m_objects->Num() - 1; i >= 0; i--) {
+#else
+	size_t const	count	= m_objects ? m_objects->Num() : 0;
+	for (size_t i = 0; i < count; ++i)
+	{
+#endif
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
 			const TerrainImprovementRecord *impRec = 
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
@@ -424,8 +437,14 @@ sint32 Cell::GetGoldProduced() const
 		gold += rec->GetEnvRiverPtr()->GetGold();
 	}
 
+#if defined(ACTIVISION_ORIGINAL)	// May crash when m_objects is NULL.
 	sint32 i;
 	for(i = m_objects->Num() - 1; i >= 0; i--) {
+#else
+	size_t const	count	= m_objects ? m_objects->Num() : 0;
+	for (size_t i = 0; i < count; ++i)
+	{
+#endif
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
 			const TerrainImprovementRecord *impRec = 
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
@@ -491,6 +510,7 @@ void Cell::AddTradeRoute(TradeRoute route)
 
 void Cell::DelTradeRoute(TradeRoute route)
 {
+#if defined(ACTIVISION_ORIGINAL)	// May crash when m_objects is NULL.
 	bool stillHaveTrade = false;
 	if(m_objects) {
 		m_objects->Del(route);
@@ -509,6 +529,32 @@ void Cell::DelTradeRoute(TradeRoute route)
 			m_objects = NULL;
 		}
 	}
+#else
+	if (m_objects)
+	{
+		m_objects->Del(route);
+		size_t const	count	= m_objects->Num();
+		
+		for (size_t i = 0; i < count; ++i)
+		{
+			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == 
+					k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE
+			   )
+			{
+				return;	// Some other trade route still passes through this cell.
+			}
+		}
+
+		if (count <= 0)
+		{
+			delete m_objects;
+			m_objects = NULL;
+		}
+	}
+
+	// Mark cell free of trade.
+	m_env &= ~(k_BIT_MOVEMENT_TYPE_TRADE);	
+#endif
 }
 
 bool Cell::OwnsTradeRoute(const PLAYER_INDEX &owner) const
@@ -575,6 +621,7 @@ void Cell::InsertImprovement(const TerrainImprovement &imp)
 
 void Cell::RemoveImprovement(const TerrainImprovement &imp)
 {
+#if defined(ACTIVISION_ORIGINAL)	// May crash when m_objects is NULL.
 	bool stillHaveImprovements = false;
 	if(m_objects) {
 		m_objects->Del(imp);
@@ -595,6 +642,33 @@ void Cell::RemoveImprovement(const TerrainImprovement &imp)
 			m_objects = NULL;
 		}
 	}
+#else
+	if (m_objects)
+	{
+		m_objects->Del(imp);
+		size_t const	count	= m_objects->Num();
+		
+		for (size_t i = 0; i < count; ++i)
+		{
+			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == 
+					k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT
+			   )
+			{
+				return;	// Some other improvement still present in this cell.
+			}
+		}
+
+		if (count <= 0)
+		{
+			delete m_objects;
+			m_objects = NULL;
+		}
+	}
+
+	// Mark cell free of trade.
+	m_env &= ~(k_BIT_ENV_HAS_IMPROVEMENT);	
+#endif
+
 }
 
 void Cell::SetOwner(sint32 owner)

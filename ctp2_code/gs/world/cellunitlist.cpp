@@ -21,12 +21,17 @@
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
 //
+// USE_STOP_ZERO_MOVEMENT
+// - When defined, prevents unit without movement points from moving.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Ships no longer get an underwater tunnel movement bonus, based on
 //   suggestions by NelsonAndBronte.
+// - Make unit types with 0 movement stand still (compiler option).
+// - Handled crashes with invalid units.
 //
 //----------------------------------------------------------------------------
 
@@ -337,7 +342,7 @@ BOOL CellUnitList::CanBeExpelled()
 
 extern sint32 g_god;
 
-
+#if defined(ACTIVISION_ORIGINAL)
 BOOL CellUnitList::GetTopVisibleUnitOfMoveType(const sint32 looking_player, const uint32 move, sint32 &maxi) const 
 { 
     uint32 vis;
@@ -409,6 +414,115 @@ BOOL CellUnitList::GetTopVisibleUnitOfMoveType(const sint32 looking_player, cons
     } 
     return FALSE; 
 }
+#else	// ACTIVISION_ORIGINAL
+//----------------------------------------------------------------------------
+//
+// Name       : CellUnitList::GetTopVisibleUnitOfMoveType
+//
+// Description: Determine which unit of a stack to display.
+//
+// Parameters : looker				: the observing player
+//              moveType			: a bit set of movement types 
+//				isResyncReported	: invalid units do not have to be reported
+//
+// Globals    : g_selected_item		: currently selected item on screen
+//				g_player			: players
+//				g_theWorld			: map information
+//				g_network			: network handler (for multiplayer)
+//				g_god				: when set, everything is visible
+//				g_fog_toggle		: when set, everything is visible
+//
+// Returns    : bool				: some unit is visible
+//				maxi				: index of the unit to display
+//				isResyncReported	: updated when a (new) missing unit has
+//                                    triggered a resync request
+//
+// Remark(s)  : - When returning false, the value of maxi has not been updated.
+//              - Units in a city are only visible when awake or currently
+//                selected.
+//              - When there are multiple units in a stack, the top unit is 
+//				  determined on either movement points (own unit) or 
+//                "visibility class" + strength (enemy unit).
+//
+//----------------------------------------------------------------------------
+
+bool CellUnitList::GetTopVisibleUnitOfMoveType
+(
+	PLAYER_INDEX const	looker,
+	uint32 const		moveTypes,
+	sint32 &			maxi,
+	bool &				isResyncReported
+) const
+{ 
+    bool	is_found_unit	= false; 
+	double	maxStrength		= -100000.0;
+    uint32	min_vis			= 0xffffffff; 
+	double	minmove			= -1;
+
+	Army	selectedArmy(0);
+	g_selected_item->GetSelectedArmy(selectedArmy);
+
+	for (sint32 i = 0; i < m_nElements; ++i)
+	{
+		Unit const &	u	= m_array[i];
+
+		if (u.IsValid())
+		{
+			if (u.IsSameMovementType(moveTypes)	&&	// move types match
+				// cell visible
+				((u.GetVisibility() & (0x01 << looker))						||
+				 (g_player[looker] && g_player[looker]->m_hasGlobalRadar)	||
+				 g_god || g_fog_toggle
+			    )								&&
+			    // selected, awake, or out in the open
+			    ((u.GetArmy().m_id == selectedArmy.m_id)					||
+			     !(u.IsAsleep() || u.IsEntrenched() || u.IsEntrenching())	||
+				 !g_theWorld->HasCity(u.RetPos())
+			    )
+			   )
+			{
+				if (u.GetOwner() == looker) 
+				{
+					// Looking at own units: order on movement points
+					if (u.GetMovementPoints() > minmove) 
+					{
+						maxi			= i;
+						minmove			= u.GetMovementPoints();
+						is_found_unit	= true;
+					}
+				} 
+				else 
+				{
+					// Looking at "enemy" units: order on visibility class, 
+					// with strength as tie-breaker.
+					uint32 const	vis = u.GetVisibilityClass();
+					
+					if (vis <= min_vis) 
+					{ 
+						double const	strength	= 
+							u.GetAttack() + u.GetDefense();
+					
+						if (strength > maxStrength) 
+						{
+							maxStrength		= strength; 
+							maxi			= i; 
+							min_vis			= vis; 
+							is_found_unit	= true; 
+						} 
+					}
+				}
+			}
+		}
+		else if (!isResyncReported)
+		{
+			g_network.RequestResync(RESYNC_INVALID_UNIT);
+			isResyncReported = true;
+		}
+    }  
+	
+	return is_found_unit;
+}
+#endif
 
 
 
@@ -419,7 +533,7 @@ BOOL CellUnitList::GetTopVisibleUnitOfMoveType(const sint32 looking_player, cons
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 Unit CellUnitList::GetTopVisibleUnit(const sint32 looking_player) const
 {
     sint32 maxi; 
@@ -431,7 +545,7 @@ Unit CellUnitList::GetTopVisibleUnit(const sint32 looking_player) const
     } 
     
     if (move_union & k_Unit_MovementType_Space_Bit) {
-        if (GetTopVisibleUnitOfMoveType(looking_player, k_Unit_MovementType_Space_Bit, maxi)) {
+        if (GetTopVisibleUnitOfMoveType(looking_player, k_Unit_MovementType_Space_Bit, maxi, noResyncReport)) {
             return m_array[maxi]; 
         }
     }        
@@ -471,7 +585,99 @@ Unit CellUnitList::GetTopVisibleUnit(const sint32 looking_player) const
     
     return Unit(0); 
 }
+#else	// ACTIVISION_ORIGINAL
+Unit CellUnitList::GetTopVisibleUnit(PLAYER_INDEX const looker) const
+{
+    uint32	move_union			= 0x0000;
+	bool	stopResyncReport	= !g_network.IsClient();
 
+    for (sint32 i = 0; i < m_nElements; ++i) 
+	{ 
+		if (m_array[i].IsValid())
+		{
+			move_union |= m_array[i].GetMovementType(); 
+		}
+		else 
+		{
+			// Would like to do DelIndex(i), but this is a const method.
+
+			if (!stopResyncReport) 
+			{
+				g_network.RequestResync(RESYNC_INVALID_UNIT);
+				stopResyncReport = false;
+			}
+		}
+    } 
+    
+    sint32	maxi; 
+
+    if (move_union & k_Unit_MovementType_Space_Bit)
+	{
+        if (GetTopVisibleUnitOfMoveType
+				(looker, k_Unit_MovementType_Space_Bit, maxi, stopResyncReport)
+		   ) 
+		{
+            return m_array[maxi]; 
+        }
+    }        
+    if (move_union & k_Unit_MovementType_Air_Bit) 
+	{
+        if (GetTopVisibleUnitOfMoveType
+				(looker, k_Unit_MovementType_Air_Bit, maxi, stopResyncReport)
+		   ) 
+		{
+            return m_array[maxi]; 
+        }
+    }
+    if (move_union & k_Unit_MovementType_Sea_Bit) 
+	{
+        if (GetTopVisibleUnitOfMoveType
+				(looker, k_Unit_MovementType_Sea_Bit, maxi, stopResyncReport)
+		   ) 
+		{
+            return m_array[maxi]; 
+        }
+    }
+    if (move_union & k_Unit_MovementType_ShallowWater_Bit) 
+	{
+        if (GetTopVisibleUnitOfMoveType
+				(looker, k_Unit_MovementType_ShallowWater_Bit, maxi, stopResyncReport)
+		   ) 
+		{
+            return m_array[maxi]; 
+        }
+    }
+    if (move_union & k_Unit_MovementType_Land_Bit) 
+	{
+        if (GetTopVisibleUnitOfMoveType
+				(looker, k_Unit_MovementType_Land_Bit, maxi, stopResyncReport)
+		   ) 
+		{
+            return m_array[maxi]; 
+        }
+    }                        
+    if (move_union & k_Unit_MovementType_Mountain_Bit) 
+	{
+        if (GetTopVisibleUnitOfMoveType
+				(looker,k_Unit_MovementType_Mountain_Bit, maxi, stopResyncReport)
+		   ) 
+		{
+            return m_array[maxi]; 
+        }
+    }                            
+    if (move_union & k_Unit_MovementType_Trade_Bit) 
+	{
+        if (GetTopVisibleUnitOfMoveType
+				(looker, k_Unit_MovementType_Trade_Bit, maxi, stopResyncReport)
+		   )
+		{
+            return m_array[maxi]; 
+        }
+    }                                
+    
+    return Unit(0); 
+}
+#endif	// ACTIVISION_ORIGINAL
 
 BOOL CellUnitList::CanBeSued() const
 {
@@ -611,6 +817,20 @@ BOOL CellUnitList::CanMoveIntoCell(const MapPoint &pos,
 
 BOOL CellUnitList::IsMovePointsEnough(const double cost) const
 {
+#if defined(USE_STOP_ZERO_MOVEMENT)
+	for (sint32 i = 0; i < m_nElements; ++i)
+	{
+		double const mp	= m_array[i].GetMovementPoints();
+
+		if ((mp == 0.0) || 
+		    ((mp < cost) && !m_array[i].GetFirstMoveThisTurn())
+		   )
+		{
+			return FALSE;
+		}
+		// else: unit has enough movement points
+	}
+#else
     sint32 i; 
     double mp; 
     
@@ -625,6 +845,8 @@ BOOL CellUnitList::IsMovePointsEnough(const double cost) const
             return FALSE; 
         }
     }
+#endif
+
     return TRUE; 
 }
 
