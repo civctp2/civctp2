@@ -1,9 +1,35 @@
-
-//scenarioeditor.h
-//Added a private static variable and 
-//a public static function so that newly created
-//cities can have the bumber of pops displayed in 
-//city pop spinner, by Martin Gühmann
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Scenario editor
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// -Added a private static variable and the accoriding access function
+//  to allow newly created cities to have the size displayed in the 
+//  city pop spinner, by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #ifndef SCENARIO_EDITOR_H__
 #define SCENARIO_EDITOR_H__
@@ -106,10 +132,11 @@ class ScenarioEditor {
 	sint32 m_brushSize;
 	sint32 m_unitIndex;
 	sint32 m_cityStyle;
+#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to add the pop number 
 	//displayed in the CityPopSpinner to new created cities.
 	sint32 m_newPopSize;
-	//End Add
+#endif
 	SCEN_START_LOC_MODE m_startLocMode;
 	bool m_haveRegion;
 	SCEN_MAP_MODE m_mapMode;
@@ -158,11 +185,12 @@ class ScenarioEditor {
 	static sint32 UnitIndex();
 	static bool PlaceCityMode();
 	static sint32 CityStyle();
+#if !defined(ACTIVISION_ORIGINAL)
 	//Function added by Martin Gühmann so that the 
 	//pop size displayed in the CityPopSpinner can 
-	//be added to new created cities.
+	//be added to newly created cities.
 	static sint32 CitySize();
-	//End Add
+#endif
 	static bool PlaceStartFlags();
 	static bool ShowStartFlags();
 	static SCEN_START_LOC_MODE GetStartLocMode();

@@ -26,10 +26,13 @@
 // Modifications from the original Activision code:
 //
 // - Make the number of city styles you can place with the scenario editor mod
-//   dependent. By Martin Gühmann.
+//   dependent, By Martin Gühmann.
 // - Make sure that newly created cities have the size as displayed in the 
-//   CityPopSpinner. By Martin Gühmann.
-// - Corrected wrap handling.
+//   CityPopSpinner, By Martin Gühmann.
+// - Corrected wrap handling, by Fromafar.
+// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gühmann.
+// - Memory leaks fixed by Martin Gühmann. (Obviously it looks like that 
+//   it does not work.)
 //
 //----------------------------------------------------------------------------
 
@@ -58,9 +61,11 @@
 #include "CityData.h"
 #include "UnitData.h"
 
+#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to have the appropiate number 
 //on the city style tab 
 #include "CityStyleRecord.h"
+#endif
 
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
@@ -374,10 +379,11 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	m_brushSize = 1;
 	m_unitIndex = -1;
 	m_cityStyle = -2;
+#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to initialize the pop number
 	//for newly created cities
 	m_newPopSize = 1;
-	//End Add
+#endif
 	m_scenarioName[0] = 0;
 	m_startLocMode = SCEN_START_LOC_MODE_NONE;
 
@@ -422,6 +428,27 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	*err = AUI_ERRCODE_OK;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : ~ScenarioEditor
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Also m_terrainImpSwitches needs to be deleted.
+//              Nulling m_terrainSwitches seems to be contraproductive.
+//              Unfortunatly both things don't have any effect
+//              PopulateTerrainImprovementList and PopulateTerrainList
+//              still show up in the CTP_LEAKS_99999.TXT, but 
+//              m_terrainImpSwitches are created with new[] and therefore
+//              should be deleted with delete[].
+//
+//----------------------------------------------------------------------------
 ScenarioEditor::~ScenarioEditor()
 {
 	if(m_window) {
@@ -434,10 +461,17 @@ ScenarioEditor::~ScenarioEditor()
 		m_addStuffWindow = NULL;
 	}
 
+#if defined(ACTIVISION_ORIGINAL);
+	//Removed by Martin Gühmann
 	if(m_terrainSwitches) {
 		delete [] m_terrainSwitches;
 		m_terrainSwitches = NULL;
 	}
+#else
+	//Added by Martin Gühmann
+	delete [] m_terrainSwitches;
+	delete [] m_terrainImpSwitches;
+#endif
 
 	if(m_copyBuffer) {
 		delete m_copyBuffer;
@@ -830,11 +864,14 @@ void ScenarioEditor::PopulateCityList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
-	//Changed by Martin Gühmann so that there are now as much buttons
-	//available as city styles are there.
+#if defined(ACTIVISION_ORIGINAL)
+	//Removed by Martin Gühmann
+	for(cs = 0; cs < CITY_STYLE_MAX; cs++) {
+#else
+	//Added by Martin Gühmann so that there are now as much buttons
+	//as city styles.
 	for(cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
-	//Original code
-//	for(cs = 0; cs < CITY_STYLE_MAX; cs++) {
+#endif
 		if(col == 0) {
 			curItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ScenCityItem");
 			Assert(curItem);
@@ -1044,6 +1081,7 @@ sint32 ScenarioEditor::CityStyle()
 	return s_scenarioEditor->m_cityStyle;
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann to make 
 //shure that newly created cities 
 //have the same pop size as displayed in
@@ -1053,7 +1091,7 @@ sint32 ScenarioEditor::CitySize()
 	if(!s_scenarioEditor) return 1;
 	return s_scenarioEditor->m_newPopSize;
 }
-//End Add
+#endif
 
 bool ScenarioEditor::PlaceStartFlags()
 {
@@ -1426,11 +1464,12 @@ void ScenarioEditor::CityPopSpinner(aui_Control *control, uint32 action, uint32 
 
 	if(!spinner) return;
 	sint32 newPop = spinner->GetValueX();
+#if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann to make shure 
 	//newly created cities have the same pop 
 	//size as displayed in the CityPopSpinner
 	s_scenarioEditor->m_newPopSize = newPop;
-	//End Add
+#endif
 	Unit city;
 	if(!g_selected_item->GetSelectedCity(city))
 		return;
@@ -2841,9 +2880,11 @@ void ScenarioEditor::UpdatePlayerCount()
 	st->SetText(tempstr);
 }
 
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
+
 void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
@@ -2852,6 +2893,47 @@ void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data,
 	sw->SetToggleState(!sw->GetToggleState());
 	g_theProfileDB->SetPollutionRule(sw->GetToggleState());
 }
+
+#else
+//Added by Martin Gühmann
+
+//----------------------------------------------------------------------------
+//
+// Name       : ScenarioEditor::Pollution
+//
+// Description: Handles calls when the pollution on/off button is pressed.
+//
+// Parameters : control - The controll element on that an action was
+//                        performed.
+//              action  - The action type that was used.
+//              data    - Unused
+//              cookie  - Unused
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Only enables disables pulltion if  
+//              action == AUI_BUTTON_ACTION_PRESS.
+//
+//----------------------------------------------------------------------------
+void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	//No idea why the above action is called more than once
+	//but this action is only called when the button is actually
+	//pressed. The result now is that pollution is not turned off
+	//automaticly when the Scenario Editor is used.
+	if(action != AUI_BUTTON_ACTION_PRESS)
+		return;
+
+	ctp2_Button *sw = (ctp2_Button *)control;
+
+	sw->SetToggleState(!sw->GetToggleState());
+	//This makes sure that also on the first press on that button the
+	//whole think work.
+	g_theProfileDB->SetPollutionRule(!g_theProfileDB->IsPollutionRule());
+}
+#endif
 
 class ReopenEditorAction : public aui_Action
 {

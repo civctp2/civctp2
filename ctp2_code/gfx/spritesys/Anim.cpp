@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Animation handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed Destructor to fix some memory leaks, by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Token.h"
@@ -49,9 +68,19 @@ Anim::~Anim()
 	if(m_specialCopyDelete == ANIMXEROX_ORIGINAL)
 	{
 		
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 		if (m_frames) delete m_frames;
 		if (m_moveDeltas) delete m_moveDeltas;
 		if (m_transparencies) delete m_transparencies;
+#else
+//Added by Martin Gühmann
+		//These fields are initialized with new[] therefore use
+		//delete[] to delete them.
+		if (m_frames) delete[] m_frames;
+		if (m_moveDeltas) delete[] m_moveDeltas;
+		if (m_transparencies) delete[] m_transparencies;
+#endif
 	}
 }
 
