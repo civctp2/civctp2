@@ -25,7 +25,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added option to show info for tile improvements that are too expensive.
+// - Added option to show info for tile improvements that are too expensive
+//   and made it modifiable in-game.
 //
 //----------------------------------------------------------------------------
 
@@ -60,7 +61,6 @@ extern ColorSet *g_colorSet;
 
 namespace
 {
-	bool				s_hideExpensive			= true;
 	COLOR				s_trackerBorderColor	= COLOR_GREEN;
 }
 #endif
@@ -144,10 +144,6 @@ sint32 tileimptracker_Initialize()
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( textBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
-
-#if !defined(ACTIVISION_ORIGINAL)
-	s_hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
-#endif
 
 	return 0;
 }
@@ -315,8 +311,10 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 			g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
 		}
 #else
+		bool const	checkMaterials	= !g_theProfileDB->GetValueByName("ShowExpensive");
+
 		if (g_player[visPlayer]->CanCreateImprovement
-				(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, extraData, s_hideExpensive, err)
+				(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, extraData, checkMaterials, err)
 		   ) 
 		{
 			if (g_player[visPlayer]->CanCreateImprovement

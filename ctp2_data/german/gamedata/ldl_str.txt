@@ -3145,5 +3145,7 @@ str_profile_AutoOpenCityWindow "Baumanager bei Stadtgründung ein"
 str_profile_ShowEnemyHealth "Lebenspunkte Feindeinheit ein"
 str_profile_ShowCityInfluence "Stadteinfluss ein"
 str_profile_ShowPoliticalBorders "Politische Grenzen ein"
+str_profile_CloseOnEyepoint "Meldung schließen nach klicken des Auges"
+str_profile_ShowExpensive "Teuere staatl. Bautruppsauswirkungen zeigen"
 
 str_ldl_Pw_COLON_	"Siedler:"
