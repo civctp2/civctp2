@@ -1,14 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Gold
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Do not trigger a warning when rushbuying causes a negative cashflow.
+// - Merged the constructors.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -19,6 +39,8 @@
 #include "ConstDB.h"
 
 #include "gstypes.h"
+
+#if defined(ACTIVISION_ORIGINAL)
 
 Gold::Gold(sint32 o)
 
@@ -64,18 +86,26 @@ Gold::Gold(void)
     m_lost_to_rushbuy = 0;
 	}
 
+#else	// ACTIVISION_ORIGINAL
 
+Gold::Gold(PLAYER_INDEX const owner)
+:	m_level(0),
+	m_income_this_turn(0),
+	m_gross_income(0),
+	m_lost_to_cleric(0), 
+    m_lost_to_crime(0), 
+    m_lost_to_rushbuy(0),
+    m_wages_this_turn(0), 
+    m_maintenance_this_turn(0), 
+	m_science_this_turn(0),
+    m_level_last_turn(0), 
+    m_delta_last_turn(0), 
+	m_consider_for_science(0.0), 
+	m_owner(owner)
+{
+}
 
-
-
-
-
-
-
-
-
-
-
+#endif	// ACTIVISION_ORIGINAL
 
 
 Gold & Gold::operator= (const Gold &copyMe)
@@ -293,8 +323,11 @@ BOOL Gold::BankruptcyImminent() const
     
     delta += m_wages_this_turn;
 
-    
+#if defined(ACTIVISION_ORIGINAL)    
     delta += m_lost_to_rushbuy;
+#else
+	// Not needed: m_lost_to_rushbuy is already included through DeltaThisTurn.
+#endif
 
     double fudge = (double)(g_theConstDB->MaintenanceWarningFudgeFactor()) / 100.0;
     sint32 f_level = (sint32)((double)m_level * fudge);
@@ -345,6 +378,9 @@ void Gold::SetScience(const sint32 g)
 
 void Gold::ClearStats()
 {
+#if !defined(ACTIVISION_ORIGINAL)
+	m_delta_last_turn	= DeltaThisTurn();	// Compute before clearing the data
+#endif
     m_income_this_turn = 0; 
     m_gross_income = 0; 
     m_lost_to_cleric = 0; 
@@ -353,6 +389,8 @@ void Gold::ClearStats()
     m_maintenance_this_turn = 0; 
     m_wages_this_turn = 0; 
     m_science_this_turn = 0; 
+#if defined(ACTIVISION_ORIGINAL)
     m_delta_last_turn = DeltaThisTurn(); 
+#endif
     m_level_last_turn = 0; 
 }

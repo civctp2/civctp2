@@ -1,13 +1,87 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Gold
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Marked Microsoft C++ extensions for future GNU compilation.
+// - Do not trigger a warning when rushbuying causes a negative cashflow.
+// - Cleaned up import structure for future GNU compilation.
+// - Merged the constructors.
+//
+//----------------------------------------------------------------------------
 
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __GOLD_H__
 #define __GOLD_H__ 1
 
+#if defined(ACTIVISION_ORIGINAL)
 class CivArchive;
 
 #define k_GOLD_VERSION_MAJOR	0									
-#define k_GOLD_VERSION_MINOR	0									
+#define k_GOLD_VERSION_MINOR	0
+									
+#else	// ACTIVISION_ORIGINAL
 
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+class	Gold;
+
+#define	k_GOLD_VERSION_MAJOR	0									
+#define k_GOLD_VERSION_MINOR	0
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+#include "c3types.h"			// MBCHAR, sint..., uint...
+#include "civarchive.h"			// CivArchive
+#include "gstypes.h"			// PLAYER_INDEX
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+#endif	// ACTIVISION_ORIGINAL
 
 class Gold { 
 
@@ -26,12 +100,22 @@ class Gold {
 
 	double m_consider_for_science; 
 	
+#if defined(ACTIVISION_ORIGINAL)
+
 	sint32 m_owner;
 
 public:
-
 	Gold(sint32 owner); 
 	Gold(void) ;
+
+#else	// ACTIVISION_ORIGINAL
+
+    PLAYER_INDEX	m_owner;
+
+public:
+	Gold(PLAYER_INDEX const owner = PLAYER_INDEX_INVALID);
+
+#endif	// ACTIVISION_ORIGINAL
 
 	void AddGold(const Gold &amount) {
 		AddGold(amount.GetLevel()) ;
@@ -42,7 +126,16 @@ public:
     void AddIncome(const sint32 delta); 
     void SubIncome(const sint32 delta); 
     sint32  GetIncome() const { return m_income_this_turn; } 
+#if defined(ACTIVISION_ORIGINAL)
     sint32 DeltaThisTurn() const { return(m_level - m_level_last_turn); }
+#else
+	sint32 DeltaThisTurn() const
+	{
+		// Do not count the rushbuy costs (incidental & under full control of
+		// the player) when determining whether the economy is sound.
+		return m_level + m_lost_to_rushbuy - m_level_last_turn;
+	};
+#endif
     BOOL BankruptcyImminent() const;
 
 	void SubGold(const Gold &amount) {
@@ -53,7 +146,14 @@ public:
 	sint32 GetLevel() const { return m_level; }; 
 	
 	void SetLevel(sint32 level) { m_level = level;};
+#if defined(ACTIVISION_ORIGINAL)
 	sint32 GetOwner() { return m_owner; }
+#else
+	PLAYER_INDEX	GetOwner() const
+	{
+		return m_owner;
+	};
+#endif
 
 	
 	BOOL GiveGold(const Gold &amount) {
