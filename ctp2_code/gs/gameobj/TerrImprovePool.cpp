@@ -1,12 +1,34 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Terrain improvement
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Sound added by Martin Gühmann
+// - Crash fixed when there is no sound defined (for mod).
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "TerrImprovePool.h"
@@ -22,10 +44,11 @@
 #include "Globals.h"
 #include "terrainutil.h"
 #include "TerrainImprovementRecord.h"
-//Added by Martin Gühmann
+#if !defined(ACTIVISION_ORIGINAL)
 #include "SoundRecord.h"
 #include "SoundManager.h"
 #include "SelItem.h"
+#endif
 
 TerrainImprovementPool::TerrainImprovementPool() 
 	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
@@ -38,6 +61,7 @@ TerrainImprovementPool::TerrainImprovementPool(CivArchive &archive)
 	Serialize(archive);
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 TerrainImprovement
 TerrainImprovementPool::Create(sint32 owner,
 							   MapPoint &point,
@@ -79,19 +103,87 @@ TerrainImprovementPool::Create(sint32 owner,
 	g_theWorld->InsertImprovement(newImprovement, point);
 	g_tiledMap->RedrawTile(&point);
 
-	//Added by Martin Gühmann to make a sound play when a tile improvement is build.
-	sint32 soundID = g_theTerrainImprovementDB->Get(newData->GetType())->GetSound()->GetIndex();
-	if (soundID != -1) {
-		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-		if ((visiblePlayer == owner)/* || 
-			(m_visibility & (1 << visiblePlayer))*/) {
+	return newImprovement;
+}
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : TerrainImprovementPool::Create
+//
+// Description: Create a new terrain improvement.
+//
+// Parameters : owner				: owner of the terrain improvement
+//				point				: map location to improve
+//				type				: type of improvement
+//				extraData			: ? 
+//
+// Globals    : g_theTerrainImprovementDB
+//				g_player
+//				g_tiledMap
+//				g_theWorld
+//				g_soundManager
+//				g_selectedItem
+//
+// Returns    : TerrainImprovement	: the newly created improvement
+//
+// Remark(s)  : - Returns a dummy TerrainImprovement of type 0 when the input
+//                data is invalid.
+//
+//----------------------------------------------------------------------------
+TerrainImprovement
+TerrainImprovementPool::Create(sint32 owner,
+							   MapPoint &point,
+							   sint32 type,
+							   sint32 extraData)
+{
+	TerrainImprovementRecord const *	dbTerrainImprovement	= 
+		g_theTerrainImprovementDB->Get(type);
 
-			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, point.x, point.y);
+	if ((!dbTerrainImprovement) ||
+		(!terrainutil_GetTerrainEffect(dbTerrainImprovement, point) &&
+	     !dbTerrainImprovement->GetClassTerraform()
+		) 
+       )
+	{
+		// Invalid or inapplicable improvement 
+		return TerrainImprovement(0);
+	}
+
+	// Obscure the improvement for all but the owner
+	for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
+	{
+		if (g_player[i] && (i != owner))
+		{
+			g_player[i]->m_vision->AddUnseen(point);
+		}
+	}
+	if (g_tiledMap) 
+	{
+		g_tiledMap->GetLocalVision()->AddUnseen(point);
+	}
+
+	// Add the new improvement to the map
+	TerrainImprovement newImprovement(NewKey(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT));
+	TerrainImprovementData *	newData = 
+		new TerrainImprovementData(newImprovement, owner, point, type, extraData);
+	Insert(newData);
+	g_theWorld->InsertImprovement(newImprovement, point);
+	g_tiledMap->RedrawTile(&point);
+
+	// Added by Martin Gühmann to make a sound play when a tile improvement is built.
+	SoundRecord const *	soundRecord	= dbTerrainImprovement->GetSound();
+	if (soundRecord)
+	{
+		sint32 const	soundID		= soundRecord->GetIndex();
+		if ((soundID != -1) && (owner == g_selected_item->GetVisiblePlayer()))
+		{
+			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32) 0, soundID, point.x, point.y);
 		}
 	}
 
 	return newImprovement;
 }
+#endif
 
 void 
 TerrainImprovementPool::Serialize(CivArchive &archive)

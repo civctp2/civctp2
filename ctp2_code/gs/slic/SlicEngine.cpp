@@ -27,6 +27,7 @@
 //
 // - Data blanked out at screen in between 2 players in hotseat play.
 // - Great library history cleared between 2 players in hotseat play.
+// - Corrected reported memory leak.
 //
 //----------------------------------------------------------------------------
 
@@ -339,8 +340,11 @@ void SlicEngine::Cleanup()
 	}
 
 	
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	slicif_init();
+#else
+	slicif_cleanup();
+#endif
 
 	m_doResearchOnUnblank = FALSE;
 }

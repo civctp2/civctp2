@@ -29,6 +29,7 @@
 // - Start the great library with the current research project of the player.
 // - Repaired memory leaks.
 // - Prevent buildings occurring twice in the pollution list.
+// - Unloaded icons. These were causing an exit-popup in the debug version.
 //
 //----------------------------------------------------------------------------
 
@@ -393,6 +394,9 @@ CityWindow::~CityWindow()
 
 CityWindow::~CityWindow()
 {
+	g_c3ui->UnloadImage(m_happyIcon);
+	g_c3ui->UnloadImage(m_unhappyIcon);
+
 	if (m_cities)			// container + created with new
 	{
 		m_cities->DeleteAll();
@@ -408,6 +412,14 @@ CityWindow::~CityWindow()
 	if (m_queueList)		// container + reference
 	{
 		m_queueList->Clear();
+	}
+
+	ctp2_DropDown *	const	dropdown	= 
+		reinterpret_cast<ctp2_DropDown *>
+			(aui_Ldl::GetObject(s_cityWindowBlock, "GovernorBox.Pulldown"));
+	if (dropdown)			// container + reference
+	{
+		dropdown->Clear();
 	}
 
 	if (m_statsWindow)		// hierarchy

@@ -1,35 +1,37 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : As far as known handels the slic compiler
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-// 
-// ACTIVISION_ORIGINAL		
-// - When defined, generates the original Activision code.
-// - When not defined, generates the modified Apolyton code.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Addtion of SOP types by Martin Gühmann to allow:
-//   - Slic database access
-//   - Slic database size access
-//
-//----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------
+ *
+ * Project      : Call To Power 2
+ * File type    : C/C++ header
+ * Description  : SLIC interpreter functions
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Disclaimer
+ *
+ * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+ *
+ * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * Source Code Project. Contact the authors at ctp2source@apolyton.net.
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Compiler flags
+ * 
+ * ACTIVISION_ORIGINAL		
+ * - When defined, generates the original Activision code.
+ * - When not defined, generates the modified Apolyton code.
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Modifications from the original Activision code:
+ *
+ * - SOP types added by Martin Gühmann to allow:
+ *   - Slic database access
+ *   - Slic database size access
+ * - slicif_cleanup() added.
+ *
+ *----------------------------------------------------------------------------
+ */
 
 #ifndef _SLICIF_H_
 #define _SLICIF_H_
@@ -193,6 +195,9 @@ SLIC_ERROR slicif_run_parser(char *filename, int symStart);
 void slicif_add_object(struct PSlicObject* obj);
 void slicif_add_op(SOP op, ...);
 void slicif_init();
+#if !defined(ACTIVISION_ORIGINAL)
+void slicif_cleanup();
+#endif
 void slicif_set_start(int symStart);
 void slicif_start();
 void slicif_dump_code(unsigned char *code, int size);
@@ -272,7 +277,7 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname);
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname);
 
 #if !defined(ACTIVISION_ORIGINAL)
-//Added by Martin Gühmann
+/* Added by Martin Gühmann */
 int slicif_is_sym(char *name);
 #endif
 

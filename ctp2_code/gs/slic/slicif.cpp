@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : As far as known handels the slic compiler
+// Description  : SLIC interpreter functions
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +27,7 @@
 //
 // - Added slic database access by Martin Gühmann
 // - Added a way to find out the size of a slic database by Martin Gühmann
+// - slicif_cleanup() added.
 //
 //----------------------------------------------------------------------------
 
@@ -134,6 +135,33 @@ void slicif_init()
 	g_slicNumEntries = 0;
 	s_temp_name_counter = 0;
 }
+
+#if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_cleanup
+//
+// Description: Clean up used (heap) memory 
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void slicif_cleanup()
+{
+	slicif_init();
+	delete [] s_code;
+	s_code				= NULL;
+	s_code_ptr			= NULL;
+	s_allocated_code	= 0;
+
+}
+#endif
 
 void slicif_start()
 {

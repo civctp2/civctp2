@@ -1,15 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Matrix of all diplomatic agreements between players
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Input checks corrected, preventing a crash to desktop.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -27,6 +45,12 @@ using namespace std;
 #include "MoveFlags.h"
 #include "Diplomat.h"
 
+#if !defined(ACTIVISION_ORIGINAL) 
+  #if !defined(_MSC_VER)
+    #include <algorithm>		// std::min
+  #endif
+#endif
+
 ai::Agreement AgreementMatrix::s_badAgreement;
 AgreementMatrix AgreementMatrix::s_agreements;
 
@@ -41,8 +65,18 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 {
 	
 	AgreementVector old_agreements(m_agreements);
+#if defined(ACTIVISION_ORIGINAL)
 	m_maxPlayers = newMaxPlayers;
-
+#else
+	// Just make sure that we can rely on testing against m_maxPlayers to have
+	// a valid index in g_player.
+	Assert(newMaxPlayers <= k_MAX_PLAYERS);
+  #if defined(_MSC_VER)
+	m_maxPlayers = min(newMaxPlayers, k_MAX_PLAYERS);
+  #else
+	m_maxPlayers = std::min<sint16>(newMaxPlayers, k_MAX_PLAYERS);
+  #endif
+#endif 
 	
 	m_agreements.clear();
 	
@@ -281,10 +315,28 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : AgreementMatrix::HasAgreement
+//
+// Description: Test whether 2 players have the indicated agreement.
+//
+// Parameters : sender_player	: initiator of the agreement
+//				receiver_player	: responder to the agreement
+//				type			: type of the agreement
+//
+// Globals    : g_player		: all players in the game
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 bool AgreementMatrix::HasAgreement(const PLAYER_INDEX & sender_player,
 								   const PLAYER_INDEX & receiver_player,
 								   const PROPOSAL_TYPE type) const
 {
+#if defined(ACTIVISION_ORIGINAL)	// incorrect and insufficient checks
 	Assert(sender_player < k_MAX_PLAYERS);
 	Assert(sender_player >= 0);
 
@@ -296,6 +348,23 @@ bool AgreementMatrix::HasAgreement(const PLAYER_INDEX & sender_player,
 	
 	if (receiver_player > k_MAX_PLAYERS || receiver_player <= 0)
 		return false;
+#else
+	Assert(sender_player < m_maxPlayers);
+	Assert(sender_player >= 0);
+
+	if ((sender_player >= m_maxPlayers)  || (sender_player < 0))
+	{
+		return false;
+	}
+
+	Assert(receiver_player < m_maxPlayers);
+	Assert(receiver_player >= 0);
+
+	if ((receiver_player >= m_maxPlayers) || (receiver_player < 0))
+	{
+		return false;
+	}
+#endif
 
 	Player *player_ptr = g_player[sender_player];
 	Assert(player_ptr != NULL);
@@ -318,7 +387,6 @@ bool AgreementMatrix::HasAgreement(const PLAYER_INDEX & sender_player,
 	
 	return false;
 }
-
 
 
 bool AgreementMatrix::HasAgreement(const PLAYER_INDEX & sender_player,
