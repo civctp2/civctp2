@@ -39,6 +39,7 @@
 // - Improved handling of space launched units.
 // - Added a isstealth paramater in characterizeArmy method
 // - Prevented leak report from unused static variables.
+// - Added modification for increased bombard range in ::Bombard & ::PerformOrderHere
 //
 //----------------------------------------------------------------------------
 
@@ -4243,6 +4244,47 @@ BOOL ArmyData::CanBombardTargetType(const CellUnitList & units) const
 
 
 
+ #if !defined(ACTIVISION_ORIGINAL)
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::GetBombardRange
+//
+// Description: Test if this army can bombard. Fill in min_rge and max_rge.
+//
+// Parameters : sint32 & min_rge : the min of the bombard ranges of this army's units
+//            : sint32 & max_rge : the max of the bombard ranges of this army's units
+//
+// Globals    : -
+//				
+// Returns    : bool
+//
+// Remark(s)  : min_rge is not used yet, pft
+//
+// Called by  : ArmyData::PerformOrderHere, ArmyData::Bombard
+// Additions by Peter Triggs Dec 18, 2004
+//----------------------------------------------------------------------------
+bool ArmyData::GetBombardRange(sint32 & min_rge, sint32 & max_rge)
+{
+	sint32 i;
+	min_rge = 99999;
+	max_rge = 0;
+
+    for(i = 0; i < m_nElements; i++) {
+	const UnitRecord *rec = g_theUnitDB->Get(m_array[i]->GetType());
+	sint32 rge;
+        rec->GetBombardRange(rge);
+	if(rge){
+            if(rgemax_rge)
+	        max_rge = rge;
+            }
+	}
+	if(max_rge > 0)
+	    return true;
+	
+	return false;
+}
+#endif
+
 BOOL ArmyData::CanBombard(const MapPoint &point) const
 {
 	static CellUnitList defender;
@@ -4395,14 +4437,29 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 	sint32 i;
 	
 	BOOL isSpaceBombard = FALSE;
-	if(point == m_pos) {
+	if(point == m_pos) {//CHANGED to INCREASE BOMBARD RANGE
 		
 		return ORDER_RESULT_ILLEGAL;
 	} else {
-		if(!point.IsNextTo(m_pos)) {//rem: this is why you can't bombard from range as in Civ:CTP
+		if (!CanBombard(point)) {
+
 			return ORDER_RESULT_ILLEGAL;
 		}
+		/*
+                             #if defined(ACTIVISION_ORIGINAL)
+		if(!point.IsNextTo(m_pos)) {//rem: this is why you can't bombard from range as in Civ:CTP
+                             #else //Peter Triggs added code 18 Dec 2004
+                                  sint32 dist = MapPoint::GetSquaredDistance(m_pos,point);
+                                  dist = sqrt(dist);
+                                  sint32 min_rge, max_rge;
+                                 GetBombardRange(min_rge,max_rge);
+
+                                 if(dist > max_rge) {//the target is out of this army's bombarding range
+                              #endif  //end of Peter's added code
+			return ORDER_RESULT_ILLEGAL;
+		}*/
 	}
+
 
     if (defender.Num() < 1) {		
 		if(BombardCity(point, TRUE)) {
@@ -8642,116 +8699,135 @@ void ArmyData::PerformOrder(const OrderRecord * order_rec)
 }
 
 
-void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path)
+void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path) // Additions by Peter Triggs Dec 18, 2004
 {
-	Assert(path != NULL);
+    Assert(path != NULL);
 
-	if (path == NULL)
-		return ;
+    if (path == NULL)
+	return ;
+    if (m_flags & k_CULF_IN_SPACE)
+	return;
+    Path *tmp_path = new Path((Path *) path);
+    MapPoint target_pos;
 
-	
-	if (m_flags & k_CULF_IN_SPACE)
-		return;
+    if (tmp_path->GetMovesRemaining() > 0)
+    {		
+	target_pos = tmp_path->GetEnd();
+    }
+    else
+    {		
+        target_pos = m_pos;
+    }
+    if (s_orderDBToEventMap == NULL)
+	AssociateEventsWithOrdersDB();
+    Assert(s_orderDBToEventMap != NULL);
+    sint32 game_event = s_orderDBToEventMap[order_rec->GetIndex()];
+    sint32 range = 0;
+    sint32 moves = tmp_path->GetMovesRemaining();
+    //order_rec: range = 0 (army must be on top of tile) or range = 1 (can execute order from adjacent tile)
+    if (order_rec->GetRange()) {
+	order_rec->GetRange(range);
+	Assert(range <= moves || order_rec->GetTargetPretestAdjacentPosition());            
+    }
 
-	
-	Path *tmp_path = new Path((Path *) path);
-	MapPoint target_pos;
+#if !defined(ACTIVISION_ORIGINAL)
 
-	if (tmp_path->GetMovesRemaining() > 0)
-	{
-		
-		target_pos = tmp_path->GetEnd();
-	}
-	else
-	{
-		
-		target_pos = m_pos;
-	}
+    sint32 min_rge, max_rge=0;
+    MapPoint move_pos = m_pos;//move_pos will become a position to move to if trying to bombard out of range
+    Path *move_path = tmp_path;//copy tmp_path
+    if (strcmp (order_rec->GetEventName(),"BombardOrder") == 0){
+        if(GetBombardRange(min_rge, max_rge)){
+            sint32 dist = MapPoint::GetSquaredDistance(m_pos,target_pos);
+	    dist=sqrt(dist);
+            if(dist > max_rge){//target is out of range
+                for(sint32 i=0;iIncDir();			
+                    tmp_path->GetCurrentPoint(move_pos);
+                    dist =  MapPoint::GetSquaredDistance(move_pos,target_pos);
 
-	
-	
+		    dist = sqrt(dist);
 
-	
-	
-		
-	
-
-		
-	
-	
-
-	
-	if (s_orderDBToEventMap == NULL)
-		AssociateEventsWithOrdersDB();
-	Assert(s_orderDBToEventMap != NULL);
-
-	
-	sint32 game_event = s_orderDBToEventMap[order_rec->GetIndex()];
-
-	
-	sint32 range = 0;
-	sint32 moves = tmp_path->GetMovesRemaining();
-	if (order_rec->GetRange()) {
-		order_rec->GetRange(range);
-		
-		Assert(range <= moves || order_rec->GetTargetPretestAdjacentPosition());
-	}
-
-	
-	for (sint32 i = 0; moves > 0 && i < range; i++)	{
-		tmp_path->SnipEnd();
-		moves--;
-	}
-
-	
-	
-	g_gevManager->Pause();
-
-	
-
-	
-	if (game_event > 0)	{
-		if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())
-			{
-				
-				g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-										static_cast<GAME_EVENT>(game_event), 
-										GEA_Army, Army(m_id), 
-										GEA_MapPoint, target_pos, 
-										GEA_End);
+                    if(dist <= max_rge){ //we're now within range
+			tmp_path->Start(m_pos);//reset tmp_path
+			for(sint32 j=1; jSnipEnd();
 			}
-		else {
-			
-			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-									static_cast<GAME_EVENT>(game_event), 
-									GEA_Army, Army(m_id), 
-									GEA_End);
+			i=moves;//exit the loop and continue
+		    }
 		}
+	    }
+        }
+    }
+    else{
+#endif		
+        for (sint32 i = 0; moves > 0 && i < range; i++){
+	    tmp_path->SnipEnd();
+	    moves--;
 	}
-
-	
-	if (tmp_path->GetMovesRemaining() > 0 && !order_rec->GetIsTeleport() && !order_rec->GetIsTarget()) {
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MoveOrder, 
-							   GEA_Army, Army(m_id),			
-							   GEA_Path, tmp_path,		 
-							   GEA_MapPoint, target_pos, 
-							   GEA_Int, (game_event == -1), 
-							   GEA_End);
+#if !defined(ACTIVISION_ORIGINAL)
+    }
+#endif	
+    g_gevManager->Pause();
+    //insert order's game_event here	
+    if (game_event > 0)	{
+	if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())//event needs target pos
+	    {
+	    	g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
+		static_cast(game_event), 
+		GEA_Army, Army(m_id), 
+		GEA_MapPoint, target_pos,
+		GEA_End);
 	}
-	else {
-		
-		delete tmp_path;
+        else {
+		g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
+		static_cast(game_event), 
+		GEA_Army, Army(m_id), 
+		GEA_End);
 	}
+    }
+    //insert GEV_MoveOrder here, i.e., move adjacent to target pos or within bombarding range of target pos	
+    if (tmp_path->GetMovesRemaining() > 0 && !order_rec->GetIsTeleport() && !order_rec->GetIsTarget()) {
+#if !defined(ACTIVISION_ORIGINAL)
+        if(max_rge){//max_rge >0 implys BombardOrder and army has bombarding units
+	    if(move_pos != m_pos){//then first move army to move_pos
 
-	
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ClearOrders,
-						   GEA_Army, Army(m_id),	
-						   GEA_End);
+                g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MoveOrder, 
+		    GEA_Army, Army(m_id),
+		    GEA_Path, move_path,
+		    GEA_MapPoint, move_pos,
+		    GEA_Int, (game_event == -1),
+		    GEA_End);
+	     }
+	     //bombard target_pos
 
-	
-	g_gevManager->Resume();
-	
+	     g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
+	         static_cast(game_event), 
+		 GEA_Army, Army(m_id), 
+		 GEA_MapPoint, target_pos, 
+		 GEA_End);
+
+	 }
+	 else{//not a bombard order
+#endif
+             g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+	         GEV_MoveOrder, 
+		 GEA_Army, Army(m_id),			
+		 GEA_Path, tmp_path,		 
+		 GEA_MapPoint, target_pos, 
+		 GEA_Int, (game_event == -1), 
+		 GEA_End);
+
+#if !defined(ACTIVISION_ORIGINAL)
+	}
+#endif
+    }
+    else {
+	     delete tmp_path;
+    }
+    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ClearOrders,
+	GEA_Army, Army(m_id),
+	GEA_End);
+    g_gevManager->Resume();
 }
+
 
 
 void ArmyData::AssociateEventsWithOrdersDB()
