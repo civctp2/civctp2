@@ -1,18 +1,38 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Import structure changed to compile with Mingw
+//
+//----------------------------------------------------------------------------
 
 #ifndef __AUI_UI_H__
 #define __AUI_UI_H__
 
-
+#if defined(ACTIVISION_ORIGINAL)
 #include "aui_region.h"
 #include "aui_audiomanager.h"
 #include "aui_moviemanager.h"
@@ -44,7 +64,57 @@ class aui_Control;
 class aui_UI;
 extern aui_UI *g_ui;
 
+#else // ACTIVISION_ORIGINAL
 
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+#include <windows.h>		// HINSTANCE etc.
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+class			aui_UI;
+
+extern aui_UI *	g_ui;
+
+#define			k_AUI_UI_NOCOLOR	0xff000000
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+#include "aui_action.h"			// aui_Action
+#include "aui_audiomanager.h"	// aui_AudioManager
+#include "aui_bitmapfont.h"		// aui_BitmapFont
+#include "aui_blitter.h"		// aui_Blitter
+#include "aui_control.h"		// aui_Control
+#include "aui_cursor.h"			// aui_Cursor
+#include "aui_dirtylist.h"		// aui_DirtyList
+#include "aui_image.h"			// aui_Image
+#include "aui_joystick.h"		// aui_Joystick
+#include "aui_keyboard.h"		// aui_Keyboard
+#include "aui_ldl.h"			// aui_Ldl
+#include "aui_memmap.h"			// aui_MemMap
+#include "aui_mouse.h"			// aui_Mouse, aui_MouseEvent
+#include "aui_moviemanager.h"	// aui_MovieManager
+#include "aui_region.h"			// aui_Region
+#include "aui_resource.h"		// aui_Resource
+#include "aui_sound.h"			// aui_Sound
+#include "aui_static.h"			// aui_Static
+#include "aui_surface.h"		// aui_Surface
+#include "aui_window.h"			// aui_Window
+#include "auitypes.h"			// AUI_...
+#include "c3types.h"			// MBCHAR, sint32, uint32
+#include "tech_wllist.h"		// tech_WLList
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+#endif // ACTIVISION_ORIGINAL
 
 
 class aui_UI : public aui_Region

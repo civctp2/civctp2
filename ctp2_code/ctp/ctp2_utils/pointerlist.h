@@ -1,8 +1,64 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Class export declaration changed.
+// - Modifications to support VC++ .NET.
+//
+//----------------------------------------------------------------------------
+
 #ifndef __GNUC__
 #pragma once
 #endif
+
 #ifndef _POINTER_LIST_H_
 #define _POINTER_LIST_H_
+
+#if !defined(ACTIVISION_ORIGINAL)
+
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+template <class T> class PointerList;
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+#endif
+
 
 template <class T> class PointerList {
 public:
@@ -68,11 +124,25 @@ public:
 	T* GetHead();
 	T* GetTail();
 
+#if defined(ACTIVISION_ORIGINAL)
 	PointerListNode *GetHeadNode();
 	PointerListNode *GetTailNode();
 
 	void InsertAt(PointerList<T>::PointerListNode *node, T *obj);
 	void InsertBefore(PointerList<T>::PointerListNode *node, T *obj);
+#else
+	PointerListNode *GetHeadNode()
+	{
+		return m_head;
+	};
+	PointerListNode *GetTailNode()
+	{
+		return m_tail;
+	};
+
+	void InsertAt(PointerListNode *node, T *obj);
+	void InsertBefore(PointerListNode *node, T *obj);
+#endif
 
 	void Remove(PointerListNode* node);
 	BOOL  IsEmpty() const { return m_head == NULL; };
@@ -296,6 +366,7 @@ template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
 	delete node;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 template <class T> inline PointerList<T>::PointerListNode *PointerList<T>::GetHeadNode()
 {
 	return m_head;
@@ -305,8 +376,13 @@ template <class T> inline PointerList<T>::PointerListNode *PointerList<T>::GetTa
 {
 	return m_tail;
 }
+#endif
 
+#if defined(ACTIVISION_ORIGINAL)
 template <class T> inline void PointerList<T>::InsertAt(PointerList<T>::PointerListNode *node, T *obj)
+#else
+template <class T> inline void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
+#endif
 {
 	PointerListNode *newNode = new PointerListNode(obj);
 	if(!node) {
@@ -330,7 +406,11 @@ template <class T> inline void PointerList<T>::InsertAt(PointerList<T>::PointerL
 	m_count++;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 template <class T> inline void PointerList<T>::InsertBefore(PointerList<T>::PointerListNode *node, T *obj)
+#else
+template <class T> inline void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
+#endif
 {
 	PointerListNode *newNode = new PointerListNode(obj);
 	if(!node) {
@@ -354,7 +434,11 @@ template <class T> inline void PointerList<T>::InsertBefore(PointerList<T>::Poin
 	m_count++;
 }
 	
+#if defined(ACTIVISION_ORIGINAL)
 template <class T> PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
+#else
+template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
+#endif
 {
 	PointerListNode *search = m_head;
 	while(search) {
@@ -366,5 +450,7 @@ template <class T> PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
 }
 
 #else
+#if defined(ACTIVISION_ORIGINAL)
 class PointerList;
+#endif
 #endif

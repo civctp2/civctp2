@@ -1,6 +1,38 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface list box
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
 
 
+#if defined(_MSC_VER)
 #pragma once
+#endif
 
 #ifndef __CTP2_LISTBOX__
 #define __CTP2_LISTBOX__
@@ -69,7 +101,8 @@ protected:
 	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
 
 	AUI_ERRCODE ReformatItemFromHeader(aui_Item *item);		
-															
+
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseMoveOver;
 	virtual MouseEventCallback MouseMoveInside;
 	virtual MouseEventCallback MouseMoveOutside;
@@ -79,6 +112,18 @@ protected:
 	virtual MouseEventCallback MouseLDragAway;
 	virtual MouseEventCallback MouseRDragOver;
 	virtual MouseEventCallback MouseRDragAway;
+#else
+	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
+
+	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
+	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseRDragAway(aui_MouseEvent * mouseData);
+#endif
+
 public:
 	
 	

@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface region (rectangle on the display)
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __AUI_REGION_H__
 #define __AUI_REGION_H__
@@ -352,10 +371,9 @@ protected:
 	
 	
 
-	
 	typedef void (MouseEventCallback)( aui_MouseEvent *mouseData );
-
 	
+#if defined(_MSC_VER)
 	virtual MouseEventCallback PreChildrenCallback {}
 	virtual MouseEventCallback PostChildrenCallback {}
 
@@ -436,6 +454,73 @@ protected:
 	MouseEventCallback MouseLDoubleClickOutsideEdit {}
 	MouseEventCallback MouseRDoubleClickInsideEdit {}
 	MouseEventCallback MouseRDoubleClickOutsideEdit {}
+#else
+	virtual void	PreChildrenCallback(aui_MouseEvent * mouseData) {};
+	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData) {};
+
+	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveAway(aui_MouseEvent * mouseData) {};
+	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveOutside(aui_MouseEvent * mouseData) {};
+
+	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragAway(aui_MouseEvent * mouseData) {};
+	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseRDragAway(aui_MouseEvent * mouseData) {};
+	virtual void	MouseRDragInside(aui_MouseEvent * mouseData);
+	virtual void	MouseRDragOutside(aui_MouseEvent * mouseData) {};
+	
+	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseRGrabOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseRDropOutside(aui_MouseEvent * mouseData) {};
+	
+	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDoubleClickOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseRDoubleClickInside(aui_MouseEvent * mouseData);
+	virtual void	MouseRDoubleClickOutside(aui_MouseEvent * mouseData);
+	
+	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
+	
+	void			MouseMoveOverEdit(aui_MouseEvent * mouseData) {};
+	void			MouseMoveAwayEdit(aui_MouseEvent * mouseData) {};
+	void			MouseMoveInsideEdit(aui_MouseEvent * mouseData) {};
+	void			MouseMoveOutsideEdit(aui_MouseEvent * mouseData) {};
+	
+	void			MouseLDragOverEdit(aui_MouseEvent * mouseData);
+	void			MouseLDragAwayEdit(aui_MouseEvent * mouseData);
+	void			MouseLDragInsideEdit(aui_MouseEvent * mouseData);
+	void			MouseLDragOutsideEdit(aui_MouseEvent * mouseData);
+	void			MouseRDragOverEdit(aui_MouseEvent * mouseData) {};
+	void			MouseRDragAwayEdit(aui_MouseEvent * mouseData) {};
+	void			MouseRDragInsideEdit(aui_MouseEvent * mouseData) {};
+	void			MouseRDragOutsideEdit(aui_MouseEvent * mouseData) {};
+
+	void			MouseLGrabInsideEdit(aui_MouseEvent * mouseData);
+	void			MouseLGrabOutsideEdit(aui_MouseEvent * mouseData);
+	void			MouseLDropInsideEdit(aui_MouseEvent * mouseData);
+	void			MouseLDropOutsideEdit(aui_MouseEvent * mouseData);
+	void			MouseRGrabInsideEdit(aui_MouseEvent * mouseData);
+	void			MouseRGrabOutsideEdit(aui_MouseEvent * mouseData);
+	void			MouseRDropInsideEdit(aui_MouseEvent * mouseData);
+	void			MouseRDropOutsideEdit(aui_MouseEvent * mouseData);
+
+	void			MouseLGrabEditMode(aui_MouseEvent * mouseData);
+	void			MouseLDropEditMode(aui_MouseEvent * mouseData);
+	void			MouseLDragEditMode(aui_MouseEvent * mouseData);
+
+	void			MouseLDoubleClickInsideEdit(aui_MouseEvent * mouseData) {};
+	void			MouseLDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
+	void			MouseRDoubleClickInsideEdit(aui_MouseEvent * mouseData) {};
+	void			MouseRDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
+
+#endif
 };
 
 

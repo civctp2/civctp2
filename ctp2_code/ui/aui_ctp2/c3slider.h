@@ -1,17 +1,38 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface slider
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __C3SLIDER_H__
 #define __C3SLIDER_H__
 
@@ -65,7 +86,11 @@ public:
 	BOOL	IsVertical( void ) const
 	{ return m_orientation == AUI_RANGER_ORIENTATION_VERTICAL; }
 
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseRGrabInside;
+#else
+	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
+#endif
 
 protected:
 	sint32 m_ticks;

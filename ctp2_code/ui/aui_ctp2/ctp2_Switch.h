@@ -1,6 +1,32 @@
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface switch
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __CTP2_SWITCH_H__
 #define __CTP2_SWITCH_H__
@@ -52,7 +78,11 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseLDoubleClickInside;
+#else
+	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
+#endif
 
 private:
 	sint32	m_bevelWidth;

@@ -1,17 +1,43 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragma once commented out
+// - Import structure modified to allow mingw compilation.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __CIVILISATION_DATA_H__
 #define __CIVILISATION_DATA_H__
+
+#if defined(_MSC_VER)
 
 #include "Gameobj.h"
 #include "ID.h"
@@ -20,6 +46,39 @@
 
 extern enum CIV_INDEX ;
 enum GENDER;
+
+#else	// _MSC_VER
+
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+class	CivilisationData;
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+#include "c3types.h"			// MBCHAR, sint..., uint...
+#include "civarchive.h"			// CivArchive
+#include "Civilisation.h"		// GENDER
+#include "Civilisationpool.h"	// CIV_INDEX
+#include "CivilisationRec.h"	// k_MAX_CITY_NAMES
+#include "dbtypes.h"			// k_MAX_NAME_LEN
+#include "Gameobj.h"			// GAMEOBJ
+#include "gstypes.h"			// PLAYER_INDEX
+#include "ID.h"					// ID
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+
+#endif	// _MSC_VER
 
 class CivilisationData : public GAMEOBJ
 	{

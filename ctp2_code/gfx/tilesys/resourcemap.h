@@ -1,14 +1,38 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __RESOURCEMAP_H__
 #define __RESOURCEMAP_H__
 
@@ -141,12 +165,16 @@ protected:
 
 	RECT        m_usedRect; 
 	
-	
-	
-
+	// Event callback handlers	
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseLGrabInside;
 	virtual MouseEventCallback MouseMoveInside;
 	virtual MouseEventCallback MouseMoveAway;
+#else
+	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
+#endif
 
 };
 

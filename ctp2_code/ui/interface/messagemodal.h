@@ -1,12 +1,40 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface modal message
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
+
 #ifndef __MESSAGEMODAL_H__
 #define __MESSAGEMODAL_H__
 
@@ -55,8 +83,13 @@ public:
 	Message				*GetMessage( void ) { return &m_message; }
 
 protected:
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseLGrabInside;
 	virtual MouseEventCallback MouseLDragAway;
+#else
+	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
+#endif
 
 	AUI_ERRCODE CreateWindowEdges( MBCHAR *ldlBlock );
 	AUI_ERRCODE CreateResponses( MBCHAR *ldlBlock );

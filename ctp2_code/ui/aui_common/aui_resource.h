@@ -1,24 +1,79 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface resource
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Import structure changed to compile with Mingw
+// - Variable scope corrected
+//
+//----------------------------------------------------------------------------
 
 #ifndef __AUI_RESOURCE_H__
 #define __AUI_RESOURCE_H__
 
-
+#if defined(ACTIVISION_ORIGINAL)
 #include "tech_wllist.h"
 
 
 #include "c3files.h"
 #include "civpaths.h"
 extern CivPaths *g_civPaths;
+
+#else // ACTIVISION_ORIGINAL
+
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+#include <stdio.h>			// sprintf
+#include <string.h>			// strcpy
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+template <class T> class	aui_Resource;
+template <class T> struct	aui_ResourceElement;
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+#include "aui_ui.h"			// aui_UI
+#include "auitypes.h"		// AUI_...
+#include "c3debug.h"		// Assert
+#include "c3files.h"		// C3DIR...
+#include "c3types.h"		// MBCHAR, sint32, uint32
+#include "CivPaths.h"		// g_civPaths
+#include "tech_wllist.h"	// ListPos, tech_WLList
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+#endif // ACTIVISION_ORIGINAL
 
 
 
@@ -362,7 +417,12 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, MBCHAR *name )
 		ListPos position = m_pathList->GetHeadPosition();
 		if ( position )
 		{
+#if defined(ACTIVISION_ORIGINAL)
 			for ( sint32 i = m_pathList->L(); i; i-- )
+#else
+			sint32	i = m_pathList->L();
+			for ( ; i; --i )
+#endif
 			{
 				MBCHAR *path = m_pathList->GetNext( position );
 				sprintf( fullPath, "%s\\%s", path, name );

@@ -1,24 +1,46 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragma once commented out
+// - Import structure modified to allow mingw compilation.
+// - bool added to == and != operators.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef MAPPOINT_H
 #define MAPPOINT_H 1
 
+#if defined(_MSC_VER)
+
 enum WORLD_DIRECTION;
-
-
-
-
 
 #define _SMALL_MAPPOINTS		(1)
 
@@ -44,6 +66,70 @@ class CivArchive;
 
 #define k_MAPPOINT_VERSION_MAJOR	0								
 #define k_MAPPOINT_VERSION_MINOR	0								
+
+#else	// _MSC_VER
+
+//----------------------------------------------------------------------------
+// Compiler flags
+//----------------------------------------------------------------------------
+
+#define _SMALL_MAPPOINTS			(1)
+
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+class	MapPoint;
+struct	MapPointData;
+struct	TileUtility;
+
+#define k_MAPPOINT_VERSION_MAJOR	0								
+#define k_MAPPOINT_VERSION_MINOR	0								
+#define k_NUM_CITY_TILES			20	
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
+#include "civarchive.h"		// CivArchive
+#include "directions.h"		// WORLD_DIRECTION
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+struct MapPointData 
+{ 
+	// Coordinates
+	sint16			x;
+	sint16			y;
+
+	bool operator == (MapPointData const & point) const 
+	{
+		return ((x == point.x) && (y == point.y));
+	};
+
+	bool operator != (MapPointData const & point) const 
+	{
+		return (! operator ==(point));
+	};
+}; 
+
+struct TileUtility 
+{ 
+    double			m_utility; 
+    double			m_food; 
+    double			m_production; 
+    double			m_gold; 
+    double			m_can_be_irrigated; 
+    MapPointData	m_pos; 
+};
+
+#endif	// _MSC_VER
 
 class MapPoint : public MapPointData { 
 

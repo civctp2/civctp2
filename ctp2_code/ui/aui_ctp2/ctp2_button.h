@@ -1,11 +1,38 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface button
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef CTP2_BUTTON_H__
 #define CTP2_BUTTON_H__
 
@@ -60,11 +87,17 @@ public:
 								 sint32 x = 0, sint32 y = 0);
 
 	
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseLGrabInside;
 	virtual MouseEventCallback MouseLDropInside;
 	virtual MouseEventCallback MouseLDragOver;
 	virtual MouseEventCallback MouseLDragAway;
-
+#else
+	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
+#endif
 	
 	static const sint32 k_CTP2_BUTTON_LAYER_FLAG_UP;
 	static const sint32 k_CTP2_BUTTON_LAYER_FLAG_DOWN;

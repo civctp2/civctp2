@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface text field
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __AUI_TEXTFIELD_H__
 #define __AUI_TEXTFIELD_H__
@@ -130,14 +149,14 @@ public:
 	HFONT	m_hfont;			
 	HFONT	m_holdfont;			
 
-	
-	
-	
-
-	
+#if defined(_MSC_VER)	
 	virtual MouseEventCallback PostChildrenCallback;
 
 	virtual MouseEventCallback MouseLGrabOutside;
+#else
+	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);
+	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
+#endif
 };
 
 

@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface radio button
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
 
 
 #ifndef __AUI_TAB_H__
@@ -62,11 +83,7 @@ public:
 protected:
 	aui_Control		*m_pane;
 
-	
-	
-	
-
-	
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseLDragOver;
 	virtual MouseEventCallback MouseLDragAway;
 
@@ -76,6 +93,16 @@ protected:
 	virtual MouseEventCallback MouseLDropOutside {}
 
 	virtual MouseEventCallback MouseRGrabInside;
+#else
+	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
+
+	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData) {};
+
+	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
+#endif
 };
 
 

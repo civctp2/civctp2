@@ -1,6 +1,32 @@
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface ?
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __THRONECONTROL_H__
 #define __THRONECONTROL_H__
@@ -75,8 +101,13 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseLDropInside;
 	virtual MouseEventCallback MouseMoveInside;
+#else
+	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
+#endif
 
 	AUI_ERRCODE Idle( void );
 

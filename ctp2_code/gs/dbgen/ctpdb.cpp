@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Database generator
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Variable 'or' renamed, because this a reserved symbol (same as ||) now.
+//
+//----------------------------------------------------------------------------
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,15 +94,21 @@ bool db_files_differ(char *newFilePath, char *oldFilePath)
 
 	while(!feof(n) && !feof(o)) {
 		char nb[DIFF_SIZE], ob[DIFF_SIZE];
+#if defined(ACTIVISION_ORIGINAL)
 		int nr, or;
 		nr = fread(nb, 1, DIFF_SIZE, n);
 		or = fread(ob, 1, DIFF_SIZE, o);
 		if(nr != or) {
+#else
+		int const	nr      = fread(nb, 1, DIFF_SIZE, n);
+		int const	oldr	= fread(ob, 1, DIFF_SIZE, o);
+
+		if (nr != oldr) {
+#endif
 			fclose(n);
 			fclose(o);
 			return true;
 		}
-
 		sint32 i;
 		for(i = 0; i < nr; i++) {
 			if(nb[i] != ob[i]) {

@@ -1,12 +1,38 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface message icon button
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __MESSAGEICONBUTTON_H__
 #define __MESSAGEICONBUTTON_H__
 
@@ -34,22 +60,20 @@ public:
 
 	void SetCurrentIconButton( MessageIconButton *button );
 
-
-	
-
 private:
 	static MessageIconButton	*m_currentButton;
+
 protected:
 
-
-	
-
-
-
-	
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseRGrabInside;
 	virtual MouseEventCallback MouseRDropInside;
 	virtual MouseEventCallback MouseRDropOutside;
+#else
+    virtual void	MouseRGrabInside(aui_MouseEvent * data);
+    virtual void	MouseRDropInside(aui_MouseEvent * data);
+    virtual void	MouseRDropOutside(aui_MouseEvent * data);
+#endif
 
 };
 

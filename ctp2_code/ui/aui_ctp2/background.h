@@ -1,17 +1,41 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface background window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+// __USING_SPANS
+// unknown
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Event handlers declared in a notation that is more standard C++.
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
- 
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __BACKGROUND_H__
 #define __BACKGROUND_H__
 
@@ -70,6 +94,7 @@ protected:
     sint32 m_lbutton_isdown; 
     sint32 m_rbutton_isdown; 
 
+#if defined(_MSC_VER)
 	virtual MouseEventCallback MouseLDragOver;
 	virtual MouseEventCallback MouseLGrabInside;
     virtual MouseEventCallback MouseLDropInside;
@@ -86,6 +111,21 @@ protected:
 
 	virtual MouseEventCallback MouseLDoubleClickInside;
 	virtual MouseEventCallback MouseRDoubleClickInside;
+#else
+    virtual void	MouseLDragOver(aui_MouseEvent * data);
+    virtual void	MouseLGrabInside(aui_MouseEvent * data);
+    virtual void	MouseLDropInside(aui_MouseEvent * data);
+    virtual void	MouseLDropOutside(aui_MouseEvent * data);
+    virtual void	MouseLDragInside(aui_MouseEvent * data);
+    virtual void	MouseRGrabInside(aui_MouseEvent * data);
+    virtual void	MouseMoveOver(aui_MouseEvent * data);
+    virtual void	MouseMoveInside(aui_MouseEvent * data);
+    virtual void	MouseMoveAway(aui_MouseEvent * data);
+    virtual void	MouseMoveOutside(aui_MouseEvent * data);
+    virtual void	MouseNoChange(aui_MouseEvent * data);
+    virtual void	MouseLDoubleClickInside(aui_MouseEvent * data);
+    virtual void	MouseRDoubleClickInside(aui_MouseEvent * data);
+#endif
     
     void ProcessLastMouseMoveThisFrame(aui_MouseEvent *data);
 

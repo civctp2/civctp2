@@ -1,18 +1,46 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : General declarations
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// - Generate debug version
+//
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+// _TEST
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragmas commented out
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __C3_H__
 #define __C3_H__
+
+#if defined(_MSC_VER)
 
 #if defined(_TEST) || !defined(_DEBUG)
 #pragma warning( disable : 4056 )
@@ -20,6 +48,7 @@
 
 #pragma warning( error : 4700 )
 
+#endif
 
 #include <limits.h>
 #include <crtdbg.h>
