@@ -17,7 +17,7 @@
 //
 // Compiler flags
 // 
-// ACTIVISION_ORIGINAL		
+// ACTIVISION_ORIGINAL
 // - When defined, generates the original Activision code.
 // - When not defined, generates the modified Apolyton code.
 //
@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Propagate PW each turn update
+// - Altered filename generating for PBEM saves (JJB 2004/12/30)
 //
 //----------------------------------------------------------------------------
 #include "c3.h"
@@ -1422,7 +1423,12 @@ void TurnCount::SendNextPlayerMessage()
 		
 		MBCHAR fullPath[_MAX_PATH], *c, *startc, *fc;
 		strcpy(fullPath, g_civPaths->GetDesktopPath());
+#if defined(ACTIVISION_ORIGINAL)
 		strcat(fullPath, "\\CTP Email To ");
+#else
+		// JJB changed this from CTP to CTP2 to avoid confusion between the two games
+		strcat(fullPath, "\\CTP2 Email To ");
+#endif
 		
 		startc = g_player[g_selected_item->GetCurPlayer()]->m_email;
 		c = startc;
@@ -1440,7 +1446,13 @@ void TurnCount::SendNextPlayerMessage()
 			c++;
 		}
 		MBCHAR turnString[_MAX_PATH];
+#if defined(ACTIVISION_ORIGINAL)
 		sprintf(turnString, " (Turn %d)", m_round);
+#else
+		// JJB changed this from m_round to GetRound()
+		// since m_round seems to always be zero
+		sprintf(turnString, " (Turn %d)", GetRound());
+#endif
 		strcat(fullPath, turnString);
 		strcat(fullPath, ".c2g");
 		GameFile::SaveGame(fullPath, NULL);
