@@ -1,13 +1,30 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : File paths
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added option to use multiple data directories.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -42,6 +59,7 @@ void CivPaths_CleanupCivPaths()
 
 
 CivPaths::CivPaths ()
+:	m_extraDataPaths()
 { 
     FILE			*fin = NULL; 
     sint32			dir;
@@ -147,6 +165,7 @@ CivPaths::~CivPaths()
 		delete[] m_assetPaths[dir];
 	}
 
+	ResetExtraDataPaths();
 }
 
 void CivPaths::CreateSaveFolders(MBCHAR *path) 
@@ -354,9 +373,25 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, MBCHAR *filename, MBCHAR *path,
 		}
 	}
 
-	
+    // The extra data paths take priority over the regular one.
+	for 
+	(
+		std::vector<MBCHAR *>::iterator	p	= m_extraDataPaths.begin();
+		p != m_extraDataPaths.end();
+		++p
+	)
+	{
+		MBCHAR *	l_dataPath	= *p;
+		if (MakeAssetPath(fullPath, m_hdPath, l_dataPath, m_localizedPath, m_assetPaths[dir], filename) ||
+			MakeAssetPath(fullPath, m_hdPath, l_dataPath, m_defaultPath,   m_assetPaths[dir], filename)
+		   ) 
+		{
+			strcpy(path, fullPath);
+			return path;
+		}
+	}
 
-	
+	// When not found in the new data, try the original directories
 	if (MakeAssetPath(fullPath, m_hdPath, m_dataPath, m_localizedPath, m_assetPaths[dir], filename)) {
 		
 		strcpy(path, fullPath);
@@ -372,7 +407,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, MBCHAR *filename, MBCHAR *path,
 
 	
 
-	
+	// The CD will only have the original content
 	if (MakeAssetPath(fullPath, m_cdPath, m_dataPath, m_localizedPath, m_assetPaths[dir], filename)) {
 		
 		strcpy(path, fullPath);
@@ -385,7 +420,6 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, MBCHAR *filename, MBCHAR *path,
 		strcpy(path, fullPath);
 		return path;
 	}
-
     
 	
     if (check_prjfile && 
@@ -647,3 +681,60 @@ finished:
 	strcpy(m_desktopPath, tempStr);
 	return m_desktopPath;
 }
+
+//----------------------------------------------------------------------------
+//
+// Name       : CivPaths::InsertExtraDataPath
+//
+// Description: Insert a data include directory to the lookup path
+//
+// Parameters : path	: ctp2_data-style directory tree
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : For lookup, the most recent path has the highest priority,
+//              and any inserted paths have priority above the original
+//              "..\..\ctp2_data" path.
+//
+//----------------------------------------------------------------------------
+
+void CivPaths::InsertExtraDataPath(MBCHAR const * path)
+{
+	MBCHAR *	newPath	= new MBCHAR[1 + strlen(path)];
+	strcpy(newPath, path);
+	m_extraDataPaths.insert(m_extraDataPaths.begin(), newPath);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CivPaths::ResetExtraDataPaths
+//
+// Description: Clear the entire lookup path
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : The original "..\..\ctp2_data" path will remain - it is not
+//              stored in m_extraDataPaths, but in m_dataPath.
+//
+//----------------------------------------------------------------------------
+
+void CivPaths::ResetExtraDataPaths(void)
+{
+	for
+	(
+		std::vector<MBCHAR *>::iterator	p = m_extraDataPaths.begin();
+		p != m_extraDataPaths.end();
+		++p
+	)
+	{
+		delete [] *p;
+	}
+	m_extraDataPaths.clear();
+}
+

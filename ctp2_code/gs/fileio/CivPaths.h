@@ -1,23 +1,42 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : File paths
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added option to use multiple data directories.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __CIVPATHS_H__
 #define __CIVPATHS_H__ 1
 
 #include "c3files.h"
-
-
-
+#include <vector>	// list did not work: crashes on begin() for empty list
 
 
 
@@ -34,7 +53,8 @@ private:
 	MBCHAR *m_defaultPath;		
 	MBCHAR *m_localizedPath;	
 
-	MBCHAR *m_dataPath;			
+	MBCHAR *m_dataPath;			            // original data path (...\ctp2_data)
+	std::vector<MBCHAR *> m_extraDataPaths; // searched before m_dataPath
 	MBCHAR *m_scenariosPath;	
 
 	MBCHAR *m_savePath;			
@@ -60,7 +80,7 @@ public:
 	
 	CivPaths ();
 	
-	~CivPaths();
+	virtual ~CivPaths();
 
 	
 	void CreateSaveFolders(MBCHAR *path);
@@ -116,6 +136,9 @@ public:
 
 	
 	MBCHAR *GetDesktopPath(void);
+
+	void	InsertExtraDataPath(MBCHAR const * path);
+	void	ResetExtraDataPaths(void);
 
 protected:
 	
