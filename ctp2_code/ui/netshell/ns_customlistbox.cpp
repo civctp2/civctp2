@@ -26,6 +26,8 @@
 // Modifications from the original Activision code:
 //
 // - Corrected strange access of non-static members from static data.
+// - Replaced typename T in specialized template member function by the 
+//   the type for that the function is specialized, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -827,7 +829,11 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 	{
 		switch (netShellObject->type(i))
 		{
+#if defined(ACTIVISION_ORIGINAL)
 		case ns_Accessor<T>::STRING:
+#else
+		case ns_Accessor<NETFunc::Player>::STRING:
+#endif
 			{
 				MBCHAR name[dp_PNAMELEN + 1];
 				strncpy(name, * reinterpret_cast<MBCHAR const * *>(dataPtr), dp_PNAMELEN);
@@ -842,12 +848,20 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 				return item->SetText(name);
 			}
 
+#if defined(ACTIVISION_ORIGINAL)
 		case ns_Accessor<T>::INT:
+#else
+		case ns_Accessor<NETFunc::Player>::INT:
+#endif
 			item->SetTextBold(netShellObject->IsMine());
 			return item->SetText
 				(itoa(* reinterpret_cast<sint32 const *>(dataPtr), scratch, 10));
 
+#if defined(ACTIVISION_ORIGINAL)
 		case ns_Accessor<T>::ICON:
+#else
+		case ns_Accessor<NETFunc::Player>::ICON:
+#endif
 			return item->SetIcon(* reinterpret_cast<MBCHAR * *>(dataPtr));
 
 		default:

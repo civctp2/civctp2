@@ -1456,8 +1456,11 @@ bool aui_Control::FillWidth(ldl_datablock *theBlock,
 				desiredWidth;
 		}
 
-		
+#if defined(ACTIVISION_ORIGINAL)					
 		width = std::_MAX(width,
+#else
+		width = std::max(width,
+#endif
 			m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
 	}
 
@@ -1559,8 +1562,11 @@ aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
 			result.first++;
 		} else {
 			
-			
+#if defined(ACTIVISION_DEFAULT)
 			result.second = std::_MAX(0L,
+#else
+			result.second = std::max(0L,
+#endif
 				result.second -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
 		}
@@ -1634,8 +1640,11 @@ bool aui_Control::FillHeight(ldl_datablock *theBlock,
 				desiredHeight;
 		}
 
-		
+#if defined(ACTIVISION_DEFAULT)
 		height = std::_MAX(height,
+#else
+		height = std::max(height,
+#endif
 			m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
 	}
 
@@ -1726,8 +1735,11 @@ sint32 aui_Control::NumberOfColumns(sint32 numberOfRows,
 			(rowIndices[rowIndex + 1] - 1) : (m_imagesPerLayer - 1);
 
 		
-		
+#if defined(ACTIVISION_DEFAULT)		
 		numberOfColumns = std::_MAX(numberOfColumns,
+#else
+		numberOfColumns = std::max(numberOfColumns,
+#endif
 			(imageEnd - imageStart + 1L));
 	}
 

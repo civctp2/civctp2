@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Net functionality (find something better if you don't like this description ;))
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Replaced typename T in specialized template member function by the 
+//   the type for that the function is specialized, by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
+
 #include "netfunc.h"
 #include <ras.h>
 
@@ -449,8 +481,6 @@ dp_serverInfo_t *NETFunc::Server::GetServer(void) {
 	return &server;
 }
 
-
-
 bool NETFunc::ListHandler<NETFunc::Server>::Handle(Message *m) {
 	if(m->GetCode() == Message::RESET && Equals((KeyStruct *)m->GetBody())) {
 		Destroy();
@@ -468,7 +498,12 @@ bool NETFunc::ListHandler<NETFunc::Server>::Handle(Message *m) {
 					if(Find(&t) != end())
 						Change(Chg(&t));
 					else
+#if defined(ACTIVISION_ORIGINAL)
 						Insert(Add(new T(t)));
+#else
+						Insert(Add(new Server(t)));
+#endif
+
 				return true;
 			
 			case dp_RES_DELETED:
@@ -1123,7 +1158,6 @@ NETFunc::Player NETFunc::player = Player();
 dp_uid_t NETFunc::userId = dp_UID_NONE;
 
 
-
 bool NETFunc::ListHandler<NETFunc::Player>::Handle(Message *m) {
 	if(m->GetCode() == Message::RESET) {
 		Destroy();
@@ -1149,7 +1183,11 @@ bool NETFunc::ListHandler<NETFunc::Player>::Handle(Message *m) {
 				if(Find(&t) != end())
 					Change(Chg(&t));
 				else
+#if defined(ACTIVISION_ORIGINAL)
 					Insert(Add(new T(t)));
+#else
+					Insert(Add(new Player(t)));
+#endif
 				return true;
 			
 			case dp_RES_DELETED:
@@ -1548,7 +1586,11 @@ bool NETFunc::ListHandler<NETFunc::Session>::Handle(Message *m) {
 				if(Find(&t) != end())
 					Change(Chg(&t));
 				else
+#if defined(ACTIVISION_ORIGINAL)
 					Insert(Add(new T(t)));
+#else
+					Insert(Add(new Session(t)));
+#endif
 				return true;
 			
 			case dp_RES_DELETED:
@@ -1646,7 +1688,11 @@ bool NETFunc::ListHandler<NETFunc::Lobby>::Handle(Message *m) {
 				if(Find(&t) != end())
 					Change(Chg(&t));
 				else
+#if defined(ACTIVISION_ORIGINAL)
 					Insert(Add(new T(t)));
+#else
+					Insert(Add(new Lobby(t)));
+#endif
 				return true;
 			
 			case dp_RES_DELETED:
@@ -1695,7 +1741,11 @@ bool NETFunc::ListHandler<NETFunc::Game>::Handle(Message *m) {
 				if(Find(&t) != end())
 					Change(Chg(&t));
 				else
+#if defined(ACTIVISION_ORIGINAL)
 					Insert(Add(new T(t)));
+#else
+					Insert(Add(new Game(t)));
+#endif
 				return true;
 			
 			case dp_RES_DELETED:

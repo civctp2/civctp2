@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Repaired memory leaks.
+// - Resolved ambigious calls of std::max.
 //
 //----------------------------------------------------------------------------
 
@@ -254,7 +255,11 @@ void LineGraph::LabelAxes(void)
 		if (m_enablePrecision) sprintf(s, "%#.3f", m_xmax);
 		else sprintf(s, "%d", (sint32)m_xmax);
 
+#if defined(ACTIVISION_ORIGINAL)
 		primitives_DrawText(m_surface, max(0, m_graphRect.right-35), m_graphRect.bottom + (m_events?20:0),
+#else
+		primitives_DrawText(m_surface, max((long)0, m_graphRect.right-35), m_graphRect.bottom + (m_events?20:0),
+#endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 
@@ -272,13 +277,21 @@ void LineGraph::LabelAxes(void)
 		if (m_enablePrecision) sprintf(s, "%#.1f", m_ymin);
 		else sprintf(s, "%d", (sint32)m_ymin);
 
+#if defined(ACTIVISION_ORIGINAL)
 		primitives_DrawText(m_surface, max(0, m_graphRect.left-45), max(0, m_graphRect.bottom-15),
+#else
+		primitives_DrawText(m_surface, max((long)0, m_graphRect.left-45), max((long)0, m_graphRect.bottom-15),
+#endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 
 		if (m_enablePrecision) sprintf(s, "%#.1f", m_ymax);
 		else sprintf(s, "%d", (sint32)m_ymax);
 	
+#if defined(ACTIVISION_ORIGINAL)
 		primitives_DrawText(m_surface, max(0, m_graphRect.left-45), m_graphRect.top,
+#else
+		primitives_DrawText(m_surface, max((long)0, m_graphRect.left-45), m_graphRect.top,
+#endif
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 }
