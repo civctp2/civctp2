@@ -29,7 +29,7 @@
 // - Center on pirating (originally by Ahenobarb, slightly modified).
 // - Center on bombarding.
 // - Fix sueing of franchises.
-// - #01 Inform AI only about bombard if it was really possible (L. Hirth 6/2004).
+// - TestOrderAny added.
 //
 //----------------------------------------------------------------------------
 
@@ -4404,8 +4404,7 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))
 			return ORDER_RESULT_ILLEGAL;
 
-#if defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
-	PLAYER_INDEX defense_owner = defender.GetOwner();
+    PLAYER_INDEX defense_owner = defender.GetOwner();
 
     
 	Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
@@ -4414,30 +4413,17 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 	defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
 
     InformAI(UNIT_ORDER_BOMBARD, point); 
-#endif   
+   
 
     sint32 numAttacks = 0;
 	sint32 numAlive = m_nElements;
 	BOOL out_of_fuel;
-#if !defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
-    sint32 numPossibleAttacks = 0;
-#endif
 
     for (i = m_nElements - 1; i>= 0; i--) { 
 		if(!m_array[i].CanPerformSpecialAction())
 			continue;
 		
         if (m_array[i].CanBombard(defender)) { 
-#if !defined(ACTIVISION_ORIGINAL) // #01 Inform AI about bombard only if really possible
-			numPossibleAttacks++;
-			if (numPossibleAttacks = 1) {
-				// Log attack and inform defender 
-				PLAYER_INDEX defense_owner = defender.GetOwner();
-				Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
-				defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
-				InformAI(UNIT_ORDER_BOMBARD, point); 
-			}
-#endif
 			if(m_array[i].Bombard(defender, FALSE)) {
 				numAttacks++;
 #if !defined(ACTIVISION_ORIGINAL)
@@ -8085,6 +8071,24 @@ bool ArmyData::GetNextPathPoint(MapPoint & next_pos) const
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::TestOrderAll
+//
+// Description: Test whether all units are capable of performing an order.
+//
+// Parameters : order_rec	: the order to test
+//
+// Globals    : g_player	: player (capabilities)
+//				g_theUnitDB	: unit (capabilities)
+//
+// Returns    : bool		: all units in the army are capable of 
+//							  performing the order.
+//
+// Remark(s)  : In contrast to mathematical logic, an army without units is
+//              incapable of doing anything.
+//
+//----------------------------------------------------------------------------
 
 bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 {
@@ -8115,7 +8119,55 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 	return(orderValid);
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
 
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::TestOrderAny
+//
+// Description: Test whether some unit is capable of performing an order.
+//
+// Parameters : order_rec	: the order to test
+//
+// Globals    : g_player	: player (capabilities)
+//				g_theUnitDB	: unit (capabilities)
+//
+// Returns    : bool		: at least one unit in the army is capable of 
+//							  performing the order.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
+{
+	if (order_rec->GetUnitPretest_CanPlantNuke() &&
+		!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance())
+	   )
+	{
+		return false;
+	}
+
+	bool		orderValid	= false;
+
+	for 
+	(
+		sint32	army_index	= 0; 
+		!orderValid && (army_index < m_nElements); 
+		++army_index
+	) 
+	{
+		
+		UnitRecord const *	unit_rec	= 
+			g_theUnitDB->Get(m_array[army_index].GetType());
+
+		orderValid = UnitValidForOrder(order_rec, unit_rec);
+	}
+
+	return orderValid;
+}
+
+#endif	// ACTIVISION_ORIGINAL
 
 bool ArmyData::TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) const
 {

@@ -1536,7 +1536,7 @@ str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-03-28"
+str_ldl_version "2004-06-28"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
@@ -3174,7 +3174,7 @@ str_profile_ShowCityInfluence 			"Show City Influence"
 str_profile_ShowPoliticalBorders 		"Show National Borders"
 str_profile_CloseOnEyepoint			"Close Message When Clicking Eyeball"
 str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
-
+str_profile_ShowOrderUnion                      "Show All Army Orders" 
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"Musicoptions"

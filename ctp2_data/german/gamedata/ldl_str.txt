@@ -1529,7 +1529,7 @@ str_ldl_Disclaimer3 "Kontakt: ctp2source@apolyton.net"
 
 ### Version String ###
 
-str_ldl_version "2004-04-18"
+str_ldl_version "2004-06-28"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
@@ -3169,6 +3169,7 @@ str_profile_ShowCityInfluence "Stadteinfluss ein"
 str_profile_ShowPoliticalBorders "Politische Grenzen ein"
 str_profile_CloseOnEyepoint "Meldung schließ. bei Klick auf Auge"
 str_profile_ShowExpensive "Kosten für Terrainverbes. immer anzeigen"
+str_profile_ShowOrderUnion "Alle ArmeeBefehle anzeigen"
 
 str_ldl_Pw_COLON_	"Siedler:"
 

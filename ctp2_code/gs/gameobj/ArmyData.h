@@ -1,5 +1,47 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - TestOrderAny added.
+//
+//----------------------------------------------------------------------------
 
+#if defined(_MSC_VER)
 #pragma once
+#endif
+
 #ifndef __ARMY_DATA_H__
 #define __ARMY_DATA_H__ 1
 
@@ -493,7 +535,9 @@ public:
 	
 	
 	bool TestOrderAll(const OrderRecord *order_rec) const;
-
+#if !defined(ACTIVISION_ORIGINAL)
+	bool TestOrderAny(const OrderRecord * order_rec) const;
+#endif
 	
 	
 	bool TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) const;

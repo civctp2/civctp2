@@ -44,6 +44,7 @@
 //   NumPlayers is higher the maximum number of players the game currently
 //   supports by Martin Gühmann.
 // - Option added to choose a color set.
+// - Option added to select which order buttons are displayed for an army.
 //
 //----------------------------------------------------------------------------
 
@@ -343,6 +344,7 @@ class ProfileDB {
 	sint32	m_closeEyepoint;	// Close message box when clicking the eyepoint.
 	sint32	m_colorSet;			// The # to use when opening colors#.txt.
 	sint32	m_showExpensive;	// Show cost and effects of expensive actions.
+	sint32	m_showOrderUnion;	// Show order button when any unit is capable.
 #endif
 	
 	PointerList<ProfileVar> *m_vars;

@@ -28,6 +28,7 @@
 // - Option added to enable viewing info on actions that are too expensive.
 // - Option added to close a messagebox automatically on eyepoint clicking.
 // - Option added to choose a color set.
+// - Option added to select which order buttons are displayed for an army.
 //
 //----------------------------------------------------------------------------
 
@@ -71,7 +72,8 @@ ProfileDB::ProfileDB()
 #if !defined(ACTIVISION_ORIGINAL)
 :	m_closeEyepoint(FALSE),
 	m_colorSet(0),
-	m_showExpensive(FALSE)
+	m_showExpensive(FALSE),
+	m_showOrderUnion(FALSE)
 #endif
 {
 	m_vars = new PointerList<ProfileVar>;
@@ -377,6 +379,7 @@ ProfileDB::ProfileDB()
 	Var("CloseOnEyepoint", PV_BOOL, &m_closeEyepoint, NULL);
 	Var("ShowExpensive", PV_BOOL, &m_showExpensive, NULL);
 	Var("ColorSet", PV_NUM, &m_colorSet, NULL, false);
+	Var("ShowOrderUnion", PV_BOOL, &m_showOrderUnion, NULL);
 #endif
 }
 
