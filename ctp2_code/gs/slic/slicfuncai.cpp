@@ -134,8 +134,8 @@ bool ParseProposalDataSlicArgs(sint32 num_types, SlicArgList *args, sint32 &argN
 	}
 	// get the proposal's arg1, if it exists
 	switch (static_cast<PROPOSAL_TYPE>(type)) {
-//	case PROPOSAL_NONE:
-//		break;
+	case PROPOSAL_NONE:
+		break;
     case PROPOSAL_OFFER_GIVE_CITY:  
 	case PROPOSAL_REQUEST_GIVE_CITY:
 	    if(!args->GetCity(argNum++, city)) {
@@ -588,20 +588,16 @@ SFN_ERROR Slic_GetPublicRegard::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	if(!args->GetInt(argNum++, type))
@@ -628,20 +624,16 @@ SFN_ERROR Slic_GetEffectiveRegard::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	m_result.m_int = 
@@ -663,20 +655,16 @@ SFN_ERROR Slic_GetTrust::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	m_result.m_int = 
@@ -701,20 +689,16 @@ SFN_ERROR Slic_SetTrust::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	if(!args->GetInt(argNum++, trustDelta))
@@ -851,20 +835,16 @@ SFN_ERROR Slic_TurnsSinceLastWar::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	m_result.m_int = 
@@ -885,20 +865,16 @@ SFN_ERROR Slic_TurnsAtWar::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	m_result.m_int = 
@@ -921,20 +897,16 @@ SFN_ERROR Slic_GetLastHotwarAttack::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	m_result.m_int = 
@@ -957,20 +929,16 @@ SFN_ERROR Slic_GetLastColdwarAttack::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	m_result.m_int = 
@@ -1007,7 +975,6 @@ SFN_ERROR Slic_ConsiderResponse::Call(SlicArgList *args)
 	if (!ParseResponseSlicArgs(args, argNum, response))
 		SFN_ERROR_TYPE_ARGS;
 
-#if defined(ACTIVISION_ORIGINAL)
 	if (Diplomat::GetDiplomat(response.senderId).GetReceiverHasInitiative(response.receiverId))
 		Diplomat::GetDiplomat(response.receiverId).
 			ConsiderResponse(response.senderId, response);
@@ -1015,13 +982,8 @@ SFN_ERROR Slic_ConsiderResponse::Call(SlicArgList *args)
 		Diplomat::GetDiplomat(response.senderId).
 			ConsiderResponse(response.receiverId, response);
 
-#else
 DPRINTF(k_DBG_SLIC, ("ConsiderResponse:sender %d, receiver %d, type %d\n",
 		response.senderId,response.receiverId, response.type));
-
-		Diplomat::GetDiplomat(response.senderId).
-			ConsiderResponse(response.receiverId, response);
-#endif
 
 	return SFN_ERROR_OK;
 }
@@ -1541,11 +1503,9 @@ SFN_ERROR Slic_AtWarCount::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	m_result.m_int = Diplomat::GetDiplomat(player).AtWarCount();
 	
@@ -1566,11 +1526,9 @@ SFN_ERROR Slic_EffectiveAtWarCount::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 	m_result.m_int = Diplomat::GetDiplomat(player).EffectiveAtWarCount();
 	
@@ -1592,20 +1550,16 @@ SFN_ERROR Slic_AtWarWith::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	m_result.m_int = AgreementMatrix::s_agreements.HasAgreement(player,foreigner,PROPOSAL_TREATY_DECLARE_WAR);
@@ -1628,20 +1582,16 @@ SFN_ERROR Slic_EffectiveWarWith::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(player > 0);
-#else
-	Assert(player >= 0);
-#endif
+
 	Assert(player < k_MAX_PLAYERS);
 
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
-#if defined(ACTIVISION_ORIGINAL)
+
 	Assert(foreigner > 0);
-#else
-	Assert(foreigner >= 0);
-#endif
+
 	Assert(foreigner < k_MAX_PLAYERS);
 
 	m_result.m_int = Diplomat::GetDiplomat(player).TestEffectiveRegard(foreigner, HOTWAR_REGARD);
