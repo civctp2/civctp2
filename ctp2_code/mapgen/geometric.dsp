@@ -48,7 +48,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /G5 /MT /W3 /GX /Zd /Og /Oi /Os /Op /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /FD /c
+# ADD CPP /nologo /G5 /MT /W3 /GX /Zd /Og /Oi /Os /Op /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /FD /c
 # SUBTRACT CPP /Ox /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -76,7 +76,7 @@ LINK32=xilink6.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /I "..\gs\events" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -103,8 +103,8 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "geometr1"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\ctp\\" /I "..\ctp\ctp2_utils" /I "..\gs\outcom" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\ui\aui_directx" /I "..\ui\freetype" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "..\ctp\\" /I "..\ctp\ctp2_utils" /I "..\gs\outcom" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\ui\aui_directx" /I "..\ui\freetype" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -132,8 +132,8 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "geometr2"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\ctp\\" /I "..\ctp\ctp2_utils" /I "..\gs\outcom" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\ui\aui_directx" /I "..\ui\freetype" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "..\ctp\\" /I "..\ctp\ctp2_utils" /I "..\gs\outcom" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\ui\aui_directx" /I "..\ui\freetype" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -161,8 +161,8 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "final"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /G5 /MT /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\ctp\\" /I "..\ctp\ctp2_utils" /I "..\gs\outcom" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\ui\aui_directx" /I "..\ui\freetype" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
-# ADD CPP /nologo /G5 /MT /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /D "GEOMETRIC" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD BASE CPP /nologo /G5 /MT /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /I "..\ctp\\" /I "..\ctp\ctp2_utils" /I "..\gs\outcom" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\ui\aui_directx" /I "..\ui\freetype" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
+# ADD CPP /nologo /G5 /MT /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "GEOMETRIC" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -190,8 +190,8 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "geometr3"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /D "GEOMETRIC" /D "_PLAYTEST" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /YX /FD /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "GEOMETRIC" /D "_PLAYTEST" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_DEBUGTOOLS" /D "_DEBUG_MEMORY" /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -219,8 +219,8 @@ LINK32=xilink6.exe
 # PROP Intermediate_Dir "geometr0"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /I "..\gs\events" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\libs\dxmedia\classes\base" /I "..\libs\dxmedia\include" /I "..\libs\directx\include" /I "..\gs\events" /D "GEOMETRIC" /D "_PLAYTEST" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /FR /YX /FD /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "GEOMETRIC" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /D "GEOMETRIC" /D "_PLAYTEST" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"

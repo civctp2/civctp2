@@ -123,6 +123,15 @@ SOURCE=.\ctpdb.l
 
 !IF  "$(CFG)" == "dbgen - Win32 Release"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=.\ctpdb.l
+
+"$(ProjDir)\lex.yy.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(CDKDIR)\flex -i -o$(ProjDir)\lex.yy.c $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "dbgen - Win32 Debug"
 
 # Begin Custom Build
@@ -153,6 +162,20 @@ InputPath=.\ctpdb.l
 SOURCE=.\ctpdb.y
 
 !IF  "$(CFG)" == "dbgen - Win32 Release"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=.\ctpdb.y
+
+BuildCmds= \
+	$(CDKDIR)\byacc -d ctpdb.y
+
+"$(ProjDir)\y.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\y.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "dbgen - Win32 Debug"
 
