@@ -256,6 +256,7 @@ str_ldl_RestartHotKey "Ctrl+z"
 
 str_ldl_NewGameHotKey "Ctrl+x"
 str_ldl_SoundHotKey "Ctrl+v"
+str_ldl_MusicHotKey "Ctrl+m"
 str_ldl_GraphicsHotKey "Ctrl+f"
 str_ldl_GameplayHotKey "Ctrl+p"
 str_ldl_CityEspionageHotKey "Ctrl+e"
@@ -445,3 +446,9 @@ str_profile_EndTurnSound "Suono di fine turno"
 CONTEXT_TILE_INFO "Info mappa"
 
 HAPPY_REASON_FEATS "Meraviglia costruita"
+
+str_ldl_EditQueueReallyDelete "Vuoi eliminare definitivamente la coda %s?"
+
+# A different kind of disconnection message for network games
+NETWORK_ACTIVENET_LOST "Connessione al server Activenet persa, tentativo di ritorno all'atrio in corso..."
+
