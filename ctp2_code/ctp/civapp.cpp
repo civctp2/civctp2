@@ -2175,8 +2175,11 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	
 	
-	
+#if defined(ACTIVISION_ORIGINAL)
+	//Removed by Martin Gühmann
+	//Who needs this stop player is already initialized with 1.
 	NewTurnCount::SetStopPlayer(1);
+#endif
 
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
@@ -2427,10 +2430,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 			if(g_scenarioUsePlayerNumber == 0 && !g_turn->IsHotSeat() &&
 				!g_turn->IsEmail()) {
 				g_selected_item->SetPlayerOnScreen(1);
-				
-				//If you really need to do it again better do it like this
-				//to allow player selection:
-				//g_selected_item->SetPlayerOnScreen(g_theProfileDB->GetPlayerIndex());	
 			}
 #endif
 			if (g_director)

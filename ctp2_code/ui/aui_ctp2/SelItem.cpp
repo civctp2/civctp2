@@ -1,3 +1,47 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handles stuff about selected items.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _DEBUG
+// - Generates debug information when set.
+//
+// _DEBUG_MEMORY
+// _MEMORYLOGGING
+// - Generates extra memory debug information when both set, and _DEBUG set.
+//
+// _NO_GAME_WATCH
+// - Generates a game watch file when not set.  
+//
+// _WAS_ABOUT_TEST_WHEN_DAN_GOT_ME_REPRO_STEPS
+// - Have to ask Activision for this one.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed archieve constructor to make sure that the
+//   correct stop player is set.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -199,7 +243,14 @@ SelectedItem::SelectedItem(CivArchive &archive)
 
     Serialize(archive); 
 
-	SetPlayerOnScreen(m_current_player); 
+	SetPlayerOnScreen(m_current_player);
+
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann
+	//To make sure that save games saved with other players than
+	//player one can be continued without usiing the cheat editor.
+	NewTurnCount::SetStopPlayer(m_current_player);
+#endif
 }
 
 SelectedItem::~SelectedItem()
