@@ -1,171 +1,161 @@
  winets2
 
- Timestamp is 3726ede5 (Wed Apr 28 04:15:49 1999)
+ Timestamp is 42320f82 (Fri Mar 11 22:37:06 2005)
 
  Preferred load address is 10000000
 
  Start         Length     Name                   Class
- 0001:00000000 00002fa6H .text                   CODE
- 0002:00000000 000001c1H .edata                  DATA
+ 0001:00000000 0000261eH .text                   CODE
+ 0002:00000000 000000a4H .idata$5                DATA
+ 0002:000000a4 00000050H .idata$2                DATA
+ 0002:000000f4 00000014H .idata$3                DATA
+ 0002:00000108 000000a4H .idata$4                DATA
+ 0002:000001ac 00000142H .idata$6                DATA
+ 0002:000002f0 000001c1H .edata                  DATA
  0003:00000000 00000004H .CRT$XCA                DATA
  0003:00000004 00000004H .CRT$XCZ                DATA
  0003:00000008 00000004H .CRT$XIA                DATA
  0003:0000000c 00000004H .CRT$XIZ                DATA
- 0003:00000010 0000014cH .data                   DATA
- 0003:0000015c 00000028H .bss                    DATA
- 0004:00000000 00000050H .idata$2                DATA
- 0004:00000050 00000014H .idata$3                DATA
- 0004:00000064 000000a8H .idata$4                DATA
- 0004:0000010c 000000a8H .idata$5                DATA
- 0004:000001b4 00000150H .idata$6                DATA
- 0005:00000000 0000007cH .rsrc$01                DATA
- 0005:00000080 00000034H .rsrc$02                DATA
+ 0003:00000010 00000130H .data                   DATA
+ 0003:00000140 00000034H .bss                    DATA
+ 0004:00000000 0000007cH .rsrc$01                DATA
+ 0004:00000080 00000038H .rsrc$02                DATA
 
-  Address         Publics by Value              Rva+Base   Lib:Object
+  Address         Publics by Value              Rva+Base     Lib:Object
 
- 0001:00000000       _adialup_autodial_enabled  10001000 f adialup.obj
- 0001:0000009f       _adialup_autodial_set      1000109f f adialup.obj
- 0001:0000011a       _adialup_is_active         1000111a f adialup.obj
- 0001:0000029b       _adialup_willdial          1000129b f adialup.obj
- 0001:000002e0       _ddprintf                  100012e0 f ddprint.obj
- 0001:000002f0       _dcstNextKey               100012f0 f dictset.obj
- 0001:00000348       _dcstHashvalue             10001348 f dictset.obj
- 0001:00000405       _dcstCreate                10001405 f dictset.obj
- 0001:000005cd       _dcstDestroy               100015cd f dictset.obj
- 0001:00000608       _dcstAdd                   10001608 f dictset.obj
- 0001:000006da       _dcstAddEx                 100016da f dictset.obj
- 0001:000007b6       _dcstReplace               100017b6 f dictset.obj
- 0001:000007f0       _dcstReplaceEx             100017f0 f dictset.obj
- 0001:0000082e       _dcstDeleteValue           1000182e f dictset.obj
- 0001:00000864       _dcstDeleteKey             10001864 f dictset.obj
- 0001:0000097d       _dcstFindKey               1000197d f dictset.obj
- 0001:00000a73       _dcstFindValue             10001a73 f dictset.obj
- 0001:00000aae       _dcstForEach               10001aae f dictset.obj
- 0001:00000b2e       _dcstFreeze                10001b2e f dictset.obj
- 0001:00000b43       _dcstThaw                  10001b43 f dictset.obj
- 0001:00000b60       _eclock_win32              10001b60 f eclock.obj
- 0001:00000bf0       _TCPWIN_Create             10001bf0 f WSTCP.obj
- 0001:00001853       _TCPWIN_Destroy            10002853 f WSTCP.obj
- 0001:00001887       _TCPWIN_Address2Handle     10002887 f WSTCP.obj
- 0001:00001c2c       _TCPWIN_Handle2Address     10002c2c f WSTCP.obj
- 0001:00001cc0       _TCPWIN_PutPacket          10002cc0 f WSTCP.obj
- 0001:00001e78       _TCPWIN_GetPacket          10002e78 f WSTCP.obj
- 0001:00001ff0       _commNoOp                  10002ff0 f WSTCPdll.obj
- 0001:00002018       _commEnumPorts             10003018 f WSTCPdll.obj
- 0001:0000203d       _commInit                  1000303d f WSTCPdll.obj
- 0001:000020f4       _commTerm                  100030f4 f WSTCPdll.obj
- 0001:0000212a       _commDriverInfo            1000312a f WSTCPdll.obj
- 0001:00002163       _commPlayerInfo            10003163 f WSTCPdll.obj
- 0001:000022ff       _commTxFull                100032ff f WSTCPdll.obj
- 0001:0000232d       _commTxPkt                 1000332d f WSTCPdll.obj
- 0001:00002411       _commPeekPkt               10003411 f WSTCPdll.obj
- 0001:0000245f       _commRxPkt                 1000345f f WSTCPdll.obj
- 0001:0000264f       _commScanAddr              1000364f f WSTCPdll.obj
- 0001:000027f9       _commPrintAddr             100037f9 f WSTCPdll.obj
- 0001:00002976       _commGroupAlloc            10003976 f WSTCPdll.obj
- 0001:000029a4       _commGroupFree             100039a4 f WSTCPdll.obj
- 0001:000029d2       _commGroupAdd              100039d2 f WSTCPdll.obj
- 0001:00002a00       _commSetParam              10003a00 f WSTCPdll.obj
- 0001:00002aa4       _commSayHi                 10003aa4 f WSTCPdll.obj
- 0001:00002b85       _commSayBye                10003b85 f WSTCPdll.obj
- 0001:00002c57       _DllMain@12                10003c57 f WSTCPdll.obj
- 0001:00002cce       _ioctlsocket@12            10003cce f wsock32:WSOCK32.dll
- 0001:00002cd4       _htons@4                   10003cd4 f wsock32:WSOCK32.dll
- 0001:00002cda       _ntohs@4                   10003cda f wsock32:WSOCK32.dll
- 0001:00002ce0       _WSAGetLastError@0         10003ce0 f wsock32:WSOCK32.dll
- 0001:00002ce6       _getsockname@12            10003ce6 f wsock32:WSOCK32.dll
- 0001:00002cec       _bind@12                   10003cec f wsock32:WSOCK32.dll
- 0001:00002cf2       _setsockopt@20             10003cf2 f wsock32:WSOCK32.dll
- 0001:00002cf8       _socket@12                 10003cf8 f wsock32:WSOCK32.dll
- 0001:00002cfe       _WSAStartup@8              10003cfe f wsock32:WSOCK32.dll
- 0001:00002d04       _recvfrom@24               10003d04 f wsock32:WSOCK32.dll
- 0001:00002d0a       _sendto@24                 10003d0a f wsock32:WSOCK32.dll
- 0001:00002d10       _closesocket@4             10003d10 f wsock32:WSOCK32.dll
- 0001:00002d16       _connect@12                10003d16 f wsock32:WSOCK32.dll
- 0001:00002d1c       _inet_addr@4               10003d1c f wsock32:WSOCK32.dll
- 0001:00002d22       _gethostbyname@4           10003d22 f wsock32:WSOCK32.dll
- 0001:00002d28       _gethostname@8             10003d28 f wsock32:WSOCK32.dll
- 0001:00002d2e       _WSACleanup@0              10003d2e f wsock32:WSOCK32.dll
- 0001:00002d34       _inet_ntoa@4               10003d34 f wsock32:WSOCK32.dll
- 0001:00002d40       __chkstk                   10003d40   MSVCRT:chkstk.obj
- 0001:00002d40       __alloca_probe             10003d40   MSVCRT:chkstk.obj
- 0001:00002d70       __CRT_INIT@12              10003d70 f MSVCRT:crtdll.obj
- 0001:00002ee0       __DllMainCRTStartup@12     10003ee0 f MSVCRT:crtdll.obj
- 0001:00002fa0       __initterm                 10003fa0 f MSVCRT:MSVCRT.dll
- 0003:00000000       ___xc_a                    10005000   MSVCRT:cinitexe.obj
- 0003:00000004       ___xc_z                    10005004   MSVCRT:cinitexe.obj
- 0003:00000008       ___xi_a                    10005008   MSVCRT:cinitexe.obj
- 0003:0000000c       ___xi_z                    1000500c   MSVCRT:cinitexe.obj
- 0003:00000154       ___win32sflag              10005154   MSVCRT:atonexit.obj
- 0003:00000170       _dp_dprintf                10005170   <common>
- 0003:00000174       __adjust_fdiv              10005174   <common>
- 0003:00000178       ___onexitend               10005178   <common>
- 0003:0000017c       ___onexitbegin             1000517c   <common>
- 0003:00000180       __pRawDllMain              10005180   <common>
- 0004:00000000       __IMPORT_DESCRIPTOR_KERNEL32 10006000   kernel32:KERNEL32.dll
- 0004:00000014       __IMPORT_DESCRIPTOR_WSOCK32 10006014   wsock32:WSOCK32.dll
- 0004:00000028       __IMPORT_DESCRIPTOR_ADVAPI32 10006028   advapi32:ADVAPI32.dll
- 0004:0000003c       __IMPORT_DESCRIPTOR_MSVCRT 1000603c   MSVCRT:MSVCRT.dll
- 0004:00000050       __NULL_IMPORT_DESCRIPTOR   10006050   kernel32:KERNEL32.dll
- 0004:0000010c       __imp__RegQueryValueExA@24 1000610c   advapi32:ADVAPI32.dll
- 0004:00000110       __imp__RegOpenKeyExA@20    10006110   advapi32:ADVAPI32.dll
- 0004:00000114       __imp__RegSetValueExA@24   10006114   advapi32:ADVAPI32.dll
- 0004:00000118       \177ADVAPI32_NULL_THUNK_DATA 10006118   advapi32:ADVAPI32.dll
- 0004:0000011c       __imp__GlobalAlloc@8       1000611c   kernel32:KERNEL32.dll
- 0004:00000120       __imp__GlobalFree@4        10006120   kernel32:KERNEL32.dll
- 0004:00000124       __imp__GetProcAddress@8    10006124   kernel32:KERNEL32.dll
- 0004:00000128       __imp__OutputDebugStringA@4 10006128   kernel32:KERNEL32.dll
- 0004:0000012c       __imp__LoadLibraryA@4      1000612c   kernel32:KERNEL32.dll
- 0004:00000130       __imp__FreeLibrary@4       10006130   kernel32:KERNEL32.dll
- 0004:00000134       __imp__GetSystemTime@4     10006134   kernel32:KERNEL32.dll
- 0004:00000138       __imp__GetTickCount@0      10006138   kernel32:KERNEL32.dll
- 0004:0000013c       __imp__CloseHandle@4       1000613c   kernel32:KERNEL32.dll
- 0004:00000140       __imp__GetVersion@0        10006140   kernel32:KERNEL32.dll
- 0004:00000144       \177KERNEL32_NULL_THUNK_DATA 10006144   kernel32:KERNEL32.dll
- 0004:00000148       __imp___adjust_fdiv        10006148   MSVCRT:MSVCRT.dll
- 0004:0000014c       __imp___initterm           1000614c   MSVCRT:MSVCRT.dll
- 0004:00000150       __imp__free                10006150   MSVCRT:MSVCRT.dll
- 0004:00000154       __imp__malloc              10006154   MSVCRT:MSVCRT.dll
- 0004:00000158       __imp__clock               10006158   MSVCRT:MSVCRT.dll
- 0004:0000015c       __imp__sprintf             1000615c   MSVCRT:MSVCRT.dll
- 0004:00000160       __imp__atoi                10006160   MSVCRT:MSVCRT.dll
- 0004:00000164       \177MSVCRT_NULL_THUNK_DATA 10006164   MSVCRT:MSVCRT.dll
- 0004:00000168       __imp__inet_ntoa@4         10006168   wsock32:WSOCK32.dll
- 0004:0000016c       __imp__gethostbyname@4     1000616c   wsock32:WSOCK32.dll
- 0004:00000170       __imp__WSACleanup@0        10006170   wsock32:WSOCK32.dll
- 0004:00000174       __imp__ntohs@4             10006174   wsock32:WSOCK32.dll
- 0004:00000178       __imp__htons@4             10006178   wsock32:WSOCK32.dll
- 0004:0000017c       __imp__ioctlsocket@12      1000617c   wsock32:WSOCK32.dll
- 0004:00000180       __imp__gethostname@8       10006180   wsock32:WSOCK32.dll
- 0004:00000184       __imp__closesocket@4       10006184   wsock32:WSOCK32.dll
- 0004:00000188       __imp__inet_addr@4         10006188   wsock32:WSOCK32.dll
- 0004:0000018c       __imp__setsockopt@20       1000618c   wsock32:WSOCK32.dll
- 0004:00000190       __imp__WSAStartup@8        10006190   wsock32:WSOCK32.dll
- 0004:00000194       __imp__sendto@24           10006194   wsock32:WSOCK32.dll
- 0004:00000198       __imp__recvfrom@24         10006198   wsock32:WSOCK32.dll
- 0004:0000019c       __imp__bind@12             1000619c   wsock32:WSOCK32.dll
- 0004:000001a0       __imp__socket@12           100061a0   wsock32:WSOCK32.dll
- 0004:000001a4       __imp__getsockname@12      100061a4   wsock32:WSOCK32.dll
- 0004:000001a8       __imp__WSAGetLastError@0   100061a8   wsock32:WSOCK32.dll
- 0004:000001ac       __imp__connect@12          100061ac   wsock32:WSOCK32.dll
- 0004:000001b0       \177WSOCK32_NULL_THUNK_DATA 100061b0   wsock32:WSOCK32.dll
+ 0001:00000000       _adialup_autodial_enabled  10001000 f   adialup.obj
+ 0001:00000081       _adialup_autodial_set      10001081 f   adialup.obj
+ 0001:000000e5       _adialup_is_active         100010e5 f   adialup.obj
+ 0001:00000234       _adialup_willdial          10001234 f   adialup.obj
+ 0001:00000270       _ddprintf                  10001270 f   ddprint.obj
+ 0001:00000280       _dcstNextKey               10001280 f   dictset.obj
+ 0001:000002c0       _dcstHashvalue             100012c0 f   dictset.obj
+ 0001:00000367       _dcstCreate                10001367 f   dictset.obj
+ 0001:00000510       _dcstDestroy               10001510 f   dictset.obj
+ 0001:00000545       _dcstAdd                   10001545 f   dictset.obj
+ 0001:0000060d       _dcstAddEx                 1000160d f   dictset.obj
+ 0001:000006dc       _dcstReplace               100016dc f   dictset.obj
+ 0001:00000707       _dcstReplaceEx             10001707 f   dictset.obj
+ 0001:00000736       _dcstDeleteValue           10001736 f   dictset.obj
+ 0001:00000761       _dcstDeleteKey             10001761 f   dictset.obj
+ 0001:0000085e       _dcstFindKey               1000185e f   dictset.obj
+ 0001:00000933       _dcstFindValue             10001933 f   dictset.obj
+ 0001:0000095c       _dcstForEach               1000195c f   dictset.obj
+ 0001:000009c7       _dcstFreeze                100019c7 f   dictset.obj
+ 0001:000009d1       _dcstThaw                  100019d1 f   dictset.obj
+ 0001:000009e0       _eclock_win32              100019e0 f   eclock.obj
+ 0001:00000a50       _TCPWIN_Create             10001a50 f   WSTCP.obj
+ 0001:00001369       _TCPWIN_Destroy            10002369 f   WSTCP.obj
+ 0001:00001397       _TCPWIN_Address2Handle     10002397 f   WSTCP.obj
+ 0001:000016a9       _TCPWIN_Handle2Address     100026a9 f   WSTCP.obj
+ 0001:00001726       _TCPWIN_PutPacket          10002726 f   WSTCP.obj
+ 0001:00001898       _TCPWIN_GetPacket          10002898 f   WSTCP.obj
+ 0001:000019e0       _commNoOp                  100029e0 f   WSTCPdll.obj
+ 0001:000019f9       _commEnumPorts             100029f9 f   WSTCPdll.obj
+ 0001:00001a0f       _commInit                  10002a0f f   WSTCPdll.obj
+ 0001:00001aa5       _commTerm                  10002aa5 f   WSTCPdll.obj
+ 0001:00001acc       _commDriverInfo            10002acc f   WSTCPdll.obj
+ 0001:00001af3       _commPlayerInfo            10002af3 f   WSTCPdll.obj
+ 0001:00001c31       _commTxFull                10002c31 f   WSTCPdll.obj
+ 0001:00001c50       _commTxPkt                 10002c50 f   WSTCPdll.obj
+ 0001:00001cfd       _commPeekPkt               10002cfd f   WSTCPdll.obj
+ 0001:00001d32       _commRxPkt                 10002d32 f   WSTCPdll.obj
+ 0001:00001eb3       _commScanAddr              10002eb3 f   WSTCPdll.obj
+ 0001:00002039       _commPrintAddr             10003039 f   WSTCPdll.obj
+ 0001:0000219a       _commGroupAlloc            1000319a f   WSTCPdll.obj
+ 0001:000021bb       _commGroupFree             100031bb f   WSTCPdll.obj
+ 0001:000021da       _commGroupAdd              100031da f   WSTCPdll.obj
+ 0001:000021f9       _commSetParam              100031f9 f   WSTCPdll.obj
+ 0001:00002265       _commSayHi                 10003265 f   WSTCPdll.obj
+ 0001:00002322       _commSayBye                10003322 f   WSTCPdll.obj
+ 0001:000023dc       _DllMain@12                100033dc f   WSTCPdll.obj
+ 0001:0000242e       _ioctlsocket@12            1000342e f   wsock32:WSOCK32.dll
+ 0001:00002434       _ntohs@4                   10003434 f   wsock32:WSOCK32.dll
+ 0001:0000243a       _getsockname@12            1000343a f   wsock32:WSOCK32.dll
+ 0001:00002440       _bind@12                   10003440 f   wsock32:WSOCK32.dll
+ 0001:00002446       _htons@4                   10003446 f   wsock32:WSOCK32.dll
+ 0001:0000244c       _setsockopt@20             1000344c f   wsock32:WSOCK32.dll
+ 0001:00002452       _socket@12                 10003452 f   wsock32:WSOCK32.dll
+ 0001:00002458       _WSAGetLastError@0         10003458 f   wsock32:WSOCK32.dll
+ 0001:0000245e       _WSAStartup@8              1000345e f   wsock32:WSOCK32.dll
+ 0001:00002464       _recvfrom@24               10003464 f   wsock32:WSOCK32.dll
+ 0001:0000246a       _sendto@24                 1000346a f   wsock32:WSOCK32.dll
+ 0001:00002470       _closesocket@4             10003470 f   wsock32:WSOCK32.dll
+ 0001:00002476       _connect@12                10003476 f   wsock32:WSOCK32.dll
+ 0001:0000247c       _inet_addr@4               1000347c f   wsock32:WSOCK32.dll
+ 0001:00002482       _gethostbyname@4           10003482 f   wsock32:WSOCK32.dll
+ 0001:00002488       _gethostname@8             10003488 f   wsock32:WSOCK32.dll
+ 0001:0000248e       _WSACleanup@0              1000348e f   wsock32:WSOCK32.dll
+ 0001:00002494       _inet_ntoa@4               10003494 f   wsock32:WSOCK32.dll
+ 0001:000024a0       __chkstk                   100034a0 f   MSVCRT:chkstk.obj
+ 0001:000024a0       __alloca_probe             100034a0 f   MSVCRT:chkstk.obj
+ 0001:000024cf       __CRT_INIT@12              100034cf f   MSVCRT:crtdll.obj
+ 0001:0000257a       __DllMainCRTStartup@12     1000357a f   MSVCRT:crtdll.obj
+ 0001:00002618       __initterm                 10003618 f   MSVCRT:MSVCRT.dll
+ 0002:00000000       __imp__RegQueryValueExA@24 10004000     advapi32:ADVAPI32.dll
+ 0002:00000004       __imp__RegSetValueExA@24   10004004     advapi32:ADVAPI32.dll
+ 0002:00000008       __imp__RegOpenKeyExA@20    10004008     advapi32:ADVAPI32.dll
+ 0002:0000000c       \177ADVAPI32_NULL_THUNK_DATA 1000400c     advapi32:ADVAPI32.dll
+ 0002:00000010       __imp__GlobalFree@4        10004010     kernel32:KERNEL32.dll
+ 0002:00000014       __imp__GlobalAlloc@8       10004014     kernel32:KERNEL32.dll
+ 0002:00000018       __imp__GetTickCount@0      10004018     kernel32:KERNEL32.dll
+ 0002:0000001c       __imp__LoadLibraryA@4      1000401c     kernel32:KERNEL32.dll
+ 0002:00000020       __imp__OutputDebugStringA@4 10004020     kernel32:KERNEL32.dll
+ 0002:00000024       __imp__GetProcAddress@8    10004024     kernel32:KERNEL32.dll
+ 0002:00000028       __imp__FreeLibrary@4       10004028     kernel32:KERNEL32.dll
+ 0002:0000002c       __imp__CloseHandle@4       1000402c     kernel32:KERNEL32.dll
+ 0002:00000030       __imp__GetSystemTime@4     10004030     kernel32:KERNEL32.dll
+ 0002:00000034       \177KERNEL32_NULL_THUNK_DATA 10004034     kernel32:KERNEL32.dll
+ 0002:00000038       __imp___initterm           10004038     MSVCRT:MSVCRT.dll
+ 0002:0000003c       __imp__free                1000403c     MSVCRT:MSVCRT.dll
+ 0002:00000040       __imp__atoi                10004040     MSVCRT:MSVCRT.dll
+ 0002:00000044       __imp__clock               10004044     MSVCRT:MSVCRT.dll
+ 0002:00000048       __imp__sprintf             10004048     MSVCRT:MSVCRT.dll
+ 0002:0000004c       __imp__malloc              1000404c     MSVCRT:MSVCRT.dll
+ 0002:00000050       __imp___adjust_fdiv        10004050     MSVCRT:MSVCRT.dll
+ 0002:00000054       \177MSVCRT_NULL_THUNK_DATA 10004054     MSVCRT:MSVCRT.dll
+ 0002:00000058       __imp__gethostbyname@4     10004058     wsock32:WSOCK32.dll
+ 0002:0000005c       __imp__gethostname@8       1000405c     wsock32:WSOCK32.dll
+ 0002:00000060       __imp__WSACleanup@0        10004060     wsock32:WSOCK32.dll
+ 0002:00000064       __imp__inet_ntoa@4         10004064     wsock32:WSOCK32.dll
+ 0002:00000068       __imp__inet_addr@4         10004068     wsock32:WSOCK32.dll
+ 0002:0000006c       __imp__connect@12          1000406c     wsock32:WSOCK32.dll
+ 0002:00000070       __imp__sendto@24           10004070     wsock32:WSOCK32.dll
+ 0002:00000074       __imp__recvfrom@24         10004074     wsock32:WSOCK32.dll
+ 0002:00000078       __imp__WSAStartup@8        10004078     wsock32:WSOCK32.dll
+ 0002:0000007c       __imp__WSAGetLastError@0   1000407c     wsock32:WSOCK32.dll
+ 0002:00000080       __imp__socket@12           10004080     wsock32:WSOCK32.dll
+ 0002:00000084       __imp__setsockopt@20       10004084     wsock32:WSOCK32.dll
+ 0002:00000088       __imp__htons@4             10004088     wsock32:WSOCK32.dll
+ 0002:0000008c       __imp__bind@12             1000408c     wsock32:WSOCK32.dll
+ 0002:00000090       __imp__getsockname@12      10004090     wsock32:WSOCK32.dll
+ 0002:00000094       __imp__ntohs@4             10004094     wsock32:WSOCK32.dll
+ 0002:00000098       __imp__ioctlsocket@12      10004098     wsock32:WSOCK32.dll
+ 0002:0000009c       __imp__closesocket@4       1000409c     wsock32:WSOCK32.dll
+ 0002:000000a0       \177WSOCK32_NULL_THUNK_DATA 100040a0     wsock32:WSOCK32.dll
+ 0002:000000a4       __IMPORT_DESCRIPTOR_KERNEL32 100040a4     kernel32:KERNEL32.dll
+ 0002:000000b8       __IMPORT_DESCRIPTOR_WSOCK32 100040b8     wsock32:WSOCK32.dll
+ 0002:000000cc       __IMPORT_DESCRIPTOR_ADVAPI32 100040cc     advapi32:ADVAPI32.dll
+ 0002:000000e0       __IMPORT_DESCRIPTOR_MSVCRT 100040e0     MSVCRT:MSVCRT.dll
+ 0002:000000f4       __NULL_IMPORT_DESCRIPTOR   100040f4     kernel32:KERNEL32.dll
+ 0003:00000000       ___xc_a                    10005000     MSVCRT:cinitexe.obj
+ 0003:00000004       ___xc_z                    10005004     MSVCRT:cinitexe.obj
+ 0003:00000008       ___xi_a                    10005008     MSVCRT:cinitexe.obj
+ 0003:0000000c       ___xi_z                    1000500c     MSVCRT:cinitexe.obj
+ 0003:00000160       _dp_dprintf                10005160     <common>
+ 0003:00000164       __adjust_fdiv              10005164     <common>
+ 0003:00000168       ___onexitend               10005168     <common>
+ 0003:0000016c       ___onexitbegin             1000516c     <common>
+ 0003:00000170       __pRawDllMain              10005170     <common>
 
- entry point at        0001:00002ee0
+ entry point at        0001:0000257a
 
  Static symbols
 
- 0001:000022a4       _commHdl2tcp               100032a4 f WSTCPdll.obj
- 0001:000025ec       _tcp2commHdl               100035ec f WSTCPdll.obj
- 0001:000012a7       _getsockerror              100022a7 f WSTCP.obj
- 0001:000012f7       _gethostaddr               100022f7 f WSTCP.obj
- 0001:00001355       _gethostaddr_ping          10002355 f WSTCP.obj
- 0001:000014a0       _gethostaddr_connect       100024a0 f WSTCP.obj
- 0001:0000156f       _gethostaddr_gethostname   1000256f f WSTCP.obj
-
-FIXUPS: 3f78 ffffecc9 3c 8d 4e 1c 1a b4 1c 7e b6 20 ffffe66f 19 1d 9c 27
-FIXUPS: 17a2 2d 10 2a 14 23 13 2f 10d fffff794 17f d 2ba1 e6 1d 14 ffffe5af
-FIXUPS: 2545 19 2a 1c 71 12 109 4f 59 4f 39 c 12 46 20 64 45 18 20 64 22
-FIXUPS: 2a8e 18 20 4b 2e 32 30 17 2e 2f fffff419 20 19 20 1c 1e 58 12 c
-FIXUPS: 215d 21 40 23 21 30 d c 1a 1e 31 58 19 19 3f 49 1c 50 48 3d 1a
-FIXUPS: 24df 12 bb4 5c a6 f 20a 23 10d 2e 60 1de 1c 5b 88 30 2a6 15 8b
-FIXUPS: 3be9 1d 15 1d ffffdfd1 12 147 5a 70 17 1c eb 12 48 69
+ 0001:00001c02       _commHdl2tcp               10002c02 f   WSTCPdll.obj
+ 0001:00001e7c       _tcp2commHdl               10002e7c f   WSTCPdll.obj
+ 0001:00000ee6       _getsockerror              10001ee6 f   WSTCP.obj
+ 0001:00000f2d       _gethostaddr               10001f2d f   WSTCP.obj
+ 0001:00000f78       _gethostaddr_ping          10001f78 f   WSTCP.obj
+ 0001:0000109a       _gethostaddr_connect       1000209a f   WSTCP.obj
+ 0001:00001174       _gethostaddr_gethostname   10002174 f   WSTCP.obj
