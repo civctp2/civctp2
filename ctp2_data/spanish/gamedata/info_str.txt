@@ -106,6 +106,7 @@ WORLD_POLLUTION_SPACE_LAUNCH 		"Nuestros satélites han detectado un aumento de l
 WORLD_POLLUTION_WARNING 		"La contaminación global ha alcanzado niveles tóxicos. El mundo se está acercando rápidamente a un desastre ecológico de dimensiones catastróficas."
 WORLD_POLLUTION_NUCLEAR_WAR 		"La guerra nuclear está provocando estragos en el medio ambiente. Hemos detectado residuos nucleares en la atmósfera."
 WORLD_POLLUTION_GLOBAL_WARMING 		"Nuestro planeta ya no puede tolerar la contaminación implacable de sus hermosas tierras. El fracaso de la comunidad mundial en reducir las emisiones significará que una alarma global es inminente."
+WORLD_POLLUTION_FLOODING_IMMINENT	"El calentamiento global ha provocado un aumento del nivel del mar. Nuestros meteorólogos más prestigiosos auguran una inundación inminente de proporciones catastróficas si no se detiene este ritmo de devastación ecológica."
 WORLD_POLLUTION_FLOODING_MINOR 		"Estamos empezando a sentir los efectos del calentamiento global en nuestro clima. Patrones climatológicos extraños e inundaciones amenazan nuestras ciudades."
 WORLD_POLLUTION_VIRIDIAN 		"El calentamiento global ha transformado nuestro planeta en una tierra asolada casi inhabitable. ¡Deberíamos haber hecho más caso a los verdes!"
 GROSS_POLLUTER 				"Tenemos un desastre de contaminación en nuestras manos. Los niveles tóxicos de contaminación están destruyendo las tierras alrededor de {city[0].name}."
@@ -163,23 +164,16 @@ ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, nos encontramos horrori
 UNIT_VETERAN 				"Por valor en el combate, su {unit[0].name} ha sido promocionado al rango de veterano."
 
 ## Age Change Messages ##
-AGE_ONE_ENTERED 			"Nuestro joven imperio está evolucionando. Hemos entrado en la Edad Antigua."
-AGE_TWO_ENTERED 			"Nuestro imperio empieza a florecer cultural y científicamente. Hemos entrado en la Edad del Renacimiento."
-AGE_THREE_ENTERED 			"Hemos establecido firmemente nuestro control del planeta. Hemos entrado en la Edad Moderna."
-AGE_FOUR_ENTERED 			"Los misterios de la vida están empezando a desplegarse ante nuestros ojos, y nuestra gente se encuentra en el umbral de una época totalmente nueva en el conocimiento científico: la Edad Genética."
-AGE_FIVE_ENTERED 			"Nos estamos acercando rápidamente al cenit del logro humano. Nuestro imperio ha entrado en la Edad del Diamante."
-
-## Age Change Messages of CityMod2 ##
-#AGE_ONE_ENTERED			"Nuestro joven imperio está evolucionando. Hemos entrado en la Edad Antigua."
-#AGE_TWO_ENTERED			"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
-#AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
-#AGE_FOUR_ENTERED			"Nuestro imperio empieza a florecer cultural y científicamente. Hemos entrado en la Edad del Renacimiento." 
-#AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
-#AGE_SIX_ENTERED			"Hemos establecido firmemente nuestro control del planeta. Hemos entrado en la Edad Moderna." 
-#AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
-#AGE_EIGHT_ENTERED			"Los misterios de la vida están empezando a desplegarse ante nuestros ojos, y nuestra gente se encuentra en el umbral de una época totalmente nueva en el conocimiento científico: la Edad Genética." 
-#AGE_NINE_ENTERED			"Nos estamos acercando rápidamente al cenit del logro humano. Nuestro imperio ha entrado en la Edad del Diamante." 
-#AGE_TEN_ENTERED			"The study of all technologies is final: Our empire awaits an unknown Future."
+AGE_ONE_ENTERED				"Nuestro joven imperio está evolucionando. Hemos entrado en la Edad Antigua."
+AGE_TWO_ENTERED				"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
+AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
+AGE_FOUR_ENTERED			"Nuestro imperio empieza a florecer cultural y científicamente. Hemos entrado en la Edad del Renacimiento." 
+AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
+AGE_SIX_ENTERED				"Hemos establecido firmemente nuestro control del planeta. Hemos entrado en la Edad Moderna." 
+AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
+AGE_EIGHT_ENTERED			"Los misterios de la vida están empezando a desplegarse ante nuestros ojos, y nuestra gente se encuentra en el umbral de una época totalmente nueva en el conocimiento científico: la Edad Genética." 
+AGE_NINE_ENTERED			"Nos estamos acercando rápidamente al cenit del logro humano. Nuestro imperio ha entrado en la Edad del Diamante." 
+AGE_TEN_ENTERED				"The study of all technologies is final: Our empire awaits an unknown Future."
 
 ##                 ##
 ## Special Actions ##
@@ -398,7 +392,6 @@ NEXT_EMAIL_PLAYER 			"Enviar por e-mail la partida guardada en tu escritorio a {
 HOTSEAT_CITY_ATTACKED 			"Los {player[0].civ_name_plural} atacaron {city[0].name} con un {unit[0].name}."
 HOTSEAT_ARMY_ATTACKED 			"Los {player[0].civ_name_plural} atacaron tu {unit[1].name} con un {unit[0].name}"
 
-
 ###Added 10/12/00###
 ### Trust Warning Messages ###
 ### Global Trust Loss ###
@@ -416,8 +409,6 @@ TRUST_LOSS_VIOLATED_CEASE_FIRE          ""
 TRUST_LOSS_VIOLATED_RESEARCH_PACT       ""
 TRUST_LOSS_VIOLATED_POLLUTION_PACT      ""
 TRUST_LOSS_VIOLATED_TRADE_PACT          ""
-
-WORLD_POLLUTION_FLOODING_IMMINENT	"El calentamiento global ha provocado un aumento del nivel del mar. Nuestros meteorólogos más prestigiosos auguran una inundación inminente de proporciones catastróficas si no se detiene este ritmo de devastación ecológica."
 
 #Nano-Terror#
 IMMUNE_TO_NANO_TERROR_VICTIM		"Tus hombres pueden volver a dormir tranquilos. La ciudad de {city[0].name} es inmune al nanoataque."

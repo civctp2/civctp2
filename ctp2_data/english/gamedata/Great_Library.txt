@@ -9787,19 +9787,21 @@ In the late 20th century, a society of litigiousness permeated much of the Weste
 [CONCEPT_CLASSIC_AGE_HISTORICAL]
 The classical period covers the epoch of the ascent Roman Republic, in particular the last 100 years. Caesar, Sallust and Augustus are only some representatives of this era. From this time many written documents were preserved for us, which differentiates this time significantly from the preceding epochs. But also the Roman Republic was a place where the learned could hold power, and the age of learning begun properly.
 [END]
+
 [CONCEPT_COMPUTER_AGE_GAMEPLAY]
 [END]
 
 [CONCEPT_COMPUTER_AGE_HISTORICAL]
-Computers are great. The German version includes here lots of information about Activision's bad support of CTP2, but I can't be bothered to translate.
+Computers are great. If anybody has an better idea for that place, please post it.
 [END]
 
 [CONCEPT_INDUSTRIAL_AGE_GAMEPLAY]
 [END]
 
 [CONCEPT_INDUSTRIAL_AGE_HISTORICAL]
-The industrial revolution led mankind into a new epoch of undreamt-of growth and a never dreamt of productivity. The time is shaped by innovations, like the factory, the steam engine, the railway, the steel, in addition, by exploiting of broad population masses, a rapidly rising environmental pollution, and acceleration, not only, those production, but also the wealth of the individual person. The Imperialism is a further appearance of the time, the suppression of whole peoples and their exploitation, without any consideration. 
-[END]   
+The Industrial Revolution ushered in a new age of commerce, discovery, and production. Driven by steam the steam engine and the railway a brought a never seen before productivity and a never known before growth. The Industrial Revolution turned up the society radically. Corporate monopolies and a new underclass - the worker class were. Soon the board masses of the population belonged to the worker class. Beside the rapidly rising pollution the acceleration of live appeared, not only in production but also in the live of the single persion. Instead of nature the machinery determined the rhythm of life.
+[END]
+
 [CONCEPT_FUTURE_AGE_GAMEPLAY]
 [END]
 

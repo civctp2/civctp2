@@ -2382,31 +2382,31 @@ messagebox 'Age5Entered' {
 	Text(ID_AGE_FIVE_ENTERED);
 	MessageType("CIVILIZATION");
 }
-// Called from CM2_age.txt
-//messagebox 'Age6Entered' {
-//	Text(ID_AGE_SIX_ENTERED);
-//	MessageType("CIVILIZATION");
-//}
-// Called from CM2_age.txt
-//messagebox 'Age7Entered' {
-//	Text(ID_AGE_SEVEN_ENTERED);
-//	MessageType("CIVILIZATION");
-//}
-// Called from CM2_age.txt
-//messagebox 'Age8Entered' {
-//	Text(ID_AGE_EIGHT_ENTERED);
-//	MessageType("CIVILIZATION");
-//}
-// Called from CM2_age.txt
-//messagebox 'Age9Entered' {
-//	Text(ID_AGE_NINE_ENTERED);
-//	MessageType("CIVILIZATION");
-//}
-// Called from CM2_age.txt
-//messagebox 'Age10Entered' {
-//	Text(ID_AGE_TEN_ENTERED);
-//	MessageType("CIVILIZATION");
-//}
+// Called from age.txt
+messagebox 'Age6Entered' {
+	Text(ID_AGE_SIX_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from age.txt
+messagebox 'Age7Entered' {
+	Text(ID_AGE_SEVEN_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from age.txt
+messagebox 'Age8Entered' {
+	Text(ID_AGE_EIGHT_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from age.txt
+messagebox 'Age9Entered' {
+	Text(ID_AGE_NINE_ENTERED);
+	MessageType("CIVILIZATION");
+}
+// Called from age.txt
+messagebox 'Age10Entered' {
+	Text(ID_AGE_TEN_ENTERED);
+	MessageType("CIVILIZATION");
+}
 
 messagebox 'TANoKillCivilian' {
 	Show();

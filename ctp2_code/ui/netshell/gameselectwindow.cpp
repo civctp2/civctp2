@@ -1,13 +1,42 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Game type selection UI
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Default values for new multiplayer game are now taken from profile, like:
+//   - World size
+//   - World shape
+//   - World type wet/dry
+//   - World type warm/cold
+//   - World type ocean/land
+//   - World type island/continent
+//   - World type homo/deverse
+//   - World type goodcount
+// - Default end age is set to last age in database.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -46,6 +75,11 @@
 #include "spnewgamewindow.h" 
 
 extern LoadSaveWindow *g_loadsaveWindow;
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include "ProfileDB.h"
+#include "AgeRecord.h"
+#endif
 
 
 GameSelectWindow *g_gameSelectWindow = NULL;
@@ -785,6 +819,29 @@ void StartSelectingWindow::NewButtonAction::Execute(
 		}
 
 		s->SetName( name );
+#if !defined(ACTIVISION_ORIGINAL)
+		//Special rules
+		s->SetBloodlust(!g_theProfileDB->IsAlienEndGameOn());
+		s->SetPollution(g_theProfileDB->IsPollutionRule()); 
+
+		//Ages
+		s->SetStartAge(0);
+		s->SetEndAge(g_theAgeDB->NumRecords()-1);
+		//World size and shape
+		s->SetMapSize(g_theProfileDB->GetMapSize());
+		s->SetWorldShape(g_theProfileDB->GetWorldShape());
+		//World types
+		s->SetWorldType1(g_theProfileDB->GetWetDry());
+		s->SetWorldType2(g_theProfileDB->GetWarmCold());
+		s->SetWorldType3(g_theProfileDB->GetOceanLand());
+		s->SetWorldType4(g_theProfileDB->GetIslandContinent());
+		s->SetWorldType5(g_theProfileDB->GetHomoDiverse());
+		s->SetWorldType6(g_theProfileDB->GetGoodCount());
+
+		//Level of difficuilties
+		s->SetDifficulty1(g_theProfileDB->GetDifficulty());
+		s->SetDifficulty2(g_theProfileDB->GetRiskLevel());
+#endif
 		listbox->InsertItem( s );
 		listbox->SelectItem(listbox->FindItem(s));
 

@@ -2467,7 +2467,7 @@ Zur Ausweitung des Wohlstands innerhalb einer Nation können darüber hinaus auch 
 [END]
 
 [CONCEPT_COMPUTER_AGE_HISTORICAL]
-Das Computerzeitalter wurde letztendlich durch den Zweiten Weltkrieg eingeleitet. Der Krieg gab der ganzen Wissenschafft einen Inovationsschub, der bis nach dem Krieg hinaus wirkte und durch den kalten Krieg verstärkt wurde. Firmen wie IBM, Apple oder Microsoft waren Pioniere, schließlich zieren Produkte, die auf deren Arbeit basieren unsere Schreibtische, ohne die Firmen wie Activision keine schönen Spiele wie dieses hätten produzieren hätten können. Na gut schön ist ein bisschen viel CTP2 macht einen etwas unfertigen Eindruck. Es befinden sich viele Sachen in den Spieldateien, die scheinbar implementiert hätten sollen aber wohl aus Zeitgründen nicht drin sind. Um ja keine Konkurenz mit Civ3 zu bekommen. Schlechter Support noch nicht einmal einen Patch will Activision rausrücken, der die angedachten Features implementiert. 
+Computer sind Großartig. Falls irgendjemand eine bessere Idee hat, was hhier hin könnte solle er sich melden.
 [END]
 
 [CONCEPT_CRIME_GAMEPLAY]
@@ -2629,7 +2629,7 @@ Allerdings haben Modernisierungen auch ihren Preis: Ihre Errichtung wird aus den
 [END]
 
 [CONCEPT_INDUSTRIAL_AGE_HISTORICAL]
-Die industrielle Revolution führt die Menschheit in eine neue Epoche des bisher ungeahnten Wachstums und einer noch nie dagewesender Produktivität. Die Zeit ist geprägt durch Neuerungen, wie die Fabrik, die Dampfmaschine, die Eisenbahn, der Stahl, aber auch durch Verehlendung breiter Bevölkerungsmassen, einer rapid ansteigender Umweltverschmutzung, und der Beschleunigung,nicht nur, die der Produktion, sondern auch die der einzelnen Person. Der Imperealismus ist eine weitere Erscheinung der Zeit, die Unterdrückung ganzer Völker und deren rücksichtlose Ausbeutung.
+Die industrielle Revolution leitete ein neues Zeitalter des Verkehrs, der Entdeckungen und Produktion. Angetrieben durch Dampf brachten die Dampfmaschiene und die Eisenbahn eine noch nie gesehende Produktivität sowie ein bisher unbekanntes Wachtum. Die industrielle Revolution veränderte die gesellschaftlichen Verhältnisse radikal, es entstanden Großmonopolunternehmen, sowie eine neue Unterschicht - die Arbeiterklasse, zu der bald die große Masse der Bevölkerung zählte. Neben der rapid ansteigenden Umweltverschmutzung, kam auch die Beschleunigung des Lebens, nicht nur in der Produktion, sondern auch im Leben des Einzelnen. Statt der Natur bestimmte nun die Maschinerie den Lebensrhythmus.
 [END]   
 
 [CONCEPT_INFRASTRUCTURE_SUMMARY]

@@ -9273,3 +9273,39 @@ Riesaminando il codice penale, il progetto Anticrimine provvede alla depenalizza
 [WONDER_ZERO_CRIME_BILL_HISTORICAL]
 Nel tardo XX secolo, una sindrome di conflittualità colpì gran parte del mondo occidentale. Nazioni come gli Stati Uniti costituivano una piccola frazione della popolazione mondiale, ma metà dei loro avvocati erano oberati di lavoro. La complessità del codice penale, con particolare riferimento agli sterminati regolamenti sulla libertà personale promulgati da moralisti reazionari, raggiunse il punto critico all'inizio del XXI secolo. Il sistema giudiziario, paralizzato dall'immensa mole di procedimenti riguardanti reati minori, finì sull'orlo del collasso a causa della sua stessa profondità labirintica. Il progetto Anticrimine ricorse alla depenalizzazione di un certo numero di reati sulla limitazione delle libertà individuali come l'utilizzo di narcotici, la prostituzione e la condotta sessuale privata. Questo provvedimento liberò le prigioni da centinaia di migliaia di criminali minori, rendendo così il sistema giudiziario libero di concentrarsi su quelli davvero pericolosi e sulla loro condotta.
 [END]
+
+[CONCEPT_CLASSIC_AGE_GAMEPLAY]
+[END]
+
+[CONCEPT_CLASSIC_AGE_HISTORICAL]
+The classical period covers the epoch of the ascent Roman Republic, in particular the last 100 years. Caesar, Sallust and Augustus are only some representatives of this era. From this time many written documents were preserved for us, which differentiates this time significantly from the preceding epochs. But also the Roman Republic was a place where the learned could hold power, and the age of learning begun properly.
+[END]
+
+[CONCEPT_COMPUTER_AGE_GAMEPLAY]
+[END]
+
+[CONCEPT_COMPUTER_AGE_HISTORICAL]
+Computers are great. If anybody has an better idea for that place, please post it.
+[END]
+
+[CONCEPT_INDUSTRIAL_AGE_GAMEPLAY]
+[END]
+
+[CONCEPT_INDUSTRIAL_AGE_HISTORICAL]
+The Industrial Revolution ushered in a new age of commerce, discovery, and production. Driven by steam the steam engine and the railway a brought a never seen before productivity and a never known before growth. The Industrial Revolution turned up the society radically. Corporate monopolies and a new underclass - the worker class were. Soon the board masses of the population belonged to the worker class. Beside the rapidly rising pollution the acceleration of live appeared, not only in production but also in the live of the single persion. Instead of nature the machinery determined the rhythm of life.
+[END]
+
+[CONCEPT_FUTURE_AGE_GAMEPLAY]
+[END]
+
+[CONCEPT_FUTURE_AGE_HISTORICAL]
+The future is unknown, we know not what it will bring. Be it good or bad. Nobody knows it exactly, even if some believe they do know exactly. Thus fortune-tellers will have always have further customers. But the true nature of the future is appropriate in unknown quantities, in the car, in the not safe one. In the future everything is possible or nothing at all. It is for us to decide.
+[END]
+
+[CONCEPT_MEDIEVAL_AGE_GAMEPLAY]
+[END]
+
+[CONCEPT_MEDIEVAL_AGE_HISTORICAL]
+The Middle Ages the age between the classical antiquity and the Renaissance. But it is little a more: It came out from the fall of the Roman Empire. Christianity lured with the promise of the release in the paradise after death and after the end of the world: Because the world was terrible the barbarians brought disaster and poverty over the Roman Empire. It was no miracle that the back was turned on polytheism and surrendered themselves to christianity. The epoch is defined by deep religiousness and devoutness. In addition, by fanatisicm and intollerance. These are one of the reasons for the crusades. To the end this  epoch the curches grew into the sky. The building of such a church took centuries. For example the Cologne Cathedral was finished only after well over half a millenium.
+[END]
+

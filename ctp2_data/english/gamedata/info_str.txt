@@ -164,23 +164,16 @@ ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, we were horrified to di
 UNIT_VETERAN 				"For valor in combat, your {unit[0].name} has been promoted to veteran status."
 
 ## Age Change Messages ##
-AGE_ONE_ENTERED 			"Our fledgling empire is evolving.  We have entered the Ancient Age."
-AGE_TWO_ENTERED 			"Our empire is beginning to flourish culturally and scientifically.  We have entered the Renaissance Age."
-AGE_THREE_ENTERED 			"We have firmly established our mastery of the planet.  We have entered the Modern Age."
-AGE_FOUR_ENTERED 			"The mysteries of life are beginning to unfold before us, and our people stand at the threshold of a bold new epoch in scientific understanding.  We have entered the Genetic Age."
-AGE_FIVE_ENTERED 			"We are fast approaching the zenith of human achievement. Our empire has entered the Diamond Age."
-
-## Age Change Messages of CityMod2 ##
-#AGE_ONE_ENTERED			"Our fledgling empire is evolving.  We have entered the Ancient Age."
-#AGE_TWO_ENTERED			"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
-#AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
-#AGE_FOUR_ENTERED			"Our empire is beginning to flourish culturally and scientifically.  We have entered the Renaissance Age." 
-#AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
-#AGE_SIX_ENTERED			"We have firmly established our mastery of the planet.  We have entered the Modern Age." 
-#AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
-#AGE_EIGHT_ENTERED			"The mysteries of life are beginning to unfold before us, and our people stand at the threshold of a bold new epoch in scientific understanding.  We have entered the Genetic Age." 
-#AGE_NINE_ENTERED			"We are fast approaching the zenith of human achievement. Our empire has entered the Diamond Age." 
-#AGE_TEN_ENTERED			"The study of all technologies is final: Our empire awaits an unknown Future."
+AGE_ONE_ENTERED				"Our fledgling empire is evolving.  We have entered the Ancient Age."
+AGE_TWO_ENTERED				"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
+AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
+AGE_FOUR_ENTERED			"Our empire is beginning to flourish culturally and scientifically.  We have entered the Renaissance Age." 
+AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
+AGE_SIX_ENTERED				"We have firmly established our mastery of the planet.  We have entered the Modern Age." 
+AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
+AGE_EIGHT_ENTERED			"The mysteries of life are beginning to unfold before us, and our people stand at the threshold of a bold new epoch in scientific understanding.  We have entered the Genetic Age." 
+AGE_NINE_ENTERED			"We are fast approaching the zenith of human achievement. Our empire has entered the Diamond Age." 
+AGE_TEN_ENTERED				"The study of all technologies is final: Our empire awaits an unknown Future."
 
 ##                 ##
 ## Special Actions ##
@@ -284,13 +277,6 @@ NANITE_CLEANSE_COMPLETE_VICTIM 		"Dreadful news, {player[0].sir}.  A foreign Eco
 NANITE_CLEANSE_FAILED_VICTIM 		"{player[0].sir_cap}, we have managed to avert an atrocity!  Our city, {city[0].name}, successfully prevented a foreign Eco-Ranger from unleashing a Nanite Cleansing attack."
 NANITE_CLEANSE_COMPLETE_ATTACK 		"Victory, glorious victory!  Our Eco-Ranger has succeeded in leveling the city of {city[0].name} with a Nanite Cleansing attack.  Nature has been restored to its rightful place in that part of the world."
 NANITE_CLEANSE_FAILED_ATTACK 		"Our Eco-Ranger has failed to unleash a Nanite Cleansing attack on the city of {city[0].name}."
-
-#Nano-Terror#
-IMMUNE_TO_NANO_TERROR_VICTIM		"Your people can sleep well again. The city of {city[0].name} is immune to nano-attack."
-NANO_TERROR_FAILED_VICTIM			"Our scientists have foiled an enemy plot to sabotage the industries of {city[0].name} with a nefarious nanological weapon."
-NANO_TERROR_COMPLETE_VICTIM			"Foreign dogs have unleashed a nanological virus on the city of {city[0].name}."
-NANO_TERROR_FAILED_AGRESSOR			"Your quest to save the Earth has fallen on hard times. Your nano-attack has failed."
-IMMUNE_TO_NANO_TERROR_AGRESSOR		"Despite your best efforts, your enemy has foreseen your cunning nature. The city that you targeted for nano-attack is immune."
 
 ## Nuclear Missile ##
 ## Nuke Attack ##
@@ -402,7 +388,7 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM 	"We just received word that the {player[0].
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
 NEXT_HOT_SEAT_PLAYER 			"{player[0].leader_name} of the {player[0].civ_name_plural}, it is now your turn."
-#NEXT_EMAIL_PLAYER 			"Please mail the saved game on your desktop to {player[0].leader_name} ({string[0].name}) of the {player[0].civ_name_plural}."
+NEXT_EMAIL_PLAYER 			"Please mail the saved game on your desktop to {player[0].leader_name} ({string[0].name}) of the {player[0].civ_name_plural}."
 HOTSEAT_CITY_ATTACKED 			"The {player[0].civ_name_plural} attacked {city[0].name} with a {unit[0].name}."
 HOTSEAT_ARMY_ATTACKED 			"The {player[0].civ_name_plural} attacked your {unit[1].name} with a {unit[0].name}"
 
@@ -422,3 +408,10 @@ TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].leader_name#SIR_CAP}, we broke our t
 TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].leader_name#SIR_CAP}, with our last operation we offended against our research agreement with the {player[1].civ_name_plural#DAT}. Their distrust is waked: They doubt our intentions."
 TRUST_LOSS_VIOLATED_POLLUTION_PACT	""
 TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].leader_name#SIR_CAP}, with our last operations we concerned against our trade agreement with the {player[1].civ_name_plural#DAT}.They will not forget our breach of trust so fast!"
+
+#Nano-Terror#
+IMMUNE_TO_NANO_TERROR_VICTIM		"Your people can sleep well again. The city of {city[0].name} is immune to nano-attack."
+NANO_TERROR_FAILED_VICTIM		"Our scientists have foiled an enemy plot to sabotage the industries of {city[0].name} with a nefarious nanological weapon."
+NANO_TERROR_COMPLETE_VICTIM		"Foreign dogs have unleashed a nanological virus on the city of {city[0].name}."
+NANO_TERROR_FAILED_AGRESSOR		"Your quest to save the Earth has fallen on hard times. Your nano-attack has failed."
+IMMUNE_TO_NANO_TERROR_AGRESSOR		"Despite your best efforts, your enemy has foreseen your cunning nature. The city that you targeted for nano-attack is immune."

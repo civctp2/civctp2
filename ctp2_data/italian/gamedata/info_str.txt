@@ -157,17 +157,24 @@ CITIES_CAPTURED_VICTIM 			"{city[0].name} è caduta nelle mani di una forza nemic
 CAPITAL_CITY_CAPTURED_VICTIM 		"La nostra capitale, {city[0].name} è stata catturata dalle forze nemiche!"
 CAPITAL_CITY_CAPTURED_ATTACKER 		"Una vittoria decisiva! Abbiamo catturato la capitale {player[0].civ_name_plural#PREPOSITION}."
 CIV_STARTED_WAR 			"{player[0].civ_name_plural#ARTICLE_CAP} sono entrati in guerra con {player[1].civ_name_plural#ARTICLE}."
-ADVANCE_FROM_CAPTURING_CITY 		"Saccheggiando la città di {city[0].name}, recentemente conquistata, scopri i segreti {advance[0].name#ARTICLED_PREPOSITION}."
+#ADVANCE_FROM_CAPTURING_CITY 		"Saccheggiando la città di {city[0].name}, recentemente conquistata, scopri i segreti {advance[0].name#ARTICLED_PREPOSITION}."
+ADVANCE_FROM_CAPTURING_CITY 		"{player[0].sir_cap}, while looting the recently conquered city of {city[0].name}, our troops took the secret of {advance[0].name}."
+ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, we were horrified to discover that the {player[1].civ_name_plural} were able not only to take our city of {city[0].name}, but also to steal the secret of {advance[0].name}."
 
 ## Combat ##
 UNIT_VETERAN 				"Per il suo valore in combattimento, {unit[0].name#ARTICLE_YOUR} è diventata un'unità veterana."
 
 ## Age Change Messages ##
 AGE_ONE_ENTERED 			"Il nostro giovane impero si sta evolvendo. Siamo entrati nell'età antica."
-AGE_TWO_ENTERED 			"Il nostro impero sta iniziando a fiorire, culturalmente e scientificamente. Siamo entrati nell'età del Rinascimento."
-AGE_THREE_ENTERED 			"Abbiamo ormai saldamente conquistato il nostro posto al sole sul pianeta. Siamo entrati nell'età moderna."
-AGE_FOUR_ENTERED 			"I misteri della vita stanno iniziando a dipanarsi davanti a noi; la nostra gente è giunta alle porte di una nuova epoca di comprensione scientifica: l'età genetica."
-AGE_FIVE_ENTERED 			"Stiamo avvicinandoci in fretta allo zenit delle realizzazioni umane. Il nostro impero è entrato nell'età del diamante."
+AGE_TWO_ENTERED				"First written sources replace the verbal excessive quantity: We penetrated into the Classical Age." 
+AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We achieved the Middle Ages." 
+AGE_FOUR_ENTERED 			"Il nostro impero sta iniziando a fiorire, culturalmente e scientificamente. Siamo entrati nell'età del Rinascimento."
+AGE_FIVE_ENTERED			"Our empire expects an era of unknown growth and a undreamt-of enormous productivity: Owing to the Industrial Revolution we achieved the Industrial Age. " 
+AGE_SIX_ENTERED 			"Abbiamo ormai saldamente conquistato il nostro posto al sole sul pianeta. Siamo entrati nell'età moderna."
+AGE_SEVEN_ENTERED			"The decoding of the mysteries of science came within easy reach, because our people push the boundary to a new, innovative epoch of the scientific realizations and prosperity: The Computer Era. " 
+AGE_EIGHT_ENTERED 			"I misteri della vita stanno iniziando a dipanarsi davanti a noi; la nostra gente è giunta alle porte di una nuova epoca di comprensione scientifica: l'età genetica."
+AGE_NINE_ENTERED 			"Stiamo avvicinandoci in fretta allo zenit delle realizzazioni umane. Il nostro impero è entrato nell'età del diamante."
+AGE_TEN_ENTERED				"The study of all technologies is final: Our empire awaits an unknown Future."
 
 ##                 ##
 ## Special Actions ##
@@ -261,6 +268,10 @@ INFECTED_VIA_TRADE 			"Un agente contaminante sta seminando il caos presso {city
 ## Cyberninja Attack ##
 INVESTIGATE_CITY_FAILED_VICTIM 		"Gli sforzi del nostro controspionaggio sono stati ripagati. Gli agenti hanno sventato il tentativo di una spia straniera di raccogliere informazioni su {city[0].name}."
 INVESTIGATE_CITY_FAILED_AGRESSOR 	"{unitrecord[0].name#ARTICLE_OUR_CAP} è stato catturato mentre cercava di assumere informazioni sulla città di {city[0].name}."
+# Added 7/2004 L. Hirth
+INVESTIGATE_CITY_FAILED_ESC_VICTIM	"Our counterintelligence efforts have paid off.  Operatives have thwarted a foreign spy's attempt to investigate our city of {city[0].name}. But unfortunately we couldn't catch him."
+INVESTIGATE_CITY_FAILED_ESC_AGRESSOR 	"Our {unitrecord[0].name} was captured while attempting to investigate the city of {city[0].name}. But luckily he could escape."
+# Added End
 
 ## Nanite Cleansing ##
 ## Eco-Ranger Attack ##
@@ -403,7 +414,7 @@ TRUST_LOSS_VIOLATED_TRADE_PACT		""
 
 #Nano-Terror#
 IMMUNE_TO_NANO_TERROR_VICTIM		"La tua popolazione può tornare a dormire sonni tranquilli. La città di {city[0].name} è immune alla nanoinfezione."
-NANO_TERROR_FAILED_VICTIM			"I nostri scienziati hanno sventato un progetto nemico per sabotare le industrie di {city[0].name} con una terribile arma nanotecnologica."
-NANO_TERROR_COMPLETE_VICTIM			"Dei cani stranieri hanno liberato un virus nanotecnologico sulla città di {city[0].name}."
-NANO_TERROR_FAILED_AGRESSOR			"La tua battaglia per salvare la Terra sta attraversando un brutto momento. La tua nanoinfezione è fallita."
+NANO_TERROR_FAILED_VICTIM		"I nostri scienziati hanno sventato un progetto nemico per sabotare le industrie di {city[0].name} con una terribile arma nanotecnologica."
+NANO_TERROR_COMPLETE_VICTIM		"Dei cani stranieri hanno liberato un virus nanotecnologico sulla città di {city[0].name}."
+NANO_TERROR_FAILED_AGRESSOR		"La tua battaglia per salvare la Terra sta attraversando un brutto momento. La tua nanoinfezione è fallita."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Nonostante il tuo impegno, il nemico ha previsto tutto. La città che hai scelto come obiettivo per la nanoinfezione ne è immune."

@@ -83,6 +83,8 @@ WAR_OVER 				"Les {player[0].civ_name_plural} ne sont plus en guerre avec les {p
 
 ## Trade Messages ##
 TRADE_PIRATED 				"{player[0].sir_cap}, notre route commerciale allant de {city[0].name} à {city[1].name} a été piratée par les {player[1].civ_name_plural]."
+TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, les {player[1].civ_name_plural} font peser un embargo sur notre commerce. Toutes les routes commerciales à destination de leur territoire ayant été rompues, toutes nos caravanes sont définitivement perdues."
+TRADE_ROUTES_BROKEN_BY_WAR		"Mauvaise nouvelle, {player[0].sir}. A cause du conflit avec les {player[1].civ_name_plural}, toutes nos routes commerciales à destination des villes des {player[1].civ_name_plural} ont été rompues. Toutes les caravanes affectées à ces routes sont définitivement perdues."
 
 ## Trade Advisor Stuff ##
 SELECTED_TRADE_ADVICE 			"Vendre {good[0].name#ARTICLE} à {city[1].name} nous rapportera {gold[0].value} pièces d'or et requiert {value[0].value} caravane(s)."
@@ -104,6 +106,7 @@ WORLD_POLLUTION_SPACE_LAUNCH 		"Nos satellites ont détecté une hausse de la poll
 WORLD_POLLUTION_WARNING 		"La pollution mondiale a atteint un niveau toxique. Le monde est sur le point de vivre une catastrophe écologique."
 WORLD_POLLUTION_NUCLEAR_WAR 		"La guerre nucléaire ravage l'environnement. Nous avons détecté des retombées radioactives dans l'atmosphère."
 WORLD_POLLUTION_GLOBAL_WARMING 		"Notre planète n'est plus en mesure de supporter la pollution constante des terres. L'incapacité de la communauté internationale à réduire les émissions risque d'entraîner un réchauffement imminent de la planète."
+WORLD_POLLUTION_FLOODING_IMMINENT       "Le réchauffement de la Terre a entraîné une montée du niveau des océans. Nos plus grands météorologues prédisent une inondation sans précédent si la pollution de l'environnement se poursuit."
 WORLD_POLLUTION_FLOODING_MINOR 		"Nous commençons à voir les effets du réchauffement de la Terre sur notre climat. Les inondations menacent nos villes et les conditions météorologiques sont pour le moins inquiétantes."
 WORLD_POLLUTION_VIRIDIAN 		"Avec le réchauffement de la Terre, notre planète est devenue un désert quasi inhabitable. Les Viridians avaient raison !"
 GROSS_POLLUTER 				"Il s'agit d'une catastrophe écologique. La pollution a atteint un niveau toxique et les terres autour de {city[0].name} vont être dévastées."
@@ -142,7 +145,6 @@ PLAYER_DISCOVERS_NEW_GOVERNMENT 	"Vous avez découvert le gouvernement du type {G
 
 ## Advances ##
 PICK_NEW_DISCOVERY 			"En découvrant <l:4,000>{advance[0].name#ARTICLE}<e>, nos chercheurs ont fait un grand pas dans la connaissance de l'humain, ouvrant de nouvelles perspectives scientifiques et culturelles.  Sélectionnez un nouveau progrès sur lequel entamer des recherches."
-
 UNIT_OBSOLETE_CIVWIDE 			"La découverte {advance[0].name#PREPOSITION} a rendu les unités suivantes obsolètes."
 
 ## Units ##
@@ -155,7 +157,6 @@ CITIES_CAPTURED_VICTIM 			"La ville de {city[0].name} est tombée entre les mains
 CAPITAL_CITY_CAPTURED_VICTIM 		"Notre capitale, {city[0].name}, a été prise d'assaut par les forces ennemies !"
 CAPITAL_CITY_CAPTURED_ATTACKER 		"Quelle victoire ! Nous avons conquis la capitale des {player[0].civ_name_plural}."
 CIV_STARTED_WAR 			"Les {player[0].civ_name_plural} sont entrés en guerre avec les {player[1].civ_name_plural}."
-#ADVANCE_FROM_CAPTURING_CITY 		"En pillant la ville de {city[0].name}, que vous venez de conquérir, vous découvrez le secret {advance[0].name#PREPOSITION}."
 ADVANCE_FROM_CAPTURING_CITY 		"{player[0].sir_cap}, lors du pillage de la cité de {city[0].name} que nous venons de conquérir, nos troupes se sont emparées du secret de {advance[0].name}."
 ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, c'est avec horreur que nous apprenons que les {player[1].civ_name_plural} nous ont pris la cité de {city[0].name} et qu'ils se sont également emparés du secret de {advance[0].name}."
 
@@ -164,22 +165,15 @@ UNIT_VETERAN 				"Votre {unit[0].name} accède au statut de vétéran en raison de 
 
 ## Age Change Messages ##
 AGE_ONE_ENTERED 			"Malgré sa jeunesse, notre empire évolue. Nous venons d'entrer dans l'Antiquité."
-AGE_TWO_ENTERED 			"Notre empire entre dans une phase d'expansion culturelle et scientifique. Il s'agit de la Renaissance."
-AGE_THREE_ENTERED 			"Nous avons assis notre connaissance de la planète. Nous venons d'entrer dans l'Ere moderne."
-AGE_FOUR_ENTERED 			"Les mystères de la vie sont sur le point de se révéler ; notre empire est au seuil d'un nouvel âge d'or de la science : l'Ere génétique."
-AGE_FIVE_ENTERED 			"Nous sommes bientôt à l'apogée de l'humanité. Nous sommes entrés dans l'Ere du diamant."
-
-## Age Change Messages of CityMod2 ##
-#AGE_ONE_ENTERED 			"Malgré sa jeunesse, notre empire évolue. Nous venons d'entrer dans l'Antiquité."
-#AGE_TWO_ENTERED			"Les premiers écrits remplace la transmission verbale. nous entamons l'Age Classique." 
-#AGE_THREE_ENTERED			"Sur les ruines de la Rome antique, notre nation continue de s'étendre. Le moyen age commence." 
-#AGE_TWO_ENTERED 			"Notre empire entre dans une phase d'expansion culturelle et scientifique. Il s'agit de la Renaissance."
-#AGE_FIVE_ENTERED			"Notre Empire débute une ère de croissance insoupçonnée, entraîné par une explosion de la productivité. En vivant cette Révolution industrielle, nous entrons dans l'Age Industriel. " 
-#AGE_SIX_ENTERED			"Nous avons assis notre connaissance de la planète. Nous venons d'entrer dans l'Ere moderne." 
-#AGE_SEVEN_ENTERED			"Décoder les mystères de la science devient aisé, notre peuple a atteint une époque de prospérité, d'innovation scientifique... : L'Ere de l'Informatique " 
-#AGE_EIGHT_ENTERED			"Les mystères de la vie sont sur le point de se révéler. Notre empire est au seuil d'un nouvel âge d'or de la science : l'Ere génétique." 
-#AGE_NINE_ENTERED			"Nous sommes bientôt à l'apogée de l'humanité. Nous sommes entrés dans l'Ere du diamant." 
-#AGE_TEN_ENTERED			"La recherche des toutes les technologies est achevée. Notre Empire attend un futur inconnu..."
+AGE_TWO_ENTERED				"Les premiers écrits remplace la transmission verbale. nous entamons l'Age Classique." 
+AGE_THREE_ENTERED			"Sur les ruines de la Rome antique, notre nation continue de s'étendre. Le moyen age commence." 
+AGE_FOUR_ENTERED 			"Notre empire entre dans une phase d'expansion culturelle et scientifique. Il s'agit de la Renaissance."
+AGE_FIVE_ENTERED			"Notre Empire débute une ère de croissance insoupçonnée, entraîné par une explosion de la productivité. En vivant cette Révolution industrielle, nous entrons dans l'Age Industriel. " 
+AGE_SIX_ENTERED				"Nous avons assis notre connaissance de la planète. Nous venons d'entrer dans l'Ere moderne." 
+AGE_SEVEN_ENTERED			"Décoder les mystères de la science devient aisé, notre peuple a atteint une époque de prospérité, d'innovation scientifique... : L'Ere de l'Informatique " 
+AGE_EIGHT_ENTERED			"Les mystères de la vie sont sur le point de se révéler. Notre empire est au seuil d'un nouvel âge d'or de la science : l'Ere génétique." 
+AGE_NINE_ENTERED			"Nous sommes bientôt à l'apogée de l'humanité. Nous sommes entrés dans l'Ere du diamant." 
+AGE_TEN_ENTERED				"La recherche des toutes les technologies est achevée. Notre Empire attend un futur inconnu..."
 
 ##                 ##
 ## Special Actions ##
@@ -199,7 +193,6 @@ UPRISING_FAILED_VICTIM 			"Des forces loyales et vigilantes ont essayé de contre
 
 ## Conduct Hit ##
 ## Eco-terrorist Attack ##
-
 CONDUCTHIT_COMPLETE_VICTIM 		"Une personnalité éminente a été assassinée dans la ville de {city[0].name}. L'assassin est un écoterroriste étranger sans doute outré par notre politique environnementale. Nos citoyens sont à la fois indignés, effrayés et profondément courroucés par cet acte de violence."
 CONDUCTHIT_FAILED_VICTIM		"Nous avons empêché un écoterroriste étranger de perpétrer un attentat contre une personnalité connue de {city[0].name}."
 CONDUCTHIT_COMPLETE_ATTACKER		"L'un de nos écoterroristes a réussi à perpétrer un attentat contre une personnalité de {city[0].name}. Heureusement, l'indignation des citoyens se porte contre leurs propres dirigeants auxquels ils reprochent de ne pas avoir pris de mesures préventives."
@@ -244,7 +237,6 @@ BRANCH_COMPLETE_VICTIM 			"Des consortiums étrangers ont implanté une franchise 
 BRANCH_FAILED_VICTIM 			"Malgré tous les efforts des consortiums étrangers pour implanter une franchise dans notre ville de {city[0].name}, nous avons réussi à les empêcher d'entrer."
 
 ## Free Slave ##
-
 ## Abolitionist Attack ##
 FREESLAVE_COMPLETE_VICTIM 		"Des abolitionnistes étrangers ont libéré quelques-uns de nos esclaves dans la ville de {city[0].name}."
 FREESLAVE_FAILED_VICTIM 		"Les gardiens de notre industrie sont parvenus à arrêter des abolitionnistes étrangers tentant d'interrompre le travail de la main d'œuvre à {city[0].name}."
@@ -400,18 +392,13 @@ NEXT_EMAIL_PLAYER 			"Veuillez envoyer la partie sauvegardée sur votre bureau à 
 HOTSEAT_CITY_ATTACKED 			"Les {player[0].civ_name_plural} ont attaqué {city[0].name} avec leur {unit[0].name}."
 HOTSEAT_ARMY_ATTACKED 			"Les {player[0].civ_name_plural} ont attaqué votre {unit[1].name} avec leur {unit[0].name}"
 
-
-TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, les {player[1].civ_name_plural} font peser un embargo sur notre commerce. Toutes les routes commerciales à destination de leur territoire ayant été rompues, toutes nos caravanes sont définitivement perdues."
-TRADE_ROUTES_BROKEN_BY_WAR		"Mauvaise nouvelle, {player[0].sir}. A cause du conflit avec les {player[1].civ_name_plural}, toutes nos routes commerciales à destination des villes des {player[1].civ_name_plural} ont été rompues. Toutes les caravanes affectées à ces routes sont définitivement perdues."
-
 ### Trust Warning Messages ###
 ### Global Trust Loss ###
 TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, nous avons tué une unité civile des {player[1].civ_name_plural} ! Cela est considéré comme un crime de guerre. Outre les {player[1].civ_name_plural}, nous avons bouleversé le monde entier."
 TRUST_LOSS_UNPROVOKED_ATTACK            "{player[0].sir_cap}, nous avons attaqué les {player[1].civ_name_plural} sans avertissement ni provocation préalables ! Ils se sentent profondément trahis par notre conduite. Pis encore, la communauté internationale met en cause notre fiabilité."
-MILITARY_PACT_BROKEN_BY_YOU       "{player[0].sir_cap}, en refusant d'envoyer des troupes sur les premières lignes des {player[1].civ_name_plural}, nous avons violé notre pacte militaire. Ils se sentent trahis."
+MILITARY_PACT_BROKEN_BY_YOU		 "{player[0].sir_cap}, en refusant d'envoyer des troupes sur les premières lignes des {player[1].civ_name_plural}, nous avons violé notre pacte militaire. Ils se sentent trahis."
 TRUST_LOSS_VIOLATED_PEACE_TREATY        "{player[0].sir_cap}, en attaquant les {player[1].civ_name_plural}, nous avons violé notre traité de paix ! Vu leur indignation, ils risquent de conseiller aux autres nations de se méfier de nous."
-ALLIANCE_BROKEN_BY_YOU            "{player[0].sir_cap}, nous avons violé notre alliance avec les {player[1].civ_name_plural} ! Ceux-ci sont furieux contre nous ! Plus aucune nation ne nous fera confiance après une telle traîtrise !"
-
+ALLIANCE_BROKEN_BY_YOU			 "{player[0].sir_cap}, nous avons violé notre alliance avec les {player[1].civ_name_plural} ! Ceux-ci sont furieux contre nous ! Plus aucune nation ne nous fera confiance après une telle traîtrise !"
 
 ### Nation-specific Trust Loss ###
 IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, nous avons accepté de respecter les frontières des {player[1].civ_name_plural}. Allez-vous vous risquer à susciter leur courroux en déplaçant des unités sur leur territoire ?"
@@ -421,16 +408,12 @@ TRUST_LOSS_FAIL_TO_REDUCE_WEAPONS       ""
 TRUST_LOSS_FAIL_TO_REDUCE_POLLUTION     ""
 TRUST_LOSS_VIOLATED_CEASE_FIRE          "{player[0].sir_cap}, nous avons violé l'accord de cessez-le-feu signé avec les {player[1].civ_name_plural}. Ils sont furieux contre nous et risquent de ne plus nous faire confiance."
 TRUST_LOSS_VIOLATED_RESEARCH_PACT       "{player[0].sir_cap}, nos récentes actions ont constitué une violation de notre pacte de recherche avec les {player[1].civ_name_plural}. Désormais, ils se méfient de nous et s'interrogent sur nos intentions."
-ECO_PACT_BROKEN_BY_YOU      "{player[0].sir_cap}, nous avons violé l'éco-pacte que nous avons signé avec {player[1].civ_name_plural}. Ceux-ci nous en veulent."
+ECO_PACT_BROKEN_BY_YOU			 "{player[0].sir_cap}, nous avons violé l'éco-pacte que nous avons signé avec {player[1].civ_name_plural}. Ceux-ci nous en veulent."
 TRUST_LOSS_VIOLATED_TRADE_PACT          "{player[0].sir_cap}, nos récentes actions nous ont contraints à renoncer au pacte commercial signé avec les {player[1].civ_name_plural}. Il s'agit d'un acte de trahison qu'ils ne sont pas près d'oublier !"
-
-
-
-WORLD_POLLUTION_FLOODING_IMMINENT       "Le réchauffement de la Terre a entraîné une montée du niveau des océans. Nos plus grands météorologues prédisent une inondation sans précédent si la pollution de l'environnement se poursuit."
 
 #Nano-Terror#
 IMMUNE_TO_NANO_TERROR_VICTIM		"Votre peuple peut à nouveau dormir sur ses deux oreilles. La ville de {city[0].name} est à l'abri des nano-attaques."
-NANO_TERROR_FAILED_VICTIM			"Nos scientifiques ont contrecarré un complot ennemi visant à saboter les usines de {city[0].name} à l'aide d'une terrible arme nano-technologique."
-NANO_TERROR_COMPLETE_VICTIM			"Des étrangers ont libéré un virus nano-technologique dans la ville de {city[0].name}."
-NANO_TERROR_FAILED_AGRESSOR			"Vos tentatives pour sauver la Terre ont avorté. Votre nano-attaque est un échec."
+NANO_TERROR_FAILED_VICTIM		"Nos scientifiques ont contrecarré un complot ennemi visant à saboter les usines de {city[0].name} à l'aide d'une terrible arme nano-technologique."
+NANO_TERROR_COMPLETE_VICTIM		"Des étrangers ont libéré un virus nano-technologique dans la ville de {city[0].name}."
+NANO_TERROR_FAILED_AGRESSOR		"Vos tentatives pour sauver la Terre ont avorté. Votre nano-attaque est un échec."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Malgré tous vos efforts, l'ennemi s'est aperçu de votre ruse. La ville que vous avez pris pour cible est immunisée contre les nano-attaques."

@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Database substructs record generator
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Members of substructs can now have default values, added by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -25,6 +56,26 @@ void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
 	dat->m_subType = subType;
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to allow struct members to have default values
+	if((!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)) &&  
+	   (dat->m_maxSize <= 0)) {                         
+		switch(dat->m_type) {
+			case DATUM_INT:
+			case DATUM_FLOAT:
+			case DATUM_STRUCT:
+			case DATUM_STRING:
+			case DATUM_FILE:
+			case DATUM_STRINGID:
+				dat->m_required = true;
+				break;
+		}
+	} else {
+		dat->SetValue(nameInfo->v);
+	}
+#endif
+
 	m_datumList.AddTail(dat);
 
 	if(dat->m_type == DATUM_BIT) {

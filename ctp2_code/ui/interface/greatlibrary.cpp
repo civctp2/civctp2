@@ -275,7 +275,11 @@ void GreatLibrary::Load_Great_Library()
 		
 		
 		const int MAX_NAME = 1024;
+#if defined(ACTIVISION_ORIGINAL)
 		const int MAX_ENTRY = 4096;
+#else
+		const int MAX_ENTRY = 8192;
+#endif
 		char the_name[MAX_NAME];
 		char the_entry[MAX_ENTRY];
 		int name_pos;

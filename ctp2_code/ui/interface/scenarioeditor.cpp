@@ -45,6 +45,7 @@
 //   slic and you switch back via the Scenario Editor to that player the game
 //   crashed, the problem is solved by deselecting everything before player
 //   changing.
+// - Added icons and tooltips to city style buttons, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -927,9 +928,26 @@ void ScenarioEditor::PopulateCityList()
 		Assert(sw);
 		if(!sw) break;
 
-		
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to give the city buttons an icon.
+		const CityStyleRecord *rec = g_theCityStyleDB->Get(cs);
+		Assert(rec);
+		if(!rec)
+			break;
+
+		const MBCHAR *iconname = rec->GetCPIcon();
+		Assert(iconname);
+		if(iconname) {
+			sw->SetImage((char *)iconname, 0);
+			sw->SetImage((char *)iconname, 1);
+		}
+#endif
 		
 		sw->SetActionFuncAndCookie(ScenarioEditor::CityStyleSwitch, (void *)cs);
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to show the according city style name in the tooltip.
+		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)rec->GetNameText());
+#endif
 		col++;
 		if(col >= k_CITY_COLS_PER_ROW) {
 			col = 0;

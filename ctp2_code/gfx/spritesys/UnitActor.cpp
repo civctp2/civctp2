@@ -28,6 +28,8 @@
 // - Fixed number of city styles removed.
 // - Prevented crashes due to uninitialised members.
 // - Prevented some NULL-dereferencing crashes.
+// - Exposed city walls and force field graphics to agecitystyle.txt, 
+//   by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -1388,12 +1390,60 @@ void UnitActor::DrawFortifying(BOOL fogged)
 void UnitActor::DrawCityWalls(BOOL fogged)
 {
 	Pixel16			*cityImage;
-	
+
+#if defined(ACTIVISION_ORIGINAL)	
 	if (0 ) {
 		cityImage = g_tiledMap->GetTileSet()->GetImprovementData(153);
 	} else {
 		cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
 	}
+#else
+	Unit		unit;
+
+	unit.m_id = GetUnitID();
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(unit.CD()->GetCityStyle());
+	if(styleRec){
+		const AgeCityStyleRecord *ageStyleRec = styleRec->GetAgeStyle(g_player[unit->GetOwner()]->m_age);
+		if(ageStyleRec){
+			const AgeCityStyleRecord::SizeSprite *spr = NULL;
+			const AgeCityStyleRecord::SizeSprite *lastTypeSpr = NULL;
+			
+			const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
+			bool isLand = !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater());
+			sint32 i;
+			sint32 p;
+
+			for(i = 0; i < ageStyleRec->GetNumSprites(); i++) {
+				if(spr = ageStyleRec->GetSprites(i)) {
+					if((isLand && spr->GetType() == 0) 
+					||(!isLand && spr->GetType() != 0)) {
+						lastTypeSpr = spr;
+						unit.CD()->GetPop(p);
+						if(spr->GetMinSize() <= p 
+						&& spr->GetMaxSize() >= p) {
+							break;
+						}
+					}
+				}
+			}
+			if(lastTypeSpr) {
+				cityImage = g_tiledMap->GetTileSet()->GetImprovementData(lastTypeSpr->GetWalls());
+			}
+			else if(spr) {
+				cityImage = g_tiledMap->GetTileSet()->GetImprovementData(spr->GetWalls());
+			}
+			else{
+				cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
+			}
+		}
+		else{
+			cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
+		}
+	}
+	else{
+		cityImage = g_tiledMap->GetTileSet()->GetImprovementData(38);
+	}
+#endif
 
 	sint32	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale()), 
 			nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
@@ -1422,6 +1472,7 @@ void UnitActor::DrawForceField(BOOL fogged)
 	sint32 which;
 	sint32 nudgeX, nudgeY;
 
+#if defined(ACTIVISION_DEFAULT)
 	if (g_theWorld->IsLand(m_pos)) {
 		nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
 		nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
@@ -1436,6 +1487,61 @@ void UnitActor::DrawForceField(BOOL fogged)
 		nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
 		which = 156;
 	}
+#else
+
+	Unit		unit;
+
+	unit.m_id = GetUnitID();
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(unit.CD()->GetCityStyle());
+	if(styleRec){
+		const AgeCityStyleRecord *ageStyleRec = styleRec->GetAgeStyle(g_player[unit->GetOwner()]->m_age);
+		if(ageStyleRec){
+			const AgeCityStyleRecord::SizeSprite *spr = NULL;
+			const AgeCityStyleRecord::SizeSprite *lastTypeSpr = NULL;
+			
+			const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
+			bool isLand = !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater());
+			sint32 i;
+			sint32 p;
+
+			for(i = 0; i < ageStyleRec->GetNumSprites(); i++) {
+				if(spr = ageStyleRec->GetSprites(i)) {
+					if((isLand && spr->GetType() == 0) 
+					||(!isLand && spr->GetType() != 0)) {
+						lastTypeSpr = spr;
+						unit.CD()->GetPop(p);
+						if(spr->GetMinSize() <= p 
+						&& spr->GetMaxSize() >= p) {
+							break;
+						}
+					}
+				}
+			}
+			if(lastTypeSpr) {
+				which = lastTypeSpr->GetForceField();
+			}
+			else if(spr) {
+				which = spr->GetForceField();
+			}
+			else{
+				which = 156;
+			}
+		}
+		else{
+			Assert(0);
+			which = 154;
+		}
+	}
+	else{
+		Assert(0);
+		which = 154;
+	}
+
+	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
+	nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
+
+#endif
+
 	
 	Pixel16 *cityImage = g_tiledMap->GetTileSet()->GetImprovementData((uint16)which);
 

@@ -1,4 +1,34 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : MP Age Screen
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Starting and ending age selection screen now uses the age names from
+//   gl_str.txt, Martin Gühmann. 
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3window.h"
@@ -188,9 +218,14 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 		const MBCHAR *name = startagestrings.GetString( i );
-
+#else
+//Added by Martin Gühmann so that no *.ldl needs to be edited
+//anymore when new ages are added.
+		const MBCHAR *name = g_theAgeDB->Get(i)->GetNameText();
+#endif
 	
 	
 	

@@ -165,22 +165,15 @@ UNIT_VETERAN 				"Als Würdigung für besondere Tapferkeit wurde {unit[0].name#PRO
 
 ## Age Change Messages ##
 AGE_ONE_ENTERED 			"Unsere Nation entsteigt den Kinderschuhen: Wir sind in das Zeitalter der Antike vorgedrungen."
-AGE_TWO_ENTERED 			"Unsere Nation schreitet einer kulturellen und wissenschaftlichen Blütezeit entgegen: Wir haben das Zeitalter der Renaissance erreicht."
-AGE_THREE_ENTERED 			"Wir haben uns auf diesem Planeten behauptet und treten nun in das Zeitalter der Moderne ein."
-AGE_FOUR_ENTERED 			"Die Entschlüsselung der Mysterien des Lebens ist in greifbare Nähe gerückt, denn unser Volk steht an der Schwelle zu einer neuen, bahnbrechenden Epoche der wissenschaftlichen Erkenntnisse: der Genetischen Ära."
-AGE_FIVE_ENTERED 			"Mit großen Schritten nähern wir uns dem Zenith des menschlichen Strebens: Unsere Nation ist in das Diamantene Zeitalter vorangeschritten."
-
-## Age Change Messages of CityMod2 ##
-#AGE_ONE_ENTERED 			"Unsere Nation entsteigt den Kinderschuhen: Wir sind in das Zeitalter der Antike vorgedrungen."
-#AGE_TWO_ENTERED 			"Erste schriftliche Quellen lösen die mündliche Überlieferung ab: Wir sind in das Klassische Zeitalter vorgedrungen."
-#AGE_THREE_ENTERED 			"Auf den Ruinen des antiken Rom wächst unsere Nation weiter: Wir haben das Mittelalter erreicht."
-#AGE_FOUR_ENTERED 			"Unsere Nation schreitet einer kulturellen und wissenschaftlichen Blütezeit entgegen: Wir haben das Zeitalter der Renaissance erreicht."
-#AGE_FIVE_ENTERED 			"Unsere Nation sieht einer Ära des bisher unbekannten Wachstums und einer noch nicht gekannten enormen Produktivität entgegen: Dank der Industriellen Revolution haben wir das Industriezeitalter erreicht."
-#AGE_SIX_ENTERED 			"Wir haben uns auf diesem Planeten behauptet und treten nun in das Zeitalter der Moderne ein."
-#AGE_SEVEN_ENTERED 			"Die Entschlüsselung der Mysterien der Wissenschaft ist in greifbare Nähe gerückt, denn unser Volk steht an der der Schwelle zu einer neuen, bahnbrechenden Epoche der wissenschaftlichen Erkenntnisse und des ungeahnten Wohlstandes entgegen: Der Computer Ära."
-#AGE_EIGHT_ENTERED 			"Die Entschlüsselung der Mysterien des Lebens ist in greifbare Nähe gerückt, denn unser Volk steht an der Schwelle zu einer neuen, bahnbrechenden Epoche der biologischen Erkenntnisse: Der Genetischen Ära."
-#AGE_NINE_ENTERED 			"Mit großen Schritten nähern wir uns dem Zenith des menschlichen Strebens: Unsere Nation ist in das Diamantene Zeitalter vorangeschritten."
-#AGE_TEN_ENTERED 			"Die Erforschung aller Technologien ist abgeschlossen: Unsere Nation sieht einer unbekannten Zukunft entgegen."
+AGE_TWO_ENTERED 			"Erste schriftliche Quellen lösen die mündliche Überlieferung ab: Wir sind in das Klassische Zeitalter vorgedrungen."
+AGE_THREE_ENTERED 			"Auf den Ruinen des antiken Rom wächst unsere Nation weiter: Wir haben das Mittelalter erreicht."
+AGE_FOUR_ENTERED 			"Unsere Nation schreitet einer kulturellen und wissenschaftlichen Blütezeit entgegen: Wir haben das Zeitalter der Renaissance erreicht."
+AGE_FIVE_ENTERED 			"Unsere Nation sieht einer Ära des bisher unbekannten Wachstums und einer noch nicht gekannten enormen Produktivität entgegen: Dank der Industriellen Revolution haben wir das Industriezeitalter erreicht."
+AGE_SIX_ENTERED 			"Wir haben uns auf diesem Planeten behauptet und treten nun in das Zeitalter der Moderne ein."
+AGE_SEVEN_ENTERED 			"Die Entschlüsselung der Mysterien der Wissenschaft ist in greifbare Nähe gerückt, denn unser Volk steht an der der Schwelle zu einer neuen, bahnbrechenden Epoche der wissenschaftlichen Erkenntnisse und des ungeahnten Wohlstandes entgegen: Der Computer Ära."
+AGE_EIGHT_ENTERED 			"Die Entschlüsselung der Mysterien des Lebens ist in greifbare Nähe gerückt, denn unser Volk steht an der Schwelle zu einer neuen, bahnbrechenden Epoche der biologischen Erkenntnisse: Der Genetischen Ära."
+AGE_NINE_ENTERED 			"Mit großen Schritten nähern wir uns dem Zenith des menschlichen Strebens: Unsere Nation ist in das Diamantene Zeitalter vorangeschritten."
+AGE_TEN_ENTERED 			"Die Erforschung aller Technologien ist abgeschlossen: Unsere Nation sieht einer unbekannten Zukunft entgegen."
 
 ##                 ##
 ## Special Actions ##
@@ -395,7 +388,7 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM 	"Wir haben soeben erfahren, dass die {playe
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
 NEXT_HOT_SEAT_PLAYER 			"{player[0].leader_name} von den {player[0].civ_name_plural#DAT}, Sie sind dran."
-#NEXT_EMAIL_PLAYER 			"Bitte senden Sie den auf Ihrem Desktop gespeicherten Spielstand an {player[0].leader_name} ({string[0].name}) von den {player[0].civ_name_plural#DAT}."
+NEXT_EMAIL_PLAYER 			"Bitte senden Sie den auf Ihrem Desktop gespeicherten Spielstand an {player[0].leader_name} ({string[0].name}) von den {player[0].civ_name_plural#DAT}."
 HOTSEAT_CITY_ATTACKED 			"Die {player[0].civ_name_plural} haben die Stadt {city[0].name} mit {unit[0].name#UNDEF_DAT} angegriffen."
 HOTSEAT_ARMY_ATTACKED 			"Die {player[0].civ_name_plural} haben {unit[1].name#PRONOUN_YOUR_ACC} mit {unit[0].name#UNDEF_DAT} angegriffen."
 
@@ -418,7 +411,7 @@ TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].leader_name#SIR_CAP}, mit unseren le
 
 #Nano-Terror#
 IMMUNE_TO_NANO_TERROR_VICTIM		"Ihre Bürger können wieder ruhig schlafen: Die Stadt {city[0].name} ist immun gegen Nanoviren-Angriffe."
-NANO_TERROR_FAILED_VICTIM			"Unsere Wissenschaftler haben die feindliche Sabotage unserer Industrieanlagen in {city[0].name} vereitelt, bei der eine teuflische Nanitenwaffe zum Einsatz kommen sollte."
-NANO_TERROR_COMPLETE_VICTIM			"Fremde Übeltäter haben in der Stadt {city[0].name} einen Nanovirus freigesetzt."
-NANO_TERROR_FAILED_AGRESSOR			"Ihr Plan zur Rettung der Welt scheint noch nicht so schnell aufzugehen: Ihr Nanoviren-Angriff ist fehlgeschlagen."
+NANO_TERROR_FAILED_VICTIM		"Unsere Wissenschaftler haben die feindliche Sabotage unserer Industrieanlagen in {city[0].name} vereitelt, bei der eine teuflische Nanitenwaffe zum Einsatz kommen sollte."
+NANO_TERROR_COMPLETE_VICTIM		"Fremde Übeltäter haben in der Stadt {city[0].name} einen Nanovirus freigesetzt."
+NANO_TERROR_FAILED_AGRESSOR		"Ihr Plan zur Rettung der Welt scheint noch nicht so schnell aufzugehen: Ihr Nanoviren-Angriff ist fehlgeschlagen."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Trotz Ihrer Vertuschungsversuche wurden Ihre Absichten durchschaut: Eine weitere feindliche Stadt wurde gegen Nanoviren-Angriffe immunisiert."

@@ -5,11 +5,14 @@ AgeCityStyle {
 		Int MinSize
 		Int MaxSize
 		Int Sprite
+		Int Walls = 38
+		Int ForceField = 154
 	}
 
 	Struct SizeSprite[] Sprites
 }
 
 CityStyle {
+	File CPIcon
 	Record AgeCityStyle[] AgeStyle
 }

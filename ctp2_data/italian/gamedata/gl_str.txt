@@ -499,6 +499,14 @@ CONCEPT_WONDERS					"Meraviglie"
 CONCEPT_WORK_HOURS				"Orario di lavoro"
 CONCEPT_WORKER					"Lavoratore"
 
+##citymod2 additions
+
+CONCEPT_CLASSIC_AGE				"Classical Age"
+CONCEPT_INDUSTRIAL_AGE				"Industrial Age"
+CONCEPT_COMPUTER_AGE				"Information Age"
+CONCEPT_FUTURE_AGE				"The Future"
+CONCEPT_MEDIEVAL_AGE				"Medieval Period"
+
 
 #### Pop STRINGS ####
 POP_WORKER					"Lavoratore"
@@ -630,3 +638,26 @@ PERSONALITY_MEDICI_DESCRIPTION			"Acuto commerciante internazionale"
 PERSONALITY_TELLER_DESCRIPTION			"Accademico ideologicamente aggressivo"
 PERSONALITY_STRANGELOVE_DESCRIPTION		"Genio del male"
 PERSONALITY_CALLENBACH_DESCRIPTION		"Populista fanatico"
+
+### Age Strings ###
+
+AGE_ONE		"Ancient"
+AGE_TWO		"Classic"
+AGE_THREE	"Middle Ages"
+AGE_FOUR	"Renaissance"
+AGE_FIVE	"Industrial"
+AGE_SIX		"Modern"
+AGE_SEVEN	"Information Age"
+AGE_EIGHT	"Genetic"
+AGE_NINE	"Diamond"
+AGE_TEN		"Future"
+
+### City Style Strings ###
+
+CITY_STYLE_ROMAN	"Roman Style"
+CITY_STYLE_ARAB		"Asian Style"
+CITY_STYLE_ASIAN	"Arabian Style"
+CITY_STYLE_AMERICAN	"American Style"
+CITY_STYLE_CASTLE	"Castle Style"
+CITY_STYLE_EGYPTAIN	"Egyptian Style"
+CITY_STYLE_PALACE	"Palace Style"
