@@ -27,6 +27,7 @@
 //
 // - Repaired memory leak or illegal access when loading a file with a 
 //   different table size.
+// - Repaired crash when computing the key of a zero-length string.
 //
 //----------------------------------------------------------------------------
 
@@ -120,6 +121,11 @@ public:
 
 template <class T> StringHash<T>::StringHash(sint32 table_size)
 {
+#if !defined(ACTIVISION_ORIGINAL)
+	// Assert validity of % and cast to uint16.
+	Assert(table_size > 0);
+	Assert(table_size < 0x10000);
+#endif
 	m_table = new StringHashNode<T> *[table_size];
 	m_table_size = table_size;
 	for(sint32 i = 0; i < table_size; i++) {
@@ -205,6 +211,8 @@ template <class T> void StringHash<T>::Serialize(ARCHIVE archive)
 
 template <class T> uint16 StringHash<T>::Key(const char *str)
 {
+#if defined(ACTIVISION_ORIGINAL)	
+	// zero-length string crash, non-standard loop scope
 	uint16 key = 0;
 	sint32 l = strlen(str);
 	for(uint16 i = 0; i < l-1; i++) {
@@ -215,6 +223,22 @@ template <class T> uint16 StringHash<T>::Key(const char *str)
 	}
 	key = uint16(sint32(key) % m_table_size);
 	return key;
+#else
+	uint16			key = 0;
+	size_t const	l	= strlen(str);
+
+	for (size_t i = 0; (i + 1) < l; ++i) 
+	{
+		key += uint16(tolower(str[i]) << 8 | tolower(str[i + 1])) + i;
+	}
+
+	if (l > 0) 
+	{
+		key += uint16(tolower(str[l - 1]) << 8) + (l - 1);
+	}
+
+	return static_cast<uint16>(key % m_table_size);
+#endif
 }
 
 template <class T> const T *StringHash<T>::Get(const char *str)
