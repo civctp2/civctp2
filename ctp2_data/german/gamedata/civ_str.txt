@@ -2261,7 +2261,7 @@ MEXICAN_COUNTRY_NAME "Mexiko"
 MEXICAN_SINGULAR "Mexikaner"
 MEXICAN_PLURAL "Mexikaner"
 
-MEXICAN_CITY_1 "Mexico Stadt"
+MEXICAN_CITY_1 "Mexiko Stadt"
 MEXICAN_CITY_2 "Gudalajara"
 MEXICAN_CITY_3 "Veracruz"
 MEXICAN_CITY_4 "Tampico"

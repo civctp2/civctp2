@@ -37,6 +37,9 @@
 // - Prevented cities to revolt twice in the same turn. By kaan.
 // - Added NeedMoreFood function to calculate whether a city should
 //   build food tile improvements, by Martin Gühmann.
+// - Removed some unused functions and added a lot new ones to be able to
+//   estimate resource production better without the need of recalculation
+//   of everything. - April 4th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -59,6 +62,8 @@
 #include "CityRadius.h"
 
 #include "MapPoint.h"
+
+#include "CitySizeRecord.h"
 
 #define k_CITYDATA_VERSION_MAJOR	0								
 #define k_CITYDATA_VERSION_MINOR	0								
@@ -278,7 +283,7 @@ class CityData : public CityRadiusCallback {
 //----------------------------------------------------------------------------
 	
     Unit m_home_city; 
-	uint8		m_min_turns_revolt;	// Number of revolt risk free turns.
+	uint8 m_min_turns_revolt;	// Number of revolt risk free turns.
     BuildQueue m_build_queue; 
     
 	TradeDynamicArray m_tradeSourceList;							
@@ -371,8 +376,8 @@ public:
 	void AddShields(sint32 s);
 
 	
-	sint32 ComputeGrossProduction( double workday_per_person, sint32 collected_production, sint32 & crime_loss, sint32 & franchise_loss ) const;
-
+	sint32 ComputeGrossProduction( double workday_per_person, sint32 collected_production, sint32 & crime_loss, sint32 & franchise_loss, bool considerOnlyFromTerrain = false ) const;
+	sint32 ProcessProduction(bool projectedOnly, sint32 &grossProduction, sint32 &collectedProduction, sint32 &crimeLoss, sint32 &franchiseLoss, bool considerOnlyFromTerrain = false) const;
     sint32 ProcessProduction(bool projectedOnly);
 	
     double ProjectMilitaryContribution();
@@ -411,16 +416,24 @@ public:
 
     
 
-    void CollectResources();
+    void   CollectResources();
+
 	sint32 ProcessFood();
-    void EatFood();
-    int FoodSupportTroops();
+	void   ProcessFood(double &foodLostToCrime, double &producedFood, double &grossFood, bool considerOnlyFromTerrain = false) const;
+	double ProcessFinalFood(double &foodLossToCrime, double &grossFood) const;
+    void   EatFood();
+    int    FoodSupportTroops();
+
 	sint32 GetBuildingOvercrowdingBonus();
 	sint32 GetBuildingMaxPopIncrease();
-	void CalculateGrowthRate();
+	void   CalculateGrowthRate();
+	double CalculateGrossGrowthRate(double &overcrowdingCoeff, double &baseRate, sint32 bonusFood = 0);
     sint32 GrowOrStarve();
 	double GetFoodRequired() const;
+	double GetFoodRequired(sint32 popCount) const;
 	double GetFoodRequiredPerCitizen() const;
+	bool   NeedMoreFood(sint32 foodBonus, sint32 &foodMissing, bool considerOnlyFromTerrain = false);
+	sint32 HowMuchMoreFoodNeeded(sint32 bonusFood = 0, bool considerOnlyFromTerrain = false);
 
 	sint32 GetAccumulatedFood() { return m_accumulated_food; }
 	sint32 SubtractAccumulatedFood(sint32 amount);
@@ -445,10 +458,9 @@ public:
 
     
     void CollectOtherTrade(const BOOL projectedOnly, BOOL changeResources = TRUE);
-    void CollectPopScience(bool projectedOnly);
     void CheckTopTen();
 	sint32 SupportBuildings(bool projectedOnly);
-	sint32 GetSupportBuildingsCost();
+	sint32 GetSupportBuildingsCost() const;
 
 	void AddTradeRoute(TradeRoute &route, BOOL fromNetwork);
 	void DelTradeRoute(TradeRoute route);
@@ -461,7 +473,7 @@ public:
 	sint32 GetLocalResourceCount(sint32 resource);
 #endif
 
-	sint32 CalcWages(sint32 wage);
+	sint32 CalcWages(sint32 wage) const;
     BOOL PayWages(sint32 wage, bool projectedOnly);
 	sint32 GetWagesNeeded(const sint32 & wages_per_person) const;
 	sint32 GetWagesNeeded();
@@ -472,6 +484,11 @@ public:
 	TradeDynamicArray* GetTradeDestinationList() { return (&m_tradeDestinationList); }
 
 	bool BreakOneSourceRoute(ROUTE_TYPE type, sint32 resource);
+
+	void CollectGold(sint32 &trade, sint32 &convertedGold, sint32 &crimeLost, bool considerOnlyFromTerrain = false) const;
+	void ProcessGold(sint32 &trade, bool considerOnlyFromTerrain = false) const;
+	void ApplyGoldCoeff(sint32 &trade) const;
+	void CalcGoldLoss(const bool projectedOnly, sint32 &trade, sint32 &convertedGold, sint32 &crimeLost) const;
 
     sint32 GetNetCityGold() const { return m_trade; } 
     sint32 GetGrossCityGold() const { return m_gross_trade; } 
@@ -532,7 +549,9 @@ public:
 	double GetDefendersBonusNoWalls() const;
 
 	// Modified by kaan to address bug # 12
+
 	void NoRevoltCountdown();
+
 	BOOL ShouldRevolt(const sint32 inciteBonus) ;					
 	void Revolt(sint32 &playerToJoin, BOOL causeIsExternal = FALSE) ;
 	void TeleportUnits(const MapPoint &pos,  BOOL &revealed_foreign_units, 
@@ -774,7 +793,7 @@ public:
 	void AiDoneMovingPops();
 
 	sint32 GetHappinessFromPops();
-	sint32 GetScienceFromPops();
+	sint32 GetScienceFromPops(bool considerOnlyFromTerrain = false) const;
 	sint32 GetGoldFromPops();
 	sint32 GetProductionFromPops();
 
@@ -842,6 +861,7 @@ public:
 	
 	void	GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const;
 	double	GetUtilisationRatio(uint32 const squaredDistance) const;
+
 	sint32 PopCount() const;
 	sint32 SpecialistCount(POP_TYPE type) const;
 	sint32 SlaveCount() const;
@@ -928,14 +948,28 @@ public:
 	
 	bool IsACopy();
 
-	void DoSupport(bool projectedOnly);
-	void SplitScience(bool projectedOnly);
+	void   DoSupport(bool projectedOnly);
+	sint32 GetSupport() const;
+	void   SplitScience(bool projectedOnly);
+	void   SplitScience(bool projectedOnly, sint32 &trade, sint32 &science, bool considerOnlyFromTerrain = false) const;
 	sint32 GetProjectedScience();
 	sint32 GetFounder() const;
 
-	bool NeedMoreFood(sint32 foodBonus, bool considerFoodOnlyFromTerrain);
+	sint32 ComputeProductionLosses(sint32 gross_production, sint32 &crime_loss, sint32 &franchise_loss) const;
+
+	double GetOvercrowding(const CitySizeRecord *rec){ 
+		return rec->GetBaseOvercrowding() + GetBuildingOvercrowdingBonus(); 
+	};
+
+	sint32 GetMaxPop(const CitySizeRecord *rec){ 
+		return rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease(); 
+	};
+
+	sint32 CrimeLoss(sint32 gross) const;
+	double CrimeLoss(double gross) const;
+
 	sint32 GetCityStyle() const;
-	void SetCityStyle(sint32 style); 
+	void   SetCityStyle(sint32 style); 
 }; 
 
 uint32 CityData_CityData_GetVersion(void) ;

@@ -29,6 +29,8 @@
 // - Added GetBestTerraformImprovement function to find the best terraform
 //   improvement. - Sep. 21st 2004 Martin Gühmann 
 // - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann 
+// - Replaced ComputeMinimumFoodWorkers by ComputeMinimumWorkers function.
+//   - April 4th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -219,11 +221,20 @@ public:
 	
 	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max);
 
-	
-	sint32 ComputeMinimumFoodWorkers(const CityData *city);
 
-	
-	
+	sint32 Governor::ComputeMinimumWorkers(const CityData *city, 
+	                                       sint32 &farmers, 
+	                                       sint32 &laborers, 
+	                                       sint32 &merchants, 
+	                                       sint32 &scientists,
+	                                       sint32 &minFood,
+	                                       sint32 &minProd,
+	                                       sint32 &minGold,
+	                                       sint32 &minScie,
+	                                       double &farmersEff,
+	                                       double &laborersEff,
+	                                       double &merchantsEff,
+	                                       double &scientistsEff);
 	
 
 	
@@ -357,11 +368,7 @@ private:
 
 	
 	
-#if defined(ACTIVSION_ORIGINAL)	
-	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const;
-#else
 	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const;
-#endif
 
 	
 	sint32 GetBestRoadImprovement(const MapPoint & pos) const;
@@ -369,12 +376,8 @@ private:
 	
 	void GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp) const;
 
-#if !defined(ACTIVSION_ORIGINAL)
 	void GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp, bool pwPerBonus) const;
-#endif
 	
-	
-
 	
 	PLAYER_INDEX m_playerId;
 

@@ -56,6 +56,11 @@
 // - Make city growth/starvation work for PBEM.
 // - Modified the bug #14 solution: use a new - debugger confirmed - message.
 // - Recompute the defense bonus when selling a building.
+// - Splitted and cleaned various functions to have better access to resource
+//   estimation without the need to recalculate everything when adjusting 
+//   population assignment for instnce. - April 4th 2005 Martin Gühmann
+// - Updated NeedMoreFood function for better estimation. 
+//   - April 4th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -195,7 +200,7 @@ extern SoundManager		*g_soundManager;
 //city creation by Scenario Editor properly
 #include "ScenarioEditor.h"
 #include "StrategyRecord.h"         // For accessing the strategy database
-#include "Diplomat.h"               // Do be able to retrieve the current strategy
+#include "Diplomat.h"               // To be able to retrieve the current strategy
 #include <algorithm>                // std::min
 
 extern void player_ActivateSpaceButton(sint32 pl);
@@ -469,7 +474,7 @@ void CityData::Serialize(CivArchive &archive)
 			m_min_turns_revolt = 0;
 		}
 	}
-    m_home_city.Serialize(archive) ;
+	m_home_city.Serialize(archive) ;
 	m_build_queue.Serialize(archive) ;
 	m_tradeSourceList.Serialize(archive);
 	m_tradeDestinationList.Serialize(archive);
@@ -550,9 +555,8 @@ void CityData::Initialize(sint32 settlerType)
 	sint32 i;
 	//Added by Martin Gühmann to make sure that also cities created by the editor
 	//have a size.
-	if((settlerType != -2) || ScenarioEditor::PlaceCityMode())
-	{
-		for(i = 0; i < numPops; i++) {
+	if((settlerType != -2) || ScenarioEditor::PlaceCityMode()){
+		for(i = 0; i < numPops; i++){
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 								   GEA_City, m_home_city,
 								   GEA_End);
@@ -644,10 +648,10 @@ void CityData::Initialize(sint32 settlerType)
 		m_cityStyle = ScenarioEditor::CityStyle();
 	}
 
-	if (name != k_CITY_NAME_UNDEFINED)	{							
-		civData->GetCityName(name, s) ;								
-		civData->UseCityName(name) ;								
-		SetName(s) ;										
+	if (name != k_CITY_NAME_UNDEFINED)	{
+		civData->GetCityName(name, s) ;
+		civData->UseCityName(name) ;
+		SetName(s) ;
 	} else {
 		
 		
@@ -794,7 +798,6 @@ void CityData::PrepareToRemove(const CAUSE_REMOVE_ARMY cause,
 
 
 void CityData::SetShieldstore (sint32 s)
-
 {
     m_shieldstore = s; 
 }
@@ -806,12 +809,12 @@ void CityData::AddShields(sint32 s)
 
 //----------------------------------------------------------------------------
 //
-// Name       : ShouldRevolt
+// Name       : CityData::ShouldRevolt
 //
 // Description: Determine whether a city should revolt.
 //
-// Parameters : inciteBonus		: extra revolt risk over the normal happiness
-//								  (e.g. from neighbouring revolting cities)
+// Parameters : inciteBonus     : extra revolt risk over the normal happiness
+//                                (e.g. from neighbouring revolting cities)
 //
 // Globals    : g_slicEngine	
 //
@@ -819,12 +822,11 @@ void CityData::AddShields(sint32 s)
 //
 // Remark(s)  : A city will not revolt
 //              - when playing the tutorial
-//				- when the civilisation is immune to revolts
+//              - when the civilisation is immune to revolts
 //              - when it has just revolted
 //              Otherwise, the revolt risk is determined by the happiness.
 //
 //----------------------------------------------------------------------------
-
 BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
 {
 	
@@ -846,7 +848,7 @@ BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
 
 //----------------------------------------------------------------------------
 //
-// Name       : NoRevoltCountdown
+// Name       : CityData::NoRevoltCountdown
 //
 // Description: Decrease the number of turns that the city is free from revolt
 //              risk.
@@ -857,11 +859,9 @@ BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
 //
 // Returns    : -
 //
-// Remark(s)  : -
+// Remark(s)  : Modified by kaan to address bug # 12
 //
 //----------------------------------------------------------------------------
-
-// Modified by kaan to address bug # 12
 void CityData::NoRevoltCountdown() 
 {
 	if (m_min_turns_revolt > 0) 
@@ -870,16 +870,8 @@ void CityData::NoRevoltCountdown()
 	}
 }	
 
-
-
-
-
-
-
-
-
 void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
-	{
+{
 	sint32	i,
 			n ;
 
@@ -1133,7 +1125,7 @@ void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units,
 
 
 void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
-	{
+{
 	TradeRoute	route ;
 
 	Unit	srcCity,
@@ -1145,28 +1137,28 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 	
 	n = m_tradeSourceList.Num() ;
 	for(i = 0; i < n; i++)
-		{
+	{
 		route = m_tradeSourceList[i] ;
 		srcCity = route.GetSource() ;
 		destCity = route.GetDestination() ;
 		if ((srcCity.GetOwner() == bannedRecipient) || (destCity.GetOwner() == bannedRecipient))
-			route.Kill(CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT) ;											
+			route.Kill(CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT) ;
 
-		}
+	}
 
 	
 	n = m_tradeDestinationList.Num() ;
 	for(i = 0; i < n; i++)
-		{
+	{
 		route = m_tradeDestinationList[i] ;
 		srcCity = route.GetSource() ;
 		destCity = route.GetDestination() ;
 		if ((srcCity.GetOwner() == bannedRecipient) && (destCity.GetOwner() == bannedRecipient))
-			route.Kill(CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT) ;										
-
-		}
+			route.Kill(CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT) ;
 
 	}
+
+}
 
 
 
@@ -1317,80 +1309,145 @@ void CityData::DoLocalPollution()
 	}
 }
 
-
-sint32 CityData::ComputeGrossProduction( double workday_per_person, sint32 collected_production, sint32 & crime_loss, sint32 & franchise_loss ) const
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ComputeGrossProduction
+//
+// Description: Calculates the production of the city for this turn and the 
+//              losses to crime and franchise dependent on workday.
+//
+// Parameters : workday_per_person:      The workday length
+//              collectedProduction:     Filled with the net production.
+//              crime_loss:              Filled with the loss due to crime.
+//              franchise_loss:          Filled with the loss to franchise.
+//              considerOnlyFromTerrain: Whether labors should be considered.
+//
+// Globals    : g_player:                The list of players
+//              g_theGovernmentDB:       The government database
+//              g_thePopDB:              The pop database
+//              g_theConstDB:            The constant database
+//
+// Returns    : sint32: The gross production including losses due bioinfection
+//
+// Remark(s)  : Use this method for estimation.
+//
+//----------------------------------------------------------------------------
+sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collected_production, sint32 & crime_loss, sint32 & franchise_loss, bool considerOnlyFromTerrain) const
 {
-
-	
-	
-	
-	
-
-	
-
-	
-	sint32 gross_production = collected_production;
-
+	double gross_production = collected_production;
 	//Added missing casts in order to remove warnings
-	gross_production = (sint32)ceil(gross_production * workday_per_person);
+	gross_production = ceil(gross_production * workday_per_person);
 
 	double prodBonus;
 	buildingutil_GetProductionPercent(GetEffectiveBuildings(), prodBonus);
-	gross_production += (sint32)ceil(gross_production * prodBonus);
+	gross_production += ceil(gross_production * prodBonus);
 
 	sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_PRODUCTION, m_owner);
-	gross_production += (sint32)ceil(double(gross_production) * (double(featPercent) / 100.0));
+	gross_production += ceil(gross_production * (static_cast<double>(featPercent) / 100.0));
 	
-	gross_production += (sint32)ceil(gross_production *
-						   (double(wonderutil_GetIncreaseProduction(g_player[m_owner]->m_builtWonders)) * 0.01));
+	gross_production += ceil(gross_production *
+						   (wonderutil_GetIncreaseProduction(g_player[m_owner]->m_builtWonders) * 0.01));
 
-	gross_production = (sint32)ceil((double)gross_production * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetProductionCoef());
+	gross_production = ceil(gross_production * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetProductionCoef());
 
-	if(m_specialistDBIndex[POP_LABORER] >= 0) {
+	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_LABORER] >= 0){
 		gross_production += LaborerCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_LABORER])->GetProduction();
 	}
 
-	if(m_bioInfectionTurns > 0) {
-		gross_production -= (sint32)ceil(double(gross_production) * g_theConstDB->GetBioInfectionProductionCoef());
+	return ComputeProductionLosses(static_cast<sint32>(gross_production), crime_loss, franchise_loss);
+}
+
+
+sint32 CityData::ComputeProductionLosses(sint32 gross_production, sint32 &crime_loss, sint32 &franchise_loss) const
+{
+
+	if(m_bioInfectionTurns > 0){
+		gross_production -= static_cast<sint32>(ceil(gross_production * g_theConstDB->GetBioInfectionProductionCoef()));
 	}
 
-	crime_loss = sint32(ceil(gross_production * m_happy->GetCrime()));
+	crime_loss = CrimeLoss(static_cast<sint32>(gross_production));
 	
-	if (crime_loss < 0) 
-		crime_loss = 0;
+	double net_production = gross_production - crime_loss;
 
-	sint32 net_production = gross_production - crime_loss;
-
-	if( m_franchise_owner >= 0 ) {
-		franchise_loss = (sint32)ceil(double(net_production) * g_theConstDB->GetFranchiseEffect());
-	}
+	if(m_franchise_owner >= 0)
+		franchise_loss = static_cast<sint32>(ceil(net_production * g_theConstDB->GetFranchiseEffect()));
 	else
 		franchise_loss = 0;
 
-
 	return gross_production;
+
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ProcessProduction
+//
+// Description: Calculates the production of the city for this turn and the 
+//              losses to crime and franchise.
+//
+// Parameters : projectedOnly: Do not add production to franchise owner and
+//                             produced items.
+//
+// Globals    : -
+//
+// Returns    : sint32: The net production of this turn.
+//
+// Remark(s)  : Use this method to recalculate production.
+//
+//----------------------------------------------------------------------------
 sint32 CityData::ProcessProduction(bool projectedOnly)
 {
-	
-	
-	m_gross_production_this_turn = 
+	m_shields_this_turn = ProcessProduction(projectedOnly, 
+	                                        m_gross_production_this_turn, 
+	                                        m_collected_production_this_turn, 
+	                                        m_shields_lost_to_crime, 
+	                                        m_productionLostToFranchise);
+	return m_shields_this_turn;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ProcessProduction
+//
+// Description: Calculates the production of the city for this turn and the 
+//              losses to crime and franchise.
+//
+// Parameters : projectedOnly:           Do not add production to franchise 
+//                                       owner and produced items.
+//              grossProduction:         The production without losses
+//              collectedProduction:     Filled with the net production.
+//              crimeLoss:               Filled with the loss due to crime
+//              franchiseLoss:           Filled with the loss to franchise
+//              considerOnlyFromTerrain: Whether labors should be considered.
+//
+// Globals    : g_player:                The list of players
+//
+// Returns    : sint32: The net production
+//
+// Remark(s)  : grossProdction is modified.
+//              Use this method to estimate the production from grossProdction.
+//
+//----------------------------------------------------------------------------
+sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, sint32 &collectedProduction, sint32 &crimeLoss, sint32 &franchiseLoss, bool considerOnlyFromTerrain) const
+{
+
+	grossProduction = 
 		ComputeGrossProduction(g_player[m_owner]->GetWorkdayPerPerson(),
-							   m_collected_production_this_turn,
-							   m_shields_lost_to_crime,
-							   m_productionLostToFranchise);
+							   collectedProduction,
+							   crimeLoss,
+							   franchiseLoss,
+		                       considerOnlyFromTerrain);
 	
-	m_shields_this_turn = m_gross_production_this_turn -
-		(m_shields_lost_to_crime + m_productionLostToFranchise);
+	sint32 shields = grossProduction -
+		(crimeLoss + franchiseLoss);
 
 	if( m_franchise_owner >= 0 ) {
 		if(!projectedOnly)
-			g_player[m_franchise_owner]->AddProductionFromFranchise(m_productionLostToFranchise);
+			g_player[m_franchise_owner]->AddProductionFromFranchise(franchiseLoss);
 	}
 
-	return m_shields_this_turn;
+	return shields;
 }
 
 double CityData::ProjectMilitaryContribution()
@@ -1530,7 +1587,6 @@ void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) co
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 {
 	sint32			fullSquaredRadius;
@@ -1556,6 +1612,7 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 	{
 		sint32 const	dbIndex			= 
 			std::min<sint32>(m_workerFullUtilizationIndex, dbMaxIndex - 1);
+
 		fullRingWorkers = g_theCitySizeDB->Get(dbIndex)->GetMaxWorkers();
 	}
 
@@ -1581,7 +1638,22 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 		     static_cast<double>(maxRingWorkers - fullRingWorkers);
 }
 
-void CityData::CollectResources()
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CollectResources
+//
+// Description: Collects the resources food, production and gold from the field.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void CityData::CollectResources() 
 {
 	sint32 fullFoodTerrainTotal = 0;
 	sint32 partFoodTerrainTotal = 0;
@@ -1627,7 +1699,6 @@ void CityData::CollectResources()
 		}
 	}
 
-	
 	double const	utilizationRatio	= GetUtilisationRatio(partSquaredRadius);
 
 	m_max_food_from_terrain = fullFoodTerrainTotal + partFoodTerrainTotal;
@@ -1652,54 +1723,199 @@ void CityData::CollectResources()
 
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ProcessFood
+//
+// Description: Calculates the food production of the city.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : Returns the amount of food produced this turn.
+//
+// Remark(s)  : Use this function if the growth rate should be recalculated.
+//
+//----------------------------------------------------------------------------
 sint32 CityData::ProcessFood()
 {
-	
+	ProcessFood(m_food_lost_to_crime, 
+	            m_food_produced_this_turn, 
+	            m_gross_food_this_turn);
+
+	return static_cast<sint32>(m_food_produced_this_turn);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ProcessFood
+//
+// Description: Calculates the food production of a city.
+//
+// Parameters : foodLostToCrime:         Filled with the amount of food lost
+//                                       to crime.
+//              producedFood:            Filled with the amount of food 
+//                                       produced actually.
+//              grossFood:               Hypothetical food production without
+//                                       crime lost
+//              considerOnlyFromTerrain: Consider only food from terrain 
+//                                       not from farmers
+//
+// Globals    : g_thePlayer:  List of players
+//              g_thePopDB:   The population database
+//
+// Returns    : -
+//
+// Remark(s)  : producedFood is the input and output parameter at the same time.
+//              Use this method for estimations.
+//
+//----------------------------------------------------------------------------
+void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double &grossFood, bool considerOnlyFromTerrain) const{
+
 	double foodBonus;
 	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus);
-	m_gross_food_this_turn += m_food_produced_this_turn * foodBonus;
-
-	m_gross_food_this_turn += sint32(ceil(((double)m_gross_food_this_turn * 
-		double(double(wonderutil_GetIncreaseFoodAllCities(
-			g_player[m_owner]->m_builtWonders)) / 100.0))));
+	grossFood += producedFood * foodBonus;
 	
+	grossFood += ceil(grossFood * 
+		static_cast<double>(wonderutil_GetIncreaseFoodAllCities(
+			g_player[m_owner]->m_builtWonders) / 100.0));
 
-	if(m_specialistDBIndex[POP_FARMER] >= 0) {
-		m_gross_food_this_turn += FarmerCount() *
+	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_FARMER] >= 0) {
+		grossFood += FarmerCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_FARMER])->GetFood();
 	}
 
-	m_gross_food_this_turn = sint32(ceil((double)m_gross_food_this_turn * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetFoodCoef()));
+	producedFood = ProcessFinalFood(foodLostToCrime, grossFood);
 
-	m_food_produced_this_turn = m_gross_food_this_turn;
-
-	m_food_lost_to_crime = floor(m_food_produced_this_turn * m_happy->GetCrime());
-	
-	if (m_food_lost_to_crime < 0)
-		m_food_lost_to_crime = 0;
-
-    m_food_produced_this_turn -= m_food_lost_to_crime;
-
-	return (sint32)m_food_produced_this_turn;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ProcessFinalFood
+//
+// Description: Calculates the food production that is common for terrain food
+//              and pop food..
+//
+// Parameters : foodLossToCrime: Crime loss
+//              grossFood:       Food before crime deduction
+//
+// Globals    : -
+//
+// Returns    : Returns the amount of food produced this turn on the base of
+//              grossFood.
+//
+// Remark(s)  : foodLossToCrime and grossFood are modified
+//
+//----------------------------------------------------------------------------
+double CityData::ProcessFinalFood(double &foodLossToCrime, double &grossFood) const{
+
+	grossFood = ceil(grossFood * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetFoodCoef());
+
+	double producedFood = grossFood;
+
+	foodLossToCrime = CrimeLoss(producedFood);
+	
+	producedFood -= foodLossToCrime;
+
+	return producedFood;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetFoodRequiredPerCitizen
+//
+// Description: Gets the current rations for each person.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : double: The rations amount for each person.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 double CityData::GetFoodRequiredPerCitizen() const
 {
 	return g_player[m_owner]->GetRationsPerPerson();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetFoodRequired
+//
+// Description: Gets the raw amount of food required for the city.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : double: The amount of food needed in this turn
+//
+// Remark(s)  : Slaves don't need rations.
+//
+//----------------------------------------------------------------------------
 double CityData::GetFoodRequired() const
 {
-	
-    return (PopCount() - SlaveCount()) * GetFoodRequiredPerCitizen();
+	return GetFoodRequired(PopCount() - SlaveCount());
 }
-	
-void CityData::EatFood()
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetFoodRequired
+//
+// Description: Gets the raw amount of food required for the city.
+//
+// Parameters : popCount: Amount of pops for that the needed food 
+//                        should be calculated.
+//
+// Globals    : -
+//
+// Returns    : double: The amount of food needed in this turn
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+double CityData::GetFoodRequired(sint32 popCount) const
+{
+	return popCount * GetFoodRequiredPerCitizen();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::EatFood
+//
+// Description: Calculates the amount of food that is left and is consumed
+//              this turn.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void CityData::EatFood()
 {
     m_food_consumed_this_turn = GetFoodRequired();
 
     m_food_delta = m_food_produced_this_turn - m_food_consumed_this_turn;
+
+	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
+	sint32 maxSurplusFood = rec->GetMaxSurplusFood();
+
+	if(m_food_delta < 0) {
+		if(m_food_delta < -maxSurplusFood)
+			m_food_delta = -maxSurplusFood;
+	}
+	else{
+		if(m_food_delta > maxSurplusFood)
+			m_food_delta = maxSurplusFood;
+	}
+
 }
 
 sint32 CityData::GetBuildingOvercrowdingBonus()
@@ -1717,64 +1933,99 @@ sint32 CityData::GetBuildingMaxPopIncrease()
 	return level;
 }
 
-void CityData::CalculateGrowthRate()
-{ 
-	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CalculateGrowthRate
+//
+// Description: Calculates the growth rate of the city.
+//
+// Parameters : -
+//
+// Globals    : g_theConstDB:   The constant database
+//
+// Returns    : -
+//
+// Remark(s)  : Use this function if the growth rate should be recalculated.
+//
+//----------------------------------------------------------------------------
+void CityData::CalculateGrowthRate(){
 
-	double maxGrowthRate = (double)rec->GetGrowthRate();
-	double minGrowthRate = (double)rec->GetMinGrowthRate();
-	sint32 maxSurplusFood = rec->GetMaxSurplusFood();
-
-	double minPop;
-	if(m_sizeIndex < 1) {
-		minPop = 0;
-	} else {
-		minPop = (double)g_theCitySizeDB->Get(m_sizeIndex - 1)->GetPopulation() + 1.0;
-	}
-
-	double overcrowding = rec->GetBaseOvercrowding();
-	overcrowding += GetBuildingOvercrowdingBonus();
 	double baseRate;
-	sint32 baseMaxPop = rec->GetBaseMaxPop();
-	sint32 maxPop = baseMaxPop + GetBuildingMaxPopIncrease();
-	
-	if(PopCount() < overcrowding) {
-		baseRate = maxGrowthRate;
-		m_overcrowdingCoeff = 1;
-	} else {
-		double popRatio = double(PopCount() - overcrowding) / double(maxPop - overcrowding);
-		m_overcrowdingCoeff = 1 - (popRatio * popRatio);
-		baseRate = m_overcrowdingCoeff * maxGrowthRate;
-	}
+	m_growth_rate = static_cast<sint32>(CalculateGrossGrowthRate(m_overcrowdingCoeff, baseRate));
 
-	if(m_food_delta < 0) {
-		
-		if(m_food_delta < -maxSurplusFood)
-			m_food_delta = -maxSurplusFood;
-
-		
-		
-		
-		double maxPop = (double)rec->GetPopulation();
-		double popScale = ((double)PopCount() - minPop) / (maxPop - minPop);
-		double growthRate = maxGrowthRate - popScale * (maxGrowthRate - minGrowthRate);
-		
-		
-		m_growth_rate = sint32(double(double(m_food_delta) / (double)maxSurplusFood) * growthRate);
-	} else {
-		if(m_food_delta > maxSurplusFood)
-			m_food_delta = maxSurplusFood;
-		
-		m_growth_rate = sint32(baseRate * (double(m_food_delta) / double(PopCount())));
+	if(m_food_delta >= 0) {
+		m_growth_rate = static_cast<sint32>(baseRate * m_growth_rate);
 		if(m_growth_rate > g_theConstDB->GetMaxAbsoluteGrowthRate())
 			m_growth_rate = g_theConstDB->GetMaxAbsoluteGrowthRate();
 
-		if(m_population > g_theCitySizeDB->Get(g_theCitySizeDB->NumRecords() - 1)->GetPopulation()) {
+		if(m_population > g_theCitySizeDB->Get(g_theCitySizeDB->NumRecords() - 1)->GetPopulation())
 			m_growth_rate = 0;
-		}
 
 		if(m_is_rioting)
 			m_growth_rate = 0;
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CalculateGrossGrowthRate
+//
+// Description: Calculates the growth rate of the city.
+//
+// Parameters : overcrowdingCoeff: Filled with overcrowding coefficient
+//              baseRate:          Filled with the maximal growth rate
+//              bonusFood:         Additional food for the calculation
+//
+// Globals    : g_theCitySizeDB:   The city size database
+//
+// Returns    : Returns the amount of fractional population added with the 
+//              given food amount each turn.
+//
+// Remark(s)  : Use this method to estimate effects.
+//              Effects like rioting, max. city size, abs. growth rate 
+//              are not considered.
+//
+//----------------------------------------------------------------------------
+double CityData::CalculateGrossGrowthRate(double &overcrowdingCoeff, double &baseRate, sint32 bonusFood)
+{
+	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
+
+	double maxGrowthRate = static_cast<double>(rec->GetGrowthRate());
+	double minGrowthRate = static_cast<double>(rec->GetMinGrowthRate());
+	sint32 maxSurplusFood = rec->GetMaxSurplusFood();
+
+	double minPop;
+	if(m_sizeIndex < 1){
+		minPop = 0;
+	}
+	else{
+		minPop = static_cast<double>(g_theCitySizeDB->Get(m_sizeIndex - 1)->GetPopulation()) + 1.0;
+	}
+
+	double overcrowding = GetOvercrowding(rec);
+	sint32 maxPop = GetMaxPop(rec);
+	
+	if(PopCount() < overcrowding){
+		baseRate = maxGrowthRate;
+		overcrowdingCoeff = 1;
+	} 
+	else{
+		double popRatio = static_cast<double>(PopCount() - overcrowding) / static_cast<double>(maxPop - overcrowding);
+		overcrowdingCoeff = 1 - (popRatio * popRatio);
+		baseRate = overcrowdingCoeff * maxGrowthRate;
+	}
+
+	if(m_food_delta + bonusFood < 0){
+
+		double maxPop = static_cast<double>(rec->GetPopulation());
+		double popScale = (static_cast<double>(PopCount()) - minPop) / (maxPop - minPop);
+		double growthRate = maxGrowthRate - popScale * (maxGrowthRate - minGrowthRate);
+
+		return(((m_food_delta + bonusFood) / static_cast<double>(maxSurplusFood)) * growthRate);
+
+	} 
+	else{
+		return((m_food_delta + bonusFood) / static_cast<double>(PopCount()));
 	}
 }
 
@@ -2033,17 +2284,23 @@ sint32 CityData::CalculateGoldFromResources()
 	return m_goldFromTradeRoutes;
 }
 
-
-void CityData::CollectPopScience(bool projectedOnly)
-{
-	Assert(FALSE);
-
-   m_science = GetScienceFromPops();
-
-   if(!projectedOnly)
-	   g_player[m_owner]->AddPopScience(m_science);
-}
-
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::SupportBuildings
+//
+// Description: Pays the building support costs and sells buildings if
+//              necessary.
+//
+// Parameters : projectedOnly: Whether costs should be paid or just be
+//                             estimated.
+//
+// Globals    : -
+//
+// Returns    : The building upkeep costs
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 CityData::SupportBuildings(bool projectedOnly)
 {
 
@@ -2080,29 +2337,65 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 	return buildingUpkeep;
 }
 
-sint32 CityData::GetSupportBuildingsCost()
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetSupportBuildingsCost
+//
+// Description: Determine whether a city should revolt.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : The amount of gold to pay in this turn
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 CityData::GetSupportBuildingsCost() const
 {
-	
 	sint32 wonderLevel = wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
-
 	
-	sint32 buildingUpkeep = buildingutil_GetTotalUpkeep(m_built_improvements, wonderLevel);
-
-	
-	return buildingUpkeep;
+	return buildingutil_GetTotalUpkeep(m_built_improvements, wonderLevel);
 }
 
-sint32 CityData::CalcWages(sint32 wage)
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CalcWages
+//
+// Description: Calculates the wages needed for this turn.
+//
+// Parameters : wage: The amount of wages for one pop
+//
+// Globals    : -	
+//
+// Returns    : The amount of wages needed for this turn
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 CityData::CalcWages(sint32 wage) const
 {
-    int n;
-	sint32 totalWages = 0;
-
-    n = PopCount(); 
-	totalWages += wage * (n - SlaveCount());
-
-	return totalWages;
+	return wage * (PopCount() - SlaveCount());
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ShouldRevolt
+//
+// Description: Pays the wages.
+//
+// Parameters : wage:          The amount of wages for one pop
+//              projectedOnly: Whether wages should be paid or only estimated.
+//
+// Globals    : g_player:      List of players	
+//
+// Returns    : Whether the player can afford to pay wages
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 BOOL CityData::PayWages(sint32 wage, bool projectedOnly)
 {
 	m_wages_paid = CalcWages(wage);
@@ -2123,17 +2416,44 @@ BOOL CityData::PayWages(sint32 wage, bool projectedOnly)
     return TRUE; 
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetWagesNeeded
+//
+// Description: Calculates the wages needed for this turn.
+//
+// Parameters : wages_per_person: The amount of wages for one pop
+//
+// Globals    : -	
+//
+// Returns    : The amount of wages needed for this turn
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 CityData::GetWagesNeeded(const sint32 & wages_per_person) const
 {
-    sint32 total_pop = PopCount(); 
-	sint32 totalWages = wages_per_person * (total_pop - SlaveCount());
-
-	return totalWages;
+	return wages_per_person * (PopCount() - SlaveCount());
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetWagesNeeded
+//
+// Description: Calculates the wages needed for this turn.
+//
+// Parameters : -
+//
+// Globals    : g_player: List of players	
+//
+// Returns    : The amount of wages needed for this turn
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 CityData::GetWagesNeeded()
 {
-	return GetWagesNeeded((sint32)g_player[m_owner]->GetWagesPerPerson());
+	return GetWagesNeeded(static_cast<sint32>(g_player[m_owner]->GetWagesPerPerson()));
 }
 
 void CityData::AddTradeRoute(TradeRoute &route, BOOL fromNetwork)
@@ -2531,7 +2851,7 @@ void CityData::CalcHappiness(sint32 &virtualGoldSpent, BOOL isFirstPass)
 		n = PopCount();
 	}
 
-    sint32 delta_martial_law; 
+    sint32 delta_martial_law;
     m_happy->CalcHappiness(*this, FALSE, delta_martial_law, isFirstPass);
 }
 
@@ -4323,10 +4643,29 @@ BOOL CityData::CanHaveUIPopType(sint32 uitype) const
 	return TRUE;
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CanBuildUnit
+//
+// Description: Checks whether the city can build the unit specified by type.
+//
+// Parameters : type: The unit type for that is checked whether the city can 
+//              build it.
+//
+// Globals    : g_player:     The list of players
+//              g_theUnitDB:  The unit database
+//              g_slicEngine: The slic engine
+//              g_theWorld:   The world prperties
+//
+// Returns    : Whether the city can build the unit specified by type.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 BOOL CityData::CanBuildUnit(sint32 type) const
 {
-
+#if defined(ACTCIVSION_ORIGINAL)
+// Removed by Martin Gühmann same code in Player::CanBuildUnit
 	const UnitRecord *rec = g_theUnitDB->Get(type);
 	if(!rec)
 		return FALSE;
@@ -4410,6 +4749,19 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 	   !wonderutil_GetParkRangersEnabled(g_theWonderTracker->GetBuiltWonders())) {
 		return FALSE;
 	}
+#else
+// Added by Martin Gühmann
+	if(!g_player[m_owner]->CanBuildUnit(type))
+		return FALSE;
+
+	const UnitRecord *rec = g_theUnitDB->Get(type);
+	if(!rec)
+		return FALSE;
+
+	MapPoint pos;
+	m_home_city.GetPos(pos);
+
+#endif
 
 	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, TRUE, m_home_city.m_id, rec->GetIndex()))
 		return FALSE;
@@ -4764,7 +5116,7 @@ void CityData::ContributeScience(double incomePercent,
 	
 }
 
-sint32 CityData::TurnsToNextPop( void )
+sint32 CityData::TurnsToNextPop( void )// Not used anywhere
 {
 	sint32 food = 0, netFood;
 	sint32 tempAccum = m_accumulated_food;
@@ -4851,6 +5203,7 @@ sint32 CityData::GetHappinessFromPops()
    return happy;
 }
 
+#if defined(ACTIVISION_ORIGINAL)
 sint32 CityData::GetScienceFromPops()
 {
 	sint32 sci = 0;
@@ -4881,6 +5234,56 @@ sint32 CityData::GetScienceFromPops()
 
 	return sci;
 }
+#else
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetScienceFromPops
+//
+// Description: Calculates the amount of science that is generated from 
+//              specialists.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
+{
+	double sci = 0.0;
+
+	double popWonderModifier = static_cast<double>(wonderutil_GetIncreaseScientists(m_builtWonders));
+	popWonderModifier += static_cast<double>(wonderutil_GetIncreaseSpecialists(g_player[m_owner]->m_builtWonders));
+	
+	if(popWonderModifier && m_specialistDBIndex[POP_SCIENTIST] >= 0 
+	&& m_specialistDBIndex[POP_SCIENTIST] < g_thePopDB->NumRecords()
+	){
+		sci += popWonderModifier * 
+					  g_thePopDB->Get(m_specialistDBIndex[POP_SCIENTIST])->GetScience();
+	}
+
+	sci += buildingutil_GetIncreaseSciencePerPop(GetEffectiveBuildings()) * static_cast<double>(PopCount() - SlaveCount());
+
+	double p;
+	buildingutil_GetSciencePercent(GetEffectiveBuildings(), p);
+	sci += sci * p;
+	sci = sci * g_player[m_home_city.GetOwner()]->GetKnowledgeCoef();
+	sci += sci * static_cast<double>(wonderutil_GetIncreaseKnowledgePercentage(g_player[m_home_city.GetOwner()]->GetBuiltWonders())) / 100.0;
+	
+	if(!considerOnlyFromTerrain
+	&& m_specialistDBIndex[POP_SCIENTIST] >= 0 
+	&& m_specialistDBIndex[POP_SCIENTIST] < g_thePopDB->NumRecords()) {
+		sci += ScientistCount() * 
+					  g_thePopDB->Get(m_specialistDBIndex[POP_SCIENTIST])->GetScience();
+	}
+
+	return static_cast<sint32>(sci);
+}
+#endif
 
 sint32 CityData::GetNumPop() const
 { 
@@ -5811,7 +6214,6 @@ void CityData::AddSellBuilding(sint32 building)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 bool CityData::PayForBuyFront()
 {
 	Player *		player	= g_player[m_owner];
@@ -6002,68 +6404,113 @@ void CityData::DoSupport(bool projectedOnly)
 	SupportBuildings(projectedOnly);
 }
 
+sint32 CityData::GetSupport() const
+{
+	Assert(g_player[m_owner]);
+	if (g_player[m_owner] == NULL)
+		return 0;
+
+	sint32 support = CalcWages(static_cast<sint32>(g_player[m_owner]->GetWagesPerPerson()));
+	support += GetSupportBuildingsCost();
+
+	return support;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::SplitScience
+//
+// Description: Calculates the player's amount of generated science.
+//
+// Parameters : projectedOnly:           Has no effect here.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Use this function for science recalculation.
+//
+//----------------------------------------------------------------------------
 void CityData::SplitScience(bool projectedOnly)
 {
-	sint32 baseTrade = m_trade;
-	if(baseTrade <= 0) {
-		baseTrade = 0;
-	}
+	SplitScience(projectedOnly, m_trade, m_science);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::SplitScience
+//
+// Description: Calculates the player's amount of generated science.
+//
+// Parameters : projectedOnly:           Has no effect here.
+//              trade:                   Amount of gross gold.
+//              science:                 Filled with the amount of science
+//                                       generated here.
+//              considerOnlyFromTerrain: Whether scientists should be considered.
+//
+// Globals    : g_player:            List of players
+//
+// Returns    : -
+//
+// Remark(s)  : trade is modified by this method.
+//              Use this function for estimations.
+//
+//----------------------------------------------------------------------------
+void CityData::SplitScience(bool projectedOnly, sint32 &trade, sint32 &science, bool considerOnlyFromTerrain) const
+{
 	if (g_player[m_owner]==NULL)
 		return;
 
+	sint32 baseTrade = trade;
+	if(baseTrade <= 0) {
+		baseTrade = 0;
+	}
+
 	double s, ws;
 	g_player[m_owner]->m_tax_rate->GetScienceTaxRate(s);
-	m_science = (sint32)(ceil(double(baseTrade) * s));
-	m_trade -= m_science;
+	science = static_cast<sint32>(ceil(baseTrade * s));
+	trade -= science;
 
 	
 	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s);
-	m_science += sint32(ceil(double(m_science) * s));
+	science += static_cast<sint32>(ceil(science * s));
 
-	ws = 0.01 * double(wonderutil_GetIncreaseKnowledgePercentage(g_player[m_owner]->GetBuiltWonders()));
-	m_science += (sint32)ceil(double(m_science) * ws);
+	ws = 0.01 * wonderutil_GetIncreaseKnowledgePercentage(g_player[m_owner]->GetBuiltWonders());
+	science += static_cast<sint32>(ceil(science * ws));
 
-	m_science += GetScienceFromPops();
+	science += GetScienceFromPops(considerOnlyFromTerrain);
 	
-	m_science = m_science - sint32(ceil(double(m_science) * m_happy->GetCrime()));
-	m_science = sint32(ceil(double(m_science) * g_player[m_owner]->GetKnowledgeCoef()));
+	science -= CrimeLoss(science);
+	science = static_cast<sint32>(ceil(science * g_player[m_owner]->GetKnowledgeCoef()));
 
-  	DPRINTF(k_DBG_GAMESTATE, ("SplitScience: %lx: %d, %lf, %lf, %d, %lf, %lf\n", m_home_city.m_id, m_science,
-  							  g_player[m_owner]->GetKnowledgeCoef(),
-  							  m_happy->GetCrime(),
-  							  GetScienceFromPops(),
-  							  ws, s));
+//  Just clutters debug log, if you need this kind of information uncomment this.
+//	DPRINTF(k_DBG_GAMESTATE, ("SplitScience: %lx: %d, %lf, %lf, %d, %lf, %lf\n", m_home_city.m_id, science,
+//	                          g_player[m_owner]->GetKnowledgeCoef(),
+//	                          m_happy->GetCrime(),
+//	                          GetScienceFromPops(considerOnlyFromTerrain),
+//	                          ws, s));
 
-	
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CollectOtherTrade
+//
+// Description: Computes the amount of gold production of the city.
+//
+// Parameters : projectedOnly:   Whether all income and lossed should be paid.
+//              changeResources: Whether trade routes should be changed.
+//
+// Globals    : g_player:            List of players
+//
+// Returns    : -
+//
+// Remark(s)  : Use this method if you want to change the gold production.
+//
+//----------------------------------------------------------------------------
 void CityData::CollectOtherTrade(const BOOL projectedOnly, BOOL changeResources)
 {
-	
-	if (m_trade > 0) {  
-		
-		double tradeBonus;
-		buildingutil_GetCommercePercent(GetEffectiveBuildings(), tradeBonus, m_owner);
-		m_trade += sint32(m_trade * tradeBonus);
-
-		
-		
-		
-
-		sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_COMMERCE, m_owner);
-		m_trade += sint32(double(m_trade) * (double(featPercent) / 100.0));
-	}
-
-	
-	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
-	m_trade += goldPerCitizen * PopCount();
-
-	
-	if(m_specialistDBIndex[POP_MERCHANT] >= 0) {
-		m_trade += MerchantCount() *
-			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT])->GetCommerce();
-	}
-
+	ProcessGold(m_trade);
 	
 	if(changeResources) {
 		m_trade += CalculateTradeRoutes(projectedOnly);
@@ -6073,79 +6520,181 @@ void CityData::CollectOtherTrade(const BOOL projectedOnly, BOOL changeResources)
 		m_trade += CalculateGoldFromResources();
 	}
 
-	
-	if (m_trade > 0) { 
-		
-		m_trade = sint32(double(m_trade) * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetGoldCoef());
-	}
-	
-	
+	ApplyGoldCoeff(m_trade);
+
 	m_trade += m_gold_from_capitalization;
 
-	
-    m_convertedGold = 0;
+	CalcGoldLoss(projectedOnly, m_trade, m_convertedGold, m_trade_lost_to_crime);
+
+	if(!projectedOnly) {
+		g_player[m_owner]->m_gold->AddIncome(m_trade);
+	}	
+
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CollectGold
+//
+// Description: Applys the commerce boni of buildings and feats. 
+//
+// Parameters : trade:                   Amount of gross gold.
+//              convertedGold:           Filled with the amount of gold lost 
+//                                       to convertion.
+//              crimeLost:               Filled with the amount of gold lost 
+//                                       to crime.
+//              considerOnlyFromTerrain: Whether merchants should be considered.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : trade is modified.
+//              Use this method if you want to estimate the amount of gold
+//              that is produced.
+//
+//----------------------------------------------------------------------------
+void CityData::CollectGold(sint32 &trade, sint32 &convertedGold, sint32 &crimeLost, bool considerOnlyFromTerrain) const
+{
+	ProcessGold(trade, considerOnlyFromTerrain);
+	ApplyGoldCoeff(trade);
+	CalcGoldLoss(true, trade, convertedGold, crimeLost);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CalcGoldLoss
+//
+// Description: Applys the commerce boni of buildings and feats. 
+//
+// Parameters : trade:                   Amount of gross gold.
+//              considerOnlyFromTerrain: Whether merchants should be considered.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Trade is modified.
+//
+//----------------------------------------------------------------------------
+void CityData::ProcessGold(sint32 &trade, bool considerOnlyFromTerrain) const
+{
+	if(trade > 0) {
+		
+		double tradeBonus;
+		buildingutil_GetCommercePercent(GetEffectiveBuildings(), tradeBonus, m_owner);
+		trade += static_cast<sint32>(trade * tradeBonus);
+
+		sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_COMMERCE, m_owner);
+		trade += static_cast<sint32>(trade * featPercent / 100.0);
+	}
+
+	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
+	trade += goldPerCitizen * PopCount();
+
+	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_MERCHANT] >= 0) {
+		trade += MerchantCount() *
+			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT])->GetCommerce();
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ApplyGoldCoeff
+//
+// Description: Modifys the given amount of gold by the player's government
+//              gold coeffiecient.
+//
+// Parameters : trade:         Amount of gross gold.
+//
+// Globals    : g_player:            List of players
+//              g_theGovernmentDB:   The government databse
+//
+// Returns    : -
+//
+// Remark(s)  : Trade is modified by this method.
+//
+//----------------------------------------------------------------------------
+void CityData::ApplyGoldCoeff(sint32 &trade) const
+{
+	if(trade > 0) {
+		trade = static_cast<sint32>(trade * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetGoldCoef());
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CalcGoldLoss
+//
+// Description: Gets the player's index of the founder of the city.
+//
+// Parameters : projectedOnly: Whether the convertion owner should be paid.
+//              trade:         Amount of gross gold.
+//              convertedGold: Filled with the amount of gold lost to convertion.
+//              crimeLost:     Filled with the amount of gold lost to crime.
+//
+// Globals    : g_player:            List of players
+//              g_theConstDB:        The constant databse
+//
+// Returns    : -
+//
+// Remark(s)  : Amount of loss is deducted from trade. 
+//              Use projectedOnly if you just want to check the values.
+//
+//----------------------------------------------------------------------------
+void CityData::CalcGoldLoss(const bool projectedOnly, sint32 &trade, sint32 &convertedGold, sint32 &crimeLost) const
+{
+    convertedGold = 0;
 	if(m_convertedTo >= 0) {
 		if(m_convertedBy == CONVERTED_BY_CLERIC) {
-			m_convertedGold = sint32(double(m_trade) * g_theConstDB->ClericConversionFactor());
+			convertedGold = static_cast<sint32>(trade * g_theConstDB->ClericConversionFactor());
 		} else if(m_convertedBy == CONVERTED_BY_TELEVANGELIST) {
 			sint32 doubleTelevangelists;
 			buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings(), doubleTelevangelists);
 			if(doubleTelevangelists) {
-				m_convertedGold = sint32(double(m_trade) * g_theConstDB->TelevangelistConversionFactor());
+				convertedGold = static_cast<sint32>(trade * g_theConstDB->TelevangelistConversionFactor());
 			} else {
-				m_convertedGold = sint32(double(m_trade) * g_theConstDB->ClericConversionFactor());
+				convertedGold = static_cast<sint32>(trade * g_theConstDB->ClericConversionFactor());
 			}
 		} else {
-#pragma warning (disable : 4127)									
 			Assert(FALSE);
-#pragma warning (default : 4127)									
 		}
-		if(m_convertedGold < 1)  
-			m_convertedGold = 1;
+		if(convertedGold < 1)
+			convertedGold = 1;
 
 		if (g_player[m_convertedTo]) {
 			sint32 wonderIncrease = wonderutil_GetIncreaseConvertedCitiesFeePercentage(g_player[m_convertedTo]->m_builtWonders);
 			if(wonderIncrease > 0) {
-				m_convertedGold += (m_convertedGold * wonderIncrease) / 100;
+				convertedGold += (convertedGold * wonderIncrease) / 100;
 			}
 		}
 
-		m_trade -= m_convertedGold;
+		trade -= convertedGold;
 
 		if(!projectedOnly) {
 			DPRINTF(k_DBG_GAMESTATE, ("Sending %d gold to player %d due to conversion\n",
-									  m_convertedGold, m_convertedTo));
+									  convertedGold, m_convertedTo));
 			if (g_player[m_convertedTo]) {
-				g_player[m_convertedTo]->AddGold(m_convertedGold);
+				g_player[m_convertedTo]->AddGold(convertedGold);
 			}
 		}
 	}
 
+	crimeLost = CrimeLoss(trade);
+	trade -= crimeLost;
 
-	
-	m_trade_lost_to_crime = int(m_trade * m_happy->GetCrime());
-
-	
-	if (m_trade_lost_to_crime < 0)
-		m_trade_lost_to_crime = 0;
-
-    m_trade -= m_trade_lost_to_crime;
-
-
-	
 	if(!projectedOnly) {
 		g_player[m_owner]->m_gold->AddIncome(m_trade);
-	}	
+	}
 }
 
 sint32 CityData::GetProjectedScience()
 {
-	
-	//Added casts
-	sint32 grossFood = (sint32)m_gross_food_this_turn;
+	// Bad design needs to be redesigned
+	double grossFood = m_gross_food_this_turn;
 	sint32 collectedProduction = m_collected_production_this_turn;
 	sint32 grossTrade = m_gross_trade;
-	sint32 foodThisTurn = (sint32)m_food_produced_this_turn;
+	double foodThisTurn = m_food_produced_this_turn;
 	sint32 trade = m_trade;
 	sint32 science = m_science;
 	sint32 wagesPaid = m_wages_paid;
@@ -6168,11 +6717,25 @@ sint32 CityData::GetProjectedScience()
 	return scienceReturn;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetFounder
+//
+// Description: Gets the index of the player who founded the city.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : The index of the player who founded the city
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 CityData::GetFounder() const
 {
 	return m_founder;
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -6181,11 +6744,14 @@ sint32 CityData::GetFounder() const
 // Description: Checks whether a new food terrain improvement should be 
 //              built in the area of the according city.
 //
-// Parameters : -
+// Parameters : bonusFood:               Additional food that should be 
+//                                       taken into the consideration
+//              foodMissing:             Filled with the amount of 
+//                                       missing food during calculation
+//              considerOnlyFromTerrain: Whether farmers should be considered.
+//              
 //
-// Globals    : g_player:            List of players
-//              g_thePopDB:          The pop database
-//              g_theCitySizeDB      The city size database
+// Globals    : g_theCitySizeDB          The city size database
 //              
 //
 // Returns    : Whether a new food terrain improvement should be built 
@@ -6194,36 +6760,78 @@ sint32 CityData::GetFounder() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-bool CityData::NeedMoreFood(sint32 bonusFood, bool considerFoodOnlyFromTerrain){
+bool CityData::NeedMoreFood(sint32 bonusFood, sint32 &foodMissing, bool considerOnlyFromTerrain){
 
-	sint32 turnsForOnePop;
-	if(GetGrowthRate() != 0){
-		turnsForOnePop = k_PEOPLE_PER_POPULATION/GetGrowthRate();
+	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
+	sint32 maxPop = GetMaxPop(rec);
+
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
+
+	sint32 popDistance;
+	strategy.GetStopBuildingFoodBeforePopMax(popDistance);
+
+	foodMissing = HowMuchMoreFoodNeeded(bonusFood, considerOnlyFromTerrain);
+
+	return(foodMissing > 0
+	&&    (PopCount() < maxPop - popDistance
+	||     m_food_delta + bonusFood < 0));
+
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::HowMuchMoreFoodNeeded
+//
+// Description: Gets the aoumt of food that is in addition needed to make 
+//              the city grow, without consideration of overcrowding.
+//
+// Parameters : bonusFood:               Additional food that should be 
+//                                       taken into the consideration
+//              considerOnlyFromTerrain: Whether farmers should be considered.
+//              
+// Globals    : g_theCitySizeDB:         The city size database
+//              
+// Returns    : The amount of food that is missing for optimal growth.
+//
+// Remark(s)  : Has to be reworked: GetProducedFood() and m_food_delta are 
+//              dependent on specialist assignment. These should be function
+//              parameters.
+//
+//----------------------------------------------------------------------------
+sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool considerOnlyFromTerrain){
+
+//	Function not final yet. Therefore DPRINTFs are still in outcommented state in.
+//	DPRINTF(k_DBG_GAMESTATE, ("CityName: %s\n", GetName()));
+	double maxFoodFromTerrain = GetMaxFoodFromTerrain() + bonusFood;
+
+	double crimeLost;
+	double grossFood = maxFoodFromTerrain;
+	ProcessFood(crimeLost, maxFoodFromTerrain, grossFood, considerOnlyFromTerrain);
+
+	double processedBonusFood = bonusFood;
+	grossFood = bonusFood;
+	ProcessFood(crimeLost, processedBonusFood, grossFood, considerOnlyFromTerrain);
+
+	/////////////////////////////////////
+	// A better solution has to be found.
+	double currentFood;
+	double foodDelta = m_food_delta;
+	sint32 bestSpecialist = GetBestSpecialist(POP_FARMER);
+	if(bestSpecialist >= 0 && considerOnlyFromTerrain){
+		double crimeLossFood;
+		double currentFoodPerPop = GetProducedFood() / static_cast<double>(WorkerCount());
+		double popFood = static_cast<double>(g_thePopDB->Get(bestSpecialist)->GetFood()*FarmerCount());
+		grossFood = popFood;
+		popFood   = ProcessFinalFood(crimeLossFood, grossFood);
+
+		currentFood = GetProducedFood() + processedBonusFood - popFood + currentFoodPerPop*FarmerCount();
+		foodDelta  -= popFood;
+		foodDelta  += currentFoodPerPop*FarmerCount();
 	}
 	else{
-		turnsForOnePop = k_PEOPLE_PER_POPULATION;
+		currentFood = GetProducedFood() + processedBonusFood;
 	}
-
-	sint32 maxFoodFromTerrain = GetMaxFoodFromTerrain() + bonusFood;
-	sint32 currentFood = (sint32)(GetProducedFood() + bonusFood);
-
-	double foodBonus;
-	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus);
-	maxFoodFromTerrain += (sint32)(maxFoodFromTerrain * foodBonus);
-	currentFood += (sint32)(bonusFood * foodBonus);
-
-	maxFoodFromTerrain += sint32(ceil(((double)maxFoodFromTerrain * 
-		double(double(wonderutil_GetIncreaseFoodAllCities(
-			g_player[m_owner]->m_builtWonders)) / 100.0))));
-
-	currentFood += sint32(ceil(((double)bonusFood * 
-		double(double(wonderutil_GetIncreaseFoodAllCities(
-			g_player[m_owner]->m_builtWonders)) / 100.0))));
-
-	if(!considerFoodOnlyFromTerrain && m_specialistDBIndex[POP_FARMER] >= 0) {
-		maxFoodFromTerrain += FarmerCount() *
-			g_thePopDB->Get(m_specialistDBIndex[POP_FARMER])->GetFood();
-	}
+	/////////////////////////////////////
 
 	const CitySizeRecord *nextRec = NULL;
 	if(m_workerPartialUtilizationIndex >= 0 
@@ -6234,33 +6842,100 @@ bool CityData::NeedMoreFood(sint32 bonusFood, bool considerFoodOnlyFromTerrain){
 		nextRec = g_theCitySizeDB->Get(g_theCitySizeDB->NumRecords()-1);
 	}
 
-	sint32 foodForNextRing;
+	double foodForNextRing;
 	if(nextRec){
-		foodForNextRing = (sint32)((nextRec->GetPopulation() - SlaveCount()) * GetFoodRequiredPerCitizen());
+		foodForNextRing = GetFoodRequired(nextRec->GetPopulation() - SlaveCount());
 	}
 	else{
-		foodForNextRing = (sint32)((PopCount() - SlaveCount()) * GetFoodRequiredPerCitizen());
+		foodForNextRing = GetFoodRequired(PopCount() - SlaveCount());
 	}
 
-	sint32 foodForNextPop = (sint32)((PopCount() + 1 - SlaveCount()) * GetFoodRequiredPerCitizen());
-
-	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
-	sint32 maxPop = rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease();
+	double foodForNextPop = GetFoodRequired(PopCount() + 1 - SlaveCount());
 
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
-
-	sint32 popDistance;
-	strategy.GetStopBuildingFoodBeforePopMax(popDistance);
 
 	sint32 timePerPop;
 	strategy.GetTurnsAcceptedForOnePop(timePerPop);
 
-	return((turnsForOnePop/GetOvercrowdingCoefficient() > timePerPop
-	&&      PopCount() < maxPop - popDistance
-	&&      !GetIsRioting())
-	||     (maxFoodFromTerrain < foodForNextRing)
-	||     (currentFood < foodForNextPop));
+	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
+//	DPRINTF(k_DBG_GAMESTATE, ("GrowthRate: %i\n", rec->GetGrowthRate()));
+	double food = ceil(static_cast<double>(PopCount()*k_PEOPLE_PER_POPULATION)/static_cast<double>(timePerPop*rec->GetGrowthRate())) - static_cast<double>(bonusFood);
+//	DPRINTF(k_DBG_GAMESTATE, ("Food: %i\n", static_cast<sint32>(food)));
+//	DPRINTF(k_DBG_GAMESTATE, ("m_food_delta: %f\n", m_food_delta));
+	food -= foodDelta;
+//	DPRINTF(k_DBG_GAMESTATE, ("Food: %i\n", static_cast<sint32>(food)));
+//	DPRINTF(k_DBG_GAMESTATE, ("foodForNextRing: %i\n", static_cast<sint32>(foodForNextRing)));
+//	DPRINTF(k_DBG_GAMESTATE, ("maxFoodFromTerrain: %i\n", static_cast<sint32>(maxFoodFromTerrain)));
 
+	if(food < foodForNextRing - maxFoodFromTerrain){
+		food = foodForNextRing - maxFoodFromTerrain;
+	}
+//	DPRINTF(k_DBG_GAMESTATE, ("FoodNextRing: %i\n", static_cast<sint32>(food)));
+
+//	DPRINTF(k_DBG_GAMESTATE, ("Food: %i\n", static_cast<sint32>(food)));
+//	DPRINTF(k_DBG_GAMESTATE, ("foodForNextPop: %i\n", static_cast<sint32>(foodForNextPop)));
+//	DPRINTF(k_DBG_GAMESTATE, ("currentFood: %i\n", static_cast<sint32>(currentFood)));
+
+	if(food < foodForNextPop - currentFood){
+		food = foodForNextPop - currentFood;
+	}
+//	DPRINTF(k_DBG_GAMESTATE, ("FoodNextPop: %i\n", static_cast<sint32>(foodForNextPop)));
+//	DPRINTF(k_DBG_GAMESTATE, ("FoodNextPop: %i\n", static_cast<sint32>(food)));
+
+	return static_cast<sint32>(ceil(food));
+
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetCityStyle
+//
+// Description: Calculates the crime loss of a factor like food, 
+//              production or gold.
+//
+// Parameters : sint32 gross
+//
+// Globals    : -
+//
+// Returns    : Crime loss
+//
+// Remark(s)  : Standardize fatcors.
+//
+//----------------------------------------------------------------------------
+sint32 CityData::CrimeLoss(sint32 gross) const
+{
+	sint32 crime_loss = static_cast<sint32>(ceil(gross * m_happy->GetCrime()));
+	
+	if (crime_loss < 0) 
+		crime_loss = 0;
+
+	return crime_loss;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetCityStyle
+//
+// Description: Calculates the crime loss of a factor like food, 
+//              production or gold.
+//
+// Parameters : d gross
+//
+// Globals    : -
+//
+// Returns    : Crime Loss as double
+//
+// Remark(s)  : Standardize fatcors.
+//
+//----------------------------------------------------------------------------
+double CityData::CrimeLoss(double gross) const
+{
+	double crime_loss = ceil(gross * m_happy->GetCrime());
+	
+	if (crime_loss < 0) 
+		crime_loss = 0;
+
+	return crime_loss;
 }
 
 //----------------------------------------------------------------------------
@@ -6271,9 +6946,9 @@ bool CityData::NeedMoreFood(sint32 bonusFood, bool considerFoodOnlyFromTerrain){
 //
 // Parameters : -
 //
-// Globals    : g_player	: list of players
+// Globals    : g_player	: List of players
 //
-// Returns    : -
+// Returns    : The style of the city
 //
 // Remark(s)  : Order of checking:
 //              1. The value of m_cityStyle for the individual city.
@@ -6301,6 +6976,21 @@ sint32 CityData::GetCityStyle() const
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::SetCityStyle
+//
+// Description: Set the style of the city and updates its sprite.
+//
+// Parameters : sint32 style: The city style to set.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void CityData::SetCityStyle(sint32 style)
 {
 
