@@ -1,4 +1,39 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Handling of user preferences.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _DEBUG
+// - Adds some aditional assertions to the code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Modification of DrawPartiallyConstructedImprovement's parameter list
+//   to add a percent complete variable to allow more then three construction
+//   per tile improvement by Martin Gühmann.
+// - Allows now to use costumized graphics for ruins/huts by Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 
 
@@ -304,13 +339,20 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		
 		
 		
-		
-		
+	//Modified by Martin Gühmann to allow modders to costumize the graphics of ruins/huts.
+	#if !defined(ACTIVISION_ORIGINAL)
+		const TerrainRecord *rec = g_theTerrainDB->Get(cell->GetTerrain());
+		if (pos.x&1) 
+			data = m_tileSet->GetImprovementData((uint16)rec->GetHutTilesetIndexA());
+		else 
+			data = m_tileSet->GetImprovementData((uint16)rec->GetHutTilesetIndexB());
+	#else // ACTIVISION_ORIGINAL
+	//	Original code:
 		if (pos.x&1) 
 			data = m_tileSet->GetImprovementData(150);
 		else 
 			data = m_tileSet->GetImprovementData(151);
-
+	#endif // ACTIVISION_ORIGINAL
 		DrawAnImprovement(surface,data,x,y,fog);
 		drewSomething = true;
 	}
@@ -335,7 +377,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else 
 				break;
 			sint32 type = cell->AccessImprovement(i).GetData()->GetType();
-			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog);
+			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
 			drewSomething = true;
 		}
 	} 
@@ -361,7 +403,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 				index = 2;
 
 
-			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog);
+			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
 			drewSomething = true;
 
 			walker->Next();
@@ -376,7 +418,8 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
 												   sint32 type, sint32 x, sint32 y, 
-												   uint16 index, BOOL fog) 
+												   uint16 index, BOOL fog, sint32 percentComplete)
+												   //Added sint32 percentComplete by Martin Gühmann
 {
 	
 
@@ -506,6 +549,7 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 
 #endif
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
+/*	//MG: Origianal code outcommented and replaced by the code below
 	if(index >= rec->GetNumConstructionTiles()) {
 		if(rec->GetNumConstructionTiles() < 1) {
 			data = m_tileSet->GetImprovementData(1);
@@ -514,6 +558,29 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 		}
 	} else {
 		data =  m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(index));
+	}*/
+	if(rec->GetNumConstructionTiles() < 1) {
+		data = m_tileSet->GetImprovementData(1);
+	}
+//	else if(rec->GetNumConstructionTiles() < 2) {
+//		data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(rec->GetNumConstructionTiles() - 1));
+//	} 
+	else {
+		if(percentComplete >= 100){
+			data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(rec->GetNumConstructionTiles() - 1));
+		}
+		else{
+			uint16 ctIndex = (uint16)floor((rec->GetNumConstructionTiles() * percentComplete)/100);
+			if(ctIndex < rec->GetNumConstructionTiles()){
+				data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(ctIndex));
+			}
+			else{
+				//No idea why the above is not enough, but this fixes the last assert I got when I place terraform improvements with the editor.
+				data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(rec->GetNumConstructionTiles() - 1));
+			}
+		}
+	//	Original code:
+	//	data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(index));
 	}
 
 	if(!data)

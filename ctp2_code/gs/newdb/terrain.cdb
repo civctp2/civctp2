@@ -87,4 +87,7 @@ Terrain {
 
 	# For gfx system use
 	Int TilesetIndex
+	# Added by Martin Gühmann to allow modders to costumize ruin/hut graphics
+	Int HutTilesetIndexA = 150
+	Int HutTilesetIndexB = 151
 }
