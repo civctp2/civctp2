@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Addion by Martin Gühmann: Two more world shape options, 
-//   flat world and Neptun world.
+//   flat world and Uranus world.
 // - Memory leak repaired.
 //
 //----------------------------------------------------------------------------
@@ -76,7 +76,7 @@ static c3_Static	*s_ewLabel			= NULL; // Earth world
 static c3_Static	*s_dwLabel			= NULL; // Doughnut world
 #if !defined(ACTIVISION_ORIGINAL)
 //Added by Martin Gühmann
-static c3_Static	*s_nwLabel			= NULL; // Neptun world
+static c3_Static	*s_uwLabel			= NULL; // Uranus world
 #endif
 static c3_Static	*s_fwLabel			= NULL; // Flat world
 
@@ -88,7 +88,7 @@ static MBCHAR	checknames[k_NUM_MAPSHAPEBOXES][50] = {
 	//Added two more shapes for more shape options by Martin Gühmann
 	"MapShapeOne",   //Earth world (West-East wrap world)
 	"MapShapeTwo",   //Doughnut world
-	"MapShapeThree", //Neptun world (North-South wrap world)
+	"MapShapeThree", //Uranus world (North-South wrap world)
 	"MapShapeFour"   //Flat world
 #endif //ACTIVISION_ORIGINAL
 };
@@ -266,7 +266,7 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	#if !defined(ACTIVISION_ORIGINAL) // Added by Martin Gühmann
 	else {
 		if ( g_theProfileDB->IsYWrap() ) {
-			s_checkBox[2]->SetState(1); //Neptun world (y-warp only)
+			s_checkBox[2]->SetState(1); //Uranus world (y-warp only)
 		}
 		else {
 			s_checkBox[3]->SetState(1); //Flat World (no warp)
@@ -277,7 +277,7 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	s_ewLabel = spNew_c3_Static( &errcode, windowBlock, "EWLabel" );
 	s_dwLabel = spNew_c3_Static( &errcode, windowBlock, "DWLabel" );
 	#if !defined(ACTIVISION_ORIGINAL) // Added by Martin Gühmann
-	s_nwLabel = spNew_c3_Static( &errcode, windowBlock, "NWLabel" );
+	s_uwLabel = spNew_c3_Static( &errcode, windowBlock, "UWLabel" );
 	s_fwLabel = spNew_c3_Static( &errcode, windowBlock, "FWLabel" );
 	#endif
 
@@ -334,7 +334,7 @@ AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
 //				s_group
 //				s_ewLabel
 //				s_dwLabel
-//				s_nwLabel
+//				s_uwLabel
 //				s_fwLabel
 //
 // Returns    : AUI_ERRCODE	: always AUI_ERRCODE_OK
@@ -363,7 +363,7 @@ AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
 		mycleanup(s_ewLabel);//Earth like world: East-West wrap world
 		mycleanup(s_dwLabel);//Doughnut world
 		// Added by Martin Gühmann
-		mycleanup(s_nwLabel);//Neptun like world: North-South wrap world
+		mycleanup(s_uwLabel);//Uranus like world: North-South wrap world
 		mycleanup(s_fwLabel);//Flat world
 		mycleanup(s_spNewGameMapShapeScreen);
 #undef mycleanup

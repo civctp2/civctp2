@@ -1094,7 +1094,7 @@ SPNewGameStrings {
 	string	string11	"str_tbl_ldl_Custom"
 	string	string12	"str_tbl_ldl_Earth_World"
 	string	string13	"str_tbl_ldl_Doughnut_World"
-	string	string14	"str_tbl_ldl_Neptun_World"
+	string	string14	"str_tbl_ldl_Uranus_World"
 	string	string15	"str_tbl_ldl_Flat_World"
 	string	string16	"str_tbl_ldl_Default"
 	string	string17	"str_tbl_ldl_Custom"

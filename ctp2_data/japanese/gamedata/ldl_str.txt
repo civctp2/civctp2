@@ -3148,8 +3148,8 @@ str_ldl_MUSIC_OPTIONS	"ミュージック"
 
 str_tbl_ldl_North_South_Wrap_Only			"North-South Wrap Only"
 str_ldl_North_and_South_edges_of_the_map_connect	"Noth and South edges of the map connect."
-str_ldl_Neptun_World					"Neptun World"
-str_tbl_ldl_Neptun_World					"Neptun World"
+str_ldl_Uranus_World					"Uranus World"
+str_tbl_ldl_Uranus_World					"Uranus World"
 
 ### New Single Player Game Player Screen Strings ###
 
@@ -3159,7 +3159,7 @@ str_ldl_SPNGPS_PlayerSpinner		"Start player"
 
 str_ldl_SPNGPS_NumPlayerText	"Sets the number of players in the new game."
 str_ldl_SPNGPS_MaxPlayerText	"Sets the maximum number of players that could occur in a game."
-str_ldl_SPNGPS_PlayerText	"Sets the start player. Determines the civ color. (Does not work, yet.)"
+str_ldl_SPNGPS_PlayerText	"Sets the start player. Determines the civ color. "
 
 ### Added Disclaimer Strings ###
 
@@ -3169,7 +3169,7 @@ str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net."
 
 ### Version String ###
 
-str_ldl_version "2003-02-21"
+str_ldl_version "2004-03-28"
 str_ldl_RANKING_POLLUTION		"汚染"
 str_ldl_RANKING_WONDER		"七不思議"
 

@@ -1455,8 +1455,8 @@ str_ldl_Fuel_COLON	"Carb"
 
 str_tbl_ldl_North_South_Wrap_Only			"Défilement Nord-Sud uniquement"
 str_ldl_North_and_South_edges_of_the_map_connect	"Connexion entre les bords Nord et Sud de la carte"
-str_ldl_Neptun_World					"Monde de type Neptune"
-str_tbl_ldl_Neptun_World				"Monde de type Neptune"
+str_ldl_Uranus_World					"Monde de type Uranus"
+str_tbl_ldl_Uranus_World				"Monde de type Uranus"
 
 ### New Single Player Game Player Screen Strings ###
 
@@ -1466,7 +1466,7 @@ str_ldl_SPNGPS_PlayerSpinner		"Premier joueur"
 
 str_ldl_SPNGPS_NumPlayerText	"Définit le nombre de joueurs dans une nouvelle partie."
 str_ldl_SPNGPS_MaxPlayerText	"Définit le nombre maximal de civilisations pouvant être simultanément en jeu."
-str_ldl_SPNGPS_PlayerText	"Définit le premier joueur. Définit la couleur de la civilisation. (Ne marche pas encore.)"
+str_ldl_SPNGPS_PlayerText	"Définit le premier joueur. Définit la couleur de la civilisation."
 
 ### Added Disclaimer Strings ###
 
@@ -1476,7 +1476,7 @@ str_ldl_Disclaimer3 "Contactez les auteurs à l'adresse ctp2source@apolyton.net."
 
 ### Version String ###
 
-str_ldl_version "2004-02-21"
+str_ldl_version "2004-03-28"
 
 
 
@@ -2722,8 +2722,8 @@ str_tbl_ldl_Defeat			"Défaite :"
 	
 # Great Library
 str_ldl_GreatLibraryGoalSetTo		"Objectif fixé à : %s"
-str_ldl_GreatLibraryGoalKnown		"%s is already known. No goal was set."
-str_ldl_GreatLibraryNoGoalPossible	"%s cannot be researched."
+str_ldl_GreatLibraryGoalKnown		"%s est déjà connu. Aucun objectif n'a été fixé."
+str_ldl_GreatLibraryNoGoalPossible	"%s ne peut pas être recherché."
 str_ldl_SEARCH_WORD			"Recherche :"
 str_ldl_TECH_TREE			"ARBORESCENCE"
 str_ldl_SET_GOAL			"Fixer objectif"

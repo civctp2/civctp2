@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Addion by Martin Gühmann: Two more world shape options, 
-//   flat world and Neptun world
+//   flat world and Uranus world
 //
 //----------------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ enum SP_NEWGAME_STR {
 	SP_NEWGAME_STR_DOUGHNUT,
 #if !defined(ACTIVISION_ORIGINAL)
 	//Added by Martin Gühmann
-	SP_NEWGAME_STR_NEPTUN,
+	SP_NEWGAME_STR_URANUS,
 #endif
 	SP_NEWGAME_STR_FLAT,
 

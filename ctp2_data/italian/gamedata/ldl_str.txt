@@ -1433,8 +1433,8 @@ str_ldl_Fuel_COLON	"Carburante:"
 
 str_tbl_ldl_North_South_Wrap_Only			"Continuità solo Nord-Sud"
 str_ldl_North_and_South_edges_of_the_map_connect	"I bordi nord e sud della mappa coincidono."
-str_ldl_Neptun_World					"Mondo nettuniano"
-str_tbl_ldl_Neptun_World					"Mondo nettuniano"
+str_ldl_Uranus_World					"Mondo uraniano"
+str_tbl_ldl_Uranus_World					"Mondo uraniano"
 
 ### New Single Player Game Player Screen Strings ###
 
@@ -1444,7 +1444,7 @@ str_ldl_SPNGPS_PlayerSpinner		"Giocatore iniziale"
 
 str_ldl_SPNGPS_NumPlayerText	"Regola il numero di giocatori in una nuova partita."
 str_ldl_SPNGPS_MaxPlayerText	"Regola il massimo numero di civiltà che possono subentrare durante il gioco."
-str_ldl_SPNGPS_PlayerText	"Regola il giocatore iniziale. Determina il colore della civiltà.[NON FUNZIONA]"
+str_ldl_SPNGPS_PlayerText	"Regola il giocatore iniziale. Determina il colore della civiltà."
 
 ### Added Disclaimer Strings ###
 
@@ -1454,7 +1454,7 @@ str_ldl_Disclaimer3 "Per contattare gli autori scrivi all'indirizzo: ctp2source@
 
 ### Version String ###
 
-str_ldl_version "31-01-2004"
+str_ldl_version "2004-03-28"
 
 
 

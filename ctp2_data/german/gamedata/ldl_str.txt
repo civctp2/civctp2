@@ -1508,8 +1508,8 @@ str_ldl_Fuel_COLON	"Treibstoff:"
 
 str_tbl_ldl_North_South_Wrap_Only			"Nur Nord-Süd-Scrolling"
 str_ldl_North_and_South_edges_of_the_map_connect	"Nord-/Süd-Scrolling der Karte."
-str_ldl_Neptun_World					"Neptunwelt"
-str_tbl_ldl_Neptun_World					"Neptunwelt"
+str_ldl_Uranus_World					"Uranuswelt"
+str_tbl_ldl_Uranus_World					"Uranuswelt"
 
 ### New Single Player Game Player Screen Strings ###
 
@@ -1519,7 +1519,7 @@ str_ldl_SPNGPS_PlayerSpinner		"Start Spieler"
 
 str_ldl_SPNGPS_NumPlayerText	"Setzt die Anzahl der Spieler im neuen Spiel."
 str_ldl_SPNGPS_MaxPlayerText	"Setzt die Maximalanzahl der Zivilisationen, die gleichzeitig im Spiel sein können."
-str_ldl_SPNGPS_PlayerText	"Setzt den Startspieler. Bestimmt die Farbe der Zivilisation. (Funktioniert noch nicht.)"
+str_ldl_SPNGPS_PlayerText	"Setzt den Startspieler. Bestimmt die Farbe der Zivilisation. "
 
 ### Added Disclaimer Strings ###
 
@@ -1529,7 +1529,7 @@ str_ldl_Disclaimer3 "Kontakt: ctp2source@apolyton.net."
 
 ### Version String ###
 
-str_ldl_version "2004-01-31"
+str_ldl_version "2004-03-28"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################

@@ -76,30 +76,30 @@ InitPlayWindow {
 	}
 	SPButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_SINGLEPLAYER"
-		int	xpix	568
+		int	xpix	478
 		int	ypix	455
-		int	widthpix	200
+		int	widthpix	290
 		int	heightpix	32
 	}
 	EmailButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_EMAIL"
-		int	xpix	236
-		int	ypix	455
-		int	widthpix	160
+		int	xpix	36
+		int	ypix	490
+		int	widthpix	140
 		int	heightpix	32
 	}
 	HotseatButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_HOTSEAT"
-		int	xpix	396
-		int	ypix	455
-		int	widthpix	160
+		int	xpix	186
+		int	ypix	490
+		int	widthpix	140
 		int	heightpix	32
 	}
 	MPButton:SP_BUTTON_BIG {
 		string	text	"str_ldl_MULTIPLAYER"
 		int	xpix	36
 		int	ypix	455
-		int	widthpix	200
+		int	widthpix	290
 		int	heightpix	32
 	}
 	QuitButton:SP_BUTTON_BIG_STONE {
@@ -128,9 +128,9 @@ InitPlayWindow {
 		int heightpix 24
 	}
 	Disclaimer1:CTP2_STATIC_BASE {
-		int fontcolorred 0
-		int fontcolorgreen 127
-		int fontcolorblue 127
+		int fontcolorred 255
+		int fontcolorgreen 0
+		int fontcolorblue 0
 
 		string text "str_ldl_Disclaimer1"
 		int xpix 269 
@@ -139,9 +139,9 @@ InitPlayWindow {
 		int heightpix 24
 	}
 	Disclaimer2:CTP2_STATIC_BASE {
-		int fontcolorred 0
-		int fontcolorgreen 127
-		int fontcolorblue 127
+		int fontcolorred 255
+		int fontcolorgreen 0
+		int fontcolorblue 0
 
 		string text "str_ldl_Disclaimer2"
 		int xpix 269 
@@ -150,9 +150,9 @@ InitPlayWindow {
 		int heightpix 24
 	}
 	Disclaimer3:CTP2_STATIC_BASE {
-		int fontcolorred 0
-		int fontcolorgreen 127
-		int fontcolorblue 127
+		int fontcolorred 255
+		int fontcolorgreen 0
+		int fontcolorblue 0
 
 		string text "str_ldl_Disclaimer3"
 		int xpix 269 
@@ -1094,7 +1094,7 @@ SPNewGameStrings {
 	string	string11	"str_tbl_ldl_Custom"
 	string	string12	"str_tbl_ldl_Earth_World"
 	string	string13	"str_tbl_ldl_Doughnut_World"
-	string	string14	"str_tbl_ldl_Neptun_World"
+	string	string14	"str_tbl_ldl_Uranus_World"
 	string	string15	"str_tbl_ldl_Flat_World"
 	string	string16	"str_tbl_ldl_Default"
 	string	string17	"str_tbl_ldl_Custom"

@@ -774,7 +774,7 @@ SPNewGameMapShapeScreen {
 		string	text	"str_ldl_East_West_and_North_South_edges"
 	}
 	#Added by Martin Gühmann
-	NWLabel:SP_POPUP_LABEL {
+	UWLabel:SP_POPUP_LABEL {
 
 		int	xpix	190
 
@@ -817,7 +817,7 @@ SPNewGameMapShapeScreen {
 		#Added by Martin Gühmann
 		MapShapeThree:POPUP_CHECKBOX {
 
-			string	text	"str_ldl_Neptun_World"
+			string	text	"str_ldl_Uranus_World"
 			int	xpix	20
 
 			int	ypix	115
