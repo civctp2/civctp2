@@ -1,16 +1,36 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handling of diplomatic countering
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+// _DEBUG
+// - Generates debug information when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - AI now considers more before stopping pirating
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -528,12 +548,21 @@ STDEHANDLER(ActionForValue_CounterResponseEvent)
 			break;
 		case PROPOSAL_OFFER_STOP_PIRACY:
 			
-			
+#if defined(ACTIVISION_ORIGINAL)
 			if (receiver_piracy <= 0 &&
 				(sender_result_value > sender_piracy * 5))
 			{
 				sender_diplomat.ConsiderResponse(receiver, RESPONSE_ACCEPT, accept_priority);
 			}
+#else
+			// made AI consider more - tombom
+			if ((receiver_piracy <= 0 &&
+				(sender_result_value > sender_piracy * 4)) && 
+				(!sender_diplomat.DesireWarWith(receiver)||!receiver_diplomat.DesireWarWith(sender)))
+			{
+				sender_diplomat.ConsiderResponse(receiver, RESPONSE_ACCEPT, accept_priority);
+			}
+#endif
 			break;
 		case PROPOSAL_OFFER_END_EMBARGO:
 			
