@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Army data handling
 //
 //----------------------------------------------------------------------------
 //
@@ -31,6 +31,7 @@
 // - Fix sueing of franchises.
 // - #01 Inform AI only about bombard if it was really possible (L. Hirth 6/2004).
 // - #02 TestOrderAny added.
+// - Ambiguous sqrt calls resolved.
 //
 //----------------------------------------------------------------------------
 
@@ -7668,11 +7669,13 @@ BOOL ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCos
 
 	MapPoint start, dest;
 	Player *p = g_player[c.GetOwner()];
+#if defined(ACTIVISION_ORIGINAL)	// moved 
 	double distcost;
-
+#endif
 	if(!p)
 		return FALSE;
 
+#if defined(ACTIVISION_ORIGINAL)	// ambiguous sqrt, possible division by 0
 	if(p->GetCapitolPos(start)) {
 		c.GetPos(dest);
 		sint32 dist = MapPoint::GetSquaredDistance(start,dest);
@@ -7686,6 +7689,18 @@ BOOL ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCos
 	} else {
 		distcost = g_theConstDB->InciteRevolutionCapitolPenalty(); 
 	}
+#else
+	double distcost = g_theConstDB->InciteRevolutionCapitolPenalty();
+
+	if (p->GetCapitolPos(start) && p->GetMaxEmpireDistance()) 
+	{
+		c.GetPos(dest);
+		double const distanceFromCapitol = 
+			sqrt(static_cast<double>(MapPoint::GetSquaredDistance(start, dest)));
+		distcost *= (1.0 - (distanceFromCapitol / p->GetMaxEmpireDistance()));
+	}
+#endif#endif
+
 	if(distcost < 1)
 		distcost = 1;
 
@@ -7736,10 +7751,14 @@ BOOL ArmyData::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost 
 	if(p->GetCapitolPos(start)) {
 		c.GetPos(dest);
 
-
+#if defined(ACTIVISION_ORIGINAL)
 		sint32 dist = MapPoint::GetSquaredDistance(start,dest);
 		distcost = 100.0 * sqrt(dist); 
-        
+#else
+		float const distanceFromCapitol =
+			sqrt(static_cast<float>(MapPoint::GetSquaredDistance(start, dest)));
+		distcost = 100.0f * distanceFromCapitol;
+#endif        
         
         
 	} else {
@@ -8654,10 +8673,12 @@ void ArmyData::AssociateEventsWithOrdersDB()
 	
 	const char *event_name;
 
-	
+#if defined(ACTIVISION_ORIGINAL)	// wrong delete	
 	if (s_orderDBToEventMap != NULL)
 		delete s_orderDBToEventMap;
-
+#else
+	delete [] s_orderDBToEventMap;
+#endif
 	
 	s_orderDBToEventMap = new sint32 [g_theOrderDB->NumRecords()];
 	

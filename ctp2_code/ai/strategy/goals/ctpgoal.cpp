@@ -1,15 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Goal handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Resolved ambiguous sqrt calls.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -775,6 +793,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		goal_rec->GetPowerBonus() );
 
 	
+#if defined(ACTIVISION_ORIGINAL)
 	cell_value += 
 		sqrt(MapPoint::GetSquaredDistance( target_pos, empire_center )) * 
 		goal_rec->GetDistanceToHomeBonus();
@@ -793,7 +812,27 @@ Utility CTPGoal::Compute_Raw_Priority()
 	cell_value += 
 		(((player_ptr->IsExplored(target_pos) == FALSE) ? 1 : 0) *
 		  goal_rec->GetUnexploredBonus());
-
+#else
+	cell_value += sqrt(static_cast<double>
+						(MapPoint::GetSquaredDistance(target_pos, empire_center))
+					  ) * goal_rec->GetDistanceToHomeBonus();
+	
+	
+	cell_value += sqrt(static_cast<double>
+						(MapPoint::GetSquaredDistance(target_pos, foreign_empire_center))
+					  )	* goal_rec->GetDistanceToEnemyBonus();
+	
+	
+	if (g_theWorld->GetCell( target_pos )->GetIsChokePoint())
+	{
+		cell_value += goal_rec->GetChokePointBonus();
+	}
+	
+	if (!player_ptr->IsExplored(target_pos))
+	{
+		cell_value += goal_rec->GetUnexploredBonus();
+	}
+#endif
 	
 	if ( goal_rec->GetTargetTypeSettleLand() ||
 		 goal_rec->GetTargetTypeSettleSea() )
@@ -1402,7 +1441,13 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos)
 		CtpAi::GetNearestRefuel(army, target_pos, refuel_pos, distance_to_refuel);
 		
 		distance_to_target = 
+#if defined(ACTIVISION_ORIGINAL)
 			sqrt(MapPoint::GetSquaredDistance(army->RetPos(), target_pos));
+#else
+			sqrt(static_cast<double>
+					(MapPoint::GetSquaredDistance(army->RetPos(), target_pos))
+				);
+#endif
 
 		if (num_tiles_to_empty < distance_to_target + distance_to_refuel)
 			return false;

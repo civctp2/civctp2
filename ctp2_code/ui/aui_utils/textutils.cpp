@@ -1,15 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
- 
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Text handling utilities
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Ambiguous fabs calls resolved.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -29,6 +47,16 @@ extern ColorSet		*g_colorSet;
 
 #define k_FONT_FILE_NAME	"ArialBd.ttf"
 #define k_FONT_FACE_NAME	"Arial Bold"
+
+#if !defined(ACTIVISION_ORIGINAL)
+namespace
+{
+	LONG RoundToNearest(double const a_Rational)
+	{
+		return static_cast<LONG>(0.5 + a_Rational);
+	}
+};	// namespace
+#endif
 
 void textutils_Initialize(void)
 {
@@ -376,7 +404,11 @@ HFONT textutils_CreateFont(
 
 	DPtoLP(hdc, &pt, 1);
 
+#if defined(ACTIVISION_ORIGINAL)
 	lf.lfHeight = - (sint32) (fabs (pt.y) / 10.0 + 0.5);
+#else
+	lf.lfHeight = - RoundToNearest(fabs(static_cast<double>(pt.y)) / 10.0);
+#endif
 	lf.lfWidth = 0;
 	lf.lfEscapement = 0;
 	lf.lfOrientation = 0;
@@ -399,8 +431,15 @@ HFONT textutils_CreateFont(
 		hFont = (HFONT) SelectObject(hdc, hFont);
 		GetTextMetrics(hdc, &tm);
 		DeleteObject(SelectObject(hdc, hFont));
+#if defined(ACTIVISION_ORIGINAL)
 		lf.lfWidth = (sint32) (tm.tmAveCharWidth * fabs (pt.x) /
 							fabs (pt.y) + 0.5);
+#else
+		lf.lfWidth = RoundToNearest(tm.tmAveCharWidth * 
+			                        fabs(static_cast<double>(pt.x)) /
+			                        fabs(static_cast<double>(pt.y))
+						           );
+#endif
 		hFont = CreateFontIndirect(&lf);
 	}
 

@@ -38,6 +38,7 @@
 // - ArmyIsValid	: added reading of the argument - to make a valid result 
 //                    possible.
 // - GrantAdvance	: added input checks and an (optional) reason argument.
+// - Ambiguous sqrt resolved.
 //
 //----------------------------------------------------------------------------
 
@@ -6340,7 +6341,12 @@ SFN_ERROR Slic_Distance::Call(SlicArgList *args)
 	if(!args->GetPos(1, p2))
 		return SFN_ERROR_TYPE_ARGS;
 
+#if defined(ACTIVISIION_ORIGINAL)
 	m_result.m_int = (sint32)sqrt(MapPoint::GetSquaredDistance(p1, p2));
+#else
+	m_result.m_int = static_cast<sint32>
+		(sqrt(static_cast<double>(MapPoint::GetSquaredDistance(p1, p2))));
+#endif
 	return SFN_ERROR_OK;
 }
 

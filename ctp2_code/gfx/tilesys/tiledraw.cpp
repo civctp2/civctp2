@@ -566,22 +566,25 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 
 
 #else
-	if(rec->GetNumConstructionTiles() < 1) {
+	if (rec->GetNumConstructionTiles() < 1) 
+	{
 		data = m_tileSet->GetImprovementData(1);
 	}
-//	else if(rec->GetNumConstructionTiles() < 2) {
-//		data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(rec->GetNumConstructionTiles() - 1));
-//	} 
-	else {
-		if(percentComplete >= 100){
+	else 
+	{
+		if (percentComplete >= 100)
+		{
 			data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(rec->GetNumConstructionTiles() - 1));
 		}
-		else{
-			uint16 ctIndex = (uint16)floor((rec->GetNumConstructionTiles() * percentComplete)/100);
-			if(ctIndex < rec->GetNumConstructionTiles()){
+		else
+		{
+			sint32 const	ctIndex = (rec->GetNumConstructionTiles() * percentComplete) / 100;
+			if (ctIndex < rec->GetNumConstructionTiles())
+			{
 				data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(ctIndex));
 			}
-			else{
+			else
+			{
 				//No idea why the above is not enough, but this fixes the last assert I got when I place terraform improvements with the editor.
 				data = m_tileSet->GetImprovementData((uint16) rec->GetConstructionTiles(rec->GetNumConstructionTiles() - 1));
 			}

@@ -32,6 +32,7 @@
 //   preferred type.
 // - Adapted the tile improvement choice to take the CTP2 ringwise fractional 
 //   worker utilisation into account.
+// - Ambiguous floor call removed for .NET compilation.
 //
 //----------------------------------------------------------------------------
 
@@ -2262,8 +2263,16 @@ void Governor::ComputeDesiredUnits()
 				
 				if (g_theUnitDB->Get(best_unit_type)->GetShieldHunger() > 0)
 				{
+#if defined(ACTIVISION_ORIGINAL)
 					m_buildUnitList[list_num].m_maximumCount = floor(total_unit_support_by_type / 
 						g_theUnitDB->Get(best_unit_type)->GetShieldHunger());
+#else
+					Assert(total_unit_support_by_type >= 0);
+					m_buildUnitList[list_num].m_maximumCount = 
+						static_cast<sint16>(total_unit_support_by_type / 
+											g_theUnitDB->Get(best_unit_type)->GetShieldHunger()
+										   );
+#endif
 					
 					
 					total_unallocated_support = total_unit_support_by_type - 

@@ -27,6 +27,7 @@
 //
 // - X-wrap added to A* heuristics costs
 // - Implemented CalcTerrainFreightCost by Martin Gühmann
+// - Resolved ambiguous sqrt call.
 //
 //----------------------------------------------------------------------------
 
@@ -1956,7 +1957,14 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
     }
 
 	sint32 maxSize = max(m_size.x, m_size.y);
+#if defined(ACTIVISION_ORIGINAL)
 	double someNumber = sqrt((maxSize * maxSize) / (2 * g_theProfileDB->GetNPlayers()));
+#else
+	double const someNumber = 
+		sqrt(static_cast<double>(maxSize * maxSize) / 
+			 (2 * g_theProfileDB->GetNPlayers())
+			);
+#endif
 	sint32 minDistance = sint32(g_theConstDB->MinStartDistanceCoefficient() * someNumber);
 	sint32 maxDistance = sint32(g_theConstDB->MaxStartDistanceCoefficient() * someNumber);
 	if(minDistance < g_theConstDB->MinAbsoluteStartDistance())
