@@ -1,9 +1,33 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Science Manager Dialog
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Display the cost for the player, not the base advancement cost.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -247,8 +271,12 @@ void ScienceManagementDialog::UpdateScience()
 	sprintf(buffer, "%d", player->m_science->GetLevel());
 	m_scienceCurrentValue->SetText(buffer);
 
-	
+
+#if defined(ACTIVISION_ORIGINAL)	
 	sprintf(buffer, "%d", currentAdvanceRecord->GetCost());
+#else
+	sprintf(buffer, "%d", player->GetCurrentScienceCost());
+#endif
 	m_scienceTotalValue->SetText(buffer);
 
 	
