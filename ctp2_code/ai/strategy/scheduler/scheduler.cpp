@@ -40,11 +40,12 @@
 //   (not only first turn of war...)
 // - Activated the double Goal check for all goals (not only settle goals)
 // - Added Peter's Comments
-//
+// - Repaired crash when a goal type has not been defined (GOAL_SEIGE in CTC)
+// - Removed double warning disable pragma.
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(ACTIVISION_ORIGINAL)	// Already in c3.h as project wide setting
 #pragma warning(disable: 4786)
 #endif
 
@@ -84,6 +85,37 @@ using namespace std ;
 #include "gfx_options.h"
 #include "Army.h"
 #include "ArmyData.h"
+
+namespace
+{
+
+//----------------------------------------------------------------------------
+//
+// Name       : IsValid
+//
+// Description: Determine whether a goal is valid in a given context
+//
+// Parameters : a_Goal			: the goal (type)
+//				a_Context		: the context
+//
+// Globals    : -
+//
+// Returns    : bool			: the goal is valid in the context
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+bool IsValid
+(
+	GOAL_TYPE const &								a_Goal,
+	Scheduler::Sorted_Goal_List_Vector 	const &		a_Context
+)
+{
+	return static_cast<size_t>(a_Goal) < a_Context.size(); 	
+};
+
+} // namespace
 #endif
 
 
@@ -1111,27 +1143,31 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 #else
 	sint32	total_value	= 0;
 
-	for 
-	(
-		Sorted_Goal_List::const_iterator sorted_goal_iter = 
-			m_goals_of_type[type].begin();
-		sorted_goal_iter != m_goals_of_type[type].end(); 
-		sorted_goal_iter++
-	)
+	if (IsValid(type, m_goals_of_type))
 	{
-		CTPGoal_ptr	ctp_goal_ptr = (CTPGoal_ptr) sorted_goal_iter->second;
+		for 
+		(
+			Sorted_Goal_List::const_iterator sorted_goal_iter = 
+				m_goals_of_type[type].begin();
+			sorted_goal_iter != m_goals_of_type[type].end(); 
+			++sorted_goal_iter
+		)
+		{
+			CTPGoal_ptr	const	ctp_goal_ptr = 
+				static_cast<CTPGoal_ptr const>(sorted_goal_iter->second);
 
-		if (ctp_goal_ptr->Get_Invalid()		||
-			ctp_goal_ptr->Is_Satisfied()	||
-			ctp_goal_ptr->ArmiesAtGoal()
-		   )
-		{
-			// Goal has become invalid or has been satisfied: try next.
+			if (ctp_goal_ptr->Get_Invalid()		||
+				ctp_goal_ptr->Is_Satisfied()	||
+				ctp_goal_ptr->ArmiesAtGoal()
+			   )
+			{
+				// Goal has become invalid or has been satisfied: try next.
+			}
+			else
+			{
+				total_value += ctp_goal_ptr->Get_Target_Value();
+			}	
 		}
-		else
-		{
-			total_value += ctp_goal_ptr->Get_Target_Value();
-		}	
 	}
 #endif
 
@@ -1193,26 +1229,30 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 
 	return ctp_goal_ptr;
 #else
-	for 
-	( 
-		Sorted_Goal_List::const_iterator sorted_goal_iter = 
-			m_goals_of_type[type].begin();
-		sorted_goal_iter != m_goals_of_type[type].end(); 
-		sorted_goal_iter++
-	)
+	if (IsValid(type, m_goals_of_type)) 
 	{
-		CTPGoal_ptr	ctp_goal_ptr = (CTPGoal_ptr) sorted_goal_iter->second;
+		for 
+		( 
+			Sorted_Goal_List::const_iterator sorted_goal_iter = 
+				m_goals_of_type[type].begin();
+			sorted_goal_iter != m_goals_of_type[type].end(); 
+			++sorted_goal_iter
+		)
+		{
+			CTPGoal_ptr	const	ctp_goal_ptr = 
+				static_cast<CTPGoal_ptr const>(sorted_goal_iter->second);
 		
-		if (ctp_goal_ptr->Get_Invalid()					||
-			(satisfied != ctp_goal_ptr->Is_Satisfied())	||
-			ctp_goal_ptr->ArmiesAtGoal()
-		   )
-		{
-			// Goal does not match: try next.
-		}
-		else
-		{
-			return ctp_goal_ptr;
+			if (ctp_goal_ptr->Get_Invalid()					||
+				(satisfied != ctp_goal_ptr->Is_Satisfied())	||
+				ctp_goal_ptr->ArmiesAtGoal()
+			   )
+			{
+				// Goal does not match: try next.
+			}
+			else
+			{
+				return ctp_goal_ptr;
+			}
 		}
 	}
 
@@ -1231,7 +1271,13 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 
 sint16 Scheduler::CountGoalsOfType(const GOAL_TYPE & type) const
 {
+#if defined(ACTIVISION_ORIGINAL)
 	return m_goals_of_type[type].size();
+#else
+	return IsValid(type, m_goals_of_type) 
+		   ? m_goals_of_type[type].size() 
+		   : 0;
+#endif
 }
 
 

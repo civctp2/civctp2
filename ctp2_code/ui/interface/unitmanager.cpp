@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit manager
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Enable selection of transported units from the tactical info tab.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "unitmanager.h"
@@ -904,12 +934,34 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 	ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 	if(!item) return;
 
+#if defined(ACTIVISION_ORIGINAL)
 	Unit u; u.m_id = (uint32)item->GetUserData();
 	Assert(u.IsValid());
 	if(!u.IsValid()) return;
 
 	if(!u.GetArmy().IsValid()) return;
+#else
+	Unit u(reinterpret_cast<uint32>(item->GetUserData()));
+	Assert(u.IsValid());
 
+	if (u.IsValid())
+	{
+		if (u.GetArmy().IsValid())
+		{
+			// Select the unit directly.
+		}
+		else if (u.IsBeingTransported())
+		{
+			// Select the transport.
+			u = u.GetTransport();
+		}
+		else
+		{
+			// No suitable selection.
+			return;
+		}
+	}
+#endif
 	g_selected_item->SetSelectUnit(u);
 	g_director->AddCenterMap(u.RetPos());
 }
