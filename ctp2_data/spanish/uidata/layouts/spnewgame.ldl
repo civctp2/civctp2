@@ -1012,10 +1012,20 @@ SPDifficultyStringTable {
 }
 SPRiskLevelStringTable {
 	int 		numstrings		5
-	string 	string0		"str_tbl_ldl_Very_Risky"
-	string	string1		"str_tbl_ldl_Risky"
-	string	string2		"str_tbl_ldl_Not_Too_Bad"
-	string	string3		"str_tbl_ldl_Pretty_Safe"
+# Changed these strings to match those in spnewgamepopups.ldl
+# Although these strings are not used in the spnewgame code as the filename suggests,
+# they are used in the scenario editor, and because the riskiness has reversed order,
+# they are most confusing.
+# JJB - 2005/01/02
+#	string 	string0		"str_tbl_ldl_Very_Risky"
+#	string	string1		"str_tbl_ldl_Risky"
+#	string	string2		"str_tbl_ldl_Not_Too_Bad"
+#	string	string3		"str_tbl_ldl_Pretty_Safe"
+#	string	string4		"str_tbl_ldl_No_Danger_Here"
+	string 	string0		"str_ldl_Villages_Only"
+	string	string1		"str_ldl_Roving_Bands"
+	string	string2		"str_ldl_Restless_Tribes"
+	string	string3		"str_ldl_Raging_Hordes"
 	string	string4		"str_tbl_ldl_No_Danger_Here"
 }
 
