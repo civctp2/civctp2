@@ -1,12 +1,33 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Advance (tech) handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Safeguard FindLevel against infinite recursion.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"      
 
@@ -55,6 +76,15 @@
 #include "buildingutil.h"
 #include "wonderutil.h"
 #include "MainControlPanel.h"
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include <stdexcept>	// overflow_error
+
+namespace
+{
+	char const	REPORT_ADVANCE_LOOP[]	= "Advance: loop detected";
+}
+#endif
 
 extern Player** g_player;
 
@@ -822,7 +852,7 @@ sint32 Advances::GetCost(const AdvanceType adv)
 }
 
 
-
+#if defined(ACTIVISION_ORIGINAL)
 sint32 Advances::FindLevel(AdvanceRecord* rec)
 {
 	if(rec->GetNumPrerequisites() == 0)
@@ -844,6 +874,52 @@ sint32 Advances::FindLevel(AdvanceRecord* rec)
 		return 1 + maxLevel;
 	}
 }
+#else
+//----------------------------------------------------------------------------
+//
+// Name       : Advances::FindLevel
+//
+// Description: Find level (length of prerequisite chain) of an advance.
+//
+// Parameters : rec				: advance description in database
+//				fromLevel		: length of chain reaching this advance
+//
+// Globals    : g_theAdvanceDB	: advance database
+//
+// Returns    : sint32			: length of largest chain of prerequisites
+//
+// Remark(s)  : throws an overflow_error when a loop is detected in the chain.
+//
+//----------------------------------------------------------------------------
+sint32 Advances::FindLevel
+(
+	AdvanceRecord const * const	rec, 
+	sint32 const				fromLevel
+) const
+{
+	if (fromLevel > g_theAdvanceDB->NumRecords())
+	{
+		throw std::overflow_error(REPORT_ADVANCE_LOOP);
+	}
+
+	sint32	maxLevel = 0;
+
+	for (sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++) 
+	{			
+		AdvanceRecord * prereqRecord = 
+			g_theAdvanceDB->Access(rec->GetPrerequisitesIndex(prereq));
+		
+		sint32 const level	= FindLevel(prereqRecord, 1 + fromLevel);
+		if (level > maxLevel)
+			maxLevel = level;
+	}
+
+	return maxLevel + fromLevel;
+}
+
+	
+
+#endif
 
 #ifdef _DEBUG
 
@@ -853,16 +929,36 @@ Advances::DebugDumpTree()
     Assert(0<m_size);
 	sint32* level = new sint32[m_size];
 	sint32 numLevels = 0;
-
+#if !defined(ACTIVISION_ORIGINAL)
+	sint32 const	LEVEL_LOOPED	= -1;
+	bool			isLoopDetected	= false;
+#endif
 	for(sint32 i = 0; i < m_size; i++) {
 		AdvanceRecord* rec = g_theAdvanceDB->Access(i);
+#if defined(ACTIVISION_ORIGINAL)
 		level[i] = FindLevel(rec);
+#else
+		try
+		{
+			level[i] = FindLevel(rec);
+		}
+		catch (std::overflow_error &)
+		{
+			level[i]		= LEVEL_LOOPED;
+			isLoopDetected	= true;
+		}
+#endif
 		if(level[i] > numLevels - 1)
 			numLevels = level[i] + 1;
 	}
 	for(sint32 l = 0; l < numLevels; l++) {
 		DPRINTF(k_DBG_INFO, ("Advance: level %d:\n", l));
+#if defined(_MSC_VER)	// incorrect scope rules
 		for(i = 0; i < m_size; i++) {
+#else
+		for (sint32 i = 0; i < m_size; i++) 
+		{
+#endif
 			if(level[i] == l) {
 				DPRINTF(k_DBG_INFO, ("Advance: %s\n", 
 									 g_theAdvanceDB->GetNameStr(i)));
@@ -870,6 +966,24 @@ Advances::DebugDumpTree()
 		}
 		DPRINTF(k_DBG_INFO, ("\n"));
 	}
+
+#if !defined(ACTIVISION_ORIGINAL)
+	if (isLoopDetected)
+	{
+		// Report loops
+		DPRINTF(k_DBG_INFO, ("%s\n", REPORT_ADVANCE_LOOP));
+		for (size_t n = 0; n < m_size; ++n)
+		{
+			if (LEVEL_LOOPED == level[n])
+			{
+				DPRINTF(k_DBG_INFO, 
+					    ("Advance: %s\n", g_theAdvanceDB->GetNameStr(n))
+					   );
+			}
+		}
+		DPRINTF(k_DBG_INFO, ("\n"));
+	}
+#endif
 
 	delete [] level;
 }
