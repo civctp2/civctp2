@@ -1,7 +1,34 @@
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : As far as known handels the slic compiler
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added slic database access by Martin Gühmann
+// - Added a way to find out the size of a slic database by Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "slicif.h"
@@ -291,6 +318,24 @@ void slicif_declare_fixed_array(char *name, SLIC_SYM type, int size)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_add_op
+//
+// Description: This function is used to compile slic code as far as it is 
+//              known.
+//
+// Parameters : SOP op and as many as you want.
+//
+// Globals    : This function is so big no idea.
+//
+// Returns    : -
+//
+// Remark(s)  : The number of arguments depends on the given SOP type
+//              if you define new operatiors you have of course modify
+//              or implement the according behaviour of that function.
+//
+//----------------------------------------------------------------------------
 void slicif_add_op(SOP op, ...)
 {
 	va_list vl;
@@ -301,6 +346,11 @@ void slicif_add_op(SOP op, ...)
 	int offset;
 	char *sptr;
 	char internalName[k_MAX_FUNCTION_NAME];
+
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann for database access
+	SlicDBInterface *conduit;
+#endif
 
 	char errbuf[1024];
 
@@ -754,6 +804,134 @@ void slicif_add_op(SOP op, ...)
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
 			break;
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann for database support
+		case SOP_DBNAME:
+			conduit = va_arg(vl, SlicDBConduit*);
+			Assert(conduit);
+
+			name = va_arg(vl, char*);
+			symval = slicif_get_symbol(name);
+			if(!symval) {
+				sprintf(errbuf, "Symbol %s is undefined", name);
+				yyerror(errbuf);
+				symval = g_slicEngine->GetOrMakeSymbol(name);
+			}
+
+			*((SlicDBInterface**)s_code_ptr) = conduit;
+			s_code_ptr += sizeof(SlicDBInterface*);
+
+			*((int *)s_code_ptr) = symval->GetIndex();
+			s_code_ptr += sizeof(int);
+
+
+			if(!s_argValuePushed && (s_parenLevel > 0)) {
+				
+				s_argValuePushed = true;
+				s_argSymbol = symval;
+				s_argMemberIndex = -1;
+			} else {
+				
+				s_argSymbol = NULL;
+			}
+
+			break;
+		case SOP_DBNAMEREF:
+			conduit = va_arg(vl, SlicDBConduit*);
+			Assert(conduit);
+
+			//Get get variable name in the argument list.
+			name = va_arg(vl, char*);
+			symval = slicif_get_symbol(name);
+			if(!symval) {
+				sprintf(errbuf, "Symbol %s is undefined", name);
+				yyerror(errbuf);
+				symval = g_slicEngine->GetOrMakeSymbol(name);
+				//variable name is now free and can be reused. 
+			}
+
+			//Get referenced name of a flag from the according database.
+			name = va_arg(vl, char*);
+			if(!conduit->IsTokenInDB(name)){
+				sprintf(errbuf, "Token %s not found in %s", name, conduit->GetName());
+				yyerror(errbuf);
+			}
+
+			*((SlicDBInterface**)s_code_ptr) = conduit;
+			s_code_ptr += sizeof(SlicDBInterface*);
+
+			*((int *)s_code_ptr) = symval->GetIndex();
+			s_code_ptr += sizeof(int);
+
+			*((char**)s_code_ptr) = name;
+			s_code_ptr += sizeof(char*);
+
+			if(!s_argValuePushed && (s_parenLevel > 0)) {
+				
+				s_argValuePushed = true;
+				s_argSymbol = symval;
+				s_argMemberIndex = -1;
+			} else {
+				
+				s_argSymbol = NULL;
+			}
+
+			break;
+		case SOP_DB:
+		{
+			conduit = va_arg(vl, SlicDBConduit*);
+			Assert(conduit);
+
+			*((SlicDBInterface**)s_code_ptr) = conduit;
+			s_code_ptr += sizeof(SlicDBInterface*);
+
+			if(!s_argValuePushed && s_parenLevel > 0) {
+				s_argValuePushed = true;
+			}
+			s_argSymbol = NULL;
+
+			break;
+		}
+		case SOP_DBREF:
+		{
+			conduit = va_arg(vl, SlicDBConduit*);
+			Assert(conduit);
+
+			name = va_arg(vl, char *);
+			if(!conduit->IsTokenInDB(name)){
+				sprintf(errbuf, "Token %s not found in %s", name, conduit->GetName());
+				yyerror(errbuf);
+			}
+			
+			*((SlicDBInterface**)s_code_ptr) = conduit;
+			s_code_ptr += sizeof(SlicDBInterface*);
+			*((char**)s_code_ptr) = name;
+			s_code_ptr += sizeof(char*);
+			
+			if(!s_argValuePushed && s_parenLevel > 0) {
+				s_argValuePushed = true;
+			}
+			s_argSymbol = NULL;
+
+			break;
+		}
+		case SOP_DBARRAY:
+			break;
+		case SOP_DBSIZE:
+			//Added by Martin Gühmann to figure out via 
+			//slic how many records the database contains
+			conduit = va_arg(vl, SlicDBConduit*);
+			Assert(conduit);
+
+			*((SlicDBInterface**)s_code_ptr) = conduit;
+			s_code_ptr += sizeof(SlicDBInterface*);
+
+			if(!s_argValuePushed && s_parenLevel > 0) {
+				s_argValuePushed = true;
+			}
+			s_argSymbol = NULL;
+			break;
+#endif
 		default:
 			break;
 	}
@@ -825,12 +1003,38 @@ void slicif_end_while()
 }	
 	
 #ifdef _DEBUG
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_dump_code
+//
+// Description: This function is for debug purposes only and dumps error
+//              messages to a file presumably
+//
+// Parameters : unsigned char* code
+//              int codeSize
+//
+// Globals    : This function is so big no idea.
+//
+// Returns    : -
+//
+// Remark(s)  : This function is used for debbug purposes only, it should
+//              also be modified if you add new SOP types.
+//
+//              As far as known this function is also used and slic compiling
+//              time.
+//
+//----------------------------------------------------------------------------
 void slicif_dump_code(unsigned char* code, int codeSize)
 {
 	unsigned char* codePtr = code;
 	double dval;
 	int ival, ival2;
 	SlicNamedSymbol *symval;
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann for database access
+	SlicDBInterface *conduit;
+	char* name;
+#endif
 
 	extern FILE *debuglog;
 
@@ -1102,6 +1306,89 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 					fprintf(debuglog, "asize %s(%d)\n", symval->GetName(), ival);
 				}
 				break;
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann for database support
+			case SOP_DBNAME:
+				conduit = *((SlicDBConduit**)codePtr);
+				codePtr += sizeof(SlicDBConduit*);
+
+				ival = *((int*)codePtr);
+				codePtr += sizeof(int);
+
+				if(!conduit) {
+					fprintf(debuglog, "Bad mojo, NULL db\n");
+				} else {
+					fprintf(debuglog, "%s\n", conduit->GetName());
+
+					symval = g_slicEngine->GetSymbol(ival);
+					if(!symval) {
+						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+						return;
+					}
+					fprintf(debuglog, "%s %s(%d)\n", conduit->GetName(), symval->GetName(), ival);
+				}
+				break;
+			case SOP_DBNAMEREF:
+				conduit = *((SlicDBConduit**)codePtr);
+				codePtr += sizeof(SlicDBConduit*);
+
+				ival = *((int*)codePtr);
+				codePtr += sizeof(int);
+
+				name = *((char**)codePtr);
+				codePtr += sizeof(char*);
+
+				if(!conduit) {
+					fprintf(debuglog, "Bad mojo, NULL db\n");
+				} else {
+					fprintf(debuglog, "%s\n", conduit->GetName());
+
+					symval = g_slicEngine->GetSymbol(ival);
+					if(!symval) {
+						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+						return;
+					}
+					fprintf(debuglog, "%s(%s).%s, %s == (%d)\n", conduit->GetName(), symval->GetName(), name, symval->GetName(), ival);
+				}
+				break;
+			case SOP_DB:
+			{
+				conduit = *((SlicDBConduit**)codePtr);
+				codePtr += sizeof(SlicDBConduit*);
+				if(!conduit) {
+					fprintf(debuglog, "Bad mojo, NULL db\n");
+				} else {
+					fprintf(debuglog, "%s\n", conduit->GetName());
+				}
+				break;
+			}
+			case SOP_DBREF:
+			{
+				conduit = *((SlicDBConduit**)codePtr);
+				codePtr += sizeof(SlicDBConduit*);
+				name = *((char**)codePtr);
+				codePtr += sizeof(char*);
+				if(!conduit) {
+					fprintf(debuglog, "Bad mojo, NULL db\n");
+				} else {
+					fprintf(debuglog, "%s(..).%s\n", conduit->GetName(), name);
+				}
+				break;
+			}
+			case SOP_DBARRAY:
+				break;
+			case SOP_DBSIZE:
+				//Added by Martin Gühmann to figure out via 
+				//slic how many records the database contains
+				conduit = *((SlicDBConduit**)codePtr);
+				codePtr += sizeof(SlicDBConduit*);
+				if(!conduit) {
+					fprintf(debuglog, "Bad mojo, NULL db\n");
+				} else {
+					fprintf(debuglog, "%s\n", conduit->GetName());
+				}
+				break;
+#endif
 			default:
 				fprintf(debuglog, "???\n");
 				break;
@@ -1636,6 +1923,24 @@ void slicif_check_hard_string_argument()
 {
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_find_db
+//
+// Description: Handels slic database access.
+//
+// Parameters : const char *dbname: A name of a database in slic.
+//              void **dbptr: A pointer that can be converted into
+//              a SlicDBInterface interface object.
+//
+// Globals    : -
+//
+// Returns    : Returns whether there is a database with such a name
+//              given by dbname. So finally 1 or 0.
+//              
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 int slicif_find_db(const char *dbname, void **dbptr)
 {
 	SlicDBInterface *conduit = g_slicEngine->GetDBConduit(dbname);
@@ -1648,6 +1953,25 @@ int slicif_find_db(const char *dbname, void **dbptr)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_find_db_index
+//
+// Description: Handels slic database access.
+//
+// Parameters : void *dbptr represents a database for instance UnitDB.
+//              const char *name represents name that can be found
+//              in the given database for instance UNIT_SETTLER.
+//
+// Globals    : -
+//
+// Returns    : The database index of the given name.For instance 
+//              UnitDB(UNIT_SETTLER) gives the the datbase index of the
+//              unit with name UNIT_SETTLER.
+//              
+// Remark(s)  : This function is called at copiling time.
+//
+//----------------------------------------------------------------------------
 int slicif_find_db_index(void *dbptr, const char *name)
 {
 	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
@@ -1664,25 +1988,72 @@ int slicif_find_db_index(void *dbptr, const char *name)
 	return index;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_find_db_value
+//
+// Description: Handels slic database access.
+//
+// Parameters : void *dbptr: Represents a database for instance UnitDB.
+//              const char *recname: Represents name that can be found
+//              in the given database for instance UNIT_SETTLER.
+//              const char *valname: Represents a flag of an entry in 
+//              the given database for instance MaxMovePoints.
+//
+// Globals    : -
+//
+// Returns    : Gets the value of a flag of a given entry in a given 
+//              database. For instance UnitDB(UNIT_SETTLER).MaxMovePoints 
+//              gives the value of the MaxMovePoints flag of the entry 
+//              in UnitDB with the internal name UNIT_SETTLER.
+//              
+// Remark(s)  : This function is called at copiling time.
+//
+//----------------------------------------------------------------------------
 int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 {
 	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
+	char errbuf[1024];
 	Assert(conduit);
 	if(!conduit)
 		return 0;
 
 	sint32 index;
 	if((index = conduit->GetIndex(recname)) < 0) {
-		char errbuf[1024];
 		sprintf(errbuf, "%s not found in %s", recname, conduit->GetName());
 		yyerror(errbuf);
 		return 0;
+	}
+	if(!conduit->IsTokenInDB(valname)){
+		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
+		yyerror(errbuf);
 	}
 
 	return conduit->GetValue(index, valname);
 				
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_find_db_value_by_index
+//
+// Description: Handels slic database access.
+//
+// Parameters : void *dbptr: Represents a database for instance UnitDB.
+//              int index: Represents an index in the given database.
+//              const char *valname: Represents a flag of an entry in 
+//              the given database for instance MaxMovePoints.
+//
+// Globals    : -
+//
+// Returns    : Gets the value of a flag of a given entry in a given 
+//              database. For instance UnitDB(0).MaxMovePoints gives
+//              the value of the MaxMovePoints flag of the first entry in
+//              UnitDB.
+//              
+// Remark(s)  : This function is called both at copiling time and run time.
+//
+//----------------------------------------------------------------------------
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 {
 	SlicDBInterface *conduit = (SlicDBConduit *)dbptr;
@@ -1690,7 +2061,45 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 	if(!conduit)
 		return 0;
 
+	if(!conduit->IsTokenInDB(valname)){
+		char errbuf[1024];
+		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
+		yyerror(errbuf);
+	}
 	return conduit->GetValue(index, valname);
 }
 
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann
 
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_is_sym
+//
+// Description: Checks whether a given name is registered as symbol or 
+//              variable name.
+//
+// Parameters : char *name
+//
+// Globals    : -
+//
+// Returns    : 1 if the given name is a registered symbol or variable
+//              name to allow overloading of the database access slic
+//              functions.
+//
+// Remark(s)  : This function is only used at compiling time, to determine
+//              wheather a given name is a slic variable name or an internal
+//              database name.
+//
+//----------------------------------------------------------------------------
+int slicif_is_sym(char *name){
+	SlicNamedSymbol *symval;
+	symval = slicif_get_symbol(name);
+	if(symval != NULL){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
+#endif

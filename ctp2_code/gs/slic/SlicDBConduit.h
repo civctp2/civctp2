@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Handels slic database access
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added two new functions for better slic error 
+//   messages and for access on the number of entries 
+//   in a database, addion by Martin Gühmann.
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __SLIC_DB_CONDUIT_H__
@@ -12,6 +44,11 @@ public:
 	virtual const MBCHAR *GetRecordNameByIndex(sint32 index) = 0;
 	virtual sint32 GetRecordNameID(const char *id) = 0;
 	virtual sint32 GetRecordNameIDByIndex(sint32 index) = 0;
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to get the number of records in a database via slic
+	virtual sint32 GetNumRecords() = 0;
+	virtual bool IsTokenInDB(const char *valname) = false;
+#endif
 	virtual ~SlicDBInterface() {};
 };
 
@@ -40,11 +77,15 @@ public:
 		else
 			return -1;
 	}
-
 	const char *GetName() { return m_slicname; }
 
 	sint32 GetValue(sint32 index, const char *valname) {
 		const T *rec = m_db->Get(index);
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to avoid an access violation
+		Assert(rec);
+		if(!rec)return 0;
+#endif
 		sint32 i;
 		for(i = 0; i < m_numTokens; i++) {
 			if(stricmp(valname, m_tokens[i]) == 0) {
@@ -103,6 +144,57 @@ public:
 			return -1;
 		}
 	}
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann to get the number of records in a database via slic
+
+//----------------------------------------------------------------------------
+//
+// Name       : GetNumRecords
+//
+// Description: Returns the number in the according database.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : Number of entries in the according database.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+	sint32 GetNumRecords(){
+		return m_db->NumRecords();
+	}
+
+//----------------------------------------------------------------------------
+//
+// Name       : IsTokenInDB
+//
+// Description: Checks wheather a token is in the according database.
+//
+// Parameters : const char *valname
+//
+// Globals    : -
+//
+// Fields     : m_numTokens
+//              m_tokens
+//
+// Returns    : Whether the token specified by valname is in the according database.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+	bool IsTokenInDB(const char *valname){
+		sint32 i;
+		for(i = 0; i < m_numTokens; i++) {
+			if(stricmp(valname, m_tokens[i]) == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+#endif
 
 private:
 	CTPDatabase<T> *m_db;

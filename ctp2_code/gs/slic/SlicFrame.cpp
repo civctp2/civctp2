@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : As far as known handels slic code execution
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added slic database access Martin Gühmann
+// - Added a way to find out the size of a slic database by Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
@@ -21,6 +52,12 @@
 #include "GameEventManager.h"
 #include "SlicArray.h"
 #include "ProfileDB.h"
+
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann for database access
+#include "SlicDBConduit.h"
+#endif
 
 extern "C" extern FILE *debuglog;
 extern TurnCount *g_turn;
@@ -247,6 +284,26 @@ void SlicFrame::AddArg(SS_TYPE type, SlicStackValue value)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : DoInstruction
+//
+// Description: Executes slic intructions that were previously
+//              "compiled" by slicif_add_op.
+//
+// Parameters : SOP op
+//
+// Globals    : This function is so big no idea.
+//
+// Returns    : -
+//
+// Remark(s)  : The behaviour depends on the given SOP type
+//              if you define new operatiors you have of course modify
+//              or implement the according behaviour of that function.
+//
+//              This function is called at slic run time.
+//
+//----------------------------------------------------------------------------
 BOOL SlicFrame::DoInstruction(SOP op)
 {
 	unsigned char* codePtr = &m_segment->m_code[m_offset];
@@ -265,6 +322,12 @@ BOOL SlicFrame::DoInstruction(SOP op)
 	sint32 sp;
 	sint32 res;
 	BOOL calcOffset = TRUE;
+
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann for database access
+	SlicDBInterface *conduit;
+	char* name;
+#endif
 
 	switch(op) {
 		case SOP_PUSHI:
@@ -972,6 +1035,126 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 			m_stack->Push(SS_TYPE_INT, sval1);
 			break;
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann for database support
+		case SOP_DBNAME:
+			conduit = *((SlicDBConduit**)codePtr);
+			codePtr += sizeof(SlicDBConduit*);
+			Assert(conduit);
+
+			ival = *((sint32*)codePtr);
+			codePtr += sizeof(int);
+			symval = g_slicEngine->GetSymbol(ival);
+			if(!symval) {
+				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
+				stopped = TRUE;
+				break;
+			}
+			sval1.m_sym = symval;
+			sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
+			
+			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				sval3.m_int = -1;
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			break;
+		case SOP_DBNAMEREF:
+			conduit = *((SlicDBConduit**)codePtr);
+			codePtr += sizeof(SlicDBConduit*);
+			Assert(conduit);
+			ival = *((sint32*)codePtr);
+			codePtr += sizeof(int);
+			symval = g_slicEngine->GetSymbol(ival);
+			if(!symval) {
+				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
+				stopped = TRUE;
+				break;
+			}
+
+			name = *((char**)codePtr);
+			codePtr += sizeof(char*);
+
+			sval1.m_sym = symval;
+			sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
+
+			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+				sval3.m_int = conduit->GetValue(sval3.m_int, name);
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
+				sval3.m_int = 0;
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			break;
+		case SOP_DB:
+		{
+			conduit = *((SlicDBConduit**)codePtr);
+			codePtr += sizeof(SlicDBConduit*);
+			Assert(conduit);
+
+			sp = m_stack->Pop(type1, sval1);
+			Assert(sp >= 0);
+
+			sval3.m_int = Eval(type1, sval1);
+
+			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				sval3.m_int = -1;
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+
+			break;
+		}
+		case SOP_DBREF:
+		{
+			conduit = *((SlicDBConduit**)codePtr);
+			codePtr += sizeof(SlicDBConduit*);
+			Assert(conduit);
+			name = *((char**)codePtr);
+			codePtr += sizeof(char*);
+
+			sp = m_stack->Pop(type1, sval1);
+			Assert(sp >= 0);
+
+			sval2.m_int = Eval(type1, sval1);
+
+			if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){		
+				sval3.m_int = conduit->GetValue(sval2.m_int, name);
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval2.m_int, conduit->GetName());
+				sval2.m_int = 0;
+				m_stack->Push(SS_TYPE_INT, sval2);
+			}
+			break;
+		}
+		case SOP_DBARRAY:
+			break;
+		case SOP_DBSIZE:
+			//Added by Martin Gühmann to figure out via 
+			//slic how many records the database contains
+			conduit = *((SlicDBConduit**)codePtr);
+			codePtr += sizeof(SlicDBConduit*);
+			Assert(conduit);
+
+			if(conduit){
+				sval3.m_int = conduit->GetNumRecords();
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				sval3.m_int = -1;
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			break;
+#endif
 
 		default:
 			DPRINTF(k_DBG_SLIC, ("???\n"));

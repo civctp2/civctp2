@@ -1,3 +1,36 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : As far as known handels the slic compiler
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Addtion of SOP types by Martin Gühmann to allow:
+//   - Slic database access
+//   - Slic database size access
+//
+//----------------------------------------------------------------------------
+
 #ifndef _SLICIF_H_
 #define _SLICIF_H_
 
@@ -77,7 +110,17 @@ typedef enum {
 	SOP_LINE, 
 	SOP_LBRK, 
 	SOP_EVENT, 
-	SOP_ASIZE, 
+	SOP_ASIZE,
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann for database support
+	SOP_DBNAME,
+	SOP_DBNAMEREF,
+	SOP_DB,
+	SOP_DBREF,
+	SOP_DBARRAY,
+	SOP_DBSIZE,
+#endif
 
 	SOP_NOP 
 } SOP;
@@ -227,6 +270,11 @@ int slicif_is_valid_string(char *s);
 
 int slicif_find_db_value(void *dbptr, const char *recname, const char *valname);
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname);
+
+#if !defined(ACTIVISION_ORIGINAL)
+//Added by Martin Gühmann
+int slicif_is_sym(char *name);
+#endif
 
 #if defined(__cplusplus)
 }
