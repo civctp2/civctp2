@@ -9718,7 +9718,7 @@ Movement: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
 Support: {UnitDB(UnitRecord[0]).ShieldHunger}
 [END]
 
-[UNIT_MOUNTED_ARCHER2_SUMMARY]
+[UNIT_MOUNTED_ARCHER_SUMMARY]
 Fast moving Ancient Age ranged unit
 [END]
 

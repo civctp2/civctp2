@@ -1,0 +1,656 @@
+   /////////////////////////////////////////////
+  // Script for the Nuclear Detente scenario //
+ //   last update 11-17-00 by Tony Evans    //
+/////////////////////////////////////////////
+
+#include "ND_mod.slc"		// Mod Functions
+
+  //////////////////////
+ // Global variables //
+//////////////////////
+
+unit_t 		nukeUnit;		// Temporary nuke unit variable
+int_t		nukeOwner;		// Temporary Nuke owner variable
+army_t 		nukeArmy;		// Temporary nuke army variable
+int_t		nukeCount;		// Temporary nuke counter
+army_t		warnArmy;		// Temporary army
+location_t	warnLoc;		// Temporary location
+int_t		codeCounter;	// Counts the months until the launch codes reset
+int_t		spyCitySum;		// The # of Cities you have launch codes for
+int_t		spyCity[8];		// Array containing flags for Cities you've investigated
+int_t		redButton;		// Flag for Nuclear war
+int_t		gameEnded;		// Flag for Game Over;
+
+  //////////////
+ // Handlers //
+//////////////
+
+
+  //---------------------------------
+ // Stuff to do when the game starts 
+//-----------------------------------
+
+HandleEvent(BeginTurn) 'NDStartGame_F' post {
+int_t i;
+
+	if(player[0] == 1) {
+		// Lower starting Regard and Trust
+		LogRegardEvent(2, 1, -500, 0, ID_ND_LAUNCH_CODE_TURNS2, 0);
+		SetTrust(2, 1, -500);
+
+		codeCounter = 6;
+		spyCitySum = 0;
+		for(i = 0; i < 8; i = i + 1) {
+			spyCity[i] = 0;
+		}
+		Message (1, 'NDStartMessageA');
+		DisableTrigger('NDStartGame_F');
+	}
+}
+
+
+  //-----------------------
+ // Stuff to do every turn 
+//-------------------------
+
+HandleEvent(BeginTurn) 'NDEachTurn_F' post {
+int_t	i;
+int_t	unitType;
+int_t	numNukes;
+int_t	numUnits;
+int_t	stopFlag;
+army_t	tmpArmy;
+unit_t	tmpUnit;
+
+	nukeCount = 0;
+// count the turns for launch code reset
+	if(player[0] == 1) {
+		if(codeCounter == 1) {
+			codeCounter = 7;
+			if (spyCitySum > 0) {
+				Message (1, 'NDLaunchCodeReset');
+				spyCitySum = 0;
+				for(i = 0; i < 8; i = i + 1) {
+					spyCity[i] = 0;
+				}
+			}
+		}
+		codeCounter = codeCounter - 1;
+	// If you are at war for 12 turns, launch all missiles and lose game
+		if(TurnsAtWar(1, 2) >= 12 ) {
+			// Disable all Detente triggers in case anyone survives the Nuclear attack
+			DisableTrigger('NDDisbandNukeWarning_F');
+			DisableTrigger('NDDisbandNukeWarning2_F');
+			DisableTrigger('NDDisbandNuke_F');
+			DisableTrigger('NDDisbandNuke2_F');
+			DisableTrigger('NDCantMoveNukes_F');
+			DisableTrigger('NDNuclearSubWarning_F');
+			DisableTrigger('NDBombardWarning_F');
+			DisableTrigger('NDNuclearSubAttackStop_F');
+			DisableTrigger('NDBombardStop_F');
+			DisableTrigger('NDWinNuclearSub_F');
+			DisableTrigger('NDUnloadNuke_F');
+			DisableTrigger('NDMoveUnloadNuke_F');
+			DisableTrigger('NDDefuserWarning_F');
+			DisableTrigger('NDWinLoseDefuser_F');
+			DisableTrigger('NDLaunchCode_F');
+			DisableTrigger('NDEachTurn_F');	
+			Message (1, 'NDLoseNuclearWarA');
+		}
+	// If flag is set, launch nuclear missiles
+		if(redButton == 1) {
+			// Disable all Detente triggers in case anyone survives the Nuclear attack
+			DisableTrigger('NDDisbandNukeWarning_F');
+			DisableTrigger('NDDisbandNukeWarning2_F');
+			DisableTrigger('NDDisbandNuke_F');
+			DisableTrigger('NDDisbandNuke2_F');
+			DisableTrigger('NDCantMoveNukes_F');
+			DisableTrigger('NDNuclearSubWarning_F');
+			DisableTrigger('NDBombardWarning_F');
+			DisableTrigger('NDNuclearSubAttackStop_F');
+			DisableTrigger('NDBombardStop_F');
+			DisableTrigger('NDWinNuclearSub_F');
+			DisableTrigger('NDUnloadNuke_F');
+			DisableTrigger('NDMoveUnloadNuke_F');
+			DisableTrigger('NDDefuserWarning_F');
+			DisableTrigger('NDWinLoseDefuser_F');
+			DisableTrigger('NDLaunchCode_F');
+			DisableTrigger('NDEachTurn_F');	
+			Message (1, 'NDLoseNuclearWarA');
+		}
+		if (GetEffectiveRegard(2, 1) > 400) {
+			LogRegardEvent(2, 1, -50, 0, ID_ND_LAUNCH_CODE_TURNS2, 0);	// if reputation gets too high, bump it down
+		}
+
+		// Check Vendikari army for Nukes
+		numNukes = 0;
+		if(IsPlayerAlive(2)) {
+			player[0] = 2;
+			numUnits = player[0].units;	
+
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(2, i, tmpUnit);
+				unitType = tmpUnit.type;
+				if(unitType == UnitDB(UNIT_NUKE)) {
+					numNukes = numNukes + 1;
+				}
+			}
+			if(numNukes == 0) {			// If Vendikari have no Nukes, you win
+				stopFlag = 1;
+				Message(1, 'NDWinDiplomacy');
+			}
+		}
+		
+		// Check your army for Nukes
+		if (stopFlag != 1) {
+			numNukes = 0;
+			player[0] = 1;
+			numUnits = player[0].units;	
+
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType = tmpUnit.type;
+				if(unitType == UnitDB(UNIT_NUKE)) {
+					numNukes = numNukes + 1;
+				}
+			}
+			if(numNukes == 0) {			// If you have no Nukes, you lose
+				Message(1, 'NDLoseStupidity');
+			}
+		}
+	}
+}
+
+
+  //---------------------------------------------
+ // Handler for when a disbanded unit is Nuclear
+//-----------------------------------------------
+
+HandleEvent(DisbandArmyOrder) 'NDDisbandNukeWarning_F' pre {
+int_t 	i;
+int_t	numUnits;
+army_t	tmpArmy;
+unit_t	tmpUnit;
+int_t	unitType;
+
+	tmpArmy = army[0];
+	nukeOwner = tmpArmy.owner;
+
+	if(nukeOwner == 1) {
+		for(i = 0; i < tmpArmy.size; i = i + 1) {
+			GetUnitFromArmy(tmpArmy, i, tmpUnit);
+			unitType = tmpUnit.type;
+			if(unitType == UnitDB(UNIT_NUKE) || 
+			   unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+				nukeArmy = tmpArmy;
+				DisableTrigger('NDDisbandNukeWarning_F');	
+				DisableTrigger('NDDisbandNukeWarning2_F');	
+				Message(1, 'NDDisbandNukeWarning');
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent(DisbandUnit) 'NDDisbandNukeWarning2_F' pre {
+unit_t	tmpUnit;
+int_t	unitType;
+
+	tmpUnit = unit[0];
+	nukeOwner = tmpUnit.owner;
+
+	if(nukeOwner == 1) {
+		unitType = tmpUnit.type;
+		if(unitType == UnitDB(UNIT_NUKE) || 
+		   unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+			nukeUnit = tmpUnit;
+			DisableTrigger('NDDisbandNukeWarning_F');	
+			DisableTrigger('NDDisbandNukeWarning2_F');
+			Event:DisbandUnit(nukeUnit);
+			return STOP;
+		}
+	}
+}
+
+HandleEvent(DisbandArmyOrder) 'NDDisbandNuke_F' post {
+int_t	i;
+int_t	unitType;
+int_t	numNukes;
+int_t	numUnits;
+army_t	tmpArmy;
+unit_t	tmpUnit;
+
+	numNukes = 0;
+	player[0] = nukeOwner;
+	numUnits = player[0].units;	
+
+	for(i = 0; i < numUnits; i = i + 1) {
+		GetUnitByIndex(nukeOwner, i, tmpUnit);
+		unitType = tmpUnit.type;
+		if(unitType == UnitDB(UNIT_NUKE)) {
+			numNukes = numNukes + 1;
+		}
+	}
+	if(numNukes == 0) {
+		if(nukeOwner == 1) {
+			Message(1, 'NDLoseStupidity');
+		} elseif (nukeOwner == 2) {
+			Message(1, 'NDWinDiplomacy');
+		}
+	}
+}
+
+HandleEvent(DisbandUnit) 'NDDisbandNuke2_F' post {
+int_t	i;
+int_t	unitType;
+int_t	numNukes;
+int_t	numUnits;
+unit_t	tmpUnit;
+	
+	numNukes = 0;
+	player[0] = nukeOwner;
+	numUnits = player[0].units;	
+
+	for(i = 0; i < numUnits; i = i + 1) {
+		GetUnitByIndex(nukeOwner, i, tmpUnit);
+		unitType = tmpUnit.type;
+		if(unitType == UnitDB(UNIT_NUKE)) {
+			numNukes = numNukes + 1;
+		}
+	}
+	if(numNukes == 0) {
+		if(nukeOwner == 1) {
+			Message(1, 'NDLoseStupidity');
+		} elseif (nukeOwner == 2) {
+			Message(1, 'NDWinDiplomacy');
+		}
+	}
+}
+
+
+  //----------------------------------------------
+ // Prohibits you from moving a Nuclear Submarine
+//------------------------------------------------
+
+HandleEvent(MoveUnits) 'NDCantMoveNukes_F' pre {
+army_t	tmpArmy;
+unit_t	tmpUnit;
+int_t	armySize;
+int_t 	i;
+int_t	unitType;
+
+	tmpArmy = army[0];
+	armySize = tmpArmy.size;
+
+	for(i = 0; i < armySize; i = i + 1) {
+		GetUnitFromArmy(tmpArmy, i, tmpUnit);
+		unitType = tmpUnit.type;
+		if(unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+			if(tmpUnit.owner == 1) {
+				Message(1, 'NDCantmoveNukes');
+			}
+			return STOP;
+		}		
+	}
+}
+
+
+  //----------------------------------------------
+ // Warns you when you attack a Nuclear Submarine
+//------------------------------------------------
+
+HandleEvent(Battle) 'NDNuclearSubWarning_F' pre {
+int_t		i;
+int_t		numUnits;
+int_t		unitType;
+unit_t		tmpUnit;
+army_t		tmpArmy;
+location_t	tmpLoc;
+
+	tmpArmy = army[0];
+
+	if(tmpArmy.owner == 1) {
+		tmpLoc = location[0];
+		numUnits = GetUnitsAtLocation(tmpLoc);
+		for (i = 0; i < numUnits; i = i + 1) {
+			GetUnitFromCell(tmpLoc, i, tmpUnit);
+			unitType = tmpUnit.type;
+			if(unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+				if (redButton != 1) {
+					warnArmy = tmpArmy;
+					warnLoc = tmpLoc;
+					Message(1, 'NDNuclearSubWarning');
+					return STOP;
+				}
+			}
+		}
+	}
+}
+
+
+HandleEvent(BombardOrder) 'NDBombardWarning_F' pre {
+int_t		i;
+int_t		numUnits;
+int_t		unitType;
+unit_t		tmpUnit;
+army_t		tmpArmy;
+location_t	tmpLoc;
+
+	tmpArmy = army[0];
+
+	if(tmpArmy.owner == 1) {
+		tmpLoc = location[0];
+		numUnits = GetUnitsAtLocation(tmpLoc);
+		for (i = 0; i < numUnits; i = i + 1) {
+			GetUnitFromCell(tmpLoc, i, tmpUnit);
+			unitType = tmpUnit.type;
+			if(unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+				if (redButton != 1) {
+					warnArmy = tmpArmy;
+					warnLoc = tmpLoc;
+					Message(1, 'NDNuclearSubWarningBombard');
+					return STOP;
+				} else {
+					DisableTrigger('NDBombardWarning_F');
+				}
+			}
+		}
+	}
+}
+
+
+  //---------------------------------------------------
+ // Keeps AI players from attacking Nuclear Submarines
+//-----------------------------------------------------
+
+HandleEvent(Battle) 'NDNuclearSubAttackStop_F' pre {
+int_t		i;
+int_t		tmpNum;
+army_t		tmpArmy;
+unit_t		tmpUnit;
+location_t	tmpLoc;
+int_t		unitType;
+int_t		armySize;
+
+	tmpArmy = army[0];			// Keeps Nuclear Subs from attacking
+	tmpLoc = location[0];
+	armySize = tmpArmy.size;
+	for (i = 0; i < armySize; i = i + 1) {
+		GetUnitFromArmy(tmpArmy, i, tmpUnit);
+		if (tmpUnit.valid) {
+			unitType = tmpUnit.type;
+			if (unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+				return STOP;
+			}
+		}
+	}
+	if (tmpArmy.owner != 1) {	// Keeps anyone but you from attacking Nuclear Subs
+		tmpNum = GetUnitsAtLocation(tmpLoc);	
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc, i, tmpUnit);
+			if (tmpUnit.valid) {
+				unitType = tmpUnit.type;
+				if (unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+					return STOP;
+				}
+			}
+		}
+	}
+}
+
+HandleEvent(BombardOrder) 'NDBombardStop_F' pre {
+int_t		i;
+int_t		tmpNum;
+int_t		unitType;
+unit_t		tmpUnit;
+army_t		tmpArmy;
+location_t	tmpLoc;
+
+	tmpArmy = army[0];
+	tmpLoc = location[0];
+	
+	if (tmpArmy.owner != 1) {	// Keeps anyone but you from bombarding Nuclear Subs
+		tmpNum = GetUnitsAtLocation(tmpLoc);	
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc, i, tmpUnit);
+			if (tmpUnit.valid) {
+				unitType = tmpUnit.type;
+				if (unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+					return STOP;
+				}
+			}
+		}
+	}
+
+}
+
+
+  //------------------------------------------------------
+ // Checks to see if all enemy Nuclear Subs are destroyed
+//--------------------------------------------------------
+
+HandleEvent(KillUnit) 'NDWinNuclearSub_F' pre {
+int_t	i;
+int_t	numUnits;
+int_t	unitType;
+int_t	unitType2;
+unit_t	tmpUnit;
+
+	// must check that unit is valid
+	if (!unit[0].valid) {
+		return CONTINUE;
+	}
+
+	tmpUnit = unit[0];
+	unitType = tmpUnit.type;
+
+	if (unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+		if(tmpUnit.owner == 2) {
+			redButton = 1;
+			nukeCount = 0;
+			if(IsPlayerAlive(2)) {
+				player[0] = 2;
+				numUnits = player[0].units;
+				for(i = 0; i < numUnits; i = i + 1) {
+					// true if unit is valid
+					if (GetUnitByIndex(2, i, tmpUnit)) {
+						unitType2 = tmpUnit.type;
+						if(unitType2 == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+							nukeCount = nukeCount + 1;
+						}
+					}
+				}
+				if(nukeCount == 8) {
+					Message(1, 'NDNuclearSubDestroy');
+				} elseif (nukeCount == 1) {
+					Message(1, 'NDWinNuclearSub');
+				}
+			}
+		}
+	}
+}
+
+
+  //-----------------------------------------------------
+ // Stops the unloading of Nukes from Nuclear Submarines
+//-------------------------------------------------------
+
+HandleEvent(UnloadOrder) 'NDUnloadNuke_F' pre {
+int_t	i;
+int_t	unitType;
+int_t	armySize;
+army_t	tmpArmy;
+unit_t	tmpUnit;
+	
+	tmpArmy = army[0];
+	armySize = tmpArmy.size;
+	
+	for(i = 0; i < armySize; i = i + 1) {
+		GetUnitFromArmy(tmpArmy, i, tmpUnit);
+		unitType = tmpUnit.type;
+		if(unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+			if(tmpArmy.owner == 1) {
+				Message(1, 'NDCantmoveNukes');
+			}
+			return STOP;
+		}
+	}
+}
+
+			
+  //----------------------------------------------------------
+ // Stops the move unloading of Nukes from Nuclear Submarines
+//------------------------------------------------------------
+
+HandleEvent(MoveUnloadOrder) 'NDMoveUnloadNuke_F' pre {
+int_t	i;
+int_t	unitType;
+int_t	armySize;
+army_t	tmpArmy;
+unit_t	tmpUnit;
+	
+	tmpArmy = army[0];
+	armySize = tmpArmy.size;
+
+	for(i = 0; i < armySize; i = i + 1) {
+		GetUnitFromArmy(tmpArmy, i, tmpUnit);
+		unitType = tmpUnit.type;
+		if(unitType == UnitDB(UNIT_NUCLEAR_SUBMARINE)) {
+			if(tmpArmy.owner == 1) {
+				Message(1, 'NDCantmoveNukes');
+			}
+			return STOP;
+		}
+	}
+}
+
+			
+  //-----------------------------------------------------------------------
+ // Sends a warning message when the AI starts building the Nanite Defuser
+//-------------------------------------------------------------------------
+
+HandleEvent(BuildWonder) 'NDDefuserWarning_F' post {
+city_t	tmpCity;
+int_t	tmpWonder;
+
+	tmpWonder = value[0];
+
+	if(tmpWonder == WonderDB(WONDER_NANITE_DEFUSER)) {
+		tmpCity = city[0];
+		if (tmpCity.owner != 1) {
+			player[1] = tmpCity.owner;
+			Message(1, 'NDDefuserWarning');
+		}
+	}
+}
+
+
+  //-----------------------------------------------
+ // Win/Lose game when the Nanite Defuser is built
+//-------------------------------------------------
+
+HandleEvent(CreateWonder) 'NDWinLoseDefuser_F' post {
+city_t	tmpCity;
+int_t	tmpWonder;
+
+	tmpWonder = value[0];
+
+	if(tmpWonder == WonderDB(WONDER_NANITE_DEFUSER)) {
+		tmpCity = city[0];
+		if (tmpCity.owner == 1) {
+			Message(1, 'NDWinDefuser');
+		} else {
+			Message(1, 'NDLoseDefuser');
+		}
+	}
+}
+
+
+  //---------------------------------
+ // Handles Launch Code Spy stuff...
+//-----------------------------------
+
+HandleEvent(DisplayInvestigationWindow) 'NDLaunchCode_F' post {
+int_t	i;
+int_t	tmpNum;
+city_t	tmpCity;
+city_t	tmpCity2;
+unit_t	tmpUnit;
+
+	tmpCity = city[0];
+	tmpUnit = unit[0];
+
+	if(tmpUnit.owner == 1 && tmpCity.owner == 2) {
+		player[0] = tmpCity.owner;
+		tmpNum = player[0].cities;
+		for(i = 0; i < tmpNum; i = i + 1) {
+			GetCityByIndex(2, i, tmpCity2);
+			if (tmpCity2 == tmpCity) {
+				if (spyCity[i] == 1) {
+					return CONTINUE;
+				} elseif(spyCitySum == 0) {
+					spyCitySum = 1;
+					spyCity[i] = 1;
+					Message(1, 'NDLaunchCode1');
+					return CONTINUE;
+				} else {
+					spyCitySum = spyCitySum + 1;
+					if(spyCitySum == 8) {
+						Message(1, 'NDWinLaunchCode');
+						return CONTINUE;
+					} else {
+						Message(1, 'NDLaunchCode2');
+						spyCity[i] = 1;
+						return CONTINUE;
+					}
+				}
+			}
+		}
+	}
+}
+
+// when strategies are first computed, change to our scenario strategy
+HandleEvent(InitStrategicState) 'ND_InitStrategicState' post {
+    int_t strategyindex;
+	strategyindex = StrategyDB(STRATEGY_ND_SCENARIO_DEFAULT);
+
+	if(IsPlayerAlive(player[0])) {
+		ConsiderStrategicState(player[0], 9999, strategyindex,-1,-1,-1);
+		ComputeCurrentStrategy(player[0]);
+	}
+}
+
+// every time strategies are computed, consider our scenario strategy
+HandleEvent(NextStrategicState) 'ND_NextStrategicState' pre {
+    int_t strategyindex;
+	strategyindex = StrategyDB(STRATEGY_ND_SCENARIO_DEFAULT);
+
+	if(IsPlayerAlive(player[0])) {
+		ConsiderStrategicState(player[0], 9999, strategyindex,-1,-1,-1);
+	}
+}
+
+// when diplomatic states are first computed, change to our scenario diplomatic
+// state
+HandleEvent(InitDiplomaticState) 'ND_InitDiplomaticState' post {
+    int_t diplomacyindex;
+	diplomacyindex = DiplomacyDB(DIPLOMACY_ND_SCENARIO_DEFAULT);
+
+	if(IsPlayerAlive(player[0]) && IsPlayerAlive(player[1])) {
+		ConsiderDiplomaticState(player[0], player[1], 9999, diplomacyindex, -1,-1,-1);
+		ChangeDiplomaticState(player[0], player[1]);
+	}
+}
+
+// every time diplomatic states are computed, consider our scenario 
+// diplomatic state
+HandleEvent(NextDiplomaticState) 'ND_NextDiplomaticState' pre {
+    int_t diplomacyindex;
+	diplomacyindex = DiplomacyDB(DIPLOMACY_ND_SCENARIO_DEFAULT);
+	if(IsPlayerAlive(player[0]) && IsPlayerAlive(player[1])) {
+		ConsiderDiplomaticState(player[0], player[1], 9999, diplomacyindex,-1,-1,-1);	
+	}
+}
+
+#include "ND_msg.slc"		// Messageboxes 
+

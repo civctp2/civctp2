@@ -1,0 +1,921 @@
+/////////////////////////////////////////////////////////
+// file info goes here                                 //
+// This file is for Winnie testing purposes only.      //
+// No lemurs were harmed in the opening of this file.  //
+/////////////////////////////////////////////////////////
+
+#include "tut2_func.slc"
+
+/////////////////////////////
+// flags and shit like dat //
+/////////////////////////////
+
+int_t YES_HELP_FLAG;	//if the player wants extra help
+int_t RETARD;			//probably won't ship with this
+int_t CHECK_QUEUE;		//workaround
+int_t FIRST_TILE_IMP;	//ag, I f'd up
+int_t FIRST_UNIT_SELECTED_FLAG;
+int_t STARTING_SETTLERS;
+int_t EARLY_BUILDING_STARTED;
+int_t CITY_KILLED;
+int_t BIG_CITY;
+int_t CARAVANS_AVAILABLE;
+int_t NEW_ARMY;
+
+city_t FIRST_CITY_CAPTURED;
+
+unit_t FIRST_UNIT;
+
+//////////////////////////////////////
+// Handlers and triggers begin here	//	
+//////////////////////////////////////
+
+//just run once when the game starts
+
+HandleEvent(BeginTurn) 'TStartGame' post {
+ARBITRARY_TERRAIN_VALUE = 650;		//I don't know; just sounded good
+MAX_DIR = 8;		//0-7 circle around the loc, 8 is the loc 
+RIVER_BONUS = 35;	//terrain w/ is much better than w/o	
+GOOD_BONUS = 2;		//for now; when trade becomes available, this becomes much more important
+CHECK_QUEUE = 0;	//dumbass workaround for dumbass design flaw
+FillUpTerrainScores();	//put scores into terrain array
+SetDirStrings();	//fill up direction strings
+YES_HELP_FLAG = 0;
+FIRST_UNIT = 0;
+NEW_ARMY = 0;
+
+	if(IsHumanPlayer(player[0])) {
+		GetLevels();
+		RIOT_LEVEL = GetRiotLevel();
+		REVOLUTION_LEVEL = GetRevolutionLevel();
+		Message (g.player, 'TMTurn0');
+		Message(g.player, 'TATurn0A');	
+		DisableTrigger('TStartGame');
+	}
+}
+
+//establish who the human player is and count the player's settlers and cities
+
+HandleEvent(BeginTurn) 'TStart10Turns' post {
+	if(IsHumanPlayer(player[0])) {
+		GetLevels();
+
+		if(player[0].cities) {
+			if(AllCitiesBuilding(player[0])) {
+				DisableTrigger('TStart10Turns');
+			}
+		}
+		if(g.year == 1 && player[0].cities < 1) {
+			Message(g.player, 'TMLookForGoodSpot1');
+		}
+		if(g.year == 2 && player[0].cities < 1) {
+			Message(g.player, 'TMLookForGoodSpot2');
+		}
+		if(g.year == 3 && player[0].cities < 1) {
+			Message(g.player, 'TMLookForGoodSpot3');
+		}
+		if(g.year == 4 && player[0].cities < 1) {
+			Message(g.player, 'TMLookForGoodSpot4');
+		}
+		if(g.year == 6 && player[0].cities < 1) {
+			Message(g.player, 'TMBuildADamnCity');
+		}
+		if(g.year == 9 && player[0].cities < 1) {
+			Message(g.player, 'TMStartOver');
+			DisableTrigger('TStart10Turns');
+		}
+	}
+}
+
+HandleEvent(BeginTurn) 'TEveryTurn' pre {
+	if(IsHumanPlayer(player[0])) {
+		GetLevels();
+		StopAttract("ControlPanelWindow.ControlPanel.TurnYearStatus");
+		StopAttract("ControlPanelWindow.ControlPanel.ShortcutPad.CityManagementButton");
+		StopAttract("ControlPanelWindow.ControlPanel.TurnButton");
+		StopAttract("ControlPanelWindow.ControlPanel.ShortcutPad.NationalManagementButton");
+		StopAttract("ControlPanelWindow.ControlPanel.ShortcutPad.TradeButton");
+		StopAttract("ControlPanelWindow.ControlPanel.ShortcutPad.CivilizationManagementButton");
+		StopAttract("CityWindow.EditQueueButton");
+		StopAttract("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.BuildProgress.IconBorder.IconButton");	
+		StopAttract("DomesticDialog.DetailsButton");	
+		if(player[0].publicworkstax) {
+			DisableTrigger('TSetPW');
+		}
+		
+		if(player[0].cities > 2 && player[0].units < 2) {
+		
+		}
+
+		if(EARLY_BUILDING_STARTED) {
+			EARLY_BUILDING_STARTED = EARLY_BUILDING_STARTED + 1;
+			if(EARLY_BUILDING_STARTED == 2) {
+				Message(g.player, 'TMWait1');
+			} elseif (EARLY_BUILDING_STARTED == 5) {
+				Message(g.player, 'TMWait2');
+			} elseif (EARLY_BUILDING_STARTED == 7) {
+				Message(g.player, 'TMWait3');
+			} elseif (EARLY_BUILDING_STARTED >= 10) {
+				Message(g.player, 'TMWait4');
+				EARLY_BUILDING_STARTED = 0;
+			}
+		}
+	}
+}
+
+//make sure nobody's rioting or starting cults or sodomizing goats
+
+HandleEvent(BeginTurn) 'TCheckCities' post {
+	if(IsHumanPlayer(player[0]) && player[0].cities > 0) {
+		AllCitiesHappy();
+		AllCitiesFood();
+	}
+}		
+			 
+//tells the player to to open CityMgmt
+
+HandleEvent(CreateCity) 'TFirstCity' post {
+	if (IsHumanPlayer(player[0])) {// && CityIsValid(city[0])) {
+		FIRST_CITY = city[0];
+		if(value[1] > -1) {
+			DisableTrigger('TMovingSettlers');
+			Message (g.player, 'TMCreateCity');
+			DisableTrigger('TFirstCity');
+		} else {
+			DisableTrigger('TMovingSettlers');
+			Message(g.player, 'TMHutCity');
+			DisableTrigger('TFirstCity');
+		}
+	}
+}
+
+//tells the player to use mayors 
+
+HandleEvent(CreateCity) 'TLotsOCities' post {
+	if(IsHumanPlayer(player[0]) && player[0].cities >= 5) {
+		Message(player[0], 'TMUseMayors');
+		DisableTrigger('TLotsOCities');
+	}
+}
+
+//tells the player how to move the little dude out of the city 
+
+int_t why;
+HandleEvent(CreateUnit) 'TFirstUnit' post {
+why = value[1];
+	if(IsHumanPlayer(player[0]) && (why == 5 || why == 9)) {
+		if(LocCompare(location[0])) {
+			FIRST_UNIT = unit[0];
+			Message(g.player, 'TMMoveUnit1');
+			NEW_ARMY = 1;
+			DisableTrigger('TFirstUnit');
+			DisableTrigger('TSelectCity');
+			EnableTrigger('TSelectUnit');
+		}
+	}
+}
+
+HandleEvent(CitySelected) 'TSelectCity' post {
+player[0] = city[0].owner;
+	if(CityIsValid(city[0])) {
+		if(IsHumanPlayer(player[0])) {
+			DisableTrigger('TSelectUnit');
+		}
+	}
+}
+
+HandleEvent(ArmySelected) 'TSelectUnit' post {
+unit_t tmpUnit;
+player[0] = army[0].owner;
+	if(FIRST_UNIT && NEW_ARMY) {
+		if(LocCompare(army[0].location)) {
+			if(CheckForUnit(army[0], FIRST_UNIT)) {
+			Message(g.player, 'TMMoveUnit2');
+				FIRST_UNIT_SELECTED_FLAG = 1;
+				DisableTrigger('TSelectUnit');
+			} elseif(GetUnitFromArmy(army[0], 0, tmpUnit)) {
+				FIRST_UNIT = tmpUnit;	
+				Message(g.player, 'TMMoveUnit2');
+				FIRST_UNIT_SELECTED_FLAG = 1;
+				DisableTrigger('TSelectUnit');
+			}	
+		}
+	}
+}
+
+HandleEvent(ArmyDeselected) 'TLostUnit' post {
+	if(FIRST_UNIT_SELECTED_FLAG) {
+		Message(g.player, 'TAReselectUnit');
+		DisableTrigger('TLostUnit');
+	}
+}
+
+HandleEvent(MoveUnits) 'TMovedFirstUnit' post {
+	if(CheckForUnit(army[0], FIRST_UNIT)) {
+		MOVED_UNIT_ONCE_FLAG = 1;
+		DisableTrigger('TLostUnit');
+		DisableTrigger('TMovedFirstUnit');
+	}
+}	
+
+//remind the player to keep exploring
+
+HandleEvent(MoveUnits) 'TKeepMovingFirstUnit' post {
+	if(CheckForUnit(army[0], FIRST_UNIT) && FIRST_UNIT.valid && MOVED_UNIT_ONCE_FLAG) {
+		Message(g.player, 'TMKeepMoving');
+		DisableTrigger('TKeepMovingFirstUnit');
+	}
+}		
+
+HandleEvent(MoveUnits) 'TSettlerHelpLook' post {
+	if(IsHumanPlayer(army[0].owner) && YES_HELP_FLAG) {
+	player[0] = army[0].owner;
+	CountSettlers(player[0].armies);
+		if(SettlerMoved() && FindGood(army[0].location) >= 0) {
+			Message(g.player, 'TMCheckGood');
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'TMovingSettlers' post {
+	if(IsHumanPlayer(army[0].owner)) {
+	player[0] = army[0].owner;
+	CountSettlers(player[0].armies);
+		if(SettlerMoved()) {
+			if(CheckSettlerRadius(army[0].location) > ARBITRARY_TERRAIN_VALUE) {
+				Message(g.player, 'TMThisIsAGoodCitySpot');				
+			} else {
+				Message(g.player, 'TMMoveYerGuySomeMore');
+			}
+		}
+	}
+}
+
+//if the player manages to click the CityMgmt button, tell them to click Edit Build Queue 
+
+trigger 'TOpenedCityMgmt' on "ControlPanelWindow.ControlPanel.ShortCutPad.CityManagementButton" when (!CHECK_QUEUE) {
+	Message(g.player, 'TMOpenedCityMgmt');
+	CHECK_QUEUE = 1;
+	DisableTrigger('TOpenedCityMgmt');
+}
+
+//more workarounds than you could shake a lemur poo at
+
+trigger 'TClickedEditQueue' on "CityWindow.EditQueueButton" when (1) {
+	CHECK_QUEUE = 2;
+	DisableTrigger('TClickedEditQueue');
+}
+
+//note to self: bad design always finds a way of biting you right on the butt
+
+trigger 'TCloseBuildQueue' on "BuildEditorWindow.NormalModeButtons.CloseButton" when (1) {
+int_t player;
+player = g.player;
+CHECK_QUEUE = 3;
+
+	if(AllCitiesBuilding(player)) {
+		Message(g.player, 'TMKeepExploring');
+		EARLY_BUILDING_STARTED = 1;
+		DisableTrigger('TCheckQueue');
+		DisableTrigger('TCloseBuildQueue');
+	} 
+}
+
+//oh, baby, show me your workaround face
+
+trigger 'TCheckQueue' on "CityWindow.CloseButton" when (1) {
+int_t player;
+player = g.player;
+
+	if(CityBuildingWonder(player)) {
+		EARLY_BUILDING_STARTED = 1;
+		DisableTrigger('TCheckQueue');
+		return CONTINUE;
+	} elseif(CityBuildingBuilding(player)) { 
+		EARLY_BUILDING_STARTED = 1;
+		DisableTrigger('TCheckQueue');
+		return CONTINUE;
+	} elseif (AllCitiesBuilding(player)) {
+		Message(g.player, 'TMKeepExploring');
+		EARLY_BUILDING_STARTED = 1;
+		DisableTrigger('TCheckQueue');
+		return CONTINUE;
+	} else {
+		return CONTINUE;
+	}
+}
+
+//make sure the player doesn't have the levels way off
+
+trigger 'TCheckLevels' on "DomesticDialog.CloseButton" when (1) {
+player[0] = g.player;
+GetLevels();
+
+	if(WAGES_EXP > WAGES_LEVEL && WORKDAY_EXP > WORKDAY_LEVEL && RATIONS_EXP > RATIONS_LEVEL) {
+		Message(g.player, 'TACheckLevels1');
+		DisableTrigger('TCheckLevels');
+		return CONTINUE;		
+	} elseif(WORKDAY_EXP > WORKDAY_LEVEL && RATIONS_EXP > RATIONS_LEVEL) {
+		Message(g.player, 'TACheckLevels2');
+		DisableTrigger('TCheckLevels');
+		return CONTINUE;
+	} elseif(WAGES_EXP > WAGES_LEVEL && RATIONS_EXP > RATIONS_LEVEL) {
+		Message(g.player, 'TACheckLevels3');
+		DisableTrigger('TCheckLevels');
+		return CONTINUE;
+	} elseif(WORKDAY_EXP > WORKDAY_LEVEL && WAGES_EXP > WAGES_LEVEL) {
+		Message(g.player, 'TACheckLevels4');
+		DisableTrigger('TCheckLevels');
+		return CONTINUE;
+	} else {
+		return CONTINUE;	
+	}
+}
+
+//yay you built a city wall here's what you get
+
+HandleEvent(CreateBuilding) 'TBuiltCityWall' post {
+	building[0] = value[0];
+	if(building[0].type == BuildingDB(IMPROVE_CITY_WALLS) && IsHumanPlayer(city[0].owner)) {
+		Message(g.player, 'TMBuiltCityWall');
+		DisableTrigger('TBuiltCityWall');
+	}
+}
+
+//yay you built a city wall here's what you get
+
+HandleEvent(CreateBuilding) 'TBuiltGranary' post {
+	building[0] = value[0];
+	if(building[0].type == BuildingDB(IMPROVE_FOOD_SILO) && IsHumanPlayer(city[0].owner)) {
+		Message(g.player, 'TMBuiltGranary');
+		DisableTrigger('TBuiltGranary');
+	}
+}
+
+HandleEvent(CreateUnit) 'TTooManyUnits' pre {
+	if(IsHumanPlayer(player[0]) && GetUnitsAtLocation(city[0].location) > 10) {
+		Message(player[0], 'TMTooManyUnits');
+		DisableTrigger('TTooManyUnits');
+	}
+}		  
+
+HandleEvent(EndTurn) 'TCityTooSmallForSettler' pre {
+	// JBR1005 - IsUnitAtHead takes a city as its argument, not a unit type, commented this out.
+//	if(IsHumanPlayer(player[0]) && IsUnitAtHead(UnitDB(UNIT_SETTLER)) && city[0].population < 2) {
+//		Message(player[0], 'TMCityTooSmallForSettler');
+//		DisableTrigger('TCityTooSmallForSettler');
+//	}
+}
+//yay you built a temple here's what you get
+
+HandleEvent(CreateBuilding) 'TBuiltTemple' post {
+	building[0] = value[0];
+	if(building[0].type == BuildingDB(IMPROVE_SHRINE) && IsHumanPlayer(city[0].owner)) {
+		Message(g.player, 'TMBuiltTemple');
+		DisableTrigger('TBuiltTemple');
+	}
+}
+
+//yay you built a marketplace here's what you get
+
+HandleEvent(CreateBuilding) 'TBuiltMarketplace' post {
+	building[0] = value[0];
+	if(building[0].type == BuildingDB(IMPROVE_BAZAAR) && IsHumanPlayer(city[0].owner)) {
+		Message(g.player, 'TMBuiltMarketplace');
+		DisableTrigger('TBuiltMarketplace');
+	}
+}
+
+//check to make sure that there are more units than cities
+
+HandleEvent(CreateCity) 'TBuildMoreEunuchs' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0]) && player[0].cities >= 2) {
+		if((player[0].units/player[0].cities) < 1) {
+			Message(g.player, 'TMBuildMoreUnits');
+			DisableTrigger('TMovingSettlers');
+			DisableTrigger('TBuildMoreEunuchs');
+		}
+	}		 
+}
+
+//check to see if player fortifies a unit in a city
+
+HandleEvent(EntrenchUnit) 'TFirstEntrenchment' post {
+	player[0] = unit[0].owner;
+	if(IsHumanPlayer(unit[0].owner)) {
+		if(CheckCityLoc(player[0].cities, unit[0].location)) {	
+			Message(g.player, 'TMFortifyOther');
+			DisableTrigger('TFirstEntrenchment');
+		} else {
+			Message(g.player, 'TMFortifyInCities');
+			DisableTrigger('TFirstEntrenchment');
+		}
+	}					
+}
+
+//first civilization contacted
+
+HandleEvent(ContactMade) 'TFirstContact' post {
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMFirstContact');
+		DisableTrigger('TFirstContact');
+	} elseif (IsHumanPlayer(player[1])) {
+		Message(player[1], 'TMFirstContact');
+		DisableTrigger('TFirstContact');
+	}
+}
+
+//when the player gets their first advance
+
+HandleEvent(GrantAdvance) 'TFirstAdvance' post {
+	if(IsHumanPlayer(player[0])) {
+		advance[0] = value[0];
+		Message(g.player, 'TMPickNewAdvance');
+		DisableTrigger('TFirstAdvance');
+	}
+}
+
+//when trade is discovered, tell the player to build Caravans
+
+HandleEvent(GrantAdvance) 'TGotTrade' post {
+int_t k; 
+city_t tmpCity;
+
+	if(IsHumanPlayer(player[0])) {
+		advance[0] = value[0];	
+		if(advance[0].type == AdvanceDB(ADVANCE_TRADE)) {
+			for(k = 0; k < player[0].cities; k = k + 1) {
+				GetCityByIndex(player[0], k, tmpCity);
+				if(CityIsValid(tmpCity) && FindGood(tmpCity.location) >= 0) {	
+					FIRST_CITY_WITH_GOOD = tmpCity;
+					Message(g.player, 'TMBuildCaravans');
+					return CONTINUE;
+					DisableTrigger('TGotTrade');
+				} else {
+					Message(g.player, 'TMSettleNearGoods');
+					DisableTrigger('TGotTrade');
+				}
+			}
+		}
+	}
+}
+
+//any govt adv discd
+
+HandleEvent(GrantAdvance) 'TNewGovt' post {
+	if(IsHumanPlayer(player[0])) {
+		advance[0] = value[0];
+		if(advance[0].type == AdvanceDB(ADVANCE_MONARCHY)
+		|| advance[0].type == AdvanceDB(ADVANCE_THEOLOGY)
+		|| advance[0].type == AdvanceDB(ADVANCE_BUREAUCRACY)
+		|| advance[0].type == AdvanceDB(ADVANCE_DEMOCRACY)
+		|| advance[0].type == AdvanceDB(ADVANCE_COMMUNISM)
+		|| advance[0].type == AdvanceDB(ADVANCE_FASCISM)
+		|| advance[0].type == AdvanceDB(ADVANCE_ECOTOPIA)
+		|| advance[0].type == AdvanceDB(ADVANCE_CORPORATE_REPUBLIC)
+		|| advance[0].type == AdvanceDB(ADVANCE_TECHNOCRACY)
+		|| advance[0].type == AdvanceDB(ADVANCE_VIRTUAL_DEMOCRACY)) {
+			Message(player[0], 'TMNewGovt');
+			DisableTrigger('TNewGovt');
+		}
+	}
+}
+
+
+//count the number of caravans and let the player know if the have any goods
+
+HandleEvent(CreateUnit) 'TCheckForCaravans' post {
+int_t k;
+city_t tmpCity;
+CARAVANS_AVAILABLE = TradePoints(player[0]) - TradePointsInUse(player[0]);
+
+	if(IsHumanPlayer(player[0]) && CARAVANS_AVAILABLE) {
+		for(k = 0; k < player[0].cities; k = k + 1) {
+			GetCityByIndex(player[0], k, tmpCity);
+			if(CityIsValid(tmpCity)) {	
+				if(FindGood(tmpCity.location) >= 0) {	
+					city[0] = tmpCity;	
+					Message(g.player, 'TMYouHaveAGood');
+					DisableTrigger('TCheckForCaravans');
+					return CONTINUE;
+				} else {
+					Message(g.player, 'TMYouHaveNoGoods');
+					DisableTrigger('TCheckForCaravans');
+				}
+			}
+		}
+	}
+}
+
+//embassy established 
+
+HandleEvent(EstablishEmbassyUnit) 'TEmbassyOrder' post {
+	if(IsHumanPlayer(unit[0].owner)) {
+		player[0] = unit[0].owner;
+		player[1] = city[0].owner;
+		Message(player[0],'TMEmbassy');
+		DisableTrigger('TEmbassyOrder');
+	} elseif (IsHumanPlayer(city[0].owner)) {
+		player[0] = city[0].owner;
+		player[1] = unit[0].owner;
+		Message(player[0],'TMEmbassy');
+	}
+}
+
+//make sure player has some PW
+
+HandleEvent(BeginTurn) 'TSetPW' post {
+	if(IsHumanPlayer(player[0]) && CITIES_BUILDING) {
+		Message(player[0], 'TMIncreasePW');
+		DisableTrigger('TSetPW');
+	}
+}			
+
+//when they have enough PW to build, then build
+
+HandleEvent(BeginTurn) 'TUsePW' post {
+	if(IsHumanPlayer(player[0]) && player[0].publicworkslevel > 200) {
+		Message(g.player, 'TMUsePW');
+		DisableTrigger('TUsePW');
+	}
+}
+
+
+HandleEvent(BeginTurn) 'TPWTooHigh' post {
+	if(IsHumanPlayer(player[0]) && player[0].publicworkstax > 70) {
+		Message(g.player, 'TAPWTooHigh');
+		DisableTrigger('TPWTooHigh');
+	}
+}
+
+//general warnings n' info about shit that happens in the game
+//there's a lot of them; I don't fucking care enough to comment each one
+
+HandleEvent(BioInfectCity) 'TBioInfectCity' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMBioInfectCity');
+		DisableTrigger('TBioInfectCity');
+	}				 
+}
+
+HandleEvent(BuyFront) 'TRushBuy' pre {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMRushBuy');
+		DisableTrigger('TRushBuy');
+	}
+}
+
+HandleEvent(CityRiot) 'TCityRiot' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMCityRiot');
+		DisableTrigger('TCityRiot');
+	}
+}
+
+HandleEvent(ConvertCityUnit) 'TConvertCity' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMConvertCity');
+		DisableTrigger('TConvertCity');
+	}
+}
+
+HandleEvent(CreateImprovement) 'TTileImprovement' post {
+	if(IsHumanPlayer(player[0])) {
+		FIRST_TILE_IMP = value[0];
+		Message(g.player, 'TMTileImprovement');
+		DisableTrigger('TTileImprovement');
+	}
+}
+
+HandleEvent(CreatePark) 'TCreatePark' pre {
+player[1] = city[0].owner;
+	if(IsHumanPlayer(player[1])) {
+		Message(g.player, 'TMCreatePark');
+		DisableTrigger('TCreatePark');
+	}
+}
+
+HandleEvent(DetrenchOrder) 'TDetrenched' post {
+player[0] = army[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMDetrenched');
+		DisableTrigger('TDetrenched');
+	}
+}
+
+HandleEvent(DisbandArmyOrder) 'TDisbandArmyOrder' pre {
+unit_t tmpUnit;
+int_t i;
+	for(i = 0; i < army[0].size; i = i + 1) {
+		GetUnitFromArmy(army[0], i, tmpUnit);
+		if(IsHumanPlayer(tmpUnit.owner)) {
+			player[0] = tmpUnit.owner;
+			Message(player[0], 'TMDisbandArmyOrder');
+			DisableTrigger('TDisbandArmyOrder');
+			return CONTINUE;
+		}		
+	}
+}
+
+HandleEvent(DisbandCity) 'TDisbandCity' pre {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0]) && city[0].population <= 3) {
+		Message(g.player, 'TMDisbandCity');
+		DisableTrigger('TDisbandCity');
+	} elseif (IsHumanPlayer(player[0]) && city[0].population > 3) {
+		BIG_CITY = city[0].population*1000;
+		Message(g.player, 'TMCantDisbandBigCity');
+	}
+}
+
+HandleEvent(EnslaveSettler) 'TSettlerEnslaved' post {
+player[0] = army[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(player[0], 'TMSettlerEnslaved');
+		DisableTrigger('TSettlerEnslaved');
+	}
+}
+
+HandleEvent(GiveMap) 'TGetMap' post {
+	if(IsHumanPlayer(player[1])) {
+		Message(g.player, 'TMGetMap');
+		DisableTrigger('TGetMap');
+	}
+}
+
+HandleEvent(ImprovementComplete) 'TTileImpComplete' post {
+	if(IsHumanPlayer(player[0])) {
+		FIRST_TILE_IMP = value[0];
+		Message(g.player, 'TMTileImpComplete');
+		DisableTrigger('TTileImpComplete');
+	}
+}
+
+HandleEvent(InciteRevolutionUnit) 'TSpyInciteRevolution' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMSpyInciteRevolution');
+		DisableTrigger('TSpyInciteRevolution');
+	}
+}
+
+HandleEvent(InciteUprisingUnit) 'TAbolitionistInciteUprising' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMAbolitionistInciteUprising');
+		DisableTrigger('TAbolitionistInciteUprising');
+	}
+}
+
+HandleEvent(IndulgenceSaleMade) 'TClericIndulgenceSale' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMClericIndulgenceSale');
+		DisableTrigger('TClericIndulgenceSale');
+	}
+}
+
+HandleEvent(InjoinUnit) 'TLawyerInjoinCity' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMLawyerInjoinCity');
+		DisableTrigger('TLawyerInjoinCity');
+	}
+}
+
+HandleEvent(MakeFranchise) 'TCorporateFranchise' post {
+player[1] = city[0].owner;
+	if(IsHumanPlayer(player[1])) {
+		Message(player[1], 'TMCorporateFranchise');
+		DisableTrigger('TCorporateFranchise');
+	}
+}
+
+//HandleEvent(BoardTransportOrder) 'TMoveIntoTransport' pre {
+//player[0] = army[0].owner;
+//	if(IsHumanPlayer(player[0])) {
+//		Message(g.player, 'TMMoveIntoTransport');
+//		DisableTrigger('TMoveIntoTransport');
+//	}
+//}
+
+HandleEvent(MoveOrder) 'TMovePathOrder' post {
+player[0] = army[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMMovePathOrder');
+		DisableTrigger('TMovePathOrder');
+	}
+}
+
+HandleEvent(MoveUnloadOrder) 'TMoveUnloadOrder' post {
+player[0] = army[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		if(!CheckForPlanes(army[0])) {
+			Message(g.player, 'TMMoveUnloadOrder');
+			DisableTrigger('TMoveUnloadOrder');
+		} else {
+			return CONTINUE;
+		}
+	}
+}
+
+HandleEvent(NanoInfectCity) 'TEcoTerroristNanoInfectCity' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMEcoTerroristNanoInfectCity');
+		DisableTrigger('TEcoTerroristNanoInfectCity');
+	}
+}
+
+HandleEvent(NukeCity) 'TCityNuked' post {
+player[1] = city[0].owner;
+	if(IsHumanPlayer(player[1])) {
+		Message(player[1], 'TMCityNuked');
+		DisableTrigger('TCityNuked');
+	}
+}
+
+HandleEvent(PillageOrder) 'TPillageOrder' post {
+player[0] = army[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMPillageOrder');
+		DisableTrigger('TPillageOrder');
+	}
+}
+
+HandleEvent(PirateOrder) 'TPirateOrder' post {
+player[0] = army[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMPirateOrder');
+		DisableTrigger('TPirateOrder');
+	}			
+}
+
+HandleEvent(PlagueCity) 'TInfectorPlagueCity' post {
+player[1] = city[0].owner;
+	if(IsHumanPlayer(player[1])) {
+		Message(player[1], 'TMInfectorPlagueCity');
+		DisableTrigger('TInfectorPlagueCity');
+	}
+}
+
+HandleEvent(ReformCityUnit) 'TReformCityOrder' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMReformCityOrder');
+		DisableTrigger('TReformCityOrder');
+	}
+}
+
+HandleEvent(Reject) 'TDipRejection' post {
+	if(IsHumanPlayer(player[1])) {
+		Message(player[1], 'TMDipRejection');
+		DisableTrigger('TDipRejection');
+	}
+}
+
+HandleEvent(Reject) 'TDipRejectionPlayer' post {
+	if(IsHumanPlayer(player[0])) {
+		Message(player[0], 'TMDipRejectionPlayer');
+		DisableTrigger('TDipRejectionPlayer');
+	}
+}
+
+HandleEvent(RemoveFranchise) 'TLawyerSueFranchise' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMLawyerSueFranchise');
+		DisableTrigger('TLawyerSueFranchise');
+	} 
+}
+
+HandleEvent(SellBuilding) 'TBuildingSold' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		improvement[0] = value[0];
+		Message(g.player, 'TMBuildingSold');
+		DisableTrigger('TBuildingSold');
+	}
+}
+
+HandleEvent(SetTarget) 'TNukeTargeted' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMNukeTargeted');
+		DisableTrigger('TNukeTargeted');
+	}
+}
+
+HandleEvent(SlaveRaidCity) 'TSlaverRaidCity' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMSlaverRaidCity');
+		DisableTrigger('TSlaverRaidCity');
+	}
+}
+
+HandleEvent(SleepOrder) 'TSleepOrder' post {
+player[0] = army[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMSleepOrder');
+		DisableTrigger('TSleepOrder');
+	}			
+}
+
+
+HandleEvent(UndergroundRailwayUnit) 'TAbolitionistFreeSlaves' post {
+player[0] = city[0].owner;
+	if(IsHumanPlayer(player[0])) {
+		Message(g.player, 'TMAbolitionistFreeSlaves');
+		DisableTrigger('TAbolitionistFreeSlaves');
+	}
+}
+
+//HandleEvent(UnloadOrder) 'TUnloadCargoOrder' post {
+//player[0] = army[0].owner;
+//	if(IsHumanPlayer(player[0]) && army[0]) {
+//		Message(g.player, 'TMUnloadCargo');
+//		DisableTrigger('TUnloadCargoOrder');
+//	}
+//}
+
+//City Mgmt one timers
+
+trigger 'TCMQueueTab' on "CityWindow.Tabs.QueueTab.TabButton" when (1) {
+	Message(g.player, 'TMCMQueueTab');
+	DisableTrigger('TCMQueueTab');
+}
+
+trigger 'TCMInventoryTab' on "CityWindow.Tabs.InventoryTab.TabButton" when (1) {
+	Message(g.player, 'TMCMInventoryTab');
+	DisableTrigger('TCMInventoryTab');
+}
+
+trigger 'TCMSpecialists' on "CityWindow.Tabs.Specialists.TabButton" when (1) {
+	Message(g.player, 'TMCMSpecialists');
+	DisableTrigger('TCMSpecialists');
+}
+
+trigger 'TCMStatistics' on "CityWindow.Tabs.Statistics.TabButton" when (1) {
+	Message(g.player, 'TMCMStatistics');
+	DisableTrigger('TCMStatistics');
+}
+
+trigger 'TCMUnits' on "CityWindow.Tabs.Units.TabButton" when (1) {
+	Message(g.player, 'TMCMUnits');
+	DisableTrigger('TCMUnits');
+}
+
+//Shortcut Pad one-timers
+
+trigger 'TSPCivMgmt' on "ControlPanelWindow.ControlPanel.ShortcutPad.CivilizationManagementButton" when (1) {
+	Message(g.player, 'TMSPCivMgmt');
+	DisableTrigger('TSPCivMgmt');
+}
+
+trigger 'TSPUnitMgmt' on "ControlPanelWindow.ControlPanel.ShortcutPad.UnitManagementButton" when (1) {
+	Message(g.player, 'TMSPUnitMgmt');
+	DisableTrigger('TSPUnitMgmt');
+}
+
+trigger 'TSPDiplomacy' on "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton" when (1) {
+	Message(g.player, 'TMSPDiplomacy');
+	DisableTrigger('TSPDiplomacy');
+}
+
+trigger 'TSPScience' on "ControlPanelWindow.ControlPanel.ShortcutPad.ScienceButton" when (1) {
+	Message(g.player, 'TMSPScience');
+	DisableTrigger('TSPScience');
+}
+
+trigger 'TSPGreatLibrary' on "ControlPanelWindow.ControlPanel.ShortcutPad.GreatLibraryButton" when (1) {
+	Message(g.player, 'TMSPGreatLibrary');
+	DisableTrigger('TSPGreatLibrary');
+}
+
+trigger 'TSPTrade' on "ControlPanelWindow.ControlPanel.ShortcutPad.TradeButton" when (1) {
+	Message(g.player, 'TMSPTrade');
+	DisableTrigger('TSPTrade');
+}
+
+trigger 'TSPNatlMgmt' on "ControlPanelWindow.ControlPanel.ShortcutPad.NationalManagementButton" when (1) {
+	Message(g.player, 'TMSPNatlMgmt');
+	DisableTrigger('TSPNatlMgmt');
+}
+
+//this is at the end of the file because something is broken in SetString()
+#include "tut2_msg.slc"		//plain ol' messageboxes in here
+
+
+
+
+
+
+
+
+		

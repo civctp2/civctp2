@@ -2,12 +2,11 @@ TILEIMP_ADVANCED_FARMS {
    Icon ICON_TILEIMP_ADVANCED_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_FARM2_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_FARM2_BUTTON
-   Sound SOUND_ID_IRRIGATION_2
    Level 2
    Class:Farm
 
+   ConstructionTiles 1
    ConstructionTiles 6
-   ConstructionTiles 7
    ConstructionTiles 7
 
    CantBuildOn TERRAIN_BROWN_MOUNTAIN
@@ -48,18 +47,17 @@ TILEIMP_ADVANCED_FARMS {
    }
 }
 
-## 1 ##########################################################
+############################################################
 
 TILEIMP_ADVANCED_MINES {
    Icon ICON_TILEIMP_ADVANCED_MINES
    Tooltip TOOLTIP_TILEIMP_SELECT_MINE2_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_MINE2_BUTTON
-   Sound SOUND_ID_MINE_2
    Level 2
    Class:Mine
 
+   ConstructionTiles 1
    ConstructionTiles 15
-   ConstructionTiles 16
    ConstructionTiles 16
 
    CantBuildOn TERRAIN_WATER_BEACH
@@ -121,18 +119,17 @@ TILEIMP_ADVANCED_MINES {
    }
 }
 
-## 2 ##########################################################
+############################################################
 
 TILEIMP_ADVANCED_UNDERSEA_MINES {
    Icon ICON_TILEIMP_ADVANCED_UNDERSEA_MINES
    Tooltip TOOLTIP_TILEIMP_SELECT_RIG2_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_RIG2_BUTTON
-   Sound SOUND_ID_MINE_2_WATER
    Level 2
    Class:OceanMine
 
+   ConstructionTiles 1
    ConstructionTiles 55
-   ConstructionTiles 56
    ConstructionTiles 56
 
    CantBuildOn TERRAIN_BROWN_HILL
@@ -195,13 +192,12 @@ TILEIMP_ADVANCED_UNDERSEA_MINES {
    }
 }
 
-## 3 ##########################################################
+############################################################
 
 TILEIMP_AIR_BASES {
    Icon ICON_TILEIMP_AIR_BASES
    Tooltip TOOLTIP_TILEIMP_SELECT_AIRBASE_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_AIRBASE_BUTTON
-   Sound SOUND_ID_AIR_BASES
    Level 2
    Class:Structure1
 
@@ -230,16 +226,19 @@ TILEIMP_AIR_BASES {
 
    TerrainEffect {
       Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_BROWN_MOUNTAIN
       Terrain TERRAIN_DESERT
       Terrain TERRAIN_FOREST
       Terrain TERRAIN_GLACIER
       Terrain TERRAIN_GRASSLAND
       Terrain TERRAIN_HILL
       Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_MOUNTAIN
       Terrain TERRAIN_PLAINS
       Terrain TERRAIN_SWAMP
       Terrain TERRAIN_TUNDRA
       Terrain TERRAIN_WHITE_HILL
+      Terrain TERRAIN_WHITE_MOUNTAIN
 
       Airport
       VisionRange 3
@@ -249,35 +248,20 @@ TILEIMP_AIR_BASES {
       ProductionTime 4
       TilesetIndex 32
    }
-
-   TerrainEffect {
-      Terrain TERRAIN_BROWN_MOUNTAIN
-      Terrain TERRAIN_MOUNTAIN
-      Terrain TERRAIN_WHITE_MOUNTAIN
-
-      Airport
-      VisionRange 3
-      RadarRange 3
-      EnableAdvance ADVANCE_AERODYNAMICS
-      ProductionCost 1000
-      ProductionTime 4
-      TilesetIndex 33
-   }
 }
 
-## 4 ##########################################################
+############################################################
 
 TILEIMP_AUTOMATED_FISHERIES {
    Icon ICON_TILEIMP_AUTOMATED_FISHERIES
    Tooltip TOOLTIP_TILEIMP_SELECT_NET3_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_NET3_BUTTON
-   Sound SOUND_ID_IRRIGATION_3_WATER
    Level 3
    Class:OceanFarm
 
-   ConstructionTiles 50
-   ConstructionTiles 50
-   ConstructionTiles 50
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
 
    CantBuildOn TERRAIN_BROWN_HILL
    CantBuildOn TERRAIN_BROWN_MOUNTAIN
@@ -342,18 +326,17 @@ TILEIMP_AUTOMATED_FISHERIES {
    }
 }
 
-## 5 ##########################################################
+############################################################
 
 TILEIMP_DRILLING_PLATFORM {
    Icon ICON_TILEIMP_DRILLING_PLATFORM
    Tooltip TOOLTIP_TILEIMP_SELECT_PIER2_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_PIER2_BUTTON
-   Sound SOUND_ID_MINE_2_WATER
    Level 2
    Class:OceanATM
 
+   ConstructionTiles 50
    ConstructionTiles 74
-   ConstructionTiles 75
    ConstructionTiles 75
 
    Excludes:ATM
@@ -385,18 +368,17 @@ TILEIMP_DRILLING_PLATFORM {
    }
 }
 
-## 6 ##########################################################
+############################################################
 
 TILEIMP_FARMS {
    Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_FARM1_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_FARM1_BUTTON
-   Sound SOUND_ID_IRRIGATION_1
    Level 1
    Class:Farm
 
+   ConstructionTiles 1
    ConstructionTiles 3
-   ConstructionTiles 4
    ConstructionTiles 4
 
    CantBuildOn TERRAIN_BROWN_MOUNTAIN
@@ -437,19 +419,18 @@ TILEIMP_FARMS {
    }
 }
 
-## 7 ##########################################################
+############################################################
 
 TILEIMP_FISHERIES {
    Icon ICON_TILEIMP_FISHERIES
    Tooltip TOOLTIP_TILEIMP_SELECT_NET2_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_NET2_BUTTON
-   Sound SOUND_ID_IRRIGATION_2_WATER
    Level 2
    Class:OceanFarm
 
-   ConstructionTiles 50
-   ConstructionTiles 50
-   ConstructionTiles 50
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
 
    CantBuildOn TERRAIN_BROWN_HILL
    CantBuildOn TERRAIN_BROWN_MOUNTAIN
@@ -514,20 +495,19 @@ TILEIMP_FISHERIES {
    }
 }
 
-## 8 ##########################################################
+############################################################
 
 TILEIMP_FORTIFICATIONS {
    Icon ICON_TILEIMP_FORTIFICATIONS
    Tooltip TOOLTIP_TILEIMP_SELECT_FORT_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_FORT_BUTTON
-   Sound SOUND_ID_FORTIFICATIONS
    Level 1
    IntBorderRadius 2
    SquaredBorderRadius 5
    Class:Structure1
 
+   ConstructionTiles 1
    ConstructionTiles 80
-   ConstructionTiles 81
    ConstructionTiles 81
 
    CantBuildOn TERRAIN_WATER_BEACH
@@ -574,18 +554,17 @@ TILEIMP_FORTIFICATIONS {
    }
 }
 
-## 9 ##########################################################
+############################################################
 
 TILEIMP_HYDROPONIC_FARMS {
    Icon ICON_TILEIMP_HYDROPONIC_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_FARM3_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_FARM3_BUTTON
-   Sound SOUND_ID_IRRIGATION_3
    Level 3
    Class:Farm
 
+   ConstructionTiles 1
    ConstructionTiles 9
-   ConstructionTiles 10
    ConstructionTiles 10
 
    CantBuildOn TERRAIN_BROWN_MOUNTAIN
@@ -626,13 +605,12 @@ TILEIMP_HYDROPONIC_FARMS {
    }
 }
 
-## 10 ##########################################################
+############################################################
 
 TILEIMP_LISTENING_POSTS {
    Icon ICON_TILEIMP_LISTENING_POSTS
    Tooltip TOOLTIP_TILEIMP_SELECT_LISTENPOST_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_LISTENPOST_BUTTON
-   Sound SOUND_ID_LISTENING_POSTS
    Level 1
    Class:LandDetector
 
@@ -687,13 +665,12 @@ TILEIMP_LISTENING_POSTS {
    }
 }
 
-## 11 ##########################################################
+############################################################
 
 TILEIMP_MAGLEV {
    Icon ICON_TILEIMP_MAGLEV
    Tooltip TOOLTIP_TILEIMP_SELECT_ROAD3_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_ROAD3_BUTTON
-   Sound SOUND_ID_ROAD_3
    Level 3
    Class:Road
 
@@ -718,7 +695,6 @@ TILEIMP_MAGLEV {
       Terrain TERRAIN_PLAINS
 
       MoveCost 10
-      Freight 10
       EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
       ProductionCost 240
       ProductionTime 4
@@ -733,7 +709,6 @@ TILEIMP_MAGLEV {
       Terrain TERRAIN_WHITE_HILL
 
       MoveCost 10
-      Freight 10
       EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
       ProductionCost 800
       ProductionTime 4
@@ -745,7 +720,6 @@ TILEIMP_MAGLEV {
       Terrain TERRAIN_TUNDRA
 
       MoveCost 10
-      Freight 10
       EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
       ProductionCost 1200
       ProductionTime 4
@@ -758,7 +732,6 @@ TILEIMP_MAGLEV {
       Terrain TERRAIN_WHITE_MOUNTAIN
 
       MoveCost 10
-      Freight 10
       EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
       ProductionCost 1600
       ProductionTime 4
@@ -766,18 +739,17 @@ TILEIMP_MAGLEV {
    }
 }
 
-## 12 ##########################################################
+############################################################
 
 TILEIMP_MEGA_MINES {
    Icon ICON_TILEIMP_MEGA_MINES
    Tooltip TOOLTIP_TILEIMP_SELECT_MINE3_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_MINE3_BUTTON
-   Sound SOUND_ID_MINE_3
    Level 3
    Class:Mine
 
+   ConstructionTiles 1
    ConstructionTiles 18
-   ConstructionTiles 19
    ConstructionTiles 19
 
    CantBuildOn TERRAIN_WATER_BEACH
@@ -839,18 +811,17 @@ TILEIMP_MEGA_MINES {
    }
 }
 
-## 13 ##########################################################
+############################################################
 
 TILEIMP_MEGA_UNDERSEA_MINES {
    Icon ICON_TILEIMP_MEGA_UNDERSEA_MINES
    Tooltip TOOLTIP_TILEIMP_SELECT_RIG3_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_RIG3_BUTTON
-   Sound SOUND_ID_MINE_3_WATER
    Level 3
    Class:OceanMine
 
+   ConstructionTiles 1
    ConstructionTiles 58
-   ConstructionTiles 59
    ConstructionTiles 59
 
    CantBuildOn TERRAIN_BROWN_HILL
@@ -913,18 +884,17 @@ TILEIMP_MEGA_UNDERSEA_MINES {
    }
 }
 
-## 14 ##########################################################
+############################################################
 
 TILEIMP_MINES {
    Icon ICON_TILEIMP_MINES
    Tooltip TOOLTIP_TILEIMP_SELECT_MINE1_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_MINE1_BUTTON
-   Sound SOUND_ID_MINE_1
    Level 1
    Class:Mine
 
+   ConstructionTiles 1
    ConstructionTiles 12
-   ConstructionTiles 13
    ConstructionTiles 13
 
    CantBuildOn TERRAIN_WATER_BEACH
@@ -983,17 +953,16 @@ TILEIMP_MINES {
    }
 }
 
-## 15 ##########################################################
+############################################################
 
 TILEIMP_NATURE_PRESERVE {
    Icon ICON_TILEIMP_NATURE_PRESERVE
    Tooltip TOOLTIP_TILEIMP_SELECT_ATM3_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_ATM3_BUTTON
-   Sound SOUND_ID_ELEPHANT
    Level 3
    Class:ATM
 
-   ConstructionTiles 29
+   ConstructionTiles 1
    ConstructionTiles 29
    ConstructionTiles 28
 
@@ -1033,18 +1002,17 @@ TILEIMP_NATURE_PRESERVE {
    }
 }
 
-## 16 ##########################################################
+############################################################
 
 TILEIMP_NETS {
    Icon ICON_TILEIMP_NETS
    Tooltip TOOLTIP_TILEIMP_SELECT_NET1_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_NET1_BUTTON
-   Sound SOUND_ID_IRRIGATION_1_WATER
    Level 1
    Class:OceanFarm
 
-   ConstructionTiles 50
-   ConstructionTiles 50
+   ConstructionTiles 1
+   ConstructionTiles 1
    ConstructionTiles 61
 
    CantBuildOn TERRAIN_BROWN_HILL
@@ -1110,18 +1078,17 @@ TILEIMP_NETS {
    }
 }
 
-## 17 ##########################################################
+############################################################
 
 TILEIMP_OUTLET_MALL {
    Icon ICON_TILEIMP_OUTLET_MALL
    Tooltip TOOLTIP_TILEIMP_SELECT_ATM2_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_ATM2_BUTTON
-   Sound SOUND_ID_ROAD_1
    Level 2
    Class:ATM
 
+   ConstructionTiles 1
    ConstructionTiles 24
-   ConstructionTiles 25
    ConstructionTiles 25
 
    CantBuildOn TERRAIN_WATER_BEACH
@@ -1153,25 +1120,24 @@ TILEIMP_OUTLET_MALL {
       Terrain TERRAIN_PLAINS
 
       BonusGold 20
-      EnableAdvance ADVANCE_ECONOMICS
+      EnableAdvance ADVANCE_MASS_MEDIA
       ProductionCost 600
       ProductionTime 2
       TilesetIndex 26
    }
 }
 
-## 18 ##########################################################
+############################################################
 
 TILEIMP_PORT {
    Icon ICON_TILEIMP_PORT
    Tooltip TOOLTIP_TILEIMP_SELECT_PIER1_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_PIER1_BUTTON
-   Sound SOUND_ID_IRRIGATION_1_WATER
    Level 1
    Class:OceanATM
 
+   ConstructionTiles 50
    ConstructionTiles 71
-   ConstructionTiles 72
    ConstructionTiles 72
 
    CantBuildOn TERRAIN_BROWN_HILL
@@ -1216,30 +1182,29 @@ TILEIMP_PORT {
    }
 }
 
-## 19 ##########################################################
+############################################################
 
 TILEIMP_PROCESSING_TOWER {
    Icon ICON_TILEIMP_PROCESSING_TOWER
    Tooltip TOOLTIP_TILEIMP_SELECT_OBELISK_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_OBELISK_BUTTON
-   Sound SOUND_ID_SCIFI_SCREEN
    Level 3
    Class:Structure1
 
+   ConstructionTiles 1
    ConstructionTiles 77
-   ConstructionTiles 78
    ConstructionTiles 78
 
    Excludes:ATM
    Excludes:Farm
    Excludes:LandDetector
    Excludes:Mine
-   Excludes:OceanFarm
-   Excludes:OceanDetector
    Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
    Excludes:Structure1
    Excludes:Structure2
-   Excludes:OceanMine
 
    TerrainEffect {
       Terrain TERRAIN_BROWN_HILL
@@ -1277,13 +1242,12 @@ TILEIMP_PROCESSING_TOWER {
    }
 }
 
-## 20 ##########################################################
+############################################################
 
 TILEIMP_RADAR_STATIONS {
    Icon ICON_TILEIMP_RADAR_STATIONS
    Tooltip TOOLTIP_TILEIMP_SELECT_RADARTOWER_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_RADARTOWER_BUTTON
-   Sound SOUND_ID_RADAR_STATIONS
    Level 2
    Class:LandDetector
 
@@ -1338,13 +1302,12 @@ TILEIMP_RADAR_STATIONS {
    }
 }
 
-## 21 ##########################################################
+############################################################
 
 TILEIMP_RAILROAD {
    Icon ICON_TILEIMP_RAILROAD
    Tooltip TOOLTIP_TILEIMP_SELECT_ROAD2_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_ROAD2_BUTTON
-   Sound SOUND_ID_ROAD_2
    Level 2
    Class:Road
 
@@ -1369,7 +1332,6 @@ TILEIMP_RAILROAD {
       Terrain TERRAIN_PLAINS
 
       MoveCost 20
-      Freight 20
       EnableAdvance ADVANCE_RAILROAD
       ProductionCost 120
       ProductionTime 3
@@ -1384,7 +1346,6 @@ TILEIMP_RAILROAD {
       Terrain TERRAIN_WHITE_HILL
 
       MoveCost 20
-      Freight 20
       EnableAdvance ADVANCE_RAILROAD
       ProductionCost 400
       ProductionTime 3
@@ -1396,7 +1357,6 @@ TILEIMP_RAILROAD {
       Terrain TERRAIN_TUNDRA
 
       MoveCost 20
-      Freight 20
       EnableAdvance ADVANCE_RAILROAD
       ProductionCost 600
       ProductionTime 3
@@ -1409,7 +1369,6 @@ TILEIMP_RAILROAD {
       Terrain TERRAIN_WHITE_MOUNTAIN
 
       MoveCost 20
-      Freight 20
       EnableAdvance ADVANCE_RAILROAD
       ProductionCost 800
       ProductionTime 4
@@ -1417,13 +1376,12 @@ TILEIMP_RAILROAD {
    }
 }
 
-## 22 ##########################################################
+############################################################
 
 TILEIMP_ROAD {
    Icon ICON_TILEIMP_ROAD
    Tooltip TOOLTIP_TILEIMP_SELECT_ROAD1_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_ROAD1_BUTTON
-   Sound SOUND_ID_ROAD_1
    Level 1
    Class:Road
 
@@ -1450,7 +1408,6 @@ TILEIMP_ROAD {
       Terrain TERRAIN_SPECIAL2
 
       MoveCost 33
-      Freight 33
       EnableAdvance ADVANCE_TRADE
       ProductionCost 60
       ProductionTime 2
@@ -1465,7 +1422,6 @@ TILEIMP_ROAD {
       Terrain TERRAIN_WHITE_HILL
 
       MoveCost 33
-      Freight 33
       EnableAdvance ADVANCE_TRADE
       ProductionCost 200
       ProductionTime 2
@@ -1477,7 +1433,6 @@ TILEIMP_ROAD {
       Terrain TERRAIN_TUNDRA
 
       MoveCost 33
-      Freight 33
       EnableAdvance ADVANCE_TRADE
       ProductionCost 300
       ProductionTime 2
@@ -1490,7 +1445,6 @@ TILEIMP_ROAD {
       Terrain TERRAIN_WHITE_MOUNTAIN
 
       MoveCost 33
-      Freight 33
       EnableAdvance ADVANCE_TRADE
       ProductionCost 400
       ProductionTime 4
@@ -1498,19 +1452,18 @@ TILEIMP_ROAD {
    }
 }
 
-## 23 ##########################################################
+############################################################
 
 TILEIMP_SONAR_BUOYS {
    Icon ICON_TILEIMP_SONAR_BUOYS
    Tooltip TOOLTIP_TILEIMP_SELECT_SONAR_BUOYS_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_SONAR_BUOYS_BUTTON
-   Sound SOUND_ID_SONAR_BUOYS
    Level 1
    Class:OceanDetector
 
-   ConstructionTiles 50
-   ConstructionTiles 50
-   ConstructionTiles 50
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
 
    CantBuildOn TERRAIN_BROWN_HILL
    CantBuildOn TERRAIN_BROWN_MOUNTAIN
@@ -1562,14 +1515,13 @@ TILEIMP_SONAR_BUOYS {
    }
 }
 
-## 24 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_BROWN_HILL {
-   Icon ICON_TERRAIN_BHILLS
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_BROWN_HILL_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_BROWN_HILL_BUTTON
    TerraformTerrain TERRAIN_BROWN_HILL
-   Sound SOUND_ID_ROAD_1
    Level 2
    Column 2
    Class:Terraform
@@ -1610,14 +1562,13 @@ TILEIMP_TERRAFORM_BROWN_HILL {
    }
 }
 
-## 25 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_BROWN_MOUNTAIN {
-   Icon ICON_TERRAIN_BMOUNTAIN
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_BROWN_MOUNTAIN_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_BROWN_MOUNTAIN_BUTTON
    TerraformTerrain TERRAIN_BROWN_MOUNTAIN
-   Sound SOUND_ID_ROAD_1
    Level 2
    Column 3
    Class:Terraform
@@ -1658,14 +1609,13 @@ TILEIMP_TERRAFORM_BROWN_MOUNTAIN {
    }
 }
 
-## 26 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_DESERT {
-   Icon ICON_TERRAIN_DESERTS
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_DESERT_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_DESERT_BUTTON
    TerraformTerrain TERRAIN_DESERT
-   Sound SOUND_ID_ROAD_1
    Level 3
    Column 0
    Class:Terraform
@@ -1706,14 +1656,13 @@ TILEIMP_TERRAFORM_DESERT {
    }
 }
 
-## 27 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_FOREST {
-   Icon ICON_TERRAIN_FORESTS
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
    TerraformTerrain TERRAIN_FOREST
-   Sound SOUND_ID_ROAD_1
    Level 1
    Column 1
    Class:Terraform
@@ -1754,14 +1703,13 @@ TILEIMP_TERRAFORM_FOREST {
    }
 }
 
-## 28 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_GRASSLAND {
-   Icon ICON_TERRAIN_GRASSLANDS
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_GRASSLND_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_GRASSLND_BUTTON
    TerraformTerrain TERRAIN_GRASSLAND
-   Sound SOUND_ID_ROAD_1
    Level 1
    Column 0
    Class:Terraform
@@ -1802,14 +1750,13 @@ TILEIMP_TERRAFORM_GRASSLAND {
    }
 }
 
-## 29 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_HILL {
-   Icon ICON_TERRAIN_HILLS
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_HILL_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_HILL_BUTTON
    TerraformTerrain TERRAIN_HILL
-   Sound SOUND_ID_ROAD_1
    Level 1
    Column 2
    Class:Terraform
@@ -1850,14 +1797,13 @@ TILEIMP_TERRAFORM_HILL {
    }
 }
 
-## 30 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_JUNGLE {
-   Icon ICON_TERRAIN_JUNGLES
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_JUNGLE_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_JUNGLE_BUTTON
    TerraformTerrain TERRAIN_JUNGLE
-   Sound SOUND_ID_ROAD_1
    Level 2
    Column 1
    Class:Terraform
@@ -1898,14 +1844,13 @@ TILEIMP_TERRAFORM_JUNGLE {
    }
 }
 
-## 31 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_MOUNTAIN {
-   Icon ICON_TERRAIN_MOUNTAIN
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_MOUNTAIN_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_MOUNTAIN_BUTTON
    TerraformTerrain TERRAIN_MOUNTAIN
-   Sound SOUND_ID_ROAD_1
    Level 1
    Column 3
    Class:Terraform
@@ -1946,14 +1891,13 @@ TILEIMP_TERRAFORM_MOUNTAIN {
    }
 }
 
-## 32 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_PLAINS {
-   Icon ICON_TERRAIN_PLAINS
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_PLAINS_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_PLAINS_BUTTON
    TerraformTerrain TERRAIN_PLAINS
-   Sound SOUND_ID_ROAD_1
    Level 2
    Column 0
    Class:Terraform
@@ -1994,14 +1938,13 @@ TILEIMP_TERRAFORM_PLAINS {
    }
 }
 
-## 33 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_SWAMP {
-   Icon ICON_TERRAIN_SWAMPS
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_SWAMP_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_SWAMP_BUTTON
    TerraformTerrain TERRAIN_SWAMP
-   Sound SOUND_ID_ROAD_1
    Level 3
    Column 1
    Class:Terraform
@@ -2042,14 +1985,13 @@ TILEIMP_TERRAFORM_SWAMP {
    }
 }
 
-## 34 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_WHITE_HILL {
-   Icon ICON_TERRAIN_WHILLS
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_WHITE_HILL_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_WHITE_HILL_BUTTON
    TerraformTerrain TERRAIN_WHITE_HILL
-   Sound SOUND_ID_ROAD_1
    Level 3
    Column 2
    Class:Terraform
@@ -2090,14 +2032,13 @@ TILEIMP_TERRAFORM_WHITE_HILL {
    }
 }
 
-## 35 ##########################################################
+############################################################
 
 TILEIMP_TERRAFORM_WHITE_MOUNTAIN {
-   Icon ICON_TERRAIN_WMOUNTAIN
+   Icon ICON_TILEIMP_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_WHITE_MOUNTAIN_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_WHITE_MOUNTAIN_BUTTON
    TerraformTerrain TERRAIN_WHITE_MOUNTAIN
-   Sound SOUND_ID_ROAD_1
    Level 3
    Column 3
    Class:Terraform
@@ -2138,18 +2079,17 @@ TILEIMP_TERRAFORM_WHITE_MOUNTAIN {
    }
 }
 
-## 36 ##########################################################
+############################################################
 
 TILEIMP_TRADING_POST {
    Icon ICON_TILEIMP_TRADING_POST
    Tooltip TOOLTIP_TILEIMP_SELECT_ATM1_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_ATM1_BUTTON
-   Sound SOUND_ID_ROAD_1
    Level 1
    Class:ATM
 
+   ConstructionTiles 1
    ConstructionTiles 21
-   ConstructionTiles 22
    ConstructionTiles 22
 
    CantBuildOn TERRAIN_WATER_BEACH
@@ -2188,18 +2128,17 @@ TILEIMP_TRADING_POST {
    }
 }
 
-## 37 ##########################################################
+############################################################
 
 TILEIMP_UNDERSEA_MINES {
    Icon ICON_TILEIMP_UNDERSEA_MINES
    Tooltip TOOLTIP_TILEIMP_SELECT_RIG1_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_RIG1_BUTTON
-   Sound SOUND_ID_MINE_1_WATER
    Level 1
    Class:OceanMine
 
+   ConstructionTiles 1
    ConstructionTiles 52
-   ConstructionTiles 53
    ConstructionTiles 53
 
    CantBuildOn TERRAIN_BROWN_HILL
@@ -2259,19 +2198,18 @@ TILEIMP_UNDERSEA_MINES {
    }
 }
 
-## 38 ##########################################################
+############################################################
 
 TILEIMP_UNDERSEA_TUNNEL {
    Icon ICON_TILEIMP_UNDERSEA_TUNNEL
    Tooltip TOOLTIP_TILEIMP_SELECT_TUNNEL_BUTTON
    Statusbar STATUSBAR_TILEIMP_SELECT_TUNNEL_BUTTON
-   Sound SOUND_ID_ROAD_3_WATER
    Level 1
    Class:OceanRoad
 
-   ConstructionTiles 50
-   ConstructionTiles 50
-   ConstructionTiles 50
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
 
    CantBuildOn TERRAIN_BROWN_HILL
    CantBuildOn TERRAIN_BROWN_MOUNTAIN
@@ -2298,7 +2236,6 @@ TILEIMP_UNDERSEA_TUNNEL {
       Terrain TERRAIN_WATER_SHALLOW
 
       MoveCost 10
-      Freight 10
       EnableAdvance ADVANCE_NANO_ASSEMBLY
       ProductionCost 1200
       ProductionTime 4
@@ -2312,7 +2249,6 @@ TILEIMP_UNDERSEA_TUNNEL {
       Terrain TERRAIN_WATER_TRENCH
 
       MoveCost 10
-      Freight 10
       EnableAdvance ADVANCE_NANO_ASSEMBLY
       ProductionCost 1200
       ProductionTime 4
@@ -2323,7 +2259,6 @@ TILEIMP_UNDERSEA_TUNNEL {
       Terrain TERRAIN_WATER_VOLCANO
 
       MoveCost 10
-      Freight 10
       EnableAdvance ADVANCE_NANO_ASSEMBLY
       ProductionCost 2400
       ProductionTime 4
@@ -2331,4 +2266,5 @@ TILEIMP_UNDERSEA_TUNNEL {
    }
 }
 
-## End ##########################################################
+############################################################
+
