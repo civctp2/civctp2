@@ -18,8 +18,7 @@
 // Modifications from the original Activision code:
 //
 // - Music added by ahenobarb.
-// - Added option to show info of tile improvements that are too expensive
-//   and made it modifiable in-game.
+// - Added option to show info of tile improvements that are too expensive.
 // - Do not display the world map of the first player at start-up for hotseat 
 //   play.
 // - Start the great library with the current research project of the player.
@@ -218,6 +217,12 @@ extern ColorSet				*g_colorSet;
 
 extern KEYMAP		*theKeyMap;
 
+#if !defined(ACTIVISION_ORIGINAL)
+namespace
+{
+	bool					s_hideExpensive	= true;
+}
+#endif
 
 ctp2_MenuBar				*s_menubar=NULL;
 ControlPanelWindow			*g_controlPanel;
@@ -594,6 +599,9 @@ sint32 controlpanelwindow_Initialize()
 	
 	g_controlPanel->ActivateTileImpBank(CP_TILEIMP_LAND);
 
+#if !defined(ACTIVISION_ORIGINAL)
+	s_hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
+#endif
 
 	return 0;
 }
@@ -2035,9 +2043,7 @@ ControlPanelWindow::TileImpUpdate()
 #if defined(ACTIVISION_ORIGINAL)
 	if (!terrainutil_CanPlayerBuild(m_currentTerrainImpRec,player_id,true))
 #else
-	bool const 	hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
-
-	if (!terrainutil_CanPlayerBuild(m_currentTerrainImpRec,player_id, hideExpensive))
+	if (!terrainutil_CanPlayerBuild(m_currentTerrainImpRec,player_id, s_hideExpensive))
 #endif
 	{
 		tileimptracker_DisplayData(pos, -1);
@@ -3912,9 +3918,7 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 #if defined(ACTIVISION_ORIGINAL)	
    	grey_button = !terrainutil_CanPlayerBuild(rec,player_id,true);
 #else
-	bool const	hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
-
-   	grey_button = !terrainutil_CanPlayerBuild(rec,player_id, hideExpensive);
+   	grey_button = !terrainutil_CanPlayerBuild(rec,player_id, s_hideExpensive);
 #endif
 	show_button = terrainutil_PlayerHasAdvancesFor(rec, player_id);
 

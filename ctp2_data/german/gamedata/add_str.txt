@@ -245,6 +245,7 @@ str_ldl_RestartHotKey "Strg+z"
 
 str_ldl_NewGameHotKey "Strg+x"
 str_ldl_SoundHotKey "Strg+v"
+Str_ldl_MusicHotKey "Strg+m"
 str_ldl_GraphicsHotKey "Strg+f"
 str_ldl_GameplayHotKey "Strg+p"
 str_ldl_CityEspionageHotKey "Strg+e"
