@@ -40,6 +40,9 @@
 // - Modified GetWorldShape function to allow four possible shapes instead 
 //   of two by Martin Gühmann
 // - Option added to close a messagebox automatically on eyepoint clicking.
+// - Changed the value for an assert to make the assert fire only when the
+//   NumPlayers is higher the maximum number of players the game currently
+//   supports by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -377,10 +380,14 @@ public:
 	
 
 	
-	
-	
+#if defined(ACTIVISION_ORIGINAL)
+	//Removed by Martin Gühmann
 	void SetNPlayers(uint32 n)					{ Assert((n>2) && (n<17)); m_nPlayers = n; }
-	
+#else
+	//Added by Martin Gühmann to avoid an assert if NumPlayer is under the maximum supported players.
+	void SetNPlayers(uint32 n)					{ Assert((n>2) && (n<=k_MAX_PLAYERS)); m_nPlayers = n; }
+#endif
+
 	void SetLeaderName(MBCHAR *name)			{ strcpy(m_leaderName, name); }
 	void SetCivName(MBCHAR *name)				{ strcpy(m_civName, name); }
 	void SetSaveNote(MBCHAR *note)				{ strcpy(m_saveNote, note); }

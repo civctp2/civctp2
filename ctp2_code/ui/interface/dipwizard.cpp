@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Handling of user preferences.
+// Description  : Handling diplomacy proposals between Human and other players.
 //
 //----------------------------------------------------------------------------
 //

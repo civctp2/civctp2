@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Color definitions.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added new colors above player 15 by Martin Gühmann
+//
+//----------------------------------------------------------------------------
  
 #pragma once
 #ifndef __COLORSET_H__
@@ -48,6 +67,27 @@ enum COLOR {
 	COLOR_PLAYER15,
 	COLOR_PLAYER16,
 	COLOR_PLAYER17,
+
+#if !defined(ACTIVISION_ORIGINAL)
+	//Added by Martin Gühmann to support 
+	//more players with colors
+	COLOR_PLAYER18,
+	COLOR_PLAYER19,
+	COLOR_PLAYER20,
+	COLOR_PLAYER21,
+	COLOR_PLAYER22,
+	COLOR_PLAYER23,
+	COLOR_PLAYER24,
+	COLOR_PLAYER25,
+	COLOR_PLAYER26,
+	COLOR_PLAYER27,
+	COLOR_PLAYER28,
+	COLOR_PLAYER29,
+	COLOR_PLAYER30,
+	COLOR_PLAYER31,
+	COLOR_PLAYER32,
+	COLOR_PLAYER33,
+#endif
 
 	COLOR_TERRAIN_0,
 	COLOR_TERRAIN_1,

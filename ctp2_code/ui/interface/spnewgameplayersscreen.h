@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Handling for the city tab of the control panel 
+// Description  : Handling single player game start options. 
 //
 //----------------------------------------------------------------------------
 //
