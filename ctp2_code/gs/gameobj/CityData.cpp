@@ -6397,8 +6397,14 @@ bool CityData::NeedMoreFood(sint32 bonusFood, bool considerFoodOnlyFromTerrain){
 
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
 
-	return((turnsForOnePop/GetOvercrowdingCoefficient() > strategy.GetTurnsAcceptedForOnePop()
-	&&      PopCount() < maxPop - strategy.GetStopBuildingFoodBeforePopMax()
+	sint32 popDistance;
+	strategy.GetStopBuildingFoodBeforePopMax(popDistance);
+
+	sint32 timePerPop;
+	strategy.GetTurnsAcceptedForOnePop(timePerPop);
+
+	return((turnsForOnePop/GetOvercrowdingCoefficient() > timePerPop
+	&&      PopCount() < maxPop - popDistance
 	&&      !GetIsRioting())
 	||     (maxFoodFromTerrain < foodForNextRing)
 	||     (currentFood < foodForNextPop));

@@ -28,6 +28,8 @@
 // - Modified ExportBitPairInitialization function to allow bit pairs to 
 //   have default values so that when two records are merged, only the bit 
 //   is merged in that is set. - Sep. 28th 2004 Martin Gühmann
+// - Updated ExportBitPairAccessorProto function so that the default
+//   values of bits can be accesses if these bits have default values.
 //
 //----------------------------------------------------------------------------
 
@@ -146,20 +148,63 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 	switch(m_bitPairDatum->m_type) {
 		case DATUM_INT:
 		case DATUM_STRINGID:
+
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 			fprintf(outfile, "    bool             Get%s(sint32 &value) const {\n", m_name);
 			fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
 					m_bitNum / 32, recordName, m_name);
 			fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
 			fprintf(outfile, "                         return true;\n");
 			fprintf(outfile, "                     }\n");
+#else
+//Added by Martin Gühmann
+			if(!m_hasValue){
+				fprintf(outfile, "    bool             Get%s(sint32 &value) const {\n", m_name);
+				fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
+					m_bitNum / 32, recordName, m_name);
+				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
+				fprintf(outfile, "                         return true;\n");
+				fprintf(outfile, "                     }\n");
+			}
+			else{
+				fprintf(outfile, "    bool             Get%s(sint32 &value) const {\n", m_name);
+				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
+				fprintf(outfile, "                         return ((m_flags%d & k_%s_%s_Bit) != 0);\n",
+					m_bitNum / 32, recordName, m_name);
+				fprintf(outfile, "                     }\n");
+			}
+#endif
 			break;
 		case DATUM_FLOAT:
+
+#if defined(ACTIVISION_ORIGINAL)
+//Removed by Martin Gühmann
 			fprintf(outfile, "    bool             Get%s(double &value) const {\n", m_name);
 			fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
 					m_bitNum / 32, recordName, m_name);
 			fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
 			fprintf(outfile, "                         return true;\n");
 			fprintf(outfile, "                     }\n");
+#else
+//Added by Martin Gühmann
+			if(!m_hasValue){
+				fprintf(outfile, "    bool             Get%s(double &value) const {\n", m_name);
+				fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
+					m_bitNum / 32, recordName, m_name);
+				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
+				fprintf(outfile, "                         return true;\n");
+				fprintf(outfile, "                     }\n");
+			}
+			else{
+				fprintf(outfile, "    bool             Get%s(double &value) const {\n", m_name);
+				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
+				fprintf(outfile, "                         return (m_flags%d & k_%s_%s_Bit) != 0);\n",
+					m_bitNum / 32, recordName, m_name);
+				fprintf(outfile, "                     }\n");
+			}
+
+#endif
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
