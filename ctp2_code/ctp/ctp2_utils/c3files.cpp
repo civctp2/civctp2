@@ -8,6 +8,7 @@
 
 
 
+
 #include "c3.h"
 #include "CivPaths.h"
 #include "c3files.h"
@@ -390,8 +391,8 @@ extern C3UI *g_c3ui;
 
 BOOL c3files_HasLegalCD()
 {
-
 	BOOL success = FALSE;
+
 	if (g_soundManager) {
 		g_soundManager->CleanupRedbook();
 	}
@@ -400,25 +401,11 @@ BOOL c3files_HasLegalCD()
 
 		success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
 
-
-
-
-
-
-
-
 		
-		
-		if (success && g_theProfileDB->IsProtected()) {
-			
+		if (success && g_theProfileDB->IsProtected()) {		
 			BOOL		valid;
-			
-			
 			BOOL		silent = TRUE;
 
-			
-			
-			
 			valid = tracklen_CheckTrackLengths();
 			
 
@@ -431,10 +418,7 @@ BOOL c3files_HasLegalCD()
 			
 		}
 
-		if (!success) {
-			
-			
-			
+		if (!success) {			
 			int rval = MessageBox(g_c3ui->TheHWND(),
 									appstrings_GetString(APPSTR_INSERTCDROM), 
 									appstrings_GetString(APPSTR_CDROM), 
@@ -444,18 +428,7 @@ BOOL c3files_HasLegalCD()
 										MB_SYSTEMMODAL |
 										MB_SETFOREGROUND);	
 
-
-
-
-
-
-
-
-
 			if (rval == IDCANCEL) {
-				
-				
-				
 				c3errors_ErrorDialog(appstrings_GetString(APPSTR_CDROM),
 										appstrings_GetString(APPSTR_NEEDCDROM));		
 				
@@ -481,10 +454,6 @@ void c3files_InitializeCD(void)
 {
 	c3files_GetCDDrives();
 	BOOL success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
-
-	
-	
-	
 }
 
 MBCHAR c3files_GetCTPCDDriveLetter(void)

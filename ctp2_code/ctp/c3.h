@@ -33,7 +33,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -51,10 +51,11 @@
 #endif
 
 #include <limits.h>
+#if !defined(__GNUC__)
 #include <crtdbg.h>
+#endif
 #include <windows.h>
 #include <tchar.h>
-
 
 #define DIRECTINPUT_VERSION 0x0700
 
@@ -73,6 +74,9 @@
 #include <stdarg.h>
 #include <time.h>
 
+#if defined(__GNUC__)
+#define _MAX_PATH PATH_MAX
+#endif
 
 #include "c3types.h"
 #include "c3debug.h"

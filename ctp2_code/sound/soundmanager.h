@@ -1,11 +1,58 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : General declarations
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// - Generate debug version
+//
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+// ACTIVISION_ORIGINAL
+// - Build original Activision binary
+//   ATTENTION: This collides with __GNUC__
+//
+// USE_SDL
+// - Compile with sdl support instead of mss (define: civsound.h)
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragmas commented out
+// - includes fixed for case sensitive filesystems
+// - added sdl sound and cdrom support
+//
+//----------------------------------------------------------------------------
 
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __SOUNDMANAGER_H__
 #define __SOUNDMANAGER_H__
 
-#include "CivSound.h"
-#include "PointerList.h"
+#include "civsound.h"
+#include "pointerlist.h"
+
+#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+#include <SDL.h>
+#include <SDL_mixer.h>
+#endif
 
 template <class T> class PointerList;
 
@@ -36,66 +83,78 @@ enum MUSICSTYLE {
 
 class SoundManager {
 public:
-	static void Initialize(void);
-	static void Cleanup(void);
+	static void Initialize();
+	static void Cleanup();
 
 	SoundManager();
 	~SoundManager();
 
-	void InitSoundDriver(void);
-	void CleanupSoundDriver(void);
+	void InitSoundDriver();
+	void CleanupSoundDriver();
 
-	void InitRedbook(void);
-	void CleanupRedbook(void);
+	void InitRedbook();
+	void CleanupRedbook();
 
-	void DumpAllSounds(void);
+	void DumpAllSounds();
 
-	void ConvertCoordinates(sint32 x, sint32 y, sint32 *soundX, sint32 *soundY, sint32 *soundZ);
+	void ConvertCoordinates(const sint32 &x, const sint32 &y,
+                            sint32 &soundX, sint32 &soundY, sint32 &soundZ);
 	void ProcessRedbook(void);
-	void Process(const uint32 target_milliseconds, uint32 &used_milliseconds);
+	void Process(const uint32 &target_milliseconds, uint32 &used_milliseconds);
 	
-	void AddGameSound(GAMESOUNDS sound);
-	void AddSound(SOUNDTYPE type, uint32 associatedObject, sint32 soundID, sint32 x=0, sint32 y=0);
-	void AddLoopingSound(SOUNDTYPE type, uint32 associatedObject, sint32 soundID, sint32 x=0, sint32 y=0);
-	void TerminateLoopingSound(SOUNDTYPE type, uint32 associatedObject);
-	void TerminateAllLoopingSounds(SOUNDTYPE type);
-	void TerminateSounds(SOUNDTYPE type);
+	void AddGameSound(const GAMESOUNDS &sound);
+	void AddSound(const SOUNDTYPE &type, const uint32 &associatedObject,
+                  const sint32 &soundID, sint32 x=0, sint32 y=0);
+	void AddLoopingSound(const SOUNDTYPE &type,
+                         const uint32 &associatedObject,
+                         const sint32 &soundID, sint32 x=0, sint32 y=0);
+	void TerminateLoopingSound(const SOUNDTYPE &type,
+                               const uint32 &associatedObject);
+	void TerminateAllLoopingSounds(const SOUNDTYPE &type);
+	void TerminateSounds(const SOUNDTYPE &type);
 	void TerminateAllSounds(void);
 
-	void SetVolume(SOUNDTYPE type, uint32 volume);
-	void SetMasterVolume(uint32 volume);
-	CivSound *FindSound(SOUNDTYPE type, uint32 associatedObject);
-	CivSound *FindLoopingSound(SOUNDTYPE type, uint32 associatedObject);
-	void SetPosition(SOUNDTYPE type, uint32 associatedObject, sint32 x, sint32 y);
+	void SetVolume(const SOUNDTYPE &type, const uint32 &volume);
+	void SetMasterVolume(const uint32 &volume);
+	CivSound *FindSound(const SOUNDTYPE &type,
+                        const uint32 &associatedObject);
+	CivSound *FindLoopingSound(const SOUNDTYPE &type, 
+                               const uint32 &associatedObject);
+	void SetPosition(const SOUNDTYPE &type,
+                     const uint32 &associatedObject,
+                     const sint32 &x, const sint32 &y);
+	
+	void		StartMusic();
+	void		StartMusic(const sint32 &trackNum);
+	void		TerminateMusic();
+	void		PickNextTrack();
+
+	void		SetMusicStyle(const MUSICSTYLE &style);
+	void		SetUserTrack(const sint32 &trackNum);
+	void		SetPlayListPosition(const sint32 &pos);
+	void		SetAutoRepeat(const BOOL &autoRepeat);
+	const MUSICSTYLE GetMusicStyle(void) const;
+	const sint32     GetUserTrack(void) const;
+	const sint32     GetPlayListPosition(void) const;
+
+	void             EnableMusic();
+	void             DisableMusic();
+
+	const BOOL       IsAutoRepeat() const;
+	const BOOL       IsMusicEnabled() const;
+
+	const sint32     GetLastTrack() const;
+	void             SetLastTrack(const sint32 &track);
 
 	
-	void		StartMusic(void) { StartMusic(m_curTrack); }
-	void		StartMusic(sint32 trackNum);
-	void		TerminateMusic(void);
-	void		PickNextTrack(void);
+	void StupidPlaySound(const sint32 &soundID);
 
-	void		SetMusicStyle(MUSICSTYLE style) { m_style = style; PickNextTrack();}
-	void		SetUserTrack(sint32 trackNum) { m_userTrack = trackNum;  PickNextTrack();}
-	void		SetPlayListPosition(sint32 pos) { m_playListPosition = pos;  PickNextTrack();}
-	void		SetAutoRepeat(BOOL autoRepeat) { m_autoRepeat = autoRepeat;  PickNextTrack();}
-	MUSICSTYLE	GetMusicStyle(void) { return m_style; }
-	sint32		GetUserTrack(void) { return m_userTrack; }
-	sint32		GetPlayListPosition(void) { return m_playListPosition; }
+	void ReleaseSoundDriver();
+	void ReacquireSoundDriver();
 
-	void		EnableMusic(void) { m_musicEnabled = TRUE; }
-	void		DisableMusic(void) { m_musicEnabled = FALSE; TerminateMusic();}
-
-	BOOL		IsAutoRepeat( void ) const { return m_autoRepeat; }
-	BOOL		IsMusicEnabled( void ) const { return m_musicEnabled; }
-
-	sint32		GetLastTrack(void) const { return m_lastTrack; }
-	void		SetLastTrack(sint32 track) { m_lastTrack = track; }
-
-	
-	void StupidPlaySound(sint32 soundID);
-
-	void ReleaseSoundDriver(void);
-	void ReacquireSoundDriver(void);
+#if defined(USE_SDL) && !defined(ACTIVISION_ORIGINAL)
+    void SDL_ChannelCompleteCB(int channel);
+#endif
 
 private:
 	PointerList<CivSound>	*m_sfxSounds;
@@ -112,8 +171,12 @@ private:
 	BOOL					m_noSound;
 	BOOL					m_usePlaySound;
 
-	
-	HREDBOOK				m_redbook;		
+#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+	HREDBOOK				m_redbook;
+#else
+    SDL_CD                  *m_cdrom;
+    Uint32                  m_SDLInitFlags;
+#endif
 	uint32					m_timeToCheckCD;
 	sint32					m_numTracks;
 	sint32					m_curTrack;

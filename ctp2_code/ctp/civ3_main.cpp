@@ -1,16 +1,59 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : General declarations
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// - Generate debug version
+//
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+// __GNUC__
+// - We are compiling with gcc
+//
+// ACTIVISION_ORIGINAL
+// - Build original Activision binary
+//   ATTENTION: This collides with __GNUC__
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragmas commented out
+// - includes fixed for case sensitive filesystems
+//
+//----------------------------------------------------------------------------
+
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#pragma once
+#endif
+
+#if 0 && defined(__GNUC__)
+#include <exception.h>
+#define __try __TRY
+#define __except __EXCEPT
+#endif
  
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "civapp.h"
 
 #include "civ3_main.h"
@@ -41,17 +84,21 @@
 #include "c3_button.h"
 #include "c3_dropdown.h"
 #include "aui_ldl.h"
-#include "backgroundWin.h"
-#include "GameFile.h"
+#include "backgroundwin.h"
+#include "gamefile.h"
 #include "controlpanelwindow.h"
 #include "keypress.h"
+
+#if !defined(__GNUC__) // TODO: replacement needed (wine doesnt have these headers...)
 #include "directvideo.h"
 #include "videoutils.h"
+#endif
+
 #include "radarmap.h"
 #include "statswindow.h"
-#include "aui_DirectKeyboard.h"
+#include "aui_directkeyboard.h"
 #include "ancientwindows.h"
-#include "Splash.h"
+#include "splash.h"
 #include "bevellesswindow.h"
 
 
@@ -66,14 +113,14 @@
 #include "World.h"
 #include "gameinit.h"
 #include "TradePool.h"
-#include "Pollution.h"
+#include "pollution.h"
 #include "SelItem.h"
-#include "Player.h"
+#include "player.h"
 #include "UnitPool.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "CivilisationDB.h"
 #include "TurnCnt.h"
-#include "constdb.h"
+#include "ConstDB.h"
 
 
 #include "RoboInit.h"
@@ -81,13 +128,13 @@
 
 
 
-#include "ScreenManager.h"
+#include "screenmanager.h"
 #include "Sprite.h"
 #include "UnitSpriteGroup.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "SpriteStateDB.h"
 #include "SpriteGroupList.h"
-#include "Director.h"
+#include "director.h"
 
 
 #include "network.h"
@@ -108,7 +155,7 @@
 #include "spwindow.h"
 #include "scenariowindow.h"
 #include "initialplaywindow.h"
-#include "GrabItem.h"
+#include "grabitem.h"
 
 #include "appstrings.h"
 
@@ -121,18 +168,25 @@
 #include "cursormanager.h"
 #include "MainControlPanel.h"
 #include "ctp2_Window.h"
-#include "ctp2_MenuBar.h"
+#include "ctp2_menubar.h"
 
 
 #include <locale.h>
 
+#if !defined(ACTIVISION_ORIGINAL)
+#include <SDL.h>
+#include <SDL_mixer.h>
+#endif
 
-#include "CivScenarios.h"
+
+#include "civscenarios.h"
 extern CivScenarios		*g_civScenarios;
 
 #include "ctpregistry.h"
 
+#ifndef WM_MOUSEWHEEL
 #define WM_MOUSEWHEEL (WM_MOUSELAST+1)  
+#endif
 
 #ifdef _DEBUG
 #include "debug.h"
@@ -226,9 +280,6 @@ sint32	g_terrainPollution ;
 
 
 SpriteStateDB               *g_theSpriteStateDB;
-
-
-
 
 
 SpriteStateDB				*g_theGoodsSpriteStateDB;
@@ -441,8 +492,6 @@ int ui_Initialize(void)
 	g_c3ui->RegisterObject( mouse );
 
 
-
-
 	SPLASH_STRING("Creating Keyboard...");
 
 	
@@ -453,12 +502,13 @@ int ui_Initialize(void)
 	g_c3ui->RegisterObject( keyboard );
 
 
-	
+#if !defined(__GNUC__)
 	aui_DirectMovieManager	*movieManager = new aui_DirectMovieManager();
 	Assert(movieManager != NULL);
 	if (movieManager != NULL) {
 		g_c3ui->RegisterObject(movieManager);
 	}
+#endif
 
 	
 	SPLASH_STRING("Starting Mouse...");
@@ -1241,6 +1291,15 @@ void ui_CivAppProcess(void)
 void AtExitProc(void)
 {
 	printf("At exit.\n");
+
+#if !defined(ACTIVISION_ORIGINAL)
+# if 0
+    // What about this?
+    Mix_CloseAudio();
+# endif
+
+    SDL_Quit();
+#endif
 }
 
 BOOL g_no_timeslice; 
@@ -1424,6 +1483,7 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 	uint32	basePtr = ebp;
 
 	BOOL done = FALSE;
+#if !defined(__GNUC__)
 	while(!done) {
 		__try {
 			caller = *((unsigned *) (basePtr + 4));
@@ -1443,6 +1503,7 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 		
 		basePtr = * ((unsigned *) basePtr);  
 	}
+#endif
 
 	uint32 guid = rand() * rand() + rand();
 
@@ -1641,34 +1702,17 @@ static BOOL s_cleaningUpTheApp = FALSE;
 
 void main_ExceptionExecute(CivExceptionFunction function)
 {
-	
+#if !defined(__GNUC__)	
 	__try
 	{
 		function();
 	}
-
 	
 	__except (main_CivExceptionHandler(GetExceptionInformation()))
 	{
 
 		g_c3ui->DestroyDirectScreen();
 		ShowWindow(gHwnd, SW_HIDE);
-
-		
-
-
-
-
-
-
-
-
-
-		
-		
-		
-		
-		
 		
 		if (!s_cleaningUpTheApp) {
 			s_cleaningUpTheApp = TRUE;
@@ -1677,6 +1721,7 @@ void main_ExceptionExecute(CivExceptionFunction function)
 
 		exit(-1);
 	}
+#endif // !defined(__GNUC__)
 }
 
 BOOL main_CheckDirectX(void)
@@ -1751,7 +1796,9 @@ void main_InitializeLogs(void)
 	time_t		ltime;
 	struct tm	*now;
 
+#if defined(ACTIVISION_ORIGINAL)
 	atexit(AtExitProc);
+#endif
 
 	
 	
@@ -1866,16 +1913,33 @@ void main_InitializeLogs(void)
 #endif
 }
 
+#if !defined(__GNUC__)
 int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow);
+#else
+int CivMain(int argc, char **argv);
+#endif
 
 
 
-
-
-
+#if !defined(__GNUC__)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+    // This stuff will have to be moved into a new int main(int argc, char **argv)
+    // once graphics are also ported to SDL
+#if !defined(ACTIVISION_ORIGINAL)
+# if defined(WIN32) || defined(_WINDOWS)
+    // Make sure old versions of DDHELP.EXE won't keep files open
+    HINSTANCE handle = LoadLibrary("DDRAW.DLL");
+    if (0 != handle) {
+        FreeLibrary(handle);
+        handle = 0;
+    }
+# endif // WIN32 || _WINDOWS
+
+   	atexit(AtExitProc);
+#endif // !ACTIVISION_ORIGINAL
+
 	__try {
 		return CivWinMain(hInstance, hPrevInstance, szCmdLine, iCmdShow);
 	} 
@@ -1887,20 +1951,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	__except (main_CivExceptionHandler(GetExceptionInformation())){
 		g_c3ui->DestroyDirectScreen();
 		ShowWindow(gHwnd, SW_HIDE);
-
-
-
-
-
-
-
-
-
-		
-		
-		
-		
-		
 		
 		if (!s_cleaningUpTheApp) {
 			s_cleaningUpTheApp = TRUE;
@@ -1909,11 +1959,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		exit(-1);
 	}
-#endif
+#endif // _DEBUG
 	return 0;
 }
 
+#else // defined(__GNUC__)
 
+int main(int argc, char **argv)
+{
+    int r;
+
+    r = CivMain(argc, argv);
+
+    if (r <  0) {
+#if defined(_DEBUG)
+        DoFinalCleanup();
+#else
+        g_c3ui->DestroyDirectScreen();
+        ShowWindow(gHwnd, SW_HIDE);
+        if (!s_cleaningUpTheApp) {
+            s_cleaningUpTheApp = TRUE;
+            g_civApp->CleanupApp();
+        }
+
+        exit(r);
+#endif
+    }
+
+    return 0;
+}
+#endif // !defined(__GNUC__)
 
 void main_DisplayPatchDisclaimer()
 {
@@ -1954,10 +2029,12 @@ Error:
 
 }
 
+#if !defined(__GNUC__)
 
 int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
 	MSG			msg;
+
 
 	
 	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
@@ -2165,7 +2242,178 @@ int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLi
 	return msg.wParam;
 }
 
+#else // defined(__GNUC__)
 
+int
+CivMain(int argc, char *argv )
+{
+	MSG			msg;
+
+#if 0
+	// I guess this code checks to see if a civctp2 is already running,
+	// and if so, bring that window to the foreground.
+	
+	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
+	if (hwnd) {
+		
+		if (IsIconic(hwnd)) {
+			ShowWindow(hwnd, SW_RESTORE);
+		}
+		SetForegroundWindow (hwnd);
+		
+		return FALSE;
+	}
+#endif	
+	
+	
+	char exepath[_MAX_PATH];
+	char launchcommand[_MAX_PATH];
+	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
+			
+			ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT, ".c2g", NULL, "c2gfile");
+			ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT, "c2gfile", NULL, "Call to Power 2 saved game");
+			strcpy(launchcommand, exepath);
+			strcat(launchcommand, " -l\"%1\"");
+			ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT, "c2gfile\\Shell\\Open\\command", NULL, launchcommand);
+			
+									 
+		char *lastbackslash = strrchr(exepath, '\\');
+		if(lastbackslash) {
+			*lastbackslash = 0;
+			SetCurrentDirectory(exepath);
+		}
+	}
+
+	
+	
+	g_e3Demo = false;
+
+	
+	appstrings_Initialize();
+
+	
+	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
+
+	
+	c3cpu_Initialize();
+	c3cpu_Examine();
+
+	if (!main_CheckDirectX()) {
+
+		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
+								appstrings_GetString(APPSTR_NEEDDIRECTX));
+	}
+
+	
+#ifdef _DEBUG
+	main_InitializeLogs();
+#endif
+#if !defined(_DEBUG) && !defined(_BFR_)
+	
+	SECURITY_ATTRIBUTES		sa;
+
+	sa.nLength = sizeof(sa);
+	sa.lpSecurityDescriptor = NULL;
+	sa.bInheritHandle = TRUE;
+	
+	CreateDirectory((LPCTSTR)"logs", &sa);
+#endif
+
+
+    ParseCommandLine(argv);
+
+	if(g_e3Demo) {
+		if(!g_no_shell && !g_launchScenario) {
+			g_no_shell = TRUE;
+		}
+	}
+
+	g_civApp = new CivApp();
+
+	
+    if (g_cmdline_load) {
+        g_civApp->InitializeApp(NULL, argc);
+
+		ScenarioPack	*pack;
+		Scenario		*scen;
+
+		if (g_civScenarios->FindScenarioFromSaveFile(g_cmdline_load_filename, &pack, &scen)) {
+			
+			g_civPaths->SetCurScenarioPath(scen->m_path);
+			
+			
+			g_civPaths->SetCurScenarioPackPath(pack->m_path);
+
+			
+			g_theProfileDB->SetIsScenario(TRUE);
+
+			
+			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
+				
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
+			} else {
+				
+				
+				spnewgamescreen_displayMyWindow();
+			}
+		} else {
+			main_RestoreGame(g_cmdline_load_filename);
+		}
+    } else if (g_no_shell) {
+		g_civApp->QuickInit(NULL, argc);
+	} else if (g_launchScenario) {	
+		g_civApp->InitializeApp(NULL, argc);
+		ScenarioPack	*pack;
+		Scenario		*scen;
+
+		if (g_civScenarios->FindScenario(g_scenarioName, &pack, &scen)) {
+			
+			g_civPaths->SetCurScenarioPath(scen->m_path);
+			
+			
+			g_civPaths->SetCurScenarioPackPath(pack->m_path);
+
+			
+			g_theProfileDB->SetIsScenario(TRUE);
+
+			
+			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
+				
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
+			} else {
+				
+				
+				spnewgamescreen_displayMyWindow();
+			}
+		}
+	} else {
+		g_civApp->InitializeApp(NULL, argc);
+	}
+
+	
+	gDone = FALSE;
+
+    sint32 first_time_hack; 
+    first_time_hack = TRUE; 
+	while (!gDone) {
+		g_civApp->Process();
+
+		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {			
+			if (msg.message == WM_QUIT)
+				gDone = TRUE;
+
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+		g_letUIProcess = FALSE;
+	}
+
+	return msg.wParam;
+}
+
+
+#endif // !defined(__GNUC__)
 
 
 

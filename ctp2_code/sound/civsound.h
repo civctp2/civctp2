@@ -1,6 +1,49 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : General declarations
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// - Generate debug version
+//
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+// USE_SDL
+// - Use SDL for sound, cdrom, ... (TODO)
+//
+// ACTIVISION_ORIGINAL
+// - Build original Activision binary
+//   ATTENTION: This collides with __GNUC__
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragmas commented out
+// - includes fixed for case sensitive filesystems
+// - sdl sound and cdrom
+//
+//----------------------------------------------------------------------------
 
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __CIVSOUND_H__
 #define __CIVSOUND_H__
 
@@ -9,25 +52,44 @@
 #undef STREAM_TYPE
 #endif
 
-#include "mss.h"
+#define USE_SDL 1
+
+#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+#  include "mss.h"
+#else // !ACTIVISION_ORIGINAL
+#  include <SDL.h>
+#  include <SDL_mixer.h>
+#endif // ACTIVISION_ORIGINAL
 
 class CivSound {
 public:
-	CivSound(uint32 associatedObject, sint32 soundID);
+	CivSound(const uint32 &associatedObject, const sint32 &soundID);
 	~CivSound();
 
-	uint32		GetAssociatedObject(void) const { return m_associatedObject; }
-	HAUDIO		GetHAudio(void) const { return m_hAudio; }
-	MBCHAR		*GetSoundFilename(void)  { return m_soundFilename; }
-	BOOL		IsPlaying(void) const { return m_isPlaying; }
-	void		SetIsPlaying(BOOL is) { m_isPlaying = is; }
-	sint32		GetSoundID(void) const { return m_soundID; }
-	void		SetIsLooping(BOOL looping) { m_isLooping = looping; }
-	BOOL		IsLooping(void) { return m_isLooping; }
-	sint32		GetVolume(void) { return m_volume; }
-	void		SetVolume(sint32 volume);
+	const uint32 GetAssociatedObject() const;
+#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
+	HAUDIO       GetHAudio() const;
+#else
+	Mix_Chunk    *GetAudio() const;
+    void         SetChannel(const int &channel);
+    const int    GetChannel() const;
+#endif
+	MBCHAR       *GetSoundFilename();
+	const BOOL   IsPlaying() const;
+	void         SetIsPlaying(const BOOL &is);
+	const sint32 GetSoundID() const;
+	void         SetIsLooping(const BOOL &looping);
+	const BOOL   IsLooping();
+	const sint32 GetVolume();
+	void         SetVolume(const sint32 &volume);
+
 private:
+#if defined(ACTIVISION_ORIGINAL) || !defined(USE_SDL)
 	HAUDIO			m_hAudio;
+#else
+	Mix_Chunk      *m_Audio;
+    int             m_Channel;
+#endif
 	uint32 			m_associatedObject;
 	MBCHAR			m_soundFilename[_MAX_PATH];
 	BOOL			m_isPlaying;

@@ -1,7 +1,43 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : General declarations
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// - Generate debug version
+//
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
+// ACTIVISION_ORIGINAL
+// - Build original Activision binary
+//   ATTENTION: This collides with __GNUC__
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - #pragmas commented out
+// - includes fixed for case sensitive filesystems
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "gamesounds.h"
 #include "SoundRecord.h"
 
