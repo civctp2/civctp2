@@ -68,6 +68,7 @@
 //   - Optimization for the food, production, happiness, science and gold
 //     have to be implemented, again the problem of missing tools.
 //   - Mar. 1st 2005 Martin Gühmann
+// - Fixed crash in debug version
 //
 //----------------------------------------------------------------------------
 
@@ -3913,7 +3914,13 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 			type = ComputeBestUnitType(build_list_rec, city);
 		} 
 	}	
+
+#if defined(ACTIVISION_ORIGINAL)
 				DPRINTF(k_DBG_GAMESTATE, ("Selected unit type: %s\n", g_theUnitDB->Get(type)->GetNameText()));
+#else
+	UnitRecord const *	unit	= g_theUnitDB->Get(type);
+	DPRINTF(k_DBG_GAMESTATE, ("Selected unit type: %s\n", unit ? unit->GetNameText() : "none"));
+#endif
 				DPRINTF(k_DBG_GAMESTATE, ("Player: %lx\n", m_playerId));
 
 	return type;
