@@ -32,6 +32,8 @@
 //   build queue no cost or turns are shown anymore, by Martin Gühmann.
 // - Rush buy button should be disabled when it is not the player's turn
 //   unfortunatly the button state is not updated on the end turn event.
+// - Made update of rush buy button possible when (only) the gold of the 
+//   player has changed.
 //
 //----------------------------------------------------------------------------
 
@@ -72,6 +74,12 @@
 
 extern C3UI *g_c3ui;
 
+#if !defined(ACTIVISION_ORIGINAL)
+namespace
+{
+	sint32 const CITY_PRODUCTION_HALTED	= 0x7fffffff;
+}
+#endif
 
 CityControlPanel::CityControlPanel(MBCHAR *ldlBlock) :
 m_buildItemLabel(static_cast<ctp2_Static*>(
@@ -445,14 +453,17 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 //
 // Parameters : -
 //
-// Globals    : -
+// Globals    : g_player		: list of players
+//				g_selected_item	: currently selected item
 //
 // Returns    : -
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 void CityControlPanel::UpdateBuildItem()
+#if defined(ACTIVISION_ORIGINAL)
 {
 	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -516,7 +527,6 @@ void CityControlPanel::UpdateBuildItem()
 
 	
 	CityData *theCity=city.CD();
-#if defined(ACTIVISION_ORIGINAL)
 	if(theCity && theCity->GetBuildQueue()->GetHead())
 	{
 		m_buildRushBuy->Enable(theCity->GetOvertimeCost() <= g_player[g_selected_item->GetVisiblePlayer()]->GetGold() && theCity->HowMuchLonger()>1);
@@ -528,27 +538,6 @@ void CityControlPanel::UpdateBuildItem()
 			m_rushBuyCost->SetText("---");
 		}
 	}
-#else
-	if (theCity 
-	&& theCity->GetBuildQueue()->GetHead() 
-	&& !theCity->AlreadyBoughtFront()
-	//Added by Martin Gühmann to disable the rush buy button when
-	//capitalization or infrastructure are at the front of the city
-	//build queue.
-	&& theCity->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
-	&& theCity->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE
-	)
-	{
-		// Allow rush buying when the player has enough gold, even when "turns to completion" is 1.
-		m_buildRushBuy->Enable(
-		        theCity->GetOvertimeCost() <= g_player[g_selected_item->GetVisiblePlayer()]->GetGold()
-		        //Added by Martin Gühmann to make sure rush buying is only possible during the players turn.
-		        && g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer());
-		char buf[20];
-		sprintf(buf, "%d", theCity->GetOvertimeCost());
-		m_rushBuyCost->SetText(buf);
-	}
-#endif
 	else
 	{
 		m_buildRushBuy->Enable(false);
@@ -605,17 +594,7 @@ void CityControlPanel::UpdateBuildItem()
 	
 	
 	MBCHAR numTurns[50];
-#if defined(ACTIVISION_ORIGINAL)
-	//Removed by Martin Gühmann
 	if (turns == 0x7fffffff)
-#else
-	//Added by Martin Gühmann to fix the turn count in the case of
-	//captalization and infrastructure.
-	if (turns == 0x7fffffff
-	|| theCity->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
-	|| theCity->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
-	)
-#endif
 		sprintf(numTurns, "---");
 	else
 		sprintf(numTurns, "%d", turns);
@@ -625,7 +604,133 @@ void CityControlPanel::UpdateBuildItem()
 
 
 }
+#else	// ACTIVISION_ORIGINAL
+{
+	Player *	player	= g_player[g_selected_item->GetVisiblePlayer()];
+	if(!player || (player->GetNumCities() <= 0)) 
+	{
+		ClearBuildItem();
+		return;
+	}
 
+	sint32	city_index	= m_cityListDropDown->GetSelectedItem();
+	if (city_index == -1)
+	{
+		return; 
+	}
+	else if (city_index >= player->GetNumCities())
+	{
+		city_index	= 0;
+	}
+	
+	sint32			numberOfItems	= m_cityListDropDown->GetListBox()->NumItems();
+	Unit			city			= player->GetCityFromIndex(city_index);
+	CityData *		theCity			= city.CD();
+	BuildQueue *	queue			= theCity ? theCity->GetBuildQueue() : NULL;
+	BuildNode *		head			= queue ? queue->GetHead() : NULL;
+
+	// Do update rush buy button even when production has not changed.
+	if (head &&
+	    !theCity->AlreadyBoughtFront() &&
+	//Added by Martin Gühmann to disable the rush buy button when
+	//capitalization or infrastructure are at the front of the city
+	//build queue.
+	    (head->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION) &&
+	    (head->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+	)
+	{
+		// Allow rush buying when the player has enough gold, even when "turns to completion" is 1.
+		m_buildRushBuy->Enable(
+		        theCity->GetOvertimeCost() <= g_player[g_selected_item->GetVisiblePlayer()]->GetGold()
+		        //Added by Martin Gühmann to make sure rush buying is only possible during the players turn.
+		        && g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer());
+		char buf[20];
+		sprintf(buf, "%d", theCity->GetOvertimeCost());
+		m_rushBuyCost->SetText(buf);
+	}
+	else
+	{
+		m_buildRushBuy->Enable(false);
+		m_rushBuyCost->SetText("---");
+	}
+
+	sint32			turns		= m_currentTurns;
+	if (g_network.IsActive() ||
+	    (g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) 
+	   )
+	{
+		turns = theCity ? theCity->HowMuchLonger() : CITY_PRODUCTION_HALTED;
+	}
+
+	if ((m_currentCity.m_id == city.m_id) &&
+	    (m_currentNumItems == numberOfItems) &&
+		(m_currentCategory == (head ? head->m_category : -1)) &&
+	    (m_currentItem == (head ? head->m_type : -1)) &&
+	    (m_currentTurns == turns)
+	   )
+	{
+		return;
+	}
+
+	m_currentCity.m_id	= city.m_id;
+	m_currentNumItems	= numberOfItems;
+	m_currentCategory	= head ? head->m_category : -1;
+	m_currentItem		= head ? head->m_type : -1;
+	m_currentTurns		= turns;
+	m_buildItemProgressBar->SetDrawCallbackAndCookie
+		(ProgressDrawCallback, (void *) m_currentCity.m_id);
+	
+	if(numberOfItems < 1) {
+		ClearBuildItem();
+		return;
+	}
+
+	if(m_buildItemIconButton->IsDisabled())
+		m_buildItemIconButton->Enable(true);
+	if(m_buildItemTurnButton->IsDisabled())
+		m_buildItemTurnButton->Enable(true);
+
+	
+	if(queue->GetLen() < 1) {
+		NoBuildItem();
+		return;
+	}
+
+	
+	MBCHAR tempStr[100];
+	strncpy(tempStr, GetBuildName(head), 99);
+	tempStr[99] = 0;
+	m_buildItemLabel->GetTextFont()->TruncateString(tempStr, m_buildItemLabel->Width());
+	m_buildItemLabel->SetText(tempStr);
+
+	const MBCHAR *buildIconName = GetBuildIcon(head);
+	if(buildIconName && strcmp(buildIconName, "NULL")) {
+		
+		m_buildItemIconButton->SetText("");
+		m_buildItemIconButton->ExchangeImage(4, 0, buildIconName);
+	} else {
+		
+		m_buildItemIconButton->SetText("---");
+		m_buildItemIconButton->ExchangeImage(4, 0, NULL);
+	}
+
+	MBCHAR numTurns[50];
+	//Added by Martin Gühmann to fix the turn count in the case of
+	//captalization and infrastructure.
+	if (turns == CITY_PRODUCTION_HALTED
+	||  head->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+	||  head->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
+	)
+	{
+		sprintf(numTurns, "---");
+	}
+	else
+	{
+		sprintf(numTurns, "%d", turns);
+	}
+	m_buildItemTurnButton->SetText(numTurns); 
+}
+#endif	// ACTIVISION_ORIGINAL
 
 void CityControlPanel::NoBuildItem()
 {

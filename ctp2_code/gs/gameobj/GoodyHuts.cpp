@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Goody hut handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Update the display (rush buy buttons) when receiving gold.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -27,6 +57,10 @@
 #include "Exclusions.h"
 #include "UnitRecord.h"
 #include "GameEventManager.h"
+
+#if !defined(ACTIVISION_ORIGINAL)
+#include "MainControlPanel.h"
+#endif
 
 extern Player **g_player;
 extern RandomGenerator *g_rand;
@@ -237,6 +271,7 @@ void GoodyHut::OpenGoody(sint32 owner, const MapPoint &point)
 			g_slicEngine->Execute(so) ;
 			DPRINTF(k_DBG_GAMESTATE, ("You get %d gold!\n", m_value));
 			g_player[owner]->AddGold(m_value);
+#if defined(ACTIVISION_ORIGINAL)
 			if (g_soundManager) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if (visiblePlayer == owner) {
@@ -246,6 +281,22 @@ void GoodyHut::OpenGoody(sint32 owner, const MapPoint &point)
 											point.y);
 				}
 			}
+#else
+			if (owner == g_selected_item->GetVisiblePlayer())
+			{
+				if (g_soundManager)
+				{
+					g_soundManager->AddSound(SOUNDTYPE_SFX, 
+											 0, // no associated object
+											 gamesounds_GetGameSoundID(GAMESOUNDS_TOOEXPENSIVE),
+											 point.x,
+											 point.y
+											);
+				}
+
+				MainControlPanel::Update();	// the received gold may enable rush buying
+			}
+#endif
 			break;
 		case GOODY_ADVANCE:
 			so = new SlicObject("79DiscoveredRemnantsOfAncientCivilisation") ;
