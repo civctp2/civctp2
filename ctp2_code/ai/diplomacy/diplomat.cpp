@@ -29,7 +29,8 @@
 //   by Peter Triggs to enable some minor AI-AI-Diplomacy.
 // - Corrected bug in list insertion.
 // - Corrected non-standard syntax and some compiler warnings.
-// - Prevented invalid strategies to be merged in.  
+// - Prevented invalid strategies to be merged in. 
+// - Prevented crash on number of strategies wrap-around to negative. 
 //
 //----------------------------------------------------------------------------
 
@@ -323,8 +324,13 @@ void Diplomat::Resize(const PLAYER_INDEX & newMaxPlayerId)
 
 void Diplomat::Load(CivArchive & archive)
 {
+#if defined(ACTIVISION_ORIGINAL)	// container sizes are never negative
 	sint16 count;
 	sint32 i;
+#else
+	uint16	count;
+	size_t	i;
+#endif
 	char *str;
 	ai::Agreement agreement;
 	Threat threat;
@@ -420,12 +426,18 @@ void Diplomat::Load(CivArchive & archive)
 
 void Diplomat::Save(CivArchive & archive) const
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	
 	archive << (sint16) m_personalityName.size();
+#else
+	archive << static_cast<uint16>(m_personalityName.size());
+#endif
 	archive.Store((uint8 *) m_personalityName.c_str(), m_personalityName.size());
 
-	 
+#if defined(ACTIVISION_ORIGINAL)	 
 	archive << (sint16) m_bestStrategicStates.size();
+#else
+	archive << static_cast<uint16>(m_bestStrategicStates.size());
+#endif
 	AiStateList::const_iterator ai_state_iter = m_bestStrategicStates.begin();
 	while (ai_state_iter != m_bestStrategicStates.end())
 	{
@@ -434,7 +446,11 @@ void Diplomat::Save(CivArchive & archive) const
 	}
 	
 	
+#if defined(ACTIVISION_ORIGINAL)	 
 	archive << (sint16) m_threats.size();
+#else
+	archive << static_cast<uint16>(m_threats.size());
+#endif
 	ThreatList::const_iterator threat_iter = m_threats.begin();
 	while (threat_iter != m_threats.end())
 	{
@@ -443,7 +459,11 @@ void Diplomat::Save(CivArchive & archive) const
 	}
 
 	
+#if defined(ACTIVISION_ORIGINAL)	 
 	archive << (sint16) m_foreigners.size();
+#else
+	archive << static_cast<uint16>(m_foreigners.size());
+#endif
 	for (sint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
 		{
 			m_foreigners[foreigner].Save(archive);
