@@ -27,9 +27,9 @@
 //
 // - Fixed number of city styles removed.
 // - Prevented crashes due to uninitialised members.
+// - Prevented some NULL-dereferencing crashes.
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 
@@ -573,9 +573,16 @@ void UnitActor::AddIdle(BOOL NoIdleJustDelay)
 
 	Action		*idleAction;
 
-	
+#if defined(ACTIVISION_ORIGINAL)	// may crash	
 	if(GetActionQueueNumItems() > 0 || NoIdleJustDelay == TRUE)
 		anim->SetNoIdleJustDelay(TRUE);
+#else
+	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
+	{
+		anim->SetNoIdleJustDelay(TRUE);
+	}
+
+#endif
 
 	if(NoIdleJustDelay == TRUE) {
 		idleAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 
@@ -613,7 +620,7 @@ void UnitActor::ActionQueueUpIdle(BOOL NoIdleJustDelay)
 		Assert(anim != NULL);
 	}
 
-	
+#if defined(ACTIVISION_ORIGINAL)	// may crash
 	if(GetActionQueueNumItems() > 0 || NoIdleJustDelay == TRUE)
 		anim->SetNoIdleJustDelay(TRUE);
 
@@ -627,6 +634,15 @@ void UnitActor::ActionQueueUpIdle(BOOL NoIdleJustDelay)
 	{
 		tempCurAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT);
 	}
+#else
+	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
+	{
+		anim->SetNoIdleJustDelay(TRUE);
+	}
+
+	Action *	tempCurAction	= 
+		new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
+#endif	
 
 	tempCurAction->SetAnim(anim);
 
@@ -649,7 +665,13 @@ void UnitActor::GetNextAction(BOOL isVisible)
 		
 		m_actionQueue.Dequeue(m_curAction);
 
-		
+#if !defined(ACTIVISION_ORIGINAL)
+		Assert(m_curAction);
+		if (!m_curAction)
+		{
+			return;
+		}
+#endif
 		
 		if (m_curAction->GetActionType() != m_curUnitAction)
 			m_frame = 0;
@@ -663,11 +685,11 @@ void UnitActor::GetNextAction(BOOL isVisible)
 	}
 
 	
-
+#if defined(ACTIVISION_ORIGINAL)	// Too late
 	Assert(m_curAction);
 	if (!m_curAction)
 		return;
-
+#endif
 	
 	if(m_curAction->m_actionType == UNITACTION_ATTACK )
 	{

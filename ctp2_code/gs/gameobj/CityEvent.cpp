@@ -28,6 +28,7 @@
 // - Readded possibility to gain an advance from a just captured 
 //   city, by Martin Gühmann. However with or without the change
 //   the CaptureCityEvent leaks, maybe a problem of SlicObject.
+// - Prevented crash when reporting completion of the Solaris project.
 //
 //----------------------------------------------------------------------------
 
@@ -672,13 +673,23 @@ STDEHANDLER(CreateWonderEvent)
 	}
 
 	if(wonder == wonderutil_GetGaiaIndex()) {
+#if defined(ACTIVISION_ORIGINAL)	// have to make a new object for each player
 		so = new SlicObject("GCMustDiscoverGaiaController");
 		for(sint32 i = 1; i < g_theProfileDB->GetMaxPlayers(); i++) {
 			if(g_player[i] && i != c->GetOwner()) {
+#else
+		// Notify the other players that they have to hurry to win.
+		// Starting at 1: the Barbarians do not have to be notified.
+		for (sint32 i = 1; i < g_theProfileDB->GetMaxPlayers(); ++i)
+		{
+			if (g_player[i] && (i != c.GetOwner()))
+			{
+				SlicObject * so	= new SlicObject("GCMustDiscoverGaiaController");
+#endif
 				so->AddRecipient(i);
 				so->AddPlayer(i);
 				so->AddPlayer(c.GetOwner());
-				g_slicEngine->Execute(so);
+				g_slicEngine->Execute(so);	// will delete so after handling
 			}
 		}
 	}

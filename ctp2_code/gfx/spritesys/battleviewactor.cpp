@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Battle view actor handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented NULL-dereferencing crash.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -137,9 +156,17 @@ void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 		Assert(anim != NULL);
 	}
 
-	
+#if defined(ACTIVISION_ORIGINAL)	// may crash + possible leak	
 	if(GetActionQueueNumItems() > 0 || NoIdleJustDelay == TRUE)
 		anim->SetNoIdleJustDelay(TRUE);
+#else
+	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
+	{
+		anim->SetNoIdleJustDelay(TRUE);
+	}
+
+	delete m_curAction;
+#endif
 
 	m_curAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT);
 	m_curAction->SetAnim(anim);

@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Trade actor handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// ACTIVISION_ORIGINAL		
+// - When defined, generates the original Activision code.
+// - When not defined, generates the modified Apolyton code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented memory leaks and double deletes.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -92,21 +111,29 @@ TradeActor::TradeActor(TradeRoute newRoute)
 TradeActor::TradeActor(TradeActor *copy)
 {
 	*this = *copy;
+#if !defined(ACTIVISION_ORIGINAL)	// Copy, to delete safely later
+	m_curAction	= new Action(m_curAction); 
+#endif
 }
 
 TradeActor::~TradeActor()
 {
-	
+#if defined(ACTIVISION_ORIGINAL)	// Useless actions and tests	
 	if (m_goodSpriteGroup != NULL) m_goodSpriteGroup = NULL;
 
 	
 	
 	if(m_curAction) delete m_curAction;
-
+#else
+	delete m_curAction;
+#endif
 }
 
 void TradeActor::AddIdle(void)
 {
+#if !defined(ACTIVISION_ORIGINAL)
+	delete m_curAction;
+#endif
 	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_INTERRUPT);
 	m_curAction->SetAnim(GetAnim(GOODACTION_IDLE));
 	m_curGoodAction = GOODACTION_IDLE;
