@@ -52,6 +52,8 @@ TERRAIN_FOREST {
 
    Resources TERRAIN_FOREST_GOOD_ONE
    Resources TERRAIN_FOREST_GOOD_TWO
+   Resources TERRAIN_FOREST_GOOD_THREE
+   Resources TERRAIN_FOREST_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -112,6 +114,8 @@ TERRAIN_PLAINS {
 
    Resources TERRAIN_PLAINS_GOOD_ONE
    Resources TERRAIN_PLAINS_GOOD_TWO
+   Resources       TERRAIN_PLAINS_GOOD_THREE
+   Resources       TERRAIN_PLAINS_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -287,6 +291,8 @@ TERRAIN_GRASSLAND {
 
    Resources TERRAIN_GRASSLAND_GOOD_TWO
    Resources TERRAIN_GRASSLAND_GOOD_ONE
+   Resources	TERRAIN_GRASSLAND_GOOD_THREE	
+   Resources	TERRAIN_GRASSLAND_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -347,6 +353,8 @@ TERRAIN_DESERT {
 
    Resources TERRAIN_DESERT_GOOD_ONE
    Resources TERRAIN_DESERT_GOOD_TWO
+   Resources       TERRAIN_DESERT_GOOD_THREE
+   Resources       TERRAIN_DESERT_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -406,6 +414,9 @@ TERRAIN_SWAMP {
    }
 
    Resources TERRAIN_SWAMP_GOOD_ONE
+   Resources TERRAIN_SWAMP_GOOD_TWO
+   Resources TERRAIN_SWAMP_GOOD_THREE
+   Resources TERRAIN_SWAMP_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -466,6 +477,8 @@ TERRAIN_JUNGLE {
 
    Resources TERRAIN_JUNGLE_GOOD_TWO
    Resources TERRAIN_JUNGLE_GOOD_ONE
+   Resources TERRAIN_JUNGLE_GOOD_FOUR
+   Resources TERRAIN_JUNGLE_GOOD_THREE
 
    MovementType: Air
    MovementType: Land
@@ -525,6 +538,8 @@ TERRAIN_MOUNTAIN {
 
    Resources TERRAIN_MOUNTAIN_GOOD_ONE
    Resources TERRAIN_MOUNTAIN_GOOD_TWO
+   Resources TERRAIN_MOUNTAIN_GOOD_THREE
+   Resources TERRAIN_MOUNTAIN_GOOD_FOUR
 
    MovementType: Air
    MovementType: Mountain
@@ -585,6 +600,8 @@ TERRAIN_HILL {
 
    Resources TERRAIN_HILL_GOOD_TWO
    Resources TERRAIN_HILL_GOOD_ONE
+   Resources TERRAIN_HILL_GOOD_FOUR
+   Resources TERRAIN_HILL_GOOD_THREE
 
    MovementType: Air
    MovementType: Land
@@ -620,6 +637,8 @@ TERRAIN_WATER_SHALLOW {
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
    Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
+   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
 
    MovementType: Air
    MovementType: Sea
@@ -656,6 +675,7 @@ TERRAIN_WATER_DEEP {
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_THREE
 
    MovementType: Air
    MovementType: Sea
@@ -691,6 +711,8 @@ TERRAIN_WATER_VOLCANO {
 
    Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE
    Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO
+   Resources TERRAIN_WHITE_HILL_GOOD_ONE
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea
@@ -727,6 +749,10 @@ TERRAIN_WATER_BEACH {
       Freight 33
    }
 
+   Resources TERRAIN_WATER_BEACH_GOOD_ONE
+   Resources TERRAIN_WATER_BEACH_GOOD_TWO
+   Resources TERRAIN_WATER_BEACH_GOOD_THREE
+
    MovementType: Air
    MovementType: Sea
    MovementType: ShallowWater
@@ -759,6 +785,11 @@ TERRAIN_WATER_SHELF {
       Shield 15
       Gold 15
    }
+
+   Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
+   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea
@@ -795,6 +826,7 @@ TERRAIN_WATER_TRENCH {
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_THREE
 
    MovementType: Air
    MovementType: Sea
@@ -830,6 +862,7 @@ TERRAIN_WATER_RIFT {
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_THREE
 
    MovementType: Air
    MovementType: Sea
@@ -920,8 +953,10 @@ TERRAIN_BROWN_HILL {
       Freight 70
    }
 
+   Resources TERRAIN_BROWN_HILL_GOOD_ONE
+   Resources TERRAIN_BROWN_HILL_GOOD_TWO
    Resources TERRAIN_DESERT_GOOD_ONE
-   Resources TERRAIN_DESERT_GOOD_TWO
+   Resources TERRAIN_DESERT_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -979,8 +1014,8 @@ TERRAIN_BROWN_MOUNTAIN {
       Freight 70
    }
 
-   Resources TERRAIN_MOUNTAIN_GOOD_ONE
-   Resources TERRAIN_MOUNTAIN_GOOD_TWO
+   Resources TERRAIN_BROWN_MOUNTAIN_GOOD_ONE
+   Resources TERRAIN_BROWN_MOUNTAIN_GOOD_TWO
 
    MovementType: Air
    MovementType: Mountain
@@ -1037,6 +1072,9 @@ TERRAIN_WHITE_HILL {
       Movement 50
       Freight 70
    }
+
+   Resources TERRAIN_WHITE_HILL_GOOD_ONE
+   Resources TERRAIN_WHITE_HILL_GOOD_TWO
 
    MovementType: Air
    MovementType: Land
@@ -1095,6 +1133,8 @@ TERRAIN_WHITE_MOUNTAIN {
 
    Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE
    Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR
 
    MovementType: Air
    MovementType: Mountain
@@ -1129,6 +1169,9 @@ TERRAIN_WATER_KELP {
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
+   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea
@@ -1163,7 +1206,10 @@ TERRAIN_WATER_REEF {
       Gold 15
    }
 
+   Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
    Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
+   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea

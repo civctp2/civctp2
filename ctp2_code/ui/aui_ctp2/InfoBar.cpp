@@ -63,6 +63,7 @@
 #include "TerrainImprovementRecord.h"
 #include "CityData.h"
 
+#include "ResourceRecord.h" //access g_theResourceDB for goods info, PFT 05 Mar 05
 // Added by Martin Gühmann
 #include "UnitData.h"
 #include "unseencell.h" //Unseen cell info is needed
@@ -383,6 +384,8 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 // Added by Martin Gühmann
 			if(hasUnseen){
 				// Use the values from the hidden info if the tile is hidden
+				// (Reminder: Goods don't change once seen. If we want to allow goods to be discovered or run out, 
+				//we'll have to add a member to UnseenCell.) 
 				food = ucell.m_unseenCell->GetFoodProduced();
 				prod = ucell.m_unseenCell->GetShieldsProduced();
 				gold = ucell.m_unseenCell->GetGoldProduced();
@@ -392,7 +395,18 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				prod = cell->GetShieldsProduced();
 				gold = cell->GetGoldProduced();
 			}
+            //include good values if present. PFT 05 Mar 05
+            StringId	goodStrID = 0;
 
+			if(g_theWorld->IsGood(point)) {
+                sint32 goods;
+				cell->GetGoodsIndex(goods);
+				food=food + g_theResourceDB->Get(goods)->GetFood();
+				prod=prod + g_theResourceDB->Get(goods)->GetProduction();
+				gold=gold + g_theResourceDB->Get(goods)->GetGold();
+
+				goodStrID = g_theWorld->GetTerrain(point)->GetResources(goods)->GetName();
+			}
 			Concat("(");
 			char numBuf[20];
 			if(food > 0) {
@@ -412,6 +426,11 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				sprintf(numBuf, "%d", gold);
 				Concat(numBuf);
 			}
+
+            if(goodStrID > 0){
+                Concat(", ");
+                Concat(g_theStringDB->GetNameStr(goodStrID));
+            }
 			Concat(")");
 		}
 		

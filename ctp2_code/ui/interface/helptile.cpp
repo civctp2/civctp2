@@ -23,6 +23,7 @@
 //
 // - Does not show anymore the current tarrain stats but those from
 //   the last visit. - Dec. 23rd 2004 Martin Gühmann
+// - Add in food, shields, and gold from any good that is present. PFT 3 apr 05
 //
 //----------------------------------------------------------------------------
 
@@ -265,6 +266,11 @@ void helptile_displayData(const MapPoint &p)
 	char myname[256];
 	char mytext[256];
 	sint32 goods=0;
+
+    sint32 food=0;//PFT 3 apr 05
+	sint32 shields=0;
+	sint32 gold=0;
+
 	const Cell *myTile = g_theWorld->GetCell(p);
 
 // Added by Martin Gühmann
@@ -288,6 +294,9 @@ void helptile_displayData(const MapPoint &p)
 		sprintf( mytext , "%d\n", ucell.m_unseenCell->GetShieldsProduced());
 		s_tileProdV->SetText(mytext);
 
+        sprintf( mytext, "%d", ucell.m_unseenCell->GetGoldProduced()); 
+		s_tileGoldV->SetText(mytext);
+
 		// Unfortunatly this kind of information is not stored in the
 		// UnseenCell object.
 		if(g_theWorld->IsGood(p)) {
@@ -298,18 +307,29 @@ void helptile_displayData(const MapPoint &p)
 			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
 			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
 			s_tileGoodV->SetText(mytext);
-			s_tileSaleV->SetText("\0");
-			s_tileSale->SetText("\0");
+
+            //PFT 03 apr 05:
+			food = myTile->GetFoodProduced() + g_theResourceDB->Get(goods)->GetFood();
+			sprintf( mytext , "%d\n", food);
+			s_tileFoodV->SetText(mytext);
+
+			shields = myTile->GetShieldsProduced() + g_theResourceDB->Get(goods)->GetProduction();
+			sprintf( mytext , "%d\n", shields);
+			s_tileProdV->SetText(mytext);
+
+
+			gold = myTile->GetGoldProduced() + g_theResourceDB->Get(goods)->GetGold();
+			sprintf( mytext, "%d", gold);
+			s_tileGoldV->SetText(mytext);
+
 		}
 		else {
 			sprintf( mytext , "%s\n", s_stringTable->GetString(STR_NONE));
 			s_tileGoodV->SetText(mytext);
-			s_tileSaleV->SetText("\0");
-			s_tileSale->SetText("\0");
 		}
 
-		sprintf( mytext, "%d", ucell.m_unseenCell->GetGoldProduced()); 
-		s_tileGoldV->SetText(mytext);
+        s_tileSaleV->SetText("\0");
+		s_tileSale->SetText("\0");
 
 		sprintf( mytext , "%.1f\n", (float)(ucell.m_unseenCell->m_move_cost / 100.0) );
 		s_tileMoveV->SetText(mytext);
@@ -325,6 +345,9 @@ void helptile_displayData(const MapPoint &p)
 		sprintf( mytext , "%d\n", myTile->GetShieldsProduced());
 		s_tileProdV->SetText(mytext);
 
+        sprintf( mytext, "%d", myTile->GetGoldProduced()); 
+		s_tileGoldV->SetText(mytext);
+
 		if(g_theWorld->IsGood(p)) {
 			StringId	goodStrID;
 
@@ -332,19 +355,30 @@ void helptile_displayData(const MapPoint &p)
 		
 			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
 			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
-			s_tileGoodV->SetText(mytext);
-			s_tileSaleV->SetText("\0");
-			s_tileSale->SetText("\0");
+            s_tileGoodV->SetText(mytext);
+
+            //PFT 03 apr 05:
+			food = myTile->GetFoodProduced() + g_theResourceDB->Get(goods)->GetFood();
+			sprintf( mytext , "%d\n", food);
+			s_tileFoodV->SetText(mytext);
+
+			shields = myTile->GetShieldsProduced() + g_theResourceDB->Get(goods)->GetProduction();
+			sprintf( mytext , "%d\n", shields);
+			s_tileProdV->SetText(mytext);
+
+
+			gold = myTile->GetGoldProduced() + g_theResourceDB->Get(goods)->GetGold();
+			sprintf( mytext, "%d", gold);
+			s_tileGoldV->SetText(mytext);
+
 		}
 		else {
 			sprintf( mytext , "%s\n", s_stringTable->GetString(STR_NONE));
 			s_tileGoodV->SetText(mytext);
-			s_tileSaleV->SetText("\0");
-			s_tileSale->SetText("\0");
 		}
 
-		sprintf( mytext, "%d", myTile->GetGoldProduced()); 
-		s_tileGoldV->SetText(mytext);
+        s_tileSaleV->SetText("\0");
+		s_tileSale->SetText("\0");
 
 		sprintf( mytext , "%.1f\n", (float)(myTile->GetMoveCost() / 100.0) );
 		s_tileMoveV->SetText(mytext);
