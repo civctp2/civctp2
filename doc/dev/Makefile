@@ -10,7 +10,7 @@ CTP2_DEV_SOURCES = ctp2_dev.tex \
 	include/make_win32.tex include/setup_win32.tex \
 	images/wallpaper1_640x480_2.jpg \
 	include/a_defines.tex include/a_dspconfig.tex \
-	include/a_deadcode.tex \
+	include/a_deadcode.tex include/a_file_describe.tex \
 	include/a_faq_project.tex include/a_faq_licence.tex
 
 all: doc
