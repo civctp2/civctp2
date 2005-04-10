@@ -1,3 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (German)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin Gühmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+# - Renamed Lexikothek to Große Bibliothek
+#
+#----------------------------------------------------------------------------
+
 ###Those darn hard-coded strings 03-09-00
 str_ldl_Already_Offer	"Sie bieten dieses Gut bereits zum Kauf an. Soll das vorangegangene Angebot ersetzt werden?"
 
@@ -286,8 +315,8 @@ str_ldl_Animated_Trade_Routes_Off	"Anim. Handelswege aus"
 str_ldl_Animated_Trade_Routes_On	"Anim. Handelswege ein"
 str_ldl_Wonder_Movies_Off	"Wunderfilme aus"
 str_ldl_Wonder_Movies_On	"Wunderfilme ein"
-str_ldl_Great_Library_Animation_Off	"Animierte Lexikothek aus"
-str_ldl_Great_Library_Animation_On	"Animierte Lexikothek ein"
+str_ldl_Great_Library_Animation_Off	"Animierte Große Biobliothek aus"
+str_ldl_Great_Library_Animation_On	"Animierte Große Biobliothek ein"
 str_ldl_Bouncing_Message_Off	"Animiertes Icon aus"
 str_ldl_Bouncing_Message_On	"Animiertes Icon ein"
 str_ldl_Water_Animation_Off	"Animiertes Wasser aus"
@@ -559,7 +588,7 @@ BUTTON_ACCEPT	"Akzeptieren"
 BUTTON_CANCEL	"Zurück"
 BUTTON_CLOSE	"OK"
 BUTTON_GOAL	"Ziel"
-BUTTON_LIBRARY	"Lexikothek"
+BUTTON_LIBRARY	"Große Bibliothek"
 BUTTON_MAYBE	"Vielleicht"
 BUTTON_NO	"Nein"
 BUTTON_OK	"OK"
@@ -664,7 +693,7 @@ str_ldl_CAPS_GOLD2	"Netto-\ngold"
 str_ldl_CAPS_GOLD	"Gold"
 str_ldl_CAPS_GOLD_COLON	"Gold:"
 str_ldl_CAPS_GOODS	"Güter"
-str_ldl_CAPS_GREAT_LIBRARY	"Lexikothek"
+str_ldl_CAPS_GREAT_LIBRARY	"Große Biobliothek"
 str_ldl_CAPS_HAPPINESS	"Zufriedenheit"
 str_ldl_CAPS_HAPPY	"Zufrieden."
 str_ldl_CAPS_HEALTH	"Lebensp."
@@ -894,7 +923,7 @@ str_ldl_Government	"Regierung"
 str_ldl_GOVERNMENTS	"Regierungen"
 str_ldl_GRAPHICS	"Grafik"
 str_ldl_GRAPHICS_OPTIONS	"Grafik"
-str_ldl_Great_Library	"Lexikothek"
+str_ldl_Great_Library	"Große Bibliothek"
 str_ldl_Group_All	"Alle gruppieren"
 str_ldl_Growth		"Wachstum"
 str_ldl_GROWTH_COLON	"Wachstum:"
@@ -954,7 +983,7 @@ str_ldl_Leader_Name_COLON	"Name:"
 str_ldl_LEAVE_OUR_LANDS	"Vertreibung"
 str_ldl_Leaving_Lobby	"Verlasse Lobby ..."
 str_ldl_Legal	"Zulässig"
-str_ldl_LIBRARY	"Lexikothek"
+str_ldl_LIBRARY	"Große Bibliothek"
 str_ldl_Line_Of_Sight	"Nebel des Krieges"
 str_ldl_LOAD_GAME	"Spiel laden"
 str_ldl_Load_Game_Setup	"Spiel-Setup laden"
@@ -1419,7 +1448,7 @@ str_tbl_ldl_Open_City_Status	"Stadtstatus einsehen"
 str_tbl_ldl_Open_City_View	"Stadtübersicht öffnen"
 str_tbl_ldl_Open_Civ_Status	"Nationsübersicht öffnen"
 str_tbl_ldl_Open_Diplomacy	"Diplomatieübersicht öffnen"
-str_tbl_ldl_Open_Great_Library	"Lexikothek öffnen"
+str_tbl_ldl_Open_Great_Library	"Große Bibliothek öffnen"
 str_tbl_ldl_Open_Info_Screen	"Akt. Punktestand einsehen"
 str_tbl_ldl_Open_Options_Screen	"Optionsübersicht öffnen"
 str_tbl_ldl_Open_Science_Status	"Wissenschaftsübersicht öffnen"
@@ -1687,7 +1716,7 @@ str_ldl_Estimated_Power_COLON	"Machteinschätzung: Sie stecken tief in der $@^&*(
 str_ldl_F	"v"
 str_ldl_Exit	"OK"
 str_ldl_Flat_World	"Flache Welt"
-str_ldl_Great_Library_Animation	"Animierte Lexikothek"
+str_ldl_Great_Library_Animation	"Animierte Große Bibliothek"
 str_ldl_Gross_Gold	"Bruttogold"
 str_ldl_Gross_Product	"Bruttoprodukt"
 str_ldl_Gross_Production	"Bruttoproduktion"
@@ -1874,30 +1903,30 @@ str_tbl_ldl_GoToButton	"GoToButton"
 str_tbl_ldl_FortifyButton	"FortifyButton"
 str_tbl_ldl_FreeSlaveButton	"FreeSlaveButton"
 str_tbl_ldl_G	"G"
-str_tbl_ldl_Great_Library_Biowarfare_Filter	"Lexikothek - Bio-Schutzfilter"
-str_tbl_ldl_Great_Library_Cathedral	"Lexikothek - Kathedrale"
-str_tbl_ldl_Great_Library_Cleric	"Lexikothek - Kleriker"
-str_tbl_ldl_Great_Library_Consumer_Electronics	"Lexikothek - Massenmedien"
-str_tbl_ldl_Great_Library_Corporate_Branch	"Lexikothek - Bürokrat"
-str_tbl_ldl_Great_Library_Eco_Terrorist	"Lexikothek - Ökoterrorist"
-str_tbl_ldl_Great_Library_Ecotopia	"Lexikothek - Ökotopia"
-str_tbl_ldl_Great_Library_Genetics	"Lexikothek - Genetik"
-str_tbl_ldl_Great_Library_Global_Defense_Initiative	"Lexikothek - Globale Verteidigung"
-str_tbl_ldl_Great_Library_House_of_Freezing	"Lexikothek - Cryo-Anlage"
-str_tbl_ldl_Great_Library_Infector	"Lexikothek - Infektor"
-str_tbl_ldl_Great_Library_Lawyer	"Lexikothek - Anwalt"
-str_tbl_ldl_Great_Library_Life_Extension	"Lexikothek - Lebensverlängerung"
-str_tbl_ldl_Great_Library_Multinationalism	"Lexikothek - Handelsrepublik"
-str_tbl_ldl_Great_Library_Personal_Encryption	"Lexikothek - Digitale Kodierung"
-str_tbl_ldl_Great_Library_Printing_Press	"Lexikothek - Druckerpresse"
-str_tbl_ldl_Great_Library_Screen	"Lexikothek"
-str_tbl_ldl_Great_Library_Subneural_Ads	"Lexikothek - Subneurale Signale"
-str_tbl_ldl_Great_Library_Technocracy	"Lexikothek - Technokratie"
-str_tbl_ldl_Great_Library_Televangelist	"Lexikothek - Televangelist"
-str_tbl_ldl_Great_Library_Television	"Lexikothek - Fernsehtechnik"
-str_tbl_ldl_Great_Library_Theocracy	"Lexikothek - Theokratie"
-str_tbl_ldl_Great_Library_Virtual_Democracy	"Lexikothek - Virtuelle Demokratie"
-str_tbl_ldl_Great_Library_Wilderness_Preservation	"Lexikothek - Wildnisschutzgesetz"
+str_tbl_ldl_Great_Library_Biowarfare_Filter	"Große Bibliothek - Bio-Schutzfilter"
+str_tbl_ldl_Great_Library_Cathedral	"Große Bibliothek - Kathedrale"
+str_tbl_ldl_Great_Library_Cleric	"Große Bibliothek - Kleriker"
+str_tbl_ldl_Great_Library_Consumer_Electronics	"Große Bibliothek - Massenmedien"
+str_tbl_ldl_Great_Library_Corporate_Branch	"Große Bibliothek - Bürokrat"
+str_tbl_ldl_Great_Library_Eco_Terrorist	"Große Bibliothek - Ökoterrorist"
+str_tbl_ldl_Great_Library_Ecotopia	"Große Bibliothek - Ökotopia"
+str_tbl_ldl_Great_Library_Genetics	"Große Bibliothek - Genetik"
+str_tbl_ldl_Great_Library_Global_Defense_Initiative	"Große Bibliothek - Globale Verteidigung"
+str_tbl_ldl_Great_Library_House_of_Freezing	"Große Bibliothek - Cryo-Anlage"
+str_tbl_ldl_Great_Library_Infector	"Große Bibliothek - Infektor"
+str_tbl_ldl_Great_Library_Lawyer	"Große Bibliothek - Anwalt"
+str_tbl_ldl_Great_Library_Life_Extension	"Große Bibliothek - Lebensverlängerung"
+str_tbl_ldl_Great_Library_Multinationalism	"Große Bibliothek - Handelsrepublik"
+str_tbl_ldl_Great_Library_Personal_Encryption	"Große Bibliothek - Digitale Kodierung"
+str_tbl_ldl_Great_Library_Printing_Press	"Große Bibliothek - Druckerpresse"
+str_tbl_ldl_Great_Library_Screen	"Große Bibliothek"
+str_tbl_ldl_Great_Library_Subneural_Ads	"Große Bibliothek - Subneurale Signale"
+str_tbl_ldl_Great_Library_Technocracy	"Große Bibliothek - Technokratie"
+str_tbl_ldl_Great_Library_Televangelist	"Große Bibliothek - Televangelist"
+str_tbl_ldl_Great_Library_Television	"Große Bibliothek - Fernsehtechnik"
+str_tbl_ldl_Great_Library_Theocracy	"Große Bibliothek - Theokratie"
+str_tbl_ldl_Great_Library_Virtual_Democracy	"Große Bibliothek - Virtuelle Demokratie"
+str_tbl_ldl_Great_Library_Wilderness_Preservation	"Große Bibliothek - Wildnisschutzgesetz"
 str_tbl_ldl_hrs	"Std."
 str_tbl_ldl_InciteRevolutionButton	"InciteRevolutionButton"
 str_tbl_ldl_HearGossipButton	"HearGossipButton"
@@ -2280,6 +2309,8 @@ str_ldl_ShowQueue     			"Bauliste ein/aus"
 str_ldl_EditQueue 			"Bauen"
 str_ldl_HideQueue 			"Bauliste ausblenden"
 
+str_ldl_OptimizeSpecialists 		"Optimiere Spezialisten"
+
 str_ldl_Costs 				"Kosten"
 str_ldl_Gives 				"Schenkungen"
 str_ldl_YouHave 			"Sie haben "
@@ -2353,7 +2384,7 @@ str_ldl_UnitsMenuTitle			"Einheiten"
 str_ldl_DiplomacyMenuTitle		"Diplomatie"
 str_ldl_ScienceMenuTitle		"Wissenschaft"
 str_ldl_TradeMenuTitle			"Handel"
-str_ldl_GLMenuTitle			"Lexikothek"
+str_ldl_GLMenuTitle			"Große Bibliothek"
 str_ldl_InfoMenuTitle			"Info"
 str_ldl_OptionsMenuTitle		"Optionen"
 
@@ -2380,13 +2411,13 @@ str_ldl_NewProposal			"Neues Gesuch"
 
 # Science Menu Strings
 str_ldl_ScienceScreen			"Wissenschaftsmenü"
-str_ldl_GreatLibrary			"Lexikothek" 
+str_ldl_GreatLibrary			"Große Bibliothek" 
 
 # Trade Menu Strings
 str_ldl_TradeScreen			"Handelsmenü"
 
 # GL Menu Strings
-str_ldl_GreatLibrary			"Lexikothek"
+str_ldl_GreatLibrary			"Große Bibliothek"
 
 # Info Menu Strings
 str_ldl_Score				"Punkte"		
@@ -2623,6 +2654,7 @@ str_ldl_DD_BUILDING_UPKEEP_LABEL	"Unterhaltskosten:"
 str_ldl_DD_SCIENCE_LABEL		"Wissenschaft:"
 str_ldl_DD_SAVINGS_LABEL		"Rücklagen:"
 str_ldl_DD_DETAILS			"Details"
+str_ldl_DD_OPTIMIZE_SLIDERS		"Optimiere Schieber"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT			"Aktuelle Regierung"
 str_ldl_DD_GOV_COMPARE			"Vergleichen mit"
@@ -2821,6 +2853,7 @@ str_tbl_ldl_InProgress			"Akt. Spiel:"
 str_tbl_ldl_Defeat			"Niederlage:"
 	
 # Great Library
+str_ldl_CAPS_GREAT_LIBRARY		"G R O S S E   B I B L I O T H E K"
 str_ldl_GreatLibraryGoalSetTo 		"Forschungsziel: %s"
 str_ldl_GreatLibraryGoalKnown	 	"%s ist bereits bekannt. Es wurde kein Forschungsziel gesetzt."
 str_ldl_GreatLibraryNoGoalPossible	"%s kann nicht erforscht werden."
@@ -2920,15 +2953,6 @@ INFOBAR_CITY 				"Stadt: "
 INFOBAR_UNEXPLORED 			"Unerforscht"
 
 UNIT_HOPLITE_NEW 			"Phalanx"
-
-BUILD_LIST_SEQUENCE_PRODUCTION 		"Produktion"
-BUILD_LIST_SEQUENCE_GROWTH 		"Wachstum"
-BUILD_LIST_SEQUENCE_OFFENSE 		"Offensive"
-BUILD_LIST_SEQUENCE_DEFENSE 		"Defensive"
-BUILD_LIST_SEQUENCE_SCIENCE 		"Wissenschaft"
-BUILD_LIST_SEQUENCE_GOLD 		"Gold"
-BUILD_LIST_SEQUENCE_WONDERS 		"Weltwunder"
-BUILD_LIST_SEQUENCE_HAPPINESS 		"Zufriedenheit"
 
 MOVED_ALL_ARMIES_GENIUS 		"Sie haben alle Ihre Truppen bewegt: Sie müssen ein Genie sein!"
 
@@ -3094,7 +3118,7 @@ str_ldl_EditQueueArmor "R"
 str_ldl_EditQueueRanged "FA"
 str_ldl_EditQueueDamage "TP"
 str_ldl_EditQueueMovement "FB"
-str_ldl_EditQueueGreatLibrary "Lexikothek"
+str_ldl_EditQueueGreatLibrary "Große Bibliothek"
 str_ldl_EditQueueConfirmOverwrite "Listen aller gewählten Städte überschreiben?"
 
 #revised to eliminate phrase 'total:' Updated in add_str

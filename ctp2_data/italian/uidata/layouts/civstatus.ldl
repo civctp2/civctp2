@@ -395,11 +395,7 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 	}
 
 	# Build Queue button.
-	DetailsButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-		# Location
-		int		xpix		208
-		int		ypix		354
-		int		widthpix	160
+	DetailsButton:CTP2_POSITION_12_BUTTON {
 		int focusindex 9
 		
 		string	image00				"upbt16aX.tga"
@@ -409,6 +405,12 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 
 		# Label
 		string	text	"str_ldl_DD_DETAILS"
+	}
+
+	OptimizeSlidersButton:CTP2_POSITION_22_BUTTON {
+
+		# Label
+		string	text	"str_ldl_DD_OPTIMIZE_SLIDERS"
 	}
 
 	# Tabs...

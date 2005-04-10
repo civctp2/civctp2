@@ -1,3 +1,29 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Civ specific strings, e.g civ names, civ leaders,
+#                city names (Italian)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added new tooltips for national management dialog. (L. Hirth Added 6/2004)
+# - Added new statusbartip for new optimize specialist button, in the 
+#   city manager. - April 7th 2005 Martin Gühmann
+# 
+#----------------------------------------------------------------------------
+
 # Control Panel
 STATUSBAR_END_TURN_BUTTON	"Clicca su questo pulsante quando hai finito."
 TOOLTIP_END_TURN_BUTTON		"Conclude il turno"
@@ -549,6 +575,8 @@ STATUSBAR_CITYMAN_MAIN_CITYPOP_DISPLAY		"Questa è la popolazione totale della ci
 TOOLTIP_CITYMAN_MAIN_CITYPOP_DISPLAY		"Popolazione totale"
 STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Clicca qui per modificare la coda di produzione della città."
 TOOLTIP_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Passa alla coda di produzione"
+STATUSBAR_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON	"Optimize the specilists distribution of this city."
+TOOLTIP_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON	"Optimize Specialists"
 STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON		"Clicca qui per accedere alla Grande Biblioteca."
 TOOLTIP_CITYMAN_MAIN_GOTOGL_BUTTON		"Passa alla Grande Biblioteca"
 STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON		"Clicca qui per inserire questa coda di produzione in quelle di tutte le città selezionate."

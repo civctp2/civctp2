@@ -1,15 +1,35 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Cause and effect tab of the domestic manager
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added m_optimizeSliderButton button for automatic slider optimization 
+//   option. Including a callback function. - April 7th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 #pragma once
 #ifndef ___BMH_CAUSE_AND_EFFECT_TAB_HEADER
 #define ___BMH_CAUSE_AND_EFFECT_TAB_HEADER
-
 
 class aui_Control;
 class aui_Region;
@@ -20,23 +40,17 @@ class ctp2_Spinner;
 class ctp2_Static;
 class ctp2_Tab;
 
-
 class CauseAndEffectTab {
 public:
-	
 	CauseAndEffectTab(MBCHAR *ldlBlock);
 
-	
 	void Update();
 
-	
 	void DisplayDetails(bool flag = true);
 
 private:
-	
 	void UpdateGeneral();
 
-	
 	void UpdateFoodSpinners();			
 	void UpdateProductionSpinners();	
 	void UpdateCommerceSpinners();		
@@ -74,6 +88,9 @@ private:
 	static void DetailsButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
+	static void OptimizeSlidersButtonActionCallback(aui_Control *control,
+		uint32 action, uint32 data, void *cookie);// Added by Martin Gühmann
+
 	static void CauseAndEffectTabActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
@@ -91,7 +108,7 @@ private:
 
 	
 	ctp2_Button		*m_detailsButton;
-
+	ctp2_Button		*m_optimizeSliderButton; // Added by Martin Gühmann
 	
 	ctp2_Static		*m_numberOfCities;
 	ctp2_Static		*m_population;

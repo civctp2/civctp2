@@ -1,3 +1,29 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Civ specific strings, e.g civ names, civ leaders,
+#                city names (French)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added new tooltips for national management dialog. (L. Hirth Added 6/2004)
+# - Added new statusbartip for new optimize specialist button, in the 
+#   city manager. - April 7th 2005 Martin Gühmann
+# 
+#----------------------------------------------------------------------------
+
 # Control Panel
 STATUSBAR_END_TURN_BUTTON	"Appuyez sur Fin de Tour lorsque vous avez terminé."
 TOOLTIP_END_TURN_BUTTON		"Fin de tour"
@@ -518,6 +544,8 @@ STATUSBAR_CITYMAN_MAIN_CITYPOP_DISPLAY		"Nombre total d'habitants de la ville."
 TOOLTIP_CITYMAN_MAIN_CITYPOP_DISPLAY		"Population totale de la ville"
 STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Cliquez ici pour modifier la liste d'attente de construction de la ville."
 TOOLTIP_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Aller à la liste d'attente"
+STATUSBAR_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON	"Optimize the specilists distribution of this city."
+TOOLTIP_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON	"Optimize Specialists"
 STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON		"Cliquez ici pour aller à la grande bibliothèque."
 TOOLTIP_CITYMAN_MAIN_GOTOGL_BUTTON		"Aller à la grande bibliothèque"
 STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON		"Cliquez ici pour insérer cette liste à toutes les listes d'attente de construction des villes sélectionnées."

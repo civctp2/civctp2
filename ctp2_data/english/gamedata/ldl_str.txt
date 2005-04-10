@@ -1,3 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (English)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin Gühmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+#
+# 
+#----------------------------------------------------------------------------
+
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer	"You are already offering that good. Replace old offer?"
 
@@ -2286,6 +2315,8 @@ str_ldl_ShowQueue     			"Show Queue"
 str_ldl_EditQueue 			"Build"
 str_ldl_HideQueue 			"Hide Queue"
 
+str_ldl_OptimizeSpecialists 		"Optimize Specialists"
+
 str_ldl_Costs 				"Costs"
 str_ldl_Gives 				"Gives"
 str_ldl_YouHave 			"You Have"
@@ -2605,30 +2636,31 @@ str_ldl_CP_EDIT_BUILD_QUEUE		"Edit Build\nQueue"
 # Domestic Management
 str_ldl_DOMESTIC_DIALOG_TITLE		"E M P I R E   M A N A G E R"
 # Cause And Effect Tab Panel
-str_ldl_DD_CNE_TAB					"DOMESTIC POLICY"
-str_ldl_DD_GOVERNMENT_TAB			"GOVERNMENT"
-str_ldl_DD_RANKING_TAB				"RANKING"
-str_ldl_DD_HAPPINESS				"Empire Happiness:"
-str_ldl_DD_RATIONS_LABEL			"Rations:"
-str_ldl_DD_WORKDAY_LABEL			"Workday:"
-str_ldl_DD_WAGES_LABEL				"Wages:"
-str_ldl_DD_REQUIRED_LABEL			"Required:"
+str_ldl_DD_CNE_TAB			"DOMESTIC POLICY"
+str_ldl_DD_GOVERNMENT_TAB		"GOVERNMENT"
+str_ldl_DD_RANKING_TAB			"RANKING"
+str_ldl_DD_HAPPINESS			"Empire Happiness:"
+str_ldl_DD_RATIONS_LABEL		"Rations:"
+str_ldl_DD_WORKDAY_LABEL		"Workday:"
+str_ldl_DD_WAGES_LABEL			"Wages:"
+str_ldl_DD_REQUIRED_LABEL		"Required:"
 str_ldl_DD_PUBLIC_WORKS_LABEL		"Public Works:"
 str_ldl_DD_SCIENCE_TAX_LABEL		"Science Tax:"
-str_ldl_DD_FOOD_TITLE				"FOOD"
-str_ldl_DD_PRODUCTION_TITLE			"PRODUCTION"
-str_ldl_DD_COMMERCE_TITLE			"COMMERCE"
-str_ldl_DD_COLLECTED_LABEL			"Collected:"
-str_ldl_DD_CRIME_LABEL				"Crime:"
-str_ldl_DD_SUBTOTAL_LABEL			"Subtotal:"
-str_ldl_DD_CONSUMED_LABEL			"Consumed:"
-str_ldl_DD_STORED_LABEL				"Stored:"
+str_ldl_DD_FOOD_TITLE			"FOOD"
+str_ldl_DD_PRODUCTION_TITLE		"PRODUCTION"
+str_ldl_DD_COMMERCE_TITLE		"COMMERCE"
+str_ldl_DD_COLLECTED_LABEL		"Collected:"
+str_ldl_DD_CRIME_LABEL			"Crime:"
+str_ldl_DD_SUBTOTAL_LABEL		"Subtotal:"
+str_ldl_DD_CONSUMED_LABEL		"Consumed:"
+str_ldl_DD_STORED_LABEL			"Stored:"
 str_ldl_DD_UNIT_UPKEEP_LABEL		"Unit Upkeep:"
-str_ldl_DD_CITY_USE_LABEL			"City Use:"
+str_ldl_DD_CITY_USE_LABEL		"City Use:"
 str_ldl_DD_BUILDING_UPKEEP_LABEL	"Maintenance:"
-str_ldl_DD_SCIENCE_LABEL			"Science:"
-str_ldl_DD_SAVINGS_LABEL			"Savings:"
-str_ldl_DD_DETAILS					"Details"
+str_ldl_DD_SCIENCE_LABEL		"Science:"
+str_ldl_DD_SAVINGS_LABEL		"Savings:"
+str_ldl_DD_DETAILS			"Details"
+str_ldl_DD_OPTIMIZE_SLIDERS		"Optimize Sliders"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT				"Current Government"
 str_ldl_DD_GOV_COMPARE				"Compare To"
@@ -2827,6 +2859,7 @@ str_tbl_ldl_InProgress			"Game in progress:"
 str_tbl_ldl_Defeat				"Defeat:"
 	
 # Great Library
+str_ldl_CAPS_GREAT_LIBRARY		"G R E A T    L I B R A R Y"
 str_ldl_GreatLibraryGoalSetTo		"Goal set to: %s"
 str_ldl_GreatLibraryGoalKnown		"%s is already known. No goal was set."
 str_ldl_GreatLibraryNoGoalPossible	"%s cannot be researched."
@@ -2926,15 +2959,6 @@ INFOBAR_CITY "City: "
 INFOBAR_UNEXPLORED "Unexplored"
 
 UNIT_HOPLITE_NEW "Hoplite"
-
-BUILD_LIST_SEQUENCE_PRODUCTION "Production"
-BUILD_LIST_SEQUENCE_GROWTH "Growth"
-BUILD_LIST_SEQUENCE_OFFENSE "Offense"
-BUILD_LIST_SEQUENCE_DEFENSE "Defense"
-BUILD_LIST_SEQUENCE_SCIENCE "Science"
-BUILD_LIST_SEQUENCE_GOLD "Gold"
-BUILD_LIST_SEQUENCE_WONDERS "Wonders"
-BUILD_LIST_SEQUENCE_HAPPINESS "Happiness"
 
 MOVED_ALL_ARMIES_GENIUS "You have moved all of your armies, you must be some kind of genius!"
 

@@ -1,6 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Civ specific strings, e.g civ names, civ leaders,
+#                city names (English)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added new tooltips for national management dialog. (L. Hirth Added 6/2004)
+# - Added new statusbartip for new optimize specialist button, in the 
+#   city manager. - April 7th 2005 Martin Gühmann
+# 
+#----------------------------------------------------------------------------
+
 # Control Panel
-STATUSBAR_END_TURN_BUTTON	"Press End Turn when you have finished."
-TOOLTIP_END_TURN_BUTTON		"End Your Turn"
+STATUSBAR_END_TURN_BUTTON		"Press End Turn when you have finished."
+TOOLTIP_END_TURN_BUTTON			"End Your Turn"
 
 # Civ Tab
 STATUSBAR_CIV_MAINTAB			"This tab gives you information about your empire."
@@ -548,6 +574,8 @@ STATUSBAR_CITYMAN_MAIN_CITYPOP_DISPLAY		"This it the total population of this ci
 TOOLTIP_CITYMAN_MAIN_CITYPOP_DISPLAY		"This city's total population"
 STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Click here to edit the build queue for this city."
 TOOLTIP_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Go to Build Queue"
+STATUSBAR_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON	"Optimize the specilists distribution of this city."
+TOOLTIP_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON	"Optimize Specialists"
 STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON		"Click here to go to the Great Library."
 TOOLTIP_CITYMAN_MAIN_GOTOGL_BUTTON		"Go to Great Library"
 STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON		"Click here to insert this queue into all the selected cities' build queues."
@@ -889,31 +917,31 @@ STATUSBAR_GL_SHOWADV_BUTTON		"Click here to view the list of advances."
 TOOLTIP_GL_SHOWADV_BUTTON		"Advances"
 STATUSBAR_GL_SHOWUNITS_BUTTON		"Click here to view the list of units."
 TOOLTIP_GL_SHOWUNITS_BUTTON		"Units"
-STATUSBAR_GL_SHOWCITYIMP_BUTTON	"Click here to view the list of city improvements."
+STATUSBAR_GL_SHOWCITYIMP_BUTTON		"Click here to view the list of city improvements."
 TOOLTIP_GL_SHOWCITYIMP_BUTTON		"City Improvements"
-STATUSBAR_GL_SHOWWONDERS_BUTTON	"Click here to view the list of wonders."
+STATUSBAR_GL_SHOWWONDERS_BUTTON		"Click here to view the list of wonders."
 TOOLTIP_GL_SHOWWONDERS_BUTTON		"Wonders"
-STATUSBAR_GL_SHOWTERRAIN_BUTTON	"Click here to view the list of terrain tiles."
+STATUSBAR_GL_SHOWTERRAIN_BUTTON		"Click here to view the list of terrain tiles."
 TOOLTIP_GL_SHOWTERRAIN_BUTTON		"Terrain"
 STATUSBAR_GL_SHOWGOODS_BUTTON		"Click here to view the list of goods."
 TOOLTIP_GL_SHOWGOODS_BUTTON		"Goods"
-STATUSBAR_GL_SHOWTILEIMP_BUTTON	"Click here to view the list of tile improvements."
+STATUSBAR_GL_SHOWTILEIMP_BUTTON		"Click here to view the list of tile improvements."
 TOOLTIP_GL_SHOWTILEIMP_BUTTON		"Tile Improvements"
 STATUSBAR_GL_SHOWGOVS_BUTTON		"Click here to view the list of governments."
 TOOLTIP_GL_SHOWGOVS_BUTTON		"Goverments"
-STATUSBAR_GL_SHOWSPECIAL_BUTTON	"Click here to view the list of special things."
+STATUSBAR_GL_SHOWSPECIAL_BUTTON		"Click here to view the list of special things."
 TOOLTIP_GL_SHOWSPECIAL_BUTTON		"Unit Orders"
 STATUSBAR_GL_SHOWCONCEPTS_BUTTON	"Click here to view the list of concepts."
-TOOLTIP_GL_SHOWCONCEPTS_BUTTON	"Concepts"
-STATUSBAR_GL_ENTERSEARCH_BUTTON	"To search for a specific item, enter a keyword in the space to the right."
+TOOLTIP_GL_SHOWCONCEPTS_BUTTON		"Concepts"
+STATUSBAR_GL_ENTERSEARCH_BUTTON		"To search for a specific item, enter a keyword in the space to the right."
 TOOLTIP_GL_ENTERSEARCH_BUTTON		"Enter Search Word"
 STATUSBAR_GL_SEARCHTEXT_BOX_DISPLAY	"Enter keywords here to search for particular items."
 TOOLTIP_GL_SEARCHTEXT_BOX_DISPLAY	"Enter Search Word"
 STATUSBAR_GL_STATSBOX_DISPLAY		"This is a list of stats for the particular item."
 TOOLTIP_GL_STATSBOX_DISPLAY		"Stats"
 STATUSBAR_GL_GAMEPLAY_TAB_BUTTON	"Select an item and click here to view the impact it has on the game."
-TOOLTIP_GL_GAMEPLAY_TAB_BUTTON	"Gameplay Impact"
-STATUSBAR_GL_HISTORY_TAB_BUTTON	"Select this tab in order to read a brief history of the item."
+TOOLTIP_GL_GAMEPLAY_TAB_BUTTON		"Gameplay Impact"
+STATUSBAR_GL_HISTORY_TAB_BUTTON		"Select this tab in order to read a brief history of the item."
 TOOLTIP_GL_HISTORY_TAB_BUTTON		"Historical Context"
 STATUSBAR_GL_TECHTREE_TAB_BUTTON	"Select this tab in order to view the Technology Tree."
 TOOLTIP_TECHTREE_TAB_BUTTON		"Tech Tree"
@@ -922,10 +950,10 @@ TOOLTIP_GL_CLOSE_BUTTON			"Leave the Great Library"
 
 # Ranking Screen
 STATUSBAR_RANKSCRN_YEARTURN_TOGGLE_BUTTON		"Click to switch between years and turns."
-TOOLTIP_RANKSCRN_YEARTURN_TOGGLE_BUTTON     "Year/Turn Toggle"
+TOOLTIP_RANKSCRN_YEARTURN_TOGGLE_BUTTON			"Year/Turn Toggle"
 STATUSBAR_RANKSCRN_SELECT_MEASURE_DISPLAY		"Select a metric from this menu to view your empire's rank amongst its peers."
-TOOLTIP_RANKSCRN_SELECT_MEASURE_DISPLAY		"Select a metric"
-STATUSBAR_RANKSCRN_CLOSE_BUTTON			"Click here to leave the rankings screen and return to you empire."
+TOOLTIP_RANKSCRN_SELECT_MEASURE_DISPLAY			"Select a metric"
+STATUSBAR_RANKSCRN_CLOSE_BUTTON				"Click here to leave the rankings screen and return to you empire."
 TOOLTIP_RANKSCRN_CLOSE_BUTTON				"Exit"
 
 ###	National Summary Window Extension (L. Hirth Added 6/2004)

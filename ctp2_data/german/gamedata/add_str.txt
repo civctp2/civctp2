@@ -1,3 +1,33 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains additional strings that should go to other files
+#                eventually (German)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Removed diplomatic photo strings as they have been already moved back
+#   to civ_str.txt. - 7th April 2005 Martin Gühmann
+# - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
+# - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
+# - Renamed Lexikothek to Große Bibliothek
+#
+# 
+#----------------------------------------------------------------------------
+
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
@@ -142,8 +172,6 @@ str_ldl_INFORMATION_DIALOG_TITLE 			"S T A T I S T I K"
 
 str_COMPUTER_TURNS		"Spielzug Computer ..."
 
-str_ldl_CAPS_GREAT_LIBRARY	"L E X I K O T H E K"
-
 #revised from ldl_str.txt
 str_code_TotalPollutionFormat "%d"
 str_ldl_CityWinHappiness "Zufriedenh.:"
@@ -277,7 +305,7 @@ str_tbl_ldl_Toggle_Ctl_Panel "Bedienfeld ein/aus"
 str_tbl_ldl_Toggle_All "Alle ein/aus"
 str_tbl_ldl_Open_Army_Mgmt "Truppenmanager öffnen"
 str_ldl_UNIT_CONTROLS "Einheitensteuerung"
-str_ldl_GreatLibrary "Lexikothek"
+str_ldl_GreatLibrary "Große Bibliothek"
 str_control_key "Strg"
 
 str_ldl_EnableAllMessages "Alle Meldungen ein"
@@ -386,9 +414,6 @@ str_ldl_Settlers "Siedler"
 # More Stuuf for LDL_STR
 # Multiplayer Disclaimer String
 str_ldl_MultiplayerDisclaimer	"Der Mehrspieler-Modus von Activisions Call To Power 2 eignet sich für maximal 4 Spieler."
-
-# Default Build List Sequence
-BUILD_LIST_SEQUENCE_DEFAULT "Standard"
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "Durch den bevorstehenden Regierungswechsel werden einige Einheiten aufgelöst. Wollen Sie diese Regierung einsetzen?"

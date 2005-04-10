@@ -1,3 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains additional strings that should go to other files
+#                eventually (Italian)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Removed diplomatic photo strings as they have been already moved back
+#   to civ_str.txt. - 7th April 2005 Martin Gühmann
+# - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
+#   - 7th April 2005 Martin Gühmann
+# - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
+#
+# 
+#----------------------------------------------------------------------------
+
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
@@ -149,8 +178,6 @@ str_ldl_AdvancedOptions "OPZIONI AVANZATE"
 str_ldl_INFORMATION_DIALOG_TITLE 			"S T A T I S T I C H E"
 
 str_COMPUTER_TURNS		"Turni dell'IA..."
-
-str_ldl_CAPS_GREAT_LIBRARY	"G R A N D E    B I B L I O T E C A"
 
 #revised from ldl_str.txt
 str_code_TotalPollutionFormat "%d"
@@ -416,9 +443,6 @@ STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Clicca qui per impedire a una nazione st
 # More Stuuf for LDL_STR
 # Multiplayer Disclaimer String
 str_ldl_MultiplayerDisclaimer	"Activision consiglia un massimo di 4 giocatori per le partite a Call to Power in multiplayer."
-
-# Default Build List Sequence
-BUILD_LIST_SEQUENCE_DEFAULT "Standard"
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "Instaurando questa forma di governo, alcune delle tue unità saranno congedate. Sei sicuro di voler proseguire?"

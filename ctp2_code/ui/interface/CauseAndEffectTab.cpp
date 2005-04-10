@@ -22,6 +22,8 @@
 // Modifications from the original Activision code:
 //
 // - Use the same science percentage everywhere.
+// - Added optimize sliders button and according callback function to allow
+//   the player to optimize sliders, automaticly. - April 8th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -54,6 +56,7 @@
 #include "network.h"
 #include "c3math.h"		// AsPercentage
 
+#include "Governor.h" // To allow automatic slider optimization
 
 extern ColorSet *g_colorSet;
 
@@ -66,6 +69,8 @@ CauseAndEffectTab::CauseAndEffectTab(MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
 m_detailsButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"DomesticDialog.DetailsButton"))),
+m_optimizeSliderButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
+	"DomesticDialog.OptimizeSlidersButton"))), // Added by Martin Gühmann
 m_numberOfCities(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"CitiesValue"))),
 m_population(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -214,6 +219,8 @@ m_summaryCommerceSavings(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	m_tabPanel->SetShowCallback(DetailsShowCallback, this);
 	m_detailsButton->SetActionFuncAndCookie(
 		DetailsButtonActionCallback, this);
+	m_optimizeSliderButton->SetActionFuncAndCookie(
+		 OptimizeSlidersButtonActionCallback, this); // Added by Martin Gühmann
 	m_happinessBar->SetDrawCallbackAndCookie(
 		HappinessBarActionCallback, this, false);
 	m_foodRationsSpinner->SetActionFuncAndCookie(
@@ -329,7 +336,7 @@ void CauseAndEffectTab::UpdateFoodSpinners()
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	
-	m_foodRationsSpinner->SetValue(player->GetUnitlessRations() +
+	m_foodRationsSpinner->SetValue(static_cast<sint32>(player->GetUnitlessRations()) +
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION, 0);
 }
 
@@ -339,7 +346,7 @@ void CauseAndEffectTab::UpdateProductionSpinners()
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	
-	m_productionWorkdaySpinner->SetValue(-player->GetUnitlessWorkday() +
+	m_productionWorkdaySpinner->SetValue(static_cast<sint32>(-player->GetUnitlessWorkday()) +
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION, 0);
 
 	
@@ -353,7 +360,7 @@ void CauseAndEffectTab::UpdateCommerceSpinners()
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	
-	m_commerceWagesSpinner->SetValue(player->GetUnitlessWages() +
+	m_commerceWagesSpinner->SetValue(static_cast<sint32>(player->GetUnitlessWages()) +
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION, 0);
 
 	
@@ -879,6 +886,58 @@ void CauseAndEffectTab::DetailsButtonActionCallback(aui_Control *control,
 	static_cast<CauseAndEffectTab*>(cookie)->m_tabPanel->ShouldDraw(TRUE);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CauseAndEffectTab::OptimizeSlidersButtonActionCallback
+//
+// Description: Executes action when the optimize sliders button is pressed.
+//
+// Parameters : control:         -
+//              action:          -
+//              data:            -
+//              cookie:          -
+//
+// Globals    : g_selected_item: The currently selected item.
+//
+// Returns    : -
+//
+// Remark(s)  : Info about parameters has to be added.
+//
+//----------------------------------------------------------------------------
+void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control,
+	uint32 action, uint32 data, void *cookie)
+{
+	
+	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
+		return;
+
+	Governor::SlidersSetting sliders_setting;
+	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
+	Governor & governor = Governor::GetGovernor(playerId);
+		
+	governor.SetSliders(sliders_setting, true);
+
+	if(governor.ComputeMinimumSliders(sliders_setting) == false)
+	{
+		bool found = governor.ComputeBestSliders(sliders_setting);
+	}
+
+	governor.SetSliders(sliders_setting, true);
+
+	UpdateCities();
+
+	// Update tab
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	tab->UpdateFoodValues();
+	tab->UpdateFoodSpinners();
+	tab->UpdateProductionValues();
+	tab->UpdateProductionSpinners();
+	tab->UpdateCommerceValues();
+	tab->UpdateCommerceSpinners();
+	tab->UpdateGeneral();
+	tab->m_tabPanel->ShouldDraw(TRUE);
+
+}
 
 
 void CauseAndEffectTab::DetailsShowCallback(aui_Region *region,
@@ -903,10 +962,13 @@ void CauseAndEffectTab::CauseAndEffectTabActionCallback(aui_Control *control,
 		((CauseAndEffectTab*)cookie)->m_detailsButton->Hide();
 	}
 
-	
-
-
-
-	
+	if(action == ctp2_Tab::ACTION_ACTIVATED)
+	{
+		((CauseAndEffectTab*)cookie)->m_optimizeSliderButton->Show();
+	}
+	else if(action == ctp2_Tab::ACTION_DEACTIVATED)
+	{
+		((CauseAndEffectTab*)cookie)->m_optimizeSliderButton->Hide();
+	}
 
 }

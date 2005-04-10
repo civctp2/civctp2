@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -33,9 +35,15 @@
 //   by Martin Gühmann.
 // - #01 Added a third tab to the dialog that shows the nuber of experts and 
 //   military units in each city.
-//   (L. Hirth 6/2004)    
+//   (L. Hirth 6/2004)
 // - #02 // #02 Fixed sorting sequence for governor type in status tab
-//   (L. Hirth 7/2004)     
+//   (L. Hirth 7/2004)
+// - Net food and net production are now displayed insted of gross food and
+//   gross production. So it is done for science and gold. This helps the 
+//   player better to know how much food is needed, as a negative amount is 
+//   displayed if the city starves. Gold is now displayed in red if it is
+//   critical. - April 6th 2005 Martin Gühmann
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -706,7 +714,7 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 
 	
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_HAPPINESS)) {
-		sint32 happiness = (sint32)(cityData->GetHappiness());
+		sint32 happiness = static_cast<sint32>(cityData->GetHappiness());
 		sprintf(stringBuffer, "%d", happiness);
 		column->SetText(stringBuffer);
 		if (happiness < g_theConstDB->GetRiotLevel()) {
@@ -718,17 +726,19 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 
 	
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_PRODUCTION)) {
-		sprintf(stringBuffer, "%d", (sint32)(cityData->GetGrossCityProduction()));
+		// Use net production instead gross production. - Martin Gühmann
+		sprintf(stringBuffer, "%d", cityData->GetNetCityProduction());
 		column->SetText(stringBuffer);
 		column->SetTextColor(colorNorm);
 	}
 
 	
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_FOOD)) {
-		sint32 food = cityData->GetGrossCityFood();
+		// Use net food instead of gross food. - Martin Gühmann
+		sint32 food = cityData->GetNetCityFood();
 		sprintf(stringBuffer, "%d", food);
 		column->SetText(stringBuffer);
-		if (food < cityData->GetFoodRequired()) {
+		if (food < 0) { // Corrected the condition to match net food.
 			column->SetTextColor(colorCritical);
 			cityCritical = true;
 		} else
@@ -737,9 +747,14 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 
 	
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_GOLD)) {
-		sprintf(stringBuffer, "%d", (sint32)(cityData->GetNetCityGold()));
+		sint32 gold = cityData->GetNetCityGold();
+		sprintf(stringBuffer, "%d", gold);
 		column->SetText(stringBuffer);
-		column->SetTextColor(colorNorm);
+		if (gold < 0) { // Gold is critical display in red as well. - Martin Gühmann
+			column->SetTextColor(colorCritical);
+			cityCritical = true;
+		} else
+			column->SetTextColor(colorNorm);
 	}
 
 	

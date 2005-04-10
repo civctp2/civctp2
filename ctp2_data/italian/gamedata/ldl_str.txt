@@ -1,22 +1,49 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (Italian)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin Gühmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+#
+# 
+#----------------------------------------------------------------------------
 
+##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer	"Stai già offrendo quella merce. Vuoi sostituire l'offerta precedente?"
 
+##That one last change 03-07-99
 ENDGAME_WON_OTHER	"Tutte le civiltà si inchineranno al nuovo sovrano: {player[1].leader_name} ha completato la clonazione di vita aliena."
 
-
-
-
-
+##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	"."
 
-
+###Strings Moved Over from Junk###
 
 CAPITALIZATION	"Capitalizzazione"
 INFRASTRUCTURE	"Infrastruttura"
 
 AGE_NAME_ANCIENT	"Età antica"
 AGE_NAME_RENAISS	"Età del Rinascimento"
-AGE_NAME_MODERN	"Età moderna"
+AGE_NAME_MODERN		"Età moderna"
 AGE_NAME_GENETIC	"Età genetica"
 AGE_NAME_DIAMOND	"Età del diamante"
 
@@ -2165,6 +2192,8 @@ str_ldl_ShowQueue     			"Mostra la coda"
 str_ldl_EditQueue 			"Costruisci"
 str_ldl_HideQueue 			"Nascondi la coda"
 
+str_ldl_OptimizeSpecialists 		"Optimize Specialists"
+
 str_ldl_Costs 				"Costa"
 str_ldl_Gives 				"Offre"
 str_ldl_YouHave 			"Tu hai"
@@ -2505,6 +2534,7 @@ str_ldl_DD_BUILDING_UPKEEP_LABEL	"Manutenzione:"
 str_ldl_DD_SCIENCE_LABEL		"Scienza:"
 str_ldl_DD_SAVINGS_LABEL		"Risparmi:"
 str_ldl_DD_DETAILS			"Dettagli"
+str_ldl_DD_OPTIMIZE_SLIDERS		"Optimize Sliders"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT			"Governo attuale"
 str_ldl_DD_GOV_COMPARE			"Confronta con"
@@ -2698,6 +2728,7 @@ str_tbl_ldl_InProgress			"Partita in corso:"
 str_tbl_ldl_Defeat			"Sconfitta:"
 	
 # Great Library
+str_ldl_CAPS_GREAT_LIBRARY		"G R A N D E    B I B L I O T E C A"
 str_ldl_GreatLibraryGoalSetTo		"Obiettivo scelto: %s"
 str_ldl_GreatLibraryGoalKnown		"%s is already known. No goal was set."
 str_ldl_GreatLibraryNoGoalPossible	"%s cannot be researched."
@@ -2797,15 +2828,6 @@ INFOBAR_CITY 				"Città: "
 INFOBAR_UNEXPLORED 			"Inesplorata"
 
 UNIT_HOPLITE_NEW 			"Oplite"
-
-BUILD_LIST_SEQUENCE_PRODUCTION 		"Produzione"
-BUILD_LIST_SEQUENCE_GROWTH 		"Crescita"
-BUILD_LIST_SEQUENCE_OFFENSE 		"Attacco"
-BUILD_LIST_SEQUENCE_DEFENSE 		"Difesa"
-BUILD_LIST_SEQUENCE_SCIENCE 		"Scienza"
-BUILD_LIST_SEQUENCE_GOLD 		"Oro"
-BUILD_LIST_SEQUENCE_WONDERS 		"Meraviglie"
-BUILD_LIST_SEQUENCE_HAPPINESS 		"Benessere"
 
 MOVED_ALL_ARMIES_GENIUS 		"Hai spostato tutte le tue armate. Devi essere una specie di genio!"
 

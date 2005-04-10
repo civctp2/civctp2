@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : City window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added OptimizeSpecialists function for specialists optimisation option.
+//   - April 7th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #ifndef CITY_WINDOW_H__
 #define CITY_WINDOW_H__
@@ -17,7 +46,6 @@ class aui_Image;
 class aui_Region;
 
 template <class T> class PointerList;
-
 
 #include "citydata.h"
 
@@ -119,6 +147,8 @@ class CityWindow {
 	static void ShowStatistics(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
 	static void BuildTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+
+	static void OptimizeSpecialists(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
 	static AUI_ERRCODE DrawGrowthBar(ctp2_Static *control,
 									 aui_Surface *surface,

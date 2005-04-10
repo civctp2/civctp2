@@ -1,3 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (French)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin Gühmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+#
+# 
+#----------------------------------------------------------------------------
+
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer "Vous avez déjà proposé cette marchandise. Remplacer l'offre précédente ?"
 
@@ -2284,6 +2313,8 @@ str_ldl_ShowQueue     			"Aff. liste"
 str_ldl_EditQueue 			"Construire"
 str_ldl_HideQueue 			"Masquer liste"
 
+str_ldl_OptimizeSpecialists 		"Optimize Specialists"
+
 str_ldl_Costs 				"Coûte"
 str_ldl_Gives 				"Donne"
 str_ldl_YouHave 			"Vous avez"
@@ -2627,6 +2658,7 @@ str_ldl_DD_BUILDING_UPKEEP_LABEL	"Maintenance :"
 str_ldl_DD_SCIENCE_LABEL		"Science :"
 str_ldl_DD_SAVINGS_LABEL		"Réserves :"
 str_ldl_DD_DETAILS			"Détails"
+str_ldl_DD_OPTIMIZE_SLIDERS		"Optimize Sliders"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT			"Gouvernement actuel"
 str_ldl_DD_GOV_COMPARE			"Comparer avec"
@@ -2825,6 +2857,7 @@ str_tbl_ldl_InProgress			"Partie en cours :"
 str_tbl_ldl_Defeat			"Défaite :"
 	
 # Great Library
+str_ldl_CAPS_GREAT_LIBRARY		"GRANDE BIBLIOTHEQUE"
 str_ldl_GreatLibraryGoalSetTo		"Objectif fixé à : %s"
 str_ldl_GreatLibraryGoalKnown		"%s est déjà connu. Aucun objectif n'a été fixé."
 str_ldl_GreatLibraryNoGoalPossible	"%s ne peut pas être recherché."
@@ -2924,15 +2957,6 @@ INFOBAR_CITY 				"Ville : "
 INFOBAR_UNEXPLORED 			"Inexploré"
 
 UNIT_HOPLITE_NEW 			"Hoplite"
-
-BUILD_LIST_SEQUENCE_PRODUCTION 		"Production"
-BUILD_LIST_SEQUENCE_GROWTH 		"Croissance"
-BUILD_LIST_SEQUENCE_OFFENSE 		"Offensive"
-BUILD_LIST_SEQUENCE_DEFENSE 		"Défense"
-BUILD_LIST_SEQUENCE_SCIENCE 		"Science"
-BUILD_LIST_SEQUENCE_GOLD 		"Or"
-BUILD_LIST_SEQUENCE_WONDERS 		"Merveilles"
-BUILD_LIST_SEQUENCE_HAPPINESS 		"Bonheur"
 
 MOVED_ALL_ARMIES_GENIUS 		"Vous avez déplacé toutes vos armées, vous devez être un génie !"
 

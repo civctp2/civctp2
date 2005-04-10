@@ -1,6 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Civ specific strings, e.g civ names, civ leaders,
+#                city names (Spanish)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added new tooltips for national management dialog. (L. Hirth Added 6/2004)
+# - Added new statusbartip for new optimize specialist button, in the 
+#   city manager. - April 7th 2005 Martin Gühmann
+# 
+#----------------------------------------------------------------------------
+
 # Control Panel
-STATUSBAR_END_TURN_BUTTON	"Cuando termines, pulsa Finalizar turno."
-TOOLTIP_END_TURN_BUTTON		"Finalizar turno"
+STATUSBAR_END_TURN_BUTTON		"Cuando termines, pulsa Finalizar turno."
+TOOLTIP_END_TURN_BUTTON			"Finalizar turno"
 
 # Civ Tab
 STATUSBAR_CIV_MAINTAB			"Proporciona información sobre tu imperio."
@@ -9,8 +35,7 @@ STATUSBAR_CIV_TOTAL_CITIES_DISPLAY	"Número total de ciudades en tu imperio."
 TOOLTIP_CIV_TOTAL_CITIES_DISPLAY	"Ciudades en total"
 STATUSBAR_CIV_TOTAL_GOLD_DISPLAY	"Cantidad total de oro en el erario."
 TOOLTIP_CIV_TOTAL_GOLD_DISPLAY		"Oro en total"
-STATUSBAR_CIV_TOTAL_PW_DISPLAY		"Cantidad total acumulada de obras 
-públicas."
+STATUSBAR_CIV_TOTAL_PW_DISPLAY		"Cantidad total acumulada de obras públicas."
 TOOLTIP_CIV_TOTAL_PW_DISPLAY		"Obras públicas en total"
 STATUSBAR_CIV_TURNS_REMAINING_DISPLAY	"Turnos restantes hasta el descubrimiento de {advance_name}."
 TOOLTIP_CIV_TURNS_REMAINING_DISPLAY	"Turnos restantes"
@@ -18,8 +43,8 @@ STATUSBAR_CIV_NOW_RESEARCHING_DISPLAY	"Adelantos en los que estás investigando a
 TOOLTIP_CIV_NOW_RESEARCHING_DISPLAY	"Lo que estás investigando ahora"
 STATUSBAR_CIV_TOTAL_HAPPINESS_DISPLAY	"Nivel de felicidad en el imperio."
 TOOLTIP_CIV_TOTAL_HAPPINESS_DISPLAY	"Felicidad total"
-STATUSBAR_CIV_TOTAL_POLLUTION_DISPLAY "Nivel de contaminación en el mundo."
-TOOLTIP_CIV_TOTAL_POLLUTION_DISPLAY "Contaminación global"
+STATUSBAR_CIV_TOTAL_POLLUTION_DISPLAY	"Nivel de contaminación en el mundo."
+TOOLTIP_CIV_TOTAL_POLLUTION_DISPLAY	"Contaminación global"
 
 # City Tab
 STATUSBAR_CITY_MAINTAB			"Muestra información sobre la ciudad seleccionada."
@@ -549,6 +574,8 @@ STATUSBAR_CITYMAN_MAIN_CITYPOP_DISPLAY		"Población total de la ciudad."
 TOOLTIP_CITYMAN_MAIN_CITYPOP_DISPLAY		"Población total de la ciudad"
 STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Pulsa para editar la cola de construc. de la ciudad."
 TOOLTIP_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Ir a Cola de construc."
+STATUSBAR_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON	"Optimize the specilists distribution of this city."
+TOOLTIP_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON	"Optimize Specialists"
 STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON		"Pulsa para ir a la Gran Biblioteca."
 TOOLTIP_CITYMAN_MAIN_GOTOGL_BUTTON		"Ir a la Gran Biblioteca"
 STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON		"Pulsa para introducir esta cola en las colas de construc. de las ciudades seleccionadas."

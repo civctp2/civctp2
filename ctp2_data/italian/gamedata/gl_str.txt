@@ -1,3 +1,29 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains the records localized names (Italian)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added CityMod2 age concept strings.
+# - Added new age strings.
+# - Added new city style strings.
+# - Moved build list sequence strings from ldl_str.txt and add_str.txt.
+#   - Mar. 7th 2005 Martin Gühmann 
+# 
+#----------------------------------------------------------------------------
 
 #### ADVANCE STRINGS ####
 ADVANCE_TOOLMAKING				"Fabbricazione utensili"
@@ -661,3 +687,21 @@ CITY_STYLE_AMERICAN	"American Style"
 CITY_STYLE_CASTLE	"Castle Style"
 CITY_STYLE_EGYPTAIN	"Egyptian Style"
 CITY_STYLE_PALACE	"Palace Style"
+
+### Build Sequences from ldl_str.txt ###
+
+BUILD_LIST_SEQUENCE_PRODUCTION 		"Produzione"
+BUILD_LIST_SEQUENCE_GROWTH 		"Crescita"
+BUILD_LIST_SEQUENCE_OFFENSE 		"Attacco"
+BUILD_LIST_SEQUENCE_DEFENSE 		"Difesa"
+BUILD_LIST_SEQUENCE_SCIENCE 		"Scienza"
+BUILD_LIST_SEQUENCE_GOLD 		"Oro"
+BUILD_LIST_SEQUENCE_WONDERS 		"Meraviglie"
+BUILD_LIST_SEQUENCE_HAPPINESS 		"Benessere"
+BUILD_LIST_SEQUENCE_DEFAULT		"Standard"
+BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST	"Wonders (Sci.)"
+BUILD_LIST_SEQUENCE_WONDERS_MILITARIST	"Wonders (Mil.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC	"Wonders (Econ.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN	"Wonders (Ecot.)"
+BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC	"Wonders (Dipl.)"
+

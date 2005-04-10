@@ -1,20 +1,40 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Civ specific strings, e.g civ names, civ leaders,
+#                city names (French)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved back diplomacy photo strings from add_str.txt.
+# - Added a bunch of new civs.
+# 
+#----------------------------------------------------------------------------
 
-#### Civilisation Names (maximum of 64 Civilisations) ####
+#### Empire/Civilisation Names (maximum of 64 Civilisations) ####
 
 
 ##### kjm 021699 - added - this goes into the investigate diplomacy screen
-PERSONALITY_DESCRIPTION_BARBARIAN "Barbare"
-PERSONALITY_DESCRIPTION_SLAVER "Esclavagiste"
-PERSONALITY_DESCRIPTION_CLERIC "Religieux"
-PERSONALITY_DESCRIPTION_WAR_MANY "Militant"
-PERSONALITY_DESCRIPTION_WAR_FEW "Agressif"
-PERSONALITY_DESCRIPTION_SCI_MANY "Pacifique"
-PERSONALITY_DESCRIPTION_SCI_FEW "Agréable"
+PERSONALITY_DESCRIPTION_BARBARIAN	"Barbare"
+PERSONALITY_DESCRIPTION_SLAVER		"Esclavagiste"
+PERSONALITY_DESCRIPTION_CLERIC		"Religieux"
+PERSONALITY_DESCRIPTION_WAR_MANY	"Militant"
+PERSONALITY_DESCRIPTION_WAR_FEW		"Agressif"
+PERSONALITY_DESCRIPTION_SCI_MANY	"Pacifique"
+PERSONALITY_DESCRIPTION_SCI_FEW		"Agréable"
 ######
-
-
-
-
 
 # SAM100798
 #
@@ -90,6 +110,7 @@ MEXICAN_DIPLOMAT_PHOTO		"updp033.tga"
 ETHIOPIAN_DIPLOMAT_PHOTO	"updp020.tga"
 MONGOLIAN_DIPLOMAT_PHOTO	"updp034.tga"
 NICARAGUAN_DIPLOMAT_PHOTO	"updp036.tga"
+
 AFRICAN_MAN_PHOTO		"updp050.tga"
 
 ARABIAN_DIPLOMAT_PHOTO		"updp050.tga"
@@ -109,6 +130,11 @@ HARAPPAN_DIPLOMAT_PHOTO  	"updp050.tga"
 HITTITE_DIPLOMAT_PHOTO  	"updp050.tga"
 SHANG_DIPLOMAT_PHOTO  		"updp050.tga"
 ETRUSCAN_DIPLOMAT_PHOTO  	"updp050.tga"
+ABORIGINE_DIPLOMAT_PHOTO  	"updp050.tga"
+ARGENTINIAN_DIPLOMAT_PHOTO  	"updp050.tga"
+KHMER_DIPLOMAT_PHOTO  		"updp050.tga"
+MALIAN_DIPLOMAT_PHOTO  		"updp050.tga"
+
 
 ## Insert as portion of Strings.txt	
 	
@@ -850,6 +876,7 @@ SPANISH_CITY_47 "Huelva"
 SPANISH_CITY_48 "Vitoria"
 SPANISH_CITY_49 "Cuenca"
 SPANISH_CITY_50 "Avila"
+
 
 PORTUGUESE "Portugais"
 
@@ -1990,6 +2017,7 @@ MAYAN_CITY_48 "Nimlipunit"
 MAYAN_CITY_49 "Itzan"
 MAYAN_CITY_50 "Altun Ha"
 
+
 CANADIANS "Canadiens"
 
 CANADIANS_LEADERM_NAME "Pierre Trudeau"
@@ -2049,6 +2077,7 @@ CANADIAN_CITY_48 "Fort McMurray"
 CANADIAN_CITY_49 "Banff"
 CANADIAN_CITY_50 "Snowdrift"
 
+
 NIGERIAN "Nigérians"
 
 NIGERIAN_LEADERM_NAME "Azikiwe"
@@ -2088,6 +2117,7 @@ NIGERIAN_CITY_28 "Gusau"
 NIGERIAN_CITY_29 "Akure"
 NIGERIAN_CITY_30 "Yenogoa"
 
+
 KOREA "Coréens"
 
 KOREAN_LEADERM_NAME "Yi Songgye"
@@ -2126,6 +2156,7 @@ KOREAN_CITY_27 "Mokpo"
 KOREAN_CITY_28 "Suwon"
 KOREAN_CITY_29 "Shihung"
 KOREAN_CITY_30 "Sogwipo"
+
 
 BRAZILIAN "Brésiliens"
 
@@ -2186,6 +2217,7 @@ BRAZILIAN_CITY_48 "Rio Tinto"
 BRAZILIAN_CITY_49 "Bage"
 BRAZILIAN_CITY_50 "Erexim"
 
+
 AUSTRALIA "Australiens"
 
 AUSTRALIAN_LEADERM_NAME "Gough Whitlam"
@@ -2244,6 +2276,7 @@ AUSTRALIAN_CITY_47 "Birdsville"
 AUSTRALIAN_CITY_48 "Suva"
 AUSTRALIAN_CITY_49 "Jayapura"
 AUSTRALIAN_CITY_50 "Derby"
+
 
 MEXICAN "Mexicains"
 
@@ -2304,6 +2337,7 @@ MEXICAN_CITY_48 "Sahuayo"
 MEXICAN_CITY_49 "Fresnillo"
 MEXICAN_CITY_50 "Saltillo"
 
+
 ETHIOPIAN  "Ethiopiens"
 
 ETHIOPIAN_LEADERM_NAME "Hailé Sélassié I"
@@ -2363,6 +2397,7 @@ ETHIOPIAN_CITY_48 "Afodo"
 ETHIOPIAN_CITY_49 "Goha"
 ETHIOPIAN_CITY_50 "Begi"
 
+
 MONGOL "Mongols"
 
 MONGOL_LEADERM_NAME "Gengis Khan"
@@ -2421,7 +2456,6 @@ MONGOL_CITY_47 "Bayanteeg"
 MONGOL_CITY_48 "Onjuul"
 MONGOL_CITY_49 "Avraga"
 MONGOL_CITY_50 "Ogoomor"
-
 
 
 NICARAGUAN "Nicaraguayens"
@@ -2981,6 +3015,7 @@ CELTIC_CITY_47 "Merthyr"
 CELTIC_CITY_48 "Tara"
 CELTIC_CITY_49 "Nefyn"
 CELTIC_CITY_50 "Dinas Powys"
+
 
 ITALIAN "Italiens"
 
@@ -3627,3 +3662,4 @@ MALIAN_CITY_47 "Taghaza"
 MALIAN_CITY_48 "Bamako"
 MALIAN_CITY_49 "Nouakchott"
 MALIAN_CITY_50 "Kayes"
+

@@ -1,3 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (Spanish)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt. Has to be done when gl_str.txt is available.
+#   - April 7th 2005 Martin Gühmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin Gühmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+# 
+#
+#----------------------------------------------------------------------------
+
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer	"Ya estás ofreciendo esa mercancía. ¿Sustituyes la oferta anterior?"
 
@@ -2203,6 +2232,8 @@ str_ldl_ShowQueue     			"Mostrar cola"
 str_ldl_EditQueue 			"Construir"
 str_ldl_HideQueue 			"Ocultar cola"
 
+str_ldl_OptimizeSpecialists 		"Optimize Specialists"
+
 str_ldl_Costs 				"Costes"
 str_ldl_Gives 				"Dar"
 str_ldl_YouHave 				"Tienes"
@@ -2544,6 +2575,7 @@ str_ldl_DD_BUILDING_UPKEEP_LABEL	"Mantenimiento:"
 str_ldl_DD_SCIENCE_LABEL		"Ciencia:"
 str_ldl_DD_SAVINGS_LABEL		"Ahorros:"
 str_ldl_DD_DETAILS			"Detalles"
+str_ldl_DD_OPTIMIZE_SLIDERS		"Optimize Sliders"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT			"Gobierno actual"
 str_ldl_DD_GOV_COMPARE			"Comparar con"
@@ -2737,10 +2769,13 @@ str_tbl_ldl_InProgress			"Partida en curso:"
 str_tbl_ldl_Defeat			"Derrota:"
 	
 # Great Library
-str_ldl_GreatLibraryGoalSetTo 	"Objetivo establecido en: %s"
+str_ldl_CAPS_GREAT_LIBRARY		"G R A N    B I B L I O T E C A"
+str_ldl_GreatLibraryGoalSetTo 		"Objetivo establecido en: %s"
+str_ldl_GreatLibraryGoalKnown		"%s is already known. No goal was set."
+str_ldl_GreatLibraryNoGoalPossible	"%s cannot be researched."
 str_ldl_SEARCH_WORD 			"Búsqueda:"
 str_ldl_TECH_TREE 			"Árbol tecnológico"
-str_ldl_SET_GOAL				"Fijar objetivo"
+str_ldl_SET_GOAL			"Fijar objetivo"
 
 
 
@@ -2752,7 +2787,7 @@ str_ldl_RANKING_SCIENTIFIC 		"Científico"
 str_ldl_RANKING_OVERALL 		"General"
 str_ldl_INFO_RANKING_TAB 		"Ranking"
 str_ldl_RANKING_POLLUTION		"Contaminación"
-str_ldl_RANKING_WONDER		"Maravilla"
+str_ldl_RANKING_WONDER			"Maravilla"
 str_ldl_RANKING_RANK 			"Rango:"
 str_ldl_LINE_BUTTON 			"Gráfico lineal"
 str_ldl_ZEROSUM_BUTTON 			"Gráfico de suma cero"

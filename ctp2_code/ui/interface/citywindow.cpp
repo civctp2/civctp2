@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -39,6 +41,13 @@
 //   selected than the first item of the build queue, by Martin Gühmann.
 // - #01 Standardization of city selection and focus handling  
 //   (L. Hirth 6/2004)
+// - Net food and net production are now displayed insted of gross food and
+//   gross production. So it is done for science and gold. This helps the 
+//   player better to know how much food is needed, as a negative amount is 
+//   displayed if the city starves. - April 6th 2005 Martin Gühmann
+// - Added OptimizeSpecialists function for specialists optimisation option.
+//   - April 7th 2005 Martin Gühmann
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -213,6 +222,10 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "EditQueueButton", CityWindow::EditQueue, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
 
+	// Added by Martin Gühmann for specialist optimization option:
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.Specialists.TabPanel.OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
+	Assert(*err == AUI_ERRCODE_OK);
+
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.List", CityWindow::BuildListSelect, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
 
@@ -371,7 +384,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 //                (to NULL) *in a destructor* is a waste of time.
 //
 //----------------------------------------------------------------------------
-
 CityWindow::~CityWindow()
 {
 	g_c3ui->UnloadImage(m_happyIcon);
@@ -649,19 +661,21 @@ void CityWindow::Update()
 		if(m_resVal[i]) {
 			switch(i) {
 				case CW_RES_FOOD:
-					sprintf(value, "%d", m_cityData->GetGrossCityFood());
+					// Display net food instead of gross food - Martin Gühmann
+					sprintf(value, "%d", m_cityData->GetNetCityFood());
 					break;
 				case CW_RES_HAPPY:
-					sprintf(value, "%d", (sint32)m_cityData->GetHappiness());
+					sprintf(value, "%d", static_cast<sint32>(m_cityData->GetHappiness()));
 					break;
 				case CW_RES_PROD:
-					sprintf(value, "%d", (sint32)m_cityData->GetGrossCityProduction());
+					// Display net production instead of gross production - Martin Gühmann
+					sprintf(value, "%d", m_cityData->GetNetCityProduction());
 					break;
 				case CW_RES_TRADE:
-					sprintf(value, "%d", (sint32)m_cityData->GetNetCityGold());
+					sprintf(value, "%d", m_cityData->GetNetCityGold());
 					break;
 				case CW_RES_SCI:
-					sprintf(value, "%d", (sint32)m_cityData->GetScience());
+					sprintf(value, "%d", m_cityData->GetScience());
 					break;
 			}
 			m_resVal[i]->SetText(value);
@@ -719,32 +733,34 @@ void CityWindow::Update()
 
 
 	if(m_happinessValue) {
-		sprintf(buf, "%d", (sint32)m_cityData->GetHappiness());	
+		sprintf(buf, "%d", static_cast<sint32>(m_cityData->GetHappiness()));	
 		m_happinessValue->SetText(buf);
 	}
 
 	if(m_globalFood) {
-		sprintf(buf, "%d", (sint32)m_cityData->GetGrossCityFood());
+		// Display net food instead of gross food. - Martin Gühmann
+		sprintf(buf, "%d", m_cityData->GetNetCityFood());
 		m_globalFood->SetText(buf);
 	}
 
 	if(m_globalTrade) {
-		sprintf(buf, "%d", (sint32)m_cityData->GetNetCityGold());
+		sprintf(buf, "%d", m_cityData->GetNetCityGold());
 		m_globalTrade->SetText(buf);
 	}
 
 	if(m_globalScience) {
-		sprintf(buf, "%d", (sint32)m_cityData->GetScience());
+		sprintf(buf, "%d", m_cityData->GetScience());
 		m_globalScience->SetText(buf);
 	}
 
 	if(m_globalProduction) {
-		sprintf(buf, "%d", (sint32)m_cityData->GetGrossCityProduction());
+		// Display net production instead of gross production - Martin Gühmann
+		sprintf(buf, "%d", m_cityData->GetNetCityProduction());
 		m_globalProduction->SetText(buf);
 	}
 				
 	if(m_globalPopulation) {
-		sprintf(buf, "%d", (sint32)m_cityData->PopCount() * k_PEOPLE_PER_POPULATION + m_cityData->GetPartialPopulation());
+		sprintf(buf, "%d", m_cityData->PopCount() * k_PEOPLE_PER_POPULATION + m_cityData->GetPartialPopulation());
 		m_globalPopulation->SetText(buf);
 	}
 
@@ -1300,7 +1316,6 @@ void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 da
 // Remark(s)  : Does not clear the list itself.
 //
 //----------------------------------------------------------------------------
-
 void CityWindow::ClearInventoryUserData()
 {
 	Assert(m_inventoryList);
@@ -1337,6 +1352,42 @@ void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, voi
 		
 
 
+
+	s_cityWindow->Update();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::OptimizeSpecialists
+//
+// Description: Optimizes the specialists assignment. 
+//
+// Parameters : aui_Control *control
+//              uint32 action
+//              uint32 data
+//              void *cookie
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != AUI_BUTTON_ACTION_EXECUTE)
+		return;
+
+	if(!s_cityWindow)
+		return;
+
+	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
+	Governor & governor = Governor::GetGovernor(playerId);
+
+	governor.AssignPopulation(s_cityWindow->m_cityData);
+
+	s_cityWindow->Project();
 
 	s_cityWindow->Update();
 }
@@ -1735,7 +1786,7 @@ AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 	double happiness = cd->GetHappiness();
 	if(happiness > 100) happiness = 100;
 
-	destRect.right = destRect.left + ((happiness * width) / 100);
+	destRect.right = destRect.left + static_cast<sint32>((happiness * width) / 100);
 
 	uint32 color;
 	if(happiness < g_theConstDB->GetRiotLevel()) {
@@ -2063,7 +2114,7 @@ int cw_compareHappyValues(const void *item1, const void *item2)
 	const cw_HappyData *h1 = (const cw_HappyData *)item1;
 	const cw_HappyData *h2 = (const cw_HappyData *)item2;
 
-	return h1->amount - h2->amount;
+	return static_cast<int>(h1->amount - h2->amount);
 }
 
 void CityWindow::FillHappinessList()
@@ -2477,7 +2528,6 @@ void CityWindow::ActivateUnitCallback(aui_Control *control, uint32 action, uint3
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void CityWindow::DisbandQuery(bool result, void *ud)
 {
 	if(result) {

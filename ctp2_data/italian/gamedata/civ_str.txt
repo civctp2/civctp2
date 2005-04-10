@@ -1,3 +1,28 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Civ specific strings, e.g civ names, civ leaders,
+#                city names (Italian)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved back diplomacy photo strings from add_str.txt.
+# - Added a bunch of new civs.
+# 
+#----------------------------------------------------------------------------
+
 #### Empire/Civilisation Names (maximum of 64 Civilisations) ####
 
 
@@ -100,15 +125,15 @@ AZTEC_DIPLOMAT_PHOTO		"updp050.tga"
 ITALIAN_DIPLOMAT_PHOTO		"updp050.tga"
 BANTU_DIPLOMAT_PHOTO   		"updp050.tga"
 SLAVIC_DIPLOMAT_PHOTO  		"updp050.tga"
-MINOAN_DIPLOMAT_PHOTO  		"updp050.tga"  # Not used, see civilisation.txt
-HARAPPAN_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
-HITTITE_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
-SHANG_DIPLOMAT_PHOTO  		"updp050.tga"  # Not used, see civilisation.txt
-ETRUSCAN_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
-ABORIGINE_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
-ARGENTINIAN_DIPLOMAT_PHOTO  	"updp050.tga"  # Not used, see civilisation.txt
-KHMER_DIPLOMAT_PHOTO  		"updp050.tga"  # Not used, see civilisation.txt
-MALIAN_DIPLOMAT_PHOTO  		"updp050.tga"  # Not used, see civilisation.txt
+MINOAN_DIPLOMAT_PHOTO  		"updp050.tga"
+HARAPPAN_DIPLOMAT_PHOTO  	"updp050.tga"
+HITTITE_DIPLOMAT_PHOTO  	"updp050.tga"
+SHANG_DIPLOMAT_PHOTO  		"updp050.tga"
+ETRUSCAN_DIPLOMAT_PHOTO  	"updp050.tga"
+ABORIGINE_DIPLOMAT_PHOTO  	"updp050.tga"
+ARGENTINIAN_DIPLOMAT_PHOTO  	"updp050.tga"
+KHMER_DIPLOMAT_PHOTO  		"updp050.tga"
+MALIAN_DIPLOMAT_PHOTO  		"updp050.tga"
 
 
 ## Insert as portion of Strings.txt	

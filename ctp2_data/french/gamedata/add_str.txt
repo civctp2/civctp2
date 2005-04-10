@@ -1,3 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains additional strings that should go to other files
+#                eventually (French)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Removed diplomatic photo strings as they have been already moved back
+#   to civ_str.txt. - 7th April 2005 Martin Gühmann
+# - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
+#   - 7th April 2005 Martin Gühmann
+# - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
+#
+# 
+#----------------------------------------------------------------------------
+
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
@@ -20,7 +49,7 @@ str_ldl_ShowTradeRoutes_Off			"Masquer routes comm."
 str_ldl_DisbandUnit                 "Démanteler"
 
 # City advisor
-#  str_ldl_CityAdvisor "Conseiller ville"
+# str_ldl_CityAdvisor "Conseiller ville"
 
 # City Window
 str_ldl_CityWindowUpkeep "Entretien"
@@ -147,8 +176,6 @@ str_ldl_AdvancedOptions "OPTIONS AVANCEES"
 str_ldl_INFORMATION_DIALOG_TITLE 			"STATISTIQUES"
 
 str_COMPUTER_TURNS		"Comptabilisation des tours..."
-
-str_ldl_CAPS_GREAT_LIBRARY	"GRANDE BIBLIOTHEQUE"
 
 #revised from ldl_str.txt
 str_code_TotalPollutionFormat "%d"
@@ -411,9 +438,6 @@ str_ldl_Settlers "Colons"
 # Diplomacy Manager Embargo Button
 TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Frapper d'embargo"
 STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Cliquez ici pour empêcher une nation étrangère de réaliser des échanges avec vous."
-
-# Default Build List Sequence
-BUILD_LIST_SEQUENCE_DEFAULT "Par défaut"
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "En instaurant ce gouvernement, certaines de vos unités risquent d'être démantelées. Etes-vous sûr de vouloir changer de régime ?"

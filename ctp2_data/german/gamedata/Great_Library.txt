@@ -2950,7 +2950,7 @@ Sobald zwei Nationen ein Abkommen oder Bündnis geschlossen haben, bleibt es daue
 [CONCEPT_UNITS_GAMEPLAY]
 Einheiten sind in Call To Power II auf vielfältige Weise zweckdienlich: Sie können die Gegend auskundschaften, einen Krieg auslösen und viele andere Aktionen und Operationen durchführen. Im Gegensatz zu <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städten<e> können sich Einheiten frei auf der Karte bewegen und besitzen mehrere individuelle Eigenschaften, wie zum Beispiel Lebenspunkte, Offensiv- und Defensivfähigkeiten, Fortbewegungspunkte und Geländetauglichkeit.
 
-Die einzelnen im Spiel verfügbaren Einheiten werden in der Lexikothek genauer beschrieben.
+Die einzelnen im Spiel verfügbaren Einheiten werden in der Großen Bibliothek genauer beschrieben.
 [END]
 
 [CONCEPT_UNITS_HISTORICAL]

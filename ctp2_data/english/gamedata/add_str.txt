@@ -1,3 +1,32 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains additional strings that should go to other files
+#                eventually (English)
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Removed diplomatic photo strings as they have been already moved back
+#   to civ_str.txt. - 7th April 2005 Martin Gühmann
+# - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
+#   - 7th April 2005 Martin Gühmann
+# - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
+#
+# 
+#----------------------------------------------------------------------------
+
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
@@ -24,50 +53,6 @@ str_ldl_DisbandUnit                 "Disband"
 
 # City Window
 str_ldl_CityWindowUpkeep "Upkeep"
-
-# Diplomat pictures.  Bit weird storing these in a string file, but it works.
-# Transplanted, and modified (filenames are updp* now, ctp1 was upd*), from civ_str.txt 
-GREEK_DIPLOMAT_PHOTO		"updp023.tga"
-AMERICAN_DIPLOMAT_PHOTO	"updp010.tga"
-SCOTTISH_DIPLOMAT_PHOTO	"updp044.tga"
-IRISH_DIPLOMAT_PHOTO			"updp028.tga"
-ENGLISH_DIPLOMAT_PHOTO	"updp019.tga"
-NATIVE_AMERICAN_DIPLOMAT_PHOTO	"updp035.tga"
-GERMAN_DIPLOMAT_PHOTO	"updp022.tga"
-FRENCH_DIPLOMAT_PHOTO	"updp021.tga"
-JAPANESE_DIPLOMAT_PHOTO	"updp030.tga"
-CHINESE_DIPLOMAT_PHOTO	"updp015.tga"
-RUSSIAN_DIPLOMAT_PHOTO	"updp043.tga"
-SPANISH_DIPLOMAT_PHOTO	"updp045.tga"
-PORTUGUESE_DIPLOMAT_PHOTO	"updp041.tga"
-DUTCH_DIPLOMAT_PHOTO	"updp017.tga"
-VIKING_DIPLOMAT_PHOTO	"updp048.tga"
-ROMAN_DIPLOMAT_PHOTO	"updp042.tga"
-EGYPTIAN_DIPLOMAT_PHOTO	"updp018.tga"
-PERSIAN_DIPLOMAT_PHOTO	"updp038.tga"
-TURKISH_DIPLOMAT_PHOTO	"updp047.tga"
-PHOENICIAN_DIPLOMAT_PHOTO	"updp039.tga"
-WELSH_DIPLOMAT_PHOTO	"updp049.tga"
-CUBAN_DIPLOMAT_PHOTO	"updp016.tga"
-ZULU_DIPLOMAT_PHOTO	"updp050.tga"
-HEBREW_DIPLOMAT_PHOTO	"updp024.tga"
-ASSYRIAN_DIPLOMAT_PHOTO	"updp011.tga"
-INDIAN_DIPLOMAT_PHOTO	"updp026.tga"
-THAI_DIPLOMAT_PHOTO	"updp046.tga"
-POLYNESIAN_DIPLOMAT_PHOTO	"updp040.tga"
-INDONESIAN_DIPLOMAT_PHOTO	"updp027.tga"
-JAMAICAN_DIPLOMAT_PHOTO		"updp029.tga"
-INCAN_DIPLOMAT_PHOTO	"updp025.tga"
-MAYAN_DIPLOMAT_PHOTO	"updp032.tga"
-CANADIAN_DIPLOMAT_PHOTO	"updp014.tga"
-NIGERIAN_DIPLOMAT_PHOTO	"updp037.tga"
-KOREAN_DIPLOMAT_PHOTO	"updp031.tga"
-BRAZILIAN_DIPLOMAT_PHOTO	"updp013.tga"
-AUSTRALIAN_DIPLOMAT_PHOTO	"updp012.tga"
-MEXICAN_DIPLOMAT_PHOTO	"updp033.tga"
-ETHIOPIAN_DIPLOMAT_PHOTO	"updp020.tga"
-MONGOLIAN_DIPLOMAT_PHOTO	"updp034.tga"
-NICARAGUAN_DIPLOMAT_PHOTO	"updp036.tga"
 
 # Dip wizard strings
 # Gets displayed on the "Accept" button depending on context
@@ -147,8 +132,6 @@ str_ldl_AdvancedOptions "ADVANCED OPTIONS"
 str_ldl_INFORMATION_DIALOG_TITLE 			"S T A T I S T I C S"
 
 str_COMPUTER_TURNS		"Computer turns..."
-
-str_ldl_CAPS_GREAT_LIBRARY	"G R E A T    L I B R A R Y"
 
 #revised from ldl_str.txt
 str_code_TotalPollutionFormat "%d"
@@ -410,9 +393,6 @@ str_ldl_Settlers "Settlers"
 # Diplomacy Manager Embargo Button
 TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Declare an Embargo"
 STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Click here to prevent a foreign nation from trading with you."
-
-# Default Build List Sequence
-BUILD_LIST_SEQUENCE_DEFAULT "Default"
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "Enacting this government will cause some of your units to be disbanded, are you sure you wish to enact it?"
