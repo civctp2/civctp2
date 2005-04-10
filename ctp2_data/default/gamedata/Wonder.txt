@@ -1,0 +1,350 @@
+WONDER_ARISTOTLES_LYCEUM {
+   DefaultIcon ICON_WONDER_ARISTOTLES_LYCEUM
+   Description DESCRIPTION_WONDER_ARISTOTLES_LYCEUM
+   Movie MOVIE_WONDER_ARISTOTLES_LYCEUM
+   EnableAdvance ADVANCE_PHILOSOPHY
+   ProductionCost 3240
+   IncKnowledgePercent 20
+}
+
+############################################################
+
+WONDER_CENTRAL_MATTER_DECOMPILER {
+   DefaultIcon ICON_WONDER_GLOBAL_NANO_CLEANER
+   Description DESCRIPTION_WONDER_GLOBAL_NANO_CLEANER
+   Movie MOVIE_WONDER_GLOBAL_NANO_CLEANER
+   EnableAdvance ADVANCE_ECOTOPIA
+   ProductionCost 20000
+   BuildingEverywhere IMPROVE_MATTER_DECOMPILER
+}
+
+############################################################
+
+WONDER_CHICHEN_ITZA {
+   DefaultIcon ICON_WONDER_CHICHEN_ITZA
+   Description DESCRIPTION_WONDER_CHICHEN_ITZA
+   Movie MOVIE_WONDER_CHICHEN_ITZA
+   EnableAdvance ADVANCE_JURISPRUDENCE
+   ProductionCost 2160
+   DecCrimePercent 30
+}
+
+############################################################
+
+WONDER_DATA_HAVEN {
+   DefaultIcon ICON_WONDER_DATA_HAVEN
+   Description DESCRIPTION_WONDER_DATA_HAVEN
+   Movie MOVIE_WONDER_DATA_HAVEN
+   EnableAdvance ADVANCE_DIGITAL_ENCRYPTION
+   ProductionCost 12400
+   GoldPerInternationalTradeRoute 25
+}
+
+############################################################
+
+WONDER_EAST_INDIA_COMPANY {
+   DefaultIcon ICON_WONDER_EAST_INDIA_COMPANY
+   Description DESCRIPTION_WONDER_EAST_INDIA_COMPANY
+   Movie MOVIE_WONDER_EAST_INDIA_COMPANY
+   EnableAdvance ADVANCE_OCEAN_FARING
+
+   ObsoleteAdvance ADVANCE_GLOBAL_ECONOMICS
+
+   ProductionCost 4320
+   GoldPerWaterTradeRoute 15
+   IncreaseBoatMovement 100
+}
+
+############################################################
+
+WONDER_EGALITARIAN_ACT {
+   DefaultIcon ICON_WONDER_EGALITARIAN_ACT
+   Description DESCRIPTION_WONDER_EGALITARIAN_ACT
+   Movie MOVIE_WONDER_EGALITARIAN_ACT
+   EnableAdvance ADVANCE_VIRTUAL_DEMOCRACY
+   ProductionCost 20000
+   TemporaryFullHappiness 5
+   RevoltingCitiesJoinPlayer
+}
+
+############################################################
+
+WONDER_EMANCIPATION_PROCLAMATION {
+   DefaultIcon ICON_WONDER_EMANCIPATION_PROCLAMATION
+   Description DESCRIPTION_WONDER_EMANCIPATION_PROCLAMATION
+   Movie MOVIE_WONDER_EMANCIPATION_PROCLAMATION
+   EnableAdvance ADVANCE_AGE_OF_REASON
+   ProductionCost 5760
+   FreeSlaves
+}
+
+############################################################
+
+WONDER_EMPIRE_STATE_BUILDING {
+   DefaultIcon ICON_WONDER_EMPIRE_STATE_BUILDING
+   Description DESCRIPTION_WONDER_EMPIRE_STATE_BUILDING
+   Movie MOVIE_WONDER_EMPIRE_STATE_BUILDING
+   EnableAdvance ADVANCE_CORPORATION
+   ProductionCost 7200
+   IncreaseRegard 100
+}
+
+############################################################
+
+WONDER_FIELD_DYNAMICS_LABORATORY {
+   DefaultIcon ICON_WONDER_FIELD_DYNAMICS_LABORATORY
+   Description DESCRIPTION_WONDER_FIELD_DYNAMICS_LABORATORY
+   Movie MOVIE_WONDER_FIELD_DYNAMICS_LABORATORY
+   EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
+   ProductionCost 15200
+   IncKnowledgePercent 35
+}
+
+############################################################
+
+WONDER_GALILEOS_TELESCOPE {
+   DefaultIcon ICON_WONDER_GALILEOS_TELESCOPE
+   Description DESCRIPTION_WONDER_GALILEOS_TELESCOPE
+   Movie MOVIE_WONDER_GALILEOS_TELESCOPE
+   EnableAdvance ADVANCE_OPTICS
+   ProductionCost 4320
+   IncreaseScientists 5
+}
+
+############################################################
+
+WONDER_GENOME_PROJECT {
+   DefaultIcon ICON_WONDER_GENOME_PROJECT
+   Description DESCRIPTION_WONDER_GENOME_PROJECT
+   Movie MOVIE_WONDER_GENOME_PROJECT
+   EnableAdvance ADVANCE_GENETICS
+   ProductionCost 15200
+   IncreaseHp 1
+   IncreaseProduction 10
+}
+
+############################################################
+
+WONDER_GLOBAL_SURVEILLANCE_CENTER {
+   DefaultIcon ICON_WONDER_GLOBAL_SURVEILLANCE
+   Description DESCRIPTION_WONDER_GLOBAL_SURVEILLANCE_CENTER
+   Movie MOVIE_WONDER_GLOBAL_SURVEILLANCE_CENTER
+   EnableAdvance ADVANCE_EUGENICS
+   ProductionCost 15200
+   EmbassiesEverywhereEvenAtWar
+}
+
+############################################################
+
+WONDER_GLOBESAT {
+   DefaultIcon ICON_WONDER_GLOBESAT
+   Description DESCRIPTION_WONDER_GLOBESAT
+   Movie MOVIE_WONDER_GLOBESAT
+   EnableAdvance ADVANCE_GLOBAL_COMMUNICATIONS
+   ProductionCost 12400
+   GlobalRadar
+}
+
+############################################################
+
+WONDER_GREAT_WALL {
+   DefaultIcon ICON_WONDER_GREAT_WALL
+   Description DESCRIPTION_WONDER_GREAT_WALL
+   Movie MOVIE_WONDER_GREAT_WALL
+   EnableAdvance ADVANCE_MASONRY
+
+   ObsoleteAdvance ADVANCE_CAVALRY_TACTICS
+
+   ProductionCost 2160
+   ReduceReadinessCost 25
+   ProtectFromBarbarians
+}
+
+############################################################
+
+WONDER_GUTTENBERGS_BIBLE {
+   DefaultIcon ICON_WONDER_GUTTENBERGS_BIBLE
+   Description DESCRIPTION_WONDER_GUTTENBERGS_BIBLE
+   Movie MOVIE_WONDER_GUTTENBERGS_BIBLE
+   EnableAdvance ADVANCE_PRINTING_PRESS
+   ProductionCost 3240
+   IncHappinessEmpire 2
+   ReformCities
+   PreventConversion
+}
+
+############################################################
+
+WONDER_HAGIA_SOPHIA {
+   DefaultIcon ICON_WONDER_HAGIA_SOPHIA
+   Description DESCRIPTION_WONDER_HAGIA_SOPHIA
+   Movie MOVIE_WONDER_HAGIA_SOPHIA
+   EnableAdvance ADVANCE_THEOLOGY
+   ProductionCost 3240
+   BuildingEverywhere IMPROVE_SHRINE
+}
+
+############################################################
+
+WONDER_HOLLYWOOD {
+   DefaultIcon ICON_WONDER_HOLLYWOOD
+   Description DESCRIPTION_WONDER_HOLLYWOOD
+   Movie MOVIE_WONDER_HOLLYWOOD
+   EnableAdvance ADVANCE_GLOBAL_ECONOMICS
+   ProductionCost 8600
+   GoldPerTelevision 15
+}
+
+############################################################
+
+WONDER_INTERNET {
+   DefaultIcon ICON_WONDER_INTERNET
+   Description DESCRIPTION_WONDER_INTERNET
+   Movie MOVIE_WONDER_INTERNET
+   EnableAdvance ADVANCE_COMPUTER
+   ProductionCost 8600
+   BuildingEverywhere IMPROVE_COMPUTER_CENTER
+}
+
+############################################################
+
+WONDER_LONDON_EXCHANGE {
+   DefaultIcon ICON_WONDER_LONDON_EXCHANGE
+   Description DESCRIPTION_WONDER_LONDON_EXCHANGE
+   Movie MOVIE_WONDER_LONDON_EXCHANGE
+   EnableAdvance ADVANCE_ECONOMICS
+   ProductionCost 7200
+   IncreaseBrokerages 50
+}
+
+############################################################
+
+WONDER_NANITE_DEFUSER {
+   DefaultIcon ICON_WONDER_NANITE_DEFUSER
+   Description DESCRIPTION_WONDER_NANITE_DEFUSER
+   Movie MOVIE_WONDER_NANITE_DEFUSER
+   EnableAdvance ADVANCE_NANO_MACHINES
+   ProductionCost 15200
+   EliminateNukes
+}
+
+############################################################
+
+WONDER_NATIONAL_SHIELD {
+   DefaultIcon ICON_WONDER_NATIONAL_SHIELD
+   Description DESCRIPTION_WONDER_NATIONAL_SHIELD
+   Movie MOVIE_WONDER_NATIONAL_SHIELD
+   EnableAdvance ADVANCE_UNIFIED_PHYSICS
+   ProductionCost 20000
+   BuildingEverywhere IMPROVE_FORCEFIELD
+}
+
+############################################################
+
+WONDER_PENICILLIN {
+   DefaultIcon ICON_WONDER_PENICILLIN
+   Description DESCRIPTION_WONDER_PENICILLIN
+   Movie MOVIE_WONDER_PENICILLIN
+   EnableAdvance ADVANCE_PHARMACEUTICALS
+   ProductionCost 7200
+   IncreaseFoodAllCities 30
+}
+
+############################################################
+
+WONDER_PYRAMIDS {
+   DefaultIcon ICON_WONDER_PYRAMIDS
+   Description DESCRIPTION_WONDER_PYRAMIDS
+   Movie MOVIE_WONDER_PYRAMIDS
+   EnableAdvance ADVANCE_STONE_WORKING
+   ProductionCost 2160
+   BonusGold 100
+}
+
+############################################################
+
+WONDER_RAMAYANA {
+   DefaultIcon ICON_WONDER_RAMAYANA
+   Description DESCRIPTION_WONDER_RAMAYANA
+   Movie MOVIE_WONDER_RAMAYANA
+   EnableAdvance ADVANCE_RELIGION
+   ProductionCost 2160
+   IncHappinessEmpire 3
+}
+
+############################################################
+
+WONDER_THE_AGENCY {
+   DefaultIcon ICON_WONDER_THE_AGENCY
+   Description DESCRIPTION_WONDER_THE_AGENCY
+   Movie MOVIE_WONDER_THE_AGENCY
+   EnableAdvance ADVANCE_GLOBAL_DEFENSE
+   ProductionCost 8600
+   SpiesEverywhere
+}
+
+############################################################
+
+WONDER_THE_APPIAN_WAY {
+   DefaultIcon ICON_WONDER_THE_APPIAN_WAY
+   Description DESCRIPTION_WONDER_THE_APPIAN_WAY
+   Movie MOVIE_WONDER_THE_APPIAN_WAY
+   EnableAdvance ADVANCE_TRADE
+
+   ObsoleteAdvance ADVANCE_AGE_OF_REASON
+
+   ProductionCost 2160
+   DecEmpireSize 100
+}
+
+############################################################
+
+WONDER_THE_EDEN_PROJECT {
+   DefaultIcon ICON_WONDER_THE_EDEN_PROJECT
+   Description DESCRIPTION_WONDER_THE_EDEN_PROJECT
+   Movie MOVIE_WONDER_THE_EDEN_PROJECT
+   EnableAdvance ADVANCE_GAIA_THEORY
+   ProductionCost 20000
+   PollutersToParks 3
+   EnableParkRangers
+}
+
+############################################################
+
+WONDER_THE_FORBIDDEN_CITY {
+   DefaultIcon ICON_WONDER_THE_FORBIDDEN_CITY
+   Description DESCRIPTION_WONDER_THE_FORBIDDEN_CITY
+   Movie MOVIE_WONDER_THE_FORBIDDEN_CITY
+   EnableAdvance ADVANCE_CONCRETE
+
+   ObsoleteAdvance ADVANCE_RAILROAD
+
+   ProductionCost 2160
+   CloseEmbassies
+   IncreaseRegard 50
+}
+
+############################################################
+
+WONDER_THE_SOLARIS_PROJECT {
+   DefaultIcon ICON_WONDER_THE_SOLARIS_PROJECT
+   Description DESCRIPTION_WONDER_THE_SOLARIS_PROJECT
+   Movie MOVIE_WONDER_THE_SOLARIS_PROJECT
+   EnableAdvance ADVANCE_GAIA_CONTROLLER
+   ProductionCost 25000
+   StartGaiaController
+}
+
+############################################################
+
+WONDER_ZERO_CRIME_BILL {
+   DefaultIcon ICON_WONDER_INTERNATIONAL_HUMAN_RIGHTS
+   Description DESCRIPTION_WONDER_INTERNATIONAL_HUMAN_RIGHTS
+   Movie MOVIE_WONDER_INTERNATIONAL_HUMAN_RIGHTS
+   EnableAdvance ADVANCE_CRIMINAL_CODE
+   ProductionCost 8600
+   DecCrimePercent 60
+}
+
+############################################################
+

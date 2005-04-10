@@ -1,0 +1,972 @@
+
+How does diplomacy work?
+
+AI Diplomacy sequence:
+
+Step 1) Create ranked list of motivations (fears and desires).
+Step 2) Select top motivation.
+Step 3) Select highest priority New Proposal triggered by top motivation.
+Step 4) Send highest priority New Proposal triggered by motivation, if any.
+     4a) Receiver select highest priority Proposal Response triggered by New Proposal
+	 4b) Receiver sends highest priority Proposal Response (Counter, Accept or Reject).
+	 4c) Sender selects highest priority Counter Response triggered by Proposal Response.
+	 4d) Sender sends highest priority Counter Response (Threat, Accept or Reject).
+Step 5) Select next highest motivation, if any; go to Step 3.
+
+-------------------------------------------------------------------------------
+
+Do not show proposals:
+
+Events that effect trust:
+
+	Having a pact or alliance gives 2 units of trust every turn.
+
+	No violating one of the following for 20 turns gives 10 units of trust.
+		PROPOSAL_REQUEST_WITHDRAW_TROOPS
+		PROPOSAL_REQUEST_STOP_PIRACY
+		PROPOSAL_REQUEST_REDUCE_POLLUTION
+		PROPOSAL_REQUEST_STOP_RESEARCH
+
+Events that effect regard:
+
+1.  LOST_BATTLE: (REGARD_EVENT_MILITARY_POWER)
+
+	If lost a military unit when at war, then no regard cost.  
+
+2.  ATTACKED_CIVILIANS: (REGARD_EVENT_MILITARY_SAFETY)
+
+	If lost a non-military unit, during war or not, then regard cost
+	'WartimeAttackRegardCost' applied to attacker.
+
+3.  PEACETIME_BORDER_INCURSION: (REGARD_EVENT_MILITARY_SAFETY)
+
+	If first unit to incur, not at war, and not in an alliance with
+	intruder, apply 'IncursionRegardCost' toward regard for them.
+	Allies likewise record 'IncursionRegardCost' for intruder.  If a
+	peace treaty exists, then that peace treaty is canceled and regard
+	and trust costs are applied.
+
+4.  BORDER_INCURSION_PULLOUT: (REGARD_EVENT_MILITARY_SAFETY)
+
+	If a unit that is not an allie removes their last army from its
+    borders, then the lesser of the -1 * 'IncursionRegardCost' or
+    enough regard to create REGARD_NEUTRAL regard in the
+    MILITARY_SAFETY category is applied.  Same applies for allies of
+    border owner.
+
+5.  INVADER_MOVEMENT: (REGARD_EVENT_MILITARY_SAFETY)
+
+	If anyone moves behind the borders of an AI, then
+	'InvaderMovementCost' is applied each time the unit moves.
+
+6.  UNPROVOKED_ATTACK: (REGARD_EVENT_MILITARY_SAFETY)
+
+	If lost a unit when not at war, then regard cost
+	'PreemptiveAttackRegardCost' applied to attacker.
+
+7.  VIOLATED_PEACE_TREATY: (REGARD_EVENT_DIPLOMACY)
+
+	If lost a unit to an attacker that we had a ceasefire, peace or
+	alliance with, then apply violation cost for treaty and trust cost
+	for treaty as defined in diplomacy.txt .
+
+8.  VIOLATED_STOP_PIRACY: (REGARD_EVENT_DIPLOMACY)
+
+	If army pirates the route of someone has a stop piracy agreement with, then
+	apply violation cost and trust cost from diplomacy.txt .  Clears any stop piracy
+	agreements between players.  Also cancel any alliance between the players.
+
+9.  ENEMY_CONVERTED_CITY: (REGARD_EVENT_DIPLOMACY)
+
+	When an army converts a city, then city owner applies 'ConvertCityRegardCost' and
+	breaks any alliance between the players.
+
+10. ENEMY_SHARES_CONTINENT: (REGARD_EVENT_MILITARY_POWER)
+
+	Any nations that share a continent, that have contact, are not at
+	war and do not have an alliance apply 'ShareContinentRegardCost'
+	unless the regard is below the hotwar regard level.  
+
+11. DECLARE_WAR
+
+	For AI that have a diplomatic state inwhich the proposal element for 
+	PROPOSAL_TREATY_DECLARE_WAR is not zero, then consider going to war.
+
+    If nation has hotwar regard for foreigner, not at war with anyone
+	else, not at war with the foreigner for last 5 rounds, and has a
+	personality that desires to be at war with the foreigner, then war
+	is declared.
+
+12. CAPTURE_CITY
+
+	Everytime a city is captured, there is a regard cost assessed.  Even if no defenders are in the city, war should be declared if a city is captured and any cease fires, peace treaties or alliances are canceled and any regard loss for violating them is assessed.
+
+-------------------------------------------------------------------------------
+
+Proposal Actions that need to be implemented:
+
+	// Transfer city from one player to another [param: cityId]
+1. OFFER_GIVE_CITY - complete
+
+   // Withdraw troops from our nation (complete in 5 turns)
+2. WITHDRAW_TROOPS - complete
+
+   // Stop piracy of nations trade routes
+3. STOP_PIRACY - complete
+
+   // Break treaty/agreement with nation [param: agreementId]
+4. BREAK_AGREEMENT - complete
+
+   // Stop researching advance or set science taxes to zero. [param: advanceType]
+5. STOP_RESEARCH - complete
+
+   // Reduce the number of special weapons in your arsenal
+6. REDUCE_{NUCLEAR, BIO, NANO}_WEAPONS - complete
+
+   // Give an Advance [param: advanceType]
+7. GIVE_ADVANCE - complete
+
+   // Give Aid/Tribute (once) [param: gold]
+8. GIVE_GOLD - complete
+
+   // Reduce Pollution [param: %]
+9. REDUCE_POLLUTION - complete
+
+    // Give Map
+10. GIVE_MAP - complete
+
+	// Honor Military Agreement [param: player to declare war on]
+11. HONOR_MILITARY_AGREEMENT - complete
+
+	// Honor Pollution Agreement [param: % to reduce]
+12. HONOR_POLLUTION_AGREEMENT - complete
+
+	// End threatened embargo
+13. END_EMBARGO - complete
+
+	// Go to war
+14. TREATY_DECLARE_WAR - complete
+
+	// Stop a war
+15. TREATY_CEASEFIRE - complete
+
+	// Establish peaceful relations
+16. TREATY_PEACE - complete
+
+	// Establish a pact that gives each side increased commerce from trade
+17. TREATY_TRADE_PACT - complete
+
+	// Establish a pact that gives each side increased science
+18. TREATY_RESEARCH_PACT - complete
+
+	// Establish a pact to go to war with the same countries
+19. TREATY_MILITARY_PACT - complete
+
+	// Establish a pact for each side to reduce pollution to some level
+20. TREATY_POLLUTION_PACT - complete
+
+	// Complete feature set not yet specified
+21. TREATY_ALLIANCE - Implemented mutual at war feature, but more TBD.
+
+Threat Actions that need to be implemented:
+
+1.  THREAT_MASS_TROOPS - TBD (cut? same as declare war.)
+	
+2.  THREAT_INVADE - TBD  (cut? same as declare war.)
+
+3.  THREAT_ATTACK_CITY - TBD, raise priority of seige goals for city
+
+4.  THREAT_ATTACK_ARMY - TBD, raise priority of attack goal for army
+
+5.  THREAT_PIRATE - TBD, raise priority of pirate goals
+
+6.  THREAT_SPECIAL_ATTACK_CITY - TBD, raise priority of special attacks for city
+
+7.  THREAT_DESTROY_CITY - TBD, might launch weapon of mass destruction on city
+
+8.  THREAT_PILLAGE - TBD, raise priority of pillage goals
+
+9.  THREAT_JOIN_MILITARY_ALLY - TBD, request military pact with foreigner
+
+10. THREAT_SELL_TECHNOLOGY - TBD, (cut)
+
+11.	THREAT_GIVE_AID - TBD, give gold and advances to foreigner
+
+12. THREAT_END_AGREEMENT - TBD, immediately end agreement
+
+13.	THREAT_TRADE_EMBARGO - complete, immediately establish a trade embargo
+
+14.	THREAT_DECLARE_WAR  - complete, immediately declare war
+
+
+
+New Proposals that can be triggered:
+
+	// Transfer city from one player to another [param: cityId]
+1.	REQUEST_GIVE_CITY:
+
+	Triggered when:
+	1) declared war exists between sender and receiver,
+	2) more than 50% of receiver's city value is at risk from sender,
+	3) the total value of receivers at risk cities exceeds the value
+	   of the requested city, 
+    4) neither sender or receiver has overwhelming military superiority.
+
+	// Withdraw troops from our nation
+2.	REQUEST_WITHDRAW_TROOPS: (REACTION)
+
+	Triggered when receiver units have incured on to territory owned
+	by sender and they are not at war.
+
+	// Stop piracy of nations trade routes
+3.	REQUEST_STOP_PIRACY:	  (FEAR_PIRACY)
+
+	Triggered when 1) receiver is pirating senders trade routes and 2)
+	no declaration of war exists between sender and receiver.
+
+	// Break treaty/agreement with nation [param: agreementId]
+4.	REQUEST_BREAK_AGREEMENT:  (MOTIVATION_DESIRE_ENLIST_FRIEND)
+
+	Consider making a New Proposal to ask my friend to break
+	agreements with my enemy.  Look for foreigner we are friends with,
+	but who has neutral or less regard for a foreigner we have coldwar
+	or less regard for.  If our friend has trade pact, research pact
+	or military pact with our coldwar enemy, then ask for them to
+	break their treaty with them.
+
+	// Stop researching advance [param: advanceType]
+5.	REQUEST_STOP_RESEARCH:
+
+	Consider making a New Proposal to request our enemy stop
+	researching a key advance.  Only valid for enemy foreigners we are
+	at cold war with.  Only valid for foreigners we have embassies
+	with (or have spied on?).  Only valid if they are researching an
+	advance from our stop researching advance list.
+
+6.	REQUEST_REDUCE_{NUCLEAR, BIO, NANO}_WEAPONS:
+
+    Triggered for coldwar enemies with nuclear, bio or nano weapons.
+	Looks at ratio of his weapons to our cities and our weapons to his
+	cities.  Tries to get enemy to reduce to the point that our losses
+	would be half of his and so that our losses will never be more
+	than 50% of our cities.
+
+	// Give an Advance [param: advanceType]
+7.	REQUEST_GIVE_ADVANCE:	   (DESIRE_SCIENCE)
+
+	Triggered when 1) sender has neutral or greater regard for
+	receiver, 2) receiver has significantly higher science rank than
+	sender, 3) receiver has an advance that sender wants, 4) requested
+	advance is not more than 20% more expensive than advance than
+	receiver might want.
+
+	// Give Aid/Tribute (once) [param: gold]
+8.	REQUEST_GIVE_GOLD:
+
+	When trying to extort a richer but weaker foreigner.  Triggered
+	when we desire gold, to make friends or to attack.  Only send to
+	foreigners we have 20% more military strength than.  Ask for an
+	unreasonably high amount from foreigners we have low regard for
+	and want to go to war with.  Ask for a smaller amount of gold from
+	foreigners we like and would like to get out of war with.
+
+	// Reduce Pollution [param: %] (FEAR_POLLUTION)
+9.	REQUEST_REDUCE_POLLUTION:
+
+	If sender fears a pollution disaster, and produces less than 150%
+	of the pollution of receiver, then it requests you reduce
+	pollution by some percent.  Ecotopians request a reduction to
+	5% below their pollution level, diplomats request a fixed
+	10% reduction and all others request a 5% reduction.
+
+	// Give Map
+10.	REQUEST_MAP:	(DESIRE_MAKE_FRIEND)
+
+    Triggered when 1) sender trusts receiver, 2) sender has NEUTRAL or
+    greater regard for receiver and 3) sender has not exchanged seen
+    receivers map recently.
+
+	// Honor military agreement by declaring war on foreigner [param: player] 
+11.	REQUEST_HONOR_MILITARY_AGREEMENT:
+
+    Triggered when receiver has a military pact or alliance with us,
+    but is not at war with nation that we have been at war with for
+    more than 10 turns.
+
+	// Honor pollution agreement by reducing pollution to agreed level [param: percent] 
+12.	REQUEST_HONOR_POLLUTION_AGREEMENT: (FEAR_POLLUTION)
+
+    Triggered when receiver has pollution pact with sender and has not
+    reduced to agreed level.  The ecotopian personality always expects
+    complete compliance within 10 turns.  Everyone else only asks you
+    to honor the agreement if you're less than half way there in 20
+    turns or not complying within 50 turns.
+
+	// End embargo that resulted from a threat
+13. REQUEST_END_EMBARGO: (DESIRE_GOLD, REACTION)
+
+	Triggered when receiver has embargo against sender, and sender
+	does not have embargo against receiver, sender has an economic
+	personality or sender needs gold.
+
+	// Treaties
+14.	DECLARE_WAR:
+
+    1) War is declared if you attack someone or they attack you.
+		
+	2) If you form an alliance with someone, you go to war with
+	   anyone they are at war with.  
+
+	3) If AI not currently at war with anyone, has hot war level
+	   regard towards you, has not been at war with you in the last 5
+	   turns (or never), is not allied with you and shares a continent
+	   with you, then it declares war.
+
+15.	REQUEST_TREATY_CEASEFIRE: (FEAR_INVASION, FEAR_CITY_DEFENSE, FEAR_MILITARY_RANK)
+
+	Triggered when 1) war has been declared between sender and
+	receiver, 2) sender trusts receiver 3) sender does not want to be
+	at war with receiver.
+
+16.	REQUEST_TREATY_PEACE:	(DESIRE_MAKE_FRIEND)
+
+	Triggered when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) sender trusts receiver, 3) receiver has no troops
+	on our territory 4) no coldwar attacks have been made by receiver
+	for 5 rounds 5) sender does not want to be at war with receiver
+	and 6) we have average regard towards them.
+
+17.	TREATY_TRADE_PACT: (DESIRE_MAKE_FRIEND, DESIRE_GOLD)
+
+    Triggered when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) sender trusts receiver, 3) receiver has no troops
+	on our territory, 4) receiver is pirating our trade routes, 5)
+	more than 10% of the value of senders trade is with the
+	receiver. 6) value of value of receivers trade with sender does
+	not exceed twice senders trade with receiver.
+
+18.	TREATY_RESEARCH_PACT: (DESIRE_MAKE_FRIEND, FEAR_SCIENCE_RANK)
+
+    Triggered when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) sender trusts receiver, 3) receiver has no troops
+	on our territory, 4) sender generater has less science than
+	receiver per turn, or 5) sender does not generate more than 20%
+	more science than receiver.
+
+19.	TREATY_MILITARY_PACT: (DESIRE_MAKE_FRIEND, DESIRE_ENLIST_FRIEND, FEAR_MILITARY_RANK)
+
+    Triggered when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) sender trusts receiver, 3) receiver has no troops
+	on our territory, 3) we are at war and peace with the same nations.
+
+20.	TREATY_POLLUTION_PACT: (FEAR_POLLUTION)
+
+    Triggered when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) sender trusts receiver, 3) receiver has no troops
+	on our territory, 3) receiver is producing more pollution that
+	sender or sender is producing up to 5% more than receiver.
+
+21.	TREATY_ALLIANCE: (DESIRE_MAKE_FRIEND, FEAR_MILITARY_RANK)
+
+	Triggered when 1) no war has occurred between sender and receiver
+	for 25 turns, 2) sender trusts receiver a lot, 3) receiver has no
+	troops on our territory 4) no coldwar attacks have been made by
+	receiver for 15 rounds 5) we are at war and peace with the same
+	nations and 6) have very high regard for receiver (ie. lots of
+	gold and advances gifts).
+
+-------------------------------------------------------------------------------
+
+New Proposals Responses that can be triggered:
+
+	// Transfer city from one player to another [param: cityId]
+1.	REQUEST_GIVE_CITY:
+
+	'LandForPeace' triggered when:
+
+	1) Declared war exists between sender and receiver,
+	2) receiver trusts sender, 
+	3) more than 50% of receiver's city value is at risk from sender,
+
+	4) the total value of receivers at risk cities exceeds the value
+	   of the requested city, 
+    5) neither sender or receiver has overwhelming military superiority.
+					
+    then, COUNTER_PROPOSAL with request TREATY_CEASEFIRE.
+
+	// Withdraw troops from our nation
+2.	REQUEST_WITHDRAW_TROOPS:
+
+	'MutualWithdraw' triggered when:
+
+	1) Do not want war and
+	2) Sender has troops in our territory
+
+	then, COUNTER_PROPOSAL with request for OFFER_WITHDRAW_TROOPS
+
+	'PayTribute' triggered when:
+
+	1) Do not want war and
+	2) Sender has no troops in our territory
+	3) We are stronger
+
+	then, COUNTER_PROPOSAL with request for OFFER_GIVE_GOLD
+
+	// Stop piracy of nations trade routes
+3.	REQUEST_STOP_PIRACY:
+
+	'StopPiracy' triggered when:
+
+	1) recieve does not lose any gold from piracy from sender.
+	2) sender loses gold from piracy by receiver.
+
+	then, COUNTER_PROPOSAL with request of OFFER_GIVE_GOLD 
+		   (3 * gold pirated by receiver each turn from sender).
+
+	'StopPiracy' triggered when:
+
+	1) receiver loses more gold from senders piracy than receiver
+       loses from senders piracy.
+					 
+    then, COUNTER_PROPOSAL with request of OFFER_STOP_PIRACY
+
+	// Break treaty/agreement with nation [param: agreementId]
+4.	REQUEST_BREAK_AGREEMENT:
+
+	TBD:
+
+	ACCEPT a break agreement proposal only when we have higher regard
+	for the sender than we do the foreigner they wish us to break our
+	agreement with.  Also ACCEPT if sender is much stronger than
+	receiver and also much stronger than foreigner.
+
+	If asking to break a pact, then COUNTER with a proposal for a
+	similar pact with sender (if all other conditions for that pact
+	exist).
+
+	// Stop researching advance [param: advanceType]
+5.	REQUEST_STOP_RESEARCH:
+
+	Only valid if we are researching an advance from our stop
+	researching advance list.
+
+	Receivers with the scientist personality will always REJECT this.
+	If sender is not equal to or stronger than receiver militarily,
+	REJECT.  Otherwise, if they are currently researching the same
+	advance, COUNTER for them to top researching the same advance.  If
+	they are much stronger, and already have the advance they are
+	asking us to stop researching, then ask for a PEACE_TREATY.
+
+	// Reduce the number of weapons of mass destruction in your arsenal
+6.	REQUEST_REDUCE_{NUCLEAR, BIO, NANO}_WEAPONS:
+
+    Triggered for coldwar enemies with nuclear, bio or nano weapons.
+	Looks at ratio of his weapons to our cities and our weapons to his
+	cities.  Tries to get enemy to reduce to the point that our losses
+	would be half of his and so that our losses will never be more
+	than 50% of our cities.
+
+	// Give an Advance [param: advanceType]
+7.	REQUEST_GIVE_ADVANCE:
+
+	'PayForAdvance' triggered when:
+
+	1) sender has not offered to pay (80% of advance cost) gold
+	2) sender can pay (80% of advance cost) gold
+
+	then, COUNTER_PROPOSAL with request of OFFER_GIVE_GOLD of (80% of
+	advance cost) gold.
+
+	'AdvanceExchange' triggered when:
+
+	1) sender has an advance that receiver wants.
+	2) advance that receiver wants costs less than 120% of advance sender requested.
+
+	then, COUNTER_PROPOSAL with request of OFFER_GIVE_ADVANCE of
+	advance receiver wants.
+
+	// Give Aid/Tribute (once) [param: gold]
+8.	REQUEST_GIVE_GOLD:
+
+	'AdvanceForGold' triggered when:
+
+	1) sender has an advance that receiver wants.
+	2) advance that receiver wants costs less than 120% of gold requested.
+
+	then, COUNTER_PROPOSAL with request of OFFER_GIVE_ADVANCE of
+	advance receiver wants.
+
+	// Reduce Pollution [param: %]
+9.	REQUEST_REDUCE_POLLUTION:
+
+	If receiver produces less than 50% of the pollution of sender,
+	then REJECT.  If receiver fears pollution disaster, then COUNTER
+	propose as follows: Ecotopians request sender to reduce pollution
+	to to 5% below their pollution level, diplomats reject if there is
+	no peace treaty or counters with a 10% reduction, and all others
+	counter with a 5% reduction.
+
+	// Give Map
+10.	REQUEST_MAP:
+
+    Always ACCEPT for allies and REJECT for anyone we are at war with
+    or have coldwar or less regard for.  If we have gotten their map
+    within the last 5 turns, REJECT.  In all other cases, counter with
+    a request for their map.
+
+	// Honor military agreement by declaring war on foreigner [param: player] 
+11.	REQUEST_HONOR_MILITARY_AGREEMENT:
+
+	If receiver at war with foreigner, has alliance with sender or has
+	lawful personality then ACCEPT.  If sender much stronger than
+	foreigner or receiver, then ACCEPT.  If foreigner much stronger than sender,
+	then REJECT.  Otherwise, REJECT if regard for sender not friendly
+	or higher or ACCEPT if regard for foreigner not friendly or
+	higher.
+
+	// Honor pollution agreement by reducing pollution to agreed level [param: percent] 
+12.	REQUEST_HONOR_POLLUTION_AGREEMENT:
+
+	If request to honor pollution agreement requests significantly
+	larger reduction than original pact, then REJECT.
+
+	If sender has not met pollution goal or half way to goal within 20
+	turns (10 turns for Ecotopian receivers), then counter with
+	request that sender honor their pollution agreement.
+
+	If receiver met pollution goal or half way to goal within 20
+	turns, then ACCEPT 
+
+	// End embargo that resulted from a threat
+13. REQUEST_END_EMBARGO:
+
+	If embargo has not continued for more than 5 turns, then REJECT.
+
+	If receiver does not have friendly regard for sender and sender
+	gets 50% or more gold from total trade than receiver, then COUNTER
+	asking for 2x the difference in gold from trade.
+
+    If sender has embargo against receiver, then COUNTER propose that
+	they end their embargo, otherwise, REJECT.
+
+	Otherwise, ACCEPT request.
+
+14. DECLARE_WAR
+
+15.	REQUEST_TREATY_CEASEFIRE:
+
+	Accept when 1) war has been declared between sender and receiver,
+    2) sender trusts receiver 3) sender does not want to be at war with
+	receiver.
+
+16.	REQUEST_TREATY_PEACE:
+
+	Accept when 1) no war has occurred between sender and receiver for
+	10 turns, 2) sender trusts receiver, 3) receiver has no troops on
+	our territory 4) no coldwar attacks have been made by receiver for
+	5 rounds 5) sender does not want to be at war with receiver and 6)
+	we have average regard towards them.
+
+17.	TREATY_TRADE_PACT:
+
+    ACCEPT when 1) no war has occurred between sender and receiver for
+	10 turns, 2) receiver trusts sender, 3) sender has no troops on
+	receivers territory, 4) sender is not pirating receivers trade
+	routes, 5) more than 10% of the value of receivers trade is with
+	the sender. 6) value of senders trade with receiver does not
+	exceed twice receivers trade with sender.
+
+18.	TREATY_RESEARCH_PACT:
+
+    ACCEPT when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) receiver trusts sender, 3) sender has no troops
+	on our territory, 4) receiver generates less science than
+	sender per turn, or 5) receiver does not generate more than 20%
+	more science than sender.
+
+19.	TREATY_MILITARY_PACT:
+
+    ACCEPT when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) receiver trusts sender, 3) sender has no troops
+	on receivers territory, 3) we are at war and peace with the same nations.
+
+20.	TREATY_POLLUTION_PACT:
+
+    ACCEPT when 1) no war has occurred between sender and receiver for
+	10 turns, 2) receiver trusts sender, 3) sender has no troops on
+	our territory, 3) for Ecotopians, any proposal as long as sender
+	is producing no more than 5% of the pollution as receiver. For
+	diplomats, as long as sender is producing no more than 20% of the
+	pollution as receiver, and the proposal is not for more than 20%
+	reduction, and for everyone else, only if no more than 10%
+	reduction.
+
+21.	ACCEPT_TREATY_ALLIANCE:
+
+	Accept when 1) no war has occurred between sender and receiver for
+	25 turns, 2) sender trusts receiver a lot, 3) receiver has no
+	troops on our territory 4) no coldwar attacks have been made by
+	receiver for 15 rounds 5) we are at war and peace with the same
+	nations and 6) have very high regard for receiver (ie. lots of
+	gold and advances gifts).
+
+Counter Proposal Responses that can be triggered:
+
+1.  Threaten Attack City
+
+	Consider whether to threaten attacking a city when the receiver
+	counters one of our proposals and we are already at war.
+
+	Only agressive or military powers threaten to attack cities;
+	Must not be at peace or War with receiver to consider this response;
+	Must have hotwar regard for receiver;
+	Most threatened city must have more than 65% of its value at risk.
+
+2.	REQUEST_GIVE_CITY + counter TREATY_CEASEFIRE:
+
+	Reject if receivers cities at risk of conquest by the sender
+	exceeds 75% of the total city value in his nation.
+
+	Reject if senders nation has an overwhelming (>30%) military
+	superiority (he can easily win).
+
+	Otherwise, Accept.
+
+4.  REQUEST_GIVE_ADVANCE + counter OFFER_GIVE_GOLD:
+    REQUEST_GIVE_ADVANCE + counter OFFER_GIVE_ADVANCE:
+
+	'PayForAdvance' triggered when:
+
+	1) Sender gets an advance worth more than 120% of the science or
+       gold the receiver gets.
+
+	then, sender responds with RESPONSE_ACCEPT.
+
+5.  REQUEST_GIVE_GOLD + counter OFFER_GIVE_ADVANCE:
+
+	'AdvanceForGold' triggered when:
+
+	1) Sender gets gold worth more than 120% of the advance the
+       receiver requested.
+
+	2) Advance is not one that the sender wants receiver to not research.
+
+	then, sender responds with RESPONSE_ACCEPT.
+
+6.  REQUEST_GIVE_GOLD, REQUEST_GIVE_ADVANCE + 
+	OFFER_WITHDRAW_TROOPS, OFFER_STOP_PIRACY, OFFER_END_EMBARGO
+
+	Only valid if we have not been at war with them for 10 turns
+	Not valid if we have hotwar regard for them
+	Only handle exchanges when we request gold or advances
+
+	If receiver wants sender to WITHDRAW_TROOPS:
+		- do not accept if they are not incurring on us
+		- do not accept if we  want to be at war with them
+
+	If receiver wants sender to STOP_PIRACY:
+	    - do not accept if they are pirating us
+		- do not accept if we're making more in five turns from piracy
+
+	If receiver wants sender to END_EMBARGO:
+		- do not accept if they have an embargo against us
+		- do not accept if gold or advance value is less than 
+		  three times the difference between trade total of receiver and
+		  sender. (ie. if they have less trade than us, then accept)
+
+6.  REQUEST_WITHDRAW_TROOPS, REQUEST_STOP_PIRACY, REQUEST_END_EMBARGO +
+	OFFER_WITHDRAW_TROOPS, OFFER_STOP_PIRACY, OFFER_END_EMBARGO
+
+	Consider whether to accept or threaten when the responder
+	requests you to reciprocate with an action.
+
+	If sender wants to be at war with them, 
+	   If a regard/personality appropriate threat exists, then threaten
+	   otherwise, reject.
+
+	If sender wants receiver to WITHDRAW_TROOPS, and receiver wants sender to WITHDRAW_TROOPS:
+		- Sender rejects if much stronger than receiver.
+
+	If sender wants receiver to WITHDRAW_TROOPS, and receiver wants sender to STOP_PIRACY or END_EMBARGO:
+		- Always accept.
+
+	If sender wants receiver to STOP_PIRACY or END_EMBARGO, and receiver wants sender to WITHDRAW_TROOPS:
+		- Always accept.
+
+	If sender wants receiver to STOP_PIRACY, and receiver wants sender to END_EMBARGO:
+		- Rejects if receiver has an embargo against sender or
+		  receiver does not pirate more than half senders trade.
+
+	If sender wants receiver to STOP_PIRACY, and receiver wants sender to STOP_PIRACY:
+	    - Reject if sender makes 2x more from piracy of receiver, then receiver makes from piracy of sender.
+
+	If sender wants receiver to END_EMBARGO, and receiver wants sender to END_EMBARGO:
+	    - Reject if receiver gets 2x as much income from trade than receiver.
+
+	If sender wants receiver to END_EMBARGO, and receiver wants sender to STOP_PIRACY:
+	    - Reject if sender receives more than 25% of its trade income from piracy of receiver.
+
+	Otherwise, accept counter proposal.
+
+{n}. DEFAULT
+
+	 Always reject a counter proposal.
+
+**********
+
+	// Transfer city from one player to another [param: cityId]
+1.	REQUEST_GIVE_CITY:
+
+	'LandForPeace' triggered when:
+
+	1) Declared war exists between sender and receiver,
+	2) receiver trusts sender, 
+	3) more than 50% of receiver's city value is at risk from sender,
+
+	4) the total value of receivers at risk cities exceeds the value
+	   of the requested city, 
+    5) neither sender or receiver has overwhelming military superiority.
+					
+    then, COUNTER_PROPOSAL with request TREATY_CEASEFIRE.
+
+	// Withdraw troops from our nation
+2.	REQUEST_WITHDRAW_TROOPS:
+
+	'MutualWithdraw' triggered when:
+
+	1) Do not want war and
+	2) Sender has troops in our territory
+
+	then, COUNTER_PROPOSAL with request for OFFER_WITHDRAW_TROOPS
+
+	'PayTribute' triggered when:
+
+	1) Do not want war and
+	2) Sender has no troops in our territory
+	3) We are stronger
+
+	then, COUNTER_PROPOSAL with request for OFFER_GIVE_GOLD
+
+	// Stop piracy of nations trade routes
+3.	REQUEST_STOP_PIRACY:
+
+	'StopPiracy' triggered when:
+
+	1) recieve does not lose any gold from piracy from sender.
+	2) sender loses gold from piracy by receiver.
+
+	then, COUNTER_PROPOSAL with request of OFFER_GIVE_GOLD 
+		   (3 * gold pirated by receiver each turn from sender).
+
+	'StopPiracy' triggered when:
+
+	1) receiver loses more gold from senders piracy than receiver
+       loses from senders piracy.
+					 
+    then, COUNTER_PROPOSAL with request of OFFER_STOP_PIRACY
+
+	// Break treaty/agreement with nation [param: agreementId]
+4.	REQUEST_BREAK_AGREEMENT:
+
+	TBD:
+
+	ACCEPT a break agreement proposal only when we have higher regard
+	for the sender than we do the foreigner they wish us to break our
+	agreement with.  Also ACCEPT if sender is much stronger than
+	receiver and also much stronger than foreigner.
+
+	If asking to break a pact, then COUNTER with a proposal for a
+	similar pact with sender (if all other conditions for that pact
+	exist).
+
+	// Stop researching advance [param: advanceType]
+5.	REQUEST_STOP_RESEARCH:
+
+	Only valid if we are researching an advance from our stop
+	researching advance list.
+
+	Receivers with the scientist personality will always REJECT this.
+	If sender is not equal to or stronger than receiver militarily,
+	REJECT.  Otherwise, if they are currently researching the same
+	advance, COUNTER for them to top researching the same advance.  If
+	they are much stronger, and already have the advance they are
+	asking us to stop researching, then ask for a PEACE_TREATY.
+
+	// Reduce the number of weapons of mass destruction in your arsenal
+6.	REQUEST_REDUCE_{NUCLEAR, BIO, NANO}_WEAPONS:
+
+    Triggered for coldwar enemies with nuclear, bio or nano weapons.
+	Looks at ratio of his weapons to our cities and our weapons to his
+	cities.  Tries to get enemy to reduce to the point that our losses
+	would be half of his and so that our losses will never be more
+	than 50% of our cities.
+
+	// Give an Advance [param: advanceType]
+7.	REQUEST_GIVE_ADVANCE:
+
+	'PayForAdvance' triggered when:
+
+	1) sender has not offered to pay (80% of advance cost) gold
+	2) sender can pay (80% of advance cost) gold
+
+	then, COUNTER_PROPOSAL with request of OFFER_GIVE_GOLD of (80% of
+	advance cost) gold.
+
+	'AdvanceExchange' triggered when:
+
+	1) sender has an advance that receiver wants.
+	2) advance that receiver wants costs less than 120% of advance sender requested.
+
+	then, COUNTER_PROPOSAL with request of OFFER_GIVE_ADVANCE of
+	advance receiver wants.
+
+	// Give Aid/Tribute (once) [param: gold]
+8.	REQUEST_GIVE_GOLD:
+
+	'AdvanceForGold' triggered when:
+
+	1) sender has an advance that receiver wants.
+	2) advance that receiver wants costs less than 120% of gold requested.
+
+	then, COUNTER_PROPOSAL with request of OFFER_GIVE_ADVANCE of
+	advance receiver wants.
+
+	// Reduce Pollution [param: %]
+9.	REQUEST_REDUCE_POLLUTION:
+
+	If receiver produces less than 50% of the pollution of sender,
+	then REJECT.  If receiver fears pollution disaster, then COUNTER
+	propose as follows: Ecotopians request sender to reduce pollution
+	to to 5% below their pollution level, diplomats reject if there is
+	no peace treaty or counters with a 10% reduction, and all others
+	counter with a 5% reduction.
+
+	// Give Map
+10.	REQUEST_MAP:
+
+    Always ACCEPT for allies and REJECT for anyone we are at war with
+    or have coldwar or less regard for.  If we have gotten their map
+    within the last 5 turns, REJECT.  In all other cases, counter with
+    a request for their map.
+
+	// Honor military agreement by declaring war on foreigner [param: player] 
+11.	REQUEST_HONOR_MILITARY_AGREEMENT:
+
+	If receiver at war with foreigner, has alliance with sender or has
+	lawful personality then ACCEPT.  If sender much stronger than
+	foreigner or receiver, then ACCEPT.  If foreigner much stronger than sender,
+	then REJECT.  Otherwise, REJECT if regard for sender not friendly
+	or higher or ACCEPT if regard for foreigner not friendly or
+	higher.
+
+	// Honor pollution agreement by reducing pollution to agreed level [param: percent] 
+12.	REQUEST_HONOR_POLLUTION_AGREEMENT:
+
+	If request to honor pollution agreement requests significantly
+	larger reduction than original pact, then REJECT.
+
+	If sender has not met pollution goal or half way to goal within 20
+	turns (10 turns for Ecotopian receivers), then counter with
+	request that sender honor their pollution agreement.
+
+	If receiver met pollution goal or half way to goal within 20
+	turns, then ACCEPT 
+
+	// End embargo that resulted from a threat
+13. REQUEST_END_EMBARGO:
+
+	If embargo has not continued for more than 5 turns, then REJECT.
+
+	If receiver does not have friendly regard for sender and sender
+	gets 50% or more gold from total trade than receiver, then COUNTER
+	asking for 2x the difference in gold from trade.
+
+    If sender has embargo against receiver, then COUNTER propose that
+	they end their embargo, otherwise, REJECT.
+
+	Otherwise, ACCEPT request.
+
+14. DECLARE_WAR
+
+15.	REQUEST_TREATY_CEASEFIRE:
+
+	Accept when 1) war has been declared between sender and receiver,
+    2) sender trusts receiver 3) sender does not want to be at war with
+	receiver.
+
+16.	REQUEST_TREATY_PEACE:
+
+	Accept when 1) no war has occurred between sender and receiver for
+	10 turns, 2) sender trusts receiver, 3) receiver has no troops on
+	our territory 4) no coldwar attacks have been made by receiver for
+	5 rounds 5) sender does not want to be at war with receiver and 6)
+	we have average regard towards them.
+
+17.	TREATY_TRADE_PACT:
+
+    ACCEPT when 1) no war has occurred between sender and receiver for
+	10 turns, 2) receiver trusts sender, 3) sender has no troops on
+	receivers territory, 4) sender is not pirating receivers trade
+	routes, 5) more than 10% of the value of receivers trade is with
+	the sender. 6) value of senders trade with receiver does not
+	exceed twice receivers trade with sender.
+
+18.	TREATY_RESEARCH_PACT:
+
+    ACCEPT when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) receiver trusts sender, 3) sender has no troops
+	on our territory, 4) receiver generates less science than
+	sender per turn, or 5) receiver does not generate more than 20%
+	more science than sender.
+
+19.	TREATY_MILITARY_PACT:
+
+    ACCEPT when 1) no war has occurred between sender and receiver
+	for 10 turns, 2) receiver trusts sender, 3) sender has no troops
+	on receivers territory, 3) we are at war and peace with the same nations.
+
+20.	TREATY_POLLUTION_PACT:
+
+    ACCEPT when 1) no war has occurred between sender and receiver for
+	10 turns, 2) receiver trusts sender, 3) sender has no troops on
+	our territory, 3) for Ecotopians, any proposal as long as sender
+	is producing no more than 5% of the pollution as receiver. For
+	diplomats, as long as sender is producing no more than 20% of the
+	pollution as receiver, and the proposal is not for more than 20%
+	reduction, and for everyone else, only if no more than 10%
+	reduction.
+
+21.	ACCEPT_TREATY_ALLIANCE:
+
+	Accept when 1) no war has occurred between sender and receiver for
+	25 turns, 2) sender trusts receiver a lot, 3) receiver has no
+	troops on our territory 4) no coldwar attacks have been made by
+	receiver for 15 rounds 5) we are at war and peace with the same
+	nations and 6) have very high regard for receiver (ie. lots of
+	gold and advances gifts).
+
+
+-------------------------------------------------------------------------------
+
+Threat Responses that can be triggered:
+
+1.  REQUEST_GIVE_CITY + threat THREAT_ATTACK_CITY:
+
+	'Reject' triggered when:
+
+	1) No declared war between sender and receiver.
+	2) Sender does not has overwhelming military superiority over receiver.
+
+	then, sender responds with RESPONSE_REJECT.
+
+	'CaveInTo' triggered when:
+
+	1) TBD. (always)
+
+	then, sender responds with RESPONSE_ACCEPT.
+
+TBD:  If AI (or human) wishes to break pact, then should ask for something unreasonable and then threaten to break agreement.
+
+TBD:  If human refuses to honor military agreement, or pollution agreement, then consider threatening to break agreement.
+
+

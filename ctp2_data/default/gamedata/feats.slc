@@ -1,0 +1,84 @@
+
+messagebox 'FeatGotConcrete' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_GOT_CONCRETE);
+}
+
+messagebox 'FeatGotGunPowder' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_GOT_GUNPOWDER);
+}
+
+messagebox 'FeatGotMassProduction' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_GOT_MASS_PRODUCTION);
+}
+
+messagebox 'FeatGotComputers' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_GOT_COMPUTER);
+}
+
+messagebox 'FeatGotRobotics' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_GOT_ROBOTICS);
+}
+
+messagebox 'FeatGotLifeExtension' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_GOT_LIFE_EXTENSION);
+}
+
+messagebox 'SailedAroundTheWorld' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_SAILED_AROUND_THE_WORLD);
+}
+
+messagebox 'FeatBuiltTheaters' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_BUILT_THEATERS);
+}
+
+messagebox 'FeatBuiltBrokerages' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_BUILT_BROKERAGES);
+}
+
+messagebox 'FeatBuiltInternet' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_BUILT_INTERNET);
+}
+
+messagebox 'FeatBuiltSyndicate' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_BUILT_SYNDICATE);
+}
+
+messagebox 'FeatBuiltOrbitalLabs' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_BUILT_ORBITAL_LABS);
+}
+
+messagebox 'FeatConqueredByForce' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_CONQUERED_BY_FORCE);
+}
+
+messagebox 'FeatRecapturedCity' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_RECAPTURED_CITY);
+}

@@ -1,0 +1,918 @@
+
+PROPOSAL_NONE {
+    Type "NONE"
+    Title DIP_NONE
+    Details0 { DetailsEven DIP_DETAILS_NONE_0 }
+    Details1 { DetailsEven DIP_DETAILS_NONE_1 }
+    Details2 { DetailsEven DIP_DETAILS_NONE_2 }
+    Details3 { DetailsEven DIP_DETAILS_NONE_3 }
+    Details4 { DetailsEven DIP_DETAILS_NONE_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_NONE_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_NONE_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_NONE_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_NONE_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_NONE_EX_4 }
+    Image "updi01.tga"
+
+    Disabled
+}
+
+PROPOSAL_OFFER_GIVE_CITY {
+    Type "OFFER_GIVE_CITY"
+    Title DIP_OFFER_GIVE_CITY
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Reciprocal PROPOSAL_REQUEST_GIVE_CITY
+    Arg1:OwnCity
+    Details0 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_GIVE_CITY_EX_4 }
+    Image "updi01.tga"
+}
+
+PROPOSAL_REQUEST_GIVE_CITY {
+    Type "REQUEST_GIVE_CITY"
+    Title DIP_REQUEST_GIVE_CITY
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Reciprocal PROPOSAL_OFFER_GIVE_CITY
+    Arg1:HisCity
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_GIVE_CITY_EX_4 }
+    Image "updi01.tga"
+}
+
+PROPOSAL_OFFER_WITHDRAW_TROOPS {
+    Type "OFFER_WITHDRAW_TROOPS"
+    Title DIP_OFFER_WITHDRAW_TROOPS
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Reciprocal PROPOSAL_REQUEST_WITHDRAW_TROOPS
+    Details0 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_WITHDRAW_TROOPS_EX_4 }
+    Image "updi01.tga"
+
+    NoHotwar	
+}
+
+PROPOSAL_REQUEST_WITHDRAW_TROOPS {
+    Type "REQUEST_WITHDRAW_TROOPS"
+    Title DIP_REQUEST_WITHDRAW_TROOPS
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Reciprocal PROPOSAL_OFFER_WITHDRAW_TROOPS
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_4 }
+    Image "updi47.tga"
+
+    # Proposal slot, show when foreigners have agreed to withdraw troops
+    ImageSlot 0
+
+    NoHotwar
+}
+
+PROPOSAL_OFFER_STOP_PIRACY {
+    Type "OFFER_STOP_PIRACY"
+    Title DIP_OFFER_STOP_PIRACY
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Reciprocal PROPOSAL_REQUEST_STOP_PIRACY
+    Details0 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_STOP_PIRACY_EX_4 }
+    Image "updi01.tga"
+
+    IsPirating
+}
+
+PROPOSAL_REQUEST_STOP_PIRACY {
+    Type "REQUEST_STOP_PIRACY"
+    Title DIP_REQUEST_STOP_PIRACY
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Reciprocal PROPOSAL_OFFER_STOP_PIRACY
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_STOP_PIRACY_EX_4 }
+    Image "updi46.tga"
+
+    # Proposal slot, show when foreigners have agreed to stop piracy
+    ImageSlot 1
+
+    IsPirating
+}
+
+PROPOSAL_OFFER_BREAK_AGREEMENT {
+    Type "OFFER_BREAK_AGREEMENT"
+    Title DIP_OFFER_BREAK_AGREEMENT
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Reciprocal PROPOSAL_REQUEST_BREAK_AGREEMENT
+    Arg1:ThirdParty
+    Details0 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_BREAK_AGREEMENT_EX_4 }
+    Image "updi01.tga"
+    Disabled
+}
+
+PROPOSAL_REQUEST_BREAK_AGREEMENT {
+    Type "REQUEST_BREAK_AGREEMENT"
+    Title DIP_REQUEST_BREAK_AGREEMENT
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Reciprocal PROPOSAL_OFFER_BREAK_AGREEMENT
+    Arg1:ThirdParty
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_4 }
+    Image "updi01.tga"
+    Disabled
+}
+
+PROPOSAL_OFFER_STOP_RESEARCH {
+    Type "OFFER_STOP_RESEARCH"
+    Title DIP_OFFER_STOP_RESEARCH
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Arg1:OwnStopResearch
+    Reciprocal PROPOSAL_REQUEST_STOP_RESEARCH
+    Details0 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_STOP_RESEARCH_EX_4 }
+    Image "updi01.tga"
+
+    HasEmbassy
+}
+
+PROPOSAL_REQUEST_STOP_RESEARCH {
+    Type "REQUEST_STOP_RESEARCH"
+    Title DIP_REQUEST_STOP_RESEARCH
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Arg1:HisStopResearch
+    Reciprocal PROPOSAL_OFFER_STOP_RESEARCH
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_4 }
+    Image "updi45.tga"
+
+    # Proposal slot, show when foreigners have agreed to stop research
+    ImageSlot 2
+
+    HasEmbassy
+}
+
+PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS {
+    Type "OFFER_REDUCE_NUCLEAR_WEAPONS"
+    Title DIP_OFFER_REDUCE_NUCLEAR_WEAPONS
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Arg1:Percent
+    Reciprocal PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS
+    Details0 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_EX_4 }
+    Image "updi01.tga"
+
+    HasNuclearWeapons
+}
+
+PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS {
+    Type "REQUEST_REDUCE_NUCLEAR_WEAPONS"
+    Title DIP_REQUEST_REDUCE_NUCLEAR_WEAPONS
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Arg1:Percent
+    Reciprocal PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_4 }
+    Image "updi01.tga"
+
+    HasNuclearWeapons
+}
+
+PROPOSAL_OFFER_REDUCE_BIO_WEAPONS {
+    Type "OFFER_REDUCE_BIO_WEAPONS"
+    Title DIP_OFFER_REDUCE_BIO_WEAPONS
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Arg1:Percent
+    Reciprocal PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS
+    Details0 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_EX_4 }
+    Image "updi01.tga"
+
+    HasBioWeapons
+}
+
+PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS {
+    Type "REQUEST_REDUCE_BIO_WEAPONS"
+    Title DIP_REQUEST_REDUCE_BIO_WEAPONS
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Arg1:Percent
+    Reciprocal PROPOSAL_OFFER_REDUCE_BIO_WEAPONS
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_4 }
+    Image "updi01.tga"
+
+    HasBioWeapons
+}
+
+PROPOSAL_OFFER_REDUCE_NANO_WEAPONS {
+    Type "OFFER_REDUCE_NANO_WEAPONS"
+    Title DIP_OFFER_REDUCE_NANO_WEAPONS
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Arg1:Percent
+    Reciprocal PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS
+    Details0 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_EX_4 }
+    Image "updi01.tga"
+
+    HasNanoWeapons
+}
+
+PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS {
+    Type "REQUEST_REDUCE_NANO_WEAPONS"
+    Title DIP_REQUEST_REDUCE_NANO_WEAPONS
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Arg1:Percent
+    Reciprocal PROPOSAL_OFFER_REDUCE_NANO_WEAPONS
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_4 }
+    Image "updi01.tga"
+
+    HasNanoWeapons
+}
+
+PROPOSAL_OFFER_GIVE_ADVANCE {
+    Type "OFFER_GIVE_ADVANCE"
+    Title DIP_OFFER_GIVE_ADVANCE
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Reciprocal PROPOSAL_REQUEST_GIVE_ADVANCE
+    Arg1:OwnAdvance
+    Details0 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_4 }
+    Image "updi01.tga"
+
+    HasEmbassy
+}
+
+PROPOSAL_REQUEST_GIVE_ADVANCE {
+    Type "REQUEST_GIVE_ADVANCE"
+    Title DIP_REQUEST_GIVE_ADVANCE
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Reciprocal PROPOSAL_OFFER_GIVE_ADVANCE
+    Arg1:HisAdvance
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_4 }
+    Image "updi01.tga"
+
+    HasEmbassy
+}
+
+PROPOSAL_OFFER_GIVE_GOLD {
+    Type "OFFER_GIVE_GOLD"
+    Title DIP_OFFER_GIVE_GOLD
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Reciprocal PROPOSAL_REQUEST_GIVE_GOLD
+    Arg1:OwnGold
+    Details0 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_GIVE_GOLD_EX_4 }
+    Image "updi01.tga"
+}
+
+PROPOSAL_REQUEST_GIVE_GOLD {
+    Type "REQUEST_GIVE_GOLD"
+    Title DIP_REQUEST_GIVE_GOLD
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Reciprocal PROPOSAL_OFFER_GIVE_GOLD
+    Arg1:HisGold
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_GIVE_GOLD_EX_4 }
+    Image "updi01.tga"
+}
+
+PROPOSAL_OFFER_REDUCE_POLLUTION {
+    Type "OFFER_REDUCE_POLLUTION"
+    Title DIP_OFFER_REDUCE_POLLUTION
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Arg1:OwnPollution
+    Reciprocal PROPOSAL_REQUEST_REDUCE_POLLUTION
+    Details0 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_REDUCE_POLLUTION_EX_4 }
+    Image "updi01.tga"
+    HasPollution
+    NoHotwar	
+
+}
+
+PROPOSAL_REQUEST_REDUCE_POLLUTION {
+    Type "REQUEST_REDUCE_POLLUTION"
+    Title DIP_REQUEST_REDUCE_POLLUTION
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Arg1:HisPollution
+    Reciprocal PROPOSAL_OFFER_REDUCE_POLLUTION
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_4 }
+    Image "updi44.tga"
+
+    # Proposal slot, show when foreigners have agreed to reduce pollution
+    ImageSlot 3
+
+    HasPollution
+    NoHotwar	
+}
+
+PROPOSAL_OFFER_MAP {
+    Type "OFFER_MAP"
+    Title DIP_OFFER_MAP
+    Category:Gift
+    Class:Offer
+    Excludes:Offer
+    Reciprocal PROPOSAL_REQUEST_MAP
+    Details0 { DetailsEven DIP_DETAILS_OFFER_MAP_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_MAP_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_MAP_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_MAP_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_MAP_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_MAP_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_MAP_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_MAP_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_MAP_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_MAP_EX_4 }
+    Image "updi01.tga"
+}
+
+PROPOSAL_REQUEST_MAP {
+    Type "REQUEST_MAP"
+    Title DIP_REQUEST_MAP
+    Category:Request
+    Class:Request
+    Excludes:Request
+    Reciprocal PROPOSAL_OFFER_MAP
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_MAP_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_MAP_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_MAP_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_MAP_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_MAP_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_MAP_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_MAP_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_MAP_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_MAP_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_MAP_EX_4 }
+    Image "updi01.tga"
+}
+
+PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT {
+    Type "OFFER_HONOR_MILITARY_AGREEMENT"
+    Title DIP_OFFER_HONOR_MILITARY_AGREEMENT
+    Category:Gift
+    Class:Offer
+    Arg1:ThirdParty
+    Reciprocal PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT
+    Details0 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_EX_4 }
+    Image "updi01.tga"
+
+    HasPeaceTreaty
+    HasEmbassy
+    HasMilitaryAgreement
+}
+
+PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT {
+    Type "REQUEST_HONOR_MILITARY_AGREEMENT"
+    Title DIP_REQUEST_HONOR_MILITARY_AGREEMENT
+    Category:Request
+    Class:Request
+    Arg1:ThirdParty
+    Reciprocal PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_4 }
+    Image "updi01.tga"
+
+    HasPeaceTreaty
+    HasEmbassy
+    HasMilitaryAgreement
+}
+
+PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT {
+    Type "OFFER_HONOR_POLLUTION_AGREEMENT"
+    Title DIP_OFFER_HONOR_POLLUTION_AGREEMENT
+    Category:Gift
+    Class:Offer
+    Arg1:OwnPollution
+    Reciprocal PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT
+    Details0 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_4 }
+    Image "updi08.tga"
+
+    HasPeaceTreaty
+    HasEmbassy
+    HasPollutionAgreement
+}
+
+PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT {
+    Type "REQUEST_HONOR_POLLUTION_AGREEMENT"
+    Title DIP_REQUEST_HONOR_POLLUTION_AGREEMENT
+    Category:Request
+    Class:Request
+    Arg1:HisPollution
+    Reciprocal PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_4 }
+    Image "updi08.tga"
+
+    HasPeaceTreaty
+    HasEmbassy
+    HasPollutionAgreement
+}
+
+PROPOSAL_OFFER_END_EMBARGO {
+    Type "OFFER_END_EMBARGO"
+    Title DIP_OFFER_END_EMBARGO
+    Category:Gift
+    Class:Offer
+    Reciprocal PROPOSAL_REQUEST_END_EMBARGO
+    Details0 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_0 }
+    Details1 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_1 }
+    Details2 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_2 }
+    Details3 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_3 }
+    Details4 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_OFFER_END_EMBARGO_EX_4 }
+    Image "updi01.tga"
+
+    NoHotwar
+    HasEmbargo
+}
+
+PROPOSAL_REQUEST_END_EMBARGO {
+    Type "REQUEST_END_EMBARGO"
+    Title DIP_REQUEST_END_EMBARGO
+    Category:Request
+    Class:Request
+    Reciprocal PROPOSAL_OFFER_END_EMBARGO
+    Details0 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_0 }
+    Details1 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_1 }
+    Details2 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_2 }
+    Details3 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_3 }
+    Details4 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_REQUEST_END_EMBARGO_EX_4 }
+    Image "updi48.tga"
+
+    # Note: Special case; this is the image and slot used when foreigner has 
+    # an embargo against us.
+    ImageSlot 5
+
+    NoHotwar
+    HasEmbargo
+}
+
+PROPOSAL_TREATY_DECLARE_WAR {
+    Type "TREATY_DECLARE_WAR"
+    Title DIP_TREATY_DECLARE_WAR
+    Category:Treaty
+    Class:Treaty
+    Arg1:ThirdParty
+    Details0 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_0 }
+    Details1 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_1 }
+    Details2 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_2 }
+    Details3 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_3 }
+    Details4 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_TREATY_DECLARE_WAR_EX_4 }
+    Image "updi02.tga"
+
+    # Proposal slot, show when at war with foreigner
+    ImageSlot 4
+
+    // do not show in lists (use button instead)
+    Disabled
+}
+
+PROPOSAL_TREATY_CEASEFIRE {
+    Type "TREATY_CEASEFIRE"
+    Title DIP_TREATY_CEASEFIRE
+    Category:Treaty
+    Class:Treaty
+    Details0 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_0 }
+    Details1 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_1 }
+    Details2 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_2 }
+    Details3 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_3 }
+    Details4 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_TREATY_CEASEFIRE_EX_4 }
+    Image "updi03.tga"
+
+    # Proposal slot, show when at ceasefire with foreigner
+    ImageSlot 4
+
+    # must be at war
+    HasHotwar
+}
+
+PROPOSAL_TREATY_PEACE {
+    Type "TREATY_PEACE"
+    Title DIP_TREATY_PEACE
+    Category:Treaty
+    Class:Treaty
+    Details0 { DetailsEven DIP_DETAILS_TREATY_PEACE_0 }
+    Details1 { DetailsEven DIP_DETAILS_TREATY_PEACE_1 }
+    Details2 { DetailsEven DIP_DETAILS_TREATY_PEACE_2 }
+    Details3 { DetailsEven DIP_DETAILS_TREATY_PEACE_3 }
+    Details4 { DetailsEven DIP_DETAILS_TREATY_PEACE_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_TREATY_PEACE_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_TREATY_PEACE_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_TREATY_PEACE_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_TREATY_PEACE_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_TREATY_PEACE_EX_4 }
+    Image "updi04.tga"
+
+    # Proposal slot, show when at peace with foreigner
+    ImageSlot 4
+
+    # need cease fire first
+    NoHotwar
+
+    # if set, then a violation reduces trust of all players
+    TrustViolationGlobal
+}
+
+PROPOSAL_TREATY_TRADE_PACT {
+    Type "TREATY_TRADE_PACT"
+    Title DIP_TREATY_TRADE_PACT
+    Category:Treaty
+    Class:Treaty
+    Details0 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_0 }
+    Details1 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_1 }
+    Details2 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_2 }
+    Details3 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_3 }
+    Details4 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_TREATY_TRADE_PACT_EX_4 }
+    Image "updi05.tga"
+
+    # Proposal slot, show when trade pact exists with foreigner
+    ImageSlot 5
+
+    # must have a peace treaty first
+    HasPeaceTreaty
+    HasEmbassy
+}
+
+PROPOSAL_TREATY_RESEARCH_PACT {
+    Type "TREATY_RESEARCH_PACT"
+    Title DIP_TREATY_RESEARCH_PACT
+    Category:Treaty
+    Class:Treaty
+    Details0 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_0 }
+    Details1 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_1 }
+    Details2 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_2 }
+    Details3 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_3 }
+    Details4 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_TREATY_RESEARCH_PACT_EX_4 }
+    Image "updi06.tga"
+
+    # Proposal slot, show when research pact exists with foreigner
+    ImageSlot 6
+
+    # must have a peace treaty first
+    HasPeaceTreaty
+    HasEmbassy
+}
+
+PROPOSAL_TREATY_MILITARY_PACT {
+    Type "TREATY_MILITARY_PACT"
+    Title DIP_TREATY_MILITARY_PACT
+    Category:Treaty
+    Class:Treaty
+    Details0 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_0 }
+    Details1 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_1 }
+    Details2 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_2 }
+    Details3 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_3 }
+    Details4 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_TREATY_MILITARY_PACT_EX_4 }
+    Image "updi07.tga"
+
+    # Proposal slot, show when research pact exists with foreigner
+    ImageSlot 8
+
+    # must have a peace treaty first
+    HasPeaceTreaty
+    HasEmbassy
+
+    # if set, then a violation reduces trust of all players
+    TrustViolationGlobal
+}
+
+PROPOSAL_TREATY_POLLUTION_PACT {
+    Type "TREATY_POLLUTION_PACT"
+    Title DIP_TREATY_POLLUTION_PACT
+    Category:Treaty
+    Class:Treaty
+    Arg1:OwnPollution
+    Details0 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_0 }
+    Details1 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_1 }
+    Details2 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_2 }
+    Details3 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_3 }
+    Details4 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_TREATY_POLLUTION_PACT_EX_4 }
+    Image "updi08.tga"
+
+    # Proposal slot, show when research pact exists with foreigner
+    ImageSlot 7
+
+    # must have a peace treaty first
+    HasPeaceTreaty
+    HasEmbassy
+    HasPollution
+}
+
+PROPOSAL_TREATY_ALLIANCE {
+    Type "TREATY_ALLIANCE"
+    Title DIP_TREATY_ALLIANCE
+    Category:Treaty
+    Class:Treaty
+    Details0 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_0 }
+    Details1 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_1 }
+    Details2 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_2 }
+    Details3 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_3 }
+    Details4 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_4 }
+    DetailsEx0 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_EX_0 }
+    DetailsEx1 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_EX_1 }
+    DetailsEx2 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_EX_2 }
+    DetailsEx3 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_EX_3 }
+    DetailsEx4 { DetailsEven DIP_DETAILS_TREATY_ALLIANCE_EX_4 }
+    Image "updi09.tga"
+
+    # Proposal slot, show when research pact exists with foreigner
+    ImageSlot 8
+
+    # must have a peace treaty first
+    HasPeaceTreaty
+    HasEmbassy
+
+    # if set, then a violation reduces trust of all players
+    TrustViolationGlobal
+}
+

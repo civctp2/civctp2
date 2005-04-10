@@ -1,0 +1,891 @@
+## there must be 6 difficulty settings
+
+## Beginner
+{
+BASE_CONTENTMENT		75	# starting happiness
+GRANARY_COEF			10	# a city needs this number times the pop food to grow
+
+BIG_CITY_SCALE			1.0	# how much each unhappy person matters
+BIG_CITY_OFFSET			6	# population above this size are unhappy
+
+SCIENCE_HANDICAP		20	# How much extra science to get advances
+#UV_MULTIPLIER			1.0	# how much extra pollution
+POLLUTION_MULTIPLIER		1.0	# how much extra pollution
+RIOT_CHANCE			10.0	# chance of rioting for each happiness point below const->RIOT_LEVEL
+STARVATION_EFFECT		-1.0	# How much happiness a city loses when starving
+STARTING_GOLD			100	# How much gold the player starts with
+SUPER_STEALTH_FUN_FACTOR	0	# I can see for miles & miles
+BASE_SCORE			3600	# base score from which to generate the civ score
+
+TIME_SCALE{
+	START_YEAR	-4000
+	NUM_PERIODS	5
+	PERIOD {
+		START_TURN	0
+		YEARS_PER_TURN	20
+	}
+	PERIOD {
+		START_TURN	150
+		YEARS_PER_TURN	10
+	}
+	PERIOD {
+		START_TURN	340
+		YEARS_PER_TURN	5
+	}
+	PERIOD {
+		START_TURN	500
+		YEARS_PER_TURN	2
+	}
+	PERIOD {
+		START_TURN	600
+		YEARS_PER_TURN	1
+	}
+	NEGATIVE_YEAR_FORMAT BC_YEAR_FORMAT
+	POSITIVE_YEAR_FORMAT AD_YEAR_FORMAT
+}
+
+FEATS_FACTOR			100.0
+ADVANCES_FACTOR			10.0
+WONDERS_FACTOR			500.0
+CITIES0TO30_FACTOR		10.0
+CITIES30TO100_FACTOR		25.0
+CITIES100TO500_FACTOR		50.0
+CITIES500PLUS_FACTOR		100.0
+CITIES_RECAPTURED_FACTOR	50.0
+POPULATION_FACTOR		2000.0
+RANK_FACTOR			2000.0
+OPPONENTS_CONQUERED_FACTOR 	500.0
+ALLIES_FACTOR			300.0
+WONDER_VICTORY_BONUS		500.0
+SOLO_VICTORY_BONUS		5000.0
+ALLIED_VICTORY_BONUS		5000.0
+
+AI_START_UNITS		0
+AI_START_GOLD		300
+AI_START_ADVANCES	3
+AI_START_PUBLIC_WORKS	0
+HUMAN_START_LOCATION	0
+
+AI_INTELLIGENCE_FACTOR			1
+AI_GANG_UP_FACTOR			1
+DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+AI_DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+POLLUTION_ADJUST			0
+
+# Resource Adjustment Amounts
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use AI_MIN_BEHIND_TECHNOLOGY_* numbers
+AI_MIN_BEHIND_PERCENT 0.7
+
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use ai_max_behind* numbers
+AI_MAX_BEHIND_PERCENT 0.4
+
+# when ai is ranked by atleast this amount above highest ranked human,
+# then use ai_min_ahead* numbers
+AI_MIN_AHEAD_PERCENT  0.9
+
+# when ai is ranked by this amount or more above highest ranked human,
+# then use ai_max_ahead* numbers
+AI_MAX_AHEAD_PERCENT  1.5
+
+# note: scale values linearly between max-min when amount 
+# behind/ahead are between min-max
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_BEHIND_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_TECHNOLOGY_COST	0.7 0.7 0.8 0.8 0.9
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_BEHIND_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_PRODUCTION_COST_ADJUSTMENT	0.7 0.7 0.8 0.8 0.9
+
+# multiplier for gold collected for ai
+AI_MIN_BEHIND_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_GOLD_ADJUSTMENT	1.2 1.2 1.2 1.1 1.1 
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_AHEAD_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_TECHNOLOGY_COST	1.3 1.3 1.2 1.2 1.1
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0  1.0  1.0
+AI_MAX_AHEAD_PRODUCTION_COST_ADJUSTMENT	2.0 2.0 1.75 1.75 1.5
+
+# multiplier for gold collected fo ai
+AI_MIN_AHEAD_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_GOLD_ADJUSTMENT	0.5 0.5 0.7 0.7 0.9 
+
+MAX_HUMAN_ADVANCES		6
+MAX_AI_ADVANCES			2
+HUMAN_SCIENCE_BONUS		-0.4	# % amount to add to advance cost for the player
+HUMAN_FOOD_BONUS		0.4	# % amount to add to food collected for the player
+
+#Starting Condtions
+EXTRA_SETTLER_CHANCE		1000000
+ADVANCE_CHANCES {
+	ADVANCE_TOOLMAKING		100	100
+	ADVANCE_AGRICULTURE		90	99
+	ADVANCE_RELIGION		80	50
+	ADVANCE_BRONZE_WORKING	80	99
+	ADVANCE_BALLISTICS		80	50
+	ADVANCE_STONE_WORKING	80	99
+	ADVANCE_SHIP_BUILDING	80	50
+	ADVANCE_WRITING			50	5
+	ADVANCE_JURISPRUDENCE	25	5
+	ADVANCE_IRON_WORKING	5	5
+	ADVANCE_GEOMETRY		5	5
+	ADVANCE_SLAVE_LABOR		5	50
+	}
+
+POLLUTION_START_PRODUCTION_LEVEL	300
+POLLUTION_START_POPULATION_LEVEL	16
+POLLUTION_PRODUCTION_RATIO		1
+POLLUTION_POPULATION_RATIO		15
+}
+
+
+# Easy
+
+{
+BASE_CONTENTMENT		75	# starting happiness
+GRANARY_COEF			10	# a city needs this number times the pop food to grow
+
+BIG_CITY_SCALE			1.0	# how much each unhappy person matters
+BIG_CITY_OFFSET			5	# population above this size are unhappy
+
+SCIENCE_HANDICAP		25	# How much extra science to get advances
+#UV_MULTIPLIER			1.0	# how much extra pollution
+POLLUTION_MULTIPLIER		1.0	# how much extra pollution
+RIOT_CHANCE			10.0	# chance of rioting for each happiness point below const->RIOT_LEVEL
+STARVATION_EFFECT		-1.0	# How much happiness a city loses when starving
+STARTING_GOLD			100	# How much gold the player starts with
+SUPER_STEALTH_FUN_FACTOR	0	# I can see for miles & miles
+BASE_SCORE			3800	# base score from which to generate the civ score
+
+TIME_SCALE{
+	START_YEAR	-4000
+	NUM_PERIODS	5
+	PERIOD {
+		START_TURN	0
+		YEARS_PER_TURN	20
+	}
+	PERIOD {
+		START_TURN	150
+		YEARS_PER_TURN	10
+	}
+	PERIOD {
+		START_TURN	340
+		YEARS_PER_TURN	5
+	}
+	PERIOD {
+		START_TURN	500
+		YEARS_PER_TURN	2
+	}
+	PERIOD {
+		START_TURN	600
+		YEARS_PER_TURN	1
+	}
+	NEGATIVE_YEAR_FORMAT BC_YEAR_FORMAT
+	POSITIVE_YEAR_FORMAT AD_YEAR_FORMAT
+}
+
+FEATS_FACTOR			100.0
+ADVANCES_FACTOR			10.0
+WONDERS_FACTOR			500.0
+CITIES0TO30_FACTOR		10.0
+CITIES30TO100_FACTOR		25.0
+CITIES100TO500_FACTOR		50.0
+CITIES500PLUS_FACTOR		100.0
+CITIES_RECAPTURED_FACTOR	50.0
+POPULATION_FACTOR		2000.0
+RANK_FACTOR			2000.0
+OPPONENTS_CONQUERED_FACTOR 	500.0
+ALLIES_FACTOR			300.0
+WONDER_VICTORY_BONUS		500.0
+SOLO_VICTORY_BONUS		5000.0
+ALLIED_VICTORY_BONUS		5000.0
+
+AI_START_UNITS		1
+AI_START_GOLD		200
+AI_START_ADVANCES	2
+AI_START_PUBLIC_WORKS	0
+HUMAN_START_LOCATION	0
+
+AI_INTELLIGENCE_FACTOR			1
+AI_GANG_UP_FACTOR			1
+DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+AI_DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+POLLUTION_ADJUST			0
+
+# Resource Adjustment Amounts
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use AI_MIN_BEHIND_TECHNOLOGY_* numbers
+AI_MIN_BEHIND_PERCENT 0.8
+
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use ai_max_behind* numbers
+AI_MAX_BEHIND_PERCENT 0.5
+
+# when ai is ranked by atleast this amount above highest ranked human,
+# then use ai_min_ahead* numbers
+AI_MIN_AHEAD_PERCENT  0.9
+
+# when ai is ranked by this amount or more above highest ranked human,
+# then use ai_max_ahead* numbers
+AI_MAX_AHEAD_PERCENT  1.5
+
+# note: scale values linearly between max-min when amount 
+# behind/ahead are between min-max
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_BEHIND_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_TECHNOLOGY_COST	0.7 0.7 0.8 0.8 0.9
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_BEHIND_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_PRODUCTION_COST_ADJUSTMENT	0.6 0.6 0.8 0.8 0.9
+
+# multiplier for gold collected for ai
+AI_MIN_BEHIND_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_GOLD_ADJUSTMENT	1.3 1.3 1.2 1.2 1.1 
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_AHEAD_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_TECHNOLOGY_COST	1.3 1.3 1.2 1.2 1.1
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.0  1.0  1.0 1.0 1.0
+AI_MAX_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.75 1.75 1.5 1.5 1.25
+
+# multiplier for gold collected fo ai
+AI_MIN_AHEAD_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_GOLD_ADJUSTMENT	0.6 0.6 0.8 0.8 0.9 
+
+MAX_HUMAN_ADVANCES		6
+MAX_AI_ADVANCES			3
+HUMAN_SCIENCE_BONUS		-0.2	# % amount to add to advance cost for the player
+HUMAN_FOOD_BONUS		0.2	# % amount to add to food collected for the player
+
+#Starting Condtions
+EXTRA_SETTLER_CHANCE		1000000
+ADVANCE_CHANCES {
+	ADVANCE_TOOLMAKING		100	100
+	ADVANCE_AGRICULTURE		90	99
+	ADVANCE_RELIGION		80	80
+	ADVANCE_BRONZE_WORKING	80	80
+	ADVANCE_STONE_WORKING	50	99
+	ADVANCE_SHIP_BUILDING	50	50
+	ADVANCE_BALLISTICS		50	50
+	ADVANCE_WRITING			50	5
+	ADVANCE_JURISPRUDENCE	25	5
+	ADVANCE_GEOMETRY		5	5
+	ADVANCE_IRON_WORKING	5	5
+	ADVANCE_SLAVE_LABOR		5	50
+	}
+
+POLLUTION_START_PRODUCTION_LEVEL	300
+POLLUTION_START_POPULATION_LEVEL	16
+POLLUTION_PRODUCTION_RATIO		1
+POLLUTION_POPULATION_RATIO		15
+}
+
+
+# Medium
+
+{
+BASE_CONTENTMENT		75	# starting happiness
+GRANARY_COEF			10	# a city needs this number times the pop food to grow
+
+BIG_CITY_SCALE			1.0	# how much each unhappy person matters
+BIG_CITY_OFFSET			5	# population above this size are unhappy
+
+SCIENCE_HANDICAP		25	# How much extra science to get advances
+#UV_MULTIPLIER			1.0	# how much extra pollution
+POLLUTION_MULTIPLIER		1.0	# how much extra pollution
+RIOT_CHANCE			10.0	# chance of rioting for each happiness point below const->RIOT_LEVEL
+STARVATION_EFFECT		-1.0	# How much happiness a city loses when starving
+STARTING_GOLD			100     # How much gold the player starts with
+SUPER_STEALTH_FUN_FACTOR	0	# I can see for miles & miles
+BASE_SCORE			4000	# base score from which to generate the civ score
+
+TIME_SCALE{
+	START_YEAR	-4000
+	NUM_PERIODS	6
+	PERIOD {
+		START_TURN	0
+		YEARS_PER_TURN	25
+	}
+	PERIOD {
+		START_TURN	80
+		YEARS_PER_TURN	20
+	}
+	PERIOD {
+		START_TURN	180
+		YEARS_PER_TURN	10
+	}
+	PERIOD {
+		START_TURN	300
+		YEARS_PER_TURN	5
+	}
+	PERIOD {
+		START_TURN	400
+		YEARS_PER_TURN	2
+	}
+	PERIOD {
+		START_TURN	500
+		YEARS_PER_TURN	1
+	}
+	NEGATIVE_YEAR_FORMAT BC_YEAR_FORMAT
+	POSITIVE_YEAR_FORMAT AD_YEAR_FORMAT
+}
+
+FEATS_FACTOR			100.0
+ADVANCES_FACTOR			10.0
+WONDERS_FACTOR			500.0
+CITIES0TO30_FACTOR		10.0
+CITIES30TO100_FACTOR		25.0
+CITIES100TO500_FACTOR		50.0
+CITIES500PLUS_FACTOR		100.0
+CITIES_RECAPTURED_FACTOR	50.0
+POPULATION_FACTOR		2000.0
+RANK_FACTOR			2000.0
+OPPONENTS_CONQUERED_FACTOR 	500.0
+ALLIES_FACTOR			300.0
+WONDER_VICTORY_BONUS		500.0
+SOLO_VICTORY_BONUS		5000.0
+ALLIED_VICTORY_BONUS		5000.0
+
+AI_START_UNITS		1
+AI_START_GOLD		500
+AI_START_ADVANCES	3
+AI_START_PUBLIC_WORKS	0
+HUMAN_START_LOCATION	0
+
+AI_INTELLIGENCE_FACTOR			1
+AI_GANG_UP_FACTOR			1
+DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+AI_DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+POLLUTION_ADJUST			0
+
+# Resource Adjustment Amounts
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use AI_MIN_BEHIND_TECHNOLOGY_* numbers
+AI_MIN_BEHIND_PERCENT 1.0
+
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use ai_max_behind* numbers
+AI_MAX_BEHIND_PERCENT 0.6
+
+# when ai is ranked by atleast this amount above highest ranked human,
+# then use ai_min_ahead* numbers
+AI_MIN_AHEAD_PERCENT  1.25
+
+# when ai is ranked by this amount or more above highest ranked human,
+# then use ai_max_ahead* numbers
+AI_MAX_AHEAD_PERCENT  1.75
+
+# note: scale values linearly between max-min when amount 
+# behind/ahead are between min-max
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_BEHIND_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_TECHNOLOGY_COST	0.5 0.5 0.7 0.7 0.9
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_BEHIND_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_PRODUCTION_COST_ADJUSTMENT	0.5 0.5 0.7 0.7 0.9
+
+# multiplier for gold collected for ai
+AI_MIN_BEHIND_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_GOLD_ADJUSTMENT	1.3 1.3 1.2 1.2 1.1 
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_AHEAD_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_TECHNOLOGY_COST	1.3 1.3 1.2 1.2 1.1
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.5 1.5 1.3 1.3 1.1
+
+# multiplier for gold collected fo ai
+AI_MIN_AHEAD_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_GOLD_ADJUSTMENT	0.7 0.7 0.8 0.8 0.9 
+
+MAX_HUMAN_ADVANCES		4
+MAX_AI_ADVANCES			4
+HUMAN_SCIENCE_BONUS		0.0	# % amount to add to advance cost for the player
+HUMAN_FOOD_BONUS		0.0	# % amount to add to food collected for the player
+
+#Starting Condtions
+EXTRA_SETTLER_CHANCE		2500
+ADVANCE_CHANCES {
+	ADVANCE_TOOLMAKING		100	100
+	ADVANCE_AGRICULTURE		90	99
+	ADVANCE_RELIGION		80	80
+	ADVANCE_BRONZE_WORKING	80	80
+	ADVANCE_BALLISTICS		50	80
+	ADVANCE_STONE_WORKING	50	50
+	ADVANCE_SHIP_BUILDING	50	50
+	ADVANCE_WRITING			50	5
+	ADVANCE_JURISPRUDENCE	25	5
+	ADVANCE_IRON_WORKING	5	5
+	ADVANCE_GEOMETRY		5	5
+	ADVANCE_SLAVE_LABOR		5	50
+	}
+
+POLLUTION_START_PRODUCTION_LEVEL	300
+POLLUTION_START_POPULATION_LEVEL	16
+POLLUTION_PRODUCTION_RATIO		1
+POLLUTION_POPULATION_RATIO		15
+}
+
+
+# Hard
+
+{
+BASE_CONTENTMENT		75	# starting happiness
+GRANARY_COEF			10	# a city needs this number times the pop food to grow
+
+BIG_CITY_SCALE			1.0	# how much each unhappy person matters
+BIG_CITY_OFFSET			3	# population above this size are unhappy
+
+SCIENCE_HANDICAP		25	# How much extra science to get advances
+#UV_MULTIPLIER			1.0	# how much extra pollution
+POLLUTION_MULTIPLIER		1.0	# how much extra pollution
+RIOT_CHANCE			10.0	# chance of rioting for each happiness point below const->RIOT_LEVEL
+STARVATION_EFFECT		-1.0	# How much happiness a city loses when starving
+STARTING_GOLD			100	# How much gold the player starts with
+SUPER_STEALTH_FUN_FACTOR	0	# I can see for miles & miles
+BASE_SCORE			4200	# base score from which to generate the civ score
+
+TIME_SCALE{
+	START_YEAR	-4000
+	NUM_PERIODS	6
+	PERIOD {
+		START_TURN	0
+		YEARS_PER_TURN	25
+	}
+	PERIOD {
+		START_TURN	80
+		YEARS_PER_TURN	20
+	}
+	PERIOD {
+		START_TURN	180
+		YEARS_PER_TURN	10
+	}
+	PERIOD {
+		START_TURN	300
+		YEARS_PER_TURN	5
+	}
+	PERIOD {
+		START_TURN	400
+		YEARS_PER_TURN	2
+	}
+	PERIOD {
+		START_TURN	500
+		YEARS_PER_TURN	1
+	}
+	NEGATIVE_YEAR_FORMAT BC_YEAR_FORMAT
+	POSITIVE_YEAR_FORMAT AD_YEAR_FORMAT
+}
+
+FEATS_FACTOR			100.0
+ADVANCES_FACTOR			10.0
+WONDERS_FACTOR			500.0
+CITIES0TO30_FACTOR		10.0
+CITIES30TO100_FACTOR		25.0
+CITIES100TO500_FACTOR		50.0
+CITIES500PLUS_FACTOR		100.0
+CITIES_RECAPTURED_FACTOR	50.0
+POPULATION_FACTOR		2000.0
+RANK_FACTOR				2000.0
+OPPONENTS_CONQUERED_FACTOR 	500.0
+ALLIES_FACTOR			300.0
+WONDER_VICTORY_BONUS		500.0
+SOLO_VICTORY_BONUS		5000.0
+ALLIED_VICTORY_BONUS		5000.0
+
+AI_START_UNITS		1
+AI_START_GOLD		1000
+AI_START_ADVANCES	4
+AI_START_PUBLIC_WORKS	200
+HUMAN_START_LOCATION	0
+
+AI_INTELLIGENCE_FACTOR			1
+AI_GANG_UP_FACTOR			1
+DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+AI_DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+POLLUTION_ADJUST			0
+
+# Resource Adjustment Amounts
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use AI_MIN_BEHIND_TECHNOLOGY_* numbers
+AI_MIN_BEHIND_PERCENT 1.2
+
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use ai_max_behind* numbers
+AI_MAX_BEHIND_PERCENT 0.7
+
+# when ai is ranked by atleast this amount above highest ranked human,
+# then use ai_min_ahead* numbers
+AI_MIN_AHEAD_PERCENT  1.5
+
+# when ai is ranked by this amount or more above highest ranked human,
+# then use ai_max_ahead* numbers
+AI_MAX_AHEAD_PERCENT  2.0
+
+# note: scale values linearly between max-min when amount 
+# behind/ahead are between min-max
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_BEHIND_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_TECHNOLOGY_COST	0.4 0.5 0.6 0.7 0.8
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_BEHIND_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_PRODUCTION_COST_ADJUSTMENT	0.5 0.5 0.6 0.6 0.8
+
+# multiplier for gold collected for ai
+AI_MIN_BEHIND_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_GOLD_ADJUSTMENT	1.4 1.4 1.2 1.2 1.1 
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_AHEAD_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_TECHNOLOGY_COST	1.3 1.3 1.2 1.2 1.1
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.4 1.4 1.2 1.2 1.1
+
+# multiplier for gold collected fo ai
+AI_MIN_AHEAD_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_GOLD_ADJUSTMENT	0.7 0.8 0.8 0.9 0.9 
+
+MAX_HUMAN_ADVANCES		3
+MAX_AI_ADVANCES			4
+HUMAN_SCIENCE_BONUS		0.2	# % amount to add to advance cost for the player
+HUMAN_FOOD_BONUS		0.0	# % amount to add to food collected for the player
+
+#Starting Condtions
+EXTRA_SETTLER_CHANCE		1800
+ADVANCE_CHANCES {
+	ADVANCE_TOOLMAKING		100	100
+	ADVANCE_AGRICULTURE		90	99
+	ADVANCE_RELIGION		80	90
+	ADVANCE_BRONZE_WORKING	60	99
+	ADVANCE_BALLISTICS		60	90
+	ADVANCE_SHIP_BUILDING	40	90
+	ADVANCE_STONE_WORKING	40	50
+	ADVANCE_WRITING			30	5
+	ADVANCE_JURISPRUDENCE	10	5
+	ADVANCE_GEOMETRY		5	5
+	ADVANCE_IRON_WORKING	5	5
+	ADVANCE_SLAVE_LABOR		5	50
+	}
+
+POLLUTION_START_PRODUCTION_LEVEL	300
+POLLUTION_START_POPULATION_LEVEL	16
+POLLUTION_PRODUCTION_RATIO		1
+POLLUTION_POPULATION_RATIO		15
+}
+
+
+# Very Hard
+
+{
+BASE_CONTENTMENT		75	# starting happiness
+GRANARY_COEF			10	# a city needs this number times the pop food to grow
+
+BIG_CITY_SCALE			1.0	# how much each unhappy person matters
+BIG_CITY_OFFSET			2	# population above this size are unhappy
+
+SCIENCE_HANDICAP		25	# How much extra science to get advances
+#UV_MULTIPLIER			1.0	# how much extra pollution
+POLLUTION_MULTIPLIER		1.0	# how much extra pollution
+RIOT_CHANCE			10.0	# chance of rioting for each happiness point below const->RIOT_LEVEL
+STARVATION_EFFECT		-1.0	# How much happiness a city loses when starving
+STARTING_GOLD			100	# How much gold the player starts with
+SUPER_STEALTH_FUN_FACTOR	0	# I can see for miles & miles
+BASE_SCORE			4400	# base score from which to generate the civ score
+
+TIME_SCALE{
+	START_YEAR	-4000
+	NUM_PERIODS	6
+	PERIOD {
+		START_TURN	0
+		YEARS_PER_TURN	25
+	}
+	PERIOD {
+		START_TURN	160
+		YEARS_PER_TURN	20
+	}
+	PERIOD {
+		START_TURN	200
+		YEARS_PER_TURN	10
+	}
+	PERIOD {
+		START_TURN	250
+		YEARS_PER_TURN	5
+	}
+	PERIOD {
+		START_TURN	350
+		YEARS_PER_TURN	2
+	}
+	PERIOD {
+		START_TURN	400
+		YEARS_PER_TURN	1
+	}
+	NEGATIVE_YEAR_FORMAT BC_YEAR_FORMAT
+	POSITIVE_YEAR_FORMAT AD_YEAR_FORMAT
+}
+
+FEATS_FACTOR			100.0
+ADVANCES_FACTOR			10.0
+WONDERS_FACTOR			500.0
+CITIES0TO30_FACTOR		10.0
+CITIES30TO100_FACTOR		25.0
+CITIES100TO500_FACTOR		50.0
+CITIES500PLUS_FACTOR		100.0
+CITIES_RECAPTURED_FACTOR	50.0
+POPULATION_FACTOR		2000.0
+RANK_FACTOR				2000.0
+OPPONENTS_CONQUERED_FACTOR 	500.0
+ALLIES_FACTOR			300.0
+WONDER_VICTORY_BONUS		500.0
+SOLO_VICTORY_BONUS		5000.0
+ALLIED_VICTORY_BONUS		5000.0
+
+AI_START_UNITS				1
+AI_START_GOLD				2000
+AI_START_ADVANCES			6
+AI_START_PUBLIC_WORKS			200
+HUMAN_START_LOCATION			0
+AI_INTELLIGENCE_FACTOR			1
+AI_GANG_UP_FACTOR			1
+DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+AI_DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+POLLUTION_ADJUST			0
+
+# Resource Adjustment Amounts
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use AI_MIN_BEHIND_TECHNOLOGY_* numbers
+AI_MIN_BEHIND_PERCENT 1.5
+
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use ai_max_behind* numbers
+AI_MAX_BEHIND_PERCENT 0.7
+
+# when ai is ranked by atleast this amount above highest ranked human,
+# then use ai_min_ahead* numbers
+AI_MIN_AHEAD_PERCENT  1.8
+
+# when ai is ranked by this amount or more above highest ranked human,
+# then use ai_max_ahead* numbers
+AI_MAX_AHEAD_PERCENT  2.5
+
+# note: scale values linearly between max-min when amount 
+# behind/ahead are between min-max
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_BEHIND_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0 
+AI_MAX_BEHIND_TECHNOLOGY_COST	0.3 0.4 0.5 0.6 0.7
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_BEHIND_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_PRODUCTION_COST_ADJUSTMENT	0.4 0.4 0.5 0.5 0.7
+
+# multiplier for gold collected for ai
+AI_MIN_BEHIND_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0 
+AI_MAX_BEHIND_GOLD_ADJUSTMENT	1.4 1.4 1.3 1.3 1.1
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_AHEAD_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_TECHNOLOGY_COST	1.3 1.3 1.2 1.2 1.1
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.3 1.3 1.2 1.2 1.1
+
+# multiplier for gold collected fo ai
+AI_MIN_AHEAD_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_GOLD_ADJUSTMENT	0.8 0.8 0.8 0.9 0.9 
+
+MAX_HUMAN_ADVANCES		3
+MAX_AI_ADVANCES			6
+HUMAN_SCIENCE_BONUS		0.4		# % amount to add to advance cost for the player
+HUMAN_FOOD_BONUS		-0.2	# % amount to add to food collected for the player
+
+#Starting Condtions
+EXTRA_SETTLER_CHANCE		1500
+ADVANCE_CHANCES {
+	ADVANCE_TOOLMAKING		100	100
+	ADVANCE_AGRICULTURE		90	99
+	ADVANCE_RELIGION		80	90
+	ADVANCE_BRONZE_WORKING	50	99
+	ADVANCE_BALLISTICS		50	90
+	ADVANCE_STONE_WORKING	30	50
+	ADVANCE_SHIP_BUILDING	30	50
+	ADVANCE_WRITING			10	5
+	ADVANCE_JURISPRUDENCE	5	5
+	ADVANCE_IRON_WORKING	5	5
+	ADVANCE_GEOMETRY		5	5
+	ADVANCE_SLAVE_LABOR		5	50
+	}
+
+POLLUTION_START_PRODUCTION_LEVEL	300
+POLLUTION_START_POPULATION_LEVEL	16
+POLLUTION_PRODUCTION_RATIO		1
+POLLUTION_POPULATION_RATIO		15
+}
+
+
+# Impossible
+
+{
+BASE_CONTENTMENT		75	# starting happiness
+GRANARY_COEF			10	# a city needs this number times the pop food to grow
+
+BIG_CITY_SCALE			1.0	# how much each unhappy person matters
+BIG_CITY_OFFSET			1	# population above this size are unhappy
+
+SCIENCE_HANDICAP		25	# How much extra science to get advances
+#UV_MULTIPLIER			1.0	# how much extra pollution
+POLLUTION_MULTIPLIER		1.0	# how much extra pollution
+RIOT_CHANCE			10.0	# chance of rioting for each happiness point below const->RIOT_LEVEL
+STARVATION_EFFECT		-1.0	# How much happiness a city loses when starving
+STARTING_GOLD			100	# How much gold the player starts with
+SUPER_STEALTH_FUN_FACTOR	0	# I can see for miles & miles
+BASE_SCORE			4600	# base score from which to generate the civ score
+
+TIME_SCALE{
+	START_YEAR	-4000
+	NUM_PERIODS	6
+	PERIOD {
+		START_TURN	0
+		YEARS_PER_TURN	25
+	}
+	PERIOD {
+		START_TURN	160
+		YEARS_PER_TURN	20
+	}
+	PERIOD {
+		START_TURN	200
+		YEARS_PER_TURN	10
+	}
+	PERIOD {
+		START_TURN	250
+		YEARS_PER_TURN	5
+	}
+	PERIOD {
+		START_TURN	350
+		YEARS_PER_TURN	2
+	}
+	PERIOD {
+		START_TURN	400
+		YEARS_PER_TURN	1
+	}
+	NEGATIVE_YEAR_FORMAT BC_YEAR_FORMAT
+	POSITIVE_YEAR_FORMAT AD_YEAR_FORMAT
+
+}
+
+FEATS_FACTOR			100.0
+ADVANCES_FACTOR			10.0
+WONDERS_FACTOR			500.0
+CITIES0TO30_FACTOR		10.0
+CITIES30TO100_FACTOR		25.0
+CITIES100TO500_FACTOR		50.0
+CITIES500PLUS_FACTOR		100.0
+CITIES_RECAPTURED_FACTOR	50.0
+POPULATION_FACTOR		2000.0
+RANK_FACTOR			2000.0
+OPPONENTS_CONQUERED_FACTOR 	500.0
+ALLIES_FACTOR			300.0
+WONDER_VICTORY_BONUS		500.0
+SOLO_VICTORY_BONUS		5000.0
+ALLIED_VICTORY_BONUS		5000.0
+
+AI_START_UNITS		2
+AI_START_GOLD		8000
+AI_START_ADVANCES	8
+AI_START_PUBLIC_WORKS	500
+HUMAN_START_LOCATION	0
+
+AI_INTELLIGENCE_FACTOR			1
+AI_GANG_UP_FACTOR			1
+DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+AI_DISTANCE_FROM_CAPITOL_ADJUSTMENT	0
+POLLUTION_ADJUST			0
+
+# Resource Adjustment Amounts
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use AI_MIN_BEHIND_TECHNOLOGY_* numbers
+AI_MIN_BEHIND_PERCENT 1.8
+
+# when ai is ranked by this amount or less below lowest ranked human, 
+# then use ai_max_behind* numbers
+AI_MAX_BEHIND_PERCENT 0.8
+
+# when ai is ranked by atleast this amount above highest ranked human,
+# then use ai_min_ahead* numbers
+AI_MIN_AHEAD_PERCENT  2.0
+
+# when ai is ranked by this amount or more above highest ranked human,
+# then use ai_max_ahead* numbers
+AI_MAX_AHEAD_PERCENT  3.0
+
+# note: scale values linearly between max-min when amount 
+# behind/ahead are between min-max
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_BEHIND_TECHNOLOGY_COST	1.0  1.0 1.0  1.0 1.0
+AI_MAX_BEHIND_TECHNOLOGY_COST	0.25 0.3 0.35 0.4 0.5
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_BEHIND_PRODUCTION_COST_ADJUSTMENT	1.0 1.0  1.0 1.0  1.0
+AI_MAX_BEHIND_PRODUCTION_COST_ADJUSTMENT	0.2 0.25 0.3 0.35 0.4
+
+# multiplier for gold collected for ai
+AI_MIN_BEHIND_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_BEHIND_GOLD_ADJUSTMENT	1.5 1.5 1.3 1.3 1.1 
+
+# % amount to multiply advance cost by per age for ai
+AI_MIN_AHEAD_TECHNOLOGY_COST	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_TECHNOLOGY_COST	1.3 1.3 1.2 1.2 1.1
+
+# % amount to multiply production cost by per age for ai
+AI_MIN_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_PRODUCTION_COST_ADJUSTMENT	1.2 1.2 1.2 1.1 1.1
+
+# multiplier for gold collected fo ai
+AI_MIN_AHEAD_GOLD_ADJUSTMENT	1.0 1.0 1.0 1.0 1.0
+AI_MAX_AHEAD_GOLD_ADJUSTMENT	0.9 0.9 0.9 1.0 1.0 
+
+MAX_HUMAN_ADVANCES	3
+MAX_AI_ADVANCES		8
+HUMAN_SCIENCE_BONUS		0.8		# % amount to add to advance cost for the player
+HUMAN_FOOD_BONUS		-0.4	# % amount to add to food collected for the player
+
+#Starting Condtions
+EXTRA_SETTLER_CHANCE		1
+ADVANCE_CHANCES {
+	ADVANCE_TOOLMAKING		100	100
+	ADVANCE_AGRICULTURE		100	100
+	ADVANCE_RELIGION		60	90
+	ADVANCE_BRONZE_WORKING	40	99
+	ADVANCE_BALLISTICS		30	99
+	ADVANCE_STONE_WORKING	10	50
+	ADVANCE_SHIP_BUILDING	10	90
+	ADVANCE_WRITING			10	5
+	ADVANCE_JURISPRUDENCE	5	5
+	ADVANCE_IRON_WORKING	1	5
+	ADVANCE_GEOMETRY		1	5
+	ADVANCE_SLAVE_LABOR		1	50
+	}
+
+POLLUTION_START_PRODUCTION_LEVEL	300
+POLLUTION_START_POPULATION_LEVEL	16
+POLLUTION_PRODUCTION_RATIO		1
+POLLUTION_POPULATION_RATIO		15
+}

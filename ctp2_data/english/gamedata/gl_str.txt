@@ -401,11 +401,11 @@ TERRAIN_WATER_DEEP_GOOD_ONE			"Whale"
 TERRAIN_WATER_DEEP_GOOD_TWO			"Giant Squid"
 TERRAIN_WATER_BEACH_GOOD_ONE			"Crab"
 TERRAIN_WATER_BEACH_GOOD_TWO			"Fish"
-#TERRAIN_WATER_SHELF_GOOD_ONE			"Crab"
-#TERRAIN_WATER_SHELF_GOOD_TWO			"Pearls"
+TERRAIN_WATER_SHELF_GOOD_ONE			"Crab"
+TERRAIN_WATER_SHELF_GOOD_TWO			"Pearls"
 TERRAIN_DUMMY_GOOD				"Dumb Good"
 
-###Added for goodmod###   fix walrus, too many
+###Added for goodmod###   fix walrus, too many (actual these aren't used)
 
 TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE		"Bauxite"
 TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR		"Emeralds"

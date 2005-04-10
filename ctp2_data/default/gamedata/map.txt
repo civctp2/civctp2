@@ -1,0 +1,770 @@
+### Small map
+
+MAP_SIZE 24 48 {
+    # Small(Small) Map - 0% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      50
+		MAP_MIN_WIDTH           3
+		MAP_MIN_HEIGHT          3
+		MAP_MAX_WIDTH           4
+		MAP_MAX_HEIGHT          6
+		MAP_BUMP_SIZE           24
+		MAP_MIN_SUBCONTINENTS   6
+		MAP_MAX_SUBCONTINENTS   12
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.4
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 10% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      44
+		MAP_MIN_WIDTH           3
+		MAP_MIN_HEIGHT          3
+		MAP_MAX_WIDTH           4
+		MAP_MAX_HEIGHT          6
+		MAP_BUMP_SIZE           22
+		MAP_MIN_SUBCONTINENTS   6
+		MAP_MAX_SUBCONTINENTS   11
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.4
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 20% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      38
+		MAP_MIN_WIDTH           3
+		MAP_MIN_HEIGHT          4
+		MAP_MAX_WIDTH           4
+		MAP_MAX_HEIGHT          7
+		MAP_BUMP_SIZE           18
+		MAP_MIN_SUBCONTINENTS   5
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.5
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 30% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      32
+		MAP_MIN_WIDTH           3
+		MAP_MIN_HEIGHT          4
+		MAP_MAX_WIDTH           5
+		MAP_MAX_HEIGHT          7
+		MAP_BUMP_SIZE           16
+		MAP_MIN_SUBCONTINENTS   5
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.5
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 40% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      28
+		MAP_MIN_WIDTH           3
+		MAP_MIN_HEIGHT          5
+		MAP_MAX_WIDTH           5
+		MAP_MAX_HEIGHT          8
+		MAP_BUMP_SIZE           13
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+## Default \/ \/ \/
+    # Small(Small) Map - 50% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      25
+		MAP_MIN_WIDTH           3
+		MAP_MIN_HEIGHT          5
+		MAP_MAX_WIDTH           5
+		MAP_MAX_HEIGHT          8
+		MAP_BUMP_SIZE           10
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 60% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      22
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          6
+		MAP_MAX_WIDTH           6
+		MAP_MAX_HEIGHT          9
+		MAP_BUMP_SIZE           10
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 70% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      18
+		MAP_MIN_WIDTH           5
+		MAP_MIN_HEIGHT          7
+		MAP_MAX_WIDTH           6
+		MAP_MAX_HEIGHT          11
+		MAP_BUMP_SIZE           9
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.7
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 80% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      16
+		MAP_MIN_WIDTH           5
+		MAP_MIN_HEIGHT          9
+		MAP_MAX_WIDTH           7
+		MAP_MAX_HEIGHT          13
+		MAP_BUMP_SIZE           9
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.7
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 90% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      13
+		MAP_MIN_WIDTH           7
+		MAP_MIN_HEIGHT          12
+		MAP_MAX_WIDTH           8
+		MAP_MAX_HEIGHT          25
+		MAP_BUMP_SIZE           8
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.8
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Small(Small) Map - 100% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      10
+		MAP_MIN_WIDTH           8
+		MAP_MIN_HEIGHT          12
+		MAP_MAX_WIDTH           9
+		MAP_MAX_HEIGHT          17
+		MAP_BUMP_SIZE           8
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.8
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+}
+
+### med map
+MAP_SIZE 48 96 {
+    # Medium(Regular) Map - 0% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      50
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          4
+		MAP_MAX_WIDTH           8
+		MAP_MAX_HEIGHT          13
+		MAP_BUMP_SIZE           24
+		MAP_MIN_SUBCONTINENTS   6
+		MAP_MAX_SUBCONTINENTS   12
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.4
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 10% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      44
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          4
+		MAP_MAX_WIDTH           8
+		MAP_MAX_HEIGHT          13
+		MAP_BUMP_SIZE           22
+		MAP_MIN_SUBCONTINENTS   6
+		MAP_MAX_SUBCONTINENTS   11
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.4
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 20% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      38
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          5
+		MAP_MAX_WIDTH           9
+		MAP_MAX_HEIGHT          14
+		MAP_BUMP_SIZE           18
+		MAP_MIN_SUBCONTINENTS   5
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.5
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 30% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      32
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          5
+		MAP_MAX_WIDTH           9
+		MAP_MAX_HEIGHT          14
+		MAP_BUMP_SIZE           16
+		MAP_MIN_SUBCONTINENTS   5
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.5
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 40% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      28
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          6
+		MAP_MAX_WIDTH           11
+		MAP_MAX_HEIGHT          15
+		MAP_BUMP_SIZE           13
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+## Default \/ \/ \/
+    # Medium(Regular) Map - 50% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      25
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          6
+		MAP_MAX_WIDTH           11
+		MAP_MAX_HEIGHT          15
+		MAP_BUMP_SIZE           10
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 60% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      22
+		MAP_MIN_WIDTH           5
+		MAP_MIN_HEIGHT          8
+		MAP_MAX_WIDTH           12
+		MAP_MAX_HEIGHT          18
+		MAP_BUMP_SIZE           10
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 70% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      18
+		MAP_MIN_WIDTH           6
+		MAP_MIN_HEIGHT          10
+		MAP_MAX_WIDTH           13
+		MAP_MAX_HEIGHT          22
+		MAP_BUMP_SIZE           9
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.7
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 80% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      16
+		MAP_MIN_WIDTH           7
+		MAP_MIN_HEIGHT          12
+		MAP_MAX_WIDTH           15
+		MAP_MAX_HEIGHT          26
+		MAP_BUMP_SIZE           9
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.7
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 90% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      13
+		MAP_MIN_WIDTH           8
+		MAP_MIN_HEIGHT          14
+		MAP_MAX_WIDTH           16
+		MAP_MAX_HEIGHT          30
+		MAP_BUMP_SIZE           8
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.8
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Medium(Regular) Map - 100% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      10
+		MAP_MIN_WIDTH           10
+		MAP_MIN_HEIGHT          16
+		MAP_MAX_WIDTH           18
+		MAP_MAX_HEIGHT          34
+		MAP_BUMP_SIZE           8
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.8
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+}
+
+# Large Map
+
+MAP_SIZE 64 128 {
+    # Large(Huge) Map - 0% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      50
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          4
+		MAP_MAX_WIDTH           12
+		MAP_MAX_HEIGHT          18
+		MAP_BUMP_SIZE           24
+		MAP_MIN_SUBCONTINENTS   6
+		MAP_MAX_SUBCONTINENTS   12
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.4
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 10% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      44
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          4
+		MAP_MAX_WIDTH           12
+		MAP_MAX_HEIGHT          18
+		MAP_BUMP_SIZE           22
+		MAP_MIN_SUBCONTINENTS   6
+		MAP_MAX_SUBCONTINENTS   11
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.4
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 20% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      38
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          5
+		MAP_MAX_WIDTH           13
+		MAP_MAX_HEIGHT          19
+		MAP_BUMP_SIZE           18
+		MAP_MIN_SUBCONTINENTS   5
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.5
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 30% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      32
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          5
+		MAP_MAX_WIDTH           13
+		MAP_MAX_HEIGHT          19
+		MAP_BUMP_SIZE           16
+		MAP_MIN_SUBCONTINENTS   5
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.5
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 40% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      28
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          6
+		MAP_MAX_WIDTH           14
+		MAP_MAX_HEIGHT          20
+		MAP_BUMP_SIZE           13
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+## Default \/ \/ \/
+    # Large(Huge) Map - 50% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      25
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          6
+		MAP_MAX_WIDTH           14
+		MAP_MAX_HEIGHT          20
+		MAP_BUMP_SIZE           10
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 60% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      22
+		MAP_MIN_WIDTH           5
+		MAP_MIN_HEIGHT          8
+		MAP_MAX_WIDTH           16
+		MAP_MAX_HEIGHT          25
+		MAP_BUMP_SIZE           10
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 70% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      18
+		MAP_MIN_WIDTH           6
+		MAP_MIN_HEIGHT          10
+		MAP_MAX_WIDTH           18
+		MAP_MAX_HEIGHT          30
+		MAP_BUMP_SIZE           9
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.7
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 80% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      16
+		MAP_MIN_WIDTH           7
+		MAP_MIN_HEIGHT          12
+		MAP_MAX_WIDTH           20
+		MAP_MAX_HEIGHT          35
+		MAP_BUMP_SIZE           9
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.7
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 90% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      13
+		MAP_MIN_WIDTH           8
+		MAP_MIN_HEIGHT          14
+		MAP_MAX_WIDTH           22
+		MAP_MAX_HEIGHT          40
+		MAP_BUMP_SIZE           8
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.8
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Large(Huge) Map - 100% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      10
+		MAP_MIN_WIDTH           10
+		MAP_MIN_HEIGHT          16
+		MAP_MAX_WIDTH           24
+		MAP_MAX_HEIGHT          45
+		MAP_BUMP_SIZE           8
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.8
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+}
+
+## Super Large Map
+
+MAP_SIZE 70 140 {
+    # Very Large(Gigantic) Map - 0% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      50
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          4
+		MAP_MAX_WIDTH           13
+		MAP_MAX_HEIGHT          20
+		MAP_BUMP_SIZE           24
+		MAP_MIN_SUBCONTINENTS   6
+		MAP_MAX_SUBCONTINENTS   12
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.4
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 10% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      44
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          4
+		MAP_MAX_WIDTH           13
+		MAP_MAX_HEIGHT          20
+		MAP_BUMP_SIZE           22
+		MAP_MIN_SUBCONTINENTS   6
+		MAP_MAX_SUBCONTINENTS   11
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.4
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 20% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      38
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          5
+		MAP_MAX_WIDTH           14
+		MAP_MAX_HEIGHT          21
+		MAP_BUMP_SIZE           18
+		MAP_MIN_SUBCONTINENTS   5
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.5
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 30% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      32
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          5
+		MAP_MAX_WIDTH           14
+		MAP_MAX_HEIGHT          21
+		MAP_BUMP_SIZE           16
+		MAP_MIN_SUBCONTINENTS   5
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.5
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 40% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      28
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          6
+		MAP_MAX_WIDTH           15
+		MAP_MAX_HEIGHT          22
+		MAP_BUMP_SIZE           13
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+## Default \/ \/ \/
+    # Very Large(Gigantic) Map - 50% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      25
+		MAP_MIN_WIDTH           4
+		MAP_MIN_HEIGHT          6
+		MAP_MAX_WIDTH           15
+		MAP_MAX_HEIGHT          22
+		MAP_BUMP_SIZE           10
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 60% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      22
+		MAP_MIN_WIDTH           5
+		MAP_MIN_HEIGHT          8
+		MAP_MAX_WIDTH           18
+		MAP_MAX_HEIGHT          28
+		MAP_BUMP_SIZE           10
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   8
+		MAP_SUBCONTINENT_SIZE   0.6
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 70% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      18
+		MAP_MIN_WIDTH           6
+		MAP_MIN_HEIGHT          10
+		MAP_MAX_WIDTH           20
+		MAP_MAX_HEIGHT          34
+		MAP_BUMP_SIZE           9
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.7
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 80% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      16
+		MAP_MIN_WIDTH           7
+		MAP_MIN_HEIGHT          12
+		MAP_MAX_WIDTH           22
+		MAP_MAX_HEIGHT          40
+		MAP_BUMP_SIZE           9
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   9
+		MAP_SUBCONTINENT_SIZE   0.7
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 90% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      13
+		MAP_MIN_WIDTH           8
+		MAP_MIN_HEIGHT          14
+		MAP_MAX_WIDTH           24
+		MAP_MAX_HEIGHT          45
+		MAP_BUMP_SIZE           8
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.8
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+    # Very Large(Gigantic) Map - 100% Continents/Islands
+    {
+		MAP_NUM_CONTINENTS      10
+		MAP_MIN_WIDTH           10
+		MAP_MIN_HEIGHT          16
+		MAP_MAX_WIDTH           26
+		MAP_MAX_HEIGHT          50
+		MAP_BUMP_SIZE           8
+		MAP_MIN_SUBCONTINENTS   4
+		MAP_MAX_SUBCONTINENTS   10
+		MAP_SUBCONTINENT_SIZE   0.8
+		MAP_SUBCONTINENT_HEIGHT 0.6
+		MAP_BORDER_SIZE         15
+		MAP_FAULT_LINES         0
+		MAP_FAULT_LENGTH        1.0
+		MAP_NS_BORDER_SIZE      5
+    }
+}
