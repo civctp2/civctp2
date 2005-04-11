@@ -17,13 +17,10 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks that
-//       are active for _MSC_VER value 1200 are the original Activision code.
+// _DEBUG		
+// - Generate debug version when set.
+// 
+// _DEBUG_SCHEDULER
 //
 //----------------------------------------------------------------------------
 //
@@ -38,6 +35,8 @@
 // - Added Peter's Comments
 // - Repaired crash when a goal type has not been defined (GOAL_SEIGE in CTC)
 // - Removed double warning disable pragma.
+// - Standardised list import.
+// - Removed unused memory reservation.
 //
 //----------------------------------------------------------------------------
 
@@ -47,13 +46,8 @@
 
 #include "profileAi.h"
 
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
-#include <list-fixed>
-#else
-#include <list>
-#endif
 #include <algorithm>
-using namespace std ;
+#include <list>
 
 #include "Scheduler.h"
 
@@ -141,19 +135,12 @@ uint32 Scheduler::m_allyRegardCache = 0;
 
 void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 {
-	sint32 old_size = s_theSchedulers.size();
+    s_theSchedulers.resize(newMaxPlayerId + 1); // 1 extra for the Barbarians
 
-	
-	
-	
-	if (old_size == 0 || newMaxPlayerId + 1 >= old_size)
-		s_theSchedulers.resize((newMaxPlayerId + 1) * 3);
-
-	
-	for (sint32 i = 0; i < newMaxPlayerId + 1; i++)
-		{
-			s_theSchedulers[i].SetPlayerId(i);
-		}
+    for (size_t i = 0; i <= newMaxPlayerId; ++i)
+    {
+		s_theSchedulers[i].SetPlayerId(i);
+	}
 }
 
 
@@ -489,10 +476,6 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 
 void Scheduler::Reset_Squad_Execution()
 {
-
-    Player * player_ptr = NULL;
-
-
 	Squad_List::iterator squad_ptr_iter = m_squads.begin();
 	while (squad_ptr_iter != m_squads.end()) 
 	{
@@ -740,6 +723,8 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 	sint32 agent_count;
 
+#if 0
+	// This does nothing but waste time. AreAllGoalsSatisfied is never used.
 	bool AreAllGoalsSatisfied = true;
 	plan_iter = m_matches.begin();
 	while (plan_iter != m_matches.end()) {
@@ -752,7 +737,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 		plan_iter++;
 	}
-
+#endif
 
 	plan_iter = m_matches.begin();
 	while (plan_iter != m_matches.end()) {
@@ -1041,14 +1026,16 @@ Scheduler::Sorted_Goal_Iter Scheduler::Remove_Goal(const Scheduler::Sorted_Goal_
 
 void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
 {
-	Sorted_Goal_Iter sorted_goal_iter;
-
-	for (sorted_goal_iter = m_goals_of_type[rec->GetIndex()].begin();
- 		 sorted_goal_iter != m_goals_of_type[rec->GetIndex()].end();)
-		 {
-			
-			sorted_goal_iter = Remove_Goal(sorted_goal_iter);
-		 }
+	Sorted_Goal_List &	goalList	= m_goals_of_type[rec->GetIndex()];
+	for 
+	(
+		Sorted_Goal_Iter	sorted_goal_iter	= goalList.begin();
+		sorted_goal_iter != goalList.end();
+		sorted_goal_iter = Remove_Goal(sorted_goal_iter)
+	)
+	{
+		// Action in for 
+	}
 }
 
 
@@ -1255,8 +1242,6 @@ bool Scheduler::Prioritize_Goals()
 		Sorted_Goal_Iter tmp_goal_iter = 
 			m_goals_of_type[goal_type].begin();
 
-		if ( g_theGoalDB->Get(goal_type)->GetTargetTypeSettleLand() ||
-			 g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea())
 		{
 			while (tmp_goal_iter != m_goals_of_type[goal_type].end())
 			{
@@ -1873,8 +1858,8 @@ void Scheduler::Remove_Matches_For_Goal
  const Goal_ptr & goal_ptr 
  )
 {
-	list<Plan_List::iterator> & match_refs = goal_ptr->Get_Match_References();
-	list<Plan_List::iterator>::iterator plan_ref_iter;
+    std::list<Plan_List::iterator> & match_refs = goal_ptr->Get_Match_References();
+    std::list<Plan_List::iterator>::iterator plan_ref_iter;
 	Squad_ptr squad_ptr;
 
 	sint32 rolled_back_agents = 0;
@@ -1908,8 +1893,8 @@ void Scheduler::Remove_Matches_For_Squad
  const Squad_ptr & squad   
  )
 {
-	list<Plan_List::iterator> & match_refs = squad->Get_Match_References();
-	list<Plan_List::iterator>::iterator plan_ref_iter;
+    std::list<Plan_List::iterator> & match_refs = squad->Get_Match_References();
+    std::list<Plan_List::iterator>::iterator plan_ref_iter;
 	Goal_ptr goal_ptr;
 
 	
@@ -1965,10 +1950,10 @@ sint32 Scheduler::Rollback_Matches_For_Goal
  const Goal_ptr & goal 
  )
 {
-	list<Plan_List::iterator> & match_refs = goal->Get_Match_References();
-	list<Plan_List::iterator>::iterator plan_ref_iter;
+    std::list<Plan_List::iterator> & match_refs = goal->Get_Match_References();
+    std::list<Plan_List::iterator>::iterator plan_ref_iter;
 
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("ROLLBACK_MATCHES_FOR_GOAL\n"));
 #endif
 
@@ -1993,7 +1978,7 @@ sint32 Scheduler::Rollback_Matches_For_Goal
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, 
 		("\t\tMissing defense = %3.0f\n",needed_strength.Get_Defense()));
 
-	#endif
+#endif
 
 	
 	
@@ -2042,8 +2027,8 @@ Squad_ptr Scheduler::Form_Squad_From_Goal
 	Assert(goal->Get_Totally_Complete());
 	
 	
-	list<Plan_List::iterator> & match_refs = goal->Get_Match_References();
-	list<Plan_List::iterator>::iterator plan_ref_iter;
+    std::list<Plan_List::iterator> & match_refs = goal->Get_Match_References();
+    std::list<Plan_List::iterator>::iterator plan_ref_iter;
 
 	
 	Squad_ptr new_squad = new Squad();
@@ -2084,8 +2069,8 @@ bool Scheduler::Add_Transport_Matches_For_Goal(
 
 	
 	
-	list<Plan_List::iterator> & matches_to_goal = goal_iter->second->Get_Match_References();
-	list<Plan_List::iterator>::iterator matches_to_goal_iter;
+    std::list<Plan_List::iterator> & matches_to_goal = goal_iter->second->Get_Match_References();
+    std::list<Plan_List::iterator>::iterator matches_to_goal_iter;
 
 	
 	for ( matches_to_goal_iter = matches_to_goal.begin(); 

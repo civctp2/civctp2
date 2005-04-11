@@ -17,31 +17,18 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks that
-//       are active for _MSC_VER value 1200 are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Marked MS version specific code.
+// - Standardised <list> import.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 
-#include <vector>
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
-#include <list-fixed>
-#else
 #include <list>
-#endif
-using namespace std;
 
 #include "Foreigner.h"
 
@@ -402,7 +389,7 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 		
 		
 		
-		m_regardEventList[type].sort(greater<RegardEvent>());
+        m_regardEventList[type].sort(std::greater<RegardEvent>());
 
 	} 
 

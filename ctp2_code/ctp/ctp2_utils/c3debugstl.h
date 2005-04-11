@@ -45,17 +45,24 @@
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)
 template<class _Ty>
-class dbgallocator : public std::allocator<_Ty> {
+class dbgallocator : public std::allocator<_Ty> 
+{
 public:
+    typedef std::allocator<_Ty> BaseAllocator;
+    
 	pointer allocate(size_type _N, const void *buf)
-	{ if (_N)
-		return allocator<_Ty>::allocate(_N, buf);
-	  else
-	  {
-		  buf = NULL;
-		  return (pointer) buf;
-	  }
-	}
+	{ 
+        if (_N > 0)
+        {
+            return BaseAllocator::allocate(_N, buf);
+        }
+	    else
+	    {
+            // MSVC6 std::allocator crashes when passing 0 as size
+		    buf = NULL;
+		    return (pointer) buf;
+	    }
+	};
 	
 	void deallocate(void _FARQ *_P, size_type)
 		{if (_P) operator delete(_P); }

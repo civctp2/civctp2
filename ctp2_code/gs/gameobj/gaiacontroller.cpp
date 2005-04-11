@@ -194,7 +194,7 @@ void GaiaController::Initialize()
 
 GaiaController::~GaiaController()
 {
-	m_coveredCells.Resize(0, 0, false);
+    // Nothing allocated directly.
 }
 
 

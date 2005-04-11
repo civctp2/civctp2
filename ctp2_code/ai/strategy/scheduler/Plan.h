@@ -17,14 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks that
-//       are active for _MSC_VER value 1200 are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,6 +24,7 @@
 // - Marked MS version specific code.
 // - Add the CanMatchesBeReevaluated (implemented for the moment always at true)
 //   so, the matches are rollbacked and changed every turn... - Calvitix
+// - Standardised <list> import.
 //
 //----------------------------------------------------------------------------
  
@@ -41,11 +34,7 @@
 
 
 #include "scheduler_types.h"
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
-#include <list-fixed>
-#else
 #include <list>
-#endif
 
 class Plan
 { 
