@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Event handler object
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// Generate extra debugging output.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leak repaired.
+//
+//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 
@@ -44,11 +74,16 @@ void GameEventHook::AddCallback(GameEventHookCallback *cb,
 void GameEventHook::RemoveCallback(GameEventHookCallback *cb)
 {
 	PointerList<GameEventHookNode>::Walker walk(m_callbacks);
-	while(walk.IsValid()) {
-		if(walk.GetObj()->m_cb == cb)
-			walk.Remove();
+	while (walk.IsValid()) 
+    {
+		if (walk.GetObj()->m_cb == cb)
+        {
+			delete walk.Remove();
+        }
 		else
+        {
 			walk.Next();
+        }
 	}
 }
 

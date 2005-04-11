@@ -1,4 +1,30 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Destructor cleaned up.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SlicObject.h"
@@ -133,117 +159,39 @@ SlicContext::SlicContext(SlicContext *copy)
 
 SlicContext::~SlicContext()
 {
-	if(m_cityList) {
-		delete m_cityList;
-		m_cityList = NULL;
-	}
+	// m_eventArgs not deleted: reference only
+	delete m_cityList;
+	delete m_unitList;
+	delete m_armyList;
+	delete m_playerList;
+	delete m_advanceList;
+	delete m_locationList;
+	delete m_agreementList;
+	delete m_intList;
+	delete m_unitRecordList;
+	delete m_goodList;
+	delete m_governmentList;
+    delete m_tradeOffersList;
 
-	if(m_unitList) {
-		delete m_unitList;
-		m_unitList = NULL;
-	}
+	delete [] m_calamityList; 
+	delete [] m_goldList;
+    delete [] m_rankList;
+    delete [] m_wonderList;
+	delete [] m_orderList;
+    delete [] m_madlibNameList;
+    delete [] m_madlibChoiceList;
+	delete [] m_attitudeList;
+    delete [] m_ageList;
+    delete [] m_buildingList;
+    delete [] m_tradeBidList;
 
-	if(m_armyList) {
-		delete m_armyList;
-		m_armyList = NULL;
-	}
-
-	if(m_playerList) {
-		delete m_playerList;
-		m_playerList = NULL;
-	}
-
-	if(m_intList) {
-		delete m_intList;
-		m_intList = NULL;
-	}
-
-	if(m_unitRecordList) {
-		delete m_unitRecordList;
-		m_unitRecordList = NULL;
-	}
-
-	if(m_advanceList) {
-		delete m_advanceList;
-		m_advanceList = NULL;
-	}
-
-	if(m_governmentList) {
-		delete m_governmentList;
-		m_governmentList = NULL;
-	}
-
-	if(m_locationList) {
-		delete m_locationList;
-		m_locationList = NULL;
-	}
-
-	if(m_calamityList) {
-		delete [] m_calamityList;
-		m_calamityList = NULL;
-	}
-
-	if(m_goldList) {
-		delete [] m_goldList;
-		m_goldList = NULL;
-	}
-
-	if(m_goodList) {
-		delete  m_goodList;
-		m_goodList = NULL;
-	}
-
-	if(m_rankList) {
-		delete [] m_rankList;
-		m_rankList = NULL;
-	}
-
-	if(m_wonderList) {
-		delete [] m_wonderList;
-		m_wonderList = NULL;
-	}
-
-	if(m_orderList) {
-		delete [] m_orderList;
-		m_orderList = NULL;
-	}
-
-	if(m_madlibChoiceList) {
-		delete [] m_madlibChoiceList;
-		m_madlibChoiceList = NULL;
-	}
-
-	if(m_madlibNameList) {
-		delete [] m_madlibNameList;
-		m_madlibNameList = NULL;
-	}
-
-	if(m_attitudeList) {
-		delete [] m_attitudeList;
-		m_attitudeList = NULL;
-	}
-
-	if(m_ageList) {
-		delete [] m_ageList;
-		m_ageList = NULL;
-	}
-
-	if(m_actionList) {
-		for(sint32 i = 0; i < m_numActions; i++) {
+	if (m_actionList) 
+    {
+		for (size_t i = 0; i < m_numActions; ++i) 
+        {
 			delete [] m_actionList[i];
 		}
 		delete [] m_actionList;
-		m_actionList = NULL;
-	}
-
-	if(m_buildingList) {
-		delete [] m_buildingList;
-		m_buildingList = NULL;
-	}
-
-	if(m_tradeBidList) {
-		delete [] m_tradeBidList;
-		m_tradeBidList = NULL;
 	}
 }
 

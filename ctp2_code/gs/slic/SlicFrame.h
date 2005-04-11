@@ -1,3 +1,30 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Slic frame handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed unnecessary variable.
+//
+//----------------------------------------------------------------------------
+
 #ifndef __SLIC_FRAME_H__
 #define __SLIC_FRAME_H__
 
@@ -22,7 +49,6 @@ private:
 	sint32 m_offset;
 	SLIC_RT m_error;
 	sint32 m_argStackPtr;
-	bool m_needResult;
 	sint32 m_currentLine;
 	
 
@@ -41,7 +67,8 @@ private:
 public:
 	SlicFrame(SlicSegment *segment, sint32 offset = 0);
 	SlicFrame(SlicSegment *segment, sint32 offset, SlicStack *stack);
-	~SlicFrame();
+	virtual ~SlicFrame();
+
 	SLIC_RT GetError() { return m_error; }
 
 	SlicSymbolData *GetSymbol(SS_TYPE symType, SlicStackValue symVal);

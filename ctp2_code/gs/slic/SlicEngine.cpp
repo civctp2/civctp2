@@ -304,21 +304,24 @@ void SlicEngine::Cleanup()
 		g_theMessagePool->NotifySlicReload();
 	}
 
-	if(m_segmentHash)
-		delete m_segmentHash;
-
-	if(m_functionHash)
+	if (m_functionHash)
+    {
+        m_functionHash->Clear();
 		delete m_functionHash;
+    }
 	
 	if(m_symTab)
 		delete m_symTab;
 
-	if(m_uiHash) {
+	if (m_uiHash) 
+    {
 		m_uiHash->Clear();
 		delete m_uiHash;
 	}
 
-	if(m_dbHash) {
+	if (m_dbHash) 
+    {
+        m_dbHash->Clear();
 		delete m_dbHash;
 	}
 
@@ -353,8 +356,17 @@ void SlicEngine::Cleanup()
 		delete m_uiExecuteObjects;
 	}
 
-	if(m_constHash)
+	if (m_segmentHash)
+    {
+        m_segmentHash->Clear();
+		delete m_segmentHash;
+    }
+
+	if (m_constHash)
+    {
+        m_constHash->Clear();
 		delete m_constHash;
+    }
 
 	if(m_builtins) {
 		

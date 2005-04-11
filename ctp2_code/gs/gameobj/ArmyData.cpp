@@ -36,6 +36,7 @@
 // - Added a isstealth paramater in characterizeArmy method
 // - Prevented leak report from unused static variables.
 // - Added modification for increased bombard range in ::Bombard & ::PerformOrderHere
+// - Improved destructor to clean up lists.
 //
 //----------------------------------------------------------------------------
 
@@ -170,213 +171,179 @@ sint32 *ArmyData::s_orderDBToEventMap = NULL;
 
 
 
-ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units) :
-	GameObj(army.m_id)
+ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units) 
+:   GameObj                 (army.m_id),
+    m_tempKillList          (NULL),
+	m_attackedByDefenders   (new UnitDynamicArray),
+    m_orders                (new PointerList<Order>),
+	m_owner                 (-1),
+    m_pos                   (),
+	m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
+	m_killer                (-1),
+	m_hasBeenAdded          (FALSE),
+	m_isPirating            (false),
+	m_name                  (NULL),
+	m_reentryTurn           (-1),
+	m_reentryPos            (),
+    m_debugStringColor      (0),
+	m_killMeSoon            (new PointerList<KillRecord>),
+	m_debarked              (),
+	m_isTransported         (FALSE), 
+    m_revealedForeignUnits  (FALSE),
+    m_revealedUnexplored    (FALSE),
+	m_zocViolation          (FALSE),
+    m_didBattle             (FALSE), 
+    m_didMove               (FALSE),
+    m_dontKillCount         (0),
+    m_needToKill            (FALSE),
+    m_debugString           (NULL)	
 {
-    m_attackedByDefenders = NULL; 
-	m_orders = NULL;
-    m_killMeSoon = NULL; 
-    m_tempKillList = NULL; 
-    m_isTransported = FALSE; 
-    m_revealedForeignUnits = FALSE; 
-    m_zocViolation = FALSE; 
-    m_didBattle = FALSE; 
-    m_hasBeenAdded = FALSE; 
-    m_dontKillCount = 0;
-	m_needToKill = 0 ;
-    m_removeCause = CAUSE_REMOVE_ARMY(0);
-	m_isPirating = false;
-	m_name = NULL;
-
-	m_owner = -1;
-	m_killer = -1;
-	sint32 i;
-	for(i = 0; i < units.Num(); i++) {
+	for (sint32 i = 0; i < units.Num(); ++i) 
+    {
 		Insert(units.Get(i));
 	}
-
-	m_attackedByDefenders = new UnitDynamicArray;
-	m_orders = new PointerList<Order>;
-
-	m_dontKillCount = 0;
-	m_needToKill = FALSE;
-	m_hasBeenAdded = FALSE;
-
-	m_killMeSoon = new PointerList<KillRecord>;
-
-
-	
-	m_debugString = NULL;
-	m_debugStringColor = 0;
-
-	
-	
-	
-	
-
 }
 
-ArmyData::ArmyData(const Army &army, const CellUnitList &units) :
-	GameObj(army.m_id)
+ArmyData::ArmyData(const Army &army, const CellUnitList &units)
+:   GameObj                 (army.m_id),
+    m_tempKillList          (NULL),
+	m_attackedByDefenders   (new UnitDynamicArray),
+    m_orders                (new PointerList<Order>),
+	m_owner                 (-1),
+    m_pos                   (),
+	m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
+	m_killer                (-1),
+	m_hasBeenAdded          (FALSE),
+	m_isPirating            (false),
+	m_name                  (NULL),
+	m_reentryTurn           (-1),
+	m_reentryPos            (),
+    m_debugStringColor      (0),
+	m_killMeSoon            (new PointerList<KillRecord>),
+	m_debarked              (),
+	m_isTransported         (FALSE), 
+    m_revealedForeignUnits  (FALSE),
+    m_revealedUnexplored    (FALSE),
+	m_zocViolation          (FALSE),
+    m_didBattle             (FALSE), 
+    m_didMove               (FALSE),
+    m_dontKillCount         (0),
+    m_needToKill            (FALSE),
+    m_debugString           (NULL)	
 {
-    m_attackedByDefenders = NULL; 
-	m_orders = NULL;
-    m_killMeSoon = NULL; 
-    m_tempKillList = NULL; 
-    m_isTransported = FALSE; 
-    m_revealedForeignUnits = FALSE; 
-    m_zocViolation = FALSE; 
-    m_didBattle = FALSE; 
-    m_hasBeenAdded = FALSE; 
-    m_dontKillCount = 0;
-	m_needToKill = 0 ;
-    m_removeCause = CAUSE_REMOVE_ARMY(0);
-	m_isPirating = false;
-	m_name = NULL;
-
-	m_owner = -1;
-	m_killer = -1;
-	sint32 i;
-	for(i = 0; i < units.Num(); i++) {
+	for(sint32 i = 0; i < units.Num(); ++i) 
+    {
 		Insert(units.Get(i));
 	}
-
-	m_attackedByDefenders = new UnitDynamicArray;
-	m_orders = new PointerList<Order>;
-
-	m_dontKillCount = 0;
-	m_needToKill = FALSE;
-	m_hasBeenAdded = FALSE;
-
-	m_killMeSoon = new PointerList<KillRecord>;
-
-	
-	m_debugString = NULL;
-	m_debugStringColor = 0;
-
-	
-	
-	
-	
-
 }
 
-ArmyData::ArmyData(const Army &army, Unit &u) :
-	GameObj(army.m_id)
+ArmyData::ArmyData(const Army &army, Unit &u)
+:   GameObj                 (army.m_id),
+    m_tempKillList          (NULL),
+	m_attackedByDefenders   (new UnitDynamicArray),
+    m_orders                (new PointerList<Order>),
+	m_owner                 (-1),
+    m_pos                   (),
+	m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
+	m_killer                (-1),
+	m_hasBeenAdded          (FALSE),
+	m_isPirating            (false),
+	m_name                  (NULL),
+	m_reentryTurn           (-1),
+	m_reentryPos            (),
+    m_debugStringColor      (0),
+	m_killMeSoon            (new PointerList<KillRecord>),
+	m_debarked              (),
+	m_isTransported         (FALSE), 
+    m_revealedForeignUnits  (FALSE),
+    m_revealedUnexplored    (FALSE),
+	m_zocViolation          (FALSE),
+    m_didBattle             (FALSE), 
+    m_didMove               (FALSE),
+    m_dontKillCount         (0),
+    m_needToKill            (FALSE),
+    m_debugString           (NULL)	
 {
-    m_attackedByDefenders = NULL; 
-	m_orders = NULL;
-    m_killMeSoon = NULL; 
-    m_tempKillList = NULL; 
-    m_isTransported = FALSE; 
-    m_revealedForeignUnits = FALSE; 
-    m_zocViolation = FALSE; 
-    m_didBattle = FALSE; 
-    m_hasBeenAdded = FALSE; 
-    m_dontKillCount = 0;
-	m_needToKill = 0 ;
-    m_removeCause = CAUSE_REMOVE_ARMY(0);
-	m_isPirating = false;
-	m_name = NULL;
-
-	m_owner = -1;
-	m_killer = -1;
 	Insert(u);
-	m_attackedByDefenders = new UnitDynamicArray;
-	m_orders = new PointerList<Order>;
-	m_dontKillCount = 0;
-	m_needToKill = FALSE;
-	m_hasBeenAdded = FALSE;
-	m_killMeSoon = new PointerList<KillRecord>;
-
-   	
-	m_debugString = NULL;
-	m_debugStringColor = 0;
-
-	
-	
-	
-	
-
 }
 
-ArmyData::ArmyData(const Army &army) :
-	GameObj(army.m_id)
+ArmyData::ArmyData(const Army &army)
+:   GameObj                 (army.m_id),
+    m_tempKillList          (NULL),
+	m_attackedByDefenders   (new UnitDynamicArray),
+    m_orders                (new PointerList<Order>),
+	m_owner                 (-1),
+    m_pos                   (),
+	m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
+	m_killer                (-1),
+	m_hasBeenAdded          (FALSE),
+	m_isPirating            (false),
+	m_name                  (NULL),
+	m_reentryTurn           (-1),
+	m_reentryPos            (),
+    m_debugStringColor      (0),
+	m_killMeSoon            (new PointerList<KillRecord>),
+	m_debarked              (),
+	m_isTransported         (FALSE), 
+    m_revealedForeignUnits  (FALSE),
+    m_revealedUnexplored    (FALSE),
+	m_zocViolation          (FALSE),
+    m_didBattle             (FALSE), 
+    m_didMove               (FALSE),
+    m_dontKillCount         (0),
+    m_needToKill            (FALSE),
+    m_debugString           (NULL)	
+
 {
-    m_attackedByDefenders = NULL; 
-	m_orders = NULL;
-    m_killMeSoon = NULL; 
-    m_tempKillList = NULL; 
-    m_isTransported = FALSE; 
-    m_revealedForeignUnits = FALSE; 
-    m_zocViolation = FALSE; 
-    m_didBattle = FALSE; 
-    m_hasBeenAdded = FALSE; 
-    m_dontKillCount = 0;
-	m_needToKill = 0 ;
-    m_removeCause = CAUSE_REMOVE_ARMY(0);
-	m_isPirating = false;
-	m_name = NULL;
-
-	m_owner = -1;
-	m_killer = -1;
-	m_attackedByDefenders = new UnitDynamicArray;
-	m_orders = new PointerList<Order>;
-	m_dontKillCount = 0;
-	m_needToKill = FALSE;
-	m_hasBeenAdded = FALSE;
-	m_killMeSoon = new PointerList<KillRecord>;
-
-	
-	m_debugString = NULL;
-	m_debugStringColor = 0;
-	
-	
-
-	
-	
-	
-	
 }
 
-ArmyData::ArmyData(CivArchive &archive) :
-	GameObj(0)
+ArmyData::ArmyData(CivArchive &archive)
+:   GameObj                 (0),
+    m_tempKillList          (NULL),
+	m_attackedByDefenders   (new UnitDynamicArray),
+    m_orders                (new PointerList<Order>),
+	m_owner                 (-1),
+    m_pos                   (),
+	m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
+	m_killer                (-1),
+	m_hasBeenAdded          (FALSE),
+	m_isPirating            (false),
+	m_name                  (NULL),
+	m_reentryTurn           (-1),
+	m_reentryPos            (),
+    m_debugStringColor      (0),
+	m_killMeSoon            (new PointerList<KillRecord>),
+	m_debarked              (),
+	m_isTransported         (FALSE), 
+    m_revealedForeignUnits  (FALSE),
+    m_revealedUnexplored    (FALSE),
+	m_zocViolation          (FALSE),
+    m_didBattle             (FALSE), 
+    m_didMove               (FALSE),
+    m_dontKillCount         (0),
+    m_needToKill            (FALSE),
+    m_debugString           (NULL)	
 {
-    m_attackedByDefenders = NULL; 
-	m_orders = NULL;
-    m_killMeSoon = NULL; 
-    m_tempKillList = NULL; 
-    m_isTransported = FALSE; 
-    m_revealedForeignUnits = FALSE; 
-    m_zocViolation = FALSE; 
-    m_didBattle = FALSE; 
-    m_hasBeenAdded = FALSE; 
-    m_dontKillCount = 0;
-	m_needToKill = 0 ;
-    m_removeCause = CAUSE_REMOVE_ARMY(0);
-	m_isPirating = false;
-	m_name = NULL;
-
-	m_attackedByDefenders = new UnitDynamicArray;
-	m_orders = new PointerList<Order>;
-	m_killMeSoon = new PointerList<KillRecord>;
-
-	
-	m_debugString = NULL;
-	m_debugStringColor = 0;
-
 	Serialize(archive);
 }
 
 ArmyData::~ArmyData()
 {
-	delete m_orders;
-	delete m_attackedByDefenders;
-	delete m_killMeSoon;
+    if (m_orders)
+    {
+        m_orders->DeleteAll();
+	    delete m_orders;
+    }
+    if (m_killMeSoon)
+    {
+        m_killMeSoon->DeleteAll();
+	    delete m_killMeSoon;
+    }
 
-	
-	if (m_debugString) delete m_debugString;
-	if (m_name)	delete m_name;
+	delete m_attackedByDefenders;
+	delete m_debugString;
+	delete m_name;
+	delete m_tempKillList;
 }
 
 void ArmyData::Serialize(CivArchive &archive)
@@ -1973,10 +1940,6 @@ ORDER_RESULT ArmyData::PlantNuke(const MapPoint &point)
 
 		sint32 oldowner = GetOwner();
 
-		static UnitDynamicArray killList;
-		killList.Clear();
-
-		
 		
         so = new SlicObject("178NukeCompleteVictim") ;
         so->AddRecipient(c.GetOwner()) ;
@@ -2024,9 +1987,7 @@ ORDER_RESULT ArmyData::PlantNuke(const MapPoint &point)
 void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 {
 	sint32 i;
-	static UnitDynamicArray revealedUnits;
-	revealedUnits.Clear();
-
+	UnitDynamicArray revealedUnits;
 	MapPoint opos;
 	GetPos(opos);
 	BOOL revealed_unexplored;
@@ -4278,8 +4239,7 @@ bool ArmyData::GetBombardRange(sint32 & min_rge, sint32 & max_rge)
 
 BOOL ArmyData::CanBombard(const MapPoint &point) const
 {
-	static CellUnitList defender;
-	defender.Clear();
+	CellUnitList defender;
 	g_theWorld->GetArmy(point, defender);
 	sint32 i;
 	
@@ -4420,14 +4380,11 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 {
 
-	MapPoint point = orderPoint;
-
-	static CellUnitList defender;
-	defender.Clear();
+	MapPoint        point   = orderPoint;
+	CellUnitList    defender;
 	g_theWorld->GetArmy(point, defender);
 	sint32 i;
 	
-	BOOL isSpaceBombard = FALSE;
 	if(point == m_pos) {//CHANGED to INCREASE BOMBARD RANGE
 		
 		return ORDER_RESULT_ILLEGAL;

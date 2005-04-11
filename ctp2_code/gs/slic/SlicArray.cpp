@@ -1,4 +1,30 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Slic array variable handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired memory leak
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "slicif.h"
@@ -47,10 +73,14 @@ SlicArray::SlicArray(CivArchive &archive)
 
 SlicArray::~SlicArray()
 {
-	if(m_array) {
-		delete [] m_array;
+	if (SS_TYPE_SYM == m_type) 
+    {
+        for (size_t i = 0; i < m_allocatedSize; ++i)
+        {
+		    delete m_array[i].m_sym;
+        }
 	}
-
+    delete [] m_array;
 }
 
 void SlicArray::FixSize(sint32 size)

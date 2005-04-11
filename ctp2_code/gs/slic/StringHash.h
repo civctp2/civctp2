@@ -44,24 +44,24 @@ public:
 	T *m_obj;
 	StringHashNode<T> *m_next;
 
-	StringHashNode(const char *string, T *obj) {
-		
-		
-		m_obj = obj;
-		m_next = NULL;
-	}
-	StringHashNode(ARCHIVE archive)
+	StringHashNode(const char *string, T *obj)
+    :   m_obj   (obj),
+        m_next  (NULL)
+    { ; };
+
+	StringHashNode(ARCHIVE archive) 
+    :   m_obj   (NULL),
+        m_next  (NULL)
 	{
 		Serialize(archive);
-	}
+	};
 
-	~StringHashNode() {
+	~StringHashNode() 
+    {
+		delete m_obj;
+        // m_next not deleted (intentional)
+	};
 
-
-
-		if(m_obj)
-			delete m_obj;
-	}
 	void Serialize(ARCHIVE archive) {
 #ifndef COM_INTERFACE
 		uint8 isPresent;
@@ -78,9 +78,9 @@ public:
 		} else {
 
 
-
 			m_obj = new T(archive);
 			archive >> isPresent;
+
 			if(isPresent) {
 				m_next = new StringHashNode<T>(archive);
 			} else {
@@ -148,7 +148,6 @@ template <class T> void StringHash<T>::Clear()
 			while(m_table[i]) {
 				StringHashNode<T> *node = m_table[i];
 				m_table[i] = node->m_next;
-				delete node->m_obj;
 				delete node;
 			}
 		}

@@ -1,23 +1,61 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Bit table
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented memory leak when loading from file.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once 
+#endif
 
 #ifndef __BIT_TABLE_H__
 #define __BIT_TABLE_H__ 1
 
-class CivArchive; 
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+#include <algorithm>    // std::copy
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class Bit_Table;
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
+
+#include "civarchive.h" // CivArchive
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 class Bit_Table
 { 
@@ -31,29 +69,53 @@ class Bit_Table
 public:
 
 	Bit_Table()
-		{
-			m_data = NULL;
-		}
+    :   y_col_len   (0),
+        m_total_len (0),
+        max_x       (0),
+        max_y       (0),
+        m_data      (NULL)
+    { ; };
 
-	Bit_Table(const Bit_Table & rhs)
-		{
-			m_data = NULL;
-			Resize(rhs.max_x, rhs.max_y,0);
-			*this = rhs;
-		}
+	Bit_Table(const Bit_Table & rhs)    // copy constructor
+    :   y_col_len   (rhs.y_col_len),
+        m_total_len (rhs.m_total_len),
+        max_x       (rhs.max_x),
+        max_y       (rhs.max_y),
+        m_data      (NULL)
+	{
+		if (rhs.m_data)
+        {
+            m_data = new sint32[m_total_len];
+            std::copy(rhs.m_data, rhs.m_data + m_total_len, m_data);
+        }
+	};
+
+    Bit_Table(CivArchive &archive) 
+    :   y_col_len   (0),
+        m_total_len (0),
+        max_x       (0),
+        max_y       (0),
+        m_data      (NULL)
+    { 
+        Serialize(archive); 
+    };
+
+    ~Bit_Table() 
+    { 
+		delete [] m_data; 
+    } 
 
 	void Resize(const sint32 mx, const sint32 my, const BOOL start_val)
 	{
         y_col_len = 1 + (my>>5); 
         m_total_len = mx * y_col_len; 
 
-		if (m_data != NULL)
-			delete m_data;
-
+		delete [] m_data;
 		if (m_total_len)
 			m_data = new sint32[m_total_len]; 
 		else
 			m_data = NULL;
+
         max_x = mx; 
         max_y = my; 
 
@@ -69,16 +131,6 @@ public:
         }
 	}
 
-    Bit_Table(CivArchive &archive) { 
-        Serialize (archive); 
-    } 
-
-    ~Bit_Table() { 
-		if (m_data != NULL)
-			delete[] m_data; 
-        m_data = NULL; 
-    } 
-
     void Serialize (CivArchive &archive) { 
         if (archive.IsStoring()) { 
             archive << y_col_len; 
@@ -92,7 +144,8 @@ public:
 	        archive >> m_total_len; 
             archive >> max_x; 
             archive >> max_y; 
-
+            
+            delete [] m_data;
             m_data = new sint32[m_total_len]; 
 
 	        archive.Load((uint8*)m_data, m_total_len *sizeof(sint32)); 

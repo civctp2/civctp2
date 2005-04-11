@@ -31,6 +31,7 @@
 // - Fixed slic database access after a reload by Martin Gühmann.
 // - Added '**' operator handling
 // - Added bitwise operator handling
+// - Repaired memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -75,7 +76,6 @@ SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset)
 	m_argStackPtr = -1;
 
 	m_messageData = NULL;
-	m_needResult = false;
 	m_resultObject = NULL;
 }
 
@@ -90,7 +90,6 @@ SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset, SlicStack *stack)
 	m_argStackPtr = -1;
 
 	m_messageData = NULL;
-	m_needResult = false;
 	m_resultObject = NULL;
 }
 
@@ -106,19 +105,18 @@ SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset, SlicStack *stack)
 //
 // Returns    : -
 //
-// Remark(s)  : No need for valid check of m_stack and m_messageData.
-//              No need to null m_stack.
-//              m_resultObject can only be released if it is valid.
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 SlicFrame::~SlicFrame()
 {
 	delete m_stack;
-
 	delete m_messageData;
 
-	if(m_resultObject)
+	if (m_resultObject)
+    {
 		m_resultObject->Release();
+    }
 }
 
 BOOL SlicFrame::ArrayLookup(SS_TYPE arrayType, SlicStackValue array,
@@ -763,17 +761,29 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				}
 				
 				
-				SlicObject *obj;
+				SlicObject * obj = NULL;
 				err = segment->Call(m_argList, obj);
-				if(op == SOP_CALLR) {
-					if(g_slicEngine->AtBreak()) {
-						m_needResult = true;
-						m_resultObject = obj;
-					} else {
-						sval1.m_int = obj->GetResult();
-						m_stack->Push(SS_TYPE_INT, sval1);
-						obj->Release();
-					}
+				if (obj)
+                {
+                    if (op == SOP_CALLR) 
+                    {
+					    if (g_slicEngine->AtBreak()) 
+                        {
+                            Assert(!m_resultObject); // need stack when failing?
+						    m_resultObject  = obj;
+					    } 
+                        else 
+                        {
+						    sval1.m_int = obj->GetResult();
+						    m_stack->Push(SS_TYPE_INT, sval1);
+						    obj->Release();
+					    }
+                    }
+                    else 
+                    {
+                        // SOP_CALL: result not used
+                        obj->Release();
+                    }
 				}
 			} else {
 				err = funcObj->Call(m_argList);
@@ -1282,10 +1292,12 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		
 BOOL SlicFrame::Run()
 {
-	if(m_needResult) {
+	if (m_resultObject) 
+    {
 		SlicStackValue value;
 		value.m_int = m_resultObject->GetResult();
 		m_resultObject->Release();
+        m_resultObject = NULL;
 		m_stack->Push(SS_TYPE_INT, value);
 	}
 

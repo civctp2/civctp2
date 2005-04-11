@@ -1,14 +1,30 @@
- 
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Repaired memory leak.
+//
+//----------------------------------------------------------------------------
  
 #include "c3.h"
 #include "pixelutils.h"
@@ -49,23 +65,23 @@ TileInfo::TileInfo()
 TileInfo::TileInfo(TileInfo *copy)
 {
 	*this = *copy;
-	if(copy->m_goodActor) {
+
+	if (copy->m_goodActor) 
+    {
 		m_goodActor = new GoodActor(copy->m_goodActor);
-	} else {
-		m_goodActor = NULL;
 	}
+    // else: already set in *this = *copy;
 }
 
 TileInfo::TileInfo(CivArchive &archive)
+:   m_goodActor (NULL)
 {
 	Serialize(archive);
 }
 
 TileInfo::~TileInfo()
 {
-	if(m_goodActor)
-		delete m_goodActor;
-	m_goodActor = NULL;
+	delete m_goodActor;
 }
 
 TILEINDEX TileInfo::GetTileNum(void)
@@ -98,15 +114,8 @@ TILEINDEX TileInfo::GetTileNum(void)
 
 sint32 TileInfo::SetGoodActor(sint32 index, MapPoint pos)
 {
-	if (m_goodActor)
-		DeleteGoodActor();
-
+    delete m_goodActor;
 	m_goodActor = new GoodActor(index, pos);
-	Assert(m_goodActor);
-	if(m_goodActor == NULL)
-		return FALSE;
-
-	
 	
 	if (g_theProfileDB->IsGoodAnim()) 
 	{
@@ -118,10 +127,8 @@ sint32 TileInfo::SetGoodActor(sint32 index, MapPoint pos)
 
 void TileInfo::DeleteGoodActor(void)
 {
-	if (m_goodActor) {
-		delete m_goodActor;
-		m_goodActor = NULL;
-	}
+	delete m_goodActor;
+	m_goodActor = NULL;
 }
 
 void TileInfo::Serialize(CivArchive &archive)
@@ -156,6 +163,8 @@ void TileInfo::Serialize(CivArchive &archive)
 			archive >> m_transitions[i];
 		}
 		archive >> hasGoodActor;
+
+        delete m_goodActor;
 		if(hasGoodActor)
 			m_goodActor = new GoodActor(archive);
 		else

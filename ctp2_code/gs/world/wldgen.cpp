@@ -25,6 +25,7 @@
 // - Implemented CalcTerrainFreightCost by Martin Gühmann
 // - Resolved ambiguous sqrt call.
 // - Standardised min/max usage.
+// - Repaired memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -88,7 +89,7 @@ extern  ProfileDB *g_theProfileDB;
 
 
 
-static C3Rand *s_randomGenerator;
+static C3Rand *s_randomGenerator    = NULL;
 
 void TemperatureFilter(sint8 *map, sint32 *histogram);
 
@@ -103,28 +104,35 @@ void TemperatureFilter(sint8 *map, sint32 *histogram);
 extern MapPoint g_mp_size;
 
 World::World(const MapPoint m, const int xw, const int yw)
+:   m_current_plugin        (NULL),
+	m_distanceQueue         (NULL),
+    m_map                   (NULL), 
+    m_tmpx                  (NULL),
+    m_cellArray             (NULL),
+    m_water_next_too_land   (NULL), 
+    m_land_next_too_water   (NULL),  
+    m_water_size            (NULL), 
+    m_land_size             (NULL),
+    m_goodValue             (NULL),
+    m_tileInfoStorage       (NULL),
+    A_star_heuristic        (NULL),
+    m_num_civ_starts        (0),
+    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
+    m_isXwrap               (xw),
+    m_isYwrap               (yw),
+    m_size                  (m)
 { 
-	
-	ClearStartingPoints();
-
-    m_mapGenerator = MAP_GENERATOR_PLUGIN;
-
-	
-	m_isXwrap = xw;
-    m_isYwrap = yw;
-
-    m_size = m; 
-    g_mp_size = m_size; 
-
-    Assert(0< m_size.x); 
-    Assert(0< m_size.y); 
-    
+    Assert(0 < m_size.x); 
+    Assert(0 < m_size.y); 
 	AllocateMap();
 
-	s_randomGenerator = new C3Rand;
-	s_randomGenerator->AddRef();
-
-	m_distanceQueue = NULL;
+    // Ugly
+    g_mp_size = m_size;
+    if (!s_randomGenerator)
+    {
+        s_randomGenerator   = new C3Rand();
+    }
+    (void) s_randomGenerator->AddRef();
 }
 
 void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
@@ -142,16 +150,15 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 		
 		XY_Coords.Init(m_size.y, m_size.x);
 
+        delete A_star_heuristic;
 		A_star_heuristic = new A_Star_Heuristic_Cost
 								(m_size.y, 
 								 m_size.x, 
 								 m_isYwrap ? true : false, 
 								 m_isXwrap ? true : false
 								);
-		s_randomGenerator->Release();
-		
 		m_continents_are_numbered= FALSE; 
-		
+	
 		NumberContinents(); 
 		
 		CalcChokePoints();
@@ -181,9 +188,16 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 				}
 			}
 		}
-		if(!worldIsGood) {
-			s_randomGenerator = new C3Rand();
-			s_randomGenerator->AddRef();
+
+		if (worldIsGood) 
+        {
+            if (0 == s_randomGenerator->Release())
+            {
+                s_randomGenerator = NULL;
+            }
+        }
+        else
+        {
 			sint32 x, y;
 			for(x = 0; x < m_size.x; x++) {
 				for(y = 0; y < m_size.y; y++) {
@@ -191,8 +205,6 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 				}
 			}
 		}
-
-
 	} while(!worldIsGood);
 
    
@@ -201,10 +213,22 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 
 
 World::World(CivArchive &archive, BOOL fromMapFile)
+:   m_current_plugin        (NULL),
+	m_distanceQueue         (NULL),
+    m_map                   (NULL), 
+    m_tmpx                  (NULL),
+    m_cellArray             (NULL),
+    m_water_next_too_land   (NULL), 
+    m_land_next_too_water   (NULL),  
+    m_water_size            (NULL), 
+    m_land_size             (NULL),
+    m_goodValue             (NULL),
+    m_tileInfoStorage       (NULL),
+    A_star_heuristic        (NULL),
+    m_num_civ_starts        (0),
+    m_mapGenerator          (MAP_GENERATOR_PLUGIN)
+//  m_isXwrap, m_isYwrap, m_size: set by Serialize
 {
-	
-	ClearStartingPoints();
-
 	if ( fromMapFile )
 		SerializeJustMap(archive);
 	else
@@ -219,21 +243,25 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	A_star_heuristic = new A_Star_Heuristic_Cost
 							(m_size.y, 
 							 m_size.x, 
-							 m_isYwrap ? true : false, 
-							 m_isXwrap ? true : false
+							 m_isYwrap, 
+							 m_isXwrap
 							);
-	m_distanceQueue = NULL;
 }
 
 World::~World()
 {
-	delete A_star_heuristic;
+	FreeMap();  // m_map, m_tmpx, m_cellArray, m_water_next_too_land, 
+                // m_land_next_too_water, m_water_size, m_land_size,
+                // m_tileInfoStorage
+	delete m_distanceQueue;
+    delete A_star_heuristic;
 
-	FreeMap();
-	if(m_distanceQueue) {
-		delete m_distanceQueue;
-		m_distanceQueue = NULL;
-	}
+    delete [] m_goodValue;
+	
+    if (m_current_plugin)
+    {
+        FreeLibrary(m_current_plugin);
+    }
 }
 
 void World::FreeMap()
@@ -247,12 +275,12 @@ void World::FreeMap()
 	}
 	
 	delete [] m_tmpx;
+    m_tmpx      = NULL;
 	delete [] m_cellArray;
+	m_cellArray = NULL;
 
 	DisposeTileInfoStorage();
-
-	m_map = NULL;
-	m_cellArray = NULL;
+	m_map       = NULL;
 
     delete m_water_next_too_land;
     m_water_next_too_land = NULL;
@@ -262,11 +290,6 @@ void World::FreeMap()
     m_water_size = NULL; 
     delete m_land_size; 
     m_land_size = NULL; 
-
-	if(m_goodValue) {
-		delete [] m_goodValue;
-		m_goodValue = NULL;
-	}
 }
 
 void World::Reset(sint16 sx, sint16 sy, BOOL yWrap, BOOL xWrap)
@@ -344,8 +367,6 @@ void World::AllocateMap()
     m_land_next_too_water = new DynamicArray<DAsint32>;
     m_water_size = new DynamicArray<sint32>; 
     m_land_size = new DynamicArray<sint32>; 
-
-	m_goodValue = new double[g_theResourceDB->NumRecords()];
 }
 
 
@@ -889,7 +910,13 @@ void World::GenerateGoods()
 
 void World::ComputeGoodsValues()
 {
-	
+    if (g_theResourceDB->NumRecords() <= 0)
+    {
+        delete [] m_goodValue;
+        m_goodValue = NULL;
+        return;
+    }
+
 	sint32 *goodCounts = new sint32[g_theResourceDB->NumRecords()];
 	memset(goodCounts, 0, sizeof(sint32) * g_theResourceDB->NumRecords());
 	MapPoint pos;
@@ -929,17 +956,15 @@ void World::ComputeGoodsValues()
 
 	double valueDiff = g_theConstDB->GetMaxGoodValue() - g_theConstDB->GetMinGoodValue();
 
+    delete [] m_goodValue;
+    m_goodValue = new double[g_theResourceDB->NumRecords()];
+
 	for(i = 0; i < g_theResourceDB->NumRecords(); i++) {
 		if(goodCounts[i] <= 0) {
 			
 			m_goodValue[i] = g_theConstDB->GetMaxGoodValue() + 1;
 		} else {
-
-			
-			
-			
-			
-			
+            // goodCounts[i] > 0 => maxCount > 0, so division by maxCount is OK
 			double percent = double(goodCounts[i]) / double(maxCount);
 			
 			m_goodValue[i] = g_theConstDB->GetMinGoodValue() +
@@ -2560,6 +2585,8 @@ void World::Serialize(CivArchive &archive)
 
 		MapPoint	pos ;
 
+        FreeMap();
+
 		archive.TestMagic(WORLD_MAGIC) ;
 		archive>>m_isXwrap ;
 		archive>>m_isYwrap ;
@@ -2670,16 +2697,15 @@ void World::AllocateTileInfoStorage(void)
 {	
 	sint32			width = m_size.x;
 	sint32			height = m_size.y;
-
+    
+    delete [] m_tileInfoStorage;
 	m_tileInfoStorage = new TileInfo[width*height];
 }
 
 void World::DisposeTileInfoStorage(void)
 {
-	if (m_tileInfoStorage != NULL) {
-		delete[] m_tileInfoStorage;
-		m_tileInfoStorage = NULL;
-	}	
+	delete [] m_tileInfoStorage;
+	m_tileInfoStorage = NULL;
 }
 
 TileInfo *World::GetTileInfoStoragePtr(const MapPoint &pos)
@@ -2773,6 +2799,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 void World::FreeMapPlugin()
 {
 	FreeLibrary(m_current_plugin);
+    m_current_plugin = NULL;
 }
 
 void World::GetHeightMap(IMapGenerator *mapgen,
