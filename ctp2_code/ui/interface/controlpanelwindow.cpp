@@ -16,6 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// _DEBUG
+// Set when generating the debug version.
 // 
 //----------------------------------------------------------------------------
 //
@@ -32,6 +35,7 @@
 // - Fixed the crossed sword bug that was caused by the previous bug fix,
 //   cossed swords even if the city is hidden. - Oct. 15th 2004 Martin Gühmann
 // - Added unit display name.
+// - Relaxed Assert for invisible buttons with mods.
 //
 //----------------------------------------------------------------------------
 //
@@ -2823,7 +2827,7 @@ ControlPanelWindow::CreateTileImpBanks()
 
 	
 	
-	char *panels[4] = {	
+	char *panels[CP_TILEIMP_MAX] = {	
 			"tiLandButtonBank",
 			"tiSpecialButtonBank",
 			"tiOceanButtonBank",
@@ -2934,7 +2938,13 @@ ControlPanelWindow::CreateTileImpBanks()
 
 			if (a_button==NULL)
 			{
-				Assert(button_id=="Could not find button");
+#if defined(_DEBUG)
+                if (row < CP_TILEIMP_MAX)
+                {
+				    Assert(button_id=="Could not find button");
+                }
+                // else: No report. Used by a lot of mods for inaccessible tile improvements.
+#endif // _DEBUG
 				continue;
 			}
 			else

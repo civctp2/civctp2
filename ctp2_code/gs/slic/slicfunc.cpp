@@ -44,6 +44,7 @@
 // - New slic function by Solver: IsOnSameContinent - Checks whether two
 //   locations are on the same continent.
 // - Added AddSlaves function modelled after the AddPops function.
+// - Improved argument checking of Get<Type> functions.
 //
 //----------------------------------------------------------------------------
 
@@ -200,27 +201,52 @@ void SlicArgList::AddArg(SA_TYPE type, SlicSymbolData *symbol)
 	m_numArgs++;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SlicArgList::Get<Type>
+//
+// Description: Try to read an argument value of a specific type.
+//
+// Parameters : arg     : argument index
+//
+// Globals    : -
+//
+// Returns    : BOOL    : an argument value has been read successfully
+//              value   : the read value
+//
+// Remark(s)  : - value is only valid when TRUE is returned
+//              - <Type> can one of: Int, Unit, Army, City, Player, 
+//                                   Pos, String, StringId
+//
+//----------------------------------------------------------------------------
+
 BOOL SlicArgList::GetInt(sint32 arg, sint32 &value)
 {
 	Assert(arg < m_numArgs);
-	if(m_argType[arg] == SA_TYPE_INT) {
+ 	if (m_argType[arg] == SA_TYPE_INT) 
+    {
 		value = m_argValue[arg].m_int;
-	} else if(m_argType[arg] == SA_TYPE_BUILTIN) {
-		m_argValue[arg].m_symbol->GetIntValue(value);
-	} else if(m_argType[arg] == SA_TYPE_INT_VAR) {
-		m_argValue[arg].m_symbol->GetIntValue(value);
-	} else {
-		return FALSE;
-	}
-	return TRUE;
+        return TRUE;
+	} 
+    else if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
+             (m_argType[arg] == SA_TYPE_BUILTIN)
+            )
+    {
+		return m_argValue[arg].m_symbol &&
+               m_argValue[arg].m_symbol->GetIntValue(value);
+	} 
+	return FALSE;
 }
 
 BOOL SlicArgList::GetUnit(sint32 arg, Unit &u)
 {
 	Assert(arg < m_numArgs);
-	if(m_argType[arg] == SA_TYPE_INT_VAR ||
-	   m_argType[arg] == SA_TYPE_BUILTIN) {
-		return m_argValue[arg].m_symbol->GetUnit(u);
+	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
+	    (m_argType[arg] == SA_TYPE_BUILTIN) 
+       )
+    {
+		return m_argValue[arg].m_symbol &&
+               m_argValue[arg].m_symbol->GetUnit(u);
 	}
 	return FALSE;
 }
@@ -228,9 +254,12 @@ BOOL SlicArgList::GetUnit(sint32 arg, Unit &u)
 BOOL SlicArgList::GetArmy(sint32 arg, Army &a)
 {
 	Assert(arg < m_numArgs);
-	if(m_argType[arg] == SA_TYPE_INT_VAR ||
-	   m_argType[arg] == SA_TYPE_BUILTIN) {
-		return m_argValue[arg].m_symbol->GetArmy(a);
+	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
+	    (m_argType[arg] == SA_TYPE_BUILTIN)
+       ) 
+    {
+		return m_argValue[arg].m_symbol &&
+               m_argValue[arg].m_symbol->GetArmy(a);
 	}
 	return FALSE;
 }
@@ -238,9 +267,12 @@ BOOL SlicArgList::GetArmy(sint32 arg, Army &a)
 BOOL SlicArgList::GetCity(sint32 arg, Unit &city)
 {
 	Assert(arg < m_numArgs);
-	if(m_argType[arg] == SA_TYPE_INT_VAR ||
-	   m_argType[arg] == SA_TYPE_BUILTIN) {
-		return m_argValue[arg].m_symbol->GetCity(city);
+	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
+	    (m_argType[arg] == SA_TYPE_BUILTIN) 
+       )
+    {
+		return m_argValue[arg].m_symbol &&
+               m_argValue[arg].m_symbol->GetCity(city);
 	}
 	return FALSE;
 }
@@ -248,9 +280,12 @@ BOOL SlicArgList::GetCity(sint32 arg, Unit &city)
 BOOL SlicArgList::GetPos(sint32 arg, MapPoint &pos)
 {
 	Assert(arg < m_numArgs);
-	if(m_argType[arg] == SA_TYPE_INT_VAR ||
-	   m_argType[arg] == SA_TYPE_BUILTIN) {
-		return m_argValue[arg].m_symbol->GetPos(pos);
+	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
+	    (m_argType[arg] == SA_TYPE_BUILTIN)
+       ) 
+    {
+		return m_argValue[arg].m_symbol &&
+               m_argValue[arg].m_symbol->GetPos(pos);
 	}
 	return FALSE;
 }
@@ -258,24 +293,28 @@ BOOL SlicArgList::GetPos(sint32 arg, MapPoint &pos)
 BOOL SlicArgList::GetPlayer(sint32 arg, sint32 &value)
 {
 	Assert(arg < m_numArgs);
-	if(m_argType[arg] == SA_TYPE_INT) {
+	if (m_argType[arg] == SA_TYPE_INT) 
+    {
 		value = m_argValue[arg].m_int;
-	} else if(m_argType[arg] == SA_TYPE_BUILTIN) {
-		if(!m_argValue[arg].m_symbol->GetPlayer(value))
-			return FALSE;
-	} else if(m_argType[arg] == SA_TYPE_INT_VAR) {
-		if(!m_argValue[arg].m_symbol->GetPlayer(value))
-			return FALSE;
-	} else {
-		return FALSE;
-	}
-	return TRUE;
+        return TRUE;
+	} 
+    else if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
+             (m_argType[arg] == SA_TYPE_BUILTIN)
+            )
+    {
+		return m_argValue[arg].m_symbol &&
+               m_argValue[arg].m_symbol->GetPlayer(value);
+	} 
+	return FALSE;
 }
 
 BOOL SlicArgList::GetString(sint32 arg, const char *&value)
 {
 	Assert(arg < m_numArgs);
-	if(m_argType[arg] == SA_TYPE_HARD_STRING) {
+	if ((m_argType[arg] == SA_TYPE_HARD_STRING) &&
+        m_argValue[arg].m_symbol
+       )
+    {
 		value = m_argValue[arg].m_symbol->GetName();
 		return TRUE;
 	} 

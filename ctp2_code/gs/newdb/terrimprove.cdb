@@ -1,3 +1,29 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : DbGen input
+#  Description  : Terrain improvement record definition
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Sound added.
+#  - Added Freight for trade redirection.
+#  - Government modifier added.
+#  - DisplayLevel and CanPillage added to support visible wonders.
+# 
+#-----------------------------------------------------------------------------
+
 TerrainImprovement {
 	Bits Class {
 		Farm,
@@ -95,4 +121,9 @@ TerrainImprovement {
 	Bit(Int) SquaredBorderRadius
 
 	Bit GLHidden
+
+    # Display level (0 = ground level = under roads, > 0 = on top of roads)
+	Int DisplayLevel	= 0
+	# Pillage prevention
+	Bit	CantPillage
 }

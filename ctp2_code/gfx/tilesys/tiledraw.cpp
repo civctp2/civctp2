@@ -45,6 +45,7 @@
 //   - Mar. 4th 2005 Martin Gühmann
 // - If fog of war is off or god mode is on all borders are now shown. Even 
 //   those of the civs you have no contact to. - Mar. 4th 2005 Martin Gühmann
+// - Added option to draw wonders on top of roads.
 //
 //----------------------------------------------------------------------------
 
@@ -227,17 +228,13 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 	if (g_selected_item->GetVisiblePlayer()==g_theWorld->GetOwner(pos)) 
 		visiblePlayerOwnsThis = TRUE;
 
-#if defined(ACTIVISION_OEIGINAL)
-// Removed by Martin Gühmann
-	if (m_localVision->GetLastSeen(pos, ucell) && !visiblePlayerOwnsThis) 
-#else
-// Added by Martin Gühmann
+	std::vector<Pixel16 *>	drawOnTop;	// things above road level
+
 	if(!g_fog_toggle // Draw the right stuff if fog of war is off
 	&& !visiblePlayerOwnsThis
 	&&  m_localVision->GetLastSeen(pos, ucell)
 //	&&  ucell.m_unseenCell->GetImprovements()->GetCount() > 0
 	) 
-#endif
 	{
 		env = ucell.m_unseenCell->GetEnv();
 
@@ -304,8 +301,16 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 				data    = m_tileSet->GetImprovementData((uint16)index);
 				
 				
-				DrawAnImprovement(surface,data,x,y,fog);
-				drewSomething = true;
+				if (rec->GetDisplayLevel() > 0)
+				{
+					// Postpone display
+					drawOnTop.push_back(data);
+				}
+				else
+				{
+					DrawAnImprovement(surface, data, x, y, fog);
+                              drewSomething = true;
+				}
 			}
 		}
 	}
@@ -438,6 +443,18 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		}
 		
 		delete walker;
+	}
+
+    // Put the special items on top
+	for
+	(
+		std::vector<Pixel16 *>::iterator	p	= drawOnTop.begin();
+		p != drawOnTop.end();
+		++p
+	)
+	{
+            DrawAnImprovement(surface, *p, x, y, fog);
+            drewSomething = true;
 	}
 
 	return drewSomething;
@@ -5734,17 +5751,7 @@ TiledMap::DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint3
 sint32 TiledMap::GetVisibleCellOwner(MapPoint &pos)
 {
 	if(!m_localVision->IsVisible(pos) 
-#if defined(ACTIVISIO_ORIGINAL)
-// Removed by Martin Gühmann already checked in IsVisible
-// no need to do it twice.
-	&& !g_fog_toggle
-	&& !g_god 
-	&& (g_player[g_selected_item->GetVisiblePlayer()] 
-	&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)
-#else
-// Added by Martin Gühmann
 	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
-#endif
 	){
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(pos, ucell)) {
@@ -5796,16 +5803,12 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 	if(pos.GetNeighborPosition(NORTHWEST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
-#if defined(ACTIVSION_ORIGINAL)
-		if(neighborOwner != myOwner && (visP->HasSeen(myOwner)) && g_theProfileDB->GetShowPoliticalBorders()) {
-#else
 		if(neighborOwner != myOwner 
 		&&(visP->HasSeen(myOwner)
 		|| g_fog_toggle // The sense of fog of and god mode is to see something.
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-#endif
 			DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID);
 		}
 
