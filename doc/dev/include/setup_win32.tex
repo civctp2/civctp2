@@ -151,6 +151,10 @@ C:\libs\SDL_mixer-1.2.5\lib
 \end{subsubsection}% Add the SDL libraries to your Visual Studio library paths
 \end{subsection}% Optional: Install SDL
 
+\begin{subsection}{Add STL fixes (MSCV 6 only)}
+If you are running MSVC6, you will need to add ctp2\_code/compiler/msvc6/stlfixes to your include path. This should come before the standard MSVC6 includes but after the DXMedia/DirectX includes.
+\end{subsection}
+
 \begin{subsection}{Unpacking the source}
 If not already done so, download the source from \href{http://ctp2files.apolyton.net/source/}{apolyton.net}.
 
@@ -198,6 +202,8 @@ Perhaps you get warnings by your zip-Software regarding files to be overwritten.
 \item{If the previous didn't apply, follow the instructions of the post where you got the file from to apply the changes to your ctp2 source code directory.}
 \end{enumerate}
 \end{subsection}% Optional: Get up to date until latest post
+
+Alternatively, update from the SVN respiritory.
 
 \begin{subsection}{Make a backup of the clean source directory}
 Backup the sources to another directory. It will help you playing with the sources, later.
