@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _DEBUG
+// - Generate debug version when set.
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -38,7 +41,8 @@
 // - Game doesn't crash anymore if the cursor is moved over a city that is
 //   displayed as city belonging to a civilisation that was destroyed.
 //   - Last 2 on Mar. 4th 2004 Martin Gühmann
-//
+// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
+//   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
 
@@ -223,14 +227,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			Concat(" - ");
 		}
 		
-#if defined(ACTIVISION_DEFAULT)
-// Removed by Martin Gühmann
-		Concat(g_theStringDB->GetNameStr(g_theTerrainDB->Get(cell->GetTerrainType())->GetName()));
-		Concat("     ");
-
-		if(cell->HasCity()) {
-			Unit city = cell->GetCity();
-#else
 // Added by Martin Gühmann
 		UnseenCellCarton ucell;
 		BOOL hasUnseen = FALSE;
@@ -297,7 +293,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				}
 			}
 			else{
-#endif
 				if(g_theStringDB->GetNameStr("INFOBAR_CITY")) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_CITY"));
 				}
@@ -401,9 +396,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			if(g_theWorld->IsGood(point)) {
                 sint32 goods;
 				cell->GetGoodsIndex(goods);
-				food=food + g_theResourceDB->Get(goods)->GetFood();
-				prod=prod + g_theResourceDB->Get(goods)->GetProduction();
-				gold=gold + g_theResourceDB->Get(goods)->GetGold();
 
 				goodStrID = g_theWorld->GetTerrain(point)->GetResources(goods)->GetName();
 			}

@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// BATTLE_FLAGS
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -31,6 +33,8 @@
 //   city the owner is now taken from the CityData instead of the Unit 
 //   itsself this allows to get the right owner info when a city changes 
 //   hands. - Mar. 4th 2005 Martin Gühmann
+// - Moved Peter's good's fix to the according Get*FromTerrain functions.
+//   - April 13th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -60,6 +64,7 @@
 // Added by Martin Gühmann to support unseen terrain stat calculation
 #include "TerrainRecord.h"
 #include "TerrainImprovementRecord.h"
+#include "ResourceRecord.h"
 
 extern Director				*g_director;
 extern World				*g_theWorld;
@@ -526,28 +531,6 @@ sint32 UnseenCell::IsListeningPost(void)
 	return terrainutil_HasListeningPost(m_point);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //----------------------------------------------------------------------------
 //
 // Name       : UnseenCell::IsFort
@@ -615,7 +598,6 @@ sint32 UnseenCell::IsHealUnits(void)
 }
 
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : UnseenCell::GetFoodFromTerrain
@@ -646,6 +628,12 @@ sint32 UnseenCell::GetFoodFromTerrain() const
 	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
 		food += rec->GetEnvRiverPtr()->GetFood();
 	}
+
+	sint32 good;
+	if(g_theWorld->GetCell(m_point)->GetGoodsIndex(good)){
+		food += g_theResourceDB->Get(good)->GetFood();
+	}
+
 	return food;
 }
 
@@ -727,6 +715,11 @@ sint32 UnseenCell::GetShieldsFromTerrain() const
 
 	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
 		shield += rec->GetEnvRiverPtr()->GetShield();
+	}
+
+	sint32 good;
+	if(g_theWorld->GetCell(m_point)->GetGoodsIndex(good)){
+		shield += g_theResourceDB->Get(good)->GetProduction();
 	}
 
 	return shield;
@@ -811,6 +804,11 @@ sint32 UnseenCell::GetGoldFromTerrain() const
 
 	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
 		gold += rec->GetEnvRiverPtr()->GetGold();
+	}
+
+	sint32 good;
+	if(g_theWorld->GetCell(m_point)->GetGoodsIndex(good)){
+		gold += g_theResourceDB->Get(good)->GetGold();
 	}
 
 	return gold;

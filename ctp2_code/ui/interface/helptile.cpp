@@ -17,6 +17,8 @@
 //
 // Compiler flags
 // 
+// - None
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +26,8 @@
 // - Does not show anymore the current tarrain stats but those from
 //   the last visit. - Dec. 23rd 2004 Martin Gühmann
 // - Add in food, shields, and gold from any good that is present. PFT 3 apr 05
+// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
+//   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
 
@@ -267,10 +271,6 @@ void helptile_displayData(const MapPoint &p)
 	char mytext[256];
 	sint32 goods=0;
 
-    sint32 food=0;//PFT 3 apr 05
-	sint32 shields=0;
-	sint32 gold=0;
-
 	const Cell *myTile = g_theWorld->GetCell(p);
 
 // Added by Martin Gühmann
@@ -308,20 +308,6 @@ void helptile_displayData(const MapPoint &p)
 			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
 			s_tileGoodV->SetText(mytext);
 
-            //PFT 03 apr 05:
-			food = myTile->GetFoodProduced() + g_theResourceDB->Get(goods)->GetFood();
-			sprintf( mytext , "%d\n", food);
-			s_tileFoodV->SetText(mytext);
-
-			shields = myTile->GetShieldsProduced() + g_theResourceDB->Get(goods)->GetProduction();
-			sprintf( mytext , "%d\n", shields);
-			s_tileProdV->SetText(mytext);
-
-
-			gold = myTile->GetGoldProduced() + g_theResourceDB->Get(goods)->GetGold();
-			sprintf( mytext, "%d", gold);
-			s_tileGoldV->SetText(mytext);
-
 		}
 		else {
 			sprintf( mytext , "%s\n", s_stringTable->GetString(STR_NONE));
@@ -356,20 +342,6 @@ void helptile_displayData(const MapPoint &p)
 			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
 			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
             s_tileGoodV->SetText(mytext);
-
-            //PFT 03 apr 05:
-			food = myTile->GetFoodProduced() + g_theResourceDB->Get(goods)->GetFood();
-			sprintf( mytext , "%d\n", food);
-			s_tileFoodV->SetText(mytext);
-
-			shields = myTile->GetShieldsProduced() + g_theResourceDB->Get(goods)->GetProduction();
-			sprintf( mytext , "%d\n", shields);
-			s_tileProdV->SetText(mytext);
-
-
-			gold = myTile->GetGoldProduced() + g_theResourceDB->Get(goods)->GetGold();
-			sprintf( mytext, "%d", gold);
-			s_tileGoldV->SetText(mytext);
 
 		}
 		else {

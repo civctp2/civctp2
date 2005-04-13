@@ -65,6 +65,8 @@
 // - Hot seat handling improved.
 // - Static member of StatusBar is now deleted correctly, by Martin Gühmann.
 // - Cleaned up music screen.
+// - The civilisation index from the profile is now reset if it is too high.
+//   This prevents the game from crashing. - April 12th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -1005,6 +1007,10 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 			}
 
 		}
+
+	// Fix the player index if it is out of range:
+	if(g_theProfileDB->GetCivIndex() >= g_theCivilisationDB->m_nRec)
+		g_theProfileDB->SetCivIndex((CIV_INDEX)1); 
 
 	Assert(g_theCivilisationDB) ;
 

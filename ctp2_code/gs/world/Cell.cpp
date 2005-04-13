@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -31,6 +33,8 @@
 //   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
 // - GetGoldProduced function now uses GetGoldFromTerrain function to avoid
 //   duplicating code. - Sep. 21st 2004 Martin Gühmann
+// - Moved Peter's good's fix to the according Get*FromTerrain functions.
+//   - April 13th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -40,6 +44,7 @@
 #include "TerrainRecord.h"
 #include "TerrImprove.h"
 #include "TerrainImprovementRecord.h"
+#include "ResourceRecord.h" // For accessing the goods on the terrain
 
 #include "pixelutils.h"
 #include "tileutils.h"
@@ -348,6 +353,12 @@ sint32 Cell::GetFoodFromTerrain(sint8 terrainType) const
 	if(HasRiver() && rec->GetEnvRiver()) {
 		food += rec->GetEnvRiverPtr()->GetFood();
 	}
+
+	sint32 good;
+	if(GetGoodsIndex(good)){
+		food += g_theResourceDB->Get(good)->GetFood();
+	}
+
 	return food;
 }
 
@@ -441,6 +452,11 @@ sint32 Cell::GetShieldsFromTerrain(sint8 terrainType) const
 
 	if(HasRiver() && rec->GetEnvRiver()) {
 		shield += rec->GetEnvRiverPtr()->GetShield();
+	}
+
+	sint32 good;
+	if(GetGoodsIndex(good)){
+		shield += g_theResourceDB->Get(good)->GetProduction();
 	}
 
 	return shield;
@@ -538,6 +554,11 @@ sint32 Cell::GetGoldFromTerrain(sint8 terrainType) const
 
 	if(HasRiver() && rec->GetEnvRiver()) {
 		gold += rec->GetEnvRiverPtr()->GetGold();
+	}
+
+	sint32 good;
+	if(GetGoodsIndex(good)){
+		gold += g_theResourceDB->Get(good)->GetGold();
 	}
 
 	return gold;

@@ -62,6 +62,8 @@
 // - Updated NeedMoreFood function for better estimation. 
 //   - April 4th 2005 Martin Gühmann
 // - Changed CollectResources to add in the food, production, and gold from the resource.
+// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
+//   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
 
@@ -1816,7 +1818,7 @@ void CityData::CollectResources()
 			fullCommerceTerrainTotal += cell->GetGoldProduced();
 
 		} else if(partSquaredRadius > 0 &&
-				  MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius) {
+		          MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius) {
 			
 			partFoodTerrainTotal += cell->GetFoodProduced();
 			partProdTerrainTotal += cell->GetShieldsProduced();
@@ -1825,10 +1827,6 @@ void CityData::CollectResources()
 		sint32 good;
 		if(g_theWorld->GetGood(it.Pos(), good)) {
 			m_collectingResources.AddResource(good);
-               // add in the food, production, and gold from the resource, PFT 01 mar 05
-               fullFoodTerrainTotal += g_theResourceDB->Get(good)->GetFood();
-               fullProdTerrainTotal += g_theResourceDB->Get(good)->GetProduction();
-               fullCommerceTerrainTotal += g_theResourceDB->Get(good)->GetGold();
 		}
 	}
 
