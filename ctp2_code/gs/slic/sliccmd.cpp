@@ -515,13 +515,16 @@ void sliccmd_type_error()
 
 void sliccmd_clear_symbols()
 {
-	if(!s_symbolList)
-		s_symbolList = new PointerList<SlicSymbolData>;
+	if (s_symbolList)
+    {
+    	while (s_symbolList->GetHead()) 
+        {
+		    s_symbolList->RemoveHead();
+        }
 
-	while(s_symbolList->GetHead()) {
-		s_symbolList->RemoveHead();
+        delete s_symbolList;
+        s_symbolList = NULL;
 	}
-
 }
 
 void sliccmd_add_symbol_used(SlicSymbolData *sym)

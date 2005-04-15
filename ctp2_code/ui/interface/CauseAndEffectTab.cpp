@@ -24,6 +24,7 @@
 // - Use the same science percentage everywhere.
 // - Added optimize sliders button and according callback function to allow
 //   the player to optimize sliders, automaticly. - April 8th 2005 Martin Gühmann
+// - Backwards compatibility crash prevention
 //
 //----------------------------------------------------------------------------
 
@@ -219,8 +220,12 @@ m_summaryCommerceSavings(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	m_tabPanel->SetShowCallback(DetailsShowCallback, this);
 	m_detailsButton->SetActionFuncAndCookie(
 		DetailsButtonActionCallback, this);
-	m_optimizeSliderButton->SetActionFuncAndCookie(
-		 OptimizeSlidersButtonActionCallback, this); // Added by Martin Gühmann
+
+    if (m_optimizeSliderButton)
+    {
+	    m_optimizeSliderButton->SetActionFuncAndCookie
+                                    (OptimizeSlidersButtonActionCallback, this);
+    }
 	m_happinessBar->SetDrawCallbackAndCookie(
 		HappinessBarActionCallback, this, false);
 	m_foodRationsSpinner->SetActionFuncAndCookie(
@@ -953,22 +958,23 @@ void CauseAndEffectTab::DetailsShowCallback(aui_Region *region,
 void CauseAndEffectTab::CauseAndEffectTabActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	if(action == ctp2_Tab::ACTION_ACTIVATED)
-	{
-		((CauseAndEffectTab*)cookie)->m_detailsButton->Show();
-	}
-	else if(action == ctp2_Tab::ACTION_DEACTIVATED)
-	{
-		((CauseAndEffectTab*)cookie)->m_detailsButton->Hide();
-	}
+    CauseAndEffectTab * tab = reinterpret_cast<CauseAndEffectTab *>(cookie);
 
-	if(action == ctp2_Tab::ACTION_ACTIVATED)
+    if (action == ctp2_Tab::ACTION_ACTIVATED)
 	{
-		((CauseAndEffectTab*)cookie)->m_optimizeSliderButton->Show();
-	}
-	else if(action == ctp2_Tab::ACTION_DEACTIVATED)
-	{
-		((CauseAndEffectTab*)cookie)->m_optimizeSliderButton->Hide();
-	}
+		tab->m_detailsButton->Show();
+        if (tab->m_optimizeSliderButton)
+        {
+            tab->m_optimizeSliderButton->Show();
+        }
 
+	}
+	else if (action == ctp2_Tab::ACTION_DEACTIVATED)
+	{
+		tab->m_detailsButton->Hide();
+        if (tab->m_optimizeSliderButton)
+        {
+            tab->m_optimizeSliderButton->Hide();
+        }
+	}
 }

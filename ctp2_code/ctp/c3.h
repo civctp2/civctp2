@@ -27,18 +27,7 @@
 // - Compiler version (for the GNU C++ compiler only).
 //
 // _TEST
-//
-// Note: The following note no longer makes much sense (and is in fact
-//       inaccurate), since ACTIVISION_ORIGINAL
-//       is no longer used, but I have left it here for the record - JJB
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are active for _MSC_VER value 1200 are the original 
-//		 Activision code, unless explicitly embedded in !ACTIVISION_ORIGINAL 
-//		 blocks.
-//		 The _GNUC_ blocks are modified Apolyton code.
+// ?
 //
 //----------------------------------------------------------------------------
 //
@@ -75,7 +64,7 @@
 #include <limits.h>
 #if !defined(__GNUC__)
 #include <crtdbg.h>
-#endif
+#endif // __GNUC__
 
 // Do not define the min and max *macros* in <windows.h>.
 #define NOMINMAX	
@@ -125,11 +114,11 @@
 
 #if defined(__GNUC__)
 #define _MAX_PATH PATH_MAX
-#endif
+#endif // __GNUC__
 
 #include "c3types.h"
 #include "c3debug.h"
 #include "c3errors.h"
 #include "aui.h"
 
-#endif
+#endif // __C3_H__

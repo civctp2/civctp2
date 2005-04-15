@@ -5012,38 +5012,6 @@ sint32 CityData::GetHappinessFromPops()
    return happy;
 }
 
-#if defined(ACTIVISION_ORIGINAL)
-sint32 CityData::GetScienceFromPops()
-{
-	sint32 sci = 0;
-
-	double popWonderModifier = double(wonderutil_GetIncreaseScientists(m_builtWonders));
-	popWonderModifier += double(wonderutil_GetIncreaseSpecialists(g_player[m_owner]->m_builtWonders));
-	
-	if(popWonderModifier && m_specialistDBIndex[POP_SCIENTIST] >= 0 && 
-	   m_specialistDBIndex[POP_SCIENTIST] < g_thePopDB->NumRecords()) {
-		sci += sint32(popWonderModifier * 
-					  g_thePopDB->Get(m_specialistDBIndex[POP_SCIENTIST])->GetScience());
-	}
-
-	sci += sint32(buildingutil_GetIncreaseSciencePerPop(GetEffectiveBuildings()) * double(PopCount() - SlaveCount()));
-
-	
-	double p;
-	buildingutil_GetSciencePercent(GetEffectiveBuildings(), p);
-	sci += sint32(sci * p);
-	sci = sint32(double(sci) * g_player[m_home_city.GetOwner()]->GetKnowledgeCoef());
-	sci += sint32((double)sci * double((double)wonderutil_GetIncreaseKnowledgePercentage(g_player[m_home_city.GetOwner()]->GetBuiltWonders()) / 100.0));
-	
-	if(m_specialistDBIndex[POP_SCIENTIST] >= 0 &&
-		m_specialistDBIndex[POP_SCIENTIST] < g_thePopDB->NumRecords()) {
-		sci += sint32(ScientistCount() * 
-					  g_thePopDB->Get(m_specialistDBIndex[POP_SCIENTIST])->GetScience());
-	}
-
-	return sci;
-}
-#else
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::GetScienceFromPops
@@ -5091,7 +5059,6 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 
 	return static_cast<sint32>(sci);
 }
-#endif
 
 sint32 CityData::GetNumPop() const
 { 

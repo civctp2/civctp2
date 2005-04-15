@@ -222,9 +222,13 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "EditQueueButton", CityWindow::EditQueue, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	// Added by Martin Gühmann for specialist optimization option:
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.Specialists.TabPanel.OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
-	Assert(*err == AUI_ERRCODE_OK);
+    if (aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.OptimizeSpecialistButton"))
+    {
+	    // Added by Martin Gühmann for specialist optimization option:
+	    *err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.Specialists.TabPanel.OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
+        Assert(*err == AUI_ERRCODE_OK);
+    }
+    // else No action: this button is not guaranteed to exist in mods.
 
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.List", CityWindow::BuildListSelect, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
