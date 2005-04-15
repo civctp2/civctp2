@@ -41,6 +41,7 @@
 //   operator needs to be reworked. - Feb. 21st 2005 Martin Gühmann
 // - Better version of Calvitix' operator added, but still experimental and
 //   therefore disabled. - Feb. 24th 2005 Martin Gühmann
+// - Added and enabled anti-symmetrical > operator. - April 14th 2005 Martin Gühmann
 // 
 //----------------------------------------------------------------------------
 
@@ -100,7 +101,7 @@ Squad_Strength & Squad_Strength::operator= (const Squad_Strength &squad_strength
     return *this;
 }
 
-#if 1
+#if 0
 // A better operator implemented than that of Calvitix
 // but it is still experimental and therefore here disabled.
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
@@ -125,12 +126,11 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 #else
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 {
-
-	// To be compatible with the original operator, test the
-	// nb of transport too
-	sint16 transport_nb = (m_transport - squad_strength.m_transport);
-	if(m_transport > 0 && transport_nb > 0)
+	// Transport squads should always be always bigger:
+	if(m_transport > squad_strength.m_transport)
 		return true;
+	else if(m_transport < squad_strength.m_transport)
+		return false;
 
 	// Attack difference
 	sint16 attack_cpr = (m_attack_str - squad_strength.m_attack_str);
@@ -141,17 +141,19 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 	// value difference
 	sint16 value_cpr = (m_value - squad_strength.m_value);
 
-	// the addition of all differences has to be greater than 0
+	// The addition of all differences has to be greater than 0
 	// it is certainly better than only testing attack or defense
 	// but can be improved (for exemple, by applying a ratio on the greater score
 	if((attack_cpr + defense_cpr + ranged_cpr + value_cpr) > 0)
 		return true;
 
-	// test the nb of agent too
+	// Test the nb of agent too
 	if(m_agent_count > 0 && squad_strength.m_agent_count > 0){
 
-		//when only agent count is as criterion : (for special units for example)
-		if (m_attack_str + m_defense_str + m_ranged_str + m_value  == 0){
+		//If only agent count is a criterion : (for special units for example)
+		if(m_attack_str + m_defense_str + m_ranged_str + m_value  == 0
+		&& squad_strength.m_attack_str + squad_strength.m_defense_str + squad_strength.m_ranged_str + squad_strength.m_value  == 0
+		){
 			return (m_agent_count > squad_strength.m_agent_count);
 		}
 	}
