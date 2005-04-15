@@ -53,8 +53,8 @@ private:
 	MBCHAR *m_defaultPath;		
 	MBCHAR *m_localizedPath;	
 
-	MBCHAR *m_dataPath;			            // original data path (...\ctp2_data)
-	std::vector<MBCHAR *> m_extraDataPaths; // searched before m_dataPath
+	MBCHAR *m_dataPath;			                    // original data path (...\ctp2_data)
+	std::vector<MBCHAR const *> m_extraDataPaths;   // searched before m_dataPath
 	MBCHAR *m_scenariosPath;	
 
 	MBCHAR *m_savePath;			
@@ -99,7 +99,7 @@ public:
 	
 	
 	MBCHAR *GetSpecificPath(C3DIR dir, MBCHAR *path, BOOL local);
-
+ 
 	
 	MBCHAR *GetScenarioRootPath(MBCHAR *path);
 
@@ -115,7 +115,7 @@ public:
 	
 	void	SetCurScenarioPackPath(MBCHAR *path);
 	
-	MBCHAR	*GetCurScenarioPackPath(void);
+	MBCHAR	* GetCurScenarioPackPath(void);
 	
 	void	ClearCurScenarioPackPath(void);
 
@@ -129,24 +129,32 @@ public:
 	
 	
 	
-    BOOL FindPath(C3DIR dir, int num, MBCHAR *path);
+    BOOL        FindPath(C3DIR dir, int num, MBCHAR *path);
 
 	
-	MBCHAR	*GetSavePathString(void) const { return m_savePath; }
+	MBCHAR *    GetSavePathString(void) const { return m_savePath; }
 
 	
-	MBCHAR *GetDesktopPath(void);
+	MBCHAR *    GetDesktopPath(void);
 
-	void	InsertExtraDataPath(MBCHAR const * path);
-	void	ResetExtraDataPaths(void);
+	std::vector<MBCHAR const *> const &
+                GetExtraDataPaths(void) const;
+	void	    InsertExtraDataPath(MBCHAR const * path);
+	void	    ResetExtraDataPaths(void);
 
 protected:
 	
-	MBCHAR *MakeAssetPath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3, MBCHAR *s4, MBCHAR *s5);
+	MBCHAR *    MakeAssetPath
+    (
+        MBCHAR *        fullPath, 
+        MBCHAR const *  s1, 
+        MBCHAR const *  s2, 
+        MBCHAR const *  s3, 
+        MBCHAR const *  s4, 
+        MBCHAR const *  s5
+    ) const;
 
-	
-	MBCHAR *MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3);
-
+	MBCHAR *    MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3);
 };
 
 

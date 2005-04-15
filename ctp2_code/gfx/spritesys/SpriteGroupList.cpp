@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Unused spritelist.h include removed.
+// - Option added to include multiple data directories.
 //
 //----------------------------------------------------------------------------
  
@@ -148,12 +149,11 @@ SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE
 		 
 		 sprintf(inFile, "GU%#.3d.SPR", index);
 		 
-		 MBCHAR path[_MAX_PATH];
 		 MBCHAR fullPath[_MAX_PATH];
-		 g_civPaths->GetSpecificPath(C3DIR_SPRITES, fullPath, FALSE);
-		 sprintf(path, "%s\\%s", fullPath, inFile);
+         g_civPaths->FindFile(C3DIR_SPRITES, inFile, fullPath, TRUE, FALSE);
 
-		if (!c3files_PathIsValid(path)){
+		 if (!c3files_PathIsValid(fullPath))
+         {
 			 sprintf(inFile, "GU%#.2d.SPR", index);
 		 }
 

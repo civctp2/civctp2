@@ -17,6 +17,7 @@
 //
 // Compiler flags
 // 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,6 +27,7 @@
 // - Option added to choose a color set.
 // - Option added to select which order buttons are displayed for an army.
 // - Option added to select message adding style (top or bottom).
+// - Option added to include multiple data directories.
 //
 //----------------------------------------------------------------------------
 
@@ -122,6 +124,7 @@ ProfileDB::ProfileDB()
 	m_leaderName[0] = '\0';
 	m_civName[0] = '\0';
 	m_saveNote[0] = '\0';
+	m_ruleSets[0] = '\0';
 	m_isSaved = FALSE;
 	m_isScenario = FALSE;
     m_gender = GENDER_MALE; 
@@ -376,6 +379,7 @@ ProfileDB::ProfileDB()
 	Var("ColorSet", PV_NUM, &m_colorSet, NULL, false);
 	Var("ShowOrderUnion", PV_BOOL, &m_showOrderUnion, NULL);
 	Var("RecentAtTop", PV_BOOL, &m_recentAtTop, NULL);
+	Var("RuleSets", PV_STRING, NULL, m_ruleSets, false);
 }
 
 void ProfileDB::DefaultSettings(void)

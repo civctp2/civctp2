@@ -178,7 +178,7 @@ void CivPaths::InitCDPath(void)
 
 
 
-MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3)
+MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3) 
 {
 	MBCHAR			tempPath[_MAX_PATH];
 	MBCHAR			*s;
@@ -267,7 +267,15 @@ MBCHAR *CivPaths::GetSavePath(C3SAVEDIR dir, MBCHAR *path)
 
 
 
-MBCHAR *CivPaths::MakeAssetPath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3, MBCHAR *s4, MBCHAR *s5)
+MBCHAR *CivPaths::MakeAssetPath
+(
+    MBCHAR *        fullPath, 
+    MBCHAR const *  s1, 
+    MBCHAR const *  s2, 
+    MBCHAR const *  s3, 
+    MBCHAR const *  s4, 
+    MBCHAR const *  s5
+) const
 {
 	MBCHAR			tempPath[_MAX_PATH];
 	MBCHAR			*s;
@@ -350,12 +358,12 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, MBCHAR *filename, MBCHAR *path,
     // The extra data paths take priority over the regular one.
 	for 
 	(
-		std::vector<MBCHAR *>::iterator	p	= m_extraDataPaths.begin();
+		std::vector<MBCHAR const *>::iterator	p	= m_extraDataPaths.begin();
 		p != m_extraDataPaths.end();
 		++p
 	)
 	{
-		MBCHAR *	l_dataPath	= *p;
+		MBCHAR const *	l_dataPath	= *p;
 		if (MakeAssetPath(fullPath, m_hdPath, l_dataPath, m_localizedPath, m_assetPaths[dir], filename) ||
 			MakeAssetPath(fullPath, m_hdPath, l_dataPath, m_defaultPath,   m_assetPaths[dir], filename)
 		   ) 
@@ -523,7 +531,7 @@ BOOL CivPaths::FindPath(C3DIR dir, int num, MBCHAR *path)
         } // scope default
     } // switch
 	
-	return(FALSE);
+	return FALSE;
 }
 
 
@@ -600,43 +608,29 @@ MBCHAR *CivPaths::GetCurScenarioPath(void)
 
 void CivPaths::ClearCurScenarioPath(void)
 {
-	if (m_curScenarioPath) {
-		delete[] m_curScenarioPath;
-		m_curScenarioPath = NULL;
-	}
+	delete[] m_curScenarioPath;
+	m_curScenarioPath = NULL;
 }
 
 
 
 void CivPaths::SetCurScenarioPackPath(MBCHAR *path)
 {
-	if (m_curScenarioPackPath)
-		delete[] m_curScenarioPackPath;
+	delete[] m_curScenarioPackPath;
 	m_curScenarioPackPath = new MBCHAR[_MAX_PATH];
 	memset(m_curScenarioPackPath, 0, _MAX_PATH);
-
 	strcpy(m_curScenarioPackPath, path);
 }
 
 MBCHAR *CivPaths::GetCurScenarioPackPath(void)
 {
 	return m_curScenarioPackPath;
-
-
-
-
-
-
-
-
 }
 
 void CivPaths::ClearCurScenarioPackPath(void)
 {
-	if (m_curScenarioPackPath) {
-		delete[] m_curScenarioPackPath;
-		m_curScenarioPackPath = NULL;
-	}
+	delete[] m_curScenarioPackPath;
+	m_curScenarioPackPath = NULL;
 }
 
 
@@ -675,6 +669,26 @@ finished:
 
 //----------------------------------------------------------------------------
 //
+// Name       : CivPaths::GetExtraDataPaths
+//
+// Description: Inspect the data include directory lookup paths
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : std::vector<MBCHAR const *> const & : the extra lookup paths
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+std::vector<MBCHAR const *> const & CivPaths::GetExtraDataPaths(void) const
+{
+    return m_extraDataPaths;
+}
+
+//----------------------------------------------------------------------------
+//
 // Name       : CivPaths::InsertExtraDataPath
 //
 // Description: Insert a data include directory to the lookup path
@@ -690,7 +704,6 @@ finished:
 //              "..\..\ctp2_data" path.
 //
 //----------------------------------------------------------------------------
-
 void CivPaths::InsertExtraDataPath(MBCHAR const * path)
 {
 	MBCHAR *	newPath	= new MBCHAR[1 + strlen(path)];
@@ -714,17 +727,16 @@ void CivPaths::InsertExtraDataPath(MBCHAR const * path)
 //              stored in m_extraDataPaths, but in m_dataPath.
 //
 //----------------------------------------------------------------------------
-
 void CivPaths::ResetExtraDataPaths(void)
 {
 	for
 	(
-		std::vector<MBCHAR *>::iterator	p = m_extraDataPaths.begin();
+		std::vector<MBCHAR const *>::iterator	p = m_extraDataPaths.begin();
 		p != m_extraDataPaths.end();
 		++p
 	)
 	{
-		delete [] *p;
+		delete [] const_cast<MBCHAR *>(*p);
 	}
 	m_extraDataPaths.clear();
 }

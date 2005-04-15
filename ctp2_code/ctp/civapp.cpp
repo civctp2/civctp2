@@ -67,6 +67,9 @@
 // - Cleaned up music screen.
 // - The civilisation index from the profile is now reset if it is too high.
 //   This prevents the game from crashing. - April 12th 2005 Martin Gühmann
+// - Added crash prevention during game loading.
+// - Added another civilisation index check.
+// - Option added to include multiple data directories.
 //
 //----------------------------------------------------------------------------
 
@@ -74,7 +77,6 @@
 #include "civ3_main.h"
 
 
-#include "c3cpu.h"
 #include "splash.h"
 #include "DebugMemory.h"
 
@@ -150,6 +152,7 @@
 #include "scenariowindow.h"
 
 #include "musicscreen.h"
+#include <algorithm>	// std::find
 
 #include "initialplaywindow.h"
 #include "optionswindow.h"
@@ -479,6 +482,59 @@ namespace
 
 //----------------------------------------------------------------------------
 //
+// Name       : InitDataIncludePath
+//
+// Description: Add an 'include'-style path to lookup data files.
+//
+// Parameters : -
+//
+// Globals    : g_theProfileDB	: user preferences (read)
+//				g_civPaths		: (updated)
+//
+// Returns    : -
+//
+// Remark(s)  : The top directories (ctp2_data-style) are read from a 
+//              semicolon-separated string 'Rulesets' in userprofile.txt.
+//
+//----------------------------------------------------------------------------
+void InitDataIncludePath(void)
+{
+	MBCHAR const	        DIR_SEPARATOR	= ';';
+	MBCHAR			        ruleSets[MAX_PATH];
+	strcpy(ruleSets, g_theProfileDB->GetRuleSets());
+    
+    std::vector<MBCHAR *>   pathStarts;
+    MBCHAR *                nextPath    = ruleSets;
+
+	for (size_t	toDo = strlen(ruleSets); toDo > 0; )
+	{
+        pathStarts.push_back(nextPath);
+		nextPath = std::find(nextPath, nextPath + toDo, DIR_SEPARATOR); 
+
+		if (nextPath < ruleSets + toDo)
+		{
+			*nextPath++	= 0;
+			toDo		= strlen(nextPath);
+		}
+		else
+		{
+			toDo		= 0;
+		}
+	}
+
+    for 
+    (
+        std::vector<MBCHAR *>::reverse_iterator p  = pathStarts.rbegin();
+        p != pathStarts.rend();
+        ++p
+    )
+    {
+	    g_civPaths->InsertExtraDataPath(*p);
+    }
+}
+
+//----------------------------------------------------------------------------
+//
 // Name       : SelectColorSet
 //
 // Description: Select which color set (colors##.txt file) to use.
@@ -494,7 +550,6 @@ namespace
 //				- The existence of the file is not checked.
 //
 //----------------------------------------------------------------------------
-
 void SelectColorSet(void)
 {
 
@@ -1397,7 +1452,8 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	}
 
 	g_logCrashes = g_theProfileDB->GetEnableLogs();
-	
+
+	InitDataIncludePath();
 	
 	c3files_InitializeCD();
 
@@ -1543,23 +1599,33 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 		// Maintain consistency between the CivIndex and CivName entries.
 		// When inconsistent, the CivIndex is leading.
 
-		CIV_INDEX const			userCivIndex	= g_theProfileDB->GetCivIndex();
-		MBCHAR const * const	dbCivName		= 
-			g_theStringDB->GetNameStr
-				(g_theCivilisationDB->GetPluralCivName(userCivIndex));
+        CIV_INDEX const userCivIndex = g_theProfileDB->GetCivIndex();
 
-		if (0 == strcmp(dbCivName, g_theProfileDB->GetCivName()))
-		{
-			// No action: keep the leader name of the user.
-		}
-		else
-		{
-			// Restore civilisation default country and leader names.
-			g_theProfileDB->DefaultSettings();
-		}
-	}
+        if (static_cast<int>(userCivIndex) < g_theCivilisationDB->GetNumRec())
+        {
+            MBCHAR const * const    dbCivName = 
+                g_theStringDB->GetNameStr
+                    (g_theCivilisationDB->GetPluralCivName(userCivIndex));
 
-	
+            if (0 == strcmp(dbCivName, g_theProfileDB->GetCivName()))
+            {
+                // No action: keep the leader name of the user.
+            }
+            else
+            {
+                // Restore civilisation default country and leader names.
+                g_theProfileDB->DefaultSettings();
+            }
+        }
+        else
+        {
+            // Possible after using a mod with less civilisations
+            g_theProfileDB->SetCivIndex(CIV_INDEX_CIV_1);
+            g_theProfileDB->DefaultSettings();
+        }
+    }
+
+
 	StartMessageSystem();
 
 
@@ -2281,6 +2347,10 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	
 	gameEventManager_Initialize();
 
+	// Prevent the event handler corrupting the (diplomacy) data in the 
+	// middle of a file restore operation.
+	g_gevManager->Pause();
+
 	events_Initialize();
     
 	g_theProgressWindow->StartCountingTo( 180 );
@@ -2290,7 +2360,8 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	g_god = FALSE;
 
 	
-    if (!gameinit_Initialize(-1, -1, archive)) { 
+    if (!gameinit_Initialize(-1, -1, archive)) {
+        g_gevManager->Resume();
        return FALSE;
     }
 		
@@ -2390,6 +2461,8 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	
 	m_gameLoaded = TRUE;
+	g_gevManager->Resume();
+	g_gevManager->Process();
 
 	g_theProgressWindow->StartCountingTo( 230 );
 
@@ -3125,7 +3198,6 @@ sint32 CivApp::StartMessageSystem()
 	g_slicEngine = new SlicEngine();
 	if(g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE))
 		g_slicEngine->Link();
-	Assert(g_slicEngine) ;
 
 	
 	g_theMessagePool = new MessagePool();

@@ -42,6 +42,7 @@
 // - Option added to choose a color set.
 // - Option added to select which order buttons are displayed for an army.
 // - Option added to select message adding style (top or bottom).
+// - Option added to include multiple data directories.
 //
 //----------------------------------------------------------------------------
 
@@ -337,11 +338,12 @@ class ProfileDB {
 	double m_homogenous;
 	sint32 m_richness;
 
-	sint32	m_closeEyepoint;	// Close message box when clicking the eyepoint.
-	sint32	m_colorSet;			// The # to use when opening colors#.txt.
-	sint32	m_showExpensive;	// Show cost and effects of expensive actions.
-	sint32	m_showOrderUnion;	// Show order button when any unit is capable.
-	sint32  m_recentAtTop;		// Add the most recent messages at the top.
+	sint32	m_closeEyepoint;		// Close message box when clicking the eyepoint.
+	sint32	m_colorSet;				// The # to use when opening colors#.txt.
+	sint32	m_showExpensive;		// Show cost and effects of expensive actions.
+	sint32	m_showOrderUnion;		// Show order button when any unit is capable.
+	sint32	m_recentAtTop;			// Add the most recent messages at the top.
+	MBCHAR  m_ruleSets[MAX_PATH];	// Data directory "include" path
 	
 	PointerList<ProfileVar> *m_vars;
 	BOOL m_loadedFromTutorial;
@@ -692,6 +694,7 @@ public:
 	BOOL GetDisplayTrade() { return m_displayTrade; }
 	BOOL GetDisplayTerrain() { return m_displayTerrain; }
 	BOOL GetEnableLogs() { return m_enableLogs; }
+	MBCHAR const *	GetRuleSets(void) const { return m_ruleSets; };
 
 	void SetPercentForest(sint32 forest) { m_forest = forest; }
 	void SetPercentGrass(sint32 grass) { m_grass = grass; }
@@ -716,7 +719,6 @@ public:
 	double PercentContinent() { return m_continent; }
 	double PercentHomogenous() { return m_homogenous; }
 	sint32 PercentRichness() { return m_richness; }
-	
 };
 
 extern ProfileDB *g_theProfileDB;

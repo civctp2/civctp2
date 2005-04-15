@@ -21,10 +21,16 @@
 // - Generate debug version
 //
 // _MSC_VER		
-// - Use Microsoft C++ extensions when set.
+// - Compiler version (for the Microsoft C++ compiler only).
 //
 // __GNUC__
-// - We are compiling with gcc
+// - Compiler version (for the GNU C++ compiler only).
+//
+// USE_LOGGING
+// - Enable logging facilities - even when not using the debug build.
+//
+// USE_DEBUG_THREAD_NAME
+// - Display thread name in the debugger
 //
 //----------------------------------------------------------------------------
 //
@@ -32,19 +38,13 @@
 //
 // - #pragmas commented out
 // - includes fixed for case sensitive filesystems
+// - Removed unused CPU investigation references.
+// - Prevent memory leak report.
+// - Merged main GNU and MSVC code.
+// - Option added to include multiple data directories.
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
-#pragma once
-#endif
-
-#if 0 && defined(__GNUC__)
-#include <exception.h>
-#define __try __TRY
-#define __except __EXCEPT
-#endif
- 
 #include "c3.h"
 
 #include "aui.h"
@@ -137,10 +137,6 @@
 
 
 #include "c3cmdline.h"
-
-#include "c3cpu.h"
-
-
 #include "workwindow.h"
 #include "statswindow.h"
 #include "greatlibrary.h"
@@ -180,6 +176,7 @@
 extern CivScenarios		*g_civScenarios;
 
 #include "ctpregistry.h"
+#include "sliccmd.h"    // sliccmd_clear_symbols
 
 #ifndef WM_MOUSEWHEEL
 #define WM_MOUSEWHEEL (WM_MOUSELAST+1)  
@@ -299,6 +296,12 @@ CivApp						*g_civApp = NULL;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
+#if defined(__GNUC__)
+int CivMain(int argc, char **argv);
+#else
+int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow);
+#endif
+
 
 Network g_network;
 
@@ -381,68 +384,55 @@ int ui_Initialize(void)
 	
 	g_colorSet->Initialize();
 
-	SPLASH_STRING_SIMPLE(c3cpu_GetString());
-
-	
-	
-	
 	SPLASH_STRING("Initializing Paths...");
 
-	
-	if (!g_civPaths->GetSpecificPath(C3DIR_PATTERNS, s, TRUE)) return 3;
-	if (strlen(s) > 0) g_c3ui->AddPatternSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddImageSearchPath(s);
-	if (!g_civPaths->GetSpecificPath(C3DIR_PATTERNS, s, FALSE)) return 3;
-	if (strlen(s) > 0) g_c3ui->AddPatternSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddImageSearchPath(s);
+    int     i;
 
-	
-	
-	
+    for (i = 0; g_civPaths->FindPath(C3DIR_PATTERNS, i, s); ++i)
+    {
+        if (s[0])
+        {
+            g_c3ui->AddPatternSearchPath(s);
+            g_c3ui->AddImageSearchPath(s);
+        }
+    }
 
+    for (i = 0; g_civPaths->FindPath(C3DIR_ICONS, i, s); ++i)
+    {
+        if (s[0])
+        {
+            g_c3ui->AddIconSearchPath(s);
+            g_c3ui->AddImageSearchPath(s);
+        }
+    }
 	
-	if (!g_civPaths->GetSpecificPath(C3DIR_ICONS, s, TRUE)) return 3;
-	if (strlen(s) > 0) g_c3ui->AddIconSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddImageSearchPath(s);
-	if (!g_civPaths->GetSpecificPath(C3DIR_ICONS, s, FALSE)) return 3;
-	if (strlen(s) > 0) g_c3ui->AddIconSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddImageSearchPath(s);
+    for (i = 0; g_civPaths->FindPath(C3DIR_PICTURES, i, s); ++i)
+    {
+        if (s[0])
+        {
+            g_c3ui->AddPatternSearchPath(s);
+            g_c3ui->AddPictureSearchPath(s);
+            g_c3ui->AddImageSearchPath(s);
+        }
+    }
+	
+    for (i = 0; g_civPaths->FindPath(C3DIR_CURSORS, i, s); ++i)
+    {
+        if (s[0])
+        {
+            g_c3ui->AddCursorSearchPath(s);
+            g_c3ui->AddImageSearchPath(s);
+        }
+    }
+	
+    for (i = 0; g_civPaths->FindPath(C3DIR_FONTS, i, s); ++i)
+    {
+        if (s[0])
+        {
+            g_c3ui->AddBitmapFontSearchPath(s);
+        }
+    }
 
-	
-	
-	
-
-	
-	if (!g_civPaths->GetSpecificPath(C3DIR_PICTURES, s, TRUE)) return 3;	
-	if (strlen(s) > 0) g_c3ui->AddPatternSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddPictureSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddImageSearchPath(s);
-
-	if (!g_civPaths->GetSpecificPath(C3DIR_PICTURES, s, FALSE)) return 3;	
-	if (strlen(s) > 0) g_c3ui->AddPatternSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddPictureSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddImageSearchPath(s);
-
-
-	
-	
-	
-	if (!g_civPaths->GetSpecificPath(C3DIR_CURSORS, s, TRUE)) return 4;
-	if (strlen(s) > 0) g_c3ui->AddCursorSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddImageSearchPath(s);
-	if (!g_civPaths->GetSpecificPath(C3DIR_CURSORS, s, FALSE)) return 4;
-	if (strlen(s) > 0) g_c3ui->AddCursorSearchPath(s);
-	if (strlen(s) > 0) g_c3ui->AddImageSearchPath(s);
-
-
-	
-	if (!g_civPaths->GetSpecificPath(C3DIR_FONTS, s, TRUE)) return 4;
-	if (strlen(s) > 0) g_c3ui->AddBitmapFontSearchPath(s);
-	if (!g_civPaths->GetSpecificPath(C3DIR_FONTS, s, FALSE)) return 4;
-	if (strlen(s) > 0) g_c3ui->AddBitmapFontSearchPath(s);
-
-	
-	
 	if (!GetWindowsDirectory(s, _MAX_PATH)) {
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_FONTS), 
 								appstrings_GetString(APPSTR_NOWINDOWSDIR));
@@ -451,63 +441,34 @@ int ui_Initialize(void)
 	g_c3ui->AddBitmapFontSearchPath(s);
 
 	
+    for (i = 0; g_civPaths->FindPath(C3DIR_VIDEOS, i, s); ++i)
+    {
+        if (s[0])
+        {
+            g_c3ui->AddMovieSearchPath(s);
+        }
+    }
 	
-	if (!g_civPaths->GetSpecificPath(C3DIR_VIDEOS, s, TRUE)) return 4;
-	if (strlen(s) > 0) g_c3ui->AddMovieSearchPath(s);
-	if (!g_civPaths->GetSpecificPath(C3DIR_VIDEOS, s, FALSE)) return 4;
-	if (strlen(s) > 0) g_c3ui->AddMovieSearchPath(s);
-	
-	
-	
-	
-
 	SPLASH_STRING("Creating Blitter...");
 
-	C3Blitter *blitter = new C3Blitter;
-	g_c3ui->RegisterObject( blitter );
-
-	
-	
-	
-
-	C3MemMap *memmap = new C3MemMap;
-	g_c3ui->RegisterObject( memmap );
+	g_c3ui->RegisterObject(new C3Blitter);
+	g_c3ui->RegisterObject(new C3MemMap);
 
 	SPLASH_STRING("Creating Mouse...");
 	
-	
-	
-
-	
-	BOOL mouseExclusiveMode = TRUE;
-
-	
-	aui_DirectMouse *mouse = new aui_DirectMouse( &auiErr, "CivMouse", mouseExclusiveMode );
-	Assert(mouse != NULL);
-	if ( !mouse ) return 4;
-
-	g_c3ui->RegisterObject( mouse );
-
+	BOOL const mouseExclusiveMode = TRUE;
+	g_c3ui->RegisterObject(new aui_DirectMouse(&auiErr, "CivMouse", mouseExclusiveMode));
 
 	SPLASH_STRING("Creating Keyboard...");
 
-	
-	aui_DirectKeyboard *keyboard = new aui_DirectKeyboard(&auiErr);
-	Assert(keyboard != NULL);
-	if (!keyboard) return NULL;
-
-	g_c3ui->RegisterObject( keyboard );
+	g_c3ui->RegisterObject(new aui_DirectKeyboard(&auiErr));
 
 
 #if !defined(__GNUC__)
-	aui_DirectMovieManager	*movieManager = new aui_DirectMovieManager();
-	Assert(movieManager != NULL);
-	if (movieManager != NULL) {
-		g_c3ui->RegisterObject(movieManager);
-	}
+	SPLASH_STRING("Creating Movie manager...");
+	g_c3ui->RegisterObject(new aui_DirectMovieManager());
 #endif
 
-	
 	SPLASH_STRING("Starting Mouse...");
 	auiErr = g_c3ui->TheMouse()->Start();
 	Assert(auiErr == AUI_ERRCODE_OK);
@@ -1570,11 +1531,6 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 		}
 
 		
-		fprintf(outFile, "> System :\n");
-		fprintf(outFile, "> %s\n", c3cpu_GetString());
-
-		
-
 		OSVERSIONINFO		osv;
 		osv.dwOSVersionInfoSize = sizeof(osv);
 
@@ -1803,7 +1759,7 @@ void main_InitializeLogs(void)
 
 	strftime(timebuf, 100, "Log started at %I:%M%p %m/%d/%Y", now);
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	c3debug_InitDebugLog();
 	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC, 1);
 #endif
@@ -1854,9 +1810,6 @@ void main_InitializeLogs(void)
 	
 
 	DPRINTF(k_DBG_FIX, ("** SYSTEM INFO:\n"));
-	DPRINTF(k_DBG_FIX,     ("**               %s\n", c3cpu_GetString()));
-
-	
 
 	OSVERSIONINFO		osv;
 	osv.dwOSVersionInfoSize = sizeof(osv);
@@ -1907,21 +1860,43 @@ void main_InitializeLogs(void)
 #endif
 }
 
-#if !defined(__GNUC__)
-int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow);
+
+
+
+#if defined(__GNUC__)
+
+int main(int argc, char **argv)
+{
+    int r = CivMain(argc, argv);
+
+    if (r < 0) {
+#if defined(_DEBUG)
+        DoFinalCleanup();
 #else
-int CivMain(int argc, char **argv);
+        g_c3ui->DestroyDirectScreen();
+        ShowWindow(gHwnd, SW_HIDE);
+        if (!s_cleaningUpTheApp) {
+            s_cleaningUpTheApp = TRUE;
+            g_civApp->CleanupApp();
+        }
+
+        exit(r);
 #endif
+    }
 
+    return 0;
+}
 
-
-#if !defined(__GNUC__)
+#else // __GNUC__
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
     // This stuff will have to be moved into a new int main(int argc, char **argv)
     // once graphics are also ported to SDL
 # if defined(WIN32) || defined(_WINDOWS)
+#  if defined(_DEBUG) && defined(USE_DEBUG_THREAD_NAME)
+	SetThreadName("WinMain");
+#  endif	// _DEBUG
     // Make sure old versions of DDHELP.EXE won't keep files open
     HINSTANCE handle = LoadLibrary("DDRAW.DLL");
     if (0 != handle) {
@@ -1933,7 +1908,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
    	atexit(AtExitProc);
 
 	__try {
-		return CivWinMain(hInstance, hPrevInstance, szCmdLine, iCmdShow);
+		return CivMain(hInstance, hPrevInstance, szCmdLine, iCmdShow);
 	} 
 #ifdef _DEBUG
 	__except (main_CivDebugExceptionHandler(GetExceptionInformation())) {
@@ -1955,32 +1930,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	return 0;
 }
 
-#else // defined(__GNUC__)
+#endif // __GNUC__
 
-int main(int argc, char **argv)
-{
-    int r;
-
-    r = CivMain(argc, argv);
-
-    if (r <  0) {
-#if defined(_DEBUG)
-        DoFinalCleanup();
-#else
-        g_c3ui->DestroyDirectScreen();
-        ShowWindow(gHwnd, SW_HIDE);
-        if (!s_cleaningUpTheApp) {
-            s_cleaningUpTheApp = TRUE;
-            g_civApp->CleanupApp();
-        }
-
-        exit(r);
-#endif
-    }
-
-    return 0;
-}
-#endif // !defined(__GNUC__)
 
 void main_DisplayPatchDisclaimer()
 {
@@ -2021,14 +1972,20 @@ Error:
 
 }
 
-#if !defined(__GNUC__)
-
-int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
+#if defined(__GNUC__)
+int CivMain
+(
+	int		    iCmdShow,   // argc 
+	char *	    szCmdLine   // argv
+)
+{
+	MSG			msg;
+    void *      hInstance   = NULL;
+#else	// __GNUC__
+int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
 	MSG			msg;
 
-
-	
 	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
 	if (hwnd) {
 		
@@ -2039,8 +1996,7 @@ int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLi
 		
 		return FALSE;
 	}
-	
-	
+#endif // __GNUC__
 	
 	char exepath[_MAX_PATH];
 	char launchcommand[_MAX_PATH];
@@ -2095,10 +2051,6 @@ int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLi
 	
 	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
 
-	
-	c3cpu_Initialize();
-	c3cpu_Examine();
-
 	if (!main_CheckDirectX()) {
 
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
@@ -2119,7 +2071,6 @@ int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLi
 	
 	CreateDirectory((LPCTSTR)"logs", &sa);
 #endif
-
 
     ParseCommandLine(szCmdLine);
 
@@ -2192,210 +2143,21 @@ int WINAPI CivWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLi
 	}
 
 	
-	gDone = FALSE;
-
-    sint32 first_time_hack; 
-    first_time_hack = TRUE; 
-	while (!gDone) {
-
-		
-		
-		
-
+	for (gDone = FALSE; !gDone; )
+	{
 		g_civApp->Process();
 
-		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
-
-			
-			
-			
-			
-			
-			
-			
-			if (msg.message == WM_QUIT)
+		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) 
+		{
+			if (WM_QUIT == msg.message)
+			{
 				gDone = TRUE;
-
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-		g_letUIProcess = FALSE;
-	}
-
-	
-	
-	
-	
-	
-	
-	
-
-	return msg.wParam;
-}
-
-#else // defined(__GNUC__)
-
-int
-CivMain(int argc, char *argv )
-{
-	MSG			msg;
-
-#if 0
-	// I guess this code checks to see if a civctp2 is already running,
-	// and if so, bring that window to the foreground.
-	
-	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
-	if (hwnd) {
-		
-		if (IsIconic(hwnd)) {
-			ShowWindow(hwnd, SW_RESTORE);
-		}
-		SetForegroundWindow (hwnd);
-		
-		return FALSE;
-	}
-#endif	
-	
-	
-	char exepath[_MAX_PATH];
-	char launchcommand[_MAX_PATH];
-	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
-			
-			ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT, ".c2g", NULL, "c2gfile");
-			ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT, "c2gfile", NULL, "Call to Power 2 saved game");
-			strcpy(launchcommand, exepath);
-			strcat(launchcommand, " -l\"%1\"");
-			ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT, "c2gfile\\Shell\\Open\\command", NULL, launchcommand);
-			
-									 
-		char *lastbackslash = strrchr(exepath, '\\');
-		if(lastbackslash) {
-			*lastbackslash = 0;
-			SetCurrentDirectory(exepath);
-		}
-	}
-
-	
-	
-	g_e3Demo = false;
-
-	
-	appstrings_Initialize();
-
-	
-	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
-
-	
-	c3cpu_Initialize();
-	c3cpu_Examine();
-
-	if (!main_CheckDirectX()) {
-
-		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
-								appstrings_GetString(APPSTR_NEEDDIRECTX));
-	}
-
-	
-#ifdef _DEBUG
-	main_InitializeLogs();
-#endif
-#if !defined(_DEBUG) && !defined(_BFR_)
-	
-	SECURITY_ATTRIBUTES		sa;
-
-	sa.nLength = sizeof(sa);
-	sa.lpSecurityDescriptor = NULL;
-	sa.bInheritHandle = TRUE;
-	
-	CreateDirectory((LPCTSTR)"logs", &sa);
-#endif
-
-
-    ParseCommandLine(argv);
-
-	if(g_e3Demo) {
-		if(!g_no_shell && !g_launchScenario) {
-			g_no_shell = TRUE;
-		}
-	}
-
-	g_civApp = new CivApp();
-
-	
-    if (g_cmdline_load) {
-        g_civApp->InitializeApp(NULL, argc);
-
-		ScenarioPack	*pack;
-		Scenario		*scen;
-
-		if (g_civScenarios->FindScenarioFromSaveFile(g_cmdline_load_filename, &pack, &scen)) {
-			
-			g_civPaths->SetCurScenarioPath(scen->m_path);
-			
-			
-			g_civPaths->SetCurScenarioPackPath(pack->m_path);
-
-			
-			g_theProfileDB->SetIsScenario(TRUE);
-
-			
-			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
-				
-				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
-			} else {
-				
-				
-				spnewgamescreen_displayMyWindow();
 			}
-		} else {
-			main_RestoreGame(g_cmdline_load_filename);
-		}
-    } else if (g_no_shell) {
-		g_civApp->QuickInit(NULL, argc);
-	} else if (g_launchScenario) {	
-		g_civApp->InitializeApp(NULL, argc);
-		ScenarioPack	*pack;
-		Scenario		*scen;
-
-		if (g_civScenarios->FindScenario(g_scenarioName, &pack, &scen)) {
-			
-			g_civPaths->SetCurScenarioPath(scen->m_path);
-			
-			
-			g_civPaths->SetCurScenarioPackPath(pack->m_path);
-
-			
-			g_theProfileDB->SetIsScenario(TRUE);
-
-			
-			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
-				
-				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
-			} else {
-				
-				
-				spnewgamescreen_displayMyWindow();
+			else
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
 			}
-		}
-	} else {
-		g_civApp->InitializeApp(NULL, argc);
-	}
-
-	
-	gDone = FALSE;
-
-    sint32 first_time_hack; 
-    first_time_hack = TRUE; 
-	while (!gDone) {
-		g_civApp->Process();
-
-		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {			
-			if (msg.message == WM_QUIT)
-				gDone = TRUE;
-
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
 		}
 
 		g_letUIProcess = FALSE;
@@ -2404,8 +2166,6 @@ CivMain(int argc, char *argv )
 	return msg.wParam;
 }
 
-
-#endif // !defined(__GNUC__)
 
 
 
@@ -2418,6 +2178,7 @@ void DoFinalCleanup(void)
 	
 	
 	delete g_civApp;
+    sliccmd_clear_symbols();
 
 #ifdef _DEBUGTOOLS
 	
