@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _DEBUG
+// - Generate debug version when set.
+//
 // CTP1_HAS_RISEN_FROM_THE_GRAVE
 // - When defined, does not use the CTP2 worker utilisation style.
 //
@@ -31,6 +34,7 @@
 // - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann 
 // - Replaced ComputeMinimumFoodWorkers by ComputeMinimumWorkers function.
 //   - April 4th 2005 Martin Gühmann
+// - Made some methods const. - April 15th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -216,10 +220,10 @@ public:
 	void AssignPopulations();
 
 	
-	void AssignPopulation(CityData *city);
+	void AssignPopulation(CityData *city) const;
 
 	
-	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max);
+	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max) const;
 
 
 	sint32 Governor::ComputeMinimumWorkers(const CityData *city, 
@@ -234,7 +238,7 @@ public:
 	                                       double &farmersEff,
 	                                       double &laborersEff,
 	                                       double &merchantsEff,
-	                                       double &scientistsEff);
+	                                       double &scientistsEff) const;
 	
 
 	

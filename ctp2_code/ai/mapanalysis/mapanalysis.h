@@ -1,16 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : AI and automated governor handling.
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// - When defined, does not use the CTP2 worker utilisation style.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added some casts and corrected some return types. - April 15th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __MAP_ANALYSIS_H__
@@ -110,11 +126,11 @@ public:
 	const MapPoint & GetNearestForeigner(const PLAYER_INDEX player, const MapPoint & pos) const;
 
 	sint32 TotalThreat(const PLAYER_INDEX & playerId) const {
-		return m_threatGrid[playerId].GetTotalValue();
+		return static_cast<sint32>(m_threatGrid[playerId].GetTotalValue());
 	}
 
 	sint32 TotalValue(const PLAYER_INDEX & playerId) const {
-		return m_valueGrid[playerId].GetTotalValue();
+		return static_cast<sint32>(m_valueGrid[playerId].GetTotalValue());
 	}
 
 	
@@ -133,36 +149,36 @@ public:
 	}
 
 	
-	sint16 GetTradeAtRisk(const PLAYER_INDEX & playerId, const MapPoint & pos ) const {
+	sint32 GetTradeAtRisk(const PLAYER_INDEX & playerId, const MapPoint & pos ) const {
 		
-		return (sint32) (m_tradeAtRiskGrid[playerId].GetGridValue(pos) / 1000);
+		return static_cast<sint32>(m_tradeAtRiskGrid[playerId].GetGridValue(pos) / 1000);
 	}
 
 	
 	sint32 TotalTradeAtRisk(const PLAYER_INDEX & playerId) const {
 		
-		return (sint32) (m_tradeAtRiskGrid[playerId].GetTotalValue() / 1000);
+		return static_cast<sint32>(m_tradeAtRiskGrid[playerId].GetTotalValue() / 1000);
 	}
 
 	
-	sint16 GetMaxTradeAtRisk(const PLAYER_INDEX & player) const {
+	sint32 GetMaxTradeAtRisk(const PLAYER_INDEX & player) const {
 		
-		return (sint32) (m_tradeAtRiskGrid[player].GetMaxGridValue() / 1000);
+		return static_cast<sint32>(m_tradeAtRiskGrid[player].GetMaxGridValue() / 1000);
 	}
 
 	
-	sint16 GetPiracyLoss(const PLAYER_INDEX & playerId, const MapPoint & pos ) const {
-		return m_piracyLossGrid[playerId].GetGridValue(pos);
+	sint32 GetPiracyLoss(const PLAYER_INDEX & playerId, const MapPoint & pos ) const {
+		return static_cast<sint32>(m_piracyLossGrid[playerId].GetGridValue(pos));
 	}
 
 	
 	sint32 TotalPiracyLoss(const PLAYER_INDEX & playerId) const {
-		return m_piracyLossGrid[playerId].GetTotalValue();
+		return static_cast<sint32>(m_piracyLossGrid[playerId].GetTotalValue());
 	}
 
 	
-	sint16 GetMaxPiracyLoss(const PLAYER_INDEX & player) const {
-		return m_piracyLossGrid[player].GetMaxGridValue();
+	sint32 GetMaxPiracyLoss(const PLAYER_INDEX & player) const {
+		return static_cast<sint32>(m_piracyLossGrid[player].GetMaxGridValue());
 	}
 
 	
