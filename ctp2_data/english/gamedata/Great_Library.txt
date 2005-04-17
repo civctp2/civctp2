@@ -755,8 +755,8 @@ In 1846, Ascanio Sobrero, an Italian chemist, discovered nitroglycerin, and soon
 
 [ADVANCE_FASCISM_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalism<e>
-<L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Mass Media<e>
+<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theology<e>
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
 [END]
 
 [ADVANCE_FASCISM_STATISTICS]
@@ -1572,6 +1572,7 @@ The Micro Defense improvement helped solve this problem.  Using nanites to monit
 [ADVANCE_NATIONALISM_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Printing Press<e>
+<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascism<e>
 [END]
 
 [ADVANCE_NATIONALISM_STATISTICS]
@@ -2363,6 +2364,28 @@ The discovery of Writing gives birth to a new world of cultural advancement.
 As ancient societies developed, early humans found a need to visibly represent the language they spoke.  Whether it was to document their history, keep records or facilitate communication, writing's origins were almost certainly borne out of need.  Although the world is full of examples of prehistoric communication, most notably in the form of cave paintings, writing systems did not begin to appear until ancient times.  Writing systems developed in many ways.  Some cultures developed a meaning-based system, with characters and symbols that represented words, acts, and concepts, while others developed sound-based systems, with characters representing syllables or phonemes.  Whether pictographic, ideographic, alphabetic or phonetic, the writing system needed to match the demands of the societies' expressions and communications.  Nevertheless, writing was a giant leap forward in the establishment of history and culture for early societies, leading to a strengthening of social order, jurisprudence and historical preservation.
 [END]
 
+[ADVANCE_MIND_CONTROL_PREREQ]
+Requires:
+<L:DATABASE_ADVANCES,ADVANCE_HUMAN_CLONING>Human Cloning<e>
+<L:DATABASE_ADVANCES,ADVANCE_TECHNOCRACY>Technocracy<e>
+[END]
+
+[ADVANCE_MIND_CONTROL_STATISTICS]
+Gives:
+<L:DATABASE_BUILDINGS,IMPROVE_MIND_CONTROL_EMITTER>Mind Controller<e>
+<L:DATABASE_WONDERS,WONDER_AI_ENTITY>AI Entity<e>
+
+[END]
+
+[ADVANCE_MIND_CONTROL_GAMEPLAY]
+An advanced Medical <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Advance<e> blending flesh and silicon, Mind Control offers Civilizations a cheap, if horrifying remedy to unhappiness. Using either Mind Controllers, which prevent L:DATABASE_CONCEPTS,CONCEPT_RIOTS>riots<e> or <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revolutions<e> in a city, or the <L:DATABASE_WONDERS,WONDER_AI_ENTITY>AI Entity<e>, Mind Control can be used to end disputes and complaints - after all, without free will, complaint is not an option.
+
+[END]
+
+[ADVANCE_MIND_CONTROL_HISTORICAL]
+Although the early Technocracy produced wondrous advances, it also produced a great amount of discontent in its citizens who complained bitterly about fading personal liberty. In order to quell this unhappiness,  the government logically turned to technology - in the form of Mind Control.  Prominent scientists developed neural implants that fed off of microwave transmissions and directly stimulated the pleasure/pain regions of the brain. In Project Happiness, the government implanted these chips into every person's brain, instantly transforming a grumbling people into a pleasantly stupefied workforce.
+[END]
+
 [CONCEPT_ACTIVE_DEFENSE_GAMEPLAY]
 There are two types of Active Defense:  Anti-Air and Anti-Naval.  A unit with Active Defense automatically <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> any Unit of a specific type that comes within range.  Active Defense is a ranged attack, so the Unit does not put itself in danger when actively defending.
 [END]
@@ -2992,11 +3015,34 @@ Workers represent the total labor potential of citizens in a <L:DATABASE_CONCEPT
 [CONCEPT_WORKER_HISTORICAL]
 [END]
 
+[TERRAIN_SWAMP_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamp<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_SWAMP_GOOD_ONE_GAMEPLAY]
 Alligators are found in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>.  They are a rare find, coveted as a food source and valued for their skin.
 [END]
 
 [TERRAIN_SWAMP_GOOD_ONE_HISTORICAL]
+Alligators and their relatives, crocodiles have existed for millions of years, among the last living remnants of the dinosaurs.  First hunted commercially in the 1880s, the American alligator was once at risk of extinction. In the 20th century laws regulating the hunting of these creatures helped restore the alligator population.  Since then, the business of processing alligators for their skin and meat has been carefully regulated to eliminate the export of leather made from its still endangered relatives.
+[END]
+
+[TERRAIN_FOREST_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_FOREST_GOOD_TWO_GAMEPLAY]
@@ -3006,18 +3052,52 @@ Found exclusively in <L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e> areas, Bears a
 [TERRAIN_FOREST_GOOD_TWO_HISTORICAL]
 [END]
 
+[TERRAIN_TUNDRA_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_TUNDRA>Tundra<e>
+[END]
+
+[TERRAIN_TUNDRA_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_TUNDRA_GOOD_ONE_GAMEPLAY]
 Caribou live in <L:DATABASE_TERRAIN,TERRAIN_TUNDRA>Tundra<e>, and are hunted for food and skins.
 [END]
 
 [TERRAIN_TUNDRA_GOOD_ONE_HISTORICAL]
+The Tundra, an inhospitable terrain for most creatures, is the perfect location for caribou. Unlike coniferous forests where Caribou can also be found, the tundra has wide open spaces that allow the animals to escape from their slower enemies, wolves. Caribou hides and meat are highly prized, but their antlers are their most distinctive and valuable component. Unlike deer, both male and female caribou grow antlers that are periodically shed. For centuries, native Indians have used antler for decorations, weaponry, and religious and medicinal purposes.
+[END]
+
+[TERRAIN_HILL_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>
+[END]
+
+[TERRAIN_HILL_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_HILL_GOOD_ONE_GAMEPLAY]
-Coffee is grown in <L:DATABASE_TERRAIN,TERRAIN_HILL>Green Hills<e>.  The beans are harvested, roasted and ground to make one of the world's most satisfying and widely enjoyed beverages.
+Coffee is grown in <L:DATABASE_TERRAIN,TERRAIN_HILL>Hills<e>.  The beans are harvested, roasted and ground to make one of the world's most satisfying and widely enjoyed beverages.
 [END]
 
 [TERRAIN_HILL_GOOD_ONE_HISTORICAL]
+With over eight billion pounds of coffee produced every year,  some consider coffee to be the most important world commodity after oil.  The coffee tree, technically a bush, is indigenous to Ethiopia but in the 1990s,  Brazil and Colombia far surpassed the native land, producing more coffee than all the other countries combined.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_ONE_GAMEPLAY]
@@ -3025,13 +3105,40 @@ Cotton is planted in <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e> areas.  
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_ONE_HISTORICAL]
+Cotton is tropical in origin but is now cultivated worldwide. It has been spun, woven, and dyed since prehistoric times. Cotton is planted annually by seed. Diseases and insect pests are numerous. For example, the boll weevil is responsible for enormous crop losses, particularly of the highly susceptible, silky-fibered sea-island cotton, which was the leading type of cotton before the onset of this pest. Cotton is separated from its seeds by a cotton gin. Manufacture of cotton into cloth, textiles, and yard goods involves carding, combing, and spinning. Cotton is a source of cellulose products, fertilizer, fuel, plastic reinforcing, automobile tire cord, pressed paper, cardboard, and cottonseed oil (used in cooking, cosmetics, soaps, candles, detergents, paints, oilcloth, artificial leather, etc.), which is pressed from the seeds. Used in Egypt, China, and India in ancient times, cotton has long played a significant role in world industry. Britain's need for imported cotton dictated much of its sea-domination policy as an imperial nation, and in the U.S., cotton was one of the economic issues behind the Civil War.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_ONE_GAMEPLAY]
-<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e> are home to crabs, which are hunted as a high-priced food source.
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelfs<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Beds<e> are home to crabs, which are hunted as a high-priced food source.
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_ONE_HISTORICAL]
+Throughout history, the crab has been prized as a delicacy.  In more recent times, crabs have been found to be useful in cosmetics, drugs, water treatment, even fertilizer. Chitisan, found in the crab's shell, contains DNA inhibitors that may have use as, ironically, a  cancer inhibitor.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Polar Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_GAMEPLAY]
@@ -3039,6 +3146,18 @@ One of the most rare and valuable stones, diamonds are mined from <L:DATABASE_TE
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Diamond is the hardest and the most abrasive-resistant material known, making diamonds essential parts of the ceramic, electronic, and carbide valve industries. The beauty and brilliance of diamonds have made them the jewel of choice, ever since the art of cutting facets was developed in the 16th century. The South African diamond rush began in 1867 on the heels of the American gold rush and oil rush, in the appropriately named borough of Hopetown.
+[END]
+
+[TERRAIN_PLAINS_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_PLAINS_GOOD_TWO_GAMEPLAY]
@@ -3046,20 +3165,62 @@ Elephants roam the <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e> and are hunted f
 [END]
 
 [TERRAIN_PLAINS_GOOD_TWO_HISTORICAL]
+Although elephant meat and skin have never been very valuable, the elephant tusk, ivory, has been widely valued since the  time of the Egyptians. Greeks used ivory for their chryselephantine statues, in which ivory represented skin.  In Byzantine times, ivory book covers, boxes, and even thrones decorated the estates of the rich. Even the near extinction of the elephant only temporarily diminished the demand for ivory. It was not until the 21st century that geneticists replenished the elephant population.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_TWO_GAMEPLAY]
-Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e> and <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>.
+Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Emeralds are highly valued gems. They are a green variety of the mineral beryl. The finest emeralds are found in Colombia. Other sources are Russia, Zimbabwe, and Australia. The Oriental emerald is the transparent green variety of corundum.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Submarine Ridge<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Submarine Canyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_TWO_GAMEPLAY]
-Though rare, giant squid are found in <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Oceans<e>, and are a valuable source of food and other raw materials.
+Though rare, giant squid are found in <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Oceans<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Submarine Ridges<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Submarine Canyons<e>, and are a valuable source of food and other raw materials.
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_TWO_HISTORICAL]
+The nemesis of Captain Nemo in Jules Verne's classic "Twenty Thousand Leagues Under the Sea," the giant squid has been a legendary creature for hundreds of years.  Occasionally reaching 60 feet long and weighing over a ton, the giant squid is found more often in the stomachs of sperm whales than alive in the ocean. It makes for unappetizing eating, but as a raw material it can be refined for everything from soap and paint to chemicals and liquid crystal.
+[END]
+
+[TERRAIN_DESERT_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_DESERT_GOOD_ONE_GAMEPLAY]
@@ -3069,11 +3230,33 @@ The sands of the <L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e> and <L:DATABASE_TE
 [TERRAIN_DESERT_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_HILL_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>
+[END]
+
+[TERRAIN_HILL_GOOD_TWO_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_HILL_GOOD_TWO_GAMEPLAY]
-Grapes grow in the temperate climates of the <L:DATABASE_TERRAIN,TERRAIN_HILL>Green Hills<e>.  Though people eat them as they are, they are most often cultivated for making wine, which is prized by kings and commoners alike.
+Grapes grow in the temperate climates of the <L:DATABASE_TERRAIN,TERRAIN_HILL>Hills<e>.  Though people eat them as they are, they are most often cultivated for making wine, which is prized by kings and commoners alike.
 [END]
 
 [TERRAIN_HILL_GOOD_TWO_HISTORICAL]
+The drinking of wines has been a cherished pastime since the earliest days of ancient Greece.  Over the centuries the craft of winemaking or "viticulture" has been refined to a science of precise control and an art form of exquisite detail.  The essence of any fine wine is the grapes from which it is made.  Most wines are made from a mixture of several different types of grape, blended to create a specific taste.  The best wines, however, are created purely from the crop of one of the world's premier vineyards, where the richness of the soil passes its fabulous and unique qualities onto the grapes that grow there.
+[END]
+
+[TERRAIN_FOREST_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 [END]
 
 [TERRAIN_FOREST_GOOD_ONE_GAMEPLAY]
@@ -3083,11 +3266,33 @@ Exotic hardwoods grow in the <L:DATABASE_TERRAIN,TERRAIN_FOREST>Forests<e>, maki
 [TERRAIN_FOREST_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_JUNGLE_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_JUNGLE_GOOD_TWO_GAMEPLAY]
 Jade is coveted as a semi-precious stone used in jewelry and ceremonial garb.  It is available exclusively in <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Rain Forests<e>, and is exceedingly rare.
 [END]
 
 [TERRAIN_JUNGLE_GOOD_TWO_HISTORICAL]
+Nephrite and jadeite, both indiscriminately called jade, have long been revered as carved ornaments. Yet the more practical ancients used the harder-than-steel stones to make weapons and axes. For eight thousand years or longer, Jade has also had religious significance for the people of China and Asia. The Emerald Buddha, for example, a two-foot statue composed of imperial jade, has for hundreds of years been considered the most holy relic in Thailand.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_JUNGLE_GOOD_ONE_GAMEPLAY]
@@ -3097,18 +3302,57 @@ Prized for their curative powers, medicinal herbs are plentiful in the lush, tro
 [TERRAIN_JUNGLE_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_DESERT_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_DESERT_GOOD_TWO_GAMEPLAY]
 A rare find, this "black gold" is sought after as fuel.  It is found in the <L:DATABASE_TERRAIN,TERRAIN_DESERT>Deserts<e> and <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>.
 [END]
 
 [TERRAIN_DESERT_GOOD_TWO_HISTORICAL]
+The most important resource of the 20th century, oil and its by-products have had many uses throughout history. Oil-burning lamps are believed to have been used by the Sumerians as early as 3000 BC. Petroleum, meanwhile, was used almost exclusively as a medicine until the 19th century when its use as a clean and cheap lighting source was revealed. A decade after the 1849 gold rush, an oil boom in Pennsylvania sent prospectors east. Prospecting for oil in the  middle-eastern countries began shortly thereafter.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_TWO_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_TWO_GAMEPLAY]
-<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e> are prime habitat for oysters, which nurture grains of sand into a commodity prized for their uniqueness as well as their rarity.  Pearls are used primarily for jewelry and are sure to fetch a high price in any market.
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelfs<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reefs<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Beds<e> are prime habitat for oysters, which nurture grains of sand into a commodity prized for their uniqueness as well as their rarity.  Pearls are used primarily for jewelry and are sure to fetch a high price in any market.
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_TWO_HISTORICAL]
+Pearls have been treasured by most Civilizations since the dawn of time. The Shun empress of China was said to have received a tribute of pearls in 2250 BC and Cleopatra supposedly dissolved a large pearl in a glass of wine and drank it to impress Mark Antony with the limitless wealth of her kingdom. The first successful pearl farm was begun in 1906 in Espiratu Santo Island in the Mexican Gulf of California, leading to the science of pearl cultivation.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Polar Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_GAMEPLAY]
@@ -3116,6 +3360,18 @@ Mined from the harsh locales of the <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>P
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_HISTORICAL]
+According to legend, the great serpent Naga created rubies in the third egg she laid. The first egg birthed Pyusawati, the King of Pagan. Rubies are the red variety of the mineral corundum, the second hardest natural mineral. All non-red varieties of corundum are called "sapphire." Because of their hardness and resistance to abrasion, the uses of rubies, aside from their ornamental value, are extensive.
+[END]
+
+[TERRAIN_PLAINS_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_PLAINS_GOOD_ONE_GAMEPLAY]
@@ -3123,6 +3379,19 @@ The <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e> is host to a diverse array of p
 [END]
 
 [TERRAIN_PLAINS_GOOD_ONE_HISTORICAL]
+Spices are aromatic vegetable products used as a flavorings or condiments. The term was formerly also applied to pungent or aromatic foods, incense and perfume ingredients, and embalming agents. Spices include stimulating condiments (such as pepper and mustard), aromatic spices (such as cloves, nutmeg, and mace), and sweet herbs (such as thyme and mint). They are used whole, as powders, and as tinctures. 
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_ONE_GAMEPLAY]
@@ -3130,6 +3399,17 @@ The <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e> is host to a diverse array of p
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_ONE_HISTORICAL]
+The tea plant (Thea sinensis, Camellia thea, or C. sinensis) is an evergreen related to the camellia. It is native to India and probably parts of China and Japan. In the wild it grows to about 30 feet (9.1 meters) in height, but in cultivation it is normally pruned to 3 to 5 feet (91 to 152 centimeters). Tea plants require a well-drained habitat in a warm climate with ample rainfall. The leaves are prepared by drying, rolling, and then firing. Black teas (such as pekoes), unlike green teas, are fermented before firing; oolong teas are partially fermented. Tea's stimulating properties are due to its relatively high caffeine content plus its astringency to tannin. Grown in China since prehistoric times, tea was produced on a commercial scale there by the 8th century. It was introduced into Europe by the Dutch <L:DATABASE_WONDERS,WONDER_EAST_INDIA_COMPANY>East India Company<e> in the 17th century, and its popularity helped spur the opening of Eastern Asia to western commerce. In colonial America, a tax on tea led to the Boston Tea Party in 1773. Today tea is consumed by more people and in greater quantity than any beverage except water.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_TWO_GAMEPLAY]
@@ -3137,6 +3417,20 @@ The <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e> is host to a diverse array of p
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_TWO_HISTORICAL]
+The first European smoker of tobacco was Luis de Torres, a Spanish explorer of Cuba. The sight of smoke coming from his mouth was enough for the Spanish Inquisition to jail de Torres for seven years. When he was released, the craze for cigar smoking had taken over. Within a hundred years, tobacco smoking was prescribed as a cure for thirty-six diseases, including toothache, bad breath, and cancer.  As an economic force, tobacco was even more important. Throughout the 17th and 18th centuries tobacco was the monetary standard in the American colonies, lasting twice as long as the gold standard.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Submarine Ridge<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Submarine Canyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_ONE_GAMEPLAY]
@@ -3144,6 +3438,758 @@ The <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e> is host to a diverse array of p
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_ONE_HISTORICAL]
+Defenders of whaling argue that every part of a whale can be used and processed to make oil, shoe polish, perfume, fertilizer, soap, shampoo, and other products. The response, since the International Whaling Commission formed in 1946, is that whales must be protected in order to prevent their extinction. Altruism was not the only inspiration for this meeting of nations. Commercial interests feared the over-exploitation, and thus the lower prices, that increased whaling might yield.
+[END]
+
+####Added for GoodMod###
+
+[TERRAIN_SWAMP_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamp<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_GAMEPLAY]
+Rice is a cereal grain (Oryza sativa) of the grass family, probably native to the Ganges, Tigris, Chang (Yangtze), and Euphrates River deltas. Growing only in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>, rice provides large amounts of <L:DATABASE_CONCEPT,CONCEPT_FOOD>food<e> for the masses.
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_HISTORICAL]
+Rice requires warmth and abundant moisture, the plant is an annual, from 2 to 6 feet (61 to 183 cm) tall, with a round, jointed stem, long, pointed leaves, and seeds borne in a dense head on separate stalks. Thousands of rice strains are now known, both cultivated and wild. Estimates are that half the world's population subsists wholly or partially on rice. The largest producers are China, India, Indonesia, Bangladesh, and Thailand. Most rice that is grown is also consumed domestically. Brown rice has greater food value than white, since the outer coatings (which are polished away to yield white rice) contain protein and minerals, while the white endosperm is chiefly carbohydrate. As a food, rice is low in fat and protein, as compared to other grains. The beverage sake is brewed from rice. 
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamp<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_GAMEPLAY]
+Chilli can be found in  <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>. 
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamp<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_GAMEPLAY]
+Peat can be found in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>. 
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_GAMEPLAY]
+Beavers live in the many waterways found in <L:DATABASE_TERRAIN,TERRAIN_FOREST>Forests<e>. People hunt the beaver for its fur.
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_HISTORICAL]
+Essentially a large rodent, the beaver and its hunt led to fortunes in the United States and Canada and to explorations throughout the Pacific Northwest. The economic power of fur was immense in the 17th, 18th, and 19th centuries. Conconully State Park in Washington derives its name from "konekol'p": a native word meaning "money hole," referring to the abundance of beaver in the area. The wealth, though, was mainly to be had by the large-scale fur traders like John Jacob Astor, America's first millionaire.
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_GAMEPLAY]
+Cut Off!
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_GAMEPLAY]
+Uranium is a dense, radioactive, silvery metal that is found on <L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e> tiles. 
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_HISTORICAL]
+In 1789, the German chemist Martin Klaproth discovered the chemical element Uranium. For about 150 years following its discovery, uranium was found to have some of the most wide-reaching effects of any element. Uranium is present in only two to four parts per million in the earth's crust. Few deposits contain uranium in amounts greater the 0.2 percent. Hundreds of minerals, however, contain uranium. For example, uraninite and carnotite are abundant minerals that contain relatively high concentrations of uranium. Pitchblende, known for its use in the early research of radioactive elements, is a variety of uraninite. The U.S. and Canada contain large deposits of uranium. Auatralia has rich deposits of uranium in its Northern Territory. South Africa and Canada have been the chief suppliers of uranium.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_GAMEPLAY]
+Potatoes can be found in <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_GAMEPLAY]
+Salmon are fish that are found in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e> tiles.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_HISTORICAL]
+Salmon are marine fish of the family Salmonidae that spawn in fresh water. The herring-like Salmonidae are characterized by soft, rayless, adipose fins and live in cold, oxygen-rich waters. They are generally a uniform silver in color. The Atlantic salmon (genus Salmo), once abundant, is threatened by pollution, damming, and over fishing. Salmon feed on crustaceans at sea and small fish while spawning and reach 15 pounds (6.8 kilograms). The Pacific salmon (genus Oncorhynchus), comprising five species, is commercially the most important. The largest, the chinook, may reach 100 pounds (45 kilograms); the blueback forms the bulk of canned salmon. Pacific salmon are famed for their grueling journeys of hundreds of miles to their headwater breeding grounds. The genus Salvelinus includes the European chars and the North American brook trout.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Polar Mountain<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+Bauxite is a hydrated mixture of metal oxides that is found in <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Polar Mountain<e> tiles.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_HISTORICAL]
+Bauxite is a mixture of hydrated aluminum oxides usually containing oxides of iron and silicon. A noncrystalline substance formerly thought to be a mineral, bauxite is claylike, ranging from white to brown or red in color. It is the chief source of aluminum and its compounds. It is widely distributed throughout the world, with important deposits in Africa, South America, France, Russia, the West Indies, and the U.S. 
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_GAMEPLAY]
+Buffalos live in the <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>.
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+Coal deposits are found on <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e> tiles. Coal is burned to produce energy.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_HISTORICAL]
+Coal is a fuel substance of plant origin, composed largely of carbon with varying amounts of mineral matter. Coal belongs to a series of carbonaceous fuels that have varying compositions in the relative amounts of moisture, volatile matter, and fixed carbon. The most useful types of coal contain the largest amounts of carbon and the smallest amounts of moisture and volatile matter. The highest grade of coal is anthracite, or hard coal, which is nearly pure carbon and is used as a domestic fuel. Bituminous coal, or soft coal, with a lower carbon content, is used as an industrial fuel and in making coke. Lignite and peat are the lowest in carbon content. Large amounts of coal were formed in the Carboniferous period of geological time (approximately 280 to 345 million years ago). It is thought that great quantities of vegetable matter collected and underwent slow decomposition in swamps that were similar to present-day peat bogs and lagoons. The peat that formed was converted to lignite and coal by metamorphism. The pressure of accumulated layers of overlying sediment and rock forced out much of the volatile matter, leaving beds or seams of compact coal interstratified with shales, clays, or sandstones. Higher grades of coal were produced where the stress was greatest. Major U.S. coal fields are found in Appalachia, the Midwest, the Rocky Mountain region, and along the Gulf Coast. The chief coal-producing countries of Europe are Russia, Ukraine, Poland, Germany, Britain, France, and Belgium. Valuable coal deposits also exist in China, India, South Africa, and Australia.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_GAMEPLAY]
+Cut Off!
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_GAMEPLAY]
+Date is the name for a palm tree (Phoenix dactylifera) and for its edible fruit. Dates grow in the oasis of the <L:DATABASE_TERRAIN,TERRAIN_DESERT>Deserts<e>.
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_HISTORICAL]
+Dates are probably native to Arabia and North Africa and long a major food source in <L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e> and tropical regions. The sweet, nutritious fruits grow in heavy clusters; a tree may produce up to 200 pounds (90 kilograms) annually. Sugar and a fermented drink are made from the sap of the tree, and the seeds are sometimes used as a coffee substitute. The wood of the trunk is used in construction, and mats and baskets are woven from the leaves.
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_GAMEPLAY]
+Olives grow on <L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>.
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_GAMEPLAY]
+Apples are the tree (and the fruit) of the genus Malus from the ROSE family. Since the fruit grows on trees, apples can only be found on <L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e> tiles.
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_HISTORICAL]
+Apples are any tree (and its fruit) of the genus Malus of the rose family. The common apple (M. sylvestris) is the best known and the most important commercial temperate fruit. It is native to Western Asia, but has been widely cultivated since prehistoric times. Thousands of varieties of apples exist, such as Golden Delicious, Winesap, Jonathan, and McIntosh. The fruit is consumed fresh or cooked, or is used for juice. Partial fermentation of apple juice (sweet cider) produces hard cider (from which applejack liquor is made); fully fermented juice yields vinegar. The hardwood is used in cabinetmaking and as fuel. The fruit of crab apple trees (which are cultivated as ornamentals) is used for preserves and jellies.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_GAMEPLAY]
+Banana is the name for a family of tropical herbs (the Musacae), for a genus (Musa) of herbaceous plants, and for the fruits they produce. Bananas can be found only on <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e> tiles.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_HISTORICAL]
+Bananas are probably native to tropical Asia, but are widely cultivated. They are related to the economically valuable Manila Hemp and to the Bird-of-Paradise flower. Banana plants have a palm-like aspect to their physical features and large leaves, the overlapping bases of which form the so-called false trunk. Only female flowers develop into the banana fruit (botanically considered a berry). Each plant can bear fruit only once. The seeds are sterile, so propagation occurs through shoots from the rhizomes. Bananas are an important food staple in tropic regions.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_GAMEPLAY]
+Sugar grows in the <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>, where dense vegetation and humidity make for a perfect growing environment.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_HISTORICAL]
+Serious European harvesting and refinement of sugar from the sugar beet began during the Napoleonic wars, when sugar from sugar cane became unavailable.  But this was far from the first time that war and the fate of sugar were intertwined. More than one hundred years before, in 1764, the British decision to tax the American colonies with a new duty on molasses, the so-called Sugar Act, added fuel to the fire which would become the American Revolution.
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e>
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Sand Dunes<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_GAMEPLAY]
+Camels lives in the <L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e> and on <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>.
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_GAMEPLAY]
+Lobsters are large marine crustaceans that are found in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e> tiles. 
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_HISTORICAL]
+Lobsters are a large marine crustacean with five pairs of jointed legs - the first pair bearing large pincer-like claws of unequal size adapted to crushing the shells of its prey. The dark-green common American lobsters (Homarus americanus) are found from Labrador to North Carolina, but primarily along the New England coast. When lobsters are cooked, the shell turns bright red. Lobster meat is considered a delicacy.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+Emeralds are valuable gems that can be found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcanos<e> .
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+Emeralds are highly valued gems. They are a green variety of the mineral beryl. The finest emeralds are found in Colombia. Other sources are Russia, Zimbabwe, and Australia. The Oriental emerald is the transparent green variety of corundum.
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_GAMEPLAY]
+Wheat is a cereal plant (genus Triticum) of the grass family, a major food and an important commodity of the world grain market. Wheat can be found on
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plain<e> tiles.
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_HISTORICAL]
+Wheat is an annual (probably derived from a perennial) that grows best where the weather is cool during its early growth. Modern wheat varieties are usually classified as winter wheats (fall-planted and unusually winter-hardy) and spring wheats (spring-planted). Hard-kerneled varieties (hard wheats) yield flour with a high gluten content, used to make breads; soft-kerneled ones (soft wheats) are starchier, and their flour is used to make cakes and biscuits. Durum wheat is a very hard-kerneled wheat used in pasta products. Wheat is also used in the manufacture of beer and whiskey, and the grain, the bran (the residue from milling), and the rest of the plant are valuable livestock feed. Wheat was one of the first grains to be cultivated: bread wheat was grown in the Nile River valley by 5000 BC. Major modern wheat-producing areas include North America, China, Western Europe, Ukraine, Kazakhstan, Russia, India, Pakistan, and Australia.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+Gold is found on <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e> tiles. 
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+Gold (Au) is a metallic element, known since prehistoric times. Chemically inactive, this very ductile and most malleable metal can be beaten into thin sheets of gold leaf. Only silver and copper conduct electricity better. Gold is usually hardened by alloying with other metals; it also often occurs in nature as an alloy. The gold content of an alloy is stated in carats. By definition, pure gold is 24 carats, and thus a 75 percent gold alloy is 18 carats. Gold is found widely distributed, mostly in metallic form as dust, grains, flakes, or nuggets. It occurs in quartz veins or lodes, usually in association with silver or other metals, and in alluvial placer deposits. Chief producers of gold are South Africa, Russia, Canada, and the U.S. Possibly the first metal used by humans, gold was valued for ornaments, and magical powers were attributed to it. Alchemists of the Middle Ages tried to transmute baser metals into gold. The search for gold stimulated European exploration of the Western Hemisphere.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_GAMEPLAY]
+Poppies grow in the <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grasslands<e>, where people harvest the plant to make medicinal drugs.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_HISTORICAL]
+There are many kinds of poppies, but one has become most infamous: papaver sominferum, also known as the opium poppy. The Chinese, who developed the unripened seed as a pain reliever in the 15th century, passed the first law against the smoking of opium in 1729. Nonetheless, the poppy fields in British India provided a profitable export to China, prompting the Opium Wars of 1839 to 1842. The wars ended with England in possession of Hong Kong and special trade privileges. By the 1990s, heroin, a drug produced from the opium poppy, was a $10 billion per year business in the U.S. alone.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Submarine Ridge<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Submarine Canyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_GAMEPLAY]
+Tuna are large fish that are found in <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Water<e> tiles. 
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_HISTORICAL]
+Tuna are the largest fish of the mackerel family. Hunted as game and for food, the family includes the little tuna (weighing 10 pounds / 4.5 kilograms) of the Atlantic, the most important commercial variety of tuna. The bluefin tuna (Thunnus thynnus) are the giant of bony fishes (200-500 pounds / 90-225 kilograms). Finally, the Pacific albacore (up to 60 pounds / 27 kilograms) are marketed as whitemeat tuna.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_GAMEPLAY]
+Copper is a metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_HISTORICAL]
+Copper (Cu) is a metallic element known to humans since the Bronze Age. This reddish-brown, malleable, ductile metal is a very good conductor of heat and electricity. It has low chemical reactivity. In moist air it forms a patina, which is a protective, greenish surface film. The primary commercial uses of copper are in electrical apparatus and wire, roofing, utensils, coins, metalwork, plumbing, and condensing coils. Copper alloys include brass and bronze. Copper compounds are used as insecticides, fungicides, and paint pigments. They are also used in electroplating. Copper is an essential nutrient for normal human metabolism and hemoglobin synthesis in blood.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_GAMEPLAY]
+Silver is a precious metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_HISTORICAL]
+Silver (Ag) is a metallic element, one of the first metals used by humans. Pure silver is nearly white, lustrous, soft, very ductile, malleable, and an excellent conductor of heat and electricity. It is used in mirrors, coins, utensils, antiseptics, jewelry, and for electrolytic plating of tableware. Silver nitrate is its most important compound. Silver reacts with hydrogen sulfide in air to form silver sulfide (tarnish). Photographic emulsions contain silver halides, which are sensitive to light. Silver alloys are used in dentistry and electrical contacts. Sterling silver contains 92.5 percent silver and 7.5 percent copper. Silver is obtained from the ores argentite, cerarygrite, pyrargyrite, stephanite, and proustite.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Polar Hill<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_GAMEPLAY]
+Sapphires are precious gems that can be found in <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Polar Hill<e> tiles.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_HISTORICAL]
+Sapphires are precious gems, a transparent blue variety of corundum. Sapphires are found chiefly in Thailand, India, Sri Lanka, and Myanmar. Like rubies, some sapphires show an internal star when cut with a round top. Synthetic sapphire stones are made by fusing aluminum oxide, with titanium oxide added for color.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_GAMEPLAY]
+Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_HISTORICAL]
+Emeralds are highly valued gems. They are a green variety of the mineral beryl. The finest emeralds are found in Colombia. Other sources are Russia, Zimbabwe, and Australia. The Oriental emerald is the transparent green variety of corundum.
+[END]
+
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_PREREQ]
+Location:
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_GAMEPLAY]
+Iron is a metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>.
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_HISTORICAL]
+Iron (Fe) is a lustrous, ductile, malleable, silver-gray metal. A good conductor of heat and electricity, it is attracted by a magnet and is itself easily magnetized. Iron is abundant throughout the universe. It is found in many stars, including the sun. It is the fourth most common element in the earth's crust, of which it constitutes about 5 percent by weight, and is believed to be the main component of the earth's core. Iron is rarely found uncombined in nature except in meteorites, and it rusts readily in moist air. Limonite and hematite are the chief iron ores; other ores include magnetite, taconite, and siderite. Iron ores are refined in a blast furnace to produce pig iron, which can be remelted and poured into molds to make cast iron, commercially purified to make wrought iron, or alloyed with carbon and other elements to make steel. Iron compounds are used as paint pigments, in dyeing, and in ink manufacture. A component of hemoglobin, the oxygen-carrying pigment of red blood cells in vertebrates, iron is important in nutrition; one cause of anemia is iron deficiency.
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commercet<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_GAMEPLAY]
+Silver is a precious metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>.
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Silver (Ag) is a metallic element, one of the first metals used by humans. Pure silver is nearly white, lustrous, soft, very ductile, malleable, and an excellent conductor of heat and electricity. It is used in mirrors, coins, utensils, antiseptics, jewelry, and for electrolytic plating of tableware. Silver nitrate is its most important compound. Silver reacts with hydrogen sulfide in air to form silver sulfide (tarnish). Photographic emulsions contain silver halides, which are sensitive to light. Silver alloys are used in dentistry and electrical contacts. Sterling silver contains 92.5 percent silver and 7.5 percent copper. Silver is obtained from the ores argentite, cerarygrite, pyrargyrite, stephanite, and proustite.[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_HISTORICAL]
+´[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GLACIER>Glacier<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_GAMEPLAY]
+Seals are marine mammals that are found in <L:DATABASE_TERRAIN,TERRAIN_GLACIER>Glacier<e> tiles.
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_HISTORICAL]
+Seals are fin-footed mammals (pinnipeds) of the family Phocidae, usually marine, with front and hind feet modified as flippers. Seals have streamlined bodies with a thick, subcutaneous layer of fat, and most inhabit cold or temperate regions. All seal species leave the water at least once a year to breed; some species migrate. Seals live on fish and shellfish. Many dive deep to feed, navigating by means of echolocation. True seals lack external ears. They are polygamous and gregarious, and most live in one of four geographical regions: northern, Antarctic, and the warm waters of the Mediterranean, Caribbean, and Hawaiian seas. Seals are extensively hunted for food, fur, hides, and oil.
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GLACIER>Glacier<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_GAMEPLAY]
+Walrus can be found on <L:DATABASE_TERRAIN,TERRAIN_GLACIER>Glacier<e> tiles. Walrus blubber, hides, and ivory provide its value to these frozen, barren tiles.
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_HISTORICAL]
+The walrus is a marine mammal (Odobenus rosmarus) that is found in  arctic seas.  Largest of the fin-footed mammals, it has long tusks, light-brown wrinkled hide, and bristly cheek pads. An adult male may weigh up to 3,000 pounds (1,400 kilograms). Walruses live on beaches near shallow water in herds of about a hundred animals and eat mainly shellfish. Hunted for blubber, hides, and ivory, they are now endangered.
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_GAMEPLAY]
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelfs<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Beds<e> are home to crabs, which are hunted as a high-priced food source.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_HISTORICAL]
+Throughout history, the crab has been prized as a delicacy.  In more recent times, crabs have been found to be useful in cosmetics, drugs, water treatment, even fertilizer. Chitisan, found in the crab's shell, contains DNA inhibitors that may have use as, ironically, a  cancer inhibitor.
+[END]
+
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_GAMEPLAY]
+Fish are limbless, aquatic, vertebrate animal with fins, internal gills, and skin. They are normally found in abundance in <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e> tiles.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_HISTORICAL]
+Most fish are cold-blooded, limbless, aquatic, vertebrate animals with a glandular secretion that decreases friction. Most fish have scales. A typical fish is torpedo-shaped, with a head containing a brain and sensory organs, a muscular-walled trunk with a cavity containing internal organs, and a muscular tail. Most fish propel themselves through water with weaving movements and control direction with their fins. Although some fish, such as sharks, bear live young, most fish eggs are fertilized and hatched in water. There are over 20,000 species of fish in three classes: Agnatha, the most primitive fishes, jawless and without paired pelvic and pectoral fins (such as the lamprey); Chondrichthyes, cartilaginous fishes, with skeletons of cartilage but no swim bladder or lungs (such as the shark and ray); and Osteichthyes, bony fishes, the most highly developed. Bony fishes have a bony skeleton and a swim bladder or lungs, and are divided into fleshy-finned (such as the lobefin and lungfish) and ray-finned fishes (such as BASS). The largest fish is the whale shark (Rhincodon typus), reaching 50 feet (15 meters) in length and are found worldwide in tropical seas. The smallest is the 1/2 inch (1.3 centimeter) goby (family Gobiidae) of the Philippines.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_GAMEPLAY]
+Dye can be found on <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e> tiles.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_HISTORICAL]
+Dyeing is the process of applying colors to fabrics. A human practice for over three thousand years, it enabled the natural white color of silk, wool and cotton to be enhanced with a varied spectrum of color. Natural dyes are created from a myriad of sources, including shells, animals and plants, though these were not always permanent and frequently expensive. Modern dyes are based around artificial or processed substances such as coal and other chemicals. One benefit for a nation with an extensive dye industry is that the processes involved in creating dye can be easily retooled to other purposes. Germany discovered this in World War I when it was determined that factories producing artificial dye could be easily modified to create explosives and other tools of war.
 [END]
 
 [GOVERNMENT_ANARCHY_PREREQ]
@@ -4693,13 +5739,36 @@ The explosion in computer hardware technology in the late 1990s and early 2000s 
 The first Virtual Reality "Amusement Park" opened in Berlin in 2027.  Guests donned neural interfaces and sat comfortably in anechoic chambers, transporting their consciousness to another reality.  VR Amusement Parks began to supplant more traditional entertainment media, leading motion picture and television studios to switch to producing VR Sims instead of traditional films.  Citizens, once delighted and mesmerized by movie screens soon found the superior experience in being a part of the movie itself.  The worlds of cinema, theme parks and computer games had intersected, revolutionizing entertainment forever.
 [END]
 
+[IMPROVE_MIND_CONTROL_EMITTER_PREREQ]
+Requires:
+<L:DATABASE_ADVANCES,ADVANCE_MIND_CONTROL>Mind Control<e>
+
+Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Gold<e>
+[END]
+
+[IMPROVE_MIND_CONTROL_EMITTER_STATISTICS]
+Gives:
+Locks <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>Happiness<e> at 75%.
+[END]
+
+[IMPROVE_MIND_CONTROL_EMITTER_GAMEPLAY]
+Mind Controller locks <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>Happiness<e> at 75%, eliminating <L:DATABASE_CONCEPTS,CONCEPT_RIOTS>riots<e> and <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revolutions<e> by eliminating the free will of discontented citizens. Tall, silvery, and imposing, no one hides from the emitter. <L:DATABASE_UNITS,UNIT_SLAVER>Slavers<e> and religious missionaries have little hope of penetrating this psychic barrier.
+[END]
+
+[IMPROVE_MIND_CONTROL_EMITTER_HISTORICAL]
+Throughout the 21st and 22nd centuries, crowding in arcologies and megaburbia eroded personal space. With thinner walls, smaller homes, and closer neighbors, socially rebellious behavior became dangerous and even illegal. Hi-tech companies turned their focus to new Mind Control technologies. Tested in prisons, the first Mind Controllers were described as "pacifiers" or "restraints." By 2212, food riots in Bombay prompted the installation of a citywide mind control system.  At long last, the government had made the people happy.
+[END]
+
 [TERRAIN_WATER_BEACH_PREREQ]
 Food: 10
 Production: 10
 Commerce: 10
 
 Goods:
-none
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_ONE>Crabs<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_TWO>Fish<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_THREE>Dye<e>
 [END]
 
 [TERRAIN_WATER_BEACH_STATISTICS]
@@ -4711,6 +5780,8 @@ Defense: +0%
 Beach tiles are excellent places to build <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> next to, as any city on a tile adjacent to a beach tile may build naval units.  Cities near beaches can also take advantage of such ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e> as <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>Nets<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>Undersea Tunnels<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_PORT>Ports<e>.  
 
 Beaches are fertile ground for fish and other seafood, and give moderate levels of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> to any <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>Nets<e> or <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>Fisheries<e> built on them.  They also provide minimal <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> and <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>.
+
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_TWO>Fish<e> and<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_THREE>Dye<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to Beach tiles.
 [END]
 
 [TERRAIN_WATER_BEACH_HISTORICAL]
@@ -4722,7 +5793,10 @@ Production: 10
 Commerce: 5
 
 Goods:
-none
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e> 
 [END]
 
 [TERRAIN_WATER_SHELF_STATISTICS]
@@ -4732,6 +5806,8 @@ Defense: +0%
 
 [TERRAIN_WATER_SHELF_GAMEPLAY]
 Continental Shelves are the dramatic slope between <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Water<e> tiles.  They are rich in <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>, and provide a small amount of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> and <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>.  One can build <L:DATABASE_CONCEPTS,CONCEPT_SEA_COLONIES>Underwater Cities<e> on them, as well as any ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e>.
+
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to shelf tiles.
 [END]
 
 [TERRAIN_WATER_SHELF_HISTORICAL]
@@ -4768,6 +5844,7 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Tuna<e>
 [END]
 
 [TERRAIN_WATER_DEEP_STATISTICS]
@@ -4778,7 +5855,7 @@ Defense: +0%
 [TERRAIN_WATER_DEEP_GAMEPLAY]
 Deep Ocean tiles are ideal places for Undersea Colonies and ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e>, as their proximity to geothermal energy affords substantial <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>.  Building <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e> in deep waters is, understandably, more expensive than in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e>.
 
-<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whales<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squids<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to deep ocean tiles.
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whales<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squids<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Tuna<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to deep ocean tiles.
 [END]
 
 [TERRAIN_WATER_DEEP_HISTORICAL]
@@ -4792,6 +5869,8 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glass<e> 
 <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Oil<e>
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_THREE>Dates<e> 
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Camels<e>
 [END]
 
 [TERRAIN_DESERT_STATISTICS]
@@ -4804,7 +5883,7 @@ Deserts are not conducive to healthy <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>
 
 After the discovery of the <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Agricultural Revolution<e> Advance, players can <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Desert tiles.
 
-<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glass<e> and <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Oil<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> found in deserts.
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glass<e>, <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Oil<e>, <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_THREE>Dates<e> and <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Camels<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> found in deserts.
 [END]
 
 [TERRAIN_DESERT_HISTORICAL]
@@ -4816,8 +5895,8 @@ Production: 10
 Commerce: 10
 
 Goods:
-<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tea<e>
-<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Emeralds<e>
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_MOUNTAIN_GOOD_ONE>Iron Ore<e>
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_MOUNTAIN_GOOD_TWO>Silver<e>
 [END]
 
 [TERRAIN_BROWN_MOUNTAIN_STATISTICS]
@@ -4830,7 +5909,7 @@ Desert Mountains are hostile to all but the hardiest of life and give no <L:DATA
 
 The <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosives<e> Advance allows one to <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Desert Mountains.
 
-<L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> like <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tea<e> and <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Emeralds<e> are found in Desert Mountains.
+<L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> like <L:DATABASE_RESOURCE,TERRAIN_BROWN_MOUNTAIN_GOOD_ONE>Iron Ore<e> and <L:DATABASE_RESOURCE,TERRAIN_BROWN_MOUNTAIN_GOOD_TWO>Silver<e> are found in Desert Mountains.
 [END]
 
 [TERRAIN_BROWN_MOUNTAIN_HISTORICAL]
@@ -4844,6 +5923,8 @@ Commerce: 10
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>Hardwood<e>
 <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_TWO>Bear<e>
+<L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_THREE>Apples<e>
+<L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_FOUR>Beavers<e>
 [END]
 
 [TERRAIN_FOREST_STATISTICS]
@@ -4856,7 +5937,7 @@ Forests provide a substantial bonus to the <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTI
 
 After the discovery of the <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Agricultural Revolution<e> Advance, players can <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Forest tiles.
 
-Exotic <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>Hardwood<e> and <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_TWO>Bears<e> are the trade <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to Forest tiles.
+Exotic <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>Hardwood<e>, <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_TWO>Bears<e>, <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_THREE>Apples<e> and <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_FOUR>Beavers<e> are the trade <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to Forest tiles.
 [END]
 
 [TERRAIN_FOREST_HISTORICAL]
@@ -4870,6 +5951,8 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_ONE>Cotton<e>
 <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_TWO>Tobacco<e>
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_THREE>Potatoes<e>
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_FOUR>Poppies<e>
 [END]
 
 [TERRAIN_GRASSLAND_STATISTICS]
@@ -4882,7 +5965,7 @@ Ample <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> and fair levels of <L:DATABASE_C
 
 Discovery of the <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Tool Making<e> Advance enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> Grasslands.
 
-<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_ONE>Cotton<e> and <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_TWO>Tobacco<e> are the <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> that Grasslands provide.
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_ONE>Cotton<e>, <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_TWO>Tobacco<e>, <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_THREE>Potatoes<e>, <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_FOUR>Poppies<e> are the <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> that Grasslands provide.
 [END]
 
 [TERRAIN_GRASSLAND_HISTORICAL]
@@ -4896,6 +5979,8 @@ Commerce: 10
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_ONE>Coffee<e>
 <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_TWO>Grapes<e>
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_THREE>Uranium<e>
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_FOUR>Olives<e>
 [END]
 
 [TERRAIN_HILL_STATISTICS]
@@ -4908,7 +5993,7 @@ Hills are good places to build <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>, beca
 
 One needs to discover <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosives<e> to <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Hills.
 
-<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_ONE>Coffee<e> and <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_TWO>Grapes<e> are the <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> found on Hill tiles.
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_ONE>Coffee<e>, <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_TWO>Grapes<e>, <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_THREE>Uranium<e>, <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_FOUR>Olives<e> are the <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> found on Hill tiles.
 [END]
 
 [TERRAIN_HILL_HISTORICAL]
@@ -4920,7 +6005,8 @@ Production: 0
 Commerce: 0
 
 Goods:
-none
+<L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_ONE>Seals<e>
+<L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_TWO>Walrus<e>
 [END]
 
 [TERRAIN_GLACIER_STATISTICS]
@@ -4932,6 +6018,9 @@ Defense: +0%
 Glacier tiles are almost completely inhospitable.  One may build a city on a Glacier, but it will be exceedingly difficult to support.  Tile Improvement construction is impossible.  There is no <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>, <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> or <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>.  Movement is severely limited and there is no <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Defense<e> bonus for units.  It is best to avoid these lands as much as possible.
 
 One must discover <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e> in order to <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Glacier tiles.
+
+<L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_ONE>Seals<e> and <L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_TWO>Walrus<e> are the <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> found on Glacier tiles.
+
 [END]
 
 [TERRAIN_GLACIER_HISTORICAL]
@@ -4945,6 +6034,7 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Tuna<e> 
 [END]
 
 [TERRAIN_WATER_RIFT_STATISTICS]
@@ -4954,6 +6044,8 @@ Defense: +0%
 
 [TERRAIN_WATER_RIFT_GAMEPLAY]
 Their proximity to intense geothermal activity endows Sub-oceanic Ridges with extremely high levels of <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>.  Though they provide minimal <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> and <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>, they are suitable for Undersea Colonies and can contain any ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvement<e>.
+
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Tuna<e> are the Goods to be found in Rifts.
 [END]
 
 [TERRAIN_WATER_RIFT_HISTORICAL]
@@ -4967,6 +6059,8 @@ Commerce: 10
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tea<e>
 <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Emeralds<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_THREE>Coal<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_FOUR>Gold<e>
 [END]
 
 [TERRAIN_MOUNTAIN_STATISTICS]
@@ -4979,7 +6073,7 @@ Mountains make up for their lack of a <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> 
 
 The discovery of <L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e> enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> Mountains.
 
-<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tea<e> and <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Emeralds<e> are the Goods to be found in Alpine Mountains.
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tea<e>, <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Emeralds<e>, <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_THREE>Coal<e> and <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_FOUR>Gold<e> are the Goods to be found in Alpine Mountains.
 [END]
 
 [TERRAIN_MOUNTAIN_HISTORICAL]
@@ -4991,7 +6085,8 @@ Production: 5
 Commerce: 5
 
 Goods:
-none
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphires<e>
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_TWO>Emeralds<e>
 [END]
 
 [TERRAIN_WHITE_HILL_STATISTICS]
@@ -5003,6 +6098,9 @@ Defense: +50%
 Polar Hills are less than desirable locations for <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>, owing to their lack of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>.  <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e> and <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> levels are minimal.  One can build <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Mines<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Roads<e>, but the harsh weather and extreme cold make supporting <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farms<e> impossible.  Movement is slow, and there is a moderate defensive bonus for units.
 
 <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosives<e> are required to <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Polar Hill tiles.
+
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphires<e> and <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_TWO>Emeralds<e> are the Goods found in Polar Hills.
+
 [END]
 
 [TERRAIN_WHITE_HILL_HISTORICAL]
@@ -5016,6 +6114,8 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE>Bauxite<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>
 [END]
 
 [TERRAIN_WHITE_MOUNTAIN_STATISTICS]
@@ -5028,7 +6128,7 @@ Though <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> is impossible to grow in Polar 
 
 <L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e> is required to <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Polar Mountains.
 
-<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e> are the Goods found in Polar Mountains.
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>,  <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE>Bauxite<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e> are the Goods found in Polar Mountains.
 [END]
 
 [TERRAIN_WHITE_MOUNTAIN_HISTORICAL]
@@ -5042,6 +6142,8 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Medicinal Herbs<e>
 <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e>
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_THREE>Bananas<e>
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_FOUR>Sugar<e>
 [END]
 
 [TERRAIN_JUNGLE_STATISTICS]
@@ -5052,9 +6154,9 @@ Defense: +25%
 [TERRAIN_JUNGLE_GAMEPLAY]
 Rain Forests have an abundance of natural resources, making available small amounts of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>, substantial <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> and a minimum of <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>.  A <L:DATABASE_CONCEPTS,CONCEPT_RIVER>River<e> enhances the bonuses.  <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farming<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Mining<e> are both impossible, but one can build Commerce improvements such as <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_TRADING_POST>Trading Posts<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_OUTLET_MALL>Shopping Malls<e>.  <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Roads<e> are strongly advised, as unaided movement through this terrain is slow.
 
-The discovery of <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Agricultural Revolution<e> enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> of Rain Forest tiles.
+The discovery of <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Toolmaking<e> enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> of Rain Forest tiles.
 
-<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Medicinal Herbs<e> and <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e> are the Goods found in rain forests.
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Medicinal Herbs<e>, <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e>, <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_THREE>Bananas<e> and <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_FOUR>Sugar<e> are the Goods found in rain forests.
 [END]
 
 [TERRAIN_JUNGLE_HISTORICAL]
@@ -5066,8 +6168,10 @@ Production: 10
 Commerce: 5
 
 Goods:
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_ONE>Copper<e>
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_TWO>Silver<e>
 <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glass<e>
-<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Oil<e>
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Camels<e>
 [END]
 
 [TERRAIN_BROWN_HILL_STATISTICS]
@@ -5080,7 +6184,7 @@ Sand Dunes are desolate and hostile locales, lacking suitable resources for <L:D
 
 <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosives<e> enable <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> Sand Dunes.
 
-<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glass<e> and <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Oil<e> are the Goods found on sand dune tiles.
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_ONE>Copper<e>, <L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_TWO>Silver<e>, <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glass<e> and <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Camels<e> are the Goods found on sand dune tiles.
 [END]
 
 [TERRAIN_BROWN_HILL_HISTORICAL]
@@ -5094,6 +6198,8 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_ONE>Spices<e>
 <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_TWO>Elephant<e>
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_THREE>Wheat<e>
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_FOUR>Buffalo<e>
 [END]
 
 [TERRAIN_PLAINS_STATISTICS]
@@ -5107,7 +6213,7 @@ The Plains are a fine place to build a city.  <L:DATABASE_CONCEPTS,CONCEPT_FOOD>
 
 One must discover <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Tool Making<e> in order to <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Plains.
 
-<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_ONE>Spices<e> and <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_TWO>Elephants<e> are the Goods found on Plains.
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_ONE>Spices<e>, <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_TWO>Elephants<e>, <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_THREE>Wheat<e> and <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_FOUR>Buffalo<e> are the Goods found on Plains.
 [END]
 
 [TERRAIN_PLAINS_HISTORICAL]
@@ -5121,6 +6227,8 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crab<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_STATISTICS]
@@ -5131,7 +6239,7 @@ Defense: +0%
 [TERRAIN_WATER_SHALLOW_GAMEPLAY]
 Both <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> and <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> are plentiful on shallow ocean tiles.  They are cost-effective locations for ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e> like <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>Undersea Tunnels<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>Fisheries<e>.
 
-<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e> are the Goods that will occasionally appear on shallow ocean tiles.
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e> are the Goods that will occasionally appear on shallow ocean tiles.
 [END]
 
 [TERRAIN_WATER_SHALLOW_HISTORICAL]
@@ -5144,6 +6252,9 @@ Commerce: 5
 
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligator<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_TWO>Rice<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_THREE>Chilli<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_FOUR>Peat<e>
 [END]
 
 [TERRAIN_SWAMP_STATISTICS]
@@ -5154,9 +6265,9 @@ Defense: +25%
 [TERRAIN_SWAMP_GAMEPLAY]
 Swamps are unsuitable for <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>.  There is a scarce amount of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> minimal <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e> and a small amount of <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>.  <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Roads<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_RAILROAD>Railroads<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MAGLEV>Maglevs<e> are the only tile improvements one can build.
 
-The <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e> Advance enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> Swamp tiles.
+The <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Agricultural Revolution<e> Advance enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> Swamp tiles.
 
-<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligator<e> is the only <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Good<e> found on swamps.
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligator<e> , <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_TWO>Rice<e>, <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_THREE>Chilli<e> and <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_FOUR>Peat<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Good<e> found on swamps.
 [END]
 
 [TERRAIN_SWAMP_HISTORICAL]
@@ -5170,6 +6281,7 @@ Commerce: 10
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Tuna<e> 
 [END]
 
 [TERRAIN_WATER_TRENCH_STATISTICS]
@@ -5179,6 +6291,9 @@ Defense: +0%
 
 [TERRAIN_WATER_TRENCH_GAMEPLAY]
 Submarine canyons are places teeming with life and energy, both of which are hard to harvest.  <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> and <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> in submarine canyons is fairly plentiful, and <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e> is minimal.  One can build any ocean-based tile Improvement, as well as <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>.
+
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e> , <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Tuna<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Good<e> found on Trenches.
+
 [END]
 
 [TERRAIN_WATER_TRENCH_HISTORICAL]
@@ -5192,6 +6307,8 @@ Commerce: 15
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Saphires<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>
 [END]
 
 [TERRAIN_WATER_VOLCANO_STATISTICS]
@@ -5204,7 +6321,7 @@ Submarine Volcanoes are the greatest source of <L:DATABASE_CONCEPTS,CONCEPT_PROD
 
 One can build <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Mines<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>Undersea Tunnels<e>, but not <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>Nets<e> or <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>Fisheries<e>.
 
-<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>, though rare, are Goods found on Submarine Volcanoes.
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>, <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Saphires<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>,  though rare, are Goods found on Submarine Volcanoes.
 [END]
 
 [TERRAIN_WATER_VOLCANO_HISTORICAL]
@@ -5244,6 +6361,8 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crab<e> 
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>
 [END]
 
 [TERRAIN_WATER_REEF_STATISTICS]
@@ -5256,7 +6375,7 @@ Coral Reefs are found in shallow waters, where <L:DATABASE_CONCEPTS,CONCEPT_PROD
 
 One can build any ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e> on Coral Reefs, except for <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_MINES>Undersea Mines<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_PORT>Ports<e>.
 
-Coral Reefs are abundant with life, and make an ideal place to harvest the Goods, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>.
+Coral Reefs are abundant with life, and make an ideal place to harvest the Goods, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>.
 [END]
 
 [TERRAIN_WATER_REEF_HISTORICAL]
@@ -5270,6 +6389,8 @@ Commerce: 5
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crab<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>
 [END]
 
 [TERRAIN_WATER_KELP_STATISTICS]
@@ -5282,7 +6403,7 @@ Defense: +0%
 
 One can build any ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e> on Kelp Beds, except for <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_MINES>Undersea Mines<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_PORT>Ports<e>.
 
-Kelp beds often have Goods, such as <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>.
+Kelp beds often have Goods, such as <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>.
 [END]
 
 [TERRAIN_WATER_KELP_HISTORICAL]
@@ -7025,11 +8146,11 @@ Damage: {UnitDB(UnitRecord[0]).Firepower}
 Vision: {UnitDB(UnitRecord[0]).VisionRange}
 Move: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
 Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
-Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+Maximale Lebenspunkte: {UnitDB(UnitRecord[0]).MaxHP}
 
-Costs: {UnitDB(UnitRecord[0]).ShieldCost}
-Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Kosten: {UnitDB(UnitRecord[0]).ShieldCost}
+Unterhalt: {UnitDB(UnitRecord[0]).ShieldHunger} Schilder
+Nahrungsbedarf: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_INTERCEPTOR_SUMMARY]
@@ -9275,6 +10396,28 @@ The Eden Project is a victory for environmentalists the world over.  With its di
 The Eden Project was one of the most controversial research projects of the Diamond Age.  It was originally conceived as a theoretical exploration of the potential applications of nano-machines in cleaning up pollution, a branch of science that became known as Gaia Theory.  Ecotopian scientists involved in the multi-national project, however, harbored sinister intentions for the technology.  Researchers discovered the key to enabling prototypical nanites to target pollution lied in designing them to seek a narrow range of chemicals that comprised the bulk of polluting agents.  Since most of these chemicals were synthetic - products of humanity rather than nature - the Ecotopians in the research group seized on the opportunity to develop a nanite that targeted and destroyed any man-made entity within a set area.  This shift in focus turned the "ecology cleanser" from a beneficent tool of world climactic and environmental repair to a device of mass destruction.  The Eco-Ranger raised the specter of the first truly efficient, large-scale annihilator of humanity.  It was particularly attractive to ecology-minded governments because it not only produced no pollution, it actually eliminated pollution within the area of effect.  Although commercial applications of Gaia Theory led to advances in pollution control systems, the destructive uses prevailed, and the arena of nanotechnological combat reached large-scale, terrifying proportions.
 [END]
 
+[WONDER_AI_ENTITY_PREREQ]
+Requires:
+<L:DATABASE_ADVANCES,ADVANCE_MIND_CONTROL>Gedankenkontrolle<e>
+
+Costs:
+{WonderDB(Wonder[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[WONDER_AI_ENTITY_STATISTICS]
+Gives:
+ Locks happiness in all <L:DATABASE_CONCEPTS,CONCEPT_CITY>cities<e> at 75%.
+Cause of <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>Revolutions<e> by the wonder.
+[END]
+
+[WONDER_AI_ENTITY_GAMEPLAY]
+By imbedding control chips into each citizen's mind, the AI Entity ends all <L:DATABASE_CONCEPTS,CONCEPT_RIOTS>riots<e> and <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revolutions<e> in a Civilization. The AI Entity quiets all complaints, replacing the din of the world with a white noise of constancy. However, in time, the AI Entity may gain self-awareness and choose to leave and form its own empire. In this case, your cities will <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revolt<e> and splinter, following their new AI leader. 
+[END]
+
+[WONDER_AI_ENTITY_HISTORICAL]
+Although in the 26th century, the discovery of  mind control opened new avenues for governmental control, inevitably, the early projects to control human labor and productivity failed. Despite using mind control to exercise dominion over people's desires to chat, surf the Net, and sometimes just plain old goof off, mind control was not effective at maintaining productivity under more extreme conditions such as fire or physical pain.  The AI Entity solved this. With a versatile and adaptable system, the AI Entity linked each of its human cells through an embedded control chip. At the first sign of discontent, the AI Entity could send gentle electrical impulses to the chip resulting in a pleasant numbing sensation and a desire to do whatever the AI Entity deemed efficient. Productivity skyrocketed and psychiatry plummeted as happiness was just an electrical impulse away.
+[END]
+
 [WONDER_EGALITARIAN_ACT_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_VIRTUAL_DEMOCRACY>Virtual Democracy<e>
@@ -9787,7 +10930,6 @@ In the late 20th century, a society of litigiousness permeated much of the Weste
 [CONCEPT_CLASSIC_AGE_HISTORICAL]
 The classical period covers the epoch of the ascent Roman Republic, in particular the last 100 years. Caesar, Sallust and Augustus are only some representatives of this era. From this time many written documents were preserved for us, which differentiates this time significantly from the preceding epochs. But also the Roman Republic was a place where the learned could hold power, and the age of learning begun properly.
 [END]
-
 [CONCEPT_COMPUTER_AGE_GAMEPLAY]
 [END]
 
@@ -9806,7 +10948,7 @@ The Industrial Revolution ushered in a new age of commerce, discovery, and produ
 [END]
 
 [CONCEPT_FUTURE_AGE_HISTORICAL]
-The future is unknown, we know not what it will bring. Be it good or bad. Nobody knows it exactly, even if some believe they do know exactly. Thus fortune-tellers will have always have further customers. But the true nature of the future is appropriate in unknown quantities, in the car, in the not safe one. In the future everything is possible or nothing at all. It is for us to decide.
+The future is unknown, we know not what it will bring. Be it good or bad. Nobody knows it exactly, even if some believe they do know exactly. Thus fortune-tellers will have always further customers. But the true nature of the future is appropriate in unknown quantities, in the vague, in the not safe one. In the future everything is possible or nothing at all. It is for us to decide.
 [END]
 
 [CONCEPT_MEDIEVAL_AGE_GAMEPLAY]

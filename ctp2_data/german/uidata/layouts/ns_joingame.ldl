@@ -1,0 +1,648 @@
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+
+gameselectwindow:nswindow {
+
+	int	widthpix	450
+
+	int	heightpix	385
+
+
+	titlestatictext : nstitlestatictext {
+
+		string	text	"str_ldl_LOAD_SETUP"
+	}
+
+
+
+	gamenamelistbox:nslistbox {
+
+		int	xpix		119
+
+		int	ypix		59
+
+		int	widthpix	208
+
+		int	heightpix	230
+
+
+
+		string	pattern	"uptg20ebig.tga"
+
+		int	srcxpix	117
+
+		int	srcypix	57
+
+		int	srcwidthpix	212
+
+		int	srcheightpix	234
+
+
+
+#		gamenamestatictext:nsstatictext {
+
+#			string	xanchor	"center"
+
+#			int	ypix	-23
+
+#			int	widthpct	100
+
+#			int	heightpix	20
+
+#			string	text	"Previous Game Setups:"
+
+#		}
+
+#		header {
+
+#			switch0:nsheaderswitch {
+
+#				string	parent	"gameselectwindow"
+
+#				int	widthpct	20
+
+#				int	heightpix	20
+
+#				string	text	"Game Setup Name"
+
+#			}
+
+#		}
+
+	}
+
+
+
+	deletebutton:nscommonbutton {
+
+		string	xanchor	"center"
+
+		int	ypix	303
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string text		"str_ldl_Delete_Setup"
+
+	}
+
+
+
+	closebutton:nsclosebutton {
+
+	}
+
+
+
+	cancelbutton:nsprevbutton {
+
+	}
+
+
+
+	okbutton:nsnextbutton {
+
+	}
+
+}
+
+
+
+passwordscreen:nswindow_popup {
+
+	int	widthpix	400
+
+	int	heightpix	220
+
+
+
+	askstatic:CTP2_STANDARD_FONT{
+
+		int ypix 20
+
+		int widthpct 100
+
+		int heightpix 20
+
+		string	text	"str_ldl_password"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	20
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	joinstatic:CTP2_STANDARD_FONT{
+
+		int ypix 20
+
+		string xanchor "center"
+
+		int widthpct 100
+
+		int heightpix 20
+
+		string	text	"str_ldl_Password_required_to_join"
+
+
+		string	pattern	"uptg20e.tga"
+#		string	pattern	"error.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	20
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	yesnoswitchgroup {
+
+#		string	xanchor	"center"
+
+		int	ypix	60
+
+		int	widthpix	640
+
+		int	heightpix	21
+
+		yesradio:nsradiobutton {
+
+			int	xpix	25
+
+			string	text	"str_ldl_Yes"
+
+		}
+
+		noradio:nsradiobutton {
+
+			int	xpix	200
+
+			string	text	"str_ldl_No"
+
+		}
+
+	}
+
+
+
+	inputstatic:CTP2_STANDARD_FONT {
+
+		int	xpix	100
+		int	ypix	110
+
+		#int	widthpct	100
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Enter_Password_COLON"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 100
+
+		int	srcypix	110
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	20
+
+	}	
+
+
+
+	inputtextfield {
+
+		#string	xanchor "center"
+		int	xpix	200
+
+		int	ypix	110
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+
+
+# we don't want to use asterisks for this.
+
+#		bool	password	true
+
+	}
+
+
+
+	denystatic:CTP2_STANDARD_FONT {
+
+		int	ypix	80
+
+		int	widthpct	100
+
+		int	heightpix	120
+
+		string	just	"center"
+
+		string	text	"str_ldl_Youve_been_denied"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	80
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	120
+
+	}	
+
+
+
+	fullstatic:CTP2_STANDARD_FONT {
+
+		int	ypix	80
+
+		int	widthpct	100
+
+		int	heightpix	120
+
+		string	just	"center"
+
+		string	text	"str_ldl_The_game_was_full"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	80
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	120
+
+	}	
+
+
+
+	nolobbystatic:CTP2_STANDARD_FONT {
+
+		int	ypix	80
+
+		int	widthpct	100
+
+		int	heightpix	120
+
+		string	just	"center"
+
+		string	text	"str_ldl_Could_not_join_lobby"
+
+
+		string	pattern	"error.tga"
+#		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	80
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	120
+
+	}	
+
+
+
+	connectionloststatic:CTP2_STANDARD_FONT {
+
+		int	ypix	80
+
+		int	widthpct	100
+
+		int	heightpix	120
+
+		string	just	"center"
+
+		string	text	"str_ldl_connectionlost"
+
+
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	80
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	120
+
+	}	
+
+	nodialupstatic:CTP2_STANDARD_FONT {
+
+		int	ypix	80
+
+		int	widthpct	100
+
+		int	heightpix	120
+
+		string	just	"center"
+
+		string	text	"str_ldl_nodialup"
+
+
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	80
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	120
+
+	}	
+
+	connectionerrstatic:CTP2_STANDARD_FONT {
+
+		int	ypix	80
+
+		int	widthpct	100
+
+		int	heightpix	120
+
+		string	just	"center"
+
+		string	text	"str_ldl_connectionerr"
+
+
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	80
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	120
+
+	}	
+
+	noscenariostatic:CTP2_STANDARD_FONT {
+
+		int	ypix	80
+
+		int	widthpct	100
+
+		int	heightpix	120
+
+		string	just	"center"
+
+		string	text	"str_ldl_No_Scenario"
+
+
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix 0
+
+		int	srcypix	80
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	120
+
+	}	
+
+	button0:nspopupbutton0 {
+
+		string	xanchor	"center"
+#		string	yanchor	"bottom"
+
+		int	ypix	40
+
+		string	text	"str_ldl_CAPS_OK"
+	}
+
+}
+
+
+
+agesscreen:nswindow_popup {
+
+	int	widthpix	400
+
+	int	heightpix	180
+
+
+
+	NameStatic : nstitlestatictext{
+
+		int ypix 20
+
+		int widthpct 100
+
+		int heightpix 20
+
+		string	text	"str_ldl_Select_Age_Research"
+
+
+
+		int	srcxpix 0
+
+		int	srcypix	20
+
+		int	srcwidthpix	400
+
+		int	srcheightpix	20
+
+	}
+
+	
+
+	StartStatic:CTP2_STANDARD_FONT{
+
+		int	xpix	34
+
+		int	ypix	60
+
+		int	widthpix	160
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Starting_Age_COLON"
+	}
+
+
+
+	EndStatic:CTP2_STANDARD_FONT{
+
+		int	xpix	206
+
+		int	ypix	60
+
+		int	widthpix	160
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Maximum_Research_COLON"
+	}
+
+
+
+	StartDropDown : CTP2_DROPDOWN {
+
+		int	xpix		34
+
+		int	ypix		80
+
+		int	widthpix	160
+
+		int	heightpix	24
+
+
+	}
+
+
+
+	EndDropDown : CTP2_DROPDOWN {
+
+		int	xpix		206
+
+		int	ypix		80
+
+		int	widthpix	160
+
+		int	heightpix	24
+
+	}
+
+
+	closebutton:nsclosebutton {
+		string	text	"str_ldl_CLOSE"
+
+	}
+}
+
+
+
+startselectingwindow:nswindow {
+
+	int	widthpix	400
+
+	int	heightpix	300
+
+
+
+
+	titlestatictext : nstitlestatictext {
+
+		string	text	"str_ldl_GAME_SETUP"
+	}
+
+
+
+	newbutton:nscommonbutton {
+
+#		string	xanchor	"center"
+
+		int	xpix	140
+
+		int	ypix	65
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Create_New_Setup"
+
+	}
+
+
+
+	gamesetupbutton:nscommonbutton {
+
+		int	xpix	140
+
+		int	ypix	115
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Load_Game_Setup"
+
+	}
+
+
+
+	savedbutton:nscommonbutton {
+
+		int	xpix	140
+
+		int	ypix	165
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Load_Saved_Game"
+
+	}
+
+
+
+	scenariobutton:nscommonbutton {
+
+		int	xpix	140
+
+		int	ypix	-215
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Load_Scenario"
+
+	}
+
+
+
+	closebutton:nsclosebutton {
+
+	}
+
+
+
+	cancelbutton:nsprevbutton {
+
+	}
+
+}
+
+
+
+$

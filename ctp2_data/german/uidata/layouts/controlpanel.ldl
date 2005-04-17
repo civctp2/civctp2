@@ -1,0 +1,3139 @@
+################################################################################
+# File: controlpanel.ldl
+# Last Access: Mon Jun 01 13:01:31 1998
+################################################################################
+
+################################################################################
+# Control Panel Tab Templates
+################################################################################
+
+# Generic control panel tab button.
+template CONTROL_PANEL_TAB_BUTTON:CTP2_SIMPLE_TAB_BUTTON {
+	# Background.
+	string	image00		"upta01ur.tga"
+	string	image10		"upta01u.tga"
+	string	image20		"upta01ul.tga"
+	bool nohighlight true
+
+	# Text label offset from top by a bit.
+	Label:CTP2_STATIC_BACKGROUND {
+		int		ypix		11
+		int		widthpix	93
+		int		heightpix	12
+	}
+}
+
+# Generic control panel tab background.
+template CONTROL_PANEL_TAB_BACKGROUND:CTP2_STATIC_IMAGE {
+	# Location.
+	int		xpix		0
+	int		ypix		28
+
+	# Background.
+	string	image00		"upfg05.tga"
+}
+
+# Icon/Value pair for Unit Tab.
+template ICON_VALUE_PAIR:CTP2_STATIC_GROUP {
+	# Size.
+	int		widthpix	19
+	int		heightpix	18
+
+#	Icon:CTP2_STATIC_IMAGE {
+#		# Location.
+#		int		xpix		1
+#	}
+
+	Value:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int		xpix		1
+		int		ypix		0
+		int		widthpix	19
+		int		heightpix	18
+		
+		bool shadowfont			TRUE
+		int fontshadowcolorred 		255			
+		int fontshadowcolorgreen 	245
+		int fontshadowcolorblue 	245
+		
+		string fontname 		"arialbd.ttf"
+		int fontsize			10
+
+	}
+}
+
+# 30x40 Image Button for Unit Tab.
+template UNIT_BUTTON_MEDIUM_SIZE:CTP2_BUTTON_BASE {
+	# Image layout.
+	int		numberoflayers		2
+	int		imagesperlayer		1
+
+	string  imagebltflag10 "chromakey"
+	int xpix10 0
+	int ypix10 0
+	int widthpix10 20
+	int heightpix10 20
+
+	# Background.
+	bool	layeralways0		true
+	bool    layeralways1        true
+
+	# Image size.
+	int		widthpix			32
+	int		heightpix			24
+
+	UnitHealth:CTP2_STATIC_BASE {
+		int xpix 2
+		int ypix 22
+		int widthpix 28
+		int heightpix 1
+	}
+}
+
+# 30x40 Image Toggle Button for Transport section of Unit Tab.
+template UNIT_TOGGLE_MEDIUM_SIZE:CTP2_SWITCH {
+	# Image layout.
+	string  imagebltflag "chromakey"
+
+	# Image size.
+	int		widthpix			32
+	int		heightpix			24
+
+	int numimagegroups 2
+
+	UnitHealth:CTP2_STATIC_BASE {
+		int xpix 2
+		int ypix 22
+		int widthpix 28
+		int heightpix 1
+	}
+}
+
+# 18x24 Image Button for Unit Tab.
+template UNIT_BUTTON_SMALL_SIZE:CTP2_BUTTON_BASE {
+	# Image layout.
+	int		numberoflayers		1
+	int		imagesperlayer		1
+
+	# Background.
+	bool	layeralways0		true
+
+	# Image size.
+	int		widthpix			24
+	int		heightpix			18
+	UnitHealth:CTP2_STATIC_BASE {
+		int xpix 2
+		int ypix 16
+		int widthpix 20
+		int heightpix 1
+	}
+}
+
+# Unit order button.
+template CTP2_ORDER_ICON_BUTTON:CTP2_BUTTON_ICONIC_OVERLAY {
+	# Background.
+	string	image00		"upbt02X.tga"
+	string	image10		"upbt02U.tga"
+	string	image20		"upbt02D.tga"
+	string	image30		"upbt02H.tga"
+
+	# Size.
+	int		widthpix	40
+	int		heightpix	30
+
+	# Offset for icon layer.
+	int		xpix40				7
+	int		ypix40				2
+	bool	imagestretchx40		true
+	int		widthpix4			26
+	bool	imagestretchy40		true
+	int		heightpix4			26
+
+	# Just here to make sure a tip gets allocated for every button.
+	# Text set dynamically.
+	string tipwindow ""
+}
+
+#Mad Doc radio button for the tile improvement tab
+template CTP2_TILE_RADIO_BUTTON:CTP2_GENERIC_SIZABLE_TEXT_BUTTON_20
+{
+#	string	objecttype	"ctp2_switch"
+#	string	pattern		"uptg20e.tga"
+	bool togglebutton true
+
+	int numberoflayers 5
+
+	string	image00				"upbt12aX.tga"
+	string	image10				"upbt12aU.tga"
+	string	image20				"upbt12aD.tga"
+	string	image30				"upbt12aH.tga"
+	string  image40             "upbt12aD.tga"
+	string	image41				"upbt04bD.tga"
+	string	image42				"upbt04cD.tga"
+
+	string imageblttype41 "tile"
+	bool imagestretchx41 true
+
+	bool	layeralways0		true
+	bool	layerup1			true
+	bool	layerdown2			true
+	bool    layerupon4          true
+	bool	layerhighlight3		true
+
+	int fontsize	8
+
+	int widthpix 145
+	int heightpix 15
+}
+
+# Tile improvement button.
+template CTP2_TILE_ICON_BUTTON:CTP2_BUTTON_ICONIC_OVERLAY {
+	# Background.
+	string	image00		"upbt02X.tga"
+	string	image10		"upbt02U.tga"
+	string	image20		"upbt02D.tga"
+	string	image30		"upbt02H.tga"
+	# Size.
+	int		widthpix	40
+	int		heightpix	30
+
+	# Offset for icon layer.
+	int		xpix40				7
+	int		ypix40				2
+	bool	imagestretchx40		true
+	int		widthpix4			26
+	bool	imagestretchy40		true
+	int		heightpix4			26
+	string  imageblttype40 "stretch"
+}
+
+# City selection.
+template CITY_PULLDOWN_SPINNER:CTP2_STATIC_GROUP {
+	# Size
+	int		widthpix		228
+	int		heightpix		29
+
+	# Pulldown.
+	Pulldown:CTP2_DROPDOWN {
+		# Location.
+		int		xpix		24
+		int		ypix		0
+		int		widthpix	180
+		int		heightpix	14
+		bool inverted true
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITY_SELECT_CITY_PULLDOWN"
+	}
+
+	# Previous.
+	Previous:CTP2_GENERIC_ARROW_BUTTON {
+		# Location.
+		int		xpix		0
+		int		ypix		0
+
+		# Background.
+		string	image00				"upsp01au.tga"
+		string	image10				"upsp01ah.tga"
+		string	image20				"upsp01ad.tga"
+		string	image30				"upsp01ax.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITY_GOTO_NEXTCITY_BUTTON"
+	}
+
+	# Next.
+	Next:CTP2_GENERIC_ARROW_BUTTON {
+		# Location.
+		int		xpix		204
+		int		ypix		0
+
+		# Background.
+		string	image00				"upsp01cu.tga"
+		string	image10				"upsp01ch.tga"
+		string	image20				"upsp01cd.tga"
+		string	image30				"upsp01cx.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITY_GOTO_NEXTCITY_BUTTON"
+	}
+}
+
+# City selection.
+template GOVERNOR_PULLDOWN_TOGGLE:CTP2_STATIC_GROUP {
+	# Size
+	int		widthpix		180
+	int		heightpix		29
+
+	# Pulldown.
+	Pulldown:CTP2_DROPDOWN {
+		# Location.
+		int		xpix		24
+		int		ypix		0
+		int		widthpix	156
+		int		heightpix	29
+		bool inverted true
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITY_GOVERNOR_PRIORITY_PULLDOWN"
+	}
+
+	# On/Off Toggle.
+	Toggle:CTP2_BUTTON_ICONIC {
+		# Two images per layer.
+		int		imagesperlayer		3
+
+		# Background.
+		string	image00				"upbt01aX.tga"
+		string	image01				"upbt01cX.tga"
+		string	image10				"upbt01aU.tga"
+		string	image11				"upbt01cU.tga"
+		string	image20				"upbt01aD.tga"
+		string	image21				"upbt01cD.tga"
+		string	image30				"upbt01aH.tga"
+		string	image31				"upbt01cH.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITY_HIRE_GOVERNOR_BUTTON"
+	}
+}
+
+# Unit selection.
+template UNIT_LABEL_SPINNER:CTP2_STATIC_GROUP {
+	# Size
+	int		widthpix		168
+	int		heightpix		29
+
+	# Pulldown.
+	Label:CTP2_STATIC_IMAGE_SIZABLE {
+		# Location.
+		int		xpix		16
+		int		ypix		0
+		int		widthpix	124
+		int		heightpix	29
+
+		# Background.
+		string	image00				"upsp01bl.tga"
+		string	image01				"upsp01bm.tga"
+		string	image02				"upsp01br.tga"
+	}
+
+	# Previous.
+	Previous:CTP2_GENERIC_ARROW_BUTTON {
+		# Location.
+#		int		xpix		0
+		int		xpix		24
+		int		ypix		0
+
+		# Background.
+		string	image00				"uptg20j.tga"
+		string	image10				"uptg20j.tga"
+		string	image20				"uptg20j.tga"
+		string	image30				"uptg20j.tga"
+
+#		string	image00				"upsp01au.tga"
+#		string	image10				"upsp01ah.tga"
+#		string	image20				"upsp01ad.tga"
+#		string	image30				"upsp01ax.tga"
+
+		# Tooltip
+#		string	tipwindow	"TOOLTIP_UNIT_PREV_UNIT_BUTTON"
+#		string	statustext	"STATUSBAR_UNIT_PREV_UNIT_BUTTON"
+		string	tipwindow	"TOOLTIP_UNIT_NEXT_UNIT_BUTTON"
+		string	statustext	"STATUSBAR_UNIT_NEXT_UNIT_BUTTON"
+	}
+
+	# Next.
+	Next:CTP2_GENERIC_ARROW_BUTTON {
+		# Location.
+		int		xpix		140
+		int		ypix		0
+
+		# Background.
+		string	image00				"upsp01cu.tga"
+		string	image10				"upsp01ch.tga"
+		string	image20				"upsp01cd.tga"
+		string	image30				"upsp01cx.tga"
+
+		# Tooltip
+		string	tipwindow	"TOOLTIP_UNIT_NEXT_UNIT_BUTTON"
+		string	statustext	"STATUSBAR_UNIT_NEXT_UNIT_BUTTON"
+	}
+}
+
+
+################################################################################
+# E3 Temporaries
+################################################################################
+CityListItem:CTP2_LIST_ITEM {
+	# Size.
+	int	widthpix	180
+	int heightpix	25
+
+	Label:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int	xpix		15
+
+		# Size.
+		int	widthpix	180
+		int heightpix	25
+
+		# Left justify.
+		string 	just 		"center"
+		bool	vertcenter	true
+	}
+}
+
+GovernorListItem:CTP2_LIST_ITEM {
+	# Size.
+	int	widthpix	156
+	int heightpix	25
+
+	Label:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int	xpix		15
+
+		# Size.
+		int	widthpix	156
+		int heightpix	25
+
+		# Left justify.
+		string 	just 		"center"
+		bool	vertcenter	true
+	}
+}
+
+# Old Tile Improvement button template modified to be more like the new ones.
+template TIB:CTP2_TILE_ICON_BUTTON {
+	# Image layout.
+#	int		numberoflayers		2
+#	int		imagesperlayer		1
+
+	# Background.
+#	bool	layeralways0		true
+#	int		ypix00				2
+#	string	image00				"upcb24D.tga"
+#	bool	layerhighlight1		true
+#	int		xpix10				2
+#	int		ypix10				2
+#	string	image10				"upbt02H.tga"
+}
+# Column 1
+template TIBc1:TIB {
+	int xpix	  2
+}
+# Column 2
+template TIBc2:TIB {
+	int xpix	  44
+}
+# Column 3
+template TIBc3:TIB {
+	int xpix	  86
+}	
+# Column 4
+template TIBc4:TIB {
+	int xpix	  128
+}
+
+template TILE_IMP_BUTTON_PANEL:CTP2_STATIC_BACKGROUND {
+	# Location.
+	int		xpix	175
+	int		ypix	10
+
+	# Background.
+	string	image0	"upfg06.tga"
+
+	# Column 1					   
+	b11:TIBc1 {
+		int ypix 2
+		# Tooltip
+		string	tipwindow	"TOOLTIP_TILEIMP_SELECT_FARM1_BUTTON"
+		string	statustext	"STATUSBAR_TILEIMP_SELECT_FARM1_BUTTON"
+	}
+	b12:TIBc1 {
+		int ypix 34
+	}
+	b13:TIBc1 {
+		int ypix 66
+	}
+	# Column 2				     
+	b21:TIBc2 {
+		int ypix 2
+		# Tooltip
+		string	tipwindow	"TOOLTIP_TILEIMP_SELECT_ROAD1_BUTTON"
+		string	statustext	"STATUSBAR_TILEIMP_SELECT_ROAD1_BUTTON"
+	}
+	b22:TIBc2 {
+		int ypix 34
+	}
+	b23:TIBc2 {
+		int ypix 66
+	}
+	# Column 3				     
+	b31:TIBc3 {
+		int ypix 2
+		# Tooltip
+		string	tipwindow	"TOOLTIP_TILEIMP_SELECT_MINE1_BUTTON"
+		string	statustext	"STATUSBAR_TILEIMP_SELECT_MINE1_BUTTON"
+	}
+	b32:TIBc3 {
+		int ypix 34
+	}
+	b33:TIBc3 {
+		int ypix 66
+	}
+	# Column 4				    
+	b41:TIBc4 {
+		int ypix 2
+	}
+	b42:TIBc4 {
+		int ypix 34
+	}
+	b43:TIBc4 {
+		int ypix 66
+	}
+}
+
+################################################################################
+# Primary Control Panel Window Description
+################################################################################
+ControlPanelWindow:CTP2_WINDOW {
+
+################################################################################
+# Location of panel.
+################################################################################
+	int	xpix		0
+	int	ypix		0
+	int	widthpix	601
+	int	heightpix	184
+
+################################################################################
+# Static background.
+################################################################################
+	ControlPanel:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int	xpix		0
+		int	ypix		0
+		int	widthpix	601
+		int	heightpix	184
+
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		3
+
+		# Background
+		bool	layeralways0		true
+		int		xpix00				0
+		int		ypix00				0
+		string	image00				"upfg01.tga"
+		int		xpix01				542
+		int		ypix01				31
+		string	image01				"upfg03.tga"
+		int		xpix02				189
+		int		ypix02				162
+		string	image02 			"upfg04.tga"
+
+################################################################################
+# Mouse over immediate help text.
+################################################################################
+		StatusBar:CTP2_STATIC_IMAGE {
+			# Location.
+			int		xpix				126
+			int		ypix				167
+
+			# Background.
+			string	image00 			"upst01.tga"
+		}
+
+################################################################################
+# End Turn button.
+################################################################################
+		TurnButton:CTP2_BUTTON_CHROMA {
+			# Location.
+			int		xpix		563
+			int		ypix		60
+
+			# Image layout.
+			int		numberoflayers		4
+			int		imagesperlayer		1
+
+			# Background.
+			bool	layerdisabled0		true
+			string	image00				"upcb14X.tga"
+			bool	layerup1			true
+			string	image10				"upcb14U.tga"
+			bool	layerdown2			true
+			string	image20				"upcb14D.tga"
+			bool	layerhighlight3		true
+			string	image30				"upcb14H.tga"
+
+			
+			
+			# Help Text
+			string	tipwindow	"TOOLTIP_END_TURN_BUTTON"
+			string	statustext	"STATUSBAR_END_TURN_BUTTON"
+			
+			#Text for End Turn Button
+			TopText:CTP2_STATIC_BASE:CTP_GOLD_TITLE_FONT {
+				int	xpix	0
+				int	ypix	2
+				int	widthpix	38
+				int	fontsize	8
+				string just "center"
+				string	text	"str_ldl_END"
+				}
+			BottomText:CTP2_STATIC_BASE:CTP_GOLD_TITLE_FONT {
+				int	xpix	0
+				int	ypix	68
+				int	widthpix	38
+				int	fontsize	8
+			 	string just "center"
+				string	text	"str_ldl_endbuttonTURN"
+				}
+
+		}
+			
+
+################################################################################
+# Main map zoom controls.
+# These are being taken out for E3.  They may be permanently removed to be
+# replaced with menu options after E3.
+################################################################################
+#		ZoomPad:CTP2_STATIC_GROUP {
+#			# Location.
+#			int		xpix			49
+#			int		ypix			164
+#			int		widthpix		92
+#			int		heightpix		20
+#
+#			# Zoom in main map.
+#			ZoomInButton:CTP2_BUTTON_NO_OVERLAY_STATES {
+#				# Location.
+#				int		xpix		0
+#				int		ypix		0
+#
+#				# Background.
+#				string	image00		"upcb13x.tga"
+#				string	image10		"upcb13u.tga"
+#				string	image20		"upcb13h.tga"
+#				string	image30		"upcb13d.tga"
+#
+#				# Help Text
+#				string	tipwindow	"TOOLTIP_ZOOM_IN_BUTTON"
+#				string	statustext	"STATUSBAR_ZOOM_IN_BUTTON"
+#			}
+#
+#			# Zoom out main map.
+#			ZoomOutButton:CTP2_BUTTON_NO_OVERLAY_STATES {
+#				# Location.
+#				int		xpix		71
+#				int		ypix		0
+#
+#				# Background.
+#				string	image00		"upcb12x.tga"
+#				string	image10		"upcb12u.tga"
+#				string	image20		"upcb12h.tga"
+#				string	image30		"upcb12d.tga"
+#
+#				# Help Text
+#				string	tipwindow	"TOOLTIP_ZOOM_OUT_BUTTON"
+#				string	statustext	"STATUSBAR_ZOOM_OUT_BUTTON"
+#			}
+#		}
+
+################################################################################
+# Shortcut button to various pop up dialogs.
+################################################################################
+		ShortcutPad:CTP2_STATIC_GROUP {
+			# Location.
+			int		xpix			13
+			int		ypix			13
+			int		widthpix		120
+			int		heightpix		124
+
+			# Shortcut button to City Management
+			CityManagementButton:CTP2_BUTTON_ICONIC {
+				# Location.
+				int		xpix		15
+				int		ypix		16
+
+				# Background.
+				string	image00	"upcb05x.tga"
+				string	image10	"upcb05u.tga"
+				string	image20	"upcb05d.tga"
+				string	image30	"upcb05h.tga"
+				string  	tipwindow 	"TOOLTIP_SHORTCUTPAD_GOTO_CITYSCR_BUTTON"
+				string  	statustext 	"STATUSBAR_SHORTCUTPAD_GOTO_CITYSCR_BUTTON"
+			}
+
+			# Shortcut button to Civilization Management
+			CivilizationManagementButton:CTP2_BUTTON_ICONIC {
+				# Location.
+				int		xpix		55
+				int		ypix		0
+
+				# Background.
+				string	image00	"upcb06x.tga"
+				string	image10	"upcb06u.tga"
+				string	image20	"upcb06d.tga"
+				string	image30	"upcb06h.tga"
+				string  	tipwindow 	"TOOLTIP_SHORTCUTPAD_GOTO_CIVSCR_BUTTON"
+				string  	statustext 	"STATUSBAR_SHORTCUTPAD_GOTO_CIVSCR_BUTTON"
+			}
+
+			# Shortcut button to National Management
+			TradeButton:CTP2_BUTTON_ICONIC {
+				# Location.
+				int		xpix		15
+				int		ypix		102
+
+				# Background.
+				string	image00	"upcb07x.tga"
+				string	image10	"upcb07u.tga"
+				string	image20	"upcb07d.tga"
+				string	image30	"upcb07h.tga"
+				string	tipwindow	"TOOLTIP_SHORTCUTPAD_GOTO_TRADESCR_BUTTON"
+				string  	statustext 	"STATUSBAR_SHORTCUTPAD_GOTO_TRADESCR_BUTTON"
+			}
+
+			# Shortcut button to Unit Management
+			UnitManagementButton:CTP2_BUTTON_ICONIC {
+				# Location.
+				int		xpix		99
+				int		ypix		16
+
+				# Background.
+				string	image00	"upcb08x.tga"
+				string	image10	"upcb08u.tga"
+				string	image20	"upcb08d.tga"
+				string	image30	"upcb08h.tga"
+				string  	tipwindow 	"TOOLTIP_SHORTCUTPAD_GOTO_UNITSCR_BUTTON"
+				string  	statustext 	"STATUSBAR_SHORTCUTPAD_GOTO_UNITSCR_BUTTON"
+			}
+
+			# Shortcut button to Diplomacy
+			DiplomacyButton:CTP2_BUTTON_ICONIC {
+				# Location.
+				int		xpix		120
+				int		ypix		57
+
+				# Background.
+				string	image00	"upcb09x.tga"
+				string	image10	"upcb09u.tga"
+				string	image20	"upcb09d.tga"
+				string	image30	"upcb09h.tga"
+				string	tipwindow	"TOOLTIP_SHORTCUTPAD_GOTO_DIPSCR_BUTTON"
+				string  	statustext 	"STATUSBAR_SHORTCUTPAD_GOTO_DIPSCR_BUTTON"
+			}
+
+			# Shortcut button to Science
+			ScienceButton:CTP2_BUTTON_ICONIC {
+				# Location.
+				int		xpix		99
+				int		ypix		102
+
+				# Background.
+				string	image00	"upcb10x.tga"
+				string	image10	"upcb10u.tga"
+				string	image20	"upcb10d.tga"
+				string	image30	"upcb10h.tga"
+				string	tipwindow	"TOOLTIP_SHORTCUTPAD_GOTO_SCIENCESCR_BUTTON"
+				string  	statustext 	"STATUSBAR_SHORTCUTPAD_GOTO_SCIENCESCR_BUTTON"
+			}
+
+			# Shortcut button to Trade
+			NationalManagementButton:CTP2_BUTTON_ICONIC {
+				# Location.
+				int		xpix		0
+				int		ypix		57
+
+				# Background.
+				string	image00	"upcb11x.tga"
+				string	image10	"upcb11u.tga"
+				string	image20	"upcb11d.tga"
+				string	image30	"upcb11h.tga"
+				string  	tipwindow 	"TOOLTIP_SHORTCUTPAD_NATLSCR_BUTTON"
+				string  	statustext 	"STATUSBAR_SHORTCUTPAD_NATLSCR_BUTTON"
+			}
+
+			# Shortcut button to Great Library
+			GreatLibraryButton:CTP2_BUTTON_ICONIC {
+				# Location.
+				int		xpix		55
+				int		ypix		124
+
+				# Background.
+				string	image00	"upcb60x.tga"
+				string	image10	"upcb60u.tga"
+				string	image20	"upcb60d.tga"
+				string	image30	"upcb60h.tga"
+				string	tipwindow	"TOOLTIP_SHORTCUTPAD_GOTO_LIBRARY_BUTTON"
+				string  	statustext 	"STATUSBAR_SHORTCUTPAD_GOTO_LIBRARY_BUTTON"
+			}
+		}
+
+################################################################################
+# Current Turn/Year Toggle
+################################################################################
+		TurnYearStatus:CTP2_BUTTON_CHROMA {
+			# Location.
+			int		xpix				56
+			int		ypix				87
+			int		fontsize			8
+			string	fontname				"times.ttf"
+
+			# Image layout.
+			int		numberoflayers		2
+			int		imagesperlayer		1
+
+			# Background.
+			bool	layeralways0		true
+			string	image00				"uppb01U.tga"
+			bool	layerhighlight1		true
+			string	image10				"uppb01H.tga"
+			string  	statustext 	"STATUSBAR_SHORTCUTPAD_YEARTURN_TOGGLE_BUTTON"
+		}
+
+		DougsProgressBar:CTP2_STATIC_BASE {
+			int xpix 61
+			int ypix 106
+			int widthpix 66	
+			int heightpix 5
+		}
+
+################################################################################
+# Control Tab Panel
+################################################################################
+		ControlTabPanel:CTP2_TAB_GROUP {
+			# Location.
+			int		xpix			189
+			int		ypix			17
+			
+			DomesticTab:CTP2_TAB {
+				TabButton:CONTROL_PANEL_TAB_BUTTON {
+					# Location.
+					int		xpix			0
+					int		ypix			0
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CIV_MAINTAB"
+
+					# Name.
+					Label {
+						string	text			"str_ldl_CivTabTitle"
+					}
+				}
+				TabPanel:CONTROL_PANEL_TAB_BACKGROUND {
+################################################################################
+# Start Domestic Tab Panel
+################################################################################
+					AdvanceProgress:CTP2_PROGRESS_DISPLAY {
+						# Location.
+						int		xpix			9
+						int		ypix			5
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CIV_NOW_RESEARCHING_DISPLAY"
+					}
+
+					# Cities Label
+					CitiesLabel:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix	130
+						int		ypix	10
+						# Name.
+						string	just	"left"
+						string	text	"str_ldl_CP_CITIES"
+					}
+
+					# Cities Value
+					CitiesValue:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix		280
+						int		ypix		10
+						int		widthpix	55
+						string	just	"right"
+						string	text	"str_ldl_0"
+					}
+
+					# Population Label
+					PopulationLabel:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix	130
+						int		ypix	26
+						# Name.
+						string	just	"left"
+						string	text	"str_ldl_CP_TOT_POP"
+					}
+
+					# Population Value
+					PopulationValue:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix		280
+						int		ypix		26
+						int		widthpix	55
+						string	just	"right"
+						# Tooltip
+						#string	statustext	"STATUSBAR_CIV_TOTAL_GOLD_DISPLAY"
+						string	text	"str_ldl_0"
+					}
+
+					# Public Works Label
+					PublicWorksLabel:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix	130
+						int		ypix	42
+						# Name.
+						string	just	"left"
+						string	text	"str_ldl_CP_PUBLIC_WORKS"
+					}
+
+					# Public Works Value
+					PublicWorksValue:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix		280
+						int		ypix		42
+						int		widthpix	55
+						# Tooltip
+						string	just	"right"
+						string	statustext	"STATUSBAR_CIV_TOTAL_PW_DISPLAY"
+						string	text	"str_ldl_0"
+					}
+
+					# Government Label
+					GovernmentLabel:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix	130
+						int		ypix	58
+						# Name.
+						string	just	"left"
+						string	text	"str_ldl_CP_CUR_GOVT"
+					}
+
+					# Government Value
+					GovernmentValue:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix		280
+						int		ypix		58
+						int		widthpix	55
+						string	just	"right"
+						# Tooltip
+						#string	statustext	"STATUSBAR_CIV_TOTAL_PW_DISPLAY"
+						string	text	"str_ldl_0"
+					}
+
+					# Science Label
+					ScienceLabel:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix	130
+						int		ypix	74
+						# Name.
+						string	just	"left"
+						string	text	"str_ldl_CP_SCIENCE"
+					}
+
+					# Science Value
+					ScienceValue:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix		280
+						int		ypix		74
+						int		widthpix	55
+						string	just	"right"
+						# Tooltip
+						#string	statustext	"STATUSBAR_CIV_TOTAL_PW_DISPLAY"
+						string	text	"str_ldl_0"
+					}
+
+					# Pollution Label
+					PollutionLabel:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix	130
+						int		ypix	90
+						# Name.
+						string	just	"left"
+						string	text	"str_ldl_CP_POLLUTION"
+					}
+
+					# Pollution Value
+					PollutionValue:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix		280
+						int		ypix		90
+						int		widthpix	55
+						string	just	"right"
+						# Tooltip
+						#string	statustext	"STATUSBAR_CIV_TOTAL_PW_DISPLAY"
+						string	text	"str_ldl_0"
+					}
+################################################################################
+# End Domestic Tab Panel
+################################################################################
+				}
+			}
+			CityTab:CTP2_TAB {
+				TabButton:CONTROL_PANEL_TAB_BUTTON {
+					# Location.
+					int		xpix			65
+					int		ypix			0
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITY_MAINTAB"
+
+					# Name.
+					Label {
+						string	text			"str_ldl_CityTabTitle"
+					}
+				}
+				TabPanel:CONTROL_PANEL_TAB_BACKGROUND {
+################################################################################
+# Start City Tab Panel
+################################################################################
+					BuildProgress:CTP2_PROGRESS_DISPLAY {
+						# Location.
+						int		xpix	9
+						int		ypix	5
+					}
+
+					CitySelect:CITY_PULLDOWN_SPINNER {
+						# Location.
+						int		xpix	117
+						int		ypix	5
+					}
+
+					# Cities Label
+					GovernorLabel:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix	141
+						int		ypix	34
+						# Name.
+						string	just	"left"
+						string	text	"str_ldl_CP_GOVERNOR"
+					}
+
+					GovernorSelect:GOVERNOR_PULLDOWN_TOGGLE {
+						# Location.
+						int		xpix	141
+						int		ypix	50
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITY_GOVERNOR_PRIORITY_PULLDOWN"
+					}
+					RushBuyButton:CTP2_BUTTON_SMALL {
+						int	xpix	150
+						int	ypix	80
+						string	text	"str_ldl_RushBuy"
+						int	widthpix	80
+						int	heightpix	24
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_RUSHBUY_BUTTON"
+					}
+					RushBuyCost:CTP2_TEXT_BOX {
+						int xpix 230
+						int ypix 80
+						int heightpix 24
+						int widthpix 100
+						string text "str_ldl_0"
+					}
+
+################################################################################
+# End City Tab Panel
+################################################################################
+				}
+			}
+			UnitTab:CTP2_TAB {
+				TabButton:CONTROL_PANEL_TAB_BUTTON {
+					# Location.
+					int		xpix			130
+					int		ypix			0
+
+					# Tooltip
+					string	statustext	"STATUSBAR_UNIT_MAINTAB"
+
+					# Name.
+					Label {
+						string	text			"str_ldl_UnitTabTitle"
+					}
+				}
+				TabPanel:CONTROL_PANEL_TAB_BACKGROUND {
+################################################################################
+# Start Unit Tab Panel
+################################################################################
+					# Possible selection controls.
+					UnitSelectionDisplay:CTP2_STATIC_GROUP {
+						# Next/previous unit selection.
+						UnitSelect:UNIT_LABEL_SPINNER {
+							# Location.
+							int		xpix	0
+							int		ypix	5
+						}
+
+						# Background for single select.
+						SingleSelect:CTP2_STATIC_IMAGE {
+							# Background
+							string	image00	"upfg50.tga"
+
+							# Unit image.
+							Icon {
+								string objecttype "ctp2_static"
+								# Location.
+								int		xpix	18
+								int		ypix	33								
+								string imageblttype "stretch"
+								int widthpix 96
+								int heightpix 72
+							}
+
+							# Attack/Defense/Move/Range
+							Attack:ICON_VALUE_PAIR {
+								int		xpix	117
+								int		ypix	33
+								# Tooltip
+								string	tipwindow	"TOOLTIP_UNIT_UNITSTATS_ATT_DISPLAY"
+								string	statustext	"STATUSBAR_UNIT_UNITSTATS_ATT_DISPLAY"
+							}
+							Defend:ICON_VALUE_PAIR {
+								int		xpix	136
+								int		ypix	33
+								# Tooltip
+								string	tipwindow	"TOOLTIP_UNIT_UNITSTATS_DEF_DISPLAY"
+								string	statustext	"STATUSBAR_UNIT_UNITSTATS_DEF_DISPLAY"
+							}
+							Range:ICON_VALUE_PAIR {
+								int		xpix	117
+								int		ypix	55
+								# Tooltip
+								string	tipwindow	"TOOLTIP_UNIT_UNITSTATS_RNG_DISPLAY"
+								string	statustext	"STATUSBAR_UNIT_UNITSTATS_RNG_DISPLAY"
+							}
+
+							Firepower:ICON_VALUE_PAIR {
+								int xpix 136
+								int ypix 55
+								# Tooltip
+								string	tipwindow	"TOOLTIP_UNIT_UNITSTATS_BOM_DISPLAY"
+								string	statustext	"STATUSBAR_UNIT_UNITSTATS_BOM_DISPLAY"
+							}
+							Move:ICON_VALUE_PAIR {
+								int		xpix	117
+								int		ypix	77
+								# Tooltip
+								string	tipwindow	"TOOLTIP_UNIT_UNITSTATS_MOV_DISPLAY"
+								string	statustext	"STATUSBAR_UNIT_UNITSTATS_MOV_DISPLAY"
+							}
+							Armor:ICON_VALUE_PAIR {
+								int xpix 136
+								int ypix 77
+								# Tooltip
+								string	tipwindow	"TOOLTIP_UNIT_UNITSTATS_ARM_DISPLAY"
+								string	statustext	"STATUSBAR_UNIT_UNITSTATS_ARM_DISPLAY"
+							}
+
+							Fuel:CTP2_STATIC_BASE {
+								int xpix 118
+								int ypix 97
+								int widthpix 37
+								int heightpix 12
+								# Tooltip
+								string	tipwindow	"TOOLTIP_UNIT_UNITSTATS_FUL_DISPLAY"
+								string	statustext	"STATUSBAR_UNIT_UNITSTATS_FUL_DISPLAY"
+							}
+
+							# Health bar.
+							Health:CTP2_STATIC_BACKGROUND {
+								# Location.
+								int		xpix		18
+								int		ypix		108
+								int		widthpix	96
+								int		heightpix	3
+							}
+						}
+
+						# Background for multiple select.
+						MultipleSelect:CTP2_STATIC_IMAGE {
+							# Background
+							string	image00	"upfg51.tga"
+
+							# Unit buttons.
+							Unit0:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	18
+								int ypix	33
+							}
+							Unit1:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	53
+								int ypix	33
+							}
+							Unit2:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	88
+								int ypix	33
+							}
+							Unit3:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	122
+								int ypix	33
+							}
+							Unit4:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	18
+								int ypix	60
+							}
+							Unit5:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	53
+								int ypix	60
+							}
+							Unit6:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	88
+								int ypix	60
+							}
+							Unit7:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	122
+								int ypix	60
+							}
+							Unit8:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	18
+								int ypix	87
+							}
+							Unit9:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	53
+								int ypix	87
+							}
+							Unit10:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	88
+								int ypix	87
+							}
+							Unit11:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	122
+								int ypix	87
+							}
+						}
+
+						# Background for army select.
+						ArmySelect:CTP2_STATIC_IMAGE {
+							# Background
+							string	image00	"upfg52.tga"
+
+							# Army icon.
+							Icon:UNIT_BUTTON_MEDIUM_SIZE {
+								int	xpix	18
+								int ypix	33
+							}
+
+							# Unit buttons.
+							Unit0:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	79
+								int ypix	33
+							}
+							Unit1:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	105
+								int ypix	33
+							}
+							Unit2:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	130
+								int ypix	33
+							}
+							Unit3:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	79
+								int ypix	53
+							}
+							Unit4:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	105
+								int ypix	53
+							}
+							Unit5:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	130
+								int ypix	53
+							}
+							Unit6:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	79
+								int ypix	73
+							}
+							Unit7:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	105
+								int ypix	73
+							}
+							Unit8:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	130
+								int ypix	73
+							}
+							Unit9:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	79
+								int ypix	93
+							}
+							Unit10:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	105
+								int ypix	93
+							}
+							Unit11:UNIT_BUTTON_SMALL_SIZE {
+								int	xpix	130
+								int ypix	93
+							}
+						}
+						# Transport selected
+						TransportSelect:CTP2_STATIC_IMAGE {
+							string image00 "upfg53.tga"
+
+							# Transport icon.
+							Icon:UNIT_BUTTON_MEDIUM_SIZE {
+								int xpix 18
+								int ypix 33
+							}
+
+							# Unit buttons
+							Cargo0:UNIT_TOGGLE_MEDIUM_SIZE {
+								int xpix 79
+								int ypix 33
+							}
+							Cargo1:UNIT_TOGGLE_MEDIUM_SIZE {
+								int xpix 114
+								int ypix 33
+							}
+
+							Cargo2:UNIT_TOGGLE_MEDIUM_SIZE {
+								int xpix 79
+								int ypix 58
+							}
+							Cargo3:UNIT_TOGGLE_MEDIUM_SIZE {
+								int xpix 114
+								int ypix 58
+							}
+
+							Cargo4:UNIT_TOGGLE_MEDIUM_SIZE {
+								int xpix 79
+								int ypix 83
+							}
+#							Cargo5:UNIT_TOGGLE_MEDIUM_SIZE {
+#								int xpix 114
+#								int ypix 83
+#							}
+						}
+
+					}
+
+					# Background for unit order buttons.
+					UnitOrderButtonGrid:CTP2_STATIC_BACKGROUND {
+						# Location.
+						int		xpix	175
+						int		ypix	10
+
+						# Background.
+						string	image0	"upfg06.tga"
+
+						# Unit Order buttons.
+						Order0:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	2
+							int	ypix	2
+							# Tooltip
+							string	tipwindow	"TOOLTIP_UNIT_MOVE_ORDER_BUTTON"
+							string	statustext	"STATUSBAR_UNIT_MOVE_ORDER_BUTTON"
+						}
+						Order1:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	44
+							int	ypix	2
+							# Tooltip
+							string	tipwindow	"TOOLTIP_UNIT_ATTACK_ORDER_BUTTON"
+							string	statustext	"STATUSBAR_UNIT_ATTACK_ORDER_BUTTON"
+						}
+						Order2:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	86
+							int	ypix	2
+							# Tooltip
+							string	tipwindow	"TOOLTIP_UNIT_PIRATE_ORDER_BUTTON"
+							string	statustext	"STATUSBAR_UNIT_PIRATE_ORDER_BUTTON"
+						}
+						Order3:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	128
+							int	ypix	2
+						}
+						Order4:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	2
+							int	ypix	34
+							# Tooltip
+							string	tipwindow	"TOOLTIP_UNIT_SETTLE_ORDER_BUTTON"
+							string	statustext	"STATUSBAR_UNIT_SETTLE_ORDER_BUTTON"
+						}
+						Order5:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	44
+							int	ypix	34
+						}
+						Order6:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	86
+							int	ypix	34
+						}
+						Order7:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	128
+							int	ypix	34
+						}
+						Order8:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	2
+							int	ypix	66
+						}
+						Order9:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	44
+							int	ypix	66
+						}
+						Order10:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	86
+							int	ypix	66
+						}
+						Order11:CTP2_ORDER_ICON_BUTTON {
+							int	xpix	128
+							int	ypix	66
+							# Tooltip
+							string	tipwindow	"TOOLTIP_UNIT_DISBAND_ORDER_BUTTON"
+							string	statustext	"STATUSBAR_UNIT_DISBAND_ORDER_BUTTON"
+						}
+					}
+################################################################################
+# End Unit Tab Panel
+################################################################################
+				}
+			}
+			MessageTab:CTP2_TAB {
+				TabButton:CONTROL_PANEL_TAB_BUTTON {
+					# Location.
+					int		xpix			195
+					int		ypix			0
+
+					# Tooltip
+					string	statustext	"STATUSBAR_MESSAGES_MAINTAB"
+
+					# Name.
+					Label {
+						string	text			"str_ldl_MsgTabTitle"
+					}
+				}
+				TabPanel:CONTROL_PANEL_TAB_BACKGROUND {
+################################################################################
+# Start Message Tab Panel
+################################################################################
+					MessageListBox:CTP2_LISTBOX {
+						# Location.
+						int		xpix			9
+						int		ypix			5
+						int		widthpix		318
+						int		heightpix		107
+
+						# Tooltip
+						string	statustext	"STATUSBAR_MESSAGES_READMESSAGE_BUTTON"
+
+						# Always show the scrollbar.
+						bool	alwaysranger	true
+
+						# handle right clicks separately
+						bool    sendrightclicks true
+					}
+################################################################################
+# End Message Tab Panel
+################################################################################
+				}
+			}
+			TilesTab:CTP2_TAB {
+				TabButton:CONTROL_PANEL_TAB_BUTTON {
+					# Location.
+					int		xpix			260
+					int		ypix			0
+
+					# Name.
+					Label {
+						string	text			"str_ldl_TileTabTitle"
+					}
+				}
+				TabPanel:CONTROL_PANEL_TAB_BACKGROUND {
+################################################################################
+# Start Tiles Tab Panel
+################################################################################
+					LandImpButton:CTP2_TILE_RADIO_BUTTON 
+					{
+						int xpix 18
+						int ypix 17
+						string text "str_ldl_ImproveLand"
+					}
+
+					OceanImpButton:CTP2_TILE_RADIO_BUTTON 
+					{
+						int xpix 18
+						int ypix 37
+						string text "str_ldl_ImproveOcean"
+					}
+
+					SpecialImpButton:CTP2_TILE_RADIO_BUTTON 
+					{
+						int xpix 18
+						int ypix 57
+						string text "str_ldl_ImproveSpecial"
+					}
+
+					TerraformLandButton:CTP2_TILE_RADIO_BUTTON 
+					{
+						int xpix 18
+						int ypix 77
+						string text "str_ldl_ImproveTerraformLand"
+					}
+
+#					TerraformOceanButton:CTP2_TILE_RADIO_BUTTON 
+#					{
+#						int xpix 18
+#						int ypix 90
+#						string text "str_ldl_ImproveTerraformOcean"
+#					}
+					tiLandButtonBank:TILE_IMP_BUTTON_PANEL {
+					}
+					tiOceanButtonBank:TILE_IMP_BUTTON_PANEL {
+					}
+					tiSpecialButtonBank:TILE_IMP_BUTTON_PANEL  {
+					}
+					tfLandButtonBank:TILE_IMP_BUTTON_PANEL {
+					}
+#					tfOceanButtonBank:TILE_IMP_BUTTON_PANEL {
+#					}
+
+################################################################################
+# End Tiles Tab Panel
+################################################################################
+				}
+			}
+		}
+	}
+}	
+
+################################################################################
+# And now for the rest...
+################################################################################
+template CP_UNIT_LOCKBUTTON {
+	int	xpix	160
+#	int	ypix	20
+	string	yanchor	"center"
+	int	widthpix	40
+	int	heightpix	40
+	string	imageblttype	"stretch"
+	string	image0	"upa001.tga"
+	string	image1	"upa001.tga"
+}
+template CP_TAB:CTP2_STANDARD_FONT {
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	disabledimage0	"error.tga"
+	string	imageblttype	"stretch"
+}
+
+template TILE_IMP_TAB:CTP2_STANDARD_FONT {
+	int	xpix	6
+	int	ypix	0
+	int	widthpix	72
+	int	heightpix	14
+	string	parent	"ControlPanelWindow"
+	string	text	"str_ldl_CIV"
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	disabledimage0	"error.tga"
+	string	imageblttype	"stretch"
+	pane {
+		int	xpix	0
+		int	ypix	0
+		int	widthpix	456
+		int	heightpix	129
+		string	parent	"ControlPanelWindow"
+	}
+}
+template PROD_SORT_BUTTON:CTP2_STANDARD_FONT {
+	int	ypix	5
+	int	widthpix	26
+	int	heightpix	19
+	int	bevelwidth	3
+}
+template PROD_BUTTON:CTP2_STANDARD_FONT {
+	int	xpix	23
+	int	widthpix	64
+	int	heightpix	21
+	int	bevelwidth	0
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	disabledimage0	"error.tga"
+	string	imagebltflag	"chromakey"
+}
+
+
+template PROD_ARROW {
+	int	ypix	95
+	int	widthpix	46
+	int	heightpix	23
+	int	bevelwidth	0
+	string	imagebltflag	"chromakey"
+}
+
+
+template PROD_SELL_BUTTON:CTP2_STANDARD_FONT {
+	int	xpix	6
+	int	ypix	6
+	int	widthpix	49
+	int	heightpix	21
+	int	bevelwidth	0
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	imagebltflag	"chromakey"
+	string	text	"str_ldl_CAPS_SELL"
+}
+
+
+#####################
+# citytab templates
+#####################
+template CITYTAB_SWITCH:CTP2_STANDARD_FONT {
+	bool shadowfont	true
+	int	xpix	6
+	int	widthpix	89
+	int	heightpix	21
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	disabledimage0	"error.tga"
+	string	imagebltflag	"chromakey"
+	int	bevelwidth	0
+}
+
+
+template CITYTAB_LABEL:CTP2_STANDARD_FONT {
+	bool	shadowfont	false
+	int	ypix	3
+	int	widthpix	125
+	int	heightpix	10
+	string	pattern	"error.tga"
+	int	srcypix	3
+	int	srcwidthpix	125
+	int	srcheightpix	10
+	string	text	"str_ldl_"
+}
+
+template CITYTAB_LABEL3:CTP2_STANDARD_FONT {
+	bool	shadowfont	false
+	int	ypix	3
+	int	widthpix	121
+	int	heightpix	10
+	string	pattern	"error.tga"
+	int	srcypix	3
+	int	srcwidthpix	121
+	int	srcheightpix	10
+	string	text	"str_ldl_"
+}
+
+
+template CITYTAB_TOTAL_BOX:CTP2_STANDARD_FONT {
+	bool	shadowfont	false
+	int	ypix	105
+	int	widthpix	25
+	int	heightpix	14
+	string	pattern	"error.tga"
+	int	srcypix	105
+	int	srcwidthpix		25
+	int	srcheightpix	14
+	int	beveltype	2
+	int	bevelwidth	1
+}
+
+template CITYTAB_TOTAL_BOX2:CTP2_STANDARD_FONT {
+	bool	shadowfont	false
+	int	ypix	105
+	int	widthpix	31
+	int	heightpix	14
+	string	pattern	"error.tga"
+	int	srcypix	105
+	int	srcwidthpix		25
+	int	srcheightpix	14
+	int	beveltype	2
+	int	bevelwidth	1
+}
+
+template CITYTAB_BOX:CTP2_STANDARD_FONT {
+	bool	shadowfont	false
+	int	xpix	198
+	int	widthpix	28
+	int	heightpix	19
+	string	pattern	"error.tga"
+	int	srcxpix	237
+	int	srcwidthpix	28
+	int	srcheightpix	19
+	int	beveltype	2
+	int	bevelwidth	1
+}
+
+
+template CITYTAB_ARROW:CTP2_STANDARD_FONT {
+	bool	shadowfont	false
+	int	xpix	10
+	int	widthpix	184
+	int	heightpix	15
+	int	bevelwidth	0	
+	string	just	"left"
+}
+
+
+template CITYTAB_LIST:CTP2_STANDARD_FONT {
+	bool	shadowfont	true
+	int	xpix	10
+	int	ypix	15
+	int	widthpix	143
+	int	heightpix	87
+	int columns		2
+	int bevelwidth	1
+	int beveltype	2
+	string	pattern	"error.tga"
+	int	srcxpix	9
+	int	srcypix	14
+	int	srcwidthpix	160
+	int	srcheightpix	89
+	header {
+		switch0 {
+			int	heightpix	0
+			int	widthpix	110
+		}
+		switch1 {
+			int	heightpix	0
+			int	widthpix	33
+		}
+	}
+	bool alwaysranger	true
+	rangery {
+		int	widthpix	15
+		int	heigthpix	15
+		string	type	"scroller"
+		string	orientation	"vertical"
+		string	pattern	"error.tga"
+		incy {
+			int	widthpix	15
+			int	heightpix	15
+			string	pattern	"error.tga"
+		}
+		decy {
+			int	widthpix	15
+			int	heightpix	15
+			string	pattern	"error.tga"
+		}
+#			thumb {
+#				string	image0	"error.tga"
+#				string	imagebltflag	"chromakey"
+#			}
+	}
+}
+
+
+##-------------##
+##  templates  ##
+##-------------##
+template CIV_TEXT:CTP2_STANDARD_FONT {
+	int	widthpix	100
+	int	heightpix	20
+}
+
+
+template CIV_MARKER {
+	int	xpix	0
+	int	ypix	0
+	int	widthpix	4
+	int	heightpix	4
+}
+
+
+template CIV_SLIDER {
+#	string	pattern	"error.tga"
+	string	pattern	"error.tga"
+	int	xpix	25
+	int	widthpix	87
+	int	heightpix	20
+	int	srcwidthpix	87
+	int	srcheightpix	20
+	bool	quantizedrag	true
+	int	maxxval	4
+	int	maxyval		0
+	int	pagexval	1
+	int	pageyval	1
+	bool	rigidthumb		true
+	int minthumbsize	9
+	string	orientation	"horizontal"
+	string	type	"slider"
+	thumb {
+		int	widthpix	9
+		int	heightpix	20
+#		string	pattern	"error.tga"
+		string	image0	"upba2512.tga"
+		string	imagebltflag	"chromakey"
+#		string	imageblttype	"stretch"
+	}
+}
+
+
+template CIV_BOX:CTP2_STANDARD_FONT {
+	int	widthpix	24
+	int	heightpix	14
+	string	pattern	"error.tga"
+	int	srcwidthpix	24
+	int	srcheightpix	14
+	int	bevelwidth	1
+	int	beveltype	2
+}
+template CIV_BUTTON {
+	int	ypix	57
+	int	widthpix	25
+	int	heightpix	23
+}
+template CIV_BUTTON_PLUS {
+	int	xpix	392
+	int	widthpix	22
+	int	heightpix	18
+	int	bevelwidth	0
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	imagebltflag	"chromakey"
+}
+
+
+template CIV_BUTTON_MINUS {
+	int	xpix	336
+	int	widthpix	22
+	int	heightpix	18
+	int	bevelwidth	0
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	imagebltflag	"chromakey"
+}
+
+
+template MAX_BUTTON:CTP2_STANDARD_FONT {
+	bool	shadowfont	true
+	int	widthpix	64
+	int	heightpix	21
+	int	bevelwidth	0
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	imagebltflag	"chromakey"
+}
+
+
+template MACRO_BOX:CTP2_STANDARD_FONT {
+	int	widthpix	28
+	int	heightpix	19
+	string	pattern	"error.tga"
+	int	srcwidthpix	28
+	int	srcheightpix	19
+	int	beveltype	2
+	int	bevelwidth	1
+}
+
+
+template MICRO_LABEL:CTP2_STANDARD_FONT {
+#	int	xpix	6
+	string	xanchor	"center"
+	int	widthpix	252
+	int	heightpix	24
+	string	pattern	"error.tga"
+	int	srcxpix	6
+	int	srcwidthpix		252
+	int	srcheightpix	24
+	int bevelwidth	1
+	int beveltype	2
+	string	disabledimage0	"error.tga"
+	string	imageblttype	"stretch"
+}
+
+
+template MICRO_BUTTON_MINUS {
+	int	xpix	4
+#	int	ypix	3
+	string	yanchor	"center"
+	int	widthpix	19
+	int	heightpix	16
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	disabledimage0	"error.tga"
+
+}
+
+
+template MICRO_BUTTON_PLUS {
+	int	xpix	57
+#	int	ypix	3
+	string	yanchor	"center"
+	int	widthpix	19
+	int	heightpix	16
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	disabledimage0	"error.tga"
+
+}
+
+
+template MICRO_BOX_LEFT:CTP2_STANDARD_FONT {
+	int	xpix	26
+#	int	ypix	3
+	string	yanchor	"center"
+	int	widthpix	28
+	int	heightpix	19
+	string	pattern	"error.tga"
+	int	srcxpix	233
+	int	srcypix	8
+	int	srcwidthpix		28
+	int	srcheightpix	19
+	int	beveltype	2
+	int	bevelwidth	1
+	string	disabledimage0	"error.tga"
+	string	imageblttype	"stretch"
+}
+
+
+template MICRO_BOX_RIGHT:CTP2_STANDARD_FONT {
+	int	xpix	192
+#	int	ypix	3
+	string	yanchor	"center"
+	int	widthpix	28
+	int	heightpix	19
+	string	pattern	"error.tga"
+	int	srcxpix	233
+	int	srcypix	8
+	int	srcwidthpix		28
+	int	srcheightpix	19
+	int	beveltype	2
+	int	bevelwidth	1
+	string	disabledimage0	"error.tga"
+	string	imageblttype	"stretch"
+}
+
+
+template MICRO_BOX_ICON {
+	string	imagebltflag	"chromakey"
+}
+
+
+template PROD_RANGER:CTP2_STANDARD_FONT {
+	bool alwaysranger	true
+	rangery {
+		int	widthpix	15
+		int	heigthpix	15
+		string	type	"scroller"
+		string	orientation	"vertical"
+		string	pattern	"error.tga"
+		incy {
+			int	widthpix	15
+			int	heightpix	15
+			string	pattern	"error.tga"
+		}
+		decy {
+			int	widthpix	15
+			int	heightpix	15
+			string	pattern	"error.tga"
+		}
+#			thumb {
+#				string	image0	"error.tga"
+#				string	imagebltflag	"chromakey"
+#			}
+	}
+}
+
+
+template IMP_BUTTON {
+	int	xpix	656
+	int	widthpix	41
+	int	heightpix	34
+	int	bevelwidth	0
+}
+
+
+template IMP_SWITCH {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	string	parent	"ControlPanelWindow.TileImpSwitch"
+	int	widthpix	64
+	int	heightpix	48
+#	string	pattern			"error.tga"
+#	string	imageblttype	"stretch"
+
+
+	tipwindow {
+		int	widthpix	150
+		int	heightpix	30
+		tip:CTP2_STANDARD_FONT {
+			bool	usedatabase	true
+			string	image0	"error.tga"
+			string	imageblttype	"tile"
+			int	widthpix	150
+			int	heightpix	30
+			string	just	"left"
+		}
+	}
+}
+
+
+##----------------##
+##  templates 640 ##
+##----------------##
+template CIV_TEXT_640:CTP2_STANDARD_FONT {
+	int	widthpix	50
+	int	heightpix	15
+}
+
+
+template CIV_MARKER_640 {
+	int	xpix	0
+	int	ypix	0
+	int	widthpix	4
+	int	heightpix	4
+}
+
+
+template CIV_SLIDER_640 {
+	string	pattern	"error.tga"
+	int	ypix	21
+	int	widthpix	67
+	int	heightpix	11
+	bool	quantizedrag	true
+	int	maxxval	4
+	int	pagexval	1
+#	bool	rigidthumb		true
+
+
+	thumb {
+		int	widthpix	10
+		string	pattern	"error.tga"
+	}
+}
+
+
+template CIV_BOX_640:CTP2_STANDARD_FONT {
+	string	pattern	"error.tga"
+	int	widthpix	21
+	int	heightpix	14
+	int	bevelwidth	1
+	int	beveltype	1
+}
+
+
+template CIV_BUTTON_640 {
+	int	ypix	45
+	int	widthpix	16
+	int	heightpix	14
+}
+
+
+template MAX_BUTTON_640:CTP2_STANDARD_FONT {
+	int	widthpix	55
+	int	heightpix	15
+	string	image0	"upbb0111.tga"
+}
+
+
+template MICRO_LABEL_640:CTP2_STANDARD_FONT {
+	int	xpix	15
+	int	widthpix	144
+	int	heightpix	20
+	int	bevelwidth	1
+	int beveltype	1
+}
+
+
+template MICRO_RIGHT_640 {
+	int	xpix	20
+	int	ypix	3
+	int	widthpix	13
+	int	heightpix	14
+	string	image0 "upbb1107.tga"
+	string	image1 "upbb1107.tga"
+}
+
+
+template MICRO_LEFT_640 {
+	int	xpix	3
+	int	ypix	3
+	int	widthpix	13
+	int	heightpix	14
+	string	image0 "upbb1106.tga"
+	string	image1 "upbb1106.tga"
+}
+
+
+template MICRO_BOX_RIGHT_640:CTP2_STANDARD_FONT {
+	int	xpix	121
+	int	ypix	2
+	int	widthpix	20
+	int	heightpix	16
+	int	bevelwidth	1
+	int	beveltype	1
+	string	text	"str_ldl_0"
+	string	pattern	"error.tga"
+}
+
+
+# List list box items in order
+ContextMenuItem:CTP2_LIST_ITEM {
+	int widthpix 100
+	int heightpix 16
+	
+	Static0:CTP2_STANDARD_FONT {
+		string 	objecttype		"c3_Static"
+		string 	textblttype		"center"		
+		string 	just 			"left"
+		bool	vertcenter		true
+		
+		int widthpix 180
+		int heightpix 20
+	}
+}
+
+	
+##########################################
+#	Main CTP2 Menubar Templates
+##########################################
+
+# Resource counter in menu bar
+template MENU_RESOURCE_COUNTER:CTP2_BUTTON_ICONIC {
+	
+	# Three images per layer.	
+	int numberoflayers 1
+	int imagesperlayer 2
+
+	string  imageblttype00 "tile"
+
+	# Mark the middle images as stretchable.
+	bool	imagestretchx00		true
+	
+	int widthpix 82
+	int ypix 4
+	int heightpix 18
+
+	string image00 "uptb02.tga"
+	string image01 "uptb03.tga"
+	
+	bool layeralways0 true
+}
+
+# Menu bar icon template	
+template MENU_BAR_ICON:CTP2_STATIC_BASE {
+	int 	numberoflayers 1
+	int 	imagesperlayer 1
+	string	image00 "upic34.tga"
+#	int 	xpix00 4
+	bool 	layeralways0 true
+}
+
+
+template MENU_TITLE_FONT:CTP_GREY_TITLE_FONT {
+	string fontname			"timesbd.ttf"
+	int	fontsize	10
+}
+
+template MENU_ITEM_FONT:CTP_GREY_TITLE_FONT {
+	string fontname			"times.ttf"
+	int	fontsize	10
+}
+
+
+template MENU_BUTTON:MENU_TITLE_FONT {
+	string objecttype "ctp2_MenuButton"
+	string pattern "UPtbtest.TGA"
+	int widthpix	80
+	int heightpix	24
+}
+
+##########################################
+#	Main CTP2 Menubar Layout
+##########################################
+
+MainMenu:CTP2_MENUBAR {
+
+	string pattern "UPtb00.TGA"
+ 
+ 	int xpix	100
+	int ypix	100
+
+	int widthpix	80
+	int heightpix	100
+
+	# menu buttons
+	CivActivator:MENU_BUTTON {
+		string	text	"str_ldl_CivMenuTitle"
+		#string objecttype "ctp2_MenuButton"
+	}
+
+	CityActivator:MENU_BUTTON {
+		string text "str_ldl_CitiesMenuTitle"
+		string objecttype "ctp2_MenuButton"
+	}
+
+	UnitsActivator:MENU_BUTTON {
+		string text "str_ldl_UnitsMenuTitle"
+		string objecttype "ctp2_MenuButton"
+	}
+
+	DiplomacyActivator:MENU_BUTTON {
+		string	text	"str_ldl_DiplomacyMenuTitle"
+		string objecttype "ctp2_MenuButton"
+	}
+
+	StatsActivator:MENU_BUTTON {
+		string objecttype "ctp2_MenuButton"
+		string text "str_ldl_InfoMenuTitle"
+	}
+
+	OptionsActivator:MENU_BUTTON {
+		string objecttype "ctp2_MenuButton"
+		string text "str_ldl_OptionsMenuTitle"
+	}
+
+	# Objects other than menu buttons fill in right to left, start with rightmost
+	PollutionBar:MENU_RESOURCE_COUNTER {
+		string objecttype "ctp2_Static"
+		int widthpix 36
+		# Tooltip
+		string	tipwindow	"TOOLTIP_CIV_TOTAL_POLLUTION_DISPLAY"
+		string	statustext	"STATUSBAR_CIV_TOTAL_POLLUTION_DISPLAY"
+	}
+	PollutionIcon:MENU_BAR_ICON {
+		string image00 "upic36.tga"
+	}	
+	
+	HappinessBar:MENU_RESOURCE_COUNTER {
+		string objecttype "ctp2_Static"
+		int widthpix 36
+		# Tooltip
+		string	tipwindow	"TOOLTIP_CIV_TOTAL_HAPPINESS_DISPLAY"
+		string	statustext	"STATUSBAR_CIV_TOTAL_HAPPINESS_DISPLAY"
+	}
+	HappinessIcon:MENU_BAR_ICON {
+		string image00 "upic35.tga"
+	}
+
+	PWStatic:MENU_RESOURCE_COUNTER {
+		# Tooltip
+		string	tipwindow	"TOOLTIP_CIV_TOTAL_PW_DISPLAY"
+		string	statustext	"STATUSBAR_CIV_TOTAL_PW_DISPLAY"
+	}
+	PWIcon:MENU_BAR_ICON {
+		string image00 "upic33.tga"
+	}
+
+	GoldStatic:MENU_RESOURCE_COUNTER {
+		# Tooltip
+		string	tipwindow	"TOOLTIP_CIV_TOTAL_GOLD_DISPLAY"
+		string	statustext	"STATUSBAR_CIV_TOTAL_GOLD_DISPLAY"
+	}
+	GoldIcon:MENU_BAR_ICON {
+		string image00 "upic34.tga"
+	}
+
+}
+
+###############
+#
+# Tab Windows
+#
+###############
+
+UnitInfoListItem:CTP2_LIST_ITEM {
+	int widthpix  90
+	int heightpix 20
+	
+	StaticThing:CTP2_STANDARD_FONT {
+		string 	objecttype		"c3_Static"
+		string 	textblttype		"center"		
+		bool	vertcenter		true
+		string 	just 			"left"
+		
+		int widthpix  90
+		int heightpix 20
+	}
+}
+
+#
+## Message List Items
+#
+MessagePanelListItem:CTP2_LIST_ITEM {
+	int heightpix		26
+#	string pattern		"uptg02.tga"
+	
+	StaticContainer {
+		string 	objecttype		"ctp2_Static"
+		int 	widthpix		318
+		int 	heightpix		26
+
+		StaticIcon {
+			string 	objecttype		"ctp2_Static"
+			int		xpix			3
+			int		ypix			3
+			int		widthpix 		30
+			int		heightpix 		24
+			string	image0			"upk101.tga"
+			string imagebltflag "chromakey"
+		}
+
+		StaticText:CTP2_HEADER_FONT {
+		#CTP2_STANDARD_FONT {}
+			string 	objecttype		"ctp2_Static"
+			string	textblttype		"fill"
+#			bool	vertcenter		true
+			
+			int		xpix			34
+			int		ypix			5
+			int		widthpix 		288
+			int		heightpix 		21
+		}
+	}
+}
+
+################################################
+# This one is nasty cause of the 36 buttons
+################################################
+
+UnitPopupWindow:CTP2_WINDOW {
+
+	string pattern "pattern.TGA"
+ 
+ 	int xpix	0
+	int ypix	0
+
+	int widthpix	364
+	int heightpix	107
+
+	ListUnit:CTP2_LISTBOX_WITH_HEADER {
+		int xpix		0
+		int ypix		0
+		int widthpix	79
+		int heightpix	99
+	}
+	
+	ListCity:CTP2_LISTBOX_WITH_HEADER {
+		int xpix		0
+		int ypix		0
+		int widthpix	79
+		int heightpix	99
+	}
+}
+
+###########################################################
+## Tile Improvement Mouse Tracker Window 
+###########################################################
+TileImpListItem {
+}
+
+TrackerFont:CTP2_STANDARD_FONT {
+}
+
+SpecialAttackWindow {
+	int	xpix	0
+	int	ypix	0
+	int	widthpix	70
+	int	heightpix	30
+	
+	SpecialAttackCost:TrackerFont {
+		int	xpix	5
+		int	ypix	5
+		int	widthpix	60
+		int	heightpix	20
+		string text "str_ldl_Cost_"
+	}
+}
+
+cp_tileimp_tracker {
+	int	xpix	0
+	int	ypix	0
+	int	widthpix	115
+	int	heightpix	78
+	TimeN:TrackerFont {
+			int	xpix	7
+			int	ypix	5
+			int	widthpix	60
+			int	heightpix	20
+			string text "str_ldl_Time_ "
+			string textblttype "fill"
+	}
+	TimeV:TrackerFont {
+			int	xpix	62
+			int	ypix	5
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
+	}
+	AdvN:TrackerFont {
+			int	xpix	7
+			int	ypix	40
+			int	widthpix	60
+			int	heightpix	20
+			string text "str_ldl_Advance_"
+			string textblttype "fill"
+	}
+	AdvV:TrackerFont {
+			int	xpix	62
+			int	ypix	40
+			int	widthpix	100
+			int	heightpix	20
+			string textblttype "fill"
+	}
+	
+	MatN:TrackerFont {
+			int	xpix	7
+			int	ypix	5
+			int	widthpix	60
+			int	heightpix	20
+			string text "str_ldl_Cost_"
+			string textblttype "fill"
+	}
+	MatV:TrackerFont {
+			int	xpix	80
+			int	ypix	5
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
+	}
+	FoodN:TrackerFont {
+			int	xpix	7
+			int	ypix	22
+			int	widthpix	70
+			int	heightpix	20
+			string text "str_ldl_Food_"
+			string textblttype "fill"
+	}
+	FoodV:TrackerFont {
+			int	xpix	80
+			int	ypix	22
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
+	}
+	ProductionN:TrackerFont {
+			int	xpix	7
+			int	ypix	40
+			int	widthpix	70
+			int	heightpix	20
+			string text "str_ldl_Production_"
+			string textblttype "fill"
+	}
+	ProductionV:TrackerFont {
+			int	xpix	80
+			int	ypix	40
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
+	}
+	GoldN:TrackerFont {
+			int	xpix	7
+			int	ypix	58
+			int	widthpix	70
+			int	heightpix	20
+			string text "str_ldl_Goldy"
+			string textblttype "fill"
+	}
+	GoldV:TrackerFont {
+			int	xpix	80
+			int	ypix	58
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
+	}
+
+	Background {
+		int xpix 1
+		int ypix 1
+		int widthpix 113
+		int heightpix 76
+		string pattern "uptg04e.tga"
+	}
+}
+
+
+
+###########################################################
+
+
+TradeListItem {
+	goodsName:CTP2_STANDARD_FONT {
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		80
+		int		heightpix		20
+	}
+	cityFrom:CTP2_STANDARD_FONT {
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		70
+		int		heightpix		20
+	}
+	cityTo:CTP2_STANDARD_FONT {
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		70
+		int		heightpix		20
+	}
+	goodsValue:CTP2_STANDARD_FONT {
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		40
+		int		heightpix		20
+	}
+
+
+}
+
+
+ProductionTabListItem {
+	ObjectName:CTP2_STANDARD_FONT {
+		int		xpix			0
+#		int		ypix			0
+		int		widthpix		162
+		int		heightpix		20
+		string	just	"left"
+		bool	vertcenter	TRUE
+	}
+	UpkeepCost:CTP2_STANDARD_FONT{
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		35
+		int		heightpix		20
+	}
+}
+TotalListItem {
+	Name:CTP2_STANDARD_FONT {
+		int		xpix			0
+#		int		ypix			0
+		int		widthpix		162
+		int		heightpix		20
+		string	just	"left"
+		bool	vertcenter	TRUE
+	}
+	TotalUpkeep:CTP2_STANDARD_FONT{
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		35
+		int		heightpix		20
+	}
+}
+
+
+prod_InventoryListItem {
+	Owned:CTP2_STANDARD_FONT {
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		56
+		int		heightpix		20
+	}
+	ObjectName:CTP2_STANDARD_FONT{
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		130
+		int		heightpix		20
+	}
+	Cost:CTP2_STANDARD_FONT{
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		20
+		int		heightpix		18
+	}
+}
+
+
+prod_QueueListItem {
+	ObjectName:CTP2_STANDARD_FONT{
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		135
+		int		heightpix		20
+	}
+}
+
+
+template STRING_TEST:CTP2_STANDARD_FONT {
+	bool	usedatabase	true
+}
+
+
+############################
+# String tables
+############################
+CivTabStrings:STRING_TEST {
+	int	numStrings	1
+	string	string0	"str_tbl_ldl_hrs"
+}
+
+
+ProdTabStrings {
+	int numStrings	12
+	string	string0 "str_tbl_ldl_NP"
+	string	string1 "str_tbl_ldl_G"
+	string	string2	"str_tbl_ldl_Pop"
+	string	string3	"str_tbl_ldl_Nothing_Building"
+	string	string4	"str_tbl_ldl_INVENTORY"
+	string	string5	"str_tbl_ldl_BUILD_OPTIONS"
+	string	string6 "str_tbl_ldl_You_will_receive"
+	string	string7	"str_tbl_ldl_gold_for_selling_the"
+	string	string8	"str_tbl_ldl_Are_you_sure"
+	string	string9	"str_tbl_ldl_Total_Upkeep"
+	string	string10	"str_tbl_ldl_NOT_BUILDING"
+	string	string11	"str_tbl_ldl_Ongoing"
+}
+
+
+MicroTabStrings {
+	int numStrings	2
+	string	string0	"str_tbl_ldl_no_required_Improvement"
+	string	string1	"str_tbl_ldl_No_workers_left_to_place"
+}
+
+
+CityTabStrings {
+	int	numStrings	14
+	string	string0	"str_tbl_ldl_POSITIVE_HAPPINESS"
+	string	string1	"str_tbl_ldl_NEGATIVE_HAPPINESS"
+	string	string2	"str_tbl_ldl_TOTAL_POSITIVE"
+	string	string3	"str_tbl_ldl_TOTAL_NEGATIVE"
+	string	string4	"str_tbl_ldl_CLEANERS"
+	string	string5	"str_tbl_ldl_POLLUTERS"
+	string	string6	"str_tbl_ldl_TOTAL_CLEANING"
+	string	string7	"str_tbl_ldl_TOTAL_POLLUTION"
+	string	string8	"str_tbl_ldl_Goods"
+	string	string9	"str_tbl_ldl_Exports"
+	string	string10	"str_tbl_ldl_View_Goods"
+	string	string11	"str_tbl_ldl_View_Exports"
+	string	string12	"str_tbl_ldl_From"
+	string	string13	"str_tbl_ldl_Destination"
+}
+UnitTabStrings {
+	int	numStrings	2
+	string	string0	"str_tbl_ldl_F"
+	string	string1	"str_tbl_ldl_S"
+}
+
+
+ThrowPartyPopup {
+	string	xanchor		"center"
+	string	yanchor		"center"
+	int		widthpix	400
+	int		heightpix	200
+	string	pattern	"error.tga"
+	TitleLabel:CTP2_STANDARD_TITLE_FONT {
+		int	xpix	0
+		string yanchor "top"
+		int widthpix 167
+		int heightpix 20
+		string	text	"str_ldl_Throw_Party"
+	}
+	TextField {
+		int	xpix	100
+		int	ypix	60
+		int	widthpix	200
+		int	heightpix	20
+		string	pattern	"error.tga"
+	}
+}
+
+
+GotoCityPopup {
+	string	xanchor		"center"
+	string	yanchor		"center"
+	int		widthpix	400
+	int		heightpix	400
+	string	pattern	"error.tga"
+	TitleLabel:CTP2_STANDARD_FONT {
+		string xanchor "center"
+		string yanchor "top"
+		int widthpct 50
+		int heightpix 20
+		string	text	"str_ldl_Send_Unit_to_City_COLON"
+		string	pattern	"error.tga"
+	}
+	OkButton:CTP2_STANDARD_FONT{
+		int	xpix	50
+		int	ypix	350
+		int	widthpix	100
+		int	heightpix	20
+		string	pattern	"error.tga"
+		string	text	"str_ldl_Ok"
+	}
+	CancelButton:CTP2_STANDARD_FONT {
+		int	xpix	250
+		int	ypix	350
+		int	widthpix	100
+		int	heightpix	20
+		string	pattern	"error.tga"
+		string	text	"str_ldl_Cancel"
+	}
+	CityList {
+		int	xpix	90
+		int	ypix	80
+		int	widthpix	200
+		int	heightpix	260
+		int columns		1
+		int bevelwidth	1
+		int beveltype	1
+		bool alwaysranger	TRUE
+		string	pattern	"error.tga"
+		header {
+			switch0:CTP2_STANDARD_FONT {
+				int	widthpix	200
+				int	heightpix	20
+				string text "str_ldl_City"
+				string	pattern	"error.tga"
+				int bevelwidth 	1
+			}
+		}
+	}
+}
+
+
+ForeignTradeBidPopup {
+	string	xanchor		"center"
+	string	yanchor		"center"
+	int		widthpix	400
+	int		heightpix	200
+	string	pattern	"error.tga"
+	TitleLabel:CTP2_STANDARD_TITLE_FONT {
+		int	xpix	32
+		int	ypix	2
+		int	widthpix	100
+		int heightpix 20
+		string	text	"str_ldl_Message"
+	}
+	TextMessage:CTP2_STANDARD_FONT {
+		int	xpix	15
+		int	ypix	60
+		int	widthpix	372
+		int	heightpix	30
+		string	text	"str_ldl_How_much_for_good"
+		string	just	"center"
+		bool	wordwrap	TRUE
+	}
+	TextField {
+		int	xpix	100
+		int	ypix	90
+		int	widthpix	200
+		int	heightpix	20
+		string	pattern	"error.tga"
+	}
+	OkButton:CTP2_STANDARD_FONT {
+		int	xpix	50
+		int	ypix	160
+		int	widthpix	100
+		int	heightpix	20
+		string	pattern	"error.tga"
+		string	text	"str_ldl_Ok"
+	}
+	CancelButton:CTP2_STANDARD_FONT {
+		int	xpix	250
+		int	ypix	160
+		int	widthpix	100
+		int	heightpix	20
+		string	pattern	"error.tga"
+		string	text	"str_ldl_Cancel"
+	}	
+}
+
+
+ct_PollutionListItem {
+	Name:CTP2_STANDARD_FONT{
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		110
+		int		heightpix		20
+	}
+	Value:CTP2_STANDARD_FONT{
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		33
+		int		heightpix		20
+	}
+}
+
+
+ct_HappinessListItem {
+	Name:CTP2_STANDARD_FONT{
+		bool	shadowfont	true
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		110
+		int		heightpix		20
+	}
+	Value:CTP2_STANDARD_FONT{
+		bool	shadowfont	true
+		int		xpix			0
+		int		ypix			0
+		int		widthpix		33
+		int		heightpix		20
+	}
+}
+
+
+UnitTabButton {
+	Arrow {
+		int	xpix	29
+		int	ypix	16
+		int	widthpix	8
+		int	heightpix	4
+#		string	pattern	"error.tga"
+		string	image0	"error.tga"
+	}
+	Fortify:CTP2_STANDARD_FONT {
+		int	xpix	5
+		int	ypix	5
+		int	widthpix	10
+		int	heightpix	10
+		string	text	"str_ldl_F"
+	}
+	Veteran:CTP2_STANDARD_FONT {
+		int	xpix	30
+		int	ypix	5
+		int	widthpix	10
+		int	heightpix	10
+		string	text	"str_ldl_V"
+	}
+	Cargo {
+		int	xpix	0
+		int	ypix	0
+		int	widthpix	4
+		int	heightpix	3
+	}
+}
+YearStrings {
+	int	numStrings	4
+	string	string0	"str_tbl_ldl_BC"
+	string	string1	"str_tbl_ldl_AD"
+	string	string2	"str_ldl_PW"
+	string	string3	"str_ldl_Gold"
+}
+template ct_tradewindow_listitem : CTP2_STANDARD_FONT {
+#	int		xpix			0
+#	int		ypix			0
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int		heightpix		23
+}
+
+ct_DomesticListItem {
+	Icon : ct_tradewindow_listitem {
+		int		widthpix		29
+	}
+	FromCity : ct_tradewindow_listitem {
+		int		widthpix		87
+	}
+	Value : ct_tradewindow_listitem {
+		int		widthpix		20
+	}
+}
+ct_ExportListItem {
+	Icon : ct_tradewindow_listitem {
+		int		widthpix		29
+	}
+	ToCity : ct_tradewindow_listitem {
+		int		widthpix		87
+	}
+	Price : ct_tradewindow_listitem {
+		int		widthpix		20
+	}
+}
+
+
+NameTheCityPopup {
+	string	xanchor		"center"
+	string	yanchor		"center"
+	int		widthpix	400
+	int		heightpix	120
+	string	pattern	"error.tga"
+	TitleLabel:CTP2_STANDARD_TITLE_FONT {
+		int	xpix	0
+		string yanchor "top"
+		int widthpix 167
+		int heightpix 20
+		string	text	"str_ldl_Name_City_Title"
+	}
+
+	TextMessage:CTP2_STANDARD_FONT {
+		int	xpix	10
+		int ypix 	30
+		int widthpix 380
+		int heightpix 40
+		string	text	"str_ldl_Name_City_Message"
+	}
+
+	TextField {
+		int	xpix	100
+		int	ypix	80
+		int	widthpix	200
+		int	heightpix	20
+		string	pattern	"error.tga"
+		# Make sure that maxfieldlen same as used in:
+	    #    CityStatusWin:CityName 
+		#    CityPad:CityNameField 
+	    #    NameTheCityPop:TextField (640 and normal)
+		int	maxfieldlen	50
+	}
+}
+
+# Mad Doc 8/28/2000
+#
+# Added RADARWINDOW_TOGGLE_BUTTON class as a toggle switch for the
+# "Units","Cities", and "Border" buttons at the top of the Radar window
+#
+
+#template RADARWINDOW_TOGGLE_BUTTON:CTP2_GENERIC_SIZABLE_TEXT_BUTTON_20
+template RADARWINDOW_TOGGLE_BUTTON
+{
+	string	objecttype	"ctp2_switch"
+	int	widthpix	20		
+	int 	heightpix	20	
+	string	imagebltflag	"chromakey"	
+	string	pattern		"uptg32.tga"
+	int bevelwidth 3
+	int numimagegroups 2
+#	bool centerimage true
+	string imagebltflag "chromakey"
+	string image0 "upcb20.tga"
+	string image1 "upcb20.tga"
+}
+
+# Main UI Radar display.
+RadarWindow {
+	# Runtime type.
+	string	objecttype	"ctp2_Window"
+
+################################################################################
+# Border
+################################################################################
+	TopBorder:CTP2_STATIC_BACKGROUND {	
+		# Size.
+		int		heightpix			36
+
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		6
+
+		# Background.
+		bool	layeralways0		true
+		string	image00				"uprb01.tga"
+		bool	imagestretchx01		true
+		string	image01				"uprb11.tga"
+		string	image02				"uprb02.tga"
+		bool	imagenextrow03		true
+		bool	imagestretchy03		true
+		string	image03				"uprb44.tga"
+		bool	imagestretchx04		true
+		bool	imagestretchy04		true
+		string	image04				"UPtb00.tga"
+		bool	imagestretchy05		true
+		string	image05				"uprb22.tga"
+
+		# Prevent redraw on mouse over.
+		bool	nohighlight			true
+
+		# Toggle buttons for map features, these are evenly
+		# sized and positioned horizontally by the code.
+		Button1:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			int		xpix			14
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_UNITS"
+			# Icon for button
+			string 	image0 		"upcb20u.tga"
+			string 	image1 		"upcb20.tga"			
+			# Tooltip
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_UNITS_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_UNITS_BUTTON"
+		}
+		Button2:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			int		xpix			36
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_CITIES"
+			# Icon for button
+			string 	image0 		"upcb21u.tga"
+			string 	image1 		"upcb21.tga"
+			# Tooltip
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_CITIES_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_CITIES_BUTTON"
+		}
+		Button3:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			int		xpix			58
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_BORDERS"
+			# Icon for button
+			string 	image0 		"upcb22u.tga"
+			string 	image1 		"upcb22.tga"
+			# Tooltip
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_BORDERS_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_BORDERS_BUTTON"
+		}
+		Button4:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			int		xpix			124
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_FILTER"
+			# Icon for button
+			string 	image0 		"upcb23u.tga"
+			string 	image1 		"upcb23.tga"
+			# Tooltip
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_FILTER_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_FILTER_BUTTON"
+		}
+		Button5:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			int		xpix			80
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_TRADE"
+			# Icon for button
+			string 	image0 		"upcb24u.tga"
+			string 	image1 		"upcb24.tga"
+			# Tooltip
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_TRADE_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_TRADE_BUTTON"
+		}
+		Button6:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			int		xpix			102
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_TERRAIN"
+			# Icon for button
+			string 	image0 		"upcb25u.tga"
+			string 	image1 		"upcb25.tga"
+			# Tooltip
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_TERRAIN_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_TERRAIN_BUTTON"
+		}
+
+		#Minimize/Maximize Button  -- not yet enabled		
+		Button7:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			# xanchor appears not to actually work in this case
+			string	xanchor	"right"
+			int		xpix			22
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_TERRAIN"
+			# Icon for button (Minimize)
+#			string 	pattern 		"upcb26.tga"
+
+#			# images for buttons if this is done as a two stage button
+#			string	image00		"upcb26.tga"
+#			string 	image10 		"upcb27.tga"
+			string  image0      "upcb26.tga"
+			string  image1      "upcb27.tga"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_MINIMAP_MINIMIZE"
+		}
+
+	}
+	LeftBorder:CTP2_STATIC_BACKGROUND {	
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		1
+
+		# Background.
+		bool	layeralways0		true
+		bool	imagestretchy00		true
+		string	image00				"uprb44.tga"
+	}
+	RightBorder:CTP2_STATIC_BACKGROUND {	
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		1
+
+		# Background.
+		bool	layeralways0		true
+		bool	imagestretchy00		true
+		string	image00				"uprb22.tga"
+	}
+	BottomBorder:CTP2_STATIC_BACKGROUND {	
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		3
+
+		# Background.
+		bool	layeralways0		true
+		string	image00				"uprb04.tga"
+		bool	imagestretchx01		true
+		string	image01				"uprb33.tga"
+		string	image02				"uprb03.tga"
+	}
+
+################################################################################
+# Map
+################################################################################
+	RadarMap {
+		# Runtime type.
+		string	objecttype	"RadarMap"
+
+		# Initial size (cannot be 0x0).
+		int		widthpix			2
+		int		heightpix			2
+	}
+}
+
+TurnProgressBar {
+
+	int	xpix	100
+
+	int	ypix	50	#155
+
+	int	widthpix	322
+
+	int	heightpix	15
+
+	string	image0	"ug026.tga"
+
+	string	barimage	"ug027.tga"
+
+	string	type	"standard"
+}
+
+# MDS 091300
+TurnProgressWindow {
+
+	string	pattern	"uptg20e.tga"
+
+	string	xanchor	"left"
+	string	yanchor	"bottom"
+
+	#string	yanchor	"center"
+
+	int	widthpix	286
+
+	int	heightpix	92
+
+	message:CTP_GREY_TITLE_FONT {
+
+		int	xpix	15
+
+		int	ypix	15
+
+		int	widthpix	256
+
+		int	heightpix	32
+
+		int	srcxpix	15
+		int	srcypix	15
+		int	srcwidthpix	371
+		int	srcheightpix	32
+
+#		string	pattern	"ug031.tga"
+
+		int	beveltype	1
+		int	bevelwidth	1
+	}
+
+	progressbar {
+
+		int	xpix	38
+
+		int	ypix	45
+
+		int	widthpix	222
+
+		int	heightpix	15
+
+		string	image0	"ug026.tga"
+		string imageblttype "stretch"
+
+		# don't want this because we want the bar to change color
+		#string	barimage	"ug027.tga"
+
+		string	type	"standard"
+	}
+}
+$
+

@@ -755,8 +755,8 @@ Nachdem Ascanio Sobrero, ein italienischer Chemiker, im Jahre 1846 das Nitroglyc
 
 [ADVANCE_FASCISM_PREREQ]
 Voraussetzung:
-<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalism<e>
-<L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Mass Media<e>
+<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theologie<e>
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Schießpulver<e>
 [END]
 
 [ADVANCE_FASCISM_STATISTICS]
@@ -1560,6 +1560,7 @@ Um dieses Problem zu lösen, wurde der Bio-Schutzfilter entwickelt. Diese Moderni
 [ADVANCE_NATIONALISM_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Druckerpresse<e>
+<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Faschismus<e>
 [END]
 
 [ADVANCE_NATIONALISM_STATISTICS]
@@ -2561,7 +2562,7 @@ Alle Luftfahrzeuge verfügen über einen bestimmten Treibstoffvorrat. Während sie 
 [END]
 
 [CONCEPT_FUTURE_AGE_HISTORICAL]
-Die Zukunft ist unbekannt, wir wissen nicht was sie bringen wird. Wird sie gut oder schlecht. Niemand weiß es so genau, auch wenn einige glauben es genau zu wissen. So werden Wahrsager auch weiterhin Kundschafft haben. Doch die wahre Natur der Zukunft liegt im Unbekannten, im  Wagen, im nicht Sicheren. In der Zukunft ist alles möglich oder auch gar nichts. Es lieg an uns sie zu gestalten.
+Die Zukunft ist unbekannt, wir wissen nicht was sie bringen wird. Wird sie gut oder schlecht. Niemand weiß es so genau, auch wenn einige glauben es genau zu wissen. So werden Wahrsager auch weiterhin Kundschafft haben. Doch die wahre Natur der Zukunft liegt im Unbekannten, im Vagen, im nicht Sicheren. In der Zukunft ist alles möglich oder auch gar nichts. Es lieg an uns sie zu gestalten.
 [END]
 
 [CONCEPT_GENETIC_AGE_GAMEPLAY]
@@ -2630,7 +2631,7 @@ Allerdings haben Modernisierungen auch ihren Preis: Ihre Errichtung wird aus den
 
 [CONCEPT_INDUSTRIAL_AGE_HISTORICAL]
 Die industrielle Revolution leitete ein neues Zeitalter des Verkehrs, der Entdeckungen und Produktion. Angetrieben durch Dampf brachten die Dampfmaschiene und die Eisenbahn eine noch nie gesehende Produktivität sowie ein bisher unbekanntes Wachtum. Die industrielle Revolution veränderte die gesellschaftlichen Verhältnisse radikal, es entstanden Großmonopolunternehmen, sowie eine neue Unterschicht - die Arbeiterklasse, zu der bald die große Masse der Bevölkerung zählte. Neben der rapid ansteigenden Umweltverschmutzung, kam auch die Beschleunigung des Lebens, nicht nur in der Produktion, sondern auch im Leben des Einzelnen. Statt der Natur bestimmte nun die Maschinerie den Lebensrhythmus.
-[END]   
+[END] 
 
 [CONCEPT_INFRASTRUCTURE_SUMMARY]
 Umwandlung von <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> in <L:DATABASE_CONCEPTS,CONCEPT_PUBLIC_WORKS>staatliche Bautrupps<e>
@@ -2848,7 +2849,7 @@ Experten sind besondere Bürgergruppen, die so gut wie nichts mit der eigentliche
 
 Es gibt fünf Arten von Experten:
 Entertainer - ermöglicht durch <L:DATABASE_ADVANCES,ADVANCE_DRAMA>Schauspiel<e> - erhöhen die <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>Zufriedenheit<e> in einer Stadt 
-Händler - ermöglicht durch <L:DATABASE_ADVANCES,ADVANCE_ECONOMICS>Volkswirtschaft<e> -  steigern die <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Goldgewinnung<e> einer Stadt 
+Händler - ermöglicht durch <L:DATABASE_ADVANCES,ADVANCE_ECONOMICS>Volkswirtschaft<e> - steigern die <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Goldgewinnung<e> einer Stadt 
 Wissenschaftler - ermöglicht durch <L:DATABASE_ADVANCES,ADVANCE_CLASSICAL_EDUCATION>Erziehungswesen<e> - erhöhen die <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE>Wissenschaftserträge<e> in einer Stadt 
 Fabrikarbeiter - ermöglicht durch <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrielle Revolution<e> - erhöhen die <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktionserträge<e> in einer Stadt 
 Bauern - ermöglicht durch <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURE>Landwirtschaft<e> - erhöhen die <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungsgewinnung<e> in einer Stadt 
@@ -2864,7 +2865,7 @@ Das <L:DATABASE_BUILDINGS,IMPROVE_GRANARY>Lagerhaus<e> erhöht die Dauer bis zum 
 
 Bei der <L:DATABASE_BUILDINGS,IMPROVE_FOOD_SILO>Siloanlage<e> beträgt diese Dauer 10 Runden.
 
-Nach der Errichtung eines <L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VAT>Nahrungsreplikators<e> ist in der betreffenden Stadt ein 100%iger Schutz vor Hungersnöten gewährleistet.
+Nach der Errichtung eines <L:DATABASE_BUILDINGS,IMPROVE_CORNUCOPIC_VATS>Nahrungsreplikators<e> ist in der betreffenden Stadt ein 100%iger Schutz vor Hungersnöten gewährleistet.
 [END]
 
 [CONCEPT_STARVATION_HISTORICAL]
@@ -3034,11 +3035,34 @@ Arbeiter repräsentieren das gesamte Arbeitspotenzial der Bürger einer <L:DATABAS
 [CONCEPT_WORKER_HISTORICAL]
 [END]
 
+[TERRAIN_SWAMP_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpf<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
 [TERRAIN_SWAMP_GOOD_ONE_GAMEPLAY]
 Alligatoren leben in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpfgebieten<e>. Hierbei handelt es sich um eine seltene Tierart, die zur Nahrungsgewinnung und zur Lederfabrikation dient.
 [END]
 
 [TERRAIN_SWAMP_GOOD_ONE_HISTORICAL]
+Die Gattung der Alligatoren und ihrer Verwandten, der Krokodile, existiert schon seit Millionen von Jahren. Sie sind die letzten lebendigen Überbleibsel der Dinosaurier-Dynastie. Um 1880 wurden die amerikanischen Alligatoren erstmals aus kommerziellen Gründen gejagt und waren später vom Aussterben bedroht. Im 20. Jahrhundert wurden Gesetze erlassen, die die Jagdrechte auf diese Tiere einschränkten, so daß sich der Bestand wieder erholen konnte. Seither gibt es strenge Regelungen für alle Geschäftsbereiche, die mit der Verarbeitung des Fleisches oder der Haut dieser immer noch gefährdeten Tiere zu tun haben, um den Export des daraus gefertigten Leders zu unterbinden.
+[END]
+
+[TERRAIN_FOREST_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Wald<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_FOREST_GOOD_TWO_GAMEPLAY]
@@ -3048,11 +3072,34 @@ Bären leben ausschließlich in <L:DATABASE_TERRAIN,TERRAIN_FOREST>Wäldern<e> und 
 [TERRAIN_FOREST_GOOD_TWO_HISTORICAL]
 [END]
 
+[TERRAIN_TUNDRA_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_TUNDRA>Tundra<e>
+[END]
+
+[TERRAIN_TUNDRA_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
+[END]
+
 [TERRAIN_TUNDRA_GOOD_ONE_GAMEPLAY]
 Karibus sind in der <L:DATABASE_TERRAIN,TERRAIN_TUNDRA>Tundra<e> beheimatet und dienen neben der Nahrungsgewinnung auch der Pelzfabrikation.
 [END]
 
 [TERRAIN_TUNDRA_GOOD_ONE_HISTORICAL]
+Die Tundra, ein für die meisten Lebewesen unwirtliches Gelände, ist das ideale Umfeld für Karibus. Im Gegensatz zu Nadelwäldern, wo ebenfalls Karibus leben, bietet die Tundra riesige freie Flächen, auf denen die Tiere ihren langsameren natürlichen Feinden, den Wölfen, entkommen können. Karibufelle und -fleisch sind außerordentlich teuer, aber ihr wertvollstes und auch markantestes Gut sind ihre Geweihe. Anders als bei Rotwild wachsen sowohl bei Karibumännchen als auch -weibchen Geweihe, die in bestimmten Intervallen abgeworfen werden. Jahrhundertelang wurden diese Geweihe von den Indianern als Dekoration, Waffen und zu religiösen und medizinischen Zwecken benutzt.
+[END]
+
+[TERRAIN_HILL_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hügel<e>
+[END]
+
+[TERRAIN_HILL_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_HILL_GOOD_ONE_GAMEPLAY]
@@ -3060,6 +3107,17 @@ Kaffee wächst auf <L:DATABASE_TERRAIN,TERRAIN_HILL>Hügeln<e>. Die Bohnen werden 
 [END]
 
 [TERRAIN_HILL_GOOD_ONE_HISTORICAL]
+Mit einer Produktion von mehr als 5 Milliarden Kilogramm pro Jahr gilt Kaffee nach Erdöl als die am meisten gehandelte Ware der Welt. Der Kaffeebaum, eigentlich ein Busch, war ursprünglich in Äthiopien beheimatet, aber in den 90er Jahren wurde die dortige Kaffeeproduktion bei weitem von Brasilien und Kolumbien übertroffen, die mehr Kaffee produzierten, als alle anderen Länder zusammen.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Weideland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_ONE_GAMEPLAY]
@@ -3067,13 +3125,40 @@ Baumwolle wird auf <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Weideland<e> angebaut. 
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_ONE_HISTORICAL]
+Baumwolle ursprünglich eine tropische Pflanze wird aber heute weltweit angebaut. Baumwolleist gesponnen, gewebt, und seit vorgeschichtlichen Zeiten gefärbt worden. Baumwolle wird jährlich neuausgesäht. Krankheiten und Insektenbefall sind häufig. Zum Beispiel, der Baumwollsamenkapselkäfer ist für enorme Ernteverluste verantwortlich, besonders betroffen ist die sehr anfällige, seiden-faserige Seeinselbaumwolle, die vor dieser Plage zur meist angebauten Baumwolleart gehörte. Baumwolle wird den Samen durch eine Baumwollentkernungsmaschine getrennt. Verarbeitung von Baumwolle zu Tuch, Gewebe, oder Garn erfolgt durch Karden, Kämmen, und Spinnen. Baumwolle ist ein Grundstoff für Zelluloseprodukte, Düngemittel, Brennmaterial, Kunststoffverstärkung, Automobilreifenschnur, gepressten Papier, Pappe und das Öl aus dem Samen gepresst, das beim Kochen, für Kosmetika, Seifen, Kerzen, Waschmittel, Farben, Wachstücher, künstliches Leder, usw. benutzt wird. Genutzt in Ägypten, China und Indien seit uralten Zeiten, spielte Baumwolle lange eine bedeutsame Rolle in Weltindustrie. Groß Britanniens Bedürfnis nach importierte Baumwolle hat viel zu seiner Seeherrschaftpolitik als imperialistische Nation beigetragen, und in den USA, war Baumwolle eine der wirtschaftlichen Hintergründe des amerikanischen Bürgerkrieges. 
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Strand<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriff<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_ONE_GAMEPLAY]
-Krebse sind in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser-<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Strandgebieten<e> beheimatet und dienen als teuer gehandeltes Nahrungsmittel.
+Krebse sind im <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser<e>, an <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Stränden<e>, in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriffen<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriffen<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriffen<e> beheimatet und dienen als teuer gehandeltes Nahrungsmittel.
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_ONE_HISTORICAL]
+In der Geschichte galt der Krebs von je her als teure Delikatesse. In der jüngeren Vergangenheit wurde außerdem sein Nutzen für die Herstellung von Kosmetika und Medikamenten, für die Wasserklärung und sogar als Düngemittel entdeckt. Das Chitin, das sich in seinem Hautpanzer befindet, enthält DNS-hemmende Substanzen, die möglicherweise, und ironischerweise, eine krebshemmende Wirkung haben.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherberg<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkan<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_GAMEPLAY]
@@ -3081,6 +3166,18 @@ Diamanten, die zu den seltensten und wertvollsten Edelsteine überhaupt zählen, w
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Diamanten sind das härteste und widerstandsfähigste bekannte Material. Dank dieser Eigenschaften gehören sie zu den wesentlichen Bestandteilen der Keramik-, Elektronik- und Karbidventilindustrie. Wegen ihrer Schönheit und Brillanz gehören die Diamanten seit der Einführung des Facettenschliffs im 16. Jahrhundert zu den beliebtesten Edelsteinen. Im Jahre 1867 brach unmittelbar nach dem Beginn des amerikanischen Gold- und Ölrauschs in dem treffend benannten südafrikanischen Bezirk Hopetown (Stadt der Hoffnung) der Diamantrausch aus.
+[END]
+
+[TERRAIN_PLAINS_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_PLAINS_GOOD_TWO_GAMEPLAY]
@@ -3088,20 +3185,62 @@ Elefanten sind in der <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e> beheimatet. H
 [END]
 
 [TERRAIN_PLAINS_GOOD_TWO_HISTORICAL]
+Zwar waren das Fleisch und die Haut des Elefanten zu keiner Zeit besonders wertvoll, aber seine Stoßzähne, die aus Elfenbein bestehen, waren schon für die alten Ägypter eine Kostbarkeit. Die Griechen benutzten das Elfenbein für ihre Elefantenstatuetten, um die Haut darzustellen. In byzantinischen Zeiten wurde es verwendet, um Bucheinbände zu fertigen, und sogar aus Elfenbein gefertigte Throne dekorierten die Häuser der Wohlhabenden. Selbst als die Elefanten vom Aussterben bedroht waren, verringerte sich die Nachfrage nach Elfenbein nur vorübergehend. Erst im 21. Jahrhundert war es mit Hilfe der Genetik möglich, den Elefantenbestand wieder aufzustocken.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Berg<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandberg<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherberg<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Gletscherhügel<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkan<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_TWO_STATISTICS]
++15<L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_TWO_GAMEPLAY]
-Smaragde gehören zu den wertvollsten Edelsteinen der Welt. Sie zeichnen sich durch ihre tiefgrüne Färbung aus und sind in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Bergen<e> und <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandbergen<e> zu finden.
+Smaragde gehören zu den wertvollsten Edelsteinen der Welt. Sie zeichnen sich durch ihre tiefgrüne Färbung aus und sind in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Bergen<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandbergen<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherbergen<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Gletscherhügeln<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkanen<e> zu finden.
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Smaragde sind sehr wertvolle Edelsteine. Sie sind eine grüne Sorte des Minerals Berylium. Die feinsten Smaragde werden in Kolombien gefunden. Andere Fundstätten sind Russland, Zimbabwe und Australien. Der orientalische Smaragd ist die durchsichtige grüne Sorte des Korund.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefsee<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Meeresriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Meerescanyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_TWO_GAMEPLAY]
-Riesenkraken sind sehr seltene Tiere, die aber gelegentlich in <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefseegewässern<e> zu finden sind. Sie gelten als begehrtes und wertvolles Nahrungsmittel und dienen auch der Gewinnung anderer Rohmaterialien.
+Riesenkraken sind sehr seltene Tiere, die aber gelegentlich in <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefseegewässern<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Meeresriffen<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Meerescanyons<e> zu finden sind. Sie gelten als begehrtes und wertvolles Nahrungsmittel und dienen auch der Gewinnung anderer Rohmaterialien.
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_TWO_HISTORICAL]
+Der Riesenkrake, in Jules Vernes' Klassiker "Zwanzigtausend Meilen unter dem Meer" als die Personifizierung der gerechten Strafe des Käpt'n Nemo dargestellt, ist eine seit Hunderten von Jahren legendäre Kreatur. Er wird gelegentlich bis zu 18 Meter lang und wiegt über eine Tonne. Riesenkraken werden eher tot in den Mägen von Pottwalen aufgefunden als lebend im Meer. Die aus ihm gewonnenen Rohstoffe können in jeglicher Form weiterverarbeitet werden, angefangen mit Seife und Farben über Chemikalien bis hin zu Flüssigkristallen.
+[END]
+
+[TERRAIN_DESERT_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Wüste<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sandhügel<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_DESERT_GOOD_ONE_GAMEPLAY]
@@ -3111,11 +3250,33 @@ Der Sand der <L:DATABASE_TERRAIN,TERRAIN_DESERT>Wüste<e> und der <L:DATABASE_TER
 [TERRAIN_DESERT_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_HILL_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hügel<e>. 
+[END]
+
+[TERRAIN_HILL_GOOD_TWO_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
 [TERRAIN_HILL_GOOD_TWO_GAMEPLAY]
 Trauben wachsen im gemäßigten Klima von <L:DATABASE_TERRAIN,TERRAIN_HILL>Hügellandschaften<e>. Diese Frucht ist nicht nur eine beliebte Obstsorte, sondern kann außerdem auch zu Wein verarbeitet werden, der von Edelleuten wie normalen Bürgern gleichermaßen geschätzt wird.
 [END]
 
 [TERRAIN_HILL_GOOD_TWO_HISTORICAL]
+Der Verzehr von Wein galt schon im antiken Griechenland als ein willkommener Zeitvertreib. Im Laufe der Jahrhunderte hat sich das Handwerk der Weinherstellung und des Weinbaus ebenso zu einer ausgeklügelten Wissenschaft wie zu einer Kunst der exquisiten Mischgenauigkeit entwickelt. Die Grundlage eines jeden erlesenen Weins sind die Trauben, aus denen er hergestellt wird. Bei den meisten Weinen werden verschiedene Traubensorten vermischt und verbinden sich so zu einem besonderen Bouquet. Die besten Weine werden allerdings aus der Ernte der weltweit besten Weinanbaugebiete gewonnen, wo sich die hervorragende und einzigartige Beschaffenheit des Bodens auf die Qualität der Trauben überträgt, die dort wachsen.
+[END]
+
+[TERRAIN_FOREST_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Wald<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
 [END]
 
 [TERRAIN_FOREST_GOOD_ONE_GAMEPLAY]
@@ -3125,11 +3286,33 @@ Exotisches Hartholz ist in <L:DATABASE_TERRAIN,TERRAIN_FOREST>Wäldern<e> zu find
 [TERRAIN_FOREST_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_JUNGLE_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Dschungel<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
 [TERRAIN_JUNGLE_GOOD_TWO_GAMEPLAY]
 Jade ist ein begehrter Halbedelstein zur Fertigung von Schmuck und zeremoniellen Gewändern. Jadevorkommen sind sehr selten und ausschließlich in <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Dschungelgebieten<e> zu finden.
 [END]
 
 [TERRAIN_JUNGLE_GOOD_TWO_HISTORICAL]
+In Form von kunstvoll geschnitzten Ornamenten wurden Nephrit und Jadeit, beides schlicht als Jade bezeichnet, schon seit langem verehrt. Die eher praktisch veranlagten Menschen der Antike benutzten diese stahlharten Steine jedoch, um Waffen und Äxte daraus zu fertigen. Für die asiatische Bevölkerung, insbesondere in China, hat Jade seit mehr als 8000 Jahren eine religiöse Bedeutung. Der Jade-Buddha beispielsweise, eine 60 cm hohe Statue, die aus kaiserlicher Jade gefertigt wurde, galt jahrhundertelang als das höchste heilige Relikt Thailands.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Dschungel<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_JUNGLE_GOOD_ONE_GAMEPLAY]
@@ -3139,18 +3322,56 @@ Medizinische Kräuterpflanzen werden wegen ihrer heilenden Wirkung geschätzt. Ins
 [TERRAIN_JUNGLE_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_DESERT_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Wüste<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
 [TERRAIN_DESERT_GOOD_TWO_GAMEPLAY]
 Ölvorkommen sind selten und wegen ihres Nutzens zur Brennstoffgewinnung sehr begehrt. Das "schwarze Gold" ist in der <L:DATABASE_TERRAIN,TERRAIN_DESERT>Wüste<e> und in <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sandhügeln<e> zu finden.
 [END]
 
 [TERRAIN_DESERT_GOOD_TWO_HISTORICAL]
+Während es im 20. Jahrhundert zu einem der wichtigsten Rohstoffe avancierte, waren die Verwendungsgebiete von Erdöl und seinen Nebenprodukten im Verlauf der Geschichte vielfältig. Man vermutet, daß die Sumerer bereits um 3000 v. Chr. Öllampen benutzten. Petroleum, ein Desillationsprodukt des Erdöls, wurde hingegen bis zum 19. Jahrhundert, als es als sauberes und preiswertes Lampenöl entdeckt wurde, fast ausschließlich in der Medizin verwendet. Zehn Jahre nachdem 1849 in Amerika der Goldrausch ausgebrochen war, schickte der amerikanische Bundesstaat Pennsylvania während des Ölrauschs Ölsucher gen Osten. Kurze Zeit später begann auch im mittleren Osten die Suche nach Öl.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriff<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_TWO_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_TWO_GAMEPLAY]
-<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwassergebiete<e> gelten als Hauptfundorte von Austern. Diese Muschel verwandelt Sandkörner in ein begehrtes Handelsgut, das wegen seiner Einzigartigkeit wie auch seiner Seltenheit geschätzt wird: Perlen. Die weißen Kügelchen werden in erster Linie zur Fertigung von Schmuck verwendet und besitzen stets einen hohen Marktwert.
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwassergebiete<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriffe<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriffe<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriffe<e> gelten als Hauptfundorte von Austern. Diese Muschel verwandelt Sandkörner in ein begehrtes Handelsgut, das wegen seiner Einzigartigkeit wie auch seiner Seltenheit geschätzt wird: Perlen. Die weißen Kügelchen werden in erster Linie zur Fertigung von Schmuck verwendet und besitzen stets einen hohen Marktwert.
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_TWO_HISTORICAL]
+Schon seit Anbeginn der Zeit galten Perlen als wertvoll, und deshalb machten sich die meisten Zivilisationen auf die Suche nach ihnen. Der chinesischen Kaiserin Shun wird nachgesagt, daß sie im Jahre 2250 v. Chr. einen Perlentribut erhalten habe, und Kleopatra soll eine große Perle in einem Glas Wein aufgelöst und dann getrunken haben, um Mark Anton mit dem grenzenlosen Reichtum ihres Königreiches zu beeindrucken. Die erste erfolgreiche Perlenfarm wurde im Jahre 1906 in Espiratu Santo Island im Mexikanischen Golf von Kalifornien eröffnet und begründete die Wissenschaft der Perlenzucht.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherberg<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkan<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_GAMEPLAY]
@@ -3158,6 +3379,18 @@ Rubine werden in den unwirtlichen Gegenden der <L:DATABASE_TERRAIN,TERRAIN_WHITE
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_HISTORICAL]
+Der Legende nach wurden die Rubine im dritten Ei der Riesenschlange Naga erschaffen - dem ersten Ei entschlüpfte Pyusawati, der König der Heiden. Rubine sind die rote Variante der Korunden, das zweithärteste natürliche Mineral. Alle andersfarbigen Korunden heißen Saphire. Dank ihrer Härte und Widerstandsfähigkeit gibt es, abgesehen von ihrem dekorativen Gebrauch, eine Vielzahl von Verwendungsgebieten für Rubine.
+[END]
+
+[TERRAIN_PLAINS_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_PLAINS_GOOD_ONE_GAMEPLAY]
@@ -3165,6 +3398,19 @@ In der <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e> wachsen verschiedenartige Pf
 [END]
 
 [TERRAIN_PLAINS_GOOD_ONE_HISTORICAL]
+Gewürze sind aromatischen Pflanzenprodukte, die als Aromastoffe oder Würzen benutzt werden. Es gibt anregende Gewürzen (wie Pfeffer und Senf), aromatische Gewürze (wie Nelken, Muskatnuts und Muskatblüte) und süße Kräuter (wie Thymian und Minze). Sie werden als Puder, Tinkturen oder als Ganzes verwendet.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Berg<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandberg<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_ONE_GAMEPLAY]
@@ -3172,6 +3418,17 @@ In der <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e> wachsen verschiedenartige Pf
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_ONE_HISTORICAL]
+Die Teepflanze (Sinensis Thea, Camellia Thea oder C-Sinensis) ist ein immergrüne Verwandte der Kamelie. Sie ist in Indien und vermutlich auch in Teilen von China und Japan heimisch. In der Wildniss erreicht sie eine Höhe von bis 9 Meter, aber in der Landwirtschahft wird sie normalerweise auf eine Höhe von 90 bis 150 Zentimeter zurückgeschnitten. Teepflanzen benötigen einen gut entwässerten Lebensraum im warmen Klima mit reichlich Niederschlag. Die Blätter werden durch Trocknen, Rollen und anschließenden brennen verarbeitet. Schwarze Tees (wie Pekoes) werden vor dem Brennen, anders als grüne Tees, gegoren; Oolongtees werden teilweise gegoren. Anregende Eigenschaften des Tees liegen in seinem verhältnismäßig hohen Koffeininhalt plus seiner Strenge zur Gerbsäure. Seit prähistorischen Zeiten in China behaimatet, wurde Tee im kommerziellen Maßstab dort seit dem 8. Jahrhundert produziert. Tee wurde in Europa durch die holländische <L:DATABASE_WONDERS, WONDER_EAST_INDIA_COMPANY>Ostindische Kompanie<e > im 17. Jahrhundert eingeführt und seine Popularität half die Öffnung Ostasiens für den westlichen Handel anzutreiben. In Kolonialamerika führte eine Steuer auf Tee zu der Bostonteeparty 1773. Heute wird Tee von mehr Leuten und in größerer Menge als jedes andere Getränk nach Wasser verbraucht.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Weideland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_TWO_GAMEPLAY]
@@ -3179,13 +3436,779 @@ In der <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e> wachsen verschiedenartige Pf
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_TWO_HISTORICAL]
+Der spanische Entdecker Luis de Torres war der erste Tabakraucher Europas. Zu sehen, wie der Rauch aus seinem Mund aufstieg, war für die spanischen Inquisitoren Grund genug, ihn für sieben Jahre in den Kerker zu werfen. Als er freigelassen wurde, war das Rauchen von Zigarren schon Mode geworden. Innerhalb von 100 Jahren wurde das Rauchen von Tabak bei 36 Krankheiten einschließlich Zahnschmerzen, Atemnot und Krebs als Heilbehandlung verschrieben. Eine noch größere Bedeutung kam dem Tabak allerdings als wirtschaftlicher Faktor zu: Im 17. und 18. Jahrhundert galt er in den amerikanischen Kolonien als Währungsstandard und blieb es doppelt so lange wie Gold.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefsee<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Meeresriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Meerescanyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_ONE_GAMEPLAY]
-Wale sind in <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefseegewässern<e> beheimatet und dienen der Nahrungs- und Brennstoffgewinnung sowie zur Herstellung von Kleidung und Waffen.
+Wale sind in <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefseegewässern<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Meeresriffen<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Meerescanyons<e> beheimatet und dienen der Nahrungs- und Brennstoffgewinnung sowie zur Herstellung von Kleidung und Waffen.
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_ONE_HISTORICAL]
+Die Verfechter des Walfangs begründen ihr Anliegen damit, daß jeder Teil des Wals brauchbar ist und zu Öl, Schuhcreme, Parfüm, Dünger, Seife, Shampoo und anderen Produkten verarbeitet werden kann. Seit der Gründung der internationalen Walfangkommission im Jahre 1946 lautet die Antwort darauf, daß die Wale geschützt werden müssen, um sie vor dem Aussterben zu bewahren. Aber Selbstlosigkeit war nicht der einzige Beweggrund für diese Zusammenkunft der Nationen. Vielmehr waren kommerzielle Nutznießer besorgt, daß es durch vermehrten Walfang zu einer zu hohen Ausbeute und infolgedessen zu einem Verfall der Preise kommen könnte.
+[END]
+
+####Added for GoodMod###
+
+[TERRAIN_SWAMP_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpf<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_GAMEPLAY]
+Reis ist eine Getreideart (Oryza sativa) der Grasfamilie, wahrscheinlich beheimatet am Ganges, Chang (Yangtze) und im Delta des Euphrates. Zu finden is Reis nur in feuchten <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpfgebieten<e>, und stellt den Massen riesige <L:DATABASE_CONCEPT,CONCEPT_FOOD>Nahrungsmengen<e> zur Verfügung.
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_HISTORICAL]
+Reis benötigt Wärme und reichlich Feutigkeit, die Pflanze ist einjährig, 60 bis 180cm groß, hat einem runden, gegliderten Stamm, lange, spitze Blätter, und Samen die in einem dichten Kopf auf einzelnen Halmen getragen werden. Tausende von Reissorten sind bekannt, sowohl Kultur- als auch Wildformen. Geschätzt wird, dass sich die Hälfte der Weltbevölkerung ganz oder teilweise vom Reis ernährt. Die größten Reisproduzenten sind China, Indien,Indonesien,Bangladesch und Thailand. Der größte Teil des Reises wird zum Eigenbedarf angebaut. Brauner Reis hat einen größeren Nahrungswert als Weißer, da die äußere Schale (welche wegpolliert wird um zum weißen Reis zu kommen) Proteine und Mineralien enthält, während das weiße innere Samenkorn häuptsächlich aus Kohlenhydraten. Im Vergleich zu anderen Gedreidesorten Reis ist arm an Fetten und Eiweisen. Das Sake Getränk ist aus Reis gebraut.
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpf<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_GAMEPLAY]
+Chilli kann man in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpfgebieten<e> finden. 
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpf<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_GAMEPLAY]
+Torf kann man in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpfgebieten<e> finden. 
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Wald<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_GAMEPLAY]
+Biber leben in den Wasserläufen der <L:DATABASE_TERRAIN,TERRAIN_FOREST>Wälder<e>. Wegen ihres Pelzes werden sie von den Menschen gejagt.
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_HISTORICAL]
+Biber sind große Nagetiere, deren Erlegung in den Vereinigten Staaten und Kanada zu Reichtum und zur Erforschung des friedlichen Nordwestens führte. Der Wert seines Pelzes war im 17., 18. und 19. Jahrhundert enorm groß. Der Name des Nationalparks Conconully State Park in Washington wurde von dem Wort "Konekol'p" aus der Sprache der Eingeborenen abgeleitet, was soviel bedeutet wie "Geldloch" und auf die vielen Biber in dieser Gegend verweist. Wirklich reich wurden aber lediglich diejenigen, die im großen Stil mit den Pelzen handelten, wie z. B. John Jacob Astor, Amerikas erster Millionär.
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_GAMEPLAY]
+Ausgeschnitten!
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hügel<e>
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_GAMEPLAY]
+Uran ist ein dichtes, radioaktives, silbernes Metall. Man findt es in <L:DATABASE_TERRAIN,TERRAIN_HILL>Hügeln<e>. 
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_HISTORICAL]
+Im Jahre 1789 hat der deutsche Chemiker Martin Klaproth das chemische Element Uran endeckt. 150 Jahre nach seiner Endickung, fand man die am weitesten reichenenden Wirkungen aller Elemente bei Uran. Uran befindet sich nur in zwei bis vier Teilen von einer Million in der Erdkruste. Es gibt nur wenige Lagerstätten deren Erz mehr als 0,2% Uran enthält. Hunderte von Mineralien enthalten Uran. Zum Beispiel Uranit und Carnotit sind reichhaltige Mineralien, die relativ hohe Konzentrationen von Uran entahlten. Pechblende bekannt aus der frühen Erforschung radioaktiver Elemente, ist eine Variante von Uranit. Die USA und Kanada besitzen große Uranvorkommen. Australien hat reiche Vorkommen in seinen Nordterritorien. Süd Afrika und Kannada sind die Hauptlieferanten von Uran.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Weideland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_GAMEPLAY]
+Kartoffeln findet man auf <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Weideland<e>.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriff<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_GAMEPLAY]
+Lachs ist ein Fisch den man im <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser<e>, 
+ <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriff<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriff<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriff<e> findet.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_HISTORICAL]
+Lachs ist ein Seefisch aus der Salmonidae Familie, der in Süßwasser laicht. Die heringartigen Salmonidae sind charakterisiert durch eine weiche, strahlenlose, fleischige Fettflosse und sie leben im kalten, sauerstoffreichen Wasser. Im Allgemeinen sind sie einheitlich Silber gefärbt. Der atlantische Lachs (genus Salmo), einst weit verbreitet, wird durch Verschmutzung, Talsperren und Überfischung bedroht. Lachse fressen im Meer Krustentiere, auf dem Weg zu ihren Laichgebieten ernähren sie sich von kleinen Fischen und erreichen so ein Gewicht bis zu 7 Kilogramm. Der pazifische Lachs (genus Oncorhynchus), umfasst fünf Einzelarten, ist komerziell gesehen der Wichtigste. Der größte, der Chinock, kann bis zu 45 Kilogramm erreichen; der Blaurücken bildet den Hauptteil von Dosenlachs. Pazifische Lachse sind berühmt für ihre strapaziösen Reisen von hunderten Kilometern zu ihren Geburtsgewässern. 
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherberg<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+Bauxit ist ein hydratisierte Mischung aus Metaloxiden, die man <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherbergen<e> findet.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_HISTORICAL]
+Bauxit ist eine Mischung aus hydratisierten Aluminiumoxiden, gewöhnlich enthält es auch Eisen- und Siliziumoxiden. Eine nicht kristaline Substanz, die früher für ein Mineral gehalten wurde, Bauxit ist Lehmartig, gefärbt von weiß bis braun oder rot. Es ist die Hauptquelle von Aluminium und seinen Verbindungen. Es wird überall in der Welt gehandelt und die wichtigsten Lagerstätten liegen in Afrika, Süd Amerika, Frankreich, auf den West Indischen Inseln und den USA.
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_GAMEPLAY]
+Büffel sind in der <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e> beheimatet. Hierbei handelt es sich um eine Tierart, die dem Menschen über die Nahrungsgewinnung hinaus zu vielseitigen weiteren Zwecken dienen kann.
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Berg<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+Kohle findet man <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Bergen<e>. Sie wird verbrannt um Energie zu gewinnen.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_HISTORICAL]
+Kohle ist eine Brennstoffsubstanz von pflanzlichen Ursprung, die größtenteils aus Kohlenstoff mit einigen Verunreinigungen mineralischen Ursprungs besteht. Kohle gehört einer Serie kohlenstoffhaltigen Brennstoffen an, die relativ unterschiedliche Mengen an Feuchtigkeit, flüchtigen Gasen und festen Kohlenstoff zu einander besitzen. Die brauchbarste Art von Kohle enthält der ziemlich viel Kohlenstoff, wenig Feuchtigkeit und wenig flüchtige Gase. Die reinste Art von Kohle ist Anthrazit, oder Hartkohle, die beinahe aus reinem Kohlenstoff besteht und als Hausbrennstoff benutzt wird. Bituminöse Kohle, oder Weichkohle, mit einem geringen Kohlenstoffgehalt, wird als ein industrieller Kraftstoff und zur Herstellung von Koks benutzt. Braunkohle und Torf besitzen den niedrigsten Kohlenstoffgehalt von allen Arten von Kohle. Ziemlich viel Kohle wurde in der Karbonzeit (ungefähr vor 280 bis 345 Million Jahren) gebildet. Man nimmt an, daß sich große Mengen pflanzlichen Materials in Sümpfen gesammelt hat, und dort langsam verrottet ist, ähnlich wie es noch heute in Torfmooren und Lagunen geschiet. Der Torf, der sich gebildet hatte, wurde zunächst in Braunkohle und schließlich in Kohle umgewandelt. Im Laufe der Zeit sammelten sich Schichten aus Sedimenten und Felsen auf der organischen Materie an, so dass der enorme Druck, der dardurch enstand, aus ihr alle flüchtigen Gase presste, so dass zwischen Betten und Flözen aus kompakter Kohle Schiefer, Ton, oder Sandstein geschichtet ist. Mehr Kohle entstand dort, wo der Druck am größten war. Die Hauptkohlegebiete der USA in den Appalachen, dem Mittleren Westen,in den Rocky Mountain, und entlang der Golf Küste. Die Hauptkohleproduzenten Europas sind Russland, die Ukraine, Polen, Deutschland, Groß Britannien, Frankreich, und Belgien. Reichhaltige Kohle Vorkommen existieren außerdem auch in China, Indien, Süd Afrika, und Australien. 
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_GAMEPLAY]
+Ausgeschnitten!
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Wüste<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_GAMEPLAY]
+Datteln sind die Früchte der Dattelpalme (Phoenix dactylifera). Die Dattelpalme wächst in den Oasen der <L:DATABASE_TERRAIN,TERRAIN_DESERT>Wüsten<e>.
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_HISTORICAL]
+Datteln sind wahrscheinlich in Arabien und dem nördlichen Afrika beheimatet und seit Langem eine Hauptnahrungsquelle in <L:DATABASE_TERRAIN,TERRAIN_DESERT>wüsten<e> und tropischen Regionen. Die süßen, nahrhaften Früchte wachsen in schweren Büscheln; ein Baum kann bis zu 90 Kilogramm jährlich tragen. Zucker und ein gegärtes Getränk werden vom Saft des Baumes hergestellt, und die Samen werden manchmal als ein Kaffeeersatz benutzt. Das Holz des Stammes wird zum Bau benutzt, und Matten und Körbe werden aus den Blättern gewebt. 
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hügel<e>
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_GAMEPLAY]
+Oliven wachsen im gemäßigten Klima von <L:DATABASE_TERRAIN,TERRAIN_HILL>Hügellandschaften<e>. Aus dieser Frucht wird das Olivenöl gewonnen, das aus der mediterranen Küche nicht wegzudenken ist.
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Wald<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_GAMEPLAY]
+Äpfel sind die Früchte des Apfelbaumes, von der Gattung Malus aus der Familie der Rose. Im Allgemeinen wachsen Baume <L:DATABASE_TERRAIN,TERRAIN_FOREST>Wäldern<e> so sind Äpfel auch nur in Wäldern zu finden. 
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_HISTORICAL]
+Äpfel sind die Früchte des Apfelbaumes, von der Gattung Malus aus der Familie der Rose. Der gemeine Apfel (M. sylvestris) ist die bekannteste und wichtigste gewerbliche genutzte Frucht. Er ist westlichem Asien beheimatet, und wurde bereits in vorgeschichtlicher Zeit kultiviert und weit verbreitet. Es gibt Tausende von Apfelsorten, wie zum Beispiel der Golden Delicious, Winesap, Jonathan, und McIntosh. Die Frucht wird frisch oder gekocht verzehrt, oder aus ihr wird Saft gewonnen. Teilgährung von Apfelsaft (süßer Apfelwein) stellt harten Apfelwein her (von welchem Apfelschnapps gemacht wid); vollstandig vergärter Apfelsaft ergibt Apfelessig. Das Holz dieht als Rohmaterial für Tischlerrein aber wird auch als Brennstoff verwendet. Die Frucht des Holzapfelbaumes, der als Zierbaum kultiviert wurde, wird für Gelees und Eingemachtes verwendet. 
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Dschungel<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_GAMEPLAY]
+Banane ist nicht nur der Name einer Frucht sondern auch der Name einer ganzen Familie von tropischen Heilpflanzen (Musacae), für eine Gattung (Musa) von Heilkreutern. Bananen findet man nur im <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Dschungel<e>.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_HISTORICAL]
+Bananen sind wahrscheinlich in tropischem Gebieten Asiens beheimatet, aber sie sind Als Kulturpflanzen weit verbreitet. Sie sind verwandt mit dem wirtschaftlich bedeutsamen Manila Hanf und der Paradies-Vogel Blume. Bananenstauden besitzen palmenartige Kennzeichen und haben große Blätter, mit überlappenden Basen, die den sogenannten falschen Stamm bilden. Nur weibliche Blüten entwickeln die Bananenfrucht (botanisch betrachtet eine Beere). Jede Pflanze kann nur einmal Früchte tragen. Die Samen sind steril, deshalb erfolgt die Fortpflanzung durch Ableger vom Wurzelstock. Bananen sind ein wichtiges Hauptnahrungmittel in tropischen Gebieten.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Dschungel<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_GAMEPLAY]
+Zucker wird aus dem Zuckerrohr gewonnen, das im <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Dschungel<e> angebaut wird, wo dank der dichten Vegetation und der Feuchtigkeit ideale Wachstumsbedingungen herrschen.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_HISTORICAL]
+Erste ernsthafte Anstrengungen, Zucker aus Zuckerrüben zu gewinnen und anschließend zu raffinieren, wurden in Europa während der napoleonischen Kriege unternommen, als der aus Zuckerrohr gewonnene Zucker nicht mehr verfügbar war. Aber dies war bei weitem nicht das erste Mal, daß ein Krieg mit dem Schicksal des Zuckers in Zusammenhang stand. Mehr als 100 Jahre zuvor, im Jahre 1764, löste die Entscheidung der Briten, die amerikanischen Kolonien mit einer neuen Melassesteuer, dem sogenannten "Zuckergesetz" zu belegen, die amerikanische Revolution aus.
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Wüste<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sandhügel<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_GAMEPLAY]
+Kamele leben in der <L:DATABASE_TERRAIN,TERRAIN_DESERT>Wüste<e> und <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sandhügeln<e>. Sie sind optimal an ein Leben in der heißen und so gut wie feuchtigkeitslosen Umgebung angepasst. Der Mensch nutzt sie schon seit langen Zeiten als Lasttiere für den Gütertransport in diesen Gegeenden.
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriff<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_GAMEPLAY]
+Hummer sind große marine Schalentiere, die in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwassergebieten<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriffen<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriffen<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriffen<e> leben.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_HISTORICAL]
+Hummer sind große marine Schalentiere mit fünf gegliederten Beinpaaren - das erste Paar trägt große zangenartige Klauen von ungleicher Größe, die zum Zerquetschen der Schalen seiner Beutetiere angepasst sind. Der dunkl-grüne gemeine amerikanische Hummer (Homarus americanus) wird von Labrador bis Nord Carolina, aber hauptsächlich entlang der Küsten Neu-Englands gefunden. Wenn Hummer gekocht werden, verfärbt die Schale sich hell rot. Hummerfleisch wird als eine Delikatesse angesehen.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Berg<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandberg<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherberg<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Gletscherhügel<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkan<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+Smaragde gehören zu den wertvollsten Edelsteinen der Welt. Sie zeichnen sich durch ihre tiefgrüne Färbung aus und sind in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Bergen<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandbergen<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherberge<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Gletscherhügeln<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkanen<e> zu finden.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+Smaragde sind sehr wertvolle Edelsteine. Sie sind eine grüne Sorte des Minerals Berylium. Die feinsten Smaragde werden in Kolombien gefunden. Andere Fundstätten sind Russland, Zimbabwe und Australien. Der orientalische Smaragd ist die durchsichtige grüne Sorte des Korund.
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_GAMEPLAY]
+Weizen ist eine Getreideart (Gattung Triticum) aus der Familie der Gräse.Es handelt sich um eine Hauptnahrungspflanze und um ein sehr wichtiges Erzeugnis für den weltweiten Getreide Markt. Weizen ist in der <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Steppe<e> zu finden.
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_HISTORICAL]
+Weizen ist eine einjährige Pflanze (vermutlich von einer mehrjährigen abgeleitet), die am besten wächst, wo das Wetter kühl während ihrer frühen Wachstumsphase ist. Moderne Weizen Sorten werden gewöhnlich als Winterweizen (im Herbst gepflanzt und außergewöhnlich winterhart) und Frühjahrsweizen (im Frühling gepflanzt) klassifiziert. Das Mehl von Hartkernsorten (harter Weizen) zeichnet sich durch seinen hohen Glutengehalt aus, aus dem Brote gemacht werden; Weichkernsorten (weicher Weizen) sind stärkehaltiger, und ihr Mehl wird für Kuchen und Kekse verwendet. Hartweizen ist ein sehr hartkerniger Weizen welcher für Nudelprodukte verwendet wird. Weizen wird auch zur Herstellung von Bier und Whiskey benutzt, und das Stroh, die Kleie (der Rückstand vom Mahlen), und die restliche Pflanze ist wertvolles Viehfutter. Weizen war eines der ersten kultivierten Getreidearten: Brot Weizen wuchs im Niltalbereits 5000 v.Chr. Größere moderne Weizenanbaugebiete schließen Nord-Amerika, China, West-Europa, die Ukraine, Kasachstan, Russland, Indien, Pakistan, und Australien mitein.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Berg<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+Gold ist ein sehr wertvolles Edelmetall, und wird sogar als Zahlungsmittel verwendet. Man findet es in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Bergen<e>.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+Gold (Au) ist ein Metallelement, bekannt seit vorgeschichtlichen Zeiten. Chemisch untätig kann, kann dieses sehr verformbare und sehr weiche Metall in dünne goldene Blätter geschlagen werden. Nur Silber und Kupfer leiten Elektrizität besser. Gold wird gewöhnlich durch Vermischung mit anderen Metallen gehärtet; es findet sich auch oft in Natur als in einer eine Legierung vor. Der Goldgehalt einer Legierung wird in Karat gemessen. Durch Definition besitzt reines Gold 24 Karat, und folglich besitzt ein 75 prozentige Goldlegierung 18 Karats. Gold findet man weit verteilt, meistens in Metallform als Staub, Körner, Flocken, oder Nuggets. Es kommt in Quarzadern vor, gewöhnlich in Verbindung mit Silber oder anderen Metallen, und wird an Anschwemmungsplätzen abgelagert. Hauptgoldfördere sind Süd Afrika, Russland, Kanada, und die USA. Vielleicht war Gold das erste Metall, das von Menschen benutzt wurde, Gold wurde für Verzierungen geschätzt, und magische Kräfte wurden ihm zugeschrieben. Alchemisten des Mittelalters haben versucht Grundmetalle in Gold zu verwandeln. Die Suche nach Gold hat die europäische Erforschung der westlichen Hemisphäre angeregt.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Weideland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_GAMEPLAY]
+Mohn wächst auf <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Weideland<e> und wird von den Menschen zur Herstellung von Medikamenten verwendet.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_HISTORICAL]
+Es gibt viele Arten von Mohn, aber eine Sorte erlangte besondere Berühmtheit: Papaver sominferum, besser bekannt als Opium. Die Chinesen, die den Inhalt der unreifen Fruchtkapseln dieser Mohnsorte im 15. Jahrhundert als schmerzstillendes Mittel entdeckt hatten, erließen im Jahre 1729 das erste Gesetz gegen das Rauchen von Opium. Nichtsdestotrotz brachten die Exporte des auf den Mohnfeldern in Britisch-Indien gewonnenen Opiums nach China ansehnliche Profite, woraufhin es in den Jahren 1839 bis 1842 zum Opiumkrieg kam. Nachdem China den Krieg verloren hatte, mußte es Hongkong an England abtreten und mehrere Häfen für den englischen Handel öffnen. Bis zu den 90er Jahren wurde alleine in Amerika mit dem Handel von Heroin, einer Droge, die ebenfalls aus dem Opium-Mohn gewonnen wird, ein Jahresumsatz von 10 Milliarden Dollar erzielt.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefsee<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Meeresriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Meerescanyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_GAMEPLAY]
+Thunfische sind große Fische, die in der <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefsee<e>, in <L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Meeresriffen<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Meerescanyons<e> leben.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_HISTORICAL]
+Thunfisch ist der größte Fisch aus der Makrelenfamilie. Gejagt zum Spaß und als Nahrung (wiegt ungefär 4.5 Kilogramm), schließt die Familie den kleinen Thunfisch vom Atlantik, die wichtigste gewerbliche genutzte Thunfischart mitein. Der Blauflossenthunfisch (Thunnus thynnus) ist der Riese der Knochenfische (90-225 Kilogramm). Schließlich wird der pazifische Weißkern (bis zu 27 Kilogramm) auf den Markt als Weißfleischthunfisch gebracht.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Wüstenhügel<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_GAMEPLAY]
+Kupfer ist ein Metall, das in <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Wüstenhügeln<e>gefunden wird.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_HISTORICAL]
+Kupfer (Cu) ist ein Metallelement, das dem Menschen bereits seit der Bronzezeit bekannt ist. Dieses rötlich-braune, weiche, verformbares Metall ist ein sehr guter Leiter von Wärme und Strom. Chemisch gesehen ist es reaktionsträge. In feuchter Luft jedoch bildet es eine Patina, die sich wie ein schützender, grünlicher Film über die Oberfläche legt. Hauptsächlich wird Kupfer für elektrische Apparate und Draht, im Dachbau, für Werkzeuge, Münzen, Metallarbeiten, Rohrleitungsinstallationen, und Kondensationsspulen verwendet. Zu den Kupferlegierungen gehören Messing und Bronze. Kupfer Mischungen werden als Pilz- und Insektengifte sowie als Farbpigmente benutzt. Sie werden auch beim Galvanisieren verwendet. Kupfer ist ein wesentlich Grundlage für den normalen menschlichen Stoffwechsel und der Hämoglobin Synthese im Blut. 
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Wüstenhügel<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandberg<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_GAMEPLAY]
+Silber ist ein kostbares Metall, das in <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Wüstenhügeln<e> und <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandbergen<e> gefunden wird.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_HISTORICAL]
+Silber (Ag) ist ein Metallelement. Es ist eines der ersten Metalle, das von Menschen benutzt wurde. Reines Silber ist beinahe weiß, strahlend, weich, sehr verformbar, und ein ausgezeichneter Leiter von Wärme und Strom. Es wird in Spiegeln, Münzen, Werkzeugen, Antiseptika, Scmuck, und natürlich für die elektrlytische Versilberung von Tafelgeschier und Besteck benutzt. Die wichtigste Verbindung dieses Elementes ist Silbernitrat. Silber reagiert mit Wasserstoffsulfid an der Luft zu Silbersulfid (angelaufendes Silber). Photographische Emulsionen enthalten Silberbestandteile, die sehr lichtempfindlich sind. Silberlegierungen werden in der Zahnheilkunde und für elektrischen Kontakte benutzt. Sterlingsilber enthält 92.5 Prozent Silber und 7.5 Prozent Kupfer. Silber ist in den Erzen Argentit, Cerarygrit, Pyrargyrit, Stephanit und Proustit erhalten. 
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Gletscherhügel<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkan<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_GAMEPLAY]
+Saphire sind kostbare Edelsteine, die in <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Gletscherhügeln<e>gefunden werden können. 
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_HISTORICAL]
+Saphire sind kostbare Edelsteine, die eine durchsichtige blaue Sorte des Korunds sind. Sapphire werden hauptsächlich in Thailand, Indien, Sri Lanka, und Myanmar gefunden. Wie Rubine zeigen einige Sapphire einen inneren Stern, wenn sie am Oberteil einen runden Schnitt besitzen. Künstliche Sapphire werden durch Verschmelzen von Aluminiumoxid mit Titanoxid letzteres für die Farbe hergestellt. 
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Berg<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandberg<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherberg<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Gletscherhügel<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkan<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_GAMEPLAY]
+Smaragde gehören zu den wertvollsten Edelsteinen der Welt. Sie zeichnen sich durch ihre tiefgrüne Färbung aus und sind in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Bergen<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandbergen<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Gletscherberge<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Gletscherhügeln<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Meeresvulkanen<e> zu finden.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_HISTORICAL]
+Smaragde sind sehr wertvolle Edelsteine. Sie sind eine grüne Sorte des Minerals Berylium. Die feinsten Smaragde werden in Kolombien gefunden. Andere Fundstätten sind Russland, Zimbabwe und Australien. Der orientalische Smaragd ist die durchsichtige grüne Sorte des Korund.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandberg<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_GAMEPLAY]
+Eisen ist ein Metall, das in <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandbergen<e> gefunden wird.
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_HISTORICAL]
+Eisen (Fe) ist ein strahlendes, verformbares, weiches, silber-graues Metall. Ein guter Leiter von Wärme und Strom, es wird leicht von Magneten angezogen und ist leicht magnetisierbar. Eisen ist reichlich im Universum vorhanden. Es kommt in der Sonne und vielen Sternen vor. Es ist das vierthaufigste Element in der Erdkruste, und es macht ungefähr 5 Prozent ihrer Masse aus. Man glaubt, dass der Erdkern zum größten Teil aus Eisen besteht. Eisen kommt selten in der Natur rein vor, wenn man mal von Meteoriten absieht. Es rostet ziemlich rasch an feuchter Luft. Limonit und Hematit sind die häufigsten Eisenerze; andere Erze bestehen außerdem aus Magnetit, Taconit, und Siderit. Eisenerze werden im Hochofen raffiniert, um Roheisen herzustellen, das dann wieder eingeschmolzen und in Formen zum Gußeisen gegossen werden kann, zum einen wurde es zu Schmiedeeisen weiter verarbeitet, zum anderen wird es heute mit Kohlenstoff und anderen Elementen versetzt um Stahl herzustellen. Eisen Mischungen werden als Farbpigmente, beim Färben, und zur Tintenherstellung benutzt. Es ist ein Bestandteil des Hämoglobins, der Farbstoff der Roten Blutkörperchens und Sauerstoffträger zugleich von Wirbeltieren, daher ist Eisen wichtig für die Ernährung; eine Ursache für Blutarmut (Anämie) ist Eisenangel. 
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Wüstenhügel<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandberg<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_GAMEPLAY]
+Silber ist ein kostbares Metall, das in <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Wüstenhügeln<e> und <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Sandbergen<e> gefunden wird.
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Silber (Ag) ist ein Metallelement. Es ist eines der ersten Metalle, das von Menschen benutzt wurde. Reines Silber ist beinahe weiß, strahlend, weich, sehr verformbar, und ein ausgezeichneter Leiter von Wärme und Strom. Es wird in Spiegeln, Münzen, Werkzeugen, Antiseptika, Scmuck, und natürlich für die elektrlytische Versilberung von Tafelgeschier und Besteck benutzt. Die wichtigste Verbindung dieses Elementes ist Silbernitrat. Silber reagiert mit Wasserstoffsulfid an der Luft zu Silbersulfid (angelaufendes Silber). Photographische Emulsionen enthalten Silberbestandteile, die sehr lichtempfindlich sind. Silberlegierungen werden in der Zahnheilkunde und für elektrischen Kontakte benutzt. Sterlingsilber enthält 92.5 Prozent Silber und 7.5 Prozent Kupfer. Silber ist in den Erzen Argentit, Cerarygrit, Pyrargyrit, Stephanit und Proustit erhalten. 
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_HISTORICAL]
+´[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_GLACIER>Gletscher<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_GAMEPLAY]
+Seerobben sind Marine Säugetiere, die in <L:DATABASE_TERRAIN,TERRAIN_GLACIER>Gletschern<e> zu Hause sind.
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_HISTORICAL]
+Seerobben sind Flossenfüßige Säugetiere von der Phocidae Familie, gewöhnlich im Meer lebend, mit zu Flossen modifizierten Vorder- und Hinterbeinen. Seerobben haben stromlinienförmigen Körper mit einer dicken, subkutanen Fettschicht, so dass sie am besten an kalte oder gemäßigte Breiten angepasst sind. Alle Seerobbenarten verlassen das Wasser mindestens einmal pro Jahr um sich fortzupflanzen; einige Arten nehmen für diesen Zweck große Wanderungen auf sich. Seerobben leben von Fischen und Schalentieren. Auf der Nahrungssuche erreichen sie große Tiefen, sie orientieren sich mit Hilfe von Echoortung. Richtige Seerobben besitzen keine nach außen sichtbaren Ohren. Sie sind polygam und gesellig. Zu den Hauptverbreitungsgebieten gehören: Der hohe Norden, die Antarktis, sowie die warmen Gewässer des Mittelmeeres, der Karibik, und Hawais. Seerobben werden stark für Nahrung, Pelz, Häute, und Öl gejagt. 
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_PREREQ]
+Fundort:
+
+<L:DATABASE_TERRAIN,TERRAIN_GLACIER>Gletscher<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_GAMEPLAY]
+Walrösser können auf <L:DATABASE_TERRAIN,TERRAIN_GLACIER>Gletschern<e> gefunden.
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_HISTORICAL]
+Walrösser sind Säugetiere (Odobenus rosmarus), die in der arktischen See leben. Sie sind die größten der flossenfüßigen Säugetiere,sie haben lange Stoßzähne, leicht-braune gerunzelte Haut, und borstige Backenschützer. Ein ausgewachsendes Männchen kann bis zu 1.400 Kilogramm wiegen. Walrösser leben auf Stränden nah dem seichtem Wasser in Herden von hundert Tieren und ernährt sich hauptsächlich von Schalentieren. Gejagt werden sie wegen ihres Specks, der Haut, und des Elfenbeins, sie jetzt gefährdet. 
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Strand<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriff<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriff<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_GAMEPLAY]
+Krebse sind im <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser<e>, an <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Stränden<e>, in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Felsenriffen<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Korallenriffen<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Algenriffen<e> beheimatet und dienen als teuer gehandeltes Nahrungsmittel.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_HISTORICAL]
+In der Geschichte galt der Krebs von je her als teure Delikatesse. In der jüngeren Vergangenheit wurde außerdem sein Nutzen für die Herstellung von Kosmetika und Medikamenten, für die Wasserklärung und sogar als Düngemittel entdeckt. Das Chitin, das sich in seinem Hautpanzer befindet, enthält DNS-hemmende Substanzen, die möglicherweise, und ironischerweise, eine krebshemmende Wirkung haben.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_PREREQ]
+Fundorte:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Strand<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_GAMEPLAY]
+Fische sind Wasserwirbeltiere mit Flossen, innerem Kiemen, und schuppiger Haut. Sie werden normalerweise in Fülle an <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Stränden<e> gefunden.
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_HISTORICAL]
+Die meisten Fische sind wechselwarme Wasserwirbeltiere, die mit einem glitschigen Sekret bedeckt sind um die Reibung zu vermindern. Der meisten Fische haben Schuppen. Ein typischer Fisch entspricht der Torpedoform, der Kopf enthält das Gehirn und weitere Sinnesorgane, ein kräftiger Rumpf enthält die inneren Organe, und ein muskulöser Schwanz bildet den Abschluss. Die meisten Fische schwimmen in wellenförmigen Bewegungen durchs Wasser und kontrollieren die Richtung mit ihren Flossen. Obwohl einige Fische, wie zum Beispiel Haie, lebende Junge gebären, werden die meisten Fischeier im Wasser befruchtet und und ausgebrütet. Es gibt über 20.000 Fischarten, die in drei Klassen eingeteilt werden: Agnatha, die ursprünglichsten Fische, kiefernlos und ohne gepaarten Brust- und Bauchflossen (wie zum Beispiel der Lampenfisch); Chondrichthyes, Knorpelfische, mit einem Knorpelskelett aber ohne Schwimmblase oder Lungen (wie zum Beispiel der Hai und der Rochen); und Osteichthyes, die Knochenfische, die am weitestens entwickelt sind. Knochenfische haben Knochenskelett und Schwimmblasen oder Lungen. Man unterscheidet zwischen den Fleischflossern (wie zum Beispiel dem Lappenflosser und dem Lungenfisch) und den Strahlflossern (wie zum Beispiel der Barsch). Der größte Fisch, der Riesenhai (Rhincodon typus), erreicht 15 Meter Länge und wird weltweit in tropischen Meeren angetroffen. Das kleinste ist der 1,3 Zentimeter große Gubbie (Familie Gobiidae) der Philippinen. 
+[END]
+
+[END]
+[TERRAIN_WATER_BEACH_GOOD_THREE_PREREQ]
+Fundort:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Strand<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaft<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_GAMEPLAY]
+Färbemittel können an <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Stränden<e> gefunden werden.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_HISTORICAL]
+Das Färben von Stoffen ist bereits seid mehr als drei tausend Jahre bekannt. Es ermöglichte die natürliche weiße Farbe von Seide, Wolle und Baumwolle durch ein manigfaltiges Spektrum an Farben zu erweitern. Natürliche Färbemittel werden von unzähligen Quellen hervorgebracht, einschließlich Muscheln, Tiere und Pflanzen, doch diese waren nicht immer vorhanden und häufig teuer. Daher basieren moderne Färbemittel auf künstliche, verarbeitete und leicht verfügbaren Substanzen, wie beispielsweise Kohle und andere Chemikalien. Ein Vorteil für eine Nation mit einer bedeutenden Färbemittelindustrie ist, dass die Prozesse, die zur Herstellung von Färbemitteln nötig sind, leicht für andere Zwecke modifizierbar sind. Deutschland entdeckte dies im 1. Weltkrieg, als ermittelt wurde, dass Fabriken, die küstliche Färbemittel produzierten, leicht umgerüstet werden konnten um Explosivstoffe und anderes Kriegsmaterial zu produzieren.
 [END]
 
 [GOVERNMENT_ANARCHY_PREREQ]
@@ -3255,7 +4278,7 @@ Der Kommunismus ist eine eher produktive <L:DATABASE_CONCEPTS,CONCEPT_GOVERNMENT
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_CORPORATE_REPUBLIC>Handelsrepublik<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3284,7 +4307,7 @@ Handelsrepubliken sind moderne und effiziente Nationen, die sich hoher <L:DATABA
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_DEMOCRACY>Demokratie<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3314,7 +4337,7 @@ Die Demokratie eignet sich für friedliebende, mittelgroße Nationen, denen am <L:
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_ECOTOPIA>Ökotopie<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3344,7 +4367,7 @@ In ihrem Fanatismus, die Schadenseinwirkung der Menschheit auf die Ökologie ein 
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_FASCISM>Faschismus<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3374,7 +4397,7 @@ Der Faschismus ist eine besonders harsche <L:DATABASE_CONCEPTS,CONCEPT_GOVERNMEN
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_MONARCHY>Monarchie<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3404,7 +4427,7 @@ Die Monarchie gehört zu den ersten <L:DATABASE_CONCEPTS,CONCEPT_GOVERNMENTS>Regi
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bürokratie<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3439,7 +4462,7 @@ Aristoteles' Vorstellung von der Republik verbreitete sich im größten Teil der w
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_TECHNOCRACY>Technokratie<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3469,7 +4492,7 @@ Wie der Name schon andeutet, steht die Wertigkeit der <L:DATABASE_CONCEPTS,CONCE
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theologie<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3500,7 +4523,7 @@ In theokratischen Nationen basierten die religiösen und staatlichen Gesetze auf 
 Voraussetzung:
 Enfällt
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3524,14 +4547,14 @@ Die Tyrannei ist die erste in Call To Power II verfügbare <L:DATABASE_CONCEPTS,C
 [END]
 
 [GOVERNMENT_TYRANNY_HISTORICAL]
-Die Tyrannei war in vielerlei Hinsicht die älteste und marodeste Regierungsform überhaupt. Tyrannen leiteten ihre Machtstellung ausschließlich von ihrer Fähigkeit ab, diese Position durch Anwendung physischer Stärke durchzusetzen. Der Tyrann war verpflichtet, seinen Untertanen Schutz zu gewähren, seine Ländereien zu verwalten und für das Wohlergehen der Bevölkerung zu sorgen. Doch die Tyrannei war zu allen Zeiten eine der instabilsten Staatsformen gewesen, denn die Grundfesten der Macht waren relativ einfach zu erschüttern, so dass sich tyrannische Herrscher in der Regel nicht lange halten konnten. Nur selten waren sie überhaupt in der Lage, ihre Untertanen zur Lehnstreue zu verpflichten, und oftmals blieben sie nur aus dem einzigen Grund an der Macht, weil sich noch keine ausreichend große Widerstandsbewegung gebildet hatte, um einen Putschversuch zu unternehmen. Da diese Regierungsform von der dauerhaften Verfügbarkeit zahlenmäßig überlegener und schlagkräftiger Militär- und Polizeikräfte abhängig war, standen nicht genügend Mittel für die Verwaltung insbesondere größerer Reiche zur Verfügung, so dass früher oder später Revolten ausbrachen und ein Regierungssturz unausweichlich war.  
+Die Tyrannei war in vielerlei Hinsicht die älteste und marodeste Regierungsform überhaupt. Tyrannen leiteten ihre Machtstellung ausschließlich von ihrer Fähigkeit ab, diese Position durch Anwendung physischer Stärke durchzusetzen. Der Tyrann war verpflichtet, seinen Untertanen Schutz zu gewähren, seine Ländereien zu verwalten und für das Wohlergehen der Bevölkerung zu sorgen. Doch die Tyrannei war zu allen Zeiten eine der instabilsten Staatsformen gewesen, denn die Grundfesten der Macht waren relativ einfach zu erschüttern, so dass sich tyrannische Herrscher in der Regel nicht lange halten konnten. Nur selten waren sie überhaupt in der Lage, ihre Untertanen zur Lehnstreue zu verpflichten, und oftmals blieben sie nur aus dem einzigen Grund an der Macht, weil sich noch keine ausreichend große Widerstandsbewegung gebildet hatte, um einen Putschversuch zu unternehmen. Da diese Regierungsform von der dauerhaften Verfügbarkeit zahlenmäßig überlegener und schlagkräftiger Militär- und Polizeikräfte abhängig war, standen nicht genügend Mittel für die Verwaltung insbesondere größerer Reiche zur Verfügung, so dass früher oder später Revolten ausbrachen und ein Regierungssturz unausweichlich war.
 [END]
 
 [GOVERNMENT_VIRTUAL_DEMOCRACY_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_VIRTUAL_DEMOCRACY>Virtuelle Demokratie<e>
 
-Max. Städte:  {GovernmentDB(Government[0]).TooManyCitiesThreshold}
+Max. Städte: {GovernmentDB(Government[0]).TooManyCitiesThreshold}
 Max. <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE_SETTING>Wissenschaftswert<e>: {GovernmentDB(Government[0]).MaxScienceRate}
 Wachstum: {GovernmentDB(Government[0]).GrowthRank}
 Produktion: {GovernmentDB(Government[0]).ProductionRank}
@@ -3595,7 +4618,7 @@ Unterhalt:
 [IMPROVE_AIRPORT_STATISTICS]
 Effekt:
 +{BuildingDB(Building[0]).CommercePercent} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
-Erhöhung der <L:DATABASE_CONCEPTS,CONCEPT_POLLUTION>Umweltverschmutzung<e> um {BuildingDB(Building[0]).ProductionPollutionPercent}% durch Produktion
+Erhöhung der <L:DATABASE_CONCEPTS,CONCEPT_POLLUTION>Umweltverschmutzung<e>
 [END]
 
 [IMPROVE_AIRPORT_GAMEPLAY]
@@ -3807,7 +4830,7 @@ Unterhalt:
 
 [IMPROVE_BATTLEMENTS_STATISTICS]
 Effekt:
-+{BuildingDB(Building[0]).OffenseBonusWater / 100}% Angriffe gegen Marineeinheiten 
++{BuildingDB(Building[0]).OffenseBonusWater / 100}% Angriff gegen Marineeinheiten 
 
 Orteinscränkung:
 Nur in Küstenstädten verfügbar
@@ -3860,7 +4883,7 @@ Unterhalt:
 
 [IMPROVE_BEHAVIORAL_MOD_CENTER_STATISTICS]
 Effekt:
-{BuildingDB(Building[0]).LowerCrime}% <L:DATABASE_CONCEPTS,CONCEPT_CRIME>Kriminalität<e>
+-{BuildingDB(Building[0]).LowerCrime}% <L:DATABASE_CONCEPTS,CONCEPT_CRIME>Kriminalität<e>
 [END]
 
 [IMPROVE_BEHAVIORAL_MOD_CENTER_GAMEPLAY]
@@ -4202,7 +5225,7 @@ Unterhalt:
 
 [IMPROVE_FLAK_TOWERS_STATISTICS]
 Effekt:
-+{BuildingDB(Building[0]).OffenseBonusAir / 100}% Angriffe gegen Lufteinheiten 
++{BuildingDB(Building[0]).OffenseBonusAir / 100}% Angriff gegen Lufteinheiten 
 [END]
 
 [IMPROVE_FLAK_TOWERS_GAMEPLAY]
@@ -4210,7 +5233,7 @@ Mit Hilfe von Flakgeschützen können sich <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städt
 [END]
 
 [IMPROVE_FLAK_TOWERS_HISTORICAL]
-Der Begriff "Flak" ist die Abkürzung für das Wort Flugabwehrkanone, ein aus Deutschland stammendes 88-Millimeter-Flugabwehrgeschütz, das sich im 2. Weltkrieg für die alliierten Bomber als wahrer Fluch erwies. Die meisten schnellfeuernden Flugabwehrkanonen verwendeten kleinkalibrige Granatgeschosse, so z. B. die 40-Millimeter-"Bofors-Fliegerfäuste", die von den alliierten Streitkräften bevorzugt gegen im tief fliegende Bomber und andere Militärflugzeuge eingesetzt wurden. Flakgeschütze, von denen einige bis zu 120 mm stark waren, eigneten sich aber besonders auch für den Einsatz gegen langsame höher fliegende Bomber. Die Granatgeschosse, die mit einer Frequenz von 120 Abschüssen pro Minute bis zu 3 Kilometer weit katapultiert wurden, waren mit radargesteuerten Nahbereichszündern ausgestattet, die eine Explosion auslösten, sobald sich das Zielobjekt innerhalb einer bestimmten Reichweite befand. Trotz weiterer Entwicklungen in den frühen 50er Jahren wurden Flak- und andere schwere Flugabwehrgeschütze schließlich in den späten 50ern und frühen 60ern durch Boden-Luft-Raketensysteme ersetzt.
+Der Begriff "Flak" ist die Abkürzung für das Wort Flug(zeug)abwehrkanone, ein aus Deutschland stammendes 88-Millimeter-Flugabwehrgeschütz, das sich im 2. Weltkrieg für die alliierten Bomber als wahrer Fluch erwies. Die meisten schnellfeuernden Flugabwehrkanonen verwendeten kleinkalibrige Granatgeschosse, so z. B. die 40-Millimeter-"Bofors-Fliegerfäuste", die von den alliierten Streitkräften bevorzugt gegen im tief fliegende Bomber und andere Militärflugzeuge eingesetzt wurden. Flakgeschütze, von denen einige bis zu 120 mm stark waren, eigneten sich aber besonders auch für den Einsatz gegen langsame höher fliegende Bomber. Die Granatgeschosse, die mit einer Frequenz von 120 Abschüssen pro Minute bis zu 3 Kilometer weit katapultiert wurden, waren mit radargesteuerten Nahbereichszündern ausgestattet, die eine Explosion auslösten, sobald sich das Zielobjekt innerhalb einer bestimmten Reichweite befand. Trotz weiterer Entwicklungen in den frühen 50er Jahren wurden Flak- und andere schwere Flugabwehrgeschütze schließlich in den späten 50ern und frühen 60ern durch Boden-Luft-Raketensysteme ersetzt.
 [END]
 
 [IMPROVE_FOOD_SILO_PREREQ]
@@ -4228,7 +5251,7 @@ Unterhalt:
 [IMPROVE_FOOD_SILO_STATISTICS]
 Effekt:
 +{BuildingDB(Building[0]).FoodPercent}% <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
-Schutz vor <L:DATABASE_CONCEPTS,CONCEPT_STARVATION>Hungersnöten<e> für die Dauer von {BuildingDB(Building[0]).StarvationProtection} Runden 
+Schutz vor <L:DATABASE_CONCEPTS,CONCEPT_STARVATION>Hungersnöten<e> für die Dauer von {BuildingDB(Building[0]).StarvationProtection}weiteren Runden 
 [END]
 
 [IMPROVE_FOOD_SILO_GAMEPLAY]
@@ -4242,6 +5265,7 @@ Im Altertum boten Lagerhäuser der städtischen Bevölkerung die Möglichkeit, ihre 
 [IMPROVE_FORCEFIELD_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Ganzheitstheorie<e>
+<L:DATABASE_BUILDINGS,IMPROVE_CITY_WALLS>Stadtmauer<e>
 
 Kosten:
 {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
@@ -4327,7 +5351,7 @@ Unterhalt:
 [IMPROVE_GRANARY_STATISTICS]
 Effekt:
 +{BuildingDB(Building[0]).FoodPercent}% <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrung<e>
-Schutz vor <L:DATABASE_CONCEPTS,CONCEPT_STARVATION>Hungersnöten<e> für die Dauer von {BuildingDB(Building[0]).StarvationProtection} Runden 
+Schutz vor <L:DATABASE_CONCEPTS,CONCEPT_STARVATION>Hungersnöten<e> für die Dauer von zusätzlichen {BuildingDB(Building[0]).StarvationProtection} Runden 
 [END]
 
 [IMPROVE_GRANARY_GAMEPLAY]
@@ -4928,7 +5952,9 @@ Produktion: 10
 Wirtschaft: 10
 
 Güter:
-keine
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_ONE>Krebse<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_TWO>Fisch<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_THREE>Färbemittel<e> 
 [END]
 
 [TERRAIN_WATER_BEACH_STATISTICS]
@@ -4940,6 +5966,8 @@ Verteidigung: +0%
 Strand-Geländefelder sind hervorragend geeignet, um in der unmittelbaren Nachbarschaft <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> zu errichten, denn jede Stadt mit einem benachbarten Strand-Geländefeld ist in der Lage, Marineeinheiten zu erschaffen. Strandnahe Städte können darüber hinaus auch die Vorteile von <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Feld-Modernisierungen<e> für Wasser-Geländefelder wie <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>Fischereien<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>Tiefseetunnels<e> und <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_PORT>Häfen<e> nutzen. 
 
 Strände halten jede Menge Nahrung für Fische und andere Meeresfrüchte bereit und gewährleisten außerdem auch eine verhältnismäßig gute <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungsgewinnung<e>, wenn <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>Fischereien<e> oder <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>Tiefseefischereien<e> auf diesen Geländefeldern angesiedelt sind. Darüber hinaus bieten sie minimale <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktions-<e> und <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e>.
+
+Als <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> haben Strand-Geländefelder <L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_ONE>Krebse<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_TWO>Fisch<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_THREE>Färbemittel<e> zu bieten.
 [END]
 
 [TERRAIN_WATER_BEACH_HISTORICAL]
@@ -4951,7 +5979,10 @@ Produktion: 10
 Wirtschaft: 5
 
 Güter:
-keine
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krebse<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Lachs<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Hummer<e> 
 [END]
 
 [TERRAIN_WATER_SHELF_STATISTICS]
@@ -4961,6 +5992,8 @@ Verteidigung: +0%
 
 [TERRAIN_WATER_SHELF_GAMEPLAY]
 Felsenriffe sind die rasanten Übergänge zwischen <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser-<e> und <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Tiefsee<e>-Geländefeldern. Sie bieten reichlich <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> und <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktions-<e> sowie geringe <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e>. Hier können <L:DATABASE_CONCEPTS,CONCEPT_SEA_COLONIES>Meereskolonien<e> sowie beliebige <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Feld-Modernisierungen<e> für Wasser-Geländefelder errichtet werden.
+
+Als <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> haben Flachwassergebiete <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krebse<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Lachs<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Hummer<e> zu bieten.
 [END]
 
 [TERRAIN_WATER_SHELF_HISTORICAL]
@@ -4997,6 +6030,7 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Wale<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Riesenkraken<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Thunfisch<e>
 [END]
 
 [TERRAIN_WATER_DEEP_STATISTICS]
@@ -5007,7 +6041,7 @@ Verteidigung: +0%
 [TERRAIN_WATER_DEEP_GAMEPLAY]
 Tiefsee-Geländefelder sind ideale Standorte für <L:DATABASE_CONCEPTS,CONCEPT_SEA_COLONIES>Meereskolonien<e> und <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Feld-Modernisierungen<e> für Wasser-Geländefelder, denn ihre Nähe zu geothermaler Energie ermöglicht hohe <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktionserträge<e>. Die Errichtung von Feld-Modernisierungen in Tiefseegebieten ist verständlicherweise kostspieliger, als dies bei <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Flachwasser-Geländefeldern<e> der Fall ist.
 
-Als <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> haben Tiefsee-Geländefelder <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Wale<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Riesenkraken<e> zu bieten.
+Als <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> haben Tiefsee-Geländefelder <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Wale<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Riesenkraken<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Thunfische<e> zu bieten.
 [END]
 
 [TERRAIN_WATER_DEEP_HISTORICAL]
@@ -5021,6 +6055,8 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glas<e> 
 <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Öl<e>
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_THREE>Datteln<e> 
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Kamele<e>
 [END]
 
 [TERRAIN_DESERT_STATISTICS]
@@ -5033,7 +6069,7 @@ Wüsten-Geländefelder sind als Standort für <L:DATABASE_CONCEPTS,CONCEPT_CITY>Stä
 
 Nach der Entdeckung der <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>landwirtschaftlichen Revolution<e> ist die Umwandlung von Wüstengebieten per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-Auf Wüsten-Geländefeldern können die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glas<e> und <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Öl<e> zu finden sein.
+Auf Wüsten-Geländefeldern können die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glas<e>, <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Öl<e>, <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_THREE>Datteln<e> und <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Kamele<e> zu finden sein.
 [END]
 
 [TERRAIN_DESERT_HISTORICAL]
@@ -5047,6 +6083,8 @@ Wirtschaft: 10
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tee<e>
 <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Smaragde<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_THREE>Eisenerz<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_FOUR>Gold<e>
 [END]
 
 [TERRAIN_BROWN_MOUNTAIN_STATISTICS]
@@ -5059,7 +6097,7 @@ Sandberge würden wohl nur von den Hartgesottensten als angenehme Umgebung bezeic
 
 Nach der Entdeckung von <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Sprengstoff<e> ist die Umwandlung von Sandberg-Geländefeldern per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-In Sandbergen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tee<e> und <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Smaragde<e> zu finden.
+In Sandbergen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tee<e>, <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Smaragde<e>, <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_THREE>Eisenerz<e> und <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_FOUR>Gold<e> zu finden.
 [END]
 
 [TERRAIN_BROWN_MOUNTAIN_HISTORICAL]
@@ -5073,6 +6111,8 @@ Wirtschaft: 10
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>Hartholz<e>
 <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_TWO>Bären<e>
+<L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_THREE>Äpfel<e>
+<L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_FOUR>Bieber<e>
 [END]
 
 [TERRAIN_FOREST_STATISTICS]
@@ -5085,7 +6125,7 @@ Wälder sind für die <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktionserträge<e
 
 Nach der Entdeckung der <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>landwirtschaftlichen Revolution<e> ist die Umwandlung von Wald-Geländefeldern per Terraforming<e> möglich.
 
-Auf Wald-Geländefeldern sind die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>Hartholz<e> und <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_TWO>Bären<e> zu finden.
+Auf Wald-Geländefeldern sind die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>Hartholz<e>, <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_TWO>Bären<e>, <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_THREE>Äpfel<e> und <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_FOUR>Bieber<e> zu finden.
 [END]
 
 [TERRAIN_FOREST_HISTORICAL]
@@ -5099,6 +6139,8 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_ONE>Baumwolle<e>
 <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_TWO>Tabak<e>
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_THREE>Kartoffeln<e>
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_FOUR>Mohn<e>
 [END]
 
 [TERRAIN_GRASSLAND_STATISTICS]
@@ -5111,7 +6153,7 @@ Weideland bietet reichlich <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> und gu
 
 Nach der Entdeckung des <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Werkzeugbaus<e> ist die Umwandlung von Weideland per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-Auf Weideland sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_ONE>Baumwolle<e> und <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_TWO>Tabak<e> zu finden.
+Auf Weideland sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_ONE>Baumwolle<e>, <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_TWO>Tabak<e>, <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_THREE>Kartoffeln<e> und <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_FOUR>Mohn<e> zu finden.
 [END]
 
 [TERRAIN_GRASSLAND_HISTORICAL]
@@ -5125,6 +6167,8 @@ Wirtschaft: 10
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_ONE>Kaffee<e>
 <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_TWO>Trauben<e>
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_THREE>Uran<e>
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_FOUR>Oliven<e>
 [END]
 
 [TERRAIN_HILL_STATISTICS]
@@ -5137,7 +6181,7 @@ Hügel sind gute Standorte für die Ansiedelung von <L:DATABASE_CONCEPTS,CONCEPT_C
 
 Nach der Entdeckung des <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Sprengstoffs<e> ist die Umwandlung von Hügeln per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-Auf Hügeln sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_ONE>Kaffee<e> und <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_TWO>Trauben<e> zu finden.
+Auf Hügeln sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_ONE>Kaffee<e>, <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_TWO>Trauben<e>, <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_THREE>Uran<e> und <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_FOUR>Oliven<e> zu finden.
 [END]
 
 [TERRAIN_HILL_HISTORICAL]
@@ -5149,7 +6193,8 @@ Produktion: 0
 Wirtschaft: 0
 
 Güter:
-keine
+<L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_ONE>Seerobben<e>
+<L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_TWO>Walrösser<e>
 [END]
 
 [TERRAIN_GLACIER_STATISTICS]
@@ -5161,6 +6206,8 @@ Verteidigung: +0%
 Gletscher sind relativ unwirtlich. Es können zwar auch auf Gletscher-Geländefeldern Städte errichtet werden, allerdings dürfte es nahezu unmöglich sein, deren anschließende Versorgung zu gewährleisten. Die Errichtung von Feld-Modernisierungen ist nicht möglich und es werden weder <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> noch <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktions-<e> oder <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e> geboten. Auch die Fortbewegung ist nur bedingt möglich und Einheiten erhalten keinerlei <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Defensivbonus<e>. Aus diesem Grund ist es empfehlenswert, derartige Geländefelder möglichst zu meiden.
 
 Nach der Entdeckung der <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>neuen Kunststoffe<e> ist die Umwandlung von Gletschern per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
+
+In Gletschern sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_ONE>Seerobben<e>und <L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_TWO>Walrösser<e> zu finden.
 [END]
 
 [TERRAIN_GLACIER_HISTORICAL]
@@ -5174,6 +6221,7 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Wale<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Riesenkraken<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Thunfisch<e> 
 [END]
 
 [TERRAIN_WATER_RIFT_STATISTICS]
@@ -5183,6 +6231,8 @@ Verteidigung: +0%
 
 [TERRAIN_WATER_RIFT_GAMEPLAY]
 Dank ihrer Nähe zu intensiver geothermaler Aktivität bieten die Meeresriffe äußerst hohe <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktions-<e>, aber nur minimale <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> und <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e>. Dennoch eignen sie sich für die Errichtung von <L:DATABASE_CONCEPTS,CONCEPT_SEA_COLONIES>Meereskolonien<e> und sämtlichen <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Feld-Modernisierungen<e> für Wasser-Geländefelder.
+
+In Meeresriffen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Wale<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Riesenkraken<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Thunfisch<e> zu finden.
 [END]
 
 [TERRAIN_WATER_RIFT_HISTORICAL]
@@ -5196,6 +6246,8 @@ Wirtschaft: 10
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tee<e>
 <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Smaragde<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_THREE>Kohle<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_FOUR>Gold<e>
 [END]
 
 [TERRAIN_MOUNTAIN_STATISTICS]
@@ -5208,7 +6260,7 @@ Berge machen ihren Mangel an <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> und 
 
 Nach der Entdeckung der <L:DATABASE_ADVANCES,ADVANCE_FUSION>Kernfusion<e> ist die Umwandlung von Bergen per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-In den Bergen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tee<e> und <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Smaragde<e> zu finden.
+In den Bergen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tee<e>, <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Smaragde<e>, <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_THREE>Kohle<e> und <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_FOUR>Gold<e> zu finden.
 [END]
 
 [TERRAIN_MOUNTAIN_HISTORICAL]
@@ -5220,7 +6272,8 @@ Produktion: 5
 Wirtschaft: 5
 
 Güter:
-keine
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphire<e>
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_TWO>Smaragde<e>
 [END]
 
 [TERRAIN_WHITE_HILL_STATISTICS]
@@ -5232,6 +6285,8 @@ Verteidigung: +50%
 Gletscherhügel sind aufgrund ihrer mangelnden <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungserträge<e> als Standorte für die Errichtung von <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städten<e> gänzlich ungeeignet. Die <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e> sind minimal, die <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> dagegen gut. Auf diesem Gelände können <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Bergewerke<e> und <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Straßen<e> errichtet werden, wegen der ungastlichen Wetterbedingungen und der extremen Kälte ist die Errichtung von <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farmen<e> allerdings nicht möglich. Dieses Gelände lässt geringe Fortbewegungsgeschwindigkeiten zu und bietet Einheiten einen mittleren Defensivbonus.
 
 Nach der Erforschung von <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Sprengstoff<e> ist die Umwandlung von Gletscherhügeln per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
+
+In Gletscherhügeln sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphire<e> und <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_TWO>Smaragde<e> zu finden.
 [END]
 
 [TERRAIN_WHITE_HILL_HISTORICAL]
@@ -5245,6 +6300,8 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubine<e>
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamanten<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE>Bauxit<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Smaragde<e>
 [END]
 
 [TERRAIN_WHITE_MOUNTAIN_STATISTICS]
@@ -5257,7 +6314,7 @@ Obwohl es unmöglich ist, in Gletscherbergen <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Na
 
 Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_FUSION>Kernfusion<e> ist die Umwandlung von Gletscherbergen per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-In Gletscherbergen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubine<e> und <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamanten<e> zu finden.
+In Gletscherbergen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubine<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamanten<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE>Bauxit<e> und <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Smaragde<e> zu finden.
 [END]
 
 [TERRAIN_WHITE_MOUNTAIN_HISTORICAL]
@@ -5271,6 +6328,8 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Heilkräuter<e>
 <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e>
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_THREE>Bananen<e>
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_FOUR>Zuckerr<e>
 [END]
 
 [TERRAIN_JUNGLE_STATISTICS]
@@ -5281,9 +6340,9 @@ Verteidigung: +25%
 [TERRAIN_JUNGLE_GAMEPLAY]
 Dschungel bieten jede Menge natürliche Ressourcen, die geringe <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e>, bedeutende <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktions-<e> und gar keine <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e> ermöglichen. Ein durch derartiges Gelände fließender <L:DATABASE_CONCEPTS,CONCEPT_RIVER>Fluss<e> erhöht allerdings die Boni. Weder die Errichtung von <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farmen<e> noch von <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Bergwerken<e> ist möglich. Es ist sehr empfehlenswert, auf diesen Geländefeldern <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Straßen<e> anzulegen, denn ansonsten ist lediglich eine langsame Fortbewegungsgeschwindigkeit möglich.
 
-Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>landwirtschaftlichen Revolution<e> ist die Umwandlung von Dschungelgelände per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
+Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Werkzeugbau<e> ist die Umwandlung von Dschungelgelände per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-In Dschungelgebieten sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Heilkräuter<e> und <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e> zu finden.
+In Dschungelgebieten sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Heilkräuter<e>, <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e>, <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_THREE>Bananen<e> und <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_FOUR>Zuckerr<e> zu finden.
 [END]
 
 [TERRAIN_JUNGLE_HISTORICAL]
@@ -5295,8 +6354,10 @@ Produktion: 10
 Wirtschaft: 5
 
 Güter:
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_ONE>Kupfer<e>
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_TWO>Silber<e>
 <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glas<e>
-<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Öl<e>
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Kamele<e>
 [END]
 
 [TERRAIN_BROWN_HILL_STATISTICS]
@@ -5309,7 +6370,7 @@ Sandhügel sind ungeeignete Standorte für die Ansiedelung von <L:DATABASE_CONCEPT
 
 Nach der Erforschung von <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Sprengstoff<e> ist die Umwandlung von Sandhügeln per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-Auf Sandhügeln sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glas<e> und <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Öl<e> zu finden.
+Auf Sandhügeln sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_ONE>Kupfer<e>, <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Öl<e>, <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glas<e> und <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Kamele<e> zu finden.
 [END]
 
 [TERRAIN_BROWN_HILL_HISTORICAL]
@@ -5323,6 +6384,8 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_ONE>Gewürze<e>
 <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_TWO>Elefanten<e>
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_THREE>Weizen<e>
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_FOUR>Büffel<e>
 [END]
 
 [TERRAIN_PLAINS_STATISTICS]
@@ -5336,7 +6399,7 @@ Die Steppe ist ein geeigneter Standort, um eine Stadt anzusiedeln. Sie bietet re
 
 Nach der Erforschung des <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Werkzeugbaus<e> ist die Umwandlung von Steppen per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-In Steppen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_ONE>Gewürze<e> und <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_TWO>Elefanten<e> zu finden.
+In Steppen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_ONE>Gewürze<e>, <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_TWO>Elefanten<e>, <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_THREE>Weizen<e> und <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_FOUR>Büffel<e> zu finden.
 [END]
 
 [TERRAIN_PLAINS_HISTORICAL]
@@ -5350,6 +6413,8 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krabben<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Lachs<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Hummer<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_STATISTICS]
@@ -5360,7 +6425,7 @@ Verteidigung: +0%
 [TERRAIN_WATER_SHALLOW_GAMEPLAY]
 Flachwassergelände bietet reichhaltige <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> wie auch <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktionserträge<e> sowie kosteneffiziente Standorte für <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Feld-Modernisierungen<e> für Wasser-Geländefelder wie <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>Tiefseetunnels<e> und <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>Tiefseefischereien<e>.
 
-Auf Flachwasser-Geländefeldern sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krabben<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e> zu finden.
+Auf Flachwasser-Geländefeldern sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krabben<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Lachs<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Hummer<e> zu finden.
 [END]
 
 [TERRAIN_WATER_SHALLOW_HISTORICAL]
@@ -5373,6 +6438,9 @@ Wirtschaft: 5
 
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligatoren<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_TWO>Reis<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_THREE>Chilli<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_FOUR>Torf<e>
 [END]
 
 [TERRAIN_SWAMP_STATISTICS]
@@ -5383,9 +6451,9 @@ Verteidigung: +25%
 [TERRAIN_SWAMP_GAMEPLAY]
 Sümpfe sind nicht für die Ansiedelung von <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städten<e> geeignet. Sie bieten weder <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> noch <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e> und auch <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> ist nur spärlich zu erzielen. Die Fortbewegungsgeschwindigkeit von Einheiten ist niedrig und die Errichtung von <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farmen<e> ist nicht möglich, aber es können <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Straßen<e> und <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Bergwerke<e> gebaut werden.
 
-Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>industriellen Revolution<e> ist die Umwandlung von Sümpfen per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
+Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Landwirtschaftlichen Revolution<e> ist die Umwandlung von Sümpfen per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
-In Sümpfen ist ausschließlich das <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgut<e> <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligatoren<e> zu finden.
+In Sümpfen sind die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligatoren<e>, <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_TWO>Reis<e>, <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_THREE>Chilli<e> und <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_FOUR>Torf<e> zu finden.
 [END]
 
 [TERRAIN_SWAMP_HISTORICAL]
@@ -5399,6 +6467,7 @@ Wirtschaft: 10
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Wale<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Riesenkraken<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Thunfisch<e> 
 [END]
 
 [TERRAIN_WATER_TRENCH_STATISTICS]
@@ -5408,6 +6477,8 @@ Verteidigung: +0%
 
 [TERRAIN_WATER_TRENCH_GAMEPLAY]
 Canyons repräsentieren lebendiges und energiegeladenes Gelände, das allerdings nur schwer zu bewirtschaften ist. Sie bieten reichhaltige <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> und <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktions-<e>, allerdings nur minimale <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e>. Auf diesen Geländefeldern können alle Feld-Modernisierungen für Wasser-Geländefelder sowie <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> errichtet werden.
+
+In Meerescanyons sind, wenn auch nur selten, die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Wale<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Riesenkraken<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Thunfisch<e> zu finden.
 [END]
 
 [TERRAIN_WATER_TRENCH_HISTORICAL]
@@ -5421,6 +6492,8 @@ Wirtschaft: 15
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubine<e>
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamanten<e>
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Saphire<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Smaragde<e>
 [END]
 
 [TERRAIN_WATER_VOLCANO_STATISTICS]
@@ -5433,7 +6506,7 @@ Meeresvulkane sind die besten <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion
 
 Auf diesen Geländefeldern können <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Bergwerke<e> und <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>Tiefseetunnels<e> errichtet werden, aber keine <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>Fischereien<e> oder <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>Tiefseefischereien<e>.
 
-In Meeresvulkanen sind, wenn auch nur selten, die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubine<e> und <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamanten<e> zu finden.
+In Meeresvulkanen sind, wenn auch nur selten, die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubine<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamanten<e>, <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Saphire<e> und <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Smaragde<e> zu finden.
 [END]
 
 [TERRAIN_WATER_VOLCANO_HISTORICAL]
@@ -5473,6 +6546,8 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krebse<e> 
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Lachs<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Hummer<e>
 [END]
 
 [TERRAIN_WATER_REEF_STATISTICS]
@@ -5485,7 +6560,7 @@ Korallenriffe sind in flachen Gewässern zu finden. Dieses Gelände bietet hohe <L
 
 Auf Korallenriffen können alle <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Feld-Modernisierungen<e> für Wasser-Geländefelder errichtet werden.
 
-Korallenriffe sind sozusagen "lebendiges" Gelände und so sind hier die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krebse<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e> zu finden.
+Korallenriffe sind sozusagen "lebendiges" Gelände und so sind hier die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krebse<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Lachs<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Hummer<e> zu finden.
 [END]
 
 [TERRAIN_WATER_REEF_HISTORICAL]
@@ -5499,6 +6574,8 @@ Wirtschaft: 5
 Güter:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krebse<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Lachs<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Hummer<e>
 [END]
 
 [TERRAIN_WATER_KELP_STATISTICS]
@@ -5511,7 +6588,7 @@ Algenriffe, in denen Fische in Sicherheit vor Raubtieren leben und gedeihen könn
 
 Auf Algenriffen können alle <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Feld-Modernisierungen<e> für Wasser-Geländefelder errichtet werden.
 
-In Algenriffen sind oftmals die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krebse<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e> zu finden.
+In Algenriffen sind oftmals die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Krebse<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Perlen<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Lachs<e> und <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Hummer<e> zu finden.
 [END]
 
 [TERRAIN_WATER_KELP_HISTORICAL]
@@ -9335,7 +10412,7 @@ Beseitigung der aus der Entfernung zum Kapitol resultierenden Unzufriedenheit um
 
 [WONDER_THE_APPIAN_WAY_GAMEPLAY]
 In der Nation, die dieses Weltwunder besitzt, stellt die Via Appia die wichtigste Handelsverbindung dar. Sie sorgt für die Anbindung wichtiger <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> und Handelszentren an das Kapitol der Nation und erleichtert so nicht nur die Handels-, sondern auch die Reiseaktivitäten. In der Folge steigen die <L:DATABASE_CONCEPTS,CONCEPT_TRADE>Handelserträge<e>, während gleichzeitig die <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>Unzufriedenheit<e> in den abgelegeneren Städten sinkt.
-Mit der Endeckung der <L:DATABASE_ADVANCES,ADVANCE_AGE_OF_REASON>Ära der Vernunft<e> ist die Via Appia überholt und wird daher hinfällig.    
+Mit der Endeckung der <L:DATABASE_ADVANCES,ADVANCE_AGE_OF_REASON>Ära der Vernunft<e> ist die Via Appia überholt und wird daher hinfällig.
 [END]
 
 [WONDER_THE_APPIAN_WAY_HISTORICAL]
@@ -9441,7 +10518,7 @@ Kosten:
 [WONDER_EAST_INDIA_COMPANY_STATISTICS]
 Effekt:
 +{WonderDB(Wonder[0]).GoldPerWaterTradeRoute} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> für jeden <L:DATABASE_CONCEPTS,CONCEPT_TRADE_ROUTE>Handelsweg<e>, der über ein Gewässer führt 
- {WonderDB(Wonder[0]).IncreaseBoatMovement / 100}  zusätzlicher Fortbewegungspunkt für alle Marineeinheiten
+ {WonderDB(Wonder[0]).IncreaseBoatMovement / 100} zusätzlicher Fortbewegungspunkt für alle Marineeinheiten
 [END]
 
 [WONDER_EAST_INDIA_COMPANY_GAMEPLAY]
@@ -9490,7 +10567,7 @@ Auslösung von <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>Revolutionen<e> durch das 
 [END]
 
 [WONDER_AI_ENTITY_GAMEPLAY]
-Durch die Implantierung eines Kontrollchips in das Gehirn eines jeden Bürgers ist die KI-Pyramide in der Lage, jeglicher Art von <L:DATABASE_CONCEPTS,CONCEPT_RIOTS>Aufruhr<e> und <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>Revolution<e> in einer Zivilisation ein Ende zu bereiten. Sie schaltet alle Beschwerden und Klagen der Bürger aus und ersetzt den Lärm in der Welt durch ein beruhigendes, konstantes Signal. #Mit der Zeit kann die KI-Pyramide jedoch ein eigenes Bewußtsein entwickeln und sich dazu entscheiden, die Heimatzivilisation zu verlassen und eine eigene Zivilisation zu gründen. In diesem Fall werden die Städte der ursprünglichen Heimatzivilisation <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revoltieren<e>, sich abspalten und schließlich dem neuen KI-Herrscher folgen.
+Durch die Implantierung eines Kontrollchips in das Gehirn eines jeden Bürgers ist die KI-Pyramide in der Lage, jeglicher Art von <L:DATABASE_CONCEPTS,CONCEPT_RIOTS>Aufruhr<e> und <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>Revolution<e> in einer Zivilisation ein Ende zu bereiten. Sie schaltet alle Beschwerden und Klagen der Bürger aus und ersetzt den Lärm in der Welt durch ein beruhigendes, konstantes Signal. Mit der Zeit kann die KI-Pyramide jedoch ein eigenes Bewußtsein entwickeln und sich dazu entscheiden, die Heimatzivilisation zu verlassen und eine eigene Zivilisation zu gründen. In diesem Fall werden die Städte der ursprünglichen Heimatzivilisation <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revoltieren<e>, sich abspalten und schließlich dem neuen KI-Herrscher folgen.
 [END]
 
 [WONDER_AI_ENTITY_HISTORICAL]
@@ -9594,7 +10671,7 @@ Kosten:
 [WONDER_THE_FORBIDDEN_CITY_STATISTICS]
 Effekt:
 Schließung der eigenen <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Botschaften<e> in allen fremden Nationen
-Erhöhung des <L:DATABASE_CONCEPTS,CONCEPT_REGARD>Ansehens<e> bei anderen Nationen  um {WonderDB(Wonder[0]).IncreaseRegard}%
+Erhöhung des <L:DATABASE_CONCEPTS,CONCEPT_REGARD>Ansehens<e> bei anderen Nationen um {WonderDB(Wonder[0]).IncreaseRegard}%
 [END]
 
 [WONDER_THE_FORBIDDEN_CITY_GAMEPLAY]

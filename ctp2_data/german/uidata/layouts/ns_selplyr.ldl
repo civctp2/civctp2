@@ -1,0 +1,345 @@
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+playerselectwindow:nswindow {
+
+	int	widthpix	450
+
+	int	heightpix	385
+
+#	string	pattern	"error.tga"
+	string	pattern	"uptg20e.tga"
+
+
+
+	titlestatictext : nstitlestatictext {
+
+		string	text	"str_ldl_SELECT_PROFILE"
+	}
+
+
+
+	currentplayerstatictext:nsstatictext {
+
+		int	xpix	149
+
+		int	ypix	47
+
+		int	widthpix	159
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Player_Name_COLON"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix	149
+
+		int	srcypix	47
+
+		int	srcwidthpix	159
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	playernametextfield {
+
+		int	xpix	149
+
+		int	ypix	70
+
+		int	widthpix	159
+
+		int	heightpix	20
+
+		int	maxfieldlen	23
+	}
+
+
+
+	playernamelistbox:nslistbox {
+
+		int	xpix	97
+
+		int	ypix	117
+
+		int	widthpix	270
+
+		int	heightpix	162
+
+
+
+		string	pattern	"uptg20ebig.tga"
+
+		int	srcxpix	95
+
+		int	srcypix	115
+
+		int	srcwidthpix	274
+
+		int	srcheightpix	161
+
+
+
+		playernamestatictext:nsstatictext {
+
+			string	xanchor	"center"
+
+			int	ypix	-23
+
+			int	widthpct	100
+
+			int	heightpix	20
+
+			string	text	"str_ldl_Saved_Profiles_COLON"
+
+
+#			string	pattern	"error.tga"
+			string	pattern	"uptg20e.tga"
+
+			int	srcxpix	97
+
+			int	srcypix	94
+
+			int	srcwidthpix	270
+
+			int	srcheightpix	20
+
+		}
+
+#		header {
+
+#			switch0:nsheaderswitch {
+
+#				string	parent	"playerselectwindow"
+
+#				int	widthpct	100
+
+#				int	heightpix	20
+
+#				string	text	"Saved Profiles:"
+
+#			}
+
+#		}
+
+	}
+
+
+
+	newbutton:nscommonbutton {
+
+		int	xpix	31
+
+		int	ypix	291
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Create_Profile"
+#		string	image0	"error.tga"
+
+#		string	image1	"error.tga"
+
+#		string disabledimage0	"error.tga"
+
+#		string disabledimage1	"error.tga"
+
+	}
+
+
+
+	editbutton:nscommonbutton {
+
+		int	xpix	165
+
+		int	ypix	291
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Edit_Profile"
+#		string	image0	"error.tga"
+
+#		string	image1	"error.tga"
+
+#		string disabledimage0	"error.tga"
+
+#		string disabledimage1	"error.tga"
+
+	}
+
+
+
+	deletebutton:nscommonbutton {
+
+		int	xpix	299
+
+		int	ypix	291
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Delete_Profile"
+#		string	image0	"error.tga"
+
+#		string	image1	"error.tga"
+
+#		string disabledimage0	"error.tga"
+
+#		string disabledimage1	"error.tga"
+
+	}
+
+
+
+	closebutton:nsclosebutton {
+
+	}
+
+
+
+	cancelbutton:nsprevbutton {
+
+	}
+
+
+
+	okbutton:nsnextbutton {
+
+	}
+
+}
+
+
+
+#aiplayerselectwindow:nswindow {
+
+#	titlestatictext:nstitlestatictext {
+
+#		string	text	"Select AI Player Screen"
+
+#	}
+
+#	playernamelistbox:nslistbox {
+
+#		string	xanchor	"center"
+
+#		int	ypct	40
+
+#		int	widthpct	30
+
+#		int	heightpct	20
+
+#		playernamestatictext:nsstatictext {
+
+#			int	xpct	0
+
+#			int	ypix	-55
+
+#			int	widthpct	100
+
+#			int	heightpix	30
+
+#			string	text	"Player Names"
+
+#		}
+
+#		header {
+
+#			switch0:nsheaderswitch {
+
+#				string	parent	"aiplayerselectwindow.playernamelistbox"
+
+#				int	widthpct	100
+
+#				int	heightpix	25
+
+#				string	text	"AI Name"
+
+#			}
+
+#		}
+
+#		newbutton:nsbutton {
+
+#			string	yanchor	"bottom"
+
+#			string	xanchor	"left"
+
+#			int	ypix	-35
+
+#			int	widthpct	33
+
+#			int	heightpix	35
+
+#			string	text	"New"
+
+#		}
+
+#		editbutton:nsbutton {
+
+#			string	yanchor	"bottom"
+
+#			string	xanchor	"center"
+
+#			int	ypix	-35
+
+#			int	widthpct	34
+
+#			int	heightpix	35
+
+#			string	text	"Edit"
+
+#		}
+
+#		deletebutton:nsbutton {
+
+#			string	yanchor	"bottom"
+
+#			string	xanchor	"right"
+
+#			int	ypix	-35
+
+#			int	widthpct	33
+
+#			int	heightpix	35
+
+#			string	text	"Delete"
+
+#		}
+
+#	}
+
+#	cancelbutton:nsprevbutton {
+
+#	}
+
+#	closebutton:nsclosebutton {
+
+#	}
+
+#	helpbutton:nshelpbutton {
+
+#	}
+
+#	okbutton:nsnextbutton {
+
+#	}
+
+#}
+
+
+
+$
