@@ -1704,33 +1704,30 @@ sint32 CivApp::CleanupAppUI(void)
 	//Added by Martin Gühmann to clean up the status bar correctly.
 	StatusBar::CleanUp();
 	
-	delete g_c3ui->TheMovieManager();
-	delete g_c3ui->TheKeyboard();
-
-	
-	delete g_c3ui->TheMouse();
-
-	
-	
-	delete g_c3ui->TheBlitter();
-
-	aui_MemMap *theMap = g_c3ui->TheMemMap();
-
-	delete theMap;
-
-	delete g_c3ui;
-	g_c3ui = NULL;
+    if (g_c3ui)
+    {
+	    delete g_c3ui->TheMovieManager();
+	    delete g_c3ui->TheKeyboard();
+	    delete g_c3ui->TheMouse();
+	    delete g_c3ui->TheBlitter();
+	    delete g_c3ui->TheMemMap();
+	    delete g_c3ui;
+	    g_c3ui = NULL;
+    }
 
 	
 	delete g_GreatLibPF;
-	delete g_ImageMapPF;
-	delete g_SoundPF;
 	g_GreatLibPF = NULL;
+
+	delete g_ImageMapPF;
 	g_ImageMapPF = NULL;
+
+	delete g_SoundPF;
 	g_SoundPF = NULL;
 
 	
 	delete g_colorSet;
+    g_colorSet = NULL;
 
 	return 0;
 }
@@ -2036,73 +2033,70 @@ sint32 CivApp::CleanupAppDB(void)
 
 sint32 CivApp::CleanupApp(void)
 {
-	
-	GreatLibrary::Shutdown_Great_Library_Data();
+	if (m_appLoaded)
+    {
+	    GreatLibrary::Shutdown_Great_Library_Data();
+    	Splash::Cleanup();
+    	messagewin_Cleanup();
 
-	Splash::Cleanup();
+	    if (g_slicEngine) {
+		    delete g_slicEngine;
+		    g_slicEngine = NULL;
+	    }
 
-	
-	messagewin_Cleanup();
+	    if (g_theMessagePool) {
+		    delete g_theMessagePool;
+		    g_theMessagePool = NULL;
+	    }
 
-	
-	if (g_slicEngine) {
-		delete g_slicEngine;
-		g_slicEngine = NULL;
-	}
+	    
+	    CivScenarios::Cleanup();
 
-	if (g_theMessagePool) {
-		delete g_theMessagePool;
-		g_theMessagePool = NULL;
-	}
+	    
+	    SoundManager::Cleanup();
 
-	
-	CivScenarios::Cleanup();
+        if (g_theProfileDB) { 
+            delete g_theProfileDB; 
+            g_theProfileDB = NULL; 
+        }
 
-	
-	SoundManager::Cleanup();
+        if (g_theConstDB) { 
+    	    delete g_theConstDB; 
+	        g_theConstDB = NULL; 
+        }
 
-    if (g_theProfileDB) { 
-        delete g_theProfileDB; 
-        g_theProfileDB = NULL; 
+	    gameinit_Cleanup();
+
+	    events_Cleanup();
+	    gameEventManager_Cleanup();
+
+	    g_network.Cleanup();
+
+	    
+	    CursorManager::Cleanup();
+
+	    
+	    sharedsurface_Cleanup();
+
+	    
+	    CleanupAppUI();
+
+	    
+	    cleanup_keymap();
+
+	    
+	    CleanupAppDB();
+
+	    
+	    CivPaths_CleanupCivPaths();
+
+	    
+	    CoUninitialize();
+
+	    
+
+	    display_Cleanup();
     }
-
-    if (g_theConstDB) { 
-    	delete g_theConstDB; 
-	    g_theConstDB = NULL; 
-    }
-
-	gameinit_Cleanup();
-
-	events_Cleanup();
-	gameEventManager_Cleanup();
-
-	g_network.Cleanup();
-
-	
-	CursorManager::Cleanup();
-
-	
-	sharedsurface_Cleanup();
-
-	
-	CleanupAppUI();
-
-	
-	cleanup_keymap();
-
-	
-	CleanupAppDB();
-
-	
-	CivPaths_CleanupCivPaths();
-
-	
-	CoUninitialize();
-
-	
-
-	display_Cleanup();
-
 	m_appLoaded = FALSE;
 
 	return 0;
@@ -2292,13 +2286,9 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		"InitProgressWindow",
 		260 );
 
-	
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	g_theProgressWindow->StartCountingTo
+        (10, g_theStringDB->GetNameStr("LOADING"));
 
-	g_theProgressWindow->StartCountingTo( 10, s );
-
-	
 	init_keymap();			
 
 	g_theProgressWindow->StartCountingTo( 20 );
@@ -3010,6 +3000,7 @@ AttractWindow::Cleanup();
 	
 	sci_advancescreen_Cleanup();
 	infowin_Cleanup();
+    infowin_Cleanup_Controls();
 	ScienceManagementDialog::Cleanup();
 
 	NationalManagementDialog::Cleanup();
@@ -3823,8 +3814,7 @@ sint32 CivApp::QuitGame(void)
 	if (m_gameLoaded)
 		CleanupGame(true); 
 
-	if (m_appLoaded)
-		CleanupApp();
+	CleanupApp();
 
 	return 0;
 }

@@ -24,6 +24,7 @@
 // - Added extra case statement to facilitate '**' operator
 // - Added stuff for '&' operator
 // - Prevented memory leaks
+// - Prevented crash
 //
 //----------------------------------------------------------------------------
 
@@ -73,9 +74,6 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 	struct PSlicObject *pobj = g_slicObjectArray[slicifIndex];
 
 	m_firstLineNumber = -1;
-
-    m_isAlert = FALSE;
-	m_isHelp = FALSE;
 
 	m_type = pobj->m_type;
 	m_id = pobj->m_id;
@@ -168,12 +166,6 @@ SlicSegment::SlicSegment(CivArchive &archive)
 
 SlicSegment::~SlicSegment()
 {
-	if(m_type == SLIC_OBJECT_HANDLEEVENT && g_gevManager && m_event != GEV_MAX) {
-		g_gevManager->RemoveCallback(m_event, this);
-	}
-
-	
-	
 	if(m_id) {
 		free(m_id);
 		m_id = NULL;
@@ -200,14 +192,15 @@ SlicSegment::~SlicSegment()
 	delete [] m_parameter_symbols;
 }
 
-void *SlicSegment::operator new(size_t size)
+void * SlicSegment::operator new(size_t size)
 {
-	Assert(g_slicEngine);
-	if(g_slicEngine) {
-		SlicSegment *seg = g_slicEngine->GetNewSegment();
-		return seg;
-	} else {
-		SlicSegment *seg = ::new SlicSegment;
+	if (g_slicEngine) 
+    {
+		return g_slicEngine->GetNewSegment();
+	} 
+    else 
+    {
+		SlicSegment * seg = ::new SlicSegment;
 		seg->m_poolIndex = -1;
 		return seg;
 	}
@@ -215,10 +208,14 @@ void *SlicSegment::operator new(size_t size)
 
 void SlicSegment::operator delete(void *ptr)
 {
-	SlicSegment *seg = (SlicSegment *)ptr;
-	if(seg->m_poolIndex >= 0) {
+	SlicSegment * seg = reinterpret_cast<SlicSegment *>(ptr);
+
+    if (seg && (seg->m_poolIndex >= 0)) 
+    {
 		g_slicEngine->ReleaseSegment(seg);
-	} else {
+	} 
+    else 
+    {
 		::delete(ptr);
 	}
 }

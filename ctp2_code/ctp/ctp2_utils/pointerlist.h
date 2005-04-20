@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Pointer list
 //
 //----------------------------------------------------------------------------
 //
@@ -23,16 +23,16 @@
 //
 // - Class export declaration changed.
 // - Modifications to support VC++ .NET.
+// - Rewritten insert functions (missing m_tail updates) to prevent crashes.
 //
 //----------------------------------------------------------------------------
 
-#ifndef __GNUC__
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
 #ifndef _POINTER_LIST_H_
 #define _POINTER_LIST_H_
-
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -52,8 +52,6 @@ template <class T> class PointerList;
 // Class declarations
 //----------------------------------------------------------------------------
 
-
-
 template <class T> class PointerList {
 public:
 	class PointerListNode {
@@ -62,20 +60,15 @@ public:
 			m_next(NULL),
 			m_prev(NULL),
 			m_obj(obj)
-		{
-		};
+        { ; };
 		
-		~PointerListNode() {
-			if(m_next)
-				m_next->m_prev = m_prev;
-			if(m_prev)
-				m_prev->m_next = m_next;
-		}
+		virtual ~PointerListNode() 
+        { ; };
 		
 		T* GetObj() { return m_obj; };
 		
-		PointerListNode *GetNext() { return m_next; }
-		PointerListNode *GetPrev() { return m_prev; }
+		PointerListNode *GetNext() { return m_next; };
+		PointerListNode *GetPrev() { return m_prev; };
 	private:
 		friend class PointerList<T>;
 		T* m_obj;
@@ -87,13 +80,13 @@ public:
 	PointerList() : m_head(NULL), 
 				m_tail(NULL),
 				m_count(0)
-	{
-	};
+    { ; };
 
-	~PointerList() 
+	virtual ~PointerList() 
 	{
-		while(m_head) {
-			PointerListNode* node = m_head;
+		while (m_head) 
+        {
+			PointerListNode * node = m_head;
 			m_head = m_head->m_next;
 			delete node;
 		}
@@ -101,15 +94,16 @@ public:
 
 	void DeleteAll()
 	{
-		while(m_head) {
-			PointerListNode *node = m_head;
+		while (m_head) 
+        {
+			PointerListNode * node = m_head;
 			m_head = m_head->m_next;
 			delete node->m_obj;
 			delete node;
 		}
 		m_tail = NULL;
 		m_count = 0;
-	}
+	};
 
 	void AddTail(T* obj);
 	void AddHead(T* obj);
@@ -291,9 +285,15 @@ template <class T> inline T* PointerList<T>::RemoveHead()
 {
 	if(!m_head)
 		return NULL;
+
 	PointerListNode* node = m_head;
 	m_head = node->m_next;
-	if(m_head == NULL) {
+	if (m_head)
+    {
+        m_head->m_prev = NULL;
+    }
+    else
+    {
 		m_tail = NULL;
 	}
 	T* obj = node->m_obj;
@@ -322,9 +322,15 @@ template <class T> inline T* PointerList<T>::RemoveTail()
 {
 	if(!m_tail)
 		return NULL;
+
 	PointerListNode* node = m_tail;
 	m_tail = node->m_prev;
-	if(m_tail == NULL) {
+	if (m_tail)
+    {
+        m_tail->m_next = NULL;
+    }
+    else
+    {
 		m_head = NULL;
 	}
 	T* obj = node->m_obj;
@@ -337,16 +343,44 @@ template <class T> inline T* PointerList<T>::RemoveTail()
 
 template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
 {
-	if(node == m_head) {
+    if (!node)
+        return;
+
+	if (node == m_head) 
+    {
 		m_head = node->m_next;
-		if(m_head == NULL)
+        if (m_head)
+        {
+            m_head->m_prev = NULL;
+        }
+        else
+        {
 			m_tail = NULL;
+        }
 	}
-	if(node == m_tail) {
+    else if (node == m_tail) 
+    {
 		m_tail = node->m_prev;
-		if(m_tail == NULL)
+		if (m_tail)
+        {
+            m_tail->m_next = NULL;
+        }
+        else
+        {
 			m_head = NULL;
+        }
 	}
+    else
+    {
+        if (node->m_next)
+        {
+            node->m_next->m_prev = node->m_prev;
+        }
+        if (node->m_prev)
+        {
+            node->m_prev->m_next = node->m_next;
+        }
+    }
 
 	m_count--;
 	delete node;
@@ -355,50 +389,50 @@ template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
 
 template <class T> inline void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
 {
-	PointerListNode *newNode = new PointerListNode(obj);
-	if(!node) {
-		if(m_head) {
-			newNode->m_next = m_head;
-			m_head->m_prev = newNode;
-			m_head = newNode;
-		} else {
-			m_head = newNode;
-		}
-	} else {
+	if (node) 
+    {
+	    PointerListNode * newNode = new PointerListNode(obj);
 		newNode->m_next = node->m_next;
 		newNode->m_prev = node;
-		node->m_next = newNode;
-		if(newNode->m_next) {
-			newNode->m_next->m_prev = newNode;
-		} else {
-			m_tail = newNode;
-		}
+        if (node->m_next)
+        {
+            node->m_next->m_prev = newNode;
+        }
+        else
+        {
+            m_tail      = newNode;
+        }
+        node->m_next    = newNode;
+    	m_count++;
 	}
-	m_count++;
+    else
+    {
+		AddHead(obj);   // AddTail would have been more logical
+	} 
 }
 
 template <class T> inline void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
 {
-	PointerListNode *newNode = new PointerListNode(obj);
-	if(!node) {
-		if(m_head) {
-			newNode->m_next = m_head;
-			m_head->m_prev = newNode;
-			m_head = newNode;
-		} else {
-			m_head = newNode;
-		}
-	} else {
-		newNode->m_next = node;
+    if (node)
+    {
+	    PointerListNode * newNode = new PointerListNode(obj);
 		newNode->m_prev = node->m_prev;
-		node->m_prev = newNode;
-		if(newNode->m_prev) {
-			newNode->m_prev->m_next = newNode;
-		} else {
-			m_head = newNode;
+		newNode->m_next = node;
+        if (node->m_prev)
+        {
+		    node->m_prev->m_next = newNode;
+        }
+		else
+        {
+			m_head      = newNode;
 		}
-	}
-	m_count++;
+        node->m_prev    = newNode;
+    	m_count++;
+    }
+    else
+    {
+        AddHead(obj);
+    }
 }
 	
 template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
@@ -412,5 +446,4 @@ template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Fin
 	return NULL;
 }
 
-#else
 #endif

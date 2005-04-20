@@ -8146,11 +8146,11 @@ Damage: {UnitDB(UnitRecord[0]).Firepower}
 Vision: {UnitDB(UnitRecord[0]).VisionRange}
 Move: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
 Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
-Maximale Lebenspunkte: {UnitDB(UnitRecord[0]).MaxHP}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
-Kosten: {UnitDB(UnitRecord[0]).ShieldCost}
-Unterhalt: {UnitDB(UnitRecord[0]).ShieldHunger} Schilder
-Nahrungsbedarf: {UnitDB(UnitRecord[0]).FoodHunger}
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_INTERCEPTOR_SUMMARY]
@@ -10398,7 +10398,7 @@ The Eden Project was one of the most controversial research projects of the Diam
 
 [WONDER_AI_ENTITY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_MIND_CONTROL>Gedankenkontrolle<e>
+<L:DATABASE_ADVANCES,ADVANCE_MIND_CONTROL>Mind Control<e>
 
 Costs:
 {WonderDB(Wonder[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>

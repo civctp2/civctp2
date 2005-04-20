@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Redesigned to prevent memory leaks and crashes.
+//
+//----------------------------------------------------------------------------
+
 #ifndef __SLIC_ENGINE_H__
 #define __SLIC_ENGINE_H__
 
@@ -76,7 +106,6 @@ enum SLIC_TAG {
 class SlicEngine {
 private:
 	BOOL m_tutorialActive;
-	BOOL m_addedBuiltinFunctions, m_addedBuiltinVariables;
 	PLAYER_INDEX m_tutorialPlayer;
 	Message *m_currentMessage;
 
@@ -119,21 +148,16 @@ private:
 	BOOL m_blankScreen;
 
 	bool m_atBreak;
-	SlicSegment *m_breakSegment;
-	sint32 m_breakOffset;
 	SlicObject *m_breakContext;
-	SlicStack *m_breakStack;
-	MessageData *m_breakMessage;
 
-	PointerList<SlicObject> *m_contextStack;
-	bool m_breakRequested;
+	PointerList<SlicObject> *   m_contextStack;
+	bool                        m_breakRequested;
 
 public:
 	SlicEngine();
 	SlicEngine(CivArchive &archive);
 	~SlicEngine();
 	void Cleanup();
-	void Reset();
 
 	void Serialize(CivArchive &archive);
 	void PostSerialize();
@@ -159,7 +183,6 @@ public:
 	void Execute(SlicObject *obj);
 
 	void AddBuiltinFunctions();
-	void AddBuiltinVariables();
 	BOOL Load(MBCHAR *filename, sint32 filenum);
 	void Link();
 
@@ -327,7 +350,7 @@ public:
 	void RequestBreak();
 	bool BreakRequested();
 
-	void PushContext();
+	void PushContext(SlicObject * obj);
 	void PopContext();
 
 	void AddDatabases();

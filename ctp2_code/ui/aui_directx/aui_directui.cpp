@@ -26,7 +26,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Prevented crash
+// - Prevented crashes
 //
 //----------------------------------------------------------------------------
 
@@ -60,7 +60,8 @@ extern sint32				g_ScreenHeight;
 extern DisplayDevice		g_displayDevice;
 
 
-aui_DirectUI::aui_DirectUI(
+aui_DirectUI::aui_DirectUI
+(
 	AUI_ERRCODE *retval,
 	HINSTANCE hinst,
 	HWND hwnd,
@@ -68,9 +69,12 @@ aui_DirectUI::aui_DirectUI(
 	sint32 height,
 	sint32 bpp,
 	MBCHAR *ldlFilename,
-	BOOL useExclusiveMode )
-	:
-	aui_UI()
+	BOOL useExclusiveMode 
+)
+:   aui_UI              (),
+    aui_DirectX         (),
+    m_lpdds             (NULL),
+    m_isCoinitialized   (false)
 {
 	
 	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
@@ -111,15 +115,16 @@ aui_DirectUI::aui_DirectUI(
 
 AUI_ERRCODE aui_DirectUI::InitCommon()
 {
-	m_lpdds = NULL;
-
 	m_savedMouseAnimFirstIndex = 0;
 	m_savedMouseAnimLastIndex = 0;
 	m_savedMouseAnimCurIndex = 0;
 
 #ifdef __AUI_USE_DIRECTMEDIA__
-	
-	CoInitialize( NULL );
+	if (!m_isCoinitialized)
+    {
+    	HRESULT const   hr  = CoInitialize(NULL);
+        m_isCoinitialized   = (S_OK == hr) || (S_FALSE == hr);
+    }
 #endif 
 
 	return AUI_ERRCODE_OK;
@@ -133,7 +138,8 @@ AUI_ERRCODE aui_DirectUI::DestroyDirectScreen(void)
     {
     	((aui_DirectSurface *)m_primary)->DDS()->Release();
 		delete m_primary;
-	    m_primary = NULL;
+	    m_primary   = NULL;
+        m_lpdds     = NULL;
     }
 
 	return AUI_ERRCODE_OK;
@@ -228,17 +234,21 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 
 aui_DirectUI::~aui_DirectUI( void )
 {
-	if ( m_lpdds )
+	if (m_lpdds)
 	{
 		m_lpdds->Release();
-		m_lpdds = NULL;
 	}
 
-	m_lpdd->RestoreDisplayMode();
+    if (m_lpdd)
+    {
+	    m_lpdd->RestoreDisplayMode();
+    }
 
 #ifdef __AUI_USE_DIRECTMEDIA__
-	
-	CoUninitialize();
+	if (m_isCoinitialized)
+    {
+	    CoUninitialize();
+    }
 #endif 
 }
 
@@ -277,9 +287,7 @@ AUI_ERRCODE aui_DirectUI::RestoreMouse(void)
 	Assert(mouse != NULL);
 	if ( !mouse ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	if (m_mouse)
-		delete m_mouse;
-
+	delete m_mouse;
 	m_mouse = mouse;
 
 	m_mouse->SetAnimIndexes(m_savedMouseAnimFirstIndex, m_savedMouseAnimLastIndex);
@@ -322,7 +330,6 @@ AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 	}
 
 	if ( m_minimize || m_exclusiveMode )
-	if ( m_primary )
 	{
 		DestroyDirectScreen();
 	}
@@ -336,7 +343,10 @@ AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 			::ShowWindow( m_hwnd, SW_MINIMIZE );
 	}
 
-	g_civApp->SetInBackground(TRUE);
+    if (g_civApp)
+    {
+        g_civApp->SetInBackground(TRUE);
+    }
 
 	return AUI_ERRCODE_OK;
 }
@@ -383,7 +393,10 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 	if ( m_joystick ) m_joystick->Acquire();
 	if (m_keyboard) m_keyboard->Acquire();
 
-	g_civApp->SetInBackground(FALSE);
+	if (g_civApp)
+    {
+        g_civApp->SetInBackground(FALSE);
+    }
 
 	return FlushDirtyList();
 }

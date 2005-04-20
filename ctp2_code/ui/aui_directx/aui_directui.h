@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface DirectX component
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialised pointer in default constructor to prevent destructor crash.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __AUI_DIRECTUI_H__
 #define __AUI_DIRECTUI_H__
@@ -37,7 +56,13 @@ public:
 	virtual ~aui_DirectUI();
 
 protected:
-	aui_DirectUI() : aui_UI() {}
+	aui_DirectUI() 
+    :   aui_UI              (),
+        aui_DirectX         (),
+        m_lpdds             (NULL),
+        m_isCoinitialized   (false)
+    { ; };
+
 	AUI_ERRCODE InitCommon( void );
 
 public:
@@ -54,6 +79,7 @@ public:
 
 protected:
 	LPDIRECTDRAWSURFACE m_lpdds; 
+    bool                m_isCoinitialized;
 };
 
 

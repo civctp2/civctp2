@@ -1,6 +1,36 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made StartCountingTo message parameter const.
+//
+//----------------------------------------------------------------------------
 
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
 
 #include "c3_popupwindow.h"
 #include "aui_progressbar.h"
@@ -60,7 +90,7 @@ public:
 	
 	
 	
-	void StartCountingTo( sint32 val, MBCHAR *message = NULL );
+	void StartCountingTo( sint32 val, MBCHAR const * message = NULL );
 
 	
 	COLORREF SetBarColor(COLORREF color);

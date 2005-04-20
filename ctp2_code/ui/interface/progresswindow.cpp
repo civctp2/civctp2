@@ -1,4 +1,30 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made StartCountingTo message parameter const.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_uniqueid.h"
@@ -57,7 +83,7 @@ void ProgressWindow::BeginProgress(
 	progwin->StartCountingTo( 0 );
 }
 
-void ProgressWindow::StartCountingTo( sint32 val, MBCHAR *message )
+void ProgressWindow::StartCountingTo( sint32 val, MBCHAR const * message )
 {
 	
 	if ( message )
