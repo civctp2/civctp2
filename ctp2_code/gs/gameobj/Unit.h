@@ -198,9 +198,9 @@ public:
 	BOOL InsertCargo(const Unit &addme); 
 
     BOOL CanBeachAssault() const; 
-	sint32 ResetMovement();
 
-	
+    bool IsImmobile()const; //PFT
+	sint32 ResetMovement();
 
     BOOL CanExpelPop()const; 
     BOOL CanBeExpelled()const;
@@ -307,7 +307,8 @@ public:
     void UnsetIsInTransport();
 
     void GetProductionStats(sint32 &s, sint32 &t, sint32 &f) const;
-    void GetPop(sint32 &p)const;  
+    void GetPop(sint32 &p)const;
+	void GetTurnsToNextPop(sint32 &p)const;//PFT 29 mar 05, show # turns until city next grows a pop
     void GetTradeStats(sint32 &g, sint32 &l, sint32 &sci) const;
     sint32 IsCity() const;
     void DrawCityStats(aui_DirectSurface *surf, sint32 x, sint32 y); 

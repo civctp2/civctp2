@@ -26,6 +26,7 @@
 //   if it is in a city and
 //   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
 // - force garrison units to ungroup.
+// - BombardNearbyEnemies before ending turn (during ExecuteOpportunityActions) PFT
 //----------------------------------------------------------------------------
 
 
@@ -135,6 +136,7 @@ private:
 	
 	static void BombardAdjacentEnemies(const Army & army);
 
+    static void BombardNearbyEnemies(Army army, sint32 max_rge);
 	
 	static bool GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos, double & distance);
 

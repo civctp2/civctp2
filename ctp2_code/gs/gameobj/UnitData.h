@@ -1,14 +1,25 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Unit data
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show # turns until city grows
+// added IsImmobile( )const; PFT 10 apr 05, to identify immobile units
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __UNIT_DATA_H__ 
@@ -244,7 +255,7 @@ public:
 	void SetFlag(uint32 f) { m_flags |= f; }
 	void ClearFlag(uint32 f) { m_flags &= ~(f); }
 
-    
+    bool IsImmobile()const; //PFT
     sint32 ResetMovement();
     
     void GetPos(MapPoint &p) const { p = m_pos; };
@@ -374,7 +385,8 @@ public:
 	void GetProjectedProductionDeltas(sint32 &s, sint32 &t, sint32 &f, sint32 &science);
 	void GetProjectedHappinessCrime(double &hap, double &crime);
     void GetConsumptionStats(sint32 &foodConsumed) const;
-    void GetPop(sint32 &p)const;  
+    void GetPop(sint32 &p)const; 
+	void GetTurnsToNextPop(sint32 &p)const; //PFT 29 mar 05, show # turns until city grows
     void GetTradeStats(sint32 &g, sint32 &l, sint32 &sci) const;
 	void GetPollutionStats(sint32 &pollution) const ;
 

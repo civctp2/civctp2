@@ -40,6 +40,7 @@
 // - Removed some unused functions and added a lot new ones to be able to
 //   estimate resource production better without the need of recalculation
 //   of everything. - April 4th 2005 Martin Gühmann
+// - Added m_turnsNextPop to track city growth - PFT 29 mar 05
 //
 //----------------------------------------------------------------------------
 
@@ -285,6 +286,7 @@ class CityData : public CityRadiusCallback {
     Unit m_home_city; 
 	uint8 m_min_turns_revolt;	// Number of revolt risk free turns.
     BuildQueue m_build_queue; 
+    sint32 m_turnsNextPop;     //PFT 29 mar 05, show # turns until city next grows 
     
 	TradeDynamicArray m_tradeSourceList;							
 	TradeDynamicArray m_tradeDestinationList;						
@@ -781,7 +783,7 @@ public:
 
 	void ContributeScience(double incomePercent,
 						   double &addscience, double &subgold);
-	sint32 TurnsToNextPop();
+	sint32 TurnsToNextPop();//PFT 29 mar 05. Fixed to compute what it says.
 	sint32 FreeSlaves();
 
 	void AddEndGameObject(sint32 type);

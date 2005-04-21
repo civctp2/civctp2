@@ -2415,7 +2415,7 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 	}
 }
 
-
+//PFT 12 apr 05: no longer used
 void CtpAi::BombardAdjacentEnemies(const Army & army)
 {
 	if (!army->CanBombard())
@@ -2681,7 +2681,16 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 		if ( !g_theArmyPool->IsValid(army) )
 			continue;
 
-		CtpAi::BombardAdjacentEnemies(army);
+		//first get max bombard rge
+		sint32 min_rge, max_rge = 0;
+        army->GetBombardRange(min_rge, max_rge);
+
+		if(max_rge && army->NumOrders() == 0){//army is available and can bombard, so find enemies
+
+            CtpAi::BombardNearbyEnemies(army, max_rge);
+
+		}
+
 
 		
 		if (army->GetMinFuel() != 0x7fffffff &&
@@ -2691,28 +2700,15 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 				continue;
 		}
 
-		
-		Unit city = g_theWorld->GetCity(army->RetPos());
-		if (city.m_id != 0)
-		{
-				
-				
-				
-		}
-
-		
-		
 		if (army->NumOrders() > 0)
 			continue;
 
-		
+		//we need to find something more interesting to do here
 		g_gevManager->AddEvent( GEV_INSERT_Tail, 
 								GEV_EntrenchOrder,
 								GEA_Army, army.m_id,
 								GEA_End);
 	}
-
-	
 	CtpAi::SpendGoldToRushBuy(player);
 }
 
@@ -2945,4 +2941,102 @@ void CtpAi::SellRandomBuildings(const Unit & city, const double chance)
 	}
 }
 
+//PFT 12 apr 05, replaces BombardAdjacentEnemies to accomodate bombarding from range
+void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
+{
+    if (!army->CanBombard())
+		return;
 
+    if (!army->CanPerformSpecialAction())
+		return;
+
+    PLAYER_INDEX playerId = army->GetOwner();
+
+    for (sint32 foreigner = 1; foreigner < CtpAi::s_maxPlayers; foreigner++) 
+	{
+		if (g_player[foreigner] 
+			&& AgreementMatrix::s_agreements.HasAgreement(playerId, 
+														  foreigner, 
+														  PROPOSAL_TREATY_DECLARE_WAR))
+		{  //try to bombard one of his armies or cities within max range      
+
+			Player *foreigner_ptr = g_player[foreigner];
+			Assert(foreigner_ptr);
+			if (foreigner_ptr == NULL)
+				return;
+
+			sint32 num_armies = foreigner_ptr->m_all_armies->Num();
+
+			MapPoint pos;
+			army->GetPos(pos);
+
+			Army def_army;
+			MapPoint def_pos;
+			sint32 i, dist = 0, min_dist = 0x7fffffff;
+            //bombard the first enemy army within range
+			for(i = 0; i < num_armies; i++){
+				def_army = foreigner_ptr->m_all_armies->Access(i);
+
+				//visibility check
+				if( !def_army->IsVisible(playerId) )
+					continue;
+				
+				def_army->GetPos(def_pos);
+
+				dist = pos.NormalizedDistance(def_pos);
+				if(dist < min_dist){
+					min_dist = dist;
+				    if(min_dist <= max_rge){
+
+						g_gevManager->AddEvent( GEV_INSERT_Tail, 
+												GEV_BombardOrder,
+												GEA_Army, army.m_id,
+												GEA_MapPoint,def_pos,
+												GEA_End);
+						return;
+					}
+				}
+			}
+	/*
+	        if(min_dist <= max_rge){
+
+				g_gevManager->AddEvent( GEV_INSERT_Tail, 
+										GEV_BombardOrder,
+										GEA_Army, army.m_id,
+										GEA_MapPoint,def_pos,
+										GEA_End);
+				return;
+			}
+	*/		
+            //bombard the first enemy city within range
+			Unit def_city;
+            sint32 num_cities = foreigner_ptr->m_all_cities ->Num();
+            dist = 0;
+			min_dist = 0x7fffffff;
+
+            for(i = 0; i < num_cities; i++){
+
+                def_city = foreigner_ptr->m_all_cities->Access(i);
+
+               //should test if def_city is visible to player
+                if(!(def_city->GetVisibility() & (1 << playerId)))
+					continue;
+
+				def_city->GetPos(def_pos);
+                dist = pos.NormalizedDistance(def_pos);
+				if(dist < min_dist){
+					min_dist = dist;
+				    if(min_dist <= max_rge){
+
+						g_gevManager->AddEvent( GEV_INSERT_Tail, 
+												GEV_BombardOrder,
+												GEA_Army, army.m_id,
+												GEA_MapPoint,def_pos,
+												GEA_End);
+						return;
+					}
+				}
+			}
+		}
+    }
+}

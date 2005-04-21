@@ -36,7 +36,10 @@
 //   current owner. If you loose a city to someone else you know who the 
 //   b*st*rd is. When changing hands the city isn't anymore removed and
 //   then added back to the wolrd. - Mar. 4th 2005 Martin Gühmann
-//
+// - added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show 
+//   # turns until city grows
+// - implemented immobile units (set MaxMovePoints equal to 0 in units.txt) 
+//   PFT 17 Mar 05
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -213,16 +216,9 @@ UnitData::UnitData(const sint32 t,
 				   const PLAYER_INDEX o,
 				   const MapPoint &actor_pos) : GameObj(i.m_id)
 {
-    
-    
-    
-    
 
 	Create(t, trans_t, i, o);
 
-	
-	
-	
 	m_visibility = 0xffffffff;
 	m_temp_visibility = 0xffffffff;
 	m_radar_visibility = 0xffffffff;
@@ -230,13 +226,24 @@ UnitData::UnitData(const sint32 t,
 							m_owner, FALSE, (GetVisionRange()), 0);
 	m_actor->SetUnitVisionRange((GetVisionRange()));
 
-	m_pos = actor_pos; 
-	                   
-	                   
-
-	
+	m_pos = actor_pos;	
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::Place
+//
+// Description: Place this unit at MapPoint &center_pos
+//
+// Parameters : MapPoint &center_pos
+// 
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Also places ZOC around the unit.
+//
+//----------------------------------------------------------------------------
 void UnitData::Place(const MapPoint &center_pos)
 {
 	m_pos = center_pos;
@@ -245,26 +252,17 @@ void UnitData::Place(const MapPoint &center_pos)
 		BOOL revealedUnexplored = FALSE;
 		SetVisible(m_owner);
 		AddUnitVision(revealedUnexplored);
-		
 
-		
-		
-		
-		
 		if(g_theWorld->GetCell(center_pos)->GetGoodyHut()) {
 			g_theWorld->GetCell(center_pos)->DeleteGoodyHut();
 		}
 
-		
-		
-		
 		if(!g_theUnitDB->Get(m_type)->GetNoZoc() &&
 		   (!g_theWorld->HasCity(m_pos) || g_theUnitDB->Get(m_type)->GetHasPopAndCanBuild())) {
 			sint32 dd;
 			MapPoint chk;
 			g_theWorld->AddZOC(center_pos, m_owner);
 			uint32 moveType = g_theUnitDB->Get(m_type)->GetMovementType();
-			BOOL isCity = g_theUnitDB->Get(m_type)->GetHasPopAndCanBuild();
 			for(dd = (sint32)NORTH; dd < (sint32)NOWHERE; dd++) {
 				if(center_pos.GetNeighborPosition((WORLD_DIRECTION)dd, chk)) {
 					if(g_theWorld->CanEnter(chk, moveType)) {
@@ -275,7 +273,24 @@ void UnitData::Place(const MapPoint &center_pos)
 		}
 	}
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::Create
+//
+// Description: Create a unit of type t with id i.m_id and owner o (at m_pos)
+//
+// Parameters : sint32       t  : the unit's type
+//              sint32 trans_t  : ? g_theUnitDB->Get(t)->GetTransType(), see UnitPool::Create
+//              Unit        &i  :
+//              PLAYER_INDEX o  : the unit's owner
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void UnitData::Create(const sint32 t,
 				 const sint32 trans_t,
 				 const Unit &i,
@@ -292,15 +307,17 @@ void UnitData::Create(const sint32 t,
 #ifdef _DEBUG
     m_text[0] = 0; 
 #endif
-    
   
-    m_owner = o; 
-	Difficulty *diff = g_player[m_owner]->m_difficulty;
-
-	SetFlag(k_UDF_FIRST_MOVE);
+    m_owner = o;
+    
 	sint32 wonderHPBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
     m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus;
-    m_movement_points = g_theUnitDB->Get(t)->GetMaxMovePoints(); 
+    m_movement_points = g_theUnitDB->Get(t)->GetMaxMovePoints();
+
+    //PFT 17 Mar 05, don't FIRST_MOVE flag immobile units
+	if( !IsImmobile() )
+		SetFlag(k_UDF_FIRST_MOVE);
+
     m_fuel = g_theUnitDB->Get(t)->GetMaxFuel(); 
 
 	sint32 amt;
@@ -332,57 +349,19 @@ void UnitData::Create(const sint32 t,
 		}
     else 
         m_city_data = NULL; 
-    
 
     m_sprite_state = new SpriteState(g_theUnitDB->Get(t)->GetDefaultSprite()->GetValue());
-
-
-
-
-
-
-
-
-
 
 	m_visibility = 0;
 	m_temp_visibility = 0;
 	m_radar_visibility = 0;
 	m_ever_visible = (1 << 0);
 
-	
-	
-#if 0
-	if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
-		(!g_network.IsClient() || !g_network.IsLocalPlayer(m_owner)))
-	{
-		
-		
-		m_ vision_range += diff->GetVisionBonus();
-
-	} 
-#endif
-
-	
-
-	
-
 	m_transport.m_id = (0);
 
 	m_roundTheWorldMask = new BitMask(g_theWorld->GetXWidth());
 	m_roundTheWorldMask->SetBit(m_pos.x);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 UnitData::UnitData(CivArchive &archive) : GameObj(0)
 {
@@ -424,17 +403,6 @@ UnitData::~UnitData()
 	if (m_actor)
 		delete m_actor;
 
-
-
-
-
-
-
-
-
-
-
-
 	if(m_roundTheWorldMask) {
 		delete m_roundTheWorldMask;
 		m_roundTheWorldMask = NULL;
@@ -453,38 +421,22 @@ UnitData::~UnitData()
 		delete m_greater;
 		m_greater = NULL;
 	}
-
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::SetPosAndNothingElse
+//
+// Description: Set this unit's position to MapPoint &p
+//
+// Parameters : MapPoint &p
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : 
+//
+//----------------------------------------------------------------------------
 void UnitData::SetPosAndNothingElse(const MapPoint &p)
 {
     m_pos = p; 
@@ -531,32 +483,39 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 
 		Cell *cell = g_theWorld->GetCell(p);
 		if(g_wormhole) {
-
-			
-			
-			
-			
-
-			
 			if(g_theUnitDB->Get(m_type)->GetWormholeProbe() && Flag(k_UDF_RETURNED_FROM_WORMHOLE)) {
 				if(cell->GetCity().m_id != 0) {
 					g_player[m_owner]->RecoveredProbe(cell->GetCity());
 				}
 			}
 		}
-
 	}
-
-
     Assert(g_player[m_owner]); 
     g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
-
-	
-	
-	
-
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::DeductMoveCost
+//
+// Description: Deducts cost from this unit's movement points.
+//
+//              If the unit doesn't use fuel, returns FALSE and sets out_of_fuel = FALSE
+//
+//              If the unit uses fuel, it trys to refuel it:
+//                 if successful, returns FALSE and sets out_of_fuel = FALSE
+//                 if unsuccessful, returns TRUE, sets out_of_fuel = TRUE, and kills human owned unit
+//
+// Parameters : Unit &me          : ?
+//              double cost       : the cost to be deducted
+//              BOOL &out_of_fuel : TRUE if deduction causes unit to run out of fuel
+//
+// Globals    : -
+//
+// Returns    : sint32 (TRUE or FALSE)
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_fuel) 
 
 {   
@@ -567,32 +526,17 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 	}
 
 	const UnitRecord *rec = g_theUnitDB->Get(m_type); 
-    
-   
-   
-   
-   
-   
-   
-   
-   
 
    out_of_fuel = FALSE; 
    if (!rec->GetNoFuelThenCrash()){ 
-	   
-        
 	   return FALSE; 
    } else {   
 	   m_fuel -= g_theConstDB->NonSpaceFuelCost();
 
-	   
-
-	   
-	   
 	   if (m_fuel <= 0) {
-		   CheckForRefuel();
+		   CheckForRefuel();//refuel the unit if it's in a city, airbase, or being transported
 
-		   if(m_fuel <= 0) {
+		   if(m_fuel <= 0) { //refuelling failed, it's NoFuelThenCrash
 			   out_of_fuel = TRUE; 
 			   
 			   if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
@@ -601,7 +545,6 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 			   }
 
 			   m_movement_points = 0;
-
 			   return TRUE; 
 		   }
         } 
@@ -609,22 +552,38 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
     return FALSE; 
 }
 
+bool UnitData::IsImmobile()const {
 
+    const UnitRecord *rec = g_theUnitDB->Get(m_type);
 
+	if (rec->GetMaxMovePoints() < 1.0 )
+		return true;
 
-
-
-
-
-
-
+	return false;
+}
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::ResetMovement
+//
+// Description: Reset this unit's movement points to it's unitDB record's MaxMovePoints.
+//
+//              If the unit uses fuel, try to refuel it.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32 (TRUE or FALSE)
+//
+// Remark(s)  : LossMoveToDmg not used but might be implemented by editing Units.txt
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::ResetMovement()
 
 { 
     const UnitRecord *rec = g_theUnitDB->Get(m_type);    
-    
-    
-    if (rec->GetLossMoveToDmgNone()) { 
+   
+    if (rec->GetLossMoveToDmgNone()) { //all entries in Units.txt have this
         m_movement_points = rec->GetMaxMovePoints(); 
     } else if (rec->GetLossMoveToDmgTwo()) { 
 		m_movement_points = 
@@ -652,13 +611,22 @@ sint32 UnitData::ResetMovement()
 		}
 	}
 
-    SetFlag(k_UDF_FIRST_MOVE);
+    if( IsImmobile() ){//17 Mar 05, PFT, don't FIRST_MOVE flag immobile units
+        m_movement_points = 0.0;
+		ClearFlag(k_UDF_FIRST_MOVE);//speeds up debugging
+    }
+	else{ 
+        SetFlag(k_UDF_FIRST_MOVE);
+	}
+
+
+
     ClearFlag(k_UDF_ALREADY_PERFORMED_SPACE_TRANSITION);
     
     if (g_theUnitDB->Get(m_type)->GetNoFuelThenCrash()) {
 		double origMovePoints = m_movement_points;
-        CheckForRefuel();
-        m_movement_points = origMovePoints;
+        CheckForRefuel();//this may zero out m_movement_points
+        m_movement_points = origMovePoints;//so restore them
         ENQUEUE();
         return (0 < m_fuel);
     } else { 
@@ -667,12 +635,21 @@ sint32 UnitData::ResetMovement()
         return TRUE; 
     }
 }
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetInserted
+//
+// Description: This unit gets inserted into the transport Unit &transport
+//
+// Parameters : -
+//
+// Globals    : g_theWorld
+//
+// Returns    : -
+//
+// Remark(s)  : see next method
+//
+//----------------------------------------------------------------------------
 void UnitData::GetInserted(const Unit &transport)
 {
 	Unit me(m_id);
@@ -681,14 +658,21 @@ void UnitData::GetInserted(const Unit &transport)
 	UndoVision();
 	RemoveUnitVision();
 }
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetInserted
+//
+// Description: Try to insert the Unit &addme into the m_cargo_list of this unit.
+//
+// Parameters : -
+//
+// Globals    : g_theUnitDB
+//
+// Returns    : -
+//
+// Remark(s)  : TRUE if successful.
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::InsertCargo(const Unit &addme)
 
 { 
@@ -701,16 +685,30 @@ sint32 UnitData::InsertCargo(const Unit &addme)
 								 ST_UNIT, addme,
 								 ST_PLAYER, m_owner,
 								 ST_END);
-
-        
         return TRUE; 
-    } else { 
-		
-        
+    } else {
         return FALSE; 
     }
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetCargoHP
+//
+// Description: Maps each unit in this transport's m_cargo_list onto it's (current) 
+//              hit points and counts the total number of units carried.
+//
+// Parameters : sint32 &count          :the total number of units being carried.
+//              sint32 unit_type[100]  :the unit_type of each unit
+//              sint32 unit_hp[100]    :the corresponding current hit points
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : 100 is the max size of m_cargo_list.
+//              Actually, not used.
+//
+//----------------------------------------------------------------------------
 void UnitData::GetCargoHP(sint32 &count, sint32 unit_type[100], sint32 unit_hp[100])
 {
     sint32 n = m_cargo_list->Num(); 
@@ -729,13 +727,22 @@ sint32 UnitData::PayWages(sint32 w)
 {
 	Assert(FALSE);
 	return 0;
-
-    
-
-   
-
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetWagesNeeded
+//
+// Description: Calculate the wages that this city needs to pay it's citizens.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : 
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::GetWagesNeeded()
 {
 	Assert(m_city_data);
@@ -744,38 +751,45 @@ sint32 UnitData::GetWagesNeeded()
 	} else {
 		return 0;
 	}
-}
-	
-
-
-
-
-
-
-
+}	
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::DelFromCargo
+//
+// Description: Delete the Unit delme from this transport's m_cargo_list.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : 
+//
+//----------------------------------------------------------------------------
 void UnitData::DelFromCargo(const Unit delme)
-
 { 
     Assert (m_cargo_list); 
     
     sint32 r = m_cargo_list->Del(delme); 
-    Assert(r); 
-    
-
+    Assert(r);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CanCarry
+//
+// Description: Check if this unit is a transport that can carry units whose type is sint32 src.
+//
+// Parameters : sint32 src : the unit type of the unit being checked.
+//
+// Globals    : -
+//
+// Returns    : sint32 (TRUE or FALSE)
+//
+// Remark(s)  : src must be the right size so that this unit can carry it.
+//              See BOOL UnitCanCarry in Unit.cpp.
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::CanCarry(
                           const sint32 src 
                           ) const 
@@ -783,14 +797,21 @@ sint32 UnitData::CanCarry(
 { 
     return UnitCanCarry(m_type, src); 
 } 
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetCargoCapacity
+//
+// Description: Get the number of currently free slots in this unit's m_cargo_list.
+//
+// Parameters : -
+//
+// Globals    : g_theUnitDB
+//
+// Returns    : sint32 the number of currently free slots in this unit's m_cargo_list.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::GetCargoCapacity() const
 
 {
@@ -802,7 +823,21 @@ sint32 UnitData::GetCargoCapacity() const
 
 	return 0; 
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetNumCarried
+//
+// Description: Get the number of units currently being carried by this unit.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32 the number of units currently being carried by this unit.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::GetNumCarried() const
 {
 	if(m_cargo_list) {
@@ -811,7 +846,22 @@ sint32 UnitData::GetNumCarried() const
 		return 0;
 	}
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CargoHasLandUnits
+//
+// Description: Test if this unit is carrying land units in it's cargo.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : sint32 TRUE if this unit is carrying units that can move on land.
+//
+// Remark(s)  : Obsolete; it was used to warn a human that he was trying to disembark
+//              from a cargo pod into water.
+//
+//----------------------------------------------------------------------------
 BOOL UnitData::CargoHasLandUnits() const
 {
 	int i, n;
@@ -828,7 +878,22 @@ BOOL UnitData::CargoHasLandUnits() const
 
     return(FALSE);
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::IsMovePointsEnough
+//
+// Description: Test if this unit has enough move points to move into a cell whose
+//              type is that of pos.
+//
+// Parameters : MapPoint &pos : the position whose type we're interested in.
+//
+// Globals    : -
+//
+// Returns    : BOOL
+//
+// Remark(s)  :
+//
+//----------------------------------------------------------------------------
 BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
 {    
     if (Flag(k_UDF_FIRST_MOVE)) {
@@ -854,7 +919,23 @@ BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
         return (cost <= m_movement_points ); 
     }
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CanAtLeastOneCargoUnloadAt
+//
+// Description: Test if at least one of this unit's cargo list can unload into MapPoint dest_pos
+//
+// Parameters : MapPoint &old_pos   : ?
+//              MapPoint &dest_pos  :
+//              BOOL & use_vision   : if TRUE then use Vision::IsVisible(dest_pos)
+//
+// Globals    : -
+//				
+// Returns    : BOOL
+//
+// Remark(s)  :
+//
+//---------------------------------------------------------------------------- 
 BOOL UnitData::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision) const
 {
 	
@@ -869,12 +950,27 @@ BOOL UnitData::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoin
         if (CanThisCargoUnloadAt((*m_cargo_list)[cargo_idx], old_pos, dest_pos, use_vision)) {
            return TRUE; 
         }
-    } 
-
+    }
     return FALSE; 
 }
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CanThisCargoUnloadAt
+//
+// Description: Returns TRUE if Unit the_cargo can unload into MapPoint new_pos 
+//
+// Parameters : Unit & the_cargo
+//              MapPoint & old_pos    : not used 
+//              MapPoint & new_pos
+//              BOOL & use_vision     : if TRUE then use Vision::IsVisible(new_pos)
+//
+// Globals    : -
+//				
+// Returns    : BOOL
+//
+// Remark(s)  : 
+//
+//---------------------------------------------------------------------------- 
 BOOL UnitData::CanThisCargoUnloadAt(const Unit & the_cargo, const MapPoint & old_pos, 
                                     const MapPoint & new_pos, const BOOL & use_vision) const
 { 
@@ -889,14 +985,11 @@ BOOL UnitData::CanThisCargoUnloadAt(const Unit & the_cargo, const MapPoint & old
     Cell *the_dest = g_theWorld->GetCell(new_pos); 
     CellUnitList *the_dest_army = the_dest->UnitArmy();
 
-    
     if (0 < the_dest_army->Num())
         if (the_dest_army->Access(0).GetOwner() == m_owner)
             if (k_MAX_ARMY_SIZE <= the_dest_army->Num()) 
                 return FALSE; 
 
-
-    
     BOOL check_baddies; 
     if (use_vision) { 
         check_baddies = g_player[m_owner]->IsVisible(new_pos); 
@@ -904,16 +997,13 @@ BOOL UnitData::CanThisCargoUnloadAt(const Unit & the_cargo, const MapPoint & old
         check_baddies = TRUE; 
     } 
 
-    
     if (check_baddies) { 
 
-        
         if (0 < the_dest_army->Num())
             if (the_dest_army->Access(0).GetOwner() != m_owner)
                 if (!the_cargo->CanBeachAssaultRightNow()) 
                     return FALSE;
 
-        
         if(m_pos != new_pos) { 
             if (!the_cargo.IsIgnoresZOC() && 
                 g_theWorld->IsMoveZOC(m_owner, m_pos, new_pos, FALSE)) 
@@ -921,74 +1011,42 @@ BOOL UnitData::CanThisCargoUnloadAt(const Unit & the_cargo, const MapPoint & old
         }
     }
 
-    
     if (the_dest->GetCity().m_id != 0) {  
 
-
-
-
-
-
-        
         if (the_dest->GetCity().GetOwner() != m_owner) { 
             if (the_cargo.GetDBRec()->GetCantCaptureCity())
-				
                 return FALSE; 
         }
 
     } else { 
-        
-        
+
         if (!g_theWorld->CanEnter(new_pos, the_cargo.GetMovementType())) 
             return FALSE; 
-    }
-
-    
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    }   
     return TRUE; 
 }
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::UnloadCargo
+//
+// Description: Try to unload (maybe one of) this unit's m_cargo_list onto MapPoint &new_pos. 
+//
+// Parameters : MapPoint &new_pos     : the position to unload to
+//              Army     &debark      : a new army formed from the debarked units
+//              BOOL     justOneUnit  : if TRUE then only unload &theUnit
+//              Unit     &theUnit     : the unit determined by justOneUnit
+//
+// Globals    : -
+//				
+// Returns    : BOOL TRUE when done (not success/failure)
+//
+// Remark(s)  : Better to check max_debark > 0 before returning TRUE ? 
+//
+//----------------------------------------------------------------------------
 BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 						   BOOL justOneUnit, Unit &theUnit)
 
 {
-	
     sint32 i, n; 	
     static CellUnitList defender; 
 	defender.Clear();
@@ -999,23 +1057,14 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 
 	Cell *cell = g_theWorld->GetCell(new_pos);
 
-	
-	
-	
-	
-	
-	
-
 	sint32 max_debark;
 	if(cell->UnitArmy() && cell->UnitArmy()->GetOwner() != m_owner) {
-		
+	//compute the max number of units we can unload	
 		max_debark = k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits();
 	} else {
 		max_debark = min(k_MAX_ARMY_SIZE - cell->GetNumUnits(),
 						 k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits());
 	}
-	
-
 	n = m_cargo_list->Num();
 	sint32 count = 0;
 	const UnitRecord *myRec = g_theUnitDB->Get(m_type);
@@ -1041,29 +1090,33 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 			static UnitDynamicArray revealedUnits;
 			BOOL revealedUnexplored;
 			revealedUnits.Clear();
-			g_theWorld->InsertUnit(m_pos, passenger,
-											revealedUnits);
-
-            ID tmp_id = m_army.m_id;
-            
+			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
 
 			passenger.AddUnitVision(revealedUnexplored);
 			
-
 			debark.Insert(passenger );  
         }
-	} 
-
-	
+	} 	
 	return TRUE;
 }
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::UnloadSelectedCargo
+//
+// Description: Try to unload this unit's m_cargo_list onto MapPoint &new_pos. 
+//
+// Parameters : MapPoint &new_pos     : the position to unload to
+//              Army     &debark      : a new army formed from the debarked units
+//
+// Globals    : -
+//				
+// Returns    : BOOL TRUE when done (not success/failure)
+//
+// Remark(s)  : 
+//
+//----------------------------------------------------------------------------
 BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
-
-{
-	
+{	
     sint32 i, n; 	
     static CellUnitList defender; 
 	defender.Clear();
@@ -1073,17 +1126,9 @@ BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 		return FALSE;
 
 	Cell *cell = g_theWorld->GetCell(new_pos);
-
-	
-	
-	
-	
-	
-	
-
+    //how many units can we unload
 	sint32 max_debark = min(k_MAX_ARMY_SIZE - cell->GetNumUnits(),
-							k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits());
-	
+							k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits());// not m_cargo_list ?
 
 	n = m_cargo_list->Num();
 	sint32 count = 0;
@@ -1091,9 +1136,7 @@ BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
     Unit passenger; 
 
 	for (i=n-1; 0 <=i ; i--) { 
-
 		if(!m_cargo_list->Access(i).Flag(k_UDF_TEMP_TRANSPORT_SELECT))
-			
 			continue;
 
 		m_cargo_list->Access(i).ClearFlag(k_UDF_TEMP_TRANSPORT_SELECT);
@@ -1124,143 +1167,10 @@ BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 
 			debark.Insert(passenger );  
         }
-	} 
-
-	
+	}	
 	return TRUE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// this is pre-CTP1 release:
 sint32 UnitData::CanRustle(CellUnitList &defender) const 
 {
 	if (defender.GetOwner() == GetOwner())
@@ -1298,17 +1208,35 @@ sint32 UnitData::CanConvertCity(Unit &city) const
 		return false;
 	return true;
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CanBombard
+//
+// Description: Check if this unit is in position to, and able to, bombard 
+//              at least one member of the CellUnitList &defender 
+//
+// Parameters : CellUnitList &defender	: the defending army (list of units)
+//
+// Globals    : g_theUnitDB	: unit properties database
+//
+// Returns    : sint32		: TRUE or FALSE
+//
+// Remark(s)  : 
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::CanBombard(CellUnitList &defender) const 
 
 {
-   const UnitRecord *rec = g_theUnitDB->Get(m_type);
-   double r = rec->GetBombardRange() + 0.5;
-   double rsq = r * r;
-
    MapPoint dpos;
    defender.GetPos(dpos);
-   if(GetDistance(dpos, m_pos, (sint32)r) > rsq)
+
+   const UnitRecord *rec = g_theUnitDB->Get(m_type);
+
+   sint32 rge;
+   rec->GetBombardRange(rge);
+   sint32 dist = m_pos.NormalizedDistance(dpos);
+
+   if(dist > rge)
 	   return FALSE;
 
    if (rec->GetCanBombardLand()) 
@@ -1416,7 +1344,25 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 
 	return attack;
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::Bombard
+//
+// Description: Do bombard damage to (i.e., subtract hit points from) Unit defender.
+//
+// Parameters : UnitRecord *rec           : this unit's UnitRecord data
+//            : Unit defender	          : the defending unit
+//            : BOOL isCounterBombardment : toggles Slic Bombardment/CounterBombardmentTriggers
+//
+// Globals    : g_theUnitDB	  : unit properties database
+//            : g_slicEngine  : 
+//            : g_theConstDB  : 
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 					   BOOL isCounterBombardment)
 {
@@ -1457,7 +1403,7 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 		g_slicEngine->RunBombardmentTriggers(Unit(m_id), defender);
 	}
 }
- 
+// not used 
 void UnitData::BombardOneRound(const UnitRecord *rec, Unit &defender, 
                                double dbonus, 
                                double dmr)
@@ -1477,7 +1423,7 @@ void UnitData::BombardOneRound(const UnitRecord *rec, Unit &defender,
    } 
    defender.SetHP(hp); 
 }
-
+// returns TRUE if this unit can bombard defender-type units
 BOOL UnitData::CanBombardType(const Unit & defender) const
 {
 	const UnitRecord *rec = g_theUnitDB->Get(m_type); 
@@ -1513,7 +1459,24 @@ BOOL UnitData::CanBombardType(const Unit & defender) const
 	}
 	return FALSE;
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::Bombard
+//
+// Description: Try to bombard a random member of CellUnitList &defender
+//
+// Parameters : CellUnitList &defender	  : the defending army (list of units)
+//            : BOOL isCounterBombardment : toggles Slic Bombardment/CounterBombardmentTriggers
+//                                          later (when doing damage to defender)
+//
+// Globals    : g_theUnitDB	: unit properties database
+//            : g_theWorld  : the map
+//
+// Returns    : BOOL		: TRUE if successful
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 BOOL UnitData::Bombard(CellUnitList &defender, BOOL isCounterBombardment) 
 { 
 	const UnitRecord *rec = g_theUnitDB->Get(m_type); 
@@ -1537,14 +1500,10 @@ BOOL UnitData::Bombard(CellUnitList &defender, BOOL isCounterBombardment)
 	}
 	return FALSE;
 }
-
+//not used
 void UnitData::FightOneRound(Unit did, double defenders_bonus, 
-                             double amr, double dmr) 
-
-{
-	
-	
-	
+                             double amr, double dmr)
+{	
 	double d = did.GetDefense(Unit(this->m_id)); 
 	double a = GetAttack(g_theUnitDB->Get(m_type), did);
 	
@@ -1568,14 +1527,12 @@ void UnitData::DeductHP(double fp)
 	if(g_theUnitDB->Get(m_type)->GetIsSpecialForces() || Flag(k_UDF_IS_PROFESSIONAL)) {
 		m_hp -= fp;
 	} else {
-		m_hp -= fp * (1 / g_player[m_owner]->m_readiness->GetHPModifier()); 
+		m_hp -= fp * (1 / g_player[m_owner]->m_readiness->GetHPModifier()); //military readiness 
 	}
 
 	
 	return; 
 }
-
-
 //----------------------------------------------------------------------------
 //
 // Name       : UDUnitTypeCanSettle
@@ -1818,13 +1775,7 @@ void BringCityIntoAge(sint32 age, Unit c)
 }
 
 BOOL UnitData::Settle()
-{ 
-	
-	
-	
-	
-	
-    
+{    
 	DPRINTF(k_DBG_GAMESTATE, ("Unit %lx settling\n", m_id));
 
     if (CanSettle(m_pos) == FALSE) {
@@ -1870,10 +1821,7 @@ BOOL UnitData::Settle()
 	   !g_theUnitDB->Get(t)->GetMovementTypeSea()) {
 		DPRINTF(k_DBG_GAMESTATE, ("Wrong terrain type\n"));
 		return FALSE;
-	}
-
-    
-	
+	}	
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 						   GEV_KillUnit,
 						   GEA_Unit, m_id,
@@ -1888,18 +1836,6 @@ BOOL UnitData::Settle()
 						   GEA_Int, CAUSE_NEW_CITY_SETTLE,
 						   GEA_Int, m_type,
 						   GEA_End);
-						   
-	
-	
-	
-
-#ifdef _DEBUG
-    
-    
-    
-    
-#endif _DEBUG
-
 
 	return TRUE; 
 }
@@ -1907,8 +1843,8 @@ BOOL UnitData::Settle()
 
 
 
-
-
+//if this city is not supposed to begin it's turn, kill it
+//see the callback CityBeginTurnEvent
 void UnitData::BeginTurnCity(const Unit &me, UnitDynamicArray &dead)
 
 {
@@ -1918,26 +1854,22 @@ void UnitData::BeginTurnCity(const Unit &me, UnitDynamicArray &dead)
         dead.Insert(me); 
     }
 }
-
+//set this unit visible to PLAYER_INDEX player 
 void UnitData::SetVisible(PLAYER_INDEX player) 
 { 
 	m_visibility |= (1 << player); 
 	m_temp_visibility |= (1 << player);
 	m_ever_visible |= (1 << player);
-
-	
 	
 	if (m_actor) {
 		g_director->AddSetVisibility(m_actor, GetVisibility());
 	}
 }
-
+//set this unit invisible to PLAYER_INDEX player 
 void UnitData::UnsetVisible(PLAYER_INDEX player) 
 {
 	m_visibility &= ~(1 << player);
 
-	
-	
 	if (m_actor) {
 		g_director->AddSetVisibility(m_actor, GetVisibility());
 	}
@@ -2204,22 +2136,6 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 		g_director->AddSetVisibility(m_actor, m_visibility);
 		g_director->AddSetVisionRange(m_actor, (GetVisionRange()));
 
-
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
 	}
 
 	static UnitDynamicArray revealed_units;
@@ -2368,22 +2284,6 @@ void UnitData::GamestateDebug()
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void UnitData::Serialize(CivArchive &archive)
 {
     CHECKSERIALIZE
@@ -2429,23 +2329,6 @@ void UnitData::Serialize(CivArchive &archive)
 
 		m_actor->Serialize(archive);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-
 		m_temp_visibility_array.Serialize(archive);
 		m_transport.Serialize(archive);
 
@@ -2485,8 +2368,6 @@ void UnitData::Serialize(CivArchive &archive)
 		
 		m_army.Serialize(archive);
 		m_pos.Serialize(archive) ;
-
-		
 		
 #ifdef _DEBUG
 		m_text[0] = 0;
@@ -2523,35 +2404,8 @@ void UnitData::Serialize(CivArchive &archive)
 
 		m_actor = new UnitActor(archive) ;
 
-
-
-		
-
-
-
-
-
-
-
-
-
-
 		m_sprite_state = m_actor->GetSpriteState();
 
-
-
-
-
-
-
-
-
-
-		
-
-
-
-		
 		m_temp_visibility_array.Serialize(archive);
 		m_transport.Serialize(archive);
 
@@ -2593,18 +2447,6 @@ void UnitData::Serialize(CivArchive &archive)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 uint32 UnitData_UnitData_GetVersion(void)
 	{
 	return (k_UNITDATA_VERSION_MAJOR<<16 | k_UNITDATA_VERSION_MINOR) ;
@@ -2643,26 +2485,47 @@ void UnitData::GetConsumptionStats(sint32 &foodConsumed) const
 	Assert(m_city_data) ;
 	m_city_data->GetConsumptionStats(foodConsumed) ;
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetPop
+//
+// Description: Get this city's population
+//
+// Parameters : sint32 &p   : the filled in number
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void UnitData::GetPop(sint32 &p)const
-
 {
     Assert(m_city_data);
     m_city_data->GetPop(p); 
 }
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetTurnsToNextPop
+//
+// Description: Get the number of turns until this city adds a pop
+//
+// Parameters : sint32 &p   : the filled in number
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : The city's m_turnsNextPop is not archived.
+//
+//----------------------------------------------------------------------------
+void UnitData::GetTurnsToNextPop(sint32 &p)const//PFT 29 mar 05
 
-
-
-
-
-
-
-
-
-
-
-
-
+{
+    Assert(m_city_data);
+    p = m_city_data->TurnsToNextPop(); 
+}
 
 void UnitData::GetPollutionStats(sint32 &pollution) const
 	{
@@ -3165,7 +3028,7 @@ void UnitData::KillVision()
 		UndoVision();
 	}
 }
-
+// returns squared distance
 sint32 UnitData::GetDistance(UnitData* unit1, UnitData* unit2,
 							 sint32 wrapRange)
 {
@@ -3390,7 +3253,7 @@ void UnitData::BeginTurn()
 	}
 
 	if(g_theWorld->IsInstallation(m_pos)) {
-		// Fort healing effect at end of turn, as for city/normal.
+
 		if (rec->GetNoFuelThenCrash() && 
 			terrainutil_HasAirfield(m_pos) &&
 			g_theWorld->GetOwner(m_pos) == m_owner &&
@@ -3401,7 +3264,7 @@ void UnitData::BeginTurn()
 	}
 
 
-		g_slicEngine->RunUnitBeginTurnTriggers(Unit(m_id));
+	g_slicEngine->RunUnitBeginTurnTriggers(Unit(m_id));
 
 
 	if(Flag(k_UDF_ALREADY_PERFORMED_SPACE_TRANSITION)) {
@@ -3419,12 +3282,13 @@ void UnitData::BeginTurn()
 void UnitData::EndTurn()
 {
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
-	sint32 wonderBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
-	double origHP = m_hp;
 
+	sint32     wonderBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
+	double          origHP  = m_hp;
 	double const	maxHp	= rec->GetMaxHP() + wonderBonus;
 
-	if (Flag(k_UDF_FIRST_MOVE) && (m_hp < maxHp))
+    // PFT added: heal immobile units also, 17 Mar 05
+	if ((Flag(k_UDF_FIRST_MOVE) || IsImmobile() ) && (m_hp < maxHp))
 	{
 		if (g_theWorld->HasCity(m_pos) || 
 			(g_theWorld->IsInstallation(m_pos) && terrainutil_HasFort(m_pos))
@@ -3465,7 +3329,7 @@ void UnitData::EndTurn()
 		}
 	}
 }
-
+// not used
 BOOL UnitData::IsInsideCityRadius(const MapPoint &pos) const
 {
 	Assert(m_city_data);
@@ -3551,19 +3415,15 @@ BOOL UnitData::SafeFromNukes() const
 	return m_city_data->SafeFromNukes();
 }
 
-
+// returns this unit's defense points when attacked (in m_pos) by Unit attacker.
+// see also UnitData::GetDefense below, which builds on this.
 double UnitData::GetPositionDefense(const Unit &attacker) const
 {
 	const UnitRecord *myRec = g_theUnitDB->Get(m_type);
 	double def, basedef;
 	Cell *cell = g_theWorld->GetCell(m_pos);
-
 	
 	def = basedef = myRec->GetDefense();
-
-	
-	
-
 	
 	if(g_theWorld->IsWater(m_pos) && !(myRec->GetMovementTypeSea() || myRec->GetMovementTypeShallowWater())) {
 		return 1.0;
@@ -3610,7 +3470,7 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 
 	return def;
 }
-
+// returns this unit's attack points when attacking Unit defender
 double UnitData::GetOffense(const Unit &defender) const
 {
 	const UnitRecord *myRec = g_theUnitDB->Get(m_type);
@@ -3629,7 +3489,7 @@ double UnitData::GetOffense(const Unit &defender) const
 		base = modAttack;
 	return base;
 }
-	
+// returns this units defense points when defending against Unit attacker 	
 double UnitData::GetDefense(const Unit &attacker) const
 {
 	const UnitRecord *attackRec, *myRec;
@@ -3667,7 +3527,7 @@ double UnitData::GetDefense(const Unit &attacker) const
 
 	return def;
 }
-
+// not used
 BOOL UnitData::HasAirport() const
 {
 	Assert(m_city_data);
@@ -3676,7 +3536,7 @@ BOOL UnitData::HasAirport() const
 
 	return m_city_data->HasAirport();
 }
-
+// not used
 void UnitData::UseAirport()
 {
 	Assert(m_city_data);
@@ -3755,7 +3615,23 @@ BOOL UnitData::StoppedBySpies(Unit &c)
 	}
 	return FALSE;
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::InvestigateCity
+//
+// Description: Order this unit to investigate the city Unit &c.
+//
+// Parameters : Unit &c       : a city
+//
+// Globals    : g_theUnitDB
+//            : g_slicEngine
+//            : g_rand		  :
+//				
+// Returns    : ORDER_RESULT  : attempt success/failure indication
+//
+// Remark(s)  :	 
+//
+//----------------------------------------------------------------------------
 ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 {
 	SlicObject	*so ;
@@ -3827,10 +3703,6 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 							   GEA_City, c.m_id,
 							   GEA_End);
 	}
-
-#ifdef _DEBUG
-
-#endif
 	return ORDER_RESULT_SUCCEEDED;
 }
 
@@ -3998,7 +3870,23 @@ failed:
 
 	return ORDER_RESULT_FAILED;
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::InciteRevolution
+//
+// Description: Order this unit to incite a revolution in the city Unit &c.
+//
+// Parameters : Unit &c             : a city
+//
+// Globals    : g_theUnitDB
+//            : g_slicEngine
+//            : g_rand		  :
+//				
+// Returns    : ORDER_RESULT  : attempt success/failure indication
+//
+// Remark(s)  :	
+//
+//----------------------------------------------------------------------------
 ORDER_RESULT UnitData::InciteRevolution(Unit &c)
 {
 	SlicObject	*so ;
@@ -4042,10 +3930,6 @@ ORDER_RESULT UnitData::InciteRevolution(Unit &c)
 			Unit me(m_id);
 			me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
 		}
-
-		
-
-
 		return ORDER_RESULT_FAILED;
 	}
 	
@@ -4120,7 +4004,7 @@ ORDER_RESULT UnitData::AssassinateRuler(Unit &c)
 	ActionSuccessful(SPECATTACK_BOMBCABINET, c);
 	return ORDER_RESULT_SUCCEEDED;
 }
-
+//leftover from CTP1 ?
 ORDER_RESULT UnitData::NullifyWalls(Unit &c)
 {
 #if 0
@@ -4793,7 +4677,7 @@ sint32 UnitData::HowMuchLonger() const
 	if(!m_city_data) return 0;
 	return m_city_data->HowMuchLonger();
 }
-
+// not used
 sint32 UnitData::GetCombatUnits() const
 {
 	Assert(m_city_data);
@@ -4801,7 +4685,7 @@ sint32 UnitData::GetCombatUnits() const
 		return 0;
 	return m_city_data->GetCombatUnits();
 }
-
+// not used (CityData::CanHavePopType always returns TRUE)
 BOOL UnitData::CanHavePopType(sint32 type) const
 {
 	Assert(m_city_data);
@@ -4830,7 +4714,7 @@ BOOL UnitData::CanBuildBuilding(sint32 type) const
 
 
 
-
+//CanBuildInfrastructure ? 
 
 
 
@@ -4893,7 +4777,7 @@ sint32 UnitData::InjoinedBy() const
 		return -1;
 	return m_city_data->InjoinedBy();
 }
-
+// not used
 double UnitData::GetDistanceToCapitol() const
 {
 	MapPoint cappos;
@@ -4950,7 +4834,7 @@ void UnitData::SetOrders(UNIT_ORDER_TYPE order)
 	}
 }
 #endif
-
+// not used !
 double UnitData::GetOverseasDistress() const
 {
 	Unit nearCity;
@@ -4974,11 +4858,7 @@ double UnitData::GetOverseasDistress() const
 void UnitData::SupportBuildings()
 {
 	Assert(FALSE);
-	return;
-	
-	
-
-	
+	return;	
 }
 
 void UnitData::CheckRiot()
@@ -5084,7 +4964,7 @@ void UnitData::SetPacMan()
 	
 	
 }
-
+//Not used
 void UnitData::SetFirstMoveThisTurn(sint32 fm)
 {
 	if(fm)
@@ -5092,7 +4972,7 @@ void UnitData::SetFirstMoveThisTurn(sint32 fm)
 	else
 		ClearFlag(k_UDF_FIRST_MOVE);
 }
-
+// not used
 void UnitData::SetFuel(sint32 fuel)
 {
 	m_fuel = fuel;
@@ -5346,7 +5226,7 @@ BOOL UnitData::HasLeftMap() const
 {
 	return Flag(k_UDF_HAS_LEFT_MAP);
 }
-
+//not used
 void UnitData::ContributeScience(double incomePercent,
 								 double &addscience,
 								 double &subgold)
@@ -5495,7 +5375,7 @@ sint32 UnitData::CanUndergroundRailway(const MapPoint &pos) const
 		return false;
 	return true;
 }
-
+// Returns true if this unit is next to pos and can convert a city there
 sint32 UnitData::CanConvert(const MapPoint &pos) const 
 {
 	if (!g_theUnitDB->Get(m_type)->GetConvertCities())
@@ -5588,7 +5468,22 @@ sint32 UnitData::CanInciteRevolution(const MapPoint &pos) const
 		return false;
 	return true;
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CanCauseUnhappiness
+//
+// Description: Test if this unit can cause unhappiness.
+//
+// Parameters : MapPoint &pos
+// 
+//
+// Globals    : -
+//
+// Returns    : true if this unit is in position to cause unhappiness at MapPoint &pos right now.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 UnitData::CanCauseUnhappiness(const MapPoint &pos) const 
 {
 	if (!g_theUnitDB->Get(m_type)->GetCauseUnhappiness())
@@ -5614,19 +5509,6 @@ sint32 UnitData::CanExpel(const MapPoint &pos) const
 		return false;
 	return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void UnitData::AddEndGameObject(sint32 type)
 {
@@ -5712,7 +5594,23 @@ sint32 UnitData::GetOutgoingTrade() const
 	}
 	return 0;
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CheckForRefuel
+//
+// Description: Test if this unit is in position to be refueled. If so, refuel it
+//              and zero it's movement points.
+//
+// Parameters : -
+// 
+//
+// Globals    : -
+//
+// Returns    : TRUE if unit can be and has been refueled.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 BOOL UnitData::CheckForRefuel()
 {
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
@@ -5722,16 +5620,11 @@ BOOL UnitData::CheckForRefuel()
 		return TRUE;
 	}
 	
-	Unit c = g_theWorld->GetCity(m_pos);
-	
+	Unit c = g_theWorld->GetCity(m_pos);	
 	if (c.m_id != (0)) { 
-		Unit me(m_id);
-		
-		if (1) { 
-			m_fuel = rec->GetMaxFuel();
-			m_movement_points = 0;
-			return TRUE;
-		}
+		m_fuel = rec->GetMaxFuel();
+		m_movement_points = 0;
+		return TRUE;
 	}
 	
 	if(g_theWorld->IsInstallation(m_pos)) {

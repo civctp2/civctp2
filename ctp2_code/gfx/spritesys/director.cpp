@@ -24,6 +24,7 @@
 // - Prevented game freeze when an item gets deleted while the program is 
 //   waiting for it to finish.
 // - Prevented messages appearing out of turn in hoseat mode
+// - PFT 29 mar 05, show # turns until city next grows a pop
 //
 //----------------------------------------------------------------------------
 
@@ -88,6 +89,9 @@
 
 #include "CursorManager.h"
 
+#include "CityData.h" //PFT 29 mar 05, show # turns until city next grows a pop
+#include "UnitData.h" // "
+
 #include "spritegrouplist.h"
 extern SpriteGroupList		*g_unitSpriteGroupList;
 
@@ -148,7 +152,7 @@ m_owner(-1)
 
 DQItem::~DQItem()
 {
-	DPRINTF(k_DBG_GAMESTATE, ("Deleting item @ %lx, type=%d\n", this, m_type));
+	//DPRINTF(k_DBG_GAMESTATE, ("Deleting item @ %lx, type=%d\n", this, m_type));
 	if (m_sequence)
 		delete m_sequence;
 
@@ -3089,16 +3093,28 @@ void Director::ReloadAllSprites()
 	sint32 p, i;
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
+        //PFT  29 mar 05
+		//cycle through human players' cities
+        if(g_player[g_selected_item->GetVisiblePlayer()]->m_playerType == PLAYER_TYPE_HUMAN){
+			for(i = 0; i < g_player[p]->m_all_cities->Num(); i++) {
+				Unit u = g_player[p]->m_all_cities->Access(i);
 
+				//recover the number of turns until the city next produces a pop from it's current state
+				//CityData *cityData = u.GetData()->GetCityData();
+				//cityData->TurnsToNextPop();
+
+				UnitActor *actor = u.GetActor();
+				u.GetSpriteState()->SetIndex(u.GetDBRec()->GetDefaultSprite()->GetValue());
+				actor->ChangeImage(u.GetSpriteState(), u.GetType(), u);
+			}
+        }
 		for(i = 0; i < g_player[p]->m_all_units->Num(); i++) {
 			Unit u = g_player[p]->m_all_units->Access(i);
 			UnitActor *actor = u.GetActor();
 			u.GetSpriteState()->SetIndex(u.GetDBRec()->GetDefaultSprite()->GetValue());
 			actor->ChangeImage(u.GetSpriteState(), u.GetType(), u);
 		}
-	}
-
-	
+	}	
 }
 
 void Director::NotifyResync()

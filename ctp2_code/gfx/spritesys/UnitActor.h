@@ -142,6 +142,8 @@ public:
 	void			SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
 	sint32			GetPlayerNum(void) { return m_playerNum;}
 
+    sint32			GetNextPop(void) { return m_nextPop;}//PFT 29 mar 05, show # turns until city next grows a pop
+
 	Action			*GetCurAction(void) { return m_curAction; }
 
 	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
@@ -255,6 +257,8 @@ protected:
 	Unit				m_unitID;
 	sint32				m_unitDBIndex;
 	sint32				m_playerNum;
+
+    sint32              m_nextPop; //PFT 29 mar 05, show # turns until city next grows a pop
 
 	UnitSpriteGroup		*m_unitSpriteGroup;
 	LOADTYPE			m_loadType;							

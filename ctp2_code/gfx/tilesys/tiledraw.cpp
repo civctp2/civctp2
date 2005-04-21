@@ -46,6 +46,7 @@
 // - If fog of war is off or god mode is on all borders are now shown. Even 
 //   those of the civs you have no contact to. - Mar. 4th 2005 Martin Gühmann
 // - Added option to draw wonders on top of roads.
+// - PFT 29 mar 05, show # turns until city next grows a pop.
 //
 //----------------------------------------------------------------------------
 
@@ -233,8 +234,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 	if(!g_fog_toggle // Draw the right stuff if fog of war is off
 	&& !visiblePlayerOwnsThis
 	&&  m_localVision->GetLastSeen(pos, ucell)
-//	&&  ucell.m_unseenCell->GetImprovements()->GetCount() > 0
-	) 
+	)
 	{
 		env = ucell.m_unseenCell->GetEnv();
 
@@ -4751,6 +4751,7 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 				BOOL		drawCity = FALSE;
 				bool        drawQueueEmpty = false;
 				sint32		pop = 0;
+                sint32      nextpop = 0;//PFT
 				MBCHAR		*name = NULL;
 				sint32		owner = 0;
 
@@ -4774,54 +4775,49 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 				UnseenCellCarton	ucell;
 				// Don't forget if fog was toggled
 				if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle) {
-						pop = ucell.m_unseenCell->GetCitySize();
-						name = (MBCHAR *)ucell.m_unseenCell->GetCityName();
-						owner = ucell.m_unseenCell->GetCityOwner();
-						isBioInfected = ucell.m_unseenCell->IsBioInfected();
-						isNanoInfected = ucell.m_unseenCell->IsNanoInfected();
-						isConverted = ucell.m_unseenCell->IsConverted();
-						isFranchised = ucell.m_unseenCell->IsFranchised();
-						isInjoined = ucell.m_unseenCell->IsInjoined();
-						wasHappinessAttacked = ucell.m_unseenCell->WasHappinessAttacked();
-						isRioting = ucell.m_unseenCell->IsRioting();
-						hasAirport = ucell.m_unseenCell->HasAirport();
-						if (owner == g_selected_item->GetVisiblePlayer())
-							hasSleepingUnits = ucell.m_unseenCell->HasSleepingUnits();
-						else
-							hasSleepingUnits = FALSE;
-						
-						isWatchful = ucell.m_unseenCell->IsWatchful();
-						
-						bioInfectedOwner = (sint32)ucell.m_unseenCell->m_bioInfectedOwner;
-						nanoInfectedOwner = ucell.m_unseenCell->m_nanoInfectedOwner;
-						convertedOwner = ucell.m_unseenCell->m_convertedOwner;
-						franchiseOwner = ucell.m_unseenCell->m_franchiseOwner;
-						injoinedOwner = ucell.m_unseenCell->m_injoinedOwner;
-						happinessAttackOwner = ucell.m_unseenCell->m_happinessAttackOwner;
-						
-						slaveBits = ucell.m_unseenCell->GetSlaveBits();
-						
-						if (pop > 0)
-							drawCity = TRUE;
-					}
-				else
-				{
-
+					pop = ucell.m_unseenCell->GetCitySize();
+					name = (MBCHAR *)ucell.m_unseenCell->GetCityName();
+					owner = ucell.m_unseenCell->GetCityOwner();
+					isBioInfected = ucell.m_unseenCell->IsBioInfected();
+					isNanoInfected = ucell.m_unseenCell->IsNanoInfected();
+					isConverted = ucell.m_unseenCell->IsConverted();
+					isFranchised = ucell.m_unseenCell->IsFranchised();
+					isInjoined = ucell.m_unseenCell->IsInjoined();
+					wasHappinessAttacked = ucell.m_unseenCell->WasHappinessAttacked();
+					isRioting = ucell.m_unseenCell->IsRioting();
+					hasAirport = ucell.m_unseenCell->HasAirport();
+					if (owner == g_selected_item->GetVisiblePlayer())
+						hasSleepingUnits = ucell.m_unseenCell->HasSleepingUnits();
+					else
+						hasSleepingUnits = FALSE;
 					
+					isWatchful = ucell.m_unseenCell->IsWatchful();
+					
+					bioInfectedOwner = (sint32)ucell.m_unseenCell->m_bioInfectedOwner;
+					nanoInfectedOwner = ucell.m_unseenCell->m_nanoInfectedOwner;
+					convertedOwner = ucell.m_unseenCell->m_convertedOwner;
+					franchiseOwner = ucell.m_unseenCell->m_franchiseOwner;
+					injoinedOwner = ucell.m_unseenCell->m_injoinedOwner;
+					happinessAttackOwner = ucell.m_unseenCell->m_happinessAttackOwner;
+					
+					slaveBits = ucell.m_unseenCell->GetSlaveBits();
+					
+					if (pop > 0)
+						drawCity = TRUE;
+				}else{
+					    //if there's a unit at pos
 					if (g_theWorld->GetTopVisibleUnit(pos,unit)) {
-
+                        //and it's a city visible to the current player
 						if (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()) && unit.IsCity()) {
 							CityData *cityData = unit.GetData()->GetCityData();
 							
-							
-							
-							
-							
 							if (!unit.GetActor()) {
 								pop = cityData->PopCount();
+                                nextpop = cityData->TurnsToNextPop();
 								owner = cityData->GetOwner();
 							} else {
 								pop = unit.GetActor()->GetSize();
+                                nextpop = unit.GetActor()->GetNextPop();
 								owner = unit.GetActor()->GetPlayerNum();
 							}
 							
@@ -4859,27 +4855,26 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 					}
 				}
 
-				if (drawCity) {
+				if (drawCity) {//it's a city now visible to the current player
 					
 					sint32		x,y;
-					maputils_MapXY2PixelXY(mapX,mapY,&x,&y);
-					
-					
+					maputils_MapXY2PixelXY(mapX,mapY,&x,&y);//change map co-ordinates to pixel co-ordinates
+										
 					y-= yoffset;
 					
 					sint32 width, height;
-					RECT rect;
-					RECT boxRect;
-					RECT clipRect;
+					RECT rect;//the city name rectangle
+					RECT boxRect;//boxRect-rect will = the player colored border for the city name
+					RECT clipRect;//working surface
 
-					if (x >= 0 && y >= 0 && x < surfWidth && y < surfHeight) {
+					if (x >= 0 && y >= 0 && x < surfWidth && y < surfHeight) {//it's on the screen
 						if (m_font) {
 							width = m_font->GetStringWidth(name);
 							height = m_font->GetMaxHeight();
 
 							COLORREF		color;
 							Pixel16			pixelColor;
-
+                            //get the proper colors for the city's owner
 							if (fog) {
 								color = g_colorSet->GetDarkColorRef(g_colorSet->ComputePlayerColor(owner));
 								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
@@ -4887,36 +4882,38 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 								color = g_colorSet->GetColorRef(g_colorSet->ComputePlayerColor(owner));
 								pixelColor = g_colorSet->GetPlayerColor(owner);
 							}
+							//define rect's screen co-ordinates
 							rect.left = x;
 							rect.top = y;
 							rect.right = x+width;
 							rect.bottom = y+height;
 
-							boxRect = rect;
+							boxRect = rect;//copy rect to boxRect
 
-							InflateRect(&boxRect, 2, 1);
+							InflateRect(&boxRect, 2, 1);//expand boxRect to allow for borders
 							
-							clipRect = boxRect;
-
+							clipRect = boxRect;//copy boxRect to the working surface clipRect
+                            //adjust clipRect to fit on the screen
 							if (clipRect.left < 0) clipRect.left = 0;
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-
+                            //color clipRect BLACK
 							primitives_PaintRect16(surf, &clipRect, g_colorSet->GetColor(COLOR_BLACK));
 							
-							InflateRect(&boxRect, 1, 1);
+							InflateRect(&boxRect, 1, 1);//get ready to do borders (clipRect - boxRect now= a one pixel border)
 
-							clipRect = boxRect;
-
+							clipRect = boxRect;//copy boxRect to the working surface clipRect
+                            //adjust clipRect to fit on the screen
 							if (clipRect.left < 0) clipRect.left = 0;
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
 
-							
+							//color clipRect to be the player's color (this creates the border)
 							primitives_FrameRect16(surf, &clipRect, pixelColor);
-							
+
+							//get the color for the city's name text
 							COLORREF nameColor;							
 							if (fog) {
 								nameColor = g_colorSet->GetDarkColorRef(COLOR_WHITE);
@@ -4930,84 +4927,178 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 								}
 							}
 
-							
+							//copy rect to clipRect (this is now the interior rectangle that holds the city name)
 							clipRect = rect;
-							
+							//adjust to fit on the screen
 							if (clipRect.left < 0) clipRect.left = 0;
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-
+                            //draw the city name
 							m_font->DrawString(surf, &rect, &clipRect, name, 0,	nameColor,	0);
-
-
-
-
-
-
-
-
-
 
 							AddDirtyRectToMix(boxRect);
 							
-
+                            //start on the city's pop rectangle
+                            //put the city's pop in str
 							MBCHAR str[80];
 							sprintf(str,"%i",pop);
-							
+							//the top line of the pop rectangle
 							y = boxRect.bottom + 1;
 
-							
+
 							width = m_font->GetStringWidth(str);
 							if (width < k_POP_BOX_SIZE_MINIMUM)
 								width = k_POP_BOX_SIZE_MINIMUM;
 							height = m_font->GetMaxHeight();
 
-							
+							// the pop rectangle
 							RECT popRect = {0, 0, width+4, height+4};
-
+                            //add the top left co-ordinates
 							OffsetRect(&popRect, boxRect.left, y);
 
-							
+							//get the proper color for the city's owner
 							if (fog) {
 								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
 							} else {
 								pixelColor = g_colorSet->GetPlayerColor(owner);
 							}
 
-							
+							//copy popRect to the working surface clipRect
 							clipRect = popRect;
+                            //adjust clipRect's screen location
+							if (clipRect.left < 0) clipRect.left = 0;
+							if (clipRect.top < 0) clipRect.top = 0;
+							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
+							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+
+							//paint clipRect's surface the proper player color and give it a black frame
+							primitives_PaintRect16(surf, &clipRect, pixelColor);
+							primitives_FrameRect16(surf, &clipRect, g_colorSet->GetColor(COLOR_BLACK));
+							
+							//width and height of the pop number 
+							width = m_font->GetStringWidth(str);
+							height = m_font->GetMaxHeight();
+                            //this rect will be the inner rect that shows the pop number
+							RECT		rect = {0, 0, width, height};
+
+							OffsetRect(&rect, popRect.left + (popRect.right-popRect.left)/2 -
+											width/2,
+											popRect.top + (popRect.bottom-popRect.top)/2 -
+											height/2);
+
+
+							//copy rect to clipRect (and adjust screen location)
+							clipRect = rect;
+							if (clipRect.left < 0) clipRect.left = 0;
+							if (clipRect.top < 0) clipRect.top = 0;
+							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
+							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+                            //draw the pop number in black
+							m_font->DrawString(surf, &rect, &clipRect, str, 
+								0, 
+								g_colorSet->GetColorRef(COLOR_BLACK),
+								0);
+
+							//move two pixels right and do it again ? 
+							OffsetRect(&rect, 2, 0);
+							clipRect = rect;
+							if (clipRect.left < 0) clipRect.left = 0;
+							if (clipRect.top < 0) clipRect.top = 0;
+							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
+							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+							m_font->DrawString(surf, &rect, &clipRect, str, 
+								0, 
+								g_colorSet->GetColorRef(COLOR_BLACK),
+								0);
+
+							//move one pixel left and do it again ?
+							OffsetRect(&rect, -1, 0);
+
+							COLORREF		colorRef;
+                            //get the proper color for the city's owner
+							if (fog)
+								colorRef = g_colorSet->GetDarkColorRef(COLOR_WHITE);
+							else
+								colorRef = g_colorSet->GetColorRef(COLOR_WHITE);
+
+							clipRect = rect;
 
 							if (clipRect.left < 0) clipRect.left = 0;
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
 
-							
-							primitives_PaintRect16(surf, &clipRect, pixelColor);
-							primitives_FrameRect16(surf, &clipRect, g_colorSet->GetColor(COLOR_BLACK));
-							
-							
-							if (m_font) {
-								width = m_font->GetStringWidth(str);
+							m_font->DrawString(surf, &rect, &clipRect, str, 
+								0, 
+								colorRef,
+								0);
+
+							popRect.bottom++;
+							popRect.right++;
+
+							AddDirtyRectToMix(rect);
+
+							//top left co-ordinates of nextPop rect
+							x = popRect.left;
+                            y = popRect.bottom + 1;
+
+							// nextpop rect, PFT
+							if (owner == g_selected_item->GetVisiblePlayer()){
+                                //put the number of turns until the city's nextpop in str
+								MBCHAR strn[80];
+								sprintf(strn,"%i",nextpop);
+                                //width and height of the pop number 
+								width = m_font->GetStringWidth(strn);
+								if (width < k_POP_BOX_SIZE_MINIMUM)
+									width = k_POP_BOX_SIZE_MINIMUM;
 								height = m_font->GetMaxHeight();
 
-								RECT		rect = {0, 0, width, height};
+							    //RECT for next pop
+								RECT popRectn = {0, 0, width+4, height+4};
+                                //add the top left co-ordinates
+								OffsetRect(&popRectn, x, y);
 
-								OffsetRect(&rect, popRect.left + (popRect.right-popRect.left)/2 -
-												width/2,
-												popRect.top + (popRect.bottom-popRect.top)/2 -
-												height/2);
+								//get the proper color for the city's owner
+								if (fog) {
+									pixelColor = g_colorSet->GetDarkPlayerColor(owner);
+								} else {
+									pixelColor = g_colorSet->GetPlayerColor(owner);
+								}
 
-
-								
-								clipRect = rect;
+								//copy popRectn to the working surface clipRect
+								clipRect = popRectn;
+                                //adjust clipRect's screen location
 								if (clipRect.left < 0) clipRect.left = 0;
 								if (clipRect.top < 0) clipRect.top = 0;
 								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
 
-								m_font->DrawString(surf, &rect, &clipRect, str, 
+								//paint clipRect's surface the proper player color and give it a black frame
+								primitives_PaintRect16(surf, &clipRect, pixelColor);
+								primitives_FrameRect16(surf, &clipRect, g_colorSet->GetColor(COLOR_BLACK));
+	
+								//width and height of the nextpop number	
+								width = m_font->GetStringWidth(strn);
+								height = m_font->GetMaxHeight();
+
+                                //this rect will be the inner rect that shows the nextpop number
+								RECT		rect = {0, 0, width, height};
+
+								OffsetRect(&rect, popRectn.left + (popRectn.right-popRectn.left)/2 -
+												width/2,
+												popRectn.top + (popRectn.bottom-popRectn.top)/2 -
+												height/2);
+
+
+								//copy rect to clipRect (and adjust screen location)
+								clipRect = rect;
+								if (clipRect.left < 0) clipRect.left = 0;
+								if (clipRect.top < 0) clipRect.top = 0;
+								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
+								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+                                //draw the nextpop number in black
+								m_font->DrawString(surf, &rect, &clipRect, strn, 
 									0, 
 									g_colorSet->GetColorRef(COLOR_BLACK),
 									0);
@@ -5019,7 +5110,7 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 								if (clipRect.top < 0) clipRect.top = 0;
 								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-								m_font->DrawString(surf, &rect, &clipRect, str, 
+								m_font->DrawString(surf, &rect, &clipRect, strn, 
 									0, 
 									g_colorSet->GetColorRef(COLOR_BLACK),
 									0);
@@ -5041,36 +5132,20 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
 
-								m_font->DrawString(surf, &rect, &clipRect, str, 
+								m_font->DrawString(surf, &rect, &clipRect, strn, 
 									0, 
 									colorRef,
 									0);
 
-								popRect.bottom++;
-								popRect.right++;
+								popRectn.bottom++;
+								popRectn.right++;
 
 								AddDirtyRectToMix(rect);
+
 							}
-							}
-						} else {
+						} else 
 							continue;
-						}
-					
-
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
+					}
 					DrawCityIcons(surf, pos, owner, fog, rect,
 								isBioInfected, isNanoInfected, isConverted, 
 								isFranchised, isInjoined, wasHappinessAttacked,
@@ -5084,7 +5159,43 @@ void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
 		}
 	}
 }
-
+//----------------------------------------------------------------------------
+//
+// Name       : TiledMap::DrawCityIcons
+//
+// Description: Draw the temporary icons above a city
+//
+// Parameters : aui_DirectSurface *surf                : the surface to draw on
+//              MapPoint          &pos                 : the city's position
+//              sint32            owner                : the city's owner
+//              BOOL              fog                  : if TRUE then draw city under fog of war
+//              RECT              &popRect             : the rectangle that contains the city's pop number
+//                                                       (used to test screen location)
+//              BOOL              isBioInfected        : if TRUE then draw MAPICON_BIODISEASE
+//              BOOL              isNanoInfected       : etc.
+//              BOOL              isConverted          :
+//              BOOL              isFranchised         :
+//              BOOL              isInjoined           :
+//              BOOL              wasHappinessAttacked :
+//              sint32            bioInfectedOwner     : not used (set to the city's owner)
+//              sint32            nanoInfectedOwner    : ditto.
+//              sint32            convertedOwner       : the player who converted the city
+//              sint32            franchiseOwner       : the player who franchised the city
+//              sint32            injoinedOwner        : not used (set to the city's owner)
+//              sint32            happinessAttackOwner : ditto
+//              uint32            slaveBits            : which other player's citizens are enslaved here
+//              BOOL              isRioting            : if TRUE then draw MAPICON_UPRISING
+//              BOOL              hasAirport           : not used
+//              BOOL              hasSleepingUnits     : if TRUE then draw MAPICON_SLEEPINGUNITS
+//              BOOL              isWatchful           : if TRUE then draw MAPICON_WATCHFUL
+//
+// Globals    : 
+//				
+// Returns    : 
+//
+// Remark(s)  : 
+//
+//----------------------------------------------------------------------------
 void TiledMap::DrawCityIcons(aui_DirectSurface *surf, MapPoint &pos, sint32 owner, BOOL fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,

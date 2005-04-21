@@ -27,6 +27,7 @@
 // - Exposed city walls and force field graphics to agecitystyle.txt, 
 //   by Martin Gühmann.
 // - Prevented crashes with invalid (i.e. killed or destroyed) units.
+// - PFT 29 mar 05, show # turns until city next grows a pop.
 //
 //----------------------------------------------------------------------------
 
@@ -140,7 +141,8 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 	m_unitVisibility = NULL;
 	m_unitSaveVisibility = NULL;
 
-	m_size = 0; 
+	m_size = 0;
+	m_nextPop = 0;//PFT 29 mar 05, show # turns until city next grows a pop
 	GetIDAndType(owner, ss, id, unitType, (MapPoint)pos, &spriteID, &m_type);
 	m_spriteID = (sint32)spriteID;
 
@@ -395,7 +397,8 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 
 	
 	if (g_theUnitPool->IsValid(id) && id.IsCity()) {
-		id.GetPop(m_size);
+		id.GetPop(m_size);//put the city's pop into the actor's m_size
+		id.GetTurnsToNextPop(m_nextPop);//PFT, computes TurnsToNextPop and puts it into the actor's m_nextPop
 	}
 
 	DumpAllActions();

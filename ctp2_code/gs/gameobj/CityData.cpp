@@ -61,7 +61,8 @@
 //   population assignment for instnce. - April 4th 2005 Martin Gühmann
 // - Updated NeedMoreFood function for better estimation. 
 //   - April 4th 2005 Martin Gühmann
-// - Changed CollectResources to add in the food, production, and gold from the resource.
+// - Changed CollectResources to add in the food, production, and gold from the resource. 
+// - Track city growth with 
 // - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
 //   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
 //
@@ -420,7 +421,7 @@ CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
 	m_workerFullUtilizationIndex = 0;
 
 	ResetStarvationTurns();
-
+    m_turnsNextPop = 0; //PFT 29 mar 05, show # turns until city next grows
 	m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
 
 	m_pos = center_point;
@@ -434,7 +435,7 @@ CityData::~CityData()
 	
 	if (!m_home_city.IsValid() || m_home_city.CD() == this)
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("Killing City %lx\n", uint32(m_home_city)));
+		//DPRINTF(k_DBG_GAMESTATE, ("Killing City %lx\n", uint32(m_home_city)));
 		sint32 i;
 
 		for(i = 0; i < m_tradeSourceList.Num(); i++) {
@@ -536,7 +537,7 @@ void CityData::Serialize(CivArchive &archive)
 //
 // Returns    : TRUE if center_point is in water terrain and doesn't have a tunnel
 //
-// Remark(s)  : Called by CityData::Initialize, 
+// Remark(s)  : 
 //
 //----------------------------------------------------------------------------
 BOOL NeedsCanalTunnel(MapPoint &center_point)
@@ -738,6 +739,8 @@ void CityData::Initialize(sint32 settlerType)
 	FindBestSpecialists();
 
 	CalculateGrowthRate();
+
+    TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
 
 	FindGoodDistances();
 
@@ -1127,7 +1130,7 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 //
 // Returns    : -
 //
-// Remark(s)  : called by Player::GiveCity (to recipient)
+// Remark(s)  : 
 //
 //----------------------------------------------------------------------------
 void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units, 
@@ -1219,7 +1222,7 @@ void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units,
 //
 // Returns    : -
 //
-// Remark(s)  : Called by Player::StopTradingWith, (obsolete DiplomaticRequestData::Enact)
+// Remark(s)  : 
 //
 //----------------------------------------------------------------------------
 void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
@@ -1273,7 +1276,7 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 //		                   m_cityIndustrialPollution
 //		                   m_total_pollution
 //
-//               called by CityData::BeginTurn
+//
 //----------------------------------------------------------------------------
 void CityData::CalcPollution(void)
 {
@@ -1376,9 +1379,7 @@ void CityData::CalcPollution(void)
 //
 // Returns    : -
 //
-// Remark(s)  : called by CityData::BeginTurn
-// 
-//              Could be changed so that unhappy citizens emigrate, PFT 
+// Remark(s)  : Could be changed so that unhappy citizens emigrate, PFT 
 //
 //----------------------------------------------------------------------------
 void CityData::DoLocalPollution()
@@ -2171,7 +2172,7 @@ double CityData::CalculateGrossGrowthRate(double &overcrowdingCoeff, double &bas
 //
 // Returns    : sint32 (TRUE or FALSE) TRUE if the city is either starving or changes pop size
 //
-// Remark(s)  : called by CityData::BeginTurn
+// Remark(s)  :
 //
 //----------------------------------------------------------------------------
 sint32 CityData::GrowOrStarve()
@@ -2198,6 +2199,8 @@ sint32 CityData::GrowOrStarve()
 				}
 
 				m_starvation_turns--;
+                TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
+                UpdateSprite();
 				return TRUE;
 			} 
 			else m_partialPopulation -= k_PEOPLE_PER_POPULATION;
@@ -2210,6 +2213,8 @@ sint32 CityData::GrowOrStarve()
 								   GEA_City, m_home_city.m_id,
 								   GEA_End);
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
+            TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
+            UpdateSprite();
 			return TRUE;
 		} else if(m_partialPopulation < 0) {
 			//PFT 05 apr 05: slaves starve first
@@ -2221,6 +2226,8 @@ sint32 CityData::GrowOrStarve()
 									   GEA_End);
 			
 			m_partialPopulation += k_PEOPLE_PER_POPULATION;
+            TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
+            UpdateSprite();
 			return TRUE;
 		}
 	} else {
@@ -2234,10 +2241,13 @@ sint32 CityData::GrowOrStarve()
 								   GEA_End);
 			
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
+            TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
+            UpdateSprite();
 			return TRUE;
 		}
 	}
-	
+	TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
+    UpdateSprite();
 	return FALSE;
 }
 
@@ -2258,7 +2268,7 @@ int CityData::FoodSupportTroops()
 //
 // Returns    : -
 //
-// Remark(s)  : called by CityData::Initialize, GrowOrStarve, SetCityStyle, and ChangePopulation
+// Remark(s)  :
 //
 //----------------------------------------------------------------------------
 void CityData::UpdateSprite(void)
@@ -2313,7 +2323,7 @@ void CityData::AddTradeResource(ROUTE_TYPE type, sint32 resource)
 //
 // Returns    : sint32 m_goldFromTradeRoutes (via CalculateGoldFromResources() )
 //
-// Remark(s)  : called by CityData::CollectOtherTrade
+// Remark(s)  :
 //
 //----------------------------------------------------------------------------
 sint32 CityData::CalculateTradeRoutes(BOOL projectedOnly)
@@ -2447,18 +2457,6 @@ sint32 CityData::CalculateGoldFromResources()
 	}
 	return m_goldFromTradeRoutes;
 }
-/*
-//not used. Science is done in CityData::SplitScience
-void CityData::CollectPopScience(bool projectedOnly)
-{
-	Assert(FALSE);
-
-   m_science = GetScienceFromPops();
-
-   if(!projectedOnly)
-	   g_player[m_owner]->AddPopScience(m_science);
-}
-*/
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::SupportBuildings
@@ -2546,7 +2544,7 @@ sint32 CityData::GetSupportBuildingsCost() const
 //
 // Returns    : The amount of wages needed for this turn
 //
-// Remark(s)  : used in ui/interface CauseAndEffectTab::UpdateCommerceValues
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 sint32 CityData::CalcWages(sint32 wage) const
@@ -2771,7 +2769,6 @@ void CityData::CheatBuildFirstItem()
 		m_shieldstore_at_begin_turn = m_shieldstore;
 	}
 }
-// called by CityData::BeginTurn
 void CityData::InitBeginTurnVariables()
 {
 	m_capturedThisTurn = FALSE;
@@ -2785,7 +2782,6 @@ void CityData::InitBeginTurnVariables()
 	m_walls_nullified = FALSE;
 
 }
-// called by CityData::BeginTurn
 void CityData::DoTurnCounters()
 {
 	if(m_spied_upon > 0)
@@ -2813,7 +2809,6 @@ void CityData::DoTurnCounters()
 	}
 
 }
-// called by CityData::BeginTurn
 // deal with capitalization/infrastructure. Otherwise, build the front item in this city's buildqueue.
 void CityData::TryToBuild()
 {
@@ -2858,7 +2853,7 @@ void CityData::TryToBuild()
 //
 // Returns    : sint32 (TRUE or FALSE)
 //
-// Remark(s)  : called by UnitData::BeginTurnCity
+// Remark(s)  : 
 //
 //----------------------------------------------------------------------------
 sint32 CityData::BeginTurn()
@@ -3725,7 +3720,7 @@ void CityData::RemoveOneSlave(PLAYER_INDEX p)
 //
 // Returns    : 
 //
-// Remark(s)  : called by STDEHANDLER(InciteUprisingUnitEvent)
+// Remark(s)  :
 //
 //----------------------------------------------------------------------------
 void CityData::DoUprising(UPRISING_CAUSE cause)
@@ -4043,7 +4038,6 @@ BOOL CityData::IsLocalResource(sint32 resource) const
 	return m_collectingResources[resource] > 0;
 }
 
-//called only by Governor::ManageGoodsTradeRoutes
 //filters out non-resource trade
 
 bool CityData::GetResourceTradeRoute(sint32 resource, TradeRoute & route) const
@@ -4062,7 +4056,7 @@ bool CityData::GetResourceTradeRoute(sint32 resource, TradeRoute & route) const
 	}	
 	return false;
 }
-// called only by TradeManager::UpdateCreateList
+
 // filters out non-resource trade
 bool CityData::IsSellingResourceTo(sint32 resource, Unit & destination) const
 {
@@ -4924,49 +4918,36 @@ void CityData::ContributeScience(double incomePercent,
 	addscience += addscience * s;
 	
 }
-
-sint32 CityData::TurnsToNextPop( void )// Not used anywhere
+//----------------------------------------------------------------------------
+//
+// Name       : CityData:TurnsToNextPop
+//
+// Description: Calculate and set the number of turns until this city adds a pop
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : the number of turns until this city adds a pop
+//
+// Remark(s)  : 
+//
+//----------------------------------------------------------------------------
+sint32 CityData::TurnsToNextPop( void )
 {
-	sint32 food = 0, netFood;
-	sint32 tempAccum = m_accumulated_food;
-
-	sint32 f2, f3;
-	GetDetailedProjectedFood(food, f2, f3);
-
-	netFood = food;
-
-	if ( netFood <= 0 ) return -1;
-	if(m_is_rioting)
-		return -1;
-
-	sint32 turns = 0;
-	sint32 foodNeeded = (PopCount() - SlaveCount())  * 
-		CityGrowthCoefficient();
-
-	if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-	   g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
-		foodNeeded += sint32(ceil(double(foodNeeded) * 
-								  g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->m_human_food_bonus));
+	sint32 tempPop = m_partialPopulation;
+    if ( m_food_delta <= 0 || m_growth_rate <= 0 || m_is_rioting){ 
+		 m_turnsNextPop = 999;
 	}
-
-    sint32 is_silo = 0;
-    sint32 silo_size = 0; 
-    
-
-	if(IsCelebratingHappiness()) {
-		if(is_silo) {
-			foodNeeded = (3 * foodNeeded) / 4;
-		} else {
-			foodNeeded = foodNeeded / 2;
+	else{
+		sint32 turns = 0;
+		while ( tempPop < k_PEOPLE_PER_POPULATION ) {
+			tempPop += m_growth_rate;
+			turns++;
 		}
+        m_turnsNextPop = turns;
 	}
-
-	while ( tempAccum < foodNeeded ) {
-		tempAccum += netFood;
-		turns++;
-	}
-
-	return turns;
+	return m_turnsNextPop;	
 }
 
 sint32 CityData::FreeSlaves()

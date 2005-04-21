@@ -23,6 +23,7 @@
 //
 // - IsValid marked as const.
 // - AddDisplayName added.
+// - PFT 29 mar 05, show # turns until city next grows a pop
 //
 //----------------------------------------------------------------------------
 
@@ -871,19 +872,17 @@ BOOL Unit::CanBeachAssault() const
     return GetDBRec()->GetCanBeachAssault(); 
 }
 
+//PFT
+bool Unit::IsImmobile()const 
+{
+	return AccessData()->IsImmobile();
+}
+
 sint32 Unit::ResetMovement()
 
 {
    return AccessData()->ResetMovement(); 
 }
-
-
-
-
-
-
-
-
 
 void Unit::SetHP(const double newval)
 
@@ -999,7 +998,7 @@ void Unit::DeductHP(const double val)
    AccessData()->DeductHP(val); 
 }
 
-
+//not used
 void Unit::FightOneRound(Unit did, double defenders_bonus, double amr, double dmr) 
 {
     AccessData()->FightOneRound(did, defenders_bonus, amr, dmr);
@@ -1416,6 +1415,11 @@ void Unit::GetPop(sint32 &p)const
 {
     GetData()->GetPop(p); 
 } 
+//PFT 29 mar 05, show # turns until city next grows a pop
+void Unit::GetTurnsToNextPop(sint32 &p)const 
+{
+	GetData()->GetTurnsToNextPop(p); 
+}
 
 void Unit::GetTradeStats(sint32 &g, sint32 &l, sint32 &sci) const
 
