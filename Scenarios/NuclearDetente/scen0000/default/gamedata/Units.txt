@@ -1,0 +1,4173 @@
+## UNIT 0
+UNIT_ABOLITIONIST {
+   Description DESCRIPTION_UNIT_ABOLITIONIST
+   DefaultIcon ICON_UNIT_ABOLITIONIST
+   DefaultSprite SPRITE_ABOLITIONIST
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 540
+   PowerPoints 250
+   ShieldHunger 5
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 1
+   EnableAdvance ADVANCE_CLASSICAL_EDUCATION
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   NoSlaves
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_ABOLITIONIST
+   SoundSelect2 SOUND_SELECT2_ABOLITIONIST
+   SoundMove SOUND_MOVE_ABOLITIONIST
+   SoundAcknowledge SOUND_ACKNOWLEDGE_ABOLITIONIST
+   SoundCantMove SOUND_CANTMOVE_ABOLITIONIST
+   SoundAttack SOUND_ATTACK_ABOLITIONIST
+   SoundWork SOUND_WORK_ABOLITIONIST
+   SoundVictory SOUND_VICTORY_ABOLITIONIST
+   SoundDeath SOUND_DEATH_ABOLITIONIST
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   SlaveUprising {
+      Sound SOUND_ID_SLAVE_UPRISING
+      Effect SPECEFFECT_SLAVE_UPRISING
+   }
+
+   UndergroundRailway {
+      Chance 0.75
+      DeathChance 0.5
+      Sound SOUND_ID_UNDERGROUND_RAILWAY
+      Effect SPECEFFECT_UNDERGROUND_RAILWAY
+   }
+}
+
+############################################################
+
+## UNIT 1
+UNIT_AIRCRAFT_CARRIER {
+   Description DESCRIPTION_UNIT_AIRCRAFT_CARRIER
+   DefaultIcon ICON_UNIT_AIRCRAFT_CARRIER
+   DefaultSprite SPRITE_AIRCRAFT_CARRIER
+   Category UNIT_CATEGORY_NAVAL
+   Attack 25
+   Defense 30
+   ZBRangeAttack 25
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 3000
+   PowerPoints 3000
+   ShieldHunger 30
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 3
+   EnableAdvance ADVANCE_NAVAL_AVIATION
+   BombRounds 10
+   BombardRange 1
+   ActiveDefenseRange 1
+   ActiveDefenseOnlyWhenCarryingEnablers
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_AIRCRAFT_CARRIER
+   SoundSelect2 SOUND_SELECT2_AIRCRAFT_CARRIER
+   SoundMove SOUND_MOVE_AIRCRAFT_CARRIER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_AIRCRAFT_CARRIER
+   SoundCantMove SOUND_CANTMOVE_AIRCRAFT_CARRIER
+   SoundAttack SOUND_ATTACK_AIRCRAFT_CARRIER
+   SoundWork SOUND_WORK_AIRCRAFT_CARRIER
+   SoundVictory SOUND_VICTORY_AIRCRAFT_CARRIER
+   SoundDeath SOUND_DEATH_AIRCRAFT_CARRIER
+
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanCarry: MedAir
+   CanCarry: SmallAir
+   CanSee: Standard
+   Defend: Air
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+
+   CargoData {
+      MaxCargo 5
+      Load SOUND_ID_AIRCRAFT_CARRIER_LOAD
+      Unload SOUND_ID_AIRCRAFT_CARRIER_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 2
+UNIT_ARCHER {
+   Description DESCRIPTION_UNIT_ARCHER
+   DefaultIcon ICON_UNIT_ARCHER
+   DefaultSprite SPRITE_ARCHER
+   Category UNIT_CATEGORY_RANGED
+   Attack 10
+   Defense 10
+   ZBRangeAttack 20
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 150
+   PowerPoints 100
+   ShieldHunger 1
+   FoodHunger 0
+   MaxMovePoints 100
+   VisionRange 2
+   EnableAdvance ADVANCE_BALLISTICS
+   ObsoleteAdvance ADVANCE_CANNON_MAKING
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   SoundSelect1 SOUND_SELECT1_ARCHER
+   SoundSelect2 SOUND_SELECT2_ARCHER
+   SoundMove SOUND_MOVE_ARCHER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_ARCHER
+   SoundCantMove SOUND_CANTMOVE_ARCHER
+   SoundAttack SOUND_ATTACK_ARCHER
+   SoundWork SOUND_WORK_ARCHER
+   SoundVictory SOUND_VICTORY_ARCHER
+   SoundDeath SOUND_DEATH_ARCHER
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 3
+UNIT_ARTILLERY {
+   Description DESCRIPTION_UNIT_ARTILLERY
+   DefaultIcon ICON_UNIT_ARTILLERY
+   DefaultSprite SPRITE_ARTILLERY
+   Category UNIT_CATEGORY_RANGED
+   Attack 10
+   Defense 35
+   ZBRangeAttack 70
+   Firepower 3
+   Armor 2
+   MaxHP 10
+   ShieldCost 1500
+   PowerPoints 1200
+   ShieldHunger 15
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 2
+   EnableAdvance ADVANCE_EXPLOSIVES
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_ARTILLERY
+   SoundSelect2 SOUND_SELECT2_ARTILLERY
+   SoundMove SOUND_MOVE_ARTILLERY
+   SoundAcknowledge SOUND_ACKNOWLEDGE_ARTILLERY
+   SoundCantMove SOUND_CANTMOVE_ARTILLERY
+   SoundAttack SOUND_ATTACK_ARTILLERY
+   SoundWork SOUND_WORK_ARTILLERY
+   SoundVictory SOUND_VICTORY_ARTILLERY
+   SoundDeath SOUND_DEATH_ARTILLERY
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanBombard: Land
+   CanBombard: Mountain
+   CanBombard: Water
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 4
+UNIT_BATTLESHIP {
+   Description DESCRIPTION_UNIT_BATTLESHIP
+   DefaultIcon ICON_UNIT_BATTLESHIP
+   DefaultSprite SPRITE_BATTLESHIP
+   Category UNIT_CATEGORY_NAVAL
+   Attack 60
+   Defense 50
+   ZBRangeAttack 60
+   Firepower 4
+   Armor 3
+   MaxHP 10
+   ShieldCost 3500
+   PowerPoints 2000
+   ShieldHunger 35
+   FoodHunger 0
+   MaxMovePoints 500
+   VisionRange 3
+   EnableAdvance ADVANCE_ADV_NAVAL_TACTICS
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_BATTLESHIP
+   SoundSelect2 SOUND_SELECT2_BATTLESHIP
+   SoundMove SOUND_MOVE_BATTLESHIP
+   SoundAcknowledge SOUND_ACKNOWLEDGE_BATTLESHIP
+   SoundCantMove SOUND_CANTMOVE_BATTLESHIP
+   SoundAttack SOUND_ATTACK_BATTLESHIP
+   SoundWork SOUND_WORK_BATTLESHIP
+   SoundVictory SOUND_VICTORY_BATTLESHIP
+   SoundDeath SOUND_DEATH_BATTLESHIP
+
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanBombard: Land
+   CanBombard: Mountain
+   CanBombard: Water
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 5
+UNIT_BOMBER {
+   Description DESCRIPTION_UNIT_BOMBER
+   DefaultIcon ICON_UNIT_BOMBER
+   DefaultSprite SPRITE_BOMBER
+   Category UNIT_CATEGORY_AERIAL
+   Attack 30
+   Defense 30
+   ZBRangeAttack 60
+   Firepower 3
+   Armor 2
+   MaxHP 10
+   ShieldCost 2250
+   PowerPoints 3000
+   ShieldHunger 22
+   FoodHunger 0
+   MaxMovePoints 1000
+   VisionRange 2
+   EnableAdvance ADVANCE_JET_PROPULSION
+   ObsoleteAdvance ADVANCE_ADVANCED_COMPOSITES
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 5000
+   IgnoreZOC
+   NoZoc
+   CantCaptureCity
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_BOMBER
+   SoundSelect2 SOUND_SELECT2_BOMBER
+   SoundMove SOUND_MOVE_BOMBER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_BOMBER
+   SoundCantMove SOUND_CANTMOVE_BOMBER
+   SoundAttack SOUND_ATTACK_BOMBER
+   SoundWork SOUND_WORK_BOMBER
+   SoundVictory SOUND_VICTORY_BOMBER
+   SoundDeath SOUND_DEATH_BOMBER
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanBombard: Land
+   CanBombard: Mountain
+   CanBombard: Water
+   CanCarry: SmallAir
+   CanSee: Standard
+   MovementType: Air
+   Size: Medium
+   VisionClass: Standard
+
+   CargoData {
+      MaxCargo 1
+      Load SOUND_ID_BOMBER_LOAD
+      Unload SOUND_ID_BOMBER_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 6
+UNIT_CANNON {
+   Description DESCRIPTION_UNIT_CANNON
+   DefaultIcon ICON_UNIT_CANNON
+   DefaultSprite SPRITE_CANNON
+   Category UNIT_CATEGORY_RANGED
+   Attack 10
+   Defense 25
+   ZBRangeAttack 50
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 400
+   ShieldHunger 12
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 2
+   EnableAdvance ADVANCE_CANNON_MAKING
+   ObsoleteAdvance ADVANCE_CYBERNETICS
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_CANNON
+   SoundSelect2 SOUND_SELECT2_CANNON
+   SoundMove SOUND_MOVE_CANNON
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CANNON
+   SoundCantMove SOUND_CANTMOVE_CANNON
+   SoundAttack SOUND_ATTACK_CANNON
+   SoundWork SOUND_WORK_CANNON
+   SoundVictory SOUND_VICTORY_CANNON
+   SoundDeath SOUND_DEATH_CANNON
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanBombard: Land
+   CanBombard: Mountain
+   CanSee: Standard
+   MovementType: Land
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 7
+UNIT_CARAVAN {
+   Description DESCRIPTION_UNIT_WARRIOR
+   DefaultIcon ICON_UNIT_CARAVAN
+   DefaultSprite SPRITE_WARRIOR
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 0
+   ZBRangeAttack 0
+   Firepower 0
+   Armor 0
+   MaxHP 10
+   ShieldCost 380
+   PowerPoints 100
+   ShieldHunger 0
+   FoodHunger 0
+   MaxMovePoints 1
+   VisionRange 0
+   EnableAdvance ADVANCE_TRADE
+   ObsoleteAdvance ADVANCE_GLOBAL_ECONOMICS
+   ActiveDefenseRange 0
+   MaxFuel 0
+   IsTrader
+   SoundSelect1 SOUND_SELECT1_CARAVAN
+   SoundSelect2 SOUND_SELECT2_CARAVAN
+   SoundMove SOUND_MOVE_CARAVAN
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CARAVAN
+   SoundCantMove SOUND_CANTMOVE_CARAVAN
+   SoundAttack SOUND_ATTACK_CARAVAN
+   SoundWork SOUND_WORK_CARAVAN
+   SoundVictory SOUND_VICTORY_CARAVAN
+   SoundDeath SOUND_DEATH_CARAVAN
+
+   CanSee: Standard
+   MovementType: Trade
+   Size: Small
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 8
+UNIT_CARGO_HELICOPTER {
+   Description DESCRIPTION_UNIT_CARGO_HELICOPTER
+   DefaultIcon ICON_UNIT_CARGO_HELICOPTER
+   DefaultSprite SPRITE_CARGO_HELICOPTER
+   Category UNIT_CATEGORY_AERIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 1500
+   PowerPoints 100
+   ShieldHunger 15
+   FoodHunger 0
+   MaxMovePoints 600
+   VisionRange 3
+   EnableAdvance ADVANCE_VERTICAL_FLIGHT_AIRCRAFT
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CantCaptureCity
+   DeathEffectsHappy
+   ParatrooperTransport
+   Explodes
+   SoundSelect1 SOUND_SELECT1_CARGO_HELICOPTER
+   SoundSelect2 SOUND_SELECT2_CARGO_HELICOPTER
+   SoundMove SOUND_MOVE_CARGO_HELICOPTER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CARGO_HELICOPTER
+   SoundCantMove SOUND_CANTMOVE_CARGO_HELICOPTER
+   SoundAttack SOUND_ATTACK_CARGO_HELICOPTER
+   SoundWork SOUND_WORK_CARGO_HELICOPTER
+   SoundVictory SOUND_VICTORY_CARGO_HELICOPTER
+   SoundDeath SOUND_DEATH_CARGO_HELICOPTER
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanCarry: SmallLand
+   CanSee: Standard
+   MovementType: Air
+   Size: Large
+   VisionClass: Standard
+
+   CargoData {
+      MaxCargo 5
+      Load SOUND_ID_TRIREME_LOAD
+      Unload SOUND_ID_TRIREME_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 9
+UNIT_CARRACK {
+   Description DESCRIPTION_UNIT_GALLEY
+   DefaultIcon ICON_UNIT_CARRACK
+   DefaultSprite SPRITE_GALLEY
+   Category UNIT_CATEGORY_NAVAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 920
+   PowerPoints 100
+   ShieldHunger 9
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 2
+   EnableAdvance ADVANCE_OCEAN_FARING
+   ObsoleteAdvance ADVANCE_INTERNAL_COMBUSTION
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   NoZoc
+   CantCaptureCity
+   DeathEffectsHappy
+   WoodenShip
+   SoundSelect1 SOUND_SELECT1_CARRACK
+   SoundSelect2 SOUND_SELECT2_CARRACK
+   SoundMove SOUND_MOVE_CARRACK
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CARRACK
+   SoundCantMove SOUND_CANTMOVE_CARRACK
+   SoundAttack SOUND_ATTACK_CARRACK
+   SoundWork SOUND_WORK_CARRACK
+   SoundVictory SOUND_VICTORY_CARRACK
+   SoundDeath SOUND_DEATH_CARRACK
+
+   CanCarry: MedLand
+   CanCarry: SmallLand
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CargoData {
+      MaxCargo 3
+      Load SOUND_ID_TRIREME_LOAD
+      Unload SOUND_ID_TRIREME_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 10
+UNIT_CATAMARAN {
+   Description DESCRIPTION_UNIT_CATAMARAN
+   DefaultIcon ICON_UNIT_CATAMARANS
+   DefaultSprite SPRITE_CATAMARAN
+   Category UNIT_CATEGORY_NAVAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 225
+   PowerPoints 100
+   ShieldHunger 2
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 1
+   EnableAdvance ADVANCE_SHIP_BUILDING
+   ObsoleteAdvance ADVANCE_HULL_MAKING
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   NoZoc
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   DeathEffectsHappy
+   WoodenShip
+   SoundSelect1 SOUND_SELECT1_CATAMARAN
+   SoundSelect2 SOUND_SELECT2_CATAMARAN
+   SoundMove SOUND_MOVE_CATAMARAN
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CATAMARAN
+   SoundCantMove SOUND_CANTMOVE_CATAMARAN
+   SoundAttack SOUND_ATTACK_CATAMARAN
+   SoundWork SOUND_WORK_CATAMARAN
+   SoundVictory SOUND_VICTORY_CATAMARAN
+   SoundDeath SOUND_DEATH_CATAMARAN
+
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanCarry: MedLand
+   CanCarry: SmallLand
+   CanSee: Standard
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+
+   CargoData {
+      MaxCargo 1
+      Load SOUND_ID_TRIREME_LOAD
+      Unload SOUND_ID_TRIREME_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 11
+UNIT_CATAPULT {
+   Description DESCRIPTION_UNIT_CATAPULT
+   DefaultIcon ICON_UNIT_CATAPULT
+   DefaultSprite SPRITE_CATAPULT
+   Category UNIT_CATEGORY_RANGED
+   Attack 10
+   Defense 15
+   ZBRangeAttack 30
+   Firepower 2
+   Armor 1
+   MaxHP 10
+   ShieldCost 740
+   PowerPoints 100
+   ShieldHunger 8
+   FoodHunger 0
+   MaxMovePoints 100
+   VisionRange 2
+   EnableAdvance ADVANCE_GEOMETRY
+   ObsoleteAdvance ADVANCE_EXPLOSIVES
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   SoundSelect1 SOUND_SELECT1_CATAPULT
+   SoundSelect2 SOUND_SELECT2_CATAPULT
+   SoundMove SOUND_MOVE_CATAPULT
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CATAPULT
+   SoundCantMove SOUND_CANTMOVE_CATAPULT
+   SoundAttack SOUND_ATTACK_CATAPULT
+   SoundWork SOUND_WORK_CATAPULT
+   SoundVictory SOUND_VICTORY_CATAPULT
+   SoundDeath SOUND_DEATH_CATAPULT
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanBombard: Land
+   CanBombard: Mountain
+   CanSee: Standard
+   MovementType: Land
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 12
+UNIT_CAVALRY {
+   Description DESCRIPTION_UNIT_CAVALRY
+   DefaultIcon ICON_UNIT_CAVALRY
+   DefaultSprite SPRITE_CAVALRY
+   Category UNIT_CATEGORY_FLANKER
+   Attack 35
+   Defense 20
+   ZBRangeAttack 20
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 700
+   ShieldHunger 12
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 2
+   EnableAdvance ADVANCE_CAVALRY_TACTICS
+   ObsoleteAdvance ADVANCE_TANK_WARFARE
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsFlanker
+   IsMounted
+   SoundSelect1 SOUND_SELECT1_CAVALRY
+   SoundSelect2 SOUND_SELECT2_CAVALRY
+   SoundMove SOUND_MOVE_CAVALRY
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CAVALRY
+   SoundCantMove SOUND_CANTMOVE_CAVALRY
+   SoundAttack SOUND_ATTACK_CAVALRY
+   SoundWork SOUND_WORK_CAVALRY
+   SoundVictory SOUND_VICTORY_CAVALRY
+   SoundDeath SOUND_DEATH_CAVALRY
+
+   CanAttack: Land
+   CanSee: Standard
+   MovementType: Land
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 13
+UNIT_CITY {
+   Description DESCRIPTION_UNIT_CITY
+   DefaultIcon ICON_UNIT_CITY
+   DefaultSprite SPRITE_CITY
+   Category UNIT_CATEGORY_GENERIC
+   Attack 0
+   Defense 0
+   ZBRangeAttack 0
+   Firepower 0
+   Armor 0
+   MaxHP 0
+   ShieldCost 0
+   PowerPoints 1000
+   ShieldHunger 0
+   FoodHunger 0
+   MaxMovePoints 0
+   VisionRange 2
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   HasPopAndCanBuild
+   CantBuild
+   CityGrowthCoefficient 1
+   NoIndex
+   GLHidden
+   CantCaptureCity
+   NeedsNoSupport
+   SoundSelect1 SOUND_SELECT1_CITY
+   SoundSelect2 SOUND_SELECT2_CITY
+   SoundMove SOUND_MOVE_CITY
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CITY
+   SoundCantMove SOUND_CANTMOVE_CITY
+   SoundAttack SOUND_ATTACK_CITY
+   SoundWork SOUND_WORK_CITY
+   SoundVictory SOUND_VICTORY_CITY
+   SoundDeath SOUND_DEATH_CITY
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Medium
+   VisionClass: Standard
+
+   Revolution {
+      Sound SOUND_ID_REVOLUTION
+      Effect SPECEFFECT_REVOLUTION
+   }
+}
+
+############################################################
+
+## UNIT 14
+UNIT_CLERIC {
+   Description DESCRIPTION_UNIT_CLERIC
+   DefaultIcon ICON_UNIT_CLERIC
+   DefaultSprite SPRITE_CLERIC
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 540
+   PowerPoints 200
+   ShieldHunger 5
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 1
+   EnableAdvance ADVANCE_THEOLOGY
+   ObsoleteAdvance ADVANCE_MASS_MEDIA
+   GovernmentType GOVERNMENT_THEOCRACY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_CLERIC
+   SoundSelect2 SOUND_SELECT2_CLERIC
+   SoundMove SOUND_MOVE_CLERIC
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CLERIC
+   SoundCantMove SOUND_CANTMOVE_CLERIC
+   SoundAttack SOUND_ATTACK_CLERIC
+   SoundWork SOUND_WORK_CLERIC
+   SoundVictory SOUND_VICTORY_CLERIC
+   SoundDeath SOUND_DEATH_CLERIC
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   CanSoothsay {
+      Sound SOUND_ID_CAN_SOOTHSAY_CL
+      Effect SPECEFFECT_CAN_SOOTHSAY
+   }
+
+   CauseUnhappiness {
+      Chance 1
+      Timer 1
+      Amount 5
+      Sound SOUND_ID_CAN_SOOTHSAY_CL
+      Effect SPECEFFECT_CAN_SOOTHSAY
+   }
+
+   ConvertCities {
+      Chance 0.75
+      DeathChance 0.5
+      Sound SOUND_ID_CONVERT_CITIES_CL
+      Effect SPECEFFECT_CONVERT_CITIES
+   }
+
+   IndulgenceSales {
+      Sound SOUND_ID_INDULGENCE_SALES_CL
+      Effect SPECEFFECT_INDULGENCE_SALES
+   }
+}
+
+############################################################
+
+## UNIT 15
+UNIT_CORPORATE_BRANCH {
+   Description DESCRIPTION_UNIT_CORPORATE_BRANCH
+   DefaultIcon ICON_UNIT_CORPORATE_BRANCH
+   DefaultSprite SPRITE_CORPORATE_BRANCH
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 1500
+   PowerPoints 2000
+   ShieldHunger 15
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 2
+   EnableAdvance ADVANCE_CORPORATION
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeSued
+   CantCaptureCity
+   DeathEffectsHappy
+   Advertise
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_CORPORATE_BRANCH
+   SoundSelect2 SOUND_SELECT2_CORPORATE_BRANCH
+   SoundMove SOUND_MOVE_CORPORATE_BRANCH
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CORPORATE_BRANCH
+   SoundCantMove SOUND_CANTMOVE_CORPORATE_BRANCH
+   SoundAttack SOUND_ATTACK_CORPORATE_BRANCH
+   SoundWork SOUND_WORK_CORPORATE_BRANCH
+   SoundVictory SOUND_VICTORY_CORPORATE_BRANCH
+   SoundDeath SOUND_DEATH_CORPORATE_BRANCH
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   CauseUnhappiness {
+      Chance 1
+      Timer 1
+      Amount 5
+      Sound SOUND_ID_ADVERTISE
+      Effect SPECEFFECT_ADVERTISE
+   }
+
+   CreateFranchise {
+      Chance 0.75
+      Sound SOUND_ID_CREATE_FRANCHISE
+      Effect SPECEFFECT_CREATE_FRANCHISE
+   }
+}
+
+############################################################
+
+## UNIT 16
+UNIT_CRAWLER {
+   Description DESCRIPTION_UNIT_CRAWLER
+   DefaultIcon ICON_UNIT_CRAWLER
+   DefaultSprite SPRITE_CRAWLER
+   Category UNIT_CATEGORY_UNDERSEA
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 3750
+   PowerPoints 5000
+   ShieldHunger 38
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 3
+   EnableAdvance ADVANCE_ULTRAPRESSURE_MACHINERY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSubmarine
+   Explodes
+   SoundSelect1 SOUND_SELECT1_CRAWLER
+   SoundSelect2 SOUND_SELECT2_CRAWLER
+   SoundMove SOUND_MOVE_CRAWLER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CRAWLER
+   SoundCantMove SOUND_CANTMOVE_CRAWLER
+   SoundAttack SOUND_ATTACK_CRAWLER
+   SoundWork SOUND_WORK_CRAWLER
+   SoundVictory SOUND_VICTORY_CRAWLER
+   SoundDeath SOUND_DEATH_CRAWLER
+
+   CanCarry: MedLand
+   CanCarry: SmallLand
+   CanSee: Standard
+   CanSee: Underwater
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Underwater
+
+   CargoData {
+      MaxCargo 5
+      Load SOUND_ID_CRAWLER_LOAD
+      Unload SOUND_ID_CRAWLER_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 17
+UNIT_CRUISE_MISSILE {
+   Description DESCRIPTION_UNIT_CRUISE_MISSILE
+   DefaultIcon ICON_UNIT_CRUISE_MISSILE
+   DefaultSprite SPRITE_CRUISE_MISSILE
+   Category UNIT_CATEGORY_AERIAL
+   Attack 60
+   Defense 10
+   ZBRangeAttack 60
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 1800
+   PowerPoints 100
+   ShieldHunger 20
+   FoodHunger 0
+   MaxMovePoints 1000
+   VisionRange 2
+   EnableAdvance ADVANCE_GUIDED_WEAPON_SYSTEMS
+   BombRounds 10
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 1000
+   IgnoreZOC
+   NoZoc
+   CanBeachAssault
+   CantCaptureCity
+   SingleUse
+   Explodes
+   SoundSelect1 SOUND_SELECT1_CRUISE_MISSILE
+   SoundSelect2 SOUND_SELECT2_CRUISE_MISSILE
+   SoundMove SOUND_MOVE_CRUISE_MISSILE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CRUISE_MISSILE
+   SoundCantMove SOUND_CANTMOVE_CRUISE_MISSILE
+   SoundAttack SOUND_ATTACK_CRUISE_MISSILE
+   SoundWork SOUND_WORK_CRUISE_MISSILE
+   SoundVictory SOUND_VICTORY_CRUISE_MISSILE
+   SoundDeath SOUND_DEATH_CRUISE_MISSILE
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanAttack: Air
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanSee: Standard
+   MovementType: Air
+   Size: Small
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 18
+UNIT_CYBER_NINJA {
+   Description DESCRIPTION_UNIT_CYBER_NINJA
+   DefaultIcon ICON_UNIT_CYBER_NINJA
+   DefaultSprite SPRITE_CYBER_NINJA
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 2500
+   PowerPoints 2500
+   ShieldHunger 25
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 3
+   EnableAdvance ADVANCE_NEURAL_INTERFACE
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   IsSpecialForces
+   DefendAgainstSpies 0.5
+   SoundSelect1 SOUND_SELECT1_CYBER_NINJA
+   SoundSelect2 SOUND_SELECT2_CYBER_NINJA
+   SoundMove SOUND_MOVE_CYBER_NINJA
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CYBER_NINJA
+   SoundCantMove SOUND_CANTMOVE_CYBER_NINJA
+   SoundAttack SOUND_ATTACK_CYBER_NINJA
+   SoundWork SOUND_WORK_CYBER_NINJA
+   SoundVictory SOUND_VICTORY_CYBER_NINJA
+   SoundDeath SOUND_DEATH_CYBER_NINJA
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   InciteRevolution {
+      Chance 0.35
+      EliteChance 0.5
+      DeathChance 0.25
+      Sound SOUND_ID_INCITE_REVOLUTION_CN
+      Effect SPECEFFECT_INCITE_REVOLUTION
+   }
+
+   InvestigateCity {
+      Chance 0.75
+      EliteChance 0.1
+      DeathChance 0.25
+   }
+
+   PlantNuke {
+      Chance 0.35
+      EscapeChance 0.5
+      Sound SOUND_ID_PLANT_NUKE_CN
+      Effect SPECEFFECT_PLANT_NUKE
+   }
+
+   StealTechnology {
+      RandomChance 0.5
+      SpecificChance 0.25
+      DeathChance 0.25
+      Sound SOUND_ID_STEAL_TECHNOLOGY_CN
+      Effect SPECEFFECT_STEAL_TECHNOLOGY
+   }
+}
+
+############################################################
+
+## UNIT 19
+UNIT_DESTROYER {
+   Description DESCRIPTION_UNIT_DESTROYER
+   DefaultIcon ICON_UNIT_DESTROYER
+   DefaultSprite SPRITE_DESTROYER
+   Category UNIT_CATEGORY_NAVAL
+   Attack 50
+   Defense 40
+   ZBRangeAttack 50
+   Firepower 4
+   Armor 2
+   MaxHP 10
+   ShieldCost 2200
+   PowerPoints 1000
+   ShieldHunger 22
+   FoodHunger 0
+   MaxMovePoints 600
+   VisionRange 3
+   EnableAdvance ADVANCE_MASS_PRODUCTION
+   ObsoleteAdvance ADVANCE_PLASMA_WEAPONRY
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 1
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_DESTROYER
+   SoundSelect2 SOUND_SELECT2_DESTROYER
+   SoundMove SOUND_MOVE_DESTROYER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_DESTROYER
+   SoundCantMove SOUND_CANTMOVE_DESTROYER
+   SoundAttack SOUND_ATTACK_DESTROYER
+   SoundWork SOUND_WORK_DESTROYER
+   SoundVictory SOUND_VICTORY_DESTROYER
+   SoundDeath SOUND_DEATH_DESTROYER
+
+   CanAttack: Air
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanBombard: Air
+   CanBombard: Water
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 20
+UNIT_DIPLOMAT {
+   Description DESCRIPTION_UNIT_DIPLOMAT
+   DefaultIcon ICON_UNIT_DIPLOMAT
+   DefaultSprite SPRITE_DIPLOMAT
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 395
+   PowerPoints 100
+   ShieldHunger 4
+   FoodHunger 0
+   MaxMovePoints 100
+   VisionRange 2
+   EnableAdvance ADVANCE_BUREAUCRACY
+   ObsoleteAdvance ADVANCE_EUGENICS
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   EstablishEmbassy
+   ThrowParty
+   DeathEffectsHappy
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_DIPLOMAT
+   SoundSelect2 SOUND_SELECT2_DIPLOMAT
+   SoundMove SOUND_MOVE_DIPLOMAT
+   SoundAcknowledge SOUND_ACKNOWLEDGE_DIPLOMAT
+   SoundCantMove SOUND_CANTMOVE_DIPLOMAT
+   SoundAttack SOUND_ATTACK_DIPLOMAT
+   SoundWork SOUND_WORK_DIPLOMAT
+   SoundVictory SOUND_VICTORY_DIPLOMAT
+   SoundDeath SOUND_DEATH_DIPLOMAT
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 21
+UNIT_DREADNAUGHT {
+   Description DESCRIPTION_UNIT_DREADNAUGHT
+   DefaultIcon ICON_UNIT_DREADNAUGHT
+   DefaultSprite SPRITE_DREADNAUGHT
+   Category UNIT_CATEGORY_UNDERSEA
+   Attack 100
+   Defense 80
+   ZBRangeAttack 100
+   Firepower 6
+   Armor 5
+   MaxHP 10
+   ShieldCost 6000
+   PowerPoints 100
+   ShieldHunger 60
+   FoodHunger 0
+   MaxMovePoints 500
+   VisionRange 4
+   EnableAdvance ADVANCE_SMART_MATERIALS
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   DeathEffectsHappy
+   IsSubmarine
+   Explodes
+   SoundSelect1 SOUND_SELECT1_DREADNAUGHT
+   SoundSelect2 SOUND_SELECT2_DREADNAUGHT
+   SoundMove SOUND_MOVE_DREADNAUGHT
+   SoundAcknowledge SOUND_ACKNOWLEDGE_DREADNAUGHT
+   SoundCantMove SOUND_CANTMOVE_DREADNAUGHT
+   SoundAttack SOUND_ATTACK_DREADNAUGHT
+   SoundWork SOUND_WORK_DREADNAUGHT
+   SoundVictory SOUND_VICTORY_DREADNAUGHT
+   SoundDeath SOUND_DEATH_DREADNAUGHT
+
+   CanAttack: Sea
+   CanAttack: Underwater
+   CanAttack: ShallowWater
+   CanSee: Standard
+   CanSee: Underwater
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Underwater
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 22
+UNIT_ECO_RANGER {
+   Description DESCRIPTION_UNIT_ECO_RANGER
+   DefaultIcon ICON_UNIT_ECO_RANGER
+   DefaultSprite SPRITE_ECO_RANGER
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 4000
+   PowerPoints 100
+   ShieldHunger 40
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 3
+   EnableAdvance ADVANCE_ECOTOPIA
+   GovernmentType GOVERNMENT_ECOTOPIA
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   SoundSelect1 SOUND_SELECT1_ECO_RANGER
+   SoundSelect2 SOUND_SELECT2_ECO_RANGER
+   SoundMove SOUND_MOVE_ECO_RANGER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_ECO_RANGER
+   SoundCantMove SOUND_CANTMOVE_ECO_RANGER
+   SoundAttack SOUND_ATTACK_ECO_RANGER
+   SoundWork SOUND_WORK_ECO_RANGER
+   SoundVictory SOUND_VICTORY_ECO_RANGER
+   SoundDeath SOUND_DEATH_ECO_RANGER
+
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Medium
+   VisionClass: Standard
+
+   CreateParks {
+      Sound SOUND_ID_CREATE_PARKS
+      Effect SPECEFFECT_CREATE_PARKS
+   }
+}
+
+############################################################
+
+## UNIT 23
+UNIT_ECO_TERRORIST {
+   Description DESCRIPTION_UNIT_ECO_TERRORIST
+   DefaultIcon ICON_UNIT_ECO_TERRORIST
+   DefaultSprite SPRITE_ECO_TERRORIST
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 3500
+   PowerPoints 5000
+   ShieldHunger 35
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 2
+   EnableAdvance ADVANCE_ECOTOPIA
+   GovernmentType GOVERNMENT_ECOTOPIA
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   SoundSelect1 SOUND_SELECT1_ECOTERRORIST
+   SoundSelect2 SOUND_SELECT2_ECOTERRORIST
+   SoundMove SOUND_MOVE_ECOTERRORIST
+   SoundAcknowledge SOUND_ACKNOWLEDGE_ECOTERRORIST
+   SoundCantMove SOUND_CANTMOVE_ECOTERRORIST
+   SoundAttack SOUND_ATTACK_ECOTERRORIST
+   SoundWork SOUND_WORK_ECOTERRORIST
+   SoundVictory SOUND_VICTORY_ECOTERRORIST
+   SoundDeath SOUND_DEATH_ECOTERRORIST
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   AssasinateRuler {
+      Chance 0.5
+      EliteChance 0.7
+      DeathChance 0.3
+   }
+
+   NanoTerror {
+      Chance 0.5
+      Sound SOUND_ID_NANO_TERROR
+      Effect SPECEFFECT_NANO
+   }
+}
+
+############################################################
+
+## UNIT 24
+UNIT_EMPATHIC_DIPLOMAT {
+   Description DESCRIPTION_UNIT_EMPATHIC_DIPLOMAT
+   DefaultIcon ICON_UNIT_EMPATHIC_DIPLOMAT
+   DefaultSprite SPRITE_EMPATHIC_DIPLOMAT
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 1500
+   PowerPoints 100
+   ShieldHunger 15
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 2
+   EnableAdvance ADVANCE_EUGENICS
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   EstablishEmbassy
+   ThrowParty
+   DeathEffectsHappy
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_EMPATHIC_DIPLOMAT
+   SoundSelect2 SOUND_SELECT2_EMPATHIC_DIPLOMAT
+   SoundMove SOUND_MOVE_EMPATHIC_DIPLOMAT
+   SoundAcknowledge SOUND_ACKNOWLEDGE_EMPATHIC_DIPLOMAT
+   SoundCantMove SOUND_CANTMOVE_EMPATHIC_DIPLOMAT
+   SoundAttack SOUND_ATTACK_EMPATHIC_DIPLOMAT
+   SoundWork SOUND_WORK_EMPATHIC_DIPLOMAT
+   SoundVictory SOUND_VICTORY_EMPATHIC_DIPLOMAT
+   SoundDeath SOUND_DEATH_EMPATHIC_DIPLOMAT
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 25
+UNIT_FASCIST {
+   Description DESCRIPTION_UNIT_FASCIST
+   DefaultIcon ICON_UNIT_FASCIST
+   DefaultSprite SPRITE_FASCIST
+   Category UNIT_CATEGORY_ATTACK
+   Attack 25
+   Defense 35
+   ZBRangeAttack 15
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 1000
+   PowerPoints 1000
+   ShieldHunger 10
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 2
+   EnableAdvance ADVANCE_FASCISM
+   GovernmentType GOVERNMENT_FASCISM
+   GovernmentType GOVERNMENT_FASCISM
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsSpecialForces
+   DefendAgainstSpies 0.25
+   SoundSelect1 SOUND_SELECT1_FASCIST
+   SoundSelect2 SOUND_SELECT2_FASCIST
+   SoundMove SOUND_MOVE_FASCIST
+   SoundAcknowledge SOUND_ACKNOWLEDGE_FASCIST
+   SoundCantMove SOUND_CANTMOVE_FASCIST
+   SoundAttack SOUND_ATTACK_FASCIST
+   SoundWork SOUND_WORK_FASCIST
+   SoundVictory SOUND_VICTORY_FASCIST
+   SoundDeath SOUND_DEATH_FASCIST
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 26
+UNIT_FIGHTER {
+   Description DESCRIPTION_UNIT_FIGHTER
+   DefaultIcon ICON_UNIT_FIGHTER
+   DefaultSprite SPRITE_FIGHTER
+   Category UNIT_CATEGORY_AERIAL
+   Attack 45
+   Defense 40
+   ZBRangeAttack 45
+   Firepower 3
+   Armor 2
+   MaxHP 10
+   ShieldCost 1125
+   PowerPoints 1500
+   ShieldHunger 10
+   FoodHunger 0
+   MaxMovePoints 800
+   VisionRange 3
+   EnableAdvance ADVANCE_AERODYNAMICS
+   ObsoleteAdvance ADVANCE_SUPERSONIC_FLIGHT
+   ActiveDefenseRange 0
+   EnableCarrierDefenses
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 2400
+   IgnoreZOC
+   NoZoc
+   CanBeachAssault
+   CantCaptureCity
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_FIGHTER
+   SoundSelect2 SOUND_SELECT2_FIGHTER
+   SoundMove SOUND_MOVE_FIGHTER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_FIGHTER
+   SoundCantMove SOUND_CANTMOVE_FIGHTER
+   SoundAttack SOUND_ATTACK_FIGHTER
+   SoundWork SOUND_WORK_FIGHTER
+   SoundVictory SOUND_VICTORY_FIGHTER
+   SoundDeath SOUND_DEATH_FIGHTER
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanSee: Standard
+   MovementType: Air
+   Size: Medium
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 27
+UNIT_FIRE_TRIREME {
+   Description DESCRIPTION_UNIT_FIRE_TRIREME
+   DefaultIcon ICON_UNIT_FIRE_TRIREME
+   DefaultSprite SPRITE_FIRE_TRIREME
+   Category UNIT_CATEGORY_NAVAL
+   Attack 15
+   Defense 10
+   ZBRangeAttack 15
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 450
+   PowerPoints 600
+   ShieldHunger 5
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 1
+   EnableAdvance ADVANCE_ALCHEMY
+   ObsoleteAdvance ADVANCE_MODERN_METALLURGY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   ExertsMartialLaw
+   DeathEffectsHappy
+   WoodenShip
+   AttackWoodenShipBonus
+   WoodenShipBonus 0.25
+   SoundSelect1 SOUND_SELECT1_GREEK_FIRE_TRIREME
+   SoundSelect2 SOUND_SELECT2_GREEK_FIRE_TRIREME
+   SoundMove SOUND_MOVE_GREEK_FIRE_TRIREME
+   SoundAcknowledge SOUND_ACKNOWLEDGE_GREEK_FIRE_TRIREME
+   SoundCantMove SOUND_CANTMOVE_GREEK_FIRE_TRIREME
+   SoundAttack SOUND_ATTACK_GREEK_FIRE_TRIREME
+   SoundWork SOUND_WORK_GREEK_FIRE_TRIREME
+   SoundVictory SOUND_VICTORY_GREEK_FIRE_TRIREME
+   SoundDeath SOUND_DEATH_GREEK_FIRE_TRIREME
+
+   CanAttack: ShallowWater
+   CanAttack: Sea
+   CanSee: Standard
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 28
+UNIT_FRIGATE {
+   Description DESCRIPTION_UNIT_FRIGATE
+   DefaultIcon ICON_UNIT_FRIGATE
+   DefaultSprite SPRITE_FRIGATE
+   Category UNIT_CATEGORY_NAVAL
+   Attack 50
+   Defense 40
+   ZBRangeAttack 50
+   Firepower 4
+   Armor 2
+   MaxHP 10
+   ShieldCost 2000
+   PowerPoints 1000
+   ShieldHunger 20
+   FoodHunger 0
+   MaxMovePoints 600
+   VisionRange 3
+   EnableAdvance ADVANCE_MASS_PRODUCTION
+   ObsoleteAdvance ADVANCE_PLASMA_WEAPONRY
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_FRIGATE
+   SoundSelect2 SOUND_SELECT2_FRIGATE
+   SoundMove SOUND_MOVE_FRIGATE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_FRIGATE
+   SoundCantMove SOUND_CANTMOVE_FRIGATE
+   SoundAttack SOUND_ATTACK_FRIGATE
+   SoundWork SOUND_WORK_FRIGATE
+   SoundVictory SOUND_VICTORY_FRIGATE
+   SoundDeath SOUND_DEATH_FRIGATE
+
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanAttack: Underwater
+   CanBombard: Water
+   CanSee: Underwater
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 29
+UNIT_FUSION_TANK {
+   Description DESCRIPTION_UNIT_FUSION_TANK
+   DefaultIcon ICON_UNIT_FUSION_TANK
+   DefaultSprite SPRITE_FUSION_TANK
+   Category UNIT_CATEGORY_FLANKER
+   Attack 65
+   Defense 45
+   ZBRangeAttack 90
+   Firepower 5
+   Armor 4
+   MaxHP 10
+   ShieldCost 5250
+   PowerPoints 7000
+   ShieldHunger 50
+   FoodHunger 0
+   MaxMovePoints 800
+   VisionRange 3
+   EnableAdvance ADVANCE_FUSION
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsFlanker
+   Explodes
+   SoundSelect1 SOUND_SELECT1_FUSION_TANK
+   SoundSelect2 SOUND_SELECT2_FUSION_TANK
+   SoundMove SOUND_MOVE_FUSION_TANK
+   SoundAcknowledge SOUND_ACKNOWLEDGE_FUSION_TANK
+   SoundCantMove SOUND_CANTMOVE_FUSION_TANK
+   SoundAttack SOUND_ATTACK_FUSION_TANK
+   SoundWork SOUND_WORK_FUSION_TANK
+   SoundVictory SOUND_VICTORY_FUSION_TANK
+   SoundDeath SOUND_DEATH_FUSION_TANK
+
+   CanAttack: Land
+   CanAttack: ShallowWater
+   CanSee: Standard
+   MovementType: Land
+   MovementType: ShallowWater
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 30
+UNIT_HOPLITE {
+   Description DESCRIPTION_UNIT_HOPLITE
+   DefaultIcon ICON_UNIT_HOPLITE
+   DefaultSprite SPRITE_HOPLITE
+   Category UNIT_CATEGORY_DEFENSE
+   Attack 10
+   Defense 15
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 175
+   PowerPoints 100
+   ShieldHunger 1
+   FoodHunger 0
+   MaxMovePoints 100
+   VisionRange 1
+   EnableAdvance ADVANCE_BRONZE_WORKING
+   ObsoleteAdvance ADVANCE_GUNPOWDER
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   SoundSelect1 SOUND_SELECT1_HOPLITE
+   SoundSelect2 SOUND_SELECT2_HOPLITE
+   SoundMove SOUND_MOVE_HOPLITE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_HOPLITE
+   SoundCantMove SOUND_CANTMOVE_HOPLITE
+   SoundAttack SOUND_ATTACK_HOPLITE
+   SoundWork SOUND_WORK_HOPLITE
+   SoundVictory SOUND_VICTORY_HOPLITE
+   SoundDeath SOUND_DEATH_HOPLITE
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 31
+UNIT_HOVER_INFANTRY {
+   Description DESCRIPTION_UNIT_HOVER_INFANTRY
+   DefaultIcon ICON_UNIT_HOVER_INFANTRY
+   DefaultSprite SPRITE_HOVER_INFANTRY
+   Category UNIT_CATEGORY_ATTACK
+   Attack 80
+   Defense 50
+   ZBRangeAttack 40
+   Firepower 5
+   Armor 1
+   MaxHP 10
+   ShieldCost 2500
+   PowerPoints 100
+   ShieldHunger 25
+   FoodHunger 0
+   MaxMovePoints 500
+   VisionRange 4
+   EnableAdvance ADVANCE_CHAOS_THEORY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   SoundSelect1 SOUND_SELECT1_HOVER_INFANTRY
+   SoundSelect2 SOUND_SELECT2_HOVER_INFANTRY
+   SoundMove SOUND_MOVE_HOVER_INFANTRY
+   SoundAcknowledge SOUND_ACKNOWLEDGE_HOVER_INFANTRY
+   SoundCantMove SOUND_CANTMOVE_HOVER_INFANTRY
+   SoundAttack SOUND_ATTACK_HOVER_INFANTRY
+   SoundWork SOUND_WORK_HOVER_INFANTRY
+   SoundVictory SOUND_VICTORY_HOVER_INFANTRY
+   SoundDeath SOUND_DEATH_HOVER_INFANTRY
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 32
+UNIT_INFANTRYMAN {
+   Description DESCRIPTION_UNIT_INFANTRYMAN
+   DefaultIcon ICON_UNIT_INFANTRYMAN
+   DefaultSprite SPRITE_INFANTRYMAN
+   Category UNIT_CATEGORY_DEFENSE
+   Attack 25
+   Defense 35
+   ZBRangeAttack 10
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 1000
+   PowerPoints 100
+   ShieldHunger 10
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 2
+   EnableAdvance ADVANCE_GUNPOWDER
+   ObsoleteAdvance ADVANCE_ADV_INFANTRY_TACTICS
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   SoundSelect1 SOUND_SELECT1_INFANTRYMAN
+   SoundSelect2 SOUND_SELECT2_INFANTRYMAN
+   SoundMove SOUND_MOVE_INFANTRYMAN
+   SoundAcknowledge SOUND_ACKNOWLEDGE_INFANTRYMAN
+   SoundCantMove SOUND_CANTMOVE_INFANTRYMAN
+   SoundAttack SOUND_ATTACK_INFANTRYMAN
+   SoundWork SOUND_WORK_INFANTRYMAN
+   SoundVictory SOUND_VICTORY_INFANTRYMAN
+   SoundDeath SOUND_DEATH_INFANTRYMAN
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 33
+UNIT_INFECTOR {
+   Description DESCRIPTION_UNIT_INFECTOR
+   DefaultIcon ICON_UNIT_INFECTOR
+   DefaultSprite SPRITE_INFECTOR
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 3000
+   PowerPoints 5000
+   ShieldHunger 30
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 2
+   EnableAdvance ADVANCE_NANO_WARFARE
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   SoundSelect1 SOUND_SELECT1_INFECTOR
+   SoundSelect2 SOUND_SELECT2_INFECTOR
+   SoundMove SOUND_MOVE_INFECTOR
+   SoundAcknowledge SOUND_ACKNOWLEDGE_INFECTOR
+   SoundCantMove SOUND_CANTMOVE_INFECTOR
+   SoundAttack SOUND_ATTACK_INFECTOR
+   SoundWork SOUND_WORK_INFECTOR
+   SoundVictory SOUND_VICTORY_INFECTOR
+   SoundDeath SOUND_DEATH_INFECTOR
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   BioTerror {
+      Chance 0.75
+      Sound SOUND_ID_BIO_TERROR
+      Effect SPECEFFECT_BIO_TERROR
+   }
+
+   Plague {
+      Chance 0.5
+      Sound SOUND_ID_BIO_TERROR
+      Effect SPECEFFECT_BIO_TERROR
+   }
+}
+
+############################################################
+
+## UNIT 34
+UNIT_INTERCEPTOR {
+   Description DESCRIPTION_UNIT_INTERCEPTOR
+   DefaultIcon ICON_UNIT_INTERCEPTOR
+   DefaultSprite SPRITE_INTERCEPTOR
+   Category UNIT_CATEGORY_AERIAL
+   Attack 60
+   Defense 60
+   ZBRangeAttack 60
+   Firepower 4
+   Armor 2
+   MaxHP 10
+   ShieldCost 2500
+   PowerPoints 100
+   ShieldHunger 25
+   FoodHunger 0
+   MaxMovePoints 1200
+   VisionRange 4
+   EnableAdvance ADVANCE_SUPERSONIC_FLIGHT
+   ObsoleteAdvance ADVANCE_AI_SURVEILLANCE
+   ActiveDefenseRange 0
+   EnableCarrierDefenses
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 3600
+   IgnoreZOC
+   NoZoc
+   CanBeachAssault
+   CantCaptureCity
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_INTERCEPTORS
+   SoundSelect2 SOUND_SELECT2_INTERCEPTORS
+   SoundMove SOUND_MOVE_INTERCEPTORS
+   SoundAcknowledge SOUND_ACKNOWLEDGE_INTERCEPTORS
+   SoundCantMove SOUND_CANTMOVE_INTERCEPTORS
+   SoundAttack SOUND_ATTACK_INTERCEPTORS
+   SoundWork SOUND_WORK_INTERCEPTORS
+   SoundVictory SOUND_VICTORY_INTERCEPTORS
+   SoundDeath SOUND_DEATH_INTERCEPTORS
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanAttack: Air
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanSee: Standard
+   MovementType: Air
+   Size: Medium
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 35
+UNIT_IRONCLAD {
+   Description DESCRIPTION_UNIT_IRONCLAD
+   DefaultIcon ICON_UNIT_IRONCLAD
+   DefaultSprite SPRITE_IRONCLAD
+   Category UNIT_CATEGORY_NAVAL
+   Attack 40
+   Defense 30
+   ZBRangeAttack 40
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 1500
+   PowerPoints 100
+   ShieldHunger 15
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 2
+   EnableAdvance ADVANCE_MODERN_METALLURGY
+   ObsoleteAdvance ADVANCE_ADV_NAVAL_TACTICS
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_IRONCLAD
+   SoundSelect2 SOUND_SELECT2_IRONCLAD
+   SoundMove SOUND_MOVE_IRONCLAD
+   SoundAcknowledge SOUND_ACKNOWLEDGE_IRONCLAD
+   SoundCantMove SOUND_CANTMOVE_IRONCLAD
+   SoundAttack SOUND_ATTACK_IRONCLAD
+   SoundWork SOUND_WORK_IRONCLAD
+   SoundVictory SOUND_VICTORY_IRONCLAD
+   SoundDeath SOUND_DEATH_IRONCLAD
+
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanBombard: Water
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 36
+UNIT_KNIGHT {
+   Description DESCRIPTION_UNIT_KNIGHT
+   DefaultIcon ICON_UNIT_KNIGHT
+   DefaultSprite SPRITE_KNIGHT
+   Category UNIT_CATEGORY_FLANKER
+   Attack 25
+   Defense 15
+   ZBRangeAttack 0
+   Firepower 2
+   Armor 1
+   MaxHP 10
+   ShieldCost 740
+   PowerPoints 400
+   ShieldHunger 8
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 2
+   EnableAdvance ADVANCE_FEUDALISM
+   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+   ObsoleteAdvance ADVANCE_TANK_WARFARE
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsFlanker
+   IsSpecialForces
+   SoundSelect1 SOUND_SELECT1_KNIGHT
+   SoundSelect2 SOUND_SELECT2_KNIGHT
+   SoundMove SOUND_MOVE_KNIGHT
+   SoundAcknowledge SOUND_ACKNOWLEDGE_KNIGHT
+   SoundCantMove SOUND_CANTMOVE_KNIGHT
+   SoundAttack SOUND_ATTACK_KNIGHT
+   SoundWork SOUND_WORK_KNIGHT
+   SoundVictory SOUND_VICTORY_KNIGHT
+   SoundDeath SOUND_DEATH_KNIGHT
+
+   CanAttack: Land
+   CanSee: Standard
+   MovementType: Land
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 37
+UNIT_KRAKEN {
+   Description DESCRIPTION_UNIT_KRAKEN
+   DefaultIcon ICON_UNIT_KRAKEN
+   DefaultSprite SPRITE_KRAKEN
+   Category UNIT_CATEGORY_UNDERSEA
+   Attack 80
+   Defense 60
+   ZBRangeAttack 80
+   Firepower 5
+   Armor 5
+   MaxHP 10
+   ShieldCost 4500
+   PowerPoints 100
+   ShieldHunger 45
+   FoodHunger 0
+   MaxMovePoints 600
+   VisionRange 3
+   EnableAdvance ADVANCE_GENETIC_TAILORING
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   DeathEffectsHappy
+   IsSubmarine
+   Explodes
+   SoundSelect1 SOUND_SELECT1_KRAKEN
+   SoundSelect2 SOUND_SELECT2_KRAKEN
+   SoundMove SOUND_MOVE_KRAKEN
+   SoundAcknowledge SOUND_ACKNOWLEDGE_KRAKEN
+   SoundCantMove SOUND_CANTMOVE_KRAKEN
+   SoundAttack SOUND_ATTACK_KRAKEN
+   SoundWork SOUND_WORK_KRAKEN
+   SoundVictory SOUND_VICTORY_KRAKEN
+   SoundDeath SOUND_DEATH_KRAKEN
+
+   CanAttack: Sea
+   CanAttack: Underwater
+   CanAttack: ShallowWater
+   CanSee: Standard
+   CanSee: Underwater
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Underwater
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 38
+UNIT_LAWYER {
+   Description DESCRIPTION_UNIT_LAWYER
+   DefaultIcon ICON_UNIT_LAWYER
+   DefaultSprite SPRITE_LAWYER
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 1500
+   PowerPoints 400
+   ShieldHunger 15
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 2
+   EnableAdvance ADVANCE_CRIMINAL_CODE
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanSue
+   CanBeSued
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_LAWYER
+   SoundSelect2 SOUND_SELECT2_LAWYER
+   SoundMove SOUND_MOVE_LAWYER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_LAWYER
+   SoundCantMove SOUND_CANTMOVE_LAWYER
+   SoundAttack SOUND_ATTACK_LAWYER
+   SoundWork SOUND_WORK_LAWYER
+   SoundVictory SOUND_VICTORY_LAWYER
+   SoundDeath SOUND_DEATH_LAWYER
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   CanInjoin {
+      Sound SOUND_ID_INJUNCTION
+      Effect SPECEFFECT_INJUNCTIONS
+   }
+}
+
+############################################################
+
+## UNIT 39
+UNIT_LEVIATHON {
+   Description DESCRIPTION_UNIT_LEVIATHON
+   DefaultIcon ICON_UNIT_LEVIATHON
+   DefaultSprite SPRITE_LEVIATHON
+   Category UNIT_CATEGORY_DEFENSE
+   Attack 90
+   Defense 100
+   ZBRangeAttack 90
+   Firepower 6
+   Armor 6
+   MaxHP 10
+   ShieldCost 9000
+   PowerPoints 12000
+   ShieldHunger 100
+   FoodHunger 0
+   MaxMovePoints 10
+   VisionRange 3
+   EnableAdvance ADVANCE_UNIFIED_PHYSICS
+   BombRounds 5
+   BombardRange 1
+   CanCounterBombard
+   ActiveDefenseRange 1
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsSpecialForces
+   Explodes
+   SoundSelect1 SOUND_SELECT1_LEVIATHAN
+   SoundSelect2 SOUND_SELECT2_LEVIATHAN
+   SoundMove SOUND_MOVE_LEVIATHAN
+   SoundAcknowledge SOUND_ACKNOWLEDGE_LEVIATHAN
+   SoundCantMove SOUND_CANTMOVE_LEVIATHAN
+   SoundAttack SOUND_ATTACK_LEVIATHAN
+   SoundWork SOUND_WORK_LEVIATHAN
+   SoundVictory SOUND_VICTORY_LEVIATHAN
+   SoundDeath SOUND_DEATH_LEVIATHAN
+
+   CanAttack: Air
+   CanAttack: Land
+   CanBombard: Land
+   CanBombard: Mountain
+   CanBombard: Water
+   CanBombard: Air
+   CanSee: Standard
+   Defend: Air
+   MovementType: Land
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 40
+UNIT_LONGSHIP {
+   CantBuild
+   Description DESCRIPTION_UNIT_LONGSHIP
+   DefaultIcon ICON_UNIT_LONGSHIP
+   DefaultSprite SPRITE_LONGSHIP
+   Category UNIT_CATEGORY_NAVAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 630
+   PowerPoints 600
+   ShieldHunger 6
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 1
+   EnableAdvance ADVANCE_HULL_MAKING
+   ObsoleteAdvance ADVANCE_INTERNAL_COMBUSTION
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   NoZoc
+   CantCaptureCity
+   DeathEffectsHappy
+   WoodenShip
+   SoundSelect1 SOUND_SELECT1_LONGSHIP
+   SoundSelect2 SOUND_SELECT2_LONGSHIP
+   SoundMove SOUND_MOVE_LONGSHIP
+   SoundAcknowledge SOUND_ACKNOWLEDGE_LONGSHIP
+   SoundCantMove SOUND_CANTMOVE_LONGSHIP
+   SoundAttack SOUND_ATTACK_LONGSHIP
+   SoundWork SOUND_WORK_LONGSHIP
+   SoundVictory SOUND_VICTORY_LONGSHIP
+   SoundDeath SOUND_DEATH_LONGSHIP
+
+   CanCarry: SmallLand
+   CanCarry: MedLand
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CargoData {
+      MaxCargo 2
+      Load SOUND_ID_LONGSHIP_LOAD
+      Unload SOUND_ID_LONGSHIP_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 41
+UNIT_MACHINE_GUNNER {
+   Description DESCRIPTION_UNIT_MACHINE_GUNNER
+   DefaultIcon ICON_UNIT_MACHINE_GUNNER
+   DefaultSprite SPRITE_MACHINE_GUNNER
+   Category UNIT_CATEGORY_ATTACK
+   Attack 40
+   Defense 30
+   ZBRangeAttack 20
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 800
+   ShieldHunger 12
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 1
+   EnableAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+   ObsoleteAdvance ADVANCE_CHAOS_THEORY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   SoundSelect1 SOUND_SELECT1_MACHINE_GUNNER
+   SoundSelect2 SOUND_SELECT2_MACHINE_GUNNER
+   SoundMove SOUND_MOVE_MACHINE_GUNNER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_MACHINE_GUNNER
+   SoundCantMove SOUND_CANTMOVE_MACHINE_GUNNER
+   SoundAttack SOUND_ATTACK_MACHINE_GUNNER
+   SoundWork SOUND_WORK_MACHINE_GUNNER
+   SoundVictory SOUND_VICTORY_MACHINE_GUNNER
+   SoundDeath SOUND_DEATH_MACHINE_GUNNER
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 42
+UNIT_MARINE {
+   Description DESCRIPTION_UNIT_MARINE
+   DefaultIcon ICON_UNIT_MARINE
+   DefaultSprite SPRITE_MARINE
+   Category UNIT_CATEGORY_ATTACK
+   Attack 60
+   Defense 40
+   ZBRangeAttack 30
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 1400
+   PowerPoints 1000
+   ShieldHunger 14
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 2
+   EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanBeachAssault
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsSpecialForces
+   SoundSelect1 SOUND_SELECT1_MARINES
+   SoundSelect2 SOUND_SELECT2_MARINES
+   SoundMove SOUND_MOVE_MARINES
+   SoundAcknowledge SOUND_ACKNOWLEDGE_MARINES
+   SoundCantMove SOUND_CANTMOVE_MARINES
+   SoundAttack SOUND_ATTACK_MARINES
+   SoundWork SOUND_WORK_MARINES
+   SoundVictory SOUND_VICTORY_MARINES
+   SoundDeath SOUND_DEATH_MARINES
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 43
+UNIT_MOBILE_SAM {
+   Description DESCRIPTION_UNIT_MOBILE_SAM
+   DefaultIcon ICON_UNIT_MOBILE_SAM
+   DefaultSprite SPRITE_MOBILE_SAM
+   Category UNIT_CATEGORY_RANGED
+   Attack 10
+   Defense 35
+   ZBRangeAttack 80
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 2000
+   PowerPoints 2000
+   ShieldHunger 20
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 3
+   EnableAdvance ADVANCE_RADAR
+   BombRounds 5
+   BombardRange 1
+   CanCounterBombard
+   ActiveDefenseRange 1
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_MOBILE_SAM
+   SoundSelect2 SOUND_SELECT2_MOBILE_SAM
+   SoundMove SOUND_MOVE_MOBILE_SAM
+   SoundAcknowledge SOUND_ACKNOWLEDGE_MOBILE_SAM
+   SoundCantMove SOUND_CANTMOVE_MOBILE_SAM
+   SoundAttack SOUND_ATTACK_MOBILE_SAM
+   SoundWork SOUND_WORK_MOBILE_SAM
+   SoundVictory SOUND_VICTORY_MOBILE_SAM
+   SoundDeath SOUND_DEATH_MOBILE_SAM
+
+   CanAttack: Air
+   CanBombard: Air
+   CanSee: Standard
+   Defend: Air
+   MovementType: Land
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 44
+UNIT_MOREY_STRIKER {
+   Description DESCRIPTION_UNIT_MOREY_STRIKER
+   DefaultIcon ICON_UNIT_MOREY_STRIKER
+   DefaultSprite SPRITE_MOREY_STRIKER
+   Category UNIT_CATEGORY_UNDERSEA
+   Attack 60
+   Defense 80
+   ZBRangeAttack 60
+   Firepower 4
+   Armor 4
+   MaxHP 10
+   ShieldCost 3500
+   PowerPoints 100
+   ShieldHunger 35
+   FoodHunger 0
+   MaxMovePoints 800
+   VisionRange 3
+   EnableAdvance ADVANCE_GENETICS
+   BombRounds 5
+   BombardRange 1
+   CanCounterBombard
+   ActiveDefenseRange 1
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   DeathEffectsHappy
+   IsSubmarine
+   Explodes
+   SoundSelect1 SOUND_SELECT1_MOREY_STRIKER
+   SoundSelect2 SOUND_SELECT2_MOREY_STRIKER
+   SoundMove SOUND_MOVE_MOREY_STRIKER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_MOREY_STRIKER
+   SoundCantMove SOUND_CANTMOVE_MOREY_STRIKER
+   SoundAttack SOUND_ATTACK_MOREY_STRIKER
+   SoundWork SOUND_WORK_MOREY_STRIKER
+   SoundVictory SOUND_VICTORY_MOREY_STRIKER
+   SoundDeath SOUND_DEATH_MOREY_STRIKER
+
+   CanAttack: Sea
+   CanAttack: Underwater
+   CanAttack: ShallowWater
+   CanBombard: Water
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Underwater
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 45
+UNIT_MOUNTED_ARCHER {
+   Description DESCRIPTION_UNIT_MOUNTED_ARCHER
+   DefaultIcon ICON_UNIT_MOUNTED_ARCHER
+   DefaultSprite SPRITE_MOUNTED_ARCHER
+   Category UNIT_CATEGORY_RANGED
+   Attack 10
+   Defense 10
+   ZBRangeAttack 20
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 340
+   PowerPoints 100
+   ShieldHunger 3
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 2
+   EnableAdvance ADVANCE_HORSE_RIDING
+   ObsoleteAdvance ADVANCE_TANK_WARFARE
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsMounted
+   SoundSelect1 SOUND_SELECT1_MOUNTED_ARCHER
+   SoundSelect2 SOUND_SELECT2_MOUNTED_ARCHER
+   SoundMove SOUND_MOVE_MOUNTED_ARCHER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_MOUNTED_ARCHER
+   SoundCantMove SOUND_CANTMOVE_MOUNTED_ARCHER
+   SoundAttack SOUND_ATTACK_MOUNTED_ARCHER
+   SoundWork SOUND_WORK_MOUNTED_ARCHER
+   SoundVictory SOUND_VICTORY_MOUNTED_ARCHER
+   SoundDeath SOUND_DEATH_MOUNTED_ARCHER
+
+   CanAttack: Land
+   CanSee: Standard
+   MovementType: Land
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 46
+UNIT_NUCLEAR_SUBMARINE {
+   CantBuild
+   Description DESCRIPTION_UNIT_NUCLEAR_SUBMARINE
+   DefaultIcon ICON_UNIT_NUCLEAR_SUBMARINE
+   DefaultSprite SPRITE_NUCLEAR_SUBMARINE
+   Category UNIT_CATEGORY_UNDERSEA
+   Attack 50
+   Defense 40
+   ZBRangeAttack 50
+   Firepower 4
+   Armor 3
+   MaxHP 10
+   ShieldCost 1800
+   PowerPoints 1850
+   ShieldHunger 18
+   FoodHunger 0
+   MaxMovePoints 500
+   VisionRange 3
+   EnableAdvance ADVANCE_NUCLEAR_POWER
+   ObsoleteAdvance ADVANCE_GENETIC_TAILORING
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSubmarine
+   Explodes
+   SoundSelect1 SOUND_SELECT1_NUCLEAR_SUBMARINE
+   SoundSelect2 SOUND_SELECT2_NUCLEAR_SUBMARINE
+   SoundMove SOUND_MOVE_NUCLEAR_SUBMARINE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_NUCLEAR_SUBMARINE
+   SoundCantMove SOUND_CANTMOVE_NUCLEAR_SUBMARINE
+   SoundAttack SOUND_ATTACK_NUCLEAR_SUBMARINE
+   SoundWork SOUND_WORK_NUCLEAR_SUBMARINE
+   SoundVictory SOUND_VICTORY_NUCLEAR_SUBMARINE
+   SoundDeath SOUND_DEATH_NUCLEAR_SUBMARINE
+
+   CanAttack: ShallowWater
+   CanAttack: Sea
+   CanAttack: Underwater
+   CanBombard: Water
+   CanCarry: SmallAir
+   CanSee: Standard
+   CanSee: Underwater
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Underwater
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+
+   CargoData {
+      MaxCargo 2
+      Load SOUND_ID_SUBMARINE_LOAD
+      Unload SOUND_ID_SUBMARINE_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 47
+UNIT_NUKE {
+   CantBuild
+   Description DESCRIPTION_UNIT_NUKE
+   DefaultIcon ICON_UNIT_NUKE
+   DefaultSprite SPRITE_NUKE
+   Category UNIT_CATEGORY_AERIAL
+   Attack 2000
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 4000
+   PowerPoints 4000
+   ShieldHunger 0
+   FoodHunger 0
+   MaxMovePoints 3000
+   VisionRange 2
+   EnableAdvance ADVANCE_NUCLEAR_POWER
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 3000
+   IgnoreZOC
+   NoZoc
+   CanBeachAssault
+   CantCaptureCity
+   SingleUse
+   IsSpecialForces
+   Explodes
+   SoundSelect1 SOUND_SELECT1_NUKE
+   SoundSelect2 SOUND_SELECT2_NUKE
+   SoundMove SOUND_MOVE_NUKE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_NUKE
+   SoundCantMove SOUND_CANTMOVE_NUKE
+   SoundAttack SOUND_ATTACK_NUKE
+   SoundWork SOUND_WORK_NUKE
+   SoundVictory SOUND_VICTORY_NUKE
+   SoundDeath SOUND_DEATH_NUKE
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanSee: Standard
+   MovementType: Air
+   Size: Small
+   VisionClass: Standard
+
+   NuclearAttack {
+      Sound SOUND_ID_NUCLEAR_ATTACK
+      Effect SPECEFFECT_NUCLEAR_ATTACK
+   }
+}
+
+############################################################
+
+## UNIT 48
+UNIT_OCEAN_CITY {
+   Description DESCRIPTION_UNIT_OCEAN_CITY
+   DefaultIcon ICON_UNIT_OCEAN_CITY
+   DefaultSprite SPRITE_OCEAN_CITY
+   Category UNIT_CATEGORY_GENERIC
+   Attack 0
+   Defense 0
+   ZBRangeAttack 0
+   Firepower 0
+   Armor 0
+   MaxHP 0
+   ShieldCost 0
+   PowerPoints 1000
+   ShieldHunger 0
+   FoodHunger 0
+   MaxMovePoints 0
+   VisionRange 2
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   HasPopAndCanBuild
+   CantBuild
+   CityGrowthCoefficient 0.5
+   NoIndex
+   GLHidden
+   CantCaptureCity
+   NeedsNoSupport
+   SoundSelect1 SOUND_SELECT1_OCEAN_CITY
+   SoundSelect2 SOUND_SELECT2_OCEAN_CITY
+   SoundMove SOUND_MOVE_OCEAN_CITY
+   SoundAcknowledge SOUND_ACKNOWLEDGE_OCEAN_CITY
+   SoundCantMove SOUND_CANTMOVE_OCEAN_CITY
+   SoundAttack SOUND_ATTACK_OCEAN_CITY
+   SoundWork SOUND_WORK_OCEAN_CITY
+   SoundVictory SOUND_VICTORY_OCEAN_CITY
+   SoundDeath SOUND_DEATH_OCEAN_CITY
+
+   CanAttack: Land
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Medium
+   VisionClass: Standard
+
+   Revolution {
+      Sound SOUND_ID_REVOLUTION
+      Effect SPECEFFECT_REVOLUTION
+   }
+}
+
+############################################################
+
+## UNIT 49
+UNIT_PARATROOPER {
+   Description DESCRIPTION_UNIT_PARATROOPER
+   DefaultIcon ICON_UNIT_PARATROOPER
+   DefaultSprite SPRITE_PARATROOPER
+   Category UNIT_CATEGORY_ATTACK
+   Attack 60
+   Defense 40
+   ZBRangeAttack 30
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 1400
+   PowerPoints 2500
+   ShieldHunger 14
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 2
+   EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsSpecialForces
+   Paratrooper
+   SoundSelect1 SOUND_SELECT1_PARATROOPER
+   SoundSelect2 SOUND_SELECT2_PARATROOPER
+   SoundMove SOUND_MOVE_PARATROOPER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_PARATROOPER
+   SoundCantMove SOUND_CANTMOVE_PARATROOPER
+   SoundAttack SOUND_ATTACK_PARATROOPER
+   SoundWork SOUND_WORK_PARATROOPER
+   SoundVictory SOUND_VICTORY_PARATROOPER
+   SoundDeath SOUND_DEATH_PARATROOPER
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 50
+UNIT_PIKEMEN {
+   CantBuild
+   Description DESCRIPTION_UNIT_PIKEMEN
+   DefaultIcon ICON_UNIT_PIKEMEN
+   DefaultSprite SPRITE_PIKEMEN
+   Category UNIT_CATEGORY_DEFENSE
+   Attack 10
+   Defense 25
+   ZBRangeAttack 0
+   Firepower 2
+   Armor 1
+   MaxHP 10
+   ShieldCost 380
+   PowerPoints 200
+   ShieldHunger 4
+   FoodHunger 0
+   MaxMovePoints 100
+   VisionRange 1
+   EnableAdvance ADVANCE_FEUDALISM
+   ObsoleteAdvance ADVANCE_FASCISM
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   BonusAgainstMounted
+   MountedBonus 0.5
+   SoundSelect1 SOUND_SELECT1_PIKEMEN
+   SoundSelect2 SOUND_SELECT2_PIKEMEN
+   SoundMove SOUND_MOVE_PIKEMEN
+   SoundAcknowledge SOUND_ACKNOWLEDGE_PIKEMEN
+   SoundCantMove SOUND_CANTMOVE_PIKEMEN
+   SoundAttack SOUND_ATTACK_PIKEMEN
+   SoundWork SOUND_WORK_PIKEMEN
+   SoundVictory SOUND_VICTORY_PIKEMEN
+   SoundDeath SOUND_DEATH_PIKEMEN
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 51
+UNIT_PLASMA_DESTROYER {
+   Description DESCRIPTION_UNIT_PLASMA_DESTROYER
+   DefaultIcon ICON_UNIT_PLASMA_DESTROYER
+   DefaultSprite SPRITE_PLASMA_DESTROYER
+   Category UNIT_CATEGORY_NAVAL
+   Attack 80
+   Defense 60
+   ZBRangeAttack 80
+   Firepower 4
+   Armor 5
+   MaxHP 10
+   ShieldCost 4500
+   PowerPoints 6000
+   ShieldHunger 45
+   FoodHunger 0
+   MaxMovePoints 800
+   VisionRange 4
+   EnableAdvance ADVANCE_PLASMA_WEAPONRY
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 1
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_PLASMA_DESTROYER
+   SoundSelect2 SOUND_SELECT2_PLASMA_DESTROYER
+   SoundMove SOUND_MOVE_PLASMA_DESTROYER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_PLASMA_DESTROYER
+   SoundCantMove SOUND_CANTMOVE_PLASMA_DESTROYER
+   SoundAttack SOUND_ATTACK_PLASMA_DESTROYER
+   SoundWork SOUND_WORK_PLASMA_DESTROYER
+   SoundVictory SOUND_VICTORY_PLASMA_DESTROYER
+   SoundDeath SOUND_DEATH_PLASMA_DESTROYER
+
+   CanAttack: Air
+   CanAttack: Sea
+   CanAttack: Underwater
+   CanAttack: ShallowWater
+   CanBombard: Land
+   CanBombard: Mountain
+   CanBombard: Water
+   CanSee: Standard
+   CanSee: Underwater
+   Defend: Air
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 52
+UNIT_SCOUT_SUB {
+   Description DESCRIPTION_UNIT_SCOUT_SUB
+   DefaultIcon ICON_UNIT_SCOUT_SUB
+   DefaultSprite SPRITE_SCOUT_SUB
+   Category UNIT_CATEGORY_UNDERSEA
+   Attack 25
+   Defense 25
+   ZBRangeAttack 25
+   Firepower 3
+   Armor 1
+   MaxHP 10
+   ShieldCost 2500
+   PowerPoints 100
+   ShieldHunger 25
+   FoodHunger 0
+   MaxMovePoints 800
+   VisionRange 6
+   EnableAdvance ADVANCE_LIQUID_BREATHING_APPARATUS
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSubmarine
+   Explodes
+   SoundSelect1 SOUND_SELECT1_SCOUT_SUB
+   SoundSelect2 SOUND_SELECT2_SCOUT_SUB
+   SoundMove SOUND_MOVE_SCOUT_SUB
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SCOUT_SUB
+   SoundCantMove SOUND_CANTMOVE_SCOUT_SUB
+   SoundAttack SOUND_ATTACK_SCOUT_SUB
+   SoundWork SOUND_WORK_SCOUT_SUB
+   SoundVictory SOUND_VICTORY_SCOUT_SUB
+   SoundDeath SOUND_DEATH_SCOUT_SUB
+
+   CanAttack: Sea
+   CanAttack: Underwater
+   CanAttack: ShallowWater
+   CanSee: Standard
+   CanSee: Underwater
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Underwater
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 53
+UNIT_SEA_ENGINEER {
+   CantBuild
+   Description DESCRIPTION_UNIT_SEA_ENGINEER
+   DefaultIcon ICON_UNIT_SEA_ENGINEER
+   DefaultSprite SPRITE_SEA_ENGINEER
+   Category UNIT_CATEGORY_SETTLER
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 2500
+   PowerPoints 6000
+   ShieldHunger 25
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 2
+   EnableAdvance ADVANCE_NANO_ASSEMBLY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   SettleCityType UNIT_OCEAN_CITY
+   CanBeExpelled
+   CantCaptureCity
+   BuildingRemovesAPop
+   OnlyBuildOne
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_SEA_ENGINEER
+   SoundSelect2 SOUND_SELECT2_SEA_ENGINEER
+   SoundMove SOUND_MOVE_SEA_ENGINEER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SEA_ENGINEER
+   SoundCantMove SOUND_CANTMOVE_SEA_ENGINEER
+   SoundAttack SOUND_ATTACK_SEA_ENGINEER
+   SoundWork SOUND_WORK_SEA_ENGINEER
+   SoundVictory SOUND_VICTORY_SEA_ENGINEER
+   SoundDeath SOUND_DEATH_SEA_ENGINEER
+
+   CanSee: Standard
+   CanSee: Underwater
+   MovementType: Sea
+   MovementType: ShallowWater
+   Settle: Water
+   Size: Medium
+   VisionClass: Underwater
+}
+
+############################################################
+
+## UNIT 54
+UNIT_SETTLER {
+   CantBuild
+   Description DESCRIPTION_UNIT_SETTLER
+   DefaultIcon ICON_UNIT_SETTLER
+   DefaultSprite SPRITE_SETTLER
+   Category UNIT_CATEGORY_SETTLER
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 740
+   PowerPoints 400
+   ShieldHunger 0
+   FoodHunger 0
+   MaxMovePoints 100
+   VisionRange 1
+   ObsoleteAdvance ADVANCE_ADV_URBAN_PLANNING
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   NoZoc
+   SettleCityType UNIT_CITY
+   SettleSize 1
+   CanBeExpelled
+   CantCaptureCity
+   BuildingRemovesAPop
+   OnlyBuildOne
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_SETTLER
+   SoundSelect2 SOUND_SELECT2_SETTLER
+   SoundMove SOUND_MOVE_SETTLER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SETTLER
+   SoundCantMove SOUND_CANTMOVE_SETTLER
+   SoundAttack SOUND_ATTACK_SETTLER
+   SoundWork SOUND_WORK_SETTLER
+   SoundVictory SOUND_VICTORY_SETTLER
+   SoundDeath SOUND_DEATH_SETTLER
+
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Settle: Land
+   Settle: Mountain
+   Size: Small
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 55
+UNIT_SHIP_OF_THE_LINE {
+   Description DESCRIPTION_UNIT_SHIP_OF_THE_LINE
+   DefaultIcon ICON_UNIT_SHIP_OF_THE_LINE
+   DefaultSprite SPRITE_SHIP_OF_THE_LINE
+   Category UNIT_CATEGORY_NAVAL
+   Attack 35
+   Defense 20
+   ZBRangeAttack 35
+   Firepower 2
+   Armor 1
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 950
+   ShieldHunger 12
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 2
+   EnableAdvance ADVANCE_NAVAL_TACTICS
+   ObsoleteAdvance ADVANCE_MASS_PRODUCTION
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   ExertsMartialLaw
+   DeathEffectsHappy
+   WoodenShip
+   SoundSelect1 SOUND_SELECT1_SHIP_OF_THE_LINE
+   SoundSelect2 SOUND_SELECT2_SHIP_OF_THE_LINE
+   SoundMove SOUND_MOVE_SHIP_OF_THE_LINE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SHIP_OF_THE_LINE
+   SoundCantMove SOUND_CANTMOVE_SHIP_OF_THE_LINE
+   SoundAttack SOUND_ATTACK_SHIP_OF_THE_LINE
+   SoundWork SOUND_WORK_SHIP_OF_THE_LINE
+   SoundVictory SOUND_VICTORY_SHIP_OF_THE_LINE
+   SoundDeath SOUND_DEATH_SHIP_OF_THE_LINE
+
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanBombard: Water
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 56
+UNIT_SLAVER {
+   Description DESCRIPTION_UNIT_SLAVER
+   DefaultIcon ICON_UNIT_SLAVER
+   DefaultSprite SPRITE_SLAVER
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 480
+   PowerPoints 200
+   ShieldHunger 5
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 1
+   EnableAdvance ADVANCE_SLAVE_LABOR
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   SoundSelect1 SOUND_SELECT1_SLAVER
+   SoundSelect2 SOUND_SELECT2_SLAVER
+   SoundMove SOUND_MOVE_SLAVER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SLAVER
+   SoundCantMove SOUND_CANTMOVE_SLAVER
+   SoundAttack SOUND_ATTACK_SLAVER
+   SoundWork SOUND_WORK_SLAVER
+   SoundVictory SOUND_VICTORY_SLAVER
+   SoundDeath SOUND_DEATH_SLAVER
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   SettlerSlaveRaids {
+      Sound SOUND_ID_SETTLER_SLAVE_RAIDS
+      Effect SPECEFFECT_SETTLER_SLAVE_RAIDS
+   }
+
+   SlaveRaids {
+      Chance 0.75
+      DeathChance 0.5
+      Timer 2
+      Amount 4
+      Sound SOUND_ID_SLAVE_RAIDS
+      Effect SPECEFFECT_SLAVE_RAIDS
+   }
+}
+
+############################################################
+
+## UNIT 57
+UNIT_SPACE_CITY {
+   Description DESCRIPTION_UNIT_SPACE_CITY
+   DefaultIcon ICON_UNIT_SPACE_CITY
+   DefaultSprite SPRITE_SPACE_CITY
+   Category UNIT_CATEGORY_GENERIC
+   Attack 0
+   Defense 0
+   ZBRangeAttack 0
+   Firepower 0
+   Armor 0
+   MaxHP 0
+   ShieldCost 0
+   PowerPoints 1000
+   ShieldHunger 0
+   FoodHunger 0
+   MaxMovePoints 0
+   VisionRange 2
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   HasPopAndCanBuild
+   CantBuild
+   CityGrowthCoefficient 0.5
+   NoIndex
+   GLHidden
+   CantCaptureCity
+   NeedsNoSupport
+   SoundSelect1 SOUND_SELECT1_SPACE_CITY
+   SoundSelect2 SOUND_SELECT2_SPACE_CITY
+   SoundMove SOUND_MOVE_SPACE_CITY
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SPACE_CITY
+   SoundCantMove SOUND_CANTMOVE_SPACE_CITY
+   SoundAttack SOUND_ATTACK_SPACE_CITY
+   SoundWork SOUND_WORK_SPACE_CITY
+   SoundVictory SOUND_VICTORY_SPACE_CITY
+   SoundDeath SOUND_DEATH_SPACE_CITY
+
+   CanAttack: Land
+   CanSee: Standard
+   MovementType: Land
+   Size: Medium
+   VisionClass: Standard
+
+   Revolution {
+      Sound SOUND_ID_REVOLUTION
+      Effect SPECEFFECT_REVOLUTION
+   }
+}
+
+############################################################
+
+## UNIT 58
+UNIT_SPACE_PLANE {
+   Description DESCRIPTION_UNIT_SPACE_PLANE
+   DefaultIcon ICON_UNIT_SPACE_PLANE
+   DefaultSprite SPRITE_SPACE_PLANE
+   Category UNIT_CATEGORY_AERIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 2250
+   PowerPoints 4000
+   ShieldHunger 25
+   FoodHunger 0
+   MaxMovePoints 1500
+   VisionRange 1
+   EnableAdvance ADVANCE_SPACE_FLIGHT
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 4500
+   IgnoreZOC
+   NoZoc
+   CantCaptureCity
+   SpaceLaunch 3
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_SPACE_PLANE
+   SoundSelect2 SOUND_SELECT2_SPACE_PLANE
+   SoundMove SOUND_MOVE_SPACE_PLANE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SPACE_PLANE
+   SoundCantMove SOUND_CANTMOVE_SPACE_PLANE
+   SoundAttack SOUND_ATTACK_SPACE_PLANE
+   SoundWork SOUND_WORK_SPACE_PLANE
+   SoundVictory SOUND_VICTORY_SPACE_PLANE
+   SoundDeath SOUND_DEATH_SPACE_PLANE
+
+   CanCarry: SmallLand
+   CanCarry: MedLand
+   CanSee: Standard
+   MovementType: Air
+   Size: Large
+   VisionClass: Standard
+
+   CargoData {
+      MaxCargo 5
+      Load SOUND_ID_SPACE_PLANE_LOAD
+      Unload SOUND_ID_SPACE_PLANE_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 59
+UNIT_SPY {
+   Description DESCRIPTION_UNIT_SPY
+   DefaultIcon ICON_UNIT_SPY
+   DefaultSprite SPRITE_SPY
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 860
+   PowerPoints 1500
+   ShieldHunger 8
+   FoodHunger 0
+   MaxMovePoints 300
+   VisionRange 3
+   EnableAdvance ADVANCE_NATIONALISM
+   ObsoleteAdvance ADVANCE_NEURAL_INTERFACE
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   DefendAgainstSpies 0.25
+   SoundSelect1 SOUND_SELECT1_SPY
+   SoundSelect2 SOUND_SELECT2_SPY
+   SoundMove SOUND_MOVE_SPY
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SPY
+   SoundCantMove SOUND_CANTMOVE_SPY
+   SoundAttack SOUND_ATTACK_SPY
+   SoundWork SOUND_WORK_SPY
+   SoundVictory SOUND_VICTORY_SPY
+   SoundDeath SOUND_DEATH_SPY
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   InciteRevolution {
+      Chance 0.25
+      EliteChance 0.35
+      DeathChance 0.5
+      Sound SOUND_ID_INCITE_REVOLUTION_SP
+      Effect SPECEFFECT_INCITE_REVOLUTION
+   }
+
+   InvestigateCity {
+      Chance 0.75
+      EliteChance 0.1
+      DeathChance 0.5
+   }
+
+   PlantNuke {
+      Chance 0.25
+      EscapeChance 0.25
+      Sound SOUND_ID_PLANT_NUKE_SP
+      Effect SPECEFFECT_PLANT_NUKE
+   }
+
+   StealTechnology {
+      RandomChance 0.35
+      SpecificChance 0.25
+      DeathChance 0.5
+      Sound SOUND_ID_STEAL_TECHNOLOGY_SP
+      Effect SPECEFFECT_STEAL_TECHNOLOGY
+   }
+}
+
+############################################################
+
+## UNIT 60
+UNIT_SPY_PLANE {
+   Description DESCRIPTION_UNIT_SPY_PLANE
+   DefaultIcon ICON_UNIT_SPY_PLANE
+   DefaultSprite SPRITE_SPY_PLANE
+   Category UNIT_CATEGORY_AERIAL
+   Attack 10
+   Defense 20
+   ZBRangeAttack 10
+   Firepower 2
+   Armor 2
+   MaxHP 10
+   ShieldCost 2815
+   PowerPoints 5000
+   ShieldHunger 30
+   FoodHunger 0
+   MaxMovePoints 1000
+   VisionRange 6
+   EnableAdvance ADVANCE_AI_SURVEILLANCE
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 10000
+   IgnoreZOC
+   NoZoc
+   CantCaptureCity
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_SPY_PLANE
+   SoundSelect2 SOUND_SELECT2_SPY_PLANE
+   SoundMove SOUND_MOVE_SPY_PLANE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SPY_PLANE
+   SoundCantMove SOUND_CANTMOVE_SPY_PLANE
+   SoundAttack SOUND_ATTACK_SPY_PLANE
+   SoundWork SOUND_WORK_SPY_PLANE
+   SoundVictory SOUND_VICTORY_SPY_PLANE
+   SoundDeath SOUND_DEATH_SPY_PLANE
+
+   CanAttack: Air
+   CanSee: Standard
+   CanSee: Underwater
+   MovementType: Air
+   Size: Medium
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 61
+UNIT_STEALTH_BOMBER {
+   Description DESCRIPTION_UNIT_STEALTH_BOMBER
+   DefaultIcon ICON_UNIT_STEALTH_BOMBER
+   DefaultSprite SPRITE_STEALTH_BOMBER
+   Category UNIT_CATEGORY_AERIAL
+   Attack 80
+   Defense 80
+   ZBRangeAttack 95
+   Firepower 4
+   Armor 3
+   MaxHP 10
+   ShieldCost 3375
+   PowerPoints 6000
+   ShieldHunger 35
+   FoodHunger 0
+   MaxMovePoints 1000
+   VisionRange 4
+   EnableAdvance ADVANCE_ADVANCED_COMPOSITES
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   EnableCarrierDefenses
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 5000
+   IgnoreZOC
+   NoZoc
+   CanBeachAssault
+   CantCaptureCity
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_STEALTH_BOMBER
+   SoundSelect2 SOUND_SELECT2_STEALTH_BOMBER
+   SoundMove SOUND_MOVE_STEALTH_BOMBER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_STEALTH_BOMBER
+   SoundCantMove SOUND_CANTMOVE_STEALTH_BOMBER
+   SoundAttack SOUND_ATTACK_STEALTH_BOMBER
+   SoundWork SOUND_WORK_STEALTH_BOMBER
+   SoundVictory SOUND_VICTORY_STEALTH_BOMBER
+   SoundDeath SOUND_DEATH_STEALTH_BOMBER
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanBombard: Land
+   CanBombard: Mountain
+   CanBombard: Water
+   CanCarry: SmallAir
+   CanSee: Standard
+   MovementType: Air
+   Size: Medium
+   VisionClass: Standard
+
+   CargoData {
+      MaxCargo 2
+      Load SOUND_ID_STEALTH_BOMBER_LOAD
+      Unload SOUND_ID_STEALTH_BOMBER_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 62
+UNIT_STEALTH_FIGHTER {
+   Description DESCRIPTION_UNIT_STEALTH_FIGHTER
+   DefaultIcon ICON_UNIT_STEALTH_FIGHTER
+   DefaultSprite SPRITE_STEALTH_FIGHTER
+   Category UNIT_CATEGORY_AERIAL
+   Attack 90
+   Defense 80
+   ZBRangeAttack 90
+   Firepower 5
+   Armor 3
+   MaxHP 10
+   ShieldCost 2815
+   PowerPoints 4000
+   ShieldHunger 30
+   FoodHunger 0
+   MaxMovePoints 1500
+   VisionRange 4
+   EnableAdvance ADVANCE_ADVANCED_COMPOSITES
+   CanCounterBombard
+   ActiveDefenseRange 1
+   EnableCarrierDefenses
+   LossMoveToDmgNone
+   NoFuelThenCrash
+   MaxFuel 3000
+   IgnoreZOC
+   NoZoc
+   CanBeachAssault
+   CantCaptureCity
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_STEALTH_FIGHTER
+   SoundSelect2 SOUND_SELECT2_STEALTH_FIGHTER
+   SoundMove SOUND_MOVE_STEALTH_FIGHTER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_STEALTH_FIGHTER
+   SoundCantMove SOUND_CANTMOVE_STEALTH_FIGHTER
+   SoundAttack SOUND_ATTACK_STEALTH_FIGHTER
+   SoundWork SOUND_WORK_STEALTH_FIGHTER
+   SoundVictory SOUND_VICTORY_STEALTH_FIGHTER
+   SoundDeath SOUND_DEATH_STEALTH_FIGHTER
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanAttack: Sea
+   CanAttack: ShallowWater
+   CanSee: Standard
+   Defend: Air
+   MovementType: Air
+   Size: Medium
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 63
+UNIT_SUBMARINE {
+   Description DESCRIPTION_UNIT_SUBMARINE
+   DefaultIcon ICON_UNIT_SUBMARINE
+   DefaultSprite SPRITE_SUBMARINE
+   Category UNIT_CATEGORY_UNDERSEA
+   Attack 40
+   Defense 30
+   ZBRangeAttack 40
+   Firepower 3
+   Armor 2
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 1500
+   ShieldHunger 12
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 2
+   EnableAdvance ADVANCE_OIL_REFINING
+   ObsoleteAdvance ADVANCE_NUCLEAR_POWER
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanExpel
+   CanPillage
+   CanPirate
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSubmarine
+   Explodes
+   SoundSelect1 SOUND_SELECT1_SUBMARINE
+   SoundSelect2 SOUND_SELECT2_SUBMARINE
+   SoundMove SOUND_MOVE_SUBMARINE
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SUBMARINE
+   SoundCantMove SOUND_CANTMOVE_SUBMARINE
+   SoundAttack SOUND_ATTACK_SUBMARINE
+   SoundWork SOUND_WORK_SUBMARINE
+   SoundVictory SOUND_VICTORY_SUBMARINE
+   SoundDeath SOUND_DEATH_SUBMARINE
+
+   CanAttack: Sea
+   CanAttack: Underwater
+   CanAttack: ShallowWater
+   CanBombard: Water
+   CanSee: Standard
+   CanSee: Underwater
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Underwater
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 64
+UNIT_SWORDSMAN {
+   Description DESCRIPTION_UNIT_SWORDSMAN
+   DefaultIcon ICON_UNIT_SWORDSMAN
+   DefaultSprite SPRITE_SWORDSMAN
+   Category UNIT_CATEGORY_ATTACK
+   Attack 20
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 2
+   Armor 1
+   MaxHP 10
+   ShieldCost 460
+   PowerPoints 250
+   ShieldHunger 5
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 1
+   EnableAdvance ADVANCE_IRON_WORKING
+   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsSpecialForces
+   SoundSelect1 SOUND_SELECT1_SAMURAI
+   SoundSelect2 SOUND_SELECT2_SAMURAI
+   SoundMove SOUND_MOVE_SAMURAI
+   SoundAcknowledge SOUND_ACKNOWLEDGE_SAMURAI
+   SoundCantMove SOUND_CANTMOVE_SAMURAI
+   SoundAttack SOUND_ATTACK_SAMURAI
+   SoundWork SOUND_WORK_SAMURAI
+   SoundVictory SOUND_VICTORY_SAMURAI
+   SoundDeath SOUND_DEATH_SAMURAI
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 65
+UNIT_TANK {
+   Description DESCRIPTION_UNIT_TANK
+   DefaultIcon ICON_UNIT_TANK
+   DefaultSprite SPRITE_TANK
+   Category UNIT_CATEGORY_FLANKER
+   Attack 50
+   Defense 35
+   ZBRangeAttack 80
+   Firepower 4
+   Armor 3
+   MaxHP 10
+   ShieldCost 2000
+   PowerPoints 2000
+   ShieldHunger 20
+   FoodHunger 0
+   MaxMovePoints 600
+   VisionRange 3
+   EnableAdvance ADVANCE_TANK_WARFARE
+   ObsoleteAdvance ADVANCE_UNIFIED_PHYSICS
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   IsFlanker
+   Explodes
+   SoundSelect1 SOUND_SELECT1_TANK
+   SoundSelect2 SOUND_SELECT2_TANK
+   SoundMove SOUND_MOVE_TANK
+   SoundAcknowledge SOUND_ACKNOWLEDGE_TANK
+   SoundCantMove SOUND_CANTMOVE_TANK
+   SoundAttack SOUND_ATTACK_TANK
+   SoundWork SOUND_WORK_TANK
+   SoundVictory SOUND_VICTORY_TANK
+   SoundDeath SOUND_DEATH_TANK
+
+   CanAttack: Land
+   CanSee: Standard
+   MovementType: Land
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 66
+UNIT_TELEVANGELIST {
+   Description DESCRIPTION_UNIT_TELEVANGELIST
+   DefaultIcon ICON_UNIT_TELEVANGELIST
+   DefaultSprite SPRITE_TELEVANGELIST
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 1000
+   ShieldHunger 12
+   FoodHunger 0
+   MaxMovePoints 400
+   VisionRange 2
+   EnableAdvance ADVANCE_MASS_MEDIA
+   GovernmentType GOVERNMENT_TECHNOCRACY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CanBeSued
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   IsTelevangelist
+   Civilian
+   SoundSelect1 SOUND_SELECT1_TELEVANGELIST
+   SoundSelect2 SOUND_SELECT2_TELEVANGELIST
+   SoundMove SOUND_MOVE_TELEVANGELIST
+   SoundAcknowledge SOUND_ACKNOWLEDGE_TELEVANGELIST
+   SoundCantMove SOUND_CANTMOVE_TELEVANGELIST
+   SoundAttack SOUND_ATTACK_TELEVANGELIST
+   SoundWork SOUND_WORK_TELEVANGELIST
+   SoundVictory SOUND_VICTORY_TELEVANGELIST
+   SoundDeath SOUND_DEATH_TELEVANGELIST
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   CanSoothsay {
+      Sound SOUND_ID_CAN_SOOTHSAY_TV
+      Effect SPECEFFECT_CAN_SOOTHSAY
+   }
+
+   CauseUnhappiness {
+      Chance 1
+      Timer 1
+      Amount 5
+      Sound SOUND_ID_CAN_SOOTHSAY_TV
+      Effect SPECEFFECT_CAN_SOOTHSAY
+   }
+
+   ConvertCities {
+      Chance 0.75
+      DeathChance 0.25
+      Sound SOUND_ID_CONVERT_CITIES_TV
+      Effect SPECEFFECT_CONVERT_CITIES
+   }
+
+   IndulgenceSales {
+      Sound SOUND_ID_INDULGENCE_SALES_TV
+      Effect SPECEFFECT_INDULGENCE_SALES
+   }
+}
+
+############################################################
+
+## UNIT 67
+UNIT_TROOP_SHIP {
+   Description DESCRIPTION_UNIT_TROOP_SHIP
+   DefaultIcon ICON_UNIT_TROOP_SHIP
+   DefaultSprite SPRITE_TROOP_SHIP
+   Category UNIT_CATEGORY_NAVAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 1200
+   ShieldHunger 12
+   FoodHunger 0
+   MaxMovePoints 500
+   VisionRange 2
+   EnableAdvance ADVANCE_INTERNAL_COMBUSTION
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   NoZoc
+   CantCaptureCity
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_TROOP_SHIP
+   SoundSelect2 SOUND_SELECT2_TROOP_SHIP
+   SoundMove SOUND_MOVE_TROOP_SHIP
+   SoundAcknowledge SOUND_ACKNOWLEDGE_TROOP_SHIP
+   SoundCantMove SOUND_CANTMOVE_TROOP_SHIP
+   SoundAttack SOUND_ATTACK_TROOP_SHIP
+   SoundWork SOUND_WORK_TROOP_SHIP
+   SoundVictory SOUND_VICTORY_TROOP_SHIP
+   SoundDeath SOUND_DEATH_TROOP_SHIP
+
+   CanCarry: SmallLand
+   CanCarry: MedLand
+   CanSee: Standard
+   MovementType: Sea
+   MovementType: ShallowWater
+   Size: Large
+   VisionClass: Standard
+
+   CargoData {
+      MaxCargo 5
+      Load SOUND_ID_TROOP_SHIP_LOAD
+      Unload SOUND_ID_TROOP_SHIP_UNLOAD
+   }
+}
+
+############################################################
+
+## UNIT 68
+UNIT_URBAN_PLANNER {
+   CantBuild
+   Description DESCRIPTION_UNIT_URBAN_PLANNER
+   DefaultIcon ICON_UNIT_URBAN_PLANNER
+   DefaultSprite SPRITE_URBAN_PLANNER
+   Category UNIT_CATEGORY_SETTLER
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 100
+   ShieldHunger 12
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 2
+   EnableAdvance ADVANCE_ADV_URBAN_PLANNING
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   NoZoc
+   SettleCityType UNIT_CITY
+   SettleSize 3
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_URBAN_PLANNER
+   SoundSelect2 SOUND_SELECT2_URBAN_PLANNER
+   SoundMove SOUND_MOVE_URBAN_PLANNER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_URBAN_PLANNER
+   SoundCantMove SOUND_CANTMOVE_URBAN_PLANNER
+   SoundAttack SOUND_ATTACK_URBAN_PLANNER
+   SoundWork SOUND_WORK_URBAN_PLANNER
+   SoundVictory SOUND_VICTORY_URBAN_PLANNER
+   SoundDeath SOUND_DEATH_URBAN_PLANNER
+   SettleBuilding IMPROVE_ACADEMY
+   SettleBuilding IMPROVE_COURTHOUSE
+   SettleBuilding IMPROVE_GRANARY
+   SettleBuilding IMPROVE_SHRINE
+   SettleBuilding IMPROVE_THEATER
+
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Settle: Land
+   Settle: Mountain
+   Size: Small
+   VisionClass: Standard
+}
+
+############################################################
+
+## UNIT 69
+UNIT_WAR_WALKER {
+   Description DESCRIPTION_UNIT_WAR_WALKER
+   DefaultIcon ICON_UNIT_WAR_WALKER
+   DefaultSprite SPRITE_WAR_WALKER
+   Category UNIT_CATEGORY_RANGED
+   Attack 50
+   Defense 40
+   ZBRangeAttack 95
+   Firepower 5
+   Armor 4
+   MaxHP 10
+   ShieldCost 3500
+   PowerPoints 100
+   ShieldHunger 35
+   FoodHunger 0
+   MaxMovePoints 500
+   VisionRange 4
+   EnableAdvance ADVANCE_CYBERNETICS
+   BombRounds 5
+   BombardRange 1
+   CanCounterBombard
+   ActiveDefenseRange 1
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   Explodes
+   SoundSelect1 SOUND_SELECT1_WAR_WALKER
+   SoundSelect2 SOUND_SELECT2_WAR_WALKER
+   SoundMove SOUND_MOVE_WAR_WALKER
+   SoundAcknowledge SOUND_ACKNOWLEDGE_WAR_WALKER
+   SoundCantMove SOUND_CANTMOVE_WAR_WALKER
+   SoundAttack SOUND_ATTACK_WAR_WALKER
+   SoundWork SOUND_WORK_WAR_WALKER
+   SoundVictory SOUND_VICTORY_WAR_WALKER
+   SoundDeath SOUND_DEATH_WAR_WALKER
+
+   CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanBombard: Land
+   CanBombard: Mountain
+   CanBombard: Air
+   CanSee: Standard
+   Defend: Air
+   MovementType: Land
+   MovementType: Mountain
+   Size: Medium
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 70
+UNIT_WARRIOR {
+   Description DESCRIPTION_UNIT_WARRIOR
+   DefaultIcon ICON_UNIT_WARRIOR
+   DefaultSprite SPRITE_WARRIOR
+   Category UNIT_CATEGORY_ATTACK
+   Attack 10
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 150
+   PowerPoints 100
+   ShieldHunger 1
+   FoodHunger 0
+   MaxMovePoints 100
+   VisionRange 2
+   EnableAdvance ADVANCE_TOOLMAKING
+   ObsoleteAdvance ADVANCE_GUNPOWDER
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   CanEntrench
+   CanExpel
+   CanPillage
+   CanPirate
+   ExertsMartialLaw
+   DeathEffectsHappy
+   SoundSelect1 SOUND_SELECT1_WARRIOR
+   SoundSelect2 SOUND_SELECT2_WARRIOR
+   SoundMove SOUND_MOVE_WARRIOR
+   SoundAcknowledge SOUND_ACKNOWLEDGE_WARRIOR
+   SoundCantMove SOUND_CANTMOVE_WARRIOR
+   SoundAttack SOUND_ATTACK_WARRIOR
+   SoundWork SOUND_WORK_WARRIOR
+   SoundVictory SOUND_VICTORY_WARRIOR
+   SoundDeath SOUND_DEATH_WARRIOR
+
+   CanAttack: Land
+   CanAttack: Mountain
+   CanSee: Standard
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Standard
+
+   CanReform {
+      Sound SOUND_ID_REFORM_CITY
+      Effect SPECEFFECT_REFORMCITY
+   }
+}
+
+############################################################
+
+## UNIT 71
+UNIT_Z_FREIGHT_TRANSPORT {
+   Description DESCRIPTION_UNIT_WARRIOR
+   DefaultIcon ICON_UNIT_FREIGHT_TRANSPORT
+   DefaultSprite SPRITE_WARRIOR
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 0
+   ZBRangeAttack 0
+   Firepower 0
+   Armor 0
+   MaxHP 10
+   ShieldCost 1200
+   PowerPoints 100
+   ShieldHunger 0
+   FoodHunger 0
+   MaxMovePoints 3
+   VisionRange 0
+   EnableAdvance ADVANCE_GLOBAL_ECONOMICS
+   ActiveDefenseRange 0
+   MaxFuel 0
+   IsTrader
+   SoundSelect1 SOUND_SELECT1_CARAVAN
+   SoundSelect2 SOUND_SELECT2_CARAVAN
+   SoundMove SOUND_MOVE_CARAVAN
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CARAVAN
+   SoundCantMove SOUND_CANTMOVE_CARAVAN
+   SoundAttack SOUND_ATTACK_CARAVAN
+   SoundWork SOUND_WORK_CARAVAN
+   SoundVictory SOUND_VICTORY_CARAVAN
+   SoundDeath SOUND_DEATH_CARAVAN
+
+}
+
+############################################################
+

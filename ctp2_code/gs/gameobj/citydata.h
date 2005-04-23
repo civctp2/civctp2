@@ -41,6 +41,9 @@
 //   estimate resource production better without the need of recalculation
 //   of everything. - April 4th 2005 Martin Gühmann
 // - Added m_turnsNextPop to track city growth - PFT 29 mar 05
+// - Removed private member m_turnsNextPop as there is no need to save it
+//   as its calculation is cheap and in addition there was no get method
+//   or anything else that requires to save it. - April 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -286,7 +289,6 @@ class CityData : public CityRadiusCallback {
     Unit m_home_city; 
 	uint8 m_min_turns_revolt;	// Number of revolt risk free turns.
     BuildQueue m_build_queue; 
-    sint32 m_turnsNextPop;     //PFT 29 mar 05, show # turns until city next grows 
     
 	TradeDynamicArray m_tradeSourceList;							
 	TradeDynamicArray m_tradeDestinationList;						

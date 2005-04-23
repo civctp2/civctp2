@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -31,6 +33,7 @@
 // - With fog of war off the current city sprites and unit sprites at the
 //   right position are displayed. - Dec. 25th 2004 - Martin Gühmann
 // - Improved destructor (useless code removed, corrected delete [])
+// - Removed .NET compiler warnings. - April 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -243,18 +246,18 @@ void TiledMap::InitLUT(void)
 }
 
 TiledMap::TiledMap(MapPoint &size)
-:	m_drawHilite	(false),
-	m_isScrolling	(false),
-	m_lockedSurface	(NULL),
-	m_overlayRec	(NULL),
+:	m_drawHilite          (false),
+	m_isScrolling         (false),
+	m_lockedSurface       (NULL),
+	m_overlayRec          (NULL),
 #if defined(_DEBUG)
-	m_showPopHack	(false),
+	m_showPopHack         (false),
 #endif
-	m_surfBase		(NULL),
-	m_surfHeight	(0),
-	m_surfIsLocked	(false),
-	m_surfPitch		(0),
-	m_surfWidth		(0)	
+	m_surfBase            (NULL),
+	m_surfHeight          (0),
+	m_surfIsLocked        (false),
+	m_surfPitch           (0),
+	m_surfWidth	          (0)
 {	
 	Assert(g_theWorld != NULL);
 	if (g_theWorld == NULL) 
@@ -1354,7 +1357,7 @@ void TiledMap::TryMegaTiles(MapPoint &pos, BOOL regenTilenum)
 void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 							   BOOL regenTilenum)
 {
-	uint16			index;
+	uint8			index;
 	sint32			goodIndex;
 	sint32			goodSpriteID;
 
@@ -1382,9 +1385,9 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 		}
 	}
 
-	index = (uint16)g_theWorld->GetTerrain(pos.x, pos.y);
+	index = static_cast<uint8>(g_theWorld->GetTerrain(pos.x, pos.y));
 	if(regenTilenum)
-		theTileInfo->SetTileNum((TILEINDEX)g_theTerrainDB->Get(index)->GetTilesetIndex());
+		theTileInfo->SetTileNum(static_cast<TILEINDEX>(g_theTerrainDB->Get(index)->GetTilesetIndex()));
 
 	theTileInfo->SetTerrainType(index);
 
@@ -1395,13 +1398,13 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 	uint16		c, n, ne, e, se, s, sw, w, nw;
 	BOOL		rc, rn, rne, re, rse, rs, rsw, rw, rnw;
 
-	c = g_theTerrainDB->Get(index)->GetTilesetIndex();
+	c = static_cast<uint16>(g_theTerrainDB->Get(index)->GetTilesetIndex());
 
 	rc = g_theWorld->IsRiver(pos.x, pos.y);
 
 	if(pos.GetNeighborPosition(NORTH, newPos)) {
 
-		n = (uint16)g_theWorld->GetTerrain(newPos.x, newPos.y);
+		n = static_cast<uint16>(g_theWorld->GetTerrain(newPos.x, newPos.y));
 		rn = g_theWorld->IsRiver(newPos.x, newPos.y);
 	} else {
 		n = index;
@@ -1410,7 +1413,7 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 
 	if(pos.GetNeighborPosition(SOUTH, newPos)) {
 
-		s = (uint16)g_theWorld->GetTerrain(newPos.x, newPos.y);
+		s = static_cast<uint16>(g_theWorld->GetTerrain(newPos.x, newPos.y));
 		rs = g_theWorld->IsRiver(newPos.x, newPos.y);
 	} else {
 		s = index;
@@ -1419,7 +1422,7 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 
 	if(pos.GetNeighborPosition(EAST, newPos)) {
 
-		e = (uint16)g_theWorld->GetTerrain(newPos.x, newPos.y);
+		e = static_cast<uint16>(g_theWorld->GetTerrain(newPos.x, newPos.y));
 		re = g_theWorld->IsRiver(newPos.x, newPos.y);
 	} else {
 		e = index;
@@ -1428,7 +1431,7 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 	
 	if(pos.GetNeighborPosition(WEST, newPos)) {
 
-		w = (uint16)g_theWorld->GetTerrain(newPos.x, newPos.y);
+		w = static_cast<uint16>(g_theWorld->GetTerrain(newPos.x, newPos.y));
 		rw = g_theWorld->IsRiver(newPos.x, newPos.y);
 	} else {
 		w = index;
@@ -1437,7 +1440,7 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 	
 	if(pos.GetNeighborPosition(SOUTHWEST, newPos)) {
 
-		sw = (uint16)g_theWorld->GetTerrain(newPos.x, newPos.y);
+		sw = static_cast<uint16>(g_theWorld->GetTerrain(newPos.x, newPos.y));
 		rsw = g_theWorld->IsRiver(newPos.x, newPos.y);
 	} else {
 		sw = index;
@@ -1446,7 +1449,7 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 	
 	if(pos.GetNeighborPosition(NORTHWEST, newPos)) {
 
-		nw = (uint16)g_theWorld->GetTerrain(newPos.x, newPos.y);
+		nw = static_cast<uint16>(g_theWorld->GetTerrain(newPos.x, newPos.y));
 		rnw = g_theWorld->IsRiver(newPos.x, newPos.y);
 	} else {
 		nw = index;
@@ -1455,7 +1458,7 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 	
 	if(pos.GetNeighborPosition(NORTHEAST, newPos)) {
 
-		ne = (uint16)g_theWorld->GetTerrain(newPos.x, newPos.y);
+		ne = static_cast<uint16>(g_theWorld->GetTerrain(newPos.x, newPos.y));
 		rne = g_theWorld->IsRiver(newPos.x, newPos.y);
 	} else {
 		ne = index;
@@ -1464,17 +1467,17 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 	
 	if(pos.GetNeighborPosition(SOUTHEAST, newPos)) {
 
-		se = (uint16)g_theWorld->GetTerrain(newPos.x, newPos.y);
+		se = static_cast<uint16>(g_theWorld->GetTerrain(newPos.x, newPos.y));
 		rse = g_theWorld->IsRiver(newPos.x, newPos.y);
 	} else {
 		se = index;
 		rse = FALSE;
 	}
 
-	theTileInfo->SetTransition(0, g_theTerrainDB->Get(sw)->GetTilesetIndex());
-	theTileInfo->SetTransition(1, g_theTerrainDB->Get(nw)->GetTilesetIndex());
-	theTileInfo->SetTransition(2, g_theTerrainDB->Get(ne)->GetTilesetIndex());
-	theTileInfo->SetTransition(3, g_theTerrainDB->Get(se)->GetTilesetIndex());
+	theTileInfo->SetTransition(0, static_cast<uint16>(g_theTerrainDB->Get(sw)->GetTilesetIndex()));
+	theTileInfo->SetTransition(1, static_cast<uint16>(g_theTerrainDB->Get(nw)->GetTilesetIndex()));
+	theTileInfo->SetTransition(2, static_cast<uint16>(g_theTerrainDB->Get(ne)->GetTilesetIndex()));
+	theTileInfo->SetTransition(3, static_cast<uint16>(g_theTerrainDB->Get(se)->GetTilesetIndex()));
 
 
 
@@ -1785,9 +1788,9 @@ void TiledMap::DrawHiliteMouseTile(aui_Surface *destSurf)
 		sint32 h = ScenarioEditor::GetRegionHeight();
 
 		// x and y are orthogonal coordinates now
-		for (sint32 y = 0; y < h; ++y)
+		for (sint16 y = 0; y < h; ++y)
 		{
-			for (sint32 x = (y & 1); x < (2 * w); x += 2)
+			for (sint16 x = (y & 1); x < (2 * w); x += 2)
 			{
 				OrthogonalPoint	cur(ul);
 				cur.Move(MapPointData(x, y));
@@ -5767,7 +5770,7 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 	MapPoint		pos;
 	POINT			hitPt;
 	sint32			x, y;
-	sint32			maxX;
+	sint16			maxX;
 	sint32			headroom = (sint32)((double)k_TILE_PIXEL_HEADROOM * m_scale);
 
 
@@ -5795,7 +5798,7 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
  	hitPt.x = x % width;
 	hitPt.y = y % height;
 
-	maxX = m_mapBounds.right;
+	maxX = static_cast<sint16>(m_mapBounds.right);
 
 	if (!PointInMask(hitPt)) {
 		
@@ -5844,8 +5847,8 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 	
 
 	
-	if (tilePos.x <0) tilePos.x = g_theWorld->GetWidth() + tilePos.x; 
-	else if (g_theWorld->GetWidth() <= tilePos.x) tilePos.x = tilePos.x - (sint16)(g_theWorld->GetWidth()); 
+	if (tilePos.x <0) tilePos.x = static_cast<sint16>(g_theWorld->GetWidth()) + tilePos.x; 
+	else if (g_theWorld->GetWidth() <= tilePos.x) tilePos.x = tilePos.x - static_cast<sint16>(g_theWorld->GetWidth()); 
 
 	if (g_theWorld->IsYwrap()) {
 		sint16 sx, sy;
@@ -5868,7 +5871,7 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 			tilePos.y = 0; 
 			return FALSE; 
 		} else if (g_theWorld->GetHeight() <= tilePos.y) { 
-			tilePos.y = g_theWorld->GetHeight() -1;
+			tilePos.y = static_cast<sint16>(g_theWorld->GetHeight() -1);
 			return FALSE; 
 		} 
 	}
@@ -6484,16 +6487,15 @@ BOOL TiledMap::ReadyToDraw() const
 	if((g_network.IsActive() || g_network.IsNetworkLaunch()) &&
 	   !g_network.ReadyToStart())
 		return FALSE;
-	
+
 	if(g_slicEngine->ShouldScreenBeBlank())
 		return FALSE;
 
-	
-	
 	if((!g_selected_item  && !g_turn) || 
 	   (g_turn->GetRound() == 0 && m_localVision->GetOwner() == 0)) {
 		return FALSE;
 	}
+
 	return TRUE;
 }
 

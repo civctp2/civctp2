@@ -496,9 +496,6 @@ public:
 
 protected:
 	
-	
-	
-	
 	void CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) const;
 
 	

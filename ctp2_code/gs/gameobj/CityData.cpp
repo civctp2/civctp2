@@ -62,9 +62,13 @@
 // - Updated NeedMoreFood function for better estimation. 
 //   - April 4th 2005 Martin Gühmann
 // - Changed CollectResources to add in the food, production, and gold from the resource. 
-// - Track city growth with 
 // - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
 //   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
+// - Track city growth with updated TurnsToNextPop method - PFT 29 mar 05
+// - Improved running time of TurnsToNextPop method and removed superflous call
+//   of TurnsToNextPop methods, as private member m_turnsNextPop was never 
+//   accessed by a get method or was used in any other method.
+//   - April 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -266,6 +270,7 @@ extern Pollution *g_thePollution ;
 
 extern TurnCount *g_turn;
 extern ProfileDB	*g_theProfileDB ;
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::CityData
@@ -421,7 +426,6 @@ CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
 	m_workerFullUtilizationIndex = 0;
 
 	ResetStarvationTurns();
-    m_turnsNextPop = 0; //PFT 29 mar 05, show # turns until city next grows
 	m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
 
 	m_pos = center_point;
@@ -455,6 +459,7 @@ CityData::~CityData()
 		m_distanceToGood = NULL;
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::Serialize
@@ -525,6 +530,7 @@ void CityData::Serialize(CivArchive &archive)
 	}
 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : NeedsCanalTunnel
@@ -541,7 +547,6 @@ void CityData::Serialize(CivArchive &archive)
 //
 //----------------------------------------------------------------------------
 BOOL NeedsCanalTunnel(MapPoint &center_point)
-
 {
     if (g_theWorld->IsCanal(center_point)) { 
         return FALSE; 
@@ -556,6 +561,7 @@ BOOL NeedsCanalTunnel(MapPoint &center_point)
         return FALSE;
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::Initialize
@@ -740,8 +746,6 @@ void CityData::Initialize(sint32 settlerType)
 
 	CalculateGrowthRate();
 
-    TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
-
 	FindGoodDistances();
 
 	GenerateBorders(center_point, m_owner, g_theConstDB->GetBorderIntRadius(), g_theConstDB->GetBorderSquaredRadius());
@@ -753,6 +757,7 @@ void CityData::Initialize(sint32 settlerType)
 						   GEA_End);
 
 }
+
 // called only by NetUnit::Unpacketize
 void CityData::NetworkInitialize()
 {
@@ -853,6 +858,7 @@ void CityData::PrepareToRemove(const CAUSE_REMOVE_ARMY cause,
 		g_theWorld->GetCell(it.Pos())->SetCityOwner(Unit(0));
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::SetShieldstore
@@ -872,6 +878,7 @@ void CityData::SetShieldstore (sint32 s)
 {
     m_shieldstore = s; 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::AddShields
@@ -955,6 +962,7 @@ void CityData::NoRevoltCountdown()
 		m_min_turns_revolt--;
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::Revolt
@@ -1114,6 +1122,7 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 	// Prevent city from revolting twice in the same turn.
 	m_min_turns_revolt = (uint8)g_theConstDB->GetMinTurnsBetweenRevolt(); 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::TeleportUnits
@@ -1210,6 +1219,7 @@ void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units,
 	}
 #endif
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::StopTradingWith
@@ -1259,13 +1269,14 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::CalcPollution
 //
 // Description: Calculate the pollution produced by this city
 //
-// Parameters : 
+// Parameters : -
 //              
 // Globals    : -
 //
@@ -1367,6 +1378,7 @@ void CityData::CalcPollution(void)
 		m_total_pollution=0;
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::DoLocalPollution
@@ -1428,6 +1440,7 @@ void CityData::DoLocalPollution()
 		}
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::ComputeGrossProduction
@@ -1478,7 +1491,24 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 	return ComputeProductionLosses(static_cast<sint32>(gross_production), crime_loss, franchise_loss);
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ComputeProductionLosses
+//
+// Description: Calculates the production of the city for this turn and the 
+//              losses to crime and franchise dependent on workday.
+//
+// Parameters : gross_production:        The gross production
+//              crime_loss:              Filled with the loss due to crime (m_shields_lost_to_crime).
+//              franchise_loss:          Filled with the loss to franchise (m_productionLostToFranchise).
+//
+// Globals    : g_theConstDB:            The constant database
+//
+// Returns    : sint32: The gross production including losses due bioinfection
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 CityData::ComputeProductionLosses(sint32 gross_production, sint32 &crime_loss, sint32 &franchise_loss) const
 {
 
@@ -1498,6 +1528,7 @@ sint32 CityData::ComputeProductionLosses(sint32 gross_production, sint32 &crime_
 	return gross_production;
 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::ProcessProduction
@@ -1568,11 +1599,13 @@ sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, 
 
 	return shields;
 }
+
 // used in NewTurnCount::VerifyEndTurn
 double CityData::ProjectMilitaryContribution()
 {
    return (double)m_shields_this_turn; 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::ComputeMaterialsPaid
@@ -1854,6 +1887,7 @@ void CityData::CollectResources()
 	m_trade = m_gross_trade;
 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::ProcessFood
@@ -2063,6 +2097,7 @@ sint32 CityData::GetBuildingMaxPopIncrease()
 	buildingutil_GetRaiseMaxPopulation(GetEffectiveBuildings(), level);
 	return level;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::CalculateGrowthRate
@@ -2160,6 +2195,7 @@ double CityData::CalculateGrossGrowthRate(double &overcrowdingCoeff, double &bas
 		return((m_food_delta + bonusFood) / static_cast<double>(PopCount()));
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::GrowOrStarve
@@ -2199,7 +2235,6 @@ sint32 CityData::GrowOrStarve()
 				}
 
 				m_starvation_turns--;
-                TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
                 UpdateSprite();
 				return TRUE;
 			} 
@@ -2213,7 +2248,6 @@ sint32 CityData::GrowOrStarve()
 								   GEA_City, m_home_city.m_id,
 								   GEA_End);
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
-            TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
             UpdateSprite();
 			return TRUE;
 		} else if(m_partialPopulation < 0) {
@@ -2226,7 +2260,6 @@ sint32 CityData::GrowOrStarve()
 									   GEA_End);
 			
 			m_partialPopulation += k_PEOPLE_PER_POPULATION;
-            TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
             UpdateSprite();
 			return TRUE;
 		}
@@ -2241,12 +2274,10 @@ sint32 CityData::GrowOrStarve()
 								   GEA_End);
 			
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
-            TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
             UpdateSprite();
 			return TRUE;
 		}
 	}
-	TurnsToNextPop();//PFT 29 mar 05, show # turns until city next grows
     UpdateSprite();
 	return FALSE;
 }
@@ -2256,6 +2287,7 @@ int CityData::FoodSupportTroops()
 {
 	return FALSE;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::UpdateSprite
@@ -2311,6 +2343,7 @@ void CityData::AddTradeResource(ROUTE_TYPE type, sint32 resource)
 			break;
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::CalculateTradeRoutes
@@ -2457,6 +2490,7 @@ sint32 CityData::CalculateGoldFromResources()
 	}
 	return m_goldFromTradeRoutes;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::SupportBuildings
@@ -2510,7 +2544,6 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 	return buildingUpkeep;
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::GetSupportBuildingsCost
@@ -2531,7 +2564,8 @@ sint32 CityData::GetSupportBuildingsCost() const
 	sint32 wonderLevel = wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
 	
 	return buildingutil_GetTotalUpkeep(m_built_improvements, wonderLevel);
-} 
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::CalcWages
@@ -2587,6 +2621,7 @@ BOOL CityData::PayWages(sint32 wage, bool projectedOnly)
 
     return TRUE; 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::GetWagesNeeded
@@ -2606,6 +2641,7 @@ sint32 CityData::GetWagesNeeded(const sint32 & wages_per_person) const
 {
 	return wages_per_person * (PopCount() - SlaveCount());
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::GetWagesNeeded
@@ -2625,6 +2661,7 @@ sint32 CityData::GetWagesNeeded()
 {
 	return GetWagesNeeded(static_cast<sint32>(g_player[m_owner]->GetWagesPerPerson()));
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : AddTradeRoute
@@ -2686,6 +2723,7 @@ void CityData::AddTradeRoute(TradeRoute &route, BOOL fromNetwork)
 		}
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : DelTradeRoute
@@ -2743,6 +2781,7 @@ void CityData::DelTradeRoute(TradeRoute route)
 		}
 	}
 }
+
 // CTP1
 void CityData::CheckTopTen()
 { 
@@ -2769,6 +2808,7 @@ void CityData::CheatBuildFirstItem()
 		m_shieldstore_at_begin_turn = m_shieldstore;
 	}
 }
+
 void CityData::InitBeginTurnVariables()
 {
 	m_capturedThisTurn = FALSE;
@@ -2782,6 +2822,7 @@ void CityData::InitBeginTurnVariables()
 	m_walls_nullified = FALSE;
 
 }
+
 void CityData::DoTurnCounters()
 {
 	if(m_spied_upon > 0)
@@ -2809,6 +2850,7 @@ void CityData::DoTurnCounters()
 	}
 
 }
+
 // deal with capitalization/infrastructure. Otherwise, build the front item in this city's buildqueue.
 void CityData::TryToBuild()
 {
@@ -2841,6 +2883,7 @@ void CityData::TryToBuild()
 
 	m_isInjoined = FALSE;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::BeginTurn
@@ -3075,7 +3118,6 @@ BOOL CityData::BuildImprovement(sint32 type)
 	}
 }
 
-
 BOOL CityData::BuildWonder(sint32 type)
 {
 	Assert(CanBuildWonder(type));
@@ -3242,7 +3284,6 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
     return TRUE;
 }
 
-
 void CityData::DestroyCapitol()
 
 {
@@ -3280,7 +3321,6 @@ void CityData::DestroyImprovement(sint32 imp)
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 }
 
-
 void CityData::NewGovernment(sint32 government_type)
 {
 	m_build_queue.RemoveIllegalItems(TRUE);
@@ -3306,6 +3346,7 @@ double CityData::GetDefendersBonusNoWalls() const
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), b);
 	return b;
 }
+
 // not used (Hospitals ?)
 void CityData::ImprovementHealUnitsInCity() const
 {
@@ -3327,6 +3368,7 @@ void CityData::ImprovementHealUnitsInCity() const
     }
 #endif
 }
+
 //no function: buildingutil_GetMovementTypeIsRefueled
 void CityData::ImprovementRefuelUnitsInCity() const
 {
@@ -3384,6 +3426,7 @@ sint32 CityData::GetProductionPollution() const
 {
 	return m_cityIndustrialPollution;
 }
+
 //not used
 void CityData::RemoveImprovements(const MapPoint &pos, sint32 owner)
 {
@@ -3584,6 +3627,7 @@ BOOL CityData::SafeFromNukes() const
 {
 	return buildingutil_GetProtectFromNukes(GetEffectiveBuildings());
 }
+
 // called by TiledMap::DrawCityNames
 BOOL CityData::HasAirport() const
 {
@@ -3619,6 +3663,7 @@ void CityData::SetSpiedUpon()
 {
 	m_spied_upon = g_theConstDB->GetSpiedUponWarinessTimer();
 }
+
 //see ORDER_RESULT UnitData::NullifyWalls
 void CityData::CityNullifyWalls()
 {
@@ -3708,6 +3753,7 @@ void CityData::RemoveOneSlave(PLAYER_INDEX p)
 						   GEA_End);
 	
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::DoUprising
@@ -4027,11 +4073,13 @@ void CityData::Unconvert(BOOL makeUnhappy)
 					  HAPPY_REASON_REFORMATION);
 	}
 }
+
 //this city is collecting more sint32 resource than than it is selling
 BOOL CityData::HasResource(sint32 resource) const
 {
 	return m_collectingResources[resource] > m_sellingResources[resource];
 }
+
 //this city is collecting some sint32 resource
 BOOL CityData::IsLocalResource(sint32 resource) const
 {
@@ -4076,7 +4124,6 @@ bool CityData::IsSellingResourceTo(sint32 resource, Unit & destination) const
 	return false;
 }
 
-
 sint32 CityData::LoadQueue(const MBCHAR *file)
 {
 	sint32	r ;
@@ -4098,9 +4145,9 @@ sint32 CityData::SaveQueue(const MBCHAR *file)
 }
 
 uint32 CityData_CityData_GetVersion(void)
-	{
+{
 	return (k_CITYDATA_VERSION_MAJOR<<16 | k_CITYDATA_VERSION_MINOR) ;
-	}
+}
 
 
 void CityData::ResetCityOwner(sint32 owner)
@@ -4188,7 +4235,6 @@ void CityData::ResetCityOwner(sint32 owner)
 	}
 }
 
-
 void CityData::SetName(const MBCHAR *name)
 { 
 	Assert(strlen(name)<k_MAX_NAME_LEN) ; 
@@ -4199,7 +4245,6 @@ void CityData::SetName(const MBCHAR *name)
 		g_network.SendCityName(this);
 	}
 }
-
 
 sint32 CityData::GetOvertimeCost() 
 {
@@ -4464,8 +4509,6 @@ void CityData::SetRoad() const
 #endif
 }
 
-
-
 void CityData::SetSize(sint32 size)
 {
 	if(size == PopCount())
@@ -4484,6 +4527,7 @@ sint32 CityData::GetNumTradeRoutes() const
 {
 	return m_tradeSourceList.Num() + m_tradeDestinationList.Num();
 }
+
 // CTP1 trade: see Player::HasSameGoodAsTraded 
 void CityData::AddTradedResources(Resources &resources)
 {
@@ -4497,6 +4541,7 @@ void CityData::AddTradedResources(Resources &resources)
 		}
 	}
 }
+
 // not used
 // how many combat (Attack > 0) units are there in m_home_city
 sint32 CityData::GetCombatUnits() const
@@ -4512,8 +4557,7 @@ sint32 CityData::GetCombatUnits() const
 	}
 	return count;
 }
-
-		
+	
 void CityData::GetProjectedProductionDeltas(sint32 &s, 
 											sint32 &t, 
 											sint32 &f,
@@ -4538,24 +4582,13 @@ void CityData::GetProjectedGrossProduction(sint32 &prod, sint32 &prod_crime)
 {
 }
 
-
 void CityData::GetProjectedGrossFood(sint32 &food, sint32 &food_crime)
 {
 }
 
-
 void CityData::GetProjectedGrossGold(sint32 &gold, sint32 &crime_gold)
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CityData::GetProjectedFood(sint32 &food)
 {
@@ -4566,14 +4599,6 @@ void CityData::GetDetailedProjectedFood(sint32 &food,
 										sint32 &foodBeforeCrimeAndEaten)
 {
 }
-	
-
-
-
-
-
-
-
 
 void CityData::GetProjectedProduction(sint32 &production)
 {
@@ -4818,7 +4843,6 @@ BOOL CityData::HaveImprovement(const sint32 type) const
 }
 
 sint32 CityData::GetPreferedPopType() const
-
 { 
 	return 0;
 }
@@ -4898,6 +4922,7 @@ void CityData::NotifyAdvance(AdvanceType advance)
 	m_build_queue.RemoveIllegalItems(TRUE);
 	FindBestSpecialists();
 }
+
 //not used; see Player::BeginTurnScience()
 void CityData::ContributeScience(double incomePercent,
 								 double &addscience,
@@ -4918,11 +4943,12 @@ void CityData::ContributeScience(double incomePercent,
 	addscience += addscience * s;
 	
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData:TurnsToNextPop
 //
-// Description: Calculate and set the number of turns until this city adds a pop
+// Description: Calculates the number of turns until this city adds a pop
 //
 // Parameters : -
 //
@@ -4930,24 +4956,20 @@ void CityData::ContributeScience(double incomePercent,
 //
 // Returns    : the number of turns until this city adds a pop
 //
-// Remark(s)  : 
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 sint32 CityData::TurnsToNextPop( void )
 {
-	sint32 tempPop = m_partialPopulation;
-    if ( m_food_delta <= 0 || m_growth_rate <= 0 || m_is_rioting){ 
-		 m_turnsNextPop = 999;
+
+    if(m_food_delta <= 0
+	|| m_growth_rate <= 0
+	|| m_is_rioting
+	){
+		return 999;
 	}
-	else{
-		sint32 turns = 0;
-		while ( tempPop < k_PEOPLE_PER_POPULATION ) {
-			tempPop += m_growth_rate;
-			turns++;
-		}
-        m_turnsNextPop = turns;
-	}
-	return m_turnsNextPop;	
+
+	return static_cast<sint32>(ceil((static_cast<double>(k_PEOPLE_PER_POPULATION - m_partialPopulation)) / static_cast<double>(m_growth_rate)));
 }
 
 sint32 CityData::FreeSlaves()
@@ -5064,11 +5086,13 @@ sint32 CityData::GetProductionFromPops()
 	
 	return prod;
 }
+
 //how many trade routes come into this city
 sint32 CityData::GetIncomingTrade() const
 {
 	return m_tradeDestinationList.Num();
 }
+
 //how many trade routes go out of this city
 sint32 CityData::GetOutgoingTrade() const
 {
@@ -6232,6 +6256,7 @@ void CityData::SplitScience(bool projectedOnly, sint32 &trade, sint32 &science, 
 //	                          ws, s));
 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::CollectOtherTrade
@@ -6337,6 +6362,7 @@ void CityData::ProcessGold(sint32 &trade, bool considerOnlyFromTerrain) const
 			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT])->GetCommerce();
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::ApplyGoldCoeff
@@ -6360,6 +6386,7 @@ void CityData::ApplyGoldCoeff(sint32 &trade) const
 		trade = static_cast<sint32>(trade * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetGoldCoef());
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::CalcGoldLoss

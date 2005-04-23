@@ -47,6 +47,10 @@
 //   displayed if the city starves. - April 6th 2005 Martin Gühmann
 // - Added OptimizeSpecialists function for specialists optimisation option.
 //   - April 7th 2005 Martin Gühmann
+// - The Project method now updates also the sprite of the city to support
+//   new turns to next pop feature, when you change the specialist 
+//   distribution, unfortunatly it does work as exspected.
+//   - April 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -576,6 +580,9 @@ void CityWindow::Project(CityData *cityData)
 	cityData->CalcHappiness(gold, FALSE);
 	cityData->EatFood();
 	cityData->CalculateGrowthRate();
+
+	// To update turn count to next pop on the map.
+	cityData->UpdateSprite();
 }
 
 void CityWindow::Project()

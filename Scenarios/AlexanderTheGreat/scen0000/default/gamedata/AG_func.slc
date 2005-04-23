@@ -1,0 +1,1109 @@
+
+
+  //////////////////////
+ // Global variables //
+//////////////////////
+
+
+// Variables to keep track of score
+int_t		cityScore;		// points from key cities controlled
+int_t		civScore;		// points from civs conquered
+int_t		heirScore;		// points from heir bonuses
+int_t		totalScore;		// total point score
+
+// Various Alexander variables
+int_t		alexStage;		// keeps track of Alex's health stages
+int_t		alexHP;			// Alexander's maximum hit points
+int_t		alexCount;		// counter to keep track of Alexander degrading
+int_t		alexDisease;	// Alex's percentage chance of dying from a disease
+int_t		alexTreatment;	// Flag for whether or not Alexander is seeking medical treatment
+
+// Variables to keep track of special units
+unit_t		alexUnit;		// keeps track of Alexander
+unit_t		parmenUnit;		// keeps track of Parmenion
+unit_t		antipUnit;		// keeps track of Antipater
+unit_t		cratUnit;		// keeps track of Craterus
+unit_t		hephUnit;		// keeps track of Hephaestian
+unit_t		ptolUnit;		// keeps track of Ptolemy
+unit_t		seleucUnit;		// keeps track of Seleucus
+unit_t		dariusUnit;		// keeps track of Darius
+unit_t		memnonUnit;		// keeps track of Memnon
+unit_t		bessusUnit;		// keeps track of Bessus
+unit_t		porusUnit;		// keeps track of Porus
+unit_t		chandUnit;		// keeps track of Chandragupta
+unit_t		specUnit;		// used to find special units
+
+// Wife and Heir-related variables
+int_t		wife[4];		// Keeps track of the wives and their pregnancies - Barsine, Roxane, Sindu, Statierta
+int_t		heirBorn[3];	// Tells which wife (1 to 4) gave birth to each of your sons
+int_t		oldestSon;		// keeps track of your oldest son, up until 12
+int_t		sonAge[3];		// keeps track of sons' ages.  -1 means son is dead
+int_t		sonBday[3];		// counter to sons' birthdays.  
+int_t		girlBorn;		// Tells you if you've already had a daughter
+
+// Location variables
+location_t	magadhanLoc;	// Location of the Magadhan entrance
+location_t	magadhan2Loc;	// Location of the second Magadhan entrance
+location_t	southIndiaLoc;	// Location of the South India entrance
+location_t	egyptLoc;		// Location to trigger Egpyt defection
+location_t	phoenLoc;		// Location of Phoenica Entrance
+location_t	sogdiaLoc;		// Location of Sogdia Entrance
+location_t	sogdia2Loc;		// Location of second Sogdia Entrance
+location_t	arabiaLoc;		// Location of trail to southern Arabia Trail
+location_t	ethiopiaLoc;	// Location of Ethiopia Entrance
+location_t	seresLoc;		// Location of entrance of Seres, land of silk
+location_t	seres2Loc;		// Eastward of entrance to Seres, land of silk
+location_t	indiaLoc;		// Indian location
+location_t	india2Loc;		// Indian location
+location_t	india3Loc;		// Indian location
+location_t	crossroadsLoc;	// crossroads to India and Sogdia
+location_t	wildernessLoc;	// Wild and hostile lands
+location_t	porusLoc;		// Location where Porus starts
+location_t	arabiaBySeaPLoc;	// Location of Persian side of Arabian sea route
+location_t	arabiaBySeaELoc;	// Location of Egyptian side of Arabian sea route
+location_t	roadToMarib1Loc;	// Location of road to Marib
+location_t	roadToMarib2Loc;	// Location of second road to Marib
+location_t	persepRoadLoc;		// Location of the road between Persepolis and Susa
+location_t	crossroad2Loc;		// Location of second crossroad
+location_t	caspianGateLoc;		// Location of Caspian Gate
+location_t	puskaravatiLoc;		// Location of crossroads 
+	// Macedonian cities
+location_t	amphipolisLoc;	// Location of city 
+location_t	larissaLoc;		// Location of city
+location_t	pellaLoc;		// Location of city 
+location_t	perinthusLoc;	// Location of city
+location_t	philipLoc;		// Location of city 
+	// Corinthian League Cities
+location_t	athensLoc;		// Location of city 
+location_t	chalcisLoc;		// Location of city 
+location_t	corcyraLoc;		// Location of city 
+location_t	corinthLoc;		// Location of city 
+location_t	epidamnusLoc;	// Location of city 
+location_t	knossosLoc;		// Location of city 
+location_t	myliteneLoc;	// Location of city 
+	// Greek States Cities
+location_t	chersonesusLoc;	// Location of city 
+location_t	cyeneLoc;		// Location of city 
+location_t	phasisLoc;		// Location of city 
+location_t	sinopeLoc;		// Location of city 
+location_t	spartaLoc;		// Location of city 
+location_t	syracuseLoc;	// Location of city 
+location_t	tarentumLoc;	// Location of city 
+location_t	trapezusLoc;	// Location of city 
+	// Persian Cities
+location_t	arachosiaLoc;	// Location of city
+location_t	aradusLoc;		// Location of city
+location_t	artakoanaLoc;	// Location of city
+location_t	babylonLoc;		// Location of city 
+location_t	baktraLoc;		// Location of city 
+location_t	dascyliumLoc;	// Location of city
+location_t	ecbatanaLoc;	// Location of city 
+location_t	ephesusLoc;		// Location of city 
+location_t	gazaLoc;		// Location of city 
+location_t	gordiumLoc;		// Location of city 
+location_t	halicarnassusLoc;	// Location of city 
+location_t	issusLoc;		// Location of city 
+location_t	kyreskhataLoc;	// Location of city
+location_t	marakandaLoc;	// Location of city 
+location_t	mazakaLoc;		// Location of city 
+location_t	memphisLoc;		// Location of city 
+location_t	pelusiumLoc;	// Location of city 
+location_t	persepolisLoc;	// Location of city 
+location_t	salamisLoc;		// Location of city 
+location_t	sardisLoc;		// Location of city
+location_t	sharudLoc;		// Location of city  
+location_t	sidonLoc;		// Location of city 
+location_t	susaLoc;		// Location of city 
+location_t	susiaLoc;		// Location of city
+location_t	tarsusLoc;		// Location of city 
+location_t	thapsacusLoc;	// Location of city 
+location_t	thebesLoc;		// Location of city
+location_t	tyreLoc;		// Location of city 
+	// Carthaginian Cities
+location_t	carthageLoc;	// Location of city 
+location_t	hadrumentumLoc;	// Location of city 
+location_t	hippoLoc;		// Location of city 
+location_t	leptisLoc;		// Location of city 
+location_t	motyaLoc;		// Location of city 
+	// Roman Cities
+location_t	capuaLoc;		// Location of city 
+location_t	cumaeLoc;		// Location of city 
+location_t	romeLoc;		// Location of city 
+	// Magadhan Cities
+location_t	bharuchLoc;		// Location of city 
+location_t	campaLoc;		// Location of city
+location_t	kasiLoc;		// Location of city 
+location_t	kausambiLoc;	// Location of city 
+location_t	kusinaraLoc;	// Location of city 
+location_t	mathuraLoc;		// Location of city 
+location_t	pataliputraLoc;	// Location of city 
+location_t	saketaLoc;		// Location of city 
+location_t	tamraliptiLoc;	// Location of city 
+location_t	ujjayiniLoc;	// Location of city 
+	// Independent States Cities
+location_t	adanaLoc;		// Location of city 
+location_t	andhapuraLoc;	// Location of city 
+location_t	dhufarLoc;		// Location of city 
+location_t	maribLoc;		// Location of city 
+location_t	meroeLoc;		// Location of city 
+location_t	mulasthanLoc;	// Location of city 
+location_t	pattalaLoc;		// Location of city 
+location_t	rorukaLoc;		// Location of city 
+location_t	sakalaLoc;		// Location of city 
+location_t	shabwahLoc;		// Location of city 
+location_t	suvarnagiriLoc;	// Location of city 
+location_t	taksasilaLoc;	// Location of city 
+location_t	udumbarikaLoc;	// Location of city 
+
+
+// Misc variables
+int_t		sogdiaRebel;			// Counter for the Sogdia Rebellion
+int_t		rebelFlag;				// Tells if Sogdia has already rebelled at least once
+int_t		rebellionOver;			// Tells if rebellion is over
+int_t		bessusFlag;				// Tells if Bessus will appear at the beginning of the next turn
+city_t		drownCity;				// City where Alexander is taken if he survives being drowned
+
+  ///////////////
+ // Functions //
+///////////////
+
+
+// Initialize Event Locators
+void_f InitLocations()
+{
+	// Non cities
+	MakeLocation(magadhanLoc, 73,37);
+	MakeLocation(magadhan2Loc, 75,47);
+	MakeLocation(southIndiaLoc, 56,83);
+	MakeLocation(egyptLoc, 3, 64);
+	MakeLocation(phoenLoc, 24, 33);
+	MakeLocation(sogdiaLoc, 68, 17);
+	MakeLocation(sogdia2Loc, 74, 19);
+	MakeLocation(arabiaLoc, 11, 62);
+	MakeLocation(ethiopiaLoc, 109, 85);
+	MakeLocation(seresLoc, 90, 10);
+	MakeLocation(seres2Loc, 101, 6);
+	MakeLocation(indiaLoc, 53, 61);
+	MakeLocation(india2Loc, 62, 43);
+	MakeLocation(india3Loc, 75, 28);
+	MakeLocation(crossroadsLoc, 71, 27);
+	MakeLocation(wildernessLoc, 56, 21);
+	MakeLocation(porusLoc, 74, 34);
+	MakeLocation(arabiaBySeaPLoc, 32, 73);
+	MakeLocation(arabiaBySeaELoc, 6, 70);
+	MakeLocation(roadToMarib1Loc, 18, 87);
+	MakeLocation(roadToMarib2Loc, 10, 92);
+	MakeLocation(persepRoadLoc, 37,44);
+	MakeLocation(crossroad2Loc, 61, 25);
+	MakeLocation(caspianGateLoc, 47, 31);
+	MakeLocation(puskaravatiLoc, 75, 26);
+	// Macedonian cities
+	MakeLocation(amphipolisLoc, 11, 26);
+	MakeLocation(larissaLoc, 5, 33);
+	MakeLocation(pellaLoc, 8, 26);
+	MakeLocation(perinthusLoc, 15, 24);
+	MakeLocation(philipLoc, 15, 20);
+	MakeLocation(sardisLoc, 13, 33);
+	// Corinthian League Cities
+	MakeLocation(athensLoc, 4, 41);
+	MakeLocation(chalcisLoc, 6, 36);
+	MakeLocation(corcyraLoc, 111, 36);
+	MakeLocation(corinthLoc, 2, 42);
+	MakeLocation(epidamnusLoc, 3, 28);
+	MakeLocation(knossosLoc, 1, 50);
+	MakeLocation(myliteneLoc, 10, 32);
+	// Greek States Cities
+	MakeLocation(chersonesusLoc, 33, 6);
+	MakeLocation(cyeneLoc, 104, 63);
+	MakeLocation(phasisLoc, 41, 11);
+	MakeLocation(sinopeLoc, 30, 15);
+	MakeLocation(spartaLoc, 111, 46);
+	MakeLocation(syracuseLoc, 99, 48);
+	MakeLocation(tarentumLoc, 109, 33);
+	MakeLocation(trapezusLoc, 36, 15);
+	// Persian Cities
+	MakeLocation(arachosiaLoc, 62, 40);
+	MakeLocation(aradusLoc, 20, 41);
+	MakeLocation(artakoanaLoc, 59, 31);
+	MakeLocation(babylonLoc, 29, 43);
+	MakeLocation(baktraLoc, 68, 22);
+	MakeLocation(dascyliumLoc, 17, 27);
+	MakeLocation(ecbatanaLoc, 40, 34);
+	MakeLocation(ephesusLoc, 10, 36);
+	MakeLocation(gazaLoc, 11, 57);
+	MakeLocation(gordiumLoc, 21, 26);
+	MakeLocation(halicarnassusLoc, 9, 41);
+	MakeLocation(issusLoc, 23, 36);
+	MakeLocation(kyreskhataLoc, 80, 7);
+	MakeLocation(marakandaLoc, 76, 8);
+	MakeLocation(mazakaLoc, 22, 34);
+	MakeLocation(memphisLoc, 2, 67);
+	MakeLocation(pelusiumLoc, 6, 61);
+	MakeLocation(persepolisLoc, 39, 49);
+	MakeLocation(salamisLoc, 16, 43);
+	MakeLocation(sharudLoc, 50, 29);
+	MakeLocation(sidonLoc, 17, 46);
+	MakeLocation(susaLoc, 35, 43);
+	MakeLocation(susiaLoc, 59, 24);
+	MakeLocation(tarsusLoc, 22, 34);
+	MakeLocation(thapsacusLoc, 27, 37);
+	MakeLocation(thebesLoc, 1, 75);
+	MakeLocation(tyreLoc, 15, 49);
+	// Carthaginian Cities
+	MakeLocation(carthageLoc, 91, 50);
+	MakeLocation(hadrumentumLoc, 90, 55);
+	MakeLocation(hippoLoc, 89, 49);
+	MakeLocation(leptisLoc, 91, 67);
+	MakeLocation(motyaLoc, 97, 44);
+	// Roman Cities
+	MakeLocation(capuaLoc, 106, 30);
+	MakeLocation(cumaeLoc, 105, 33);
+	MakeLocation(romeLoc, 105, 27);
+	// Magadhan Cities
+	MakeLocation(bharuchLoc, 59, 67);
+	MakeLocation(campaLoc, 84, 51);
+	MakeLocation(kasiLoc, 78, 52);
+	MakeLocation(kausambiLoc, 75, 54);
+	MakeLocation(kusinaraLoc, 82, 45);
+	MakeLocation(mathuraLoc, 75, 47);
+	MakeLocation(pataliputraLoc, 81, 50);
+	MakeLocation(saketaLoc, 79, 48);
+	MakeLocation(tamraliptiLoc, 80, 61);
+	MakeLocation(ujjayiniLoc, 65, 60);
+	// Independent States Cities
+	MakeLocation(adanaLoc, 8, 95);
+	MakeLocation(andhapuraLoc, 64, 77);
+	MakeLocation(dhufarLoc, 20, 87);
+	MakeLocation(maribLoc, 11, 87);
+	MakeLocation(meroeLoc, 108, 93);
+	MakeLocation(mulasthanLoc, 69, 41);
+	MakeLocation(pattalaLoc, 57, 57);
+	MakeLocation(rorukaLoc, 63, 47);
+	MakeLocation(sakalaLoc, 76, 32);
+	MakeLocation(shabwahLoc, 16, 87);
+	MakeLocation(suvarnagiriLoc, 59, 79);
+	MakeLocation(taksasilaLoc, 75, 29);
+	MakeLocation(udumbarikaLoc, 76, 37);
+}
+
+
+// Returns 1 if Unit is special
+int_f IsSpecialUnit (unit_t tmpUnit)
+{
+int_t	i;
+int_t	tmpNum;
+	if (tmpUnit.valid) {
+		tmpNum = tmpUnit.type;
+		if (tmpNum >= 72 && tmpNum <= 88) {
+			return 1;
+		} else {
+			return 0;
+		}
+	} else {
+		return 0;
+	}
+}
+
+
+// Finds a special Unit such as Alexander, Darius or Generals
+int_f FindSpecialUnit (int_t unitType, int_t tmpPlayer) 
+{
+int_t	i;
+int_t	numUnits;
+int_t	tmpPlayer2;
+int_t	tmpNum;
+int_t	tmpNum2;
+
+	player[0] = tmpPlayer;
+	numUnits = player[0].units;
+	tmpPlayer2 = tmpPlayer;
+	for(i = 0; i < numUnits; i = i + 1) {
+		GetUnitByIndex(tmpPlayer2, i, specUnit);
+		tmpNum = specUnit.type;
+		tmpNum2 = unitType;
+		if(tmpNum == tmpNum2) {
+			return 1;
+		}
+	}
+}
+
+
+// Kill all units at a location
+int_f KillUnitsAtLocation (location_t tmpLoc)
+{
+int_t		i;
+int_t		tmpNum;
+int_t		numUnits;
+int_t		noKill;
+unit_t		tmpUnit;
+location_t	tmpLoc2;
+
+	tmpLoc2 = tmpLoc;
+	numUnits = GetUnitsAtLocation(tmpLoc2);
+
+	for (i = 0; i < numUnits; i = i + 1) {		// Check for special units
+		GetUnitFromCell(tmpLoc2, i, tmpUnit);
+		tmpNum = tmpUnit.type;
+		if (tmpNum >= 72 && tmpNum <= 88) {
+			noKill = 1;
+		}
+	}
+	if (noKill == 0) {
+		for (i = 0; i < numUnits; i = i + 1) {	//If no special units, kill all units
+			GetUnitFromCell(tmpLoc2, i, tmpUnit);
+			Event: KillUnit(tmpUnit, 0, tmpUnit.owner);
+		}
+	} else {
+		return -1;  			// Can't kill due to Special unit
+	}
+}	
+
+
+// Swaps City to Player. Kills all units first if flag is set to 1.
+int_f SwapCity (city_t swCity, int_t swPlayer, int_t killUnits) 
+{
+int_t		i;
+int_t		tmpPlayer;
+int_t		tmpNum;
+int_t		numUnits;
+int_t		noSwap;
+unit_t		tmpUnit;
+city_t		tmpCity;
+location_t	tmpLoc;
+
+		tmpCity = swCity;
+	if (CityIsValid(tmpCity)) {
+		tmpPlayer = swPlayer;
+		numUnits = GetUnitsAtLocation(tmpCity.location);
+		tmpLoc = tmpCity.location;
+		for (i = 0; i < numUnits; i = i + 1) {			// Check for special units
+			GetUnitFromCell(tmpLoc, i, tmpUnit);
+			tmpNum = tmpUnit.type;
+			if (tmpNum >= 72 && tmpNum <= 88) {
+				noSwap = 1; 
+			}
+		}
+		if (noSwap == 0) {
+			if (killUnits == 1) {
+				for (i = 0; i < numUnits; i = i + 1) {	//If no special units, kill all units
+					GetUnitFromCell(tmpLoc, i, tmpUnit);
+					Event: KillUnit(tmpUnit, 0, tmpUnit.owner);
+				}
+			}
+			Event:GiveCity(tmpCity, tmpPlayer);
+		} else {
+			return -1; 			// Can't swap due to Special unit
+		}
+	} else {
+		return -2;				// Can't swap due to invalid city
+	}
+}
+
+
+// Spawns a random number of Warriors and Mounted Archers at a location within a certain distance
+void_f SpawnHordes (int_t tmpNum, location_t tmpLoc, int_t tmpPlayer, int_t tmpDist)
+{
+int_t	tmpRand;
+int_t	i;
+	tmpRand = Random(tmpNum);			// Spawn between 1 and tmpNum units
+	for(i = 0; i < tmpRand; i = i + 1) {
+		if (Random(5) > 1) {			// 60% chance of Warrior, 40% chance of Horseman
+			CreateUnit(tmpPlayer, UnitDB(UNIT_WARRIOR), tmpLoc, tmpDist);
+		} else {
+			CreateUnit(tmpPlayer, UnitDB(UNIT_MOUNTED_ARCHER2), tmpLoc, tmpDist);
+		}
+	}
+}
+
+
+// Handles Pregnacy and Heir births
+void_f HandlePregnancy ()
+{
+int_t	i;
+int_t	j;
+int_t	tmpRand;
+int_t	tmpContinue;
+int_t	tmpPregnant;
+	tmpPregnant = 0;
+	for (i = 0; i < 4; i = i + 1) {
+		if (wife[i] > 1 && wife[i] != 10 ) {	// if wife is pregnant and not at end of pregnancy
+			wife[i] = wife[i] + 1;				// increment pregnancy
+		}
+	}
+	for (i = 0; i < 4; i = i + 1) {
+		if (wife[i] == 1 && tmpPregnant != 1) {	// if you're married to wife i, and she is not pregnant and no other wife has gotten pregnant this turn
+			if (Random(20) == 1) {				// 5% chance of getting pregnant
+				wife[i] = 2;					// She's pregnant
+				tmpPregnant = 1;
+				// Set the name of the wife who is pregnant
+				if (i == 0) {
+					SetString(0, ID_AG_WIFE1);
+				} elseif (i == 1) {
+					SetString(0, ID_AG_WIFE2);
+				} elseif (i == 2) {
+					SetString(0, ID_AG_WIFE3);
+				} else {
+					SetString(0, ID_AG_WIFE4);
+				}
+				if (sonAge[0] != 0) {
+					Message (1, 'AGPregnant2');
+				} else {
+					Message (1, 'AGPregnant');
+				}
+			}
+		}
+	}
+	for (i = 0; i < 4; i = i + 1) {
+		if (wife[i] == 10) {					// if end of pregnacy
+			wife[i] = 1;						// reset wife pregnancy counter
+			// Set the name of the wife who is giving birth
+			if (i == 0) {
+				SetString(0, ID_AG_WIFE1);
+			} elseif (i == 1) {
+				SetString(0, ID_AG_WIFE2);
+			} elseif (i == 2) {
+				SetString(0, ID_AG_WIFE3);
+			} else {
+				SetString(0, ID_AG_WIFE4);
+			}
+			tmpRand = Random(3);
+			if (tmpRand == 0) {					// it's a girl
+				if (girlBorn == 1) {
+					Message (1, 'AGItsAGirl2');
+				} else {
+					Message (1, 'AGItsAGirl');
+					girlBorn = 1;
+				}
+			} elseif (tmpRand == 1) {			// stillborn
+				Message (1, 'AGStillborn');
+			} else {							// it's a boy!
+				for (j = 0; j < 3; j = j + 1) {
+					if (heirBorn[j] == -1) {	// if number j son isn't already born
+						heirBorn[j] = i;		// number i wife gave birth to number j son
+						if (j == 0) {			// Alexander IV is born
+							Message (1, 'AGItsABoy');
+							sonBday[0] = 13;
+							oldestSon = 0;		// Alexander IV is oldest Son
+						} elseif (j == 1) {		// Hephaestian is born
+							Message (1, 'AGItsABoy2');
+							sonBday[1] = 13;
+							if (sonAge[0] == -1) {	// If Alexander IV is dead
+								oldestSon = 1;		// Hephaestion is oldest Son
+							}
+						} else {				// Philip II is born
+							Message (1, 'AGItsABoy3');
+							sonBday[2] = 13;
+							if (sonAge[0] == -1 && sonAge[1] == -1) {	// If Alexander IV and Hephaestion are dead
+								oldestSon = 2;							// Philip II is oldest Son
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+// Handles Heir aging 
+void_f HeirGrowth ()
+{
+int_t	i;
+	for (i = 0; i < 3; i = i + 1) {
+		if (sonBday[i] > 1) {
+			sonBday[i] = sonBday[i] - 1;		// decrement birthday counter
+		} elseif (sonBday[i] <= 1) {
+			sonBday[i] = 12;
+			sonAge[i] = sonAge[i] + 1;			// Son is another year older
+			if (i == oldestSon) {				// only handle birthdays for oldest son
+				heirScore = sonAge[i];
+				if (i == 0) {
+					Message (1, 'AGSonBirthday');
+				} elseif (i == 1) {
+					Message (1, 'AGSon2Birthday');
+				} elseif (i == 2) {
+					Message (1, 'AGSon3Birthday');
+				}
+			}
+		}
+		if (sonAge[i] >= 12) {
+			heirScore = 17;
+			if (i == 0) {
+				SetString(0, ID_AG_SON_WORTHY);
+				Message (1, 'AGSonTwelveA');
+			} elseif (i == 1) {
+				SetString(0, ID_AG_BLANK);
+				Message (1, 'AGSon2TwelveA');
+			} elseif (i == 2) {
+				SetString(0, ID_AG_BLANK);
+				Message (1, 'AGSon3TwelveA');
+			}			
+		}
+	}
+}
+
+
+// Handles chance of Alexander IV or Hephaestion dying of disease
+void_f HeirDie ()
+{
+int_t	i;
+int_t	sonDied;
+	sonDied = 0;
+	for (i = 0; i < 2; i = i + 1) {
+		if (sonDied != 1) {					// If a son hasn't already died this turn
+			if (sonAge[i] < 3) {				// if Son is less than 3 years old
+				if (Random(50) == 1) {		// 2% chance that Son dies of disease
+					if (i == 0) {
+						Message (1, 'AGSon1Disease');
+						sonDied = 1;
+						sonAge[0] = -1;
+						sonBday[0] = -1;
+						if (sonBday[1] > 0 && sonAge[1] != -1) {	// If Hephaestion is alive, set him as oldest son
+							oldestSon = 1;
+						} elseif (sonBday[2] > 0) {				 // If Philip II is alive, set him as oldest son
+							oldestSon = 2;
+						} else {
+							oldestSon = -1;						// no Sons alive
+						}
+					} elseif (i == 1) {
+						sonAge[1] = -1;
+						if (oldestSon == 0) {
+							Message (1, 'AGSon2Disease');
+							sonAge[1] = -1;
+							sonBday[1] = -1;
+						} else {
+							Message (1, 'AGSon12Disease');			
+							sonAge[1] = -1;
+							sonBday[1] = -1;
+						}
+					}
+				}
+			}
+		}
+	} 
+}
+
+
+// Changes Alexander's Health 
+void_f ChangeAlexander (int_t theStage) 
+{
+location_t 	tmpLoc;
+int_t	tmpDmg;
+int_t	i;
+int_t	numUnits;
+int_t	tmpNum;
+int_t	changeStage;
+
+	player[0] = 1;
+	changeStage = theStage;
+	numUnits = player[0].units;
+	tmpLoc = alexUnit.location;
+	if (changeStage == 1) {
+		KillUnit(alexUnit);
+		CreateUnit(1, UnitDB(UNIT_ALEXANDER2), tmpLoc, 0);
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, specUnit);
+			tmpNum = specUnit.type;
+			if(tmpNum == UnitDB(UNIT_ALEXANDER2)) {
+				alexUnit = specUnit;
+			}
+		}
+		alexStage = 1;
+		Message (1, 'AGAlexStage1');
+	} elseif (changeStage == 2) {
+		KillUnit(alexUnit);
+		CreateUnit(1, UnitDB(UNIT_ALEXANDER3), tmpLoc, 0);
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, specUnit);
+			tmpNum = specUnit.type;
+			if(tmpNum == UnitDB(UNIT_ALEXANDER3)) {
+				alexUnit = specUnit;
+			}
+		}
+		alexStage = 2;
+		Message (1, 'AGAlexStage2');
+	} elseif (changeStage == 3) {
+		KillUnit(alexUnit);
+		CreateUnit(1, UnitDB(UNIT_ALEXANDER4), tmpLoc, 0);
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, specUnit);
+			tmpNum = specUnit.type;
+			if(tmpNum == UnitDB(UNIT_ALEXANDER4)) {
+				alexUnit = specUnit;
+			}
+		}
+		alexStage = 3;
+		Message (1, 'AGAlexStage3');
+	} elseif (changeStage == 4) {
+		KillUnit(alexUnit);
+		CreateUnit(1, UnitDB(UNIT_ALEXANDER5), tmpLoc, 0);
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, specUnit);
+			tmpNum = specUnit.type;
+			if(tmpNum == UnitDB(UNIT_ALEXANDER5)) {
+				alexUnit = specUnit;
+			}
+		}
+		alexStage = 4;
+		Message (1, 'AGAlexStage4');
+	} else {
+		KillUnit(alexUnit);
+		CreateUnit(1, UnitDB(UNIT_ALEXANDER), tmpLoc, 0);
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, specUnit);
+			tmpNum = specUnit.type;
+			if(tmpNum == UnitDB(UNIT_ALEXANDER)) {
+				alexUnit = specUnit;
+			}
+		}
+		alexStage = 0;
+	}
+	if (alexHP < alexUnit.hp) {
+		if (alexHP < 1) {
+			alexHP = 1;
+		}
+		tmpDmg = specUnit.hp - alexHP;
+		DamageUnit(specUnit, tmpDmg);
+	}
+	alexHP = specUnit.hp;
+}
+
+
+// Makes units on the same square as Darius or Alexander Veteran and all other non Special units non Veteran
+void_f VeteranEffect (location_t tmpLoc, int_t tmpPlayer)
+{
+int_t	i;
+unit_t	tmpUnit;
+int_t	tmpNum;
+int_t	numUnits;
+int_t	tmpPlayer2;
+
+	player[0] = tmpPlayer;
+	numUnits = player[0].units;
+	tmpPlayer2 = tmpPlayer;
+	if (IsPlayerAlive(tmpPlayer2)) {
+	// Make all Units non veteran, except Special Units
+		for (i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(tmpPlayer2, i, tmpUnit);
+			tmpNum = tmpUnit.type;
+			if (tmpNum >= 72 && tmpNum <= 88) {
+				ToggleVeteran(tmpUnit, 1);
+			} else {
+				ToggleVeteran(tmpUnit, 0);
+			}
+		}
+	}
+	
+	// Make all Units veterans who share the location of Darius or Alexander
+	tmpNum = GetUnitsAtLocation(tmpLoc);
+	for (i = 0; i < tmpNum; i = i + 1) {
+		GetUnitFromCell(tmpLoc, i, tmpUnit);
+		ToggleVeteran(tmpUnit, 1);
+	}
+}
+
+
+// Creates unit in the nearest city to a given location within a distance boundary.  If location is on a city, it will send the unit to the second nearest city.  Returns zero if player has no cities. 
+int_f CreateUnitNearestCity (int_t unitType, location_t tmpLoc, int_t tmpPlayer, int_t cityDist) 
+{
+int_t	i;
+int_t	smlDist;
+int_t	tmpDist;
+int_t	cityDist2;
+city_t	tmpCity;
+city_t	smlCity;
+int_t	numCities;
+int_t	tmpPlayer2;
+location_t	tmpLoc2;
+
+	cityDist2 = cityDist;
+	tmpLoc2 = tmpLoc;
+	player[0] = tmpPlayer;
+	tmpPlayer2 = tmpPlayer;
+	smlDist = 1000;			// initialize Smallest Distance city to some absurb number
+
+	if (IsPlayerAlive(player[0])) {
+		numCities = player[0].cities;
+		if (numCities == 0) {
+			return 0;
+		} else {
+			for(i = 0; i < numCities; i = i + 1) {
+				if(GetCityByIndex(tmpPlayer2, i, tmpCity)) {
+					tmpDist = Distance(tmpLoc2, tmpCity.location);
+					if (tmpDist < smlDist && tmpDist > cityDist2) {
+						smlDist = tmpDist;
+						smlCity = tmpCity;
+					}
+				}
+			}
+			if (GetUnitsAtLocation(smlCity.location) != 12) {	//if there are too many Units in the nearest city, set Unit outside of city
+				drownCity = smlCity;
+				CreateUnit(tmpPlayer2, unitType, smlCity, 0);
+				return 1;
+			} else {
+				drownCity = smlCity;
+				CreateUnit(tmpPlayer2, unitType, smlCity, 1);
+				return 1;
+			}
+		}
+	}
+}
+
+
+// Converts all units at a location to another player
+void_f ConvertUnits (location_t tmpLoc, int_t tmpPlayer)
+{
+int_t	tmpNum;
+int_t	tmpUnitTypes[12];
+int_t	i;
+unit_t	tmpUnit;
+
+	player[0] = tmpPlayer;
+	if (IsPlayerAlive(player[0])) {
+		tmpNum = GetUnitsAtLocation(tmpLoc);
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc, i, tmpUnit);
+			tmpUnitTypes[i] = tmpUnit.type;
+			Event: KillUnit(tmpUnit, 0, tmpUnit.owner);
+		}
+		for (i = 0; i < tmpNum; i = i + 1) {
+			CreateUnit(tmpPlayer, tmpUnitTypes[i], tmpLoc, 0);
+		}
+	}
+}
+
+// Makes several Indian cities controlled by M very happy
+void_f HappyIndians ()
+{
+city_t	tmpCity;
+
+	GetCityByLocation(ujjayiniLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 100, 3, 14);	// +3 happiness for 100 turns due to Conquest
+		}
+	}
+	GetCityByLocation(kausambiLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 100, 3, 14);	// +3 happiness for 100 turns due to Conquest
+		}
+	}
+	GetCityByLocation(pataliputraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 100, 3, 14);	// +3 happiness for 100 turns due to Conquest
+		}
+	}
+	GetCityByLocation(mathuraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 100, 3, 14);	// +3 happiness for 100 turns due to Conquest
+		}
+	}
+	GetCityByLocation(kasiLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 100, 3, 14);	// +3 happiness for 100 turns due to Conquest
+		}
+	}
+	GetCityByLocation(saketaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 100, 3, 14);	// +3 happiness for 100 turns due to Conquest
+		}
+	}
+}
+
+
+// Makes the main Macedonia cities controlled by M very happy
+void_f HappyMacedonians ()
+{
+city_t tmpCity;
+
+	GetCityByLocation(pellaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 3, 14); // +3 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(amphipolisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 3, 14); // +3 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(perinthusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 3, 14); // +3 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(philipLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 3, 14); // +3 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(larissaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 3, 14); // +3 happiness for 200 turns due to Conquest
+		}
+	}
+}
+
+
+// Makes many (ex-Persian) cities controlled by M very happy
+void_f HappyEmpire ()
+{
+city_t	tmpCity;
+
+	GetCityByLocation(dascyliumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(gordiumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(mazakaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(tarsusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(issusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(aradusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(sidonLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(tyreLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(gazaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(pelusiumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(memphisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(thebesLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(thapsacusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(babylonLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(susaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(ecbatanaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(sharudLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(persepolisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(susiaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(sardisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(ephesusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+	GetCityByLocation(halicarnassusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {
+		if (tmpCity.owner == 1) {
+			Event:AddHappyTimer(tmpCity, 200, 2, 14); // +2 happiness for 200 turns due to Conquest
+		}
+	}
+}
+
+
+// Point calculation at the end of the game
+int_f  AlexanderGameOver() 
+{
+int_t	i;
+int_t	j;
+city_t	tmpCity;
+	cityScore = 0;
+	for (i = 0; i < 9; i = i + 1) {				// Calculate score for Cities belonging to allies
+		player[0] = i;
+		if (IsPlayerAlive(player[0])) {
+			if (i == 1 || HasAgreement(1, i, 38)) {	// If player i has an alliance with Macedonia
+				if (i != 1) {				
+					civScore = civScore + 1;		// increment civScore for each player allied with
+				}
+				for(j = 0; j < player[0].cities; j = j + 1) {
+					if(GetCityByIndex(i, j, tmpCity)) {
+						// Checks if city is one of the special cities
+						if (tmpCity.location == syracuseLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == tarentumLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == carthageLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == romeLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == athensLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == corinthLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == pellaLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == spartaLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == ephesusLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == halicarnassusLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == cyeneLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == memphisLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == tyreLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == salamisLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == thapsacusLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == tarsusLoc) {
+							cityScore = cityScore + 1; 
+						} elseif (tmpCity.location == sinopeLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == babylonLoc) {
+							cityScore = cityScore + 1; 		  
+						} elseif (tmpCity.location == susaLoc) {
+							cityScore = cityScore + 1; 		  
+						} elseif (tmpCity.location == ecbatanaLoc) {
+							cityScore = cityScore + 1;  
+						} elseif (tmpCity.location == persepolisLoc) {
+							cityScore = cityScore + 1; 		  
+						} elseif (tmpCity.location == baktraLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == marakandaLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == rorukaLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == pattalaLoc) {
+							cityScore = cityScore + 1; 		  
+						} elseif (tmpCity.location == taksasilaLoc) {
+							cityScore = cityScore + 1; 	  
+						} elseif (tmpCity.location == sakalaLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == ujjayiniLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == suvarnagiriLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == kausambiLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == mathuraLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == pataliputraLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == tamraliptiLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == maribLoc) {
+							cityScore = cityScore + 1;
+						} elseif (tmpCity.location == shabwahLoc) {
+							cityScore = cityScore + 1;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	totalScore = cityScore + civScore + heirScore;
+
+	if (totalScore < 10) { 
+		Message (1, 'AGUnworthy');
+	} elseif (totalScore < 20) {
+		Message (1, 'AGGood');
+	} elseif (totalScore < 30) {
+		Message (1, 'AGMighty');
+	} elseif (totalScore < 40) {
+		Message (1, 'AGGreat');
+	} elseif (totalScore < 50) {
+		Message (1, 'AGMagnificent');
+	} elseif (totalScore < 60) {
+		Message (1, 'AGDemigod');
+	} elseif (totalScore == 60) {
+		Message (1, 'AGGod');
+	}
+}	
+

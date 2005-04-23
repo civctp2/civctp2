@@ -47,6 +47,7 @@
 //   those of the civs you have no contact to. - Mar. 4th 2005 Martin Gühmann
 // - Added option to draw wonders on top of roads.
 // - PFT 29 mar 05, show # turns until city next grows a pop.
+// - Removed .NET warnings. - April 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -428,7 +429,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 				if(rec!=NULL && effect!=NULL){
 					if(!rec->GetClassRoad() && !rec->GetClassOceanRoad()){
-						data = m_tileSet->GetImprovementData(effect->GetTilesetIndex());
+						data = m_tileSet->GetImprovementData(static_cast<uint16>(effect->GetTilesetIndex()));
 						DrawAnImprovement(surface,data,x,y,fog);
 					}
 				}
@@ -1435,7 +1436,7 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 	t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
 	t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
 	
-	transitionBuffer = m_tileSet->GetBaseTile((tilesetIndex * 100) + 99);
+	transitionBuffer = m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
 	if(transitionBuffer) {
 		transData = transitionBuffer->GetTileData();
 		transDataPtr = transData;
@@ -1646,7 +1647,7 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, MapPoint &pos, sint32
 	t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
 	t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
 
-	transitionBuffer = m_tileSet->GetBaseTile((tilesetIndex * 100) + 99);
+	transitionBuffer = m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
 	if(transitionBuffer) {
 		transData = transitionBuffer->GetTileData();
 		transDataPtr = transData;
@@ -4143,7 +4144,7 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, MapPoint &pos, sint32 xp
 	tileData[2] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
 	tileData[3] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
 	
-	transitionBuffer = m_tileSet->GetBaseTile((tilesetIndex * 100) + 99);
+	transitionBuffer = m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
 	if(transitionBuffer) {
 		transData = transitionBuffer->GetTileData();
 		transDataPtr = transData;
@@ -4378,7 +4379,7 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, MapPoint &pos, sin
 	t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
 	t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
 	
-	transitionBuffer = m_tileSet->GetBaseTile((tilesetIndex * 100) + 99);
+	transitionBuffer = m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
 	if(transitionBuffer) {
 		transData = transitionBuffer->GetTileData();
 		transDataPtr = transData;

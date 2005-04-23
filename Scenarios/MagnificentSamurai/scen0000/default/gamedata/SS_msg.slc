@@ -1,0 +1,4928 @@
+  ///////////////////////////////////////////////////
+ // Messages for The Magnificent Samurai scenario //
+///////////////////////////////////////////////////
+
+
+  //---------------------//
+ // Start game messages //
+//---------------------//
+
+messagebox 'SSStartA' {
+	Show();
+	Title(ID_SS_START_TITLE);
+	Text(ID_SS_START_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSStartB');
+	}
+}
+
+messagebox 'SSStartB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_START_B);
+	Button(ID_AG_BUTTON_RULES) {
+		Kill();
+		LibraryConcept(71);		// Display the Scenario Rules entry of the Great Library
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSStartA');
+	}
+}
+
+messagebox 'SSShichinenReturn' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SHICHINEN_RETURN);
+}
+
+messagebox 'SSBridgeBurned' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_BRIDGE_BURNED);
+}
+
+messagebox 'SSBridgeBurned2' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_BRIDGE_BURNED2);
+}
+
+
+  //------------------------------//
+ // Katchu and Oatakark messages //
+//------------------------------//
+
+messagebox 'SSScurvyMaidenA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SCURVY_MAIDEN_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSScurvyMaidenB');
+	}
+}
+
+messagebox 'SSScurvyMaidenB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SCURVY_MAIDEN_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSScurvyMaidenC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSScurvyMaidenA');
+	}
+}
+
+messagebox 'SSScurvyMaidenC' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SCURVY_MAIDEN_C);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSScurvyMaidenD');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSScurvyMaidenB');
+	}
+}
+
+messagebox 'SSScurvyMaidenD' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SCURVY_MAIDEN_D);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSScurvyMaidenC');
+	}
+}
+
+messagebox 'SSGoingToOatakark' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_GOING_TO_OATAKARK);
+}
+
+messagebox 'SSNextToOatakark' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_NEXT_TO_OATAKARK);
+}
+
+messagebox 'SSOatakarkShoreA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_OATAKARK_SHORE_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSOatakarkShoreB');
+	}
+}
+
+messagebox 'SSOatakarkShoreB' {
+
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_OATAKARK_SHORE_B);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSOatakarkShoreA');
+	}
+}
+
+messagebox 'SSOatakarkShore' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_OATAKARK_SHORE);
+}
+
+messagebox 'SSOatakarkWarn1' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_OATAKARK_WARN1);
+}
+
+messagebox 'SSOatakarkWarn2' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_OATAKARK_WARN2);
+}
+
+messagebox 'SSKatchuA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KATCHU_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKatchuB');
+	}
+}
+
+messagebox 'SSKatchuB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KATCHU_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKatchuC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKatchuA');
+	}
+}
+
+messagebox 'SSKatchuC' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KATCHU_C);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKatchuD');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKatchuB');
+	}
+}
+
+messagebox 'SSKatchuD' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KATCHU_D);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKatchuE');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKatchuC');
+	}
+}
+
+messagebox 'SSKatchuE' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KATCHU_E);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKatchuF');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKatchuD');
+	}
+}
+
+messagebox 'SSKatchuF' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KATCHU_F);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKatchuE');
+	}
+}
+
+messagebox 'SSOatakarkSinking' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_OATAKARK_SINKING);
+}
+
+messagebox 'SSOatakarkDrownA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_OATAKARK_DROWN_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		AddCenter(balloonDestLoc);
+		Message(1, 'SSOatakarkDrownB');
+	}
+}
+
+messagebox 'SSOatakarkDrownB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_OATAKARK_DROWN_B);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSOatakarkDrownA');
+	}
+}
+
+messagebox 'SSBalloonA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_BALLOON_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSBalloonB');
+	}
+}
+
+messagebox 'SSBalloonB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_BALLOON_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSBalloonC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSBalloonA');
+	}
+}
+
+messagebox 'SSBalloonC' {
+	Show();
+	Title(ID_SS_BLANK);
+	if(sevenSamurai[1].valid) {			// If Katchu is alive
+		if (Distance (sevenSamurai[0].location, sevenSamurai[1].location) <= 1) {
+			SetString(0, ID_SS_BALLOON_C_K);
+		} else {
+			SetString(0, ID_SS_BLANK);
+		}
+	} else {
+		SetString(0, ID_SS_BLANK);
+	}
+	Text(ID_SS_BALLOON_C);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSBalloonD');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSBalloonB');
+	}
+}
+
+messagebox 'SSBalloonD' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_BALLOON_D);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSBalloonE');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSBalloonC');
+	}
+}
+
+messagebox 'SSBalloonE' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_BALLOON_E);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSBalloonD');
+	}
+}
+
+alertbox 'SSBalloonEndA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_BALLOON_END_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSBalloonEndB');
+	}
+}
+
+alertbox 'SSBalloonEndB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_BALLOON_END_B);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+		Terraform(balloonDestLoc, 24);	// Remove Balloon 'good' by terraforming to Special1 tile
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSBalloonEndA');
+	}
+}
+
+
+  //--------------------------------------//
+ // Chun Ling and Mountain Pass messages //
+//--------------------------------------//
+
+
+messagebox 'SSKauPi' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KAU_PI_A);
+}
+
+alertbox 'SSKauPiA' {
+	Show();
+	Text(ID_SS_KAU_PI_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKauPiB');
+	}
+}
+
+alertbox 'SSKauPiA2' {
+	Show();
+	Text(ID_SS_KAU_PI_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKauPiB2');
+	}
+}
+
+alertbox 'SSKauPiB' {
+	Show();
+	Text(ID_SS_KAU_PI_B);
+	Button(ID_SS_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_SS_BUTTON_YES) {
+		Kill();
+		TransformAkimbo(sevenSamurai[0].location);
+		MakeArmies (1);
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKauPiA');
+	}
+}
+
+alertbox 'SSKauPiB2' {
+	Show();
+	Text(ID_SS_KAU_PI_B2);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKauPiA2');
+	}
+}
+
+messagebox 'SSKauPiReturn' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KAU_PI_RETURN);
+}
+
+alertbox 'SSKauPiReturnA' {
+	Show();
+	Text(ID_SS_KAU_PI_RETURN);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKauPiReturnB');
+	}
+}
+
+alertbox 'SSKauPiReturnB' {
+	Show();
+	Text(ID_SS_KAU_PI_B);
+	Button(ID_SS_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_SS_BUTTON_YES) {
+		Kill();
+		TransformAkimbo(sevenSamurai[0].location);
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKauPiReturnA');
+	}
+}
+
+alertbox 'SSKauPiReturnA2' {
+	Show();
+	Text(ID_SS_KAU_PI_RETURN);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKauPiReturnB2');
+	}
+}
+
+alertbox 'SSKauPiReturnB2' {
+	Show();
+	Text(ID_SS_KAU_PI_B2);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKauPiReturnA2');
+	}
+}
+
+messagebox 'SSKauPiPassClear' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KAU_PI_PASS_CLEAR);
+}
+
+messagebox 'SSKauPiRest' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KAU_PI_REST);
+}
+
+messagebox 'SSSardoA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SARDO_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSSardoB');
+	}
+}
+
+messagebox 'SSSardoB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SARDO_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSSardoC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSSardoA');
+	}
+}
+
+messagebox 'SSSardoC' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SARDO_C);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSSardoB');
+	}
+}
+
+messagebox 'SSSardoDoneA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SARDO_DONE_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSSardoDoneB');
+	}
+}
+
+messagebox 'SSSardoDoneB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SARDO_DONE_B);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSSardoDoneA');
+	}
+}
+
+messagebox 'SSSardoRest' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_SARDO_REST);
+}
+
+messagebox 'SSKyonshi' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI);
+}
+
+messagebox 'SSKyonshi2' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI2);
+}
+
+messagebox 'SSKyonshiA' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKyonshiB');
+	}
+}
+
+messagebox 'SSKyonshiANoK' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI_A_NO_K);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKyonshiC');
+	}
+}
+
+messagebox 'SSKyonshiB' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKyonshiC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKyonshiA');
+	}
+}
+
+messagebox 'SSKyonshiC' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI_C);
+	if(sevenSamurai[1].valid) {				// if Katchu is alive
+		if (Distance (sevenSamurai[1].location, sevenSamurai[0].location) <= 1) { // if Katchu is with you
+			Button(ID_SS_BUTTON_NEXT) {
+				Kill();
+				Message(1, 'SSKyonshiD');
+			}
+			Button(ID_SS_BUTTON_BACK) {
+				Kill();
+				Message(1, 'SSKyonshiB');
+			}
+		} else {
+			Button(ID_SS_BUTTON_NEXT) {
+				Kill();
+				Message(1, 'SSKyonshiE');
+			}
+			Button(ID_SS_BUTTON_BACK) {
+				Kill();
+				Message(1, 'SSKyonshiANoK');
+			}
+		}
+	} else {
+		Button(ID_SS_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'SSKyonshiE');
+		}
+		Button(ID_SS_BUTTON_BACK) {
+			Kill();
+			Message(1, 'SSKyonshiANoK');
+		}
+	}
+}
+
+messagebox 'SSKyonshiD' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI_D);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKyonshiE');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKyonshiC');
+	}
+}
+
+messagebox 'SSKyonshiE' {
+	Show();
+	Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI_E);
+	if(sevenSamurai[1].valid) {			// if Katchu is alive
+		Button(ID_SS_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'SSKyonshiF');
+		}
+		Button(ID_SS_BUTTON_BACK) {
+			Kill();
+			Message(1, 'SSKyonshiD');
+		}
+	} else {
+		Button(ID_SS_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'SSKyonshiF');
+		}
+		Button(ID_SS_BUTTON_BACK) {
+			Kill();
+			Message(1, 'SSKyonshiC');
+		}
+	}
+}
+
+messagebox 'SSKyonshiF' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI_F);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSKyonshiG');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKyonshiE');
+	}
+}
+
+messagebox 'SSKyonshiG' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_KYONSHI_G);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSKyonshiF');
+	}
+}
+
+
+  //-------------------------------//
+ // Gonza and Chikamatsu messages //
+//-------------------------------//
+
+messagebox 'SSGonzaA' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GONZA_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGonzaB');
+	}
+}
+
+messagebox 'SSGonzaB' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GONZA_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGonzaC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSGonzaA');
+	}
+}
+
+messagebox 'SSGonzaC' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GONZA_C);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGonzaD');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSGonzaB');
+	}
+}
+
+messagebox 'SSGonzaD' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GONZA_D);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSGonzaC');
+	}
+}
+
+alertbox 'SSAmbushGonza' {
+	Show(); Title(ID_SS_BLANK);
+	if (TerrainType(sevenSamurai[3].location) == 0) {
+		SetString(0, ID_SS_AMBUSH_FOREST);
+	} elseif (TerrainType(sevenSamurai[3].location) == 4) {
+		SetString(0, ID_SS_AMBUSH_GRASSLAND);
+	} elseif (TerrainType(sevenSamurai[3].location) == 6) {
+		SetString(0, ID_SS_AMBUSH_SWAMP);	
+	} elseif (TerrainType(sevenSamurai[3].location) == 7) {
+		SetString(0, ID_SS_AMBUSH_JUNGLE);
+	} elseif (TerrainType(sevenSamurai[3].location) == 5) {
+		SetString(0, ID_SS_AMBUSH_DESERT);
+	} elseif (TerrainType(sevenSamurai[3].location) == 18) {
+		SetString(0, ID_SS_AMBUSH_DUNES);
+	} elseif (TerrainType(sevenSamurai[3].location) == 13) {
+		SetString(0, ID_SS_AMBUSH_BEACH);
+	} elseif (TerrainType(sevenSamurai[3].location) == 8 || TerrainType(sevenSamurai[3].location) == 9) {
+		SetString(0, ID_SS_AMBUSH_MOUNTAIN);
+	} else {
+		SetString(0, ID_SS_AMBUSH_PLAINS);
+	}
+	Text(ID_SS_AMBUSH_GONZA);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'SSChikamatsuA' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_CHIKAMATSU_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSChikamatsuB');
+	}
+}
+
+messagebox 'SSChikamatsuB' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_CHIKAMATSU_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSChikamatsuC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSChikamatsuA');
+	}
+}
+
+messagebox 'SSChikamatsuC' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_CHIKAMATSU_C);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSChikamatsuB');
+	}
+}
+
+messagebox 'SSChikamatsuANoG' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_CHIKAMATSU_A_NO_G);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSChikamatsuBNoG');
+	}
+}
+
+messagebox 'SSChikamatsuBNoG' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_CHIKAMATSU_B_NO_G);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSChikamatsuANoG');
+	}
+}
+
+messagebox 'SSChikamatsuHorse' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_CHIKAMATSU_HORSE);
+}
+
+
+  //-----------------//
+ // J-chan messages //
+//-----------------//
+
+messagebox 'SSBunny' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_BUNNY);
+}
+
+messagebox 'SSBunny2' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_BUNNY2);
+}
+
+messagebox 'SSBunny3' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_BUNNY3);
+}
+
+messagebox 'SSJchanA' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_JCHAN_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSJchanB');
+	}
+}
+
+messagebox 'SSJchanB' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_JCHAN_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSJchanC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSJchanA');
+	}
+}
+
+messagebox 'SSJchanC' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_JCHAN_C);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSJchanD');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSJchanB');
+	}
+}
+
+messagebox 'SSJchanD' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_JCHAN_D);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSJchanE');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSJchanC');
+	}
+}
+
+messagebox 'SSJchanE' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_JCHAN_E);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSJchanD');
+	}
+}
+
+
+  //---------------------------------------//
+ // Mimoyota and Star Road quest messages //
+//---------------------------------------//
+
+messagebox 'SSMimiyotaA' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_MIMIYOTA_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSMimiyotaB');
+	}
+}
+
+messagebox 'SSMimiyotaB' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_MIMIYOTA_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSMimiyotaC');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSMimiyotaA');
+	}
+}
+
+messagebox 'SSMimiyotaC' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_MIMIYOTA_C);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSMimiyotaD');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSMimiyotaB');
+	}
+}
+
+messagebox 'SSMimiyotaD' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_MIMIYOTA_D);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSMimiyotaC');
+	}
+}
+
+messagebox 'SSMimiyotaHeal' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_MIMIYOTA_HEAL);
+}
+
+messagebox 'SSStarRoadA' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_STAR_ROAD_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSStarRoadB');
+	}
+}
+
+messagebox 'SSStarRoadB' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_STAR_ROAD_B);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSStarRoadA');
+	}
+}
+
+messagebox 'SSStarRoad' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_STAR_ROAD);
+}
+
+messagebox 'SSReswob' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_RESWOB);
+}
+
+  //-------------------//
+ // End game messages //
+//-------------------//
+
+alertbox 'SSReturnToShichinen' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_SHICHINEN_GREETING);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSBanditAttack');
+	}
+}
+
+messagebox 'SSShichinenRuined' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_SHICHINEN_RUINED_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSShichinenRuinedB');
+	}
+}
+
+messagebox 'SSShichinenRuinedB' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_SHICHINEN_RUINED_B);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSShichinenRuined');
+	}
+}
+
+alertbox 'SSBanditAttack' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_BANDIT_ATTACK);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSReturnToShichinen');
+	}
+}
+
+messagebox 'SSBanditsDefeated' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_BANDITS_DEFEATED);
+}
+
+messagebox 'SSBanditCarrack' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_BANDIT_CARRACK);
+}
+
+messagebox 'SSBanditLeader' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_BANDIT_LEADER);
+}
+
+alertbox 'SSLoseGame' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_LOSE_GAME);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+		player[0] = 1;
+		if (player[0].units > 0) {
+			GameOver(1, 2);
+		}
+	}
+}
+
+alertbox 'SSLoseGame2' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_LOSE_GAME2);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+		player[0] = 1;
+		if (player[0].units > 0) {
+			GameOver(1, 2);
+		}
+	}
+}
+
+alertbox 'SSWinGame' {
+	if(villageDestroyed == 1) {
+		SetString(0, ID_SS_WIN_GAME2);
+	} else {
+		SetString(0, ID_SS_BLANK);
+	}
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_WIN_GAME);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+		player[0] = 3;
+		if (player[0].units > 0) {
+			GameOver(1, 1);
+		}
+	}
+}
+
+messagebox 'SSTimeUp' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_TIME_UP);
+}
+
+
+messagebox 'SSShichinenFlee' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_SHICHINEN_FLEE);
+}
+
+alertbox 'SSKatchuDrowns' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_KATCHU_DROWNS);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'SSKatchuDies' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_KATCHU_DIES);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'SSChunLingDies' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_CHUN_LING_DIES);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'SSGonzaDies' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GONZA_DIES);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'SSChikamatsuDies' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_CHIKAMATSU_DIES);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'SSJchanDies' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_JCHAN_DIES);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'SSMimiyotaDies' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_MIMIYOTA_DIES);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+		player[0] = 1;
+		if (player[0].units > 0) {
+			GameOver(1, 2);
+		}
+	}
+}
+
+alertbox 'SSMimiyotaDies2' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_MIMIYOTA_DIES2);
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+
+  //------------------------------------//
+ // Global, random and Tavern messages //
+//------------------------------------//
+
+messagebox 'SSBimonthly' {
+	Show(); Title(ID_SS_BLANK);
+	if (turnCount == 60) {
+		Text(ID_SS_2MONTHS);
+	} elseif (turnCount == 122) {
+		Text(ID_SS_4MONTHS);
+	} elseif (turnCount == 180) {
+		Text(ID_SS_6MONTHS);
+	} elseif (turnCount == 241) {
+		Text(ID_SS_8MONTHS);
+	} elseif (turnCount == 302) {
+		Text(ID_SS_10MONTHS);
+	} 
+}
+
+messagebox 'SSTimeUp' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_TIME_UP);
+}
+
+messagebox 'SSLevelUp' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_LEVEL_UP);
+}
+
+messagebox 'SSLevelMax' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_LEVEL_MAX);
+}
+
+messagebox 'SSHutEmpty' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_HUT_EMPTY);
+}
+
+alertbox 'SSAmbush' {
+int_t 	tmpNum;
+	Show(); Title(ID_SS_BLANK);
+	if (TerrainType(location[0]) == 0) {
+		SetString(0, ID_SS_AMBUSH_FOREST);
+	} elseif (TerrainType(location[0]) == 4) {
+		SetString(0, ID_SS_AMBUSH_GRASSLAND);
+	} elseif (TerrainType(location[0]) == 6) {
+		SetString(0, ID_SS_AMBUSH_SWAMP);	
+	} elseif (TerrainType(location[0]) == 7) {
+		SetString(0, ID_SS_AMBUSH_JUNGLE);
+	} elseif (TerrainType(location[0]) == 5) {
+		SetString(0, ID_SS_AMBUSH_DESERT);
+	} elseif (TerrainType(location[0]) == 18) {
+		SetString(0, ID_SS_AMBUSH_DUNES);
+	} elseif (TerrainType(location[0]) == 13) {
+		SetString(0, ID_SS_AMBUSH_BEACH);
+	} elseif (TerrainType(location[0]) == 8 || TerrainType(location[0]) == 9) {
+		SetString(0, ID_SS_AMBUSH_MOUNTAIN);
+	} else {
+		SetString(0, ID_SS_AMBUSH_PLAINS);
+	}
+	tmpNum = Random(6);
+	if (tmpNum == 1) {
+		Text(ID_SS_AMBUSH2);
+	} elseif (tmpNum == 2) {
+		Text(ID_SS_AMBUSH3);
+	} elseif (tmpNum == 3) {
+		Text(ID_SS_AMBUSH4);
+	} elseif (tmpNum == 4) {
+		Text(ID_SS_AMBUSH5);
+	} elseif (tmpNum == 5) {
+		Text(ID_SS_AMBUSH6);
+	} else {
+		Text(ID_SS_AMBUSH1);
+	}
+	Button(ID_SS_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'SSTavern' {
+int_t	gossip;
+int_t	i;
+int_t	descriptor;
+int_t	person;
+int_t	dIndex;
+
+	gossip = Random(20);
+	if (gossip == 9 && oatakarkWarn == 0) {
+		gossip = 13;
+	}
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_TAVERN);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		if(gossip == 1) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 2;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 3;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(10, ID_SS_PERSON1_DAT);
+				SetString(11, ID_SS_PERSON1_ACC);
+				SetString(12, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(10, ID_SS_PERSON2_DAT);
+				SetString(11, ID_SS_PERSON2_ACC);
+				SetString(12, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(10, ID_SS_PERSON3_DAT);
+				SetString(11, ID_SS_PERSON3_ACC);
+				SetString(12, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(10, ID_SS_PERSON4_DAT);
+				SetString(11, ID_SS_PERSON4_ACC);
+				SetString(12, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(10, ID_SS_PERSON5_DAT);
+				SetString(11, ID_SS_PERSON5_ACC);
+				SetString(12, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(10, ID_SS_PERSON6_DAT);
+				SetString(11, ID_SS_PERSON6_ACC);
+				SetString(12, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(10, ID_SS_PERSON7_DAT);
+				SetString(11, ID_SS_PERSON7_ACC);
+				SetString(12, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(10, ID_SS_PERSON8_DAT);
+				SetString(11, ID_SS_PERSON8_ACC);
+				SetString(12, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(10, ID_SS_PERSON9_DAT);
+				SetString(11, ID_SS_PERSON9_ACC);
+				SetString(12, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(10, ID_SS_PERSON10_DAT);
+				SetString(11, ID_SS_PERSON10_ACC);
+				SetString(12, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(10, ID_SS_PERSON11_DAT);
+				SetString(11, ID_SS_PERSON11_ACC);
+				SetString(12, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(10, ID_SS_PERSON12_DAT);
+				SetString(11, ID_SS_PERSON12_ACC);
+				SetString(12, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(10, ID_SS_PERSON13_DAT);
+				SetString(11, ID_SS_PERSON13_ACC);
+				SetString(12, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(10, ID_SS_PERSON14_DAT);
+				SetString(11, ID_SS_PERSON14_ACC);
+				SetString(12, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(10, ID_SS_PERSON15_DAT);
+				SetString(11, ID_SS_PERSON15_ACC);
+				SetString(12, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(10, ID_SS_PERSON16_DAT);
+				SetString(11, ID_SS_PERSON16_ACC);
+				SetString(12, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(10, ID_SS_PERSON17_DAT);
+				SetString(11, ID_SS_PERSON17_ACC);
+				SetString(12, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(10, ID_SS_PERSON18_DAT);
+				SetString(11, ID_SS_PERSON18_ACC);
+				SetString(12, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(10, ID_SS_PERSON19_DAT);
+				SetString(11, ID_SS_PERSON19_ACC);
+				SetString(12, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(10, ID_SS_PERSON0_DAT);
+				SetString(11, ID_SS_PERSON0_ACC);
+				SetString(12, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip1');
+		} elseif(gossip == 2) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 2;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 3;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(10, ID_SS_PERSON1_DAT);
+				SetString(11, ID_SS_PERSON1_ACC);
+				SetString(12, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(10, ID_SS_PERSON2_DAT);
+				SetString(11, ID_SS_PERSON2_ACC);
+				SetString(12, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(10, ID_SS_PERSON3_DAT);
+				SetString(11, ID_SS_PERSON3_ACC);
+				SetString(12, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(10, ID_SS_PERSON4_DAT);
+				SetString(11, ID_SS_PERSON4_ACC);
+				SetString(12, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(10, ID_SS_PERSON5_DAT);
+				SetString(11, ID_SS_PERSON5_ACC);
+				SetString(12, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(10, ID_SS_PERSON6_DAT);
+				SetString(11, ID_SS_PERSON6_ACC);
+				SetString(12, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(10, ID_SS_PERSON7_DAT);
+				SetString(11, ID_SS_PERSON7_ACC);
+				SetString(12, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(10, ID_SS_PERSON8_DAT);
+				SetString(11, ID_SS_PERSON8_ACC);
+				SetString(12, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(10, ID_SS_PERSON9_DAT);
+				SetString(11, ID_SS_PERSON9_ACC);
+				SetString(12, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(10, ID_SS_PERSON10_DAT);
+				SetString(11, ID_SS_PERSON10_ACC);
+				SetString(12, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(10, ID_SS_PERSON11_DAT);
+				SetString(11, ID_SS_PERSON11_ACC);
+				SetString(12, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(10, ID_SS_PERSON12_DAT);
+				SetString(11, ID_SS_PERSON12_ACC);
+				SetString(12, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(10, ID_SS_PERSON13_DAT);
+				SetString(11, ID_SS_PERSON13_ACC);
+				SetString(12, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(10, ID_SS_PERSON14_DAT);
+				SetString(11, ID_SS_PERSON14_ACC);
+				SetString(12, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(10, ID_SS_PERSON15_DAT);
+				SetString(11, ID_SS_PERSON15_ACC);
+				SetString(12, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(10, ID_SS_PERSON16_DAT);
+				SetString(11, ID_SS_PERSON16_ACC);
+				SetString(12, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(10, ID_SS_PERSON17_DAT);
+				SetString(11, ID_SS_PERSON17_ACC);
+				SetString(12, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(10, ID_SS_PERSON18_DAT);
+				SetString(11, ID_SS_PERSON18_ACC);
+				SetString(12, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(10, ID_SS_PERSON19_DAT);
+				SetString(11, ID_SS_PERSON19_ACC);
+				SetString(12, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(10, ID_SS_PERSON0_DAT);
+				SetString(11, ID_SS_PERSON0_ACC);
+				SetString(12, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip2');
+		} elseif(gossip == 3) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip3');
+		} elseif(gossip == 4) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip4');
+		} elseif(gossip == 5) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip5');
+		} elseif(gossip == 6) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip6');
+		} elseif(gossip == 7) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip7A');
+		} elseif(gossip == 8) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip8');
+		} elseif(gossip == 9) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip9');
+		} elseif(gossip == 10) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip10');
+		} elseif(gossip == 11) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip11');
+		} elseif(gossip == 12) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip12');
+		} elseif(gossip == 13) {
+			// Assign People
+			person = Random(15);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PEOPLE1);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PEOPLE2);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PEOPLE3);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PEOPLE4);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PEOPLE5);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PEOPLE6);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PEOPLE7);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PEOPLE8);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PEOPLE9);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PEOPLE10);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PEOPLE11);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PEOPLE12);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PEOPLE13);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PEOPLE14);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+			}
+			Message(1, 'SSGossip13');
+		} elseif(gossip == 14) {
+			// Assign People
+			person = Random(15);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PEOPLE1);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PEOPLE2);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PEOPLE3);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PEOPLE4);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PEOPLE5);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PEOPLE6);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PEOPLE7);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PEOPLE8);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PEOPLE9);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PEOPLE10);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PEOPLE11);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PEOPLE12);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PEOPLE13);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PEOPLE14);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+			}
+			Message(1, 'SSGossip14');
+		} elseif(gossip == 15) {
+			// Assign People
+			person = Random(15);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PEOPLE1);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PEOPLE2);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PEOPLE3);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PEOPLE4);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PEOPLE5);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PEOPLE6);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PEOPLE7);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PEOPLE8);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PEOPLE9);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PEOPLE10);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PEOPLE11);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PEOPLE12);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PEOPLE13);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PEOPLE14);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+			}
+			Message(1, 'SSGossip15');
+		} elseif(gossip == 16) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip16');
+		} elseif(gossip == 17) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip17');
+		} elseif(gossip == 18) {
+			Message(1, 'SSGossip18');
+		} elseif(gossip == 19) {
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 0;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 1;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(5, ID_SS_PERSON1_DAT);
+				SetString(6, ID_SS_PERSON1_ACC);
+				SetString(7, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(5, ID_SS_PERSON2_DAT);
+				SetString(6, ID_SS_PERSON2_ACC);
+				SetString(7, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(5, ID_SS_PERSON3_DAT);
+				SetString(6, ID_SS_PERSON3_ACC);
+				SetString(7, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(5, ID_SS_PERSON4_DAT);
+				SetString(6, ID_SS_PERSON4_ACC);
+				SetString(7, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(5, ID_SS_PERSON5_DAT);
+				SetString(6, ID_SS_PERSON5_ACC);
+				SetString(7, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(5, ID_SS_PERSON6_DAT);
+				SetString(6, ID_SS_PERSON6_ACC);
+				SetString(7, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(5, ID_SS_PERSON7_DAT);
+				SetString(6, ID_SS_PERSON7_ACC);
+				SetString(7, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(5, ID_SS_PERSON8_DAT);
+				SetString(6, ID_SS_PERSON8_ACC);
+				SetString(7, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(5, ID_SS_PERSON9_DAT);
+				SetString(6, ID_SS_PERSON9_ACC);
+				SetString(7, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(5, ID_SS_PERSON10_DAT);
+				SetString(6, ID_SS_PERSON10_ACC);
+				SetString(7, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(5, ID_SS_PERSON11_DAT);
+				SetString(6, ID_SS_PERSON11_ACC);
+				SetString(7, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(5, ID_SS_PERSON12_DAT);
+				SetString(6, ID_SS_PERSON12_ACC);
+				SetString(7, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(5, ID_SS_PERSON13_DAT);
+				SetString(6, ID_SS_PERSON13_ACC);
+				SetString(7, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(5, ID_SS_PERSON14_DAT);
+				SetString(6, ID_SS_PERSON14_ACC);
+				SetString(7, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(5, ID_SS_PERSON15_DAT);
+				SetString(6, ID_SS_PERSON15_ACC);
+				SetString(7, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(5, ID_SS_PERSON16_DAT);
+				SetString(6, ID_SS_PERSON16_ACC);
+				SetString(7, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(5, ID_SS_PERSON17_DAT);
+				SetString(6, ID_SS_PERSON17_ACC);
+				SetString(7, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(5, ID_SS_PERSON18_DAT);
+				SetString(6, ID_SS_PERSON18_ACC);
+				SetString(7, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(5, ID_SS_PERSON19_DAT);
+				SetString(6, ID_SS_PERSON19_ACC);
+				SetString(7, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(5, ID_SS_PERSON0_DAT);
+				SetString(6, ID_SS_PERSON0_ACC);
+				SetString(7, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(8, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(9, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			// Assign Descriptor
+			descriptor = Random(20);
+			dIndex = 2;
+			if (descriptor == 1) {
+				SetString(dIndex, ID_SS_DESCRIPTOR1);
+			} elseif (descriptor == 2) {
+				SetString(dIndex, ID_SS_DESCRIPTOR2);
+			} elseif (descriptor == 3) {
+				SetString(dIndex, ID_SS_DESCRIPTOR3);
+			} elseif (descriptor == 4) {
+				SetString(dIndex, ID_SS_DESCRIPTOR4);
+			} elseif (descriptor == 5) {
+				SetString(dIndex, ID_SS_DESCRIPTOR5);
+			} elseif (descriptor == 6) {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			} elseif (descriptor == 7) {
+				SetString(dIndex, ID_SS_DESCRIPTOR7);
+			} elseif (descriptor == 8) {
+				SetString(dIndex, ID_SS_DESCRIPTOR8);
+			} elseif (descriptor == 9) {
+				SetString(dIndex, ID_SS_DESCRIPTOR9);
+			} elseif (descriptor == 10) {
+				SetString(dIndex, ID_SS_DESCRIPTOR10);
+			} elseif (descriptor == 11) {
+				SetString(dIndex, ID_SS_DESCRIPTOR11);
+			} elseif (descriptor == 12) {
+				SetString(dIndex, ID_SS_DESCRIPTOR12);
+			} elseif (descriptor == 13) {
+				SetString(dIndex, ID_SS_DESCRIPTOR13);
+			} elseif (descriptor == 14) {
+				SetString(dIndex, ID_SS_DESCRIPTOR14);
+			} elseif (descriptor == 15) {
+				SetString(dIndex, ID_SS_DESCRIPTOR15);
+			} elseif (descriptor == 16) {
+				SetString(dIndex, ID_SS_DESCRIPTOR16);
+			} elseif (descriptor == 17) {
+				SetString(dIndex, ID_SS_DESCRIPTOR17);
+			} elseif (descriptor == 18) {
+				SetString(dIndex, ID_SS_DESCRIPTOR18);
+			} elseif (descriptor == 19) {
+				SetString(dIndex, ID_SS_DESCRIPTOR19);
+			} else {
+				SetString(dIndex, ID_SS_DESCRIPTOR6);
+			}
+			// Assign Person
+			person = Random(20);
+			dIndex = 3;
+			if (person == 1) {
+				SetString(dIndex, ID_SS_PERSON1);
+				SetString(10, ID_SS_PERSON1_DAT);
+				SetString(11, ID_SS_PERSON1_ACC);
+				SetString(12, ID_SS_PERSON1_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON1_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON1_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 2) {
+				SetString(dIndex, ID_SS_PERSON2);
+				SetString(10, ID_SS_PERSON2_DAT);
+				SetString(11, ID_SS_PERSON2_ACC);
+				SetString(12, ID_SS_PERSON2_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON2_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON2_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 3) {
+				SetString(dIndex, ID_SS_PERSON3);
+				SetString(10, ID_SS_PERSON3_DAT);
+				SetString(11, ID_SS_PERSON3_ACC);
+				SetString(12, ID_SS_PERSON3_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON3_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON3_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 4) {
+				SetString(dIndex, ID_SS_PERSON4);
+				SetString(10, ID_SS_PERSON4_DAT);
+				SetString(11, ID_SS_PERSON4_ACC);
+				SetString(12, ID_SS_PERSON4_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON4_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON4_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 5) {
+				SetString(dIndex, ID_SS_PERSON5);
+				SetString(10, ID_SS_PERSON5_DAT);
+				SetString(11, ID_SS_PERSON5_ACC);
+				SetString(12, ID_SS_PERSON5_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON5_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON5_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 6) {
+				SetString(dIndex, ID_SS_PERSON6);
+				SetString(10, ID_SS_PERSON6_DAT);
+				SetString(11, ID_SS_PERSON6_ACC);
+				SetString(12, ID_SS_PERSON6_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON6_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON6_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 7) {
+				SetString(dIndex, ID_SS_PERSON7);
+				SetString(10, ID_SS_PERSON7_DAT);
+				SetString(11, ID_SS_PERSON7_ACC);
+				SetString(12, ID_SS_PERSON7_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON7_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON7_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 8) {
+				SetString(dIndex, ID_SS_PERSON8);
+				SetString(10, ID_SS_PERSON8_DAT);
+				SetString(11, ID_SS_PERSON8_ACC);
+				SetString(12, ID_SS_PERSON8_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON8_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON8_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 9) {
+				SetString(dIndex, ID_SS_PERSON9);
+				SetString(10, ID_SS_PERSON9_DAT);
+				SetString(11, ID_SS_PERSON9_ACC);
+				SetString(12, ID_SS_PERSON9_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON9_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON9_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 10) {
+				SetString(dIndex, ID_SS_PERSON10);
+				SetString(10, ID_SS_PERSON10_DAT);
+				SetString(11, ID_SS_PERSON10_ACC);
+				SetString(12, ID_SS_PERSON10_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON10_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON10_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 11) {
+				SetString(dIndex, ID_SS_PERSON11);
+				SetString(10, ID_SS_PERSON11_DAT);
+				SetString(11, ID_SS_PERSON11_ACC);
+				SetString(12, ID_SS_PERSON11_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON11_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON11_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 12) {
+				SetString(dIndex, ID_SS_PERSON12);
+				SetString(10, ID_SS_PERSON12_DAT);
+				SetString(11, ID_SS_PERSON12_ACC);
+				SetString(12, ID_SS_PERSON12_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON12_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON12_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 13) {
+				SetString(dIndex, ID_SS_PERSON13);
+				SetString(10, ID_SS_PERSON13_DAT);
+				SetString(11, ID_SS_PERSON13_ACC);
+				SetString(12, ID_SS_PERSON13_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON13_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON13_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 14) {
+				SetString(dIndex, ID_SS_PERSON14);
+				SetString(10, ID_SS_PERSON14_DAT);
+				SetString(11, ID_SS_PERSON14_ACC);
+				SetString(12, ID_SS_PERSON14_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON14_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON14_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 15) {
+				SetString(dIndex, ID_SS_PERSON15);
+				SetString(10, ID_SS_PERSON15_DAT);
+				SetString(11, ID_SS_PERSON15_ACC);
+				SetString(12, ID_SS_PERSON15_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON15_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON15_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 16) {
+				SetString(dIndex, ID_SS_PERSON16);
+				SetString(10, ID_SS_PERSON16_DAT);
+				SetString(11, ID_SS_PERSON16_ACC);
+				SetString(12, ID_SS_PERSON16_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON16_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON16_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 17) {
+				SetString(dIndex, ID_SS_PERSON17);
+				SetString(10, ID_SS_PERSON17_DAT);
+				SetString(11, ID_SS_PERSON17_ACC);
+				SetString(12, ID_SS_PERSON17_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON17_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON17_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 18) {
+				SetString(dIndex, ID_SS_PERSON18);
+				SetString(10, ID_SS_PERSON18_DAT);
+				SetString(11, ID_SS_PERSON18_ACC);
+				SetString(12, ID_SS_PERSON18_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON18_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON18_ARTICLE_UNDEF_CAPS);
+			} elseif (person == 19) {
+				SetString(dIndex, ID_SS_PERSON19);
+				SetString(10, ID_SS_PERSON19_DAT);
+				SetString(11, ID_SS_PERSON19_ACC);
+				SetString(12, ID_SS_PERSON19_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON19_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON19_ARTICLE_UNDEF_CAPS);
+			} else {
+				SetString(dIndex, ID_SS_PERSON0);
+				SetString(10, ID_SS_PERSON0_DAT);
+				SetString(11, ID_SS_PERSON0_ACC);
+				SetString(12, ID_SS_PERSON0_ARTICLE_DEF_CAPS);
+				SetString(13, ID_SS_PERSON0_ARTICLE_DEF_SMALL);
+				SetString(14, ID_SS_PERSON0_ARTICLE_UNDEF_CAPS);
+			}
+			Message(1, 'SSGossip19');
+		} else {
+			SpawnBandits(atTavernLoc, 1);
+			Message(1, 'SSAmbush');
+		}
+		if (gossip != 0) {
+			HealAll(atTavernLoc);
+		}
+	}
+}
+
+messagebox 'SSGossip1' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP1);
+}
+
+messagebox 'SSGossip2' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP2);
+}
+
+messagebox 'SSGossip3' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP3);
+}
+
+messagebox 'SSGossip4' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP4);
+}
+
+messagebox 'SSGossip5' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP5);
+}
+
+messagebox 'SSGossip6' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP6);
+}
+
+messagebox 'SSGossip7A' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP7_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGossip7B');
+	}
+}
+
+messagebox 'SSGossip7ABack' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP7_A);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGossip7B');
+	}
+}
+
+messagebox 'SSGossip7B' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP7_B);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGossip7C');
+	}
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSGossip7ABack');
+	}
+}
+
+messagebox 'SSGossip7C' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP7_C);
+	Button(ID_SS_BUTTON_BACK) {
+		Kill();
+		Message(1, 'SSGossip7B');
+	}
+}
+
+messagebox 'SSGossip8' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP8);
+}
+
+messagebox 'SSGossip9' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP9);
+}
+
+messagebox 'SSGossip10' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP10);
+}
+
+messagebox 'SSGossip11' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP11);
+}
+
+messagebox 'SSGossip12' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP12);
+}
+
+messagebox 'SSGossip13' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP13);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGossip131415');
+	}
+}
+
+messagebox 'SSGossip14' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP14);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGossip131415');
+	}
+}
+
+messagebox 'SSGossip15' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP15);
+	Button(ID_SS_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'SSGossip131415');
+	}
+}
+
+messagebox 'SSGossip131415' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP13_14_15);
+}
+
+messagebox 'SSGossip16' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP16);
+}
+
+messagebox 'SSGossip17' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP17);
+}
+
+messagebox 'SSGossip18' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP18);
+}
+
+messagebox 'SSGossip19' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_GOSSIP1);
+}
+
+
+messagebox 'SSTemp' {
+	Show(); Title(ID_SS_BLANK);
+	Text(ID_SS_TEMP);
+}
