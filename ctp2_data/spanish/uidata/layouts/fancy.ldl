@@ -1,0 +1,257 @@
+# fancy.ldl
+
+
+
+# ########################################################
+
+# WINDOW ART this should be in a general place
+
+# IT is important for resize to work correctly that that all dimension and position
+
+# values do not change there is a dependency base on the original size of the 
+
+# help tile box
+
+# ########################################################
+
+c3_FancyTL {
+
+	string	pattern	"error.tga"
+
+	int 	xpix		-18
+
+	int 	ypix		0
+
+	int	widthpix	18
+
+	int	heightpix	32
+
+}
+
+c3_FancyTR {
+
+	string	pattern	"error.tga"
+
+	int 	xpix		538
+
+	int 	ypix		0
+
+	int	widthpix	21
+
+	int	heightpix	31
+
+}
+
+c3_FancyTop {
+
+	string	pattern	"error.tga"
+
+	int 	xpix		0
+
+	int 	ypix		-9
+
+	int	widthpix	538
+
+	int	heightpix	9
+
+}
+
+
+
+c3_FancyCancel {
+
+		int	numimagegroups	2
+
+		string	image0	"error.tga"
+
+		string	image1	"error.tga"
+
+		int	xpix	4
+
+		int	ypix	456
+
+		int	widthpix	46
+
+		int	heightpix	19	
+
+		string	imagebltflag	"chromakey"
+
+		int	bevelwidth	0
+
+	}
+
+c3_FancyOk:CTP_CLOSE_BUTTON {
+
+		int	xpix	488
+		int	ypix	456
+}
+
+
+
+c3_PopupUL {
+
+#	string	image0	"error.tga"
+	string	image0	"uptg03a.tga"
+	string	imagebltflag	"chromakey"
+
+	int heightpix 17
+	int widthpix 17
+#	int	widthpix	27
+
+#	int	heightpix	30
+
+}
+
+c3_PopupUR {
+
+#	string	image0	"error.tga"
+	string	imagebltflag	"chromakey"
+	string  image0 "uptg03c.tga"
+
+	int heightpix 17
+	int widthpix 17
+#	int	widthpix	27
+
+#	int	heightpix	30
+
+}
+
+c3_PopupLL {
+
+#	string	image0	"error.tga"
+	string	imagebltflag	"chromakey"
+	string image0 "uptg03g.tga"
+
+	int heightpix 17
+	int widthpix 17
+#	int	widthpix	27
+
+#	int	heightpix	30
+
+}
+
+c3_PopupLR {
+
+#	string	image0	"error.tga"
+	string image0 "uptg03i.tga"
+	string	imagebltflag	"chromakey"
+
+	int heightpix 17
+	int widthpix 17
+#	int	widthpix	27
+
+#	int	heightpix	30
+
+}
+
+
+
+c3_PopupLeft {
+
+#	string	pattern	"error.tga"
+	string pattern "uptg03d.tga"
+
+	int	widthpix	17
+
+}
+
+c3_PopupTop {
+
+#	string	pattern	"error.tga"
+	string	pattern	"uptg03b.tga"
+
+	int	heightpix	17
+
+}
+
+c3_PopupRight {
+
+#	string	pattern	"error.tga"
+	string pattern "uptg03f.tga"
+
+	int	widthpix	17
+
+}
+
+c3_PopupBottom {
+
+#	string	pattern	"error.tga"
+	string pattern "uptg03h.tga"
+	int	heightpix	17
+
+}
+
+
+
+
+c3_PopupCancel:CTP2_STANDARD_FONT {
+
+#	string	image0	"error.tga"
+
+#	string	image1	"error.tga"
+	string image0 "ctp1_button_up.tga"
+	string image1 "ctp1_button_down.tga"
+
+	string	imagebltflag	"chromakey"
+
+	int	widthpix	70
+
+	int	heightpix	24
+
+	string	text	"str_ldl_Cancel"
+	int	bevelwidth	0
+
+}
+
+c3_PopupNo:CTP2_STANDARD_FONT {
+
+	string	image0	"error.tga"
+
+	string	image1	"error.tga"
+
+	string	imagebltflag	"chromakey"
+
+	int	widthpix	70
+
+	int	heightpix	28
+
+	string	text	"str_ldl_No"
+	int	bevelwidth	0
+
+}
+
+c3_PopupClose:CTP2_BUTTON_SMALL {
+
+	int	widthpix	70
+	int	heightpix	24
+	string	text	"str_ldl_Close"
+	int	bevelwidth	0
+}
+
+c3_PopupOk:CTP2_BUTTON_SMALL {
+	int	widthpix	70
+	int	heightpix	24
+	string	text	"str_ldl_Ok"
+	int	bevelwidth	0
+}
+
+c3_PopupYes:CTP2_STANDARD_FONT {
+
+	string	image0	"error.tga"
+
+	string	image1	"error.tga"
+
+	string	imagebltflag	"chromakey"
+
+	int	widthpix	70
+
+	int	heightpix	28
+
+	string	text	"str_ldl_Yes"
+	int	bevelwidth	0
+
+}
+
+$
+
+

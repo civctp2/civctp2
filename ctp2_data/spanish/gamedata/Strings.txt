@@ -1,0 +1,30 @@
+#import "Strings.txt"	# Strings: This file
+
+import "add_str.txt"	# Addon: String additions should temporarily reside here. Strings should be moved from here to where they belong. This file should be gone by the time we CR.
+import "civ_str.txt"	# Civ City Ruler Names
+import "dip_str.txt"	# Diplomacy:
+import "err_str.txt"	# Error: None of these will be localized so it would be nice to have them out on their own
+import "exp_str.txt"	# Explanation: Reasons for City (Un)Happiness and Civ Points
+import "gl_str.txt"	# Great Library: Terms and Descriptions
+import "info_str.txt"	# Info Message: Includes Drop Down & Instant Action Messages. Trade could go here
+import "junk_str.txt"	# Junk: Trash can for obsolete strings that need to be there for the executable. Programmers should delete things from junk_str.txt
+import "ldl_str.txt"	# LDL strings: Migration from LDL
+import "tut_str.txt"	# Tutorial:
+
+#SAM022299 added for cheat tools
+import "cht_str.txt"	# Cheat Tools
+
+#JBR08031999 added scen_str.txt
+import "scen_str.txt"
+
+#REM101999 for new diplomacy system
+import "dip2_str.txt"
+
+#BMH040800 added for tooltips and status bar text
+import "tips_str.txt"
+
+import "feat_str.txt"
+
+import "tut2_str.txt"
+
+import "cut_str.txt"
