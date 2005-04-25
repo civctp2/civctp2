@@ -36,6 +36,7 @@
 //   cossed swords even if the city is hidden. - Oct. 15th 2004 Martin Gühmann
 // - Added unit display name.
 // - Relaxed Assert for invisible buttons with mods.
+// - Prevented crashes with mods.
 //
 //----------------------------------------------------------------------------
 //
@@ -1727,40 +1728,53 @@ ControlPanelWindow::BuildOptionsMenu()
 
 	
 	
-	m_mainMenuBar->AddMenuItem(menu,(char *)g_theStringDB->GetNameStr("str_ldl_ZoomOut"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_ZoomOut"),
 							   KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ZOOM_OUT1)), 
 							   (void *)CP_MENU_ITEM_10);
-	m_mainMenuBar->AddMenuItem(menu,(char *)g_theStringDB->GetNameStr("str_ldl_ZoomIn"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_ZoomIn"),
 							   KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ZOOM_IN1)),
 							   (void *)CP_MENU_ITEM_11);
 
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Gameplay"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Gameplay"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_GAMEPLAY_OPTIONS)),(void *)CP_MENU_ITEM_0);
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Graphics"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Graphics"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_GRAPHICS_OPTIONS)),(void *)CP_MENU_ITEM_1);
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Sound"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Sound"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_SOUND_OPTIONS)),(void *)CP_MENU_ITEM_2);
-	// MUSIC added by ahenobarb
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Music"),
-		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_MUSIC_OPTIONS)),(void *)CP_MENU_ITEM_12);
+
+    {
+        MBCHAR const *  musicItemText   = g_theStringDB->GetNameStr("str_ldl_Music");
+
+        if (musicItemText)
+        {
+            // MUSIC added by ahenobarb
+	        m_mainMenuBar->AddMenuItem
+                (menu, 
+                 musicItemText, 
+                 KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_MUSIC_OPTIONS)),
+                 (void *) CP_MENU_ITEM_12
+                );
+        }
+        // else: No action: backwards compatibility for Mods.
+    }
 	
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Advanced"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Advanced"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ADVANCED_OPTIONS)),(void *)CP_MENU_ITEM_3);
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Cheat_Mode_Case"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Cheat_Mode_Case"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_OPEN_SCENARIO_EDITOR)),(void *)CP_MENU_ITEM_4);
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_SaveGame"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_SaveGame"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_SAVE_GAME)),(void *)CP_MENU_ITEM_5);
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_LoadGame"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_LoadGame"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_LOAD_GAME)),(void *)CP_MENU_ITEM_6);
 	
 	if (!g_theProfileDB->IsScenario() && !g_isScenario) 
 	{
-		m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Restart"),
+		m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Restart"),
 			KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_RESTART)),(void *)CP_MENU_ITEM_7);
 	}
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_NewGame"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_NewGame"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_NEW_GAME)),(void *)CP_MENU_ITEM_8);
-	m_mainMenuBar->AddMenuItem(menu,(char*)g_theStringDB->GetNameStr("str_ldl_Quit"),
+	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Quit"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_QUIT)),(void *)CP_MENU_ITEM_9);
 }
 

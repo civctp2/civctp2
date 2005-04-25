@@ -24,7 +24,8 @@
 // - Shifted buttons from the "Single Player" subscreen into this one to
 //   simplify the interface.
 //   (JJB)
-// - Retrieve the modification date from the executable
+// - Retrieve the modification date from the executable.
+// - Added mod compatibility crash fix.
 //
 //----------------------------------------------------------------------------
 
@@ -153,23 +154,26 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 											initialplayscreen_creditsPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	// Code for new buttons, just copy/pasted and altered from the above
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "NewGameButton", 
 											initialplayscreen_newgamePress, NULL);
-	Assert(errcode == AUI_ERRCODE_OK);
+	if (errcode == AUI_ERRCODE_OK)
+    {
+	    // Apolyton initial screen layout
+	    (void) aui_Ldl::SetActionFuncAndCookie
+            (s_initplayWindowLDLBlock, "LoadGameButton", initialplayscreen_loadgamePress, NULL);
+	    (void) aui_Ldl::SetActionFuncAndCookie
+            (s_initplayWindowLDLBlock, "TutorialButton", initialplayscreen_tutorialPress, NULL);
+	    (void) aui_Ldl::SetActionFuncAndCookie
+            (s_initplayWindowLDLBlock, "OptionsButton", initialplayscreen_optionsPress, NULL);
+    }
+    else
+    {
+        // Original game layout compatibility handler (sort of)
+        (void) aui_Ldl::SetActionFuncAndCookie
+            (s_initplayWindowLDLBlock, "SPButton", initialplayscreen_newgamePress, NULL);
 
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "LoadGameButton", 
-											initialplayscreen_loadgamePress, NULL);
-	Assert(errcode == AUI_ERRCODE_OK);
-
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "TutorialButton", 
-											initialplayscreen_tutorialPress, NULL);
-	Assert(errcode == AUI_ERRCODE_OK);
-
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "OptionsButton", 
-											initialplayscreen_optionsPress, NULL);
-	Assert(errcode == AUI_ERRCODE_OK);
+    }
 
 	// Display executable date of last modification as version
 	ctp2_Static * versionText = reinterpret_cast<ctp2_Static *>

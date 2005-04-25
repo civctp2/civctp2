@@ -21,7 +21,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Crash prevented
+// - Crashes prevented.
 //
 //----------------------------------------------------------------------------
 
@@ -48,34 +48,44 @@ MBCHAR *aui_ImageBase::m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ] =
 
 
 
-aui_ImageBase::aui_ImageBase(
-	MBCHAR *ldlBlock,
-	bool loadOnDemand )
+aui_ImageBase::aui_ImageBase
+(
+	MBCHAR *        ldlBlock,
+	bool            loadOnDemand 
+)
+:   m_stateImageNames           (NULL),
+	m_numberOfStateImageNames   (0),
+	m_numStateImageGroups       (0),
+	m_stateImageGroups          (NULL),
+    m_loadOnDemand              (loadOnDemand),
+	m_chromaRed	   		        (k_DEFAULT_CHROMA_RED),
+	m_chromaGreen		        (k_DEFAULT_CHROMA_GREEN),
+	m_chromaBlue		        (k_DEFAULT_CHROMA_BLUE),
+	m_chromaSpecified           (false)
 {
-	
-	m_chromaSpecified = false;
-
-	
-	m_loadOnDemand = loadOnDemand;
-
-	InitCommonLdl( ldlBlock );
+	InitCommonLdl(ldlBlock);
 }
 
 
 
-aui_ImageBase::aui_ImageBase(
+aui_ImageBase::aui_ImageBase
+(
 	sint32 numStateImageGroups,
 	AUI_IMAGEBASE_BLTTYPE imageblttype,
 	AUI_IMAGEBASE_BLTFLAG imagebltflag,
-	bool loadOnDemand )
+	bool loadOnDemand 
+)
+:   m_stateImageNames           (NULL),
+	m_numberOfStateImageNames   (0),
+	m_numStateImageGroups       (0),
+	m_stateImageGroups          (NULL),
+    m_loadOnDemand              (loadOnDemand),
+	m_chromaRed	   		        (k_DEFAULT_CHROMA_RED),
+	m_chromaGreen		        (k_DEFAULT_CHROMA_GREEN),
+	m_chromaBlue		        (k_DEFAULT_CHROMA_BLUE),
+	m_chromaSpecified           (false)
 {
-	
-	m_chromaSpecified = false;
-
-	
-	m_loadOnDemand = loadOnDemand;
-
-	InitCommon( numStateImageGroups, imageblttype, imagebltflag );
+	InitCommon(numStateImageGroups, imageblttype, imagebltflag);
 }
 
 
@@ -96,12 +106,6 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-
-	
-	m_chromaRed	   		=k_DEFAULT_CHROMA_RED;
-	m_chromaGreen		=k_DEFAULT_CHROMA_GREEN;
-	m_chromaBlue		=k_DEFAULT_CHROMA_BLUE;
-	m_chromaSpecified	=false;
 
 	
 	if (block->GetAttributeType(k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED  ) == ATTRIBUTE_TYPE_INT)
@@ -232,11 +236,7 @@ AUI_ERRCODE aui_ImageBase::InitCommon(
 		
 		for(int index = 0; index < m_numberOfStateImageNames; index++)
 			m_stateImageNames[index] = NULL;
-	} else {
-		
-		m_stateImageNames = NULL;
-		m_numberOfStateImageNames = 0;
-	}
+	} 
 
 	m_stateImageGroups =
 		new aui_StateImageGroup[ m_numStateImageGroups = numStateImageGroups ];
@@ -255,26 +255,22 @@ AUI_ERRCODE aui_ImageBase::InitCommon(
 
 aui_ImageBase::~aui_ImageBase()
 {
-	
-	
-	if(m_stateImageNames) {
-		
-		for(int index = 0; index < m_numberOfStateImageNames; index++)
+	if (m_stateImageNames) 
+    {
+		for (int index = 0; index < m_numberOfStateImageNames; index++)
 			if(m_stateImageNames[index]) free(m_stateImageNames[index]);
 
-		
 		delete [] m_stateImageNames;
 	}
 
-	if ( m_stateImageGroups )
+	if (m_stateImageGroups)
 	{
-		for ( sint32 i = 0; i < m_numStateImageGroups; i++ )
-		for ( sint32 j = 0; j < AUI_IMAGEBASE_SUBSTATE_LAST; j++ )
-			if ( m_stateImageGroups[ i ][ j ] )
-				g_ui->UnloadImage( m_stateImageGroups[ i ][ j ] );
+		for ( sint32 i = 0; i < m_numStateImageGroups; i++)
+		    for (sint32 j = 0; j < AUI_IMAGEBASE_SUBSTATE_LAST; j++)
+			    if (m_stateImageGroups[ i ][ j ])
+				    g_ui->UnloadImage( m_stateImageGroups[ i ][ j ] );
 
-		delete[ m_numStateImageGroups ] m_stateImageGroups;
-		m_stateImageGroups = NULL;
+		delete [] m_stateImageGroups;
 	}
 }
 
@@ -369,7 +365,6 @@ aui_Image *aui_ImageBase::SetImage(
 			
 			if(m_stateImageNames[index]) {
 				free(m_stateImageNames[index]);
-				m_stateImageNames[index] = NULL;
 			}
 
 			

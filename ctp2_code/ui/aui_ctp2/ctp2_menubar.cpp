@@ -1,14 +1,30 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made AddMenuItem itemID parameter const.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -230,14 +246,18 @@ ctp2_MenuBar::SetMenuCallback(ctp2_Menu *menu,CTP2MenuCallback *callback)
 }
 
 
-void			
-ctp2_MenuBar::AddMenuItem(ctp2_Menu *menu,MBCHAR *itemID,MBCHAR *shortcut,void *cookie)
+void ctp2_MenuBar::AddMenuItem
+(
+    ctp2_Menu *     menu,
+    MBCHAR const *  itemID,
+    MBCHAR const *  shortcut,
+    void *          cookie
+)
 {
-	
-	if (menu==NULL)
-		return;
-
-	 menu->AddItem(itemID,shortcut,cookie);
+	if (menu)
+    {
+        menu->AddItem(itemID, shortcut, cookie);
+    }
 }
 
 

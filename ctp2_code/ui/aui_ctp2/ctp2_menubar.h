@@ -1,17 +1,37 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Menu bar user interface element
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made AddMenuItem itemID parameter const.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
- 
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __CTP2_MENUBAR_H__
 #define __CTP2_MENUBAR_H__
 
@@ -47,7 +67,13 @@ public:
 	
 	ctp2_Menu		*GetMenu(MBCHAR *ldlParent,MBCHAR *menuname);
 	void			SetMenuCallback	(ctp2_Menu *menu,CTP2MenuCallback *callback);
-	void			AddMenuItem		(ctp2_Menu *menu,MBCHAR *itemID,MBCHAR *shortcut,void *cookie);
+	void			AddMenuItem		
+    (
+        ctp2_Menu *     menu,
+        MBCHAR const *  itemID,
+        MBCHAR const *  shortcut,
+        void *          cookie
+    );
 
 	void            BuildNeighbors();
 

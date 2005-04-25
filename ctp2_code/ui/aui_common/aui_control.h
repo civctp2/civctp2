@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Event handlers declared in a notation that is more standard C++.
+// - Prevented crash in destructor after using the default constructor.
 //
 //----------------------------------------------------------------------------
 
@@ -110,13 +111,19 @@ public:
 	static uint32 m_controlClassId;
 
 protected:
-	aui_Control() : aui_Region(), aui_ImageBase(), aui_TextBase(),
-		m_statusText(NULL),
-		m_numberOfLayers(0), m_imagesPerLayer(0),
-		m_imageLayerList(NULL),
-		m_layerRenderFlags(NULL),
-		m_renderFlags(k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
-		{}
+	aui_Control() 
+    :   aui_Region          (), 
+        aui_ImageBase       (), 
+        aui_TextBase        (),
+		m_statusText        (NULL),
+		m_numberOfLayers    (0), 
+        m_imagesPerLayer    (0),
+		m_imageLayerList    (NULL),
+		m_layerRenderFlags  (NULL),
+		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
+        m_stringTable       (NULL),
+        m_allocatedTip      (false)
+    { ; };
 
 	AUI_ERRCODE InitCommonLdl(
 		MBCHAR *ldlBlock,

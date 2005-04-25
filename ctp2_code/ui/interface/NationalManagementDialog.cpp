@@ -43,6 +43,7 @@
 //   player better to know how much food is needed, as a negative amount is 
 //   displayed if the city starves. Gold is now displayed in red if it is
 //   critical. - April 6th 2005 Martin Gühmann
+// - Added mod compatibilty crash fix
 //
 //----------------------------------------------------------------------------
 
@@ -150,11 +151,14 @@ void NationalManagementDialog::Open()
 	g_nationalManagementDialog->UpdateGovernor();
 	g_nationalManagementDialog->UpdateRushBuy();
 
-	if(!g_nationalManagementDialog->m_resourceList->IsHidden()) {
+	if (!g_nationalManagementDialog->m_resourceList->IsHidden()) {
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_resourceList);
 	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_statusList);
-	} else if (!g_nationalManagementDialog->m_specialistList->IsHidden()) {
+	} else if (g_nationalManagementDialog->m_specialistList &&
+               !g_nationalManagementDialog->m_specialistList->IsHidden()
+              ) 
+    {
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_specialistList);
 	}
 }
@@ -252,7 +256,6 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	Assert(m_closeButton);
 	Assert(m_resourceList);
 	Assert(m_statusList);
-	Assert(m_specialistList);
 	Assert(m_governorToggle);
 	Assert(m_governorDropDown);
 
@@ -263,10 +266,7 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 
 	
 	m_resourceList->SetMultiSelect(true);		// Allow the selction of multiple
-	m_statusList->SetMultiSelect(true);         // items in the lists  
-	m_specialistList->SetMultiSelect(true);         
-
-
+	m_statusList->SetMultiSelect(true);         // items in the lists 
 	
 	m_closeButton->SetActionFuncAndCookie(CloseButtonActionCallback, this);
 	m_statusList->SetActionFuncAndCookie(StatusListSelectActionCallback, this);
@@ -278,11 +278,21 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	m_disbandButton->SetActionFuncAndCookie(DisbandButtonActionCallback, this);
 	m_resourceList->SetActionFuncAndCookie(ResourceListSelectActionCallback, this);
 
-	m_specialistList->SetActionFuncAndCookie(SpecialistListSelectActionCallback, this);
 	
 	m_resourceTab->SetActionFuncAndCookie(TabActionCallback, this);
 	m_statusTab->SetActionFuncAndCookie(TabActionCallback, this);
-	m_specialistTab->SetActionFuncAndCookie(TabActionCallback, this);
+
+    // The new specialist Tab may not be present in Mods.
+    if (m_specialistList)                       
+    {
+	    m_specialistList->SetMultiSelect(true);         
+	    m_specialistList->SetActionFuncAndCookie(SpecialistListSelectActionCallback, this);
+    }
+
+    if (m_specialistTab)
+    {
+	    m_specialistTab->SetActionFuncAndCookie(TabActionCallback, this);
+    }
 
 	m_governorDropDown->Clear();
 
@@ -385,7 +395,6 @@ void NationalManagementDialog::UpdateStatusList()
 // Name       : NationalManagementDialog::UpdateSpecialistList
 //
 // Description: Fills the list of the specialist tabs
-//               
 //
 // Parameters : -
 //
@@ -398,27 +407,22 @@ void NationalManagementDialog::UpdateStatusList()
 //----------------------------------------------------------------------------
 void NationalManagementDialog::UpdateSpecialistList()
 {
-	
-	m_specialistList->BuildListStart();
+    if (m_specialistList)
+    {
+	    m_specialistList->BuildListStart();
+    	m_specialistList->Clear();
 
-	
-	m_specialistList->Clear();
+    	UnitDynamicArray * cityList =
+	    	g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
 
-	
-	UnitDynamicArray *cityList =
-		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
+	    for (sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) 
+        {
+		    Unit city = cityList->Get(cityIndex);
+	    	m_specialistList->AddItem(CreateSpecialistItem(city));
+    	}
 
-	
-	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
-		
-		Unit city = cityList->Get(cityIndex);
-
-		
-		m_specialistList->AddItem(CreateSpecialistItem(city));
-	}
-
-	
-	m_specialistList->BuildListEnd();
+	    m_specialistList->BuildListEnd();
+    }
 }
 
 void NationalManagementDialog::UpdateGovernor()
@@ -1774,7 +1778,10 @@ Unit NationalManagementDialog::GetSelectedCity()
 		visList = g_nationalManagementDialog->m_resourceList;
 	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
 		visList = g_nationalManagementDialog->m_statusList;
-	} else if (!g_nationalManagementDialog->m_specialistList->IsHidden()) {
+	} else if (g_nationalManagementDialog->m_specialistList &&
+               !g_nationalManagementDialog->m_specialistList->IsHidden()
+              ) 
+    {
 		visList = g_nationalManagementDialog->m_specialistList;
 	} else {
 		Assert(false);
@@ -1801,24 +1808,33 @@ void NationalManagementDialog::MirrorSelectedCities()
 		return;
 
 	ctp2_ListBox *visList;
-	ctp2_ListBox *invisList;
-	ctp2_ListBox *invisList2;
+    std::vector<ctp2_ListBox *> invisList;
 
-
-	if(!g_nationalManagementDialog->m_resourceList->IsHidden()) {
-		visList = g_nationalManagementDialog->m_resourceList;
-		invisList = g_nationalManagementDialog->m_specialistList;
-		invisList2 = g_nationalManagementDialog->m_statusList;
-
-	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
+	if(!g_nationalManagementDialog->m_resourceList->IsHidden()) 
+    {
+		visList     = g_nationalManagementDialog->m_resourceList;
+		invisList.push_back(g_nationalManagementDialog->m_statusList);
+		if (g_nationalManagementDialog->m_specialistList)
+        {
+            invisList.push_back(g_nationalManagementDialog->m_specialistList);
+        }
+	} 
+    else if (!g_nationalManagementDialog->m_statusList->IsHidden()) 
+    {
 		visList = g_nationalManagementDialog->m_statusList;
-		invisList = g_nationalManagementDialog->m_specialistList;
-		invisList2 = g_nationalManagementDialog->m_resourceList;
+		if (g_nationalManagementDialog->m_specialistList)
+        {
+            invisList.push_back(g_nationalManagementDialog->m_specialistList);
+        }
+		invisList.push_back(g_nationalManagementDialog->m_resourceList);
 		
-	} else if (!g_nationalManagementDialog->m_specialistList->IsHidden()) {
+	} else if (g_nationalManagementDialog->m_specialistList &&
+               !g_nationalManagementDialog->m_specialistList->IsHidden()
+              ) 
+    {
 		visList = g_nationalManagementDialog->m_specialistList;
-		invisList = g_nationalManagementDialog->m_statusList;
-		invisList2 = g_nationalManagementDialog->m_resourceList;
+		invisList.push_back(g_nationalManagementDialog->m_resourceList);
+		invisList.push_back(g_nationalManagementDialog->m_statusList);
 	} else {
 		Assert(false);
 		return;
@@ -1835,39 +1851,50 @@ void NationalManagementDialog::MirrorSelectedCities()
 
 	g_nationalManagementDialog->m_mirroring = true;
 
-	sint32 i;
-	for(i = 0; i < invisList->NumItems(); i++) {
-		invisList->DeselectItem(i);
-		invisList2->DeselectItem(i);
+    for 
+    (
+        std::vector<ctp2_ListBox *>::iterator p = invisList.begin();
+        p != invisList.end();
+        ++p
+    )
+    {
+        for (sint32 i = 0; i < (*p)->NumItems(); ++i) 
+        {
+		    (*p)->DeselectItem(i);
+        }
 	}
 
-	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
+	for (int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
 	{
 		
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
-			static_cast<ctp2_ListItem*>(visList->GetItemByIndex(
-				selectedList->GetAtIndex(selectIndex)
-				))->GetUserData());
+		uint32 cityId   = reinterpret_cast<uint32>
+                            (static_cast<ctp2_ListItem*>
+                                (visList->GetItemByIndex
+                                    (selectedList->GetAtIndex(selectIndex))
+                                )->GetUserData()
+                            );
 
-		for(i = 0; i < invisList->NumItems(); i++) {
-			Unit invisCity;
-			invisCity.m_id = reinterpret_cast<uint32>(
-				static_cast<ctp2_ListItem*>(invisList->GetItemByIndex(i))->GetUserData());
-			if(invisCity.m_id == city.m_id) {
-				invisList->SelectItem(i);
-				break;
-			}
-		}
-		for(i = 0; i < invisList2->NumItems(); i++) {
-			Unit invisCity;
-			invisCity.m_id = reinterpret_cast<uint32>(
-				static_cast<ctp2_ListItem*>(invisList2->GetItemByIndex(i))->GetUserData());
-			if(invisCity.m_id == city.m_id) {
-				invisList2->SelectItem(i);
-				break;
-			}
-		}
+        for 
+        (
+            std::vector<ctp2_ListBox *>::iterator p = invisList.begin();
+            p != invisList.end();
+            ++p
+        )
+        {
+		    for (sint32 i = 0; i < (*p)->NumItems(); ++i) 
+            {
+			    uint32 invisId  = reinterpret_cast<uint32>
+                                    (static_cast<ctp2_ListItem *>((*p)->GetItemByIndex(i))
+                                        ->GetUserData()
+                                    );
+			    
+                if (invisId == cityId) 
+                {
+				    (*p)->SelectItem(i);
+				    break;
+			    }
+		    }
+        }
 	}
 		
 	g_nationalManagementDialog->m_mirroring = false;

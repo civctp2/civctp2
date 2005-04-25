@@ -63,6 +63,7 @@
 // - Removed some completely unused code.
 // - Modernised some code: e.g. implemented the modified records list as a 
 //   std::vector, so we don't have to do the memory management ourselves. 
+// - Prevented crash in Parse when m_numrecords is 0.
 //
 //----------------------------------------------------------------------------
 
@@ -92,23 +93,17 @@ template <class T> CTPDatabase<T>::CTPDatabase()
 
 template <class T> CTPDatabase<T>::~CTPDatabase()
 {
-	if(m_records) {
-		sint32 i;
-		for(i = 0; i < m_numRecords; i++) {
-			if(m_records[i]) {
-				delete m_records[i];
-			}
+	if (m_records) 
+    {
+		for (sint32 i = 0; i < m_numRecords; i++) 
+        {
+			delete m_records[i];
 		}
 		delete [] m_records;
 	}
 
-	if(m_indexToAlpha) {
-		delete [] m_indexToAlpha;
-	}
-
-	if(m_alphaToIndex) {
-		delete [] m_alphaToIndex;
-	}
+	delete [] m_indexToAlpha;
+	delete [] m_alphaToIndex;
 
 
 	for (size_t j = 0; j < m_modifiedRecords.size(); ++j)
@@ -129,8 +124,6 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 		}
 		delete [] m_modifiedList;
 	}
-
-
 }
 
 template <class T> T *CTPDatabase<T>::Access(sint32 index,sint32 govIndex)
@@ -366,9 +359,9 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 	}
 
 	delete [] m_indexToAlpha;
-	m_indexToAlpha	= new sint32[m_numRecords];
+    m_indexToAlpha	= (m_numRecords > 0) ? new sint32[m_numRecords] : NULL;
 	delete [] m_alphaToIndex;
-	m_alphaToIndex	= new sint32[m_numRecords];
+    m_alphaToIndex	= (m_numRecords > 0) ? new sint32[m_numRecords] : NULL;
 
 	for (sint32 i = 0; i < m_numRecords; ++i)
 	{

@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Standardised min/max usage.
+// - Prevented crashes in destructor with uninitialised m_stringTable.
 //
 //----------------------------------------------------------------------------
 
@@ -85,23 +86,25 @@ aui_Control::aui_Control(
 	MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
-	:
-	aui_Region( retval, id, ldlBlock ),
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_SoundBase( ldlBlock ),
-	m_statusText(NULL),
-	m_numberOfLayers(0), m_imagesPerLayer(0),
-	m_imageLayerList(NULL),
-	m_layerRenderFlags(NULL),
-	m_renderFlags(k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
+:
+	aui_Region              (retval, id, ldlBlock),
+	aui_ImageBase           (ldlBlock),
+	aui_TextBase            (ldlBlock, (const MBCHAR *) NULL),
+	aui_SoundBase           (ldlBlock),
+	m_statusText            (NULL),
+	m_numberOfLayers        (0), 
+    m_imagesPerLayer        (0),
+	m_imageLayerList        (NULL),
+	m_layerRenderFlags      (NULL),
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
+    m_stringTable           (NULL),
+    m_allocatedTip          (false)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommonLdl( ldlBlock, ActionFunc, cookie );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -115,23 +118,25 @@ aui_Control::aui_Control(
 	sint32 height,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
-	:
-	aui_Region( retval, id, x, y, width, height ),
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_SoundBase( (MBCHAR **)NULL ),
-	m_statusText(NULL),
-	m_numberOfLayers(0), m_imagesPerLayer(0),
-	m_imageLayerList(NULL),
-	m_layerRenderFlags(NULL),
-	m_renderFlags(k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
+:
+	aui_Region              (retval, id, x, y, width, height),
+	aui_ImageBase           ((sint32) 0),
+	aui_TextBase            (NULL),
+	aui_SoundBase           ((MBCHAR **) NULL),
+	m_statusText            (NULL),
+	m_numberOfLayers        (0), 
+    m_imagesPerLayer        (0),
+	m_imageLayerList        (NULL),
+	m_layerRenderFlags      (NULL),
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
+    m_stringTable           (NULL),
+    m_allocatedTip          (false)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommon( ActionFunc, cookie );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -141,14 +146,6 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 {
-	
-	m_statusText= NULL;
-	m_numberOfLayers = 0;
-	m_imagesPerLayer = 0;
-	m_imageLayerList = NULL;
-	m_layerRenderFlags = NULL;
-	m_renderFlags = k_AUI_CONTROL_LAYER_FLAG_ALWAYS;
-
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
 	
@@ -221,8 +218,6 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 		if ( !AUI_NEWOK(m_stringTable,errcode) )
 			return AUI_ERRCODE_MEMALLOCFAILED;
 	}
-	else
-		m_stringTable = NULL;
 
 	
 	InitializeImageLayers(block);
@@ -241,9 +236,7 @@ AUI_ERRCODE aui_Control::InitCommon(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 {
-	m_stringTable = NULL;
-
-	m_window = NULL,
+    m_window = NULL,
 	m_allocatedTip = FALSE,
 	m_tip = NULL,
 	m_showingTip = FALSE,
@@ -265,27 +258,18 @@ AUI_ERRCODE aui_Control::InitCommon(
 
 aui_Control::~aui_Control()
 {
-	if ( m_stringTable )
-	{
-		delete m_stringTable;
-		m_stringTable = NULL;
-	}
-
+	delete m_stringTable;
 	
 	ReleaseKeyboardFocus();
 
-	if ( m_allocatedTip && m_tip )
+	if (m_allocatedTip)
 	{
 		delete m_tip;
-		m_tip = NULL;
-		m_allocatedTip = FALSE;
 	}
 	
-	
 	delete m_imageLayerList;
-	m_imageLayerList = NULL;
 	delete [] m_layerRenderFlags;
-	m_layerRenderFlags = NULL;
+    // m_statusText: reference only
 }
 
 
