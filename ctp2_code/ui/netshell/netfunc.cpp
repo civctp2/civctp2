@@ -16,6 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// _DEBUG
+// Generate debug information.
 // 
 //----------------------------------------------------------------------------
 //
@@ -23,9 +26,15 @@
 //
 // - Replaced typename T in specialized template member function by the 
 //   the type for that the function is specialized, by Martin Gühmann.
+// - Display the main thread function name in the debugger.
 //
 //----------------------------------------------------------------------------
 
+#include "c3.h"
+
+#if defined(_DEBUG)
+#include "debug.h"      // SetThreadName
+#endif
 #include "netfunc.h"
 #include <ras.h>
 
@@ -623,6 +632,10 @@ NETFunc::PortList::~PortList(void) {
 
 
 DWORD WINAPI NETFunc::ConnectThread(LPVOID t) {
+#if defined(_DEBUG)
+	SetThreadName("NETFunc::ConnectThread");
+#endif
+
 	result = dpCreate(&dp, ((TransportSetup *)t)->GetTransport(), ((TransportSetup *)t)->GetParams(), 0);
 	if (result == dp_RES_OK)
 		ExitThread(0);
@@ -634,6 +647,10 @@ DWORD WINAPI NETFunc::ConnectThread(LPVOID t) {
 
 
 DWORD WINAPI NETFunc::ReConnectThread(LPVOID r) {
+#if defined(_DEBUG)
+	SetThreadName("NETFunc::ReconnectThread");
+#endif
+
 	*((bool *)r) = false;
 	dpSetActiveThread(dp);
 	while (!(*((bool *)r))){

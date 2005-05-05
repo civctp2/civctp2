@@ -29,9 +29,6 @@
 // USE_LOGGING
 // - Enable logging facilities - even when not using the debug build.
 //
-// USE_DEBUG_THREAD_NAME
-// - Display thread name in the debugger
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -40,8 +37,9 @@
 // - includes fixed for case sensitive filesystems
 // - Removed unused CPU investigation references.
 // - Prevent memory leak report.
-// - Merged main GNU and MSVC code.
+// - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
+// - Display the main thread function name in the debugger.
 //
 //----------------------------------------------------------------------------
 
@@ -942,44 +940,6 @@ int ui_Process(void)
 
 
 
-
-int ui_Cleanup(void)
-{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	return 0;
-}
-
 sint32 sharedsurface_Initialize( void ) 
 {
 	
@@ -1584,37 +1544,14 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception);
 extern sint32 g_logCrashes;
 #endif
 
-static LONG _cdecl main_CivExceptionHandler (LPEXCEPTION_POINTERS pException)
+static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 {
+#if defined(_DEBUG)
+
+	MBCHAR * s;
 	
-
-	
-
-#ifdef _BFR_
-	
-	if(g_logCrashes) 
-#endif
-	{
-		FILE *crashLog = fopen("logs\\crash.txt", "w");
-		if(!crashLog)
-			crashLog = fopen("crash.txt", "w");
-
-		if(crashLog) {
-			fprintf(crashLog, "%s\n", c3debug_ExceptionStackTrace(pException));
-		}
-		fclose(crashLog);
-	}
-				
-	return EXCEPTION_EXECUTE_HANDLER;
-}
-
-#ifdef _DEBUG
-static LONG _cdecl main_CivDebugExceptionHandler (LPEXCEPTION_POINTERS exception_pointers)
-{
-	MBCHAR *s;
-
-	
-	switch (exception_pointers->ExceptionRecord->ExceptionCode) {
+	switch (pException->ExceptionRecord->ExceptionCode) 
+    {
 	case EXCEPTION_ACCESS_VIOLATION:		s = "Access Violation";		break;
 	case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:	s = "Array Bounds Exceeded"; break;
 	case EXCEPTION_BREAKPOINT:				s = "Breakpoint"; break;
@@ -1636,45 +1573,34 @@ static LONG _cdecl main_CivDebugExceptionHandler (LPEXCEPTION_POINTERS exception
 	case EXCEPTION_PRIV_INSTRUCTION:		s = "Privileged Instruction"; break;
 	case EXCEPTION_SINGLE_STEP:				s = "Single Step"; break;
 	case EXCEPTION_STACK_OVERFLOW:			s = "Stack Overflow"; break;
-	default:
-		s = "Unknown";
+	default:                        		s = "Unknown"; break;
 	}
 
 	DPRINTF(k_DBG_FIX, ("Exception: '%s' thrown.\n", s));
-
-	
-	s = c3debug_ExceptionStackTrace(exception_pointers);
-
+	s = c3debug_ExceptionStackTrace(pException);
 	DPRINTF(k_DBG_FIX, ("Exception Stack Trace:\n%s\n", s));
 
 	return EXCEPTION_CONTINUE_SEARCH;
-}
+
+#else // _DEBUG
+
+#ifdef _BFR_
+    if (g_logCrashes) 
 #endif
-
-static BOOL s_cleaningUpTheApp = FALSE;
-
-void main_ExceptionExecute(CivExceptionFunction function)
-{
-#if !defined(__GNUC__)	
-	__try
 	{
-		function();
-	}
-	
-	__except (main_CivExceptionHandler(GetExceptionInformation()))
-	{
+		FILE *crashLog = fopen("logs\\crash.txt", "w");
+		if(!crashLog)
+			crashLog = fopen("crash.txt", "w");
 
-		g_c3ui->DestroyDirectScreen();
-		ShowWindow(gHwnd, SW_HIDE);
-		
-		if (!s_cleaningUpTheApp) {
-			s_cleaningUpTheApp = TRUE;
-			g_civApp->CleanupApp();
+		if(crashLog) {
+			fprintf(crashLog, "%s\n", c3debug_ExceptionStackTrace(pException));
 		}
-
-		exit(-1);
+		fclose(crashLog);
 	}
-#endif // !defined(__GNUC__)
+				
+	return EXCEPTION_EXECUTE_HANDLER;
+
+#endif // _DEBUG
 }
 
 BOOL main_CheckDirectX(void)
@@ -1867,21 +1793,11 @@ void main_InitializeLogs(void)
 
 int main(int argc, char **argv)
 {
-    int r = CivMain(argc, argv);
+    int const   r = CivMain(argc, argv);
 
-    if (r < 0) {
-#if defined(_DEBUG)
-        DoFinalCleanup();
-#else
-        g_c3ui->DestroyDirectScreen();
-        ShowWindow(gHwnd, SW_HIDE);
-        if (!s_cleaningUpTheApp) {
-            s_cleaningUpTheApp = TRUE;
-            g_civApp->CleanupApp();
-        }
-
-        exit(r);
-#endif
+    if (r < 0) 
+    {
+        DoFinalCleanup(r);
     }
 
     return 0;
@@ -1893,40 +1809,31 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 {
     // This stuff will have to be moved into a new int main(int argc, char **argv)
     // once graphics are also ported to SDL
-# if defined(WIN32) || defined(_WINDOWS)
-#  if defined(_DEBUG) && defined(USE_DEBUG_THREAD_NAME)
+#if defined(WIN32) || defined(_WINDOWS)
+
+#if defined(_DEBUG)
 	SetThreadName("WinMain");
-#  endif	// _DEBUG
+#endif	// _DEBUG
+
     // Make sure old versions of DDHELP.EXE won't keep files open
     HINSTANCE handle = LoadLibrary("DDRAW.DLL");
     if (0 != handle) {
         FreeLibrary(handle);
         handle = 0;
     }
-# endif // WIN32 || _WINDOWS
+#endif // WIN32 || _WINDOWS
 
    	atexit(AtExitProc);
 
-	__try {
+	__try 
+    {
 		return CivMain(hInstance, hPrevInstance, szCmdLine, iCmdShow);
 	} 
-#ifdef _DEBUG
-	__except (main_CivDebugExceptionHandler(GetExceptionInformation())) {
+	__except (main_CivExceptionHandler(GetExceptionInformation()))
+    {
 		DoFinalCleanup();
 	}
-#else
-	__except (main_CivExceptionHandler(GetExceptionInformation())){
-		g_c3ui->DestroyDirectScreen();
-		ShowWindow(gHwnd, SW_HIDE);
-		
-		if (!s_cleaningUpTheApp) {
-			s_cleaningUpTheApp = TRUE;
-			g_civApp->CleanupApp();
-		}
 
-		exit(-1);
-	}
-#endif // _DEBUG
 	return 0;
 }
 
@@ -2168,27 +2075,59 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 
 
+#if defined(_DEBUG)
 
-void DoFinalCleanup(void)
+void DoFinalCleanup(int)
 {
 	if (!g_exclusiveMode)
+    {
 		main_RestoreTaskBar();
+    }
 
-	g_civApp->QuitGame();
-	
-	
-	delete g_civApp;
+    if (g_civApp)
+    {
+	    g_civApp->QuitGame();
+
+    	delete g_civApp;
+        g_civApp = NULL;
+    }
+
     sliccmd_clear_symbols();
 
 #ifdef _DEBUGTOOLS
-	
 	Debug_Close();
 #endif
 
-	
 	appstrings_Cleanup();
-
 }
+
+#else   // _DEBUG
+
+void DoFinalCleanup(int exitCode)
+{
+    static bool s_cleaningUpTheApp  = false;
+
+    if (g_c3ui)
+    {
+		g_c3ui->DestroyDirectScreen();
+    }
+
+	ShowWindow(gHwnd, SW_HIDE);
+
+	if (!s_cleaningUpTheApp) 
+    {
+		s_cleaningUpTheApp = true;
+
+        if (g_civApp)
+        {
+			g_civApp->CleanupApp();
+        }
+	}
+
+	exit(exitCode);
+}
+
+#endif  // _DEBUG
 
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 

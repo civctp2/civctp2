@@ -16,12 +16,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// _DEBUG
+// Generate extra debug information when set.
 // 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Repaired memory leaks
+// - Repaired memory leaks.
+// - Display the main thread function name in the debugger.
 //
 //----------------------------------------------------------------------------
 
@@ -32,6 +36,9 @@
 #include "SimpleDynArr.h"
 #include "zlib.h"
 
+#if defined(_DEBUG)
+#include "debug.h"  // SetThreadName
+#endif
 
 TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf, sint32 len,
 						 BOOL sendPacket)
@@ -202,6 +209,10 @@ NET_ERR NetThread::Init(NetIOResponse *response)
 void NetThread::Run()
 {
 	TPacketData *packet;
+
+#if defined(_DEBUG)
+	SetThreadName("NetThread::Run");
+#endif
 
 	while(!m_exit) {
 		Sleep(100);
