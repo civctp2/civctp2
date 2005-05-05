@@ -24,6 +24,7 @@
 // - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be 
 //   modifiable in const.txt.
 // - Added compatibility handling to solve database out of synch problems.
+// - Removed temporary compatibility, to force const.txt cleanup.
 //
 //----------------------------------------------------------------------------
 
@@ -95,56 +96,6 @@ bool ParseOptional
 	return false;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : ParseMandatoryAfterOptional
-//
-// Description: Parse a mandatory element from the input file
-//
-// Parameters : a_Token			: current token pointer
-//				t				: token to look for
-//
-// Globals    : g_abort_parse	: set when a parsing error occurs or 
-//								  the token is missing from the input file
-//
-// Returns    : bool			: set when the token was read from the file
-//				val				: value (from file or default)
-//
-// Remark(s)  : Modified version of token_ParseFloatNext
-//
-//----------------------------------------------------------------------------
-
-bool ParseMandatoryAfterOptional
-(
-	Token *			aToken, 
-	sint32 const	t, 
-	double &		val 
-)
-{
-	if ((aToken->GetType() == t) || (aToken->Next() == t))
-	{
-		// Keyword found: the number has to be valid
-		if (aToken->Next() == TOKEN_NUMBER)
-		{
-			aToken->GetFloat(val);
-			return true;
-		}
-		else
-		{ 
-			c3errors_ErrorDialog(aToken->ErrStr(), "Expected number not found");
-		} 
-	} 
-	else 
-	{ 
-		c3errors_ErrorDialog(aToken->ErrStr(), 
-							 "Expected keyword %s not found", 
-							 g_const_token_data[t - (TOKEN_MAX + 1)].keyword
-							);
-	}
-	
-	g_abort_parse = TRUE; 
-	return false;
-}
 
 } // namespace
 
@@ -1609,34 +1560,14 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if (!token_ParseValNext(const_token, TOKEN_RIOT_LEVEL,
 							m_riot_level)) return FALSE;
 
-	// Backwards compatibility code for the playtest releases up to 2004.06.28.
-	bool const	isOldPlayTest	= ParseOptional(const_token, 
-												TOKEN_MAX_MATCH_LIST_CYCLES, 
-												m_max_match_list_cycles, 
-												DEFAULT_MAX_MATCH_LIST_CYCLES
-											   );
-
-	if (isOldPlayTest)
+	if (!token_ParseFloatNext
+            (const_token, 
+             TOKEN_POWER_POINTS_TO_MATERIALS, 
+			 m_power_points_to_materials
+            )
+       )
 	{
-		if (!token_ParseFloatNext(const_token, 
-			                      TOKEN_POWER_POINTS_TO_MATERIALS,
-								  m_power_points_to_materials
-								 )
-		   ) 
-		{
-			return FALSE;
-		}
-	}
-	else
-	{
-		if (!ParseMandatoryAfterOptional(const_token, 
-									     TOKEN_POWER_POINTS_TO_MATERIALS, 
-										 m_power_points_to_materials
-										)
-		   )
-		{
-			return FALSE;
-		}
+		return FALSE;
 	}
 	if(!token_ParseValNext(const_token, TOKEN_MAX_AIRLIFT_STACK_SIZE,
 						   m_max_airlift_stack_size)) return FALSE;
@@ -1878,20 +1809,16 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if(!token_ParseValNext(const_token, TOKEN_POLLUTION_CAUSED_BY_NUKE,
 						   m_pollution_caused_by_nuke)) return FALSE;
 
-	if (!isOldPlayTest)
-	{
-		(void) ParseOptional(const_token, 
-							 TOKEN_MAX_MATCH_LIST_CYCLES, 
-							 m_max_match_list_cycles, 
-							 DEFAULT_MAX_MATCH_LIST_CYCLES
-							);	
-	}
-
 	(void) ParseOptional(const_token, 
-						 TOKEN_MIN_TURNS_BETWEEN_REVOLT,
-						 m_min_turns_between_revolt,
-						 DEFAULT_MIN_TURNS_BETWEEN_REVOLT
-						);
+		                 TOKEN_MAX_MATCH_LIST_CYCLES, 
+		                 m_max_match_list_cycles, 
+                         DEFAULT_MAX_MATCH_LIST_CYCLES
+					    );
+    (void) ParseOptional(const_token, 
+		        		 TOKEN_MIN_TURNS_BETWEEN_REVOLT,
+				         m_min_turns_between_revolt,
+					     DEFAULT_MIN_TURNS_BETWEEN_REVOLT
+					    );
 
 	return TRUE; 	
 }

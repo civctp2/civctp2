@@ -1,5 +1,3 @@
-
-
 # all numbers are integers ranging from 0 to 100
 
 PERCENT_LAND 40 # how much of the world is land
@@ -223,7 +221,6 @@ INDUSTRIAL_POLLUTION_WARNING_THRESHOLD	10	# industrial pollution warning message
 VERY_HAPPY_THRESHOLD	85			# threshold at which a city is considered "very happy"
 CITY_GROWTH_COEFFICIENT 175          # Amount of food per citizen required to grow a city
 RIOT_LEVEL              73
-MAX_MATCH_LIST_CYCLES 6 # Amount of AI match list cycles
 POWER_POINTS_TO_MATERIALS 1  # 1 power point can be converted to x materials
 MAX_AIRLIFT_STACK_SIZE 2
 GOLD_FROM_PIRACY 30
@@ -354,4 +351,6 @@ CARAVAN_COEF 0.004
 
 POLLUTION_CAUSED_BY_NUKE 1000000
 
+# Apolyton changes
+MAX_MATCH_LIST_CYCLES 6 # Amount of AI match list cycles
 MIN_TURNS_BETWEEN_REVOLT 1 # minimum number of turns from a city revolts until it is possible to revolt again

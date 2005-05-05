@@ -1,25 +1,4 @@
-#-----------------------------------------------------------------------------
-#
-#  Project      : Call To Power 2
-#  File type    : text
-#  Description  : Game constants (for the Magnificent Samurai scenario)
-# 
-# ----------------------------------------------------------------------------
-# 
-#  Disclaimer
-# 
-#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-# 
-#  This material has been developed at apolyton.net by the Apolyton CtP2 
-#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-# 
-#-----------------------------------------------------------------------------
-# 
-#  Modifications from the original Activision 1.11 patch text:
-# 
-#  - Added MAX_MATCH_LIST_CYCLES.
-# 
-#-----------------------------------------------------------------------------
+
 
 # all numbers are integers ranging from 0 to 100
 
@@ -244,7 +223,6 @@ INDUSTRIAL_POLLUTION_WARNING_THRESHOLD	10	# industrial pollution warning message
 VERY_HAPPY_THRESHOLD	85			# threshold at which a city is considered "very happy"
 CITY_GROWTH_COEFFICIENT 175          # Amount of food per citizen required to grow a city
 RIOT_LEVEL              73
-MAX_MATCH_LIST_CYCLES   6
 POWER_POINTS_TO_MATERIALS 1  # 1 power point can be converted to x materials
 MAX_AIRLIFT_STACK_SIZE 2
 GOLD_FROM_PIRACY 30
