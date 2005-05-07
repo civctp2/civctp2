@@ -1,3 +1,28 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Wonder type descriptor
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Governmenttype //added by E limiting wonders to certain governments
+#  - CultureOnly //added by E -- can only build wonders if civ has certain citystyle
+#  - CityStyleOnly //added by E -- can only build wonders at cities with certain citystyle 
+#  - PrerequisiteBuilding  // Added by E to limit wonders to cities with certain buildings
+# 
+#-----------------------------------------------------------------------------
 
 WonderMovie : File
 
@@ -8,7 +33,11 @@ Wonder {
 	StringId Description
 	Record Advance EnableAdvance
 	Record Advance [0..5] ObsoleteAdvance
-	Record Government[] GovernmentsModified
+	Record Building[] PrerequisiteBuilding  // Added by E to limit wonders to cities with certain buildings
+	Record Government[] GovernmentsModified  // Added by MrBaggins
+	Record CityStyle[] CultureOnly //added by E -- can only build wonders if civ has certain citystyle
+	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
+	Record CityStyle[] CityStyleOnly //added by E--can only build wonders at cities with certain citystyle 
 
 	# Flags
 	Bit(Int) ReduceReadinessCost
@@ -44,6 +73,9 @@ Wonder {
 	Bit(Int) OtherCivRandomAdvanceChance
 	Bit(Int) IncreaseProduction
 	Bit(Int) BonusGold
+	Bit CantBuildInSea					// Added by E to restrict some wonders to Land
+	Bit CantBuildOnLand					// Added by E to restrict some wonders to Sea				
+	Bit CoastalBuilding 					// Added by E to restrict some wonders to the Coast 
 
 	Bit(Int) IncreaseFoodAllCities
 	Bit(Int) TemporaryFullHappiness

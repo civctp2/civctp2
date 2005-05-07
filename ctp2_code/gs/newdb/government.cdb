@@ -1,3 +1,28 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Government type descriptor
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - IsAnarchy //FU; creates barbarian rebels during anarchy, collapsed-state
+#  - IsXenophobia //FU; trait that reduces pop for city's of different citystyle
+#  - CultureOnly //added by E -- can only be govt if civ has certain citystyle
+#  - IsParliamentary // FU; to bring back Civ2 Democracy where govt vetoes war
+# 
+#-----------------------------------------------------------------------------
 Government {
 	Float PositiveWorkdayCoef
 	Float NegativeWorkdayCoef
@@ -54,6 +79,7 @@ Float DefenseCoef
 
 Record Advance EnableAdvance
 Record Advance[0..5] ObsoleteAdvance
+Record CityStyle[] CultureOnly //added by E -- govt only if civ has certain citystyle
 
 Record Icon Icon
 Int GrowthRank
@@ -80,6 +106,9 @@ Int WarDiscontentMaxUnits
 Float WarDiscontentPerUnit
 
 	Bit IsEcotopia
+      Bit IsParliamentary //added for future use
+	Bit IsAnarchy //added for future use
+	Bit IsXenophobia //added for future use
 	Bit GLHidden
 
 	// The discovery of governments of the same rank 

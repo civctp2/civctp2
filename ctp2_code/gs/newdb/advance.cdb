@@ -1,12 +1,40 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : DbGen input
+#  Description  : Advance record definition
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - GovernmentType - added by E; a copy of unit Government type code
+#  - ExcludesAdvance - added by E; future use; allow some advances to close off 
+#                    other branches, possibly for future ages
+#  - CultureOnly - added by E; can only research if civ has certain citystyle
+# 
+#-----------------------------------------------------------------------------
 
 Advance {
 	Int Cost
 	Record Advance[0..4] Prerequisites
 	Record Advance[] Dependencies
 	Record Advance[] LeadsTo
+	Record Advance[] ExcludesAdvance //Future Use: allow some advances to close off other branches, possibly for future ages
 	Record Icon Icon
 	Record AdvanceBranch Branch
 	Record Age Age
+	Record CityStyle[] CultureOnly //added by E -- can only research if civ has certain citystyle
+	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
 
 	Bit DeepOcean
 	Bit Capitalization

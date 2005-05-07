@@ -1,4 +1,28 @@
-
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Building type descriptor
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - CultureOnly //added by E -- can only build buildings if civ has certain citystyle
+#  - CityStyleOnly //added by E--can only build buildings at cities with certain citystyle 
+#  - GovernmentType //added by E --- a copy of unit Government type code
+#  - OnePerCiv //FU; For "smallwonders"
+# 
+#-----------------------------------------------------------------------------
 Building {
 	# stuff every building has
 	Record Icon DefaultIcon
@@ -7,6 +31,9 @@ Building {
 	Record Advance[0..5] ObsoleteAdvance
 	Record Building[] PrerequisiteBuilding
 	Record Government[] GovernmentsModified
+	Record CityStyle[] CultureOnly //added by E -- can only build buildings if civ has certain citystyle
+	Record CityStyle[] CityStyleOnly //added by E--can only build buildings at cities with certain citystyle 
+	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
 	Int ProductionCost
 	Int Upkeep
 
@@ -48,6 +75,7 @@ Building {
 	Bit(Int)   RaiseMaxPopulation
 	Bit(Int)   StarvationProtection
 	Bit        CoastalBuilding				//DW - Added to fix bug #895
+      Bit        OnePerCiv
 
 	Bit(Float) OffenseBonusLand
 	Bit(Float) OffenseBonusWater

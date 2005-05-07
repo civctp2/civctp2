@@ -22,6 +22,14 @@
 // Modifications from the original Activision code:
 //
 // - Corrected non-standard syntax.
+// - Added a check in CanPlayerBuild for the CultureOnly flag to see if a   
+//   tile improvement is limited to certain CityStyles. - (E 2005/03/12)
+// - Added a check in terrainutil_CanPlayerBuild to check if a tile improvement
+//   is restricted to certain types of governments and if the player has 
+//   that government - (E 2005/03/12)
+// - Added a check in terrainutil_CanPlayerBuildAt for the IsRestrictedToGood 
+//   flag so a tile improvement can only be built on a tile with a 
+//   certain good on it - (E 2005/03/12)
 //
 //----------------------------------------------------------------------------
 
@@ -443,6 +451,27 @@ bool terrainutil_PlayerHasAdvancesFor(const TerrainImprovementRecord *rec, sint3
 	return false;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : terrainutil_CanPlayerBuild
+//
+// Description: Checks whether the city can build the improvement 
+//             
+// Parameters : checkMaterials   : Checks to see if player has materials  
+//                                 to build it.
+//              sint32 pl        : index of the player that is checked 
+//                                 for whether the terrain improvement 
+//                                 in question can be built
+//
+// Globals    : g_player:      The list of players
+//
+// Returns    : Whether the imp is available for a player to build.
+//
+// Remark(s)  : GovernmentType flag for improvements limits imps to govt type.
+//              CultureOnly flag added by E. It allows only civilizations with 
+//              the same CityStyle as CultureOnly's style to build that imp.
+//
+//----------------------------------------------------------------------------
 bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, bool checkMaterials)
 {
 	Assert(rec != NULL);
@@ -457,6 +486,34 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 	Assert(g_player[pl]);
 	if(!g_player[pl])
 		return false;
+
+// Added by E - Compares Improvement's GovernmentType to the Player's Government
+	if(rec->GetNumGovernmentType() > 0) {
+		sint32 i;
+		bool found = false;
+		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
+			if(rec->GetGovernmentTypeIndex(i) == g_player[pl]->GetGovernmentType()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+// Added by E - Compares Improvement's CultureOnly to the Player's CityStyle
+	if(rec->GetNumCultureOnly() > 0) {
+		sint32 s;
+		bool found = false;
+		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
+			if(rec->GetCultureOnlyIndex(s) == g_player[pl]->GetCivilisation()->GetCityStyle()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
 
 	if(terrainutil_PlayerHasAdvancesFor(rec, pl)) {
 		
@@ -496,6 +553,35 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 	return false;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       :  terrainutil_CanPlayerBuildAt
+//
+// Description:  Checks terrain improvement properties to see if the player 
+//               can build it on a tile 
+//
+// Parameters :  sint32 pl              : index of the player that is checked 
+//                                        for whether the terrain improvement 
+//                                        in question can be built
+//               const MapPoint &pos    : Variable for tile on map
+//               const TerrainImprovementRecord *rec    
+//                                      : terrain improvement record in the 
+//                                        terrain improvement database.
+// Globals    :   g_theWorld            : The game world properties
+//                g_player              : The list of players 
+//
+// Returns    :   bool                  : Returns true if an improvement 
+//                                        can be built on a tile
+//                                        false if the improvement cannot 
+//
+// Remark(s)  :   A new improvement attribute IsRestrictedToGood was 
+//                added by E. Modders will define this in tileimp.txt as 
+//                IsRestrictedToGood: X. The flag adds an additional option 
+//                in order to restrict ceratin improvements to goods, adding 
+//                new options and bonuses. 
+//              
+//
+//----------------------------------------------------------------------------
 bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos)
 {
 	sint32 i;
@@ -584,16 +670,26 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 			}
 		}
 		
-		
-		for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
-			if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
-				return FALSE;
+//added by E. Improvement can only be built on a tile with a certain good on it		
+		if(rec->GetNumIsRestrictedToGood () == 0) {
+			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
+				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
+					return false;
+				}
+			}
+		} 
+		else {
+			sint32 good;
+			if (g_theWorld->GetGood(pos, good)) {
+				for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
+					if(rec->GetIsRestrictedToGood(i) == good) {
+						return true; 
+					}  
+				}	 
+				return false;
 			}
 		}
 	}
-
-	
-	
 	return true;
 }
 

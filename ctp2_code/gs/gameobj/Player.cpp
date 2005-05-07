@@ -42,6 +42,9 @@
 //   (J Bytheway 2005/01/02)
 // - Synchronise the turn count when adding a new civilisation.
 // - Prevented memory leak reports (not actual leaks)
+// - CultureOnly code added to CanBuildUnit; limits unit construction by 
+//   comparing a unit's CultureOnly flag to a player's citystyle 
+//   by E April 20th 2005
 //
 //----------------------------------------------------------------------------
 
@@ -10169,6 +10172,27 @@ void Player::MakeConvertedCitiesUnhappy(sint32 convertedTo)
 BOOL Player::CanBuildInfrastructure() const { return m_can_build_infrastructure; }
 BOOL Player::CanBuildCapitalization() const { return m_can_build_capitalization; }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Player::CanBuildUnit
+//
+// Description: Checks whether the player can build the unit specified by type.
+//
+// Parameters : type: The unit type for that is checked whether the city can 
+//              build it.
+//
+// Globals    : g_player:     The list of players
+//              g_theUnitDB:  The unit database
+//              g_slicEngine: The slic engine
+//              G_TheWonderTracker: The list of wonders
+//
+// Returns    : Whether the player can build the unit specified by type.
+//
+// Remark(s)  : CultureOnly added by E; checks if a player can build a unit 
+//              by comparing the unit's CultureOnly flag to the player's 
+//              citystyle.
+//
+//-----------------------------------------------------------------------------
 BOOL Player::CanBuildUnit(const sint32 type) const
 {
 	const UnitRecord *rec = g_theUnitDB->Get(type);
@@ -10195,6 +10219,20 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 		bool found = false;
 		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
 			if(rec->GetGovernmentTypeIndex(i) == m_government_type) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+// Added by E - Compares Unit CultureOnly to the Player's CityStyle
+	if(rec->GetNumCultureOnly() > 0) {
+		sint32 s;
+		bool found = false;
+		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
+			if(rec->GetCultureOnlyIndex(s) == GetCivilisation()->GetCityStyle()) {
 				found = true;
 				break;
 			}

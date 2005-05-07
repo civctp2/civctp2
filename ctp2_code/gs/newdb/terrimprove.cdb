@@ -21,9 +21,18 @@
 #  - Added Freight for trade redirection.
 #  - Government modifier added.
 #  - DisplayLevel and CanPillage added to support visible wonders.
+#  - GovernmentType - added by E; a copy of unit Government type code
+#  - CultureOnly - added by E; can only research if civ has certain citystyle
+#  - IsRestrictedToGood - added by E; can only build imps if tile has good
+#  - Wonder and Urban Class - added by E; FutureUse; for visible wonders and citysprawl
+#  - CantPillage - added by E; FutureUse; prevent pillage of certain imps 
+#  - NeedsWorker - added by E; FutureUse; can't build unless IsWorker unit is on square
+#  - NeedsWaterSupply- added by E; FutureUse; can only build on rivers or adjacent to 
+#                      other IsWaterSupply imps
+#  - PlantGood - added by E; FutureUse; imp that places a good instead
+#
 # 
 #-----------------------------------------------------------------------------
-
 TerrainImprovement {
 	Bits Class {
 		Farm,
@@ -39,6 +48,8 @@ TerrainImprovement {
 		LandDetector,
 		OceanDetector,
 		Terraform
+		Wonder //added by E for visible wonders
+		Urban //added by E for future Urban Sprawl
 	}
 
 	Bits Excludes {
@@ -55,6 +66,8 @@ TerrainImprovement {
 		LandDetector,
 		OceanDetector,
 		Terraform
+		Wonder //added by E for visible wonders
+		Urban //added by E for future Urban Sprawl
 	}
 
 	Bits CanSee {
@@ -85,12 +98,16 @@ TerrainImprovement {
 		#Added by Martin Gühmann for Trade redirection
 		Bit(Int) Freight
 		Bit Radar
+		Bit CantPillage //futureUse added by E to prevent pillage of certain imps 
+		Bit NeedsWorker //futureUse - can't build unless IsWorker unit is on square
+		Bit NeedsWaterSupply //futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
 		Bit Airport
 		Bit ListeningPost
 		Bit Endgame
 		Bit(Int) VisionRange
 		Bit(Int) RadarRange
 		Bit(Float) DefenseBonus
+		Bit(Int) PlantGood //added by E for future imp that places a good instead
 		Record Advance EnableAdvance
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost
@@ -102,6 +119,9 @@ TerrainImprovement {
 	Record Sound Sound
 	Record Terrain[] CantBuildOn
 	Record Government[] GovernmentsModified
+	Record CityStyle[] CultureOnly //added by E -- can only build imps if civ has certain citystyle
+	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
+	Record Resource[] IsRestrictedToGood //added by E -- can only build imps if tile has good
 	Bit(Struct Effect) Effect
 	Struct Effect[] TerrainEffect
 

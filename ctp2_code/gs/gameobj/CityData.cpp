@@ -69,6 +69,18 @@
 //   of TurnsToNextPop methods, as private member m_turnsNextPop was never 
 //   accessed by a get method or was used in any other method.
 //   - April 23rd 2005 Martin Gühmann
+// - CityStyleOnly code added to CanBuildUnit, CanBuildBuilding, CanBuildWonder; 
+//   Checks if the style of city matches the citystyle flag for the unit, 
+//   building, or wonder - by E April 20th 2005
+// - CultureOnly added to CanBuildBuilding and CanBuildWonder; Checks if the 
+//   player's citystyle matches the citystyle flag for the building, or wonder 
+//   - by E April 20th 2005
+// - Governmenttype added to CanBuildWonder and CanBuildBuilding; Checks if
+//   the player's government matches the flag for the wonder or building - by E 
+//   April 20th 2005 
+// - PrerequisiteBuilding added to CanBuildUnit and CanBuildWonder; Checks if a 
+//   city has a building required to build the unit or wonder. - by E 
+//   April 30th 2005 
 //
 //----------------------------------------------------------------------------
 
@@ -4690,11 +4702,14 @@ BOOL CityData::CanHaveUIPopType(sint32 uitype) const
 // Globals    : g_player:     The list of players
 //              g_theUnitDB:  The unit database
 //              g_slicEngine: The slic engine
-//              g_theWorld:   The world prperties
+//              g_theWorld:   The world properties
 //
 // Returns    : Whether the city can build the unit specified by type.
 //
-// Remark(s)  : -
+// Remark(s)  : Added CityStyleOnly check to build units in specific
+//              CityStyle types.
+//            : Added PrerequisiteBuilding check to see if a city has a building
+//              needed to build a unit.
 //
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildUnit(sint32 type) const
@@ -4709,6 +4724,29 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 
 	MapPoint pos;
 	m_home_city.GetPos(pos);
+
+// Added by E - checks if a city has a building required to build the unit
+	if(rec->GetNumPrerequisiteBuilding() > 0) {
+		sint32 o;
+		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
+			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
+			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
+				return FALSE;
+		}
+	}
+// Added by E - Compares Unit CityStyle to the CityStyle of the City
+	if(rec->GetNumCityStyleOnly() > 0) {
+		sint32 s;
+		bool found = false;
+		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
+			if(rec->GetCityStyleOnlyIndex(s) == m_citystyle) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
 
 	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, TRUE, m_home_city.m_id, rec->GetIndex()))
 		return FALSE;
@@ -4745,6 +4783,30 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 	return TRUE;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CanBuildBuilding
+//
+// Description: Checks whether the city can build the building specified by 
+//              type.
+//
+// Parameters : type: The building type for that is checked whether the city  
+//              can build it.
+//
+// Globals    : g_player:        The list of players
+//              g_theBuildingDB: The building database
+//              g_slicEngine:    The slic engine
+//              g_theWorld:      The world properties
+//
+// Returns    : Whether the city can build the building specified by type.
+//
+// Remark(s)  : CityStyleOnly added by E. Limits certain buildings to be built  
+//              only at certain cities of certain styles.
+//              GovernmentType flag for Buidings limits Buildings to govt type.
+//              CultureOnly flag added by E. It allows only civilizations with 
+//              the same CityStyle as CultureOnly's style to build that building.
+//
+//----------------------------------------------------------------------------
 BOOL CityData::CanBuildBuilding(sint32 type) const
 {
 	if(g_exclusions->IsBuildingExcluded(type))
@@ -4802,10 +4864,77 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		}
 	}
 
+// Added GovernmentType flag from Units to use for Buildings
+	if(irec->GetNumGovernmentType() > 0) {
+		sint32 i;
+		bool found = false;
+		for(i = 0; i < irec->GetNumGovernmentType(); i++) {
+			if(irec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+// Added by E - Compares Building CityStyle to the CityStyle of the City
+	if(irec->GetNumCityStyleOnly() > 0) {
+		sint32 s;
+		bool found = false;
+		for(s = 0; s < irec->GetNumCityStyleOnly(); s++) {
+			if(irec->GetCityStyleOnlyIndex(s) == m_citystyle) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+// Added by E - Compares Building CultureOnly to the Player's CityStyle
+	if(irec->GetNumCultureOnly() > 0) {
+		sint32 s;
+		bool found = false;
+		for(s = 0; s < irec->GetNumCultureOnly(); s++) {
+			if(irec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
 
 	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, irec->GetIndex());
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CanBuildWonder
+//
+// Description: Checks whether the city can build the Wonder specified by 
+//              type.
+//
+// Parameters : type: The Wonder type for that is checked whether the city  
+//              can build it.
+//
+// Globals    : g_player:        The list of players
+//              g_theWonderDB:   The building database
+//              g_slicEngine:    The slic engine
+//              g_theWorld:      The world properties
+//
+// Returns    : Whether the city can build the wonder specified by type.
+//
+// Remark(s)  : CityStyleOnly added by E. Limits certain wonders to be built  
+//              only at certain cities of certain styles.
+//            : GovernmentType flag for wonders limits wonders to govt type.
+//            : CultureOnly flag added by E. It allows only civilizations with 
+//              the same CityStyle as CultureOnly's style to build that wonder.
+//            : PrerequisiteBuilding checks if a city has a building in order
+//              to build a wonder. Added by E.
+//
+//----------------------------------------------------------------------------
 BOOL CityData::CanBuildWonder(sint32 type) const
 {
 	if(g_exclusions->IsWonderExcluded(type))
@@ -4813,6 +4942,62 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 
 	if(!wonderutil_IsAvailable(type, m_owner))
 		return FALSE;
+
+
+// Added Wonder database 
+	const WonderRecord* rec = wonderutil_Get(type);
+
+// Added PrerequisiteBuilding checks if city has building to build wonder 
+	if(rec->GetNumPrerequisiteBuilding() > 0) {
+		sint32 o;
+		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
+			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
+			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
+				return FALSE;
+		}
+	}
+	
+// Added GovernmentType flag from Units to use for Wonders
+	if(rec->GetNumGovernmentType() > 0) {
+		sint32 i;
+		bool found = false;
+		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
+			if(rec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+// Added by E - Compares Wonder CityStyle to the CityStyle of the City
+	if(rec->GetNumCityStyleOnly() > 0) {
+		sint32 s;
+		bool found = false;
+		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
+			if(rec->GetCityStyleOnlyIndex(s) == m_citystyle) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+// Added by E - Compares Wonder CultureOnly to the Player's CityStyle
+	if(rec->GetNumCultureOnly() > 0) {
+		sint32 s;
+		bool found = false;
+		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
+			if(rec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
 
 	return g_slicEngine->CallMod(mod_CanCityBuildWonder, TRUE, m_home_city.m_id, type);
 }

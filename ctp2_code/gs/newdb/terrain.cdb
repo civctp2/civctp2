@@ -4,6 +4,9 @@ Resource {
 	Int Production = 0
     Int SpriteID
 	Float Probability
+      Bit //CantTrade
+	Record Advance             AvailableAdvance  //added by E FutureUse
+	Record Advance[0..5]        VanishAdvance    //added by E FutureUse
 	Record Sound Sound
 	Record Icon Icon
 	Record Government[] GovernmentsModified	
