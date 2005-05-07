@@ -15,10 +15,17 @@
 //
 //----------------------------------------------------------------------------
 //
+// Compiler flags
+//
+// - None
+// 
+//----------------------------------------------------------------------------
+//
 // Modifications from the original Activision code:
 //
-// added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show # turns until city grows
-// added IsImmobile( )const; PFT 10 apr 05, to identify immobile units
+// - Added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show # turns until city grows
+// - Added IsImmobile( )const; PFT 10 apr 05, to identify immobile units
+//
 //----------------------------------------------------------------------------
 
 #pragma once

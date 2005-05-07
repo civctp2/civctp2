@@ -42,6 +42,8 @@
 // - Replaced build list by those from GoodMod/Mymod, this sepeartes defense 
 //   and offense build lists and seperates the special untit build lists. So
 //   that there are now civs building Abolitionists.
+// - Increased priority for the refuel goal as it is now available for 
+//   units only that needs refueling. - April 30th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -254,7 +256,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_SUE                 Priority   470000  MaxEval  15  MaxExec   5 } //MG added
     GoalElement { Goal GOAL_INDULGENCE          Priority   440000  MaxEval  15  MaxExec   7 } //MG added
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval  15  MaxExec   7 } //MG added
-    GoalElement { Goal GOAL_REFUEL              Priority   470000  MaxEval   5  MaxExec   4 } //MG added
+    GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   405000  MaxEval  25  MaxExec   5 } //MG added
 
@@ -576,6 +578,16 @@ STRATEGY_BARBARIAN {
     GoalElement { Goal GOAL_RETREAT_SPECIAL     Priority        0  MaxEval   0  MaxExec   0 PerCity}
     GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
     GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ADVERTISING	        Priority        0  MaxEval   0  MaxExec   0 } //P1 added
+    GoalElement { Goal GOAL_INCITE_UPRISING     Priority        0  MaxEval   0  MaxExec   0 } //P1 added
+    GoalElement { Goal GOAL_POISON_CITY         Priority        0  MaxEval   0  MaxExec   0 } //P1 added
+    GoalElement { Goal GOAL_THROW_PARTY         Priority        0  MaxEval   0  MaxExec   0 } //MG added
+    GoalElement { Goal GOAL_SUE                 Priority        0  MaxEval   0  MaxExec   0 } //MG added
+    GoalElement { Goal GOAL_INDULGENCE          Priority        0  MaxEval   0  MaxExec   0 } //MG added
+    GoalElement { Goal GOAL_FAITH_HEALING       Priority        0  MaxEval   0  MaxExec   0 } //MG added
+    GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
+    GoalElement { Goal GOAL_PARADROP            Priority        0  MaxEval   0  MaxExec   0 } //MG added
+    GoalElement { Goal GOAL_RANGED_ATTACK       Priority        0  MaxEval   0  MaxExec   0 } //MG added
 
     // multiplied by #rounds to target
 	DistanceModifierFactor		     -250
@@ -1241,7 +1253,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_SUE                 Priority   480000  MaxEval  15  MaxExec   7 } //MG added
     GoalElement { Goal GOAL_INDULGENCE          Priority   420000  MaxEval  15  MaxExec   7 } //MG added
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval  15  MaxExec   7 } //MG added
-    GoalElement { Goal GOAL_REFUEL              Priority   470000  MaxEval   5  MaxExec   4 } //MG added
+    GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   505000  MaxEval  25  MaxExec   3 } //MG added
 
@@ -1703,7 +1715,7 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_SUE                 Priority   570000  MaxEval  25  MaxExec  15 } //MG added
     GoalElement { Goal GOAL_INDULGENCE          Priority   470000  MaxEval  15  MaxExec  15 } //MG added
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   465000  MaxEval  15  MaxExec  15 } //MG added
-    GoalElement { Goal GOAL_REFUEL              Priority   470000  MaxEval   5  MaxExec   4 } //MG added
+    GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   505000  MaxEval  25  MaxExec   5 } //MG added
 
@@ -2164,7 +2176,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_SUE                 Priority   455000  MaxEval  25  MaxExec  15 } //MG added
     GoalElement { Goal GOAL_INDULGENCE          Priority   454000  MaxEval  25  MaxExec  15 } //MG added
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   575000  MaxEval  25  MaxExec  15 } //MG added
-    GoalElement { Goal GOAL_REFUEL              Priority   470000  MaxEval   5  MaxExec   4 } //MG added
+    GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   509000  MaxEval  25  MaxExec   3 } //MG added
 
@@ -2624,7 +2636,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_SUE                 Priority   470000  MaxEval  10  MaxExec   5 } //MG added
     GoalElement { Goal GOAL_INDULGENCE          Priority   440000  MaxEval  10  MaxExec   7 } //MG added
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   445000  MaxEval  15  MaxExec   7 } //MG added
-    GoalElement { Goal GOAL_REFUEL              Priority   470000  MaxEval   5  MaxExec   4 } //MG added
+    GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   506000  MaxEval  25  MaxExec   3 } //MG added
 
@@ -3083,7 +3095,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_SUE                 Priority   430000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_INDULGENCE          Priority   440000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval   5  MaxExec   3 } //MG added
-    GoalElement { Goal GOAL_REFUEL              Priority   470000  MaxEval   5  MaxExec   4 } //MG added
+    GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   440000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   505000  MaxEval  25  MaxExec   4 } //MG added
 

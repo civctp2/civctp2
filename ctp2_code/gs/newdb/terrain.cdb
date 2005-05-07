@@ -2,9 +2,9 @@ Resource {
 	Int Gold
 	Int Food = 0
 	Int Production = 0
-    Int SpriteID
+	Int SpriteID
 	Float Probability
-      Bit //CantTrade
+//	Bit CantTrade
 	Record Advance             AvailableAdvance  //added by E FutureUse
 	Record Advance[0..5]        VanishAdvance    //added by E FutureUse
 	Record Sound Sound
@@ -16,11 +16,11 @@ Resource {
 Terrain {
 	# Int                   TerrainType
 	Record Icon           Icon
-    Record Advance        AddAdvance
-    Record Advance        RemoveAdvance
+	Record Advance        AddAdvance
+	Record Advance        RemoveAdvance
 	Bit                   CanDie
 	Bit GLHidden
-    
+
 	Struct TransformData {
 		Int Time
 		Int Materials
@@ -29,7 +29,7 @@ Terrain {
 	Bit(Struct TransformData) TransformAdd, TransformRemove
 
 	Struct Modifiers {
-	    Int Score
+		Int Score
 		Int Gold
 		Int DeadGold
 		Int Food

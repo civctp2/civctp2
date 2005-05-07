@@ -1,3 +1,30 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Unit type descriptor
+#
+# ----------------------------------------------------------------------------
+#
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+#  - Added new unit pretests:
+#    - UnitPretest_NoFuelThenCrash: To allow the AI to order planes back 
+#                                   when fuel is low.
+#    - UnitPretest_CanParadrop:     To allow paradropping.
+#    - April 23rd 2005 Martin Gühmann
+#  - Added TargetPretest:CanRefuel - April 30th 2005 Martin Gühmann
+#
+#-----------------------------------------------------------------------------
 
 Order {
   // gold needed
@@ -17,18 +44,19 @@ Order {
 
   // valid target for order
   Bits TargetPretest {
-	None,
-	EnemyCity,
-	OwnCity,
-	EnemyArmy,
+    None,
+    EnemyCity,
+    OwnCity,
+    EnemyArmy,
     EnemySpecialUnit,
     EnemySettler,
     EnemyTradeUnit,
-	TradeRoute,
+    TradeRoute,
     TerrainImprovement,
-	MovePosition,
+    MovePosition,
     AttackPosition,
     Transport,
+    CanRefuel,
     AdjacentPosition
   }
 
@@ -73,6 +101,8 @@ Order {
   Bit UnitPretest_CanBeTransported
   Bit UnitPretest_CanLaunch
   Bit UnitPretest_CanTarget
+  Bit UnitPretest_NoFuelThenCrash
+  Bit UnitPretest_CanParadrop
   Bit UnitPretest_Invalid
 
   Bit(Int) Range

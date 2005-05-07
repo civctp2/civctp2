@@ -22,6 +22,8 @@
 // Modifications from the original Activision code:
 //
 // - Relaxed assert
+// - Moved needs refueling check to Unit.cpp to remove code duplication.
+//   - April 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -79,22 +81,22 @@
 #include "radarwindow.h"
 #include "screenutils.h"
 
-extern SelectedItem				*g_selected_item; 
-extern World					*g_world;
-extern Director					*g_director;
+extern SelectedItem             *g_selected_item; 
+extern World                    *g_world;
+extern Director                 *g_director;
 extern Player                   **g_player;
 
 
-extern Pollution				*g_thePollution;
+extern Pollution                *g_thePollution;
 
 
 
 extern ProfileDB                *g_theProfileDB; 
 
-extern DifficultyDB				*g_theDifficultyDB;
+extern DifficultyDB             *g_theDifficultyDB;
 
 
-extern MessageModal				*g_modalMessage;
+extern MessageModal             *g_modalMessage;
 
 sint32 NewTurnCount::sm_the_stop_player = 1;
 
@@ -107,15 +109,15 @@ NewTurnCount::NewTurnCount()
 	m_sentGameOverMessage=false;
 }
 
-sint32 NewTurnCount::GetStopPlayer() 
-{ 
+sint32 NewTurnCount::GetStopPlayer()
+{
 	return sm_the_stop_player; 
 }
 
-void NewTurnCount::SetStopPlayer(const sint32 &player_index) 
-{ 
+void NewTurnCount::SetStopPlayer(const sint32 &player_index)
+{
 	sm_the_stop_player = player_index; 
-} 
+}
 
 
 void NewTurnCount::StartNextPlayer(bool stop)
@@ -123,17 +125,17 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	DPRINTF(1, ("NewTurnCount::StartNextPlayer(%d), curPlayer: %d\n", stop, g_selected_item->GetCurPlayer()));
 
 	static bool warned=false;
-    if (!VerifyEndTurn(warned))
+	if (!VerifyEndTurn(warned))
 	{
 		warned=true;
-        return;
+		return;
 	}
 	warned=false;
 
 	PLAYER_INDEX current_player = g_selected_item->GetCurPlayer();
 
 	if(g_network.IsClient()) {
-		g_network.SendAction(new NetAction(NET_ACTION_END_TURN));		
+		g_network.SendAction(new NetAction(NET_ACTION_END_TURN));
 		return;
 	}
 
@@ -177,7 +179,7 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		//	g_turn->SendNextPlayerMessage();
 		//}
 		
-		g_director->NextPlayer(); 
+		g_director->NextPlayer();
 		
 		g_director->AddCopyVision();
 		
@@ -193,12 +195,12 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	}
 
 	
-	if (stop || 
+	if (stop ||
 		(g_network.IsActive() &&
 		 (g_network.IsClient() || g_player[next_player]->GetPlayerType() != PLAYER_TYPE_ROBOT)))
 	{
 		NewTurnCount::SetStopPlayer(next_player);
-		g_director->NextPlayer(); 
+		g_director->NextPlayer();
 	}
 
 	if(g_network.IsHost() && GetStopPlayer() == next_player) {
@@ -253,7 +255,7 @@ void NewTurnCount::ChooseNextActivePlayer()
 		g_selected_item->NextPlayer();
 		g_director->NextPlayer();
 		count++;
-	} while( g_player[g_selected_item->GetCurPlayer()] == NULL ); 
+	} while( g_player[g_selected_item->GetCurPlayer()] == NULL );
 }
 
 
@@ -343,26 +345,26 @@ void NewTurnCount::RunNewYearMessages(void)
 			if(g_network.IsHost()) 
 			{
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_GAME_OVER_OUT_OF_TIME,
-											  highPlayer));
+				                              highPlayer));
 			}
 
-			for(i = 0; i < k_MAX_PLAYERS; i++) 
+			for(i = 0; i < k_MAX_PLAYERS; i++)
 			{
-				if(g_player[i]) 
+				if(g_player[i])
 				{
-					if(i == highPlayer) 
+					if(i == highPlayer)
 					{
 						g_player[i]->GameOver(GAME_OVER_WON_OUT_OF_TIME, -1);
-					} 
-					else 
+					}
+					else
 					{
 						g_player[i]->GameOver(GAME_OVER_LOST_OUT_OF_TIME, -1);
 					}
 				}
 			}
 			m_sentGameOverMessage = true;
-		} 
-		else 
+		}
+		else
 		{
 			g_theGameSettings->SetKeepScore(FALSE);
 		}
@@ -396,22 +398,20 @@ void NewTurnCount::SendMsgToAllPlayers(MBCHAR *s)
 
 BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 {
-    Player *player = g_player[g_selected_item->GetCurPlayer()];
+	Player *player = g_player[g_selected_item->GetCurPlayer()];
 
-    
-    if (player->GetPlayerType() != PLAYER_TYPE_HUMAN) {
-        return(TRUE);
-    }
-        
+
+	if (player->GetPlayerType() != PLAYER_TYPE_HUMAN) {
+		return(TRUE);
+	}
+
 	if(g_network.IsActive() && (g_network.IsSpeedStyle() || g_network.IsTimedStyle())) {
 		return TRUE;
 	}
 
 	if (g_modalMessage && !force)
-		
 		return FALSE;
 
-    
 	if(g_theCriticalMessagesPrefs->IsEnabled("16IAOutOfFuel")) {
 		if (g_slicEngine->GetSegment("16IAOutOfFuel")->TestLastShown(player->m_owner, 1)) {
 			int i;
@@ -424,19 +424,18 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 					continue;
 				if(unit->AccessData()->CheckForRefuel())
 					continue;
-				if ((unit->GetFuel() <= g_theConstDB->NonSpaceFuelCost() * (unit->GetMovementPoints() / 100.0))) {
+				if (unit->NeedsRefueling()) {
 					SlicObject *so = new SlicObject("16IAOutOfFuel") ;
 					so->AddRecipient(player->m_owner) ;
 					so->AddCivilisation(player->m_owner) ;
 					g_slicEngine->Execute(so) ;
 					return(FALSE);
 				}
-			}            
+			}
 		}
 	}
 
 
-    
 	if(g_theCriticalMessagesPrefs->IsEnabled("23IACityWillStarve")) {
 		if (g_slicEngine->GetSegment("23IACityWillStarve")->TestLastShown(player->m_owner, 1)) {
 			int i;
@@ -462,7 +461,7 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 		}
 	}
 
-    
+
 	if(g_theCriticalMessagesPrefs->IsEnabled("21IACannotAffordMaintenance")) {
 		if (g_slicEngine->GetSegment("21IACannotAffordMaintenance")->TestLastShown(player->m_owner, 1)) {
 			if (player->m_gold->BankruptcyImminent() &&
@@ -476,7 +475,7 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 		}
 	}
 
-    
+
 	if(g_theCriticalMessagesPrefs->IsEnabled("22IACannotAffordSupport")) {
 		if (g_slicEngine->GetSegment("22IACannotAffordSupport")->TestLastShown(player->m_owner, 1)) {
 			int i;
@@ -501,7 +500,7 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 			}
 		}
 	}
-        
 
-    return(TRUE);
+
+	return(TRUE);
 }

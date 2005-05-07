@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -24,6 +26,12 @@
 // - IsValid marked as const.
 // - AddDisplayName added.
 // - PFT 29 mar 05, show # turns until city next grows a pop
+// - Made GetFuel method const - April 24th 2005 Martin Gühmann
+// - Added NeedsRefueling method to remove code duplications.
+//   - April 24th 2005 Martin Gühmann
+// - Moved UnitValidForOrder from ArmyData to be able to access the Unit
+//   properties as well. - April 24th 2005 Martin Gühmann
+// - Implemented GovernmentModified for the UnitDB.  - April 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -198,7 +206,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		sint32 xx=1;
 	}
 	
-	if(!g_theUnitDB->Get(GetType())->GetIsTrader()) {
+	if(!g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType())->GetIsTrader()) {
 		AccessData()->KillVision();
 	}
 	
@@ -206,7 +214,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	GetPos(pos);
 	PLAYER_INDEX owner = GetOwner(); 
 	
-	if(!g_theUnitDB->Get(GetType())->GetIsTrader() && !IsTempSlaveUnit() &&
+	if(!g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType())->GetIsTrader() && !IsTempSlaveUnit() &&
 		!IsBeingTransported() && !HasLeftMap()) {
 		
 		r = g_theWorld->RemoveUnitReference(pos, *this);
@@ -295,7 +303,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 	
 
-	if(!g_theUnitDB->Get(GetType())->GetIsTrader()) {
+	if(!g_theUnitDB->Get(GetType())->GetIsTrader(), g_player[GetOwner()]->GetGovernmentType()) {
 		UpdateZOCForRemoval();
 	}
 			   
@@ -347,12 +355,12 @@ const UnitRecord * Unit::GetDBRec(void) const
 
 {
    UnitData *ptr = g_theUnitPool->GetUnit(m_id);
-   return g_theUnitDB->Get(ptr->GetType()); 
+   return g_theUnitDB->Get(ptr->GetType(), g_player[ptr->GetOwner()]->GetGovernmentType()); 
 }
 
 const UnitRecord * Unit::GetDBRec(UnitData *u) const
 {
-   return g_theUnitDB->Get(u->GetType()); 
+   return g_theUnitDB->Get(u->GetType(), g_player[u->GetOwner()]->GetGovernmentType()); 
 }
 
 const UnitData * Unit::GetData() const 
@@ -896,7 +904,7 @@ void Unit::SetHPToMax()
    SetHP(GetDBRec()->GetMaxHP());
 }
 
-sint32 Unit::GetFuel()
+sint32 Unit::GetFuel() const
 { 
     return GetData()->GetFuel(); 
 } 
@@ -2586,8 +2594,10 @@ void Unit::CheckVisionRadius()
 
 BOOL UnitCanCarry(sint32 dest, sint32 src)
 { 
-    const UnitRecord *drec = g_theUnitDB->Get(dest); 
-    const UnitRecord *srec = g_theUnitDB->Get(src);
+	const UnitRecord *drec = g_theUnitDB->Get(dest); 
+	const UnitRecord *srec = g_theUnitDB->Get(src);
+//	const UnitRecord *drec = g_theUnitDB->Get(dest, g_player[GetOwner()]->GetGovernmentType()); // Owner has to be passed
+//	const UnitRecord *srec = g_theUnitDB->Get(src, g_player[GetOwner()]->GetGovernmentType());
 
 
     if (!drec->GetCanCarry()) {
@@ -2652,3 +2662,147 @@ CityData *Unit::GetCityData() const
 	return AccessData()->GetCityData();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Unit::NeedsRefueling
+//
+// Description: Checks whether the given Unit has to be refueled.
+//
+// Parameters : -
+//
+// Globals    : g_theConstDB: The const database
+//
+// Returns    : bool:         true:  The Unit has to be refueled
+//                            false: Otherwise
+//
+// Remark(s)  : Does not check whether the Unit needs fuel.
+//
+//----------------------------------------------------------------------------
+bool Unit::NeedsRefueling() const
+{
+	return GetFuel() <= g_theConstDB->NonSpaceFuelCost() * (GetMovementPoints() / 100.0);
+}
+
+//----------------------------------------------------------------------------
+//
+//  Name       : Unit::UnitValidForOrder
+//
+//  Description: Test if a unit passes an order's UnitPretest
+//
+//  Parameters : OrderRecord * order_rec : The order's order record 
+//
+//  Globals    : g_theUnitDB             : The unit database
+//
+//  Returns    : bool   : true if the unit passes order_rec's UnitPretest
+//                      : false otherwise
+//
+//  Remark(s)  : - 
+//
+//  Called by  : 
+//
+//----------------------------------------------------------------------------
+bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
+{
+	const UnitRecord *unit_rec = g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType());
+
+	UnitRecord::ChanceEffect *chance_data;
+	UnitRecord::InvestigateCityData *investigate_data;
+	UnitRecord::StealTechnologyData *steal_data;
+	UnitRecord::InciteRevolutionData *incite_data;
+	UnitRecord::AssasinateRulerData *assasinate_data;
+	UnitRecord::CauseUnhappinessData *unhappiness_data;
+	UnitRecord::PlantNukeData *plant_data;
+	UnitRecord::SlaveRaidsData *raid_data;
+	UnitRecord::SuccessDeathEffect *success_death_data;
+
+	bool order_valid = false;
+
+	
+	if(order_rec->GetUnitPretest_CanAttack())
+		order_valid = (unit_rec->GetAttack() > 0.0 );
+	else if(order_rec->GetUnitPretest_CanEntrench())
+		order_valid = unit_rec->GetCanEntrench();
+//	else if(order_rec->GetUnitPretest_CanSueFranchise())
+//		order_valid = unit_rec->GetCanSueFranchise();
+	else if(order_rec->GetUnitPretest_CanSue())
+		order_valid = unit_rec->GetCanSue();
+	else if(order_rec->GetUnitPretest_CanCreateFranchise())
+		order_valid = unit_rec->GetCreateFranchise(chance_data);
+	else if(order_rec->GetUnitPretest_CanInvestigateCity())
+		order_valid = unit_rec->GetInvestigateCity(investigate_data);
+	else if(order_rec->GetUnitPretest_CanBombard())
+		order_valid = (unit_rec->GetCanBombard() != 0x0);
+	else if(order_rec->GetUnitPretest_CanSettle())
+		order_valid = (unit_rec->GetSettleLand() || unit_rec->GetSettleWater());
+	else if(order_rec->GetUnitPretest_CanStealTechnology())
+		order_valid = unit_rec->GetStealTechnology(steal_data);
+	else if(order_rec->GetUnitPretest_CanInciteRevolution())
+		order_valid = unit_rec->GetInciteRevolution(incite_data);
+	else if(order_rec->GetUnitPretest_CanAssassinateRuler())
+		order_valid = unit_rec->GetAssasinateRuler(assasinate_data);
+	else if(order_rec->GetUnitPretest_CanExpel())
+		order_valid = unit_rec->GetCanExpel();
+	else if(order_rec->GetUnitPretest_EstablishEmbassy())
+		order_valid = unit_rec->GetEstablishEmbassy();
+	else if(order_rec->GetUnitPretest_ThrowParty())
+		order_valid = unit_rec->GetThrowParty();
+	else if(order_rec->GetUnitPretest_CanCauseUnhappiness())
+		order_valid = unit_rec->GetCauseUnhappiness(unhappiness_data);
+	else if(order_rec->GetUnitPretest_CanPlantNuke())
+		order_valid = unit_rec->GetPlantNuke(plant_data);
+	else if(order_rec->GetUnitPretest_CanSlaveRaid())
+		order_valid = unit_rec->GetSlaveRaids(raid_data);
+	else if(order_rec->GetUnitPretest_CanEnslaveSettler())
+		order_valid = unit_rec->GetSettlerSlaveRaids();
+	else if(order_rec->GetUnitPretest_CanUndergroundRailway())
+		order_valid = unit_rec->GetUndergroundRailway(success_death_data);
+	else if(order_rec->GetUnitPretest_CanInciteUprising())
+		order_valid = unit_rec->GetSlaveUprising();
+	else if(order_rec->GetUnitPretest_CanBioTerror())
+		order_valid = unit_rec->GetBioTerror(chance_data);
+	else if(order_rec->GetUnitPretest_CanPlague())
+		order_valid = unit_rec->GetPlague(chance_data);
+	else if(order_rec->GetUnitPretest_CanNanoInfect())
+		order_valid = unit_rec->GetNanoTerror(chance_data);
+	else if(order_rec->GetUnitPretest_CanConvertCity())
+		order_valid = unit_rec->GetConvertCities(success_death_data);
+	else if(order_rec->GetUnitPretest_CanReformCity())
+		order_valid = unit_rec->GetCanReform();
+	else if(order_rec->GetUnitPretest_CanSellIndulgences())
+		order_valid = unit_rec->GetIndulgenceSales();
+//	else if(order_rec->GetUnitPretest_CanFaithHeal())
+//		order_valid = false;
+	else if(order_rec->GetUnitPretest_CanSoothsay())
+		order_valid = unit_rec->GetCanSoothsay();
+	else if(order_rec->GetUnitPretest_CanCreatePark())
+		order_valid = unit_rec->GetCreateParks();
+	else if(order_rec->GetUnitPretest_CanPillage())
+		order_valid = unit_rec->GetCanPillage();
+	else if(order_rec->GetUnitPretest_CanInjoin())
+		order_valid = unit_rec->GetCanInjoin();
+	else if(order_rec->GetUnitPretest_CanInterceptTrade())
+		order_valid = unit_rec->GetCanPirate();
+	else if(order_rec->GetUnitPretest_CanAdvertise())
+		order_valid = unit_rec->GetAdvertise();
+	else if(order_rec->GetUnitPretest_CanNukeCity())
+		order_valid = unit_rec->GetNuclearAttack();
+	else if(order_rec->GetUnitPretest_CanTransport())
+		order_valid = unit_rec->GetCargoData();
+	else if(order_rec->GetUnitPretest_CanBeTransported())
+		order_valid = unit_rec->GetSizeMedium() || 
+			unit_rec->GetSizeSmall();
+	else if(order_rec->GetUnitPretest_CanLaunch())
+		order_valid = unit_rec->GetSpaceLaunch();
+	else if(order_rec->GetUnitPretest_CanTarget())
+		order_valid = unit_rec->GetNuclearAttack();
+	else if(order_rec->GetUnitPretest_NoFuelThenCrash()
+	     && unit_rec->GetNoFuelThenCrash()
+	     &&!unit_rec->GetSingleUse())
+		order_valid = NeedsRefueling();
+//	else if(order_rec->GetUnitPretest_CanParadrop())
+//		order_valid = unit_rec->GetParatrooperTransport();
+	else if(order_rec->GetUnitPretest_None())
+		order_valid = true;
+
+	return order_valid;
+}

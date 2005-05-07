@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Army data handling
 //
 //----------------------------------------------------------------------------
 //
@@ -34,6 +34,8 @@
 // - CanTransport method added. - Calvitix
 // - Added IsWounded method - Calvitix
 // - Added a isstealth paramater in characterizeArmy method - Calvitix
+// - Moved UnitValidForOrder to Unit.h to be able to access the Unit 
+//   properties. - April 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -69,12 +71,12 @@ enum ORDER_RESULT;
 
 class OrderRecord;
 enum ORDER_TEST {
-	ORDER_TEST_OK,					
-	ORDER_TEST_ILLEGAL,		    	
-	ORDER_TEST_LACKS_GOLD,	    	
-	ORDER_TEST_NEEDS_TARGET,		
-	ORDER_TEST_INVALID_TARGET,		
-	ORDER_TEST_NO_MOVEMENT			
+	ORDER_TEST_OK,
+	ORDER_TEST_ILLEGAL,
+	ORDER_TEST_LACKS_GOLD,
+	ORDER_TEST_NEEDS_TARGET,
+	ORDER_TEST_INVALID_TARGET,
+	ORDER_TEST_NO_MOVEMENT
 };
 
 #include "Army.h"
@@ -95,15 +97,15 @@ public:
 class ArmyData : public GAMEOBJ,
 				 public CellUnitList,
 				 public CityRadiusCallback
-{ 
+{
 
-private:   
+private:
 	friend class NetArmy;
 
-	UnitDynamicArray *m_tempKillList;  
-	                                   
-	                                   
-	UnitDynamicArray *m_attackedByDefenders; 
+	UnitDynamicArray *m_tempKillList;
+
+
+	UnitDynamicArray *m_attackedByDefenders;
 	PointerList<Order> *m_orders;
 	PLAYER_INDEX m_owner;
 	MapPoint m_pos;
@@ -115,10 +117,10 @@ private:
 	sint32 m_reentryTurn;
 	MapPoint m_reentryPos;
 
-	
+
 	uint8 m_debugStringColor;
-	
-	
+
+
 	PointerList<KillRecord> *m_killMeSoon;
 	Army m_debarked;
 
@@ -131,9 +133,9 @@ private:
 	
 	MBCHAR *m_debugString;	
 
-public: 
+public:
 
-	
+
 
 
 	ArmyData(const Army &army, const UnitDynamicArray &units);
@@ -155,7 +157,7 @@ public:
 	void GetPos(MapPoint &pos) const { pos = m_pos; }
 	MapPoint RetPos() const { return m_pos; }
 
-    uint32 GetMovementType() const; 
+	uint32 GetMovementType() const; 
 	uint32 GetCargoMovementType() const;
 	BOOL HasCargo() const;
 	BOOL GetCargo(sint32 &transports, sint32 &max, sint32 &empty) const;
@@ -163,10 +165,10 @@ public:
 
 	sint16 CountMovementTypeSea() const;
 
-    BOOL CanSettle(const MapPoint &pos) const;
-    BOOL CanSettle() const;
+	BOOL CanSettle(const MapPoint &pos) const;
+	BOOL CanSettle() const;
 
-    bool CanTransport() const;
+	bool CanTransport() const;
 	bool IsWounded() const;
 
 	BOOL IsAsleep() const;
@@ -181,21 +183,21 @@ public:
 	BOOL IsPatrolling() const;
 	void SetPatrolling(BOOL p);
 
-    void GetActors(Unit &excludeMe, UnitActor **restOfStack);
+	void GetActors(Unit &excludeMe, UnitActor **restOfStack);
 
-    void GroupArmy(Army &addme); 
+	void GroupArmy(Army &addme); 
 	void GroupAllUnits();
 	void GroupUnit(Unit &unit);
 	void UngroupUnits();
 
-    void FastKill();
+	void FastKill();
 
 	void CityRadiusFunc(const MapPoint &pos);
 	void GetActiveDefenders(UnitDynamicArray &input, 
-							UnitDynamicArray &output,
-							BOOL isCargoPodCheck);
+	                        UnitDynamicArray &output,
+	                        BOOL isCargoPodCheck);
 	BOOL CheckActiveDefenders(MapPoint &pos, 
-							  BOOL isCargoPodCheck);
+	                          BOOL isCargoPodCheck);
 	
 	void BeginTurn();
 	BOOL CanFight(CellUnitList &defender);
@@ -220,32 +222,32 @@ public:
 	ORDER_RESULT Expel(const MapPoint &point);
 
 	BOOL CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount,
-							 sint32 &uindex) const;
+	                         sint32 &uindex) const;
 	BOOL CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount) const;
 	ORDER_RESULT CauseUnhappiness(const MapPoint &point, sint32 uindex);
 	
 	BOOL CanPlantNuke(double &chance, double &escape_chance,
-					  sint32 &uindex) const;
+	                  sint32 &uindex) const;
 	BOOL CanPlantNuke(double &chance, double &escape_chance) const;
 	ORDER_RESULT PlantNuke(const MapPoint &point);
 	void SetPositionAndFixActors(const MapPoint &p);
 	void FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray &revealedUnits);
 
 	BOOL CanSlaveRaid(double &success, double &death, 
-					  sint32 &timer, sint32 &amount,
-					  sint32 &uindex) const;
+	                  sint32 &timer, sint32 &amount,
+	                  sint32 &uindex) const;
 	BOOL CanSlaveRaid(double &success, double &death, 
 					  sint32 &timer, sint32 &amount) const;
 	ORDER_RESULT SlaveRaid(const MapPoint &point);
 
-    BOOL IsSlaveRaidPossible(const MapPoint &point, 
-							 double &success, double &death, sint32 &timer, sint32 &amount,
-							 sint32 &uindex, BOOL &target_is_city, Unit &target_city, Unit &home_city);
+	BOOL IsSlaveRaidPossible(const MapPoint &point, 
+	                         double &success, double &death, sint32 &timer, sint32 &amount,
+	                         sint32 &uindex, BOOL &target_is_city, Unit &target_city, Unit &home_city);
 
 	BOOL CanEnslaveSettler(sint32 &uindex) const;
 	ORDER_RESULT EnslaveSettler(const MapPoint &point, const sint32 uindex, Unit home_city);
 	BOOL CanUndergroundRailway(double &success, double &death,
-							   sint32 &uindex) const;
+	                           sint32 &uindex) const;
 	BOOL CanUndergroundRailway(double &success, double &death) const;
 	ORDER_RESULT UndergroundRailway(const MapPoint &point);
 	BOOL CanInciteUprising(sint32 &uindex) const;
@@ -331,10 +333,10 @@ public:
 	BOOL HasLeftMap() const;
 	BOOL CanNukeCity() const;
 
-    void CurMinMovementPoints(double &cur) const; 
-    void MinMovementPoints(double &cur) const; 
+	void CurMinMovementPoints(double &cur) const; 
+	void MinMovementPoints(double &cur) const; 
 
-    void ThisMeansWAR(PLAYER_INDEX denfender);
+	void ThisMeansWAR(PLAYER_INDEX denfender);
 
 	
 	
@@ -345,7 +347,7 @@ public:
 	BOOL BombardCity(const MapPoint &point, BOOL doAnimations);
 	ORDER_RESULT Bombard(const MapPoint &point);
 
-	
+
 
 
 	sint32 NumOrders() const;
@@ -354,23 +356,23 @@ public:
 	void AddOrders(UNIT_ORDER_TYPE order, const MapPoint &point);
 	void AddOrders(UNIT_ORDER_TYPE order);
 	void AutoAddOrders(UNIT_ORDER_TYPE order, Path *path, 
-					   const MapPoint &point, sint32 argument);
+	                   const MapPoint &point, sint32 argument);
 	void AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
-								const MapPoint &point, sint32 argument);
+	                            const MapPoint &point, sint32 argument);
 
 	void AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &point,
-				   sint32 argument, GAME_EVENT passedEvent = GEV_MAX);
+	               sint32 argument, GAME_EVENT passedEvent = GEV_MAX);
 
 	void ClearOrders();
 	void ClearOrdersExceptGroupUnits();
 	BOOL ExecuteOrders(bool propagate = true);
-    void InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos);
+	void InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos);
 
 	void ResumePatrol();
 	void ForgetPatrol();
 
 	BOOL IsOccupiedByForeigner(const MapPoint &pos);
-    
+
 	sint32 NumUnitsCanMoveIntoThisTransport(const CellUnitList &transports) const;
 	BOOL CanMoveIntoTransport(const MapPoint &pos, CellUnitList &transports) const;
 	BOOL CanMoveIntoThisTransport(const CellUnitList &transports) const;
@@ -395,15 +397,15 @@ public:
 	void SetKiller(PLAYER_INDEX who);
 
 	void AddDeath(const Unit &unit, CAUSE_REMOVE_ARMY cause,
-				  PLAYER_INDEX who);
-    BOOL HasBeenAdded() const { return m_hasBeenAdded; }
+	              PLAYER_INDEX who);
+	BOOL HasBeenAdded() const { return m_hasBeenAdded; }
 
 	sint32 GetMinFuel();
-    void CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const; 
+    void CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const;
 
 	BOOL CanMove();
 
-	
+
 	BOOL CanBeachAssault() const;
 	BOOL CanHearGossip() const;
 	BOOL CanSlaveUprising() const;
@@ -428,15 +430,15 @@ public:
 	void SetTurnOver();
 	BOOL TurnOver();
 
-    BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & used_vision) const;
+	BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & used_vision) const;
 
 	static BOOL GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost );
 	static BOOL GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );
 
-	
-	
 
-	
+
+
+
 
 
 	BOOL ExecuteMoveOrder(Order *order);
@@ -448,17 +450,17 @@ public:
 	BOOL CheckSpecialUnitMove(const MapPoint &pos);
 	BOOL MoveIntoForeigner(const MapPoint &pos);
 	BOOL VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
-					  sint32 defense_owner);
+	                  sint32 defense_owner);
 
 	BOOL ExertsZOC() const;
 	void UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d);
 	void RevealZOCUnits(const MapPoint &pos);
 	BOOL MoveIntoCell(const MapPoint &pos,
-					  UNIT_ORDER_TYPE order, WORLD_DIRECTION d);
+	                  UNIT_ORDER_TYPE order, WORLD_DIRECTION d);
 
 	void MoveActors(const MapPoint &pos,
-					UnitDynamicArray &revealedUnits,
-					BOOL teleport = FALSE);
+	                UnitDynamicArray &revealedUnits,
+	                BOOL teleport = FALSE);
 	void MoveUnits(const MapPoint &pos);
 	void DeductMoveCost(const MapPoint &pos);
 
@@ -487,40 +489,40 @@ public:
 
 	void FinishUnloadOrder(Army &unloadingArmy, MapPoint &to_pt);
 
-	
+
 
 
 	Path *RemovePathedOrder();
 
-	
+
 	void CharacterizeArmy( bool & isspecial, 
- 						   bool & isstealth,
-		 			       sint32 & maxattack, 
-						   sint32 & maxdefense, 
-						   bool & cancapture,
-						   bool & haszoc,
-						   bool & canbombard) const;
+	                       bool & isstealth,
+	                       sint32 & maxattack, 
+	                       sint32 & maxdefense, 
+	                       bool & cancapture,
+	                       bool & haszoc,
+	                       bool & canbombard) const;
 
 	
 	BOOL IsCivilian() const;
 
 	
 	void GetArmyStrength( sint32 & hitpoints, 
-						  sint32 & defense_count, 
-						  sint32 & ranged_count, 
-						  sint32 & attack_strength,
-						  sint32 & defense_strength,
-						  sint32 & ranged_strength,
-					      sint32 & total_value ) const;
+	                      sint32 & defense_count, 
+	                      sint32 & ranged_count, 
+	                      sint32 & attack_strength,
+	                      sint32 & defense_strength,
+	                      sint32 & ranged_strength,
+	                      sint32 & total_value ) const;
 
 	bool CanPerformSpecialAction() const;
 	void CheckAddEventOrder();
 	void IncrementOrderPath();
 
 
-	
-	
-	
+
+
+
 
 	
 	bool CheckValidDestination(const MapPoint &dest) const;
@@ -538,79 +540,76 @@ public:
 	uint8 GetDebugStringColor(void) const { return m_debugStringColor; }
 	void SetDebugStringColor(uint8 color) { m_debugStringColor = color; }
 
-	
-	
+
+
 	bool TestOrderAll(const OrderRecord *order_rec) const;
 	bool TestOrderAny(const OrderRecord * order_rec) const;
 	
 	
 	bool TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) const;
 
-	
+
 	ORDER_TEST TestOrder(const OrderRecord * order_rec) const;
 
-	
+
 	ORDER_TEST TestOrderHere(const OrderRecord * order_rec, const MapPoint & pos) const;
 
 	
 	ORDER_TEST CargoTestOrderHere(const OrderRecord * order_rec, const MapPoint & pos) const;
 
-	
+
 	void PerformOrder(const OrderRecord * order_rec);
 
-	
+
 	void PerformOrderHere(const OrderRecord * order_rec, const Path *path);
 
-	
+
 	bool IsObsolete() const;
 
 	void StopPirating();
 
-	
+
 	const MBCHAR *GetName() const;
 	void SetName(const MBCHAR *name);
 
-	
+
 	bool PlayerCanSee(const PLAYER_INDEX playerId) const;
 
-	
+
 	sint16 CountNuclearUnits() const;
 
-	
+
 	sint16 CountBioUnits() const;
 
-	
+
 	sint16 CountNanoUnits() const;
 
-	
+
 	sint16 DisbandNuclearUnits(const sint16 count);
 
-	
+
 	sint16 DisbandBioUnits(const sint16 count);
 
-	
+
 	sint16 DisbandNanoUnits(const sint16 count);
 
-	
+
 	static bool TargetValidForOrder(const OrderRecord * order_rec, const MapPoint &pos);
 
-	
-	static bool UnitValidForOrder(const OrderRecord * order_rec, const UnitRecord *unit_rec);
 
-	
 	bool HasVeterans() const;
 
-	
-	
-	
-	
+
+
+
+
 
 private:
 
-	
+
 	static sint32 *s_orderDBToEventMap;
 
-	
+
 	static void AssociateEventsWithOrdersDB();
 };
 

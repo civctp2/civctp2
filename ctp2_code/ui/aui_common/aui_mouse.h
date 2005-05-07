@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Mouse User Interface
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Increased k_MOUSE_MAXNUMCURSORS to allow some additional cursors. 
+//   - April 30th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #ifndef __AUI_MOUSE_H__
 #define __AUI_MOUSE_H__
@@ -24,7 +43,6 @@ class aui_Image;
 class aui_DirtyList;
 class ldl_datablock;
 
-
 #define k_MOUSE_LDL_NUMCURSORS	"numcursors"
 #define k_MOUSE_LDL_ANIM		"anim"
 #define k_MOUSE_LDL_CURSOR		"cursor"
@@ -38,7 +56,6 @@ class ldl_datablock;
 #define k_MOUSE_EVENT_FLAG_RSHIFT		0x00000002
 #define k_MOUSE_EVENT_FLAG_LCONTROL		0x00000004
 #define k_MOUSE_EVENT_FLAG_RCONTROL		0x00000008
-
 
 
 struct aui_MouseEvent
@@ -55,19 +72,13 @@ struct aui_MouseEvent
 };
 
 
-
 #define k_MOUSE_MAXINPUT			48
-
 
 #define k_MOUSE_MAXSIZE				64
 
-
-#define k_MOUSE_MAXNUMCURSORS		90
-
+#define k_MOUSE_MAXNUMCURSORS		96
 
 #define k_MOUSE_DEFAULTANIMDELAY	100
-
-
 
 
 class aui_Mouse : public aui_Base, public virtual aui_Input
@@ -194,16 +205,13 @@ protected:
 
 	aui_MouseEvent	m_data;			
 	double			m_sensitivity;	
-									
 
-	aui_MouseEvent	m_inputs[ k_MOUSE_MAXINPUT ]; 
-
+	aui_MouseEvent	m_inputs[ k_MOUSE_MAXINPUT ];
 	aui_Surface		*m_privateMix;
 	aui_Surface		*m_pickup;
 	aui_Surface		*m_prevPickup;
 
-	RECT		m_clip;			
-
+	RECT		m_clip;
 	aui_Cursor	*m_cursors[ k_MOUSE_MAXNUMCURSORS ];
 	aui_Cursor	**m_curCursor;	
 	sint32		m_firstIndex;	

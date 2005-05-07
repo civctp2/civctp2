@@ -1,4 +1,31 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Cursor Manager, with cursor indeces
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added 6 new cursor indeces. - April 30th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __CURSORMANAGER_H__
@@ -98,6 +125,13 @@ enum CURSORINDEX {
 	CURSORINDEX_PLAGUE_INVALID,
 	CURSORINDEX_FAITH_HEALING,
 	CURSORINDEX_FAITH_HEALING_INVALID,
+
+	CURSORINDEX_CLEAR_TARGET,
+	CURSORINDEX_CLEAR_TARGET_INVALID,
+	CURSORINDEX_REFUEL,
+	CURSORINDEX_REFUEL_INVALID,
+	CURSORINDEX_EXTRA, // Rename when needed
+	CURSORINDEX_EXTRA_INVALID,
 
 	CURSORINDEX_MAX
 };

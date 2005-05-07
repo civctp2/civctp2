@@ -31,7 +31,6 @@
 #                      other IsWaterSupply imps
 #  - PlantGood - added by E; FutureUse; imp that places a good instead
 #
-# 
 #-----------------------------------------------------------------------------
 TerrainImprovement {
 	Bits Class {
@@ -47,8 +46,8 @@ TerrainImprovement {
 		Structure2,
 		LandDetector,
 		OceanDetector,
-		Terraform
-		Wonder //added by E for visible wonders
+		Terraform,
+		Wonder, //added by E for visible wonders
 		Urban //added by E for future Urban Sprawl
 	}
 
@@ -65,8 +64,8 @@ TerrainImprovement {
 		Structure2,
 		LandDetector,
 		OceanDetector,
-		Terraform
-		Wonder //added by E for visible wonders
+		Terraform,
+		Wonder, //added by E for visible wonders
 		Urban //added by E for future Urban Sprawl
 	}
 
@@ -142,7 +141,7 @@ TerrainImprovement {
 
 	Bit GLHidden
 
-    # Display level (0 = ground level = under roads, > 0 = on top of roads)
+	# Display level (0 = ground level = under roads, > 0 = on top of roads)
 	Int DisplayLevel	= 0
 	# Pillage prevention
 	Bit	CantPillage

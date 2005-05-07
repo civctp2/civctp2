@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -45,6 +47,7 @@
 // - CultureOnly code added to CanBuildUnit; limits unit construction by 
 //   comparing a unit's CultureOnly flag to a player's citystyle 
 //   by E April 20th 2005
+// - Removed .NET warnings - May 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -2860,7 +2863,7 @@ void Player::EndTurnPollution(void)
 	
 	
 	if(GetPlayerType() == PLAYER_TYPE_ROBOT) {
-		sint32 target_pollution;
+		uint32 target_pollution;
 		sint32 foreigner_pollution;
 		const double max_difference = 0.75;
 		sint32 original_pollution = m_pollution_history[0];
@@ -3445,7 +3448,7 @@ void Player::RemoveTradeRoute(TradeRoute route, CAUSE_KILL_TRADE_ROUTE cause)
 {
 	Assert(route.GetPayingFor() == m_owner);
 	if(route.GetPayingFor() == m_owner && !route.AccessData()->GetDontAdjustPoints()) {
-		sint32 cost = route.GetCost();
+		double cost = route.GetCost();
 		RemoveUsedTransportPoints((sint32)route.GetCost());
 
 		if(cause != CAUSE_KILL_TRADE_ROUTE_NO_INITIAL_CARAVANS) {
@@ -10197,8 +10200,8 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 {
 	const UnitRecord *rec = g_theUnitDB->Get(type);
 
-    if (!HasAdvance(rec->GetEnableAdvanceIndex()))
-        return FALSE;
+	if (!HasAdvance(rec->GetEnableAdvanceIndex()))
+		return FALSE;
 
 	sint32 o;
 	for(o = rec->GetNumObsoleteAdvance() - 1; o >= 0; o--) {
@@ -10291,17 +10294,17 @@ void Player::RemoveEmptyCities(CAUSE_REMOVE_ARMY cause)
 	sint32 i;
 	for(i = m_all_cities->Num() - 1; i >= 0; i--) {
 		if(m_all_cities->Access(i).PopCount() < 1) {
-            Unit *city = &(m_all_cities->Access(i));
+			Unit *city = &(m_all_cities->Access(i));
 
-            if(!g_theUnitPool->IsValid(*city))
-                continue;
+			if(!g_theUnitPool->IsValid(*city))
+				continue;
 
-            if (cause == CAUSE_REMOVE_ARMY_FLOOD) {
-                SlicObject *so = new SlicObject("04CitiesKilledByCalamity") ;
-                so->AddRecipient(m_owner) ;
-                so->AddCity(*city);
-                g_slicEngine->Execute(so) ;
-            }                
+			if (cause == CAUSE_REMOVE_ARMY_FLOOD) {
+				SlicObject *so = new SlicObject("04CitiesKilledByCalamity");
+				so->AddRecipient(m_owner);
+				so->AddCity(*city);
+				g_slicEngine->Execute(so);
+			}
 
 			city->Kill(cause, -1);
 		}

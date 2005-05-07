@@ -1,4 +1,29 @@
-# 47
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : Text file
+// Description  : The data for orders
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - UnitPretest of ORDER_REFUEL is now NoFuelThenCrash (outcommented until it works)
+// - UnitPretest of ORDER_PARADROP is now CanParadrop
+//   - April 24th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
+
+# 47 Total Orders
 
 # Standard Orders
 
@@ -737,7 +762,7 @@ ORDER_CLEAR_TARGET {
   CPIcon "upsi39.tga"
   ButtonLocation 5
   DefaultIcon ICON_ORDER_CLEAR_TARGET
-  Cursor 88
+  Cursor 88 // incorrect cursors
   InvalidCursor 89
 }
 
@@ -877,14 +902,15 @@ ORDER_REFUEL {
   LocalizedName str_ldl_order_refuel
   StatusText str_ldl_order_refuel
 
+//  TargetPretest:OwnCity // Should be replaced by CanRefuel
+//  UnitPretest_NoFuelThenCrash // Should be enabled when everything is working
   UnitPretest_Invalid
 
-  CPIcon "upsi26.tga"
+  CPIcon "upsi47.tga"
   ButtonLocation 10
   DefaultIcon ICON_ORDER_REFUEL
-  # FIXME - these are the default special action cursors
-  Cursor 7
-  InvalidCursor 8
+  Cursor 90
+  InvalidCursor 91
 }
 
 
@@ -900,7 +926,7 @@ ORDER_PARADROP {
   StatusText str_ldl_order_paradrop
 
   TargetPretest:EnemyCity
-  UnitPretest_Invalid
+  UnitPretest_CanParadrop
 
   Range 20  
 
@@ -958,7 +984,3 @@ ORDER_AIRLIFT {
   InvalidCursor 8
 }
 
-
-## NEW
-
-				

@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,6 +32,7 @@
 // - Added a check in terrainutil_CanPlayerBuildAt for the IsRestrictedToGood 
 //   flag so a tile improvement can only be built on a tile with a 
 //   certain good on it - (E 2005/03/12)
+// - Removed .NET warnings - May 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -57,6 +60,7 @@
 #include "TiledMap.h"
 #include "AdvanceRecord.h"
 #include "network.h"
+#include "Civilisation.h"
 
 extern QuadTree<Unit> *g_theUnitTree;
 #endif
@@ -169,7 +173,7 @@ void terrainutil_Initialize()
 		}
 	}
 
-	
+
 	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
 		if (rec->GetTerraformTerrainPtr()->GetIndex() == s_TERRAIN_HILL)
@@ -368,9 +372,9 @@ void terrainutil_DoVision(const MapPoint &point)
 	DynamicArray<Unit> unitArray;
 
 	g_theUnitTree->SearchRect(unitArray, topleft,
-							  sint32(myVisionRange) * 2 + 1,
-							  sint32(myVisionRange) * 2 + 1,
-							  ~(1 << cell->GetOwner()));
+	                          static_cast<sint16>(myVisionRange) * 2 + 1,
+	                          static_cast<sint16>(myVisionRange) * 2 + 1,
+	                          ~(1 << cell->GetOwner()));
 	sint32 un = unitArray.Num();
 	for(i = 0; i < un; i++) {
 		UnitData *ud = unitArray[i].AccessData();
@@ -429,9 +433,9 @@ bool terrainutil_PlayerHasAdvancesForTerrain(const TerrainImprovementRecord *rec
 					if(g_player[pl]->HasAdvance(eff->GetObsoleteAdvanceIndex(a))) {
 						haveObsolete = true;
 					}
-				}				
-				
-				if(!haveObsolete) {					
+				}
+
+				if(!haveObsolete) {
 					return true;
 				}
 			}
@@ -520,8 +524,8 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 		if(!checkMaterials)
 			return true;
 
-		
-		
+
+
 		sint32 i;
 		for(i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 			if(terrainutil_PlayerHasAdvancesForTerrain(rec, pl, i)) {
@@ -548,7 +552,6 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 			}
 		}
 	}
-				
 
 	return false;
 }
@@ -578,8 +581,7 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 //                added by E. Modders will define this in tileimp.txt as 
 //                IsRestrictedToGood: X. The flag adds an additional option 
 //                in order to restrict ceratin improvements to goods, adding 
-//                new options and bonuses. 
-//              
+//                new options and bonuses.
 //
 //----------------------------------------------------------------------------
 bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos)
@@ -632,10 +634,10 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		}
 	}
 
-	
+
 	if(g_theWorld->GetCity(pos).IsValid())
 		return false;
-		
+
 	if(rec->GetClassTerraform()) {
 		sint32 terr;
 		if(!rec->GetTerraformTerrainIndex(terr))
@@ -654,7 +656,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 			return false;
 		}
 	} else {
-		
+
 		const TerrainImprovementRecord::Effect *eff;
 		eff = terrainutil_GetTerrainEffect(rec, cell->GetTerrain());
 		if(!eff)
@@ -669,7 +671,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 				return false;
 			}
 		}
-		
+
 //added by E. Improvement can only be built on a tile with a certain good on it		
 		if(rec->GetNumIsRestrictedToGood () == 0) {
 			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
@@ -677,15 +679,15 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 					return false;
 				}
 			}
-		} 
+		}
 		else {
 			sint32 good;
 			if (g_theWorld->GetGood(pos, good)) {
 				for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
-					if(rec->GetIsRestrictedToGood(i) == good) {
+					if(rec->GetIsRestrictedToGoodIndex(i) == good) {
 						return true; 
-					}  
-				}	 
+					}
+				}
 				return false;
 			}
 		}

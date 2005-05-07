@@ -1,3 +1,29 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : The data for constant things
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added MAX_MATCH_LIST_CYCLES
+# - Added MIN_TURNS_BETWEEN_REVOLT
+# - Set back CARAVAN_COEF devision by 10 is now done inside the executable.
+#   - May 7th 2005 Martin Gühmann
+#
+#----------------------------------------------------------------------------
+
 # all numbers are integers ranging from 0 to 100
 
 PERCENT_LAND 40 # how much of the world is land
@@ -347,7 +373,7 @@ BIO_INFECTION_PRODUCTION_COEF 0.2
 NANO_BUILDING_KILL_PERCENTAGE 0.3
 BASE_STARVATION_PROTECTION 3
 
-CARAVAN_COEF 0.004
+CARAVAN_COEF 0.04
 
 POLLUTION_CAUSED_BY_NUKE 1000000
 

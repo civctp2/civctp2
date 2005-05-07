@@ -655,7 +655,7 @@ ORDER_CONVERT					"Glaubenswechsel"
 ORDER_CREATE_PARK				"Nanitenbereinigung"
 ORDER_DISBAND_ARMY				"Einheit auflösen"
 ORDER_ESTABLISH_EMBASSY				"Botschaft errichten"
-ORDER_EXPEL		"Vertreiben"
+ORDER_EXPEL					"Vertreiben"
 ORDER_FORTIFY					"Verschanzung"
 ORDER_FRANCHISE					"Franchising"
 ORDER_INCITE_REVOLUTION				"Revolution auslösen"
@@ -682,12 +682,12 @@ ORDER_UNDERGROUND_RAILWAY			"Sklaven befreien"
 ORDER_UNLOAD					"Entladen"
 
 ###Added Order Strings###
-ORDER_CLEAR_TARGET	"Ziel verwerfen"
-ORDER_FAITH_HEALING	"Gesundbeten"
-ORDER_PLAGUE	"Seuche"
-ORDER_RANGED_ATTACK	"Fernangriff"
-ORDER_REFUEL	"Auftanken"
-ORDER_TARGET	"Zielen"
+ORDER_CLEAR_TARGET				"Ziel verwerfen"
+ORDER_FAITH_HEALING				"Gesundbeten"
+ORDER_PLAGUE					"Seuche"
+ORDER_RANGED_ATTACK				"Fernangriff"
+ORDER_REFUEL					"Auftanken"
+ORDER_TARGET					"Zielen"
 
 ### ADDED 10-07-00 ###
 

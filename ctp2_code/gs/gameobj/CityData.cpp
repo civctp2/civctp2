@@ -2916,51 +2916,51 @@ sint32 CityData::BeginTurn()
 	InitBeginTurnVariables();
 	DoTurnCounters();//decrement various turn counters, e.g., m_franchiseTurnsRemaining
 
-    ImprovementHealUnitsInCity();//zeroed out. Could have, e.g., hospitals speeding up healing
-    ImprovementRefuelUnitsInCity();//zeroed out. Could be removed.
+	ImprovementHealUnitsInCity();//zeroed out. Could have, e.g., hospitals speeding up healing
+	ImprovementRefuelUnitsInCity();//zeroed out. Could be removed.
 
-    MapPoint pos;
-    m_home_city.GetPos(pos);  //see CityInfluenceIterator below
+	MapPoint pos;
+	m_home_city.GetPos(pos);  //see CityInfluenceIterator below
 
 	m_pw_from_infrastructure = 0;
 	m_gold_from_capitalization = 0;
 
 	TryToBuild();//Deal with capitalization/infrastructure. Otherwise, build the front item in this city's buildqueue.
 
-    CalcPollution(); //Calculate the pollution produced by this city 
+	CalcPollution(); //Calculate the pollution produced by this city 
 	DoLocalPollution();//Add dead tiles near polluting cities
 
 	ProcessFood();//Modify m_gross_food_this_turn by any applicable bonus and subtract
-                  //m_food_lost_to_crime to get m_food_produced_this_turn
+	              //m_food_lost_to_crime to get m_food_produced_this_turn
 
 	DoSupport(false);
 
 	SplitScience(false);
 
-    CollectOtherTrade(FALSE); 
+	CollectOtherTrade(FALSE); 
 
-    EatFood();//Calculate m_food_delta = m_food_produced_this_turn - m_food_consumed_this_turn 
+	EatFood();//Calculate m_food_delta = m_food_produced_this_turn - m_food_consumed_this_turn 
 
-    if (GrowOrStarve()) { //Deal with city starvation and growth/shrinkage      
-        if (PopCount() < 1) { 
-            SlicObject *so = new SlicObject("265CityDestroyedByStarving") ;
-            so->AddRecipient(GetOwner()) ;
-            so->AddCity(m_home_city) ;
-            g_slicEngine->Execute(so) ;
+	if (GrowOrStarve()) { //Deal with city starvation and growth/shrinkage      
+		if (PopCount() < 1) { 
+			SlicObject *so = new SlicObject("265CityDestroyedByStarving") ;
+			so->AddRecipient(GetOwner()) ;
+			so->AddCity(m_home_city) ;
+			g_slicEngine->Execute(so) ;
 
-            return FALSE; 
-        }
-    }
+			return FALSE; 
+		}
+	}
 	
 	if (IsCelebratingHappiness()) {
 		if(m_lastCelebrationMsg < 0 || (m_lastCelebrationMsg + 10 < g_turn->GetRound())) {
-            SlicObject *so = new SlicObject("40CityIsCelebratingHappiness") ;
-            so->AddCity(m_home_city) ;
-            so->AddRecipient(m_owner) ;
+			SlicObject *so = new SlicObject("40CityIsCelebratingHappiness") ;
+			so->AddCity(m_home_city) ;
+			so->AddRecipient(m_owner) ;
 			so->AddPlayer(m_owner);
-            g_slicEngine->Execute(so) ;
+			g_slicEngine->Execute(so) ;
 			m_lastCelebrationMsg = sint16(g_turn->GetRound());
-        }
+		}
 
 		g_player[m_owner]->m_score->AddCelebration();//Could use something more interesting here 
 	}
@@ -2977,7 +2977,7 @@ sint32 CityData::BeginTurn()
 	m_sentInefficientMessageAlready = FALSE;
 
 	CheckForSlaveUprising();//Check that there's enough military units to guard the slaves.
-    //Does the city have a terrainImprovement in it's radius? Used for pillage goal.
+	//Does the city have a terrainImprovement in it's radius? Used for pillage goal.
 	CityInfluenceIterator it(pos, m_sizeIndex);
 	Cell *cell;
 	for(it.Start(); !it.End(); it.Next()) {
@@ -2993,7 +2993,7 @@ sint32 CityData::BeginTurn()
 
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 
-    return TRUE;
+	return TRUE;
 }
 
 void CityData::EndTurn()
@@ -3019,7 +3019,7 @@ void CityData::EndTurn()
 
 void CityData::CalcHappiness(sint32 &virtualGoldSpent, BOOL isFirstPass)
 
-{ 
+{
 	/* ???
 	if(isFirstPass) {
 		sint32 wage = sint32(g_player[m_owner]->GetWagesPerPerson());
@@ -3027,8 +3027,8 @@ void CityData::CalcHappiness(sint32 &virtualGoldSpent, BOOL isFirstPass)
 		n = PopCount();
 	}*/
 
-    sint32 delta_martial_law;
-    m_happy->CalcHappiness(*this, FALSE, delta_martial_law, isFirstPass);
+	sint32 delta_martial_law;
+	m_happy->CalcHappiness(*this, FALSE, delta_martial_law, isFirstPass);
 }
 
 void CityData::CheckRiot()
@@ -4739,7 +4739,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		sint32 s;
 		bool found = false;
 		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
-			if(rec->GetCityStyleOnlyIndex(s) == m_citystyle) {
+			if(rec->GetCityStyleOnlyIndex(s) == m_cityStyle) {
 				found = true;
 				break;
 			}
@@ -4812,7 +4812,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 	if(g_exclusions->IsBuildingExcluded(type))
 		return FALSE;
 
-    const BuildingRecord* irec = g_theBuildingDB->Get(type);
+	const BuildingRecord* irec = g_theBuildingDB->Get(type);
 	
 	
 	Assert(irec != NULL);
@@ -4883,7 +4883,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		sint32 s;
 		bool found = false;
 		for(s = 0; s < irec->GetNumCityStyleOnly(); s++) {
-			if(irec->GetCityStyleOnlyIndex(s) == m_citystyle) {
+			if(irec->GetCityStyleOnlyIndex(s) == m_cityStyle) {
 				found = true;
 				break;
 			}
@@ -4976,7 +4976,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		sint32 s;
 		bool found = false;
 		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
-			if(rec->GetCityStyleOnlyIndex(s) == m_citystyle) {
+			if(rec->GetCityStyleOnlyIndex(s) == m_cityStyle) {
 				found = true;
 				break;
 			}
@@ -5023,12 +5023,12 @@ BOOL CityData::IsInjoined() const
 
 
 BOOL CityData::HaveImprovement(const sint32 type) const
-{ 
-    return (GetImprovements() & (uint64(1) << type)) != 0;
+{
+	return (GetImprovements() & (uint64(1) << type)) != 0;
 }
 
 sint32 CityData::GetPreferedPopType() const
-{ 
+{
 	return 0;
 }
 
@@ -5147,7 +5147,7 @@ void CityData::ContributeScience(double incomePercent,
 sint32 CityData::TurnsToNextPop( void )
 {
 
-    if(m_food_delta <= 0
+	if(m_food_delta <= 0
 	|| m_growth_rate <= 0
 	|| m_is_rioting
 	){
@@ -5197,7 +5197,7 @@ sint32 CityData::GetHappinessFromPops()
 		happy += sint32(EntertainerCount() *
 						g_thePopDB->Get(m_specialistDBIndex[POP_ENTERTAINER])->GetHappiness());
 	}
-   return happy;
+	return happy;
 }
 
 //----------------------------------------------------------------------------
@@ -5249,15 +5249,15 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 }
 
 sint32 CityData::GetNumPop() const
-{ 
-    sint32 n = PopCount(); 
+{
+	sint32 n = PopCount();
 
-    if (n < 1) {
-        return 1; 
-    } else {
-        return n; 
-    } 
-} 
+	if (n < 1) {
+		return 1;
+	} else {
+		return n;
+	}
+}
 
 sint32 CityData::GetGoldFromPops()
 {

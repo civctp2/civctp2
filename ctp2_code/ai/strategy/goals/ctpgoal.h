@@ -32,7 +32,9 @@
 // - Set the SUB_TASK_TYPE global - Calvitix
 // - Added an SUB_TASK_TYPE attribute (used for armytext display) - Calvitix
 // - Added methods to Ungroup armies - Calvitix
-// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will be changed on wounded case) - Calvitix
+// - Changes the const attribute for Compute_Matching_Value 
+//   (Raw_Priority will be changed on wounded case) - Calvitix
+//
 //----------------------------------------------------------------------------
 
 
@@ -160,20 +162,20 @@ protected:
 
 
     bool NeededForGarrison(CTPAgent_ptr army,
-    const MapPoint & dest_pos,
-    sint8 & garrison_count,
-    double & garrison_strength) const;
+                           const MapPoint & dest_pos,
+                           sint8 & garrison_count,
+                           double & garrison_strength) const;
 
     bool FindPathToTask(CTPAgent_ptr the_army,
-    const MapPoint & goal_pos,
-    const SUB_TASK_TYPE & sub_task,
-    Path & found_path);
+                        const MapPoint & goal_pos,
+                        const SUB_TASK_TYPE & sub_task,
+                        Path & found_path);
 
     bool FollowPathToTask(CTPAgent_ptr first_army,
-    CTPAgent_ptr second_army,
-    const SUB_TASK_TYPE sub_task,
-    const MapPoint & dest_pos,
-    const Path & path);
+                          CTPAgent_ptr second_army,
+                          const SUB_TASK_TYPE sub_task,
+                          const MapPoint & dest_pos,
+                          const Path & path);
 
 
     bool GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_transport, const SUB_TASK_TYPE & sub_task);

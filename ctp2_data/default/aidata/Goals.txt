@@ -1703,7 +1703,7 @@ GOAL_FAITH_HEALING {
 GOAL_REFUEL {
   SquadClass:Special  
 
-  TargetType:City
+  TargetType:City // Needs to be replaced by CanRefuel
   TargetOwner:Self
 
   Execute	ORDER_REFUEL

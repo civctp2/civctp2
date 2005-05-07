@@ -21,34 +21,32 @@
 #  - Added Bonuses depending on territory owner
 #  - Added IsVisible Bonus
 #  - Added IsWounded Bonus
+#  - Added TargetType:PetrolStation - April 30th 2005 Martin Gühmann
+#
 #-----------------------------------------------------------------------------
 
 Goal {
 	Bit NeedsEscort
 	Bit IsSally
-	Bit AvoidWatchfulCity		// do not target watchful cities
-    Bit ExecuteIncrementally	// execute while undercommited
+	Bit AvoidWatchfulCity       // do not target watchful cities
+	Bit ExecuteIncrementally    // execute while undercommited
 	Bit NeverSatisfied          // retreat goals are never satisfied
-    Bit RemoveWhenComplete
-	Bit RallyFirst				// armies need to rally before going to target
-	Bit NoTransport			    // do not use transports to satisfy this goal
-#not ACTIVISION_ORIGINAL    
-    Bit UnGroupFirst
-    Bit NoRollback
-#end
+	Bit RemoveWhenComplete
+	Bit RallyFirst              // armies need to rally before going to target
+	Bit NoTransport             // do not use transports to satisfy this goal
+	Bit UnGroupFirst
+	Bit NoRollback
 
 	Bits SquadClass {
 		CanExplore,
 		CanAttack,
-        CanDefend,
-        HasZoc,
-        CanCaptureCity,
-        CanBombard,
-        Special,
-#not ACTIVISION_ORIGINAL 
-        Stealth,
-#end
-        CanTransport
+		CanDefend,
+		HasZoc,
+		CanCaptureCity,
+		CanBombard,
+		Special,
+		Stealth,
+		CanTransport
 	}
 
 	Bits TargetType {
@@ -56,14 +54,15 @@ Goal {
 		SpecialUnit,
 		SettleLand,
 		SettleSea,
-        City,
-	    ChokePoint,
-        GoodyHut,
-        TradeRoute,
-        Improvement,
+		City,
+		ChokePoint,
+		GoodyHut,
+		TradeRoute,
+		Improvement,
 		Unexplored,
 		Border,
 		Endgame,
+		PetrolStation,
 		Random
 	}
 
@@ -71,26 +70,25 @@ Goal {
 		Self,
 		Ally,
 		Neutral,
-        ColdEnemy,
-        HotEnemy,
+		ColdEnemy,
+		HotEnemy,
 		NoContact
 	}
 
 	Record Order Execute
 
-    Int ThreatBonus
-    Int EnemyValueBonus
+	Int ThreatBonus
+	Int EnemyValueBonus
 	Int AlliedValueBonus
 	Int PowerBonus 
 	Int DistanceToHomeBonus 
 	Int DistanceToEnemyBonus
-#not ACTIVISION_ORIGINAL    
 	Int InHomeTerritoryBonus = 0
 	Int NoOwnerTerritoryBonus = 0
 	Int InEnemyTerritoryBonus = 0
 	Int WoundedArmyBonus = 0
 	Int NotVisibleBonus = 0
-#end	
+
 	Int ChokePointBonus 
 	Int UnexploredBonus 
 	Int ObsoleteArmyBonus
@@ -112,11 +110,11 @@ Goal {
 	Bits ForceMatch {
 		Offensive,
 		Defensive,
-        StealthAttack,
+		StealthAttack,
 		Bombard,
 		Special,
 		Harass
-	}	
+	}
 
 	// wonders of this type protect owner against this goal
 	Bit (Record Wonder) TargetProtectionWonder

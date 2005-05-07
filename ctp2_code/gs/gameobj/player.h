@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -23,6 +25,7 @@
 //
 // - Return type of SetResearchGoal function set from void to 
 //   sint32, by Martin Gühmann.
+// - Made GetCivilisation method const - May 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -36,8 +39,8 @@
 #include "MapPoint.h"
 #include "Advances.h"
 
-#define k_PLAYER_VERSION_MAJOR	0									
-#define k_PLAYER_VERSION_MINOR	2									
+#define k_PLAYER_VERSION_MAJOR	0
+#define k_PLAYER_VERSION_MINOR	2
 
 
 #define k_ANNOUNCE_TRADE_MESSAGES 1
@@ -86,10 +89,10 @@ typedef sint32 AdvanceType;
 template <class T> class DynamicArray;
 template <class T> class Database;
 class UnseenCellCarton;
-class Agreement ;
-class Regard ;
-class Civilisation ;
-class Message ;
+class Agreement;
+class Regard;
+class Civilisation;
+class Message;
 class UnitOrderQueue;
 class UnitDynamicArray;
 class Unit;
@@ -105,7 +108,7 @@ class GovernmentRecord;
 class MapPoint;
 class TradeRoute;
 class Pop;
-class SlicObject ;
+class SlicObject;
 class Strengths;
 class Army;
 class CellUnitList;
@@ -113,7 +116,7 @@ class Score;
 class ID;
 
 class Vision;
-class DiplomaticRequest ;
+class DiplomaticRequest;
 
 typedef sint32 TERRAIN_IMPROVEMENT;
 class TerrainImprovement;
@@ -156,18 +159,18 @@ class EndGame;
 class GaiaController;
 
 enum DIPLOMATIC_STATE { 
-    DIPLOMATIC_STATE_WAR, 
-    DIPLOMATIC_STATE_CEASEFIRE, 
-    DIPLOMATIC_STATE_NEUTRAL, 
-    DIPLOMATIC_STATE_ALLIED
-}; 
+	DIPLOMATIC_STATE_WAR, 
+	DIPLOMATIC_STATE_CEASEFIRE, 
+	DIPLOMATIC_STATE_NEUTRAL, 
+	DIPLOMATIC_STATE_ALLIED
+};
 
 enum DIPLOMATIC_STRENGTH { 
-    DIPLOMATIC_STRENGTH_VERY_WEAK, 
-    DIPLOMATIC_STRENGTH_WEAK, 
-    DIPLOMATIC_STRENGTH_AVERAGE, 
-    DIPLOMATIC_STRENGTH_STRONG, 
-    DIPLOMATIC_STRENGTH_VERY_STRONG
+	DIPLOMATIC_STRENGTH_VERY_WEAK, 
+	DIPLOMATIC_STRENGTH_WEAK, 
+	DIPLOMATIC_STRENGTH_AVERAGE, 
+	DIPLOMATIC_STRENGTH_STRONG, 
+	DIPLOMATIC_STRENGTH_VERY_STRONG
 
 };
 
@@ -178,35 +181,35 @@ class Player {
 
 private:
 
-    MBCHAR *GenerateDescriptionString(int is_winner);
+	MBCHAR *GenerateDescriptionString(int is_winner);
 
 public:
 	
 	
-	PLAYER_INDEX m_owner; 
+	PLAYER_INDEX m_owner;
 	PLAYER_TYPE m_playerType;
 
-	uint32 m_diplomatic_mute ;
+	uint32 m_diplomatic_mute;
 	uint32 mask_alliance;
 	uint32 m_mask_hostile;
-    DIPLOMATIC_STATE m_diplomatic_state[k_MAX_PLAYERS]; 
+	DIPLOMATIC_STATE m_diplomatic_state[k_MAX_PLAYERS];
 
-    sint32 m_government_type;    
+	sint32 m_government_type;
 	sint32 m_tradeTransportPoints;
 	sint32 m_usedTradeTransportPoints;
-	uint32 m_pollution_history[k_MAX_POLLUTION_HISTORY] ;					
-	sint32	m_event_pollution[k_MAX_EVENT_POLLUTION_TURNS] ;
-	BOOL	m_terrainPollution ;									
+	uint32 m_pollution_history[k_MAX_POLLUTION_HISTORY];
+	sint32	m_event_pollution[k_MAX_EVENT_POLLUTION_TURNS];
+	BOOL	m_terrainPollution ;
 	BOOL	m_deepOceanVisible;
 	sint32	m_patience[k_MAX_PLAYERS] ;
 	sint32  m_sent_requests_this_turn[k_MAX_PLAYERS];
 
 
 	double m_materialsTax;
-    
-    sint32 m_home_lost_unit_count; 
-    sint32 m_oversea_lost_unit_count; 
-    uint64 m_builtWonders;
+
+	sint32 m_home_lost_unit_count; 
+	sint32 m_oversea_lost_unit_count; 
+	uint64 m_builtWonders;
 	uint64 m_wonderBuildings;
 
 	double m_income_Percent;
@@ -285,19 +288,19 @@ public:
 	
 	
 	
-    DynamicArray<Army> *m_all_armies;
+	DynamicArray<Army> *m_all_armies;
 
 	UnitDynamicArray *m_all_cities;
 
 	UnitDynamicArray *m_all_units;
 	UnitDynamicArray *m_traderUnits;
-    Unit *m_capitol; 
+	Unit *m_capitol; 
 
 	Regard	*m_regard ;
-    Gold *m_gold;
-    Science *m_science; 
-    TaxRate *m_tax_rate; 
-    Difficulty *m_difficulty; 
+	Gold *m_gold;
+	Science *m_science; 
+	TaxRate *m_tax_rate; 
+	Difficulty *m_difficulty; 
 	Advances *m_advances;
 	MaterialPool *m_materialPool;
 
@@ -306,9 +309,9 @@ public:
 	DynamicArray<MapPoint> *m_battleFlags;
 #endif
 
-	DynamicArray<DiplomaticRequest>	*m_requests ;					
-	DynamicArray<Agreement> *m_agreed ;								
-	DynamicArray<Message> *m_messages ;								
+	DynamicArray<DiplomaticRequest> *m_requests;
+	DynamicArray<Agreement> *m_agreed;
+	DynamicArray<Message> *m_messages;
 
 	Vision *m_vision;
 
@@ -317,35 +320,35 @@ public:
 	DynamicArray<Installation>       *m_allInstallations;
 
 	MilitaryReadiness *m_readiness;
-    PlayerHappiness *m_global_happiness; 
-	Civilisation	*m_civilisation ;								
+	PlayerHappiness   *m_global_happiness;
+	Civilisation      *m_civilisation ;
 
-	Throne		*m_throne;
+	Throne            *m_throne;
 
-	Strengths   *m_strengths;
-	Score       *m_score;
-	EndGame     *m_endGame;
-	sint32      *m_goodSalePrices;
-	MBCHAR       *m_email;
-	GaiaController *m_gaiaController;
+	Strengths         *m_strengths;
+	Score             *m_score;
+	EndGame           *m_endGame;
+	sint32            *m_goodSalePrices;
+	MBCHAR            *m_email;
+	GaiaController    *m_gaiaController;
+
+
+
 
 	
 	
+	CreateUnitRequest *m_unitRequestList;
 
-	
-	
-	CreateUnitRequest *m_unitRequestList; 
-	                                      
-	                                      
-	Unit *m_slic_special_city;  
-	BOOL m_hasGlobalRadar; 
-	                       
+
+	Unit *m_slic_special_city;
+	BOOL m_hasGlobalRadar;
+
 #ifdef _DEBUG_INCOMPATIBLE
 	
 	ATTITUDE_TYPE	m_attitude[k_MAX_PLAYERS] ;
 #endif
-    
-    MBCHAR m_descrip_string[256];
+
+	MBCHAR m_descrip_string[256];
 								
 	sint32 m_starting_index;
 
@@ -362,9 +365,9 @@ public:
 	friend class NetPlayer;
 
 public:
-    friend class SelectedItem; 
+	friend class SelectedItem; 
 
-    Player(const PLAYER_INDEX o, sint32 d, 	PLAYER_TYPE pt); 
+	Player(const PLAYER_INDEX o, sint32 d, 	PLAYER_TYPE pt); 
 	Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const CIV_INDEX civ, GENDER gender) ;
 	Player(CivArchive &archive) ;
 	~Player();
@@ -375,7 +378,7 @@ public:
 
 	Unit CreateUnitNoPosition(const sint32 type, CellUnitList &army, 
 							  const MapPoint &actor_pos, sint32 oldOwner);
-    Unit CreateUnit(sint32 type, const MapPoint &pos, const Unit hc,
+	Unit CreateUnit(sint32 type, const MapPoint &pos, const Unit hc,
 					BOOL tempUnit,  CAUSE_NEW_ARMY cause);
 	void CreateUnitSoon(sint32 type, const MapPoint &pos, const Unit hc,
 						BOOL tempUnit, CAUSE_NEW_ARMY cause);
@@ -384,11 +387,11 @@ public:
 	sint32 FindArmyIndex(const Unit &unit) const;
 	sint32 FindArmyIndex(const Army &army) const;
 	sint32 FindCityIndex(const Unit &find) const;
-	
-    
-	
 
-    Unit InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
+
+
+
+	Unit InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 							 const Unit &whereBuilt);
 	Army GetNewArmy(CAUSE_NEW_ARMY cause);
  	sint32 RemoveUnitReference(Unit &id, const CAUSE_REMOVE_ARMY cause,
@@ -402,14 +405,14 @@ public:
 					PLAYER_INDEX killedBy,
 					BOOL fromNetwork = FALSE);
 
-    BOOL RemoveCityReferenceFromPlayer(Unit &id,  CAUSE_REMOVE_CITY cause,
+	BOOL RemoveCityReferenceFromPlayer(Unit &id,  CAUSE_REMOVE_CITY cause,
 									   sint32 &killedBy); 
 
 	BOOL RefreshAIArmyReference(Army &the_army);
 	BOOL RemoveUnitReferenceFromPlayer(Unit &killme,  CAUSE_REMOVE_ARMY cause, 
 									   sint32 &killedBy);
 
-    BOOL AddCityReferenceToPlayer(Unit id,  CAUSE_NEW_CITY cause); 
+	BOOL AddCityReferenceToPlayer(Unit id,  CAUSE_NEW_CITY cause); 
 	Unit CreateCity(const sint32 t, const MapPoint &pos,  CAUSE_NEW_CITY cause,
 					UnitActor *actor, sint32 settlerType);
 
@@ -422,41 +425,41 @@ public:
 	void BeginTurnUnits();
 
 	void BeginTurn(); 
-    void BeginTurnScience();
+	void BeginTurnScience();
 
 	void EndTurn(); 
 	void EndTurnSoon();
 	void ProcessUnitOrders(BOOL currentOnly = FALSE);
-	Civilisation *GetCivilisation(void) { return (m_civilisation) ; }
+	Civilisation *GetCivilisation(void) const { return (m_civilisation) ; }
 	void GetPluralCivName(MBCHAR *s) ;
 	void GetSingularCivName(MBCHAR *s) ;
 	MBCHAR *GetLeaderName(void) ;
 
-    
-    void RegisterLostUnits(sint32 nUnits, const MapPoint &pos, 
-        const DEATH_EFFECT_MORALE mtype);
 
-    void RegisterInsertCargo(ID *id, const sint32 unit_type, sint32 hp);
-    void RegisterUnloadCargo(ID *id, const sint32 unit_type, sint32 hp);
-    void GroupArmy(Army &army); 
-    void UngroupArmy(Army &army);
+	void RegisterLostUnits(sint32 nUnits, const MapPoint &pos, 
+	                       const DEATH_EFFECT_MORALE mtype);
 
-    void RegisterYourArmyWasMoved(const Army &i_moved, const MapPoint &new_pos);
+	void RegisterInsertCargo(ID *id, const sint32 unit_type, sint32 hp);
+	void RegisterUnloadCargo(ID *id, const sint32 unit_type, sint32 hp);
+	void GroupArmy(Army &army); 
+	void UngroupArmy(Army &army);
 
-    void GetArmyPos(sint32 index, MapPoint &army_pos);
+	void RegisterYourArmyWasMoved(const Army &i_moved, const MapPoint &new_pos);
+
+	void GetArmyPos(sint32 index, MapPoint &army_pos);
 	void UnloadAllTransports (); 
 #if 0
-    void UnloadAllTransportsInArmy(const sint32 selected_army, const MapPoint &pos, 
-        BOOL &did_move, BOOL &i_died, ArmyList &dead_attacker,
-	    BOOL &revealed_foreign_units, BOOL &revealed_unexplored, 
-        BOOL &zocViolation, BOOL &is_transported, BOOL &debarker_out_of_fuel);
+	void UnloadAllTransportsInArmy(const sint32 selected_army, const MapPoint &pos, 
+	                               BOOL &did_move, BOOL &i_died, ArmyList &dead_attacker,
+	                               BOOL &revealed_foreign_units, BOOL &revealed_unexplored, 
+	                               BOOL &zocViolation, BOOL &is_transported, BOOL &debarker_out_of_fuel);
 #endif
 
-    BOOL AiUnloadAllTransportsInArmy(BOOL *is_unknown_id, 
-        uint32 unload_me, const MapPoint &dest_pos, 
-        BOOL *did_move, BOOL *i_died, 
-		BOOL *revealed_foreign_units, BOOL *revealed_unexplored, 
-        BOOL *zocViolation, BOOL *is_transported);
+	BOOL AiUnloadAllTransportsInArmy(BOOL *is_unknown_id, 
+	                                 uint32 unload_me, const MapPoint &dest_pos, 
+	                                 BOOL *did_move, BOOL *i_died, 
+	                                 BOOL *revealed_foreign_units, BOOL *revealed_unexplored, 
+	                                 BOOL *zocViolation, BOOL *is_transported);
 
 	sint32 Settle(Army &settle_army);
 	Unit CityIndexToUnit(sint32 index);
@@ -468,9 +471,9 @@ public:
 
 	sint32 GetCheapestMilitaryUnit();
 	void InsertArmy(const MapPoint &point, const Unit &home_city,
-					Army &army, CAUSE_NEW_ARMY cause);
+	                Army &army, CAUSE_NEW_ARMY cause);
 
-    
+
 	void BeginTurnPollution(void) ;
 	void EndTurnPollution(void) ;
 	void AdjustPollution(const sint32 amount) ;
@@ -482,45 +485,45 @@ public:
 	uint32 GetAverageEventPollution(void) ;
 
 	
-    Army GetArmy(sint32 s_index);
+	Army GetArmy(sint32 s_index);
 	UnitDynamicArray *GetAllUnitList() { return m_all_units; }
 	UnitDynamicArray *GetAllCitiesList() { return m_all_cities; }
 	UnitDynamicArray *GetTradersList() { return m_traderUnits; }
 	DynamicArray<TradeOffer>* GetTradeOffersList() { return m_tradeOffers; }
-    DynamicArray<Army> *GetAllArmiesList() { return m_all_armies; }
+	DynamicArray<Army> *GetAllArmiesList() { return m_all_armies; }
 
-    Unit GetTopSelectedArmy(const sint32 selected_army);
-	
-   
-	sint32	GetNumCities() const;
-	sint32	GetMaxCityCount() const;
-    sint32	GetNearestCity(const MapPoint &pos, Unit &nearest, double &distance,
-						   BOOL butNotThisOne = FALSE, const sint32 continent = -1);
+	Unit GetTopSelectedArmy(const sint32 selected_army);
+
+
+	sint32  GetNumCities() const;
+	sint32  GetMaxCityCount() const;
+	sint32  GetNearestCity(const MapPoint &pos, Unit &nearest, double &distance,
+	                       BOOL butNotThisOne = FALSE, const sint32 continent = -1);
 	sint32  GetSlaveCity(const MapPoint &pos, Unit &city);
 
 	BOOL    GetNearestFort(const MapPoint &src, MapPoint &dest);
 	BOOL    GetNearestAirfield(const MapPoint &src, MapPoint &dest, const sint32 continent = -1);
 
-    sint32	GetCityIndex(const Unit &c, sint32 &idx); 
-	Unit	GetCityFromIndex(sint32 unit_idx);
-    sint32	GetArmyIndex(const Unit &c, sint32 &idx); 
-    
+	sint32  GetCityIndex(const Unit &c, sint32 &idx); 
+	Unit    GetCityFromIndex(sint32 unit_idx);
+	sint32  GetArmyIndex(const Unit &c, sint32 &idx); 
+
 	sint32	ReturnPopToCity(const MapPoint &pos, const sint32 announce);
 	sint32	LoadBuildQueue(const sint32 city, const MBCHAR *file) ;
 	sint32	SaveBuildQueue(const sint32 city, const MBCHAR *file) ;
 
 	
 	BOOL IsFriendly(sint32 p) { Assert((p>=0) && (p<k_MAX_PLAYERS) );
-							return ((mask_alliance & 1L<<p) != 0); } ;
-  	sint32 GetMaskAlliance() { return mask_alliance;} ; 
+	                            return ((mask_alliance & 1L<<p) != 0); } ;
+	sint32 GetMaskAlliance() { return mask_alliance;} ; 
 
-    DIPLOMATIC_STATE GetDiplomaticState(const PLAYER_INDEX p) const {
-        Assert(0 <= p);
-        Assert(p < k_MAX_PLAYERS); 
-        return m_diplomatic_state[p]; 
-    } 
+	DIPLOMATIC_STATE GetDiplomaticState(const PLAYER_INDEX p) const {
+		Assert(0 <= p);
+		Assert(p < k_MAX_PLAYERS); 
+		return m_diplomatic_state[p]; 
+	}
 
-    void SetDiplomaticState(const PLAYER_INDEX p, const DIPLOMATIC_STATE s);
+	void SetDiplomaticState(const PLAYER_INDEX p, const DIPLOMATIC_STATE s);
 
 	void GiveCity(const PLAYER_INDEX player, const sint32 c) ;
 	void GiveCity(const PLAYER_INDEX player, Unit c) ;
@@ -702,7 +705,7 @@ public:
 	void BeginTurnImprovements();
 
 	
-    sint32 GetMaterialsStored()  const;  
+	sint32 GetMaterialsStored()  const;  
 	Installation CreateInstallation(sint32 type, MapPoint &point);
 	void AddInstallation(Installation &inst);
 	void RemoveInstallationReferences(Installation &inst);
@@ -712,22 +715,22 @@ public:
 	void BeginTurnBattleFlags();
 #endif
 
-    sint32 GetReadinessLevel() const; 
+	sint32 GetReadinessLevel() const; 
 	void SetReadinessLevel(READINESS_LEVEL level, BOOL immediate = FALSE);
-    sint32 GetReadinessCost() const; 
+	sint32 GetReadinessCost() const; 
 
-    sint32 GetTotalProduction() const { return m_total_production; }
-    sint32 GetTotalUnitCost();
+	sint32 GetTotalProduction() const { return m_total_production; }
+	sint32 GetTotalUnitCost();
 
 	double GetHPModifier();
 	double GetSupportModifier();
 
 	void GamestateDebug();
 
-    
+
 	void GiveOrders(sint32 army, UNIT_ORDER_TYPE orders);
 
-   	void SetPlayerType(PLAYER_TYPE pt);
+	void SetPlayerType(PLAYER_TYPE pt);
 
 	double GetPlayerType() { return m_playerType; };
 
@@ -744,24 +747,24 @@ public:
 	void BeginTurnAllCities();
 	void BeginTurnWonders();
 	sint32 CalcWonderGold();
-    sint32 CalcTotalBuildingUpkeep();
+	sint32 CalcTotalBuildingUpkeep();
 	void BuildUnit(sint32 type, Unit &city);
 	void BuildImprovement(sint32 type, Unit &city);    
 	void BuildWonder(sint32 wonder, Unit &city);
 	void BuildEndGame(sint32 type, Unit &city);
 
-    BOOL ChangeCurrentlyBuildingItem(Unit &city, sint32 category, sint32 item_type);
+	BOOL ChangeCurrentlyBuildingItem(Unit &city, sint32 category, sint32 item_type);
 
 	void Serialize(CivArchive &archive) ;
 
 	
-    void BeginTurnProduction();
+	void BeginTurnProduction();
 
 	void AddGold (const sint32 d);
-    void SubGold (const sint32 d); 
+	void SubGold (const sint32 d); 
 	void AddGold (const Gold &amount);
-    void SubGold (const Gold &amount); 
-    sint32 GetGold(); 
+	void SubGold (const Gold &amount); 
+	sint32 GetGold(); 
 	
 	void SetGold(const sint32 d);
 	void AddScience (const sint32 d);
@@ -769,21 +772,21 @@ public:
 
 	void SpecialDiscoveryNotices(AdvanceType adv);
 	void GovernmentDiscoveryNotices(AdvanceType advance) ;
-    void ObsoleteNotices(AdvanceType advance);
+	void ObsoleteNotices(AdvanceType advance);
 	void BuildResearchDialog(AdvanceType adv);
 	void SetResearching(AdvanceType advance);
-    sint32 GetCurrentScienceCost();
-    sint32 GetCurrentScienceLevel();
+	sint32 GetCurrentScienceCost();
+	sint32 GetCurrentScienceLevel();
 	void StartResearching(sint32 idx) ;
 	void GetScienceTaxRate(double &s);
 	void SetTaxes(double s);
-    void DelTailPathOrder(sint32 index);
+	void DelTailPathOrder(sint32 index);
 
- 	void SetMaterialsTax(double m);
+	void SetMaterialsTax(double m);
 	void ContributeMaterials(sint32 &cityProduction);
 
 	
-    PLAYER_INDEX GetOwner() { return m_owner; } 
+	PLAYER_INDEX GetOwner() { return m_owner; } 
 	sint32 GetGovernmentType() const { return m_government_type; }
 	BOOL SetGovernmentType(sint32 type);
 	BOOL ActuallySetGovernment(sint32 type);
@@ -792,31 +795,31 @@ public:
 	
 	sint32 GetNumRevolted(void) const { return m_num_revolted; }	
 
-    sint32 GetUnitsLostHome() const { return m_home_lost_unit_count; }
-    sint32 GetUnitsLostOverseas() const { return m_oversea_lost_unit_count; } 
+	sint32 GetUnitsLostHome() const { return m_home_lost_unit_count; }
+	sint32 GetUnitsLostOverseas() const { return m_oversea_lost_unit_count; } 
 
-    void GetPeaceMovement(double &overseas_defeat, 
-        double &home_defeat, double &overseas);
+	void GetPeaceMovement(double &overseas_defeat, 
+	                      double &home_defeat, double &overseas);
 
-    void SetWorkdayLevel (sint32 w);
-    double GetWorkdayPerPerson ();
-    double GetUnitlessWorkday ();
+	void SetWorkdayLevel (sint32 w);
+	double GetWorkdayPerPerson ();
+	double GetUnitlessWorkday ();
 
-    void SetWagesLevel (sint32 w);
-    double GetWagesPerPerson();
-    double GetUnitlessWages();
+	void SetWagesLevel (sint32 w);
+	double GetWagesPerPerson();
+	double GetUnitlessWages();
 
-    void SetRationsLevel (sint32 w);
-    double GetRationsPerPerson() const;
-    double GetUnitlessRations ();
-    void DisplayWWR();
+	void SetRationsLevel (sint32 w);
+	double GetRationsPerPerson() const;
+	double GetUnitlessRations ();
+	void DisplayWWR();
 
-    void CalcAllHappiness(); 
+	void CalcAllHappiness(); 
 	sint32 GetAverageHappiness();
-    void RegisterProfessionalChange(BOOL on, Unit &u);
+	void RegisterProfessionalChange(BOOL on, Unit &u);
 
-	
-   
+
+
 	Difficulty* GetDifficulty() { return m_difficulty; }
 
 	sint32 GetBaseContentment() const;
@@ -827,56 +830,56 @@ public:
 	double GetRiotChance() const;
 	double GetStarvationEffect() const;
 
-    double GetPositiveWorkdayCoef() const;
+	double GetPositiveWorkdayCoef() const;
 	double GetNegativeWorkdayCoef() const;
-    double GetWorkdayExpectation() const;
-    double GetWorkdayLevel() const;
+	double GetWorkdayExpectation() const;
+	double GetWorkdayLevel() const;
 
-    double GetPositiveWagesCoef() const;
+	double GetPositiveWagesCoef() const;
 	double GetNegativeWagesCoef() const;
-    double GetWagesExpectation() const;
-    double GetWagesLevel() const;
+	double GetWagesExpectation() const;
+	double GetWagesLevel() const;
 
-    double GetPositiveRationsCoef() const;
+	double GetPositiveRationsCoef() const;
 	double GetNegativeRationsCoef() const;
-    double GetRationsExpectation() const;
-    double GetRationsLevel() const;
+	double GetRationsExpectation() const;
+	double GetRationsLevel() const;
 
-    double GetKnowledgeCoef() const;
-    double GetPollutionCoef() const;
-    double GetPollutionUnhappyCoef() const;
-    
-    double GetConquestDistress() const;
+	double GetKnowledgeCoef() const;
+	double GetPollutionCoef() const;
+	double GetPollutionUnhappyCoef() const;
+
+	double GetConquestDistress() const;
 	double GetConquestDistressDecay() const;
-    double GetEmpireDistanceScale() const;
-    double GetMaxEmpireDistance() const;
+	double GetEmpireDistanceScale() const;
+	double GetMaxEmpireDistance() const;
 
-    sint32 GetMaxMartialLawUnits() const;
-    double GetMartialLawEffect() const;
-    sint32 GetMartialLawThreshold() const;
+	sint32 GetMaxMartialLawUnits() const;
+	double GetMartialLawEffect() const;
+	sint32 GetMartialLawThreshold() const;
 
 
-    double GetAtHomeRadius() const;
-    double GetOverseasCoef() const;
-    
-    double GetOverseasDefeatDecay() const;
-    double GetOverseasDefeatCoef() const;
-    double GetHomeDefeatDecay() const;
-    double GetHomeDefeatCoef() const;
+	double GetAtHomeRadius() const;
+	double GetOverseasCoef() const;
 
-    double GetCrimeCoef() const;
-    double GetCrimeOffset () const;
+	double GetOverseasDefeatDecay() const;
+	double GetOverseasDefeatCoef() const;
+	double GetHomeDefeatDecay() const;
+	double GetHomeDefeatCoef() const;
 
-    sint32 GetProfessionalUnits() const;
-    
-    double GetReadyPeaceCoef() const;
-    double GetReadyPeaceHP() const;
-    
-    double GetReadyAlertCoef() const;
-    double GetReadyAlertHP() const;
-    
-    double GetReadyWarCoef() const;
-    double GetReadyWarHP() const;
+	double GetCrimeCoef() const;
+	double GetCrimeOffset () const;
+
+	sint32 GetProfessionalUnits() const;
+
+	double GetReadyPeaceCoef() const;
+	double GetReadyPeaceHP() const;
+
+	double GetReadyAlertCoef() const;
+	double GetReadyAlertHP() const;
+
+	double GetReadyWarCoef() const;
+	double GetReadyWarHP() const;
 
 	
 	double GetIncomePercent() {return m_income_Percent; } 
@@ -885,9 +888,9 @@ public:
 	sint32 GetScienceHandicap();
 
 	void  SetCapitol(const Unit &c);
-    sint32 GetCapitolPos(MapPoint &pos) const;
-    
-    double GetRationLevel() const { return 1.0; } 
+	sint32 GetCapitolPos(MapPoint &pos) const;
+
+	double GetRationLevel() const { return 1.0; } 
 
 	void BuildWonder(Unit city, sint32 wonder);
 	void AddWonder(sint32 wonder, Unit &city);
@@ -904,107 +907,107 @@ public:
 	sint32 GetProductionFromFranchises();
 	void AddProductionFromFranchise(sint32 amt);
 
-    
-    
-    Army GetArmyList(uint32 army_id, BOOL &is_unknown_id); 
-    void GetArmyPos(const uint32 army_id, BOOL &is_unknown_id, MapPoint &p1)const;
-    void GetArmyCurMinMovementPoints(const uint32 army_id, BOOL &is_unknown_id, double &cur)const;
-    void GetArmyMinMovementPoints(const uint32 army_id, BOOL &is_unknown_id, double &min_move)const;
-    BOOL ArmySettle(const uint32 army_id, BOOL &is_unknown_id); 
-    
-    BOOL ArmyCanEnter(const uint32 army_id, BOOL &is_unknown_id, MapPoint &pos, 
-        BOOL &move_to_many_units_dest, BOOL &move_violated_zoc, BOOL &move_violated_movetype, 
-       BOOL &move_out_of_fuel);
 
-    BOOL ArmyMoveTo(const uint32 army_id, BOOL &is_unknown_id, MapPoint &pos, BOOL &did_move, 
-       BOOL &i_died, BOOL &move_violated_zoc, BOOL &revealed_foreign_units, 
-       BOOL &revealed_unexplored, BOOL &is_transported, BOOL &out_of_fuel);
 
-    BOOL ArmyCanSettle(uint32 army_id, BOOL &iis_unknown_id, const MapPoint &ipos); 
+	Army GetArmyList(uint32 army_id, BOOL &is_unknown_id); 
+	void GetArmyPos(const uint32 army_id, BOOL &is_unknown_id, MapPoint &p1)const;
+	void GetArmyCurMinMovementPoints(const uint32 army_id, BOOL &is_unknown_id, double &cur)const;
+	void GetArmyMinMovementPoints(const uint32 army_id, BOOL &is_unknown_id, double &min_move)const;
+	BOOL ArmySettle(const uint32 army_id, BOOL &is_unknown_id); 
 
-    BOOL AiArmyGroup(uint32 add_me, uint32 target, BOOL *is_unknown_id);
-    BOOL AiArmyUngroup(uint32 split_me, BOOL &is_unknown_id);
+	BOOL ArmyCanEnter(const uint32 army_id, BOOL &is_unknown_id, MapPoint &pos, 
+	    BOOL &move_to_many_units_dest, BOOL &move_violated_zoc, BOOL &move_violated_movetype, 
+	   BOOL &move_out_of_fuel);
 
-    BOOL GetCityPos(uint32 city_id, BOOL &is_unknown_id, MapPoint &ipos);
+	BOOL ArmyMoveTo(const uint32 army_id, BOOL &is_unknown_id, MapPoint &pos, BOOL &did_move, 
+	   BOOL &i_died, BOOL &move_violated_zoc, BOOL &revealed_foreign_units, 
+	   BOOL &revealed_unexplored, BOOL &is_transported, BOOL &out_of_fuel);
 
-    BOOL CityEnqueueBuildItem (uint32 city_id, BOOL *is_unknown_id, 
-        sint32 category, sint32 unit_type);
-    
-    BOOL CityChangeCurrentlyBuildingItem(uint32 city_id, BOOL *is_unknown_id,
-        sint32 category, sint32 item_type);
+	BOOL ArmyCanSettle(uint32 army_id, BOOL &iis_unknown_id, const MapPoint &ipos); 
 
-    sint32 CityGetStoredProduction (uint32 city_id, BOOL *is_unknown_id);  
-    sint32 CityGetGrossProduction (uint32 city_id, BOOL *is_unknown_id); 
-    sint32 CityGetNetProduction (uint32 city_id, BOOL *is_unknown_id); 
+	BOOL AiArmyGroup(uint32 add_me, uint32 target, BOOL *is_unknown_id);
+	BOOL AiArmyUngroup(uint32 split_me, BOOL &is_unknown_id);
 
-    sint32 CityGetStoredFood (uint32 city_id, BOOL *is_unknown_id); 
-    sint32 CityGetGrossFood (uint32 city_id, BOOL *is_unknown_id); 
-    sint32 CityGetNetFood (uint32 city_id, BOOL *is_unknown_id); 
+	BOOL GetCityPos(uint32 city_id, BOOL &is_unknown_id, MapPoint &ipos);
 
-    sint32 CityGetGrossGold (uint32 city_id, BOOL *is_unknown_id); 
-    sint32 CityGetNetGold (uint32 city_id, BOOL *is_unknown_id); 
+	BOOL CityEnqueueBuildItem (uint32 city_id, BOOL *is_unknown_id, 
+	    sint32 category, sint32 unit_type);
 
-    sint32 GetTotalBuildingUpkeep();
+	BOOL CityChangeCurrentlyBuildingItem(uint32 city_id, BOOL *is_unknown_id,
+	    sint32 category, sint32 item_type);
 
-    uint32 GetArmyId (const Unit &u); 
-    uint32 GetCityId (const Unit &c); 
-    void RegisterCreateBuilding(Unit &city_id, sint32 blg_type);
-    void RegisterLostBuilding(Unit &city_id, sint32 blg_type);
+	sint32 CityGetStoredProduction (uint32 city_id, BOOL *is_unknown_id);  
+	sint32 CityGetGrossProduction (uint32 city_id, BOOL *is_unknown_id); 
+	sint32 CityGetNetProduction (uint32 city_id, BOOL *is_unknown_id); 
+
+	sint32 CityGetStoredFood (uint32 city_id, BOOL *is_unknown_id); 
+	sint32 CityGetGrossFood (uint32 city_id, BOOL *is_unknown_id); 
+	sint32 CityGetNetFood (uint32 city_id, BOOL *is_unknown_id); 
+
+	sint32 CityGetGrossGold (uint32 city_id, BOOL *is_unknown_id); 
+	sint32 CityGetNetGold (uint32 city_id, BOOL *is_unknown_id); 
+
+	sint32 GetTotalBuildingUpkeep();
+
+	uint32 GetArmyId (const Unit &u); 
+	uint32 GetCityId (const Unit &c); 
+	void RegisterCreateBuilding(Unit &city_id, sint32 blg_type);
+	void RegisterLostBuilding(Unit &city_id, sint32 blg_type);
 	void RegisterNewGovernment(Unit &u, sint32 blg_type);
-    void RegisterNewCapitolBuilding(Unit &city_id); 
-    void RegisterCreateWonder(Unit &city_id, sint32 wonder_type);
+	void RegisterNewCapitolBuilding(Unit &city_id); 
+	void RegisterCreateWonder(Unit &city_id, sint32 wonder_type);
 	void RegisterCreateEndgameObject(Unit &city_id, sint32 object_type);
 
-    void AiRegisterAllObjects(); 
+	void AiRegisterAllObjects(); 
 
-    BOOL AiCreateTradeRoute(BOOL *is_unknown_id,  uint32 src_city,
-    sint32 type_route, sint32 scr_good,   uint32 dest_city);
+	BOOL AiCreateTradeRoute(BOOL *is_unknown_id,  uint32 src_city,
+	sint32 type_route, sint32 scr_good,   uint32 dest_city);
 
-    sint32 GetResourceCount(BOOL *is_unknown_id , uint32 u_city_id, 
-                                const sint32 type_good) const;
-    double GetRouteCost(BOOL *is_unknown_id , 
-        uint32 u_src_city, uint32 u_dest_city);
+	sint32 GetResourceCount(BOOL *is_unknown_id , uint32 u_city_id, 
+	                        const sint32 type_good) const;
+	double GetRouteCost(BOOL *is_unknown_id , 
+	                    uint32 u_src_city, uint32 u_dest_city);
 
-    BOOL CityBuyFront(BOOL *is_unknown_id , uint32 u_city_id);
-    sint32 CityGetOvertimeCost(BOOL *is_unknown_id , uint32 u_city_id);
-    
-    BOOL ArmyGetNumCargo (BOOL *is_unknown_id, uint32 u_id, 
-         sint32 *full_slots, sint32 *empty_slots); 
+	BOOL CityBuyFront(BOOL *is_unknown_id , uint32 u_city_id);
+	sint32 CityGetOvertimeCost(BOOL *is_unknown_id , uint32 u_city_id);
 
-    sint32 AiNumUnitsCanMoveIntoThisTranportEver(BOOL *is_unknown_id,  uint32 test_me, 
-       uint32 transport);
-    
-    BOOL AiCanMoveArmyIntoThisTranportEver(BOOL *is_unknown_id,  uint32 test_me, 
-       uint32 transport);
+	BOOL ArmyGetNumCargo (BOOL *is_unknown_id, uint32 u_id, 
+	     sint32 *full_slots, sint32 *empty_slots); 
 
-    BOOL AiCanMoveArmyIntoThisTranportRightNow(BOOL *is_unknown_id,  
-        uint32 move_me, uint32 transport, BOOL *enough_move, 
-        BOOL *adjacent, BOOL *ever);
+	sint32 AiNumUnitsCanMoveIntoThisTranportEver(BOOL *is_unknown_id,  uint32 test_me, 
+	   uint32 transport);
+	
+	BOOL AiCanMoveArmyIntoThisTranportEver(BOOL *is_unknown_id,  uint32 test_me, 
+	   uint32 transport);
 
-    BOOL AiArmyMoveIntoTranport(BOOL *is_unknown_id,  uint32 move_me, 
-        uint32 transport, BOOL *is_transported);
+	BOOL AiCanMoveArmyIntoThisTranportRightNow(BOOL *is_unknown_id,  
+	    uint32 move_me, uint32 transport, BOOL *enough_move, 
+	    BOOL *adjacent, BOOL *ever);
 
-    BOOL AiGetCargoMovementPoints (BOOL *is_unknown_id, 
-         const uint32 u_tran_id,  double *min_move_point, BOOL *first_move);
+	BOOL AiArmyMoveIntoTranport(BOOL *is_unknown_id,  uint32 move_me, 
+	    uint32 transport, BOOL *is_transported);
 
-    BOOL AiParadrop(BOOL *is_unknown_id, uint32 u_id,  const MapPoint &dropPos, 
-        BOOL *all_dropped, BOOL *some_dropped, BOOL *all_died, 
-        BOOL *revealed_foreign_units, BOOL *revealed_unexplored);
+	BOOL AiGetCargoMovementPoints (BOOL *is_unknown_id, 
+	     const uint32 u_tran_id,  double *min_move_point, BOOL *first_move);
 
-    BOOL AiGetArmy(BOOL &is_unknown_id, uint32 u_id, Army &a);
-    BOOL AiGetCity(BOOL &is_unknonw_id, uint32 u_id, Unit &city); 
-    uint32 AiGetCityID(Unit &hc); 
+	BOOL AiParadrop(BOOL *is_unknown_id, uint32 u_id,  const MapPoint &dropPos, 
+	    BOOL *all_dropped, BOOL *some_dropped, BOOL *all_died, 
+	    BOOL *revealed_foreign_units, BOOL *revealed_unexplored);
 
-    sint32 GetAllTileValue(uint32 city_id, BOOL &is_unknown_id, sint32 num_tile, TileUtility *open_list[k_NUM_CITY_TILES]);
+	BOOL AiGetArmy(BOOL &is_unknown_id, uint32 u_id, Army &a);
+	BOOL AiGetCity(BOOL &is_unknonw_id, uint32 u_id, Unit &city); 
+	uint32 AiGetCityID(Unit &hc); 
 
-    friend class C3Player; 
+	sint32 GetAllTileValue(uint32 city_id, BOOL &is_unknown_id, sint32 num_tile, TileUtility *open_list[k_NUM_CITY_TILES]);
+
+	friend class C3Player; 
 
 	void IndicateTerrainPolluted(void) { m_terrainPollution = TRUE ; }
 	BOOL WasTerrainPolluted(void) const { return (m_terrainPollution) ; }
 
-	BOOL CheckPlayerDead();    
+	BOOL CheckPlayerDead();
 	BOOL IsDead(void) const { return (m_isDead) ; }					
-    void StartDeath(GAME_OVER reason, sint32 data);
+	void StartDeath(GAME_OVER reason, sint32 data);
 	static void RemoveDeadPlayers();
 	static Player *GetDeadPlayer(sint32 index);
 
@@ -1028,11 +1031,11 @@ public:
 	sint32 GetCityPopCount(uint32 city_id, BOOL &is_unknown_id) ;
 	sint32 GetCitySlaveCount(uint32 city_id, BOOL &is_unknown_id) ;
 	void GetCityProjectedHappinessAndCrime(uint32 city_id, double &happiness, double &crime, BOOL &is_unknown_id, 
-        sint32 *delta_martial_law);
+	    sint32 *delta_martial_law);
 	void GetCityProjectedFood(uint32 city_id, sint32 &food, BOOL &is_unknown_id) ;
 	void GetCityProjectedProduction(uint32 city_id, sint32 &production, BOOL &is_unknown_id) ;
 	void GetCityProjectedTrade(uint32 city_id, BOOL &is_unknown_id, 
-        sint32 &projected_gross_gold, sint32 &projected_net_gold);
+	    sint32 &projected_gross_gold, sint32 &projected_net_gold);
 	void GetProjectedTradeFromCell(uint32 city_id, MapPoint &pos, sint32 &trade, BOOL &is_unknown_id) ;
 	void GetCityRequiredFood(uint32 city_id, sint32 &food, BOOL &is_unknown_id) ;
 	sint32 GetTileFood(uint32 city_id, MapPoint &pos, BOOL &is_unknown_id) ;
@@ -1047,7 +1050,7 @@ public:
 
 	ATTITUDE_TYPE GetAttitude(PLAYER_INDEX player) const ;
 	void SetAttitude(PLAYER_INDEX player, ATTITUDE_TYPE attitude) ;
-    DIPLOMATIC_STRENGTH GetRelativeStrength(PLAYER_INDEX him) const; 
+	DIPLOMATIC_STRENGTH GetRelativeStrength(PLAYER_INDEX him) const; 
 
 	sint32 GetKnowledgeStrength() const;
 	sint32 GetMilitaryStrength() const;
@@ -1076,7 +1079,7 @@ public:
 	sint32 DeductPoints(sint32 p);
 	sint32 AddPoints(sint32 p);
 	sint32 SetPoints(sint32 p);
-    MBCHAR *GetDescriptionString();
+	MBCHAR *GetDescriptionString();
 
 	void TradeUnitsForPoints(const MapPoint &pnt);
 	void TradeUnitForPoints(Unit &unit);
@@ -1093,7 +1096,7 @@ public:
 	BOOL HasContactWith(PLAYER_INDEX player);
 	void SetHasAdvance(AdvanceType advance);
 	void GiveArmyCommand(Army &army, UNIT_COMMAND command);
-    void CheckWonderObsoletions(AdvanceType advance);
+	void CheckWonderObsoletions(AdvanceType advance);
 
 	void Emancipate();
 
