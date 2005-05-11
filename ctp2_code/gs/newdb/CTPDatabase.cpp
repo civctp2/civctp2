@@ -126,84 +126,44 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 	}
 }
 
-template <class T> T *CTPDatabase<T>::Access(sint32 index,sint32 govIndex)
+template <class T> T *CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 {
-	sint32 numberGovernmentRecords;
-	if (g_theGovernmentDB)
-	{
-		numberGovernmentRecords=g_theGovernmentDB->NumRecords();
-	}
-	else 
-	{
-		numberGovernmentRecords=0;
-		DPRINTF(k_DBG_FIX, ("GovMod- No Government Records \n"));
-	}
+	sint32 const    numberGovernmentRecords = 
+        g_theGovernmentDB ? g_theGovernmentDB->NumRecords() : 0;
 
 	Assert(index >= 0);
 	Assert(index < m_numRecords);
 	Assert(govIndex >= 0);
 	Assert(govIndex < numberGovernmentRecords);
-	if((index < 0) || (index >= m_numRecords) || (govIndex < 0) || (govIndex>=numberGovernmentRecords))
+	
+    if((index < 0) || (index >= m_numRecords) || (govIndex < 0) || (govIndex >= numberGovernmentRecords))
 		return NULL;
 
+    T *     result  = m_records[index]; // generic value (default)
 
-	PointerList<GovernmentModifiedRecordNode>::Walker *walk = new PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
-	bool found=false;
-	sint32 thisIndex=-1;
-	while(walk->IsValid()&&(!found)) {
-		thisIndex=walk->GetObj()->m_governmentModified;
-		if(thisIndex==govIndex)
-			found=true;
-		else
-			walk->Next();
+    // Check for govermnent spefic overrides
+	PointerList<GovernmentModifiedRecordNode>::Walker * walk = 
+        new PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
+
+	for (bool found = false; walk->IsValid() && (!found); walk->Next()) 
+    {
+		sint32 const    thisIndex = walk->GetObj()->m_governmentModified;
+		
+        if (thisIndex == govIndex)
+        {
+            result  = m_modifiedRecords[walk->GetObj()->m_modifiedRecord];
+			found   = true;
+        }
 	}
 
-	if(thisIndex==govIndex) {
-		return m_modifiedRecords[walk->GetObj()->m_modifiedRecord];
-	}
-	else
-		return m_records[index];
+    delete walk;
+    return result;
 }
 
 
-template <class T> const T *CTPDatabase<T>::Get(sint32 index,sint32 govIndex)
+template <class T> const T * CTPDatabase<T>::Get(sint32 index,sint32 govIndex)
 {
-
-	sint32 numberGovernmentRecords;
-	  if(g_theGovernmentDB)
-			numberGovernmentRecords=g_theGovernmentDB->NumRecords();
-	  else {
-		numberGovernmentRecords=0;
-		DPRINTF(k_DBG_FIX, ("GovMod- No Government Records \n"));
-	  }
-
-
-	Assert(index >= 0);
-	Assert(index < m_numRecords);
-	Assert(govIndex >= 0);
-	Assert(govIndex < numberGovernmentRecords);
-	if((index < 0) || (index >= m_numRecords) || (govIndex < 0) || (govIndex>=numberGovernmentRecords))
-		return NULL;
-
-
-
-
-	PointerList<GovernmentModifiedRecordNode>::Walker *walk = new PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
-	bool found=false;
-	sint32 thisIndex=-1;
-	while(walk->IsValid()&&(!found)) {
-		thisIndex=walk->GetObj()->m_governmentModified;
-		if(thisIndex==govIndex)
-			found=true;
-		else
-			walk->Next();
-	}
-
-	if(thisIndex==govIndex) {
-		return m_modifiedRecords[walk->GetObj()->m_modifiedRecord];
-	}
-	else
-		return m_records[index];
+    return const_cast<const T *>(Access(index, govIndex));
 }
 
 
@@ -374,9 +334,8 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 
 template <class T> sint32 CTPDatabase<T>::Parse(const C3DIR & c3dir, const char *filename)
 {
-	sint32 result;
-	DBLexer *lex = new DBLexer(c3dir, filename);
-	result = Parse(lex);
+	DBLexer *       lex     = new DBLexer(c3dir, filename);
+	sint32 const    result  = Parse(lex);
 	delete lex;
 	return result;
 }

@@ -1,17 +1,36 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Sprite file handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed some unused members, made file name parameter const.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
- 
+#if defined(_MSC_VER) && (_MSC_VER > 1000) 
 #pragma once
+#endif
 
 #include "c3.h"
 #include "Action.h"
@@ -108,8 +127,8 @@ class Anim;
 class SpriteFile 
 {
 public:
-	SpriteFile(MBCHAR *filename);
-	~SpriteFile();
+	SpriteFile(MBCHAR const * filename);
+	virtual ~SpriteFile();
 
 	void			WriteSpriteData(Sprite *s);
 	void			WriteFacedSpriteData(FacedSprite *s);
@@ -217,10 +236,8 @@ protected:
 	void *DeCompressData_LZW1(void *Data,unsigned CompressedLen,unsigned ActualLen);
 
 private:
-	char   		*m_file_data;
-	sint32       m_file_size;
-	FILE		*m_file;
-	MBCHAR		 m_filename[_MAX_PATH];
+	FILE *      m_file;
+	MBCHAR		m_filename[_MAX_PATH];
 };
 
 #endif

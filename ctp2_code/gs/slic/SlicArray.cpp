@@ -85,9 +85,14 @@ SlicArray::~SlicArray()
 
 void SlicArray::FixSize(sint32 size)
 {
-	if(m_array) {
-		delete [] m_array;
+	if (SS_TYPE_SYM == m_type) 
+    {
+        for (size_t i = 0; i < m_allocatedSize; ++i)
+        {
+		    delete m_array[i].m_sym;
+        }
 	}
+    delete [] m_array;
 
 	m_allocatedSize = m_arraySize = size; 
 	m_array = new SlicStackValue[m_allocatedSize];

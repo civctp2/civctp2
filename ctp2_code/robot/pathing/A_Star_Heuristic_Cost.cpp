@@ -16,53 +16,26 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// SUPER_DEBUG_HEURISTICS
 // 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - X-wrap added, structure cleaned up 
+// - X-wrap added, structure cleaned up.
+// - Removed some unused includes.
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
-#include "Globals.h"
-#include "DebugMemory.h"
-#include <Limits>
+#include "c3.h"                     // pre-compiled header
 
-#include "semi_dynamic_array.h"
+#include "A_Star_Heuristic_Cost.h"  // own declarations: consistency check
 
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "RandGen.h"
-#include "Cell.h"
-#include "A_Star_Heuristic_Cost.h"
+#include <algorithm>                // std::fill
+#include <limits>                   // DBL_MAX
+#include "World.h"                  // g_theWorld
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#include <algorithm>
 
 namespace
 {
@@ -163,12 +136,12 @@ A_Star_Heuristic_Cost::A_Star_Heuristic_Cost
 	bool const		a_HasYWrap,
 	bool const		a_HasXWrap
 )
-:	rows(DivCeil(a_RowCount, HEURISTIC_TILES_PER_GRID)),
-	columns(DivCeil(2 * a_ColumnCount, HEURISTIC_TILES_PER_GRID)),
-	world_rows(a_RowCount),
-	world_columns(2 * a_ColumnCount),
-	x_wrap(a_HasXWrap),
-	y_wrap(a_HasYWrap)
+:	rows            (DivCeil(a_RowCount, HEURISTIC_TILES_PER_GRID)),
+	columns         (DivCeil(2 * a_ColumnCount, HEURISTIC_TILES_PER_GRID)),
+	world_rows      (a_RowCount),
+	world_columns   (2 * a_ColumnCount),
+	x_wrap          (a_HasXWrap),
+	y_wrap          (a_HasYWrap)
 {
 	size_t const	blockCount	= rows * columns;
 

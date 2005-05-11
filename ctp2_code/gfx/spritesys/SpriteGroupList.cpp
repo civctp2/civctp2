@@ -241,14 +241,7 @@ SpriteGroup *SpriteGroupList::GetSprite(uint32 index, GROUPTYPE type, LOADTYPE l
 
 	SpriteGroup *group = m_spriteList[index];
 
-	
-	if (group==NULL) 
-	{
-		
-		err = LoadSprite(index, type, loadType,action);
-		Assert(err == SPRITELISTERR_OK);
-	} 
-	else 
+	if (group) 
 	{
 		if (loadType != group->GetLoadType()) 
 		{
@@ -261,6 +254,18 @@ SpriteGroup *SpriteGroupList::GetSprite(uint32 index, GROUPTYPE type, LOADTYPE l
 			}
 		}
 	}
+	else 
+    {
+        if (SPRITELISTERR_OK == LoadSprite(index, type, loadType, action))
+        {
+            // No action: m_spriteList[index] initialised with data from file
+        }
+        else
+        {
+            // Failure has been Asserted in LoadSprite
+            return NULL;
+        }
+	} 
 
 	switch (loadType) 
 	{

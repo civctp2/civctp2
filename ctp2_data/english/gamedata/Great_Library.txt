@@ -8319,7 +8319,7 @@ In modern times, the lawyer acted as an advocate on behalf of his or her client.
 
 [UNIT_LEVIATHON_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Unified Physics<e>
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY><e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>

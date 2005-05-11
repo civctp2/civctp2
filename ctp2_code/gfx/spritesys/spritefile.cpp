@@ -1,14 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Sprite file handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// __MAKESPR__
+// __SPRITETEST__
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Crash prevention, small clean-ups.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -29,11 +47,8 @@
 #include "EffectSpriteGroup.h"
 #include "Anim.h"
 #include "SpriteFile.h"
-#include "CivPaths.h"
-
-extern CivPaths				*g_civPaths;
-#include "profiledb.h"
-extern ProfileDB		*g_theProfileDB;
+#include "CivPaths.h"               // g_civPaths
+#include "profiledb.h"              // g_theProfileDB
 
 
 #ifdef __MAKESPR__
@@ -42,17 +57,20 @@ unsigned char g_compression_buff[COM_BUFF_SIZE];
 unsigned char *g_compression_buff=NULL;
 #endif
 
-SpriteFile::SpriteFile(MBCHAR *name)
+SpriteFile::SpriteFile(MBCHAR const * name)
+:   m_file              (NULL),
+    m_version           (k_SPRITEFILE_VERSION0),
+    m_spr_compression   (SPRDATA_REGULAR)
 {
 	strcpy(m_filename, name);
-	m_version         = k_SPRITEFILE_VERSION0;
-	m_spr_compression = SPRDATA_REGULAR;
 }
-
 
 SpriteFile::~SpriteFile()
 {
-
+    if (m_file)
+    {
+        c3files_fclose(m_file);
+    }
 }
 
 void SpriteFile::WriteSpriteData(Sprite *s)
@@ -1192,21 +1210,18 @@ SPRITEFILEERR SpriteFile::Create(SPRITEFILETYPE type,unsigned version,unsigned c
 	uint32			data;
 	MBCHAR			path[_MAX_PATH];
 
-#ifdef __MAKESPR__
+#if defined(__MAKESPR__) || defined(__SPRITETEST__)
 	strcpy(path, m_filename);
 #else
-
-	#ifdef __SPRITETEST__
-	strcpy(path, m_filename);
-	#else
-	
 	MBCHAR fullPath[_MAX_PATH];
 	g_civPaths->GetSpecificPath(C3DIR_SPRITES, fullPath, FALSE);
 	sprintf(path, "%s\\%s", fullPath, m_filename);
-
-	#endif
 #endif
 
+    if (m_file)
+    {
+        c3files_fclose(m_file);
+    }
 	m_file = c3files_fopen(C3DIR_DIRECT, path, "wb");
 
 	Assert(m_file != NULL);
@@ -1601,7 +1616,11 @@ SPRITEFILEERR SpriteFile::Write(CitySpriteGroup *s, Anim *anim)
 
 SPRITEFILEERR SpriteFile::CloseWrite()
 {
-	c3files_fclose(m_file);
+	if (m_file)
+    {
+        c3files_fclose(m_file);
+        m_file = NULL;
+    }
 
 	return SPRITEFILEERR_OK;
 }
@@ -1613,8 +1632,12 @@ SPRITEFILEERR SpriteFile::Open(SPRITEFILETYPE *type)
 	SPRITEFILEERR	err;
 	uint32			data;
 
-	
-	m_file = c3files_fopen(C3DIR_SPRITES, m_filename, "rb");
+	if (m_file)
+    {
+        c3files_fclose(m_file);
+    }
+    m_file = c3files_fopen(C3DIR_SPRITES, m_filename, "rb");
+
 	Assert(m_file != NULL);
 	if (m_file == NULL) return SPRITEFILEERR_NOOPEN;
 
@@ -1765,7 +1788,7 @@ SpriteFile::ReadBasic_v13(UnitSpriteGroup *s)
 				s->SetGroupAnim((GAME_ACTION)i, anim);
 			} else
 			if (i==UNITACTION_IDLE) {
-				if (g_theProfileDB->IsUnitAnim()) {
+				if (g_theProfileDB && g_theProfileDB->IsUnitAnim()) {
 					
 					sprite = s->GetGroupSprite((GAME_ACTION)i);
 					ReadSpriteDataGeneralFull(&sprite);
@@ -1898,7 +1921,7 @@ SpriteFile::ReadBasic_v20(UnitSpriteGroup *s)
 	   ReadSpriteDataGeneralBasic(&sprite);
 	   ReadAnimDataBasic(anim);
 #else
-		if(g_theProfileDB->IsUnitAnim())
+		if (g_theProfileDB && g_theProfileDB->IsUnitAnim())
 		{
 			ReadSpriteDataGeneralFull(&sprite);
 			ReadAnimDataFull(anim);
@@ -2469,7 +2492,11 @@ SPRITEFILEERR SpriteFile::Read(CitySpriteGroup **s, Anim **anim)
 
 SPRITEFILEERR SpriteFile::CloseRead()
 {
-	c3files_fclose(m_file);
+	if (m_file)
+    {
+        c3files_fclose(m_file);
+        m_file = NULL;
+    }
 
 	return SPRITEFILEERR_OK;
 }

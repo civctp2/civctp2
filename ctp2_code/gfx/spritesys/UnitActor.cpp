@@ -133,7 +133,7 @@ namespace
 
 UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner, BOOL isUnseenCellActor,
 					 double visionRange, sint32 citySprite)
-: Actor(ss)
+:   Actor   (ss)
 {	
 	sint32 spriteID;
 
@@ -180,13 +180,12 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 
 
 UnitActor::UnitActor(CivArchive &archive)
+:   Actor   (NULL)
 {
 	m_refCount = 1;
 
 	m_unitVisibility = NULL;
 	m_unitSaveVisibility = NULL;
-
-	m_spriteState = NULL;
 
 	Serialize(archive);
 	Initialize();
@@ -348,36 +347,30 @@ void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unit
 UnitActor::~UnitActor()
 {
 	DumpAllActions();
-
 	
-	
-	if (m_type == GROUPTYPE_UNIT) {
-		if (g_unitSpriteGroupList->ReleaseSprite(m_spriteID, m_loadType))
-			m_unitSpriteGroup = NULL;
-	} else {
-		if (g_citySpriteGroupList->ReleaseSprite(m_spriteID, m_loadType))
-			m_unitSpriteGroup = NULL;
+	if (m_type == GROUPTYPE_UNIT) 
+    {
+		g_unitSpriteGroupList->ReleaseSprite(m_spriteID, m_loadType);
+        if (LOADTYPE_BASIC != m_loadType)
+        {
+            g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_BASIC);
+        }
+	} 
+    else 
+    {
+		g_citySpriteGroupList->ReleaseSprite(m_spriteID, m_loadType);
+        if (LOADTYPE_BASIC != m_loadType)
+        {
+		    g_citySpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_BASIC);
+        }
 	}
 
-	if(m_savedRevealedActors != NULL)
-	{
+	delete [] m_savedRevealedActors;
+	delete [] m_revealedActors;
 
-
-		delete[] m_savedRevealedActors;
-	}
-
-	if(m_revealedActors != NULL)
-	{
-
-
-		delete[] m_revealedActors;
-	}
-
-	
 	m_actionQueue.Deallocate();
 
-	
-	if (m_spriteState) delete m_spriteState;
+	delete m_spriteState;
 }
 
 void UnitActor::Hide(void)
@@ -419,11 +412,6 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 
 	if (spriteID == -1) {
 
-#ifdef _DEBUG
-		
-
-
-#endif
 
 		spriteID = 1;
 

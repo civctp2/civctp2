@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Base actor class
 //
 //----------------------------------------------------------------------------
 //
@@ -16,16 +16,26 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// _ACTOR_DRAW_OPTIMIZATION
+//
 // 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Animation queue increased to 12 fixing bug #4
+// - Merged constructors and initialised all members.
 //
 //----------------------------------------------------------------------------
 
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __ACTOR_H__
 #define __ACTOR_H__
 
@@ -48,8 +58,7 @@ class Anim;
 class Actor 
 {
 public:
-	Actor(SpriteState *ss);
-	Actor();
+	Actor(SpriteState * ss = NULL);
 	virtual ~Actor(void);
 
 	void	SetX(sint32 x) { m_x = x; }
