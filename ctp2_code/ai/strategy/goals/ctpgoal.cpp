@@ -49,9 +49,7 @@
 //   - Feb. 21st 2005 Martin Gühmann
 // - Removed unnecessary reinitialization in Compute_Needed_Troop_Flow for trade
 //   routes and tileimps. - Feb. 21st 2005 Martin Gühmann
-// - Abolisionist go now to cities with slaves instead of cities without 
-//   slaves. - April 23rd 2005 Martin Gühmann
-//   Started to reimplement the refuel order. - May 7th 2005 Martin Gühmann
+// - Started to reimplement the refuel order. - May 7th 2005 Martin Gühmann
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------

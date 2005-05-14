@@ -1,3 +1,27 @@
+################################################################################
+#
+#  Project      : Call To Power 2
+#  File type    : LDL layout description 
+#  Description  : Single player pop-up boxes for the game settings.
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Set the minimum number of players from 3 to 1.
+#  - Removed references to non-existing files upba5700.tga and upba5701.tga.
+# 
+################################################################################
+
 template SP_POPUP_LABEL:CTP2_STANDARD_FONT {
 
 	int	widthpix	100
@@ -32,9 +56,9 @@ template SP_POPUP_SWITCH_LARGE:CTP2_STANDARD_FONT {
 
 	bool	shadowfont	true
 
-	string	image0	"upba5700.tga"
+	string	image0	"error.tga"
 
-	string	image1	"upba5701.tga"
+	string	image1	"error.tga"
 
 	int	widthpix	123
 

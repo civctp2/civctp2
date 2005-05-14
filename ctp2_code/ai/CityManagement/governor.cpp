@@ -365,6 +365,11 @@ void Governor::NormalizeSliders(SlidersSetting & sliders_setting) const
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
+	DPRINTF(k_DBG_GAMESTATE, ("Governor::NormalizeSliders\n"));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
+
 	//Added casts
 	if(player_ptr->GetWorkdayExpectation() - sliders_setting.m_deltaProduction > 2)
 		sliders_setting.m_deltaProduction = -2 + static_cast<sint32>(player_ptr->GetWorkdayExpectation());
@@ -407,10 +412,23 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
+	DPRINTF(k_DBG_GAMESTATE, ("Governor::SetSliders\n"));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
+
 	//Added casts
 	player_ptr->SetWorkdayLevel(static_cast<sint32>(player_ptr->GetWorkdayExpectation()) - sliders_setting.m_deltaProduction);
 	player_ptr->SetWagesLevel(static_cast<sint32>(player_ptr->GetWagesExpectation()) - sliders_setting.m_deltaGold);
 	player_ptr->SetRationsLevel(static_cast<sint32>(player_ptr->GetRationsExpectation()) - sliders_setting.m_deltaFood );
+
+	DPRINTF(k_DBG_GAMESTATE, ("Government:      %i\n", player_ptr->GetGovernmentType()));
+	DPRINTF(k_DBG_GAMESTATE, ("WorkdayExp:      %f\n", player_ptr->GetWorkdayExpectation()));
+	DPRINTF(k_DBG_GAMESTATE, ("WagesExp:        %f\n", player_ptr->GetWagesExpectation()));
+	DPRINTF(k_DBG_GAMESTATE, ("RationsExp:      %f\n", player_ptr->GetRationsExpectation()));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
 		
 	if (update_cities == false)
 		return 0;
@@ -432,9 +450,9 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-	//	AssignPopulation(city);
+		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-	//	city->CalcHappiness(gold, FALSE);
+		city->CalcHappiness(gold, FALSE);
 
 		city->DoSupport(true);
 		city->SplitScience(true);
@@ -466,7 +484,7 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 //
 // Returns    : -
 //
-// Remark(s)  : -
+// Remark(s)  : Only used by GetSlidersAdvice and this isn't used.
 //
 //----------------------------------------------------------------------------
 void Governor::GetSliders(SlidersSetting & sliders_setting) const
@@ -477,14 +495,17 @@ void Governor::GetSliders(SlidersSetting & sliders_setting) const
 
 	sliders_setting.m_deltaProduction = 
 		static_cast<sint32>(player_ptr->GetWorkdayExpectation() - player_ptr->GetUnitlessWorkday());
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
 
 
 	sliders_setting.m_deltaGold = 
 		static_cast<sint32>(player_ptr->GetWagesExpectation() - player_ptr->GetUnitlessWages());
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold: %i\n", sliders_setting.m_deltaGold));
 
 
 	sliders_setting.m_deltaFood =
 		static_cast<sint32>(player_ptr->GetRationsExpectation() - player_ptr->GetUnitlessRations());
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood: %i\n", sliders_setting.m_deltaFood));
 }
 
 //----------------------------------------------------------------------------
@@ -510,6 +531,10 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 	bool happiness_test;
 	SlidersSetting tmp_sliders_setting;
 
+	DPRINTF(k_DBG_GAMESTATE, ("Governor::ComputeMinimumSliders\n"));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
 	
 	bool found = TestSliderSettings(sliders_setting, 
 	                                production_test,
@@ -620,6 +645,11 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 {
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+
+	DPRINTF(k_DBG_GAMESTATE, ("Governor::ComputeBestSliders\n"));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
 
 	bool config_found = false;
 	bool found;
@@ -737,6 +767,11 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 	bool happiness_test;
 
 	
+	DPRINTF(k_DBG_GAMESTATE, ("Governor::FitSlidersToCities\n"));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
+
 	NormalizeSliders(sliders_setting);
 
 	const StrategyRecord & strategy = 
@@ -870,6 +905,11 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
+	DPRINTF(k_DBG_GAMESTATE, ("Governor::TestSliderSettings\n"));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
+	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
+
 	double deficit_spending;
 	sint32 min_happiness;
 	double max_wage_percent;
@@ -913,9 +953,9 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-//		AssignPopulation(city);
+		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-//		city->CalcHappiness(gold, FALSE);
+		city->CalcHappiness(gold, FALSE);
 			
 		city->ProcessFood();
 		city->CollectOtherTrade(TRUE, FALSE);
@@ -974,6 +1014,11 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	){
 		gold_test = false;
 	}
+
+	DPRINTF(k_DBG_GAMESTATE, ("production_test: %i\n", static_cast<sint32>(production_test)));
+	DPRINTF(k_DBG_GAMESTATE, ("gold_test:       %i\n", static_cast<sint32>(gold_test)));
+	DPRINTF(k_DBG_GAMESTATE, ("food_test:       %i\n", static_cast<sint32>(food_test)));
+	DPRINTF(k_DBG_GAMESTATE, ("happiness_test:  %i\n", static_cast<sint32>(happiness_test)));
 
 	return (production_test && gold_test && food_test && happiness_test);
 }
@@ -2294,13 +2339,19 @@ void Governor::AssignPopulation(CityData *city) const {
 		}
 		if(min_entertainers > city->WorkerCount()){
 			count = min_entertainers - city->WorkerCount();
-			count = (count <= city->ScientistCount()) ? count : city->LaborerCount();
+			count = (count <= city->ScientistCount()) ? count : city->ScientistCount();
 			city->ChangeSpecialists(POP_SCIENTIST, -count);
 		}
 		if(min_entertainers > city->WorkerCount()){
 			count = min_entertainers - city->WorkerCount();
-			count = (count <= city->MerchantCount()) ? count : city->LaborerCount();
+			count = (count <= city->MerchantCount()) ? count : city->MerchantCount();
 			city->ChangeSpecialists(POP_MERCHANT, -count);
+		}
+		if(min_entertainers > city->WorkerCount()){
+			min_entertainers = city->WorkerCount();
+		}
+		if(max_entertainers > city->WorkerCount()){
+			max_entertainers = city->WorkerCount();
 		}
 
 		count = static_cast<sint32>
