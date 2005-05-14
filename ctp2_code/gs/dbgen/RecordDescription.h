@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Database record generator header
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -40,7 +41,7 @@
 #define k_MAX_RECORD_NAME 256
 #define k_MAX_STRING 256
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #include "Datum.h"
 #include "MemberClass.h"

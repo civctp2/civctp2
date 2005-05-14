@@ -1,34 +1,41 @@
+/**
+ * $Id$
+ */
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 
-
+#if !defined(USE_COM_REPLACEMENT)
 #include "c3.h"
+#else
+#include <algorithm>
+
+#if defined(HAVE_STRING_H)
+#include <string.h>
+#endif
+
+using std::max;
+#endif
 #include "Geometric.h"
 #include "FaultGen.h"
 #include <stdlib.h>
 #include "IC3Rand.h"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 struct georect {
 	int x, y, w, h;
 };
 
+#if defined(USE_COM_REPLACEMENT)
+extern "C" IMapGenerator *CoCreateMapGenerator()
+{
+	IMapGenerator *gen = new Geometric();
+	gen->AddRef();
+	return gen;
+}
+
+Geometric::~Geometric()
+{
+}
+#else
 STDAPI CoCreateMapGenerator(IUnknown **obj)
 {
 	Geometric *gen = new Geometric();
@@ -52,13 +59,22 @@ STDMETHODIMP Geometric::QueryInterface(REFIID riid, void **obj)
 	}
 	return E_NOINTERFACE;
 }
+#endif
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP_(ULONG) Geometric::AddRef()
+#else
+uint32 Geometric::AddRef()
+#endif
 {
 	return ++m_refCount;
 }
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP_(ULONG) Geometric::Release()
+#else
+uint32 Geometric::Release()
+#endif
 {
 	if(--m_refCount)
 		return m_refCount;
@@ -67,8 +83,8 @@ STDMETHODIMP_(ULONG) Geometric::Release()
 }
 
 void Geometric::RaiseRectangle(sint32 sx, sint32 sy,
-							   sint32 rectw, sint32 recth,
-							   sint32 amount)
+                               sint32 rectw, sint32 recth,
+                               sint32 amount)
 {
 	sint32 x, y;
 	for(x = sx; x < sx + rectw; x++) {
@@ -97,8 +113,8 @@ void Geometric::RaiseRectangle(sint32 sx, sint32 sy,
 }
 
 void Geometric::RaiseCircle(sint32 sx, sint32 sy,
-							   sint32 rectw, sint32 recth,
-							   sint32 amount)
+                            sint32 rectw, sint32 recth,
+                            sint32 amount)
 {
 	sint32 x, y;
 	float x2;
@@ -244,9 +260,15 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 	delete [] landmap;
 }
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
-							  IC3Rand *randgen,
-							  const double *settings, sint32 numSettings)
+                                 IC3Rand *randgen,
+                                 const double *settings, sint32 numSettings)
+#else
+void Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
+                         IC3Rand *randgen,
+                         const double *settings, sint32 numSettings)
+#endif
 {
 	memset(outmap, -127, outwidth * outheight);
 	m_usedmap = new sint8[outwidth * outheight];
@@ -309,7 +331,7 @@ STDMETHODIMP Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheigh
 
 	sint32 cont;
 	for(cont = 0; cont < numContinents; cont++) {
-		BOOL locOk = FALSE;
+		bool locOk = false;
 		sint32 loop_guard = 100;
 		sint32 contx, conty, width, height;
 		while(!locOk && loop_guard-- > 0) {
@@ -319,7 +341,7 @@ STDMETHODIMP Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheigh
 			width = randgen->Next(maxWidth - minWidth) + minWidth;
 			height = randgen->Next(maxHeight - minHeight) + minHeight;
 
-			locOk = TRUE;
+			locOk = true;
 
 			sint32 centerx = contx + width/2;
 			sint32 centery = conty + height / 2;
@@ -329,7 +351,7 @@ STDMETHODIMP Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheigh
 				centery -= height;
 
 			if(m_usedmap[centery * m_width + centerx]) {
-				locOk = FALSE;
+				locOk = false;
 			}
 		}
 
@@ -373,12 +395,14 @@ STDMETHODIMP Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheigh
 	
 	delete [] m_usedmap;
 
+#if !defined(USE_COM_REPLACEMENT)
 	return S_OK;
+#endif
 }
 
 void Geometric::GenerateSubContinent(sint32 contx, sint32 conty,
-									 sint32 cwidth, sint32 cheight,
-									 sint32 bumpSize)
+                                     sint32 cwidth, sint32 cheight,
+                                     sint32 bumpSize)
 {
 	sint32 cx, cy;
 	sint32 x, y;

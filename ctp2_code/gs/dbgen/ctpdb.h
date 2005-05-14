@@ -1,4 +1,6 @@
-
+/**
+ * $Id$
+ */
 #ifndef __CTPDB_H__
 #define __CTPDB_H__
 
@@ -7,13 +9,6 @@ extern "C" {
 #endif
 
 #define Assert(x) { if(!(x)) { fprintf(stderr, "Assert %s:%d: %s\n", __FILE__, __LINE__, #x); } }
-typedef long sint32;
-typedef unsigned long uint32;
-typedef short sint16;
-typedef unsigned short uint16;
-typedef char sint8;
-typedef unsigned char uint8;
-typedef int BOOL;
 
 typedef enum {
 	DATUM_INT,

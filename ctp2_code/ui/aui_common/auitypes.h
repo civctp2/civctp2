@@ -12,10 +12,7 @@
 #ifndef __AUITYPES_H__
 #define __AUITYPES_H__
 
-
-
-
-
+#include "ctp2_inttypes.h"
 
 enum AUI_ERRCODE
 {
@@ -97,35 +94,21 @@ enum AUI_ERRCODE
 	AUI_ERRCODE_MAX
 };
 
-
-
-
-
-
-
-
 #define Mod(a,m)			((a)-(m)*(sint32)floor((double)(a)/(double)(m)))
 
 #define AUI_SUCCESS(err)	((err)==AUI_ERRCODE_OK)
 #define AUI_NEWOK(obj,err)	((obj)&&AUI_SUCCESS(err))
 
-
-
-
-
-
-typedef signed char         sint8;
-typedef unsigned char       uint8;
-typedef signed short int	sint16;
-typedef unsigned short int	uint16;
-typedef signed long int		sint32;
-typedef unsigned long int	uint32;
-
+#if defined(WIN32)
 typedef _TCHAR				tchar;
-
-
 typedef tchar				MBCHAR;
 typedef MBCHAR*				LPMBCHAR;
+#else
+typedef char                            _TCHAR;
+typedef _TCHAR                          tchar;
+typedef tchar                           MBCHAR;
+typedef MBCHAR*                         LPMBCHAR;
+#endif
 
 
 #endif 

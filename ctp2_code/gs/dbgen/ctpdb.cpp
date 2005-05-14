@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Database generator
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,12 +28,21 @@
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#elif defined(WIN32)
+#include <windows.h>
 #include <direct.h>
+#endif
 #include <time.h>
+#include <errno.h>
 
 #include "ctpdb.h"
 #include "RecordDescription.h"
@@ -40,10 +50,61 @@
 RecordDescription *g_record = NULL;
 
 #ifndef _MAX_PATH
+#if defined(PATH_MAX)
+#define _MAX_PATH PATH_MAX
+#endif
+#else
 #define _MAX_PATH 1024
 #endif
 
+#ifndef FREAD_BUF_SIZE
+#define FREAD_BUF_SIZE 16384
+#endif
+
 static char s_output_dir[_MAX_PATH];
+
+static int copy_file(char *srcFName, char *dstFName)
+{
+	Assert(srcFName);
+	Assert(dstFName);
+
+	char buf[FREAD_BUF_SIZE];
+	FILE *inFile = fopen(srcFName, "r");
+
+	Assert(inFile);
+	if (!inFile)
+		return -1;
+
+	FILE *outFile = fopen(dstFName, "w");
+	Assert(outFile);
+	if (!outFile) {
+		fclose(inFile);
+		return -1;
+	}
+
+	size_t read;
+	size_t wrote;
+
+	while ((read = fread((void *)&buf, sizeof(char),
+	                     sizeof(buf) / sizeof(char), inFile
+	                    )
+	       ) > 0) {
+		wrote = fwrite((void *)&buf, sizeof(char),
+		               read, outFile);
+		
+	}
+
+	fclose(outFile);
+	fclose(inFile);
+
+	if (-1 == read)
+		return -1;
+
+	if (-1 == wrote)
+		return -1;
+
+	return 0;
+}
 
 void db_set_output_dir(char *dir)
 {
@@ -89,7 +150,7 @@ bool db_files_differ(char *newFilePath, char *oldFilePath)
 		return true;
 	}
 
-#define DIFF_SIZE 16384
+#define DIFF_SIZE FREAD_BUF_SIZE
 
 	while(!feof(n) && !feof(o)) {
 		char nb[DIFF_SIZE], ob[DIFF_SIZE];
@@ -121,7 +182,6 @@ void db_maybe_copy(char *newFilePath)
 
 	chdir(db_get_code_directory());
 
-	char cmd[1024];
 	char oldFilePath[_MAX_PATH];
 
 
@@ -134,10 +194,20 @@ void db_maybe_copy(char *newFilePath)
 	*dot = 0;
 
 	if(db_files_differ(oldFilePath, newFilePath)) {
-		sprintf(cmd, "copy %s %s.old", oldFilePath, oldFilePath);
-		system(cmd);
-		sprintf(cmd, "copy %s %s", newFilePath, oldFilePath);
-		system(cmd);
+		char backupPath[_MAX_PATH] = { 0 };
+		sprintf(backupPath, "%s.old", oldFilePath);
+#ifdef _DEBUG
+		printf("%s -> %s\n", oldFilePath, backupPath);
+#endif
+		if (0 != copy_file(oldFilePath, backupPath)) {
+		  fprintf(stderr, "%s\n", strerror(errno));
+		}
+#ifdef _DEBUG
+		printf("%s -> %s\n", newFilePath, oldFilePath);
+#endif
+		if (0 != copy_file(newFilePath, oldFilePath)) {
+		  fprintf(stderr, "%s\n", strerror(errno));
+		}
 	}
 #if 0
 	sprintf(cmd, "diff -q %s %s", oldFilePath, newFilePath);
@@ -181,11 +251,7 @@ void db_maybe_copy(char *newFilePath)
 		}
 	}
 #endif
-	sprintf(cmd, "del %s", newFilePath);
-	system(cmd);
-	
-	
-	
+	unlink(newFilePath);
 
 	chdir(oldpath);
 }
@@ -196,7 +262,8 @@ void db_end_record(char *name)
 	FILE *outfile = NULL;
 
 	
-	sprintf(filename, "%s\\%sRecord.h.new", db_get_code_directory(), name);
+	sprintf(filename, "%s%s%sRecord.h.new",
+	        db_get_code_directory(), FILE_SEP, name);
 
 	outfile = db_open_file(filename);
 	Assert(outfile);
@@ -208,10 +275,11 @@ void db_end_record(char *name)
 	fclose(outfile);
 
 	
-	db_maybe_copy(strrchr(filename, '\\') + 1);
+	db_maybe_copy(strrchr(filename, FILE_SEPC) + 1);
 
 	
-	sprintf(filename, "%s\\%sRecord.cpp.new", db_get_code_directory(), name);
+	sprintf(filename, "%s%s%sRecord.cpp.new",
+	        db_get_code_directory(), FILE_SEP, name);
 
 	outfile = db_open_file(filename);
 	Assert(outfile);
@@ -222,9 +290,10 @@ void db_end_record(char *name)
 	
 	fclose(outfile);
 
-	db_maybe_copy(strrchr(filename, '\\') + 1);
+	db_maybe_copy(strrchr(filename, FILE_SEPC) + 1);
 
-	sprintf(filename, "%s\\%sRecord.stamp", db_get_code_directory(), name);
+	sprintf(filename, "%s%s%sRecord.stamp",
+	        db_get_code_directory(), FILE_SEP, name);
 	FILE *stamp = fopen(filename, "w");
 	Assert(stamp);
 	if(stamp) {

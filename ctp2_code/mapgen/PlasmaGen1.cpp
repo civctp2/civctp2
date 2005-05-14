@@ -1,4 +1,6 @@
-
+/**
+ * $Id$
+ */
 #define INITGUID
 
 #include "c3.h"

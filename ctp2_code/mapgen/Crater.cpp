@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,15 +26,31 @@
 //   VC++ .NET compilation.
 //
 //----------------------------------------------------------------------------
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 
-
+#if !defined(USE_COM_REPLACEMENT)
 #define INITGUID
 
 #include "c3.h"
+#endif
+
 #include "Crater.h"
 #include <stdlib.h>
 #include "IC3Rand.h"
 
+#if defined(USE_COM_REPLACEMENT)
+extern "C" IMapGenerator *CoCreateMapGenerator()
+{
+	IMapGenerator *gen = new Crater();
+	gen->AddRef();
+	return gen;
+}
+
+Crater::~Crater()
+{
+}
+#else
 STDAPI CoCreateMapGenerator(IUnknown **obj)
 {
 	Crater *gen = new Crater();
@@ -57,13 +74,22 @@ STDMETHODIMP Crater::QueryInterface(REFIID riid, void **obj)
 	}
 	return E_NOINTERFACE;
 }
+#endif
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP_(ULONG) Crater::AddRef()
+#else
+uint32 Crater::AddRef()
+#endif
 {
 	return ++m_refCount;
 }
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP_(ULONG) Crater::Release()
+#else
+uint32 Crater::Release()
+#endif
 {
 	if(--m_refCount)
 		return m_refCount;
@@ -71,9 +97,15 @@ STDMETHODIMP_(ULONG) Crater::Release()
 	return 0;
 }
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP Crater::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
-							  IC3Rand *randgen,
-							  const double *settings, sint32 numSettings)
+                              IC3Rand *randgen,
+                              const double *settings, sint32 numSettings)
+#else
+void Crater::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
+                      IC3Rand *randgen,
+                      const double *settings, sint32 numSettings)
+#endif
 {
 	sint32 numCraters, maxRadius;
 	if(numSettings >= 1) {
@@ -134,5 +166,7 @@ STDMETHODIMP Crater::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 			}
 		}
 	}
+#if !defined(USE_COM_REPLACEMENT)
 	return S_OK;
+#endif
 }

@@ -1,11 +1,33 @@
+/**
+ * $Id$
+ */
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 
+#if !defined(USE_COM_REPLACEMENT)
 #define INITGUID
 
 #include "c3.h"
+#else
+#include "noCOMBase.h"
+#endif
+
 #include "PlasmaGen2.h"
 #include <stdlib.h>
 #include "IC3Rand.h"
 
+#if defined(USE_COM_REPLACEMENT)
+extern "C" IMapGenerator *CoCreateMapGenerator()
+{
+	IMapGenerator *gen = new PlasmaGenerator2();
+	gen->AddRef();
+	return gen;
+}
+
+PlasmaGenerator2::~PlasmaGenerator2()
+{
+}
+#else
 STDAPI CoCreateMapGenerator(IUnknown **obj)
 {
 	PlasmaGenerator2 *gen = new PlasmaGenerator2();
@@ -29,13 +51,22 @@ STDMETHODIMP PlasmaGenerator2::QueryInterface(REFIID riid, void **obj)
 	}
 	return E_NOINTERFACE;
 }
+#endif
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP_(ULONG) PlasmaGenerator2::AddRef()
+#else
+uint32 PlasmaGenerator2::AddRef()
+#endif
 {
 	return ++m_refCount;
 }
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP_(ULONG) PlasmaGenerator2::Release()
+#else
+uint32 PlasmaGenerator2::Release()
+#endif
 {
 	if(--m_refCount)
 		return m_refCount;
@@ -53,9 +84,15 @@ sint8 Rand1(IC3Rand *randgen, sint16 base, sint16 delta)
 	return (sint8)res;
 }
 
+#if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
-										IC3Rand *randgen,
-										const double *settings, sint32 numSettings)
+                                        IC3Rand *randgen,
+                                        const double *settings, sint32 numSettings)
+#else
+void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
+                                IC3Rand *randgen,
+                                const double *settings, sint32 numSettings)
+#endif
 {
 	double roughness;
 	if(numSettings >= 1)
@@ -134,5 +171,7 @@ STDMETHODIMP PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 o
 	}
 
 	delete [] map;
+#if !defined(USE_COM_REPLACEMENT)
 	return S_OK;
+#endif
 }

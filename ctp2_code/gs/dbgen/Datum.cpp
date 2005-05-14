@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Database record file generator
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -28,9 +29,15 @@
 //   values of bits can be accesses if these bits have default values.
 //
 //----------------------------------------------------------------------------
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 
 #include <stdio.h>
 #include <string.h>
+#if defined(WIN32)
+#include <windows.h>
+#endif
+
 #include "ctpdb.h"
 #include "RecordDescription.h"
 

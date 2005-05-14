@@ -1,7 +1,23 @@
-
+/**
+ * $Id$
+ */
+#include "ctp2_config.h"
+#include "c3types.h"
 
 #include "c3.h"
+
+#if defined(HAVE_SYS_TYPES_H)
+#include <sys/types.h>
+#endif
+#if defined(HAVE_SYS_PARAM_H)
+#include <sys/param.h>
+#endif
+#include <limits.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "appstrings.h"
+#include "c3errors.h"
 
 static MBCHAR **s_appStrings;
 static sint32	s_numAppStrings;
@@ -51,4 +67,3 @@ MBCHAR *appstrings_GetString(APPSTR stringID)
 		return NULL;
 	}
 }
-

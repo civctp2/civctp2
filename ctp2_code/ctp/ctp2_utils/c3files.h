@@ -1,16 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * $Id$
+ */
+#if defined(_MSC_VER) && (_MSC_VER > 1200)
 #pragma once
+#endif
 #ifndef __C3FILES_H__
 #define __C3FILES_H__
 
@@ -83,6 +76,9 @@ void		c3files_StripSpaces(MBCHAR *s);
 
 
 sint32		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
+#if !defined(WIN32)
+typedef MBCHAR WIN32_FIND_DATA;
+#endif
 sint32		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
 
 

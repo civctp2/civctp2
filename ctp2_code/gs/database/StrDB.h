@@ -62,8 +62,8 @@ extern	StringDB *	g_theStringDB;
 
 #include "c3types.h"	// MBCHAR
 #include "dbtypes.h"	// StringId
-#include "strrec.h"		// StringRecord
-#include "token.h"		// Token
+#include "StrRec.h"		// StringRecord
+#include "Token.h"		// Token
 
 //----------------------------------------------------------------------------
 // Class declarations

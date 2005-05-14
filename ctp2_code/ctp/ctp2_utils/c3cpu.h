@@ -1,6 +1,10 @@
+/**
+ * $Id$
+ */
 #ifndef __C3CPU_H__
 #define __C3CPU_H__
 
+#if defined(WIN32)
 #define CPUINFODLL "dll\\util\\cpuinf32.dll"
 
 
@@ -24,8 +28,8 @@ struct TIME_STAMP
 
 
 #define CLONE_MASK		0x8000	
-								
 
+#endif								
 
 void		c3cpu_Initialize(void);
 void		c3cpu_Examine(void);

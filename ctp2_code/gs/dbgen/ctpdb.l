@@ -1,4 +1,7 @@
 %{
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
+
 #include "ctpdb.h"
 #include "y.tab.h"
 #include <stdlib.h>

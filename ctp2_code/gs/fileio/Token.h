@@ -16,7 +16,7 @@
 
 #define k_MAX_TOKEN_LEN _MAX_PATH
 
-enum C3DIR;
+#include "c3files.h"
 #include "dbtypes.h"
 
 enum TOKEN_TYPES { 
@@ -694,6 +694,12 @@ sint32  token_ParseFloatNext(Token *aToken, const sint32 t, double &val);
 sint32	token_ParseAnOpenBraceNext(Token *aToken);
 sint32	token_ParseAnCloseBraceNext(Token *aToken);
 sint32	token_ParseAnCloseBrace(Token *aToken);
+#if !defined(WIN32)
+struct POINT {
+	sint32 x;
+	sint32 y;
+};
+#endif
 POINT	token_ParsePoint(Token *theToken);
 
 template <class T> class CTPDatabase;

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : General declarations
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -62,13 +63,14 @@
 #endif	// _MSC_VER
 
 #include <limits.h>
-#if !defined(__GNUC__)
+
+#if defined(WIN32)
 #include <crtdbg.h>
-#endif // __GNUC__
 
 // Do not define the min and max *macros* in <windows.h>.
 #define NOMINMAX	
 #include <windows.h>
+#endif
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)
 	// MSVC 6.0 does not even have std::min and std::max.
@@ -95,11 +97,12 @@
 	using std::min;
 	using std::max;
 
+#if defined(WIN32)
 #include <tchar.h>
 
-#include "ddraw.h"
-#include "dinput.h"
-
+#include <ddraw.h>
+#include <dinput.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -115,8 +118,7 @@
 #if defined(__GNUC__)
 #define _MAX_PATH PATH_MAX
 #endif // __GNUC__
-
-#include "c3types.h"
+#include "ctp2_inttypes.h"
 #include "c3debug.h"
 #include "c3errors.h"
 #include "aui.h"

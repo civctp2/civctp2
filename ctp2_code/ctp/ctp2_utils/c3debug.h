@@ -1,16 +1,10 @@
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * $Id$
+ */
+#if defined(_MSC_VER) && (_MSC_VER > 1200)
 #pragma once
+#endif
+
 #ifndef __C3DEBUG_H__
 #define __C3DEBUG_H__
 
@@ -66,9 +60,11 @@ int		c3debug_InitDebugLog();
 int		c3debug_dprintf(char* format, ...);
 int		c3debug_dprintfPrefix(int mask, char* file, int line);
 void	c3debug_SetDebugMask(int mask, int set);
+#if defined(WIN32)
 char	*c3debug_StackTrace(void);
 char	*c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception);
 static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_pointers);
+#endif
 void	c3debug_ExceptionExecute(CivExceptionFunction function);
 
 void	c3debug_Assert(char *s, char *file, int line);

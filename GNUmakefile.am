@@ -1,0 +1,11 @@
+#
+# $Id$
+#
+SUBDIRS=\
+	ctp2_code
+
+purge: Makefile distclean
+	$(MAKE) -f $< $@
+
+bootstrap doc local playtest: Makefile
+	$(MAKE) -f $< $@

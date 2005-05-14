@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Database substructs record generator
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,10 +28,16 @@
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#if defined(WIN32)
+#include <windows.h>
+#endif
+
 #include "ctpdb.h"
 #include "RecordDescription.h"
 
