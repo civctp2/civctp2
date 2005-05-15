@@ -17,6 +17,7 @@
 //
 // Compiler flags
 // 
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +26,13 @@
 // - Changed string handling to avoid using deprecated functions.
 //
 //----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// File: VidPlay.cpp
+//
+// Desc: DirectShow sample code - video (DVD and file) playback class.
+//
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -36,9 +44,9 @@
 #include "VidPlay.h"
 
 
-
-
-
+//
+// CBaseVideoPlayer constructor
+//
 CBaseVideoPlayer::CBaseVideoPlayer()
 :   m_achFileName    ()
 {
@@ -47,23 +55,23 @@ CBaseVideoPlayer::CBaseVideoPlayer()
     m_pMC = NULL ;
     m_pME = NULL ;
     
-    m_dwColorKey = 253 ;  
+    m_dwColorKey = 253 ;  // magenta by default
 }
 
 
-
-
-
+//
+// CBaseVideoPlayer destructor
+//
 CBaseVideoPlayer::~CBaseVideoPlayer()
 {
     ReleaseInterfaces() ;
 }
 
 
-
-
-
-
+//
+// CBaseVideoPlayer::GetInterfaces(): Gets the standard interfaces required for
+// playing back through a filter graph
+//
 HRESULT CBaseVideoPlayer::GetInterfaces(HWND hWndApp)
 {
     HRESULT  hr ;
@@ -73,23 +81,23 @@ HRESULT CBaseVideoPlayer::GetInterfaces(HWND hWndApp)
     hr = m_pGraph->QueryInterface(IID_IMediaEventEx, (LPVOID *)&m_pME) ;
     ASSERT(SUCCEEDED(hr) && m_pME) ;
     
-    
-    
-    
-    
+    //
+    // Also set up the event notification so that the main window gets
+    // informed about all that we care about during playback.
+    //
     hr = m_pME->SetNotifyWindow((OAHWND) hWndApp, WM_PLAY_EVENT, 
         (ULONG)(LPVOID)m_pME) ;
     ASSERT(SUCCEEDED(hr)) ;
     
-    m_eState = Stopped ;  
+    m_eState = Stopped ;  // graph has been built
     
     return S_OK ;
 }
 
 
-
-
-
+//
+// CBaseVideoPlayer::ReleaseInterfaces(): Let go of the standard interfaces taken for playback.
+//
 void CBaseVideoPlayer::ReleaseInterfaces(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CBaseVideoPlayer::ReleaseInterfaces() entered"))) ;
@@ -99,22 +107,22 @@ void CBaseVideoPlayer::ReleaseInterfaces(void)
         m_pMC = NULL ;
     }
     if (m_pME) {
-        
+        // clear any already set notification arrangement
         m_pME->SetNotifyWindow(NULL, WM_PLAY_EVENT, (ULONG)(LPVOID)m_pME) ;
         m_pME->Release() ;
         m_pME = NULL ;
     }
     
-    m_eState = Uninitialized ;  
+    m_eState = Uninitialized ;  // no graph available
 }
 
 
-
-
-
+//
+// CBaseVideoPlayer::WaitForState(): Wait for the state to change to the given one.
+//
 void CBaseVideoPlayer::WaitForState(FILTER_STATE State)
 {
-    
+    // Make sure we have switched to the required state
     LONG   lfs ;
     do
     {
@@ -123,9 +131,9 @@ void CBaseVideoPlayer::WaitForState(FILTER_STATE State)
 }
 
 
-
-
-
+//
+// CBaseVideoPlayer::Play(): Plays the filter graph (and waits to really start playing)
+//
 BOOL CBaseVideoPlayer::Play(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CBaseVideoPlayer::Play() entered"))) ;
@@ -143,16 +151,16 @@ BOOL CBaseVideoPlayer::Play(void)
     }
     WaitForState(State_Running) ;
     
-    
+    // Some state changes now
     m_eState = Playing ;
     
-    return TRUE ;  
+    return TRUE ;  // success
 }
 
 
-
-
-
+//
+// CBaseVideoPlayer::Pause(): Pauses/Cues the filter graph (and waits to really pause)
+//
 BOOL CBaseVideoPlayer::Pause(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CBaseVideoPlayer::Pause() entered"))) ;
@@ -170,16 +178,16 @@ BOOL CBaseVideoPlayer::Pause(void)
     }
     WaitForState(State_Paused) ;
     
-    
+    // Some state changes now
     m_eState = Paused ;
     
-    return TRUE ;  
+    return TRUE ;  // success
 }
 
 
-
-
-
+//
+// CBaseVideoPlayer::Stop(): Stops the filter graph (and waits to really stop)
+//
 BOOL CBaseVideoPlayer::Stop(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CBaseVideoPlayer::Stop() entered"))) ;
@@ -197,17 +205,17 @@ BOOL CBaseVideoPlayer::Stop(void)
     }
     WaitForState(State_Stopped) ;
     
-    
+    // Some state changes now
     m_eState = Stopped ;
     
-    return TRUE ;  
+    return TRUE ;  // success
 }
 
 
-
-
-
-
+//
+// CBaseVideoPlayer::GetColorKey(): Returns color key to the app so that other 
+// components (here the DDraw object) can be told about it.
+//
 HRESULT CBaseVideoPlayer::GetColorKey(DWORD *pdwColorKey)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CBaseVideoPlayer::GetColorKey() entered"))) ;
@@ -215,15 +223,14 @@ HRESULT CBaseVideoPlayer::GetColorKey(DWORD *pdwColorKey)
     if (! IsGraphReady() )
         return E_UNEXPECTED ;
     
-    *pdwColorKey = m_dwColorKey ;  
+    *pdwColorKey = m_dwColorKey ;  // use the cached color key info
     return S_OK ;
 }
 
 
-
-
-
-
+//
+// CDVDPlayer constructor
+//
 CDVDPlayer::CDVDPlayer()
 :	CBaseVideoPlayer  ()
 {
@@ -235,9 +242,9 @@ CDVDPlayer::CDVDPlayer()
 }
 
 
-
-
-
+//
+// CDVDPlayer destructor
+//
 CDVDPlayer::~CDVDPlayer()
 {
     DbgLog((LOG_TRACE, 3, TEXT("CDVDPlayer d-tor entered"))) ;
@@ -251,17 +258,17 @@ CDVDPlayer::~CDVDPlayer()
 }
 
 
-
-
-
-
+//
+// CDVDPlayer::Initialize(): Creates a DVD graph builder object for later building
+// a filter graph.
+//
 BOOL CDVDPlayer::Initialize(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDVDPlayer::Initialize() entered"))) ;
     
-    
-    
-    
+    //
+    // Now instantiate the DVD Graph Builder object and start working
+    //
     HRESULT hr = CoCreateInstance(CLSID_DvdGraphBuilder, NULL, CLSCTX_INPROC, 
         IID_IDvdGraphBuilder, (LPVOID *)&m_pDvdGB) ;
     if (FAILED(hr) || NULL == m_pDvdGB)
@@ -275,37 +282,37 @@ BOOL CDVDPlayer::Initialize(void)
 }
 
 
-
-
-
-
-
+//
+// CDVDPlayer::BuildGraph(): Builds a filter graph for playing back the specified
+// DVD title/file.  Also gets some interfaces that are required for controlling 
+// playback.
+//
 HRESULT CDVDPlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWSURFACE pDDPrimary)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDVDPlayer::BuildGraph() entered"))) ;
 
     HRESULT     hr ;
     
-    
+    // First release any existing interface pointer(s)
     ReleaseInterfaces() ;
-    SetColorKey(253) ;  
+    SetColorKey(253) ;  // default magenta for 8bpp
     
-    
+    // Check if a DVD-Video volume name has been specified; if so, use that
     WCHAR    achwFileName[MAX_PATH] ;
-    LPCWSTR  lpszwFileName = NULL ;  
-    if (lstrlen(GetFileName()) > 0)  
+    LPCWSTR  lpszwFileName = NULL ;  // by default
+    if (lstrlen(GetFileName()) > 0)  // if something was specified before
     {
 #ifdef UNICODE
         lstrcpy(achwFileName, GetFileName()) ;
 #else
         MultiByteToWideChar(CP_ACP, 0, GetFileName(), -1, achwFileName, MAX_PATH) ;
-#endif 
+#endif // UNICODE
         
         lpszwFileName = achwFileName ;
     }
     DbgLog((LOG_TRACE, 5, TEXT("DVD file <%s> will be played"), GetFileName())) ;
     
-    
+    // Set DDraw object and surface on DVD graph builder before starting to build graph
     IDDrawExclModeVideo  *pDDXMV ;
     hr = m_pDvdGB->GetDvdInterface(IID_IDDrawExclModeVideo, (LPVOID *)&pDDXMV) ;
     if (FAILED(hr) || NULL == pDDXMV)
@@ -318,20 +325,20 @@ HRESULT CDVDPlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWSU
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0, TEXT("ERROR: IDDrawExclModeVideo::SetDDrawObject() failed (Error 0x%lx)"), hr)) ;
-        pDDXMV->Release() ;  
+        pDDXMV->Release() ;  // release before returning
         return hr ;
     }
     hr = pDDXMV->SetDDrawSurface(pDDPrimary) ;
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0, TEXT("ERROR: IDDrawExclModeVideo::SetDDrawSurface() failed (Error 0x%lx)"), hr)) ;
-        pDDXMV->SetDDrawObject(NULL) ;  
-        pDDXMV->Release() ;  
+        pDDXMV->SetDDrawObject(NULL) ;  // to reset
+        pDDXMV->Release() ;  // release before returning
         return hr ;
     }
-    pDDXMV->Release() ;  
+    pDDXMV->Release() ;  // done with the interface
     
-    
+    // Build the graph
     AM_DVD_RENDERSTATUS   Status ;
     TCHAR                 achBuffer[1000] ;
     hr = m_pDvdGB->RenderDvdVideoVolume(lpszwFileName,
@@ -342,7 +349,7 @@ HRESULT CDVDPlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWSU
         MessageBox(hWndApp, achBuffer, "Error", MB_OK) ;
         return hr ;
     }
-    if (S_FALSE == hr)  
+    if (S_FALSE == hr)  // if partial success
     {
         std::basic_string<TCHAR>   l_Text;
         if (GetStatusText(&Status, achBuffer, sizeof(achBuffer)))
@@ -369,9 +376,9 @@ HRESULT CDVDPlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWSU
 }
 
 
-
-
-
+//
+// CDVDPlayer::GetInterfaces(): Gets some interfaces useful for DVD title playback
+//
 HRESULT CDVDPlayer::GetInterfaces(HWND hWndApp)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDVDPlayer::GetInterfaces() entered"))) ;
@@ -380,26 +387,26 @@ HRESULT CDVDPlayer::GetInterfaces(HWND hWndApp)
     hr = m_pDvdGB->GetFiltergraph(&m_pGraph) ;
     ASSERT(SUCCEEDED(hr) && m_pGraph) ;
     
-    
+    // Now get the DVD-specific interfaces (though we don't use them in this app).
     hr = m_pDvdGB->GetDvdInterface(IID_IDvdControl, (LPVOID *)&m_pDvdC) ;
     ASSERT(SUCCEEDED(hr) && m_pDvdC) ;
     
     hr = m_pDvdGB->GetDvdInterface(IID_IDvdInfo, (LPVOID *)&m_pDvdI) ;
     ASSERT(SUCCEEDED(hr) && m_pDvdI) ;
     
-    return CBaseVideoPlayer::GetInterfaces(hWndApp) ;  
+    return CBaseVideoPlayer::GetInterfaces(hWndApp) ;  // get the standard interfaces
 }
 
 
-
-
-
-
+//
+// CDVDPlayer::ClearGraph(): Tears down the filter graph created by BuildGraph()
+// and also releases the DVD graph builder object.
+//
 HRESULT CDVDPlayer::ClearGraph()
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDVDPlayer::ClearGraph() entered"))) ;
     
-    ReleaseInterfaces() ;  
+    ReleaseInterfaces() ;  // let go of the other interfaces
     if (m_pDvdGB)
     {
         m_pDvdGB->Release() ;
@@ -411,15 +418,15 @@ HRESULT CDVDPlayer::ClearGraph()
 }
 
 
-
-
-
-
-HRESULT CDVDPlayer::GetColorKeyInternal(IBaseFilter *pOvM )
+//
+// CDVDPlayer::GetColorKeyInternal(): Retrieves color key and stores it for later 
+// queries from the app.
+//
+HRESULT CDVDPlayer::GetColorKeyInternal(IBaseFilter *pOvM /* = NULL */)
 {
-    ASSERT(NULL == pOvM) ; 
+    ASSERT(NULL == pOvM) ; // we don't need pOvM passed in
     
-    
+    // Get color key from MixerPinConfig interface via IDvdGraphBuilder
     IMixerPinConfig2  *pMPC ;
     DWORD              dwColorKey ;
     HRESULT  hr = m_pDvdGB->GetDvdInterface(IID_IMixerPinConfig2, (LPVOID *) &pMPC) ;
@@ -429,8 +436,8 @@ HRESULT CDVDPlayer::GetColorKeyInternal(IBaseFilter *pOvM )
         ASSERT(SUCCEEDED(hr)) ;
         SetColorKey(dwColorKey) ;
 
-        
-        
+        //  Set mode to stretch - that way we don't fight the overlay
+        //  mixer about the exact way to fix the aspect ratio
         pMPC->SetAspectRatioMode(AM_ARMODE_STRETCHED);
         pMPC->Release() ;
     }
@@ -444,10 +451,10 @@ HRESULT CDVDPlayer::GetColorKeyInternal(IBaseFilter *pOvM )
 }
 
 
-
-
-
-
+//
+// CDVDPlayer::GetNativeVideoData(): Retrieves the original video size from OverlayMixer's
+// IDDrawExclModeVideo interface.
+//
 HRESULT CDVDPlayer::GetNativeVideoData(DWORD *pdwWidth, DWORD *pdwHeight, DWORD *pdwARX, DWORD *pdwARY)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDVDPlayer::GetNativeVideoData() entered"))) ;
@@ -467,16 +474,16 @@ HRESULT CDVDPlayer::GetNativeVideoData(DWORD *pdwWidth, DWORD *pdwHeight, DWORD 
             TEXT("WARNING: IDDrawExclModeVideo::GetNativeVideoProps() failed (Error 0x%lx)"), hr)) ;
     }
     
-    pDDXMV->Release() ;  
+    pDDXMV->Release() ;  // release before returning
     
     return hr ;
 }
 
 
-
-
-
-
+//
+// CDVDPlayer::SetVideoPosition(): Sets the source and destination rects on the 
+// OverlayMixer's IDDrawExclModeVideo interface .
+//
 HRESULT CDVDPlayer::SetVideoPosition(DWORD dwLeft, DWORD dwTop, DWORD dwWidth, DWORD dwHeight)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDVDPlayer::SetVideoPosition() entered"))) ;
@@ -492,7 +499,8 @@ HRESULT CDVDPlayer::SetVideoPosition(DWORD dwLeft, DWORD dwTop, DWORD dwWidth, D
     
     RECT  rectDest ;
     SetRect(&rectDest, dwLeft, dwTop, dwLeft + dwWidth, dwTop + dwHeight) ;
-    
+
+    // NULL or (0, 0, 10000, 10000) for full video
     hr = pDDXMV->SetDrawParameters(NULL, &rectDest) ;
     if (FAILED(hr))
     {
@@ -500,16 +508,16 @@ HRESULT CDVDPlayer::SetVideoPosition(DWORD dwLeft, DWORD dwTop, DWORD dwWidth, D
             TEXT("WARNING: IDDrawExclModeVideo::SetDrawParameters() failed (Error 0x%lx)"), hr)) ;
     }
     
-    pDDXMV->Release() ;  
+    pDDXMV->Release() ;  // release before returning  
     
     return hr ;
 }
 
 
-
-
-
-
+//
+// CDVDPlayer::SetOverlayCallback(): Specify the pointer to the overlay notification
+// callback object which the OverlayMixer will call during playback.
+//
 HRESULT CDVDPlayer::SetOverlayCallback(IDDrawExclModeVideoCallback *pCallback)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDVDPlayer::SetOverlayCallback() entered"))) ;
@@ -528,15 +536,15 @@ HRESULT CDVDPlayer::SetOverlayCallback(IDDrawExclModeVideoCallback *pCallback)
     {
         DbgLog((LOG_ERROR, 0, TEXT("ERROR: IDDrawExclModeVideo::SetCallbackInterface() failed (Error 0x%lx)"), hr)) ;
     }
-    pDDXMV->Release() ;  
+    pDDXMV->Release() ;  // done with the interface
 
     return hr ;
 }
 
 
-
-
-
+//
+// CDVDPlayer::ReleaseInterfaces(): Let go of the interfaces taken in BuildGraph()
+//
 void CDVDPlayer::ReleaseInterfaces(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDVDPlayer::ReleaseInterfaces() entered"))) ;
@@ -553,13 +561,13 @@ void CDVDPlayer::ReleaseInterfaces(void)
         m_pGraph->Release() ;
         m_pGraph = NULL ;
     }
-    CBaseVideoPlayer::ReleaseInterfaces() ;  
+    CBaseVideoPlayer::ReleaseInterfaces() ;  // release standard interfaces
 }
 
 
-
-
-
+//
+// CDVDPlayer::GetStatusText(): Composes a status message on failure to build DVD graph.
+//
 DWORD CDVDPlayer::GetStatusText(AM_DVD_RENDERSTATUS *pStatus,
                                 LPTSTR lpszStatusText,
                                 DWORD dwMaxText)
@@ -642,9 +650,9 @@ DWORD CDVDPlayer::GetStatusText(AM_DVD_RENDERSTATUS *pStatus,
 
 
 
-
-
-
+//
+// CFilePlayer constructor
+//
 CFilePlayer::CFilePlayer(void)
 :   CBaseVideoPlayer   ()
 {
@@ -654,9 +662,9 @@ CFilePlayer::CFilePlayer(void)
 }
 
 
-
-
-
+//
+// CFilePlayer destructor
+//
 CFilePlayer::~CFilePlayer(void)
 {
     DbgLog((LOG_TRACE, 3, TEXT("CFilePlayer d-tor entered"))) ;
@@ -667,9 +675,9 @@ CFilePlayer::~CFilePlayer(void)
 }
 
 
-
-
-
+//
+// CFilePlayer::ReleaseInterfaces(): Let go of the interfaces taken in BuildGraph()
+//
 void CFilePlayer::ReleaseInterfaces(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::ReleaseInterfaces() entered"))) ;
@@ -682,16 +690,16 @@ void CFilePlayer::ReleaseInterfaces(void)
 }
 
 
-
-
-
+//
+// CFilePlayer::Initialize(): Creates an empty filter graph object.
+//
 BOOL CFilePlayer::Initialize(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::Initialize() entered"))) ;
     
-    
-    
-    
+    //
+    // Just instantiate the Filter Graph object
+    //
     HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC, 
         IID_IGraphBuilder, (LPVOID *)&m_pGraph) ;
     if (FAILED(hr) || NULL == m_pGraph)
@@ -705,10 +713,10 @@ BOOL CFilePlayer::Initialize(void)
 }
 
 
-
-
-
-
+//
+// CFilePlayer::IsOvMConnected(): Private method to detect if the video stream 
+// is passing through the Overlay Mixer (i.e, is it connected?).
+//
 BOOL CFilePlayer::IsOvMConnected(IBaseFilter *pOvM)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::IsOvMConnected() entered"))) ;
@@ -740,25 +748,25 @@ BOOL CFilePlayer::IsOvMConnected(IBaseFilter *pOvM)
 
 
 
-
-
-
-
+//
+// CFilePlayer::GetVideoRendererInterface(): Private method to get the interface
+// to the Video Rendererer filter. It also tells us if a file has any video stream.
+//
 HRESULT CFilePlayer::GetVideoRendererInterface(IBaseFilter **ppVR)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::IsVideoStreamPresent() entered"))) ;
     
-    
+    // Get Video Renderer filter pointer from the graph
     return m_pGraph->FindFilterByName(L"Video Renderer", ppVR) ;
 }
 
 
 
-
-
-
-
-
+//
+// CFilePlayer::AddOvMToGraph(): Private method to instantiate OverlayMixer,
+// add it to the filter graph and set the DDraw parameters specified by the
+// app..
+//
 HRESULT CFilePlayer::AddOvMToGraph(IBaseFilter **ppOvM, LPDIRECTDRAW pDDObj, 
                                    LPDIRECTDRAWSURFACE pDDPrimary)
 {
@@ -781,11 +789,11 @@ HRESULT CFilePlayer::AddOvMToGraph(IBaseFilter **ppOvM, LPDIRECTDRAW pDDObj,
         return E_FAIL ;
     }
     
-    
+    // Set the DDraw params now
     hr = SetDDrawParams(*ppOvM, pDDObj, pDDPrimary) ;
     if (FAILED(hr))
     {
-        m_pGraph->RemoveFilter(*ppOvM) ;  
+        m_pGraph->RemoveFilter(*ppOvM) ;  // remove from graph
         (*ppOvM)->Release() ;
         *ppOvM = NULL ;
         return hr ;
@@ -795,10 +803,10 @@ HRESULT CFilePlayer::AddOvMToGraph(IBaseFilter **ppOvM, LPDIRECTDRAW pDDObj,
 }
 
 
-
-
-
-
+//
+// CFilePlayer::SetDDrawParams(): Private method to set DDraw objeact and primary
+// surface on the OverlayMixer via the IDDrawExclModeVideo interface.
+//
 HRESULT CFilePlayer::SetDDrawParams(IBaseFilter *pOvM, LPDIRECTDRAW pDDObj, 
                                     LPDIRECTDRAWSURFACE pDDPrimary)
 {
@@ -818,28 +826,28 @@ HRESULT CFilePlayer::SetDDrawParams(IBaseFilter *pOvM, LPDIRECTDRAW pDDObj,
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0, TEXT("SetDDrawObject(0x%lx) failed (Error 0x%lx)"), pDDObj, hr)) ;
-        pDDXM->Release() ;               
+        pDDXM->Release() ;               // release interface
         return E_FAIL ;
     }
     hr = pDDXM->SetDDrawSurface(pDDPrimary) ;
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0, TEXT("SetDDrawSurface(0x%lx) failed (Error 0x%lx)"), pDDPrimary, hr)) ;
-        pDDXM->SetDDrawObject(NULL) ;    
-        pDDXM->Release() ;               
+        pDDXM->SetDDrawObject(NULL) ;    // get back to original DDraw object
+        pDDXM->Release() ;               // release interface
         return E_FAIL ;
     }
     
-    pDDXM->Release() ;               
+    pDDXM->Release() ;               // release interface  
     
     return S_OK ;
 }
 
 
-
-
-
-
+//
+// CFilePlayer::PutVideoThroughOvM(): Private method to connect the decoded video 
+// stream through the OverlayMixer.
+//
 HRESULT CFilePlayer::PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::PutVideoThroughOvM() entered"))) ;
@@ -852,7 +860,7 @@ HRESULT CFilePlayer::PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR)
     PIN_DIRECTION  pd ;
     HRESULT        hr ;
     
-    
+    // Get the video renderer's (only) in pin
     hr = pVR->EnumPins(&pEnumPins) ;
     ASSERT(SUCCEEDED(hr)) ;
     hr = pEnumPins->Next(1, &pPinVR, &ul) ;
@@ -861,7 +869,7 @@ HRESULT CFilePlayer::PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR)
     ASSERT(PINDIR_INPUT == pd) ;
     pEnumPins->Release() ;
     
-    
+    // Disconnect VR from upstream filter and put OvMixer in between them
     hr = pPinVR->ConnectedTo(&pPinConnectedTo) ;
     ASSERT(SUCCEEDED(hr) && pPinConnectedTo) ;
     hr = m_pGraph->Disconnect(pPinVR) ;
@@ -869,20 +877,20 @@ HRESULT CFilePlayer::PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR)
     hr = m_pGraph->Disconnect(pPinConnectedTo) ;
     ASSERT(SUCCEEDED(hr)) ;
     
-    
-    
+    // Now connect the upstream filter's out pin to OvM's in pin 
+    // (and remove Video Renderer from the graph).
     hr = pOvM->EnumPins(&pEnumPins) ;
     ASSERT(SUCCEEDED(hr)) ;
     int  iInConns  = 0 ;
-    while (iInConns == 0  &&   
-        S_OK == pEnumPins->Next(1, &pPinOvM, &ul) && 1 == ul)  
+    while (iInConns == 0  &&   // input pin not connected yet
+        S_OK == pEnumPins->Next(1, &pPinOvM, &ul) && 1 == ul)  // pin left to try
     {
         pPinOvM->QueryDirection(&pd) ;
-        if (PINDIR_INPUT == pd)  
+        if (PINDIR_INPUT == pd)  // OvM's in pin <- Upstream filter's pin
         {
-            if (0 == iInConns) 
+            if (0 == iInConns) // We want to connect only one input pin
             {
-                hr = m_pGraph->Connect(pPinConnectedTo, pPinOvM) ; 
+                hr = m_pGraph->Connect(pPinConnectedTo, pPinOvM) ; // , NULL) ;  // direct??
                 ASSERT(SUCCEEDED(hr)) ;
                 if (FAILED(hr))
                     DbgLog((LOG_ERROR, 0, TEXT("ERROR: m_pGraph->Connect() failed (Error 0x%lx)"), hr)) ;
@@ -893,7 +901,7 @@ HRESULT CFilePlayer::PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR)
                     iInConns++ ;
                 }
             }
-            
+            // else ignore
         }
         else
             DbgLog((LOG_ERROR, 1, TEXT("OVMixer still has an out pin!!!"))) ;
@@ -902,25 +910,25 @@ HRESULT CFilePlayer::PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR)
     }
     pEnumPins->Release() ;
     
-    pPinConnectedTo->Release() ;  
-    pPinVR->Release() ; 
-    m_pGraph->RemoveFilter(pVR) ;  
+    pPinConnectedTo->Release() ;  // done with upstream pin
+    pPinVR->Release() ; // done with VR pin
+    m_pGraph->RemoveFilter(pVR) ;  // by force remove the VR from graph
 
-    
-    if (0 == iInConns)  
+    // Just to check...
+    if (0 == iInConns)  // input pin not connected!!
     {
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: Couldn't connect any out pin to OvMixer's 1st in pin"))) ;
-        return E_FAIL ;    
+        return E_FAIL ;    // failure
     }
     
-    return S_OK ;          
+    return S_OK ;          // success!!
 }
 
 
-
-
-
-
+//
+// CFilePlayer::BuildGraph(): Builds a AVI/MPEG/.. playback graph rendering via
+// OverlayMixer which uses app's given DDraw params.
+//
 HRESULT CFilePlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWSURFACE pDDPrimary)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::BuildGraph() entered"))) ;
@@ -931,12 +939,12 @@ HRESULT CFilePlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWS
     LPWSTR        lpszwFileName = NULL ;
     IBaseFilter  *pVR ;
     
-    
+    // First release any existing interface pointer(s)
     ReleaseInterfaces() ;
-    SetColorKey(253) ;  
+    SetColorKey(253) ;  // default magenta for 8bpp
     
-    
-    if (lstrlen(GetFileName()) > 0)  
+    // Check if a file name has been specified; if so, use that
+    if (lstrlen(GetFileName()) > 0)  // if something was specified before
     {
 #ifdef UNICODE
         lstrcpy(achwFileName, GetFileName()) ;
@@ -946,100 +954,100 @@ HRESULT CFilePlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWS
         
         lpszwFileName = achwFileName ;
     }
-    else  
+    else  // no file specified, but we should have detected it before!!!
         return E_FAIL ;
     
-    
-    
-    
+    //
+    // Instantiate Overlay Mixer, add it to the graph and set DDraw params
+    //
     hr = AddOvMToGraph(&pOvM, pDDObj, pDDPrimary) ;
     if (FAILED(hr))
     {
         return E_FAIL ;
     }
     
-    
-    
-    
+    //
+    // First render the graph for the selected file
+    //
     hr = m_pGraph->RenderFile(lpszwFileName, NULL) ;
     if (S_OK != hr)
     {
         DbgLog((LOG_ERROR, 0, 
             TEXT("Rendering the given file didn't succeed completely (Error 0x%lx)"), hr)) ;
-        m_pGraph->RemoveFilter(pOvM) ;  
-        pOvM->Release() ;               
+        m_pGraph->RemoveFilter(pOvM) ;  // remove from graph
+        pOvM->Release() ;               // release filter
         return E_FAIL ;
     }
 
-    
-    
-    
-    
-    
+    //
+    // Because there are some AVI files which on some machines decide to rather go 
+    // through the Color Space Converter filter, just making sure that the OverlayMixer
+    // is actually being used.  Otherwise we have to do some more (bull)work.
+    //
     if (! IsOvMConnected(pOvM) )
     {
         DbgLog((LOG_TRACE, 1, TEXT("OverlayMixer is not used in the graph. Try again..."))) ;
     
-        
-        
-        
-        
+        //
+        // Check that the  specified file has a video stream. Otherwise OverlayMixer
+        // will never be used and DDraw exclusive mode playback doesn't make any sense.
+        //
         if (FAILED(GetVideoRendererInterface(&pVR)))
         {
             DbgLog((LOG_TRACE, 1, TEXT("Specified file doesn't have any video stream. Aborting graph building."))) ;
-            m_pGraph->RemoveFilter(pOvM) ;  
-            pOvM->Release() ;               
+            m_pGraph->RemoveFilter(pOvM) ;  // remove from graph
+            pOvM->Release() ;               // release filter
             return E_FAIL ;
         }
 
-        
-        
-        
+        //
+        // Put the video stream to go through the OverlayMixer.
+        //
         hr = PutVideoThroughOvM(pOvM, pVR) ;
         if (FAILED(hr))
         {
             DbgLog((LOG_TRACE, 1, TEXT("Couldn't put video through the OverlayMixer."))) ;
-            m_pGraph->RemoveFilter(pOvM) ;  
-            pOvM->Release() ;               
-            pVR->Release() ;                
+            m_pGraph->RemoveFilter(pOvM) ;  // remove OvMixer from graph
+            pOvM->Release() ;               // release OvMixer filter
+            pVR->Release() ;                // release VR interface (before giving up)
             return E_FAIL ;
         }
-        pVR->Release() ;    
+        pVR->Release() ;    // done with VR interface
     }
 
-    
-    
-    
+    //
+    // We are successful in building the graph. Now the rest...
+    //
     GetInterfaces(hWndApp) ;
     
-    
+    // Get IDDrawExclModeVideo interface of the OvMixer and store it
     hr = pOvM->QueryInterface(IID_IDDrawExclModeVideo, (LPVOID *)&m_pDDXM) ;
     ASSERT(SUCCEEDED(hr)) ;
     
-    
+    // Get the color key to be used and store it
     hr = GetColorKeyInternal(pOvM) ;
     ASSERT(SUCCEEDED(hr)) ;
     
-    pOvM->Release() ;  
+    pOvM->Release() ;  // done with it
     
     return S_OK ;
 }
 
 
-
-
-
-
-
+//
+// CFilePlayer::GetInterfaces(): Gets some interfaces useful for DVD title playback
+//
+// NOTE: Don't really need this one.  We could have as well used the base classes'.
+//
 HRESULT CFilePlayer::GetInterfaces(HWND hWndApp)
 {
-    return CBaseVideoPlayer::GetInterfaces(hWndApp) ;  
+    return CBaseVideoPlayer::GetInterfaces(hWndApp) ;  // get the standard interfaces
 }
 
-
-
-
-
+//
+// CFilePlayer::GetColorKeyInternal(): Private method to query the color key
+// value from teh first input pin of the OverlayMixer.
+//
 HRESULT CFilePlayer::GetColorKeyInternal(IBaseFilter *pOvM)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::GetColorKeyInternal() entered"))) ;
@@ -1055,53 +1063,54 @@ HRESULT CFilePlayer::GetColorKeyInternal(IBaseFilter *pOvM)
     IMixerPinConfig  *pMPC ;
     HRESULT  hr = pOvM->EnumPins(&pEnumPins) ;
     ASSERT(pEnumPins) ;
-    while (S_OK == pEnumPins->Next(1, &pPin, &ul)  &&  1 == ul)  
+    while (S_OK == pEnumPins->Next(1, &pPin, &ul)  &&  1 == ul)  // try all pins
     {
         pPin->QueryDirection(&pd) ;
-        if (PINDIR_INPUT == pd)  
+        if (PINDIR_INPUT == pd)  // only the 1st in pin
         {
             hr = pPin->QueryInterface(IID_IMixerPinConfig, (LPVOID *) &pMPC) ;
             ASSERT(SUCCEEDED(hr) && pMPC) ;
-            hr = pMPC->GetColorKey(NULL, &dwColorKey) ;  
+            hr = pMPC->GetColorKey(NULL, &dwColorKey) ;  // just get the physical color
             SetColorKey(dwColorKey) ;
             
-            
+            //  Set mode to stretch - that way we don't fight the overlay
+            //  mixer about the exact way to fix the aspect ratio
             pMPC->SetAspectRatioMode(AM_ARMODE_STRETCHED);
             ASSERT(SUCCEEDED(hr)) ;
             pMPC->Release() ;
-            pPin->Release() ; 
-            break ;   
+            pPin->Release() ; // exiting early; release pin
+            break ;   // we are done
         }
         pPin->Release() ;
     }
-    pEnumPins->Release() ;  
+    pEnumPins->Release() ;  // done with pin enum    
     
     return S_OK ;
 }
 
 
-
-
-
-
+//
+// CFilePlayer::ClearGraph(): Releases the filter graph built by BuildGraph()
+// and the interfaces taken for playback.
+//
 HRESULT CFilePlayer::ClearGraph(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::ClearGraph() entered"))) ;
     
-    ReleaseInterfaces() ;  
+    ReleaseInterfaces() ;  // let go of the other interfaces
     if (m_pGraph)
     {
-        m_pGraph->Release() ;  
+        m_pGraph->Release() ;  // let the graph go (we'll create a fresh one next time)
         m_pGraph = NULL ;
     }
     
     return S_OK ;
 }
 
-
-
-
-
+//
+// CFilePlayer::SetVideoPosition(): Sets the source and dest rects for the video to
+// be shown via IDDrawExclModeVideo interface of OverlayMixer.
+//
 HRESULT CFilePlayer::SetVideoPosition(DWORD dwLeft, DWORD dwTop, DWORD dwWidth, DWORD dwHeight)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::SetVideoPosition() entered"))) ;
@@ -1109,14 +1118,14 @@ HRESULT CFilePlayer::SetVideoPosition(DWORD dwLeft, DWORD dwTop, DWORD dwWidth, 
     RECT  rectDest ;
     SetRect(&rectDest, dwLeft, dwTop, dwLeft + dwWidth, dwTop + dwHeight) ;
     
-    
+    // NULL or (0, 0, 10000, 10000) for full video
     return m_pDDXM->SetDrawParameters(NULL, &rectDest) ;
 }
 
 
-
-
-
+//
+// CFilePlayer::GetNativeVideoData(): Returns the actual video size to the app.
+//
 HRESULT CFilePlayer::GetNativeVideoData(DWORD *pdwWidth, DWORD *pdwHeight, DWORD *pdwARX, DWORD *pdwARY)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::GetNativeVideoData() entered"))) ;
@@ -1125,10 +1134,10 @@ HRESULT CFilePlayer::GetNativeVideoData(DWORD *pdwWidth, DWORD *pdwHeight, DWORD
 }
 
 
-
-
-
-
+//
+// CFilePlayer::SetOverlayCallback(): Specify the pointer to the overlay notification
+// callback object which the OverlayMixer will call during playback.
+//
 HRESULT CFilePlayer::SetOverlayCallback(IDDrawExclModeVideoCallback *pCallback)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CFilePlayer::SetOverlayCallback() entered"))) ;

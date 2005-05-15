@@ -16,9 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -28,6 +27,14 @@
 // - Changed string handling to avoid using deprecated functions.
 //
 //----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// File: VidPlay.h
+//
+// Desc: DirectShow sample code - video (DVD and file) playback 
+//       class header file.
+//
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------------------------
 
 #ifndef VIDPLAY_H
 #define VIDPLAY_H
@@ -46,21 +53,22 @@ class	CBaseVideoPlayer;
 class CDVDPlayer;
 class CFilePlayer;
 
+// Player state
 typedef enum {
     Uninitialized = 0, Stopped, Paused, Playing, Scanning
 } PLAYER_STATE ;
 
-
+// Define a special WM message for playback related events from DirectShow filtergraph
 #define WM_PLAY_EVENT     WM_USER + 100
 #define WM_SIZE_CHANGE    WM_USER + 101
 
 
-
-
-
+//
+// Video Playback base class
+//
 class CBaseVideoPlayer
 {
-public:   
+public:   // public methods for Windows structure to call
     CBaseVideoPlayer(void) ;
     ~CBaseVideoPlayer(void) ;
     
@@ -95,25 +103,25 @@ protected:
 private:
     void    WaitForState(FILTER_STATE State) ;
     
-protected:  
-    IGraphBuilder  *m_pGraph ;        
+protected:  // semi-internal state info (to be shared with derived classes)
+    IGraphBuilder  *m_pGraph ;  // IGraphBuilder interface      
     
-private:    
-    PLAYER_STATE    m_eState ;    
-    std::basic_string<TCHAR>	m_achFileName;
-    IMediaControl  *m_pMC ;           
-    IMediaEventEx  *m_pME ;           
+private:    // internal state info
+    PLAYER_STATE    m_eState ;    // player state (run/pause/stop/...)
+    std::basic_string<TCHAR>	m_achFileName;  // current file name
+    IMediaControl  *m_pMC ;           // IMediaControl interface
+    IMediaEventEx  *m_pME ;           // IMediaEventEx interface
     
-    DWORD           m_dwColorKey ;    
+    DWORD           m_dwColorKey ;    // color key to be used for video
 } ;
 
 
-
-
-
+//
+// DVD Playback class
+//
 class CDVDPlayer : public CBaseVideoPlayer
 {
-public:   
+public:   // public methods for Windows structure to call
     CDVDPlayer(void) ;
     ~CDVDPlayer(void) ;
     
@@ -126,26 +134,26 @@ public:
     HRESULT GetInterfaces(HWND hWndApp) ;
     HRESULT SetOverlayCallback(IDDrawExclModeVideoCallback *pCallback) ;
     
-private:  
+private:  // private helper methods for the class' own use
     void    ReleaseInterfaces(void) ;
     HRESULT GetColorKeyInternal(IBaseFilter *pOvM = NULL) ;
     DWORD   GetStatusText(AM_DVD_RENDERSTATUS *pStatus, 
         LPTSTR lpszStatusText,
         DWORD dwMaxText) ;
     
-private:  
-    IDvdGraphBuilder  *m_pDvdGB ;         
-    IDvdInfo          *m_pDvdI ;          
-    IDvdControl       *m_pDvdC ;          
+private:  // internal state info
+    IDvdGraphBuilder  *m_pDvdGB ;         // IDvdGraphBuilder interface
+    IDvdInfo          *m_pDvdI ;          // IDvdInfo interface
+    IDvdControl       *m_pDvdC ;          // IDvdControl interface
 } ;
 
 
-
-
-
+//
+// File Playback class
+//
 class CFilePlayer : public CBaseVideoPlayer
 {
-public:   
+public:   // public methods for Windows structure to call
     CFilePlayer(void) ;
     ~CFilePlayer(void) ;
     
@@ -158,7 +166,7 @@ public:
     HRESULT GetInterfaces(HWND hWndApp) ;
     HRESULT SetOverlayCallback(IDDrawExclModeVideoCallback *pCallback) ;
     
-private:  
+private:  // private helper methods for the class' own use
     void    ReleaseInterfaces() ;
     HRESULT GetColorKeyInternal(IBaseFilter *pOvM = NULL) ;
     BOOL    IsOvMConnected(IBaseFilter *pOvM) ;
@@ -169,8 +177,8 @@ private:
         LPDIRECTDRAWSURFACE pDDPrimary) ;
     HRESULT PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR) ;
     
-private:  
-    IDDrawExclModeVideo *m_pDDXM ;       
+private:  // internal state info
+    IDDrawExclModeVideo *m_pDDXM ;       // IDDrawExclModeVideo interface
 } ;
 
 #endif
