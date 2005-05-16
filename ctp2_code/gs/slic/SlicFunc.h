@@ -31,7 +31,7 @@
 //   - GetUnitFromCargo  Gets the i'th unit a unit is carrying.
 //   - GetContinent      Gets the continent ID of an location.
 //   - IsWater           Gets whether a location is water.
-// - IsVeteran and AllUnitsCanBeExpelled return types corrected.
+// - CreateUnit, IsVeteran, and AllUnitsCanBeExpelled return types corrected.
 // - New slic function by Solver: IsOnSameContinent - Checks whether two
 //   locations are on the same continent.
 // - Added AddSlaves function modelled after the AddPops function.
@@ -387,7 +387,7 @@ SLICFUNC(SFR_VOID, StopTimer)
 SLICFUNC(SFR_VOID, DisableMessageClass)           
 SLICFUNC(SFR_VOID, EnableMessageClass)            
 
-SLICFUNC(SFR_VOID, CreateUnit)                    
+SLICFUNC(SFR_INT,  CreateUnit)                    
 SLICFUNC(SFR_INT,  Random)                        
 SLICFUNC(SFR_VOID, AddCityByIndex)                
 SLICFUNC(SFR_VOID, DetachRobot)                   

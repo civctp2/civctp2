@@ -611,11 +611,12 @@ BOOL ArmyData::HasCargo() const
 //
 // Description: Test if this army is carrying cargo and fill in the function's parameters.
 //
-// Parameters : sint32 &transports : the number of transports
-//            : sint32 &max        : the max cargo space available
-//            : sint32 &empty      : the current cargo space available (max - used)
+// Parameters : sint32 &transports  : the number of transports
+//            : sint32 &max         : the max cargo space available
+//            : sint32 &empty       : the current cargo space available (max - used)
 //
-// Globals    : g_theUnitDB        : unit (capabilities) from Units.txt
+// Globals    : g_theUnitDB         : unit (capabilities) from Units.txt
+//              g_player            : 
 //				
 // Returns    : BOOL TRUE if at least one unit in the CellUnitList can transport.
 //
@@ -624,27 +625,37 @@ BOOL ArmyData::HasCargo() const
 //---------------------------------------------------------------------------- 
 BOOL ArmyData::GetCargo(sint32 &transports, sint32 &max, sint32 &empty) const
 {
-    int i; 
-	const UnitDynamicArray *cargo;
-	transports = 0;
-	max = 0;
-	empty = 0;
-	sint32 used = 0;
-	sint32 tmp;
+	transports      = 0;
+	max             = 0;
+	empty           = 0;
+	sint32  used    = 0;
     
-    for (i=0; i<m_nElements; i++) 
+    for (int i = 0; i < m_nElements; ++i) 
 	{ 
-		cargo = m_array[i].AccessData()->GetCargoList();
-		used += cargo->Num();
-		
-		if (g_theUnitDB->Get(m_array[i].GetType())->GetCargoData(), g_player[GetOwner()]->GetGovernmentType())
-			tmp = g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType())->GetCargoDataPtr()->GetMaxCargo();
-		else
-			tmp = 0;
-		max += tmp;
-		if (tmp > 0)
-			transports++;
+		UnitDynamicArray const *    cargo = m_array[i].AccessData()->GetCargoList();
+
+        if (cargo)
+        {
+            used += cargo->Num();
+        }
+		    
+        sint32 const    government  = g_player[m_owner]->GetGovernmentType();
+
+		if (g_theUnitDB->Get(m_array[i].GetType(), government)->GetCargoData())
+        {
+            UnitRecord::CargoData const *   cargoData   = 
+                g_theUnitDB->Get(m_array[i].GetType(), government)->GetCargoDataPtr();
+            sint32 const                    tmp         = 
+                cargoData ? cargoData->GetMaxCargo() : 0;
+
+		    max += tmp;
+		    if (tmp > 0)
+            {
+			    ++transports;
+            }
+        }
 	}
+
 	Assert( max >= used );
 	Assert( max >= transports);
 	empty = max - used;
@@ -7360,8 +7371,10 @@ BOOL ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 
     sint32 i, j;
     sint32 n=0; 
+#if 0
     UnitActor **move_actor; 
     move_actor = new (UnitActor* [m_nElements + 1]);  
+#endif
     UnitActor *top_src_ptr = NULL;
     UnitActor *act = NULL;
     Unit top_src; 
@@ -7389,7 +7402,9 @@ BOOL ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
                 if (act == top_src_ptr) {                     
                     found_top_src = TRUE;
                 } else { 
+#if 0
                     move_actor[n++] = act;
+#endif                
                 }
                 
                 m_array[i].SetIsInTransport(transports[j]);

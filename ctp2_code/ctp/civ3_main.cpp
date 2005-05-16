@@ -1518,13 +1518,13 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 		ms.dwLength = sizeof(ms);
 		GlobalMemoryStatus(&ms);
 
-		fprintf(outFile, ">      Physical RAM: %d bytes\n", ms.dwTotalPhys);
-		fprintf(outFile, ">     Available RAM: %d bytes\n", ms.dwAvailPhys);
-		fprintf(outFile, ">    Page File Size: %d bytes\n", ms.dwTotalPageFile);
-		fprintf(outFile, ">    Page File Free: %d bytes\n", ms.dwAvailPageFile);
-		fprintf(outFile, ">          Total VM: %d bytes\n", ms.dwTotalVirtual);
-		fprintf(outFile, ">      Available VM: %d bytes\n", ms.dwAvailVirtual);
-		fprintf(outFile, ">       Memory load: %d%% used\n", ms.dwMemoryLoad);
+		fprintf(outFile, ">      Physical RAM: %u bytes\n", ms.dwTotalPhys);
+		fprintf(outFile, ">     Available RAM: %u bytes\n", ms.dwAvailPhys);
+		fprintf(outFile, ">    Page File Size: %u bytes\n", ms.dwTotalPageFile);
+		fprintf(outFile, ">    Page File Free: %u bytes\n", ms.dwAvailPageFile);
+		fprintf(outFile, ">          Total VM: %u bytes\n", ms.dwTotalVirtual);
+		fprintf(outFile, ">      Available VM: %u bytes\n", ms.dwAvailVirtual);
+		fprintf(outFile, ">       Memory load: %u%% used\n", ms.dwMemoryLoad);
 
 		
 		fprintf(outFile, ">  Direct X Version: 0x%x\n", g_dxver);
@@ -1768,13 +1768,13 @@ void main_InitializeLogs(void)
 	ms.dwLength = sizeof(ms);
 	GlobalMemoryStatus(&ms);
 
-	DPRINTF(k_DBG_FIX, ("**      Physical RAM: %d bytes\n", ms.dwTotalPhys));
-	DPRINTF(k_DBG_FIX, ("**     Available RAM: %d bytes\n", ms.dwAvailPhys));
-	DPRINTF(k_DBG_FIX, ("**    Page File Size: %d bytes\n", ms.dwTotalPageFile));
-	DPRINTF(k_DBG_FIX, ("**    Page File Free: %d bytes\n", ms.dwAvailPageFile));
-	DPRINTF(k_DBG_FIX, ("**          Total VM: %d bytes\n", ms.dwTotalVirtual));
-	DPRINTF(k_DBG_FIX, ("**      Available VM: %d bytes\n", ms.dwAvailVirtual));
-	DPRINTF(k_DBG_FIX, ("**       Memory load: %d%% used\n", ms.dwMemoryLoad));
+	DPRINTF(k_DBG_FIX, ("**      Physical RAM: %u bytes\n", ms.dwTotalPhys));
+	DPRINTF(k_DBG_FIX, ("**     Available RAM: %u bytes\n", ms.dwAvailPhys));
+	DPRINTF(k_DBG_FIX, ("**    Page File Size: %u bytes\n", ms.dwTotalPageFile));
+	DPRINTF(k_DBG_FIX, ("**    Page File Free: %u bytes\n", ms.dwAvailPageFile));
+	DPRINTF(k_DBG_FIX, ("**          Total VM: %u bytes\n", ms.dwTotalVirtual));
+	DPRINTF(k_DBG_FIX, ("**      Available VM: %u bytes\n", ms.dwAvailVirtual));
+	DPRINTF(k_DBG_FIX, ("**       Memory load: %u%% used\n", ms.dwMemoryLoad));
 
 	
 	DPRINTF(k_DBG_FIX, ("**  Direct X Version: 0x%x\n", g_dxver));

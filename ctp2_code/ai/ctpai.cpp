@@ -1225,10 +1225,9 @@ void CtpAi::Initialize()
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_WORLD_UNION");
 
 	
-	CellUnitList unit_list;
-	unit_list.Clear();
-	
 #ifdef _DEBUG
+	CellUnitList unit_list;
+	
 	CtpAiDebug::SetDebugPlayer(2); 
 	CtpAiDebug::SetDebugGoalType(-1); 
 	CtpAiDebug::SetDebugArmies(unit_list); 

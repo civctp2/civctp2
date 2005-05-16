@@ -26,8 +26,10 @@
 // - Modifed db_add_bit_pair function to allow bit pairs to have default 
 //   values so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
+// - Portability improved (ctplinuxfan).
 //
 //----------------------------------------------------------------------------
+
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
@@ -52,10 +54,10 @@ RecordDescription *g_record = NULL;
 #ifndef _MAX_PATH
 #if defined(PATH_MAX)
 #define _MAX_PATH PATH_MAX
-#endif
 #else
 #define _MAX_PATH 1024
-#endif
+#endif  // PATH_MAX
+#endif  // _MAX_PATH
 
 #ifndef FREAD_BUF_SIZE
 #define FREAD_BUF_SIZE 16384

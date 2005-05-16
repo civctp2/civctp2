@@ -229,6 +229,8 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 
 EditQueue::~EditQueue()
 {
+    ClearChoiceLists();
+
 	if(m_window) {
 		aui_Ldl::DeleteHierarchyFromRoot(s_editQueueBlock);
 		m_window = NULL;
@@ -568,6 +570,10 @@ void EditQueue::AddChoiceItem(const MBCHAR *text, EditItemInfo *userData, sint32
 			choiceList->AddItem(item);
 		}
 	}
+    else
+    {
+        delete userData;
+    }
 }
 
 void EditQueue::ClearChoiceList(ctp2_ListBox *choiceList)
@@ -578,9 +584,8 @@ void EditQueue::ClearChoiceList(ctp2_ListBox *choiceList)
 	for(i = 0; i < choiceList->NumItems(); i++) {
 		item = (ctp2_ListItem *)choiceList->GetItemByIndex(i);
 		if(item) {
-			EditItemInfo *info = (EditItemInfo *)item->GetUserData();
-			if(info)
-				delete info;
+			EditItemInfo * info = (EditItemInfo *) item->GetUserData();
+			delete info;
 			item->SetUserData(NULL);
 		}
 	}
