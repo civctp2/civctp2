@@ -65,6 +65,7 @@ local:
 PLAYTEST = playtest
 
 playtest:
+	$(MAKE) -C doc/user
 	rm -rf playtest
 	mkdir -p $(PLAYTEST)/ctp2_program/ctp/dll/
 	svn export ctp2_code/ctp/dll $(PLAYTEST)/ctp2_program/ctp/dll --force
@@ -72,9 +73,9 @@ playtest:
 	cp -uv ctp2_code/ctp/anet* $(PLAYTEST)/ctp2_program/ctp/
 	cp -uv ctp2_code/ctp/ctp2.* $(PLAYTEST)/ctp2_program/ctp/
 	cp -uv ctp2_code/ctp/appstr.txt $(PLAYTEST)/ctp2_program/ctp/
+	cp -uv doc/user/*.txt $(PLAYTEST)/
 	svn export ctp2_data $(PLAYTEST)/ctp2_data --force
 	svn export Scenarios $(PLAYTEST)/Scenarios --force
-# TODO: The playtest should include the user documentation too
 
 doc:
 	$(MAKE) -C doc
