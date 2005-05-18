@@ -35,6 +35,7 @@
 //   duplicating code. - Sep. 21st 2004 Martin Gühmann
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
 //   - April 13th 2005 Martin Gühmann
+// - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -355,7 +356,7 @@ sint32 Cell::GetFoodFromTerrain(sint8 terrainType) const
 	}
 
 	sint32 good;
-	if(GetGoodsIndex(good)){
+	if(g_theWorld->GetGood(this, good)) {
 		food += g_theResourceDB->Get(good)->GetFood();
 	}
 
@@ -455,7 +456,7 @@ sint32 Cell::GetShieldsFromTerrain(sint8 terrainType) const
 	}
 
 	sint32 good;
-	if(GetGoodsIndex(good)){
+	if(g_theWorld->GetGood(this, good)) {
 		shield += g_theResourceDB->Get(good)->GetProduction();
 	}
 
@@ -557,7 +558,7 @@ sint32 Cell::GetGoldFromTerrain(sint8 terrainType) const
 	}
 
 	sint32 good;
-	if(GetGoodsIndex(good)){
+	if(g_theWorld->GetGood(this, good)) {
 		gold += g_theResourceDB->Get(good)->GetGold();
 	}
 
@@ -1067,8 +1068,7 @@ void Cell::SetEnv(uint32 env)
 
 void Cell::CalcTerrainMoveCost()
 {
-	double tmp; 
-	static MapPoint pos;
+	double tmp;
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 	sint32 base;
 	bool gotMovement = rec->GetEnvBase()->GetMovement(base);

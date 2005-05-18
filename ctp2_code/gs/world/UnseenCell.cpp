@@ -35,6 +35,7 @@
 //   hands. - Mar. 4th 2005 Martin Gühmann
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
 //   - April 13th 2005 Martin Gühmann
+// - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -630,7 +631,7 @@ sint32 UnseenCell::GetFoodFromTerrain() const
 	}
 
 	sint32 good;
-	if(g_theWorld->GetCell(m_point)->GetGoodsIndex(good)){
+	if(g_theWorld->GetGood(m_point, good)){
 		food += g_theResourceDB->Get(good)->GetFood();
 	}
 
@@ -718,7 +719,7 @@ sint32 UnseenCell::GetShieldsFromTerrain() const
 	}
 
 	sint32 good;
-	if(g_theWorld->GetCell(m_point)->GetGoodsIndex(good)){
+	if(g_theWorld->GetGood(m_point, good)){
 		shield += g_theResourceDB->Get(good)->GetProduction();
 	}
 
@@ -807,7 +808,7 @@ sint32 UnseenCell::GetGoldFromTerrain() const
 	}
 
 	sint32 good;
-	if(g_theWorld->GetCell(m_point)->GetGoodsIndex(good)){
+	if(g_theWorld->GetGood(m_point, good)){
 		gold += g_theResourceDB->Get(good)->GetGold();
 	}
 

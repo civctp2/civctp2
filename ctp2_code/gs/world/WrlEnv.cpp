@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Prevented memory leak report (not an actual leak).
+// - Added second World::GetGood method, usefull if you already have a Cell
+//   pointer. - May 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -262,18 +264,67 @@ sint32 World::IsGood(const sint32 x, const sint32 y) const
 	
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : World::GetGood
+//
+// Description: Checks whether the given location has a good.
+//
+// Parameters : const MapPoint &pos: Map position which should be checked, 
+//                                   whether it has a good.
+//              sint32 &good:        Filled with the good database index 
+//                                   of the good at the map position.
+//
+// Globals    : g_theTerrainDB: The terrain database.
+//
+// Returns    : Whether the given location has a good.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 BOOL World::GetGood(const MapPoint &pos, sint32 &good) const
 {
-	
-    sint32 i; 
-    Cell *c = GetCell(pos);
-	
-    if (c->GetGoodsIndex(i)) { 
-        good= g_theTerrainDB->Get(c->m_terrain_type)->GetResourcesIndex(i);
+
+	sint32 i;
+	Cell *c = GetCell(pos);
+
+	if (c->GetGoodsIndex(i)) {
+		good= g_theTerrainDB->Get(c->m_terrain_type)->GetResourcesIndex(i);
 		return TRUE;
-    } else { 
-        return FALSE; 
-    }
+	} else {
+		return FALSE;
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : World::GetGood
+//
+// Description: Checks whether the given location has a good.
+//
+// Parameters : Cell *cell:   Pointer on the cell for which should be checked,
+//                            whether it has a good.
+//              sint32 &good: Filled with the good database index of the good
+//                            in the cell.
+//
+// Globals    : g_theTerrainDB: The terrain database.
+//
+// Returns    : Whether the given location has a good.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+BOOL World::GetGood(const Cell *c, sint32 &good) const
+{
+
+	sint32 i;
+
+	if (c->GetGoodsIndex(i)) {
+		good= g_theTerrainDB->Get(c->m_terrain_type)->GetResourcesIndex(i);
+		return TRUE;
+	} else {
+		return FALSE;
+	}
 }
 
 

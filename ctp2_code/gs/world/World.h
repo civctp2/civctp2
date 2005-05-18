@@ -1,20 +1,38 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : part of the World class implementation
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added second World::GetGood method, usefull if you already have a Cell
+//   pointer. - May 18th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 
 #ifndef __WORLD_H__
 #define __WORLD_H__
-
 
 #include "MapPoint.h"
 #include "CityRadius.h"
@@ -24,7 +42,6 @@
 #include "gstypes.h"
 #include "cell.h"
 #include "moveflags.h"
-
 
 class MapPoint;
 class CivArchive ;
@@ -43,7 +60,6 @@ enum WORLD_DIRECTION;
 typedef Cell * CellPtr; 
 typedef CellPtr * CellYarray;
 typedef CellYarray * CellXarray;
-
 
 
 typedef bool (FindDistanceCellCallback) (const MapPoint &pos, Cell *cell, void *cookie);
@@ -364,8 +380,9 @@ public:
     TERRAIN_TYPES GetTerrainType(const MapPoint &pos) const;
     
     sint32 IsGood(const MapPoint &pos) const;
-    sint32 IsGood(const sint32 x, const sint32 y) const; 
+    sint32 IsGood(const sint32 x, const sint32 y) const;
     BOOL GetGood(const MapPoint &pos, sint32 &good) const;
+    BOOL GetGood(const Cell *c, sint32 &good) const;
     void SetGood(const sint32 x, const sint32 y, const sint32 g);
     void SetRandomGood(const sint32 x, const sint32 y);
     void ClearGoods(const sint32 x, const sint32 y) ;
