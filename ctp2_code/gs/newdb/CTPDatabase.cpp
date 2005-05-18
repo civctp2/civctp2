@@ -142,21 +142,20 @@ template <class T> T *CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
     T *     result  = m_records[index]; // generic value (default)
 
     // Check for govermnent spefic overrides
-	PointerList<GovernmentModifiedRecordNode>::Walker * walk = 
-        new PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
+	PointerList<GovernmentModifiedRecordNode>::Walker   walk = 
+        PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
 
-	for (bool found = false; walk->IsValid() && (!found); walk->Next()) 
+	for (bool found = false; walk.IsValid() && (!found); walk.Next()) 
     {
-		sint32 const    thisIndex = walk->GetObj()->m_governmentModified;
+		sint32 const    thisIndex = walk.GetObj()->m_governmentModified;
 		
         if (thisIndex == govIndex)
         {
-            result  = m_modifiedRecords[walk->GetObj()->m_modifiedRecord];
+            result  = m_modifiedRecords[walk.GetObj()->m_modifiedRecord];
 			found   = true;
         }
 	}
 
-    delete walk;
     return result;
 }
 

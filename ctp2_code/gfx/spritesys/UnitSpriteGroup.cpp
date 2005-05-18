@@ -24,10 +24,13 @@
 // - Prevented crashes when accessing files that failed to open/create. 
 // - Prevented crashes due to uninitialised members.
 // - Moved common SpriteGroup member handling to SpriteGroup.
+// - Removed Assert to make mod battles less tedious to debug.
+// - Cleaned up some superfluous tests.
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "c3.h"                 // Pre-compiled header
+#include "UnitSpriteGroup.h"    // Own declarations: consistency check
 
 #include "tiffutils.h"
 #include "pixelutils.h"
@@ -35,12 +38,11 @@
 #include "c3errors.h"
 #include "primitives.h"
 
-#include "UnitSpriteGroup.h"
 #include "FacedSprite.h"
 #include "Sprite.h"
 #include "ScreenManager.h"
 
-#include "CivPaths.h"
+#include "CivPaths.h"           // g_civPaths
 #include "c3files.h"
 
 #include "SpriteFile.h"
@@ -50,7 +52,6 @@
 
 #include "Token.h"
 
-extern CivPaths			*g_civPaths;
 extern ScreenManager	*g_screenManager;
 extern ColorSet			*g_colorSet;
 
@@ -80,13 +81,12 @@ UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
 UnitSpriteGroup::~UnitSpriteGroup()
 {
 }
+
 void UnitSpriteGroup::DeallocateStorage(void)
 {
 	for (int i=UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
 	{
-		if (m_sprites[i]!=NULL) 
-		    delete m_sprites[i];
-	
+	    delete m_sprites[i];
 		m_sprites[i] = NULL;
 	}
 }
@@ -100,12 +100,11 @@ void UnitSpriteGroup::DeallocateStorage(void)
 
 void UnitSpriteGroup::DeallocateFullLoadAnims(void)
 {
-	for (sint32 i=UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
+	for (sint32 i = UNITACTION_MOVE + 1; i < UNITACTION_MAX; i++) 
 	{
-		if (i != UNITACTION_MOVE && i != UNITACTION_IDLE) 
+		if (i != UNITACTION_IDLE) 
 		{
-		  	if(m_anims[i]!=NULL)
-				delete m_anims[i];
+			delete m_anims[i];
 			m_anims[i] = NULL;
 		}
 	}
@@ -142,60 +141,40 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
 	
 	
 	
-	if(specialDelayProcess == TRUE 
+	if (specialDelayProcess 
 		|| (action == UNITACTION_IDLE && m_sprites[action] == NULL)
 		|| (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
-		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL 
-				&& specialDelayProcess == TRUE))
+		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
+       )
 	{
-		
-		
-		
-		
-		
-		
-		
-		if(m_sprites[UNITACTION_MOVE] != NULL)
+		if (m_sprites[UNITACTION_MOVE])
 		{
 			action = UNITACTION_MOVE;
 			frame = 0; 
 		}
 	}
 
-	if (m_sprites[action] == NULL) return;
-
-
-
-
-
-
-	if (frame >= m_sprites[action]->GetNumFrames()) {
-		frame = 0;
-	}
+	if (m_sprites[action])
+    {
+    	if (frame >= m_sprites[action]->GetNumFrames()) 
+        {
+		    frame = 0;
+	    }
 	
-
-
-
-
-
-
-
-
-
-	m_sprites[action]->SetCurrentFrame((uint16)frame);
+    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
 
 	
-	if(directionalAttack == FALSE)
-	{
-
-		if (m_sprites[action] != NULL)
-		    m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
-	}
-	else
-	{
-		if (m_sprites[action] != NULL)
-			m_sprites[action]->DirectionalDraw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
-	}
+	    if (directionalAttack)
+	    {
+		    m_sprites[action]->DirectionalDraw
+                (drawX, drawY, facing, scale, transparency, outlineColor, flags);
+	    }
+	    else
+	    {
+	        m_sprites[action]->Draw
+                (drawX, drawY, facing, scale, transparency, outlineColor, flags);
+	    }
+    }
 }
 
 BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing, 
@@ -208,33 +187,25 @@ BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, si
 	Assert(action >= UNITACTION_MOVE &&
 			action <= UNITACTION_WORK);
 
-	if(specialDelayProcess == TRUE || (action == UNITACTION_IDLE && m_sprites[action] == NULL) || (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL && specialDelayProcess == TRUE))
+	if (specialDelayProcess 
+        || (action == UNITACTION_IDLE && m_sprites[action] == NULL) 
+        || (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
+       )
 	{
-		if(m_sprites[UNITACTION_MOVE] != NULL)
+		if (m_sprites[UNITACTION_MOVE])
 		{
 			action = UNITACTION_MOVE;
 			frame = 0; 
 		}
 	}
 
-	if (m_sprites[action] == NULL) return FALSE;
-
-	m_sprites[action]->SetCurrentFrame((uint16)frame);
-
-	if(directionalAttack == FALSE)
-	{
-
-		if (m_sprites[action] != NULL)
-			return m_sprites[action]->HitTest(mousePt, drawX, drawY, facing, scale, transparency, outlineColor, flags);
-
-	}
-	else
-	{
-		if (m_sprites[action] != NULL)
-			return m_sprites[action]->HitTest(mousePt, drawX, drawY, facing, scale, transparency, outlineColor, flags);
-	}
-
-	return FALSE;
+	if (m_sprites[action]) 
+    {
+    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
+	    return m_sprites[action]->HitTest
+            (mousePt, drawX, drawY, facing, scale, transparency, outlineColor, flags);
+    }
+    return FALSE;
 }
 
 void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
@@ -256,45 +227,26 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 	
 	
 	
-	if(specialDelayProcess == TRUE || (action == UNITACTION_IDLE && m_sprites[action] == NULL) || (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL && specialDelayProcess == TRUE))
+	if (specialDelayProcess 
+        || (action == UNITACTION_IDLE && m_sprites[action] == NULL)
+        || (action == UNITACTION_MOVE && (m_sprites[UNITACTION_IDLE] == NULL))
+       )
 	{
-		
-		
-		
-		
-		
-		
-		
-		if(m_sprites[UNITACTION_MOVE] != NULL)
+		if (m_sprites[UNITACTION_MOVE])
 		{
 			action = UNITACTION_MOVE;
 			frame = 0; 
 		}
 	}
 
-	if (m_sprites[action] == NULL) return;
-
-	if (frame >= m_sprites[action]->GetNumFrames()) {
-		Assert(FALSE);
-
-		return;
-	}
-
-	m_sprites[action]->SetCurrentFrame((uint16)frame);
-
+    if (m_sprites[action] && (frame < m_sprites[action]->GetNumFrames()))
+    {
+    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
 	
-	if(directionalAttack == FALSE)
-	{
-
-		if (m_sprites[action] != NULL)
+    	if (!directionalAttack)
+	    {
 			m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);
-
-	}
-	else
-	{
-		if (m_sprites[action] != NULL) {
-
-		}
+	    }
 	}
 }
 
@@ -541,7 +493,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 	char			prefixStr[80];
 
 	
-	for (j=0; j<5; j++) 
+	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
 		for (i=0; i<k_MAX_NAMES; i++) 
 		{
@@ -651,7 +603,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		attackSprite->ParseFromTokens(theToken);
 
 		printf(" [Attack");
-		for (j=0; j<5; j++) 
+		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
 			sint32 camera = j + 1;
 			for(i=0; i<attackSprite->GetNumFrames(); i++) 
@@ -782,7 +734,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		workSprite->ParseFromTokens(theToken);
 
 		printf(" [Work/A2");
-		for (j=0; j<5; j++) 
+		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
 			sint32 camera = j + 1;
 			for(i=0; i<workSprite->GetNumFrames(); i++) 
@@ -893,7 +845,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 
 	delete theToken;
 
-	for (j=0; j<5; j++) {
+	for (j=0; j<k_NUM_FACINGS; j++) {
 		for (i=0; i<k_MAX_NAMES; i++) 
 		{
 			free(facedImageNames[j][i]);

@@ -1,66 +1,103 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Happiness data
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Reimplemented m_timedChanges as std::list, to prevent Asserts
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
+
 #ifndef __HAPPY_H__
 #define __HAPPY_H__
 
-class CityData; 
-class CivArchive ;
-typedef sint32 PLAYER_INDEX ;
-template <class T> class DynamicArray;
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+#include <list>     // std::list
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class Happy;
+class HappyTimer;
 
 #define k_HAPPY_VERSION_MAJOR	0									
-#define k_HAPPY_VERSION_MINOR	0									
+#define k_HAPPY_VERSION_MINOR	0
+									
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
-class Player;
-enum HAPPY_REASON;
-class HappyTracker;
+#include "HappyTracker.h"   // HAPPY_REASON, HappyTracker
+#include "Player.h"         // PLAYER_INDEX, Player
+
+class CityData; 
+class CivArchive;
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 class HappyTimer {
 public:
-	sint32 m_turnsRemaining;
-	double m_adjustment;
-	HAPPY_REASON m_reason;
+	sint32          m_turnsRemaining;
+	double          m_adjustment;
+	HAPPY_REASON    m_reason;
 
-	HappyTimer(sint32 turns, double adjust,
-			   HAPPY_REASON reason)
-	{
-		m_turnsRemaining = turns;
-		m_adjustment = adjust;
-		m_reason = reason;
-	}
+	HappyTimer
+    (
+        sint32          turns   = 0, 
+        double          adjust  = 0.0,
+	    HAPPY_REASON    reason  = HAPPY_REASON_SMOKING_CRACK
+    )
+    :   m_turnsRemaining    (turns),
+        m_adjustment        (adjust),
+        m_reason            (reason)
+    { ; };
 	
-	HappyTimer()
-	{
-		m_turnsRemaining = 0;
-		m_adjustment = 0.0;
-		m_reason = (HAPPY_REASON)-1; 
-	}
 
 	void Serialize(CivArchive &archive);
-
-	void Castrate() {}
-	void DelPointers() {}
 };
 
 class Happy
 	{
 	private:
 		
-        
+//----------------------------------------------------------------------------
+// Do not change anything in the types or order of the following variable 
+// declarations. Doing so will break reading in of save files.
+// See the Serialize implementation for more details.
+//----------------------------------------------------------------------------
+
 		double m_happiness;
-
-
         double m_last_captured;
-
         double m_base; 
         double m_size; 
         double m_pollution; 
@@ -69,17 +106,13 @@ class Happy
         double m_enemy_action; 
         double m_peace; 
         double m_starvation; 
-
         double m_workday; 
         double m_wages; 
         double m_rations; 
-
         double m_martial_law;
-
         double m_pop_ent; 
         double m_improvement; 
         double m_wonders; 
-
         double m_dist_to_capitol; 
 		sint32 m_cost_to_capitol;
 		sint32 m_fullHappinessTurns;
@@ -88,25 +121,22 @@ class Happy
 		double m_timed;
         double m_crime; 
 		
+//----------------------------------------------------------------------------
+// Changing the order below this line should not break anything.
+//----------------------------------------------------------------------------
 
-		
-		DynamicArray<HappyTimer> *m_timedChanges;
-		
-
-		HappyTracker *m_tracker;
+        std::list<HappyTimer>   m_timedChanges;
+		HappyTracker *          m_tracker;
 
 		friend class NetHappy;
 
 	public:
 		Happy() ;
-		Happy(const Happy *copyme);
+		Happy(Happy const & copyme);
 		~Happy() ;
-		void CopyFrom(const Happy *copyme);
+
 		void SaveTracker();
 		void RestoreTracker();
-
-		void Castrate();
-        void DelPointers();
 
         void DecayConquestDistress(); 
 
@@ -188,6 +218,5 @@ class Happy
 	} ;
 
 uint32 Happy_Happy_GetVersion(void) ;
-#else
-class Happy ;
+
 #endif

@@ -294,33 +294,14 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 
 aui_Region::~aui_Region()
 {
-	
-	Assert(this);
-	if(!this) return;
+	aui_Ldl::Remove(this);
 
-	
-	aui_Ldl::Remove( this );
+	delete m_dim;
+	delete m_childList;
+	delete [] m_ldlBlock;
 
-	if ( m_dim )
-	{
-		delete m_dim;
-		m_dim = NULL;
-	}
-
-	if ( m_childList )
-	{
-		delete m_childList;
-		m_childList = NULL;
-	}
-
-	if(m_ldlBlock)
-	{
-		delete [] m_ldlBlock;
-		m_ldlBlock = NULL;
-	}
-
-	if(CanAttract()) {
-		
+	if (g_attractWindow && CanAttract()) 
+    {
 		g_attractWindow->RemoveRegion(this);
 	}
 }

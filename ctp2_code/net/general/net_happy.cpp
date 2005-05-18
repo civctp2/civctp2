@@ -1,26 +1,45 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer happiness packet handler
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Updated after changing Happy.h.
+// - Added overflow checks.
+//
+//----------------------------------------------------------------------------
 
+#include "c3.h"             // Pre-compiled header
+#include "net_happy.h"      // Own declarations: consistency check
 
-
-
-
-
-
-
-
-#include "c3.h"
 #include "network.h"
-#include "net_happy.h"
 #include "net_util.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "CityData.h"
 #include "Happy.h"
-#include "UnitPool.h"
+#include "UnitPool.h"       // g_theUnitPool
 #include "PlayHap.h"
-#include "Player.h"
+#include "Player.h"         // g_player
 
-extern UnitPool *g_theUnitPool;
-extern Player **g_player;
 
 NetHappy::NetHappy(Unit city, Happy *data, BOOL isInitial)
 {
@@ -68,15 +87,20 @@ NetHappy::Packetize(uint8 *buf, uint16 &size)
 	PUSHDOUBLE(m_data->m_dist_to_capitol);
 	PUSHLONG(m_data->m_fullHappinessTurns);
 	PUSHDOUBLE(m_data->m_timed);
-	uint8 n = (uint8)m_data->m_timedChanges->Num();
+    Assert(m_data->m_timedChanges.size() <= 255);
+    // Maybe incomplete, but this is the best we can do.
+    uint8 const n = static_cast<uint8>
+        (std::min<size_t>(255, m_data->m_timedChanges.size()));
 	PUSHBYTE(n);
-	uint8 i;
-	for(i = 0; i < n; i++) {
-		PUSHLONG(m_data->m_timedChanges->Access(i).m_turnsRemaining);
-		PUSHDOUBLE(m_data->m_timedChanges->Access(i).m_adjustment);
-		PUSHBYTE((uint8)m_data->m_timedChanges->Access(i).m_reason);
+    std::list<HappyTimer>::iterator p = m_data->m_timedChanges.begin();
+	for (uint8 i = 0; i < n; ++i) 
+    {
+		PUSHLONG(p->m_turnsRemaining);
+		PUSHDOUBLE(p->m_adjustment);
+		PUSHBYTE(p->m_reason);
+
+        ++p;
 	}
-	
 }
 
 void
@@ -100,10 +124,11 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLBYTE(m_isInitialPacket);
 
-	bool resync = false;
+    bool const  isCheck = !m_isInitialPacket && (cd->GetOwner() == g_network.GetPlayerIndex());
+	bool        resync  = false;
 
 	m_data = cd->m_happy;
-#define PDCHK(x) {double tmp = x; PULLDOUBLE(x); if(cd->GetOwner() == g_network.GetPlayerIndex() && !m_isInitialPacket) { Assert((tmp >= (x - 0.00000001)) && (tmp <= (x + 0.000000001))); if((tmp < (x - 0.000000001)) || (tmp > (x + 0.000000001))) resync = true; }}
+#define PDCHK(x) {double tmp = x; PULLDOUBLE(x); if (isCheck) { Assert((tmp >= (x - 0.00000001)) && (tmp <= (x + 0.000000001))); if((tmp < (x - 0.000000001)) || (tmp > (x + 0.000000001))) resync = true; }}
 
 	PDCHK(m_data->m_happiness);
 
@@ -133,7 +158,8 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PDCHK(m_data->m_crime); 
 	sint32 oldCost = m_data->m_cost_to_capitol;
 	PULLLONG(m_data->m_cost_to_capitol);
-	if(!m_isInitialPacket && cd->GetOwner() == g_network.GetPlayerIndex()) {
+	if (isCheck) 
+    {
 		Assert(oldCost == m_data->m_cost_to_capitol);
 		if(oldCost != m_data->m_cost_to_capitol)
 			resync = true;
@@ -142,7 +168,8 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PDCHK(m_data->m_dist_to_capitol);
 	sint32 oldFullHappiness = m_data->m_fullHappinessTurns;
 	PULLLONG(m_data->m_fullHappinessTurns);
-	if(!m_isInitialPacket && cd->GetOwner() == g_network.GetPlayerIndex()) {
+	if (isCheck) 
+    {
 		Assert(oldFullHappiness == m_data->m_fullHappinessTurns);
 		if(oldFullHappiness != m_data->m_fullHappinessTurns)
 			resync = true;
@@ -150,52 +177,62 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLDOUBLE(m_data->m_timed);
 
-	if(m_isInitialPacket || cd->GetOwner() != g_network.GetPlayerIndex()) {
-		m_data->m_timedChanges->Clear();
-	}
-	
 	uint8 n;
 	PULLBYTE(n);
-	if(!m_isInitialPacket && cd->GetOwner() == g_network.GetPlayerIndex()) {
-		Assert(n == (uint8)m_data->m_timedChanges->Num());
-		if(n != (uint8)m_data->m_timedChanges->Num()) {
+
+	if (isCheck) 
+    {
+		Assert(n == m_data->m_timedChanges.size());
+		if ((n == m_data->m_timedChanges.size()) ||
+            ((n == 255) && (m_data->m_timedChanges.size() > 255))
+           ) 
+        {
+            // No action: size OK, or impossible to repair.
+        }
+        else
+        {
 			resync = true;
 		}
 	}
+	else
+    {
+		m_data->m_timedChanges.clear();
+	}
 
-	if(!resync) {
-		uint8 i;
-		for(i = 0; i < n; i++) {
+	if (!resync) 
+    {
+        std::list<HappyTimer>::iterator     p   = m_data->m_timedChanges.begin();
+		for (uint8 i = 0; i < n; i++) 
+        {
 			HappyTimer ins;
 			PULLLONG(ins.m_turnsRemaining);
 			PULLDOUBLE(ins.m_adjustment);
 			PULLBYTETYPE(ins.m_reason, HAPPY_REASON);
 			
-			if(m_isInitialPacket || cd->GetOwner() != g_network.GetPlayerIndex()) {
-				m_data->m_timedChanges->Insert(ins);
-			} else {
-				Assert(m_data->m_timedChanges->Access(i).m_turnsRemaining ==
-					   ins.m_turnsRemaining);
-				if(m_data->m_timedChanges->Access(i).m_turnsRemaining !=
-				   ins.m_turnsRemaining)
-					resync = TRUE;
+			if (isCheck) 
+            {
+				Assert(p->m_turnsRemaining == ins.m_turnsRemaining);
+				if (p->m_turnsRemaining != ins.m_turnsRemaining)
+					resync = true;
 
-				Assert(m_data->m_timedChanges->Access(i).m_adjustment ==
-					   ins.m_adjustment);
-				if(m_data->m_timedChanges->Access(i).m_adjustment !=
-				   ins.m_adjustment)
-					resync = TRUE;
+				Assert(p->m_adjustment == ins.m_adjustment);
+				if (p->m_adjustment != ins.m_adjustment)
+					resync = true;
 
-				Assert(m_data->m_timedChanges->Access(i).m_reason ==
-					   ins.m_reason);
-				if(m_data->m_timedChanges->Access(i).m_reason !=
-				   ins.m_reason)
-					resync = TRUE;
+				Assert(p->m_reason == ins.m_reason);
+				if (p->m_reason != ins.m_reason)
+					resync = true;
 			}
+            else 
+            {
+				m_data->m_timedChanges.push_back(ins);
+			} 
 		}
 		Assert(pos == size);
 	}
-	if(resync) {
+
+	if (resync) 
+    {
 		g_network.RequestResync(RESYNC_CITY_STATS);
 	}
 }

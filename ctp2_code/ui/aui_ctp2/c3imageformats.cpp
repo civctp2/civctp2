@@ -1,17 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Loading of various image file formats
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Return an error code when loading a TGA file fails.
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-#include "c3.h"
+#include "c3.h"                     // Pre-compiled header
+#include "c3imageformats.h"         // Own declarations: consistency check
 
 #include <io.h>
 
@@ -25,7 +41,6 @@
 #include "targautils.h"
 #include "rimutils.h"
 
-#include "c3imageformats.h"
 
 #include "prjfile.h"
 extern ProjectFile *g_ImageMapPF;
@@ -116,13 +131,19 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR *filename, aui_Image *image)
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode == AUI_ERRCODE_OK )
 	{
-		Load_TGA_File(filename, (uint8 *)buffer, (int)surface->Pitch(), width, height, NULL, TRUE);
+		if (Load_TGA_File(filename, (uint8 *)buffer, (int)surface->Pitch(), width, height, NULL, TRUE))
+        {
+		    errcode = surface->Unlock( buffer );
 
-		errcode = surface->Unlock( buffer );
-
-		Assert( errcode == AUI_ERRCODE_OK );
-		if ( errcode != AUI_ERRCODE_OK )
-			retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
+		    Assert( errcode == AUI_ERRCODE_OK );
+		    if ( errcode != AUI_ERRCODE_OK )
+			    retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
+        }
+        else
+        {
+            (void) surface->Unlock(buffer);
+            retcode = AUI_ERRCODE_LOADFAILED;
+        }
 	}
 
 	return retcode;
@@ -138,8 +159,6 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
 	AUI_ERRCODE errcode;
     uint8 *image_data;
     RIMHeader *rhead;
-
-    void *buffer;
 
 	int		width, height, pitch;
 	int		record_is_565;
@@ -169,7 +188,8 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
     rname[rlen - 1] = 'm';
 
     
-    buffer = g_ImageMapPF->getData(rname, &size);
+    void *  buffer  = g_ImageMapPF ? g_ImageMapPF->getData(rname, &size) : NULL;
+
     if (buffer == NULL) {
 		c3errors_ErrorDialog("Targa Load", "Unable to find the file '%s'", filename);
         return AUI_ERRCODE_LOADFAILED;

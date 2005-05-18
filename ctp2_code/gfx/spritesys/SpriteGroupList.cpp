@@ -23,6 +23,7 @@
 //
 // - Unused spritelist.h include removed.
 // - Option added to include multiple data directories.
+// - Corrected crash when loading a saved game (only in release version?).
 //
 //----------------------------------------------------------------------------
  
@@ -141,23 +142,20 @@ SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE
 	
 	switch (type) 
 	{
-	case GROUPTYPE_UNIT : 
-	     if(newSpriteGroup==NULL)
+    case GROUPTYPE_UNIT : 
+	    if(newSpriteGroup==NULL)
 		    newSpriteGroup = new UnitSpriteGroup(type);
 
+        // A unit sprite file may have 3 or 2 digits in the name. 
+		sprintf(inFile, "GU%#.3d.SPR", index);
 		 
-		 
-		 sprintf(inFile, "GU%#.3d.SPR", index);
-		 
-		 MBCHAR fullPath[_MAX_PATH];
-         g_civPaths->FindFile(C3DIR_SPRITES, inFile, fullPath, TRUE, FALSE);
-
-		 if (!c3files_PathIsValid(fullPath))
-         {
-			 sprintf(inFile, "GU%#.2d.SPR", index);
-		 }
-
-		 break;
+		MBCHAR fullPath[_MAX_PATH];
+        if (!g_civPaths->FindFile(C3DIR_SPRITES, inFile, fullPath, TRUE, FALSE))
+        {
+            // No 3 digit version found: try the 2 digit version.
+			sprintf(inFile, "GU%#.2d.SPR", index);
+		}
+		break;
    	
 	case GROUPTYPE_PROJECTILE : 
 		 Assert("Projectile Actors Removed From Game - CJI"==NULL);

@@ -22,23 +22,24 @@
 // Modifications from the original Activision code:
 //
 // - Standardised min/max usage.
+// - Reimplemented m_timedChanges as std::list, to prevent Asserts
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "c3.h"                 // Pre-compiled header
+#include "Happy.h"              // Own declarations: consistency check
 
-#include "Happy.h"
 #include "CivArchive.h"
-#include "Player.h"
-#include "ConstDB.h"
+#include "Player.h"             // g_player
+#include "ConstDB.h"            // g_theConstDB
 #include "UnitPool.h"
 #include "CityData.h"
-#include "SelItem.h"
+#include "SelItem.h"            // g_theSelectedItem
 #include "TurnCnt.h"
 #include "MapPoint.h"
 
 #include "XY_Coordinates.h"
-#include "World.h"
+#include "World.h"              // g_theWorld
 #include "BuildingRecord.h"
 #include "CellUnitList.h"
 #include "WonderRecord.h"
@@ -58,150 +59,126 @@
 #include "wonderutil.h"
 #include "FeatTracker.h"
 
-extern SelectedItem g_theSelectedItem; 
-extern Player**	g_player ;
-extern ConstDB		*g_theConstDB ;
-extern TurnCount   *g_turn; 
-
-extern World    *g_theWorld; 
-extern UnitPool	*g_theUnitPool ;
 
 
 
 
 
+Happy::Happy()
+:   m_happiness             (0.0),
+    m_last_captured         (1000000000.0),
+    m_base                  (0.0),
+    m_size                  (0.0), 
+    m_pollution             (0.0), 
+    m_conquest_distress     (0.0),
+    m_empire_dist           (0.0),
+    m_enemy_action          (0.0), 
+    m_peace                 (0.0),
+    m_starvation            (0.0), 
+    m_workday               (0.0),
+    m_wages                 (0.0),
+    m_rations               (0.0),
+    m_martial_law           (0.0),
+    m_pop_ent               (0.0),
+    m_improvement           (0.0),
+    m_wonders               (0.0),
+    m_dist_to_capitol       (0.0),      
+	m_cost_to_capitol       (0),
+	m_fullHappinessTurns    (0),
+    m_pad                   (0),
+	m_too_many_cities       (0.0),
+	m_timed                 (0.0),
+    m_crime                 (0.0), 
+    m_timedChanges          (0.0),
+    m_tracker               (new HappyTracker())
+{ ; }
 
-
-
-
-
-Happy::Happy()	{
-
-   m_last_captured = 1000000000.0;
-   m_happiness = 0.0 ;
-   m_conquest_distress=0.0;
-   m_base = 0.0; 
-   m_size = 0.0; 
-   m_pollution = 0.0; 
-   m_starvation = 0.0; 
-   m_empire_dist = 0.0;
-   m_enemy_action = 0.0; 
-   m_peace = 0.0; 
-   m_workday=0.0; 
-   m_wages=0.0; 
-   m_rations=0.0; 
-   m_martial_law=0.0;
-   m_pop_ent=0.0; 
-   m_improvement=0.0; 
-   m_wonders=0.0; 
-   m_crime=0.0; 
-   m_too_many_cities = 0.0; 
-   m_dist_to_capitol = 0.0; 
-   m_cost_to_capitol = 0;
-   m_fullHappinessTurns = 0;
-   m_pad = 0; 
-   m_timed = 0;
-
-   m_timedChanges = new DynamicArray<HappyTimer>;
-   m_tracker = new HappyTracker();
+Happy::Happy(Happy const & copyme)
+:   m_happiness             (copyme.m_happiness),
+    m_last_captured         (copyme.m_last_captured),
+    m_base                  (copyme.m_base),
+    m_size                  (copyme.m_size), 
+    m_pollution             (copyme.m_pollution), 
+    m_conquest_distress     (copyme.m_conquest_distress),
+    m_empire_dist           (copyme.m_empire_dist),
+    m_enemy_action          (copyme.m_enemy_action), 
+    m_peace                 (copyme.m_peace),
+    m_starvation            (copyme.m_starvation), 
+    m_workday               (copyme.m_workday),
+    m_wages                 (copyme.m_wages),
+    m_rations               (copyme.m_rations),
+    m_martial_law           (copyme.m_martial_law),
+    m_pop_ent               (copyme.m_pop_ent),
+    m_improvement           (copyme.m_improvement),
+    m_wonders               (copyme.m_wonders),
+    m_dist_to_capitol       (copyme.m_dist_to_capitol),      
+	m_cost_to_capitol       (copyme.m_cost_to_capitol),
+	m_fullHappinessTurns    (copyme.m_fullHappinessTurns),
+    m_pad                   (copyme.m_pad),
+	m_too_many_cities       (copyme.m_too_many_cities),
+	m_timed                 (copyme.m_timed),
+    m_crime                 (copyme.m_crime), 
+    m_timedChanges          (copyme.m_timedChanges),
+    m_tracker               (new HappyTracker())
+{ 
+    for (size_t i = 0; i < static_cast<size_t>(HAPPY_REASON_MAX); ++i)
+    {
+        double      data;
+        StringID    name;
+        copyme.m_tracker->GetHappiness(static_cast<HAPPY_REASON>(i), data, name);
+        m_tracker->SetHappiness(static_cast<HAPPY_REASON>(i), data);
+    }
 }
 
-Happy::Happy(const Happy *copyme)
+Happy::~Happy()	
 {
-	CopyFrom(copyme);
-
-	m_timedChanges = new DynamicArray<HappyTimer>;
-	m_tracker = new HappyTracker();
-}
-
-Happy::~Happy()	{
-	if(m_timedChanges) {
-		delete m_timedChanges;
-		m_timedChanges = NULL;
-	}
-
-	if(m_tracker) {
-		delete m_tracker;
-	}
+    m_timedChanges.clear();
+	delete m_tracker;
 }
 
 
 void Happy::Serialize (CivArchive &archive)
-
 {
-	sint32 i;
-
     CHECKSERIALIZE
 
-    if (archive.IsStoring()) {
+    if (archive.IsStoring()) 
+    {
 		archive.StoreChunk((uint8 *)&m_happiness, ((uint8 *)&m_crime)+sizeof(m_crime));
 
-		archive << m_timedChanges->Num();
-		for(i = 0; i < m_timedChanges->Num(); i++) {
-			m_timedChanges->Access(i).Serialize(archive);
-		}
+		archive << static_cast<uint32>(m_timedChanges.size());
+        for 
+        (
+            std::list<HappyTimer>::iterator p = m_timedChanges.begin();
+            p != m_timedChanges.end();
+            ++p
+        )
+        {
+            p->Serialize(archive);
+        }
 		m_tracker->Serialize(archive);
-    } else {
+    } 
+    else 
+    {
 		archive.LoadChunk((uint8 *)&m_happiness, ((uint8 *)&m_crime)+sizeof(m_crime));
 
-		sint32 num;
+		uint32 num;
 		archive >> num;
-		for(i = 0; i < num; i++) {
-			m_timedChanges->ExtendByOne();
-			m_timedChanges->Access(i).Serialize(archive);
+
+        m_timedChanges.clear();
+        HappyTimer  item;
+        for (uint32 i = 0; i < num; ++i)
+        {
+            item.Serialize(archive);
+            m_timedChanges.push_back(item);
 		}
 
-		
-		if (m_tracker)
-			delete m_tracker;
+		delete m_tracker;
 		m_tracker = new HappyTracker(archive);
     }
 }
 
-void Happy::CopyFrom(const Happy *copyme)
-{
-	m_last_captured = copyme->m_last_captured;
-	m_happiness = copyme->m_happiness;
-	m_conquest_distress = copyme->m_conquest_distress;
-	m_base = copyme->m_base;
-	m_size = copyme->m_size;
-	m_pollution = copyme->m_pollution;
-    m_starvation = copyme->m_starvation; 
-	m_empire_dist = copyme->m_empire_dist;
-	m_enemy_action = copyme->m_enemy_action;
-	m_peace = copyme->m_peace;
-	m_workday = copyme->m_workday;
-	m_wages = copyme->m_wages;
-	m_rations = copyme->m_rations;
-	m_martial_law = copyme->m_martial_law;
-	m_pop_ent = copyme->m_pop_ent;
-	m_improvement = copyme->m_improvement;
-	m_wonders = copyme->m_wonders;
-	m_crime = copyme->m_crime;
-	m_fullHappinessTurns = copyme->m_fullHappinessTurns;
-	m_dist_to_capitol = copyme->m_dist_to_capitol;
-}
-
-void Happy::Castrate()
-{
-	m_timedChanges = NULL;
-	m_tracker = NULL;
-}
-
-void Happy::DelPointers()
-{ 
-    if (m_timedChanges) { 
-        delete m_timedChanges; 
-    } 
-
-	if(m_tracker)
-		delete m_tracker;
-    m_timedChanges=NULL; 
-	m_tracker = NULL;
-}
 
 double Happy::CalcBase(Player *p)
-
 { 
     m_base = p->GetBaseContentment(); 
     return m_base;
@@ -210,7 +187,6 @@ double Happy::CalcBase(Player *p)
 
 
 double Happy::CalcSize(CityData &cd, Player *p)
-
 {  
 	m_size	= p->GetBigCityScale() * std::min(p->GetBigCityOffset(), 0.0);
 	m_tracker->SetHappiness(HAPPY_REASON_CITY_SIZE, m_size);
@@ -231,7 +207,7 @@ double Happy::CalcTooManyCities(Player *p)
     for (i=0; i<n; i++) { 
         Unit *city = &(p->m_all_cities->Access(i));
         sint32 pop;
-        if (! g_theUnitPool->IsValid(*city))
+        if (!city->IsValid())
             continue;
         
         city->GetPop(pop);
@@ -542,26 +518,39 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 double Happy::CalcTimedChanges(CityData &cd, Player *p, BOOL projectedOnly,
 							   BOOL isFirstPass)
 {
-	sint32 i, n = m_timedChanges->Num();
-	DynamicArray<HappyTimer> dead;
-	double ret = 0.0;
+	if (isFirstPass && !projectedOnly) 
+    {
+	    double ret = 0.0;
 
-	if(isFirstPass && !projectedOnly) {
 		m_tracker->ClearEntries(HAPPY_REASON_HAPPINESS_ATTACK,
 								HAPPY_REASON_MAX);
-		for(i = n-1; i >= 0; i--) {
-			double adj = (*m_timedChanges)[i].m_adjustment;
+
+
+		for 
+        (
+            std::list<HappyTimer>::iterator ip   = m_timedChanges.begin();
+            ip != m_timedChanges.end();
+            // p updated in loop
+        )
+        {
+            double const    adj = ip->m_adjustment;
 			ret += adj;
-			
-			if(isFirstPass && !projectedOnly) {
-				m_tracker->AddTimedChange((*m_timedChanges)[i].m_reason, adj);
-				if(--((*m_timedChanges)[i].m_turnsRemaining) <= 0) {
-					m_timedChanges->DelIndex(i);
-				}
+			m_tracker->AddTimedChange(ip->m_reason, adj);
+            --ip->m_turnsRemaining;
+			if (ip->m_turnsRemaining > 0)
+            {    
+                ++ip;
+            }
+            else
+            {
+                ip = m_timedChanges.erase(ip);
 			}
 		}
+
 		m_timed = ret;
 	}
+    // else: No action: use cached value
+
 	return m_timed;
 }
 
@@ -826,27 +815,32 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
 
 void Happy::AddTimer(sint32 turns, double adjust, HAPPY_REASON reason)
 {
-	HappyTimer timer(turns, adjust, reason);
-	
-	m_timedChanges->Insert(timer);
+	m_timedChanges.push_back(HappyTimer(turns, adjust, reason));
 }
 
 void Happy::RemoveTimerReason(HAPPY_REASON reason)
 {
-	sint32 i;
-	for(i = m_timedChanges->Num() - 1; i >= 0; i--) {
-		if(m_timedChanges->Access(i).m_reason == reason) {
-			m_timedChanges->DelIndex(i);
-		}
-	}
+    for 
+    (
+        std::list<HappyTimer>::iterator p = m_timedChanges.begin();
+        p != m_timedChanges.end();
+        // p updated in loop
+    )
+    {
+        if (reason == p->m_reason)  
+        {
+            p = m_timedChanges.erase(p);
+        }
+        else
+        {
+            ++p;
+        }
+    }
 }
 
 void Happy::ClearTimedChanges()
 {
-	while(m_timedChanges->Num() > 0) {
-		m_timedChanges->DelIndex(0);
-	}
-
+    m_timedChanges.clear();
 	m_tracker->ClearEntries(HAPPY_REASON_HAPPINESS_ATTACK,
 							HAPPY_REASON_MAX);
 
