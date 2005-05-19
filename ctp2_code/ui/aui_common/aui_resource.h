@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : User interface general resource handling
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,6 +25,8 @@
 // - Import structure changed to compile with Mingw
 // - Variable scope corrected
 // - Crash preventions
+// - moved aui_UI::CalculateHash -> aui_Base::CalculateHash
+// - fixed some filesystem portability issues
 //
 //----------------------------------------------------------------------------
 
@@ -49,7 +52,7 @@ template <class T> struct	aui_ResourceElement;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "aui_ui.h"			// aui_UI
+#include "aui_base.h"
 #include "auitypes.h"		// AUI_...
 #include "c3debug.h"		// Assert
 #include "c3files.h"		// C3DIR...
@@ -60,9 +63,6 @@ template <class T> struct	aui_ResourceElement;
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
-
-
-
 
 template<class TT>
 struct aui_ResourceElement
@@ -124,8 +124,8 @@ aui_ResourceElement<TT>::aui_ResourceElement(
 	MBCHAR *fullPath )
 :	resource(NULL),
 	name((newName && fullPath) ? new MBCHAR[strlen(newName) + 1] : NULL),
-	hash(aui_UI::CalculateHash(newName)),
-	pathhash(aui_UI::CalculateHash(fullPath)),
+	hash(aui_Base::CalculateHash(newName)),
+	pathhash(aui_Base::CalculateHash(fullPath)),
 	refcount(1)
 {
 	
@@ -310,7 +310,7 @@ T *aui_Resource<T>::Load( MBCHAR *resName, C3DIR dir, uint32 size)
 	}
 
 
-	uint32 hash = aui_UI::CalculateHash( name );
+	uint32 hash = aui_Base::CalculateHash( name );
 
 	ListPos position = m_resourceList->GetHeadPosition();
 	for ( sint32 i = m_resourceList->L(); i; i-- )
@@ -381,8 +381,7 @@ T *aui_Resource<T>::Load( MBCHAR *resName, C3DIR dir, uint32 size)
 template<class T>
 BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, MBCHAR *name )
 {
-	
-	if ( !strchr( name, ':' ) && strncmp( name, "\\\\", 2 ) )
+	if ( !strchr( name, ':' ) && strncmp( name, FILE_SEP FILE_SEP, 2 ) )
 	{
 		
 		ListPos position = m_pathList->GetHeadPosition();
@@ -391,10 +390,14 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, MBCHAR *name )
 			for ( sint32 i = m_pathList->L(); i; i-- )
 			{
 				MBCHAR *path = m_pathList->GetNext( position );
-				sprintf( fullPath, "%s\\%s", path, name );
+				sprintf( fullPath, "%s%s%s", path, FILE_SEP, name );
 
-				
+#if defined(WIN32)
 				if ( GetFileAttributes( fullPath ) != 0xffffffff )
+#else
+            struct stat st;
+            if (0 == stat(fullPath, &st))
+#endif
 				{
                     return TRUE;
 				}
@@ -435,7 +438,7 @@ AUI_ERRCODE aui_Resource<T>::Unload( T *resource )
 template<class T>
 AUI_ERRCODE aui_Resource<T>::Unload( MBCHAR *name )
 {
-	uint32 hash = aui_UI::CalculateHash( name );
+	uint32 hash = aui_Base::CalculateHash( name );
 
 	ListPos position = m_resourceList->GetHeadPosition();
 	for ( sint32 i = m_resourceList->L(); i; i-- )
@@ -460,8 +463,6 @@ AUI_ERRCODE aui_Resource<T>::Unload( MBCHAR *name )
 
 	return AUI_ERRCODE_OK;
 }
-
-
 
 
 #endif 

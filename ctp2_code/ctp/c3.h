@@ -49,6 +49,7 @@
 #define __C3_H__
 
 #include "ctp2_config.h"
+#include "c3types.h"
 
 #if defined(_MSC_VER)
 
@@ -70,7 +71,9 @@
 // Do not define the min and max *macros* in <windows.h>.
 #define NOMINMAX	
 #include <windows.h>
-#endif
+#else
+#include "windows.h"
+#endif // WIN32
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)
 	// MSVC 6.0 does not even have std::min and std::max.
@@ -118,7 +121,6 @@
 #if defined(__GNUC__)
 #define _MAX_PATH PATH_MAX
 #endif // __GNUC__
-#include "ctp2_inttypes.h"
 #include "c3debug.h"
 #include "c3errors.h"
 #include "aui.h"

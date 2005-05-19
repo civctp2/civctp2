@@ -1,13 +1,29 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source file
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - moved CalculateHash to aui_Base
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_action.h"
@@ -36,9 +52,6 @@ extern BOOL		g_exclusiveMode;
 
 aui_UI *g_ui = NULL;
 
-static void free_crc();
-
-
 aui_UI::aui_UI(
 	AUI_ERRCODE *retval,
 	HINSTANCE hinst,
@@ -53,19 +66,6 @@ aui_UI::aui_UI(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
-
-	
-	
-
-	
-	
-	
-
-	
-
-	
-	
 	Assert( aui_Base::GetBaseRefCount() == 2 );
 	g_ui = aui_Base::GetBaseRefCount() == 2 ? this : NULL;
 
@@ -225,7 +225,7 @@ AUI_ERRCODE aui_UI::CreateScreen( void )
 	return retcode;
 }
 
-
+extern void free_crc();
 
 aui_UI::~aui_UI()
 {
@@ -320,8 +320,6 @@ aui_UI::~aui_UI()
 
 	free_crc();
 
-	
-	
 	sint32 test = aui_Base::GetBaseRefCount();
 	Assert( aui_Base::GetBaseRefCount() == 2 );
 }
@@ -2073,112 +2071,3 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 
 	return AUI_ERRCODE_OK;
 }
-
-uint32 update_crc(uint32 crc_accum, const MBCHAR *data_blk_ptr,
-						 sint32 data_blk_size);
-
-
-
-uint32 aui_UI::CalculateHash( const MBCHAR *string )
-{
-	Assert( string != NULL );
-	if ( !string ) return 0;
-
-	return update_crc(0, string, strlen(string));
-
-
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#define POLYNOMIAL 0x04c11db7L
-
-static uint32 *g_crcTable = NULL;
-
-
-void gen_crc_table()
-{
-	if (!g_crcTable)
-		g_crcTable = new uint32[256];
-
-	register int i, j;  
-	register unsigned long crc_accum;
-
-	for ( i = 0;  i < 256;  i++ ) {
-		crc_accum = ( (uint32) i << 24 );
-		for ( j = 0;  j < 8;  j++ ) {
-			if ( crc_accum & 0x80000000L ) 
-				crc_accum = ( crc_accum << 1 ) ^ POLYNOMIAL;
-			else
-				crc_accum = ( crc_accum << 1 ); 
-		}
-		
-		g_crcTable[i] = crc_accum; 
-	}
-	
-	return; 
-}
-
-static void free_crc()
-{
-	if(g_crcTable)
-		delete [] g_crcTable;
-}
-
-
-uint32 update_crc(uint32 crc_accum, const MBCHAR *data_blk_ptr, sint32 data_blk_size)
-{
-	if (!g_crcTable) {
-		gen_crc_table();
-	}
-
-	register int i, j;
-
-	for ( j = 0;  j < data_blk_size;  j++ ) {
-		i = ( (int) ( crc_accum >> 24) ^ tolower(*data_blk_ptr++) ) & 0xff;
-		crc_accum = ( crc_accum << 8 ) ^ g_crcTable[i]; 
-	}
-
-	return crc_accum; 
-}
-

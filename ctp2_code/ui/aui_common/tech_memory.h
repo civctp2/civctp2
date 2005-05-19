@@ -28,21 +28,14 @@
 #ifndef __TECH_MEMORY_H__
 #define __TECH_MEMORY_H__
 
-
-
-
-
 #define k_TECH_MEMORY_DEFAULT_BLOCKSIZE		20
 #define k_TECH_MEMORY_BITSPERDWORD			(sizeof(unsigned)<<3)
-
-
 
 template< class T >
 class tech_Memory
 {
 public:
-	
-	tech_Memory( unsigned long blockSize = k_TECH_MEMORY_DEFAULT_BLOCKSIZE );
+	tech_Memory(size_t blockSize = k_TECH_MEMORY_DEFAULT_BLOCKSIZE );
 	virtual ~tech_Memory();
 
 	T		*New( void );
@@ -51,14 +44,14 @@ public:
 protected:
 	struct Block
 	{
-		Block( unsigned long blockSize )
+		Block(size_t blockSize )
 			:
 			pNext( 0 ),
 			dataSize( blockSize )
 		{
 			
 			usedSize = dataSize / k_TECH_MEMORY_BITSPERDWORD;
-			unsigned long remainder = dataSize % k_TECH_MEMORY_BITSPERDWORD;
+			size_t remainder = dataSize % k_TECH_MEMORY_BITSPERDWORD;
 			if ( remainder ) usedSize++;
 
 			if ( used = new unsigned[ usedSize ] )
@@ -77,21 +70,29 @@ protected:
 		{
 			if ( used )
 			{
+#if defined(_MSC_VER) && 0
 				delete[ usedSize ] used;
+#else
+            delete[] used;
+#endif
 				used = 0;
 			}
 
 			if ( data )
 			{
+#if defined(_MSC_VER)
 				delete[ dataSize ] data;
+#else
+            delete[] data;
+#endif
 				data = 0;
 			}
 		}
 
 		Block *pNext;			
-		unsigned long usedSize; 
+		size_t usedSize; 
 		unsigned *used;			
-		unsigned long dataSize; 
+		size_t dataSize; 
 		T *data;				
 	};
 
@@ -101,7 +102,7 @@ protected:
 	
 	void UnuseElement( T *t );
 
-	unsigned long m_blockSize;
+	size_t m_blockSize;
 	Block *m_pFirst;
 	Block *m_pLast;
 };
@@ -111,7 +112,7 @@ protected:
 
 
 template< class T >
-tech_Memory< T >::tech_Memory( unsigned long blockSize )
+tech_Memory< T >::tech_Memory( size_t blockSize )
 	:
 	m_blockSize( blockSize ? blockSize : k_TECH_MEMORY_DEFAULT_BLOCKSIZE ),
 	m_pFirst( 0 ),
@@ -222,7 +223,7 @@ void tech_Memory< T >::UnuseElement( T *t )
 	if ( !t ) return;
 
 	
-	unsigned long offset;
+	size_t offset;
 	Block *			pBlock = m_pFirst;
 	for ( ; pBlock ; pBlock = pBlock->pNext )
 	{

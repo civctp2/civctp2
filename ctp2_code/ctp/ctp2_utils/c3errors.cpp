@@ -1,14 +1,28 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source file
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
 
 #include "c3.h"
 
@@ -18,15 +32,7 @@
 #include "aui_ui.h"
 extern aui_UI *g_ui;
 
-	extern	StringDB	*g_theStringDB ;
-
-
-
-
-
-
-
-
+extern	StringDB	*g_theStringDB ;
 
 void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 {
@@ -40,42 +46,19 @@ void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 	c3errors_ErrorDialog(module, str);
 	va_end(list);
 
-
-	
-	
-	
 	Assert(FALSE);
-
 	
 	Report("Fatal error.  Aborting.\n");
 
 #ifndef _DEBUG
-
-
-
-
-
 #ifndef _BFR_
 	sint32 *s = 0;
 	*s = 0;
 #endif
 #endif
-
 	
 	exit(-1);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
@@ -100,38 +83,19 @@ void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
 
 	MessageBox(NULL, str, dbTitle, MB_OK | MB_ICONEXCLAMATION) ;
 
-	
-	
-	
 	Assert(FALSE) ;
-
 	
 	Report("Fatal error.  Aborting.\n") ;
 
 #ifndef _DEBUG
-
-
 #ifndef _BFR_
 	sint32 *s = 0;
 	*s = 0;
 #endif
 #endif
 
-	
 	exit(-1) ;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void c3errors_ErrorDialogFromDB(const char *module, const char *err, ...)
@@ -155,7 +119,7 @@ void c3errors_ErrorDialogFromDB(const char *module, const char *err, ...)
 	va_end(list) ;
 
 	MessageBox(NULL, str, dbTitle, MB_OK | MB_ICONEXCLAMATION) ;
-	}
+}
 
 
 void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
@@ -168,16 +132,23 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 
 	szTmp = (module == NULL) ? (LPTSTR)szDefaultModule : (LPTSTR)module;
 
-	
-	
-	
-	
+#if defined(WIN32)
 	if ((szTitle = (LPTSTR)LocalAlloc(LMEM_FIXED, (lstrlen(szTmp) +
 			lstrlen(szTitleText) + lstrlen(fmt) + 33000)*sizeof(TCHAR))) == NULL)
 		return;
 
-	wsprintf(szTitle, szTitleText, szTmp);
-	
+   wsprintf(szTitle, szTitleText, szTmp);
+#else
+   if ((szTitle = (LPTSTR)malloc((lstrlen(szTmp) + lstrlen(szTitleText) +
+                                  lstrlen(fmt) + 33000
+                                 )*sizeof(TCHAR)
+                                )
+       ) == NULL)
+      return;
+
+   sprintf(szTitle, szTitleText, szTmp);
+#endif
+
 	szTmp = szTitle + (lstrlen(szTitle)+2)*sizeof(TCHAR);
 
 	va_start(list, fmt);
@@ -188,7 +159,11 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 	
 	DPRINTF(k_DBG_FIX, ("Error: %s, %s\n", szTitle, szTmp));
 
+#if defined(WIN32)
 	LocalFree(szTitle);
+#else
+   free(szTitle);
+#endif
 	
 #ifndef _DEBUG
 	extern bool g_autoAltTab;

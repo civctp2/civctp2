@@ -66,8 +66,7 @@ class	CivilisationData;
 
 #include "c3types.h"			// MBCHAR, sint..., uint...
 #include "civarchive.h"			// CivArchive
-#include "Civilisation.h"		// GENDER
-#include "CivilisationPool.h"	// CIV_INDEX
+#include "GameObj_types.h"
 #include "CivilisationRec.h"	// k_MAX_CITY_NAMES
 #include "dbtypes.h"			// k_MAX_NAME_LEN
 #include "GameObj.h"			// GAMEOBJ

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : User interface
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -22,6 +23,7 @@
 // Modifications from the original Activision code:
 //
 // - Import structure changed to compile with Mingw
+// - Moved CalculateHash() to aui_Base
 //
 //----------------------------------------------------------------------------
 
@@ -303,9 +305,6 @@ public:
 	AUI_ERRCODE ShowSelectedRegion( aui_Region *region );
 	RECT		TheEditRect( void ) const { return m_editRect; }
 	AUI_ERRCODE	CreateEditModeDialog( BOOL bMake );
-
-	
-	static uint32	CalculateHash( const MBCHAR *string );
 
 	struct DirtyRectInfo
 	{

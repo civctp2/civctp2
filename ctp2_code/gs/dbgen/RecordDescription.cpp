@@ -57,6 +57,8 @@
 #include <stdlib.h>
 #if defined(WIN32)
 #include <windows.h>
+#else
+#include "windows.h"
 #endif
 #include "ctpdb.h"
 #include "RecordDescription.h"

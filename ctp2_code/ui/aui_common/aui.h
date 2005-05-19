@@ -1,14 +1,29 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  : 
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
 #ifndef __AUI_H__
 #define __AUI_H__
 
@@ -18,6 +33,8 @@
 #include <vfw.h>
 #include <tchar.h>
 #include <mbstring.h>
+#else
+#include "windows.h"
 #endif
 
 
@@ -42,19 +59,19 @@
 #if defined(__AUI_USE_DIRECTMEDIA__) && !defined(__AUI_USE_DIRECTX__)
 #define __AUI_USE_DIRECTX__
 #endif
+#endif // WIN32
 
 #if defined(__AUI_USE_DIRECTX__)
 #include <ddraw.h>
 #include <dinput.h>
 #include <dsound.h>
-#endif 
+#endif // __AUI_USE_DIRECTX__
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 #include <amstream.h>
 #include <ddstream.h>
 #include <mmstream.h>
 #include <reftime.h>
-#endif 
-#endif
+#endif // __AUI_USE_DIRECTMEDIA__
 
 #endif 

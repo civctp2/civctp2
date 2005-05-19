@@ -1,24 +1,39 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
 #ifndef __AUI_MOVIEMANAGER_H__
 #define __AUI_MOVIEMANAGER_H__
 
 
 #include "aui_base.h"
-#include "aui_movie.h"
+#include "aui_ui.h"
 #include "aui_resource.h"
+#include "aui_movie.h"
 
 #include "c3files.h"
-
 
 class aui_MovieManager : aui_Base
 {

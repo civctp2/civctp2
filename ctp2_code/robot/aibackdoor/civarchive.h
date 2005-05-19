@@ -1,20 +1,39 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
+#if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #pragma once
+#endif
+
 #ifndef __CIVARCHIVE_H__
 #define __CIVARCHIVE_H__
 
-#include "ic3CivArchive.h"
+#include "Ic3CivArchive.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include <SDL_endian.h>
 
 #define k_ARCHIVE_MAGIC_VALUE_1	'OTAK'
@@ -26,8 +45,11 @@ class DataCheck ;
 class CivArchive : public IC3CivArchive
 	{
 	private:
-
-        ULONG m_refCount;
+#if !defined(USE_COM_REPLACEMENT)
+      ULONG m_refCount;
+#else
+      uint32 m_refCount;
+#endif
 
 		bool	m_bIsStoring ;										
 
@@ -60,14 +82,18 @@ class CivArchive : public IC3CivArchive
 		CivArchive(uint32 ulSize) ;									
 		~CivArchive() ;												
 
+#if !defined(USE_COM_REPLACEMENT)
+      STDMETHODIMP QueryInterface(REFIID, void **obj);
+      STDMETHODIMP_(ULONG) AddRef();
+      STDMETHODIMP_(ULONG) Release();
 
-        	
-	STDMETHODIMP QueryInterface(REFIID, void **obj);
-	STDMETHODIMP_(ULONG) AddRef();
-	STDMETHODIMP_(ULONG) Release();
+      STDMETHODIMP_ (void) Store(uint8 *pbData, uint32 ulLen);
+#else
+      virtual uint32 AddRef();
+      virtual uint32 Release();
+      virtual void Store(uint8 *pbData, uint32 ulLen);
+#endif
 
-		
-		 STDMETHODIMP_ (void) Store(uint8 *pbData, uint32 ulLen) ;					
 #ifndef HUNT_SERIALIZE
 		void StoreChunk(uint8 *start, uint8 *end);
 #endif
@@ -139,8 +165,11 @@ class CivArchive : public IC3CivArchive
 			Store((uint8 *)&temp, sizeof(temp));
 		}
 
-		
-		 STDMETHODIMP_ (void) Load(uint8 *pbData, uint32 ulLen) ;					
+#if !defined(USE_COM_REPLACEMENT)
+      STDMETHODIMP_ (void) Load(uint8 *pbData, uint32 ulLen);
+#else
+      virtual void Load(uint8 *pbData, uint32 ulLen);
+#endif
 #ifndef HUNT_SERIALIZE
 		  void LoadChunk(uint8 *start, uint8 *end);
 #endif
@@ -220,8 +249,12 @@ class CivArchive : public IC3CivArchive
 	
 		void PerformMagic(uint32 id) ;
 		void TestMagic(uint32 id) ;
-		
-		 STDMETHODIMP_ (BOOL) IsStoring(void) { return (m_bIsStoring) ; }			
+
+#if !defined(USE_COM_REPLACEMENT)
+      STDMETHODIMP_ (BOOL) IsStoring(void) { return (m_bIsStoring) ; }
+#else
+      virtual BOOL IsStoring(void) { return (m_bIsStoring); }
+#endif
 
 		
 		void StoreArray( sint8 * dataarray, size_t size ) {

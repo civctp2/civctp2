@@ -21,7 +21,7 @@
 #endif // DIRECTSOUND_VERSION
 
 #if defined(USE_SDL)
-#define __AUI_USE_SDL__ 1
+//#define __AUI_USE_SDL__ 1
 #endif
 
 /****************************************************************

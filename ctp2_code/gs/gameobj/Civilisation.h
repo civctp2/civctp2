@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : 
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -43,22 +44,8 @@
 #define __CIVILISATION_H__
 
 #include "ID.h"
+#include "GameObj_types.h"
 #include "CivilisationData.h"
-
-#if defined(_MSC_VER)
-enum CIV_INDEX ;
-#else
-#include "CivilisationPool.h"	// CIV_INDEX
-#endif
-
-enum GENDER {
-	GENDER_MALE,
-	GENDER_FEMALE,
-
-	GENDER_RANDOM,
-	
-	GENDER_MAX
-};
 
 //----------------------------------------------------------------------------
 //
@@ -82,25 +69,13 @@ enum GENDER {
 class Civilisation : public ID
 	{
 	public:
-		
-		
-
-		
-		
-
-		
-		
-		
-
-		
-		
-
-	public:
 		Civilisation() : ID() { return ; }
 		Civilisation(sint32 val) : ID(val) { return ; }
 		Civilisation(uint32 val) : ID(val) { return ; }
+#if defined(WIN32)
 		Civilisation(const int val) : ID(val) { return ; }
 		Civilisation(const unsigned int val) : ID(val) { return ; }
+#endif
 
 		CivilisationData *operator -> () const { return AccessData(); }
 
@@ -133,7 +108,5 @@ void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner);
 
 extern Civilisation	*g_theCivilisation ;
 #else
-
-class Civilisation ;
-
+class Civilisation;
 #endif

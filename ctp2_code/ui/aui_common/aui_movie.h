@@ -1,14 +1,29 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
 #ifndef __AUI_MOVIE_H__
 #define __AUI_MOVIE_H__
 
@@ -135,12 +150,13 @@ protected:
 	uint32		m_timePerFrame;
 	uint32		m_lastFrameTime;
 
-	
+#if defined(WIN32)	
 	PAVIFILE			m_aviFile;
 	PAVISTREAM			m_aviStream;
 	AVIFILEINFO			m_aviFileInfo;
 	AVISTREAMINFO		m_aviStreamInfo;
 	PGETFRAME			m_getFrame;
+#endif
 	uint32				m_curFrame;
 };
 

@@ -1,12 +1,35 @@
-/**
- * $Id$
- */
-#if defined(_MSC_VER) && (_MSC_VER > 1200)
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+// - corrected wrong defined name for multiple include prevention
+//
+//----------------------------------------------------------------------------
+#if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #pragma once
 #endif
 
-#ifndef __PLASMA_GEN_1_H__
-#define __PLASMA_GEN_1_H__
+#ifndef __FAULTGEN_H__
+#define __FAULTGEN_H__ 1
 
 #include "IMapGen.h"
 

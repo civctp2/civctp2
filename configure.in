@@ -37,13 +37,21 @@ AC_PROG_LIBTOOL
 
 AC_CANONICAL_TARGET
 
+AM_PATH_DIRECTX
+AM_PATH_DXMEDIA
 AM_PATH_SDL
+AC_DEFINE(USE_SDL,1,[Use the SDL-library])
 
 AC_OS_DEFINES
 AC_OS_PATHNAMES
 
 AC_CHECK_HEADERS(sys/param.h)
-AC_DEFINE(USE_COM_REPLACEMENT,1,[Do not use COM])
+case $host in
+*-cygwin*)
+	;;
+*)	AC_DEFINE(USE_COM_REPLACEMENT,1,[Do not use COM])
+	;;
+esac
 AC_DEFINE(YYDEBUG,9,[Debug Parsers])
 
 for ac_remove_CFLAG in "-O1" "-O2" "-O3" ; do

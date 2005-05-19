@@ -1,12 +1,35 @@
-/**
- * $Id$
- */
-#if defined(_MSC_VER) && (_MSC_VER > 1200)
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : 
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
+#if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #pragma once
 #endif
 
 #ifndef __GEOMETRIC_H__
-#define __GEOMETRIC_H__
+#define __GEOMETRIC_H__ 1
 
 #include "IMapGen.h"
 

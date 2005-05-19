@@ -4,6 +4,14 @@
 plugindir = $(libdir)/ctp2
 plugin_LTLIBRARIES=crater.la fault.la geometric.la plasma2.la
 
+if WIN32
+CTP2_WIN32_FREETYPE_INC=\
+	-I$(ctp2_code)/ui/freetype
+else
+CTP2_NOWIN32_INC=
+	-I$(ctp2_code)/os/nowin32
+endif
+
 crater_la_SOURCES = Crater.cpp
 crater_la_LDFLAGS = -module -avoid-version
 
@@ -17,6 +25,10 @@ plasma2_la_SOURCES = PlasmaGen2.cpp
 plasma2_la_LDFLAGS = -module -avoid-version
 
 AM_CPPFLAGS = \
+	$(DIRECTX_INCLUDES) \
+	$(DXMEDIA_INCLUDES) \
+	$(CTP2_WIN32_FREETYPE_INC) \
+	$(CTP2_NOWIN32_INC) \
 	-I$(ctp2_code)/os/include \
 	-I$(ctp2_code)/ctp \
 	-I$(ctp2_code)/ctp/ctp2_utils \

@@ -1,34 +1,53 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface general resource handling
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
+#endif
 #ifndef __C3UI_H__
 #define __C3UI_H__
 
-
+#if defined(__AUI_USE_SDL__)
+#include "aui_sdlui.h"
+#else
 #include "aui_directui.h"
+#endif
 #include "pattern.h"		
 #include "icon.h"			
 #include "picture.h"		
 #include "aui_resource.h"	
 #include "aui_window.h"
 
-
-
+#if defined(__AUI_USE_SDL__)
+class C3UI : public aui_SDLUI
+#else
 class C3UI : public aui_DirectUI
+#endif
 {
 public:
-	
 	C3UI(
 		AUI_ERRCODE *retval,
 		HINSTANCE hinst,

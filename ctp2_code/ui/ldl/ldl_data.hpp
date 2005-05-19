@@ -1,14 +1,29 @@
-/*******************************************************************************
-
-	$Workfile:: ldl_data.hpp                                                   $
-	  $Author$
-	    $Date$
-	$Rev$
-	 $Archive:: /LDL/test/ldl_data.hpp                                         $
-
-*******************************************************************************/
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  : 
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
 #ifndef LDL_DATA_HPP
 #define LDL_DATA_HPP
 

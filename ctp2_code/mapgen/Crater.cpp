@@ -37,7 +37,7 @@
 
 #include "Crater.h"
 #include <stdlib.h>
-#include "ic3Rand.h"
+#include "IC3Rand.h"
 
 #if defined(USE_COM_REPLACEMENT)
 extern "C" IMapGenerator *CoCreateMapGenerator()

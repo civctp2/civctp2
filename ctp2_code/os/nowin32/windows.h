@@ -1,0 +1,97 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  : Windows stub header for non-Windows systems
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+#ifndef __WINDOWS_H__
+#define __WINDOWS_H__ 1
+
+#if defined(WIN32)
+#error "WIN32 defined, but included windows.h from os/nowin32!"
+#endif
+
+#include "tchar.h"
+
+/* Windows data types */
+typedef uint32 BOOL;
+const BOOL FALSE = 0;
+const BOOL TRUE = 1;
+typedef char   CHAR;
+typedef uint32 COLORREF;
+typedef sint32 GUID;
+typedef sint32 HRESULT;
+typedef sint32 LPARAM;
+typedef const CHAR *LPCSTR;
+typedef const TCHAR *LPCTSTR;
+typedef CHAR * LPSTR;
+typedef TCHAR * LPTSTR;
+typedef void * LPVOID;
+typedef sint32 LRESULT;
+typedef sint32 (*WNDPROC)();
+typedef sint32 WPARAM;
+
+/* Standard datatypes */
+typedef uint8  BYTE;
+typedef uint16 WORD;
+typedef uint32 DWORD;
+typedef sint32 INT;
+typedef sint32 LONG;
+typedef uint32 UINT;
+typedef uint32 ULONG;
+
+/* Structs */
+struct POINT {
+  sint32 x;
+  sint32 y;
+};
+typedef POINT * LPPOINT;
+
+struct RECT {
+  sint32 left;
+  sint32 top;
+  sint32 right;
+  sint32 bottom;
+};
+
+/* Stub definitions */
+typedef struct critical_section_t {} CRITICAL_SECTION;
+typedef CRITICAL_SECTION *LPCRITICAL_SECTION;
+
+typedef struct handle_t* HANDLE;
+typedef struct hbitmap_t* HBITMAP;
+typedef struct hdc_t* HDC;
+typedef struct hinstance_t* HINSTANCE;
+typedef struct hwnd_t* HWND;
+
+/* Constants */
+#define MB_OK 0
+#define MB_ICONEXCLAMATION 0
+
+/* Makros */
+#define CALLBACK
+#define RGB(r,g,b) ((BYTE)(b) << 16 | (BYTE)(g) << 8 | (BYTE)(r))
+#define WINAPI
+
+/* stub functions */
+sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags);
+#define lstrlen(s) strlen(s)
+
+
+
+#endif

@@ -46,14 +46,6 @@ typedef uint32_t             uint32;
 typedef int64_t              sint64;
 typedef uint64_t             uint64;
 
-typedef char                 CHAR;
-#if defined(__cplusplus)
-typedef bool                 BOOL;
-
-const BOOL TRUE  = true;
-const BOOL FALSE = false;
-#endif
-
 #endif// !defined(_MSCVER)
 
 #endif

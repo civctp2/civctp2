@@ -1,16 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+// - #pragma once commented out.
+//
+//----------------------------------------------------------------------------
+#if defined(_MSC_VER) && (_MSC_VER >= 1000)
 #pragma once
+#endif
+
 #ifndef __TOKEN_H__
 #define __TOKEN_H__ 1
 
@@ -20,8 +37,6 @@
 #include "dbtypes.h"
 
 enum TOKEN_TYPES { 
-	
-	
 	TOKEN_STRING,  
 		TOKEN_QUOTED_STRING,   
 		TOKEN_MISSING_QUOTE,   
@@ -694,12 +709,6 @@ sint32  token_ParseFloatNext(Token *aToken, const sint32 t, double &val);
 sint32	token_ParseAnOpenBraceNext(Token *aToken);
 sint32	token_ParseAnCloseBraceNext(Token *aToken);
 sint32	token_ParseAnCloseBrace(Token *aToken);
-#if !defined(WIN32)
-struct POINT {
-	sint32 x;
-	sint32 y;
-};
-#endif
 POINT	token_ParsePoint(Token *theToken);
 
 template <class T> class CTPDatabase;

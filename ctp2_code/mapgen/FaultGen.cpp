@@ -6,18 +6,20 @@
 
 #if !defined(USE_COM_REPLACEMENT)
 #define INITGUID
-
-#include "c3.h"
 #else
 #include "noCOMBase.h"
-#include <algorithm>
+#endif
 
+#if defined(WIN32)
+#include "c3.h"
+#else
+#include <algorithm>
 using std::min;
 #endif
 
 #include "FaultGen.h"
 #include <stdlib.h>
-#include "ic3Rand.h"
+#include "IC3Rand.h"
 
 #ifndef GEOMETRIC
 #if !defined(USE_COM_REPLACEMENT)

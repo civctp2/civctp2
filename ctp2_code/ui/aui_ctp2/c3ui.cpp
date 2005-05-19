@@ -31,7 +31,11 @@ C3UI::C3UI(
 	MBCHAR *ldlFilename,
 	BOOL useExclusiveMode )
 	:
+#if defined(__AUI_USE_SDL__)
+	aui_SDLUI( retval, hinst, hwnd, width, height, bpp, ldlFilename, useExclusiveMode )
+#else
 	aui_DirectUI( retval, hinst, hwnd, width, height, bpp, ldlFilename, useExclusiveMode )
+#endif
 {
 	m_patternResource = new aui_Resource<Pattern>;
 	m_iconResource = new aui_Resource<Icon>;

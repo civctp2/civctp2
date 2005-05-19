@@ -117,6 +117,7 @@
 <font1> ctplinuxfan
 <font1> closms
 <font1> Leland
+<font1> Johannes Sixt
 <font1> uppi
 ;
 <page>

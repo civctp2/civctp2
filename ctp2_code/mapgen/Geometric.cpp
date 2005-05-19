@@ -18,7 +18,7 @@ using std::max;
 #include "Geometric.h"
 #include "FaultGen.h"
 #include <stdlib.h>
-#include "ic3Rand.h"
+#include "IC3Rand.h"
 
 struct georect {
 	int x, y, w, h;

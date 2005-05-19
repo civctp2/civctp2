@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Handling of user preferences.
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -723,4 +724,4 @@ public:
 
 extern ProfileDB *g_theProfileDB;
 
-#endif __PROFILE_DB_H__
+#endif // __PROFILE_DB_H__

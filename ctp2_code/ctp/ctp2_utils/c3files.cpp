@@ -1,13 +1,29 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "CivPaths.h"
@@ -25,6 +41,9 @@
 
 #include "civ3_main.h"
 
+#include <sys/stat.h>
+#include <sys/types.h>
+
 extern ProfileDB *g_theProfileDB;
 
 extern CivPaths *g_civPaths;
@@ -35,17 +54,12 @@ FILE* c3files_fopen(C3DIR dirID, MBCHAR *s1, MBCHAR *s2)
 {
 	MBCHAR		s[_MAX_PATH];
 
-	
 	if (g_civPaths->FindFile(dirID, s1, s) != NULL) {
 		return fopen(s, s2);
 	} else {
-
-		
 		return NULL;
 	}
 }
-
-
 
 FILE* c3files_freopen(const MBCHAR *s1, const MBCHAR *s2, FILE *file)
 {
@@ -53,13 +67,10 @@ FILE* c3files_freopen(const MBCHAR *s1, const MBCHAR *s2, FILE *file)
 }
 
 
-
 sint32 c3files_fclose(FILE *file)
 {
 	return (sint32)fclose(file);
 }
-
-
 
 sint32 c3files_fscanf(FILE *file, const MBCHAR *s, ...)
 {
@@ -73,28 +84,20 @@ sint32 c3files_fscanf(FILE *file, const MBCHAR *s, ...)
 	return val;
 }
 
-
-
 size_t c3files_fread(void *p, size_t i1, size_t i2, FILE *file)
 {
 	return fread(p, i1, i2, file);
 }
-
-
 
 sint32 c3files_fgetc(FILE *file)
 {
 	return (sint32)fgetc(file);
 }
 
-
-
 sint32 c3files_fgetpos(FILE *file, fpos_t *pos)
 {
 	return (sint32)fgetpos(file, pos);
 }
-
-
 
 MBCHAR* c3files_fgets(MBCHAR *s, sint32 i, FILE *file)
 {
@@ -243,7 +246,11 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size)
 	}
 
 	if (c3files_fread( bits, 1, filesize, f ) != filesize) {
-		delete[filesize] bits;
+#if defined(_MSC_VER)
+      delete[filesize] bits;
+#else
+      delete[] bits;
+#endif
 		c3files_fclose(f);
 
 		return NULL;
@@ -258,17 +265,31 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size)
 
 BOOL c3files_PathIsValid(MBCHAR *path)
 {
-    struct _stat	tmpstat;
+#if defined(WIN32)
+   struct _stat tmpstat;
+#else
+   struct stat  tmpstat;
+#endif
 	sint32			r;
 
-	r = _stat(path, &tmpstat);
+#if defined(WIN32)
+   r = _stat(path, &tmpstat);
+#else
+   r = stat(path, &tmpstat);
+#endif
+
 	if (!r) return TRUE;
 	else return FALSE;
 }
 
 BOOL c3files_CreateDirectory(MBCHAR *path)
 {
+#if defined(WIN32)
 	return CreateDirectory(path, NULL);
+#else
+   mode_t mask = 0777;
+   return mkdir(path, mask);
+#endif
 }
 
 void c3files_StripSpaces(MBCHAR *s)
@@ -302,9 +323,7 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *li
 	WIN32_FIND_DATA	fileData;
 	HANDLE lpFileList;
 
-	
 	g_civPaths->GetSavePath(dirID, path);
-
 	
 	if (ext) sprintf(strbuf,"*.%s",ext);
 	else strcpy(strbuf, "*.*");
@@ -315,7 +334,6 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *li
 	lpFileList = FindFirstFile(path,&fileData);
 	
 	if (lpFileList ==  INVALID_HANDLE_VALUE) return FALSE;
-
 	
 	lpFileName = new MBCHAR[256];
 	strcpy(lpFileName,fileData.cFileName);

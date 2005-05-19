@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : User interface window
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -38,14 +39,11 @@
 #include "aui_mouse.h"
 #include "pointerlist.h"
 
-class aui_UI;
+//class aui_UI;
 class aui_Mouse;
 class aui_Control;
 class aui_Surface;
 struct aui_Stencil;
-
-
-
 
 enum AUI_WINDOW_TYPE
 {
@@ -106,8 +104,8 @@ protected:
 	aui_Window() : aui_Region() {}
 	AUI_ERRCODE InitCommon( sint32 bpp, AUI_WINDOW_TYPE type );
 #if defined(_MSC_VER)
-	friend aui_UI;
-	friend aui_Mouse;
+	friend class aui_UI;
+	friend class aui_Mouse;
 #endif
 
 public:

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : 
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -15,8 +16,6 @@
 //
 //----------------------------------------------------------------------------
 //
-// Compiler flags
-// 
 // Compiler flags
 // 
 // _BFR
@@ -78,20 +77,20 @@ class	ID;
 
 
 class ID { 
-
 public:
-		
 	uint32 m_id; 
 	
 	ID () { m_id = 0; };
 	ID (sint32 val) { m_id = val; }; 
 	ID (uint32 val) { m_id = val; }; 
+#if defined(WIN32)
 	ID (const int val) {
 		Assert (0 <= val); 
 		m_id = unsigned int (val); }; 
 	
 	ID (const unsigned int val) {
 		m_id = val; }; 
+#endif
 	
 	void Castrate() { } 
 	void DelPointers() {} 

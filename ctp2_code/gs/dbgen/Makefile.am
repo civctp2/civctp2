@@ -10,7 +10,11 @@ ctpdb_SOURCES=\
 	y.tab.c \
 	lex.yy.c
 
+if !WIN32
+CTP2_NOWIN32_INC=-I$(ctp2_code)/os/nowin32
+endif
 AM_CPPFLAGS=\
+	$(CTP2_NOWIN32_INC) \
 	-I$(ctp2_code)/os/include \
 	-I$(ctp2_code)/ctp/ctp2_utils
 

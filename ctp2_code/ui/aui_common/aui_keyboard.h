@@ -1,14 +1,29 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
 #ifndef __AUI_KEYBOARD_H__
 #define __AUI_KEYBOARD_H__
 
@@ -16,10 +31,7 @@
 #include "aui_base.h"
 #include "aui_input.h"
 
-
-
-
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 enum AUI_KEYBOARD_KEY
 {
 	AUI_KEYBOARD_KEY_FIRST = 0,

@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header
-// Description  : 
+// File type    : C++ header file
+// Description  : Windows stub header for non-Windows systems
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -17,26 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 //----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - #pragma once commented out.
-//
-//----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1200)
-#pragma once
+#ifndef __TCHAR_H__
+#define __TCHAR_H__ 1
+
+#if defined(WIN32)
+#error "WIN32 defined, but included tchar.h from os/nowin32!"
 #endif
-#ifndef DB_TYPES_H__
-#define DB_TYPES_H__
 
-typedef sint32 StringId; 
-typedef sint32 PopDBIndex;
-
-#define k_MAX_TEXT_LEN 16384
-#define k_MAX_NAME_LEN 512
-
-#define k_NUM_MERIDIANS 6
+typedef char TCHAR;
 
 #endif

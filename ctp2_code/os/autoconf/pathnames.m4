@@ -7,8 +7,8 @@ AC_DEFUN([AC_OS_PATHNAMES],[
 
    case "${host}" in
       *-cygwin*)
-         AC_DEFINE_UNQUOTED(FILE_SEP,"\\",[File separator used on windows])
-         AC_DEFINE_UNQUOTED(FILE_SEPC,'\\',[File separator used on windows])
+         AC_DEFINE_UNQUOTED(FILE_SEP,"\\\\",[File separator used on windows])
+         AC_DEFINE_UNQUOTED(FILE_SEPC,'\\\\',[File separator used on windows])
          AC_DEFINE_UNQUOTED(PATH_SEP,";",[Path separator used on windows])
          AC_DEFINE_UNQUOTED(PATH_SEPC,';',[Path separator used on windows])
          ;;

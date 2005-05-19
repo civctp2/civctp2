@@ -39,9 +39,12 @@
 #include <string.h>
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h>
-#elif defined(WIN32)
+#endif
+#if defined(WIN32)
 #include <windows.h>
 #include <direct.h>
+#else
+#include "windows.h"
 #endif
 #include <time.h>
 #include <errno.h>

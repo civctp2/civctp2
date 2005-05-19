@@ -1,7 +1,30 @@
-/**
- * $Id$
- */
-#if defined(_MSC_VER) && (_MSC_VER > 1200)
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+// - Report for !WIN32 on stderr
+//
+//----------------------------------------------------------------------------
+#if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #pragma once
 #endif
 
@@ -23,7 +46,11 @@
 	#define Assert(x)				;
 #endif
 
+#if defined(WIN32)
 #define Report(x)				{_RPT0(_CRT_WARN, x);}
+#else
+#define Report(x) { fprintf(stderr, "%s\n", x); }
+#endif
 
 
 typedef void (* CivExceptionFunction) (void);
@@ -68,19 +95,6 @@ static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_p
 void	c3debug_ExceptionExecute(CivExceptionFunction function);
 
 void	c3debug_Assert(char *s, char *file, int line);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #ifdef _DEBUG
 	#define DPRINTF(mask, x) { c3debug_dprintfPrefix(mask, __FILE__, __LINE__); c3debug_dprintf x;}
