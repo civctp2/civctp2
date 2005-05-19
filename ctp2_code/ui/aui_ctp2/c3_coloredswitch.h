@@ -6,7 +6,7 @@
 
 #include "patternbase.h"
 #include "aui_switch.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #define k_C3_COLOREDSWITCH_DEFAULTNUMSTATES		2
 #define k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH		2

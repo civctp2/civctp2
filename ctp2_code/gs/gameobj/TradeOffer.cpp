@@ -10,15 +10,15 @@
 #include "c3.h"
 
 #include "TradeOffer.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "TradeOfferPool.h"
-#include "Player.h"
+#include "player.h"
 #include "net_info.h"
 #include "network.h"
 
-#include "Message.h"
+#include "message.h"
 #include "MessageData.h"
-#include "TradeManager.h"
+#include "trademanager.h"
 
 extern Player **g_player;
 

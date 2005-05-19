@@ -3,7 +3,7 @@
 #ifndef __BATTLEVIEWWINDOW_H__
 #define __BATTLEVIEWWINDOW_H__
 
-#include "C3Window.h"
+#include "c3window.h"
 #include "aui_action.h"
 
 

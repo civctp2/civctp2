@@ -10,9 +10,9 @@
 
 
 #include "LineDance.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 
-#include "BattleView.h"
+#include "battleview.h"
 #include "bset.h"
 
 

@@ -36,19 +36,19 @@
 
 #include "c3.h"
 #include "Unit.h"
-#include "SlicFuncAI.h"
+#include "slicfuncai.h"
 #include "AgreementMatrix.h"
 #include "Army.h"
 #include "Scheduler.h"
-#include "DiplomatTypes.h"
+#include "diplomattypes.h"
 
 #include "slicif.h"
 #include "StrDB.h"
 extern StringDB *g_theStringDB;
 
 #include "Diplomat.h"
-#include "MapAnalysis.h"
-#include "Player.h"
+#include "mapanalysis.h"
+#include "player.h"
 #include "ProposalAnalysis.h"
 
 

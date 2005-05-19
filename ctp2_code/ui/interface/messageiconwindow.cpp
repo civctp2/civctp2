@@ -9,7 +9,7 @@
 
 #include "c3.h"
 
-#include "profiledb.h"
+#include "profileDB.h"
 
 #include "aui.h"
 #include "aui_ldl.h"

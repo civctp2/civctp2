@@ -13,11 +13,11 @@
 #include "c3.h"
 
 #include "ConstDB.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "Cell.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "CheckSum.h"
+#include "Checksum.h"
 #include "CivPaths.h"
 #include "BuildingRecord.h"
 #include "SpriteStateDB.h"
@@ -27,8 +27,8 @@
 #include "TerrainRecord.h"
 #include "TradePool.h"
 #include "TradeOfferPool.h"
-#include "Pollution.h"
-#include "GWDB.h"
+#include "pollution.h"
+#include "gwdb.h"
 #include "UVDB.h"
 #include "WonderRecord.h"
 #include "UnitPool.h"
@@ -42,7 +42,7 @@
 #include "installationpool.h"
 
 #include "TerrImprovePool.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "TopTen.h"
 #include "GovernmentRecord.h"
 
@@ -50,7 +50,7 @@
 #include "aui.h"
 #include "aui_surface.h"
 #include "primitives.h"
-#include "Player.h"
+#include "player.h"
 
 #include "DataCheck.h"
 

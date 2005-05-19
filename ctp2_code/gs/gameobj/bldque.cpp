@@ -32,16 +32,16 @@
 #include "c3errors.h"
 #include "c3files.h"
 
-#include "GameFile.h"
+#include "gamefile.h"
 #include "BldQue.h"
 #include "ObjPool.h"
 #include "Unit.h"
 #include "MapPoint.h"
-#include "Player.h"
-#include "CityData.h"
-#include "CivArchive.h"
+#include "player.h"
+#include "citydata.h"
+#include "civarchive.h"
 #include "BuildingRecord.h"
-#include "AiCause.h"
+#include "aicause.h"
 #include "Checksum.h"
 #include "CivPaths.h"
 #include "WonderRecord.h"
@@ -56,14 +56,14 @@
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "gamesounds.h"
 #include "SelItem.h"
 
 #include "UnitData.h"
 #include "UnitPool.h"
 
-#include "profiledb.h"
+#include "profileDB.h"
 
 #include "WonderTracker.h"
 #include "wondermoviewin.h"
@@ -83,7 +83,7 @@
 #include "GameEventManager.h"
 
 
-#include "Globals.h"
+#include "globals.h"
 
 #include "buildingutil.h"
 #include "wonderutil.h"

@@ -13,27 +13,27 @@
 #define INITGUID
 #include "c3.h"
 #include "IRobot.h"
-#include "IC3GameState.h" 
-#include "IC3Player.h"
-#include "IC3World.h"
+#include "ic3GameState.h" 
+#include "ic3player.h"
+#include "ic3world.h"
 #include "RobotCOM.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
-#include "CivArchive.h"
-#include "IC3DipReq.h"
+#include "ic3GameState.h"
+#include "aimain.h"
+#include "civarchive.h"
+#include "ic3DipReq.h"
 #include "IC3Trade.h"
 #include "common.h"
 #include "linked_list.h"
 #include "semi_dynamic_array.h"
-#include "Sorted_array.h"
-#include "AIP.h"
-#include "Planner.h"
-#include "IC3EndGameDB.h"
+#include "sorted_array.h"
+#include "aip.h"
+#include "planner.h"
+#include "ic3endgamedb.h"
 
 
-#include "DebugMemory.h"
-#include "DebugCallstack.h"
-#include "Log.h"
+#include "debugmemory.h"
+#include "debugcallstack.h"
+#include "log.h"
 
 #include "fliif.h"
 
@@ -71,7 +71,7 @@ Memory_Manager* g_memory_CityVertex;
 #include "Delaunay.h"
 Memory_Manager* g_memory_QuadEdge; 
 
-#include "AiCell.h"
+#include "aicell.h"
 Memory_Manager* g_memory_AiCellPtr; 
 
 STDAPI CoCreateInstanceRobotCom(IUnknown *&obj)

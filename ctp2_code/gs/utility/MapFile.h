@@ -8,7 +8,7 @@ template <class T> class CTPDatabase;
 class UnitRecord;
 class TerrainImprovementRecord;
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "StrDB.h"
 
 

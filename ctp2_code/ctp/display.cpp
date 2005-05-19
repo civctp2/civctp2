@@ -4,7 +4,7 @@
 
 #include "display.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "appstrings.h"
 
 #define COMPILE_MULTIMON_STUBS 
@@ -25,7 +25,7 @@ extern sint32				g_ScreenHeight;
 extern BOOL					g_exclusiveMode;
 extern BOOL					g_createDirectDrawOnSecondary;
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 extern ProfileDB			*g_theProfileDB;
 
 

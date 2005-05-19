@@ -28,13 +28,13 @@
 #include "c3.h"
 
 
-#include "aui_Imagebase.h"
+#include "aui_imagebase.h"
 
 
-#include "aui_Blitter.h"
-#include "aui_Ldl.h"
-#include "aui_Surface.h"
-#include "aui_UI.h"
+#include "aui_blitter.h"
+#include "aui_ldl.h"
+#include "aui_surface.h"
+#include "aui_ui.h"
 
 
 MBCHAR *aui_ImageBase::m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ] =

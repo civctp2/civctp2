@@ -72,7 +72,7 @@
 
 extern LoadSaveWindow *g_loadsaveWindow;
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "AgeRecord.h"
 
 

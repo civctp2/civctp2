@@ -22,12 +22,12 @@
 #include "SpriteState.h"
 #include "Actor.h"
 #include "SpriteGroupList.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "Anim.h"
 #include "EffectActor.h"
 #include "Action.h"
-#include "Director.h"
-#include "ColorSet.h"
+#include "director.h"
+#include "colorset.h"
 #include "maputils.h"
 
 #define k_doInvisible FALSE

@@ -21,7 +21,7 @@
 #include "aui_ldl.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "CivPaths.h"
 

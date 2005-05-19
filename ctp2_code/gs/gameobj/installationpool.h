@@ -13,7 +13,7 @@
 #define _INSTALLATIONPOOL_H_
 
 #include "ObjPool.h"
-#include "Installation.h"
+#include "installation.h"
 
 class CivArchive;
 

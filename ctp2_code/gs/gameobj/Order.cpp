@@ -1,11 +1,11 @@
 
 
 #include "c3.h"
-#include "Order.h"
+#include "order.h"
 #include "Path.h"
 #include "TurnCnt.h"
-#include "CivArchive.h"
-#include "Pool.h"
+#include "civarchive.h"
+#include "pool.h"
 #include "GameEventArgList.h"
 
 #include <vector>

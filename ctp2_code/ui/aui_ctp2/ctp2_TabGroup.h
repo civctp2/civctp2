@@ -10,7 +10,7 @@
 #define CTP2_TABGROUP_H__
 
 
-#include "aui_Control.h"
+#include "aui_control.h"
 
 
 class ctp2_Tab;

@@ -34,17 +34,17 @@
 #include "c3ui.h"
 
 #include "ctp2_Window.h"
-#include "ctp2_Button.h"
-#include "ctp2_ListBox.h"
+#include "ctp2_button.h"
+#include "ctp2_listbox.h"
 #include "ctp2_Static.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_listitem.h"
 #include "ctp2_Menu.h"
 
 #include "Diplomat.h"
 #include "diplomacyutil.h"
 
 #include "SelItem.h"
-#include "Player.h"
+#include "player.h"
 #include "StrDB.h"
 #include "Civilisation.h"
 #include "UnitDynArr.h"
@@ -53,7 +53,7 @@
 #include "Events.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "DiplomacyProposalRecord.h"
 #include "DiplomacyThreatRecord.h"
@@ -62,16 +62,16 @@
 #include "SlicObject.h"
 #include "stringutils.h"
 
-#include "Gold.h"
+#include "gold.h"
 
-#include "ctp2_Spinner.h"
+#include "ctp2_spinner.h"
 
-#include "IntelligenceWindow.h"
+#include "intelligencewindow.h"
 #include "AttractWindow.h"
 
 #include "ctp2_TabGroup.h"
 #include "ctp2_Tab.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 
 #include "AgreementMatrix.h"
 #include "DiplomacyDetails.h"

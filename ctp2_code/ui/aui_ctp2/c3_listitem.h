@@ -6,7 +6,7 @@
 #define __C3_LISTITEM_H__
 
 #include "aui_item.h"
-#include "PatternBase.h"
+#include "patternbase.h"
 
 class aui_Surface;
 

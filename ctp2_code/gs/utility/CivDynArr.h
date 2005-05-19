@@ -17,7 +17,7 @@
 #define __CIVILISATION_DYNAMIC_ARRAY_H__
 
 #include "Civilisation.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
 
 class CivilisationDynamicArray : public DynamicArray<Civilisation> {

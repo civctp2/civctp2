@@ -16,13 +16,13 @@
 #include "aui.h"
 #include "aui_control.h"
 #include "aui_ldl.h"
-#include "aui_uniqueID.h"
+#include "aui_uniqueid.h"
 #include "pattern.h"
 #include "primitives.h"
 #include "c3window.h"
-#include "C3FancyWindow.h"
+#include "c3fancywindow.h"
 #include "c3ui.h"
-#include "c3_Button.h"
+#include "c3_button.h"
 
 extern C3UI						*g_c3ui;
 

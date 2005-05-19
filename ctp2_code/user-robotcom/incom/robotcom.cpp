@@ -16,21 +16,21 @@
 
 #include "ctp.h"
 #include "globals.h"
-#include "AICause.h"
-#include "Order.h"
+#include "aicause.h"
+#include "order.h"
 
 #include "RobotCOM.h"
-#include "AiMain.h"
+#include "aimain.h"
 
 
 #include "IRobot.h"
-#include "IC3GameState.h" 
-#include "IC3Player.h"
-#include "IC3World.h"
-#include "IC3GameState.h"
-#include "IC3DipReq.h"
+#include "ic3GameState.h" 
+#include "ic3player.h"
+#include "ic3world.h"
+#include "ic3GameState.h"
+#include "ic3DipReq.h"
 #include "IC3Trade.h"
-#include "IC3EndGameDB.h"
+#include "ic3endgamedb.h"
 
 STDAPI CoCreateInstanceRobotCom(IUnknown *&obj)
 {

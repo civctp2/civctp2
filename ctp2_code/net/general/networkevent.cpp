@@ -8,14 +8,14 @@
 #include "Events.h"
 #include "GameEventUser.h"
 #include "net_info.h"
-#include "Player.h"
-#include "CityData.h"
+#include "player.h"
+#include "citydata.h"
 #include "UnitData.h"
 
-#include "DiplomatTypes.h"
+#include "diplomattypes.h"
 #include "Diplomat.h"
 
-#include "CtpAi.h"
+#include "ctpai.h"
 
 #include "newturncount.h"
 #include "director.h"

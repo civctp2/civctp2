@@ -18,8 +18,8 @@
 
 #include "aui_textfield.h"
 
-#include "SoundManager.h"
-#include "gameSounds.h"
+#include "soundmanager.h"
+#include "gamesounds.h"
 #include "chatbox.h"
 
 

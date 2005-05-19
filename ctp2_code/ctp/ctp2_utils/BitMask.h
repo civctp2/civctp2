@@ -2,7 +2,7 @@
 #ifndef BIT_MASK_H__
 #define BIT_MASK_H__
 
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #define SIZE_IN_BYTES(bitSize) ((bitSize + 7) / 8)
 

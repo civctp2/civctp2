@@ -9,9 +9,9 @@
 #include "aui_ldl.h"
 
 #include "c3ui.h"
-#include "ctp2_switch.h"
-#include "PatternBase.h"
-#include "Pattern.h"
+#include "ctp2_Switch.h"
+#include "patternbase.h"
+#include "pattern.h"
 #include "primitives.h"
 
 #include "SlicEngine.h"

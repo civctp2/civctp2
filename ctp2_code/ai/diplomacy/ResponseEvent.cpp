@@ -23,11 +23,11 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "AICause.h"
-#include "Player.h"
+#include "aicause.h"
+#include "player.h"
 
 #include "Diplomat.h"
-#include "MapAnalysis.h" 
+#include "mapanalysis.h" 
 
 #include "SelItem.h"
 extern SelectedItem *g_selected_item; 

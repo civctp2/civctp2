@@ -1,20 +1,20 @@
 #include "c3.h"
 
 #include "globals.h"
-#include "IC3Player.h"
+#include "ic3player.h"
 
 
 #include "GlOvertime.h"
 
-#include "BSet.h"
-#include "CivArchive.h"
+#include "bset.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 
 
-#include "IC3GameState.h"
-#include "IC3World.h"
-#include "AiMain.h"
-#include "Gold.h"
+#include "ic3GameState.h"
+#include "ic3world.h"
+#include "aimain.h"
+#include "gold.h"
 
 #include "CityAgent.h"
 

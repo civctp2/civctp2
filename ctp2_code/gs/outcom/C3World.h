@@ -15,7 +15,7 @@
 #ifndef __C3World_H__
 #define __C3World_H__
 
-#include "IC3World.h"
+#include "ic3world.h"
 
 class World; 
 

@@ -72,7 +72,7 @@
 #include "DBLexer.h"
 #include "DBTokens.h"
 #include "StrDB.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #define k_INITIAL_DB_SIZE 10
 #define k_GROW_DB_STEP 10

@@ -12,13 +12,13 @@
 #include "c3.h"
 
 
-#include "throneDB.h"
+#include "thronedb.h"
 
 
 #include "c3errors.h"
 #include "Token.h"
 #include "ErrMsg.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "SoundRecord.h"
 #include "c3files.h"
 #include "StrDB.h"

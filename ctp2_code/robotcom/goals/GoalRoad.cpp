@@ -5,26 +5,26 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "IC3World.h"
-#include "IC3InstDB.h"
-#include "IC3Player.h"
+#include "ic3world.h"
+#include "ic3InstDB.h"
+#include "ic3player.h"
 
 #include "GoalRoad.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "TerrImproveData.h"
 #include "CityAgent.h"
-#include "IC3RobotAstar.h"
-#include "AiMain.h"
-#include "AiCause.h"
-#include "ScienceAgent.h"
+#include "ic3RobotAstar.h"
+#include "aimain.h"
+#include "aicause.h"
+#include "scienceagent.h"
 
 extern double fz_inst_threat_threshold;
 extern double fz_inst_road_coef;
 
 #include "Scheduler.h"
-#include "Planner.h"
-#include "Grassfire.h"
+#include "planner.h"
+#include "grassfire.h"
 #include "strategic_map.h"
 
 

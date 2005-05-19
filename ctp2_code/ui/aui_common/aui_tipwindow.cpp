@@ -19,7 +19,7 @@
 
 #include "pixelutils.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 extern ColorSet *g_colorSet;
 
 

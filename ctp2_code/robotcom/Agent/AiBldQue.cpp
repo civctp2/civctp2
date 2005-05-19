@@ -2,15 +2,15 @@
 #include "c3.h"
 #include "AiBldQue.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "BSet.h"
+#include "bset.h"
 #include "IMapPointData.h"
 #include "globals.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 #include "ArmyAgent.h"
-#include "BSet.h"
+#include "bset.h"
 
 AiBuildNode::AiBuildNode()
 {

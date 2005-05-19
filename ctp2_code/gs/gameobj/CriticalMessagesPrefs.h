@@ -28,7 +28,7 @@
 #ifndef CRITICALMESSAGESPREFS_H
 #define CRITICALMESSAGESPREFS_H
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 struct CriticalMessagesData
 {

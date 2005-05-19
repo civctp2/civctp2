@@ -37,18 +37,18 @@
 
 
 #include "AdvanceRecord.h"
-#include "aui_Ldl.h"
-#include "ctp2_Button.h"
+#include "aui_ldl.h"
+#include "ctp2_button.h"
 #include "ctp2_Static.h"
 #include "IconRecord.h"
-#include "Player.h"
-#include "sci_AdvanceScreen.h"
+#include "player.h"
+#include "sci_advancescreen.h"
 #include "SelItem.h"
 
 #include "pixelutils.h"
 #include "primitives.h"
-#include "ColorSet.h"
-#include "Pollution.h"
+#include "colorset.h"
+#include "pollution.h"
 #include "GovernmentRecord.h"
 
 #include "aui_bitmapfont.h"

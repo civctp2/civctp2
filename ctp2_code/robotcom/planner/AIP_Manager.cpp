@@ -45,8 +45,8 @@
 #include "c3types.h"
 #include "c3errors.h"
 #include "globals.h"
-#include "IC3Player.h"
-#include "AiMain.h"
+#include "ic3player.h"
+#include "aimain.h"
 
 
 #include "common.h"
@@ -55,15 +55,15 @@
 
 #include "linked_list.h"
 
-#include "Strategic_AI_Forward.h"
+#include "strategic_ai_forward.h"
 
-#include "AIP.h"
+#include "aip.h"
 
 #include "AIP_Manager.h"
 
 #include "dr_debug.h"
 
-#include "AILog.h"
+#include "ailog.h"
 
 
 

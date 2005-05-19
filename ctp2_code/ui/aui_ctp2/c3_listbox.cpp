@@ -43,21 +43,21 @@
 #include "aui.h"
 
 #include "aui_ui.h"
-#include "aui_Ldl.h"
-#include "aui_UniqueId.h"
-#include "aui_Ranger.h"
-#include "aui_Window.h"
-#include "aui_Item.h"
-#include "aui_Switch.h"
+#include "aui_ldl.h"
+#include "aui_uniqueid.h"
+#include "aui_ranger.h"
+#include "aui_window.h"
+#include "aui_item.h"
+#include "aui_switch.h"
 
 #include "c3_header.h"
 #include "c3_listbox.h"
 #include "c3_ranger.h"
 #include "c3_listitem.h"
 
-#include "Pattern.h"
+#include "pattern.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 extern aui_UI		*g_ui;
 extern ColorSet		*g_colorSet;

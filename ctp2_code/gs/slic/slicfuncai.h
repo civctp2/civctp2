@@ -37,7 +37,7 @@
 
 
 
-#include "slicfunc.h"	// SLICFUNC, SFR
+#include "SlicFunc.h"	// SLICFUNC, SFR
 
 
 

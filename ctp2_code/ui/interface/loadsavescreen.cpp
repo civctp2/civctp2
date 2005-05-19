@@ -50,13 +50,13 @@
 #include "ctp2_button.h"
 
 #include "player.h"
-#include "civilisation.h"
+#include "Civilisation.h"
 
 #include "initialplaywindow.h"
-#include "loadsaveWindow.h"
+#include "loadsavewindow.h"
 #include "netshell.h"
 
-#include "profiledb.h"
+#include "profileDB.h"
 #include "c3_utilitydialogbox.h"
 #include "StrDB.h"
 
@@ -70,15 +70,15 @@
 #include "direct.h"
 
 
-#include "CivScenarios.h"
+#include "civscenarios.h"
 extern CivScenarios			*g_civScenarios;
 
 
 #include "gameinit.h"
-#include "CivApp.h"
+#include "civapp.h"
 extern CivApp				*g_civApp;
 
-#include "OptionsWindow.h"
+#include "optionswindow.h"
 
 extern Player **g_player;
 
@@ -89,7 +89,7 @@ extern ProfileDB			*g_theProfileDB;
 extern StringDB				*g_theStringDB;
 
 
-#include "civilisationdb.h"
+#include "CivilisationDB.h"
 extern CivilisationDatabase	*g_theCivilisationDB;
 
 
@@ -114,7 +114,7 @@ LoadSaveWindow				*g_loadsaveWindow = NULL;
 #include "hotseatlist.h"
 
 
-#include "messageboxdialog.h"
+#include "MessageBoxDialog.h"
 
 
 #include "TurnYearStatus.h"

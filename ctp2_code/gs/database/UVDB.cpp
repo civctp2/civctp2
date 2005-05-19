@@ -13,11 +13,11 @@
 #include "c3.h"
 #include "c3errors.h"
 
-#include "Globals.h"
+#include "globals.h"
 #include "Token.h"
 #include "UVDB.h"
 #include "ErrMsg.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 	sint32	g_parse_uv_abort ;

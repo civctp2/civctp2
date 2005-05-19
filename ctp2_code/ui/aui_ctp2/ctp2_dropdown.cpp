@@ -15,7 +15,7 @@
 
 #include "ctp2_listbox.h"
 
-#include "Pattern.h"
+#include "pattern.h"
 #include "pixelutils.h"
 #include "primitives.h"
 

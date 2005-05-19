@@ -16,18 +16,18 @@
 #include "UnitPool.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "Player.h"
+#include "player.h"
 
 #include "DB.h"
 #include "UnitRec.h"
 #include "SelItem.h"
-#include "Director.h"
+#include "director.h"
 #include "tech_wllist.h"
 
 #include "Cell.h"
 
-#include "AiCause.h"
-#include "CtpAi.h"
+#include "aicause.h"
+#include "ctpai.h"
 
 extern UnitPool* g_theUnitPool;
 extern World* g_theWorld;

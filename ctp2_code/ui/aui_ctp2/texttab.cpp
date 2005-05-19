@@ -26,7 +26,7 @@
 
 #include "primitives.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 #include "textutils.h"
 
 #include "texttab.h"

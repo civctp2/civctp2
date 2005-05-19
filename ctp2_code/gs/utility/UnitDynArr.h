@@ -3,7 +3,7 @@
 #ifndef __UNIT_DYNAMIC_ARRAY_H__
 #define __UNIT_DYNAMIC_ARRAY_H__ 1
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "Unit.h"
 
 class UnitDynamicArray : public DynamicArray<Unit> {

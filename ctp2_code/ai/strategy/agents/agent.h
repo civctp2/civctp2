@@ -17,8 +17,8 @@
 
 #pragma warning(disable: 4786)
 
-#include "Scheduler_Types.h"
-#include "Squad_Strength.h"
+#include "scheduler_types.h"
+#include "squad_strength.h"
 
 
 

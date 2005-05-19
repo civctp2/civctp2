@@ -18,11 +18,11 @@
 #include "pixelutils.h"
 #include "spriteutils.h"
 #include "c3errors.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
 #include "aui.h"
 #include "aui_surface.h"
-#include "aui_DirectSurface.h"
+#include "aui_directsurface.h"
 
 #include "Sprite.h"
 #include "FacedSpriteWshadow.h"

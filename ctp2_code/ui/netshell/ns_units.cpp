@@ -11,7 +11,7 @@
 
 #include "c3.h"
 
-#include "strdb.h"
+#include "StrDB.h"
 
 #include "aui_stringtable.h"
 

@@ -15,7 +15,7 @@
 #include <strstream>
 
 
-#include "aui_Ldl.h"
+#include "aui_ldl.h"
 #include "c3ui.h"
 #include "ctp2_Tab.h"
 #include "ctp2_TabGroup.h"

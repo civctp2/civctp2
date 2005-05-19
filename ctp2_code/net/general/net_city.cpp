@@ -34,18 +34,18 @@
 #include "net_util.h"
 
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 
 #include "UnitPool.h"
-#include "Player.h"
-#include "AiCause.h"
+#include "player.h"
+#include "aicause.h"
 #include "Unit.h"
 #include "BldQue.h"
 
 #include "ResourceRecord.h"
 #include "Resources.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #include "MainControlPanel.h"
 #include "SelItem.h"

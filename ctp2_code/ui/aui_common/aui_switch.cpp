@@ -18,8 +18,8 @@
 
 #include "aui_switch.h"
 
-#include "SoundManager.h"
-#include "gameSounds.h"
+#include "soundmanager.h"
+#include "gamesounds.h"
 
 
 

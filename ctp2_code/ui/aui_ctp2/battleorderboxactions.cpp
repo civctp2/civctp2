@@ -12,29 +12,29 @@
 
 #include "aui.h"
 
-#include "aui_Button.h"
+#include "aui_button.h"
 #include "c3_coloriconbutton.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitPool.h"
 #include "Army.h"
 #include "cellunitlist.h"
-#include "mappoint.h"
-#include "xy_coordinates.h"
-#include "world.h"
-#include "cell.h"
+#include "MapPoint.h"
+#include "XY_Coordinates.h"
+#include "World.h"
+#include "Cell.h"
 #include "order.h"
 
 #include "controlpanelwindow.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "battleorderbox.h"
 #include "battleorderboxactions.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "SelItem.h"
 

@@ -175,17 +175,17 @@
 
 
 #include "c3.h"
-#include "DynArr.h"
-#include "CivArchive.h"
+#include "dynarr.h"
+#include "civarchive.h"
 #include "IMapPointData.h"
-#include "BSet.h"
+#include "bset.h"
 
 
-#include "IC3GameState.h"
-#include "IC3World.h"
-#include "IC3UnitDB.h"
+#include "ic3GameState.h"
+#include "ic3world.h"
+#include "ic3UnitDB.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 #include "AiMap.h"
 
 
@@ -193,15 +193,15 @@
 #include "common.h"
 #include "linked_list.h"
 #include "semi_dynamic_array.h"
-#include "Sorted_array.h"
-#include "AIP.h"
-#include "Planner.h"
+#include "sorted_array.h"
+#include "aip.h"
+#include "planner.h"
 
 
 #include "dr_debug.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 
 #include "FzOut.h"
@@ -217,8 +217,8 @@ extern double fz_max_force_matching_percent;
 
 #include "GlAttck.h"
 
-#include "AILOG.h"
-#include "Squad_Strength.h"
+#include "ailog.h"
+#include "squad_strength.h"
 
 #define LOG_GOAL_ATTACK true
 

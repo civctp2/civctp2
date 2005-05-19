@@ -423,21 +423,21 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "DynArr.h"
+#include "dynarr.h"
 #include "IMapPointData.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 #include "AiMap.h"
-#include "AiCell.h"
-#include "AIRndCnt.h"
+#include "aicell.h"
+#include "airndcnt.h"
 
 
-#include "IC3GameState.h"
-#include "IC3Player.h"
-#include "IC3World.h"
-#include "IC3Rand.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "ic3player.h"
+#include "ic3world.h"
+#include "ic3Rand.h"
+#include "aimain.h"
 #include "Foreigner.h"
 
 
@@ -459,14 +459,14 @@
 #include "unitflow.h"
 
 
-#include "AIP.h"
+#include "aip.h"
 
 
 #include "squad.h"
 #include "Cont.h"
 
 
-#include "Goal.h"
+#include "goal.h"
 #include "ArmyGoal.h"
 
 
@@ -474,18 +474,18 @@
 
 
 #include "Scheduler.h"
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
-#include "Planner.h"
-#include "ScienceAgent.h"
+#include "planner.h"
+#include "scienceagent.h"
 
 
 #include "dr_debug.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
-#include "DebugMemory.h"
+#include "debugmemory.h"
 
 #define LOG_ARMYGOAL true
 

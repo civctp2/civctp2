@@ -14,7 +14,7 @@
 
 #include "PlasmaGen2.h"
 #include <stdlib.h>
-#include "IC3Rand.h"
+#include "ic3Rand.h"
 
 #if defined(USE_COM_REPLACEMENT)
 extern "C" IMapGenerator *CoCreateMapGenerator()

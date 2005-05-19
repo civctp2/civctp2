@@ -32,10 +32,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "Player.h"
+#include "player.h"
 #include "UnitRec.h"
 #include "DB.h"
 #include "WonderRecord.h"

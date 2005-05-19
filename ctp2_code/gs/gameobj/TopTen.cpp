@@ -12,15 +12,15 @@
 
 #include "c3debug.h"
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "Player.h"
-#include "CivArchive.h"
+#include "player.h"
+#include "civarchive.h"
 #include "TopTen.h"
 #include "UnitData.h"
-#include "Gamefile.h"
+#include "gamefile.h"
 
 	extern	Player	**g_player ;
 	

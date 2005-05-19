@@ -48,7 +48,7 @@
 #include "Anim.h"
 #include "SpriteFile.h"
 #include "CivPaths.h"               // g_civPaths
-#include "profiledb.h"              // g_theProfileDB
+#include "profileDB.h"              // g_theProfileDB
 
 
 #ifdef __MAKESPR__

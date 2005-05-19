@@ -15,8 +15,8 @@
 #ifndef __BUTTONBANK_H__
 #define __BUTTONBANK_H__
 
-#include "aui_Action.h"
-#include "ControlSheet.h"
+#include "aui_action.h"
+#include "controlsheet.h"
 
 #define k_BUTTON_BANK_MAX_BUTTONS		16
 #define k_BUTTON_BANK_NEXT_PAGE_INDEX	7

@@ -1,6 +1,6 @@
 
-#include "C3.h"
-#include "WallClock.h"
+#include "c3.h"
+#include "Wallclock.h"
 
 
 Wall_Clock::Wall_Clock()

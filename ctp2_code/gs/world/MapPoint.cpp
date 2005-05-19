@@ -29,7 +29,7 @@
 #include "c3.h"
 
 #include "MapPoint.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"

@@ -41,30 +41,30 @@
 #include "aui_directsurface.h"
 
 #include "c3ui.h"
-#include "c3_Button.h"
+#include "c3_button.h"
 #include "c3_static.h"
-#include "c3_ListBox.h"
+#include "c3_listbox.h"
 #include "c3_listitem.h"
 #include "c3_dropdown.h"
-#include "TextTab.h"
-#include "PointerList.h"
-#include "c3TextField.h"
+#include "texttab.h"
+#include "pointerlist.h"
+#include "c3textfield.h"
 
 #include "StrDB.h"
 #include "CivilisationDB.h"
-#include "civilisationpool.h"
-#include "ProfileDB.h"
+#include "CivilisationPool.h"
+#include "profileDB.h"
 #include "TurnCnt.h"
 
 #include "spnewgamewindow.h" 
 #include "loadsavewindow.h"
 
 
-#include "LineGraph.h"
+#include "linegraph.h"
 #include "infowin.h"
 
 
-#include "RadarMap.h"
+#include "radarmap.h"
 
 #include "pixelutils.h"
 
@@ -87,7 +87,7 @@ extern LoadSaveWindow				*g_loadsaveWindow;
 
 extern sint32						g_is565Format;
 
-#include "selitem.h"
+#include "SelItem.h"
 extern SelectedItem					*g_selected_item;
 
 #define k_LOADSAVE_AUTOSORT_COL		-2

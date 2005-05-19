@@ -12,7 +12,7 @@
 #include "c3.h"
 
 #include "aui_ldl.h"
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "ctp2_button.h"
 #include "c3ui.h"
 #include "ctp2_Static.h"
@@ -21,22 +21,22 @@
 #include "StrDB.h"
 
 
-#include "TimelineTab.h"
+#include "timelinetab.h"
 
 
-#include "LineGraph.h"
+#include "linegraph.h"
 
 
 #include "aui_uniqueid.h"
 
 
-#include "aui_StringTable.h"
+#include "aui_stringtable.h"
 
 
-#include "ColorSet.h"
+#include "colorset.h"
 
 
-#include "RankingTab.h"
+#include "rankingtab.h"
 
 #include "EventTracker.h"
 

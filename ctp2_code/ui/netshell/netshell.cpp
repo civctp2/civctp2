@@ -55,7 +55,7 @@
 #include "passwordscreen.h"
 
 
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 
 NetShell *g_netshell = NULL;
 NETFunc *g_netfunc = NULL;

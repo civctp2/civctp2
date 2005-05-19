@@ -50,7 +50,7 @@
 
 class CivArchive; 
 
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 #define k_FUDGE_MAX_ARMY_SIZE 9

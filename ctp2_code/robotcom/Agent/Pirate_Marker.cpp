@@ -1,8 +1,8 @@
 
 #include "c3.h"
 
-#include "CivArchive.h"
-#include "BSet.h"
+#include "civarchive.h"
+#include "bset.h"
 #include "Pirate_Marker.h"
 
 

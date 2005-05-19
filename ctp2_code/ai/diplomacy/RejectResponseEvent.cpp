@@ -21,14 +21,14 @@
 #include "Unit.h"
 #include "StrDB.h"
 #include "GameEventManager.h"
-#include "CtpAi.h"
+#include "ctpai.h"
 #include "AgreementMatrix.h"
 
-#include "AICause.h"
+#include "aicause.h"
 
 #include "Diplomat.h"
-#include "MapAnalysis.h" 
-#include "Player.h"
+#include "mapanalysis.h" 
+#include "player.h"
 
 
 

@@ -14,7 +14,7 @@
 
 #include "c3.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 #include "pixelutils.h"
 #include "spriteutils.h"
@@ -23,7 +23,7 @@
 #include "targautils.h"
 
 #include "BaseTile.h"
-#include "TileSet.h"
+#include "tileset.h"
 
 #include "Token.h"
 #include "CivPaths.h"

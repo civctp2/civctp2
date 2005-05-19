@@ -2,26 +2,26 @@
 
 #include "c3.h"
 #include "MapPoint.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
-#include "IC3GameState.h"
-#include "IC3UnitDB.h"
-#include "IC3Government.h"
-#include "IC3Science.h"
-#include "IC3InstDB.h"
-#include "IC3BlgDB.h"
-#include "IC3Wonder.h"
-#include "IC3TerrDb.h"
+#include "ic3GameState.h"
+#include "ic3UnitDB.h"
+#include "ic3Government.h"
+#include "ic3Science.h"
+#include "ic3InstDB.h"
+#include "ic3BlgDB.h"
+#include "ic3Wonder.h"
+#include "ic3TerrDB.h"
 
 
-#include "AiMain.h"
-#include "AiCell.h"
+#include "aimain.h"
+#include "aicell.h"
 #include "AiMap.h"
-#include "AiRndCnt.h"
-#include "AiCause.h"
+#include "airndcnt.h"
+#include "aicause.h"
 
 
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 
 
 #include "FzOut.h"
@@ -76,7 +76,7 @@ extern double fz_sci_plantime;
 #include "GoodAgent.h"
 #include "BldAgent.h"
 
-#include "Gold.h"
+#include "gold.h"
 #include "AllocWGF.h"
 #include "WonderBlg.h"
 #include "WonderTbl.h"

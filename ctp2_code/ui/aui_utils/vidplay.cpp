@@ -41,7 +41,7 @@
 #include "streams.h"
 
 #include "mpconfig.h"
-#include "VidPlay.h"
+#include "vidplay.h"
 
 
 //

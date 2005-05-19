@@ -11,14 +11,14 @@
 
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "UnitPool.h"
 
 #include "UnitRec.h"
 #include "UnitData.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "StrDB.h"
 
 

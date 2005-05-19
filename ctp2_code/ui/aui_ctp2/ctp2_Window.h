@@ -39,7 +39,7 @@
 
 #include "aui_window.h"
 #include "patternbase.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 class ctp2_Window;
 

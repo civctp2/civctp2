@@ -12,16 +12,16 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "Token.h"
 
 #include "StrDB.h"
 #include "TerrainRecord.h"
 #include "DB.h"
 #include "GovernmentRecord.h"
-#include "PollutionRecord.h"
+#include "pollutionrecord.h"
 
-#include "PollutionToken.h"
+#include "pollutiontoken.h"
 #include "AdvanceRecord.h"
 
 

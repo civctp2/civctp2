@@ -22,8 +22,8 @@
 #include "TerrImproveData.h"
 
 #include "tileutils.h"
-#include "TileSet.h"
-#include "TiledMap.h"
+#include "tileset.h"
+#include "tiledmap.h"
 
 #include "TileDrawRoad.h"
 

@@ -685,12 +685,12 @@
 #include "globals.h"
 #include "c3types.h"
 #include "c3errors.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include <Limits>  
 
 #include "dr_debug.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 
 
 #include "ArmyAgent.h"
@@ -706,25 +706,25 @@
 #include "list_array.h"
 
 
-#include "Pool.h"
-#include "Pointer_Pool.h"
+#include "pool.h"
+#include "pointer_pool.h"
 
 #include "Red_Black_Tree.h"
 
 
 #include "unitflow.h"
-#include "AIP.h"
+#include "aip.h"
 #include "squad.h"
 
 
-#include "Goal.h"
+#include "goal.h"
 #include "GlSettl.h"
 
 #include "Scheduler.h"
-#include "Planner.h"
+#include "planner.h"
 
-#include "AILog.h"
-#include "WallClock.h"
+#include "ailog.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 #include "FlatPtr.h"

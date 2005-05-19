@@ -3,7 +3,7 @@
 #ifndef __BATTLEEVENT_H__
 #define __BATTLEEVENT_H__
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 
 

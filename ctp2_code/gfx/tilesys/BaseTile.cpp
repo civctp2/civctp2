@@ -17,7 +17,7 @@
 #include "pixelutils.h"
 #include "tileutils.h"
 #include "TileInfo.h"
-#include "TileSet.h"
+#include "tileset.h"
 #include "BaseTile.h"
 
 BaseTile::BaseTile()

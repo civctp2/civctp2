@@ -31,7 +31,7 @@
 #include "aui.h"
 #include "aui_window.h"
 #include "primitives.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "BaseTile.h"
 #include "TileInfo.h"
 #include "maputils.h"

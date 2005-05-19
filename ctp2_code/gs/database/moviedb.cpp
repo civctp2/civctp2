@@ -9,8 +9,8 @@
 
 #include "c3.h"
 
-#include "MovieDB.h"
-#include "CivArchive.h"
+#include "moviedb.h"
+#include "civarchive.h"
 
 #include "Token.h"
 #include "c3files.h"

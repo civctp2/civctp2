@@ -35,9 +35,9 @@
 
 #include "c3_ranger.h"
 
-#include "Pattern.h"
+#include "pattern.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "ns_header.h"
 

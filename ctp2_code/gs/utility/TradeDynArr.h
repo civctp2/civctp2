@@ -12,7 +12,7 @@
 #ifndef _TRADEDYNARR_H_
 #define _TRADEDYNARR_H_
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "TradeRoute.h"
 
 class TradeDynamicArray : public DynamicArray<TradeRoute>

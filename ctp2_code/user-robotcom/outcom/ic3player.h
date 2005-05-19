@@ -17,7 +17,7 @@
 #define __IC3PLAYER_H__
 
 #include <OBJBASE.H>  
-#include "MapPointData.h"
+#include "mappointdata.h"
 
 typedef sint32 PLAYER_INDEX; 
 enum AGREEMENT_TYPE;

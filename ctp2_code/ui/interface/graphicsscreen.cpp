@@ -2,7 +2,7 @@
 
 #include "c3.h"
 
-#include "profiledb.h"
+#include "profileDB.h"
 
 #include "c3window.h"
 #include "c3_popupwindow.h"
@@ -12,7 +12,7 @@
 #include "c3_static.h"
 #include "c3slider.h"
 #include "c3ui.h"
-#include "aui_Switch.h"
+#include "aui_switch.h"
 #include "aui_uniqueid.h"
 
 #include "spnewgamewindow.h"
@@ -31,7 +31,7 @@ extern TiledMap				*g_tiledMap;
 #include "civapp.h"
 extern CivApp				*g_civApp;
 
-#include "spritegrouplist.h"
+#include "SpriteGroupList.h"
 extern SpriteGroupList		*g_unitSpriteGroupList;
 
 static ctp2_Button	*s_resScreenButton;

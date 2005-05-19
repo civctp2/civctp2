@@ -15,7 +15,7 @@
 
 #include "aui.h"
 #include "aui_window.h"
-#include "aui_Ldl.h"
+#include "aui_ldl.h"
 
 #include "c3ui.h"
 
@@ -24,7 +24,7 @@
 #include "statictextbox.h"
 #include "textutils.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 
 #define k_STATICTEXTBOX_LDL_BEVEL "bevel"
 

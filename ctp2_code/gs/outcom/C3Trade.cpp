@@ -2,9 +2,9 @@
 
 #include "c3.h"
 #include "C3Trade.h"
-#include "CivArchive.h"
-#include "Globals.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "globals.h"
+#include "player.h"
 #include "UnitPool.h"
 #include "UnitDynArr.h"
 

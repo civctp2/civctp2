@@ -1,8 +1,8 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "Bset.h"
-#include "AiMain.h"
+#include "bset.h"
+#include "aimain.h"
 
 #include "ArmyAgent.h"
 #include "CityAgent.h"
@@ -12,7 +12,7 @@
 #include "AiMap.h"
 
 
-#include "Order.h"
+#include "order.h"
 
 
 

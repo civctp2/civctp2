@@ -11,7 +11,7 @@
 #ifndef _INSTALLATION_DATA_H_
 #define _INSTALLATION_DATA_H_
 
-#include "gameobj.h"
+#include "GameObj.h"
 #include "MapPoint.h"
 
 class CivArchive;

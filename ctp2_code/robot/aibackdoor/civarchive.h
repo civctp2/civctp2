@@ -12,10 +12,10 @@
 #ifndef __CIVARCHIVE_H__
 #define __CIVARCHIVE_H__
 
-#include "IC3CivArchive.h"
+#include "ic3CivArchive.h"
 
 #include "globals.h"
-#include "SDL_Endian.h"
+#include <SDL_endian.h>
 
 #define k_ARCHIVE_MAGIC_VALUE_1	'OTAK'
 #define k_ARCHIVE_MAGIC_VALUE_2	'U-98'

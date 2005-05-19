@@ -3,18 +3,18 @@
 
 
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "IMapPointData.h"
 
-#include "IC3GameState.h"
-#include "IC3Player.h"
+#include "ic3GameState.h"
+#include "ic3player.h"
 
-#include "AiMain.h"
-#include "BSet.h"
+#include "aimain.h"
+#include "bset.h"
 
-#include "Gold.h"
+#include "gold.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FzOut.h"
 #include "CityAgent.h"
 

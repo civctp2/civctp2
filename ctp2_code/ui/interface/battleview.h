@@ -5,7 +5,7 @@
 #ifndef __BATTLEVIEW_H__
 #define __BATTLEVIEW_H__
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #define k_BATTLEVIEW_DEFAULT_ATTACKER_FACING		1
 #define k_BATTLEVIEW_DEFAULT_DEFENDER_FACING		5

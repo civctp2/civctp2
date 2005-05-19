@@ -2,11 +2,11 @@
 
 #include "c3.h"
 #include "TaxRate.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "SlicEngine.h"
 #include "DB.h"
 #include "GovernmentRecord.h"
-#include "Player.h"
+#include "player.h"
 #include "network.h"
 #include "net_info.h"
 #include "net_action.h"

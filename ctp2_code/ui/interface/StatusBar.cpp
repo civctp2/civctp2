@@ -31,7 +31,7 @@
 #include "StatusBar.h"
 
 
-#include "aui_Ldl.h"
+#include "aui_ldl.h"
 #include "ctp2_Static.h"
 
 

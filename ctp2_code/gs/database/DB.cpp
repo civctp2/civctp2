@@ -13,10 +13,10 @@
 #include "c3.h"
 
 #include "DB.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
-#include "strdb.h"
+#include "StrDB.h"
 extern StringDB *g_theStringDB;
 
 template <class T> Database<T>::Database()
@@ -277,7 +277,7 @@ template <class T> void Database<T>::Serialize(CivArchive &archive)
 #include "CivilisationRec.h"
 #include "RiskRecord.h"
 #include "EndGameRecord.h"
-#include "PollutionRecord.h"
+#include "pollutionrecord.h"
 #include "MapRecord.h"
 
 template  class Database<GWRecord>;

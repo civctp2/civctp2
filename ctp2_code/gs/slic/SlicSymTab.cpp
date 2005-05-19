@@ -1,7 +1,7 @@
 #include "c3.h"
 #include "SlicSymTab.h"
 #include "SlicEngine.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 SlicSymTab::SlicSymTab(sint32 size) : 
 	StringHash<SlicNamedSymbol>(k_SLIC_SYM_TAB_HASH_SIZE)

@@ -46,25 +46,25 @@
 
 #include "keymap.h"
 
-#include "Player.h"
-#include "GameFile.h"
+#include "player.h"
+#include "gamefile.h"
 
 #include "network.h"
 #include "net_action.h"
 #include "net_info.h"
 #include "net_rand.h"
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "background.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "civ3_main.h"
-#include "Pollution.h"
+#include "pollution.h"
 #include "SelItem.h"
-#include "NewTurnCount.h"
+#include "newturncount.h"
 #include "TurnCnt.h"
-#include "AiCause.h"
-#include "RadarMap.h"
+#include "aicause.h"
+#include "radarmap.h"
 #include "DataCheck.h"
 
 #include "km_screen.h"
@@ -72,10 +72,10 @@
 #include "optionswindow.h"
 #include "resourcemap.h"
 
-#include "CivApp.h"
-#include "Order.h"
+#include "civapp.h"
+#include "order.h"
 
-#include "ControlPanelWindow.h"
+#include "controlpanelwindow.h"
 #include "c3_listbox.h"
 #include "aui_ranger.h"
 
@@ -95,7 +95,7 @@
 #include "segmentlist.h"
 
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 
 #include "GameEventManager.h"
 #include "CTP2Combat.h"
@@ -106,11 +106,11 @@
 
 #include "dipwizard.h"
 #include "keypress.h"
-#include "ScienceVictoryDialog.h"
-#include "CityWindow.h"
-#include "InfoWindow.h"
-#include "CityEspionage.h"
-#include "TradeManager.h"
+#include "sciencevictorydialog.h"
+#include "citywindow.h"
+#include "infowindow.h"
+#include "cityespionage.h"
+#include "trademanager.h"
 #include "EditQueue.h"
 #include "soundscreen.h"
 // music added by ahenobarb
@@ -119,7 +119,7 @@
 #include "gameplayoptions.h"
 #include "OrderRecord.h"
 #include "ProfileEdit.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "ArmyData.h"
 #include "MainControlPanel.h"
 #include "UnitControlPanel.h"
@@ -165,20 +165,20 @@ extern ControlPanelWindow *g_controlPanel;
 
 
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 extern ProfileDB *g_theProfileDB; 
 
-#include "Director.h"
+#include "director.h"
 extern Director *g_director; 
 
 #include "c3_utilitydialogbox.h"
 c3_UtilityPlayerListPopup *g_networkPlayersScreen = NULL;
 extern c3_UtilityTextMessagePopup		*g_utilityTextMessage;
 
-#include "ChatBox.h"
+#include "chatbox.h"
 extern ChatBox		*g_chatBox;
 
-#include "strdb.h"
+#include "StrDB.h"
 extern StringDB		*g_theStringDB;
 
 #include "keyboardhandler.h"
@@ -192,7 +192,7 @@ extern sint32 g_modalWindow;
 #include "debugwindow.h"
 extern DebugWindow		*g_debugWindow;
 
-#include "BattleViewWindow.h"
+#include "battleviewwindow.h"
 extern BattleViewWindow *g_battleViewWindow;
 
 PointerList<KeyboardHandler> g_keyboardHandlers;

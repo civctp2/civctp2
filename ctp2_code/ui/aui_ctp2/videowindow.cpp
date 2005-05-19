@@ -20,10 +20,10 @@
 
 #include "primitives.h"
 
-#include "aui_DirectSurface.h"
+#include "aui_directsurface.h"
 #include "CivPaths.h"
 #include "c3ui.h"
-#include "DirectVideo.h"
+#include "directvideo.h"
 
 #include "videowindow.h"
 

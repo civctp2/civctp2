@@ -90,11 +90,11 @@
 
 #include "math.h" 
 #include "common.h"
-#include "Linked_List.h"
-#include "Globals.h"
-#include "AIMain.h"
-#include "IParser.h"
-#include "ExpressionP.h"
+#include "linked_list.h"
+#include "globals.h"
+#include "aimain.h"
+#include "iparser.h"
+#include "expressionP.h"
 
 
 

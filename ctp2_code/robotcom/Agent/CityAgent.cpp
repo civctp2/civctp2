@@ -4,30 +4,30 @@
 #include "globals.h"
 #include "c3types.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 #include "MoveFlags.h"
-#include "IC3Player.h"
-#include "IC3BlgDB.h"
-#include "IC3Population.h"
-#include "IC3UnitDb.h"
-#include "IC3World.h"
-#include "IC3InstDB.h"
-#include "IC3Rand.h"
-#include "IC3Wonder.h"
-#include "IC3EndGameDB.h"
+#include "ic3player.h"
+#include "ic3BlgDB.h"
+#include "ic3Population.h"
+#include "ic3UnitDB.h"
+#include "ic3world.h"
+#include "ic3InstDB.h"
+#include "ic3Rand.h"
+#include "ic3Wonder.h"
+#include "ic3endgamedb.h"
 
 #include "MapPoint.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
-#include "IC3GameState.h"
-#include "AiCause.h"
-#include "AiCell.h"
+#include "ic3GameState.h"
+#include "aicause.h"
+#include "aicell.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 #include "AiMap.h"
-#include "AiRndCnt.h"
+#include "airndcnt.h"
 
 
 #include "common.h"
@@ -41,8 +41,8 @@
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 #include "AiBldQue.h"
-#include "BSet.h"
-#include "CivArchive.h"
+#include "bset.h"
+#include "civarchive.h"
 #include "ForeignAgent.h"
 #include "ForeignCity.h"
 #include "Foreigner.h"
@@ -60,39 +60,39 @@
 
 
 #include "ArmyGoal.h"
-#include "GlBlg.h"
-#include "GlFreight.h"
+#include "glblg.h"
+#include "glfreight.h"
 #include "GoalMapTarget.h"
 #include "GoalRetreat.h"
 
 
 
 
-#include "Unitflow.h"
-#include "AIP.h"
-#include "Squad.h"
-#include "Goal.h"
+#include "unitflow.h"
+#include "aip.h"
+#include "squad.h"
+#include "goal.h"
 
 
 #include "GoalDefense.h"
 
 #include "Scheduler.h"
-#include "Planner.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "planner.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 
 #include "AllocWGF.h"
 #include "CityGrowth.h"
 #include "CityProd.h"
 #include "CityFP.h"
-#include "ScienceAgent.h"
-#include "Squad_Strength.h"
+#include "scienceagent.h"
+#include "squad_strength.h"
 
 
 #include "IC3Trade.h"
 #include "Pirate_Marker.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #define k_SIZE_COEF 5
 

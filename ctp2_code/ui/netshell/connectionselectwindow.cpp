@@ -19,8 +19,8 @@
 #include "aui_stringtable.h"
 
 
-#include "c3_Static.h"
-#include "c3_Button.h"
+#include "c3_static.h"
+#include "c3_button.h"
 
 
 #include "civapp.h"

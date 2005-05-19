@@ -12,9 +12,9 @@
 #ifndef __DIPLOMATICREQUESTDATA_H__
 #define __DIPLOMATICREQUESTDATA_H__
 
-#include "Gameobj.h"
+#include "GameObj.h"
 #include "ID.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Unit.h"
 
 
@@ -23,7 +23,7 @@ typedef sint32 AdvanceType;
 
 class CivArchive;
 
-#include "DiplomaticTypes.h"
+#include "diplomatictypes.h"
 
 class DiplomaticRequestData : public GAMEOBJ
 	{

@@ -10,7 +10,7 @@
 #define CTP2_TAB_H__
 
 
-#include "aui_Control.h"
+#include "aui_control.h"
 
 
 class ctp2_TabButton;

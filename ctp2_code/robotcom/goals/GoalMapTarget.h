@@ -16,7 +16,7 @@
 #include "ArmyGoal.h"
 
 
-#include "DynArr.h"
+#include "dynarr.h"
 
 enum GOAL_TYPE; 
 struct MapPointData; 

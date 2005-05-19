@@ -13,10 +13,10 @@
 
 
 
-#include "Strategic_AI_Forward.h"
+#include "strategic_ai_forward.h"
 
 
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
 
 

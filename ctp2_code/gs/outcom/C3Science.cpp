@@ -1,13 +1,13 @@
 
 #include "c3.h"
-#include "Player.h"
+#include "player.h"
 
 
 #include "C3Science.h"
 
 
 #include "AdvanceRecord.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "Advances.h"
 
 #include "StrDB.h"

@@ -2,8 +2,8 @@
 #include "c3.h"
 #include "SlicConst.h"
 #include "SlicEngine.h"
-#include "DiplomatTypes.h"
-#include "CivArchive.h"
+#include "diplomattypes.h"
+#include "civarchive.h"
 
 char *slic_const_test_names[] = {
 	"Continue",

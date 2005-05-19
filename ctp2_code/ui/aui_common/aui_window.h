@@ -36,7 +36,7 @@
 #include "aui_region.h"
 #include "aui_dirtylist.h"
 #include "aui_mouse.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 class aui_UI;
 class aui_Mouse;

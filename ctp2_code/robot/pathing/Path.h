@@ -15,8 +15,8 @@
 #ifndef __PATH_H__
 #define __PATH_H__
 
-#include "AstarPnt.h"
-#include "DynArr.h"
+#include "astarpnt.h"
+#include "dynarr.h"
 #include "directions.h"
 
 struct Direction { 

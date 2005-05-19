@@ -3,36 +3,36 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_Window.h"
+#include "aui_window.h"
 #include "aui_ldl.h"
-#include "aui_UniqueId.h"
-#include "aui_Surface.h"
-#include "TipWindow.h"
+#include "aui_uniqueid.h"
+#include "aui_surface.h"
+#include "tipwindow.h"
 #include "aui_stringtable.h"
 
-#include "Picture.h"
+#include "picture.h"
 
 #include "MapPoint.h"
 #include "Unit.h"
 #include "UnitRec.h"
 #include "Army.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "UnitPool.h"
 #include "MapPoint.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 
-#include "ColorIconButton.h"
+#include "coloriconbutton.h"
 
-#include "ControlSheet.h"
+#include "controlsheet.h"
 #include "buttonbank.h"
 
 #include "player.h"
 #include "SelItem.h"
 #include "AdvanceRecord.h"
 
-#include "ControlPanelWindow.h"
+#include "controlpanelwindow.h"
 
 #include "primitives.h"
 #include "advanceutil.h"

@@ -30,7 +30,7 @@
 #include "aui.h"
 #include "tiledmap.h"
 #include "maputils.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 

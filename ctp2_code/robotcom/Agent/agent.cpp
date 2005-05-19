@@ -61,12 +61,12 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "IMapPointData.h"
-#include "IC3RobotAstar.h"
-#include "IC3Player.h"
-#include "DynArr.h"
-#include "AIMain.h"
+#include "ic3RobotAstar.h"
+#include "ic3player.h"
+#include "dynarr.h"
+#include "aimain.h"
 
 #include "common.h"
 
@@ -75,18 +75,18 @@
 #include "unitflow.h"
 #include "squad.h"
 
-#include "Planner.h"
+#include "planner.h"
 
 #include "dr_debug.h"
 
-#include "AILog.h"
+#include "ailog.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "Agent.h"
 #include "ArmyAgent.h"
 #include "CityAgent.h"
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
 
 

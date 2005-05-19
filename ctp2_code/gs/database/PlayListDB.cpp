@@ -3,9 +3,9 @@
 #include "c3.h"
 
 #include "Token.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "playlistdb.h"
+#include "PlayListDB.h"
 #include "c3files.h"
 
 enum TOKEN_PLAYLIST {

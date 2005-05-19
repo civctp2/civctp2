@@ -2,26 +2,26 @@
 #include "c3.h"
 
 #include "MapPoint.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 
 
-#include "IC3GameState.h"
-#include "IC3Government.h"
-#include "IC3Science.h"
-#include "IC3Player.h"
+#include "ic3GameState.h"
+#include "ic3Government.h"
+#include "ic3Science.h"
+#include "ic3player.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 #include "gold.h"
 #include "AllocWGF.h"
 #include "CityAgent.h"
 
 
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 
 
 #include "FzOut.h"
-#include "WotP.h"
+#include "wotp.h"
 #include "ArmyAgent.h"
 
 #define k_MIN_UTILITY -1000000.0

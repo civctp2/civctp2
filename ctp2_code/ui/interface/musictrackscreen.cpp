@@ -36,13 +36,13 @@
 #include "c3_switch.h"
 #include "c3_checkbox.h"
 #include "c3ui.h"
-#include "profiledb.h"
+#include "profileDB.h"
 #include "spnewgamewindow.h"
 #include "musicscreen.h"
 #include "musictrackscreen.h"
 #include "aui_uniqueid.h"
 #include "aui_stringtable.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 extern SoundManager		*g_soundManager;
 

@@ -36,7 +36,7 @@
 #ifndef __WORKMAP_H__
 #define __WORKMAP_H__
 
-#include "PatternBase.h"
+#include "patternbase.h"
 #include "aui_control.h"
 #include "Unit.h"
 #include "MapPoint.h"

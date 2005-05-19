@@ -4,23 +4,23 @@
 #include "c3ui.h"
 #include "ctp2_Window.h"
 #include "aui_ldl.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
 #include "ctp2_Static.h"
-#include "Ctp2_button.h"
+#include "ctp2_button.h"
 #include "ctp2_textfield.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "MessageBoxDialog.h"
 #include "ProfileEdit.h"
 #include "StrDB.h"
 
 #include "CriticalMessagesPrefs.h"
 
-#include "CivApp.h"
+#include "civapp.h"
 extern CivApp *g_civApp;
 
-#include "spritegrouplist.h"
+#include "SpriteGroupList.h"
 extern SpriteGroupList		*g_unitSpriteGroupList;
 
 extern C3UI *g_c3ui;

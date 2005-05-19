@@ -36,19 +36,19 @@
 
 #include "c3ui.h"
 
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "UnseenCell.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "Unit.h"
 #include "UnitData.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "SelItem.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 #include "primitives.h"
 

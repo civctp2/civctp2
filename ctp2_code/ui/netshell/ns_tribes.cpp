@@ -11,8 +11,8 @@
 
 #include "c3.h"
 
-#include "civilisationdb.h"
-#include "strdb.h"
+#include "CivilisationDB.h"
+#include "StrDB.h"
 
 #include "aui_uniqueid.h"
 

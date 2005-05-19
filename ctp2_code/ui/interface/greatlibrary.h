@@ -44,7 +44,7 @@
 #ifndef __GREATLIBRARY_H__
 #define __GREATLIBRARY_H__
 
-#include "ctp2_ListItem.h"
+#include "ctp2_listitem.h"
 #include "keyboardhandler.h"
 #include <vector>	// std::vector
 

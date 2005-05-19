@@ -16,7 +16,7 @@
 
 #include "MapPoint.h"
 #include "Anim.h"
-#include "Director.h"
+#include "director.h"
 
 
 class ProjectileActor;

@@ -27,18 +27,18 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 #include "CivilisationRec.h"
 #include "CivilisationDB.h"
 #include "CivilisationData.h"
 #include "Civilisation.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "StrDB.h"
 #include "network.h"
-#include "CivArchive.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "player.h"
 #include "UnitDynArr.h"
-#include "CityData.h"
+#include "citydata.h"
 
 	extern	StringDB	*g_theStringDB ;
 

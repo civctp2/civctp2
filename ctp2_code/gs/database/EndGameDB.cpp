@@ -4,7 +4,7 @@
 #include "c3errors.h"
 #include "EndGameDB.h"
 #include "Token.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "EndGameToken.h"
 #include "StrDB.h"
 

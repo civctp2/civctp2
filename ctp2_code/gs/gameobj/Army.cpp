@@ -32,7 +32,7 @@
 #include "Army.h"
 #include "ArmyPool.h"
 #include "ArmyData.h"
-#include "Player.h"
+#include "player.h"
 #include "SelItem.h"
 
 extern SelectedItem *g_selected_item;

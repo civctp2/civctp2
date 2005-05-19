@@ -18,7 +18,7 @@ class TradeOffer;
 class GameEventArgList;
 class Army;
 enum UNIT_ORDER_TYPE;
-#include "DiplomatTypes.h"
+#include "diplomattypes.h"
 
 
 

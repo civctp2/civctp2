@@ -2,12 +2,12 @@
 
 #include "c3.h"
 
-#include "Globals.h"
+#include "globals.h"
 #include "C3GameState.h"
 #include "C3ErrorReport.h"
 #include "c3debug.h"
 #include "c3errors.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 STDMETHODIMP C3ErrorReport::QueryInterface(REFIID riid, void **obj)
 {

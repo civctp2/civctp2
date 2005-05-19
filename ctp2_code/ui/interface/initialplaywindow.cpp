@@ -40,15 +40,15 @@
 #include "aui_stringtable.h"
 #include "c3ui.h"
 #include "c3window.h"
-#include "c3_Button.h"
+#include "c3_button.h"
 #include "c3_static.h"
 #include "c3_listitem.h"
 #include "c3_dropdown.h"
 #include "StrDB.h"
 #include "CivilisationDB.h"
-#include "civilisationpool.h"
+#include "CivilisationPool.h"
 
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 
 #include "spnewgamewindow.h" 
 #include "initialplaywindow.h"
@@ -63,7 +63,7 @@ extern CivilisationDatabase			*g_theCivilisationDB;
 
 
 
-#include "ctp2_static.h"
+#include "ctp2_Static.h"
 
 InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)

@@ -20,7 +20,7 @@ enum QUADRANT {
 	QUADRANT_ERROR
 };
 
-#include "DynArr.h"
+#include "dynarr.h"
 
 
 

@@ -6,8 +6,8 @@
 #define __CHATBOX_H__
 
 #include "primitives.h"
-#include "ColorSet.h"
-#include "C3Window.h"
+#include "colorset.h"
+#include "c3window.h"
 
 #define k_CHATBOX_LINE_LENGTH			60
 

@@ -10,7 +10,7 @@
 
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 #include "C3GameState.h"
 #include "C3UnitDB.h"
 #include "C3BlgDB.h"
@@ -26,25 +26,25 @@
 #include "C3Government.h"
 #include "C3Wonder.h"
 #include "C3Population.h"
-#include "C3EndGameDB.h"
+#include "c3endgamedb.h"
 
-#include "IC3DipReq.h"
-#include "BSet.h"
+#include "ic3DipReq.h"
+#include "bset.h"
 #include "UnitPool.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Strengths.h"
-#include "Pollution.h"
+#include "pollution.h"
 #include "UnitDynArr.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "TradePool.h"
 #include "TradeDynArr.h"
-#include "Order.h"
+#include "order.h"
 
 #include "RobotAstar.h"
 
 #include "ConstDB.h"
 
-#include "Player.h"
+#include "player.h"
 
 
 
@@ -602,7 +602,7 @@ STDMETHODIMP_(sint32) C3GameState::GetOrderMaxGoldCost()
 	return max;
 }
 
-#include "CivApp.h"
+#include "civapp.h"
 
 STDMETHODIMP_(void) C3GameState::ProcessGraphicsCallback()
 {

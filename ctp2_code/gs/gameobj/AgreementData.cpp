@@ -11,10 +11,10 @@
 #include "c3.h"
 #include "c3errors.h"
 
-#include "Globals.h"
-#include "Player.h"
+#include "globals.h"
+#include "player.h"
 #include "Unit.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Advances.h"
 #include "AgreementData.h"
 #include "TurnCnt.h"
@@ -34,7 +34,7 @@
 
 #include "network.h"
 
-#include "AiCause.h"
+#include "aicause.h"
 #include "AgreementPool.h"
 
 extern	Player	**g_player ;

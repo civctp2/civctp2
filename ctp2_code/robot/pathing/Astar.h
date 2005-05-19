@@ -15,8 +15,8 @@
 #ifndef ASTAR_H
 #define ASTAR_H 1
 
-#include "AstarPnt.h"
-#include "PriorityQueue.h"
+#include "astarpnt.h"
+#include "priorityqueue.h"
 
 class MapPoint;
 class AstarPoint;  

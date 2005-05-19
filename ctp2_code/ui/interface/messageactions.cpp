@@ -30,11 +30,11 @@
 #include "aui.h"
 #include "aui_button.h"
 
-#include "slicbutton.h"
+#include "SlicButton.h"
 
 #include "pixelutils.h"
 #include "radarmap.h"
-#include "c3_DropDown.h"
+#include "c3_dropdown.h"
 
 
 #include "messageiconwindow.h"
@@ -50,9 +50,9 @@
 #include "c3ui.h"
 
 #include "SelItem.h"
-#include "Player.h"
-#include "Director.h"
-#include "ProfileDB.h"				// g_theProfileDB
+#include "player.h"
+#include "director.h"
+#include "profileDB.h"				// g_theProfileDB
 
 extern RadarMap			*g_radarMap;
 extern C3UI				*g_c3ui;

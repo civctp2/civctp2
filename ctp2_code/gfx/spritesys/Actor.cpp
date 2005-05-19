@@ -32,7 +32,7 @@
 #include "Anim.h"
 #include "Unit.h"
 #include "Actor.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 
 

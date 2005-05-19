@@ -10,11 +10,11 @@
 
 #include "c3.h"
 #include "TradeOfferPool.h"
-#include "Player.h"
-#include "DynArr.h"
+#include "player.h"
+#include "dynarr.h"
 
-#include "Globals.h"
-#include "GameFile.h"
+#include "globals.h"
+#include "gamefile.h"
 
 extern Player **g_player;
 

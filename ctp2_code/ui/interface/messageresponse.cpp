@@ -31,10 +31,10 @@
 #include "tech_wllist.h"
 
 
-#include "slicbutton.h"
+#include "SlicButton.h"
 
 
-#include "c3_Button.h"
+#include "c3_button.h"
 #include "c3_dropdown.h"
 #include "c3_static.h"
 #include "c3listbox.h"
@@ -42,7 +42,7 @@
 
 
 #include "message.h"
-#include "messagedata.h"
+#include "MessageData.h"
 #include "messageactions.h"
 #include "messagewindow.h"
 #include "messageresponse.h"

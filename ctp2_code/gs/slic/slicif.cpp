@@ -47,7 +47,7 @@
 #include "SlicStruct.h"
 #include "SlicNamedSymbol.h"
 #include "SlicArray.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "SlicDBConduit.h"
 

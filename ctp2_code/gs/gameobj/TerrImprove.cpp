@@ -8,12 +8,12 @@
 
 
 #include "c3.h"
-#include "terrimprove.h"
+#include "TerrImprove.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrImprovePool.h"
-#include "DynArr.h"
-#include "Player.h"
+#include "dynarr.h"
+#include "player.h"
 
 #include "network.h"
 #include "net_info.h"

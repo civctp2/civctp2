@@ -16,7 +16,7 @@
 #include "aui_action.h"
 
 #include "c3ui.h"
-#include "civpaths.h"
+#include "CivPaths.h"
 #include "c3_static.h"
 #include "c3_button.h"
 #include "c3_image.h"

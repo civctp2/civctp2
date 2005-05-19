@@ -18,7 +18,7 @@
 #include "TradeOffer.h"
 #include "UnitPool.h"
 
-#include "Player.h"
+#include "player.h"
 extern Player **g_player;
 extern UnitPool *g_theUnitPool;
 

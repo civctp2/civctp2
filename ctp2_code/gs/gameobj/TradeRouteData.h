@@ -14,7 +14,7 @@
 #include "GameObj.h"
 #include "Unit.h"
 #include "TradeRoute.h"
-#include "DynArr.h"
+#include "dynarr.h"
 #include "MapPoint.h"
 #include "CityRadius.h"
 #include "Army.h"

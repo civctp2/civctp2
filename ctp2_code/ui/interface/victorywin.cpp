@@ -16,17 +16,17 @@
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 
-#include "c3_Static.h"
+#include "c3_static.h"
 #include "ctp2_Static.h"
 
 
 #include "textbutton.h"
-#include "c3_Button.h"
+#include "c3_button.h"
 
 #include "ctp2_button.h"
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
 
@@ -42,8 +42,8 @@
 #include "texttab.h"
 #include "aui_tabgroup.h"
 
-#include "ctp2_tabgroup.h"
-#include "ctp2_tab.h"
+#include "ctp2_TabGroup.h"
+#include "ctp2_Tab.h"
 
 
 #include "c3window.h"
@@ -53,7 +53,7 @@
 #include "infowin.h"
 #include "c3fancywindow.h"
 #include "aui_stringtable.h"
-#include "c3_PopupWindow.h"
+#include "c3_popupwindow.h"
 #include "screenutils.h"
 
 
@@ -61,15 +61,15 @@
 #include "ObjPool.h"
 #include "Cell.h"
 #include "MapPoint.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "SelItem.h"
 #include "c3files.h"
-#include "PointerList.h"
-#include "LineGraph.h"
+#include "pointerlist.h"
+#include "linegraph.h"
 #include "TurnCnt.h"
 #include "Strengths.h"
 #include "UnitPool.h"
-#include "score.h"
+#include "Score.h"
 
 
 #include "pixelutils.h"
@@ -78,14 +78,14 @@
 
 
 
-#include "Player.h"
+#include "player.h"
 #include "UnitRec.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "StrDB.h"
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
@@ -93,7 +93,7 @@
 #include "TopTen.h"
 #include "AgeRecord.h"
 #include "highscoredb.h"
-#include "gamesettings.h"
+#include "GameSettings.h"
 
 
 #include "Civilisation.h"
@@ -104,8 +104,8 @@
 #include "c3_listitem.h"
 #include "resource.h"
 #include "thumbnailmap.h"
-#include "ColorSet.h"
-#include "CivApp.h"
+#include "colorset.h"
+#include "civapp.h"
 #include "TurnCnt.h"
 
 #include "wonderutil.h"

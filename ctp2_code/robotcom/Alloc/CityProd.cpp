@@ -4,13 +4,13 @@
   
 #include "CityProd.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "DynArr.h"
-#include "BSet.h"
+#include "dynarr.h"
+#include "bset.h"
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 #include "CityAgent.h"
 #include "FzOut.h"

@@ -11,10 +11,10 @@
 #include "DomesticManagementDialog.h"
 
 
-#include "aui_Ldl.h"
+#include "aui_ldl.h"
 #include "c3ui.h"
 #include "CauseAndEffectTab.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "ctp2_Window.h"
 #include "GovernmentTab.h"
 #include "network.h"

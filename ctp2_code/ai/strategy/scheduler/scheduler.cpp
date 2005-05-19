@@ -44,15 +44,15 @@
 #include "c3.h"
 
 
-#include "profileAi.h"
+#include "profileai.h"
 
 #include <algorithm>
 #include <list>
 
 #include "Scheduler.h"
 
-#include "Goal.h"
-#include "Squad.h"
+#include "goal.h"
+#include "squad.h"
 #include "Plan.h"
 
 
@@ -63,11 +63,11 @@
 #include "Diplomat.h"
 #include "CTPDatabase.h"
 #include "GoalRecord.h"
-#include "CTPGoal.h"
-#include "CTPAiDebug.h"
+#include "ctpgoal.h"
+#include "ctpaidebug.h"
 #include "c3math.h"
-#include "CtpAgent.h"
-#include "agreementmatrix.h"
+#include "ctpagent.h"
+#include "AgreementMatrix.h"
 #include "gfx_options.h"
 #include "Army.h"
 #include "ArmyData.h"

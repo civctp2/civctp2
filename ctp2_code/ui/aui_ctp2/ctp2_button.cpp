@@ -15,14 +15,14 @@
 #include <strstream>
 
 
-#include "aui_ImageList.h"
-#include "aui_Ldl.h"
-#include "aui_Window.h"
+#include "aui_imagelist.h"
+#include "aui_ldl.h"
+#include "aui_window.h"
 #include "c3ui.h"
 
 #include "AttractWindow.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 #include "primitives.h"
 
 

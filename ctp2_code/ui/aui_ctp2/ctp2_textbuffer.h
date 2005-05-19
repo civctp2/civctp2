@@ -5,7 +5,7 @@
 #include "aui_bitmapfont.h"
 #include "aui_surface.h"
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 class ctp2_TextBuffer
 {

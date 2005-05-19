@@ -9,7 +9,7 @@
 #include "CivilisationPool.h"
 #include "CivilisationDB.h"
 
-#include "Player.h"
+#include "player.h"
 
 #include "c3_utilitydialogbox.h"
 

@@ -6,7 +6,7 @@
 #include "spriteutils.h"
 #include "Sprite.h"
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 extern sint32		g_is565Format;
 extern TiledMap		*g_tiledMap;

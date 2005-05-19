@@ -32,10 +32,10 @@
 #ifndef __MAP_ANALYSIS_H__
 #define __MAP_ANALYSIS_H__
 
-#include "MapGrid.h"
-#include "CityData.h"
-#include "BoundingRect.h"
-#include "Bit_Table.h"
+#include "mapgrid.h"
+#include "citydata.h"
+#include "boundingrect.h"
+#include "bit_table.h"
 #include <vector>
 
 #ifdef _DEBUG

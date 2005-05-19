@@ -9,7 +9,7 @@
 #include "FliSetFunc.h"
 #include "FliWhen.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #define k_FLI_MAX_CODE_SIZE 32768
 

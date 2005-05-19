@@ -6,11 +6,11 @@
 #include "c3.h"
 #include "MapPoint.h"
 #include "geom2d.h"
-#include "delaunay.h"
+#include "Delaunay.h"
 
 #include "CityVertex.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "CityTree.h"
 #include "CityEdge.h"

@@ -18,7 +18,7 @@
 enum CAUSE_REMOVE_ARMY; 
 
 
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
 #include "gstypes.h"
 

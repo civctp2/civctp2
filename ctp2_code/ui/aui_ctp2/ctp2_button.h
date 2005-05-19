@@ -37,7 +37,7 @@
 #define CTP2_BUTTON_H__
 
 
-#include "aui_Button.h"
+#include "aui_button.h"
 
 
 class aui_ImageList;

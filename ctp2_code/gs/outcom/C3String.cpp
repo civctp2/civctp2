@@ -2,12 +2,12 @@
 
 #include "c3.h"
 
-#include "Globals.h"
+#include "globals.h"
 #include "C3GameState.h"
 #include "C3String.h"
 #include "c3errors.h"
 #include "StrDB.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 extern StringDB *g_theStringDB;
 

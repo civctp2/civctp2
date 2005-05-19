@@ -45,8 +45,8 @@
 
 #include "ConstDB.h"
 
-#include "CivApp.h"
-#include "ProfileDB.h"
+#include "civapp.h"
+#include "profileDB.h"
 
 
 

@@ -4,7 +4,7 @@
 #ifndef __ASTAR_QUEUE__
 #define __ASTAR_QUEUE__ 1
 
-#include "AstarPnt.h"
+#include "astarpnt.h"
 
 class AstarQueue { 
 

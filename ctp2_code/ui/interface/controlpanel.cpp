@@ -26,7 +26,7 @@
 #include "textbutton.h"
 #include "iconbutton.h"
 #include "picturebutton.h"
-#include "ColorIconButton.h"
+#include "coloriconbutton.h"
 
 
 #include "c3thumb.h"
@@ -57,10 +57,10 @@
 
 #include "c3textfield.h"
 
-#include "ButtonBank.h"
+#include "buttonbank.h"
 
-#include "C3ListBox.h"
-#include "CityInventoryListBox.h"
+#include "c3listbox.h"
+#include "cityinventorylistbox.h"
 
 
 #include "aui_progressbar.h"
@@ -77,20 +77,20 @@
 
 
 #include "controlsheet.h"
-#include "terrimprovedata.h"
-#include "terrimprovepool.h"
+#include "TerrImproveData.h"
+#include "TerrImprovePool.h"
 #include "MapPoint.h"
-#include "TiledMap.h"
-#include "Player.h"
+#include "tiledmap.h"
+#include "player.h"
 #include "SelItem.h"
 #include "InstDB.h"
 
 #include "bevellesswindow.h"
 #include "radarwindow.h"
 
-#include "uiutils.h"
+#include "UIUtils.h"
 
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 
 #include "citymanager.h"
 #include "citywindow.h"

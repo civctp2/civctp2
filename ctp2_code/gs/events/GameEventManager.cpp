@@ -15,7 +15,7 @@
 #include "GameEventArgument.h"
 #include "GameEvent.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #include "Army.h"
 #include "Unit.h"

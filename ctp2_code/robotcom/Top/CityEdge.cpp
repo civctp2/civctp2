@@ -11,7 +11,7 @@
 
 #include "CityEdge.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "CityVertex.h"
 #include "CityAgent.h"

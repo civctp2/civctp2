@@ -161,19 +161,19 @@
 #include "c3types.h"
 #include "c3errors.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 
 
 
 #include "common.h"
 #include "linked_list.h"
-#include "Strategic_AI_Forward.h"
-#include "Unitflow.h"
-#include "Squad.h"
-#include "Goal.h"
-#include "Squad_Strength.h"
+#include "strategic_ai_forward.h"
+#include "unitflow.h"
+#include "squad.h"
+#include "goal.h"
+#include "squad_strength.h"
 
 #define LOG_GOAL true
 

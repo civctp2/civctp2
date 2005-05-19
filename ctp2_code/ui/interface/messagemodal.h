@@ -39,7 +39,7 @@
 #define __MESSAGEMODAL_H__
 
 #include "messagewindow.h"
-#include "c3_PopupWindow.h"
+#include "c3_popupwindow.h"
 
 #define k_MODAL_BUTTON_SPACING			4
 #define k_MODAL_BUTTON_TEXT_PADDING			15

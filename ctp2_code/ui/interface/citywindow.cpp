@@ -58,23 +58,23 @@
 #include "c3math.h"
 #include "citywindow.h"
 #include "ctp2_Window.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "ctp2_button.h"
 #include "c3ui.h"
-#include "PointerList.h"
-#include "ctp2_static.h"
-#include "Player.h"
+#include "pointerlist.h"
+#include "ctp2_Static.h"
+#include "player.h"
 #include "SelItem.h"
-#include "ctp2_Spinner.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
-#include "ctp2_DropDown.h"
-#include "ctp2_HyperTextBox.h"
+#include "ctp2_spinner.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
+#include "ctp2_dropdown.h"
+#include "ctp2_hypertextbox.h"
 #include "ctp2_TabGroup.h"
 #include "ctp2_Tab.h"
-#include "aui_Image.h"
+#include "aui_image.h"
 
 #include "aui_blitter.h"
 
@@ -89,11 +89,11 @@
 
 #include "StrDB.h"
 #include "ConstDB.h"
-#include "ColorSet.h"
+#include "colorset.h"
 extern ColorSet	*g_colorSet;
 
 #include "BldQue.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Happy.h"
 #include "UnitData.h"
 
@@ -103,7 +103,7 @@ extern ColorSet	*g_colorSet;
 #include "screenutils.h"
 #include "greatlibrary.h"
 
-#include "ResourceMap.h"
+#include "resourcemap.h"
 extern ResourceMap *g_resourceMap;
 
 #include "workwin.h"
@@ -114,7 +114,7 @@ extern ProjectFile                  *g_GreatLibPF;
 #include "HappyTracker.h"
 
 #include "NationalManagementDialog.h"
-#include "Governor.h"
+#include "governor.h"
 
 #include "World.h"
 #include "Cell.h"
@@ -123,11 +123,11 @@ extern ProjectFile                  *g_GreatLibPF;
 
 #include "MessageBoxDialog.h"
 
-#include "Director.h"
+#include "director.h"
 
 #include "network.h"
 
-#include "AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
+#include "aicause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include "ArmyPool.h"	// g_armyPool
 
 

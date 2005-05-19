@@ -34,30 +34,30 @@
 #include "CauseAndEffectTab.h"
 
 
-#include "aui_Ldl.h"
-#include "aui_Region.h"
-#include "BuildingUtil.h"
-#include "C3Slider.h"
-#include "ColorSet.h"
-#include "ctp2_Button.h"
-#include "ctp2_Spinner.h"
+#include "aui_ldl.h"
+#include "aui_region.h"
+#include "buildingutil.h"
+#include "c3slider.h"
+#include "colorset.h"
+#include "ctp2_button.h"
+#include "ctp2_spinner.h"
 #include "ctp2_Static.h"
 #include "ctp2_Tab.h"
 #include "GovernmentRecord.h"
 #include "Happy.h"	
-#include "PixelUtils.h"
-#include "Player.h"
-#include "Primitives.h"
+#include "pixelutils.h"
+#include "player.h"
+#include "primitives.h"
 #include "SelItem.h"
 #include "StrDB.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
-#include "WonderUtil.h"
+#include "wonderutil.h"
 #include "DomesticManagementDialog.h"
 #include "network.h"
 #include "c3math.h"		// AsPercentage
 
-#include "Governor.h" // To allow automatic slider optimization
+#include "governor.h" // To allow automatic slider optimization
 
 extern ColorSet *g_colorSet;
 

@@ -21,17 +21,17 @@
 #include "c3ui.h"
 #include "c3_static.h"
 #include "c3_ranger.h"
-#include "Pattern.h"
-#include "PatternBase.h"
+#include "pattern.h"
+#include "patternbase.h"
 #include "pixelutils.h"
 #include "primitives.h"
 #include "c3_hypertextbox.h"
 #include "SlicEngine.h"
-#include "ColorSet.h"
-#include "ctp2_ListBox.h"
+#include "colorset.h"
+#include "ctp2_listbox.h"
 
 
-#include "GreatLibrary.h"
+#include "greatlibrary.h"
 
 extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;

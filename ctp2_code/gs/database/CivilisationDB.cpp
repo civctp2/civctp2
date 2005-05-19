@@ -16,9 +16,9 @@
 #include "StrDB.h"
 #include "ErrMsg.h"
 #include "Unit.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "Token.h"
-#include "Globals.h"
+#include "globals.h"
 
 enum TOKEN_CIVILISATION_FLAG
 	{

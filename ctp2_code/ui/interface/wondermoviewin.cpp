@@ -8,16 +8,16 @@
 
 #include "c3window.h"
 
-#include "WonderMovieWindow.h"
+#include "wondermoviewindow.h"
 #include "wondermoviewin.h"
 
 #include "WonderRecord.h"
 #include "WonderMovieRecord.h"
 #include "StrDB.h"
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 
-#include "Director.h"
+#include "director.h"
 #include "IconRecord.h"
 #include "greatlibrary.h"
 #include "SlicObject.h"

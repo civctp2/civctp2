@@ -10,7 +10,7 @@
 
 #include "c3.h"
 #include "Unit.h"
-#include "Player.h"
+#include "player.h"
 
 
 #include "DiplomaticRequestPool.h"
@@ -18,12 +18,12 @@
 #include "StrDB.h"
 #include "network.h"
 #include "net_action.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "DiplDynArr.h"
 #include "MsgDynArr.h"
 #include "TurnCnt.h"
-#include "Globals.h"
-#include "GameFile.h"
+#include "globals.h"
+#include "gamefile.h"
 
 	extern	StringDB	*g_theStringDB ;
 

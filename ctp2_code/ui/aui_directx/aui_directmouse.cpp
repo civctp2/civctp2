@@ -40,7 +40,7 @@
 
 #include "aui_directmouse.h"
 
-#include "profiledb.h"
+#include "profileDB.h"
 extern ProfileDB *g_theProfileDB;
 
 

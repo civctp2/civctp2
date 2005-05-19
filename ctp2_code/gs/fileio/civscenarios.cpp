@@ -28,11 +28,11 @@
 
 #include "c3.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #include "CivPaths.h"
-#include "CivScenarios.h"
-#include "GameFile.h"
+#include "civscenarios.h"
+#include "gamefile.h"
 
 extern CivPaths		*g_civPaths;
 

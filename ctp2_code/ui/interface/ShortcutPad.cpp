@@ -11,14 +11,14 @@
 #include "ShortcutPad.h"
 
 
-#include "aui_Ldl.h"
-#include "CityWindow.h"
-#include "ctp2_Button.h"
+#include "aui_ldl.h"
+#include "citywindow.h"
+#include "ctp2_button.h"
 #include "SelItem.h"
 #include "screenutils.h"
-#include "TradeManager.h"
-#include "UnitManager.h"
-#include "GreatLibrary.h"
+#include "trademanager.h"
+#include "unitmanager.h"
+#include "greatlibrary.h"
 #include "World.h"
 #include "ArmyData.h"
 

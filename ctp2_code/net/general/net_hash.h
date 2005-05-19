@@ -14,7 +14,7 @@
 
 #define k_NET_HASH_TABLE_SIZE 512
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 class NetHash
 {

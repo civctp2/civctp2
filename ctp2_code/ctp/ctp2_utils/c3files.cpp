@@ -13,8 +13,8 @@
 #include "CivPaths.h"
 #include "c3files.h"
 #include "c3errors.h"
-#include "PointerList.h"
-#include "ProfileDB.h"
+#include "pointerlist.h"
+#include "profileDB.h"
 
 
 #include "c3ui.h"

@@ -14,7 +14,7 @@
 #include "pixelutils.h"
 #include "primitives.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "AttractWindow.h"
 

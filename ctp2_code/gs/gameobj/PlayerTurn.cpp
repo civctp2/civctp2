@@ -1,16 +1,16 @@
 
 #include "c3.h"
-#include "Player.h"
+#include "player.h"
 #include "GameEventManager.h"
 #include "controlpanelwindow.h"
 #include "PlayerEvent.h"
 #include "Events.h"
-#include "Player.h"
+#include "player.h"
 #include "GameEventUser.h"
 #include "Wormhole.h"
 #include "PlayHap.h"
 #include "UnitDynArr.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Readiness.h"
 #include "UnitPool.h"
 #include "XY_Coordinates.h"
@@ -24,7 +24,7 @@
 #include "Score.h"
 
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "civapp.h"
 #include "SelItem.h"
 #include "controlpanelwindow.h"
@@ -36,7 +36,7 @@
 #include "MessagePool.h"
 #include "net_strengths.h"
 
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "debugmemory.h"
 
 extern ControlPanelWindow	*g_controlPanel;

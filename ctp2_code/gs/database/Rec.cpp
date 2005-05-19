@@ -13,7 +13,7 @@
 #include "c3.h"
 
 #include "Rec.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 Record::Record()

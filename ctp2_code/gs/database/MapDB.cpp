@@ -4,7 +4,7 @@
 #include "c3errors.h"
 #include "MapDB.h"
 #include "Token.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "StrDB.h"
 #include "MapToken.h"
 

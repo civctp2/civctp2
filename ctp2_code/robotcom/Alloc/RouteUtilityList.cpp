@@ -4,11 +4,11 @@
 
 
 #include "globals.h"
-#include "CivArchive.h"
-#include "BSet.h"
+#include "civarchive.h"
+#include "bset.h"
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 
 #include "CityAgent.h"

@@ -19,7 +19,7 @@
 
 #include <OBJBASE.H>  
 
-#include "ImprovementTypes.h"
+#include "improvementtypes.h"
 
 DEFINE_GUID(CLSID_IC3InstDB, 
     0x08420cc0,

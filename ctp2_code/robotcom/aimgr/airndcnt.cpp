@@ -1,8 +1,8 @@
 
 #include "c3.h"
-#include "AIRndCnt.h"
-#include "CivArchive.h"
-#include "AiMain.h"
+#include "airndcnt.h"
+#include "civarchive.h"
+#include "aimain.h"
 
 
 

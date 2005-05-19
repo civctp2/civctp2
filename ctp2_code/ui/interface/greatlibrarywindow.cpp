@@ -48,7 +48,7 @@
 #include "TerrainImprovementRecord.h"
 
 #include "TerrainRecord.h"
-#include "ConceptDB.h"
+#include "conceptdb.h"
 #include "GovernmentRecord.h"
 #include "prjfile.h"
 
@@ -56,19 +56,19 @@
 
 
 #include "c3ui.h"
-#include "aui_TabGroup.h"
+#include "aui_tabgroup.h"
 #include "directvideo.h"
 #include "CivPaths.h"
 #include "ctp2_hypertextbox.h"
-#include "ctp2_static.h"
-#include "ctp2_window.h"
+#include "ctp2_Static.h"
+#include "ctp2_Window.h"
 
 #include "aui_ldl.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 #include "textutils.h"
 #include "debugwindow.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 #include "UnitRecord.h"
 #include "IconRecord.h"
@@ -78,7 +78,7 @@
 #include "wonderutil.h"
 
 
-#include "Text_Hasher.h"
+#include "text_hasher.h"
 
 
 #include "ResourceRecord.h"

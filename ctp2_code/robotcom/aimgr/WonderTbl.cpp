@@ -7,14 +7,14 @@
 #include "c3.h"  
 #include "WonderTbl.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
-#include "IC3GameState.h"
-#include "IC3Wonder.h"
-#include "IC3Science.h"
+#include "civarchive.h"
+#include "ic3GameState.h"
+#include "ic3Wonder.h"
+#include "ic3Science.h"
 
 
 
-#include "AiMain.h"
+#include "aimain.h"
 #include "WonderBlg.h"
 #include "CityAgent.h"
 

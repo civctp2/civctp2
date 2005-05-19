@@ -1,9 +1,9 @@
 #ifdef _DEBUG
 
 
-#include "DebugAssert.h"
-#include "DebugCallstack.h"
-#include "Breakpoint.h"
+#include "debugassert.h"
+#include "debugcallstack.h"
+#include "breakpoint.h"
 #include "log.h"
 
 

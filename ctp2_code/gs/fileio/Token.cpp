@@ -40,7 +40,7 @@
 
 #include "Token.h"
 #include "ErrMsg.h"
-#include "Globals.h"
+#include "globals.h"
 #include "StrDB.h"
 #ifndef __MAKESPR__
 #include "AdvanceRecord.h"

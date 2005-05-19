@@ -7,14 +7,14 @@
 #include "FliSymTab.h"
 #include "FliFuncTab.h"
 #include "FliRule.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "fliif.h"
 #include "FliAction.h"
 
-#include "IC3GameState.h"
-#include "IC3ErrorReport.h"
-#include "IC3String.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "ic3ErrorReport.h"
+#include "ic3String.h"
+#include "aimain.h"
 
 #define k_INITIAL_SYMTAB_SIZE 64
 double fz_always_one_var=1.0;

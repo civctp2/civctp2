@@ -27,7 +27,7 @@
 
 #include "c3.h"
 
-#include "GrabItem.h"
+#include "grabitem.h"
 
 GrabItem	*g_grabbedItem = NULL;
 

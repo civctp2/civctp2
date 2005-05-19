@@ -26,19 +26,19 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "CivArchive.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "player.h"
 #include "CivilisationDB.h"
 #include "CivilisationPool.h"
 #include "network.h"
 #include "SelItem.h"
 
-#include "AiCause.h"
+#include "aicause.h"
 #include "profileDB.h"
 
 #include "net_player.h"
 #include "AdvanceRecord.h"
-#include "xy_coordinates.h"
+#include "XY_Coordinates.h"
 #include "World.h"
 #include "net_vision.h"
 #include "ctpai.h"

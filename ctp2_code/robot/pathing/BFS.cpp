@@ -1,15 +1,15 @@
 
-#include "C3.h"
+#include "c3.h"
 
 #include "BFS.h"
 
-#include "AstarPnt.h"
+#include "astarpnt.h"
 #include "AVLHeap.h"
 extern AVLHeap g_astar_mem; 
 
 #include "MapPoint.h"
 
-#include "Player.h"
+#include "player.h"
 extern Player **g_player;
 
 #include "Cell.h"
@@ -19,7 +19,7 @@ extern World *g_theWorld;
 
 #include "Unit.h"
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "Happy.h"
 #include "ArmyData.h"
 #include "GovernmentRecord.h"

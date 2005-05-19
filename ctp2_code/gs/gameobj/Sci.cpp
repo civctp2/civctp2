@@ -1,9 +1,9 @@
 #include "c3.h"
 
 #include "Sci.h"
-#include "CivArchive.h"
-#include "CtpAi.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "ctpai.h"
+#include "player.h"
 #include "AgreementMatrix.h"
 #include "Unit.h"
 #include "UnitData.h"

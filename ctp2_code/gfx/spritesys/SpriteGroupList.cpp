@@ -44,7 +44,7 @@
 #include "SpriteGroupList.h"
 
 #include "progresswindow.h"
-#include "strdb.h"
+#include "StrDB.h"
 
 #include "CivPaths.h"
 extern CivPaths			*g_civPaths;

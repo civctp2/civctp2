@@ -11,7 +11,7 @@
 #include "ArmyPool.h"
 
 #include "ctp2_Window.h"
-#include "ctp2_TextField.h"
+#include "ctp2_textfield.h"
 
 #include "World.h"
 #include "Cell.h"
@@ -19,21 +19,21 @@
 #include "UnitRecord.h"
 #include "ctp2_Switch.h"
 #include "SelItem.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
 #include "ctp2_Static.h"
-#include "ctp2_Button.h"
-#include "Player.h"
-#include "AICause.h"
+#include "ctp2_button.h"
+#include "player.h"
+#include "aicause.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #include "StrDB.h"
 
 #include "GameEventUser.h"
 #include "Events.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "network.h"
 

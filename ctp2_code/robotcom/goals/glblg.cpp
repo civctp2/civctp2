@@ -2,22 +2,22 @@
 
 
 #include "c3.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "IMapPointData.h"
 
 
-#include "IC3GameState.h"
-#include "IC3BlgDB.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "ic3BlgDB.h"
+#include "aimain.h"
 
 
 #include "Agent.h"
 #include "CityAgent.h"
 
 
-#include "GlBlg.h"
+#include "glblg.h"
 
-#include "AILOG.h"
+#include "ailog.h"
 
 GoalBuildingFlat::~GoalBuildingFlat()
 { 

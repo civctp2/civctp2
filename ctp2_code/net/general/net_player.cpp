@@ -13,19 +13,19 @@
 #include "net_player.h"
 #include "net_util.h"
 
-#include "Player.h"
+#include "player.h"
 #include "Advances.h"
-#include "BSet.h"
+#include "bset.h"
 #include "MaterialPool.h"
 #include "TaxRate.h"
-#include "DynArr.h"
-#include "BSet.h"
+#include "dynarr.h"
+#include "bset.h"
 #include "network.h"
 #include "Unit.h"
 #include "Score.h"
 
 #include "MainControlPanel.h"
-#include "ControlPanelWindow.h"
+#include "controlpanelwindow.h"
 
 extern Player** g_player;
 

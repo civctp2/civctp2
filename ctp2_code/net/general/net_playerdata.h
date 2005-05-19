@@ -2,9 +2,9 @@
 #ifndef __NET_PLAYERDATA_H__
 #define __NET_PLAYERDATA_H__
 
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "net_hash.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
 class UnitDynamicArray;
 

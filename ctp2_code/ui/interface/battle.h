@@ -6,7 +6,7 @@
 enum COLOR;
 
 #include "dbtypes.h"
-#include "BattleView.h"
+#include "battleview.h"
 
 class Battle {
 public:

@@ -12,8 +12,8 @@
 #define __AUI_BATTLEORDERBOXACTIONS_H__
 
 
-#include "aui_Action.h"
-#include "army.h"
+#include "aui_action.h"
+#include "Army.h"
 
 class BattleOrderBox;
 class aui_Control;

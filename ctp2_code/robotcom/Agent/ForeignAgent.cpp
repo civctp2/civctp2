@@ -5,28 +5,28 @@
 #include "globals.h"
 
 
-#include "IC3GameState.h"
-#include "IC3UnitDB.h"
-#include "AiMain.h"
-#include "IC3Player.h"
-#include "IC3World.h"
+#include "ic3GameState.h"
+#include "ic3UnitDB.h"
+#include "aimain.h"
+#include "ic3player.h"
+#include "ic3world.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "ForeignAgent.h"
 
 
-#include "Goal.h"
+#include "goal.h"
 #include "GlEnslave.h"
-#include "GoalBombard.h"
-#include "GoalRustle.h"
+#include "goalbombard.h"
+#include "goalrustle.h"
 #include "GoalExpel.h"
 #include "GoalSally.h"
 
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "MapPoint.h"
 #include "Foreigner.h"
 

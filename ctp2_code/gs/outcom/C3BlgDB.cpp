@@ -5,12 +5,12 @@
 
 #include "C3BlgDB.h"
 
-#include "Globals.h"
+#include "globals.h"
 #include "C3GameState.h"
 
 
-#include "Player.h"
-#include "CivArchive.h"
+#include "player.h"
+#include "civarchive.h"
 #include "BuildingRecord.h"
 #include "StrDB.h"
 #include "buildingutil.h"

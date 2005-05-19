@@ -2,9 +2,9 @@
 #ifndef __C3DIPREQ_H__
 #define __C3DIPREQ_H__
 
-#include "IC3DipReq.h"
+#include "ic3DipReq.h"
 #include "DiplomaticRequest.h"
-#include "Message.h"
+#include "message.h"
 
 class CivArchive;
 

@@ -16,12 +16,12 @@
 #include "aui_static.h"
 #include "aui_blitter.h"
 #include "c3_hypertipwindow.h"
-#include "aui_HyperTextBox.h"
+#include "aui_hypertextbox.h"
 
 #include "pattern.h"
 #include "pixelutils.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 extern ColorSet *g_colorSet;
 
 

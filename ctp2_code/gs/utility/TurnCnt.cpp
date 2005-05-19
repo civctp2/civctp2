@@ -30,23 +30,23 @@
 #include "c3.h"
 
 
-#include "Director.h"
+#include "director.h"
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "SelItem.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "DB.h"
 #include "AgreementPool.h"
-#include "Pollution.h"
+#include "pollution.h"
 #include "DiplomaticRequestData.h"
 #include "DiplomaticRequestPool.h"
-#include "Player.h"
-#include "ProfileDB.h"
+#include "player.h"
+#include "profileDB.h"
 #include "CivPaths.h"
 #include "DiffDB.h"
 #include "ConstDB.h"
@@ -60,15 +60,15 @@
 
 
 
-#include "Network.h"
+#include "network.h"
 #include "net_action.h"
 #include "net_info.h"
 #include "net_rand.h"
 #include "net_ready.h"
-#include "RadarMap.h"
+#include "radarmap.h"
 
 
-#include "Director.h"
+#include "director.h"
 
 
 #include "messagewin.h"
@@ -82,20 +82,20 @@
 
 #include "SimpleDynArr.h"
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "gamesounds.h"
 
 #include "Barbarians.h"
-#include "GameFile.h"
+#include "gamefile.h"
 
-#include "DebugMemory.h"
+#include "debugmemory.h"
 
 #include "Cell.h"
 #include "XY_Coordinates.h"
 #include "A_Star_Heuristic_Cost.h"
 #include "World.h"
 #include "messagemodal.h"
-#include "AiCause.h"
+#include "aicause.h"
 
 #include "GameSettings.h"
 #include "Score.h"
@@ -103,7 +103,7 @@
 #include "GameEventManager.h"
 
 #include "UnitDynArr.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "UnitData.h"
 #include "UnitRecord.h"
 

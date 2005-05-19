@@ -19,8 +19,8 @@
 #include "aui_ldl.h"
 #include "aui_undo.h"
 #include "aui_region.h"
-#include "GameSounds.h"
-#include "SoundManager.h"
+#include "gamesounds.h"
+#include "soundmanager.h"
 #include "StatusBar.h"
 #include "AttractWindow.h"
 

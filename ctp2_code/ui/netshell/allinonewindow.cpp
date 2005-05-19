@@ -80,7 +80,7 @@
 #include "custommapscreen.h"
 #include "spnewgamediffscreen.h"
 #include "passwordscreen.h"
-#include "profiledb.h"
+#include "profileDB.h"
 #include "agerecord.h"
 
 #include "network.h"
@@ -89,17 +89,17 @@
 
 #include "StrDB.h"
 #include "CivilisationDB.h"
-#include "exclusions.h"
+#include "Exclusions.h"
 
 #include "CivPaths.h"
 #include "gamefile.h"
-#include "CivScenarios.h"
+#include "civscenarios.h"
 
 
 #include "spnewgamewindow.h"
-#include "ctp2_static.h"
+#include "ctp2_Static.h"
 #include "ctp2_spinner.h"
-#include "ctp2_switch.h"
+#include "ctp2_Switch.h"
 
 
 extern CivPaths *g_civPaths;

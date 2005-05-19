@@ -29,55 +29,55 @@
 
 #include "c3.h"
 
-#include "NewTurnCount.h"
+#include "newturncount.h"
 #include "GameEventManager.h"
 
 
 #include "c3errors.h"
 
 
-#include "Director.h"
+#include "director.h"
 
 #include "SlicObject.h"
 #include "SelItem.h"
-#include "Player.h"
+#include "player.h"
 #include "World.h"
 #include "Barbarians.h"
 #include "A_Star_Heuristic_Cost.h"
 #include "SlicSegment.h"
 #include "SlicEngine.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "DiffDB.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
-#include "Pollution.h"
+#include "pollution.h"
 
 
-#include "Network.h"
+#include "network.h"
 #include "net_action.h"
 #include "net_info.h"
 #include "net_rand.h"
 #include "net_ready.h"
 
 #include "ConstDB.h"
-#include "score.h"
+#include "Score.h"
 #include "GameOver.h"
 #include "GameSettings.h"
-#include "MessageModal.h"
+#include "messagemodal.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitRecord.h"
 #include "UnitDynArr.h"
 #include "Readiness.h"
-#include "BuildingUtil.h"
+#include "buildingutil.h"
 
 #include "TurnCnt.h"
 
 #include "radarmap.h"
 
-#include "ControlPanelWindow.h"
+#include "controlpanelwindow.h"
 #include "CriticalMessagesPrefs.h"
-#include "Gold.h"
+#include "gold.h"
 #include "radarwindow.h"
 #include "screenutils.h"
 

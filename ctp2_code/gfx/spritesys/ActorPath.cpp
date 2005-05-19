@@ -18,7 +18,7 @@
 
 #include "Anim.h"
 #include "ActorPath.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "maputils.h"
 
 extern TiledMap			*g_tiledMap;

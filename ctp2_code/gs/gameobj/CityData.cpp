@@ -96,34 +96,34 @@
 #include "ConstDB.h"
 #include "CivilisationDB.h"
 
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "UnitRec.h"
 #include "UnitPool.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 
-#include "Player.h"
+#include "player.h"
 #include "RandGen.h"
 
 #include "network.h"
 #include "net_info.h"
 #include "net_action.h"
 
-#include "CivArchive.h"
-#include "CheckSum.h"
+#include "civarchive.h"
+#include "Checksum.h"
 #include "SelItem.h"
 #include "pixelutils.h"
 #include "WonderRecord.h"
-#include "Pollution.h"
+#include "pollution.h"
 #include "TradeRoute.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Cell.h"
 #include "TileVal.h"
 #include "installationtree.h"
 #include "CivilisationPool.h"
-#include "AICause.h"
-#include "Director.h"
+#include "aicause.h"
+#include "director.h"
 #include "MessagePool.h"
 #include "Advances.h"
 #include "SlicSegment.h"
@@ -135,7 +135,7 @@
 #include "UnoccupiedTiles.h"
 
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "TaxRate.h"
 
 #include "ArmyPool.h"
@@ -146,8 +146,8 @@
 #include "WonderTracker.h"
 #include "MaterialPool.h"
 
-#include "ColorSet.h"
-#include "TiledMap.h"
+#include "colorset.h"
+#include "tiledmap.h"
 
 #include "TradeOffer.h"
 
@@ -157,7 +157,7 @@
 #include "c3window.h"
 #include "statswindow.h"
 
-#include "Order.h"
+#include "order.h"
 
 
 
@@ -167,12 +167,12 @@ extern DifficultyDB *g_theDifficultyDB;
 extern ColorSet *g_colorSet;
 
 #ifdef _DEBUG
-#include "AiCause.h"
+#include "aicause.h"
 #endif
 
 #include "UnitActor.h"
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 extern SoundManager		*g_soundManager;
 
 #include "GameSettings.h"
@@ -198,7 +198,7 @@ extern SoundManager		*g_soundManager;
 #include "SlicEngine.h"
 #include "SlicObject.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 #include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
@@ -214,11 +214,11 @@ extern SoundManager		*g_soundManager;
 #include "AgeCityStyleRecord.h"
 #include "TradePool.h"
 
-#include "GameFile.h"
+#include "gamefile.h"
 
 //Added by Martin Gühmann to handle 
 //city creation by Scenario Editor properly
-#include "ScenarioEditor.h"
+#include "scenarioeditor.h"
 #include "StrategyRecord.h"         // For accessing the strategy database
 #include "Diplomat.h"               // To be able to retrieve the current strategy
 #include <algorithm>                // std::min

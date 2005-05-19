@@ -33,7 +33,7 @@
 #include "Player.h"             // g_player
 #include "ConstDB.h"            // g_theConstDB
 #include "UnitPool.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "SelItem.h"            // g_theSelectedItem
 #include "TurnCnt.h"
 #include "MapPoint.h"
@@ -41,7 +41,7 @@
 #include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld
 #include "BuildingRecord.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "WonderRecord.h"
 #include "HappyTracker.h"
 #include "Diffcly.h"

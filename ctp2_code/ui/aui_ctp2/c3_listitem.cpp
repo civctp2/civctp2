@@ -3,12 +3,12 @@
 #include "c3.h"
 #include "aui.h"
 #include "aui_item.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 #include "aui_ldl.h"
-#include "aui_BitmapFont.h"
+#include "aui_bitmapfont.h"
 
-#include "Pattern.h"
-#include "PatternBase.h"
+#include "pattern.h"
+#include "patternbase.h"
 
 #include "c3_listitem.h"
 #include "c3_static.h"

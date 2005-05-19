@@ -44,8 +44,8 @@
 #include "aui_control.h"
 #include "StrDB.h"
 #include "StatusBar.h"
-#include "aui_ImageList.h"
-#include "aui_Static.h"
+#include "aui_imagelist.h"
+#include "aui_static.h"
 
 
 extern StringDB		*g_theStringDB;

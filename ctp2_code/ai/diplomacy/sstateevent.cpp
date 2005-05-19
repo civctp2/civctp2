@@ -40,16 +40,16 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "AICause.h"
+#include "aicause.h"
 
 #include "Diplomat.h"
-#include "MapAnalysis.h"
-#include "Player.h"
-#include "Governor.h"
+#include "mapanalysis.h"
+#include "player.h"
+#include "governor.h"
 #include "StrategyRecord.h"
-#include "NewTurnCount.h"
+#include "newturncount.h"
 #include "AgreementMatrix.h"
-#include "CtpAi.h"
+#include "ctpai.h"
 
 #include "GovernmentRecord.h"
 #include "wonderutil.h"

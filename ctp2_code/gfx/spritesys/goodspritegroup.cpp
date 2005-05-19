@@ -38,7 +38,7 @@
 #include "GoodSpriteGroup.h"
 #include "FacedSprite.h"
 #include "Sprite.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
 #include "CivPaths.h"
 #include "c3files.h"

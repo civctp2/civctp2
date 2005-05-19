@@ -4,16 +4,16 @@
 #include "globals.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 
-#include "IC3GameState.h"
-#include "IC3Player.h"
-#include "IC3World.h"
-#include "IC3UnitDB.h"
-#include "AiMain.h"
-#include "ScienceAgent.h"
+#include "ic3GameState.h"
+#include "ic3player.h"
+#include "ic3world.h"
+#include "ic3UnitDB.h"
+#include "aimain.h"
+#include "scienceagent.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "MapPoint.h"
 
 
@@ -21,7 +21,7 @@
 #include "GlEnslave.h"
 
 #include "ForeignCity.h"
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
 ForeignCity::ForeignCity() : Agent()
 

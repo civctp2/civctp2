@@ -373,7 +373,7 @@ public:
     void EnqueueBuildFreight(AiMain * ai, 
                const double utility);
 
-#include "CityAgentBlg.h"
+#include "cityagentblg.h"
 
     
     sint32 PretestContructBuilding(AiMain *ai, sint32 building_type);

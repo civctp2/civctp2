@@ -1,7 +1,7 @@
 #include "c3.h"
 #include "RandGen.h"
-#include "CivArchive.h"
-#include "GameFile.h"
+#include "civarchive.h"
+#include "gamefile.h"
 
 
 RandomGenerator::RandomGenerator(sint32 seed)

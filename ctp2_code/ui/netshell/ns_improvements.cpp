@@ -12,7 +12,7 @@
 #include "c3.h"
 
 #include "BuildingRecord.h"
-#include "strdb.h"
+#include "StrDB.h"
 
 #include "aui_stringtable.h"
 

@@ -14,7 +14,7 @@
 #include "aui_ldl.h"
 
 #include "SlicEngine.h"
-#include "CivApp.h"
+#include "civapp.h"
 
 extern BOOL			g_helpMode;
 extern SlicEngine	*g_slicEngine;

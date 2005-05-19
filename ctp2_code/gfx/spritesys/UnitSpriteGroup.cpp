@@ -40,7 +40,7 @@
 
 #include "FacedSprite.h"
 #include "Sprite.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
 #include "CivPaths.h"           // g_civPaths
 #include "c3files.h"
@@ -48,7 +48,7 @@
 #include "SpriteFile.h"
 #include "Anim.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "Token.h"
 

@@ -1,17 +1,17 @@
 
-#include "C3.h"
+#include "c3.h"
 #include "globals.h"
-#include "IC3Player.h"
-#include "IC3UnitDB.h"
+#include "ic3player.h"
+#include "ic3UnitDB.h"
 
 #include "OA_Paradrop.h"
 
 #include "ArmyAgent.h"
-#include "AiMain.h"
+#include "aimain.h"
 
 #include "Foreigner.h"
 #include "ForeignCity.h"
-#include "BSet.h"
+#include "bset.h"
 
 #include "AiMap.h"
 

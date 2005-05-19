@@ -28,28 +28,28 @@
 
 #include "c3.h"
 #include "aui.h"
-#include "aui_Blitter.h"
-#include "aui_DirectSurface.h"
+#include "aui_blitter.h"
+#include "aui_directsurface.h"
 #include "aui_ldl.h"
 #include "aui_window.h"
-#include "aui_StringTable.h"
+#include "aui_stringtable.h"
 
 #include "primitives.h"
-#include "Globals.h"
-#include "Player.h"
+#include "globals.h"
+#include "player.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "SelItem.h"
 
-#include "Director.h"
+#include "director.h"
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "BaseTile.h"
 #include "TileInfo.h"
-#include "TileSet.h"
-#include "ColorSet.h"
+#include "tileset.h"
+#include "colorset.h"
 
-#include "ResourceMap.h"
+#include "resourcemap.h"
 #include "Unit.h"
 #include "UnitPool.h"
 
@@ -65,12 +65,12 @@
 #include "c3ui.h"
 #include "GoodActor.h"
 
-#include "CityData.h"
+#include "citydata.h"
 #include "textutils.h"
 
 #include "maputils.h"
 #include "SlicEngine.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 
 #include "CityRadius.h"

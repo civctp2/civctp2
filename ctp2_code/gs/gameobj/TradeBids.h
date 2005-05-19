@@ -3,7 +3,7 @@
 #define __TRADE_BIDS_H__
 
 #include "Unit.h"
-#include "Message.h"
+#include "message.h"
 
 class CivArchive;
 template <class T> class PointerList;

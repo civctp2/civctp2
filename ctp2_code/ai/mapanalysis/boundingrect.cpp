@@ -28,7 +28,7 @@
 
 #include "c3.h"
 
-#include "BoundingRect.h"
+#include "boundingrect.h"
 
 
 void BoundingRect::Initialize(const MapPoint & xy_center,

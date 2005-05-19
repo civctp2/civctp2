@@ -30,8 +30,8 @@
 #include "Advances.h"
 #include "AdvanceRecord.h"
 
-#include "CivArchive.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "player.h"
 #include "WonderRecord.h"
 #include "AgeRecord.h"
 #include "StrDB.h"
@@ -45,18 +45,18 @@
 #include "Civilisation.h"
 
 
-#include "AiCause.h"
+#include "aicause.h"
 #include "SelItem.h"
 
 #include "UnitActor.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 #include "Unit.h"
 #include "Sci.h"
-#include "Gold.h"
+#include "gold.h"
 
 #include "DiffDB.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "ConstDB.h"
 #include "RandGen.h"
 #include "statswindow.h"

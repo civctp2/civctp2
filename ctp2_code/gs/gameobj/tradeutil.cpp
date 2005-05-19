@@ -34,11 +34,11 @@
 #include "World.h"
 #include "ResourceRecord.h"
 #include "Unit.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "TradeAstar.h"
 #include "Path.h"
 #include "AgreementMatrix.h"
-#include "constdb.h"
+#include "ConstDB.h"
 
 extern TradeAstar g_theTradeAstar; 
 

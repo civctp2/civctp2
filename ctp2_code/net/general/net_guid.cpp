@@ -4,7 +4,7 @@
 #include "net_guid.h"
 #include "net_util.h"
 #include "network.h"
-#include "Player.h"
+#include "player.h"
 
 extern Player **g_player;
 

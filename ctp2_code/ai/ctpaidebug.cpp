@@ -12,7 +12,7 @@
 
 #include "c3.h"
 
-#include "CtpAiDebug.h"
+#include "ctpaidebug.h"
 #include "Army.h"
 
 #ifdef _PLAYTEST

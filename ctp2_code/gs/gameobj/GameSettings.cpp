@@ -27,11 +27,11 @@
 
 #include "c3.h"
 #include "GameSettings.h"
-#include "ProfileDB.h"
-#include "CivArchive.h"
+#include "profileDB.h"
+#include "civarchive.h"
 #include "network.h"
-#include "Player.h"
-#include "endgame.h"
+#include "player.h"
+#include "EndGame.h"
 
 extern ProfileDB *g_theProfileDB;
 extern Player **g_player;

@@ -32,16 +32,16 @@
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 #include "aui_static.h"
 #include "aui_hypertextbox.h"
 
-#include "c3_Static.h"
-#include "Thermometer.h"
+#include "c3_static.h"
+#include "thermometer.h"
 
 
 #include "textbutton.h"
-#include "c3_Button.h"
+#include "c3_button.h"
 
 
 #include "c3textfield.h"
@@ -61,20 +61,20 @@
 
 
 
-#include "Player.h"
+#include "player.h"
 #include "UnitRec.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "StrDB.h"
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "TerrainRecord.h"
 
-#include "uiutils.h"
+#include "UIUtils.h"
 
 #include "network.h"
 
@@ -85,13 +85,13 @@
 
 #include "gameinit.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 
-#include "civilisationpool.h"
+#include "CivilisationPool.h"
 
-#include "CivScenarios.h"
-#include "GameFile.h"
+#include "civscenarios.h"
+#include "gamefile.h"
 
 extern C3UI			*g_c3ui;
 extern Player **g_player;

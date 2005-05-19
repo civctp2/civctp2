@@ -52,7 +52,7 @@
 
 #include "civ3_main.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 
-#include "spWindow.h"
+#include "spwindow.h"
 

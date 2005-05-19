@@ -52,7 +52,7 @@
 
 
 #include "Diplomat.h"
-#include "MapGrid.h"
+#include "mapgrid.h"
 #include "Path.h"
 
 class CityData;

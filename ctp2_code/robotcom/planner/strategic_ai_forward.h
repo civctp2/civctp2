@@ -80,13 +80,13 @@ template <class T> class semi_dynamic_array;
 #include "unitflow.h"
 
 
-#include "AIP.h"
+#include "aip.h"
 
 
 #include "squad.h"
 
 
-#include "Goal.h"
+#include "goal.h"
 
 
 #include "Plan.h"
@@ -95,9 +95,9 @@ template <class T> class semi_dynamic_array;
 #include "Scheduler.h"
 
 
-#include "Planner.h"
+#include "planner.h"
 
 
-#include "AILog.h"
+#include "ailog.h"
 
 #endif

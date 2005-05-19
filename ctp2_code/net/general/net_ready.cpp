@@ -11,7 +11,7 @@
 #include "c3.h"
 #include "Readiness.h"
 #include "net_ready.h"
-#include "Player.h"
+#include "player.h"
 #include "net_util.h"
 
 extern Player **g_player;

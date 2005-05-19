@@ -369,13 +369,13 @@
 #include "c3types.h"
 #include "c3errors.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
-#include "IC3World.h"
-#include "IC3Player.h"
-#include "IC3UnitDB.h"
+#include "civarchive.h"
+#include "ic3world.h"
+#include "ic3player.h"
+#include "ic3UnitDB.h"
 
 
-#include "AiMain.h"
+#include "aimain.h"
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 #include "InstBidList.h"
@@ -388,29 +388,29 @@
 
 #include "Agent.h"
 #include "unitflow.h"
-#include "AIP.h"
+#include "aip.h"
 #include "squad.h"
 
 #include "dr_debug.h"
 
-#include "AI_Match.h"
+#include "ai_match.h"
 
-#include "AILog.h"
+#include "ailog.h"
 
 
-#include "Goal.h"
+#include "goal.h"
 #include "ArmyGoal.h"
 #include "GlAttck.h"
 
 #include "Scheduler.h"
-#include "Planner.h"
-#include "Squad_Strength.h"
+#include "planner.h"
+#include "squad_strength.h"
 #include "AiMap.h"
-#include "cont.h"
+#include "Cont.h"
 
 
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 #define RALLY_SUCCESSFUL_RATIO (0.7)
 

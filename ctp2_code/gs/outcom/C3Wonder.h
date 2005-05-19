@@ -14,7 +14,7 @@
 #ifndef __C3Wonder_H__
 #define __C3Wonder_H__ 1
 
-#include "IC3Wonder.h"
+#include "ic3Wonder.h"
 
 #define PLAYER_INDEX_INVALID	32
 

@@ -3,12 +3,12 @@
 #include "c3.h"
 #include "fliif.h"
 #include "FliSymbol.h"
-#include "CivArchive.h"
-#include "DynArr.h"
+#include "civarchive.h"
+#include "dynarr.h"
 #include "FliOutputProc.h"
 #include "FliEngine.h"
 #include "FliSetFunc.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "FliRule.h"
 
 FliSymbol::FliSymbol(char *name, double *internal, double initvalue, FLI_SYM type)

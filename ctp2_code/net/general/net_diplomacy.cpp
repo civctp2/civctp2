@@ -6,10 +6,10 @@
 #include "net_packet.h"
 #include "net_info.h"
 #include "net_util.h"
-#include "Player.h"
+#include "player.h"
 #include "SelItem.h"
 #include "Diplomat.h"
-#include "DiplomatTypes.h"
+#include "diplomattypes.h"
 #include "GameEventManager.h"
 #include "AgreementMatrix.h"
 

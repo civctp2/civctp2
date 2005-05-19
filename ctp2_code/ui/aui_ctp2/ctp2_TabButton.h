@@ -10,7 +10,7 @@
 #define CTP2_TAB_BUTTON_H__
 
 
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 
 
 class ctp2_TabGroup;

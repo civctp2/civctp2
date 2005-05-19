@@ -3,7 +3,7 @@
 
 
 #include "geom2d.h"
-#include "delaunay.h"
+#include "Delaunay.h"
 
 
 #include "Memory_Manager.h"

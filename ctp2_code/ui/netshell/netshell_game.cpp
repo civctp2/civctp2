@@ -25,7 +25,7 @@
 #include "civapp.h"
 
 #include "netshell_game.h"
-#include "CivScenarios.h"
+#include "civscenarios.h"
 extern CivScenarios *g_civScenarios;
 
 extern CivApp *g_civApp;

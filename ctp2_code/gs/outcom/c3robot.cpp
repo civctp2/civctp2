@@ -13,7 +13,7 @@
 #define INITGUID
 #include "c3.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "aui.h"
 #include "debugwindow.h"
@@ -23,26 +23,26 @@ extern DebugWindow *g_debugWindow;
 #include "ConstDB.h"
 extern ConstDB *g_theConstDB;
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "SelItem.h"
 extern SelectedItem *g_selected_item; 
 
 #include "TurnCnt.h"
 extern TurnCount *g_turn; 
 
-#include "BSet.h"
-#include "Player.h"
+#include "bset.h"
+#include "player.h"
 #include "Unit.h"
 
 #include <objbase.h>
 #include "IRobot.h"
 #include "C3GameState.h"
 
-#include "AiCause.h"
+#include "aicause.h"
 
 #include "IMapGen.h"
-#include "IC3BlgDB.h"
-#include "IC3Rand.h"
+#include "ic3BlgDB.h"
+#include "ic3Rand.h"
 
 #include "C3UnitDB.h"
 #include "C3BlgDB.h"
@@ -59,20 +59,20 @@ extern TurnCount *g_turn;
 #include "C3Wonder.h"
 #include "C3Population.h"
 #include "RobotAstar.h"
-#include "C3EndGameDB.h"
+#include "c3endgamedb.h"
 
-#include "aui_Surface.h"
+#include "aui_surface.h"
 
 #include "maputils.h"
 #include "primitives.h"
 
-#include "TileSet.h"
+#include "tileset.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "IC3DipReq.h"
+#include "ic3DipReq.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "C3Trade.h"
 #include "TradeOffer.h"
@@ -84,15 +84,15 @@ extern TurnCount *g_turn;
 #include "UnitDynArr.h"
 #include "UnitData.h"
 
-#include "TiledMap.h"
-#include "RadarMap.h"
+#include "tiledmap.h"
+#include "radarmap.h"
 
 #include "Civilisation.h"
 
-#include "DebugMemory.h"
-#include "Log.h"
-#include "DebugCallstack.h"
-#include "Player.h"
+#include "debugmemory.h"
+#include "log.h"
+#include "debugcallstack.h"
+#include "player.h"
 
 extern World *g_theWorld; 
 extern ProfileDB *g_theProfileDB;
@@ -100,17 +100,17 @@ extern Player **g_player;
 extern TiledMap		*g_tiledMap;
 extern RadarMap		*g_radarMap;
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 extern TiledMap *g_tiledMap; 
 
-#include "ChatBox.h"
+#include "chatbox.h"
 extern ChatBox  *g_chatBox;
 
 #include "network.h"
 #include "net_info.h"
 #include "net_action.h"
-#include "Order.h"
-#include "Director.h"
+#include "order.h"
+#include "director.h"
 
 #include "AdvanceRecord.h"
 #include "UnitRecord.h"
@@ -1562,7 +1562,7 @@ BOOL RobotInterface::IsComLoaded(const sint32 p) const
 	return FALSE;
 }
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 extern ProfileDB *g_theProfileDB; 
 extern RobotInterface *g_robot_interface; 
 

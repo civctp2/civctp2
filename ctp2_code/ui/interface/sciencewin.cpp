@@ -29,7 +29,7 @@
 
 
 #include "aui.h"
-#include "aui_DirectSurface.h"
+#include "aui_directsurface.h"
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
@@ -40,29 +40,29 @@
 
 #include "c3dropdown.h"
 #include "aui_listbox.h"
-#include "c3_ListBox.h"
-#include "C3DropDown.h"
+#include "c3_listbox.h"
+#include "c3dropdown.h"
 
-#include "ControlSheet.h"
-#include "StaticTextBox.h"
-#include "c3_HyperTextBox.h"
+#include "controlsheet.h"
+#include "statictextbox.h"
+#include "c3_hypertextbox.h"
 
 #include "pixelutils.h"
-#include "c3_Switch.h"
+#include "c3_switch.h"
 #include "colorset.h"
 #include "tileset.h"
 #include "c3_icon.h"
 
-#include "C3Slider.h"
-#include "Thermometer.h"
+#include "c3slider.h"
+#include "thermometer.h"
 
 
 #include "textbutton.h"
 #include "textswitch.h"
 #include "aui_switchgroup.h"
 #include "picturebutton.h"
-#include "aui_Button.h"
-#include "c3_Button.h"
+#include "aui_button.h"
+#include "c3_button.h"
 #include "ctp2_button.h"
 
 #include "aui_listbox.h"
@@ -73,23 +73,23 @@
 #include "WonderRecord.h"
 #include "Unit.h"
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "Advances.h"
-#include "Globals.h"
+#include "globals.h"
 #include "AdvanceRecord.h"
 
-#include "Player.h"
+#include "player.h"
 #include "Readiness.h"
 #include "SelItem.h"
 #include "ObjPool.h"
 
 #include "debugwindow.h"
 
-#include "unitdata.h"
-#include "Player.h"
+#include "UnitData.h"
+#include "player.h"
 #include "PlayHap.h"
 #include "SelItem.h"
-#include "sci.h"
+#include "Sci.h"
 
 #include "chart.h"
 
@@ -104,7 +104,7 @@
 
 #include "c3window.h"
 
-#include "uiutils.h"
+#include "UIUtils.h"
 #include "screenutils.h"
 
 #include "sciencewin.h"

@@ -4,7 +4,7 @@
 #include "net_research.h"
 #include "net_util.h"
 #include "Advances.h"
-#include "Player.h"
+#include "player.h"
 
 extern Player **g_player;
 

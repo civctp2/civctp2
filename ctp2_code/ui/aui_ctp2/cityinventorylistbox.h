@@ -12,7 +12,7 @@
 #ifndef __CITYINVENTORYLISTBOX_H__
 #define __CITYINVENTORYLISTBOX_H__
 
-#include "C3ListBox.h"
+#include "c3listbox.h"
 
 class Unit;
 

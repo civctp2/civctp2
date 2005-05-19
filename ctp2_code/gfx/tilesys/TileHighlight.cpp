@@ -34,7 +34,7 @@
 #include "c3.h"
 #include "aui.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "SelItem.h"
 #include "MapPoint.h"
 #include "Path.h"
@@ -43,16 +43,16 @@
 #include "ID.h"
 #include "Army.h"
 #include "order.h"
-#include "CellUnitList.h"
-#include "Player.h"
+#include "cellunitlist.h"
+#include "player.h"
 
-#include "aui_Surface.h"
+#include "aui_surface.h"
 
 #include "maputils.h"
 #include "primitives.h"
-#include "TiledMap.h"
-#include "ColorSet.h"
-#include "Director.h"
+#include "tiledmap.h"
+#include "colorset.h"
+#include "director.h"
 
 #include "buttonbank.h"
 
@@ -93,7 +93,7 @@ extern ORDERMODE		g_orderModeOrder;
 
 #include "TerrainRecord.h"
 
-#include "ControlPanelWindow.h"
+#include "controlpanelwindow.h"
 #include "OrderRecord.h"
 
 

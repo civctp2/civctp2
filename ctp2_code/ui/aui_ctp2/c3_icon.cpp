@@ -2,18 +2,18 @@
 
 #include "c3.h"
 #include "aui.h"
-#include "aui_Ldl.h"
+#include "aui_ldl.h"
 #include "aui_ui.h"
-#include "aui_Window.h"
+#include "aui_window.h"
 
 #include "tiledmap.h"
 #include "tileset.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "c3_icon.h"
-#include "PatternBase.h"
-#include "Pattern.h"
+#include "patternbase.h"
+#include "pattern.h"
 
 #include "primitives.h"
 

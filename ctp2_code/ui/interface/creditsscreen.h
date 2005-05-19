@@ -14,7 +14,7 @@
 #define _BMH_CREDITS_SCREEN_H_
 
 
-#include "C3Window.h"
+#include "c3window.h"
 
 
 class aui_Control;

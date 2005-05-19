@@ -4,7 +4,7 @@
 #ifndef __AGENT_H__
 #define __AGENT_H__ 1
 
-#include "BSet.h"
+#include "bset.h"
 
 
 
@@ -19,12 +19,12 @@
 
 #include "dr_debug.h"
 
-#include "AILog.h"
+#include "ailog.h"
 
 
 
 
-#include "Strategic_AI_Forward.h"
+#include "strategic_ai_forward.h"
 
 enum AGENT_TYPE { 
     AGENT_TYPE_UNKNOWN,

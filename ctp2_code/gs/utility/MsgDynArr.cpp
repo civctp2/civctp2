@@ -10,8 +10,8 @@
 
 
 #include "c3.h"
-#include "Globals.h"
-#include "Player.h"
+#include "globals.h"
+#include "player.h"
 #include "Unit.h"
 #include "MessageData.h"
 #include "MsgDynArr.h"

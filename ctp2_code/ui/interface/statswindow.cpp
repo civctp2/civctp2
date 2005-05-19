@@ -32,14 +32,14 @@
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "c3ui.h"
-#include "aui_StringTable.h"
+#include "aui_stringtable.h"
 
 #include "pixelutils.h"
 #include "primitives.h"
 
 
-#include "c3_Button.h"
-#include "ctp2_Button.h"
+#include "c3_button.h"
+#include "ctp2_button.h"
 
 
 #include "c3_static.h"
@@ -52,19 +52,19 @@
 #include "c3windows.h"
 
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 #include "statswindow.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "SelItem.h"
-#include "Player.h"
-#include "unitdynarr.h"
+#include "player.h"
+#include "UnitDynArr.h"
 
 #include "screenutils.h"
 
-#include "uiutils.h"
+#include "UIUtils.h"
 #include "bevellesswindow.h"
 
 #include "network.h"

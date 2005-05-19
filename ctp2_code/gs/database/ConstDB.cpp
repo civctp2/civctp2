@@ -31,11 +31,11 @@
 #include "c3.h"
 
 #include "Token.h"
-#include "CivArchive.h"
-#include "Pollution.h"
+#include "civarchive.h"
+#include "pollution.h"
 #include "ConstDB.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 
 extern ConstDB *g_theConstDB; 
 

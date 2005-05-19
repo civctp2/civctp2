@@ -18,11 +18,11 @@
 #include "aui_surface.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
-#include "c3_Ranger.h"
+#include "c3_ranger.h"
 #include "pattern.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "primitives.h"
 
 #include "c3listbox.h"

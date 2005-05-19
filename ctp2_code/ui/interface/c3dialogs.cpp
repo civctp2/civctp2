@@ -5,7 +5,7 @@
 #include "c3_utilitydialogbox.h"
 #include "c3dialogs.h"
 
-#include "Player.h"
+#include "player.h"
 
 extern Player **g_player;
 

@@ -9,15 +9,15 @@
 #include "c3ui.h"
 
 
-#include "aui_Static.h"
-#include "c3_Static.h"
+#include "aui_static.h"
+#include "c3_static.h"
 
 
 #include "c3window.h"
 #include "c3windows.h"
 
 #include "bevellesswindow.h"
-#include "RadarWindow.h"
+#include "radarwindow.h"
 #include "statswindow.h"
 #include "controlpanelwindow.h"
 

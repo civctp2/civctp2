@@ -42,7 +42,7 @@
 #include "TurnCnt.h"
 
 #include "Civilisation.h"
-#include "Player.h"
+#include "player.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitPool.h"
@@ -52,7 +52,7 @@
 #include "RandGen.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "stringutils.h"
 #include "BuildingRecord.h"

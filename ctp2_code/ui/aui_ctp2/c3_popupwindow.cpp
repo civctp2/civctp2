@@ -13,9 +13,9 @@
 #include "c3window.h"
 #include "c3_static.h"
 #include "c3_button.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 
-#include "uiutils.h"
+#include "UIUtils.h"
 
 #include "c3_popupwindow.h"
 #include "keypress.h"

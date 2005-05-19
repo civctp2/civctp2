@@ -1,9 +1,9 @@
 
-#include "C3.h"
+#include "c3.h"
 
 #include "globals.h"
-#include "IC3Player.h"
-#include "AiMain.h"
+#include "ic3player.h"
+#include "aimain.h"
 
 #include "CityAgent.h"
 #include "OA_NoTrade.h"

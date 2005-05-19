@@ -17,7 +17,7 @@
 #define __TEXTUTILS_H
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 class aui_DirectSurface;
 

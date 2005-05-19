@@ -45,9 +45,9 @@
 
 //Added by Martin Gühmann
 #include "ctp2_spinner.h"
-#include "ctp2_static.h"
+#include "ctp2_Static.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 extern ColorSet			*g_colorSet;
 
 

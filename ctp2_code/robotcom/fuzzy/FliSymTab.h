@@ -9,7 +9,7 @@
 
 #include "StringHash.h"
 #include "FliSymbol.h"
-#include "Fliif.h"
+#include "fliif.h"
 
 class FliSymTab : public StringHash<FliSymbol>
 {

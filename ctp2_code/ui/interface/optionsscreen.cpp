@@ -62,17 +62,17 @@
 #include "optionswindow.h"
 
 #include "gamesounds.h"
-#include "gamesettings.h"
+#include "GameSettings.h"
 
 #include "keypress.h"
 #include "TurnCnt.h"
 
-#include "ScenarioEditor.h"
+#include "scenarioeditor.h"
 #include "scorewarn.h"
 
 #include "MessageBoxDialog.h"
 #include "StrDB.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 extern C3UI					*g_c3ui;
 extern c3_PopupWindow		*g_scorewarn;

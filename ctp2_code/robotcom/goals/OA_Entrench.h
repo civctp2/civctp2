@@ -4,7 +4,7 @@
 #ifndef __OA_ENTRENCH__
 #define __OA_ENTRENCH__ 1
 
-#include "OA.h"
+#include "Oa.h"
 
 class Opportunity_Action_Entrench : public Opportunity_Action { 
 

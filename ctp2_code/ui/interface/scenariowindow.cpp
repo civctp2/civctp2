@@ -11,9 +11,9 @@
 #include "aui_textfield.h"
 #include "aui_stringtable.h"
 #include "c3ui.h"
-#include "ctp2_window.h"
-#include "ctp2_Button.h"
-#include "ctp2_static.h"
+#include "ctp2_Window.h"
+#include "ctp2_button.h"
+#include "ctp2_Static.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
 #include "ctp2_dropdown.h"
@@ -22,19 +22,19 @@
 
 #include "StrDB.h"
 #include "CivilisationDB.h"
-#include "civilisationpool.h"
+#include "CivilisationPool.h"
 
-#include "CivScenarios.h"
+#include "civscenarios.h"
 
 #include "spnewgamewindow.h"
-#include "ScenarioWindow.h"
+#include "scenariowindow.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "loadsavewindow.h"
-#include "ScenarioEditor.h"
+#include "scenarioeditor.h"
 
-#include "CivApp.h"
+#include "civapp.h"
 
 extern StringDB						*g_theStringDB;
 extern CivilisationDatabase			*g_theCivilisationDB;

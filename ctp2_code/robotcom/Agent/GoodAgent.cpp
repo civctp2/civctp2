@@ -1,14 +1,14 @@
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "GoodAgent.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 #include "MapPoint.h"
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 
 

@@ -45,7 +45,7 @@
 #include "patternbase.h"
 #include "Unit.h"
 #include "pixeltypes.h"
-#include "profiledb.h"
+#include "profileDB.h"
 
 
 enum C3_RADAR_ACTION {

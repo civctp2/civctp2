@@ -14,7 +14,7 @@
 #ifndef __C3UnitDB_H__
 #define __C3UnitDB_H__ 1
 
-#include "IC3UnitDB.h"
+#include "ic3UnitDB.h"
 
 class Player; 
 class CivArchive; 

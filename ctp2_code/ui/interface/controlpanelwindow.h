@@ -32,7 +32,7 @@
 #include "c3_button.h"
 #include "buttonbank.h"
 #include "aui_stringtable.h"
-#include "unit.h"
+#include "Unit.h"
 
 #include "SelItem.h"
 

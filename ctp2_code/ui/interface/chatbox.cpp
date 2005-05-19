@@ -39,23 +39,23 @@
 #include "c3ui.h"
 #include "background.h"
 #include "c3_hypertextbox.h"
-#include "C3TextField.h"
-#include "TiledMap.h"
+#include "c3textfield.h"
+#include "tiledmap.h"
 
-#include "ChatBox.h"
+#include "chatbox.h"
 
-#include "Network.h"
+#include "network.h"
 
 #include "SelItem.h"
 
-#include "NewTurnCount.h"
+#include "newturncount.h"
 #include "TurnCnt.h"
-#include "CivApp.h"
-#include "ControlPanelWindow.h"
-#include "Director.h"
-#include "RadarMap.h"
+#include "civapp.h"
+#include "controlpanelwindow.h"
+#include "director.h"
+#include "radarmap.h"
 #include "Civilisation.h"
-#include "Player.h"
+#include "player.h"
 #include "SlicEngine.h"
 
 #include "radarwindow.h"
@@ -80,11 +80,11 @@ extern Player		**g_player;
 #include "soundmanager.h"
 extern SoundManager	*g_soundManager;
 
-#include "xy_coordinates.h"
-#include "world.h"
+#include "XY_Coordinates.h"
+#include "World.h"
 extern World		*g_theWorld;
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 extern TiledMap		*g_tiledMap;
 
 #include "gfx_options.h"

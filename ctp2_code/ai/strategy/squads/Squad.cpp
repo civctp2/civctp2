@@ -14,9 +14,9 @@
 
 #include "c3.h"
 
-#include "Squad.h"
+#include "squad.h"
 #include "Agent.h"
-#include "CTPAgent.h"
+#include "ctpagent.h"
 #include "Plan.h"
 
 #ifdef _DEBUG
@@ -26,8 +26,8 @@
 using namespace std;
 
 
-#include "DebugAssert.h"
-#include "CtpAiDebug.h"
+#include "debugassert.h"
+#include "ctpaidebug.h"
 
 
 

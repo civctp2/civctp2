@@ -56,7 +56,7 @@
 #include "SlicConditional.h"
 #include "GameEventManager.h"
 #include "SlicArray.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 
 //Added by Martin Gühmann for database access

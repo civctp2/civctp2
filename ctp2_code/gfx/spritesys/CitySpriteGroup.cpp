@@ -32,7 +32,7 @@
 
 #include "aui_directsurface.h"
 #include "primitives.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
 #include "CitySpriteGroup.h"
 #include "FacedSprite.h"

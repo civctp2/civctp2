@@ -55,8 +55,8 @@
 
 #include "pixelutils.h"
 #include "tileutils.h"
-#include "TileSet.h"
-#include "ColorSet.h"
+#include "tileset.h"
+#include "colorset.h"
 #include "World.h"
 
 #define k_MEDIUM_KEY	0x4208

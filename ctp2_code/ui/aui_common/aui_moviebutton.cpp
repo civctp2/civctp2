@@ -20,7 +20,7 @@
 #include "c3ui.h"
 extern C3UI			*g_c3ui;
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 extern ProfileDB	*g_theProfileDB;
 
 

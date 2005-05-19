@@ -6,7 +6,7 @@
 
 
 
-#include "Strategic_AI_Forward.h"
+#include "strategic_ai_forward.h"
 
 
 
@@ -17,8 +17,8 @@
 
 
 
-#include "Unitflow.h"
-#include "Goal.h"
+#include "unitflow.h"
+#include "goal.h"
 
 
 enum GOAL_TYPE; 

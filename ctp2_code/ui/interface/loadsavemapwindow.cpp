@@ -15,25 +15,25 @@
 #include "aui_directsurface.h"
 
 #include "c3ui.h"
-#include "c3_Button.h"
+#include "c3_button.h"
 #include "c3_static.h"
-#include "c3_ListBox.h"
+#include "c3_listbox.h"
 #include "c3_listitem.h"
 #include "c3_dropdown.h"
-#include "c3TextField.h"
-#include "TextTab.h"
-#include "PointerList.h"
+#include "c3textfield.h"
+#include "texttab.h"
+#include "pointerlist.h"
 
 #include "StrDB.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "spnewgamewindow.h" 
-#include "loadSaveMapWindow.h"
+#include "loadsavemapwindow.h"
 
 #include "pixelutils.h"
 
 
-#include "RadarMap.h"
+#include "radarmap.h"
 
 extern C3UI							*g_c3ui;
 extern StringDB						*g_theStringDB;

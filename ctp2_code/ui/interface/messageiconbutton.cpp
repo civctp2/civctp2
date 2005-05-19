@@ -16,7 +16,7 @@
 #include "aui_window.h"
 #include "aui_blitter.h"
 
-#include "aui_Button.h"
+#include "aui_button.h"
 #include "messageiconbutton.h"
 
 #include "c3ui.h"

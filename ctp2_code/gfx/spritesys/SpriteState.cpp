@@ -1,7 +1,7 @@
 #include "c3.h"
 
 #include "SpriteState.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 

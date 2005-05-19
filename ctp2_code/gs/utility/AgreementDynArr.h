@@ -17,7 +17,7 @@
 #define __AGREEMENT_DYNAMIC_ARRAY_H__
 
 #include "Agreement.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
 
 class AgreementDynamicArray : public DynamicArray<Agreement> {

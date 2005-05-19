@@ -9,7 +9,7 @@
 
 
 #include "c3.h"
-#include "DebugMemory.h"
+#include "debugmemory.h"
 #include "c3debug.h"
 
 sint32 g_check_mem; 

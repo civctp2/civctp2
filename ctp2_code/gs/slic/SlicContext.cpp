@@ -35,8 +35,8 @@
 #include "Civilisation.h"
 #include "Advances.h"
 #include "SlicFrame.h"
-#include "Player.h"
-#include "CivArchive.h"
+#include "player.h"
+#include "civarchive.h"
 #include "Agreement.h"
 #include "TradeOffer.h"
 #include "GameEventArgList.h"
@@ -46,8 +46,8 @@
 #include "SlicArray.h"
 #include "SlicSymbol.h"
 #include "SimpleDynArr.h"
-#include "Order.h"
-#include "DiplomatTypes.h"
+#include "order.h"
+#include "diplomattypes.h"
 
 SlicContext::SlicContext()
 {

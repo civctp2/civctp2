@@ -1,12 +1,12 @@
 #include "c3.h"
 
 #include "MapPoint.h"
-#include "IC3InstDB.h"
-#include "CivArchive.h"
+#include "ic3InstDB.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 
 #include "CityAgent.h"

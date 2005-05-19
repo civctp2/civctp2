@@ -15,7 +15,7 @@
 #include "Token.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "c3errors.h"
 #include "c3files.h"

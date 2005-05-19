@@ -39,7 +39,7 @@
 #include "aui_stringtable.h"
 #include "c3ui.h"
 #include "c3window.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "c3_switch.h"
 #include "c3_static.h"
 #include "c3_checkbox.h"
@@ -48,17 +48,17 @@
 #include "StrDB.h"
 #include "profileDB.h"
 #include "CivilisationDB.h"
-#include "civilisationpool.h"
-#include "c3TextField.h"
+#include "CivilisationPool.h"
+#include "c3textfield.h"
 
 #include "spnewgametribescreen.h"
 #include "spnewgamemapsizescreen.h"
 #include "loadsavemapwindow.h"
 #include "spnewgamewindow.h"
 
-#include "CivScenarios.h"
+#include "civscenarios.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 extern ProfileDB					*g_theProfileDB;
 extern StringDB						*g_theStringDB;

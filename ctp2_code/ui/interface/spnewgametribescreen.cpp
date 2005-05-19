@@ -43,16 +43,16 @@
 #include "c3_static.h"
 #include "c3slider.h"
 #include "c3ui.h"
-#include "aui_Radio.h"
+#include "aui_radio.h"
 #include "c3textfield.h"
 #include "textradio.h"
-#include "aui_SwitchGroup.h"
+#include "aui_switchgroup.h"
 #include "aui_uniqueid.h"
 
 #include "Civilisation.h"
 #include "CivilisationDB.h"
 #include "StrDB.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "player.h"
 
@@ -60,7 +60,7 @@
 #include "keypress.h"
 #include "SelItem.h"
 
-#include "GameFile.h"
+#include "gamefile.h"
 
 #include <vector>           // std::vector
 

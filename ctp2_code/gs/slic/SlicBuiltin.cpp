@@ -56,7 +56,7 @@
 #include "SelItem.h"
 
 #include "Army.h"
-#include "Player.h"
+#include "player.h"
 #include "UnitDynArr.h"
 #include "UnitRecord.h"
 #include "TerrImprove.h"
@@ -69,7 +69,7 @@
 #include "AdvanceRecord.h"
 #include "ResourceRecord.h"
 
-#include "turnyearstatus.h"
+#include "TurnYearStatus.h"
 
 #include "citydata.h"
 #include "CityControlPanel.h"

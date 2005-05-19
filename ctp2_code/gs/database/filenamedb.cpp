@@ -9,8 +9,8 @@
 
 #include "c3.h"
 
-#include "FilenameDB.h"
-#include "CivArchive.h"
+#include "filenamedb.h"
+#include "civarchive.h"
 
 #include "Token.h"
 #include "c3files.h"

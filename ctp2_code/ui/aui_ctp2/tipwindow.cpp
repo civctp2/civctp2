@@ -20,7 +20,7 @@
 
 #include "primitives.h"
 #include "textutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "tipwindow.h"
 

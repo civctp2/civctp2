@@ -12,7 +12,7 @@
 
 #include "ObjPool.h"
 
-#include "Message.h"
+#include "message.h"
 
 typedef sint32 MESSAGE_TYPE ;
 

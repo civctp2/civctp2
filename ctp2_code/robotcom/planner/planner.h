@@ -16,8 +16,8 @@ class Strategic_Map;
 template <class DATA_TYPE> class list_array;
 template <class DATA_TYPE, class KEY_TYPE> class sorted_array;
 
-#include "AIP.h"
-#include "Strategic_AI_Forward.h"
+#include "aip.h"
+#include "strategic_ai_forward.h"
 
 
 #define NO_SQUAD -1

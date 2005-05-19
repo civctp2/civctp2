@@ -31,8 +31,8 @@
 #include "tileutils.h"
 #include "TileInfo.h"
 #include "GoodActor.h"
-#include "CivArchive.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "player.h"
 #include "SelItem.h"
 #include "TerrainRecord.h"
 #include "terrainutil.h"
@@ -40,7 +40,7 @@
 extern Player			**g_player;
 extern SelectedItem		*g_selected_item;
 
-#include "profiledb.h"
+#include "profileDB.h"
 extern ProfileDB		*g_theProfileDB;
 
 extern sint32			g_fog_toggle;

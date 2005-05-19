@@ -10,7 +10,7 @@
 #include <ctype.h>
 
 #include "prjfile.h"
-#include "civpaths.h"
+#include "CivPaths.h"
 
 extern CivPaths *g_civPaths;
 

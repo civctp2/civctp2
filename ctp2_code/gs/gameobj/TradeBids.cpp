@@ -2,9 +2,9 @@
 
 #include "c3.h"
 #include "TradeBids.h"
-#include "PointerList.h"
-#include "CivArchive.h"
-#include "Player.h"
+#include "pointerlist.h"
+#include "civarchive.h"
+#include "player.h"
 #include "MessagePool.h"
 #include "gamefile.h"
 

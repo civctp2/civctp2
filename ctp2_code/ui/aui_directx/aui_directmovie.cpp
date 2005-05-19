@@ -33,7 +33,7 @@
 #include "aui_directmovie.h"
 
 #include "CivPaths.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 
 

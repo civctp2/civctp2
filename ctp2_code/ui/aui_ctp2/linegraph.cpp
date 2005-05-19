@@ -34,16 +34,16 @@
 #include "aui_window.h"
 
 #include "c3ui.h"
-#include "C3Blitter.h"
+#include "c3blitter.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "primitives.h"
 #include "textutils.h"
 
 #include "EventTracker.h"
 
-#include "LineGraph.h"
+#include "linegraph.h"
 
 extern ColorSet		*g_colorSet;
 extern C3UI			*g_c3ui;

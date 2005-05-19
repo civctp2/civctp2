@@ -26,7 +26,7 @@
 
 #include "primitives.h"
 #include "textutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "texttable.h"
 #include "c3windows.h"

@@ -4,7 +4,7 @@
 #include "aui.h"
 #include "aui_surface.h"
 
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
 ScreenManager::ScreenManager()
 :

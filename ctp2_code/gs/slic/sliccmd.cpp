@@ -40,12 +40,12 @@
 #include "SlicNamedSymbol.h"
 #include "SlicStruct.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #include "sc.tab.h"
 #include "StrDB.h"
 #include "SlicDBConduit.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 
 

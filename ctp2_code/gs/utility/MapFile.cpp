@@ -31,25 +31,25 @@
 #include "Cell.h"
 #include "UnitRecord.h"
 #include "TerrainImprovementRecord.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "UnitData.h"
 #include "CTPDatabase.h"
-#include "CellUnitList.h"
-#include "Player.h"
-#include "AICause.h"
+#include "cellunitlist.h"
+#include "player.h"
+#include "aicause.h"
 #include "unitutil.h"
 #include "TerrImprove.h"
-#include "Director.h"
+#include "director.h"
 #include "Vision.h"
 #include "QuadTree.h"
 #include "Vision.h"
 #include "AdvanceRecord.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 
 #include "net_util.h"
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 
 

@@ -12,18 +12,18 @@
 #include "MessageBoxDialog.h"
 
 
-#include "aui_Ldl.h"
+#include "aui_ldl.h"
 #include "c3ui.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "ctp2_Static.h"
 #include "ctp2_Window.h"
-#include "ctp2_TextField.h"
+#include "ctp2_textfield.h"
 #include "StrDB.h"
 
 #include "CriticalMessagesPrefs.h"
 
-#include "SoundManager.h"
-#include "gameSounds.h"
+#include "soundmanager.h"
+#include "gamesounds.h"
 
 
 extern C3UI *g_c3ui;

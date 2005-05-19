@@ -43,8 +43,8 @@
 
 #include "Plan.h"
 
-#include "Scheduler_Types.h"
-#include "Squad_Strength.h"
+#include "scheduler_types.h"
+#include "squad_strength.h"
 #include "StrategyRecord.h"
 
 
@@ -54,7 +54,7 @@
 
 #include "c3debugstl.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 
 class GoalRecord;
 class Scheduler;

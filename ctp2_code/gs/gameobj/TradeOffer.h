@@ -11,7 +11,7 @@
 #ifndef _TRADEOFFER_H_
 #define _TRADEOFFER_H_
 
-#include "Id.h"
+#include "ID.h"
 #include "Unit.h"
 #include "TradeOfferData.h"
 

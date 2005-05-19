@@ -28,16 +28,16 @@
 #include "c3.h"
 
 
-#include "RadarWindow.h"
+#include "radarwindow.h"
 
 
-#include "aui_Ldl.h"
+#include "aui_ldl.h"
 #include "c3ui.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "ctp2_Static.h"
 #include "ctp2_Window.h"
 #include "ctp2_Switch.h"
-#include "RadarMap.h"
+#include "radarmap.h"
 #include "gameinit.h"		// g_startHotseatGame
 
 ctp2_Window *g_radarWindow = NULL;

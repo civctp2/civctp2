@@ -2,15 +2,15 @@
 
 #include "c3.h"
 #include "IRobot.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "Agreement.h"
 
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 #include "Foreigner.h"
 #include "AiMap.h"
-#include "IC3World.h"
+#include "ic3world.h"
 
 
 #include "ForeignAgent.h"
@@ -22,13 +22,13 @@
 #include "FzOut.h"
 
 
-#include "IC3Player.h"
-#include "DiplomaticTypes.h"
+#include "ic3player.h"
+#include "diplomatictypes.h"
 
-#include "AIRndCnt.h"
+#include "airndcnt.h"
 #include "Cont.h"
 
-#include "C3player.h"
+#include "C3Player.h"
 
 
 extern double fz_com_city_scale; 

@@ -37,10 +37,10 @@
 #include "c3ui.h"
 
 #include "ctp2_dropdown.h"	
-#include "aui_StringTable.h"
+#include "aui_stringtable.h"
 
 #include "agerecord.h"
-#include "strdb.h"
+#include "StrDB.h"
 
 #include "spnewgamewindow.h"
 

@@ -17,7 +17,7 @@ using std::min;
 
 #include "FaultGen.h"
 #include <stdlib.h>
-#include "IC3Rand.h"
+#include "ic3Rand.h"
 
 #ifndef GEOMETRIC
 #if !defined(USE_COM_REPLACEMENT)

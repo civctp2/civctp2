@@ -119,7 +119,7 @@ enum	PROF_VAR_TYPE
 #include "CivilisationPool.h"	// CIV_INDEX
 #include "gstypes.h"			// PLAYER_INDEX
 #include "MapPoint.h"			// MapPoint
-#include "PointerList.h"		// PointerList
+#include "pointerlist.h"		// PointerList
 #include "SimpleDynArr.h"		// SimpleDynamicArray
 
 //----------------------------------------------------------------------------

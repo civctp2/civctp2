@@ -3,11 +3,11 @@
 #include "FileDialog.h"
 #include "aui_ldl.h"
 #include "ctp2_Window.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
 #include "c3ui.h"
 #include "ctp2_Static.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "ctp2_textfield.h"
 
 static MBCHAR *s_block = "GenericFileDialog";

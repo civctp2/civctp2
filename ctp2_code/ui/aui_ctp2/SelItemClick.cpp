@@ -30,7 +30,7 @@
 #include "SelItem.h"
 #include "Unit.h"
 #include "Army.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "QuickSlic.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
@@ -45,12 +45,12 @@
 #include "aui_uniqueid.h"
 #include "aui_mouse.h"
 #include "Cell.h"
-#include "ControlPanelWindow.h"
-#include "ArmyManagerWindow.h"
-#include "CityWindow.h"
+#include "controlpanelwindow.h"
+#include "armymanagerwindow.h"
+#include "citywindow.h"
 
 #include "helptile.h"
-#include "Player.h"
+#include "player.h"
 
 
 

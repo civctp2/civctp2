@@ -2,13 +2,13 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 
 
-#include "IC3GameState.h"
-#include "IC3InstDB.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "ic3InstDB.h"
+#include "aimain.h"
 
 #include "CityAgent.h"
 

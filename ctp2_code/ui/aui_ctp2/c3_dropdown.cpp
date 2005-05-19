@@ -14,7 +14,7 @@
 #include "c3_button.h"
 #include "c3_static.h"
 
-#include "Pattern.h"
+#include "pattern.h"
 #include "pixelutils.h"
 #include "primitives.h"
 

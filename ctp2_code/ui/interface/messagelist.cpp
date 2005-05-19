@@ -9,13 +9,13 @@
 
 
 #include "SelItem.h"
-#include "profiledb.h"
+#include "profileDB.h"
 
 
 #include "aui.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 
 #include "aui_static.h"
 #include "aui_surface.h"

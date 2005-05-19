@@ -1,12 +1,12 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "AiMain.h"
+#include "aimain.h"
 
 #include "FSOppAction.h"
-#include "OA.h"
+#include "Oa.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

@@ -20,13 +20,13 @@
 
 
 #include "spnewgamewindow.h"
-#include "ScenarioWindow.h"
+#include "scenariowindow.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 
-#include "CivApp.h"
+#include "civapp.h"
 #include "CivPaths.h"
-#include "CivScenarios.h"
+#include "civscenarios.h"
 
 extern C3UI					*g_c3ui;
 extern ProfileDB			*g_theProfileDB;

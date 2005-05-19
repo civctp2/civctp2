@@ -11,8 +11,8 @@
 #ifndef __AUI_IMAGELIST_H__
 #define __AUI_IMAGELIST_H__
 
-#include "aui_Image.h"
-#include "aui_ImageBase.h"	
+#include "aui_image.h"
+#include "aui_imagebase.h"	
 
 
 class aui_ImageList {

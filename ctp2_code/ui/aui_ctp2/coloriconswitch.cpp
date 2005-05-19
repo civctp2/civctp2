@@ -21,14 +21,14 @@
 #include "aui_ldl.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "CivPaths.h"
 
 
 #include "primitives.h"
 
-#include "ColorIconSwitch.h"
+#include "coloriconswitch.h"
 
 #include "c3ui.h"
 

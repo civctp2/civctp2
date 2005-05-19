@@ -14,7 +14,7 @@ class ctp2_TextField;
 class ctp2_Button;
 class ctp2_ListItem;
 
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "Unit.h"
 
 enum EDIT_QUEUE_MODE {

@@ -16,8 +16,8 @@
 #define __STATICTEXTITEM_H__
 
 
-#include "aui_Static.h"
-#include "ItemInfo.h"
+#include "aui_static.h"
+#include "iteminfo.h"
 
 
 class StaticTextItem : public aui_Static, public ItemInfo

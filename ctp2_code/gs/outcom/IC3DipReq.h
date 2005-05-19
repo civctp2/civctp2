@@ -12,7 +12,7 @@ DEFINE_GUID(CLSID_IC3DiplomaticRequest,
 #undef INTERFACE
 #define INTERFACE IC3DiplomaticRequest
 
-#include "DiplomaticTypes.h"
+#include "diplomatictypes.h"
 
 typedef sint32 AdvanceType;
 typedef sint32 PLAYER_INDEX;

@@ -378,26 +378,26 @@
 #include "c3types.h"
 #include "c3errors.h"
 #include "globals.h"
-#include "IC3UnitDB.h"
-#include "IC3Science.h"
-#include "IC3Wonder.h"
-#include "IC3BlgDB.h"
-#include "IC3Population.h"
-#include "IC3EndGameDB.h"
+#include "ic3UnitDB.h"
+#include "ic3Science.h"
+#include "ic3Wonder.h"
+#include "ic3BlgDB.h"
+#include "ic3Population.h"
+#include "ic3endgamedb.h"
 
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "AiMain.h"
-#include "Gold.h"
+#include "aimain.h"
+#include "gold.h"
 
 #include "common.h"
 
 #include "linked_list.h"		
 #include "semi_dynamic_array.h"
 #include "sorted_array.h"
-#include "Matrix.h"
-#include "Grassfire.h"
+#include "matrix.h"
+#include "grassfire.h"
 
 
 #include "ArmyAgent.h"
@@ -407,24 +407,24 @@
 
 
 #include "unitflow.h"
-#include "AIP.h"
+#include "aip.h"
 #include "squad.h"
 
 
-#include "Goal.h"
+#include "goal.h"
 #include "ArmyGoal.h"
-#include "Goal_Build_Supplemental.h"
+#include "goal_build_supplemental.h"
 #include "Goal_Build_List.h"
 
 #include "WonderTbl.h"
 
 #include "Scheduler.h"
-#include "Planner.h"
-#include "Strategic_Map.h"
+#include "planner.h"
+#include "strategic_map.h"
 
 #include "dr_debug.h"
 
-#include "AILog.h"
+#include "ailog.h"
 
 
 

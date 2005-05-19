@@ -14,8 +14,8 @@
 
 #include "c3.h"
 
-#include "DynArr.h"
-#include "path.h"
+#include "dynarr.h"
+#include "Path.h"
 
 #include "MapPoint.h"
 #include "Cell.h"

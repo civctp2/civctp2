@@ -17,8 +17,8 @@
 #include "TerrImprovePool.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "Player.h"
-#include "TiledMap.h"
+#include "player.h"
+#include "tiledmap.h"
 
 extern World *g_theWorld;
 extern Player **g_player;

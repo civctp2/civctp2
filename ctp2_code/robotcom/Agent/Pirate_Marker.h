@@ -4,7 +4,7 @@
 #ifndef __Pirate_Marker__
 #define __Pirate_Marker__ 1
 
-#include "BSet.h"
+#include "bset.h"
 
 class CityAgent; 
 class CivArchive; 

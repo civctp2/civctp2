@@ -30,20 +30,20 @@
 
 #include "aui.h"
 #include "aui_ldl.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
 #include "ctp2_Window.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "ctp2_Static.h"
 #include "ctp2_TabGroup.h"
-#include "aui_Blitter.h"
+#include "aui_blitter.h"
 
 #include "c3ui.h"
 #include "colorset.h"
 
 #include "SelItem.h"
 
-#include "Player.h"
+#include "player.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "Army.h"
@@ -62,13 +62,13 @@
 #include "Events.h"
 
 #include "MessageBoxDialog.h"
-#include "ctp2_HyperTextBox.h"
-#include "Governor.h"
+#include "ctp2_hypertextbox.h"
+#include "governor.h"
 #include "SlicContext.h" 
 #include "stringutils.h"
 #include "aui_ranger.h"
 #include "ctp2_spinner.h"
-#include "Director.h"
+#include "director.h"
 #include "network.h"
 
 #include "net_action.h"

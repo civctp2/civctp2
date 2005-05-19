@@ -17,8 +17,8 @@
 #include "aui_button.h"
 
 #include "message.h"
-#include "messagedata.h"
-#include "messagepool.h"
+#include "MessageData.h"
+#include "MessagePool.h"
 
 #include "messageiconwindow.h"
 #include "messagewindow.h"

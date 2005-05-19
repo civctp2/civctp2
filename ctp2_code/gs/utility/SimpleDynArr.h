@@ -3,7 +3,7 @@
 #ifndef __SIMPLEDYNARR_H__
 #define __SIMPLEDYNARR_H__
 
-#include "CivArchive.h"
+#include "civarchive.h"
 
 template <class T> class SimpleDynamicArray {
 private:

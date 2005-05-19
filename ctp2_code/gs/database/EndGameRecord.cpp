@@ -4,7 +4,7 @@
 #include "EndGameDB.h"
 #include "Token.h"
 #include "EndGameToken.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "StrDB.h"
 #include "AdvanceRecord.h"
 #include "SoundRecord.h"

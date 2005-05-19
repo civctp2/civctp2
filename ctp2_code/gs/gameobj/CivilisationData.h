@@ -40,7 +40,7 @@
 
 #if defined(_MSC_VER) 
 
-#include "Gameobj.h"
+#include "GameObj.h"
 #include "ID.h"
 #include "CivilisationRec.h"
 #include "gstypes.h"
@@ -67,10 +67,10 @@ class	CivilisationData;
 #include "c3types.h"			// MBCHAR, sint..., uint...
 #include "civarchive.h"			// CivArchive
 #include "Civilisation.h"		// GENDER
-#include "Civilisationpool.h"	// CIV_INDEX
+#include "CivilisationPool.h"	// CIV_INDEX
 #include "CivilisationRec.h"	// k_MAX_CITY_NAMES
 #include "dbtypes.h"			// k_MAX_NAME_LEN
-#include "Gameobj.h"			// GAMEOBJ
+#include "GameObj.h"			// GAMEOBJ
 #include "gstypes.h"			// PLAYER_INDEX
 #include "ID.h"					// ID
 

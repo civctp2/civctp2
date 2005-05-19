@@ -21,8 +21,8 @@
 #include "c3ui.h"
 #include "c3_button.h"
 #include "c3textfield.h"
-#include "PatternBase.h"
-#include "Pattern.h"
+#include "patternbase.h"
+#include "pattern.h"
 #include "primitives.h"
 #include "colorset.h"
 

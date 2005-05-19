@@ -34,7 +34,7 @@
 
 #include "aui_directsurface.h"
 #include "primitives.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
 #include "ProjectileSpriteGroup.h"
 #include "FacedSpriteWshadow.h"

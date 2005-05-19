@@ -40,10 +40,10 @@
 
 #include "c3.h"
 
-#include "DebugCallStack.h"
+#include "debugcallstack.h"
 
-#include "Log.h"
-#include "DebugCallStack.h"
+#include "log.h"
+#include "debugcallstack.h"
 #include <windows.h>		
 #include <string.h>
 #include <stdio.h>

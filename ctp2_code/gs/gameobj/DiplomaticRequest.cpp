@@ -10,15 +10,15 @@
 
 #include "c3.h"
 
-#include "CivArchive.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "player.h"
 #include "Unit.h"
 #include "DiplomaticRequestData.h"
 #include "DiplomaticRequest.h"
 #include "DiplomaticRequestPool.h"
 #include "network.h"
 #include "net_info.h"
-#include "AiCause.h"
+#include "aicause.h"
 
 	extern	Player	**g_player ;
 

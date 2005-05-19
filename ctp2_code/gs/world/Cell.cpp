@@ -53,14 +53,14 @@
 #include "GoodyHuts.h"
 #include "UnitRec.h"
 #include "TradeDynArr.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "Unit.h"
 #include "UnitPool.h"
-#include "Player.h"
+#include "player.h"
 #include "terrainutil.h"
 #include "MoveFlags.h"
-#include "Globals.h"
-#include "world.h"
+#include "globals.h"
+#include "World.h"
 
 extern void WhackScreen(); 
 

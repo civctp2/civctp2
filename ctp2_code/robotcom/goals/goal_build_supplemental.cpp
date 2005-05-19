@@ -87,34 +87,34 @@
 
 
 #include "c3.h"
-#include "DynArr.h"
-#include "CivArchive.h"
+#include "dynarr.h"
+#include "civarchive.h"
 #include "IMapPointData.h"
-#include "IC3UnitDB.h"
+#include "ic3UnitDB.h"
 
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 #include "AiMap.h"
 
 
 #include "dr_debug.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 
 #include "FzOut.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 
 
-#include "Goal_Build_Supplemental.h"
+#include "goal_build_supplemental.h"
 
-#include "AILOG.h"
+#include "ailog.h"
 
 #define LOG_GOAL_BUILD_SUPPLEMENTAL true
 

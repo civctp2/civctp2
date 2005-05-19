@@ -12,7 +12,7 @@ class ctp2_Button;
 class C3Slider;
 
 #include "Unit.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 
 struct CreateListData {

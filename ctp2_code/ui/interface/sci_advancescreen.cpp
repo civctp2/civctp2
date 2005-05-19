@@ -29,20 +29,20 @@
 #include "c3.h"
 #include "aui_uniqueid.h"
 #include "c3window.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "c3_listitem.h"
 #include "ctp2_Static.h"
 #include "c3ui.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_HyperTextBox.h"
-#include "aui_StringTable.h"
+#include "ctp2_listbox.h"
+#include "ctp2_hypertextbox.h"
+#include "aui_stringtable.h"
 
 #include "Advances.h"
 #include "AdvanceRecord.h"
 #include "StrDB.h"
 #include "SelItem.h"
 #include "player.h"
-#include "sci.h"
+#include "Sci.h"
 #include "gold.h"
 #include "prjfile.h"
 
@@ -69,7 +69,7 @@
 #include "GovernmentRecord.h"
 
 
-#include "Director.h"
+#include "director.h"
 extern Director		*g_director;
 
 extern C3UI			*g_c3ui;
@@ -82,8 +82,8 @@ extern ScienceWin	*g_scienceWin;
 #include "ScienceManagementDialog.h"
 
 
-#include "SoundManager.h"
-#include "GameSounds.h"
+#include "soundmanager.h"
+#include "gamesounds.h"
 extern SoundManager	*g_soundManager;
 
 extern ColorSet	*g_colorSet;

@@ -35,17 +35,17 @@
 #include <sstream>
 
 
-#include "aui_Ldl.h"
-#include "ctp2_Button.h"
-#include "NewTurnCount.h"
+#include "aui_ldl.h"
+#include "ctp2_button.h"
+#include "newturncount.h"
 #include "StrDB.h"
-#include "ctp2_static.h"
+#include "ctp2_Static.h"
 
 #include "SelItem.h"
-#include "Player.h"
+#include "player.h"
 
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 extern ColorSet *g_colorSet;
 
 

@@ -16,7 +16,7 @@
 #include "aui_ldl.h"
 #include "c3ui.h"
 #include "ctp2_Window.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 
 #include "aui.h"
 #include "aui_control.h"

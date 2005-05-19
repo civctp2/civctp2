@@ -10,11 +10,11 @@
 
 #include "c3.h"
 #include "installationpool.h"
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "CivArchive.h"
-#include "Globals.h"
+#include "civarchive.h"
+#include "globals.h"
 
 
 InstallationPool::InstallationPool() : ObjPool(k_BIT_GAME_OBJ_TYPE_INSTALLATION)

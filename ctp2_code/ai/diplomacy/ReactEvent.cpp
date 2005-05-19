@@ -12,7 +12,7 @@
 
 #include "c3.h"
 
-#include "ReactEvent.h"
+#include "reactevent.h"
 
 #include "Events.h"
 #include "GameEventUser.h"
@@ -20,8 +20,8 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "AICause.h"
-#include "Player.h"
+#include "aicause.h"
+#include "player.h"
 #include "c3_utilitydialogbox.h"
 
 

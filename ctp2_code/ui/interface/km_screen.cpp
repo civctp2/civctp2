@@ -34,8 +34,8 @@
 #include "c3_static.h"
 #include "c3ui.h"
 #include "c3_listbox.h"
-#include "RadioGroup.h"
-#include "c3_Switch.h"
+#include "radiogroup.h"
+#include "c3_switch.h"
 #include "aui_uniqueid.h"
 #include "aui_ranger.h"
 
@@ -49,7 +49,7 @@
 #include "km_screen.h"
 
 #include "StrDB.h"
-#include "ControlPanelWindow.h"
+#include "controlpanelwindow.h"
 #include "ctp2_Static.h"
 
 extern C3UI			*g_c3ui;

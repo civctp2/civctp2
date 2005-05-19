@@ -10,7 +10,7 @@ extern World *g_theWorld;
 
 #include "MapPoint.h"
 
-#include "BSet.h"
+#include "bset.h"
 
 #include "MoveFlags.h"
 

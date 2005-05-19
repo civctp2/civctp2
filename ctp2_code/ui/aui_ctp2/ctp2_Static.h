@@ -31,8 +31,8 @@
 #ifndef __CTP2_STATIC_H__
 #define __CTP2_STATIC_H__
 
-#include "aui_Static.h"
-#include "PatternBase.h"
+#include "aui_static.h"
+#include "patternbase.h"
 
 
 #define k_CTP2_STATIC_LDL_BEVELWIDTH		"bevelwidth"

@@ -19,7 +19,7 @@
 #include "c3_static.h"
 #include "c3_headerswitch.h"
 
-#include "Pattern.h"
+#include "pattern.h"
 #include "primitives.h"
 
 extern aui_UI *g_ui;

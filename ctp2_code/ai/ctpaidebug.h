@@ -16,7 +16,7 @@
 
 #ifdef _PLAYTEST
 
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 
 #ifdef _DEBUG
 	#define AI_DPRINTF(mask, player, goal_type, army_id, x) { if (CtpAiDebug::DebugLogCheck(player, goal_type, army_id)) DPRINTF(mask,x); }

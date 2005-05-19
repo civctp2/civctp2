@@ -12,7 +12,7 @@
 #include "c3.h"
 
 
-#include "EndGameWindow.h"
+#include "EndgameWindow.h"
 
 
 #include "pixelutils.h"
@@ -26,12 +26,12 @@
 #include "aui_progressbar.h"
 #include "c3ui.h"
 #include "c3window.h"
-#include "c3_Static.h"
+#include "c3_static.h"
 #include "c3_coloredstatic.h"
 #include "c3_button.h"
-#include "uiutils.h"
+#include "UIUtils.h"
 #include "primitives.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 
 #include "StrDB.h"

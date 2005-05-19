@@ -8,15 +8,15 @@
 
 #include "c3window.h"
 
-#include "VictoryMovieWindow.h"
+#include "victorymoviewindow.h"
 #include "victorymoviewin.h"
 #include "GameOver.h"
 #include "victorywin.h"
 #include "victorywindow.h"
 #include "infowin.h"
-#include "EndGameWindow.h"
+#include "EndgameWindow.h"
 
-#include "MovieDB.h"
+#include "moviedb.h"
 #include "StrDB.h"
 #include "AgeRecord.h"
 #include "WonderRecord.h"
@@ -24,15 +24,15 @@
 #include "screenutils.h"
 #include "EndGame.h"
 
-#include "Director.h"
+#include "director.h"
 extern MovieDB			*g_theVictoryMovieDB;
 extern C3UI				*g_c3ui;
 extern VictoryWindow	*g_victoryWindow;
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 extern SoundManager		*g_soundManager;
 
-#include "selitem.h"
+#include "SelItem.h"
 extern SelectedItem		*g_selected_item;
 
 #include "player.h"

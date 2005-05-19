@@ -34,7 +34,7 @@
 #include "c3_dropdown.h"
 #include "aui_ldl.h"
 #include "c3_button.h"
-#include "c3_ListItem.h"
+#include "c3_listitem.h"
 #include "ctp2_button.h"
 
 class aui_Control;

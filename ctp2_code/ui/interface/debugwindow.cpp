@@ -24,12 +24,12 @@
 #include "c3cmdline.h"
 #include "c3ui.h"
 
-#include "TextBox.h"
+#include "textbox.h"
 
 extern C3UI				*g_c3ui;
 
 
-#include "ColorSet.h"
+#include "colorset.h"
 extern ColorSet *g_colorSet;
 DebugWindow::DebugWindow(
 	AUI_ERRCODE *retval,

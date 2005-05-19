@@ -46,7 +46,7 @@
 #include "c3_dropdown.h"
 #include "c3_listitem.h"
 #include "CivPaths.h"
-#include "uiutils.h"
+#include "UIUtils.h"
 
 #include "netshell.h"
 
@@ -54,11 +54,11 @@
 
 
 #include "loadsavewindow.h"
-#include "initialplayWindow.h"
+#include "initialplaywindow.h"
 #include "scenariowindow.h"
 
 // Need more includes for the actions of the new buttons
-#include "ctp2_static.h"
+#include "ctp2_Static.h"
 #include "optionswindow.h"
 
 #include "gameinit.h"

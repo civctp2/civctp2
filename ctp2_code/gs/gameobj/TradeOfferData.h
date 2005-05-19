@@ -12,7 +12,7 @@
 #define _TRADEOFFERDATA_H_
 
 #include "Unit.h"
-#include "Gameobj.h"
+#include "GameObj.h"
 #include "ID.h"
 #include "TradeRouteData.h"
 

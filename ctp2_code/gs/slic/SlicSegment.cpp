@@ -34,7 +34,7 @@
 #include "slicif.h"
 #include "SlicStack.h"
 #include "SlicFrame.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "SlicEngine.h"
 #include "SlicSymbol.h"
 #include "SlicObject.h"
@@ -47,7 +47,7 @@
 #include "SlicNamedSymbol.h"
 #include "SlicConditional.h"
 #include "SlicConst.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 SlicSegment::SlicSegment()
 {

@@ -5,10 +5,10 @@
 #include "C3InstDB.h"
 
 
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "TerrainRecord.h"
 #include "InstDB.h"
 #include "TerrImproveData.h"

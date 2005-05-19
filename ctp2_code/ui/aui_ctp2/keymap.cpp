@@ -33,7 +33,7 @@
 #include "CivPaths.h"
 #include "c3files.h"
 #include "c3errors.h"
-#include "controlPanelWindow.h"
+#include "controlpanelwindow.h"
 
 extern CivPaths *g_civPaths; 
 

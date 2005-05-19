@@ -6,10 +6,10 @@
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 
 
-#include "c3_Button.h"
+#include "c3_button.h"
 
 
 #include "c3windows.h"

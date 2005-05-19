@@ -2,13 +2,13 @@
 
 #include "net_endgame.h"
 #include "network.h"
-#include "wormhole.h"
-#include "endgame.h"
+#include "Wormhole.h"
+#include "EndGame.h"
 #include "net_util.h"
 #include "player.h"
-#include "endgamedb.h"
+#include "EndGameDB.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 extern Player **g_player;
 

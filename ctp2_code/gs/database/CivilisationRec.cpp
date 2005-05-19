@@ -13,7 +13,7 @@
 #include "c3errors.h"
 
 #include "StrDB.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "CivilisationRec.h"
 #include "Token.h"
 

@@ -88,16 +88,16 @@
 
 #include "c3.h"
 
-#include "Player.h"
+#include "player.h"
 #include "Path.h"
 #include "installationtree.h"
 #include "UnitRecord.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "ArmyData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "UnitData.h"
 #include "UnitPool.h"
-#include "Globals.h"
+#include "globals.h"
 #include "World.h"
 #include "BuildListSequenceRecord.h"
 #include "UnitBuildListRecord.h"
@@ -125,23 +125,23 @@
 #include "Strengths.h"
 #include "stringutils.h"
 #include "GoalRecord.h"
-#include "GaiaController.h"
+#include "gaiacontroller.h"
 #include "AgreementMatrix.h"
 #include "WonderTracker.h"
 
-#include "CtpAi.h"
+#include "ctpai.h"
 
-#include "CityAStar.h"
+#include "CityAstar.h"
 extern CityAstar g_city_astar;
 
 
-#include "profileAi.h"
+#include "profileai.h"
 
 #include <algorithm>
 #include "Scheduler.h"
-#include "CtpGoal.h"
-#include "Governor.h"
-#include "MapAnalysis.h"
+#include "ctpgoal.h"
+#include "governor.h"
+#include "mapanalysis.h"
 
 #include "network.h"
 #include "net_action.h"

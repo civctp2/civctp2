@@ -85,31 +85,31 @@
 
 
 #include "UnitData.h"
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "UnitPool.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "TradeRouteData.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Path.h"
 #include "Agreement.h"
 #include "CivilisationPool.h"
 #include "Civilisation.h"
 #include "TradeOffer.h"
 #include "TerrImprove.h"
-#include "Installation.h"
+#include "installation.h"
 #include "DiplomaticRequest.h"
 #include "DiplomaticRequestPool.h"
-#include "Message.h"
+#include "message.h"
 #include "TradePool.h"
 #include "TurnCnt.h"
-#include "TiledMap.h"
-#include "RadarMap.h"
-#include "ChatBox.h"
+#include "tiledmap.h"
+#include "radarmap.h"
+#include "chatbox.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
-#include "Order.h"
+#include "order.h"
 #include "UnseenCell.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -118,7 +118,7 @@
 
 
 #include "profileDB.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #include "c3_utilitydialogbox.h"
 
@@ -137,10 +137,10 @@ extern StringDB					*g_theStringDB;
 
 #include "GameEventManager.h"
 
-#include "CtpAI.h"
-#include "ChatList.h"
+#include "ctpai.h"
+#include "chatlist.h"
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "gamesounds.h"
 
 #include "progresswindow.h"
@@ -161,7 +161,7 @@ extern CivilisationDatabase *g_theCivilisationDB;
 
 #include "resource.h"
 
-#include "Director.h"
+#include "director.h"
 
 #include "GameOver.h"
 #include "civ3_main.h"
@@ -192,7 +192,7 @@ extern ControlPanelWindow		*g_controlPanel;
 
 #include "sci_advancescreen.h"
 
-#include "DipWizard.h"
+#include "dipwizard.h"
 #include "Diplomat.h"
 
 #include "CTP2Combat.h"

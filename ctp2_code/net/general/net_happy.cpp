@@ -34,7 +34,7 @@
 #include "net_util.h"
 #include "Unit.h"
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "Happy.h"
 #include "UnitPool.h"       // g_theUnitPool
 #include "PlayHap.h"

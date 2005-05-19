@@ -78,45 +78,45 @@
 
 
 #include "splash.h"
-#include "DebugMemory.h"
+#include "debugmemory.h"
 
 
-#include "civpaths.h"
+#include "CivPaths.h"
 #include "Unit.h"
-#include "Message.h"
+#include "message.h"
 #include "gameinit.h"
-#include "randgen.h"
+#include "RandGen.h"
 #include "keymap.h"
 #include "keypress.h"
-#include "turncnt.h"
+#include "TurnCnt.h"
 #include "DB.h"
 #include "StrDB.h"
 #include "AdvanceRecord.h"
-#include "GWDB.h"
+#include "gwdb.h"
 #include "UVDB.h"
 #include "BuildingRecord.h"
 #include "DiffDB.h"
 #include "SpriteStateDB.h"
-#include "ThroneDB.h"
-#include "ConceptDB.h"
+#include "thronedb.h"
+#include "conceptdb.h"
 
 #include "WonderRecord.h"
 #include "WonderMovieRecord.h"
 #include "CivilisationDB.h"
-#include "ProfileDB.h"
-#include "CivArchive.h"
-#include "GameFile.h"
-#include "constdb.h"
+#include "profileDB.h"
+#include "civarchive.h"
+#include "gamefile.h"
+#include "ConstDB.h"
 #include "SlicEngine.h"
-#include "Player.h"
+#include "player.h"
 #include "Advances.h"
 #include "MessagePool.h"
 #include "PlayListDB.h"
 
-#include "CivScenarios.h"
+#include "civscenarios.h"
 
 
-#include "roboinit.h"
+#include "RoboInit.h"
 #include "ctpai.h"
 
 
@@ -129,7 +129,7 @@
 #include "c3_static.h"
 #include "c3_checkbox.h"
 #include "background.h"
-#include "GrabItem.h"
+#include "grabitem.h"
 #include "c3_dropdown.h"
 #include "c3_listbox.h"
 #include "c3_button.h"
@@ -161,14 +161,14 @@
 #include "graphicsscreen.h"
 #include "soundscreen.h"
 #include "radarmap.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "workwin.h"
-#include "CursorManager.h"
+#include "cursormanager.h"
 #include "gamesounds.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "civapp.h"
-#include "ChatBox.h"
-#include "BattleView.h"
+#include "chatbox.h"
+#include "battleview.h"
 #include "screenutils.h"
 #include "sci_advancescreen.h"
 #include "infowin.h"
@@ -188,15 +188,15 @@
 
 
 
-#include "SpriteEditor.h"
+#include "spriteeditor.h"
 
 #include "network.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "RiskDB.h"
-#include "MovieDB.h"
+#include "moviedb.h"
 #include "EndGameDB.h"
-#include "FilenameDB.h"
-#include "PollutionDB.H"
+#include "filenamedb.h"
+#include "PollutionDB.h"
 #include "Exclusions.h"
 #include "MapDB.h"
 #include "tutorialwin.h"
@@ -204,8 +204,8 @@
 
 #include "ctp_finger.h"
 #include "AttractWindow.h"
-#include "intromoviewin.h"
-#include "endgamewindow.h"
+#include "IntroMovieWin.h"
+#include "EndgameWindow.h"
 
 #include "appstrings.h"
 #include "victorywin.h"
@@ -277,18 +277,18 @@ int g_gameWatchID = -1;
 
 #include "diplomacyutil.h"
 
-#include "ScenarioEditor.h"
-#include "DiplomacyWindow.h"
-#include "ArmyManagerWindow.h"
-#include "CityWindow.h"
+#include "scenarioeditor.h"
+#include "diplomacywindow.h"
+#include "armymanagerwindow.h"
+#include "citywindow.h"
 #include "terrainutil.h"
 #include "buildingutil.h"
 
-#include "UnitManager.h"
+#include "unitmanager.h"
 #include "EditQueue.h"
 #include "ProfileEdit.h"
 
-#include "ScreenManager.h"
+#include "screenmanager.h"
 extern ScreenManager *g_screenManager;
 
 #define RELDBG(x) { FILE *f = fopen("reldbg.txt", "a"); fprintf x; fclose(f); }
@@ -446,10 +446,10 @@ extern GameSettings			*g_theGameSettings;
 #include "SelItem.h"
 extern SelectedItem *g_selected_item;
 
-#include "TutorialWin.h"
+#include "tutorialwin.h"
 extern TutorialWin	*g_tutorialWin;
 
-#include "PrjFile.h"
+#include "prjfile.h"
 ProjectFile *g_GreatLibPF = NULL;
 ProjectFile *g_ImageMapPF = NULL;
 ProjectFile *g_SoundPF = NULL;
@@ -457,7 +457,7 @@ int InitializeGreatLibrary();
 int InitializeSoundPF();
 int InitializeImageMaps();
 
-#include "Director.h"
+#include "director.h"
 extern Director				*g_director;
 extern BOOL					g_runInBackground;
 

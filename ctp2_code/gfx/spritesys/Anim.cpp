@@ -30,7 +30,7 @@
 #include "Anim.h"
 #include "c3errors.h"
 #ifndef __SPRITETEST__
-#include "Director.h"
+#include "director.h"
 
 
 extern Director			*g_director;

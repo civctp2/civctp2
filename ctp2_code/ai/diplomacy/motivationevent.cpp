@@ -15,7 +15,7 @@
 #include "c3.h"
 
 
-#include "profileAi.h"
+#include "profileai.h"
 
 #include "Scheduler.h"
 
@@ -24,20 +24,20 @@
 #include "Events.h"
 #include "GameEventUser.h"
 #include "Unit.h"
-#include "Player.h"
+#include "player.h"
 #include "Strengths.h"
 #include "StrDB.h"
 #include "GameEventManager.h"
 
 #include "Diplomat.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 #include "GoalRecord.h"
-#include "CTPGoal.h"
-#include "Gold.h"
+#include "ctpgoal.h"
+#include "gold.h"
 #include "stringutils.h"
-#include "CtpAi.h"
+#include "ctpai.h"
 
-#include "Pollution.h"
+#include "pollution.h"
 extern Pollution *g_thePollution;
 
 

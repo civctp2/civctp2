@@ -2,31 +2,31 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "IC3BlgDB.h"
+#include "ic3BlgDB.h"
 
-#include "IC3Population.h"
-#include "IC3Player.h"
+#include "ic3Population.h"
+#include "ic3player.h"
 
 #include "MapPoint.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 
 
-#include "IC3GameState.h"
-#include "IC3World.h"
+#include "ic3GameState.h"
+#include "ic3world.h"
 
-#include "AiMain.h"
-#include "AiCell.h"
+#include "aimain.h"
+#include "aicell.h"
 #include "AiMap.h"
-#include "AiRndCnt.h"
-#include "Gold.h"
+#include "airndcnt.h"
+#include "gold.h"
 
 
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 #include "AiBldQue.h"
-#include "BSet.h"
-#include "CivArchive.h"
+#include "bset.h"
+#include "civarchive.h"
 #include "ForeignAgent.h"
 #include "ForeignCity.h"
 #include "Foreigner.h"
@@ -43,8 +43,8 @@
 
 
 #include "ArmyGoal.h"
-#include "GlBlg.h"
-#include "GlFreight.h"
+#include "glblg.h"
+#include "glfreight.h"
 
 
 #include "AllocWGF.h"

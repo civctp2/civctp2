@@ -29,7 +29,7 @@
 #include "c3.h"
 #include "slicif.h"
 #include "SlicArray.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "SlicEngine.h"
 #include "SlicSymbol.h"
 #include "SlicStack.h"
@@ -38,7 +38,7 @@
 #include "SlicObject.h"
 #include "SlicSegment.h"
 #include "SlicFrame.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #define k_DEFAULT_SLICARRAY_SIZE 1
 

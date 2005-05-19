@@ -8,7 +8,7 @@
 #include "MapPoint.h"
 #include "World.h"
 #include "Cell.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "ArmyData.h"
 #include "director.h"
 #include "battleviewwindow.h"

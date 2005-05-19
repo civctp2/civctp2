@@ -37,13 +37,13 @@
 #include "aui_bitmapfont.h"
 
 
-#include "c3_DropDown.h"
+#include "c3_dropdown.h"
 #include "c3_listbox.h"
 #include "c3_static.h"
 
 
 #include "message.h"
-#include "messagedata.h"
+#include "MessageData.h"
 #include "messageactions.h"
 #include "messagewindow.h"
 #include "messagemodal.h"

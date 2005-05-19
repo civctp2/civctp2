@@ -2,10 +2,10 @@
 
 #include "c3.h"
 #include "C3DipReq.h"
-#include "CivArchive.h"
-#include "Globals.h"
+#include "civarchive.h"
+#include "globals.h"
 
-#include "Player.h"
+#include "player.h"
 extern Player **g_player;
 
 

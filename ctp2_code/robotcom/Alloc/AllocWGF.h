@@ -3,7 +3,7 @@
 #ifndef __AllocWGF_H__
 #define __AllocWGF_H__ 1
 
-#include "DynArr.h"
+#include "dynarr.h"
 
 class CivArchive; 
 

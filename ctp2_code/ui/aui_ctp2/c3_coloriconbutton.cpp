@@ -20,10 +20,10 @@
 #include "aui_window.h"
 #include "aui_surface.h"
 #include "aui_ldl.h"
-#include "TipWindow.h"
+#include "tipwindow.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "CivPaths.h"
 
 

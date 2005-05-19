@@ -14,7 +14,7 @@
 #define __C3GAMESTATE_H__
 
 
-#include "IC3GameState.h"
+#include "ic3GameState.h"
 
 class RobotAstar;
 class C3UnitDB; 

@@ -41,7 +41,7 @@
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 #include "c3_static.h"
 #include "c3_listitem.h" 
 #include "helptile.h"
@@ -49,43 +49,43 @@
 #include "aui_tipwindow.h"
 
 
-#include "Player.h"
-#include "CivArchive.h"
+#include "player.h"
+#include "civarchive.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "Director.h"
+#include "director.h"
 #include "SelItem.h"
 #include "UnitAstar.h"
 #include "TurnCnt.h"
 #include "AgreementPool.h"
-#include "Pollution.h"
+#include "pollution.h"
 #include "DiplomaticRequestData.h"
 #include "DiplomaticRequestPool.h"
 #include "Cell.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "TradeDynArr.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "UnitData.h"
-#include "GrabItem.h"
+#include "grabitem.h"
 #include "TradeRouteData.h"
 #include "TradeRoute.h"
 #include "UnitPool.h"
 #include "ArmyPool.h"
 #include "Army.h"
-#include "CellUnitList.h"
-#include "Order.h"
+#include "cellunitlist.h"
+#include "order.h"
 #include "battleorderbox.h"
 
 
-#include "AiCause.h"
+#include "aicause.h"
 
 
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "maputils.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 
 #include "network.h"
@@ -96,11 +96,11 @@
 
 #include "workwindow.h"
 #include "workwin.h"
-#include "ResourceMap.h"
-#include "RadarMap.h"
+#include "resourcemap.h"
+#include "radarmap.h"
 
-#include "SoundManager.h"
-#include "ProfileDB.h"
+#include "soundmanager.h"
+#include "profileDB.h"
 
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -108,7 +108,7 @@
 
 #include "sci_advancescreen.h"
 
-#include "Message.h"
+#include "message.h"
 
 #include "GameEventManager.h"
 #include "UnitRecord.h"
@@ -116,7 +116,7 @@
 #include "ResourceRecord.h"
 #include "MoveFlags.h"
 
-#include "ArmyManagerWindow.h"
+#include "armymanagerwindow.h"
 #include "ArmyData.h"
 
 #include "scenarioeditor.h"
@@ -125,8 +125,8 @@
 #include "MainControlPanel.h"
 
 #include "AttractWindow.h"
-#include "gameSounds.h"
-#include "SoundManager.h"
+#include "gamesounds.h"
+#include "soundmanager.h"
 
 
 extern ControlPanelWindow	*g_controlPanel;

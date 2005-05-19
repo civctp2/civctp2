@@ -2,7 +2,7 @@
 #ifndef __C3ERRORREPORT_H__
 #define __C3ERRORREPORT_H__
 
-#include "IC3ErrorReport.h"
+#include "ic3ErrorReport.h"
 
 class CivArchive; 
 

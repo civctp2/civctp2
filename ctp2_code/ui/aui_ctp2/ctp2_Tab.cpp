@@ -11,8 +11,8 @@
 #include "ctp2_Tab.h"
 
 
-#include "aui_Action.h"
-#include "aui_Ldl.h"
+#include "aui_action.h"
+#include "aui_ldl.h"
 #include "ctp2_Static.h"
 #include "ctp2_TabButton.h"
 #include "ctp2_TabGroup.h"

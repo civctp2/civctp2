@@ -33,26 +33,26 @@
 extern C3UI *g_c3ui;
 
 #include "ctp2_Window.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_Button.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_listbox.h"
+#include "ctp2_button.h"
+#include "ctp2_listitem.h"
 #include "ctp2_Static.h"
-#include "ctp2_HyperTextBox.h"
+#include "ctp2_hypertextbox.h"
 #include "ctp2_Tab.h"
 #include "ctp2_TabGroup.h"
 
 #include "ResourceRecord.h"
 #include "Unit.h"
-#include "CityData.h"
-#include "Player.h"
+#include "citydata.h"
+#include "player.h"
 #include "tradeutil.h"
 #include "TradeRouteData.h"
 
 #include "SelItem.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
-#include "aui_Blitter.h"
+#include "colorset.h"
+#include "aui_blitter.h"
 
 #include "GameEventManager.h"
 #include "GameEventUser.h"
@@ -62,14 +62,14 @@ extern C3UI *g_c3ui;
 #include "SlicContext.h"
 #include "TradeRoute.h"
 #include "IconRecord.h"
-#include "C3Slider.h"
+#include "c3slider.h"
 
 #include "AgreementMatrix.h"
 #include "Diplomat.h"
 
 #include "network.h"
 #include "net_action.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 static TradeManager *s_tradeManager = NULL;
 static MBCHAR *s_tradeManagerBlock = "TradeManager";

@@ -6,20 +6,20 @@
 #include "c3.h"
 #include "c3errors.h"
 
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 #include "SelItem.h"
 #include "aui.h"
-#include "DebugWindow.h"
+#include "debugwindow.h"
 
 #include "AdvanceRecord.h"
 #include "DataCheck.h"
-#include "Pollution.h"
+#include "pollution.h"
 
 #include "CivPaths.h"
 
@@ -28,7 +28,7 @@
 
 
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 
 #include "Vision.h"
 
@@ -44,7 +44,7 @@
 #include "installationpool.h"
 #include "WonderRecord.h"
 
-#include "Gold.h"
+#include "gold.h"
 #include "Sci.h"
 #include "TaxRate.h"
 #include "Diffcly.h"
@@ -58,27 +58,27 @@
 #include "Agreement.h"
 #include "UnitPool.h"
 #include "BuildingRecord.h"
-#include "Director.h"
+#include "director.h"
 #include "RandGen.h"
 #include "Regard.h"
 #include "CivilisationDB.h"
 #include "CivilisationPool.h"
 #include "MessagePool.h"
 
-#include "ProfileDB.h"
-#include "AiCause.h"
+#include "profileDB.h"
+#include "aicause.h"
 #include "CreateUnit.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "StrDB.h"
 #include "TradeAstar.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
-#include "Order.h"
+#include "order.h"
 #include "UnitRecord.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 
 

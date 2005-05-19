@@ -9,9 +9,9 @@
 
 #include "c3.h"
 
-#include "CivArchive.h"
-#include "Gold.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "gold.h"
+#include "player.h"
 #include "Unit.h"
 #include "AgreementData.h"
 #include "Agreement.h"

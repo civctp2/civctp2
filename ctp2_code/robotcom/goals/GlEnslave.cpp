@@ -3,24 +3,24 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "DynArr.h"
+#include "dynarr.h"
 #include "IMapPointData.h"
-#include "IC3Player.h"
-#include "IC3World.h"
+#include "ic3player.h"
+#include "ic3world.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
-#include "BSet.h"
+#include "bset.h"
 
-#include "AIMain.h"
+#include "aimain.h"
 #include "AiMap.h"
 #include "GlEnslave.h"
 
 
 #include "dr_debug.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 #include "ForeignAgent.h"
 #include "ForeignCity.h"

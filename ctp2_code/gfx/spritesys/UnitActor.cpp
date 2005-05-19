@@ -47,8 +47,8 @@
 #include "SelItem.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "CivArchive.h"
-#include "ScreenManager.h"
+#include "civarchive.h"
+#include "screenmanager.h"
 #include "Cell.h"
 
 #include "FacedSprite.h"
@@ -56,13 +56,13 @@
 #include "SpriteState.h"
 #include "Actor.h"
 #include "SpriteGroupList.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "Anim.h"
 #include "UnitActor.h"
 #include "ActorPath.h"
 #include "Action.h"
-#include "Director.h"
-#include "ColorSet.h"
+#include "director.h"
+#include "colorset.h"
 #include "UnitPool.h"
 #include "ArmyPool.h"
 #include "maputils.h"
@@ -70,16 +70,16 @@
 #include "network.h"
 #include "SpriteStateDB.h"
 #include "AgeRecord.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "WonderRecord.h"
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 
-#include "civilisation.h"
-#include "civilisationdb.h"
+#include "Civilisation.h"
+#include "CivilisationDB.h"
 #include "player.h"
 
-#include "DebugMemory.h"
+#include "debugmemory.h"
 #include "UnitRecord.h"
 
 #include "wonderutil.h"
@@ -116,7 +116,7 @@ extern Player			**g_player;
 
 extern BOOL				g_unitCompletedAction;
 
-#include "profiledb.h"
+#include "profileDB.h"
 extern ProfileDB		*g_theProfileDB;
 
 #ifndef _DEBUG_MEMORY

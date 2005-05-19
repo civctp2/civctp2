@@ -11,7 +11,7 @@ class ctp2_ListItem;
 class ctp2_Static;
 class aui_Surface;
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 struct UnitManagerCategoryInfo
 {

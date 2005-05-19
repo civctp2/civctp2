@@ -2,11 +2,11 @@
 
 #include "OTUtilityList.h"
 
-#include "BSet.h"
-#include "CivArchive.h"
+#include "bset.h"
+#include "civarchive.h"
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 #include "CityAgent.h"
 

@@ -9,7 +9,7 @@
 
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 #include "net_gameobj.h"
 #include "GameObj.h"
 #include "ObjPool.h"
@@ -20,7 +20,7 @@
 #include "TerrImprove.h"
 #include "installation.h"
 #include "DiplomaticRequest.h"
-#include "Message.h"
+#include "message.h"
 
 #include "UnitPool.h"
 #include "TradePool.h"
@@ -32,8 +32,8 @@
 #include "MessagePool.h"
 #include "ArmyPool.h"
 
-#include "AiCause.h"
-#include "PointerList.h"
+#include "aicause.h"
+#include "pointerlist.h"
 
 extern UnitPool *g_theUnitPool;
 

@@ -12,9 +12,9 @@
 
 #include "StrDB.h"
 #include "ErrMsg.h"
-#include "CivArchive.h"
-#include "Player.h"
-#include "MovieDB.h"
+#include "civarchive.h"
+#include "player.h"
+#include "moviedb.h"
 #include "AgeRecord.h"
 
 #include "WonderTracker.h"

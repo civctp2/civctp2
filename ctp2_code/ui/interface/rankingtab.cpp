@@ -12,35 +12,35 @@
 #include "c3.h"
 
 #include "aui_ldl.h"
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "ctp2_button.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
 #include "c3ui.h"
-#include "ctp2_DropDown.h"
+#include "ctp2_dropdown.h"
 #include "ctp2_Static.h"
-#include "ctp2_ListBox.h"
+#include "ctp2_listbox.h"
 
 
 #include "StrDB.h"
 
 
-#include "RankingTab.h"
+#include "rankingtab.h"
 
 
-#include "LineGraph.h"
+#include "linegraph.h"
 
 
 #include "aui_uniqueid.h"
 
 
-#include "Player.h"
+#include "player.h"
 
 
-#include "aui_StringTable.h"
+#include "aui_stringtable.h"
 
 
-#include "ColorSet.h"
+#include "colorset.h"
 
 
 #include "infowin.h"

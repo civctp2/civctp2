@@ -3,30 +3,30 @@
 #include "c3.h"
 #include "c3math.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 
 
 
-#include "RobotAstar2.h"
+#include "robotastar2.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "Path.h"
 #include "UnitAstar.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "DynArr.h"
-#include "Player.h"
+#include "dynarr.h"
+#include "player.h"
 #include "RandGen.h"
 #include "UnitRec.h"
 #include "RobotAstar.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "UnitRecord.h"
 #include "ArmyData.h"
 #include "Cell.h"
 #include "Diplomat.h"
 #include "DiffDB.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 extern  ProfileDB *g_theProfileDB; 
 extern World *g_theWorld; 

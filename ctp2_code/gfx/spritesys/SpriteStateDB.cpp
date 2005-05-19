@@ -14,7 +14,7 @@
 #include "c3.h"
 
 #include "SpriteStateDB.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "Token.h"
 

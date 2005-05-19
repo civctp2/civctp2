@@ -3,7 +3,7 @@
 #ifndef __C3_ICON_H__
 #define __C3_ICON_H__
 
-#include "c3_Static.h"
+#include "c3_static.h"
 
 class aui_Surface;
 

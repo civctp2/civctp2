@@ -32,13 +32,13 @@
 #include "aui.h"
 
 #include "aui_ui.h"
-#include "aui_Ldl.h"
-#include "aui_UniqueId.h"
-#include "aui_Ranger.h"
-#include "aui_Window.h"
-#include "aui_Item.h"
-#include "aui_Switch.h"
-#include "aui_Blitter.h"
+#include "aui_ldl.h"
+#include "aui_uniqueid.h"
+#include "aui_ranger.h"
+#include "aui_window.h"
+#include "aui_item.h"
+#include "aui_switch.h"
+#include "aui_blitter.h"
 
 #include "c3_header.h"
 #include "c3_ranger.h"
@@ -47,12 +47,12 @@
 #include "ctp2_listbox.h"
 #include "ctp2_dropdown.h"
 
-#include "Pattern.h"
+#include "pattern.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "ctp2_MenuButton.h"
-#include "aui_DragDropWindow.h"
+#include "aui_dragdropwindow.h"
 
 
 

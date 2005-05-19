@@ -5,10 +5,10 @@
 #include "C3Population.h"
 
 
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "DB.h"
 
 	extern	enum POPTYPE ;
@@ -18,9 +18,9 @@
 	extern	Player	**g_player ;
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "WonderRecord.h"
 #include "Happy.h"
 

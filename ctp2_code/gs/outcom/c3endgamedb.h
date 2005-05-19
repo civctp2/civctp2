@@ -14,7 +14,7 @@
 #ifndef __C3EndGameDB_H__
 #define __C3EndGameDB_H__ 1
 
-#include "IC3EndGameDB.h"
+#include "ic3endgamedb.h"
 
 class Player; 
 class CivArchive; 

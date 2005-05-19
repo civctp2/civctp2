@@ -15,7 +15,7 @@
 #ifdef _DEBUG
 
 #include "aui.h"
-#include "debugWindow.h"
+#include "debugwindow.h"
 #include "civ3_main.h"
 #include "netconsole.h"
 

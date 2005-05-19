@@ -49,21 +49,21 @@
 #include "AdvanceRecord.h"
 
 #include "TerrainRecord.h"
-#include "GWDB.h"
+#include "gwdb.h"
 #include "UVDB.h"
 
 #include "BuildingRecord.h"
 #include "DiffDB.h"
 
-#include "MovieDB.h"
+#include "moviedb.h"
 
 
-#include "constdb.h"
+#include "ConstDB.h"
 
 #include "XY_Coordinates.h"
 #include "A_Star_Heuristic_Cost.h"
 #include "World.h"
-#include "Player.h"
+#include "player.h"
 
 #include "DataCheck.h"
 
@@ -75,7 +75,7 @@
 #include "SelItem.h"
 #include "TradeOfferPool.h"
 
-#include "NewTurnCount.h"
+#include "newturncount.h"
 #include "TurnCnt.h"
 
 #include "QuadTree.h"
@@ -88,7 +88,7 @@
 #include "CivilisationDB.h"
 #include "filenamedb.h"
 
-#include "Pollution.h"
+#include "pollution.h"
 #include "UnitPool.h"
 #include "ArmyPool.h"
 #include "DiplomaticRequestPool.h"
@@ -100,19 +100,19 @@
 
 
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "c3errors.h"
 
-#include "AiCause.h"
+#include "aicause.h"
 #include "Advances.h"
 
 #include "SlicEngine.h"
 
 #include "AgeRecord.h"
-#include "ThroneDB.h"
-#include "ConceptDB.h"
+#include "thronedb.h"
+#include "conceptdb.h"
 
-#include "Splash.h"
+#include "splash.h"
 #include "TopTen.h"
 #include "SoundRecord.h"
 
@@ -129,27 +129,27 @@
 #include "EndGameDB.h"
 #include "PollutionDB.h"
 
-#include "DebugMemory.h"
+#include "debugmemory.h"
 #include "TradeBids.h"
 
-#include "Order.h"
+#include "order.h"
 #include "UnseenCell.h"
-#include "Pool.h"
+#include "pool.h"
 
 #include "c3slider.h"
 #include "custommapscreen.h"
 
 #include "GameSettings.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
-#include "ControlPanelWindow.h"
+#include "controlpanelwindow.h"
 
 #include "MaterialPool.h"
 
-#include "GameFile.h"
+#include "gamefile.h"
 #include "Cell.h"
 
-#include "Director.h"
+#include "director.h"
 extern Director *g_director;
 
 #include "IconRecord.h"
@@ -163,8 +163,8 @@ extern Director *g_director;
 #include "wonderutil.h"
 
 
-#include "CtpAi.h"
-#include "roboinit.h"
+#include "ctpai.h"
+#include "RoboInit.h"
 
 #include "FeatTracker.h"
 
@@ -2931,7 +2931,7 @@ extern C3UI *g_c3ui;
 #include "radarmap.h"
 #include "radarwindow.h"
 #include "ctp2_Window.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "background.h"
 extern Background *g_background;
 

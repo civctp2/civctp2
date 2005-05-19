@@ -1,51 +1,51 @@
 
 
 #include "c3.h"
-#include "Globals.h"
-#include "CivArchive.h"
+#include "globals.h"
+#include "civarchive.h"
 
-#include "IC3DipReq.h"
-#include "IC3World.h"
-#include "IC3Science.h"
-#include "IC3Player.h"
-#include "IC3TerrDB.h"              
-#include "IC3Rand.h"
+#include "ic3DipReq.h"
+#include "ic3world.h"
+#include "ic3Science.h"
+#include "ic3player.h"
+#include "ic3TerrDB.h"              
+#include "ic3Rand.h"
 
-#include "FSDiplomat.h"
+#include "FsDiplomat.h"
 
 #include "FliEngine.h"
 #include "fliif.h"
 #include "FzOut.h"
-#include "FzDipVars.h"
+#include "fzdipvars.h"
 #include "FliSymbol.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 #include "Foreigner.h"
 #include "ForeignAgent.h"
 #include "AIDipReq.h"
-#include "BSet.h"
+#include "bset.h"
 #include "ForeignCity.h"
 
-#include "AIRndCnt.h"
+#include "airndcnt.h"
 #include "AiMap.h"
 #include "Cont.h"
 
 #include "FlatPtr.h"
 #include "CityAgent.h"
-#include "Gold.h"
+#include "gold.h"
 
 #include "IC3Trade.h"
-#include "PointerList.h"
-#include "AiCell.h"
+#include "pointerlist.h"
+#include "aicell.h"
 
 #include "ArmyAgent.h"
 #include "AgreementTypes.h"
 #include "Pirate_Marker.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
-#include "IC3Rand.h"
+#include "ic3Rand.h"
 #include "C3Player.h"
 
 #include "TradeRouteData.h"

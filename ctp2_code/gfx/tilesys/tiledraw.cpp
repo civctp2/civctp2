@@ -60,11 +60,11 @@
 #include "primitives.h"
 #include "background.h"
 
-#include "PointerList.h"
-#include "DynArr.h"
+#include "pointerlist.h"
+#include "dynarr.h"
 
 #include "SelItem.h"
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
@@ -72,34 +72,34 @@
 #include "TerrImprove.h"
 #include "TerrImproveData.h"
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "TileInfo.h"
-#include "TileSet.h"
+#include "tileset.h"
 #include "BaseTile.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "maputils.h"
 #include "textutils.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "UnitData.h"
 #include "TileDrawRoad.h"
-#include "Director.h"
-#include "ScreenManager.h"
+#include "director.h"
+#include "screenmanager.h"
 #include "UnitActor.h"
 
-#include "unseencell.h"
+#include "UnseenCell.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "network.h"
-#include "ChatList.h"
-#include "PointerList.h"
+#include "chatlist.h"
+#include "pointerlist.h"
 #include "StrDB.h"
 
 extern ProfileDB	*g_theProfileDB;
 
 
-#include "TerrainUtil.h"
+#include "terrainutil.h"
 #include "TerrainRecord.h"
 #include "TerrImprove.h"
 #include "TerrainImprovementRecord.h"

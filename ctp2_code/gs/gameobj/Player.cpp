@@ -60,17 +60,17 @@
 #include "c3math.h"
 
 #include "Army.h"
-#include "CellUnitList.h"
-#include "Player.h"
+#include "cellunitlist.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 #include "SelItem.h"
 #include "aui.h"
-#include "DebugWindow.h"
+#include "debugwindow.h"
 
 
 #include "network.h"
@@ -81,7 +81,7 @@
 
 #include "AdvanceRecord.h"
 #include "DataCheck.h"
-#include "Pollution.h"
+#include "pollution.h"
 
 #include "CivPaths.h"
 
@@ -90,7 +90,7 @@
 
 
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 
 #include "Vision.h"
 
@@ -106,7 +106,7 @@
 
 #include "installationpool.h"
 
-#include "Installation.h"
+#include "installation.h"
 #include "installationtree.h"
 
 
@@ -114,7 +114,7 @@
 
 #include "radarmap.h"
 
-#include "Gold.h"
+#include "gold.h"
 #include "Sci.h"
 #include "TaxRate.h"
 #include "Diffcly.h"
@@ -129,15 +129,15 @@
 #include "Agreement.h"
 #include "UnitPool.h"
 #include "BuildingRecord.h"
-#include "Director.h"
+#include "director.h"
 #include "RandGen.h"
 #include "Regard.h"
 #include "CivilisationDB.h"
 #include "CivilisationPool.h"
 #include "MessagePool.h"
 
-#include "ProfileDB.h"
-#include "AiCause.h"
+#include "profileDB.h"
+#include "aicause.h"
 #include "CreateUnit.h"
 #include "SlicSegment.h"
 #include "SlicEngine.h"
@@ -146,7 +146,7 @@
 #include "StrDB.h"
 #include "TopTen.h"
 #include "Strengths.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "gamesounds.h"
 
 #include "messagewin.h"
@@ -155,7 +155,7 @@
 #include "infowin.h"
 #include "victorywin.h"
 
-#include "CivApp.h"
+#include "civapp.h"
 
 #include "Happy.h"
 #include "AgreementDynArr.h"
@@ -170,7 +170,7 @@
 #include "AchievementTracker.h"
 
 #include "ArmyPool.h"
-#include "Order.h"
+#include "order.h"
 #include "ArmyData.h"
 #include "civapp.h"
 
@@ -194,7 +194,7 @@
 #include "statswindow.h"
 #include "sci_advancescreen.h"
 
-#include "c3_HyperTextBox.h"
+#include "c3_hypertextbox.h"
 
 #include "sciencewin.h"
 
@@ -202,7 +202,7 @@
 #include "screenutils.h"
 
 #include "EndGameDB.h"
-#include "EndGameWindow.h"
+#include "EndgameWindow.h"
 
 #include "GameSettings.h"
 #include "WonderTracker.h"
@@ -228,12 +228,12 @@
 #include "wonderutil.h"
 
 #include "MainControlPanel.h"
-#include "TradeManager.h"
-#include "ScenarioEditor.h"
+#include "trademanager.h"
+#include "scenarioeditor.h"
 
 #include "FeatTracker.h"
-#include "GaiaController.h"
-#include "GreatLibrary.h"
+#include "gaiacontroller.h"
+#include "greatlibrary.h"
 #include "EventTracker.h"
 
 #include "ctp2_Window.h"
@@ -241,11 +241,11 @@
 
 #include "AgreementMatrix.h"
 #include "Diplomat.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 
-#include "MessageWindow.h"
+#include "messagewindow.h"
 
-#include "ScenarioEditor.h"
+#include "scenarioeditor.h"
 
 extern C3UI						*g_c3ui;
 extern ControlPanelWindow		*g_controlPanel;
@@ -278,11 +278,11 @@ BOOL							g_toggleAdvances ;
 BOOL							g_aPlayerIsDead = FALSE;
 
 
-#include "NewTurnCount.h"
+#include "newturncount.h"
 
 #include "TurnCnt.h"
 extern TurnCount				*g_turn;
-#include "TiledMap.h" 
+#include "tiledmap.h" 
 extern TiledMap					*g_tiledMap;
 
 extern BOOL g_powerPointsMode;
@@ -309,7 +309,7 @@ extern BOOL							g_ai_revolt;
 
 #include "Exclusions.h"
 
-#include "CtpAi.h"
+#include "ctpai.h"
 
 
 

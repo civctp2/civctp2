@@ -33,7 +33,7 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "ProfileDB.h"	
+#include "profileDB.h"	
 #include "MapPoint.h"
 #include "Token.h"
 #include "globals.h"
@@ -43,16 +43,16 @@
 #include "Civilisation.h"
 #include "SimpleDynArr.h"
 #include "SlicEngine.h"
-#include "CivApp.h"
+#include "civapp.h"
 #include "screenutils.h"
-#include "gamesettings.h"
-#include "SoundManager.h"
+#include "GameSettings.h"
+#include "soundmanager.h"
 #include "CivPaths.h"
-#include "Player.h"
+#include "player.h"
 #include "Diffcly.h"
 
 
-#include "action.h"
+#include "Action.h"
 
 extern CivPaths				*g_civPaths;
 extern StringDB				*g_theStringDB;

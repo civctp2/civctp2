@@ -4,7 +4,7 @@
 #ifndef __OA_PILLAGE__
 #define __OA_PILLAGE__ 1
 
-#include "OA.h"
+#include "Oa.h"
 
 class Opportunity_Action_Pillage : public Opportunity_Action { 
 

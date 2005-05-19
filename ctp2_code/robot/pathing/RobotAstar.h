@@ -17,7 +17,7 @@
 
 
 #include "UnitAstar.h"
-#include "IC3RobotAstar.h"
+#include "ic3RobotAstar.h"
 
 class Player; 
 class CivArchive; 

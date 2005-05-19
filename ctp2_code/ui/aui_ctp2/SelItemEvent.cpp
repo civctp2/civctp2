@@ -5,7 +5,7 @@
 #include "SelItemEvent.h"
 #include "Events.h"
 #include "SelItem.h"
-#include "ControlPanelWindow.h"
+#include "controlpanelwindow.h"
 #include "ctp2_Static.h"
 
 STDEHANDLER(SelItemArmyMovedEvent)

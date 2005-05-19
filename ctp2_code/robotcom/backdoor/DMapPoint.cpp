@@ -2,7 +2,7 @@
 #include "c3.h"
 
 #include "DMapPoint.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 DMapPoint::DMapPoint()
 {

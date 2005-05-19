@@ -24,29 +24,29 @@
 #include "radarwindow.h"
 #include "statswindow.h"
 
-#include "ChatBox.h"
+#include "chatbox.h"
 
 
 #include "network.h"
 
 #include "TradePool.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "c3windows.h"
 #include "c3cmdline.h"
 
-#include "aui_Static.h"
+#include "aui_static.h"
 
-#include "backgroundWin.h"
+#include "backgroundwin.h"
 #include "controlpanelwindow.h"
 
-#include "BSet.h"
+#include "bset.h"
 
 
 #include "profileDB.h"
 
 #include "director.h"
 
-#include "ScreenManager.h"
+#include "screenmanager.h"
 extern ScreenManager	*g_screenManager;
 
 

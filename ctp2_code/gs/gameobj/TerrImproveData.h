@@ -11,7 +11,7 @@
 #ifndef _TERRIMPROVEDATA_H_
 #define _TERRIMPROVEDATA_H_
 
-#include "gameobj.h"
+#include "GameObj.h"
 #include "MapPoint.h"
 #include "gstypes.h"
 

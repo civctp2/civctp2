@@ -5,23 +5,23 @@
 
 #include "Army.h"
 #include "ArmyData.h"
-#include "Director.h"
-#include "TiledMap.h"
+#include "director.h"
+#include "tiledmap.h"
 #include "SelItem.h"
 #include "UnitActor.h"
 #include "UnitData.h"
 #include "unitutil.h"
 #include "UnitPool.h"
-#include "Player.h"
+#include "player.h"
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 #include "SoundRecord.h"
 #include "SpecialEffectRecord.h"
 #include "SpecialAttackInfoRecord.h"
 
 #include "network.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 STDEHANDLER(DirectorMoveUnitsEvent)
 {

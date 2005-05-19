@@ -5,21 +5,21 @@
 #include "C3Wonder.h"
 
 
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "WonderRecord.h"
 
 #include "StrDB.h"
 #include "Unit.h"
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "Exclusions.h"
 
 #include "BldQue.h"
 #include "Exclusions.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "WonderTracker.h"
 

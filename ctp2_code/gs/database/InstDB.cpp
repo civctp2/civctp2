@@ -12,7 +12,7 @@
 #include "InstDB.h"
 #include "c3errors.h"
 #include "StrDB.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "Token.h"
 #include "UnitRec.h"
 #include "SoundRecord.h"

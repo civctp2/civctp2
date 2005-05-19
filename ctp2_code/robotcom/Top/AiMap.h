@@ -15,9 +15,9 @@
 #ifndef __AI_MAP_H__
 #define __AI_MAP_H__
 
-#include "DynArr.h"
-#include "AiCell.h"
-#include "PriorityQueue.h"
+#include "dynarr.h"
+#include "aicell.h"
+#include "priorityqueue.h"
 
 
 class AiCell; 

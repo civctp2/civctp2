@@ -12,7 +12,7 @@
 #ifndef LDL_DATA_HPP
 #define LDL_DATA_HPP
 
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "ldl_list.h"
 
 class ldl;

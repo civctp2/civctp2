@@ -1,13 +1,13 @@
 #include "c3.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 
-#include "GlFreight.h"
+#include "glfreight.h"
 
-#include "AILOG.h"
+#include "ailog.h"
 #include "Plan.h"
 #include "ArmyAgent.h"
 #include "CityAgent.h"

@@ -11,13 +11,13 @@
 #include "c3_switch.h"
 #include "c3_checkbox.h"
 #include "c3ui.h"
-#include "profiledb.h"
+#include "profileDB.h"
 #include "spnewgamewindow.h"
 #include "aui_uniqueid.h"
 #include "aui_stringtable.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "civ3_main.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 
 #include "display.h"

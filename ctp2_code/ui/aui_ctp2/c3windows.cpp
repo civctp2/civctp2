@@ -74,17 +74,17 @@
 #include "workwindow.h"
 
 
-#include "backgroundWin.h"
+#include "backgroundwin.h"
 #include "workwin.h"
 
-#include "ThumbnailMap.h"
+#include "thumbnailmap.h"
 
 #include "player.h"
-#include "id.h"
-#include "selitem.h"
+#include "ID.h"
+#include "SelItem.h"
 
 #include "screenutils.h"
-#include "gamesettings.h"
+#include "GameSettings.h"
 
 #include "c3_utilitydialogbox.h"
 

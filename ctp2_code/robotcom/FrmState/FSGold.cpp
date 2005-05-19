@@ -2,20 +2,20 @@
 
 
 #include "FSGold.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
-#include "IC3GameState.h"
-#include "IC3Player.h"
-#include "IC3Population.h"
-#include "IC3TerrDB.h"
+#include "ic3GameState.h"
+#include "ic3player.h"
+#include "ic3Population.h"
+#include "ic3TerrDB.h"
 
-#include "AiMain.h"
-#include "Gold.h"
+#include "aimain.h"
+#include "gold.h"
 
 
 #include "CityAgent.h"
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 
 
 #include "GlOvertime.h"
@@ -23,7 +23,7 @@
 
 #include "OTUtilityList.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

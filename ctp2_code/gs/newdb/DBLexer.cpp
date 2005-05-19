@@ -29,7 +29,7 @@
 #include "c3.h"
 #include "DBLexer.h"
 #include "StringHash.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "DBTokens.h"
 #include "StrDB.h"
 #include "c3files.h"

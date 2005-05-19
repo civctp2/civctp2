@@ -31,7 +31,7 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "TerrainRecord.h"
 
@@ -40,22 +40,22 @@
 #include "World.h"
 #include "Cell.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "ConstDB.h"
-#include "Player.h"
+#include "player.h"
 #include "RandGen.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "TileInfo.h"
 #include "GoodyHuts.h"
 
-#include "profiledb.h"
-#include "DynArr.h"
+#include "profileDB.h"
+#include "dynarr.h"
 #include "network.h"
 #include "MapDB.h"
 #include "PQueue.h"
 #include "WorldDistance.h"
 
-#include "GameFile.h"
+#include "gamefile.h"
 #include "StartingPosition.h"
 
 #include "MoveFlags.h"
@@ -65,9 +65,9 @@
 #include "ResourceRecord.h"
 
 #include "terrainutil.h"
-#include "CellUnitList.h"
-#include "AICause.h"
-#include "CityData.h"
+#include "cellunitlist.h"
+#include "aicause.h"
+#include "citydata.h"
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
 #include "bmp_io.h"
@@ -76,7 +76,7 @@
 
 #include <initguid.h>
 #include "C3Rand.h"
-#include "IC3RobotAstar.h"
+#include "ic3RobotAstar.h"
 #include "IMapGen.h"
 
 extern	Player	**g_player ;

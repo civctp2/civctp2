@@ -5,9 +5,9 @@
 #include "DataCheck.h"
 #include "RoboInit.h"
 
-#include "CtpAi.h"
+#include "ctpai.h"
 #include "Diplomat.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 #include "AgreementMatrix.h"
 
 UnitAstar *g_theUnitAstar; 

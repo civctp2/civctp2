@@ -14,7 +14,7 @@
 #include "c3errors.h"
 
 #include "GameObj.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
    
 

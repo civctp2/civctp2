@@ -128,9 +128,9 @@
 
 
 #include "c3.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "IMapPointData.h"
-#include "IC3Player.h"
+#include "ic3player.h"
 
 
 #include "Agent.h"
@@ -138,19 +138,19 @@
 #include "CityAgent.h"
 
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 
 #include "GlExpl.h"
 
-#include "AILOG.h"
+#include "ailog.h"
 
 
 #include "dr_debug.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 
 #include "Agent.h"
@@ -160,9 +160,9 @@
 
 #include "FzOut.h"
 #include "AiMap.h"
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 
-#include "IC3World.h"
+#include "ic3world.h"
 
 
 GoalExplore::GoalExplore()

@@ -14,7 +14,7 @@
 #ifndef __C3InstDB_H__
 #define __C3InstDB_H__ 1
 
-#include "IC3InstDB.h"
+#include "ic3InstDB.h"
 
 class Player; 
 class CivArchive; 

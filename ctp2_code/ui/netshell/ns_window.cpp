@@ -38,7 +38,7 @@
 #include "aui_action.h"
 
 #include "ns_window.h"
-#include "c3_Static.h"
+#include "c3_static.h"
 
 
 

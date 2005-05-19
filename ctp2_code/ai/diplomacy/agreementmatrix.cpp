@@ -32,14 +32,14 @@
 #include <vector>
 using namespace std;
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "AgreementMatrix.h"
-#include "Player.h"
+#include "player.h"
 
 #include "diplomacyutil.h"
 #include "DiplomacyProposalRecord.h"
-#include "NewTurnCount.h"
-#include "CtpAi.h"
+#include "newturncount.h"
+#include "ctpai.h"
 #include "MoveFlags.h"
 #include "Diplomat.h"
 

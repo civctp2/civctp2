@@ -7,9 +7,9 @@
 #include "MapPoint.h"
 #include "Army.h"
 #include "Path.h"
-#include "Player.h"
+#include "player.h"
 #include "TerrImprove.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "TradeRoute.h"
 
 GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl)

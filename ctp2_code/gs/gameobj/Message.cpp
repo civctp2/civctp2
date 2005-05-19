@@ -8,13 +8,13 @@
 
 #include "c3.h"
 
-#include "CivArchive.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "player.h"
 #include "Unit.h"
 #include "DiplomaticRequestData.h"
 #include "DiplomaticRequest.h"
 #include "MessageData.h"
-#include "Message.h"
+#include "message.h"
 #include "MessagePool.h"
 #include "network.h"
 #include "net_info.h"

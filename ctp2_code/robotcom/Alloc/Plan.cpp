@@ -20,33 +20,33 @@
 
 
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 
 #include "common.h"
 #include "linked_list.h"
-#include "Strategic_AI_Forward.h"
-#include "Unitflow.h"
-#include "Squad.h"
-#include "Goal.h"
+#include "strategic_ai_forward.h"
+#include "unitflow.h"
+#include "squad.h"
+#include "goal.h"
 
 
 
 #include "semi_dynamic_array.h"
 #include "list_array.h"
-#include "Pool.h"
+#include "pool.h"
 
 
 #include "Plan.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 
 #include "Scheduler.h"
-#include "Planner.h"
+#include "planner.h"
 
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
 
 

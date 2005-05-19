@@ -27,34 +27,34 @@
 
 #include "c3.h"
 
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "Army.h"
 #include "UnitPool.h"
 
 #include "aui.h"
-#include "aui_Window.h"
-#include "aui_UniqueID.h"
-#include "aui_Ldl.h"
+#include "aui_window.h"
+#include "aui_uniqueid.h"
+#include "aui_ldl.h"
 
 #include "c3_static.h"
 
 #include "SpriteState.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "c3_coloredstatic.h"
-#include "ControlSheet.h"
-#include "TextButton.h"
+#include "controlsheet.h"
+#include "textbutton.h"
 #include "c3_coloriconbutton.h"
-#include "UnitTabButton.h"
+#include "unittabbutton.h"
 
 #include "thermometer.h"
-#include "uiutils.h"
+#include "UIUtils.h"
 
 #include "battleorderbox.h"
 #include "battleorderboxactions.h"
 
-#include "strdb.h"
+#include "StrDB.h"
 
 #include "primitives.h"
 #include "UnitRecord.h"

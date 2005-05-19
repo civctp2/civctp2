@@ -13,7 +13,7 @@
 #define _BMH_END_GAME_WINDOW_H_
 
 
-#include "C3Window.h"
+#include "c3window.h"
 #include "keyboardhandler.h"
 
 

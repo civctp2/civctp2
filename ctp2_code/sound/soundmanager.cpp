@@ -43,7 +43,7 @@
 #include "CivPaths.h"
 #include "c3files.h"
 #include "PlayListDB.h"
-#include "Gamesounds.h"
+#include "gamesounds.h"
 #include <cctype>
 
 extern HWND			gHwnd;

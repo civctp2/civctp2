@@ -1214,19 +1214,19 @@
 #include "c3.h"
 #include "globals.h"
 #include "IMapPointData.h"
-#include "IC3RobotAstar.h"
-#include "IC3Player.h"
-#include "IC3Wonder.h"
-#include "IC3UnitDB.h"
-#include "IC3World.h"
-#include "DynArr.h" 
+#include "ic3RobotAstar.h"
+#include "ic3player.h"
+#include "ic3Wonder.h"
+#include "ic3UnitDB.h"
+#include "ic3world.h"
+#include "dynarr.h" 
 
 
 #include "AiMap.h"
-#include "AiCell.h"
-#include "AIRndCnt.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "aicell.h"
+#include "airndcnt.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 #include "FrameState.h"
 #include "Cont.h"
 
@@ -1234,15 +1234,15 @@
 #include "dr_debug.h"
 #include "semi_dynamic_array.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 #include "AiBldQue.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 #include "FzOut.h"
@@ -1255,19 +1255,19 @@
 #include "GlAttck.h"
 #include "GlTrans.h"
 #include "GlEnslave.h"
-#include "ScienceAgent.h"
-#include "Squad_Strength.h"
+#include "scienceagent.h"
+#include "squad_strength.h"
 #include "gold.h"
 
 
-#include "AstarPnt.h"
+#include "astarpnt.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 
-#include "Order.h"
-#include "AiCause.h"
+#include "order.h"
+#include "aicause.h"
 #include "C3Player.h"
 #include "Foreigner.h"
 #include "ForeignCity.h"

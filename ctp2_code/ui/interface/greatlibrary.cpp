@@ -48,14 +48,14 @@
 #include "aui_stringtable.h"
 
 
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 
 
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 
 #include "aui_switchgroup.h"
-#include "ctp2_tabgroup.h"
-#include "ctp2_tab.h"
+#include "ctp2_TabGroup.h"
+#include "ctp2_Tab.h"
 #include "texttab.h"
 #include "c3_button.h"
 
@@ -64,28 +64,28 @@
 
 
 #include "aui_listbox.h"
-#include "ctp2_HyperTextBox.h"
+#include "ctp2_hypertextbox.h"
 
 
-#include "ctp2_Button.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_button.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
 #include "ctp2_Static.h"
 
 #include "SlicObject.h"
 #include "SelItem.h"
-#include "Player.h"
+#include "player.h"
 
-#include "ControlSheet.h"
+#include "controlsheet.h"
 #include "videoutils.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 
 #include "AdvanceRecord.h"
 
-#include "ConceptDB.h"
+#include "conceptdb.h"
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "StrDB.h"
@@ -104,7 +104,7 @@
 
 #include "chart.h"
 
-#include "uiutils.h"
+#include "UIUtils.h"
 #include "screenutils.h"
 
 #include "greatlibrarywindow.h"
@@ -118,17 +118,17 @@
 #include "wonderutil.h"
 
 
-#include "Text_Hasher.h"
+#include "text_hasher.h"
 
 
 #include "MessageBoxDialog.h"
 
 
-#include "ctp2_TextField.h"
+#include "ctp2_textfield.h"
 #include <Vector>
 #include "String_Search.h"
 
-#include "Sci_Advancescreen.h"
+#include "sci_advancescreen.h"
 #include "stdlib.h"
 
 

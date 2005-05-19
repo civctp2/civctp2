@@ -34,7 +34,7 @@
 
 #include "textutils.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "CivPaths.h"
 
 HFONT				g_hFont;

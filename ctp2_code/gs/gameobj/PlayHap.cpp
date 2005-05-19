@@ -2,7 +2,7 @@
 #include "globals.h"
 
 #include "PlayHap.h"
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "ConstDB.h"
@@ -12,7 +12,7 @@
 #include "aui_window.h"
 #include "debugwindow.h"
 #include "Unit.h"
-#include "DynArr.h"
+#include "dynarr.h"
 #include "UnitDynArr.h"
 #include "Cell.h"
 #include "installationtree.h"
@@ -20,7 +20,7 @@
 #include "GovernmentRecord.h"
 #include "terrainutil.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "network.h"
 #include "GovernmentRecord.h"
 

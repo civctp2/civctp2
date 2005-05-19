@@ -4,8 +4,8 @@
 #include "ctp2_MenuButton.h"
 #include "ctp2_Menu.h"
 
-#include "GameSounds.h"
-#include "SoundManager.h"
+#include "gamesounds.h"
+#include "soundmanager.h"
 
 extern SoundManager		*g_soundManager;
 

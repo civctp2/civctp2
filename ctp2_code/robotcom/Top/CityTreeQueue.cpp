@@ -4,12 +4,12 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 #include "CityTreeQueue.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "CityTree.h"
 #include "CityVertex.h"
 #include "CityAgent.h"

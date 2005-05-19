@@ -1,19 +1,19 @@
-#include "C3.h"
+#include "c3.h"
 
 #include "XY_Coordinates.h"
 
 #include "World.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
 #include "Cell.h"
 
-#include "BSet.h"
+#include "bset.h"
 
 
 #include "MoveFlags.h"
 #include "Unit.h"
 #include "directions.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 
 sint16 World::GetContinent(const MapPoint & pos) const
 {

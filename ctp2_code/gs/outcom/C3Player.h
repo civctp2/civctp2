@@ -13,7 +13,7 @@
 #ifndef __C3PLAYER_H__
 #define __C3PLAYER_H__
 
-#include "IC3Player.h"
+#include "ic3player.h"
 class Player;
 class CivArchive; 
 class CityData; 

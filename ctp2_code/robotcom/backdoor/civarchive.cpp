@@ -15,8 +15,8 @@
 
 #include "c3errors.h"
 
-#include "CivArchive.h"
-#include "Ic3CivArchive.h"
+#include "civarchive.h"
+#include "ic3CivArchive.h"
 
 
 #ifdef _DEBUG

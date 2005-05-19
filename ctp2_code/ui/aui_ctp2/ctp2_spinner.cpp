@@ -27,7 +27,7 @@
 
 #include "primitives.h"
 
-#include "ctp2_Spinner.h"
+#include "ctp2_spinner.h"
 #include "ctp2_Static.h"
 #include <string>
 

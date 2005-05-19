@@ -42,7 +42,7 @@
 #include "ctp2_button.h"
 #include "c3_listbox.h"
 #include "c3_listitem.h"
-#include "C3_popupwindow.h"
+#include "c3_popupwindow.h"
 #include "MapPoint.h"
 #include "maputils.h"
 #include "tilecontrol.h"
@@ -63,10 +63,10 @@
 #include "ResourceRecord.h"
 
 // Added by Martin Gühmann
-#include "unseencell.h" //Unseen cell info is needed
-#include "TiledMap.h"
+#include "UnseenCell.h" //Unseen cell info is needed
+#include "tiledmap.h"
 #include "SelItem.h"
-#include "Player.h"
+#include "player.h"
 
 extern sint32		g_fog_toggle;
 extern sint32		g_god;

@@ -27,18 +27,18 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "AICause.h"
+#include "aicause.h"
 
 #include "Diplomat.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 #include "AgreementMatrix.h"
-#include "Player.h"
+#include "player.h"
 #include "AdvanceRecord.h"
 #include "Strengths.h"
-#include "Pollution.h"
-#include "NewTurnCount.h"
+#include "pollution.h"
+#include "newturncount.h"
 #include "Sci.h"
-#include "Gold.h"
+#include "gold.h"
 
 
 

@@ -3,14 +3,14 @@
 #include "c3.h"
 #include "FliRule.h"
 #include "FliSetFunc.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "FliSymbol.h"
 #include "FliEngine.h"
 #include "FliStack.h"
 #include "FliOutputProc.h"
 #include "FliWhen.h"
-#include "Globals.h"
-#include "AiMain.h"
+#include "globals.h"
+#include "aimain.h"
 
 FliRule::FliRule(uint8 *code, sint32 codelen,
 				 PointerList<FliSymbol> *inputsyms,

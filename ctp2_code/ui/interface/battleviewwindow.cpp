@@ -2,29 +2,29 @@
 
 #include "c3.h"
 
-#include "aui_Control.h"
+#include "aui_control.h"
 #include "ctp2_Static.h"
-#include "ctp2_Button.h"
-#include "c3_Icon.h"
+#include "ctp2_button.h"
+#include "c3_icon.h"
 #include "c3ui.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 #include "aui_ldl.h"
-#include "aui_StringTable.h"
-#include "aui_Blitter.h"
+#include "aui_stringtable.h"
+#include "aui_blitter.h"
 
 #include "pixelutils.h"
 #include "primitives.h"
-#include "TileSet.h"
-#include "TiledMap.h"
+#include "tileset.h"
+#include "tiledmap.h"
 
-#include "BattleViewWindow.h"
-#include "BattleViewActor.h"
-#include "BattleView.h"
-#include "Battle.h"
+#include "battleviewwindow.h"
+#include "battleviewactor.h"
+#include "battleview.h"
+#include "battle.h"
 
 #include "World.h"
 
-#include "Director.h"
+#include "director.h"
 
 #include "CTP2Combat.h"
 #include "GameEventManager.h"
@@ -33,7 +33,7 @@
 #include "network.h"
 #include "TerrainRecord.h"
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 extern C3UI		*g_c3ui;
 extern World	*g_theWorld;

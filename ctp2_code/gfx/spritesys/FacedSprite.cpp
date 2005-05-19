@@ -17,14 +17,14 @@
 #include "tiffutils.h"
 #include "pixelutils.h"
 #include "spriteutils.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
 #include "aui.h"
 #include "aui_surface.h"
 
 #include "Sprite.h"
 #include "FacedSprite.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 #include "Token.h"
 

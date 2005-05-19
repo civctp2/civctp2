@@ -31,8 +31,8 @@
 #include "SlicSymbol.h"
 #include "SlicEngine.h"
 #include "SlicNamedSymbol.h"
-#include "CivArchive.h"
-#include "GameFile.h"
+#include "civarchive.h"
+#include "gamefile.h"
 
 SlicStructDescription::Member::Member(SlicStructDescription *parent, char *name, SLIC_SYM type)
 {

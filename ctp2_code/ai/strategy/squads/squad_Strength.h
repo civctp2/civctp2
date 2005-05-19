@@ -12,7 +12,7 @@
 #ifndef __AGENT_STRENGTH_H__
 #define __AGENT_STRENGTH_H__
 
-#include "Scheduler_Types.h"
+#include "scheduler_types.h"
 #include "MapPoint.h"
 
 class Squad_Strength { 

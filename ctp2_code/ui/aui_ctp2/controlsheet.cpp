@@ -3,10 +3,10 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_Window.h"
+#include "aui_window.h"
 
-#include "Pattern.h"
-#include "ControlSheet.h"
+#include "pattern.h"
+#include "controlsheet.h"
 
 #include "primitives.h"
 

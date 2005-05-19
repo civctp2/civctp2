@@ -15,11 +15,11 @@
 #include "CivPaths.h"
 
 #include "c3ui.h"
-#include "DirectVideo.h"
-#include "Pattern.h"
-#include "C3Window.h"
-#include "VideoWindow.h"
-#include "TextButton.h"
+#include "directvideo.h"
+#include "pattern.h"
+#include "c3window.h"
+#include "videowindow.h"
+#include "textbutton.h"
 
 #include "videoutils.h"
 

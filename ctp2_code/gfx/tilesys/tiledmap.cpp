@@ -42,17 +42,17 @@
 
 #include "XY_Coordinates.h"
 #include "Cell.h"
-#include "Player.h"
-#include "CellUnitList.h"
+#include "player.h"
+#include "cellunitlist.h"
 #include "SelItem.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "aui.h"
 #include "c3ui.h"
 #include "aui_stringtable.h"
 #include "aui_directsurface.h"
 #include "aui_blitter.h"
-#include "aui_DirtyList.h"
+#include "aui_dirtylist.h"
 #include "c3window.h"
 
 #include "ctp2_button.h"
@@ -72,36 +72,36 @@
 #include "TerrainRecord.h"
 #include "StrDB.h"
 
-#include "ScreenManager.h"
+#include "screenmanager.h"
 #include "Sprite.h"
 #include "UnitSpriteGroup.h"
 #include "UnitActor.h"
 
 #include "EffectActor.h"
 #include "GoodActor.h"
-#include "Director.h"
+#include "director.h"
 
 #include "TileInfo.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "BaseTile.h"
 #include "TileInfo.h"
 #include "TerrImproveData.h"
 #include "maputils.h"
-#include "TileSet.h"
+#include "tileset.h"
 #include "TileDrawRoad.h"
 
 #include "CivPaths.h"
 
-#include "ColorSet.h"
-#include "RadarMap.h"
+#include "colorset.h"
+#include "radarmap.h"
 
 #include "buttonbank.h"
 #include "controlpanelwindow.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
-#include "ProfileDB.h"
-#include "AiCause.h"
+#include "profileDB.h"
+#include "aicause.h"
 #include "UnitPool.h"
 
 
@@ -109,8 +109,8 @@
 
 #include "TradeRoute.h"
 #include "TradeRouteData.h"
-#include "GrabItem.h"
-#include "AiCause.h"
+#include "grabitem.h"
+#include "aicause.h"
 #include "ArmyPool.h"
 #include "ArmyData.h"
 
@@ -119,21 +119,21 @@
 #include "TurnCnt.h"
 
 
-#include "TerrainUtil.h"
+#include "terrainutil.h"
 #include "TerrainRecord.h"
 #include "TerrImprove.h"
 #include "TerrainImprovementRecord.h"
 #include "TerrImprovePool.h"		
 
 
-#include "c3_PopupWindow.h"
+#include "c3_popupwindow.h"
 
 
 
 #include "SlicEngine.h"
 
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "UnitRecord.h"
 #include "ResourceRecord.h"
 
@@ -144,12 +144,12 @@
 
 #include "gfx_options.h"
 
-#include "ScenarioEditor.h"
+#include "scenarioeditor.h"
 
 
 #include "gamefile.h"
 
-#include "RadarWindow.h"
+#include "radarwindow.h"
 #include "ctp2_Window.h"
 
 extern World		*g_theWorld;

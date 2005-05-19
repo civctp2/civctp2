@@ -13,7 +13,7 @@
 
 #include "spnewgamewindow.h"
 #include "soundscreen.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "keypress.h"
 

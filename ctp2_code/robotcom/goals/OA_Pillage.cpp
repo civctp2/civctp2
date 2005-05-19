@@ -10,8 +10,8 @@
 
 #include "OA_Pillage.h"
 
-#include "AiMain.h"
-#include "BSet.h"
+#include "aimain.h"
+#include "bset.h"
 #include "ArmyAgent.h"
 #include "Foreigner.h"
 

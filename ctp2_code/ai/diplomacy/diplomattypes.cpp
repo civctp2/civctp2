@@ -11,7 +11,7 @@
 #include "c3.h"
 #include "SlicConst.h"
 #include "SlicEngine.h"
-#include "DiplomatTypes.h"
+#include "diplomattypes.h"
 
 extern std::string s_regardEventNames[REGARD_EVENT_MAX] = {
 	"SCENARIO",

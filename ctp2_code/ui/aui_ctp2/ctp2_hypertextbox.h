@@ -44,7 +44,7 @@
 #define __CTP2_HYPERTEXTBOX_H__
 
 #include "aui_hypertextbox.h"
-#include "PatternBase.h"
+#include "patternbase.h"
 
 class aui_Static;
 

@@ -33,18 +33,18 @@
 #include "Foreigner.h"
 
 
-#include "Player.h"
+#include "player.h"
 #include "Army.h"
 #include "ArmyData.h"
 #include "World.h"
-#include "NewTurnCount.h"
+#include "newturncount.h"
 
 #include "SlicObject.h"
 #include "SlicEngine.h"
 #include "stringutils.h"
 #include "StrDB.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "GSLogs.h"
 
 extern sint32 g_saveFileVersion;

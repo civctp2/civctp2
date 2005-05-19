@@ -10,8 +10,8 @@
 
 #include "c3ui.h"
 #include "c3_radio.h"
-#include "PatternBase.h"
-#include "Pattern.h"
+#include "patternbase.h"
+#include "pattern.h"
 #include "primitives.h"
 #include "colorset.h"
 

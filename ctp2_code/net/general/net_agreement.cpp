@@ -17,7 +17,7 @@
 
 #include "Agreement.h"
 #include "AgreementPool.h"
-#include "Player.h"
+#include "player.h"
 #include "AgreementDynArr.h"
 
 extern AgreementPool *g_theAgreementPool;

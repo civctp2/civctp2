@@ -392,13 +392,13 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "IC3Player.h"
-#include "IC3Rand.h"
-#include "IC3World.h"
-#include "IC3UnitDB.h"
+#include "ic3player.h"
+#include "ic3Rand.h"
+#include "ic3world.h"
+#include "ic3UnitDB.h"
 #include "AgreementTypes.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 
 
 #include "dr_debug.h"
@@ -409,16 +409,16 @@
 #include "semi_dynamic_array.h"
 #include "sorted_array.h"
 #include "matrix.h"
-#include "AILog.h"
+#include "ailog.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "MapPoint.h"
 
 
-#include "IC3GameState.h"
-#include "AiMain.h"
-#include "AiCell.h"
+#include "ic3GameState.h"
+#include "aimain.h"
+#include "aicell.h"
 #include "AiMap.h"
 #include "RouteUtilityList.h"
 #include "WonderTbl.h"
@@ -435,7 +435,7 @@
 
 
 
-#include "FSCompete.h"
+#include "fscompete.h"
 
 
 #include "ArmyGoal.h"
@@ -444,7 +444,7 @@
 #include "GlAttck.h"
 #include "GlSettl.h"
 #include "GlRoute.h"
-#include "GlFreight.h"
+#include "glfreight.h"
 #include "GlTrans.h"
 #include "GlEnslave.h"
 #include "Goal_Perimeter.h"
@@ -470,13 +470,13 @@
 #include "unitflow.h"
 
 
-#include "AIP.h"
+#include "aip.h"
 
 
 #include "squad.h"
 
 
-#include "Goal.h"
+#include "goal.h"
 
 
 #include "Plan.h"
@@ -485,13 +485,13 @@
 #include "Scheduler.h"
 
 
-#include "Planner.h"
+#include "planner.h"
 
 
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

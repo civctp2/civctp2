@@ -11,7 +11,7 @@
 #define __MESSAGE_WINDOW_H__
 
 
-#include "c3_PopupWindow.h"
+#include "c3_popupwindow.h"
 #include "aui_textbase.h"
 #include "message.h"
 #include "aui_hypertextbox.h"

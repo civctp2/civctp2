@@ -54,8 +54,8 @@
 
 #include "aui.h"
 
-#include "aui_uniqueId.h"
-#include "aui_StringTable.h"
+#include "aui_uniqueid.h"
+#include "aui_stringtable.h"
 #include "aui_tab.h"
 #include "aui_ldl.h"
 #include "aui_button.h"
@@ -71,10 +71,10 @@
 
 #include "citywindow.h"
 #include "background.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "radarwindow.h"
-#include "infobar.h"
-#include "Network.h"
+#include "InfoBar.h"
+#include "network.h"
 #include "OrderRecord.h"
 
 #include "newturncount.h"
@@ -90,7 +90,7 @@
 #include "km_screen.h"
 #include "optionswindow.h"
 #include "infowindow.h"
-#include "messagepool.h"
+#include "MessagePool.h"
 #include "message.h"
 
 
@@ -100,15 +100,15 @@
 
 #include "c3cmdline.h"
 #include "SelItem.h"
-#include "Player.h"
-#include "C3Window.h"
+#include "player.h"
+#include "c3window.h"
 #include "ctp2_Window.h"
-#include "ctp2_menu.h"
-#include "ctp2_static.h"
-#include "ctp2_switch.h"
+#include "ctp2_Menu.h"
+#include "ctp2_Static.h"
+#include "ctp2_Switch.h"
 
 #include "ctp2_menubar.h"
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "ctp2_button.h"
 #include "ctp2_listitem.h"
 #include "ctp2_listbox.h"
@@ -128,10 +128,10 @@
 #include "screenutils.h"
 #include "Advances.h"
 #include "AdvanceRecord.h"
-#include "AdvanceUtil.h"
+#include "advanceutil.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "Cell.h"
 #include "World.h"
 #include "director.h"
@@ -140,7 +140,7 @@
 #include "TerrainRecord.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "primitives.h"
 
 #include "controlpanelwindow.h"
@@ -148,9 +148,9 @@
 
 #include "MainControlPanel.h"
 #include "EditQueue.h"
-#include "DiplomacyWindow.h"
+#include "diplomacywindow.h"
 #include "dipwizard.h"
-#include "CityEspionage.h"
+#include "cityespionage.h"
 
 #include "civ3_main.h"
 
@@ -159,7 +159,7 @@
 #include "ctp2_TabGroup.h"
 
 
-#include "ArmyManagerWindow.h"
+#include "armymanagerwindow.h"
 
 #include "ProfileEdit.h"
 #include "c3_utilitydialogbox.h"
@@ -170,25 +170,25 @@
 
 #include "tileimptracker.h"
 
-#include "FilenameDB.h"
-#include "MessageIconWindow.h"
-#include "ScenarioEditor.h"
+#include "filenamedb.h"
+#include "messageiconwindow.h"
+#include "scenarioeditor.h"
 
 #include "progresswindow.h"
 #include "aui_progressbar.h"
 #include "aui_tipwindow.h"
 
-#include "Order.h"
+#include "order.h"
 
-#include "SoundManager.h"
-#include "Gamesounds.h"
+#include "soundmanager.h"
+#include "gamesounds.h"
 
 #include "km_screen.h"
 #include "keymap.h"
 
 #include "ConstDB.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "helptile.h"
 
 #include "gameinit.h"		// g_startHotseatGame
@@ -3342,7 +3342,7 @@ ControlPanelWindow::BuildCityList (const MapPoint &pos)
 
 }
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 
 void

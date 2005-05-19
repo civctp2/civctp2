@@ -12,15 +12,15 @@
 
 
 
-#include "Unitflow.h"
-#include "Goal.h"
+#include "unitflow.h"
+#include "goal.h"
 
 
 
-#include "Strategic_AI_Forward.h"
+#include "strategic_ai_forward.h"
 
 
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
 class CivArchive; 
 

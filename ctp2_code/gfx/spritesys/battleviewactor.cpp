@@ -34,27 +34,27 @@
 
 #include "Unit.h"	
 #include "UnitData.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
 #include "FacedSprite.h"
 #include "UnitSpriteGroup.h"
 #include "SpriteState.h"
 #include "Actor.h"
 #include "SpriteGroupList.h"
-#include "TiledMap.h"
-#include "TileSet.h"
+#include "tiledmap.h"
+#include "tileset.h"
 #include "Anim.h"
-#include "BattleViewActor.h"
+#include "battleviewactor.h"
 #include "ActorPath.h"
 #include "Action.h"
 
-#include "Director.h"
+#include "director.h"
 #include "UnitPool.h"
 #include "SpriteStateDB.h"
 #include "primitives.h"
 
-#include "SoundManager.h"
-#include "ColorSet.h"
+#include "soundmanager.h"
+#include "colorset.h"
 
 extern SpriteGroupList	*g_unitSpriteGroupList;
 extern TiledMap			*g_tiledMap;

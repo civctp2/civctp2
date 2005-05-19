@@ -20,7 +20,7 @@
 #include "primitives.h"
 #include "colorset.h"
 
-#include "c3_Slidometer.h"
+#include "c3_slidometer.h"
 
 #include "SlicEngine.h"
 

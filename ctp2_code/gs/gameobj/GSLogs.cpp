@@ -27,9 +27,9 @@
 
 #include "c3.h"
 #include "GSLogs.h"
-#include "Player.h"
+#include "player.h"
 #include "StrDB.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "UnitDynArr.h"
 #include "Unit.h"
 #include "UnitRecord.h"
@@ -41,7 +41,7 @@
 #include "Sci.h"
 #include "TaxRate.h"
 #include "PlayHap.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "c3math.h"		// AsPercentage
 
 static s_initialized = 0;

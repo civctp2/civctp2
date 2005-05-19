@@ -1,6 +1,6 @@
 #include "c3.h"
 #include "Resources.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "ResourceRecord.h"
 
 Resources::Resources()

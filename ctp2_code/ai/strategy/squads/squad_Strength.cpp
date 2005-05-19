@@ -48,11 +48,11 @@
 #include "c3.h"
 
 #include "Agent.h"
-#include "Squad_Strength.h"
-#include "CellUnitList.h"
+#include "squad_strength.h"
+#include "cellunitlist.h"
 #include "World.h"
 #include "UnitRecord.h"
-#include "DebugAssert.h"
+#include "debugassert.h"
 
 Squad_Strength::Squad_Strength()
 {

@@ -1,7 +1,7 @@
 #include "c3.h"
 #include "Regard.h"
-#include "CivArchive.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "player.h"
 #include "StrDB.h"
 extern	StringDB	*g_theStringDB ;
 
@@ -9,7 +9,7 @@ extern	StringDB	*g_theStringDB ;
 
 
 
-#include "Player.h"
+#include "player.h"
 extern Player **g_player; 
 
 #include "network.h"

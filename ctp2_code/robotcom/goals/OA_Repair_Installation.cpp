@@ -3,19 +3,19 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "IC3World.h"
-#include "IC3Player.h"
-#include "IC3Science.h"
-#include "IC3InstDB.h"
-#include "IC3Rand.h"
+#include "ic3world.h"
+#include "ic3player.h"
+#include "ic3Science.h"
+#include "ic3InstDB.h"
+#include "ic3Rand.h"
 
 #include "OA_Repair_Installation.h"
-#include "CivArchive.h"
-#include "AiMain.h"
-#include "AiRndCnt.h"
+#include "civarchive.h"
+#include "aimain.h"
+#include "airndcnt.h"
 #include "TerrImproveData.h"
-#include "ScienceAgent.h"
-#include "AiCause.h"
+#include "scienceagent.h"
+#include "aicause.h"
 
 extern double fz_min_num_dirty_tiles;
 

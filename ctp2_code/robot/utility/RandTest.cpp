@@ -1,7 +1,7 @@
 
 #include "c3.h"
 #include "player.h"
-#include "unit.h"
+#include "Unit.h"
 #include "SelItem.h"
 
 #include "RandGen.h"

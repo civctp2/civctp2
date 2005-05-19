@@ -10,10 +10,10 @@
 
 #include "c3ui.h"
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "c3_coloredswitch.h"
-#include "PatternBase.h"
-#include "Pattern.h"
+#include "patternbase.h"
+#include "pattern.h"
 #include "primitives.h"
 
 #include "SlicEngine.h"

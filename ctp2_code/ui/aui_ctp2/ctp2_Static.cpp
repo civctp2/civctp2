@@ -2,15 +2,15 @@
 
 #include "c3.h"
 #include "aui.h"
-#include "aui_Ldl.h"
+#include "aui_ldl.h"
 #include "aui_ui.h"
-#include "aui_Window.h"
+#include "aui_window.h"
 #include "aui_gamespecific.h"
 
 #include "ctp2_Static.h"
 
-#include "PatternBase.h"
-#include "Pattern.h"
+#include "patternbase.h"
+#include "pattern.h"
 #include "primitives.h"
 #include "colorset.h"
 

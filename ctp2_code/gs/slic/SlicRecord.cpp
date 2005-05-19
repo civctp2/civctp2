@@ -4,9 +4,9 @@
 #include "SlicRecord.h"
 #include "SlicEngine.h"
 #include "MessagePool.h"
-#include "CivArchive.h"
-#include "Player.h"
-#include "DynArr.h"
+#include "civarchive.h"
+#include "player.h"
+#include "dynarr.h"
 #include "SlicSegment.h"
 #include "slicif.h"
 

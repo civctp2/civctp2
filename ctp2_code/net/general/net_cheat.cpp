@@ -5,19 +5,19 @@
 #include "network.h"
 #include "net_util.h"
 #include "net_cheat.h"
-#include "Player.h"
+#include "player.h"
 #include "Unit.h"
 #include "UnitDynArr.h"
 #include "MapPoint.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "MaterialPool.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Advances.h"
 #include "AdvanceRecord.h"
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 
 extern Player **g_player;
 extern World *g_theWorld;

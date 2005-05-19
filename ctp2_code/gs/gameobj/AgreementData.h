@@ -13,7 +13,7 @@
 #ifndef __AGREEMENTDATA_H__
 #define __AGREEMENTDATA_H__
 
-#include "Gameobj.h"
+#include "GameObj.h"
 #include "Unit.h"
 #include "gstypes.h"
 

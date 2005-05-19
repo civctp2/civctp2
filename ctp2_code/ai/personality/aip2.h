@@ -21,7 +21,7 @@
 #include <vector>
 #include "c3debugstl.h"
 
-#include "DiplomatTypes.h"
+#include "diplomattypes.h"
 
 class DipAIP {
 public:

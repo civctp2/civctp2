@@ -5,7 +5,7 @@
 #include "c3.h"
 #include "CityTree.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "CityEdge.h"
 #include "CityVertex.h"
 #include "CityAgent.h"

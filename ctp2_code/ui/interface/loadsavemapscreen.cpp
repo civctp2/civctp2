@@ -22,7 +22,7 @@
 
 #include "initialplaywindow.h"
 #include "spnewgamewindow.h"
-#include "loadSaveMapWindow.h"
+#include "loadsavemapwindow.h"
 
 extern C3UI					*g_c3ui;
 extern CivApp				*g_civApp;

@@ -14,40 +14,40 @@
 #include "c3.h"
 #include "globals.h"
 #include "IMapPointData.h"
-#include "IC3Population.h"
+#include "ic3Population.h"
 
 
 #include "FSBeginTurn.h"
-#include "AiCell.h"
+#include "aicell.h"
 #include "AiMap.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
-#include "foreigner.h"
-#include "Gold.h"
+#include "ic3GameState.h"
+#include "aimain.h"
+#include "Foreigner.h"
+#include "gold.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 
 
-#include "DynArr.h"
-#include "CivArchive.h"
+#include "dynarr.h"
+#include "civarchive.h"
 
 
 #include "CityGrowth.h"
 
 
 #include "FzOut.h"
-#include "WotP.h"
+#include "wotp.h"
 #include "Cont.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 #include "AllocWGF.h"
-#include "IC3Wonder.h"
+#include "ic3Wonder.h"
 
 
 extern double fz_pop_food_max;  

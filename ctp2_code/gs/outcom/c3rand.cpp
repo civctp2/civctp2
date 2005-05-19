@@ -2,7 +2,7 @@
 #include "c3.h"
 #include "C3Rand.h"
 #include "RandGen.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 extern RandomGenerator *g_rand;
 

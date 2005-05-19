@@ -3,16 +3,16 @@
 
 
 
-#include "Globals.h"
+#include "globals.h"
 #include "C3GameState.h"
 
 #include "C3UnitDB.h"
 
 
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "MapPoint.h"
 #include "UnitRecord.h"
 

@@ -31,7 +31,7 @@
 #include "greatlibrary.h"
 #include "SlicObject.h"
 #include "stringutils.h"
-#include "Text_Hasher.h"
+#include "text_hasher.h"
 
 //----------------------------------------------------------------------------
 //

@@ -1,20 +1,20 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "Bset.h"
-#include "AiMain.h"
+#include "bset.h"
+#include "aimain.h"
 
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 
-#include "OA_Loot.h"
+#include "oa_loot.h"
 
 #include "AiMap.h"
-#include "IC3BlgDB.h"
-#include "IC3Player.h"
+#include "ic3BlgDB.h"
+#include "ic3player.h"
 
 
-#include "Order.h"
+#include "order.h"
 
 
 

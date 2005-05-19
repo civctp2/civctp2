@@ -12,7 +12,7 @@
 #include "net_installation.h"
 #include "net_util.h"
 #include "installationpool.h"
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 

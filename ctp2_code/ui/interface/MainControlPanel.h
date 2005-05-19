@@ -61,13 +61,13 @@ class MainControlPanel;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "aui_ProgressBar.h"	// aui_ProgressBar
+#include "aui_progressbar.h"	// aui_ProgressBar
 #include "c3types.h"			// MBCHAR
-#include "CellUnitList.h"		// CellUnitList
+#include "cellunitlist.h"		// CellUnitList
 #include "ControlTabPanel.h"	// ControlTabPanel
 #include "EndTurnButton.h"		// EndTurnButton
-#include "Player.h"				// PLAYER_INDEX
-#include "ShortCutPad.h"		// ShortCutPad
+#include "player.h"				// PLAYER_INDEX
+#include "ShortcutPad.h"		// ShortCutPad
 #include "StatusBar.h"			// StatusBar
 #include "TurnYearStatus.h"		// TurnYearStatus
 

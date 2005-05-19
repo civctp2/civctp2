@@ -4,8 +4,8 @@
 #ifndef __OA_PARADROP__
 #define __OA_PARADROP__ 1
 
-#include "OA.h"
-#include "DynArr.h"
+#include "Oa.h"
+#include "dynarr.h"
 #include "MapPoint.h"
 
 class ArmyAgent; 

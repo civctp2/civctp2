@@ -33,11 +33,11 @@
 #include "aui_movie.h"
 
 #include "c3window.h"
-#include "Pattern.h"
-#include "PatternBase.h"
+#include "pattern.h"
+#include "patternbase.h"
 #include "c3_static.h"
 
-#include "WonderMovieWindow.h"
+#include "wondermoviewindow.h"
 #include "wondermoviewin.h"
 #include "ctp2_hypertextbox.h"
 

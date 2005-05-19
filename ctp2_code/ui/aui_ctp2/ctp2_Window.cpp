@@ -21,7 +21,7 @@
 
 #include "primitives.h"
 
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "aui_action.h"
 
 #include "c3ui.h"

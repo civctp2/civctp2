@@ -5,7 +5,7 @@
 #include "StrDB.h"
 #include "Unit.h"
 #include "RandGen.h"
-#include "PollutionToken.h"
+#include "pollutiontoken.h"
 
 	extern	StringDB	*g_theStringDB ;
 

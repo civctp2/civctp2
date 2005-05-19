@@ -9,9 +9,9 @@
 
 #include "c3.h"
 #include "TradeOfferData.h"
-#include "CivArchive.h"
-#include "Player.h"
-#include "Gold.h"
+#include "civarchive.h"
+#include "player.h"
+#include "gold.h"
 #include "network.h"
 #include "net_action.h"
 #include "net_info.h"

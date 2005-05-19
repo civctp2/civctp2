@@ -43,10 +43,10 @@
 #include "c3debugstl.h"
 
 #include "Unit.h"
-#include "CivArchive.h"
-#include "Bit_Table.h"
+#include "civarchive.h"
+#include "bit_table.h"
 #include "MapPoint.h"
-#include "MapGrid.h"
+#include "mapgrid.h"
 
 #include <list>
 

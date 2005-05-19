@@ -4,23 +4,23 @@
   
 #include "AllocWGF.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "IC3GameState.h"
-#include "IC3Player.h"
-#include "IC3Government.h"
-#include "IC3Population.h"
+#include "ic3GameState.h"
+#include "ic3player.h"
+#include "ic3Government.h"
+#include "ic3Population.h"
 
-#include "AiMain.h"
-#include "BSet.h"
+#include "aimain.h"
+#include "bset.h"
 
 
 #include "CityAgent.h"
-#include "WotP.h"
+#include "wotp.h"
 
 
 #include "FzOut.h"
-#include "Gold.h"
+#include "gold.h"
 
 
 

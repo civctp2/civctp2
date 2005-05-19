@@ -13,7 +13,7 @@
 
 
 #include "c3.h"
-#include "AstarPnt.h"
+#include "astarpnt.h"
 
 #if 0
 

@@ -2,8 +2,8 @@
 #include "c3.h"
 #include "HappyTracker.h"
 #include "StrDB.h"
-#include "CivArchive.h"
-#include "GameFile.h"
+#include "civarchive.h"
+#include "gamefile.h"
 
 extern StringDB *g_theStringDB;
 

@@ -39,7 +39,7 @@
  
 
 
-#include "Globals.h"
+#include "globals.h"
 #include "GWRecord.h"
 
 #include "ConstDB.h"
@@ -49,16 +49,16 @@
 #include "DB.h"
 #include "UnitRec.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "Unit.h"
 #include "UnitDynArr.h"
 
-#include "CityData.h"
+#include "citydata.h"
 
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 
-#include "Player.h"
-#include "Pollution.h"
+#include "player.h"
+#include "pollution.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
@@ -74,11 +74,11 @@
 #include "aui.h"
 #include "primitives.h"
 
-#include "Director.h"
-#include "tech_WLList.h"
+#include "director.h"
+#include "tech_wllist.h"
 #include "Readiness.h"
 
-#include "AiCause.h"
+#include "aicause.h"
 
 #include "SlicEngine.h"
 #include "HappyTracker.h"
@@ -114,7 +114,7 @@ extern SelectedItem *g_selected_item;
 
 #include "GameEventManager.h"
 #include "unitutil.h"
-#include "CtpAi.h"
+#include "ctpai.h"
 
 
 #include "gamefile.h"

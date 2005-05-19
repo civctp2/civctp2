@@ -61,16 +61,16 @@
 #include "TerrainRecord.h"
 #include "Unit.h"
 #include "SelItem.h"
-#include "Player.h"
+#include "player.h"
 #include "Civilisation.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "TerrainImprovementRecord.h"
-#include "CityData.h"
+#include "citydata.h"
 
 #include "ResourceRecord.h" //access g_theResourceDB for goods info, PFT 05 Mar 05
 // Added by Martin Gühmann
 #include "UnitData.h"
-#include "unseencell.h" //Unseen cell info is needed
+#include "UnseenCell.h" //Unseen cell info is needed
 
 extern sint32		g_fog_toggle;
 extern sint32		g_god;

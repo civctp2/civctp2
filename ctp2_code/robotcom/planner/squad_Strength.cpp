@@ -1,16 +1,16 @@
 
-#include "C3.h"
+#include "c3.h"
 #include "MapPoint.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 
 
-#include "IC3UnitDB.h"
-#include "IC3World.h"
-#include "AiMain.h"
+#include "ic3UnitDB.h"
+#include "ic3world.h"
+#include "aimain.h"
 
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 
 
 

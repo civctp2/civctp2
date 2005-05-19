@@ -26,9 +26,9 @@
 #include "Sprite.h"
 #include "SpriteFile.h"
 #include "Anim.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 #include "Token.h"
 

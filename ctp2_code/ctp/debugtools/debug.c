@@ -40,10 +40,10 @@
 #include <stdio.h>
 
 
-#include "DebugAssert.h"
-#include "DebugCallStack.h"
-#include "DebugException.h"
-#include "DebugMemory.h"
+#include "debugassert.h"
+#include "debugcallstack.h"
+#include "debugexception.h"
+#include "debugmemory.h"
 #include "log.h"
 
 typedef struct tagTHREADNAME_INFO

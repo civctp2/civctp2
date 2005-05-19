@@ -11,11 +11,11 @@
 #include "StrDB.h"
 #include "ErrMsg.h"
 #include "Unit.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "WonderTracker.h"
 #include "WonderRecord.h"
-#include "Player.h"
+#include "player.h"
 
 #include "wonderutil.h"
 

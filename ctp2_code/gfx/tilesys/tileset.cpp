@@ -22,8 +22,8 @@
 #include "tiffutils.h"
 #include "BaseTile.h"
 
-#include "TiledMap.h"
-#include "TileSet.h"
+#include "tiledmap.h"
+#include "tileset.h"
 
 #include "CivPaths.h"
 #include "rimutils.h"

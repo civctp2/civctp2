@@ -14,8 +14,8 @@
 #ifndef __MESSAGE_DYNAMIC_ARRAY_H__
 #define __MESSAGE_DYNAMIC_ARRAY_H__
 
-#include "Message.h"
-#include "DynArr.h"
+#include "message.h"
+#include "dynarr.h"
 
 
 class MessageDynamicArray : public DynamicArray<Message> {

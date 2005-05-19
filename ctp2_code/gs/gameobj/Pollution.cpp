@@ -29,22 +29,22 @@
 
 #include "c3debug.h"
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "Pollution.h"
-#include "Player.h"
-#include "GWDB.h"
+#include "pollution.h"
+#include "player.h"
+#include "gwdb.h"
 #include "UVDB.h"
 #include "WonderRecord.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "network.h"
 #include "SlicSegment.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
 #include "PollutionDB.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "GameSettings.h"
 #include "Cell.h"
 #include "ConstDB.h"
@@ -55,7 +55,7 @@
 #include "SelItem.h"
 
 #include "wonderutil.h"
-#include "NewTurnCount.h"
+#include "newturncount.h"
 
 #include "GameEventManager.h"
 

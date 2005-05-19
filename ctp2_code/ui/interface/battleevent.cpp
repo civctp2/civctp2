@@ -2,13 +2,13 @@
 
 #include "c3.h"
 
-#include "BattleViewActor.h"
+#include "battleviewactor.h"
 #include "EffectActor.h"
-#include "BattleViewWindow.h"
+#include "battleviewwindow.h"
 
-#include "BattleEvent.h"
+#include "battleevent.h"
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 extern SoundManager		*g_soundManager;
 extern BattleViewWindow	*g_battleViewWindow;

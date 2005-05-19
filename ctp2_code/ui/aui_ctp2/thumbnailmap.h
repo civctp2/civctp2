@@ -39,12 +39,12 @@
 #ifndef __THUMBNAILMAP_H__
 #define __THUMBNAILMAP_H__
 
-#include "PatternBase.h"
+#include "patternbase.h"
 #include "aui_control.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "Unit.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
 #define k_THUMBNAIL_CITY_BLINK_RATE		1000
 

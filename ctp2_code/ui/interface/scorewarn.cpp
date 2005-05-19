@@ -23,17 +23,17 @@
 #include "c3_popupwindow.h"
 #include "optionswindow.h"
 #include "keypress.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "c3_static.h"
 #include "UIUtils.h"
-#include "c3_HyperTextBox.h"
-#include "ctp2_HyperTextBox.h"
+#include "c3_hypertextbox.h"
+#include "ctp2_hypertextbox.h"
 
 #include "scenarioeditor.h"
 
 #include "scorewarn.h"
 #include "StrDB.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "SelItem.h"
 #include "GameSettings.h"
 

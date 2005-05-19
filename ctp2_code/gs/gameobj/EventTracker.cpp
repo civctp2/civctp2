@@ -5,7 +5,7 @@
 #include "Unit.h"
 #include "GameEventArgList.h"
 #include "GameEventManager.h"
-#include "NewTurnCount.h"
+#include "newturncount.h"
 #include "UnitData.h"
 
 EventTracker::EventTracker()

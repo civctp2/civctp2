@@ -28,7 +28,7 @@
 #include "c3.h"
 
 
-#include "CreditsScreen.h"
+#include "creditsscreen.h"
 
 #include <algorithm>	// std::fill
 
@@ -42,14 +42,14 @@
 #include "aui_button.h"
 #include "c3ui.h"
 #include "c3window.h"
-#include "ctp2_Button.h"
-#include "uiutils.h"
+#include "ctp2_button.h"
+#include "UIUtils.h"
 #include "primitives.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 
-#include "aui_BitmapFont.h"
+#include "aui_bitmapfont.h"
 #include "MessageBoxDialog.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 
 #include "StrDB.h"

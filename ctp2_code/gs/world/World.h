@@ -40,8 +40,8 @@
 #include "XY_Coordinates.h"
 #include "dbtypes.h"
 #include "gstypes.h"
-#include "cell.h"
-#include "moveflags.h"
+#include "Cell.h"
+#include "MoveFlags.h"
 
 class MapPoint;
 class CivArchive ;

@@ -3,20 +3,20 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 #include "geom2d.h"
-#include "delaunay.h"
+#include "Delaunay.h"
 
 #include "globals.h"
-#include "IC3GameState.h"
-#include "IC3World.h"
-#include "IC3RobotAstar.h"
-#include "IC3InstDB.h"
+#include "ic3GameState.h"
+#include "ic3world.h"
+#include "ic3RobotAstar.h"
+#include "ic3InstDB.h"
 
-#include "AiMain.h"
-#include "BSet.h"
+#include "aimain.h"
+#include "bset.h"
 #include "AiMap.h"
 
 #include "MST.h"
@@ -29,7 +29,7 @@
 #include "CityTree.h"
 #include "CityTreeQueue.h"
 #include "FlatPtr.h"
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 
 extern QuadEdge *g_quad_edge_head; 
 extern QuadEdge *g_quad_edge_tail; 

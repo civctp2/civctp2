@@ -11,9 +11,9 @@
 #include "ZoomPad.h"
 
 
-#include "TiledMap.h"
-#include "aui_Ldl.h"
-#include "ctp2_Button.h"
+#include "tiledmap.h"
+#include "aui_ldl.h"
+#include "ctp2_button.h"
 
 
 ZoomPad::ZoomPad(MBCHAR *ldlBlock) :

@@ -4,14 +4,14 @@
 
 #include "DiffDB.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "Token.h"
 #include "StrDB.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "AdvanceRecord.h"
 #include "c3files.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 #include "TurnYearStatus.h"
 
 extern StringDB *g_theStringDB;

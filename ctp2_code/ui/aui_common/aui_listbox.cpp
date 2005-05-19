@@ -41,7 +41,7 @@
 #include "aui_static.h"
 
 #include "aui_listbox.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_listitem.h"
 
 
 aui_DragDropWindow *aui_ListBox::m_dragDropWindow = NULL;

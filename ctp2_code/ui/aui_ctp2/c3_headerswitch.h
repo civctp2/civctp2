@@ -13,7 +13,7 @@
 #define __C3_HEADERSWITCH_H__
 
 #include "aui_radio.h"
-#include "PatternBase.h"
+#include "patternbase.h"
 
 #define k_C3_HEADERSWITCH_DEFAULTNUMSTATES	3	
 

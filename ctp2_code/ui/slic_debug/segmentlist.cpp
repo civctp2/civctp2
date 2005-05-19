@@ -9,16 +9,16 @@
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 #include "aui_static.h"
 #include "aui_hypertextbox.h"
 
-#include "c3_Static.h"
-#include "Thermometer.h"
+#include "c3_static.h"
+#include "thermometer.h"
 
 
 #include "textbutton.h"
-#include "c3_Button.h"
+#include "c3_button.h"
 
 
 #include "c3textfield.h"

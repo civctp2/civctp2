@@ -16,8 +16,8 @@
 
 #include "aui_soundbase.h"
 
-#include "SoundManager.h"
-#include "GameSounds.h"
+#include "soundmanager.h"
+#include "gamesounds.h"
 
 extern SoundManager		*g_soundManager;
 

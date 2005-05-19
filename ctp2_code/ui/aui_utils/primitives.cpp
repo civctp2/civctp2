@@ -16,7 +16,7 @@
 #include "c3.h"
 #include "c3math.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 #include "aui.h"
 #include "aui_surface.h"
@@ -31,8 +31,8 @@
 #include "pixelutils.h"
 #include "primitives.h"
 #include "textutils.h"
-#include "TileSet.h"
-#include "ColorSet.h"
+#include "tileset.h"
+#include "colorset.h"
 
 extern sint32		g_is565Format;
 extern ColorSet		*g_colorSet;
@@ -3488,8 +3488,8 @@ void primitives_HackTileDraw(aui_Surface *pSurface)
 
 
 
-#include "TiledMap.h"
-#include "TileSet.h"
+#include "tiledmap.h"
+#include "tileset.h"
 
 extern TiledMap *g_tiledMap;
 

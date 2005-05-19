@@ -2,16 +2,16 @@
 
 #include "c3.h"
 #include "SlicEyePoint.h"
-#include "CivArchive.h"
-#include "RadarMap.h"
-#include "Message.h"
-#include "TiledMap.h"
+#include "civarchive.h"
+#include "radarmap.h"
+#include "message.h"
+#include "tiledmap.h"
 #include "SelItem.h"
 #include "UnitPool.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "SlicSegment.h"
-#include "Director.h"
+#include "director.h"
 
 extern RadarMap *g_radarMap;
 extern TiledMap	*g_tiledMap;

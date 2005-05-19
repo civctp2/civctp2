@@ -8,14 +8,14 @@
 
 #include "c3.h"
 #include "Unit.h"
-#include "Player.h"
+#include "player.h"
 #include "MessageData.h"
-#include "Message.h"
+#include "message.h"
 #include "MessagePool.h"
 
 #include "network.h"
-#include "CivArchive.h"
-#include "Globals.h"
+#include "civarchive.h"
+#include "globals.h"
 
 
 

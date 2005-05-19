@@ -16,7 +16,7 @@
 #include "aui_base.h"
 #include "tech_wllist.h"
 
-#include "aui_Control.h"
+#include "aui_control.h"
 
 #include "ldl_user.h"
 

@@ -13,7 +13,7 @@
 #include "net_util.h"
 
 #include "Diffcly.h"
-#include "Player.h"
+#include "player.h"
 
 extern Player** g_player;
 

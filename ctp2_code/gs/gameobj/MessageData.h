@@ -10,7 +10,7 @@
 #ifndef __MESSAGEDATA_H__
 #define __MESSAGEDATA_H__
 
-#include "Gameobj.h"
+#include "GameObj.h"
 #include "ID.h"
 #include "MapPoint.h"
 

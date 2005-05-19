@@ -6,17 +6,17 @@
 
 #include "AiStats.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 
-#include "IC3GameState.h"
-#include "AiMain.h"
-#include "BSet.h"
-#include "AiRndCnt.h"
+#include "ic3GameState.h"
+#include "aimain.h"
+#include "bset.h"
+#include "airndcnt.h"
 #include "CityAgent.h"
 #include "ArmyAgent.h"
-#include "Gold.h"
+#include "gold.h"
 
 char g_label[k_NUM_STATS][100] =
 { 

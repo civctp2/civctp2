@@ -6,10 +6,10 @@
 
 #include "Token.h"
 #include "ErrMsg.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "StrDB.h"
 
-#include "highscoreDB.h"
+#include "highscoredb.h"
 
 extern sint32	g_abort_parse;
 extern StringDB	*g_theStringDB;

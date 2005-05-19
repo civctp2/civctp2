@@ -57,7 +57,7 @@ class GameEventHookCallback;
 
 #include "GameEventArgList.h"   // GameEventArgList
 #include "GameEventTypes.h"     // GAME_EVENT...
-#include "PointerList.h"
+#include "pointerlist.h"
 
 //----------------------------------------------------------------------------
 // Class declarations

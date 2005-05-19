@@ -17,7 +17,7 @@
 #include "tileutils.h"
 
 #include "Unit.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
 #include "SelItem.h"
 
@@ -26,14 +26,14 @@
 #include "SpriteState.h"
 #include "Actor.h"
 #include "SpriteGroupList.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "Anim.h"
-#include "WorkerActor.h"
+#include "workeractor.h"
 
 
 #include "ActorPath.h"
 #include "Action.h"
-#include "Director.h"
+#include "director.h"
 #include "maputils.h"
 
 extern SpriteGroupList	*g_unitSpriteGroupList;

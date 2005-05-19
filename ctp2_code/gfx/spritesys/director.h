@@ -27,9 +27,9 @@ enum GAMESOUNDS;
 
 class TradeRoute; 
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
-#include "DirectorActions.h"
+#include "directoractions.h"
 
 
 

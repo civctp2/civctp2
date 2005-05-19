@@ -37,7 +37,7 @@
 
 
 #include "aui_window.h"
-#include "ctp2_menu.h"
+#include "ctp2_Menu.h"
 #include "patternbase.h"
 
 

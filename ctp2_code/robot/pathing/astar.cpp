@@ -29,14 +29,14 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 
 
-#include "AstarPnt.h"
+#include "astarpnt.h"
 #include "Astar.h"
 #include "AVLHeap.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "Path.h"
 
 #include "XY_Coordinates.h"
@@ -44,7 +44,7 @@
 #include "RandGen.h"
 #include "Cell.h"
 #include "ConstDB.h"
-#include "PriorityQueue.h"
+#include "priorityqueue.h"
 #include "A_Star_Heuristic_Cost.h"
 
 

@@ -4,7 +4,7 @@
 
 
 
-#include "ctp2_ListItem.h"
+#include "ctp2_listitem.h"
 
 class ctp2_Window;
 class ctp2_ListBox;

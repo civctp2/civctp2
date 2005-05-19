@@ -30,26 +30,26 @@
 
 
 #include "c3.h"
-#include "DipWizard.h"
+#include "dipwizard.h"
 
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 
 #include "ctp2_Window.h"
 #include "ctp2_Menu.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "ctp2_Static.h"
-#include "ctp2_DropDown.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_dropdown.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
 #include "ctp2_Tab.h"
 #include "ctp2_TabButton.h"
 #include "ctp2_TabGroup.h"
-#include "ctp2_Spinner.h"
+#include "ctp2_spinner.h"
 
 #include "c3ui.h"
 
-#include "DiplomacyWindow.h"
+#include "diplomacywindow.h"
 #include "diplomacyutil.h"
 #include "Diplomat.h"
 
@@ -64,7 +64,7 @@
 #include "SlicObject.h"
 #include "stringutils.h"
 
-#include "Player.h"
+#include "player.h"
 #include "Civilisation.h"
 #include "UnitDynArr.h"
 
@@ -73,13 +73,13 @@
 
 #include "DiplomacyDetails.h"
 #include "AgreementMatrix.h"
-#include "Gold.h"
+#include "gold.h"
 
 #include "network.h"
 #include "UnitData.h"
 
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 extern ColorSet *g_colorSet;
 

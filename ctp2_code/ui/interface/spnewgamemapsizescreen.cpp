@@ -34,8 +34,8 @@
 #include "c3_static.h"
 #include "c3slider.h"
 #include "c3ui.h"
-#include "aui_Radio.h"
-#include "aui_SwitchGroup.h"
+#include "aui_radio.h"
+#include "aui_switchgroup.h"
 #include "aui_uniqueid.h"
 
 #include "profileDB.h"
@@ -47,7 +47,7 @@
 
 #include "keypress.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 extern C3UI			*g_c3ui;
 extern ProfileDB	*g_theProfileDB;

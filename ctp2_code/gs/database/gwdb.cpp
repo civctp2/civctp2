@@ -13,13 +13,13 @@
 #include "c3.h"
 #include "c3errors.h"
 
-#include "GWDB.h"
+#include "gwdb.h"
 #include "StrDB.h"
 
 #include "Unit.h"
 #include "RandGen.h"
 #include "GWToken.h"
-#include "Globals.h"
+#include "globals.h"
 #include "terrainutil.h"
 
 	extern	StringDB	*g_theStringDB ;

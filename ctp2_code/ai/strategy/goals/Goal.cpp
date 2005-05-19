@@ -37,26 +37,26 @@
 
 #include "c3.h"
 
-#include "Goal.h"
+#include "goal.h"
 using namespace std;
 
 
 const Utility Goal::BAD_UTILITY = -99999999; 
 const Utility Goal::MAX_UTILITY = 99999999; 
 
-#include "Squad_Strength.h"
+#include "squad_strength.h"
 #include "Agent.h"
 #include "ArmyPool.h"
-#include "DebugAssert.h"
+#include "debugassert.h"
 
 #include "gstypes.h"
 #include "gfx_options.h"
-#include "CTPAgent.h"
+#include "ctpagent.h"
 
 #ifdef _DEBUG_SCHEDULER
-#include "CTPAgent.h"
+#include "ctpagent.h"
 #include "ArmyData.h"
-#include "CTPGoal.h"
+#include "ctpgoal.h"
 #endif _DEBUG_SCHEDULER
 
 

@@ -22,9 +22,9 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "AICause.h"
+#include "aicause.h"
 #include "Diplomat.h"
-#include "MapAnalysis.h" 
+#include "mapanalysis.h" 
 #include "AgreementMatrix.h"
 #include "DiplomacyRecord.h"
 

@@ -22,7 +22,7 @@
 
 #include "c3debugstl.h"
 
-#include "DiplomatTypes.h"
+#include "diplomattypes.h"
 #include "DiplomacyRecord.h"
 #include "MapPoint.h"
 

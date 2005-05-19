@@ -12,7 +12,7 @@
 #define __DIPLOMACY_DATA_H__
 
 #include "Unit.h"
-#include "Gameobj.h"
+#include "GameObj.h"
 #include "ID.h"
 #include "TradeRouteData.h"
 

@@ -35,7 +35,7 @@
 #include "GameObj.h"
 #include "MapPoint.h"
 #include "Unit.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "Army.h"
 
 

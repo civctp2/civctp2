@@ -2,12 +2,12 @@
 
 
 #include "c3.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "IMapPointData.h"
 
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 #include "GoalWonder.h"
 #include "CityAgent.h"

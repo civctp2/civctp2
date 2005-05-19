@@ -8,7 +8,7 @@
 #include "net_io.h"
 #include "anet.h"
 #include "net_array.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #define CIV3_SPECIES 1504
 

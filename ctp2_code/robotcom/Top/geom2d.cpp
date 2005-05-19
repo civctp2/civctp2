@@ -1,5 +1,5 @@
 
-#include "C3.h"
+#include "c3.h"
 #include "geom2d.h"
 
 

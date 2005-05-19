@@ -3,7 +3,7 @@
 #ifndef __C3RAND_H__
 #define __C3RAND_H__
 
-#include "IC3Rand.h"
+#include "ic3Rand.h"
 
 class CivArchive; 
 class RandomGenerator;

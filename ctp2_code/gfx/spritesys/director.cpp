@@ -34,16 +34,16 @@
 
 #include "tech_wllist.h"
 
-#include "Globals.h"
-#include "Player.h"
-#include "DynArr.h"
+#include "globals.h"
+#include "player.h"
+#include "dynarr.h"
 #include "UnitPool.h"
 
 #include "pixelutils.h"
 #include "spriteutils.h"
 #include "tileutils.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "SelItem.h"
 
@@ -52,7 +52,7 @@
 #include "Unit.h"
 
 #include "radarmap.h"
-#include "Director.h"
+#include "director.h"
 #include "UnitActor.h"
 
 #include "EffectActor.h"
@@ -60,13 +60,13 @@
 #include "Action.h"
 #include "Anim.h"
 #include "maputils.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
-#include "BattleViewWindow.h"
+#include "battleviewwindow.h"
 #include "network.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "network.h"
-#include "DebugMemory.h"
+#include "debugmemory.h"
 #include "TurnCnt.h"
 #include "c3ui.h"
 
@@ -81,18 +81,18 @@
 #include "sci_advancescreen.h"
 #include "UnitRecord.h"
 #include "GameEventManager.h"
-#include "GameSounds.h"
+#include "gamesounds.h"
 #include "network.h"
 #include "net_info.h"
 #include "UnitDynArr.h"
 #include "SpriteRecord.h"
 
-#include "CursorManager.h"
+#include "cursormanager.h"
 
-#include "CityData.h" //PFT 29 mar 05, show # turns until city next grows a pop
+#include "citydata.h" //PFT 29 mar 05, show # turns until city next grows a pop
 #include "UnitData.h" // "
 
-#include "spritegrouplist.h"
+#include "SpriteGroupList.h"
 extern SpriteGroupList		*g_unitSpriteGroupList;
 
 extern Director			*g_director;
@@ -114,14 +114,14 @@ extern C3UI				*g_c3ui;
 extern BattleViewWindow	*g_battleViewWindow;
 extern Player			**g_player;
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 extern ProfileDB		*g_theProfileDB;
 
-#include "armypool.h"
+#include "ArmyPool.h"
 extern ArmyPool			*g_theArmyPool;
 
 #include "Cell.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "World.h"
 extern World			*g_theWorld;
 

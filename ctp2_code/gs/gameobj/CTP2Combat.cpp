@@ -29,22 +29,22 @@
 
 #ifndef TEST_APP
 
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "UnitRecord.h"
 #include "UnitData.h"
 #include "GameEventManager.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "RandGen.h"
 
-#include "BattleEvent.h"
-#include "BattleView.h"
-#include "Battle.h"
-#include "BattleViewWindow.h"
-#include "Director.h"
+#include "battleevent.h"
+#include "battleview.h"
+#include "battle.h"
+#include "battleviewwindow.h"
+#include "director.h"
 
 #include "SelItem.h"
-#include "Player.h"
-#include "ProfileDB.h"
+#include "player.h"
+#include "profileDB.h"
 
 
 #include "World.h"
@@ -60,7 +60,7 @@
 
 #endif
 
-#include "Debugmemory.h"
+#include "debugmemory.h"
 
 #include "CTP2Combat.h"
 

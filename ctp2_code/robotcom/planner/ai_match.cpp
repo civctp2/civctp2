@@ -30,7 +30,7 @@
 
 #include "IMapPointData.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 
 #include "Agent.h"
 #include "ArmyAgent.h"
@@ -44,7 +44,7 @@
 
 
 
-#include "AILog.h"
+#include "ailog.h"
 #include "dr_debug.h"
 
 
@@ -63,7 +63,7 @@
 
 
 #include "Agent.h"
-#include "AI_Match.h"
+#include "ai_match.h"
 
 
 

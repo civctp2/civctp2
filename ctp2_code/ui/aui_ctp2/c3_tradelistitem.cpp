@@ -5,19 +5,19 @@
 #include "c3.h"
 #include "aui.h"
 #include "aui_item.h"
-#include "aui_UniqueId.h"
-#include "aui_Ldl.h"
+#include "aui_uniqueid.h"
+#include "aui_ldl.h"
 
 #include "TradeRoute.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "StrDB.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "tradewin.h"
 
-#include "c3_Static.h"
+#include "c3_static.h"
 #include "c3_tradelistitem.h"
-#include "Pattern.h"
+#include "pattern.h"
 
 extern StringDB			*g_theStringDB;
 

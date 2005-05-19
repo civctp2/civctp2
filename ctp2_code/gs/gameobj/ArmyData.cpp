@@ -55,8 +55,8 @@
 #include "UnitPool.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "Player.h"
-#include "Director.h"
+#include "player.h"
+#include "director.h"
 #include "CivPaths.h"
 #include "SelItem.h"
 #include "installationtree.h"
@@ -70,14 +70,14 @@
 #include "UnitData.h"
 #include "ConstDB.h"
 #include "UnitAstar.h"
-#include "AiCause.h"
+#include "aicause.h"
 
 #include "GoodyHuts.h"
 #include "SlicSegment.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "QuickSlic.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "TurnCnt.h"
 #include "HappyTracker.h"
 
@@ -103,10 +103,10 @@
 #include "net_action.h"
 #include "net_info.h"
 
-#include "SoundManager.h"
-#include "GameSounds.h"
-#include "Order.h"
-#include "CellUnitList.h"
+#include "soundmanager.h"
+#include "gamesounds.h"
+#include "order.h"
+#include "cellunitlist.h"
 
 #include "CityAstar.h"
 extern CityAstar g_city_astar;
@@ -114,7 +114,7 @@ extern CityAstar g_city_astar;
 #include "AgreementPool.h"
 extern AgreementPool *g_theAgreementPool;
 
-#include "Pollution.h"
+#include "pollution.h"
 extern Pollution *g_thePollution;
 
 #include "GameEventManager.h"
@@ -129,21 +129,21 @@ extern Pollution *g_thePollution;
 #include "SpecialEffectRecord.h"
 #include "wonderutil.h"
 
-#include "CtpAi.h"
+#include "ctpai.h"
 #include "OrderRecord.h"
 #include "AgreementMatrix.h"
 
 #include "SoundRecord.h"
 
-#include "Squad.h"
-#include "CTPAgent.h"
-#include "CTPGoal.h"
+#include "squad.h"
+#include "ctpagent.h"
+#include "ctpgoal.h"
 
 #include "TradeRouteData.h"
-#include "Gold.h"
-#include "BuildingUtil.h"
+#include "gold.h"
+#include "buildingutil.h"
 #include "Diplomat.h"
-#include "Radarmap.h"
+#include "radarmap.h"
 
 BOOL g_smokingCrack = TRUE;
 BOOL g_useOrderQueues = TRUE;
@@ -165,7 +165,7 @@ extern SoundManager *g_soundManager;
 #define NW_F (1 << NORTHWEST)
 
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog; 
 

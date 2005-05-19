@@ -6,10 +6,10 @@
 
 
 #include "FSWar.h"
-#include "AiCell.h"
+#include "aicell.h"
 #include "AiMap.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 #include "Foreigner.h"
 
 
@@ -17,7 +17,7 @@
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

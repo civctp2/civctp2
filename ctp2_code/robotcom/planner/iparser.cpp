@@ -212,23 +212,23 @@
 #include "c3types.h"
 #include "c3errors.h"
 
-#include "IC3GameState.h"
-#include "IC3ErrorReport.h"
+#include "ic3GameState.h"
+#include "ic3ErrorReport.h"
 
 #include <ctype.h>
 
 #include "math.h" 
 #include "common.h"
-#include "Linked_List.h"
+#include "linked_list.h"
 
-#include "Globals.h"
-#include "AIMain.h"
+#include "globals.h"
+#include "aimain.h"
 
-#include "AILog.h"
+#include "ailog.h"
 
 #include "dr_debug.h"
-#include "IParser.h"
-#include "ExpressionP.h"
+#include "iparser.h"
+#include "expressionP.h"
 
 
 

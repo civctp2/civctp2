@@ -1008,54 +1008,54 @@
 #include "c3.h"
 #include "globals.h"
 
-#include "IC3GameState.h"
-#include "IC3Player.h"
-#include "IC3World.h"
+#include "ic3GameState.h"
+#include "ic3player.h"
+#include "ic3world.h"
 #include "RobotCOM.h"
-#include "IC3RobotAstar.h"
-#include "IC3UnitDB.h"
-#include "IC3BlgDB.h"
-#include "IC3InstDB.h"
-#include "IC3TerrDB.h"
-#include "C3player.h"
+#include "ic3RobotAstar.h"
+#include "ic3UnitDB.h"
+#include "ic3BlgDB.h"
+#include "ic3InstDB.h"
+#include "ic3TerrDB.h"
+#include "C3Player.h"
 
 #include "IMapPointData.h"
-#include "AiCause.h"
-#include "Order.h"
+#include "aicause.h"
+#include "order.h"
 
 
-#include "IC3GameState.h"
+#include "ic3GameState.h"
 #include "Fuzzy_Variables.h"
-#include "AiMain.h"
+#include "aimain.h"
 #include "FrameClock.h"
 #include "Cont.h"
 #include "WonderTbl.h"
 
 #include "AiMap.h"
-#include "AIRndCnt.h"
+#include "airndcnt.h"
 #include "Foreigner.h"
 #include "AiStats.h"
 
 
 #include "FrameState.h"
 #include "FSBeginTurn.h"
-#include "FSCompete.h"
+#include "fscompete.h"
 #include "FSWar.h"
 #include "FSGold.h"
-#include "FSAlloc.h"
-#include "FSFuzzy.h"
+#include "fsalloc.h"
+#include "fsfuzzy.h"
 #include "MST.h"
 
 
 #include "ArmyAgent.h"
 #include "CityAgent.h"
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 #include "ForeignAgent.h"
 #include "ForeignCity.h"
 
 
-#include "BSet.h"
-#include "DynArr.h"
+#include "bset.h"
+#include "dynarr.h"
 #include "DMapPoint.h"
 
 
@@ -1076,7 +1076,7 @@ extern double fz_settler_packing;
 #include "InstBidList.h"
 #include "RouteUtilityList.h"
 #include "OTUtilityList.h"
-#include "DynArr.h"
+#include "dynarr.h"
 #include "AllocWGF.h"
 
 #include "common.h"				
@@ -1085,39 +1085,39 @@ extern double fz_settler_packing;
 #include "list_array.h"
 #include "sorted_array.h"
 #include "Plan.h"
-#include "Pool.h"
-#include "Pointer_Pool.h"
-#include "AIP.h"				
+#include "pool.h"
+#include "pointer_pool.h"
+#include "aip.h"				
 #include "AIP_Manager.h"
-#include "Planner.h"			
+#include "planner.h"			
 #include "Scheduler.h"
-#include "AILog.h"
+#include "ailog.h"
 
 #include "CityGrowth.h"
 #include "CityProd.h"
 #include "CityFP.h"
 #include "FSBeginTurn.h"
-#include "WotP.h"
+#include "wotp.h"
 
 
 #include "FliEngine.h"
-#include "Gold.h"
+#include "gold.h"
 
 
-#include "FSDiplomat.h"
-#include "IC3DipReq.h"
+#include "FsDiplomat.h"
+#include "ic3DipReq.h"
 #include "AIDipReq.h"
 
-#include "DebugMemory.h"
+#include "debugmemory.h"
 
-#include "OA.h"
+#include "Oa.h"
 #include "FSOppAction.h"
 
 #include "OA_Paradrop.h"
 #include "OA_Refuel.h"
 #include "OA_Pillage.h"
 #include "OA_Entrench.h"
-#include "OA_Loot.h"
+#include "oa_loot.h"
 #include "OA_Repair_Installation.h"
 #include "OA_NoTrade.h"
 
@@ -1126,7 +1126,7 @@ extern double fz_settler_packing;
 
 #include "GoalMapTarget.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 Wall_Clock *g_wall_clock;
 
 
@@ -1140,7 +1140,7 @@ int g_AIP_manager_reference_count = 0;
 
 sint32 g_nBuildings; 
 
-#include "Bit_Table.h"
+#include "bit_table.h"
 Bit_Table *g_can_settle_ground = NULL;
 Bit_Table *g_can_settle_space = NULL;
 

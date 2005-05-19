@@ -9,17 +9,17 @@
 #include "aui_stringtable.h"
 
 #include "c3ui.h"
-#include "c3_Button.h"
+#include "c3_button.h"
 #include "c3window.h"
 #include "c3fancywindow.h"
 #include "c3_static.h"
-#include "c3_Icon.h"
+#include "c3_icon.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
 #include "pixelutils.h"
 #include "primitives.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "XY_Coordinates.h"
 #include "Army.h"
@@ -29,16 +29,16 @@
 
 
 #include "Cell.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 
 #include "Anim.h"
 #include "Action.h"
-#include "TileSet.h"
+#include "tileset.h"
 
-#include "GameSounds.h"
-#include "SoundManager.h"
+#include "gamesounds.h"
+#include "soundmanager.h"
 
-#include "Player.h"
+#include "player.h"
 
 #include "SpriteState.h"
 #include "SpriteStateDB.h"
@@ -46,15 +46,15 @@
 #include "EffectActor.h"
 #include "AgeRecord.h"
 
-#include "BattleViewActor.h"
-#include "BattleView.h"
-#include "Battle.h"
-#include "BattleViewWindow.h"
-#include "BattleEvent.h"
+#include "battleviewactor.h"
+#include "battleview.h"
+#include "battle.h"
+#include "battleviewwindow.h"
+#include "battleevent.h"
 
-#include "Director.h"
+#include "director.h"
 
-#include "Tileset.h"
+#include "tileset.h"
 #include "AgeRecord.h"
 #include "GameEventManager.h"
 

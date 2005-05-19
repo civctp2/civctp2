@@ -12,7 +12,7 @@
 #ifndef __INFOWIN_H__
 #define __INFOWIN_H__
 
-#include "c3_ListItem.h"
+#include "c3_listitem.h"
 #include "Unit.h"
 
 enum {

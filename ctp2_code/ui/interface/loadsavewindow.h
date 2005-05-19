@@ -5,8 +5,8 @@
 #ifndef LOADSAVEWINDOW_FLAG
 #define LOADSAVEWINDOW_FLAG
 
-#include "PointerList.h"
-#include "GameFile.h"
+#include "pointerlist.h"
+#include "gamefile.h"
 #include "c3_popupwindow.h"
 #include "c3_listitem.h"
 

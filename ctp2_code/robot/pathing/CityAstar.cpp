@@ -39,17 +39,17 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 
 
 #include "CityAstar.h"
-#include "DynArr.h"
+#include "dynarr.h"
 #include "Path.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "DynArr.h"
-#include "Player.h"
+#include "dynarr.h"
+#include "player.h"
 
 #include "MoveFlags.h"
 

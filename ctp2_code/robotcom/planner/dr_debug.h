@@ -9,7 +9,7 @@
 #ifndef __DR_DEBUG_H
 #define __DR_DEBUG_H
 
-#include "DebugMemory.h"
+#include "debugmemory.h"
 
 
 

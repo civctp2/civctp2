@@ -42,12 +42,12 @@
 #include "CityRadius.h"
 #ifdef _DEBUG
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 extern ColorSet *g_colorSet;
 #endif
 #include "TradeDynArr.h"
 #include "RandGen.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "network.h"
 #include "net_info.h"
 #include "TerrImprove.h"
@@ -55,7 +55,7 @@ extern ColorSet *g_colorSet;
 #include "ResourceRecord.h"
 #include "MoveFlags.h"
 #include "Unit.h"
-#include "Globals.h"
+#include "globals.h"
 
 extern RandomGenerator *g_rand;
 extern TiledMap *g_tiledMap;

@@ -4,7 +4,7 @@
 #ifndef __SCIENCEWIN_H__
 #define __SCIENCEWIN_H__
 
-#include "c3_ListItem.h"
+#include "c3_listitem.h"
 #include "aui_stringtable.h"
 #include "c3_updateaction.h"
 #include "keyboardhandler.h"

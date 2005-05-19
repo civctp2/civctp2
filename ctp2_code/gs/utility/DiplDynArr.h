@@ -17,7 +17,7 @@
 #define __DIPLOMATICREQUEST_DYNAMIC_ARRAY_H__
 
 #include "DiplomaticRequest.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
 
 class DiplomaticRequestDynamicArray : public DynamicArray<DiplomaticRequest> {

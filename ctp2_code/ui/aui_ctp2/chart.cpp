@@ -4,27 +4,27 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_UniqueId.h"
-#include "aui_Ldl.h"
-#include "aui_Window.h"
+#include "aui_uniqueid.h"
+#include "aui_ldl.h"
+#include "aui_window.h"
 #include "aui_bitmapfont.h"
 
 #include "pixelutils.h"
 #include "primitives.h"
 
 #include "c3_hypertipwindow.h"
-#include "aui_HyperTextBox.h"
+#include "aui_hypertextbox.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 #include "c3windows.h"
 
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "ctp2_Static.h"
 #include "c3ui.h"
 
 
 #include "AdvanceRecord.h"
-#include "Player.h"
+#include "player.h"
 #include "SelItem.h"
 #include "Advances.h"
 #include "prjfile.h"

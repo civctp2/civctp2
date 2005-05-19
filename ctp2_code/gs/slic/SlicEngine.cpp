@@ -51,14 +51,14 @@
 #include "c3errors.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "SlicSegment.h"
 #include "slicif.h"
 #include "StringHash.h"
 #include "SlicFunc.h"
-#include "SlicFuncAI.h"
+#include "slicfuncai.h"
 #include "SlicSymTab.h"
-#include "Player.h"
+#include "player.h"
 extern Player **g_player;
 #include "Unit.h"
 #include "CivPaths.h"
@@ -73,20 +73,20 @@ extern SelectedItem *g_selected_item;
 #include "UnitPool.h"
 extern UnitPool *g_theUnitPool;
 
-#include "TutorialWin.h"
+#include "tutorialwin.h"
 extern TutorialWin *g_tutorialWin;
 
 
-#include "PointerList.h"
+#include "pointerlist.h"
 
-#include "Pool.h"
+#include "pool.h"
 #include "SimpleDynArr.h"
 
 
-#include "GameFile.h"
+#include "gamefile.h"
 
-#include "TiledMap.h"
-#include "Radarmap.h"
+#include "tiledmap.h"
+#include "radarmap.h"
 #include "controlpanelwindow.h"
 #include "director.h"
 
@@ -143,15 +143,15 @@ extern TutorialWin *g_tutorialWin;
 
 #include "GameEventManager.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 #include "ResourceRecord.h"
 #include "CriticalMessagesPrefs.h"
 
-#include "MessageWindow.h"
-#include "ProfileDB.h"
+#include "messagewindow.h"
+#include "profileDB.h"
 
-#include "GreatLibrary.h"
+#include "greatlibrary.h"
 #include "MainControlPanel.h"
 
 

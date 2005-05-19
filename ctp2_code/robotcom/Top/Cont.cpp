@@ -6,17 +6,17 @@
 
 
 #include "globals.h"
-#include "CivArchive.h"
-#include "IC3World.h"
+#include "civarchive.h"
+#include "ic3world.h"
 
-#include "BSet.h"
-#include "DynArr.h"
+#include "bset.h"
+#include "dynarr.h"
 #include "FlatPtr.h"
 
 
-#include "IC3GameState.h"
-#include "AiMain.h"
-#include "AiCell.h"
+#include "ic3GameState.h"
+#include "aimain.h"
+#include "aicell.h"
 
 
 #include "ArmyAgent.h"

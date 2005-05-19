@@ -4,7 +4,7 @@
 #ifndef __WONDERMOVIEWIN__
 #define __WONDERMOVIEWIN__
 
-#include "aui_Action.h"
+#include "aui_action.h"
 
 class Sequence;
 

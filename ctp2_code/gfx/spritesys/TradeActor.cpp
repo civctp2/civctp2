@@ -31,7 +31,7 @@
 
 #include "Unit.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 
 #include "SelItem.h"
 #include "pixelutils.h"
@@ -43,16 +43,16 @@
 #include "SpriteState.h"
 #include "Actor.h"
 #include "SpriteGroupList.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "Anim.h"
 #include "TradeActor.h"
 #include "GoodActor.h"
 #include "SpriteStateDB.h"
-#include "StrDb.h"
+#include "StrDB.h"
 
 #include "ActorPath.h"
 #include "Action.h"
-#include "Director.h"
+#include "director.h"
 #include "maputils.h"
 #include "Cell.h"
 #include "ResourceRecord.h"

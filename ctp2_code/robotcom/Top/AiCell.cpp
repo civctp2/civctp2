@@ -21,17 +21,17 @@
 
 
 #include "c3.h"
-#include "Globals.h"
-#include "IC3World.h"
+#include "globals.h"
+#include "ic3world.h"
 #include "IMapPointData.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
-#include "CivArchive.h"
+#include "ic3GameState.h"
+#include "aimain.h"
+#include "civarchive.h"
 
-#include "AiCell.h"
+#include "aicell.h"
 
 #include "FzOut.h"
-#include "Bit_Table.h"
+#include "bit_table.h"
 
 AiCell::AiCell() 
 {

@@ -15,31 +15,31 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "IC3GameState.h"
-#include "IC3World.h"
-#include "IC3Player.h"
-#include "IC3Rand.h"
-#include "IC3Government.h"
+#include "ic3GameState.h"
+#include "ic3world.h"
+#include "ic3player.h"
+#include "ic3Rand.h"
+#include "ic3Government.h"
 
 
 #include "AiMap.h"
-#include "AiCell.h"
-#include "IC3GameState.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "aicell.h"
+#include "ic3GameState.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 #include "Foreigner.h"
 #include "Cont.h"
 
 
 #include "dr_debug.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "CityAgent.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "ForeignAgent.h"
 #include "ForeignCity.h"
 
@@ -49,11 +49,11 @@
 
 #include "ArmyGoal.h"
 #include "GlSettl.h"
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 #include "FzOut.h"
 #include "Cont.h"
-#include "Bit_Table.h"
-#include "WotP.h"
+#include "bit_table.h"
+#include "wotp.h"
 
 
 

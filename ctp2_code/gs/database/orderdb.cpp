@@ -1,7 +1,7 @@
 
 #include "c3.h"
-#include "OrderDB.h"
-#include "Order.h"
+#include "orderdb.h"
+#include "order.h"
 #include "Token.h"
 #include "SoundRecord.h"
 #include "c3files.h"

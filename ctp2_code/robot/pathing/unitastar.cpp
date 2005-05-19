@@ -37,9 +37,9 @@
 #include "c3.h"
 #include "c3math.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 
-#include "DynArr.h"
+#include "dynarr.h"
 #include "Path.h"
 #include "UnitAstar.h"
 
@@ -54,14 +54,14 @@
 
 #include "Army.h"
 #include "Unit.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 extern World *g_theWorld; 
 #include "Cell.h"
 
-#include "DynArr.h"
-#include "Player.h"
+#include "dynarr.h"
+#include "player.h"
 #include "RandGen.h"
 #include "UnitRecord.h"
 #include "ConstDB.h"

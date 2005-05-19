@@ -5,7 +5,7 @@
 #include "c3errors.h"
 
 #include "StringHash.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "AvlTree.h"
 
 #include "aui_ui.h"

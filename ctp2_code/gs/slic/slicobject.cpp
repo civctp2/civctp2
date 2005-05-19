@@ -4,7 +4,7 @@
 #include "SlicObject.h"
 #include "SlicEngine.h"
 #include "SlicSegment.h"
-#include "DynArr.h"
+#include "dynarr.h"
 #include "UnitDynArr.h"
 #include "MapPoint.h"
 #include "Unit.h"
@@ -13,11 +13,11 @@
 #include "SlicFrame.h"
 #include "MessageData.h"
 #include "MessagePool.h"
-#include "Player.h"
+#include "player.h"
 #include "SelItem.h"
 #include "SlicButton.h"
 #include "network.h"
-#include "CivApp.h"
+#include "civapp.h"
 #include "messagewin.h"
 #include "TradeBids.h"
 #include "messagewindow.h"
@@ -25,7 +25,7 @@
 #include "stringutils.h"
 
 #include "TurnCnt.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "controlpanelwindow.h"
 extern ControlPanelWindow *g_controlPanel;

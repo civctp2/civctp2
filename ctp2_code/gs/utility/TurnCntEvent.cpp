@@ -9,13 +9,13 @@
 #include "TurnCntEvent.h"
 #include "GameEventUser.h"
 
-#include "Player.h"
+#include "player.h"
 
-#include "ProfileDB.h"
-#include "Director.h"
+#include "profileDB.h"
+#include "director.h"
 #include "network.h"
-#include "CtpAi.h"
-#include "NewTurnCount.h"
+#include "ctpai.h"
+#include "newturncount.h"
 
 STDEHANDLER(BeginTurnEvent)
 {

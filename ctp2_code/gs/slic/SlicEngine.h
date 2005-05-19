@@ -79,7 +79,7 @@ typedef sint32 PLAYER_INDEX;
 #define k_MAX_TRIGGER_KEYS 10
 
 #include "SlicTriggerLists.h"
-#include "Message.h"
+#include "message.h"
 #include "slicif_sym.h"
 #include "SlicModFuncEnum.h"
 #include "gstypes.h"

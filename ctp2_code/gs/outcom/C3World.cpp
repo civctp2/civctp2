@@ -11,9 +11,9 @@
 
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 
-#include "CityData.h"
+#include "citydata.h"
 #include "C3World.h"
 #include "Cell.h"
 #include "XY_Coordinates.h"
@@ -22,12 +22,12 @@
 #include "Wormhole.h"
 #include "UnitRecord.h"
 
-#include "Player.h"
+#include "player.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "TerrImproveData.h"
-#include "CellUnitList.h"
-#include "InstallationTree.h"
+#include "cellunitlist.h"
+#include "installationtree.h"
 #include "InstDB.h"
 #include "MoveFlags.h"
 

@@ -1,10 +1,10 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "IC3World.h"
+#include "ic3world.h"
 
-#include "Bset.h"
-#include "AiMain.h"
+#include "bset.h"
+#include "aimain.h"
 
 #include "ArmyAgent.h"
 #include "CityAgent.h"

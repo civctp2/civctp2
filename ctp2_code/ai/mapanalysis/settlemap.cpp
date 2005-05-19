@@ -17,21 +17,21 @@
 
 #include "gfx_options.h"
 
-#include "SettleMap.h"
+#include "settlemap.h"
 #include "World.h"
 extern World *g_theWorld;
-#include "CityData.h"
+#include "citydata.h"
 
 #include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
 #include "Cell.h"
 #include <vector>
 #include <utility> 
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 #include "StrategyRecord.h"
 #include "Diplomat.h"
 
-#include "BoundingRect.h"
+#include "boundingrect.h"
 
 
 SettleMap SettleMap::s_settleMap;

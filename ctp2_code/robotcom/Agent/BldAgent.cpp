@@ -1,15 +1,15 @@
 
 
 #include "c3.h"
-#include "IC3BlgDB.h"
+#include "ic3BlgDB.h"
 
 #include "AiBldQue.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 
 
 #include "BldAgent.h"

@@ -41,7 +41,7 @@
 #include "network.h"
 
 #include "ConstDB.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 namespace
 {

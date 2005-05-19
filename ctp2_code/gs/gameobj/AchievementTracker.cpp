@@ -28,8 +28,8 @@
 
 #include "c3.h"
 #include "AchievementTracker.h"
-#include "CivArchive.h"
-#include "Player.h"
+#include "civarchive.h"
+#include "player.h"
 #include "network.h"
 #include "net_info.h"
 #include "gamefile.h"

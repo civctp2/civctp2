@@ -3,20 +3,20 @@
 
 #include "c3.h"
 #include "aui.h"
-#include "aui_Ldl.h"
-#include "aui_Ranger.h"
+#include "aui_ldl.h"
+#include "aui_ranger.h"
 #include "aui_static.h"
 #include "aui_ui.h"
-#include "aui_UniqueId.h"
-#include "c3_Button.h"
-#include "aui_Window.h"
+#include "aui_uniqueid.h"
+#include "c3_button.h"
+#include "aui_window.h"
 #include "aui_dimension.h"
 
-#include "c3_Ranger.h"
-#include "c3_Thumb.h"
+#include "c3_ranger.h"
+#include "c3_thumb.h"
 
-#include "Pattern.h"
-#include "PatternBase.h"
+#include "pattern.h"
+#include "patternbase.h"
 #include "primitives.h"
 
 extern aui_UI		*g_ui;

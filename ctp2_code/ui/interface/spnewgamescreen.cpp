@@ -34,20 +34,20 @@
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_stringtable.h"
-#include "aui_SwitchGroup.h"
+#include "aui_switchgroup.h"
 #include "aui_textfield.h"
 #include "c3ui.h"
 #include "c3window.h"
 #include "c3_static.h"
 #include "c3_button.h"
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "c3_checkbox.h"
 #include "c3_switch.h"
 #include "c3_dropdown.h"
 #include "c3_listbox.h"
 #include "c3_listitem.h"
 #include "c3slider.h"
-#include "c3TextField.h"
+#include "c3textfield.h"
 
 
 #include "ctp2_button.h"
@@ -87,12 +87,12 @@
 
 #include "initialplaywindow.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 #include "SlicEngine.h"
 
 #include "MessageBoxDialog.h"
-#include "Civilisationdb.h"
+#include "CivilisationDB.h"
 
 extern	ProfileDB			*g_theProfileDB;
 extern C3UI					*g_c3ui;

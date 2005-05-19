@@ -3,7 +3,7 @@
 #include "net_strengths.h"
 #include "net_util.h"
 #include "Strengths.h"
-#include "Player.h"
+#include "player.h"
 #include "TurnCnt.h"
 #include "Score.h"
 

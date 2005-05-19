@@ -32,7 +32,7 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "cell.h"
+#include "Cell.h"
 
 #include "network.h"
 #include "net_info.h"
@@ -40,27 +40,27 @@
 #include "net_action.h"
 
 #include "UnitData.h"
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Advances.h"
 #include "AdvanceRecord.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "UnitPool.h"
 #include "ArmyPool.h"
 #include "TradeOffer.h"
 #include "TradeOfferPool.h"
 #include "TerrImprove.h"
 #include "TerrImprovePool.h"
-#include "Installation.h"
+#include "installation.h"
 #include "PlayHap.h"
 
 #include "QuadTree.h"
 #include "Vision.h"
 #include "TaxRate.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Sci.h"
-#include "Message.h"
+#include "message.h"
 #include "MessagePool.h"
 #include "DiplomaticRequest.h"
 #include "DiplomaticRequestPool.h"
@@ -71,7 +71,7 @@
 
 #include "WonderRecord.h"
 
-#include "NewTurnCount.h"
+#include "newturncount.h"
 
 
 #include "SelItem.h"
@@ -88,17 +88,17 @@ extern C3UI					*g_c3ui;
 #include "aui.h"
 #include "ctp2_Window.h"
 
-#include "Tiledmap.h"
+#include "tiledmap.h"
 #include "background.h"
-#include "RadarMap.h"
+#include "radarmap.h"
 #include "radarwindow.h"
-#include "Director.h"
-#include "AiCause.h"
+#include "director.h"
+#include "aicause.h"
 #include "CivPaths.h"
 #include "installationpool.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "gamesounds.h"
-#include "AiCause.h"
+#include "aicause.h"
 
 #include "HappyTracker.h"
 #include "WonderTracker.h"
@@ -109,26 +109,26 @@ extern C3UI					*g_c3ui;
 #include "SlicObject.h"
 #include "TradePool.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 #include "wonderutil.h"
 
 #include "GameEventManager.h"
 
-#include "CtpAi.h"
+#include "ctpai.h"
 #include "GameOver.h"
 
-#include "SettleMap.h"
+#include "settlemap.h"
 
 #include "MainControlPanel.h"
 
 #include "citywindow.h"
-#include "editqueue.h"
+#include "EditQueue.h"
 
 #include "DomesticManagementDialog.h"
-#include "UnitManager.h"
-#include "ArmyManagerWindow.h"
-#include "TradeManager.h"
+#include "unitmanager.h"
+#include "armymanagerwindow.h"
+#include "trademanager.h"
 
 extern Background	*g_background;
 extern RadarMap     *g_radarMap;
@@ -139,7 +139,7 @@ extern QuadTree<Unit> *g_theUnitTree;
 extern void player_ActivateSpaceButton(sint32 pl);
 extern void network_VerifyGameData();
 
-#include "feattracker.h"	// Propagate feats
+#include "FeatTracker.h"	// Propagate feats
 #include "MaterialPool.h"	// Propagate PW
 
 const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {

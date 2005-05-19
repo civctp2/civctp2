@@ -15,7 +15,7 @@
 
 #include "primitives.h"
 
-#include "c3_Thumb.h"
+#include "c3_thumb.h"
 
 
 

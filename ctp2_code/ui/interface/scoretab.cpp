@@ -6,11 +6,11 @@
 
 #include "aui_ldl.h"
 #include "aui_stringtable.h"
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
 #include "ctp2_Static.h"
-#include "Player.h"
-#include "profiledb.h"
+#include "player.h"
+#include "profileDB.h"
 #include "Score.h"
 #include "SelItem.h"
 

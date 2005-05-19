@@ -11,33 +11,33 @@
 
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "StrDB.h"
 #include "TerrainRecord.h"
-#include "GWDB.h"
+#include "gwdb.h"
 #include "UVDB.h"
 #include "RandGen.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "ConstDB.h"
 #include "network.h"
 #include "GoodyHuts.h"
-#include "TiledMap.h"
-#include "Player.h"
+#include "tiledmap.h"
+#include "player.h"
 #include "TerrImprovePool.h"
 #include "UnitData.h"
 
 #include "net_info.h"
-#include "AiCause.h"
-#include "Installationtree.h"
+#include "aicause.h"
+#include "installationtree.h"
 #include "PollutionDB.h"
 #include "radarmap.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 
-#include "Director.h"
+#include "director.h"
 
 #include "UnitRecord.h"
 

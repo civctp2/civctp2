@@ -36,7 +36,7 @@
 #ifndef __RESOURCEMAP_H__
 #define __RESOURCEMAP_H__
 
-#include "PatternBase.h"
+#include "patternbase.h"
 #include "aui_control.h"
 #include "Unit.h"
 #include "MapPoint.h"

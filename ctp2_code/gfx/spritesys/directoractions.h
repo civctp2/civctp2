@@ -10,7 +10,7 @@ class Battle;
 enum GAME_OVER;
 class SpriteState;
 
-#include "Message.h"
+#include "message.h"
 #include "Unit.h"
 #include "MapPoint.h"
 

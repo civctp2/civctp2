@@ -18,24 +18,24 @@
 
 
 #include "ctp.h"
-#include "AICause.h"
-#include "Order.h"
+#include "aicause.h"
+#include "order.h"
 
 
-#include "IC3GameState.h"
-#include "IC3Player.h"
-#include "IC3World.h"
-#include "IC3RobotAstar.h"
-#include "IC3UnitDB.h"
-#include "IC3BlgDB.h"
-#include "IC3InstDB.h"
-#include "IC3TerrDB.h"
-#include "IC3DipReq.h"
-#include "IC3GameState.h"
-#include "IC3CivArchive.h"
-#include "IC3Rand.h"
+#include "ic3GameState.h"
+#include "ic3player.h"
+#include "ic3world.h"
+#include "ic3RobotAstar.h"
+#include "ic3UnitDB.h"
+#include "ic3BlgDB.h"
+#include "ic3InstDB.h"
+#include "ic3TerrDB.h"
+#include "ic3DipReq.h"
+#include "ic3GameState.h"
+#include "ic3CivArchive.h"
+#include "ic3Rand.h"
 
-#include "MapPointData.h"
+#include "mappointdata.h"
 
 class AiMain
 {	

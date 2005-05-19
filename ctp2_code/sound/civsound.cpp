@@ -38,7 +38,7 @@
 
 #include "c3.h"
 
-#include "CivSound.h"
+#include "civsound.h"
 #include "SoundRecord.h"
 #include "prjfile.h"
 

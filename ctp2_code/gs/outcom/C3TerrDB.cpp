@@ -2,7 +2,7 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 #include "TerrainRecord.h"
 

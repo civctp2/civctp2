@@ -11,8 +11,8 @@
 #include "SlicObject.h"
 #include "SlicEngine.h"
 #include "SlicFunc.h"
-#include "CivArchive.h"
-#include "ProfileDB.h"
+#include "civarchive.h"
+#include "profileDB.h"
 
 SlicNamedSymbol::SlicNamedSymbol(const char *name, SLIC_SYM type) :
 	SlicSymbolData(type)

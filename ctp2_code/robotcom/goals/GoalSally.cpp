@@ -68,41 +68,41 @@
 
 
 #include "c3.h"
-#include "IC3UnitDB.h"
-#include "DynArr.h"
-#include "CivArchive.h"
+#include "ic3UnitDB.h"
+#include "dynarr.h"
+#include "civarchive.h"
 #include "IMapPointData.h"
 
 
-#include "IC3GameState.h"
-#include "IC3World.h"
-#include "IC3Player.h"
+#include "ic3GameState.h"
+#include "ic3world.h"
+#include "ic3player.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 #include "AiMap.h"
 #include "airndcnt.h"
 
 
 #include "dr_debug.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "Strategic_Map.h"
+#include "grassfire.h"
+#include "strategic_map.h"
 
 
 #include "FzOut.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 #include "ForeignAgent.h"
 #include "Foreigner.h"
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 
 
 #include "GoalSally.h"
 
-#include "AILOG.h"
+#include "ailog.h"
 
 
 

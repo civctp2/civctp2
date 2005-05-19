@@ -8,23 +8,23 @@
 #include "aui_stringtable.h"
 
 #include "c3ui.h"
-#include "c3_PopupWindow.h"
+#include "c3_popupwindow.h"
 #include "c3_button.h"
 #include "c3_switch.h"
 #include "c3_listbox.h"
 
-#include "slicengine.h"
+#include "SlicEngine.h"
 #include "player.h"
 #include "SelItem.h"
 
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "SlicRecord.h"
 
-#include "profiledb.h"
+#include "profileDB.h"
 
 #include "c3_utilitydialogbox.h"
 
-#include "uiutils.h"
+#include "UIUtils.h"
 #include "screenutils.h"
 
 #include "tutorialwin.h"

@@ -2,9 +2,9 @@
 
   
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "AiMain.h"
+#include "aimain.h"
 
 #include "GlTrans.h"
 
@@ -14,7 +14,7 @@
 
 #include "GlSettl.h"
 
-#include "AILOG.h"
+#include "ailog.h"
 
 ZEROMEM(GoalTransportFlat); 
 ZEROMEM(GoalTransportPtr); 

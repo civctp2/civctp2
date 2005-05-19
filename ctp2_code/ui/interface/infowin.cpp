@@ -32,7 +32,7 @@
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 #include "aui_ranger.h"
 #include "screenutils.h"
 
@@ -41,12 +41,12 @@
 #include "c3_button.h"
 
 
-#include "c3_Static.h"
+#include "c3_static.h"
 #include "staticpicture.h"
 #include "textbox.h"
-#include "c3_ListBox.h"
+#include "c3_listbox.h"
 #include "controlsheet.h"
-#include "aui_TextField.h"
+#include "aui_textfield.h"
 #include "c3_dropdown.h"
 #include "thermometer.h"
 #include "aui_stringtable.h"
@@ -59,7 +59,7 @@
 #include "radarmap.h"
 
 
-#include "ColorSet.h"
+#include "colorset.h"
 #include "c3windows.h"
 #include "infowin.h"
 #include "infowindow.h"
@@ -68,14 +68,14 @@
 
 
 
-#include "Player.h"
+#include "player.h"
 #include "UnitRec.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "StrDB.h"
 #include "ConstDB.h"
 #include "BuildingRecord.h"
@@ -86,11 +86,11 @@
 #include "Score.h"
 #include "DiffDB.h"
 #include "Diffcly.h"
-#include "ProfileDB.h"
-#include "Pollution.h"
+#include "profileDB.h"
+#include "pollution.h"
 #include "EndGame.h"
 #include "EndGameDB.h"
-#include "wondertracker.h"
+#include "WonderTracker.h"
 
 
 #include "Civilisation.h"
@@ -106,8 +106,8 @@
 #include "ObjPool.h"
 #include "Cell.h"
 #include "c3files.h"
-#include "PointerList.h"
-#include "LineGraph.h"
+#include "pointerlist.h"
+#include "linegraph.h"
 #include "TurnCnt.h"
 #include "Strengths.h"
 #include "UnitPool.h"
@@ -147,7 +147,7 @@ extern ProfileDB                *g_theProfileDB;
 extern Pollution				*g_thePollution; 
 
 
-#include "civilisationpool.h"
+#include "CivilisationPool.h"
 extern CivilisationPool			*g_theCivilisationPool;
 
 #define k_INFORADAR_WIDTH		202

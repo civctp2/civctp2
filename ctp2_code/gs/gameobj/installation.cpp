@@ -11,14 +11,14 @@
 #include "installation.h"
 #include "installationpool.h"
 
-#include "Player.h"
+#include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 
 #include "network.h"
 #include "net_info.h"
 #include "SelItem.h"
-#include "Director.h"
+#include "director.h"
 #include "terrainutil.h"
 
 extern Player **g_player;

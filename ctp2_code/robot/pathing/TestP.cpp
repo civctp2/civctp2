@@ -1,9 +1,9 @@
 
-#include "Globals.h"
+#include "globals.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "TestP.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "pixelutils.h"
 #include "UnitAstar.h"
 #include "SelItem.h"
@@ -14,7 +14,7 @@
 #include "aui.h"
 #include "aui_surface.h"
 #include "primitives.h"
-#include "Player.h"
+#include "player.h"
 
 UnitAstar *g_theTestPather; 
 

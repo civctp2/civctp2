@@ -38,7 +38,7 @@
 #include "c3_switch.h"
 #include "c3_checkbox.h"
 #include "c3ui.h"
-#include "profiledb.h"
+#include "profileDB.h"
 #include "spnewgamewindow.h"
 #include "musictrackscreen.h"
 #include "musicscreen.h"
@@ -67,7 +67,7 @@ static BOOL				s_useMusicOn = FALSE;
 
 extern BOOL				g_musicTrackChosen;
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 extern SoundManager		*g_soundManager;
 
 

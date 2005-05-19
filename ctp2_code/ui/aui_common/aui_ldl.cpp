@@ -22,14 +22,14 @@
 
 
 
-#include "C3Slider.h"
-#include "C3Window.h"
-#include "C3Windows.h"
-#include "c3_Button.h"
-#include "c3_Static.h"
+#include "c3slider.h"
+#include "c3window.h"
+#include "c3windows.h"
+#include "c3_button.h"
+#include "c3_static.h"
 #include "ctp2_Static.h"
 #include "ctp2_button.h"
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "ctp2_menubar.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
@@ -39,13 +39,13 @@
 #include "c3_hypertextbox.h"
 #include "aui_switch.h"
 #include "ctp2_Switch.h"
-#include "ctp2_TextField.h"
+#include "ctp2_textfield.h"
 #include "ctp2_MenuButton.h"
 #include "ctp2_Tab.h"
 #include "ctp2_TabGroup.h"
 #include "ctp2_TabButton.h"
-#include "RadarMap.h"
-#include "LineGraph.h"
+#include "radarmap.h"
+#include "linegraph.h"
 #include "AvlTree.h"
 
 

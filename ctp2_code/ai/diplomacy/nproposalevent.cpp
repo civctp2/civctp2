@@ -23,24 +23,24 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "Player.h"
+#include "player.h"
 #include "Strengths.h"
 
 #include "Diplomat.h"
-#include "MapAnalysis.h" 
+#include "mapanalysis.h" 
 #include "AdvanceRecord.h"
 #include "AgreementMatrix.h"
-#include "NewTurnCount.h"
+#include "newturncount.h"
 #include "SelItem.h"
-#include "CtpAi.h"
+#include "ctpai.h"
 #include "ProposalAnalysis.h"
 #include "c3math.h"
 #include "UnitData.h"
 #include "UnitPool.h"
 #include "network.h"
-#include "Pollution.h"
-#include "Director.h"
-#include "Gold.h"
+#include "pollution.h"
+#include "director.h"
+#include "gold.h"
 
 extern SelectedItem *g_selected_item;
 extern UnitPool *g_theUnitPool;

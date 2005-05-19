@@ -9,7 +9,7 @@
 
 #include "ctp2_button.h"
 
-#include "uiutils.h"
+#include "UIUtils.h"
 
 #include "citymanager.h"
 #include "c3ui.h"

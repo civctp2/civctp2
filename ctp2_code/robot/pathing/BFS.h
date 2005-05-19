@@ -4,8 +4,8 @@
 #ifndef __BFS_H__
 #define __BFS_H__ 1
 
-#include "AstarPnt.h"
-#include "PriorityQueue.h"
+#include "astarpnt.h"
+#include "priorityqueue.h"
 
 class AstarPoint; 
 class MapPoint; 

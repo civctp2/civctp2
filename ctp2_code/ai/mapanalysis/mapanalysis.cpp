@@ -34,9 +34,9 @@
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitRecord.h"
-#include "CityData.h"
-#include "Player.h"
-#include "DynArr.h"
+#include "citydata.h"
+#include "player.h"
+#include "dynarr.h"
 #include "UnitDynArr.h"
 #include "ArmyPool.h"
 #include "UnitPool.h"
@@ -48,7 +48,7 @@
 #include "Strengths.h"
 #include "AgreementMatrix.h"
 #include "Diplomat.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 
 #include "Scheduler.h"
 #include <vector>

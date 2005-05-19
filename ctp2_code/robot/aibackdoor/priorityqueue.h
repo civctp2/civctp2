@@ -43,7 +43,7 @@
 #ifndef __DA_PRIORITY_QUEUE__
 #define __DA_PRIORITY_QUEUE__ 1
 
-#include "DynArr.h"
+#include "dynarr.h"
 
 template <class T> class DAPriorityQueue { 
 	DynamicArray<T*> m_queue; 

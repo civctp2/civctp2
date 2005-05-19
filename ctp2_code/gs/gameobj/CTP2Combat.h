@@ -37,8 +37,8 @@ typedef unsigned long uint32;
 #include "ConstDB.h"	// g_theConstDB
 #include "Unit.h"
 #include "MapPoint.h"
-#include "Battle.h"
-#include "DynArr.h"
+#include "battle.h"
+#include "dynarr.h"
 
 #define k_COMBAT_WIDTH 4
 #define k_COMBAT_HEIGHT 7

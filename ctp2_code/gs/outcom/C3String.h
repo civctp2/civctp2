@@ -2,8 +2,8 @@
 #ifndef __C3STRING_H__
 #define __C3STRING_H__
 
-#include "IC3String.h"
-#include "CivArchive.h"
+#include "ic3String.h"
+#include "civarchive.h"
 
 class C3String : public IC3String
 {

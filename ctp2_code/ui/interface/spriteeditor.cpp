@@ -13,7 +13,7 @@
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "c3ui.h"
-#include "aui_StringTable.h"
+#include "aui_stringtable.h"
 #include "aui_dimension.h"
 
 
@@ -26,7 +26,7 @@
 
 
 
-#include "ctp2_Button.h"
+#include "ctp2_button.h"
 #include "c3textfield.h"
 
 
@@ -46,15 +46,15 @@
 
 
 
-#include "TiledMap.h"
-#include "SpriteEditor.h"
+#include "tiledmap.h"
+#include "spriteeditor.h"
 
-#include "ColorSet.h"
+#include "colorset.h"
 #include "SelItem.h"
-#include "Player.h"
-#include "unitdynarr.h"
+#include "player.h"
+#include "UnitDynArr.h"
 #include "screenutils.h"
-#include "uiutils.h"
+#include "UIUtils.h"
 #include "bevellesswindow.h"
 #include "network.h"
 #include "victorywin.h"
@@ -70,14 +70,14 @@
 #include "UnitSpriteGroup.h"
 #include "FacedSprite.h"
 #include "Sprite.h"
-#include "ScreenManager.h"
+#include "screenmanager.h"
 #include "CivPaths.h"
 #include "c3files.h"
 #include "SpriteFile.h"
 #include "Anim.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "Token.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "Actor.h"
 

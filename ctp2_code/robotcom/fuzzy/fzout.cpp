@@ -2,16 +2,16 @@
 #include "c3.h"
 
 #include "globals.h"
-#include "IC3GameState.h"
+#include "ic3GameState.h"
 #include "Fuzzy_Variables.h"
-#include "AiMain.h"
+#include "aimain.h"
 
 #include "FzOut.h"
 #include "fliif.h"
 #include "FliEngine.h"
 #include "FliSymbol.h"
 
-#include "DiplomaticTypes.h"
+#include "diplomatictypes.h"
 
 double fz_freight_reserve; 
 double fz_personality_aggression;

@@ -53,14 +53,14 @@
 #include "UnitData.h"
 #include "UnitDynArr.h"
 
-#include "CityData.h"
+#include "citydata.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 
 #include "SpriteState.h"
 #include "UnitActor.h"
-#include "Player.h"
+#include "player.h"
 #include "RandGen.h"
 #include "QuadTree.h"
 #include "installationtree.h"
@@ -80,12 +80,12 @@
 #include "CivilisationDB.h"
 #include "CivilisationPool.h"
 #include "SelItem.h"
-#include "TiledMap.h"
-#include "Director.h"
+#include "tiledmap.h"
+#include "director.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 
-#include "AiCause.h"
+#include "aicause.h"
 #include "HappyTracker.h"
 #include "AchievementTracker.h"
 
@@ -94,15 +94,15 @@
 #include "Agreement.h"
 #include "Wormhole.h"
 #include "victorymoviewin.h"
-#include "CellUnitList.h"
-#include "Order.h"
+#include "cellunitlist.h"
+#include "order.h"
 
 #include "Diffcly.h"
 #include "DiffDB.h"
 
 #include "ArmyPool.h"
 #include "TradeOfferPool.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "gamesounds.h"
 #include "TerrainRecord.h"
 
@@ -112,9 +112,9 @@
 #include "TradeBids.h"
 #include "TradePool.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 
-#include "BSet.h"
+#include "bset.h"
 
 #include "MaterialPool.h"
 #include "SpecialAttackInfoRecord.h"
@@ -137,13 +137,13 @@
 
 #include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
-#include "BuildingUtil.h"
+#include "buildingutil.h"
 #include "BuildingRecord.h"
-#include "Gold.h"
+#include "gold.h"
 #include "ArmyData.h"
 #include "WonderTracker.h"
 
-#include "CityWindow.h"
+#include "citywindow.h"
 
 #ifdef _DEBUG
 #include "aui.h"

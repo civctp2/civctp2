@@ -80,9 +80,9 @@ string ID_SPY_MAKE_FRIEND_DS("ID_SPY_MAKE_FRIEND_DS");
 string ID_ADVICE_MAKE_FRIEND_DS("ID_ADVICE_MAKE_FRIEND_DS");
 string ID_NEWS_MAKE_FRIEND_DS("ID_NEWS_MAKE_FRIEND_DS");
 
-#include "CTP2.h"
+#include "ctp2.h"
 #include "Diplomat.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 
 
 vector<Player> Player::s_players(g_numPlayers);

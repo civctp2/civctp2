@@ -84,7 +84,7 @@ sint32 const	USE_CURRENT_ROUND			= -1;
 #include "c3types.h"			// MBCHAR, sint32 
 #include "civarchive.h"			// CivArchive
 #include "pointerlist.h"		// PointerList
-#include "unit.h"				// Unit
+#include "Unit.h"				// Unit
 
 //----------------------------------------------------------------------------
 // Class declarations

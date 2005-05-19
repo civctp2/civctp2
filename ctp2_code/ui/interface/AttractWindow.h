@@ -4,7 +4,7 @@
 #define __ATTRACT_WINDOW_H__
 
 #include "c3window.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 
 struct AttractRegion {
 	aui_Region *m_region;

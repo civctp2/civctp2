@@ -23,7 +23,7 @@
 #include "c3ui.h"
 
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 
 #include "primitives.h"
 #include "textutils.h"

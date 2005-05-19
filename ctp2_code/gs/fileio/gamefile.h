@@ -4,11 +4,11 @@
 #define __GAMEFILE_H__
 
 #include "pixeltypes.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "ns_gamesetup.h"
 #include "MapPoint.h"
 #include "StartingPosition.h"
-#include "CivScenarios.h"
+#include "civscenarios.h"
 #include "CivilisationPool.h"
 
 enum GAMEFILE_ERR

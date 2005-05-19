@@ -4,22 +4,22 @@
 #include "c3.h"
 #include "globals.h"
 #include "MoveFlags.h"
-#include "CivArchive.h"
-#include "IC3InstDB.h"
-#include "IC3Rand.h"
+#include "civarchive.h"
+#include "ic3InstDB.h"
+#include "ic3Rand.h"
 
 
-#include "BSet.h"
+#include "bset.h"
 #include "MapPoint.h"
 
 
-#include "IC3GameState.h"
-#include "IC3Player.h"
-#include "IC3World.h"
-#include "IC3RobotAstar.h"
+#include "ic3GameState.h"
+#include "ic3player.h"
+#include "ic3world.h"
+#include "ic3RobotAstar.h"
 
-#include "AiMain.h"
-#include "AiCell.h"
+#include "aimain.h"
+#include "aicell.h"
 #include "AiMap.h"
 #include "RouteUtilityList.h"
 
@@ -30,12 +30,12 @@
 
 
 
-#include "FSAlloc.h"
+#include "fsalloc.h"
 
 
-#include "IC3GameState.h"
-#include "IC3TerrDB.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "ic3TerrDB.h"
+#include "aimain.h"
 
 
 #include "ArmyGoal.h"
@@ -44,7 +44,7 @@
 #include "GlAttck.h"
 #include "GlSettl.h"
 #include "GlRoute.h"
-#include "GlFreight.h"
+#include "glfreight.h"
 
 
 
@@ -54,13 +54,13 @@
 
 
 
-#include "Unitflow.h"
-#include "AIP.h"
-#include "Squad.h"
-#include "Goal.h"
+#include "unitflow.h"
+#include "aip.h"
+#include "squad.h"
+#include "goal.h"
 
 #include "Scheduler.h"
-#include "Planner.h"
+#include "planner.h"
 
 
 #include "AllocWGF.h"
@@ -73,24 +73,24 @@
 #include "GoalInst.h"
 
 #include "CityTree.h"
-#include "cont.h"
+#include "Cont.h"
 #include "GoalRoad.h"
 #include "CityEdge.h"
 
 
 #include "FlatPtr.h"
-#include "ScienceAgent.h"
+#include "scienceagent.h"
 
 
 
 #include "dr_debug.h"
 #include "matrix.h"
-#include "Grassfire.h"
+#include "grassfire.h"
 #include "strategic_map.h"
-#include "AiRndCnt.h"
+#include "airndcnt.h"
 #include "Pirate_Marker.h"
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

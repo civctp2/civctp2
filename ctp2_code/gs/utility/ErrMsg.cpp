@@ -13,7 +13,7 @@
 #include "c3.h"
 #include "c3types.h"
 
-#include "Errmsg.h"
+#include "ErrMsg.h"
 
 
 #ifdef LPRNT

@@ -17,7 +17,7 @@
 #include "tileutils.h"
 
 #include "Unit.h"
-#include "DynArr.h"
+#include "dynarr.h"
 
 #include "SelItem.h"
 
@@ -26,16 +26,16 @@
 #include "SpriteState.h"
 #include "Actor.h"
 #include "SpriteGroupList.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "Anim.h"
 #include "GoodActor.h"
 
 
 #include "ActorPath.h"
 #include "Action.h"
-#include "Director.h"
+#include "director.h"
 #include "maputils.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 extern SpriteGroupList	*g_goodSpriteGroupList;
 extern TiledMap			*g_tiledMap;

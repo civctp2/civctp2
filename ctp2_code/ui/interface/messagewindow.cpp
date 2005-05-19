@@ -19,19 +19,19 @@
 
 #include "aui_hypertextbox.h"
 
-#include "c3_PopupWindow.h"
+#include "c3_popupwindow.h"
 
 #include "StrDB.h"
 
 
 #include "message.h"
-#include "messagedata.h"
+#include "MessageData.h"
 #include "messageactions.h"
 #include "messageeyepoint.h"
 #include "messageresponse.h"
 #include "messageiconwindow.h"
 #include "messagewindow.h"
-#include "messagepool.h"
+#include "MessagePool.h"
 
 #include "TurnYearStatus.h"
 

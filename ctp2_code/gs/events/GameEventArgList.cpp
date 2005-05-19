@@ -3,7 +3,7 @@
 #include "c3.h"
 #include "GameEventArgList.h"
 #include "GameEventArgument.h"
-#include "PointerList.h"
+#include "pointerlist.h"
 #include "Unit.h"
 #include "Army.h"
 #include "MapPoint.h"
@@ -15,7 +15,7 @@
 #include "TradeRoute.h"
 #include "TradePool.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 
 GameEventArgList::GameEventArgList(va_list *vl)
 {

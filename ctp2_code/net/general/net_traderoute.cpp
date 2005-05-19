@@ -15,14 +15,14 @@
 #include "TradeRouteData.h"
 #include "TradePool.h"
 
-#include "Director.h"
+#include "director.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 
 #include "TradeDynArr.h"
 
-#include "TradeManager.h"
+#include "trademanager.h"
 
 extern Director *g_director;
 extern World *g_theWorld;

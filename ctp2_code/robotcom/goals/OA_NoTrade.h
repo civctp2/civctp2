@@ -4,7 +4,7 @@
 #ifndef __OA_DONT_TRADE_WITH_ENEMY_H__
 #define __OA_DONT_TRADE_WITH_ENEMY_H__ 1
 
-#include "OA.h"
+#include "Oa.h"
 
 class Opportunity_Action_Dont_Trade_With_Enemy : public Opportunity_Action { 
 

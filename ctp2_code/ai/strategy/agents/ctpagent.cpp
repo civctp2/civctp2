@@ -32,8 +32,8 @@
 
 #include "gfx_options.h"
 
-#include "CTPAgent.h"
-#include "RobotAstar2.h"
+#include "ctpagent.h"
+#include "robotastar2.h"
 
 #include "ArmyPool.h"
 #include "World.h"
@@ -41,17 +41,17 @@
 #include "Unit.h"
 #include "Army.h"
 #include "ArmyData.h"
-#include "Player.h"
+#include "player.h"
 #include "Events.h"
-#include "Order.h"
+#include "order.h"
 #include "GameEventUser.h"
 #include "CTPDatabase.h"
 #include "OrderRecord.h"
 #include "GoalRecord.h"
 #include "UnitRecord.h"
-#include "MapAnalysis.h"
-#include "CtpAiDebug.h"
-#include "CtpAi.h"
+#include "mapanalysis.h"
+#include "ctpaidebug.h"
+#include "ctpai.h"
 
 using namespace std;
 

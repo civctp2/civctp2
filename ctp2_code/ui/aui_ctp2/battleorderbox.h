@@ -15,9 +15,9 @@
 #ifndef __BATTLEORDERBOX_H__
 #define __BATTLEORDERBOX_H__
 
-#include "ControlSheet.h"
+#include "controlsheet.h"
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "Unit.h"
 #include "unittabbutton.h"
 

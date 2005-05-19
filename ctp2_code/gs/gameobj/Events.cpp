@@ -8,13 +8,13 @@
 #include "Events.h"
 #include "GameEventUser.h"
 
-#include "Player.h"
+#include "player.h"
 #include "Score.h"
 #include "Army.h"
 #include "Path.h"
-#include "Order.h"
+#include "order.h"
 
-#include "Director.h"
+#include "director.h"
 #include "gamesounds.h"
 #include "aicause.h"
 #include "SelItem.h"
@@ -43,22 +43,22 @@
 
 #include "directorevent.h"
 
-#include "Order.h"
+#include "order.h"
 
 #include "World.h"
-#include "BSet.h"
-#include "ArmyManagerWindow.h"
-#include "TradeManager.h"
+#include "bset.h"
+#include "armymanagerwindow.h"
+#include "trademanager.h"
 #include "tradeevent.h"
-#include "UnitManager.h"
+#include "unitmanager.h"
 
-#include "CtpAi.h"
-#include "DipWizard.h"
+#include "ctpai.h"
+#include "dipwizard.h"
 
 #include "EventTracker.h"
 #include "FeatTracker.h"
 
-#include "GaiaController.h"
+#include "gaiacontroller.h"
 
 STDEHANDLER(ScoreEventTest)
 {

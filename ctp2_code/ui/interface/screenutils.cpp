@@ -49,7 +49,7 @@
 #include "citywindow.h"
 
 #include "km_screen.h"
-#include "endgamewindow.h"
+#include "EndgameWindow.h"
 #include "creditsscreen.h"
 
 #include "tutorialwin.h"
@@ -58,31 +58,31 @@
 
 #include "debugmemory.h"
 
-#include "Player.h"
+#include "player.h"
 #include "SelItem.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "network.h"
 
 #include "screenutils.h"
 
 #include "director.h"
 
-#include "DiplomacyWindow.h"
+#include "diplomacywindow.h"
 #include "DomesticManagementDialog.h"
 #include "NationalManagementDialog.h"
 
-#include "TradeManager.h"
+#include "trademanager.h"
 #include "ScienceManagementDialog.h"
-#include "UnitManager.h"
-#include "ScienceVictoryDialog.h"
+#include "unitmanager.h"
+#include "sciencevictorydialog.h"
 
-#include "BattleViewWindow.h"
-#include "ScenarioEditor.h"
+#include "battleviewwindow.h"
+#include "scenarioeditor.h"
 #include "EditQueue.h"
 
-#include "DipWizard.h"
+#include "dipwizard.h"
 
-#include "ScienceVictoryDialog.h"
+#include "sciencevictorydialog.h"
 
 
 extern C3UI					*g_c3ui;

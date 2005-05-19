@@ -5,7 +5,7 @@
 #include "network.h"
 #include "net_util.h"
 
-#include "Pollution.h"
+#include "pollution.h"
 #include "PollutionConst.h"
 
 extern Pollution *g_thePollution;

@@ -9,15 +9,15 @@
 #include "c3window.h"
 
 #include "IntroMovieWindow.h"
-#include "Intromoviewin.h"
+#include "IntroMovieWin.h"
 
-#include "MovieDB.h"
+#include "moviedb.h"
 #include "StrDB.h"
 #include "AgeRecord.h"
 #include "WonderRecord.h"
 
 #include "initialplaywindow.h"
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 #include "wonderutil.h"
 

@@ -253,11 +253,11 @@
 #include "c3types.h"
 #include "c3errors.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
-#include "IC3World.h"
+#include "civarchive.h"
+#include "ic3world.h"
 
 #include "dr_debug.h"
-#include "AiMain.h"
+#include "aimain.h"
 
 
 #include "ArmyAgent.h"
@@ -272,17 +272,17 @@
 #include "semi_dynamic_array.h"
 #include "sorted_array.h"
 #include "list_array.h"
-#include "Matrix.h"
-#include "Grassfire.h"
-#include "Pool.h"
-#include "Pointer_Pool.h"
+#include "matrix.h"
+#include "grassfire.h"
+#include "pool.h"
+#include "pointer_pool.h"
 
 #include "unitflow.h"
-#include "AIP.h"
+#include "aip.h"
 #include "squad.h"
 
 
-#include "Goal.h"
+#include "goal.h"
 #include "ArmyGoal.h"
 #include "GoalDefense.h"
 
@@ -290,16 +290,16 @@
 #include "GlExpl.h"
 #include "GlAttck.h"
 #include "GlEnslave.h"
-#include "GlBlg.h"
-#include "GlFreight.h"
+#include "glblg.h"
+#include "glfreight.h"
 
 #include "GlTrans.h"
-#include "Goal_Build_Supplemental.h"
+#include "goal_build_supplemental.h"
 #include "Goal_Perimeter.h"
 #include "Goal_Patrol.h"
-#include "GoalBombard.h"
+#include "goalbombard.h"
 #include "Goal_Build_List.h"
-#include "GoalRustle.h"
+#include "goalrustle.h"
 #include "GoalExpel.h"
 #include "GoalSally.h"
 #include "GoalRetreat.h"
@@ -310,13 +310,13 @@
 #include "Scheduler.h"
 
 
-#include "Strategic_Map.h"
-#include "Planner.h"
+#include "strategic_map.h"
+#include "planner.h"
 
 
 extern Pool<Squad> * g_squad_pool; 
 
-#include "AILog.h"
+#include "ailog.h"
 
 #define LOG_PLANNER true
 

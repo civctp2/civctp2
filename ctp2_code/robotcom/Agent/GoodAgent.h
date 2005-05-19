@@ -3,7 +3,7 @@
 #ifndef __GOOD_AGENT_H__
 #define __GOOD_AGENT_H__ 1
 
-#include "BSet.h"
+#include "bset.h"
 
 class CivArchive; 
 struct MapPointData; 

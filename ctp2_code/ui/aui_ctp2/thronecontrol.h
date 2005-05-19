@@ -32,7 +32,7 @@
 #define __THRONECONTROL_H__
 
 #include "patternbase.h"
-#include "aui_Control.h"
+#include "aui_control.h"
 
 #define k_THRONE_LDL_BLENDSPEED		"blendspeed"
 

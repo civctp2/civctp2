@@ -11,9 +11,9 @@
 #include "EndTurnButton.h"
 
 
-#include "aui_Ldl.h"
-#include "ctp2_Button.h"
-#include "NewTurnCount.h"
+#include "aui_ldl.h"
+#include "ctp2_button.h"
+#include "newturncount.h"
 #include "SelItem.h"
 
 #include "AttractWindow.h"

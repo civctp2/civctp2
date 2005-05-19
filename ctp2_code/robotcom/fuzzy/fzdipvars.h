@@ -2,7 +2,7 @@
 #ifndef __FZDIPVARS_H__
 #define __FZDIPVARS_H__
 
-#include "DiplomaticTypes.h"
+#include "diplomatictypes.h"
 
 
 extern double fz_war_with_him;

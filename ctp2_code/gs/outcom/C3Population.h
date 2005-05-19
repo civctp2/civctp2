@@ -14,7 +14,7 @@
 #ifndef __C3Population_H__
 #define __C3Population_H__ 1
 
-#include "IC3Population.h"
+#include "ic3Population.h"
 
 class Player ;
 class CivArchive ;

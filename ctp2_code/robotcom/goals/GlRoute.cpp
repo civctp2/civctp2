@@ -2,19 +2,19 @@
 
 #include "c3.h"
 #include "globals.h"
-#include "IC3Player.h"
+#include "ic3player.h"
 
 #include "GlRoute.h"
 #include "globals.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
-#include "BSet.h"
-#include "IC3TerrDB.h"
+#include "bset.h"
+#include "ic3TerrDB.h"
 
 
-#include "IC3GameState.h"
-#include "AiMain.h"
-#include "AiRndCnt.h"
+#include "ic3GameState.h"
+#include "aimain.h"
+#include "airndcnt.h"
 #include "FzOut.h"
 
 

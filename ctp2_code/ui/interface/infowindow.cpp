@@ -12,15 +12,15 @@
 #include "c3.h"
 
 #include "aui_ldl.h"
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "ctp2_button.h"
 #include "ctp2_Tab.h"
 #include "ctp2_TabGroup.h"
 #include "c3ui.h"
 
 #include "infowindow.h"
-#include "RankingTab.h"
-#include "ScoreTab.h"
+#include "rankingtab.h"
+#include "scoretab.h"
 #include "WonderTab.h"
 
 extern void cpw_NumberToCommas( uint64 number, MBCHAR *s );

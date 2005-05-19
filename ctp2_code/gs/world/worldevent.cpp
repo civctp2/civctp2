@@ -6,12 +6,12 @@
 #include "directions.h"
 #include "GameEventUser.h"
 #include "Events.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 #include "network.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
-#include "CellUnitList.h"
-#include "AICause.h"
+#include "cellunitlist.h"
+#include "aicause.h"
 
 STDEHANDLER(CutImprovementsEvent)
 {

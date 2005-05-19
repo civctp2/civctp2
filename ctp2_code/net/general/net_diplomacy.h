@@ -4,7 +4,7 @@
 #define __NET_DIPLOMACY_H__
 
 #include "net_packet.h"
-#include "DiplomatTypes.h"
+#include "diplomattypes.h"
 
 class NetDipProposal : public Packetizer
 {

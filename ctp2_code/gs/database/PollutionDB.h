@@ -3,8 +3,8 @@
 #define __POLLUTION_DB_H__
 
 #include "DB.h"
-#include "PollutionRecord.h"
-#include "PollutionToken.h"
+#include "pollutionrecord.h"
+#include "pollutiontoken.h"
 
 
 class CivArchive ;

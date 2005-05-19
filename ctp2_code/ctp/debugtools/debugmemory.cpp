@@ -11,11 +11,11 @@
 
 
 
-#include "Log.h"
-#include "DebugMemory.h"
-#include "DebugCallStack.h"
-#include "DebugAssert.h"
-#include "Breakpoint.h"
+#include "log.h"
+#include "debugmemory.h"
+#include "debugcallstack.h"
+#include "debugassert.h"
+#include "breakpoint.h"
 #include <windows.h>		
 #include <string.h>
 

@@ -14,7 +14,7 @@
 #ifndef __AI_MAIN_H__     
 #define __AI_MAIN_H__ 1
 
-#include "IC3GameState.h"
+#include "ic3GameState.h"
 #include "gstypes.h"	
 
 #define k_UNIT_STRENGTH_COEF 1.0

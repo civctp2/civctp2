@@ -21,13 +21,13 @@
 
 
 #include "c3.h"
-#include "AiCell.h"
-#include "IC3World.h"
+#include "aicell.h"
+#include "ic3world.h"
 #include "IMapPointData.h"
-#include "IC3GameState.h"
-#include "IC3GameState.h"
-#include "AiMain.h"
-#include "CivArchive.h"
+#include "ic3GameState.h"
+#include "ic3GameState.h"
+#include "aimain.h"
+#include "civarchive.h"
 
 AiCell::AiCell() 
 

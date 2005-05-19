@@ -17,7 +17,7 @@
 #include "ArmyPool.h"
 
 #include "Path.h"
-#include "Player.h"
+#include "player.h"
 #include "GameEventManager.h"
 #include "ArmyData.h"
 

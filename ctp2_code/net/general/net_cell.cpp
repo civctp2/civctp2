@@ -1,5 +1,5 @@
 #include "c3.h"
-#include "cell.h"
+#include "Cell.h"
 #include "net_cell.h"
 #include "net_util.h"
 #include "network.h"
@@ -7,14 +7,14 @@
 #include "GoodyHuts.h"
 #include "TileInfo.h"
 #include "GoodActor.h"
-#include "TiledMap.h"
-#include "CellUnitList.h"
+#include "tiledmap.h"
+#include "cellunitlist.h"
 #include "TradeDynArr.h"
 #include "ObjPool.h"
 #include "TerrImprovePool.h"
 
 #include "XY_Coordinates.h"
-#include "world.h"
+#include "World.h"
 
 #define SEND_MOVE_COST
 

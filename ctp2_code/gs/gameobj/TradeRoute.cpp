@@ -13,11 +13,11 @@
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "TradePool.h"
-#include "Player.h"
+#include "player.h"
 #include "TradeRouteData.h"
-#include "Director.h"
+#include "director.h"
 #include "MapPoint.h"
-#include "DynArr.h"
+#include "dynarr.h"
 #include "Cell.h"
 #include "UnitPool.h"
 #include "SlicObject.h"
@@ -25,8 +25,8 @@
 
 #include "network.h"
 #include "net_info.h"
-#include "RadarMap.h"
-#include "TradeManager.h"
+#include "radarmap.h"
+#include "trademanager.h"
 
 extern World* g_theWorld;
 extern Player** g_player;

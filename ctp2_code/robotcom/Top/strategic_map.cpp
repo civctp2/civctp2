@@ -212,13 +212,13 @@
 #include "c3types.h"
 #include "c3errors.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
-#include "IC3World.h"
-#include "IC3Player.h"
-#include "IC3Rand.h"
+#include "civarchive.h"
+#include "ic3world.h"
+#include "ic3player.h"
+#include "ic3Rand.h"
 
 #include "Fuzzy_Variables.h"
-#include "AiMain.h"
+#include "aimain.h"
 #include "AiMap.h"
 
 
@@ -226,8 +226,8 @@
 #include "dr_debug.h"
 #include "linked_list.h"
 #include "matrix.h"
-#include "Grassfire.h"
-#include "AILog.h"
+#include "grassfire.h"
+#include "ailog.h"
 
 
 #include "Agent.h"
@@ -241,7 +241,7 @@
 #include "iparser.h"
 
 
-#include "Strategic_Map.h"
+#include "strategic_map.h"
 
 
 #define LOG_STRATEGIC_MAP true

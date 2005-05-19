@@ -1,8 +1,8 @@
  
 #include "c3.h"
-#include "BSet.h"
-#include "IC3CivArchive.h"
-#include "CivArchive.h"
+#include "bset.h"
+#include "ic3CivArchive.h"
+#include "civarchive.h"
 
 BSetID::BSetID ()
 

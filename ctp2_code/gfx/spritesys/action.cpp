@@ -18,13 +18,13 @@
 #include "Anim.h"
 #include "ActorPath.h"
 #include "Action.h"
-#include "Director.h"
+#include "director.h"
 #include "UnitActor.h"
 #include "tech_wllist.h"
 
 #include "EffectActor.h"
-#include "ProfileDB.h"
-#include "DebugMemory.h"
+#include "profileDB.h"
+#include "debugmemory.h"
 
 extern ProfileDB		*g_theProfileDB;
 extern Director			*g_director;

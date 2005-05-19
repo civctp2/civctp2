@@ -1,7 +1,7 @@
 #include "c3.h"
 
 #include "TileVal.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "MapPoint.h"

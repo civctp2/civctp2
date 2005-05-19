@@ -1,16 +1,16 @@
 
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 #include "net_army.h"
 #include "network.h"
 #include "net_util.h"
-#include "Player.h"
+#include "player.h"
 #include "UnitPool.h"
 #include "ArmyPool.h"
 #include "Army.h"
 #include "ArmyData.h"
-#include "CtpAi.h"
+#include "ctpai.h"
 #include "net_info.h"
 
 extern Player **g_player;

@@ -50,25 +50,25 @@
 #include "c3ui.h"
 #include "scenarioeditor.h"
 #include "aui_ldl.h"
-#include "ctp2_window.h"
+#include "ctp2_Window.h"
 #include "controlpanelwindow.h"
 
 #include "TerrainRecord.h"
 #include "IconRecord.h"
 #include "UnitRecord.h"
 
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
-#include "aui_ImageList.h"
-#include "ctp2_Button.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
+#include "aui_imagelist.h"
+#include "ctp2_button.h"
 #include "ctp2_Static.h"
 #include "ctp2_Switch.h"
-#include "ctp2_Spinner.h"
+#include "ctp2_spinner.h"
 
 #include "StrDB.h"
 
 #include "Unit.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "UnitData.h"
 
 //Added by Martin Gühmann to have the appropiate number 
@@ -82,18 +82,18 @@
 
 #include "SelItem.h"
 
-#include "wondertracker.h"
+#include "WonderTracker.h"
 #include "wonderutil.h"
-#include "Player.h"
+#include "player.h"
 #include "Advances.h"
 
-#include "Director.h"
-#include "TiledMap.h"
+#include "director.h"
+#include "tiledmap.h"
 #include "radarmap.h"
 #include "TurnCnt.h"
 
 #include "Civilisation.h"
-#include "aui_TipWindow.h"
+#include "aui_tipwindow.h"
 
 #include "loadsavewindow.h"
 #include "GameSettings.h"
@@ -102,9 +102,9 @@
 
 #include "c3_utilitydialogbox.h"
 
-#include "Scenariowindow.h"
+#include "scenariowindow.h"
 
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "CivilisationDB.h"
 
 #include "MapCopyBuffer.h"
@@ -118,7 +118,7 @@
 #include "DiffDB.h"
 
 #include "Cell.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "TerrImprove.h"
 #include "ConstDB.h"
 #include "civapp.h"
@@ -130,16 +130,16 @@
 
 #include "GameOver.h"
 
-#include "exclusions.h"
+#include "Exclusions.h"
 #include "SlicEngine.h"
 #include "MessageBoxDialog.h"
 
 #include "MainControlPanel.h"
-#include "NewTurnCount.h"
+#include "newturncount.h"
 #include "TurnYearStatus.h"
 #include "MaterialPool.h"
 #include "gold.h"
-#include "CursorManager.h"
+#include "cursormanager.h"
 #include "network.h"
 #include "AttractWindow.h"
 

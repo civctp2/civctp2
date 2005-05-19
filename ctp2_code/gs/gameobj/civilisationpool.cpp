@@ -29,16 +29,16 @@
 #include "c3.h"
 #include "c3errors.h"
 #include "Unit.h"
-#include "Player.h"
+#include "player.h"
 #include "StrDB.h"
 #include "CivilisationDB.h"
 #include "CivilisationPool.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "RandGen.h"
 #include "SimpleDynArr.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 #include "network.h"
-#include "Globals.h"
+#include "globals.h"
 
 	extern	Player	**g_player ;
 

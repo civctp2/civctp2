@@ -13,19 +13,19 @@
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "TradeRouteData.h"
-#include "Player.h"
+#include "player.h"
 #include "Path.h"
 #include "TradeAstar.h"
 #include "Cell.h"
 #include "CityRadius.h"
 #include "TerrainRecord.h"
 #include "pixelutils.h"
-#include "ColorSet.h"
+#include "colorset.h"
 #include "network.h"
 #include "ResourceRecord.h"
 #include "ConstDB.h"
 #include "UnitData.h"
-#include "RadarMap.h"
+#include "radarmap.h"
 
 extern ColorSet *g_colorSet;
 extern TradeAstar g_theTradeAstar; 

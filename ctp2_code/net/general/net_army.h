@@ -8,8 +8,8 @@ class ArmyList;
 class ArmyData;
 
 typedef sint32 PLAYER_INDEX;
-#include "AiCause.h"
-#include "CellUnitList.h"
+#include "aicause.h"
+#include "cellunitlist.h"
 
 
 class NetNewArmy : public Packetizer

@@ -5,10 +5,10 @@
 
 #include "Token.h"
 #include "ErrMsg.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "StrDB.h"
 
-#include "conceptDB.h"
+#include "conceptdb.h"
 #include "c3files.h"
 #include "IconRecord.h"
 

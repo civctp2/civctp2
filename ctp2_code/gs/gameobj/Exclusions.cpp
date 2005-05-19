@@ -29,7 +29,7 @@
 #include "Exclusions.h"
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "UnitRecord.h"
 
 Exclusions *g_exclusions = NULL;

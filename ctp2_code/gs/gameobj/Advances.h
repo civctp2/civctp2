@@ -51,7 +51,7 @@ typedef sint32 PLAYER_INDEX;
 #if defined(_MSC_VER)
 enum CAUSE_SCI;
 #else
-#include "AICause.h"	// CAUSE_SCI
+#include "aicause.h"	// CAUSE_SCI
 #endif
 
 #define k_ADVANCES_VERSION_MAJOR	0								

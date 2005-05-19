@@ -11,7 +11,7 @@
 #include "aui_switch.h"
 #include "c3_checkbox.h"
 #include "c3ui.h"
-#include "profiledb.h"
+#include "profileDB.h"
 #include "spnewgamewindow.h"
 #include "gameplayoptions.h"
 #include "aui_uniqueid.h"

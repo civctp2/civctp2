@@ -6,7 +6,7 @@
 
 #include "c3ui.h" 
 
-#include "CursorManager.h"
+#include "cursormanager.h"
 
 extern C3UI			*g_c3ui;
 

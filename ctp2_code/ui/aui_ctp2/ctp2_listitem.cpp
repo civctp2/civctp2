@@ -3,10 +3,10 @@
 #include "c3.h"
 #include "aui.h"
 #include "aui_item.h"
-#include "aui_UniqueId.h"
+#include "aui_uniqueid.h"
 
-#include "Pattern.h"
-#include "PatternBase.h"
+#include "pattern.h"
+#include "patternbase.h"
 
 #include "ctp2_listitem.h"
 

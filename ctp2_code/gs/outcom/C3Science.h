@@ -14,7 +14,7 @@
 #ifndef __C3Science_H__
 #define __C3Science_H__ 1
 
-#include "IC3Science.h"
+#include "ic3Science.h"
 
 class Player; 
 class CivArchive; 

@@ -4,11 +4,11 @@
 #include "SlicButton.h"
 #include "SlicObject.h"
 #include "StrDB.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "SlicSegment.h"
 #include "SlicEngine.h"
 #include "SlicFrame.h"
-#include "Message.h"
+#include "message.h"
 
 extern StringDB *g_theStringDB;
 

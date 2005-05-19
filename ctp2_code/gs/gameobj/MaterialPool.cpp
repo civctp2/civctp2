@@ -10,11 +10,11 @@
 
 #include "c3.h"
 #include "MaterialPool.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "network.h"
 #include "net_action.h"
 #include "net_info.h"
-#include "Player.h"
+#include "player.h"
 #include "ConstDB.h"
 
 extern Player **g_player;

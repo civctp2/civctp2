@@ -4,7 +4,7 @@
 #define __CTP2_LISTITEM_H__
 
 #include "aui_item.h"
-#include "PatternBase.h"
+#include "patternbase.h"
 
 class aui_Surface;
 

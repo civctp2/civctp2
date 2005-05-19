@@ -31,21 +31,21 @@
 
 #include "background.h"
 
-#include "TiledMap.h"
-#include "DynArr.h"
+#include "tiledmap.h"
+#include "dynarr.h"
 #include "SelItem.h"
-#include "CursorManager.h"
+#include "cursormanager.h"
 #include "c3window.h"
 #include "c3ui.h"
 
 #include "messageactions.h"
 #include "messagewindow.h"
 #include "InfoBar.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 #include "controlpanelwindow.h"
 #include "StatusBar.h"
-#include "ScenarioEditor.h"
+#include "scenarioeditor.h"
 #include "ctp2_Static.h"
 #include "aui_ldl.h"
 

@@ -29,7 +29,7 @@
 #ifndef __GAIA_CONTROLLER_H__
 #define __GAIA_CONTROLLER_H__
 
-#include "Bit_Table.h"
+#include "bit_table.h"
 #include <list>
 #include <utility>
 #include "MapPoint.h"

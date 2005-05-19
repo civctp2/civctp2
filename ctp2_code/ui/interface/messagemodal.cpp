@@ -16,22 +16,22 @@
 #include "aui_static.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
-#include "aui_HyperTextBox.h"
+#include "aui_hypertextbox.h"
 
-#include "c3_PopupWindow.h"
+#include "c3_popupwindow.h"
 
-#include "slicbutton.h"
-#include "ctp2_Button.h"
+#include "SlicButton.h"
+#include "ctp2_button.h"
 #include "aui_dimension.h"
 
 
 #include "message.h"
-#include "messagedata.h"
+#include "MessageData.h"
 #include "messageactions.h"
 #include "messagewindow.h"
 #include "messageeyepoint.h"
 #include "messagemodal.h"
-#include "Player.h"
+#include "player.h"
 #include "SelItem.h"
 
 extern Player **g_player;

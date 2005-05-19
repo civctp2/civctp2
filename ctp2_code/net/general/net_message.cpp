@@ -9,7 +9,7 @@
 #include "MessagePool.h"
 #include "UnitDynArr.h"
 #include "net_info.h"
-#include "Player.h"
+#include "player.h"
 
 extern Player **g_player;
 

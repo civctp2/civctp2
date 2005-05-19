@@ -5,30 +5,30 @@
 #include "c3errors.h"
 
 #include "IMapPointData.h"
-#include "IC3Player.h"
-#include "IC3Government.h"
+#include "ic3player.h"
+#include "ic3Government.h"
 
 #include "CityAgent.h"
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "FlatPtr.h"
 
 
-#include "IC3GameState.h"
-#include "IC3Population.h"
-#include "IC3World.h"
+#include "ic3GameState.h"
+#include "ic3Population.h"
+#include "ic3world.h"
 
-#include "AiMain.h"
-#include "AiCell.h"
+#include "aimain.h"
+#include "aicell.h"
 #include "AiMap.h"
-#include "AiRndCnt.h"
+#include "airndcnt.h"
 
 
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 #include "AiBldQue.h"
-#include "BSet.h"
-#include "CivArchive.h"
+#include "bset.h"
+#include "civarchive.h"
 #include "ForeignAgent.h"
 #include "ForeignCity.h"
 #include "Foreigner.h"
@@ -50,15 +50,15 @@ extern double fz_i_agreed_to_stop_polluting;
 
 
 #include "ArmyGoal.h"
-#include "GlBlg.h"
-#include "GlFreight.h"
+#include "glblg.h"
+#include "glfreight.h"
 
 
 #include "AllocWGF.h"
-#include "Wotp.h"
+#include "wotp.h"
 
 
-#include "WallClock.h"
+#include "Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

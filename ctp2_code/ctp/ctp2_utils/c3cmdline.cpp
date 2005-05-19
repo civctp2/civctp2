@@ -35,10 +35,10 @@
 #include "ConstDB.h"
 
 #include "c3ui.h"
-#include "DebugMemory.h"
-#include "Log.h"
+#include "debugmemory.h"
+#include "log.h"
 
-#include "Player.h"
+#include "player.h"
 #include "Strengths.h"
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -51,12 +51,12 @@
 #include "MapPoint.h"
 #include "TradePool.h"
 #include "UnitData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrImprove.h"
 #include "Readiness.h"
-#include "GameFile.h"
+#include "gamefile.h"
 #include "TradeOffer.h"
 #include "Cell.h"
 #include "MaterialPool.h"
@@ -65,13 +65,13 @@
 #include "StrDB.h"
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
-#include "Director.h"
+#include "director.h"
 #include "maputils.h"
 #include "Regard.h"
 #include "UnoccupiedTiles.h"
 
-#include "ProfileDB.h"
-#include "Order.h"
+#include "profileDB.h"
+#include "order.h"
 
 #include "SlicObject.h"
 #include "SlicEngine.h"
@@ -79,12 +79,12 @@
 #include "statswindow.h"
 #include "controlpanelwindow.h"
 
-#include "ChatBox.h"
+#include "chatbox.h"
 #include "Score.h"
 #include "Happy.h"
 
 
-#include "debugWindow.h"
+#include "debugwindow.h"
 
 #include "SlicSymbol.h"
 #include "SlicNamedSymbol.h"
@@ -115,9 +115,9 @@
 #include "Diplomat.h"
 #include "AgreementMatrix.h"
 
-#include "Globals.h"
-#include "CellUnitList.h"
-#include "CtpAiDebug.h"
+#include "globals.h"
+#include "cellunitlist.h"
+#include "ctpaidebug.h"
 
 
 #include "gfx_options.h"
@@ -164,7 +164,7 @@ extern sint32 g_robotMessages;
 #include "aui.h"
 #include "aui_surface.h"
 #include "primitives.h"
-#include "TiledMap.h"
+#include "tiledmap.h"
 
 #include "SelItem.h"
 #include "network.h"
@@ -182,11 +182,11 @@ extern sint32 g_robotMessages;
 
 #include "gameinit.h"
 
-#include "AiCause.h"
+#include "aicause.h"
 #include "TurnCnt.h"
 
 
-#include "CivApp.h"
+#include "civapp.h"
 #include "TurnCnt.h"
 
 #include "AttractWindow.h"
@@ -244,7 +244,7 @@ extern void WhackScreen();
 #include "Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog; 
 
-#include "Director.h"
+#include "director.h"
 extern Director *g_director;
 
 
@@ -1688,8 +1688,8 @@ void AiDebugCommand::Execute(sint32 argc, char **argv)
 	CtpAiDebug::SetDebugArmies(unit_list);
 }
 
-#include "goodspritegroup.h"
-#include "unitspritegroup.h"
+#include "GoodSpriteGroup.h"
+#include "UnitSpriteGroup.h"
 
 void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 {

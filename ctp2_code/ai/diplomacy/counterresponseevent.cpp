@@ -31,7 +31,7 @@
 #include "c3.h"
 
 
-#include "Player.h"
+#include "player.h"
 #include "c3math.h"
 
 #include "CounterResponseEvent.h"
@@ -42,9 +42,9 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "AICause.h"
+#include "aicause.h"
 #include "Diplomat.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 #include "ProposalAnalysis.h"
 #include "AgreementMatrix.h"
 #include "Strengths.h"

@@ -3,8 +3,8 @@
 #ifndef __C3_COLOREDSTATIC_H__
 #define __C3_COLOREDSTATIC_H__
 
-#include "ColorSet.h"
-#include "c3_Static.h"
+#include "colorset.h"
+#include "c3_static.h"
 
 class aui_Surface;
 

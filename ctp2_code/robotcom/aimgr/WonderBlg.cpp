@@ -2,15 +2,15 @@
 
 #include "c3.h"  
 #include "globals.h"
-#include "IC3Wonder.h"
+#include "ic3Wonder.h"
 #include "WonderBlg.h"
 #include "FlatPtr.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
-#include "IC3GameState.h"
-#include "AiMain.h"
+#include "ic3GameState.h"
+#include "aimain.h"
 #include "FzOut.h"
-#include "BSet.h"
+#include "bset.h"
 
 ZEROMEM(WonderBlgFlat); 
 ZEROMEM(WonderBlgPtr); 

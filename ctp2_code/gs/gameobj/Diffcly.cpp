@@ -12,7 +12,7 @@
 
 #include "Diffcly.h"
 #include "DiffDB.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 
 
 extern DifficultyDB *g_theDifficultyDB; 

@@ -14,7 +14,7 @@
 
 #if 0
 #include "c3errors.h"
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "Token.h"
 
 #include "StrDB.h"
