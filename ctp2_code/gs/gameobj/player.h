@@ -28,9 +28,9 @@
 // - Made GetCivilisation method const - May 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __PLAYER_H__
 #define __PLAYER_H__ 1
 
@@ -46,7 +46,7 @@
 #define k_ANNOUNCE_TRADE_MESSAGES 1
 #define k_SQUELCH_TRADE_MESSAGES 0
 
-extern enum ROUTE_TYPE; 
+#include "TradeRouteData.h"
 
 extern enum AGREEMENT_TYPE ;
 extern enum CIV_INDEX ;

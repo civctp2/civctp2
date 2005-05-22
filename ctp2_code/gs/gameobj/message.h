@@ -5,15 +5,16 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MESSAGE_H__ 
 #define __MESSAGE_H__
 
 #include "ID.h"
 #include "MessageData.h"
 
-extern enum MESSAGE_RESPONSE_TYPE ;
+enum MESSAGE_RESPONSE_TYPE ;
 typedef sint32 AdvanceType;
 
 class Message : public ID

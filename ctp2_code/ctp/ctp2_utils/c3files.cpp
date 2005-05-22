@@ -22,6 +22,7 @@
 //
 // Modifications from the original Activision code:
 //
+// - added linux specific code
 //
 //----------------------------------------------------------------------------
 
@@ -43,6 +44,13 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
+#if !defined(WIN32)
+#include <dirent.h>
+#endif
+#if defined(LINUX)
+#include <linux/iso_fs.h>
+#include <errno.h>
+#endif
 
 extern ProfileDB *g_theProfileDB;
 
@@ -320,25 +328,25 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *li
 	MBCHAR *lpFileName = NULL;
 	MBCHAR path[_MAX_PATH];
 
+#if defined(WIN32)
 	WIN32_FIND_DATA	fileData;
 	HANDLE lpFileList;
+#endif
 
 	g_civPaths->GetSavePath(dirID, path);
-	
+
+#if defined(WIN32)	
 	if (ext) sprintf(strbuf,"*.%s",ext);
 	else strcpy(strbuf, "*.*");
 		
 	strcat(path,strbuf);
 
-	
 	lpFileList = FindFirstFile(path,&fileData);
 	
 	if (lpFileList ==  INVALID_HANDLE_VALUE) return FALSE;
 	
 	lpFileName = new MBCHAR[256];
-	strcpy(lpFileName,fileData.cFileName);
-	list->AddTail(lpFileName);
-	
+	strcpy(lpFileName, fileData.cFileName);
 	while(FindNextFile(lpFileList,&fileData))
 	{
 		lpFileName = new MBCHAR[256];
@@ -347,12 +355,38 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *li
 	}
 
 	FindClose(lpFileList);
+#else
+	DIR *dir = opendir(path);
+	if (!dir)
+		return FALSE;
+	struct dirent *dent = NULL;
+	
+	while (dent = readdir(dir))
+	{
+		char *p = strrchr(dent->d_name, '.');
+		if (NULL == p) {
+			continue;
+		}
+		if (1 == strlen(p)) {
+			continue;
+		}
+		p++;
+		
+		if (0 != strcasecmp(p, ext)) {
+			continue;
+		}
+		lpFileName = new char[NAME_MAX];
+		strcpy(lpFileName, dent->d_name);
+		list->AddTail(lpFileName);
+	}
+
+	closedir(dir);
+#endif
 
 	return TRUE;
 }
 
-
-
+#if defined(WIN32)
 sint32 c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *list)
 {
 	MBCHAR strbuf[256];
@@ -391,14 +425,13 @@ sint32 c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FI
 
 	return TRUE;
 }
-
-
+#endif
 
 #define k_CTP_CD_VOLUME_NAME		"CTP2"
 
 MBCHAR	VolumeName[32];
 MBCHAR	WhichCD;
-MBCHAR	IsCD[26];
+MBCHAR	IsCD[26] = { 0 };
 sint32	CDIndex = 0;
 BOOL	g_hasCD = FALSE;
 
@@ -436,7 +469,8 @@ BOOL c3files_HasLegalCD()
 			
 		}
 
-		if (!success) {			
+		if (!success) {
+#ifdef WIN32			
 			int rval = MessageBox(g_c3ui->TheHWND(),
 									appstrings_GetString(APPSTR_INSERTCDROM), 
 									appstrings_GetString(APPSTR_CDROM), 
@@ -447,11 +481,14 @@ BOOL c3files_HasLegalCD()
 										MB_SETFOREGROUND);	
 
 			if (rval == IDCANCEL) {
+#endif // WIN32
 				c3errors_ErrorDialog(appstrings_GetString(APPSTR_CDROM),
 										appstrings_GetString(APPSTR_NEEDCDROM));		
 				
 				exit(-1);
+#ifdef WIN32
 			}
+#endif // WIN32
 
 			
 			
@@ -460,7 +497,6 @@ BOOL c3files_HasLegalCD()
 			}
 		}
 	}
-
 	if (g_soundManager) {
 		g_soundManager->InitRedbook();
 	}
@@ -487,6 +523,17 @@ BOOL c3files_HasCD(void)
 
 void c3files_GetCDDrives(void)
 {
+#if defined(USE_SDL)
+	int numDrives = SDL_CDNumDrives();
+	if (-1 == numDrives) {
+		// Forgot init...
+		Assert(0);
+		return;
+	}
+	for (int i = 0; i < min(26, numDrives); i++) {
+		IsCD[i] = 1;
+	}
+#else
     uint32		all_drives;
     MBCHAR		i;
     MBCHAR		drivepath[16];
@@ -505,10 +552,12 @@ void c3files_GetCDDrives(void)
 				IsCD[i] = 1;
 		}
 	}
+#endif
 }
 
-MBCHAR *c3files_GetVolumeName(MBCHAR name)
+MBCHAR *c3files_GetVolumeName(int cdIndex)
 {
+#if defined(WIN32)
     MBCHAR drivepath[32];
     MBCHAR FSName[32];
     uint32 SerialNumber;
@@ -516,12 +565,58 @@ MBCHAR *c3files_GetVolumeName(MBCHAR name)
     uint32 FSFlags;
     
     strcpy(drivepath, " :\\");
-    drivepath[0] = name;
+    drivepath[0] = cdIndex + 'A';
     if (GetVolumeInformation(drivepath, VolumeName, 32, &SerialNumber,
                              &MaxComponentLen, &FSFlags, FSName, 32)) {
 	    return(VolumeName);
     }
-    return(NULL);
+	return(NULL);
+#elif defined(LINUX)
+	// FIXME: Add code to determine beginsector of iso_primary_sector
+	//        On german ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
+	const char *cd_dev = SDL_CDName(cdIndex);
+	FILE *cd = fopen("/dev/cdrom", "rb");
+	if (cd == NULL) {
+		fprintf(stderr, "%s\n", strerror(errno));
+		return NULL;
+	}
+	int rc = fseek(cd, 0x8000, SEEK_SET);
+	if (rc != 0) {
+		fprintf(stderr, "%s\n", strerror(errno));
+		fclose(cd);
+		return NULL;
+	}
+	struct iso_primary_descriptor ipd = { 0 };
+	size_t r = fread(&ipd, 1, sizeof(ipd), cd);
+	if (r != sizeof(ipd)) {
+		fprintf(stderr, "Failed reading %d bytes: %s\n", sizeof(ipd),
+		        strerror(errno));
+		fclose(cd);
+		return NULL;
+	}
+	bool validName = true;
+	int i = 0;
+	while (1) {
+		if (i > min(sizeof(ipd.volume_id), sizeof(VolumeName))) {
+			validName = false;
+			break;
+		}
+		if ('\0' == ipd.volume_id[i]) {
+			VolumeName[i] = '\0';
+			break;
+		}
+		if (!isalnum(ipd.volume_id[i])) {
+			validName = false;
+			break;
+		}
+		VolumeName[i] = ipd.volume_id[i];
+		i++;
+	}
+	if (validName) {
+		return VolumeName;
+	}
+	return NULL;
+#endif
 }
 
 BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveLetter)
