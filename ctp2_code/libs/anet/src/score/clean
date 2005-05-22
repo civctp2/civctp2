@@ -1,0 +1,5 @@
+#!/bin/sh
+rm *.class *.jar Activision/*.class Activision/*.jar
+rm Activision/Activision_score_005finit.h
+rm -rf servjar scoret scorlist scoreokt scorerept scorsend
+rm -rf scordump wmqt wmqdump sq wmq2mysql

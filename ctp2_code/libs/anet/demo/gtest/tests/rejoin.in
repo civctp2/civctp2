@@ -1,0 +1,34 @@
+# Join the game and create a player.
+sessions
+wait
+assert n_sessions > 0
+join d
+wait
+assert theError == 0
+newp first
+wait
+assert theError == 0
+sleep 1
+
+# Abruptly crash out of the game without sending any packets.
+freeze
+sleep 1
+dpCreate
+
+# Find the game
+sessions
+wait
+assert n_sessions > 0
+
+# Join the game again (kill server now to test assert)
+join d
+wait
+assert theError == 0
+
+# Create second player (kill server now to test assert)
+newp second
+wait
+assert theError == 0
+
+sleep 10
+quit

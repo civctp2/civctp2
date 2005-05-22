@@ -1,0 +1,22 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Refresh" CONTENT="{UPDATE}">
+<META HTTP-EQUIV="Expires" CONTENT="{EXPTIME}">
+<TITLE>Activision Game Server</TITLE>
+</HEAD>
+
+<BODY BGCOLOR=#FFFFFF TEXT=#000000>
+<CENTER>
+<B><FONT SIZE=+2>Activision Game Server</FONT>
+- <FONT SIZE=+1>{HOSTNAME}</FONT></B>
+<P>
+<B><A HREF="dpURL">dpNAME</A></B>
+<BR>
+{GAMESDAY dpTYPE} games played in past 24 hrs.
+{SPECIES dpTYPE}
+<P>
+Updated every {UPDATE} seconds.<BR>Page will reload automatically if
+your browser supports this feature.<BR>Current time: {TIME}
+</CENTER>
+</BODY>
+</HTML>

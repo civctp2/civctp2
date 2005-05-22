@@ -1,0 +1,86 @@
+<h1>The dptab module</h1>
+<i>Last update: 16 Aug 1997</i>
+<h2>History</h2>
+The Activenet dp library has to propagate four different tables of
+data: sessions, players, variables, and groups.  The code to
+propagate these tables was originally written over more than a year, 
+and each table is propagated differently.  Worse yet, the player 
+table doesn't propagate very well; it has trouble with more than 16 players
+in a room!
+<h2>Goal</h2>
+The goal of dptab is to replace the four different table propagation
+methods in dp with one well-understood, high-performance table propagation
+module.  It should be able to handle a hundred players in a room without 
+any trouble.
+<p>
+It should also be easily adaptable for use by games that need to
+propagate game-specific data between the game clients and the game server.
+<p>
+dptab will sit between dpio (the reliable transport module) 
+and dp2 (the big lobbies version of the Activenet API).
+It provides building blocks for reliably mirroring tables
+(e.g. session tables, player tables, or game-specific data tables)
+between client and server, server and master server, or between 
+peers in a game.
+<p>
+See <a href="../doc/arch.htm">src/doc/arch.htm</a> for more overview
+of how the new dp2 works.
+<h2>Unimplemented Features</h2>
+<ul>
+<li>I intend to optimize dptab_update() to collect multiple small items
+into a single packet.  This should improve dp2 performance on Leif's psp
+test with packet loss or with over 24 players.
+<li>I intend to support automatic packing and unpacking of at least small
+(sub-one-packet) variables via callbacks specified at dptab_createTable time.
+dp will use this to reduce its overhead bandwidth requirement.
+<li>I intend later to provide periodic status callbacks when transferring
+large variables (like maps or sounds, max size approx 200 kilobytes).
+<li>To support dpFreeze(), all objects inside dp_t (that means dptab_t!)
+need to have freeze and thaw methods for writing themselves and reading
+themselves to/from disk.  This is not yet implemented (although there is
+some old code there, it's commented out).
+</ul>
+
+<h2>Code</h2>
+<ul>
+<li><a href="../../h/dptab.h">dptab.h</a> - interface and doc
+<li><a href="dptab.c">dptab.c</a>
+<li><a href="dptabx.bat">dptabx.bat</a> - Batch file to compile and run unit
+test
+</ul>
+<h2>Regression test</h2>
+The regression test currently only checks whether a table
+entry is properly propagated around a ring of hosts which agree to
+subscribe to a table from their left neighbor and publish the same table 
+to their right neighbor.  It also prints out propagation time.
+<ul>
+<li><a href="../test/dptabt/dptabt.c">../test/dptabt/dptabt.c</a>
+<li><a href="../test/dptabt/dptabt.mak">../test/dptabt/dptabt.mak</a> - Makefile to compile and run dptabt.exe
+</ul>
+
+<h2>Prototype users of the module</h2>
+dptab and dp2 are now linked in to the dp2, dp2d, anet2, and anet2d
+libraries (static, static debugging, dynamic, and dynamic debugging,
+respectively; released applications should be linked to anet2.)
+<ul>
+<li><a href="../../h/dp2.h">dp2.h</a> - the Big Lobbies version of dp
+<li><a href="dp2.c">dp2.c</a>
+</ul>
+The game server will eventually be rewritten to use dptab.  Here
+are trivial protoypes of client and server demonstrating a three-tiered
+system (master server, slave servers, and clients) for distributing session
+info:
+<ul>
+<li><a href="dp2t1.c">dp2t1.c</a> - Demo client
+<li><a href="dp2t1x.bat">dp2t1x.bat</a> - batch file to compile demo client
+<li><a href="dp2t2.c">dp2t2.c</a> - Demo server
+<li><a href="dp2t2x.bat">dp2t2x.bat</a> - batch file to compile demo server
+<li><a href="dpt.bat">dpt.bat</a> - Batch file to run master server, two servers,
+<li><a href="dpt2.bat">dpt2.bat</a> - Batch file to run master server, two servers,
+and ten clients
+</ul>
+
+<hr>
+<a href="index.html">Back to unit test index</a><br>
+<a href="../index.html">Up to Activenet Source Packing List</a><br>
+<i>Dan Kegel</i>

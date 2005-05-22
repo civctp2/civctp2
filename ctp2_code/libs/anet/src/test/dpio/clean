@@ -1,0 +1,6 @@
+#!/bin/sh
+rm -fr normal
+rm -fr debug
+rm -fr profile
+rm -fr log
+rm output* *.log gmon.out core

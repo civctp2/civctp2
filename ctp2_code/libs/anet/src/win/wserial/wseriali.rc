@@ -1,0 +1,50 @@
+/*--------------------------------------------------------------------------
+ Resource file for Windows DLL.
+ Needed only because we compress the DLL, so the embedded info record
+ is not readable!
+ 
+ $Log: wseriali.rc $
+ Revision 1.1  1997/06/04 17:54:50  dkegel
+ Initial revision
+ Revision 1.1  1997/06/04 01:27:24  dkegel
+ Initial revision
+--------------------------------------------------------------------------*/
+
+/* Here is the approximate definition of this structure, taken from commapi.h.
+ * If commapi.h has changed since this was taken out, beware!
+
+#define comm_DRIVER_SIGNATURE		"AVKEGL7"	
+#define comm_DRIVER_SIGLEN			8
+#define comm_DRIVER_NAMELEN			32
+
+typedef struct {
+	char signature[comm_DRIVER_SIGLEN];
+	size_t recordLen;				
+	char name[comm_DRIVER_NAMELEN];
+	short version;				
+	short capabilities;		
+	short needs;		
+} comm_driverInfo_t;
+
+static const comm_driverInfo_t commDriverInfo =
+    comm_DRIVER_SIGNATURE,
+    sizeof(comm_driverInfo_t),
+    "Internet",
+    0x0100,
+    (comm_DRIVER_IS_VISIBLE | comm_DRIVER_IS_FAST | comm_DRIVER_ALLOWS_GAMELIST | comm_DRIVER_NO_BROADCAST),
+    0
+  };
+***************/
+
+#include "..\..\..\h\commapi.h"
+
+resname comminfo
+BEGIN
+   comm_DRIVER_SIGNATURE "\0",
+   50L,
+   "Null Modem" "\0\0"  "\0\0\0\0"  "\0\0\0\0"  "\0\0\0\0"  "\0\0\0\0"  "\0\0\0\0",
+   0x0101,
+   (comm_DRIVER_IS_VISIBLE | comm_DRIVER_IS_FAST | comm_DRIVER_ALLOWS_GAMELIST),
+   (comm_INIT_NEEDS_SESSIONID | comm_INIT_NEEDS_PORTNUM | comm_INIT_NEEDS_BAUD)
+END 
+/* bug: hard codes baud rate, shouldn't set needs baud */

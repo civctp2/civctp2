@@ -1,0 +1,16 @@
+#(shell script fragment)
+# Set the variables used by the ActiveNet server monitor.
+#
+# Home directory and web directory (must be web accessible).
+# Customize for your system.
+ANETMON_HOME=/home/anet/anetmon
+ANETMON_WEBHOME=/home/anet/public_html/anetmon
+
+# Paths to files and directories used by anet server.
+# Generally, there will be no need to change anything below.
+JAVADIR=/usr/local/jdk
+ANETMON_SERVERS=$ANETMON_HOME/servers.txt
+
+#This is a shell script fragment.  It must be run by another
+#shell script, using the line (note the leading period):
+# . ~/anetmon/anetmonenv

@@ -1,0 +1,477 @@
+%!PS-Adobe-1.0
+%%Creator: allen.cert.org:jte (James Ellis)
+%%Title: stdin
+%%CreationDate: Mon Mar 14 11:18:20 1994
+%%DocumentFonts: Times-Roman Times-Italic Times-Bold Symbol Times-Roman DIThacks
+%%Pages: (atend)
+%%EndComments
+% Start of pscat.pro -- prolog for troff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCS: $Header: pscat.pro,v 2.2 87/11/17 16:40:32 byron Rel $
+save /pscatsave exch def
+/$pscat 50 dict def
+$pscat begin
+/fm [1 0 0 1 0 0] def
+/xo 0 def /yo 0 def
+/M /moveto load def
+/R /show load def
+/S {exch currentpoint exch pop moveto show}def
+/T {exch currentpoint pop exch moveto show}def
+/U {3 1 roll moveto show}def
+/siz 0 def
+/font 0 def
+/Z {/siz exch def SF}def
+/F {/font exch def SF}def
+/SF{font 0 ne
+    {catfonts font 1 sub get fm 0 siz put fm 3 siz neg put 
+     fm makefont setfont}if}def
+/BP{save/catsv exch def 0 792 translate 72 432 div dup neg scale 
+  xo yo translate 0 0 moveto}def
+/EP{catsv restore showpage}def
+
+% definitions for PPROC callback functions
+% each PPROC is called with the following number on the stack:
+% pointsize charcode railmag pswidth pschar x y wid
+/$pprocs 50 dict def
+/fractm [.65 0 0 .6 0 0] def
+% fractions
+/PS1{gsave $pprocs begin
+    /wid exch def pop pop pop pop pop /ch exch def /size exch def
+    /pair $pprocs ch get def /cf currentfont def
+    cf fractm makefont setfont
+    0 .3 size mul 6 mul 2 copy neg rmoveto pair 0 get show rmoveto
+    currentfont cf setfont (\244) show setfont
+    pair 1 get show grestore wid .06 div 0 rmoveto end}def
+$pprocs begin
+8#34 [(1)(4)] def
+8#36 [(1)(2)] def
+8#46 [(3)(4)] def
+end
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+/rls{rlineto stroke}def
+/currx{currentpoint pop}def
+/dround{transform round exch round exch itransform} def
+end
+end
+/DIThacks exch definefont pop
+/catfonts [
+	/Times-Roman findfont
+	/Times-Italic findfont
+	/Times-Bold findfont
+	/Symbol findfont
+	/Times-Roman findfont
+	/DIThacks findfont
+	] def
+%%EndProlog
+%%Page: ? 1
+BP
+1 F
+60 Z
+432 222(MD5)U
+568(\()S
+598(1)S
+638(\))S
+1564(USER)S
+1737(COMMANDS)S
+3014(MD5)S
+3150(\()S
+3180(1)S
+3220(\))S
+3 F
+54 Z
+432 510(NAME)U
+1 F
+60 Z
+648 582(md5)U
+775(\261)S
+825(calcula)S
+997(te)S
+1061(a)S
+1108(message-digest)S
+1496(\256ngerprint)S
+1770(\(checksum\))S
+2071(for)S
+2161(a)S
+2208(\256le)S
+3 F
+54 Z
+432 681(SYNOPSIS)U
+60 Z
+648 753(md5)U
+1 F
+781([)S
+821(-t)S
+6 F
+878(e)S
+1 F
+898(-x)S
+6 F
+968(e)S
+1 F
+988(-sstring)S
+6 F
+1188(e)S
+1 F
+1208(\256lename\(s\))S
+1499(])S
+3 F
+54 Z
+432 852(DESCRIPTION)U
+60 Z
+648 924(md5)U
+1 F
+791(takes)S
+945(as)S
+1025(input)S
+1179(a)S
+1236(message)S
+1470(of)S
+1550(arbitrary)S
+1788(length)S
+1969(and)S
+2086(produces)S
+2333(as)S
+2413(output)S
+2597(a)S
+2654(128-bit)S
+5 F
+2857(")S
+1 F
+(\256ngerprint)R
+5 F
+(")R
+1 F
+3190(or)S
+648 1068(m)U
+5 F
+648 996(")U
+1 F
+(message)R
+906(digest)S
+5 F
+(")R
+1 F
+1104(of)S
+1183(the)S
+1286(input.)S
+1474(It)S
+1540(is)S
+1609(conjecture)S
+1861(d)S
+1920(that)S
+2039(it)S
+2101(is)S
+2169(computati)S
+2411(onally)S
+2590(infeasible)S
+2853(to)S
+2928(produce)S
+3150(two)S
+695 1068(essages)U
+896(having)S
+1081(the)S
+1176(same)S
+1321(message)S
+1545(digest,)S
+1724(or)S
+1794(to)S
+1861(produce)S
+2075(any)S
+2182(message)S
+2406(having)S
+2590(a)S
+2637(given)S
+2791(prespeci\256ed)S
+3102(target)S
+648 1212(m)U
+648 1140(message)U
+880(digest.)S
+1087(The)S
+1209(MD5)S
+1362(algorithm)S
+1624(is)S
+1691(intended)S
+1926(for)S
+2023(digital)S
+2205(signature)S
+2453(applicat)S
+2645(ions,)S
+2787(where)S
+2961(a)S
+3015(large)S
+3163(\256le)S
+695 1212(ust)U
+791(be)S
+5 F
+874(")S
+1 F
+(compressed)R
+5 F
+(")R
+1 F
+1234(in)S
+1307(a)S
+1360(secure)S
+1540(manner)S
+1747(before)S
+1927(being)S
+2087(encrypted)S
+2351(with)S
+2484(a)S
+2537(private)S
+2731(\(secret\))S
+2938(key)S
+3051(under)S
+3213(a)S
+3 F
+54 Z
+432 1383(OPTIONS)U
+1 F
+60 Z
+648 1284(public-key)U
+926(cryptosystem)S
+1267(such)S
+1397(as)S
+2 F
+1467(RSA.)S
+1 F
+648 1455(The)U
+768(following)S
+1028(four)S
+1154(options)S
+1357(may)S
+1486(be)S
+1568(used)S
+1703(in)S
+1775(any)S
+1887(combinati)S
+2129(on,)S
+2229(except)S
+2412(that)S
+3 F
+2528(\256lename\(s\))S
+1 F
+2833(must)S
+2975(be)S
+3057(the)S
+3156(last)S
+3 F
+648 1626(-)U
+1 F
+648 1527(objects)U
+839(on)S
+919(the)S
+1013(command)S
+1271(line.)S
+3 F
+668 1626(sstring)U
+1 F
+861(prints)S
+1018(a)S
+1065(checksum)S
+1326(of)S
+1396(the)S
+1490(given)S
+5 F
+1644(")S
+1 F
+(string)R
+5 F
+(")R
+1 F
+(.)R
+3 F
+648 1824(-)U
+648 1725(-t)U
+1 F
+708(runs)S
+831(a)S
+878(built-in)S
+1076(time)S
+1204(trial.)S
+3 F
+668 1824(x)U
+1 F
+718(runs)S
+841(a)S
+888(built-in)S
+1086(test)S
+1190(script.)S
+1961 1923(.)U
+3 F
+648(\256lename\(s\))S
+1 F
+948(prints)S
+1105(a)S
+1152(checksum\(s\))S
+1476(for)S
+1566(each)S
+1697(of)S
+1767(the)S
+1861(\256les)S
+3 F
+54 Z
+657 2022(O)U
+432(SEE)S
+552(ALS)S
+60 Z
+648 2094(sum)U
+1 F
+(\(1\))R
+648 2193(R)U
+(FC)R
+781(1321)S
+921(describes)S
+1165(in)S
+1232(detail)S
+1387(the)S
+1481(MD2,)S
+1642(MD4,)S
+1803(and)S
+1910(MD5)S
+2056(message-digest)S
+2444(algorithms.)S
+3 F
+54 Z
+432 2292(ACKNOWLEDGEMENTS)U
+1 F
+60 Z
+648 2364(This)U
+775(program)S
+999(is)S
+1059(placed)S
+1237(in)S
+1304(the)S
+1398(public)S
+1569(domain)S
+1770(for)S
+1860(free)S
+1974(general)S
+2172(use)S
+2272(by)S
+2352(RSA)S
+2488(Data)S
+2622(Security.)S
+3210 4542(1)U
+432(Sun)S
+545(Release)S
+753(4.1)S
+1507(Last)S
+1631(change:)S
+1839(Feb)S
+1949(14,)S
+2044(1994)S
+EP
+%%Trailer
+pscatsave end restore
+%%Pages: 1

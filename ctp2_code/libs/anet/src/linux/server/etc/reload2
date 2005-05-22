@@ -1,0 +1,19 @@
+#!/bin/sh
+# Reload the ActiveNet game server text files
+#
+# You should not need to edit this file.  All modifiable
+# fields are controlled by the file ~/etc/anet2env
+#
+
+# Set environment variables
+. ~/etc/anet2env
+
+# Find and reload the server files
+ps auxww | grep $ANET2_EXEC | grep -v grep | awk '{print $2}' > /tmp/anet2.pid 
+if [ -s /tmp/anet2.pid ]; then
+   echo Reloading game server files at `date`
+   kill -HUP `cat /tmp/anet2.pid`
+else
+   echo No old game server daemon running at `date`
+fi
+

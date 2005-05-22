@@ -1,0 +1,26 @@
+#!/bin/sh
+# Stop the ActiveNet game server
+#
+# You should not need to edit this file.  All modifiable
+# fields are controlled by the file ~/etc/anet2env
+#
+. ~/etc/anet2env
+
+# Find and stop the server
+ps auxww | grep $ANET2_EXEC | grep -v grep | awk '{print $2}' > /tmp/anet2.pid 
+if [ -s /tmp/anet2.pid ]; then
+   echo Stopping game server at `date`
+   kill -TERM `cat /tmp/anet2.pid`
+   i=30
+   while [ -s /tmp/anet2.pid -a $i -ne 0 ]; do
+       i=$[$i-1]
+       sleep 1
+       ps auxww | grep `cat /tmp/anet2.pid` | grep -v grep | awk '{print $2}' > /tmp/anet2.pid 
+   done
+   if [ $i -eq 0 ]; then
+       kill -9 `cat /tmp/anet2.pid`
+   fi
+else
+   echo No old game server daemon running at `date`
+fi
+rm -f /tmp/anet2.pid

@@ -1,0 +1,235 @@
+<html>
+<head>
+<title>Anet API Test Program</title>
+</head>
+<body>
+<h1><center><a name="Top">Gtest: An interactive test program for the Anet API</a></center></h1>
+<center><font size="-1">Copyright 1995-2001, <a href="http://www.activision.com/">Activision</a></font></center>
+<center>Last updated: 13 May 98</center>
+<h1>Contents</h1>
+<ul>
+<li><a href="#Overview">Overview</a>
+<li><a href="#Starting">Starting Gtest</a>
+<li><a href="#Commands">Gtest Commands</a>
+<li><a href="#Assert">The assert command</a>
+<li><a href="#Examples">Examples</a>
+</ul>
+<hr>
+<h1><a name="Overview">Overview</a></h1>
+Gtest was originally a small demo program to show how to create
+an Anet session.  It has grown to become a useful tool
+for understanding the <a href="dp.htm">Anet API</a>, for testing API functions,
+for troubleshooting games written with Anet, and for
+running small Internet game servers for testing.
+<p>
+Gtest is a command-line interface to the Anet API.
+It lets you call most of the dp and dpio functions directly.
+It also has a few commands to support writing test scripts,
+and rudimentary simulation of a network game's frame update cycle.
+<p>
+Gtest makes a good tool for learning, too, especially if you are willing
+to refer to the <a href="../demo/gtest/gtest.c">source file, gtest.c</a>,
+to make up for the poor documentation.
+
+<h1><a name="Starting">Starting Gtest</a></h1>
+Gtest is run from the DOS commandline (even the Windows version!).
+Choose the version you want to run, and copy it into the current directory.
+Debugging and nondebugging precompiled versions for Windows 
+(<a href="../win/bin/gtest.exe">win/bin/gtest.exe</a> and
+(<a href="../win/bin/gtestd.exe">win/bin/gtestd.exe</a>)
+are included in the SDK.
+<p>
+Gtest prints out a usage message if you run it without arguments
+that lists the commandline options:
+<pre>
+Usage: gtest [-N:comm.dll][-B:busy10msec][-P:adrString][-S][-x]
+[-W:phonenum][-Y:commportnum(0 : com1)][-Z:baudrate][-I:modeministr]
+[-Kirq:irqnum][-Kport:hexportnum][-Kpulse][-Ktest]
+
+Option details:
+-n:foo.dll Load comm dll foo.dll
+-b:10      Burn CPU for 10 centisec, then call dpReceive until empty, repeat
+-p:server  Connect to given game server
+-s         Read commands from stdin (needed for win32)
+-x         use dpio, not dp
+-c         don't create dp on startup
+</pre>
+
+Copy the transport DLL you want to use to the current directory,
+then specify it when you start gtest with -N:path, e.g.
+<pre>gtest -N:wipx2d.dll</pre>
+The current comm dll's are
+<ul>
+<li><a href="../win/dll/wmodem2.dll">win\dll\wmodem2.dll</a> - modem driver
+<li><a href="../win/dll/wmodem2d.dll">win\dll\wmodem2d.dll</a> - debugging
+modem driver
+<li><a href="../win/dll/wserial2.dll">win\dll\wserial2.dll</a>
+<li><a href="../win/dll/wserial2d.dll">win\dll\wserial2d.dll</a>
+<li><a href="../win/dll/winets2.dll">win\dll\winets2.dll</a>
+<li><a href="../win/dll/winets2d.dll">win\dll\winets2d.dll</a>
+<li><a href="../win/dll/wipx2.dll">win\dll\wipx2.dll</a>
+<li><a href="../win/dll/wipx2d.dll">win\dll\wipx2d.dll</a>
+<li><a href="../win/dll/wloop2.dll">win\dll\wloop2.dll</a> - the loopback
+dummy driver.  Works without any network installed.
+<li><a href="../win/dll/wloop2d.dll">win\dll\wloop2d.dll</a>
+</ul>
+<p>
+If you use a version that was compiled for
+debugging, it will read <a href="dp.htm#inifile">gtest.ini</a> on startup. 
+
+<h1><a name="Commands">Gtest Commands</a></h1>
+After you start gtest, it waits for you to type commands.
+Commands may be abbreviated, e.g. HOST may be abbreviated HO.
+Here is what typing <tt>HELP</tt> at the gtest prompt shows:
+<pre>
+help:  Basic script language commands 
+help:     #                 -- Comment
+help:     help              -- Get help
+help:     quit              -- terminate program (can give an exit code; default 0)
+help:     remotequit        -- tell other players to terminate program
+help:     wait              -- Wait until enum or join finishes.
+help:     sleep             -- Sleep given number of seconds
+help:     busy              -- Be busy given number of 10ms per main loop
+help:     set               -- Set var to val; var is theVar or dwUser1
+help:     show              -- Print variable value; var is one of anyGroup,anyPlayer,dwUser1,n_players,n_sessions,theError,theVar,thisGroup, or thisPlayer
+help:     spam              -- Send data to node at intervals
+help:     assert            -- Compare values and abort if unequal; var is one of anyGroup,anyPlayer,dwUser1,n_players,n_sessions,theError,theVar,thisGroup, or thisPlayer
+help:  dpio commands 
+help:     dpio_create       -- Load dpio
+help:     dpio_openHdl      -- Open a comm handle to a given node
+help:     dpio_closeHdl     -- Close a comm handle
+help:     dpio_findTimedOutHost -- Find closed handles
+help:     dpio_setMaxPlayerHdls -- Set maximum handles
+help:     dpio_setHandleOptions -- Set handle options
+help:     dpio_put_reliable -- Send datagram via dpio reliably to given node
+help:     dpio_freeze       -- Save dpio to disk [dpio.dat]
+help:     dpio_thaw         -- Restore dpio from disk [dpio.dat]
+help:     statinit          -- initialize dp statistics
+help:     statprint         -- print dp statistics
+help:  startup/shutdown 
+help:     enumtransports    -- list available transports
+help:     gameservers       -- list available game servers
+help:     setGameServer     -- connects to a game server
+help:     dpCreate          -- load dp
+help:     dpDestroy         -- unload dp
+help:     freeze            -- freeze the current session and destroy
+help:     thaw              -- Restore a dp session from disk
+help:  session mgmt 
+help:     species           -- Set species used for listing and hosting
+help:     host              -- create new session; name [maxpl] [flags] [dwuser1].
+help:     lobby             -- declare the current session to be a server lobby
+help:     join              -- join an existing session
+help:     joinany           -- join any existing session
+help:     dpClose           -- Disconnect from the current session
+help:     sessions          -- list available sessions
+help:     sdeltas           -- request session deltas; [on|off]
+help:     gdeltas           -- request gameserver deltas; [on|off]
+help:     pdeltas           -- request player deltas; [on|off]
+help:     dpGetSessionDesc  -- get current session description
+help:  player mgmt 
+help:     players           -- list players in current session
+help:     rplayers          -- list players in named session
+help:     xplayers          -- list players in current session
+help:     xrplayers         -- list players in named session
+help:     newplayer         -- create a player in current session
+help:     delplayer         -- destroy a player in current session
+help:     setpname          -- change the name of the player with the given id
+help:     setpblob          -- change the blob of the player with the given id
+help:  group mgmt 
+help:     groups            -- list groups in current session
+help:     newgroup          -- create a group in current session
+help:     delgroup          -- destroy a group in current session
+help:     gaddplayer        -- add a player to a group
+help:     gdelplayer        -- delete a player from a group
+help:     gplayers          -- list players in given group
+help:  player variables 
+help:     pset              -- Set a variable of a player
+help:     fpset             -- Set a variable of a player to a given file
+help:     pget              -- Get value of a variable of a player
+help:  misc 
+help:     ping              -- measure round trip lag time to a player
+help:     scap              -- Get capabilities of current session.
+help:     enumapp           -- list available applications
+help:     patch             -- Check whether patch is needed [apply]
+help:     pickapp           -- pick an existing application for use with launchapp
+help:     launchapp         -- freeze, start the application selected from pickapp, then destroy
+help:     crash             -- cause an exception
+help:  sending/receiving datagrams 
+help:     send              -- send a packet to a given player or group
+help:     chat              -- broadcast a chat message
+</pre>
+
+<h1><a name="Assert">The assert command</a></h1>
+The assert command lets you refer to the results of past commands in a few special cases.
+The variables supported at the moment are
+<ul>
+<li>n_sessions (set by the Sessions command)
+<li>n_players  (set by the Players and RPlayers commands)
+</ul>
+You use the assert command to test whether one of these variables
+has the value you expected.  For instance,
+<pre>
+assert n_sessions > 0
+</pre>
+makes sure at least one session was found.  You may use the
+>, <, ==, and != comparison operators inside assert commands.
+If the condition does not evaluate to TRUE, the program is aborted
+with an error message.
+<h1><a name="Examples">Examples</a></h1>
+The following examples will use nondebugging Windows dll's,
+so all the dll names will start in W and not end in D.  If you
+want log files, substitute the debugging gtest (gtestd.exe) and
+the debugging dll's (e.g. wipx2d.dll).
+
+<h2>Joining a game</h2>
+Try starting a game on one machine as follows:
+<pre>
+C:> gtest -n=wipx2.dll 
+host
+</pre>
+and joining it from another machine as follows:
+<pre>
+C:> gtest -n=wipx2.dll 
+sessions
+join demo
+newplayer Joe
+</pre>
+When the player Joe is created, all other machines in the game
+will handle the dp_user_addPlayer_packet_t 
+<a href="dp.htm#SysMsgs">system message</a>, and
+display a message on the screen.
+
+<h2>Scripts</h2>
+To run gtest in batch mode, use the -s option to read from stdin,
+and redirect input.  You can use the <tt>wait</tt> command to
+wait for an callback to complete, or the <tt>sleep</tt> command
+to wait for a fixed amount of time; gtest will continue listening
+for packets while it waits.  For example, if test.in contains
+<pre>
+sessions
+wait
+join demo
+sleep 5
+quit
+</pre>
+you can run it in gtest as follows:
+<pre>
+C:> gtest -n=wipx2.dll -s < test.in
+</pre>
+and it will return to the DOS prompt automatically when it's done.
+<p>
+Scripts are great during debugging because they let you run 
+<b>regression tests</b>.  For example, to make sure that at least one
+game is active on the LAN, you could write a script
+<pre>
+sessions
+wait
+assert n_sessions > 0
+quit
+</pre>
+<p>
+There are example gtest scripts in the demo/gtest directory.
+<hr>
+<i>Dan Kegel</i>
+</body>
+</html>

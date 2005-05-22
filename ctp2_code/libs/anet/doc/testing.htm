@@ -1,0 +1,111 @@
+<h1>Building / installing / testing the Anet Server</h1>
+
+<ul>
+<li> Build everything by typing "make" on the command line.
+
+<li> Follow the instructions found in "linux86/server/README2.txt"
+  to install and run a game server.
+
+<li> Run gtest (found in "demo/gtest/normal"), with the following 
+  command line options, to connect to a game server:
+<pre>
+		gtest -p:IPADR -t:SPECIES -n:DLL
+</pre> 
+  where IPADR is the IP address of the machine running the game server,<br>
+  SPECIES is the id of the game lobby (if you don't care, just use 1000),<br>
+  and DLL is the network transport DLL (under Linux, this is ignored unless
+  you have Loki's transport patch).
+<p>
+  (Note: "localhost" will not work for the IP address -- you must use
+  the public IP address as seen by clients!  See
+  server/README2.txt for more details).  
+
+<li> Once you have succeeded in running gtest and connecting to a game server,
+  create a new session using the host command in gtest (i.e. "host foo 8" 
+  will create a new session with name foo and 8 maximum players).
+
+<li> Run another instance of gtest in another window, and connect to the same 
+  game server and with the same species you used earlier.  Then type 
+  "sessions" in the new window; you should see the name of the new session 
+  you just created.  If you can see your new session (in the new window of 
+  course), then all is well and good, otherwise the test failed.
+
+<li> If the first test succeeded, try adding and deleting players (with the 
+  "newplayer" and "delplayer" commands, respectively) to the session 
+  from both windows and make sure the changes are shown in each window.  
+  Make sure you join the session created in the host window by using 
+  the join command in the client window (i.e. "join foo").  You may also 
+  want to try changing the names of some players using the "setpname" 
+  command.  When deleting players from a session, the host can delete 
+  any player; however, a client can only delete players that it has 
+  created.  In addition, each client, as well as the host, can add up 
+  to four players for a given session.  More information on gtest can be 
+  found in "doc/gtest.htm".
+
+<li> To test the game server with a real game, obtain and install an 
+  Anet game that supports multiplayer internet game play.  Then: 
+
+<ol>
+<li> Search for the session type (or Species) of your game in the file 
+   "types.txt", located in the game server etc/ directory.
+
+<li> Then connect to your game server via gtest with the session type 
+   you just found (i.e. "Civilization: Call to Power" has session type 
+   73).
+
+<li> Create a new session (i.e. "host foo 8").
+
+<li> Declare the session to be a server lobby by typing "lobby".
+
+<li> Connect to your game server via your Anet game.
+
+<li> Join the lobby you declared at step 3 (via your Anet game).
+
+<li> Create new players and delete players via gtest for the session 
+   created in step 3; and make sure you can see those changes in your 
+   Anet game.
+
+</ol>
+</ul>
+
+<h2>Making your server available to the world</h2>
+Games have an internal hardcoded list of master game servers.
+Once they connect to one of those servers, they suck down a list
+of all known game servers, and store it in the file servers.dat
+(the location on disk varies from game to game).  There are two ways
+to make your server known to the world:
+<ul>
+<li>Get your server added to a popular Anet server's list of game
+servers.  (See server/README2.txt, part 5a.)
+Then when people connect to that Anet server, their servers.dat
+file will be updated with your server's address.
+
+<li>Using gtest, create a servers.dat file containing your server's address,
+and post it on a web site together with instructions telling users
+how to download it and overwrite their existing servers.dat with it.
+
+To create the servers.dat file, put your game server in its own list
+of servers (servers.txt), restart the server, connect to it using gtest,
+and give the 'gameservers' command.  Once you see your server in that list,
+and quit gtest, it writes out the 'servers.dat' file you need.
+</ul>
+
+<h2>Additional Notes:</h2>
+
+<ul>
+<li> Game server types (or Species) for specific Anet games can be 
+  found in the file "types.txt" located in the game server etc/ directory.
+
+<li> You can make permanent entries to the files "names.txt, "servers.txt", 
+  "apps.txt", and "types.txt" by putting those desired entries in the 
+  files "local-names.txt", "local-severs.txt", "local-apps.txt", and 
+  "local-types.txt", respectively.
+
+<li> 
+Anet does not like running on machines with multiple IP addresses.
+Under Linux, you can get around this by using the UUDP_ADDRESS environment 
+variable to tell Anet which IP address to use.  Under Windows, you should
+avoid running Anet servers or clients on machines that have more than
+one IP address (e.g. machines acting as Internet Sharing gateways).
+</p>
+

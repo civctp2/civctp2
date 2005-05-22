@@ -1,0 +1,16 @@
+# Makefile for third party code used by tca
+
+unpack: d3des/unpacked md5/unpacked
+
+clean:
+	-rm -rf d3des
+	-rm -rf md5
+
+d3des/unpacked: d3des.zip
+	unzip -a d3des
+	patch -p0 < d3des.const.patch
+	touch d3des/unpacked
+
+md5/unpacked: md5.zip
+	unzip -a md5
+	touch md5/unpacked

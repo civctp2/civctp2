@@ -1,0 +1,51 @@
+#!/bin/sh
+# ActiveNet UNIX cleanr
+# Matthew Versluys
+# Activision
+
+# Outut
+echo "Output"
+rm -fr ../../linux86
+
+# Library
+echo "Library"
+( cd dp ; sh clean )
+
+# GTEST
+echo "gtest"
+( cd ../../demo/gtest ; sh clean )
+
+# Bench
+echo "bench"
+( cd ../test/bench ; sh clean )
+
+# Dptabt
+echo "dptabt"
+( cd ../test/dptab ; sh clean )
+
+# Load
+echo "load"
+( cd ../test/load ; sh clean )
+
+# Server
+echo "server"
+( cd server ; sh clean )
+
+# Crash Logger
+echo "crash logger"
+( cd ../aeh/analaeh ; sh clean )
+
+# RunSrvFil
+echo "runsrvfil"
+( cd runsrvfil ; rm runsrvfil.cgi )
+
+# Score Server
+echo "scoresrv"
+( cd scoresrv ; sh clean )
+
+# Score Server Java
+echo "score"
+( cd ../score ; sh clean )
+
+echo "Cleaning Complete..." 
+

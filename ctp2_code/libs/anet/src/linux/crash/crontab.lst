@@ -1,0 +1,4 @@
+#
+# crontab entries for crash log stuff
+0 9 * * * sh ~/crash/dodays.sh 0 > ~/crash/dodays.log 2>&1
+*/15 * * * * sh ~/crash/dosplit.sh > ~/crash/dosplit.log 2>&1

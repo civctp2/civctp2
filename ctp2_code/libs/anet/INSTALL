@@ -1,0 +1,33 @@
+The build and install process evolved without much design, and 
+needs a bit of work.  This file is a quick intro that glosses over
+the ugly details; determined programmers can figure out more by looking
+at the batch files and makefiles in the source tree.
+
+Compiling:
+
+To compile the game SDK and server on linux on Intel, run 'make'.
+This creates and populates the linux86 directory, and the following archives:
+	linux86.tgz - the binary SDK plus all the servers
+	anet3srv.tgz - just the game server
+	anetcmon.tgz - just the crash monitor server
+	anetmon.tgz - just the game server status monitor server
+
+To compile the game SDK on Windows, run src/build.bat.
+This creates the win directory.  This has not been
+tested lately, and requires both MSVC 4.2 or later and a few odd tools
+like 'wmake', probably from Watcom C.  T
+
+To compile the game SDK on MacOS, use the CodeWarrior project in 
+src/mac/macbuild.sit.
+
+Installing:
+
+To install the SDK under Linux, copy h/anet.h and h/aneterr.h and 
+unpack linux86.tgz onto the machine where you want to build games.
+
+To install the SDK under Windows, copy h/anet.h and h/aneterr.h and 
+the win directory onto the machine where you want to build games.
+
+To install the game server, see 
+src/linux/server/README2.html and doc/testing.html.
+

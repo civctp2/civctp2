@@ -1,0 +1,91 @@
+<html><head><title>Activision Account Server</title></head>
+<body>
+
+<form method=post action=acctserv.cgi>
+<b><big>Create a New Account</big></b><br>
+To create a new account, enter your desired username, password, and email
+address below.  Usernames must be unique, so you may have to try several to
+find an open one.  Passwords must be at least 6 characters in length.  If
+successful, you will receive an email containing a code you will need to
+activate your new account at the address you provide below.<br>
+<table>
+<tr><td><b>Username:</b> </td>
+	<td><input type=text name=Username maxlength=16 size=32> </td></tr>
+<tr><td><b>Password:</b> </td>
+	<td><input type=password name=Password maxlength=16 size=32> </td></tr>
+<tr><td><b>Verify Password:</b> </td>
+	<td><input type=password name=PasswordCheck maxlength=16 size=32> </td></tr>
+<tr><td><b>Email Address:</b> </td>
+	<td><input type=text name=Email maxlength=64 size=32> </td></tr>
+<tr><td colspan=2 align=center><input type=hidden name=Action value=N>
+	<input type=submit value="Submit New Account"> </td></tr>
+</table>
+</form><br>
+
+<form method=post action=acctserv.cgi>
+<b><big>Activate a New Account</big></b><br>
+To activate your new account, enter your username, password, and the
+activation code you received below.<br>
+<table>
+<tr><td><b>Username:</b> </td>
+	<td><input type=text name=Username maxlength=16 size=32> </td></tr>
+<tr><td><b>Password:</b> </td>
+	<td><input type=password name=Password maxlength=16 size=32> </td></tr>
+<tr><td><b>Activation Code:</b> </td>
+	<td><input type=text name=ActivationCode maxlength=16 size=32> </td></tr>
+<tr><td colspan=2 align=center><input type=hidden name=Action value=A>
+	<input type=submit value="Submit Account Activation"> </td></tr>
+</table>
+</form><br>
+
+<form method=post action=acctserv.cgi>
+<b><big>Change Password</big></b><br>
+To change your password, enter your username, password, and the desired new
+password below.  Your account need not be activated yet.<br>
+<table>
+<tr><td><b>Username:</b> </td>
+	<td><input type=text name=Username maxlength=16 size=32> </td></tr>
+<tr><td><b>Password:</b> </td>
+	<td><input type=password name=Password maxlength=16 size=32> </td></tr>
+<tr><td><b>New Password:</b> </td>
+	<td><input type=password name=NewPassword maxlength=16 size=32> </td></tr>
+<tr><td><b>Verify Password:</b> </td>
+	<td><input type=password name=NewPasswordCheck maxlength=16 size=32>
+	</td></tr>
+<tr><td colspan=2 align=center><input type=hidden name=Action value=P>
+	<input type=submit value="Submit Password Change"> </td></tr>
+</table>
+</form><br>
+
+<form method=post action=acctserv.cgi>
+<b><big>Change Email</big></b><br>
+To change your email address, enter your username, password, and the desired
+new address below.  If your account has been activated, you will have to
+reactivate it as before.  You will receive an email containing a new
+activation code at the new email address shortly.<br>
+<table>
+<tr><td><b>Username:</b> </td>
+	<td><input type=text name=Username maxlength=16 size=32> </td></tr>
+<tr><td><b>Password:</b> </td>
+	<td><input type=password name=Password maxlength=16 size=32> </td></tr>
+<tr><td><b>New Email Address:</b> </td>
+	<td><input type=text name=NewEmail maxlength=16 size=32> </td></tr>
+<tr><td colspan=2 align=center><input type=hidden name=Action value=E>
+	<input type=submit value="Submit Address Change"> </td></tr>
+</table>
+</form><br>
+
+<form method=post action=acctserv.cgi>
+<b><big>Delete an Account</big></b><br>
+To delete your account, enter your username and password below.<br>
+<table>
+<tr><td><b>Username:</b> </td>
+	<td><input type=text name=Username maxlength=16 size=32> </td></tr>
+<tr><td><b>Password:</b> </td>
+	<td><input type=password name=Password maxlength=16 size=32> </td></tr>
+<tr><td colspan=2 align=center><input type=hidden name=Action value=D>
+	<input type=submit value="Submit Account Deletion"> </td></tr>
+</table>
+</form><br>
+
+</body></html>

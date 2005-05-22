@@ -1,0 +1,301 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Japanese resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+#ifdef _WIN32
+LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
+#pragma code_page(932)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OLD_JRE_TITLE       "Old JRE"
+    IDS_OLD_JRE_MSG         "「上海ダイナスティ」ではJRE1.1.6かそれ以降のバージョンが必要です。CD-ROMからJRE1.1.6をインストールして下さい。"
+    IDS_NO_JRE_TITLE        "No JRE"
+    IDS_NO_JRE_MSG          "「上海ダイナスティ」ではJREが必要です。JREをインストールするには、ハードディスクの要領が6MB必要です。CD-ROMからJREをインストールして下さい。"
+    IDS_UNSP_OS_TITLE       "Unsupported OS"
+    IDS_UNSP_OS_MSG         "日本語のオペレーティングシステムが必要です。"
+END
+
+#endif    // Japanese resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// German (Germany) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OLD_JRE_TITLE       "Old JRE"
+    IDS_OLD_JRE_MSG         "Dieses Produkt benigt mindestens JRE 1.1.6. Bitte installieren Sie eine neue JRE-Version von der CD. Sie knen die Installation auch von einer Website wie http://java.sun.com aus durchf�hren."
+    IDS_NO_JRE_TITLE        "No JRE"
+    IDS_NO_JRE_MSG          "Dieses Produkt benigt die Java(tm)-Laufzeitumgebung (JRE), die 6 MB Speicherplatz in Anspruch nimmt. Bitte installieren Sie die JRE von der CD. Bei Fragen ziehen Sie bitte das Handbuch zu Rate."
+    IDS_UNSP_OS_TITLE       "Unsupported OS"
+    IDS_UNSP_OS_MSG         "Das Produkt l舫ft nicht auf diesem Betriebssystem."
+END
+
+#endif    // German (Germany) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OLD_JRE_TITLE       "Old JRE"
+    IDS_OLD_JRE_MSG         "This product requires JRE 1.1.6 or newer. Please install a new version of the JRE from the CD. If you wish, you may install from a web site, such as http://java.sun.com."
+    IDS_NO_JRE_TITLE        "No JRE"
+    IDS_NO_JRE_MSG          "This product requires the Java(tm) Runtime Environment (JRE). It needs 6MB of hard drive space. Please install from the CD, or refer to the manual for further instructions."
+    IDS_UNSP_OS_TITLE       "Unsupported OS"
+    IDS_UNSP_OS_MSG         "This product does not run under this operating system."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Spanish (Castilian) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESP)
+#ifdef _WIN32
+LANGUAGE LANG_SPANISH, SUBLANG_SPANISH
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OLD_JRE_TITLE       "Old JRE"
+    IDS_OLD_JRE_MSG         "Para poder utilizar este producto, se necesita la versi 1.1.6 de JRE u otra m疽 reciente. Instala una versi nueva de JRE desde el CD. Si lo prefieres, puedes realizar la instalaci desde un sitio web como, por ejemplo, http://java.sun.com."
+    IDS_NO_JRE_TITLE        "No JRE"
+    IDS_NO_JRE_MSG          "Para poder utilizar este producto, se necesita JRE (Java(tm) Runtime Environment). Para ello, se requieren 6 MB de espacio libre en el disco duro. Realiza la instalaci desde el CD o consulta el manual para m疽 instrucciones."
+    IDS_UNSP_OS_TITLE       "Unsupported OS"
+    IDS_UNSP_OS_MSG         "Este producto no es compatible con este sistema operativo."
+END
+
+#endif    // Spanish (Castilian) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// German (Switzerland) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DES)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN_SWISS
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OLD_JRE_TITLE       "Old JRE"
+    IDS_OLD_JRE_MSG         "Dieses Produkt benigt mindestens JRE 1.1.6. Bitte installieren Sie eine neue JRE-Version von der CD. Sie knen die Installation auch von einer Website wie http://java.sun.com aus durchf�hren."
+    IDS_NO_JRE_TITLE        "No JRE"
+    IDS_NO_JRE_MSG          "Dieses Produkt benigt die Java(tm)-Laufzeitumgebung (JRE), die 6 MB Speicherplatz in Anspruch nimmt. Bitte installieren Sie die JRE von der CD. Bei Fragen ziehen Sie bitte das Handbuch zu Rate."
+    IDS_UNSP_OS_TITLE       "Unsupported OS"
+    IDS_UNSP_OS_MSG         "Das Produkt l舫ft nicht auf diesem Betriebssystem."
+END
+
+#endif    // German (Switzerland) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Spanish (Mexican) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESM)
+#ifdef _WIN32
+LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_MEXICAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OLD_JRE_TITLE       "Old JRE"
+    IDS_OLD_JRE_MSG         "Para poder utilizar este producto, se necesita la versi 1.1.6 de JRE u otra m疽 reciente. Instala una versi nueva de JRE desde el CD. Si lo prefieres, puedes realizar la instalaci desde un sitio web como, por ejemplo, http://java.sun.com."
+    IDS_NO_JRE_TITLE        "No JRE"
+    IDS_NO_JRE_MSG          "Para poder utilizar este producto, se necesita JRE (Java(tm) Runtime Environment). Para ello, se requieren 6 MB de espacio libre en el disco duro. Realiza la instalaci desde el CD o consulta el manual para m疽 instrucciones."
+    IDS_UNSP_OS_TITLE       "Unsupported OS"
+    IDS_UNSP_OS_MSG         "Este producto no es compatible con este sistema operativo."
+END
+
+#endif    // Spanish (Mexican) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// German (Austria) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEA)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN_AUSTRIAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OLD_JRE_TITLE       "Old JRE"
+    IDS_OLD_JRE_MSG         "Dieses Produkt benigt mindestens JRE 1.1.6. Bitte installieren Sie eine neue JRE-Version von der CD. Sie knen die Installation auch von einer Website wie http://java.sun.com aus durchf�hren."
+    IDS_NO_JRE_TITLE        "No JRE"
+    IDS_NO_JRE_MSG          "Dieses Produkt benigt die Java(tm)-Laufzeitumgebung (JRE), die 6 MB Speicherplatz in Anspruch nimmt. Bitte installieren Sie die JRE von der CD. Bei Fragen ziehen Sie bitte das Handbuch zu Rate."
+    IDS_UNSP_OS_TITLE       "Unsupported OS"
+    IDS_UNSP_OS_MSG         "Das Produkt l舫ft nicht auf diesem Betriebssystem."
+END
+
+#endif    // German (Austria) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Spanish (Modern) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESN)
+#ifdef _WIN32
+LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_MODERN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OLD_JRE_TITLE       "Old JRE"
+    IDS_OLD_JRE_MSG         "Para poder utilizar este producto, se necesita la versi 1.1.6 de JRE u otra m疽 reciente. Instala una versi nueva de JRE desde el CD. Si lo prefieres, puedes realizar la instalaci desde un sitio web como, por ejemplo, http://java.sun.com."
+    IDS_NO_JRE_TITLE        "No JRE"
+    IDS_NO_JRE_MSG          "Para poder utilizar este producto, se necesita JRE (Java(tm) Runtime Environment). Para ello, se requieren 6 MB de espacio libre en el disco duro. Realiza la instalaci desde el CD o consulta el manual para m疽 instrucciones."
+    IDS_UNSP_OS_TITLE       "Unsupported OS"
+    IDS_UNSP_OS_MSG         "Este producto no es compatible con este sistema operativo."
+END
+
+#endif    // Spanish (Modern) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

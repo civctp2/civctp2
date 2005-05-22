@@ -1,0 +1,12 @@
+#(shell script fragment)
+# Set the variables used by the ActiveNet crash logger.
+#
+# Home directory and web directory (must be web accessible).
+# Customize for your system.
+CRASH_HOME=/home/anet/crash
+CRASH_WEB=/home/anet/public_html
+CRASH_WEBHOME=$CRASH_WEB/crash
+
+#This is a shell script fragment.  It must be run by another
+#shell script, using the line (note the leading period):
+# . ~/crash/crashenv

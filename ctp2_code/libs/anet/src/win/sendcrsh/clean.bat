@@ -1,0 +1,17 @@
+del *.*~
+del *.dll
+del *.exe
+del *.exp
+del *.ilk
+del *.lib
+del *.log
+del *.map
+del *.mdp
+del *.ncb
+del *.obj 
+del *.opt
+del *.opt
+del *.pch
+del *.pdb
+del *.plg
+del *.res

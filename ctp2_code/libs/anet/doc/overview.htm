@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>Anet Overview</title>
+</head>
+<body>
+<h1><center>Anet: A Network Game Programming Library</center></h2>
+<center>Last updated: 22 August 1998</center>
+<h2>A Rose by Any Other Name...</h2>
+The public name for Activision's online game service was ActiveLink.
+It is referred to by Anet in this doc, and by ActiveNet in some places 
+in the code.
+
+<h2>Purpose</h2>
+Anet was designed to help multiplayer games reach the widest possible 
+audience, lets users play against the widest possible choice of opponents
+online.
+<p>
+It supports many kinds of connections: LAN, Internet, modem, direct serial 
+connection, and even <a href="services.htm">proprietary gaming networks</a> such as 
+<a href="http://www.heat.net/">Heat</a>,
+<a href="http://www.mplayer.com">MPlayer</a>,
+<a href="http://www.zone.com">Microsoft Game Zone</a> and
+<a href="http://www.dwango.com/">Dwango</a>. 
+(All of these are gone as of 2001 except the Zone.)
+
+<h2>What is Anet?</h2>
+Anet has three main parts:
+<ul>
+<li>An <a href="server.htm">Internet game server</a> where people playing over the Net can find 
+opponents.  The game server is a program which we can distribute free of
+charge, and will be run by major Internet Service Providers and hobbyists;
+a tracker program will maintain an up to date list of
+all servers.
+<li>An <b>API</b> (like Microsoft's DirectPlay or 
+Apple's <a href="http://developer.apple.com/dev/games/">NetSprocket</a>) which takes care of the 
+dirty part of networking (like dialing the modem or connecting over the 'Net),
+and lets the game programmer concentrate on the game.  
+<li>A client program, or shell, which lists all of the games currently being
+played on the server (MercNet, Dark Reign, etc.), lets players chat with 
+each other before choosing a game, and then launches the appropriate game.
+(This part is optional; each game can be played without the client program.
+It is the only part that has not yet been shipped with a product.)
+</ul>
+<h2>What platforms are supported?</h2>
+<ul>
+<li><b>Windows 95</b><br>
+About eight products have been shipped using Win95 Anet.  
+Special effort was taken to make sure that porting games between
+Microsoft's game networking library and Anet is reasonably easy.
+<li><b>Linux</b><br>
+Linux is used for our game servers, and as a result, a Linux version
+of the Anet library is available.  Only the Internet transport
+is supported on Linux.
+<li><b>Macintosh</b><br>
+One shipping product, Mac Netmech, uses an older version of the SDK.
+Support for this platform could be revived if desired.
+<li><b>Java</b><br>
+The Java support is experimental.
+It's implemented as a wrapper around the native library.
+Right now, it's only implemented for Windows 95.
+<li><b>DOS</b><br>
+One product (DOS MercNet) is shipping with Anet support built in,
+but it is unlikely anyone will want this version of the SDK, so we no longer
+support it.
+</ul>
+<h2>Will Anet games work with online services like TEN and Mpath?</h2>
+Yes - it's pretty easy!  All it takes is for the
+game to be able to use our <a href="services.htm">commandline launcher</a>.
+<h2>What does Anet look like to the Programmer?</h2>
+To get started using Anet, the programmer needs
+the Anet SDK, usually distributed as ANETSDK.ZIP.
+<p>
+Refer to the <a href="index.html">top-level documentation index</a>
+for programmer information.
+includes pointers to the
+<a href="dp.htm">Anet API Overview and Function Reference</a>, which
+explains how to use Anet in a game, and 
+<a href="../demo">the demo applications</a>.
+<p>
+The program <a href="gtest.htm">gtest</a> is provided with the SDK
+as a tool for the programmer to play with the API interactively
+and learn how it behaves without having to compile any C programs.
+<h2>Developer Support</h2>
+Developers should <a href="mailto:dank-anet@kegel.com">contact 
+Dan Kegel</a> for support and additional example code if needed.
+Often just a couple minutes talking over questions can save a great deal
+of time.
+<p>
+<hr>
+<a href="index.html">Back to index</a>
+<hr>
+<i>Dan Kegel</i><br>
+<i>Copyright 1995-2001 Activision</i>
+</body>
+</html>

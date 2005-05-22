@@ -1,0 +1,4 @@
+host
+newp a
+pset 3 0 foo
+freeze

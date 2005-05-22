@@ -1,0 +1,137 @@
+<html>
+<center><h1>ActiveNet SDK - Source</h1></center>
+<center><i>Activision Confidential</i></center>
+<center><i>Last updated: 26 July 1997</i></center>
+<br>
+<h2>Source Tree</h2>
+The source for the ActiveNet SDK sits in the src subdirectory of
+the SDK itself, and references the same h directory as the SDK.
+<p>
+The core source code files in src/dp are used for all platforms 
+(DOS, Win32, Unix, Mac).  Platform-specific but network-independent
+source is usually kept in src/PLATFORM/dp or src/PLATFORM/main.
+Network-specific source is usually kept in src/PLATFORM/NETWORK,
+for example, src/DOS/IPX.
+<p>
+For a description of the public part of the SDK,
+please go to <a href="../index.html">the SDK packing list</a>.
+The private part of the SDK is the SRC directory tree, which looks like this:
+<ul>
+<li><b><a href=".">src</a> -- Source code</b>
+<ul>
+<li><a href="doc/index.html">doc</a> -- Activenet Source Documentation
+<li><a href="buildall.bat">buildall.bat</a> -- Batch file to compile the whole SDK from scratch and make ANETSDK.ZIP
+<li><a href="makefile">makefile</a> -- Makefile to create anetsdk.zip once dos\build.bat and win\build.bat have been run
+<li><a href="test">test</a> -- Regression tests run during the build process
+<li><a href="dp">dp</a> -- platform-independent source files (plus a few DOS-specific ones)
+<ul>
+<li><a href="dp/index.html">dp/default.htm</a> -- Unit test documentation
+</ul>
+<li><a href="dos">dos</a> -- DOS-specific source files
+<li><a href="mac">mac</a> -- Macintosh-specific source files
+<li><a href="win">win</a> -- Win32-specific source files
+<ul>
+<li><a href="win/build.bat">src/win/build.bat</a> -- Batch file to compile Win32 library and DLL's
+<li><a href="win/makefile">src/win/makefile</a> -- Only knows how to clean up uneeded files
+<li><a href="win/out">win/src/out</a> -- Temporary resting place for Win32 library and DLL's.  Deleted by 'make&nbsp;clean'.  (Note: this should go away.  There's no reason to have this.)
+</ul>
+<li><a href="unix">unix</a> -- Unix-specific source files (e.g. for use with game servers)
+<li><a href="demo/index.html">demo</a> -- Internal Demo source (mostly
+obsolete demos moved here from the public demo directory)
+</ul>
+</ul>
+<h2>Compiling the SDK</h2>
+The batch file <a href="buildall.bat">BUILDALL.BAT</a> compiles the whole SDK for DOS and Win32.
+<a name="pcpath">
+It requires <a href="pcpath.bat">PCPATH.BAT</a> to be installed in the
+root of C:\ to set up environment variables for the various compilers.
+Please take a minute to copy pcpath.bat to C:\ and edit it to reflect
+where Watcom C++ and Visual C++ are installed on your system, as well
+as how your path should normally be set.  Also, if you haven't already,
+expand your environment variable space by adding
+<pre> shell=c:\command.com c:\ /e:2048 /p </pre>
+to C:\CONFIG.SYS and rebooting.
+</a>
+Mostly, PCPATH.BAT is used to switch between Watcom C (for DOS) 
+and Visual C (for Windows).  If you're not compiling the DOS version
+of the SDK, all you need in PCPATH.BAT are 
+<pre>
+  Rem Visual C
+  CALL C:\MSDEV\BIN\VCVARS32.BAT
+  Rem Get Watcom's WMAKE.EXE
+  PATH %PATH%;c:\watcom\bin
+</pre>
+
+<h2>Compiling the SDK on the Mac</h2>
+First, install both 
+<a href="http://www.aladdinsys.com/stuffit/expander/index.html">Stuffit Expander</a>
+and 
+<a href="http://www.aladdinsys.com/consumer/dsee1.html">Expander Enhancer</a>.
+This will let you unpack .zip files.
+Second, run Stuffit Expander, and use it to unpack the ANETSRC.ZIP
+source archive; then use it to unpack demo/macbuild.sit and
+src/mac/macbuild.sit.  Codewarrior Pro projects can be found in
+demo/macbuild and src/mac/macbuild.  Compile src/mac/macbuild/dp v2.mac
+and src/mac/IPX v2.mac first; then to test it, compile 
+demo/macbuild/gtest v2.mac and see if you can list sessions created by
+PC copies of gtest.  There are scripts to do all this-
+see the Applescript files "SDK Unpack and Build" and "SDK Build"
+in the src/mac/macbuild.sit archive.
+
+<h2>Adding new network drivers</h2>
+To add a new network driver, copy the source for one of the existing 
+drivers, e.g. dos/DWANGO, into a new folder named after the network
+or service you want to add, e.g. dos/TEN, and modify it to use the
+new network's API.  Once it's working, you need to modify the parent
+directories' build.bat and makefile to refer to the new driver.
+
+<h2>Note on Makefiles and Visual C++</h2>
+Yes, Virginia, there is a way to use Visual C++ 
+from the commandline.  In fact, it even creates makefiles (named xxxx.mak)
+automatically.  These can be used either inside Visual C++'s IDE,
+or from the commandline with Microsoft's NMAKE.EXE (in which case
+you need to set up your environment variables by running the VCVARS32.BAT
+created by the Visual C++ setup).
+<p>
+Both Watcom and Visual C++ share at least one environment variable: INCLUDE.
+That's the reason for the batch file <a href="#pcpath">PCPATH.BAT (see above)</a>; if %C% is set to VC,
+pcpath sets up for Visual C++; otherwise it sets up for Watcom C.
+It clears out the PATH, LIB, and INCLUDE environment variables, then sets 
+them properly for the compiler of interest.
+<p>
+To test whether you can compile Watcom C properly from the commandline,
+create the famous HELLO.C, then run <tt>wcl386&nbsp;hello.c</tt>.  
+If you get a good executable HELLO.EXE, you're all set.
+<p>
+To test whether you can compile Visual C++ properly from the commandline,
+create the famous HELLO.C, then run <tt>cl&nbsp;hello.c</tt>.  
+If you get a good executable HELLO.EXE, you're all set.
+<p>
+Here's a simple HELLO.C you can use if you want to be sure about what
+compiler was used to create it:
+<ul>
+<pre>
+#include <stdio.h>
+main()
+{
+	printf("Hello, World!\n");
+#ifdef _WIN32
+	printf("I was compiled for Win32\n");
+#endif
+#ifdef _MSC_VER
+	printf("I was compiled by version %d.%d of Microsoft C\n", _MSC_VER / 100, _MSC_VER % 100);
+	/* Note: Visual C++ 4.x uses Microsoft C version 10.x */
+#endif
+#ifdef __WATCOMC__
+	printf("I was compiled by Watcom C\n");
+#endif
+}
+</pre>
+</ul>
+<hr>
+<a href="../index.html">Up to public packing list</a>
+<hr>
+<i>Dan Kegel<br>
+dank-anet@kegel.com</i><br>
+<i>All files copyright 1997 Activision</i>
+</html>

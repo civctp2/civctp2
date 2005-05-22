@@ -1,0 +1,37 @@
+# Makefile for ActiveNet demo game server under Linux on intel using dp2
+# Mostly copied from makefile.lin
+# $Log: makefile2.lin $
+# Revision 1.2  1997/09/03 23:44:46  dkegel
+# Turn on profiling temporarily... needed to match dp's makefile.
+# Revision 1.1  1997/08/25 18:04:12  anitalee
+# Initial revision
+
+PACK=__attribute__ ((packed))
+OPT = -DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -Dstrnicmp=strncasecmp -Dstricmp=strcasecmp -Ddp_ANET2 -I. -I../../../h -I../../utils
+COPT = $(FLAGS) $(OPT)
+OBJ_FILES = gtest.o raw.o avgstat.o /usr/lib/libbsd.a ../../../linux86/lib/$(dp_LIB)
+
+default: ../../../linux86/bin/$(DEST)
+
+../../../linux86/bin/$(DEST): $(DEST)
+	if [ ! -d ../../../linux86 ]; then mkdir ../../../linux86; fi
+	if [ ! -d ../../../linux86/bin ]; then mkdir ../../../linux86/bin; fi
+	cp $(DEST) ../../../linux86/bin/$(DEST)
+
+$(DEST): $(OBJ_FILES)
+	gcc $(COPT) $(OBJ_FILES) -o $(DEST)
+
+gtest.o: ../gtest.c ../../../h/dp.h
+	gcc -c $(COPT) ../gtest.c
+raw.o: ../../utils/raw.c ../../utils/raw.h
+	gcc -c $(COPT) ../../utils/raw.c
+avgstat.o: ../../utils/avgstat.c ../../utils/avgstat.h
+	gcc -c $(COPT) ../../utils/avgstat.c
+
+clean:
+	rm -f *.err
+	rm -f *.o
+	rm -f *.log
+	rm -rf junk
+
+# end of MAKEFILE

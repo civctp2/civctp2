@@ -1,0 +1,28 @@
+
+*** D3DES ***
+Data encryption/decryption code using the DES algorithm 
+
+Downloaded source from:
+ftp://idea.sec.dsi.unimi.it/pub/security/crypt/code/d3des.tar.gz
+
+See reference:
+http://gnv.fdt.net/~analyzer/crypt.html
+
+
+*** MD5 ***
+Message digest code using the MD5 algorithm
+
+Downloaded source from:
+ftp://ftp.cert.org/pub/tools/md5/
+
+See references:
+http://www.rsa.com/rsalabs/newfaq/q99.html
+http://minnie.cs.adfa.oz.au/FreeBSD-srctree/newsrc/kern/md5c.c.html
+http://www.alternic.net/info/rfcs/1300/rfc1321.txt.html
+
+
+*** mysql.jar / mm.mysql.jdbc-1.1 ***
+A Java/JDBC driver for mysql
+
+Source and information available from:
+http://www.worldserver.com/~mmatthew/mysql/

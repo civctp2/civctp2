@@ -1,0 +1,115 @@
+# Server Benchmarking program
+# usage : bench.pr people iterations
+#
+# people - number of players to simulate simultanesously
+# iterations - number of iterations to perform per player
+#
+GOTO @BEGIN
+
+LABEL @FAIL
+
+# Exit with fail code
+EXIT 1
+
+LABEL @BEGIN
+
+Verbosity 1
+
+Spawn @CLIENT %3
+Wait Solitary
+
+# Write reports on the timers
+Timer 0 REPORT
+Timer 1 REPORT
+Timer 2 REPORT
+Timer 3 REPORT
+Timer 4 REPORT
+
+# Test to see if we had any failures
+Timer 0 COPY NUMER
+SET I1 0
+ADD I1 I0
+Timer 2 COPY NUMBER
+IF I0 < I1 @FAIL
+
+# Figure out if the average time was greater than 5000
+Timer 2 COPY AVG
+SET I1 5000
+IF I0 > I1 @FAIL
+
+# Exit with success code
+EXIT 0
+
+LABEL @CLIENT
+
+Verbosity 2
+
+# Number of iterations to perform
+SET I0 %4
+SET I1 0
+SET I2 -1
+
+LABEL @START
+
+Timer 0 START
+Timer 0 END
+
+ONERROR @TERMINATE
+
+# Create dp
+dpCreate winets2.dll
+
+ONERROR @DESTROY
+
+# Connect to game server
+Timer 1 START
+dpSetGameServer %1 %2
+Timer 1 END
+
+# Wait 5000 10000
+# dpReceive
+
+ONERROR @CLOSE
+
+# Join any session on the server
+Timer 2 START
+dpOpen ANY
+Wait
+
+# Create a player in the room
+dpCreatePlayer BenchPlayer
+Wait
+Timer 2 END
+
+# Wait a bit
+Wait 5000
+
+# Say something
+dpSend BROADCAST Hello
+Wait 5000
+dpSend BROADCAST ByeBye
+Wait 5000
+
+Wait 15000
+
+# Close down
+LABEL @CLOSE
+ONERROR @DESTROY
+dpClose
+Timer 3 START
+Wait 2000 Freeze
+Timer 3 END
+
+# Destroy dp
+LABEL @DESTROY
+ONERROR @TERMINATE
+dpDestroy
+
+ADD I4 I5
+
+# Loop
+ADD I0 I2
+IF I0 ! I1 @START
+
+# Termination
+LABEL @TERMINATE

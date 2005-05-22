@@ -1,0 +1,149 @@
+# Server Benchmarking program
+# usage : bench load.pr maxexec server sessiontype nplayers
+#
+# maxexec - maximum msecs of time between processing the steps (100 is good)
+# server - server to use
+# sessiontype - sessiontype to use
+# nplayers - number of players to simulate simultaneously
+
+Print Loading server=%1 sesstype=%2 nplayers=%3
+
+# Set I8 to the WARNING level of time allowed per step (ms)
+SET I8 10000
+# Set I9 to the FATAL level of time allowed per step (ms)
+SET I9 10000
+
+GOTO @BEGIN
+
+#--------------------------------------------------------------------------
+
+LABEL @FAIL
+Verbosity 2 
+Print process $procid exits
+# Exit with fail code
+EXIT 1
+
+#--------------------------------------------------------------------------
+
+LABEL @BEGIN
+
+Verbosity 2
+
+# Create %3 players
+SET I0 1
+SET I1 %3
+SET I2 1
+# End point is nplayers + 1
+ADD I1 I2
+
+#Timer 2 OFF
+
+# do {
+LABEL @OUTLOOP
+
+# 	spawn(); wait(250ms);
+Spawn @CLIENT 1
+Wait 250
+
+# } while (I0++ < argv[2]);
+ADD I0 I2
+IF I0 < I1 @OUTLOOP
+
+#Timer 2 ON
+SET I8 100
+SET I9 200
+Wait Solitary
+
+# Write reports on the timers
+#Timer 0 REPORT
+Print Timer 1: dpSetGameServer stats
+Timer 1 REPORT
+Print Timer 2: dpOpen
+Timer 2 REPORT
+Print Timer 3: dpCreatePlayer
+Timer 3 REPORT
+Print Timer 4: Wait Shutdown
+Timer 4 REPORT
+#Timer 5 REPORT
+
+# Test to see if we had any failures
+Timer 0 COPY NUMBER
+SET I1 0
+ADD I1 I0
+Timer 5 COPY NUMBER
+Print $I0 of $I1 connections succeeded.
+IF I0 < I1 @FAIL
+
+# Exit with success code
+EXIT 0
+
+#--------------------------------------------------------------------------
+
+LABEL @CLIENT
+
+Verbosity 0
+
+# Number of iterations to perform = (nPlayers + 19)/20
+SET I0 %3
+SET I1 19
+ADD I0 I1
+SET I1 20
+DIV I0 I1
+
+SET I1 0
+SET I2 -1
+
+LABEL @START
+
+Timer 0 START
+Timer 0 END
+
+# Create dp
+ONERROR @TERMINATE
+dpCreate winets2.dll
+
+# Connect to game server argv[1] with session type argv[2]
+ONERROR @DESTROY
+Timer 1 START
+dpSetGameServer %1 %2
+Timer 1 END
+
+# Join any session on the server
+ONERROR @CLOSE
+Timer 2 START
+dpOpen ANY
+Wait
+Timer 2 END
+
+# Create a player in the room
+Timer 3 START
+dpCreatePlayer LoadPlayer
+Wait
+Timer 3 END
+
+Timer 5 START
+Timer 5 END
+
+# Sit around watching others come and go for 10s
+Wait 10000
+
+# Shut down
+LABEL @CLOSE
+ONERROR @DESTROY
+Timer 4 START
+Wait 2000 1000 Shutdown
+Timer 4 END
+
+# Destroy dp
+LABEL @DESTROY
+ONERROR @TERMINATE
+
+dpGetStats
+dpDestroy
+
+# Loop
+ADD I0 I2
+IF I0 ! I1 @START
+
+# Termination
+LABEL @TERMINATE

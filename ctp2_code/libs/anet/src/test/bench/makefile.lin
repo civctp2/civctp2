@@ -1,0 +1,25 @@
+# Makefile for bench, a script based testing utility
+
+PACK=__attribute__ ((packed))
+OPT = -DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -Dstrnicmp=strncasecmp -Dstricmp=strcasecmp -Ddp_ANET2 -I. -I../../../../h -I../../../../demo/utils -I..
+COPT = $(FLAGS) $(OPT)
+OBJ_FILES = bench.o prog.o raw.o /usr/lib/libm.a /usr/lib/libbsd.a ../../../../linux86/lib/$(dp_LIB)
+
+default: ../../../../linux86/bin/$(DEST) 
+
+../../../../linux86/bin/$(DEST): $(DEST)
+	if [ ! -d ../../../../linux86 ]; then mkdir ../../../../linux86; fi
+	if [ ! -d ../../../../linux86/bin ]; then mkdir ../../../../linux86/bin; fi
+	cp $(DEST) ../../../../linux86/bin
+
+$(DEST): $(OBJ_FILES)
+	gcc $(COPT) $(OBJ_FILES) $(LOPT) -o $(DEST)
+
+bench.o: ../bench.c ../prog.h ../../../../h/dp2.h
+	gcc -c $(COPT) ../bench.c
+prog.o: ../prog.c ../prog.h
+	gcc -c $(COPT) ../prog.c
+raw.o: ../../../../demo/utils/raw.c ../../../../demo/utils/raw.h
+	gcc -c $(COPT) ../../../../demo/utils/raw.c
+
+# end of MAKEFILE

@@ -1,0 +1,179 @@
+#!/bin/sh
+# ActiveNet UNIX builder
+# Matthew Versluys
+# Activision
+set -x
+set -e
+die() {
+	echo "Build failed; $0"
+	exit 1
+}
+
+BUILD=../../linux86
+
+# Library
+echo "Library"
+( cd dp ; sh build $1 ) || die
+
+# GTEST
+echo "gtest"
+( cd ../../demo/gtest ; sh build $1 ) || die
+
+# Bench
+echo "bench..."
+( cd ../test/bench ; sh build $1 ) || die
+install -d ${BUILD}/bench
+install -m 0644 ../test/bench/*.pr ${BUILD}/bench
+install ${BUILD}/bin/bench* ${BUILD}/bench 
+
+# Load
+echo "load"
+( cd ../test/load ; sh build $1 ; sh build normal ) || die
+install -d ${BUILD}/load
+install -m 0644 ../test/load/*.ini ${BUILD}/load
+install ${BUILD}/bin/load* ${BUILD}/load
+
+# Crash monitor
+echo "Crash Monitor"
+( cd ../aeh/analaeh ; sh build $1 ) || die
+install -d ${BUILD}/crash
+install crash/* ${BUILD}/crash
+install ${BUILD}/bin/procserv* ${BUILD}/crash
+install ${BUILD}/bin/analcrsh* ${BUILD}/crash
+install ${BUILD}/bin/aehsplit* ${BUILD}/crash
+install ${BUILD}/bin/modcrc* ${BUILD}/crash
+install -d ${BUILD}/crash
+install -m 0644 crash/*.in crash/*.txt crash/*.java ${BUILD}/crash
+install -m 0644 crash/crontab.lst crash/crashenv ${BUILD}/crash
+install -m 0755 crash/*.pl crash/*.sh ${BUILD}/crash
+
+# Server
+echo "server"
+( cd server ; sh build $1 ) || die
+install -d ${BUILD}/server/etc
+install -m 0644 server/README2.txt ${BUILD}/server/README2.txt
+install server/etc/*2 server/etc/htget server/etc/servfil ${BUILD}/server/etc
+install -m 0644 server/etc/{anet2env,*.lst,*.in,*.tpl,*.pl} ${BUILD}/server/etc
+# install whichever servers were built
+case $1 in 
+"" )
+	for sfx in "" d l p; do
+		install ${BUILD}/bin/server${sfx} ${BUILD}/server/etc/anet3srv${sfx}
+	done
+	;;
+normal | NORMAL )
+	install ${BUILD}/bin/server ${BUILD}/server/etc/anet3srv
+	;;
+debug | DEBUG )
+	install ${BUILD}/bin/serverd ${BUILD}/server/etc/anet3srvd
+	;;
+profile | PROFILE )
+	install ${BUILD}/bin/serverp ${BUILD}/server/etc/anet3srvp
+	;;
+log | LOG )
+	install ${BUILD}/bin/serverl ${BUILD}/server/etc/anet3srvl
+	;;
+esac
+
+# Make RunSrvFil
+echo "Making runsrvfil"
+( cd runsrvfil ; make ) || die
+install -m 0755 runsrvfil/runsrvfil.cgi ${BUILD}/server/etc
+
+# Score Server Java
+#echo "score server java"
+#(cd ../score ; sh build $1 ) || die
+#install -d ${BUILD}/scoresrv
+#install -m 0644 ../score/score.jar ${BUILD}/scoresrv
+#install -d ${BUILD}/scoresrv/servjar
+#install -m 0644 ../score/servjar/score_*.jar ${BUILD}/scoresrv/servjar
+
+# Score Server
+#echo "score server"
+#(cd scoresrv ; sh build $1 ) || die
+#install scoresrv/runscoresrv* ${BUILD}/scoresrv
+#install ../3rdparty/mysql.jar ${BUILD}/scoresrv
+# install whichever score server libs and executables we built
+#case $1 in 
+#"" )
+#	install -m 0644 scoresrv/normal/libjscore2.so ${BUILD}/scoresrv/libjscore2.so
+#	install -m 0644 scoresrv/debug/libjscore2.so ${BUILD}/scoresrv/libjscore2d.so
+#	install -m 0644 scoresrv/profile/libjscore2.so ${BUILD}/scoresrv/libjscore2p.so
+#	install -m 0644 scoresrv/log/libjscore2.so ${BUILD}/scoresrv/libjscore2l.so
+#	install scoresrv/normal/antpserv ${BUILD}/scoresrv/antpserv
+#	install scoresrv/normal/antpclient ${BUILD}/scoresrv/antpclient
+#	install scoresrv/normal/wmqmerge ${BUILD}/scoresrv/wmqmerge
+#	install scoresrv/debug/antpserv ${BUILD}/scoresrv/antpservd
+#	install scoresrv/debug/antpclient ${BUILD}/scoresrv/antpclientd
+#	install scoresrv/debug/wmqmerge ${BUILD}/scoresrv/wmqmerged
+#	install scoresrv/profile/antpserv ${BUILD}/scoresrv/antpservp
+#	install scoresrv/profile/antpclient ${BUILD}/scoresrv/antpclientp
+#	install scoresrv/profile/wmqmerge ${BUILD}/scoresrv/wmqmergep
+#	install scoresrv/log/antpserv ${BUILD}/scoresrv/antpservl
+#	install scoresrv/log/antpclient ${BUILD}/scoresrv/antpclientl
+#	install scoresrv/log/wmqmerge ${BUILD}/scoresrv/wmqmergel
+#	;;
+#normal | NORMAL )
+#	install -m 0644 scoresrv/normal/libjscore2.so ${BUILD}/scoresrv/libjscore2.so
+#	install scoresrv/normal/antpserv ${BUILD}/scoresrv/antpserv
+#	install scoresrv/normal/antpclient ${BUILD}/scoresrv/antpclient
+#	install scoresrv/normal/wmqmerge ${BUILD}/scoresrv/wmqmerge
+#	;;
+#debug | DEBUG )
+#	install -m 0644 scoresrv/debug/libjscore2.so ${BUILD}/scoresrv/libjscore2d.so
+#	install scoresrv/debug/antpserv ${BUILD}/scoresrv/antpservd
+#	install scoresrv/debug/antpclient ${BUILD}/scoresrv/antpclientd
+#	install scoresrv/debug/wmqmerge ${BUILD}/scoresrv/wmqmerged
+#	;;
+#profile | PROFILE )
+#	install -m 0644 scoresrv/profile/libjscore2.so ${BUILD}/scoresrv/libjscore2p.so
+#	install scoresrv/profile/antpserv ${BUILD}/scoresrv/antpservp
+#	install scoresrv/profile/antpclient ${BUILD}/scoresrv/antpclientp
+#	install scoresrv/profile/wmqmerge ${BUILD}/scoresrv/wmqmergep
+#	;;
+#log | LOG )
+#	install -m 0644 scoresrv/log/libjscore2.so ${BUILD}/scoresrv/libjscore2l.so
+#	install scoresrv/log/antpserv ${BUILD}/scoresrv/antpservl
+#	install scoresrv/log/antpclient ${BUILD}/scoresrv/antpclientl
+#	install scoresrv/log/wmqmerge ${BUILD}/scoresrv/wmqmergel
+#	;;
+#esac
+
+echo "Anet Monitor"
+install -d ${BUILD}/anetmon
+install -m 0644 anetmon/*.in anetmon/*.txt anetmon/*.java ${BUILD}/anetmon
+install -m 0644 anetmon/crontab.lst anetmon/anetmonenv ${BUILD}/anetmon
+install -m 0755 anetmon/*.pl anetmon/*.sh ${BUILD}/anetmon
+install -d ${BUILD}/anetmon/load
+install -m 0755 ${BUILD}/bin/load ${BUILD}/anetmon/load
+
+# Package everything into linux86.zip
+(
+	cd ${BUILD}/server
+	if [ -f ../../anet3srv.tgz ]; then rm ../../anet3srv.tgz; fi
+	tar -cf - README* etc | gzip > ../../anet3srv.tgz
+) || die
+(
+	cd ${BUILD}
+	if [ -f ../anetmon.tgz ]; then rm ../anetmon.tgz; fi
+	tar -cf - anetmon | gzip > ../anetmon.tgz
+) || die
+(
+	cd ${BUILD}
+	if [ -f ../anetcmon.tgz ]; then rm ../anetcmon.tgz; fi
+	tar -cf - crash | gzip > ../anetcmon.tgz
+) || die
+(
+	cd ${BUILD}/..
+	if [ -f linux86.tgz ]; then rm linux86.tgz; fi
+	tar -cf - linux86 | gzip > linux86.tgz
+	if [ -f linux86.zip ]; then rm linux86.zip; fi
+	zip -0 linux86.zip linux86.tgz anet3srv.tgz
+) || die
+
+echo "Building Complete..." 
+echo "Running regression tests..."
+(
+	cd ../test
+	sh test.sh $1
+) || die

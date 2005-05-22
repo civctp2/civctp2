@@ -1,0 +1,51 @@
+;
+; ipxapi.a
+;
+; Copyright (C) 1992-1994 Novell, Inc.
+; All rights reserved.
+;
+; Think C users shouldn't use this file.  The same functionality is provided
+; by inline assembly code in ipxapi.c.
+;
+
+			CASE			ON
+
+Ipx_get_drvr_ref_num		FUNC		EXPORT
+
+			LEA				drvrRefNum,A0
+			MOVE.L			(A0),D0
+			RTS
+			
+drvrRefNum	dc.l			$00000000
+
+
+			EXPORT			Ipx_set_drvr_ref_num
+
+Ipx_set_drvr_ref_num		EQU		*
+
+			LEA				drvrRefNum,A0
+			MOVE.L			4(A7),(A0)
+			RTS
+
+			EXPORT			IpxGetRegisterA5
+
+IpxGetRegisterA5			EQU		*
+
+			MOVE.L			A5,D0
+			RTS
+
+;
+; IpxGetECBFromRegisterA0 is a Pascal routine!
+;
+			EXPORT			IPXGETECBFROMREGISTERA0
+			
+IPXGETECBFROMREGISTERA0	EQU		*
+
+			MOVE.L			A0,4(A7)
+			MOVEA.L			(A7)+,A0
+			JMP				(A0)
+			RTS
+			
+			ENDFUNC
+			
+			END

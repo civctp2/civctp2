@@ -1,0 +1,18 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Refresh" CONTENT="60">
+<TITLE>Game Server game status</TITLE>
+</HEAD>
+<BODY>
+
+<TABLE>
+<tr><th>Session type<th>#current players<th>#current games<th>#games in past 24 hrs.
+<tr><td>
+GAMELIST sep=<tr><td> after={CURPLAYER}<td>{CURGAME}<td>{GAMEDAY}
+</TABLE>
+
+<br>
+This page last updated {TIME}.<br>
+Page will reload automatically if your browser supports this feature.
+</BODY>
+</HTML>

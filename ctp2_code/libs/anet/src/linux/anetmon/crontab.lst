@@ -1,0 +1,5 @@
+# crontab entries for server health monitoring
+#
+*/15 * * * * sh ~/anetmon/ckgame.sh >> /tmp/anetmon.log
+29 * * * * sh ~/anetmon/ckserver.sh >> /tmp/anetmon.log 2> /dev/null
+0 5 * * * sh ~/anetmon/daily.sh >> /tmp/anetmon.log

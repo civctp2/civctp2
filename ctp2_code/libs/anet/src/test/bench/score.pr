@@ -1,0 +1,363 @@
+# score reporting test
+# usage : bench score.pr maxexec nplayers startuid
+#
+# maxexec - maximum amount of time between processing the steps
+# nplayers - number of players in test 
+# startuid - uid of player 1, useful for avoiding a 40s handle timeout wait
+
+# Global variable usage
+# $G0...nplayers-1  Scores for clients with procid 0..nplayers-1
+# $G97              Session name
+# $G98              Current hostid
+# $G99              Current phase (set by timekeeper task)
+# $T0               Counter incremented by each client when done with phase
+#
+# Local variable usage - client
+# $I6               Next phase, while waiting
+# $I7               1 for first client (host), 0 for all others
+# 
+# Local variable usage - timekeeper
+# $I3               Run count
+
+Print Score reporting test.  nplayers %1, startuid %2
+
+# Generate random session name in $G97
+SetGlobal 97 $R50000
+Print Chose session name $G97
+
+# There is one timekeeper thread, and nplayers client threads.
+# The timekeeper thread uses G99 to hold the current phase
+# number; everyone else waits for G99 to change when they're
+# done with the current phase.
+# The first client thread doubles as a host thread if a 
+# new session must be created.
+# Scenarios are read in from stdin, executed, and verified
+# repeatedly.
+#
+# On startup, T1 is set to zero.
+#
+# Phase 0:
+# The timekeeper puts random scores into globals 0-Nplayers
+#
+# Everyone waits for phase 1, which starts 15 seconds later:
+# Everyone joins the session.
+# When each player sees %1 players, he increments T0
+
+# Everyone waits for phase 2, which starts when T0 gets to %1:
+# Everyone reports everyone else's scores. 
+# Everyone increments T0.
+
+# Everyone waits for phase 3, which starts when T0 gets to %1:
+# Everyone exits gracefully.
+# Everyone then increments T0.
+
+# Set I8 to the WARNING level of time allowed per step (ms)
+SET I8 10000
+# Set I9 to the FATAL level of time allowed per step (ms)
+SET I9 10000
+
+GOTO @A_BEGIN
+
+#--------------------------------------------------------------------------
+
+LABEL @ASSERT_FAIL
+Print @@ $procid $uptime : "Assertion failed."
+# Exit with fail code
+
+LABEL @FAIL
+Eval $dp 0
+SET I1 0
+IF I0 = I1 @FAIL_NODP
+# Force log file flush
+dpDestroy
+LABEL @FAIL_NODP
+
+# Exit with fail code
+EXIT 1
+
+LABEL @PASS
+Print @@ Test passed.
+EXIT 0
+
+#--------------------------------------------------------------------------
+
+# Timekeeper Thread
+LABEL @A_BEGIN
+Verbosity 2
+
+# Start off in phase 0, with no session
+SetGlobal 99 0
+Timer 0 ZERO
+
+# Create one special player
+SET I0 1
+SET I1 1
+SET I3 %2
+ADD I0 I3
+Spawn @C_HOST 1 $I0 $I0
+ADD I0 I1
+
+# Create %1-1 normal players
+SET I2 %1
+ADD I2 I3
+ADD I2 I1
+GOTO @A_CSPAWN_TEST
+LABEL @A_CSPAWN
+Spawn @C_CLIENT 1 $I0 $I0
+ADD I0 I1
+LABEL @A_CSPAWN_TEST
+IF I0 < I2 @A_CSPAWN
+
+SET I3 0
+LABEL @A_PHASE0_START
+SET I0 1
+ADD I3 I0
+
+Print @@ Timekeeper: Phase 0, run $I3
+# In phase zero, just wait 15 seconds, and advance to phase 1.
+# Also zero G98, so it can be set by the host in phase 3.
+Wait 15000
+Timer 0 ZERO
+SetGlobal 99 1
+SetGlobal 98 0
+
+Print @@ Timekeeper: Phase 1, run $I3
+# In phase one, wait until all %1 tasks have incremented T0.
+# then read in behaviors, clear T0, and go on to phase 2.
+
+# Wait for T0 to reach %1
+Verbosity 1
+SET I1 %1
+LABEL @A_PHASE1_WAIT
+Timer 0 COPY NUMBER
+IF I0 ! I1 @A_PHASE1_WAIT
+Verbosity 2
+
+# Set player scores to random values
+SET I0 1
+SET I1 1
+SET I2 %1
+ADD I2 I1
+LABEL @A_SETSCORES
+SetGlobal $I0 $R50
+Print Score for procid $I0 is $G$I0
+ADD I0 I1
+IF I0 < I2 @A_SETSCORES
+
+# Clear T0 and go to phase 2.
+Timer 0 ZERO
+SetGlobal 99 2
+
+Print @@ Timekeeper: Phase 2, run $I3
+# In phase 2, wait until all %1 tasks have incremented T0.
+# Everyone will report the scores they see now.
+Verbosity 1
+SET I1 %1
+LABEL @A_PHASE2_WAIT
+Timer 0 COPY NUMBER
+IF I0 ! I1 @A_PHASE2_WAIT
+Verbosity 2
+
+Timer 0 ZERO
+SetGlobal 99 3
+
+Print @@ Timekeeper: Phase 3, run $I3
+# Everyone will now leave, wait for them to increment T0, then finish.
+# In phase 3, reset T0 
+Verbosity 1
+SET I1 %1
+LABEL @A_PHASE4_WAIT
+Timer 0 COPY NUMBER
+IF I0 ! I1 @A_PHASE4_WAIT
+Verbosity 2
+#Wait Solitary
+Print @@ Timekeeper: Done
+EXIT 0
+
+#----------------------------------------------------------------
+# The client thread.
+#
+# Client and host are same, except host has I7=1
+# Never change I7!
+
+LABEL @C_HOST
+SET I7 1
+LABEL @C_CLIENT
+Verbosity 2
+ONERROR @TERMINATE
+
+#----------------------------------------------------------------
+# Phase 0.  
+#
+# On exit:
+# connection to game server exists, and there is a session to join.
+
+LABEL @C_PHASE0
+
+# If we don't already have a dp and a connection to the game server,
+# get one.
+Eval $dp 0
+SET I1 0
+IF I0 ! I1 @C_PHASE0_GOTDP
+dpCreate winets2.dll
+LABEL @C_PHASE0_GOTDP
+
+dpSetGameServer iserv.activision.com 65
+
+# Wait until Phase 0
+Verbosity 1
+SET I6 0
+Print @@ $procid $uptime : waiting for phase $I6
+LABEL @C_PHASE0_WAIT1
+dpReceive
+Eval $G99 0
+IF I0 < I6 @C_PHASE0_WAIT1
+Print @@ $procid $uptime : phase $I6 started
+Verbosity 2
+
+# Timer 1 was set in phase 4 to the number of players still in session.
+# If timer 1 is zero, and we're the special client,
+# host a session - otherwise just wait.
+SET I1 0
+IF I7 = I1 @C_PHASE0_END
+Timer 0 COPY NUMBER
+IF I0 ! I1 @C_PHASE0_END
+
+Login $S0 $S1
+Wait Login
+dpOpen CREATE $G97
+dpCreatePlayer Host
+Print @@ $procid $uptime : Created session. hostid $hostid myid $myId myUID $myUID
+
+LABEL @C_PHASE0_END
+
+#----------------------------------------------------------------
+# Phase 1.  
+# When Phase 1 starts, Timers 0 and 1 are zero, and Global 2 is zero.
+#
+# On exit:
+# all the players are in the session, and can see all other players.
+
+# Wait until Phase 1
+Verbosity 1
+SET I6 1
+Print @@ $procid $uptime : waiting for phase $I6.
+LABEL @C_PHASE1_WAIT1
+dpReceive
+Eval $G99 0
+IF I0 < I6 @C_PHASE1_WAIT1
+Print @@ $procid $uptime : phase $I6 started
+Verbosity 2
+
+# If we're not in a session, join the session
+Eval $hostid 0
+SET I1 0
+Print @@ $procid $uptime : hostid is $I0
+IF I0 ! I1 @C_PHASE1_JOINED
+Login $S0 $S1
+dpOpen $G97
+Wait Login
+Wait dpOpen
+dpCreatePlayer Player
+Wait dpCreatePlayer
+LABEL @C_PHASE1_JOINED
+
+# save our id in $G[30+$procid]
+Eval $procid 0
+SET I1 30
+ADD I0 I1
+SetGlobal $I0 $myId
+
+# Wait until we have %1 players
+Verbosity 1
+Print @@ $procid $uptime : waiting for %1 players.  
+SET I1 %1
+SET I2 0
+LABEL @C_PHASE1_WAIT2
+dpReceive
+Eval $numPlayers 0
+IF I0 = I2 @C_PHASE1_NOPRINT
+Eval $I0 2
+Print @@ $procid $uptime : I see $I0 players
+LABEL @C_PHASE1_NOPRINT
+IF I0 < I1 @C_PHASE1_WAIT2
+Verbosity 2
+Print @@ $procid $uptime : Got all %1 players
+
+# Increment global count of tasks who have full player roster
+Timer 0 START
+Timer 0 END
+
+#----------------------------------------------------------------
+# Phase 2.  
+# When Phase 2 starts, 
+# all the players are in the session, and can see all other players.
+#
+
+# Wait until Phase 2
+Verbosity 1
+SET I6 2
+Print @@ $procid $uptime : waiting for phase $I6
+LABEL @C_PHASE2_WAIT1
+dpReceive
+Eval $G99 0
+IF I0 < I6 @C_PHASE2_WAIT1
+Print @@ $procid $uptime : phase $I6 started. hostid $hostId myid $myId myUID $myUID
+Verbosity 2
+
+# Report scores from globals.
+SET I2 %1
+SET I0 1
+SET I4 31
+SET I1 1
+ADD I2 I1
+# $G[30 + 1-N] contain everone's ids, $G[1-N] contain their scores
+LABEL @C_REPORT
+Print @@ $procid $uptime : $I0 ReportScore $G$I4 $G$I0
+ReportScore $G$I4 $G$I0
+ADD I0 I1
+ADD I4 I1
+IF I0 < I2 @C_REPORT
+Print @@ $procid $uptime : Reported $I2 scores
+
+LABEL @C_PHASE2_DONE
+
+# Increment global counter of how many players have reported scores
+Timer 0 START
+Timer 0 END
+
+#----------------------------------------------------------------
+# Phase 3.  
+# When Phase 3 starts, 
+# Everyone has reported everyone else's scores
+#
+# When Phase 3 ends,
+# Everyone has left the session
+
+# Wait until Phase 3
+Verbosity 1
+SET I6 3
+Print @@ $procid $uptime : waiting for phase $I6
+LABEL @C_PHASE3_WAIT1
+dpReceive
+Eval $G99 0
+IF I0 < I6 @C_PHASE3_WAIT1
+Print @@ $procid $uptime : phase $I6 started. hostid $hostId myid $myId myUID $myUID
+Verbosity 2
+
+Print @@ $procid $uptime : Closing gracefully now
+Wait 4000 2000 Shutdown
+
+# Increment global counter of how many players have left 
+Timer 0 START
+Timer 0 END
+GOTO @EXIT
+
+#---------------------------------------
+# Termination
+LABEL @TERMINATE
+Print @@ $procid $uptime : This task terminated because of an unexpected error.
+GOTO @ASSERT_FAIL
+
+# Terminate threads normally by jumping here
+LABEL @EXIT

@@ -1,0 +1,140 @@
+# Join the game and create a player.
+sessions
+wait
+assert n_sessions > 0
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+pl
+assert n_players == 1
+set theVar anyPlayer
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+sleep 1
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp foo
+wait
+assert thisPlayer != 64001
+send thisPlayer theVar
+dpClose
+
+quit

@@ -1,0 +1,15 @@
+#!/bin/sh
+# make a fresh build from anetlin.zip
+#
+
+(
+	if [ -d commdll ]; then
+		rm -rf commdll
+	fi
+	mkdir commdll
+	cd commdll
+	unzip -aLo ../anetlin.zip
+	find . \( -name build -or -name clean \) -exec chmod u+x \{\} \;
+	cd src/linux
+	./build debug
+) 2>&1

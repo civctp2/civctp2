@@ -1,0 +1,28 @@
+BUILD.BAT will compile both the chat program and its installer.
+
+
+Compiling the Installer:
+Files to be compiled are in setupsrc dir.
+Files in the setup directory are used when running install program.
+
+Modify setup.rul script in the setupsrc dir if you'd like.
+If you need to add files, they must be added both in setup.rul and
+(see SmallFileTransfer()) and in setup.lst (God knows why).
+
+Build.bat will copy the output of the compile to the setup directory;
+the setup directory is what would appear on the root of the
+distribution floppy.
+
+
+Running the installer:
+Just run setup.exe as usual.  It will install chat.exe and the
+needed DLL's into \demochat by default.
+
+
+Running gtest .bat files:
+There are comments at the beginning of each .bat file describing what they do.
+
+Example of how to run:
+run hostg.bat first on one machine
+then when gtest from hostg.bat file sleeps, run clientch.bat immediately on
+ the other machine

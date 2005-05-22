@@ -1,0 +1,69 @@
+CC=gcc
+OPT=-Wall -I../../../../h -I../.. -I../../../../demo/utils -I../../../dp -I- -Ddp_ANET2 -DUNIX -DNO_NETWORK -D__NO_ANONYMOUS_UNIONS__
+COPT=$(FLAGS) $(OPT)
+ANALCRSH=analcrsh$(SUFFIX)
+MODCRC=modcrc$(SUFFIX)
+PROCSERV=procserv$(SUFFIX)
+AEHSPLIT=aehsplit$(SUFFIX)
+
+default: ../../../../linux86/bin/$(ANALCRSH) ../../../../linux86/bin/$(PROCSERV) \
+	../../../../linux86/bin/$(AEHSPLIT) ../../../../linux86/bin/$(MODCRC)
+
+../../../../linux86/bin/$(ANALCRSH): $(ANALCRSH)
+	-mkdir ../../../../linux86
+	-mkdir ../../../../linux86/bin
+	cp $(ANALCRSH) ../../../../linux86/bin
+
+../../../../linux86/bin/$(PROCSERV): $(PROCSERV)
+	-mkdir ../../../../linux86
+	-mkdir ../../../../linux86/bin
+	cp $(PROCSERV) ../../../../linux86/bin
+
+../../../../linux86/bin/$(MODCRC): $(MODCRC)
+	-mkdir ../../../../linux86
+	-mkdir ../../../../linux86/bin
+	cp $(MODCRC) ../../../../linux86/bin
+
+../../../../linux86/bin/$(AEHSPLIT): $(AEHSPLIT)
+	-mkdir ../../../../linux86
+	-mkdir ../../../../linux86/bin
+	cp $(AEHSPLIT) ../../../../linux86/bin
+
+$(ANALCRSH): analcrsh.o aeh.o aehmap.o aehlog.o dpcrc32.o dpprivy.o
+	$(CC) $(COPT) analcrsh.o aeh.o aehmap.o aehlog.o dpprivy.o dpcrc32.o -o $(ANALCRSH)
+
+$(MODCRC): modcrc.o dpcrc32.o
+	$(CC) $(COPT) modcrc.o dpcrc32.o -o $(MODCRC)
+
+$(PROCSERV): procserv.o aeh.o aehmap.o aehlog.o dpcrc32.o dpprivy.o
+	$(CC) $(COPT) procserv.o aeh.o aehmap.o aehlog.o dpprivy.o dpcrc32.o -o $(PROCSERV)
+
+$(AEHSPLIT): aehsplit.o aeh.o aehlog.o dpcrc32.o dpprivy.o
+	$(CC) $(COPT) aehsplit.o aeh.o aehmap.o aehlog.o dpprivy.o dpcrc32.o -o $(AEHSPLIT)
+
+analcrsh.o: ../analcrsh.c ../../aehlog.h ../../aeh.h
+	$(CC) -c $(COPT) ../analcrsh.c
+
+aeh.o: ../../aeh.c ../../aeh.h
+	$(CC) -c $(COPT) ../../aeh.c
+
+aehmap.o: ../../aehmap.c ../../aeh.h
+	$(CC) -c $(COPT) ../../aehmap.c
+
+aehlog.o: ../../aehlog.c ../../aehlog.h ../../aeh.h
+	$(CC) -c $(COPT) ../../aehlog.c
+
+dpcrc32.o: ../../../../demo/utils/dpcrc32.c ../../../../demo/utils/dpcrc32.h
+	$(CC) -c $(COPT) ../../../../demo/utils/dpcrc32.c
+
+dpprivy.o: ../../../dp/dpprivy.c ../../../dp/dpprivy.h
+	$(CC) -c $(COPT) ../../../dp/dpprivy.c
+
+modcrc.o: ../modcrc.c
+	$(CC) -c $(COPT) ../modcrc.c
+
+procserv.o: ../procserv.c ../../aehlog.h ../../aeh.h
+	$(CC) -c $(COPT) ../procserv.c
+
+aehsplit.o: ../aehsplit.c ../../aehlog.h ../../aeh.h
+	$(CC) -c $(COPT) ../aehsplit.c
