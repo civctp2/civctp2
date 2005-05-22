@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TURN_COUNT_H__
 #define __TURN_COUNT_H__
 

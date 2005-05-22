@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __BIT_ARRAY_H__
 #define __BIT_ARRAY_H__
 

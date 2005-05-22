@@ -10,8 +10,9 @@
 
 
  
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DEBUGWINDOW_H__
 #define __DEBUGWINDOW_H__
 

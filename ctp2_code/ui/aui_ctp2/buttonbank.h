@@ -10,8 +10,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __BUTTONBANK_H__
 #define __BUTTONBANK_H__
 

@@ -26,8 +26,9 @@
 // - Added 6 new cursor indeces. - April 30th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CURSORMANAGER_H__
 #define __CURSORMANAGER_H__
 

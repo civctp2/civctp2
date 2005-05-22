@@ -4,8 +4,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_TURN_YEAR_STATUS_HEADER
 #define ___BMH_TURN_YEAR_STATUS_HEADER
 
@@ -13,7 +14,7 @@
 #include <string>
 
 
-#include "globals.h"
+#include "Globals.h"
 
 
 class aui_Control;

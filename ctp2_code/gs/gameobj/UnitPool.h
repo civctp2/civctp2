@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UNITPOOL_H__
 #define __UNITPOOL_H__ 1
 

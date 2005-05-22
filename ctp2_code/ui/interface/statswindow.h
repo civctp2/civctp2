@@ -1,5 +1,7 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
+
 #ifndef __STATSWINDOW_H__
 #define __STATSWINDOW_H__
 
@@ -10,65 +12,6 @@ enum SW {
 	SW_NO_UNITS,
 	SW_NO_DIPLOMACY
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 enum BUTTON {

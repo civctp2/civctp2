@@ -10,8 +10,9 @@
 
 
  
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __BEVELLESSWINDOW_H__
 #define __BEVELLESSWINDOW_H__
 

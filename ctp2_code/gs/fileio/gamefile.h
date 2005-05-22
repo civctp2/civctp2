@@ -1,5 +1,6 @@
-
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
 #ifndef __GAMEFILE_H__
 #define __GAMEFILE_H__
 

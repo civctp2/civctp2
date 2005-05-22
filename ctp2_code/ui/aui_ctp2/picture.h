@@ -10,8 +10,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __PICTURE_H__
 #define __PICTURE_H__
 

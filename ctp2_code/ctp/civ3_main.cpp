@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header
+// File type    : C++ source
 // Description  : General declarations
 //
 //----------------------------------------------------------------------------
@@ -130,7 +130,7 @@
 #include "SpriteGroupList.h"
 #include "director.h"
 
-
+#include "GameOver.h"
 #include "network.h"
 
 

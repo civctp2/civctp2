@@ -54,6 +54,7 @@
 #ifndef __CITY_DATA_H__
 #define __CITY_DATA_H__ 1
 
+#include "ctp2_enums.h"
 #include "Unit.h"
 #include "BldQue.h"
 
@@ -111,11 +112,6 @@ enum RADIUS_OP {
 	RADIUS_OP_COUNT_GOODS,
 };
 
-enum CONVERTED_BY {
-	CONVERTED_BY_CLERIC,
-	CONVERTED_BY_TELEVANGELIST,
-	CONVERTED_BY_NOTHING
-};
 
 enum UPRISING_CAUSE {
 	UPRISING_CAUSE_NONE,

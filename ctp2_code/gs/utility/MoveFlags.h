@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MOVE_FLAGS_H__
     #define __MOVE_FLAGS_H__
     #define k_MASK_ENV_MOVEMENT_TYPE  0xff000000

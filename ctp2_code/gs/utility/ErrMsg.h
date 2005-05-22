@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ERR_MSG_H__
 #define __ERR_MSG_H__ 1
 

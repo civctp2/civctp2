@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __BACKGROUNDWIN_H__
 #define __BACKGROUNDWIN_H__
 

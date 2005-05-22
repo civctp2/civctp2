@@ -74,6 +74,8 @@
 #include "StrDB.h"
 #include "pointerlist.h"
 
+#include "GovernmentRecord.h"
+
 #define k_INITIAL_DB_SIZE 10
 #define k_GROW_DB_STEP 10
 

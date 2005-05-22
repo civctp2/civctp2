@@ -11,9 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __PIXELUTILS_H__
 #define __PIXELUTILS_H__
 

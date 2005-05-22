@@ -1,6 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __SPLASH_H__
 #define __SPLASH_H__

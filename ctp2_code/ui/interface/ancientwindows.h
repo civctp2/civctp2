@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ANCIENTWINDOWS_H__
 #define __ANCIENTWINDOWS_H__
 

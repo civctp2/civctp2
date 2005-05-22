@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CTP_RECORD_H__
 #define __CTP_RECORD_H__
 

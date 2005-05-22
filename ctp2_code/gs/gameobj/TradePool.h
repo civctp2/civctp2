@@ -7,8 +7,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _TRADEPOOL_H_
 #define _TRADEPOOL_H_
 

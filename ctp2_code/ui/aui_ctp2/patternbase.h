@@ -10,8 +10,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __PATTERNBASE_H__
 #define __PATTERNBASE_H__
 

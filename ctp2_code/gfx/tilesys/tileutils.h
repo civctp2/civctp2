@@ -11,8 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TILEUTILS_H__
 #define __TILEUTILS_H__
 

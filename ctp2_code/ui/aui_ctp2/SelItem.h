@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SELECTED_ITEM_H__
 #define __SELECTED_ITEM_H__ 1
 

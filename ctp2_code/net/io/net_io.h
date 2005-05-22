@@ -3,8 +3,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _NETIO_H_
 #define _NETIO_H_
 

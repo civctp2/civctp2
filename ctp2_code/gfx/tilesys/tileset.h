@@ -9,8 +9,9 @@
 
 
 
- 
+#ifdef HAVE_PRAGMA_ONCE 
 #pragma once
+#endif
 #ifndef __TILESET_H__
 #define __TILESET_H__
 

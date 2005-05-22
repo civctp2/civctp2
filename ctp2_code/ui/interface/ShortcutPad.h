@@ -4,8 +4,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_SHORTCUT_PAD_HEADER
 #define ___BMH_SHORTCUT_PAD_HEADER
 

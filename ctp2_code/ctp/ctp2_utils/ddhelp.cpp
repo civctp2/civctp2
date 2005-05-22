@@ -1,6 +1,7 @@
 
 #include "c3.h"
-#include "ddraw.h"
+#if !defined(__AUI_USE_SDL__)
+#include <ddraw.h>
 
 void TraceErrorDD(HRESULT hErr, char *sFile, int nLine) 
 {
@@ -113,3 +114,4 @@ void TraceErrorDD(HRESULT hErr, char *sFile, int nLine)
 	sprintf(err, "DirectDraw Error %s\nin file %s at line %d", dderr, sFile, nLine);     
 	DPRINTF(k_DBG_FIX, ("%s\n", err));
 }  
+#endif

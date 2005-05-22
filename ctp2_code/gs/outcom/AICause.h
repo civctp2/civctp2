@@ -1,6 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __AI_CAUSE_H__
 #define __AI_CAUSE_H__ 1
 
@@ -171,4 +171,4 @@ enum CAUSE_HIDDEN_DETECT
 	CAUSE_HIDDEN_DETECT_UNKNOWN
 };
 
-#endif __AI_CAUSE_H__
+#endif // __AI_CAUSE_H__

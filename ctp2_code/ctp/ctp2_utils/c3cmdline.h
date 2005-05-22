@@ -7,8 +7,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifdef _PLAYTEST
 
 #ifndef _C3CMDLINE_H_

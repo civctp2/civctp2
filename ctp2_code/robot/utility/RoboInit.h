@@ -1,6 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ROBO_INIT_H
 #define ROBO_INIT_H 1
 

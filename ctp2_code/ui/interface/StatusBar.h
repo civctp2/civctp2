@@ -24,8 +24,9 @@
 // - Added CleanUp function for m_text, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_STATUS_BAR_HEADER
 #define ___BMH_STATUS_BAR_HEADER
 

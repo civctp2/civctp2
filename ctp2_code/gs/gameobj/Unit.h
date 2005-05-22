@@ -47,6 +47,7 @@
 #include "ID.h"
 #include "dbtypes.h"
 #include "gstypes.h"
+#include "AICause.h"
 #include "OrderRecord.h" // For order valid check
 
 class MapPoint;
@@ -83,14 +84,9 @@ enum ORDER_RESULT;
 enum WORLD_DIRECTION;
 
 class Unit : public ID {
-
-
     void RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, sint32 killedBy);
 
 public: 
-
-
-
 	Unit () : ID() { return; } ;
 	Unit (sint32 val) : ID (val) { return; };
 	Unit (uint32 val) : ID (val) { return; };

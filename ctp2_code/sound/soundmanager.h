@@ -44,6 +44,7 @@
 
 #include "civsound.h"
 #include "pointerlist.h"
+#include "gamesounds.h"
 
 #if defined(USE_SDL)
 #include <SDL.h>
@@ -51,8 +52,6 @@
 #endif
 
 template <class T> class PointerList;
-
-enum GAMESOUNDS;
 
 enum SOUNDTYPE {
 	SOUNDTYPE_NONE = 0,

@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DIRECTOR_H__
 #define __DIRECTOR_H__
 

@@ -50,6 +50,7 @@
 
 #include "ctp2_config.h"
 #include "c3types.h"
+#include "ctp2_enums.h"
 
 #if defined(_MSC_VER)
 
@@ -64,6 +65,7 @@
 #endif	// _MSC_VER
 
 #include <limits.h>
+#include <string.h>
 
 #if defined(WIN32)
 #include <crtdbg.h>

@@ -11,8 +11,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __C3WINDOWS_H__
 #define __C3WINDOWS_H__
 

@@ -5,6 +5,11 @@
 #define __os_include_config_win32_h__ 1
 
 #if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifndef HAVE_PRAGMA_ONCE
+#define HAVE_PRAGMA_ONCE 1
+#else
+#error "HAVE_PRAGMA_ONCE defined twice"
+#endif
 #pragma once
 #endif
 

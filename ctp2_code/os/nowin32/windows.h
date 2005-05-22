@@ -1,3 +1,4 @@
+//
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
@@ -56,11 +57,18 @@ typedef uint32 UINT;
 typedef uint32 ULONG;
 
 /* Structs */
+typedef struct tagBITMAPFILEHEADER {
+	WORD    bfType;
+	DWORD   bfSize;
+	WORD    bfReserved1;
+	WORD    bfReserved2;
+	DWORD   bfOffBits;
+} BITMAPFILEHEADER;
 struct POINT {
   sint32 x;
   sint32 y;
 };
-typedef POINT * LPPOINT;
+typedef struct POINT * LPPOINT;
 
 struct RECT {
   sint32 left;
@@ -91,7 +99,14 @@ typedef struct hwnd_t* HWND;
 /* stub functions */
 sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags);
 #define lstrlen(s) strlen(s)
-
+inline int stricmp(const char* s1, const char* s2)
+{
+	return strcasecmp(s1, s2);
+}
+inline int strnicmp(const char *str1, const char *str2, size_t n)
+{
+	return strncasecmp(str1, str2, n);
+}
 
 
 #endif

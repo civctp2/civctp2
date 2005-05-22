@@ -1,13 +1,6 @@
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _TRADEROUTEDATA_H_
 #define _TRADEROUTEDATA_H_
 

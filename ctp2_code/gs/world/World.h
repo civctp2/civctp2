@@ -28,9 +28,9 @@
 //   pointer. - May 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __WORLD_H__
 #define __WORLD_H__
 

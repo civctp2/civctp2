@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _NETWORK_H_
 #define _NETWORK_H_
 

@@ -10,8 +10,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CONTROLSHEET_H__
 #define __CONTROLSHEET_H__
 

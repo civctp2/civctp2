@@ -11,8 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __PRIMITIVES_H__
 #define __PRIMITIVES_H__
 

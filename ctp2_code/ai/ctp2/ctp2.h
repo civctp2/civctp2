@@ -10,7 +10,9 @@
 
 
 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CTP2_H__
 #define __CTP2_H__
 

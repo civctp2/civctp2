@@ -52,7 +52,7 @@
 //   - Oct. 6th 2004 Martin Gühmann 
 // - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann 
 // - Fixed an error in the should terraform logic. - Oct. 6th 2004 Martin Gühmann
-// - Disabled the utilizíation factor for all first ring improvements, so that
+// - Disabled the utilization factor for all first ring improvements, so that
 //   small ciries are more likly improved. - Feb. 21st 2005 Martin Gühmann
 // - Replaced c-sytle casts by by standart static_cast's. 
 //   - Feb. 21st 2005 Martin Gühmann
@@ -3491,8 +3491,8 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 		(g_theWorld->GetCell(city->GetHomeCity().RetPos())->GetNumUnits() >= k_MAX_ARMY_SIZE);
 	
 	
-	
-	for ( int elem_num = 0; elem_num < build_list_sequence->GetNumBuildListElement(); elem_num++)
+	int elem_num;
+	for ( elem_num = 0; elem_num < build_list_sequence->GetNumBuildListElement(); elem_num++)
 		{
 			elem = build_list_sequence->GetBuildListElement(elem_num);
 
@@ -3628,7 +3628,8 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	const StrategyRecord::BuildListSequenceElement *best_elem = NULL;
 	sint32 best_priority = -99999;
 
-	for (int elem_num = 0; elem_num < strategy.GetNumBuildListSequenceElement(); elem_num++)
+	int elem_num;
+	for (elem_num = 0; elem_num < strategy.GetNumBuildListSequenceElement(); elem_num++)
 		{
 			
 			elem = strategy.GetBuildListSequenceElement(elem_num);
@@ -4474,8 +4475,8 @@ void Governor::ManageGoodsTradeRoutes()
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
 				GEA_Int, route_iter->m_resource,
-				GEA_City, route_iter->m_sourceCity,
-				GEA_City, route_iter->m_destinationCity,
+				GEA_City, &route_iter->m_sourceCity,
+				GEA_City, &route_iter->m_destinationCity,
 				GEA_End);
 			unused_freight -= route_iter->m_cost;
 		}

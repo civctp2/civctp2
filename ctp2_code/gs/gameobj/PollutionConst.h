@@ -7,8 +7,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __POLLUTION_CONST_H__
 #define __POLLUTION_CONST_H__
 

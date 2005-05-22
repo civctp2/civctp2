@@ -1,8 +1,7 @@
-
-
-
 #include "c3.h"
 #include "ctpregistry.h"
+
+#if defined(WIN32)
 
 BOOL ctpregistry_DoesKeyExist(void *key, MBCHAR *subKey)
 {
@@ -85,3 +84,5 @@ MBCHAR *ctpregistry_GetKeyValue(void *key,
 	}
 	return NULL;
 }
+
+#endif

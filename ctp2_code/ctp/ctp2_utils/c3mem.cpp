@@ -16,7 +16,7 @@ sint32 g_check_mem;
 
 #ifndef _DEBUG_MEMORY
 
-void* operator new(const unsigned int size)
+void* operator new(const size_t size)
 {
     Assert (0 < size); 
 	void* ptr = malloc(size);
@@ -56,26 +56,3 @@ void operator delete(void *ptr)
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

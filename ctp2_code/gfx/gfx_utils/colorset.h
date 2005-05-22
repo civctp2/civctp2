@@ -24,8 +24,9 @@
 // - Added new colors above player 15 by Martin Gühmann
 //
 //----------------------------------------------------------------------------
- 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __COLORSET_H__
 #define __COLORSET_H__
 

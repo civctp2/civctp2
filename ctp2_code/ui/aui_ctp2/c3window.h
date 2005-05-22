@@ -10,8 +10,9 @@
 
 
  
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __PATTERNWINDOW_H__
 #define __PATTERNWINDOW_H__
 

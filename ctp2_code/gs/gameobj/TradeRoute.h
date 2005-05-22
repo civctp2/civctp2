@@ -7,8 +7,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _TRADEROUTE_H_
 #define _TRADEROUTE_H_
 

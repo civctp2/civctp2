@@ -27,8 +27,9 @@
 //   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CELL_H__
 #define __CELL_H__ 1
 

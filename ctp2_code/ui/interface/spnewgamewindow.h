@@ -25,8 +25,9 @@
 //   flat world and Uranus world
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef SPNEWGAMEWINDOW_FLAG
 #define SPNEWGAMEWINDOW_FLAG
 

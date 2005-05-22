@@ -1,5 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __CIVAPP_H__
 #define __CIVAPP_H__
 

@@ -1,5 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
 #ifndef THIS_IS_MY_CONSTANT_SO_YOU_BETTER_NOT_USE_IT
 #define  THIS_IS_MY_CONSTANT_SO_YOU_BETTER_NOT_USE_IT
 
@@ -23,4 +24,4 @@ private:
 	sint32 m_name;
 };
 
-#endif THIS_IS_MY_CONSTANT_SO_YOU_BETTER_NOT_USE_IT
+#endif // THIS_IS_MY_CONSTANT_SO_YOU_BETTER_NOT_USE_IT

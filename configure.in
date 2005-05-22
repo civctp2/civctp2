@@ -4,9 +4,11 @@ AC_INIT(ctp2,1.2)
 AC_PREREQ(2.54)
 
 AC_CONFIG_AUX_DIR(ctp2_code/os/autoconf/config)
-AM_CONFIG_HEADER(ctp2_code/os/include/config.h)
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
 
 AM_INIT_AUTOMAKE
+AM_CONFIG_HEADER(ctp2_code/os/include/config.h)
 AM_MAINTAINER_MODE
 AC_PROG_MAKE_SET
 
@@ -35,8 +37,6 @@ fi
 
 AC_PROG_LIBTOOL
 
-AC_CANONICAL_TARGET
-
 AM_PATH_DIRECTX
 AM_PATH_DXMEDIA
 AM_PATH_SDL
@@ -63,6 +63,8 @@ done
 ctp2_code='$(top_srcdir)/ctp2_code'
 AC_SUBST(ctp2_code)
 
+CFLAGS="$CFLAGS"
+CXXFLAGS="-fms-extensions $CXXFLAGS"
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
@@ -73,5 +75,6 @@ AC_OUTPUT([
    ctp2_code/ctp/Makefile
    ctp2_code/gs/Makefile
    ctp2_code/gs/dbgen/Makefile
+   ctp2_code/gs/newdb/Makefile
    ctp2_code/mapgen/Makefile
 ])

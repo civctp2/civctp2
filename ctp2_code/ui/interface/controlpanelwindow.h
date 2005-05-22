@@ -14,8 +14,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CONTROLPANELWINDOW_H__
 #define __CONTROLPANELWINDOW_H__
 

@@ -4,13 +4,14 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_END_TURN_BUTTON_HEADER
 #define ___BMH_END_TURN_BUTTON_HEADER
 
 
-#include "globals.h"
+#include "Globals.h"
 
 
 class aui_Control;

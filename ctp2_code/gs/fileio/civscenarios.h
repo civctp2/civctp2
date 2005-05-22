@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __CIVSCENARIOS_H__
 #define __CIVSCENARIOS_H__

@@ -4,8 +4,8 @@
 SUBDIRS=\
 	ctp2_code
 
-purge: Makefile distclean
+purge: $(top_srcdir)/Makefile distclean
 	$(MAKE) -f $< $@
 
-bootstrap doc local playtest: Makefile
+bootstrap doc local playtest: $(top_srcdir)/Makefile
 	$(MAKE) -f $< $@

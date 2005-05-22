@@ -45,10 +45,11 @@
 #ifndef __CTPDATABASE_H__
 #define __CTPDATABASE_H__
 
+#include "c3files.h"
 #include <vector>
 
 class DBLexer;
-enum C3DIR;
+
 template <class T> class PointerList;
 
 #define DBERROR(x) { lex->ReportError x; }

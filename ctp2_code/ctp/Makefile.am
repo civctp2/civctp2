@@ -5,21 +5,131 @@
 bin_PROGRAMS = ctp2
 # This hack shortens include path list,
 # but prohibits using a separate build dir
-ctp2_code=..
+#ctp2_code=..
 
 if WIN32
 CTP2_WIN32_FREETYPE_INC=\
 	-I$(ctp2_code)/ui/freetype
 CTP2_WIN32_MILES_INC=\
 	-I$(ctp2_code)/libs/miles
-CTP2_WIN32_RSRC_INC=\
-	-I$(ctp2_code)/ctp/ctp2_rsrc
 CTP2_WIN32_ZLIB_INC=\
 	-I$(ctp2_code)/libs/zlib
 else
 CTP2_NOWIN32_INC=\
 	-I$(ctp2_code)/os/nowin32
 endif
+CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
+
+newdb_CDBSRCFILES = \
+	../gs/newdb/AdvanceBranchRecord.cpp \
+	../gs/newdb/AdvanceListRecord.cpp \
+	../gs/newdb/AdvanceRecord.cpp \
+	../gs/newdb/AgeCityStyleRecord.cpp \
+	../gs/newdb/AgeRecord.cpp \
+	../gs/newdb/BuildListSequenceRecord.cpp \
+	../gs/newdb/BuildingBuildListRecord.cpp \
+	../gs/newdb/BuildingRecord.cpp \
+	../gs/newdb/CitySizeRecord.cpp \
+	../gs/newdb/CityStyleRecord.cpp \
+	../gs/newdb/DiplomacyProposalRecord.cpp \
+	../gs/newdb/DiplomacyRecord.cpp \
+	../gs/newdb/DiplomacyThreatRecord.cpp \
+	../gs/newdb/EndGameObjectRecord.cpp \
+	../gs/newdb/FeatRecord.cpp \
+	../gs/newdb/GoalRecord.cpp \
+	../gs/newdb/GovernmentRecord.cpp \
+	../gs/newdb/IconRecord.cpp \
+	../gs/newdb/ImprovementListRecord.cpp \
+	../gs/newdb/OrderRecord.cpp \
+	../gs/newdb/PersonalityRecord.cpp \
+	../gs/newdb/PopRecord.cpp \
+	../gs/newdb/ResourceRecord.cpp \
+	../gs/newdb/SoundRecord.cpp \
+	../gs/newdb/SpecialAttackInfoRecord.cpp \
+	../gs/newdb/SpecialEffectRecord.cpp \
+	../gs/newdb/SpriteRecord.cpp \
+	../gs/newdb/StrategyRecord.cpp \
+	../gs/newdb/TerrainImprovementRecord.cpp \
+	../gs/newdb/TerrainRecord.cpp \
+	../gs/newdb/UnitBuildListRecord.cpp \
+	../gs/newdb/UnitRecord.cpp \
+	../gs/newdb/WonderBuildListRecord.cpp \
+	../gs/newdb/WonderMovieRecord.cpp \
+	../gs/newdb/WonderRecord.cpp
+
+newdb_CDBHDRFILES = \
+	../gs/newdb/AdvanceBranchRecord.h \
+	../gs/newdb/AdvanceListRecord.h \
+	../gs/newdb/AdvanceRecord.h \
+	../gs/newdb/AgeCityStyleRecord.h \
+	../gs/newdb/AgeRecord.h \
+	../gs/newdb/BuildListSequenceRecord.h \
+	../gs/newdb/BuildingBuildListRecord.h \
+	../gs/newdb/BuildingRecord.h \
+	../gs/newdb/CitySizeRecord.h \
+	../gs/newdb/CityStyleRecord.h \
+	../gs/newdb/DiplomacyProposalRecord.h \
+	../gs/newdb/DiplomacyRecord.h \
+	../gs/newdb/DiplomacyThreatRecord.h \
+	../gs/newdb/EndGameObjectRecord.h \
+	../gs/newdb/FeatRecord.h \
+	../gs/newdb/GoalRecord.h \
+	../gs/newdb/GovernmentRecord.h \
+	../gs/newdb/IconRecord.h \
+	../gs/newdb/ImprovementListRecord.h \
+	../gs/newdb/OrderRecord.h \
+	../gs/newdb/PersonalityRecord.h \
+	../gs/newdb/PopRecord.h \
+	../gs/newdb/ResourceRecord.h \
+	../gs/newdb/SoundRecord.h \
+	../gs/newdb/SpecialAttackInfoRecord.h \
+	../gs/newdb/SpecialEffectRecord.h \
+	../gs/newdb/SpriteRecord.h \
+	../gs/newdb/StrategyRecord.h \
+	../gs/newdb/TerrainImprovementRecord.h \
+	../gs/newdb/TerrainRecord.h \
+	../gs/newdb/UnitBuildListRecord.h \
+	../gs/newdb/UnitRecord.h \
+	../gs/newdb/WonderBuildListRecord.h \
+	../gs/newdb/WonderMovieRecord.h \
+	../gs/newdb/WonderRecord.h
+
+newdb_CDBSTAMPFILES = \
+	../gs/newdb/AdvanceBranchRecord.stamp \
+	../gs/newdb/AdvanceListRecord.stamp \
+	../gs/newdb/AdvanceRecord.stamp \
+	../gs/newdb/AgeCityStyleRecord.stamp \
+	../gs/newdb/AgeRecord.stamp \
+	../gs/newdb/BuildListSequenceRecord.stamp \
+	../gs/newdb/BuildingBuildListRecord.stamp \
+	../gs/newdb/BuildingRecord.stamp \
+	../gs/newdb/CitySizeRecord.stamp \
+	../gs/newdb/CityStyleRecord.stamp \
+	../gs/newdb/DiplomacyProposalRecord.stamp \
+	../gs/newdb/DiplomacyRecord.stamp \
+	../gs/newdb/DiplomacyThreatRecord.stamp \
+	../gs/newdb/EndGameObjectRecord.stamp \
+	../gs/newdb/FeatRecord.stamp \
+	../gs/newdb/GoalRecord.stamp \
+	../gs/newdb/GovernmentRecord.stamp \
+	../gs/newdb/IconRecord.stamp \
+	../gs/newdb/ImprovementListRecord.stamp \
+	../gs/newdb/OrderRecord.stamp \
+	../gs/newdb/PersonalityRecord.stamp \
+	../gs/newdb/PopRecord.stamp \
+	../gs/newdb/ResourceRecord.stamp \
+	../gs/newdb/SoundRecord.stamp \
+	../gs/newdb/SpecialAttackInfoRecord.stamp \
+	../gs/newdb/SpecialEffectRecord.stamp \
+	../gs/newdb/SpriteRecord.stamp \
+	../gs/newdb/StrategyRecord.stamp \
+	../gs/newdb/TerrainImprovementRecord.stamp \
+	../gs/newdb/TerrainRecord.stamp \
+	../gs/newdb/UnitBuildListRecord.stamp \
+	../gs/newdb/UnitRecord.stamp \
+	../gs/newdb/WonderBuildListRecord.stamp \
+	../gs/newdb/WonderMovieRecord.stamp \
+	../gs/newdb/WonderRecord.stamp
 
 ctp2_SOURCES = \
 	ctp2_utils/appstrings.cpp \
@@ -44,8 +154,14 @@ ctp2_SOURCES = \
 	fingerprint/endecode.c \
 	fingerprint/shroud.c \
 	fingerprint/verify.c \
+	$(newdb_CDBSRCFILES) \
+	../gs/newdb/lex.dbl.c \
+	../gs/newdb/CTPDatabase.cpp \
+	../gs/newdb/CTPRecord.cpp \
+	../gs/newdb/DBLexer.cpp \
+	../gs/newdb/DBLexer.cpp \
 	c3.cpp \
-	civ3main.cpp \
+	civ3_main.cpp \
 	civapp.cpp \
 	display.cpp \
 	../gfx/spritesys/action.cpp \
@@ -249,7 +365,171 @@ ctp2_SOURCES = \
 	../gs/fileio/civscenarios.cpp \
 	../gs/fileio/GameFile.cpp \
 	../gs/fileio/prjfile.cpp \
-	../gs/fileio/Token.cpp
+	../gs/fileio/Token.cpp \
+	../gs/slic/slic.l \
+	../gs/slic/sliccmd.y
+
+# Rules for generated sources
+
+../gs/newdb/lex.dbl.c: $(ctp2_code)/gs/newdb/DBLexer.l
+	$(LEXCOMPILE) -i -Pdbl -o../gs/newdb/lex.dbl.c $<
+
+CTPDB=$(top_builddir)/ctp2_code/gs/dbgen/ctpdb$(EXEEXT)
+
+../gs/newdb/AdvanceBranchRecord.cpp \
+../gs/newdb/AdvanceBranchRecord.h: $(ctp2_code)/gs/newdb/advance.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/AdvanceListRecord.cpp \
+../gs/newdb/AdvanceListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb \
+		../gs/newdb/AdvanceRecord.h \
+		$(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/AdvanceRecord.cpp \
+../gs/newdb/AdvanceRecord.h: $(ctp2_code)/gs/newdb/advance.cdb \
+		../gs/newdb/AgeRecord.h \
+		../gs/newdb/CityStyleRecord.h ../gs/newdb/GovernmentRecord.h \
+		../gs/newdb/FeatRecord.h ../gs/newdb/IconRecord.h \
+		$(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/AgeCityStyleRecord.cpp \
+../gs/newdb/AgeCityStyleRecord.h: $(ctp2_code)/gs/newdb/citystyle.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/AgeRecord.cpp \
+../gs/newdb/AgeRecord.h: $(ctp2_code)/gs/newdb/advance.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/BuildListSequenceRecord.cpp \
+../gs/newdb/BuildListSequenceRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/BuildingBuildListRecord.cpp \
+../gs/newdb/BuildingBuildListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb \
+		../gs/newdb/BuildingRecord.h \
+		$(CTPDB) 
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/BuildingRecord.cpp \
+../gs/newdb/BuildingRecord.h: $(ctp2_code)/gs/newdb/building.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/CitySizeRecord.cpp \
+../gs/newdb/CitySizeRecord.h: $(ctp2_code)/gs/newdb/citysize.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/CityStyleRecord.cpp \
+../gs/newdb/CityStyleRecord.h: $(ctp2_code)/gs/newdb/citystyle.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/DiplomacyProposalRecord.cpp \
+../gs/newdb/DiplomacyProposalRecord.h: $(ctp2_code)/gs/newdb/dipproposal.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/DiplomacyRecord.cpp \
+../gs/newdb/DiplomacyRecord.h: $(ctp2_code)/gs/newdb/diplomacy.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/DiplomacyThreatRecord.cpp \
+../gs/newdb/DiplomacyThreatRecord.h: $(ctp2_code)/gs/newdb/dipthreat.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/EndGameObjectRecord.cpp \
+../gs/newdb/EndGameObjectRecord.h: $(ctp2_code)/gs/newdb/EndGameObject.cdb \
+		../gs/newdb/TerrainImprovementRecord.h \
+		$(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/FeatRecord.cpp \
+../gs/newdb/FeatRecord.h: $(ctp2_code)/gs/newdb/feat.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/GoalRecord.cpp \
+../gs/newdb/GoalRecord.h: $(ctp2_code)/gs/newdb/goal.cdb \
+		../gs/newdb/OrderRecord.h \
+		$(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/GovernmentRecord.cpp \
+../gs/newdb/GovernmentRecord.h: $(ctp2_code)/gs/newdb/government.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/IconRecord.cpp \
+../gs/newdb/IconRecord.h: $(ctp2_code)/gs/newdb/icon.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/ImprovementListRecord.cpp \
+../gs/newdb/ImprovementListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/OrderRecord.cpp \
+../gs/newdb/OrderRecord.h: $(ctp2_code)/gs/newdb/order.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/PersonalityRecord.cpp \
+../gs/newdb/PersonalityRecord.h: $(ctp2_code)/gs/newdb/personality.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/PopRecord.cpp \
+../gs/newdb/PopRecord.h: $(ctp2_code)/gs/newdb/pop.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/ResourceRecord.cpp \
+../gs/newdb/ResourceRecord.h: $(ctp2_code)/gs/newdb/terrain.cdb \
+		../gs/newdb/SoundRecord.h \
+		$(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/SoundRecord.cpp \
+../gs/newdb/SoundRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/SpecialAttackInfoRecord.cpp \
+../gs/newdb/SpecialAttackInfoRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/SpecialEffectRecord.cpp \
+../gs/newdb/SpecialEffectRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/SpriteRecord.cpp \
+../gs/newdb/SpriteRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/StrategyRecord.cpp \
+../gs/newdb/StrategyRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/TerrainImprovementRecord.cpp \
+../gs/newdb/TerrainImprovementRecord.h: $(ctp2_code)/gs/newdb/terrimprove.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/TerrainRecord.cpp \
+../gs/newdb/TerrainRecord.h: $(ctp2_code)/gs/newdb/terrain.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/UnitBuildListRecord.cpp \
+../gs/newdb/UnitBuildListRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/UnitRecord.cpp \
+../gs/newdb/UnitRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/WonderBuildListRecord.cpp \
+../gs/newdb/WonderBuildListRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/WonderMovieRecord.cpp \
+../gs/newdb/WonderMovieRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
+../gs/newdb/WonderRecord.cpp \
+../gs/newdb/WonderRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
+	$(CTPDB) ../gs/newdb < $<
+
 
 AM_CXXFLAGS=\
 	$(SDL_CFLAGS)
@@ -261,6 +541,7 @@ AM_CPPFLAGS=\
 	-I$(ctp2_code)/os/include \
 	-I$(ctp2_code)/ctp \
 	-I$(ctp2_code)/ctp/ctp2_utils \
+	-I$(ctp2_code)/ctp/ctp2_rsrc \
 	$(CTP2_WIN32_RSRC_INC) \
 	-I$(ctp2_code)/ctp/debugtools \
 		$(INCORDER_ctp2_code__libs__freetype__lib) \
@@ -288,7 +569,7 @@ AM_CPPFLAGS=\
 	-I$(ctp2_code)/ui/aui_ctp2 \
 	-I$(ctp2_code)/ui/aui_common \
 		$(INCORDER_ctp2_code__libs__tiff) \
-		$(INCORDER_ctp2_code__libs__anet__h) \
+		$(CTP2_ANET_INC) \
 	-I$(ctp2_code)/mm \
 	-I$(ctp2_code)/robotcom/backdoor \
 	-I$(ctp2_code)/gs/slic \
@@ -310,6 +591,7 @@ AM_CPPFLAGS=\
 		$(INCORDER_ctp2_code__libs__dxmedia__include) \
 		$(INCORDER_ctp2_code__libs__directx__include) \
 	-I$(ctp2_code)/gs/events \
+	-I$(top_builddir)/ctp2_code/gs/newdb \
 	-I$(ctp2_code)/gs/newdb \
 	-I$(ctp2_code)/ai/diplomacy \
 	-I$(ctp2_code)/ai/mapanalysis \
@@ -318,5 +600,3 @@ AM_CPPFLAGS=\
 	-I$(ctp2_code)/ai/strategy/goals \
 	-I$(ctp2_code)/ai/strategy/squads \
 	-I$(ctp2_code)/ai/citymanagement
-
-

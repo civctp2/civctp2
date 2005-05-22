@@ -9,8 +9,9 @@
 
 
 
- 
+#ifdef HAVE_PRAGMA_ONCE 
 #pragma once
+#endif
 #ifndef __SPRITEGROUP_H__
 #define __SPRITEGROUP_H__
 

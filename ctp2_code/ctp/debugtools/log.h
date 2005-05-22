@@ -190,7 +190,11 @@ int Log_OutputEnabled (void);
 
 
 void Log_Begin (const char *module_name, int module_line);
+#if defined(WIN32)
 void __cdecl Log_Middle (LogClass log_class, const char *format, ...);
+#else
+void Log_Middle(LogClass log_class, const char *format, ...);
+#endif
 void Log_End (void);
 
 
@@ -199,4 +203,4 @@ void Log_End (void);
 }
 #endif
 
-#endif  
+#endif

@@ -9,8 +9,9 @@
 
 
 
- 
+#ifdef HAVE_PRAGMA_ONCE 
 #pragma once
+#endif
 #ifndef __QUEUE_H__
 #define __QUEUE_H__
 

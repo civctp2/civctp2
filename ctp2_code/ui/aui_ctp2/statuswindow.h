@@ -10,8 +10,9 @@
 
 
  
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __STATUSWINDOW_H__
 #define __STATUSWINDOW_H__
 

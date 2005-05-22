@@ -5,8 +5,9 @@
 
 
 
-
+#ifdef PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MESSAGEWIN_H__
 #define __MESSAGEWIN_H__
 

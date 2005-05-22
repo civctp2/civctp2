@@ -38,7 +38,9 @@
 //
 //----------------------------------------------------------------------------
 
+#ifndef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GOVERNOR_H__
 #define __GOVERNOR_H__
 
@@ -399,4 +401,4 @@ private:
 
 };
 
-#endif  __GOVERNOR_H__
+#endif  //__GOVERNOR_H__

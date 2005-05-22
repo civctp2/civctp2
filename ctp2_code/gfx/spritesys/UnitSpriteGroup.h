@@ -11,8 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UNITSPRITEGROUP_H__
 #define __UNITSPRITEGROUP_H__
 
