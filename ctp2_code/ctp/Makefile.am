@@ -439,6 +439,7 @@ CTPDB=$(top_builddir)/ctp2_code/gs/dbgen/ctpdb$(EXEEXT)
 ../gs/newdb/EndGameObjectRecord.cpp \
 ../gs/newdb/EndGameObjectRecord.h: $(ctp2_code)/gs/newdb/EndGameObject.cdb \
 		../gs/newdb/TerrainImprovementRecord.h \
+		../gs/newdb/WonderRecord.h \
 		$(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
 

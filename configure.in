@@ -53,6 +53,12 @@ case $host in
 	;;
 esac
 AC_DEFINE(YYDEBUG,9,[Debug Parsers])
+AC_PATH_PROG(HTLATEX,htlatex)
+AC_PATH_PROG(MAKEINDEX,makeindex)
+AC_PATH_PROG(PDFLATEX,pdflatex)
+AC_PATH_PROG(PERL,perl)
+AC_PATH_PROG(THUMBPDF,thumbpdf)
+AC_PATH_PROG(VIEWPDF,acroread)
 
 for ac_remove_CFLAG in "-O1" "-O2" "-O3" ; do
 	CFLAGS=${CFLAGS//${ac_remove_CFLAG}/}
