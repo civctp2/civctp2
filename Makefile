@@ -74,6 +74,8 @@ playtest:
 	cp -uv ctp2_code/ctp/ctp2.* $(PLAYTEST)/ctp2_program/ctp/
 	#cp -uv ctp2_code/ctp/appstr.txt $(PLAYTEST)/ctp2_program/ctp/
 	cp -uv doc/user/playtest/*.txt $(PLAYTEST)/
+	mkdir -p $(PLAYTEST)/doc
+	cp -uv doc/user/manual/user_manual.pdf $(PLAYTEST)/doc
 	svn export ctp2_data $(PLAYTEST)/ctp2_data --force
 	svn export Scenarios $(PLAYTEST)/Scenarios --force
 

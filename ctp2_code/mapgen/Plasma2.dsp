@@ -32,7 +32,7 @@ CFG=Plasma2 - Win32 Debug Browse
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""$/ctp", BAAAAAAA"
 # PROP Scc_LocalPath "..\ctp"
-CPP=xicl6.exe
+CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
@@ -59,7 +59,7 @@ RSC=rc.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /map /machine:I386 /out:"..\ctp\dll\map\plasma2.dll"
 # SUBTRACT LINK32 /profile
@@ -86,7 +86,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll"
 # SUBTRACT LINK32 /profile
@@ -114,7 +114,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp2\dll\map\plasma2.dll" /pdbtype:sept
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll" /pdbtype:sept
 
@@ -141,7 +141,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll"
 # SUBTRACT BASE LINK32 /profile
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll"
@@ -162,7 +162,7 @@ LINK32=xilink6.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils" /I "..\gs\outcom" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\ui\aui_directx" /I "..\ui\freetype" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils" /I "..\ui\aui_directx" /I "..\ui\freetype" /I "..\gs\outcom" /I "..\gs\gameobj" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -170,7 +170,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 uuid.lib /nologo /subsystem:windows /dll /map /machine:I386 /out:"..\ctp2\dll\map\plasma2.dll"
 # SUBTRACT BASE LINK32 /profile
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /map /machine:I386 /out:"..\ctp\dll\map\plasma2.dll"
@@ -199,7 +199,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll"
 # SUBTRACT BASE LINK32 /profile
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll"
@@ -228,7 +228,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll"
 # SUBTRACT BASE LINK32 /profile
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll"
@@ -256,7 +256,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib:"libcd.lib" /out:"..\ctp\dll\map\plasma2.dll"
 # SUBTRACT LINK32 /profile
@@ -284,7 +284,7 @@ LINK32=xilink6.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=xilink6.exe
+LINK32=link.exe
 # ADD BASE LINK32 uuid.lib /nologo /subsystem:windows /dll /map /machine:I386 /out:"..\ctp2\dll\map\plasma2.dll"
 # SUBTRACT BASE LINK32 /profile
 # ADD LINK32 uuid.lib /nologo /subsystem:windows /dll /map /machine:I386 /out:"..\ctp\dll\map\plasma2.dll"
