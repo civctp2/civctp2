@@ -12,25 +12,11 @@
 #ifndef __AUI_TABGROUP_H__
 #define __AUI_TABGROUP_H__
 
-
+#include "ctp2_enums.h"
 #include "aui_switchgroup.h"
 
 
 class aui_Tab;
-
-
-
-enum AUI_TABGROUP_ALIGNMENT
-{
-	AUI_TABGROUP_ALIGNMENT_FIRST = 0,
-	AUI_TABGROUP_ALIGNMENT_LEFT = 0,	
-	AUI_TABGROUP_ALIGNMENT_TOP, 		
-	AUI_TABGROUP_ALIGNMENT_RIGHT,		
-	AUI_TABGROUP_ALIGNMENT_BOTTOM,		
-	AUI_TABGROUP_ALIGNMENT_LAST
-};
-
-
 
 #define k_AUI_TABGROUP_LDL_AUTOARRANGE		"autoarrange"
 #define k_AUI_TABGROUP_LDL_PANEOFFSETX		"paneoffsetx"

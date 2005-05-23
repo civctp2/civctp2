@@ -1,20 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once 
 
 #ifndef __AI_MAP_H__
 #define __AI_MAP_H__
 
+#include "ctp2_enums.h"
 #include "dynarr.h"
 #include "aicell.h"
 #include "priorityqueue.h"
@@ -39,17 +28,6 @@ enum GRADIENT_BITS;
 #define k_MINECELLY 15 
 
 #include "TerrImproveData.h"
-
-enum INSTALLATION_TYPES { 
-    INSTALLATION_LISTENING_POSTS=0, 
-
-    INSTALLATION_RADAR_STATIONS, 	
-    INSTALLATION_AIR_BASES,
-    INSTALLATION_FORTIFICATIONS, 
-    INSTALLATION_SONAR_BUOYS,
-   
-    
-};
 
 enum ERROR_INSERT_SETTLE { 
     ERROR_INSERT_SETTLE_OK, 

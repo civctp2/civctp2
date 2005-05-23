@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -38,7 +26,7 @@ typedef  AUI_ERRCODE (C3Blitter::*_C3BLIT_PROTO)(	aui_Surface *destSurf,
 
 
 
-
+#ifdef __AUI_USE_DIRECTX__
 
 class C3Blitter : public aui_DirectBlitter
 {
@@ -86,5 +74,6 @@ protected:
 
 };
 
+#endif
 
 #endif 

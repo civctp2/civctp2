@@ -13,6 +13,7 @@
 #ifndef _TRADEROUTE_H_
 #define _TRADEROUTE_H_
 
+#include "ctp2_enums.h"
 #include "ID.h"
 
 template <class T> class DynamicArray;
@@ -21,7 +22,6 @@ class TradeRouteData;
 class Unit;
 class MapPoint;
 typedef sint32 PLAYER_INDEX;
-enum ROUTE_TYPE;
 typedef sint32 StringId;
 
 enum CAUSE_KILL_TRADE_ROUTE {
@@ -43,11 +43,14 @@ class TradeRoute : public ID
 {
 private:
 public:
-	TradeRoute () : ID() { return; } ; 
-	TradeRoute (sint32 val) : ID (val) { return; }; 
-	TradeRoute (uint32 val) : ID (val) { return; }; 
-	TradeRoute (const int val) : ID (val) { return; }; 
-	TradeRoute (const unsigned int val) : ID (val) { return; }; 
+	TradeRoute () : ID() { return; } ;
+	TradeRoute (sint32 val) : ID (val) { return; };
+	TradeRoute (uint32 val) : ID (val) { return; };
+
+#if defined WIN32
+	TradeRoute (const int val) : ID (val) { return; };
+	TradeRoute (const unsigned int val) : ID (val) { return; };
+#endif
    
 	TradeRouteData *operator -> () const { return AccessData(); }
 	bool IsValid() const;

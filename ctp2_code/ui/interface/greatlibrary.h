@@ -44,6 +44,7 @@
 #ifndef __GREATLIBRARY_H__
 #define __GREATLIBRARY_H__
 
+#include "ctp2_enums.h"
 #include "ctp2_listitem.h"
 #include "keyboardhandler.h"
 #include <vector>	// std::vector
@@ -79,23 +80,6 @@
 
 size_t const	k_MAX_GL_ENTRY		= 8192;
 size_t const	GL_MAX_DB_NAME_SIZE	= 30; 
-
-enum DATABASE {
-	DATABASE_DEFAULT,
-	DATABASE_UNITS,
-	DATABASE_BUILDINGS,
-	DATABASE_WONDERS,
-	DATABASE_ADVANCES,
-	DATABASE_TERRAIN,
-	DATABASE_CONCEPTS,
-	DATABASE_GOVERNMENTS,
-	DATABASE_TILE_IMPROVEMENTS,
-	DATABASE_RESOURCE,
-	DATABASE_ORDERS,
-	DATABASE_SEARCH,
-
-	DATABASE_MAX
-};
 
 enum LIB_STRING {
 	LIB_STRING_INDEX,

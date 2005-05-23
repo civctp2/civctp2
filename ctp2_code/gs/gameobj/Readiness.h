@@ -1,21 +1,8 @@
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef _READINESS_H_
 #define _READINESS_H_
 
-enum READINESS_LEVEL {
-	READINESS_LEVEL_PEACE,
-	READINESS_LEVEL_ALERT,
-	READINESS_LEVEL_WAR
-};
+#include "ctp2_enums.h"
 
 class CivArchive;
 class Unit; 

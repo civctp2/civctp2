@@ -33,6 +33,7 @@
 
 
 #include "aui_control.h"
+#include "aui_keyboard.h"
 
 
 class aui_Surface;
