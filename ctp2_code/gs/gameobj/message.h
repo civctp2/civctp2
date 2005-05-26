@@ -26,8 +26,10 @@ class Message : public ID
 		Message() : ID() { return ; }
 		Message(sint32 val) : ID(val) { return ; }
 		Message(uint32 val) : ID(val) { return ; }
+#ifdef _MSC_VER
 		Message(const int val) : ID(val) { return ; }
 		Message(const unsigned int val) : ID(val) { return ; }
+#endif
 
 		void KillMessage() ;
 		void Kill() { KillMessage() ; }

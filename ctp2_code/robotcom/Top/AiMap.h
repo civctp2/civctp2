@@ -1,4 +1,17 @@
-#pragma once 
+
+
+
+
+
+
+
+
+
+
+
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
 
 #ifndef __AI_MAP_H__
 #define __AI_MAP_H__
@@ -28,6 +41,7 @@ enum GRADIENT_BITS;
 #define k_MINECELLY 15 
 
 #include "TerrImproveData.h"
+
 
 enum ERROR_INSERT_SETTLE { 
     ERROR_INSERT_SETTLE_OK, 

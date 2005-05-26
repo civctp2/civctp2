@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef OPTIONSWINDOW_FLAG
 #define OPTIONSWINDOW_FLAG
 

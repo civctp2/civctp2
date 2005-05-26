@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __VICTORYWIN_H__
 #define __VICTORYWIN_H__
 

@@ -1,4 +1,14 @@
+
+
+
+
+
+
+
+
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _READINESS_H_
 #define _READINESS_H_
 

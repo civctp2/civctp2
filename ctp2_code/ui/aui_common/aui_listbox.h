@@ -288,7 +288,7 @@ protected:
 
 	
 	AUI_ERRCODE	StartSelecting( void );
-	friend aui_DropDown;
+	friend class aui_DropDown;
 
 	
 	static aui_DragDropWindow *m_dragDropWindow;

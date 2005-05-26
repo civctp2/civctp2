@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DIFF_DB_H__
 #define __DIFF_DB_H__ 1
 

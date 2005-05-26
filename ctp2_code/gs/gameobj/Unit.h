@@ -35,7 +35,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -68,16 +68,11 @@ class CityData;
 #define k_UNIT_VERSION_MAJOR	0
 #define k_UNIT_VERSION_MINOR	0
 
-enum CONVERTED_BY;
 enum CAUSE_REMOVE_ARMY;
 enum CAUSE_REMOVE_CITY; 
 enum CAUSE_NEW_ARMY;
-enum UNIT_ORDER_TYPE;
-enum HAPPY_REASON;
 typedef sint32 AdvanceType;
 
-enum DEFAULT_PLACE_POP;
-enum ORDER_RESULT;
 enum WORLD_DIRECTION;
 
 class Unit : public ID {
@@ -88,8 +83,7 @@ public:
 	Unit (sint32 val) : ID (val) { return; };
 	Unit (uint32 val) : ID (val) { return; };
 	Unit (ID i) : ID (i.m_id) { return; };
-
-#if defined WIN32
+#if defined(WIN32)
 	Unit (const int val) : ID (val) { return; };
 	Unit (const unsigned int val) : ID (val) { return; };
 #endif

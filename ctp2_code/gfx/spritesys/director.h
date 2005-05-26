@@ -15,33 +15,17 @@
 #ifndef __DIRECTOR_H__
 #define __DIRECTOR_H__
 
+#include "ctp2_enums.h"
 #include "aui.h"
 #include "aui_mouse.h"
-
 #include "Queue.h"
 
 class Unit; 
-
-
-extern enum ROUTE_TYPE;
-enum GAMESOUNDS;
-
 class TradeRoute; 
 
 #include "pointerlist.h"
-
 #include "directoractions.h"
-
-
-
-
-
-
-
-
-
-
-
+#include "gamesounds.h"
 
 
 #define k_MAX_DIRECTOR_QUEUE_ITEMS		2000

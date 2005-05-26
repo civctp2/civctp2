@@ -70,8 +70,7 @@ public:
 	Army(sint32 val) : ID(val) {}
 	Army(uint32 val) : ID(val) {}
 	Army(ID i) : ID(i.m_id) {}
-
-#if defined WIN32
+#if defined(WIN32)
 	Army(const int val) : ID(val) {}
 	Army(const unsigned int val) : ID(val) {}
 #endif

@@ -1,13 +1,13 @@
 #pragma once
+#endif
 #ifndef __REGARD_H__
 #define __REGARD_H__ 1
 
 class CivArchive;
 
-enum REGARD_TYPE ;
 
-#define k_REGARD_VERSION_MAJOR	0									
-#define k_REGARD_VERSION_MINOR	0									
+#define k_REGARD_VERSION_MAJOR	0								
+#define k_REGARD_VERSION_MINOR	0								
 
 #include "gstypes.h"
 

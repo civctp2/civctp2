@@ -600,4 +600,6 @@ AM_CPPFLAGS=\
 	-I$(ctp2_code)/ai/strategy/agents \
 	-I$(ctp2_code)/ai/strategy/goals \
 	-I$(ctp2_code)/ai/strategy/squads \
-	-I$(ctp2_code)/ai/citymanagement
+	-I$(ctp2_code)/ai/citymanagement \
+	-I$(ctp2_code)/ai
+

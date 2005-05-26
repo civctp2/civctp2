@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SLICIF_SYM_H__
 #define __SLICIF_SYM_H__
 

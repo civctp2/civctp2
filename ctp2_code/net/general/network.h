@@ -7,6 +7,7 @@
 #include "net_io.h"
 #include "net_const.h"
 #include "gstypes.h"
+#include "GameEventDescription.h"
 
 class UnitData;
 class Packetizer;
@@ -48,7 +49,6 @@ class DiplomaticRequest;
 class Exclusions;
 struct Response;
 enum GAME_OVER;
-enum GAME_EVENT;
 class ChatList;
 class CellUnitList;
 

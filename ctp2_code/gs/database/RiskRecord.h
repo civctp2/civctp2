@@ -1,5 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __RISKRECORD_H__
 #define __RISKRECORD_H__
 

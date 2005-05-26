@@ -44,6 +44,7 @@ typedef CHAR * LPSTR;
 typedef TCHAR * LPTSTR;
 typedef void * LPVOID;
 typedef sint32 LRESULT;
+typedef CHAR * PSTR;
 typedef sint32 (*WNDPROC)();
 typedef sint32 WPARAM;
 
@@ -98,6 +99,26 @@ typedef struct hwnd_t* HWND;
 
 /* stub functions */
 sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags);
+inline void InflateRect(struct RECT *pr, int x, int y)
+{
+	if (!pr)
+		return;
+	
+	pr->bottom += y;
+	pr->left -= x;
+	pr->right += x;
+	pr->top -= y;
+}
+inline void OffsetRect(struct RECT *pr, int x, int y)
+{
+	if (!pr)
+		return;
+
+	pr->bottom += y;
+	pr->left += x;
+	pr->right += x;
+	pr->top += y;
+}
 #define lstrlen(s) strlen(s)
 inline int stricmp(const char* s1, const char* s2)
 {

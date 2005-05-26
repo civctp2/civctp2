@@ -3,10 +3,12 @@
 
 
 #include "c3files.h"
-
+#ifndef WIN32
+#include <stdio.h>
 
 typedef struct _iobuf FILE;
 typedef void *HANDLE;
+#endif
 struct ZFS_FHEADER;
 struct ZFS_DTABLE;
 

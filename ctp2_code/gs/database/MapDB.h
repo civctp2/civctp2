@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MAPDB_H__
 #define __MAPDB_H__
 

@@ -1,7 +1,8 @@
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SCREENUTILS_H__
 #define __SCREENUTILS_H__
 

@@ -1,7 +1,6 @@
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _NET_TYPES_H_
 #define _NET_TYPES_H_
 
@@ -22,7 +21,7 @@ enum NET_ERR {
 	NET_ERR_INVALIDSESSION,
 	NET_ERR_NO_TRANSPORTS,
 	NET_ERR_TOO_LARGE,
-	NET_ERR_UNKNOWN,
+	NET_ERR_UNKNOWN
 };
 
 #endif

@@ -37,7 +37,7 @@
 //----------------------------------------------------------------------------
 
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -48,8 +48,6 @@
 #include "ctp2_listitem.h"
 #include "keyboardhandler.h"
 #include <vector>	// std::vector
-
-
 
 #define k_GL_TREE_LEFT		5
 #define k_GL_TREE_TOP		40
@@ -80,6 +78,7 @@
 
 size_t const	k_MAX_GL_ENTRY		= 8192;
 size_t const	GL_MAX_DB_NAME_SIZE	= 30; 
+
 
 enum LIB_STRING {
 	LIB_STRING_INDEX,

@@ -50,8 +50,8 @@
 #define k_SQUELCH_TRADE_MESSAGES 0
 
 #include "TradeRouteData.h"
+#include "AgreementTypes.h"
 
-extern enum MSG_CLS ;
 
 enum ATTITUDE_TYPE
 	{
@@ -62,7 +62,7 @@ enum ATTITUDE_TYPE
 	ATTITUDE_TYPE_WEAK_HOSTILE,
 	ATTITUDE_TYPE_WEAK_FRIENDLY,
 	ATTITUDE_TYPE_MAX,
-	} ;
+} ;
 
 
 enum DEATH_EFFECT_MORALE {
@@ -356,7 +356,7 @@ public:
 public:
 	friend class SelectedItem; 
 
-	Player(const PLAYER_INDEX o, sint32 d, 	PLAYER_TYPE pt); 
+	Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt); 
 	Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const CIV_INDEX civ, GENDER gender) ;
 	Player(CivArchive &archive) ;
 	~Player();

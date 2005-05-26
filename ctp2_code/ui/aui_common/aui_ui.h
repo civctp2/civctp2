@@ -293,7 +293,7 @@ public:
 
 	
 	BOOL		IsChildWin( HWND hwnd ) const
-	{ return (BOOL)m_winList->Find( hwnd ); }
+	{ return (m_winList->Find(hwnd) ? TRUE : FALSE); }
 	AUI_ERRCODE	AddWin( HWND hwnd );
 	AUI_ERRCODE	RemoveWin( HWND hwnd );
 

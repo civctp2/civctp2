@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GREATLIBRARYWINDOW_H__
 #define __GREATLIBRARYWINDOW_H__
 

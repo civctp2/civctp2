@@ -1,7 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __SCI_ADVANCESCREEN_H__
 #define __SCI_ADVANCESCREEN_H__
 

@@ -6,6 +6,7 @@
 
 #include "ctp2_enums.h"
 #include "pixelutils.h"
+#include "aui_tabgroup.h"
 
 class aui_Surface;
 class aui_DirectSurface;

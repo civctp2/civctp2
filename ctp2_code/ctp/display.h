@@ -7,7 +7,7 @@ struct DisplayDevice {
 	LPSTR		szName;
     LPSTR		szDevice;
     GUID*		lpGUID;
-    GUID		GUID;
+    typename GUID	GUID;
     HMONITOR	hMon;
 	RECT		rect;
 };

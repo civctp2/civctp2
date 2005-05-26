@@ -9,7 +9,7 @@
 #ifndef _NETIO_H_
 #define _NETIO_H_
 
-enum NET_ERR;
+#include "net_types.h"
 
 class NetIOResponse
 {

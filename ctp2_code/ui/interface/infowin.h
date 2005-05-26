@@ -7,8 +7,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __INFOWIN_H__
 #define __INFOWIN_H__
 

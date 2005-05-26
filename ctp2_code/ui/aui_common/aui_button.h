@@ -110,7 +110,7 @@ protected:
 
 	virtual MouseEventCallback MouseRDropInside;
 #else
-	virtual void	KeyboardCallback(aui_KeyBoardEvent * keyboardData);
+	virtual void	KeyboardCallback(aui_KeyboardEvent * keyboardData);
 	
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
