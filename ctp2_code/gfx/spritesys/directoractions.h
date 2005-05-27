@@ -7,12 +7,12 @@ class EffectActor;
 class TradeActor;
 class aui_Surface;
 class Battle;
-enum GAME_OVER;
 class SpriteState;
 
 #include "message.h"
 #include "Unit.h"
 #include "MapPoint.h"
+#include "GameOver.h"
 
 class DQAction {
 public:
