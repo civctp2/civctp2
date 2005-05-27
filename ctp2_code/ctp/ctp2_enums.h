@@ -1,22 +1,25 @@
+//----------------------------------------------------------------------------
 //
-// C++ Interface: ctp2_enums
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Temporary storage of some enums, to be refactored later
 //
-// Description: 
+//----------------------------------------------------------------------------
 //
+// Disclaimer
 //
-// Author:  <ctp2source@apolyton.net>, (C) 2005
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// Copyright: See COPYING file that comes with this distribution
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
-//
+//----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
 #ifndef __ctp__ctp2_enums_h__
 #define __ctp__ctp2_enums_h__ 1
-
-#include "AgreementTypes.h"
 
 enum CONVERTED_BY {
 	CONVERTED_BY_CLERIC,
@@ -40,9 +43,6 @@ enum DATABASE {
 
 	DATABASE_MAX
 };
-
-#include "GameObj_types.h"
-#include "GameOver.h"
 
 enum HAPPY_REASON {
 	HAPPY_REASON_SMOKING_CRACK = -1,
