@@ -5,7 +5,7 @@
 #include "c3files.h"
 #ifndef WIN32
 #include <stdio.h>
-
+#else
 typedef struct _iobuf FILE;
 typedef void *HANDLE;
 #endif

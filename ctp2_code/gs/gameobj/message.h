@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -26,7 +19,7 @@ class Message : public ID
 		Message() : ID() { return ; }
 		Message(sint32 val) : ID(val) { return ; }
 		Message(uint32 val) : ID(val) { return ; }
-#ifdef _MSC_VER
+#ifdef WIN32
 		Message(const int val) : ID(val) { return ; }
 		Message(const unsigned int val) : ID(val) { return ; }
 #endif

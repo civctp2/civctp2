@@ -10,32 +10,6 @@ struct GameEventDescription {
 	char *args;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef EVENT
 #undef EVENT
 #endif

@@ -2090,7 +2090,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 			
 			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
-				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
 			} else {
 				spnewgamescreen_displayMyWindow();
 			}
@@ -2112,7 +2112,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 			
 			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
-				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
 			} else {
 				spnewgamescreen_displayMyWindow();
 			}
