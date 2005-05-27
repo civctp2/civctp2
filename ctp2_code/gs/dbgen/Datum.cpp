@@ -124,6 +124,10 @@ void Datum::ExportVariable(FILE *outfile, sint32 indent)
 		case DATUM_BIT_GROUP:
 			typestring = "uint32";
 			break;
+		/// \todo Export for Bitpairs
+		case DATUM_BIT_PAIR:
+		case DATUM_NONE:
+			break;
 	}
 	fprintf(outfile, "%s", indent ? "        " : "    ");
 	fprintf(outfile, "%-15s %c%cm_%s%s;%s\n", typestring, star, notFixedStar, m_name, sizestring, comment);
@@ -224,6 +228,11 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 			fprintf(outfile, "                         return &m_%s;\n", m_bitPairDatum->m_name);
 			fprintf(outfile, "                     }\n");
 			break;
+		case DATUM_BIT:
+		case DATUM_BIT_GROUP:
+		case DATUM_BIT_PAIR:
+		case DATUM_NONE:
+			break;
 	}
 			
 }
@@ -298,6 +307,11 @@ void Datum::ExportAccessor(FILE *outfile, sint32 indent, char *recordName)
 				break;
 			case DATUM_STRUCT:
 				fprintf(outfile, "    const %s *Get%s(sint32 index) const;\n", m_subType, m_name);
+				break;
+			case DATUM_BIT:
+			case DATUM_BIT_GROUP:
+			case DATUM_BIT_PAIR:
+			case DATUM_NONE:
 				break;
 		}
 		fprintf(outfile, "    sint32           GetNum%s() const { return m_num%s;}\n", m_name, m_name);
@@ -566,6 +580,11 @@ void Datum::ExportDestructor(FILE *outfile)
 			fprintf(outfile, "\tm_%s = NULL; \n", m_name );
 			fprintf(outfile, "\tm_num%s = 0; \n\n", m_name );
 			break;
+		case DATUM_BIT:
+		case DATUM_BIT_GROUP:
+		case DATUM_BIT_PAIR:
+		case DATUM_NONE:
+			break;
 		}
 	} else if ( m_type ==  DATUM_BIT_PAIR ) 
 	{
@@ -584,6 +603,12 @@ void Datum::ExportDestructor(FILE *outfile)
 			fprintf(outfile, "\t\tdelete m_%s; \n", m_bitPairDatum->m_name );
 			fprintf(outfile, "\tm_%s = NULL; \n\n", m_bitPairDatum->m_name );
 			break;
+		case DATUM_BIT:
+		case DATUM_BIT_GROUP:
+		case DATUM_BIT_PAIR:
+		case DATUM_NONE:
+			break;
+
 		}
 	} else if ( m_type == DATUM_FILE || m_type == DATUM_STRING )
 	{
@@ -683,6 +708,12 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "\tm_num%s = rval.m_num%s;\n\n",m_name,m_name);
 
 			break;
+		case DATUM_BIT:
+		case DATUM_BIT_GROUP:
+		case DATUM_BIT_PAIR:
+		case DATUM_NONE:
+			break;
+
 		}
 	}
 	else if ( m_maxSize > 0 )
@@ -723,6 +754,12 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "\t} \n" );
 
 			break;
+		case DATUM_BIT:
+		case DATUM_BIT_GROUP:
+		case DATUM_BIT_PAIR:
+		case DATUM_NONE:
+			break;
+
 		}
 	} 
 	else if ( m_type ==  DATUM_BIT_PAIR ) 
@@ -749,6 +786,12 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 				m_bitPairDatum->m_name, m_bitPairDatum->m_name );
 			fprintf(outfile, "\t\t} \n\n" );
 			break;
+		case DATUM_BIT:
+		case DATUM_BIT_GROUP:
+		case DATUM_BIT_PAIR:
+		case DATUM_NONE:
+			break;
+
 		}
 	} else if ( m_type == DATUM_FILE || m_type == DATUM_STRING )
 	{
@@ -777,6 +820,8 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 		case DATUM_BIT:
 			fprintf(outfile, "\tm_flags%d = rval.m_flags%d; \n",m_bitNum / 32, m_bitNum / 32);
 			break;
+		case DATUM_BIT_PAIR:
+		case DATUM_NONE:
 		default:
 			Assert(0);
 			break;
@@ -930,6 +975,11 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				
 				
 				fprintf(outfile, "\t} \n" );
+			case DATUM_BIT:
+			case DATUM_BIT_GROUP:
+			case DATUM_BIT_PAIR:
+			case DATUM_NONE:
+				break;
 			}
 
 	} else if ( m_type ==  DATUM_BIT_PAIR ) 
@@ -956,6 +1006,11 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 					fprintf(outfile, "\t\t\tstrcpy(m_%s, rval.m_%s); \n",
 							m_bitPairDatum->m_name, m_bitPairDatum->m_name );
 					fprintf(outfile, "\t\t} \n\n" );
+					break;
+				case DATUM_BIT:
+				case DATUM_BIT_GROUP:
+				case DATUM_BIT_PAIR:
+				case DATUM_NONE:
 					break;
 				}
 	} else if ( m_type == DATUM_BIT_GROUP )	{

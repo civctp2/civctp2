@@ -1,23 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TIFFUTILS_H__
 #define __TIFFUTILS_H__
-
-
-
 
 #ifdef __cplusplus
 extern "C" {

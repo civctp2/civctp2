@@ -10,8 +10,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SPRITE_STATE_H__
 #define __SPRITE_STATE_H__
 

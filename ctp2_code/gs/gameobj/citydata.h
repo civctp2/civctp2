@@ -324,7 +324,7 @@ public:
 	CityData(CivArchive &archive) ;									
     CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_pos);
 	CityData(CityData *copy);
-	~CityData();
+	virtual ~CityData();
 
 	void Copy(CityData *copy);
     void Serialize(CivArchive &archive) ;

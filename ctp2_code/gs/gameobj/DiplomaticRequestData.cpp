@@ -11,7 +11,7 @@
 #include "c3.h"
 #include "c3errors.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include "AdvanceRecord.h"
 #include "player.h"
 #include "Unit.h"
@@ -26,7 +26,7 @@
 #include "UnitData.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
-#include "aicause.h"
+#include "AICause.h"
 
 #include "network.h"
 #include "net_info.h"
@@ -68,10 +68,10 @@ DiplomaticRequestData::DiplomaticRequestData(const ID id) : GAMEOBJ(id.m_id)
 	m_request = REQUEST_TYPE_NULL ;
 	m_response = REQUEST_RESPONSE_TYPE_NULL ;
 
-	m_advance = NULL ;
-	m_reciprocalAdvance = NULL ;
-	m_targetCity = NULL ;
-	m_reciprocalCity = NULL ;
+	m_advance = 0;
+	m_reciprocalAdvance = 0;
+	m_targetCity = 0;
+	m_reciprocalCity = 0;
 	m_amount = 0 ;
 	m_tone = k_MESSAGE_TONE_NEUTRAL;
 
@@ -96,10 +96,10 @@ DiplomaticRequestData::DiplomaticRequestData(const ID id, const PLAYER_INDEX own
 	m_thirdParty = PLAYER_INDEX_INVALID ;
 	m_response = REQUEST_RESPONSE_TYPE_NULL ;
 
-	m_advance = NULL ;
-	m_reciprocalAdvance = NULL ;
-	m_targetCity = NULL ;
-	m_reciprocalCity = NULL ;
+	m_advance = 9;
+	m_reciprocalAdvance = 0;
+	m_targetCity = 0;
+	m_reciprocalCity = 0;
 	m_amount = 0 ;
 	m_tone = k_MESSAGE_TONE_NEUTRAL;
 
@@ -386,7 +386,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
     if (g_theDiplomacyLog) {
         g_theDiplomacyLog->LogEnact(m_owner, m_recipient, m_request);	
     }
-#endif _DEBUG
+#endif // _DEBUG
 
 	if(g_network.IsClient() && !fromCurPlayer) {
 		g_network.SendAction(new NetAction(NET_ACTION_ENACT_REQUEST,
@@ -681,7 +681,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
         g_theDiplomacyLog->LogRegard(m_owner, m_recipient); 
         g_theDiplomacyLog->LogRegard(m_recipient, m_owner); 
     } 
-#endif _DEBUG
+#endif // _DEBUG
 
 		DiplomaticRequest me(m_id);
 		me.Kill();
@@ -947,7 +947,7 @@ void DiplomaticRequestData::Reject(BOOL fromServer)
         g_theDiplomacyLog->LogRegard(m_owner, m_recipient); 
         g_theDiplomacyLog->LogRegard(m_recipient, m_owner); 
     } 
-#endif _DEBUG
+#endif // _DEBUG
 
 }
 
@@ -1068,7 +1068,7 @@ void DiplomaticRequestData::Complete()
     if (g_theDiplomacyLog) { 
         g_theDiplomacyLog->LogTone(m_owner, m_recipient, GetAttitude(m_owner, m_recipient)); 
     }
-#endif _DEBUG
+#endif // _DEBUG
 
 	if(g_network.IsHost()) {
 		g_network.Enqueue(this);

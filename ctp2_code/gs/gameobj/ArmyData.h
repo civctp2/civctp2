@@ -478,7 +478,7 @@ public:
 	BOOL ExecuteTeleportOrder(Order *order);
 	void SetUnloadMovementPoints();
 
-	void ActionSuccessful(SPECATTACK attack, Unit &unit, Unit &c);
+	void ActionSuccessful(SPECATTACK attack, Unit &unit, const Unit &c);
 	void ActionUnsuccessful(const MapPoint &point);
 
 	BOOL ExecuteSpecialOrder(Order *order, BOOL &keepGoing);

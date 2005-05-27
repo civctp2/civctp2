@@ -31,6 +31,8 @@
 #ifndef __SLIC_ENGINE_H__
 #define __SLIC_ENGINE_H__
 
+#include "SlicBuiltinEnum.h"
+
 class SlicObject;
 class CivArchive;
 

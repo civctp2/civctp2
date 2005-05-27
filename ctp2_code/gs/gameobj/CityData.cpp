@@ -117,12 +117,12 @@
 #include "WonderRecord.h"
 #include "pollution.h"
 #include "TradeRoute.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Cell.h"
 #include "TileVal.h"
 #include "installationtree.h"
 #include "CivilisationPool.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "director.h"
 #include "MessagePool.h"
 #include "Advances.h"
@@ -157,7 +157,7 @@
 #include "c3window.h"
 #include "statswindow.h"
 
-#include "order.h"
+#include "Order.h"
 
 
 
@@ -198,7 +198,7 @@ extern SoundManager		*g_soundManager;
 #include "SlicEngine.h"
 #include "SlicObject.h"
 
-#include "globals.h"
+#include "Globals.h"
 
 #include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
@@ -3282,9 +3282,13 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 			return FALSE;
 		}
     default:
-#pragma warning (disable : 4127)									
+#ifdef WIN32
+#pragma warning (disable : 4127)
+#endif
         Assert(0); 
-#pragma warning (default : 4127)									
+#ifdef WIN32
+#pragma warning (default : 4127)
+#endif		
         break; 
     } 
 
@@ -3559,9 +3563,13 @@ void CityData::CityRadiusFunc(const MapPoint &pos)
 			}
 			break;
 		default:
-#pragma warning (disable : 4127)									
+#ifdef WIN32
+#pragma warning (disable : 4127)
+#endif		
 			Assert(FALSE);
-#pragma warning (default : 4127)									
+#ifdef WIN32
+#pragma warning (default : 4127)
+#endif
 			break;
 	}
 }
@@ -3816,7 +3824,8 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 
 	if(numSlaves > k_MAX_ARMY_SIZE)
 		numSlaves = k_MAX_ARMY_SIZE;
-	for(sint32 i = 0; i < numSlaves; i++) {
+	sint32 i;
+	for(i = 0; i < numSlaves; i++) {
 		Unit u = g_player[si]->CreateUnitNoPosition(cheapUnit,
 													slaveArmy,
 													cpos,

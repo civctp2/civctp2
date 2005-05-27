@@ -12,11 +12,11 @@
 #include "Score.h"
 #include "Army.h"
 #include "Path.h"
-#include "order.h"
+#include "Order.h"
 
 #include "director.h"
 #include "gamesounds.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "SelItem.h"
 
 #include "SlicObject.h"
@@ -43,7 +43,7 @@
 
 #include "directorevent.h"
 
-#include "order.h"
+#include "Order.h"
 
 #include "World.h"
 #include "bset.h"

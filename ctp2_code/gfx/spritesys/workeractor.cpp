@@ -223,7 +223,7 @@ void WorkerActor::Draw(void)
 
 
 	m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 
-							1, m_transparency, color, flags, NULL, NULL);
+							1, m_transparency, color, flags, 0, 0);
 }
 
 void WorkerActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
@@ -238,7 +238,7 @@ void WorkerActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale
 
 
 	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, sint32(x+(k_ACTOR_CENTER_OFFSET_X*scale)), sint32(y+(k_ACTOR_CENTER_OFFSET_Y*scale)), m_facing, 
-							scale, m_transparency, color, flags, NULL, NULL);
+							scale, m_transparency, color, flags, 0, 0);
 }
 
 void WorkerActor::DrawText(sint32 x, sint32 y, MBCHAR *unitText)

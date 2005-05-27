@@ -27,8 +27,9 @@
 // - Added IsImmobile( )const; PFT 10 apr 05, to identify immobile units
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UNIT_DATA_H__ 
 #define __UNIT_DATA_H__ 1
 
@@ -171,8 +172,6 @@ enum CAUSE_REMOVE_CITY;
 #define k_UDF_TELEPORT_DEATH                         0x20000000 
 #define k_UDF_BEACH_ASSAULT_LEGAL                    0x40000000
 
-enum DEFAULT_PLACE_POP;
-
 class UnitData : public GAMEOBJ,
 				 public CityRadiusCallback
 { 
@@ -278,7 +277,7 @@ public:
     BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision) const;
     BOOL CanThisCargoUnloadAt(const Unit &the_cargo, const MapPoint & old_pos, const MapPoint & new_pos, const BOOL & use_vision) const;
     BOOL UnloadCargo(const MapPoint &new_pos, Army &debark,
-					 BOOL justOneUnit, Unit &theUnit);
+					 BOOL justOneUnit, const Unit &theUnit);
 	BOOL UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);
 
 
@@ -441,7 +440,7 @@ public:
     BOOL GetMilitaryContribution() const;
 
 	static sint32 GetDistance(UnitData *unit1, UnitData *unit2, sint32 wrap);
-	static sint32 GetDistance(Installation &inst, UnitData *unit2, sint32 wrap);
+	static sint32 GetDistance(const Installation &inst, UnitData *unit2, sint32 wrap);
 	static sint32 GetDistance(const UnitData *unit, const MapPoint &pos, sint32 wrap);
 	static sint32 GetDistance(const MapPoint &pos1, const MapPoint &pos2, sint32 wrap);
 
@@ -529,7 +528,7 @@ public:
 	sint32 GetFranchiseTurnsRemaining() const;
 	void SetFranchiseTurnsRemaining(sint32 turns);
 
-	BOOL CanSee(Army &al) const;
+	BOOL CanSee(const Army &al) const;
 
 #ifdef _DEBUG
     void SetIgnoreHappiness(BOOL v); 
@@ -701,7 +700,7 @@ public:
 
 	void CheckVisionRadius();
 
-	void SetTargetCity(Unit &city);
+	void SetTargetCity(const Unit &city);
 	const Unit &GetTargetCity();
 
 	bool CanBeachAssaultRightNow();
@@ -709,5 +708,4 @@ public:
 
 uint32 UnitData_UnitData_GetVersion(void) ;
 #endif
-
 

@@ -15,7 +15,7 @@
 #include "GoodActor.h"
 #include "director.h"
 #include "UnitPool.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "network.h"
 #include "net_endgame.h"
 #include "directions.h"

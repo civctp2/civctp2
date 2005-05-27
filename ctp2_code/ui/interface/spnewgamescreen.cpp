@@ -473,9 +473,6 @@ void spnewgamescreen_editorPress( aui_Control *control, uint32 action, uint32 da
 
 void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
-
 	MBCHAR	tempPath[_MAX_PATH];
 
 	sprintf(tempPath, "%s\\%s", 
@@ -506,10 +503,6 @@ void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, u
 
 		return;
 	}
-
-	
-	
-
 	
 	g_spNewGameWindow->Update();
 }

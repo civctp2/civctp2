@@ -1,8 +1,9 @@
-topdir = ../../
+topdir = ../../../
+thisdir = doc/user/playtest/
 
 all: ChangeLog.txt
 
 ChangeLog.txt: .svn/entries
-	svn log $(topdir) > $@
+	cd $(topdir) && svn log > $(thisdir)$@
 
 .PHONY: all

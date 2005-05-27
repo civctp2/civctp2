@@ -361,7 +361,11 @@ public:
 uint32 Cell_CELL_GetVersion(void) ;
 #else 
 
-class CELL; 
-typedef class CELL Cell; 
+#ifdef WIN32
+class CELL;
+typedef class CELL Cell;
+#else
+class Cell;
+#endif
 
 #endif 

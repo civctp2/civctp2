@@ -36,7 +36,7 @@
 #include "CTPDatabase.h"
 #include "cellunitlist.h"
 #include "player.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "unitutil.h"
 #include "TerrImprove.h"
 #include "director.h"

@@ -69,12 +69,15 @@ done
 
 ctp2_code='$(top_srcdir)/ctp2_code'
 AC_SUBST(ctp2_code)
-
-CFLAGS="$CFLAGS"
-CXXFLAGS="-fms-extensions $CXXFLAGS"
+C_WARNINGS="-Wunknown-pragmas"
+CXX_WARNINGS="$C_WARNINGS -Wnon-virtual-dtor"
+CFLAGS="$C_WARNINGS -fms-extensions $CFLAGS"
+CXXFLAGS="$CXX_WARNINGS -fms-extensions $CXXFLAGS"
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
+
+AC_DEFINE(_TIFF_DATA_TYPEDEFS_,1,[Tiff uint{16,32} datatype collision prevention])
 
 AC_OUTPUT([
    GNUmakefile

@@ -47,7 +47,9 @@ public:
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL, sint32 x = 0, sint32 y = 0 );
 
 private:
+#ifdef __AUI_USE_DIRECTX__
 	DirectVideo		*m_video;
+#endif
 	MBCHAR			m_filename[_MAX_PATH];
 	BOOL			m_modal;
 };

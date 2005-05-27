@@ -30,7 +30,7 @@
 #include "GoodyHuts.h"
 #include "player.h"
 #include "RandGen.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "ConstDB.h"
 #include "Unit.h"
 #include "civarchive.h"

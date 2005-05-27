@@ -10,17 +10,17 @@
 
 #include "c3.h"
 #include "Unit.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Advances.h"
 #include "AgreementData.h"
 #include "Agreement.h"
 #include "AgreementPool.h"
 #include "player.h"
 #include "pollution.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "civarchive.h"
 #include "AgreementDynArr.h"
-#include "globals.h"
+#include "Globals.h"
 #include "gamefile.h"
 	
 	extern	Player	**g_player ;

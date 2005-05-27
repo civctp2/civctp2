@@ -17,8 +17,7 @@
 
 #include "Action.h"
 #include "FacedSprite.h"
-
-enum TOKEN_TYPES;
+#include "Token.h"
 
 #define k_NUM_FIREPOINTS		8
 

@@ -28,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -56,7 +56,7 @@ class HappyTimer;
 //----------------------------------------------------------------------------
 
 #include "HappyTracker.h"   // HAPPY_REASON, HappyTracker
-#include "Player.h"         // PLAYER_INDEX, Player
+#include "player.h"         // PLAYER_INDEX, Player
 
 class CityData; 
 class CivArchive;

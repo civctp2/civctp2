@@ -7,18 +7,19 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _INSTALLATION_DB_H_
 #define _INSTALLATION_DB_H_
 
 #include "DB.h"
 #include "InstRec.h"
+#include "c3files.h"
 
 class CivArchive;
 class Installation;
 class Token;
-enum C3DIR;
 
 class InstallationDatabase : public Database <InstallationRecord>
 {

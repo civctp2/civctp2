@@ -368,10 +368,7 @@ BOOL CivScenarios::FindScenario(MBCHAR *scenarioName, ScenarioPack **pack, Scena
 			if (!scenario) continue;
 
 
-			if (!_stricoll(scenarioName, scenario->m_name)) {
-
-			
-
+			if (!stricmp(scenarioName, scenario->m_name)) {
 				*pack = scenarioPack;
 				*scen = scenario;
 

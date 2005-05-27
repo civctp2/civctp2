@@ -43,7 +43,7 @@
 #include "SlicSegment.h"
 #include "SlicObject.h"
 #include "QuickSlic.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "SelItem.h"
 #include "SlicObject.h"
 #include "RandGen.h"

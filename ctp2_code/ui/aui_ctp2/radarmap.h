@@ -46,13 +46,13 @@
 #include "Unit.h"
 #include "pixeltypes.h"
 #include "profileDB.h"
+#include "colorset.h"
 
 
 enum C3_RADAR_ACTION {
 	C3_RADAR_ACTION_NULL,
 	C3_RADAR_ACTION_MAX
 };
-
 
 class aui_Surface;
 class MapPoint;
@@ -105,7 +105,7 @@ public:
 	
 	BOOL		IncludePointInView(MapPoint &pos, sint32 radius);
 	MapPoint	ComputeCenteredMap(MapPoint &pos, RECT *viewRect);	
-	MapPoint	CenterMap( MapPoint &pos );
+	MapPoint	CenterMap(const MapPoint &pos );
 	void		Setup( void );
 	void		Update( void );
 	void		RedrawTile( const MapPoint *point );

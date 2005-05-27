@@ -11,7 +11,7 @@
 #include "TradeOfferData.h"
 #include "civarchive.h"
 #include "player.h"
-#include "gold.h"
+#include "Gold.h"
 #include "network.h"
 #include "net_action.h"
 #include "net_info.h"

@@ -39,6 +39,8 @@
 
 #include "c3.h" 
 #include "c3debug.h"
+#include <ios>
+#include <iostream>
 
 #include "aui.h"
 
@@ -103,7 +105,7 @@
 #include "profileDB.h"
 #include "c3errors.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "Advances.h"
 
 #include "SlicEngine.h"
@@ -132,7 +134,7 @@
 #include "debugmemory.h"
 #include "TradeBids.h"
 
-#include "order.h"
+#include "Order.h"
 #include "UnseenCell.h"
 #include "pool.h"
 
@@ -669,7 +671,7 @@ sint32 gameinit_InitializeGameFiles(void)
 
 	fin = c3files_fopen(C3DIR_GAMEDATA, "gamefile.txt", "r");
 
-	dir[0] = NULL ;
+	dir[0] = 0;
 
 	r=fscanf (fin, "%s", str1); 
     if (r == EOF) { 
@@ -1221,7 +1223,8 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 							   g_player_start_score);
 
 
-	for(sint32 i = 0; i < nPlayers - 1; i++) 
+	sint32 i;
+	for(i = 0; i < nPlayers - 1; i++) 
 		if(g_player_start_list[i].x < 0) 
 		{
 			nPlayers = i + 1; 

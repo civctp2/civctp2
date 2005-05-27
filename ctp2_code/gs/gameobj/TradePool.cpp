@@ -19,7 +19,7 @@
 #include "TradeDynArr.h"
 #include "profileDB.h"
 #include "ResourceRecord.h"
-#include "globals.h"
+#include "Globals.h"
 #include "Events.h"
 #include "GameEventUser.h"
 

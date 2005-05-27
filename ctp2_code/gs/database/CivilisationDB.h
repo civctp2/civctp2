@@ -38,11 +38,10 @@
 #include "GameObj_types.h"
 #include "DB.h"
 #include "CivilisationRec.h"
+#include "c3files.h"
 
 class CivArchive ;
 class Token ;
-
-enum C3DIR;
 
 class CivilisationDatabase : public Database<CivilisationRecord>
 	{
@@ -144,3 +143,4 @@ class CivilisationDatabase : public Database<CivilisationRecord>
 extern CivilisationDatabase *g_theCivilisationDB ;
 
 #endif
+

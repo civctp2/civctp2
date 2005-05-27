@@ -11,10 +11,10 @@
 #include "c3.h"
 #include "c3errors.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include "player.h"
 #include "Unit.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Advances.h"
 #include "AgreementData.h"
 #include "TurnCnt.h"
@@ -34,7 +34,7 @@
 
 #include "network.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "AgreementPool.h"
 
 extern	Player	**g_player ;
@@ -227,7 +227,7 @@ void AgreementData::MakeAgreement(PLAYER_INDEX owner, PLAYER_INDEX recipient, AG
             g_theDiplomacyLog->LogMakeAgreement(m_owner, m_recipient, m_thirdParty,
                 m_agreement); 
         } 
-#endif _DEBUG
+#endif // _DEBUG
 
 	ENQUEUE();
 }
@@ -1396,7 +1396,7 @@ void AgreementData::Break()
             g_theDiplomacyLog->LogBrokenAgreement(m_owner, m_recipient, m_thirdParty,
                 m_agreement); 
         } 
-#endif _DEBUG
+#endif // _DEBUG
 
 } 
 

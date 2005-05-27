@@ -1,5 +1,4 @@
 
-#pragma once
 #include "c3.h"
 #include "c3errors.h"
 #include "EndGameDB.h"

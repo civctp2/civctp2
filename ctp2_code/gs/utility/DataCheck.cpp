@@ -936,17 +936,17 @@ void DataCheck::draw_crc(aui_Surface *surf, char str1[80], sint32 t, sint32 x, s
 	{
     MBCHAR	str2[80] ;
 
-    primitives_DrawText((aui_DirectSurface *)surf, x, y, (MBCHAR *)str1, 0, 0) ;
+    primitives_DrawText(surf, x, y, (MBCHAR *)str1, 0, 0) ;
 
     if (IsChanged(t))
 		{
         sprintf(str2, "***") ;
-      	primitives_DrawText((aui_DirectSurface *)surf, x+100, y, (MBCHAR *)str2, 3050, 1) ;
+      	primitives_DrawText(surf, x+100, y, (MBCHAR *)str2, 3050, 1) ;
 	    }
 
     sprintf (str2, "%08X %08X %08X %08X  %4.2lf", m_crc[t][CRC_ARRAY_0], m_crc[t][CRC_ARRAY_1], m_crc[t][CRC_ARRAY_2], m_crc[t][CRC_ARRAY_3], (double)(m_time[t]) / CLOCKS_PER_SEC) ;
- 	primitives_DrawText((aui_DirectSurface *)surf, x+125, y, (MBCHAR *)str2, 0, 0) ;
-	}
+ 	primitives_DrawText(surf, x+125, y, (MBCHAR *)str2, 0, 0) ;
+}
 
 
 
@@ -958,11 +958,11 @@ void DataCheck::draw_crc(aui_Surface *surf, char str1[80], sint32 t, sint32 x, s
 
 void DataCheck::draw_time(aui_Surface *surf, sint32 x, sint32 y) const
 	{
-    MBCHAR	s[80] ;
+	MBCHAR	s[80] ;
 
-    sprintf(s, "Total time %4.2lf", (double)(m_total_time) / CLOCKS_PER_SEC) ;
- 	primitives_DrawText((aui_DirectSurface *)surf, x, y, s, 0, 0) ;
-	}
+	sprintf(s, "Total time %4.2lf", (double)(m_total_time) / CLOCKS_PER_SEC) ;
+ 	primitives_DrawText(surf, x, y, s, 0, 0) ;
+}
 
 	
 

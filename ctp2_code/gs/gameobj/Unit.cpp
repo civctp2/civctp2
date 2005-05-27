@@ -39,7 +39,7 @@
  
 
 
-#include "globals.h"
+#include "Globals.h"
 #include "GWRecord.h"
 
 #include "ConstDB.h"
@@ -78,7 +78,7 @@
 #include "tech_wllist.h"
 #include "Readiness.h"
 
-#include "aicause.h"
+#include "AICause.h"
 
 #include "SlicEngine.h"
 #include "HappyTracker.h"
@@ -846,7 +846,7 @@ BOOL Unit::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint &
 }
 
 BOOL Unit::UnloadCargo(const MapPoint &new_pos, Army &debark,
-					   BOOL justOneUnit, Unit &theUnit)
+					   BOOL justOneUnit, const Unit &theUnit)
 
 {
     return AccessData()->UnloadCargo(new_pos, debark, justOneUnit, theUnit); 
@@ -973,7 +973,7 @@ sint32 Unit::CanCounterBombard(CellUnitList &defender) const
     return GetData()->CanCounterBombard(defender);
 }
 
-sint32 Unit::CanActivelyDefend(Army &attacker) const
+sint32 Unit::CanActivelyDefend(const Army &attacker) const
 {
 	CellUnitList *list = g_theArmyPool->AccessArmy(attacker);
 	return GetData()->CanActivelyDefend(*list);
@@ -1436,14 +1436,8 @@ void Unit::GetTradeStats(sint32 &g, sint32 &l, sint32 &sci) const
 }
 
     
-void Unit::DrawCityStats(aui_DirectSurface *surf, sint32 x, sint32 y)
-
+void Unit::DrawCityStats(aui_Surface *surf, sint32 x, sint32 y)
 {
-
-	
-	
-	
-
 }
 
 void Unit::AddTradeRoute(TradeRoute &route, BOOL fromNetwork)
@@ -1892,7 +1886,7 @@ sint32 Unit::GetFranchiseTurnsRemaining() const
 	return GetData()->GetFranchiseTurnsRemaining();
 }
 
-BOOL Unit::CanSee(Army &al) const
+BOOL Unit::CanSee(const Army &al) const
 {
 	return GetData()->CanSee(al);
 }
@@ -2705,15 +2699,15 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 {
 	const UnitRecord *unit_rec = g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType());
 
-	UnitRecord::ChanceEffect *chance_data;
-	UnitRecord::InvestigateCityData *investigate_data;
-	UnitRecord::StealTechnologyData *steal_data;
-	UnitRecord::InciteRevolutionData *incite_data;
-	UnitRecord::AssasinateRulerData *assasinate_data;
-	UnitRecord::CauseUnhappinessData *unhappiness_data;
-	UnitRecord::PlantNukeData *plant_data;
-	UnitRecord::SlaveRaidsData *raid_data;
-	UnitRecord::SuccessDeathEffect *success_death_data;
+	const UnitRecord::ChanceEffect *chance_data;
+	const UnitRecord::InvestigateCityData *investigate_data;
+	const UnitRecord::StealTechnologyData *steal_data;
+	const UnitRecord::InciteRevolutionData *incite_data;
+	const UnitRecord::AssasinateRulerData *assasinate_data;
+	const UnitRecord::CauseUnhappinessData *unhappiness_data;
+	const UnitRecord::PlantNukeData *plant_data;
+	const UnitRecord::SlaveRaidsData *raid_data;
+	const UnitRecord::SuccessDeathEffect *success_death_data;
 
 	bool order_valid = false;
 

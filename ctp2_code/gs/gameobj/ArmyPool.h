@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ARMY_POOL_H__
 #define __ARMY_POOL_H__
 

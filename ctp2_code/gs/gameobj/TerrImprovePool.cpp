@@ -37,7 +37,7 @@
 #include "tiledmap.h"
 #include "player.h"
 #include "Vision.h"
-#include "globals.h"
+#include "Globals.h"
 #include "terrainutil.h"
 #include "TerrainImprovementRecord.h"
 #include "SoundRecord.h"

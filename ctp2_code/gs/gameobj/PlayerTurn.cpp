@@ -10,7 +10,7 @@
 #include "Wormhole.h"
 #include "PlayHap.h"
 #include "UnitDynArr.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Readiness.h"
 #include "UnitPool.h"
 #include "XY_Coordinates.h"

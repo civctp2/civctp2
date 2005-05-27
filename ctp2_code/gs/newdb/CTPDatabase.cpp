@@ -81,11 +81,11 @@
 
 
 template <class T> CTPDatabase<T>::CTPDatabase()
-:	m_indexToAlpha(NULL),
-	m_alphaToIndex(NULL),
-	m_modifiedRecords()
+:	m_numRecords(0),
+	m_modifiedRecords(),
+	m_indexToAlpha(NULL),
+	m_alphaToIndex(NULL)
 {
-	m_numRecords = 0;
 	m_allocatedSize = k_INITIAL_DB_SIZE;
 	m_records = new T *[m_allocatedSize];
 

@@ -107,7 +107,7 @@ sint32 ConceptDB::ParseConceptDatabase(MBCHAR *filename)
 				m_conceptInfo[i].m_name );
 			for ( sint32 a = 0; a < i; ++a )
 			{
-				if ( _stricoll( str, g_theStringDB->GetNameStr(
+				if ( stricmp( str, g_theStringDB->GetNameStr(
 					m_conceptInfo[ m_alphaToIndex[ a ] ].m_name ) ) < 0 )
 				{
 					

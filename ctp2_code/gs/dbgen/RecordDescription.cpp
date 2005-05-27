@@ -266,6 +266,12 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 			case DATUM_STRINGID:
 				dat->m_required = true;
 				break;
+			case DATUM_BIT:
+			case DATUM_BIT_GROUP:
+			case DATUM_BIT_PAIR:
+			case DATUM_RECORD:
+			case DATUM_NONE:
+				break;
 		}
 	} else {
 		dat->SetValue(nameInfo->v);
@@ -1010,6 +1016,16 @@ void RecordDescription::ExportDataParsers(FILE *outfile)
 				dat->ExportBitGroupParser(outfile, m_name);
 				break;
 			case DATUM_STRUCT:
+				break;
+			case DATUM_BIT:
+			case DATUM_BIT_PAIR:
+			case DATUM_FILE:
+			case DATUM_FLOAT:
+			case DATUM_INT:
+			case DATUM_RECORD:
+			case DATUM_STRING:
+			case DATUM_STRINGID:
+			case DATUM_NONE:
 				break;
 		}
 		walk.Next();

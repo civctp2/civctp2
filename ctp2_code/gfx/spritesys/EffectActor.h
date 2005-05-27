@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __EFFECTACTOR_H__
 #define __EFFECTACTOR_H__
 

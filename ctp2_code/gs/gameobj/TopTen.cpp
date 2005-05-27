@@ -12,7 +12,7 @@
 
 #include "c3debug.h"
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
@@ -245,9 +245,13 @@ BOOL TopTen::IsTopTenCity(const Unit &c, const sint32 category, sint32 &pos)
 			return (FindCity(c, m_happiestCities, pos)) ;
 
 		default :
-#pragma warning (disable : 4127)									
+#ifdef _MSC_VER
+#pragma warning (disable : 4127)
+#endif		
 			Assert(FALSE) ;
-#pragma warning (default : 4127)									
+#ifdef _MSC_VER
+#pragma warning (default : 4127)
+#endif		
 			return (FALSE) ;
 
 		}
@@ -266,9 +270,13 @@ BOOL TopTen::GetCityPosition(const Unit &c, const sint32 category, sint32 &pos)
 			return (FindCity(c, m_happiestCities, pos)) ;
 
 		default :
-#pragma warning (disable : 4127)									
+#ifdef _MSC_VER
+#pragma warning (disable : 4127)
+#endif		
 			Assert(FALSE) ;
-#pragma warning (default : 4127)									
+#ifdef _MSC_VER
+#pragma warning (default : 4127)
+#endif		
 			return (FALSE) ;
 
 		}

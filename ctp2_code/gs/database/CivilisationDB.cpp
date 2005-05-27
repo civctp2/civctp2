@@ -18,7 +18,7 @@
 #include "Unit.h"
 #include "civarchive.h"
 #include "Token.h"
-#include "globals.h"
+#include "Globals.h"
 
 enum TOKEN_CIVILISATION_FLAG
 	{

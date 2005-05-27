@@ -55,11 +55,9 @@ class CivArchive;
 
 #define k_FUDGE_MAX_ARMY_SIZE 9
 
-enum CAUSE_REMOVE_ARMY; 
+#include "AICause.h"
 
-template <class T> class DynamicArray {
-
-        
+template <class T> class DynamicArray {   
 public:
     
 	

@@ -64,27 +64,40 @@ namespace
 	size_t ComputeHashIndex(MBCHAR const * id)
 	{
 		unsigned short hash;
-
+#ifdef WIN32
 		__asm 
 		{
-          push eax              ; save registers
-          push ecx
-          push edx
-          xor  edx, edx         ; zero out working registers
-          xor  eax, eax
-          mov  ecx, id          ; get pointer to start of string
-		hashLoop:
-          mov  al, [ecx]        ; get character from string
-          add  dx, ax           ; add it to the running hash
-          rol  dx, 1            ; rotate the hash by one place
-          inc  ecx              ; point to next character in string
-          cmp  al, 0            ; check for end of string
-          jnz  hashLoop
-          mov  hash, dx         ; save the result
-          pop  edx              ; restore registers
-          pop  ecx
-          pop  eax
-		}     
+			push eax              ; save registers
+			push ecx
+			push edx
+			xor  edx, edx         ; zero out working registers
+			xor  eax, eax
+			mov  ecx, id          ; get pointer to start of string
+			hashLoop:
+			mov  al, [ecx]        ; get character from string
+			add  dx, ax           ; add it to the running hash
+			rol  dx, 1            ; rotate the hash by one place
+			inc  ecx              ; point to next character in string
+			cmp  al, 0            ; check for end of string
+			jnz  hashLoop
+			mov  hash, dx         ; save the result
+			pop  edx              ; restore registers
+			pop  ecx
+			pop  eax
+		}
+#else
+		hash = 0;
+		const MBCHAR *p = id;
+		while (*p) {
+			// add a character
+			hash += (unsigned char)(*p++);
+			// rotate hash
+			if ((short)hash >= 0)
+				hash <<= 1;
+			else
+				hash <<= 1, ++hash;
+		}
+#endif
 		
 		return static_cast<size_t>(hash % STRDB_NUM_HEADS);
 	}

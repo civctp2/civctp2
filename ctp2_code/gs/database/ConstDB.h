@@ -35,7 +35,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -44,13 +44,12 @@
 
 #include "MapPoint.h"
 #include "dbtypes.h"
+#include "c3files.h"
 
 #define k_MAX_CONST_DB 3
 
 class CivArchive ;
 class Token;
-enum C3DIR;
-enum MAPSIZE;
 
 typedef class ConstDB { 
 	

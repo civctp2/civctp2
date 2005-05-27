@@ -234,7 +234,7 @@ public:
 							sint32 arraySize, UnitActor **moveActors);
 
 	void			AddAttack(Unit attacker, Unit attacked);
-	void			AddAttackPos(Unit attacker, MapPoint &pos);
+	void			AddAttackPos(Unit attacker, const MapPoint &pos);
 	void			AddSpecialAttack(Unit attacker, Unit attacked, SPECATTACK attack);
 	void			AddWinnerLoser(Unit victor, Unit dead);
 	void			AddDeath(Unit dead);
@@ -251,13 +251,13 @@ public:
 	void			AddSetVisibility(UnitActor *actor, uint32 visibility);	
 	void			AddSetOwner(UnitActor *actor, sint32 owner);	
 	void			AddSetVisionRange(UnitActor *actor, double range);
-	void			AddCombatFlash(MapPoint &pos);
+	void			AddCombatFlash(const MapPoint &pos);
 	void			AddCopyVision(void);
 	void			AddCenterMap(const MapPoint &pos);
 	void			AddSelectUnit(uint32 flags);
 	void			AddEndTurn(void);
 	void			AddBattle(Battle *battle);
-	void			AddPlaySound(sint32 soundID, MapPoint &pos);
+	void			AddPlaySound(sint32 soundID, const MapPoint &pos);
 	void            AddGameSound(GAMESOUNDS sound);
 	void			AddPlayWonderMovie(sint32 which);
 	void			AddPlayVictoryMovie(GAME_OVER reason, BOOL previouslyWon, BOOL previouslyLost);

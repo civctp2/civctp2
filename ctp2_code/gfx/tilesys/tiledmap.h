@@ -58,6 +58,7 @@
 #include "tileset.h"
 #include "colorset.h"
 #include "World.h"
+#include "SelItem.h"
 
 #define k_MEDIUM_KEY	0x4208
 
@@ -90,7 +91,6 @@ struct GridRect {
 #define k_BORDER_SOLID 0
 #define k_BORDER_DASHED 1
 
-class aui_DirectSurface;
 class aui_Surface;
 class aui_DirtyList;
 
@@ -115,7 +115,6 @@ class Unit;
 class CellUnitList; 
 class TerrainImprovementRecord;
 
-enum SELECT_TYPE;
 enum WORLD_DIRECTION;
 
 class TiledMap {
@@ -173,15 +172,15 @@ public:
 	void			ReloadGoodActors(void);
 
 	void			GenerateHitMask(void);
-	void			DrawHitMask(aui_Surface *surf, MapPoint &pos);
-	void			DrawColoredHitMask(aui_Surface *surf, MapPoint &pos, COLOR color);
-	void			DrawColoredHitMaskEdge(aui_Surface *surf, MapPoint &pos, Pixel16 color, WORLD_DIRECTION d);
-	void			DrawColoredBorderEdge(aui_Surface *surf, MapPoint &pos, Pixel16 color, WORLD_DIRECTION d, sint32 dashMode);
-	void			DrawHitMask(aui_Surface *surf, MapPoint &pos, RECT *mapViewRect, RECT *destRect);
+	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos);
+	void			DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color);
+	void			DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 color, WORLD_DIRECTION d);
+	void			DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 color, WORLD_DIRECTION d, sint32 dashMode);
+	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect);
 	void			SetHiliteMouseTile(MapPoint &pos);
 	void			DrawHiliteMouseTile(aui_Surface *destSurf);
   	
-	void			SetTerrainOverlay(TerrainImprovementRecord *rec,MapPoint &pos,Pixel16 color);
+	void			SetTerrainOverlay(TerrainImprovementRecord *rec, MapPoint &pos,Pixel16 color);
 	void			DrawTerrainOverlay(aui_Surface *destSurf);
 
 	sint32			RecalculateViewRect(RECT &myRect);
@@ -229,8 +228,8 @@ public:
 	sint32			RepaintEdgeY(RECT *repaintRect);
 	sint32			Refresh(void);
 
-	sint32			DrawCityRadius(MapPoint &cpos, COLOR color,sint32 size=1);
-	sint32			DrawCityRadius1(MapPoint &cpos, COLOR color);
+	sint32			DrawCityRadius(const MapPoint &cpos, COLOR color,sint32 size=1);
+	sint32			DrawCityRadius1(const MapPoint &cpos, COLOR color);
 	sint32			PaintColoredTile(sint32 x, sint32 y, COLOR color);
 
 	void			ProcessLayerSprites(RECT *processRect, sint32 layer);
@@ -271,7 +270,7 @@ public:
 	sint32			OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY);
 
 	
-	void			DrawStartingLocations(aui_DirectSurface *surf, sint32 layer);
+	void			DrawStartingLocations(aui_Surface *surf, sint32 layer);
 
 	inline	bool	IsScrolling(){ return m_isScrolling;};
 	inline	void	SetScrolling(bool scroll){ m_isScrolling=scroll;};
@@ -433,8 +432,8 @@ public:
 									sint32 roadType, uint16 roadOffset, BOOL fog, 
 									sint32 flags = k_OVERLAY_FLAG_NORMAL);
 
-	void		DrawCityNames(aui_DirectSurface *surf, sint32 layer);
-	void		DrawCityIcons(aui_DirectSurface *surf, MapPoint &pos, sint32 owner, BOOL fog, RECT &popRect,
+	void		DrawCityNames(aui_Surface *surf, sint32 layer);
+	void		DrawCityIcons(aui_Surface *surf, MapPoint &pos, sint32 owner, BOOL fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
@@ -449,7 +448,7 @@ public:
 	Vision		*GetLocalVision(void) { return m_localVision; }
 	void        ReallocateVision();
 
-	aui_DirectSurface *GetSurface(void) { return m_surface; } 
+	aui_Surface *GetSurface(void) { return m_surface; } 
 
 	TILEHITMASK	*GetTileHitMask( void ) { return m_tileHitMask; }
 	void		GetMapBounds( RECT &rect ) { rect = m_mapBounds; }
@@ -518,11 +517,11 @@ protected:
 	
 	bool				 m_isScrolling;
 
-	aui_DirectSurface	*m_surface;			
-	aui_DirectSurface	*m_mapSurface;		
+	aui_Surface		*m_surface;			
+	aui_Surface		*m_mapSurface;		
 
 	
-	aui_DirectSurface	*m_lockedSurface;	
+	aui_Surface		*m_lockedSurface;	
 	uint8			*m_surfBase;
 	sint32			m_surfWidth;
 	sint32			m_surfHeight;

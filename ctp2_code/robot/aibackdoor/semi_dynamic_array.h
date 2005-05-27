@@ -332,8 +332,8 @@ void semi_dynamic_array<T>::Clean_Up()
 
 
 
-template <class DATA_TYPE>
-void semi_dynamic_array<DATA_TYPE>::Get_Raw
+template <class T>
+void semi_dynamic_array<T>::Get_Raw
 (
     int *r_size,
     char **r_data
@@ -411,9 +411,9 @@ semi_dynamic_array<T>::semi_dynamic_array
 	data = NULL;
 
 	
-	chunk_size = sda.chunk_size;
-	max_chunks = sda.max_chunks;
-	chunks = sda.chunks;
+	this->chunk_size = sda.chunk_size;
+	this->max_chunks = sda.max_chunks;
+	this->chunks = sda.chunks;
 
 	
 	Assign(sda);
@@ -486,8 +486,9 @@ semi_dynamic_array<T>& semi_dynamic_array<T>::operator=
 template <class T>
 T& semi_dynamic_array<T>::operator[](const int nIndex)
 {
-	
+#ifdef WIN32	
 	_ASSERTE(nIndex >= 0 && nIndex < size);
+#endif
 
 	
 	return data[nIndex];

@@ -21,11 +21,7 @@
 
 #include "aui_base.h"
 #include "tech_wllist.h"
-
-
-class aui_Surface;
-
-
+#include "aui_surface.h"
 
 
 #define k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT		0x00000001 

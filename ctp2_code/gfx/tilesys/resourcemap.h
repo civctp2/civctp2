@@ -135,7 +135,7 @@ public:
 	void		GetOwningCity(Unit &c) { c = m_unit; }
 
 protected:		
-	aui_DirectSurface *m_surface;
+	aui_Surface	*m_surface;
 
 	Unit		m_unit;
 

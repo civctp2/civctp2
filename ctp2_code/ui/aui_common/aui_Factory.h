@@ -17,45 +17,29 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+// 
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - #pragma once added.
-//
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __IC3_CIVARCHIVE_H__
-#define __IC3_CIVARCHIVE_H__ 1
+#ifndef __aui_Factory__h__
+#define __aui_Factory__h__ 1
 
-#if !defined(USE_COM_REPLACEMENT)
-#undef INTERFACE
-#define INTERFACE IC3CivArchive
+#include "aui_surface.h"
 
-DEFINE_GUID(CLSID_IC3CivArchive, 
-    0x151bb9c0,
-    0xd098,
-    0x11d1,
-    0x85, 0xa7, 0x00, 0x60, 0x08, 0x3a, 0x40, 0x82
-);
-
-DECLARE_INTERFACE_(IC3CivArchive, IUnknown) { 
-
-STDMETHOD_ (void, Store) (THIS_ uint8 *pbData, uint32 ulLen) PURE;
-STDMETHOD_ (void, Load) (THIS_ uint8 *pbData, uint32 ulLen) PURE ;					
-STDMETHOD_ (BOOL, IsStoring)(THIS) PURE ; 
+class aui_Factory {
+public:
+	static aui_Surface *new_Surface(AUI_ERRCODE &retval,
+	                                const sint32 &width, const sint32 &height,
+	                                const sint32 &bpp, void *data = 0,
+					const BOOL &isPrimary = FALSE
+	                               );
 };
-#else
-#include "noCOMBase.h"
-
-class IC3CivArchive : public ICTP2Unknown {
-  virtual void Store(uint8 *pbData, uint32 ulLen) = 0;
-  virtual void Load(uint8 *pbData, uint32 ulLen) = 0;
-  virtual BOOL IsStoring() = 0;
-};
-#endif// !USE_COM_REPLACEMENT
 
 #endif
+

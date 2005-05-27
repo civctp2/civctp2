@@ -113,17 +113,6 @@ void InstallationData::DoVision()
 	sint32 maxrsq = sint32((maxVisionRange+0.5) * (maxVisionRange+0.5));
 	sint32 myrsq = sint32((myVisionRange+0.5)*(myVisionRange+0.5));
 
-	
-	
-	
-		
-	
-	
-	
-	
-	
-
-	
 	if(m_owner >= 0) {
 		m_visibility = 1 << m_owner;
 	} else {
@@ -138,7 +127,8 @@ void InstallationData::DoVision()
 									  sint32(maxVisionRange) * 2 + 1,
 									  m_owner >= 0 ? ~(1 << m_owner) : 0xffffffff);
 	sint32 in = instArray.Num();
-	for(sint32 i = 0; i < in; i++) {
+	sint32 i;
+	for(i = 0; i < in; i++) {
 		InstallationData *oinst = instArray[i].AccessData();
 		double hisr = terrainutil_GetVisionRange(oinst->m_type, oinst->GetLocation()) + 0.5;
 		sint32 hisrsq = sint32(hisr * hisr);
@@ -217,7 +207,8 @@ void InstallationData::CheckVision(sint32 owner)
 									  1 << owner);
 	sint32 in = instArray.Num();
 	BOOL canBeSeen = FALSE;
-	for(sint32 i = 0; i < in; i++) {
+	sint32 i;
+	for(i = 0; i < in; i++) {
 		InstallationData *oinst = instArray[i].AccessData();
 		sint32 ls = GetDistance(this, oinst, sint32(maxVisionRange));
 		if(ls > maxrsq)

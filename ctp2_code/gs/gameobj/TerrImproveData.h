@@ -6,8 +6,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _TERRIMPROVEDATA_H_
 #define _TERRIMPROVEDATA_H_
 

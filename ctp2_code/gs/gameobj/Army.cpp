@@ -28,7 +28,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 #include "Army.h"
 #include "ArmyPool.h"
 #include "ArmyData.h"
@@ -240,7 +240,7 @@ sint32 Army::IsEnemy(Unit defender) const
 
 sint32 Army::IsEnemy(Army &defender) const
 {
-	return GetData()->IsEnemy(defender);
+	return GetData()->IsEnemy(defender.GetOwner());
 }
 
 

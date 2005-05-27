@@ -8,8 +8,9 @@
 
 
 
-
+#ifdef _MSC_VER
 #pragma optimize ("agtp", on)
+#endif
 
 BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 					 uint16 transparency, Pixel16 outlineColor, uint16 flags)

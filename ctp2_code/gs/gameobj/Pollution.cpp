@@ -29,7 +29,7 @@
 
 #include "c3debug.h"
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"

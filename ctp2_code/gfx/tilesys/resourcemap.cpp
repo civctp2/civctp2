@@ -29,13 +29,12 @@
 #include "c3.h"
 #include "aui.h"
 #include "aui_blitter.h"
-#include "aui_directsurface.h"
 #include "aui_ldl.h"
 #include "aui_window.h"
 #include "aui_stringtable.h"
 
 #include "primitives.h"
-#include "globals.h"
+#include "Globals.h"
 #include "player.h"
 
 #include "dynarr.h"
@@ -82,6 +81,8 @@
 #include "CityInfluenceIterator.h"
 
 #include "ldl_user.h"
+
+#include "aui_Factory.h"
 
 #define k_NUDGE		48					
 
@@ -187,18 +188,15 @@ void ResourceMap::InitCommon( sint32 scale)
 
 	m_scale = scale;
 	m_drawHilite = FALSE;
-
 	
-	m_unit = NULL;
+	m_unit = 0;
 
-	
 	m_updateAction = NULL;
 
-	m_surface = new aui_DirectSurface( &errcode, 
-									   g_tiledMap->GetZoomTilePixelWidth() * ((k_MAX_CITY_RADIUS * 2) + 1),
-									   g_tiledMap->GetZoomTilePixelHeight() * ((k_MAX_CITY_RADIUS * 2) + 2),
-									   16, (g_c3ui)->DD());
-	
+	m_surface = aui_Factory::new_Surface(errcode, 
+		g_tiledMap->GetZoomTilePixelWidth() * ((k_MAX_CITY_RADIUS * 2) + 1),
+		g_tiledMap->GetZoomTilePixelHeight() * ((k_MAX_CITY_RADIUS * 2) + 2),
+		16);
 
 	Assert( m_surface != NULL );
 	if ( !m_surface ) return;
@@ -444,7 +442,8 @@ sint32 ResourceMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, s
 		}
 		maputils_MapX2TileX(pos.x,pos.y,&i);
 
-		for (sint32 x = 0;x < 3;x++) {
+		sint32 x;
+		for (x = 0;x < 3;x++) {
 			if (x==0 && (y==0 || y==6)) continue;
 			if ( !m_scale )
 				DrawImprovements(pSurface, pos.y, i+x, x*96+nudge+xOff,y*24+yOff);

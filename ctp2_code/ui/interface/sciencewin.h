@@ -51,7 +51,7 @@ public:
 	C3Window	*m_window;
 
 	ScienceWin( void );
-	~ScienceWin( void );
+	virtual ~ScienceWin( void );
 
 	sint32 Initialize( MBCHAR *windowBlock );
 protected:

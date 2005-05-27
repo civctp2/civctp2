@@ -245,9 +245,13 @@ QuadTreeNode<T>::FindQuadrant(const MapPoint &pos)
 	if(pos.x >= QCX && pos.y >= QCY) return QUADRANT_SE;
 	if(pos.x < QCX && pos.y >= QCY) return QUADRANT_SW;
 	if(pos.x < QCX && pos.y < QCY) return QUADRANT_NW;
-#pragma warning( disable : 4127)									
+#ifdef _MSC_VER
+#pragma warning( disable : 4127)
+#endif
 		Assert(FALSE);
-#pragma warning( default : 4127)									
+#ifdef _MSC_VER
+#pragma warning( default : 4127)
+#endif		
 	return QUADRANT_ERROR;
 }
 
@@ -533,9 +537,13 @@ QuadTreeNode<T>::GetAt(const MapPoint &point, DynamicArray<T> &array)
 				if(!m_nw) return FALSE;
 				return m_nw->GetAt(point, array);
 		}
-#pragma warning (disable : 4127)									
+#ifdef _MSC_VER
+#pragma warning (disable : 4127)
+#endif
 		Assert(FALSE);
-#pragma warning (default : 4127)									
+#ifdef _MSC_VER
+#pragma warning (default : 4127)
+#endif		
 		return FALSE;
 	}
 }

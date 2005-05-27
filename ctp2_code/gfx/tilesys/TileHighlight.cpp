@@ -42,7 +42,7 @@
 #include "World.h"
 #include "ID.h"
 #include "Army.h"
-#include "order.h"
+#include "Order.h"
 #include "cellunitlist.h"
 #include "player.h"
 
@@ -760,7 +760,7 @@ void TiledMap::DrawLegalMove
 						sint32 const	textX	= x - (width >> 1);
 						sint32 const	textY	= y - (height >> 1);
 							
-						primitives_DrawText((aui_DirectSurface *)pSurface, textX, textY, turnNumber, 0, 1);
+						primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
 					}
 				} 
 			} 
@@ -813,7 +813,7 @@ void TiledMap::DrawLegalMove
 					sint32 const	textX	= x - (width >> 1);
 					sint32 const	textY	= y - (height >> 1);
 					 
-					primitives_DrawText((aui_DirectSurface *)pSurface, textX, textY, turnNumber, 0, 1);
+					primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
 				}
 			}
 		}
@@ -1104,7 +1104,7 @@ void TiledMap::DrawUnfinishedMove(
 						sint32 textX = x - (width>>1);
 						sint32 textY = y - (height>>1);
 						
-						primitives_DrawText((aui_DirectSurface *)pSurface, textX, textY, turnNumber, color, 1);
+						primitives_DrawText(pSurface, textX, textY, turnNumber, color, 1);
 						
 						
 					}

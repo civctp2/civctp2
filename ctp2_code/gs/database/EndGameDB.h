@@ -7,9 +7,8 @@
 #include "Rec.h"
 #include "DB.h"
 #include "EndGameRecord.h"
-
-class Token;
-enum C3DIR;
+#include "c3files.h"
+#include "Token.h"
 
 class EndGameDatabase : public Database<EndGameRecord> {
 private:

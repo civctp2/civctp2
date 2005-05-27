@@ -85,7 +85,7 @@
 #include "SlicEngine.h"
 #include "SlicObject.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "HappyTracker.h"
 #include "AchievementTracker.h"
 
@@ -95,7 +95,7 @@
 #include "Wormhole.h"
 #include "victorymoviewin.h"
 #include "cellunitlist.h"
-#include "order.h"
+#include "Order.h"
 
 #include "Diffcly.h"
 #include "DiffDB.h"
@@ -139,7 +139,7 @@
 #include "terrainutil.h"
 #include "buildingutil.h"
 #include "BuildingRecord.h"
-#include "gold.h"
+#include "Gold.h"
 #include "ArmyData.h"
 #include "WonderTracker.h"
 
@@ -1044,7 +1044,7 @@ BOOL UnitData::CanThisCargoUnloadAt(const Unit & the_cargo, const MapPoint & old
 //
 //----------------------------------------------------------------------------
 BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
-						   BOOL justOneUnit, Unit &theUnit)
+						   BOOL justOneUnit, const Unit &theUnit)
 
 {
     sint32 i, n; 	
@@ -2944,7 +2944,8 @@ void UnitData::UndoVision()
 							  (sint32)(GetVisionRange()) * 2 + 1,
 							  ~(1 << m_owner));
 	sint32 en = enemyArray.Num();
-	for(sint32 i = 0; i < en; i++) {
+	sint32 i;
+	for(i = 0; i < en; i++) {
 		
 		if(!(enemyArray[i].GetRealVisibility() & (1 << m_owner)))
 			continue;
@@ -3036,7 +3037,7 @@ sint32 UnitData::GetDistance(UnitData* unit1, UnitData* unit2,
 	return GetDistance(unit1, u2pos, wrapRange);
 }
 
-sint32 UnitData::GetDistance(Installation &inst, UnitData* unit2,
+sint32 UnitData::GetDistance(const Installation &inst, UnitData* unit2,
 							 sint32 wrapRange)
 {
 	MapPoint iPos;
@@ -3194,7 +3195,8 @@ void UnitData::CityRadiusFunc(const MapPoint &pos)
 	   cell->GetCity().GetOwner() != m_owner &&
 	   cell->GetCity().IsCapitol() &&
 	   g_rand->Next(100) < sint32(g_theConstDB->HearGossipChance() * 100.0)) {
-		HearGossip(cell->GetCity());
+	   	Unit unit = cell->GetCity();
+		HearGossip(unit);
 	}
 }
 
@@ -3641,7 +3643,7 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::InvestigateCityData *data;
+	const UnitRecord::InvestigateCityData *data;
 	g_theUnitDB->Get(m_type)->GetInvestigateCity(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -3729,7 +3731,7 @@ ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
 															  num);
 	double randChance, specChance, deathChance;
 	BOOL r;
-	UnitRecord::StealTechnologyData *data;
+	const UnitRecord::StealTechnologyData *data;
 	r = g_theUnitDB->Get(m_type)->GetStealTechnology(data);
 	randChance = data->GetRandomChance();
 	specChance = data->GetSpecificChance();
@@ -3896,7 +3898,7 @@ ORDER_RESULT UnitData::InciteRevolution(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::InciteRevolutionData *data;
+	const UnitRecord::InciteRevolutionData *data;
 	g_theUnitDB->Get(m_type)->GetInciteRevolution(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -3960,7 +3962,7 @@ ORDER_RESULT UnitData::AssassinateRuler(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::AssasinateRulerData *data;
+	const UnitRecord::AssasinateRulerData *data;
 	g_theUnitDB->Get(m_type)->GetAssasinateRuler(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -4253,7 +4255,7 @@ sint32 UnitData::GetFranchiseTurnsRemaining() const
 	return m_city_data->GetFranchiseTurnsRemaining();
 }
 
-BOOL UnitData::CanSee(Army &al) const
+BOOL UnitData::CanSee(const Army &al) const
 {
 	sint32 i, n = al.Num();
 	for(i = 0; i < n; i++) {
@@ -5821,7 +5823,7 @@ void UnitData::CheckVisionRadius()
 #endif
 }
 
-void UnitData::SetTargetCity(Unit &city)
+void UnitData::SetTargetCity(const Unit &city)
 {
 	m_target_city = city;
 	if(m_target_city.IsValid()) {

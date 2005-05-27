@@ -7,15 +7,16 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __FOREIGNER_H__
 #define __FOREIGNER_H__
 
 
-
+#ifdef _MSC_VER
 #pragma warning(disable: 4786)
-
+#endif
 
 #include <list>
 #include <deque>
@@ -304,4 +305,4 @@ private:
 
 };
 
-#endif __FOREIGNER_H__
+#endif // __FOREIGNER_H__

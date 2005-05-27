@@ -165,16 +165,7 @@ struct TileUtility
 #endif	// _MSC_VER
 
 class MapPoint : public MapPointData { 
-
 public:
-
-    
-	
-	
-	
-
-	
-	
 	MapPoint()
 	:	MapPointData()
 	{ };

@@ -95,23 +95,12 @@ template <class T> class DynamicArray;
 typedef DynamicArray<sint32> DAsint32; 
 
 class World : public CityRadiusCallback { 
-    
-    
-    
     sint32 m_isYwrap; 
     sint32 m_isXwrap;					
     BOOL m_continents_are_numbered; 
 
     MAP_GENERATOR m_mapGenerator;
 
-
-
-    
-    
-    
-    
-    
-    
     MapPoint m_size;
     CellXarray	m_map; 
     
@@ -175,7 +164,7 @@ public:
     World(CivArchive &archive, BOOL fromMapFile = FALSE);
     void CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 						sint32 player_start_score[k_MAX_PLAYERS]);
-    ~World();
+    virtual ~World();
     
     void FreeMap();
     void AllocateMap();
@@ -545,7 +534,7 @@ public:
     
     
     void InsertImprovement(const TerrainImprovement &imp, MapPoint &point);
-    void RemoveImprovement(const TerrainImprovement &imp, MapPoint &point);
+    void RemoveImprovement(const TerrainImprovement &imp, const MapPoint &point);
     
     void InsertInstallation(Installation &inst, MapPoint &point);
     void RemoveInstallation(Installation &inst, MapPoint &point);

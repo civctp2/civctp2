@@ -35,12 +35,16 @@
 //----------------------------------------------------------------------------
 
 #ifndef __GOAL_H__
-    #define __GOAL_H__
+#define __GOAL_H__
+
+#ifdef _MSC_VER
     #pragma warning(disable: 4786)
-    #include "Plan.h"
-    #include "Scheduler_Types.h"
-    #include "Squad_Strength.h"
-    #include <string>
+#endif
+    
+#include "Plan.h"
+#include "scheduler_types.h"
+#include "squad_Strength.h"
+#include <string>
 class Goal
 {
 public:

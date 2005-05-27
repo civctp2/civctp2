@@ -365,5 +365,25 @@ AUI_ERRCODE aui_DirectSurface::ReleaseDC( HDC hdc )
 	return errcode;
 }
 
+AUI_ERRCODE aui_DirectSurface::Blank(const uint32 &color)
+{
+	int errcode;
+	LPDIRECTDRAWSURFACE	lpdds;
+
+	DDBLTFX ddbltfx;
+	ddbltfx.dwSize = sizeof(ddbltfx);
+	ddbltfx.dwFillColor = 0;
+
+	lpdds = DDS();
+							
+	errcode = lpdds->Blt(NULL,NULL,NULL,DDBLT_COLORFILL,&ddbltfx);
+
+	Assert(errcode == AUI_ERRCODE_OK);
+	if(errcode != AUI_ERRCODE_OK)
+		return AUI_ERRCODE_BLTFAILED;
+
+	return AUI_ERRCODE_OK;
+}
+
 
 #endif 

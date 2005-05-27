@@ -67,8 +67,13 @@ typedef std::pair<Utility, Goal_ptr> Sorted_Goal_ptr;
 
 
 template<class _T1, class _T2> inline
+#ifdef WIN32
 bool __cdecl operator<(const Sorted_Goal_ptr& _X,
-					   const Sorted_Goal_ptr& _Y)
+#else
+bool operator<(const Sorted_Goal_ptr& _X,
+#endif
+			   const Sorted_Goal_ptr& _Y)
+
 {return (_X.first < _Y.first); }
 
 
@@ -82,4 +87,4 @@ typedef std::list<Agent_ptr> Agent_List;
 typedef std::list<Squad_ptr> Squad_List;
 typedef std::list<Plan> Plan_List;
 
-#endif __SCHEDULER_TYPES_H__
+#endif //__SCHEDULER_TYPES_H__

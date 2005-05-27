@@ -384,7 +384,7 @@ public:
 	Unit InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 							 const Unit &whereBuilt);
 	Army GetNewArmy(CAUSE_NEW_ARMY cause);
- 	sint32 RemoveUnitReference(Unit &id, const CAUSE_REMOVE_ARMY cause,
+ 	sint32 RemoveUnitReference(const Unit &id, const CAUSE_REMOVE_ARMY cause,
 							   PLAYER_INDEX killedBy);
 	void AddArmy(const Army &army,
 				 const CAUSE_NEW_ARMY cause,
@@ -395,11 +395,11 @@ public:
 					PLAYER_INDEX killedBy,
 					BOOL fromNetwork = FALSE);
 
-	BOOL RemoveCityReferenceFromPlayer(Unit &id,  CAUSE_REMOVE_CITY cause,
+	BOOL RemoveCityReferenceFromPlayer(const Unit &id,  CAUSE_REMOVE_CITY cause,
 									   sint32 &killedBy); 
 
-	BOOL RefreshAIArmyReference(Army &the_army);
-	BOOL RemoveUnitReferenceFromPlayer(Unit &killme,  CAUSE_REMOVE_ARMY cause, 
+	BOOL RefreshAIArmyReference(const Army &the_army);
+	BOOL RemoveUnitReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_ARMY cause, 
 									   sint32 &killedBy);
 
 	BOOL AddCityReferenceToPlayer(Unit id,  CAUSE_NEW_CITY cause); 
@@ -697,8 +697,8 @@ public:
 	
 	sint32 GetMaterialsStored()  const;  
 	Installation CreateInstallation(sint32 type, MapPoint &point);
-	void AddInstallation(Installation &inst);
-	void RemoveInstallationReferences(Installation &inst);
+	void AddInstallation(const Installation &inst);
+	void RemoveInstallationReferences(const Installation &inst);
 
 #ifdef BATTLE_FLAGS
 	void AddBattleFlag(const MapPoint &point);

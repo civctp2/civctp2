@@ -138,12 +138,12 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 	sint32 spriteID;
 
 	m_unitVisionRange = visionRange;
-	m_unitVisibility = NULL;
-	m_unitSaveVisibility = NULL;
+	m_unitVisibility = 0;
+	m_unitSaveVisibility = 0;
 
 	m_size = 0;
 	m_nextPop = 0;//PFT 29 mar 05, show # turns until city next grows a pop
-	GetIDAndType(owner, ss, id, unitType, (MapPoint)pos, &spriteID, &m_type);
+	GetIDAndType(owner, ss, id, unitType, pos, &spriteID, &m_type);
 	m_spriteID = (sint32)spriteID;
 
 	m_loadType = LOADTYPE_NONE;
@@ -184,8 +184,8 @@ UnitActor::UnitActor(CivArchive &archive)
 {
 	m_refCount = 1;
 
-	m_unitVisibility = NULL;
-	m_unitSaveVisibility = NULL;
+	m_unitVisibility = 0;
+	m_unitSaveVisibility = 0;
 
 	Serialize(archive);
 	Initialize();
@@ -316,7 +316,7 @@ void UnitActor::Initialize(void)
 	AddIdle();
 }
 
-void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, 
+void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, 
 								sint32 *spriteID, GROUPTYPE *groupType)
 {
 	BOOL		isCity;
@@ -771,7 +771,7 @@ void UnitActor::Process(void)
 				
 			}
 			delete moveActors;
-			m_curAction->SetMoveActors(NULL, NULL);
+			m_curAction->SetMoveActors(NULL, 0);
 		}
 
 		

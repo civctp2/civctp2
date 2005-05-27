@@ -8,12 +8,18 @@
 #include "appstrings.h"
 
 #define COMPILE_MULTIMON_STUBS 
+#ifdef __AUI_USE_DIRECTX__
 #include <multimon.h>
+#elif defined(__AUI_USE_SDL__)
+#include <SDL.h>
+#endif
 
 PointerList<CTPDisplayMode>	*g_displayModes = NULL;
+#ifdef WIN32
 PointerList<DisplayDevice>	*g_displayDevices = NULL;
 
 DisplayDevice				g_displayDevice;
+#endif
 
 extern LPCSTR				gszMainWindowClass;
 extern LPCSTR				gszMainWindowName;
@@ -29,8 +35,7 @@ extern BOOL					g_createDirectDrawOnSecondary;
 extern ProfileDB			*g_theProfileDB;
 
 
-
-
+#ifdef WIN32
 BOOL CALLBACK display_FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName,
 								   LPSTR szDevice, LPVOID lParam, HMONITOR hMonitor)
 {
@@ -59,7 +64,6 @@ BOOL CALLBACK display_FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName,
 
 	return TRUE;
 }
-
 
 BOOL display_EnumerateDisplayDevices(void)
 {
@@ -95,9 +99,6 @@ BOOL display_EnumerateDisplayDevices(void)
 }
 
 
-
-
-
 HRESULT CALLBACK display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam)
 {
     sint32 width  = pdds->dwWidth;
@@ -129,28 +130,75 @@ HRESULT CALLBACK display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam
     
     return S_FALSE;
 }
-
+#endif
 
 
 void display_EnumerateDisplayModes(void)
 {
+#ifdef __AUI_USE_DIRECTX__
 	HRESULT				hr;
 	LPDIRECTDRAW		dd;
 
-	g_displayModes = NULL;
-
-	
-	
-    hr = DirectDrawCreate(g_displayDevice.lpGUID, &dd, NULL);
+	hr = DirectDrawCreate(g_displayDevice.lpGUID, &dd, NULL);
 	Assert(hr == DD_OK);
 	if (hr != DD_OK) {
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
 								appstrings_GetString(APPSTR_REINSTALLDIRECTX));
 		return;
 	}
-
+#else
+	SDL_PixelFormat fmt = { 0 };
+	fmt.BitsPerPixel = 16;
+	SDL_Rect **modes = SDL_ListModes(&fmt, SDL_FULLSCREEN);
+	
 	g_displayModes = new PointerList<CTPDisplayMode>;
+	
+	if (0 == modes) {
+		return;
+	} else if ((SDL_Rect **) -1 == modes) {
+		// Fallback if SDL reports us to support anything,
+		// we'll pick 800 x 600 and 1024 x 768
+		const SDL_VideoInfo *info = SDL_GetVideoInfo();
+		if (0 == info) {
+			return;
+		}
+		if (0 == info->vfmt) {
+			return;
+		}
+		if (16 < info->vfmt->BitsPerPixel) {
+			return;
+		}
+		CTPDisplayMode *mode;
+		mode = new CTPDisplayMode;
+		if  (!mode)
+			return;
+		mode->width  = 800;
+		mode->height = 600;
+		g_displayModes->AddTail(mode);
+		mode = new CTPDisplayMode;
+		if (!mode)
+			return;
+		mode->width  = 1024;
+		mode->height = 768;
+		g_displayModes->AddTail(mode);
+	} else {
+		for (int i = 0; modes[i]; i++) {
+			// We might get modes multiple times for each bpp
+			// supported. Thus, check if we got it already.
+			if (!display_IsLegalResolution(modes[i]->w,
+			                               modes[i]->h)) {
+				CTPDisplayMode *mode = new CTPDisplayMode;
+				if (!mode)
+					return;
+				mode->width = modes[i]->w;
+				mode->height = modes[i]->h;
+				g_displayModes->AddTail(mode);
+			}
+		}
+	}
+#endif
 
+#ifdef __AUI_USE_DIRECTX__
 	hr = dd->EnumDisplayModes(0, NULL, NULL, display_DisplayModeCallback);
 
 	if (g_displayModes->GetCount() < 1) {
@@ -161,6 +209,7 @@ void display_EnumerateDisplayModes(void)
 	}
 
 	dd->Release();
+#endif
 }
 
 
@@ -182,7 +231,7 @@ BOOL display_IsLegalResolution(sint32 width, sint32 height)
 	return FALSE;
 }
 
-
+#ifdef __AUI_USE_DIRECTX__
 BOOL display_InitWindow( HINSTANCE hinst, int cmdshow )
 {
 	WNDCLASS wc;
@@ -247,11 +296,12 @@ BOOL display_InitWindow( HINSTANCE hinst, int cmdshow )
 	
 	return TRUE;
 }
-
+#endif
 
 
 int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 {
+#ifdef __AUI_USE_DIRECTX__
 	display_EnumerateDisplayDevices();
 
 	
@@ -280,7 +330,7 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 
 		SetRect(&g_displayDevice.rect, 0, 0, g_ScreenWidth, g_ScreenHeight);
 	}
-
+#endif
 	display_EnumerateDisplayModes();
 
 	
@@ -317,8 +367,9 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 		g_ScreenHeight = 600;
 	}
 
-	
+#ifdef __AUI_USE_DIRECTX__
 	display_InitWindow(hInstance, iCmdShow);
+#endif
 
 	return 0;
 }
@@ -327,12 +378,13 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 
 void display_Cleanup()
 {
+#ifdef __AUI_USE_DIRECTX__
 	if(g_displayDevices) {
 		g_displayDevices->DeleteAll();
 		delete g_displayDevices;
 		g_displayDevices = NULL;
 	}
-
+#endif
 	if(g_displayModes) {
 		g_displayModes->DeleteAll();
 		delete g_displayModes;

@@ -50,7 +50,7 @@
 #include "aui.h"
 #include "c3ui.h"
 #include "aui_stringtable.h"
-#include "aui_directsurface.h"
+#include "aui_Factory.h"
 #include "aui_blitter.h"
 #include "aui_dirtylist.h"
 #include "c3window.h"
@@ -101,7 +101,7 @@
 #include "pointerlist.h"
 
 #include "profileDB.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "UnitPool.h"
 
 
@@ -110,7 +110,7 @@
 #include "TradeRoute.h"
 #include "TradeRouteData.h"
 #include "grabitem.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "ArmyPool.h"
 #include "ArmyData.h"
 
@@ -373,7 +373,7 @@ sint32 TiledMap::Initialize(RECT *viewRect)
 	sint32			h = viewRect->bottom - viewRect->top;
 	AUI_ERRCODE		errcode;
 
-	m_mapSurface = new aui_DirectSurface( &errcode, w, h, 16, (g_c3ui)->DD() );
+	m_mapSurface = aui_Factory::new_Surface(errcode, w, h, 16);
 	Assert( m_mapSurface != NULL );
 	if ( !m_mapSurface ) return AUI_ERRCODE_MEMALLOCFAILED;
 
@@ -589,7 +589,7 @@ void TiledMap::LockThisSurface(aui_Surface *surface)
 {
 	AUI_ERRCODE		errcode;
 
-	m_lockedSurface = (aui_DirectSurface *)surface;
+	m_lockedSurface = (aui_Surface *)surface;
 
 	errcode = surface->Lock(NULL, (LPVOID *)&m_surfBase, 0);
 	Assert(errcode == AUI_ERRCODE_OK);
@@ -2388,7 +2388,7 @@ void TiledMap::RetargetTileSurface(aui_Surface *surf)
 	if (surf == NULL) {
 		m_surface = m_mapSurface;
 	} else {
-		m_surface = (aui_DirectSurface *)surf;
+		m_surface = (aui_Surface *)surf;
 	}
 }
 
@@ -2841,7 +2841,7 @@ void TiledMap::PaintArmyActors(MapPoint &pos)
 }
 
 #ifndef _PLAYTEST
-int g_show_ai_dbg = 0;
+BOOL g_show_ai_dbg = 0;
 #endif
 
 void TiledMap::PaintUnitActor(UnitActor *actor, BOOL fog)
@@ -3721,14 +3721,14 @@ sint32 TiledMap::RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolli
 	if (g_theProfileDB->GetShowCityNames()) {
 		
 		
-		g_tiledMap->DrawCityNames((aui_DirectSurface *)surf, 0);
+		g_tiledMap->DrawCityNames((aui_Surface *)surf, 0);
 	}
 
 	
 	
 	
 	if (ScenarioEditor::ShowStartFlags()) {
-		g_tiledMap->DrawStartingLocations((aui_DirectSurface *)surf, 0);
+		g_tiledMap->DrawStartingLocations((aui_Surface *)surf, 0);
 	}
 
 	return 0;
@@ -3741,7 +3741,7 @@ sint32 TiledMap::RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolli
 
 
 
-void TiledMap::DrawStartingLocations(aui_DirectSurface *surf, sint32 layer)
+void TiledMap::DrawStartingLocations(aui_Surface *surf, sint32 layer)
 {
 	if (ScenarioEditor::GetStartLocMode() == SCEN_START_LOC_MODE_NONE)
 		return;
@@ -3966,7 +3966,7 @@ void TiledMap::DrawStartingLocations(aui_DirectSurface *surf, sint32 layer)
 }
 
 
-sint32 TiledMap::DrawCityRadius(MapPoint &cpos, COLOR color, sint32 pop)
+sint32 TiledMap::DrawCityRadius(const MapPoint &cpos, COLOR color, sint32 pop)
 {
 	Pixel16 pixelColor = g_colorSet->GetColor(color);
 	
@@ -4037,7 +4037,7 @@ sint32 TiledMap::DrawCityRadius(MapPoint &cpos, COLOR color, sint32 pop)
 //
 //----------------------------------------------------------------------------
 
-sint32 TiledMap::DrawCityRadius1(MapPoint &cpos, COLOR color)
+sint32 TiledMap::DrawCityRadius1(const MapPoint &cpos, COLOR color)
 {
 	for (int dir = NORTHEAST; dir <= NOWHERE; ++dir)
 	{
@@ -4198,8 +4198,10 @@ void TiledMap::ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf)
 			srcPtr =	(uint32 *)(buffer + (w - dx) * 2 - 4);
 			destPtr =	(uint32 *)(buffer + w * 2 - 4);
 
+#ifdef WIN32
 			_ASSERTE((unsigned)srcPtr >=(unsigned)buffer);
 			_ASSERTE((unsigned)destPtr>=(unsigned)buffer);
+#endif
 
 			slop = (pitch>>2) + copyWidth;
 
@@ -6094,7 +6096,7 @@ void TiledMap::HandleCheat(MapPoint &pos)
 				g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
 			}
 
-			if (cell->GetCity().m_id != NULL) {
+			if (0 != cell->GetCity().m_id) {
 				cell->GetCity().KillUnit(CAUSE_REMOVE_ARMY_TOE, -1);
 			}
 		} else 

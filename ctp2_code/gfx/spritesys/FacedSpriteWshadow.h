@@ -11,8 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __FACEDSPRITEWSHADOW_H__
 #define __FACEDSPRITEWSHADOW_H__
 
@@ -56,16 +57,20 @@ public:
 						Pixel16 outlineColor, uint16 flags);
 
 	Pixel16			*GetFrameData(uint16 facing, uint16 frame) { return m_frames[facing][frame]; }
+	size_t			GetFrameDataSize(uint16 facing, uint16 frame);
 	Pixel16			*GetMiniFrameData(uint16 facing, uint16 frame) { return m_miniframes[facing][frame]; }
+	size_t			GetMiniFrameDataSize(uint16 facing, uint16 frame);
 
-	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_frames[facing][frame] = data; }
-	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_miniframes[facing][frame] = data; }
+	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size) { m_frames[facing][frame] = data; m_framesSizes[facing][frame] = size;}
+	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size) { m_miniframes[facing][frame] = data; m_miniframesSizes[facing][frame] = size;}
 	
 	Pixel16			*GetShadowFrameData(uint16 facing, uint16 frame) { return m_shadowFrames[facing][frame]; }
+	size_t			GetShadowFrameDataSize(uint16 facing, uint16 frame);
 	Pixel16			*GetMiniShadowFrameData(uint16 facing, uint16 frame) { return m_miniShadowFrames[facing][frame]; }
+	size_t			GetMiniShadowFrameDataSize(uint16 facing, uint16 frame);
 	
-	void			SetShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_shadowFrames[facing][frame] = data; }
-	void			SetMiniShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_miniShadowFrames[facing][frame] = data; }
+	void			SetShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size) { m_shadowFrames[facing][frame] = data; m_shadowFramesSizes[facing][frame] = size; }
+	void			SetMiniShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size) { m_miniShadowFrames[facing][frame] = data; m_miniShadowFramesSizes[facing][frame] = size;}
 
 	POINT			GetHotPoint(uint16 facing) { return m_hotPoints[facing]; }
 	POINT			*GetHotPoints(void) { return m_hotPoints; }
@@ -81,10 +86,14 @@ public:
 
 protected:
 	Pixel16			**m_frames[k_NUM_FACINGS];
+	size_t			*m_framesSizes[k_NUM_FACINGS];
 	Pixel16			**m_miniframes[k_NUM_FACINGS];
+	size_t			*m_miniframesSizes[k_NUM_FACINGS];
 	
 	Pixel16			**m_shadowFrames[k_NUM_FACINGS];
+	size_t			*m_shadowFramesSizes[k_NUM_FACINGS];
 	Pixel16			**m_miniShadowFrames[k_NUM_FACINGS];
+	size_t			*m_miniShadowFramesSizes[k_NUM_FACINGS];
 
 	uint16			m_hasShadow;
 

@@ -77,6 +77,12 @@ void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 			case DATUM_STRINGID:
 				dat->m_required = true;
 				break;
+			case DATUM_BIT:
+			case DATUM_BIT_GROUP:
+			case DATUM_BIT_PAIR:
+			case DATUM_RECORD:
+			case DATUM_NONE:
+				break;
 		}
 	} else {
 		dat->SetValue(nameInfo->v);

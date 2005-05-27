@@ -43,24 +43,13 @@ enum AUI_SURFACE_PIXELFORMAT
 	AUI_SURFACE_PIXELFORMAT_LAST
 };
 
-
-
-
 struct aui_SurfaceSubset
 {
 	LPVOID	buffer;
 	RECT	rect;
 };
 
-
-
-
-
-
-
 #define k_SURFACE_MAXLOCK 4
-
-
 
 enum AUI_SURFACE_LOCKOP
 {
@@ -70,9 +59,6 @@ enum AUI_SURFACE_LOCKOP
 	AUI_SURFACE_LOCKOP_REMOVE,
 	AUI_SURFACE_LOCKOP_LAST
 };
-
-
-
 
 class aui_Surface : public aui_Base
 {
@@ -97,7 +83,6 @@ public:
 	{	
 		return classId == m_surfaceClassId;
 	}
-
 	
 	sint32 Width( void ) const { return m_width; }
 	sint32 Height( void ) const { return m_height; }
@@ -128,6 +113,9 @@ public:
 	
 	virtual BOOL IsOK( void ) const { return m_saveBuffer != NULL; }
 
+	virtual AUI_ERRCODE BlankRGB(const uint8 &red, const uint8 &green, const uint8 &blue);
+	virtual AUI_ERRCODE Blank(const uint32 &color);
+
 	static uint32 m_surfaceClassId;
 
 protected:
@@ -144,8 +132,6 @@ protected:
 	sint32	m_pitch;		
 	sint32	m_size;			
 	uint8	*m_buffer;		
-
-	
 	
 	HDC		m_hdc;			
 	BOOL	m_dcIsGot;		

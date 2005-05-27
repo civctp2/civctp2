@@ -2634,7 +2634,7 @@ void SelectedItem::DirectorUnitSelection(uint32 flags)
 	}
 }
 
-void SelectedItem::ForceDirectorSelect(Army &army)
+void SelectedItem::ForceDirectorSelect(const Army &army)
 {
 	if(g_theArmyPool->IsValid(army) &&
 	   army.GetOwner() == GetVisiblePlayer()) {

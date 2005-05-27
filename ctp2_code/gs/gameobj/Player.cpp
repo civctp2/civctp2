@@ -55,7 +55,7 @@
 
 
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 #include "c3errors.h"
 #include "c3math.h"
 
@@ -114,7 +114,7 @@
 
 #include "radarmap.h"
 
-#include "gold.h"
+#include "Gold.h"
 #include "Sci.h"
 #include "TaxRate.h"
 #include "Diffcly.h"
@@ -137,7 +137,7 @@
 #include "MessagePool.h"
 
 #include "profileDB.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "CreateUnit.h"
 #include "SlicSegment.h"
 #include "SlicEngine.h"
@@ -170,7 +170,7 @@
 #include "AchievementTracker.h"
 
 #include "ArmyPool.h"
-#include "order.h"
+#include "Order.h"
 #include "ArmyData.h"
 #include "civapp.h"
 
@@ -1371,7 +1371,7 @@ sint32 Player::FindCityIndex(const Unit &find) const
 
 
 
-sint32 Player::RemoveUnitReference(Unit &kill_me,  const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
+sint32 Player::RemoveUnitReference(const Unit &kill_me,  const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 
 { 
     int r = FALSE; 
@@ -1678,7 +1678,7 @@ BOOL Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
    return TRUE; 
 }
 
-BOOL Player::RefreshAIArmyReference(Army &the_army)
+BOOL Player::RefreshAIArmyReference(const Army &the_army)
 {
 	bool StopCallingThisFuckingFunction = false;
 	Assert(StopCallingThisFuckingFunction);
@@ -1686,7 +1686,7 @@ BOOL Player::RefreshAIArmyReference(Army &the_army)
 	return TRUE;
 }
 
-BOOL Player::RemoveUnitReferenceFromPlayer(Unit &killme,  CAUSE_REMOVE_ARMY cause, sint32 &killedBy)
+BOOL Player::RemoveUnitReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_ARMY cause, sint32 &killedBy)
 {
 	sint32 unit_type = killme.GetType();
 
@@ -1720,7 +1720,7 @@ BOOL Player::RemoveUnitReferenceFromPlayer(Unit &killme,  CAUSE_REMOVE_ARMY caus
 }
 
 
-BOOL Player::RemoveCityReferenceFromPlayer(Unit &killme,  CAUSE_REMOVE_CITY cause, sint32 &killedBy)
+BOOL Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CITY cause, sint32 &killedBy)
 {
     sint32 i; 
     sint32 n = m_all_cities->Num(); 
@@ -7086,7 +7086,7 @@ void Player::DumpAllies(void)
 	MBCHAR	s[_MAX_PATH] ;
 
 	DPRINTF(k_DBG_INFO, ("Dumping alliances for Player #%d", m_owner)) ;
-	s[0] = NULL ;
+	s[0] = 0;
 	for (i=0; i<k_MAX_PLAYERS; i++)
 		{
 		if ((mask_alliance & (0x01<<i)) && (i != m_owner))
@@ -7307,7 +7307,7 @@ Installation Player::CreateInstallation(sint32 type,
 	return theInst;
 }
 
-void Player::AddInstallation(Installation &inst)
+void Player::AddInstallation(const Installation &inst)
 {
 	m_allInstallations->Insert(inst);
 
@@ -7319,40 +7319,21 @@ void Player::AddInstallation(Installation &inst)
 		m_allRadarInstallations->Insert(inst);
 	}
 
-	
-	
-
 	if(visionRange > 0) {
 		if(g_selected_item->GetVisiblePlayer() == m_owner) {
 			BOOL revealedUnexplored = FALSE;
 			g_tiledMap->GetLocalVision()->AddVisible(pos, visionRange, revealedUnexplored);
 		}
 	}
-
-    
-    
-    
-	
-    
-	
-	
 }
 
-void Player::RemoveInstallationReferences(Installation &inst)
+void Player::RemoveInstallationReferences(const Installation &inst)
 {
 	m_allRadarInstallations->Del(inst);
 	m_allInstallations->Del(inst);
 
-    MapPoint pos;
+	MapPoint pos;
 	inst.GetPos(pos); 
-
-    
-    
-    
-	
-	
-	
-	
 }
 
 #ifdef BATTLE_FLAGS
@@ -9610,7 +9591,8 @@ void Player::TradeUnitsForPoints(const MapPoint &pnt)
 	Cell *cell = g_theWorld->GetCell(pnt);
 	if(cell->GetNumUnits() <= 0) {
 		if(cell->GetCity().m_id != (0)) {
-			TradeCityForPoints(cell->GetCity());
+			Unit unit = cell->GetCity();
+			TradeCityForPoints(unit);
 		}
 		return;
 	}

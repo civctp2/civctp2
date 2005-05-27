@@ -267,7 +267,7 @@ void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 
 void GoodSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
 {
-	primitives_DrawText((aui_DirectSurface *)g_screenManager->GetSurface(), x, y, (MBCHAR *)s, 0, 0);
+	primitives_DrawText(g_screenManager->GetSurface(), x, y, (MBCHAR *)s, 0, 0);
 }
 
 

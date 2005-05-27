@@ -173,7 +173,7 @@ protected:
 public:
 	SlicFunc(char *name, SLIC_FUNC_RET_TYPE type);
 	SlicFunc(CivArchive &archive);
-	~SlicFunc();
+	virtual ~SlicFunc();
 	void Serialize(CivArchive &archive);
 	SlicFuncResult GetResult() { return m_result; }
 	SLIC_FUNC_RET_TYPE GetReturnType() { return m_type; }
@@ -190,17 +190,9 @@ public:
 class Slic_##x : public SlicFunc { \
 public:\
 	Slic_##x() : SlicFunc(#x, type) {} \
+	virtual ~Slic_##x() {} \
 	SFN_ERROR Call(SlicArgList *args); \
 };
-
-
-
-
-
-
-
-
-
 
 
 

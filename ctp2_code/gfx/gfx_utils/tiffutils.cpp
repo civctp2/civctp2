@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
 #include "c3.h"
 #include "tiffio.h"
 #include "tiffutils.h"

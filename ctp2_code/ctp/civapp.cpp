@@ -1436,14 +1436,14 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 {
 	sint32		success;
-
-#ifndef USE_COM_REPLACEMENT
-	CoInitialize(NULL);
-#endif
 	
+// COM needed for DirectX/Movies
+#ifdef WIN32
+    CoInitialize(NULL);
+#endif
+
 	Splash::Initialize();
 
-	
 	CivPaths_InitCivPaths();
 
 	
@@ -2091,8 +2091,8 @@ sint32 CivApp::CleanupApp(void)
 
 	    
 	    CivPaths_CleanupCivPaths();
-
-#ifndef USE_COM_REPLACEMENT
+// COM needed for DirectX Moviestuff
+#ifdef WIN32    
 	    CoUninitialize();
 #endif
 
@@ -3541,13 +3541,15 @@ sint32 CivApp::Process(void)
 	
 	
 	if (m_inBackground) {
-#ifdef LINUX
+#ifdef HAVE_UNISTD_H
+		usleep(50);
+#elif defined(WIN32)
+		Sleep(50);
+#elif defined(LINUX)
 		struct timespec backgroundSleepTime;
 		backgroundSleepTime.tv_sec=0;
 		backgroundSleepTime.tv_nsec=50000000;
 		nanosleep(&backgroundSleepTime, NULL);
-#else
-		Sleep(50);
 #endif
 		return 0;
 	}

@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __NET_ARMY_H__
 #define __NET_ARMY_H__
 
@@ -8,7 +10,7 @@ class ArmyList;
 class ArmyData;
 
 typedef sint32 PLAYER_INDEX;
-#include "aicause.h"
+#include "AICause.h"
 #include "cellunitlist.h"
 
 

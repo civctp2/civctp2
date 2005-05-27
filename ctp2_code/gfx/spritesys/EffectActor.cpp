@@ -44,7 +44,7 @@ EffectActor::EffectActor(SpriteState *ss, const MapPoint &pos)
 	RECT			tmpRect = {0, 0, 10, 16};
 
 	
-	m_effectVisibility = NULL;
+	m_effectVisibility = 0;
 	m_bVisSpecial = FALSE;
 	m_spriteState = ss;
 	m_curEffectAction = EFFECTACTION_NONE;

@@ -31,7 +31,7 @@ ColorSet::ColorSet()
 	sint32		i;
 
 	for (i=0; i<k_MAX_COLOR_SET; i++)
-		m_colors[i] = NULL;
+		m_colors[i] = 0;
 }
 
 

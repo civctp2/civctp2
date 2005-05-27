@@ -43,7 +43,7 @@ class GameFile ;
 class DataCheck ;
 
 class CivArchive : public IC3CivArchive
-	{
+{
 	private:
 #if !defined(USE_COM_REPLACEMENT)
       ULONG m_refCount;
@@ -80,7 +80,7 @@ class CivArchive : public IC3CivArchive
 	public:
 		CivArchive() ;												
 		CivArchive(uint32 ulSize) ;									
-		~CivArchive() ;												
+		virtual ~CivArchive() ;												
 
 #if !defined(USE_COM_REPLACEMENT)
       STDMETHODIMP QueryInterface(REFIID, void **obj);

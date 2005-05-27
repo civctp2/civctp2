@@ -52,7 +52,7 @@
 #include "Token.h"
 
 #ifndef __SPRITETEST__
-	#include "TiledMap.h"
+	#include "tiledmap.h"
 
 	extern CivPaths *g_civPaths;
 

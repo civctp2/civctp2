@@ -23,7 +23,7 @@ DECLARE_INTERFACE_(IC3Rand, IUnknown)
 };
 #else
 
-class IC3Rand : public IUnknown
+class IC3Rand : public ICTP2Unknown
 {
 public:
 	virtual sint32 Next(sint32 range) = 0;

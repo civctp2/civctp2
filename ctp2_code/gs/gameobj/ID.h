@@ -95,8 +95,6 @@ public:
 	void Castrate() { } 
 	void DelPointers() {} 
 	
-	
-	
 	operator int() const  { return m_id; }; 
 	operator unsigned int() const  { return m_id; }; 
 	operator unsigned long() const  { return m_id; };

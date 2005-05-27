@@ -3,17 +3,16 @@
 #ifndef __BATTLE_H__
 #define __BATTLE_H__
 
-enum COLOR;
-
 #include "dbtypes.h"
 #include "battleview.h"
+#include "colorset.h"
 
 class Battle {
 public:
 	Battle();
 	~Battle();
 
-	void Initialize(Army &attackers, CellUnitList &defenders);
+	void Initialize(const Army &attackers, const CellUnitList &defenders);
 
 	
 	
@@ -21,7 +20,7 @@ public:
 	
 	
 
-	void MakeAttackers(sint32 numAttackers, Army &attackers);
+	void MakeAttackers(sint32 numAttackers, const Army &attackers);
 	void MakeDefenders(sint32 numDefenders, CellUnitList &defenders);
 
 	BattleViewActor			*ActorFromUnit(BOOL isDefender, Unit theUnit);
