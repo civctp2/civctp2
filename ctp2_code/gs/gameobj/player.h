@@ -35,6 +35,7 @@
 #define __PLAYER_H__ 1
 
 #include "ctp2_enums.h"
+#include "GameOver.h"
 #include "AgreementTypes.h"
 #include "GameObj_types.h"
 #include "PollutionConst.h"

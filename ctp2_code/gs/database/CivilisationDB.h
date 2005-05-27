@@ -35,13 +35,13 @@
 #ifndef __CIVILISATION_DATABASE_H__
 #define __CIVILISATION_DATABASE_H__
 
+#include "GameObj_types.h"
 #include "DB.h"
 #include "CivilisationRec.h"
 
 class CivArchive ;
 class Token ;
 
-enum CIV_INDEX ;
 enum C3DIR;
 
 class CivilisationDatabase : public Database<CivilisationRecord>

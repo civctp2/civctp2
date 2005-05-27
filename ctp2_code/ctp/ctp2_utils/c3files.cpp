@@ -555,7 +555,7 @@ void c3files_GetCDDrives(void)
 #endif
 }
 
-MBCHAR *c3files_GetVolumeName(MBCHAR name)
+MBCHAR *c3files_GetVolumeName(int cdIndex)
 {
 #if defined(WIN32)
     MBCHAR drivepath[32];
@@ -563,6 +563,7 @@ MBCHAR *c3files_GetVolumeName(MBCHAR name)
     uint32 SerialNumber;
     uint32 MaxComponentLen;
     uint32 FSFlags;
+		MBCHAR name = (MBCHAR) cdIndex+'A';
     
     strcpy(drivepath, " :\\");
     drivepath[0] = name;
@@ -644,7 +645,7 @@ BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveLetter)
 			if (IsCD[i])
 			{
 				CDIndex++;
-        		cdName = c3files_GetVolumeName((MBCHAR)(i + 'A'));
+				cdName = c3files_GetVolumeName(i);
 				if (cdName && !strnicmp(cdName, name, strlen(name)))
 				{
 					if (findDriveLetter)
