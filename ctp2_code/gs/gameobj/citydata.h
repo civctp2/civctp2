@@ -764,7 +764,7 @@ public:
 
 	void AddEndGameObject(sint32 type);
 
-	BOOL SendSlaveTo(Unit &dest);
+	BOOL SendSlaveTo(const Unit &dest);
 	void SetFullHappinessTurns(sint32 turns);
 
 	void AiStartMovingPops();

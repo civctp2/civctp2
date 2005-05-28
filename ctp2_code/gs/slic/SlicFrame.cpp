@@ -63,7 +63,7 @@
 #include "SlicDBConduit.h"
 #include <math.h>
 
-extern "C" extern FILE *debuglog;
+extern "C" FILE *debuglog;
 extern TurnCount *g_turn;
 
 SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset)

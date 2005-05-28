@@ -14,122 +14,8 @@ CTP2_WIN32_MILES_INC=\
 	-I$(ctp2_code)/libs/miles
 CTP2_WIN32_ZLIB_INC=\
 	-I$(ctp2_code)/libs/zlib
-else
-CTP2_NOWIN32_INC=\
-	-I$(ctp2_code)/os/nowin32
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
-
-newdb_CDBSRCFILES = \
-	../gs/newdb/AdvanceBranchRecord.cpp \
-	../gs/newdb/AdvanceListRecord.cpp \
-	../gs/newdb/AdvanceRecord.cpp \
-	../gs/newdb/AgeCityStyleRecord.cpp \
-	../gs/newdb/AgeRecord.cpp \
-	../gs/newdb/BuildListSequenceRecord.cpp \
-	../gs/newdb/BuildingBuildListRecord.cpp \
-	../gs/newdb/BuildingRecord.cpp \
-	../gs/newdb/CitySizeRecord.cpp \
-	../gs/newdb/CityStyleRecord.cpp \
-	../gs/newdb/DiplomacyProposalRecord.cpp \
-	../gs/newdb/DiplomacyRecord.cpp \
-	../gs/newdb/DiplomacyThreatRecord.cpp \
-	../gs/newdb/EndGameObjectRecord.cpp \
-	../gs/newdb/FeatRecord.cpp \
-	../gs/newdb/GoalRecord.cpp \
-	../gs/newdb/GovernmentRecord.cpp \
-	../gs/newdb/IconRecord.cpp \
-	../gs/newdb/ImprovementListRecord.cpp \
-	../gs/newdb/OrderRecord.cpp \
-	../gs/newdb/PersonalityRecord.cpp \
-	../gs/newdb/PopRecord.cpp \
-	../gs/newdb/ResourceRecord.cpp \
-	../gs/newdb/SoundRecord.cpp \
-	../gs/newdb/SpecialAttackInfoRecord.cpp \
-	../gs/newdb/SpecialEffectRecord.cpp \
-	../gs/newdb/SpriteRecord.cpp \
-	../gs/newdb/StrategyRecord.cpp \
-	../gs/newdb/TerrainImprovementRecord.cpp \
-	../gs/newdb/TerrainRecord.cpp \
-	../gs/newdb/UnitBuildListRecord.cpp \
-	../gs/newdb/UnitRecord.cpp \
-	../gs/newdb/WonderBuildListRecord.cpp \
-	../gs/newdb/WonderMovieRecord.cpp \
-	../gs/newdb/WonderRecord.cpp
-
-newdb_CDBHDRFILES = \
-	../gs/newdb/AdvanceBranchRecord.h \
-	../gs/newdb/AdvanceListRecord.h \
-	../gs/newdb/AdvanceRecord.h \
-	../gs/newdb/AgeCityStyleRecord.h \
-	../gs/newdb/AgeRecord.h \
-	../gs/newdb/BuildListSequenceRecord.h \
-	../gs/newdb/BuildingBuildListRecord.h \
-	../gs/newdb/BuildingRecord.h \
-	../gs/newdb/CitySizeRecord.h \
-	../gs/newdb/CityStyleRecord.h \
-	../gs/newdb/DiplomacyProposalRecord.h \
-	../gs/newdb/DiplomacyRecord.h \
-	../gs/newdb/DiplomacyThreatRecord.h \
-	../gs/newdb/EndGameObjectRecord.h \
-	../gs/newdb/FeatRecord.h \
-	../gs/newdb/GoalRecord.h \
-	../gs/newdb/GovernmentRecord.h \
-	../gs/newdb/IconRecord.h \
-	../gs/newdb/ImprovementListRecord.h \
-	../gs/newdb/OrderRecord.h \
-	../gs/newdb/PersonalityRecord.h \
-	../gs/newdb/PopRecord.h \
-	../gs/newdb/ResourceRecord.h \
-	../gs/newdb/SoundRecord.h \
-	../gs/newdb/SpecialAttackInfoRecord.h \
-	../gs/newdb/SpecialEffectRecord.h \
-	../gs/newdb/SpriteRecord.h \
-	../gs/newdb/StrategyRecord.h \
-	../gs/newdb/TerrainImprovementRecord.h \
-	../gs/newdb/TerrainRecord.h \
-	../gs/newdb/UnitBuildListRecord.h \
-	../gs/newdb/UnitRecord.h \
-	../gs/newdb/WonderBuildListRecord.h \
-	../gs/newdb/WonderMovieRecord.h \
-	../gs/newdb/WonderRecord.h
-
-newdb_CDBSTAMPFILES = \
-	../gs/newdb/AdvanceBranchRecord.stamp \
-	../gs/newdb/AdvanceListRecord.stamp \
-	../gs/newdb/AdvanceRecord.stamp \
-	../gs/newdb/AgeCityStyleRecord.stamp \
-	../gs/newdb/AgeRecord.stamp \
-	../gs/newdb/BuildListSequenceRecord.stamp \
-	../gs/newdb/BuildingBuildListRecord.stamp \
-	../gs/newdb/BuildingRecord.stamp \
-	../gs/newdb/CitySizeRecord.stamp \
-	../gs/newdb/CityStyleRecord.stamp \
-	../gs/newdb/DiplomacyProposalRecord.stamp \
-	../gs/newdb/DiplomacyRecord.stamp \
-	../gs/newdb/DiplomacyThreatRecord.stamp \
-	../gs/newdb/EndGameObjectRecord.stamp \
-	../gs/newdb/FeatRecord.stamp \
-	../gs/newdb/GoalRecord.stamp \
-	../gs/newdb/GovernmentRecord.stamp \
-	../gs/newdb/IconRecord.stamp \
-	../gs/newdb/ImprovementListRecord.stamp \
-	../gs/newdb/OrderRecord.stamp \
-	../gs/newdb/PersonalityRecord.stamp \
-	../gs/newdb/PopRecord.stamp \
-	../gs/newdb/ResourceRecord.stamp \
-	../gs/newdb/SoundRecord.stamp \
-	../gs/newdb/SpecialAttackInfoRecord.stamp \
-	../gs/newdb/SpecialEffectRecord.stamp \
-	../gs/newdb/SpriteRecord.stamp \
-	../gs/newdb/StrategyRecord.stamp \
-	../gs/newdb/TerrainImprovementRecord.stamp \
-	../gs/newdb/TerrainRecord.stamp \
-	../gs/newdb/UnitBuildListRecord.stamp \
-	../gs/newdb/UnitRecord.stamp \
-	../gs/newdb/WonderBuildListRecord.stamp \
-	../gs/newdb/WonderMovieRecord.stamp \
-	../gs/newdb/WonderRecord.stamp
 
 ctp2_SOURCES = \
 	ctp2_utils/appstrings.cpp \
@@ -154,12 +40,6 @@ ctp2_SOURCES = \
 	fingerprint/endecode.c \
 	fingerprint/shroud.c \
 	fingerprint/verify.c \
-	$(newdb_CDBSRCFILES) \
-	../gs/newdb/lex.dbl.c \
-	../gs/newdb/CTPDatabase.cpp \
-	../gs/newdb/CTPRecord.cpp \
-	../gs/newdb/DBLexer.cpp \
-	../gs/newdb/DBLexer.cpp \
 	c3.cpp \
 	civ3_main.cpp \
 	civapp.cpp \
@@ -366,206 +246,468 @@ ctp2_SOURCES = \
 	../gs/fileio/GameFile.cpp \
 	../gs/fileio/prjfile.cpp \
 	../gs/fileio/Token.cpp \
-	../gs/slic/slic.l \
-	../gs/slic/sliccmd.y
+	../gs/events/GameEvent.cpp \
+	../gs/events/GameEventArgList.cpp \
+	../gs/events/GameEventArgument.cpp \
+	../gs/events/GameEventDescription.cpp \
+	../gs/events/GameEventHook.cpp \
+	../gs/events/GameEventManager.cpp \
+	../gs/outcom/c3rand.cpp \
+	../net/general/net_achievement.cpp \
+	../net/general/net_action.cpp \
+	../net/general/net_agreement.cpp \
+	../net/general/net_army.cpp \
+	../net/general/net_cell.cpp \
+	../net/general/net_chat.cpp \
+	../net/general/net_cheat.cpp \
+	../net/general/net_city.cpp \
+	../net/general/net_city.h \
+	../net/general/net_civ.cpp \
+	../net/general/net_crc.cpp \
+	../net/general/net_diff.cpp \
+	../net/general/net_diplomacy.cpp \
+	../net/general/net_endgame.cpp \
+	../net/general/net_exclusions.cpp \
+	../net/general/net_feat.cpp \
+	../net/general/net_gameobj.cpp \
+	../net/general/net_gamesettings.cpp \
+	../net/general/net_guid.cpp \
+	../net/general/net_happy.cpp \
+	../net/general/net_info.cpp \
+	../net/general/net_installation.cpp \
+	../net/general/net_keys.cpp \
+	../net/general/net_message.cpp \
+	../net/general/net_order.cpp \
+	../net/general/net_player.cpp \
+	../net/general/net_pollution.cpp \
+	../net/general/net_rand.cpp \
+	../net/general/net_ready.cpp \
+	../net/general/net_report.cpp \
+	../net/general/net_research.cpp \
+	../net/general/net_strengths.cpp \
+	../net/general/net_terrain.cpp \
+	../net/general/net_tradeoffer.cpp \
+	../net/general/net_traderoute.cpp \
+	../net/general/net_unit.cpp \
+	../net/general/net_vision.cpp \
+	../net/general/net_wonder.cpp \
+	../net/general/net_world.cpp \
+	../net/general/network.cpp \
+	../net/general/networkevent.cpp \
+	../net/io/net_anet.cpp \
+	../net/io/net_debug.cpp \
+	../net/io/net_io.cpp \
+	../net/io/net_thread.cpp \
+	../robot/utility/RandTest.cpp \
+	../robot/utility/RoboInit.cpp \
+	../robot/pathing/A_Star_Heuristic_Cost.cpp \
+	../robot/pathing/Astar.cpp \
+	../robot/pathing/AstarPnt.cpp \
+	../robot/pathing/AVLHeap.cpp \
+	../robot/pathing/CityAstar.cpp \
+	../robot/pathing/Path.cpp \
+	../robot/pathing/RobotAstar.cpp \
+	../robot/pathing/RobotAstar2.cpp \
+	../robot/pathing/TradeAstar.cpp \
+	../robot/pathing/UnitAstar.cpp \
+	../robot/aibackdoor/BSet.cpp \
+	../robot/aibackdoor/civarchive.cpp \
+	../ui/aui_common/aui_action.cpp \
+	../ui/aui_common/aui_animate.cpp \
+	../ui/aui_common/aui_audiomanager.cpp \
+	../ui/aui_common/aui_base.cpp \
+	../ui/aui_common/aui_bitmapfont.cpp \
+	../ui/aui_common/aui_blitter.cpp \
+	../ui/aui_common/aui_button.cpp \
+	../ui/aui_common/aui_control.cpp \
+	../ui/aui_common/aui_cursor.cpp \
+	../ui/aui_common/aui_dimension.cpp \
+	../ui/aui_common/aui_dirtylist.cpp \
+	../ui/aui_common/aui_dragdropwindow.cpp \
+	../ui/aui_common/aui_dropdown.cpp \
+	../ui/aui_common/aui_font.cpp \
+	../ui/aui_common/aui_gamespecific.cpp \
+	../ui/aui_common/aui_header.cpp \
+	../ui/aui_common/aui_hypertextbase.cpp \
+	../ui/aui_common/aui_hypertextbox.cpp \
+	../ui/aui_common/aui_image.cpp \
+	../ui/aui_common/aui_imagebase.cpp \
+	../ui/aui_common/aui_imagelist.cpp \
+	../ui/aui_common/aui_input.cpp \
+	../ui/aui_common/aui_item.cpp \
+	../ui/aui_common/aui_joystick.cpp \
+	../ui/aui_common/aui_keyboard.cpp \
+	../ui/aui_common/aui_ldl.cpp \
+	../ui/aui_common/aui_listbox.cpp \
+	../ui/aui_common/aui_memmap.cpp \
+	../ui/aui_common/aui_mouse.cpp \
+	../ui/aui_common/aui_movie.cpp \
+	../ui/aui_common/aui_moviebutton.cpp \
+	../ui/aui_common/aui_moviemanager.cpp \
+	../ui/aui_common/aui_music.cpp \
+	../ui/aui_common/aui_pixel.cpp \
+	../ui/aui_common/aui_progressbar.cpp \
+	../ui/aui_common/aui_radio.cpp \
+	../ui/aui_common/aui_ranger.cpp \
+	../ui/aui_common/aui_rectangle.cpp \
+	../ui/aui_common/aui_region.cpp \
+	../ui/aui_common/aui_regiondispatch.cpp \
+	../ui/aui_common/aui_screen.cpp \
+	../ui/aui_common/aui_shell.cpp \
+	../ui/aui_common/aui_sound.cpp \
+	../ui/aui_common/aui_soundbase.cpp \
+	../ui/aui_common/aui_static.cpp \
+	../ui/aui_common/aui_stringtable.cpp \
+	../ui/aui_common/aui_surface.cpp \
+	../ui/aui_common/aui_switch.cpp \
+	../ui/aui_common/aui_switchgroup.cpp \
+	../ui/aui_common/aui_tab.cpp \
+	../ui/aui_common/aui_tabgroup.cpp \
+	../ui/aui_common/aui_textbase.cpp \
+	../ui/aui_common/aui_textbox.cpp \
+	../ui/aui_common/aui_textfield.cpp \
+	../ui/aui_common/aui_thumb.cpp \
+	../ui/aui_common/aui_tipwindow.cpp \
+	../ui/aui_common/aui_ui.cpp \
+	../ui/aui_common/aui_undo.cpp \
+	../ui/aui_common/aui_uniqueid.cpp \
+	../ui/aui_common/aui_win.cpp \
+	../ui/aui_common/aui_window.cpp \
+	../ui/aui_common/tech_memmap.cpp \
+	../ui/aui_utils/primitives.cpp \
+	../ui/aui_utils/textutils.cpp \
+	../ui/aui_utils/vidplay.cpp \
+	../ui/aui_directx/aui_directaudiomanager.cpp \
+	../ui/aui_directx/aui_directblitter.cpp \
+	../ui/aui_directx/aui_directinput.cpp \
+	../ui/aui_directx/aui_directjoystick.cpp \
+	../ui/aui_directx/aui_directkeyboard.cpp \
+	../ui/aui_directx/aui_directmouse.cpp \
+	../ui/aui_directx/aui_directmovie.cpp \
+	../ui/aui_directx/aui_directmoviemanager.cpp \
+	../ui/aui_directx/aui_directsound.cpp \
+	../ui/aui_directx/aui_directsurface.cpp \
+	../ui/aui_directx/aui_directui.cpp \
+	../ui/aui_directx/aui_directx.cpp \
+	../ui/aui_sdl/aui_sdl.cpp \
+	../ui/aui_sdl/aui_sdlinput.cpp \
+	../ui/aui_sdl/aui_sdlinput.h \
+	../ui/aui_sdl/aui_sdljoystick.cpp \
+	../ui/aui_sdl/aui_sdlkeyboard.cpp \
+	../ui/aui_sdl/aui_sdlmouse.cpp \
+	../ui/aui_sdl/aui_sdlsound.cpp \
+	../ui/aui_sdl/aui_sdlsurface.cpp \
+	../ui/aui_ctp2/background.cpp \
+	../ui/aui_ctp2/battleorderbox.cpp \
+	../ui/aui_ctp2/battleorderboxactions.cpp \
+	../ui/aui_ctp2/bevellesswindow.cpp \
+	../ui/aui_ctp2/buttonbank.cpp \
+	../ui/aui_ctp2/c3_button.cpp \
+	../ui/aui_ctp2/c3_checkbox.cpp \
+	../ui/aui_ctp2/c3_coloredstatic.cpp \
+	../ui/aui_ctp2/c3_coloredswitch.cpp \
+	../ui/aui_ctp2/c3_coloriconbutton.cpp \
+	../ui/aui_ctp2/c3_dropdown.cpp \
+	../ui/aui_ctp2/c3_fancywindow.cpp \
+	../ui/aui_ctp2/c3_header.cpp \
+	../ui/aui_ctp2/c3_headerswitch.cpp \
+	../ui/aui_ctp2/c3_hypertextbox.cpp \
+	../ui/aui_ctp2/c3_hypertipwindow.cpp \
+	../ui/aui_ctp2/c3_icon.cpp \
+	../ui/aui_ctp2/c3_image.cpp \
+	../ui/aui_ctp2/c3_listbox.cpp \
+	../ui/aui_ctp2/c3_listitem.cpp \
+	../ui/aui_ctp2/c3_popupwindow.cpp \
+	../ui/aui_ctp2/c3_radio.cpp \
+	../ui/aui_ctp2/c3_ranger.cpp \
+	../ui/aui_ctp2/c3_slidometer.cpp \
+	../ui/aui_ctp2/c3_static.cpp \
+	../ui/aui_ctp2/c3_switch.cpp \
+	../ui/aui_ctp2/c3_thumb.cpp \
+	../ui/aui_ctp2/c3_updateaction.cpp \
+	../ui/aui_ctp2/c3_utilitydialogbox.cpp \
+	../ui/aui_ctp2/c3blitter.cpp \
+	../ui/aui_ctp2/c3dropdown.cpp \
+	../ui/aui_ctp2/c3fancywindow.cpp \
+	../ui/aui_ctp2/c3imageformats.cpp \
+	../ui/aui_ctp2/c3listbox.cpp \
+	../ui/aui_ctp2/c3memmap.cpp \
+	../ui/aui_ctp2/c3scroller.cpp \
+	../ui/aui_ctp2/c3slider.cpp \
+	../ui/aui_ctp2/c3spinner.cpp \
+	../ui/aui_ctp2/c3textfield.cpp \
+	../ui/aui_ctp2/c3thumb.cpp \
+	../ui/aui_ctp2/c3ui.cpp \
+	../ui/aui_ctp2/c3window.cpp \
+	../ui/aui_ctp2/c3windows.cpp \
+	../ui/aui_ctp2/chart.cpp \
+	../ui/aui_ctp2/checkbox.cpp \
+	../ui/aui_ctp2/cityinventorylistbox.cpp \
+	../ui/aui_ctp2/coloriconbutton.cpp \
+	../ui/aui_ctp2/coloriconswitch.cpp \
+	../ui/aui_ctp2/controlsheet.cpp \
+	../ui/aui_ctp2/directvideo.cpp \
+	../ui/aui_ctp2/grabitem.cpp \
+	../ui/aui_ctp2/icon.cpp \
+	../ui/aui_ctp2/iconbutton.cpp \
+	../ui/aui_ctp2/iconswitch.cpp \
+	../ui/aui_ctp2/icontab.cpp \
+	../ui/aui_ctp2/InfoBar.cpp \
+	../ui/aui_ctp2/iteminfo.cpp \
+	../ui/aui_ctp2/keymap.cpp \
+	../ui/aui_ctp2/keypress.cpp \
+	../ui/aui_ctp2/linegraph.cpp \
+	../ui/aui_ctp2/pattern.cpp \
+	../ui/aui_ctp2/patternbase.cpp \
+	../ui/aui_ctp2/picture.cpp \
+	../ui/aui_ctp2/picturebutton.cpp \
+	../ui/aui_ctp2/pictureswitch.cpp \
+	../ui/aui_ctp2/picturetab.cpp \
+	../ui/aui_ctp2/radarmap.cpp \
+	../ui/aui_ctp2/radiogroup.cpp \
+	../ui/aui_ctp2/SelItem.cpp \
+	../ui/aui_ctp2/SelItemClick.cpp \
+	../ui/aui_ctp2/SelItemEvent.cpp \
+	../ui/aui_ctp2/staticpicture.cpp \
+	../ui/aui_ctp2/statictextitem.cpp \
+	../ui/aui_ctp2/statuswindow.cpp \
+	../ui/aui_ctp2/textbox.cpp \
+	../ui/aui_ctp2/textbutton.cpp \
+	../ui/aui_ctp2/textradio.cpp \
+	../ui/aui_ctp2/textswitch.cpp \
+	../ui/aui_ctp2/texttab.cpp \
+	../ui/aui_ctp2/thermometer.cpp \
+	../ui/aui_ctp2/thronecontrol.cpp \
+	../ui/aui_ctp2/thumbnailmap.cpp \
+	../ui/aui_ctp2/tilecontrol.cpp \
+	../ui/aui_ctp2/tipwindow.cpp \
+	../ui/aui_ctp2/unittabbutton.cpp \
+	../ui/aui_ctp2/videowindow.cpp \
+	../gfx/tilesys/workmap.cpp \
+	../ui/aui_ctp2/ctp2_button.cpp \
+	../ui/aui_ctp2/ctp2_commandline.cpp \
+	../ui/aui_ctp2/ctp2_dropdown.cpp \
+	../ui/aui_ctp2/ctp2_hypertextbox.cpp \
+	../ui/aui_ctp2/ctp2_listbox.cpp \
+	../ui/aui_ctp2/ctp2_listitem.cpp \
+	../ui/aui_ctp2/ctp2_Menu.cpp \
+	../ui/aui_ctp2/ctp2_menubar.cpp \
+	../ui/aui_ctp2/ctp2_MenuButton.cpp \
+	../ui/aui_ctp2/ctp2_spinner.cpp \
+	../ui/aui_ctp2/ctp2_static.cpp \
+	../ui/aui_ctp2/ctp2_Switch.cpp \
+	../ui/aui_ctp2/ctp2_Tab.cpp \
+	../ui/aui_ctp2/ctp2_TabButton.cpp \
+	../ui/aui_ctp2/ctp2_TabGroup.cpp \
+	../ui/aui_ctp2/ctp2_textbuffer.cpp \
+	../ui/aui_ctp2/ctp2_textfield.cpp \
+	../ui/aui_ctp2/ctp2_Window.cpp \
+	../ui/interface/CityControlPanel.cpp \
+	../ui/interface/DomesticControlPanel.cpp \
+	../ui/interface/MessageControlPanel.cpp \
+	../ui/interface/TilesControlPanel.cpp \
+	../ui/interface/UnitControlPanel.cpp \
+	../ui/interface/ControlTabPanel.cpp \
+	../ui/interface/EndTurnButton.cpp \
+	../ui/interface/MainControlPanel.cpp \
+	../ui/interface/ShortcutPad.cpp \
+	../ui/interface/StatusBar.cpp \
+	../ui/interface/TurnYearStatus.cpp \
+	../ui/interface/ZoomPad.cpp \
+	../ui/interface/controlpanelwindow.cpp \
+	../ui/interface/interfaceevent.cpp \
+	../ui/interface/agesscreen.cpp \
+	../ui/interface/ancientwindows.cpp \
+	../ui/interface/armymanagerwindow.cpp \
+	../Ui/interface/AttractWindow.cpp \
+	../ui/interface/backgroundwin.cpp \
+	../ui/interface/c3dialogs.cpp \
+	../ui/interface/ChatBox.cpp \
+	../ui/interface/CityEspionage.cpp \
+	../ui/interface/citymanager.cpp \
+	../ui/interface/creditsscreen.cpp \
+	../ui/interface/CursorManager.cpp \
+	../ui/interface/custommapscreen.cpp \
+	../ui/interface/debugwindow.cpp \
+	../ui/interface/DiplomacyDetails.cpp \
+	../ui/interface/diplomacywindow.cpp \
+	../ui/interface/dipwizard.cpp \
+	../ui/interface/editqueue.cpp \
+	../ui/interface/FileDialog.cpp \
+	../ui/interface/gameplayoptions.cpp \
+	../ui/interface/graphicsresscreen.cpp \
+	../ui/interface/graphicsscreen.cpp \
+	../ui/interface/greatlibrary.cpp \
+	../ui/interface/greatlibrary_util.cpp \
+	../ui/interface/greatlibrarywindow.cpp \
+	../ui/interface/helptile.cpp \
+	../ui/interface/hotseatlist.cpp \
+	../ui/interface/infowin.cpp \
+	../ui/interface/initialplayscreen.cpp \
+	../ui/interface/initialplaywindow.cpp \
+	../ui/interface/intelligencewindow.cpp \
+	../Ui/interface/IntroMovieWin.cpp \
+	../Ui/interface/IntroMovieWindow.cpp \
+	../ui/interface/km_screen.cpp \
+	../ui/interface/loadsavemapscreen.cpp \
+	../ui/interface/loadsavemapwindow.cpp \
+	../ui/interface/loadsavescreen.cpp \
+	../ui/interface/loadsavewindow.cpp \
+	../ui/interface/MapCopyBuffer.cpp \
+	../ui/interface/messageactions.cpp \
+	../ui/interface/messageadvice.cpp \
+	../ui/interface/messageeyepoint.cpp \
+	../ui/interface/messageiconbutton.cpp \
+	../ui/interface/messageiconwindow.cpp \
+	../ui/interface/messagelist.cpp \
+	../ui/interface/messagemodal.cpp \
+	../ui/interface/messageresponse.cpp \
+	../ui/interface/messagewin.cpp \
+	../ui/interface/messagewindow.cpp \
+	../ui/interface/musicscreen.cpp \
+	../ui/interface/musictrackscreen.cpp \
+	../ui/interface/optionsscreen.cpp \
+	../ui/interface/optionswindow.cpp \
+	../ui/interface/optionwarningscreen.cpp \
+	../ui/interface/ProfileEdit.cpp \
+	../ui/interface/progresswindow.cpp \
+	../ui/interface/radarwindow.cpp \
+	../ui/interface/scenarioeditor.cpp \
+	../ui/interface/scenarioscreen.cpp \
+	../ui/interface/scenariowindow.cpp \
+	../ui/interface/sciencewin.cpp \
+	../ui/interface/scorewarn.cpp \
+	../ui/interface/screenutils.cpp \
+	../ui/interface/soundscreen.cpp \
+	../ui/interface/splash.cpp \
+	../ui/interface/spnewgamediffscreen.cpp \
+	../ui/interface/spnewgamemapshapescreen.cpp \
+	../ui/interface/spnewgamemapsizescreen.cpp \
+	../ui/interface/spnewgameplayersscreen.cpp \
+	../ui/interface/spnewgamerandomcustomscreen.cpp \
+	../ui/interface/spnewgamerulesscreen.cpp \
+	../ui/interface/spNewGameScreen.cpp \
+	../ui/interface/spnewgametribescreen.cpp \
+	../ui/interface/spnewgamewindow.cpp \
+	../ui/interface/spriteeditor.cpp \
+	../ui/interface/spscreen.cpp \
+	../ui/interface/spwindow.cpp \
+	../ui/interface/statictextbox.cpp \
+	../ui/interface/statswindow.cpp \
+	../ui/interface/String_Search.cpp \
+	../ui/interface/tileimptracker.cpp \
+	../ui/interface/trademanager.cpp \
+	../ui/interface/tutorialwin.cpp \
+	../ui/interface/UIUtils.cpp \
+	../ui/interface/unitmanager.cpp \
+	../ui/interface/victorymoviewin.cpp \
+	../ui/interface/VictoryMovieWindow.cpp \
+	../ui/interface/victorywin.cpp \
+	../ui/interface/victorywindow.cpp \
+	../ui/interface/wondermoviewin.cpp \
+	../ui/interface/WonderMovieWindow.cpp \
+	../ui/interface/WonderTab.cpp \
+	../ui/interface/workwin.cpp \
+	../ui/interface/workwindow.cpp \
+	../ui/interface/InterfaceEventRegister.cpp \
+	../ui/interface/CauseAndEffectTab.cpp \
+	../ui/interface/DomesticManagementDialog.cpp \
+	../ui/interface/GovernmentTab.cpp \
+	../ui/interface/citywindow.cpp \
+	../ui/interface/sci_advancescreen.cpp \
+	../ui/interface/ScienceManagementDialog.cpp \
+	../ui/interface/NationalManagementDialog.cpp \
+	../ui/interface/MessageBoxDialog.cpp \
+	../ui/interface/Battle.cpp \
+	../ui/interface/BattleEvent.cpp \
+	../ui/interface/BattleView.cpp \
+	../ui/interface/BattleViewWindow.cpp \
+	../ui/interface/infowindow.cpp \
+	../ui/interface/rankingtab.cpp \
+	../ui/interface/scoretab.cpp \
+	../ui/interface/timelinetab.cpp \
+	../ui/interface/sciencevictorydialog.cpp \
+	../ui/netshell/allinonewindow.cpp \
+	../ui/netshell/connectionselectwindow.cpp \
+	../ui/netshell/dialogboxwindow.cpp \
+	../ui/netshell/gameselectwindow.cpp \
+	../ui/netshell/lobbychangewindow.cpp \
+	../ui/netshell/lobbywindow.cpp \
+	../ui/netshell/netfunc.cpp \
+	../ui/netshell/netshell.cpp \
+	../ui/netshell/netshell_game.cpp \
+	../ui/netshell/ns_aiplayer.cpp \
+	../ui/netshell/ns_aiplayersetup.cpp \
+	../ui/netshell/ns_chatbox.cpp \
+	../ui/netshell/ns_civlistbox.cpp \
+	../ui/netshell/ns_customlistbox.cpp \
+	../ui/netshell/ns_game.cpp \
+	../ui/netshell/ns_gamesetup.cpp \
+	../ui/netshell/ns_gplayer.cpp \
+	../ui/netshell/ns_header.cpp \
+	../ui/netshell/ns_headerswitch.cpp \
+	../ui/netshell/ns_improvements.cpp \
+	../ui/netshell/ns_item.cpp \
+	../ui/netshell/ns_lobby.cpp \
+	../ui/netshell/ns_player.cpp \
+	../ui/netshell/ns_playersetup.cpp \
+	../ui/netshell/ns_rplayer.cpp \
+	../ui/netshell/ns_server.cpp \
+	../ui/netshell/ns_session.cpp \
+	../ui/netshell/ns_spinner.cpp \
+	../ui/netshell/ns_string.cpp \
+	../ui/netshell/ns_transport.cpp \
+	../ui/netshell/ns_tribes.cpp \
+	../ui/netshell/ns_units.cpp \
+	../ui/netshell/ns_window.cpp \
+	../ui/netshell/ns_wonders.cpp \
+	../ui/netshell/passwordscreen.cpp \
+	../ui/netshell/playereditwindow.cpp \
+	../ui/netshell/playerselectwindow.cpp \
+	../ui/netshell/serverselectwindow.cpp \
+	../ui/slic_debug/segmentlist.cpp \
+	../ui/slic_debug/sourcelist.cpp \
+	../ui/slic_debug/watchlist.cpp \
+	../sound/civsound.cpp \
+	../sound/GameSounds.cpp \
+	../sound/soundevent.cpp \
+	../sound/SoundManager.cpp \
+	../ai/diplomacy/CounterResponseEvent.cpp \
+	../ai/diplomacy/DStateEvent.cpp \
+	../ai/diplomacy/MotivationEvent.cpp \
+	../ai/diplomacy/NProposalEvent.cpp \
+	../ai/diplomacy/ProposalResponseEvent.cpp \
+	../ai/diplomacy/ReactEvent.cpp \
+	../ai/diplomacy/RegardEvent.cpp \
+	../ai/diplomacy/RejectResponseEvent.cpp \
+	../ai/diplomacy/ResponseEvent.cpp \
+	../ai/diplomacy/SStateEvent.cpp \
+	../ai/diplomacy/ThreatResponseEvent.cpp \
+	../ai/diplomacy/AgreementMatrix.cpp \
+	../ai/diplomacy/diplomacyutil.cpp \
+	../ai/diplomacy/Diplomat.cpp \
+	../ai/diplomacy/diplomattypes.cpp \
+	../ai/diplomacy/Foreigner.cpp \
+	../ai/diplomacy/ProposalAnalysis.cpp \
+	../ai/strategy/Scheduler/Plan.cpp \
+	../ai/strategy/Scheduler/Scheduler.cpp \
+	../ai/strategy/goals/CTPGoal.cpp \
+	../ai/strategy/Goals/Goal.cpp \
+	../ai/strategy/Squads/Squad.cpp \
+	../ai/strategy/Squads/squad_Strength.cpp \
+	../ai/strategy/Agents/agent.cpp \
+	../ai/strategy/agents/CTPAgent.cpp \
+	../ai/mapanalysis/BoundingRect.cpp \
+	../ai/mapanalysis/MapAnalysis.cpp \
+	../ai/mapanalysis/SettleMap.cpp \
+	../ai/CityManagement/Governor.cpp \
+	../ai/CtpAi.cpp \
+	../ai/CtpAiDebug.cpp
 
-# Rules for generated sources
-
-../gs/newdb/lex.dbl.c: $(ctp2_code)/gs/newdb/DBLexer.l
-	$(LEXCOMPILE) -i -Pdbl -o../gs/newdb/lex.dbl.c $<
-
-CTPDB=$(top_builddir)/ctp2_code/gs/dbgen/ctpdb$(EXEEXT)
-
-../gs/newdb/AdvanceBranchRecord.cpp \
-../gs/newdb/AdvanceBranchRecord.h: $(ctp2_code)/gs/newdb/advance.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/AdvanceListRecord.cpp \
-../gs/newdb/AdvanceListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb \
-		../gs/newdb/AdvanceRecord.h \
-		$(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/AdvanceRecord.cpp \
-../gs/newdb/AdvanceRecord.h: $(ctp2_code)/gs/newdb/advance.cdb \
-		../gs/newdb/AgeRecord.h \
-		../gs/newdb/CityStyleRecord.h ../gs/newdb/GovernmentRecord.h \
-		../gs/newdb/FeatRecord.h ../gs/newdb/IconRecord.h \
-		$(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/AgeCityStyleRecord.cpp \
-../gs/newdb/AgeCityStyleRecord.h: $(ctp2_code)/gs/newdb/citystyle.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/AgeRecord.cpp \
-../gs/newdb/AgeRecord.h: $(ctp2_code)/gs/newdb/advance.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/BuildListSequenceRecord.cpp \
-../gs/newdb/BuildListSequenceRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/BuildingBuildListRecord.cpp \
-../gs/newdb/BuildingBuildListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb \
-		../gs/newdb/BuildingRecord.h \
-		$(CTPDB) 
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/BuildingRecord.cpp \
-../gs/newdb/BuildingRecord.h: $(ctp2_code)/gs/newdb/building.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/CitySizeRecord.cpp \
-../gs/newdb/CitySizeRecord.h: $(ctp2_code)/gs/newdb/citysize.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/CityStyleRecord.cpp \
-../gs/newdb/CityStyleRecord.h: $(ctp2_code)/gs/newdb/citystyle.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/DiplomacyProposalRecord.cpp \
-../gs/newdb/DiplomacyProposalRecord.h: $(ctp2_code)/gs/newdb/dipproposal.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/DiplomacyRecord.cpp \
-../gs/newdb/DiplomacyRecord.h: $(ctp2_code)/gs/newdb/diplomacy.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/DiplomacyThreatRecord.cpp \
-../gs/newdb/DiplomacyThreatRecord.h: $(ctp2_code)/gs/newdb/dipthreat.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/EndGameObjectRecord.cpp \
-../gs/newdb/EndGameObjectRecord.h: $(ctp2_code)/gs/newdb/EndGameObject.cdb \
-		../gs/newdb/TerrainImprovementRecord.h \
-		../gs/newdb/WonderRecord.h \
-		$(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/FeatRecord.cpp \
-../gs/newdb/FeatRecord.h: $(ctp2_code)/gs/newdb/feat.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/GoalRecord.cpp \
-../gs/newdb/GoalRecord.h: $(ctp2_code)/gs/newdb/goal.cdb \
-		../gs/newdb/OrderRecord.h \
-		$(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/GovernmentRecord.cpp \
-../gs/newdb/GovernmentRecord.h: $(ctp2_code)/gs/newdb/government.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/IconRecord.cpp \
-../gs/newdb/IconRecord.h: $(ctp2_code)/gs/newdb/icon.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/ImprovementListRecord.cpp \
-../gs/newdb/ImprovementListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/OrderRecord.cpp \
-../gs/newdb/OrderRecord.h: $(ctp2_code)/gs/newdb/order.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/PersonalityRecord.cpp \
-../gs/newdb/PersonalityRecord.h: $(ctp2_code)/gs/newdb/personality.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/PopRecord.cpp \
-../gs/newdb/PopRecord.h: $(ctp2_code)/gs/newdb/pop.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/ResourceRecord.cpp \
-../gs/newdb/ResourceRecord.h: $(ctp2_code)/gs/newdb/terrain.cdb \
-		../gs/newdb/SoundRecord.h \
-		$(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/SoundRecord.cpp \
-../gs/newdb/SoundRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/SpecialAttackInfoRecord.cpp \
-../gs/newdb/SpecialAttackInfoRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/SpecialEffectRecord.cpp \
-../gs/newdb/SpecialEffectRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/SpriteRecord.cpp \
-../gs/newdb/SpriteRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/StrategyRecord.cpp \
-../gs/newdb/StrategyRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/TerrainImprovementRecord.cpp \
-../gs/newdb/TerrainImprovementRecord.h: $(ctp2_code)/gs/newdb/terrimprove.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/TerrainRecord.cpp \
-../gs/newdb/TerrainRecord.h: $(ctp2_code)/gs/newdb/terrain.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/UnitBuildListRecord.cpp \
-../gs/newdb/UnitBuildListRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/UnitRecord.cpp \
-../gs/newdb/UnitRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/WonderBuildListRecord.cpp \
-../gs/newdb/WonderBuildListRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/WonderMovieRecord.cpp \
-../gs/newdb/WonderMovieRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
-../gs/newdb/WonderRecord.cpp \
-../gs/newdb/WonderRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
-	$(CTPDB) ../gs/newdb < $<
-	touch $@
-
+ctp2_LDADD = \
+	../gs/newdb/libgsnewdb.la \
+	../gs/slic/libgsslic.la \
+	$(SDL_LDFLAGS)
 
 AM_CXXFLAGS=\
 	$(SDL_CFLAGS)
@@ -608,6 +750,7 @@ AM_CPPFLAGS=\
 		$(CTP2_ANET_INC) \
 	-I$(ctp2_code)/mm \
 	-I$(ctp2_code)/robotcom/backdoor \
+	-I$(top_builddir)/ctp2_code/gs/slic \
 	-I$(ctp2_code)/gs/slic \
 	-I$(ctp2_code)/gfx/layers \
 	-I$(ctp2_code)/mapgen \
@@ -622,6 +765,7 @@ AM_CPPFLAGS=\
 	-I$(ctp2_code)/gs/outcom \
 	-I$(ctp2_code)/ctp \
 	-I$(ctp2_code)/ui/aui_common \
+	-I$(top_builddir)/ctp2_code/ui/ldl \
 	-I$(ctp2_code)/ui/ldl \
 		$(INCORDER_ctp2_code__libs__dxmedia__classes__base) \
 		$(INCORDER_ctp2_code__libs__dxmedia__include) \

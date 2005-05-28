@@ -1818,7 +1818,7 @@ ORDER_RESULT Unit::InvestigateCity(Unit &c)
 	return AccessData()->InvestigateCity(c);
 }
 
-ORDER_RESULT Unit::StealTechnology(Unit &c, sint32 whichAdvance)
+ORDER_RESULT Unit::StealTechnology(const Unit &c, sint32 whichAdvance)
 {
 	return AccessData()->StealTechnology(c, whichAdvance);
 }
@@ -2445,7 +2445,7 @@ void Unit::AddEndGameObject(sint32 type)
 	AccessData()->AddEndGameObject(type);
 }
 
-BOOL Unit::SendSlaveTo(Unit &dest)
+BOOL Unit::SendSlaveTo(const Unit &dest)
 {
 	return AccessData()->SendSlaveTo(dest);
 }

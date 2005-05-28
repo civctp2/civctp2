@@ -414,7 +414,7 @@ public:
 	BOOL HasForceField() const;
 
 	ORDER_RESULT InvestigateCity(Unit &c);
-	ORDER_RESULT StealTechnology(Unit &c, sint32 whichAdvance);
+	ORDER_RESULT StealTechnology(const Unit &c, sint32 whichAdvance);
 	ORDER_RESULT InciteRevolution(Unit &c);
 	ORDER_RESULT AssassinateRuler(Unit &c);
 	ORDER_RESULT InvestigateReadiness(Unit &c);
@@ -582,7 +582,7 @@ public:
 
 	void AddEndGameObject(sint32 type);
 
-	BOOL SendSlaveTo(Unit &dest);
+	BOOL SendSlaveTo(const Unit &dest);
 
 	void SetFullHappinessTurns(sint32 turns);
 

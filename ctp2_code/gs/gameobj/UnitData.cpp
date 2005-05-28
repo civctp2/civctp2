@@ -3576,7 +3576,7 @@ BOOL UnitData::HasForceField() const
 	return m_city_data->HasForceField();
 }
 
-BOOL UnitData::StoppedBySpies(Unit &c)
+BOOL UnitData::StoppedBySpies(const Unit &c)
 {
 	SlicObject	*so ;
 	MapPoint pos;
@@ -3708,7 +3708,7 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 	return ORDER_RESULT_SUCCEEDED;
 }
 
-ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
+ORDER_RESULT UnitData::StealTechnology(const Unit &c, sint32 whichAdvance)
 {
 	SlicObject	*so ;
 
@@ -3747,8 +3747,8 @@ ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
 			randChance += g_theConstDB->EliteSpyBonus();
 		}
 
-		c.ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, randChance);
-		c.SetWatchful();
+		const_cast<Unit &>(c).ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, randChance);
+		const_cast<Unit &>(c).SetWatchful();
 
 		if(g_rand->Next(100) >= sint32(randChance * 100.0)) {
 			so = new SlicObject("10bStealTechnologyFailed") ;
@@ -3818,8 +3818,8 @@ ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
 			specChance += g_theConstDB->EliteSpyBonus();
 		}
 
-		c.ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, specChance);
-		c.SetWatchful();
+		const_cast<Unit &>(c).ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, specChance);
+		const_cast<Unit &>(c).SetWatchful();
 
 		if(g_rand->Next(100) > sint32(specChance * 100.0)) {
 			
@@ -5520,7 +5520,7 @@ void UnitData::AddEndGameObject(sint32 type)
 	}
 }
 
-BOOL UnitData::SendSlaveTo(Unit &dest)
+BOOL UnitData::SendSlaveTo(const Unit &dest)
 {
 	Assert(m_city_data);
 	if(m_city_data) {
@@ -5680,7 +5680,7 @@ void UnitData::BuildCapitalization()
 	}
 }
 
-void UnitData::ActionSuccessful(SPECATTACK attack, Unit &c)
+void UnitData::ActionSuccessful(SPECATTACK attack, const Unit &c)
 {
 	sint32		soundID, spriteID;
 

@@ -58,8 +58,8 @@ void TradeOfferData::Serialize(CivArchive &archive)
 }
 
 BOOL TradeOfferData::Accept(PLAYER_INDEX player, 
-							Unit &sourceCity,
-							Unit &destCity)
+                            const Unit &sourceCity,
+                            const Unit &destCity)
 {
 #ifndef RECIPROCAL_ROUTES
 	Assert(m_askingType == ROUTE_TYPE_GOLD);

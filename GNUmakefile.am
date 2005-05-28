@@ -1,5 +1,5 @@
 #
-# $Id$
+# $Id: /ctp2/local-linux/GNUmakefile.am 1574 2005-05-27T21:53:23.640016Z holger  $
 #
 SUBDIRS=\
 	ctp2_code

@@ -2,4 +2,6 @@
 # $Id$
 #
 SUBDIRS=\
-	dbgen
+	dbgen \
+	newdb \
+	slic

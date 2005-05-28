@@ -48,9 +48,9 @@ public:
 	void Serialize(CivArchive &archive);
 
 	uint32 AddBid(sint32 owner,
-				  Unit &fromCity,
+				  const Unit &fromCity,
 				  sint32 resource,
-				  Unit &toCity,
+				  const Unit &toCity,
 				  sint32 price);
 	void Reject(uint32 id);
 	void Accept(uint32 id);

@@ -42,6 +42,7 @@ AM_PATH_DXMEDIA
 AM_PATH_SDL
 AC_DEFINE(USE_SDL,1,[Use the SDL-library])
 
+AC_WORDS_BIGENDIAN
 AC_OS_DEFINES
 AC_OS_PATHNAMES
 
@@ -86,5 +87,8 @@ AC_OUTPUT([
    ctp2_code/gs/Makefile
    ctp2_code/gs/dbgen/Makefile
    ctp2_code/gs/newdb/Makefile
+   ctp2_code/gs/slic/Makefile
    ctp2_code/mapgen/Makefile
+   ctp2_code/os/Makefile
+   ctp2_code/os/nowin32/Makefile
 ])

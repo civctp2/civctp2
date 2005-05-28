@@ -60,91 +60,17 @@
 extern QuadTree<Unit>              *g_theUnitTree;
 
 #define k_TERRAIN_HEADER 'TERR'
-
-
-
 #define k_TERRAIN_ENV_HEADER 'TENV'
-
-
-
 #define k_CITIES_HEADER 'CITY'
-
-
-
-
-
-
-
-
-
-
 #define k_NEW_CITIES_HEADER 'NCTY'
-
-
-
-
-
-
-
-
-
-
 #define k_UNIT_TYPES_HEADER 'UTYP'
-
-
-
-
-
 #define k_UNITS_HEADER 'UNIT'
-
-
-
-
-
-
-
-
-
-
 #define k_IMPROVEMENT_TYPES_HEADER 'ITYP'
-
-
-
-
-
 #define k_IMPROVEMENTS_HEADER 'IMPS'
-
-
-
-
-
-
-
-
-
 #define k_VISION_HEADER 'VISN'
-
-
-
-
 #define k_ADVANCE_TYPES_HEADER 'ATYP'
-
-
-
-
-
 #define k_PLAYER_ADVANCES_HEADER 'PADV'
-
-
-
-
-
-
 #define k_HUTS_HEADER 'HUTS'
-
-
-
-
 #define k_CIVS_HEADER 'CIVS'
 
 

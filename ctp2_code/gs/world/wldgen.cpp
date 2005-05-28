@@ -31,7 +31,7 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "globals.h"
+#include "Globals.h"
 
 #include "TerrainRecord.h"
 
@@ -66,17 +66,20 @@
 
 #include "terrainutil.h"
 #include "cellunitlist.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "citydata.h"
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
 #include "bmp_io.h"
 #endif
 
-
+#ifndef USE_COM_REPLACEMENT
 #include <initguid.h>
+#else
+#include <ltdl.h>
+#endif
 #include "C3Rand.h"
-#include "ic3RobotAstar.h"
+#include "IC3RobotAstar.h"
 #include "IMapGen.h"
 
 extern	Player	**g_player ;
@@ -254,14 +257,19 @@ World::~World()
                 // m_land_next_too_water, m_water_size, m_land_size,
                 // m_tileInfoStorage
 	delete m_distanceQueue;
-    delete A_star_heuristic;
+	delete A_star_heuristic;
 
-    delete [] m_goodValue;
+	delete [] m_goodValue;
 	
-    if (m_current_plugin)
-    {
-        FreeLibrary(m_current_plugin);
-    }
+	if (m_current_plugin)
+	{
+#ifndef USE_COM_REPLACEMENT
+		FreeLibrary(m_current_plugin);
+#else
+		lt_dlclose(m_current_plugin);
+		lt_dlexit();
+#endif
+	}
 }
 
 void World::FreeMap()
@@ -1767,21 +1775,21 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
 
 	MapPoint pos(x, y);   
 	sint32 cont;
-	int is_land;
+	BOOL is_land;
 	GetContinent(pos, cont, is_land);
-    if (!is_land) {
-        cum_score = 0.0; 
+	if (!is_land) {
+		cum_score = 0.0; 
 	} else if(m_land_size->Access(cont) < s_actualMinContinentStartSize) {
 		cum_score = 0.0;
-    } else { 
-        MapPoint start, pos;
-        start.Set(x, y); 
-        cum_score = 0.0; 
+	} else { 
+		MapPoint start, pos;
+		start.Set(x, y); 
+		cum_score = 0.0; 
 
 		
 		sint32 oldYwrap = m_isYwrap;
-	    m_isYwrap = TRUE;
-        for (start.FirstRectItt(d, pos, i); start.EndRectItt(d, i); start.NextRectItt(d, pos, i)) { 
+		m_isYwrap = TRUE;
+		for (start.FirstRectItt(d, pos, i); start.EndRectItt(d, i); start.NextRectItt(d, pos, i)) { 
 			if(i == 0 || i == 4 || i == 20 || i == 24)
 				continue; 
 			Cell *cell = m_map[pos.x][pos.y];
@@ -1791,10 +1799,9 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
 				cum_score += raw_score[pos.x][pos.y]; 
 				numCounted[cell->m_terrain_type]++;
 			}
-        }
+		}
 		m_isYwrap = oldYwrap;
-
-    } 
+	} 
 	m_map[x][y]->m_color = sint32(cum_score);
 }
 
@@ -1821,7 +1828,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 	}
 	sint32 playerContinent;
 	if(index > 0) {
-		int is_land;
+		BOOL is_land;
 		GetContinent(player_start[0], playerContinent, is_land);
 	} else {
 		playerContinent = 0;
@@ -1834,7 +1841,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 			
 			if(g_theProfileDB->IsTutorialAdvice() && !ignoreTutorialRules && index != 0) {
 				sint32 cont;
-				int is_land;
+				BOOL is_land;
 				GetContinent(chk, cont, is_land);
 				if(is_land && cont == playerContinent)
 					continue;
@@ -2760,29 +2767,62 @@ void World::GenerateGoodyHuts()
 
 IMapGenerator *World::LoadMapPlugin(sint32 pass)
 {
+#ifndef USE_COM_REPLACEMENT
 	HINSTANCE plugin;
+#else
+	lt_dlhandle plugin;
+#endif
 	const char *name = g_theProfileDB->MapPluginName(pass);
 	if(stricmp(name, "none") == 0)
 		return NULL;
+#ifndef USE_COM_REPLACEMENT
 	plugin = LoadLibrary(name);
-	if(plugin == NULL) {
-		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
+#else
+	int rc = lt_dlinit();
+	if (0 != rc) {
 		return NULL;
 	}
+	plugin = lt_dlopen(name);
+#endif
+	if(plugin == NULL) {
+		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
+#ifdef USE_COM_REPLACEMENT
+		lt_dlexit();
+#endif
+		return NULL;
+	}
+#ifndef USE_COM_REPLACEMENT
 	CreateMapGenerator creator = (CreateMapGenerator)GetProcAddress(plugin, "CoCreateMapGenerator");
+#else
+	CreateMapGenerator creator = (CreateMapGenerator)lt_dlsym(plugin, "CoCreateMapGenerator");
+#endif
 	if(creator == NULL) {
+#ifndef USE_COM_REPLACEMENT
 		FreeLibrary(plugin);
+#else
+		lt_dlclose(plugin);
+		lt_dlexit();
+#endif
 		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", name);
 		return NULL;
 	}
-	
+#ifndef USE_COM_REPLACEMENT
 	IUnknown *unknown;
 	if(creator(&unknown) != S_OK) {
+#else
+	IMapGenerator *generator = creator();
+	if (!generator) {
+#endif
 		c3errors_ErrorDialog("Map Generator", "Plugin creation failed");
+#ifndef USE_COM_REPLACEMENT
 		FreeLibrary(plugin);
+#else
+		lt_dlclose(plugin);
+		lt_dlexit();
+#endif
 		return NULL;
 	}
-	
+#ifndef USE_COM_REPLACEMENT	
 	IMapGenerator *generator;
 	if(unknown->QueryInterface(CLSID_MapGenerator, (void **)&generator) != S_OK) {
 		c3errors_ErrorDialog("Map Generator", "Plugin does not have map generator interface");
@@ -2790,16 +2830,23 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 		FreeLibrary(plugin);
 		return NULL;
 	}
-	
+#endif
 	m_current_plugin = plugin;
+#ifndef USE_COM_REPLACEMENT
 	unknown->Release();
+#endif
 	return generator;
 }
 	
 void World::FreeMapPlugin()
 {
+#ifndef USE_COM_REPLACEMENT
 	FreeLibrary(m_current_plugin);
-    m_current_plugin = NULL;
+#else
+	lt_dlclose(m_current_plugin);
+	lt_dlexit();
+#endif
+	m_current_plugin = NULL;
 }
 
 void World::GetHeightMap(IMapGenerator *mapgen,

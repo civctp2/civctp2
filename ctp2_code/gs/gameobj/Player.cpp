@@ -3682,7 +3682,7 @@ void Player::CreateTradeBid(Unit &fromCity, sint32 resource, Unit &toCity)
 
 }
 
-void Player::SendTradeBid(Unit &fromCity, sint32 resource, Unit &toCity,
+void Player::SendTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity,
 						  sint32 price)
 {
 	Assert(fromCity.GetOwner() != m_owner);
@@ -3732,7 +3732,7 @@ void Player::SendTradeBid(Unit &fromCity, sint32 resource, Unit &toCity,
 
 }
 
-void Player::AcceptTradeBid(Unit &fromCity, sint32 resource, Unit &toCity,
+void Player::AcceptTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity,
 							sint32 price)
 {
 	SlicObject *so = new SlicObject("TradeBidAccepted");
@@ -3757,7 +3757,7 @@ void Player::AcceptTradeBid(Unit &fromCity, sint32 resource, Unit &toCity,
 					 price); 
 }
 
-void Player::RejectTradeBid(Unit &fromCity, sint32 resource, Unit &toCity,
+void Player::RejectTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity,
 							sint32 price)
 {
 	SlicObject *so = new SlicObject("TradeBidRejected");

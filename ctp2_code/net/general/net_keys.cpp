@@ -12,7 +12,7 @@
 #include "CivilisationPool.h"
 #include "DiplomaticRequestPool.h"
 #include "MessagePool.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "ArmyPool.h"
 #include "AgreementPool.h"
 

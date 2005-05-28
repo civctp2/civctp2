@@ -27,6 +27,7 @@
 #error "WIN32 defined, but included windows.h from os/nowin32!"
 #endif
 
+#include <assert.h>
 #include "tchar.h"
 
 /* Windows data types */
@@ -107,6 +108,7 @@ typedef struct hwnd_t* HWND;
 #define WINAPI
 
 /* stub functions */
+char* _fullpath(char*, const char*, int);
 void _splitpath(const char*,char*,char*,char*,char*);
 uint32 GetTickCount();
 sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags);

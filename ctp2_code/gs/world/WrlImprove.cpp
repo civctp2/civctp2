@@ -39,7 +39,7 @@ World::InsertImprovement(const TerrainImprovement &imp, MapPoint &pnt)
 }
 
 void
-World::RemoveImprovement(const TerrainImprovement &imp, MapPoint &pnt)
+World::RemoveImprovement(const TerrainImprovement &imp, const MapPoint &pnt)
 {
 	GetCell(pnt)->RemoveImprovement(imp);
 }

@@ -26,7 +26,7 @@ public:
 	GameEventManager();
 	~GameEventManager();
 
-//	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type, ...);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type, ...);
 	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
 				GAME_EVENT_ARGUMENT, int,
 				GAME_EVENT_ARGUMENT);

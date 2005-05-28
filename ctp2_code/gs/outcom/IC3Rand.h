@@ -1,4 +1,4 @@
-#if defined(_MSC_VER) && (_MSC_VER > 1200)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __IC3RAND_H__
@@ -22,6 +22,7 @@ DECLARE_INTERFACE_(IC3Rand, IUnknown)
 	STDMETHOD_(sint32, Next) (THIS_ sint32 range) PURE;
 };
 #else
+#include "noCOMBase.h"
 
 class IC3Rand : public ICTP2Unknown
 {

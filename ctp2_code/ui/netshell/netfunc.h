@@ -2,6 +2,7 @@
 #define __NETFUNC_H__
 
 #include "anet.h"
+#include <locale>
 #include <iterator>
 #include <stdio.h>
 #include <stdlib.h>

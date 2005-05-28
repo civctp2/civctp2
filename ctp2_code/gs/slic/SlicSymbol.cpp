@@ -45,7 +45,7 @@
 #include "UnitData.h"
 #include "Civilisation.h"
 #include "player.h"
-#include "gold.h"
+#include "Gold.h"
 #include "TurnCnt.h"
 #include "TaxRate.h"
 #include "Agreement.h"
@@ -529,7 +529,7 @@ BOOL SlicSymbolData::SetUnit(Unit &unit)
 	return FALSE;
 }
 
-BOOL SlicSymbolData::SetCity(Unit &city)
+BOOL SlicSymbolData::SetCity(const Unit &city)
 {
 	if(GetType() == SLIC_SYM_CITY) {
 		m_val.m_city_id = city.m_id;
@@ -544,7 +544,7 @@ BOOL SlicSymbolData::SetCity(Unit &city)
 	return FALSE;
 }
 
-BOOL SlicSymbolData::SetArmy(Army &army)
+BOOL SlicSymbolData::SetArmy(const Army &army)
 {
 	if(GetType() == SLIC_SYM_ARMY) {
 		m_val.m_army_id = army.m_id;

@@ -11,7 +11,7 @@
 #include "SlicObject.h"
 #include "SlicEngine.h"
 #include "cellunitlist.h"
-#include "aicause.h"
+#include "AICause.h"
 
 STDEHANDLER(CutImprovementsEvent)
 {

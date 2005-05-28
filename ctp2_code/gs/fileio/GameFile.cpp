@@ -31,7 +31,7 @@
 #include "c3errors.h"
 #include "c3files.h"
 
-#include "zlib.h"
+#include <zlib.h>
 
 #include "BldQue.h"
 #include "ConstDB.h"
@@ -68,7 +68,7 @@
 #include "TerrImprovePool.h"
 #include "WonderRecord.h"
 #include "Advances.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Sci.h"
 #include "TaxRate.h"
 #include "UnitPool.h"
@@ -124,6 +124,10 @@
 extern int g_gameWatchID;
 #endif 
 
+#ifndef WIN32
+#include <sys/types.h>
+#include <dirent.h>
+#endif
 
 
 sint32 g_showUnitLabels = FALSE;
@@ -238,132 +242,57 @@ MBCHAR g_scenarioName[k_SCENARIO_NAME_MAX];
 
 
 
-
-
-
-
-
-
-
-
-
 void GameFile::RestoreGame(const MBCHAR *filename)
-	{
+{
 	GameFile	*game ;
 
-    game = new GameFile ;
-	
+	game = new GameFile ;
 	game->Restore(filename);
 
 	delete game ;
-	} 
-
-
-
-
-
-
-
-
+} 
 
 
 void GameFile::RestoreScenarioGame(MBCHAR *name)
 {
 	GameFile	*game;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		game = new GameFile;
-		game->Restore(name);
-		delete game;
+	game = new GameFile;
+	game->Restore(name);
+	delete game;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void GameFile::SaveGame(const MBCHAR *filename, SaveInfo *info)
-	{
+{
 	GameFile	*game ;
 
 	game = new GameFile ;
-	game->Save(filename, info) ;
-    delete game ;
-	}
-
-
-
-
-
-
-
-
-
+	game->Save(filename, info);
+	
+	delete game;
+}
 
 
 
 GameFile::GameFile(void)
-	{
-
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-static uint32 CompressData(uint8 *inbuf, uint32 insize,
-                           uint8 **outbuf, uint32 *outsize)
 {
-    int err;
-    uint32 tsize = (uint32)(((double)insize * 1.01) + 12.5);
 
-	*outbuf = new uint8[tsize];
-    *outsize = tsize;
-    err = compress2(*outbuf, outsize, inbuf, insize, Z_DEFAULT_COMPRESSION);
-    
-    return(err == Z_OK);
 }
 
 
+static uint32 CompressData(uint8 *inbuf, size_t insize,
+                           uint8 **outbuf, size_t *outsize)
+{
+	int err;
+	uLong tsize = (uLong)(((double)insize * 1.01) + 12.5);
 
-
-
-
-
-
-
-
-
-
-
-
+	*outbuf = new uint8[tsize];
+	
+	err = compress2(*outbuf, &tsize, inbuf, insize, Z_DEFAULT_COMPRESSION);
+	*outsize = tsize;
+    
+	return(err == Z_OK);
+}
 
 
 uint32 GameFile::SaveDB(CivArchive &archive)
@@ -518,13 +447,13 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 }
 
 uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
-	{
+{
 
 
 	FILE	*fpSave = NULL;
     
-	uint32	ulLen,
-			n ;
+	size_t ulLen;
+	uint32 n ;
 
 	sint32	i ;
 
@@ -534,8 +463,8 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	MBCHAR	sHeader[_MAX_PATH] ;
 
-    uint32	compressedSize = 0;
-    uint8	*compressedData = NULL;
+	size_t compressedSize = 0;
+	uint8	*compressedData = NULL;
 
 	start = clock() ;
 
@@ -933,9 +862,8 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	{
 	FILE	*fpLoad ;
 
-	uint32	ver,
-			ulLen,
-			n ;
+	uint32	ver, n;
+	size_t ulLen;
 
 	clock_t	start, finish ;
 
@@ -943,9 +871,9 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	CivArchive	archive ;
 
-    uint32	tlen = 0;
-    uint32	compressedSize = 0;
-    uint8	*compressedData = NULL;
+	size_t	tlen = 0;
+	size_t	compressedSize = 0;
+	uint8	*compressedData = NULL;
 
 	start = clock() ;
 
@@ -2159,7 +2087,7 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 	MBCHAR		header[_MAX_PATH] ;
 	sint32		n;
 
-	sprintf(filepath, "%s\\%s", path, info->fileName);
+	sprintf(filepath, "%s%s%s", path, FILE_SEP, info->fileName);
 
 	saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");
 	if (saveFile == NULL) 
@@ -2255,83 +2183,125 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 
 	list = new PointerList<GameInfo>;
 
-	
+#ifdef WIN32	
 	WIN32_FIND_DATA		fileData;
 	HANDLE				lpDirList;
+#else
+	DIR			*d;
+	struct stat		tmpstat;
+	struct dirent		*dent = 0;
+#endif
 	MBCHAR				dirPath[_MAX_PATH],
-						path[_MAX_PATH];
+					path[_MAX_PATH];
 
 	
 	if (!g_civPaths->GetSavePath(dir, dirPath)) return list;
 
 	
-	sprintf(path, "%s\\*.*", dirPath);
-
-	
+#ifdef WIN32
+	sprintf(path, "%s%s*.*", dirPath);
 	lpDirList = FindFirstFile(path, &fileData);
 
 	
 	if (lpDirList == INVALID_HANDLE_VALUE) return list;
+#else
+	d = opendir(dirPath);
+	if (!dir) return list;
+#endif
 
 	GameInfo			*gameInfo;
 
 	do {
+#ifndef WIN32
+		dent = readdir(d);
+		if (!dent) continue;
+		
+		snprintf(path, sizeof(path), "%s%s%s", dirPath, FILE_SEP, dent->d_name);
+		if (!stat(path, &tmpstat))
+			continue;
+		
+		if (S_ISDIR(tmpstat.st_mode)) {
+			MBCHAR *name = dent->d_name;
+#else
 		if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			if (!strcmp(fileData.cFileName, ".")) continue;
-			if (!strcmp(fileData.cFileName, "..")) continue;
+			MBCHAR *name = fileData.cFileName;
+#endif
+			if (!strcmp(name, ".")) continue;
+			if (!strcmp(name, "..")) continue;
 
 			
 			gameInfo = new GameInfo();
 
 			
-			strcpy(gameInfo->name, fileData.cFileName);
+			strcpy(gameInfo->name, name);
 
 			
-			sprintf(gameInfo->path, "%s%s", dirPath, fileData.cFileName);
+			sprintf(gameInfo->path, "%s%s%s", dirPath, FILE_SEP, name);
 
 			
 			gameInfo->files = new PointerList<SaveInfo>;
 
-			
 			list->AddTail(gameInfo);
 
-			
+#ifdef WIN32			
 			WIN32_FIND_DATA		fileData2;
 			HANDLE				lpFileList;
 
-			sprintf(path, "%s\\*.*", gameInfo->path);
+			sprintf(path, "%s%s*.*", gameInfo->path, FILE_SEP);
 
 			
 			lpFileList = FindFirstFile(path, &fileData2);
-
 			if (lpFileList == INVALID_HANDLE_VALUE) continue;
+#else
+			DIR *dir2 = opendir(path);
+			struct dirent *dent2 = 0;
+			
+			if (!dir2) continue;
+#endif
 			do {
+#ifndef WIN32
+				dent2 = readdir(dir2);
+				if (!dent2) continue;
+				
+				snprintf(path, sizeof(path), "%s%s%s", gameInfo->path, FILE_SEP, dent2->d_name);
+				if (!stat(path, &tmpstat)) continue;
+				
+				if (!S_ISDIR(tmpstat.st_mode)) {
+					name = dent2->d_name;
+#else
 				if (!(fileData2.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+					name = fileData2.cFileName;
+#endif
 					
 					SaveInfo		*saveInfo = new SaveInfo();
 
 					
-					strcpy(saveInfo->fileName, fileData2.cFileName);
+					strcpy(saveInfo->fileName, name);
 
 					
-					sprintf(saveInfo->pathName, "%s\\%s", gameInfo->path, saveInfo->fileName);
+					sprintf(saveInfo->pathName, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 
 					
 					if (!ValidateGameFile(gameInfo->path, saveInfo)) {
 						delete saveInfo;
 						continue;
 					}
-
 					
 					gameInfo->files->AddTail(saveInfo);
 				}
+#ifdef WIN32
 			} while (FindNextFile(lpFileList, &fileData2));
-
 			FindClose(lpFileList);
 		}
 	} while(FindNextFile(lpDirList,&fileData));
-
 	FindClose(lpDirList);
+#else
+			} while (dent2);
+			closedir(dir2);
+		}
+	} while(dent);
+	closedir(d);
+#endif
 
 	return list;
 }
@@ -2875,7 +2845,7 @@ BOOL GameMapFile::ValidateGameMapFile(MBCHAR *path, SaveMapInfo *info)
 	MBCHAR		header[_MAX_PATH] ;
 	sint32		n;
 
-	sprintf(filepath, "%s\\%s", path, info->fileName);
+	sprintf(filepath, "%s%s%s", path, FILE_SEP, info->fileName);
 
 	saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");
 	if (saveFile == NULL) 
@@ -2911,65 +2881,96 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 	list = new PointerList<GameMapInfo>;
 
 	
+#ifdef WIN32	
 	WIN32_FIND_DATA		fileData;
 	HANDLE				lpDirList;
+#else
+	DIR			*d;
+	struct stat		tmpstat;
+	struct dirent		*dent = 0;
+#endif
 	MBCHAR				dirPath[_MAX_PATH],
 						path[_MAX_PATH];
 
 	
 	if (!g_civPaths->GetSavePath(dir, dirPath)) return list;
 
-	
-	sprintf(path, "%s\\*.*", dirPath);
-
+#ifdef WIN32
+	sprintf(path, "%s%s*.*", dirPath, FILE_SEP);
 	
 	lpDirList = FindFirstFile(path, &fileData);
 
 	
 	if (lpDirList == INVALID_HANDLE_VALUE) return list;
+#else
+	d = opendir(dirPath);
+	if (!dir) return list;
+#endif
 
 	GameMapInfo			*gameInfo;
 
 	do {
+#ifndef WIN32
+		dent = readdir(d);
+		if (!dent) continue;
+		
+		snprintf(path, sizeof(path), "%s%s%s", dirPath, FILE_SEP, dent->d_name);
+		if (!stat(path, &tmpstat))
+			continue;
+		
+		if (S_ISDIR(tmpstat.st_mode)) {
+			MBCHAR *name = dent->d_name;
+#else
 		if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			if (!strcmp(fileData.cFileName, ".")) continue;
-			if (!strcmp(fileData.cFileName, "..")) continue;
+			MBCHAR *name = fileData.cFileName;
+#endif
+			if (!strcmp(name, ".")) continue;
+			if (!strcmp(name, "..")) continue;
 
 			
 			gameInfo = new GameMapInfo();
-
-			
-			strcpy(gameInfo->name, fileData.cFileName);
-
-			
-			sprintf(gameInfo->path, "%s%s", dirPath, fileData.cFileName);
-
-			
+			strcpy(gameInfo->name, name);
+			sprintf(gameInfo->path, "%s%s%s", dirPath, FILE_SEP, name);
 			gameInfo->files = new PointerList<SaveMapInfo>;
-
 			
 			list->AddTail(gameInfo);
 
-			
+#ifdef WIN32			
 			WIN32_FIND_DATA		fileData2;
 			HANDLE				lpFileList;
 
-			sprintf(path, "%s\\*.*", gameInfo->path);
+			sprintf(path, "%s%s*.*", gameInfo->path, FILE_SEP);
 
 			
 			lpFileList = FindFirstFile(path, &fileData2);
-
 			if (lpFileList == INVALID_HANDLE_VALUE) continue;
+#else
+			DIR *dir2 = opendir(path);
+			struct dirent *dent2 = 0;
+			
+			if (!dir2) continue;
+#endif
 			do {
+#ifndef WIN32
+				dent2 = readdir(dir2);
+				if (!dent2) continue;
+				
+				snprintf(path, sizeof(path), "%s%s%s", gameInfo->path, FILE_SEP, dent2->d_name);
+				if (!stat(path, &tmpstat)) continue;
+				
+				if (!S_ISDIR(tmpstat.st_mode)) {
+					name = dent2->d_name;
+#else
 				if (!(fileData2.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-					
+					name = fileData2.cFileName;
+#endif
 					SaveMapInfo		*saveInfo = new SaveMapInfo();
 
 					
-					strcpy(saveInfo->fileName, fileData2.cFileName);
+					strcpy(saveInfo->fileName, name);
 
 					
-					sprintf(saveInfo->pathName, "%s\\%s", gameInfo->path, saveInfo->fileName);
+					sprintf(saveInfo->pathName, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 
 					
 					if (!ValidateGameMapFile(gameInfo->path, saveInfo)) {
@@ -2980,13 +2981,19 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 					
 					gameInfo->files->AddTail(saveInfo);
 				}
+#ifdef WIN32
 			} while (FindNextFile(lpFileList, &fileData2));
-
 			FindClose(lpFileList);
 		}
 	} while(FindNextFile(lpDirList,&fileData));
-
 	FindClose(lpDirList);
+#else
+			} while (dent2);
+			closedir(dir2);
+		}
+	} while(dent);
+	closedir(d);
+#endif
 
 	return list;
 }

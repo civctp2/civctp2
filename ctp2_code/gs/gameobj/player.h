@@ -662,9 +662,9 @@ public:
 	void WithdrawTradeOffer(TradeOffer offer);
 	void AcceptTradeOffer(TradeOffer offer, Unit &sourceCity, Unit &destCity);
 	void CreateTradeBid(Unit &fromCity, sint32 resource, Unit &toCity);
-	void SendTradeBid(Unit &fromCity, sint32 resource, Unit &toCity, sint32 price);
-	void AcceptTradeBid(Unit &fromCity, sint32 resource, Unit &toCity, sint32 price);
-	void RejectTradeBid(Unit &fromCity, sint32 resource, Unit &toCity, sint32 price);
+	void SendTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity, sint32 price);
+	void AcceptTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity, sint32 price);
+	void RejectTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity, sint32 price);
 
 	void AddTrader(Unit uid);
     sint32 GetUnusedFreight()const; 

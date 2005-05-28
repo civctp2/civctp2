@@ -46,7 +46,7 @@
 #include "SlicArray.h"
 #include "SlicSymbol.h"
 #include "SimpleDynArr.h"
-#include "order.h"
+#include "Order.h"
 #include "diplomattypes.h"
 
 SlicContext::SlicContext()

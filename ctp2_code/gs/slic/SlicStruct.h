@@ -35,16 +35,14 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
 #ifndef __SLIC_STRUCT_H__
-#define __SLIC_STRUCH_H__
+#define __SLIC_STRUCT_H__ 1
 
-#if !defined(ACTIVISION)
 #include <vector>		// std::vector
-#endif
 
 #include "slicif.h"
 #include "SlicStack.h"
@@ -56,12 +54,6 @@ class SlicSymbolData;
 class SlicNamedSymbol;
 class SlicStructInstance;
 class SlicStructMemberData;
-
-
-
-
-
-
 
 class SlicStructDescription {
 public:
@@ -79,12 +71,12 @@ public:
 
 		SLIC_SYM m_type;
 		char *m_name;
-		SlicStructDescription *m_parent;
-		SlicStructMemberData *m_symbol; 
+		class SlicStructDescription *m_parent;
+		class SlicStructMemberData *m_symbol; 
 	};
 
 	SlicStructDescription(char *name, SLIC_BUILTIN type);
-	~SlicStructDescription();
+	virtual ~SlicStructDescription();
 
 	void AddAccessor(char * name, SlicStructMemberData * symbol);
 
@@ -146,7 +138,7 @@ public:
 		m_parent(parent)
 	{ };
 
-	~SlicStructMemberData() {}
+	virtual ~SlicStructMemberData() {}
 
 	void Serialize(CivArchive &archive) {}
 	void SerializeMemberReference(CivArchive &archive);

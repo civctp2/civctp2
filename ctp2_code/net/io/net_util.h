@@ -1,14 +1,10 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _NET_UTIL_H_
 #define _NET_UTIL_H_
 
-
-
-
-
-
-
-#ifdef WIN32
+#if defined(WIN32) || !defined(WORDS_BIGENDIAN)
 #define NET_UTIL_LITTLE_ENDIAN
 #endif
 
@@ -86,7 +82,7 @@ inline void putdouble(uint8* b, double l)
 
 #else
 
-
+#error "Little endian byte order not implemented"
 
 #endif
 

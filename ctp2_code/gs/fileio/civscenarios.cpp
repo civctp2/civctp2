@@ -34,6 +34,11 @@
 #include "civscenarios.h"
 #include "gamefile.h"
 
+#ifndef WIN32
+#include <sys/types.h>
+#include <dirent.h>
+#endif
+
 extern CivPaths		*g_civPaths;
 
 CivScenarios		*g_civScenarios = NULL;
@@ -83,7 +88,7 @@ void CivScenarios::LoadScenarioData(Scenario *scenario, MBCHAR *scenPath)
 	scenario->m_name[0] = '\0';
 	scenario->m_description[0] = '\0';
 
-	sprintf(scenFileName, "%s\\%s", scenPath, k_SCENARIO_INFO_FILENAME);
+	sprintf(scenFileName, "%s%s%s", scenPath, FILE_SEP, k_SCENARIO_INFO_FILENAME);
 	
 	
 	scenFile = fopen(scenFileName, "r");
@@ -120,15 +125,18 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 	FILE				*listFile;
 	MBCHAR				listFileName[_MAX_PATH];
 	sint32				i;
-    struct _stat		tmpstat;
+#ifdef WIN32
+	struct _stat		tmpstat;
+#else
+	struct stat		tmpstat;
+#endif
 
 	pack->m_numScenarios = 0;
 	pack->m_scenarios = NULL;
 	pack->m_name[0] = '\0';
 	pack->m_description[0] = '\0';
 
-	sprintf(listFileName, "%s\\%s", packPath, k_SCENARIO_PACK_LIST_FILENAME);
-
+	sprintf(listFileName, "%s%s%s", packPath, FILE_SEP, k_SCENARIO_PACK_LIST_FILENAME);
 	
 	listFile = fopen(listFileName, "r");
 	if (!listFile) return;
@@ -170,13 +178,17 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 	for (i=0; i<numScenarios; i++) {
 		MBCHAR		scenPath[_MAX_PATH];
 		MBCHAR		scenListName[_MAX_PATH];
-		sint32		r;
+		int		r;
 
 		
-		sprintf(scenPath, "%s\\%s%#.4d", packPath, k_SCENARIO_FOLDER_PREFIX, i, k_SCENARIO_INFO_FILENAME);
-		sprintf(scenListName, "%s\\%s", scenPath, k_SCENARIO_INFO_FILENAME);
+		sprintf(scenPath, "%s%s%s%#.4d", packPath, FILE_SEP, k_SCENARIO_FOLDER_PREFIX, i, k_SCENARIO_INFO_FILENAME);
+		sprintf(scenListName, "%s%s%s", scenPath, FILE_SEP, k_SCENARIO_INFO_FILENAME);
 
+#ifdef WIN32
 		r = _stat(scenListName, &tmpstat);
+#else
+		r = stat(scenListName, &tmpstat);
+#endif
 		if (!r) {
 			MBCHAR *scenarioPath = new MBCHAR[strlen(scenPath)+1];
 			strcpy(scenarioPath, scenPath);
@@ -208,64 +220,83 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 	//This must be deleted always
 	scenList->DeleteAll();	
 	delete scenList;
-
-
-
-
-
-
-
-
 }
 
 
 
 void CivScenarios::LoadData(void)
 {
-	MBCHAR				*lpFileName = NULL;
-	MBCHAR				path[_MAX_PATH],
-						rootPath[_MAX_PATH];
+	MBCHAR			*lpFileName = NULL;
+	MBCHAR			path[_MAX_PATH],
+				rootPath[_MAX_PATH];
+#ifdef WIN32
 	WIN32_FIND_DATA		fileData;
-	HANDLE				lpFileList;
-	sint32				i;
-    struct _stat		tmpstat;
-
+	HANDLE			lpFileList;
+	struct _stat		tmpstat;
+#else
+	struct stat		tmpstat;
+#endif
+	 sint32			i;
 	
 
 	
 	g_civPaths->GetScenarioRootPath(rootPath);
 
-	
-	sprintf(path, "%s\\*.*", rootPath);
-
-	
+#ifdef WIN32
+	sprintf(path, "%s%s*.*", rootPath, FILE_SEP);
 	lpFileList = FindFirstFile(path,&fileData);
 
 	
 	if (lpFileList == INVALID_HANDLE_VALUE) return;
+#else
+	DIR *dir = opendir(rootPath);
+	if (!dir) return;
+	struct dirent *dent = 0;
+#endif
 
 	MBCHAR				*fileListFileName;
 
 	PointerList<MBCHAR>	*packList = new PointerList<MBCHAR>;
 	do {
+#ifndef WIN32
+		dent = readdir(dir);
+		if (!dent)
+			continue;
+		snprintf(path, sizeof(path), "%s%s%s", rootPath, FILE_SEP, dent->d_name);
+		if (!stat(path, &tmpstat))
+			continue;
+		
+		if (S_ISDIR(tmpstat.st_mode)) {
+			MBCHAR *name = dent->d_name;
+#else
 		if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			MBCHAR *name = fileData.cFileName;
+#endif
 			MBCHAR		packListName[_MAX_PATH];
-			sint32		r;
+			int		r;
 
 			
-			sprintf(packListName, "%s\\%s\\%s", rootPath, fileData.cFileName, k_SCENARIO_PACK_LIST_FILENAME);
+			sprintf(packListName, "%s%s%s%s%s", rootPath, FILE_SEP, name, FILE_SEP, k_SCENARIO_PACK_LIST_FILENAME);
+#ifdef WIN32
 			r = _stat(packListName, &tmpstat);
+#else
+			r = stat(packListName, &tmpstat);
+#endif
 			if (!r) {
-				fileListFileName = new MBCHAR[strlen(fileData.cFileName)+1];
+				fileListFileName = new MBCHAR[strlen(name)+1];
 				
-				strcpy(fileListFileName, fileData.cFileName);
+				strcpy(fileListFileName, name);
 
 				packList->AddTail(fileListFileName);
 			}
 		}
+#ifndef WIN32
+	} while(dent);
+	closedir(dir);
+#else
 	} while(FindNextFile(lpFileList,&fileData));
-
 	FindClose(lpFileList);
+#endif
 
 	if (packList->GetCount() <= 0) {
 		delete packList;
@@ -286,7 +317,7 @@ void CivScenarios::LoadData(void)
 		
 		fileListFileName = walker->GetObj();
 
-		sprintf(packPath, "%s\\%s", rootPath, walker->GetObj());
+		sprintf(packPath, "%s%s%s", rootPath, FILE_SEP, walker->GetObj());
 
 		strcpy(m_scenarioPacks[i].m_path, packPath);
 		m_scenarioPacks[i].m_index = i;
@@ -387,7 +418,7 @@ BOOL CivScenarios::FindScenarioFromSaveFile(MBCHAR *saveName, ScenarioPack **pac
 {
 	MBCHAR path[_MAX_PATH];
 	strcpy(path, saveName);
-	MBCHAR *lastBackslash = strrchr(path, '\\');
+	MBCHAR *lastBackslash = strrchr(path, FILE_SEPC);
 	if(!lastBackslash)
 		return FALSE;
 
@@ -412,8 +443,8 @@ BOOL CivScenarios::ScenarioHasSavedGame(Scenario *scen)
 
 	if (!scen) return FALSE;
 
-	sprintf(tempPath, "%s\\%s", 
-						scen->m_path, 
+	sprintf(tempPath, "%s%s%s", 
+						scen->m_path, FILE_SEP,
 						k_SCENARIO_DEFAULT_SAVED_GAME_NAME);
 
 	if (c3files_PathIsValid(tempPath)) {
@@ -429,8 +460,8 @@ SaveInfo *CivScenarios::LoadSaveInfo(Scenario *scen)
 
 	if (!scen) return NULL;
 
-	sprintf(tempPath, "%s\\%s", 
-						scen->m_path, 
+	sprintf(tempPath, "%s%s%s", 
+						scen->m_path, FILE_SEP,
 						k_SCENARIO_DEFAULT_SAVED_GAME_NAME);
 
 	if (c3files_PathIsValid(tempPath)) {
@@ -450,21 +481,28 @@ SaveInfo *CivScenarios::LoadSaveInfo(Scenario *scen)
 CIV_SCEN_ERR CivScenarios::MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR *packDesc)
 {
 	MBCHAR				path[_MAX_PATH],
-						rootPath[_MAX_PATH];
-    struct _stat		tmpstat;
+					rootPath[_MAX_PATH];
+#ifdef WIN32
+	struct _stat		tmpstat;
+#else
+	struct stat		tmpstat;
+#endif
 
 	
 	g_civPaths->GetScenarioRootPath(rootPath);
 
-	sprintf(path, "%s\\%s", rootPath, dirName);
+	sprintf(path, "%s%s%s", rootPath, dirName);
+#ifdef WIN32
 	if(!_stat(path, &tmpstat)) {
-		
+#else
+	if(!stat(path, &tmpstat)) {
+#endif
 		return CIV_SCEN_DIR_EXISTS;
 	}
 
 	c3files_CreateDirectory(path);
 
-	strcat(path, "\\packlist.txt");
+	strcat(path, FILE_SEP "packlist.txt");
 	FILE *packlist = fopen(path, "w");
 	Assert(packlist);
 	if(!packlist)
@@ -484,7 +522,7 @@ CIV_SCEN_ERR CivScenarios::MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR
 CIV_SCEN_ERR CivScenarios::UpdatePacklist(ScenarioPack *pack)
 {
 	MBCHAR path[_MAX_PATH];
-	sprintf(path, "%s\\packlist.txt", pack->m_path);
+	sprintf(path, "%s%spacklist.txt", pack->m_path, FILE_SEP);
 
 	FILE *packList = fopen(path, "w");
 
@@ -504,11 +542,19 @@ CIV_SCEN_ERR CivScenarios::UpdatePacklist(ScenarioPack *pack)
 
 CIV_SCEN_ERR CivScenarios::MakeNewScenario(ScenarioPack *pack, MBCHAR *scenName, MBCHAR *scenDesc)
 {
-    struct _stat		tmpstat;
+#ifdef WIN32
+	struct _stat		tmpstat;
+#else
+	struct stat		tmpstat;
+#endif
 
 	MBCHAR scenPath[_MAX_PATH];
-	sprintf(scenPath, "%s\\scen%04d", pack->m_path, pack->m_numScenarios);
+	sprintf(scenPath, "%s%sscen%04d", pack->m_path, FILE_SEP, pack->m_numScenarios);
+#ifdef WIN32
 	if(!_stat(scenPath, &tmpstat)) {
+#else
+	if(!stat(scenPath, &tmpstat)) {
+#endif
 		
 		return CIV_SCEN_DIR_EXISTS;
 	}
@@ -516,7 +562,7 @@ CIV_SCEN_ERR CivScenarios::MakeNewScenario(ScenarioPack *pack, MBCHAR *scenName,
 	c3files_CreateDirectory(scenPath);
 
 	MBCHAR descPath[_MAX_PATH];
-	sprintf(descPath, "%s\\scenario.txt", scenPath);
+	sprintf(descPath, "%s%sscenario.txt", scenPath, FILE_SEP);
 	FILE *scenFile = fopen(descPath, "w");
 	Assert(scenFile);
 	if(!scenFile)
@@ -527,14 +573,14 @@ CIV_SCEN_ERR CivScenarios::MakeNewScenario(ScenarioPack *pack, MBCHAR *scenName,
 	fclose(scenFile);
 
 	MBCHAR dataPath[_MAX_PATH];
-	sprintf(dataPath, "%s\\default", scenPath);
+	sprintf(dataPath, "%s%sdefault", scenPath, FILE_SEP);
 	c3files_CreateDirectory(dataPath);
 
-	strcat(dataPath, "\\gamedata");
+	strcat(dataPath, FILE_SEP "gamedata");
 	c3files_CreateDirectory(dataPath);
 
 	MBCHAR filePath[_MAX_PATH];
-	sprintf(filePath, "%s\\scenario.slc", dataPath);
+	sprintf(filePath, "%s%sscenario.slc", dataPath, FILE_SEP);
 	
 	FILE *script = fopen(filePath, "w");
 	Assert(script);

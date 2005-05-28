@@ -1,13 +1,6 @@
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _TRADEOFFERDATA_H_
 #define _TRADEOFFERDATA_H_
 
@@ -64,7 +57,7 @@ public:
 	ROUTE_TYPE GetAskingType() const { return m_askingType; }
 	sint32 GetAskingResource() const { return m_askingResource; }
 
-	BOOL Accept(sint32 player, Unit &sourceCity, Unit &destCity);
+	BOOL Accept(sint32 player, const Unit &sourceCity, const Unit &destCity);
 
 	
 	

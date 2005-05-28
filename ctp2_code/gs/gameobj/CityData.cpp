@@ -5179,7 +5179,7 @@ void CityData::AddEndGameObject(sint32 type)
 	Assert(wtf);
 }
 
-BOOL CityData::SendSlaveTo(Unit &dest)
+BOOL CityData::SendSlaveTo(const Unit &dest)
 {
 	return FALSE;
 }

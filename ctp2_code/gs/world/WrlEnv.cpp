@@ -55,7 +55,7 @@ extern ColorSet *g_colorSet;
 #include "ResourceRecord.h"
 #include "MoveFlags.h"
 #include "Unit.h"
-#include "globals.h"
+#include "Globals.h"
 
 extern RandomGenerator *g_rand;
 extern TiledMap *g_tiledMap;

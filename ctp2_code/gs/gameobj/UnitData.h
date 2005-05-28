@@ -504,9 +504,9 @@ public:
 	BOOL HasCityWalls() const;
 	BOOL HasForceField() const;
 
-	BOOL StoppedBySpies(Unit &c);
+	BOOL StoppedBySpies(const Unit &c);
 	ORDER_RESULT InvestigateCity(Unit &c);
-	ORDER_RESULT StealTechnology(Unit &c, sint32 whichAdvance);
+	ORDER_RESULT StealTechnology(const Unit &c, sint32 whichAdvance);
 	ORDER_RESULT InciteRevolution(Unit &c);
 	ORDER_RESULT AssassinateRuler(Unit &c);
 	ORDER_RESULT NullifyWalls(Unit &c);
@@ -673,7 +673,7 @@ public:
 	void AddEndGameObject(sint32 type);
 	double GetVisionRange() const;
 
-	BOOL SendSlaveTo(Unit &dest);
+	BOOL SendSlaveTo(const Unit &dest);
 
 	void SetFullHappinessTurns(sint32 turns);
 	sint32 GetIncomingTrade() const;
@@ -686,7 +686,7 @@ public:
 	void BuildCapitalization();
 	void BuildInfrastructure();
 
-	void ActionSuccessful(SPECATTACK attack, Unit &c);
+	void ActionSuccessful(SPECATTACK attack, const Unit &c);
 	void ActionUnsuccessful(void);;
 
 	const Unit &GetTransport() const;

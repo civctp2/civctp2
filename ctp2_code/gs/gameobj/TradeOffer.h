@@ -41,7 +41,7 @@ public:
 	ROUTE_TYPE GetAskingType() const { return GetData()->GetAskingType(); }
 	sint32 GetAskingResource() const { return GetData()->GetAskingResource(); }
 
-	BOOL Accept(PLAYER_INDEX player, Unit &sourceCity, Unit &destCity);
+	BOOL Accept(PLAYER_INDEX player, const Unit &sourceCity, const Unit &destCity);
 
 	void Castrate() {};
 };
