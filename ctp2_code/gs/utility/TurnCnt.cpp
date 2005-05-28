@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -219,16 +221,16 @@ void TurnCount::Serialize(CivArchive &archive)
 		tmp = NewTurnCount::m_sentGameAlmostOverMessage;
 		archive << tmp;
 	} else {
-		archive >> m_turn; 
-		archive >> m_round;
-		archive >> m_year;
+		archive >> m_turn;  // Unused always -4000 or what you have in const.txt
+		archive >> m_round; // Unused always 0
+		archive >> m_year;  // Unused
 		archive >> sim;
 		m_simultaneousMode = sim;
-		archive >> m_activePlayers;
-		archive >> m_lastBeginTurn;
+		archive >> m_activePlayers; // Seems to be number of players at the start
+		archive >> m_lastBeginTurn; // Unused always -1
 		m_isEmail = (BOOL)archive.GetSINT8();
 		m_isHotSeat = (BOOL)archive.GetSINT8();
-		archive >> m_happinessPlayer;
+		archive >> m_happinessPlayer; // Unused always 0
 
 		uint8 tmp;
 		archive >> tmp;

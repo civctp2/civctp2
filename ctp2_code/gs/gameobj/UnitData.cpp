@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -40,6 +42,8 @@
 //   # turns until city grows
 // - implemented immobile units (set MaxMovePoints equal to 0 in units.txt) 
 //   PFT 17 Mar 05
+// - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin Gühmann
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -342,11 +346,11 @@ void UnitData::Create(const sint32 t,
     }
     
     if (g_theUnitDB->Get(m_type)->GetHasPopAndCanBuild()) 
-		{
+	{
         m_city_data = new CityData(m_owner, i, m_pos);
 		
 		
-		}
+	}
     else 
         m_city_data = NULL; 
 
@@ -2289,13 +2293,13 @@ void UnitData::Serialize(CivArchive &archive)
     CHECKSERIALIZE
 
 	if (archive.IsStoring())
-		{
+	{
 		
-		archive<<m_id ;
-		archive.PutSINT32(m_owner) ;
-		archive<<m_fuel ;
-		archive<<m_hp ;
-		archive<<m_movement_points ;
+		archive<<m_id;
+		archive.PutSINT32(m_owner);
+		archive<<m_fuel;
+		archive<<m_hp;
+		archive<<m_movement_points;
 		
 		archive<<m_type; 
 		archive<<m_visibility;
@@ -2307,25 +2311,25 @@ void UnitData::Serialize(CivArchive &archive)
 		archive << m_flags;
 
 		m_army.Serialize(archive);
-		m_pos.Serialize(archive) ;
+		m_pos.Serialize(archive);
 		
 		
 		if (m_cargo_list)
-			{
-			archive<<(uint8)(TRUE) ;								
-			m_cargo_list->Serialize(archive) ;						
-			}
+		{
+			archive<<(uint8)(TRUE);								
+			m_cargo_list->Serialize(archive);						
+		}
 		else
-			archive<<(uint8)(FALSE) ;								
+			archive<<(uint8)(FALSE);								
 
 		
 		if (m_city_data)
-			{
-			archive<<(uint8)(TRUE) ;								
-			m_city_data->Serialize(archive) ;						
-			}
+		{
+			archive<<(uint8)(TRUE);								
+			m_city_data->Serialize(archive);						
+		}
 		else
-			archive<<(uint8)(FALSE) ;								
+			archive<<(uint8)(FALSE);								
 
 		m_actor->Serialize(archive);
 
@@ -2339,25 +2343,25 @@ void UnitData::Serialize(CivArchive &archive)
 		archive << (uint32)(m_lesser != NULL);
 
 		if (m_lesser)
-			((UnitData *)(m_lesser))->Serialize(archive) ;
+			((UnitData *)(m_lesser))->Serialize(archive);
 
 		archive << (uint32)(m_greater != NULL);
 
 		if (m_greater)
-			((UnitData *)(m_greater))->Serialize(archive) ;
+			((UnitData *)(m_greater))->Serialize(archive);
 
-		}
+	}
 	else
-		{
-		uint8	tmp ;
+	{
+		uint8	tmp;
 
-		archive>>m_id ;
-		m_owner = (PLAYER_INDEX)archive.GetSINT32() ;
-		archive>>m_fuel ;
-		archive>>m_hp ;
-		archive>>m_movement_points ;
+		archive>>m_id;
+		m_owner = (PLAYER_INDEX)archive.GetSINT32();
+		archive>>m_fuel;
+		archive>>m_hp;
+		archive>>m_movement_points;
 		
-		archive>>m_type, 
+		archive>>m_type;
 		archive>>m_visibility;
 		archive>>m_temp_visibility;
 		archive>>m_radar_visibility;
@@ -2367,42 +2371,42 @@ void UnitData::Serialize(CivArchive &archive)
 		archive >> m_flags;
 		
 		m_army.Serialize(archive);
-		m_pos.Serialize(archive) ;
+		m_pos.Serialize(archive);
 		
 #ifdef _DEBUG
 		m_text[0] = 0;
 #endif
 		
 		if (m_cargo_list)
-			delete m_cargo_list ;
+			delete m_cargo_list;
 
-		archive>>tmp ;
+		archive>>tmp;
 		if (tmp)
-			{
-			m_cargo_list = new UnitDynamicArray() ;
-			m_cargo_list->Serialize(archive) ;
-			}
+		{
+			m_cargo_list = new UnitDynamicArray();
+			m_cargo_list->Serialize(archive);
+		}
 		else
-			m_cargo_list=NULL ;
+			m_cargo_list=NULL;
 
 		
 		if (m_city_data)
-			delete m_city_data ;
+			delete m_city_data;
 
 		archive>>tmp ;
 		if (tmp)
-			m_city_data = new CityData(archive) ;
+			m_city_data = new CityData(archive);
 		else
 			m_city_data = NULL ;
 
 		
 		if (m_actor)
 		{
-			delete m_actor ;
+			delete m_actor;
 			m_actor = NULL;
 		}
 
-		m_actor = new UnitActor(archive) ;
+		m_actor = new UnitActor(archive);
 
 		m_sprite_state = m_actor->GetSpriteState();
 
