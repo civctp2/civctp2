@@ -1,9 +1,6 @@
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SOURCE_LIST_H__
 #define __SOURCE_LIST_H__
 

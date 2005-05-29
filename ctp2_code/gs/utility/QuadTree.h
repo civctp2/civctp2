@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _QUAD_TREE_H_
 #define _QUAD_TREE_H_
 

@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __HAPPY_TRACKER_H__
 #define __HAPPY_TRACKER_H__
 

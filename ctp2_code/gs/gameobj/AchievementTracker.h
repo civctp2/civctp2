@@ -1,14 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
-
-
-
-
-
-
-
-
+#endif
 
 #ifndef __ACHIEVEMENT_TRACKER_H__
 #define __ACHIEVEMENT_TRACKER_H__

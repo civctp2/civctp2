@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _INSTALLATION_RECORD_H_
 #define _INSTALLATION_RECORD_H_
 

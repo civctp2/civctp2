@@ -1,15 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DIFFICULTY_H__
 #define __DIFFICULTY_H__ 1
 

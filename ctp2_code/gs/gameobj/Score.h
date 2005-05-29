@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SCORE_H__
 #define __SCORE_H__
 

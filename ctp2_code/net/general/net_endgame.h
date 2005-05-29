@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __NET_ENDGAME_H_
 #define __NET_ENDGAME_H_
 

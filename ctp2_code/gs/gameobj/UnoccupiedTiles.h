@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UNOCCUPIED_TILES_H__
 #define __UNOCUUPIED_TILES_H__
 

@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DIPLOMATICREQUEST_H__ 
 #define __DIPLOMATICREQUEST_H__
 

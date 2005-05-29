@@ -1,16 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TOPTEN_H__
 #define __TOPTEN_H__
 

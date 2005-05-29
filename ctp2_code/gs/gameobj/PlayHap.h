@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __PLAYER_HAPPINESS_H__ 
 #define __PLAYER_HAPPINESS_H__ 1
 

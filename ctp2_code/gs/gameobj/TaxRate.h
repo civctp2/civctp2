@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TAX_RATE_H__
 #define __TAX_RATE_H__ 1
 

@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef TILE_VALUE_H
 #define TILE_VALUE_H 1
 
