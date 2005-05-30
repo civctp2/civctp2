@@ -732,8 +732,10 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			DPRINTF(k_DBG_NET, ("Server: Player %d building wonder %d in city %lx\n",
 								index, m_data[1], m_data[0]));
-			if(g_theUnitPool->IsValid(Unit(m_data[0])))
-				Unit(m_data[0]).BuildWonder(m_data[1]);
+			Unit unit = Unit(m_data[0]);
+			if(g_theUnitPool->IsValid(unit)) {
+				unit.BuildWonder(m_data[1]);
+			}
 			break;
 		}
 		case NET_ACTION_INTERCEPT_TRADE:

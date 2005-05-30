@@ -69,6 +69,12 @@ typedef struct tagBITMAPFILEHEADER {
 	WORD    bfReserved2;
 	DWORD   bfOffBits;
 } BITMAPFILEHEADER;
+typedef struct tagRGBQUAD {
+	uint8 rgbBlue;
+	uint8 rgbGreen;
+	uint8 rgbRed;
+	uint8 rgbReserved;
+} RGBQUAD;
 struct POINT {
   sint32 x;
   sint32 y;
@@ -91,6 +97,7 @@ typedef struct hbitmap_t* HBITMAP;
 typedef struct hdc_t* HDC;
 typedef struct hfont_t* HFONT;
 typedef struct hinstance_t* HINSTANCE;
+typedef struct hpalette_t* HPALETTE;
 typedef struct hwnd_t* HWND;
 
 /* Constants */
@@ -104,13 +111,26 @@ typedef struct hwnd_t* HWND;
 /* Makros */
 #define _ASSERTE(x) assert(x)
 #define CALLBACK
+#ifdef WORDS_BIGENDIAN
+#define HIWORD(w) ((WORD)(w))
+#define LOWORD(w) ((WORD)((w)>>16))
+#else
+#define LOWORD(w) ((WORD)(w))
+#define HIWORD(w) ((WORD)((w)>>16))
+#endif
 #define RGB(r,g,b) ((BYTE)(b) << 16 | (BYTE)(g) << 8 | (BYTE)(r))
 #define WINAPI
 
 /* stub functions */
 char* _fullpath(char*, const char*, int);
 void _splitpath(const char*,char*,char*,char*,char*);
+inline void CopyRect(struct RECT *dest, struct RECT *src) {
+	*dest = *src;
+}
 uint32 GetTickCount();
+inline uint8 GetRValue(COLORREF c) { return c & 0xff; }
+inline uint8 GetGValue(COLORREF c) { return (c>>8) & 0xff; }
+inline uint8 GetBValue(COLORREF c) { return (c>>16) & 0xff; }
 sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags);
 inline void InflateRect(struct RECT *pr, int x, int y)
 {

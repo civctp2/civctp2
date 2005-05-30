@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Loads and interprets Great Library strings
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -39,41 +41,37 @@
 //
 // Description: Load and interpret a library string.
 //
-// Parameters : filename			: (case insensitive) library string name 
-//				so					: context to look up values of variables
-//									  during interpretation
+// Parameters : filename            : (case insensitive) library string name 
+//              so                  : context to look up values of variables
+//                                    during interpretation
 //
 // Globals    : GreatLibrary::m_great_library_info
-//									: library (string) data
+//                                  : library (string) data
 //
-// Returns    : MBCHAR const *		: pointer to an interpreted string
+// Returns    : MBCHAR const *      : pointer to an interpreted string
 //
 // Remark(s)  : When the library string name is not found, NULL is returned.
 //
 //----------------------------------------------------------------------------
 const MBCHAR *glutil_LoadText(const char *filename, SlicContext &so)
 {
-    char *text;
-
+	char *text;
 	
 	char * lower_case_filename = new char[strlen(filename)+1];
 	strcpy(lower_case_filename, filename);
-
 	
 	for (int j = 0; j < strlen(lower_case_filename); j++)
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
-
 	
 	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
-
 	delete [] lower_case_filename;
 
-    if (text) 
+	if (text) 
 	{
 		static MBCHAR interpreted[k_MAX_GL_ENTRY];
 		stringutils_Interpret(text, so, interpreted, k_MAX_GL_ENTRY);
 		return interpreted;
-    }
+	}
 	else
 	{
 		return NULL;

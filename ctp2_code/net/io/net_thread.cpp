@@ -166,7 +166,13 @@ NetThread::~NetThread()
 	}
 }
 
+#ifdef USE_SDL
+static int NetThread_StartThread(void *obj)
+#elif defined(WIN32)
 DWORD WINAPI NetThread_StartThread(LPVOID obj)
+#else
+#error "Threading not implemented."
+#endif
 {
 	NetThread *threadObj = (NetThread*)obj;
 	threadObj->Run();
@@ -186,7 +192,11 @@ NetThread::NetThread()
 	m_anet = NULL;
 	m_exit = m_exited = FALSE;
 
+#ifdef USE_SDL
+	m_mutex = SDL_CreateMutex();
+#elif defined(WIN32)
 	InitializeCriticalSection(&m_mutex);
+#endif
 	m_setMaxPlayers = -1;
 	m_kickPlayers = new SimpleDynamicArray<uint16>;
 }
@@ -195,12 +205,16 @@ NET_ERR NetThread::Init(NetIOResponse *response)
 {
 	NetIO::Init(response);
 
+#ifdef USE_SDL
+	if ((m_thread = SDL_CreateThread(NetThread_StartThread, this)) == NULL) {
+#elif defined(WIN32)
 	if((m_threadHandle = CreateThread(NULL,
 									  0,
 									  NetThread_StartThread,
 									  this,
 									  0,
 									  &m_threadId)) == NULL) {
+#endif
 		DPRINTF(k_DBG_NET, ("Failed to start thread\n"));
 	}
 	return NET_ERR_OK;
@@ -211,14 +225,19 @@ void NetThread::Run()
 	TPacketData *packet;
 
 #if defined(_DEBUG)
+#ifndef USE_SDL
 	SetThreadName("NetThread::Run");
+#endif
 #endif
 
 	while(!m_exit) {
+#ifdef WIN32
 		Sleep(100);
+#else
+		usleep(100);
+#endif
 		if(m_anet) {
 			if(m_dp) {
-				
 				dpSetActiveThread(m_dp);
 				m_anet->SetDP(m_dp);
 				m_origDP = m_dp;
@@ -290,12 +309,20 @@ void NetThread::Run()
 
 void NetThread::Lock()
 {
+#ifdef USE_SDL
+	SDL_mutexP(m_mutex);
+#else
 	EnterCriticalSection(&m_mutex);
+#endif
 }
 
 void NetThread::Unlock()
 {
+#ifdef USE_SDL
+	SDL_mutexV(m_mutex);
+#else
 	LeaveCriticalSection(&m_mutex);
+#endif
 }
 
 void NetThread::SetDP(dp_t *dp)
@@ -411,12 +438,12 @@ NET_ERR NetThread::Send(uint16 id, sint32 flags, uint8* buf, sint32 len)
 
 NET_ERR NetThread::SendCompressed(uint16 id, sint32 flags, uint8 *buf, sint32 len)
 {
-	uint32 cbufsize = (uint32)(((double)len * 1.01) + 12.5);
+	uLong cbufsize = (uint32)(((double)len * 1.01) + 12.5);
 	uint8 *cbuf = new uint8[cbufsize + 5];
 
 	cbuf[0] = k_COMPRESSED_PACKET;
 	int err;
-	err = compress2(&cbuf[5], &cbufsize, buf, len, Z_DEFAULT_COMPRESSION);
+	err = compress2(&cbuf[5], &cbufsize, buf, (uLong)len, Z_DEFAULT_COMPRESSION);
 	if(err == Z_OK) {
 		putlong(&cbuf[1], len);
 		return Send(id, flags, cbuf, cbufsize + 5);
@@ -480,7 +507,7 @@ NET_ERR NetThread::Idle()
 			}
 		} else {
 			if(packet->m_buf[0] == k_COMPRESSED_PACKET) {
-				uint32 uSize = getlong(&packet->m_buf[1]);
+				uLong uSize = getlong(&packet->m_buf[1]);
 
 				uint8 *uBuf = new uint8[uSize];
 				int err;

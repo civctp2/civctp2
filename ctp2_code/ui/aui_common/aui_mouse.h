@@ -36,6 +36,11 @@
 #include "aui_input.h"
 #include "tech_wllist.h"
 
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_thread.h>
+#endif
+
 class aui_Cursor;
 class aui_Surface;
 class aui_Window;
@@ -185,7 +190,11 @@ public:
 		RECT *imageRect,
 		aui_DirtyList *imageAreas );
 
+#ifdef USE_SDL
+	SDL_mutex *LPCS(void) const { return m_lpcs; }
+#else
 	LPCRITICAL_SECTION LPCS( void ) const { return m_lpcs; }
+#endif
 
 	
 	
@@ -197,7 +206,11 @@ public:
 
 protected:
 	static sint32 m_mouseRefCount;
+#ifdef USE_SDL
+	static SDL_mutex         *m_lpcs;
+#else
 	static LPCRITICAL_SECTION m_lpcs;
+#endif
 
 	
 	virtual AUI_ERRCODE Erase( void );
@@ -217,7 +230,7 @@ protected:
 	sint32		m_firstIndex;	
 	sint32		m_lastIndex;	
 	uint32		m_animDelay;	
-	uint32		m_time;			
+	uint32		m_time;
 
 	tech_WLList<POINT>	m_animIndexList;
 	tech_WLList<sint32> m_animDelayList;
@@ -226,21 +239,25 @@ protected:
 	sint32		m_showCount;	
 	BOOL		m_reset;		
 
-	HANDLE		m_thread;		
-	DWORD		m_threadId;		
+#ifdef USE_SDL
+	SDL_Thread     *m_thread;
+#else
+	HANDLE		m_thread;
+	DWORD		m_threadId;
 	HANDLE		m_threadEvent;	
 	HANDLE		m_terminateEvent; 
 	HANDLE		m_suspendEvent;	
 	HANDLE		m_resumeEvent;	
 	HANDLE		m_replyEvent;	
-
+#endif
 	uint32		m_flags;		
 };
 
-
-
-
+#ifdef USE_SDL
+int MouseThreadProc(void *param);
+#else
 DWORD WINAPI MouseThreadProc( LPVOID lpVoid );
+#endif
 
 
 #endif 

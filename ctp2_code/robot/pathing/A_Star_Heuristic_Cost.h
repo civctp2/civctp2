@@ -149,7 +149,7 @@ public:
 	
 	inline double Get_Minimum_Nearby_Movement_Cost
 	(
-		MapPointData &the_tile			
+		const MapPointData &the_tile			
 	)
 	{
 		

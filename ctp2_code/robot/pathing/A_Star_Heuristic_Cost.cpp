@@ -34,6 +34,9 @@
 
 #include <algorithm>                // std::fill
 #include <limits>                   // DBL_MAX
+#ifndef DBL_MAX
+#define DBL_MAX 1.7976931348623158e+308
+#endif
 #include "World.h"                  // g_theWorld
 
 

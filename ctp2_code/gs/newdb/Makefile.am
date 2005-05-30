@@ -59,116 +59,51 @@ libgsnewdb_la_SOURCES = \
 	DBLexer.cpp \
 	DBLexer.cpp
 
+newdb_CDBTYPES = \
+	AdvanceBranchRecord \
+	AdvanceListRecord \
+	AdvanceRecord \
+	AgeCityStyleRecord \
+	AgeRecord \
+	BuildListSequenceRecord \
+	BuildingBuildListRecord \
+	BuildingRecord \
+	CitySizeRecord \
+	CityStyleRecord \
+	DiplomacyProposalRecord \
+	DiplomacyRecord \
+	DiplomacyThreatRecord \
+	EndGameObjectRecord \
+	FeatRecord \
+	GoalRecord \
+	GovernmentRecord \
+	IconRecord \
+	ImprovementListRecord \
+	OrderRecord \
+	PersonalityRecord \
+	PopRecord \
+	ResourceRecord \
+	SoundRecord \
+	SpecialAttackInfoRecord \
+	SpecialEffectRecord \
+	SpriteRecord \
+	StrategyRecord \
+	TerrainImprovementRecord \
+	TerrainRecord \
+	UnitBuildListRecord \
+	UnitRecord \
+	WonderBuildListRecord \
+	WonderMovieRecord \
+	WonderRecord
+
 newdb_CDBSRCFILES = \
-	AdvanceBranchRecord.cpp \
-	AdvanceListRecord.cpp \
-	AdvanceRecord.cpp \
-	AgeCityStyleRecord.cpp \
-	AgeRecord.cpp \
-	BuildListSequenceRecord.cpp \
-	BuildingBuildListRecord.cpp \
-	BuildingRecord.cpp \
-	CitySizeRecord.cpp \
-	CityStyleRecord.cpp \
-	DiplomacyProposalRecord.cpp \
-	DiplomacyRecord.cpp \
-	DiplomacyThreatRecord.cpp \
-	EndGameObjectRecord.cpp \
-	FeatRecord.cpp \
-	GoalRecord.cpp \
-	GovernmentRecord.cpp \
-	IconRecord.cpp \
-	ImprovementListRecord.cpp \
-	OrderRecord.cpp \
-	PersonalityRecord.cpp \
-	PopRecord.cpp \
-	ResourceRecord.cpp \
-	SoundRecord.cpp \
-	SpecialAttackInfoRecord.cpp \
-	SpecialEffectRecord.cpp \
-	SpriteRecord.cpp \
-	StrategyRecord.cpp \
-	TerrainImprovementRecord.cpp \
-	TerrainRecord.cpp \
-	UnitBuildListRecord.cpp \
-	UnitRecord.cpp \
-	WonderBuildListRecord.cpp \
-	WonderMovieRecord.cpp \
-	WonderRecord.cpp
+	$(foreach type,$(newdb_CDBTYPES),$(type).cpp )
 
 newdb_CDBHDRFILES = \
-	AdvanceBranchRecord.h \
-	AdvanceListRecord.h \
-	AdvanceRecord.h \
-	AgeCityStyleRecord.h \
-	AgeRecord.h \
-	BuildListSequenceRecord.h \
-	BuildingBuildListRecord.h \
-	BuildingRecord.h \
-	CitySizeRecord.h \
-	CityStyleRecord.h \
-	DiplomacyProposalRecord.h \
-	DiplomacyRecord.h \
-	DiplomacyThreatRecord.h \
-	EndGameObjectRecord.h \
-	FeatRecord.h \
-	GoalRecord.h \
-	GovernmentRecord.h \
-	IconRecord.h \
-	ImprovementListRecord.h \
-	OrderRecord.h \
-	PersonalityRecord.h \
-	PopRecord.h \
-	ResourceRecord.h \
-	SoundRecord.h \
-	SpecialAttackInfoRecord.h \
-	SpecialEffectRecord.h \
-	SpriteRecord.h \
-	StrategyRecord.h \
-	TerrainImprovementRecord.h \
-	TerrainRecord.h \
-	UnitBuildListRecord.h \
-	UnitRecord.h \
-	WonderBuildListRecord.h \
-	WonderMovieRecord.h \
-	WonderRecord.h
+	$(foreach type,$(newdb_CDBTYPES),$(type).h )
 
 newdb_CDBSTAMPFILES = \
-	AdvanceBranchRecord.stamp \
-	AdvanceListRecord.stamp \
-	AdvanceRecord.stamp \
-	AgeCityStyleRecord.stamp \
-	AgeRecord.stamp \
-	BuildListSequenceRecord.stamp \
-	BuildingBuildListRecord.stamp \
-	BuildingRecord.stamp \
-	CitySizeRecord.stamp \
-	CityStyleRecord.stamp \
-	DiplomacyProposalRecord.stamp \
-	DiplomacyRecord.stamp \
-	DiplomacyThreatRecord.stamp \
-	EndGameObjectRecord.stamp \
-	FeatRecord.stamp \
-	GoalRecord.stamp \
-	GovernmentRecord.stamp \
-	IconRecord.stamp \
-	ImprovementListRecord.stamp \
-	OrderRecord.stamp \
-	PersonalityRecord.stamp \
-	PopRecord.stamp \
-	ResourceRecord.stamp \
-	SoundRecord.stamp \
-	SpecialAttackInfoRecord.stamp \
-	SpecialEffectRecord.stamp \
-	SpriteRecord.stamp \
-	StrategyRecord.stamp \
-	TerrainImprovementRecord.stamp \
-	TerrainRecord.stamp \
-	UnitBuildListRecord.stamp \
-	UnitRecord.stamp \
-	WonderBuildListRecord.stamp \
-	WonderMovieRecord.stamp \
-	WonderRecord.stamp
+	$(foreach type,$(newdb_CDBTYPES),$(type).stamp )
 
 # Rules for generated sources
 
@@ -515,4 +450,7 @@ AM_CPPFLAGS=\
 MOSTLYCLEANFILES=\
 	$(newdb_CDBSRCFILES) \
 	$(newdb_CDBHDRFILES) \
-	$(newdb_CDBSTAMPFILES)
+	$(newdb_CDBSTAMPFILES) \
+	$(foreach src,$(newdb_CDBSRCFILES),$(src).old $(src).new ) \
+	$(foreach hdr,$(newdb_CDBHDRFILES),$(hdr).old $(hdr).new ) \
+	$(foreach stamp,$(newdb_CDBSTAMPFILES),$(stamp).old $(stamp).new )

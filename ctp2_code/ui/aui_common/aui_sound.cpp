@@ -98,7 +98,7 @@ AUI_ERRCODE aui_Sound::Unload( void )
 AUI_ERRCODE aui_WavSoundFormat::LoadSoundData(
 	MBCHAR *filename,
 	uint8 **wavdata,
-	uint32 *size)
+	size_t *size)
 {
 	m_data = (uint8 *)g_ui->TheMemMap()->GetFileBits( filename, size );
 	*wavdata = m_data;
@@ -119,19 +119,19 @@ void aui_SoundFormat::ReleaseSoundData() {
 
 
 
-void aui_WavSoundFormat::TrimWavHeader(uint8 **wavedata, uint32 *size)
+void aui_WavSoundFormat::TrimWavHeader(uint8 **wavedata, size_t *size)
 {
 	int i;
 	uint8 *data; 
-	long raw_data_size=0; 
+	size_t raw_data_size=0; 
 
 	data = *wavedata;
 	for(i=0;i<(int)*size;i++)
 	{
-		if(*(long *)data == *(long *)"data")
+		if(*(sint32 *)data == *(sint32 *)"data")
 		{
 		data += 4; 
-		raw_data_size = *(long *)data;
+		raw_data_size = *(sint32 *)data;
 		data += 4;
 		break;
 		}

@@ -4,10 +4,10 @@
 #ifndef __BSET_H__
 #define __BSET_H__ 1
 
-struct IC3CivArchive; 
+#include "Ic3CivArchive.h"
 
 
-    class CivArchive; 
+class CivArchive; 
 
 
 enum BSET_STACK { 

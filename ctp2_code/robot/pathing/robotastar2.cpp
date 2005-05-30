@@ -3,7 +3,7 @@
 #include "c3.h"
 #include "c3math.h"
 #include "c3errors.h"
-#include "globals.h"
+#include "Globals.h"
 
 
 
@@ -250,7 +250,7 @@ sint32 RobotAstar2::EntryCost( const MapPoint &prev,
 							   ASTAR_ENTRY_TYPE &entry )
 {
 	BOOL r = TRUE;
-	r = UnitAstar::EntryCost(prev, pos, cost, static_cast<BOOL>(is_zoc), entry); 
+	r = UnitAstar::EntryCost(prev, pos, cost, is_zoc, entry); 
 
 	if (r == FALSE)  { 
 		return FALSE; 

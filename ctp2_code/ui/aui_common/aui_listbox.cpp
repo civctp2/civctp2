@@ -43,6 +43,10 @@
 #include "aui_listbox.h"
 #include "ctp2_listitem.h"
 
+#ifdef USE_SDL
+#include <SDL.h>
+#endif
+
 
 aui_DragDropWindow *aui_ListBox::m_dragDropWindow = NULL;
 
@@ -652,7 +656,8 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 
 	
 	ListPos position = m_selectedList->GetHeadPosition();
-	for ( sint32 i = m_selectedList->L(); i; i-- )
+	sint32 i;
+	for ( i = m_selectedList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
 		sint32 curIndex = m_selectedList->GetNext( position );
@@ -912,8 +917,9 @@ sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 	sint32 width = 0;
 	sint32 count = 0;
 
+	sint32 i;
 	for (
-		sint32 i = m_numColumns - m_widthList->L();
+		i = m_numColumns - m_widthList->L();
 		i > 0 && (width += m_maxItemWidth) <= m_width;
 		i-- )
 			count++;
@@ -1326,7 +1332,8 @@ void aui_ListBox::WhatsChanged(
 
 	
 	ListPos position = m_selectedList->GetHeadPosition();
-	for ( sint32 i = m_selectedList->L(); i; i-- )
+	sint32 i;
+	for ( i = m_selectedList->L(); i; i-- )
 	{
 		sint32 itemIndex = m_selectedList->GetNext( position );
 		if ( !m_selectedListLastTime->Find( itemIndex ) )
@@ -1770,8 +1777,8 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 					sint32		firstIndex = 999999, 
 								index;
-					
-					for (sint32 i=0; i<(sint32)(m_visualSelectedList->L()); i++) {
+					sint32 i;
+					for (i=0; i<(sint32)(m_visualSelectedList->L()); i++) {
 						index = m_visualSelectedList->GetAtIndex(i);
 						if (index <= firstIndex) firstIndex = index;
 					}
@@ -2298,14 +2305,22 @@ bool aui_ListBox::HandleKey(uint32 wParam)
 		if(NumItems() < 1)
 			return false;
 
+#ifdef USE_SDL
+		if(wParam == SDLK_UP + 256) {
+#else
 		if(wParam == VK_UP + 256) {
+#endif
 			if(!GetSelectedItem() || GetSelectedItemIndex() == 0) {
 				SelectItem(NumItems() - 1);
 			} else {
 				SelectItem(GetSelectedItemIndex() - 1);
 			}
 			return true;
+#ifdef USE_SDL
+		} else if(wParam == SDLK_DOWN + 256) {
+#else
 		} else if(wParam == VK_DOWN + 256) {
+#endif
 			if(!GetSelectedItem() || GetSelectedItemIndex() >= NumItems() - 1) {
 				SelectItem((sint32)0);
 			} else {

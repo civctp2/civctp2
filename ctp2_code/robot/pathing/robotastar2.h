@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ROBOT_ASTAR2_H__
 #define __ROBOT_ASTAR2_H__ 1
 
@@ -63,4 +64,4 @@ private:
 	PLAYER_INDEX m_owner;
 };
 
-#endif __ROBOT_ASTAR2_H__
+#endif // __ROBOT_ASTAR2_H__

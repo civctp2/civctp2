@@ -299,18 +299,18 @@ ctp2_SOURCES = \
 	../net/io/net_io.cpp \
 	../net/io/net_thread.cpp \
 	../robot/utility/RandTest.cpp \
-	../robot/utility/RoboInit.cpp \
+	../robot/utility/roboinit.cpp \
 	../robot/pathing/A_Star_Heuristic_Cost.cpp \
-	../robot/pathing/Astar.cpp \
+	../robot/pathing/astar.cpp \
 	../robot/pathing/AstarPnt.cpp \
 	../robot/pathing/AVLHeap.cpp \
 	../robot/pathing/CityAstar.cpp \
 	../robot/pathing/Path.cpp \
 	../robot/pathing/RobotAstar.cpp \
-	../robot/pathing/RobotAstar2.cpp \
+	../robot/pathing/robotastar2.cpp \
 	../robot/pathing/TradeAstar.cpp \
-	../robot/pathing/UnitAstar.cpp \
-	../robot/aibackdoor/BSet.cpp \
+	../robot/pathing/unitastar.cpp \
+	../robot/aibackdoor/bset.cpp \
 	../robot/aibackdoor/civarchive.cpp \
 	../ui/aui_common/aui_action.cpp \
 	../ui/aui_common/aui_animate.cpp \
@@ -433,7 +433,7 @@ ctp2_SOURCES = \
 	../ui/aui_ctp2/c3listbox.cpp \
 	../ui/aui_ctp2/c3memmap.cpp \
 	../ui/aui_ctp2/c3scroller.cpp \
-	../ui/aui_ctp2/c3slider.cpp \
+	../ui/aui_ctp2/C3slider.cpp \
 	../ui/aui_ctp2/c3spinner.cpp \
 	../ui/aui_ctp2/c3textfield.cpp \
 	../ui/aui_ctp2/c3thumb.cpp \
@@ -494,7 +494,7 @@ ctp2_SOURCES = \
 	../ui/aui_ctp2/ctp2_menubar.cpp \
 	../ui/aui_ctp2/ctp2_MenuButton.cpp \
 	../ui/aui_ctp2/ctp2_spinner.cpp \
-	../ui/aui_ctp2/ctp2_static.cpp \
+	../ui/aui_ctp2/ctp2_Static.cpp \
 	../ui/aui_ctp2/ctp2_Switch.cpp \
 	../ui/aui_ctp2/ctp2_Tab.cpp \
 	../ui/aui_ctp2/ctp2_TabButton.cpp \
@@ -519,20 +519,20 @@ ctp2_SOURCES = \
 	../ui/interface/agesscreen.cpp \
 	../ui/interface/ancientwindows.cpp \
 	../ui/interface/armymanagerwindow.cpp \
-	../Ui/interface/AttractWindow.cpp \
+	../ui/interface/AttractWindow.cpp \
 	../ui/interface/backgroundwin.cpp \
 	../ui/interface/c3dialogs.cpp \
-	../ui/interface/ChatBox.cpp \
+	../ui/interface/chatbox.cpp \
 	../ui/interface/CityEspionage.cpp \
 	../ui/interface/citymanager.cpp \
 	../ui/interface/creditsscreen.cpp \
-	../ui/interface/CursorManager.cpp \
+	../ui/interface/cursormanager.cpp \
 	../ui/interface/custommapscreen.cpp \
 	../ui/interface/debugwindow.cpp \
 	../ui/interface/DiplomacyDetails.cpp \
 	../ui/interface/diplomacywindow.cpp \
 	../ui/interface/dipwizard.cpp \
-	../ui/interface/editqueue.cpp \
+	../ui/interface/EditQueue.cpp \
 	../ui/interface/FileDialog.cpp \
 	../ui/interface/gameplayoptions.cpp \
 	../ui/interface/graphicsresscreen.cpp \
@@ -546,8 +546,8 @@ ctp2_SOURCES = \
 	../ui/interface/initialplayscreen.cpp \
 	../ui/interface/initialplaywindow.cpp \
 	../ui/interface/intelligencewindow.cpp \
-	../Ui/interface/IntroMovieWin.cpp \
-	../Ui/interface/IntroMovieWindow.cpp \
+	../ui/interface/IntroMovieWin.cpp \
+	../ui/interface/IntroMovieWindow.cpp \
 	../ui/interface/km_screen.cpp \
 	../ui/interface/loadsavemapscreen.cpp \
 	../ui/interface/loadsavemapwindow.cpp \
@@ -586,7 +586,7 @@ ctp2_SOURCES = \
 	../ui/interface/spnewgameplayersscreen.cpp \
 	../ui/interface/spnewgamerandomcustomscreen.cpp \
 	../ui/interface/spnewgamerulesscreen.cpp \
-	../ui/interface/spNewGameScreen.cpp \
+	../ui/interface/spnewgamescreen.cpp \
 	../ui/interface/spnewgametribescreen.cpp \
 	../ui/interface/spnewgamewindow.cpp \
 	../ui/interface/spriteeditor.cpp \
@@ -601,11 +601,11 @@ ctp2_SOURCES = \
 	../ui/interface/UIUtils.cpp \
 	../ui/interface/unitmanager.cpp \
 	../ui/interface/victorymoviewin.cpp \
-	../ui/interface/VictoryMovieWindow.cpp \
+	../ui/interface/victorymoviewindow.cpp \
 	../ui/interface/victorywin.cpp \
 	../ui/interface/victorywindow.cpp \
 	../ui/interface/wondermoviewin.cpp \
-	../ui/interface/WonderMovieWindow.cpp \
+	../ui/interface/wondermoviewindow.cpp \
 	../ui/interface/WonderTab.cpp \
 	../ui/interface/workwin.cpp \
 	../ui/interface/workwindow.cpp \
@@ -618,10 +618,10 @@ ctp2_SOURCES = \
 	../ui/interface/ScienceManagementDialog.cpp \
 	../ui/interface/NationalManagementDialog.cpp \
 	../ui/interface/MessageBoxDialog.cpp \
-	../ui/interface/Battle.cpp \
-	../ui/interface/BattleEvent.cpp \
-	../ui/interface/BattleView.cpp \
-	../ui/interface/BattleViewWindow.cpp \
+	../ui/interface/battle.cpp \
+	../ui/interface/battleevent.cpp \
+	../ui/interface/battleview.cpp \
+	../ui/interface/battleviewwindow.cpp \
 	../ui/interface/infowindow.cpp \
 	../ui/interface/rankingtab.cpp \
 	../ui/interface/scoretab.cpp \
@@ -669,40 +669,40 @@ ctp2_SOURCES = \
 	../ui/slic_debug/sourcelist.cpp \
 	../ui/slic_debug/watchlist.cpp \
 	../sound/civsound.cpp \
-	../sound/GameSounds.cpp \
+	../sound/gamesounds.cpp \
 	../sound/soundevent.cpp \
-	../sound/SoundManager.cpp \
-	../ai/diplomacy/CounterResponseEvent.cpp \
-	../ai/diplomacy/DStateEvent.cpp \
-	../ai/diplomacy/MotivationEvent.cpp \
-	../ai/diplomacy/NProposalEvent.cpp \
-	../ai/diplomacy/ProposalResponseEvent.cpp \
+	../sound/soundmanager.cpp \
+	../ai/diplomacy/counterresponseevent.cpp \
+	../ai/diplomacy/dstateevent.cpp \
+	../ai/diplomacy/motivationevent.cpp \
+	../ai/diplomacy/nproposalevent.cpp \
+	../ai/diplomacy/proposalresponseevent.cpp \
 	../ai/diplomacy/ReactEvent.cpp \
-	../ai/diplomacy/RegardEvent.cpp \
+	../ai/diplomacy/regardevent.cpp \
 	../ai/diplomacy/RejectResponseEvent.cpp \
 	../ai/diplomacy/ResponseEvent.cpp \
-	../ai/diplomacy/SStateEvent.cpp \
-	../ai/diplomacy/ThreatResponseEvent.cpp \
-	../ai/diplomacy/AgreementMatrix.cpp \
+	../ai/diplomacy/sstateevent.cpp \
+	../ai/diplomacy/threatresponseevent.cpp \
+	../ai/diplomacy/agreementmatrix.cpp \
 	../ai/diplomacy/diplomacyutil.cpp \
-	../ai/diplomacy/Diplomat.cpp \
+	../ai/diplomacy/diplomat.cpp \
 	../ai/diplomacy/diplomattypes.cpp \
-	../ai/diplomacy/Foreigner.cpp \
-	../ai/diplomacy/ProposalAnalysis.cpp \
-	../ai/strategy/Scheduler/Plan.cpp \
-	../ai/strategy/Scheduler/Scheduler.cpp \
-	../ai/strategy/goals/CTPGoal.cpp \
-	../ai/strategy/Goals/Goal.cpp \
-	../ai/strategy/Squads/Squad.cpp \
-	../ai/strategy/Squads/squad_Strength.cpp \
-	../ai/strategy/Agents/agent.cpp \
-	../ai/strategy/agents/CTPAgent.cpp \
-	../ai/mapanalysis/BoundingRect.cpp \
-	../ai/mapanalysis/MapAnalysis.cpp \
-	../ai/mapanalysis/SettleMap.cpp \
-	../ai/CityManagement/Governor.cpp \
-	../ai/CtpAi.cpp \
-	../ai/CtpAiDebug.cpp
+	../ai/diplomacy/foreigner.cpp \
+	../ai/diplomacy/proposalanalysis.cpp \
+	../ai/strategy/scheduler/Plan.cpp \
+	../ai/strategy/scheduler/scheduler.cpp \
+	../ai/strategy/goals/ctpgoal.cpp \
+	../ai/strategy/goals/Goal.cpp \
+	../ai/strategy/squads/Squad.cpp \
+	../ai/strategy/squads/squad_Strength.cpp \
+	../ai/strategy/agents/agent.cpp \
+	../ai/strategy/agents/ctpagent.cpp \
+	../ai/mapanalysis/boundingrect.cpp \
+	../ai/mapanalysis/mapanalysis.cpp \
+	../ai/mapanalysis/settlemap.cpp \
+	../ai/CityManagement/governor.cpp \
+	../ai/ctpai.cpp \
+	../ai/ctpaidebug.cpp
 
 ctp2_LDADD = \
 	../gs/newdb/libgsnewdb.la \

@@ -474,7 +474,7 @@ SaveInfo *CivScenarios::LoadSaveInfo(Scenario *scen)
 		}
 	} 
 
-	return FALSE;
+	return NULL;
 }
 	
 

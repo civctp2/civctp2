@@ -3,7 +3,7 @@
 #include "c3.h"
 #include "c3math.h"
 #include "c3errors.h"
-#include "globals.h"
+#include "Globals.h"
 
 
 
@@ -25,7 +25,8 @@
 #include "UnitRecord.h"
 
 extern World *g_theWorld; 
-  
+
+#ifndef USE_COM_REPLACEMENT
 STDMETHODIMP RobotAstar::QueryInterface(REFIID riid, void **obj)
 {
 	*obj = NULL;
@@ -43,17 +44,24 @@ STDMETHODIMP RobotAstar::QueryInterface(REFIID riid, void **obj)
 }
 
 STDMETHODIMP_(ULONG) RobotAstar::AddRef()
+#else
+uint32 RobotAstar::AddRef()
+#endif
 {
 	return ++m_refCount;
 }
-
+#ifndef USE_COM_REPLACEMENT
 STDMETHODIMP_(ULONG) RobotAstar::Release()
+#else
+uint32 RobotAstar::Release()
+#endif
 {
 	if(--m_refCount)
 		return m_refCount;
 	delete this;
 	return 0;
 }
+
 RobotAstar::RobotAstar(Player *p)
 {
     
@@ -67,6 +75,10 @@ RobotAstar::RobotAstar(Player *p, CivArchive &archive)
     m_player = p; 
     m_callback = NULL; 
     Serialize(archive); 
+}
+
+RobotAstar::~RobotAstar()
+{
 }
 
 void RobotAstar::Serialize(CivArchive &archive)

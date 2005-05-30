@@ -1,7 +1,7 @@
  
 #include "c3.h"
 #include "bset.h"
-#include "ic3CivArchive.h"
+#include "Ic3CivArchive.h"
 #include "civarchive.h"
 
 BSetID::BSetID ()
@@ -10,10 +10,12 @@ BSetID::BSetID ()
     val = 0; 
 } 
 
+#ifdef WIN32
 BSetID::BSetID (const int &copy_me)
 { 
     val = uint32(copy_me); 
 }
+#endif
 
 BSetID::BSetID (const uint32 &copy_me)
 { 
@@ -30,11 +32,13 @@ BSetID::BSetID (const BSetID &copy_me)
     val = copy_me.val;
 }
 
+#ifdef WIN32
 BSetID& BSetID::operator = (const int &copy_me)
 {
     val = uint32(copy_me); 
     return *this;
 }
+#endif
 
 BSetID& BSetID::operator= (const uint32 &copy_me)
 {

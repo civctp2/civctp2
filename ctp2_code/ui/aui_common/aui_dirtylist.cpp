@@ -59,7 +59,7 @@ aui_DirtyList::~aui_DirtyList()
 
 	if ( m_spanListArray )
 	{
-		delete[ m_height ] m_spanListArray;
+		delete[] m_spanListArray;
 		m_spanListArray = NULL;
 	}
 }
@@ -346,7 +346,8 @@ AUI_ERRCODE aui_DirtyList::ComputeSpans( RECT *newRect )
 
 		sint32 prevStop = 0;
 
-		for ( sint32 s = curSpanList->num; s; s--, curSpan++ )
+		sint32 s;
+		for ( s = curSpanList->num; s; s--, curSpan++ )
 		{
 			curStop = ( curStart = curStop + curSpan->run ) + curSpan->length;
 

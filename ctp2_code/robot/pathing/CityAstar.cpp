@@ -39,7 +39,7 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "globals.h"
+#include "Globals.h"
 
 
 #include "CityAstar.h"

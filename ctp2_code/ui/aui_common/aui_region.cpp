@@ -99,9 +99,11 @@ AUI_ERRCODE aui_Region::InitCommon( uint32 id, sint32 x, sint32 y, sint32 width,
 	m_showCallbackData = NULL;
 	m_hideCallbackData = NULL;
 
-	
-	
+#ifdef USE_SDL
+	m_doubleClickTimeOut = 375;
+#else	
 	m_doubleClickTimeOut = GetDoubleClickTime();
+#endif
 
 	m_ldlBlock = NULL;
 

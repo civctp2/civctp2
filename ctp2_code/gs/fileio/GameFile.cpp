@@ -863,7 +863,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	FILE	*fpLoad ;
 
 	uint32	ver, n;
-	size_t ulLen;
+	uLong ulLen;
 
 	clock_t	start, finish ;
 
@@ -871,8 +871,8 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	CivArchive	archive ;
 
-	size_t	tlen = 0;
-	size_t	compressedSize = 0;
+	uLong	tlen = 0;
+	uLong	compressedSize = 0;
 	uint8	*compressedData = NULL;
 
 	start = clock() ;
