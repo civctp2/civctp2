@@ -17,6 +17,8 @@
 //
 // Compiler flags
 // 
+// - None
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,6 +28,8 @@
 // - Resolved ambiguous sqrt call.
 // - Standardised min/max usage.
 // - Repaired memory leaks.
+// - Force a good value recalculation on reload if the ressouce database was
+//   modified (goods added removed). - May 19th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -2518,10 +2522,10 @@ void World::Mdump(FILE *fout)
 				}
 				fprintf(fout, " ");
 				
-			}  
-      }
-      fprintf (fout, "\n");
-   }   
+			}
+		}
+		fprintf (fout, "\n");
+	}
 #endif
 }
 
@@ -2534,27 +2538,42 @@ void World::Mdump(FILE *fout)
 
 
 
+// Need a global to fix number of goods.
+sint32 g_numGoods = 0;
 
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : World::Serialize
+//
+// Description: Store/Load CityData
+//
+// Parameters : CivArchive &archive       :
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void World::Serialize(CivArchive &archive)
 {
-	sint32	w, h,
-			x, y;
+	sint32 w, h,
+	       x, y;
 
 #define WORLD_MAGIC 0x48A8A848
 
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
-	if (archive.IsStoring()) {					
-		archive.PerformMagic(WORLD_MAGIC) ;
-		archive<<m_isXwrap ;
-		archive<<m_isYwrap ;
-        archive.PutSINT32(m_continents_are_numbered); 
+	if (archive.IsStoring()) {
+		archive.PerformMagic(WORLD_MAGIC);
+		archive<<m_isXwrap;
+		archive<<m_isYwrap;
+		archive.PutSINT32(m_continents_are_numbered);
 		archive << m_water_continent_max;
 		archive << m_land_continent_max;
 
-		m_size.Serialize(archive) ;				
+		m_size.Serialize(archive) ;
 
 		
 		w = GetWidth() ;
@@ -2578,35 +2597,35 @@ void World::Serialize(CivArchive &archive)
 		archive << g_theResourceDB->NumRecords();
 		archive.Store((uint8*)m_goodValue, sizeof(double) * g_theResourceDB->NumRecords());
 
-	} else {	
-		sint32	i,
-				x, y,
-				w, h ;
+	} else {
+		sint32  i,
+		        x, y,
+		        w, h;
 
-		MapPoint	pos ;
+		MapPoint pos;
 
-        FreeMap();
+		FreeMap();
 
-		archive.TestMagic(WORLD_MAGIC) ;
-		archive>>m_isXwrap ;
-		archive>>m_isYwrap ;
-        m_continents_are_numbered = archive.GetSINT32(); 
+		archive.TestMagic(WORLD_MAGIC);
+		archive>>m_isXwrap;
+		archive>>m_isYwrap;
+		m_continents_are_numbered = archive.GetSINT32();
 		archive >> m_water_continent_max;
 		archive >> m_land_continent_max;
 
-		m_size.Serialize(archive) ;		
+		m_size.Serialize(archive) ;
 
 
 		AllocateMap();
 
-		w = GetWidth() ;
-		h = GetHeight() ;
+		w = GetWidth();
+		h = GetHeight();
 
 
 
 
 
-		sint32		len = w * h;
+		sint32      len = w * h;
 		for (i=0; i<len; i++) {
 			m_tileInfoStorage[i].Serialize(archive);
 		}
@@ -2625,11 +2644,19 @@ void World::Serialize(CivArchive &archive)
 		archive >> m_num_civ_starts;
 		archive.Load((uint8*)m_civ_starts, sizeof(m_civ_starts));
 
-		sint32 numGoods;
-		archive >> numGoods;
-		Assert(numGoods == g_theResourceDB->NumRecords());
-		m_goodValue = new double[numGoods];
-		archive.Load((uint8 *)m_goodValue, sizeof(double) * numGoods);
+		g_numGoods;
+		archive >> g_numGoods;
+		if(g_numGoods == g_theResourceDB->NumRecords()){
+			m_goodValue = new double[g_numGoods];
+			archive.Load((uint8 *)m_goodValue, sizeof(double) * g_numGoods);
+		}
+		else{ // Handle sized up good database
+			// Remove good values from archieve and recalculate them
+			double *tmpGoodValue = new double[g_numGoods];
+			archive.Load((uint8 *)tmpGoodValue, sizeof(double) * g_numGoods);
+			delete[] tmpGoodValue;
+			ComputeGoodsValues();
+		}
 	}
 }
 

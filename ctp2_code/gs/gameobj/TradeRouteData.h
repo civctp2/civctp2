@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Trade Route Data
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added SetSourceResource method to correct the trade route index if 
+//   the size of the Resource database was increased. - June 4th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -126,6 +156,7 @@ public:
 	const DynamicArray<MapPoint>* GetSelectedPath() const { return &m_selectedPath; }
 
 	void GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const;
+	void SetSourceResource(sint32 resource){ m_sourceResource = resource; }
 	void RemoveFromCells();
 
 	BOOL PassesThrough(sint32 player) const;
