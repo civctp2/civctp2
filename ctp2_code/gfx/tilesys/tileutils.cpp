@@ -14,7 +14,7 @@
 
 #include "c3.h"
 
-#include "globals.h"
+#include "Globals.h"
 
 #include "pixelutils.h"
 #include "spriteutils.h"
@@ -940,7 +940,7 @@ sint32 tileutils_EncodeStencil(MBCHAR *filename)
 
 	uint16 tableHeight = k_TILE_PIXEL_HEIGHT;
 
-	file = fopen("source\\stencil\\stencil.bin", "wb");
+	file = fopen("source" FILE_SEP "stencil" FILE_SEP "stencil.bin", "wb");
 	if (file != NULL) {
 		fwrite((void *)&tableHeight, 1, sizeof(uint16), file);
 		fwrite((void *)g_bitsTable, 1, sizeof(sint32) * k_TILE_PIXEL_HEIGHT, file);
@@ -994,7 +994,7 @@ void tileutils_LoadStencil(void)
 	uint16		tableHeight = 0;
 	FILE		*file;
 
-	file = fopen("source\\stencil\\stencil.bin", "rb");
+	file = fopen("source" FILE_SEP "stencil" FILE_SEP "stencil.bin", "rb");
 
 	if (file != NULL) {
 		fread((void *)&tableHeight, 1, sizeof(uint16), file);
@@ -1155,7 +1155,7 @@ Pixel16 *tileutils_LoadStencilImage(uint16 from, uint16 to)
 	FILE		*file;
 
 
-	sprintf(fname, "output\\xitions\\gtft%#.2d%#.2d.bin", from, to);
+	sprintf(fname, "output" FILE_SEP "xitions" FILE_SEP "gtft%#.2d%#.2d.bin", from, to);
 
 	file = fopen(fname, "rb");
 	if (file != NULL) {
@@ -1381,7 +1381,7 @@ sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 	uint16	width=0, height=0;
 
 	MBCHAR		fname[_MAX_PATH];
-	sprintf(fname, "source\\xitions\\%s", filename);
+	sprintf(fname, "source" FILE_SEP "xitions" FILE_SEP "%s", filename);
 
 	tif = tileutils_TIF2mem(fname, &width, &height);
 	Assert(tif != NULL);
@@ -1525,7 +1525,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 	bork = tileutils_CreateBorkBork();
 
-	sprintf(filename, "source\\basetiles\\GT%cB%#.4d.tif", ageChar, tileNum);
+	sprintf(filename, "source" FILE_SEP "basetiles" FILE_SEP "GT%cB%#.4d.tif", ageChar, tileNum);
 
 	if (baseType == TERRAIN_WATER_BEACH) {
 		
@@ -1679,7 +1679,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 	Pixel16		*hatData=NULL;
 	uint32		hatDataLen=0;
 
-	sprintf(filename, "source\\hats\\GTFh%#.4d.tif", tileNum);
+	sprintf(filename, "source" FILE_SEP "hats" FILE_SEP "GTFh%#.4d.tif", tileNum);
 	hatTif = tileutils_TIF2mem(filename, &width, &height);
 	if (hatTif) {
 		hatData = (Pixel16 *)tileutils_EncodeTile((Pixel32 *)hatTif, width, height, &hatDataLen);
@@ -1710,31 +1710,32 @@ uint16 tileutils_CompileImprovements(FILE *file)
 	uint16		width, height, id;
 	Pixel16		*data;
 	uint16		count = 0;
+#ifdef WIN32
 	struct _stat tmpstat;
+#else
+	struct stat tmpstat;
+#endif
 	int			r;
 
 	for (i=0; i<k_MAX_IMPROVEMENTS; i++) {
-		sprintf(filename, "source\\improve\\GTFM%#.3d.tif", i);
+		sprintf(filename, "source%simprove%sGTFM%#.3d.tif",
+		        FILE_SEP, FILE_SEP, i);
+#ifdef WIN32
 		r = (sint32)_stat(filename, &tmpstat);
+#else
+		r = stat(filename, &tmpstat);
+#endif
 		if (r == 0) count++;
 	}
 
 	fwrite((void *)&count, 1, sizeof(uint16), file);
 
 	for (i=0; i<k_MAX_IMPROVEMENTS; i++) {
-		sprintf(filename, "source\\improve\\GTFM%#.3d.tif", i);
+		sprintf(filename, "source%simprove%sGTFM%#.3d.tif",
+		        FILE_SEP, FILE_SEP, i);
 		tif = tileutils_TIF2mem(filename, &width, &height);
 		if (tif) {
 			data = (Pixel16 *)tileutils_EncodeTile((Pixel32 *)tif, width, height, &dataLen);
-
-
-
-
-
-
-
-
-
 
 
 			free(tif);
@@ -2020,7 +2021,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				char		*tif;
 				uint16		width, height;
 
-				sprintf(filename, "source\\rivers\\GTFL%#.2d.tif", tmp);
+				sprintf(filename, "source" FILE_SEP "rivers" FILE_SEP "GTFL%#.2d.tif", tmp);
 				tif = tileutils_TIF2mem(filename, &width, &height);
 
 				uint32		dataLen=0;
@@ -2052,12 +2053,10 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 	printf("\nWriting Tileset: ");
 
-	extern long g_is565Format;
-
 	if (g_is565Format) {
-		sprintf(fname, "output\\gtset565.til");
+		sprintf(fname, "output" FILE_SEP "gtset565.til");
 	} else {
-		sprintf(fname, "output\\gtset555.til");
+		sprintf(fname, "output" FILE_SEP "gtset555.til");
 	}
 
 	tfile = fopen(fname, "wb");

@@ -644,8 +644,7 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 
 }
 
-
-void TiledMap::DrawHitMask(aui_Surface *surf, MapPoint &pos)
+void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 {
 	sint32		start, end;
 	sint32		errcode;
@@ -692,10 +691,6 @@ void TiledMap::DrawHitMask(aui_Surface *surf, MapPoint &pos)
 
 	for (i=k_TILE_PIXEL_HEADROOM; i<k_TILE_GRID_HEIGHT;) 
 	{
-
-   
-   
-
 		start = m_tileHitMask[i].start;
 		end   = m_tileHitMask[i].end  ;
 
@@ -727,8 +722,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, MapPoint &pos)
 
 }
 
-
-void TiledMap::DrawColoredHitMask(aui_Surface *surf, MapPoint &pos, COLOR color)
+void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color)
 {
 	sint32		start, end;
 	uint8		*surfBase;
@@ -791,7 +785,7 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, MapPoint &pos, COLOR color)
 
 }
 
-void TiledMap::DrawHitMask(aui_Surface *surf, MapPoint &pos, RECT *mapViewRect, RECT *destRect)
+void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect)
 {
 	sint32		start, end;
 	sint32		errcode;
@@ -867,7 +861,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, MapPoint &pos, RECT *mapViewRect, 
 }
 
 
-void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side)
+void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side)
 {
 	sint32		start, end;
 	uint8		*surfBase;
@@ -954,7 +948,7 @@ void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, MapPoint &pos, Pixel16 
 
 }
 
-void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side, sint32 dashMode)
+void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side, sint32 dashMode)
 {
 	sint32		start, end;
 	uint8		*surfBase;
@@ -1104,29 +1098,14 @@ sint32 TiledMap::DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y)
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
 
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	unsigned short	*destPixel;
 
 	y+=k_TILE_PIXEL_HEADROOM;
 
-
-
-if (x < 0) return 0;
-if (x >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
-if (y < 0) return 0;
-if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
+	if (x < 0) return 0;
+	if (x >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
+	if (y < 0) return 0;
+	if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 	sint32 startX, endX;
 
@@ -1145,13 +1124,6 @@ if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 			*destPixel++ = 0x0000;
 		}
 	}
-
-
-
-
-
-
-
 
 	return 0;
 }
@@ -4132,10 +4104,6 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, MapPoint &pos, sint32 xp
 	uint16 tilesetIndex_short = (uint16) tilesetIndex;
 
 #ifdef _DEBUG
-	
-	
-	
-	
 	Assert(tilesetIndex == ((sint32) tilesetIndex_short));
 #endif
 
@@ -4163,18 +4131,6 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, MapPoint &pos, sint32 xp
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
 
-
-
-
-
-
-
-
-
-
-
-
-	
 	Pixel16 srcPixel;
 
 	uint16 *pDestPixel = (Pixel16 *)(pSurfBase + ypos * surfPitch + 2 * xpos);
@@ -4191,27 +4147,7 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, MapPoint &pos, sint32 xp
 
 			if (transDataPtr)
 			{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef _MSC_VER
 				_asm {
 					mov edx, endX
 					mov edi, pDestPixel
@@ -4220,13 +4156,6 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, MapPoint &pos, sint32 xp
 					lea edi, [edi + 2*edx]
 					sub ecx, edx
 					mov ebx, transDataPtr
-
-				
-				
-				
-				
-				
-				
 				
 L0:
 					mov dx, [esi]
@@ -4251,7 +4180,39 @@ L1:
 					jnz L0
 					mov transDataPtr, ebx
 					mov dataPtr, esi
-				}	
+				}
+#else
+				Pixel16* pedx;
+                                int edx = endX;
+                                uint16* edi = pDestPixel;
+                                Pixel16* esi = dataPtr;
+                                int ecx = startX;
+                                edi += edx;
+                                ecx -= edx;
+                                Pixel16* ebx = transDataPtr;
+L0:
+                                Pixel16 dx = *esi;
+                                ++esi;
+                                Pixel16 ax = dx;
+                                if (ax >= 4)
+                                    goto L1;
+                                pedx = tileData[ax];
+                                if (pedx == 0)
+                                    goto L2;
+                                tileData[ax] = pedx;
+                                dx = pedx[-1];
+                                goto L1;
+L2:
+                                dx = *ebx;
+L1:
+                                ++ebx;
+                                edi[ecx] = dx;
+                                ++ecx;
+                                if (ecx != 0)
+                                    goto L0;
+                                transDataPtr = ebx;
+                                dataPtr = esi;
+#endif
 			}
 			else
 			{
@@ -4541,180 +4502,6 @@ sint32			tinc[2]={0,1};
 
 void TiledMap::DrawWater(void)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void TiledMap::DrawCityNames(aui_DirectSurface *surf, sint32 layer)
@@ -5422,24 +5209,6 @@ void TiledMap::DrawCityIcons(aui_DirectSurface *surf, MapPoint &pos, sint32 owne
 		iconRect.left += iconDim.x;
 		iconRect.right += iconDim.x;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	if (hasSleepingUnits) {

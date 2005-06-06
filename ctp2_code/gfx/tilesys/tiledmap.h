@@ -20,9 +20,6 @@
 // _DEBUG
 // - Debug version when set.
 // 
-// _MSC_VER		
-// - Microsoft C++ compiler version - when applicable.
-//
 // __SPRITETEST__
 // - ?
 //
@@ -36,7 +33,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -58,6 +55,7 @@
 #include "tileset.h"
 #include "colorset.h"
 #include "World.h"
+#include "SelItem.h"
 
 #define k_MEDIUM_KEY	0x4208
 
@@ -115,7 +113,6 @@ class Unit;
 class CellUnitList; 
 class TerrainImprovementRecord;
 
-enum SELECT_TYPE;
 enum WORLD_DIRECTION;
 
 class TiledMap {
@@ -173,15 +170,15 @@ public:
 	void			ReloadGoodActors(void);
 
 	void			GenerateHitMask(void);
-	void			DrawHitMask(aui_Surface *surf, MapPoint &pos);
-	void			DrawColoredHitMask(aui_Surface *surf, MapPoint &pos, COLOR color);
-	void			DrawColoredHitMaskEdge(aui_Surface *surf, MapPoint &pos, Pixel16 color, WORLD_DIRECTION d);
-	void			DrawColoredBorderEdge(aui_Surface *surf, MapPoint &pos, Pixel16 color, WORLD_DIRECTION d, sint32 dashMode);
-	void			DrawHitMask(aui_Surface *surf, MapPoint &pos, RECT *mapViewRect, RECT *destRect);
+	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos);
+	void			DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color);
+	void			DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 color, WORLD_DIRECTION d);
+	void			DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 color, WORLD_DIRECTION d, sint32 dashMode);
+	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect);
 	void			SetHiliteMouseTile(MapPoint &pos);
 	void			DrawHiliteMouseTile(aui_Surface *destSurf);
   	
-	void			SetTerrainOverlay(TerrainImprovementRecord *rec,MapPoint &pos,Pixel16 color);
+	void			SetTerrainOverlay(TerrainImprovementRecord *rec, MapPoint &pos,Pixel16 color);
 	void			DrawTerrainOverlay(aui_Surface *destSurf);
 
 	sint32			RecalculateViewRect(RECT &myRect);
@@ -229,8 +226,8 @@ public:
 	sint32			RepaintEdgeY(RECT *repaintRect);
 	sint32			Refresh(void);
 
-	sint32			DrawCityRadius(MapPoint &cpos, COLOR color,sint32 size=1);
-	sint32			DrawCityRadius1(MapPoint &cpos, COLOR color);
+	sint32			DrawCityRadius(const MapPoint &cpos, COLOR color,sint32 size=1);
+	sint32			DrawCityRadius1(const MapPoint &cpos, COLOR color);
 	sint32			PaintColoredTile(sint32 x, sint32 y, COLOR color);
 
 	void			ProcessLayerSprites(RECT *processRect, sint32 layer);
