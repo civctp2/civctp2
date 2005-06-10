@@ -23,6 +23,7 @@
 //
 // - Fixed crash when the game tries to display invalid text strings, 
 //   by Martin Gühmann.
+// - Tribe index check updated.
 //
 //----------------------------------------------------------------------------
 
@@ -155,23 +156,6 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 	
 	m_spScenario = spNew_ctp2_Button(retval, ldlBlock, "ScenarioButton", spnewgamescreen_scenarioPress);
 
-#ifndef _DEBUG
-	
-	 
-	
-#endif
-
-
-
-
-
-
-
-
-
-
-
-
 
 	m_spName = spNewTextEntry(retval,ldlBlock,"Name");
 
@@ -208,7 +192,7 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 
 SPNewGameWindow::~SPNewGameWindow()
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
 	mycleanup(m_spStart);
 
 	mycleanup(m_spReturn);
@@ -470,8 +454,8 @@ SPProfileBox::~SPProfileBox()
 
 void SPProfileBox::SetLeader(uint32 index)
 {
-	
-	if ( spnewgametribescreen_getTribeIndex() < 0 )
+	sint32 const    tribeIndex = spnewgametribescreen_getTribeIndex();
+	if ((tribeIndex < 0) || (tribeIndex >= INDEX_TRIBE_INVALID))
 	{
 		const MBCHAR *name =
 			g_theStringDB->GetNameStr(

@@ -36,7 +36,7 @@
 #include "profileDB.h"	
 #include "MapPoint.h"
 #include "Token.h"
-#include "globals.h"
+#include "Globals.h"
 
 #include "StrDB.h"
 #include "CivilisationDB.h"
@@ -80,7 +80,8 @@ ProfileDB::ProfileDB()
 
 	m_mapSize = MAPSIZE_MEDIUM;
 
-	for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
+	sint32 i;
+	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		m_ai_personality[i][0] = 0;
 	}
 

@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Repaired memory leaks.
+// - Updated tribe index check.
 //
 //----------------------------------------------------------------------------
 
@@ -343,8 +344,10 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 
 	CIV_INDEX	tribeIndex = (CIV_INDEX)spnewgametribescreen_getTribeIndex();
 
-	if (tribeIndex == -1)
-		tribeIndex = (CIV_INDEX)1;
+	if ((tribeIndex < 0) || (tribeIndex >= INDEX_TRIBE_INVALID))
+    {
+		tribeIndex = CIV_INDEX_CIV_1;
+    }
 
 	g_theProfileDB->SetCivIndex(tribeIndex);
 	
@@ -386,7 +389,7 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
  				civName = s_tempSaveInfo->civList[i];
 				dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName(tribeIndex));
  				if (strlen(civName) > 0) {
- 					if (!_stricoll(dbString, civName)) {
+ 					if (!stricmp(dbString, civName)) {
  						
  						g_scenarioUsePlayerNumber = i;
 						foundOne = TRUE;
@@ -574,7 +577,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 									for (sint32 j=0; j<g_theCivilisationDB->GetNumRec(); j++) {
 										dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName((CIV_INDEX)j));
 										
-										if (!_stricoll(dbString, civName)) {
+										if (!stricmp(dbString, civName)) {
 											
 											spnewgametribescreen_enableTribe((CIV_INDEX)j);
 											foundOne = TRUE;

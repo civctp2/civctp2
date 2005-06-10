@@ -31,9 +31,9 @@
 //
 //----------------------------------------------------------------------------
 
-
-
 #include "c3.h"
+#include "spnewgameplayersscreen.h"
+
 #include "c3window.h"
 #include "c3_popupwindow.h"
 #include "c3_button.h"
@@ -56,14 +56,44 @@ extern ColorSet			*g_colorSet;
 #include "profileDB.h"
 
 #include "spnewgamewindow.h"
-#include "spnewgameplayersscreen.h"
 #include "keypress.h"
 
 extern C3UI			*g_c3ui;
 extern ProfileDB	*g_theProfileDB;
 
+namespace
+{
 
-static c3_PopupWindow	*s_spNewGamePlayersScreen	= NULL;
+c3_PopupWindow *    s_spNewGamePlayersScreen = NULL;
+
+//----------------------------------------------------------------------------
+//
+// Name       : CleanupControl
+//
+// Description: Release data of a control
+//
+// Parameters : a_Control   : the control to release
+//
+// Globals    : s_spNewGamePlayersScreen
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+template <typename T>
+void CleanupControl(T * & a_Control)
+{
+    if (a_Control)
+    {
+        s_spNewGamePlayersScreen->RemoveControl(a_Control->Id());
+        delete a_Control;
+        a_Control = NULL;
+    }
+}
+
+} // namespace
+
 static c3_Button	*s_back				= NULL;
 
 static c3_Static	*s_name				= NULL;
@@ -97,7 +127,6 @@ static sint32		s_maxPlayers=0;
 //               player new game player screen
 //
 //----------------------------------------------------------------------------
-
 sint32	spnewgameplayersscreen_displayMyWindow()
 {
 	sint32 retval=0;
@@ -165,7 +194,7 @@ sint32 spnewgameplayersscreen_removeMyWindow(uint32 action)
 //
 // Name       : spnewgameplayersscreen_Initialize
 //
-// Description: Global Function
+// Description: Initializes the single player new game player screen
 //
 // Parameters : aui_Control::ControlActionCallback *callback
 //
@@ -174,13 +203,13 @@ sint32 spnewgameplayersscreen_removeMyWindow(uint32 action)
 //              s_max_player_spinner
 //              s_player_spinner
 //              s_maxPlayers
+//              g_ui
 //
 // Returns    : AUI_ERRCODE
 //
-// Remark(s)  : -Initializes the single player new game player screen
+// Remark(s)  : Assumption: g_ui and g_ui->TheLdl() are non-NULL.
 //
 //----------------------------------------------------------------------------
-
 AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
 	AUI_ERRCODE errcode;
@@ -222,105 +251,98 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 
 	s_spNewGamePlayersScreen->AddClose( callback );
 
-//Added by Martin Gühmann
+    // Added by Martin Gühmann, may not exist for mods 
 	sprintf( controlBlock, "%s.%s", windowBlock, "NumPlayerSpinner");
-	s_num_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
-	if(s_num_player_spinner){ 
+    if (g_ui->GetLdl()->IsValid(controlBlock))
+    {
+	    s_num_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
 		s_num_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_NumPlayerSpinner, NULL);
 		s_num_player_spinner->SetValue(g_theProfileDB->GetNPlayers() - 1, 0);
 		if(s_num_player_spinner->GetMaximumX() >= k_MAX_PLAYERS){
 			s_num_player_spinner->SetMaximum(k_MAX_PLAYERS-1, 0);
 		}
+	    s_spNewGamePlayersScreen->AddControl(s_num_player_spinner);
+
+	    sprintf( controlBlock, "%s.%s", windowBlock, "NumPlayerText");
+	    s_num_player = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
+	    s_spNewGamePlayersScreen->AddControl(s_num_player);
 	}
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "MaxPlayerSpinner");
-	s_max_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
-	if(s_max_player_spinner){
+    if (g_ui->GetLdl()->IsValid(controlBlock))
+    {
+        s_max_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
 		s_max_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_MaxPlayerSpinner, NULL);
 		s_max_player_spinner->SetValue(g_theProfileDB->GetMaxPlayers() - 1, 0);
 		if(s_max_player_spinner->GetMaximumX() >= k_MAX_PLAYERS){
 			s_max_player_spinner->SetMaximum(k_MAX_PLAYERS-1, 0);
 		}
+        s_spNewGamePlayersScreen->AddControl(s_max_player_spinner);
+
+	    sprintf( controlBlock, "%s.%s", windowBlock, "MaxPlayerText");
+	    s_max_player = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
+	    s_spNewGamePlayersScreen->AddControl(s_max_player);
 	}
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerSpinner");
-	s_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock);
-	if(s_player_spinner){
+    if (g_ui->GetLdl()->IsValid(controlBlock))
+    {
+	    s_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock);
 		s_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_PlayerSpinner, NULL);
 		s_player_spinner->SetValue(g_theProfileDB->GetPlayerIndex(), 0);
 		s_player_spinner->SetMaximum(g_theProfileDB->GetNPlayers() - 1, 0);
-	}
-	sprintf( controlBlock, "%s.%s", windowBlock, "NumPlayerText");
-	s_num_player = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
-	sprintf( controlBlock, "%s.%s", windowBlock, "MaxPlayerText");
-	s_max_player = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
-	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerText");
-	s_player = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
-	if(s_player){
-		s_player->SetTextColor(g_colorSet->GetColorRef(g_colorSet->ComputePlayerColor(g_theProfileDB->GetPlayerIndex())));
-	}
+	    s_spNewGamePlayersScreen->AddControl(s_player_spinner);
 
-	//Add the new spinners to the player window.
-	s_spNewGamePlayersScreen->AddControl(s_num_player_spinner);
-	s_spNewGamePlayersScreen->AddControl(s_max_player_spinner);
-	s_spNewGamePlayersScreen->AddControl(s_player_spinner);
-	s_spNewGamePlayersScreen->AddControl(s_num_player);
-	s_spNewGamePlayersScreen->AddControl(s_max_player);
-	s_spNewGamePlayersScreen->AddControl(s_player);
+	    sprintf( controlBlock, "%s.%s", windowBlock, "PlayerText");
+        s_player = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
+		s_player->SetTextColor(g_colorSet->GetColorRef(g_colorSet->ComputePlayerColor(g_theProfileDB->GetPlayerIndex())));
+	    s_spNewGamePlayersScreen->AddControl(s_player);
+	}
 
 	return AUI_ERRCODE_OK;
 }
 
 //----------------------------------------------------------------------------
 //
-// Name       : spnewgameplayersscreen_Cleanuo
+// Name       : spnewgameplayersscreen_Cleanup
 //
-// Description: Global Function
+// Description: Release the data of the single player new game player screen.
 //
-// Parameters : void
+// Parameters : -
 //
 // Globals    : s_spNewGamePlayersScreen
 //              s_num_player_spinner
 //              s_max_player_spinner
 //              s_player_spinner
+//              s_num_player
+//              s_max_player
+//              s_player
 //
-// Returns    : void
+// Returns    : -
 //
-// Remark(s)  : -Removes the single player new game player screen
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
-AUI_ERRCODE spnewgameplayersscreen_Cleanup()
+void spnewgameplayersscreen_Cleanup()
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+	if (s_spNewGamePlayersScreen)
+    {
+        CleanupControl(s_num_player_spinner);
+        CleanupControl(s_max_player_spinner);
+        CleanupControl(s_player_spinner);
+        CleanupControl(s_num_player);
+        CleanupControl(s_max_player);
+        CleanupControl(s_player);
 
-	if ( !s_spNewGamePlayersScreen  ) return AUI_ERRCODE_OK; 
+        if (g_c3ui)
+        {
+            g_c3ui->RemoveWindow(s_spNewGamePlayersScreen->Id());
+        }
+        keypress_RemoveHandler(s_spNewGamePlayersScreen);
 
-//Added by Martin Gühmann
-	s_spNewGamePlayersScreen->RemoveControl(s_num_player_spinner->Id());
-	s_spNewGamePlayersScreen->RemoveControl(s_max_player_spinner->Id());
-	s_spNewGamePlayersScreen->RemoveControl(s_player_spinner->Id());
-	s_spNewGamePlayersScreen->RemoveControl(s_num_player->Id());
-	s_spNewGamePlayersScreen->RemoveControl(s_max_player->Id());
-	s_spNewGamePlayersScreen->RemoveControl(s_player->Id());
-	g_c3ui->RemoveWindow( s_spNewGamePlayersScreen->Id() );
-	keypress_RemoveHandler(s_spNewGamePlayersScreen);
-
-//Added by Martin Gühmann
-	mycleanup(s_num_player_spinner);
-	mycleanup(s_max_player_spinner);
-	mycleanup(s_player_spinner);
-	mycleanup(s_num_player);
-	mycleanup(s_max_player);
-	mycleanup(s_player);
-
-
-	delete s_spNewGamePlayersScreen;
-	s_spNewGamePlayersScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
+        delete s_spNewGamePlayersScreen;
+        s_spNewGamePlayersScreen = NULL;
+    }
 }
 
 //----------------------------------------------------------------------------

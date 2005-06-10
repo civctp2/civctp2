@@ -1,7 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef LOADSAVEWINDOW_FLAG
 #define LOADSAVEWINDOW_FLAG
 
