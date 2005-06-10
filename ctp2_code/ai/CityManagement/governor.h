@@ -35,61 +35,71 @@
 // - Replaced ComputeMinimumFoodWorkers by ComputeMinimumWorkers function.
 //   - April 4th 2005 Martin Gühmann
 // - Made some methods const. - April 15th 2005 Martin Gühmann
+// - Added Cleanup to reduce memory leak reports.
+// - Merged with linux changes.
+// - Improved import structure, removed debug allocator versions.
 //
 //----------------------------------------------------------------------------
 
-#ifndef HAVE_PRAGMA_ONCE
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
+
 #ifndef __GOVERNOR_H__
 #define __GOVERNOR_H__
 
-
-
-#pragma warning(disable: 4786)
-
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
 
 #include <vector>
-#include "c3debugstl.h"
 
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
-#include "Diplomat.h"
+class Governor;
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
+
+#include "civarchive.h"     // CivArchive
+#include "DB.h"             // StringId
 #include "mapgrid.h"
-#include "Path.h"
+#include "Path.h"           // Path
+#include "Player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
+#include "SlicContext.h"    // SlicContext
+#include "StrategyRecord.h" // StrategyRecord
 
 class CityData;
 class BuildingBuildListRecord;
+class BuildListSequenceRecord;
 class WonderBuildListRecord;
 class StrategyRecord::PopAssignmentElement;
+class UnitBuildListRecord;
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 class Governor {
 public:
+	typedef std::vector<Governor>   GovernorVector;
+	typedef std::vector<sint16>     UnitCountVector;
 
-	
-	
-	
-
-#ifdef _DEBUG
-	
-	typedef std::vector<Governor, dbgallocator<Governor> > GovernorVector;
-	typedef std::vector<sint16, dbgallocator<sint16> > UnitCountVector;
-#else
-	
-	typedef std::vector<Governor> GovernorVector;
-	typedef std::vector<sint16> UnitCountVector;
-#endif
 
 	
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayerId);
-
+    static void Cleanup(void);
 	
 	static void LoadAll(CivArchive & archive);
-
-	
 	static void SaveAll(CivArchive & archive);
 
 	
 	static Governor & GetGovernor(const PLAYER_INDEX & playerId);
+
+    static Governor const &         INVALID;
 
 	
 	
@@ -109,12 +119,9 @@ public:
 	};
 
 	
-	Governor();
+	Governor(PLAYER_INDEX const & playerId = PLAYER_UNASSIGNED);
+    virtual ~Governor();
 
-	
-	void Initialize();
-
-	
 	void SetPlayerId(const PLAYER_INDEX &playerId);
 
 	void Resize( const sint16 & xSize,
@@ -228,19 +235,19 @@ public:
 	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max) const;
 
 
-	sint32 Governor::ComputeMinimumWorkers(const CityData *city, 
-	                                       sint32 &farmers, 
-	                                       sint32 &laborers, 
-	                                       sint32 &merchants, 
-	                                       sint32 &scientists,
-	                                       sint32 &minFood,
-	                                       sint32 &minProd,
-	                                       sint32 &minGold,
-	                                       sint32 &minScie,
-	                                       double &farmersEff,
-	                                       double &laborersEff,
-	                                       double &merchantsEff,
-	                                       double &scientistsEff) const;
+	sint32 ComputeMinimumWorkers(const CityData *city, 
+	                           sint32 &farmers, 
+	                           sint32 &laborers, 
+	                           sint32 &merchants, 
+	                           sint32 &scientists,
+	                           sint32 &minFood,
+	                           sint32 &minProd,
+	                           sint32 &minGold,
+	                           sint32 &minScie,
+	                           double &farmersEff,
+	                           double &laborersEff,
+	                           double &merchantsEff,
+	                           double &scientistsEff) const;
 	
 
 	
@@ -361,13 +368,7 @@ private:
 		sint32 type;
 	};
 
-#ifdef _DEBUG
-	
-	typedef std::vector<TiGoal, dbgallocator<TiGoal> > TiGoalQueue;
-#else
-	
 	typedef std::vector<TiGoal> TiGoalQueue;
-#endif
 	
 	
 	static TiGoalQueue s_tiQueue;

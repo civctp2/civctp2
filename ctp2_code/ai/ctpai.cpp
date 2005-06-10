@@ -1129,19 +1129,9 @@ void CtpAi::InitializeEvents()
 
 void CtpAi::Cleanup()
 {
-	
 	SettleMap::s_settleMap.Cleanup();
-
-	for (PLAYER_INDEX player=0; player < s_maxPlayers; player++)
-	{
-		
-		Scheduler::GetScheduler(player).Cleanup();
-		
-		
-		Governor::GetGovernor(player).Initialize();
-		
-	}
-
+    Scheduler::CleanupAll();
+	Governor::Cleanup();
 	Diplomat::CleanupAll();
 }
 
@@ -1337,55 +1327,40 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 {
 	Assert(deadPlayerId < s_maxPlayers);
 
-	
 	Scheduler::GetScheduler(deadPlayerId).Cleanup();
+    Governor::GetGovernor(deadPlayerId) = Governor::INVALID;
 
-	
-	Governor::GetGovernor(deadPlayerId).Initialize();
-
-
-	for (PLAYER_INDEX player=0; player < s_maxPlayers; player++)
+	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
-		
 		Diplomat::GetDiplomat(player).InitForeigner(deadPlayerId);
 	}
-
 	
 	AgreementMatrix::s_agreements.ClearAgreementsInvolving(deadPlayerId);
-
 	Diplomat::GetDiplomat(deadPlayerId).Cleanup();
 	
 	if (deadPlayerId + 1 >= s_maxPlayers)
+    {
+        // Last player in array
 		Resize();
+    }
 }
 
 
 void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 {
-	
 	Assert(g_player[newPlayerId]);
-	Player *player_ptr = g_player[newPlayerId];
-
 	
 	if (newPlayerId >= s_maxPlayers)
+    {
 		Resize();
+    }
 
-	
 	Scheduler::GetScheduler(newPlayerId).Initialize();
-
-	
-	Governor::GetGovernor(newPlayerId).Initialize();
-
-	
 	Diplomat::GetDiplomat(newPlayerId).Initialize();
-
-	
-	
 	Diplomat::GetDiplomat(newPlayerId).InitStrategicState();
 
-	for (PLAYER_INDEX player=0; player < s_maxPlayers; player++)
+	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
-		
 		Diplomat::GetDiplomat(player).InitForeigner(newPlayerId);
 	}
 }
