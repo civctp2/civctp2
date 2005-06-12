@@ -48,13 +48,15 @@
 //   comparing a unit's CultureOnly flag to a player's citystyle 
 //   by E April 20th 2005
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
+// - Allow loading of savegames with diffrent number of goods than in 
+//   the good database. - May 28th 2005 Martin Gühmann
+// - Made version constants local, merged with linux branch.
 //
 //----------------------------------------------------------------------------
 
-#include "c3debug.h"
-
-
 #include "c3.h"
+
+#include "c3debug.h"
 #include "Globals.h"
 #include "c3errors.h"
 #include "c3math.h"
@@ -247,61 +249,62 @@
 
 #include "scenarioeditor.h"
 
-extern C3UI						*g_c3ui;
-extern ControlPanelWindow		*g_controlPanel;
-extern DataCheck				*g_dataCheck; 
-extern CivPaths					*g_civPaths;
+extern C3UI                     *g_c3ui;
+extern ControlPanelWindow       *g_controlPanel;
+extern DataCheck                *g_dataCheck; 
+extern CivPaths                 *g_civPaths;
 extern PointerList<Player>      *g_deadPlayer;
-extern Pollution				*g_thePollution ;
-extern TopTen					*g_theTopTen ;
-extern ConstDB					*g_theConstDB ;
-extern AgreementPool			*g_theAgreementPool ;
-extern DiplomaticRequestPool	*g_theDiplomaticRequestPool ;
-extern RandomGenerator			*g_rand ;
-extern CivilisationPool			*g_theCivilisationPool ;
-extern MessageWindow *g_currentMessageWindow;
+extern Pollution                *g_thePollution ;
+extern TopTen                   *g_theTopTen ;
+extern ConstDB                  *g_theConstDB ;
+extern AgreementPool            *g_theAgreementPool ;
+extern DiplomaticRequestPool    *g_theDiplomaticRequestPool ;
+extern RandomGenerator          *g_rand ;
+extern CivilisationPool         *g_theCivilisationPool ;
+extern MessageWindow            *g_currentMessageWindow;
 
-extern DebugWindow				*g_debugWindow;
+extern DebugWindow              *g_debugWindow;
 
 
-extern InstallationQuadTree  *g_theInstallationTree; 
+extern InstallationQuadTree     *g_theInstallationTree; 
 
-extern RadarMap					*g_radarMap;
-extern CivApp					*g_civApp;
+extern RadarMap                 *g_radarMap;
+extern CivApp                   *g_civApp;
 extern DifficultyDB             *g_theDifficultyDB;
-extern
+extern sint32                   g_numGoods; // To fix games with altered ressource database
+extern sint32                   *g_newGoods;
 
 #ifdef _DEBUG
-BOOL							g_toggleAdvances ;
+BOOL                            g_toggleAdvances ;
 #endif
 
-BOOL							g_aPlayerIsDead = FALSE;
+BOOL                            g_aPlayerIsDead = FALSE;
 
 
 #include "newturncount.h"
 
 #include "TurnCnt.h"
-extern TurnCount				*g_turn;
+extern TurnCount                *g_turn;
 #include "tiledmap.h" 
-extern TiledMap					*g_tiledMap;
+extern TiledMap                 *g_tiledMap;
 
 extern BOOL g_powerPointsMode;
 
 
-extern sint32					g_tileImprovementMode;
+extern sint32                   g_tileImprovementMode;
 
-sint32					g_specialAttackMode = 0;
+sint32                          g_specialAttackMode = 0;
 
-extern SoundManager				*g_soundManager;
+extern SoundManager             *g_soundManager;
 
-extern sint32					g_isTileImpPadOn;
+extern sint32                   g_isTileImpPadOn;
 
 extern sint32                   g_isCheatModeOn;
 
 extern void WhackScreen();
 
 #ifdef _DEBUG
-extern BOOL							g_ai_revolt;
+extern BOOL                     g_ai_revolt;
 #endif
 
 #include "BFS.h"
@@ -312,7 +315,8 @@ extern BOOL							g_ai_revolt;
 #include "ctpai.h"
 
 
-
+#define k_PLAYER_VERSION_MAJOR	0
+#define k_PLAYER_VERSION_MINOR	2
 
 
 
@@ -320,7 +324,7 @@ extern BOOL							g_ai_revolt;
 
 Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt)
 {
-    memset(this, 0, sizeof(*this)); 
+	memset(this, 0, sizeof(*this)); 
 
 	InitPlayer(o, d, pt) ;
 }
@@ -342,7 +346,7 @@ Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt)
 
 Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const CIV_INDEX civ, GENDER gender)
 	{
-    memset(this, 0, sizeof(*this)); 
+	memset(this, 0, sizeof(*this)); 
 
 	InitPlayer(o, d, pt) ;
 	*m_civilisation = g_theCivilisationPool->Create(m_owner, civ, gender) ;
@@ -353,19 +357,19 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 {
 
 
-    m_owner = o;  
+	m_owner = o;  
 
 
 	g_player[o] = this;
 
-    m_playerType = pt;
+	m_playerType = pt;
 
 	BOOL treatAsRobot = m_playerType == PLAYER_TYPE_ROBOT;
 	if(treatAsRobot && (g_startHotseatGame || g_startEmailGame) &&
 	   g_hsPlayerSetup[m_owner].isHuman)
 		treatAsRobot = FALSE;
 
-    m_all_armies = new DynamicArray<Army>;
+	m_all_armies = new DynamicArray<Army>;
 
 	m_all_cities = new UnitDynamicArray;
 
@@ -390,34 +394,34 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_goodSalePrices = new sint32[g_theResourceDB->NumRecords()];
 	memset(m_goodSalePrices, 0, sizeof(sint32) * g_theResourceDB->NumRecords());
 
-    m_oversea_lost_unit_count = 0; 
-	m_home_lost_unit_count = 0; 
+	m_oversea_lost_unit_count = 0;
+	m_home_lost_unit_count = 0;
 
 	m_global_happiness = new PlayerHappiness;
 	
 	m_income_Percent = 0;
 
-    sint32 i; 
+	sint32 i; 
 	m_diplomatic_state[0] = DIPLOMATIC_STATE_WAR;
 	m_sent_requests_this_turn[0] = 0;
 
-    for (i=1; i<k_MAX_PLAYERS; i++) { 
+	for (i=1; i<k_MAX_PLAYERS; i++) {
 		if(m_owner == 0) {
 			m_diplomatic_state[i] = DIPLOMATIC_STATE_WAR;
 		} else {
-			m_diplomatic_state[i] = DIPLOMATIC_STATE_NEUTRAL; 
+			m_diplomatic_state[i] = DIPLOMATIC_STATE_NEUTRAL;
 		}
 		m_sent_requests_this_turn[i] = 0;
-    }
+	}
 
 
-    *m_capitol = 0;
+	*m_capitol = 0;
 
-    Assert(o <32); 
-    mask_alliance = 0x01 << o;
+	Assert(o <32); 
+	mask_alliance = 0x01 << o;
 
 	m_set_government_type = 1;
-    m_government_type = 1;
+	m_government_type = 1;
 	m_change_government_turn = -1;
 	m_changed_government_this_turn = FALSE;
 	
@@ -429,15 +433,15 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_materialsTax = k_DEFAULT_MATERIALS_TAX;
 
 
-	m_diplomatic_mute = 0 ;											
-	memset(m_pollution_history, 0, sizeof(m_pollution_history)) ;					
-	memset(m_event_pollution, 0, sizeof(m_event_pollution)) ;
-	memset(m_patience, 0, sizeof(m_patience)) ;
+	m_diplomatic_mute = 0 ;
+	memset(m_pollution_history, 0, sizeof(m_pollution_history));
+	memset(m_event_pollution, 0, sizeof(m_event_pollution));
+	memset(m_patience, 0, sizeof(m_patience));
 
 	m_vision = new Vision(m_owner);
-    if (0 == m_owner) { 
-        m_vision->SetTheWholeWorldExplored(); 
-    }
+	if (0 == m_owner) { 
+		m_vision->SetTheWholeWorldExplored();
+	}
 
 	m_terrainImprovements = new DynamicArray<TerrainImprovement>;
 #ifdef BATTLE_FLAGS
@@ -470,7 +474,7 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	
 	m_totalArmiesCreated = 0;
 	m_hasUsedCityView = FALSE;
-	m_terrainPollution = FALSE ;									
+	m_terrainPollution = FALSE;
 
 	m_deepOceanVisible = FALSE;
 
@@ -498,7 +502,7 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_advances->DebugDumpTree();
 #endif
 
-    m_mask_hostile = 0;
+	m_mask_hostile = 0;
 	m_hasUsedCityView = FALSE;
 	m_hasUsedWorkView = FALSE;
 	m_hasUsedProductionControls = FALSE;
@@ -515,7 +519,7 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_hasGlobalRadar = FALSE;
 
 #ifdef _DEBUG_INCOMPATIBLE
-	memset(m_attitude, 0, sizeof(m_attitude)) ;						
+	memset(m_attitude, 0, sizeof(m_attitude));
 #endif
 	m_advances->SetOwner(m_owner);
 
@@ -589,7 +593,7 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	}
 	delete [] canResearch;
 
-    m_strengths->Calculate();
+	m_strengths->Calculate();
 
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		m_last_attacked[i] = -1;
@@ -611,7 +615,7 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_hasWonTheGame = FALSE;
 	m_hasLostTheGame = FALSE;
 
-    m_descrip_string[0] = 0;
+	m_descrip_string[0] = 0;
 
 	m_disableChooseResearch = FALSE;
 
@@ -662,9 +666,9 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 
 Player::Player(CivArchive &archive)
 {
-    memset(this, 0, sizeof(*this)); 
+	memset(this, 0, sizeof(*this));
 
-    m_all_armies = new DynamicArray<Army>;
+	m_all_armies = new DynamicArray<Army>;
 
 	m_all_cities = new UnitDynamicArray;
 
@@ -697,7 +701,7 @@ Player::Player(CivArchive &archive)
 	m_score = new Score(PLAYER_INDEX(0));
 	
 	m_goodSalePrices = new sint32[g_theResourceDB->NumRecords()];
-    m_descrip_string[0] = 0;
+	m_descrip_string[0] = 0;
 
 	Serialize(archive) ;
 	}
@@ -724,7 +728,7 @@ Player::~Player()
 	if(m_allRadarInstallations)	delete m_allRadarInstallations;
 	if(m_allInstallations) delete m_allInstallations;
 
-    if(m_all_armies) delete m_all_armies;
+	if(m_all_armies) delete m_all_armies;
 
 	if(m_all_cities) delete m_all_cities;
 
@@ -750,11 +754,11 @@ Player::~Player()
 
 
 
-	if(m_civilisation) {			
+	if(m_civilisation) {
 		if(g_theCivilisationPool->IsValid(*m_civilisation))
-			m_civilisation->Kill() ;
+			m_civilisation->Kill();
 
-		delete m_civilisation ;
+		delete m_civilisation;
 	}
 
 	if (m_slic_special_city)
@@ -767,70 +771,102 @@ Player::~Player()
 		delete m_gaiaController;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::Serialize
+//
+// Description: Store/Load CityData
+//
+// Parameters : CivArchive &archive       :
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void Player::Serialize(CivArchive &archive)
 {
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
 #define PLAYER_MAGIC 0x7F7E7D7C
-    if (archive.IsStoring())
-		{
+	if (archive.IsStoring())
+	{
 		archive.PerformMagic(PLAYER_MAGIC) ;
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_broken_alliances_and_cease_fires)
 			+ sizeof(m_broken_alliances_and_cease_fires));
 
 		archive.Store((uint8*)m_goodSalePrices, g_theResourceDB->NumRecords() * sizeof(sint32));
 #ifdef _DEBUG_INCOMPATIBLE
-        {
-			
-            sint32 i; 
-            for (i=0; i<k_MAX_PLAYERS; i++) { 
-	            archive.PutUINT32(m_attitude[i]);
-            }
-        }
-#endif
-		}
-    else
 		{
-        archive.TestMagic(PLAYER_MAGIC) ;
+
+			sint32 i;
+			for (i=0; i<k_MAX_PLAYERS; i++) {
+				archive.PutUINT32(m_attitude[i]);
+			}
+		}
+#endif
+	}
+	else
+	{
+		archive.TestMagic(PLAYER_MAGIC) ;
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_broken_alliances_and_cease_fires)
 			+ sizeof(m_broken_alliances_and_cease_fires));
 
-		archive.Load((uint8*)m_goodSalePrices, g_theResourceDB->NumRecords() * sizeof(sint32));
-#ifdef _DEBUG_INCOMPATIBLE
-        {
-            sint32 i; 
-            for (i=0; i<k_MAX_PLAYERS; i++) { 
-	            m_attitude[i] = ATTITUDE_TYPE(archive.GetUINT32());
-            }
-        }
-#endif
+		if(g_numGoods == g_theResourceDB->NumRecords()){
+			archive.Load((uint8*)m_goodSalePrices, g_theResourceDB->NumRecords() * sizeof(sint32));
+		}
+		else{ // Fix trade if the number of goods was changed in the database since this was saved.
+			sint32* tmpGoodSalePrices = new sint32[g_numGoods];
+			archive.Load((uint8*)tmpGoodSalePrices, g_numGoods * sizeof(sint32));
 
+			sint32 numGoods;
+			if(g_numGoods < g_theResourceDB->NumRecords()){
+				numGoods = g_numGoods;
+			}
+			else{
+				numGoods = g_theResourceDB->NumRecords();
+			}
+
+			memset(m_goodSalePrices, 0, g_theResourceDB->NumRecords() * sizeof(sint32));
+			sint32 i;
+
+			for(i = 0; i < numGoods; ++i){
+				// Actual superflous since m_goodSalePrices isn't used at all
+				if(tmpGoodSalePrices[i] > 0){
+					m_goodSalePrices[g_newGoods[i]] = tmpGoodSalePrices[i];
+				}
+			}
+
+			delete[] tmpGoodSalePrices;
 		}
 
-	m_all_armies->Serialize(archive) ;
 
-    m_all_cities->Serialize(archive) ;
+#ifdef _DEBUG_INCOMPATIBLE
+		{
+			sint32 i;
+			for (i=0; i<k_MAX_PLAYERS; i++) {
+				m_attitude[i] = ATTITUDE_TYPE(archive.GetUINT32());
+			}
+		}
+#endif
 
-    m_all_units->Serialize(archive) ;
+	}
+
+	m_all_armies->Serialize(archive);
+
+	m_all_cities->Serialize(archive);
+
+	m_all_units->Serialize(archive);
 	m_traderUnits->Serialize(archive);
-    m_gold->Serialize(archive) ;
-    m_science->Serialize(archive) ;
-    m_tax_rate->Serialize(archive) ;
-	m_difficulty->Serialize(archive) ;
-	m_advances->Serialize(archive) ;
+	m_gold->Serialize(archive);
+	m_science->Serialize(archive);
+	m_tax_rate->Serialize(archive);
+	m_difficulty->Serialize(archive);
+	m_advances->Serialize(archive);
 	m_tradeOffers->Serialize(archive);
-    m_global_happiness->Serialize(archive); 
+	m_global_happiness->Serialize(archive);
 
 	uint8 hadVision;
 	if(archive.IsStoring()) {
@@ -849,7 +885,7 @@ void Player::Serialize(CivArchive &archive)
 				delete m_vision;
 				m_vision = NULL;
 			}
-		} else {			
+		} else {
 			Assert(m_vision);
 			m_vision->Serialize(archive);
 		}
@@ -942,13 +978,13 @@ Unit Player::CreateUnitNoPosition(const sint32 t,
 		
 	
 	
-    Unit u = g_theUnitPool->Create (t, m_owner, actor_pos);
+	Unit u = g_theUnitPool->Create (t, m_owner, actor_pos);
 
 	u.SetFlag(k_UDF_TEMP_SLAVE_UNIT);
 
 	DPRINTF(k_DBG_GAMESTATE, ("Player::CreateUnitNoPosition(t=%d) : newunit=%d\n", 
-					  u.GetType(), (uint32)u));
-    
+	                          u.GetType(), (uint32)u));
+
 	if(g_network.IsClient() && g_network.IsLocalPlayer(oldOwner)) {
 		g_network.AddCreatedObject(u.AccessData());
 		
@@ -971,11 +1007,11 @@ Unit Player::CreateUnitNoPosition(const sint32 t,
 
 
 
-Unit Player::CreateUnit(const sint32 t,         
+Unit Player::CreateUnit(const sint32 t, 
                         const MapPoint &pos, 
                         const Unit hc,
-						BOOL tempUnit, 
-                        CAUSE_NEW_ARMY cause)                        
+                        BOOL tempUnit, 
+                        CAUSE_NEW_ARMY cause)
 {
 
 	const UnitRecord *rec = g_theUnitDB->Get(t);
@@ -1049,7 +1085,7 @@ Unit Player::CreateUnit(const sint32 t,
 		}
 	}
 	
-    Unit u = g_theUnitPool->Create (t, m_owner, pos, hc, NULL);
+	Unit u = g_theUnitPool->Create (t, m_owner, pos, hc, NULL);
 
 	if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK &&
 	   cause != CAUSE_NEW_ARMY_INITIAL && !g_network.SetupMode()) {
@@ -1057,7 +1093,7 @@ Unit Player::CreateUnit(const sint32 t,
 	}
 
 	DPRINTF(k_DBG_GAMESTATE, ("Player::CreateUnit(t=%d, pos=(%d,%d), hc=%d) : newunit=%d\n", 
-					  u.GetType(), pos.x, pos.y, hc.m_id, u.m_id));
+	                           u.GetType(), pos.x, pos.y, hc.m_id, u.m_id));
     
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.AddCreatedObject(u.AccessData());
@@ -1067,14 +1103,14 @@ Unit Player::CreateUnit(const sint32 t,
 		g_network.AddNewUnit(m_owner, u);
 	}
 
-    BOOL revealed_unexplored; 
+	BOOL revealed_unexplored; 
 	if(rec->GetIsTrader()) {
 		m_traderUnits->Insert(u);
 		AddTransportPoints((sint32)g_theUnitDB->Get(t)->GetMaxMovePoints());
 
 		return u;
 	} else {
-        UnitDynamicArray	revealed;
+		UnitDynamicArray	revealed;
 
 		sint32 r = u.SetPosition(pos, revealed, revealed_unexplored); 
 
@@ -1089,7 +1125,7 @@ Unit Player::CreateUnit(const sint32 t,
 		Assert(r); 
 
 		return InsertUnitReference(u, cause, hc);
-    }
+	}
 }
 
 void Player::CreateUnitSoon(sint32 t,
@@ -1147,7 +1183,7 @@ Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 	if(u.IsCity())
 		return Unit(0);
 
-   	m_all_units->Insert(u); 
+	m_all_units->Insert(u); 
 				
 
 
@@ -1188,9 +1224,9 @@ Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 		g_selected_item->RegisterCreatedUnit(m_owner); 
 	}
 
-    m_readiness->SupportUnit(u, m_government_type); 
+	m_readiness->SupportUnit(u, m_government_type); 
 
-    return u; 
+	return u; 
 }
 
 
@@ -1920,7 +1956,7 @@ void Player::BeginTurnScience()
 	DPRINTF(k_DBG_GAMESTATE, ("Adding %d science to player %d, who had %d\n", totalScience, m_owner, m_science->GetLevel()));
 
 	
-    AddScience(sint32(totalScience) ); 
+	AddScience(sint32(totalScience) ); 
 
 	double otherCivRandomAdvanceChance = wonderutil_GetOtherCivRandomAdvanceChance(m_builtWonders);
 	if(otherCivRandomAdvanceChance > 0 &&

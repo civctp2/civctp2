@@ -83,11 +83,15 @@
 // - Cleaned a little bit functions and added experimental code for slider
 //   optimization, the code is currently outcommented as it seemed that it 
 //   harms the AI more than it helps. - April 15th 2005 Martin Gühmann
+// - Improved cleanup to reduce memory leak reports.
+// - Removed debug allocator version.
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "c3.h"                 // Pre-compiled header
+#include "governor.h"           // Own declarations: consistency check
 
+#include "Diplomat.h"
 #include "player.h"
 #include "Path.h"
 #include "installationtree.h"
@@ -140,7 +144,6 @@ extern CityAstar g_city_astar;
 #include <algorithm>
 #include "Scheduler.h"
 #include "ctpgoal.h"
-#include "governor.h"
 #include "mapanalysis.h"
 
 #include "network.h"
@@ -149,15 +152,16 @@ extern CityAstar g_city_astar;
 #include "TerrainRecord.h" // Use terrain database
 #include "unitutil.h" // Use unit utilities
 
-using namespace std;
-
 extern MapPoint g_mp_size;
 
+namespace
+{
+    Governor const          UniqueInvalidGovernor       = Governor(PLAYER_UNASSIGNED);
+}
 
-
-Governor::GovernorVector Governor::s_theGovernors;
-Governor::TiGoalQueue Governor::s_tiQueue;
-
+Governor const &            Governor::INVALID           = UniqueInvalidGovernor;
+Governor::GovernorVector    Governor::s_theGovernors;
+Governor::TiGoalQueue       Governor::s_tiQueue;
 
 void Governor::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 {
@@ -190,8 +194,43 @@ void Governor::SaveAll(CivArchive & archive)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::Cleanup
+//
+// Description: Release the memory of the Governor data.
+//
+// Parameters : -
+//
+// Globals    : s_theGovernors  
+//
+// Returns    : -
+//
+// Remark(s)  : static function
+//
+//----------------------------------------------------------------------------
+void Governor::Cleanup(void)
+{
+    GovernorVector().swap(s_theGovernors);
+    TiGoalQueue   ().swap(s_tiQueue);
+}
 
-Governor & Governor::GetGovernor(const PLAYER_INDEX & playerId)
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetGovernor
+//
+// Description: Return a reference to the Governor of a player.
+//
+// Parameters : playerId        : player to govern
+//
+// Globals    : s_theGovernors  
+//
+// Returns    : Governor &      : governor of the player
+//
+// Remark(s)  : static function
+//
+//----------------------------------------------------------------------------
+Governor & Governor::GetGovernor(PLAYER_INDEX const & playerId)
 {
 	Assert(playerId >= 0);
 	Assert(playerId < s_theGovernors.size());
@@ -199,24 +238,48 @@ Governor & Governor::GetGovernor(const PLAYER_INDEX & playerId)
 	return s_theGovernors[playerId]; 
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::Governor
+//
+// Description: Constructor
+//
+// Parameters : playerId    : player to govern
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+Governor::Governor(PLAYER_INDEX const & playerId)
+:   m_maximumUnitShieldCost     (0),
+    m_currentUnitShieldCost     (0),
+    m_playerId                  (playerId),
+	m_currentUnitCount          (),
+    m_neededFreight             (0.0)
+{ ; }
 
-Governor::Governor()
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::~Governor
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -  
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+Governor::~Governor()
 {
-	m_playerId = -1;
-
-	Initialize();
+	UnitCountVector().swap(m_currentUnitCount);
 }
-
-
-void Governor::Initialize()
-{
-	
-	
-	
-
-	
-}
-
 
 void Governor::SetPlayerId(const PLAYER_INDEX &playerId)
 {
@@ -450,9 +513,9 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-		AssignPopulation(city);
+//		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-		city->CalcHappiness(gold, FALSE);
+//		city->CalcHappiness(gold, FALSE);
 
 		city->DoSupport(true);
 		city->SplitScience(true);
@@ -738,7 +801,7 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::ComputeBestSliders
+// Name       : Governor::FitSlidersToCities
 //
 // Description: Modifies the given slider settings so that they fit
 //
@@ -953,9 +1016,9 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-		AssignPopulation(city);
+//		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-		city->CalcHappiness(gold, FALSE);
+//		city->CalcHappiness(gold, FALSE);
 			
 		city->ProcessFood();
 		city->CollectOtherTrade(TRUE, FALSE);
@@ -1327,7 +1390,7 @@ void Governor::PlaceTileImprovements()
 	max_eval = MIN(max_eval, (sint32)s_tiQueue.size());
 	TiGoalQueue::iterator max_iter = TiGoalQueue::iterator(&s_tiQueue[max_eval]);
 	
-	std::partial_sort(s_tiQueue.begin(), max_iter, s_tiQueue.end(), greater<TiGoal>());
+	std::partial_sort(s_tiQueue.begin(), max_iter, s_tiQueue.end(), std::greater<TiGoal>());
 
 	sint32 avail_pw = player_ptr->GetMaterialsStored() - reserve_pw;
 
@@ -4298,13 +4361,7 @@ struct GoodsRoute {
 	Unit m_destinationCity;
 };
 
-#ifdef _DEBUG
-	
-	typedef list<GoodsRoute, dbgallocator<GoodsRoute> > GoodsRouteList;
-#else
-	typedef list<GoodsRoute> GoodsRouteList;
-#endif
-
+typedef std::list<GoodsRoute> GoodsRouteList;
 
 void Governor::ManageGoodsTradeRoutes()
 {

@@ -26,10 +26,11 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - #pragma once commented out.
+// - Removed compiler complaint. 
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -135,7 +136,7 @@ public:
 	void		GetOwningCity(Unit &c) { c = m_unit; }
 
 protected:		
-	aui_Surface	*m_surface;
+	aui_Surface *   m_surface;
 
 	Unit		m_unit;
 

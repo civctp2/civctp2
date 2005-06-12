@@ -24,6 +24,7 @@
 // - Clean up any created subscreens when cleaning up the main screen.
 // - Always return to main menu, never SP menu (JJB)
 // - Repaired memory leaks.
+// - Added tribe index check.
 //
 //----------------------------------------------------------------------------
 
@@ -136,8 +137,8 @@ sint32	spnewgamescreen_displayMyWindow()
 	
 	if ( !g_spNewGameTribeScreen ) spnewgametribescreen_Initialize();
 
-	
-	if ( spnewgametribescreen_getTribeIndex() < 0 )
+	sint32 const    tribeIndex = spnewgametribescreen_getTribeIndex();
+	if ((tribeIndex < 0) || (tribeIndex >= INDEX_TRIBE_INVALID))
 	{
 		spnewgamescreen_setPlayerName(g_theProfileDB->GetLeaderName());
 	}
