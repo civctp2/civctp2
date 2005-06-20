@@ -477,27 +477,30 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 							int		widthpix	161
 							string	text		"str_ldl_ND_RTL_CITY_NAME"
 							# Tooltip
-							string	tipwindow	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCITY_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCITY_BUTTON"
 						}
 						# Population
 						switch1:CITY_STATUS_HEADER {
 							int		widthpix	68
 							string	text		"str_ldl_ND_RTL_POPULATION"
 							# Tooltip
-							string	tipwindow	"STATUSBAR_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
 						}
 						# Worker
 						switch2:CITY_STATUS_HEADER {
 							int		widthpix	30
-							string	text		"str_ldl_ND_RTL_WORKER"
+							string image0 "upic08.tga"
+							string image1 "upic08.tga"
+							string image2 "upic08.tga"
 							# Tooltip
-
 							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON"
 						}
 						# Slaves
 						switch3:CITY_STATUS_HEADER {
 							int		widthpix	30
-							string	text		"str_ldl_ND_RTL_SLAVE"
+							string image0 "upc039.tga"
+							string image1 "upc039.tga"
+							string image2 "upc039.tga"
 							# Tooltip
 							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON"
 						}
@@ -549,7 +552,9 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 						# Military Units
 						switch9:CITY_STATUS_HEADER {
 							int		widthpix	30
-							string	text		"str_ldl_ND_RTL_COMBAT_UNITS"
+							string image0 "upc040.tga"
+							string image1 "upc040.tga"
+							string image2 "upc040.tga"
 							# Tooltip
 							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON"
 						}
