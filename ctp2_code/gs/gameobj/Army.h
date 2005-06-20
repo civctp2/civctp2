@@ -52,13 +52,13 @@ class ArmyData;
 class Unit;
 class CellUnitList;
 class UnitActor;
-enum UNIT_ORDER_TYPE;
 typedef sint32 PLAYER_INDEX;
 class MapPoint;
-enum CAUSE_REMOVE_ARMY;
 class Order;
 
 size_t const	MAX_UNIT_COUNT	= 100;	// TODO: check k_MAX_ARMY_SIZE
+
+#include "AICause.h"
 
 class Army : public ID
 { 
@@ -66,16 +66,14 @@ public:
 	const ArmyData *GetData() const;
 	ArmyData *AccessData() const;
 
-
-	
-
-
 	Army() : ID() {}
 	Army(sint32 val) : ID(val) {}
 	Army(uint32 val) : ID(val) {}
 	Army(ID i) : ID(i.m_id) {}
+#if defined(WIN32)
 	Army(const int val) : ID(val) {}
 	Army(const unsigned int val) : ID(val) {}
+#endif
 
 	ArmyData *operator -> () const { return AccessData(); }
 
