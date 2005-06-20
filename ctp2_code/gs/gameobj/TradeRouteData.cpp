@@ -1,12 +1,31 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Trade utilities
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Standardized trade route cost calculation. - June 5th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "TradeRoute.h"
@@ -26,6 +45,7 @@
 #include "ConstDB.h"
 #include "UnitData.h"
 #include "radarmap.h"
+#include "tradeutil.h"
 
 extern ColorSet *g_colorSet;
 extern TradeAstar g_theTradeAstar; 
@@ -86,11 +106,11 @@ TradeRouteData::TradeRouteData(
 		m_valid = TRUE;
 	}
 
-	
-	DPRINTF(k_DBG_GAMESTATE, ("Created Trade Route from %d to %d, cost=%d\n",
-							  (uint32)m_sourceCity,
-							  (uint32)m_destinationCity,
-							  m_transportCost));
+	DPRINTF(k_DBG_GAMESTATE, ("Created Trade Route from %s to %s, cost=%d, valid=%i\n",
+	                          m_sourceCity->GetCityData()->GetName(),
+	                          m_destinationCity->GetCityData()->GetName(),
+	                          m_transportCost));
+
 	if(m_valid) {
 		ENQUEUE();
 	}
@@ -215,7 +235,7 @@ BOOL TradeRouteData::GeneratePath(const PLAYER_INDEX owner)
 
 	m_transportCost = 0.0;
 
-    sint32 r; 
+	sint32 r; 
 	for(wp = 0; wp < nwp - 1; wp++) {
 		if(wp == 0) {
 			r = g_theTradeAstar.FindPath(m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
@@ -225,7 +245,7 @@ BOOL TradeRouteData::GeneratePath(const PLAYER_INDEX owner)
 		} else {
 			r = g_theTradeAstar.FindPath(m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
 								  partialAstarPath, cost, FALSE);
-            if(!r)
+			if(!r)
 				return FALSE;
 			m_astarPath->Concat(partialAstarPath);
 		}
@@ -235,7 +255,7 @@ BOOL TradeRouteData::GeneratePath(const PLAYER_INDEX owner)
 	
 
 	
-	m_transportCost = (float)((int)((m_transportCost * g_theConstDB->GetCaravanCoef()) + 0.5));
+	m_transportCost = (float)((int)tradeutil_GetNetTradeCosts(m_transportCost));
 	
 	if(m_transportCost < 1)
 		m_transportCost = 1;
@@ -266,7 +286,7 @@ BOOL TradeRouteData::GeneratePath(const PLAYER_INDEX owner)
 }
 	
 void TradeRouteData::SetPath(DynamicArray<MapPoint> &fullpath,
-							 DynamicArray<MapPoint> &waypoints)
+                             DynamicArray<MapPoint> &waypoints)
 {
 	sint32 p;
 	m_setPath.Clear();
@@ -305,17 +325,17 @@ void TradeRouteData::ReturnPath(const PLAYER_INDEX owner,
 	m_astarPath->Clear();
 
 	sint32 wp, nwp = waypoints.Num();
-    sint32 r; 
+	sint32 r;
 
 	for(wp = 0; wp < nwp - 1; wp++) {
 		if(wp == 0) {
 			r = g_theTradeAstar.FindPath(owner, waypoints[wp], waypoints[wp + 1],
-								  *m_astarPath, partialcost, FALSE);
-            Assert(r); 
+			                             *m_astarPath, partialcost, FALSE);
+			Assert(r);
 		} else {
 			r = g_theTradeAstar.FindPath(owner, waypoints[wp], waypoints[wp + 1],
 								  partialAstarPath, partialcost, FALSE);
-            Assert(r); 
+			Assert(r);
 			m_astarPath->Concat(partialAstarPath);
 		}
 		cost += partialcost;

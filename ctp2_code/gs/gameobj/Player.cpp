@@ -3415,7 +3415,7 @@ TradeRoute Player::PayForTrade(TradeRoute &newRoute)
 			
 			g_theTradePool->HackSetKey((uint32)newRoute & k_ID_KEY_MASK);
 		}
-		
+
 		newRoute.KillRoute(CAUSE_KILL_TRADE_ROUTE_NO_INITIAL_CARAVANS);
 		return TradeRoute(0);
 	} else if(g_network.IsClient()) {
@@ -3743,10 +3743,10 @@ void Player::SendTradeBid(const Unit &fromCity, sint32 resource, const Unit &toC
 	}
 
 	uint32 bidId = g_theTradeBids->AddBid(m_owner,
-										  fromCity,
-										  resource,
-										  toCity,
-										  price);
+	                                      fromCity,
+	                                      resource,
+	                                      toCity,
+	                                      price);
 	
 	
 	
