@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SLIC_BUILTIN_ENUM_H__
 #define __SLIC_BUILTIN_ENUM_H__
 

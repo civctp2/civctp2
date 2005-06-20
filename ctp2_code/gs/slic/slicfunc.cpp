@@ -45,6 +45,7 @@
 //   locations are on the same continent.
 // - Added AddSlaves function modelled after the AddPops function.
 // - Improved argument checking of Get<Type> functions.
+// - AOM facilitation: set player[0] to the recipient when undefined.
 //
 //----------------------------------------------------------------------------
 
@@ -79,7 +80,7 @@
 #include "civapp.h"
 #include "filenamedb.h"
 #include "UnitPool.h"
-#include "order.h"
+#include "Order.h"
 #include "Army.h"
 #include "ArmyPool.h"
 #include "network.h"
@@ -96,7 +97,7 @@
 #include "profileDB.h"
 #include "statswindow.h"
 #include "cellunitlist.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "RandGen.h"
 
 #include "Happy.h"
@@ -130,12 +131,12 @@
 #include "MapFile.h"
 #include "SlicStruct.h"
 #include "SpecialEffectRecord.h"
-#include "globals.h"
+#include "Globals.h"
 #include "wonderutil.h"
 #include "ConstDB.h"
 #include "FeatTracker.h"
 #include "FeatRecord.h"
-#include "gold.h"
+#include "Gold.h"
 
 #include "radarwindow.h"
 #include "controlpanelwindow.h"
@@ -308,14 +309,14 @@ BOOL SlicArgList::GetPlayer(sint32 arg, sint32 &value)
 	return FALSE;
 }
 
-BOOL SlicArgList::GetString(sint32 arg, const char *&value)
+BOOL SlicArgList::GetString(sint32 arg, char *&value)
 {
 	Assert(arg < m_numArgs);
 	if ((m_argType[arg] == SA_TYPE_HARD_STRING) &&
-        m_argValue[arg].m_symbol
-       )
-    {
-		value = m_argValue[arg].m_symbol->GetName();
+	     m_argValue[arg].m_symbol
+	   )
+	{
+		value = const_cast<char *>(m_argValue[arg].m_symbol->GetName());
 		return TRUE;
 	} 
 	return FALSE;
@@ -540,6 +541,10 @@ SFN_ERROR Slic_AddMessage::Call(SlicArgList *args)
 									 g_slicEngine->GetContext());
 	obj->AddRecipient(recip);
 	obj->CopyFromBuiltins();
+    if (obj->GetNumPlayers() == 0)
+    {
+        obj->AddPlayer(recip);
+    }
 	g_slicEngine->Execute(obj);
 
 	return SFN_ERROR_OK;
@@ -576,7 +581,12 @@ SFN_ERROR Slic_Message::Call(SlicArgList *args)
 									 g_slicEngine->GetContext());
 	obj->AddRecipient(recip);
 	obj->CopyFromBuiltins();
+    if (obj->GetNumPlayers() == 0)
+    {
+        obj->AddPlayer(recip);
+    }
 	g_slicEngine->Execute(obj);
+
 	return SFN_ERROR_OK;
 }
 
@@ -1078,7 +1088,7 @@ SFN_ERROR Slic_IsInRegion::Call(SlicArgList *args)
 	MapPoint point;
 	BOOL res;
 	struct PSlicRegion region;
-	struct PSlicComplexRegion *cregion;
+	const struct PSlicComplexRegion *cregion;
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
@@ -1241,7 +1251,7 @@ SFN_ERROR Slic_ControlsRegion::Call(SlicArgList *args)
 {
 	PLAYER_INDEX player;
 	struct PSlicRegion region;
-	struct PSlicComplexRegion *cregion;
+	const struct PSlicComplexRegion *cregion;
 	BOOL res;
 
 	if(args->m_numArgs != 2)
@@ -1504,7 +1514,7 @@ SFN_ERROR Slic_CaptureRegion::Call(SlicArgList *args)
 	BOOL res;
 
 	struct PSlicRegion region;
-	struct PSlicComplexRegion *cregion;
+	const struct PSlicComplexRegion *cregion;
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
@@ -1537,7 +1547,7 @@ SFN_ERROR Slic_LeaveRegion::Call(SlicArgList *args)
 
 	BOOL res;
 	struct PSlicRegion region;
-	struct PSlicComplexRegion *cregion;
+	const struct PSlicComplexRegion *cregion;
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
@@ -1774,7 +1784,7 @@ SFN_ERROR Slic_StealRandomAdvance::Call(SlicArgList *args)
 		}
 	}
 
-	ORDER_RESULT res = u.StealTechnology(context->GetCity(0), -1);
+	ORDER_RESULT res = u.StealTechnology(context->GetCity(0), (sint32)-1);
 	if(res != ORDER_RESULT_ILLEGAL) {
 		sint32 index = g_orderInfoMap[UNIT_ORDER_STEAL_TECHNOLOGY];
 		OrderInfo *oi = NULL;
@@ -3256,8 +3266,7 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 	}
 
 	MapPoint pos;
-	BOOL res = FALSE;
-	res = args->GetPos(2, pos);
+	BOOL res = args->GetPos(2, pos);
 	if(!res)
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -3273,8 +3282,7 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 
 	sint32 x, y;
 	BOOL found = FALSE;
-	static DynamicArray<MapPoint> legalPoints;
-	legalPoints.Clear();
+	DynamicArray<MapPoint> legalPoints;
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
 			MapPoint chk(x, y);
@@ -5913,7 +5921,7 @@ SFN_ERROR Slic_ExitToDesktop::Call(SlicArgList *args)
 
 SFN_ERROR Slic_Import::Call(SlicArgList *args)
 {
-	const char *filename;
+	char *filename;
 	if(!args->GetString(0, filename))
 		return SFN_ERROR_TYPE_ARGS;
 	MapFile mf;
@@ -5925,7 +5933,7 @@ SFN_ERROR Slic_Import::Call(SlicArgList *args)
 
 SFN_ERROR Slic_Export::Call(SlicArgList *args)
 {
-	const char *filename;
+	char *filename;
 	if(!args->GetString(0, filename))
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -6392,39 +6400,43 @@ SFN_ERROR Slic_StringCompare::Call(SlicArgList *args)
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
-//Added by Martin Gühmann to allow string comparision, between string IDs and plain strings
-	const char *string1, *string2;
+	//Added by Martin Gühmann to allow string comparision, between string IDs and plain strings
+	char *string1 = 0;
+	char *string2 = 0;
+
+	const char *cstring1, *cstring2;
 	StringId stringId1, stringId2;
 
 	if(!args->GetString(0, string1)){
 		if(args->GetStringId(0, stringId1)){
-			string1 = g_theStringDB->GetNameStr(stringId1);
+			cstring1 = g_theStringDB->GetNameStr(stringId1);
 		}
 		else if(args->m_argType[0] == SA_TYPE_INT_VAR){
-			string1 = g_theStringDB->GetNameStr(args->m_argValue[0].m_symbol->GetStringId());
+			cstring1 = g_theStringDB->GetNameStr(args->m_argValue[0].m_symbol->GetStringId());
 		}
 		else{
 			return SFN_ERROR_TYPE_ARGS;
 		}
+		string1 = const_cast<char *>(cstring1);
 	}
 	
 	if(!args->GetString(1, string2)){
 		if(args->GetStringId(1, stringId2)){
-			string2 = g_theStringDB->GetNameStr(stringId2);
+			cstring2 = g_theStringDB->GetNameStr(stringId2);
 		}
 		else if(args->m_argType[1] == SA_TYPE_INT_VAR){
-			string2 = g_theStringDB->GetNameStr(args->m_argValue[1].m_symbol->GetStringId());
+			cstring2 = g_theStringDB->GetNameStr(args->m_argValue[1].m_symbol->GetStringId());
 		}
 		else{
 			return SFN_ERROR_TYPE_ARGS;
 		}
+		string2 = const_cast<char *>(cstring2);
 	}
 
 
 	if ( !stricmp(string1, string2) )
 	{
 		m_result.m_int = 1;
-
 	}
 	else {
 		m_result.m_int = 0;

@@ -35,16 +35,14 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
 #ifndef __SLIC_STRUCT_H__
-#define __SLIC_STRUCH_H__
+#define __SLIC_STRUCT_H__ 1
 
-#if !defined(ACTIVISION)
 #include <vector>		// std::vector
-#endif
 
 #include "slicif.h"
 #include "SlicStack.h"
@@ -57,18 +55,12 @@ class SlicNamedSymbol;
 class SlicStructInstance;
 class SlicStructMemberData;
 
-
-
-
-
-
-
 class SlicStructDescription {
 public:
 	class Member {
 	public:
-		Member(SlicStructDescription *parent, char *name, SLIC_SYM type);
-		Member(SlicStructDescription *parent, char *name, SlicStructMemberData *sym);
+		Member(SlicStructDescription *parent, char const * name, SLIC_SYM type);
+		Member(SlicStructDescription *parent, char const * name, SlicStructMemberData *sym);
 		~Member();
 
 		SlicStructDescription *GetParent() { return m_parent; }
@@ -79,14 +71,14 @@ public:
 
 		SLIC_SYM m_type;
 		char *m_name;
-		SlicStructDescription *m_parent;
-		SlicStructMemberData *m_symbol; 
+		class SlicStructDescription *m_parent;
+		class SlicStructMemberData *m_symbol; 
 	};
 
-	SlicStructDescription(char *name, SLIC_BUILTIN type);
-	~SlicStructDescription();
+	SlicStructDescription(char const * name, SLIC_BUILTIN type);
+	virtual ~SlicStructDescription();
 
-	void AddAccessor(char * name, SlicStructMemberData * symbol);
+	void AddAccessor(char const * name, SlicStructMemberData * symbol);
 
 	SlicStructMemberData * GetMemberSymbol(sint32 index) const;
 	sint32 GetMemberSymbolIndex(SlicStructMemberData * symbol) const;
@@ -94,14 +86,14 @@ public:
 		{ return m_accessors.size(); };
 
 	void AddMember(SlicStructDescription::Member *member);
-	void AddMember(char *name, SLIC_SYM type);
-	void AddMember(char *name, SlicStructMemberData *sym);
-	const char *GetName() { return m_name; }
-	sint32 GetMemberIndex(char *name);
-	const char *GetMemberName(sint32 index);
+	void AddMember(char const * name, SLIC_SYM type);
+	void AddMember(char const * name, SlicStructMemberData *sym);
+	const char * GetName() const { return m_name; }
+	sint32 GetMemberIndex(char const * name) const;
+	const char *GetMemberName(sint32 index) const;
 	sint32 GetNumMembers() { return m_numMembers; }
 
-	SLIC_BUILTIN GetType() { return m_type; }
+	SLIC_BUILTIN GetType() const { return m_type; }
 
 	SlicSymbolData *CreateInstance(SS_TYPE type, SlicStackValue value);
 	SlicSymbolData *CreateInstance();
@@ -131,22 +123,25 @@ protected:
 
 public:
 
-	SlicStructMemberData(SlicStructInstance *parent, SlicSymbolData *data) :
-		SlicSymbolData(data)
-	{
-		m_parent = parent;
-	}
+	SlicStructMemberData
+    (
+        SlicStructInstance *    parent, 
+        SlicSymbolData const &  data
+    ) 
+    :   SlicSymbolData  (data),
+        m_parent        (parent)
+    { ; }
 
 	SlicStructMemberData
 	(
 		SlicStructInstance *	parent	= NULL, 
 		SLIC_SYM				type	= SLIC_SYM_UNDEFINED
 	)
-	:	SlicSymbolData(type),
-		m_parent(parent)
-	{ };
+	:	SlicSymbolData  (type),
+		m_parent        (parent)
+	{ ; };
 
-	~SlicStructMemberData() {}
+	virtual ~SlicStructMemberData() {}
 
 	void Serialize(CivArchive &archive) {}
 	void SerializeMemberReference(CivArchive &archive);

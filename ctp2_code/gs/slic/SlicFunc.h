@@ -38,7 +38,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -58,7 +58,7 @@ class Army;
 
 typedef sint32 StringId;
 
-enum GAME_EVENT;
+#include "GameEventDescription.h"
 
 enum SA_TYPE {
 	SA_TYPE_INT,
@@ -142,7 +142,7 @@ public:
 	void Clear() { m_numArgs = 0; }
 	BOOL GetInt(sint32 arg, sint32 &value);
 	BOOL GetPlayer(sint32 arg, sint32 &value);
-	BOOL GetString(sint32 arg, const char *&value);
+	BOOL GetString(sint32 arg, char *&value);
 	BOOL GetUnit(sint32 arg, Unit &u);
 	BOOL GetCity(sint32 arg, Unit &city);
 	BOOL GetPos(sint32 arg, MapPoint &pos);
@@ -173,7 +173,7 @@ protected:
 public:
 	SlicFunc(char *name, SLIC_FUNC_RET_TYPE type);
 	SlicFunc(CivArchive &archive);
-	~SlicFunc();
+	virtual ~SlicFunc();
 	void Serialize(CivArchive &archive);
 	SlicFuncResult GetResult() { return m_result; }
 	SLIC_FUNC_RET_TYPE GetReturnType() { return m_type; }
@@ -190,17 +190,9 @@ public:
 class Slic_##x : public SlicFunc { \
 public:\
 	Slic_##x() : SlicFunc(#x, type) {} \
+	virtual ~Slic_##x() {} \
 	SFN_ERROR Call(SlicArgList *args); \
 };
-
-
-
-
-
-
-
-
-
 
 
 
