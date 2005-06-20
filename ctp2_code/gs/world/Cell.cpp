@@ -59,7 +59,7 @@
 #include "player.h"
 #include "terrainutil.h"
 #include "MoveFlags.h"
-#include "globals.h"
+#include "Globals.h"
 #include "World.h"
 
 extern void WhackScreen(); 

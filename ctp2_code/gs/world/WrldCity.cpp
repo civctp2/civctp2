@@ -11,7 +11,7 @@
 
 #include "c3.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "QuadTree.h"
@@ -118,15 +118,12 @@ void World::CityRadiusFunc(const MapPoint &pos)
 sint32 World::InsertCity(const MapPoint &pos, Unit u)
 
 {
-	
-	Cell *c; 
-	static UnitDynamicArray revealed;
-	revealed.Clear();
-
 	g_theUnitTree->Insert(u);
+
+    UnitDynamicArray revealed;
 	u.DoVision(revealed);
-	c = GetCell(pos); 
-	
+
+    Cell *  c   = GetCell(pos); 
 	if (c->GetCity().m_id != (0)) { 
 		return FALSE; 
 	} else { 

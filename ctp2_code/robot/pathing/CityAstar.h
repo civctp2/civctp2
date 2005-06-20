@@ -25,7 +25,9 @@
 //
 //----------------------------------------------------------------------------
 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CITY_ASTAR_H__
 #define __CITY_ASTAR_H__ 1
 

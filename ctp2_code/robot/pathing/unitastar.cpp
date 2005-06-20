@@ -31,6 +31,7 @@
 //   considers a danger if the owner is less than neutral - Calvitix
 // - Disabled Calvitix check for danger. If an army encounter something on
 //   its way the goal should be reconsidered. - Feb. 21st 2005 Martin Gühmann
+// - Updated for wrap correction.
 //
 //----------------------------------------------------------------------------
 
@@ -131,9 +132,7 @@ sint32 UnitAstar::StraightLine
 
 	// Shortest distance vector from start to dest, using XY coordinates, and
 	// taking world wrap properties into account.
-	MapPoint				diff;	
-	start.NormalizedSubtract(dest, diff);
-	
+	MapPointData const		diff        = start.NormalizedSubtract(dest);
 	WORLD_DIRECTION	const	dirX		= (diff.x > 0) ? EAST  : WEST;
 	WORLD_DIRECTION const	dirY		= (diff.y > 0) ? SOUTH : NORTH;
 	WORLD_DIRECTION	const	dirDiagonal	= 
@@ -1460,8 +1459,8 @@ BOOL UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
 }
 
 
-sint32 UnitAstar::FindPath(Army &army,  MapPoint &start,
-    const PLAYER_INDEX owner, MapPoint &dest, Path &good_path, 
+sint32 UnitAstar::FindPath(Army &army,  MapPoint const & start,
+    const PLAYER_INDEX owner, MapPoint const & dest, Path &good_path, 
     sint32 &is_broken_path, Path &bad_path, float &total_cost)
                            
 {
