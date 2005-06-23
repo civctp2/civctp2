@@ -22,14 +22,14 @@
 // Modifications from the original Activision code:
 //
 // - Safeguard FindLevel against infinite recursion.
+// - Speeded up goody hut advance and unit selection.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"      
-
 #include "Advances.h"
-#include "AdvanceRecord.h"
 
+#include "AdvanceRecord.h"
 #include "civarchive.h"
 #include "player.h"
 #include "WonderRecord.h"
@@ -44,8 +44,7 @@
 #include "QuickSlic.h"
 #include "Civilisation.h"
 
-
-#include "aicause.h"
+#include "AICause.h"
 #include "SelItem.h"
 
 #include "UnitActor.h"
@@ -53,7 +52,7 @@
 
 #include "Unit.h"
 #include "Sci.h"
-#include "gold.h"
+#include "Gold.h"
 
 #include "DiffDB.h"
 #include "profileDB.h"
@@ -77,7 +76,8 @@
 
 namespace
 {
-	char const	REPORT_ADVANCE_LOOP[]	= "Advance: loop detected";
+	char const	REPORT_ADVANCE_LOOP[]	= "Advance loop detected";
+    char const  REPORT_ADVANCE_SELF[]   = "Advance undiscoverable";
 }
 
 extern Player** g_player;
@@ -92,6 +92,10 @@ extern StringDB     *g_theStringDB ;
 extern CivilisationPool *g_theCivilisationPool;
 
 #define k_MAX_ADVANCE_TURNS 1000
+
+#define k_ADVANCES_VERSION_MAJOR	0								
+#define k_ADVANCES_VERSION_MINOR	0								
+
 
 Advances::Advances()
 {
@@ -125,22 +129,9 @@ Advances::Advances(sint32 num)
 
 Advances::~Advances()
 {
-	Assert(m_hasAdvance != NULL);
-	if(m_hasAdvance) {
-		delete [] m_hasAdvance;
-		m_hasAdvance = NULL;
-	}
-
-	
-	if (m_canResearch) {
-		delete [] m_canResearch;
-		m_canResearch = NULL;
-	}
-
-	if(m_turnsSinceOffered) {
-		delete [] m_turnsSinceOffered;
-		m_turnsSinceOffered = NULL;
-	}
+	delete [] m_hasAdvance;
+	delete [] m_canResearch;
+	delete [] m_turnsSinceOffered;
 }
 
 void Advances::SetOwner(PLAYER_INDEX o)
@@ -153,7 +144,7 @@ void Advances::SetOwner(PLAYER_INDEX o)
 void Advances::Copy(Advances *copy)
 {
 	*this = *copy;
-	if(m_hasAdvance) {
+	if (m_hasAdvance) {
 		m_hasAdvance = new uint8[m_size];
 		memcpy(m_hasAdvance, copy->m_hasAdvance, m_size * sizeof(uint8));
 	}
@@ -170,9 +161,9 @@ void Advances::Copy(Advances *copy)
 }
 
 uint8
-Advances::HasAdvance(sint32 index)
+Advances::HasAdvance(sint32 index) const
 {
-	if (index >= 1000000)
+	if (index >= m_size)
 		return FALSE;
 
 	if(index < 0)
@@ -334,7 +325,6 @@ Advances::GrantAdvance()
 									  g_player[m_owner]->m_science->GetLevel()));
 	}
 
-	sint32 gotAdvance = m_researching;
 	SetHasAdvance(m_researching);
 
 	g_player[m_owner]->SetCityRoads();
@@ -479,7 +469,7 @@ void Advances::InitialAdvance(AdvanceType adv)
 
 
 uint8*
-Advances::CanResearch()
+Advances::CanResearch() const
 {
 	
     Assert(0 < m_size);
@@ -489,7 +479,7 @@ Advances::CanResearch()
 	return research;
 }
 
-BOOL Advances::CanResearch(sint32 advance)
+BOOL Advances::CanResearch(sint32 advance) const
 {
 	return (BOOL)m_canResearch[advance];
 }
@@ -717,7 +707,7 @@ void Advances::AddAlienLifeAdvance()
 
 
 uint8*
-Advances::CanAskFor(Advances* otherCivAdvances, sint32 &num) 
+Advances::CanAskFor(Advances* otherCivAdvances, sint32 &num) const
 {
 	
     Assert(0<m_size);
@@ -740,7 +730,7 @@ Advances::CanAskFor(Advances* otherCivAdvances, sint32 &num)
 
 
 uint8*
-Advances::CanOffer(Advances* otherCivAdvances, sint32 &num) 
+Advances::CanOffer(Advances* otherCivAdvances, sint32 &num) const 
 {
 	
     Assert(0<m_size);
@@ -817,12 +807,12 @@ sint32 Advances::GetPollutionProductionModifier(void) const
 
 
 sint32
-Advances::GetCost()
+Advances::GetCost() const
 {
 	return GetCost(m_researching);
 }
 
-sint32 Advances::GetCost(const AdvanceType adv)
+sint32 Advances::GetCost(const AdvanceType adv) const
 {
 	if(!g_player[m_owner])
 		return 0x7fffffff;
@@ -877,9 +867,14 @@ sint32 Advances::FindLevel
 
 	for (sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++) 
 	{			
-		AdvanceRecord * prereqRecord = 
+		AdvanceRecord const * prereqRecord = 
 			g_theAdvanceDB->Access(rec->GetPrerequisitesIndex(prereq));
-		
+
+        if (rec == prereqRecord)
+        {
+            throw std::overflow_error(REPORT_ADVANCE_SELF);
+        }
+        		
 		sint32 const level	= FindLevel(prereqRecord, 1 + fromLevel);
 		if (level > maxLevel)
 			maxLevel = level;
@@ -917,15 +912,11 @@ Advances::DebugDumpTree()
 	}
 	for(sint32 l = 0; l < numLevels; l++) {
 		DPRINTF(k_DBG_INFO, ("Advance: level %d:\n", l));
-#if defined(_MSC_VER)	// incorrect scope rules
-		for(i = 0; i < m_size; i++) {
-#else
-		for (sint32 i = 0; i < m_size; i++) 
+		for (sint32 j = 0; j < m_size; j++) 
 		{
-#endif
-			if(level[i] == l) {
+			if(level[j] == l) {
 				DPRINTF(k_DBG_INFO, ("Advance: %s\n", 
-									 g_theAdvanceDB->GetNameStr(i)));
+									 g_theAdvanceDB->GetNameStr(j)));
 			}
 		}
 		DPRINTF(k_DBG_INFO, ("\n"));
@@ -994,28 +985,64 @@ uint32 Advances_Advances_GetVersion(void)
 	return (k_ADVANCES_VERSION_MAJOR<<16 | k_ADVANCES_VERSION_MINOR) ;
 	}
 
-sint32 Advances::GetMinPrerequisites(sint32 adv) const
+//----------------------------------------------------------------------------
+//
+// Name       : Advances::GetMinPrerequisites
+//
+// Description: Get the number of missing steps to get to an advance
+//
+// Parameters : adv     : the advance to get to
+//              limit   : when to stop counting and report it as too advanced
+//
+// Globals    : g_theAdvanceDB
+//
+// Returns    : sint32  : the number of missing prerequisite steps
+//
+// Remark(s)  : - When you already have the advance, the returned value is 0.
+//              - When you have all prerequisites for the advance, but do not
+//                have the advance itself, the returned value is 1.
+//              - When you are missing prerequisites for the advance, the 
+//                returned value is the sum of the recursive application of 
+//                this function to the missing prerequisites.
+//              - When the limit is reached, the returned value is unspecified,
+//                but always larger than the limit.
+//
+//----------------------------------------------------------------------------
+sint32 Advances::GetMinPrerequisites(sint32 adv, sint32 limit) const
 {
-	if(m_hasAdvance[adv])
+	if (m_hasAdvance[adv])
+    {
 		return 0;
+    }
 
-	const AdvanceRecord *rec = g_theAdvanceDB->Get(adv);
-	sint32 prereq;
-	sint32 totalneeded = 0;
-	for(prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++) {
-		if(rec->GetIndex() == rec->GetPrerequisitesIndex(prereq)) {
-			continue;
-		}
+	AdvanceRecord const *   rec         = g_theAdvanceDB->Get(adv);
+	sint32                  totalneeded = 0;
 
-		if(!m_hasAdvance[rec->GetPrerequisitesIndex(prereq)]) {
-			
-			totalneeded += GetMinPrerequisites(rec->GetPrerequisitesIndex(prereq));
+	for (sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); ++prereq)
+    {
+		if ((rec->GetIndex() != rec->GetPrerequisitesIndex(prereq)) &&
+            !m_hasAdvance[rec->GetPrerequisitesIndex(prereq)]
+           ) 
+        {
+			totalneeded += 
+                GetMinPrerequisites(rec->GetPrerequisitesIndex(prereq), limit - 1);
+
+            if (totalneeded > limit)
+            {
+                return totalneeded;
+            }
 		}
 	}
+
 	return totalneeded + 1; 
 }
 
-sint32 Advances::GetProjectedScience()
+sint32 Advances::GetMinPrerequisites(sint32 adv) const
+{
+    return GetMinPrerequisites(adv, m_size * k_MAX_Prerequisites);
+}
+
+sint32 Advances::GetProjectedScience() const
 {
 	UnitDynamicArray *cities = g_player[m_owner]->m_all_cities;
 	sint32 s = 0, i;
@@ -1095,7 +1122,7 @@ sint32 Advances::GetProjectedScience()
 #endif
 }
 
-sint32 Advances::TurnsToNextAdvance(AdvanceType adv)
+sint32 Advances::TurnsToNextAdvance(AdvanceType adv) const
 {
 	if(adv < 0)
 		adv = m_researching;
@@ -1121,3 +1148,4 @@ void Advances::SetResearching(AdvanceType adv)
 							 ST_PLAYER, m_owner,
 							 ST_END);
 }
+
