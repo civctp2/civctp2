@@ -58,19 +58,13 @@ public:
 	sint32 AddRef();
 	sint32 Release();
 	SlicObject();
-	SlicObject(char *id);
+	SlicObject(char const * id);
 	SlicObject(SlicSegment *segment);
 	SlicObject(SlicSegment *segment, SlicObject *copy);
-    SlicObject(char *id, SlicContext *copy);
+    SlicObject(char const * id, SlicContext *copy);
 	SlicObject(CivArchive &archive) ;
 	virtual ~SlicObject();
 	void Serialize(CivArchive &archive) ;
-
-#ifdef USE_SLICOBJECT_POOLS
-	void *operator new(size_t size);
-	void operator delete(void *ptr);
-	void operator delete [] (void *ptr, size_t size);
-#endif
 
 	sint32 GetIndex() const { return m_index; }
 	void SetIndex(sint32 index) { m_index = index; }
