@@ -34,7 +34,7 @@
 #include "civarchive.h"
 #include "gamefile.h"
 
-SlicStructDescription::Member::Member(SlicStructDescription *parent, char *name, SLIC_SYM type)
+SlicStructDescription::Member::Member(SlicStructDescription *parent, char const * name, SLIC_SYM type)
 {
 	m_parent = parent;
 	m_name = new char[strlen(name) + 1];
@@ -44,7 +44,7 @@ SlicStructDescription::Member::Member(SlicStructDescription *parent, char *name,
 	m_symbol = NULL;
 }
 
-SlicStructDescription::Member::Member(SlicStructDescription *parent, char *name, SlicStructMemberData *sym)
+SlicStructDescription::Member::Member(SlicStructDescription *parent, char const * name, SlicStructMemberData *sym)
 {
 	m_parent = parent;
 	m_name = new char[strlen(name) + 1];
@@ -61,7 +61,7 @@ SlicStructDescription::Member::~Member()
 	delete m_symbol;
 }
 
-SlicStructDescription::SlicStructDescription(char *name, SLIC_BUILTIN type)
+SlicStructDescription::SlicStructDescription(char const * name, SLIC_BUILTIN type)
 :	m_accessors()
 {
 	m_name = new char[strlen(name) + 1];
@@ -118,7 +118,7 @@ SlicStructDescription::~SlicStructDescription()
 
 void SlicStructDescription::AddAccessor
 (
-	char *					name, 
+	char const *			name, 
 	SlicStructMemberData *	symbol
 )
 {
@@ -239,12 +239,12 @@ void SlicStructDescription::AddMember(SlicStructDescription::Member *member)
 	m_members[m_numMembers - 1] = member;
 }
 
-void SlicStructDescription::AddMember(char *name, SLIC_SYM type)
+void SlicStructDescription::AddMember(char const * name, SLIC_SYM type)
 {
 	AddMember(new SlicStructDescription::Member(this, name, type));
 }
 
-void SlicStructDescription::AddMember(char *name, SlicStructMemberData *sym)
+void SlicStructDescription::AddMember(char const * name, SlicStructMemberData *sym)
 {
 	AddMember(new SlicStructDescription::Member(this, name, sym));
 }
@@ -270,7 +270,7 @@ void SlicStructDescription::AddMember(char *name, SlicStructMemberData *sym)
 //                indices starting from m_numMembers.
 //
 //----------------------------------------------------------------------------
-sint32 SlicStructDescription::GetMemberIndex(char *name)
+sint32 SlicStructDescription::GetMemberIndex(char const * name) const
 {
 	sint32 i;
 	for(i = 0; i < m_numMembers; i++) {
@@ -337,7 +337,7 @@ SlicSymbolData *SlicStructDescription::CreateDataSymbol()
 //
 //----------------------------------------------------------------------------
 
-const char *SlicStructDescription::GetMemberName(sint32 index)
+const char * SlicStructDescription::GetMemberName(sint32 index) const
 {
 	Assert(index >= 0);
 	if (index >= 0)
@@ -404,9 +404,9 @@ SlicStructInstance::SlicStructInstance(CivArchive &archive)
 //----------------------------------------------------------------------------
 SlicStructInstance::~SlicStructInstance()
 {
-	if(m_dataSymbol && m_createdData) {
+	if (m_createdData) 
+    {
 		delete m_dataSymbol;
-		m_dataSymbol = NULL;
 	}
 
 	if(m_members) {
@@ -473,16 +473,17 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 		} else {
 			m_dataSymbol = NULL;
 		}
+
 		if(g_saveFileVersion >= 64) {
 			archive >> m_dataSymbolIndex;
 		} else {
 			m_dataSymbolIndex = -1;
-			if(!m_dataSymbol) {
-				m_dataSymbol = m_description->CreateDataSymbol();
-			}
 		}
-		if(!m_dataSymbol && m_dataSymbolIndex < 0) {
-			m_dataSymbol = m_description->CreateDataSymbol();
+
+		if (!m_dataSymbol && (m_dataSymbolIndex < 0)) 
+        {
+			m_dataSymbol    = m_description->CreateDataSymbol();
+            m_createdData   = true;
 		}
 
 	}

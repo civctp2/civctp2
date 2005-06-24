@@ -1429,7 +1429,7 @@ void SlicContext::Snarf(GameEventArgList *args)
 void SlicContext::FillBuiltins()
 {
 	sint32 i;
-	SlicSymbolData *sym;
+	SlicSymbolData const *sym;
 	SlicArray *array;
 
 	
@@ -1540,7 +1540,7 @@ void SlicContext::CopyFromBuiltins()
 {
 	sint32 i, b;
 	for(b = 0; b < SLIC_BUILTIN_MAX; b++) {
-		SlicSymbolData *sym = g_slicEngine->GetBuiltinSymbol((SLIC_BUILTIN)b);
+		SlicSymbolData const * sym = g_slicEngine->GetBuiltinSymbol((SLIC_BUILTIN)b);
 		if(!sym) continue;
 
 		if(sym->GetType() != SLIC_SYM_ARRAY) continue;

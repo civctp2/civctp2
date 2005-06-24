@@ -45,6 +45,7 @@
 //   locations are on the same continent.
 // - Added AddSlaves function modelled after the AddPops function.
 // - Improved argument checking of Get<Type> functions.
+// - AOM facilitation: set player[0] to the recipient when undefined.
 //
 //----------------------------------------------------------------------------
 
@@ -540,6 +541,10 @@ SFN_ERROR Slic_AddMessage::Call(SlicArgList *args)
 									 g_slicEngine->GetContext());
 	obj->AddRecipient(recip);
 	obj->CopyFromBuiltins();
+    if (obj->GetNumPlayers() == 0)
+    {
+        obj->AddPlayer(recip);
+    }
 	g_slicEngine->Execute(obj);
 
 	return SFN_ERROR_OK;
@@ -576,7 +581,12 @@ SFN_ERROR Slic_Message::Call(SlicArgList *args)
 									 g_slicEngine->GetContext());
 	obj->AddRecipient(recip);
 	obj->CopyFromBuiltins();
+    if (obj->GetNumPlayers() == 0)
+    {
+        obj->AddPlayer(recip);
+    }
 	g_slicEngine->Execute(obj);
+
 	return SFN_ERROR_OK;
 }
 
@@ -3256,8 +3266,7 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 	}
 
 	MapPoint pos;
-	BOOL res = FALSE;
-	res = args->GetPos(2, pos);
+	BOOL res = args->GetPos(2, pos);
 	if(!res)
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -3273,8 +3282,7 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 
 	sint32 x, y;
 	BOOL found = FALSE;
-	static DynamicArray<MapPoint> legalPoints;
-	legalPoints.Clear();
+	DynamicArray<MapPoint> legalPoints;
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
 			MapPoint chk(x, y);

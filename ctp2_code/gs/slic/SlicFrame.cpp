@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : As far as known handels slic code execution
+// Description  : Slic code interpreter
 //
 //----------------------------------------------------------------------------
 //
@@ -32,6 +32,7 @@
 // - Added '**' operator handling
 // - Added bitwise operator handling
 // - Repaired memory leaks.
+// - Repaired crash with invalid input.
 //
 //----------------------------------------------------------------------------
 
@@ -1125,25 +1126,32 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				codePtr += sizeof(char);
 			}
 			codePtr += sizeof(char);
-			Assert(conduit);
 
 			ival = *((sint32*)codePtr);
 			codePtr += sizeof(int);
 			symval = g_slicEngine->GetSymbol(ival);
-			if(!symval) {
+
+			if (conduit && symval) 
+            {
+			    sval1.m_sym = symval;
+			    sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
+			
+			    if ((sval3.m_int >= 0) && sval3.m_int < conduit->GetNumRecords())
+                {	
+                    // No action: value is OK
+			    }
+			    else
+                {
+				    sval3.m_int = -1;
+                }
+                
+                m_stack->Push(SS_TYPE_INT, sval3);
+			}
+            else
+            {
 				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
 				stopped = TRUE;
 				break;
-			}
-			sval1.m_sym = symval;
-			sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
-			
-			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
-				m_stack->Push(SS_TYPE_INT, sval3);
-			}
-			else{
-				sval3.m_int = -1;
-				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			break;
 		}

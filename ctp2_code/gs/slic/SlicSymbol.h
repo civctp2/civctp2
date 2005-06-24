@@ -89,20 +89,16 @@ protected:
 	SlicSymbolDebugInfo *m_debugInfo;
 
 public:
-	SlicSymbolData();
-	SlicSymbolData(SLIC_SYM type);
+	SlicSymbolData(SLIC_SYM type = SLIC_SYM_UNDEFINED);
 	SlicSymbolData(SlicArray *array);
 	SlicSymbolData(SlicStructInstance *aStruct);
-	SlicSymbolData(SlicSymbolData *copy);
+	SlicSymbolData(SlicSymbolData const & copy);
 	SlicSymbolData(SlicStructDescription *structDesc);
 
 	void Serialize(CivArchive &archive);
 	virtual SLIC_SYM_SERIAL_TYPE GetSerializeType() { return SLIC_SYM_SERIAL_GENERIC; }
 	virtual ~SlicSymbolData();
 
-	void Init();
-
-	
 	virtual const char *GetName() const;
 	virtual BOOL GetIntValue(sint32 &value) const;
 	virtual BOOL GetPlayer(PLAYER_INDEX &player) const;
@@ -136,7 +132,7 @@ public:
 	BOOL GetUnitType(sint32 &type) const;
 	BOOL GetRegion(struct PSlicRegion &region) const;
 	BOOL GetComplexRegion(const struct PSlicComplexRegion *&region) const;
-	void GetDebugText(MBCHAR *text, sint32 len);
+	void GetDebugText(MBCHAR *text, sint32 len) const;
 
 	BOOL ArrayLookup(sint32 index, SS_TYPE &retType, SlicStackValue &retValue);
 	BOOL SetArrayValue(sint32 index, SS_TYPE insType, SlicStackValue insValue);
@@ -146,7 +142,7 @@ public:
 	SlicStructInstance *GetStruct();
 	void SetStruct(SlicStructInstance *aStruct);
 
-	SlicArray *GetArray();
+	SlicArray *GetArray() const;
 
 	SlicSegment *GetSegment();
 	void SetSegment(SlicSegment *segment);
@@ -157,6 +153,9 @@ public:
 	void AddWatch(SlicSymbolWatchCallback *watch);
 	void RemoveWatch(SlicSymbolWatchCallback *watch);
 	void NotifyChange();
+
+private:
+   	void Init();
 };
 
 SlicSymbolData *slicsymbol_Load(CivArchive &archive, SlicSymbolData *useSymbol);

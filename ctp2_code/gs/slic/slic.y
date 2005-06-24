@@ -21,7 +21,7 @@
  *   - Slic database access                                                                            
  *   - Slic database size access
  * - Exponentiation operator '**' added.
- * - Bitwise and '&' operator added.
+ * - Bitwise operators ('&', '|', '^', '~') added.
  * 
  *----------------------------------------------------------------------------
  */
@@ -48,16 +48,6 @@
  * 
  * _DEBUG
  * Set when generating the debug version.
- *
- *----------------------------------------------------------------------------
- *
- * Modifications from the original Activision code:
- *
- * - Addtion by Martin Gühmann to allow:
- *   - Slic database access
- *   - Slic database size access
- * - Exponetiation operator '**' added.
- * - Bitwise operators added
  *
  *----------------------------------------------------------------------------
  */
@@ -183,7 +173,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed AlertBox %s\n", $2);
+		fprintf(debuglog, "Parsed HelpBox %s\n", $2);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
