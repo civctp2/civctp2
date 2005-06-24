@@ -25,7 +25,7 @@
 
 aui_Cursor::aui_Cursor(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	const MBCHAR *filename )
 	:
 	aui_Image( retval, filename )
 {

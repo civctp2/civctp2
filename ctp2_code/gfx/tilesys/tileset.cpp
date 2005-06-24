@@ -475,7 +475,7 @@ void TileSet::LoadMapIcons(void)
 			Pixel16 *image;
 			RIMHeader *rhead;
 			sprintf(path, "upc%#.3d.rim", i+1);
-			uint8 *buf = (uint8 *) g_ImageMapPF->getData(path, (long *)(&len));
+			uint8 *buf = (uint8 *) g_ImageMapPF->getData(path, &len);
 			if (buf == NULL) {
 				c3errors_ErrorDialog("TileSet", "'%s not found in asset tree.", name);
 				continue;

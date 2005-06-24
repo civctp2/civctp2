@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __WORMHOLE_H__
 #define __WORMHOLE_H__
 

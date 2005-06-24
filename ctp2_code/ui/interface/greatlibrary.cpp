@@ -125,7 +125,7 @@
 
 
 #include "ctp2_textfield.h"
-#include <Vector>
+#include <vector>
 #include "String_Search.h"
 
 #include "sci_advancescreen.h"
@@ -1101,28 +1101,9 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 	m_window->m_window->SetDraggable(TRUE);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef WIN32
 	m_techMovie = NULL;
-
+#endif
 
 	
 	Initialize( windowBlock );
@@ -1135,7 +1116,9 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 	m_window->SetTechStillShot ( m_techStillShot );
 	m_window->SetTechHistoricalText ( m_techHistoricalText );
 	m_window->SetTechGameplayText ( m_techGameplayText );
+#ifdef WIN32
 	m_window->SetTechMovie ( m_techMovie );
+#endif
 	m_window->SetTechRequirementsText ( m_techRequirementsText );
 	m_window->SetTechVariablesText ( m_techVariablesText );
 
@@ -1158,6 +1141,7 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 	
 	if ( g_theProfileDB->IsLibraryAnim() ) {
 		m_techStillShot->Hide();
+#ifdef WIN32
 		if (m_techMovie) {
 			if (m_techMovie->Open()) m_techMovie->CloseStream();
 		}
@@ -1165,6 +1149,7 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 			m_techStillShot->ShouldDraw();
 			m_techStillShot->Show();
 		}
+#endif
 	}
 	else {
 		if ( !m_window->LoadTechStill() ) {
@@ -1238,10 +1223,11 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 			k_VIDEO_Y + k_VIDEO_HEIGHT};
 
 		GetWindow()->SetDynamic(FALSE);
-
+#ifdef WIN32
 		m_techMovie = new DirectVideo();
 		m_techMovie->Initialize((aui_DirectUI *)g_c3ui, (aui_Window *)GetWindow(), FALSE);
 		m_techMovie->SetDestRect(&rect);
+#endif
 	}
 
 
@@ -1362,11 +1348,13 @@ GreatLibrary::~GreatLibrary( void )
 		delete m_string;
 		m_string = NULL;
 	}
+#ifdef WIN32
 	if (m_techMovie)
 	{
 		delete m_techMovie;
 		m_techMovie = NULL;
 	}
+#endif
 }
 
 void GreatLibrary::Display( void )
@@ -1594,12 +1582,13 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	
 
 	
-	
+#ifdef WIN32	
 	if (m_techMovie) {
 		if (m_techMovie->Open()) m_techMovie->CloseStream();
 		delete m_techMovie;
 		m_techMovie = NULL;
 	}
+#endif
 
 	RECT rect = {
 		k_VIDEO_X,
@@ -1608,9 +1597,11 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		k_VIDEO_Y + k_VIDEO_HEIGHT};
 
 	if ( g_theProfileDB->IsLibraryAnim() ) {
+#ifdef WIN32
 		m_techMovie = new DirectVideo();
 		m_techMovie->Initialize((aui_DirectUI *)g_c3ui, (aui_Window *)GetWindow(), FALSE);
 		m_techMovie->SetDestRect(&rect);
+#endif
 
 	}
 	else {
@@ -1620,7 +1611,9 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 	
 	m_window->SetTechTree ( m_techTree );
+#ifdef WIN32
 	m_window->SetTechMovie ( m_techMovie );
+#endif
 
 	
 	int text_load_result;
@@ -1694,12 +1687,14 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 	
 	if ( g_theProfileDB->IsLibraryAnim() ) {
+#ifdef WIN32
 		if (m_techMovie) {
 			if (m_techMovie->Open()) 
 				m_techMovie->CloseStream();
 		}
 		if (!g_greatLibrary->m_window->LoadTechMovie()) {
 		}
+#endif
 		if ( m_window->LoadTechStill() ) {
 			m_techStillShot->Show();
 			GetWindow()->ShouldDraw();

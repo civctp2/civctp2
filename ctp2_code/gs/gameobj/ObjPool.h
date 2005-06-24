@@ -25,7 +25,7 @@
 // - #pragma once commented out.
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __OBJ_POOL_H__

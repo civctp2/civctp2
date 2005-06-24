@@ -30,7 +30,7 @@ public:
 	
 	Icon(
 		AUI_ERRCODE *retval,
-		MBCHAR *szFileName = NULL);
+		const MBCHAR *szFileName = NULL);
 
 	virtual ~Icon();
 

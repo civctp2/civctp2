@@ -28,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000) 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -224,16 +224,16 @@ protected:
 	SPRITEFILEERR	Write_v20(UnitSpriteGroup *s);
 
 	
-	void *CompressData  (void *Data, size_t &DataLen);
-	void *DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen);
+	uint8 *CompressData  (void *Data, size_t &DataLen);
+	uint8 *DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen);
 	
 	
-	void *CompressData_Default  (void *Data, size_t &DataLen);
-	void *DeCompressData_Default(void *Data, size_t CompressedLen, size_t ActualLen);
+	uint8 *CompressData_Default  (void *Data, size_t &DataLen);
+	uint8 *DeCompressData_Default(void *Data, size_t CompressedLen, size_t ActualLen);
 
 	
-	void *CompressData_LZW1  (void *Data, size_t &DataLen);
-	void *DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualLen);
+	uint8 *CompressData_LZW1  (void *Data, size_t &DataLen);
+	uint8 *DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualLen);
 
 private:
 	FILE *      m_file;

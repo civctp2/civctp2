@@ -1652,7 +1652,7 @@ static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, int *
 			break;
 
 		case 'd':
-			*piresult = (int) (bench->dp);
+			*piresult = (size_t) (bench->dp);
 			break;
 
 		case 'h':

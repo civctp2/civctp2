@@ -1079,10 +1079,18 @@ SoundManager::StupidPlaySound(const sint32 &soundID)
 		if (strlen(g_theSoundDB->Get(soundID)->GetValue()) > 0) {
 			strcpy(nonConst, g_theSoundDB->Get(soundID)->GetValue());
 			g_civPaths->FindFile(C3DIR_SOUNDS, nonConst, fullPath);
-			
-			PlaySound(fullPath, NULL,  (SND_ASYNC | SND_FILENAME | SND_NOWAIT)); 
+			PlaySound(fullPath, true);
 		}
 	}
+}
+
+void
+SoundManager::PlaySound(const MBCHAR *fullFilename, const bool &bNoWait)
+{
+#if !defined(USE_SDL)
+	PlaySound(fullname, NULL,
+	          (SND_ASYNC | SND_FILENAME | (bNoWait ? SND_NOWAIT : 0)));
+#endif
 }
 
 #if !defined(USE_SDL)

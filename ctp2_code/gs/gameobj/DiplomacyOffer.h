@@ -1,13 +1,6 @@
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DIPLOMACY_DATA_H__
 #define __DIPLOMACY_DATA_H__
 
@@ -61,3 +54,4 @@ public:
 };
 
 #endif
+

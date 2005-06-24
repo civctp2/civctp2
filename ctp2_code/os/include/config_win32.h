@@ -1,6 +1,9 @@
 /**
  * $Id$
  */
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
 #ifndef __os_include_config_win32_h__
 #define __os_include_config_win32_h__ 1
 

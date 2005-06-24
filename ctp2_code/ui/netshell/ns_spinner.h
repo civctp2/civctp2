@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __NS_SPINNER_H__
 #define __NS_SPINNER_H__

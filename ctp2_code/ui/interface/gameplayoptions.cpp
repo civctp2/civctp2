@@ -178,7 +178,7 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false);
 	Assert( AUI_NEWOK(s_gameplayoptionsWindow, errcode) );
-	if ( !AUI_NEWOK(s_gameplayoptionsWindow, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_gameplayoptionsWindow, errcode) ) return errcode;
 
 	s_gameplayoptionsWindow->SetStronglyModal(TRUE);
 
@@ -276,8 +276,9 @@ AUI_ERRCODE gameplayoptions_Cleanup()
 
 
 
-
+#ifdef WIN32
 static
+#endif
 void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	

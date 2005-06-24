@@ -29,7 +29,7 @@ then
    ])
 else
    YACC="${YACC}"
-   YFLAGS="-d -v -t"
+   YFLAGS="-d -v"
    AC_SUBST(YACC)
    AC_SUBST(YFLAGS)
    AC_DEFINE(AUTOMAKE_INVOKES_YACC,1,[Defined when automake runs yacc and renames the output files])
@@ -40,6 +40,8 @@ AC_PROG_LIBTOOL
 AM_PATH_DIRECTX
 AM_PATH_DXMEDIA
 AM_PATH_SDL
+AC_PATH_X
+AC_PATH_XTRA
 AC_DEFINE(USE_SDL,1,[Use the SDL-library])
 
 AC_WORDS_BIGENDIAN
@@ -54,7 +56,7 @@ case $host in
 	;;
 esac
 
-AC_DEFINE(YYDEBUG,9,[Debug Parsers])
+dnl AC_DEFINE(YYDEBUG,9,[Debug Parsers])
 AC_PATH_PROG(HTLATEX,htlatex)
 AC_PATH_PROG(MAKEINDEX,makeindex)
 AC_PATH_PROG(PDFLATEX,pdflatex)
@@ -70,8 +72,16 @@ done
 
 ctp2_code='$(top_srcdir)/ctp2_code'
 AC_SUBST(ctp2_code)
+
 C_WARNINGS="-Wunknown-pragmas"
 CXX_WARNINGS="$C_WARNINGS -Wnon-virtual-dtor"
+COMMON_WARNINGS="-pedantic -Wchar-subscripts -Wcomment -Wconversion -Wendif-labels -Wformat -Wformat-y2k -Wformat-nonliteral -Wformat-security -Wimplicit -Winit-self -Wmissing-braces -Wpointer-arith -Wreturn-type -Wsign-compare -Wunknown-pragmas"
+C_WARNINGS="$COMMON_WARNINGS -Wmain -Wmissing-prototypes -Wnested-externs -Wnonnull -Wsequence-point -Wstrict-prototypes"
+CXX_WARNINGS="$COMMON_WARNINGS -Winvalid-offsetof"
+
+C_WARNINGS="-Wall"
+CXX_WARNINGS="-Wall"
+
 CFLAGS="$C_WARNINGS -fms-extensions $CFLAGS"
 CXXFLAGS="$CXX_WARNINGS -fms-extensions $CXXFLAGS"
 AC_SUBST(CFLAGS)
@@ -79,16 +89,29 @@ AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
 
 AC_DEFINE(_TIFF_DATA_TYPEDEFS_,1,[Tiff uint{16,32} datatype collision prevention])
+if test x$have_x=xyes; then
+	AC_DEFINE(HAVE_X11,1,[System with X11R6 present])
+fi
 
 AC_OUTPUT([
    GNUmakefile
    ctp2_code/Makefile
    ctp2_code/ctp/Makefile
+   ctp2_code/gfx/Makefile
+   ctp2_code/gfx/gfx_utils/Makefile
+   ctp2_code/gfx/layers/Makefile
+   ctp2_code/gfx/spritesys/Makefile
+   ctp2_code/gfx/tilesys/Makefile
    ctp2_code/gs/Makefile
+   ctp2_code/gs/database/Makefile
    ctp2_code/gs/dbgen/Makefile
+   ctp2_code/gs/gameobj/Makefile
    ctp2_code/gs/newdb/Makefile
    ctp2_code/gs/slic/Makefile
    ctp2_code/mapgen/Makefile
    ctp2_code/os/Makefile
    ctp2_code/os/nowin32/Makefile
+   ctp2_code/sound/Makefile
+   ctp2_code/ui/Makefile
+   ctp2_code/ui/interface/Makefile
 ])

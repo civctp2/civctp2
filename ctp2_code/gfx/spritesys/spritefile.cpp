@@ -115,7 +115,7 @@ void SpriteFile::WriteSpriteData(Sprite *s)
     WriteData((uint8 *)normal_msizes,s->GetNumFrames()*sizeof(uint32));
 
 	
-	void *CompressedData;
+	uint8 *CompressedData;
 
 	
 	for (i=0; i<s->GetNumFrames(); i++) 
@@ -218,7 +218,7 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 	}	
 
 	
-	void *CompressedData;
+	uint8 *CompressedData;
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
@@ -2600,10 +2600,10 @@ void SpriteFile::SetFilePos(size_t pos)
 
 
 
-void *
+uint8 *
 SpriteFile::CompressData  (void *Data, size_t &DataLen)
 {
-	void *ReturnVal=NULL;
+	uint8 *ReturnVal=NULL;
 
 	switch(m_spr_compression)
 	{
@@ -2626,10 +2626,10 @@ SpriteFile::CompressData  (void *Data, size_t &DataLen)
 }
 
 
-void *
+uint8 *
 SpriteFile::DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen)
 {
-	void *ReturnVal=Data;
+	uint8 *ReturnVal = (uint8 *)Data;
 
 	switch(m_spr_compression)
 	{
@@ -2644,18 +2644,6 @@ SpriteFile::DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen)
 			break;
 
 
-	
-	
-	
-
-	
-	
-	
-
-	
-	
-	
-
 	default:
 		 
 		c3errors_ErrorDialog("SpriteFile:", "Bad Compression Mode %d",m_spr_compression);
@@ -2667,23 +2655,23 @@ SpriteFile::DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen)
 
 
 
-void *
+uint8 *
 SpriteFile::CompressData_Default  (void *Data, size_t &DataLen)
 {
-  void *ReturnVal = (void *)new unsigned char[DataLen];
+	uint8 *ReturnVal = new uint8[DataLen];
 			
-  memcpy(ReturnVal,Data,DataLen);
+	memcpy((void *)ReturnVal,Data,DataLen);
 
-  return ReturnVal;
+	return ReturnVal;
 }
 
 
-void *
+uint8 *
 SpriteFile::DeCompressData_Default(void *Data, size_t CompressedLen, size_t ActualLen)
 {
-  void *ReturnVal = (void *)new unsigned char[ActualLen];
+  uint8 *ReturnVal = new uint8[ActualLen];
 			
-  memcpy(ReturnVal,Data,ActualLen);
+  memcpy((void *)ReturnVal,Data,ActualLen);
 
   return ReturnVal;
 }
@@ -2701,25 +2689,13 @@ SpriteFile::DeCompressData_Default(void *Data, size_t CompressedLen, size_t Actu
 
 
 
-void *
+uint8 *
 SpriteFile::CompressData_LZW1(void *Data, size_t &DataLen)
 {
-
-
-
-
-
-
-
-
-
-
-
-
  uint8  *p_src_first=(uint8 *)Data;
  uint8  *p_dst_first=(uint8 *)g_compression_buff;
  
- unsigned  src_len=DataLen;	
+ size_t  src_len=DataLen;
  uint32     p_dst_len=COM_BUFF_SIZE;
 
  uint8 *p_src=p_src_first,*p_dst=p_dst_first;
@@ -2806,10 +2782,7 @@ literal:
 
  goto end_of_compression;
 
- 
-
-
- 
+  
 overrun: memcpy(p_dst_first+LZW1_FLAG_BYTES,p_src_first,src_len);
           
    *p_dst_first=LZW1_FLAG_COPY; 
@@ -2817,33 +2790,21 @@ overrun: memcpy(p_dst_first+LZW1_FLAG_BYTES,p_src_first,src_len);
 
 end_of_compression:
 
- unsigned char *retval=new unsigned char[p_dst_len];
+ uint8 *retval=new uint8[p_dst_len];
  DataLen = p_dst_len;
 
  memcpy(retval,g_compression_buff,DataLen);
 
- return (void *)retval;
+ return (uint8 *)retval;
 }
 
 
 
-void *
+uint8 *
 SpriteFile::DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualLen)
 {
-
-
-
-
-
-
-
-
-
-
-
-
- uint32  src_len=CompressedLen;
- uint32  dst_len=ActualLen;
+ size_t  src_len=CompressedLen;
+ size_t  dst_len=ActualLen;
 
  uint8  *ReturnVal  = new uint8[ActualLen];
  uint8  *p_src_first=(uint8 *)Data;

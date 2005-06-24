@@ -1,7 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __CMS_H__
 #define __CMS_H__
 

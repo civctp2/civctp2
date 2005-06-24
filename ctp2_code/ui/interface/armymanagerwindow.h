@@ -17,7 +17,7 @@ class ArmyListNode {
   public:
 	Army m_army;
 
-	ArmyListNode(Army &a) { m_army = a; }
+	ArmyListNode(const Army &a) { m_army = a; }
 	ArmyListNode() { m_army.m_id = 0; }
 };
 

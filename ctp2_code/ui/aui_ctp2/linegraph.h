@@ -8,7 +8,7 @@
 #include "aui_control.h"
 
 class aui_EditText;
-class aui_DirectSurface;
+class aui_Surface;
 class EventTracker;
 
 enum GRAPH_TYPE
@@ -61,7 +61,7 @@ public:
 	void		SetXAxisName(MBCHAR *name);
 	void		SetYAxisName(MBCHAR *name);
 
-	void		UpdateGraph(aui_DirectSurface *surface, sint32 x, sint32 y);
+	void		UpdateGraph(aui_Surface *surface, sint32 x, sint32 y);
 
 	void		LabelAxes(void);
 	void		DrawIndicator(void);
@@ -85,7 +85,7 @@ public:
 	virtual AUI_ERRCODE		DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
 	
-	aui_DirectSurface	*GetGraphSurface(void) const { return m_surface; }
+	aui_Surface	*GetGraphSurface(void) const { return m_surface; }
 
 private:
 	double			m_xmin;
@@ -103,7 +103,7 @@ private:
 	MBCHAR			*m_xAxisName;
 	MBCHAR			*m_yAxisName;
 
-	aui_DirectSurface *m_surface;
+	aui_Surface *m_surface;
 
 	RECT			m_graphRect;
 	RECT			m_surfaceRect;

@@ -1,11 +1,6 @@
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_UNIT_CONTROL_PANEL_HEADER
 #define ___BMH_UNIT_CONTROL_PANEL_HEADER
 

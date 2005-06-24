@@ -1,12 +1,6 @@
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MESSAGE_RESPONSE_H__
 #define __MESSAGE_RESPONSE_H__
 

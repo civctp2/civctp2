@@ -22,26 +22,26 @@
 // Modifications from the original Activision code:
 //
 // - Make the number of city styles you can place with the scenario editor mod
-//   dependent, by Martin Gühmann.
+//   dependent, by MartinGühmann.
 // - Make sure that newly created cities have the size as displayed in the 
-//   CityPopSpinner, by Martin Gühmann.
+//   CityPopSpinner, by MartinGühmann.
 // - Corrected wrap handling, by Fromafar.
-// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gühmann.
-// - Memory leaks fixed, by Martin Gühmann and Fromafar.
+// - Fixed Auto-Turn-Off-Pollution-Bug, by MartinGühmann.
+// - Memory leaks fixed, by MartinGühmann and Fromafar.
 // - Fixed switch to player 1 bug when the scenario editor is loaded for the
-//   first time in a game session, by Martin Gühmann.
-// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
+//   first time in a game session, by MartinGühmann.
+// - Added GetLastPlayer() to get the last player in the game, by MartinGühmann.
 // - Fixed player spinners in the scenario editor so that the last player
 //   is still accessable even if players before in the row were killed,
-//   by Martin Gühmann. 
+//   by MartinGühmann. 
 //   Unfortunatly it looks like here are more problems. Soon after some turns
 //   with the dead player I got Asserts when I try to access the dead player.
-// - Fix of a crash by Martin Gühmann. If you selected a city changed the 
+// - Fix of a crash by MartinGühmann. If you selected a city changed the 
 //   player, the city was destroyed by in game events, conquest, starvation
 //   slic and you switch back via the Scenario Editor to that player the game
 //   crashed, the problem is solved by deselecting everything before player
 //   changing.
-// - Added icons and tooltips to city style buttons, by Martin Gühmann.
+// - Added icons and tooltips to city style buttons, by MartinGühmann.
 // - Repaired backwards compatibility and possible crashes.
 //
 //----------------------------------------------------------------------------
@@ -71,7 +71,7 @@
 #include "citydata.h"
 #include "UnitData.h"
 
-//Added by Martin Gühmann to have the appropiate number 
+//Added by MartinGühmann to have the appropiate number 
 //on the city style tab 
 #include "CityStyleRecord.h"
 
@@ -118,7 +118,7 @@
 #include "DiffDB.h"
 
 #include "Cell.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "TerrImprove.h"
 #include "ConstDB.h"
 #include "civapp.h"
@@ -138,7 +138,7 @@
 #include "newturncount.h"
 #include "TurnYearStatus.h"
 #include "MaterialPool.h"
-#include "gold.h"
+#include "Gold.h"
 #include "cursormanager.h"
 #include "network.h"
 #include "AttractWindow.h"
@@ -275,14 +275,14 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin) {
 
-			//Added by Martin Gühmann to amke sure that the Scenario Editor 
+			//Added by MartinGühmann to amke sure that the Scenario Editor 
 			//does not set the player to player 1 when the scenario editor
 			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
 			spin->SetSpinnerCallback(PlayerSpinner, NULL);
 
 			spin->SetMinimum(0, 0);
-			//Added by Martin Gühmann
+			//Added by MartinGühmann
 			spin->SetMaximum(GetLastPlayer(), 0);
 		}
 	}
@@ -397,7 +397,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	m_brushSize = 1;
 	m_unitIndex = -1;
 	m_cityStyle = -2;
-	//Added by Martin Gühmann to initialize the pop number
+	//Added by MartinGühmann to initialize the pop number
 	//for newly created cities
 	m_newPopSize = 1;
 	m_scenarioName[0] = 0;
@@ -477,7 +477,7 @@ ScenarioEditor::~ScenarioEditor()
 		m_addStuffWindow = NULL;
 	}
 
-	//Added by Martin Gühmann
+	//Added by MartinGühmann
 	delete [] m_terrainSwitches;
 	delete [] m_terrainImpSwitches;
 
@@ -873,7 +873,7 @@ void ScenarioEditor::PopulateCityList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
-	//Added by Martin Gühmann so that there are now as much buttons
+	//Added by MartinGühmann so that there are now as much buttons
 	//as city styles.
 	for(cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
 		if(col == 0) {
@@ -906,8 +906,8 @@ void ScenarioEditor::PopulateCityList()
 			curItemBox = NULL;
 		}
 
-//Added by Martin Gühmann to give the city buttons an icon.
-//Added by Martin Gühmann to show the according city style name in the tooltip.
+//Added by MartinGühmann to give the city buttons an icon.
+//Added by MartinGühmann to show the according city style name in the tooltip.
 
 // Modified to allow buttons not to have an icon:
 // - moved down check to prevent a premature break
@@ -1113,7 +1113,7 @@ sint32 ScenarioEditor::CityStyle()
 	return s_scenarioEditor->m_cityStyle;
 }
 
-//Added by Martin Gühmann to make 
+//Added by MartinGühmann to make 
 //shure that newly created cities 
 //have the same pop size as displayed in
 //the CityPopSpinner
@@ -1494,7 +1494,7 @@ void ScenarioEditor::CityPopSpinner(aui_Control *control, uint32 action, uint32 
 
 	if(!spinner) return;
 	sint32 newPop = spinner->GetValueX();
-	//Added by Martin Gühmann to make shure 
+	//Added by MartinGühmann to make shure 
 	//newly created cities have the same pop 
 	//size as displayed in the CityPopSpinner
 	s_scenarioEditor->m_newPopSize = newPop;
@@ -2236,7 +2236,7 @@ void ScenarioEditor::PlayerSpinner(aui_Control *control, uint32 action, uint32 d
 
 	if(g_player[newPlayer]) {
 
-//Added by Martin Gühmann to prevent a crash if you use the
+//Added by MartinGühmann to prevent a crash if you use the
 //Scenario Editor to select a city, change the player without deselecting
 //it, destroy this city by conquest or slic or starvation and switching back
 //to that player.
@@ -2895,7 +2895,7 @@ void ScenarioEditor::UpdatePlayerCount()
 	st->SetText(tempstr);
 }
 
-//Added by Martin Gühmann
+//Added by MartinGühmann
 
 //----------------------------------------------------------------------------
 //
@@ -3333,7 +3333,7 @@ sint32 ScenarioEditor::GetNumPlayers()
 	return players;
 }
 
-//Added by Martin Gühmann to get the last player in the game.
+//Added by MartinGühmann to get the last player in the game.
 sint32 ScenarioEditor::GetLastPlayer() 
 {
 	sint32 players = 0;

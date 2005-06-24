@@ -34,7 +34,7 @@ public:
 	aui_ImageFormat() {}
 	virtual ~aui_ImageFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR *filename, aui_Image *image )
+	virtual AUI_ERRCODE	Load( const MBCHAR *filename, aui_Image *image )
 		{ return AUI_ERRCODE_OK; }
 };
 
@@ -46,7 +46,7 @@ public:
 	
 	aui_Image(
 		AUI_ERRCODE *retval,
-		MBCHAR *filename = NULL );
+		const MBCHAR *filename = NULL );
 	virtual ~aui_Image();
 
 	
@@ -57,7 +57,7 @@ public:
 
 protected:
 	aui_Image() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR *filename );
+	AUI_ERRCODE InitCommon( const MBCHAR *filename );
 
 public:
 	
@@ -77,7 +77,7 @@ public:
 	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_filename; }
 
 	
-	AUI_ERRCODE	SetFilename( MBCHAR *filename );
+	AUI_ERRCODE	SetFilename( const MBCHAR *filename );
 
 protected:
 	MBCHAR			m_filename[ MAX_PATH + 1 ];	

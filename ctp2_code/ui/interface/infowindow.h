@@ -1,17 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif 
+
 #ifndef __INFOWINDOW_H__
 #define __INFOWINDOW_H__
 

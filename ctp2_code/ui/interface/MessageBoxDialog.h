@@ -1,11 +1,6 @@
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_MESSAGE_BOX_DIALOG_HEADER
 #define ___BMH_MESSAGE_BOX_DIALOG_HEADER
 

@@ -1091,7 +1091,7 @@ DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const 
 	if (len > 0)
 		memcpy(p->szUserField, userbuf+4, len);	
 
-	len = buflen - ((int)q - (int)buf);
+	len = buflen - ((size_t)q - (size_t)buf);
 	if (len > 0) {
 		/* session has migrated.  Receive new master address. */
 		assert(len >= dp->dpio->myAdrLen);
@@ -1104,7 +1104,7 @@ DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const 
 
 	dprint_sess(dp, p, "dp_unpack_session (new)");
 	dp_assertValid(dp);
-	return ((int)q - (int)buf);
+	return ((size_t)q - (size_t)buf);
 }
 #else
 
@@ -1295,7 +1295,7 @@ static int dp_unpack_host(dpid_t firstId, int myAdrLen, const char *buf, dp_host
 	printAdr(myAdrLen, p->iadr);
 
 	/* Depending upon the size of this host a second address could be embeded */
-	if (length > ((int)q - (int)buf)) {
+	if (length > ((size_t)q - (size_t)buf)) {
 		memcpy(p->iadr2, q, myAdrLen);
 		q += myAdrLen;
 
@@ -1308,7 +1308,7 @@ static int dp_unpack_host(dpid_t firstId, int myAdrLen, const char *buf, dp_host
 	p->firstId = firstId;
 	DPRINT(("\n"));
 
-	return ((int)q - (int)buf);
+	return ((size_t)q - (size_t)buf);
 }
 
 /*----------------------------------------------------------------------
@@ -1338,7 +1338,7 @@ static int dp_pack_host(int myAdrLen, const dp_host_t *p, char *buf)
 		printAdr(myAdrLen, p->iadr2);
 	}
 	DPRINT(("\n"));
-	return ((int)q - (int)buf);
+	return ((size_t)q - (size_t)buf);
 }
 
 /*----------------------------------------------------------------------
@@ -1421,7 +1421,7 @@ int dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
 	DPRINT(("dp_unpack_playerId(id %d): name %s\n", id, p->name));
 #endif
 
-  return ((int)q - (int)buf);
+  return ((size_t)q - (size_t)buf);
 }
 
 /*--------------------------------------------------------------------------
@@ -4003,7 +4003,7 @@ DP_API dp_result_t dpResolveHostname(
 		int i;
 		dp_serverInfo_t *server;
 		char subkey[dptab_KEY_MAXLEN];
-		int serverlen;
+		size_t serverlen;
 		int subkeylen;
 		for (i = 0; i < dptab_tableSize(dp->serverpings); i++) {
 			if (dptab_get_byindex(dp->serverpings, i, (void **)&server,
@@ -5173,9 +5173,9 @@ dpHandleJoinSession(
 	/* Find first available non-reserved dpId for player */
 	do {
 		char subkey[dp_KEY_MAXLEN];
-		int subkeylen = 2;
+		size_t subkeylen = 2;
 		char *buf;
-		int buflen;
+		size_t buflen;
 
 		host.firstId = (dpid_t) (dp_PLAYERS_PER_HOST * sp->hostid++);
 		/* Wrap dpids around at dp_MAXDPIDS back to dp_FIRST_DPID 
@@ -8228,7 +8228,7 @@ static dp_result_t dp_election_become_master(dp_t *dp, dpid_t winner_id)
 	 */
 	sp->hostid = (highest_id / dp_PLAYERS_PER_HOST) + 2;
 	DPRINT(("dp_election_become_master: new players will start at id:%d\n", sp->hostid * dp_PLAYERS_PER_HOST));
-	{	int i; int len; int subkeylen;
+	{	int i; size_t len; int subkeylen;
 		char subkey[dptab_KEY_MAXLEN];
 		char *buf;
 		subkeylen = 2;
@@ -9161,7 +9161,7 @@ dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, int *sessidle
 	char subkey[dptab_KEY_MAXLEN];
 	char *pbuf;
 	dp_result_t err;
-	int len;
+	size_t len;
 
 	subkey[0] = dpGETLONG_FIRSTBYTE(uid);
 	subkey[1] = dpGETLONG_SECONDBYTE(uid);
@@ -9645,7 +9645,7 @@ static dp_result_t dp_receive(
 			char subkey[dptab_KEY_MAXLEN];
 			int subkeylen = 0;
 			char *buf;
-			int buflen;
+			size_t buflen;
 			int idoffset = (dpid_t)pkt->body.pData.id - firstId;
 			subkey[subkeylen++] = (char) dpGETSHORT_FIRSTBYTE(idoffset);
 			subkey[subkeylen++] = (char) dpGETSHORT_FIRSTBYTE(pkt->body.pData.key);

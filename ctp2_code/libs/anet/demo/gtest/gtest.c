@@ -2563,7 +2563,7 @@ int processChatCommand(const char *szChatText)
 		buf[0] = 0;
 	} else if (MATCH("dpGetSessionDesc", "get current session description")) {
 		dp_session_t s;
-		int len = sizeof(dp_session_t);
+		size_t len = sizeof(dp_session_t);
 		err = dpGetSessionDesc(myDP, &s, &len);
 		if (err != dp_RES_OK) {
 			sprintf(buf, "error %d calling dpGetSessionDesc", err);

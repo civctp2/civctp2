@@ -147,8 +147,8 @@ sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 
 	AUI_ERRCODE auiErr;
 
-	
-	for (sint32 i = 0;i < k_NUM_DIFFBOXES;i++ )
+	sint32 i;
+	for ( i = 0;i < k_NUM_DIFFBOXES;i++ )
 		s_checkBox[ i ]->Enable( !viewMode );
 	for ( i = 0;i < k_NUM_RISKBOXES;i++ )
 		s_riskBox[ i ]->Enable( !viewMode );

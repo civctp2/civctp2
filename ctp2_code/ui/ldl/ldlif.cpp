@@ -96,7 +96,7 @@ void ldlif_init_log()
 	}
 #endif
 }
-void ldlif_log(char *format, ...)
+void ldlif_log(const char *format, ...)
 {
 #ifdef _DEBUG
 	va_list list;

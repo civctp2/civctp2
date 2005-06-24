@@ -53,6 +53,7 @@
 #include "player.h"
 #include "director.h"
 #include "profileDB.h"				// g_theProfileDB
+#include "soundmanager.h" // g_soundManager
 
 extern RadarMap			*g_radarMap;
 extern C3UI				*g_c3ui;
@@ -90,7 +91,8 @@ void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 dat
 	if ( wavName = ( MBCHAR * ) message->AccessData()->GetMsgOpenSound() ) {
 		MBCHAR filename[ _MAX_PATH ]; 
 		g_civPaths->FindFile( C3DIR_SOUNDS, wavName, filename );
-		PlaySound( filename, NULL, SND_ASYNC | SND_FILENAME ); 
+		if (g_soundManager)
+			g_soundManager->PlaySound(filename, false);
 	}
 }
 

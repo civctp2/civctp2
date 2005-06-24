@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef LOADSAVEMAPWINDOW_FLAG
 #define LOADSAVEMAPWINDOW_FLAG

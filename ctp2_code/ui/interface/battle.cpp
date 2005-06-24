@@ -97,7 +97,7 @@ PointerList<BattleEvent> *Battle::GrabEventQueue()
 }
 
 
-void Battle::Initialize(Army &attackers, CellUnitList &defenders)
+void Battle::Initialize(const Army &attackers, CellUnitList &defenders)
 {
 	m_numAttackers = attackers.Num();
 	m_numDefenders = defenders.Num();
@@ -252,7 +252,7 @@ void Battle::Initialize(Army &attackers, CellUnitList &defenders)
 
 
 
-void Battle::MakeAttackers(sint32 numAttackers, Army &attackers)
+void Battle::MakeAttackers(sint32 numAttackers, const Army &attackers)
 {
 	sint32			i;
 	MapPoint		pos;
@@ -260,7 +260,7 @@ void Battle::MakeAttackers(sint32 numAttackers, Army &attackers)
 	pos.x = pos.y = 0;
 
 	for (i=0; i<numAttackers; i++) {
-		m_attackers[i] = new BattleViewActor(attackers[i].GetSpriteState(), attackers[i],
+		m_attackers[i] = new BattleViewActor(const_cast<Unit &>(attackers[i]).GetSpriteState(), attackers[i],
 										attackers[i].GetType(), pos,  attackers[i].GetOwner());
 		m_attackers[i]->SetFacing(k_BATTLEVIEW_DEFAULT_ATTACKER_FACING);
 

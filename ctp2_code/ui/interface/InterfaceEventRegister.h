@@ -1,12 +1,6 @@
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_INTERFACE_EVENT_REGISTER_HEADER
 #define ___BMH_INTERFACE_EVENT_REGISTER_HEADER
 

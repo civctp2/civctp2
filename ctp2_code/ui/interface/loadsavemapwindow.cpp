@@ -455,7 +455,7 @@ void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 	if (!radarMap) return;
 
 	
-	aui_DirectSurface	*surf = (aui_DirectSurface *)radarMap->GetMapSurface();
+	aui_Surface	*surf = (aui_Surface *)radarMap->GetMapSurface();
 
 	radarMap->RenderMap(surf);	
 

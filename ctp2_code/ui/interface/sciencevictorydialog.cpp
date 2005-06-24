@@ -508,8 +508,8 @@ sint32 ScienceVictoryDialog::CompareMainframeCities(ctp2_ListItem *item1,
 {
 	
 	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
+	city1.m_id = *reinterpret_cast<uint32 *>(item1->GetUserData());
+	city2.m_id = *reinterpret_cast<uint32 *>(item2->GetUserData());
 
 	
 	Assert(city1.IsValid());
@@ -597,8 +597,8 @@ void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
 		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
 
 	
-	
-	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
+	sint32 cityIndex;	
+	for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
 		
 		Unit city = cityList->Get(cityIndex);
 

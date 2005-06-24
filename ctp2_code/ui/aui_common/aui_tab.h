@@ -28,7 +28,9 @@
 // - #pragma once commented out.
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
 
 #ifndef __AUI_TAB_H__
 #define __AUI_TAB_H__
@@ -106,4 +108,5 @@ protected:
 };
 
 
-#endif 
+#endif
+

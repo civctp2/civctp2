@@ -29,9 +29,9 @@ extern C3UI *g_c3ui;
 
 Pattern::Pattern(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename,
-	MBCHAR *lightFilename,
-	MBCHAR *darkFilename )
+	const MBCHAR *filename,
+	const MBCHAR *lightFilename,
+	const MBCHAR *darkFilename )
 :
 	aui_Image( retval, filename )
 {
@@ -41,7 +41,7 @@ Pattern::Pattern(
 
 Pattern::Pattern(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	const MBCHAR *filename )
 :
 	aui_Image( retval, filename ),
 	m_lightImage( NULL ),

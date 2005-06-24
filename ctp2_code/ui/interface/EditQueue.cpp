@@ -66,7 +66,7 @@
 
 #include "UnitDynArr.h"
 
-#include "gold.h"
+#include "Gold.h"
 
 #include "network.h"
 #include "IconRecord.h"

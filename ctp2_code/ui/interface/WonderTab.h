@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __WonderTab_H__
 #define __WonderTab_H__
 

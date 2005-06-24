@@ -755,8 +755,8 @@ void TiledMap::DrawLegalMove
 						primitives_PaintRect16(pSurface, &turnRect, g_colorSet->GetColor(actual_line_color));
 						primitives_FrameRect16(pSurface, &turnRect, 0);
 
-						sint32 const	width	= textutils_GetWidth((aui_DirectSurface *)pSurface, turnNumber);
-						sint32 const	height	= textutils_GetHeight((aui_DirectSurface *)pSurface, turnNumber);
+						sint32 const	width	= textutils_GetWidth(pSurface, turnNumber);
+						sint32 const	height	= textutils_GetHeight(pSurface, turnNumber);
 						sint32 const	textX	= x - (width >> 1);
 						sint32 const	textY	= y - (height >> 1);
 							
@@ -808,8 +808,8 @@ void TiledMap::DrawLegalMove
 					primitives_FrameRect16(pSurface, &turnRect, 0);
 					 
 
-					sint32 const	width	= textutils_GetWidth((aui_DirectSurface *)pSurface, turnNumber);
-					sint32 const	height	= textutils_GetHeight((aui_DirectSurface *)pSurface, turnNumber);
+					sint32 const	width	= textutils_GetWidth(pSurface, turnNumber);
+					sint32 const	height	= textutils_GetHeight(pSurface, turnNumber);
 					sint32 const	textX	= x - (width >> 1);
 					sint32 const	textY	= y - (height >> 1);
 					 
@@ -1098,8 +1098,8 @@ void TiledMap::DrawUnfinishedMove(
 						
 						COLORREF color = g_colorSet->GetColorRef(k_TURN_COLOR);
 						
-						sint32 width = textutils_GetWidth((aui_DirectSurface *)pSurface, turnNumber);
-						sint32 height = textutils_GetHeight((aui_DirectSurface *)pSurface, turnNumber);
+						sint32 width = textutils_GetWidth(pSurface, turnNumber);
+						sint32 height = textutils_GetHeight(pSurface, turnNumber);
 						
 						sint32 textX = x - (width>>1);
 						sint32 textY = y - (height>>1);

@@ -26,7 +26,7 @@ aui_Movie *aui_Movie::m_onScreenMovie = NULL;
 
 aui_Movie::aui_Movie(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	const MBCHAR *filename )
 	:
 	aui_Base()
 {
@@ -37,7 +37,7 @@ aui_Movie::aui_Movie(
 
 
 
-AUI_ERRCODE aui_Movie::InitCommon( MBCHAR *filename )
+AUI_ERRCODE aui_Movie::InitCommon( const MBCHAR *filename )
 {
 	m_format = NULL;
 	m_surface = NULL;
@@ -86,7 +86,7 @@ aui_Movie::~aui_Movie()
 
 
 
-AUI_ERRCODE aui_Movie::SetFilename( MBCHAR *filename )
+AUI_ERRCODE aui_Movie::SetFilename( const MBCHAR *filename )
 {
 	
 	Unload();

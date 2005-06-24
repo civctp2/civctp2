@@ -36,7 +36,8 @@ class aui_Factory {
 public:
 	static aui_Surface *new_Surface(AUI_ERRCODE &retval,
 	                                const sint32 &width, const sint32 &height,
-	                                const sint32 &bpp, void *data = 0,
+	                                const sint32 &bpp,
+	                                void *data = 0,
 					const BOOL &isPrimary = FALSE
 	                               );
 };

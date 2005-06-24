@@ -53,6 +53,7 @@
 
 
 #include "StrDB.h"
+#include "aui_Factory.h"
 
 
 #define k_C3_ANIMATION_MODIFIER				20
@@ -64,7 +65,7 @@
 #define k_C3_ANIMATION_BLEND_SPEED			"blendSpeed"
 
 
-#define k_CREDITS_BITS_PER_PIXEL			16
+const sint32 k_CREDITS_BITS_PER_PIXEL =			16;
 #define k_LDL_CREDITS_WINDOW				"CreditsScreen"
 #define k_LDL_CREDITS_EXIT_BUTTON			"ExitButton"
 #define k_LDL_CREDITS_PAUSE_BUTTON			"PauseButton"
@@ -87,8 +88,8 @@
 
 
 
-const k_CreditsLineLen = 80;
-const kCreditsTextNumFonts = 6;
+const size_t k_CreditsLineLen = 80;
+const size_t kCreditsTextNumFonts = 6;
 
 
 
@@ -497,8 +498,8 @@ AUI_ERRCODE c3_TriggeredAnimation::DrawBlendImage(aui_Surface *destSurf, RECT *d
 	RECT lastRect = { 0, 0, lastSurf->Width(), lastSurf->Height() };
 
 	
-	aui_DirectSurface *backSurface = new aui_DirectSurface(&errcode, srcRect.right, srcRect.bottom,
-		k_C3_ANIMATION_BITS_PER_PIXEL, g_c3ui->DD());
+	aui_Surface *backSurface = aui_Factory::new_Surface(errcode, srcRect.right, srcRect.bottom,
+		k_C3_ANIMATION_BITS_PER_PIXEL);
 	Assert(AUI_NEWOK(backSurface, errcode));
 
 	
@@ -508,8 +509,7 @@ AUI_ERRCODE c3_TriggeredAnimation::DrawBlendImage(aui_Surface *destSurf, RECT *d
 	
 	if(m_imagebltflag == AUI_IMAGEBASE_BLTFLAG_CHROMAKEY) {
 		
-		aui_DirectSurface *frontSurface = new aui_DirectSurface(&errcode, lastRect.right, lastRect.bottom,
-			k_C3_ANIMATION_BITS_PER_PIXEL, g_c3ui->DD());
+		aui_Surface *frontSurface = aui_Factory::new_Surface(errcode, lastRect.right, lastRect.bottom, k_C3_ANIMATION_BITS_PER_PIXEL);
 		Assert(AUI_NEWOK(frontSurface, errcode));
 		
 		
@@ -538,8 +538,8 @@ AUI_ERRCODE c3_TriggeredAnimation::DrawBlendImage(aui_Surface *destSurf, RECT *d
 	
 	if(m_imagebltflag == AUI_IMAGEBASE_BLTFLAG_CHROMAKEY) {
 		
-		aui_DirectSurface *frontSurface = new aui_DirectSurface(&errcode, srcRect.right, srcRect.bottom,
-			k_C3_ANIMATION_BITS_PER_PIXEL, g_c3ui->DD());
+		aui_Surface *frontSurface = aui_Factory::new_Surface(errcode, srcRect.right, srcRect.bottom,
+			k_C3_ANIMATION_BITS_PER_PIXEL);
 		Assert(AUI_NEWOK(frontSurface, errcode));
 		
 		

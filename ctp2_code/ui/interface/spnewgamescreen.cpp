@@ -88,7 +88,7 @@
 
 #include "initialplaywindow.h"
 
-#include "globals.h"
+#include "Globals.h"
 
 #include "SlicEngine.h"
 
@@ -751,8 +751,8 @@ spNew_ctp2_Button(AUI_ERRCODE *errcode,
 								buttonFlavor,
 								500, 10,
 								100, 20,
-								NULL,
-								callback);
+								callback,
+								NULL);
 
 	Assert( AUI_NEWOK(myButton, *errcode) );
 	return myButton;

@@ -93,7 +93,7 @@
 extern ColorSet	*g_colorSet;
 
 #include "BldQue.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Happy.h"
 #include "UnitData.h"
 
@@ -127,7 +127,7 @@ extern ProjectFile                  *g_GreatLibPF;
 
 #include "network.h"
 
-#include "aicause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
+#include "AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include "ArmyPool.h"	// g_armyPool
 
 
@@ -2059,7 +2059,7 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 		   (!(stricmp(strrchr(statText, '.'), ".txt")))) {
 			
 			MBCHAR *fileText;
-			sint32 size;
+			uint32 size;
 			fileText = (MBCHAR *)g_GreatLibPF->getData((char *)statText, &size, C3DIR_GL);
 			
 			if(fileText != NULL) {
@@ -2377,7 +2377,8 @@ void CityWindow::FillPollutionList()
 		}
 	}
 
-	for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+	sint32 i;
+	for (i = 0; i < g_theBuildingDB->NumRecords(); i++)
 	{
 		if (m_cityData->HaveImprovement(i))
 		{

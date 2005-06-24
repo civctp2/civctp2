@@ -13,12 +13,12 @@ public:
 					  const Unit hc,
 					  BOOL temp,
 					  CAUSE_NEW_ARMY cause) :
+		m_next(NULL),
 		m_type(t),
 		m_point(point),
 		m_homeCity(hc),
 		m_tempUnit(temp),
-		m_cause(cause),
-		m_next(NULL)
+		m_cause(cause)
 	{}
 
 	sint32 m_type;

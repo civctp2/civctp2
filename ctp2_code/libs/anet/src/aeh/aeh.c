@@ -1532,7 +1532,8 @@ static int putStreamErrFull(unsigned char *p, aeh_buf_t *aehbuf)
 int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 {
 	unsigned int i;
-	unsigned char *pwrite, *psave, *pend;
+	unsigned char *pwrite, *pend;
+	void *psave;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh || !aehbuf) {
 		aeh_SetCurrent(__LINE__, __FILE__);

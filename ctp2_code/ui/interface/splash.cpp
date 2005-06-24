@@ -49,11 +49,11 @@ Splash::~Splash()
 
 void Splash::AddText(MBCHAR *text)
 {
-	aui_DirectSurface		*surface;
+	aui_Surface		*surface;
 
 	if (!g_c3ui) return;
 	
-	surface = (aui_DirectSurface *)g_c3ui->Primary();
+	surface = (aui_Surface *)g_c3ui->Primary();
 
 	if (!surface) return;
 
@@ -63,11 +63,11 @@ void Splash::AddText(MBCHAR *text)
 void Splash::AddTextNL(MBCHAR *text)
 {
 	
-	aui_DirectSurface		*surface;
+	aui_Surface		*surface;
 
 	if (!g_c3ui) return;
 	
-	surface = (aui_DirectSurface *)g_c3ui->Primary();
+	surface = (aui_Surface *)g_c3ui->Primary();
 
 	if (!surface) return;
 
@@ -81,11 +81,11 @@ void Splash::AddTextNL(MBCHAR *text)
 void Splash::AddHilitedTextNL(MBCHAR *text)
 {
 	
-	aui_DirectSurface		*surface;
+	aui_Surface		*surface;
 
 	if (!g_c3ui) return;
 	
-	surface = (aui_DirectSurface *)g_c3ui->Primary();
+	surface = (aui_Surface *)g_c3ui->Primary();
 
 	if (!surface) return;
 

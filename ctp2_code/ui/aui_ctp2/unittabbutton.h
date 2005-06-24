@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UNITTABBUTTON_H__
 #define __UNITTABBUTTON_H__
 

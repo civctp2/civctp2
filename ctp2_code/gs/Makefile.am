@@ -4,4 +4,5 @@
 SUBDIRS=\
 	dbgen \
 	newdb \
-	slic
+	slic \
+	database

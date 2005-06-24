@@ -30,7 +30,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -54,7 +54,7 @@ class aui_StringTable;
 class ResourceMap : public aui_Control, public PatternBase {
 public:
 
-	typedef BOOL (ResourceMapDrawFunc)(aui_Surface *surf, MapPoint &pos, void *context);
+	typedef BOOL (ResourceMapDrawFunc)(aui_Surface *surf, const MapPoint &pos, void *context);
 
 	
 	ResourceMap(AUI_ERRCODE *retval, 

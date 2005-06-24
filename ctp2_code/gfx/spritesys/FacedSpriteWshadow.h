@@ -26,7 +26,7 @@
 #include "Sprite.h"
 
 class Token;
-class aui_DirectSurface;
+class aui_Surface;
 
 class FacedSpriteWshadow : public Sprite {
 public:

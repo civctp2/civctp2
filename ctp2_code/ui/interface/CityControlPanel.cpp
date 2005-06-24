@@ -42,7 +42,7 @@
 #include "CityControlPanel.h"
 
 
-#include <strstream>
+#include <sstream>
 
 
 #include "aui_ldl.h"

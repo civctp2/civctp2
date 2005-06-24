@@ -33,7 +33,7 @@
 
 
 #include "aui_win.h"
-
+#include "aui_bitmapfont.h"
 
 
 enum AUI_TEXTFIELD_ACTION
@@ -76,7 +76,7 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *text = NULL,
+		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~aui_TextField();
@@ -85,8 +85,8 @@ protected:
 	aui_TextField() : aui_Win() {}
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon(
-		MBCHAR *text,
-		MBCHAR *font,
+		const MBCHAR *text,
+		const MBCHAR *font,
 		sint32 fontheight,
 		BOOL multiLine,
 		BOOL autovscroll = TRUE,
@@ -99,11 +99,13 @@ public:
 	sint32	GetFieldText( MBCHAR *text, sint32 maxCount );
 	BOOL	SetFieldText( const MBCHAR *text );
 
+#ifdef __AUI_USE_DIRECTX__
 	BOOL	IsMultiLine( void ) const { return m_multiLine; }
 	BOOL	SetMultiLine( BOOL multiLine );
 
 	BOOL	IsPasswordReady( void ) const { return m_passwordReady; }
 	BOOL	SetPasswordReady( BOOL passwordReady );
+#endif
 
 	BOOL	IsFileName( void ) const { return m_isFileName; }
 	BOOL	SetIsFileName( BOOL isFileName );
@@ -121,8 +123,11 @@ public:
 
 	
 	static WNDPROC	m_windowProc;
-
+#ifdef __AUI_USE_DIRECTX__
 	static void HitEnter( HWND hwnd );
+#else
+	void HitEnter();
+#endif
 	static BOOL IsFileName( HWND hwnd );
 	static sint32 GetMaxFieldLen( HWND hwnd );
 
@@ -142,12 +147,19 @@ protected:
 	BOOL	m_isFileName;		
 
 	sint32	m_maxFieldLen;
+	MBCHAR *m_Text;
+	sint32  m_selStart;
+	sint32  m_selEnd;
 
 public:
 	sint32	m_textHeight;		
-	MBCHAR	m_desiredFont[256];	
-	HFONT	m_hfont;			
-	HFONT	m_holdfont;			
+	MBCHAR	m_desiredFont[256];
+#ifndef __AUI_USE_DIRECTX__
+	aui_BitmapFont *m_Font;
+#else
+	HFONT	m_hfont;
+	HFONT	m_holdfont;
+#endif
 
 #if defined(_MSC_VER)	
 	virtual MouseEventCallback PostChildrenCallback;

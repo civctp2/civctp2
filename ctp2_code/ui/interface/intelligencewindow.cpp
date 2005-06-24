@@ -812,7 +812,7 @@ void intelligence_DeclareWarCallback(bool response, void *cookie)
 			g_network.SendAction(new NetAction(NET_ACTION_DECLARE_WAR, (sint32)cookie));
 		}
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DeclareWar((sint32)cookie);
-		DiplomacyWindow::EnableButtons(TRUE, reinterpret_cast<sint32>(cookie));
+		DiplomacyWindow::EnableButtons(TRUE, *reinterpret_cast<sint32 *>(cookie));
 	}
 }
 
@@ -820,7 +820,7 @@ void intelligence_DeclarEmbargoCallback(bool response, void *cookie)
 {
 	if(response) {
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).SetEmbargo((sint32)cookie, 1);
-		DiplomacyWindow::EnableButtons(TRUE, reinterpret_cast<sint32>(cookie));
+		DiplomacyWindow::EnableButtons(TRUE, *reinterpret_cast<sint32 *>(cookie));
 	}
 }
 

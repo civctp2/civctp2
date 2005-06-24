@@ -481,7 +481,7 @@ sint32 ResourceMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, s
 	return TRUE;
 }
 
-BOOL ResourceMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL ResourceMap::DrawACity(aui_Surface *pSurface, const MapPoint &pos, void *context)
 {
 	ResourceMap		*resourceMap = (ResourceMap *)context;
 	UnitActor	*actor;
@@ -517,7 +517,7 @@ BOOL ResourceMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
 	return TRUE;
 }
 
-BOOL ResourceMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL ResourceMap::DrawALandCity(aui_Surface *pSurface, const MapPoint &pos, void *context)
 {
 	ResourceMap		*resourceMap = (ResourceMap *)context;
 	UnitActor	*actor;
@@ -553,7 +553,7 @@ BOOL ResourceMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *cont
 }
 
 
-BOOL ResourceMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL ResourceMap::DrawAGood(aui_Surface *pSurface, const MapPoint &pos, void *context)
 {
 	ResourceMap		*resourceMap = (ResourceMap *)context;
 	GoodActor	*goodActor;
@@ -589,7 +589,7 @@ BOOL ResourceMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
 	return TRUE;
 }
 
-BOOL ResourceMap::DrawATile(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL ResourceMap::DrawATile(aui_Surface *pSurface, const MapPoint &pos, void *context)
 {
 	ResourceMap		*resourceMap = (ResourceMap *)context;
 	sint32		x, y;
@@ -864,15 +864,15 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 
 	if (x >= 0 && y >= 0 && x < surface->Width() && y < surface->Height()) {
 
-		width = textutils_GetWidth((aui_DirectSurface *)surface,name);
-		height = textutils_GetHeight((aui_DirectSurface *)surface,name);
+		width = textutils_GetWidth(surface,name);
+		height = textutils_GetHeight(surface,name);
 		rect.left = x;
 		rect.top = y;
 		rect.right = x+width;
 		rect.bottom = y+height;;
 
 		textutils_ColoredDropString(
-			(aui_DirectSurface *)surface,
+			surface,
 			name,
 			x,
 			y,
@@ -889,8 +889,8 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 	sprintf(str,"%i",pop);
 	y+=yoffset;
 
-	width = textutils_GetWidth((aui_DirectSurface *)surface,str);
-	height = textutils_GetHeight((aui_DirectSurface *)surface,str);
+	width = textutils_GetWidth(surface,str);
+	height = textutils_GetHeight(surface,str);
 
 	sint32	popEdgeSize = (sint32)((double)k_POP_BOX_SIZE);
 	sint32 nudge = 0;
@@ -908,7 +908,7 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 	primitives_FrameRect16(surface,&popRect,0x0000);
 
 	textutils_CenteredColoredDropString(
-		(aui_DirectSurface *)surface,
+		surface,
 		str,
 		&popRect,
 		k_POP_PTSIZE,

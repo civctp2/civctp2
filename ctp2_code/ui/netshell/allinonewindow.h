@@ -322,7 +322,7 @@ protected:
 	aui_Switch *m_improvements[ k_IMPROVEMENTS_MAX ];
 	sint32 m_numAvailWonders;
 	aui_Switch *m_wonders[ k_WONDERS_MAX ];
-	friend nf_GameSetup;
+	friend class nf_GameSetup;
 	
 	ns_ScenarioInfo m_scenInfo;
 
@@ -333,7 +333,7 @@ protected:
 
 	class PPTSwitchAction : public aui_Action
 	{ public: virtual ActionCallback Execute; };
-	friend PPTSwitchAction;
+	friend class PPTSwitchAction;
 
 	class KickButtonAction : public aui_Action
 	{ public: virtual ActionCallback Execute; };
@@ -379,7 +379,7 @@ protected:
 
 	class PlayStyleDropDownAction : public aui_Action
 	{ public: virtual ActionCallback Execute; };
-	friend PlayStyleDropDownAction;
+	friend class PlayStyleDropDownAction;
 
 
 
@@ -416,7 +416,7 @@ protected:
 
 	class HandicappingSwitchAction : public aui_Action
 	{ public: virtual ActionCallback Execute; };
-	friend HandicappingSwitchAction;
+	friend class HandicappingSwitchAction;
 
 
 
@@ -439,11 +439,11 @@ protected:
 
 	class CivPointsButtonAction : public aui_Action
 	{ public: virtual ActionCallback Execute; };
-	friend CivPointsButtonAction;
+	friend class CivPointsButtonAction;
 
 	class PwPointsButtonAction : public aui_Action
 	{ public: virtual ActionCallback Execute; };
-	friend PwPointsButtonAction;
+	friend class PwPointsButtonAction;
 
 
 

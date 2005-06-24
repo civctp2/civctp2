@@ -259,7 +259,7 @@ void RadarMap::ClearMapOverlay(void)
 //    lay it does not exists yet  
 //	
 //---------------------------------------------------------------------------
-void RadarMap::SetMapOverlayCell(MapPoint &pos, COLOR color)
+void RadarMap::SetMapOverlayCell(const MapPoint &pos, COLOR color)
 {
 	if (m_mapOverlay == NULL) {
 		sint32 len = m_mapSize->x * m_mapSize->y;

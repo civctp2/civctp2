@@ -20,7 +20,7 @@
 #include "aui_stringtable.h"
 
 #include "primitives.h"
-#include "globals.h"
+#include "Globals.h"
 #include "player.h"
 
 #include "dynarr.h"
@@ -66,6 +66,7 @@
 #include "GameEventManager.h"
 
 #include "CityInfluenceIterator.h"
+#include "aui_Factory.h"
 
 #define k_NUDGE		48					
 
@@ -185,7 +186,7 @@ void WorkMap::InitCommon( sint32 scale)
 	m_drawHilite = FALSE;
 
 	
-	m_unit = NULL;
+	m_unit = 0;
 
 	
 	m_updateAction = NULL;
@@ -195,7 +196,7 @@ void WorkMap::InitCommon( sint32 scale)
 	}
 	m_numWorkers = 0;
 
-	m_surface = new aui_DirectSurface( &errcode, m_width, m_height, 16, (g_c3ui)->DD() );
+	m_surface = aui_Factory::new_Surface(errcode, m_width, m_height, 16);
 	Assert( m_surface != NULL );
 	if ( !m_surface ) return;
 
@@ -465,7 +466,8 @@ return 0;
 		}
 		maputils_MapX2TileX(pos.x,pos.y,&i);
 
-		for (sint32 x = 0;x < 3;x++) {
+		sint32 x;
+		for (x = 0;x < 3;x++) {
 			if (x==0 && (y==0 || y==6)) continue;
 			if ( !m_scale )
 				CalculateWrap(m_surface, pos.y, i+x, x*96+nudge,y*24);
@@ -655,7 +657,8 @@ sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint3
 		}
 		maputils_MapX2TileX(pos.x,pos.y,&i);
 
-		for (sint32 x = 0;x < 3;x++) {
+		sint32 x;
+		for (x = 0;x < 3;x++) {
 			if (x==0 && (y==0 || y==6)) continue;
 			if ( !m_scale )
 				DrawImprovements(pSurface, pos.y, i+x, x*96+nudge+xOff,y*24+yOff);
@@ -1131,15 +1134,15 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 
 	if (x >= 0 && y >= 0 && x < surface->Width() && y < surface->Height()) {
 
-		width = textutils_GetWidth((aui_DirectSurface *)surface,name);
-		height = textutils_GetHeight((aui_DirectSurface *)surface,name);
+		width = textutils_GetWidth(surface,name);
+		height = textutils_GetHeight(surface,name);
 		rect.left = x;
 		rect.top = y;
 		rect.right = x+width;
 		rect.bottom = y+height;;
 
 		textutils_ColoredDropString(
-			(aui_DirectSurface *)surface,
+			surface,
 			name,
 			x,
 			y,
@@ -1156,8 +1159,8 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 	sprintf(str,"%i",pop);
 	y+=yoffset;
 
-	width = textutils_GetWidth((aui_DirectSurface *)surface,str);
-	height = textutils_GetHeight((aui_DirectSurface *)surface,str);
+	width = textutils_GetWidth(surface,str);
+	height = textutils_GetHeight(surface,str);
 
 	sint32	popEdgeSize = (sint32)((double)k_POP_BOX_SIZE);
 	sint32 nudge = 0;
@@ -1175,7 +1178,7 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 	primitives_FrameRect16(surface,&popRect,0x0000);
 
 	textutils_CenteredColoredDropString(
-		(aui_DirectSurface *)surface,
+		surface,
 		str,
 		&popRect,
 		k_POP_PTSIZE,

@@ -31,7 +31,6 @@ enum GOODACTION {
 };
 
 class aui_Surface;
-class aui_DirectSurface;
 
 class Sprite;
 

@@ -709,8 +709,8 @@ void UnitControlPanel::UpdateOrderButtons()
 	m_lastSelectedArmy = army;
 	m_lastSelectedArmyCount = army.IsValid() ? army.Num() : 0;
 
-	
-	for(sint32 orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
+	sint32 orderIndex;	
+	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
 		
 		m_orderButton[orderIndex]->ExchangeImage(4, 0, NULL);
 		m_orderButton[orderIndex]->ShouldDraw();
@@ -961,7 +961,7 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 {
 	
 	Unit unit;
-	unit.m_id = reinterpret_cast<uint32>(cookie);
+	unit.m_id = *reinterpret_cast<uint32 *>(cookie);
 
 	
 	AUI_ERRCODE errorCode =

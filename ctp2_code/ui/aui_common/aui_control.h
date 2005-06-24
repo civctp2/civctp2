@@ -112,19 +112,19 @@ public:
 
 protected:
 	aui_Control() 
-    :   aui_Region          (), 
-        aui_ImageBase       (), 
-        aui_TextBase        (),
+    :   aui_ImageBase       (),
+	aui_TextBase        (),
+	aui_Region          (),
 	aui_SoundBase       (),
+	m_stringTable       (NULL),
+        m_allocatedTip      (false),
 		m_statusText        (NULL),
 		m_numberOfLayers    (0), 
-        m_imagesPerLayer    (0),
+	m_imagesPerLayer    (0),
 		m_imageLayerList    (NULL),
 		m_layerRenderFlags  (NULL),
-		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
-        m_stringTable       (NULL),
-        m_allocatedTip      (false)
-    { ; };
+		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
+    {  }
 
 	AUI_ERRCODE InitCommonLdl(
 		MBCHAR *ldlBlock,

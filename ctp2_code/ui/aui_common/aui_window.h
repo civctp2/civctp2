@@ -39,7 +39,7 @@
 #include "aui_mouse.h"
 #include "pointerlist.h"
 
-//class aui_UI;
+class aui_UI;
 class aui_Mouse;
 class aui_Control;
 class aui_Surface;
@@ -212,8 +212,6 @@ public:
 protected:
 	virtual AUI_ERRCODE CreateSurface( void );
 
-
-
 	void MakeSureSurfaceIsValid( void );
 	void DeleteSurfaceIfDynamic( void );
 
@@ -264,6 +262,8 @@ protected:
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);	
 #endif
+
+	friend class aui_UI;
 };
 
 

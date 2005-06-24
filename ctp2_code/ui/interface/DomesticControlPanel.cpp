@@ -33,7 +33,7 @@
 #include "DomesticControlPanel.h"
 
 
-#include <strstream>
+#include <sstream>
 
 
 #include "AdvanceRecord.h"
@@ -181,10 +181,10 @@ m_scienceValue(static_cast<ctp2_Static*>(
 m_pollutionValue(static_cast<ctp2_Static*>(
 				   aui_Ldl::GetObject(ldlBlock,
 				   "DomesticTab.TabPanel.PollutionValue"))),
-m_menuPublicWorksValue(static_cast<ctp2_Static*>(
-	                   aui_Ldl::GetObject("MainMenu.PWStatic"))),
 m_menuGoldValue(static_cast<ctp2_Static*>(
 	            aui_Ldl::GetObject("MainMenu.GoldStatic"))),
+m_menuPublicWorksValue(static_cast<ctp2_Static*>(
+	                   aui_Ldl::GetObject("MainMenu.PWStatic"))),
 m_menuHappinessValue(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject("MainMenu.HappinessBar"))),
 m_menuPollutionValue(static_cast<ctp2_Static*>(

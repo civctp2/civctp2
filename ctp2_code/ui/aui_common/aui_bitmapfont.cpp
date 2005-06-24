@@ -42,7 +42,7 @@ TT_Engine aui_BitmapFont::m_ttEngine = { NULL };
 
 aui_BitmapFont::aui_BitmapFont(
 	AUI_ERRCODE *retval,
-	MBCHAR *descriptor )
+	const MBCHAR *descriptor )
 	:
 	aui_Base()
 {
@@ -89,7 +89,7 @@ void aui_BitmapFont::DescriptorToAttributes(
 
 
 
-AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR *descriptor )
+AUI_ERRCODE aui_BitmapFont::InitCommon( const MBCHAR *descriptor )
 {
 	AUI_ERRCODE errcode = SetFilename( descriptor );
 	Assert( AUI_SUCCESS(errcode) );
@@ -196,7 +196,7 @@ aui_BitmapFont::~aui_BitmapFont()
 
 
 
-AUI_ERRCODE aui_BitmapFont::SetFilename( MBCHAR *descriptor )
+AUI_ERRCODE aui_BitmapFont::SetFilename( const MBCHAR *descriptor )
 {
 	memset( m_descriptor, '\0', sizeof( m_descriptor ) );
 
@@ -290,7 +290,7 @@ AUI_ERRCODE aui_BitmapFont::Unload( void )
 
 
 
-AUI_ERRCODE aui_BitmapFont::SetTTFFile( MBCHAR *ttffile )
+AUI_ERRCODE aui_BitmapFont::SetTTFFile( const MBCHAR *ttffile )
 {
 	
 	Assert( !IsLoaded() );

@@ -21,7 +21,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Memory leaks repaired in LoadText by Martin Gühmann.
+// - Memory leaks repaired in LoadText by MartinGühmann.
 //
 //----------------------------------------------------------------------------
 
@@ -256,6 +256,7 @@ GreatLibraryWindow::~GreatLibraryWindow()
 
 AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 {
+#ifdef WIN32
 	if ( !m_techMovie ) return AUI_ERRCODE_OK;
 
 	if ( m_techMovie->Open() ) {
@@ -268,7 +269,7 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 			m_techMovie = NULL;
 		}
 	}
-
+#endif
 	return AUI_ERRCODE_OK;
 }
 
@@ -375,8 +376,8 @@ sint32 GreatLibraryWindow::LoadVariablesText ( SlicObject &so )
 
 sint32 GreatLibraryWindow::LoadTechMovie ( void )
 {
+#ifdef WIN32
 	MBCHAR fullPath[256];
-
 	
 	if (!m_techMovie) return 0;
 	if (!strcmp(m_movie_file,"null")) return 0;
@@ -396,7 +397,9 @@ sint32 GreatLibraryWindow::LoadTechMovie ( void )
 
 
 	return 1;
-
+#else
+	return 0;
+#endif
 }
 
 sint32 GreatLibraryWindow::LoadTechStill( void )
@@ -422,7 +425,9 @@ sint32 GreatLibraryWindow::LoadTechStill( void )
 
 void GreatLibraryWindow::PlayTechMovie ( void )
 {
+#ifdef WIN32
 	m_techMovie->PlayAll();
+#endif
 }
 
 sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )

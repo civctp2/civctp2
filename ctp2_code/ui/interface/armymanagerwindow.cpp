@@ -24,7 +24,7 @@
 #include "ctp2_Static.h"
 #include "ctp2_button.h"
 #include "player.h"
-#include "aicause.h"
+#include "AICause.h"
 
 #include "pointerlist.h"
 
@@ -829,7 +829,8 @@ void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data,
 
 	bool enableRemoveButton=true;
 	bool enableRemoveAllButton=false;
-	for(int i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	int i;
+	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
 		MBCHAR switchName[k_MAX_NAME_LEN];
 		sprintf(switchName, "InArmyBox.Unit%d", i);		
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
@@ -864,7 +865,8 @@ void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 da
 	bool enableAddAllButton=false;
 	ctp2_ListBox *armyList = (ctp2_ListBox *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList");
 	ctp2_ListItem *item = (ctp2_ListItem *)armyList->GetSelectedItem();
-	for(int i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	int i;
+	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
 		MBCHAR switchName[k_MAX_NAME_LEN];
 		sprintf(switchName, "OutOfArmyBox.Unit%d", i);		
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);

@@ -39,7 +39,7 @@
 #include "ctp2_dropdown.h"	
 #include "aui_stringtable.h"
 
-#include "agerecord.h"
+#include "AgeRecord.h"
 #include "StrDB.h"
 
 #include "spnewgamewindow.h"

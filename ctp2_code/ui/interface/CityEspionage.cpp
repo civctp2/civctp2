@@ -43,12 +43,12 @@
 #include "BuildingRecord.h"
 #include "UnitData.h"
 #include "citywindow.h"
-#include "wonderrecord.h"
+#include "WonderRecord.h"
 #include "cellunitlist.h"
 #include "World.h"
 #include "Cell.h"
-#include "unitrecord.h"
-#include "iconrecord.h"
+#include "UnitRecord.h"
+#include "IconRecord.h"
 
 static CityEspionage *s_CityEspionage;
 static MBCHAR *s_CityEspionageBlock = "CityEspionage";

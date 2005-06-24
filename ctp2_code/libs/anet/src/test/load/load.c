@@ -545,7 +545,7 @@ processMessage(dp_t* myDP, data_t* res)
 	dpid_t idFrom;
 	dpid_t idTo;
 	char buf[dpio_MAXLEN_UNRELIABLE];
-	unsigned int size = dpio_MAXLEN_UNRELIABLE;
+	size_t size = dpio_MAXLEN_UNRELIABLE;
 	dp_result_t err;
 
 	DPRINTE(("load.processMessage: Entry\n"));
@@ -608,7 +608,7 @@ waitForHost(
 	dpid_t idFrom;
 	dpid_t idTo;
 	char buf[dpio_MAXLEN_UNRELIABLE];
-	unsigned int size = dpio_MAXLEN_UNRELIABLE;
+	size_t size = dpio_MAXLEN_UNRELIABLE;
 	dp_result_t err;
 	clock_t endClock;
 

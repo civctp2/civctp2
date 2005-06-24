@@ -35,7 +35,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -143,6 +143,7 @@ public:
 
 	
 	void StupidPlaySound(const sint32 &soundID);
+	void PlaySound(const MBCHAR *fullFilename, const bool &bNoWait);
 
 	void ReleaseSoundDriver();
 	void ReacquireSoundDriver();

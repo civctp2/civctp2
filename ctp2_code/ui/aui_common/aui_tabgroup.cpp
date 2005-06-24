@@ -156,7 +156,8 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 	sint32 maxPaneWidth = 0;
 	sint32 maxPaneHeight = 0;
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = numTabs; i; i-- )
+	sint32 i;
+	for ( i = numTabs; i; i-- )
 	{
 		aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 		if ( tab->GetPane()->Width() > maxPaneWidth )

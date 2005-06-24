@@ -1,7 +1,6 @@
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __NS_CIVLISTBOX__
 #define __NS_CIVLISTBOX__
 

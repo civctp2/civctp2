@@ -621,9 +621,10 @@ BOOL LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
 
 		m_tabGroup->ShouldDraw(TRUE);
 
-		
+
+		sint32 i;		
 		sint32 numCivs = 0;
-		for (sint32 i=1; i<k_MAX_PLAYERS; i++) {
+		for (i=1; i<k_MAX_PLAYERS; i++) {
 			
 			MBCHAR			s[_MAX_PATH];
 			PLAYER_INDEX	currentCiv = g_selected_item->GetVisiblePlayer();
@@ -705,7 +706,7 @@ void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 	if (infowin_UpdateGraph(myGraph, xCount, yCount, &graphData)) return;
 
 	
-	aui_DirectSurface	*surf = myGraph->GetGraphSurface();
+	aui_Surface	*surf = myGraph->GetGraphSurface();
 
 	if (info->powerGraphWidth > 0 && 
 		info->powerGraphHeight > 0 && 
@@ -763,7 +764,7 @@ void LoadSaveWindow::GetRadarMap(SaveInfo *info)
 	if (!radarMap) return;
 
 	
-	aui_DirectSurface	*surf = (aui_DirectSurface *)radarMap->GetMapSurface();
+	aui_Surface	*surf = (aui_Surface *)radarMap->GetMapSurface();
 
 	radarMap->RenderMap(surf);	
 

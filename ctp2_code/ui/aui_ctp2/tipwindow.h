@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TIPWINDOW_H__
 #define __TIPWINDOW_H__
 

@@ -1,7 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __C3_RANGER_H__
 #define __C3_RANGER_H__
 

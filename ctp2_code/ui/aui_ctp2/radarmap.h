@@ -31,7 +31,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -86,7 +86,7 @@ public:
 	
 	
 	void		ClearMapOverlay(void);
-	void		SetMapOverlayCell(MapPoint &pos, COLOR color);
+	void		SetMapOverlayCell(const MapPoint &pos, COLOR color);
 
 	
 	void		CalculateMetrics(void);

@@ -1358,7 +1358,7 @@ void TiledMap::TryMegaTiles(MapPoint &pos, BOOL regenTilenum)
 }
 
 
-void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
+void TiledMap::PostProcessTile(const MapPoint &pos, TileInfo *theTileInfo,
 							   BOOL regenTilenum)
 {
 	uint8			index;
@@ -5300,7 +5300,7 @@ void TiledMap::RedrawTile(
 
 
 
-void TiledMap::BlackTile(aui_Surface *surface, MapPoint *point)
+void TiledMap::BlackTile(aui_Surface *surface, const MapPoint *point)
 {
 	if (!TileIsVisible(point->x, point->y)) return;
 
@@ -6707,7 +6707,7 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 
 
 void 
-TiledMap::DrawTransitionTileClipped(aui_Surface *surface, MapPoint &pos, sint32 xpos, sint32 ypos)
+TiledMap::DrawTransitionTileClipped(aui_Surface *surface, const MapPoint &pos, sint32 xpos, sint32 ypos)
 {
 	Pixel16		*dataPtr;
 	sint32		x, y;

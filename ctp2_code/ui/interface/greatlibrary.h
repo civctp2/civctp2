@@ -87,7 +87,9 @@ enum LIB_STRING {
 
 class Chart;
 class ctp2_HyperTextBox;
+#ifdef WIN32
 class DirectVideo;
+#endif
 class ctp2_Static;
 class aui_StringTable;
 class ctp2_Button;
@@ -183,7 +185,9 @@ protected:
 	ctp2_HyperTextBox	*m_techRequirementsText;
 	ctp2_HyperTextBox	*m_techVariablesText;
 
+#ifdef WIN32
 	DirectVideo		*m_techMovie;
+#endif
 	ctp2_Static		*m_techStillShot;
 
 	aui_StringTable	*m_string;

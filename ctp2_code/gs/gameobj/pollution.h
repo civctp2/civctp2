@@ -35,8 +35,7 @@
 //
 //----------------------------------------------------------------------------
 
-
-#if defined(_MSC_VER)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 

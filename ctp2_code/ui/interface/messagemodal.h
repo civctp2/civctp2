@@ -30,10 +30,9 @@
 //----------------------------------------------------------------------------
 
 
-#if defined(_MSC_VER)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
 
 #ifndef __MESSAGEMODAL_H__
 #define __MESSAGEMODAL_H__

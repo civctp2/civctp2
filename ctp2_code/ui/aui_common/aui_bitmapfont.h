@@ -51,7 +51,7 @@ public:
 	
 	aui_BitmapFont(
 		AUI_ERRCODE *retval,
-		MBCHAR *descriptor = NULL );
+		const MBCHAR *descriptor = NULL );
 	virtual ~aui_BitmapFont();
 
 	
@@ -70,7 +70,7 @@ public:
 
 protected:
 	aui_BitmapFont() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR *descriptor );
+	AUI_ERRCODE InitCommon( const MBCHAR *descriptor );
 
 public:
 	AUI_ERRCODE Load( void );
@@ -83,11 +83,11 @@ public:
 
 	
 	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_descriptor; }
-	AUI_ERRCODE	SetFilename( MBCHAR *descriptor );
+	AUI_ERRCODE	SetFilename( const MBCHAR *descriptor );
 
 	
 	MBCHAR		*GetTTFFile( void ) const { return (MBCHAR *)m_ttffile; }
-	AUI_ERRCODE	SetTTFFile( MBCHAR *ttffile );
+	AUI_ERRCODE	SetTTFFile( const MBCHAR *ttffile );
 	sint32		GetPointSize( void ) const { return m_pointSize; }
 	AUI_ERRCODE	SetPointSize( sint32 pointSize );
 	sint32		GetBold( void ) const { return m_bold; }

@@ -284,8 +284,11 @@ DATA_TYPE Text_Hasher<DATA_TYPE>::Look_Up_Data
 	while (translation != NULL)
 	{
 		
-		
+#ifdef WIN32
 		if (!_tcsncmp(key, translation->m_key, MAX_KEY_CHARS))
+#else
+		if (!strncmp(key, translation->m_key, MAX_KEY_CHARS))
+#endif
 		{
 			
 			return translation->m_data;

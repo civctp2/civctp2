@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __SPNEWGAMEMAPSIZESCREEN_H__
 #define __SPNEWGAMEMAPSIZESCREEN_H__

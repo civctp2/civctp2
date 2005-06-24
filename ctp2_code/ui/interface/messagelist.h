@@ -1,12 +1,6 @@
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MESSAGELIST_H__
 #define __MESSAGELIST_H__
 

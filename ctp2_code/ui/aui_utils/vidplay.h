@@ -43,6 +43,7 @@
 // Library imports
 //----------------------------------------------------------------------------
 
+#ifdef __AUI_USE_DIRECTX__
 #include <string>           // std::basic_string
 
 //----------------------------------------------------------------------------
@@ -180,5 +181,7 @@ private:  // private helper methods for the class' own use
 private:  // internal state info
     IDDrawExclModeVideo *m_pDDXM ;       // IDDrawExclModeVideo interface
 } ;
+
+#endif // __AUI_USE_DIRECTX__
 
 #endif

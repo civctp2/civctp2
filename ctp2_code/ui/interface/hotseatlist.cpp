@@ -615,7 +615,8 @@ BOOL		s_playerCivsLocked;
 
 void hotseatlist_ClearOptions(void)
 {
-	for(sint32 i=0; i<k_MAX_PLAYERS; i++) {
+	sint32 i;
+	for(i=0; i<k_MAX_PLAYERS; i++) {
 		s_hotseatCivList[i] = (CIV_INDEX)0;
 	}
 

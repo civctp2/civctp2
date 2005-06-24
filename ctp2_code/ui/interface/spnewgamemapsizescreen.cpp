@@ -47,7 +47,7 @@
 
 #include "keypress.h"
 
-#include "globals.h"
+#include "Globals.h"
 
 extern C3UI			*g_c3ui;
 extern ProfileDB	*g_theProfileDB;

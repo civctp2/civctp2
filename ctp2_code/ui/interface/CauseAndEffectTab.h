@@ -27,7 +27,9 @@
 //   option. Including a callback function. - April 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_CAUSE_AND_EFFECT_TAB_HEADER
 #define ___BMH_CAUSE_AND_EFFECT_TAB_HEADER
 

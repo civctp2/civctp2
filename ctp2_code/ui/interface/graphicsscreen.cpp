@@ -320,7 +320,9 @@ void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, 
 
 	graphicsscreen_removeMyWindow(action);
 }
+#ifdef WIN32
 static
+#endif
 void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	

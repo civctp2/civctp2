@@ -11,7 +11,7 @@
 #define k_BATTLEVIEW_DEFAULT_DEFENDER_FACING		5
 
 class BattleViewActor;
-class aui_DirectSurface;
+class aui_Surface;
 class aui_Control;
 class c3_Button;
 class c3_Static;
@@ -81,7 +81,7 @@ public:
 	void DrawExplosions(void);
 	void DrawAttackers(void);
 	void DrawDefenders(void);
-	aui_DirectSurface		*GetBattleSurface(void) { return m_battleSurface; }
+	aui_Surface		*GetBattleSurface(void) { return m_battleSurface; }
 	void RemoveDeadActorsFromEvents(BattleEvent *deathEvent);
 
 private:
@@ -92,7 +92,7 @@ private:
 	Battle		*m_battle;
 
 	RECT						m_battleViewRect;
-	aui_DirectSurface			*m_battleSurface;
+	aui_Surface			*m_battleSurface;
 	aui_Image					*m_backgroundImage;
 	aui_Image                   *m_cityImage;
 	sint32						m_numAttackers;

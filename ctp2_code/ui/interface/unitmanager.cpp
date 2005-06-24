@@ -930,7 +930,7 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 	ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 	if(!item) return;
 
-	Unit u(reinterpret_cast<uint32>(item->GetUserData()));
+	Unit u(*reinterpret_cast<uint32 *>(item->GetUserData()));
 	Assert(u.IsValid());
 
 	if (u.IsValid())

@@ -29,7 +29,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -52,9 +52,9 @@ public:
 				MBCHAR *ldlBlock,
 				ControlActionCallback *ActionFunc = NULL,
 				void *cookie = NULL) :
-	aui_Button(retval, id, ldlBlock, ActionFunc, cookie),
 		aui_ImageBase(ldlBlock),
-		aui_TextBase(ldlBlock, NULL)
+		aui_TextBase(ldlBlock, NULL),
+		aui_Button(retval, id, ldlBlock, ActionFunc, cookie)
 	{ *retval = InitCommonLdl(ldlBlock, NULL, 0, 0, 0, 0); }
 
 	
@@ -68,9 +68,9 @@ public:
 				sint32 height,
 				ControlActionCallback *ActionFunc = NULL,
 				void *cookie = NULL) :
-	aui_Button(retval, id, ldlBlock, ActionFunc, cookie),
 		aui_ImageBase(ldlBlock),
-		aui_TextBase(ldlBlock, NULL)
+		aui_TextBase(ldlBlock, NULL),
+		aui_Button(retval, id, ldlBlock, ActionFunc, cookie)
 	{ *retval = InitCommonLdl(ldlBlock, ldlTemplate,
 		x, y, width, height); }
 

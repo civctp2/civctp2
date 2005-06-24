@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __LINEDANCE_H__
 #define __LINEDANCE_H__
 

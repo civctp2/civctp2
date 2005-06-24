@@ -2,6 +2,8 @@
 # $Id$
 #
 
+include $(ctp2_code)/os/autoconf/Makefile.common
+
 noinst_LTLIBRARIES = libgsnewdb.la
 # This hack shortens include path list,
 # but prohibits using a separate build dir
@@ -59,6 +61,8 @@ libgsnewdb_la_SOURCES = \
 	DBLexer.cpp \
 	DBLexer.cpp
 
+libgsnewdb_la_LDFLAGS = -static
+
 newdb_CDBTYPES = \
 	AdvanceBranchRecord \
 	AdvanceListRecord \
@@ -108,7 +112,7 @@ newdb_CDBSTAMPFILES = \
 # Rules for generated sources
 
 lex.dbl.c: $(ctp2_code)/gs/newdb/DBLexer.l
-	$(LEXCOMPILE) -i -Pdbl -olex.dbl.c $<
+	$(LEX) -i -Pdbl -olex.dbl.c $<
 
 CTPDB=$(top_builddir)/ctp2_code/gs/dbgen/ctpdb$(EXEEXT)
 

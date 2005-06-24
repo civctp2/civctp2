@@ -2,16 +2,10 @@
 //ranking.h
 
 //Pollution power graph added by Martin Gühmann on November the 2nd
-
-
-
-
-
-
-
  
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __RankingTab_H__
 #define __RankingTab_H__
 

@@ -107,6 +107,9 @@ typedef struct hwnd_t* HWND;
 #define MAX_PATH PATH_MAX
 #define MB_OK 0
 #define MB_ICONEXCLAMATION 0
+#define SND_ASYNC 0x0001
+#define SND_FILENAME 0x00020000L
+#define SND_NOWAIT   0x00002000L
 
 /* Makros */
 #define _ASSERTE(x) assert(x)

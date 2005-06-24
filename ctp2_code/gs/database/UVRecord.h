@@ -1,18 +1,9 @@
 #if 0
 
 
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UV_RECORD_H__
 #define __UV_RECORD_H__
 

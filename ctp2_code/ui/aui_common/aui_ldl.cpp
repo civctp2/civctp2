@@ -91,7 +91,7 @@ static cmp_t CompareByString(aui_LdlObject *obj1, aui_LdlObject *obj2)
 
 aui_Ldl::aui_Ldl(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlFilename )
+	const MBCHAR *ldlFilename )
 	:
 	aui_Base()
 {
@@ -102,7 +102,7 @@ aui_Ldl::aui_Ldl(
 
 
 
-AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR *ldlFilename )
+AUI_ERRCODE aui_Ldl::InitCommon( const MBCHAR *ldlFilename )
 {
 	if ( !m_objectListByObject && !m_objectListByString)
 	{

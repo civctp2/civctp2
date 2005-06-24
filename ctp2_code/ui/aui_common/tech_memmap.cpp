@@ -65,7 +65,7 @@ unsigned char *tech_MemMap::GetFileBits(
 	}
 
 	if ( fread( bits, 1, filesize, f ) != filesize ) {
-		delete[filesize] bits;
+		delete[] bits;
 		fclose(f);
 		return NULL;
 	}

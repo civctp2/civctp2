@@ -22,7 +22,7 @@ void BlockPush(MBCHAR *path, MBCHAR *addition)
 	Assert(addition[0] != '.') ;
 	Assert(addition[strlen(addition)] != '.') ;
 
-	if (path[0]!=NULL)												
+	if (path[0]!= '\0')												
 		strcat(path, ".") ;											
 
 	strcat(path, addition) ;										
@@ -40,10 +40,10 @@ void BlockPop(MBCHAR *path)
 	p = strrchr(path, '.') ;										
 	
 	Assert(p!=NULL) ;
-	if (p==NULL)													
+	if (p==NULL)		
 		return ;													
 
-	*p = NULL ;														
+	*p = '\0';														
 	}
 
 void ui_TruncateString( aui_Control *control, MBCHAR *str )

@@ -27,7 +27,7 @@
 //   number of goods in than in the database. - May 28th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef _RESOURCES_H_

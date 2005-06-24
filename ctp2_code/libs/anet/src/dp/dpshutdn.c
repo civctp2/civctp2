@@ -71,7 +71,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 		} else if (dp->players) {
 			int i;
 			void *buf;
-			int len;
+			size_t len;
 			char subkey[dp_KEY_MAXLEN];
 			int subkeylen;
 			dpid_t id;
@@ -108,12 +108,12 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 		/* Finish closing session */
 		if (dpReadyToFreeze(dp) != dp_RES_BUSY) {
 			DPRINT(("dpShutdown: session closed.\n"));
+			dp->quitState++;
 		} else if (timeout && ((long)(dp->now - dp->quitDeadline) > 0)) {
 			DPRINT(("dpShutdown: session close timed out.\n"));
-		} else
-			break;
+			dp->quitState++;
+		}
 
-		dp->quitState++;
 		break;
 
 	case 5:

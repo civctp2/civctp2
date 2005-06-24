@@ -1,7 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __AGESSCREEN_H__
 #define __AGESSCREEN_H__
 

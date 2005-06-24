@@ -7,9 +7,8 @@
 
 class aui_Surface;
 
-enum COLOR;
-enum MAPICON;
-
+#include "colorset.h"
+#include "tileset.h"
 
 class c3_Icon : public c3_Static {
 public:

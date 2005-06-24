@@ -24,7 +24,7 @@
 //
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __C3UI_H__

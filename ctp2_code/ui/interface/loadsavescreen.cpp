@@ -67,9 +67,14 @@
 #include "spnewgametribescreen.h"
 #include "spnewgameplayersscreen.h"
 
-#include "io.h"
-#include "direct.h"
-
+#ifdef WIN32
+#include <io.h>
+#include <direct.h>
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#endif
 
 #include "civscenarios.h"
 extern CivScenarios			*g_civScenarios;
@@ -367,7 +372,8 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 		
 		
 		BOOL noCivsInList = TRUE;
-		for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
+		sint32 i;
+		for (i=0; i<k_MAX_PLAYERS; i++) {
 			if (s_tempSaveInfo->playerCivIndexList[i] > 0) {
 				noCivsInList = FALSE;
 				break;
@@ -552,7 +558,8 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 						
 						
 						BOOL noCivsInList = TRUE;
-						for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
+						sint32 i;
+						for (i=0; i<k_MAX_PLAYERS; i++) {
 							if (s_tempSaveInfo->playerCivIndexList[i] > 0) {
 								noCivsInList = FALSE;
 								break;
@@ -965,9 +972,9 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 	
 	nf_GameSetup gs;
 
-	
+	sint32 i = 0;
 	sint32 j = 0;
-	for ( sint32 i = 0; i < k_MAX_PLAYERS; i++ )
+	for ( i = 0; i < k_MAX_PLAYERS; i++ )
 	{
 		if ( g_player[ i ] )
 		{
@@ -1377,9 +1384,13 @@ void loadsavescreen_delete( void )
 	{
 		MBCHAR		path[_MAX_PATH];
 
-		sprintf(path, "%s\\%s", gameInfo->path, saveInfo->fileName);
+		sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 
+#ifdef WIN32
 		if ( DeleteFile( path ) )
+#else
+		if (!unlink(path))
+#endif
 		{
 			// FIXME ? Do we want to worry about deleting .gw files?
 
@@ -1409,6 +1420,7 @@ void loadsavescreen_delete( void )
 	}
 	else
 	{
+#ifdef WIN32
 		MBCHAR		path[_MAX_PATH];
 		int fileHandle;
 
@@ -1431,6 +1443,7 @@ void loadsavescreen_delete( void )
 		assert(!retval);
 		g_loadsaveWindow->FillListTwo(NULL);
 		g_loadsaveWindow->SetType(g_loadsaveWindow->GetType());
+#endif
 	}
 }
 

@@ -1,11 +1,6 @@
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_ZOOM_PAD_HEADER
 #define ___BMH_ZOOM_PAD_HEADER
 

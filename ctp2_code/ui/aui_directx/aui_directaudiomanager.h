@@ -123,6 +123,6 @@ protected:
 };
 
 
-#endif 
+#endif // __AUI_USE_DIRECTX__
 
 #endif 

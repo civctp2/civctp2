@@ -30,7 +30,10 @@
 
 
 #include "aui_base.h"
-
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_thread.h>
+#endif
 
 enum AUI_SURFACE_PIXELFORMAT
 {
@@ -109,7 +112,11 @@ public:
 	virtual AUI_ERRCODE GetDC( HDC *hdc );
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
 
+#ifdef USE_SDL
+	SDL_mutex *LPCS( void ) const { return m_cs; };
+#else
 	LPCRITICAL_SECTION LPCS( void ) const { return &m_cs; };
+#endif
 	
 	virtual BOOL IsOK( void ) const { return m_saveBuffer != NULL; }
 
@@ -120,8 +127,11 @@ public:
 
 protected:
 	static sint32 m_surfaceRefCount;
+#ifdef USE_SDL
+	static SDL_mutex *m_cs;
+#else
 	static	CRITICAL_SECTION	m_cs;
-	
+#endif
 	AUI_ERRCODE ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SURFACE_LOCKOP op );
 
 	sint32	m_width;		

@@ -1,15 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _BMH_CREDITS_SCREEN_H_
 #define _BMH_CREDITS_SCREEN_H_
 

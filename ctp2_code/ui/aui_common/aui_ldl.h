@@ -94,12 +94,12 @@ public:
 	
 	aui_Ldl(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlFilename );
+		const MBCHAR *ldlFilename );
 	virtual ~aui_Ldl();
 
 protected:
 	aui_Ldl() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR *ldlFilename );
+	AUI_ERRCODE InitCommon( const MBCHAR *ldlFilename );
 
 public:
 	

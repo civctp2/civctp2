@@ -262,7 +262,7 @@ void dptabt1_build_tables(dptabt1_t *ptest)
 	int dummy;
 	int *pdummy;
 	size_t len;
-	size_t subkeylen;
+	int subkeylen;
 	char bigdata[BIGDATALEN];
 	char *pbigdata;
 	int i;

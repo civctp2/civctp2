@@ -70,8 +70,7 @@ aui_SDLUI::aui_SDLUI
 )
 :   aui_UI              (),
     aui_DirectX         (),
-    m_lpdds             (NULL),
-    m_isCoinitialized   (false)
+    m_X11Display        (0)
 {
 	
 	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
@@ -93,6 +92,18 @@ aui_SDLUI::aui_SDLUI
 	*retval = CreateDirectScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
+
+#if defined(HAVE_X11)
+	char *dispname = getenv("DISPLAY");
+	if (dispname) {
+		m_X11Display = XOpenDisplay(dispname);
+	} else {
+		m_X11Display = XOpenDisplay(":0.0");
+	}
+	if (!m_X11Display) {
+		*retval = AUI_ERRCODE_NOUI;
+	}
+#endif
 }
 
 
@@ -103,14 +114,6 @@ AUI_ERRCODE aui_SDLUI::InitCommon()
 	m_savedMouseAnimLastIndex = 0;
 	m_savedMouseAnimCurIndex = 0;
 
-#ifdef __AUI_USE_DIRECTMEDIA__
-	if (!m_isCoinitialized)
-    {
-    	HRESULT const   hr  = CoInitialize(NULL);
-        m_isCoinitialized   = (S_OK == hr) || (S_FALSE == hr);
-    }
-#endif 
-
 	return AUI_ERRCODE_OK;
 }
 
@@ -118,13 +121,13 @@ AUI_ERRCODE aui_SDLUI::InitCommon()
 
 AUI_ERRCODE aui_SDLUI::DestroyDirectScreen(void)
 {
-    if (m_primary)
-    {
-    	((aui_DirectSurface *)m_primary)->DDS()->Release();
+	if (m_primary)
+	{
+		((aui_SDLSurface *)m_primary)->DDS()->Release();
 		delete m_primary;
-	    m_primary   = NULL;
-        m_lpdds     = NULL;
-    }
+		m_primary   = NULL;
+		m_lpdds     = NULL;
+	}
 
 	return AUI_ERRCODE_OK;
 }
@@ -213,27 +216,22 @@ AUI_ERRCODE aui_SDLUI::CreateDirectScreen( BOOL useExclusiveMode )
 	return AUI_ERRCODE_OK;
 }
 
-
-
+#ifdef HAVE_X11
+Display *
+aui_SDLUI::getDisplay()
+{
+	return m_X11Display;
+}
+#endif
 
 aui_SDLUI::~aui_SDLUI( void )
 {
-	if (m_lpdds)
-	{
-		m_lpdds->Release();
+#ifdef HAVE_X11
+	if (m_X11Display) {
+		XCloseDisplay(m_X11Display);
+		m_X11Display = 0;
 	}
-
-    if (m_lpdd)
-    {
-	    m_lpdd->RestoreDisplayMode();
-    }
-
-#ifdef __AUI_USE_DIRECTMEDIA__
-	if (m_isCoinitialized)
-    {
-	    CoUninitialize();
-    }
-#endif 
+#endif
 }
 
 

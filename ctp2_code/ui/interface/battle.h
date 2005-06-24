@@ -12,7 +12,7 @@ public:
 	Battle();
 	~Battle();
 
-	void Initialize(const Army &attackers, const CellUnitList &defenders);
+	void Initialize(const Army &attackers, CellUnitList &defenders);
 
 	
 	

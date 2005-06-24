@@ -1378,7 +1378,7 @@ static int updateRoom(
 		return 1;
 	}
 	for (i = 0; i < dptab_tableSize(mysessions); i++) {
-		int sesslen;
+		size_t sesslen;
 		char *sessbuf;
 		dptab_get_byindex(mysessions, i, (void**)&sessbuf, &sesslen, subkey, &subkeylen);
 		dp_unpack_session(dp, subkey, subkeylen, sessbuf, sesslen, &sess[i]);
@@ -1486,7 +1486,7 @@ static int updateServerTable(dp_t *dp, const char *fname)
 
 	/*For server table entry, delete those that no longer exist*/
 	for (i = dptab_tableSize(servers) - 1; i >= 0; i--) {
-		int hlen, j;
+		size_t hlen, j;
 		char *hbuf;
 		if (dptab_get_byindex(servers, i, (void**)&hbuf, &hlen, subkey, &subkeylen) != dp_RES_OK)
 			continue;
@@ -1568,7 +1568,7 @@ static int updateAppTable(
 		unsigned short type;
 		unsigned short plat;
 		unsigned char lang;
-		int vlen, j;
+		size_t vlen, j;
 		dp_version_t *vbuf;
 		if (dptab_get_byindex(apps, i, (void**)&vbuf, &vlen, subkey, &subkeylen) != dp_RES_OK)
 			continue;

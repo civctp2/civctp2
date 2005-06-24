@@ -253,13 +253,14 @@ void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 d
 
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s\\%s", gameMapInfo->path, saveMapInfo->fileName);
+	sprintf(path, "%s%s%s", gameMapInfo->path, FILE_SEP, saveMapInfo->fileName);
 
-	if ( DeleteFile( path ) )
+#ifdef WIN32
+	if (DeleteFile( path ) )
+#else
+	if (!unlink(path))
+#endif
 	{
-		
-
-		
 		sint32 one = g_loadSaveMapWindow->GetListOne()->GetSelectedItemIndex();
 		sint32 two = g_loadSaveMapWindow->GetListTwo()->GetSelectedItemIndex();
 
@@ -269,14 +270,6 @@ void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 d
 
 		if ( two && two == g_loadSaveMapWindow->GetListTwo()->NumItems() ) --two;
 		g_loadSaveMapWindow->GetListTwo()->SelectItem( two );
-
-
-
-
-
-
-
-
 	}
 	else
 	{

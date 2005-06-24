@@ -46,7 +46,7 @@
 
 aui_Image::aui_Image(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	const MBCHAR *filename )
 	:
 	aui_Base()
 {
@@ -65,7 +65,7 @@ aui_Image::aui_Image(
 
 
 
-AUI_ERRCODE aui_Image::InitCommon( MBCHAR *filename )
+AUI_ERRCODE aui_Image::InitCommon( const MBCHAR *filename )
 {
 	m_surface = NULL,
 	m_format = NULL;
@@ -86,7 +86,7 @@ aui_Image::~aui_Image()
 
 
 
-AUI_ERRCODE aui_Image::SetFilename( MBCHAR *filename )
+AUI_ERRCODE aui_Image::SetFilename( const MBCHAR *filename )
 {
 	
 	Unload();	// deletes and NULLs m_format and m_surface

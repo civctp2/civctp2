@@ -28,53 +28,16 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
+#ifndef __UI__INTERFACE__PROGRESSWINDOW_H__
+#define __UI__INTERFACE__PROGRESSWINDOW_H__ 1
 
 #include "c3_popupwindow.h"
 #include "aui_progressbar.h"
 #include "tech_wllist.h"
-
-
-
-
-
-
-
-
-
-
-
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class ProgressWindow : public c3_PopupWindow
 {
@@ -134,3 +97,6 @@ public:
 protected:
 	virtual AUI_ERRCODE CalculateIntervals( double *start, double *stop );
 };
+
+#endif
+
