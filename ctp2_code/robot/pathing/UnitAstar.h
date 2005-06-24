@@ -25,7 +25,10 @@
 // - Added methods to check room for army and danger along path
 //----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
+
 #ifndef __UNIT_ASTAR__
 #define __UNIT_ASTAR__ 1
 
@@ -151,8 +154,8 @@ public:
                            float &total_cost, BOOL no_bad_path, 
                            const sint32 cutoff, sint32 &nodes_opened);
 
-    sint32 FindPath(Army &army, MapPoint &start,
-		  const PLAYER_INDEX owner, MapPoint &dest, Path &new_path, 
+    sint32 FindPath(Army &army, MapPoint const & start,
+		  const PLAYER_INDEX owner, MapPoint const & dest, Path &new_path, 
           sint32 &is_broken_path, Path &bad_path,  
          float &total_cost);
 

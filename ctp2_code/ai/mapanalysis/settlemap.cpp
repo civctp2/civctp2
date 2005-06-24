@@ -48,39 +48,15 @@ SettleMap::SettleMap()
 
 double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 {
-	RadiusIterator it(pos, k_minimum_settle_city_size, k_minimum_settle_city_size * k_minimum_settle_city_size);
-	
-	
-	
-	
-	
-	
 	sint32 score = 0;
+	RadiusIterator it(pos, k_minimum_settle_city_size);
 
-	
-	for(it.Start(); !it.End(); it.Next()) 
-		{
-			const Cell * cell = g_theWorld->GetCell(it.Pos());
-			
-			
-			
+	for (it.Start(); !it.End(); it.Next()) 
+	{
+		const Cell * cell = g_theWorld->GetCell(it.Pos());
+		score += cell->GetScore();
+	}
 
-			
-			
-			
-			
-			score += cell->GetScore();
-		}
-
-	
-	
-	
-	
-	
-	
-	
-
-	
 	return score;
 }
 
@@ -160,33 +136,25 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 	radius += radius + 1;
 	
 	
-	RadiusIterator it(pos, 0);
-	it.Init(pos, radius, radius*radius);
-
-	
-	for(it.Start(); !it.End(); it.Next()) 
-		{
-			pos = it.Pos();
-			m_invalidCells.Set(pos.x, pos.y, TRUE);
-		}
+	RadiusIterator it(pos, radius);
+	for (it.Start(); !it.End(); it.Next()) 
+	{
+		pos = it.Pos();
+		m_invalidCells.Set(pos.x, pos.y, TRUE);
+	}
 
 	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 	sint32 min_settle_distance = 0;
 	strategy.GetMinSettleDistance(min_settle_distance);
 
-	it.Init(pos, min_settle_distance, min_settle_distance*min_settle_distance);
-	
-	sint32 new_value;
-	for(it.Start(); !it.End(); it.Next()) 
-		{
-			
-			pos = it.Pos();
-			
-			new_value = ComputeSettleValue(pos) * 0.5;
-			m_settleValues.SetGridValue(pos, new_value);
-		}
-
+	RadiusIterator settleIt(pos, min_settle_distance);
+	for (settleIt.Start(); !settleIt.End(); settleIt.Next()) 
+	{
+		pos = settleIt.Pos();
+		sint32 const new_value = ComputeSettleValue(pos) * 0.5;
+		m_settleValues.SetGridValue(pos, new_value);
+	}
 	
 	MapAnalysis::GetMapAnalysis().UpdateBoundingRectangle(city);
 }

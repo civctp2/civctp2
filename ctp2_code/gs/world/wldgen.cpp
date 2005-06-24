@@ -30,29 +30,30 @@
 // - Repaired memory leaks.
 // - Force a good value recalculation on reload if the ressouce database was
 //   modified (goods added removed). - May 19th 2005 Martin Gühmann
+// - Wrap handling improved
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "c3.h"                     // pre-compiled
+#include "World.h"                  // own declarations, g_theWorld
+
 #include "c3errors.h"
 #include "Globals.h"
 
 #include "TerrainRecord.h"
 
-#include "XY_Coordinates.h"
 #include "A_Star_Heuristic_Cost.h"
-#include "World.h"
 #include "Cell.h"
 
 #include "civarchive.h"
-#include "ConstDB.h"
-#include "player.h"
-#include "RandGen.h"
-#include "tiledmap.h"
+#include "ConstDB.h"                // g_theConstDB
+#include "player.h"                 // g_player
+#include "RandGen.h"                // g_rand
+#include "tiledmap.h"               // g_tiledMap
 #include "TileInfo.h"
 #include "GoodyHuts.h"
 
-#include "profileDB.h"
+#include "profileDB.h"              // g_theProfileDB
 #include "dynarr.h"
 #include "network.h"
 #include "MapDB.h"
@@ -63,7 +64,6 @@
 #include "StartingPosition.h"
 
 #include "MoveFlags.h"
-#include "CityInfluenceIterator.h"
 
 
 #include "ResourceRecord.h"
@@ -86,12 +86,6 @@
 #include "IC3RobotAstar.h"
 #include "IMapGen.h"
 
-extern	Player	**g_player ;
-extern	ConstDB	*g_theConstDB ;
-extern  RandomGenerator *g_rand; 
-extern  World *g_theWorld; 
-extern	TiledMap *g_tiledMap ;
-extern  ProfileDB *g_theProfileDB;
 
 
 
@@ -1781,30 +1775,26 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
 	sint32 cont;
 	BOOL is_land;
 	GetContinent(pos, cont, is_land);
-	if (!is_land) {
-		cum_score = 0.0; 
-	} else if(m_land_size->Access(cont) < s_actualMinContinentStartSize) {
-		cum_score = 0.0;
-	} else { 
-		MapPoint start, pos;
-		start.Set(x, y); 
-		cum_score = 0.0; 
-
-		
-		sint32 oldYwrap = m_isYwrap;
-		m_isYwrap = TRUE;
-		for (start.FirstRectItt(d, pos, i); start.EndRectItt(d, i); start.NextRectItt(d, pos, i)) { 
-			if(i == 0 || i == 4 || i == 20 || i == 24)
-				continue; 
+    cum_score   = 0.0;
+	if (is_land &&
+        (m_land_size->Access(cont) >= s_actualMinContinentStartSize) 
+       ) 
+    {
+		MapPoint        start   (x, y);
+        RadiusIterator  it      (start, d);
+        
+		for (it.Start(); !it.End(); it.Next())
+        { 
+            MapPoint &  pos     = it.Pos();
 			Cell *cell = m_map[pos.x][pos.y];
-			if(numCounted[cell->m_terrain_type] < maxToCount ||
-			   IsRiver(pos) || IsGood(pos)) {
-			   
+			if ((numCounted[cell->m_terrain_type] < maxToCount) ||
+			    IsRiver(pos) || IsGood(pos)
+               ) 
+            {
 				cum_score += raw_score[pos.x][pos.y]; 
 				numCounted[cell->m_terrain_type]++;
 			}
 		}
-		m_isYwrap = oldYwrap;
 	} 
 	m_map[x][y]->m_color = sint32(cum_score);
 }
@@ -1902,27 +1892,25 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 	return !searching; 
 } 
 
+// Not a clue what this - apparenly unused - function is supposed to do.
+// Just replaced the flawed iterator with a working one.
 void World::FlattenCumScore(sint32 d, float **cum_score,
     const sint32 maxx, const sint32 maxy)
 
 {
-    sint32 i;     
-    MapPoint start, pos;
-    start.Set(maxx, maxy);
+    MapPoint    start(maxx, maxy);
    
     float s; 
-    float r = 2.0f * float(d) + 1.0f; 
+    float r = 2.0f * float(d) + 1.0f;   // unused?
 
-	
-	
-	sint32 oldYwrap = m_isYwrap;
-	m_isYwrap = TRUE;
-    for (start.FirstRectItt(d, pos, i); start.EndRectItt(d, i); start.NextRectItt(d, pos, i)) {		
-		  sint32 dist = start.NormalizedDistance(pos);		  
-		  s = float(d - dist) / (float(d) +1.0f); 		  
-		  cum_score[pos.x][pos.y] = -50000.0f; 
+	SquareIterator  it  (start, d);
+    for (it.Start(); !it.End(); it.Next())
+    {		
+        MapPoint &  pos = it.Pos();
+		sint32 dist = start.NormalizedDistance(pos);		  
+		s = float(d - dist) / (float(d) +1.0f);   // unused?
+		cum_score[pos.x][pos.y] = -50000.0f; 
     }
-	m_isYwrap = oldYwrap;
 
     cum_score[start.x][start.y] = -60000.0f;
 }
@@ -3549,7 +3537,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 
 	if(rec->GetMovementTypeLand() || rec->GetMovementTypeMountain()) {
 		
-		RadiusIterator it(pos, 1, 2);
+		RadiusIterator it(pos, 1);
 		for(it.Start(); !it.End(); it.Next()) {
 			if(it.Pos() == pos) continue;
 
@@ -3565,7 +3553,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 		}
 	} else if(rec->GetMovementTypeShallowWater()) {
 		
-		RadiusIterator it(pos, 1, 2);
+		RadiusIterator it(pos, 1);
 		bool nextToLand = false;
 		for(it.Start(); !it.End(); it.Next()) {
 			if(it.Pos() == pos) continue;
@@ -3616,7 +3604,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 			terr = TERRAIN_WATER_SHALLOW;
 		}
 	} else if(rec->GetMovementTypeSea()) {
-		RadiusIterator it(pos, 1, 2);
+		RadiusIterator it(pos, 1);
 		bool nextToLand = false;
 		bool nextToShallow = false;
 		bool nextToBeach = false;
@@ -3734,7 +3722,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 
 		
 		
-		RadiusIterator it(pos, 1, 2);
+		RadiusIterator it(pos, 1);
 		for(it.Start(); !it.End(); it.Next()) {
 			Cell *cell = GetCell(it.Pos());
 			if(cell) {
