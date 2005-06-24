@@ -1,3 +1,26 @@
+################################################################################
+#
+#  Project      : Call To Power 2
+#  File type    : LDL layout description 
+#  Description  : Single player new game screen.
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Uranus world shape added.
+# 
+################################################################################
+
 template INIT_PLAY_BUTTON:CTP2_STANDARD_FONT {
 	bool	shadowfont	true
 	string	imagebltflag	"chromakey"
@@ -1026,9 +1049,9 @@ SPWorldTypeStringTable {
 SPWorldShapeStringTable {
 	int 		numstrings		4
 	string 	string0		"str_tbl_ldl_East_West_Wrap_Only"
-	string	string2		"str_tbl_ldl_North_South_and_East_West"
+	string	string1		"str_tbl_ldl_North_South_and_East_West"
+	string	string2		"str_tbl_ldl_No_Wrap"
 	string 	string3		"str_tbl_ldl_North_South_Wrap_Only"
-	string	string4		"str_tbl_ldl_No_Wrap"
 }
 SPDifficultyStringTable {
 	int 		numstrings		5
@@ -1132,8 +1155,8 @@ SPNewGameStrings {
 	string	string11	"str_tbl_ldl_Custom"
 	string	string12	"str_tbl_ldl_Earth_World"
 	string	string13	"str_tbl_ldl_Doughnut_World"
-	string	string14	"str_tbl_ldl_Uranus_World"
-	string	string15	"str_tbl_ldl_Flat_World"
+	string	string14	"str_tbl_ldl_Flat_World"
+	string	string15	"str_tbl_ldl_Uranus_World"
 	string	string16	"str_tbl_ldl_Default"
 	string	string17	"str_tbl_ldl_Custom"
 #	string	string18				# environment
