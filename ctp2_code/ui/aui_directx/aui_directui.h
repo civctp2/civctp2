@@ -69,8 +69,8 @@ public:
 	
 	virtual AUI_ERRCODE AltTabOut( void );
 	virtual AUI_ERRCODE AltTabIn( void );
-	AUI_ERRCODE CreateDirectScreen( BOOL useExclusiveMode );
-	AUI_ERRCODE DestroyDirectScreen(void);
+	AUI_ERRCODE CreateScreen( BOOL useExclusiveMode );
+	AUI_ERRCODE DestroyScreen(void);
 	AUI_ERRCODE TearDownMouse(void);
 	AUI_ERRCODE RestoreMouse(void);
 
@@ -82,6 +82,7 @@ protected:
     bool                m_isCoinitialized;
 };
 
+typedef aui_DirectUI aui_NativeUI;
 
 #endif 
 

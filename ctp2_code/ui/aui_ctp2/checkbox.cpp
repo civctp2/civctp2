@@ -90,7 +90,7 @@ AUI_ERRCODE Checkbox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	
 	if ( m_text )
 		primitives_DropText(
-			(aui_DirectSurface *)surface,
+			surface,
 			buttonRect.right + 10,
 			buttonRect.top + 5,
 			m_text,

@@ -22,6 +22,7 @@ public:
 protected:
 };
 
+typedef aui_SDLBlitter aui_NativeBlitter;
 
 #endif 
 

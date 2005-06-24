@@ -6,14 +6,14 @@
 #include "aui_sdljoystick.h"
 
 aui_SDLJoystick::aui_SDLJoystick(AUI_ERRCODE *retval,
-                                 uint32 lMin = -1000,
-                                 uint32 lMax = 1000)
+                                 uint32 lMin,
+                                 uint32 lMax)
 {
 	m_lMin = lMin;
 	m_lMax = lMax;
 }
 
-aui_SDLJoystick::~aui_SDLJoystick
+aui_SDLJoystick::~aui_SDLJoystick()
 {
 }
 

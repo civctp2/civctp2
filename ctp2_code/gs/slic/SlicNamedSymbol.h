@@ -77,12 +77,12 @@ class SlicBuiltinNamedSymbol : public SlicNamedSymbol
 	SLIC_BUILTIN m_builtin;
 public:
 	SlicBuiltinNamedSymbol(SLIC_BUILTIN which, const char *name, SlicArray *array) :
-		m_builtin(which),
-		SlicNamedSymbol(name, array)
+		SlicNamedSymbol(name, array),
+		m_builtin(which)
 	{}
 	SlicBuiltinNamedSymbol(SLIC_BUILTIN which, const char *name, SlicStructDescription *structDesc) :
-		m_builtin(which),
-		SlicNamedSymbol(name, structDesc)
+		SlicNamedSymbol(name, structDesc),
+		m_builtin(which)
 	{}
 	SlicBuiltinNamedSymbol() {}
 

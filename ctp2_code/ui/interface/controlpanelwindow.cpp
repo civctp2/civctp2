@@ -4102,10 +4102,8 @@ ControlPanelWindow::ToggleTerraforming()
 	TileImpPanelRedisplay();
 }
 
-
-
 void	
-ControlPanelWindow::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit)
+ControlPanelWindow::SetStack(const Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit)
 {
 
 }

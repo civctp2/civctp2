@@ -1358,7 +1358,7 @@ void TiledMap::TryMegaTiles(MapPoint &pos, BOOL regenTilenum)
 }
 
 
-void TiledMap::PostProcessTile(const MapPoint &pos, TileInfo *theTileInfo,
+void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 							   BOOL regenTilenum)
 {
 	uint8			index;
@@ -5950,8 +5950,10 @@ void TiledMap::HandleCheat(MapPoint &pos)
 
 	if(needPostProcess) {
 		RadiusIterator it(pos, 1);
+		MapPoint mpos;
 		for(it.Start(); !it.End(); it.Next()) {
-			PostProcessTile(it.Pos(), GetTileInfo(it.Pos()));
+			mpos = it.Pos();
+			PostProcessTile(mpos, GetTileInfo(mpos));
 			RedrawTile(&it.Pos());
 		}
 		return;
@@ -6707,7 +6709,7 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 
 
 void 
-TiledMap::DrawTransitionTileClipped(aui_Surface *surface, const MapPoint &pos, sint32 xpos, sint32 ypos)
+TiledMap::DrawTransitionTileClipped(aui_Surface *surface, MapPoint &pos, sint32 xpos, sint32 ypos)
 {
 	Pixel16		*dataPtr;
 	sint32		x, y;

@@ -93,7 +93,9 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 #endif
-
+#ifdef HAVE_X11
+#include <X11/Xlib.h>
+#endif
 
 #include "radarmap.h"
 #include "statswindow.h"
@@ -441,27 +443,45 @@ int ui_Initialize(void)
 	}
 	strcat(s, "\\fonts");
 	g_c3ui->AddBitmapFontSearchPath(s);
-#elif defined(LINUX)
-	const int maxPaths = 3;
-	const char* fontPaths[maxPaths] = {
-		"/usr/share/fonts",
-		"/usr/X11R6/lib/X11/fonts",
-		"/usr/lib/X11/fonts"
-	};
-	const int maxDirs = 3;
-	const char* fontDirs[maxDirs] = {
-		"TTF",
-		"corefonts",
-		"truetype"
-	};
-	for (int pIdx = 0; pIdx < maxPaths; pIdx++) {
-		for (int dIdx = 0; dIdx < maxPaths; dIdx++) {
-			struct stat st = { 0 };
-			snprintf(s, sizeof(s), "%s/%s",
-			         fontPaths[pIdx], fontDirs[dIdx]);
-			int rc = stat(s, &st);
+#elif defined(HAVE_X11)
+	Display *display = g_c3ui->getDisplay();
+	int ndirs;
+	bool noPath = true;
+	char **fontpaths = XGetFontPath(display, &ndirs);
+	if (fontpaths) {
+		struct stat st = { 0 };
+		for (int i = 0; i < ndirs; i++) {
+			int rc = stat(fontpaths[i], &st);
 			if ((rc == 0) && (S_ISDIR(st.st_mode))) {
-				g_c3ui->AddBitmapFontSearchPath(s);
+				g_c3ui->AddBitmapFontSearchPath(fontpaths[i]);
+				noPath = false;
+			}
+		}
+		XFreeFontPath(fontpaths);
+	}
+	// Fontpath just contains server(s)?
+	if (noPath) {
+		const int maxPaths = 3;
+		const char* fontPaths[maxPaths] = {
+			"/usr/share/fonts",
+			"/usr/X11R6/lib/X11/fonts",
+			"/usr/lib/X11/fonts"
+		};
+		const int maxDirs = 3;
+		const char* fontDirs[maxDirs] = {
+			"TTF",
+			"corefonts",
+			"truetype"
+		};
+		for (int pIdx = 0; pIdx < maxPaths; pIdx++) {
+			for (int dIdx = 0; dIdx < maxPaths; dIdx++) {
+				struct stat st = { 0 };
+				snprintf(s, sizeof(s), "%s/%s",
+			         	fontPaths[pIdx], fontDirs[dIdx]);
+				int rc = stat(s, &st);
+				if ((rc == 0) && (S_ISDIR(st.st_mode))) {
+					g_c3ui->AddBitmapFontSearchPath(s);
+				}
 			}
 		}
 	}
@@ -562,10 +582,6 @@ void ui_HandleMouseWheel(sint16 delta)
 			g_tiledMap->InvalidateMap();
 			g_tiledMap->ValidateMix();
 		}
-
-
-
-
 }
 
 
@@ -2209,7 +2225,7 @@ void DoFinalCleanup(int exitCode)
 
     if (g_c3ui)
     {
-		g_c3ui->DestroyDirectScreen();
+		g_c3ui->DestroyScreen();
     }
 
 #ifdef WIN32

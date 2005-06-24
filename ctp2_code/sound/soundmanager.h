@@ -149,10 +149,13 @@ public:
 	void ReacquireSoundDriver();
 
 #if defined(USE_SDL)
-    void SDL_ChannelCompleteCB(int channel);
+        void SDL_ChannelCompleteCB(int channel);
 #endif
 
+        struct Data;
 private:
+	Data *m_pData;
+	
 	PointerList<CivSound>	*m_sfxSounds;
 	PointerList<CivSound>	*m_voiceSounds;
 

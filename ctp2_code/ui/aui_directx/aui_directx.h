@@ -55,7 +55,7 @@ private:
 	static sint32			m_directXRefCount;
 };
 
-
+typedef aui_DirectX aui_Native;
 
 
 #ifndef DDLOCK_NOSYSLOCK

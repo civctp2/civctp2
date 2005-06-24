@@ -23,6 +23,7 @@ public:
 #if 0
 	void SetDevice( LPDIRECTINPUTDEVICE device ) { m_lpdid = device;};
 	LPDIRECTINPUTDEVICE Device( void ) { return m_lpdid;};
+#endif
 
 	void SetDeviceName( MBCHAR *name ) { strcpy( m_deviceName, name ); };
 	MBCHAR *DeviceName( void ) { return m_deviceName; };
@@ -32,21 +33,23 @@ public:
 
 protected:
 	aui_DirectJoystick() {}
+#if 0
 	AUI_ERRCODE CreateDirectJoystick( void );
+#endif
 
-public:
-	
-	virtual AUI_ERRCODE Acquire( void ) { return aui_DirectInput::Acquire(); }
-	virtual AUI_ERRCODE Unacquire( void ) { return aui_DirectInput::Unacquire(); }
+public:	
+	virtual AUI_ERRCODE Acquire( void ) { return aui_SDLInput::Acquire(); }
+	virtual AUI_ERRCODE Unacquire( void ) { return aui_SDLInput::Unacquire(); }
 
-	
+#if 0
 	virtual AUI_ERRCODE GetInput( void );
 #endif
 protected:
 #if 0
 	LPDIRECTINPUTDEVICE2 	m_lpDI2Joystick;
-	MBCHAR	m_deviceName[40];
 #endif
+	MBCHAR	m_deviceName[40];
+
 	uint32	m_lMax;
 	uint32	m_lMin;
 

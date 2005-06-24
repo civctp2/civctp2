@@ -38,7 +38,7 @@ class SegmentList : public KeyboardHandler
 {
 public:
 	SegmentList(SegmentListCallback *callback = NULL, MBCHAR *ldlBlock = NULL);
-	~SegmentList();
+	virtual ~SegmentList();
 
 	c3_PopupWindow *m_window;
 	c3_ListBox     *m_list;

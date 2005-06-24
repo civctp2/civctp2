@@ -25,7 +25,7 @@
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
-#include "order.h"
+#include "Order.h"
 
 #include "controlpanelwindow.h"
 

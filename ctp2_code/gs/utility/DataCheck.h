@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DATACHECK_H__
 #define __DATACHECK_H__
 

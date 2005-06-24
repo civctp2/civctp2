@@ -431,6 +431,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 
 	if (dataPtr)
 	{
+		MBCHAR text[40] = { 0 };
 		switch (netShellObject->type(i))
 		{
 		case ns_Accessor<T>::STRING:
@@ -455,8 +456,8 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 
 		case ns_Accessor<T>::INT:
 			item->SetTextBold(netShellObject->IsMine());
-			return item->SetText
-				(itoa(* reinterpret_cast<sint32 const *>(dataPtr), scratch, 10));
+			sprintf(text, "%d", *reinterpret_cast<sint32 const *>(dataPtr));
+			return item->SetText(text);
 
 		case ns_Accessor<T>::ICON:
 			return item->SetIcon(* reinterpret_cast<MBCHAR * *>(dataPtr));

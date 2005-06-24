@@ -41,6 +41,7 @@ protected:
 	DDBLTFX m_ddbfx;
 };
 
+typedef aui_DirectBlitter aui_NativeBlitter;
 
 #endif 
 

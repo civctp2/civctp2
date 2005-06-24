@@ -1,8 +1,9 @@
-//----------------------------------------------------------------------------
+/// \file aui_Factory.h
+/// \brief Factory for native aui_* Instance creation
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Factory for native aui_* Instance creation
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -38,7 +39,9 @@ public:
 	                                const sint32 &width, const sint32 &height,
 	                                const sint32 &bpp,
 	                                void *data = 0,
-					const BOOL &isPrimary = FALSE
+					const BOOL &isPrimary = FALSE,
+					const BOOL &useVideoMemory = FALSE,
+					const BOOL &takeOwnership = FALSE
 	                               );
 };
 

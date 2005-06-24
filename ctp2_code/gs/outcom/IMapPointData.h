@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MAP_POINT_DATA_H__
 #define __MAP_POINT_DATA_H__ 1
 
@@ -32,5 +33,5 @@ struct TileUtility {
 };
 
 
-#endif __MAP_POINT_DATA_H__ 
+#endif // __MAP_POINT_DATA_H__ 
 

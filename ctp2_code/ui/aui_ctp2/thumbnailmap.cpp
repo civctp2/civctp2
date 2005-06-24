@@ -28,7 +28,7 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_directsurface.h"
+#include "aui_Factory.h"
 #include "aui_blitter.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
@@ -158,7 +158,7 @@ void ThumbnailMap::InitCommon(void)
 	m_cityFilterProc = NULL;
 
 	
-	m_mapSurface = new aui_DirectSurface(&errcode, m_width, m_height, 16, g_c3ui->DD());
+	m_mapSurface = aui_Factory::new_Surface(errcode, m_width, m_height, 16);
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
 	
@@ -285,7 +285,7 @@ AUI_ERRCODE	ThumbnailMap::Resize( sint32 width, sint32 height )
 		delete m_mapSurface;
 
 	
-	m_mapSurface = new aui_DirectSurface(&errcode, width, height, 16, g_c3ui->DD());
+	m_mapSurface = aui_Factory::new_Surface(errcode, width, height, 16);
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
 	CalculateMetrics();

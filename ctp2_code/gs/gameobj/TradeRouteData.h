@@ -177,7 +177,7 @@ public:
 	BOOL IsPosInSelectedPath(const MapPoint &pos);
 	BOOL IsPosInPath(const MapPoint &pos);
 	void UpdateSelectedCellData(TradeRoute &route);
-	void ClearSelectedCellData(TradeRoute &route);
+	void ClearSelectedCellData(const TradeRoute &route);
 	sint32 GetPathSelectionState() const { return m_path_selection_state; }
 	void SetPathSelectionState(sint32 state) { m_path_selection_state = state; }
 

@@ -39,12 +39,6 @@ aui_SDLSurface::aui_SDLSurface(
 
 	if ( !(m_lpdds = lpdds) )
 	{
-		if ( !lpdd )
-		{
-			*retval = AUI_ERRCODE_INVALIDDIMENSION;
-			return;
-		}
-
 		SDL_PixelFormat* fmt = SDL_GetVideoSurface()->format;
 		m_lpdds = SDL_CreateRGBSurface(0, width, height, fmt->BitsPerPixel,
 					   fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
@@ -115,10 +109,10 @@ uint32 aui_SDLSurface::SetChromaKey( uint32 color )
 
 
 
-/*BOOL aui_SDLSurface::IsOK( void ) const
+BOOL aui_SDLSurface::IsOK( void ) const
 {
-	return m_lpdds->IsLost() == DD_OK && m_saveBuffer != NULL;
-}*/
+	return TRUE;
+}
 
 
 

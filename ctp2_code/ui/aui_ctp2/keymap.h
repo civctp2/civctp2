@@ -174,7 +174,7 @@ class KEYMAP {
 	KEYPRESS_MAP key2func[MAX_KEYPRESS_MAP]; 
    
 
-   uint32 hash_32to16(unsigned long val);
+   uint32 hash_32to16(uint32 val);
 
 public:
 	KEYMAP(BOOL useDefault);

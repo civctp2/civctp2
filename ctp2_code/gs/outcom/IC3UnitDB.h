@@ -1,6 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __IC3UnitDB_H__
 #define __IC3UnitDB_H__ 1
 

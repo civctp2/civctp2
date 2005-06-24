@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __REGARD_EVENT_H__
 #define __REGARD_EVENT_H__
 
@@ -21,4 +10,5 @@ public:
 	static void AddCallbacks();
 };
 
-#endif __REGARD_EVENT_H__
+#endif // __REGARD_EVENT_H__
+

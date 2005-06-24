@@ -22,6 +22,8 @@
 
 #include "c3errors.h"
 
+#ifdef __AUI_USE_DIRECTX__
+
 #include "aui_directui.h"
 #include "aui_window.h"
 #include "aui_directsurface.h"
@@ -367,3 +369,4 @@ void DirectVideo::Resume(void)
 	}
 }
 
+#endif // __AUI_USE_DIRECTX__

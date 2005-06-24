@@ -129,7 +129,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 
 				g_director->AddMove(uid, pnt, m_unitData->m_pos, numRevealed, revealedActors, 
-										NULL, NULL, FALSE, uid.GetMoveSoundID()); 
+										0, NULL, FALSE, uid.GetMoveSoundID()); 
 			}
 		} 
 #if 0
@@ -433,7 +433,7 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 
 	g_director->AddMove(u, oldPos, ud->m_pos, numRevealed, revealedActors, 
-							NULL, NULL, FALSE, u.GetMoveSoundID()); 
+							0, NULL, FALSE, u.GetMoveSoundID()); 
 }
 
 void NetUnitHP::Packetize(uint8 *buf, uint16 &size)

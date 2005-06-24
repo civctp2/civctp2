@@ -30,7 +30,8 @@
 #include "c3.h"
 #include "aui.h"
 #include "aui_ldl.h"
-#include "aui_directsurface.h"
+#include "aui_surface.h"
+#include "aui_Factory.h"
 #include "aui_window.h"
 
 #include "c3ui.h"
@@ -158,7 +159,7 @@ void LineGraph::InitCommon(void)
 	m_enablePrecision = TRUE;
 
 	
-	m_surface = new aui_DirectSurface(&errcode, m_width, m_height, 16, g_c3ui->DD());
+	m_surface = aui_Factory::new_Surface(errcode, m_width, m_height, 16);
 	Assert( AUI_NEWOK(m_surface, errcode) );
 
 	SetRect(&m_surfaceRect, 0, 0, m_width, m_height);
@@ -188,7 +189,7 @@ AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	UpdateGraph((aui_DirectSurface *)surface, rect.left, rect.top);
+	UpdateGraph(surface, rect.left, rect.top);
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );
@@ -197,7 +198,7 @@ AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 }
 
 
-void LineGraph::UpdateGraph(aui_DirectSurface *surface, sint32 x, sint32 y)
+void LineGraph::UpdateGraph(aui_Surface *surface, sint32 x, sint32 y)
 {
 	RECT		rect = {0, 0, m_width, m_height};
 

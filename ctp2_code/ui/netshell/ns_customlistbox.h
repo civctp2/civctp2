@@ -162,7 +162,8 @@ public:
 			
 			sint32 first = -1;
 			sint32 j = 0;
-			for(iterator i=begin(); i!=end(); i++, j++) {
+			iterator i = begin();
+			for(; i!=end(); i++, j++) {
 				if ( FindItem( *i ) == GetSelectedItem() )
 				{
 					(*i)->SetKey(&(Keys::key));

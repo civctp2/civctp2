@@ -67,10 +67,10 @@ private:
     int addPath_ZFS(char *path);
     int addPath_ZMS(char *path);
 
-    void *getData_DOS(PFEntry *entry, long *size, C3DIR dir = C3DIR_DIRECT);
-    void *getData_ZFS(PFEntry *entry, long *size);
-    void *getData_ZMS(PFEntry *entry, long *size);
-    void *getData_ZMS(PFEntry *entry, long *size, 
+    void *getData_DOS(PFEntry *entry, uint32 *size, C3DIR dir = C3DIR_DIRECT);
+    void *getData_ZFS(PFEntry *entry, uint32 *size);
+    void *getData_ZMS(PFEntry *entry, uint32 *size);
+    void *getData_ZMS(PFEntry *entry, uint32 *size, 
                       HANDLE *hFileMap, long *offset);
 
     char m_error_string[256];
@@ -83,11 +83,11 @@ public:
     int addPath(char *path, int use_filemapping = 0);
 
     
-    void *getData(char *rname, long *size, C3DIR dir = C3DIR_DIRECT);
+    void *getData(char *rname, uint32 *size, C3DIR dir = C3DIR_DIRECT);
 
     
     
-    void *getData(char *rname, long *size, HANDLE *hFileMap, long *offset);
+    void *getData(char *rname, uint32 *size, HANDLE *hFileMap, long *offset);
 
     
     void freeData(void *);

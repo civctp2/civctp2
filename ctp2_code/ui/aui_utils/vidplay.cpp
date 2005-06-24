@@ -36,13 +36,13 @@
 
 #include "c3.h"
 
+#ifdef __AUI_USE_DIRECTX__
+
 #define STRSAFE_NO_DEPRECATE
 
 #include "streams.h"
-
 #include "mpconfig.h"
 #include "vidplay.h"
-
 
 //
 // CBaseVideoPlayer constructor
@@ -1153,3 +1153,4 @@ HRESULT CFilePlayer::SetOverlayCallback(IDDrawExclModeVideoCallback *pCallback)
 }
 
 
+#endif // __AUI_USE_DIRECTX__

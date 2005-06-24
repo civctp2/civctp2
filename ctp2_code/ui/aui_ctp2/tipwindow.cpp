@@ -15,7 +15,7 @@
 
 #include "aui.h"
 #include "c3ui.h"
-#include "aui_directsurface.h"
+#include "aui_Factory.h"
 #include "pattern.h"
 
 #include "primitives.h"
@@ -58,7 +58,7 @@ AUI_ERRCODE TipWindow::FitWindowToText( void )
 {
 	if ( m_text && m_surface)
 	{
-		RECT rect = textutils_GetBounds( (aui_DirectSurface *)m_surface, m_text );
+		RECT rect = textutils_GetBounds( m_surface, m_text );
 		rect.right += 10;
 		rect.bottom += 10;
 
@@ -92,7 +92,7 @@ AUI_ERRCODE TipWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if ( m_text )
 	{
 		
-		textutils_CenteredDropString((aui_DirectSurface *)surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
+		textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
 	}
 
 	m_dirtyList->AddRect( &rect );

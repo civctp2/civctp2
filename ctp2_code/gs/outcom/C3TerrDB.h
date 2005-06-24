@@ -1,16 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __C3TerrDB_H__
 #define __C3TerrDB_H__ 1
 

@@ -1194,7 +1194,7 @@ if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 
 
-void TiledMap::DrawDitheredTileScaled(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color)
+void TiledMap::DrawDitheredTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color)
 {
 	sint32		startX, endX;
 	uint8		*pSurfBase;
@@ -1339,7 +1339,7 @@ Exit:
 
 
 
-sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, MapPoint &pos,sint32 xpos, sint32 ypos, Pixel16 color, sint32 blend)
+sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint32 xpos, sint32 ypos, Pixel16 color, sint32 blend)
 {
 
 	Pixel16		*dataPtr;
@@ -1512,7 +1512,7 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 
 
-void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color,sint32 blend)
+void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color,sint32 blend)
 {
 	uint16		len;
 	Pixel16		*dataPtr;
@@ -2776,7 +2776,7 @@ if (y > surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 
 
-void TiledMap::DrawTileBorderScaled(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color)
+void TiledMap::DrawTileBorderScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color)
 {
 	sint32		startX, endX;
 	uint8		*pSurfBase;
@@ -2884,7 +2884,7 @@ if (y >= surface->Height() - destHeight) return;
 	}
 }
 
-void TiledMap::DrawBlackScaledLow(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight)
+void TiledMap::DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight)
 {
 	Pixel16		*dataPtr;
 	sint32		startX, endX;
@@ -4040,7 +4040,7 @@ void TiledMap::SlowDrawText(aui_Surface *surface, char *buf, sint32 color, sint3
 
 }
 
-void TiledMap::DrawTransitionTile(aui_Surface *surface, MapPoint &pos, sint32 xpos, sint32 ypos)
+void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sint32 xpos, sint32 ypos)
 {
 
 	Pixel16		*dataPtr;
@@ -4232,7 +4232,7 @@ L1:
 
 }
 
-void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight)
+void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight)
 {
 
 	Pixel16		*dataPtr;

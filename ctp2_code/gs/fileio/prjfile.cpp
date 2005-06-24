@@ -217,7 +217,7 @@ int ProjectFile::exists(char *rname)
     return(findRecord(rname) != NULL);
 }
 
-void *ProjectFile::getData_DOS(PFEntry *entry, long *size, C3DIR dir)
+void *ProjectFile::getData_DOS(PFEntry *entry, uint32 *size, C3DIR dir)
 {
     FILE *fp;
     char *data;
@@ -260,7 +260,7 @@ void *ProjectFile::getData_DOS(PFEntry *entry, long *size, C3DIR dir)
     return(data);
 }
 
-void *ProjectFile::getData_ZFS(PFEntry *entry, long *size)
+void *ProjectFile::getData_ZFS(PFEntry *entry, uint32 *size)
 {
     FILE *fp = m_paths[entry->path].zfs_fp;
     char *data;
@@ -288,7 +288,7 @@ void *ProjectFile::getData_ZFS(PFEntry *entry, long *size)
     return(data);
 }
 
-void *ProjectFile::getData_ZMS(PFEntry *entry, long *size)
+void *ProjectFile::getData_ZMS(PFEntry *entry, uint32 *size)
 {
     char *data;
 
@@ -298,7 +298,7 @@ void *ProjectFile::getData_ZMS(PFEntry *entry, long *size)
     return(data);
 }
 
-void *ProjectFile::getData_ZMS(PFEntry *entry, long *size,
+void *ProjectFile::getData_ZMS(PFEntry *entry, uint32 *size,
                                HANDLE *hFileMap, long *offset)
 {
     char *data;
@@ -313,7 +313,7 @@ void *ProjectFile::getData_ZMS(PFEntry *entry, long *size,
     return(data);
 }
 
-void *ProjectFile::getData(char *rname, long *size, C3DIR dir)
+void *ProjectFile::getData(char *rname, uint32 *size, C3DIR dir)
 {
     PFEntry *entry = findRecord(rname);
 
@@ -327,12 +327,13 @@ void *ProjectFile::getData(char *rname, long *size, C3DIR dir)
       case PRJFILE_PATH_DOS: return(getData_DOS(entry, size, dir));
       case PRJFILE_PATH_ZFS: return(getData_ZFS(entry, size));
       case PRJFILE_PATH_ZMS: return(getData_ZMS(entry, size));
+      case PRJFILE_PATH_NULL: return NULL;
     }
 
     return(NULL);
 }
 
-void *ProjectFile::getData(char *rname, long *size, 
+void *ProjectFile::getData(char *rname, uint32 *size, 
                            HANDLE *hFileMap, long *offset)
 {
     PFEntry *entry = findRecord(rname);

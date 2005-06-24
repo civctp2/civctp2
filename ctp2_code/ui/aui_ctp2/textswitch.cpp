@@ -14,7 +14,7 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_surface.h"
+#include "aui_Factory.h"
 #include "aui_window.h"
 #include "pattern.h"
 #include "aui_ldl.h"
@@ -130,7 +130,7 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-			textutils_CenteredDropString((aui_DirectSurface *)surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_HILITE, 0);
+			textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_HILITE, 0);
 		}
 	}
 	else
@@ -141,7 +141,7 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-			textutils_CenteredDropString((aui_DirectSurface *)surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
+			textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
 
 		}
 	}

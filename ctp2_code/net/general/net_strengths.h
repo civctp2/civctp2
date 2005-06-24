@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __NET_STRENGTHS_H__
 #define __NET_STRENGTHS_H__
 

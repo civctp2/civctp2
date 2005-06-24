@@ -107,13 +107,13 @@ AUI_ERRCODE TextButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if ( IsActive() )
 	{
 		if (m_text) {
-			textutils_CenteredDropString((aui_DirectSurface *)surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_HILITE, 0);
+			textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_HILITE, 0);
 		}
 	}
 	else
 	{
 		if (m_text) {
-			textutils_CenteredDropString((aui_DirectSurface *)surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
+			textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
 		}
 	}
 

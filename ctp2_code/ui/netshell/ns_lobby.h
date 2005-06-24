@@ -43,4 +43,5 @@ public:
 };
 
 
-#endif __NS_LOBBY_H__
+#endif // __NS_LOBBY_H__
+

@@ -235,7 +235,7 @@ AUI_ERRCODE C3Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	sprintf( s, "%d", 100 - ( m_isVertical ? GetValueY() : GetValueX() ) );
 
 	primitives_DropText(
-		(aui_DirectSurface *)surface,
+		surface,
 		rect.left + 5,
 		rect.top + 5,
 		s,

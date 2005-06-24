@@ -1251,6 +1251,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1286,6 +1287,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 
 	hr = pSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#endif
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1301,16 +1303,19 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 		BOOL bg							
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
 	sint32 oldMode;
+#endif
 
 	Assert(pSurface);
 	if (pSurface==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
@@ -1348,7 +1353,7 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
-
+#endif
 	return PRIMITIVES_ERRCODE_OK;
 }
 
@@ -1374,6 +1379,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1417,7 +1423,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
-
+#endif
 	return PRIMITIVES_ERRCODE_OK;
 }
 
@@ -1442,6 +1448,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1485,7 +1492,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
-
+#endif
 	return PRIMITIVES_ERRCODE_OK;
 }
 
@@ -1511,6 +1518,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1555,7 +1563,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
-
+#endif
 	return PRIMITIVES_ERRCODE_OK;
 }
 
@@ -1573,6 +1581,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC			hdc;
 	HRESULT		hr;
 	COLORREF	oldColor;
@@ -1623,7 +1632,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
-
+#endif
 	return PRIMITIVES_ERRCODE_OK;
 }
 
@@ -1642,6 +1651,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC			hdc;
 	HRESULT		hr;
 	COLORREF	oldColor;
@@ -1693,6 +1703,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#endif
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1720,6 +1731,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1781,7 +1793,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
-
+#endif
 	return PRIMITIVES_ERRCODE_OK;
 }
 

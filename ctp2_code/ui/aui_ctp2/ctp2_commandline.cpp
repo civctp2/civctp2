@@ -66,11 +66,23 @@ void ctp2_CommandLine::Draw(void)
 void ctp2_CommandLine::HandleKeypress(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam) {
+#ifdef __AUI_USE_SDL__
+	case SDLK_TAB:
+#else
 	case VK_TAB:
+#endif
 		break;
+#ifdef __AUI_USE_SDL__
+	case SDLK_RETURN:
+#else
 	case VK_RETURN:
+#endif
 		break;
+#ifdef __AUI_USE_SDL__
+	case SDLK_BACKSPACE:
+#else
 	case VK_BACK:
+#endif
 			m_caret--;
 			if (m_caret < 0)
 				m_caret = 0;
@@ -81,27 +93,53 @@ void ctp2_CommandLine::HandleKeypress(WPARAM wParam, LPARAM lParam)
 			
 			m_string[m_end] = '\0';
 		break;
+#ifdef __AUI_USE_SDL__
+	case SDLK_LEFT:
+#else
 	case VK_LEFT:
+#endif
 			m_caret--;
 			if (m_caret < 0)
 				m_caret = 0;
 		break;
+#ifdef __AUI_USE_SDL__
+	case SDLK_RIGHT:
+#else
 	case VK_RIGHT:
+#endif
 			m_caret++;
 			if (m_caret > (k_MAX_COMMAND_LINE_LENGTH-1))
 				m_caret = k_MAX_COMMAND_LINE_LENGTH-1;
 		break;
+#ifdef __AUI_USE_SDL__
+	case SDLK_UP:
+	case SDLK_HOME:
+#else
 	case VK_UP:
 	case VK_HOME:
+#endif
 			m_caret = 0;
 		break;
+#ifdef __AUI_USE_SDL__
+	case SDLK_DOWN:
+	case SDLK_END:
+#else
 	case VK_DOWN:
 	case VK_END:
+#endif
 			m_caret = m_end;
 		break;
+#ifdef __AUI_USE_SDL__
+	case SDLK_DELETE:
+#else
 	case VK_DELETE:
+#endif
 		break;
+#ifdef __AUI_USE_SDL__
+	case SDLK_INSERT:
+#else
 	case VK_INSERT:
+#endif
 		break;
 	default: 
 		{

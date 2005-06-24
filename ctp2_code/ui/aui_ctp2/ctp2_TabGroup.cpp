@@ -107,7 +107,8 @@ AUI_ERRCODE ctp2_TabGroup::Draw(aui_Surface *surface, sint32 x, sint32 y)
 		
 		
 		ListPos position = ChildList()->GetHeadPosition();
-		for(int countdown = ChildList()->L(); countdown; countdown--) {
+		int countdown;
+		for(countdown = ChildList()->L(); countdown; countdown--) {
 			
 			ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));
 
@@ -171,7 +172,8 @@ void ctp2_TabGroup::SelectTab(ctp2_Tab *tab)
 			
 			
 			ListPos position = ChildList()->GetHeadPosition();
-			for(int countdown = ChildList()->L(); countdown; countdown--) {
+			int countdown;
+			for(countdown = ChildList()->L(); countdown; countdown--) {
 				
 				ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));
 

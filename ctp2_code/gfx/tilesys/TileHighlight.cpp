@@ -201,7 +201,7 @@ bool IsKnownEntryCost
 // Remark(s)  : 
 //
 //----------------------------------------------------------------------------
-BOOL TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, MapPoint &old_pos, MapPoint &dest_pos)
+BOOL TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &dest_pos)
 { 
     
     switch (sType) { 

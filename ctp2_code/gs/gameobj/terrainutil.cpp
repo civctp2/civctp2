@@ -1015,15 +1015,16 @@ void terrainutil_RemoveBorders(MapPoint &center, sint32 owner, sint32 intRad, si
 			continue;
 		}
 
-		
-		bool stillOwned = terrainutil_GetSomethingOwnsCell(it.Pos(), owner, ignoreCity);
+		MapPoint mpos = it.Pos();
+		bool stillOwned = terrainutil_GetSomethingOwnsCell(mpos, owner, ignoreCity);
+		it.Pos() = mpos;
 		if(!stillOwned) {
 			
 			cell->SetOwner(-1);
 		}
 
 		g_network.Block(owner);
-		g_network.Enqueue(cell, it.Pos().x, it.Pos().y);
+		g_network.Enqueue(cell, mpos.x, mpos.y);
 		g_network.Unblock(owner);
 
 	}

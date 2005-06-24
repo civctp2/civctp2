@@ -1577,7 +1577,7 @@ void Network::SetReady(uint16 id)
 		chunkPackets.AddTail( new NetEndGame(p));
 
 		playerPercent += percentPerPlayer;
-		CPROGRESS(55 + (playerPercent * 30));
+		CPROGRESS((uint32)(55 + (playerPercent * 30)));
 		ChunkList(player->m_id, &chunkPackets);
 		Assert(!chunkPackets.GetHead());
 	}

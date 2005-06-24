@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _NET_GAMEOBJ_H_
 #define _NET_GAMEOBJ_H_
 

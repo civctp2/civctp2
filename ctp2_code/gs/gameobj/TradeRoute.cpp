@@ -275,7 +275,7 @@ void TradeRoute::UpdateSelectedCellData(TradeRoute &route)
 	AccessData()->UpdateSelectedCellData(route);
 }
 
-void TradeRoute::ClearSelectedCellData(TradeRoute &route)
+void TradeRoute::ClearSelectedCellData(const TradeRoute &route)
 {
 	AccessData()->ClearSelectedCellData(route);
 }

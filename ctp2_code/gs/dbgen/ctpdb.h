@@ -21,7 +21,7 @@ typedef enum {
 	DATUM_STRING,
 	DATUM_STRINGID,
 	DATUM_BIT_PAIR,
-	DATUM_NONE,
+	DATUM_NONE
 } DATUM_TYPE;
 
 union dbvalue {

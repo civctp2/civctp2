@@ -220,7 +220,7 @@ void Path::ClipStartToCurrent()
 
  
 
-void Path::GetStartPoint(MapPoint &pos)
+void Path::GetStartPoint(MapPoint &pos) const
 {
     pos = m_start;
 }
@@ -256,7 +256,7 @@ void Path::IncDir()
 	m_next_dir++; 
 }
 
-void Path::Concat(Path &otherpath)
+void Path::Concat(const Path &otherpath)
 {
 	sint32 i, n = otherpath.m_step.Num();
 	MapPoint start_pos;

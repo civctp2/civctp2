@@ -9,7 +9,7 @@
 #include "aui_uniqueid.h"
 #include "aui_surface.h"
 
-#include "aui_directsurface.h"
+#include "aui_Factory.h"
 #include "aui_blitter.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
@@ -203,7 +203,7 @@ void ThroneControl::InitCommon(void)
 	}
 
 	
-	m_throneSurface = new aui_DirectSurface( &errcode, m_width, m_height, 16, g_c3ui->DD() );
+	m_throneSurface = aui_Factory::new_Surface( errcode, m_width, m_height, 16);
 	Assert( AUI_NEWOK(m_throneSurface, errcode) );
 
 	m_zoomedImage = NULL;
@@ -299,7 +299,7 @@ aui_Surface *ThroneControl::InitializeNewBG( MBCHAR *filename )
 
 	
 	if ( !tempBG ) {
-		tempBG = new aui_DirectSurface( &errcode, m_width, m_height, 16, g_c3ui->DD() );
+		tempBG = aui_Factory::new_Surface( errcode, m_width, m_height, 16);
 		Assert( AUI_NEWOK(tempBG, errcode) );
 		if ( !AUI_NEWOK(tempBG, errcode) ) return NULL;
 	}
@@ -342,7 +342,7 @@ void ThroneControl::CrossFadeImage( MBCHAR *filename )
 
 	
 	if ( !m_oldCutout ) {
-		m_oldCutout = new aui_DirectSurface( &errcode, width, height, 16, g_c3ui->DD() );
+		m_oldCutout = aui_Factory::new_Surface( errcode, width, height, 16);
 		Assert( AUI_NEWOK(m_oldCutout, errcode) );
 
 		
@@ -357,7 +357,7 @@ void ThroneControl::CrossFadeImage( MBCHAR *filename )
 	
 	
 	if ( !m_newCutout ) {
-		m_newCutout = new aui_DirectSurface( &errcode, width, height, 16, g_c3ui->DD() );
+		m_newCutout = aui_Factory::new_Surface( errcode, width, height, 16);
 		Assert( AUI_NEWOK(m_newCutout, errcode) );
 
 		
@@ -415,7 +415,7 @@ void ThroneControl::HilightImage( sint32 index )
 
 	
 	if ( !m_oldCutout ) {
-		m_oldCutout = new aui_DirectSurface( &errcode, width, height, 16, g_c3ui->DD() );
+		m_oldCutout = aui_Factory::new_Surface( errcode, width, height, 16 );
 		Assert( AUI_NEWOK(m_oldCutout, errcode) );
 
 		

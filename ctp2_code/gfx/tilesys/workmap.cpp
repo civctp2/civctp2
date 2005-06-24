@@ -698,7 +698,7 @@ sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint3
 	return TRUE;
 }
 
-BOOL WorkMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL WorkMap::DrawACity(aui_Surface *pSurface, const MapPoint &pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
 	UnitActor	*actor;
@@ -744,7 +744,7 @@ BOOL WorkMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
 	return TRUE;
 }
 
-BOOL WorkMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL WorkMap::DrawALandCity(aui_Surface *pSurface, const MapPoint &pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
 	UnitActor	*actor;
@@ -791,7 +791,7 @@ BOOL WorkMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *context)
 }
 
 
-BOOL WorkMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL WorkMap::DrawAGood(aui_Surface *pSurface, const MapPoint &pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
 	GoodActor	*goodActor;
@@ -836,7 +836,7 @@ BOOL WorkMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
 	return TRUE;
 }
 
-BOOL WorkMap::DrawATile(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL WorkMap::DrawATile(aui_Surface *pSurface, const MapPoint &pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
 	sint32		x, y;

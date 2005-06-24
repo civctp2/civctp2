@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __NET_RESEARCH_H__
 #define __NET_RESEARCH_H__
 

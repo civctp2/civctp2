@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ASTAR_QUEUE__
 #define __ASTAR_QUEUE__ 1
 

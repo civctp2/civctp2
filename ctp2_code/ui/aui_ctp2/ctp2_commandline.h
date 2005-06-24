@@ -1,5 +1,3 @@
-
-
 #ifndef __CTP2_COMMANDLINE_H__
 #define __CTP2_COMMANDLINE_H__
 
@@ -32,3 +30,4 @@ private:
 
 
 #endif 
+

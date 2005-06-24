@@ -1563,7 +1563,7 @@ ORDER_RESULT ArmyData::InvestigateCity(const MapPoint &point)
         return ORDER_RESULT_ILLEGAL;
     }
 
-    UnitRecord::InvestigateCityData *values;
+    const UnitRecord::InvestigateCityData *values;
 
     for(sint32 i = 0; i < m_nElements; i++) {
         if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN))
@@ -2225,7 +2225,6 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 		if(cell->AccessUnit(i).CanBeExpelled() &&
 		   cell->AccessUnit(i).GetVisibility() & (1 << m_owner)) {
 			Unit u = cell->AccessUnit(i);
-			victim = u.GetOwner();
 			Army army = u.GetArmy();
 			foundCity = u.NearestFriendlyCityWithRoom(cpos, numToExpel,
 								  &army);

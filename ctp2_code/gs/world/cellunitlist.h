@@ -36,9 +36,9 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif // _MSC_VER
+#endif // HAVE_PRAGMA_ONCE
 
 #ifndef __CELL_UNIT_LIST_H__
 #define __CELL_UNIT_LIST_H__

@@ -74,11 +74,11 @@
 #include "ArmyPool.h"
 #include "Army.h"
 #include "cellunitlist.h"
-#include "order.h"
+#include "Order.h"
 #include "battleorderbox.h"
 
 
-#include "aicause.h"
+#include "AICause.h"
 
 
 
@@ -1010,7 +1010,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 	m_waypoints.Clear();
 
-	g_controlPanel->SetStack(Army(0), NULL); // empty function
+	g_controlPanel->SetStack(Army(0), 0); // empty function
 
 	if(!g_theUnitPool->IsValid(u))
 		return;
@@ -1358,7 +1358,9 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 			goodPath->JustSetStart(m_selected_army[player]->RetPos());
 
             if (GetAutoUnload()) {
-				goodPath->Start(m_selected_army[player]->RetPos());
+			MapPoint startPos = m_selected_army[player]->RetPos();
+				goodPath->Start(startPos);
+				m_selected_army[player]->RetPos() = startPos;
 
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveUnloadOrder,
 									   GEA_Army, m_selected_army[player],
@@ -2458,7 +2460,7 @@ void SelectedItem::Goto(MapPoint &dest)
 }
 
 void SelectedItem::EnterMovePath(sint32 owner, Army &army,
-								 MapPoint &src, MapPoint &dest)
+                                 const MapPoint &src, const MapPoint &dest)
 {
 	Path *good_path = new Path, bad_path;
 	sint32 is_broken;

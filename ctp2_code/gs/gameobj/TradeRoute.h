@@ -93,7 +93,7 @@ public:
 	BOOL IsSelectedPathSame();
 	BOOL IsPosInSelectedPath(const MapPoint &pos);
 	BOOL IsPosInPath(const MapPoint &pos);
-	void ClearSelectedCellData(TradeRoute &route);
+	void ClearSelectedCellData(const TradeRoute &route);
 	void UpdateSelectedCellData(TradeRoute &route);
 	sint32 GetPathSelectionState() const;
 	void SetPathSelectionState(sint32 state);

@@ -97,9 +97,9 @@ template <class T> class QuadTree
 {
 public:
 	QuadTree(sint16 width, sint16 height, BOOL yWrap) 
-		: m_width(width),
+		: m_top(NULL),
+		  m_width(width),
 		  m_height(height),
-		  m_top(NULL),
 		  m_isYWrap(yWrap)
 	{
 		m_degenerateCount = 0;
@@ -270,6 +270,9 @@ QuadTreeNode<T>::AddLeaf(QUADRANT quad, T obj)
 		case QUADRANT_NW:
 			return m_nw = new QuadTreeNode<T>(m_tree,
 											  this, obj, m_x, m_y, neww, newh);
+		case QUADRANT_ERROR:
+			Assert(FALSE);
+			return NULL;
 	}
 	Assert(FALSE);
 	return NULL;

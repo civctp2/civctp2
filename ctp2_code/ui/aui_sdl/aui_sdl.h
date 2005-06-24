@@ -9,6 +9,8 @@
 
 #if defined(__AUI_USE_SDL__)
 
+#include <SDL.h>
+
 class aui_SDL
 {
 public:
@@ -26,14 +28,18 @@ public:
 	}
 
 	BOOL GetExclusiveMode(void) { return m_exclusiveMode; }
+	SDL_Surface *DD() { return m_lpdd; }
 
 protected:
-	BOOL					m_exclusiveMode;
+	BOOL			m_exclusiveMode;
+	static SDL_Surface *	m_lpdd;
 
 private:
-	static sint32			m_SDLRefCount;
+	static sint32		m_SDLRefCount;
 	static uint32           m_SDLClassId;
 };
+
+typedef aui_SDL aui_Native;
 
 #endif // defined(__AUI_USE_SDL__)
 

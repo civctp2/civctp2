@@ -41,11 +41,7 @@
 #include "aui_resource.h"	
 #include "aui_window.h"
 
-#if defined(__AUI_USE_SDL__)
-class C3UI : public aui_SDLUI
-#else
-class C3UI : public aui_DirectUI
-#endif
+class C3UI : public aui_NativeUI
 {
 public:
 	C3UI(

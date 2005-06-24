@@ -14,7 +14,7 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_directsurface.h"
+#include "aui_Factory.h"
 #include "c3blitter.h"
 #include "c3ui.h"
 
@@ -80,7 +80,7 @@ AUI_ERRCODE Picture::MakeMipmap( void )
 		sint32 mipSize = (mipWidth*mipHeight) << 1;
 
 		AUI_ERRCODE retcode;
-		pMipmap = new aui_DirectSurface(&retcode,mipWidth,mipHeight,mipBpp,g_c3ui->DD());
+		pMipmap = aui_Factory::new_Surface(retcode,mipWidth,mipHeight,mipBpp);
 		Assert(pMipmap);
 		if (pMipmap != NULL)
 		{

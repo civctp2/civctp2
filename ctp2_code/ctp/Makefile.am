@@ -46,83 +46,6 @@ ctp2_SOURCES = \
 	civ3_main.cpp \
 	civapp.cpp \
 	display.cpp \
-	../gfx/spritesys/action.cpp \
-	../gfx/spritesys/Actor.cpp \
-	../gfx/spritesys/ActorPath.cpp \
-	../gfx/spritesys/Anim.cpp \
-	../gfx/spritesys/battleviewactor.cpp \
-	../gfx/spritesys/EffectActor.cpp \
-	../gfx/spritesys/goodactor.cpp \
-	../gfx/spritesys/TradeActor.cpp \
-	../gfx/spritesys/UnitActor.cpp \
-	../gfx/spritesys/workeractor.cpp \
-	../gfx/spritesys/CitySpriteGroup.cpp \
-	../gfx/spritesys/effectspritegroup.cpp \
-	../gfx/spritesys/FacedSprite.cpp \
-	../gfx/spritesys/FacedSpriteWshadow.cpp \
-	../gfx/spritesys/goodspritegroup.cpp \
-	../gfx/spritesys/Sprite.cpp \
-	../gfx/spritesys/spritefile.cpp \
-	../gfx/spritesys/SpriteGroup.cpp \
-	../gfx/spritesys/SpriteGroupList.cpp \
-	../gfx/spritesys/SpriteHitTest.cpp \
-	../gfx/spritesys/SpriteList.cpp \
-	../gfx/spritesys/SpriteLow555.cpp \
-	../gfx/spritesys/SpriteLow565.cpp \
-	../gfx/spritesys/SpriteState.cpp \
-	../gfx/spritesys/SpriteStateDB.cpp \
-	../gfx/spritesys/spriteutils.cpp \
-	../gfx/spritesys/UnitSpriteGroup.cpp \
-	../gfx/spritesys/director.cpp \
-	../gfx/spritesys/directorevent.cpp \
-	../gfx/spritesys/screenmanager.cpp \
-	../gfx/tilesys/maputils.cpp \
-	../gfx/tilesys/BaseTile.cpp \
-	../gfx/tilesys/resourcemap.cpp \
-	../gfx/tilesys/tiledmap.cpp \
-	../gfx/tilesys/tiledraw.cpp \
-	../gfx/tilesys/tiledrawroad.cpp \
-	../gfx/tilesys/TileHighlight.cpp \
-	../gfx/tilesys/TileInfo.cpp \
-	../gfx/tilesys/tileset.cpp \
-	../gfx/tilesys/tileutils.cpp \
-	../gfx/gfx_utils/arproces.cpp \
-	../gfx/gfx_utils/ColorSet.cpp \
-	../gfx/gfx_utils/gfx_options.cpp \
-	../gfx/gfx_utils/pixelutils.cpp \
-	../gfx/gfx_utils/targautils.cpp \
-	../gfx/gfx_utils/tiffutils.cpp \
-	../gfx/gfx_utils/videoutils.cpp \
-	../gfx/layers/citylayer.cpp \
-	../gs/database/CivilisationDB.cpp \
-	../gs/database/CivilisationRec.cpp \
-	../gs/database/conceptdb.cpp \
-	../gs/database/ConstDB.cpp \
-	../gs/database/DB.cpp \
-	../gs/database/DiffDB.cpp \
-	../gs/database/EndGameDB.cpp \
-	../gs/database/EndGameRecord.cpp \
-	../gs/database/filenamedb.cpp \
-	../gs/database/gwdb.cpp \
-	../gs/database/GWRecord.cpp \
-	../gs/database/highscoredb.cpp \
-	../gs/database/InstDB.cpp \
-	../gs/database/InstRec.cpp \
-	../gs/database/MapDB.cpp \
-	../gs/database/MapRecord.cpp \
-	../gs/database/moviedb.cpp \
-	../gs/database/orderdb.cpp \
-	../gs/database/PlayListDB.cpp \
-	../gs/database/pollutiondb.cpp \
-	../gs/database/PollutionRecord.cpp \
-	../gs/database/profileDB.cpp \
-	../gs/database/Rec.cpp \
-	../gs/database/RiskDB.cpp \
-	../gs/database/StrDB.cpp \
-	../gs/database/StrRec.cpp \
-	../gs/database/thronedb.cpp \
-	../gs/database/UVDB.cpp \
-	../gs/database/UVRecord.cpp \
 	../gs/gameobj/AchievementTracker.cpp \
 	../gs/gameobj/Advances.cpp \
 	../gs/gameobj/advanceutil.cpp \
@@ -376,6 +299,7 @@ ctp2_SOURCES = \
 	../ui/aui_common/aui_win.cpp \
 	../ui/aui_common/aui_window.cpp \
 	../ui/aui_common/tech_memmap.cpp \
+	../ui/aui_common/aui_Factory.cpp \
 	../ui/aui_utils/primitives.cpp \
 	../ui/aui_utils/textutils.cpp \
 	../ui/aui_utils/vidplay.cpp \
@@ -485,7 +409,6 @@ ctp2_SOURCES = \
 	../ui/aui_ctp2/tipwindow.cpp \
 	../ui/aui_ctp2/unittabbutton.cpp \
 	../ui/aui_ctp2/videowindow.cpp \
-	../gfx/tilesys/workmap.cpp \
 	../ui/aui_ctp2/ctp2_button.cpp \
 	../ui/aui_ctp2/ctp2_commandline.cpp \
 	../ui/aui_ctp2/ctp2_dropdown.cpp \
@@ -504,131 +427,6 @@ ctp2_SOURCES = \
 	../ui/aui_ctp2/ctp2_textbuffer.cpp \
 	../ui/aui_ctp2/ctp2_textfield.cpp \
 	../ui/aui_ctp2/ctp2_Window.cpp \
-	../ui/interface/CityControlPanel.cpp \
-	../ui/interface/DomesticControlPanel.cpp \
-	../ui/interface/MessageControlPanel.cpp \
-	../ui/interface/TilesControlPanel.cpp \
-	../ui/interface/UnitControlPanel.cpp \
-	../ui/interface/ControlTabPanel.cpp \
-	../ui/interface/EndTurnButton.cpp \
-	../ui/interface/MainControlPanel.cpp \
-	../ui/interface/ShortcutPad.cpp \
-	../ui/interface/StatusBar.cpp \
-	../ui/interface/TurnYearStatus.cpp \
-	../ui/interface/ZoomPad.cpp \
-	../ui/interface/controlpanelwindow.cpp \
-	../ui/interface/interfaceevent.cpp \
-	../ui/interface/agesscreen.cpp \
-	../ui/interface/ancientwindows.cpp \
-	../ui/interface/armymanagerwindow.cpp \
-	../ui/interface/AttractWindow.cpp \
-	../ui/interface/backgroundwin.cpp \
-	../ui/interface/c3dialogs.cpp \
-	../ui/interface/chatbox.cpp \
-	../ui/interface/CityEspionage.cpp \
-	../ui/interface/citymanager.cpp \
-	../ui/interface/creditsscreen.cpp \
-	../ui/interface/cursormanager.cpp \
-	../ui/interface/custommapscreen.cpp \
-	../ui/interface/debugwindow.cpp \
-	../ui/interface/DiplomacyDetails.cpp \
-	../ui/interface/diplomacywindow.cpp \
-	../ui/interface/dipwizard.cpp \
-	../ui/interface/EditQueue.cpp \
-	../ui/interface/FileDialog.cpp \
-	../ui/interface/gameplayoptions.cpp \
-	../ui/interface/graphicsresscreen.cpp \
-	../ui/interface/graphicsscreen.cpp \
-	../ui/interface/greatlibrary.cpp \
-	../ui/interface/greatlibrary_util.cpp \
-	../ui/interface/greatlibrarywindow.cpp \
-	../ui/interface/helptile.cpp \
-	../ui/interface/hotseatlist.cpp \
-	../ui/interface/infowin.cpp \
-	../ui/interface/initialplayscreen.cpp \
-	../ui/interface/initialplaywindow.cpp \
-	../ui/interface/intelligencewindow.cpp \
-	../ui/interface/IntroMovieWin.cpp \
-	../ui/interface/IntroMovieWindow.cpp \
-	../ui/interface/km_screen.cpp \
-	../ui/interface/loadsavemapscreen.cpp \
-	../ui/interface/loadsavemapwindow.cpp \
-	../ui/interface/loadsavescreen.cpp \
-	../ui/interface/loadsavewindow.cpp \
-	../ui/interface/MapCopyBuffer.cpp \
-	../ui/interface/messageactions.cpp \
-	../ui/interface/messageadvice.cpp \
-	../ui/interface/messageeyepoint.cpp \
-	../ui/interface/messageiconbutton.cpp \
-	../ui/interface/messageiconwindow.cpp \
-	../ui/interface/messagelist.cpp \
-	../ui/interface/messagemodal.cpp \
-	../ui/interface/messageresponse.cpp \
-	../ui/interface/messagewin.cpp \
-	../ui/interface/messagewindow.cpp \
-	../ui/interface/musicscreen.cpp \
-	../ui/interface/musictrackscreen.cpp \
-	../ui/interface/optionsscreen.cpp \
-	../ui/interface/optionswindow.cpp \
-	../ui/interface/optionwarningscreen.cpp \
-	../ui/interface/ProfileEdit.cpp \
-	../ui/interface/progresswindow.cpp \
-	../ui/interface/radarwindow.cpp \
-	../ui/interface/scenarioeditor.cpp \
-	../ui/interface/scenarioscreen.cpp \
-	../ui/interface/scenariowindow.cpp \
-	../ui/interface/sciencewin.cpp \
-	../ui/interface/scorewarn.cpp \
-	../ui/interface/screenutils.cpp \
-	../ui/interface/soundscreen.cpp \
-	../ui/interface/splash.cpp \
-	../ui/interface/spnewgamediffscreen.cpp \
-	../ui/interface/spnewgamemapshapescreen.cpp \
-	../ui/interface/spnewgamemapsizescreen.cpp \
-	../ui/interface/spnewgameplayersscreen.cpp \
-	../ui/interface/spnewgamerandomcustomscreen.cpp \
-	../ui/interface/spnewgamerulesscreen.cpp \
-	../ui/interface/spnewgamescreen.cpp \
-	../ui/interface/spnewgametribescreen.cpp \
-	../ui/interface/spnewgamewindow.cpp \
-	../ui/interface/spriteeditor.cpp \
-	../ui/interface/spscreen.cpp \
-	../ui/interface/spwindow.cpp \
-	../ui/interface/statictextbox.cpp \
-	../ui/interface/statswindow.cpp \
-	../ui/interface/String_Search.cpp \
-	../ui/interface/tileimptracker.cpp \
-	../ui/interface/trademanager.cpp \
-	../ui/interface/tutorialwin.cpp \
-	../ui/interface/UIUtils.cpp \
-	../ui/interface/unitmanager.cpp \
-	../ui/interface/victorymoviewin.cpp \
-	../ui/interface/victorymoviewindow.cpp \
-	../ui/interface/victorywin.cpp \
-	../ui/interface/victorywindow.cpp \
-	../ui/interface/wondermoviewin.cpp \
-	../ui/interface/wondermoviewindow.cpp \
-	../ui/interface/WonderTab.cpp \
-	../ui/interface/workwin.cpp \
-	../ui/interface/workwindow.cpp \
-	../ui/interface/InterfaceEventRegister.cpp \
-	../ui/interface/CauseAndEffectTab.cpp \
-	../ui/interface/DomesticManagementDialog.cpp \
-	../ui/interface/GovernmentTab.cpp \
-	../ui/interface/citywindow.cpp \
-	../ui/interface/sci_advancescreen.cpp \
-	../ui/interface/ScienceManagementDialog.cpp \
-	../ui/interface/NationalManagementDialog.cpp \
-	../ui/interface/MessageBoxDialog.cpp \
-	../ui/interface/battle.cpp \
-	../ui/interface/battleevent.cpp \
-	../ui/interface/battleview.cpp \
-	../ui/interface/battleviewwindow.cpp \
-	../ui/interface/infowindow.cpp \
-	../ui/interface/rankingtab.cpp \
-	../ui/interface/scoretab.cpp \
-	../ui/interface/timelinetab.cpp \
-	../ui/interface/sciencevictorydialog.cpp \
 	../ui/netshell/allinonewindow.cpp \
 	../ui/netshell/connectionselectwindow.cpp \
 	../ui/netshell/dialogboxwindow.cpp \
@@ -707,8 +505,14 @@ ctp2_SOURCES = \
 	../ai/ctpaidebug.cpp
 
 ctp2_LDADD = \
+	../gfx/gfx_utils/libgfxgfx_utils.la \
+	../gfx/layers/libgfxlayers.la \
+	../gfx/spritesys/libgfxspritesys.la \
+	../gfx/tilesys/libgfxtilesys.la \
+	../gs/database/libgsdatabase.la \
 	../gs/newdb/libgsnewdb.la \
 	../gs/slic/libgsslic.la \
+	../ui/interface/libuiinterface.la \
 	$(CTP2_LDFLAGS)
 
 AM_CFLAGS=\

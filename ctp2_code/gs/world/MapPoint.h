@@ -29,8 +29,7 @@
 // - Corrected wrap computation for city influence and borders.
 //
 //----------------------------------------------------------------------------
-
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 

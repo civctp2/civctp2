@@ -414,7 +414,7 @@ AUI_ERRCODE c3_EditButton::SetValue( sint32 val )
 	m_val = val;
 
 	MBCHAR text[ 50 ];
-	itoa( m_val, text, 10 );
+	sprintf(text, "%d", m_val);
 	SetText( text );
 
 	if ( changed ) DoCallback();
@@ -481,7 +481,7 @@ void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, vo
 	button->GetParent()->RemoveChild( button->Id() );
 
 	MBCHAR text[ 50 ];
-	itoa( button->GetValue(), text, 10 );
+	sprintf(text, "%d", button->GetValue());
 	field->SetFieldText( text );
 
 	field->SetKeyboardFocus();

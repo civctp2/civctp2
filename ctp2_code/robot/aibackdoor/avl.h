@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __AVL_H__
 #define __AVL_H__ 1
 

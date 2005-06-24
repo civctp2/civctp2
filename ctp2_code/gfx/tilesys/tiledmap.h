@@ -159,7 +159,7 @@ public:
 	BOOL			TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint16 e, uint16 se, uint16 s, 
 									uint16 sw, uint16 w, uint16 nw, uint16 *newIndex);
 	void			TryMegaTiles(MapPoint &pos, BOOL regenTilenum);
-	void			PostProcessTile(const MapPoint &pos, TileInfo *theTileInfo,
+	void			PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 									BOOL regenTilenum = TRUE);
 	void			PostProcessMap(BOOL regenTilenums = TRUE);
 
@@ -296,7 +296,7 @@ public:
 	void			BlackTile(aui_Surface *surface, const MapPoint *point);
 
 
-	bool			DrawImprovementsLayer(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y,bool clip=false);
+	bool			DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y,bool clip=false);
 	void			DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
 													sint32 type, sint32 x, sint32 y, 
 													uint16 index, BOOL fog, sint32 percentComplete);
@@ -307,7 +307,7 @@ public:
 	void            DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,bool fog,bool clip=false);
 
 	
-	void	DrawTransitionTileClipped(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y);
+	void	DrawTransitionTileClipped(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y);
 	sint32	DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,sint32 flags = k_OVERLAY_FLAG_NORMAL);
 	sint32	DrawBlendedTileClipped(aui_Surface *surface, const MapPoint &pos,sint32 x, sint32 y, Pixel16 color, sint32 blend);
 	sint32	DrawBlendedOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,Pixel16 color, sint32 blend, sint32 flags = k_OVERLAY_FLAG_NORMAL);
@@ -430,7 +430,7 @@ public:
 									sint32 flags = k_OVERLAY_FLAG_NORMAL);
 
 	void		DrawCityNames(aui_Surface *surf, sint32 layer);
-	void		DrawCityIcons(aui_Surface *surf, const MapPoint &pos, sint32 owner, BOOL fog, RECT &popRect,
+	void		DrawCityIcons(aui_Surface *surf, MapPoint &pos, sint32 owner, BOOL fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
@@ -466,7 +466,7 @@ public:
 
 	sint32 GetVisibleCellOwner(MapPoint &pos);
 	uint32 GetVisibleCityOwner(MapPoint &pos);
-	void DrawNationalBorders(aui_Surface *surface, const MapPoint &pos);
+	void DrawNationalBorders(aui_Surface *surface, MapPoint &pos);
 
 	
 	

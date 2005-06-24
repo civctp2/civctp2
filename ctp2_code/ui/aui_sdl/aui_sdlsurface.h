@@ -14,6 +14,7 @@
 #include <SDL.h>
 
 class aui_SDLSurface : public aui_Surface, public aui_SDL {
+public:
 	aui_SDLSurface(
 	               AUI_ERRCODE *retval,
 	               sint32 width,
@@ -48,11 +49,12 @@ public:
 ; }
 
 
-//      virtual BOOL IsOK( void ) const;
+        virtual BOOL IsOK( void ) const;
 
 	static uint32 m_SDLSurfaceClassId;
 
 	SDL_mutex* m_bltMutex;
+
 protected:
 	SDL_Surface* m_lpdds;
 };

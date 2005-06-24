@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TRADE_ASTAR_H__
 #define __TRADE_ASTAR_H__ 1
 

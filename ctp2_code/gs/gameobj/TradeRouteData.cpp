@@ -586,7 +586,7 @@ void TradeRouteData::UpdateSelectedCellData(TradeRoute &route)
 		g_theWorld->GetCell(m_selectedPath[i])->AddTradeRoute(route);
 }
 
-void TradeRouteData::ClearSelectedCellData(TradeRoute &route)
+void TradeRouteData::ClearSelectedCellData(const TradeRoute &route)
 {
 	
 	for ( sint32 i = 0 ; i < m_selectedPath.Num() ; i++ )

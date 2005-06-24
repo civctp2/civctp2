@@ -1,16 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CTP_AI_DEBUG_H__
 #define __CTP_AI_DEBUG_H__
 
@@ -54,6 +44,6 @@ private:
 };
 #else
 	#define AI_DPRINTF(mask, player, goal_type, army_id, x)	;
-#endif _DEBUG
+#endif // _DEBUG
 
-#endif __CTP_AI_DEBUG_H__
+#endif // __CTP_AI_DEBUG_H__

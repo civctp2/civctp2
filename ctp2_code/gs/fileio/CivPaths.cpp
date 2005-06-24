@@ -143,7 +143,7 @@ CivPaths::~CivPaths()
 	}
 }
 
-void CivPaths::CreateSaveFolders(MBCHAR *path) 
+void CivPaths::CreateSaveFolders(const MBCHAR *path) 
 {
 #ifdef WIN32
 	SECURITY_ATTRIBUTES		sa;
@@ -328,7 +328,7 @@ MBCHAR *CivPaths::MakeAssetPath
 
 
 
-MBCHAR *CivPaths::FindFile(C3DIR dir, MBCHAR *filename, MBCHAR *path,
+MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
                            BOOL silent, BOOL check_prjfile)
 {
 	MBCHAR			fullPath[_MAX_PATH];	
@@ -615,7 +615,7 @@ MBCHAR *CivPaths::GetScenarioRootPath(MBCHAR *path)
 }
 
 
-void CivPaths::SetCurScenarioPath(MBCHAR *path)
+void CivPaths::SetCurScenarioPath(const MBCHAR *path)
 {
 	if (m_curScenarioPath)
 		delete[] m_curScenarioPath;
@@ -646,7 +646,7 @@ void CivPaths::ClearCurScenarioPath(void)
 
 
 
-void CivPaths::SetCurScenarioPackPath(MBCHAR *path)
+void CivPaths::SetCurScenarioPackPath(const MBCHAR *path)
 {
 	delete[] m_curScenarioPackPath;
 	m_curScenarioPackPath = new MBCHAR[_MAX_PATH];

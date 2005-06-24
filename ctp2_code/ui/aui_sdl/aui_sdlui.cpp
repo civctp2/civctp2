@@ -89,7 +89,7 @@ aui_SDLUI::aui_SDLUI
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = CreateDirectScreen( useExclusiveMode );
+	*retval = CreateScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -119,7 +119,7 @@ AUI_ERRCODE aui_SDLUI::InitCommon()
 
 
 
-AUI_ERRCODE aui_SDLUI::DestroyDirectScreen(void)
+AUI_ERRCODE aui_SDLUI::DestroyScreen(void)
 {
 	if (m_primary)
 	{
@@ -133,74 +133,16 @@ AUI_ERRCODE aui_SDLUI::DestroyDirectScreen(void)
 }
 
 
-AUI_ERRCODE aui_SDLUI::CreateDirectScreen( BOOL useExclusiveMode )
+AUI_ERRCODE aui_SDLUI::CreateScreen( BOOL useExclusiveMode )
 {
 	
-	AUI_ERRCODE errcode = aui_DirectX::InitCommon( useExclusiveMode );
+	AUI_ERRCODE errcode = aui_SDL::InitCommon( useExclusiveMode );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
+	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, SDL_SWSURFACE);
 	
-	
-	
-
-	HRESULT hr;
-
-	
-	uint32 coopFlags = DDSCL_NORMAL;
-	if ( m_exclusiveMode )
-		coopFlags = DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT;
-
-	
-	
-	
-	if (g_createDirectDrawOnSecondary) {
-        coopFlags = DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW | 
-					DDSCL_ALLOWREBOOT | DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN;
-	}
-
-	
-	hr = m_lpdd->SetCooperativeLevel( m_hwnd, coopFlags );
-	Assert( hr == DD_OK );
-	if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
-
-	
-	hr = m_lpdd->SetDisplayMode( m_width, m_height, m_bpp );
-	Assert( hr == DD_OK );
-	if ( hr != DD_OK ) return AUI_ERRCODE_SETDISPLAYFAILED;
-
-	
-	MoveWindow(
-		m_hwnd,
-		0, 0,
-
-		g_ScreenWidth, 
-		g_ScreenHeight,
-		TRUE );
-
-	
-	LPDIRECTDRAWSURFACE lpdds;
-	DDSURFACEDESC ddsd;
-	memset( &ddsd, 0, sizeof( ddsd ) );
-	ddsd.dwSize = sizeof( ddsd );
-	ddsd.dwFlags = DDSD_CAPS;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
-	hr = m_lpdd->CreateSurface( &ddsd, &lpdds, NULL );
-	Assert( hr == DD_OK || hr == DDERR_PRIMARYSURFACEALREADYEXISTS );
-	if ( hr != DD_OK )
-	{
-		if ( hr != DDERR_PRIMARYSURFACEALREADYEXISTS )
-			return AUI_ERRCODE_CREATESURFACEFAILED;
-
-		hr = m_lpdds->Restore();
-		Assert( hr == DD_OK );
-		if ( hr != DD_OK ) return AUI_ERRCODE_CREATESURFACEFAILED;
-	}
-	else
-		m_lpdds = lpdds;
-
-	
-	m_primary = new aui_DirectSurface(
+	m_primary = new aui_SDLSurface(
 		&errcode,
 		m_width,
 		m_height,
@@ -226,6 +168,10 @@ aui_SDLUI::getDisplay()
 
 aui_SDLUI::~aui_SDLUI( void )
 {
+	if ( m_lpdds ) {
+		// m_lpdds is deleted by SDL_Quit()
+		m_lpdds = NULL;
+	}
 #ifdef HAVE_X11
 	if (m_X11Display) {
 		XCloseDisplay(m_X11Display);
@@ -313,7 +259,7 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 
 	if ( m_minimize || m_exclusiveMode )
 	{
-		DestroyDirectScreen();
+		DestroyScreen();
 	}
 
 	while ( ShowCursor( TRUE ) < 0 )
@@ -339,7 +285,7 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 {
 
 
-	if ( !m_primary ) CreateDirectScreen( m_exclusiveMode );
+	if ( !m_primary ) CreateScreen( m_exclusiveMode );
 
 	if ( m_minimize || m_exclusiveMode )
 		while ( GetForegroundWindow() != m_hwnd )

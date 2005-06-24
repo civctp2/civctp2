@@ -104,7 +104,7 @@ public:
 
 	
 	BOOL		IncludePointInView(MapPoint &pos, sint32 radius);
-	MapPoint	ComputeCenteredMap(MapPoint &pos, RECT *viewRect);	
+	MapPoint	ComputeCenteredMap(const MapPoint &pos, RECT *viewRect);	
 	MapPoint	CenterMap(const MapPoint &pos );
 	void		Setup( void );
 	void		Update( void );

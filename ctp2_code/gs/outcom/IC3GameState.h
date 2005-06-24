@@ -1,15 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __IC3GAMESTATE_H__
 #define __IC3GAMESTATE_H__
 

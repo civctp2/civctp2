@@ -1,16 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __AIP2_H__
 #define __AIP2_H__
 
@@ -90,4 +80,5 @@ private:
 	std::string m_strategicStateName;
 };
 
-#endif __AIP2_H__
+#endif // __AIP2_H__
+

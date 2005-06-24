@@ -243,7 +243,7 @@ void CivArchive::Load(uint8 *pbData, uint32 ulLen)
 
 #ifdef ARCHIVE_TYPE_CHECK
 TypeCheck(TYPE_CHECK_ARRAY); 
-#endif ARCHIVE_TYPE_CHECK
+#endif // ARCHIVE_TYPE_CHECK
 
 #ifdef _DEBUG
     Assert(!m_bIsStoring);

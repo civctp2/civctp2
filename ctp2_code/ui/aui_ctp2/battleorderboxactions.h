@@ -26,14 +26,10 @@ public:
 	
 	BobButtonAction(BattleOrderBox *bob);
 
-	
-	
-	
-
 	virtual ActionCallback Execute;
 
-	void SetUnit(Unit &unit) { m_unit = unit; }
-	void SetArmy( Army &army ) { m_army = army; }
+	void SetUnit(const Unit &unit) { m_unit = unit; }
+	void SetArmy(const Army &army ) { m_army = army; }
 
 private:
 	BattleOrderBox		*m_bob;

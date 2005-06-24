@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _UNSEEN_CELL_QUAD_TREE_H_
 #define _UNSEEN_CELL_QUAD_TREE_H_
 

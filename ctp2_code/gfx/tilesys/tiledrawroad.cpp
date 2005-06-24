@@ -58,7 +58,7 @@ void TiledMap::DrawARoadPiece(aui_Surface *surface, Pixel16 *data, sint32 x, sin
 
 void TiledMap::DrawRoads(
 	aui_Surface *surface,
-	MapPoint &pos,		
+	const MapPoint &pos,		
 	sint32 x,			
 	sint32 y,			
 	sint32 roadType,	
@@ -581,7 +581,7 @@ void TiledMap::DrawRoads(
 
 void TiledMap::DrawCityRoads(
 	aui_Surface *surface,
-	MapPoint &pos,		
+	const MapPoint &pos,		
 	sint32 x,			
 	sint32 y,			
 	sint32 roadType,	

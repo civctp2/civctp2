@@ -65,8 +65,8 @@ public:
 	HAUDIO       GetHAudio() const;
 #else
 	Mix_Chunk    *GetAudio() const;
-    void         SetChannel(const int &channel);
-    const int    GetChannel() const;
+	void         SetChannel(const int &channel);
+	const int    GetChannel() const;
 #endif
 	MBCHAR       *GetSoundFilename();
 	const BOOL   IsPlaying() const;
@@ -82,7 +82,7 @@ private:
 	HAUDIO			m_hAudio;
 #else
 	Mix_Chunk      *m_Audio;
-    int             m_Channel;
+	int             m_Channel;
 #endif
 	uint32 			m_associatedObject;
 	MBCHAR			m_soundFilename[_MAX_PATH];
@@ -91,7 +91,7 @@ private:
 	sint32			m_soundID;
 	sint32			m_volume;
 	void			*m_dataptr;
-	uint32			m_datasize;
+	size_t			m_datasize;
 };
 
 #endif

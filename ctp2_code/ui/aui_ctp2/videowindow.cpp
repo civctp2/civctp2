@@ -20,14 +20,16 @@
 
 #include "primitives.h"
 
-#include "aui_directsurface.h"
+#include "aui_Factory.h"
 #include "CivPaths.h"
 #include "c3ui.h"
 #include "directvideo.h"
 
 #include "videowindow.h"
 
+#ifdef __AUI_USE_DIRECTX__
 extern DirectVideo		*g_video;
+#endif
 extern CivPaths			*g_civPaths;
 extern C3UI				*g_c3ui;
 
@@ -81,7 +83,9 @@ VideoWindow::VideoWindow(
 
 AUI_ERRCODE VideoWindow::InitCommon( void )
 {
+#ifdef __AUI_USE_DIRECTX__
 	m_video = NULL,
+#endif
 	m_modal = FALSE;
 
 	return AUI_ERRCODE_OK;
@@ -94,7 +98,7 @@ AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 	HRESULT			hr;
 	AUI_ERRCODE		errcode;
 
-	
+#ifdef __AUI_USE_DIRECTX__	
 	m_video = new DirectVideo();
 	if (m_video == NULL) return AUI_ERRCODE_MEMALLOCFAILED;
 
@@ -133,7 +137,7 @@ AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 	}
 
 	m_video->SetDestRect(&rect);
-
+#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -142,19 +146,21 @@ AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 
 VideoWindow::~VideoWindow()
 {
+#ifdef __AUI_USE_DIRECTX__
 	if (m_video != NULL) {
 		
 		m_video->CloseStream();
 		delete m_video;
 		m_video = NULL;
 	}
+#endif
 }
 
 
 
 AUI_ERRCODE VideoWindow::Idle(void)
 {
-	
+#ifdef __AUI_USE_DIRECTX__	
 	if (m_video != NULL) {
 		m_video->Process();
 		if (m_video->Finished()) {
@@ -166,7 +172,7 @@ AUI_ERRCODE VideoWindow::Idle(void)
 			
 		}
 	}
-
+#endif
 	return AUI_ERRCODE_OK;
 }
 
@@ -183,7 +189,7 @@ AUI_ERRCODE VideoWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 	
 	primitives_BevelRect16( m_surface, &rect, 1, 0, 16, 16 );
 
-	primitives_DropText((aui_DirectSurface *)m_surface, 5, 3, m_filename, 0xFFFF, TRUE);
+	primitives_DropText(m_surface, 5, 3, m_filename, 0xFFFF, TRUE);
 
 	rect.top += 20;
 

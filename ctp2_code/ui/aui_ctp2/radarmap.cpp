@@ -50,7 +50,7 @@
 
 
 #include "aui.h"
-#include "aui_directsurface.h"
+#include "aui_Factory.h"
 #include "aui_blitter.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
@@ -219,7 +219,7 @@ void RadarMap::InitCommon(void)
 	m_selectedCity.m_id = 0;
 
 	
-	m_mapSurface = new aui_DirectSurface(&errcode, m_width, m_height, 16, g_c3ui->DD());
+	m_mapSurface = aui_Factory::new_Surface(errcode, m_width, m_height, 16);
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -293,7 +293,7 @@ AUI_ERRCODE	RadarMap::Resize( sint32 width, sint32 height )
 		delete m_mapSurface;
 
 	
-	m_mapSurface = new aui_DirectSurface(&errcode, width, height, 16, g_c3ui->DD());
+	m_mapSurface = aui_Factory::new_Surface(errcode, width, height, 16);
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
 	CalculateMetrics();
@@ -697,8 +697,8 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
 	};
 
-	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
-	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
+	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1));
+	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1));
 	
 	if(borderFlags & k_WEST_BORDER_FLAG)
 		primitives_DrawLine16(surface, tileRectangle.left, tileRectangle.top,
@@ -715,7 +715,7 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 	tileRectangle.left = 0;
 	tileRectangle.right = static_cast<sint32>(ceil(m_tilePixelWidth / 2.0));
 
-	tileRectangle.right	= std::max(tileRectangle.left, (tileRectangle.right - 1L));
+	tileRectangle.right	= std::max(tileRectangle.left, (tileRectangle.right - 1));
 	
 	if(borderFlags & k_EAST_BORDER_FLAG)
 		primitives_DrawLine16(surface, tileRectangle.right, tileRectangle.top,
@@ -784,8 +784,8 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 	
 	sint32 middle = ceil(xPosition + m_tilePixelWidth/2);
 
-	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
-	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
+	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1));
+	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1));
 	middle					= std::min(middle, tileRectangle.right);
 	
 	
@@ -1236,7 +1236,7 @@ void RadarMap::UpdateMap(aui_Surface *surf, sint32 x, sint32 y)
 //	RadarMap::ComputeCenteredMap
 //		
 //---------------------------------------------------------------------------
-MapPoint RadarMap::ComputeCenteredMap(MapPoint &pos, RECT *viewRect)
+MapPoint RadarMap::ComputeCenteredMap(const MapPoint &pos, RECT *viewRect)
 {
 	RECT *mapViewRect = viewRect;
 
@@ -1265,7 +1265,7 @@ MapPoint RadarMap::ComputeCenteredMap(MapPoint &pos, RECT *viewRect)
 //  - Used to focus the RadarMap to a specific point 
 //
 //---------------------------------------------------------------------------
-MapPoint RadarMap::CenterMap(MapPoint &pos)
+MapPoint RadarMap::CenterMap(const MapPoint &pos)
 {
 	MapPoint LastPT = m_lastCenteredPoint;
 	if(LastPT.x == 0 && LastPT.y == 0)

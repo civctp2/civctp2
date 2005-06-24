@@ -1,13 +1,6 @@
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _NET_INSTALLATION_H_
 #define _NET_INSTALLATION_H_
 

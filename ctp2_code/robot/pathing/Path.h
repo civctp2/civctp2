@@ -84,14 +84,14 @@ public:
     void GetCurrentPoint(MapPoint &p) const; 
     void ClipStartToCurrent();
 
-    void GetStartPoint(MapPoint &pos); 
+    void GetStartPoint(MapPoint &pos) const;
     void StartDir(WORLD_DIRECTION &d);
     void GetCurrentDir(WORLD_DIRECTION &d);
     sint32 IsEndDir();
     void IncDir();
 
 	void ConcatReturnPath();
-	void Concat(Path &otherpath);
+	void Concat(const Path &otherpath);
 
     void Serialize(CivArchive &archive); 
     void InsertFront(const MapPoint &pos);

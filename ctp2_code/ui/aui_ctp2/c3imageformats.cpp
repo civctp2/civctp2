@@ -29,7 +29,17 @@
 #include "c3.h"                     // Pre-compiled header
 #include "c3imageformats.h"         // Own declarations: consistency check
 
+#ifdef _WIN32
 #include <io.h>
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#if defined(_MSC_VER)
+#define _stat stat
+#endif// _MSC_VER
+
+#endif
 
 #include "aui.h"
 #include "aui_image.h"
@@ -103,8 +113,12 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR *filename, aui_Image *image)
 	int		width, height;
 	int		bpp;
 
-    
+#ifdef _WIN322
     if (_access(filename, 0) != 0) {
+#else
+      struct stat st;
+      if (stat(filename, &st) != 0) {
+#endif
 		return LoadRIM(filename, image);
     }        
 
@@ -162,7 +176,7 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
 
 	int		width, height, pitch;
 	int		record_is_565;
-    long     size;
+    size_t     size;
 
     char *basename;
     char rname[256];

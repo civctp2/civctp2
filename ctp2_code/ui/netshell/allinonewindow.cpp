@@ -81,7 +81,7 @@
 #include "spnewgamediffscreen.h"
 #include "passwordscreen.h"
 #include "profileDB.h"
-#include "agerecord.h"
+#include "AgeRecord.h"
 
 #include "network.h"
 #include "CivilisationPool.h"
@@ -1158,7 +1158,8 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 
 	sint32 numStyles = st.GetNumStrings();
 	ctp2_Static *label = NULL;
-	for ( sint32 i = 0; i < numStyles; i++ )
+	sint32 i;
+	for ( i = 0; i < numStyles; i++ )
 	{
 		ns_ListItem *item = new ns_ListItem(
 			&errcode,
@@ -1211,7 +1212,7 @@ AllinoneWindow::~AllinoneWindow()
 	}
 
 	sint32 numActions = sizeof( m_dbActionArray ) / sizeof( aui_Action *);
-	for ( sint32 i = 0; i < numActions; i++ )
+	for ( i = 0; i < numActions; i++ )
 	{
 		if ( m_dbActionArray[ i ] )
 		{
@@ -1400,7 +1401,8 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 		listbox =
 			(aui_ListBox *)m_controls[ CONTROL_UNITSLISTBOX ];
-		for ( sint32 i = listbox->NumItems(); i; i-- )
+		sint32 i;
+		for ( i = listbox->NumItems(); i; i-- )
 		{
 			aui_Item *item = listbox->GetItemByIndex( 0 );
 			listbox->RemoveItem( item->Id() );

@@ -34,7 +34,7 @@ int tech_MemMap::GetFileExtension( char *filename, char *extension )
 
 unsigned char *tech_MemMap::GetFileBits(
 	char *filename,
-	unsigned long *outfilesize )
+	size_t *outfilesize )
 {
 	if ( outfilesize ) *outfilesize = 0;
 

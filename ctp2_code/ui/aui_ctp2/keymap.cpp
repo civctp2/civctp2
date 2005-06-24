@@ -28,7 +28,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 #include "keymap.h"
 #include "CivPaths.h"
 #include "c3files.h"
@@ -240,7 +240,7 @@ KEYMAP::KEYMAP(BOOL useDefault)
 			}
 		} else {
 			
-			val = unsigned long (keystr[0]); 
+			val = (unsigned long) (keystr[0]); 
 		}
 
         k = hash_32to16(val) & MASK_MAX_KEYPRESS_MAP; 
@@ -273,15 +273,14 @@ KEYMAP::KEYMAP(BOOL useDefault)
    
 } 
 
-uint32 KEYMAP::hash_32to16(unsigned long val)
-
+uint32 KEYMAP::hash_32to16(uint32 val)
 {
    unsigned char a, b, c, d; 
 
-   a = unsigned char(val >> 24); 
-   b = unsigned char(val >> 16); 
-   c = unsigned char(val >> 8); 
-   d = unsigned char(val); 
+   a = static_cast<unsigned char>(val >> 24); 
+   b = static_cast<unsigned char>(val >> 16); 
+   c = static_cast<unsigned char>(val >> 8); 
+   d = static_cast<unsigned char>(val); 
 
 
    return a^b^c^d;

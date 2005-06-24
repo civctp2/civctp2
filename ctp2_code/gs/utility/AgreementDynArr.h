@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __AGREEMENT_DYNAMIC_ARRAY_H__
 #define __AGREEMENT_DYNAMIC_ARRAY_H__
 
