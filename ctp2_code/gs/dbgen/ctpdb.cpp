@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// -None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -87,8 +89,13 @@ static int copy_file(char *srcFName, char *dstFName)
 		return -1;
 	}
 
+#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+	int read;
+	int wrote;
+#else
 	size_t read;
 	size_t wrote;
+#endif
 
 	while ((read = fread((void *)&buf, sizeof(char),
 	                     sizeof(buf) / sizeof(char), inFile
@@ -102,10 +109,18 @@ static int copy_file(char *srcFName, char *dstFName)
 	fclose(outFile);
 	fclose(inFile);
 
+#if defined(_MSC_VER) && (_MSC_VER < 1200)
+	if (0 >= read)
+#else
 	if (0 == read)
+#endif
 		return -1;
 
+#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+	if (0 >= wrote)
+#else
 	if (0 == wrote)
+#endif
 		return -1;
 
 	return 0;

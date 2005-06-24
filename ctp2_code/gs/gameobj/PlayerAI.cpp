@@ -1,4 +1,31 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Player AI game object
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed GetAllTileValue method
+//
+//----------------------------------------------------------------------------
 
 #include "c3debug.h"
 
@@ -541,12 +568,6 @@ sint32 Player::GetTileProduction(uint32 city_id, MapPoint &pos, BOOL &is_unknown
 sint32 Player::GetTileResource(uint32 city_id, MapPoint &pos, BOOL &is_unknown_id)
 {
 	return 0;
-}
-
-sint32 Player::GetAllTileValue(uint32 city_id, BOOL &is_unknown_id, 
-    sint32 num_tile, TileUtility *open_tile[k_NUM_CITY_TILES])	
-{
-    return TRUE; 
 }
 
 

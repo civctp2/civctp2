@@ -26,6 +26,7 @@
 // - Devided caravan costs by 10 so that we don't have to update const.txt.
 //   This allows better mod compatibility. - May 7th 2005 Martin Gühmann
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
+// - Standardized trade route cost calculation. - June 5th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -38,7 +39,6 @@
 #include "TradeAstar.h"
 #include "Path.h"
 #include "AgreementMatrix.h"
-#include "ConstDB.h"
 
 extern TradeAstar g_theTradeAstar; 
 
@@ -53,7 +53,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 res
 
 
 	double baseValue = g_theWorld->GetGoodValue(resource);
-	double distance = double(destination.CD()->GetDistanceToGood(resource));
+	double distance = static_cast<double>(destination.CD()->GetDistanceToGood(resource));
 	sint32 totalValue = sint32(baseValue * distance);
 	
 	
@@ -80,13 +80,12 @@ sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 	
 
 	
-	cost = (float)((int)((cost * g_theConstDB->GetCaravanCoef() * 0.1) + 0.5));
-	
+	cost = tradeutil_GetNetTradeCosts(cost);
 	
 	if(cost < 1)
 		cost = 1;
 
-	return sint32(cost);
+	return static_cast<sint32>(cost);
 }
 
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
@@ -112,7 +111,7 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 	
 	
 	
-	cost = cost * g_theConstDB->GetCaravanCoef() + .5;
+	cost = tradeutil_GetNetTradeCosts(cost);
 	if(cost < 1)
 		cost = 1;
 
