@@ -25,11 +25,13 @@
 // - Added stuff for '&' operator
 // - Prevented memory leaks
 // - Prevented crash
+// - Reuse SlicSegment pool between SlicEngine sessions.
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SlicSegment.h"
+#include "c3.h"                 // Pre-compiled header
+#include "SlicSegment.h"        // Own declarations: consistency check
+
 #include "SlicError.h"
 #include "slicif.h"
 #include "SlicStack.h"
@@ -48,81 +50,137 @@
 #include "SlicConditional.h"
 #include "SlicConst.h"
 #include "profileDB.h"
+#include "Pool.h"
 
-SlicSegment::SlicSegment()
+namespace
 {
-	m_id = NULL;
-	m_code = NULL;
-	m_uiComponent = NULL;
-	m_trigger_symbols = NULL;
-	m_trigger_symbols_indices = NULL;
-	m_parameter_indices = NULL;
-	m_parameter_symbols = NULL;
-    m_isAlert = FALSE;
-	m_isHelp = FALSE;
-	m_filename = NULL;
-	m_firstLineNumber = -1;
+    sint32 const                NOT_IN_USE    = -1;
+    GAME_EVENT_PRIORITY const   PRIORITY_DEFAULT    = GEV_PRI_Pre;
+    SLIC_OBJECT const           TYPE_DEFAULT        = SLIC_OBJECT_MESSAGEBOX;
 
-    int i;
-    for(i=0; i<k_MAX_PLAYERS; i++)
-        m_lastShown[i] = 0;
+    size_t const                SEGMENT_POOL_SIZE   = 100;
+	Pool<SlicSegment> *         s_segmentPond       = NULL;
 }
 
-SlicSegment::SlicSegment(sint32 slicifIndex)
+//----------------------------------------------------------------------------
+//
+// Name       : SlicSegment::SlicSegment
+//
+// Description: Default constructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+SlicSegment::SlicSegment()
+:	GameEventHookCallback       (),
+    m_type                      (TYPE_DEFAULT),
+	m_codeSize                  (0),
+	m_num_trigger_symbols       (0),
+	m_num_parameters            (0),
+	m_enabled                   (FALSE),
+	m_specialVariables          (0),
+	m_isAlert                   (FALSE),
+	m_isHelp                    (FALSE),
+	m_event                     (GEV_MAX),
+	m_priority                  (PRIORITY_DEFAULT),
+	m_fromFile                  (FALSE),
+	m_firstLineNumber           (NOT_IN_USE),
+	m_id                        (NULL),
+	m_code                      (NULL),
+	m_uiComponent               (NULL),
+	m_filename                  (NULL),
+    m_trigger_symbols_indices   (NULL),
+	m_trigger_symbols           (NULL),
+	m_parameter_indices         (NULL),
+	m_parameter_symbols         (NULL),
+    m_poolIndex                 (NOT_IN_USE) 
 {
-	Assert(slicifIndex < g_slicNumEntries);
-	struct PSlicObject *pobj = g_slicObjectArray[slicifIndex];
+    std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
+}
 
-	m_firstLineNumber = -1;
+//----------------------------------------------------------------------------
+//
+// Name       : SlicSegment::SlicSegment
+//
+// Description: Constructor from stored object
+//
+// Parameters : slicifIndex         : index of stored object
+//
+// Globals    : g_slicObjectArray   : stored objects
+//              g_slicEngine        : game engine
+//              g_gevManager        : game event manager
+//
+// Returns    : -
+//
+// Remark(s)  : - The stored object will be deleted after copying its data.
+//              - Event handlers and Slic user functions will be registered. 
+//
+//----------------------------------------------------------------------------
+SlicSegment::SlicSegment(sint32 slicifIndex)
+:	GameEventHookCallback       (),
+    m_type                      (TYPE_DEFAULT),
+	m_codeSize                  (0),
+	m_num_trigger_symbols       (0),
+	m_num_parameters            (0),
+	m_enabled                   (TRUE),
+	m_specialVariables          (0),
+	m_isAlert                   (FALSE),
+	m_isHelp                    (FALSE),
+	m_event                     (GEV_MAX),
+	m_priority                  (PRIORITY_DEFAULT),
+	m_fromFile                  (FALSE),
+	m_firstLineNumber           (NOT_IN_USE),
+	m_id                        (NULL),
+	m_code                      (NULL),
+	m_uiComponent               (NULL),
+	m_filename                  (NULL),
+    m_trigger_symbols_indices   (NULL),
+	m_trigger_symbols           (NULL),
+	m_parameter_indices         (NULL),
+	m_parameter_symbols         (NULL),
+    m_poolIndex                 (slicifIndex) 
+{
+    std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
+
+	Assert(slicifIndex < g_slicNumEntries);
+	struct PSlicObject * pobj = g_slicObjectArray[slicifIndex];
 
 	m_type = pobj->m_type;
 	m_id = pobj->m_id;
 	m_code = pobj->m_code;
 	m_codeSize = pobj->m_codeSize;
-	m_specialVariables = 0;
 	m_fromFile = pobj->m_from_file;
 	m_isAlert = pobj->m_is_alert;
 	m_isHelp  = pobj->m_is_help;
 	m_uiComponent = pobj->m_ui_component;
 	m_filename = pobj->m_filename;
 
-	
-
-
-
-
-	m_trigger_symbols = NULL;
-	m_parameter_symbols = NULL;
-
-	if(m_type == SLIC_OBJECT_TRIGGER) {
-		
-		
-		
-		
-		free(pobj->m_trigger_symbols);
-		m_num_trigger_symbols = 0;
-	} else {
-		m_trigger_symbols_indices = NULL;
-		m_num_trigger_symbols = 0;
+	if (m_type == SLIC_OBJECT_TRIGGER) 
+    {
+		free(pobj->m_trigger_symbols);  // never used
 	}
 
-	if(m_type == SLIC_OBJECT_FUNCTION) {
-		if(pobj->m_num_parameters == 0) {
-			m_parameter_indices = new sint32[1];
-		} else {
-			m_parameter_indices = new sint32[pobj->m_num_parameters];
-		}
-		memcpy(m_parameter_indices, pobj->m_parameters, pobj->m_num_parameters * sizeof(sint32));
+	if (m_type == SLIC_OBJECT_FUNCTION) 
+    {
+		if (pobj->m_num_parameters > 0) 
+        {
+    		m_parameter_indices = new sint32[pobj->m_num_parameters];
+		    memcpy(m_parameter_indices, pobj->m_parameters, pobj->m_num_parameters * sizeof(sint32));
+    	}
 		m_num_parameters = pobj->m_num_parameters;
 		free(pobj->m_parameters);
-	} else {
-		m_parameter_indices = NULL;
-		m_num_parameters = 0;
 	}
 
-	if(m_type == SLIC_OBJECT_HANDLEEVENT && g_gevManager) {
-		m_event = g_gevManager->GetEventIndex(pobj->m_event_name);
-		switch(pobj->m_priority) {
+	if (m_type == SLIC_OBJECT_HANDLEEVENT) 
+    {
+		switch (pobj->m_priority) 
+        {
 			case SLIC_PRI_PRE:     m_priority = GEV_PRI_Pre;         break;
 			case SLIC_PRI_POST:    m_priority = GEV_PRI_Post;        break;
 			case SLIC_PRI_PRIMARY: m_priority = GEV_PRI_Primary;     break;
@@ -132,38 +190,93 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 				break;
 		}
 
-		g_gevManager->AddCallback(m_event, m_priority, this);
-	} else {
-		m_event = GEV_MAX;
+        if (g_gevManager)
+        {
+		    m_event = g_gevManager->GetEventIndex(pobj->m_event_name);
+		    g_gevManager->AddCallback(m_event, m_priority, this);
+        }
 	}
 
 	g_slicObjectArray[slicifIndex] = NULL;
 
 	m_enabled = TRUE;
 
-    int i;
-    for(i=0; i<k_MAX_PLAYERS; i++)
-        m_lastShown[i] = 0;
+    if (g_slicEngine)
+    {
+	    SlicSymbolData * sym = g_slicEngine->GetSymbol(m_id);
 
-	SlicSymbolData *sym = g_slicEngine->GetSymbol(m_id);
-	if(sym) {
-		
-		
-		if((sym->GetType() == SLIC_SYM_ID) ||
-		   (sym->GetType() == SLIC_SYM_UFUNC)) {
-			sym->SetSegment(this);
+	    if (sym) 
+        {
+    		if((sym->GetType() == SLIC_SYM_ID) ||
+	    	   (sym->GetType() == SLIC_SYM_UFUNC)
+              ) 
+            {
+			    sym->SetSegment(this);
+            }
 		}
 	}
 
 	free(pobj);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SlicSegment::SlicSegment
+//
+// Description: Constructor from serialized archive
+//
+// Parameters : archive : archive to read from
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 SlicSegment::SlicSegment(CivArchive &archive)
+:	GameEventHookCallback       (),
+    m_type                      (TYPE_DEFAULT),
+	m_codeSize                  (0),
+	m_num_trigger_symbols       (0),
+	m_num_parameters            (0),
+	m_enabled                   (TRUE),
+	m_specialVariables          (0),
+	m_isAlert                   (FALSE),
+	m_isHelp                    (FALSE),
+	m_event                     (GEV_MAX),
+	m_priority                  (PRIORITY_DEFAULT),
+	m_fromFile                  (FALSE),
+	m_firstLineNumber           (NOT_IN_USE),
+	m_id                        (NULL),
+	m_code                      (NULL),
+	m_uiComponent               (NULL),
+	m_filename                  (NULL),
+    m_trigger_symbols_indices   (NULL),
+	m_trigger_symbols           (NULL),
+	m_parameter_indices         (NULL),
+	m_parameter_symbols         (NULL)
+    // m_poolIndex              (filled when retrieving from the pool) 
 {
+    std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
 	Serialize(archive);
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : SlicSegment::~SlicSegment
+//
+// Description: Destructor
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 SlicSegment::~SlicSegment()
 {
 	if(m_id) {
@@ -192,34 +305,69 @@ SlicSegment::~SlicSegment()
 	delete [] m_parameter_symbols;
 }
 
-void * SlicSegment::operator new(size_t size)
+//----------------------------------------------------------------------------
+//
+// Name       : SlicSegment::operator new
+//
+// Description: Memory allocator
+//
+// Parameters : (size_t: unused)
+//
+// Globals    : s_segmentPond   : pool to retrieve a segment from
+//
+// Returns    : void *          : pointer to pool segment
+//
+// Remark(s)  : Slic segments are from a specialised pool, instead of from the
+//              default heap.
+//
+//----------------------------------------------------------------------------
+void * SlicSegment::operator new(size_t)
 {
-	if (g_slicEngine) 
+    if (!s_segmentPond)
     {
-		return g_slicEngine->GetNewSegment();
-	} 
-    else 
+        s_segmentPond = new Pool<SlicSegment>(SEGMENT_POOL_SIZE);
+    }
+
+	int index;
+	SlicSegment *   seg = static_cast<SlicSegment *>
+        (s_segmentPond->Get_Next_Pointer(index));
+
+    if (seg)
     {
-		SlicSegment * seg = ::new SlicSegment;
-		seg->m_poolIndex = -1;
-		return seg;
-	}
+	    seg->SetPoolIndex(index);
+    }
+
+	return seg;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SlicSegment::operator delete
+//
+// Description: Memory deallocator
+//
+// Parameters : ptr             : pointer to delete
+//
+// Globals    : s_segmentPond   : pool to restore the pointer to
+//
+// Returns    : -
+//
+// Remark(s)  : Slic segments are from a specialised pool, instead of from the
+//              default heap.
+//
+//----------------------------------------------------------------------------
 void SlicSegment::operator delete(void *ptr)
 {
-	SlicSegment * seg = reinterpret_cast<SlicSegment *>(ptr);
-
-    if (seg && (seg->m_poolIndex >= 0)) 
+    SlicSegment * seg = static_cast<SlicSegment *>(ptr);
+    if (seg)
     {
-		g_slicEngine->ReleaseSegment(seg);
-	} 
-    else 
-    {
-		::delete(ptr);
-	}
+        int const poolIndex = seg->GetPoolIndex();
+        if ((poolIndex >= 0) && s_segmentPond)
+        {
+            s_segmentPond->Release_Pointer(poolIndex);
+        }
+    }
 }
-
 
 BOOL SlicSegment::TestLastShown(sint32 player, sint32 turn)
 {
@@ -293,7 +441,7 @@ void SlicSegment::Serialize(CivArchive &archive)
 		}
 
 		archive >> m_num_parameters;
-		m_parameter_indices = new sint32[m_num_parameters > 0 ? m_num_parameters : 1];
+        m_parameter_indices = (m_num_parameters > 0) ? new sint32[m_num_parameters] : NULL;
 		sint32 i;
 		for(i = 0; i < m_num_parameters; i++) {
 			m_parameter_indices[i] = archive.GetSINT32();
@@ -373,7 +521,7 @@ void SlicSegment::LinkParameterSymbols()
 		return;
 
 	delete [] m_parameter_symbols;	
-	m_parameter_symbols = new SlicSymbolData *[m_num_parameters ? m_num_parameters : 1];
+    m_parameter_symbols = (m_num_parameters > 0) ? new SlicSymbolData *[m_num_parameters] : NULL;
 	for(sint32 i = 0; i < m_num_parameters; i++) {
 		m_parameter_symbols[i] = g_slicEngine->GetSymbol(m_parameter_indices[i]);
 		Assert(m_parameter_symbols[i]);
@@ -749,4 +897,9 @@ SlicConditional *SlicSegment::NewConditional(sint32 line, const char *expression
 	return NULL;
 }
 
+void SlicSegment::Cleanup(void)
+{
+    delete s_segmentPond;
+    s_segmentPond = NULL;
+}
 

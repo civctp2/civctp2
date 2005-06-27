@@ -17,75 +17,22 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Redesigned to prevent memory leaks and crashes.
+// - Reuse SlicSegment pool between SlicEngine sessions.
 //
 //----------------------------------------------------------------------------
 
 #ifndef __SLIC_ENGINE_H__
 #define __SLIC_ENGINE_H__
 
-class SlicObject;
-class CivArchive;
+class SlicEngine;
 
-#define k_SEGMENT_HASH_SIZE 512
-
-class SlicSegment;
-class SlicFunc;
-template <class T> class StringHash;
-template <class T> class PointerList;
-class SlicSymTab;
-class SlicSymbolData;
-class SlicContext;
-class SlicSegmentHash;
-class Unit;
-class MapPoint;
-class TradeOffer;
-class Agreement;
-struct BuildNode;
-class Message;
-class TradeRoute;
-class SlicRecord;
-class SlicConst;
-class SlicStructDescription;
-class SlicNamedSymbol;
-class SlicParameterSymbol;
-class SlicBuiltinNamedSymbol;
-enum SLIC_BUILTIN;
-class SlicStack;
-class SlicModFunc;
-class SlicUITrigger;
-
-class SlicDBInterface;
-
-template <class T> class Pool;
-template <class T> class SimpleDynamicArray;
-
-typedef sint32 AdvanceType;
-typedef sint32 PLAYER_INDEX;
-
-#define k_NORMAL_FILE 0
-#define k_TUTORIAL_FILE 1
-
-#define k_NON_TUTORIAL_MESSAGE_CLASS 666
-#define k_NON_TUTORIAL_HELP_CLASS 667
-
-#define k_MAX_TRIGGER_KEYS 10
-
-#include "SlicTriggerLists.h"
-#include "message.h"
-#include "slicif_sym.h"
-#include "SlicModFuncEnum.h"
-#include "gstypes.h"
-
-
-enum SLIC_TAG {
+enum SLIC_TAG 
+{
 	ST_NONE,
 	ST_UNIT,
 	ST_CITY,
@@ -102,6 +49,59 @@ enum SLIC_TAG {
 };
 
 #define k_NUM_TIMERS 11
+#define k_SEGMENT_HASH_SIZE 512
+
+#define k_NORMAL_FILE 0
+#define k_TUTORIAL_FILE 1
+
+#define k_NON_TUTORIAL_MESSAGE_CLASS 666
+#define k_NON_TUTORIAL_HELP_CLASS 667
+
+#define k_MAX_TRIGGER_KEYS 10
+
+extern SlicEngine *g_slicEngine;
+
+
+class SlicObject;
+class CivArchive;
+class SlicSegment;
+class SlicFunc;
+template <class T> class StringHash;
+template <class T> class PointerList;
+class SlicSymTab;
+class SlicSymbolData;
+class SlicContext;
+class SlicSegmentHash;
+class Unit;
+class MapPoint;
+class TradeOffer;
+class Agreement;
+class Message;
+class TradeRoute;
+class SlicRecord;
+class SlicConst;
+class SlicStructDescription;
+class SlicNamedSymbol;
+class SlicParameterSymbol;
+class SlicBuiltinNamedSymbol;
+class SlicStack;
+class SlicModFunc;
+class SlicUITrigger;
+class SlicDBInterface;
+template <class T> class SimpleDynamicArray;
+
+typedef sint32 AdvanceType;
+
+#include "Advances.h"           // AdvanceType
+#include "BldQue.h"             // BuildNode
+#include "SlicBuiltinEnum.h"
+#include "SlicTriggerLists.h"
+#include "message.h"
+#include "slicif_sym.h"
+#include "SlicModFuncEnum.h"
+#include "c3types.h"            // MBCHAR, sint32
+#include "Player.h"             // PLAYER_INDEX
+
 
 class SlicEngine {
 private:
@@ -120,10 +120,6 @@ private:
 	SlicModFunc *m_modFunc[mod_MAX];
 
 	PointerList<SlicSegment> *m_triggerLists[TRIGGER_LIST_MAX];
-
-	Pool<SlicObject> *m_objectPond;
-	Pool<SlicSegment> *m_segmentPond;
-	
 	PointerList<SlicRecord> *m_records[k_MAX_PLAYERS];
 	sint32 m_timer[k_NUM_TIMERS];
 	SimpleDynamicArray<sint32> *m_disabledClasses;
@@ -140,8 +136,8 @@ private:
 	StringHash<SlicConst> *m_constHash;
 
 	
-	SlicSymbolData **m_builtins;
-	SlicStructDescription **m_builtin_desc;
+	SlicSymbolData const **     m_builtins;
+	SlicStructDescription **    m_builtin_desc;
 
 	char *m_loadGameName;
 	MBCHAR m_currentKeyTrigger;
@@ -156,19 +152,10 @@ private:
 public:
 	SlicEngine();
 	SlicEngine(CivArchive &archive);
-	~SlicEngine();
-	void Cleanup();
+	virtual ~SlicEngine();
 
 	void Serialize(CivArchive &archive);
 	void PostSerialize();
-
-	
-	SlicObject *GetNewObject();
-	void ReleaseObject(SlicObject *object);
-	
-	
-	SlicSegment *GetNewSegment();
-	void ReleaseSegment(SlicSegment *seg);
 
 	SlicSegment *GetSegment(const char *id);
 	SlicSegmentHash *GetSegmentHash() { return m_segmentHash; }
@@ -333,7 +320,7 @@ public:
 	void AddSymbol(SlicNamedSymbol *sym);
 	void AddStructArray(bool createSymbols, SlicStructDescription *desc, SLIC_BUILTIN which);
 	void AddStruct(bool createSymbols, SlicStructDescription *desc, SLIC_BUILTIN which);
-	SlicSymbolData *GetBuiltinSymbol(SLIC_BUILTIN which);
+	SlicSymbolData const * GetBuiltinSymbol(SLIC_BUILTIN which) const;
 
 	void AddStructs(bool createSymbols);
 	void AddBuiltinSymbol(SlicBuiltinNamedSymbol *sym);
@@ -361,7 +348,5 @@ public:
 
 	sint32 CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 player);
 };
-
-extern SlicEngine *g_slicEngine;
 
 #endif
