@@ -356,7 +356,7 @@ void ConnectionSelectWindow::OKButtonAction::Execute(
 		else
 		{
 			NETFunc::STATUS status = g_netfunc->SetTransport(t);
-			if ( status != NETFunc::STATUS::OK )
+			if ( status != NETFunc::OK )
 			{
 				passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_NODIALUP );
 			} else if(t->GetType() == NETFunc::Transport::INTERNET) {

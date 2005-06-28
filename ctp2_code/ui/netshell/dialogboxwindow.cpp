@@ -346,7 +346,7 @@ DialogBoxWindow::~DialogBoxWindow()
 			}
 		}
 
-		delete[ m_numButtons ] m_buttons;
+		delete[] m_buttons;
 		m_buttons = NULL;
 	}
 

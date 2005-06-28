@@ -140,8 +140,8 @@ public:
 class c3_UtilityTextFieldPopup
 {
 public:
-	c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback *callback, MBCHAR *titleText, MBCHAR *messageText,
-								MBCHAR *defaultText, MBCHAR *ldlBlock = NULL, void *data = NULL,
+	c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback *callback, const MBCHAR *titleText, const MBCHAR *messageText,
+								const MBCHAR *defaultText, MBCHAR *ldlBlock = NULL, void *data = NULL,
 							  bool wantEmpties = false);
 	~c3_UtilityTextFieldPopup( void );
 

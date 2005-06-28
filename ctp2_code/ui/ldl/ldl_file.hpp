@@ -27,7 +27,7 @@ public:
 	~ldl();
 
 	// read an ldl file and new the data associated with it
-	int ReadData(const char *fname = NULL);
+	uint32 ReadData(const char *fname = NULL);
 
 	ldl_datablock *FindDataBlock( char *szName, ldl_datablock *dbParent = NULL );
 	// compatibility

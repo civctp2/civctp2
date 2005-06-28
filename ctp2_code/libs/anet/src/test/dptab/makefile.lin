@@ -3,7 +3,7 @@
 PACK=__attribute__ ((packed))
 OPT = -DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -I. -I../../../../h -I../../../../demo/utils -I..
 COPT = $(FLAGS) $(OPT)
-OBJ_FILES = dptabt1.o /usr/lib/libm.a /usr/lib/libbsd.a ../../../../linux86/lib/$(dp_LIB)
+OBJ_FILES = dptabt1.o /usr/lib/libm.a libbsd.a ../../../../linux86/lib/$(dp_LIB)
 
 default: ../../../../linux86/bin/$(DEST) 
 
@@ -17,5 +17,8 @@ $(DEST): $(OBJ_FILES)
 
 dptabt1.o: ../dptabt1.c ../../../../h/dp2.h
 	gcc -c $(COPT) ../dptabt1.c
+
+libbsd.a: /usr/lib/libbsd*.a
+	cp -p $< $@
 
 # end of MAKEFILE

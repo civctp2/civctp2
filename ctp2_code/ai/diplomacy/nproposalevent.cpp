@@ -40,7 +40,7 @@
 #include "network.h"
 #include "pollution.h"
 #include "director.h"
-#include "gold.h"
+#include "Gold.h"
 
 extern SelectedItem *g_selected_item;
 extern UnitPool *g_theUnitPool;
@@ -1654,7 +1654,8 @@ STDEHANDLER(BreakAgreementWithEnemy_NewProposalEvent)
 	const Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 	ai::Agreement agreement;
 
-	for (PLAYER_INDEX cold_war_enemy = 1; cold_war_enemy < CtpAi::s_maxPlayers; cold_war_enemy++)
+	PLAYER_INDEX cold_war_enemy;
+	for (cold_war_enemy = 1; cold_war_enemy < CtpAi::s_maxPlayers; cold_war_enemy++)
 	{
 		if (g_player[cold_war_enemy] == NULL)
 			continue;
@@ -2206,8 +2207,9 @@ STDEHANDLER(RequestHonorMilitaryAgeement_NewProposalEvent)
 	if (g_player[receiver] == NULL)
 		return GEV_HD_Continue;
 
-	
-	for (PLAYER_INDEX hot_war_enemy = 1; hot_war_enemy < CtpAi::s_maxPlayers; hot_war_enemy++)
+
+	PLAYER_INDEX hot_war_enemy;
+	for (hot_war_enemy = 1; hot_war_enemy < CtpAi::s_maxPlayers; hot_war_enemy++)
 	{
 		if (g_player[hot_war_enemy] == NULL)
 			continue;

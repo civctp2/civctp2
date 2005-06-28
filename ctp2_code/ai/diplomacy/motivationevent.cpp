@@ -33,7 +33,7 @@
 #include "mapanalysis.h"
 #include "GoalRecord.h"
 #include "ctpgoal.h"
-#include "gold.h"
+#include "Gold.h"
 #include "stringutils.h"
 #include "ctpai.h"
 

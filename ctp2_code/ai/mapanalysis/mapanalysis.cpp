@@ -204,9 +204,9 @@ void MapAnalysis::BeginTurn()
     ComputeHandicapRatios();
 
 
-	
-	
-    for (sint16 player = 0; player < m_threatGrid.size(); player++)
+    /// \todo Check, why it's not PLAYER_INDEX
+    sint16 player;
+    for (player = 0; player < m_threatGrid.size(); player++)
     {
 
         m_threatGrid[player].Clear();

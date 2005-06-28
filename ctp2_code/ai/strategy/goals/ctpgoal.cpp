@@ -63,7 +63,7 @@
 #include "Cell.h"
 #include "World.h"
 #include "player.h"
-#include "order.h"
+#include "Order.h"
 #include "ArmyData.h"
 #include "UnitData.h"
 #include "UnitPool.h"

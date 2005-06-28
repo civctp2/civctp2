@@ -140,9 +140,11 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 				g_netshell->GotoScreen( SCREEN_ALLINONE );
 				w->Update();
 			}
-		} else
-			
+		} else {
+#ifdef WIN32
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
+#endif
+		}
 	} else
 	
 		g_netshell->GotoScreen( SCREEN_CONNECTIONSELECT );
@@ -596,8 +598,8 @@ void NetShell::DestroyScreens( void )
 	SaveGameSetupList();
 
 
-	
-	for ( sint32 i = 0; i < (sint32)SCREEN_MAX; i++ )
+	sint32 i;
+	for ( i = 0; i < (sint32)SCREEN_MAX; i++ )
 		if ( m_screens[ i ] ) delete m_screens[ i ];
 	memset( m_screens, 0, sizeof( m_screens ) );
 

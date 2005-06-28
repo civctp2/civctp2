@@ -35,7 +35,7 @@
 
 class Unit;
 
-sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 resource);
+sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit &destination, sint32 resource);
 sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination);
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination);
 double inline tradeutil_GetNetTradeCosts(double costs){return(costs * g_theConstDB->GetCaravanCoef() * 0.1) + 0.5;}

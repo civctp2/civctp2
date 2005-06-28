@@ -22,7 +22,7 @@
 #include "GSLogs.h"
 #include "mapanalysis.h"
 #include "c3math.h"
-#include "gold.h"
+#include "Gold.h"
 #include "DiplomacyProposalRecord.h"
 #include "diplomacyutil.h"
 

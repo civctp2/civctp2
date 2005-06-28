@@ -796,8 +796,8 @@ void c3_ExpelPopup::RemoveWindow( void )
 
 
 c3_UtilityTextFieldPopup::c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback* callback, 
-												   MBCHAR *titleText, MBCHAR *defaultText, 
-												   MBCHAR *messageText, MBCHAR *ldlBlock, void *data,
+												   const MBCHAR *titleText, const MBCHAR *defaultText, 
+												   const MBCHAR *messageText, MBCHAR *ldlBlock, void *data,
 													bool wantEmpties)
 {
 	AUI_ERRCODE errcode;

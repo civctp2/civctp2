@@ -792,7 +792,8 @@ void StartSelectingWindow::NewButtonAction::Execute(
 		sint32 num = 2;
 		while ( 1 )
 		{
-			for ( sint32 i = 0; i < listbox->NumItems(); i++ )
+			sint32 i;
+			for ( i = 0; i < listbox->NumItems(); i++ )
 			{
 				NETFunc::GameSetup *game = (NETFunc::GameSetup *)
 					((ns_GameSetupItem *)listbox->GetItemByIndex( i ))->
@@ -923,7 +924,8 @@ void gameselectwindow_scenarioExitCallback(aui_Control *control,
 		sint32 num = 2;
 		while ( 1 )
 		{
-			for ( sint32 i = 0; i < listbox->NumItems(); i++ )
+			sint32 i;
+			for ( i = 0; i < listbox->NumItems(); i++ )
 			{
 				NETFunc::GameSetup *game = (NETFunc::GameSetup *)
 					((ns_GameSetupItem *)listbox->GetItemByIndex( i ))->

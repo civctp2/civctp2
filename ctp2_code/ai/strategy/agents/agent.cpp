@@ -14,7 +14,7 @@
 
 #include "c3.h"
 
-#include "Agent.h"
+#include "agent.h"
 
 
 #include "debugassert.h"

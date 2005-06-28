@@ -43,7 +43,7 @@
 #include "ArmyData.h"
 #include "player.h"
 #include "Events.h"
-#include "order.h"
+#include "Order.h"
 #include "GameEventUser.h"
 #include "CTPDatabase.h"
 #include "OrderRecord.h"

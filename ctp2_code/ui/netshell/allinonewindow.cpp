@@ -1212,6 +1212,7 @@ AllinoneWindow::~AllinoneWindow()
 	}
 
 	sint32 numActions = sizeof( m_dbActionArray ) / sizeof( aui_Action *);
+	sint32 i;
 	for ( i = 0; i < numActions; i++ )
 	{
 		if ( m_dbActionArray[ i ] )
@@ -1496,7 +1497,8 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	m_numAvailUnits = g_nsUnits->GetStrings()->GetNumStrings();
 	g_gamesetup.SetNumAvailUnits( m_numAvailUnits );
-	for ( sint32 i = 0; i < m_numAvailUnits; i++ )
+	sint32 i;
+	for ( i = 0; i < m_numAvailUnits; i++ )
 	{
 		if ( !g_nsUnits->m_noIndex[ i ] )
 		{
@@ -1525,6 +1527,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	ListPos pos = unitList.GetHeadPosition();
 
+	/// \todo Check wether even increasement is wanted
 	for ( i++; i < m_numAvailUnits; i++ )
 	{
 		if ( !g_nsUnits->m_noIndex[ i ] )
@@ -2112,7 +2115,8 @@ BOOL AllinoneWindow::AssignTribe(
 
 	
 	TribeSlot *tribeSlots = g_gamesetup.GetTribeSlots();
-	for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
+	sint32 i;
+	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 	{
 		if ( tribeSlots[ i ].key == key && tribeSlots[ i ].isAI == isAI )
 		{
@@ -2124,7 +2128,7 @@ BOOL AllinoneWindow::AssignTribe(
 	if ( !unassign )
 	{
 		
-		sint32 playerIndex = i;
+		PLAYER_INDEX playerIndex = i;
 		if ( playerIndex == k_NS_MAX_PLAYERS )
 		{
 			for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
@@ -2502,7 +2506,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 			}
 
 			
-			if ( m->GetCode() == NETFunc::Message::Code::ADDAIPLAYER )
+			if ( m->GetCode() == NETFunc::Message::ADDAIPLAYER )
 			{
 				nf_AIPlayer aiplayer;
 				aiplayer.Set( m->GetBodySize(), m->GetBody() );
@@ -2519,7 +2523,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 					FALSE );
 				Assert( success );
 			}
-			else if ( m->GetCode() == NETFunc::Message::Code::DELAIPLAYER )
+			else if ( m->GetCode() == NETFunc::Message::DELAIPLAYER )
 			{
 				
 				nf_AIPlayer aiplayer;
@@ -2727,7 +2731,8 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 					info->networkGUID,
 					sizeof(CivGuid) * k_MAX_PLAYERS);
 
-				for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
+				sint32 i;
+				for(i = 0; i < k_MAX_PLAYERS; i++) {
 					if(m_civGuids[i].guid == *g_network.GetGuid()) {
 						success = AssignTribe(
 							m_civGuids[i].civIndex + 1, 
@@ -2768,9 +2773,11 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 													 cancel,
 													 AUI_BUTTON_ACTION_EXECUTE,
 													 0 );
-					} else
-						
+					} else {
+#ifdef WIN32
 						PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
+#endif
+					}
 				}
 
 			}
@@ -2989,8 +2996,8 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 					if ( m_mode == CONTINUE_JOIN && m_joinedGame && gotpacket )
 					{
 						
-						
-						for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
+						sint32 i;
+						for(i = 0; i < k_MAX_PLAYERS; i++) {
 							if(m_civGuids[i].guid == *g_network.GetGuid()) {
 								RequestTribe( m_civGuids[ i ].civIndex + 1 );
 								break;
@@ -3144,9 +3151,11 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 				FindWindow( NetShell::WINDOW_LOBBY );
 			g_netshell->GotoScreen( NetShell::SCREEN_LOBBY );
 			w->Update();
-		} else
-			
+		} else {
+#ifdef WIN32
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
+#endif
+		}
 
 	}
 
@@ -3168,9 +3177,11 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 				cancel,
 				AUI_BUTTON_ACTION_EXECUTE,
 				0 );
-		} else
-			
+		} else {
+#ifdef WIN32	
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
+#endif
+		}
 	}
 			
 	if(joinedgame && g_netfunc->GetStatus() == NETFunc::OK) {
@@ -3222,7 +3233,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 			
 			if ( m_receivedGuids )
 			{
-				
+				sint32 i;
 				
 				for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
 					if(m_civGuids[i].guid == *g_network.GetGuid()) {
@@ -3406,7 +3417,8 @@ void AllinoneWindow::UpdateDisplay( void )
 	if ( !m_createdExclusions ) CreateExclusions();
 
 	m_numAvailUnits = g_gamesetup.GetNumAvailUnits();
-	for ( sint32 i = 0; i < m_numAvailUnits; i++ )
+	sint32 i;
+	for ( i = 0; i < m_numAvailUnits; i++ )
 		if ( m_units[ i ] ) m_units[ i ]->SetState( g_gamesetup.GetUnit( i ) );
 
 	m_numAvailImprovements = g_gamesetup.GetNumAvailImprovements();
@@ -3493,7 +3505,8 @@ void AllinoneWindow::UpdateTribeSwitches( void )
 	}
 
 	spnewgametribescreen_enableTribes();
-	for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
+	sint32 i;
+	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 	{
 		
 		if ( tribeSlots[ i ].tribe != g_playersetup.GetTribe() )
@@ -4074,7 +4087,8 @@ void AllinoneWindow::PlayersListBoxAction::Execute(
 		FindControl(AllinoneWindow::CONTROL_CHATBOX);
 
 	ListPos position = justDeselectedList.GetHeadPosition();
-	for ( sint32 i = justDeselectedList.L(); i; i-- ) {
+	sint32 i;
+	for ( i = justDeselectedList.L(); i; i-- ) {
 		index = justDeselectedList.GetNext( position );
 		ns_HPlayerItem *item = (ns_HPlayerItem *)listbox->GetItemByIndex(index);
 		if ( !item->IsAI() )
@@ -4943,18 +4957,22 @@ void AllinoneWindow::CancelButtonAction::Execute(
 			g_gamesetup.SetClosed( FALSE );
 			g_gamesetup.SetSize( k_NS_MAX_HUMANS );
 
-			
+#ifdef WIN32			
 			Sleep( k_PACKET_DELAY );
+#else
+			usleep( k_PACKET_DELAY );
+#endif
 			w->UpdateGameSetup();
 		}
 		g_netfunc->Leave();
 		LobbyWindow *w = (LobbyWindow *)(g_netshell->FindWindow( NetShell::WINDOW_LOBBY ));
 		g_netshell->GotoScreen( NetShell::SCREEN_LOBBY );
 		w->Update();
-
-	} else
-		
+	} else {
+#ifdef WIN32
 		PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
+#endif
+	}
 }
 
 
@@ -5009,7 +5027,8 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	
 
 	memset( moreinfo, 0, sizeof( moreinfo ) );
-	for ( sint32 i = 0; i < m_numAvailUnits; i++ )
+	sint32 i;
+	for ( i = 0; i < m_numAvailUnits; i++ )
 	{
 		if ( m_units[ i ] && m_units[ i ]->GetState() )
 		{

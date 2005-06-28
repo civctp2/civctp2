@@ -47,8 +47,8 @@
 
 #include "c3.h"
 
-#include "Agent.h"
-#include "squad_strength.h"
+#include "agent.h"
+#include "squad_Strength.h"
 #include "cellunitlist.h"
 #include "World.h"
 #include "UnitRecord.h"

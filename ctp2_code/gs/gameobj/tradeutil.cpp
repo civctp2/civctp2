@@ -42,7 +42,7 @@
 
 extern TradeAstar g_theTradeAstar; 
 
-sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 resource)
+sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit &destination, sint32 resource)
 {
 	Assert(destination.IsValid());
 	if(!destination.IsValid()) return 0;
@@ -53,7 +53,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 res
 
 
 	double baseValue = g_theWorld->GetGoodValue(resource);
-	double distance = static_cast<double>(destination.CD()->GetDistanceToGood(resource));
+	double distance = static_cast<double>(const_cast<Unit &>(destination).CD()->GetDistanceToGood(resource));
 	sint32 totalValue = sint32(baseValue * distance);
 	
 	

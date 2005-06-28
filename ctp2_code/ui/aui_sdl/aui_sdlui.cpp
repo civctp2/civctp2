@@ -38,8 +38,8 @@
 #include "aui_mouse.h"
 #include "aui_keyboard.h"
 #include "aui_joystick.h"
-#include "aui_directsurface.h"
-#include "aui_directmouse.h"
+#include "aui_sdlsurface.h"
+#include "aui_sdlmouse.h"
 
 #include "aui_sdlui.h"
 
@@ -69,7 +69,7 @@ aui_SDLUI::aui_SDLUI
 	BOOL useExclusiveMode 
 )
 :   aui_UI              (),
-    aui_DirectX         (),
+    aui_SDL             (),
     m_X11Display        (0)
 {
 	
@@ -123,7 +123,6 @@ AUI_ERRCODE aui_SDLUI::DestroyScreen(void)
 {
 	if (m_primary)
 	{
-		((aui_SDLSurface *)m_primary)->DDS()->Release();
 		delete m_primary;
 		m_primary   = NULL;
 		m_lpdds     = NULL;
@@ -148,7 +147,6 @@ AUI_ERRCODE aui_SDLUI::CreateScreen( BOOL useExclusiveMode )
 		m_height,
 		m_bpp,
 		m_lpdd,
-		m_lpdds,
 		TRUE );
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -192,7 +190,9 @@ AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
 
 		if ( m_minimize || m_exclusiveMode )
 		{
+#if 0
 			SetCursorPos( m_mouse->X(), m_mouse->Y() );
+#endif
 		}
 
 		m_mouse->End();
@@ -211,7 +211,7 @@ AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 	BOOL			exclusive = TRUE;
 
 	
-	aui_DirectMouse *mouse = new aui_DirectMouse( &auiErr, "CivMouse", exclusive );
+	aui_SDLMouse *mouse = new aui_SDLMouse( &auiErr, "CivMouse", exclusive );
 	Assert(mouse != NULL);
 	if ( !mouse ) return AUI_ERRCODE_MEMALLOCFAILED;
 
@@ -229,7 +229,7 @@ AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 	if ( m_minimize || m_exclusiveMode )
 	{
 		POINT point;
-		GetCursorPos( &point );
+		//GetCursorPos( &point );
 		m_mouse->SetPosition( &point );
 	}
 
@@ -262,6 +262,7 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 		DestroyScreen();
 	}
 
+#if 0
 	while ( ShowCursor( TRUE ) < 0 )
 		; 
 
@@ -270,11 +271,11 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 		while ( !IsIconic( m_hwnd ) )
 			::ShowWindow( m_hwnd, SW_MINIMIZE );
 	}
-
-    if (g_civApp)
-    {
-        g_civApp->SetInBackground(TRUE);
-    }
+#endif
+	if (g_civApp)
+	{
+		g_civApp->SetInBackground(TRUE);
+	}
 
 	return AUI_ERRCODE_OK;
 }
@@ -287,6 +288,7 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 
 	if ( !m_primary ) CreateScreen( m_exclusiveMode );
 
+#if 0
 	if ( m_minimize || m_exclusiveMode )
 		while ( GetForegroundWindow() != m_hwnd )
 			::ShowWindow( m_hwnd, SW_RESTORE );
@@ -317,7 +319,7 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 		RECT clipRect = { 0, 0, m_width, m_height };
 		ClipCursor(&clipRect);
 	}
-
+#endif
 	if ( m_joystick ) m_joystick->Acquire();
 	if (m_keyboard) m_keyboard->Acquire();
 

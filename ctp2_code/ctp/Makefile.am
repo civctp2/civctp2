@@ -14,6 +14,14 @@ CTP2_WIN32_MILES_INC=\
 	-I$(ctp2_code)/libs/miles
 CTP2_WIN32_ZLIB_INC=\
 	-I$(ctp2_code)/libs/zlib
+else
+CTP2_LIBANET_LDFLAGS = \
+	$(ctp2_code)/libs/anet/linux86/lib/dp2.a \
+	$(ctp2_code)/libs/anet/linux86/lib/dp2d.a \
+	$(ctp2_code)/libs/anet/linux86/lib/dp2p.a \
+	$(ctp2_code)/libs/anet/linux86/lib/dp2l.a
+CTP2_LIBOSNOWIN32_LDFLAGS = \
+	../os/nowin32/libosnowin32.la
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
@@ -316,6 +324,7 @@ ctp2_SOURCES = \
 	../ui/aui_directx/aui_directui.cpp \
 	../ui/aui_directx/aui_directx.cpp \
 	../ui/aui_sdl/aui_sdl.cpp \
+	../ui/aui_sdl/aui_sdlblitter.cpp \
 	../ui/aui_sdl/aui_sdlinput.cpp \
 	../ui/aui_sdl/aui_sdlinput.h \
 	../ui/aui_sdl/aui_sdljoystick.cpp \
@@ -427,6 +436,14 @@ ctp2_SOURCES = \
 	../ui/aui_ctp2/ctp2_textbuffer.cpp \
 	../ui/aui_ctp2/ctp2_textfield.cpp \
 	../ui/aui_ctp2/ctp2_Window.cpp \
+	../ui/ldl/ldl.tab.c \
+	../ui/ldl/lex.ldl.c \
+	../ui/ldl/ldl_attr.cpp \
+	../ui/ldl/ldl_data.cpp \
+	../ui/ldl/ldl_data_info.cpp \
+	../ui/ldl/ldl_file.cpp \
+	../ui/ldl/ldl_memmap.cpp \
+	../ui/ldl/ldlif.cpp \
 	../ui/netshell/allinonewindow.cpp \
 	../ui/netshell/connectionselectwindow.cpp \
 	../ui/netshell/dialogboxwindow.cpp \
@@ -468,10 +485,6 @@ ctp2_SOURCES = \
 	../ui/slic_debug/segmentlist.cpp \
 	../ui/slic_debug/sourcelist.cpp \
 	../ui/slic_debug/watchlist.cpp \
-	../sound/civsound.cpp \
-	../sound/gamesounds.cpp \
-	../sound/soundevent.cpp \
-	../sound/soundmanager.cpp \
 	../ai/diplomacy/counterresponseevent.cpp \
 	../ai/diplomacy/dstateevent.cpp \
 	../ai/diplomacy/motivationevent.cpp \
@@ -512,8 +525,31 @@ ctp2_LDADD = \
 	../gs/database/libgsdatabase.la \
 	../gs/newdb/libgsnewdb.la \
 	../gs/slic/libgsslic.la \
+	../sound/libsound.la \
 	../ui/interface/libuiinterface.la \
+	../gfx/gfx_utils/libgfxgfx_utils.la \
+	../gfx/layers/libgfxlayers.la \
+	../gfx/spritesys/libgfxspritesys.la \
+	../gfx/tilesys/libgfxtilesys.la \
+	../gs/database/libgsdatabase.la \
+	../gs/newdb/libgsnewdb.la \
+	../gs/slic/libgsslic.la \
+	../sound/libsound.la \
+	../ui/interface/libuiinterface.la \
+	$(CTP2_LIBANET_LDFLAGS) \
+	$(CTP2_LIBOSNOWIN32_LDFLAGS) \
 	$(CTP2_LDFLAGS)
+
+../ui/ldl:
+	$(INSTALL) -d $@
+
+../ui/ldl/lex.ldl.c: ../ui/ldl/ldl.l ../ui/ldl
+	$(LEX) -i -Pldl -o$@ $<
+
+../ui/ldl/ldl.tab.h: ../ui/ldl/ldl.tab.c ../ui/ldl
+
+../ui/ldl/ldl.tab.c: ../ui/ldl/ldl.y ../ui/ldl
+	$(YACC) $(YFLAGS) $(AM_YFLAGS) -b../ui/ldl/ldl $<
 
 AM_CFLAGS=\
 	$(CTP2_CFLAGS)

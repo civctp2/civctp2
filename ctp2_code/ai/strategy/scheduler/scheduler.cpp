@@ -51,8 +51,8 @@
 
 #include "Scheduler.h"
 
-#include "goal.h"
-#include "squad.h"
+#include "Goal.h"
+#include "Squad.h"
 #include "Plan.h"
 
 
@@ -608,7 +608,7 @@ bool Scheduler::Sort_Matches()
 	
 #ifdef _DEBUG
 	sint32 size = m_matches.size();
-#endif _DEBUG
+#endif // _DEBUG
 
 	m_matches.sort(std::greater<Plan>());
 
@@ -616,7 +616,7 @@ bool Scheduler::Sort_Matches()
 	
 	
 	Assert(m_matches.size() == size);
-#endif _DEBUG
+#endif // _DEBUG
 
 	t2 = GetTickCount();
 	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, 
@@ -641,7 +641,7 @@ bool Scheduler::Sort_Matches()
 			}
 		}
 	}
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 #ifdef _DEBUG
 
@@ -983,7 +983,7 @@ void Scheduler::Add_New_Squad(const Squad_ptr & new_squad)
 	
 	
 	Assert(squad_iter == m_squads.end());
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 	
 	m_new_squads.push_back(new_squad);
@@ -1064,7 +1064,7 @@ bool Scheduler::Validate() const
 			sorted_goal_iter++;
 		}
 	}
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 	return true;
 }

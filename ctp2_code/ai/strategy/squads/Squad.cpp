@@ -9,13 +9,14 @@
 
 
 
-
+#ifdef _MSC_VER
 #pragma warning(disable: 4786)
+#endif
 
 #include "c3.h"
 
-#include "squad.h"
-#include "Agent.h"
+#include "Squad.h"
+#include "agent.h"
 #include "ctpagent.h"
 #include "Plan.h"
 
@@ -358,7 +359,7 @@ Agent_List::const_iterator Squad::Remove_Agent(const Agent_List::const_iterator 
 
 		
 		Scheduler::GetScheduler(playerId).Validate();
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
         
         delete the_agent;
@@ -366,7 +367,7 @@ Agent_List::const_iterator Squad::Remove_Agent(const Agent_List::const_iterator 
 #ifdef _DEBUG_SCHEDULER
 		
 		Scheduler::GetScheduler(playerId).Validate();
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
     }
     

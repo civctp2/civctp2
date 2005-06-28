@@ -107,7 +107,7 @@ public:
 
 	class WhisperSwitchAction : public aui_Action
 	{ public: virtual ActionCallback Execute; };
-	friend WhisperSwitchAction;
+	friend class WhisperSwitchAction;
 
 	class ReviewButtonAction : public aui_Action
 	{ public: virtual ActionCallback Execute; };

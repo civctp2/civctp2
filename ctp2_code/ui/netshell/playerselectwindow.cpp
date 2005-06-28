@@ -460,7 +460,8 @@ void PlayerSelectWindow::OKButtonAction::Execute(
 	{
 		
 		ListPos pos = listbox->GetPane()->ChildList()->GetHeadPosition();
-		for ( sint32 i = 0; i < listbox->NumItems(); i++ )
+		sint32 i;
+		for ( i = 0; i < listbox->NumItems(); i++ )
 		{
 			ns_PlayerSetupItem *item = (ns_PlayerSetupItem *)
 				listbox->GetPane()->ChildList()->GetNext( pos );

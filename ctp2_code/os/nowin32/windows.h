@@ -31,9 +31,9 @@
 #include "tchar.h"
 
 /* Windows data types */
-typedef uint32 BOOL;
-const BOOL FALSE = 0;
-const BOOL TRUE = 1;
+#define BOOL uint32
+#define FALSE 0
+#define TRUE 1
 typedef char   CHAR;
 typedef uint32 COLORREF;
 typedef sint32 GUID;
@@ -127,59 +127,20 @@ typedef struct hwnd_t* HWND;
 /* stub functions */
 char* _fullpath(char*, const char*, int);
 void _splitpath(const char*,char*,char*,char*,char*);
-inline void CopyRect(struct RECT *dest, struct RECT *src) {
-	*dest = *src;
-}
+void CopyRect(struct RECT *dest, struct RECT *src);
 uint32 GetTickCount();
-inline uint8 GetRValue(COLORREF c) { return c & 0xff; }
-inline uint8 GetGValue(COLORREF c) { return (c>>8) & 0xff; }
-inline uint8 GetBValue(COLORREF c) { return (c>>16) & 0xff; }
+uint8 GetRValue(COLORREF c);
+uint8 GetGValue(COLORREF c);
+uint8 GetBValue(COLORREF c);
 sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags);
-inline void InflateRect(struct RECT *pr, int x, int y)
-{
-	if (!pr)
-		return;
-	
-	pr->bottom += y;
-	pr->left -= x;
-	pr->right += x;
-	pr->top -= y;
-}
-inline void OffsetRect(struct RECT *pr, int x, int y)
-{
-	if (!pr)
-		return;
-
-	pr->bottom += y;
-	pr->left += x;
-	pr->right += x;
-	pr->top += y;
-}
-inline BOOL PtInRect(struct RECT* pr, struct POINT m)
-{
-	if (!pr)
-		return FALSE;
-		
-	return pr->left <= m.x && m.x < pr->right && pr->top <= m.y && m.y < pr->bottom;
-}
-
-inline void SetRect(struct RECT* R, int left, int top, int right, int bottom)
-{ 
-	R->left = left;
-	R->right = right;
-	R->top = top;
-	R->bottom = bottom;
-}
+void InflateRect(struct RECT *pr, int x, int y);
+void OffsetRect(struct RECT *pr, int x, int y);
+BOOL PtInRect(struct RECT* pr, struct POINT m);
+void SetRect(struct RECT* R, int left, int top, int right, int bottom);
 void SubtractRect(struct RECT* r, const struct RECT* a, const struct RECT* b);
 #define lstrlen(s) strlen(s)
-inline int stricmp(const char* s1, const char* s2)
-{
-	return strcasecmp(s1, s2);
-}
-inline int strnicmp(const char *str1, const char *str2, size_t n)
-{
-	return strncasecmp(str1, str2, n);
-}
+int stricmp(const char* s1, const char* s2);
+int strnicmp(const char *str1, const char *str2, size_t n);
 char* strupr(char* str);
 
 #endif

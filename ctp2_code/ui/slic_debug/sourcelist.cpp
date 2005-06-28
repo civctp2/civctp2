@@ -58,7 +58,13 @@ public:
 		m_item = item;
 	}
 
-	ActionCallback Execute
+#ifdef _MSC_VER
+	aui_Action::ActionCallback Execute
+#else
+	virtual void Execute(aui_Control* control,
+	                     uint32 action,
+	                     uint32 data)
+#endif
 	{
 		m_item->Continue();
 	}
@@ -509,7 +515,13 @@ static c3_UtilityTextFieldPopup *s_conditionalPopup = NULL;
 class KillConditionalPopupAction : public aui_Action
 {
 public:
-	ActionCallback Execute
+#ifdef _MSC_VER
+        virtual ActionCallBack Execute
+#else
+	virtual void Execute(aui_Control* control,
+	                     uint32 action,
+	                     uint32 data)
+#endif
 	{
 		if(s_conditionalPopup) {
 			delete s_conditionalPopup;
@@ -549,7 +561,7 @@ void SourceListItem::EditConditional()
 	if(!s_conditionalPopup)
 	s_conditionalPopup = new c3_UtilityTextFieldPopup(SourceListItemConditionalCallback,
 													  NULL,
-													  cond ? (char*)cond->GetExpression() : "",
+													  cond ? (char *)cond->GetExpression() : "",
 													  NULL,
 													  "SourceListConditionalPopup",
 													  this,

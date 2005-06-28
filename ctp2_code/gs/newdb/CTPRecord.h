@@ -5,7 +5,7 @@
 #define __CTP_RECORD_H__
 
 #include "CTPDatabase.h"
-
+#include "dbtypes.h"
 class DBLexer;
 
 class CTPRecord
@@ -15,7 +15,7 @@ protected:
 	char *m_textName; 
 
 public:
-	sint32 m_name;
+	StringId m_name;
 
 	CTPRecord() { m_index = -1; m_textName = NULL; m_name = -1;}
 	virtual ~CTPRecord() { if(m_textName) delete [] m_textName; }
@@ -23,7 +23,7 @@ public:
 	sint32 GetIndex() const { return m_index; }
 	void SetIndex(sint32 index) { m_index = index; }
 
-	sint32 GetName() const { return m_name; }
+	StringId GetName() const { return m_name; }
 	const char *GetIDText() const;
 	virtual const char *GetNameText() const;
 	void SetTextName(const char *text);

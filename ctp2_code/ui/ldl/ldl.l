@@ -1,10 +1,22 @@
 
 %{
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 #include "ldlyaccdefs.h"
 #include "ldl.tab.h"
+#include <sys/param.h>
+#include <sys/types.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#ifdef WIN32
 #include <windows.h>
+#else
+#include "windows.h"
+#endif
 #include "ldlif.h"
 
 int state;

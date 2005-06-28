@@ -11,7 +11,11 @@
 
 #include "c3.h"
 
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#elif defined(WIN32)
 #include <direct.h>
+#endif
 
 #include "ldl_file.hpp"
 #include "ldl_attr.hpp"

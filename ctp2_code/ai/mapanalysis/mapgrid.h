@@ -62,8 +62,9 @@ public:
 	{
 		s_scratch.resize(0);
 		
-		
+#ifdef _MSC_VER
 		m_values.free();
+#endif
 	}
 	
 	

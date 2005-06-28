@@ -1240,7 +1240,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF color,						
 	BOOL bg								
 	)
@@ -1298,7 +1298,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 		aui_Surface *pSurface,	
 		RECT *bound,						
-		MBCHAR *pString,				
+		const MBCHAR *pString,				
 		COLORREF color,					
 		BOOL bg							
 		)
@@ -1367,7 +1367,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR **pString,					
+	const MBCHAR **pString,					
 	sint32 numStrings,					
 	COLORREF color,						
 	BOOL bg								
@@ -1437,7 +1437,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF color,						
 	BOOL bg								
 	)
@@ -1506,7 +1506,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF textColor,						
 	COLORREF dropColor,						
 	BOOL bg								
@@ -1570,7 +1570,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	aui_Surface *pSurface,	
 	RECT *destRect,
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF color,						
 	BOOL bg								
 	)
@@ -1639,7 +1639,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	aui_Surface *pSurface,	
 	RECT *destRect,
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF textColor,						
 	COLORREF dropColor,						
 	BOOL bg								
@@ -1719,7 +1719,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR **pString,					
+	const MBCHAR **pString,					
 	sint32 numStrings,					
 	COLORREF color,						
 	BOOL bg								

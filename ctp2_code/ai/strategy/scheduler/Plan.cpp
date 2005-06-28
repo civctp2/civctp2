@@ -76,14 +76,14 @@
 
 #include "profileai.h"
 #include "debugassert.h"
-#include "squad.h"
-#include "goal.h"
-#include "Agent.h"
+#include "Squad.h"
+#include "Goal.h"
+#include "agent.h"
 #include "ArmyData.h"
 #include "ctpagent.h"
 #include "ctpgoal.h"
 #include "Scheduler.h"
-#include "squad_strength.h"
+#include "squad_Strength.h"
 #include "ctpaidebug.h"
 #include "ArmyPool.h"
 

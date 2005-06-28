@@ -34,6 +34,18 @@ else
    AC_SUBST(YFLAGS)
    AC_DEFINE(AUTOMAKE_INVOKES_YACC,1,[Defined when automake runs yacc and renames the output files])
 fi
+AC_PATH_PROG(UNZIP,unzip,no)
+if test "x$UNZIP" == "xno"
+then
+   AC_MSG_ERROR([
+
+        unzip could not be found!
+
+	Make sure unzip is in your path.
+
+   ])
+fi
+AC_SUBST(UNZIP)
 
 AC_PROG_LIBTOOL
 
@@ -79,8 +91,8 @@ COMMON_WARNINGS="-pedantic -Wchar-subscripts -Wcomment -Wconversion -Wendif-labe
 C_WARNINGS="$COMMON_WARNINGS -Wmain -Wmissing-prototypes -Wnested-externs -Wnonnull -Wsequence-point -Wstrict-prototypes"
 CXX_WARNINGS="$COMMON_WARNINGS -Winvalid-offsetof"
 
-C_WARNINGS="-Wall"
-CXX_WARNINGS="-Wall"
+C_WARNINGS="-Wall -Wno-unused-variable"
+CXX_WARNINGS="-Wall -Wno-unused-variable"
 
 CFLAGS="$C_WARNINGS -fms-extensions $CFLAGS"
 CXXFLAGS="$CXX_WARNINGS -fms-extensions $CXXFLAGS"
@@ -108,6 +120,7 @@ AC_OUTPUT([
    ctp2_code/gs/gameobj/Makefile
    ctp2_code/gs/newdb/Makefile
    ctp2_code/gs/slic/Makefile
+   ctp2_code/libs/Makefile
    ctp2_code/mapgen/Makefile
    ctp2_code/os/Makefile
    ctp2_code/os/nowin32/Makefile

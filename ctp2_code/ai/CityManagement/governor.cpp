@@ -103,7 +103,7 @@
 #include "citydata.h"
 #include "UnitData.h"
 #include "UnitPool.h"
-#include "globals.h"
+#include "Globals.h"
 #include "World.h"
 #include "BuildListSequenceRecord.h"
 #include "UnitBuildListRecord.h"

@@ -9,6 +9,10 @@
 #include <stdarg.h>
 #include <string.h>
 #include <list>
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_thread.h>
+#endif
 
 class NETFunc {
 public:
@@ -93,7 +97,7 @@ struct KeyStruct {
 class Keys {
 friend class NETFunc;
 protected:
-	KeyStruct key;
+	KeyStruct curkey;
 public:
 	
 	Keys(void);
@@ -619,15 +623,13 @@ friend class PortList;
 
 
 
-
+#ifdef USE_SDL
+static int ConnectThread(void *t);
+static int ReConnectThread(void *r);
+#else
 static DWORD WINAPI ConnectThread(LPVOID t);
-
-
-
-
-
 static DWORD WINAPI ReConnectThread(LPVOID r);
-
+#endif
 
 
 
@@ -1451,11 +1453,13 @@ public:
 
 
 private:
-	
+#ifdef USE_SDL
+	SDL_Thread *threadHandle;
+	Uint32 threadId;
+#else
 	HANDLE threadHandle;
-	
 	DWORD threadId;
-	
+#endif
 	static long cancelDial;
 	
 	dp_appParam_t appParam;

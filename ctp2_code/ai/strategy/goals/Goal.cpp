@@ -37,15 +37,15 @@
 
 #include "c3.h"
 
-#include "goal.h"
+#include "Goal.h"
 using namespace std;
 
 
 const Utility Goal::BAD_UTILITY = -99999999; 
 const Utility Goal::MAX_UTILITY = 99999999; 
 
-#include "squad_strength.h"
-#include "Agent.h"
+#include "squad_Strength.h"
+#include "agent.h"
 #include "ArmyPool.h"
 #include "debugassert.h"
 

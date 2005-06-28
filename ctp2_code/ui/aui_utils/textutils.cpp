@@ -115,7 +115,7 @@ sint32 textutils_GetWidth(
 
 sint32 textutils_GetHeight(
 		aui_Surface *pSurface,	
-		MBCHAR *pString					
+		const MBCHAR *pString					
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -198,7 +198,7 @@ HFONT textutils_GetFont(
 
 RECT textutils_GetBounds(
 		aui_Surface *pSurface,	
-		MBCHAR *pString					
+		const MBCHAR *pString					
 		)
 {
 #ifdef __AUI_USE_DIRECTX__

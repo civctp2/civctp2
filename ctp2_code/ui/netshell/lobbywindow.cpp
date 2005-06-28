@@ -792,7 +792,8 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 	aui_Switch *ms = (aui_Switch *)(w->FindControl(LobbyWindow::CONTROL_MUTESWITCH));
 
 	ListPos position = justDeselectedList.GetHeadPosition();
-	for ( sint32 i = justDeselectedList.L(); i; i-- ) {
+	sint32 i;
+	for ( i = justDeselectedList.L(); i; i-- ) {
 		index = justDeselectedList.GetNext( position );
 		ns_PlayerItem *item = (ns_PlayerItem *)listbox->GetItemByIndex(index);
 		NETFunc::Player *player = item->GetNetShellObject()->GetNETFuncObject();

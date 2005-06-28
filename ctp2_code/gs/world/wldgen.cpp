@@ -1785,7 +1785,7 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
         
 		for (it.Start(); !it.End(); it.Next())
         { 
-            MapPoint &  pos     = it.Pos();
+            MapPoint pos     = it.Pos();
 			Cell *cell = m_map[pos.x][pos.y];
 			if ((numCounted[cell->m_terrain_type] < maxToCount) ||
 			    IsRiver(pos) || IsGood(pos)
@@ -1906,7 +1906,7 @@ void World::FlattenCumScore(sint32 d, float **cum_score,
 	SquareIterator  it  (start, d);
     for (it.Start(); !it.End(); it.Next())
     {		
-        MapPoint &  pos = it.Pos();
+        MapPoint pos = it.Pos();
 		sint32 dist = start.NormalizedDistance(pos);		  
 		s = float(d - dist) / (float(d) +1.0f);   // unused?
 		cum_score[pos.x][pos.y] = -50000.0f; 

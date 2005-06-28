@@ -24,7 +24,7 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "Diplomat.h"
 #include "player.h"
 #include "ArmyData.h"

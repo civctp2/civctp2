@@ -6,8 +6,15 @@
 #include "sc.tab.h"
 #include <stdlib.h>
 #include <string.h>
+#ifdef WIN32
 #include <windows.h>
+#else
+#include "windows.h"
+#endif
 #include "slicif.h"
+
+#undef min
+#define min(a,b) ((a) < (b) ? (a) : (b))
 
 int my_scinput(char *buf, int max_size);
 

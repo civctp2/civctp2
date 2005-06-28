@@ -57,7 +57,7 @@
 #include "ArmyPool.h"
 #include "World.h"
 #include "Cell.h"
-#include "gold.h"
+#include "Gold.h"
 #include "AdvanceListRecord.h"
 #include "AdvanceRecord.h"
 #include "UnitData.h"
@@ -83,7 +83,7 @@
 #include "ctpai.h"
 #include "GSLogs.h"
 #include "profileDB.h"
-#include "aicause.h"
+#include "AICause.h"
 
 
 #include "CivilisationDB.h"
@@ -2589,7 +2589,7 @@ void Diplomat::ExecuteResponse( const PLAYER_INDEX sender,
 	  {
 	    ProposalAnalysis::LogDebugResult(response);
 	  }
-#endif _BFR_
+#endif // _BFR_
 
 	Assert(response.type != RESPONSE_INVALID);
 	if (response.type == RESPONSE_INVALID)
@@ -3426,7 +3426,7 @@ void Diplomat::ExecuteNewProposal( const PLAYER_INDEX & receiver ) {
 
 #ifndef _BFR_
 	ProposalAnalysis::LogDebugResult(proposal);
-#endif _BFR_
+#endif // _BFR_
 }
 
 
@@ -4112,7 +4112,8 @@ sint32 Diplomat::GetNextAdvance() const
 
 	
 	sint32 advance_index = -1;
-	for (sint32 wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
+	sint32 wanted_advance;
+	for (wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
 	{
 		advance_index = rec->GetAdvance(wanted_advance)->GetIndex();
 
@@ -4151,7 +4152,8 @@ sint32 Diplomat::GetDesiredAdvanceFrom( const PLAYER_INDEX & foreignerId, const 
 
 	
 	sint32 advance_index = -1;
-	for (sint32 wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
+	sint32 wanted_advance;
+	for (wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
 	{
 
 		advance_index = rec->GetAdvance(wanted_advance)->GetIndex();
@@ -4241,7 +4243,8 @@ sint32 Diplomat::GetNextKeyAdvance() const
 	
 	
 	const AdvanceRecord *rec;
-	for (sint32 advance_index = 0; advance_index < g_theAdvanceDB->NumRecords(); advance_index++)
+	sint32 advance_index;
+	for (advance_index = 0; advance_index < g_theAdvanceDB->NumRecords(); advance_index++)
 	{
 		rec = g_theAdvanceDB->Get(advance_index);
 
@@ -4283,7 +4286,8 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 
 	
 	sint32 stop_researching_adv;
-	for (PLAYER_INDEX foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId)
+	PLAYER_INDEX foreignerId;
+	for (foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId)
 		{
 			
 			if (TestEffectiveRegard(foreignerId, ALLIED_REGARD ))
@@ -4333,8 +4337,8 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 		ai::Regard best_friend_regard = MIN_REGARD;
 		PLAYER_INDEX best_friend = -1;
 
-		
-		for (sint32 unit_type = 0; unit_type < g_theUnitDB->NumRecords(); unit_type++)
+		sint32 unit_type;
+		for (unit_type = 0; unit_type < g_theUnitDB->NumRecords(); unit_type++)
 		{
 			const UnitRecord *unit_rec = g_theUnitDB->Get(unit_type);
 			if (unit_rec->GetEnableAdvance() &&
@@ -5559,7 +5563,8 @@ void Diplomat::DisbandNuclearWeapons(const double percent)
 	
 	sint32 total_weapons = 0;
 	Unit unit;
-	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
+	sint32 i;
+	for(i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
 		
 		unit = player_ptr->m_all_units->Access(i);
 		if (!g_theUnitPool->IsValid(unit.m_id))
@@ -5601,7 +5606,8 @@ void Diplomat::DisbandBioWeapons(const double percent)
 	
 	sint32 total_weapons = 0;
 	Unit unit;
-	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
+	sint32 i;
+	for(i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
 		
 		unit = player_ptr->m_all_units->Access(i);
 		if (!g_theUnitPool->IsValid(unit.m_id))
@@ -5642,7 +5648,8 @@ void Diplomat::DisbandNanoWeapons(const double percent)
 	
 	sint32 total_weapons = 0;
 	Unit unit;
-	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
+	sint32 i;
+	for(i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
 		
 		unit = player_ptr->m_all_units->Access(i);
 		if (!g_theUnitPool->IsValid(unit.m_id))

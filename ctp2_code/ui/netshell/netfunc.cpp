@@ -36,13 +36,21 @@
 #include "debug.h"      // SetThreadName
 #endif
 #include "netfunc.h"
-#include <ras.h>
 
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_thread.h>
+#endif
+
+#ifdef WIN32
+#include <ras.h>
+#endif
 
 
 
 int adialup_autodial_enabled(void)
 {
+#ifdef WIN32
 	HKEY hKey;
 	unsigned long werr;
 	int enableAutodial;
@@ -82,19 +90,22 @@ int adialup_autodial_enabled(void)
 
 	DPRINT(("autodial_enabled: autodial is on.\n"));
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 #define adialup_MAXCONNS 10
 
+#ifdef WIN32
 typedef DWORD (APIENTRY *pfnRasEnumConnections_t)(LPRASCONN, LPDWORD, LPDWORD);
 typedef DWORD (APIENTRY *pfnRasGetConnectStatus_t)(HRASCONN, LPRASCONNSTATUS);
-
+#endif
 
 
 int adialup_is_active(void)
 {
-	
-
+#ifdef WIN32
 	RASCONNSTATUS rasconnstatus;
 	RASCONN rasconnArray[adialup_MAXCONNS];
 	DWORD cConnections;
@@ -148,6 +159,7 @@ int adialup_is_active(void)
 
 	DPRINT(("adialup_is_active: none of the connections are active\n"));
 	FreeLibrary((HINSTANCE)hlib);
+#endif
 	return FALSE;
 }
 
@@ -299,7 +311,7 @@ NETFunc::Message::Message(void) {
 
 NETFunc::Message::~Message(void) {
 	if(newbody)
-		delete [size] body;
+		delete [] body;
 }
 
 dp_packetType_t *NETFunc::Message::Get(void) {
@@ -348,14 +360,14 @@ NETFunc::Messages NETFunc::messages = Messages();
 
 
 NETFunc::Keys::Keys(void) {
-	memset(&key, 0, sizeof(KeyStruct));
-	key.len = 1;
+	memset(&curkey, 0, sizeof(KeyStruct));
+	curkey.len = 1;
 }
 
 void NETFunc::Keys::NextKey(void) {
-	if(key.buf[key.len-1] == 255)
-		key.len++;
-	key.buf[key.len-1]++;
+	if(curkey.buf[curkey.len-1] == 255)
+		curkey.len++;
+	curkey.buf[curkey.len-1]++;
 }
 
 
@@ -630,25 +642,43 @@ NETFunc::PortList::~PortList(void) {
 }
 
 
-
+#ifdef USE_SDL
+int NETFunc::ConnectThread(void * t) {
+#else
 DWORD WINAPI NETFunc::ConnectThread(LPVOID t) {
+#endif // USE_SDL
 #if defined(_DEBUG)
+#ifndef USE_SDL
 	SetThreadName("NETFunc::ConnectThread");
+#endif
 #endif
 
 	result = dpCreate(&dp, ((TransportSetup *)t)->GetTransport(), ((TransportSetup *)t)->GetParams(), 0);
 	if (result == dp_RES_OK)
+#ifdef USE_SDL
+		return 0;
+#else
 		ExitThread(0);
+#endif
 	else
+#ifdef USE_SDL
+		return 1;
+#else
 		ExitThread(1);
 	return 0;
+#endif
 }
 
 
-
+#ifdef USE_SDL
+int NETFunc::ReConnectThread(void *r) {
+#else
 DWORD WINAPI NETFunc::ReConnectThread(LPVOID r) {
+#endif
 #if defined(_DEBUG)
+#ifndef USE_SDL
 	SetThreadName("NETFunc::ReconnectThread");
+#endif
 #endif
 
 	*((bool *)r) = false;
@@ -656,7 +686,9 @@ DWORD WINAPI NETFunc::ReConnectThread(LPVOID r) {
 	while (!(*((bool *)r))){
 		Receive();
 	}
+#ifndef USE_SDL
 	ExitThread(0);
+#endif
 	return 0;
 }
 
@@ -813,8 +845,11 @@ NETFunc::TransportList::TransportList(void) {
 NETFunc::TransportList::~TransportList(void) {
 }
 
-
+#ifdef _MSC_VER
 void __stdcall
+#else
+void
+#endif
 NETFunc::TransportList::CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context) {
 	if (comm_DRIVER_IS_VISIBLE & d->capabilities) {
 		KeyStruct *k = (KeyStruct *)&((TransportList *)context)->key;
@@ -2324,7 +2359,11 @@ NETFunc::STATUS NETFunc::SetTransport(Transport *t) {
 			nextStatus = READY;
 		}
 		cancelDial = 0;
+#ifdef USE_SDL
+		threadHandle = SDL_CreateThread(ConnectThread, (void *)transport);
+#else
 		threadHandle = CreateThread(0, 0, ConnectThread, (void *)transport, 0, &threadId);
+#endif
 		if(threadHandle) {
 			status = CONNECT;
 			return OK;
@@ -2501,7 +2540,7 @@ NETFunc::STATUS NETFunc::InsertAIPlayer(AIPlayer *p) {
 		return ERR;
 	AIPlayer aip(*p);
 	aiPlayers->NextKey();
-	aip.key = aiPlayers->key;
+	aip.key = aiPlayers->curkey;
 	Message *m = new Message(Message::ADDAIPLAYER, aip.GetBody(), aip.GetSize());
 	PushMessage(m);
 	if(Send(dp, m, dp_ID_BROADCAST) != OK)
@@ -2751,11 +2790,13 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 	if(result != dp_RES_OK)
 		return ERR;
 
+#ifdef USE_SDL
+	threadHandle = SDL_CreateThread(ReConnectThread, (void *) &reconnected);
+#else
 	threadHandle = CreateThread(0, 0, ReConnectThread, (void *)&reconnected, 0, &threadId);
+#endif
 	if(!threadHandle)
 		return ERR;
-
-	
 
 	return OK;
 }
@@ -2763,6 +2804,9 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 void NETFunc::ReConnect(void) {
 	if(!reconnected) {
 		reconnected = true;
+#ifdef USE_SDL
+		SDL_WaitThread(threadHandle, NULL);
+#else
 		DWORD dw;
 		
 		do
@@ -2770,6 +2814,7 @@ void NETFunc::ReConnect(void) {
 		while(dw == STILL_ACTIVE);
 
 		CloseHandle(threadHandle);
+#endif
 		threadHandle = 0;
 		dpSetActiveThread(dp);
 	}
@@ -3115,12 +3160,18 @@ bool NETFunc::Handle(Message *m) {
 void NETFunc::Execute(void) {
 	switch(status) {
 	case CONNECT:
-		
+#ifdef USE_SDL
+		int dw;
+		// This is ugly, but there is no other way in SDL
+		// to determine if a thread is running
+		SDL_WaitThread(threadHandle, &dw);
+#else
 		DWORD dw;
 		
 		GetExitCodeThread(threadHandle, &dw);
 		if(dw != STILL_ACTIVE) {
 			CloseHandle(threadHandle);
+#endif
 			threadHandle = 0;
 			if(dw) {
 				status = START;
@@ -3134,7 +3185,9 @@ void NETFunc::Execute(void) {
 				if(status == PRECONNECT)
 					EnumServers(true);
 			}
+#ifndef USE_SDL
 		}
+#endif
 		break;
 	case OK:
 		if(!session.IsServer() && session.IsLobby() && session.GetPlayers() == 1) {
@@ -3255,8 +3308,11 @@ void NETFunc::Execute(void) {
 	}
 }
 
-
+#ifdef _MSC_VER
 int __stdcall
+#else
+int
+#endif
 NETFunc::SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *context) {
 	
 	if(s) {
@@ -3288,8 +3344,11 @@ NETFunc::SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *cont
 	return 0;
 }
 
-
+#ifdef _MSC_VER
 void __stdcall
+#else
+void
+#endif
 NETFunc::PlayerCallBack(dpid_t id, dp_char_t *n, long flags, void *context) {
 	
 	if(n) {

@@ -80,6 +80,7 @@ protected:
 #if defined(HAVE_X11)
 	Display *           m_X11Display;
 #endif
+	SDL_Surface        *m_lpdds;
 };
 
 typedef aui_SDLUI aui_NativeUI;

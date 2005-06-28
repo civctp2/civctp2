@@ -7,7 +7,9 @@
 #include "ldlif.h"
 
 /* Avoid silly warnings */
+#ifdef _MSC_VER
 #pragma warning( disable : 4013 )
+#endif
 #define lint
 
 void yyerror(char* err);
@@ -66,7 +68,7 @@ bool: VTRUE { $$.intval = 1; } | VFALSE { $$.intval = 0; } ;
 extern FILE *yyin;
 int yyparse();
 
-int ldlif_parse(char *filename)
+int ldlif_parse(const char *filename)
 {
 	ldlif_allocate_stuff();
 

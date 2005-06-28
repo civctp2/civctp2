@@ -20,7 +20,7 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "player.h"
 #include "c3_utilitydialogbox.h"
 
