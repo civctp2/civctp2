@@ -24,6 +24,8 @@
 // - Fixed crash when the game tries to display invalid text strings, 
 //   by Martin Gühmann.
 // - Tribe index check updated.
+// - Allowed for a number of players less than 3 to be displayed
+//   - JJB 2005/06/28
 //
 //----------------------------------------------------------------------------
 
@@ -346,8 +348,7 @@ void SPNewGameWindow::Update( void )
 	
 	sint32 numPlayers = g_theProfileDB->GetNPlayers() - 1; 
 
-	
-	if ( numPlayers < 3 ) numPlayers = 3;
+	// Removed the alteration to the value when it was below 3 - JJB
 	sprintf( s, "%d", numPlayers);
 	m_spPlayers->SetText( s );
 

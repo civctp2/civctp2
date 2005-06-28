@@ -37,6 +37,8 @@
 // - TradePool is fixed on reload if the number of goods in the 
 //   savegame differs from the number of goods in the database. 
 //   - June 4th 2005 Martin Gühmann
+// - Allowed for nPlayers to be 2 or 3 - JJB 2005/06/28
+// - Removed auto-tutorial on low difficulty - JJB 2005/06/28
 //
 //----------------------------------------------------------------------------
 
@@ -1612,11 +1614,12 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	uint32 seed;
 
-	if(!g_network.IsNetworkLaunch() && g_theProfileDB->GetNPlayers() < 4) {
-		g_theProfileDB->SetNPlayers(4);
+	// Reduced min players from 4 to 2 - JJB
+	if(!g_network.IsNetworkLaunch() && g_theProfileDB->GetNPlayers() < 2) {
+		g_theProfileDB->SetNPlayers(2);
 	}
 	sint32 nPlayers = g_theProfileDB->GetNPlayers();
-	Assert(3 <= nPlayers); 
+	Assert(2 <= nPlayers); 
 
 
 	g_theOrderPond = new Pool<Order>(INITIAL_CHUNK_LIST_SIZE);
@@ -1629,21 +1632,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	){
 		g_theProfileDB->SetTutorialAdvice(FALSE);
 	}
-	else
-		if(g_theProfileDB->GetDifficulty() < 2) {
-			g_theProfileDB->SetTutorialAdvice(TRUE);
-		}
-
-   
-	   
-	   
-	   
-	   
-
-   
-
-
-
+	// Removed the auto-tutorial on low difficulty, since it causes
+	// more problems than it solves - JJB
 
 	if (&archive) { 
 		g_rand = new RandomGenerator(archive); 
