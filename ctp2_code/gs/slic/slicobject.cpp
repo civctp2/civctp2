@@ -72,7 +72,6 @@ SlicObject::SlicObject(char const * id)
 {
     m_seconds = 1; 
     m_defaultAdvance = -1; 
-    m_segment = NULL;
     m_request = NULL;
 
 	m_id = new char[strlen(id) + 1];
@@ -102,10 +101,10 @@ SlicObject::SlicObject(char const * id)
 
 SlicObject::SlicObject(SlicSegment *segment)
 {
+    m_seconds = 1; 
+    m_defaultAdvance = -1; 
 	m_id = new char[strlen(segment->GetName()) + 1];
 	strcpy(m_id, segment->GetName());
-    m_segment = NULL;
-    m_request = NULL;
 	
 	m_recipientList = NULL;
 	m_numRecipients = 0;
@@ -132,10 +131,6 @@ SlicObject::SlicObject(SlicSegment *segment, SlicObject *copy)
 	: SlicContext(copy)
 {
     m_seconds = 1; 
-    m_defaultAdvance = -1; 
-    m_segment = NULL;
-    m_request = NULL;
-
 	m_id = new char[strlen(segment->GetName()) + 1];
 	strcpy(m_id, segment->GetName());
 	
@@ -170,8 +165,6 @@ SlicObject::SlicObject(char const * id, SlicContext *copy)
 {
     m_seconds = 1; 
     m_defaultAdvance = -1; 
-    m_segment = NULL;
-    m_request = NULL;
 
 	m_id = new char[strlen(id) + 1];
 	strcpy(m_id, id);
@@ -220,25 +213,10 @@ SlicObject::~SlicObject()
 	
 	m_refCount = 0x7fffffff; 
 
-	if(m_id) {
-		delete [] m_id;
-		m_id = NULL;
-	}
-
-	if(m_recipientList) {
-		delete [] m_recipientList;
-		m_recipientList = NULL;
-	}
-
-	if(m_frame) {
-		delete m_frame;
-		m_frame = NULL;
-	}
-
-	if(m_request) {
-		delete m_request;
-		m_request = NULL;
-	}
+	delete [] m_id;
+	delete [] m_recipientList;
+	delete m_frame;
+	delete m_request;
 }
 
 sint32 SlicObject::AddRef()

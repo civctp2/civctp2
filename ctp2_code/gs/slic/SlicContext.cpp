@@ -1410,47 +1410,47 @@ void SlicContext::Snarf(GameEventArgList *args)
 	}
 }
 
-#define FILL(builtin, list, symtype, setMethod) \
-    sym = g_slicEngine->GetBuiltinSymbol(builtin);\
-	array = sym->GetArray();\
-	if(list) {\
-		array->Prune(list->Num());\
-		setSym.SetType(symtype);\
-		for(i = 0; i < list->Num(); i++) {\
-			setSym.setMethod(list->Access(i));\
-			array->Insert(i, SS_TYPE_SYM, stackVal);\
-		}\
-	} else {\
-		array->Prune(0);\
+//----------------------------------------------------------------------------
+//
+// Name       : FILL
+//
+// Description: -
+//
+// Parameters : builtin     : type of built-in object
+//              list        : list to fill
+//              symtype     : type of Slic object
+//              setMethod   : method to use to copy from built-in to list
+//
+// Globals    : g_slicEngine
+//
+// Returns    : -
+//
+// Remark(s)  : MACRO
+//
+//              The local setSym variable is reset to SLIC_SYM_UNDEFINED type
+//              before going out of scope, to prevent deleting member data
+//              that has been copied to the list.
+//
+//----------------------------------------------------------------------------
+#define FILL(builtin, list, symtype, setMethod)                     \
+	array = g_slicEngine->GetBuiltinSymbol(builtin)->GetArray();    \
+    array->Prune(list ? list->Num() : 0);                           \
+	if(list) {                                                      \
+        SlicSymbolData setSym(symtype);                             \
+        stackVal.m_sym = &setSym;                                   \
+		for(sint32 i = 0; i < list->Num(); i++) {                   \
+			setSym.setMethod(list->Access(i));                      \
+			array->Insert(i, SS_TYPE_SYM, stackVal);                \
+		}                                                           \
+        setSym.SetType(SLIC_SYM_UNDEFINED);                         \
 	}
-
-
 
 void SlicContext::FillBuiltins()
 {
-	sint32 i;
-	SlicSymbolData const *sym;
-	SlicArray *array;
+    SlicArray *             array;
+	SlicStackValue          stackVal;
 
-	
-	
-	SlicSymbolData setSym;
-	SlicStackValue stackVal;
-	stackVal.m_sym = &setSym;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // The following lists all have SimpleDynamicArray structure.
 
 	FILL(SLIC_BUILTIN_CITY, m_cityList, SLIC_SYM_CITY, SetCity);
 	FILL(SLIC_BUILTIN_UNIT, m_unitList, SLIC_SYM_UNIT, SetUnit);
@@ -1463,63 +1463,55 @@ void SlicContext::FillBuiltins()
 	FILL(SLIC_BUILTIN_ADVANCE, m_advanceList, SLIC_SYM_IVAR, SetIntValue);
 	FILL(SLIC_BUILTIN_GOVERNMENT, m_governmentList, SLIC_SYM_IVAR, SetIntValue);
 
-	
-	sym = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_ACTION);
-	array = sym->GetArray();
-	if(m_actionList) {
-		array->Prune(m_numActions);
-		setSym.SetType(SLIC_SYM_STRING);
-		for(i = 0; i < m_numActions; i++) {
+    // The following lists do not have SimpleDynamicArray structure,
+    // but are plain arrays, with a separate count.
+
+	array = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_ACTION)->GetArray();
+    array->Prune(m_actionList ? m_numActions : 0);                          
+	if (m_actionList) {
+		SlicSymbolData setSym(SLIC_SYM_STRING);
+		for(sint32 i = 0; i < m_numActions; i++) {
 			setSym.SetString(m_actionList[i]);
 			array->Insert(i, SS_TYPE_SYM, stackVal);
 		}
-	} else {
-		array->Prune(0);
+        setSym.SetType(SLIC_SYM_UNDEFINED);
 	}
 
-	
-	sym = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_BUILDING);
-	array = sym->GetArray();
+	array = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_BUILDING)->GetArray();
+    array->Prune(m_buildingList ? m_numBuildings : 0);                         
 	if(m_buildingList) {
-		array->Prune(m_numBuildings);
-		setSym.SetType(SLIC_SYM_IVAR);
-		for(i = 0; i < m_numBuildings; i++) {
+		SlicSymbolData setSym(SLIC_SYM_IVAR);
+		for(sint32 i = 0; i < m_numBuildings; i++) {
 			setSym.SetIntValue(m_buildingList[i]);
 			array->Insert(i, SS_TYPE_SYM, stackVal);
 		}
-	} else {
-		array->Prune(0);
+        setSym.SetType(SLIC_SYM_UNDEFINED);
 	}
 
-	
-	sym = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_WONDER);
-	array = sym->GetArray();
+	array = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_WONDER)->GetArray();
+    array->Prune(m_wonderList ? m_numWonders : 0);                         
 	if(m_wonderList) {
-		array->Prune(m_numWonders);
-		setSym.SetType(SLIC_SYM_IVAR);
-		for(i = 0; i < m_numWonders; i++) {
+		SlicSymbolData setSym(SLIC_SYM_IVAR);
+		for(sint32 i = 0; i < m_numWonders; i++) {
 			setSym.SetIntValue(m_wonderList[i]);
 			array->Insert(i, SS_TYPE_SYM, stackVal);
 		}
-	} else {
-		array->Prune(0);
+        setSym.SetType(SLIC_SYM_UNDEFINED);
 	}
 
-
-	
-	sym = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_GOLD);
-	array = sym->GetArray();
+	array = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_GOLD)->GetArray();
+    array->Prune(m_goldList ? m_numGolds : 0);                         
 	if(m_goldList) {
-		array->Prune(m_numGolds);
-		setSym.SetType(SLIC_SYM_IVAR);
-		for(i = 0; i < m_numGolds; i++) {
+		SlicSymbolData setSym(SLIC_SYM_IVAR);
+		for(sint32 i = 0; i < m_numGolds; i++) {
 			setSym.SetIntValue(m_goldList[i]);
 			array->Insert(i, SS_TYPE_SYM, stackVal);
 		}
-	} else {
-		array->Prune(0);
+        setSym.SetType(SLIC_SYM_UNDEFINED);
 	}
 }
+
+#undef FILL
 
 #define UNFILL(list, type, GetMethod, SetMethod) \
 		if(array->GetSize() > 0) {\
@@ -1580,3 +1572,5 @@ void SlicContext::CopyFromBuiltins()
 		}				
 	}
 }
+
+#undef UNFILL

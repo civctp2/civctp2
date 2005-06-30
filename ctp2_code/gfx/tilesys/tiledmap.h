@@ -33,7 +33,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -88,7 +88,6 @@ struct GridRect {
 #define k_BORDER_SOLID 0
 #define k_BORDER_DASHED 1
 
-class aui_DirectSurface;
 class aui_Surface;
 class aui_DirtyList;
 
@@ -178,7 +177,7 @@ public:
 	void			SetHiliteMouseTile(MapPoint &pos);
 	void			DrawHiliteMouseTile(aui_Surface *destSurf);
   	
-	void			SetTerrainOverlay(TerrainImprovementRecord *rec, MapPoint &pos,Pixel16 color);
+	void			SetTerrainOverlay(TerrainImprovementRecord *rec,MapPoint &pos,Pixel16 color);
 	void			DrawTerrainOverlay(aui_Surface *destSurf);
 
 	sint32			RecalculateViewRect(RECT &myRect);
@@ -268,7 +267,7 @@ public:
 	sint32			OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY);
 
 	
-	void			DrawStartingLocations(aui_DirectSurface *surf, sint32 layer);
+	void			DrawStartingLocations(aui_Surface *surf, sint32 layer);
 
 	inline	bool	IsScrolling(){ return m_isScrolling;};
 	inline	void	SetScrolling(bool scroll){ m_isScrolling=scroll;};
@@ -294,7 +293,7 @@ public:
 	sint32          RedrawBorders(aui_Surface *surface, sint32 i, sint32 j, bool clip = false);
 	void			RedrawTile(const MapPoint *point);
 	void			RedrawTileClipped(const MapPoint *point);
-	void			BlackTile(aui_Surface *surface, MapPoint *point);
+	void			BlackTile(aui_Surface *surface, const MapPoint *point);
 
 
 	bool			DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y,bool clip=false);
@@ -310,7 +309,7 @@ public:
 	
 	void	DrawTransitionTileClipped(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y);
 	sint32	DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	sint32	DrawBlendedTileClipped(aui_Surface *surface, MapPoint &pos,sint32 x, sint32 y, Pixel16 color, sint32 blend);
+	sint32	DrawBlendedTileClipped(aui_Surface *surface, const MapPoint &pos,sint32 x, sint32 y, Pixel16 color, sint32 blend);
 	sint32	DrawBlendedOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,Pixel16 color, sint32 blend, sint32 flags = k_OVERLAY_FLAG_NORMAL);
 	sint32	DrawDitheredTileClipped(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color);
 	sint32	DrawDitheredOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color);
@@ -351,19 +350,19 @@ public:
 	sint32			DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y);
 	sint32			QuickBlackBackGround(aui_Surface *surface);
 	sint32			DrawDitheredTile(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color);
-	void			DrawDitheredTileScaled(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color);
+	void			DrawDitheredTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color);
 
-	sint32			DrawBlendedTile(aui_Surface *surface, MapPoint &pos,sint32 x, sint32 y, Pixel16 color, sint32 blend);
-	void			DrawBlendedTileScaled(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color,sint32 blend);
+	sint32			DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint32 x, sint32 y, Pixel16 color, sint32 blend);
+	void			DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color,sint32 blend);
 
 	sint32			DrawTileBorder(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color);
-	void			DrawTileBorderScaled(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color);
+	void			DrawTileBorderScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color);
 	
 	
 	inline Pixel16	average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4);
 
 
-	void			DrawBlackScaledLow(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
+	void			DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
 
 	void			ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1, Pixel16 *pix2, 
 							sint32 pos, Pixel16 destPixel, short transparency, Pixel16 outlineColor, 
@@ -410,12 +409,12 @@ public:
 	BOOL		GetMousePos(POINT &pos);
 	BOOL		GetMouseTilePos(MapPoint &pt);
 
-	void		DrawTransitionTile(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y);
-	void		DrawTransitionTileScaled(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
+	void		DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y);
+	void		DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
 
 	void		DrawWater(void);
 
-    BOOL        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, MapPoint &old_pos, MapPoint &cur_pos);
+    BOOL        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &cur_pos);
 	void		DrawLegalMove(aui_Surface *pSurface);
 	void		DrawUnfinishedMove(aui_Surface *pSurface);
 
@@ -423,15 +422,15 @@ public:
 
 	void		DrawARoadPiece(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
 									BOOL fog, sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	void		DrawRoads(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, 
+	void		DrawRoads(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, 
 									sint32 roadType, uint16 roadOffset, BOOL fog, 
 									sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	void		DrawCityRoads(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y, 
+	void		DrawCityRoads(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, 
 									sint32 roadType, uint16 roadOffset, BOOL fog, 
 									sint32 flags = k_OVERLAY_FLAG_NORMAL);
 
-	void		DrawCityNames(aui_DirectSurface *surf, sint32 layer);
-	void		DrawCityIcons(aui_DirectSurface *surf, MapPoint &pos, sint32 owner, BOOL fog, RECT &popRect,
+	void		DrawCityNames(aui_Surface *surf, sint32 layer);
+	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, BOOL fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
@@ -446,7 +445,7 @@ public:
 	Vision		*GetLocalVision(void) { return m_localVision; }
 	void        ReallocateVision();
 
-	aui_DirectSurface *GetSurface(void) { return m_surface; } 
+	aui_Surface *GetSurface(void) { return m_surface; } 
 
 	TILEHITMASK	*GetTileHitMask( void ) { return m_tileHitMask; }
 	void		GetMapBounds( RECT &rect ) { rect = m_mapBounds; }
@@ -515,11 +514,11 @@ protected:
 	
 	bool				 m_isScrolling;
 
-	aui_DirectSurface	*m_surface;			
-	aui_DirectSurface	*m_mapSurface;		
+	aui_Surface		*m_surface;			
+	aui_Surface		*m_mapSurface;		
 
 	
-	aui_DirectSurface	*m_lockedSurface;	
+	aui_Surface		*m_lockedSurface;	
 	uint8			*m_surfBase;
 	sint32			m_surfWidth;
 	sint32			m_surfHeight;
