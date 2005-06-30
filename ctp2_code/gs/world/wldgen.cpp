@@ -31,6 +31,8 @@
 // - Force a good value recalculation on reload if the ressouce database was
 //   modified (goods added removed). - May 19th 2005 Martin Gühmann
 // - Wrap handling improved
+// - Using /importmap to import a text map no longer causes the river mouths
+//   to be deleted - 2005-07-01 Shaun Dove
 //
 //----------------------------------------------------------------------------
 
@@ -3448,7 +3450,8 @@ BOOL World::ImportMap(MBCHAR *filename)
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
 			if(IsWater(x,y) && !IsSurroundedByWater(x,y)) {
-				ConvertToBeach(x, y, GetCell(x,y));
+				// ConvertToBeach(x, y, GetCell(x,y));
+				GetCell(x,y)->SetTerrain(TERRAIN_WATER_BEACH);
 			} else if(GetCell(x,y)->GetTerrainType() == TERRAIN_WATER_BEACH && IsSurroundedByWater(x,y)) {
 				GetCell(x,y)->SetTerrain(TERRAIN_WATER_SHALLOW);
 			}
