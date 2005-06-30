@@ -34,6 +34,14 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 Changelog:
 
+2005-06-28
+Fixed: Crash caused by loading savegames with the wrong number of goods
+Fixed: Misc crashes
+Added: More AOM support
+Changed: Method of generating advances and units from goody huts to speed it up
+Fixed: Problem preventing play with fewer than 3 civs
+Removed: Automatic tutorial advice on low difficulty levels, since it breaks mods and generally causes problems (we have a specific tutorial button now on the main menu for those that want one)
+
 2005-05-23
 Added: Brief changelog to playtest readme
 Fixed: Incorrect bonuses from goods

@@ -27,6 +27,9 @@
 // _NO_GAME_WATCH
 // - Generates a game watch file when not set.  
 //
+// USE_SDL
+// Use SDL as replacement for DirectX.
+//
 // _WAS_ABOUT_TEST_WHEN_DAN_GOT_ME_REPRO_STEPS
 // - Have to ask Activision for this one.
 //
@@ -70,6 +73,7 @@
 // - Added crash prevention during game loading.
 // - Added another civilisation index check.
 // - Option added to include multiple data directories.
+// - Added Slic segment cleanup.
 //
 //----------------------------------------------------------------------------
 
@@ -287,6 +291,7 @@ int g_gameWatchID = -1;
 #include "unitmanager.h"
 #include "EditQueue.h"
 #include "ProfileEdit.h"
+#include "SlicSegment.h"    // SlicSegment::Cleanup
 
 #ifdef LINUX
 #include <time.h>
@@ -535,6 +540,8 @@ void InitDataIncludePath(void)
     {
 	    g_civPaths->InsertExtraDataPath(*p);
     }
+
+
 }
 
 //----------------------------------------------------------------------------
@@ -568,6 +575,41 @@ void SelectColorSet(void)
 }
 
 } // namespace
+
+//----------------------------------------------------------------------------
+//
+// Name       : Os
+//
+// Description: Wrapper for some operating system specific functions
+//
+// Remark(s)  : TODO: move to a better location
+//
+//----------------------------------------------------------------------------
+namespace Os
+{
+    inline uint32 GetTicks()
+    {
+#if defined(USE_SDL)
+	    return SDL_GetTicks();
+#else
+	    return GetTickCount();
+#endif
+    }
+
+    inline void Sleep(uint32 milliSeconds)
+    {
+#ifdef HAVE_UNISTD_H
+		usleep(milliSeconds);
+#elif defined(WIN32)
+		::Sleep(milliSeconds);
+#elif defined(LINUX)
+		struct timespec backgroundSleepTime;
+		backgroundSleepTime.tv_sec  = 0;
+		backgroundSleepTime.tv_nsec = 1000000 * milliSeconds;
+		nanosleep(&backgroundSleepTime, NULL);
+#endif
+    }
+} // namespace Os
 
 
 void check_leak()
@@ -1686,11 +1728,9 @@ extern ColorSet	*g_colorSet;
 
 sint32 CivApp::CleanupAppUI(void)
 {
-	
 	NetShell::Leave( k_NS_FLAGS_DESTROY );
 
-	
-	
+    // Clean up any opened screens	
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
@@ -1701,11 +1741,10 @@ sint32 CivApp::CleanupAppUI(void)
 	graphicsscreen_Cleanup();
 	gameplayoptions_Cleanup();
 	soundscreen_Cleanup();
-
 	musicscreen_Cleanup();
 	//Added by Martin Gühmann to clean up the status bar correctly.
 	StatusBar::CleanUp();
-	
+
     if (g_c3ui)
     {
 	    delete g_c3ui->TheMovieManager();
@@ -1741,291 +1780,176 @@ sint32 CivApp::CleanupAppUI(void)
 
 sint32 CivApp::CleanupAppDB(void)
 {
-	if (g_theMapDB) {
-		delete g_theMapDB;
-		g_theMapDB = NULL;
-	}
+	delete g_theMapDB;
+	g_theMapDB = NULL;
 
-	if (g_exclusions) {
-		delete g_exclusions;
-		g_exclusions = NULL;
-	}
+	delete g_exclusions;
+	g_exclusions = NULL;
 
-	if (g_theGoodsIconDB) {
-		delete g_theGoodsIconDB;
-		g_theGoodsIconDB = NULL;
-	}
+	delete g_theGoodsIconDB;
+	g_theGoodsIconDB = NULL;
 
-	if (g_theMessageIconFileDB) {
-		delete g_theMessageIconFileDB;
-		g_theMessageIconFileDB = NULL;
-	}
+	delete g_theMessageIconFileDB;
+	g_theMessageIconFileDB = NULL;
 
-	if (g_theEndGameDB) {
-		delete g_theEndGameDB;
-		g_theEndGameDB = NULL;
-	}
+	delete g_theEndGameDB;
+	g_theEndGameDB = NULL;
 
-	if (g_theRiskDB) {
-		delete g_theRiskDB;
-		g_theRiskDB = NULL;
-	}
+	delete g_theRiskDB;
+	g_theRiskDB = NULL;
 
-    if (g_theWonderDB) { 
-    	delete g_theWonderDB; 
-	    g_theWonderDB = NULL; 
-    }
+    delete g_theWonderDB; 
+	g_theWonderDB = NULL; 
 
-	
+	delete g_theCivilisationDB;
+	g_theCivilisationDB = NULL;
 
+	delete g_thePollutionDB;
+	g_thePollutionDB = NULL;
 
+	delete g_theUVDB;
+	g_theUVDB = NULL;
 
+	delete g_theGWDB;
+	g_theGWDB = NULL;
 
+    delete g_theBuildingDB; 
+	g_theBuildingDB = NULL; 
 
-	if (g_theCivilisationDB) {
-		delete g_theCivilisationDB;
-		g_theCivilisationDB = NULL;
-	}
+	delete g_theTerrainDB;
+	g_theTerrainDB = NULL;
 
-	if (g_thePollutionDB) {
-		delete g_thePollutionDB;
-		g_thePollutionDB = NULL;
-	}
+	delete g_theResourceDB;
+	g_theResourceDB = NULL;
 
-	if (g_theUVDB) {
-		delete g_theUVDB;
-		g_theUVDB = NULL;
-	}
+	delete g_theGovernmentDB; 
+    g_theGovernmentDB = NULL; 
 
-	if (g_theGWDB) {
-		delete g_theGWDB;
-		g_theGWDB = NULL;
-	}
-	
-    if (g_theBuildingDB) { 
-    	delete g_theBuildingDB; 
-	    g_theBuildingDB = NULL; 
-    }
+	delete g_theConceptDB;
+	g_theConceptDB = NULL;
 
-	if (g_theTerrainDB) {
-		delete g_theTerrainDB;
-		g_theTerrainDB = NULL;
-	}
+	delete g_theThroneDB;
+	g_theThroneDB = NULL;
 
-	if (g_theResourceDB) {
-		delete g_theResourceDB;
-		g_theResourceDB = NULL;
-	}
-    
-    if (g_theGovernmentDB) { 
-	    delete g_theGovernmentDB; 
-    	g_theGovernmentDB = NULL; 
-    }
+	delete g_theAgeDB;
+	g_theAgeDB = NULL;
 
-	if (g_theConceptDB) {
-		delete g_theConceptDB;
-		g_theConceptDB = NULL;
-	}
+	delete g_theCityStyleDB;
+	g_theCityStyleDB = NULL;
 
-	if ( g_theThroneDB ) {
-		delete g_theThroneDB;
-		g_theThroneDB = NULL;
-	}
+	delete g_theAgeCityStyleDB;
+	g_theAgeCityStyleDB = NULL;
 
-	if (g_theAgeDB) {
-		delete g_theAgeDB;
-		g_theAgeDB = NULL;
-	}
-	
-	if(g_theCityStyleDB) {
-		delete g_theCityStyleDB;
-		g_theCityStyleDB = NULL;
-	}
+	delete g_theDifficultyDB;
+	g_theDifficultyDB = NULL;
 
-	if(g_theAgeCityStyleDB) {
-		delete g_theAgeCityStyleDB;
-		g_theAgeCityStyleDB = NULL;
-	}
+    delete g_theUnitDB; 
+	g_theUnitDB = NULL;
 
-	if (g_theDifficultyDB) {
-		delete g_theDifficultyDB;
-		g_theDifficultyDB = NULL;
-	}
+    delete g_theAdvanceDB; 
+	g_theAdvanceDB = NULL;
 
-    if (g_theUnitDB) { 
-    	delete g_theUnitDB; 
-	    g_theUnitDB = NULL;
-    }
+	delete g_theAdvanceBranchDB;
+	g_theAdvanceBranchDB = NULL;
 
-    if (g_theAdvanceDB) { 
-    	delete g_theAdvanceDB; 
-	    g_theAdvanceDB = NULL;
-    }
+	delete g_theCitySpriteStateDB;
+	g_theCitySpriteStateDB = NULL;
 
-	if(g_theAdvanceBranchDB) {
-		delete g_theAdvanceBranchDB;
-		g_theAdvanceBranchDB = NULL;
-	}
+	delete g_theGoodsSpriteStateDB;
+	g_theGoodsSpriteStateDB = NULL;
 
-	if (g_theCitySpriteStateDB) {
-		delete g_theCitySpriteStateDB;
-		g_theCitySpriteStateDB = NULL;
-	}
-	
-	if (g_theGoodsSpriteStateDB) {
-		delete g_theGoodsSpriteStateDB;
-		g_theGoodsSpriteStateDB = NULL;
-	}
+	delete g_theSpecialEffectDB;
+	g_theSpecialEffectDB = NULL;
 
-	if (g_theSpecialEffectDB) {
-		delete g_theSpecialEffectDB;
-		g_theSpecialEffectDB = NULL;
-	}
+	delete g_theSpriteStateDB;
+	g_theSpriteStateDB = NULL;
 
-	if (g_theSpriteStateDB) {
-		delete g_theSpriteStateDB;
-		g_theSpriteStateDB = NULL;
-	}
+	delete g_theSpriteDB;
+	g_theSpriteDB = NULL;
 
-	if(g_theSpriteDB) {
-		delete g_theSpriteDB;
-		g_theSpriteDB = NULL;
-	}
+	delete g_theSpecialAttackInfoDB;
+	g_theSpecialAttackInfoDB = NULL;
 
-	if(g_theSpecialAttackInfoDB) {
-		delete g_theSpecialAttackInfoDB;
-		g_theSpecialAttackInfoDB = NULL;
-	}
+	delete g_thePlayListDB;
+	g_thePlayListDB = NULL;
 
-	if (g_thePlayListDB) {
-		delete g_thePlayListDB;
-		g_thePlayListDB = NULL;
-	}
+	delete g_theVictoryMovieDB;
+	g_theVictoryMovieDB = NULL;
 
-	if (g_theVictoryMovieDB) {
-		delete g_theVictoryMovieDB;
-		g_theVictoryMovieDB = NULL;
-	}
+	delete g_theWonderMovieDB;
+	g_theWonderMovieDB = NULL;
 
-	if (g_theWonderMovieDB) {
-		delete g_theWonderMovieDB;
-		g_theWonderMovieDB = NULL;
-	}
+	delete g_theIconDB;
+	g_theIconDB = NULL;
 
-	if (g_theIconDB) {
-		delete g_theIconDB;
-		g_theIconDB = NULL;
-	}
+	delete g_theSoundDB;
+	g_theSoundDB = NULL;
 
-	if (g_theSoundDB) {
-		delete g_theSoundDB;
-		g_theSoundDB = NULL;
-	}
+    delete g_theStringDB; 
+	g_theStringDB = NULL;
 
-	if (g_theStringDB) { 
-    	delete g_theStringDB; 
-	    g_theStringDB = NULL;
-    }
+	delete g_theTerrainImprovementDB;
+	g_theTerrainImprovementDB = NULL;
 
-	if(g_theTerrainImprovementDB) {
-		delete g_theTerrainImprovementDB;
-		g_theTerrainImprovementDB = NULL;
-	}
+	delete g_theOrderDB;
+	g_theOrderDB = NULL;
 
-	if(g_theOrderDB) {
-		delete g_theOrderDB;
-		g_theOrderDB = NULL;
-	}
+	delete g_theCitySizeDB;
+	g_theCitySizeDB = NULL;
 
-	if(g_theCitySizeDB) {
-		delete g_theCitySizeDB;
-		g_theCitySizeDB = NULL;
-	}
+	delete g_thePopDB;
+	g_thePopDB = NULL;
 
-	if(g_thePopDB) {
-		delete g_thePopDB;
-		g_thePopDB = NULL;
-	}
+	delete g_theBuildingDB;
+	g_theBuildingDB = NULL;
 
-	if(g_theBuildingDB) {
-		delete g_theBuildingDB;
-		g_theBuildingDB = NULL;
-	}
+	delete g_theFeatDB;
+	g_theFeatDB = NULL;
 
-	if(g_theFeatDB) {
-		delete g_theFeatDB;
-		g_theFeatDB = NULL;
-	}
+	delete g_theEndGameObjectDB;
+	g_theEndGameObjectDB = NULL;
 
-	if(g_theEndGameObjectDB) {
-		delete g_theEndGameObjectDB;
-		g_theEndGameObjectDB = NULL;
-	}
+	delete g_theGoalDB;
+	g_theGoalDB = NULL;
 
-	if(g_theGoalDB) {
-		delete g_theGoalDB;
-		g_theGoalDB = NULL;
-	}
+	delete g_thePersonalityDB;
+	g_thePersonalityDB = NULL;
 
-	if(g_thePersonalityDB) {
-		delete g_thePersonalityDB;
-		g_thePersonalityDB = NULL;
-	}
+	delete g_theUnitBuildListDB;
+	g_theUnitBuildListDB = NULL;
 
-	if(g_theUnitBuildListDB) {
-		delete g_theUnitBuildListDB;
-		g_theUnitBuildListDB = NULL;
-	}
+	delete g_theWonderBuildListDB;
+	g_theWonderBuildListDB = NULL;
 
-	if(g_theWonderBuildListDB) {
-		delete g_theWonderBuildListDB;
-		g_theWonderBuildListDB = NULL;
-	}
-	if(g_theBuildingBuildListDB) {
-		delete g_theBuildingBuildListDB;
-		g_theBuildingBuildListDB = NULL;
-	}
-	if(g_theImprovementListDB) {
-		delete g_theImprovementListDB;
-		g_theImprovementListDB = NULL;
-	}
+	delete g_theBuildingBuildListDB;
+	g_theBuildingBuildListDB = NULL;
 
-	if(g_theStrategyDB) {
-		delete g_theStrategyDB;
-		g_theStrategyDB = NULL;
-	}
+	delete g_theImprovementListDB;
+	g_theImprovementListDB = NULL;
 
-	if(g_theBuildListSequenceDB) {
-		delete g_theBuildListSequenceDB;
-		g_theBuildListSequenceDB = NULL;
-	}
-	
-	if(g_theDiplomacyDB) {
-		delete g_theDiplomacyDB;
-		g_theDiplomacyDB = NULL;
-	}
+	delete g_theStrategyDB;
+	g_theStrategyDB = NULL;
 
-	if(g_theAdvanceListDB) {
-		delete g_theAdvanceListDB;
-		g_theAdvanceListDB = NULL;
-	}
+	delete g_theBuildListSequenceDB;
+	g_theBuildListSequenceDB = NULL;
 
-	if(g_theDiplomacyProposalDB) {
-		delete g_theDiplomacyProposalDB;
-		g_theDiplomacyProposalDB = NULL;
-	}
+	delete g_theDiplomacyDB;
+	g_theDiplomacyDB = NULL;
 
-	if(g_theDiplomacyThreatDB) {
-		delete g_theDiplomacyThreatDB;
-		g_theDiplomacyThreatDB = NULL;
-	}
+	delete g_theAdvanceListDB;
+	g_theAdvanceListDB = NULL;
+
+	delete g_theDiplomacyProposalDB;
+	g_theDiplomacyProposalDB = NULL;
+
+	delete g_theDiplomacyThreatDB;
+	g_theDiplomacyThreatDB = NULL;
 
 	delete [] g_pTurnLengthOverride;
 	g_pTurnLengthOverride = NULL;
 
 	m_dbLoaded = FALSE;
-
-	return 0;
+    return 0;
 }
 
 
@@ -2041,56 +1965,33 @@ sint32 CivApp::CleanupApp(void)
     	Splash::Cleanup();
     	messagewin_Cleanup();
 
-	    if (g_slicEngine) {
-		    delete g_slicEngine;
-		    g_slicEngine = NULL;
-	    }
+	    delete g_slicEngine;
+	    g_slicEngine = NULL;
 
-	    if (g_theMessagePool) {
-		    delete g_theMessagePool;
-		    g_theMessagePool = NULL;
-	    }
-
+	    delete g_theMessagePool;
+	    g_theMessagePool = NULL;
 	    
 	    CivScenarios::Cleanup();
+        SoundManager::Cleanup();
 
-	    
-	    SoundManager::Cleanup();
+        delete g_theProfileDB; 
+        g_theProfileDB = NULL; 
 
-        if (g_theProfileDB) { 
-            delete g_theProfileDB; 
-            g_theProfileDB = NULL; 
-        }
-
-        if (g_theConstDB) { 
-    	    delete g_theConstDB; 
-	        g_theConstDB = NULL; 
-        }
+   	    delete g_theConstDB; 
+	    g_theConstDB = NULL; 
 
 	    gameinit_Cleanup();
-
 	    events_Cleanup();
 	    gameEventManager_Cleanup();
-
 	    g_network.Cleanup();
-
-	    
 	    CursorManager::Cleanup();
-
-	    
 	    sharedsurface_Cleanup();
+   	    CleanupAppUI();
+   	    cleanup_keymap();
+   	    CleanupAppDB();
+   	    CivPaths_CleanupCivPaths();
+        SlicSegment::Cleanup();
 
-	    
-	    CleanupAppUI();
-
-	    
-	    cleanup_keymap();
-
-	    
-	    CleanupAppDB();
-
-	    
-	    CivPaths_CleanupCivPaths();
 // COM needed for DirectX Moviestuff
 #ifdef WIN32    
 	    CoUninitialize();
@@ -2098,9 +1999,9 @@ sint32 CivApp::CleanupApp(void)
 
 	    display_Cleanup();
     }
-	m_appLoaded = FALSE;
 
-	return 0;
+	m_appLoaded = FALSE;
+    return 0;
 }
 
 
@@ -2616,6 +2517,8 @@ sint32 InitializeSpriteEditorUI(void)
 	g_splash_old = GetTickCount();
 #endif
 
+	g_splash_old = Os::GetTicks();
+
 	g_theProgressWindow->StartCountingTo( 20 );
 
 	
@@ -2964,17 +2867,8 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 
 sint32 CivApp::CleanupGameUI(void)
 {
-
-AttractWindow::Cleanup();
-
-	
+    AttractWindow::Cleanup();
 	GrabItem::Cleanup();
-
-	
-	
-	
-
-	
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
@@ -2986,11 +2880,9 @@ AttractWindow::Cleanup();
 	graphicsscreen_Cleanup();
 	gameplayoptions_Cleanup();
 	soundscreen_Cleanup();
-
-	
 	AncientWindows_Cleanup();
-
 	controlpanelwindow_Cleanup();
+
 	c3windows_MakeDebugWindow(FALSE);
 
 	
@@ -3193,7 +3085,7 @@ sint32 CivApp::StartMessageSystem()
 		InitializeAppDB((*(CivArchive *)(NULL)));
 
 
-	
+	delete g_slicEngine;
 	g_slicEngine = new SlicEngine();
 	if(g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE))
 		g_slicEngine->Link();
@@ -3409,13 +3301,7 @@ sint32 CivApp::ProcessRobot(const uint32 target_milliseconds, uint32 &used_milli
 		}
 	}
 
-    
-    
-    
-	
-	
-
-    
+	used_milliseconds = Os::GetTicks() - start_time_ms;
     return 0; 
 } 
 
@@ -3428,10 +3314,12 @@ sint32 CivApp::ProcessNet(const uint32 target_milliseconds, uint32 &used_millise
 	uint32 start_time_ms = GetTickCount();
 #endif
 
-	if(m_gameLoaded) {
+	if (m_gameLoaded) 
+    {
 		g_network.Process();
 	}
 
+    used_milliseconds   = Os::GetTicks() - start_time;
 	return 0;
 }
 
@@ -3863,9 +3751,7 @@ sint32 CivApp::QuitGame(void)
 	if (m_gameLoaded)
 		CleanupGame(true); 
 
-	CleanupApp();
-
-	return 0;
+	return CleanupApp();
 }
 
 
