@@ -19,7 +19,8 @@
 #include "aui_action.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
-#include "aui_directsurface.h"
+#include "aui_surface.h"
+#include "aui_Factory.h"
 #include "aui_blitter.h"
 #include "aui_stringtable.h"
 #include "aui_static.h"
@@ -145,9 +146,9 @@ AUI_ERRCODE c3_DarkenArea::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
+#if 0	
 	DarkenSurface(surface, &rect, k_ENDGAME_DARKEN_VALUE);
-
+#endif
 	
 	return(aui_Static::DrawThis(surface, x, y));
 }
@@ -294,7 +295,7 @@ public:
 	c3_Blend(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
 		aui_Static(retval, id, ldlBlock),
 		aui_ImageBase( ldlBlock, true ),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
+		aui_TextBase((const MBCHAR *)NULL, (uint32)0)
 		{ m_blendVal = 0; m_soundID = -1; }
 
 	
@@ -302,7 +303,7 @@ public:
 		const MBCHAR *text = NULL, uint32 maxLength = 0 ) :
 		aui_Static(retval, id, x, y, width, height, text, maxLength),
 		aui_ImageBase( (sint32)0, AUI_IMAGEBASE_BLTTYPE_COPY, AUI_IMAGEBASE_BLTFLAG_COPY, true),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
+		aui_TextBase((const MBCHAR *)NULL, (uint32)0)
 		{ m_blendVal = 0; m_soundID = -1; }
 
 	
@@ -406,8 +407,8 @@ AUI_ERRCODE c3_Blend::DrawBlendImage(aui_Surface *destSurf, RECT *destRect)
 	RECT srcRect = { 0, 0, srcSurf->Width(), srcSurf->Height() };
 
 	
-	aui_DirectSurface *backSurface = new aui_DirectSurface(&errcode, srcRect.right, srcRect.bottom,
-		k_C3_BLEND_BITS_PER_PIXEL, g_c3ui->DD());
+	aui_Surface *backSurface = aui_Factory::new_Surface(errcode, srcRect.right, srcRect.bottom,
+		k_C3_BLEND_BITS_PER_PIXEL);
 	Assert(AUI_NEWOK(backSurface, errcode));
 
 	
@@ -417,8 +418,8 @@ AUI_ERRCODE c3_Blend::DrawBlendImage(aui_Surface *destSurf, RECT *destRect)
 	
 	if(m_imagebltflag == AUI_IMAGEBASE_BLTFLAG_CHROMAKEY) {
 		
-		aui_DirectSurface *frontSurface = new aui_DirectSurface(&errcode, srcRect.right, srcRect.bottom,
-			k_C3_BLEND_BITS_PER_PIXEL, g_c3ui->DD());
+		aui_Surface *frontSurface = aui_Factory::new_Surface(errcode, srcRect.right, srcRect.bottom,
+			k_C3_BLEND_BITS_PER_PIXEL);
 		Assert(AUI_NEWOK(frontSurface, errcode));
 		
 		
@@ -469,8 +470,8 @@ AUI_ERRCODE c3_Blend::DrawBlendImage(aui_Surface *destSurf, RECT *destRect)
 	
 	if(m_imagebltflag == AUI_IMAGEBASE_BLTFLAG_CHROMAKEY) {
 		
-		aui_DirectSurface *frontSurface = new aui_DirectSurface(&errcode, highlightRect.right,
-			highlightRect.bottom, k_C3_BLEND_BITS_PER_PIXEL, g_c3ui->DD());
+		aui_Surface *frontSurface = aui_Factory::new_Surface(errcode, highlightRect.right,
+			highlightRect.bottom, k_C3_BLEND_BITS_PER_PIXEL);
 		Assert(AUI_NEWOK(frontSurface, errcode));
 		
 		
@@ -507,7 +508,7 @@ public:
 	c3_Animation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
 		c3_Blend(retval, id, ldlBlock),
 		aui_ImageBase( ldlBlock, true ),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
+		aui_TextBase((const MBCHAR *)NULL, (uint32)0)
 		{ 	
 			
 			m_frames = NULL;
@@ -522,7 +523,7 @@ public:
 		const MBCHAR *text = NULL, uint32 maxLength = 0 ) :
 		c3_Blend(retval, id, x, y, width, height, text, maxLength),
 		aui_ImageBase( (sint32)0, AUI_IMAGEBASE_BLTTYPE_COPY, AUI_IMAGEBASE_BLTFLAG_COPY, true),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
+		aui_TextBase((const MBCHAR *)NULL, (uint32)0)
 		{
 			
 			m_frames = NULL;
@@ -746,8 +747,8 @@ EndGameWindow::~EndGameWindow()
 
 void EndGameWindow::SetStage(sint32 stage, sint32 lastStage)
 {
-	
-	for(int index = 0; index < m_numberOfStages; index++) {
+	int index;
+	for(index = 0; index < m_numberOfStages; index++) {
 		if(index == stage) {
 			m_embryoStage[index]->ShowThis();
 			if(index == lastStage) m_embryoStage[index]->SetBlend(k_C3_BLEND_MAXBLEND);

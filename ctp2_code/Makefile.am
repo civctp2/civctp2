@@ -597,6 +597,7 @@ ctp2_SOURCES = \
 	ui/aui_ctp2/ctp2_Window.cpp \
 	ui/interface/CityControlPanel.cpp \
 	ui/interface/DomesticControlPanel.cpp \
+	ui/interface/EndgameWindow.cpp \
 	ui/interface/MessageControlPanel.cpp \
 	ui/interface/TilesControlPanel.cpp \
 	ui/interface/UnitControlPanel.cpp \

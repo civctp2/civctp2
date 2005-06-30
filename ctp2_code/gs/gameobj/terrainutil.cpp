@@ -995,7 +995,7 @@ bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreC
 	return false;
 }
 
-void terrainutil_RemoveBorders(MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit &ignoreCity)
+void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit &ignoreCity)
 {
 	
 	

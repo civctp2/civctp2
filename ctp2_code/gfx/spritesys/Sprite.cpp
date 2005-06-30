@@ -48,7 +48,9 @@ Sprite::Sprite()
 
 	m_numFrames = 0;
 	m_frames = NULL;
+	m_framesSizes = NULL;
 	m_miniframes = NULL;
+	m_miniframesSizes = NULL;
 	m_currentFrame = 0;
 	m_firstFrame = 0;
 
@@ -68,29 +70,34 @@ Sprite::Sprite()
 
 Sprite::~Sprite()
 {
-	if (m_frames != NULL) {
-		for (sint32 i=0; i<m_numFrames; i++) {
-			if (m_frames[i] != NULL) {
-				delete[] (m_frames[i]);
+	for (sint32 i = 0; i < m_numFrames; i++) {
+		if (m_frames) 
+			if (m_frames[i]) {
+				delete[] m_frames[i];
+				m_frames[i] = 0;
 			}
-			if (m_miniframes[i] != NULL) {
-				delete[] (m_miniframes[i]);
+		if (m_miniframes)
+			if (m_miniframes[i]) {
+				delete[] m_miniframes[i];
+				m_miniframes[i] = 0;
 			}
-		}
-
-		delete[] m_frames;
-		delete[] m_miniframes;
 	}
-
-
-
-
-
-
-
-
-
-
+	if (m_frames) {
+		delete[] m_frames;
+		m_frames = 0;
+	}
+	if (m_framesSizes) {
+		delete[] m_framesSizes;
+		m_framesSizes = 0;
+	}
+	if (m_miniframes) {
+		delete[] m_miniframes;
+		m_miniframes = 0;
+	}
+	if (m_miniframesSizes) {
+		delete[] m_miniframesSizes;
+		m_miniframesSizes = 0;
+	}
 }
 
 
@@ -730,7 +737,16 @@ Pixel16 *Sprite::GetFrameData(uint16 frameNum)
 	return m_frames[frameNum];
 }
 
+size_t Sprite::GetFrameDataSize(uint16 frameNum)
+{
+	Assert(frameNum < m_numFrames);
+	if (frameNum >= m_numFrames) return 0;
 
+	Assert(m_framesSizes != NULL);
+	if (m_framesSizes == NULL) return 0;
+
+	return m_framesSizes[frameNum];
+}
 
 Pixel16 *Sprite::GetMiniFrameData(uint16 frameNum)
 {
@@ -741,6 +757,17 @@ Pixel16 *Sprite::GetMiniFrameData(uint16 frameNum)
 	if (m_miniframes == NULL) return NULL;
 
 	return m_miniframes[frameNum];
+}
+
+size_t Sprite::GetMiniFrameDataSize(uint16 frameNum)
+{
+	Assert(frameNum < m_numFrames);
+	if (frameNum >= m_numFrames) return 0;
+
+	Assert(m_miniframesSizes != NULL);
+	if (m_miniframesSizes == NULL) return 0;
+
+	return m_miniframesSizes[frameNum];
 }
 
 

@@ -103,7 +103,7 @@ typedef sint32 AdvanceType;
 #include "slicif_sym.h"
 #include "SlicModFuncEnum.h"
 #include "c3types.h"            // MBCHAR, sint32
-#include "Player.h"             // PLAYER_INDEX
+#include "player.h"             // PLAYER_INDEX
 
 
 class SlicEngine {

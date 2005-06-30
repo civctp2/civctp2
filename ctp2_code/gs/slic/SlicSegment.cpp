@@ -50,7 +50,7 @@
 #include "SlicConditional.h"
 #include "SlicConst.h"
 #include "profileDB.h"
-#include "Pool.h"
+#include "pool.h"
 
 namespace
 {

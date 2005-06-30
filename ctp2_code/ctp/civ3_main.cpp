@@ -1305,9 +1305,13 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f);
 
 
 
-
+#ifdef __GNUC__
+void ParseCommandLine(int argc, char **argv)
+#else
 void ParseCommandLine(MBCHAR *szCmdLine)
-{ 
+#endif
+{
+#ifdef WIN32
 #ifndef _BFR_
 	if(stricmp(szCmdLine, "crash.txt") == 0) {
 		FILE *txt = fopen("crashmap.txt", "w");
@@ -1315,12 +1319,14 @@ void ParseCommandLine(MBCHAR *szCmdLine)
 		fclose(txt);
 		exit(0);
 	}
-#endif
+#endif// _BFR_
+#else // WIN32
+	const MBCHAR *szCmdLine = "";
+#endif // WIN32
 
-    
-    char *archive_file; 
+    char *archive_file = NULL;
     archive_file = strstr(szCmdLine, "-l");
-    if (NULL == archive_file) { 
+    if (NULL == archive_file) {
         g_cmdline_load = FALSE; 
     } else { 
         g_cmdline_load = TRUE; 
@@ -1352,9 +1358,8 @@ void ParseCommandLine(MBCHAR *szCmdLine)
     } 
 
 	
-    MBCHAR		*scenName; 
+    MBCHAR		*scenName = NULL; 
 
-    
 	scenName = strstr(szCmdLine, "-s");
     if (NULL != scenName) { 
 		
@@ -2003,7 +2008,11 @@ Error:
 void SDLMessageHandler(const SDL_Event &event);
 #endif
 
+#ifdef __GNUC__
+int CivMain(int argc, char **argv)
+#else
 int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
+#endif
 {
 #ifdef WIN32
 	MSG			msg;
@@ -2081,7 +2090,11 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 #endif // WIN32
 #endif // !defined(_DEBUG) && !defined(_BFR_)
 
+#ifdef __GNUC__
+	ParseCommandLine(argc, argv);
+#else
     ParseCommandLine(szCmdLine);
+#endif
 
 	if(g_e3Demo) {
 		if(!g_no_shell && !g_launchScenario) {
@@ -2091,6 +2104,11 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	g_civApp = new CivApp();
 
+#ifndef WIN32
+#warning "Remove unneeded arguments."
+	HINSTANCE hInstance = NULL;
+	int iCmdShow = 0;
+#endif
 	
     if (g_cmdline_load) {
         g_civApp->InitializeApp(hInstance, iCmdShow);

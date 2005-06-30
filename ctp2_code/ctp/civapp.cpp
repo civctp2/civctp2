@@ -3319,7 +3319,7 @@ sint32 CivApp::ProcessNet(const uint32 target_milliseconds, uint32 &used_millise
 		g_network.Process();
 	}
 
-    used_milliseconds   = Os::GetTicks() - start_time;
+    used_milliseconds   = Os::GetTicks() - start_time_ms;
 	return 0;
 }
 
