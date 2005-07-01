@@ -23,6 +23,7 @@
 // Modifications from the original Activision code:
 //
 // - Destructor cleaned up.
+// - Repaired crashes.
 //
 //----------------------------------------------------------------------------
 
@@ -1470,6 +1471,7 @@ void SlicContext::FillBuiltins()
     array->Prune(m_actionList ? m_numActions : 0);                          
 	if (m_actionList) {
 		SlicSymbolData setSym(SLIC_SYM_STRING);
+        stackVal.m_sym = &setSym;                    
 		for(sint32 i = 0; i < m_numActions; i++) {
 			setSym.SetString(m_actionList[i]);
 			array->Insert(i, SS_TYPE_SYM, stackVal);
@@ -1481,6 +1483,7 @@ void SlicContext::FillBuiltins()
     array->Prune(m_buildingList ? m_numBuildings : 0);                         
 	if(m_buildingList) {
 		SlicSymbolData setSym(SLIC_SYM_IVAR);
+        stackVal.m_sym = &setSym;         
 		for(sint32 i = 0; i < m_numBuildings; i++) {
 			setSym.SetIntValue(m_buildingList[i]);
 			array->Insert(i, SS_TYPE_SYM, stackVal);
@@ -1492,6 +1495,7 @@ void SlicContext::FillBuiltins()
     array->Prune(m_wonderList ? m_numWonders : 0);                         
 	if(m_wonderList) {
 		SlicSymbolData setSym(SLIC_SYM_IVAR);
+        stackVal.m_sym = &setSym; 
 		for(sint32 i = 0; i < m_numWonders; i++) {
 			setSym.SetIntValue(m_wonderList[i]);
 			array->Insert(i, SS_TYPE_SYM, stackVal);
@@ -1503,6 +1507,7 @@ void SlicContext::FillBuiltins()
     array->Prune(m_goldList ? m_numGolds : 0);                         
 	if(m_goldList) {
 		SlicSymbolData setSym(SLIC_SYM_IVAR);
+        stackVal.m_sym = &setSym; 
 		for(sint32 i = 0; i < m_numGolds; i++) {
 			setSym.SetIntValue(m_goldList[i]);
 			array->Insert(i, SS_TYPE_SYM, stackVal);
