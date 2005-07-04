@@ -771,6 +771,10 @@ BOOL SlicFrame::DoInstruction(SOP op)
 					    if (g_slicEngine->AtBreak()) 
                         {
                             Assert(!m_resultObject); // need stack when failing?
+                            if (m_resultObject)
+                            {
+                                m_resultObject->Release();
+                            }
 						    m_resultObject  = obj;
 					    } 
                         else 

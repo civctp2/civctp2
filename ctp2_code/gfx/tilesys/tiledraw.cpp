@@ -1065,8 +1065,6 @@ void TiledMap::DrawPath(Path *path)
 
 sint32 TiledMap::QuickBlackBackGround(aui_Surface *surface)
 {
-	sint32			errcode;
-	
 	if (!surface) {
 		return m_surface->Blank(0);
 	} else {
@@ -4491,7 +4489,7 @@ void TiledMap::DrawWater(void)
 {
 }
 
-void TiledMap::DrawCityNames(aui_Surface *surf, sint32 layer)
+void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 {
 	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH*m_scale)/2);
 	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEADROOM*m_scale)/2;
@@ -4971,7 +4969,7 @@ void TiledMap::DrawCityNames(aui_Surface *surf, sint32 layer)
 // Remark(s)  : 
 //
 //----------------------------------------------------------------------------
-void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint &pos, sint32 owner, BOOL fog, RECT &popRect,
+void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, BOOL fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
 								sint32 bioInfectedOwner, sint32 nanoInfectedOwner, sint32 convertedOwner,

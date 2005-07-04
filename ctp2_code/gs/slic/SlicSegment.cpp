@@ -149,7 +149,7 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
     std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
 
 	Assert(slicifIndex < g_slicNumEntries);
-	struct PSlicObject * pobj = g_slicObjectArray[slicifIndex];
+	struct PSlicObject *pobj = g_slicObjectArray[slicifIndex];
 
 	m_type = pobj->m_type;
 	m_id = pobj->m_id;
@@ -170,9 +170,9 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
     {
 		if (pobj->m_num_parameters > 0) 
         {
-    		m_parameter_indices = new sint32[pobj->m_num_parameters];
+			m_parameter_indices = new sint32[pobj->m_num_parameters];
 		    memcpy(m_parameter_indices, pobj->m_parameters, pobj->m_num_parameters * sizeof(sint32));
-    	}
+		}
 		m_num_parameters = pobj->m_num_parameters;
 		free(pobj->m_parameters);
 	}
@@ -193,8 +193,8 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
         if (g_gevManager)
         {
 		    m_event = g_gevManager->GetEventIndex(pobj->m_event_name);
-		    g_gevManager->AddCallback(m_event, m_priority, this);
-        }
+		g_gevManager->AddCallback(m_event, m_priority, this);
+	}
 	}
 
 	g_slicObjectArray[slicifIndex] = NULL;
@@ -203,17 +203,17 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 
     if (g_slicEngine)
     {
-	    SlicSymbolData * sym = g_slicEngine->GetSymbol(m_id);
-
+	SlicSymbolData *sym = g_slicEngine->GetSymbol(m_id);
+		
 	    if (sym) 
         {
-    		if((sym->GetType() == SLIC_SYM_ID) ||
+		if((sym->GetType() == SLIC_SYM_ID) ||
 	    	   (sym->GetType() == SLIC_SYM_UFUNC)
               ) 
             {
-			    sym->SetSegment(this);
-            }
+			sym->SetSegment(this);
 		}
+	}
 	}
 
 	free(pobj);
@@ -326,7 +326,7 @@ void * SlicSegment::operator new(size_t)
     if (!s_segmentPond)
     {
         s_segmentPond = new Pool<SlicSegment>(SEGMENT_POOL_SIZE);
-    }
+	} 
 
 	int index;
 	SlicSegment *   seg = static_cast<SlicSegment *>
@@ -337,8 +337,8 @@ void * SlicSegment::operator new(size_t)
 	    seg->SetPoolIndex(index);
     }
 
-	return seg;
-}
+		return seg;
+	}
 
 //----------------------------------------------------------------------------
 //
@@ -363,10 +363,10 @@ void SlicSegment::operator delete(void *ptr)
     {
         int const poolIndex = seg->GetPoolIndex();
         if ((poolIndex >= 0) && s_segmentPond)
-        {
+    {
             s_segmentPond->Release_Pointer(poolIndex);
-        }
-    }
+	}
+}
 }
 
 BOOL SlicSegment::TestLastShown(sint32 player, sint32 turn)

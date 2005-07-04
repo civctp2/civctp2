@@ -287,22 +287,21 @@ BOOL SlicArray::Insert(sint32 index, SS_TYPE type, SlicStackValue value)
 	}
 
 	
-	if(m_type == SS_TYPE_SYM) {
-		
-		if(!m_array[index].m_sym) {
-			delete m_array[index].m_sym;
-			if(m_structTemplate) {
-				
-				m_array[index].m_sym = m_structTemplate->CreateInstance(type, value);
-			} else {
-				
-				m_array[index].m_sym = new SlicSymbolData(m_varType);
-				m_array[index].m_sym->SetValueFromStackValue(type, value);
-			}
-		} else {
-			m_array[index].m_sym->SetValueFromStackValue(type, value);
-		}
-	} else {
+	if (m_type == SS_TYPE_SYM) 
+    {
+        // Create a new symbol if one does not exist yet.
+	    if (!m_array[index].m_sym) 
+        {
+			m_array[index].m_sym = (m_structTemplate) 
+                                   ? m_structTemplate->CreateInstance() 
+                                   : new SlicSymbolData(m_varType);
+		} 
+
+        return m_array[index].m_sym &&
+               m_array[index].m_sym->SetValueFromStackValue(type, value);
+	} 
+    else 
+    {
 		m_array[index] = value;
 	}
 
@@ -312,14 +311,13 @@ BOOL SlicArray::Insert(sint32 index, SS_TYPE type, SlicStackValue value)
 
 void SlicArray::Prune(sint32 size)
 {
-	if(m_sizeIsFixed)
+	if (m_sizeIsFixed)
 		return;
 
-	sint32 i;
-	if(m_type == SS_TYPE_SYM) {
-		
-		
-		for(i = size; i < m_arraySize; i++) {
+	if (m_type == SS_TYPE_SYM) 
+    {
+		for (sint32 i = size; i < m_arraySize; i++) 
+        {
 			delete m_array[i].m_sym;
 			m_array[i].m_sym = NULL;
 		}

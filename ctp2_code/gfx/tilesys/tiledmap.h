@@ -177,7 +177,7 @@ public:
 	void			SetHiliteMouseTile(MapPoint &pos);
 	void			DrawHiliteMouseTile(aui_Surface *destSurf);
   	
-	void			SetTerrainOverlay(TerrainImprovementRecord *rec, MapPoint &pos,Pixel16 color);
+	void			SetTerrainOverlay(TerrainImprovementRecord *rec,MapPoint &pos,Pixel16 color);
 	void			DrawTerrainOverlay(aui_Surface *destSurf);
 
 	sint32			RecalculateViewRect(RECT &myRect);
@@ -430,7 +430,7 @@ public:
 									sint32 flags = k_OVERLAY_FLAG_NORMAL);
 
 	void		DrawCityNames(aui_Surface *surf, sint32 layer);
-	void		DrawCityIcons(aui_Surface *surf, MapPoint &pos, sint32 owner, BOOL fog, RECT &popRect,
+	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, BOOL fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,

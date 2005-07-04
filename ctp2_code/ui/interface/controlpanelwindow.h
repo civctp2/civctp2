@@ -1,24 +1,46 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Control panel window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Cleaned up structure
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __CONTROLPANELWINDOW_H__
 #define __CONTROLPANELWINDOW_H__
+
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// #include <>      
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
 #define k_CONTROLPANEL_CITYUNIT_MODE		1
 #define k_CONTROLPANEL_UNSELECT_MODE		2
@@ -29,11 +51,7 @@
 #define k_CONTROLPANEL_TILEIMP_MODE			7
 #define k_CONTROLPANEL_CIVTAB_MODE			8
 
-#include "c3window.h"
-#include "c3_button.h"
-#include "buttonbank.h"
-#include "aui_stringtable.h"
-#include "Unit.h"
+class ControlPanelWindow;
 
 #include "SelItem.h"
 
@@ -152,6 +170,60 @@ enum
 
 #define CP_MAX_TILEIMPBUTTONS	(CP_TILEIMP_MAX*CP_MAX_BUTTONS_PER_BANK)
 
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
+
+#include "Player.h"             // PLAYER_INDEX
+#include "buttonbank.h"         // ORDERMODE
+#include "ctp2_inttypes.h"      // sint32
+#include "c3window.h"
+#include "c3_button.h"
+#include "aui_stringtable.h"
+#include "Unit.h"
+
+#include "SelItem.h"
+
+class Unit;
+class aui_TabGroup;
+class BattleOrderBox;
+class CellUnitList;
+class Army;
+class CityInventoryListBox;
+class ButtonBank;
+class TextTab;
+class c3_Static;
+class ctp2_Static;
+class c3_ColoredSwitch;
+class Thermometer;
+class StaticTextBox;
+class aui_Tab;
+class MapPoint;
+struct aui_MouseData;
+
+class ControlSheet;
+class aui_ProgressBar;
+class aui_Static;
+class ctp2_Window;
+class ctp2_ListBox;
+class ctp2_ListItem;
+class ctp2_DropDown;
+class ctp2_Button;
+class ctp2_Menu;
+class ctp2_MenuBar;
+class aui_Control;
+class OrderRecord;
+class ArmyData;
+class TerrainImprovementRecord;
+class TerrainRecord;
+class Message;
+class ctp2_TabGroup;
+class ctp2_Tab;
+class ctp2_Switch;
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 class ControlPanelWindow 
 {
@@ -434,9 +506,9 @@ void GotoCityUtilityDialogBoxCallback  (Unit city, sint32 val2);
 void controlpanelwindow_Update( Unit *city = NULL );
 
 
-sint32 controlpanelwindow_Initialize();
-sint32 controlpanelwindow_InitializeHats( void );
-sint32 controlpanelwindow_Cleanup( void );
+sint32  controlpanelwindow_Initialize();
+sint32  controlpanelwindow_InitializeHats( void );
+void    controlpanelwindow_Cleanup( void );
 
 
 extern ControlPanelWindow *g_controlPanel;

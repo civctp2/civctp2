@@ -48,7 +48,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"         
+#include "c3.h"
 #include "SlicEngine.h"    
 
 #include <iterator>
@@ -182,7 +182,7 @@ SlicEngine::SlicEngine()
 	m_currentMessage        (new Message(0)),
 	m_segmentHash           (new SlicSegmentHash(k_SEGMENT_HASH_SIZE)),
 	m_functionHash          (NULL),
-	m_uiHash                (new StringHash<SlicUITrigger>(k_SEGMENT_HASH_SIZE)),
+	m_uiHash                (new StringHash<SlicUITrigger> (k_SEGMENT_HASH_SIZE)),
 	m_dbHash                (NULL),
     m_symTab                (new SlicSymTab(0)),
 	m_context               (NULL),
@@ -281,27 +281,27 @@ SlicEngine::SlicEngine(CivArchive &archive)
 SlicEngine::~SlicEngine()
 {
     if (m_context)
-    {
+	{
         m_context->Release();
         m_context = NULL;
-    }
+	}
 
     if (m_breakContext)
 	{
         m_breakContext->Release();
         m_breakContext = NULL;
-    }
+	}
 
     while (SlicObject * obj = m_contextStack->RemoveTail())
-    {
+{
         obj->Release();
-    }
+	}
     delete m_contextStack;
 
 	// m_loadGameName: reference only
     KillCurrentMessage();
 	delete m_currentMessage;
-
+	
 	size_t  i;
 
     for (i = 0; i < TRIGGER_LIST_MAX; ++i) 
@@ -341,8 +341,8 @@ SlicEngine::~SlicEngine()
 	for (i = 0; i < mod_MAX; ++i) 
     {
 	    delete m_modFunc[i];
-	}
-	
+    }
+
 
     delete m_segmentHash;
 	delete m_functionHash;
@@ -358,13 +358,13 @@ SlicEngine::~SlicEngine()
 	}
     delete [] m_builtin_desc;
     delete [] m_builtins;
-
+	
 	slicif_cleanup();
 
     if (g_theMessagePool) 
     {
 		g_theMessagePool->NotifySlicReload();
-	}
+}
 }
 
 void SlicEngine::Serialize(CivArchive &archive)
@@ -525,17 +525,17 @@ void SlicEngine::Execute(SlicObject *obj)
 		(!g_theCriticalMessagesPrefs || g_theCriticalMessagesPrefs->IsEnabled(obj->GetSegment()->GetName()))
        ) 
     {
-		obj->Execute();
-	}
+			obj->Execute();
+		}
 
-	if (m_atBreak)
+	if(m_atBreak)
     {
         // No action: keep context active to Continue later.
     }
     else
     {
-	    PopContext();
-    }
+	PopContext();
+}
 }
 
 void SlicEngine::AddBuiltinFunctions()

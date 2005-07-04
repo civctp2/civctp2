@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Tile map 
 //
 //----------------------------------------------------------------------------
 //
@@ -28,6 +28,8 @@
 //	 to not give away land and/or water locations.
 // - Added comments and cleaned up the code somewhat.
 // - Standardised min/max usage.
+// - Added some bombard code (PFT)
+// - Repaired crash when no order is active.
 //
 //----------------------------------------------------------------------------
 
@@ -117,7 +119,6 @@ namespace // unnamed = static
 //              may not know it.
 //
 //----------------------------------------------------------------------------
-
 double GetEntryCost
 (
 	Army const &		a_Army,
@@ -161,7 +162,6 @@ double GetEntryCost
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 bool IsKnownEntryCost
 (
 	Army const &		a_Army,
@@ -241,7 +241,6 @@ BOOL TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPo
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void TiledMap::DrawLegalMove
 (
 	aui_Surface *	pSurface	
@@ -326,7 +325,7 @@ void TiledMap::DrawLegalMove
     const OrderRecord *rec = g_controlPanel->GetCurrentOrder();
 	sint32 min_rge, max_rge = 0, dist = 9999;
 
-    if(rec->GetUnitPretest_CanBombard() ){//test if it's a bombard order
+    if (rec && rec->GetUnitPretest_CanBombard() ){//test if it's a bombard order
 	
         sel_army.AccessData()->GetBombardRange(min_rge, max_rge);
 
@@ -1105,7 +1104,6 @@ void TiledMap::DrawUnfinishedMove(
 						sint32 textY = y - (height>>1);
 						
 						primitives_DrawText(pSurface, textX, textY, turnNumber, color, 1);
-						
 						
 					}
 				}

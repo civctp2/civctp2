@@ -140,7 +140,7 @@ private:
 
 	
 	SlicSymbolData const **     m_builtins;
-	SlicStructDescription **    m_builtin_desc;
+	SlicStructDescription **m_builtin_desc;
 
 	char *m_loadGameName;
 	MBCHAR m_currentKeyTrigger;

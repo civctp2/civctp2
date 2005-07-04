@@ -42,9 +42,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "tiledmap.h"
+
 #include "c3errors.h"
 
-#include "XY_Coordinates.h"
 #include "Cell.h"
 #include "player.h"
 #include "cellunitlist.h"
@@ -86,7 +87,6 @@
 #include "director.h"
 
 #include "TileInfo.h"
-#include "tiledmap.h"
 #include "BaseTile.h"
 #include "TileInfo.h"
 #include "TerrImproveData.h"
@@ -114,7 +114,6 @@
 #include "TradeRoute.h"
 #include "TradeRouteData.h"
 #include "grabitem.h"
-#include "AICause.h"
 #include "ArmyPool.h"
 #include "ArmyData.h"
 
@@ -593,7 +592,7 @@ void TiledMap::LockThisSurface(aui_Surface *surface)
 {
 	AUI_ERRCODE		errcode;
 
-	m_lockedSurface = (aui_Surface *)surface;
+	m_lockedSurface = surface;
 
 	errcode = surface->Lock(NULL, (LPVOID *)&m_surfBase, 0);
 	Assert(errcode == AUI_ERRCODE_OK);
@@ -2389,11 +2388,7 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 
 void TiledMap::RetargetTileSurface(aui_Surface *surf)
 {
-	if (surf == NULL) {
-		m_surface = m_mapSurface;
-	} else {
-		m_surface = (aui_Surface *)surf;
-	}
+	m_surface = (surf) ? surf : m_mapSurface;
 }
 
 
