@@ -34,7 +34,7 @@ void roboinit_Cleanup()
 	MapAnalysis::GetMapAnalysis().Resize(0, 0, 0, 1);
 
 	
-	AgreementMatrix::s_agreements.~AgreementMatrix();
+	AgreementMatrix::s_agreements.Resize(0);
 
 	Astar_Cleanup();
 
