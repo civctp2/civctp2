@@ -492,7 +492,8 @@ void GotoCityUtilityDialogBoxCallback(Unit city, sint32 val2)
 
 	if (city.IsValid())
 	{
-	    g_selected_item->Goto(city.RetPos());
+	    MapPoint        destPos = city.RetPos();
+	    g_selected_item->Goto(destPos);
 	}
 }
 
