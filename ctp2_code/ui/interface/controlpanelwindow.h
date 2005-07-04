@@ -174,7 +174,7 @@ enum
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "Player.h"             // PLAYER_INDEX
+#include "player.h"             // PLAYER_INDEX
 #include "buttonbank.h"         // ORDERMODE
 #include "ctp2_inttypes.h"      // sint32
 #include "c3window.h"
