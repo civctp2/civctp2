@@ -6,8 +6,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _TERRIMPROVE_H_
 #define _TERRIMPROVE_H_
 
@@ -22,8 +23,10 @@ public:
 	TerrainImprovement () : ID() { return; } ; 
 	TerrainImprovement (sint32 val) : ID (val) { return; }; 
 	TerrainImprovement (uint32 val) : ID (val) { return; }; 
+#ifdef WIN32
 	TerrainImprovement (const int val) : ID (val) { return; }; 
 	TerrainImprovement (const unsigned int val) : ID (val) { return; }; 
+#endif
 
 	TerrainImprovementData *operator -> () const { return AccessData(); }
 

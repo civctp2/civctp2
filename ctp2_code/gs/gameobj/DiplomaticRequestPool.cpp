@@ -22,12 +22,12 @@
 #include "DiplDynArr.h"
 #include "MsgDynArr.h"
 #include "TurnCnt.h"
-#include "globals.h"
+#include "Globals.h"
 #include "gamefile.h"
 
-	extern	StringDB	*g_theStringDB ;
+extern	StringDB	*g_theStringDB ;
 
-	extern	Player	**g_player ;
+extern	Player	**g_player ;
 extern TurnCount *g_turn;
 
 #include "Diplomacy_Log.h"
@@ -124,7 +124,7 @@ DiplomaticRequest DiplomaticRequestPool::Create(PLAYER_INDEX owner, PLAYER_INDEX
         g_theDiplomacyLog->LogRegard(owner, recipient); 
         g_theDiplomacyLog->LogRegard(recipient, owner); 
     } 
-#endif _DEBUG
+#endif // _DEBUG
 
 	DiplomaticRequest newRequest(NewKey(k_BIT_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST));
 	
@@ -140,7 +140,7 @@ DiplomaticRequest DiplomaticRequestPool::Create(PLAYER_INDEX owner, PLAYER_INDEX
     if (g_theDiplomacyLog) {
         g_theDiplomacyLog->LogRequestCreated(owner, recipient, request); 
     } 
-#endif _DEBUG
+#endif // _DEBUG
 
 #if 0
 	if(g_network.IsClient()) 
@@ -188,8 +188,7 @@ void DiplomaticRequestPool::EndTurn(const PLAYER_INDEX sender)
 	{
 	sint32	i ;
 
-	static MessageDynamicArray	msgExpired ;
-	msgExpired.Clear();
+	MessageDynamicArray	msgExpired;
 
 	for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 		{
@@ -211,7 +210,6 @@ void DiplomaticRequestPool::EndTurn(DiplomaticRequestData *top,
 									const PLAYER_INDEX sender,
 									MessageDynamicArray &msgExpired)
 {
-	Message msg;
 	if(top->GetLesser())
 		EndTurn(top->GetLesser(), sender, msgExpired);
 	if(top->GetGreater())

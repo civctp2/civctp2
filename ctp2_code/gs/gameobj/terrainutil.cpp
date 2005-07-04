@@ -995,7 +995,7 @@ bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreC
 	return false;
 }
 
-void terrainutil_RemoveBorders(MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit &ignoreCity)
+void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit &ignoreCity)
 {
 	
 	
@@ -1177,7 +1177,8 @@ sint32 terrainutil_GetTerraformGrasslandImprovement()
 sint32 terrainutil_GetEndgameTileImpIndex()
 {
 	const TerrainImprovementRecord *me; 
-	for(sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+	sint32 i;
+	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
 		me = g_theTerrainImprovementDB->Get(i);
 		if(me->GetEffectPtr()->GetEndgame())
 			return i;

@@ -28,7 +28,10 @@
 //
 //----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
+
 #ifndef _RESOURCES_H_
 #define _RESOURCES_H_
 
@@ -45,19 +48,19 @@ private:
 public:
 	Resources();
 	Resources(const Resources &copyme);
-	~Resources() {
-		if(m_supply)
-			delete [] m_supply;
+	virtual ~Resources() 
+    {
+		delete [] m_supply;
 	}
 
-	void Clear()
+	void Clear() 
 	{
 		memset(m_supply, 0, m_numGoods * sizeof(sint32));
 		m_totalResources = 0;
 	}
 
 	void Resize(sint32 newSize);
-
+	
 	const sint32 & operator [] (const sint32 index) const
 	{
 		Assert(index >= 0 && index < m_numGoods);
@@ -78,7 +81,7 @@ public:
 		return (m_supply[index] += amt);
 	}
 
-	void SetResourceCount(sint32 index, sint32 amt)
+	void SetResourceCount(sint32 index, sint32 amt) 
 	{
 		m_totalResources -= m_supply[index] - amt;
 		Assert(m_totalResources >= 0);

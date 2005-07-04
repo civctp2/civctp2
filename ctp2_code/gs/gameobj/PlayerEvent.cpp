@@ -39,7 +39,7 @@
 #include "Wormhole.h"
 #include "PlayHap.h"
 #include "UnitDynArr.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Readiness.h"
 #include "UnitPool.h"
 #include "XY_Coordinates.h"
@@ -68,7 +68,7 @@
 #include "ArmyData.h"
 #include "ctpai.h"
 #include "MainControlPanel.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "soundmanager.h"
 #include "gamesounds.h"
 #include "GSLogs.h"
@@ -170,10 +170,6 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 
 	Player *p = g_player[player];
 
-    static UnitDynamicArray dead;
-	dead.Clear();
-
-	
 	p->m_pop_science = 0;
 
     p->m_gold->SetSavings();

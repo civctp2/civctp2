@@ -1,13 +1,6 @@
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _INSTALLATION_DATA_H_
 #define _INSTALLATION_DATA_H_
 

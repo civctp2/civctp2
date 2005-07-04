@@ -38,17 +38,17 @@
 #include "SimpleDynArr.h"
 #include "profileDB.h"
 #include "network.h"
-#include "globals.h"
+#include "Globals.h"
 
-	extern	Player	**g_player ;
+extern	Player	**g_player ;
 
-	extern	StringDB	*g_theStringDB ;
+extern	StringDB	*g_theStringDB ;
 
-	extern	CivilisationDatabase	*g_theCivilisationDB ;
+extern	CivilisationDatabase	*g_theCivilisationDB ;
 
-	extern RandomGenerator *g_rand;
+extern RandomGenerator *g_rand;
 	
-	extern ProfileDB *g_theProfileDB;
+extern ProfileDB *g_theProfileDB;
 
 
 

@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __EXCLUSIONS_H__
 #define __EXCLUSIONS_H__
 

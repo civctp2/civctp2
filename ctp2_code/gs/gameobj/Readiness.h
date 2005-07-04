@@ -6,16 +6,20 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _READINESS_H_
 #define _READINESS_H_
+
+class MilitaryReadiness;
 
 enum READINESS_LEVEL {
 	READINESS_LEVEL_PEACE,
 	READINESS_LEVEL_ALERT,
 	READINESS_LEVEL_WAR
 };
+
 
 class CivArchive;
 class Unit; 

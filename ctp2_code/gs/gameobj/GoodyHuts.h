@@ -59,7 +59,7 @@ enum GOODY
 //----------------------------------------------------------------------------
 
 #include "ctp2_inttypes.h"      // uint32
-#include "Player.h"             // PLAYER_INDEX
+#include "player.h"             // PLAYER_INDEX
 
 class CivArchive;
 class MapPoint;

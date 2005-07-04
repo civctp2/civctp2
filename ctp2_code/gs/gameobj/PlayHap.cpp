@@ -1,5 +1,5 @@
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 
 #include "PlayHap.h"
 #include "player.h"

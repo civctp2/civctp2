@@ -1,7 +1,11 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __STRENGTH_H__
 #define __STRENGTH_H__
+
+class Strengths;
 
 enum STRENGTH_CAT {
 	STRENGTH_CAT_NONE = -1,
@@ -22,9 +26,8 @@ enum STRENGTH_CAT {
 	STRENGTH_CAT_MAX
 };
 
+#include "CivArchive.h"     // CivArchive
 #include "SimpleDynArr.h"
-
-class CivArchive;
 
 class Strengths {
 private:

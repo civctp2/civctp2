@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __AGREEMENT_TYPES_H__
 #define __AGREEMENT_TYPES_H__
 

@@ -33,7 +33,7 @@
 #include "network.h"
 #include "SelItem.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "profileDB.h"
 
 #include "net_player.h"

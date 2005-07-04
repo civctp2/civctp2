@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __EMPTY_TILE_H__
 #define __EMPTY_TILE_H__
 

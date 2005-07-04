@@ -29,8 +29,8 @@
 #include "c3.h"                 // Pre-compiled header
 #include "Happy.h"              // Own declarations: consistency check
 
-#include "CivArchive.h"
-#include "Player.h"             // g_player
+#include "civarchive.h"
+#include "player.h"             // g_player
 #include "ConstDB.h"            // g_theConstDB
 #include "UnitPool.h"
 #include "citydata.h"

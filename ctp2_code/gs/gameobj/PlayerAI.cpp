@@ -71,7 +71,7 @@
 #include "installationpool.h"
 #include "WonderRecord.h"
 
-#include "gold.h"
+#include "Gold.h"
 #include "Sci.h"
 #include "TaxRate.h"
 #include "Diffcly.h"
@@ -93,7 +93,7 @@
 #include "MessagePool.h"
 
 #include "profileDB.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "CreateUnit.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -102,10 +102,10 @@
 #include "cellunitlist.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
-#include "order.h"
+#include "Order.h"
 #include "UnitRecord.h"
 
-#include "globals.h"
+#include "Globals.h"
 
 
 

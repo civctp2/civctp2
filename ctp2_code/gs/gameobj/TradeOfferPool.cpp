@@ -13,7 +13,7 @@
 #include "player.h"
 #include "dynarr.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include "gamefile.h"
 
 extern Player **g_player;

@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DIPLOMATICTYPES_H__
 #define __DIPLOMATICTYPES_H__
 

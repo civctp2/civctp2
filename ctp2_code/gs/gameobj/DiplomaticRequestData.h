@@ -7,23 +7,25 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __DIPLOMATICREQUESTDATA_H__
 #define __DIPLOMATICREQUESTDATA_H__
 
 #include "GameObj.h"
 #include "ID.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Unit.h"
 
 
-enum ATTITUDE_TYPE ;
 typedef sint32 AdvanceType;
 
 class CivArchive;
 
-#include "diplomatictypes.h"
+#include "DiplomaticTypes.h"
+#include "player.h"
+
 
 class DiplomaticRequestData : public GAMEOBJ
 	{

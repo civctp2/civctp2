@@ -27,7 +27,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 #include "CivilisationRec.h"
 #include "CivilisationDB.h"
 #include "CivilisationData.h"
@@ -40,17 +40,10 @@
 #include "UnitDynArr.h"
 #include "citydata.h"
 
-	extern	StringDB	*g_theStringDB ;
+extern	StringDB	*g_theStringDB ;
 
-	extern	CivilisationDatabase	*g_theCivilisationDB ;
-	extern	ProfileDB				*g_theProfileDB; 
-
-
-
-
-
-
-
+extern	CivilisationDatabase	*g_theCivilisationDB ;
+extern	ProfileDB				*g_theProfileDB; 
 
 
 #include "CivilisationPool.h"	// CIV_INDEX_INVALID
