@@ -311,7 +311,7 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 	strcpy(lower_case_filename, filename);
 
 	
-	for (int j = 0; j < strlen(lower_case_filename); j++)
+	for (int j = 0; (unsigned) j < strlen(lower_case_filename); j++)
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
 
 	
@@ -597,7 +597,7 @@ char * GreatLibraryWindow::GetIconRecText
 			return NULL;
 
 		
-		for (int j = 0; j < strlen(lower_case_filename); j++)
+		for (int j = 0; (unsigned) j < strlen(lower_case_filename); j++)
 			lower_case_filename[j] = tolower(lower_case_filename[j]);
 
 		

@@ -2722,7 +2722,7 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 			g_slicEngine->Link();
 		}
 	}
-	g_slicEngine->RunTrigger(TRIGGER_LIST_GAME_LOADED, ST_END);
+	g_slicEngine->RunTrigger(TRIGGER_LIST_GAME_LOADED);
 
 #ifdef _DEBUG
 	g_gevManager->Dump();

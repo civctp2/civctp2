@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "sliccmd.h"
+#include "slicif.h"
 #include <math.h>
 
 /* Avoid silly warnings */

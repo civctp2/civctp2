@@ -27,9 +27,9 @@ ctp2_Switch::ctp2_Switch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -55,9 +55,9 @@ ctp2_Switch::ctp2_Switch(
 	sint32 state,
 	sint32 numStates )
 	:
-	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	aui_ImageBase( numStates ),
 	aui_TextBase( NULL ),
+	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	PatternBase(pattern)
 {
 	Assert( AUI_SUCCESS(*retval) );

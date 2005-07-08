@@ -133,13 +133,13 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 		return false;
 
 	// Attack difference
-	sint16 attack_cpr = (m_attack_str - squad_strength.m_attack_str);
+	sint16 attack_cpr = sint16(m_attack_str - squad_strength.m_attack_str);
 	// Defense difference
-	sint16 defense_cpr = (m_defense_str - squad_strength.m_defense_str);
+	sint16 defense_cpr = sint16(m_defense_str - squad_strength.m_defense_str);
 	// ranged difference
-	sint16 ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
+	sint16 ranged_cpr = sint16(m_ranged_str - squad_strength.m_ranged_str);
 	// value difference
-	sint16 value_cpr = (m_value - squad_strength.m_value);
+	sint16 value_cpr = sint16(m_value - squad_strength.m_value);
 
 	// The addition of all differences has to be greater than 0
 	// it is certainly better than only testing attack or defense

@@ -75,7 +75,7 @@ SlicArray::~SlicArray()
 {
 	if (SS_TYPE_SYM == m_type) 
     {
-        for (size_t i = 0; i < m_allocatedSize; ++i)
+        for (size_t i = 0; i < (unsigned) m_allocatedSize; ++i)
         {
 		    delete m_array[i].m_sym;
         }
@@ -87,7 +87,7 @@ void SlicArray::FixSize(sint32 size)
 {
 	if (SS_TYPE_SYM == m_type) 
     {
-        for (size_t i = 0; i < m_allocatedSize; ++i)
+        for (size_t i = 0; i < (unsigned) m_allocatedSize; ++i)
         {
 		    delete m_array[i].m_sym;
         }

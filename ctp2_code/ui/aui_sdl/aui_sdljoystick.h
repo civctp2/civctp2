@@ -32,7 +32,7 @@ public:
 	uint32 GetUpperMax ( void ) { return m_lMax; };
 
 protected:
-	aui_DirectJoystick() {}
+	aui_SDLJoystick() {}
 #if 0
 	AUI_ERRCODE CreateDirectJoystick( void );
 #endif

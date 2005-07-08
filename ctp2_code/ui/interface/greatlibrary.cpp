@@ -418,7 +418,7 @@ void GreatLibrary::Load_Great_Library()
 							entry_copy[strlen(the_entry)] = 0;
 
 							
-							for (int j = 0; j < strlen(name_copy); j++)
+							for (int j = 0; (unsigned) j < strlen(name_copy); j++)
 								name_copy[j] = tolower(name_copy[j]);
 
 							
@@ -924,9 +924,9 @@ void GreatLibrary_Topics_List_Callback
 
 TechListItem::TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, MBCHAR *ldlBlock)
 	:
-	ctp2_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	ctp2_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -1547,7 +1547,7 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		
 		
 		
-		if ((m_history.size() != 0) && (m_history_position < m_history.size() - 1))
+		if ((m_history.size() != 0) && (m_history_position < (signed) m_history.size() - 1))
 		{
 			
 			
@@ -2255,7 +2255,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		Search_Great_Library();
 
 		
-		for (index = 0; index < m_search_results.size(); index++)
+		for (index = 0; (unsigned) index < m_search_results.size(); index++)
 		{
 			
 			int real_index = m_search_results[index].m_item;
@@ -2655,14 +2655,14 @@ void GreatLibrary::Forward()
 	int next_index;
 
 	
-	if (m_history_position >= m_history.size() - 1)
+	if (m_history_position >= (signed) m_history.size() - 1)
 		return;
 
 	
 	m_history_position++;
 
 	
-	if (m_history_position == m_history.size() - 1)
+	if (m_history_position == (signed) m_history.size() - 1)
 	{
 		
 		m_forwardButton->Enable(FALSE);

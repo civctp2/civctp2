@@ -26,9 +26,9 @@ ns_Header::ns_Header(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
-	aui_Header(),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Header()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -65,9 +65,9 @@ ns_Header::ns_Header(
 	sint32 width,
 	sint32 height )
 	:
-	aui_Header(),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_Header()
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );

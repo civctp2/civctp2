@@ -229,10 +229,11 @@ void scenarioeditor_SetSaveOptionsFromMode(void)
 }
 
 ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
-:	m_terrainImpSwitches(NULL),		
+:
 	m_terrainSwitches(NULL),
-	m_xWrapButton(NULL),			// never used?
-	m_yWrapButton(NULL)				// never used?
+	m_terrainImpSwitches(NULL),
+	m_xWrapButton(NULL),  // never used?
+	m_yWrapButton(NULL)   // never used?
 {
 	m_initializing = true;
 
@@ -271,7 +272,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		
 	ctp2_Spinner *spin;
 	sint32 i;
-	for(i = 0; i < k_NUM_PLAYER_SPINNERS; i++) {
+	for(i = 0; (unsigned) i < k_NUM_PLAYER_SPINNERS; i++) {
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin) {
 
@@ -1933,12 +1934,12 @@ void ScenarioEditor::SetupNations()
 
 void ScenarioEditor::AddLeftList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	ScenarioEditor::AddAddButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, NULL, NULL);	
+	ScenarioEditor::AddAddButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, 0, NULL);	
 }
 
 void ScenarioEditor::AddRightList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	ScenarioEditor::AddRemoveButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, NULL, NULL);
+	ScenarioEditor::AddRemoveButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, 0, NULL);
 }
 
 void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
@@ -2177,7 +2178,7 @@ void ScenarioEditor::NotifyPlayerChange()
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	
 	sint32 i;
-	for(i = 0; i < k_NUM_PLAYER_SPINNERS; i++) {
+	for(i = 0; (unsigned) i < k_NUM_PLAYER_SPINNERS; i++) {
 		ctp2_Spinner *spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		Assert(spin);
 		if(spin) {

@@ -88,6 +88,7 @@ m_window(static_cast<ctp2_Window*>(
 		 aui_Ldl::BuildHierarchyFromRoot("ScienceVictoryDialog"))),
 m_switch(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.Switch"))),
+m_switchState(-1),
 m_startButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.Switch.Construction.Start"))),
 m_map(static_cast<RadarMap*>(aui_Ldl::GetObject(
@@ -114,13 +115,10 @@ m_statusText(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.Switch.Status.Text"))),
 m_statusBar(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.Switch.Status.Bar"))),
-
-
 m_buildQueueButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.BuildQueueButton"))),
 m_closeButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
-	"ScienceVictoryDialog.CloseButton"))),
-m_switchState(-1)	
+	"ScienceVictoryDialog.CloseButton")))
 {
 	g_c3ui->AddWindow(m_window);
 

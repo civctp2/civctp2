@@ -38,9 +38,9 @@ Thermometer::Thermometer(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
-	aui_TextBase((MBCHAR *)NULL),
 	aui_ImageBase((sint32)0),
+	aui_TextBase((MBCHAR *)NULL),
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	PatternBase(pattern),
 	m_percentFilled(percentFilled)
 {
@@ -54,9 +54,9 @@ Thermometer::Thermometer(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL),
 	aui_ImageBase( ldlBlock ),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL),
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	*retval = InitCommonLdl( ldlBlock );

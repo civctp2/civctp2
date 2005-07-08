@@ -22,7 +22,7 @@ class CivArchive;
 
 class GameEventArgList {
 public:
-	GameEventArgList(va_list *vl);
+	GameEventArgList(const GAME_EVENT_ARGUMENT* argTypes, const void** args);
 	GameEventArgList();
 	GameEventArgList(CivArchive &archive);
 	~GameEventArgList();

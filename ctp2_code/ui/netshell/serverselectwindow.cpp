@@ -233,7 +233,7 @@ AUI_ERRCODE ServerSelectWindow::Idle( void )
 	dp_objectDelta_packet_t *p;
 	
 	if(g_netfunc) {
-		while(m = g_netfunc->GetMessage()) {
+		while((m = g_netfunc->GetMessage())) {
 			
 			
 			

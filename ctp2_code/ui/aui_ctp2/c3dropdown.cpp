@@ -45,9 +45,9 @@ C3DropDown::C3DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_DropDown(retval, id,x, y, width, height, buttonSize, windowSize, ActionFunc, cookie),
-	aui_TextBase( NULL ),
 	aui_ImageBase( (sint32)0 ),
+	aui_TextBase( NULL ),
+	aui_DropDown(retval, id,x, y, width, height, buttonSize, windowSize, ActionFunc, cookie),
 	PatternBase(pattern)
 {
 
@@ -67,9 +67,9 @@ C3DropDown::C3DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_DropDown(retval, id, ldlBlock, ActionFunc, cookie),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_DropDown(retval, id, ldlBlock, ActionFunc, cookie),
 	PatternBase(ldlBlock, NULL)
 {
 	*retval = aui_SoundBase::InitCommonLdl(ldlBlock);

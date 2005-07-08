@@ -43,7 +43,7 @@ public:
 	StringRecord *m_lesser, *m_greater; 
 
 	StringRecord();
-    ~StringRecord(); 
+	~StringRecord();
 };
 
 #endif

@@ -441,7 +441,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						item->SetUserData(data);
 						
 						ctp2_Static *child;
-						if(child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_INDEX)) {
+						if((child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_INDEX))) {
 							MBCHAR name[501];
 							strncpy(name, city.GetName(), 500);
 							name[500] = 0;
@@ -450,7 +450,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 							child->SetText(name);
 						}
 						
-						if(child = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_INDEX)) {
+						if((child = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_INDEX))) {
 							const char *iconname = g_theResourceDB->Get(g)->GetIcon()->GetIcon();
 							if(stricmp(iconname, "NULL") == 0) {
 								iconname = NULL;
@@ -458,14 +458,14 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 							child->SetImage((char *)iconname);
 						}
 						
-						if(child = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_INDEX)) {
+						if((child = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_INDEX))) {
 							child->SetText(g_theResourceDB->Get(g)->GetNameText());
 							if(curDestCity.m_id != 0) {
 								child->SetTextColor(g_colorSet->GetColorRef(COLOR_RED));
 							}
 						}
 						
-						if(child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_INDEX)) {
+						if((child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_INDEX))) {
 							MBCHAR name[501];
 							strncpy(name, maxCity[i].GetName(), 500);
 							name[500] = 0;
@@ -476,16 +476,16 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						
 						MBCHAR buf[20];
 						sprintf(buf, "%d", maxPrice[i]);
-						if(child = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_INDEX)) {
+						if((child = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_INDEX))) {
 							child->SetText(buf);
 						}
 						
-						if(child = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_INDEX)) {
+						if((child = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_INDEX))) {
 							sprintf(buf, "%d", data->m_caravans);
 							child->SetText(buf);
 						}
 						
-						if(child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX)) {
+						if((child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX))) {
 							child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)data->m_destination.GetOwner());
 						}
 						
@@ -678,7 +678,7 @@ void TradeManager::UpdateSummaryList()
 			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
 
 			ctp2_Static *child;
-			if(child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX)) {
+			if((child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX))) {
 				MBCHAR name[501];
 				strncpy(name, city.GetName(), 500);
 				name[500] = 0;
@@ -692,7 +692,7 @@ void TradeManager::UpdateSummaryList()
 
 			route.GetSourceResource(rtype, resource);
 
-			if(child = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_SUM_INDEX)) {
+			if((child = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_SUM_INDEX))) {
 				if(rtype == ROUTE_TYPE_RESOURCE) {
 					const MBCHAR *imageName = g_theResourceDB->Get(resource)->GetIcon()->GetIcon();
 					if(stricmp(imageName, "NULL") == 0) {
@@ -705,7 +705,7 @@ void TradeManager::UpdateSummaryList()
 				}
 			}
 
-			if(child = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_SUM_INDEX)) {
+			if((child = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_SUM_INDEX))) {
 				if(rtype == ROUTE_TYPE_RESOURCE) {
 					child->SetText(g_theResourceDB->Get(resource)->GetNameText());
 				} else {
@@ -713,7 +713,7 @@ void TradeManager::UpdateSummaryList()
 				}
 			}
 
-			if(child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_SUM_INDEX)) {
+			if((child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_SUM_INDEX))) {
 				MBCHAR name[501];
 				Unit dCity = route.GetDestination();
 				strncpy(name, dCity.GetName(), 500);
@@ -723,7 +723,7 @@ void TradeManager::UpdateSummaryList()
 				child->SetText(name);
 			}
 	
-			if(child = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX)) {
+			if((child = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))) {
 				child->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
 			}
 
@@ -734,16 +734,16 @@ void TradeManager::UpdateSummaryList()
 				strcpy(buf, "---");
 			}
 
-			if(child = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_SUM_INDEX)) {
+			if((child = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_SUM_INDEX))) {
 				child->SetText(buf);
 			}
 
-			if(child = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_SUM_INDEX)) {
+			if((child = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_SUM_INDEX))) {
 				sprintf(buf, "%.0f", route.GetCost());
 				child->SetText(buf);
 			}
 
-			if(child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX)) {
+			if((child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX))) {
 				child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)route.GetDestination().GetOwner());
 			}
 

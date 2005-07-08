@@ -101,4 +101,4 @@ void CtpAiDebug::SetDebugArmies(const CellUnitList & unit_list)
 		}
 }
 
-#endif _DEBUG
+#endif // _DEBUG

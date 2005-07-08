@@ -894,7 +894,7 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, au
 	if(s_armyWindow->m_inArmy[(int)cookie].IsValid())
 	{
 		maxhp=s_armyWindow->m_inArmy[(int)cookie].GetDBRec()->GetMaxHP();
-		curhp=s_armyWindow->m_inArmy[(int)cookie].GetHP();
+		curhp=(sint32) s_armyWindow->m_inArmy[(int)cookie].GetHP();
 		width=rect.right-rect.left;
 		hpwidth=width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):
@@ -915,7 +915,7 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control,
 	if(s_armyWindow->m_outOfArmy[(int)cookie].IsValid())
 	{
 		maxhp=s_armyWindow->m_outOfArmy[(int)cookie].GetDBRec()->GetMaxHP();
-		curhp=s_armyWindow->m_outOfArmy[(int)cookie].GetHP();
+		curhp=(sint32) s_armyWindow->m_outOfArmy[(int)cookie].GetHP();
 		width=rect.right-rect.left;
 		hpwidth=width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):

@@ -50,11 +50,11 @@ IconButton::IconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
+	aui_ImageBase( (sint32)0 ),
+	aui_TextBase(NULL),
 	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie ),
 	PatternBase( pattern ),
-	m_color(color ),
-	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	m_color(color )
 {
 	InitCommon(icon);
 
@@ -67,10 +67,10 @@ IconButton::IconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
-	PatternBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
+	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 	InitCommon(ldlBlock, TRUE);
 

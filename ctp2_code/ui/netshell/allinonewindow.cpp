@@ -1984,7 +1984,7 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 		TribeSlot *tribeSlots = g_gamesetup.GetTribeSlots();
 
 		for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
-			if ( tribeSlots[ i ].key == key && tribeSlots[ i ].isAI == isAI )
+			if ( tribeSlots[ i ].key == key && (BOOL) tribeSlots[ i ].isAI == isAI )
 			{
 				if ( isFemale ) *isFemale = tribeSlots[ i ].isFemale;
 				return tribeSlots[ i ].tribe;
@@ -2013,7 +2013,7 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 						{
 							if (
 								g_gamesetup.GetSavedTribeSlots()[ j ].tribe == i &&
-								g_gamesetup.GetSavedTribeSlots()[ j ].isAI == isAI )
+								(BOOL) g_gamesetup.GetSavedTribeSlots()[ j ].isAI == isAI )
 							{
 								if ( isFemale ) *isFemale = g_gamesetup.GetSavedTribeSlots()[ j ].isFemale;
 								return i;
@@ -2118,7 +2118,7 @@ BOOL AllinoneWindow::AssignTribe(
 	sint32 i;
 	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 	{
-		if ( tribeSlots[ i ].key == key && tribeSlots[ i ].isAI == isAI )
+		if ( tribeSlots[ i ].key == key && (BOOL) tribeSlots[ i ].isAI == isAI )
 		{
 			memset( tribeSlots + i, 0, sizeof( TribeSlot ) );
 			break;
@@ -2467,7 +2467,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 	
 	while(n) {
 		
-		if(m = g_netfunc->GetMessage()) {
+		if((m = g_netfunc->GetMessage())) {
 
 			
 			
@@ -2905,7 +2905,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 	
 	while(n) {
 		
-		if(m = g_netfunc->GetMessage()) {
+		if((m = g_netfunc->GetMessage())) {
 			
 			
 			g_netfunc->HandleMessage(m);
@@ -3969,7 +3969,7 @@ void AllinoneWindow::AddAIPlayer( sint32 curCount )
 		key.len = 1;
 	}
 
-	if( key.buf[ key.len - 1 ] == 255 )
+	if( key.buf[ key.len - 1 ] == (char) 255 )
 		key.len++;
 	key.buf[ key.len - 1 ]++;
 	

@@ -727,11 +727,11 @@ void LoadSaveMapWindow::EnableFields( BOOL enable )
 
 LSMGameMapsListItem::LSMGameMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameMapInfo *info)
 :
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	m_itemText(NULL),
-	m_itemIcon(NULL)
+	c3_ListItem( retval, ldlBlock),
+	m_itemIcon(NULL),
+	m_itemText(NULL)
 {
 	m_info = info;
 
@@ -772,11 +772,11 @@ sint32 LSMGameMapsListItem::Compare(c3_ListItem *item2, uint32 column)
 
 LSMSaveMapsListItem::LSMSaveMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveMapInfo *info)
 :
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	m_itemText(NULL),
-	m_itemIcon(NULL)
+	c3_ListItem( retval, ldlBlock),
+	m_itemIcon(NULL),
+	m_itemText(NULL)
 {
 	m_info = info;
 

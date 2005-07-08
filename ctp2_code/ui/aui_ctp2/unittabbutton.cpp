@@ -33,10 +33,10 @@ UnitTabButton::UnitTabButton(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	: 
-	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
-	PatternBase(ldlBlock, NULL),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	PatternBase(ldlBlock, NULL)
 {
 	
 	SetDrawMask( k_AUI_REGION_DRAWFLAG_UPDATE );
@@ -55,10 +55,10 @@ UnitTabButton::UnitTabButton(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	:
-	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
-	PatternBase(pattern),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	PatternBase(pattern)
 {
 	
 	SetDrawMask( k_AUI_REGION_DRAWFLAG_UPDATE );

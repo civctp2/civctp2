@@ -137,27 +137,27 @@ namespace
 //----------------------------------------------------------------------------
         GOODY   Select(sint32 randomValue) const
         {
-            if (randomValue < m_BarbarianThreshold)
+            if (randomValue < (signed) m_BarbarianThreshold)
             {
                 return GOODY_BARBARIANS;
             }
-            else if (randomValue < m_GoldThreshold)
+            else if (randomValue < (signed) m_GoldThreshold)
             {
                 return GOODY_GOLD;
             }
-            else if (randomValue < m_AdvanceThreshold)
+            else if (randomValue < (signed) m_AdvanceThreshold)
             {
                 return GOODY_ADVANCE;
             }
-            else if (randomValue < m_UnitThreshold)
+            else if (randomValue < (signed) m_UnitThreshold)
             {
                 return GOODY_UNIT;
             }
-            else if (randomValue < m_CityThreshold)
+            else if (randomValue < (signed) m_CityThreshold)
             {
                 return GOODY_CITY;
             }
-            else if (randomValue < m_SettlerThreshold)
+            else if (randomValue < (signed) m_SettlerThreshold)
             {
                 return GOODY_SETTLER;
             }
@@ -342,7 +342,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 
     case GOODY_SETTLER:
         {
-		    for (size_t i = 0; i < g_theUnitDB->NumRecords(); ++i) 
+		    for (size_t i = 0; i < (unsigned) g_theUnitDB->NumRecords(); ++i) 
             {
 			    if (g_theUnitDB->Get(i)->GetSettleLand()) 
                 {

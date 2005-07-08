@@ -285,11 +285,11 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 		MBCHAR buf[k_MAX_NAME_LEN];
 		Civilisation civ = *g_player[p]->m_civilisation;
 
-		if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_FLAG_COL)) {
+		if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_FLAG_COL))) {
 			child->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
 			child->SetActionFuncAndCookie(SelectItem, (void *)item);
 		}
-		if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL)) {
+		if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL))) {
 			civ->GetCountryName(buf);
 			child->SetText(buf);
 			
@@ -297,7 +297,7 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 			child->SetActionFuncAndCookie(SelectItem, (void *)item);
 		}
 
-		if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_REGARD_COL)) {
+		if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_REGARD_COL))) {
 			child->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *)p, true);
 			MBCHAR buf[k_MAX_NAME_LEN];
 			SetRegardTip(buf, p, g_selected_item->GetVisiblePlayer());
@@ -305,7 +305,7 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 			child->SetActionFuncAndCookie(SelectItem, (void *)item);
 		}
 
-		if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL)) {
+		if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL))) {
 			child->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *)p, true);
 
 			MBCHAR buf[k_MAX_NAME_LEN];
@@ -342,12 +342,12 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 			child->SetActionFuncAndCookie(SelectItem, (void *)item);
 		}
 
-		if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL)) {
+		if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL))) {
 			child->SetDrawCallbackAndCookie(DrawEmbassy, (void *)p, true);
 			child->SetActionFuncAndCookie(SelectItem, (void *)item);
 		}
 
-		if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL)) {
+		if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL))) {
 			child->SetDrawCallbackAndCookie(DrawTreaties, (void *)p, true);
 			
 			

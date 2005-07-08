@@ -51,12 +51,12 @@ static sint32			s_currentWonderDisplay;
 static c3_Button		*s_eventsInfoButton[17];
 
 TimelineTab::TimelineTab(ctp2_Window *parent) :
-	m_infoGraph(static_cast<LineGraph *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab2.TabPanel.InfoGraph"))),
+	m_rightButton(static_cast<ctp2_Button*>(
+		aui_Ldl::GetObject("InfoDialog.TabGroup.Tab2.TabPanel.RightButton"))),
 	m_leftButton(static_cast<ctp2_Button*>(
 		aui_Ldl::GetObject("InfoDialog.TabGroup.Tab2.TabPanel.LeftButton"))),
-	m_rightButton(static_cast<ctp2_Button*>(
-		aui_Ldl::GetObject("InfoDialog.TabGroup.Tab2.TabPanel.RightButton")))
+	m_infoGraph(static_cast<LineGraph *>(
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab2.TabPanel.InfoGraph")))
 {
 
 	

@@ -302,7 +302,7 @@ int messagewin_CreateMessage( Message data, BOOL bRecreate )
 	
 	if ( !bRecreate ) {
 		MBCHAR *wavName = NULL;
-		if ( wavName = ( MBCHAR * ) data.AccessData()->GetMsgSound() ) {
+		if ((wavName = ( MBCHAR * ) data.AccessData()->GetMsgSound())) {
 			MBCHAR filename[ _MAX_PATH ]; 
 			g_civPaths->FindFile( C3DIR_SOUNDS, wavName, filename );
 #ifdef WIN32
@@ -324,7 +324,7 @@ int messagewin_CreateModalMessage( Message data )
 	messagemodal_CreateModalMessage( data );	
 
 	MBCHAR *wavName = NULL;
-	if ( wavName = ( MBCHAR * ) data.AccessData()->GetMsgSound() ) {
+	if ((wavName = ( MBCHAR * ) data.AccessData()->GetMsgSound())) {
 		MBCHAR filename[ _MAX_PATH ]; 
 		g_civPaths->FindFile( C3DIR_SOUNDS, wavName, filename );
 #ifdef WIN32

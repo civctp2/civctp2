@@ -61,9 +61,9 @@ extern uint8 g_messageRespDropPadding;
 
 MessageResponseListItem::MessageResponseListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -172,7 +172,7 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 
 
-	while ( sButton = window->GetMessage()->AccessData()->GetButton( responseCount )) {
+	while ((sButton = window->GetMessage()->AccessData()->GetButton( responseCount ))) {
 		text = sButton->GetName();
 		
 		
@@ -376,7 +376,7 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 	sint32 textlength = g_messageRespButtonWidth;
 	i = 0;
-	while ( sButton = window->GetMessage()->AccessData()->GetButton( i++ )) {
+	while ((sButton = window->GetMessage()->AccessData()->GetButton( i++ ))) {
 		text = sButton->GetName();
 		aui_BitmapFont *font = m_submitButton->GetTextFont();
 		Assert(font);
@@ -396,7 +396,7 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 	
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardResponseDropdownItem" );
 	i = 0;
-	while ( sButton = window->GetMessage()->AccessData()->GetButton( i++ )) {
+	while ((sButton = window->GetMessage()->AccessData()->GetButton( i++ ))) {
 		
 		text = sButton->GetName();
 

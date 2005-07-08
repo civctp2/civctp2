@@ -51,9 +51,9 @@ ButtonBank::ButtonBank(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	: 
-	ControlSheet(retval, id, ldlBlock, ActionFunc, cookie),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	ControlSheet(retval, id, ldlBlock, ActionFunc, cookie)
 {
 	InitCommon(ldlBlock);
 }
@@ -68,9 +68,9 @@ ButtonBank::ButtonBank(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	:
-	ControlSheet(retval, id, x, y, width, height, pattern, ActionFunc, cookie),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
-	aui_ImageBase( (sint32)0 )
+	ControlSheet(retval, id, x, y, width, height, pattern, ActionFunc, cookie)
 {
 	InitCommon(NULL);
 }

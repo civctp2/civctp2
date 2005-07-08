@@ -1145,7 +1145,6 @@ void Advances::SetResearching(AdvanceType adv)
 
 	g_slicEngine->RunTrigger(TRIGGER_LIST_PLAYER_RESEARCHING,
 							 ST_ADVANCE, adv,
-							 ST_PLAYER, m_owner,
-							 ST_END);
+							 ST_PLAYER, m_owner);
 }
 

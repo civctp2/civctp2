@@ -59,9 +59,9 @@ aui_ListBox::aui_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -87,9 +87,9 @@ aui_ListBox::aui_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -1383,13 +1383,13 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 				if ( m_dragIndex < itemIndex )
 				{
 					for ( sint32 i = m_dragIndex; i <= itemIndex; i++ )
-						if ( pos = m_visualSelectedList->Find( i ) )
+						if ((pos = m_visualSelectedList->Find( i )))
 							m_visualSelectedList->DeleteAt( pos );
 				}
 				else
 				{
 					for ( sint32 i = itemIndex; i <= m_dragIndex; i++ )
-						if ( pos = m_visualSelectedList->Find( i ) )
+						if ((pos = m_visualSelectedList->Find( i )))
 							m_visualSelectedList->DeleteAt( pos );
 				}
 			}

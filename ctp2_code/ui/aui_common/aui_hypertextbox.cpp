@@ -30,9 +30,9 @@ aui_HyperTextBox::aui_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_HyperTextBase( retval, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -59,9 +59,9 @@ aui_HyperTextBox::aui_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_HyperTextBase( retval, NULL, 0 )
 {
 	Assert( AUI_SUCCESS(*retval) );

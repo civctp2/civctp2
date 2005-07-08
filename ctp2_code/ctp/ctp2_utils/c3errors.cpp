@@ -77,7 +77,12 @@ void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
 	if (!g_theStringDB->GetText(str, &dbError))
 		c3errors_FatalDialog("string db", "%s missing from string db", err) ;
 
-    va_start(list, dbError) ;
+	// TODO: I've changed the second argument in the following from dbError (which made no sense)
+	//   into err.  I think that this is what was originally intended, but since the feature this
+	//   code implements is never actually used anywhere, I expect it makes little difference.
+	//   nevertheless, that this works should be checked at some point.  The same applies to the
+	//   next function (c3errors_ErrorDialogFromDB) - JJB
+	va_start(list, err) ;
 	vsprintf(str, dbError, list) ;
 	va_end(list) ;
 
@@ -114,7 +119,7 @@ void c3errors_ErrorDialogFromDB(const char *module, const char *err, ...)
 	if (!g_theStringDB->GetText(str, &dbError))
 		c3errors_FatalDialog("string db", "%s missing from string db", err) ;
 
-    va_start(list, dbError) ;
+	va_start(list, err) ;
 	vsprintf(str, dbError, list) ;
 	va_end(list) ;
 

@@ -241,12 +241,10 @@ m_buildQueueButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"CityStatusWin.BuildQueueButton"))),
 m_disbandButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"CityStatusWin.DisbandButton"))),
+m_statusTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
+	"CityStatusWin.TabGroup.Tab2"))),
 m_resourceTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab1"))),
-
-m_statusTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
-	"CityStatusWin.TabGroup.Tab2")))
-	,
 m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab3")))
 {
@@ -463,7 +461,7 @@ void NationalManagementDialog::UpdateGovernor()
 	}
 
 	
-	for( int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) 
+	for( int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) 
 	{
 		
 		Unit city;
@@ -611,7 +609,7 @@ void NationalManagementDialog::UpdateRushBuy()
 	
 	tech_WLList<sint32> *selectedList = m_statusList->GetSelectedList();
 	
-	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
+	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
 		city.m_id = *reinterpret_cast<uint32 *>(
@@ -1070,7 +1068,7 @@ bool NationalManagementDialog::CanBuild(uint32 category, sint32 type)
 
 	
 	
-	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
+	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
 		city.m_id = *reinterpret_cast<uint32 *>(
@@ -1400,7 +1398,7 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 	cities.Clear();
 
 	
-	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
+	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
 		city.m_id = *reinterpret_cast<uint32 *>(
@@ -1455,7 +1453,7 @@ void NationalManagementDialog::DisbandCallback(bool response, void *userData)
 		tech_WLList<sint32> *selectedList = visibleList->GetSelectedList();
 
 		
-		for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
+		for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
 			
 			ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 				visibleList->GetItemByIndex(
@@ -1493,7 +1491,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
 	
-	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
+	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
 		city.m_id = *reinterpret_cast<uint32 *>(
@@ -1512,7 +1510,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 
 	
 	
-	for(int selectIndex2 = 0; selectIndex2 < selectedList->L(); selectIndex2++) {
+	for(int selectIndex2 = 0; (unsigned) selectIndex2 < selectedList->L(); selectIndex2++) {
 		
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(
@@ -1551,7 +1549,7 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
 	
-	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
+	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
 		
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(
@@ -1606,7 +1604,7 @@ void NationalManagementDialog::SelectBuildItemActionCallback(aui_Control *contro
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
 	
-	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
+	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
 		
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(
@@ -1644,7 +1642,7 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
 	
-	for(int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
+	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
 		
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(
@@ -1864,7 +1862,7 @@ void NationalManagementDialog::MirrorSelectedCities()
         }
 	}
 
-	for (int selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
+	for (int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++)
 	{
 		
 		uint32 cityId   = *reinterpret_cast<uint32 *>

@@ -30,9 +30,9 @@ aui_Switch::aui_Switch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	m_drawFunc			= NULL;
 	m_drawCookie		= NULL;
@@ -60,9 +60,9 @@ aui_Switch::aui_Switch(
 	sint32 state,
 	sint32 numStates )
 	:
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( numStates ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie )
 {
 	m_drawFunc			= NULL;
 	m_drawCookie		= NULL;
@@ -119,7 +119,7 @@ sint32 aui_Switch::SetState( sint32 state )
 	sint32 prevState = m_state;
 
 	
-	if ( m_state = state )
+	if ((m_state = state))
 	{
 		
 		

@@ -126,8 +126,10 @@ StringDB::~StringDB()
 	}
 }
 
-
-StringRecord const * const & StringDB::GetHead(MBCHAR const * id) const
+// TODO: Confirm if commenting out the const is the correct solution
+//   to the problem of this method, which suffers from a
+//   "returning reference to temporary" warning
+StringRecord /*const*/ * const & StringDB::GetHead(MBCHAR const * id) const
 {
 	return m_head[ComputeHashIndex(id)];
 }
@@ -312,7 +314,7 @@ MBCHAR * StringDB::GetIdStr(StringId const & index) const
 { 
 	Assert(0 <= index);
 	Assert(index < m_all.size());
-	return (index < 0) || (index >= m_all.size()) ? NULL : m_all[index]->m_id;
+	return (index < 0) || (index >= (signed) m_all.size()) ? NULL : m_all[index]->m_id;
 }
 
 
@@ -494,7 +496,7 @@ bool StringDB::GetIndexNode
 MBCHAR const * StringDB::GetNameStr(StringId const & n) const
 {
 	Assert(n >= 0);
-	return (n < 0) || (n >= m_all.size()) ? "BADSTRING" : m_all[n]->m_text;
+	return (n < 0) || (n >= (signed) m_all.size()) ? "BADSTRING" : m_all[n]->m_text;
 }
 
 

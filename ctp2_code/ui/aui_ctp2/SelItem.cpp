@@ -1562,8 +1562,8 @@ void SelectedItem::SelectTradeRoute( const MapPoint &pos )
 			
 			cell->GetTradeRoute(i).AddSelectedWayPoint(pos);
 
-			
-			g_grabbedItem->SetGrabbedItem(&cell->GetTradeRoute(i));
+			TradeRoute tradeRouteItem = cell->GetTradeRoute(i);
+			g_grabbedItem->SetGrabbedItem(&tradeRouteItem);
 
 			
 			cell->GetTradeRoute(i).ClearSelectedCellData(cell->GetTradeRoute(i));

@@ -198,7 +198,7 @@ class EditQueue {
 	static void SaveNameResponse(bool response, const char *text, void *userData);
 	static void SaveButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-	bool IsItemInQueueList(sint32 cat, sint32 type);
+	bool IsItemInQueueList(uint32 cat, sint32 type);
 
 	static void NotifyCityCaptured(const Unit &c);
 };

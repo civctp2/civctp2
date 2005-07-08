@@ -33,14 +33,14 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_ImageBase( ldlBlock ),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	aui_Radio(
 		retval,
 		id,
 		ldlBlock,
 		ActionFunc,
 		cookie ),
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -68,6 +68,8 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 	sint32 state,
 	sint32 numStates )
 	:
+	aui_ImageBase( numStates ),
+	aui_TextBase( text ),
 	aui_Radio(
 		retval,
 		id,
@@ -79,8 +81,6 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 		cookie,
 		state,
 		numStates ),
-	aui_ImageBase( numStates ),
-	aui_TextBase( text ),
 	PatternBase( pattern )
 {
 	Assert( AUI_SUCCESS(*retval) );

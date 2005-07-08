@@ -136,7 +136,7 @@ void FileDialog::Fill()
 	FindClose(lpFileList);
 #else
 	struct stat st;
-	while (dent = readdir(dir)) {
+	while ((dent = readdir(dir))) {
 		snprintf(path, sizeof(path), "%s%s%s", m_dirPath, FILE_SEP, dent->d_name);
 		int rc = stat(path, &st);
 		if (!S_ISDIR(st.st_mode)) {

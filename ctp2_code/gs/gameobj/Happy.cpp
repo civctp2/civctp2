@@ -89,7 +89,7 @@ Happy::Happy()
 	m_too_many_cities       (0.0),
 	m_timed                 (0.0),
     m_crime                 (0.0), 
-    m_timedChanges          (0.0),
+    m_timedChanges          (0),
     m_tracker               (new HappyTracker())
 { ; }
 
@@ -359,7 +359,7 @@ double Happy::CalcPollution(CityData &cd, Player *p)
 
 double Happy::CalcCityIndependentWorkday(Player *player)
 {
-	sint32 delta = (player->GetUnitlessWorkday() - 
+	sint32 delta = sint32(player->GetUnitlessWorkday() -
 					player->GetWorkdayExpectation());
 	if(delta > 0)
 		return(delta * player->GetPositiveWorkdayCoef());
@@ -369,7 +369,8 @@ double Happy::CalcCityIndependentWorkday(Player *player)
 
 double Happy::CalcCityIndependentWages(Player *player)
 {
-	sint32 delta = player->GetUnitlessWages() - player->GetWagesExpectation();
+	sint32 delta = sint32(player->GetUnitlessWages() -
+					player->GetWagesExpectation());
 	if(delta > 0)
 		return(player->GetPositiveWagesCoef() * delta);
 	else
@@ -378,7 +379,8 @@ double Happy::CalcCityIndependentWages(Player *player)
 
 double Happy::CalcCityIndependentRations(Player *player)
 {
-	sint32 delta = player->GetUnitlessRations() - player->GetRationsExpectation();
+	sint32 delta = sint32(player->GetUnitlessRations() -
+					player->GetRationsExpectation());
 	if(delta > 0)
 		return(player->GetPositiveRationsCoef() * delta);
 	else
@@ -715,7 +717,7 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
     CalcCrime(cd, p); 
 
 	sint32 intHap = (sint32)m_happiness;
-	sint32 newHappiness = g_slicEngine->CallMod(mod_CityHappiness, intHap, cd.GetHomeCity(), intHap);
+	sint32 newHappiness = g_slicEngine->CallMod(mod_CityHappiness, intHap, cd.GetHomeCity().m_id, intHap);
 	if(intHap != newHappiness)
 		m_happiness = newHappiness;
 

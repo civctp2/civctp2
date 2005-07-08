@@ -1711,14 +1711,14 @@ BOOL UnitAstar::VerifyMem() const
 {
     if (m_move_union == 0xcdcdcdcd) return FALSE;
     if (m_move_intersection == 0xcdcdcdcd) return FALSE; 
-    if (m_max_dir == 0xcdcdcdcd) return FALSE;
+    if ((unsigned) m_max_dir == 0xcdcdcdcd) return FALSE;
     if (m_mask_alliance == 0xcdcdcdcd) return FALSE;
-    if (m_dest.x == 0xcdcdcdcd) return FALSE; 
-    if (m_dest.y == 0xcdcdcdcd) return FALSE; 
-    if (m_start.x == 0xcdcdcdcd) return FALSE; 
-    if (m_start.y == 0xcdcdcdcd) return FALSE; 
-    if (m_owner == 0xcdcdcdcd) return FALSE; 
-    if (m_nUnits == 0xcdcdcdcd) return FALSE;
+    if (m_dest.x == sint16(0xcdcd)) return FALSE; 
+    if (m_dest.y == sint16(0xcdcd)) return FALSE; 
+    if (m_start.x == sint16(0xcdcd)) return FALSE; 
+    if (m_start.y == sint16(0xcdcd)) return FALSE; 
+    if ((unsigned) m_owner == 0xcdcdcdcd) return FALSE; 
+    if ((unsigned) m_nUnits == 0xcdcdcdcd) return FALSE;
     if (m_army.m_id == 0xcdcdcdcd) return FALSE;    
     if (m_army_minmax_move == -99999999) return FALSE;
     if (m_can_space_launch == 0xcdcdcdcd) return FALSE; 

@@ -242,7 +242,7 @@ sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequ
 		
 		
 		sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CHEER_CASTLE);
-		g_soundManager->AddSound(SOUNDTYPE_SFX, NULL, soundID);
+		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID);
 	}
 
 	s_from = from;

@@ -365,7 +365,7 @@ NETFunc::Keys::Keys(void) {
 }
 
 void NETFunc::Keys::NextKey(void) {
-	if(curkey.buf[curkey.len-1] == 255)
+	if(curkey.buf[curkey.len-1] == (char) 255)
 		curkey.len++;
 	curkey.buf[curkey.len-1]++;
 }
@@ -727,7 +727,11 @@ DWORD WINAPI NETFunc::ReConnectThread(LPVOID r) {
 
 
 NETFunc::Transport::Transport(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k)
-:transport(*t), description(*d), Key(k) {
+:
+	Key(k),
+	transport(*t),
+	description(*d)
+{
 	
 	memset(&parameters, 0, sizeof(commInitReq_t));
 	parameters.reqLen = sizeof(commInitReq_t);
@@ -853,7 +857,7 @@ void
 NETFunc::TransportList::CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context) {
 	if (comm_DRIVER_IS_VISIBLE & d->capabilities) {
 		KeyStruct *k = (KeyStruct *)&((TransportList *)context)->key;
-		if(k->buf[k->len-1] == 255)
+		if(k->buf[k->len-1] == (char) 255)
 			k->len++;
 		else
 			k->buf[k->len-1]++;
@@ -1037,8 +1041,11 @@ NETFunc::STATUS NETFunc::AIPlayer::Save(FILE *f) {
 
 NETFunc::STATUS NETFunc::AIPlayers::Send(dp_t *p, dpid_t id, dpid_t from) {
 	for(iterator i=begin(); i!=end(); i++)
-		if(NETFunc::Send(p, &Message(Message::ADDAIPLAYER, (*i)->GetBody(), (*i)->GetSize()), id, from) != OK)
+	{
+		Message message = Message(Message::ADDAIPLAYER, (*i)->GetBody(), (*i)->GetSize());
+		if(NETFunc::Send(p, &message, id, from) != OK)
 			return ERR;
+	}
 	return OK;
 }
 
@@ -1326,7 +1333,8 @@ NETFunc::STATUS NETFunc::PlayerStat::Update(dp_t *p, bool r) {
 	hasleft = false;
 	isingame = true;
 	Pack();
-	if(NETFunc::Send(p, &Message(Message::ADDPLAYERSTAT, GetBody(), GetSize()), dp_ID_BROADCAST, dp_ID_BROADCAST, r) != OK)
+	Message message = Message(Message::ADDPLAYERSTAT, GetBody(), GetSize());
+	if(NETFunc::Send(p, &message, dp_ID_BROADCAST, dp_ID_BROADCAST, r) != OK)
 		return ERR;
 	return OK;
 }
@@ -1338,8 +1346,11 @@ NETFunc::PlayerStats::PlayerStats(PlayerStats *l):NETFunc::List<NETFunc::PlayerS
 
 NETFunc::STATUS NETFunc::PlayerStats::Send(dp_t *p, dpid_t id, dpid_t from) {
 	for(iterator i=begin(); i!=end(); i++)
-		if(NETFunc::Send(p, &Message(Message::ADDPLAYERSTAT, (*i)->GetBody(), (*i)->GetSize()), id) != OK)
+	{
+		Message message = Message(Message::ADDPLAYERSTAT, (*i)->GetBody(), (*i)->GetSize());
+		if(NETFunc::Send(p, &message, id) != OK)
 			return ERR;
+	}
 	return OK;
 }
 
@@ -1905,9 +1916,11 @@ void NETFunc::GameSetup::Unpack() {
 }
 
 NETFunc::STATUS NETFunc::GameSetup::Send(dp_t *p, dpid_t id, dpid_t from) {
-	if(NETFunc::Send(p, &Message(Message::GAMESESSION, &session, sizeof(dp_session_t)), id, from) != OK)
+	Message message = Message(Message::GAMESESSION, &session, sizeof(dp_session_t));
+	if(NETFunc::Send(p, &message, id, from) != OK)
 		return ERR;
-	if(NETFunc::Send(p, &Message(Message::GAMEPACKET, GetBody(), GetSize()), id, from) != OK)
+	message = Message(Message::GAMEPACKET, GetBody(), GetSize());
+	if(NETFunc::Send(p, &message, id, from) != OK)
 		return ERR;
 	return OK;
 }
@@ -1982,7 +1995,8 @@ NETFunc::STATUS	NETFunc::Chat::Send(Player *p, char *m) {
 		return BUSSY;
 	else {
 		Receive(&player, *(TYPE *)buffer, m);
-		return NETFunc::Send(netf->GetDP(), &Message(Message::CHAT, buffer, size), id);
+		Message message = Message(Message::CHAT, buffer, size);
+		return NETFunc::Send(netf->GetDP(), &message, id);
 	}
 }
 
@@ -1996,7 +2010,8 @@ NETFunc::STATUS	NETFunc::Chat::SendGroup(char *m) {
 		return BUSSY;
 	else {
 		Receive(&player, *(TYPE *)buffer, m);
-		return NETFunc::Send(netf->GetDP(), &Message(Message::CHAT, buffer, size), dp_ID_BROADCAST);
+		Message message = Message(Message::CHAT, buffer, size);
+		return NETFunc::Send(netf->GetDP(), &message, dp_ID_BROADCAST);
 	}
 }
 
@@ -2263,7 +2278,8 @@ NETFunc::STATUS NETFunc::Connect(char *file) {
 	KeyStruct k;
 	k.len = 0;
 
-	transport = new TransportSetup(&Transport(&i, &t, &k));
+	Transport trans = Transport(&i, &t, &k);
+	transport = new TransportSetup(&trans);
 
 	connected = true;
 
@@ -2466,10 +2482,11 @@ NETFunc::STATUS NETFunc::SetRemotePlayerRecord(PlayerSetup *p) {
 		return ERR;
 	if(p->GetId() == player.GetId()) {
 		PushMessage(new Message(Message::SETPLAYERRECORD, &p->player, sizeof(dp_playerId_t)));
-	} else
-		
-		if(Send(dp, &Message(Message::SETPLAYERRECORD, &p->player, sizeof(dp_playerId_t)), p->GetId()) != OK)
+	} else {
+		Message message = Message(Message::SETPLAYERRECORD, &p->player, sizeof(dp_playerId_t));
+		if(Send(dp, &message, p->GetId()) != OK)
 			return ERR;
+	}
 	return OK;
 }
 
@@ -2481,10 +2498,11 @@ NETFunc::STATUS NETFunc::SetRemotePlayerPacket(PlayerSetup *p) {
 		return ERR;
 	if(p->GetId() == player.GetId())
 		SetPlayerSetupPacket(p);
-	else
-		
-		if(Send(dp, &Message(Message::SETPLAYERPACKET, p->GetBody(), p->GetSize()), p->GetId()) != OK)
+	else {
+		Message message = Message(Message::SETPLAYERPACKET, p->GetBody(), p->GetSize());
+		if(Send(dp, &message, p->GetId()) != OK)
 			return ERR;
+	}
 	return OK;
 }
 
@@ -2510,7 +2528,8 @@ NETFunc::STATUS NETFunc::SetGameSetupPacket(GameSetup *g) {
 	setgamepacket = true;
 	if(status != OK)
 		return OK;
-	if(Send(dp, &Message(Message::GAMEPACKET, g->GetBody(), g->GetSize()), dp_ID_BROADCAST) != OK)
+	Message message = Message(Message::GAMEPACKET, g->GetBody(), g->GetSize());
+	if(Send(dp, &message, dp_ID_BROADCAST) != OK)
 		return ERR;
 	setgamepacket = false;
 	return OK;
@@ -2754,24 +2773,39 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 
 	KeyStruct k;
 	k.len = 0;
-
+	
 	switch(GetTransportType(&i)) {
 	case Transport::INTERNET:
-		transport = new TransportSetup(&Internet(&i, &t, &k));
+		{
+			Internet internet = Internet(&i, &t, &k);
+			transport = new TransportSetup(&internet);
+		}
 		if(dpSetGameServerEx(dp, servername, GameType) != dp_RES_OK)
 			return ERR;
 	break;
 	case Transport::IPX:
-		transport = new TransportSetup(&IPX(&i, &t, &k));
+		{
+			IPX ipx = IPX(&i, &t, &k);
+			transport = new TransportSetup(&ipx);
+		}
 	break;
 	case Transport::MODEM:
-		transport = new TransportSetup(&Modem(&i, &t, &k));
+		{
+			Modem modem = Modem(&i, &t, &k);
+			transport = new TransportSetup(&modem);
+		}
 	break;
 	case Transport::NULLMODEM:
-		transport = new TransportSetup(&NullModem(&i, &t, &k));
+		{
+			NullModem nullModem = NullModem(&i, &t, &k);
+			transport = new TransportSetup(&nullModem);
+		}
 	break;	
 	default:
-		transport = new TransportSetup(&Transport(&i, &t, &k));
+		{
+			Transport trans = Transport(&i, &t, &k);
+			transport = new TransportSetup(&trans);
+		}
 		break;
 	}
 
@@ -3025,7 +3059,8 @@ bool NETFunc::Handle(Message *m) {
 		return true;
 	} else if(m->GetCode() == Message::PLAYERENTER) {
 		dp_playerId_t *p = (dp_playerId_t *)m->GetBody();
-		Send(dp, &Message(Message::PINGBACK), p->id);
+		Message message = Message(Message::PINGBACK);
+		Send(dp, &message, p->id);
 		return true;
 	}
 	else if(m->GetCode() == Message::RESET) {
@@ -3136,8 +3171,10 @@ bool NETFunc::Handle(Message *m) {
 
 						PushMessage(new Message(Message::ENTERGAME, session.GetKey(), sizeof(KeyStruct)));
 					}
-					if(p->status == dp_RES_CREATED)
-						Send(dp, &Message(Message::PLAYERENTER, &player.player, sizeof(dp_playerId_t)), dp_ID_BROADCAST);
+					if(p->status == dp_RES_CREATED) {
+						Message message = Message(Message::PLAYERENTER, &player.player, sizeof(dp_playerId_t));
+						Send(dp, &message, dp_ID_BROADCAST);
+					}
 				}
 			}
 			
@@ -3379,11 +3416,16 @@ void NETFunc::CancelDial(void) {
 
 NETFunc::STATUS NETFunc::Kick(Player *p) {
 	if(status == OK && p->IsInCurrentSession() && !p->IsMe())
-		if(player.IsHost())
-			return Send(dp, &Message(Message::KICKED), p->GetId(), player.GetId());
+		if(player.IsHost()){
+			Message message = Message(Message::KICKED);
+			return Send(dp, &message, p->GetId(), player.GetId());
+		}
 
 		else if(player.IsGroupMaster() && player.GetGroup() == p->GetGroup())
-			return Send(dp, &Message(Message::KICKED), p->GetId(), player.GetId());
+		{
+			Message message = Message(Message::KICKED);
+			return Send(dp, &message, p->GetId(), player.GetId());
+		}
 	return ERR;
 }
 

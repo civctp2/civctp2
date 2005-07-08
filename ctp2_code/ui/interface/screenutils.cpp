@@ -160,13 +160,13 @@ sint32 open_CityStatus( void )
 	if(g_e3Demo) return 0;
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 		NationalManagementDialog::Open();
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "City Status" );
-#endif _DEBUG
+#endif // _DEBUG
 
 	return 0;
 }
@@ -184,13 +184,13 @@ sint32 open_CivStatus()
 
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 	DomesticManagementDialog::Open();
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Civ Status" );
-#endif _DEBUG
+#endif // _DEBUG
 
 	return 0;
 }
@@ -241,7 +241,7 @@ sint32 open_TradeStatus( void )
 {
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 
 
@@ -250,7 +250,7 @@ sint32 open_TradeStatus( void )
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Trade" );
-#endif _DEBUG
+#endif // _DEBUG
 
 	return 0;
 }
@@ -267,7 +267,7 @@ sint32 open_VictoryWindow( void )
 
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 
 
@@ -277,7 +277,7 @@ sint32 open_VictoryWindow( void )
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Victory" );
-#endif _DEBUG
+#endif // _DEBUG
 
 	return 0;
 }
@@ -292,13 +292,13 @@ sint32 open_Diplomacy( void )
 {
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 	DiplomacyWindow::Display();
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Diplomacy" );
-#endif _DEBUG
+#endif // _DEBUG
 
 	return 0;
 }
@@ -315,13 +315,13 @@ sint32 open_InfoScreen( void )
 
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 	InfoWindow::Open();
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Info" );
-#endif _DEBUG
+#endif // _DEBUG
 
 	return 0;
 }
@@ -359,7 +359,7 @@ sint32 open_GreatLibrary(sint32 index, BOOL sci)
 
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 	sint32 const	err	= greatlibrary_Initialize(index, sci);
 	Assert(!err);
@@ -369,7 +369,7 @@ sint32 open_GreatLibrary(sint32 index, BOOL sci)
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME("Great Library");
-#endif _DEBUG
+#endif // _DEBUG
 
 	return true;
 }
@@ -415,7 +415,7 @@ sint32 open_OptionsScreen( sint32 fromWhichScreen )
 {
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 	sint32 err = optionsscreen_displayMyWindow( fromWhichScreen );
 	
@@ -423,7 +423,7 @@ sint32 open_OptionsScreen( sint32 fromWhichScreen )
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Options Screen" );
-#endif _DEBUG
+#endif // _DEBUG
 }
 
 sint32 close_OptionsScreen( void )
@@ -537,7 +537,7 @@ sint32 open_TutorialWin( void )
 	if(g_e3Demo) return 0;
 #ifdef _DEBUG
 	SET_TIME
-#endif _DEBUG
+#endif // _DEBUG
 
 	sint32 err;
 
@@ -549,7 +549,7 @@ sint32 open_TutorialWin( void )
 
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Tutorial Win" );
-#endif _DEBUG
+#endif // _DEBUG
 
 	return 0;
 }

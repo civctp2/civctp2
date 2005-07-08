@@ -170,7 +170,7 @@ bool IsGetSelectionIndex(TribeSelector const & a_List, size_t & index)
         ++p, ++index
     )
     {
-        if (index == s_skipIndex)
+        if (index == (unsigned) s_skipIndex)
         {
             ++index;
         }
@@ -246,7 +246,7 @@ void spnewgametribescreen_setTribeIndex(
     {
         --alpha;
     }
-	if ((alpha < 0) || (alpha >= s_checkBox.size())) 
+	if ((alpha < 0) || (alpha >= (signed) s_checkBox.size())) 
 	{
 		return;
 	}
@@ -319,7 +319,7 @@ void spnewgametribescreen_getLeaderName( MBCHAR *lname )
 }
 void spnewgametribescreen_enableTribes( void )
 {
-	for ( sint32 i = 0; i < s_checkBox.size(); i++ )
+	for ( sint32 i = 0; (unsigned) i < s_checkBox.size(); i++ )
 	{
 		if ( s_checkBox[ i ] && s_checkBox[ i ]->IsDisabled() )
 		{
@@ -329,7 +329,7 @@ void spnewgametribescreen_enableTribes( void )
 }
 void spnewgametribescreen_disableTribes( void )
 {
-	for ( sint32 i = 0; i < s_checkBox.size(); i++ )
+	for ( sint32 i = 0; (unsigned) i < s_checkBox.size(); i++ )
 	{
 		if ( s_checkBox[ i ] && !s_checkBox[ i ]->IsDisabled() )
 		{
@@ -345,7 +345,7 @@ void spnewgametribescreen_disableTribe(sint32 tribe)
         --alpha;
     }
 
-	if ((alpha >= 0) && (alpha < s_checkBox.size()) &&
+	if ((alpha >= 0) && (alpha < (signed) s_checkBox.size()) &&
 		!s_checkBox[alpha]->IsDisabled()
 	   )
 	{
@@ -360,7 +360,7 @@ void spnewgametribescreen_enableTribe(sint32 tribe)
         --alpha;
     }
 
-	if ((alpha >= 0) && (alpha < s_checkBox.size()))
+	if ((alpha >= 0) && (alpha < (signed) s_checkBox.size()))
 	{
 	    if (s_checkBox[alpha]->IsDisabled())
 	    {
@@ -422,7 +422,7 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname)
             ++p, ++alpha
         )
         {
-            if (alpha == s_skipIndex)
+            if (alpha == (unsigned) s_skipIndex)
             { 
                 ++alpha;
             }

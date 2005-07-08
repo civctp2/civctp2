@@ -40,12 +40,12 @@ IconTab::IconTab(
 	void *cookie,
 	BOOL selected )
 :
+	aui_ImageBase( (sint32)0 ),
+	aui_TextBase( NULL ),
 	aui_Tab( retval, id, x, y, width, height, paneWidth, paneHeight, ActionFunc, cookie, selected ),
 	PatternBase( pattern ),
 	m_icon( icon ),
-	m_color ( color ),
-	aui_TextBase( NULL ),
-	aui_ImageBase( (sint32)0 )
+	m_color ( color )
 {
 }
 

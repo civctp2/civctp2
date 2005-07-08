@@ -624,7 +624,7 @@ void ProposalAnalysis::ComputeRegardResultFromProfit(DiplomacyResult & senderRes
 	
 	
 	
-	senderResult.regard -= sender_profit_ratio * ((double)MAX_REGARD / 5);
+	senderResult.regard -= sint32(sender_profit_ratio * ((double)MAX_REGARD / 5));
 }
 
 
@@ -834,11 +834,11 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 		else if (not_friend && !not_trading_partner && !recent_attacks && !piracy && !untrustworthy && !has_embargo)
 		{
 			desire_type = PROPOSAL_OFFER_GIVE_GOLD;
-			desire_arg.gold = player_ptr->m_gold->GetIncome() * regard_ratio;
+			desire_arg.gold = sint32(player_ptr->m_gold->GetIncome() * regard_ratio);
 
 			if (has_alliance)
 			{
-				desire_arg.gold = player_ptr->m_gold->GetIncome() * regard_ratio * 0.5;
+				desire_arg.gold = sint32(player_ptr->m_gold->GetIncome() * regard_ratio * 0.5);
 			}
 
 		}
@@ -847,7 +847,7 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 		else if (has_embargo && !not_trading_partner && !recent_attacks && !piracy && !untrustworthy && !not_friend )
 		{
 			desire_type = PROPOSAL_OFFER_END_EMBARGO;
-			desire_arg.gold = player_ptr->m_gold->GetIncome() * regard_ratio;
+			desire_arg.gold = sint32(player_ptr->m_gold->GetIncome() * regard_ratio);
 		}
 
 		
@@ -856,7 +856,9 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 			if (trade_total > 0)
 			{
 				desire_type = PROPOSAL_OFFER_GIVE_GOLD;
-				desire_arg.gold =  5 * (0.10 - trade_percent) * MapAnalysis::GetMapAnalysis().GetTotalTrade(playerId);
+				desire_arg.gold =  sint32(
+					5 * (0.10 - trade_percent) * MapAnalysis::GetMapAnalysis().GetTotalTrade(playerId)
+					);
 			}
 			if (has_alliance)
 			{
@@ -882,12 +884,12 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 		else if (not_friend && !very_low_science && !recent_attacks && !piracy && !untrustworthy && !has_embargo)
 		{
 			desire_type = PROPOSAL_OFFER_GIVE_GOLD;
-			desire_arg.gold = player_ptr->m_gold->GetIncome() * regard_ratio;
+			desire_arg.gold = sint32(player_ptr->m_gold->GetIncome() * regard_ratio);
 
 			
 			if (has_alliance)
 			{
-				desire_arg.gold = player_ptr->m_gold->GetIncome() * regard_ratio * 0.5;
+				desire_arg.gold = sint32(player_ptr->m_gold->GetIncome() * regard_ratio * 0.5);
 			}
 		}
 		
@@ -895,7 +897,7 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 		else if (has_embargo && !very_low_science && !recent_attacks && !piracy && !untrustworthy && !not_friend )
 		{
 			desire_type = PROPOSAL_OFFER_END_EMBARGO;
-			desire_arg.gold = player_ptr->m_gold->GetIncome() * regard_ratio;
+			desire_arg.gold = sint32(player_ptr->m_gold->GetIncome() * regard_ratio);
 		}
 
 		
@@ -938,14 +940,14 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 		else if (not_friend && !desire_war && !cannot_form_alliance && !recent_attacks && !piracy && !untrustworthy && !has_embargo)
 		{
 			desire_type = PROPOSAL_OFFER_GIVE_GOLD;
-			desire_arg.gold = player_ptr->m_gold->GetIncome() * regard_ratio;
+			desire_arg.gold = sint32(player_ptr->m_gold->GetIncome() * regard_ratio);
 		}
 		
 		
 		else if (has_embargo && !desire_war && !cannot_form_alliance && !recent_attacks && !piracy && !untrustworthy && !not_friend )
 		{
 			desire_type = PROPOSAL_OFFER_END_EMBARGO;
-			desire_arg.gold = player_ptr->m_gold->GetIncome() * regard_ratio;
+			desire_arg.gold = sint32(player_ptr->m_gold->GetIncome() * regard_ratio);
 		}
 
 	}
@@ -962,7 +964,7 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 		if (diplomat.GetPersonality()->GetDiscoveryEcotopian() && pollution_ratio > 1.05)
 		{
 			desire_type = PROPOSAL_OFFER_REDUCE_POLLUTION;
-			desire_arg.pollution = player_pollution * 1.05;
+			desire_arg.pollution = sint32(player_pollution * 1.05);
 		}
 		
 		

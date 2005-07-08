@@ -33,6 +33,7 @@ GetTickCount()
 sint32
 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 {
+	return 0;
 }
 
 void

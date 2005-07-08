@@ -1262,7 +1262,7 @@ Army Player::GetNewArmy(CAUSE_NEW_ARMY cause)
 		cause != CAUSE_NEW_ARMY_INITIAL) {
 		g_network.AddCreatedObject(g_theArmyPool->AccessArmy(army));
 		g_network.SendAction(new NetAction(NET_ACTION_CREATED_ARMY,
-			army, cause));
+			army.m_id, cause));
 	}
 #if 0
 	if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK) {
@@ -3731,7 +3731,7 @@ void Player::SendTradeBid(const Unit &fromCity, sint32 resource, const Unit &toC
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_SEND_TRADE_BID,
 										   m_owner,
-										   fromCity, resource, toCity,
+										   fromCity.m_id, resource, toCity.m_id,
 										   price));
 	} else if(g_network.IsHost()) {
 		g_network.Block(toCity.GetOwner());
@@ -3783,7 +3783,7 @@ void Player::AcceptTradeBid(const Unit &fromCity, sint32 resource, const Unit &t
 	if(g_network.IsClient()) {
 		g_network.SendAction(new NetAction(NET_ACTION_ACCEPT_TRADE_BID,
 										   m_owner,
-										   fromCity, resource, toCity,
+										   fromCity.m_id, resource, toCity.m_id,
 										   price));
 	}
 	TradeRoute route = CreateTradeRoute(fromCity, 
@@ -3808,7 +3808,7 @@ void Player::RejectTradeBid(const Unit &fromCity, sint32 resource, const Unit &t
 	if(g_network.IsClient()) {
 		g_network.SendAction(new NetAction(NET_ACTION_REJECT_TRADE_BID,
 										   m_owner,
-										   fromCity, resource, toCity,
+										   fromCity.m_id, resource, toCity.m_id,
 										   price));
 	}
 }
@@ -7116,7 +7116,7 @@ void Player::GetSingularCivName(MBCHAR *s)
 
 
 void Player::DumpAllies(void)
-	{
+{
 	sint32	i ;
 
 	MBCHAR	s[_MAX_PATH] ;
@@ -7124,23 +7124,22 @@ void Player::DumpAllies(void)
 	DPRINTF(k_DBG_INFO, ("Dumping alliances for Player #%d", m_owner)) ;
 	s[0] = 0;
 	for (i=0; i<k_MAX_PLAYERS; i++)
-		{
+	{
 		if ((mask_alliance & (0x01<<i)) && (i != m_owner))
 			sprintf(s, "%s P%d, ", s, i) ;
 
-		}
+	}
 
 	if (strlen(s))
-		{
-		s[strlen(s)-2] = NULL ;
+	{
+		s[strlen(s)-2] = 0 ;
 		DPRINTF(k_DBG_INFO, ("%s", s)) ;
-		}
-	else
-		{
-		DPRINTF(k_DBG_INFO, ("No alliances formed")) ;
-		}
-
 	}
+	else
+	{
+		DPRINTF(k_DBG_INFO, ("No alliances formed")) ;
+	}
+}
 
 
 sint32 Player::GetCityIndex(const Unit &c, sint32 &idx)

@@ -23,9 +23,9 @@ aui_TabGroup::aui_TabGroup(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
-	aui_SwitchGroup( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_SwitchGroup( retval, id, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -47,9 +47,9 @@ aui_TabGroup::aui_TabGroup(
 	sint32 paneOffsetX,
 	sint32 paneOffsetY )
 	:
-	aui_SwitchGroup( retval, id, x, y, 0, 0 ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_SwitchGroup( retval, id, x, y, 0, 0 )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

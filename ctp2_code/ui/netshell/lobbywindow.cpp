@@ -469,7 +469,7 @@ AUI_ERRCODE LobbyWindow::Idle( void )
 	
 	while(n) {
 		
-		if(m = g_netfunc->GetMessage()) {
+		if((m = g_netfunc->GetMessage())) {
 			
 			
 			g_netfunc->HandleMessage(m);
@@ -720,7 +720,7 @@ void LobbyWindow::PasswordScreenDone( MBCHAR *password )
 			if ( password )
 			{
 				strncpy( temp, password, dp_PASSWORDLEN );
-				for ( sint32 i = 0; i < strlen( temp ); i++ )
+				for ( sint32 i = 0; (unsigned) i < strlen( temp ); i++ )
 				{
 					
 					temp[ i ] = tolower( temp[ i ] );

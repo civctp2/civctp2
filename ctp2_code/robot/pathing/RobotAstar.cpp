@@ -114,7 +114,7 @@ sint32 RobotAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
     static MapPoint tmppos;
     tmppos.Iso2Norm(pos); 
 
-	BOOL r2 =  (*m_callback)(r, &MapPointData(tmpprev), &MapPointData(tmppos), 
+	BOOL r2 =  (*m_callback)(r, (MapPointData*)&tmpprev, (MapPointData*)&tmppos, 
 		&cost, is_zoc, entry); 
 
     if (cost <1.0) { 
@@ -143,8 +143,8 @@ void RobotAstar::RecalcEntryCost(AstarPoint *parent,
 		static MapPoint tmppos;
 		tmppos.Iso2Norm(node->m_pos); 
 
-		BOOL r2 =  (*m_callback)(TRUE, &MapPointData(tmpprev), 
-			&MapPointData(tmppos), &new_entry_cost, new_is_zoc, new_entry);         
+		BOOL r2 =  (*m_callback)(TRUE, (MapPointData*)&tmpprev, 
+			(MapPointData*)&tmppos, &new_entry_cost, new_is_zoc, new_entry);         
 	}
 }
 

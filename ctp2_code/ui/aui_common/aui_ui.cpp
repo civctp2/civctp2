@@ -416,7 +416,7 @@ aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
 
 	SetRect( &m_imageRect, x, y, x, y );
 
-	if ( m_image = image )
+	if ((m_image = image))
 	{
 		m_imageRect.right += m_image->TheSurface()->Width();
 		m_imageRect.bottom += m_image->TheSurface()->Height();
@@ -915,7 +915,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 				windowDirtyList->Flush();
 				windowDirtyList->AddRect( &windowRect );
 				
-				if ( j = m_childList->L() - i )
+				if ((j = m_childList->L() - i))
 				{
 					
 					
@@ -2060,7 +2060,7 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 			else
 			{
 				
-				for ( sint32 j = moveCount; (baseEvent++)->movecount = j; j-- );
+				for ( sint32 j = moveCount; ((baseEvent++)->movecount = j); j-- );
 
 				
 				moveCount = 0;
@@ -2068,13 +2068,13 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 		}
 
 		
-		for ( i = moveCount; (baseEvent++)->movecount = i; i-- );
+		for ( i = moveCount; ((baseEvent++)->movecount = i); i-- );
 
 		
 		
 		
 
-		for ( i = numEvents - 1; (events++)->framecount = i; i-- );
+		for ( i = numEvents - 1; ((events++)->framecount = i); i-- );
 	}
 
 	return AUI_ERRCODE_OK;

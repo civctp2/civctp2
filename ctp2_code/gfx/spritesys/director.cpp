@@ -139,10 +139,10 @@ BOOL					g_useHandler = FALSE;
 DQItem::DQItem(DQITEM_TYPE type, DQAction *action, DQHandler *handler)
 :
 m_type(type),
-m_action(action),
-m_handler(handler),
 m_addedToSavedList(FALSE),
-m_owner(-1)
+m_owner(-1),
+m_action(action),
+m_handler(handler)
 {
 	m_sequence = g_director->NewSequence();
 	m_sequence->SetItem(this);
@@ -3650,8 +3650,8 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	UnitActor	*theVictor = action->death_victor;
 	Anim		*deathAnim;
 	Anim		*victorAnim;
-	uint32		deathActionType = UNITACTION_NONE, 
-				victorActionType = UNITACTION_NONE;
+	uint32		deathActionType = (unsigned) UNITACTION_NONE, 
+				victorActionType = (unsigned) UNITACTION_NONE;
 
 	
 	
@@ -3684,7 +3684,7 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		else
 		{
 			
-			deathActionType = UNITACTION_FAKE_DEATH;
+			deathActionType = (unsigned) UNITACTION_FAKE_DEATH;
 			deathAnim = theDead->MakeFakeDeath();
 		}
 	}

@@ -58,9 +58,9 @@ extern uint8		g_messageEyeGreatPadding;
 
 MessageEyePointListItem::MessageEyePointListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -322,7 +322,7 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 	
 	i = 0;
 	sint32 textlength = g_messageEyeDropWidth;
-	while ( text = window->GetMessage()->AccessData()->GetEyePointName( i++ )) {
+	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
 		
 
 		aui_BitmapFont *font = m_button->GetTextFont();
@@ -353,7 +353,7 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdownItem" );
 	i = 0;
-	while ( text = window->GetMessage()->AccessData()->GetEyePointName( i++ )) {
+	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
 		
 		MessageEyePointListItem		*item;
 
@@ -419,7 +419,7 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageModal 
 	
 	i = 0;
 	sint32 textlength = g_messageEyeDropWidth;
-	while ( text = window->GetMessage()->AccessData()->GetEyePointName( i++ )) {
+	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
 		
 
 		aui_BitmapFont *font = m_button->GetTextFont();
@@ -450,7 +450,7 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageModal 
 
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdownItem" );
 	i = 0;
-	while ( text = window->GetMessage()->AccessData()->GetEyePointName( i++ )) {
+	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
 		
 		MessageEyePointListItem		*item;
 

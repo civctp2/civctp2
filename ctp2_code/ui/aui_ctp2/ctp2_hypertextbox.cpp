@@ -294,9 +294,9 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	void *cookie )
 	:
 
-	aui_HyperTextBox(),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_HyperTextBox(),
 	PatternBase(ldlBlock, NULL)
 {
 
@@ -344,10 +344,10 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	PatternBase(pattern),
-	aui_HyperTextBox(retval, id, x,y, width, height, ActionFunc, cookie),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_HyperTextBox(retval, id, x,y, width, height, ActionFunc, cookie),
+	PatternBase(pattern)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

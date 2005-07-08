@@ -20,9 +20,9 @@ aui_Static::aui_Static(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
-	aui_Control( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_Control( retval, id, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -44,9 +44,9 @@ aui_Static::aui_Static(
 	const MBCHAR *text,
 	uint32 maxLength )
 	:
-	aui_Control( retval, id, x, y, width, height ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( text, maxLength )
+	aui_TextBase( text, maxLength ),
+	aui_Control( retval, id, x, y, width, height )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

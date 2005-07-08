@@ -45,10 +45,10 @@ TextTab::TextTab(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_Tab( retval, id, ldlBlock, ActionFunc, cookie),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
-	PatternBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_Tab( retval, id, ldlBlock, ActionFunc, cookie),
+	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 	
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
@@ -74,10 +74,10 @@ TextTab::TextTab(
 	void *cookie,
 	BOOL selected )
 	:
-	aui_Tab( retval, id, x, y, width, height, paneWidth, paneHeight, ActionFunc, cookie, selected ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text ),
-	PatternBase( pattern ),
-	aui_ImageBase( (sint32)0 )
+	aui_Tab( retval, id, x, y, width, height, paneWidth, paneHeight, ActionFunc, cookie, selected ),
+	PatternBase( pattern )
 {
 	
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE

@@ -1022,7 +1022,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 		
 		char *testchars="\\*\"/:|?<>";
 		bool charschanged=false;
-		for(i=0; i<strlen(saveInfo->gameName); i++)
+		for(i=0; (unsigned) i<strlen(saveInfo->gameName); i++)
 		{
 			if(strchr(testchars,saveInfo->gameName[i]))
 			{
@@ -1050,7 +1050,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 
 		// Check for invalid characters in filename.
 		bool charschanged2=false;
-		for(i=0; i<strlen(saveInfo->fileName); i++)
+		for(i=0; (unsigned) i<strlen(saveInfo->fileName); i++)
 		{
 			if(strchr(testchars,saveInfo->fileName[i]))
 			{
@@ -1521,7 +1521,7 @@ void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 d
 	// If another list item was previously selected, make sure to dump its
 	// extended info
 	tech_WLList<sint32> *lastList = list->GetSelectedListLastTime();
-	for (sint32 i=0; i<lastList->L(); i++) {
+	for (sint32 i=0; (unsigned) i<lastList->L(); i++) {
 		sint32 index = lastList->GetAtIndex(i);
 		LSSavesListItem *oldItem = (LSSavesListItem *)list->GetItemByIndex(index);
 		if (oldItem != NULL) {

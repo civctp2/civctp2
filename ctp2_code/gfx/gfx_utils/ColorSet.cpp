@@ -55,7 +55,7 @@ void ColorSet::Import(uint32 index)
 	sint32		i;
 	uint16		r, g, b;
 
-	sprintf(filename, "Colors%#.2ld.txt", index);
+	sprintf(filename, "Colors%.2ld.txt", index);
 
 	theToken = new Token(filename, C3DIR_GAMEDATA); 
 	Assert(theToken); 	

@@ -1602,7 +1602,7 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 		   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner) ||
 			(!g_network.IsActive() && !g_theProfileDB->AIPopCheat()))) {
 			if(u.GetDBRec()->GetBuildingRemovesAPop()) {
-				cd->SubtractAccumulatedFood(g_theConstDB->CityGrowthCoefficient());
+				cd->SubtractAccumulatedFood((sint32) g_theConstDB->CityGrowthCoefficient());
 				cd->ChangePopulation(-1);
 			}
 		}
@@ -1687,7 +1687,7 @@ bool BuildQueue::IsItemInQueue(uint32 cat, sint32 type)
 {
 	PointerList<BuildNode>::Walker walk(m_list);
 	for(; walk.IsValid(); walk.Next()) {
-		if(walk.GetObj()->m_category == cat &&
+		if((unsigned) walk.GetObj()->m_category == cat &&
 		   walk.GetObj()->m_type == type)
 			return true;
 	}

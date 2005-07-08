@@ -3130,7 +3130,7 @@ BOOL CityData::BuildUnit(sint32 type)
 	m_buildCapitalization = FALSE;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
-		g_network.SendAction(new NetAction(NET_ACTION_BUILD, type, m_home_city));
+		g_network.SendAction(new NetAction(NET_ACTION_BUILD, type, m_home_city.m_id));
 	} else if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILDING_UNIT, 
@@ -3166,8 +3166,7 @@ BOOL CityData::BuildImprovement(sint32 type)
 	m_buildCapitalization = FALSE;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
-		g_network.SendAction(new NetAction(NET_ACTION_BUILD_IMP, type, 
-										   m_home_city));
+		g_network.SendAction(new NetAction(NET_ACTION_BUILD_IMP, type, m_home_city.m_id));
 	} else if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_IMP, m_owner, type, 
@@ -3269,7 +3268,7 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	if(m_build_queue.GetHead())
 		oldCategory = m_build_queue.GetHead()->m_category;
 	else
-		oldCategory = -5;
+		oldCategory = (unsigned) -5;
 
     switch(category) { // see Globals.h for k_GAME_OBJ_TYPE enum
     case k_GAME_OBJ_TYPE_UNIT:
@@ -3368,7 +3367,7 @@ void CityData::DestroyCapitol()
 {
 	if(buildingutil_GetDesignatesCapitol(m_built_improvements)) {
 		uint64 i;
-		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+		for(i = 0; i < (unsigned) g_theBuildingDB->NumRecords(); i++) {
 			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i) &&
 			   m_built_improvements & uint64((uint64)1 << i)) {
 				m_built_improvements &= ~((uint64)1 << i);
@@ -4071,42 +4070,50 @@ void CityData::NanoInfect( sint32 player )
 
 void CityData::SpreadBioTerror()
 {
-    Unit *c;
-    sint32 i, n = m_tradeSourceList.Num();
-    for(i = 0; i < n; i++) {
-        c = &(m_tradeSourceList[i].GetDestination());
-        if ((c->IsBioImmune()) || (c->IsBioInfected()))
-            continue;
+	Unit c;
+	sint32 i, n = m_tradeSourceList.Num();
+	for(i = 0; i < n; i++) {
+		// FIXME: I believe that this is not having the intended effect because c reaches here by
+		// value rather than by reference.  The previous code took the address of 
+		// m_tradeSourceList[i].GetDestination() and used that, but since that generated a
+		// "taking address of temporary" warning, I'm fairly sure it was the wrong thing to do,
+		// and investigating the implmentation of m_tradeSourceList[i].GetDestination() increased my
+		// worries.  I've made these changes as a temporary solution, but this needs to be further
+		// investigated. - JJB 2005/07/02
+		c = m_tradeSourceList[i].GetDestination();
+		if ((c.IsBioImmune()) || (c.IsBioInfected()))
+			continue;
 
-        if(g_rand->Next(100) < sint32(g_theConstDB->BioInfectionSpreadChance()
-                                      * 100.0)) {
-            c->BioInfect(0);
-            SlicObject *so = new SlicObject("047InfectedViaTrade");
-            so->AddCity(*c);
-            so->AddRecipient(c->GetOwner());
-            g_slicEngine->Execute(so);
-        }
-    }
+		if(g_rand->Next(100) < sint32(g_theConstDB->BioInfectionSpreadChance()
+			                          * 100.0)) {
+			c.BioInfect(0);
+			SlicObject *so = new SlicObject("047InfectedViaTrade");
+			so->AddCity(c);
+			so->AddRecipient(c.GetOwner());
+			g_slicEngine->Execute(so);
+		}
+	}
 }
 
 void CityData::SpreadNanoTerror()
 {
-    Unit *c;
-    sint32 i, n = m_tradeSourceList.Num();
-    for(i = 0; i < n; i++) {
-        c = &(m_tradeSourceList[i].GetDestination());
-        if ((c->IsNanoImmune()) || (c->IsNanoInfected()))
-            continue;
+	Unit c;
+	sint32 i, n = m_tradeSourceList.Num();
+	for(i = 0; i < n; i++) {
+		// FIXME: See comment in CityData::SpreadBioTerror above - same applies here.
+		c = m_tradeSourceList[i].GetDestination();
+		if ((c.IsNanoImmune()) || (c.IsNanoInfected()))
+			continue;
 
-        if(g_rand->Next(100) < sint32(g_theConstDB->NanoInfectionSpreadChance()
-                                      * 100.0)) {
-            c->NanoInfect(0);
-            SlicObject *so = new SlicObject("047InfectedViaTrade");
-            so->AddCity(*c);
-            so->AddRecipient(c->GetOwner());
-            g_slicEngine->Execute(so);
-        }
-    }
+		if(g_rand->Next(100) < sint32(g_theConstDB->NanoInfectionSpreadChance()
+			                          * 100.0)) {
+			c.NanoInfect(0);
+			SlicObject *so = new SlicObject("047InfectedViaTrade");
+			so->AddCity(c);
+			so->AddRecipient(c.GetOwner());
+			g_slicEngine->Execute(so);
+		}
+	}
 }
 
 BOOL CityData::IsBioImmune() const
@@ -5445,7 +5452,7 @@ void CityData::BuildInfrastructure()
 		return;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
-		g_network.SendAction(new NetAction(NET_ACTION_BUILD_INFRASTRUCTURE, m_home_city));
+		g_network.SendAction(new NetAction(NET_ACTION_BUILD_INFRASTRUCTURE, m_home_city.m_id));
 	} else if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_INFRASTRUCTURE, m_home_city));
@@ -5469,7 +5476,7 @@ void CityData::BuildCapitalization()
 		return;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
-		g_network.SendAction(new NetAction(NET_ACTION_BUILD_CAPITALIZATION, m_home_city));
+		g_network.SendAction(new NetAction(NET_ACTION_BUILD_CAPITALIZATION, m_home_city.m_id));
 	} else if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_CAPITALIZATION, m_home_city));
@@ -6382,7 +6389,7 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 	const AgeCityStyleRecord::SizeSprite *lastTypeSpr = NULL;
 
 	for(i = 0; i < ageStyleRec->GetNumSprites(); i++) {
-		if(spr = ageStyleRec->GetSprites(i)) {
+		if((spr = ageStyleRec->GetSprites(i))) {
 			if((isLand && spr->GetType() == 0) ||
 			   (!isLand && spr->GetType() != 0)) {
 				lastTypeSpr = spr;

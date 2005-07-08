@@ -137,7 +137,7 @@ void CTPAgent::Set_Army(const Army & army)
 #ifdef _DEBUG_SCHEDULER
 	Assert(army->m_theAgent == NULL);
 	army->m_theAgent = this;
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 }
 
 
@@ -161,7 +161,7 @@ bool CTPAgent::Get_Is_Dead() const
 
 #ifdef _DEBUG_SCHEDULER
 	Assert(m_army->m_theAgent == this);
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
     
     if (m_army->GetOwner() != m_playerId)
@@ -190,7 +190,7 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 
 #ifdef _DEBUG_SCHEDULER
 	Assert(m_army->m_theAgent == this);
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 	m_army->CharacterizeArmy(
 		isspecial, 
@@ -475,7 +475,7 @@ sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 	   ///Improvement of rounds evaluation (based on minimum cost point between
 	   ///start and destination mappoints. - Calvitix
 		Cell * myCell = g_theWorld->GetCell(pos);
-		sint32 movement = myCell->GetMoveCost();
+		sint32 movement = sint32(myCell->GetMoveCost());
 		myCell = g_theWorld->GetCell(Get_Pos());
 		movement = std::min((long)movement,(long)myCell->GetMoveCost());
 

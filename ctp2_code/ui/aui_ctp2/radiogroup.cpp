@@ -29,10 +29,10 @@ RadioGroup::RadioGroup(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
-	aui_SwitchGroup( retval, id, ldlBlock ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
-	PatternBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_SwitchGroup( retval, id, ldlBlock ),
+	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 }
 
@@ -48,10 +48,10 @@ RadioGroup::RadioGroup(
 	MBCHAR *pattern,
 	MBCHAR *text )
 	:
-	aui_SwitchGroup( retval, id, x, y, width, height ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text ),
-	PatternBase( pattern ),
-	aui_ImageBase( (sint32)0 )
+	aui_SwitchGroup( retval, id, x, y, width, height ),
+	PatternBase( pattern )
 {
 }
 

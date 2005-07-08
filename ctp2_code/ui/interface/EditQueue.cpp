@@ -420,17 +420,17 @@ sint32 EditQueue::CompareUnitItems(ctp2_ListItem *item1, ctp2_ListItem *item2, s
 		case 0: 
 			return stricmp(rec1->GetNameText(), rec2->GetNameText());
 		case 1: 
-			return rec1->GetAttack() - rec2->GetAttack();
+			return sint32(rec1->GetAttack() - rec2->GetAttack());
 		case 2: 
-			return rec1->GetDefense() - rec2->GetDefense();
+			return sint32(rec1->GetDefense() - rec2->GetDefense());
 		case 3: 
-			return rec1->GetArmor() - rec2->GetArmor();
+			return sint32(rec1->GetArmor() - rec2->GetArmor());
 		case 4: 
 			return rec1->GetZBRangeAttack() - rec2->GetZBRangeAttack();
 		case 5: 
 			return rec1->GetFirepower() - rec2->GetFirepower();
 		case 6: 
-			return rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints();
+			return sint32(rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints());
 		case 7: 
 			return rec1->GetShieldCost() - rec2->GetShieldCost();
 	}
@@ -1301,7 +1301,7 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed)
 
 	if(checkRemoveList) {
 		sint32 type = info->m_type;
-		sint32 cat = info->m_category;
+		uint32 cat = info->m_category;
 		sint32 i;
 		for(i = checkRemoveList->NumItems() - 1; i >= 0; i--) {
 			ctp2_ListItem *item = (ctp2_ListItem *)checkRemoveList->GetItemByIndex(i);
@@ -1547,7 +1547,7 @@ void EditQueue::ShowSelectedInfo()
 
 	ctp2_ListBox *visList = s_editQueue->GetVisibleItemList();
 
-	uint32 category = -1;
+	uint32 category = (unsigned) -1;
 	sint32 type = -1;
 
 	ctp2_ListItem *item;
@@ -2399,7 +2399,7 @@ void EditQueue::SaveButton(aui_Control *control, uint32 action, uint32 data, voi
 								SaveNameResponse);
 }
 
-bool EditQueue::IsItemInQueueList(sint32 cat, sint32 type)
+bool EditQueue::IsItemInQueueList(uint32 cat, sint32 type)
 {
 	sint32 i;
 	for(i = 0; i < m_queueList->NumItems(); i++) {

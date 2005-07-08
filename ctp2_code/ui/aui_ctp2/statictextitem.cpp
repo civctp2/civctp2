@@ -40,9 +40,9 @@ StaticTextItem::StaticTextItem(
 	sint32 category,
 	sint32 itemType)
 :
-	aui_Static( retval, id, x, y, width, height, text ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text ),
-	aui_ImageBase( (sint32)0 )
+	aui_Static( retval, id, x, y, width, height, text )
 {
 	
 

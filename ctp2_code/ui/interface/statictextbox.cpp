@@ -44,9 +44,9 @@ StaticTextBox::StaticTextBox(
 	uint32 size,
 	sint32 bevel)
 :
-	aui_Static( retval, id, x, y, width, height ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text, maxLength ),
-	aui_ImageBase( (sint32)0 )
+	aui_Static( retval, id, x, y, width, height )
 {
 	
 
@@ -61,9 +61,9 @@ StaticTextBox::StaticTextBox(
 	uint32 id,
 	MBCHAR *ldlBlock)
 	:
-	aui_Static(retval, id, ldlBlock),
+	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase(ldlBlock)
+	aui_Static(retval, id, ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 

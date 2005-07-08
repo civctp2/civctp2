@@ -365,7 +365,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			} else if(g_c3ui->TopWindow() && g_c3ui->TopWindow()->HandleKey(wParam)) {
 				
 			} else if(g_battleViewWindow) {
-				battleview_ExitButtonActionCallback( NULL, AUI_BUTTON_ACTION_EXECUTE, NULL, NULL);
+				battleview_ExitButtonActionCallback( NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 			} else {
 				
 				optionsscreen_Initialize();

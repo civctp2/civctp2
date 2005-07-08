@@ -23,16 +23,17 @@ struct SimpleMapPoint {
 
 class GameEventArgument {
 public:
-	GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl);
-	GameEventArgument(GAME_EVENT_ARGUMENT type, ...);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, const void* arg);
 	GameEventArgument(GAME_EVENT_ARGUMENT type, sint32);
 	GameEventArgument(GAME_EVENT_ARGUMENT type, const MapPointData &);
 	GameEventArgument(CivArchive &archive);
 	~GameEventArgument();
 	void Serialize(CivArchive &archive);
 
-	void Init(GAME_EVENT_ARGUMENT type, va_list *vl);
+private:
+	void Init(GAME_EVENT_ARGUMENT type, const void* arg);
 
+public:
 	GAME_EVENT_ARGUMENT GetType() { return m_type; }
 
 	BOOL GetCity(Unit &c);

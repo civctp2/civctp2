@@ -23,9 +23,9 @@ c3_ColoredStatic::c3_ColoredStatic(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
-	c3_Static( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	c3_Static( retval, id, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -50,9 +50,9 @@ c3_ColoredStatic::c3_ColoredStatic(
 	uint32 bevelWidth,
 	uint32 bevelType)
 	:
-	c3_Static( retval, id, x, y, width, height, pattern, text, maxLength, bevelWidth, bevelType),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( text, maxLength )
+	aui_TextBase( text, maxLength ),
+	c3_Static( retval, id, x, y, width, height, pattern, text, maxLength, bevelWidth, bevelType)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

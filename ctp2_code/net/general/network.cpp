@@ -260,12 +260,12 @@ namespace
 } // namespace
 
 Network::Network() :
-	m_initialized(FALSE),
+	m_state(NETSTATE_READY),
 	m_pid(0),
 	m_hostId(0),
 	m_iAmHost(FALSE),
 	m_iAmClient(FALSE),
-	m_state(NETSTATE_READY),
+	m_initialized(FALSE),
 	m_processingNewPlayers(FALSE)
 {
 	m_noThread = FALSE;
@@ -2925,8 +2925,8 @@ PlayerData::PlayerData(char* name, uint16 id) :
 	m_id(id),
 	m_index(-1),
 	m_frozen(FALSE),
-	m_blocked(0),
 	m_ready(FALSE),
+	m_blocked(0),
 	m_ackBeginTurn(FALSE)
 {
 	if(name) {

@@ -40,9 +40,9 @@ c3_Button::c3_Button(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -66,9 +66,9 @@ c3_Button::c3_Button(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
+	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie ),
 	PatternBase(pattern)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -233,9 +233,9 @@ c3_EditButton::c3_EditButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	c3_Button( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	c3_Button( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -262,9 +262,9 @@ c3_EditButton::c3_EditButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	c3_Button( retval, id, x, y, width, height, pattern, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	c3_Button( retval, id, x, y, width, height, pattern, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

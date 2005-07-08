@@ -51,9 +51,9 @@ C3Slider::C3Slider(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_Ranger()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -99,9 +99,9 @@ C3Slider::C3Slider(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
-	aui_ImageBase( (sint32)0 )
+	aui_Ranger()
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );

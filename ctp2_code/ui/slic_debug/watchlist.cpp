@@ -266,9 +266,9 @@ void WatchList::Clear()
 
 WatchListItem::WatchListItem(AUI_ERRCODE *retval, sint32 index,
 							 MBCHAR *line, MBCHAR *ldlBlock) :
-	c3_ListItem(retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem(retval, ldlBlock)
 {
 	m_index = index;
 	m_break = false;

@@ -253,7 +253,7 @@ AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
 		
 		if(g_useCustomYear && g_pTurnLengthOverride)
 		{
-			copyBlock[0]=NULL;
+			copyBlock[0]=0;
 		}
 		else
 		{

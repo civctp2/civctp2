@@ -43,7 +43,7 @@ const aui_Control *StatusBar::m_owner = NULL;
 
 void StatusBar::SetText(const MBCHAR *text, const aui_Control *owner)
 {
-	if(m_text && m_allocatedLen < strlen(text) + 1) {
+	if(m_text && (unsigned) m_allocatedLen < strlen(text) + 1) {
 		
 		delete m_text;
 		m_text = NULL;

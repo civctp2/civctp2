@@ -20,9 +20,9 @@
 
 ctp2_Tab::ctp2_Tab(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
 				   ControlActionCallback *ActionFunc, void *cookie) :
-aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 aui_ImageBase(ldlBlock),
 aui_TextBase(ldlBlock, NULL),
+aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 m_tabGroup(NULL),
 m_tabButton(NULL),
 m_tabPanel(NULL)

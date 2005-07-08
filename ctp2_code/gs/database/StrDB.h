@@ -103,7 +103,7 @@ public:
 
 
 private:
-	std::vector<StringRecord *>	m_all;	// a flattened list version of m_head
+	std::vector<StringRecord *> m_all;	// a flattened list version of m_head
 	std::vector<StringRecord *> m_head;	
 		// hash vector of B-trees of lexicographically ordered strings
 
@@ -117,7 +117,7 @@ private:
 	void					AssignIndex(StringRecord * & ptr);
 	void					Btree2Array(void); 
 	StringRecord * &		GetHead(MBCHAR const * id);
-	StringRecord const * const &	
+	StringRecord /*const*/ * const &	
 							GetHead(MBCHAR const * id) const;
 	bool					GetIndexNode
 	(

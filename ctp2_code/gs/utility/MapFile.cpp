@@ -74,7 +74,6 @@ extern QuadTree<Unit>              *g_theUnitTree;
 #define k_CIVS_HEADER 'CIVS'
 
 
-
 const uint32 k_MAPFILE_NAME_LEN = 32;
 
 const uint32 k_CIVS_BLOCK_LENGTH = k_MAX_PLAYERS * (sizeof(uint32) + k_MAPFILE_NAME_LEN); 
@@ -1205,7 +1204,7 @@ bool MapFile::LoadCivilizations(uint8 *buf, sint32 size)
 	uint32 currNation;
 
 	
-	if (size != k_CIVS_BLOCK_LENGTH)
+	if (size != (signed) k_CIVS_BLOCK_LENGTH)
 	{
 		
 		MessageBoxDialog::Information("Error loading civilizations.","ErrLoadCivs");
@@ -1221,7 +1220,7 @@ bool MapFile::LoadCivilizations(uint8 *buf, sint32 size)
 		{
 			g_player[i]->m_civilisation->ResetCiv((CIV_INDEX)currNation, g_player[i]->m_civilisation->GetGender());
 			MBCHAR name[k_MAPFILE_NAME_LEN];
-			for (int j = 0; j < k_MAPFILE_NAME_LEN; j++)
+			for (int j = 0; j < (signed) k_MAPFILE_NAME_LEN; j++)
 			{
 				PULLBYTE(name[j]);
 			}
@@ -1241,7 +1240,7 @@ bool MapFile::LoadCivilizations(uint8 *buf, sint32 size)
 		}
 		else
 		{
-			for (int j = 0; j < k_MAPFILE_NAME_LEN + 4; j++) 
+			for (int j = 0; j < (signed) k_MAPFILE_NAME_LEN + 4; j++) 
 			{
 				uint8 foo;
 				PULLBYTE(foo);

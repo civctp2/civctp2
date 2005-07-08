@@ -57,7 +57,7 @@ const Utility Goal::MAX_UTILITY = 99999999;
 #include "ctpagent.h"
 #include "ArmyData.h"
 #include "ctpgoal.h"
-#endif _DEBUG_SCHEDULER
+#endif //_DEBUG_SCHEDULER
 
 
 
@@ -294,7 +294,7 @@ bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & ag
 			
 			Assert(0);
 		}
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 		return true;
 	}
@@ -323,7 +323,7 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent_ptr;
 	if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
 		Assert(ctpagent_ptr->Get_Army()->m_theGoal == this);
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 	
 
@@ -365,7 +365,7 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 		
 		Assert(0);
 	}
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 	return agent_ptr;
 }
@@ -551,14 +551,14 @@ bool Goal::Validate() const
 			CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr)(*agent_iter);
 			Assert(ctpagent_ptr->Get_Army().AccessData()->m_theAgent == ctpagent_ptr);
 			Assert(ctpagent_ptr->Get_Army().AccessData()->m_theGoal != NULL);
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 			
 			Assert(0);
 		}
 	}
 
-#endif _DEBUG
+#endif // _DEBUG
     
     return true;
 } 
@@ -582,7 +582,7 @@ void Goal::Add_Match_Reference(const Plan_List::iterator &plan_iter)
 #ifdef _DEBUG_SCHEDULER
 		
 		Validate();
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 }
 
@@ -596,7 +596,7 @@ void Goal::Remove_Match_Reference(const Plan_List::iterator &plan_iter)
 
 		
 		Validate();
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 }
 

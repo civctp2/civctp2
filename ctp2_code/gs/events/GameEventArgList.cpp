@@ -17,29 +17,31 @@
 
 #include "civarchive.h"
 
-GameEventArgList::GameEventArgList(va_list *vl)
+GameEventArgList::GameEventArgList(const GAME_EVENT_ARGUMENT* argTypes, const void** args)
 {
-	GAME_EVENT_ARGUMENT arg;
-	for(arg = GEA_Null; arg < GEA_End; arg = (GAME_EVENT_ARGUMENT)(sint32(arg) + 1)) {
-		m_argLists[arg] = NULL;
+	GAME_EVENT_ARGUMENT argType;
+	for(argType = GEA_Null; argType < GEA_End; argType = (GAME_EVENT_ARGUMENT)(sint32(argType) + 1)) {
+		m_argLists[argType] = NULL;
 	}
 
+	uint32 currentArg = 0;
 	while(1) {
-		GAME_EVENT_ARGUMENT arg = va_arg(*vl, GAME_EVENT_ARGUMENT);
-		Assert(arg > GEA_Null);
-		Assert(arg <= GEA_End);
-		if(arg <= GEA_Null || arg > GEA_End)
+		argType = argTypes[currentArg];
+		Assert(argType > GEA_Null);
+		Assert(argType <= GEA_End);
+		if(argType <= GEA_Null || argType > GEA_End)
 			break;
 
-		if(arg == GEA_End) {
+		if(argType == GEA_End) {
 			break;
 		}
 
-		if(!m_argLists[arg]) {
-			m_argLists[arg] = new PointerList<GameEventArgument>;
+		if(!m_argLists[argType]) {
+			m_argLists[argType] = new PointerList<GameEventArgument>;
 		}
-		m_argLists[arg]->AddTail(new GameEventArgument(arg, vl));
-	}	
+		m_argLists[argType]->AddTail(new GameEventArgument(argType, args[currentArg]));
+		currentArg++;
+	}
 }
 
 GameEventArgList::GameEventArgList()

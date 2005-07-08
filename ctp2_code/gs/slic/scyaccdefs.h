@@ -66,7 +66,11 @@
 #define yyss scss
 #define yysslim scsslim
 #define yyvs scvs
+
+#ifndef __GNUC__
+//Removed this one since it is redefined later anyway
 #define yystacksize scstacksize
+#endif
 
 #define yygrowstack scgrowstack
 #define yyrule scrule

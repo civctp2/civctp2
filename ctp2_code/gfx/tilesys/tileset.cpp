@@ -451,10 +451,10 @@ uint8 TileSet::ReverseDirection(sint32 dir)
 	case k_MEGATILE_DIRECTION_W	: return k_MEGATILE_DIRECTION_E;
 	default:
 		Assert(FALSE);
-		return -1;
+		return (unsigned) -1;
 	}
 
-	return -1;
+	return (unsigned) -1;
 }
 
 void TileSet::LoadMapIcons(void)
@@ -469,12 +469,12 @@ void TileSet::LoadMapIcons(void)
  
 	for (i=0; i<MAPICON_MAX; i++) {
 		
-		sprintf(name, "UPC%#.3d.TGA", i+1);
+		sprintf(name, "UPC%.3d.TGA", i+1);
 
 		if (g_civPaths->FindFile(C3DIR_PICTURES, name, path, TRUE, FALSE) == NULL) {
 			Pixel16 *image;
 			RIMHeader *rhead;
-			sprintf(path, "upc%#.3d.rim", i+1);
+			sprintf(path, "upc%.3d.rim", i+1);
 			uint8 *buf = (uint8 *) g_ImageMapPF->getData(path, &len);
 			if (buf == NULL) {
 				c3errors_ErrorDialog("TileSet", "'%s not found in asset tree.", name);

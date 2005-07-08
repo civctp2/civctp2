@@ -1276,9 +1276,9 @@ BOOL LoadSaveWindow::NoName( void )
 
 LSCivsListItem::LSCivsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, const MBCHAR *name)
 :
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock),
 	m_myItem(NULL)
 {
 	
@@ -1316,11 +1316,11 @@ sint32 LSCivsListItem::Compare(c3_ListItem *item2, uint32 column)
 
 LSGamesListItem::LSGamesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameInfo *info)
 :
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	m_itemText(NULL),
-	m_itemIcon(NULL)
+	c3_ListItem( retval, ldlBlock),
+	m_itemIcon(NULL),
+	m_itemText(NULL)
 {
 	m_info = info;
 
@@ -1377,11 +1377,11 @@ sint32 LSGamesListItem::Compare(c3_ListItem *item2, uint32 column)
 
 LSSavesListItem::LSSavesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveInfo *info)
 :
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	m_itemText(NULL),
-	m_itemIcon(NULL)
+	c3_ListItem( retval, ldlBlock),
+	m_itemIcon(NULL),
+	m_itemText(NULL)
 {
 	m_info = info;
 

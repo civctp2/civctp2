@@ -339,7 +339,7 @@ AUI_ERRCODE MessageModal::CreateResponses( MBCHAR *ldlBlock )
 
 
 
-	while ( sButton = m_message.AccessData()->GetButton( responseCount )) {
+	while ((sButton = m_message.AccessData()->GetButton( responseCount ))) {
 		text = sButton->GetName();
 		
 		

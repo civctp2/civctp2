@@ -140,7 +140,7 @@ aui_Surface *aui_Movie::SetDestSurface( aui_Surface *surface )
 {
 	aui_Surface *prevSurface = m_surface;
 
-	if ( m_surface = surface )
+	if ((m_surface = surface))
 	{
 		RECT surfRect =
 		{

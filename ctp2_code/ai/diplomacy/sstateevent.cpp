@@ -733,7 +733,7 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 	AiState state;
 
 	
-	sint16 max_threat = MapAnalysis::GetMapAnalysis().GetMaxThreat(playerId);
+	sint32 max_threat = MapAnalysis::GetMapAnalysis().GetMaxThreat(playerId);
 
 #define MAXIMUM_DEFENSE_LEVEL	50000
 #define HIGH_DEFENSE_LEVEL		25000

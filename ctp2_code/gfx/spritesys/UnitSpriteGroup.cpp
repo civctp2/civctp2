@@ -512,14 +512,14 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 
 	if (type == GROUPTYPE_UNIT)
 	{
-		sprintf(scriptName, "GU%#.3d.txt", id);
+		sprintf(scriptName, "GU%.3d.txt", id);
 
 		
 		if (!c3files_PathIsValid(scriptName))
-			sprintf(scriptName, "GU%#.2d.txt", id);
+			sprintf(scriptName, "GU%.2d.txt", id);
 	}
 	else 
-		sprintf(scriptName, "GC%#.3d.txt", id);
+		sprintf(scriptName, "GC%.3d.txt", id);
 
 	printf("Processing '%s'\n", scriptName);
 

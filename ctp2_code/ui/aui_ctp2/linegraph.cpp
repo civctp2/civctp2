@@ -56,9 +56,10 @@ LineGraph::LineGraph(AUI_ERRCODE *retval,
 							ControlActionCallback *ActionFunc,
 							void *cookie,
 							EventTracker *events)
-	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	:
 		aui_ImageBase(ldlBlock),
-		aui_TextBase(ldlBlock)
+		aui_TextBase(ldlBlock),
+		aui_Control(retval, id, ldlBlock, ActionFunc, cookie)
 {
 	m_events = events;
 	InitCommonLdl(ldlBlock);
@@ -73,9 +74,10 @@ LineGraph::LineGraph(AUI_ERRCODE *retval,
 							sint32 height,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	:
 		aui_ImageBase((sint32)0),
-		aui_TextBase((MBCHAR *)NULL)
+		aui_TextBase((MBCHAR *)NULL),
+		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie)
 {
 	m_events=NULL;
 	InitCommon();	
@@ -358,7 +360,7 @@ void LineGraph::DrawLines(int eventsOfset)
 			int currentEventNum=0;
 			first=TRUE;
 			EventData *curData;
-			while(curData=m_events->GetEvents(first))
+			while((curData=m_events->GetEvents(first)))
 			{
 				first=FALSE;
 				xpos=m_graphRect.left+(curData->m_turn-1)*width/m_numSamples;

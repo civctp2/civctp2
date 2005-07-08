@@ -295,7 +295,7 @@ AUI_ERRCODE PlayerSelectWindow::Idle( void )
 {
 	NETFunc::Message *m;
 	
-	while(m = g_netfunc->GetMessage()) {
+	while((m = g_netfunc->GetMessage())) {
 		
 		
 		

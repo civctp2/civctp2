@@ -363,7 +363,7 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *li
 		return FALSE;
 	struct dirent *dent = NULL;
 	
-	while (dent = readdir(dir))
+	while ((dent = readdir(dir)))
 	{
 		char *p = strrchr(dent->d_name, '.');
 		if (NULL == p) {

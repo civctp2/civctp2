@@ -38,9 +38,9 @@ aui_TextField::aui_TextField(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Win( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_Win( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -63,9 +63,9 @@ aui_TextField::aui_TextField(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Win( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_Win( retval, id, x, y, width, height, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

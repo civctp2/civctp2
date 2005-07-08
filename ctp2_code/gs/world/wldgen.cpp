@@ -107,23 +107,24 @@ void TemperatureFilter(sint8 *map, sint32 *histogram);
 extern MapPoint g_mp_size;
 
 World::World(const MapPoint m, const int xw, const int yw)
-:   m_current_plugin        (NULL),
-	m_distanceQueue         (NULL),
+:   
+    m_isYwrap               (yw),
+    m_isXwrap               (xw),
+    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
+    m_size                  (m),
     m_map                   (NULL), 
-    m_tmpx                  (NULL),
-    m_cellArray             (NULL),
     m_water_next_too_land   (NULL), 
     m_land_next_too_water   (NULL),  
     m_water_size            (NULL), 
     m_land_size             (NULL),
-    m_goodValue             (NULL),
+    m_cellArray             (NULL),
+    m_tmpx                  (NULL),
     m_tileInfoStorage       (NULL),
-    A_star_heuristic        (NULL),
+    m_goodValue             (NULL),
     m_num_civ_starts        (0),
-    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
-    m_isXwrap               (xw),
-    m_isYwrap               (yw),
-    m_size                  (m)
+    m_current_plugin        (NULL),
+    m_distanceQueue         (NULL),
+    A_star_heuristic        (NULL)
 { 
     Assert(0 < m_size.x); 
     Assert(0 < m_size.y); 
@@ -216,20 +217,21 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 
 
 World::World(CivArchive &archive, BOOL fromMapFile)
-:   m_current_plugin        (NULL),
-	m_distanceQueue         (NULL),
+:   
+    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
     m_map                   (NULL), 
-    m_tmpx                  (NULL),
-    m_cellArray             (NULL),
     m_water_next_too_land   (NULL), 
     m_land_next_too_water   (NULL),  
     m_water_size            (NULL), 
     m_land_size             (NULL),
-    m_goodValue             (NULL),
+    m_cellArray             (NULL),
+    m_tmpx                  (NULL),
     m_tileInfoStorage       (NULL),
-    A_star_heuristic        (NULL),
+    m_goodValue             (NULL),
     m_num_civ_starts        (0),
-    m_mapGenerator          (MAP_GENERATOR_PLUGIN)
+    m_current_plugin        (NULL),
+    m_distanceQueue         (NULL),
+    A_star_heuristic        (NULL)
 //  m_isXwrap, m_isYwrap, m_size: set by Serialize
 {
 	if ( fromMapFile )
@@ -3403,14 +3405,14 @@ BOOL World::ImportMap(MBCHAR *filename)
 			BOOL hasGood;
 			sint32 terrainType;
 			uint32 env;
-
+			
 			fscanf(infile, "%d,%d,%d,%d,%ld\t", 
 					&terrainType,
 					&hasHut,
 					&hasRiver,
 					&hasGood,
 					&env);
-
+			
 			cell = GetCell(pos);
 
 			

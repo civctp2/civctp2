@@ -206,7 +206,7 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 	MBCHAR *anchor;
 
 	
-	if ( anchor = block->GetString( k_AUI_LDL_HANCHOR ) )
+	if ((anchor = block->GetString( k_AUI_LDL_HANCHOR )))
 	{
 		if ( stricmp( anchor, "right" ) == 0 ) {
 			m_dim->AnchorRight();
@@ -221,7 +221,7 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 		m_dim->AnchorLeft();
 
 	
-	if ( anchor = block->GetString( k_AUI_LDL_VANCHOR ) )
+	if ((anchor = block->GetString( k_AUI_LDL_VANCHOR )))
 	{
 		if ( stricmp( anchor, "bottom" ) == 0 )
 			m_dim->AnchorBottom();

@@ -195,7 +195,7 @@ AUI_ERRCODE LobbyChangeWindow::Idle( void )
 {
 	NETFunc::Message *m;
 	
-	while(m = g_netfunc->GetMessage()) {
+	while((m = g_netfunc->GetMessage())) {
 		
 		
 		

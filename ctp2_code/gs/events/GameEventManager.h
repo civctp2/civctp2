@@ -26,7 +26,10 @@ public:
 	GameEventManager();
 	~GameEventManager();
 
-	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type, ...);
+private:
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				const GAME_EVENT_ARGUMENT* argTypes, const void** args);
+public:
 	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
 				GAME_EVENT_ARGUMENT, int,
 				GAME_EVENT_ARGUMENT);
@@ -189,7 +192,7 @@ public:
 
 private:
 	BOOL CheckArg(sint32 num, char got, char want);
-	BOOL VerifyArgs(GAME_EVENT type, va_list *vl);
+	BOOL VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* argTypes, const void** args);
 
 	
 	PointerList<GameEvent> *m_eventList;

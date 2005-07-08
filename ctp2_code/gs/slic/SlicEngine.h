@@ -33,6 +33,13 @@
 
 class SlicEngine;
 
+// HACK: This is to avaoid a warning about type promotion in gcc
+#ifdef __GNUC__
+#define VA_ARG_SLIC_TAG int
+#else
+#define VA_ARG_SLIC_TAG SLIC_TAG
+#endif
+
 enum SLIC_TAG 
 {
 	ST_NONE,
@@ -104,7 +111,6 @@ typedef sint32 AdvanceType;
 #include "SlicModFuncEnum.h"
 #include "c3types.h"            // MBCHAR, sint32
 #include "player.h"             // PLAYER_INDEX
-
 
 class SlicEngine {
 private:
@@ -306,10 +312,21 @@ public:
 	void RunWorkViewTriggers();
 	void RunSentCeaseFireTriggers(sint32 owner, sint32 recipient);
 
-	void RunTrigger(TRIGGER_LIST tlist, ...);
+private:
+	void RunTrigger(const TRIGGER_LIST tlist, const uint32 numArgs, const SLIC_TAG* argTypes, const void** args);
+public:
+	void RunTrigger(const TRIGGER_LIST tlist);
+	void RunTrigger(const TRIGGER_LIST tlist, const SLIC_TAG arg1Type, const sint32 arg1);
+	void RunTrigger(const TRIGGER_LIST tlist, const SLIC_TAG arg1Type, const sint32 arg1,
+		const SLIC_TAG arg2Type, const sint32 arg2);
+	void RunTrigger(const TRIGGER_LIST tlist, const SLIC_TAG arg1Type, const ID &arg1,
+		const SLIC_TAG arg2Type, const sint32 arg2);
+	void RunTrigger(const TRIGGER_LIST tlist, const SLIC_TAG arg1Type, const sint32 arg1,
+		const SLIC_TAG arg2Type, const sint32 arg2, const SLIC_TAG arg3Type, const sint32 arg3,
+		const SLIC_TAG arg4Type, const sint32 arg4);
 	MBCHAR GetTriggerKey(sint32 index);
 	void SetTriggerKey(sint32 index, MBCHAR key);
-	BOOL IsKeyPressed(MBCHAR key);
+	/*BOOL IsKeyPressed(MBCHAR key);*/
 	BOOL RunKeyboardTrigger(MBCHAR key);
 
 	void CheckPendingResearch();
@@ -347,8 +364,11 @@ public:
 	SlicDBInterface *GetDBConduit(const char *name);
 
 	void AddModFuncs();
-	sint32 CallMod(MOD_FUNC modFunc, sint32 def, ...);
-
+private:
+	sint32 CallMod(const MOD_FUNC modFunc, const sint32 def, const void** args);
+public:
+	sint32 CallMod(const MOD_FUNC modFunc, const sint32 def, const sint32 arg1, const sint32 arg2);
+	sint32 CallMod(const MOD_FUNC modFunc, const sint32 def, const uint32 arg1, const uint32 arg2, const sint32 arg3);
 	sint32 CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 player);
 };
 

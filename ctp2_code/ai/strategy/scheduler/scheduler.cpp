@@ -137,7 +137,7 @@ void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 {
     s_theSchedulers.resize(newMaxPlayerId + 1); // 1 extra for the Barbarians
 
-    for (size_t i = 0; i <= newMaxPlayerId; ++i)
+    for (size_t i = 0; i <= (unsigned) newMaxPlayerId; ++i)
     {
 		s_theSchedulers[i].SetPlayerId(i);
 	}
@@ -148,7 +148,7 @@ void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 void Scheduler::LoadAll(CivArchive & archive)
 {
     DPRINTF(k_DBG_AI, ("\n\ncalling Scheduler::LoadAll\n\n"));
-	for (sint32 i = 0; i < s_theSchedulers.size(); i++)
+	for (sint32 i = 0; (unsigned) i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Load(archive);
 	}
@@ -158,7 +158,7 @@ void Scheduler::LoadAll(CivArchive & archive)
 // no longer used "Reason: should be able to regenerate state from game objects."
 void Scheduler::SaveAll(CivArchive & archive)
 {
-	for (sint32 i = 0; i < s_theSchedulers.size(); i++)
+	for (sint32 i = 0; (unsigned) i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Save(archive);
 	}
@@ -187,7 +187,7 @@ Scheduler & Scheduler::GetScheduler(const sint32 & playerId)
 /// not used
 void Scheduler::ValidateAll()
 {
-	for (sint32 i = 0; i < s_theSchedulers.size(); i++)
+	for (sint32 i = 0; (unsigned) i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Validate();
 	}
@@ -276,7 +276,7 @@ void Scheduler::Cleanup()
 
 	
 	Sorted_Goal_Iter sorted_goal_iter;
-	for (GOAL_TYPE goal_type = 0; goal_type < m_goals_of_type.size(); goal_type++)	{
+	for (GOAL_TYPE goal_type = 0; (unsigned) goal_type < m_goals_of_type.size(); goal_type++)	{
 
 		
 		sorted_goal_iter = m_goals_of_type[goal_type].begin();

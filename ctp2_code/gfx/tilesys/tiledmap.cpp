@@ -249,18 +249,19 @@ void TiledMap::InitLUT(void)
 }
 
 TiledMap::TiledMap(MapPoint &size)
-:	m_drawHilite          (false),
+:
 	m_isScrolling         (false),
 	m_lockedSurface       (NULL),
-	m_overlayRec          (NULL),
 #if defined(_DEBUG)
 	m_showPopHack         (false),
 #endif
 	m_surfBase            (NULL),
+	m_surfWidth           (0),
 	m_surfHeight          (0),
-	m_surfIsLocked        (false),
 	m_surfPitch           (0),
-	m_surfWidth	          (0)
+	m_surfIsLocked        (false),
+	m_overlayRec          (NULL),
+	m_drawHilite          (false)
 {	
 	Assert(g_theWorld != NULL);
 	if (g_theWorld == NULL) 
@@ -1614,7 +1615,7 @@ void TiledMap::BreakMegaTile(MapPoint &pos)
 
 	
 	curPos = pos;
-	while (next = tileInfo->GetNextMega()) {
+	while ((next = tileInfo->GetNextMega())) {
 		switch (next) {
 		case k_MEGATILE_DIRECTION_N : 
 			curPos.GetNeighborPosition(NORTHWEST, curPos); 
@@ -1640,7 +1641,7 @@ void TiledMap::BreakMegaTile(MapPoint &pos)
 
 	
 	curPos = pos;
-	while (last = tileInfo->GetLastMega()) {
+	while ((last = tileInfo->GetLastMega())) {
 		switch (last) {
 		case k_MEGATILE_DIRECTION_N : 
 			curPos.GetNeighborPosition(NORTHWEST, curPos); 
@@ -5949,7 +5950,7 @@ void TiledMap::HandleCheat(MapPoint &pos)
 		for(it.Start(); !it.End(); it.Next()) {
 			mpos = it.Pos();
 			PostProcessTile(mpos, GetTileInfo(mpos));
-			RedrawTile(&it.Pos());
+			RedrawTile(&mpos);
 		}
 		return;
 	}

@@ -189,8 +189,7 @@ void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies,
 	RecalcCost();
 
 	g_slicEngine->RunTrigger(TRIGGER_LIST_READINESS,
-							 ST_PLAYER, m_owner,
-							 ST_END);
+							 ST_PLAYER, m_owner);
 }
 
 void MilitaryReadiness::RecalcCost()

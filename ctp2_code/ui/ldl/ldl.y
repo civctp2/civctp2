@@ -68,6 +68,8 @@ bool: VTRUE { $$.intval = 1; } | VFALSE { $$.intval = 0; } ;
 extern FILE *yyin;
 int yyparse();
 
+int ldl_open_first_file(const char *filename);
+
 int ldlif_parse(const char *filename)
 {
 	ldlif_allocate_stuff();

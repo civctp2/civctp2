@@ -650,7 +650,7 @@ STDEHANDLER(ReducePollution_NewProposalEvent)
 
 	
 	reduce_percent = ProposalAnalysis::RoundPercentReduction(reduce_percent);
-	sint32 target_pollution = ((1.0 - reduce_percent) * receiver_pollution);
+	sint32 target_pollution = sint32((1.0 - reduce_percent) * receiver_pollution);
 	target_pollution = ProposalAnalysis::RoundGold(target_pollution);
 	if (target_pollution <= 0)
 		return GEV_HD_Continue;
@@ -749,7 +749,7 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 		
 		
 		if (turns_since_start > 20 && turns_since_start < 50 &&
-			receiver_pollution <= half_promised_pollution)
+			receiver_pollution <= (unsigned) half_promised_pollution)
 			return GEV_HD_Continue;
 	}
 
@@ -1148,7 +1148,7 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 
 	
 	reduce_percent = ProposalAnalysis::RoundPercentReduction(reduce_percent);
-	sint32 target_pollution = (reduce_percent * receiver_pollution);
+	sint32 target_pollution = sint32(reduce_percent * receiver_pollution);
 	target_pollution = ProposalAnalysis::RoundGold(target_pollution);
 	if (target_pollution <= 0)
 		return GEV_HD_Continue;
@@ -1160,7 +1160,7 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_POLLUTION_PACT; 
-	new_proposal.detail.first_arg.pollution = (1.0 - reduce_percent) * receiver_pollution;
+	new_proposal.detail.first_arg.pollution = sint32((1.0 - reduce_percent) * receiver_pollution);
 	new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;   
 	
 	
@@ -1985,8 +1985,8 @@ STDEHANDLER(RequestTribute_NewProposalEvent)
 		{
 			return GEV_HD_Continue;
 		}
-		sint32 at_risk_value = ((double)at_risk_value_percent / 100.0) *
-			MapAnalysis::GetMapAnalysis().TotalValue(receiver);
+		sint32 at_risk_value = sint32(((double)at_risk_value_percent / 100.0) *
+			MapAnalysis::GetMapAnalysis().TotalValue(receiver));
 		
 		type = PROPOSAL_REQUEST_GIVE_GOLD;
 		tone = DIPLOMATIC_TONE_ANGRY;
@@ -2119,8 +2119,8 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	sint32 at_risk_value_percent = 
 		MapAnalysis::GetMapAnalysis().AtRiskCitiesValue(receiver,sender);
 
-	sint32 at_risk_value = ((double)at_risk_value_percent / 100.0) *
-		MapAnalysis::GetMapAnalysis().TotalValue(receiver);
+	sint32 at_risk_value = sint32(((double)at_risk_value_percent / 100.0) *
+		MapAnalysis::GetMapAnalysis().TotalValue(receiver));
 
 	
 	

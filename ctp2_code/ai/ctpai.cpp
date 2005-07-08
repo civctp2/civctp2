@@ -550,10 +550,10 @@ void CtpAi::GroupWithEscort(const Army & army)
 				continue;
 
 			unit_rec = g_theUnitDB->Get(tmp_army[0].GetType());
-			tmp_strength = unit_rec->GetAttack() * 
+			tmp_strength = sint32(unit_rec->GetAttack() * 
 				unit_rec->GetDefense() *
 				unit_rec->GetFirepower() *
-				unit_rec->GetArmor();
+				unit_rec->GetArmor());
 			if (min_strength < 0 || tmp_strength < min_strength)
 				{
 					min_strength = tmp_strength;
@@ -2166,8 +2166,8 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 				 !g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea() )
 				continue;
 
-			max_desired_goals = goal_element_ptr->GetMaxEval() -
-				scheduler.CountGoalsOfType(goal_type);
+			max_desired_goals = sint32(goal_element_ptr->GetMaxEval() -
+				scheduler.CountGoalsOfType(goal_type));
 
 			desired_goals = max_desired_goals;
 
@@ -2379,7 +2379,7 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 			total_value);
 		
 		
-		defense_strength += city->GetCityData()->GetDefendersBonus() * defense_count;
+		defense_strength += sint32(city->GetCityData()->GetDefendersBonus() * defense_count);
 
 		
 		prev_city_defense = city->GetCityData()->GetCurrentGarrisonStrength();
@@ -2490,7 +2490,7 @@ bool CtpAi::GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos,
 		tmp_squared_distance = MapPoint::GetSquaredDistance(tmp_army->RetPos(), army->RetPos());
 		if (tmp_squared_distance < squared_distance)
 		{
-			squared_distance = tmp_squared_distance;
+			squared_distance = sint32(tmp_squared_distance);
 			carrier_pos = tmp_army->RetPos();
 		}
 	}
@@ -2509,8 +2509,8 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 	army->CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty);
 
 	
-	num_tiles_to_empty /= k_MOVE_AIR_COST;
-	num_tiles_to_half /= k_MOVE_AIR_COST;
+	num_tiles_to_empty /= sint32(k_MOVE_AIR_COST);
+	num_tiles_to_half /= sint32(k_MOVE_AIR_COST);
 
 	
 	refueling_distance = -1;
@@ -2524,7 +2524,7 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 	Unit city;
 	if (player->GetNearestCity(start_pos, city, distance))
 	{
-		refueling_distance = distance;
+		refueling_distance = sint32(distance);
 		refueling_pos = city.RetPos();
 		found = (refueling_distance < num_tiles_to_empty);
 	}
@@ -2536,7 +2536,7 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 		
 		if (refueling_distance < 0 || distance < refueling_distance)
 		{
-			refueling_distance = distance;
+			refueling_distance = sint32(distance);
 			refueling_pos = tmp_pos;
 			found = (refueling_distance < num_tiles_to_empty);
 		}
@@ -2549,7 +2549,7 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 		distance = sqrt(distance);
 		if (refueling_distance < 0 || distance < refueling_distance)
 		{
-			refueling_distance = distance;
+			refueling_distance = sint32(distance);
 			refueling_pos = tmp_pos;
 		}
 	}
@@ -2573,8 +2573,8 @@ void CtpAi::RefuelAirplane(const Army & army)
 	MapPoint pos;
 
 	
-	num_tiles_to_empty /= k_MOVE_AIR_COST;
-	num_tiles_to_half /= k_MOVE_AIR_COST;
+	num_tiles_to_empty /= sint32(k_MOVE_AIR_COST);
+	num_tiles_to_half /= sint32(k_MOVE_AIR_COST);
 
 	
 	if (num_tiles_to_half > 0 && army->GetNextPathPoint(pos))

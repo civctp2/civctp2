@@ -187,9 +187,9 @@ ns_Item<T,NetShellT>::ns_Item(
 	MBCHAR *ldlBlock,
 	T *object )
 	:
-	aui_Item( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Item( retval, id, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

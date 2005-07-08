@@ -136,7 +136,7 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 	
 	BOOL wasDestLocked;
 	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	if ((wasDestLocked = destBuf != NULL))
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -157,7 +157,7 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 		
 		BOOL wasSrcLocked;
 		uint16 *srcBuf = (uint16 *)srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+		if ((wasSrcLocked = srcBuf != NULL))
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -306,7 +306,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 	
 	BOOL wasDestLocked;
 	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	if ((wasDestLocked = destBuf != NULL))
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -327,7 +327,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 		
 		BOOL wasSrcLocked;
 		uint16 *srcBuf = (uint16 *)srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+		if ((wasSrcLocked = srcBuf != NULL))
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -481,7 +481,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 	
 	BOOL wasDestLocked;
 	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	if ((wasDestLocked = destBuf != NULL))
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -502,7 +502,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 		
 		BOOL wasSrcLocked;
 		uint16 *srcBuf = (uint16 *)srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+		if ((wasSrcLocked = srcBuf != NULL))
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}

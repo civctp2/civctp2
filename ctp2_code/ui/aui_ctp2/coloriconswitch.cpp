@@ -49,10 +49,9 @@ ColorIconSwitch::ColorIconSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	c3_Switch( retval, id, x, y, width, height, pattern, ActionFunc, cookie ),
-
+	aui_ImageBase( 1, AUI_IMAGEBASE_BLTTYPE_STRETCH ),
 	aui_TextBase(NULL),
-	aui_ImageBase( 1, AUI_IMAGEBASE_BLTTYPE_STRETCH )
+	c3_Switch( retval, id, x, y, width, height, pattern, ActionFunc, cookie )
 {
 	m_shrinkToFit = FALSE;
 	m_filename = NULL;
@@ -69,10 +68,9 @@ ColorIconSwitch::ColorIconSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	c3_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
-
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	c3_Switch( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	m_shrinkToFit = FALSE;
 	m_filename = NULL;

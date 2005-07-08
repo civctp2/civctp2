@@ -43,4 +43,4 @@ private:
 	MBCHAR			**m_rowData;
 };
 
-#endif 
+#endif

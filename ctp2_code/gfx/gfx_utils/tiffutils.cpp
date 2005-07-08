@@ -215,66 +215,64 @@ int TIFLoadIntoBuffer16(char *filename, uint16 *width, uint16 *height, uint16 im
 
 char *StripTIF2Mem(char *filename, uint16 *width, uint16 *height)
 {
-    uint32		imageLength; 
-    uint32		imageWidth; 
-    uint32		LineSize;
-    uint32		RowsPerStrip;  
-    sint32      PhotometricInterpretation;
-    TIFF		*tif;
+	uint32		imageLength; 
+	uint32		imageWidth; 
+	uint32		LineSize;
+	uint32		RowsPerStrip;  
+	sint32      PhotometricInterpretation;
+	TIFF		*tif;
 	sint32      nrow;
 	uint32		row;
-    char        *buf;          
-    sint32		stripSize;
+	char        *buf;          
+	sint32		stripSize;
 	char		*outBuf, *outBufPtr;
 	sint32		l;
 
-    tif = TIFFOpen(filename, "r");
+	tif = TIFFOpen(filename, "r");
 
 
-    if (!tif)
-       return NULL;
+	if (!tif)
+		return NULL;
 
-	*width = -1;
-	*height = -1;
+	*width = (unsigned) -1;
+	*height = (unsigned) -1;
 
-    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &imageWidth);
-    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imageLength);  
-    TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &RowsPerStrip);  
-    TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &RowsPerStrip);   
-    TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &PhotometricInterpretation);
-           
-    LineSize = TIFFScanlineSize(tif); 
-     
-		
-        
-    stripSize = (sint32) TIFFStripSize(tif);
-    buf = (char *)malloc(stripSize);          
-    outBuf = (char *)malloc(imageWidth * imageLength * 4);
-    outBufPtr = outBuf;
+	TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &imageWidth);
+	TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imageLength);  
+	TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &RowsPerStrip);  
+	TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &RowsPerStrip);   
+	TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &PhotometricInterpretation);
+	
+	LineSize = TIFFScanlineSize(tif); 
+	
+	stripSize = (sint32) TIFFStripSize(tif);
+	buf = (char *)malloc(stripSize);          
+	outBuf = (char *)malloc(imageWidth * imageLength * 4);
+	outBufPtr = outBuf;
 		
 		
 	
 	
-    for (row = 0; row < imageLength; row += RowsPerStrip) 
-      {     
-        nrow = (row + RowsPerStrip > imageLength ? imageLength - row : RowsPerStrip);
-        if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, row, 0), buf, nrow*LineSize)==-1) {
+	for (row = 0; row < imageLength; row += RowsPerStrip) 
+	{
+		nrow = (row + RowsPerStrip > imageLength ? imageLength - row : RowsPerStrip);
+		if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, row, 0), buf, nrow*LineSize)==-1) {
 			return NULL;
-        } else {  
-            for (l = 0; l < nrow; l++) {
+		} else {  
+			for (l = 0; l < nrow; l++) {
 				memcpy(outBufPtr, &buf[(sint32) (l*LineSize)], (sint32) imageWidth*4);
 				outBufPtr += imageWidth * 4;
-            }
-         }
-    }
+			}
+		}
+	}
 
 	free(buf);
 
-    TIFFClose(tif);
+	TIFFClose(tif);
 
 	*width = (uint16)imageWidth; 
 	*height = (uint16)imageLength;
-     
-    return outBuf;         
+
+	return outBuf;         
 }
 

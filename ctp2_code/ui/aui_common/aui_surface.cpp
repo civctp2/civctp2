@@ -97,7 +97,7 @@ aui_Surface::aui_Surface(
 		Assert( m_saveBuffer != NULL );
 
 		
-		if (m_allocated = (BOOL) (NULL != m_saveBuffer))
+		if ((m_allocated = (BOOL) (NULL != m_saveBuffer)))
 			memset( m_saveBuffer, 0x00, m_size );
 		else
 		{

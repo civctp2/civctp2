@@ -58,9 +58,10 @@ unsigned char *g_compression_buff=NULL;
 #endif
 
 SpriteFile::SpriteFile(MBCHAR const * name)
-:   m_file              (NULL),
-    m_version           (k_SPRITEFILE_VERSION0),
-    m_spr_compression   (SPRDATA_REGULAR)
+:
+	m_version           (k_SPRITEFILE_VERSION0),
+	m_spr_compression   (SPRDATA_REGULAR),
+	m_file              (NULL)
 {
 	strcpy(m_filename, name);
 }
@@ -111,8 +112,8 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 	    normal_msizes[i] = s->GetMiniFrameDataSize(i); 
 	}
 	
-    WriteData((uint8 *)normal_ssizes,s->GetNumFrames()*sizeof(uint32));
-    WriteData((uint8 *)normal_msizes,s->GetNumFrames()*sizeof(uint32));
+	WriteData((uint8 *)normal_ssizes,s->GetNumFrames()*sizeof(uint32));
+	WriteData((uint8 *)normal_msizes,s->GetNumFrames()*sizeof(uint32));
 
 	
 	uint8 *CompressedData;
@@ -130,7 +131,7 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 
 		compressed_size = size;
 
-	    if(m_version>k_SPRITEFILE_VERSION1)
+		if(m_version>k_SPRITEFILE_VERSION1)
 		{
 			size += sizeof(uint32);
 			WriteData((uint32)normal_ssizes[i]);
@@ -141,7 +142,7 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 		compressed_ssizes[i] = compressed_size;
 
 		
-		delete CompressedData;
+		delete[] (unsigned char*) CompressedData;
 	}
 	
 	
@@ -245,7 +246,7 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 		    compressed_ssizes[j][i] = size;
 
 			
-			delete CompressedData;
+			delete[] (unsigned char*) CompressedData;
 		}
 
 		
@@ -1201,8 +1202,8 @@ void SpriteFile::SkipAnimData(void)
 SPRITEFILEERR SpriteFile::Create(SPRITEFILETYPE type,unsigned version,unsigned compression_mode)
 {
 	SPRITEFILEERR	err;
-	uint32			data;
-	MBCHAR			path[_MAX_PATH];
+	uint32		data;
+	MBCHAR		path[_MAX_PATH];
 
 #if defined(__MAKESPR__) || defined(__SPRITETEST__)
 	strcpy(path, m_filename);
@@ -1212,10 +1213,10 @@ SPRITEFILEERR SpriteFile::Create(SPRITEFILETYPE type,unsigned version,unsigned c
 	sprintf(path, "%s\\%s", fullPath, m_filename);
 #endif
 
-    if (m_file)
-    {
-        c3files_fclose(m_file);
-    }
+	if (m_file)
+	{
+		c3files_fclose(m_file);
+	}
 	m_file = c3files_fopen(C3DIR_DIRECT, path, "wb");
 
 	Assert(m_file != NULL);
@@ -1331,7 +1332,7 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 		else 
 		{
 			WriteData((uint32)FALSE);
-			offset[i] = -1;
+			offset[i] = (unsigned) -1;
 			
 		}
 	}
@@ -1586,7 +1587,7 @@ SPRITEFILEERR SpriteFile::Write(GoodSpriteGroup *s)
 		{
 			
 			WriteData((uint32)FALSE);
-			offset[i] = -1;
+			offset[i] = (unsigned) -1;
 		}
 
 	}
@@ -1627,10 +1628,10 @@ SPRITEFILEERR SpriteFile::Open(SPRITEFILETYPE *type)
 	uint32			data;
 
 	if (m_file)
-    {
-        c3files_fclose(m_file);
-    }
-    m_file = c3files_fopen(C3DIR_SPRITES, m_filename, "rb");
+	{
+		c3files_fclose(m_file);
+	}
+	m_file = c3files_fopen(C3DIR_SPRITES, m_filename, "rb");
 
 	Assert(m_file != NULL);
 	if (m_file == NULL) return SPRITEFILEERR_NOOPEN;

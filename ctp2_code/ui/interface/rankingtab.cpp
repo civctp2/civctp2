@@ -68,14 +68,14 @@ RankingTab * RankingTab::s_current_ranking_tab = NULL;
 
 
 RankingTab::RankingTab(ctp2_Window *parent) :
+	m_infoGraph(static_cast<LineGraph *>(
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph"))),
 	m_rankingDropDown(static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(
 		"InfoDialog.TabGroup.Tab3.TabPanel.RankSelect.Pulldown"))),
 	m_lineOrZeroSumButton(static_cast<ctp2_Button*>(
 		aui_Ldl::GetObject("InfoDialog.TabGroup.Tab3.TabPanel.LineOrZeroSum"))),
 	m_infoPlayerList(static_cast<ctp2_ListBox *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoPlayerList"))),
-	m_infoGraph(static_cast<LineGraph *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph")))
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoPlayerList")))
 {
 
 	

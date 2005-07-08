@@ -96,24 +96,24 @@ m_singleSelectionArmor(static_cast<ctp2_Static*>(
 m_singleSelectionFirepower(static_cast<ctp2_Static *>(
 	aui_Ldl::GetObject(ldlBlock,
 					   "UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Firepower.Value"))),
-m_singleSelectionFuel(static_cast<ctp2_Static *>(
-	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Fuel"))),
 m_singleSelectionHealth(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject(ldlBlock,
 	"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Health"))),
+m_singleSelectionFuel(static_cast<ctp2_Static *>(
+	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Fuel"))),
 m_multipleSelectionDisplay(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject(ldlBlock,
 	"UnitTab.TabPanel.UnitSelectionDisplay.MultipleSelect"))),
 m_armySelectionDisplay(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject(ldlBlock,
 	"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect"))),
+m_armySelectionIcon(static_cast<ctp2_Button*>(
+	aui_Ldl::GetObject(ldlBlock,
+	"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect.Icon"))),
 m_transportSelectionDisplay(static_cast<ctp2_Static *>(
 	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect"))),
 m_transportSelectionIcon(static_cast<ctp2_Button *>(
-	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Icon"))),
-m_armySelectionIcon(static_cast<ctp2_Button*>(
-	aui_Ldl::GetObject(ldlBlock,
-	"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect.Icon")))
+	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Icon")))
 {
 	
 	Assert(m_unitDisplayGroup);
@@ -1126,7 +1126,7 @@ void UnitControlPanel::OrderButtonActionCallback(aui_Control *control,
 void UnitControlPanel::Activated()
 {
 	
-	m_lastSelectedArmy.m_id = -1;
+	m_lastSelectedArmy.m_id = (unsigned) -1;
 
 	Army a;
 	if(g_selected_item->GetSelectedArmy(a))

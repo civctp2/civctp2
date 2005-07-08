@@ -25,26 +25,26 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H 1
 
-#define k_GAME_OBJ_TYPE_UNIT					1
-#define k_GAME_OBJ_TYPE_POP						2
-#define k_GAME_OBJ_TYPE_IMPROVEMENT				3
-#define k_GAME_OBJ_TYPE_TRADE_ROUTE				4
-#define k_GAME_OBJ_TYPE_TRADE_OFFER				5
-#define k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT		6
-#define k_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST		7
-#define k_GAME_OBJ_TYPE_INSTALLATION			8
-#define k_GAME_OBJ_TYPE_WONDER					9
-#define k_GAME_OBJ_TYPE_CIVILISATION			10
-#define k_GAME_OBJ_TYPE_AGREEMENT				11
-#define k_GAME_OBJ_TYPE_MESSAGE					12
-#define k_GAME_OBJ_TYPE_ARMY                    13
-#define k_GAME_OBJ_TYPE_ENDGAME_OBJECT          14
-#define k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT_DB  15
+#define k_GAME_OBJ_TYPE_UNIT                     1U
+#define k_GAME_OBJ_TYPE_POP                      2U
+#define k_GAME_OBJ_TYPE_IMPROVEMENT              3U
+#define k_GAME_OBJ_TYPE_TRADE_ROUTE              4U
+#define k_GAME_OBJ_TYPE_TRADE_OFFER              5U
+#define k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT      6U
+#define k_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST       7U
+#define k_GAME_OBJ_TYPE_INSTALLATION             8U
+#define k_GAME_OBJ_TYPE_WONDER                   9U
+#define k_GAME_OBJ_TYPE_CIVILISATION            10U
+#define k_GAME_OBJ_TYPE_AGREEMENT               11U
+#define k_GAME_OBJ_TYPE_MESSAGE                 12U
+#define k_GAME_OBJ_TYPE_ARMY                    13U
+#define k_GAME_OBJ_TYPE_ENDGAME_OBJECT          14U
+#define k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT_DB  15U
 
 
 
-#define k_GAME_OBJ_TYPE_CAPITALIZATION          16
-#define k_GAME_OBJ_TYPE_INFRASTRUCTURE          17
+#define k_GAME_OBJ_TYPE_CAPITALIZATION          16U
+#define k_GAME_OBJ_TYPE_INFRASTRUCTURE          17U
 
 
 

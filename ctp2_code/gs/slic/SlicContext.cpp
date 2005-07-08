@@ -187,7 +187,7 @@ SlicContext::~SlicContext()
 
 	if (m_actionList) 
     {
-		for (size_t i = 0; i < m_numActions; ++i) 
+		for (size_t i = 0; i < (unsigned) m_numActions; ++i) 
         {
 			delete [] m_actionList[i];
 		}
@@ -1572,5 +1572,4 @@ void SlicContext::CopyFromBuiltins()
 		}				
 	}
 }
-
 #undef UNFILL

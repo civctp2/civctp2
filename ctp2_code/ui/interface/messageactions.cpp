@@ -88,7 +88,7 @@ void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 dat
 
 	
 	MBCHAR *wavName = NULL;
-	if ( wavName = ( MBCHAR * ) message->AccessData()->GetMsgOpenSound() ) {
+	if ((wavName = ( MBCHAR * ) message->AccessData()->GetMsgOpenSound())) {
 		MBCHAR filename[ _MAX_PATH ]; 
 		g_civPaths->FindFile( C3DIR_SOUNDS, wavName, filename );
 		if (g_soundManager)

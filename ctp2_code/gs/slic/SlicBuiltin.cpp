@@ -385,7 +385,7 @@ class CitySymbol_Happiness : public SlicStructMemberData {
 		BOOL res = m_parent->GetDataSymbol()->GetCity(city);
 		Assert(res);
 		if(city.IsValid()) {
-			value = city.GetHappiness();
+			value = (sint32) city.GetHappiness();
 			return TRUE;
 		} else {
 			return FALSE;
@@ -1197,7 +1197,7 @@ class PlayerSymbol_PublicWorksTax : public SlicStructMemberData {
 		Assert(res);
 		if(res)
 			{
-			value = g_player[pl]->m_materialsTax*100;
+			value = (sint32) (g_player[pl]->m_materialsTax*100);
 			return TRUE;
 			}
 		else

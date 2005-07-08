@@ -243,8 +243,8 @@ public:
 
 					
 					
-					max_value *= RELAX_DIAGONAL;
-					max_value *= coefficient;
+					max_value = sint32(max_value * RELAX_DIAGONAL);
+					max_value = sint32(max_value * coefficient);
 						
 					
 					

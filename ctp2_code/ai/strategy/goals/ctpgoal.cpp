@@ -416,7 +416,7 @@ Agent_ptr CTPGoal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 		Assert(ctpagent_ptr->Get_Army()->m_theAgent == ctpagent_ptr);
 		Assert(ctpagent_ptr->Get_Army()->m_theGoal == this);
 	}
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 	
 	
@@ -1947,7 +1947,7 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 			stagent_ptr = (CTPAgent_ptr) *agent_iter;
             stagent_ptr->Log_Debug_Info(log);
     } 
-#endif _DEBUG
+#endif // _DEBUG
 }
 
 
@@ -1965,7 +1965,7 @@ bool CTPGoal::ReferencesAgent(const CTPAgent *ctp_agent) const
 		if (ctp_agent == tmp_ctp_agent)
 			return true;
     } 
-#endif _DEBUG
+#endif // _DEBUG
 
 	return false;
 }
@@ -3192,7 +3192,7 @@ sint32 CTPGoal::GetThreatenBonus() const
 		if (diplomat.HasThreat(target_owner, THREAT_DESTROY_CITY, tmp_threat))
 		{
 			
-			if (tmp_threat.detail.arg.cityId == m_target_city.m_id)
+			if ((unsigned) tmp_threat.detail.arg.cityId == m_target_city.m_id)
 				return goal_record->GetThreatenBonus();
 		}
 		break;

@@ -345,11 +345,13 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 				if (event_iter->duration <= 0) 
 				{
 					if (event_iter->regard > 0)
-						event_iter->regard *= regard_decay->GetPositiveDecay();
+						event_iter->regard =
+							sint16(event_iter->regard*regard_decay->GetPositiveDecay());
 
 					
 					else
-						event_iter->regard *= regard_decay->GetNegativeDecay();
+						event_iter->regard =
+							sint16(event_iter->regard*regard_decay->GetNegativeDecay());
 				}
  				
 				else if ((sint32) event_iter->turn + (sint32) event_iter->duration < decayRound) {

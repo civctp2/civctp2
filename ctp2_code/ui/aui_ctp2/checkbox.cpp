@@ -31,10 +31,10 @@ Checkbox::Checkbox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 :
-	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
-	PatternBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
+	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 }
 
@@ -53,10 +53,10 @@ Checkbox::Checkbox(
 	void *cookie,
 	BOOL selected )
 :
-	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, selected ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text ),
-	PatternBase( pattern ),
-	aui_ImageBase( (sint32)0 )
+	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, selected ),
+	PatternBase( pattern )
 {
 }
 

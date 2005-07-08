@@ -260,7 +260,7 @@ AUI_ERRCODE ConnectionSelectWindow::Idle( void )
 {	
 	NETFunc::Message *m;
 	
-	while(m = g_netfunc->GetMessage()) {
+	while((m = g_netfunc->GetMessage())) {
 		
 		
 		

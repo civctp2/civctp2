@@ -412,7 +412,7 @@ STDEHANDLER(AdvanceForGold_CounterResponseEvent)
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
 	ProposalAnalysis::DebugResult(receiver_response);
-#endif _DEBUG
+#endif // _DEBUG
 	
 	sint32 accept_priority = 
 		sender_diplomat.GetAcceptPriority(receiver, PROPOSAL_REQUEST_GIVE_GOLD);
@@ -518,7 +518,7 @@ STDEHANDLER(ActionForValue_CounterResponseEvent)
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
 	ProposalAnalysis::DebugResult(receiver_response);
-#endif _DEBUG
+#endif // _DEBUG
 
 	const MapAnalysis & map_analysis = MapAnalysis::GetMapAnalysis();
 	sint32 receiver_trade_total = map_analysis.GetTotalTrade(receiver);

@@ -92,7 +92,7 @@ sint32 Science::ComputeScienceFromResearchPact(const sint32 playerId, const PLAY
 			research_pact_science += city.CD()->GetScience();
 		}
 		
-		research_pact_science = (research_pact_science * 1.05);
+		research_pact_science = sint32(research_pact_science * 1.05);
 	}
 	return research_pact_science;
 }

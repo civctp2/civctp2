@@ -251,7 +251,8 @@ nf_GameSetup *GameSelectWindow::GetGameSetup(NETFunc::Session *session) {
 			return s;
 	}
 
-	s = new nf_GameSetup(&NETFunc::Game(session));
+	NETFunc::Game game = NETFunc::Game(session);
+	s = new nf_GameSetup(&game);
 	l->InsertItem(s);
 
 	return s;
@@ -282,7 +283,7 @@ AUI_ERRCODE GameSelectWindow::Idle( void )
 {	
 	NETFunc::Message *m;
 	
-	while(m = g_netfunc->GetMessage()) {
+	while((m = g_netfunc->GetMessage())) {
 		
 		
 		
@@ -506,7 +507,7 @@ void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 		if ( password )
 		{
 			strncpy( temp, password, dp_PASSWORDLEN );
-			for ( sint32 i = 0; i < strlen( temp ); i++ )
+			for ( sint32 i = 0; (unsigned) i < strlen( temp ); i++ )
 			{
 				
 				temp[ i ] = tolower( temp[ i ] );
@@ -720,7 +721,7 @@ AUI_ERRCODE StartSelectingWindow::Idle( void )
 {	
 	NETFunc::Message *m;
 	
-	while(m = g_netfunc->GetMessage()) {
+	while((m = g_netfunc->GetMessage())) {
 		
 		
 		

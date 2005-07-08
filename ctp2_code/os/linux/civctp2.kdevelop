@@ -6,11 +6,7 @@
     <version>$VERSION$</version>
     <projectmanagement>KDevAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
-    <ignoreparts>
-      <part>CvsService</part>
-      <part>KDevClearCase</part>
-      <part>KDevPerforce</part>
-    </ignoreparts>
+    <ignoreparts/>
     <projectdirectory>../../..</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
@@ -42,12 +38,12 @@
         <cxxflags>-O2 -g0</cxxflags>
       </optimized>
       <debug>
-        <configargs>--enable-debug=full</configargs>
+        <configargs>--enable-debug=full -C</configargs>
         <builddir>debug</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <cxxflags>-O0 -g3</cxxflags>
+        <cxxflags>-O0 -Werror -Wchar-subscripts -Wcomment -Wimplicit-funtion-declaration -Wmissing-braces -Wparentheses -Wreorder -Wreturn-type -Wtrigraphs -Wunknown-pragmas -Wno-multichar -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -Wno-non-template-friend -g3</cxxflags>
         <envvars/>
         <topsourcedir>.</topsourcedir>
         <cppflags/>
@@ -55,7 +51,7 @@
         <ccompilerbinary/>
         <cxxcompilerbinary/>
         <f77compilerbinary/>
-        <cflags/>
+        <cflags>-O0 -Werror -Wchar-subscripts -Wcomment -Werror-implicit-function-declaration -Wformat -Wimplicit-int -Wmain -Wmissing-braces -Wmultichar -Wreturn-type -Wsequence-point -Wswitch -Wtrigraphs -Wunknown-pragmas -Wno-unused -Wno-implicit-function-declaration</cflags>
         <f77flags/>
       </debug>
     </configurations>
@@ -65,7 +61,7 @@
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
       <abortonerror>true</abortonerror>
-      <numberofjobs>1</numberofjobs>
+      <numberofjobs>2</numberofjobs>
       <dontact>false</dontact>
       <makebin>make</makebin>
       <prio>0</prio>
@@ -137,19 +133,19 @@
   </kdevdoctreeview>
   <kdevfilecreate>
     <filetypes>
-      <type icon="source_cpp" ext="cpp" create="template" name="C++ Source" >
+      <type icon="source_cpp" ext="cpp" name="C++ Source" create="template" >
         <descr>A new empty C++ file.</descr>
       </type>
-      <type icon="source_c" ext="c" create="template" name="C Source" >
+      <type icon="source_c" ext="c" name="C Source" create="template" >
         <descr>A new empty C file.</descr>
       </type>
-      <type icon="source_h" ext="h" create="template" name="C/C++ Header" >
+      <type icon="source_h" ext="h" name="C/C++ Header" create="template" >
         <descr>A new empty header file for C or C++.</descr>
       </type>
-      <type icon="source_l" ext="l" create="template" name="flex C Source" >
+      <type icon="source_l" ext="l" name="flex C Source" create="template" >
         <descr>A new empty flex C source source file.</descr>
       </type>
-      <type icon="source_y" ext="y" create="template" name="bison C Source" >
+      <type icon="source_y" ext="y" name="bison C Source" create="template" >
         <descr>A new empty bison C source source file.</descr>
       </type>
     </filetypes>

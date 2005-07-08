@@ -687,8 +687,7 @@ sint32 UnitData::InsertCargo(const Unit &addme)
 
 		g_slicEngine->RunTrigger(TRIGGER_LIST_EMBARKED,
 								 ST_UNIT, addme,
-								 ST_PLAYER, m_owner,
-								 ST_END);
+								 ST_PLAYER, m_owner);
         return TRUE; 
     } else {
         return FALSE; 
@@ -2841,8 +2840,7 @@ void UnitData::DoVision(UnitDynamicArray &revealedUnits)
 										 ST_UNIT, him->m_id,
 										 ST_UNIT, m_id,
 										 ST_PLAYER, m_owner,
-										 ST_PLAYER, him->m_owner,
-										 ST_END);
+										 ST_PLAYER, him->m_owner);
 			}
 		}
 
@@ -2854,8 +2852,7 @@ void UnitData::DoVision(UnitDynamicArray &revealedUnits)
 										 ST_UNIT, m_id,
 										 ST_UNIT, him->m_id,
 										 ST_PLAYER, him->m_owner,
-										 ST_PLAYER, m_owner,
-										 ST_END);
+										 ST_PLAYER, m_owner);
 			}
 		}
 	}
@@ -3161,11 +3158,7 @@ void UnitData::Entrench()
 	
 		g_slicEngine->RunTrigger(TRIGGER_LIST_FORTIFY,
 								 ST_UNIT, Unit(m_id),
-								 ST_PLAYER, m_owner,
-								 ST_END);
-	
-
-	
+								 ST_PLAYER, m_owner);
 }
 
 void UnitData::Detrench()
@@ -3490,7 +3483,7 @@ double UnitData::GetOffense(const Unit &defender) const
 	}
 
 	sint32 intAttack = (sint32)base;
-	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, Unit(m_id), defender, intAttack);
+	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
 	if(modAttack != intAttack)
 		base = modAttack;
 	return base;
@@ -3527,7 +3520,7 @@ double UnitData::GetDefense(const Unit &attacker) const
 	}
 
 	sint32 intDef = (sint32)def;
-	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, Unit(m_id), attacker, intDef);
+	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
 	if(modDef != intDef)
 		def = modDef;
 
@@ -4525,7 +4518,7 @@ sint32 UnitData::GetNumTradeRoutes() const
 {
 	Assert(m_city_data);
 	if(!m_city_data)
-		return NULL;
+		return 0;
 	return m_city_data->GetNumTradeRoutes();
 }
 
@@ -5097,7 +5090,7 @@ BOOL UnitData::IsProtectedFromSlavery() const
 	if(!m_city_data)
 		return FALSE;
 
-	return m_city_data->IsProtectedFromSlavery();
+	return (BOOL) m_city_data->IsProtectedFromSlavery();
 }
 
 
@@ -5281,7 +5274,7 @@ void UnitData::ChangeArmy(const Army &army, CAUSE_NEW_ARMY cause)
 			g_network.Unblock(m_owner);
 	} else if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner) && cause != CAUSE_NEW_ARMY_NETWORK) {
 		g_network.SendAction(new NetAction(NET_ACTION_GROUP_ARMY,
-										   army, m_id));
+										   army.m_id, m_id));
 	}
 
 	if(g_theArmyPool->IsValid(m_army)) {

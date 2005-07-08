@@ -66,8 +66,8 @@ aui_Redbook::aui_Redbook() :
 m_cd_device_id(-1),
 m_cd_drive_letter(0),
 m_cd_drive_index(0),
-m_aux_cdrom_id(-1),
-m_cd_ok(FALSE)
+m_cd_ok(FALSE),
+m_aux_cdrom_id(-1)
 {
 	return;
 }

@@ -23,9 +23,9 @@ ctp2_Static::ctp2_Static(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
-	aui_Static( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Static( retval, id, ldlBlock ),
 	PatternBase(ldlBlock, NULL)
 {
 	m_drawFunc			= NULL;
@@ -58,9 +58,9 @@ ctp2_Static::ctp2_Static(
 	uint32 bevelWidth,
 	uint32 bevelType)
 	:
-	aui_Static( retval, id, x, y, width, height, text, maxLength),
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text, maxLength ),
+	aui_Static( retval, id, x, y, width, height, text, maxLength),
 	PatternBase(pattern)
 {
 	

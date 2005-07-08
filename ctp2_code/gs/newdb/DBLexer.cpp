@@ -190,7 +190,7 @@ sint32 DBLexer::GetToken()
 	DBToken *dbtok;
 
 	if(tok == k_Token_Name) {
-		if(dbtok = m_tokenHash->Access(m_tokenText[m_whichTokenText])) {
+		if((dbtok = m_tokenHash->Access(m_tokenText[m_whichTokenText]))) {
 			return dbtok->GetValue();
 		} else {
 			return k_Token_Name;

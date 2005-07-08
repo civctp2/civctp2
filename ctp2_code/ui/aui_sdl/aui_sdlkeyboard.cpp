@@ -17,8 +17,8 @@ extern CivApp	*g_civApp;
 aui_SDLKeyboard::aui_SDLKeyboard(
 	AUI_ERRCODE *retval )
 	:
-	aui_Keyboard( retval ),
 	aui_Input( retval ),
+	aui_Keyboard( retval ),
 	aui_SDLInput( retval, FALSE )
 {
 	Assert( AUI_SUCCESS(*retval) );

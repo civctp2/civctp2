@@ -26,9 +26,9 @@ aui_Tab::aui_Tab(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -54,9 +54,9 @@ aui_Tab::aui_Tab(
 	sint32 state,
 	sint32 numStates )
 	:
-	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	aui_ImageBase( numStates ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -138,7 +138,7 @@ sint32 aui_Tab::SetState( sint32 state )
 	sint32 prevState = m_state;
 
 	
-	if ( m_state = state )
+	if ((m_state = state))
 	{
 		
 		

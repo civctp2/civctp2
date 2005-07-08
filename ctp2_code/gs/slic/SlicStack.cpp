@@ -65,7 +65,7 @@ void SlicStack::Push(SS_TYPE type, SlicStackValue value)
 sint32 SlicStack::Pop(SS_TYPE &type, SlicStackValue &value)
 {
 	Assert(m_sptr >= (1 + sizeof(SlicStackValue)));
-	if(m_sptr < 1 + sizeof(SlicStackValue)) {
+	if((unsigned) m_sptr < 1 + sizeof(SlicStackValue)) {
 		return -1;
 	}
 

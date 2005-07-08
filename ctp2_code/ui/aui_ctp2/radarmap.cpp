@@ -107,9 +107,10 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
+		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -130,9 +131,10 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
+		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon();	
@@ -782,7 +784,7 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 	};
 
 	
-	sint32 middle = ceil(xPosition + m_tilePixelWidth/2);
+	sint32 middle = sint32(ceil(xPosition + m_tilePixelWidth/2));
 
 	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1));
 	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1));

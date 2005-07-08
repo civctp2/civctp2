@@ -70,7 +70,7 @@ void SlicNamedSymbol::Init(const char *name)
 	m_name = new char[strlen(name) + 1];
 	strcpy(m_name, name);
 
-	m_fromFile = -1;
+	m_fromFile = (unsigned) -1;
 
 }
 

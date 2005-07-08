@@ -1541,7 +1541,7 @@ void c3_UtilityPlayerListPopup::SetText( MBCHAR *s, sint32 index )
 {
 	DoubleListItem *item;
 
-	if ( item = (DoubleListItem *)m_list->GetItemByIndex(index) ) {
+	if ((item = (DoubleListItem *)m_list->GetItemByIndex(index))) {
 		(DoubleListItem *)item->SetSecondColumn( s );
 	}
 }
@@ -1560,9 +1560,9 @@ void c3_UtilityPlayerListPopup::SetText( MBCHAR *s, sint32 index )
 
 DoubleListItem::DoubleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, MBCHAR *text, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

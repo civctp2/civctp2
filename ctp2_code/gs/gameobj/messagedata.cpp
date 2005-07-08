@@ -248,7 +248,7 @@ MessageData::~MessageData()
 	
 	if(m_buttonList) {
 		SlicButton *butt;
-		while(butt = m_buttonList->RemoveHead()) {
+		while((butt = m_buttonList->RemoveHead())) {
 #ifdef _BAD_BUTTON
 			memset(butt, 0xbe, sizeof(SlicButton));
 			s_deletedButtons.AddTail(butt);
@@ -261,7 +261,7 @@ MessageData::~MessageData()
 
 	if(m_eyePoints) {
 		SlicEyePoint *ep;
-		while(ep = m_eyePoints->RemoveHead())
+		while((ep = m_eyePoints->RemoveHead()))
 			delete ep;
 		delete m_eyePoints;
 	}

@@ -152,7 +152,7 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 	for (settleIt.Start(); !settleIt.End(); settleIt.Next()) 
 	{
 		pos = settleIt.Pos();
-		sint32 const new_value = ComputeSettleValue(pos) * 0.5;
+		sint32 const new_value = sint32(ComputeSettleValue(pos) * 0.5);
 		m_settleValues.SetGridValue(pos, new_value);
 	}
 	
@@ -267,7 +267,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 				sprintf(buf,"*%4.0f*",settle_target.m_value );
 				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 			}
-#endif _DEBUG
+#endif // _DEBUG
 
 			
 			if ( CanSettlePos(rc_pos) == false)
@@ -282,7 +282,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 					sprintf(buf,"(%4.0f)",settle_target.m_value );
 					g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 				}
-#endif _DEBUG
+#endif // _DEBUG
 
 				continue;
 			}
@@ -298,7 +298,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 				sprintf(buf,"%4.0f",settle_target.m_value );
 				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 			}
-#endif _DEBUG
+#endif // _DEBUG
 
 			targets.push_back(settle_target);
 		}
@@ -336,7 +336,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 #ifdef _DEBUG
                       if (is_land) {Assert(cont < max_land_cont);}
                       else {Assert(cont < max_water_cont);}
-#endif _DEBUG
+#endif // _DEBUG
 			Assert(cont >= 0);
 
 			if ((is_land == TRUE && 

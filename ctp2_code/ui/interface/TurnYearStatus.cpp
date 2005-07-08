@@ -64,7 +64,7 @@ const MBCHAR *TurnYearStatus::GetCurrentYear()
 		g_player[g_selected_item->GetVisiblePlayer()]->m_current_round :
 		NewTurnCount::GetCurrentRound();
 	if(g_useCustomYear && g_pTurnLengthOverride) {
-		if(round >= g_turnLengthOverrideSize) {
+		if((unsigned) round >= g_turnLengthOverrideSize) {
 			round = g_turnLengthOverrideSize - 1;
 		}
 		strcpy(buf, g_pTurnLengthOverride[round].text);

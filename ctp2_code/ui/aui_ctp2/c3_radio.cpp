@@ -29,9 +29,9 @@ c3_Radio::c3_Radio(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -57,9 +57,9 @@ c3_Radio::c3_Radio(
 	sint32 state,
 	sint32 numStates )
 	:
-	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	aui_ImageBase( numStates ),
 	aui_TextBase( NULL ),
+	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	PatternBase(pattern)
 {
 	Assert( AUI_SUCCESS(*retval) );

@@ -5,7 +5,7 @@
 #include "SlicModFunction.h"
 
 SlicModFunc::SlicModFunc(const MBCHAR *name, ...)
-{	
+{
 	m_numArgs = 0;
 
 	m_segment = g_slicEngine->GetSegment(name);
@@ -19,7 +19,7 @@ SlicModFunc::SlicModFunc(const MBCHAR *name, ...)
 
 	m_numArgs = 0;
 	do {
-		tag = va_arg(vl, SLIC_TAG);
+		tag = (SLIC_TAG) va_arg(vl, VA_ARG_SLIC_TAG);
 		switch(tag) {
 			case ST_END:
 				done = true;

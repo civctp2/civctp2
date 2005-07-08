@@ -213,7 +213,7 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 		double fy = src_y - floor(src_y);
 		for (sint32 i=0;i<width;i++)
 		{
-			uint32 x = floor(src_x);
+			uint32 x = uint32(floor(src_x));
 			if (!bFilter)
 			{
 				pDstPixel[i] = pSrcPixel[x];

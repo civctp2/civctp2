@@ -28,6 +28,7 @@
 #endif
 
 #include <assert.h>
+#include <strings.h>
 #include "tchar.h"
 
 /* Windows data types */

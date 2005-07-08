@@ -100,7 +100,7 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, RGB
 	valMain |= ( green >> 3 ) << 5;
 	valMain |= ( blue >> 3 );
 
-	for ( uint8 i = 0; i < 256; i++ ) {
+	for ( uint8 i = 0; 1; i++ ) {
 		valCompare = 0;
 		b = rgbq[i].rgbBlue;
 		g = rgbq[i].rgbGreen;
@@ -202,7 +202,7 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
             tp = buf16 + (row*cols);
 	    } else {
             col = cols - 1;
-            limitcol = -1;
+            limitcol = (unsigned) -1;
             fp = buf24 + (3*row*cols) + (3*col);
             tp = buf16 + (row*cols) + col;
 	    }
@@ -214,7 +214,7 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 
 
 
-            if ((skipb != -1) && 
+            if ((skipb != (unsigned) -1) && 
                 (fb == skipb) && (fg == skipg) && (fr == skipr)) {
                 
                 sr = fr;

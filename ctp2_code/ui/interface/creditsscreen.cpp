@@ -745,14 +745,14 @@ public:
 		MBCHAR *		ldlBlock
 	) 
 	:	aui_Static(retval, id, ldlBlock),
+		m_lastIdle(GetTickCount()),
 		m_numPages(0),
 		m_pPages(NULL),
 		m_pCurrPage(NULL),
-		m_numFonts(0),
 		m_definingFont(false),
 		m_currFontNumber(0),
 		m_currFontSize(0),
-		m_lastIdle(GetTickCount())
+		m_numFonts(0)
 	{
 		std::fill(m_fonts, m_fonts + kCreditsTextNumFonts, (aui_BitmapFont *) NULL);
 
@@ -781,15 +781,15 @@ public:
 		uint32			maxLength	= 0 
 	) 
 	:	aui_Static(retval, id, x, y, width, height, text, maxLength),
+		m_lastIdle(GetTickCount()),
 		m_numPages(0),
 		m_pPages(NULL),
 		m_pCurrPage(NULL),
-		m_numFonts(0),
 		m_definingFont(false),
 		m_currFontNumber(0),
 		m_currFontSize(0),
 		m_animationSpeed(3000),
-		m_lastIdle(GetTickCount())
+		m_numFonts(0)
 	{
 		std::fill(m_fonts, m_fonts + kCreditsTextNumFonts, (aui_BitmapFont *) NULL);
 	};
@@ -806,7 +806,7 @@ public:
 			delete pFoo;
 		}
 
-		for (int i = 0; i < kCreditsTextNumFonts; i++)
+		for (int i = 0; (unsigned) i < kCreditsTextNumFonts; i++)
 		{
 			if (m_fonts[i])
 				g_c3ui->UnloadBitmapFont(m_fonts[i]);
@@ -1312,7 +1312,7 @@ c3_CreditsText * c3_CreditsText::Parse(FILE *textfile)
 	MBCHAR errorStr[128];
 	char c;
 	eTokenType tokenType;
-	uint32 currFont = -1;
+	uint32 currFont = (unsigned) -1;
 	int i;
 	bool done = false;
 	bool gettingText = false;
@@ -1350,7 +1350,7 @@ c3_CreditsText * c3_CreditsText::Parse(FILE *textfile)
 		{
 			
 			c = (char)fgetc(textfile);
-			for (i = 0; ((i < k_CreditsLineLen) && (c != '\n')); i++, c = (char)fgetc(textfile) )
+			for (i = 0; (((unsigned) i < k_CreditsLineLen) && (c != '\n')); i++, c = (char)fgetc(textfile) )
 			{
 				currToken[i] = c;
 #if 0
@@ -1385,7 +1385,7 @@ c3_CreditsText * c3_CreditsText::Parse(FILE *textfile)
 			case kFont:
 			{
 				currFont = GetFontNumber(currToken);
-				if ((currFont == -1) || (currFont > m_numFonts) )
+				if ((currFont == (unsigned) -1) || (currFont > m_numFonts) )
 				{
 					sprintf(errorStr, "%s line %d: Bad font specifier '%s'", k_CREDITS_FILENAME, m_currTextfileLine, currToken);
 					MessageBoxDialog::Information(errorStr, "CreditsError");
@@ -1425,7 +1425,7 @@ c3_CreditsText * c3_CreditsText::Parse(FILE *textfile)
 			{
 				m_definingFont = TRUE;
 				m_currFontNumber = GetFontNumber(currToken);
-				if (m_currFontNumber == -1)
+				if (m_currFontNumber == (unsigned) -1)
 				{
 					sprintf(errorStr, "%s line %d: Bad font definition '%s'", k_CREDITS_FILENAME, m_currTextfileLine, currToken);
 					MessageBoxDialog::Information(errorStr, "CreditsError");
@@ -1438,7 +1438,7 @@ c3_CreditsText * c3_CreditsText::Parse(FILE *textfile)
 			case kFontSize:
 			{
 				m_currFontSize = GetFontSize(currToken);
-				if (m_currFontSize == -1)
+				if (m_currFontSize == (unsigned) -1)
 				{
 					sprintf(errorStr, "%s line %d: Bad font size '%s'", k_CREDITS_FILENAME, m_currTextfileLine, currToken);
 					MessageBoxDialog::Information(errorStr, "CreditsError");
@@ -1649,7 +1649,7 @@ uint32 c3_CreditsText::GetNumberFromToken(MBCHAR *pToken)
 
 	if (error)
 	{
-		return -1;
+		return (unsigned) -1;
 	}
 
 	return atoi(pFoo);
@@ -1663,7 +1663,7 @@ uint32 c3_CreditsText::GetFontNumber(MBCHAR *pToken)
 
 	if ((retval < 0)  || (retval > kCreditsTextNumFonts))
 	{
-		return -1;
+		return (unsigned) -1;
 	}
 
 	return retval;

@@ -52,7 +52,7 @@ class WatchList : public KeyboardHandler
 {
 public:
 	WatchList(WatchListCallback *callback = NULL, MBCHAR *ldlBlock = NULL);
-	~WatchList();
+	virtual ~WatchList();
 
 	c3_PopupWindow *m_window;
 	c3_ListBox     *m_list;

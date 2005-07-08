@@ -213,9 +213,9 @@ void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 da
 
 MusicTrackListItem::MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

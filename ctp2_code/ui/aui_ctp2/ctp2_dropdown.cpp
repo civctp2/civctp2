@@ -38,9 +38,9 @@ ctp2_DropDown::ctp2_DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_DropDown(),
-	aui_TextBase( NULL ),
 	aui_ImageBase( (sint32)0 ),
+	aui_TextBase( NULL ),
+	aui_DropDown(),
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon(id, x, y, width, height);
@@ -72,9 +72,9 @@ ctp2_DropDown::ctp2_DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_DropDown(),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_DropDown(),
 	PatternBase(ldlBlock, NULL)
 {
 	*retval = aui_Region::InitCommonLdl(id, ldlBlock);
@@ -137,8 +137,8 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 		aui_Ldl::BuildHierarchyFromRoot(const_cast<MBCHAR*>(
 			std::string(ldlBlock).append(".autobutton").c_str()));
-		if(m_button = static_cast<aui_Button*>(
-			aui_Ldl::GetObject(ldlBlock, "autobutton"))) {
+		if((m_button = static_cast<aui_Button*>(
+			aui_Ldl::GetObject(ldlBlock, "autobutton")))) {
 			m_button->SetActionFuncAndCookie(DropDownButtonActionCallback, this);
 			m_buttonSize = 0;
 		} else if ( theLdl->GetLdl()->FindDataBlock( block ) ) {

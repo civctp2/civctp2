@@ -1564,7 +1564,7 @@ bool DiplomacyWindow::AddProposalData(SlicObject &so, sint32 proposal, Diplomacy
 			so.AddInt(arg.pollution);
 			return true;
 		case k_DiplomacyProposal_Arg1_Percent_Bit:
-			so.AddInt(arg.percent * 100.0);
+			so.AddInt(sint32(arg.percent * 100.0));
 			return true;
 		default:
 			return true;
@@ -2371,13 +2371,13 @@ void DiplomacyWindow::RequestPollutionValue(sint32 player)
 
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPollutionRequest.Spinner");
 	
-	spinner->SetMaximum((g_player[player]->GetPollutionLevel() * 0.95), 0);
+	spinner->SetMaximum(sint32(g_player[player]->GetPollutionLevel() * 0.95), 0);
 	
-	spinner->SetMinimum((g_player[player]->GetPollutionLevel() * 0.25), 0);
+	spinner->SetMinimum(sint32(g_player[player]->GetPollutionLevel() * 0.25), 0);
 	
-	spinner->SetPage((g_player[player]->GetPollutionLevel() * 0.20), 0);
+	spinner->SetPage(sint32(g_player[player]->GetPollutionLevel() * 0.20), 0);
 	
-	spinner->SetIncrement((g_player[player]->GetPollutionLevel() * 0.10), 0);
+	spinner->SetIncrement(sint32(g_player[player]->GetPollutionLevel() * 0.10), 0);
 
 	g_c3ui->AddWindow(m_pollutionRequestWindow);
 }

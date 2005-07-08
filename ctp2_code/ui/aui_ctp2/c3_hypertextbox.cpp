@@ -52,10 +52,9 @@ c3_HyperTextBox::c3_HyperTextBox(
 	bool draw_frame
 	)
 	:
-
-	aui_HyperTextBox(),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_HyperTextBox(),
 	PatternBase(ldlBlock, NULL)
 {
 	
@@ -107,10 +106,10 @@ c3_HyperTextBox::c3_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	PatternBase(pattern),
-	aui_HyperTextBox(retval, id, x,y, width, height, ActionFunc, cookie),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_HyperTextBox(retval, id, x,y, width, height, ActionFunc, cookie),
+	PatternBase(pattern)
 {
 	
 	m_draw_frame = false;

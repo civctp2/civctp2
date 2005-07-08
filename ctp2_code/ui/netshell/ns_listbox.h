@@ -192,9 +192,9 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	ns_CivListBox( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	ns_CivListBox( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -316,7 +316,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 			item->AddChild( childItem );
 
 			NetShellT *netShellObject = item->GetNetShellObject();
-			if ( netShellObject->type( i ) == ns_Accessor<T>::INT )
+			if ( netShellObject->type( i ) == ns_Accessor<NetShellT>::INT )
 			{
 				childItem->TextFlags() =
 					k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER |

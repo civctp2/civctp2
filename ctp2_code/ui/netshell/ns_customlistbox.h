@@ -88,19 +88,21 @@ public:
 		AUI_ERRCODE *retval,
 		uint32 id,
 		MBCHAR *ldlBlock,
-		ControlActionCallback *ActionFunc = NULL,
+		typename ns_FileDataListBox<NFT,NST>::ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		char *filename = "")
 
-		:ns_ListBox<NFT, NST>(
+		:
+		aui_ImageBase( ldlBlock),
+		aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+		Keys(),
+		ns_ListBox<NFT, NST>(
 		retval,
 		id,
 		ldlBlock,
 		ActionFunc,
-		cookie ),
-		aui_ImageBase( ldlBlock),
-		aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-		Keys() {
+		cookie )
+	{
 
 		strncpy(m_filename, filename, 64);
 		FILE *file = fopen(filename, "rb");
@@ -162,7 +164,7 @@ public:
 			
 			sint32 first = -1;
 			sint32 j = 0;
-			iterator i = begin();
+			typename ns_FileDataListBox<NFT,NST>::iterator i = begin();
 			for(; i!=end(); i++, j++) {
 				if ( FindItem( *i ) == GetSelectedItem() )
 				{

@@ -206,7 +206,7 @@ void MapAnalysis::BeginTurn()
 
     /// \todo Check, why it's not PLAYER_INDEX
     sint16 player;
-    for (player = 0; player < m_threatGrid.size(); player++)
+    for (player = 0; (unsigned) player < m_threatGrid.size(); player++)
     {
 
         m_threatGrid[player].Clear();
@@ -433,7 +433,7 @@ void MapAnalysis::BeginTurn()
 
     const sint8 cycles = 1;
     const double coef = 0.8;
-    for (player = 0; player < m_threatGrid.size(); player++)
+    for (player = 0; (unsigned) player < m_threatGrid.size(); player++)
     {
         m_threatGrid[player].Relax(cycles, coef);
         m_valueGrid[player].Relax(cycles, coef);
@@ -808,7 +808,7 @@ const MapPoint & MapAnalysis::GetNearestForeigner(const PLAYER_INDEX player, con
     sint32 tmp_squared_distance;
     sint16 closest_player = 1;
 
-    for (sint16 i = 0; i < m_empireCenter.size(); i++)
+    for (sint16 i = 0; (unsigned) i < m_empireCenter.size(); i++)
     {
 
         if (i == player)
@@ -922,7 +922,7 @@ const PLAYER_INDEX & opponentId) const
     }
 
 
-    return (ratio * 100);
+    return sint32(ratio * 100);
 }
 
 
@@ -1112,7 +1112,7 @@ void MapAnalysis::ComputeAllianceSize(const PLAYER_INDEX playerId, PLAYER_INDEX 
     leaderId = playerId;
     sint32 max_population = m_totalPopulation[playerId];
     sint32 allies = 0;
-    for (PLAYER_INDEX foreignerId = 0; foreignerId < m_threatGrid.size(); foreignerId++)
+    for (PLAYER_INDEX foreignerId = 0; (unsigned) foreignerId < m_threatGrid.size(); foreignerId++)
     {
         if (g_player[foreignerId] == NULL)
             continue;
@@ -1160,7 +1160,7 @@ void MapAnalysis::ComputeHandicapRatios()
 
 
     sint16 player;
-    for (player = 0; player < m_threatGrid.size(); player++)
+    for (player = 0; (unsigned) player < m_threatGrid.size(); player++)
     {
 
         if (g_player[player] == NULL)
@@ -1202,7 +1202,7 @@ void MapAnalysis::ComputeHandicapRatios()
     }
 
 
-    for (player = 0; player < m_threatGrid.size(); player++)
+    for (player = 0; (unsigned) player < m_threatGrid.size(); player++)
     {
 
         m_productionHandicapRatio[player] = 1.0;
@@ -1306,7 +1306,7 @@ double MapAnalysis::GetScienceHandicapRatio(const PLAYER_INDEX playerId) const
 
 void MapAnalysis::DebugLog() const
 {
-    for (sint16 player = 0; player < m_threatGrid.size(); player++)
+    for (sint16 player = 0; (unsigned) player < m_threatGrid.size(); player++)
     {
         if (m_threatGrid[player].GetMaxValue() > 0)
         {

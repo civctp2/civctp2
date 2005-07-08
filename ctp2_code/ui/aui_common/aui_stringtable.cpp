@@ -129,7 +129,7 @@ sint32 aui_StringTable::FindNumStringsFromLdl( ldl_datablock *block )
 
 AUI_ERRCODE aui_StringTable::InitCommon( sint32 numStrings )
 {
-	if ( m_numStrings = numStrings )
+	if ((m_numStrings = numStrings))
 	{
 		m_strings = new MBCHAR *[ numStrings ];
 		Assert( m_strings != NULL );

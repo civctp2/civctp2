@@ -135,7 +135,7 @@ AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
 	tmp.right -= 2;
 	tmp.bottom -= 5;
 	
-	sint32 width = (total * (tmp.right - tmp.left)) / nextEvent;
+	sint32 width = sint32((total * (tmp.right - tmp.left)) / nextEvent);
 	primitives_PaintRect16(surface, &tmp, g_colorSet->GetColor(COLOR_BLACK));
 
 	if(width > 0) {
@@ -374,7 +374,7 @@ void DomesticControlPanel::UpdateStats()
 
 	cities = g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities();
 	population = g_player[g_selected_item->GetVisiblePlayer()]->GetTotalPopulation();
-	pw = (g_player[g_selected_item->GetVisiblePlayer()]->m_materialsTax * 100.0) + 0.5;
+	pw = sint32((g_player[g_selected_item->GetVisiblePlayer()]->m_materialsTax * 100.0) + 0.5);
 	government = g_player[g_selected_item->GetVisiblePlayer()]->GetGovernmentType();
 
 	g_player[g_selected_item->GetVisiblePlayer()]->GetScienceTaxRate(scienceTax);

@@ -84,9 +84,9 @@ ns_TribesDropDown::ns_TribesDropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	c3_DropDown( retval, aui_UniqueId(), ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	c3_DropDown( retval, aui_UniqueId(), ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

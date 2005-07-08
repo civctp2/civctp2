@@ -154,7 +154,7 @@ SlicStructMemberData * SlicStructDescription::GetMemberSymbol(sint32 index) cons
 	{
 		memberAtIndex = m_members[index];
 	}
-	else if (index < (m_numMembers + m_accessors.size()))
+	else if ((unsigned) index < (m_numMembers + m_accessors.size()))
 	{
 		memberAtIndex = m_accessors[index - m_numMembers];
 	}
@@ -530,7 +530,7 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbol(sint32 index)
 {
 	Assert(index >= 0);
 	Assert(index < m_validIndexCount);
-	if ((index < 0) || (index >= m_validIndexCount))
+	if ((index < 0) || ((unsigned) index >= m_validIndexCount))
 	{
 		return NULL;
 	}
@@ -556,7 +556,7 @@ sint32 SlicStructInstance::GetMemberSymbolIndex(SlicStructMemberData *memb)
 SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
 {
 	sint32 const	index	= m_description->GetMemberIndex(name);
-	if ((index < 0) || (index >= m_validIndexCount))
+	if ((index < 0) || ((unsigned) index >= m_validIndexCount))
 	{
 		return NULL;
 	}

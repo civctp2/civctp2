@@ -75,7 +75,7 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 		m_agreements.~vector();
 		return;
 	}
-#endif _DEBUG
+#endif // _DEBUG
 
 	
 	
@@ -154,7 +154,7 @@ const ai::Agreement & AgreementMatrix::GetAgreement( const PLAYER_INDEX sender_p
 			return AgreementMatrix::s_badAgreement;
 		}
 	}
-#endif _DEBUG
+#endif // _DEBUG
 
 	return m_agreements[ index ];
 }
@@ -476,7 +476,7 @@ sint32 AgreementMatrix::TurnsAtWar(const PLAYER_INDEX & player,
 void AgreementMatrix::SetAgreementFast(sint32 index, const ai::Agreement &agreement)
 {
 	Assert(index < m_agreements.size());
-	if(index < m_agreements.size()) {
+	if((unsigned) index < m_agreements.size()) {
 		m_agreements[index] = agreement;
 	}
 }

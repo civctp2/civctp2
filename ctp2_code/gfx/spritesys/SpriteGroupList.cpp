@@ -143,20 +143,20 @@ SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE
 	switch (type) 
 	{
     case GROUPTYPE_UNIT : 
-	    if(newSpriteGroup==NULL)
-		    newSpriteGroup = new UnitSpriteGroup(type);
+	if(newSpriteGroup==NULL)
+		newSpriteGroup = new UnitSpriteGroup(type);
 
         // A unit sprite file may have 3 or 2 digits in the name. 
-		sprintf(inFile, "GU%#.3d.SPR", index);
+	sprintf(inFile, "GU%.3d.SPR", index);
 		 
-		MBCHAR fullPath[_MAX_PATH];
+	MBCHAR fullPath[_MAX_PATH];
         if (!g_civPaths->FindFile(C3DIR_SPRITES, inFile, fullPath, TRUE, FALSE))
         {
-            // No 3 digit version found: try the 2 digit version.
-			sprintf(inFile, "GU%#.2d.SPR", index);
-		}
-		break;
-   	
+		// No 3 digit version found: try the 2 digit version.
+		sprintf(inFile, "GU%.2d.SPR", index);
+	}
+	break;
+
 	case GROUPTYPE_PROJECTILE : 
 		 Assert("Projectile Actors Removed From Game - CJI"==NULL);
 		 return SPRITELISTERR_NOTFOUND;
@@ -164,18 +164,18 @@ SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE
 	case GROUPTYPE_EFFECT : 
 		 if(newSpriteGroup==NULL)
 		    newSpriteGroup = new EffectSpriteGroup(type);
-		 sprintf(inFile, "GX%#.2d.SPR", index);
+		 sprintf(inFile, "GX%.2d.SPR", index);
 	  
 		 break;
 	case GROUPTYPE_CITY:
 		 if(newSpriteGroup==NULL)
 		    newSpriteGroup = new UnitSpriteGroup(type);
-		 sprintf(inFile, "GC%#.3d.SPR", index);
+		 sprintf(inFile, "GC%.3d.SPR", index);
 		 break;
 	case GROUPTYPE_GOOD:
 		 if(newSpriteGroup==NULL)
 		    newSpriteGroup = new GoodSpriteGroup(type);
-		 sprintf(inFile, "GG%#.3d.SPR", index);
+		 sprintf(inFile, "GG%.3d.SPR", index);
 		 break;
 	default:
 		Assert(type > GROUPTYPE_GROUP && type < GROUPTYPE_MAX);

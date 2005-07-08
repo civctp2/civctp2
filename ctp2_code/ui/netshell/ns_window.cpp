@@ -312,7 +312,7 @@ aui_Image *ns_Window::SetTile( MBCHAR *tile )
 BOOL ns_Window::SetRetired( BOOL retired )
 {
 	BOOL wasRetired = m_retired;
-	if ( m_retired = retired && !wasRetired )
+	if ((m_retired = retired && !wasRetired))
 	{
 		
 		MBCHAR *blockIdentifier = aui_Ldl::GetBlock( this );

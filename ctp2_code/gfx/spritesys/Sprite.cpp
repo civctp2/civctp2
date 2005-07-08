@@ -193,7 +193,7 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 
 	if (bpp!=4)
 	{
-		printf("TGA Sprite File not 32-bits\n",imageFiles[index]);
+		printf("TGA Sprite File not 32-bits(%s)\n",imageFiles[index]);
 		*imageData=NULL;
 		fcloseall();
 		exit(0);

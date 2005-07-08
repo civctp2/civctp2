@@ -395,7 +395,11 @@ void SPNewGameWindow::Update( void )
 SPProfileBox::SPProfileBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_spClan(NULL),m_spGender(NULL),m_spName(NULL),
 	m_spPreferences(NULL),m_spCustom(NULL),
-	m_PTOP(NULL),m_PBOT(NULL), m_PHEADER(NULL), m_PLEFT(NULL), m_PRIGHT(NULL)
+	m_PTOP(NULL),
+	m_PHEADER(NULL),
+	m_PBOT(NULL),
+	m_PLEFT(NULL),
+	m_PRIGHT(NULL)
 {
 	{
 		int i=0,numClans;
@@ -485,7 +489,11 @@ void SPProfileBox::SetLeader(uint32 index)
 SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_mapSize(NULL), m_worldType(NULL), m_worldShape(NULL),
 	m_difficulty(NULL), m_riskLevel(NULL), m_opponent(NULL), m_spCustom(NULL),
-	m_WTOP(NULL),m_WBOT(NULL), m_WHEADER(NULL), m_WLEFT(NULL), m_WRIGHT(NULL)
+	m_WTOP(NULL),
+	m_WHEADER(NULL),
+	m_WBOT(NULL),
+	m_WLEFT(NULL),
+	m_WRIGHT(NULL)
 {
 	{
 		aui_StringTable *mysizes = NULL;
@@ -583,7 +591,11 @@ SPWorldBox::~SPWorldBox()
 SPRulesBox::SPRulesBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_spGenocide(NULL), m_spTrade(NULL), m_spCombat(NULL),
 	m_spPollution(NULL),
-	m_RTOP(NULL),m_RBOT(NULL), m_RHEADER(NULL), m_RLEFT(NULL), m_RRIGHT(NULL)
+	m_RTOP(NULL),
+	m_RHEADER(NULL),
+	m_RBOT(NULL),
+	m_RLEFT(NULL),
+	m_RRIGHT(NULL)
 {
 
 	m_spGenocide	= spNew_c3_CheckBox(retval,ldlBlock,"GenocideButton",0,spnewgamescreen_genocidePress);
@@ -639,9 +651,9 @@ uint32 SPRulesBox::GetPollutionRules() { return m_spGenocide->IsOn(); }
 
 SPDropDownListItem::SPDropDownListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock,MBCHAR *type,const MBCHAR *name)
 :
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock),
 	m_myItem(NULL)
 {
 	
@@ -680,9 +692,9 @@ TwoChoiceButton::TwoChoiceButton(
 		MBCHAR *choiceOff, MBCHAR *choiceOn, uint32 onoff,
 		ControlActionCallback *ActionFunc,
 		void *cookie) : 
-	ctp2_Button(retval,id,ldlBlock,ActionFunc,cookie),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	ctp2_Button(retval,id,ldlBlock,ActionFunc,cookie),
 	m_choice(0)
 {
 		Assert(onoff == 1 || onoff == 0 );

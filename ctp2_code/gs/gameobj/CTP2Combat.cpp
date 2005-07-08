@@ -908,10 +908,10 @@ void CombatField::FillFrom(CellUnitList &units)
 CTP2Combat::CTP2Combat(sint32 w, sint32 h,
 					   CellUnitList &attackers,
 					   CellUnitList &defenders) :
-	m_width(w),
-	m_height(h),
 	m_attackers(w, h, true),
 	m_defenders(w, h, false),
+	m_width(w),
+	m_height(h),
 	m_retreated(false),
 	m_retreating(false),
 	m_noAttacksPossible(false),

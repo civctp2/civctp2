@@ -67,9 +67,10 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
+		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -85,9 +86,10 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
+		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon();	
@@ -137,7 +139,7 @@ void ThumbnailMap::InitCommon(void)
 	m_tilePixelHeight = 0.0;
 
 	m_selectedRoute = NULL;
-	m_selectedCity = NULL;
+	m_selectedCity = 0;
 
 	m_displayUnits = TRUE;
 	m_displayLandOwnership = TRUE;
@@ -206,7 +208,9 @@ void ThumbnailMap::BuildCityList(void)
 			}
 
 			info.city = cities->Access(i);
-			pt = MapToPixel(&info.city.RetPos()); 
+			
+			MapPoint cityPos = info.city.RetPos();
+			pt = MapToPixel(&cityPos);
 			
 			SetRect(&cityRect, pt.x, pt.y, (sint32)(pt.x + m_tilePixelWidth), (sint32)(pt.y + m_tilePixelHeight));
 			OffsetRect(&cityRect, (sint32)(m_tilePixelWidth/2), (sint32)(m_tilePixelHeight/2));

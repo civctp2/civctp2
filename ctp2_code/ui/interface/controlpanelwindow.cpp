@@ -1131,12 +1131,12 @@ ControlPanelWindow::ControlPanelWindow(
 	MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type ) : 
+m_mainWindow(NULL),
+m_contextMenu(NULL),
 m_turnToggle(true),
-m_terraFormMode(false),
 m_targetingMode(CP_TARGETING_MODE_OFF),
 m_currentOrder(NULL),
-m_contextMenu(NULL),
-m_mainWindow(NULL)
+m_terraFormMode(false)
 {
 	
 	*retval = AUI_ERRCODE_OK;
@@ -1834,7 +1834,7 @@ void ControlPanelWindow::PerformOrderAfterConfirmation(bool response, void *user
 	{
 		((OrderDataRec*)userData)->data->PerformOrder(((OrderDataRec*)userData)->rec);
 	}
-	delete userData;
+	delete (OrderDataRec*) userData;
 }
 
 
@@ -2803,7 +2803,7 @@ ControlPanelWindow::CreateTileImpBanks()
 	}
 
 			
-	for(uint32 current=0;current<g_theTerrainImprovementDB->NumRecords();current++)
+	for(uint32 current=0;current<(unsigned) g_theTerrainImprovementDB->NumRecords();current++)
 	{
 		found		= false;
 		group_id	= 0;

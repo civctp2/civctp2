@@ -260,9 +260,9 @@ class CityData : public CityRadiusCallback {
 // Changing the order below this line should not break anything.
 //----------------------------------------------------------------------------
 	
-    Unit m_home_city; 
+	Unit m_home_city; 
 	uint8 m_min_turns_revolt;	// Number of revolt risk free turns.
-    BuildQueue m_build_queue; 
+	BuildQueue m_build_queue; 
     
 	TradeDynamicArray m_tradeSourceList;							
 	TradeDynamicArray m_tradeDestinationList;						

@@ -87,18 +87,17 @@ aui_Control::aui_Control(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_Region              (retval, id, ldlBlock),
 	aui_ImageBase           (ldlBlock),
 	aui_TextBase            (ldlBlock, (const MBCHAR *) NULL),
+	aui_Region              (retval, id, ldlBlock),
 	aui_SoundBase           (ldlBlock),
+	m_stringTable           (NULL),
+	m_allocatedTip          (false),
 	m_statusText            (NULL),
 	m_numberOfLayers        (0), 
-    m_imagesPerLayer        (0),
+	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
-	m_layerRenderFlags      (NULL),
-	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
-    m_stringTable           (NULL),
-    m_allocatedTip          (false)
+	m_layerRenderFlags      (NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -119,18 +118,18 @@ aui_Control::aui_Control(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_Region              (retval, id, x, y, width, height),
 	aui_ImageBase           ((sint32) 0),
 	aui_TextBase            (NULL),
+	aui_Region              (retval, id, x, y, width, height),
 	aui_SoundBase           ((MBCHAR **) NULL),
+	m_stringTable           (NULL),
+	m_allocatedTip          (false),
 	m_statusText            (NULL),
 	m_numberOfLayers        (0), 
-    m_imagesPerLayer        (0),
+	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
 	m_layerRenderFlags      (NULL),
-	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
-    m_stringTable           (NULL),
-    m_allocatedTip          (false)
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

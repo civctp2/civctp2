@@ -287,7 +287,7 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 	char			prefixStr[80];
 
 	sprintf(prefixStr, ".\\%d\\", id);
-	sprintf(scriptName, "GG%#.2d.txt", id);
+	sprintf(scriptName, "GG%.2d.txt", id);
 
 
 	theToken = new Token(scriptName, C3DIR_SPRITES); 
@@ -323,10 +323,10 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		printf(" [Idle");
 		for(i=0; i<idleSprite->GetNumFrames(); i++) {
 
-			sprintf(name, "%sGG%#.2dS.%d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
+			sprintf(name, "%sGG%.2dS.%d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
 			strcpy(shadowNames[i], name);
 
-			sprintf(name, "%sGG%#.2dA.%d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
+			sprintf(name, "%sGG%.2dA.%d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
 			strcpy(imageNames[i], name);
 		}
 

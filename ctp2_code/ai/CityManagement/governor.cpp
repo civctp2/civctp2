@@ -288,7 +288,7 @@ Governor::Governor(Governor const &copyme)
 //	m_currentUnitCount          (copyme.m_currentUnitCount), // Well that would be the code of the default version
     m_neededFreight             (copyme.m_neededFreight)
 { 
-	for(sint32 i = 0; i < copyme.m_currentUnitCount.size(); ++i){
+	for(sint32 i = 0; (unsigned) i < copyme.m_currentUnitCount.size(); ++i){
 		m_currentUnitCount.push_back(copyme.m_currentUnitCount[i]);
 	}
 }
@@ -4578,8 +4578,8 @@ void Governor::ManageGoodsTradeRoutes()
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
 				GEA_Int, route_iter->m_resource,
-				GEA_City, &route_iter->m_sourceCity,
-				GEA_City, &route_iter->m_destinationCity,
+				GEA_City, route_iter->m_sourceCity,
+				GEA_City, route_iter->m_destinationCity,
 				GEA_End);
 			unused_freight -= route_iter->m_cost;
 		}

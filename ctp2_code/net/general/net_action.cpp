@@ -1568,7 +1568,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_network.QueuePacket(id, new NetInfo(NET_INFO_CODE_ACK_OBJECT,
 													  m_data[0]));
 			} else {
-				c3errors_ErrorDialog("NET TESTING", "NAK: Army 0x%lx should be 0x%lx", m_data[0], pd->m_createdArmies[0]);
+				c3errors_ErrorDialog("NET TESTING", "NAK: Army 0x%lx should be 0x%lx",
+					m_data[0], pd->m_createdArmies[0].m_id);
 				g_network.QueuePacket(id,
 									  new NetInfo(NET_INFO_CODE_NAK_OBJECT,
 												  m_data[0], (uint32)pd->m_createdArmies[0]));

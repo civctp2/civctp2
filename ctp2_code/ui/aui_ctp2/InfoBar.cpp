@@ -208,7 +208,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 	MBCHAR buf[k_MAX_NAME_LEN];
 	sprintf(buf, " (%d, %d)", point.x, point.y);
 	Concat(buf);
-#endif _DEBUG
+#endif // _DEBUG
 
 	} else {
 // Added by Martin Gühmann
@@ -430,7 +430,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 		MBCHAR buf[k_MAX_NAME_LEN];
 		sprintf(buf, " (%d, %d) ", point.x, point.y);
 		Concat(buf);
-#endif _DEBUG
+#endif // _DEBUG
 
 
 		if(cell->GetNumUnits() > 0) {

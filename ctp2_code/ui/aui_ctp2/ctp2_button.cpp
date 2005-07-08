@@ -12,7 +12,6 @@
 
 
 #include <string>
-#include <strstream>
 
 
 #include "aui_imagelist.h"

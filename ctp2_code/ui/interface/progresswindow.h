@@ -89,9 +89,10 @@ public:
 		uint32 id,
 		MBCHAR *ldlBlock )
 		:
-		aui_ProgressBar( retval, id, ldlBlock ),
 		aui_ImageBase( ldlBlock ),
-		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ) {}
+		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+		aui_ProgressBar( retval, id, ldlBlock )
+	{}
 	virtual ~StandardProgressBar() {}
 
 protected:

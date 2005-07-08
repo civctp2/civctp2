@@ -1055,8 +1055,9 @@ sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_
 	
 	sint32 max_distance = (g_theWorld->GetHeight() * g_theWorld->GetWidth()) * 
 		(g_theWorld->GetHeight() * g_theWorld->GetWidth()); 
-	min_score += 
-		(optimal_distance/10) * (1.0 - ((float) empire_distance / (float) max_distance));
+	min_score += sint32(
+			(optimal_distance/10) * (1.0 - ((float) empire_distance / (float) max_distance))
+		);
 	
 	return min_score;
 }

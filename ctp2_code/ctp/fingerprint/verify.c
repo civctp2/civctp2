@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <windows.h>
 
+#ifdef LINUX
+#include <string.h>
+#endif
+
 #include "resource.h"
 #include "shroud.h"
 #include "verify.h"

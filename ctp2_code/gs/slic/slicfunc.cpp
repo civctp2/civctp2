@@ -2931,7 +2931,7 @@ SFN_ERROR Slic_PlayerWagesExp::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-	m_result.m_int = g_player[player]->GetWagesExpectation();
+	m_result.m_int = (sint32) g_player[player]->GetWagesExpectation();
 
 	return SFN_ERROR_OK;
 }
@@ -2945,7 +2945,7 @@ SFN_ERROR Slic_PlayerWorkdayExp::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-	m_result.m_int = g_player[player]->GetWorkdayExpectation();
+	m_result.m_int = (sint32) g_player[player]->GetWorkdayExpectation();
 
 	return SFN_ERROR_OK;
 }
@@ -2959,7 +2959,7 @@ SFN_ERROR Slic_PlayerRationsExp::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-	m_result.m_int = g_player[player]->GetRationsExpectation();
+	m_result.m_int = (sint32) g_player[player]->GetRationsExpectation();
 
 	return SFN_ERROR_OK;
 }
@@ -2973,7 +2973,7 @@ SFN_ERROR Slic_PlayerWagesLevel::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-	m_result.m_int = (sint32) (g_player[player]->GetWagesExpectation() - (sint32) g_player[player]->GetUnitlessWages());
+	m_result.m_int = ((sint32) g_player[player]->GetWagesExpectation() - (sint32) g_player[player]->GetUnitlessWages());
 
 	return SFN_ERROR_OK;
 }

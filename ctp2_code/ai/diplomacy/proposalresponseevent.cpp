@@ -268,7 +268,7 @@ STDEHANDLER(PayTribute_ProposalResponseEvent)
 		return GEV_HD_Continue;
 
 	sint32 extort_gold = 
-		MIN(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85;
+		sint32(MIN(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85);
 
 	extort_gold = ProposalAnalysis::RoundGold(extort_gold);
 	if (extort_gold <= 0)
@@ -369,7 +369,7 @@ STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 	GetDescription(name,100);
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
-#endif _DEBUG
+#endif // _DEBUG
 
 	
 
@@ -378,11 +378,11 @@ STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 
 	
 	if (regard >= NEUTRAL_REGARD)
-		desired_gold = proposal_sender_result.science * 1.5;
+		desired_gold = sint32(proposal_sender_result.science * 1.5);
 	else if (regard >= FRIEND_REGARD)
-		desired_gold = proposal_sender_result.science * 1.0;
+		desired_gold = sint32(proposal_sender_result.science * 1.0);
 	else if (regard >= ALLIED_REGARD)
-		desired_gold = proposal_sender_result.science * 0.8;
+		desired_gold = sint32(proposal_sender_result.science * 0.8);
 	else 
 		return GEV_HD_Continue;
 	
@@ -457,7 +457,7 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 	GetDescription(name,100);
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
-#endif _DEBUG
+#endif // _DEBUG
 
 	
 
@@ -468,11 +468,11 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 
 	
 	if (regard >= NEUTRAL_REGARD)
-		max_cost  = proposal_sender_result.science * 0.8;
+		max_cost  = sint32(proposal_sender_result.science * 0.8);
 	else if (regard >= FRIEND_REGARD)
-		max_cost = proposal_sender_result.science * 1.0;
+		max_cost = sint32(proposal_sender_result.science * 1.0);
 	else if (regard >= ALLIED_REGARD)
-		max_cost = proposal_sender_result.science * 3.0;
+		max_cost = sint32(proposal_sender_result.science * 3.0);
 	else 
 		return GEV_HD_Continue;
 
@@ -481,14 +481,14 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 		receiver_diplomat.GetPersonality()->GetDiscoveryScientist())
 	{
 		
-		min_cost = proposal_sender_result.science * 0.5;
-		max_cost = MIN(max_cost, proposal_sender_result.science * 3.0);
+		min_cost = sint32(proposal_sender_result.science * 0.5);
+		max_cost = sint32(MIN(max_cost, proposal_sender_result.science * 3.0));
 	}
 	else
 	{
 		
-		min_cost = proposal_sender_result.science * 0.8;
-		max_cost = MIN(max_cost, proposal_sender_result.science * 2.0);
+		min_cost = sint32(proposal_sender_result.science * 0.8);
+		max_cost = sint32(MIN(max_cost, proposal_sender_result.science * 2.0));
 	}
 	sint32 desired_advance = receiver_diplomat.GetDesiredAdvanceFrom(sender, min_cost, max_cost);
 	
@@ -548,7 +548,7 @@ STDEHANDLER(AdvanceExchange_ProposalResponseEvent)
 	GetDescription(name,100);
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
-#endif _DEBUG
+#endif // _DEBUG
 
 	
 	sint32 regard = receiver_diplomat.GetEffectiveRegard(sender);
@@ -565,13 +565,13 @@ STDEHANDLER(AdvanceExchange_ProposalResponseEvent)
 		receiver_diplomat.GetPersonality()->GetDiscoveryScientist())
 	{
 		
-		min_cost = proposal_sender_result.science * 0.5;
+		min_cost = sint32(proposal_sender_result.science * 0.5);
 		max_cost = proposal_sender_result.science * 2;
 	}
 	else
 	{
 		
-		min_cost = proposal_sender_result.science * 0.8;
+		min_cost = sint32(proposal_sender_result.science * 0.8);
 		max_cost = proposal_sender_result.science * 3;
 	}
 
@@ -648,7 +648,7 @@ STDEHANDLER(StopPiracy_ProposalResponseEvent)
 	GetDescription(name,100);
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
-#endif _DEBUG
+#endif // _DEBUG
 
 	
 
@@ -974,7 +974,7 @@ STDEHANDLER(CeasefireForGold_ProposalResponseEvent)
 
 	
 	sint32 extort_gold = 
-		MIN(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85;
+		sint32(MIN(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85);
 
 	
 	if (sender_proposal.detail.first_arg.gold > extort_gold)
@@ -1324,7 +1324,7 @@ STDEHANDLER(ReducePollution_ProposalResponseEvent)
 
 	
 	DiplomacyArg arg;
-	arg.pollution = (1.0 - reduce_percent) * sender_pollution;
+	arg.pollution = sint32((1.0 - reduce_percent) * sender_pollution);
 	receiver_diplomat.ConsiderCounterResponse(
 		sender, 
 		PROPOSAL_OFFER_REDUCE_POLLUTION, 
@@ -1376,7 +1376,7 @@ STDEHANDLER(HonorMilitaryAgreement_ProposalResponseEvent)
 		receiver_diplomat.GetRejectPriority( sender, sender_proposal.detail.first_type);
 
 	
-	if (foreigner == NULL ||
+	if (foreigner == 0 ||
 		AgreementMatrix::s_agreements.HasAgreement(receiver, foreigner, PROPOSAL_TREATY_DECLARE_WAR))
 	{
 		receiver_diplomat.ConsiderResponse(sender, RESPONSE_ACCEPT, accept_priority);
@@ -1516,7 +1516,7 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 			double percent = ((double)sender_pollution - sender_promised_pollution) / sender_pollution;
 			percent = ProposalAnalysis::RoundPercentReduction(percent);
 
-			arg.pollution = ((1.0 - percent) * sender_pollution);
+			arg.pollution = sint32((1.0 - percent) * sender_pollution);
 			arg.pollution = ProposalAnalysis::RoundGold(arg.pollution);
 			if (arg.pollution <= 0)
 				return GEV_HD_Continue;
@@ -1583,7 +1583,7 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 		
 		percent = ProposalAnalysis::RoundPercentReduction(percent);
 
-		arg.pollution = (percent * sender_pollution);
+		arg.pollution = sint32(percent * sender_pollution);
 		arg.pollution = ProposalAnalysis::RoundGold(arg.pollution);
 		if (arg.pollution <= 0)
 			return GEV_HD_Continue;
