@@ -433,7 +433,7 @@ arrayref: NAME { $$.name = $1.name; slicif_add_op(SOP_PUSHA, $1.name); } '[' exp
 	;
 %%
 
-extern FILE *yyin;
+extern FILE *yyslin;
 int yyparse();
 
 SLIC_ERROR slicif_run_parser(char* filename, int symStart)
@@ -463,14 +463,14 @@ SLIC_ERROR slicif_run_parser(char* filename, int symStart)
 
     do {
 		yyparse();
-    } while(!feof(yyin) && slic_parse_error == SLIC_ERROR_OK && !slic_parser_done);
+    } while(!feof(yyslin) && slic_parse_error == SLIC_ERROR_OK && !slic_parser_done);
 
 #ifdef _DEBUG
 	fclose(debuglog);
 	debuglog = NULL;
 #endif
-	fclose(yyin);
-	yyin = NULL;
+	fclose(yyslin);
+	yyslin = NULL;
 	return slic_parse_error;
 }
 

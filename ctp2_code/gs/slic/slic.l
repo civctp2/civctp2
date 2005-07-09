@@ -29,7 +29,7 @@
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
-#include "y.tab.h"
+#include "ysl.tab.h"
 #include <limits.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -152,32 +152,32 @@ Const       { return KW_CONST; }
 
 Return      { return KW_RETURN; }
 
-{stringid}  { yylval.val = slicif_find_string(yytext); return STRINGID; }
+{stringid}  { yysllval.val = slicif_find_string(yytext); return STRINGID; }
 {name}		{ 
 			    int value;
 				void *dbptr;
 				if(slicif_find_const(yytext, &value)) {
-				    yylval.val = value;
+				    yysllval.val = value;
 					return NUMBER;
 				} else if(slicif_find_db(yytext, &dbptr)) {
-					yylval.dbptr = dbptr;
+					yysllval.dbptr = dbptr;
 					return DBREF;
 				} else {
-				    yylval.name = (char*)strdup(yytext); 
+				    yysllval.name = (char*)strdup(yytext); 
 				    return NAME;
 				}
 			}
-[0-9]+		{ yylval.val = atoi(yytext); return NUMBER; }
+[0-9]+		{ yysllval.val = atoi(yytext); return NUMBER; }
 {slicid}	{ 
-				yylval.name = malloc(strlen(yytext) - 1);
-				strncpy(yylval.name, yytext + 1, strlen(yytext) - 2);
-				yylval.name[strlen(yytext) - 2] = 0;
+				yysllval.name = malloc(strlen(yytext) - 1);
+				strncpy(yysllval.name, yytext + 1, strlen(yytext) - 2);
+				yysllval.name[strlen(yytext) - 2] = 0;
 				return IDENTIFIER; 
 			}
 {string}    { 
-                yylval.name = malloc(strlen(yytext) - 1);
-				strncpy(yylval.name, yytext + 1, strlen(yytext) - 2);
-				yylval.name[strlen(yytext) - 2] = 0;
+                yysllval.name = malloc(strlen(yytext) - 1);
+				strncpy(yysllval.name, yytext + 1, strlen(yytext) - 2);
+				yysllval.name[strlen(yytext) - 2] = 0;
 				return STRING;
 			}
 

@@ -65,7 +65,7 @@
 #include "ResourceRecord.h"
 
 #include "sliccmd.h"
-#include "sc.tab.h"
+#include "ysc.tab.h"
 
 #if defined(_JAPANESE)
 #include "japanese.h"

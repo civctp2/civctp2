@@ -73,12 +73,12 @@ ctp2_SOURCES = \
 	gs/newdb/CTPDatabase.cpp \
 	gs/newdb/CTPRecord.cpp \
 	gs/newdb/DBLexer.cpp \
-	gs/slic/lex.sc.c \
-	gs/slic/lex.yy.c \
-	gs/slic/sc.tab.c \
-	gs/slic/sc.tab.h \
-	gs/slic/y.tab.c \
-	gs/slic/y.tab.h \
+	gs/slic/lex.yysc.c \
+	gs/slic/lex.yysl.c \
+	gs/slic/ysc.tab.c \
+	gs/slic/ysc.tab.h \
+	gs/slic/ysl.tab.c \
+	gs/slic/ysl.tab.h \
 	gs/slic/QuickSlic.cpp \
 	gs/slic/SlicArray.cpp \
 	gs/slic/SlicBuiltin.cpp \
@@ -684,8 +684,6 @@ ctp2_SOURCES = \
 	ui/interface/spnewgametribescreen.cpp \
 	ui/interface/spnewgamewindow.cpp \
 	ui/interface/spriteeditor.cpp \
-	ui/interface/spscreen.cpp \
-	ui/interface/spwindow.cpp \
 	ui/interface/statictextbox.cpp \
 	ui/interface/statswindow.cpp \
 	ui/interface/String_Search.cpp \
@@ -807,19 +805,19 @@ ctp2_LDADD = \
 	$(CTP2_LIBOSNOWIN32_LDFLAGS) \
 	$(CTP2_LDFLAGS)
 
-gs/slic/lex.sc.c: $(ctp2_code)/gs/slic/sliccmd.l gs/slic/sc.tab.h
-	$(LEX) -i -o$@ $<
+gs/slic/lex.yysc.c: $(ctp2_code)/gs/slic/sliccmd.l gs/slic/ysc.tab.h
+	$(LEX) -i --prefix=yysc -o$@ $<
 
-gs/slic/lex.yy.c: $(ctp2_code)/gs/slic/slic.l gs/slic/y.tab.h
-	$(LEX) -i -o$@ $<
+gs/slic/lex.yysl.c: $(ctp2_code)/gs/slic/slic.l gs/slic/ysl.tab.h
+	$(LEX) -i --prefix=yysl -o$@ $<
 
-gs/slic/sc.tab.c \
-gs/slic/sc.tab.h: $(ctp2_code)/gs/slic/sliccmd.y
-	$(YACC) $(YFLAGS) $(AM_YFLAGS) -bgs/slic/sc $<
+gs/slic/ysc.tab.c \
+gs/slic/ysc.tab.h: $(ctp2_code)/gs/slic/sliccmd.y
+	$(YACC) $(YFLAGS) $(AM_YFLAGS) -p yysc -bgs/slic/ysc $<
 
-gs/slic/y.tab.c \
-gs/slic/y.tab.h: $(ctp2_code)/gs/slic/slic.y
-	$(YACC) $(YFLAGS) $(AM_YFLAGS) -bgs/slic/y $<
+gs/slic/ysl.tab.c \
+gs/slic/ysl.tab.h: $(ctp2_code)/gs/slic/slic.y
+	$(YACC) $(YFLAGS) $(AM_YFLAGS) -p yysl -bgs/slic/ysl $<
 
 ui/ldl:
 	$(INSTALL) -d $@
@@ -1160,13 +1158,14 @@ $(NEWDB_TARGET)WonderRecord.stamp: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
 
 MOSTLYCLEANFILES=\
 	gs/newdb/lex.dbl.c \
-	gs/slic/lex.sc.c \
-	gs/slic/lex.yy.c \
-	gs/slic/sc.tab.c \
-	gs/slic/sc.tab.h \
-	gs/slic/y.tab.c \
-	gs/slic/y.tab.h \
-	gs/slic/y.output \
+	gs/slic/lex.yysc.c \
+	gs/slic/lex.yysl.c \
+	gs/slic/ysc.tab.c \
+	gs/slic/ysc.tab.h \
+	gs/slic/ysc.output \
+	gs/slic/ysl.tab.c \
+	gs/slic/ysl.tab.h \
+	gs/slic/ysl.output \
 	$(newdb_CDBSRCFILES) \
 	$(newdb_CDBHDRFILES) \
 	$(newdb_CDBSTAMPFILES) \

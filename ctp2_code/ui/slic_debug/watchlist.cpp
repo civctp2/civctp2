@@ -43,7 +43,7 @@
 #include "colorset.h"
 
 #include "sliccmd.h"
-#include "sc.tab.h"
+#include "ysc.tab.h"
 
 #include "pointerlist.h"
 

@@ -1,7 +1,7 @@
 <?xml version = '1.0'?>
 <kdevelop>
   <general>
-    <author/>
+    <author></author>
     <email>ctp2source@apolyton.net</email>
     <version>$VERSION$</version>
     <projectmanagement>KDevAutoProject</projectmanagement>
@@ -9,7 +9,7 @@
     <ignoreparts/>
     <projectdirectory>../../..</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <secondaryLanguages>
       <language>C</language>
     </secondaryLanguages>
@@ -46,13 +46,13 @@
         <cxxflags>-O0 -Werror -Wchar-subscripts -Wcomment -Wimplicit-funtion-declaration -Wmissing-braces -Wparentheses -Wreorder -Wreturn-type -Wtrigraphs -Wunknown-pragmas -Wno-multichar -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -Wno-non-template-friend -g3</cxxflags>
         <envvars/>
         <topsourcedir>.</topsourcedir>
-        <cppflags/>
-        <ldflags/>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
-        <cflags>-O0 -Werror -Wchar-subscripts -Wcomment -Werror-implicit-function-declaration -Wformat -Wimplicit-int -Wmain -Wmissing-braces -Wmultichar -Wreturn-type -Wsequence-point -Wswitch -Wtrigraphs -Wunknown-pragmas -Wno-unused -Wno-implicit-function-declaration</cflags>
-        <f77flags/>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags>-O0 -Werror -Wchar-subscripts -Wcomment -Werror-implicit-function-declaration -Wformat -Wimplicit-int -Wmain -Wmissing-braces -Wmultichar -Wreturn-type -Wsequence-point -Wswitch -Wtrigraphs -Wunknown-pragmas -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
+        <f77flags></f77flags>
       </debug>
     </configurations>
     <make>
@@ -70,11 +70,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -174,7 +174,7 @@
     </codecompletion>
     <references/>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -202,8 +202,8 @@
   </kdevfileview>
   <kdevvisualadvance>
     <emulator>VisualBoyAdvance</emulator>
-    <binary/>
-    <addOptions/>
+    <binary></binary>
+    <addOptions></addOptions>
     <terminal>false</terminal>
     <fullscreen>false</fullscreen>
     <graphicFilter>-f0</graphicFilter>

@@ -2,7 +2,7 @@
 #include "c3.h"
 #include "SlicConditional.h"
 #include "sliccmd.h"
-#include "sc.tab.h"
+#include "ysc.tab.h"
 
 SlicConditional::SlicConditional(const char *expression)
 {

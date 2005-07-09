@@ -17,6 +17,16 @@ GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, const void* arg)
 	Init(type, arg);
 }
 
+GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, const sint32 arg)
+{
+	Init(type, &arg);
+}
+
+GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, const MapPoint& arg)
+{
+	Init(type, &arg);
+}
+
 GameEventArgument::GameEventArgument(CivArchive &archive)
 {
 	Serialize(archive);

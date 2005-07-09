@@ -42,7 +42,7 @@
 
 #include "pointerlist.h"
 
-#include "sc.tab.h"
+#include "ysc.tab.h"
 #include "StrDB.h"
 #include "SlicDBConduit.h"
 #include "profileDB.h"
@@ -55,22 +55,22 @@ int sliccmd_int_result;
 
 void sliccmd_arg_exp(int value)
 {
-	scerror("arguments not implemented");
+	yyscerror("arguments not implemented");
 }
 
 void sliccmd_arg_id(char *id)
 {
-	scerror("arguments not implemented");
+	yyscerror("arguments not implemented");
 }
 
 void sliccmd_arg_stringid(int id)
 {
-	scerror("arguments not implemented");
+	yyscerror("arguments not implemented");
 }
 
 void sliccmd_arg_string(char *string)
 {
-	scerror("arguments not implemented");
+	yyscerror("arguments not implemented");
 }
 
 int sliccmd_get_int_value(char *symName)
@@ -80,14 +80,14 @@ int sliccmd_get_int_value(char *symName)
 	SlicSymbolData *sym = sliccmd_get_symbol(symName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", symName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
 	sint32 value;
 	if(!sym->GetIntValue(value)) {
 		sprintf(errbuf, "Symbol %s is not an integer variable", symName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -96,7 +96,7 @@ int sliccmd_get_int_value(char *symName)
 
 int sliccmd_call(char *funcName)
 {
-	scerror("Function calls not implemented");
+	yyscerror("Function calls not implemented");
 	return 0;
 }
 
@@ -150,14 +150,14 @@ int sliccmd_get_ref_value(char *structName, char *memberName)
 	SlicSymbolData *sym = sliccmd_get_symbol(structName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", structName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
 	
 	if(sym->GetType() != SLIC_SYM_STRUCT) {
 		sprintf(errbuf, "%s is not a structure", structName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -174,7 +174,7 @@ int sliccmd_get_ref_value(char *structName, char *memberName)
 	SlicSymbolData *member = inst->GetMemberSymbolByName(memberName);
 	if(!member) {
 		sprintf(errbuf, "Struct %s has no member named %s", structName, memberName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -184,7 +184,7 @@ int sliccmd_get_ref_value(char *structName, char *memberName)
 	sint32 value;
 	if(!member->GetIntValue(value)) {
 		sprintf(errbuf, "%s.%s is not an integer", structName, memberName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 	return value;
@@ -198,14 +198,14 @@ void *sliccmd_get_ref_sym(char *structName, char *memberName)
 	SlicSymbolData *sym = sliccmd_get_symbol(structName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", structName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
 	
 	if(sym->GetType() != SLIC_SYM_STRUCT) {
 		sprintf(errbuf, "%s is not a structure", structName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -222,7 +222,7 @@ void *sliccmd_get_ref_sym(char *structName, char *memberName)
 	SlicSymbolData *member = inst->GetMemberSymbolByName(memberName);
 	if(!member) {
 		sprintf(errbuf, "Struct %s has no member named %s", structName, memberName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -239,14 +239,14 @@ int sliccmd_array_lookup(char *arrayName, int index)
 	SlicSymbolData *sym = sliccmd_get_symbol(arrayName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", arrayName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
 	
 	if(sym->GetType() != SLIC_SYM_ARRAY) {
 		sprintf(errbuf, "%s is not an array", arrayName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -254,7 +254,7 @@ int sliccmd_array_lookup(char *arrayName, int index)
 	SlicStackValue value;
 	if(!sym->ArrayLookup(index, type, value)) {
 		sprintf(errbuf, "Array lookup %s[%d] failed", arrayName, index);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -264,7 +264,7 @@ int sliccmd_array_lookup(char *arrayName, int index)
 		sint32 intVal;
 		if(!value.m_sym->GetIntValue(intVal)) {
 			sprintf(errbuf, "%s[%d] is not an integer", arrayName, index);
-			scerror(errbuf);
+			yyscerror(errbuf);
 			return 0;
 		}
 		return intVal;
@@ -283,14 +283,14 @@ void *sliccmd_array_lookup_reference(char *arrayName, int index, char *memberNam
 	SlicSymbolData *sym = sliccmd_get_symbol(arrayName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", arrayName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
 	
 	if(sym->GetType() != SLIC_SYM_ARRAY) {
 		sprintf(errbuf, "%s is not an array", arrayName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -298,13 +298,13 @@ void *sliccmd_array_lookup_reference(char *arrayName, int index, char *memberNam
 	SlicStackValue value;
 	if(!sym->ArrayLookup(index, type, value)) {
 		sprintf(errbuf, "Array lookup %s[%d] failed", arrayName, index);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
 	if((type != SS_TYPE_SYM) || (value.m_sym->GetType() != SLIC_SYM_STRUCT)) {
 		sprintf(errbuf, "%s[%d] is not a struct", arrayName, index);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -318,7 +318,7 @@ void *sliccmd_array_lookup_reference(char *arrayName, int index, char *memberNam
 	SlicSymbolData *member = inst->GetMemberSymbolByName(memberName);
 	if(!member) {
 		sprintf(errbuf, "%s[%d] has no member named %s", arrayName, index, memberName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return 0;
 	}
 
@@ -395,7 +395,7 @@ void *sliccmd_lookup_sym(char *name)
 	SlicSymbolData *sym = sliccmd_get_symbol(name);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", name);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return sym;
 	}
 	return sym;
@@ -414,14 +414,14 @@ void *sliccmd_array_lookup_sym(char *arrayName, int index)
 	SlicSymbolData *sym = sliccmd_get_symbol(arrayName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", arrayName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return NULL;
 	}
 
 	
 	if(sym->GetType() != SLIC_SYM_ARRAY) {
 		sprintf(errbuf, "%s is not an array", arrayName);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return NULL;
 	}
 
@@ -429,7 +429,7 @@ void *sliccmd_array_lookup_sym(char *arrayName, int index)
 	SlicStackValue value;
 	if(!sym->ArrayLookup(index, type, value)) {
 		sprintf(errbuf, "Array lookup %s[%d] failed", arrayName, index);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return NULL;
 	}
 
@@ -437,7 +437,7 @@ void *sliccmd_array_lookup_sym(char *arrayName, int index)
 		return value.m_sym;
 	} else {
 		sprintf(errbuf, "No symbol for %s[%d]", arrayName, index);
-		scerror(errbuf);
+		yyscerror(errbuf);
 		return NULL;
 	}
 }
@@ -510,7 +510,7 @@ void sliccmd_type_error()
 {
 	char errbuf[1024];
 	sprintf(errbuf, "Type error");
-	scerror(errbuf);
+	yyscerror(errbuf);
 }
 
 void sliccmd_clear_symbols()

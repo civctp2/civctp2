@@ -24,8 +24,8 @@ struct SimpleMapPoint {
 class GameEventArgument {
 public:
 	GameEventArgument(GAME_EVENT_ARGUMENT type, const void* arg);
-	GameEventArgument(GAME_EVENT_ARGUMENT type, sint32);
-	GameEventArgument(GAME_EVENT_ARGUMENT type, const MapPointData &);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, const sint32 arg);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, const MapPoint& arg);
 	GameEventArgument(CivArchive &archive);
 	~GameEventArgument();
 	void Serialize(CivArchive &archive);

@@ -3,7 +3,7 @@
 #include "ctp2_inttypes.h"
 
 #include "ctpdb.h"
-#include "y.tab.h"
+#include "ydb.tab.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -27,21 +27,21 @@ string        { return STRING; }
 stringid      { return STRINGID; }
 
 {name}        {
-			      yylval.name = (char*)strdup(yytext);
+			      yydblval.name = (char*)strdup(yytext);
 				  return NAME;
 			  }
 {string}      {
 				  /* strips quotes */
-				  yylval.name = (char*)strdup(yytext+1);
-				  yylval.name[strlen(yylval.name) - 1] = 0;
+				  yydblval.name = (char*)strdup(yytext+1);
+				  yydblval.name[strlen(yydblval.name) - 1] = 0;
 				  return STRINGVALUE;
 			  }
 -?[0-9]+\.[0-9]+ {
-				  yylval.fval = atof(yytext);
+				  yydblval.fval = atof(yytext);
 				  return FLOATVALUE;
 			  }
 -?[0-9]+	  {
-				  yylval.val = atoi(yytext);
+				  yydblval.val = atoi(yytext);
 				  return NUMBER;
 			  }
 \.\.          { return RANGE; }					

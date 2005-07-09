@@ -1,9 +1,8 @@
 %{
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
-#include "scyaccdefs.h"
 #include "sliccmd.h" 
-#include "sc.tab.h"
+#include "ysc.tab.h"
 #include <stdlib.h>
 #include <string.h>
 #ifdef WIN32
@@ -41,34 +40,34 @@ name		[a-zA-Z]+[a-zA-Z0-9_#]*
 				}
 			}
 	
-{stringid}  { yylval.v.value = slicif_find_string(yytext); return STRINGID; }
+{stringid}  { yysclval.v.value = slicif_find_string(yytext); return STRINGID; }
 {name}		{ 
 			    int value;
                 void *dbptr;
 				if(slicif_find_const(yytext, &value)) {
-                    yylval.v.type = EXP_VAL_INT;
-				    yylval.v.value = value;
+                    yysclval.v.type = EXP_VAL_INT;
+				    yysclval.v.value = value;
 					return NUMBER;
                 } else if(slicif_find_db(yytext, &dbptr)) {
-					yylval.v.dbptr = dbptr;
+					yysclval.v.dbptr = dbptr;
 					return DBREF;
 				} else {
-                    yylval.v.type = EXP_VAL_SYM;
-				    strncpy(yylval.v.name, yytext, k_MAX_SLICCMD_NAME);
+                    yysclval.v.type = EXP_VAL_SYM;
+				    strncpy(yysclval.v.name, yytext, k_MAX_SLICCMD_NAME);
 				    return NAME;
 				}
 			}
-[0-9]+		{ yylval.v.type = EXP_VAL_INT; yylval.v.value = atoi(yytext); return NUMBER; }
+[0-9]+		{ yysclval.v.type = EXP_VAL_INT; yysclval.v.value = atoi(yytext); return NUMBER; }
 {slicid}	{ 
-                yylval.v.type = EXP_VAL_SYM;
-				strncpy(yylval.v.name, yytext + 1, strlen(yytext) - 2);
-				yylval.v.name[strlen(yytext) - 2] = 0;
+                yysclval.v.type = EXP_VAL_SYM;
+				strncpy(yysclval.v.name, yytext + 1, strlen(yytext) - 2);
+				yysclval.v.name[strlen(yytext) - 2] = 0;
 				return IDENTIFIER; 
 			}
 {string}    { 
-                yylval.v.type = EXP_VAL_SYM;
-				strncpy(yylval.v.name, yytext + 1, strlen(yytext) - 2);
-				yylval.v.name[strlen(yytext) - 2] = 0;
+                yysclval.v.type = EXP_VAL_SYM;
+				strncpy(yysclval.v.name, yytext + 1, strlen(yytext) - 2);
+				yysclval.v.name[strlen(yytext) - 2] = 0;
 				return STRING;
 			}
 

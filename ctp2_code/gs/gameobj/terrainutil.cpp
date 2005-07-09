@@ -39,6 +39,7 @@
 #include "c3.h"
 #include "terrainutil.h"
 #include "TerrainRecord.h"
+
 #ifndef __TILETOOL__
 #include "MapPoint.h"
 #include "World.h"

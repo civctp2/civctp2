@@ -117,7 +117,7 @@ static int s_argMemberIndex;
 
 #define k_MAX_FUNCTION_NAME 256
 
-extern "C" void yyerror(char *s);
+extern "C" void yyslerror(char *s);
 
 void slicif_init()
 {
@@ -288,7 +288,7 @@ void slicif_declare_sym(char *name, SLIC_SYM type)
 	if(sym) {
 		if(sym->GetType() != SLIC_SYM_UNDEFINED) {
 			sprintf(buf, "Symbol '%s' already has a type", name);			
-			yyerror(buf);
+			yyslerror(buf);
 		} else {
 			SlicStructDescription *desc = g_slicEngine->GetStructDescription(type);
 			if(desc) {
@@ -300,7 +300,7 @@ void slicif_declare_sym(char *name, SLIC_SYM type)
 		}
 	} else {
 		sprintf(buf, "Couldn't create symbol '%s'", name);
-		yyerror(buf);
+		yyslerror(buf);
 	}
 }
 
@@ -311,7 +311,7 @@ void slicif_declare_array(char *name, SLIC_SYM type)
 	if(sym) {
 		if(sym->GetType() != SLIC_SYM_UNDEFINED) {
 			sprintf(buf, "Symbol '%s' in array declaration already has a type", name);
-			yyerror(buf);
+			yyslerror(buf);
 		} else {
 			sym->SetType(SLIC_SYM_ARRAY);
 			SlicStructDescription *desc = g_slicEngine->GetStructDescription(type);
@@ -324,7 +324,7 @@ void slicif_declare_array(char *name, SLIC_SYM type)
 		}
 	} else {
 		sprintf(buf, "Couldn't create array symbol '%s'", name);
-		yyerror(buf);
+		yyslerror(buf);
 	}
 }
 
@@ -335,7 +335,7 @@ void slicif_declare_fixed_array(char *name, SLIC_SYM type, int size)
 	if(sym) {
 		if(sym->GetType() != SLIC_SYM_UNDEFINED) {
 			sprintf("Symbol '%s' in array declaration already has a type", name);
-			yyerror(buf);
+			yyslerror(buf);
 		} else {
 			sym->SetType(SLIC_SYM_ARRAY);
 			sym->GetArray()->FixSize(size);
@@ -350,7 +350,7 @@ void slicif_declare_fixed_array(char *name, SLIC_SYM type, int size)
 		}
 	} else {
 		sprintf(buf, "Couldn't create array symbol '%s'", name);
-		yyerror(buf);
+		yyslerror(buf);
 	}
 }
 
@@ -439,7 +439,7 @@ void slicif_add_op(SOP op, ...)
 			symval = slicif_get_symbol(name);
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(name);
 			}
 			*((int *)s_code_ptr) = symval->GetIndex();
@@ -463,7 +463,7 @@ void slicif_add_op(SOP op, ...)
 			symval = slicif_get_symbol(name);
 			if(!symval) {
 				sprintf(errbuf, "Symbol '%s' is undefined", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(name);
 			}
 			*((int *)s_code_ptr) = symval->GetIndex();
@@ -487,17 +487,17 @@ void slicif_add_op(SOP op, ...)
 			sint32 member;
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", structname);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(structname);
 			} else if(symval->GetType() != SLIC_SYM_STRUCT) {
 				sprintf(errbuf, "%s is not a structure", structname);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 			} else {
 				SlicStructDescription *theStruct = symval->GetStruct()->GetDescription();
 				member = (int)theStruct->GetMemberIndex(name);
 				if(member < 0) {
 					sprintf(errbuf, "%s is not a member of %s", name, structname);
-					yyerror(errbuf);
+					yyslerror(errbuf);
 				}
 			}
 			
@@ -529,17 +529,17 @@ void slicif_add_op(SOP op, ...)
 			sint32 member;
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", structname);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(structname);
 			} else if(symval->GetType() != SLIC_SYM_ARRAY) {
 				sprintf(errbuf, "%s is not an array", structname);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 			} else {
 				SlicStructDescription *theStruct = symval->GetArray()->GetStructTemplate();
 				member = (int)theStruct->GetMemberIndex(name);
 				if(member < 0) {
 					sprintf(errbuf, "%s is not a member of %s", name, structname);
-					yyerror(errbuf);
+					yyslerror(errbuf);
 				}
 			}
 			
@@ -580,7 +580,7 @@ void slicif_add_op(SOP op, ...)
 					symval->SetType(SLIC_SYM_ID);
 				} else {
 					sprintf(errbuf, "%s already defined", name);
-					yyerror(errbuf);
+					yyslerror(errbuf);
 				}
 			}
 			*((int *)s_code_ptr) = symval->GetIndex();
@@ -632,14 +632,14 @@ void slicif_add_op(SOP op, ...)
 				if(symval->GetType() != SLIC_SYM_FUNC &&
 				   symval->GetType() != SLIC_SYM_UFUNC) {
 					sprintf(errbuf, "%s is not a function", name);
-					yyerror(errbuf);
+					yyslerror(errbuf);
 				}
 			} else {
 				strcpy(internalName, "_");
 				strcat(internalName, name);
 				if(!g_slicEngine->GetFunction(internalName)) {
 					sprintf(errbuf, "No function named %s", name);
-					yyerror(errbuf);
+					yyslerror(errbuf);
 				}
 				if(!(symval = g_slicEngine->GetSymbol(internalName))) {
 					symval = g_slicEngine->GetOrMakeSymbol(internalName);
@@ -732,17 +732,17 @@ void slicif_add_op(SOP op, ...)
 			symval = slicif_get_symbol(name);
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(name);
 			}
 
 			if(symval->GetType() == SLIC_SYM_UNDEFINED) {
 				sprintf(errbuf, "Variable '%s' used in assignment has unknown type", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval->SetType(SLIC_SYM_IVAR);
 			} else if(symval->IsParameter()) {
 				sprintf(errbuf, "Function parameters are read-only");
-				yyerror(errbuf);
+				yyslerror(errbuf);
 			}
 
 			*((int *)s_code_ptr) = symval->GetIndex();
@@ -756,13 +756,13 @@ void slicif_add_op(SOP op, ...)
 			symval = slicif_get_symbol(name);
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(name);
 			}
 
 			if(symval->GetType() != SLIC_SYM_ARRAY) {
 				sprintf(errbuf, "Symbol '%s' used in array assignment is not an array", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 			}
 
 			*((int *)s_code_ptr) = symval->GetIndex();
@@ -779,13 +779,13 @@ void slicif_add_op(SOP op, ...)
 			symval = slicif_get_symbol(structname);
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", structname);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(structname);
 			}
 
 			if(symval->GetType() != SLIC_SYM_STRUCT) {
 				sprintf(errbuf, "Symbol %s is not a struct", structname);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				member = -1;
 			} else {
 				
@@ -793,7 +793,7 @@ void slicif_add_op(SOP op, ...)
 				member = (int)theStruct->GetMemberIndex(name);
 				if(member < 0) {
 					sprintf(errbuf, "Struct %s has no member named %s", structname, name);
-					yyerror(errbuf);
+					yyslerror(errbuf);
 				}
 			}
 
@@ -828,13 +828,13 @@ void slicif_add_op(SOP op, ...)
 			symval = slicif_get_symbol(name);
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(name);
 			}
 
 			if(symval->GetType() != SLIC_SYM_ARRAY) {
 				sprintf(errbuf, ".# operator only works on arrays");
-				yyerror(errbuf);
+				yyslerror(errbuf);
 			}
 
 			*((int *)s_code_ptr) = symval->GetIndex();
@@ -850,7 +850,7 @@ void slicif_add_op(SOP op, ...)
 			symval = slicif_get_symbol(name);
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(name);
 			}
 
@@ -891,7 +891,7 @@ void slicif_add_op(SOP op, ...)
 			symval = slicif_get_symbol(name);
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", name);
-				yyerror(errbuf);
+				yyslerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(name);
 				//variable name is now free and can be reused. 
 			}
@@ -900,7 +900,7 @@ void slicif_add_op(SOP op, ...)
 			name = va_arg(vl, char*);
 			if(!conduit->IsTokenInDB(name)){
 				sprintf(errbuf, "Token %s not found in %s", name, conduit->GetName());
-				yyerror(errbuf);
+				yyslerror(errbuf);
 			}
 
 			//Save the database name to the code data, by saving every
@@ -968,7 +968,7 @@ void slicif_add_op(SOP op, ...)
 			name = va_arg(vl, char *);
 			if(!conduit->IsTokenInDB(name)){
 				sprintf(errbuf, "Token %s not found in %s", name, conduit->GetName());
-				yyerror(errbuf);
+				yyslerror(errbuf);
 			}
 			
 			//Save the database name to the code data, by saving every
@@ -1550,12 +1550,12 @@ int slicif_find_string(char *id)
 		sym->SetType(SLIC_SYM_SVAR);
 	} else if(sym->GetType() != SLIC_SYM_SVAR) {
 		sprintf(errbuf, "%s is not a string variable", id + 3);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 
 	if(!slicif_is_valid_string(id + 3)) {
 		sprintf(errbuf, "%s not found in string databse", id + 3);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 
 	return sym->GetIndex();
@@ -1706,7 +1706,7 @@ void slicif_add_parameter(SLIC_SYM type, char *name)
 		
 		char errbuf[1024];
 		sprintf(errbuf, "'%s' already has a local definition", name);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	} else {
 		
 		SlicParameterSymbol *psym = g_slicEngine->GetParameterSymbol(namebuf, s_parameter_index++);
@@ -1741,7 +1741,7 @@ void slicif_add_prototype(char *name)
 	char errbuf[1024];
 	if(sym->GetType() != SLIC_SYM_UNDEFINED) {
 		sprintf(errbuf, "Symbol '%s' is already defined", name);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	} else {
 		sym->SetType(SLIC_SYM_UFUNC);
 	}
@@ -1750,7 +1750,7 @@ void slicif_add_prototype(char *name)
 		
 		
 		sprintf(errbuf, "Prototypes should not define arguments\n");
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 }
 
@@ -1826,7 +1826,7 @@ void slicif_check_event_exists(char *name)
 	if(ev >= GEV_MAX) {
 		char errbuf[1024];
 		sprintf(errbuf, "No event named %s", name);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 }
 
@@ -1937,7 +1937,7 @@ void slicif_start_event(char *name)
 	s_currentEvent = g_gevManager->GetEventIndex(name);
 	if(s_currentEvent >= GEV_MAX) {
 		sprintf(errbuf, "Event %s does not exist", name);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 		return;
 	}
 
@@ -1956,7 +1956,7 @@ void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
 		if(type != SLIC_SYM_IVAR && type != SLIC_SYM_PLAYER && type != SLIC_SYM_LOCATION &&
 			type != SLIC_SYM_CITY && type != SLIC_SYM_UNIT && type != SLIC_SYM_ARMY) {
 			sprintf(errbuf, "Argument %d requires a symbol", s_currentEventArgument[s_parenLevel] + 1);
-			yyerror(errbuf);
+			yyslerror(errbuf);
 		}
 		return;
 	}
@@ -1985,7 +1985,7 @@ void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
 	}
 	if(symType != type) {
 		sprintf(errbuf, "Type mismatch for argument %d, expected %s", s_currentEventArgument[s_parenLevel] + 1, typeName);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 		return;
 	}
 }
@@ -2050,7 +2050,7 @@ void slicif_check_num_args()
 			sprintf(errbuf, "Wrong number of arguments for event %s, expected %d",
 			        g_gevManager->GetEventName(s_currentEvent),
 			        g_gevManager->GetNumArgs(s_currentEvent));
-			yyerror(errbuf);
+			yyslerror(errbuf);
 			return;
 		}
 	}
@@ -2124,7 +2124,7 @@ int slicif_find_db_index(void *dbptr, const char *name)
 	if(index < 0) {
 		char errbuf[1024];
 		sprintf(errbuf, "%s not found in %s", name, conduit->GetName());
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 	return index;
 }
@@ -2163,7 +2163,7 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 	sint32 index;
 	if((index = conduit->GetIndex(recname)) < 0) {
 		sprintf(errbuf, "%s not found in %s", recname, conduit->GetName());
-		yyerror(errbuf);
+		yyslerror(errbuf);
 		return 0;
 	}
 #if 0
