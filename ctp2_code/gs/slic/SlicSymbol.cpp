@@ -30,10 +30,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "SlicSymbol.h"
+
 #include "c3errors.h"
 #include "SlicFunc.h"
-
-#include "SlicSymbol.h"
 #include "SlicObject.h"
 #include "SlicSegment.h"
 #include "slicif.h"
@@ -112,8 +112,6 @@ void SlicSymbolData::Init()
 	m_debugInfo = NULL;
 }
 
-//Added by Martin Gühmann
-
 //----------------------------------------------------------------------------
 //
 // Name       : ~SlicSymbolData
@@ -126,36 +124,42 @@ void SlicSymbolData::Init()
 //
 // Returns    : -
 //
-// Remark(s)  : No need for valid checks.
-//              No need for nulling.
-//              Also Strings are now cleaned up.
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 SlicSymbolData::~SlicSymbolData()
 {
-	if(GetType() == SLIC_SYM_REGION) {
-		delete m_val.m_region;
-	}
+    switch (GetType())
+    {
+    default:
+        // No action: no specific data to delete
+        break;
 
-	if(GetType() == SLIC_SYM_COMPLEX_REGION) {
-		while(m_val.m_complexRegion) {
+    case SLIC_SYM_REGION:
+		delete m_val.m_region;
+        break;
+
+    case SLIC_SYM_COMPLEX_REGION:
+        while (m_val.m_complexRegion) 
+        {
 			PSlicComplexRegion *next = m_val.m_complexRegion->next;
 			delete m_val.m_complexRegion;
 			m_val.m_complexRegion = next;
 		}
-	}
+        break;
 
-	if(GetType() == SLIC_SYM_STRUCT) {
+    case SLIC_SYM_STRUCT:
 		delete m_val.m_struct;
-	}
+        break;
 
-	if(GetType() == SLIC_SYM_ARRAY) {
+    case SLIC_SYM_ARRAY:
 		delete m_val.m_array;
-	}
+        break;
 
-	if(GetType() == SLIC_SYM_STRING) {
+	case SLIC_SYM_STRING:
 		delete m_val.m_hard_string;
-	}
+        break;
+    } // switch
 
 	delete m_debugInfo;
 }
@@ -911,12 +915,19 @@ void SlicSymbolDebugInfo::NotifyChange(SlicSymbolData *sym)
 	}
 }
 
-void SlicSymbolData::SetString(MBCHAR *str)
+void SlicSymbolData::SetString(MBCHAR const * str)
 {
 	if(GetType() == SLIC_SYM_STRING) {
         delete [] m_val.m_hard_string;
-		m_val.m_hard_string = new char[strlen(str) + 1];
-		strcpy(m_val.m_hard_string, str);
+        if (str)
+        {
+		    m_val.m_hard_string = new char[strlen(str) + 1];
+            strcpy(m_val.m_hard_string, str);
+        }
+        else
+        {
+            m_val.m_hard_string = NULL;            
+        }
 	} else if(GetType() == SLIC_SYM_STRUCT) {
 		m_val.m_struct->GetDataSymbol()->SetString(str);
 	} else {

@@ -1,18 +1,48 @@
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Guarded against crash with NULL source argument in strcpy.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "SlicSymbol.h"
 #include "SlicNamedSymbol.h"
+
+#include "SlicSymbol.h"
 #include "SlicArray.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
 #include "SlicFunc.h"
 #include "civarchive.h"
 #include "profileDB.h"
+
+
+namespace
+{
+//  Some value that is different from k_NORMAL_FILE (0) and k_TUTORIAL_FILE (1).
+    uint8 const k_GENERATED_BY_EXECUTABLE   = -1;
+}
 
 SlicNamedSymbol::SlicNamedSymbol(const char *name, SLIC_SYM type) :
 	SlicSymbolData(type)
@@ -40,10 +70,7 @@ SlicNamedSymbol::SlicNamedSymbol(const char *name, SlicStructDescription *struct
 
 SlicNamedSymbol::~SlicNamedSymbol()
 {
-	if(m_name) {
-		delete [] m_name;
-		m_name = NULL;
-	}
+	delete [] m_name;
 }
 
 
@@ -67,11 +94,17 @@ void SlicNamedSymbol::Serialize(CivArchive &archive)
 
 void SlicNamedSymbol::Init(const char *name)
 {
-	m_name = new char[strlen(name) + 1];
-	strcpy(m_name, name);
+    if (name)
+    {
+	    m_name = new char[strlen(name) + 1];
+	    strcpy(m_name, name);
+    }
+    else
+    {
+        m_name = NULL;
+    }
 
-	m_fromFile = -1;
-
+	m_fromFile = k_GENERATED_BY_EXECUTABLE;
 }
 
 const char *SlicNamedSymbol::GetName() const
