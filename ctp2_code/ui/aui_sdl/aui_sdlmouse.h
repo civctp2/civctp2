@@ -15,18 +15,12 @@
 class aui_SDLMouse : public aui_Mouse, public aui_SDLInput {
 public:
 	aui_SDLMouse(AUI_ERRCODE *retval, MBCHAR *ldlBlock,
-	             BOOL useExclusiveMode);
+	             BOOL useExclusiveMode = FALSE);
 	virtual ~aui_SDLMouse();
 
 protected:
 	aui_SDLMouse();
-
-public:
-	virtual AUI_ERRCODE Acquire();
-	virtual AUI_ERRCODE Unacquire();
-	virtual AUI_ERRCODE ReactToInput();
-	virtual AUI_ERRCODE GetInput();
-	
+	virtual AUI_ERRCODE GetInput();	
 };
 
 #endif // defined(__AUI_USE_SDL__)

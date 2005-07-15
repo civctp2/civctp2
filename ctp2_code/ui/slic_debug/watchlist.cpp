@@ -2,7 +2,7 @@
 
 #include "c3.h"
 
-
+#ifdef CTP2_ENABLE_SLICDEBUG
 
 
 #include "aui.h"
@@ -82,7 +82,7 @@ void watchlist_AddExpression(char *exp)
 	g_watchList->AddExpression(exp);
 }
 
-WatchList::WatchList(WatchListCallback *callback, MBCHAR *ldlBlock)
+WatchList::WatchList(WatchListCallback callback, MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -403,3 +403,6 @@ void WatchListItem::WatchVariableDeleted(SlicSymbolData *symbol)
 		}
 	}
 }
+
+#endif// CTP2_ENABLE_SLICDEBUG
+

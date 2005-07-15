@@ -2,7 +2,7 @@
 
 #include "c3.h"
 
-
+#ifdef CTP2_ENABLE_SLICDEBUG
 
 
 #include "aui.h"
@@ -570,3 +570,6 @@ void SourceListItem::EditConditional()
 
 	
 }
+
+#endif // CTP2_ENABLE_SLICDEBUG
+

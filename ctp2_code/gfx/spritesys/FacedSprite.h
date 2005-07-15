@@ -36,11 +36,11 @@ public:
 						Pixel16 outlineColor, uint16 flags);
 
 	Pixel16			*GetFrameData(uint16 facing, uint16 frame) { return m_frames[facing][frame]; }
-	size_t			GetFrameDataSize(uint16 facing, uint16 frame);
+	size_t			GetFrameDataSize(uint16 facing, uint16 frame) { return m_framesSizes[facing][frame]; }
 	Pixel16			*GetMiniFrameData(uint16 facing, uint16 frame) { return m_miniframes[facing][frame]; }
-	size_t			GetMiniFrameDataSize(uint16 facing, uint16 frame);
-	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size) { m_frames[facing][frame] = data; }
-	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size) { m_miniframes[facing][frame] = data; m_miniframesSizes[facing][frame] = size; }
+	size_t			GetMiniFrameDataSize(uint16 facing, uint16 frame) { return m_miniframesSizes[facing][frame]; }
+	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
+	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
 
 	POINT			GetHotPoint(uint16 facing) { return m_hotPoints[facing]; }
 	POINT			*GetHotPoints(void) { return m_hotPoints; }

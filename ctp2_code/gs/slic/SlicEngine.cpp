@@ -2821,7 +2821,9 @@ void SlicEngine::Break(SlicSegment *segment, sint32 offset, SlicObject *context,
 	
 	m_atBreak = true;
 
+#ifdef CTP2_ENABLE_SLICDEBUG
 	sourcelist_RegisterBreak(segment, offset);
+#endif
 }
 
 void SlicEngine::Continue()

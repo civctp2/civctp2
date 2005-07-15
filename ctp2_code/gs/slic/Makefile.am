@@ -51,10 +51,10 @@ libgsslic_la_SOURCES = \
 libgsslic_la_LDFLAGS = -static
 
 lex.yysc.c: sliccmd.l ysc.tab.h
-	$(LEX) -i --prefix=yysc -o$@ $<
+	$(LEX) -i -Pyysc -o$@ $<
 
 lex.yysl.c: slic.l ysl.tab.h
-	$(LEX) -i --prefix=yysl -o$@ $<
+	$(LEX) -i -Pyysl -o$@ $<
 
 ysc.tab.c \
 ysc.tab.h: sliccmd.y

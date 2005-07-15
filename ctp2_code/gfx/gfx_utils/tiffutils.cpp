@@ -14,7 +14,7 @@ typedef sint32 int32;
 #include <tiffio.h>
 #include "tiffutils.h"
 
-char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height)
+char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height, size_t *size)
 {
     TIFF* tif = TIFFOpen(filename, "r");
 	
@@ -34,8 +34,14 @@ char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height)
 		{
 			if (TIFFReadRGBAImage(tif, w, h, raster, 0)) 
 			{
-				
 				destImage = (char *)malloc(npixels * sizeof(uint32));
+				if (!destImage) {
+					_TIFFfree(raster);
+					TIFFClose(tif);
+					return NULL;
+				}
+				if (size)
+					*size = npixels * sizeof(uint32);
 				memcpy(destImage, raster, npixels * sizeof(uint32));
 
 				_TIFFfree(raster);
@@ -55,7 +61,7 @@ char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height)
 
 
 
-char *TIF2mem(char *filename, uint16 *width, uint16 *height)
+char *TIF2mem(char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	TIFF	*tif = TIFFOpen(filename, "r");
 	char	*image = NULL;
@@ -77,13 +83,19 @@ char *TIF2mem(char *filename, uint16 *width, uint16 *height)
 		sint32 bytesPerRow = w * 4;
 
 		image = (char *)malloc(npixels * sizeof(uint32));
+		if (image == NULL) {
+			TIFFClose(tif);
+			return NULL;
+		}
+		if (size)
+			*size = npixels * sizeof(uint32);
 		char *imagePtr = image;
 
 		raster = (char *) _TIFFmalloc(npixels * sizeof(uint32));
 		char *rasterPtr;
 
 		if (raster != NULL) {
-	        if (TIFFReadRGBAImage(tif, w, h, (uint32 *)raster, 0)) {
+		        if (TIFFReadRGBAImage(tif, w, h, (uint32 *)raster, 0)) {
 				imagePtr = image;
 				rasterPtr = raster + (bytesPerRow * (h-1));
 				for (uint32 row = 0; row < h; row++) {
@@ -114,7 +126,6 @@ int TIFGetMetrics(char *filename, uint16 *width, uint16 *height)
 	uint32	w=0, h=0;
 
 	if (tif) {
-		
 		TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
 		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
 
@@ -213,7 +224,7 @@ int TIFLoadIntoBuffer16(char *filename, uint16 *width, uint16 *height, uint16 im
 
 
 
-char *StripTIF2Mem(char *filename, uint16 *width, uint16 *height)
+char *StripTIF2Mem(char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	uint32		imageLength; 
 	uint32		imageWidth; 
@@ -248,6 +259,9 @@ char *StripTIF2Mem(char *filename, uint16 *width, uint16 *height)
 	stripSize = (sint32) TIFFStripSize(tif);
 	buf = (char *)malloc(stripSize);          
 	outBuf = (char *)malloc(imageWidth * imageLength * 4);
+	if (size)
+		*size = imageWidth * imageLength * 4;
+
 	outBufPtr = outBuf;
 		
 		

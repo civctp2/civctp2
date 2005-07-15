@@ -967,7 +967,7 @@ bool terrainutil_AdvanceEnablesImprovement(sint32 advance, sint32 imp)
 	return enables;
 }
 
-bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreCity)
+bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, const Unit &ignoreCity)
 {
 	
 	sint32 i;
@@ -996,7 +996,7 @@ bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreC
 	return false;
 }
 
-void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit &ignoreCity)
+void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, const Unit &ignoreCity)
 {
 	
 	

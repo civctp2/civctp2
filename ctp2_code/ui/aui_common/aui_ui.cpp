@@ -1670,13 +1670,13 @@ AUI_ERRCODE aui_UI::HandleJoystickEvents( void )
 }
 
 
-#ifdef __AUI_USE_DIRECTX__
 AUI_ERRCODE aui_UI::HandleWindowsMessage(
 	HWND hwnd,
 	UINT message,
 	WPARAM wParam,
 	LPARAM lParam )
 {
+#ifdef __AUI_USE_DIRECTX__
 	AUI_ERRCODE errcode = AUI_ERRCODE_UNHANDLED;
 
 	
@@ -1905,8 +1905,10 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 	}
 
 	return errcode;
-}
+#else
+	return AUI_ERRCODE_UNHANDLED;
 #endif// __AUI_USE_DIRECTX__
+}
 
 
 AUI_ERRCODE aui_UI::AltTabOut( void )

@@ -41,7 +41,7 @@ bool terrainutil_IsInstallation(const sint32 type);
 double terrainutil_GetMaxVisionRange();
 double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint & pos);
 
-bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreCity);
+bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, const Unit &ignoreCity);
 void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, const Unit &ignoreCity);
 
 bool terrainutil_AdvanceEnablesImprovementForPlayer(sint32 player, sint32 advance, sint32 imp);

@@ -415,7 +415,7 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 }
 
 
-Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, uint16 height)
+Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, uint16 height, size_t *size)
 {
 	Pixel32				*srcPixel = buf;
 
@@ -468,12 +468,14 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wid
 	returnBuf = new Pixel16[resultSize];
 
 	memcpy(returnBuf, outBuf, resultSize * sizeof(Pixel16));
+	if (size)
+		*size = resultSize * sizeof(Pixel16);
 
 	return (Pixel16 *)returnBuf;
 }
 
 
-Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height)
+Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height, size_t *size)
 {
 	Pixel32				*srcPixel = buf;
 
@@ -521,6 +523,8 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height)
 	returnBuf = new Pixel16[resultSize];
 
 	memcpy(returnBuf, outBuf, resultSize * sizeof(Pixel16));
+	if (size)
+		*size = resultSize * sizeof(Pixel16);
 
 	return (Pixel16 *)returnBuf;
 }

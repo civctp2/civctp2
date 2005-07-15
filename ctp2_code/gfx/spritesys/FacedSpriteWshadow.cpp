@@ -38,9 +38,13 @@ FacedSpriteWshadow::FacedSpriteWshadow()
 	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++)
 	{
 		m_frames[facing] = NULL;
+		m_framesSizes[facing] = NULL;
 		m_miniframes[facing] = NULL;
+		m_miniframesSizes[facing] = NULL;
 		m_shadowFrames[facing] = NULL;
+		m_shadowFramesSizes[facing] = NULL;
 		m_miniShadowFrames[facing] = NULL;
+		m_miniShadowFramesSizes[facing] = NULL;
 	}
 	m_type = SPRITETYPE_FACEDWSHADOW;
 	m_hasShadow = TRUE;
@@ -55,23 +59,43 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 	{
 		if (m_frames[facing] != NULL) 
 		{
-			free (m_frames[facing]);
+			delete[] m_frames[facing];
 			m_frames[facing] = NULL;
+		}
+		if (m_framesSizes[facing] != NULL)
+		{
+			delete[] m_framesSizes[facing];
+			m_framesSizes[facing] = NULL;
 		}
 		if (m_miniframes[facing] != NULL) 
 		{
-			free (m_miniframes[facing]);
+			delete[] m_miniframes[facing];
 			m_miniframes[facing] = NULL;
+		}
+		if (m_miniframesSizes[facing] != NULL)
+		{
+			delete[] m_miniframesSizes[facing];
+			m_miniframesSizes[facing] = NULL;
 		}
 		if (m_shadowFrames[facing] != NULL) 
 		{
-			free (m_shadowFrames[facing]);
+			delete[] m_shadowFrames[facing];
 			m_shadowFrames[facing] = NULL;
+		}
+		if (m_shadowFramesSizes[facing] != NULL)
+		{
+			delete[] m_shadowFramesSizes[facing];
+			m_shadowFramesSizes[facing] = NULL;
 		}
 		if (m_miniShadowFrames[facing] != NULL) 
 		{
-			free (m_miniShadowFrames[facing]);
+			delete[] m_miniShadowFrames[facing];
 			m_miniShadowFrames[facing] = NULL;
+		}
+		if (m_miniShadowFramesSizes[facing] != NULL)
+		{
+			delete[] m_miniShadowFramesSizes[facing];
+			m_miniShadowFramesSizes[facing] = NULL;
 		}
 	}
 }
@@ -85,31 +109,38 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
  
 	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++) 
 	{
-		m_frames[facing] = (Pixel16 **)malloc(sizeof(Pixel16 *) * m_numFrames);
+		m_frames[facing] = new Pixel16 *[m_numFrames];
 		if (m_frames[facing] == NULL) return;
+		m_framesSizes[facing] = new size_t[m_numFrames];
+		if (m_framesSizes[facing] == NULL) return;
+		memset(m_framesSizes[facing], 0, m_numFrames * sizeof(size_t));
 		
-		m_miniframes[facing] = (Pixel16 **)malloc(sizeof(Pixel16 *) * m_numFrames);
+		m_miniframes[facing] = new Pixel16 *[m_numFrames];
 		if (m_miniframes[facing] == NULL) return;
+		m_miniframesSizes[facing] = new size_t[m_numFrames];
+		if (m_miniframesSizes[facing] == NULL) return;
+		memset(m_miniframesSizes[facing], 0, m_numFrames * sizeof(size_t));
 		
-		m_shadowFrames[facing] = (Pixel16 **)malloc(sizeof(Pixel16 *) * m_numFrames);
+		m_shadowFrames[facing] = new Pixel16 *[m_numFrames];
 		if (m_shadowFrames[facing] == NULL) return;
+		m_shadowFramesSizes[facing] = new size_t[m_numFrames];
+		if (m_shadowFramesSizes[facing] == NULL) return;
+		memset(m_shadowFramesSizes[facing], 0, m_numFrames * sizeof(size_t));
 		
-		m_miniShadowFrames[facing] = (Pixel16 **)malloc(sizeof(Pixel16 *) * m_numFrames);
+		m_miniShadowFrames[facing] = new Pixel16 *[m_numFrames];
 		if (m_miniShadowFrames[facing] == NULL) return;
+		m_miniShadowFramesSizes[facing] = new size_t[m_numFrames];
+		if (m_miniShadowFramesSizes[facing] == NULL) return;
 
 		for (sint32 i=0; i<m_numFrames; i++) 
 		{
-
-
 			m_frames[facing][i] = NULL;
-	
-			m_miniframes[facing][i] = NULL;
-					
+			m_miniframes[facing][i] = NULL;	
 			m_shadowFrames[facing][i] = NULL;
-			
 			m_miniShadowFrames[facing][i] = NULL;
 			
-			char *tif = StripTIF2Mem(imageFiles[facing][i], &m_width, &m_height);
+			size_t tifsize = 0;
+			char *tif = StripTIF2Mem(imageFiles[facing][i], &m_width, &m_height, &tifsize);
 			if (tif) 
 			{
 				char *minitif = NULL;
@@ -117,51 +148,61 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 				
 				spriteutils_CreateQuarterSize((Pixel32 *)tif, m_width, m_height, (Pixel32 **)&minitif, TRUE);
 							
-				Pixel16 *frame = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height);
+				size_t frameSize = 0;
+				Pixel16 *frame = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height, &frameSize);
 				if (frame) 
 				{
 					m_frames[facing][i] = frame;
+					m_framesSizes[facing][i] = frameSize;
 				}
 
-				Pixel16 *miniframe = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, m_width >> 1, m_height >> 1);
+				size_t miniframeSize = 0;
+				Pixel16 *miniframe = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, m_width >> 1, m_height >> 1, &miniframeSize);
 				if (miniframe) 
 				{
 					m_miniframes[facing][i] = miniframe;
+					m_miniframesSizes[facing][i] = miniframeSize;
 				}
 
 				char *shadowTif = StripTIF2Mem(shadowFiles[facing][i], &width, &height);
 				if (shadowTif) 
 				{
-					Pixel16 *sFrame = spriteutils_RGB32ToEncoded((Pixel32 *)shadowTif, m_width, m_height);
+					size_t sFrameSize = 0;
+					Pixel16 *sFrame = spriteutils_RGB32ToEncoded((Pixel32 *)shadowTif, m_width, m_height, &sFrameSize);
 					if (sFrame) 
 					{
 						m_shadowFrames[facing][i] = sFrame;
+						m_shadowFramesSizes[facing][i] = sFrameSize;
 					}
 
 					spriteutils_CreateQuarterSize((Pixel32 *)shadowTif, m_width, m_height, (Pixel32 **)&minishadow, FALSE);
 
 					if(minishadow)
 					{
-						Pixel16 *minisFrame = spriteutils_RGB32ToEncoded((Pixel32 *)minishadow, m_width >> 1, m_height >> 1);
+						size_t minisFrameSize = 0;
+						Pixel16 *minisFrame = spriteutils_RGB32ToEncoded((Pixel32 *)minishadow, m_width >> 1, m_height >> 1, &minisFrameSize);
 						if (minisFrame) 
 						{
 							m_miniShadowFrames[facing][i] = minisFrame;
+							m_miniShadowFramesSizes[facing][i] = minisFrameSize;
 						}
 					}
 				}
 				else
 				{
-					if(m_shadowFrames[facing][i] != NULL)
+					if (m_shadowFrames[facing][i] != NULL)
 					{
-						free(m_shadowFrames[facing][i]);
+						delete[] m_shadowFrames[facing][i];
 						m_shadowFrames[facing][i] = NULL;
 					}
+					m_shadowFramesSizes[facing][i] = 0;
 					
 					if(m_miniShadowFrames[facing][i] != NULL)
 					{
-						free(m_miniShadowFrames[facing][i]);
+						delete[] m_miniShadowFrames[facing][i];
 						m_miniShadowFrames[facing][i] = NULL;
 					}
+					m_miniShadowFramesSizes[facing][i] = 0;
 				}
 
 				
@@ -174,27 +215,31 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 					
 				if(m_frames[facing][i] != NULL)
 				{
-					free(m_frames[facing][i]);
+					delete[] m_frames[facing][i];
 					m_frames[facing][i] = NULL;
 				}
-
+				m_framesSizes[facing][i] = 0;
+				
 				if(m_miniframes[facing][i] != NULL)
 				{
-					free(m_miniframes[facing][i]);
+					delete[] m_miniframes[facing][i];
 					m_miniframes[facing][i] = NULL;
 				}
+				m_miniframesSizes[facing][i] = 0;
 
 				if(m_shadowFrames[facing][i] != NULL)
 				{
-					free(m_shadowFrames[facing][i]);
+					delete[] m_shadowFrames[facing][i];
 					m_shadowFrames[facing][i] = NULL;
 				}
+				m_shadowFramesSizes[facing][i] = 0;
 
 				if(m_miniShadowFrames[facing][i] != NULL)
 				{
-					free(m_miniShadowFrames[facing][i]);
+					delete[] m_miniShadowFrames[facing][i];
 					m_miniShadowFrames[facing][i] = NULL;
 				}
+				m_miniShadowFramesSizes[facing][i] = 0;
 			}
 			printf(".");
 		}
@@ -210,11 +255,17 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
  
 	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++) 
 	{
-		m_frames[facing] = (Pixel16 **)malloc(sizeof(Pixel16 *) * m_numFrames);
+		m_frames[facing] = new Pixel16 *[m_numFrames];
 		if (m_frames[facing] == NULL) return;
+		m_framesSizes[facing] = new size_t[m_numFrames];
+		if (m_framesSizes[facing] == NULL) return;
+		memset(m_framesSizes[facing], 0, m_numFrames * sizeof(size_t));
 		
-		m_miniframes[facing] = (Pixel16 **)malloc(sizeof(Pixel16 *) * m_numFrames);
+		m_miniframes[facing] = new Pixel16 *[m_numFrames];
 		if (m_miniframes[facing] == NULL) return;
+		m_miniframesSizes[facing] = new size_t[m_numFrames];
+		if (m_miniframesSizes[facing] == NULL) return;
+		memset(m_miniframesSizes[facing], 0, m_numFrames * sizeof(size_t));
 		
 		for (sint32 i=0; i<m_numFrames; i++) 
 		{
@@ -229,17 +280,21 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 				char *minishadow = NULL;
 				
 				spriteutils_CreateQuarterSize((Pixel32 *)tif, m_width, m_height, (Pixel32 **)&minitif, TRUE);
-			
-				Pixel16 *frame = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height);
+
+				size_t frameSize = 0;
+				Pixel16 *frame = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height, &frameSize);
 				if (frame) 
 				{
 					m_frames[facing][i] = frame;
+					m_framesSizes[facing][i] = frameSize;
 				}
 
-				Pixel16 *miniframe = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, m_width >> 1, m_height >> 1);
+				size_t miniframeSize = 0;
+				Pixel16 *miniframe = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, m_width >> 1, m_height >> 1, &miniframeSize);
 				if (miniframe) 
 				{
 					m_miniframes[facing][i] = miniframe;
+					m_miniframesSizes[facing][i] = miniframeSize;
 				}
 
 				free(tif);
@@ -249,15 +304,17 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 					
 				if(m_frames[facing][i] != NULL)
 				{
-					free(m_frames[facing][i]);
+					delete[] m_frames[facing][i];
 					m_frames[facing][i] = NULL;
 				}
+				m_framesSizes[facing][i] = 0;
 
 				if(m_miniframes[facing][i] != NULL)
 				{
-					free(m_miniframes[facing][i]);
+					delete[] m_miniframes[facing][i];
 					m_miniframes[facing][i] = NULL;
 				}
+				m_miniframesSizes[facing][i] = 0;
 
 			}
 			printf(".");
@@ -820,10 +877,71 @@ void FacedSpriteWshadow::AllocateFrameArrays(void)
 	for (i=0; i<k_NUM_FACINGS; i++) 
 	{
 		m_frames[i] = (Pixel16 **)new uint8[sizeof(Pixel16 *) * GetNumFrames()];
+		m_framesSizes[i] = new size_t[GetNumFrames()];
 		m_miniframes[i] = (Pixel16 **)new uint8[sizeof(Pixel16 *) * GetNumFrames()];
+		m_miniframesSizes[i] = new size_t[GetNumFrames()];
 
 		m_shadowFrames[i] = (Pixel16 **)new uint8[sizeof(Pixel16 *) * GetNumFrames()];
+		m_shadowFramesSizes[i] = new size_t[GetNumFrames()];
 		m_miniShadowFrames[i] = (Pixel16 **)new uint8[sizeof(Pixel16 *) * GetNumFrames()];
-
+		m_miniShadowFramesSizes[i] = new size_t[GetNumFrames()];
 	}
 }
+
+size_t FacedSpriteWshadow::GetFrameDataSize(uint16 facing, uint16 frame)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_numFrames);
+	
+	if (!m_framesSizes[facing])
+		return 0;
+
+	if (frame >= m_numFrames)
+		return 0;
+
+	return m_framesSizes[facing][frame];
+}
+
+
+size_t FacedSpriteWshadow::GetMiniFrameDataSize(uint16 facing, uint16 frame)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_numFrames);
+	
+	if (!m_miniframesSizes[facing])
+		return 0;
+
+	if (frame >= m_numFrames)
+		return 0;
+
+	return m_miniframesSizes[facing][frame];
+}
+
+size_t FacedSpriteWshadow::GetShadowFrameDataSize(uint16 facing, uint16 frame)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_numFrames);
+	
+	if (!m_shadowFramesSizes[facing])
+		return 0;
+
+	if (frame >= m_numFrames)
+		return 0;
+
+	return m_shadowFramesSizes[facing][frame];
+}
+
+size_t FacedSpriteWshadow::GetMiniShadowFrameDataSize(uint16 facing, uint16 frame)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_numFrames);
+	
+	if (!m_miniShadowFramesSizes[facing])
+		return 0;
+
+	if (frame >= m_numFrames)
+		return 0;
+
+	return m_miniShadowFramesSizes[facing][frame];
+}
+

@@ -108,9 +108,10 @@ public:
 	virtual AUI_ERRCODE Lock( RECT *rect, LPVOID *buffer, DWORD flags );
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
-	
+#ifndef USE_SDL
 	virtual AUI_ERRCODE GetDC( HDC *hdc );
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
+#endif
 
 #ifdef USE_SDL
 	SDL_mutex *LPCS( void ) const { return m_cs; };

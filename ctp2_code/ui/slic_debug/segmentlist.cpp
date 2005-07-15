@@ -1,9 +1,7 @@
 
-
 #include "c3.h"
 
-
-
+#ifdef CTP2_ENABLE_SLICDEBUG
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -66,6 +64,7 @@ void segmentlist_Remove()
 }
 
 SegmentList::SegmentList(SegmentListCallback *callback, MBCHAR *ldlBlock)
+   : KeyboardHandler()
 {
 	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -304,3 +303,6 @@ void SegmentListItem::Open()
 {
 	sourcelist_Display(m_segment);
 }
+
+#endif // CTP2_ENABLE_SLICDEBUG
+

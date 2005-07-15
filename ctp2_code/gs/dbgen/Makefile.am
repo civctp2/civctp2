@@ -19,7 +19,7 @@ ydb.tab.c ydb.tab.h: ctpdb.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -p yydb -b ydb $<
 
 lex.yydb.c: ctpdb.l ydb.tab.h
-	$(LEX) -i --prefix=yydb -o $@ $<
+	$(LEX) -i -Pyydb -o$@ $<
 
 MOSTLYCLEANFILES=\
 	ctpdb_lex.c \

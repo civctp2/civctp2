@@ -14,6 +14,7 @@ AC_PROG_MAKE_SET
 
 AC_PROG_CC(cl gcc cc KCC CC egcs)
 AC_PROG_CXX(cl g++ gcc cxx c++ cc++ KCC CC egcs)
+AC_PROG_LIBTOOL
 AC_LANG(C++)
 AM_PROG_LEX
 dnl AC_PROG_YACC
@@ -47,7 +48,7 @@ then
 fi
 AC_SUBST(UNZIP)
 
-AC_PROG_LIBTOOL
+dnl AC_PROG_LIBTOOL
 
 AM_PATH_DIRECTX
 AM_PATH_DXMEDIA
@@ -94,8 +95,8 @@ CXX_WARNINGS="$COMMON_WARNINGS -Winvalid-offsetof"
 C_WARNINGS="-Wall -Wno-unused-variable"
 CXX_WARNINGS="-Wall -Wno-unused-variable"
 
-CFLAGS="$C_WARNINGS -fms-extensions $CFLAGS"
-CXXFLAGS="$CXX_WARNINGS -fms-extensions $CXXFLAGS"
+CFLAGS="$C_WARNINGS -fms-extensions -fmessage-length=0 $CFLAGS"
+CXXFLAGS="$CXX_WARNINGS -fms-extensions -fmessage-length=0 -fno-rtti -fexceptions $CXXFLAGS"
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
@@ -104,6 +105,12 @@ AC_DEFINE(_TIFF_DATA_TYPEDEFS_,1,[Tiff uint{16,32} datatype collision prevention
 if test x$have_x=xyes; then
 	AC_DEFINE(HAVE_X11,1,[System with X11R6 present])
 fi
+
+if test 0 -eq 1; then
+	AC_DEFINE(CTP2_ENABLE_SLICDEBUG,1,[Enable slic debugging code])
+fi
+
+AC_SUBST(CTP2_ENABLE_SLICDEBUG)
 
 AC_OUTPUT([
    GNUmakefile

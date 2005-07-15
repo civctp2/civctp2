@@ -806,10 +806,10 @@ ctp2_LDADD = \
 	$(CTP2_LDFLAGS)
 
 gs/slic/lex.yysc.c: $(ctp2_code)/gs/slic/sliccmd.l gs/slic/ysc.tab.h
-	$(LEX) -i --prefix=yysc -o$@ $<
+	$(LEX) -i -Pyysc -o$@ $<
 
 gs/slic/lex.yysl.c: $(ctp2_code)/gs/slic/slic.l gs/slic/ysl.tab.h
-	$(LEX) -i --prefix=yysl -o$@ $<
+	$(LEX) -i -Pyysl -o$@ $<
 
 gs/slic/ysc.tab.c \
 gs/slic/ysc.tab.h: $(ctp2_code)/gs/slic/sliccmd.y

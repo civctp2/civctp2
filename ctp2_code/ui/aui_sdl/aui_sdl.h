@@ -28,7 +28,7 @@ public:
 	}
 
 	BOOL GetExclusiveMode(void) { return m_exclusiveMode; }
-	SDL_Surface *DD() { return m_lpdd; }
+	static SDL_Surface *DD() { return m_lpdd; }
 
 protected:
 	BOOL			m_exclusiveMode;
@@ -36,6 +36,7 @@ protected:
 
 private:
 	static sint32		m_SDLRefCount;
+protected:
 	static uint32           m_SDLClassId;
 };
 

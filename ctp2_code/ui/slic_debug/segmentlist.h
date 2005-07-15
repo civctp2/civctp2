@@ -4,6 +4,8 @@
 #ifndef __SEGMENT_LIST_H__
 #define __SEGMENT_LIST_H__
 
+#ifdef CTP2_ENABLE_SLICDEBUG
+
 #include "c3_listitem.h"
 #include "aui_action.h"
 #include "keyboardhandler.h"
@@ -37,7 +39,7 @@ private:
 class SegmentList : public KeyboardHandler
 {
 public:
-	SegmentList(SegmentListCallback *callback = NULL, MBCHAR *ldlBlock = NULL);
+	SegmentList(SegmentListCallback* callback = 0, MBCHAR *ldlBlock = 0);
 	virtual ~SegmentList();
 
 	c3_PopupWindow *m_window;
@@ -56,7 +58,7 @@ public:
 	void RemoveWindow();
 	void DisplayWindow();
 	
-	void kh_Close();
+	virtual void kh_Close();
 
 	c3_ListBox *GetList() { return m_list; }
 };
@@ -67,4 +69,7 @@ void segmentlist_Display();
 void segmentlist_Remove();
 
 extern SegmentList *g_segmentList;
+
+#endif //CTP2_ENABLE_SLICDEBUG
+
 #endif

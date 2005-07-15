@@ -37,8 +37,10 @@ FacedSprite::FacedSprite()
 {
 	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++)
 	{
-		m_frames[facing] = NULL;
-		m_miniframes[facing] = NULL;
+		m_frames[facing] = 0;
+		m_framesSizes[facing] = 0;
+		m_miniframes[facing] = 0;
+		m_miniframesSizes[facing] = 0;
 	}
 	m_type = SPRITETYPE_FACED;
 }
@@ -57,12 +59,20 @@ FacedSprite::~FacedSprite()
 			delete[] m_frames[facing];
 			m_frames[facing] = NULL;
 		}
+		if (m_framesSizes[facing] != NULL) {
+			delete[] m_framesSizes[facing];
+			m_framesSizes[facing] = NULL;
+		}
 		if (m_miniframes[facing] != NULL) {
 			for (i=0; i<m_numFrames; i++) {
 				delete[] m_miniframes[facing][i];
 			}
 			delete [] m_miniframes[facing];
 			m_miniframes[facing] = NULL;
+		}
+		if (m_miniframesSizes[facing] != NULL) {
+			delete[] m_miniframesSizes[facing];
+			m_miniframesSizes[facing] = NULL;
 		}
 	}
 }
@@ -75,14 +85,21 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
  
 	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++) 
 	{
-		
-		m_frames[facing] = (Pixel16 **)malloc(sizeof(Pixel16 *) * m_numFrames);
+		m_framesSizes[facing] = (size_t *)new size_t[m_numFrames];
+		if (m_framesSizes[facing] == NULL)
+			return;
+
+		memset(m_framesSizes[facing], 0, sizeof(size_t) * m_numFrames);
+		m_frames[facing] = (Pixel16 **)new Pixel16 *[m_numFrames];
 		
 		if (m_frames[facing] == NULL) 
 			return;
 		
-		
-		m_miniframes[facing] = (Pixel16 **)malloc(sizeof(Pixel16 *) * m_numFrames);
+		m_miniframesSizes[facing] = new size_t[m_numFrames];
+		if (m_miniframesSizes[facing] == NULL)
+			return;
+		memset(m_miniframesSizes[facing], 0, sizeof(size_t) * m_numFrames);
+		m_miniframes[facing] = new Pixel16 *[m_numFrames];
 		
 		if (m_miniframes[facing] == NULL) 
 			return;
@@ -135,13 +152,13 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 				spriteutils_CreateQuarterSize(image, m_width, m_height,&miniimage, TRUE);
 		
 				
-				m_frames[facing][i]     = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height);
+				m_frames[facing][i]     = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &(m_framesSizes[facing][i]));
 		
 				if (shadow)
 					spriteutils_CreateQuarterSize(shadow, m_width, m_height,&minishadow, FALSE);
 		
 				
-				m_miniframes[facing][i] = spriteutils_RGB32ToEncoded(miniimage, minishadow, m_width >> 1, m_height >> 1);
+				m_miniframes[facing][i] = spriteutils_RGB32ToEncoded(miniimage, minishadow, m_width >> 1, m_height >> 1, &(m_miniframesSizes[facing][i]));
 			}
 			else 
 			{
@@ -162,7 +179,37 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 }
 
 
+void FacedSprite::SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_numFrames);
+	Assert(m_frames[facing] != NULL);
+	Assert(m_framesSizes[facing] != NULL);
+	
+	if (facing < k_NUM_FACINGS)
+		return;
+	if (frame >= m_numFrames)
+		return;
 
+	m_frames[facing][frame] = data;
+	m_framesSizes[facing][frame] = size;
+}
+
+void FacedSprite::SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_numFrames);
+	Assert(m_frames[facing] != NULL);
+	Assert(m_framesSizes[facing] != NULL);
+
+	if (facing < k_NUM_FACINGS)
+		return;
+	if (frame >= m_numFrames)
+		return;
+	
+	m_miniframes[facing][frame] = data;
+	m_miniframesSizes[facing][frame] = size;
+}
 
 void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
@@ -446,6 +493,7 @@ void FacedSprite::AllocateFrameArrays(void)
 
 	for (i=0; i<k_NUM_FACINGS; i++) {
 		m_frames[i] = (Pixel16 **)new uint8[sizeof(Pixel16 *) * GetNumFrames()];
+		m_framesSizes[i] = (size_t *)new size_t[GetNumFrames()];
 		m_miniframes[i] = (Pixel16 **)new uint8[sizeof(Pixel16 *) * GetNumFrames()];
 	}
 }

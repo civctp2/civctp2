@@ -4,6 +4,8 @@
 #ifndef __SOURCE_LIST_H__
 #define __SOURCE_LIST_H__
 
+#ifdef CTP2_ENABLE_SLICDEBUG
+
 #include "c3_listitem.h"
 #include "aui_action.h"
 #include "keyboardhandler.h"
@@ -94,4 +96,7 @@ void sourcelist_Remove();
 void sourcelist_RegisterBreak(SlicSegment *segment, sint32 offset);
 
 extern SourceList *g_sourceList;
+#endif // CTP2_ENABLE_SLICDEBUG
+
 #endif
+
