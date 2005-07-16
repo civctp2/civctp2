@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,6 +27,7 @@
 //   (modification as posted by Peter Triggs).
 // - Players are now notified if someone starts to build the first wonder
 //   from the database. - Feb. 23rd 2005 Martin Gühmann
+// - Added assignment operator. - Jul 16th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -88,13 +91,13 @@
 #include "buildingutil.h"
 #include "wonderutil.h"
 
-extern	ControlPanelWindow	*g_controlPanel;
-extern	CivPaths	*g_civPaths ;
-extern	SoundManager *g_soundManager;
-extern DifficultyDB     *g_theDifficultyDB;
+extern ControlPanelWindow  *g_controlPanel;
+extern CivPaths            *g_civPaths ;
+extern SoundManager        *g_soundManager;
+extern DifficultyDB        *g_theDifficultyDB;
 
-#define k_BUILDQUEUE_VERSION_MAJOR	0									
-#define k_BUILDQUEUE_VERSION_MINOR	1									
+#define k_BUILDQUEUE_VERSION_MAJOR 0
+#define k_BUILDQUEUE_VERSION_MINOR 1
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
@@ -104,18 +107,18 @@ BuildQueue::BuildQueue()
 // These variables should store a 
 // wonder database index. 0 is also
 // a valid database index.
-    m_wonderStarted  = -1;
-    m_wonderStopped  = -1;
+	m_wonderStarted  = -1;
+	m_wonderStopped  = -1;
 	m_wonderComplete = -1;
-    m_settler_pending = FALSE;
+	m_settler_pending = FALSE;
 	m_list = new PointerList<BuildNode>;
 	m_frontWhenBuilt = NULL;
 
 	strcpy(m_name,"");
-} 
+}
 
 BuildQueue::~BuildQueue()
-{ 
+{
 	if(m_list) {
 		m_list->DeleteAll();
 		delete m_list;
@@ -182,7 +185,7 @@ void BuildQueue::SerializeQueue(CivArchive &archive)
 		archive << len;
 		archive.Store((uint8*)m_name, len * sizeof(MBCHAR));
 
-		len = m_list->GetCount();
+		len = static_cast<uint16>(m_list->GetCount());
 		archive << len;
 		PointerList<BuildNode>::Walker walk(m_list);
 		while(walk.IsValid()) {
@@ -376,25 +379,23 @@ sint32 BuildQueue::Save(const MBCHAR *file)
 void BuildQueue::EndTurn(void)
 {
 
-    if (m_wonderStarted != m_wonderStopped) {
+	if (m_wonderStarted != m_wonderStopped) {
 //Added by Martin Gühmann
 // Correct the condition with the index shift
-        if (m_wonderStopped >= 0) {
-            SendMsgWonderStopped(m_wonderStopped) ;
-            g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
-			
-        }
-        if (m_wonderStarted != m_wonderComplete && m_wonderStarted >= 0) {
-            SendMsgWonderStarted(m_wonderStarted) ;
-            g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
-            
-        }
-    }
+		if (m_wonderStopped >= 0) {
+			SendMsgWonderStopped(m_wonderStopped);
+			g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
+		}
+		if (m_wonderStarted != m_wonderComplete && m_wonderStarted >= 0) {
+			SendMsgWonderStarted(m_wonderStarted);
+			g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
+		}
+	}
 	// These values reperesent an index into the good's database
 	// 0 is a valid database index
-    m_wonderStarted = -1;
-    m_wonderStopped = -1;
-    m_settler_pending = FALSE;
+	m_wonderStarted = -1;
+	m_wonderStopped = -1;
+	m_settler_pending = FALSE;
 }
 
 
@@ -411,24 +412,24 @@ void BuildQueue::Clear(BOOL fromServer)
 {
 	if(!fromServer && g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_CLEAR_QUEUE,
-										   (uint32)m_city));
+		                     (uint32)m_city));
 	} else if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_CLEAR_QUEUE,
-									  (uint32)m_city));
+		                  (uint32)m_city));
 		g_network.Unblock(m_owner);
 	}
-										   
-    while (m_list->GetHead()) {
+
+	while (m_list->GetHead()) {
 		if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_WONDER)
 		{
-            m_wonderStopped = m_list->GetHead()->m_type;
+			m_wonderStopped = m_list->GetHead()->m_type;
 			
 			g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
 		}
 
 		delete m_list->RemoveHead();
-    } 
+	}
 
 	Assert(m_list->GetCount() == 0);
 }
@@ -443,7 +444,7 @@ void BuildQueue::ClearAllButHead(BOOL fromServer)
 	} else if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_CLEAR_QUEUE_EXCEPT_HEAD,
-									  (uint32)m_city));
+		                  (uint32)m_city));
 		g_network.Unblock(m_owner);
 	}
 
@@ -482,19 +483,19 @@ bool BuildQueue::BuildFrontUnit(BOOL forceFinish)
 		}
 
 		DPRINTF(k_DBG_GAMESTATE, ("City %lx building unit: %s\n",
-								  (uint32)cd->GetHomeCity(),
-								  g_theStringDB->GetNameStr(g_theUnitDB->Get(m_list->GetHead()->m_type)->m_name)));
+		                          (uint32)cd->GetHomeCity(),
+		                          g_theStringDB->GetNameStr(g_theUnitDB->Get(m_list->GetHead()->m_type)->m_name)));
 		
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-							   GEV_CreateUnit,
-							   GEA_Player, m_owner,
-							   GEA_MapPoint, cpos,
-							   GEA_City, m_city,
-							   GEA_Int, m_list->GetHead()->m_type,
-							   GEA_Int, CAUSE_NEW_ARMY_BUILT,
-							   GEA_End);
-	} else { 
-		return false; 
+		                       GEV_CreateUnit,
+		                       GEA_Player, m_owner,
+		                       GEA_MapPoint, cpos,
+		                       GEA_City, m_city,
+		                       GEA_Int, m_list->GetHead()->m_type,
+		                       GEA_Int, CAUSE_NEW_ARMY_BUILT,
+		                       GEA_End);
+	} else {
+		return false;
 	}
 	return true;
 }
@@ -503,18 +504,18 @@ bool BuildQueue::BuildFrontBuilding()
 {
 	if (m_list->GetHead()->m_cost <= m_city.CD()->GetStoredCityProduction()) {
 		DPRINTF(k_DBG_GAMESTATE, (
-				  "City %lx built improvement: %s\n",
-				  (uint32)m_city,
-				  g_theStringDB->GetNameStr(g_theBuildingDB->Get(m_list->GetHead()->m_type)->m_name)));
+		          "City %lx built improvement: %s\n",
+		          (uint32)m_city,
+		          g_theStringDB->GetNameStr(g_theBuildingDB->Get(m_list->GetHead()->m_type)->m_name)));
 
 		m_list->GetHead()->m_flags |= k_BUILD_NODE_FLAG_ALREADY_BUILT;
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateBuilding,
-							   GEA_City, m_city.m_id,
-							   GEA_Int, m_list->GetHead()->m_type,
-							   GEA_End);
+		                       GEA_City, m_city.m_id,
+		                       GEA_Int, m_list->GetHead()->m_type,
+		                       GEA_End);
 		return true;
 	} else {
-		return false; 
+		return false;
 	}
 	
 }
@@ -529,14 +530,14 @@ bool BuildQueue::BuildFrontWonder()
 
 	if(m_list->GetHead()->m_cost <= m_city.CD()->GetStoredCityProduction()) {
 		DPRINTF(k_DBG_GAMESTATE, ("City %lx built wonder: %s\n",
-								  (uint32)m_city,
-								  g_theStringDB->GetNameStr(wonderutil_Get(m_list->GetHead()->m_type)->GetName())));
+		                          (uint32)m_city,
+		                          g_theStringDB->GetNameStr(wonderutil_Get(m_list->GetHead()->m_type)->GetName())));
 
 		m_list->GetHead()->m_flags |= k_BUILD_NODE_FLAG_ALREADY_BUILT;
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateWonder,
-							   GEA_City, m_city.m_id,
-							   GEA_Int, m_list->GetHead()->m_type,
-							   GEA_End);
+		                       GEA_City, m_city.m_id,
+		                       GEA_Int, m_list->GetHead()->m_type,
+		                       GEA_End);
 	
 		wonderutil_AddBuilt(m_list->GetHead()->m_type);
 
@@ -549,8 +550,8 @@ bool BuildQueue::BuildFrontWonder()
 			if(g_network.IsHost()) {
 				g_network.Block(m_owner);
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_WONDER_ALMOST_DONE,
-											  m_owner, m_list->GetHead()->m_type,
-											  m_city.m_id));
+				                              m_owner, m_list->GetHead()->m_type,
+				                              m_city.m_id));
 				g_network.Unblock(m_owner);
 			}
 			
@@ -573,10 +574,9 @@ bool BuildQueue::BuildFrontEndgame()
 		
 		m_list->GetHead()->m_flags |= k_BUILD_NODE_FLAG_ALREADY_BUILT;
 		DPRINTF(k_DBG_GAMESTATE, ("City %lx built endgame object type %d\n",
-								  m_city, m_list->GetHead()->m_type));
+		                          m_city, m_list->GetHead()->m_type));
 		g_player[m_owner]->AddEndGameObject(m_city, m_list->GetHead()->m_type);
-		g_player[m_owner]->RegisterCreateBuilding(m_city, 
-														 m_list->GetHead()->m_type); 
+		g_player[m_owner]->RegisterCreateBuilding(m_city, m_list->GetHead()->m_type);
 		return true;
 	} else {
 		return false;
@@ -585,23 +585,23 @@ bool BuildQueue::BuildFrontEndgame()
 
 
 bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &pos, 
-                           uint64 &built_improvements, uint64 &built_wonders,
-						   BOOL forceFinish)
+                            uint64 &built_improvements, uint64 &built_wonders,
+                            BOOL forceFinish)
 {
-    bool is_something_built = FALSE; 
+	bool is_something_built = FALSE; 
 
-    m_settler_pending = FALSE;
+	m_settler_pending = FALSE;
 
-    if (m_list->GetHead()) { 
+	if (m_list->GetHead()) { 
 		DPRINTF(k_DBG_GAMESTATE, ("BuildFront: City %lx building %d,%d\n",
-								  m_city.m_id, m_list->GetHead()->m_category,
-								  m_list->GetHead()->m_type));
-        
-        switch (m_list->GetHead()->m_category) {
-        case k_GAME_OBJ_TYPE_UNIT:
+		                          m_city.m_id, m_list->GetHead()->m_category,
+		                          m_list->GetHead()->m_type));
+
+		switch (m_list->GetHead()->m_category) {
+		case k_GAME_OBJ_TYPE_UNIT:
 			is_something_built = BuildFrontUnit(forceFinish);
 			break;
-        case k_GAME_OBJ_TYPE_IMPROVEMENT:
+		case k_GAME_OBJ_TYPE_IMPROVEMENT:
 			is_something_built = BuildFrontBuilding();
 			break;
 		case k_GAME_OBJ_TYPE_WONDER:
@@ -616,9 +616,9 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 		case k_GAME_OBJ_TYPE_CAPITALIZATION:
 			m_city.CD()->BuildCapitalization();
 			break;
-        default:
-            Assert(0); 
-        } 
+		default:
+			Assert(0);
+		}
 
 
 		if (is_something_built) {
@@ -630,28 +630,27 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if (visiblePlayer == m_owner) {
 					g_soundManager->AddSound(SOUNDTYPE_VOICE, (uint32)0, 
-											gamesounds_GetGameSoundID(GAMESOUNDS_BUILDING_COMPLETE),
-											pos.x,
-											pos.y);
+					                         gamesounds_GetGameSoundID(GAMESOUNDS_BUILDING_COMPLETE),
+					                         pos.x,
+					                         pos.y);
 				}
 			}
 		}
 
-        return true;
-    } else { 
+		return true;
+	} else {
 
 		DPRINTF(k_DBG_GAMESTATE, ("BuildFront: City %lx building nothing\n",
-								  m_city.m_id));
-        
-        
-        if (!Player::IsThisPlayerARobot(m_owner) ||
+		                          m_city.m_id));
+		
+		
+		if (!Player::IsThisPlayerARobot(m_owner) ||
 			(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) { 
 			DPRINTF(k_DBG_GAMESTATE, ("Setting shieldstore to 0 for %lx\n", m_city.m_id));
-    		shieldstore = 0;
-        }
-        return false;
-    }
-  
+			shieldstore = 0;
+		}
+		return false;
+	}
 }
 
 void BuildQueue::FinishBuildFront(Unit &u)
@@ -660,12 +659,12 @@ void BuildQueue::FinishBuildFront(Unit &u)
 	if(m_list->GetHead() && m_list->GetHead() == m_frontWhenBuilt) {
 		
 		if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_WONDER) {
-			SendMsgWonderComplete(cd, m_list->GetHead()->m_type) ;
+			SendMsgWonderComplete(cd, m_list->GetHead()->m_type);
 			m_wonderComplete = m_list->GetHead()->m_type;
 			g_theWonderTracker->ClearBuildingWonder(m_list->GetHead()->m_type, m_owner);
-		} else if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_UNIT) {	
-			if (g_theUnitDB->Get(m_list->GetHead()->m_type)->GetWormholeProbe()) {	
-				SendMsgWormholeProbeComplete() ;
+		} else if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_UNIT) {
+			if (g_theUnitDB->Get(m_list->GetHead()->m_type)->GetWormholeProbe()) {
+				SendMsgWormholeProbeComplete();
 			}
 		}
 			
@@ -1602,7 +1601,7 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 		   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner) ||
 			(!g_network.IsActive() && !g_theProfileDB->AIPopCheat()))) {
 			if(u.GetDBRec()->GetBuildingRemovesAPop()) {
-				cd->SubtractAccumulatedFood(g_theConstDB->CityGrowthCoefficient());
+				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
 				cd->ChangePopulation(-1);
 			}
 		}
@@ -1692,5 +1691,35 @@ bool BuildQueue::IsItemInQueue(uint32 cat, sint32 type)
 			return true;
 	}
 	return false;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : BuildQueue::operator=
+//
+// Description: Assignment operator copies an instance of BuildQueue on the 
+//              right side to the instance on the left side.
+//
+// Parameters : BuildQueue &copy    : Instance to be copied.
+//
+// Globals    : g_network
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+BuildQueue & BuildQueue::operator= (const BuildQueue &copy){
+	memcpy(&m_owner, &copy.m_owner, (uint32)&m_wonderComplete + sizeof(m_wonderComplete) - (uint32)&m_owner);
+	m_list->DeleteAll();
+	PointerList<BuildNode>::Walker walk(copy.m_list);
+	while(walk.IsValid()) {
+		BuildNode* destBN = new BuildNode();
+		BuildNode* sourBN = walk.GetObj();
+		memcpy(destBN, sourBN, sizeof(BuildNode));
+		m_list->AddTail(destBN);
+		walk.Next();
+	}
+	return *this;
 }
 
