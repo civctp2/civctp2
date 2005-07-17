@@ -529,7 +529,7 @@ void SlicStructInstance::CreateMember(sint32 index)
 SlicSymbolData *SlicStructInstance::GetMemberSymbol(sint32 index)
 {
 	Assert(index >= 0);
-	Assert(index < m_validIndexCount);
+	Assert((unsigned) index < m_validIndexCount);
 	if ((index < 0) || ((unsigned) index >= m_validIndexCount))
 	{
 		return NULL;

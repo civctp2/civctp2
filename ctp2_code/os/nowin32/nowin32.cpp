@@ -7,15 +7,16 @@
 #include <sys/param.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <strings.h>
 #include <ctype.h>
 #include "windows.h"
 #include <SDL.h>
 
 char*
-_fullpath(char*, const char*, int)
+_fullpath(char* dest, const char* src, int maxLen)
 {
-	assert(0);
+	return strncpy(dest, src, maxLen);
 }
 
 void
@@ -33,6 +34,8 @@ GetTickCount()
 sint32
 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 {
+	printf("MessageBox: %s\n", title);
+	printf("%s\n", msg);
 	return 0;
 }
 

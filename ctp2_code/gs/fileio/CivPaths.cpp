@@ -57,8 +57,6 @@ void CivPaths_CleanupCivPaths()
 	g_civPaths = NULL;
 } 
 
-
-
 CivPaths::CivPaths ()
 :	m_hdPath                (new MBCHAR[_MAX_PATH]),
 	m_cdPath                (new MBCHAR[_MAX_PATH]),
@@ -96,10 +94,25 @@ CivPaths::CivPaths ()
 	fscanf(fin, "%s", m_saveMapPath);
 	fscanf(fin, "%s", m_saveClipsPath);
 
+	ReplaceFileSeperator(m_hdPath);
+	ReplaceFileSeperator(m_cdPath);
+	ReplaceFileSeperator(m_defaultPath);
+	ReplaceFileSeperator(m_localizedPath);
+	ReplaceFileSeperator(m_dataPath);
+	ReplaceFileSeperator(m_scenariosPath);
+	ReplaceFileSeperator(m_savePath);
+	ReplaceFileSeperator(m_saveGamePath);
+	ReplaceFileSeperator(m_saveQueuePath);
+	ReplaceFileSeperator(m_saveMPPath);
+	ReplaceFileSeperator(m_saveSCENPath);
+	ReplaceFileSeperator(m_saveMapPath);
+	ReplaceFileSeperator(m_saveClipsPath);
+
 	for (size_t dir = 0; dir < C3DIR_MAX; ++dir) 
-    {
+	{
 		m_assetPaths[dir] = new MBCHAR[_MAX_PATH];
 		fscanf (fin, "%s", m_assetPaths[dir]);
+		ReplaceFileSeperator(m_assetPaths[dir]);
 	}
 
 	fclose(fin); 
@@ -238,7 +251,34 @@ MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR 
 	}
 }
 
+void CivPaths::ReplaceFileSeperator(MBCHAR* path)
+{
+	MBCHAR* oldChar;
+	MBCHAR* newChar;
+	MBCHAR newPath[_MAX_PATH];
 
+	oldChar=path;
+	newChar=newPath;
+
+	while (*oldChar && newChar < newPath+_MAX_PATH-1)
+	{
+		if (*oldChar == '\\' || *oldChar == '/')
+		{
+			strncpy(newChar,FILE_SEP,newPath+_MAX_PATH-newChar);
+			newChar+=strlen(FILE_SEP);
+		}
+		else
+		{
+			*newChar=*oldChar;
+			newChar++;
+		}
+		oldChar++;
+	}
+
+	*newChar = '\0';
+
+	strncpy(path,newPath,_MAX_PATH);
+}
 
 MBCHAR *CivPaths::GetSavePath(C3SAVEDIR dir, MBCHAR *path)
 {
@@ -311,6 +351,7 @@ MBCHAR *CivPaths::MakeAssetPath
 
 	sprintf(tempPath, "%s%s%s%s%s%s%s%s%s",
 	        s1, FILE_SEP, s2, FILE_SEP, s3, FILE_SEP, s4, FILE_SEP, s5);
+	printf("[CivPaths::MakeAssetPath] Checking path '%s'\n",tempPath);
 
 	s = _fullpath(fullPath, tempPath, _MAX_PATH);
 	Assert(s != NULL);

@@ -72,7 +72,7 @@
 #include "UnoccupiedTiles.h"
 
 #include "profileDB.h"
-#include "order.h"
+#include "Order.h"
 
 #include "SlicObject.h"
 #include "SlicEngine.h"
@@ -90,7 +90,7 @@
 #include "SlicSymbol.h"
 #include "SlicNamedSymbol.h"
 #include "sliccmd.h"
-#include "sc.tab.h"
+#include "ysc.tab.h"
 
 #include "watchlist.h"
 #include "UnitRecord.h"
@@ -116,7 +116,7 @@
 #include "Diplomat.h"
 #include "AgreementMatrix.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include "cellunitlist.h"
 #include "ctpaidebug.h"
 
@@ -183,7 +183,7 @@ extern sint32 g_robotMessages;
 
 #include "gameinit.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "TurnCnt.h"
 
 
@@ -238,7 +238,7 @@ BOOL g_show_ai_dbg;
 BOOL g_doingFastRounds = FALSE;
 
 
-extern BOOL		g_ai_revolt = TRUE;
+BOOL		g_ai_revolt = TRUE;
 
 extern void WhackScreen();
 

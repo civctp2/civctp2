@@ -194,8 +194,12 @@ void NetConsole::Idle()
 	if(st >= 0) {
 		if(m_listenSock >= 0 && FD_ISSET(m_listenSock, &readFds)) {
 			struct sockaddr_in naddr;
+#ifdef WIN32
 			sint32 len = sizeof(naddr);
-			sock_t newsock = accept(m_listenSock, (struct sockaddr *)&naddr, (int *)&len);
+#else
+			uint32 len = sizeof(naddr);
+#endif
+			sock_t newsock = accept(m_listenSock, (struct sockaddr *)&naddr, &len);
 			sint32 whichSock;
 			for(whichSock = 0; whichSock < k_MAX_CONNECTIONS; whichSock++) {
 				if(m_connections[whichSock] < 0) {
@@ -204,7 +208,11 @@ void NetConsole::Idle()
 				}
 			}
 			if(whichSock >= k_MAX_CONNECTIONS) {
+#ifdef WIN32
 				closesocket(newsock);
+#else
+				close(newsock);
+#endif
 			} else {
 				Print("Slot %d connected\n", whichSock);
 			}
@@ -216,7 +224,11 @@ void NetConsole::Idle()
 				uint8 buf[k_MAX_SOCK_READ];
 				sint32 r = recv(m_connections[i], (char *)buf, k_MAX_SOCK_READ - 1, 0);
 				if(r < 0) {
+#ifdef WIN32
 					closesocket(m_connections[i]);
+#else
+					close(m_connections[i]);
+#endif
 					m_connections[i] = -1;
 				} else {
 					buf[r] = 0;

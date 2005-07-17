@@ -6,7 +6,7 @@ CTP2_LDFLAGS = \
 	$(DIRECTX_LDFLAGS) \
 	$(DXMEDIA_LDFLAGS) \
 	$(SDL_LDFLAGS) \
-	-lttf -ltiff -lSDL_image -lSDL_mixer -ldl -lpthread \
+	-lttf -ltiff -lSDL_image -lSDL_mixer -ldl -lpthread -lltdl \
 	$(X_PRE_LIBS) \
 	$(X_LIBS) -lX11
 

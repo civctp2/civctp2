@@ -10,8 +10,8 @@ aui_SDLMouse::aui_SDLMouse(
    MBCHAR *ldlBlock,
    BOOL useExclusiveMode)
    :
-   aui_Mouse(retval, ldlBlock),
    aui_Input(retval),
+   aui_Mouse(retval, ldlBlock),
    aui_SDLInput(retval, useExclusiveMode)
 {
    Assert(AUI_SUCCESS(*retval));
@@ -66,6 +66,7 @@ aui_SDLMouse::GetInput(void)
       }
       return AUI_ERRCODE_OK;
    }
+   return AUI_ERRCODE_OK;
 }
 
 #endif

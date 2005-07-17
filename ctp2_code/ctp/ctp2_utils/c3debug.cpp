@@ -14,6 +14,11 @@
 
 #ifdef _DEBUG
 
+#include <sys/types.h>
+#if !defined(WIN32)
+#include <dirent.h>
+#endif
+
 #include "aui.h"
 #include "debugwindow.h"
 #include "civ3_main.h"
@@ -37,7 +42,7 @@ char g_last_debug_text[4096];
 extern DebugWindow *g_debugWindow;
 #endif
 
-#define k_FILENAME				"logs\\civ3log%#.2d.txt"
+#define k_FILENAME				"logs\\civ3log%.2d.txt"
 #define k_MAX_LOG_FILE_LINES	10000		
 
 MBCHAR	s_logFileName[20];
@@ -61,7 +66,9 @@ sint32 *c3debug_GetLogLinesThisFile(void)
 
 int c3debug_InitDebugLog()
 {
+	MBCHAR fileName[256];
 	
+#if defined(WIN32)
 	SECURITY_ATTRIBUTES		sa;
 
 	sa.nLength = sizeof(sa);
@@ -70,19 +77,15 @@ int c3debug_InitDebugLog()
 	
 	CreateDirectory((LPCTSTR)"logs", &sa);
 
-	
 	WIN32_FIND_DATA	fileData;
 	HANDLE lpFileList;
 	MBCHAR path[_MAX_PATH];
-
 	strcpy(path, "logs\\*.*");
-		
 	
 	lpFileList = FindFirstFile(path, &fileData);
 	
 	if (lpFileList != INVALID_HANDLE_VALUE) {
 		
-		MBCHAR fileName[256];
 		do {
 			sprintf(fileName, "logs\\%s", fileData.cFileName);
 			DeleteFile(fileName);
@@ -90,16 +93,24 @@ int c3debug_InitDebugLog()
 
 		FindClose(lpFileList);
 	}
+#else
+	mode_t mask = 0777;
+	return mkdir("logs", mask);
 
-
-
-
-
-
-
-
-
-
+	DIR *dir = opendir("logs");
+	Assert(dir);
+	struct dirent *dent = NULL;
+	
+	while ((dent = readdir(dir)))
+	{
+		int unlinkRetVal;
+		sprintf(fileName, "logs\\%s", dent->d_name);
+		unlinkRetVal = unlink(fileName);
+		Assert(unlinkRetVal == 0);
+	}
+	
+	closedir(dir);
+#endif
 
 	s_logFileNumber = 0;
 	s_logLinesThisFile = 0;
@@ -207,6 +218,7 @@ c3debug_SetDebugMask(int mask, int set)
 }
 
 
+#ifdef WIN32
 static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_pointers)
 {
 	MBCHAR *s;
@@ -294,20 +306,20 @@ void c3debug_ExceptionExecute(CivExceptionFunction function)
 		DoFinalCleanup();
 	}
 }
+#endif // WIN32
 
 void c3debug_Assert(char *s, char *file, int line)
 {
 	DPRINTF(k_DBG_FIX, ("Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line)); 
- 
+
+#ifdef WIN32 
 	MBCHAR *traceStr = c3debug_StackTrace();
 	DPRINTF(k_DBG_FIX, ("Stack Trace: '%s'\n", traceStr));
 
-    do { 
-
-
- 		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) _CrtDbgBreak(); 
-
+	do { 
+		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) _CrtDbgBreak(); 
 	} while (0);
+#endif
 }	
 
 #endif 

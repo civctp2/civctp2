@@ -154,7 +154,8 @@ protected:
         MBCHAR const *  s5
     ) const;
 
-	MBCHAR *    MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3);
+	MBCHAR * MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3);
+	void ReplaceFileSeperator(MBCHAR* path);
 };
 
 

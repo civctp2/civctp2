@@ -36,8 +36,8 @@
 #include "Globals.h"
 #include <SDL_endian.h>
 
-#define k_ARCHIVE_MAGIC_VALUE_1	'OTAK'
-#define k_ARCHIVE_MAGIC_VALUE_2	'U-98'
+#define k_ARCHIVE_MAGIC_VALUE_1 0x4F54414B //'OTAK'
+#define k_ARCHIVE_MAGIC_VALUE_2 0x552D3938 //'U-98'
 
 class GameFile ;
 class DataCheck ;

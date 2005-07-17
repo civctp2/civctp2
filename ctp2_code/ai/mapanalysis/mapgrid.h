@@ -393,7 +393,7 @@ public:
 		elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
 			    (xy_pos.x / m_resolution);
 		Assert(elem >= 0);
-		Assert(elem < m_values.size());
+		Assert((unsigned) elem < m_values.size());
 
 		return m_values[elem];
 	}
