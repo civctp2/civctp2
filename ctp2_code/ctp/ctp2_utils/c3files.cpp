@@ -60,7 +60,7 @@ extern CivPaths *g_civPaths;
 
 FILE* c3files_fopen(C3DIR dirID, MBCHAR *s1, MBCHAR *s2)
 {
-	MBCHAR		s[_MAX_PATH];
+	MBCHAR		s[_MAX_PATH] = { 0 };
 
 	if (g_civPaths->FindFile(dirID, s1, s) != NULL) {
 		return fopen(s, s2);

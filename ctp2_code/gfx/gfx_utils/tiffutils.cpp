@@ -14,7 +14,7 @@ typedef sint32 int32;
 #include <tiffio.h>
 #include "tiffutils.h"
 
-char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height, size_t *size)
+char *tiffutils_LoadTIF(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
     TIFF* tif = TIFFOpen(filename, "r");
 	
@@ -61,7 +61,7 @@ char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height, size_t *s
 
 
 
-char *TIF2mem(char *filename, uint16 *width, uint16 *height, size_t *size)
+char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	TIFF	*tif = TIFFOpen(filename, "r");
 	char	*image = NULL;
@@ -120,7 +120,7 @@ char *TIF2mem(char *filename, uint16 *width, uint16 *height, size_t *size)
 
 
 
-int TIFGetMetrics(char *filename, uint16 *width, uint16 *height)
+int TIFGetMetrics(const char *filename, uint16 *width, uint16 *height)
 {
 	TIFF	*tif = TIFFOpen(filename, "r");
 	uint32	w=0, h=0;
@@ -138,7 +138,7 @@ int TIFGetMetrics(char *filename, uint16 *width, uint16 *height)
 	return 0;
 }
 
-int TIFLoadIntoBuffer16(char *filename, uint16 *width, uint16 *height, uint16 imageRowBytes, uint16 *buffer, BOOL is565)
+int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uint16 imageRowBytes, uint16 *buffer, BOOL is565)
 {
 	TIFF	*tif = TIFFOpen(filename, "r");
 	uint16	*image = NULL;
@@ -224,7 +224,7 @@ int TIFLoadIntoBuffer16(char *filename, uint16 *width, uint16 *height, uint16 im
 
 
 
-char *StripTIF2Mem(char *filename, uint16 *width, uint16 *height, size_t *size)
+char *StripTIF2Mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	uint32		imageLength; 
 	uint32		imageWidth; 

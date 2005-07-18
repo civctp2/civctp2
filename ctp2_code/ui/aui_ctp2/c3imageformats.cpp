@@ -60,7 +60,7 @@ extern ProjectFile *g_ImageMapPF;
 
 
 
-AUI_ERRCODE TiffImageFormat::Load( MBCHAR *filename, aui_Image *image )
+AUI_ERRCODE TiffImageFormat::Load( const MBCHAR *filename, aui_Image *image )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
@@ -103,7 +103,7 @@ AUI_ERRCODE TiffImageFormat::Load( MBCHAR *filename, aui_Image *image )
 
 
 
-AUI_ERRCODE TargaImageFormat::Load(MBCHAR *filename, aui_Image *image)
+AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
@@ -166,7 +166,7 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR *filename, aui_Image *image)
 
 
 
-AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
+AUI_ERRCODE TargaImageFormat::LoadRIM(const MBCHAR *filename, aui_Image *image)
 {
     extern sint32 g_is565Format;
 
@@ -178,18 +178,21 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
 	int		record_is_565;
     size_t     size;
 
-    char *basename;
+    const char *basename = NULL;
     char rname[256];
     int  rlen;
 
-    
-    if (((basename = strrchr(filename, '\\')) == NULL) &&
-        ((basename = strrchr(filename, '/')) == NULL)) {
+    if ((basename = strrchr(filename, FILE_SEPC)) == NULL) {
+        basename = strrchr(filename, '\\');
+    }
+    if (basename == NULL) {
+	basename = strrchr(filename, '/');
+    }
+    if (basename == NULL) {
         basename = filename;
     } else {
         basename++;
     }
-    
     
     strcpy(rname, basename);
     rlen = strlen(rname);
@@ -241,3 +244,4 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
 
 	return errcode;
 }
+

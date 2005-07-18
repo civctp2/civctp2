@@ -2046,12 +2046,10 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 									"c2gfile\\Shell\\Open\\command",
 									NULL,
 									launchcommand);
-			
-									 
-		char *lastbackslash = strrchr(exepath, '\\');
+		char *lastbackslash = strrchr(exepath, FILE_SEPC);
 		if(lastbackslash) {
 			*lastbackslash = 0;
-			SetCurrentDirectory(exepath);
+			chdir(exepath);
 		}
 	}
 #endif // __WIN32__

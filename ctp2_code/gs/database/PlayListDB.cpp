@@ -48,12 +48,16 @@ BOOL PlayListDB::Parse(MBCHAR *filename)
 	Assert(playListToken);
 	if (!playListToken) return FALSE;
 
-	sint32		val;
+	sint32		val = 0;
 
 	if (playListToken->GetType() == TOKEN_PLAYLIST_NUM_SONGS) { 
-		if (playListToken->Next() == TOKEN_NUMBER) { 
-			playListToken->GetNumber(val); 
+		if (playListToken->Next() == TOKEN_NUMBER) {
+			playListToken->GetNumber(val);
+		} else {
+			return FALSE;
 		}
+	} else {
+		return FALSE;
 	}
 
 	m_numSongs = val;

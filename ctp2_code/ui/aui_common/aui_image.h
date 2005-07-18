@@ -31,11 +31,10 @@ class aui_ImageFormat : public aui_FileFormat
 {
 public:
 	
-	aui_ImageFormat() {}
+	aui_ImageFormat() : aui_FileFormat() {}
 	virtual ~aui_ImageFormat() {}
 
-	virtual AUI_ERRCODE	Load( const MBCHAR *filename, aui_Image *image )
-		{ return AUI_ERRCODE_OK; }
+	virtual AUI_ERRCODE	Load( const MBCHAR *filename, aui_Image *image ) = 0;
 };
 
 
@@ -98,10 +97,10 @@ class aui_BmpImageFormat : public aui_ImageFormat
 {
 public:
 	
-	aui_BmpImageFormat() {}
+	aui_BmpImageFormat() : aui_ImageFormat() {}
 	virtual ~aui_BmpImageFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR *filename, aui_Image *image );
+	virtual AUI_ERRCODE	Load( const MBCHAR *filename, aui_Image *image );
 };
 
 

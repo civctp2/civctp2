@@ -805,8 +805,12 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	Assert(g_theSoundDB);
 	if (g_theSoundDB) {
 		lex = new DBLexer(C3DIR_GAMEDATA, g_sounddb_filename);
-		if (!g_theSoundDB->Parse(lex))
+		if (!lex)
 			return FALSE;
+		if (!g_theSoundDB->Parse(lex)) {
+			delete lex;
+			return FALSE;
+		}
 		delete lex;
 	}
 
@@ -4084,13 +4088,20 @@ int InitializeImageMaps()
     char *patname;
     char *picname;
 
-	if (g_c3ui->Primary()->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) {
-        patname = "\\pat555.zfs";
-        picname = "\\pic555.zfs";
-    } else {
-        patname = "\\pat565.zfs";
-        picname = "\\pic565.zfs";
+    Assert(g_c3ui);
+    if (g_c3ui->Primary()) 
+        if (g_c3ui->Primary()->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) {
+            patname = FILE_SEP "pat555.zfs";
+            picname = FILE_SEP "pic555.zfs";
+        } else {
+            patname = FILE_SEP "pat565.zfs";
+            picname = FILE_SEP "pic565.zfs";
+        }
+    else {
+        patname = FILE_SEP "pat565.zfs";
+        picname = FILE_SEP "pic565.zfs";
     }
+        
 
     g_ImageMapPF = new ProjectFile();
 

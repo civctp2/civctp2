@@ -87,7 +87,7 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
 	m_showCount = 0;
 	m_reset = TRUE;
 	m_thread = NULL;
-#ifndef USE_SDL
+#ifndef __AUI_USE_SDL__
 	m_threadId = 0;
 	m_threadEvent = NULL;
 	m_terminateEvent = NULL;
@@ -175,6 +175,7 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 					Assert( cursor != NULL );
 					if ( !cursor ) return AUI_ERRCODE_LOADFAILED;
 
+					Assert( cursor->TheSurface() != NULL );
 					Assert( cursor->TheSurface()->Width() <= k_MOUSE_MAXSIZE );
 					Assert( cursor->TheSurface()->Height() <= k_MOUSE_MAXSIZE );
 					if ( cursor->TheSurface()->Width() > k_MOUSE_MAXSIZE

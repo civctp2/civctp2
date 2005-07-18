@@ -96,7 +96,7 @@ C_WARNINGS="-Wall -Wno-unused-variable"
 CXX_WARNINGS="-Wall -Wno-unused-variable"
 
 CFLAGS="$C_WARNINGS -fms-extensions -fmessage-length=0 $CFLAGS"
-CXXFLAGS="$CXX_WARNINGS -fms-extensions -fmessage-length=0 -fno-rtti -fexceptions $CXXFLAGS"
+CXXFLAGS="$CXX_WARNINGS -fms-extensions -fmessage-length=0 -frtti -fexceptions $CXXFLAGS"
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
@@ -104,6 +104,13 @@ AC_SUBST(CXXFLAGS)
 AC_DEFINE(_TIFF_DATA_TYPEDEFS_,1,[Tiff uint{16,32} datatype collision prevention])
 if test x$have_x=xyes; then
 	AC_DEFINE(HAVE_X11,1,[System with X11R6 present])
+fi
+
+AC_ARG_ENABLE([debug],
+              AC_HELP_STRING([--enable-debug],[enable debugging]),,
+	      [enable_debug=no])
+if test x$enable_debug = xyes; then
+	AC_DEFINE(_DEBUG,1,[Enable debugging code])
 fi
 
 if test 0 -eq 1; then

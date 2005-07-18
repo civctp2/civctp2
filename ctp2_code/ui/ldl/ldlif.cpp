@@ -38,6 +38,7 @@ extern "C" { void ldlif_report_error(char *text); }
 
 void ldlif_report_error(char *text)
 {
+	fprintf(stderr, "%s\n", text);
 	c3errors_ErrorDialog("LDL", text);
 }
 

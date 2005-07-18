@@ -7,16 +7,66 @@
 #include <sys/param.h>
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef HAVE_STRING_H
 #include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
 #include <strings.h>
+#endif
 #include <ctype.h>
 #include "windows.h"
 #include <SDL.h>
 
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 char*
-_fullpath(char* dest, const char* src, int maxLen)
+_fullpath(char* absolute, const char* relative, size_t bufsize)
 {
-	return strncpy(dest, src, maxLen);
+	char ret[MAX_PATH] = { 0 };
+	char *dest = (absolute == NULL) ? ret : absolute;
+	size_t size = (absolute == NULL) ? MAX_PATH : bufsize;
+
+	if (!relative) {
+		getcwd(dest, size - 1);
+		dest[size - 1] = '\0';
+	} else if (relative[0] == FILE_SEPC) {
+		strncpy(dest, relative, size - 1);
+		dest[size - 1] = '\0';
+	} else {
+#ifdef __USE_GNU
+		char *abs = canonicalize_file_name(relative);
+		if (abs) {
+			strncpy(dest, abs, size - 1);
+			dest[size - 1] = '\0';
+			free(abs);
+		} else {
+			return NULL;
+		}
+#elif defined(BSD) || defined(__USE_BSD)
+		char rlpath[PATH_MAX] = { 0 };
+		char *abs = realpath(relative, rlpath);
+		if (abs) {
+			if (!absolute) {
+				return strdup(rlpath);
+			} else {
+				strncpy(dest, rlpath, size - 1);
+				dest[size - 1] = '\0';
+				return dest;
+			}
+		} else {
+			return NULL;
+		}
+#else
+#error "_fullpath() not implemented for this platform."
+#endif
+	}
+
+	if (absolute)
+		return dest;
+	else
+		return strdup(dest);
 }
 
 void
@@ -34,8 +84,9 @@ GetTickCount()
 sint32
 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 {
-	printf("MessageBox: %s\n", title);
-	printf("%s\n", msg);
+	fprintf(stderr, "Messagebox(%s): %s\n",
+	        (title ? title : "null"), (msg ? msg : "null"));
+	
 	return 0;
 }
 

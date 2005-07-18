@@ -222,7 +222,8 @@ AUI_ERRCODE c3_PopupWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	RECT rect = { 0, 0, m_width, m_height };
 
-	m_pattern->Draw( m_surface, &rect );
+	if (m_pattern)
+		m_pattern->Draw( m_surface, &rect );
 
 	
 

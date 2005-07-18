@@ -13,11 +13,11 @@ class aui_Surface;
 class TargaImageFormat : public aui_ImageFormat
 {
 public:
-	TargaImageFormat() {}
+	TargaImageFormat() : aui_ImageFormat() {}
 	virtual ~TargaImageFormat() {}
 
-	AUI_ERRCODE LoadRIM(MBCHAR *filename, aui_Image *image);
-	virtual AUI_ERRCODE Load(MBCHAR *filename, aui_Image *image);
+	virtual AUI_ERRCODE LoadRIM(const MBCHAR *filename, aui_Image *image);
+	virtual AUI_ERRCODE Load(const MBCHAR *filename, aui_Image *image);
 };
 
 
@@ -26,10 +26,10 @@ class TiffImageFormat : public aui_ImageFormat
 {
 public:
 	
-	TiffImageFormat() {}
+	TiffImageFormat() : aui_ImageFormat() {}
 	virtual ~TiffImageFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR *filename, aui_Image *image );
+	virtual AUI_ERRCODE	Load( const MBCHAR *filename, aui_Image *image );
 };
 
 

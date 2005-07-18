@@ -254,7 +254,7 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
 	
 	for (uint16 i=0; i<m_numFrames; i++) 
 	{
-		char ext[_MAX_DIR];
+		char ext[_MAX_DIR] = { 0 };
 
 		
 		image		= NULL;      
@@ -262,8 +262,11 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
 		shadow		= NULL;
 		minishadow	= NULL;
 
-		
-		_splitpath(imageFiles[i],NULL,NULL,NULL,ext);
+		char *dot = strrchr(imageFiles[i], '.');
+		if (dot && (*++dot)) {
+			char *end = strncpy(ext, dot, _MAX_DIR - 1);
+			*++end = '\0';
+		}
 
 		if (strstr(strupr(ext),"TIF"))
 			ImportTIFF(i,imageFiles,&image);
@@ -276,8 +279,13 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
 				fcloseall();
 				exit(-1);
 			}
-		
-		_splitpath(shadowFiles[i],NULL,NULL,NULL,ext);
+
+		ext[0] = '\0';
+		dot = strrchr(shadowFiles[i], '.');
+		if (dot && (*++dot)) {
+			char *end = strncpy(ext, dot, _MAX_DIR - 1);
+			*++end = '\0';
+		}
 
 		if (strstr(strupr(ext),"TIF"))
 			ImportTIFF(i,shadowFiles,&shadow);

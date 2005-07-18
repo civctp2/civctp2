@@ -15,9 +15,15 @@ AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)
 {
 	m_exclusiveMode = useExclusiveMode;
 
+#if 0
 	int rc = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTTHREAD |
 	                  SDL_INIT_AUDIO | SDL_INIT_TIMER);
-	if (-1 == rc) {
+#else
+	int rc = SDL_Init(SDL_INIT_EVENTTHREAD |
+	                  SDL_INIT_AUDIO | SDL_INIT_TIMER);
+#endif
+
+	if (0 != rc) {
 		fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
 		return AUI_ERRCODE_CREATEFAILED;
 	}

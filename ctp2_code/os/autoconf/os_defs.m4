@@ -14,6 +14,7 @@ AC_DEFUN([AC_OS_DEFINES],[
          ;;
       *-linux*)
          AC_DEFINE(LINUX,1,[Define to 1 if you are compiling on Linux])
+	 AC_DEFINE(__USE_GNU,1,[Use GNU extensions of glibc])
 	 CTP2_NOWIN32_INC='-I$(ctp2_code)/os/nowin32'
          ac_OpSystem="LINUX"
    esac

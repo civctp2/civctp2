@@ -112,7 +112,7 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 		
 		for (uint16 i=0; i<m_numFrames; i++) 
 		{
-			char ext[_MAX_DIR];
+			char ext[_MAX_DIR] = { 0 };
 		
 			
 			image		= NULL;      
@@ -123,8 +123,11 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 			
 			fname = imageFiles[facing][i];
 
-			
-			_splitpath(fname,NULL,NULL,NULL,ext);
+			char *dot = strrchr(fname, '.');
+			if (dot && (*++dot)) {
+				char *end = strncpy(ext, dot, _MAX_DIR - 1);
+				*++end = '\0';
+			}
 		
 			if (strstr(strupr(ext),"TIF"))
 				ImportTIFF(i,imageFiles[facing],&image);
@@ -137,8 +140,11 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 			
 			fname = shadowFiles[facing][i];
 
-			
-			_splitpath(fname,NULL,NULL,NULL,ext);
+			dot = strrchr(fname, '.');
+			if (dot && (*++dot)) {
+				char *end = strncpy(ext, dot, _MAX_DIR - 1);
+				*++end = '\0';
+			}
 		
 			if (strstr(strupr(ext),"TIF"))
 				ImportTIFF(i,shadowFiles[facing],&shadow);

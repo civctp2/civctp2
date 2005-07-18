@@ -126,7 +126,7 @@ typedef struct hwnd_t* HWND;
 #define WINAPI
 
 /* stub functions */
-char* _fullpath(char*, const char*, int);
+char* _fullpath(char*, const char*, size_t);
 void _splitpath(const char*,char*,char*,char*,char*);
 void CopyRect(struct RECT *dest, struct RECT *src);
 uint32 GetTickCount();

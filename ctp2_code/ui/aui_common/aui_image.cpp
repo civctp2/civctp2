@@ -102,6 +102,7 @@ AUI_ERRCODE aui_Image::SetFilename( const MBCHAR *filename )
 		m_format = static_cast<aui_ImageFormat *>
 						(g_ui->TheMemMap()->GetFileFormat(m_filename));
 	}
+	assert( m_format != NULL );
 	Assert( m_format != NULL );
 	if ( !m_format ) return AUI_ERRCODE_MEMALLOCFAILED;
 	
@@ -120,6 +121,9 @@ AUI_ERRCODE aui_Image::Load( void )
 	if ( m_surface ) return AUI_ERRCODE_OK;
 
 	AUI_ERRCODE retval=m_format->Load( m_filename, this );
+#ifdef _DEBUG
+	fprintf(stderr, "%d==aui_Image::Load(%s)", retval, m_filename);
+#endif
 
 	return retval;
 }
@@ -189,9 +193,11 @@ AUI_ERRCODE aui_Image::LoadFileMapped( sint32 width, sint32 height,
 
 
 
-AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
+AUI_ERRCODE aui_BmpImageFormat::Load( const MBCHAR *filename, aui_Image *image )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+	Assert( filename != NULL );
+	Assert( image != NULL );
 
 #ifdef WIN32	
 	uint8 *filebits = g_ui->TheMemMap()->GetFileBits( filename );
@@ -364,6 +370,27 @@ AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
 		}
 	}
 
+	return retcode;
+#elif defined(__AUI_USE_SDL__)
+	assert(0);
+	SDL_Surface *bmp = SDL_LoadBMP(filename);
+	SDL_Surface *surf = NULL;
+	SDL_PixelFormat fmt = { 0 };
+#if 0
+	if (aui_image_SDLPixelFormat(image, &fmt)) {
+		surf = SDL_ConvertSurface(bmp, &fmt, 0);
+	}
+#endif
+	if (NULL == surf) {
+		surf = SDL_DisplayFormat(bmp);
+	}
+	SDL_FreeSurface(bmp);
+	if (NULL == surf)
+		return AUI_ERRCODE_LOADFAILED;
+	
+	if (image->TheSurface()) {
+	} else {		
+	}
 	return retcode;
 #else
 	return AUI_ERRCODE_LOADFAILED;

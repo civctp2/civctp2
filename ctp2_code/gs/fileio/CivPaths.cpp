@@ -117,8 +117,8 @@ CivPaths::CivPaths ()
 
 	fclose(fin); 
 
-	MBCHAR	tempPath[_MAX_PATH];
-	MBCHAR	fullPath[_MAX_PATH];
+	MBCHAR	tempPath[_MAX_PATH] = { 0 };
+	MBCHAR	fullPath[_MAX_PATH] = { 0 };
 	MBCHAR	*s;
 
 	sprintf(tempPath, "%s%s%s", m_hdPath, FILE_SEP, m_savePath);
@@ -171,7 +171,7 @@ void CivPaths::CreateSaveFolders(const MBCHAR *path)
 	mkdir(path, mode);
 #endif
 	
-	MBCHAR subFolderPath[_MAX_PATH];
+	MBCHAR subFolderPath[_MAX_PATH] = { 0 };
 
 	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveGamePath);
 #ifdef WIN32
@@ -213,7 +213,7 @@ void CivPaths::CreateSaveFolders(const MBCHAR *path)
 
 void CivPaths::InitCDPath(void)
 {
-	MBCHAR tempPath[_MAX_PATH];
+	MBCHAR tempPath[_MAX_PATH] = { 0 };
 	sprintf(tempPath, "%c:\\%s", c3files_GetCTPCDDriveLetter(), m_cdPath);
 	strcpy(m_cdPath, tempPath);
 }
@@ -222,7 +222,7 @@ void CivPaths::InitCDPath(void)
 
 MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3) 
 {
-	MBCHAR			tempPath[_MAX_PATH];
+	MBCHAR			tempPath[_MAX_PATH] = { 0 };
 	MBCHAR			*s;
 	int			r;
 #ifdef WIN32
@@ -282,7 +282,7 @@ void CivPaths::ReplaceFileSeperator(MBCHAR* path)
 
 MBCHAR *CivPaths::GetSavePath(C3SAVEDIR dir, MBCHAR *path)
 {
-	MBCHAR		fullPath[_MAX_PATH];
+	MBCHAR		fullPath[_MAX_PATH] = { 0 };
 
 	switch (dir) {
 	case C3SAVEDIR_GAME:
@@ -340,7 +340,7 @@ MBCHAR *CivPaths::MakeAssetPath
     MBCHAR const *  s5
 ) const
 {
-	MBCHAR			tempPath[_MAX_PATH];
+	MBCHAR			tempPath[_MAX_PATH] = { 0 };
 	MBCHAR			*s;
 	int			r;
 #ifdef WIN32
@@ -372,7 +372,7 @@ MBCHAR *CivPaths::MakeAssetPath
 MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
                            BOOL silent, BOOL check_prjfile)
 {
-	MBCHAR			fullPath[_MAX_PATH];	
+	MBCHAR			fullPath[_MAX_PATH] = { 0 };
 
 	
 	Assert(path != NULL);
@@ -511,7 +511,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 
 BOOL CivPaths::FindPath(C3DIR dir, int num, MBCHAR *path)
 {
-	MBCHAR          tempPath[_MAX_PATH];
+	MBCHAR          tempPath[_MAX_PATH] = { 0 };
 	
 	Assert(path != NULL);
 	Assert(dir < C3DIR_MAX);
@@ -616,8 +616,8 @@ MBCHAR *CivPaths::GetSpecificPath(C3DIR dir, MBCHAR *path, BOOL local)
 	Assert(dir < C3DIR_MAX);
 	if (dir >= C3DIR_MAX) return NULL;
 
-	MBCHAR			fullPath[_MAX_PATH];
-	MBCHAR			tempPath[_MAX_PATH];
+	MBCHAR			fullPath[_MAX_PATH] = { 0 };
+	MBCHAR			tempPath[_MAX_PATH] = { 0 };
 	MBCHAR			*s;
 
 	if (local) {
@@ -643,7 +643,7 @@ MBCHAR *CivPaths::GetSpecificPath(C3DIR dir, MBCHAR *path, BOOL local)
 
 MBCHAR *CivPaths::GetScenarioRootPath(MBCHAR *path)
 {
-	MBCHAR	temp[_MAX_PATH];
+	MBCHAR	temp[_MAX_PATH] = { 0 };
 	MBCHAR	*s;
 
 	s = _fullpath(temp, m_scenariosPath, _MAX_PATH);

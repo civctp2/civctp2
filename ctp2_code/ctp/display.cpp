@@ -149,6 +149,7 @@ void display_EnumerateDisplayModes(void)
 #else
 	SDL_PixelFormat fmt = { 0 };
 	fmt.BitsPerPixel = 16;
+	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Rect **modes = SDL_ListModes(&fmt, SDL_FULLSCREEN);
 	
 	g_displayModes = new PointerList<CTPDisplayMode>;
@@ -351,12 +352,14 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 			g_ScreenWidth = g_theProfileDB->GetScreenResWidth();
 			g_ScreenHeight = g_theProfileDB->GetScreenResHeight();
 		} else {
-			
-			
 			CTPDisplayMode *mode = g_displayModes->GetHead();
-
-			g_ScreenWidth = mode->width;
-			g_ScreenHeight = mode->height;
+			if (mode != NULL) {
+				g_ScreenWidth = mode->width;
+				g_ScreenHeight = mode->height;
+			} else {
+				g_ScreenWidth = 800;
+				g_ScreenHeight = 600;
+			}
 		}
 	}
 

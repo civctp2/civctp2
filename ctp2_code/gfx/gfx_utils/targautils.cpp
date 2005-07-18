@@ -21,7 +21,7 @@ SHORT TgaDecodeScanLine(BYTE *DecodedBuffer, WORD LineLength,
 unsigned char *tmpbuf = NULL;
 unsigned char *tmpbuf1= NULL; 
 
-bool Get_TGA_Dimension (char *fname, 
+bool Get_TGA_Dimension (const char *fname, 
 						int &Width, 
 						int &Height,
 						int &Bpp)
@@ -84,7 +84,7 @@ static void Get_Pixel_Mask_Scale (
 }
 
 
-bool Load_TGA_File_Simple(char *fname,
+bool Load_TGA_File_Simple(const char *fname,
 						  unsigned char *data,
 						  int Buffer_Width,
 						  int width, 
@@ -237,7 +237,7 @@ void TGA2RGB32(Pixel32 *data,int datasize)
 }
 
 
-bool Load_TGA_File(char *fname,
+bool Load_TGA_File(const char *fname,
 			 unsigned char *data,
 			 int Buffer_Width,
 			 int width, 
@@ -414,7 +414,7 @@ bool Load_TGA_File(char *fname,
     return(1);
 }
 
-int write_tga(char *fname, int width, int height, unsigned char *data)
+int write_tga(const char *fname, int width, int height, unsigned char *data)
 {
     TGAHEADER head;
     long fsize;
@@ -557,3 +557,4 @@ SHORT TgaDecodeScanLine(unsigned char *DecodedBuffer, WORD LineLength,
     }
     return(byteCount);
 }
+

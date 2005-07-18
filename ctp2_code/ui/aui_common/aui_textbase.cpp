@@ -395,7 +395,7 @@ void aui_TextBase::TextReloadFont( void )
 
 	aui_BitmapFont *oldFont = m_textfont;
 
-	static MBCHAR descriptor[ k_AUI_BITMAPFONT_MAXDESCLEN + 1 ];
+	static MBCHAR descriptor[ k_AUI_BITMAPFONT_MAXDESCLEN + 1 ] = { 0 };
 	aui_BitmapFont::AttributesToDescriptor(
 		descriptor,
 		m_textttffile,
@@ -403,7 +403,12 @@ void aui_TextBase::TextReloadFont( void )
 		m_textbold,
 		m_textitalic );
 
+	fprintf(stderr, "%s\n", descriptor);
+#ifdef WIN32
 	m_textfont = g_ui->LoadBitmapFont( descriptor );
+#else
+	m_textfont = g_ui->LoadBitmapFont( m_textttffile );
+#endif
 	Assert( m_textfont != NULL );
 	if (m_textfont)
 	{

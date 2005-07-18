@@ -134,9 +134,9 @@ AUI_ERRCODE aui_SDLUI::DestroyScreen(void)
 
 AUI_ERRCODE aui_SDLUI::CreateScreen( BOOL useExclusiveMode )
 {
-	
 	AUI_ERRCODE errcode = aui_SDL::InitCommon( useExclusiveMode );
 	Assert( AUI_SUCCESS(errcode) );
+	assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
 	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, SDL_SWSURFACE);
@@ -149,6 +149,7 @@ AUI_ERRCODE aui_SDLUI::CreateScreen( BOOL useExclusiveMode )
 		m_lpdd,
 		TRUE );
 	Assert( AUI_NEWOK(m_primary,errcode) );
+	assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	m_pixelFormat = m_primary->PixelFormat();
