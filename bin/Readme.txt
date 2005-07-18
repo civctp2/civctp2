@@ -14,6 +14,6 @@ This means that you can port an Open Source(tm) application to cygwin, and distr
 
 See http://www.opensource.org/docs/definition_plain.html for the precise Open Source Definition referenced above. 
 
-*** ANOTHR NOTE ***
+*** ANOTHER NOTE ***
 
 The GNU General Public License (GPL) version 2 can be found in this directory under GNUGeneralPublicLicence2.txt note it is in unix format and Windows' notepad cannot read the line warps. In addition you can download this licience from http://cygwin.com/COPYING and http://www.gnu.org/licenses/gpl.txt, more information about Cygwin can be found at http://www.cygwin.com/. 

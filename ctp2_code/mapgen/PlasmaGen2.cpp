@@ -1,6 +1,33 @@
-/**
- * $Id$
- */
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// USE_COM_REPLACEMENT
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
+
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
@@ -76,12 +103,12 @@ uint32 PlasmaGenerator2::Release()
 
 sint8 Rand1(IC3Rand *randgen, sint16 base, sint16 delta)
 {
-	sint16 res = (base + randgen->Next(delta) - delta/2);
+	sint16 res = (base + static_cast<sint16>(randgen->Next(delta)) - delta/2);
 	if(res > 127)
 		res = 127;
 	if(res < -128)
 		res = -128;
-	return (sint8)res;
+	return static_cast<sint8>(res);
 }
 
 #if !defined(USE_COM_REPLACEMENT)
@@ -120,7 +147,7 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
 	for (i=0;i<height;i++) 
 		for (j=0;j<width;j++) 
 			map[i * width + j]=0;
-    
+
 	sint32 bigside = (width > height) ? width : height;
 
 	h = height;
@@ -138,7 +165,7 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
 		bigside = bigside / 2;
 		for(i = 0; i < height; i += h) {
 			for(j = 0; j < width; j += w) {
-				
+
 				i2 = (i + h) % height;
 				i3 = (i + h/2) % height;
 				j2 = (j + w) % width;
@@ -152,11 +179,10 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
 					map[i3 * width + j] = Rand1(randgen, (a+b)/2, delta);
 				if(j == 0)
 					map[i * width + j3] = Rand1(randgen, (a+c)/2, delta);
-                
-                map[i2*width+j3]=Rand1(randgen, (b+d)/2,delta);
-				
-                
-                map[i3*width+j2]=Rand1(randgen, (c+d)/2,delta);
+
+				map[i2*width+j3]=Rand1(randgen, (b+d)/2,delta);
+
+				map[i3*width+j2]=Rand1(randgen, (c+d)/2,delta);
 			}
 		}
 		delta = int(double(delta) * roughness);

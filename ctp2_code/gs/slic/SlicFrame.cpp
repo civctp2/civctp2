@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -115,9 +117,9 @@ SlicFrame::~SlicFrame()
 	delete m_messageData;
 
 	if (m_resultObject)
-    {
+	{
 		m_resultObject->Release();
-    }
+	}
 }
 
 BOOL SlicFrame::ArrayLookup(SS_TYPE arrayType, SlicStackValue array,

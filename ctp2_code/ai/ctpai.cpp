@@ -17,6 +17,8 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -47,6 +49,7 @@
 //   at least the later must be reconsidered as I got the feeling that we have
 //   in the city units that are waiting for being moved out. 
 //    - Feb. 21st 2005 Martin Gühmann
+// - Improved AI sliders optimization. - Jul 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -1557,18 +1560,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		Governor::SlidersSetting sliders_setting;
 		
 		
-		Governor::GetGovernor(player).SetSliders(sliders_setting, true);
-
-		
-		if (Governor::GetGovernor(player).ComputeMinimumSliders(sliders_setting) == false)
-		{
-			
-			bool found = 
-				Governor::GetGovernor(player).ComputeBestSliders(sliders_setting);
-			
-		}
-
-		
+		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
 		Governor::GetGovernor(player).SetSliders(sliders_setting, true);
 
 		t2 = GetTickCount();
@@ -1969,18 +1961,7 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 		Governor::SlidersSetting sliders_setting;
 		
 		
-		Governor::GetGovernor(player).SetSliders(sliders_setting, true);
-
-		
-		if (Governor::GetGovernor(player).ComputeMinimumSliders(sliders_setting) == false)
-		{
-			
-			bool found = 
-				Governor::GetGovernor(player).ComputeBestSliders(sliders_setting);
-			
-		}
-
-		
+		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
 		Governor::GetGovernor(player).SetSliders(sliders_setting, true);
 		
 		DPRINTF(k_DBG_AI, ("\n\n"));
