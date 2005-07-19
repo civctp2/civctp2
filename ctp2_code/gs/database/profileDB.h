@@ -43,6 +43,7 @@
 // - Option added to include multiple data directories.
 // - Improved structure + linux branch synchronisation.
 // - Added world shape handling.
+// - Made file compiable in Win32 Test configuration
 //
 //----------------------------------------------------------------------------
 
@@ -63,10 +64,11 @@
 // Exported names
 //----------------------------------------------------------------------------
 
-class	ProfileDB;
-class	ProfileVar;
+class   ProfileDB;
+class   ProfileVar;
+enum    MAPSIZE;
 
-enum	PROF_VAR_TYPE
+enum    PROF_VAR_TYPE
 {
     PV_BOOL,
     PV_NUM,
