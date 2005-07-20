@@ -351,7 +351,6 @@ MBCHAR *CivPaths::MakeAssetPath
 
 	sprintf(tempPath, "%s%s%s%s%s%s%s%s%s",
 	        s1, FILE_SEP, s2, FILE_SEP, s3, FILE_SEP, s4, FILE_SEP, s5);
-	printf("[CivPaths::MakeAssetPath] Checking path '%s'\n",tempPath);
 
 	s = _fullpath(fullPath, tempPath, _MAX_PATH);
 	Assert(s != NULL);

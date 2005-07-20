@@ -410,6 +410,7 @@ void aui_TextBase::TextReloadFont( void )
 	m_textfont = g_ui->LoadBitmapFont( m_textttffile );
 #endif
 	Assert( m_textfont != NULL );
+	assert( m_textfont != NULL );
 	if (m_textfont)
 	{
 		if (oldFont)
@@ -436,6 +437,7 @@ AUI_ERRCODE aui_TextBase::DrawThisText(
 
 	
 	if ( m_textreload ) TextReloadFont();
+	assert(m_textfont!=NULL);
 
 	if ( m_textshadow )
 	{

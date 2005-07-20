@@ -41,7 +41,7 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 %%
 
 ^import	{ BEGIN(incl); }
-<incl>[ \t]* {}
+<incl>[ \t\r]* {}
 <incl>\"    { BEGIN(fname); }
 <fname>[a-zA-Z0-9_.\\]+\" { /* Got the include file name */
   			if ( ldl_include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
@@ -131,7 +131,7 @@ false           { return VFALSE; }
 					return VSTRING;
 				}
 #.*\n             { g_ldlLineNumber++; }
-[ \t]			{ }
+[ \t\r]			{ }
 \n				{ g_ldlLineNumber++; }
 \$              { }
 .				{ return yytext[0]; }

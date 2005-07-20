@@ -22,7 +22,7 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 -?[0-9]+\.[0-9]* { return k_Token_Float; }
 -?[0-9]+      { return k_Token_Int; }
 
-[ \t]     { }
+[ \t\r]     { }
 \n        { g_dblexerLineNumber++; }
 #.*\n       { g_dblexerLineNumber++; }
 \/\/.*\n	{ g_dblexerLineNumber++; }

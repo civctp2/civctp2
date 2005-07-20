@@ -60,7 +60,7 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 %%
 ^#include	{ BEGIN(incl); }
 ^#warnings   { g_slicWarnUndeclared = 1; }
-<incl>[ \t]* {}
+<incl>[ \t\r]* {}
 <incl>\"    { BEGIN(fname); }
 <fname>[a-zA-Z0-9_.\\]+\" { /* Got the include file name */
   			if ( include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
@@ -189,7 +189,7 @@ Return      { return KW_RETURN; }
 \} 			{ /*slicif_end_block();*/ return yytext[0]; }
 
 \.       { return REF; }
-[ \t]		{}
+[ \t\r]		{}
 ==		{ return EQ; }
 \<		{ return LT; }
 \>		{ return GT; }
