@@ -18,15 +18,15 @@ AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)
 #if 0
 	int rc = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTTHREAD |
 	                  SDL_INIT_AUDIO | SDL_INIT_TIMER);
-#else
+#elif 0
 	int rc = SDL_Init(SDL_INIT_EVENTTHREAD |
 	                  SDL_INIT_AUDIO | SDL_INIT_TIMER);
-#endif
 
 	if (0 != rc) {
 		fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
 		return AUI_ERRCODE_CREATEFAILED;
 	}
+#endif
 	SDL_ShowCursor(SDL_DISABLE);
 
 	// enable only a handfull of events

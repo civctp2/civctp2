@@ -1229,6 +1229,11 @@ AUI_ERRCODE aui_UI::Draw( void )
 		ShowSelectedRegion( m_editRegion );
 	}
 
+#ifdef __AUI_USE_SDL__
+	if (SDL_Flip(SDL_GetVideoSurface()) < 0) {
+		fprintf(stderr, "Flip failed: %s\n", SDL_GetError());
+	}
+#endif
 	errcode = m_mouse->Resume();
 	Assert( errcode == AUI_ERRCODE_OK );
 

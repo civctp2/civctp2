@@ -89,7 +89,7 @@ aui_SDLUI::aui_SDLUI
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = CreateScreen( useExclusiveMode );
+	*retval = CreateNativeScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -119,7 +119,7 @@ AUI_ERRCODE aui_SDLUI::InitCommon()
 
 
 
-AUI_ERRCODE aui_SDLUI::DestroyScreen(void)
+AUI_ERRCODE aui_SDLUI::DestroyNativeScreen(void)
 {
 	if (m_primary)
 	{
@@ -132,7 +132,7 @@ AUI_ERRCODE aui_SDLUI::DestroyScreen(void)
 }
 
 
-AUI_ERRCODE aui_SDLUI::CreateScreen( BOOL useExclusiveMode )
+AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 {
 	AUI_ERRCODE errcode = aui_SDL::InitCommon( useExclusiveMode );
 	Assert( AUI_SUCCESS(errcode) );
@@ -260,7 +260,7 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 
 	if ( m_minimize || m_exclusiveMode )
 	{
-		DestroyScreen();
+		DestroyNativeScreen();
 	}
 
 #if 0
@@ -287,7 +287,7 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 {
 
 
-	if ( !m_primary ) CreateScreen( m_exclusiveMode );
+	if ( !m_primary ) CreateNativeScreen( m_exclusiveMode );
 
 #if 0
 	if ( m_minimize || m_exclusiveMode )

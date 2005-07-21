@@ -295,8 +295,8 @@ BOOL c3files_CreateDirectory(MBCHAR *path)
 #if defined(WIN32)
 	return CreateDirectory(path, NULL);
 #else
-   mode_t mask = 0777;
-   return mkdir(path, mask);
+	mode_t mask = 0777;
+	return mkdir(path, mask);
 #endif
 }
 
@@ -503,6 +503,13 @@ BOOL c3files_HasLegalCD()
 
 void c3files_InitializeCD(void)
 {
+#if 0
+	int rc = SDL_Init(SDL_INIT_CDROM);
+	if (0 != rc) {
+		fprintf(stderr, "Could not initialize CDROM:\n%s\n", SDL_GetError());
+		return;
+	}
+#endif
 	c3files_GetCDDrives();
 	BOOL success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
 }

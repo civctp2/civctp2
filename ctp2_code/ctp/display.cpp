@@ -149,7 +149,7 @@ void display_EnumerateDisplayModes(void)
 #else
 	SDL_PixelFormat fmt = { 0 };
 	fmt.BitsPerPixel = 16;
-	SDL_Init(SDL_INIT_VIDEO);
+	
 	SDL_Rect **modes = SDL_ListModes(&fmt, SDL_FULLSCREEN);
 	
 	g_displayModes = new PointerList<CTPDisplayMode>;

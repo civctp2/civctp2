@@ -2241,7 +2241,7 @@ void DoFinalCleanup(int exitCode)
 
     if (g_c3ui)
     {
-		g_c3ui->DestroyScreen();
+		g_c3ui->DestroyNativeScreen();
     }
 
 #ifdef WIN32

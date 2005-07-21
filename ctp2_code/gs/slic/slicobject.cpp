@@ -378,7 +378,7 @@ void SlicObject::Finish()
 
 					if(g_player[m_recipientList[i]]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
 					   *m_request == ID(0)
-#ifdef _DEBUG
+#if defined(_DEBUG) && !defined(LINUX)
 					   && !g_robotMessages
 #endif
 						) {

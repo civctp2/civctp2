@@ -36,7 +36,7 @@
 #include <shlobj.h>
 #endif
 
-CivPaths *g_civPaths; 
+CivPaths *g_civPaths = 0; 
 
 #include "prjfile.h"
 extern ProjectFile *g_ImageMapPF;
@@ -44,17 +44,19 @@ extern ProjectFile *g_ImageMapPF;
 
 
 void CivPaths_InitCivPaths() 
-{ 
-    delete g_civPaths;
+{
+	if (g_civPaths)
+		delete g_civPaths;
 	g_civPaths = new CivPaths; 
 } 
 
 
 
 void CivPaths_CleanupCivPaths()
-{ 
-    delete g_civPaths;
-	g_civPaths = NULL;
+{
+	if (g_civPaths)
+		delete g_civPaths;
+	g_civPaths = 0;
 } 
 
 CivPaths::CivPaths ()

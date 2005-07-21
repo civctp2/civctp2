@@ -34,10 +34,12 @@ void* operator new(const size_t size)
 #endif
 		exit(-1);
 	}
-  
+ 
+#if defined(WIN32)
 	if (g_check_mem) { 
         Assert(_CrtCheckMemory()); 
     }
+#endif
 
 	return ptr;
 }
@@ -50,9 +52,11 @@ void operator delete(void *ptr)
 	free(ptr);
     ptr = NULL; 
 
+#if defined(WIN32)
     if (g_check_mem) { 
         Assert(_CrtCheckMemory());  
     }
+#endif
 }
 
 #endif

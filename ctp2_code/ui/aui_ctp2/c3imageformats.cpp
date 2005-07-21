@@ -41,6 +41,12 @@
 
 #endif
 
+#if defined(__AUI_USE_SDL__)
+#include <SDL.h>
+#include <SDL_image.h>
+#include "aui_sdlsurface.h"
+#endif
+
 #include "aui.h"
 #include "aui_image.h"
 #include "aui_surface.h"
@@ -114,18 +120,19 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 	int		bpp;
 
 #ifdef _WIN322
-    if (_access(filename, 0) != 0) {
+	if (_access(filename, 0) != 0) {
 #else
-      struct stat st;
-      if (stat(filename, &st) != 0) {
+	struct stat st;
+	if (stat(filename, &st) != 0) {
 #endif
 		return LoadRIM(filename, image);
-    }        
+	}        
 
 	if (!Get_TGA_Dimension(filename, width, height, bpp)) {
 		return AUI_ERRCODE_LOADFAILED;
-    }
+	}
 
+#ifndef __AUI_USE_SDL__
 	errcode = image->LoadEmpty( width, height, 16 );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) {
@@ -159,6 +166,25 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
             retcode = AUI_ERRCODE_LOADFAILED;
         }
 	}
+#else // !__AUI_USE_SDL__
+	SDL_Surface *s = IMG_Load(filename);
+	if (s != NULL) {
+		aui_SDLSurface *as = new aui_SDLSurface(&retcode,
+		                                     0,
+						     0,
+						     0,
+						     s,
+						     FALSE,
+						     FALSE,
+						     TRUE);
+		Assert ( AUI_NEWOK(as, retcode));
+		image->AttachSurface(as);
+	} else {
+		fprintf(stderr, "aui_Image: Failed to load %s\n", filename);
+		retcode = AUI_ERRCODE_LOADFAILED;
+	}
+	
+#endif
 
 	return retcode;
 }

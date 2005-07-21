@@ -293,6 +293,9 @@ int g_gameWatchID = -1;
 #include "ProfileEdit.h"
 #include "SlicSegment.h"    // SlicSegment::Cleanup
 
+#if defined(USE_SDL) || defined(__AUI_USE_SDL__)
+#include <SDL.h>
+#endif
 #ifdef LINUX
 #include <time.h>
 #endif
@@ -1486,6 +1489,17 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 // COM needed for DirectX/Movies
 #ifdef WIN32
     CoInitialize(NULL);
+#endif
+#ifdef __AUI_USE_SDL__
+	Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTTHREAD) & ~SDL_INIT_AUDIO;
+#if defined(_DEBUG) || defined(DEBUG)
+	flags |= SDL_INIT_NOPARACHUTE;
+#endif// _DEBUG || DEBUG
+	int rc = SDL_Init(flags);
+	if (rc != 0) {
+		fprintf(stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
+		return -1;
+	}
 #endif
 
 	Splash::Initialize();

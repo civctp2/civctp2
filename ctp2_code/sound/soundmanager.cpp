@@ -209,7 +209,8 @@ SoundManager::InitSoundDriver()
 
 #if defined(USE_SDL)
 	output_format = AUDIO_S16SYS;
-    errcode = SDL_Init(SDL_INIT_AUDIO | m_SDLInitFlags);
+	
+    errcode = SDL_InitSubSystem(SDL_INIT_AUDIO | m_SDLInitFlags);
 
     if (errcode < 0) {
         m_noSound = TRUE;
@@ -261,13 +262,15 @@ SoundManager::InitRedbook()
 {
 #if defined(USE_SDL)
     if (!m_cdrom) {
-        int errcode = SDL_Init(SDL_INIT_CDROM | m_SDLInitFlags);
+#if 0
+        int errcode = SDL_InitSubSystem(SDL_INIT_CDROM | m_SDLInitFlags);
 
         Assert(0 == errcode);
         if (errcode < 0) {
             g_theProfileDB->SetUseRedbookAudio(FALSE);
             return;
         }
+#endif
 
         MBCHAR drive_letter = toupper(c3files_GetCTPCDDriveLetter());
         int numDrives = SDL_CDNumDrives();

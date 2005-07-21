@@ -148,7 +148,15 @@ AUI_ERRCODE aui_Image::Unload( void )
 	return AUI_ERRCODE_OK;
 }
 
-
+void
+aui_Image::AttachSurface(aui_Surface *s)
+{
+	if (m_surface) {
+		delete m_surface;
+	}
+	
+	m_surface = s;
+}
 
 
 AUI_ERRCODE aui_Image::LoadEmpty( sint32 width, sint32 height, sint32 bpp )

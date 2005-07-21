@@ -63,7 +63,7 @@ public:
 	AUI_ERRCODE Load( void );
 	AUI_ERRCODE Unload( void );
 
-	
+	virtual void AttachSurface(aui_Surface *surface);
 	virtual AUI_ERRCODE LoadEmpty( sint32 width, sint32 height, sint32 bpp );
 
     

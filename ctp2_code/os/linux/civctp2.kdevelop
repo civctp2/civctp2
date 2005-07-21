@@ -13,18 +13,18 @@
     <secondaryLanguages>
       <language>C</language>
     </secondaryLanguages>
-    <versioncontrol/>
+    <versioncontrol></versioncontrol>
   </general>
   <kdevautoproject>
     <general>
-      <activetarget>ctp2_code/ctp/ctp2</activetarget>
+      <activetarget>ctp2_code/ctp2</activetarget>
       <useconfiguration>debug</useconfiguration>
     </general>
     <run>
-      <mainprogram>ctp2_code/ctp/ctp2</mainprogram>
+      <mainprogram>ctp2_code/ctp2</mainprogram>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
-      <programargs/>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
@@ -43,7 +43,7 @@
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <cxxflags>-O0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -g3</cxxflags>
+        <cxxflags>-O0 -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -g3</cxxflags>
         <envvars/>
         <topsourcedir>.</topsourcedir>
         <cppflags></cppflags>
@@ -51,7 +51,7 @@
         <ccompilerbinary></ccompilerbinary>
         <cxxcompilerbinary></cxxcompilerbinary>
         <f77compilerbinary></f77compilerbinary>
-        <cflags>-O0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
+        <cflags>-O0 -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
         <f77flags></f77flags>
       </debug>
     </configurations>
@@ -61,7 +61,7 @@
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
       <abortonerror>true</abortonerror>
-      <numberofjobs>2</numberofjobs>
+      <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
       <makebin>make</makebin>
       <prio>0</prio>
@@ -76,11 +76,11 @@
       <runShellScript></runShellScript>
       <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
-      <separatetty>false</separatetty>
+      <separatetty>true</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
     </general>
     <display>
-      <staticmembers>false</staticmembers>
+      <staticmembers>true</staticmembers>
       <demanglenames>true</demanglenames>
       <outputradix>10</outputradix>
     </display>
@@ -184,9 +184,9 @@
   </kdevcppsupport>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem/>
-      <docurl/>
-      <usermanualurl/>
+      <docsystem></docsystem>
+      <docurl></docurl>
+      <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
   <kdevfileview>

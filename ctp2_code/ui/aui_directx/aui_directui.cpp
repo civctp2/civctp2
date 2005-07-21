@@ -106,7 +106,7 @@ aui_DirectUI::aui_DirectUI
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = CreateDirectScreen( useExclusiveMode );
+	*retval = CreateNativeScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
@@ -132,7 +132,7 @@ AUI_ERRCODE aui_DirectUI::InitCommon()
 
 
 
-AUI_ERRCODE aui_DirectUI::DestroyDirectScreen(void)
+AUI_ERRCODE aui_DirectUI::DestroyNativeScreen(void)
 {
     if (m_primary)
     {
@@ -146,7 +146,7 @@ AUI_ERRCODE aui_DirectUI::DestroyDirectScreen(void)
 }
 
 
-AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
+AUI_ERRCODE aui_DirectUI::CreateNativeScreen( BOOL useExclusiveMode )
 {
 	
 	AUI_ERRCODE errcode = aui_DirectX::InitCommon( useExclusiveMode );
@@ -331,7 +331,7 @@ AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 
 	if ( m_minimize || m_exclusiveMode )
 	{
-		DestroyDirectScreen();
+		DestroyNativeScreen();
 	}
 
 	while ( ShowCursor( TRUE ) < 0 )
@@ -357,7 +357,7 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 {
 
 
-	if ( !m_primary ) CreateDirectScreen( m_exclusiveMode );
+	if ( !m_primary ) CreateNativeScreen( m_exclusiveMode );
 
 	if ( m_minimize || m_exclusiveMode )
 		while ( GetForegroundWindow() != m_hwnd )
