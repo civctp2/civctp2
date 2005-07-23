@@ -91,6 +91,8 @@
 // - Redesigned Copy method so that it doesn't abuse the serialize method
 //   anymore. Replaces Fromafar's large memory fix, for some reason it made
 //   crash the game anyway. - Jul. 5th 2005 Martin Gühmann
+// - If capitalisation or infrastructure first item in the build queue, an
+//   item can now rush bought that is inserted before. - Jul. 23rd 2005 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
 
@@ -6222,7 +6224,12 @@ void CityData::InsertBuildItem(sint32 index, uint32 category, sint32 type)
 		InsertBuildItem(-1, category, type);
 		return;
 	}
-
+	if(index == 0 
+	&& category != k_GAME_OBJ_TYPE_CAPITALIZATION
+	&& category != k_GAME_OBJ_TYPE_INFRASTRUCTURE
+	){
+		StopInfrastructureCapitalization();
+	}
 	m_build_queue.InsertBefore(node, category, type);
 }
 

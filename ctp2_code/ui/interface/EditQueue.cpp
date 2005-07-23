@@ -420,17 +420,17 @@ sint32 EditQueue::CompareUnitItems(ctp2_ListItem *item1, ctp2_ListItem *item2, s
 		case 0: 
 			return stricmp(rec1->GetNameText(), rec2->GetNameText());
 		case 1: 
-			return rec1->GetAttack() - rec2->GetAttack();
+			return static_cast<sint32>(rec1->GetAttack() - rec2->GetAttack());
 		case 2: 
-			return rec1->GetDefense() - rec2->GetDefense();
+			return static_cast<sint32>(rec1->GetDefense() - rec2->GetDefense());
 		case 3: 
-			return rec1->GetArmor() - rec2->GetArmor();
+			return static_cast<sint32>(rec1->GetArmor() - rec2->GetArmor());
 		case 4: 
 			return rec1->GetZBRangeAttack() - rec2->GetZBRangeAttack();
 		case 5: 
 			return rec1->GetFirepower() - rec2->GetFirepower();
 		case 6: 
-			return rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints();
+			return static_cast<sint32>(rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints());
 		case 7: 
 			return rec1->GetShieldCost() - rec2->GetShieldCost();
 	}
@@ -1456,7 +1456,10 @@ void EditQueue::ToggleBuildings(aui_Control *control, uint32 action, uint32 data
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	s_editQueue->SelectChoiceList(s_editQueue->m_buildingList);
-	
+//	if(!s_editQueue->m_cityData) return;
+//	char buff[200];
+//	sprintf(buff, "Baut Kapitalisierung: %i, Baut Infrastruktur: %i\n", s_editQueue->m_cityData->IsBuildingCapitalization(), s_editQueue->m_cityData->IsBuildingInfrastructure());
+//	MessageBoxDialog::Information(buff, "InfoMustName");
 }
 
 void EditQueue::ToggleWonders(aui_Control *control, uint32 action, uint32 data, void *cookie)
