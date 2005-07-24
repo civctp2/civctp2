@@ -39,6 +39,9 @@
 /* Defined when automake runs yacc and renames the output files */
 /* #undef AUTOMAKE_INVOKES_YACC */
 
+/* Defined when slic debugging code in ui/slic_debug should be compiled */
+#define CTP2_ENABLE_DEBUGSLIC 1
+
 /** File seperator used on windows */
 #define FILE_SEP "\\"
 
