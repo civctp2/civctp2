@@ -17,12 +17,17 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added OrthogonalPoint to facilitate wrap computations.
 // - Corrected wrap computation for city influence and borders.
+// - Fixed first RadiusIterator constructor so that it does the same as
+//   in the original version. The defect caused a significant AI 
+//   performance loss. July 16th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -37,8 +42,8 @@
 
 MapPoint g_mp_size;
 
-#define k_MAPPOINT_VERSION_MAJOR	0
-#define k_MAPPOINT_VERSION_MINOR	0
+#define k_MAPPOINT_VERSION_MAJOR    0
+#define k_MAPPOINT_VERSION_MINOR    0
 
 namespace
 {
@@ -46,18 +51,18 @@ MapPoint const  MAP_POINT_UNKNOWN   = MapPoint(-1, -1);
 
 void sqmp(const MapPoint &mp, sint32 &sq_min, MapPoint &diff)
 {
-    sint32 square = mp.x * mp.x + mp.y * mp.y;
+	sint32 square = mp.x * mp.x + mp.y * mp.y;
 
-    if (square < sq_min) {
-        diff = mp;
-        sq_min = square;
-    } else if (square == sq_min) {
-        if (diff.x < mp.x) {
-            diff = mp;
-        } else if (diff.y < mp.y) {
-            diff = mp;
-        }
-    }
+	if (square < sq_min) {
+		diff = mp;
+		sq_min = square;
+	} else if (square == sq_min) {
+		if (diff.x < mp.x) {
+			diff = mp;
+		} else if (diff.y < mp.y) {
+			diff = mp;
+		}
+	}
 }
 
 sint32 WrapDelta(sint32 delta, sint32 size)
@@ -85,18 +90,18 @@ sint32 WrapDelta(sint32 delta, sint32 size)
 
 MapPoint& MapPoint::operator += (const MapPoint &rhs)
 {
-    x += rhs.x;
-    y += rhs.y;
+	x += rhs.x;
+	y += rhs.y;
 #if !defined(_SMALL_MAPPOINTS)
 	z += rhs.z;
 #endif
-    return *this;
+	return *this;
 }
 
 MapPoint & MapPoint::operator -= (const MapPoint &rhs)
 {
-    x -= rhs.x;
-    y -= rhs.y;
+	x -= rhs.x;
+	y -= rhs.y;
 #if !defined(_SMALL_MAPPOINTS)
 	z -= rhs.z;
 #endif
@@ -107,16 +112,16 @@ void MapPoint::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring())
 		{
-		archive<<x ;
-		archive<<y ;
+		archive<<x;
+		archive<<y;
 #if !defined(_SMALL_MAPPOINTS)
 		archive << z;
 #endif
 		}
 	else
 		{
-		archive>>x ;
-		archive>>y ;
+		archive>>x;
+		archive>>y;
 #if !defined(_SMALL_MAPPOINTS)
 		archive >> z;
 #endif
@@ -125,12 +130,12 @@ void MapPoint::Serialize(CivArchive &archive)
 
 bool MapPoint::operator == (const MapPoint &test_me) const
 {
-    return ((x == test_me.x) && (y == test_me.y));
+	return ((x == test_me.x) && (y == test_me.y));
 }
 
 bool MapPoint::operator!= (const MapPoint &test_me) const
 {
-    return ((x != test_me.x) || (y != test_me.y));
+	return ((x != test_me.x) || (y != test_me.y));
 }
 
 //----------------------------------------------------------------------------
@@ -139,20 +144,20 @@ bool MapPoint::operator!= (const MapPoint &test_me) const
 //
 // Description: Get a neighbour of this point.
 //
-// Parameters : direction		: the direction to get the neighbour for
+// Parameters : direction       : the direction to get the neighbour for
 //
 // Globals    : -
 //
-// Returns    : bool			: the neighbour is valid (i.e. on the map)
-//				pos				: the neighbour
+// Returns    : bool            : the neighbour is valid (i.e. on the map)
+//              pos             : the neighbour
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool MapPoint::GetNeighborPosition
 (
-	WORLD_DIRECTION const &	direction,
-	MapPoint & 				pos
+	WORLD_DIRECTION const & direction,
+	MapPoint &              pos
 ) const
 {
 	OrthogonalPoint	point(*this);
@@ -174,11 +179,11 @@ bool MapPoint::GetNeighborPosition
 //
 // Description: Get the direction of a neighbour.
 //
-// Parameters : neighbor		: the neighbour to get the direction for
+// Parameters : neighbor        : the neighbour to get the direction for
 //
 // Globals    : -
 //
-// Returns    : WORLD_DIRECTION	: the direction of the neighbour
+// Returns    : WORLD_DIRECTION : the direction of the neighbour
 //
 // Remark(s)  : When neighbor is not actually a - direct - neighbour,
 //              NOWHERE will be returned.
@@ -191,40 +196,40 @@ WORLD_DIRECTION MapPoint::GetNeighborDirection(MapPoint const & neighbor) const
 	switch (diff.x)
 	{
 	default:
-        break;
+		break;
 
-    case -2:
+	case -2:
 		if ( 0 == diff.y)       return WEST;
-        break;
+		break;
 
 	case -1:
-        if (-1 == diff.y)       return NORTHWEST;
-        if ( 1 == diff.y)       return SOUTHWEST;
-        break;
+		if (-1 == diff.y)       return NORTHWEST;
+		if ( 1 == diff.y)       return SOUTHWEST;
+		break;
 
 	case  0:
-        if (-2 == diff.y)       return NORTH;
-        if ( 2 == diff.y)       return SOUTH;
+		if (-2 == diff.y)       return NORTH;
+		if ( 2 == diff.y)       return SOUTH;
 #if !defined(_SMALL_MAPPOINTS)
 		if ( 0 == diff.y) 
-        {
+		{
 			if (-1 == diff.z)   return DOWN;
-            if ( 1 == diff.z)   return UP;
-        }
+			if ( 1 == diff.z)   return UP;
+		}
 #endif
-        break;
+		break;
 
 	case 1:
 		if (-1 == diff.y)       return NORTHEAST;
-        if ( 1 == diff.y)       return SOUTHEAST;
-        break;
+		if ( 1 == diff.y)       return SOUTHEAST;
+		break;
 
-    case 2:
-        if ( 0 == diff.y)       return EAST;
-        break;
- 	}
+	case 2:
+		if ( 0 == diff.y)       return EAST;
+		break;
+	}
 
-    return NOWHERE;
+	return NOWHERE;
 }
 
 //----------------------------------------------------------------------------
@@ -233,11 +238,11 @@ WORLD_DIRECTION MapPoint::GetNeighborDirection(MapPoint const & neighbor) const
 //
 // Description: Check whether neighbor is actually a neighbour.
 //
-// Parameters : neighbor		: the neighbour to check
+// Parameters : neighbor        : the neighbour to check
 //
 // Globals    : -
 //
-// Returns    : bool			: neighbor is a direct neighbour
+// Returns    : bool            : neighbor is a direct neighbour
 //
 // Remark(s)  : When neighbor is not a valid map location, false will be
 //              returned. The validity of this location is not checked.
@@ -275,11 +280,11 @@ bool MapPoint::IsNextTo(MapPoint const & neighbor) const
 bool MapPoint::IsValid(void) const
 {
 	return (g_theWorld->IsXwrap() || ((x >= 0) && (x < g_mp_size.x)))
-        && (g_theWorld->IsYwrap() || ((y >= 0) && (y < g_mp_size.y)))
+	    && (g_theWorld->IsYwrap() || ((y >= 0) && (y < g_mp_size.y)))
 #if !defined(_SMALL_MAPPOINTS)
 	    && (z >= 0) && (z < g_mp_size.z)
 #endif
-        ;
+	    ;
 }
 
 //----------------------------------------------------------------------------
@@ -293,18 +298,18 @@ bool MapPoint::IsValid(void) const
 // Globals    : g_mp_size
 //              g_theWorld
 //
-// Returns    : MapPointData	: the difference, in XY coordinates
+// Returns    : MapPointData     : the difference, in XY coordinates
 //
 // Remark(s)  : Not valid for z component yet.
 //
 //----------------------------------------------------------------------------
 MapPointData MapPoint::NormalizedSubtract(MapPoint const & dest) const
-{	
+{
 	OrthogonalPoint here    (*this);
-    OrthogonalPoint to      (dest);
-    to.Move(MapPointData(-here.x, -here.y));
+	OrthogonalPoint to      (dest);
+	to.Move(MapPointData(-here.x, -here.y));
 
-    MapPointData    diff    (to.x, to.y);    
+	MapPointData    diff    (to.x, to.y);    
 
 	if (g_theWorld->IsXwrap())
 	{
@@ -315,7 +320,7 @@ MapPointData MapPoint::NormalizedSubtract(MapPoint const & dest) const
 		diff.y = WrapDelta(diff.y, g_mp_size.y);
 	}
 
-    return diff;
+	return diff;
 }
 
 //----------------------------------------------------------------------------
@@ -344,80 +349,80 @@ void MapPoint::OldNormalizedSubtract(const MapPoint &dest, MapPoint &diff) const
 {
 
 
-    static MapPoint s, d;
+	static MapPoint s, d;
 
-    s.x = (g_mp_size.y-1) - (x + y);
-    s.y = x;
+	s.x = (g_mp_size.y-1) - (x + y);
+	s.y = x;
 
-    d.x = (g_mp_size.y-1) - (dest.x + dest.y);
-    d.y = dest.x;
+	d.x = (g_mp_size.y-1) - (dest.x + dest.y);
+	d.y = dest.x;
 
 
-    static MapPoint delta_inner,
+	static MapPoint delta_inner,
 					delta_left, delta_right,
 					delta_up, delta_down,
 					delta_ur, delta_ul, delta_dr, delta_dl;
 
 
-    delta_inner.x = d.x - s.x;
-    delta_inner.y = d.y - s.y;
-    sint32 sq_min = delta_inner.x * delta_inner.x + delta_inner.y * delta_inner.y;
-    diff = delta_inner;
+	delta_inner.x = d.x - s.x;
+	delta_inner.y = d.y - s.y;
+	sint32 sq_min = delta_inner.x * delta_inner.x + delta_inner.y * delta_inner.y;
+	diff = delta_inner;
 
-    delta_up.x = delta_inner.x + g_mp_size.x;
-    delta_up.y = -(g_mp_size.x - d.y) - s.y;
-    sqmp(delta_up, sq_min, diff);
+	delta_up.x = delta_inner.x + g_mp_size.x;
+	delta_up.y = -(g_mp_size.x - d.y) - s.y;
+	sqmp(delta_up, sq_min, diff);
 
-    delta_down.x = delta_inner.x - g_mp_size.x;
-    delta_down.y = (g_mp_size.x - s.y) + d.y;
-    sqmp(delta_down, sq_min, diff);
+	delta_down.x = delta_inner.x - g_mp_size.x;
+	delta_down.y = (g_mp_size.x - s.y) + d.y;
+	sqmp(delta_down, sq_min, diff);
 
-    if (g_theWorld->IsYwrap()) {
+	if (g_theWorld->IsYwrap()) {
 
-        delta_right.x = g_mp_size.y + d.x - s.x;
-        delta_right.y = d.y - s.y;
-        sqmp(delta_right, sq_min, diff);
+		delta_right.x = g_mp_size.y + d.x - s.x;
+		delta_right.y = d.y - s.y;
+		sqmp(delta_right, sq_min, diff);
 
-        delta_left.x = -(g_mp_size.y + s.x - d.x);
-        delta_left.y = d.y - s.y;
-        sqmp(delta_left, sq_min, diff);
+		delta_left.x = -(g_mp_size.y + s.x - d.x);
+		delta_left.y = d.y - s.y;
+		sqmp(delta_left, sq_min, diff);
 
-        delta_ur.x = delta_right.x + g_mp_size.x;
-        delta_ur.y = delta_up.y;
-        sqmp(delta_ur, sq_min, diff);
+		delta_ur.x = delta_right.x + g_mp_size.x;
+		delta_ur.y = delta_up.y;
+		sqmp(delta_ur, sq_min, diff);
 
-        delta_ul.x = delta_left.x + g_mp_size.x;
-        delta_ul.y = delta_up.y;
-        sqmp(delta_ul, sq_min, diff);
+		delta_ul.x = delta_left.x + g_mp_size.x;
+		delta_ul.y = delta_up.y;
+		sqmp(delta_ul, sq_min, diff);
 
 
-        delta_dr.x = delta_right.x- g_mp_size.x;
-        delta_dr.y = delta_down.y;
-        sqmp(delta_dr, sq_min, diff);
+		delta_dr.x = delta_right.x- g_mp_size.x;
+		delta_dr.y = delta_down.y;
+		sqmp(delta_dr, sq_min, diff);
 
-        delta_dl.x = delta_left.x - g_mp_size.x;
-        delta_dl.y = delta_down.y;
-        sqmp(delta_dl, sq_min, diff);
-    }
+		delta_dl.x = delta_left.x - g_mp_size.x;
+		delta_dl.y = delta_down.y;
+		sqmp(delta_dl, sq_min, diff);
+	}
 }
 
 
 void MapPoint::Iso2Norm(const MapPointData &pos)
 {
-    x = pos.x;
-    y = pos.y;
+	x = pos.x;
+	y = pos.y;
 
 
 	y += x;
-    while (y >= g_mp_size.y) {
+	while (y >= g_mp_size.y) {
 		y -= g_mp_size.y;
-    }
+	}
 }
 
 void MapPoint::Norm2Iso(const MapPointData &pos)
 {
-    x = pos.x;
-    y = pos.y;
+	x = pos.x;
+	y = pos.y;
 
 	while(x < 0)
 		x += g_mp_size.x;
@@ -433,13 +438,13 @@ void MapPoint::Norm2Iso(const MapPointData &pos)
 void MapPoint::Iso2Norm(const MapPoint &pos)
 
 {
-    Iso2Norm(MapPointData(pos));
+	Iso2Norm(MapPointData(pos));
 }
 
 void MapPoint::Norm2Iso(const MapPoint &pos)
 
 {
-    Norm2Iso(MapPointData(pos));
+	Norm2Iso(MapPointData(pos));
 }
 
 
@@ -562,17 +567,17 @@ uint32 MapPoint_MapPoint_GetVersion(void)
 
 void verifyYwrap()
 {
-    MapPoint pos, tmp1, tmp2;
+	MapPoint pos, tmp1, tmp2;
 
 	for (pos.x=0; pos.x<g_mp_size.x; pos.x++)
 	{
-    	for (pos.y=0; pos.y<g_mp_size.y; pos.y++)
-    	{
-        	tmp1.Norm2Iso(pos);
-         	tmp2.Iso2Norm(tmp1);
-         	Assert(pos == tmp2);
-      }
-   }
+		for (pos.y=0; pos.y<g_mp_size.y; pos.y++)
+		{
+			tmp1.Norm2Iso(pos);
+			tmp2.Iso2Norm(tmp1);
+			Assert(pos == tmp2);
+		}
+	}
 }
 
 
@@ -635,11 +640,10 @@ OrthogonalPoint::OrthogonalPoint(MapPoint const & rc)
 	y       (m_point.y),
 	m_point ((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y)
 #else
-:
+:	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y, rc.z),
 	x       (m_point.x),
 	y       (m_point.y),
-	z       (m_point.z),
-	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y, rc.z)
+	z       (m_point.z)
 #endif
 { }
 
@@ -659,13 +663,13 @@ OrthogonalPoint::OrthogonalPoint(MapPoint const & rc)
 //
 //----------------------------------------------------------------------------
 OrthogonalPoint::OrthogonalPoint(OrthogonalPoint const & copy)
-:
+:	m_point (copy.m_point),
 	x       (m_point.x),
-	y       (m_point.y),
+	y       (m_point.y)
 #if !defined(_SMALL_MAPPOINTS)
-	z       (m_point.z),
+	                   ,
+	z       (m_point.z)
 #endif
-	m_point (copy.m_point)
 { }
 
 //----------------------------------------------------------------------------
@@ -685,8 +689,8 @@ OrthogonalPoint::OrthogonalPoint(OrthogonalPoint const & copy)
 //----------------------------------------------------------------------------
 OrthogonalPoint & OrthogonalPoint::operator = (OrthogonalPoint const & copy)
 {
-    m_point = copy.m_point;
-    return *this;
+	m_point = copy.m_point;
+	return *this;
 }
 
 //----------------------------------------------------------------------------
@@ -732,7 +736,7 @@ MapPoint OrthogonalPoint::GetRC(void)
 //
 // Globals    : g_mp_size
 //
-// Returns    : bool	: point is valid
+// Returns    : bool    : point is valid
 //
 // Remark(s)  : Apply wrapping first.
 //
@@ -741,12 +745,12 @@ bool OrthogonalPoint::IsValid(void)
 {
 	Normalise();
 
-	return (m_point.x >= 0) && (m_point.x < (2 * g_mp_size.x))	&&
-		   (m_point.y >= 0) && (m_point.y < g_mp_size.y)		&&
+	return (m_point.x >= 0) && (m_point.x < (2 * g_mp_size.x))  &&
+	       (m_point.y >= 0) && (m_point.y < g_mp_size.y)        &&
 #if !defined(_SMALL_MAPPOINTS)
-		   (m_point.z >= 0) && (m_point.z < g_mp_size.z)		&&
+	       (m_point.z >= 0) && (m_point.z < g_mp_size.z)        &&
 #endif
-		   (((m_point.x + m_point.y) & 1) == 0);
+	       (((m_point.x + m_point.y) & 1) == 0);
 }
 
 //----------------------------------------------------------------------------
@@ -755,10 +759,10 @@ bool OrthogonalPoint::IsValid(void)
 //
 // Description: Move the position of a point.
 //
-// ParametersA: delta			: movement vector
+// ParametersA: delta           : movement vector
 //
-// ParametersB: direction		: direction to move in
-//				count			: number of steps to move
+// ParametersB: direction       : direction to move in
+//              count           : number of steps to move
 //
 // Globals    : -
 //
@@ -776,18 +780,18 @@ void OrthogonalPoint::Move(MapPointData const & delta)
 
 void OrthogonalPoint::Move
 (
-	WORLD_DIRECTION const	direction,
-	size_t const			count
+	WORLD_DIRECTION const   direction,
+	size_t const            count
 )
 {
-	MapPointData	delta	= Step(direction);
-	delta.x	*= count;
-	delta.y	*= count;
+	MapPointData	delta   = Step(direction);
+	delta.x *= count;
+	delta.y *= count;
 #if !defined(_SMALL_MAPPOINTS)
-	delta.z	*= count;
+	delta.z *= count;
 #endif
 
-	m_point	+= MapPoint(delta);
+	m_point += MapPoint(delta);
 }
 
 //----------------------------------------------------------------------------
@@ -800,7 +804,7 @@ void OrthogonalPoint::Move
 // Parameters : -
 //
 // Globals    : g_theWorld
-//				g_mp_size
+//              g_mp_size
 //
 // Returns    : -
 //
@@ -904,12 +908,12 @@ MapPointData OrthogonalPoint::Step
 
 SquareIterator::SquareIterator(MapPoint const & center, sint32 size)
 :	m_center        (center),
-    m_cur           (center),
-    m_wrappedCur    (center),
+	m_cur           (center),
+	m_wrappedCur    (center),
 	m_startX        (center.x),
-    m_endX          (center.x),
+	m_endX          (center.x),
 	m_row           (size),
-    m_intRadius     (static_cast<sint16>(size)),
+	m_intRadius     (static_cast<sint16>(size)),
 	m_testXY        (OrthogonalPoint(m_center))
 {
 }
@@ -925,7 +929,7 @@ void SquareIterator::Start()
 	m_testXY    = OrthogonalPoint(m_center);
 	m_testXY.Move(WEST, m_intRadius);
 	
-    if (IsIncluded())
+	if (IsIncluded())
 	{
 		// Point is on the map
 		m_wrappedCur = m_testXY.GetRC();
@@ -971,12 +975,12 @@ bool SquareIterator::End() const
 
 bool SquareIterator::IsIncluded()
 {
-    return m_testXY.IsValid();
+	return m_testXY.IsValid();
 }
 
 MapPoint SquareIterator::Pos() const
 {
-    return m_wrappedCur;
+	return m_wrappedCur;
 }
 
 //----------------------------------------------------------------------------
@@ -997,20 +1001,18 @@ MapPoint SquareIterator::Pos() const
 
 RadiusIterator::RadiusIterator(MapPoint const & center, sint32 size)
 :	SquareIterator  (center, size),
-    m_squaredRadius ((static_cast<double>(size) + 0.5) *
-                     (static_cast<double>(size) + 0.5)
-                    )
+	m_squaredRadius (static_cast<double>(size * size))
 {
 }
 
 RadiusIterator::RadiusIterator(MapPoint const & center, sint32 size, double squaredSize)
 :	SquareIterator  (center, size),
-    m_squaredRadius (squaredSize)
+	m_squaredRadius (squaredSize)
 {
 }
 
 bool RadiusIterator::IsIncluded()
 {
-    return 	m_testXY.IsValid() &&
-		    (MapPoint::GetSquaredDistance(m_cur, m_center) <= m_squaredRadius);
+	return m_testXY.IsValid() &&
+	       (MapPoint::GetSquaredDistance(m_cur, m_center) <= m_squaredRadius);
 }

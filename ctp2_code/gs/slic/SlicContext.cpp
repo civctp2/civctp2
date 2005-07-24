@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Slic context (values of variables)
 //
 //----------------------------------------------------------------------------
 //
@@ -23,6 +23,7 @@
 // Modifications from the original Activision code:
 //
 // - Destructor cleaned up.
+// - Repaired crashes.
 //
 //----------------------------------------------------------------------------
 
@@ -48,6 +49,118 @@
 #include "SimpleDynArr.h"
 #include "Order.h"
 #include "diplomattypes.h"
+
+namespace
+{
+
+//----------------------------------------------------------------------------
+//
+// Name       : ImplementationType
+//
+// Description: Get the implementation type of a builtin variable type.
+//
+// Parameters : builtin     : the builtin type
+//
+// Globals    : -
+//
+// Returns    : SLIC_SYM    : the implementation type
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+    SLIC_SYM ImplementationType(SLIC_BUILTIN builtin)
+    {
+        switch (builtin)
+        {
+#if 0   // Unused CTP1 leftovers?                  
+	    case SLIC_BUILTIN_GLOBAL:
+	    case SLIC_BUILTIN_POP:
+	    case SLIC_BUILTIN_IMPROVEMENT:  
+#endif
+        default:  
+            return SLIC_SYM_UNDEFINED;
+
+	    case SLIC_BUILTIN_ACTION:       
+            return SLIC_SYM_STRING;
+
+	    case SLIC_BUILTIN_ADVANCE:
+	    case SLIC_BUILTIN_BUILDING:
+	    case SLIC_BUILTIN_GOLD:
+	    case SLIC_BUILTIN_GOOD:
+	    case SLIC_BUILTIN_GOVERNMENT:
+        case SLIC_BUILTIN_PLAYER:   
+	    case SLIC_BUILTIN_UNITRECORD:
+	    case SLIC_BUILTIN_VALUE:
+	    case SLIC_BUILTIN_WONDER:
+            return SLIC_SYM_IVAR;
+
+	    case SLIC_BUILTIN_ARMY:     
+            return SLIC_SYM_ARMY;
+
+	    case SLIC_BUILTIN_CITY:     
+            return SLIC_SYM_CITY;
+
+	    case SLIC_BUILTIN_UNIT:     
+            return SLIC_SYM_UNIT;
+
+	    case SLIC_BUILTIN_LOCATION: 
+            return SLIC_SYM_LOCATION;
+        }
+    }
+
+//----------------------------------------------------------------------------
+//
+// Name       : ResizedArray
+//
+// Description: Get and prune the array belonging to a builtin variable
+//
+// Parameters : builtin     : the builtin type
+//              new_size    : the size to prune to
+//
+// Globals    : g_slicEngine
+//
+// Returns    : SlicArray   : the array for the builtin, after pruning
+//
+// Remark(s)  : No checks are applied.
+//
+//----------------------------------------------------------------------------
+    SlicArray * ResizedArray(SLIC_BUILTIN builtin, sint32 new_size)
+    {
+        SlicArray * array   =
+            g_slicEngine->GetBuiltinSymbol(builtin)->GetArray();
+        array->Prune(new_size);
+        return array;
+    }
+
+//----------------------------------------------------------------------------
+//
+// Name       : SingleItemStack
+//
+// Description: Placeholder for a single item that has to be accessed as a
+//              SlicStackValue
+//
+// Parameters : implementationType  : the type of the item
+//
+//----------------------------------------------------------------------------
+    class SingleItemStack
+    {
+    public:
+        SingleItemStack(SLIC_SYM implementationType)
+        :   m_symbol    (implementationType)
+        {
+            m_stackValue.m_sym  = &m_symbol;
+        };
+        virtual ~SingleItemStack(void) { ; };
+
+        SlicStackValue      Value(void) const   { return m_stackValue; };
+        SlicSymbolData &    Symbol(void)        { return m_symbol; }
+
+    private:
+        SlicSymbolData  m_symbol;
+ 	    SlicStackValue  m_stackValue;
+    };
+
+} // namespace
 
 SlicContext::SlicContext()
 {
@@ -1418,100 +1531,91 @@ void SlicContext::Snarf(GameEventArgList *args)
 //
 // Parameters : builtin     : type of built-in object
 //              list        : list to fill
-//              symtype     : type of Slic object
 //              setMethod   : method to use to copy from built-in to list
 //
-// Globals    : g_slicEngine
+// Globals    : -
 //
 // Returns    : -
 //
 // Remark(s)  : MACRO
 //
-//              The local setSym variable is reset to SLIC_SYM_UNDEFINED type
-//              before going out of scope, to prevent deleting member data
-//              that has been copied to the list.
+//----------------------------------------------------------------------------
+#define FILL(builtin, list, setMethod)                              \
+{                                                                   \
+    sint32 const    count   = list ? list->Num() : 0;               \
+    SlicArray *     array   = ResizedArray(builtin, count);         \
+	if (count > 0)                                                  \
+    {                                                               \
+        SingleItemStack item(ImplementationType(builtin));          \
+                                                                    \
+		for (sint32 i = 0; i < count; ++i)                          \
+        {                                                           \
+			item.Symbol().setMethod(list->Access(i));               \
+			array->Insert(i, SS_TYPE_SYM, item.Value());            \
+		}                                                           \
+	}                                                               \
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : FILL_ARRAY
+//
+// Description: -
+//
+// Parameters : builtin     : type of built-in object
+//              plainArray  : list to fill
+//              arrayCount  : number of items in list, if list exists
+//              setMethod   : method to use to copy from built-in to list
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : MACRO
 //
 //----------------------------------------------------------------------------
-#define FILL(builtin, list, symtype, setMethod)                     \
-	array = g_slicEngine->GetBuiltinSymbol(builtin)->GetArray();    \
-    array->Prune(list ? list->Num() : 0);                           \
-	if(list) {                                                      \
-        SlicSymbolData setSym(symtype);                             \
-        stackVal.m_sym = &setSym;                                   \
-		for(sint32 i = 0; i < list->Num(); i++) {                   \
-			setSym.setMethod(list->Access(i));                      \
-			array->Insert(i, SS_TYPE_SYM, stackVal);                \
+#define FILL_ARRAY(builtin, plainArray, arrayCount, setMethod)      \
+{                                                                   \
+    sint32 const    count   = plainArray ? arrayCount : 0;          \
+    SlicArray *     array   = ResizedArray(builtin, count);         \
+	if (count > 0)                                                  \
+    {                                                               \
+        SingleItemStack item(ImplementationType(builtin));          \
+                                                                    \
+		for (sint32 i = 0; i < count; ++i)                          \
+        {                                                           \
+			item.Symbol().setMethod(plainArray[i]);                 \
+			array->Insert(i, SS_TYPE_SYM, item.Value());            \
 		}                                                           \
-        setSym.SetType(SLIC_SYM_UNDEFINED);                         \
-	}
+	}                                                               \
+}
 
 void SlicContext::FillBuiltins()
 {
-    SlicArray *             array;
-	SlicStackValue          stackVal;
-
     // The following lists all have SimpleDynamicArray structure.
 
-	FILL(SLIC_BUILTIN_CITY, m_cityList, SLIC_SYM_CITY, SetCity);
-	FILL(SLIC_BUILTIN_UNIT, m_unitList, SLIC_SYM_UNIT, SetUnit);
-	FILL(SLIC_BUILTIN_PLAYER, m_playerList, SLIC_SYM_IVAR, SetIntValue);
-	FILL(SLIC_BUILTIN_ARMY, m_armyList, SLIC_SYM_ARMY, SetArmy);
-	FILL(SLIC_BUILTIN_LOCATION, m_locationList, SLIC_SYM_LOCATION, SetPos);
-	FILL(SLIC_BUILTIN_VALUE, m_intList, SLIC_SYM_IVAR, SetIntValue);
-	FILL(SLIC_BUILTIN_UNITRECORD, m_unitRecordList, SLIC_SYM_IVAR, SetIntValue);
-	FILL(SLIC_BUILTIN_GOOD, m_goodList, SLIC_SYM_IVAR, SetIntValue);
-	FILL(SLIC_BUILTIN_ADVANCE, m_advanceList, SLIC_SYM_IVAR, SetIntValue);
-	FILL(SLIC_BUILTIN_GOVERNMENT, m_governmentList, SLIC_SYM_IVAR, SetIntValue);
+	FILL(SLIC_BUILTIN_CITY, m_cityList, SetCity);
+	FILL(SLIC_BUILTIN_UNIT, m_unitList, SetUnit);
+	FILL(SLIC_BUILTIN_PLAYER, m_playerList, SetIntValue);
+	FILL(SLIC_BUILTIN_ARMY, m_armyList, SetArmy);
+	FILL(SLIC_BUILTIN_LOCATION, m_locationList, SetPos);
+	FILL(SLIC_BUILTIN_VALUE, m_intList, SetIntValue);
+	FILL(SLIC_BUILTIN_UNITRECORD, m_unitRecordList, SetIntValue);
+	FILL(SLIC_BUILTIN_GOOD, m_goodList, SetIntValue);
+	FILL(SLIC_BUILTIN_ADVANCE, m_advanceList, SetIntValue);
+	FILL(SLIC_BUILTIN_GOVERNMENT, m_governmentList, SetIntValue);
 
     // The following lists do not have SimpleDynamicArray structure,
     // but are plain arrays, with a separate count.
 
-	array = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_ACTION)->GetArray();
-    array->Prune(m_actionList ? m_numActions : 0);                          
-	if (m_actionList) {
-		SlicSymbolData setSym(SLIC_SYM_STRING);
-		for(sint32 i = 0; i < m_numActions; i++) {
-			setSym.SetString(m_actionList[i]);
-			array->Insert(i, SS_TYPE_SYM, stackVal);
-		}
-        setSym.SetType(SLIC_SYM_UNDEFINED);
-	}
-
-	array = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_BUILDING)->GetArray();
-    array->Prune(m_buildingList ? m_numBuildings : 0);                         
-	if(m_buildingList) {
-		SlicSymbolData setSym(SLIC_SYM_IVAR);
-		for(sint32 i = 0; i < m_numBuildings; i++) {
-			setSym.SetIntValue(m_buildingList[i]);
-			array->Insert(i, SS_TYPE_SYM, stackVal);
-		}
-        setSym.SetType(SLIC_SYM_UNDEFINED);
-	}
-
-	array = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_WONDER)->GetArray();
-    array->Prune(m_wonderList ? m_numWonders : 0);                         
-	if(m_wonderList) {
-		SlicSymbolData setSym(SLIC_SYM_IVAR);
-		for(sint32 i = 0; i < m_numWonders; i++) {
-			setSym.SetIntValue(m_wonderList[i]);
-			array->Insert(i, SS_TYPE_SYM, stackVal);
-		}
-        setSym.SetType(SLIC_SYM_UNDEFINED);
-	}
-
-	array = g_slicEngine->GetBuiltinSymbol(SLIC_BUILTIN_GOLD)->GetArray();
-    array->Prune(m_goldList ? m_numGolds : 0);                         
-	if(m_goldList) {
-		SlicSymbolData setSym(SLIC_SYM_IVAR);
-		for(sint32 i = 0; i < m_numGolds; i++) {
-			setSym.SetIntValue(m_goldList[i]);
-			array->Insert(i, SS_TYPE_SYM, stackVal);
-		}
-        setSym.SetType(SLIC_SYM_UNDEFINED);
-	}
+    FILL_ARRAY(SLIC_BUILTIN_ACTION, m_actionList, m_numActions, SetString);
+    FILL_ARRAY(SLIC_BUILTIN_BUILDING, m_buildingList, m_numBuildings, SetIntValue);
+    FILL_ARRAY(SLIC_BUILTIN_WONDER, m_wonderList, m_numWonders, SetIntValue);
+    FILL_ARRAY(SLIC_BUILTIN_GOLD, m_goldList, m_numGolds, SetIntValue);
 }
 
 #undef FILL
+#undef FILL_ARRAY
 
 #define UNFILL(list, type, GetMethod, SetMethod) \
 		if(array->GetSize() > 0) {\
@@ -1523,7 +1627,7 @@ void SlicContext::FillBuiltins()
 					}\
 				}\
 			}\
-		} else if(list) {\
+		} else {\
 			delete list;\
 			list = NULL;\
 		}

@@ -58,8 +58,6 @@ public:
 	sint32 GetAskingResource() const { return m_askingResource; }
 
 	BOOL Accept(sint32 player, const Unit &sourceCity, const Unit &destCity);
-
-	
 	
 	void Serialize(CivArchive &archive);
 };

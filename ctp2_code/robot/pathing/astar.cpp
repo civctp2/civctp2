@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +26,7 @@
 // - Prevent CtD (NULL-dereference)
 // - Made the algorithm behave more like A-star (recompute an open node when a
 //   new path is found that has a lower cost).
+// - Made Win32 Optimized Test configuration compile. - Jul 19th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -104,7 +107,7 @@ long int g_closed_nodes = 0;
 #endif 
 
 extern void WhackScreen(); 
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 extern bool g_old_heuristic;
 #else
 bool g_old_heuristic = false;

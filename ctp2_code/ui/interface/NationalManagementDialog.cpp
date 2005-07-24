@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Behaviour of the National Management dialog
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -44,6 +45,9 @@
 //   displayed if the city starves. Gold is now displayed in red if it is
 //   critical. - April 6th 2005 Martin Gühmann
 // - Added mod compatibilty crash fix
+// - Added City Manager button and functions callback. - July 24th 2005 Martin Gühmann
+// - National Manager window will always be displayed on top of other 
+//   windows when activated. - July 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -83,8 +87,8 @@
 
 #include "network.h"
 
-extern ConstDB *g_theConstDB ;
-extern ColorSet	*g_colorSet;
+extern ConstDB  *g_theConstDB;
+extern ColorSet *g_colorSet;
 
 
 class BuildQueueDropdownItem {
@@ -103,30 +107,30 @@ public:
 };
 
 
-static const sint32 k_NMD_RES_CITY_NAME		= 0;
-static const sint32 k_NMD_RES_POPULATION	= 1;
-static const sint32 k_NMD_RES_HAPPINESS		= 2;
-static const sint32 k_NMD_RES_FOOD			= 3;
-static const sint32 k_NMD_RES_PRODUCTION	= 4;
-static const sint32 k_NMD_RES_GOLD			= 5;
-static const sint32 k_NMD_RES_SCIENCE		= 6;
+static const sint32 k_NMD_RES_CITY_NAME     = 0;
+static const sint32 k_NMD_RES_POPULATION    = 1;
+static const sint32 k_NMD_RES_HAPPINESS     = 2;
+static const sint32 k_NMD_RES_FOOD          = 3;
+static const sint32 k_NMD_RES_PRODUCTION    = 4;
+static const sint32 k_NMD_RES_GOLD          = 5;
+static const sint32 k_NMD_RES_SCIENCE       = 6;
 static const sint32 k_NMD_RES_POLLUTION     = 7;
 static const sint32 k_NMD_RES_CRIME         = 8;
-static const sint32 k_NMD_STAT_CITY_NAME	= 0;
-static const sint32 k_NMD_STAT_MAYOR		= 1;
-static const sint32 k_NMD_STAT_PRIORITY		= 2;
-static const sint32 k_NMD_STAT_BUILDING		= 3;
-static const sint32 k_NMD_STAT_TIME			= 4;
-static const sint32 k_NMD_SPEC_CITY_NAME	= 0;
-static const sint32 k_NMD_SPEC_POPULATION	= 1;
-static const sint32 k_NMD_SPEC_WORKER		= 2;
-static const sint32 k_NMD_SPEC_SLAVE		= 3;
-static const sint32 k_NMD_SPEC_ENTERTAINER	= 4;
-static const sint32 k_NMD_SPEC_FARMER		= 5;
-static const sint32 k_NMD_SPEC_LABORER		= 6;
-static const sint32 k_NMD_SPEC_MERCHANT		= 7;
-static const sint32 k_NMD_SPEC_SCIENTIST	= 8;
-static const sint32 k_NMD_SPEC_COMBAT_UNITS	= 9;
+static const sint32 k_NMD_STAT_CITY_NAME    = 0;
+static const sint32 k_NMD_STAT_MAYOR        = 1;
+static const sint32 k_NMD_STAT_PRIORITY     = 2;
+static const sint32 k_NMD_STAT_BUILDING     = 3;
+static const sint32 k_NMD_STAT_TIME         = 4;
+static const sint32 k_NMD_SPEC_CITY_NAME    = 0;
+static const sint32 k_NMD_SPEC_POPULATION   = 1;
+static const sint32 k_NMD_SPEC_WORKER       = 2;
+static const sint32 k_NMD_SPEC_SLAVE        = 3;
+static const sint32 k_NMD_SPEC_ENTERTAINER  = 4;
+static const sint32 k_NMD_SPEC_FARMER       = 5;
+static const sint32 k_NMD_SPEC_LABORER      = 6;
+static const sint32 k_NMD_SPEC_MERCHANT     = 7;
+static const sint32 k_NMD_SPEC_SCIENTIST    = 8;
+static const sint32 k_NMD_SPEC_COMBAT_UNITS = 9;
 
 extern C3UI *g_c3ui;
 
@@ -156,9 +160,9 @@ void NationalManagementDialog::Open()
 	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_statusList);
 	} else if (g_nationalManagementDialog->m_specialistList &&
-               !g_nationalManagementDialog->m_specialistList->IsHidden()
-              ) 
-    {
+			   !g_nationalManagementDialog->m_specialistList->IsHidden()
+			  ) 
+	{
 		g_nationalManagementDialog->UpdateMainButtons(g_nationalManagementDialog->m_specialistList);
 	}
 }
@@ -187,7 +191,7 @@ void NationalManagementDialog::Cleanup()
 
 bool NationalManagementDialog::IsShown()
 {
-    if (!g_nationalManagementDialog) {
+	if (!g_nationalManagementDialog) {
 		return false;
 	} else {
 		return  !g_nationalManagementDialog->m_window->IsHidden();
@@ -198,8 +202,8 @@ bool NationalManagementDialog::IsShown()
 //
 // Name       : NationalManagementDialog::NationalManagementDialog()
 //
-// Description: Creates the National Managment Window
-//               
+// Description: Creates the National Managment Window (Contructor)
+//
 //
 // Parameters : -
 //
@@ -239,6 +243,8 @@ m_rushBuyValue(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 	"CityStatusWin.TabGroup.Tab2.TabPanel.RushBuyValue"))),
 m_buildQueueButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"CityStatusWin.BuildQueueButton"))),
+m_cityManagerButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
+	"CityStatusWin.CityManagerButton"))),
 m_disbandButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"CityStatusWin.DisbandButton"))),
 m_statusTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
@@ -263,7 +269,7 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	Assert(m_disbandButton);
 
 	
-	m_resourceList->SetMultiSelect(true);		// Allow the selction of multiple
+	m_resourceList->SetMultiSelect(true);       // Allow the selction of multiple
 	m_statusList->SetMultiSelect(true);         // items in the lists 
 	
 	m_closeButton->SetActionFuncAndCookie(CloseButtonActionCallback, this);
@@ -273,6 +279,9 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 
 	m_rushBuyButton->SetActionFuncAndCookie(RushBuyButtonActionCallback, this);
 	m_buildQueueButton->SetActionFuncAndCookie(BuildQueueButtonActionCallback, this);
+	if(m_cityManagerButton){
+		m_cityManagerButton->SetActionFuncAndCookie(CityManagerButtonActionCallback, this);
+	}
 	m_disbandButton->SetActionFuncAndCookie(DisbandButtonActionCallback, this);
 	m_resourceList->SetActionFuncAndCookie(ResourceListSelectActionCallback, this);
 
@@ -280,17 +289,17 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	m_resourceTab->SetActionFuncAndCookie(TabActionCallback, this);
 	m_statusTab->SetActionFuncAndCookie(TabActionCallback, this);
 
-    // The new specialist Tab may not be present in Mods.
-    if (m_specialistList)                       
-    {
-	    m_specialistList->SetMultiSelect(true);         
-	    m_specialistList->SetActionFuncAndCookie(SpecialistListSelectActionCallback, this);
-    }
+	// The new specialist Tab may not be present in Mods.
+	if (m_specialistList)
+	{
+		m_specialistList->SetMultiSelect(true);
+		m_specialistList->SetActionFuncAndCookie(SpecialistListSelectActionCallback, this);
+	}
 
-    if (m_specialistTab)
-    {
-	    m_specialistTab->SetActionFuncAndCookie(TabActionCallback, this);
-    }
+	if (m_specialistTab)
+	{
+		m_specialistTab->SetActionFuncAndCookie(TabActionCallback, this);
+	}
 
 	m_governorDropDown->Clear();
 
@@ -314,11 +323,27 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	m_mirroring = false;
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::Show
+//
+// Description: Shows the National Manager window
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NationalManagementDialog::Show()
 {
 	g_c3ui->AddWindow(m_window);
-	m_window->Show();
+	if(m_window->Show() == AUI_ERRCODE_OK){
+		g_c3ui->BringWindowToTop(m_window);
+	}
 }
 
 
@@ -405,22 +430,22 @@ void NationalManagementDialog::UpdateStatusList()
 //----------------------------------------------------------------------------
 void NationalManagementDialog::UpdateSpecialistList()
 {
-    if (m_specialistList)
-    {
-	    m_specialistList->BuildListStart();
-    	m_specialistList->Clear();
+	if (m_specialistList)
+	{
+		m_specialistList->BuildListStart();
+		m_specialistList->Clear();
 
-    	UnitDynamicArray * cityList =
-	    	g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
+		UnitDynamicArray * cityList =
+			g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
 
-	    for (sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) 
-        {
-		    Unit city = cityList->Get(cityIndex);
-	    	m_specialistList->AddItem(CreateSpecialistItem(city));
-    	}
+		for (sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) 
+		{
+			Unit city = cityList->Get(cityIndex);
+			m_specialistList->AddItem(CreateSpecialistItem(city));
+		}
 
-	    m_specialistList->BuildListEnd();
-    }
+		m_specialistList->BuildListEnd();
+	}
 }
 
 void NationalManagementDialog::UpdateGovernor()
@@ -461,7 +486,7 @@ void NationalManagementDialog::UpdateGovernor()
 	}
 
 	
-	for( int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) 
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) 
 	{
 		
 		Unit city;
@@ -609,8 +634,7 @@ void NationalManagementDialog::UpdateRushBuy()
 	
 	tech_WLList<sint32> *selectedList = m_statusList->GetSelectedList();
 	
-	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
-		
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		Unit city;
 		city.m_id = *reinterpret_cast<uint32 *>(
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
@@ -1068,7 +1092,7 @@ bool NationalManagementDialog::CanBuild(uint32 category, sint32 type)
 
 	
 	
-	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
 		city.m_id = *reinterpret_cast<uint32 *>(
@@ -1325,7 +1349,7 @@ sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
 		case k_NMD_SPEC_COMBAT_UNITS:
 			result = atoi(column1->GetText()) - atoi(column2->GetText());
 			break;
-        
+
 		default:
 			Assert(false);
 			result =(0);
@@ -1394,11 +1418,10 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 	
 	tech_WLList<sint32> *selectedList = visibleList->GetSelectedList();
 
-	static UnitDynamicArray cities;
-	cities.Clear();
+	UnitDynamicArray cities;
 
 	
-	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
 		city.m_id = *reinterpret_cast<uint32 *>(
@@ -1418,6 +1441,57 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 		if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
 		} else {
 			EditQueue::Display(cities);
+		}
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : NationalManagementDialog::CityManagerButtonActionCallback
+//
+// Description: Opens the City Manager when the City Manager button is clicked.
+//
+// Parameters : aui_Control *control
+//              uint32 action
+//              uint32 data
+//              void *cookie
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *control,
+	uint32 action, uint32 data, void *cookie)
+{
+	
+	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
+		return;
+
+	
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+
+	
+	bool governorStatus = false;
+
+	ctp2_ListBox *visibleList = dialog->m_resourceList;
+	if(visibleList->IsHidden())
+		visibleList = dialog->m_statusList;
+
+	
+	tech_WLList<sint32> *selectedList = visibleList->GetSelectedList();
+
+	if(selectedList->L() == 1) {
+		
+		Unit city;
+		city.m_id = reinterpret_cast<uint32>(
+		    static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
+		    selectedList->GetAtIndex(0)
+		    ))->GetUserData());
+		if(!(g_network.IsClient() && g_network.GetSensitiveUIBlocked())) {
+			CityWindow::Display(CityWindow::GetCityData(city));
 		}
 	}
 }
@@ -1453,7 +1527,7 @@ void NationalManagementDialog::DisbandCallback(bool response, void *userData)
 		tech_WLList<sint32> *selectedList = visibleList->GetSelectedList();
 
 		
-		for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
+		for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 			
 			ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 				visibleList->GetItemByIndex(
@@ -1491,8 +1565,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
 	
-	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
-		
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		Unit city;
 		city.m_id = *reinterpret_cast<uint32 *>(
 			static_cast<ctp2_ListItem*>(dialog->m_statusList->GetItemByIndex(
@@ -1510,8 +1583,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 
 	
 	
-	for(int selectIndex2 = 0; (unsigned) selectIndex2 < selectedList->L(); selectIndex2++) {
-		
+	for(uint32 selectIndex2 = 0; selectIndex2 < selectedList->L(); selectIndex2++) {
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex2)));
@@ -1549,8 +1621,7 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
 	
-	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
-		
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)));
@@ -1604,8 +1675,7 @@ void NationalManagementDialog::SelectBuildItemActionCallback(aui_Control *contro
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
 	
-	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
-		
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)));
@@ -1642,8 +1712,7 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
 	
-	for(int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++) {
-		
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)));
@@ -1743,6 +1812,13 @@ void NationalManagementDialog::UpdateMainButtons(ctp2_ListBox *box)
 	} else {
 		m_disbandButton->Enable(TRUE);
 		m_buildQueueButton->Enable(TRUE);
+	}
+
+	if(box->GetSelectedList()->L() == 1){
+		m_cityManagerButton->Enable(TRUE);
+	}
+	else{
+		m_cityManagerButton->Enable(FALSE);
 	}
 }
 
@@ -1849,20 +1925,20 @@ void NationalManagementDialog::MirrorSelectedCities()
 
 	g_nationalManagementDialog->m_mirroring = true;
 
-    for 
-    (
-        std::vector<ctp2_ListBox *>::iterator p = invisList.begin();
-        p != invisList.end();
-        ++p
-    )
-    {
-        for (sint32 i = 0; i < (*p)->NumItems(); ++i) 
-        {
-		    (*p)->DeselectItem(i);
-        }
+	for 
+	(
+		std::vector<ctp2_ListBox *>::iterator p = invisList.begin();
+		p != invisList.end();
+		++p
+	)
+	{
+		for (sint32 i = 0; i < (*p)->NumItems(); ++i) 
+		{
+			(*p)->DeselectItem(i);
+		}
 	}
 
-	for (int selectIndex = 0; (unsigned) selectIndex < selectedList->L(); selectIndex++)
+	for (uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
 	{
 		
 		uint32 cityId   = *reinterpret_cast<uint32 *>

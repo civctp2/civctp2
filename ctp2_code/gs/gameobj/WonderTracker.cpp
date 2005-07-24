@@ -2,7 +2,9 @@
 
 #include "c3.h"
 #include "WonderTracker.h"
+
 #include "civarchive.h"
+#include "Globals.h"        // k_GAME_OBJ_TYPE_WONDER
 #include "player.h"
 #include "network.h"
 #include "net_info.h"

@@ -188,8 +188,7 @@ void DiplomaticRequestPool::EndTurn(const PLAYER_INDEX sender)
 	{
 	sint32	i ;
 
-	static MessageDynamicArray	msgExpired ;
-	msgExpired.Clear();
+	MessageDynamicArray	msgExpired;
 
 	for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 		{
@@ -211,7 +210,6 @@ void DiplomaticRequestPool::EndTurn(DiplomaticRequestData *top,
 									const PLAYER_INDEX sender,
 									MessageDynamicArray &msgExpired)
 {
-	Message msg;
 	if(top->GetLesser())
 		EndTurn(top->GetLesser(), sender, msgExpired);
 	if(top->GetGreater())

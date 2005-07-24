@@ -31,17 +31,18 @@
 //
 // - Improved mod handling for Diplomod/WAW: reduces Asserts, restored 
 //   compatibility.
+// - Added missing arguments for some proposals.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Unit.h"
 #include "slicfuncai.h"
+
+#include "Unit.h"
 #include "AgreementMatrix.h"
 #include "Army.h"
 #include "Scheduler.h"
 #include "diplomattypes.h"
-
 #include "slicif.h"
 #include "StrDB.h"
 extern StringDB *g_theStringDB;
@@ -50,7 +51,6 @@ extern StringDB *g_theStringDB;
 #include "mapanalysis.h"
 #include "player.h"
 #include "ProposalAnalysis.h"
-
 
 //----------------------------------------------------------------------------
 //
@@ -75,7 +75,6 @@ extern StringDB *g_theStringDB;
 //                indicated by a PROPOSAL_NONE marker, without parameters.
 //
 //----------------------------------------------------------------------------
-
 bool ParseProposalDataBlock
 (
 	SlicArgList *		args, 
@@ -85,21 +84,12 @@ bool ParseProposalDataBlock
 )
 {
 	sint32	type;
-    Unit	city;
-	// for clarity:
-    sint32	adv;
-    sint32	percent;
-    sint32	gold;
-    sint32	pollution;
-    sint32	plyr;
-
 	if(!args->GetInt(argNum++, type))
 		return false;
 
-	Assert(type >= PROPOSAL_NONE);
-	Assert(type < PROPOSAL_MAX);
-
+	Assert((type >= PROPOSAL_NONE) && (type < PROPOSAL_MAX));
 	blockType = static_cast<PROPOSAL_TYPE>(type);
+
 	DPRINTF(k_DBG_SLIC, ("ParseProposalDataSlicArgs: type= %d\n", blockType));
 
 	// get the proposal's arg1, if it exists
@@ -107,25 +97,25 @@ bool ParseProposalDataBlock
 	{
 	default:
 		// No arguments expected.
-		break;
+		return true;
 
     case PROPOSAL_OFFER_GIVE_CITY:  
 	case PROPOSAL_REQUEST_GIVE_CITY:
-	    if (!args->GetCity(argNum++, city)) 
-		{
-		    return false;
-		}
-		blockArgs.cityId = city.m_id;
+        {
+	        Unit    city;
+            if (!args->GetCity(argNum++, city)) 
+		    {
+		        return false;
+		    }
+		    blockArgs.cityId = city.m_id;
+        }
 		break;
 
 	case PROPOSAL_OFFER_STOP_RESEARCH:		
 	case PROPOSAL_REQUEST_STOP_RESEARCH:
-	    if (!args->GetInt(argNum++, adv)) 
-		{
-		    return false;
-		}
-		blockArgs.advanceType = adv;
-		break;
+	case PROPOSAL_OFFER_GIVE_ADVANCE:
+	case PROPOSAL_REQUEST_GIVE_ADVANCE:
+        return args->GetInt(argNum++, blockArgs.advanceType);
 
 	case PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS:
 	case PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS:
@@ -133,50 +123,32 @@ bool ParseProposalDataBlock
 	case PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS:
 	case PROPOSAL_OFFER_REDUCE_NANO_WEAPONS:
 	case PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS:
-        if (!args->GetInt(argNum++, percent)) 
-		{
-		    return false;
-		}
-		blockArgs.percent= ((double) percent)/100.0;
-		break;
-
-	case PROPOSAL_OFFER_GIVE_ADVANCE:
-	case PROPOSAL_REQUEST_GIVE_ADVANCE:
-		if (!args->GetInt(argNum++, adv)) 
-		{
-		    return false;
-		}
-		blockArgs.advanceType = adv;
+        {
+            sint32 percent;
+            if (!args->GetInt(argNum++, percent)) 
+		    {
+		        return false;
+		    }
+		    blockArgs.percent = static_cast<double>(percent) / 100.0;
+        }
 		break;
 
 	case PROPOSAL_OFFER_GIVE_GOLD:
 	case PROPOSAL_REQUEST_GIVE_GOLD:
-	    if (!args->GetInt(argNum++, gold)) 
-		{
-		    return false;
-		}
-		blockArgs.gold = gold;
-		break;
+        return args->GetInt(argNum++, blockArgs.gold);
 
 	case PROPOSAL_OFFER_REDUCE_POLLUTION:
 	case PROPOSAL_REQUEST_REDUCE_POLLUTION:
 	case PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT:
 	case PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT:
-        if (!args->GetInt(argNum++, pollution)) 
-		{
-		    return false;
-		}
-		blockArgs.pollution = pollution;
-		break;
+        return args->GetInt(argNum++, blockArgs.pollution);
 
 	case PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT:
 	case PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT:
-        if (!args->GetInt(argNum++, plyr)) 
-		{
-		    return false;
-		}
-		blockArgs.playerId = plyr;
-		break;
+    case PROPOSAL_OFFER_BREAK_AGREEMENT:
+    case PROPOSAL_REQUEST_BREAK_AGREEMENT:
+    case PROPOSAL_TREATY_DECLARE_WAR:
+        return args->GetInt(argNum++, blockArgs.playerId);
 	}
 
 	return true;
@@ -204,7 +176,6 @@ bool ParseProposalDataBlock
 //                indicated by a PROPOSAL_NONE marker, without parameters.
 //
 //----------------------------------------------------------------------------
-
 bool ParseProposalDataSlicArgs
 (
 	SlicArgList *	args, 

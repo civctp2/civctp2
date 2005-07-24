@@ -87,6 +87,8 @@
 // - Removed debug allocator version.
 // - Added copy constructor to bypass a problem concerning memory 
 //   allocation. - June 18th 2005 Martin Gühmann
+// - Added OptimizeSliders method and updated TestSliders method for 
+//   better AI sliders optimisation routines. - Jul 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -288,7 +290,7 @@ Governor::Governor(Governor const &copyme)
 //	m_currentUnitCount          (copyme.m_currentUnitCount), // Well that would be the code of the default version
     m_neededFreight             (copyme.m_neededFreight)
 { 
-	for(sint32 i = 0; (unsigned) i < copyme.m_currentUnitCount.size(); ++i){
+	for(uint32 i = 0; i < copyme.m_currentUnitCount.size(); ++i){
 		m_currentUnitCount.push_back(copyme.m_currentUnitCount[i]);
 	}
 }
@@ -453,17 +455,13 @@ StringId Governor::GetGovernmentAdvice() const
 //
 // Remark(s)  : Strange method, why setting sliders back into range, instead
 //              making sure that the sliders stay in range.
+//              No more used.
 //
 //----------------------------------------------------------------------------
 void Governor::NormalizeSliders(SlidersSetting & sliders_setting) const
 {
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
-
-	DPRINTF(k_DBG_GAMESTATE, ("Governor::NormalizeSliders\n"));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
 
 	//Added casts
 	if(player_ptr->GetWorkdayExpectation() - sliders_setting.m_deltaProduction > 2)
@@ -482,6 +480,104 @@ void Governor::NormalizeSliders(SlidersSetting & sliders_setting) const
 		sliders_setting.m_deltaFood = -2 + static_cast<sint32>(player_ptr->GetRationsExpectation());
 	else if(player_ptr->GetRationsExpectation() - sliders_setting.m_deltaFood < -2)
 		sliders_setting.m_deltaFood = 2 + static_cast<sint32>(player_ptr->GetRationsExpectation());
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetMaxSliderSettings
+//
+// Description: Finds the possible maximal slider settings.
+//
+// Parameters : sliders_setting: Filled with the possible maximal slider 
+//                               settings.
+//
+// Globals    : g_player: List of players
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void Governor::GetMaxSliderSettings(SlidersSetting & sliders_setting) const
+{
+	Player * player_ptr = g_player[m_playerId];
+	Assert(player_ptr != NULL);
+
+	sliders_setting.m_deltaProduction = 2 + static_cast<sint32>(player_ptr->GetWorkdayExpectation());
+	sliders_setting.m_deltaGold       = 2 + static_cast<sint32>(player_ptr->GetWagesExpectation());
+	sliders_setting.m_deltaFood       = 2 + static_cast<sint32>(player_ptr->GetRationsExpectation());
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ProdSliderReachedMin
+//
+// Description: Tests whether the production slider is at the minimum or
+//              below.
+//
+// Parameters : sliders_setting: The slider settings to test.
+//
+// Globals    : g_player: List of players
+//
+// Returns    : Whether the production slider has reached its minimum
+//              or is below.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool Governor::ProdSliderReachedMin(SlidersSetting & sliders_setting) const
+{
+	Player * player_ptr = g_player[m_playerId];
+	Assert(player_ptr != NULL);
+	return player_ptr->GetWorkdayExpectation() - sliders_setting.m_deltaProduction >= 2;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GoldSliderReachedMin
+//
+// Description: Tests whether the gold slider is at the minimum or
+//              below.
+//
+// Parameters : sliders_setting: The slider settings to test.
+//
+// Globals    : g_player: List of players
+//
+// Returns    : Whether the gold slider has reached its minimum
+//              or is below.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool Governor::GoldSliderReachedMin(SlidersSetting & sliders_setting) const
+{
+	Player * player_ptr = g_player[m_playerId];
+	Assert(player_ptr != NULL);
+	return player_ptr->GetWagesExpectation() - sliders_setting.m_deltaGold >= 2;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::FoodSliderReachedMin
+//
+// Description: Tests whether the food slider is at the minimum or
+//              below.
+//
+// Parameters : sliders_setting: The slider settings to test.
+//
+// Globals    : g_player: List of players
+//
+// Returns    : Whether the food slider has reached its minimum
+//              or is below.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool Governor::FoodSliderReachedMin(SlidersSetting & sliders_setting) const
+{
+	Player * player_ptr = g_player[m_playerId];
+	Assert(player_ptr != NULL);
+	return player_ptr->GetRationsExpectation() - sliders_setting.m_deltaFood >= 2;
 }
 
 //----------------------------------------------------------------------------
@@ -507,24 +603,11 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
-	DPRINTF(k_DBG_GAMESTATE, ("Governor::SetSliders\n"));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
-
 	//Added casts
 	player_ptr->SetWorkdayLevel(static_cast<sint32>(player_ptr->GetWorkdayExpectation()) - sliders_setting.m_deltaProduction);
 	player_ptr->SetWagesLevel(static_cast<sint32>(player_ptr->GetWagesExpectation()) - sliders_setting.m_deltaGold);
 	player_ptr->SetRationsLevel(static_cast<sint32>(player_ptr->GetRationsExpectation()) - sliders_setting.m_deltaFood );
 
-	DPRINTF(k_DBG_GAMESTATE, ("Government:      %i\n", player_ptr->GetGovernmentType()));
-	DPRINTF(k_DBG_GAMESTATE, ("WorkdayExp:      %f\n", player_ptr->GetWorkdayExpectation()));
-	DPRINTF(k_DBG_GAMESTATE, ("WagesExp:        %f\n", player_ptr->GetWagesExpectation()));
-	DPRINTF(k_DBG_GAMESTATE, ("RationsExp:      %f\n", player_ptr->GetRationsExpectation()));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
-		
 	if (update_cities == false)
 		return 0;
 
@@ -540,14 +623,15 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 	{
 		city = city_list->Access(i)->GetCityData();
 		old_happiness = city->GetHappiness();
-		city->CollectResources();
 	
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-	//	AssignPopulation(city);
+		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-	//	city->CalcHappiness(gold, FALSE);
+		city->CalcHappiness(gold, FALSE);
+
+		city->CollectResources();
 
 		city->DoSupport(true);
 		city->SplitScience(true);
@@ -587,20 +671,14 @@ void Governor::GetSliders(SlidersSetting & sliders_setting) const
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
-
 	sliders_setting.m_deltaProduction = 
 		static_cast<sint32>(player_ptr->GetWorkdayExpectation() - player_ptr->GetUnitlessWorkday());
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
-
 
 	sliders_setting.m_deltaGold = 
 		static_cast<sint32>(player_ptr->GetWagesExpectation() - player_ptr->GetUnitlessWages());
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold: %i\n", sliders_setting.m_deltaGold));
-
 
 	sliders_setting.m_deltaFood =
 		static_cast<sint32>(player_ptr->GetRationsExpectation() - player_ptr->GetUnitlessRations());
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood: %i\n", sliders_setting.m_deltaFood));
 }
 
 //----------------------------------------------------------------------------
@@ -615,7 +693,7 @@ void Governor::GetSliders(SlidersSetting & sliders_setting) const
 //
 // Returns    : bool: Somewhat confusing.
 //
-// Remark(s)  : -
+// Remark(s)  : Removed
 //
 //----------------------------------------------------------------------------
 bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
@@ -625,17 +703,14 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 	bool food_test;
 	bool happiness_test;
 	SlidersSetting tmp_sliders_setting;
+	sint32 prod, gold, food;
 
-	DPRINTF(k_DBG_GAMESTATE, ("Governor::ComputeMinimumSliders\n"));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
-	
 	bool found = TestSliderSettings(sliders_setting, 
 	                                production_test,
 	                                gold_test,
 	                                food_test,
-	                                happiness_test);
+	                                happiness_test,
+	                                prod, gold, food);
 	
 	if(found)
 		return false;
@@ -644,7 +719,6 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 	SlidersSetting orig_sliders_setting = sliders_setting;
 
 	bool changed = true;
-//	bool error = false; // Error? You are in error or why don't you use it?
 #if defined(_DEBUG)
 	sint32 loop_test = 0;
 #endif
@@ -660,7 +734,8 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 		                           production_test,
 		                           gold_test,
 		                           food_test,
-		                           happiness_test);
+		                           happiness_test,
+		                           prod, gold, food);
 		changed = false;
 
 			
@@ -712,7 +787,8 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 	                           production_test,
 	                           gold_test,
 	                           food_test,
-	                           happiness_test);
+	                           happiness_test,
+	                           prod, gold, food);
 
 	if(!found)
 		return true;
@@ -733,18 +809,13 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 //
 // Returns    : bool: Whether it was possible to find the best slider settings.
 //
-// Remark(s)  : -
+// Remark(s)  : Seems to do some shit, actual not worth to be understand.
 //
 //----------------------------------------------------------------------------
 bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 {
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
-
-	DPRINTF(k_DBG_GAMESTATE, ("Governor::ComputeBestSliders\n"));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
 
 	bool config_found = false;
 	bool found;
@@ -844,7 +915,7 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 //
 // Returns    : bool: Whether it was possible to find the best slider settings.
 //
-// Remark(s)  : -
+// Remark(s)  : Seems to do some shit, actual not worth to be understand.
 //
 //----------------------------------------------------------------------------
 bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
@@ -853,19 +924,11 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 	Player *player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
 
-//	Unit city_unit;
-//	CityData *city = NULL;
-//	CityData *unhappy_city = NULL;
 	bool production_test;
 	bool gold_test;
 	bool food_test;
 	bool happiness_test;
-
-	
-	DPRINTF(k_DBG_GAMESTATE, ("Governor::FitSlidersToCities\n"));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
+	sint32 prod, gold, food;
 
 	NormalizeSliders(sliders_setting);
 
@@ -890,7 +953,8 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 		                           production_test,
 		                           gold_test,
 		                           food_test,
-		                           happiness_test);
+		                           happiness_test,
+		                           prod, gold, food);
 		changed = false;
 		
 		
@@ -970,40 +1034,42 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 // Description: Checks if the given slider settings are enough to support 
 //              the empire.
 //
-// Parameters : sliders_setting: The slider settings to be tesed.
-//              production_test: Indicates after function execution whether
-//                               new slider settings allow to support units.
-//              gold_test:       Indicates after function execution whether
-//                               new slider settings allow to pay wages and
-//                               building upkeep or if building upkeep can't 
-//                               be paid whether deficit spending is not to high.
-//              food_test:       Indicates after function execution whether 
-//                               new slider settings allow to feed each city.
-//              happiness_test:  Indicates after function execution whether
-//                               new slider settings allow each city to stay 
-//                               above the minimum happiness level.
+// Parameters : sliders_setting:  The slider settings to be tesed.
+//              production_test:  Indicates after function execution whether
+//                                new slider settings allow to support units.
+//              gold_test:        Indicates after function execution whether
+//                                new slider settings allow to pay wages and
+//                                building upkeep or if building upkeep can't 
+//                                be paid whether deficit spending is not to high.
+//              food_test:        Indicates after function execution whether 
+//                                new slider settings allow to feed each city.
+//              happiness_test:   Indicates after function execution whether
+//                                new slider settings allow each city to stay 
+//                                above the minimum happiness level.
+//              total_production: Filled with empire production (military support,
+//                                public works and production for buildings)
+//              total_gold:       Filled with gold surplus
+//              total_food:       Filled with food surplus
 //
 // Globals    : -
 //
-// Returns    : bool:            Whether production_test and gold_test and
-//                               food_test and happiness_test are true.
+// Returns    : bool:             Whether production_test and gold_test and
+//                                food_test and happiness_test are true.
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
-                                  bool & production_test,
-                                  bool & gold_test,
-                                  bool & food_test,
-                                  bool & happiness_test) const
+                                  bool   & production_test,
+                                  bool   & gold_test,
+                                  bool   & food_test,
+                                  bool   & happiness_test,
+                                  sint32 & total_production,
+                                  sint32 & total_gold,
+                                  sint32 & total_food) const
 {
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
-
-	DPRINTF(k_DBG_GAMESTATE, ("Governor::TestSliderSettings\n"));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaProduction: %i\n", sliders_setting.m_deltaProduction));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaGold:       %i\n", sliders_setting.m_deltaGold));
-	DPRINTF(k_DBG_GAMESTATE, ("DeltaFood:       %i\n", sliders_setting.m_deltaFood));
 
 	double deficit_spending;
 	sint32 min_happiness;
@@ -1013,11 +1079,11 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	strategy.GetMinimumHappiness(min_happiness);
 	strategy.GetMaximumWagePercent(max_wage_percent);
 
-//	sint32 total_food = 0;
-	sint32 total_production = 0;
 	sint32 total_gold_cost = 0;
 	sint32 gross_gold = 0;
-	sint32 total_gold = 0;
+	total_food = 0;
+	total_production = 0;
+	total_gold = 0;
 
 	production_test = true;
 	gold_test = true;
@@ -1049,28 +1115,28 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-//		AssignPopulation(city);
+		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-//		city->CalcHappiness(gold, FALSE);
-			
+		city->CalcHappiness(gold, FALSE);
+		city->CollectResources();
+		city->DoSupport(true); // Deduct wages and building costs
+		city->SplitScience(true); // Deduct science costs
+
 		city->ProcessFood();
 		city->CollectOtherTrade(TRUE, FALSE);
 		city->ProcessProduction(true);
 			
-		// Production has an effect on pollution and polltion has an effect on happiness
-		// Of course better would be only one recalculation
-		city->CalcHappiness(gold, FALSE);
 		city->EatFood();
-			
+		city->CalculateGrowthRate();
 
-			
 		new_happiness = city->GetHappiness();
-		if(new_happiness < min_happiness)
-		{
+		if(new_happiness < min_happiness
+		|| city->EntertainerCount() == city->PopCount()
+		){
 			happiness_test = false;
 		}
 
-//		total_food += city->GetNetCityFood();
+		total_food += city->GetNetCityFood();
 		total_production += city->GetNetCityProduction();
 
 			
@@ -1081,7 +1147,6 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 			
 		if(city->GetNetCityFood() < 0)
 		{
-			DPRINTF(k_DBG_GAMESTATE, ("Food test failed in city: %s\n", city->GetName()));
 			food_test = false;
 		}
 	}
@@ -1097,37 +1162,17 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	double wages_percent = static_cast<double>(total_gold_cost) / static_cast<double>(gross_gold);
 	if(wages_percent > max_wage_percent)
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("Wages test failed in city: %s\n", city->GetName()));
 		gold_test = false;
 	}
 
-	DPRINTF(k_DBG_GAMESTATE, ("total_gold_cost: %i\n", static_cast<sint32>(total_gold_cost)));
-	DPRINTF(k_DBG_GAMESTATE, ("gross_gold: %i\n", static_cast<sint32>(gross_gold)));
-	DPRINTF(k_DBG_GAMESTATE, ("wages_percent: %f\n", static_cast<double>(wages_percent)));
-	DPRINTF(k_DBG_GAMESTATE, ("max_wage_percent: %f\n", static_cast<double>(max_wage_percent)));
 	
-	
-	total_gold_cost += player_ptr->CalcTotalBuildingUpkeep();
-	total_gold += player_ptr->GetGold();
-	sint32 surplus = gross_gold - total_gold_cost;
-	if((surplus < 0)
-	&&((total_gold + surplus) > 0)
-	&&(surplus > (player_ptr->GetGold() * deficit_spending * -1))
+	sint32 player_gold = player_ptr->GetGold();
+	if(total_gold < 0
+	&& total_gold + player_gold < 0
+	&& total_gold > player_gold * -deficit_spending
 	){
-		DPRINTF(k_DBG_GAMESTATE, ("Gold test failed in city: %s\n", city->GetName()));
 		gold_test = false;
 	}
-
-	DPRINTF(k_DBG_GAMESTATE, ("Governor::TestSliderSettings\n"));
-	DPRINTF(k_DBG_GAMESTATE, ("total_gold_cost: %i\n", static_cast<sint32>(total_gold_cost)));
-	DPRINTF(k_DBG_GAMESTATE, ("total_gold: %i\n", static_cast<sint32>(total_gold)));
-	DPRINTF(k_DBG_GAMESTATE, ("surplus: %i\n", static_cast<sint32>(surplus)));
-	DPRINTF(k_DBG_GAMESTATE, ("gross_gold: %i\n", static_cast<sint32>(gross_gold)));
-	DPRINTF(k_DBG_GAMESTATE, ("player_ptr->GetGold(): %i\n", static_cast<sint32>(player_ptr->GetGold())));
-	DPRINTF(k_DBG_GAMESTATE, ("production_test: %i\n", static_cast<sint32>(production_test)));
-	DPRINTF(k_DBG_GAMESTATE, ("gold_test:       %i\n", static_cast<sint32>(gold_test)));
-	DPRINTF(k_DBG_GAMESTATE, ("food_test:       %i\n", static_cast<sint32>(food_test)));
-	DPRINTF(k_DBG_GAMESTATE, ("happiness_test:  %i\n", static_cast<sint32>(happiness_test)));
 
 	return (production_test && gold_test && food_test && happiness_test);
 }
@@ -1216,9 +1261,110 @@ StringId Governor::GetSlidersAdvice() const
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::OptimizeSliders
+//
+// Description: Optimizes the sliders
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
+{
+	sint32 value, valueProd, valueGold, valueFood;
+
+	GetMaxSliderSettings(sliders_setting);
+	SliderTests slider_tests;
+	SliderTests prod_slider_tests;
+	SliderTests gold_slider_tests;
+	SliderTests food_slider_tests;
+	SlidersSetting prod_sliders_setting;
+	SlidersSetting gold_sliders_setting;
+	SlidersSetting food_sliders_setting;
 
 
+	while( !ProdSliderReachedMin(sliders_setting)
+	||     !GoldSliderReachedMin(sliders_setting)
+	||     !FoodSliderReachedMin(sliders_setting)
+	){
 
+		TestSliderSettings(     sliders_setting,      slider_tests);
+		value     =      slider_tests.GetValue();
+
+		if(!ProdSliderReachedMin(sliders_setting)){
+			prod_sliders_setting = sliders_setting;
+			prod_sliders_setting.m_deltaProduction--;
+			TestSliderSettings(prod_sliders_setting, prod_slider_tests);
+			valueProd = prod_slider_tests.GetValue();
+		}
+		else{
+			valueProd = -1; // Should be lower than everything else
+		}
+
+		if(!GoldSliderReachedMin(sliders_setting)){
+			gold_sliders_setting = sliders_setting;
+			gold_sliders_setting.m_deltaGold--;
+			TestSliderSettings(gold_sliders_setting, gold_slider_tests);
+			valueGold = gold_slider_tests.GetValue();
+		}
+		else{
+			valueGold = -1;
+		}
+
+		if(!FoodSliderReachedMin(sliders_setting)){
+			food_sliders_setting = sliders_setting;
+			food_sliders_setting.m_deltaFood--;
+			TestSliderSettings(food_sliders_setting, food_slider_tests);
+			valueFood = food_slider_tests.GetValue();
+		}
+		else{
+			valueFood = -1;
+		}
+
+		if(value >= valueProd
+		&& value >= valueGold
+		&& value >= valueFood
+		&& slider_tests.m_happinessTest
+		){
+			break;
+		}
+		// Real equal need a better solution
+		else if(valueProd >= value
+		&&      valueProd >= valueGold
+		&&      valueProd >= valueFood
+		&&      prod_slider_tests.m_productionTest
+		){
+			sliders_setting = prod_sliders_setting;
+		}
+		// Real equal need a better solution
+		else if(valueGold >= value
+		&&      valueGold >= valueProd
+		&&      valueGold >= valueFood
+		&&      gold_slider_tests.m_goldTest
+		){
+			sliders_setting = gold_sliders_setting;
+		}
+		// Real equal need a better solution
+		else if(valueFood >= value
+		&&      valueFood >= valueProd
+		&&      valueFood >= valueGold
+		&&      food_slider_tests.m_foodTest
+		){
+			sliders_setting = food_sliders_setting;
+		}
+		else{
+			break;
+		}
+
+	}
+}
 
 void Governor::AddRoadPriority(Path & path, const double & priority_delta)
 {
@@ -1230,11 +1376,11 @@ void Governor::AddRoadPriority(Path & path, const double & priority_delta)
 	TiGoal ti_goal;
 
 	MapPoint old, pos;
-    path.Start(old); 
-    path.Next(pos);  
+	path.Start(old);
+	path.Next(pos);
 
-    for ( ; !path.IsEnd(); path.Next(pos)) 
-	{ 
+	for ( ; !path.IsEnd(); path.Next(pos))
+	{
 		
 		ti_goal.type = GetBestRoadImprovement(pos);
 
@@ -1245,7 +1391,7 @@ void Governor::AddRoadPriority(Path & path, const double & priority_delta)
 			ti_goal.pos = pos;
 
 			
-		    strategy.GetRoadUtilityBonus(bonus);
+			strategy.GetRoadUtilityBonus(bonus);
 			ti_goal.utility =  bonus * priority_delta;
 			s_tiQueue.push_back(ti_goal);
 		}
@@ -1304,7 +1450,7 @@ void Governor::ComputeRoadPriorities()
 			
 			
 
-	    float total_cost = 0.0; 
+	    float total_cost = 0.0;
 		Path found_path;
 		double trans_max_r = 0.8;
 			
@@ -1312,10 +1458,10 @@ void Governor::ComputeRoadPriorities()
 			
 		if (g_city_astar.FindRoadPath(city_unit.RetPos(), min_neighbor_unit.RetPos(),
 			m_playerId,
-			found_path,     
-			total_cost ))   
-		{	
-			Assert(0 < found_path.Num()); 
+			found_path,
+			total_cost ))
+		{
+			Assert(0 < found_path.Num());
 
 				
 				
@@ -1340,7 +1486,7 @@ void Governor::ComputeRoadPriorities()
 			}
 			else
 			{
-				found_path.InsertEnd(neighbor);			   
+				found_path.InsertEnd(neighbor);
 				found_path.InsertEnd(city_unit.RetPos());
 			}
 		}
@@ -1444,17 +1590,17 @@ void Governor::PlaceTileImprovements()
 	TiGoalQueue::const_iterator iter;
 	for(iter = s_tiQueue.begin(); iter != max_iter; iter++)
 	{
-		sint32 const	needed_pw	= 
-			terrainutil_GetProductionCost(iter->type, iter->pos, 0);
+		sint32 const needed_pw = 
+		       terrainutil_GetProductionCost(iter->type, iter->pos, 0);
 		if(needed_pw <= avail_pw)
 		{
-			g_gevManager->AddEvent(GEV_INSERT_Tail, 
-								   GEV_CreateImprovement,
-								   GEA_Player,		m_playerId,
-								   GEA_MapPoint,	iter->pos,
-								   GEA_Int,			iter->type,
-								   GEA_Int,			0, 
-								   GEA_End);
+			g_gevManager->AddEvent(GEV_INSERT_Tail,
+			                       GEV_CreateImprovement,
+			                       GEA_Player,      m_playerId,
+			                       GEA_MapPoint,    iter->pos,
+			                       GEA_Int,         iter->type,
+			                       GEA_Int,         0,
+			                       GEA_End);
 			avail_pw -= needed_pw;
 		}
 		else
@@ -1542,7 +1688,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 				                && !effect->GetBonusFood()
 				                && !effect->GetBonusProduction()
 				                && !effect->GetBonusGold()
-					            && !effect->GetEndgame();
+				                && !effect->GetEndgame();
 			}
 
 		}
@@ -1670,11 +1816,11 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			
 			
 		strategy.GetImproveProductionBonus(bonus);
-		goal.utility =  bonus * terr_gold_rank;
+		goal.utility = bonus * terr_gold_rank;
 			
 		if(production_rank > 0.8){
 			strategy.GetImproveLargeCityProductionBonus(bonus);
-			goal.utility += bonus *	production_rank;
+			goal.utility += bonus * production_rank;
 		}
 		if(g_theWorld->IsGood(pos)){
 			strategy.GetImproveGoodBonus(bonus);

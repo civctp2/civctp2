@@ -47,6 +47,7 @@
 //   Actual this should be replaced by new order. - April 30th 2005 Martin Gühmann
 // - Implemented GovernmentModified for UnitDB - April 30th 2005 Martin Gühmann
 // - Added unit record and civilisation information to some messageboxes.
+// - Repaired crash when inciting an uprising succeeds.
 //
 //----------------------------------------------------------------------------
 
@@ -1339,13 +1340,7 @@ ArmyData::CheckActiveDefenders(MapPoint &pos, BOOL cargoPodCheck)
     double maxActiveDefenseRange = unitutil_MaxActiveDefenseRange();
     topleft.x -= sint16(maxActiveDefenseRange);
 
-    static UnitDynamicArray possibleDefenders;
-    static UnitDynamicArray activeDefenders;
-    static UnitDynamicArray deadDefenders;
-
-    possibleDefenders.Clear();
-    deadDefenders.Clear();
-
+    UnitDynamicArray possibleDefenders;
     g_theUnitTree->SearchRect(possibleDefenders, topleft,
                               static_cast<sint16>(maxActiveDefenseRange * 2 + 1),
                               static_cast<sint16>(maxActiveDefenseRange * 2 + 1),
@@ -1353,10 +1348,12 @@ ArmyData::CheckActiveDefenders(MapPoint &pos, BOOL cargoPodCheck)
     if(possibleDefenders.Num() <= 0)
         return FALSE;
 
+    UnitDynamicArray activeDefenders;
     GetActiveDefenders(possibleDefenders, activeDefenders, cargoPodCheck);
     sint32 defenderOwner = -1;
     sint32 owner = GetOwner();
 
+    UnitDynamicArray deadDefenders;
     sint32 i, j, n = activeDefenders.Num();
     for(i = 0; i < n; i++) {
         if(!activeDefenders[i].CanSee(Army(m_id)))
@@ -3208,12 +3205,12 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit c = GetAdjacentCity(point);
-
-	if(c.m_id == 0)
+	if (!c.IsValid())
 		return ORDER_RESULT_ILLEGAL;
 
-	if(c.GetOwner() == m_owner) {
-		
+    PLAYER_INDEX const  cityOwner = c.GetOwner();
+
+	if (cityOwner == m_owner) {
 		return ORDER_RESULT_ILLEGAL;
 	}
 
@@ -3226,35 +3223,31 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-    //InformAI(UNIT_ORDER_INCITE_UPRISING, point); //does nothing here but could be implementedoint); 
+	Player *    p               = g_player[cityOwner];
+	double      distanceCost    = 100.0;
+	MapPoint    start;
 
-	MapPoint start, dest;
-    PLAYER_INDEX city_owner = c.GetOwner();
-	Player *p = g_player[city_owner];
-	float distcost;
-
-	if(p->GetCapitolPos(start)) {
+	if (p->GetCapitolPos(start)) 
+    {
+        MapPoint    dest;
 		c.GetPos(dest);
-        distcost = 100.0f * start.NormalizedDistance(dest);
-	} else {
-		distcost = float(p->GetMaxEmpireDistance()); 
+        distanceCost += 100.0 * start.NormalizedDistance(dest);
+	} 
+    else 
+    {
+		distanceCost += p->GetMaxEmpireDistance(); 
 	}
 	
-	distcost += 100;
+	double const    baseCost        = 
+        (g_player[c.GetOwner()]->m_gold->GetLevel() + 5000) *
+		static_cast<double>(c.PopCount()) * 
+        (1 / distanceCost) *
+		g_theConstDB->InciteUprisingGoldCoefficient();
+    double const    capitolPenalty  = c.IsCapitol() ? g_theConstDB->InciteUprisingCapitolPenalty() : 0.0;
 
-	if(distcost < 1)
-		distcost = 1;
+    sint32 const    cost            = static_cast<sint32>(baseCost + capitolPenalty);
 
-	sint32 capitolPenalty = 0;
-	if(c.IsCapitol()) {
-		capitolPenalty = sint32(g_theConstDB->InciteUprisingCapitolPenalty());
-	}
-	double cost = (g_player[c.GetOwner()]->m_gold->GetLevel() + 5000) *
-		double(c.PopCount()) * (1 / distcost) *
-		 g_theConstDB->InciteUprisingGoldCoefficient() +
-		 capitolPenalty;
-
-	DPRINTF(k_DBG_GAMESTATE, ("Cost to incite uprising: %lf\n", cost));
+	DPRINTF(k_DBG_GAMESTATE, ("Cost to incite uprising: %ld\n", cost));
 
 	if(g_player[m_owner]->m_gold->GetLevel() < cost)
 		return ORDER_RESULT_FAILED;
@@ -3272,7 +3265,7 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 	
 
     so = new SlicObject("208UprisingCompleteVictim") ;
-    so->AddRecipient(city_owner) ;
+    so->AddRecipient(cityOwner) ;
     so->AddCity(c) ;
     g_slicEngine->Execute(so) ;
 
@@ -6822,7 +6815,6 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 	}
 
 	uint8 dirs;
-	static DynamicArray<MapPoint> points;
 	sint32 dd;
 	MapPoint chk;
 	if(!doneRemoving) {
@@ -6839,7 +6831,7 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 		}
 
 		
-		points.Clear();
+	    DynamicArray<MapPoint> points;
 		for(dd = 0; dd < (sint32)NOWHERE; dd++) {
 			if(dirs & (1 << dd)) {
 				if(m_pos.GetNeighborPosition((WORLD_DIRECTION)dd, chk)) {

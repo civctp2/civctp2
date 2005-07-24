@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,6 +27,11 @@
 // - Added optimize sliders button and according callback function to allow
 //   the player to optimize sliders, automaticly. - April 8th 2005 Martin Gühmann
 // - Backwards compatibility crash prevention
+// - All food, production and gold values are now updated, when a single 
+//   slider is moved, because happiness modifies crime, crime modifies
+//   losses and production modifies pollution and pollution modifies crime.
+//   This means all the values are modified even if only a single slider
+//   is moved. Jul 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -55,9 +62,9 @@
 #include "wonderutil.h"
 #include "DomesticManagementDialog.h"
 #include "network.h"
-#include "c3math.h"		// AsPercentage
+#include "c3math.h"                     // AsPercentage
 
-#include "governor.h" // To allow automatic slider optimization
+#include "governor.h"                   // To allow automatic slider optimization
 
 extern ColorSet *g_colorSet;
 
@@ -221,11 +228,10 @@ m_summaryCommerceSavings(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	m_detailsButton->SetActionFuncAndCookie(
 		DetailsButtonActionCallback, this);
 
-    if (m_optimizeSliderButton)
-    {
-	    m_optimizeSliderButton->SetActionFuncAndCookie
-                                    (OptimizeSlidersButtonActionCallback, this);
-    }
+	if (m_optimizeSliderButton)
+	{
+		m_optimizeSliderButton->SetActionFuncAndCookie(OptimizeSlidersButtonActionCallback, this);
+	}
 	m_happinessBar->SetDrawCallbackAndCookie(
 		HappinessBarActionCallback, this, false);
 	m_foodRationsSpinner->SetActionFuncAndCookie(
@@ -626,7 +632,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 
 void CauseAndEffectTab::SetHappinessIcon(ctp2_Static *control,
-										 sint32 happiness)
+                                         sint32 happiness)
 {
 	
 	if(happiness < -1)
@@ -640,7 +646,7 @@ void CauseAndEffectTab::SetHappinessIcon(ctp2_Static *control,
 	else if(happiness > 1)
 		control->ExchangeImage(0, 0, "updi39.tga");
 	else {
-		Assert(false);	
+		Assert(false);
 	}
 
 	
@@ -676,7 +682,9 @@ void CauseAndEffectTab::UpdateCities()
 
 
 AUI_ERRCODE CauseAndEffectTab::HappinessBarActionCallback(ctp2_Static *control,
-	aui_Surface *surface, RECT &rect, void *cookie)
+                                                          aui_Surface *surface, 
+                                                          RECT &rect, 
+                                                          void *cookie)
 {
 	
 	if(g_selected_item == NULL)
@@ -732,8 +740,9 @@ AUI_ERRCODE CauseAndEffectTab::HappinessBarActionCallback(ctp2_Static *control,
 
 
 void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
-													 uint32 action, uint32 data,
-													 void *cookie)
+                                                     uint32 action, 
+                                                     uint32 data,
+                                                     void *cookie)
 {
 	
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
@@ -754,8 +763,12 @@ void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
 		UpdateCities();
 	}
 
-	
+	// Happiness is modified by this spinner and happiness modfies crime
+	// and crime modifies food, production and commerce, therefore all three
+	// need to be updated.
 	tab->UpdateFoodValues();
+	tab->UpdateProductionValues();
+	tab->UpdateCommerceValues();
 	tab->UpdateGeneral();
 	tab->m_tabPanel->ShouldDraw(TRUE);
 }
@@ -783,7 +796,12 @@ void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
 	}
 
 	
+	// Happiness is modified by this spinner and happiness modfies crime
+	// and crime modifies food, production and commerce, therefore all three
+	// need to be updated.
+	tab->UpdateFoodValues();
 	tab->UpdateProductionValues();
+	tab->UpdateCommerceValues();
 	tab->UpdateGeneral();
 	tab->m_tabPanel->ShouldDraw(TRUE);
 }
@@ -840,6 +858,11 @@ void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
 	}
 
 	
+	// Happiness is modified by this spinner and happiness modfies crime
+	// and crime modifies food, production and commerce, therefore all three
+	// need to be updated.
+	tab->UpdateFoodValues();
+	tab->UpdateProductionValues();
 	tab->UpdateCommerceValues();
 	tab->UpdateGeneral();
 	tab->m_tabPanel->ShouldDraw(TRUE);
@@ -919,14 +942,8 @@ void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control
 	Governor::SlidersSetting sliders_setting;
 	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
 	Governor & governor = Governor::GetGovernor(playerId);
-		
-	governor.SetSliders(sliders_setting, true);
 
-	if(governor.ComputeMinimumSliders(sliders_setting) == false)
-	{
-		bool found = governor.ComputeBestSliders(sliders_setting);
-	}
-
+	governor.OptimizeSliders(sliders_setting);
 	governor.SetSliders(sliders_setting, true);
 
 	UpdateCities();
@@ -946,7 +963,7 @@ void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control
 
 
 void CauseAndEffectTab::DetailsShowCallback(aui_Region *region,
-											void *userData)
+                                            void *userData)
 {
 	
 	CauseAndEffectTab *dialog = static_cast<CauseAndEffectTab*>(userData);
@@ -956,25 +973,27 @@ void CauseAndEffectTab::DetailsShowCallback(aui_Region *region,
 }
 
 void CauseAndEffectTab::CauseAndEffectTabActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+                                                        uint32 action, 
+                                                        uint32 data, 
+                                                        void *cookie)
 {
-    CauseAndEffectTab * tab = reinterpret_cast<CauseAndEffectTab *>(cookie);
+	CauseAndEffectTab * tab = reinterpret_cast<CauseAndEffectTab *>(cookie);
 
-    if (action == ctp2_Tab::ACTION_ACTIVATED)
+	if (action == ctp2_Tab::ACTION_ACTIVATED)
 	{
 		tab->m_detailsButton->Show();
-        if (tab->m_optimizeSliderButton)
-        {
-            tab->m_optimizeSliderButton->Show();
-        }
+		if (tab->m_optimizeSliderButton)
+		{
+			tab->m_optimizeSliderButton->Show();
+		}
 
 	}
 	else if (action == ctp2_Tab::ACTION_DEACTIVATED)
 	{
 		tab->m_detailsButton->Hide();
-        if (tab->m_optimizeSliderButton)
-        {
-            tab->m_optimizeSliderButton->Hide();
-        }
+		if (tab->m_optimizeSliderButton)
+		{
+			tab->m_optimizeSliderButton->Hide();
+		}
 	}
 }

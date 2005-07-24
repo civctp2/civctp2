@@ -119,7 +119,7 @@ public:
 	void SetIntValue(sint32 val);
 	BOOL SetValueFrom(SlicSymbolData *sym);
 	BOOL SetValueFromStackValue(SS_TYPE type, SlicStackValue value);
-	void SetString(MBCHAR *str);
+	void SetString(MBCHAR const * str);
 
 	SlicFunc *GetFunction() const;
 

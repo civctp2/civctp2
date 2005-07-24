@@ -1,31 +1,31 @@
 # Microsoft Developer Studio Project File - Name="ctp2" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** DO NOT EDIT **
+# ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=CTP2 - WIN32 RELEASE
-!MESSAGE This is not a valid makefile. To build this project using NMAKE,
-!MESSAGE use the Export Makefile command and run
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "civctp.mak".
 !MESSAGE 
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "civctp.mak" CFG="CTP2 - WIN32 RELEASE"
 !MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE 
-!MESSAGE "ctp2 - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Test" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 NDebug" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Final" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Debug Browse" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Optimized Test" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - SDL Debug" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - SDL Final" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Release" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Debug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Test" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 NDebug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Final" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Debug Browse" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Optimized Test" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - SDL Debug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - SDL Final" (basierend auf  "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -61,7 +61,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2r.exe"
+# ADD LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib amstrmid.lib strmbasd.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2r.exe"
 # SUBTRACT LINK32 /profile
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
+# ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib amstrmid.lib strmbasd.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
 # SUBTRACT LINK32 /verbose /profile
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
@@ -151,7 +151,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2d.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib imagehlp.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
 # SUBTRACT BASE LINK32 /verbose /profile /map
-# ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_ndbg.exe"
+# ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib amstrmid.lib strmbasd.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /incremental:no /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_ndbg.exe"
 # SUBTRACT LINK32 /verbose /profile /map
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
@@ -180,7 +180,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2.lib strmbasd.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib imagehlp.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"civctp_rel.exe"
 # SUBTRACT BASE LINK32 /profile /debug
-# ADD LINK32 ..\libs\anet\win\lib\anet2.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"ctp2.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe"
+# ADD LINK32 ..\libs\anet\win\lib\anet2.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib amstrmid.lib strmbasd.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"ctp2.map" /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe"
 # SUBTRACT LINK32 /profile /debug
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
@@ -211,12 +211,12 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
 # SUBTRACT BASE LINK32 /verbose /profile
-# ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
+# ADD LINK32 ..\libs\anet\win\lib\anet2d.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib amstrmid.lib strmbasd.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /map:"CivCTP_dbg.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"CivCTP_dbg.exe"
 # SUBTRACT LINK32 /verbose /profile
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                               exist                               R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                               copy                               C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                               R:\ctp2_project\ctp2_code\ctp\                              	rem       if                               exist                               R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                               copy                               C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                               R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                                   exist                                   R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                   copy                                   C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                   R:\ctp2_project\ctp2_code\ctp\                                  	rem           if                                   exist                                   R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                   copy                                   C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                   R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -247,7 +247,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe"
 # SUBTRACT BASE LINK32 /profile
-# ADD LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib strmbasd.lib amstrmid.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe" /fixed:no
+# ADD LINK32 ..\libs\anet\win\lib\anet2.lib imagehlp.lib ..\libs\GameWatch\gamewatch.lib ..\libs\GameWatch\gwciv.lib kernel32.lib ole32.lib amstrmid.lib strmbasd.lib quartz.lib oleaut32.lib winmm.lib dxguid.lib ddraw.lib dinput.lib dsound.lib ..\libs\tiff\libtiff.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib ..\ui\freetype\freetype.lib vfw32.lib ..\libs\miles\mss32.lib ..\libs\zlib\zlib.lib wsock32.lib /nologo /subsystem:windows /pdb:none /map:"civctp_rel.map" /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libc.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"libcmt.lib" /out:"ctp2.exe" /fixed:no
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
 
@@ -605,6 +605,10 @@ SOURCE=.\civapp.cpp
 # Begin Source File
 
 SOURCE=.\civapp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ctp2_enums.h
 # End Source File
 # Begin Source File
 
@@ -1716,7 +1720,7 @@ SOURCE=..\gs\gameobj\GameObj.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\gs\gameobj\gameover.h
+SOURCE=..\gs\gameobj\GameOver.h
 # End Source File
 # Begin Source File
 
@@ -6960,6 +6964,10 @@ SOURCE=..\os\include\config_win32.h
 # Begin Source File
 
 SOURCE=..\os\include\ctp2_config.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\os\include\ctp2_inttypes.h
 # End Source File
 # End Group
 # Begin Group "win32"

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City window
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -51,6 +52,7 @@
 //   new turns to next pop feature, when you change the specialist 
 //   distribution, unfortunatly it does work as exspected.
 //   - April 23rd 2005 Martin Gühmann
+// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -90,7 +92,7 @@
 #include "StrDB.h"
 #include "ConstDB.h"
 #include "colorset.h"
-extern ColorSet	*g_colorSet;
+extern ColorSet                     *g_colorSet;
 
 #include "BldQue.h"
 #include "Gold.h"
@@ -104,7 +106,7 @@ extern ColorSet	*g_colorSet;
 #include "greatlibrary.h"
 
 #include "resourcemap.h"
-extern ResourceMap *g_resourceMap;
+extern ResourceMap                  *g_resourceMap;
 
 #include "workwin.h"
 
@@ -131,11 +133,11 @@ extern ProjectFile                  *g_GreatLibPF;
 #include "ArmyPool.h"	// g_armyPool
 
 
-static CityWindow *s_cityWindow = NULL;
-extern  C3UI				*g_c3ui;
+static CityWindow                   *s_cityWindow = NULL;
+extern C3UI                         *g_c3ui;
 
-static MBCHAR *s_cityWindowBlock = "CityWindow";
-static MBCHAR *s_cityStatsBlock = "CityStatisticsWindow";
+static MBCHAR                       *s_cityWindowBlock = "CityWindow";
+static MBCHAR                       *s_cityStatsBlock = "CityStatisticsWindow";
 
 
 static sint32 s_isBuilding = 1;
@@ -149,8 +151,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 		*err = AUI_ERRCODE_INVALIDPARAM;
 		return;
 	}
-
-	m_window->SetStronglyModal(TRUE);
 
 	m_statsWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_cityStatsBlock);
 	Assert(m_statsWindow);
@@ -226,13 +226,19 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "EditQueueButton", CityWindow::EditQueue, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
 
-    if (aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.OptimizeSpecialistButton"))
-    {
-	    // Added by Martin Gühmann for specialist optimization option:
-	    *err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.Specialists.TabPanel.OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
-        Assert(*err == AUI_ERRCODE_OK);
-    }
-    // else No action: this button is not guaranteed to exist in mods.
+	if (aui_Ldl::GetObject(s_cityWindowBlock, "NationalManagerButton"))
+	{
+		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "NationalManagerButton", CityWindow::OpenNationalManager, NULL);
+		Assert(*err == AUI_ERRCODE_OK);
+	}
+
+	if (aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.OptimizeSpecialistButton"))
+	{
+		// Added by Martin Gühmann for specialist optimization option:
+		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.Specialists.TabPanel.OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
+		Assert(*err == AUI_ERRCODE_OK);
+	}
+	// else No action: this button is not guaranteed to exist in mods.
 
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.List", CityWindow::BuildListSelect, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
@@ -300,7 +306,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 			}
 		}
 	}
-							  
+
 	m_resVal[CW_RES_HAPPY] = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.WorkerBox.HappyValue");
 	m_resVal[CW_RES_FOOD] = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.WorkerBox.FoodValue");
 	m_resVal[CW_RES_PROD] = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.WorkerBox.ProductionValue");
@@ -1365,6 +1371,33 @@ void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, voi
 
 
 	s_cityWindow->Update();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::OpenNationalManager
+//
+// Description: Opens the National Manager, when the National Manager button
+//              is clicked.
+//
+// Parameters : aui_Control *control
+//              uint32 action
+//              uint32 data
+//              void *cookie
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void CityWindow::OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != AUI_BUTTON_ACTION_EXECUTE)
+		return;
+
+	NationalManagementDialog::Open();
 }
 
 //----------------------------------------------------------------------------

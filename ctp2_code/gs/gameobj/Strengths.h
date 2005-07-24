@@ -6,9 +6,11 @@
 #define __STRENGTH_H__
 
 #include "ctp2_enums.h"
-#include "SimpleDynArr.h"
 
-class CivArchive;
+class Strengths;
+
+#include "CivArchive.h"     // CivArchive
+#include "SimpleDynArr.h"
 
 class Strengths {
 private:

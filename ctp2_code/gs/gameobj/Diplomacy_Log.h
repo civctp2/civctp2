@@ -4,6 +4,8 @@
 #ifndef __DIPLOMACY_LOG_H__
 #define __DIPLOMACY_LOG_H__ 1
 
+class Diplomacy_Log;
+
 #include "ctp2_enums.h"
 #include "AgreementTypes.h"
 #include "player.h"

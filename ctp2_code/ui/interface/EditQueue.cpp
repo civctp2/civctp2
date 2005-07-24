@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City build queue handling.
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,6 +30,8 @@
 //   the changes above.
 // - #01 Standardization of city selection and focus handling  
 //   (L. Hirth 6/2004)
+// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
+// - Made Build Manager window non-modal. - July 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -70,6 +73,7 @@
 
 #include "network.h"
 #include "IconRecord.h"
+#include "NationalManagementDialog.h"
 
 static EditQueue *s_editQueue = NULL;
 
@@ -85,8 +89,6 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 		*err = AUI_ERRCODE_INVALIDPARAM;
 		return;
 	}
-
-	m_window->SetStronglyModal(TRUE);
 
 	m_itemsBox = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox");
 	m_queueBox = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup");
@@ -212,6 +214,9 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_gotoCityButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "GotoCityButton");
 	m_gotoCityButton->SetActionFuncAndCookie(GotoCity, NULL);
 
+	m_nationalManagerButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "NationalManagerButton");
+	if(m_nationalManagerButton) m_nationalManagerButton->SetActionFuncAndCookie(OpenNationalManager, NULL);
+
 	m_attachedToWindow = NULL; 
 
 	m_inCallback = false;
@@ -229,7 +234,7 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 
 EditQueue::~EditQueue()
 {
-    ClearChoiceLists();
+	ClearChoiceLists();
 
 	if(m_window) {
 		aui_Ldl::DeleteHierarchyFromRoot(s_editQueueBlock);
@@ -420,17 +425,17 @@ sint32 EditQueue::CompareUnitItems(ctp2_ListItem *item1, ctp2_ListItem *item2, s
 		case 0: 
 			return stricmp(rec1->GetNameText(), rec2->GetNameText());
 		case 1: 
-			return sint32(rec1->GetAttack() - rec2->GetAttack());
+			return static_cast<sint32>(rec1->GetAttack() - rec2->GetAttack());
 		case 2: 
-			return sint32(rec1->GetDefense() - rec2->GetDefense());
+			return static_cast<sint32>(rec1->GetDefense() - rec2->GetDefense());
 		case 3: 
-			return sint32(rec1->GetArmor() - rec2->GetArmor());
+			return static_cast<sint32>(rec1->GetArmor() - rec2->GetArmor());
 		case 4: 
 			return rec1->GetZBRangeAttack() - rec2->GetZBRangeAttack();
 		case 5: 
 			return rec1->GetFirepower() - rec2->GetFirepower();
 		case 6: 
-			return sint32(rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints());
+			return static_cast<sint32>(rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints());
 		case 7: 
 			return rec1->GetShieldCost() - rec2->GetShieldCost();
 	}
@@ -1456,7 +1461,10 @@ void EditQueue::ToggleBuildings(aui_Control *control, uint32 action, uint32 data
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	s_editQueue->SelectChoiceList(s_editQueue->m_buildingList);
-	
+//	if(!s_editQueue->m_cityData) return;
+//	char buff[200];
+//	sprintf(buff, "Baut Kapitalisierung: %i, Baut Infrastruktur: %i\n", s_editQueue->m_cityData->IsBuildingCapitalization(), s_editQueue->m_cityData->IsBuildingInfrastructure());
+//	MessageBoxDialog::Information(buff, "InfoMustName");
 }
 
 void EditQueue::ToggleWonders(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -2329,6 +2337,31 @@ void EditQueue::GotoCity(aui_Control *control, uint32 action, uint32 data, void 
 	if(!s_editQueue->m_cityData) return;
 
 	CityWindow::Display(s_editQueue->m_cityData);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : EditQueue::OpenNationalManager
+//
+// Description: Opens the National Manager when the National Manager button is clicked.
+//
+// Parameters : aui_Control *control
+//              uint32 action
+//              uint32 data
+//              void *cookie
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void EditQueue::OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+
+	NationalManagementDialog::Open();
 }
 
 class ConfirmOverwriteQueueAction:public aui_Action

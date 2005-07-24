@@ -170,10 +170,6 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 
 	Player *p = g_player[player];
 
-    static UnitDynamicArray dead;
-	dead.Clear();
-
-	
 	p->m_pop_science = 0;
 
     p->m_gold->SetSavings();

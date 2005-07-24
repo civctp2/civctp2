@@ -207,9 +207,7 @@ STDEHANDLER(CityBeginTurnEvent)
 	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
-    static UnitDynamicArray dead;
-	dead.Clear();
-
+    UnitDynamicArray dead;
 	city.BeginTurnCity(dead);
 	dead.KillList(CAUSE_REMOVE_ARMY_UNKNOWN, -1);
 	return GEV_HD_Continue;
@@ -256,12 +254,12 @@ STDEHANDLER(CityBuildFrontEvent)
 STDEHANDLER(CityCreateUnitEvent)
 {
 	Unit homeCity;
-	Unit unit;
 	if(!args->GetCity(0, homeCity)) {
 		
 		return GEV_HD_Continue;
 	}
 
+	Unit unit;
 	if(!args->GetUnit(0, unit))
 		return GEV_HD_Continue;
 
@@ -404,14 +402,14 @@ STDEHANDLER(NukeCityEvent)
 		}
 	}
 
-	static UnitDynamicArray killList;
-	killList.Clear();
-
 	if(g_network.IsHost() && nuker == g_selected_item->GetCurPlayer()) {
 		
 		g_network.Block(nuker);
 	}
+
+	UnitDynamicArray killList;
 	c.GetNuked(killList);
+
 	if(g_network.IsHost() && nuker == g_selected_item->GetCurPlayer()) {
 		g_network.Unblock(nuker);
 	}

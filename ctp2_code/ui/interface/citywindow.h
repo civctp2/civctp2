@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : City window
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +26,7 @@
 //
 // - Added OptimizeSpecialists function for specialists optimisation option.
 //   - April 7th 2005 Martin Gühmann
+// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -137,6 +139,7 @@ class CityWindow {
 	static void GovernorPriority(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ToggleQueueInventory(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void BuildListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void InventoryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SelectCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
