@@ -1,3 +1,27 @@
+################################################################################
+#
+#  Project      : Call To Power 2
+#  File type    : LDL layout description 
+#  Description  : Main ldl file
+#  Id           : $Id$
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+#
+# - Added a city manager button. - July 24th 2005 Martin Gühmann
+# 
+################################################################################
+
 # citystatus.ldl
 
 #################
@@ -207,15 +231,23 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 #	}
 
 	# Build queue button.
-	BuildQueueButton:CTP2_POSITION_12_BUTTON {
+	BuildQueueButton:CTP2_POSITION_13_BUTTON {
 		# Label
 		string	text	"str_ldl_ND_BUILD_QUEUE"
 		# Tooltip
 		string	statustext	"STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON"
 	}
 
+	# City manager button.
+	CityManagerButton:CTP2_POSITION_23_BUTTON {
+		# Label
+		string	text	"str_ldl_CITY_MANAGER"
+		# Tooltip
+		string	statustext	"STATUSBAR_SHORTCUTPAD_GOTO_CITYSCR_BUTTON"
+	}
+
 	# Disband button.
-	DisbandButton:CTP2_POSITION_22_BUTTON {
+	DisbandButton:CTP2_POSITION_33_BUTTON {
 		# Label
 		string	text	"str_ldl_ND_DISBAND"
 		# Tooltip
