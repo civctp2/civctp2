@@ -121,8 +121,8 @@ typedef struct sockaddr sockaddr;
 
 /* Holds an IP address and port */
 typedef struct addr_s {
-	u_long addr PACK;	/* in network order */
-	u_short port PACK;	/* in network order */
+	in_addr_t addr PACK;	/* in network order */
+	in_port_t port PACK;	/* in network order */
 } addr_t;
 
 /* Second address of a peer (can assume it's his private, internal adr) */

@@ -68,7 +68,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include "dpcrc32.h"
 
-static unsigned long crc32_table[256];
+static dp_uint32_t crc32_table[256];
 /* Initialized first time "crc32()" is called. If you prefer, you can
  * statically initialize it at compile time. [Another exercise.]
  */
@@ -81,7 +81,7 @@ static unsigned long crc32_table[256];
 static void init_crc32()
 {
 	int i, j;
-	unsigned long c;
+	dp_uint32_t c;
 
 	for (i = 0; i < 256; ++i) {
 		for (c = i << 24, j = 8; j > 0; --j)
@@ -90,7 +90,7 @@ static void init_crc32()
 	}
 }
 
-unsigned long dp_crc32_inc(unsigned char *buf, int len, unsigned long crc)
+dp_uint32_t dp_crc32_inc(unsigned char *buf, size_t len, dp_uint32_t crc)
 {
 	unsigned char *p;
 
@@ -101,7 +101,7 @@ unsigned long dp_crc32_inc(unsigned char *buf, int len, unsigned long crc)
 	return crc;
 }
 
-unsigned long dp_crc32(unsigned char *buf, int len)
+dp_uint32_t dp_crc32(unsigned char *buf, size_t len)
 {
 	/* preload shift register, per CRC-32 spec */
 	/* transmit complement, per CRC-32 spec */
@@ -109,11 +109,11 @@ unsigned long dp_crc32(unsigned char *buf, int len)
 }
 
 #define BUF_SIZE 8192
-unsigned long dp_fil_crc32(FILE *fp)
+dp_uint32_t dp_fil_crc32(FILE *fp)
 {
 	int nread;
 	unsigned char buf[BUF_SIZE];
-	unsigned long  crc;
+	dp_uint32_t  crc;
 
 	if (!crc32_table[1])    /* if not already done, */
 		init_crc32();   /* build table */

@@ -16,7 +16,8 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
+#include "anet_types.h"
 
-unsigned long dp_crc32_inc(unsigned char *buf, int len, unsigned long crc);
-unsigned long dp_crc32(unsigned char *buf, int len);
-unsigned long dp_fil_crc32(FILE *fp);
+dp_uint32_t dp_crc32_inc(unsigned char *buf, size_t len, dp_uint32_t crc);
+dp_uint32_t dp_crc32(unsigned char *buf, size_t len);
+dp_uint32_t dp_fil_crc32(FILE *fp);

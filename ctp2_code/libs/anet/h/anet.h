@@ -37,6 +37,8 @@ extern "C" {
 #endif
 
 /************ Constants, types, and packet definitions *******************/
+#include "anet_types.h"
+
 #ifndef dp_ANET1		/* Make dp_ANET2 be the default */
 #ifndef dp_ANET2
 #define dp_ANET2
@@ -168,9 +170,6 @@ extern "C" {
 
 #define sizeof_dp_envelope_t 6
 
-/*  Basic types */
-typedef char dp_char_t;		/*  For human readable text. */
-
 typedef dp_char_t char_t;	/* for the moment - will go away */
 
 #define dp_ID_NAMESERVER	0
@@ -227,25 +226,25 @@ typedef dp_char_t char_t;	/* for the moment - will go away */
 typedef struct {
 
 	DP_ALIAS(char, dummy, dwSize);	/* used to be hMaster; now in dp_t */
-	unsigned char adrMaster[dp_MAX_ADR_LEN] PACK;	/*  Address needed to establish comm layer connection. */
+	dp_uint8_t adrMaster[dp_MAX_ADR_LEN] PACK;	/*  Address needed to establish comm layer connection. */
 	dpid_t		masterPseudoplayer PACK;
 	/*  Only allow connections to sessions with the same sessionType. */
 	DP_ALIAS3(dp_species_t, sessionType, guidSession, guidApplication);
 	/*  Random number chosen by library when creating a session. */
 	DP_ALIAS(dp_karma_t, karma, dwSession);
-	/* short		maxPlayers;*/
-	DP_ALIAS(short,	maxPlayers, dwMaxPlayers);
-	/* short		currentPlayers; */
-	DP_ALIAS(short,	currentPlayers, dwCurrentPlayers);
-	DP_ALIAS(short,	flags, dwFlags);
+	/* short	maxPlayers;*/
+	DP_ALIAS(dp_int16_t,	maxPlayers, dwMaxPlayers);
+	/* short	currentPlayers; */
+	DP_ALIAS(dp_int16_t,	currentPlayers, dwCurrentPlayers);
+	DP_ALIAS(dp_int16_t,	flags, dwFlags);
 	/* char_t		sessionName[dp_SNAMELEN]; */
 	DP_ALIAS3(dp_char_t, sessionName[dp_SNAMELEN], szSessionName[dp_SNAMELEN], lpszSessionNameA[dp_SNAMELEN]);
-	char		szUserField[dp_USERFIELDLEN] PACK;	/*  Availible for user data. */
-	char		szPassword[dp_PASSWORDLEN] PACK;		/*  Not supported yet. */
-	long		dwReserved1 PACK;
-	long		dwUser1 PACK;						/*  Availible for user data. */
+	dp_char_t	szUserField[dp_USERFIELDLEN] PACK;	/*  Availible for user data. */
+	dp_char_t	szPassword[dp_PASSWORDLEN] PACK;		/*  Not supported yet. */
+	dp_int32_t	dwReserved1 PACK;
+	dp_int32_t	dwUser1 PACK;						/*  Availible for user data. */
 #ifdef dp_ANET2
-	unsigned char	reserved2[dp_MAX_ADR_LEN+2] PACK;
+	dp_uchar_t	reserved2[dp_MAX_ADR_LEN+2] PACK;
 #endif
 } dp_session_t;	/* 83 bytes + 2 byte header */
 
@@ -262,18 +261,18 @@ typedef struct {
 typedef struct {
 	DP_ALIAS(dpid_t, id, dpId) PACK;
 	dp_karma_t	karma PACK;
-	unsigned char	adr[dp_MAX_ADR_LEN] PACK;
-	char			name[dp_PNAMELEN] PACK;
+	dp_uint8_t	adr[dp_MAX_ADR_LEN] PACK;
+	char		name[dp_PNAMELEN] PACK;
 #ifdef dp_ANET2
-	unsigned char bloblen;
-	unsigned char blob[dp_MAX_PLAYERBLOB_LEN];	/* game-specific info */
+	dp_uint8_t bloblen;
+	dp_uint8_t blob[dp_MAX_PLAYERBLOB_LEN];	/* game-specific info */
 #endif
 } dp_playerId_t;
 
 /* Structure to describe version info. */
 typedef struct {
-	unsigned short major PACK;
-	unsigned short minor PACK;
+	dp_uint16_t major PACK;
+	dp_uint16_t minor PACK;
 } dp_version_t;
 
 /* Structure to describe an installed game.
@@ -291,7 +290,7 @@ typedef struct {
 	char *cwd;					/* Directory to be in when launching game */
 	char *shellOpts;			/* Options for netshell */
 	dp_species_t sessionType;	/* Session type of the game */
-	unsigned short platform;	/* OS, accelerator cards, etc. */
+	dp_uint16_t platform;	/* OS, accelerator cards, etc. */
 	unsigned char language;		/* e.g, English, French, Hindi, etc. */
 	dp_version_t current;		/* installed version # */
 	dp_version_t latest;		/* latest published version # */
@@ -365,7 +364,7 @@ typedef struct dp_groupId_s {
 typedef struct {
 	size_t len PACK;			/* let them be huge */
 	dpid_t id PACK;
-	unsigned short key PACK;
+	dp_uint16_t key PACK;
 	void *data PACK;			/* only sent on local machine, ptrs ok */
 } dp_user_playerData_packet_t;
 
@@ -395,9 +394,9 @@ typedef struct {
 	char signature[comm_DRIVER_SIGLEN] PACK;
 	size_t recordLen PACK;				/* sizeof(comm_driverInfo_t) */
 	char name[comm_DRIVER_NAMELEN] PACK;/* Name to present to user */
-	short version PACK;					/* Major, minor rev. in high, low byte */
-	short capabilities PACK;			/* What driver can do/wants to do */
-	short needs PACK;					/* What fields in commInitReq_t to fill in */
+	dp_int16_t version PACK;					/* Major, minor rev. in high, low byte */
+	dp_int16_t capabilities PACK;			/* What driver can do/wants to do */
+	dp_int16_t needs PACK;					/* What fields in commInitReq_t to fill in */
 } comm_driverInfo_t;
 
 /* Special value for commInitReq_t.portnum */
@@ -470,17 +469,17 @@ typedef struct {
  * dpEnumServersEx(), and by the Java interface.
  */
 typedef struct dp_serverInfo_s {
-	short len;						/* length of this structure */
-	short rtt_ms_avg;				/* Average round trip time, millisec */
-	short loss_percent;				/* Average packet loss */
-	short cur_users;				/* people currently connected */
-	short max_users;				/* max # allowed to connect */
+	dp_int16_t len;						/* length of this structure */
+	dp_int16_t rtt_ms_avg;				/* Average round trip time, millisec */
+	dp_int16_t loss_percent;				/* Average packet loss */
+	dp_int16_t cur_users;				/* people currently connected */
+	dp_int16_t max_users;				/* max # allowed to connect */
 
 	char hostname[64];				/* ASCII server name (often hostname) */
 	dp_species_t sessType;			/* session type given in dpEnumServersEx()*/
-	short cur_sessTypeUsers;		/* people currently in sessType sessions */
-	short cur_games;				/* games currently running */
-	short cur_sessTypeGames;		/* games of sessType currently running */
+	dp_int16_t cur_sessTypeUsers;		/* people currently in sessType sessions */
+	dp_int16_t cur_games;				/* games currently running */
+	dp_int16_t cur_sessTypeGames;		/* games of sessType currently running */
 	char reserved[16];				/* for internal use */
 } dp_serverInfo_t;
 
@@ -502,7 +501,7 @@ typedef struct {
  * Can't be completely declared in C; some manual unpacking required.
  */
 typedef struct {
-	short nScoreTypes PACK;
+	dp_int16_t nScoreTypes PACK;
 	short scoreIds[1 /* nScoreTypes */] PACK;	/* variable length */
 	long scores[1 /* nScoreTypes */ ] PACK;		/* variable length */
 } dp_scoreInfo_t;
@@ -576,9 +575,9 @@ typedef struct {
 -------------------------------------------------------------------------*/
 #define dp_ACCOUNT_PACKET_ID dppt_MAKE(dp_PACKET_INITIALBYTE,'-')
 typedef struct {
-	dp_uid_t		uid;		/* dp_UID_NONE unless reason is dp_RES_OK */
+	dp_uid_t	uid;		/* dp_UID_NONE unless reason is dp_RES_OK */
 	dp_result_t 	reason;	
-	unsigned long	reserved;	/* for future use */
+	dp_uint32_t	reserved;	/* for future use */
 } dp_account_packet_t;
 #endif
 
