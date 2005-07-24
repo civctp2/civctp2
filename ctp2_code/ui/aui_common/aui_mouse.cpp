@@ -14,6 +14,9 @@
 #ifdef __AUI_USE_DIRECTX__
 #include "aui_directui.h"
 #include "aui_directsurface.h"
+#elif defined(__AUI_USE_SDL__)
+#include "aui_sdlui.h"
+#include "aui_sdlsurface.h"
 #else
 #include "aui_ui.h"
 #include "aui_surface.h"
@@ -192,6 +195,7 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 					cursor->SetHotspot(
 						block->GetInt( temp ),
 						block->GetInt( temp2 ) );
+					cursor->TheSurface()->SetChromaKey(0);
 				}
 
 				m_cursors[ i ] = cursor;
@@ -437,38 +441,34 @@ AUI_ERRCODE aui_Mouse::CreatePrivateBuffers( void )
 	
 	DestroyPrivateBuffers();
 
-	
-#ifdef __AUI_USE_DIRECTX__
-	m_privateMix = new aui_DirectSurface(
+#if defined(__AUI_USE_SDL) || defined(__AUI_USE_DIRECTX__)	
+	m_privateMix = aui_Factory::new_Surface(
 			&retcode,
 			k_MOUSE_MAXSIZE,
 			k_MOUSE_MAXSIZE,
 			g_ui->Primary()->BitsPerPixel(),
-			((aui_DirectUI *)g_ui)->DD(),
 			NULL,
 			FALSE,
 			FALSE ); 
 	Assert( AUI_NEWOK(m_privateMix,retcode) );
 	if ( !AUI_NEWOK(m_privateMix,retcode) ) return retcode;
 
-	m_pickup = new aui_DirectSurface(
+	m_pickup = aui_Factory::new_Surface(
 			&retcode,
 			k_MOUSE_MAXSIZE,
 			k_MOUSE_MAXSIZE,
 			g_ui->Primary()->BitsPerPixel(),
-			((aui_DirectUI *)g_ui)->DD(),
 			NULL,
 			FALSE,
 			FALSE ); 
 	Assert( AUI_NEWOK(m_pickup,retcode) );
 	if ( !AUI_NEWOK(m_pickup,retcode) ) return retcode;
 
-	m_prevPickup = new aui_DirectSurface(
+	m_prevPickup = aui_Factory::new_Surface(
 			&retcode,
 			k_MOUSE_MAXSIZE,
 			k_MOUSE_MAXSIZE,
 			g_ui->Primary()->BitsPerPixel(),
-			((aui_DirectUI *)g_ui)->DD(),
 			NULL,
 			FALSE,
 			FALSE ); 
@@ -1733,3 +1733,4 @@ sint32 aui_Mouse::ManipulateInputs( aui_MouseEvent *data, BOOL add )
 
 	return numManipulated;
 }
+

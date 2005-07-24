@@ -30,14 +30,12 @@ extern BOOL		g_useDDBlit;
 unsigned which_blit=0;
 
 
-C3Blitter::C3Blitter() 
+C3Blitter::C3Blitter() : aui_NativeBlitter()
 {
    
    
    
    if(CheckMMXTechnology())	
-	   
-	   
 	   _Blt16To16Fast = &Blt16To16Fast;
    else
 	   _Blt16To16Fast = &Blt16To16Fast;
@@ -51,7 +49,12 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	RECT *srcRect,
 	uint32 flags )
 {
+	// Blitting in assembler code is not portable
+#if defined(__AUI_USE_SDL__) || (!defined(WIN32))
+	if (0)
+#else
 	if ((flags & k_AUI_BLITTER_FLAG_FAST)) 
+#endif
 	{
 		
 #ifdef _TRY_ALL_BLITTERS	
@@ -99,10 +102,7 @@ AUI_ERRCODE C3Blitter::ColorStencilBlt16(
 	uint32 color,
 	uint32 flags)
 {
-
-
-
-		return aui_Blitter::ColorStencilBlt16(destSurf, destRect, stencilSurf, stencilRect, color, flags);
+	return aui_Blitter::ColorStencilBlt16(destSurf, destRect, stencilSurf, stencilRect, color, flags);
 }
 
 AUI_ERRCODE C3Blitter::StretchBlt16To16(
@@ -188,7 +188,9 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 				do
 				{
 					destBuf += destPitch;
-#ifdef _MSC_VER
+#ifndef _MSC_VER
+					assert(0);
+#else
 					__asm {
 							mov		ecx, scanWidth
 				  			mov		esi, srcBuf
@@ -368,7 +370,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 
 					destBuf += destPitch;
 					
-#ifdef _MSC_VER
+#ifndef _MSC_VER
+					assert(0);
+#else
 					_asm
 					{
 						mov eax, scanWidth
@@ -538,7 +542,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 					
 					destBuf += destPitch;
 
-#ifdef _MSC_VER	
+#ifndef _MSC_VER
+					assert(0);
+#else
 					_asm
 			  		{
 						mov eax, scanWidth
@@ -690,3 +696,4 @@ End:	add		ecx, eax
 	assert(0);
 #endif // _MSC_VER
 }
+

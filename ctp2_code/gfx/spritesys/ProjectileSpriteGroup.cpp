@@ -296,7 +296,7 @@ sint32 ProjectileSpriteGroup::Parse(uint16 id)
 
 
 
-	sprintf(prefixStr, ".\\%d\\", id);
+	sprintf(prefixStr, ".%s%d%s", FILE_SEP, id, FILE_SEP);
 	sprintf(scriptName, "GP%#.2d.txt", id);
 
 printf("Processing '%s'\n", scriptName);

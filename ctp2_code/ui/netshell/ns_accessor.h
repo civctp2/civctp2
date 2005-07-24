@@ -96,7 +96,7 @@ public:
 		void *b = p->data(i);
 		switch(t) {
 		case INT:
-			return (int)a - (int)b;
+			return (*reinterpret_cast<int *>(a) - *reinterpret_cast<int *>(b));
 		case STRING:
 		case ICON:
 			if(a) {

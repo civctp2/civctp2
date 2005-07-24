@@ -582,7 +582,7 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 
 void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 {
-	FILE *uFile = fopen("logs\\unitlist.txt", "r");
+	FILE *uFile = fopen("logs" FILE_SEP "unitlist.txt", "r");
 	sint32 n = g_theUnitDB->NumRecords();
 	sint32 i;
 	if(!uFile) {
@@ -1650,7 +1650,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 		seed = g_oldRandSeed ? g_oldRandSeed : GetTickCount();
 
-		fin = fopen("logs\\oldseed.txt", "w"); 
+		fin = fopen("logs" FILE_SEP "oldseed.txt", "w"); 
 		fprintf (fin, "%d\n", seed); 
 	}
 

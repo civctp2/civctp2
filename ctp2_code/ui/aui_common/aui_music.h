@@ -24,7 +24,10 @@
 
 
 #include "aui_base.h"
-
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_cdrom.h>
+#endif
 
 
 enum AUI_MUSIC_CODE
@@ -121,9 +124,12 @@ protected:
 	AUI_MUSIC_ERRCODE CDDone();
 
 protected:
-
+#ifndef USE_SDL
 	sint32 m_cd_device_id;
-	MBCHAR m_cd_drive_letter;
+#else
+	SDL_CD*m_cd_device_id;
+#endif
+	int    m_cd_drive_num;
 	sint32 m_cd_drive_index;
 	BOOL m_cd_ok;
 	sint32 m_aux_cdrom_id;

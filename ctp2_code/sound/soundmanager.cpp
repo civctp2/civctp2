@@ -271,31 +271,14 @@ SoundManager::InitRedbook()
             return;
         }
 #endif
-
-        MBCHAR drive_letter = toupper(c3files_GetCTPCDDriveLetter());
-        int numDrives = SDL_CDNumDrives();
-        int drive = -1;
-        int i = 0;
+        int drive = c3files_GetCTPCDDriveNum();
         
-        Assert(numDrives >= 0);
-
-        // Hack: We don't have the num of the SDL drive stored,
-        //       so we search for the drive with the drive letter stored
-        while ((i < numDrives) && (-1 == drive)) {
-            const char *cd_name = SDL_CDName(i);
-            if (cd_name) {
-                if (toupper(cd_name[0]) == drive_letter) {
-                    drive = i;
-                }
-            }
-            i++;
-        }
-
         // No drive match?!
         if (drive < 0) {
             g_theProfileDB->SetUseRedbookAudio(FALSE);
             return;
         }
+	
         m_cdrom = SDL_CDOpen(drive);
         Assert(m_cdrom != 0);
         // No control structur?
@@ -307,8 +290,17 @@ SoundManager::InitRedbook()
     }
 #else // !USE_SDL
 	if (!m_redbook) {
-		MBCHAR drive = c3files_GetCTPCDDriveLetter();
-		m_redbook = AIL_redbook_open_drive(drive);
+		int drive = c3files_GetCTPCDDriveNum();
+		if (drive < 0) {
+			g_theProfileDB->SetUseRedbookAudio(FALSE);
+			return;
+		}
+		const char *name = c3files_GetCDDriveName(drive);
+		if (name == NULL) {
+			g_theProfileDB->SetUseRedbookAudio(FALSE);
+			return;
+		}
+		m_redbook = AIL_redbook_open_drive(name[0]);
 		if (!m_redbook) {
 			g_theProfileDB->SetUseRedbookAudio(FALSE);
 		}

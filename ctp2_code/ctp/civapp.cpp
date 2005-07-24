@@ -661,7 +661,7 @@ sint32 CivApp::InitializeAppUI(void)
 	
 	NETFunc::GameType = GAMEID;
 	
-	NETFunc::DllPath = "dll\\net";
+	NETFunc::DllPath = "dll" FILE_SEP "net";
 
 	
 	extern BOOL g_useIntroMovie;
@@ -3818,7 +3818,7 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 	g_civPaths->GetSavePath(dir, path);
 
 	
-	sprintf(fullpath, "%s\\%s", path, leaderName);
+	sprintf(fullpath, "%s%s%s", path, FILE_SEP, leaderName);
 
 	
 	if (!c3files_PathIsValid(fullpath)) {
@@ -3829,7 +3829,7 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 	}
 
 	
-	strcat(fullpath, "\\");
+	strcat(fullpath, FILE_SEP);
 	strcat(fullpath, filename);
 
 	GameFile	*file = new GameFile();
@@ -3918,7 +3918,7 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 	g_civPaths->GetSavePath(dir, path);
 
 	
-	sprintf(fullpath, "%s\\%s", path, leaderName);
+	sprintf(fullpath, "%s%s%s", path, FILE_SEP, leaderName);
 
 	
 	if (!c3files_PathIsValid(fullpath)) {
@@ -3929,7 +3929,7 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 	}
 
 	
-	strcat(fullpath, "\\");
+	strcat(fullpath, FILE_SEP);
 	strcat(fullpath, filename);
 
 	FILE *f = fopen(fullpath, "r");
@@ -4068,7 +4068,8 @@ int InitializeGreatLibrary()
     while(g_civPaths->FindPath(C3DIR_GL, i++, path)) {
         if (path[0]) {
             g_GreatLibPF->addPath(path);
-            strcat(path, "\\gl.zfs");
+	    strcat(path, FILE_SEP);
+            strcat(path, "gl.zfs");
             g_GreatLibPF->addPath(path);
         }
     }
@@ -4086,7 +4087,8 @@ int InitializeSoundPF()
     while(g_civPaths->FindPath(C3DIR_SOUNDS, i++, path)) {
         if (path[0]) {
             g_SoundPF->addPath(path);
-            strcat(path, "\\sound.zfs");
+	    strcat(path, FILE_SEP);
+            strcat(path, "sound.zfs");
             g_SoundPF->addPath(path);
         }
     }
@@ -4097,7 +4099,7 @@ int InitializeSoundPF()
 
 int InitializeImageMaps()
 {
-    MBCHAR path[_MAX_PATH];
+    MBCHAR path[_MAX_PATH] = { 0 };
     int i=0;
     char *patname;
     char *picname;

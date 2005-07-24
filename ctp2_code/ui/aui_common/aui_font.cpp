@@ -21,6 +21,7 @@ aui_Font::aui_Font(
 	:
 	aui_Base()
 {
+	assert(0);
 	*retval = InitCommon( descriptor );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

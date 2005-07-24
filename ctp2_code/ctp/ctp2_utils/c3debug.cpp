@@ -42,7 +42,7 @@ char g_last_debug_text[4096];
 extern DebugWindow *g_debugWindow;
 #endif
 
-#define k_FILENAME				"logs\\civ3log%.2d.txt"
+#define k_FILENAME				"logs" FILE_SEP "civ3log%.2d.txt"
 #define k_MAX_LOG_FILE_LINES	10000		
 
 MBCHAR	s_logFileName[20];
@@ -80,14 +80,14 @@ int c3debug_InitDebugLog()
 	WIN32_FIND_DATA	fileData;
 	HANDLE lpFileList;
 	MBCHAR path[_MAX_PATH];
-	strcpy(path, "logs\\*.*");
+	strcpy(path, "logs" FILE_SEP "*.*");
 	
 	lpFileList = FindFirstFile(path, &fileData);
 	
 	if (lpFileList != INVALID_HANDLE_VALUE) {
 		
 		do {
-			sprintf(fileName, "logs\\%s", fileData.cFileName);
+			sprintf(fileName, "logs%s%s", FILE_SEP, fileData.cFileName);
 			DeleteFile(fileName);
 		} while(FindNextFile(lpFileList,&fileData));
 
@@ -104,7 +104,7 @@ int c3debug_InitDebugLog()
 	while ((dent = readdir(dir)))
 	{
 		int unlinkRetVal;
-		sprintf(fileName, "logs\\%s", dent->d_name);
+		sprintf(fileName, "logs%s%s", FILE_SEP, dent->d_name);
 		unlinkRetVal = unlink(fileName);
 		Assert(unlinkRetVal == 0);
 	}
@@ -146,7 +146,7 @@ c3debug_dprintfPrefix(int mask,
 			fprintf(f, "[Continued from Part %#.2d]\n\n", s_logFileNumber-1);
 		}
 
-		filename = strrchr(file, '\\');
+		filename = strrchr(file, FILE_SEPC);
 		if(!filename)
 			filename = file;
 		else

@@ -341,7 +341,7 @@ class CivArchive : public IC3CivArchive
     char archive_filename_here[100]= {0}; \
     char archive_filename_tmp[100]= {0}; \
     sint32 archive_filename_len=0; \
-	char *partialname = strrchr(__FILE__, '\\') + 1; \
+	char *partialname = strrchr(__FILE__, FILE_SEPC) + 1; \
 	if(!partialname) \
 		partialname = __FILE__; \
     sprintf(archive_filename_here, "%s%d", partialname, __LINE__);\

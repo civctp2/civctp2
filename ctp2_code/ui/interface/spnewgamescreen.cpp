@@ -476,9 +476,9 @@ void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, u
 {
 	MBCHAR	tempPath[_MAX_PATH];
 
-	sprintf(tempPath, "%s\\%s", 
-						g_civPaths->GetCurScenarioPath(), 
-						k_SCENARIO_DEFAULT_SAVED_GAME_NAME);
+	sprintf(tempPath, "%s%s%s",
+	        g_civPaths->GetCurScenarioPath(), FILE_SEP,
+	        k_SCENARIO_DEFAULT_SAVED_GAME_NAME);
 
 	if (c3files_PathIsValid(tempPath)) {
 		if(!c3files_HasLegalCD())

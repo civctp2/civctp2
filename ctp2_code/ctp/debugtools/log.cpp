@@ -877,7 +877,8 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 	
 	
 	while ((adjusted_module != adjusted_module_scan) && 
-	       (* (adjusted_module_scan - 1) != '\\'))
+	        ((* (adjusted_module_scan - 1) != '\\')
+		 || (* (adjusted_module_scan - 1) != FILE_SEPC)))
 	{
 		
 		if (*adjusted_module_scan == '.')

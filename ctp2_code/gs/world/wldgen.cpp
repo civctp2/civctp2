@@ -417,7 +417,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	FreeMapPlugin();
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-	MapDump ("logs\\HeightMap.bmp", map, m_size.x, m_size.y);
+	MapDump ("logs" FILE_SEP "HeightMap.bmp", map, m_size.x, m_size.y);
 #endif
 
 	IMapGenerator *filterPass = LoadMapPlugin(1);
@@ -431,7 +431,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		FreeMapPlugin();
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-		MapDump ("logs\\FilterMap.bmp", map, m_size.x, m_size.y);
+		MapDump ("logs" FILE_SEP "FilterMap.bmp", map, m_size.x, m_size.y);
 #endif
 	}
 	GetHistogram(map, histogram);
@@ -470,7 +470,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	}
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-	TerrainDump ("logs\\TerrainMap.bmp", map, m_size.x, m_size.y, waterLevel, mountainLevel, hillLevel);
+	TerrainDump ("logs" FILE_SEP "TerrainMap.bmp", map, m_size.x, m_size.y, waterLevel, mountainLevel, hillLevel);
 #endif
 
 	for(y = 0; y < m_size.y; y++) {
@@ -522,7 +522,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 					   &homogeneity, 1);
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-	MapDump ("logs\\WetMap.bmp", wetmap, m_size.x, m_size.y);
+	MapDump ("logs" FILE_SEP "WetMap.bmp", wetmap, m_size.x, m_size.y);
 #endif
 
 	sint32 totalLandCells = 0;
@@ -643,7 +643,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	TemperatureFilter(temperatureMap, temperatureHist);
 			
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-	MapDump ("logs\\TempMap.bmp", temperatureMap, m_size.x, m_size.y);
+	MapDump ("logs" FILE_SEP "TempMap.bmp", temperatureMap, m_size.x, m_size.y);
 #endif
 
 	sint32 whitePercent = g_theProfileDB->PercentWhite();
@@ -2792,20 +2792,63 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 	lt_dlhandle plugin;
 #endif
 	const char *name = g_theProfileDB->MapPluginName(pass);
+	if (!name)
+		return NULL;
+	if (stricmp(name,"") == 0)
+		return NULL;
 	if(stricmp(name, "none") == 0)
 		return NULL;
+	
+	char szTemp[MAX_PATH] = { 0 };
+#ifdef _DEBUG
+	getcwd(szTemp, MAX_PATH);
+	fprintf(stderr, "name: %s\n", name);
+	fprintf(stderr, "CWD: %s\n", szTemp);
+#endif
+	const char *n = name;
+	char *p = szTemp;
+	char clast = '\0';
+	while (*n) {
+		if ((*n == '\\') || (*n == FILE_SEPC)) {
+			if (clast != FILE_SEPC) {
+				clast = FILE_SEPC;
+				*p = FILE_SEPC;
+				p++;
+			}
+		} else {
+			clast = *n;
+			*p = clast;
+			p++;
+		}
+		n++;
+	}
+	*p = '\0';
+
 #ifndef USE_COM_REPLACEMENT
 	plugin = LoadLibrary(name);
 #else
+
+	p = strrchr(szTemp, FILE_SEPC);
+	while (p && *++p) {
+		*p = tolower(*p);
+	}
+	p = strrchr(szTemp, '.');
+	if (p) {
+		*p = '\0';
+		strcat(szTemp, ".la");
+	}
 	int rc = lt_dlinit();
 	if (0 != rc) {
+		c3errors_ErrorDialog("Map Generator", "Could not initialize plugin loader, using builtin map generator");
 		return NULL;
 	}
-	plugin = lt_dlopen(name);
+	plugin = lt_dlopen(szTemp);
 #endif
 	if(plugin == NULL) {
-		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
-#ifdef USE_COM_REPLACEMENT
+#ifndef USE_COM_REPLACEMENT
+		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", szTemp);
+#else
+		c3errors_ErrorDialog("Map Generator", "Error: %s, using builtin map generator", lt_dlerror());
 		lt_dlexit();
 #endif
 		return NULL;
@@ -2822,7 +2865,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 		lt_dlclose(plugin);
 		lt_dlexit();
 #endif
-		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", name);
+		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", szTemp);
 		return NULL;
 	}
 #ifndef USE_COM_REPLACEMENT

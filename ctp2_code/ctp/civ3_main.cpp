@@ -63,6 +63,7 @@
 #include "aui_directmouse.h"
 #include "aui_sdlmouse.h"
 #include "aui_directsurface.h"
+#include "aui_Factory.h"
 #include "primitives.h"
 #include "aui_directmoviemanager.h"
 #include "c3window.h"
@@ -441,7 +442,8 @@ int ui_Initialize(void)
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_FONTS), 
 								appstrings_GetString(APPSTR_NOWINDOWSDIR));
 	}
-	strcat(s, "\\fonts");
+	strcat(s, FILE_SEP);
+	strcat(s, "fonts");
 	g_c3ui->AddBitmapFontSearchPath(s);
 #elif defined(HAVE_X11)
 	Display *display = g_c3ui->getDisplay();
@@ -454,7 +456,8 @@ int ui_Initialize(void)
 			int rc = stat(fontpaths[i], &st);
 			if ((rc == 0) && (S_ISDIR(st.st_mode))) {
 				g_c3ui->AddBitmapFontSearchPath(fontpaths[i]);
-				noPath = false;
+				// Make some default paths get added, too
+				//noPath = false;
 			}
 		}
 		XFreeFontPath(fontpaths);
@@ -467,11 +470,12 @@ int ui_Initialize(void)
 			"/usr/X11R6/lib/X11/fonts",
 			"/usr/lib/X11/fonts"
 		};
-		const int maxDirs = 3;
+		const int maxDirs = 4;
 		const char* fontDirs[maxDirs] = {
 			"TTF",
 			"corefonts",
-			"truetype"
+			"truetype",
+			"truetype/msttcorefonts"
 		};
 		for (int pIdx = 0; pIdx < maxPaths; pIdx++) {
 			for (int dIdx = 0; dIdx < maxPaths; dIdx++) {
@@ -1014,13 +1018,12 @@ sint32 sharedsurface_Initialize( void )
 	Assert( g_sharedSurface == NULL );
 	if ( !g_sharedSurface )
 	{
-#ifdef __AUI_USE_DIRECTX__
-		g_sharedSurface = new aui_DirectSurface(
-			&errcode,
+#if defined(__AUI_USE_DIRECTX__) || defined(__AUI_USE_SDL__)
+		g_sharedSurface = aui_Factory::new_Surface(
+			errcode,
 			k_SHARED_SURFACE_WIDTH,
 			k_SHARED_SURFACE_HEIGHT,
-			k_SHARED_SURFACE_BPP,
-			((aui_DirectUI *)g_ui)->DD() );
+			k_SHARED_SURFACE_BPP);
 #else
 		g_sharedSurface = new aui_Surface(
 			&errcode,
@@ -1708,7 +1711,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
     if (g_logCrashes) 
 #endif // _BFR_
 	{
-		FILE *crashLog = fopen("logs\\crash.txt", "w");
+		FILE *crashLog = fopen("logs" FILE_SEP "crash.txt", "w");
 		if(!crashLog)
 			crashLog = fopen("crash.txt", "w");
 
@@ -1730,7 +1733,7 @@ BOOL main_CheckDirectX(void)
 	BOOL found = FALSE;
 
 	
-	HANDLE dll = LoadLibrary( "dll\\util\\dxver" );
+	HANDLE dll = LoadLibrary( "dll" FILE_SEP "util" FILE_SEP "dxver" );
 	if ( dll ) {
 		
 		typedef BOOL (WINAPI *FuncType)( DWORD *pVersion );
@@ -2456,7 +2459,13 @@ void DisplayFrame (aui_Surface *surf)
 
 BOOL ExitGame(void)
 {
-#ifdef WIN32
+#if defined(__AUI_USE_SDL__)
+	static SDL_Event quit = { 0 };
+	quit.type = SDL_QUIT;
+	quit.quit.type = SDL_QUIT;
+	int e = SDL_PushEvent(&quit);
+	return (e != 0);
+#elif defined(WIN32)
 	return PostMessage(gHwnd, WM_CLOSE, 0, 0);
 #else
 	return TRUE;

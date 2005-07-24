@@ -101,6 +101,8 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 
 		m_registered = RegisterClassEx( &wcex );
 		Assert( m_registered );
+#else
+		m_registered = TRUE;
 #endif // __AUI_USE_DIRECTX
 	}
 #ifdef __AUI_USE_DIRECTX

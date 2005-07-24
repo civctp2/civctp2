@@ -193,7 +193,7 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		shadowNames[i] = (char *)malloc(k_MAX_NAME_LENGTH);
 	}
 
-	sprintf(prefixStr, ".\\%d\\", id);
+	sprintf(prefixStr, ".%s%d%s", FILE_SEP, id, FILE_SEP);
 	sprintf(scriptName, "GX%.2d.txt", id);
 
 printf("Processing '%s'\n", scriptName);

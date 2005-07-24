@@ -130,8 +130,8 @@ public:
 				} while(t);
 			}
 			fclose(file);
-			if(size())
-				SelectItem((sint32)0);
+			if(this->size())
+				this->SelectItem((sint32)0);
 		}
 	}
 
@@ -164,9 +164,9 @@ public:
 			
 			sint32 first = -1;
 			sint32 j = 0;
-			typename ns_FileDataListBox<NFT,NST>::iterator i = begin();
-			for(; i!=end(); i++, j++) {
-				if ( FindItem( *i ) == GetSelectedItem() )
+			typename ns_FileDataListBox<NFT,NST>::iterator i = this->begin();
+			for(; i!=this->end(); i++, j++) {
+				if ( FindItem( *i ) == this->GetSelectedItem() )
 				{
 					(*i)->SetKey(&(this->curkey));
 					(*i)->Save(file);
@@ -176,7 +176,7 @@ public:
 					break;
 				}
 			}
-			for(i=begin(), j=0; i!=end(); i++, j++) {
+			for(i=this->begin(), j=0; i!=this->end(); i++, j++) {
 				if ( j != first )
 				{
 					(*i)->SetKey(&(this->curkey));

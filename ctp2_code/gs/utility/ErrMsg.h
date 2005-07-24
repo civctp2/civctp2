@@ -68,7 +68,7 @@ extern char *szAppName;
 #endif
 
 #ifdef LPRNT
-#define LSTART lprint_fout=fopen("civlog.txt","a");fprintf(lprint_fout," %3d-%d:%12s %4d: ",turn_count, my_team, strrchr(__FILE__,'\\')+1,__LINE__);
+#define LSTART lprint_fout=fopen("civlog.txt","a");fprintf(lprint_fout," %3d-%d:%12s %4d: ",turn_count, my_team, strrchr(__FILE__,FILE_SEPC)+1,__LINE__);
 #define LEND fprintf(lprint_fout,"\n");fclose(lprint_fout);
 #endif
 

@@ -16,6 +16,9 @@
 using std::max;
 #endif
 #include "Geometric.h"
+#ifndef GEOMETRIC
+#define GEOMETRIC 1
+#endif
 #include "FaultGen.h"
 #include <stdlib.h>
 #include "IC3Rand.h"

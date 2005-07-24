@@ -172,7 +172,7 @@ void ThroneControl::InitCommon(void)
 	MBCHAR s[_MAX_PATH];
 
 	if (!g_civPaths->GetSpecificPath(C3DIR_PICTURES, s, FALSE)) return;
-	strcat( s, "\\" );
+	strcat( s, FILE_SEP );
 	strcat( s, s_throneImage[0] );
 
 	
@@ -185,7 +185,7 @@ void ThroneControl::InitCommon(void)
 	
 	for ( sint32 i = 0;i < k_THRONE_IMAGES;i++ ) {
 		if (!g_civPaths->GetSpecificPath(C3DIR_PICTURES, s, FALSE)) return;
-		strcat( s, "\\" );
+		strcat( s, FILE_SEP );
 		strcat( s, s_throneImage[i+1] );
 
 		m_upgradeImage[i] = new c3_Image( &errcode, s );
@@ -312,7 +312,7 @@ aui_Surface *ThroneControl::InitializeNewBG( MBCHAR *filename )
 		delete tempBG;
 		return NULL;
 	}
-	strcat( s, "\\" );
+	strcat( s, FILE_SEP );
 	strcat( s, filename );
 
 	

@@ -160,10 +160,10 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( const MBCHAR *descriptor )
 		sint32 last;
 		if ( (last = GetWindowsDirectory( fontdir, MAX_PATH ) - 1) > 1 )
 		{
-			if ( fontdir[ last ] == '\\' )
+			if ( fontdir[ last ] == FILE_SEPC )
 				fontdir[ last ] = '\0';
 
-			strcat( fontdir, "\\fonts" );
+			strcat( fontdir, FILE_SEP "fonts" );
 
 			g_ui->GetBitmapFontResource()->AddSearchPath( fontdir );
 		}
@@ -263,7 +263,10 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	if ( i == n ) return AUI_ERRCODE_HACK;
 
 	
-	SetPointSize( m_pointSize );
+	// make sure that SetPointSize() does not return immediately
+	int s = m_pointSize;
+	m_pointSize = 0;
+	SetPointSize( s );
 
 	return AUI_ERRCODE_OK;
 }
@@ -309,6 +312,9 @@ AUI_ERRCODE aui_BitmapFont::SetTTFFile( const MBCHAR *ttffile )
 
 AUI_ERRCODE aui_BitmapFont::SetPointSize( sint32 pointSize )
 {
+	// no need to do anything if the point size matches already
+	if (pointSize > 0 && m_pointSize == pointSize)
+		return AUI_ERRCODE_OK;
 	
 	
 	Assert( !HasCached() );
@@ -742,7 +748,7 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( const MBCHAR *pc )
 			//	rect of gi->surface is "unrocked".
 			errcode = gi->surface->Unlock( bitmap.bitmap );
 			Assert( AUI_SUCCESS(errcode) );
-			   if ( !AUI_SUCCESS(errcode) ) goto Error;
+			if ( !AUI_SUCCESS(errcode) ) goto Error;
 		}
 
 		TT_Done_Glyph( ttGlyph );

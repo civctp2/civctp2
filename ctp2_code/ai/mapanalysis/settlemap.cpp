@@ -36,8 +36,12 @@ extern World *g_theWorld;
 
 SettleMap SettleMap::s_settleMap;
 
-
-MapGrid<double>::MapGridArray MapGrid<double>::s_scratch;
+#ifdef __GNUC__
+// Force instantiation of static template data
+static template class MapGrid<double>;
+template<>
+#endif
+std::valarray<double> MapGrid<double>::s_scratch;
 
 
 SettleMap::SettleMap()

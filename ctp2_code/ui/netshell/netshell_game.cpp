@@ -56,8 +56,8 @@ void LaunchGame( void )
 
 	switch ( w->GetMode() )
 	{
-	case w->CONTINUE_CREATE:
-	case w->CONTINUE_JOIN:
+	case AllinoneWindow::CONTINUE_CREATE:
+	case AllinoneWindow::CONTINUE_JOIN:
 
 		{
 			g_network.SetLaunchFromNetFunc(TRUE);
@@ -71,7 +71,7 @@ void LaunchGame( void )
 
 		break;
 
-	case w->CREATE:
+	case AllinoneWindow::CREATE:
 		
 		g_network.SetLaunchFromNetFunc(FALSE);
 
@@ -82,8 +82,8 @@ void LaunchGame( void )
 				if(g_civScenarios->FindScenario(g_scenarioName,
 												&pack, &scen)) {
 					MBCHAR path[_MAX_PATH];
-					sprintf(path, "%s\\%s",
-							scen->m_path,
+					sprintf(path, "%s%s%s",
+							scen->m_path, FILE_SEP,
 							k_SCENARIO_DEFAULT_SAVED_GAME_NAME);
 					g_civApp->PostLoadSaveGameAction(path);
 					break;
@@ -93,7 +93,7 @@ void LaunchGame( void )
 		g_civApp->PostStartGameAction();
 		break;
 
-	case w->JOIN:
+	case AllinoneWindow::JOIN:
 		g_network.SetLaunchFromNetFunc(FALSE);
 		g_civApp->PostStartGameAction();
 		break;

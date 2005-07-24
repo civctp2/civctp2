@@ -36,6 +36,12 @@
 #include <shlobj.h>
 #endif
 
+#ifdef LINUX
+#include <stdio.h>
+#include <mntent.h>
+#include <paths.h>
+#endif
+
 CivPaths *g_civPaths = 0; 
 
 #include "prjfile.h"
@@ -216,8 +222,61 @@ void CivPaths::CreateSaveFolders(const MBCHAR *path)
 void CivPaths::InitCDPath(void)
 {
 	MBCHAR tempPath[_MAX_PATH] = { 0 };
-	sprintf(tempPath, "%c:\\%s", c3files_GetCTPCDDriveLetter(), m_cdPath);
+
+	int ctpcd = c3files_GetCTPCDDriveNum();
+	if (ctpcd < 0)
+		return;
+
+	const MBCHAR *cdDriveName = c3files_GetCDDriveName(ctpcd);
+	if (cdDriveName == NULL)
+		return;
+
+#if defined(WIN32)
+	sprintf(tempPath, "%s%s%s", cdDriveName, FILE_SEP, m_cdPath);
 	strcpy(m_cdPath, tempPath);
+#elif defined(LINUX)
+	const unsigned mntInfoCnt = 2;
+	const MBCHAR *mntInfo[] = {  _PATH_MOUNTED, _PATH_MNTTAB };
+	BOOL cdrLink = FALSE;
+	MBCHAR devlink[_MAX_PATH] = { 0 };
+	struct stat st = { 0 };
+	if (lstat(cdDriveName, &st) != 0) {
+		return;
+	}
+	if (S_ISLNK(st.st_mode)) {
+		int len = readlink(cdDriveName, devlink, _MAX_PATH);
+		if ((len > 0) && (len < _MAX_PATH)) {
+			cdrLink = TRUE;
+			devlink[len] = '\0';
+		}
+	}
+
+	for (unsigned u = 0; u < mntInfoCnt; u++) {
+		FILE *mounts = setmntent(_PATH_MOUNTED, "r");
+		if (mounts) {
+			struct mntent *mntent;
+			while ((mntent = getmntent(mounts)) != NULL) {
+				if ((mntent->mnt_fsname == NULL) || 
+				    (mntent->mnt_dir == NULL) ||
+				    (mntent->mnt_type == NULL))
+					continue;
+			
+				if (mntent->mnt_type == MNTTYPE_IGNORE)
+					continue;
+			
+				if ((!strcasecmp(cdDriveName, mntent->mnt_fsname))
+				    || (cdrLink && (!strcasecmp(devlink, mntent->mnt_fsname)))
+				   ) {
+					sprintf(tempPath, "%s%s%s", mntent->mnt_dir, FILE_SEP, m_cdPath);
+					strcpy(m_cdPath, tempPath);
+					endmntent(mounts);
+					return;
+				}
+			}
+			endmntent(mounts);
+		}
+	}
+#endif
 }
 
 
@@ -817,4 +876,3 @@ void CivPaths::ResetExtraDataPaths(void)
 	}
 	m_extraDataPaths.clear();
 }
-

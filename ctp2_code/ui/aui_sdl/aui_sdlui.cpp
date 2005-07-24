@@ -146,7 +146,7 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 		m_width,
 		m_height,
 		m_bpp,
-		m_lpdd,
+		m_lpdds,
 		TRUE );
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	assert( AUI_NEWOK(m_primary,errcode) );
@@ -240,7 +240,7 @@ AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 
 AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 {
-
+	assert(0);
 
 	if(m_keyboard) m_keyboard->Unacquire();
 	if ( m_joystick ) m_joystick->Unacquire();
@@ -285,7 +285,7 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 
 AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 {
-
+	assert(0);
 
 	if ( !m_primary ) CreateNativeScreen( m_exclusiveMode );
 

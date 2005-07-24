@@ -1889,7 +1889,7 @@ void EditQueue::SaveCallback(aui_Control *control, uint32 action, uint32 data, v
 	}
 
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
-	strcat(saveFileName, "\\");
+	strcat(saveFileName, FILE_SEP);
 	strcat(saveFileName, saveName);
 
 	FILE *test = c3files_fopen(C3DIR_DIRECT, saveFileName, "r");
@@ -1996,7 +1996,7 @@ void EditQueue::LoadQueryCallback(bool response, void *data)
 
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, "\\");
+	strcat(loadFileName, FILE_SEP);
 	strcat(loadFileName, loadName);
 
 	if(s_editQueue->m_cityData) {
@@ -2017,7 +2017,7 @@ void  EditQueue::LoadCustom(const MBCHAR *loadName)
 {
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, "\\");
+	strcat(loadFileName, FILE_SEP);
 	strcat(loadFileName, loadName);
 
 	s_editQueue->m_customBuildList.DeleteAll();
@@ -2126,7 +2126,7 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 {
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, "\\");
+	strcat(loadFileName, FILE_SEP);
 	strcat(loadFileName, queueName);
 
 	FILE	*fpQueue ;
@@ -2236,7 +2236,7 @@ void EditQueue::DeleteQueryCallback(bool response, void *data)
 
 	char delFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, delFileName);
-	strcat(delFileName, "\\");
+	strcat(delFileName, FILE_SEP);
 	strcat(delFileName, queueName);
 	
 	remove(delFileName);
@@ -2375,7 +2375,7 @@ void EditQueue::SaveNameResponse(bool response, const char *text, void *userData
 			
 		static MBCHAR saveFileName[_MAX_PATH];
 		g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
-		strcat(saveFileName, "\\");
+		strcat(saveFileName, FILE_SEP);
 		strcat(saveFileName, text);
 
 		FILE *test = c3files_fopen(C3DIR_DIRECT, saveFileName, "r");

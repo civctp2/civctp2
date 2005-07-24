@@ -4,11 +4,8 @@
 #ifndef __C3BLITTER_H__
 #define __C3BLITTER_H__
 
-#ifdef __AUI_USE_DIRECTX__
 #include "aui_directblitter.h"
-#elif defined(__AUI_USE_SDL__)
 #include "aui_sdlblitter.h"
-#endif // __AUI_USE_SDL__
 
 
 class aui_Surface;
@@ -24,11 +21,7 @@ typedef  AUI_ERRCODE (C3Blitter::*_C3BLIT_PROTO)(	aui_Surface *destSurf,
 													RECT *srcRect,
 													uint32 flags );
 
-#ifdef __AUI_USE_DIRECTX__
-class C3Blitter : public aui_DirectBlitter
-#elif defined(__AUI_USE_SDL__)
-class C3Blitter : public aui_SDLBlitter
-#endif
+class C3Blitter : public aui_NativeBlitter
 {
 public:
 	C3Blitter();

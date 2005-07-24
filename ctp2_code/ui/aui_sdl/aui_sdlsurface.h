@@ -33,7 +33,7 @@ protected:
 public:
 	virtual BOOL IsThisA( uint32 classId )
 	{
-		return classId == m_SDLSurfaceClassId
+		return (classId == m_SDLSurfaceClassId)
 		                  || aui_Surface::IsThisA( classId )
 		                  || aui_SDL::IsThisA( classId );
         }

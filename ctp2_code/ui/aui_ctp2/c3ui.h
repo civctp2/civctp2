@@ -58,12 +58,12 @@ public:
 	
 	aui_Resource<Pattern>	*GetPatternResource( void ) const { return m_patternResource; }
 
-	Pattern	*LoadPattern( MBCHAR *name )
+	Pattern	*LoadPattern( const MBCHAR *name )
 		{ return m_patternResource->Load( name ); }
 
 	AUI_ERRCODE	UnloadPattern( Pattern *resource )
 		{ return m_patternResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadPattern( MBCHAR *name )
+	AUI_ERRCODE	UnloadPattern( const MBCHAR *name )
 		{ return m_patternResource->Unload( name ); }
 
 	AUI_ERRCODE	AddPatternSearchPath( MBCHAR *path )
@@ -74,12 +74,12 @@ public:
 	
 	aui_Resource<Icon>	*GetIconResource( void ) const { return m_iconResource; }
 
-	Icon	*LoadIcon( MBCHAR *name )
+	Icon	*LoadIcon( const MBCHAR *name )
 		{ return m_iconResource->Load( name ); }
 
 	AUI_ERRCODE	UnloadIcon( Icon *resource )
 		{ return m_iconResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadIcon( MBCHAR *name )
+	AUI_ERRCODE	UnloadIcon( const MBCHAR *name )
 		{ return m_iconResource->Unload( name ); }
 
 	AUI_ERRCODE	AddIconSearchPath( MBCHAR *path )
@@ -90,12 +90,12 @@ public:
 	
 	aui_Resource<Picture>	*GetPictureResource( void ) const { return m_pictureResource; }
 
-	Picture	*LoadPicture( MBCHAR *name )
+	Picture	*LoadPicture( const MBCHAR *name )
 		{ return m_pictureResource->Load( name ); }
 
 	AUI_ERRCODE	UnloadPicture( Picture *resource )
 		{ return m_pictureResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadPicture( MBCHAR *name )
+	AUI_ERRCODE	UnloadPicture( const MBCHAR *name )
 		{ return m_pictureResource->Unload( name ); }
 
 	AUI_ERRCODE	AddPictureSearchPath( MBCHAR *path )

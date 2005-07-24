@@ -819,7 +819,10 @@ gs/slic/ysl.tab.c \
 gs/slic/ysl.tab.h: $(ctp2_code)/gs/slic/slic.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -p yysl -bgs/slic/ysl $<
 
-ui/ldl:
+ui:
+	$(INSTALL) -d $@
+
+ui/ldl: ui
 	$(INSTALL) -d $@
 
 ui/ldl/lex.ldl.c: $(ctp2_code)/ui/ldl/ldl.l ui/ldl

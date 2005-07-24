@@ -1525,7 +1525,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 	bork = tileutils_CreateBorkBork();
 
-	sprintf(filename, "source" FILE_SEP "basetiles" FILE_SEP "GT%cB%.4d.tif", ageChar, tileNum);
+	sprintf(filename, "source" FILE_SEP "basetiles" FILE_SEP "GT%cB%4d.tif", ageChar, tileNum);
 
 	if (baseType == TERRAIN_WATER_BEACH) {
 		

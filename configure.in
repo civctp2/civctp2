@@ -117,6 +117,8 @@ if test 0 -eq 1; then
 	AC_DEFINE(CTP2_ENABLE_SLICDEBUG,1,[Enable slic debugging code])
 fi
 
+AC_DEFINE(_BFR_,1,[Build final release])
+AC_SUBST(_BFR_)
 AC_SUBST(CTP2_ENABLE_SLICDEBUG)
 
 AC_OUTPUT([

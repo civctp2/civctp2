@@ -41,13 +41,9 @@
 #define RELAX_SHARED_SIDE (1.0)
 #define RELAX_DIAGONAL (0.41)   
 
-template<class _Ty>
+template<typename _Ty>
 class MapGrid {
-public:	
-	
-	typedef std::valarray< _Ty > MapGridArray;
-	
-	
+public:
 	MapGrid() 
 	{ 
 		m_xSize = 0;
@@ -112,7 +108,6 @@ public:
 	
 	void Clear()
 	{
-		
 		m_values = 0;
 		
 		
@@ -177,8 +172,8 @@ public:
 		
 		if (cycles <= 0) return;
 
-		MapGridArray *map_from_ptr = &m_values;
-		MapGridArray *map_to_ptr = &s_scratch;
+		std::valarray<_Ty> *map_from_ptr = &m_values;
+		std::valarray<_Ty> *map_to_ptr = &s_scratch;
 		
 		s_scratch.resize(m_xGridSize*m_yGridSize);
 
@@ -269,7 +264,7 @@ public:
 			} 
 			
 			
-			MapGridArray *map_tmp_ptr;
+			std::valarray<_Ty> *map_tmp_ptr;
 			map_tmp_ptr = map_from_ptr;
 			map_from_ptr = map_to_ptr;
 			map_to_ptr = map_tmp_ptr;
@@ -299,9 +294,9 @@ public:
 		if (cycles <= 0)
 			return;
 		
-		MapGridArray *map_tmp_ptr;
-		MapGridArray *map_from_ptr = &m_values;
-		MapGridArray *map_to_ptr = &s_scratch;
+		std::valarray<_Ty> *map_tmp_ptr;
+		std::valarray<_Ty> *map_from_ptr = &m_values;
+		std::valarray<_Ty> *map_to_ptr = &s_scratch;
 		
 		
 		*map_to_ptr = *map_from_ptr;
@@ -476,7 +471,7 @@ private:
 	_Ty GetRelaxValue( const sint32 & src_elem, 
 		const sint8 & delta_x, 
 		const sint8 & delta_y, 
-		const MapGridArray & map_from ) const
+		const std::valarray<_Ty> & map_from ) const
 	{
 		
 		
@@ -527,10 +522,10 @@ private:
 	sint32 m_resolution;
 	
 	
-	static MapGridArray s_scratch;
+	static std::valarray<_Ty> s_scratch;
 	
 	
-	MapGridArray m_values;
+	std::valarray<_Ty> m_values;
 	
 	
 	_Ty m_maxGridValue;

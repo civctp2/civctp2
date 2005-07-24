@@ -659,7 +659,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 	
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s\\%s", directoryPath, saveInfo->fileName);
+	sprintf(path, "%s%s%s", directoryPath, FILE_SEP, saveInfo->fileName);
 
 	
 	
@@ -805,7 +805,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		}
 		
 		MBCHAR overridePath[_MAX_PATH];
-		sprintf(overridePath, "%s\\%s", g_civPaths->GetCurScenarioPath(), "turnlength.txt");
+		sprintf(overridePath, "%s%s%s", g_civPaths->GetCurScenarioPath(), FILE_SEP, "turnlength.txt");
 
 		g_useCustomYear = false;
 
@@ -1035,7 +1035,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 			MessageBoxDialog::Information("str_ldl_InvalidCharsFixed", "InfoInvalidCharsFixed");
 		}
 
-		sprintf(fullPath, "%s\\%s", path, saveInfo->gameName);
+		sprintf(fullPath, "%s%s%s", path, FILE_SEP, saveInfo->gameName);
 
 		// Verify that this directory exists, and if it doesn't, create it
 		if (!c3files_PathIsValid(fullPath)) {
@@ -1064,11 +1064,11 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 		}
 
 		// Full path, including the save file's filename
-		sprintf(saveInfo->pathName, "%s\\%s", fullPath, saveInfo->fileName);
+		sprintf(saveInfo->pathName, "%s%s%s", fullPath, FILE_SEP, saveInfo->fileName);
 	} else {
 		sprintf(fullPath, "%s", path);
 		strcpy(saveInfo->fileName, useName);
-		sprintf(saveInfo->pathName, "%s\\%s", fullPath, useName);
+		sprintf(saveInfo->pathName, "%s%s%s", fullPath, FILE_SEP, useName);
 	}
 
 	// Build a power graph from the UI
@@ -1120,7 +1120,7 @@ void loadsavescreen_LoadMPGame(void)
 
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s\\%s", gameInfo->path, saveInfo->fileName);
+	sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 	g_civApp->PostLoadSaveGameAction(path);
 }
 
@@ -1166,7 +1166,7 @@ void loadsavescreen_SaveMPGame(void)
 
 	if (!g_civPaths->GetSavePath(C3SAVEDIR_MP, path)) return;
 	
-	sprintf(fullPath, "%s\\%s", path, saveInfo->gameName);
+	sprintf(fullPath, "%s%s%s", path, FILE_SEP, saveInfo->gameName);
 	
 	// Verify that this directory exists, and if it doesn't, create it
 	if (!c3files_PathIsValid(fullPath)) {
@@ -1180,7 +1180,7 @@ void loadsavescreen_SaveMPGame(void)
 	}
 
 	// Full path, including the save file's filename
-	sprintf(saveInfo->pathName, "%s\\%s", fullPath, saveInfo->fileName);
+	sprintf(saveInfo->pathName, "%s%s%s", fullPath, FILE_SEP, saveInfo->fileName);
 
 	// Build a power graph from the UI
 	g_loadsaveWindow->GetPowerGraph(saveInfo);
@@ -1214,7 +1214,7 @@ void loadsavescreen_LoadSCENGame(void)
 
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s\\%s", gameInfo->path, saveInfo->fileName);
+	sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 //	g_civApp->PostLoadSaveGameAction(path);
 
 	g_civPaths->SetCurScenarioPath(gameInfo->path);
@@ -1280,7 +1280,7 @@ void loadsavescreen_SaveSCENGame(void)
 
 	if (!g_civPaths->GetSavePath(C3SAVEDIR_SCEN, path)) return;
 	
-	sprintf(fullPath, "%s\\%s", path, saveInfo->gameName);
+	sprintf(fullPath, "%s%s%s", path, FILE_SEP, saveInfo->gameName);
 	
 	// Verify that this directory exists, and if it doesn't, create it
 	if (!c3files_PathIsValid(fullPath)) {
@@ -1294,7 +1294,7 @@ void loadsavescreen_SaveSCENGame(void)
 	}
 
 	// Full path, including the save file's filename
-	sprintf(saveInfo->pathName, "%s\\%s", fullPath, saveInfo->fileName);
+	sprintf(saveInfo->pathName, "%s%s%s", fullPath, FILE_SEP, saveInfo->fileName);
 
 	// Build a power graph from the UI
 	g_loadsaveWindow->GetPowerGraph(saveInfo);
@@ -1424,13 +1424,13 @@ void loadsavescreen_delete( void )
 		MBCHAR		path[_MAX_PATH];
 		int fileHandle;
 
-		sprintf(path, "%s\\*.*", gameInfo->path);
+		sprintf(path, "%s%s*.*", FILE_SEP, gameInfo->path);
 
 		_finddata_t findData;
 		fileHandle=_findfirst(path,&findData);
 		while(fileHandle)
 		{
-			sprintf(path, "%s\\%s", gameInfo->path, findData.name);
+			sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, findData.name);
 			DeleteFile(path);
 			if(_findnext(fileHandle,&findData))
 			{

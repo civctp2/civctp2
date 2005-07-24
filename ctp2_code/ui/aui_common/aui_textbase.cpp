@@ -403,12 +403,14 @@ void aui_TextBase::TextReloadFont( void )
 		m_textbold,
 		m_textitalic );
 
-	fprintf(stderr, "%s\n", descriptor);
-#ifdef WIN32
+#if 1
 	m_textfont = g_ui->LoadBitmapFont( descriptor );
 #else
 	m_textfont = g_ui->LoadBitmapFont( m_textttffile );
 #endif
+	if (!m_textfont) {
+		fprintf(stderr, "Failed loading %s\n", m_textttffile);
+	}
 	Assert( m_textfont != NULL );
 	assert( m_textfont != NULL );
 	if (m_textfont)

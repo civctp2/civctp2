@@ -113,7 +113,7 @@ void FileDialog::Fill()
 	HANDLE				lpFileList;
 	WIN32_FIND_DATA		fileData;
 
-	sprintf(path, "%s\\*.*", m_dirPath);
+	sprintf(path, "%s%s*.*", FILE_SEP, m_dirPath);
 
 	lpFileList = FindFirstFile(path, &fileData);
 
@@ -178,7 +178,7 @@ void FileDialog::LoadCallback(aui_Control *control, uint32 action, uint32 data, 
 	FileDialog *di = (FileDialog *)cookie;
 	if(di->m_callback) {
 		MBCHAR full[_MAX_PATH];
-		sprintf(full, "%s\\%s", di->m_dirPath, di->GetSelectedFile());
+		sprintf(full, "%s%s%s", di->m_dirPath, FILE_SEP, di->GetSelectedFile());
 		di->m_callback(di, k_FILE_DIALOG_LOAD, full, di->m_cookie);
 	}
 	di->Close();
@@ -190,7 +190,7 @@ void FileDialog::SaveCallback(aui_Control *control, uint32 action, uint32 data, 
 	FileDialog *di = (FileDialog *)cookie;
 	if(di->m_callback) {
 		MBCHAR full[_MAX_PATH];
-		sprintf(full, "%s\\%s", di->m_dirPath, di->GetSelectedFile());
+		sprintf(full, "%s%s%s", di->m_dirPath, FILE_SEP, di->GetSelectedFile());
 		di->m_callback(di, k_FILE_DIALOG_SAVE, full, di->m_cookie);
 	}
 	di->Close();

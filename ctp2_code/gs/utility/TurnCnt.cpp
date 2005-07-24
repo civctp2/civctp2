@@ -1418,7 +1418,7 @@ void TurnCount::SendNextPlayerMessage()
 		MBCHAR fullPath[_MAX_PATH], *c, *startc, *fc;
 		strcpy(fullPath, g_civPaths->GetDesktopPath());
 		// JJB changed this from CTP to CTP2 to avoid confusion between the two games
-		strcat(fullPath, "\\CTP2 Email To ");
+		strcat(fullPath, FILE_SEP "CTP2 Email To ");
 		
 		startc = g_player[g_selected_item->GetCurPlayer()]->m_email;
 		c = startc;

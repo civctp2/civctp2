@@ -6908,9 +6908,9 @@ void Player::AddMessage(Message &msg)
 			FILE *mfile;
 			static int openedFile = 0;
 			if(openedFile) {
-				mfile = fopen("logs\\messages.txt", "a");
+				mfile = fopen("logs" FILE_SEP "messages.txt", "a");
 			} else {
-				mfile = fopen("logs\\messages.txt", "w");
+				mfile = fopen("logs" FILE_SEP "messages.txt", "w");
 				openedFile = 1;
 			}
 			if(mfile) {

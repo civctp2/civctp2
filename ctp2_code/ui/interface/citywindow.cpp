@@ -2059,7 +2059,7 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 		   (!(stricmp(strrchr(statText, '.'), ".txt")))) {
 			
 			MBCHAR *fileText;
-			uint32 size;
+			size_t size;
 			fileText = (MBCHAR *)g_GreatLibPF->getData((char *)statText, &size, C3DIR_GL);
 			
 			if(fileText != NULL) {

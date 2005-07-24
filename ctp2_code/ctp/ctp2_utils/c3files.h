@@ -106,7 +106,22 @@ sint32		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_F
 
 BOOL		c3files_HasLegalCD(void);
 void		c3files_InitializeCD(void);
-MBCHAR		c3files_GetCTPCDDriveLetter(void);
+/** Returns the number of the CD drive, which contains the CTP2 CD.
+ * 
+ * If no CD drive exists or no drive contains the CTP2 CD, -1 is returned.
+ * 
+ * @returns CDDriveNum
+ */
+int		c3files_GetCTPCDDriveNum(void);
+/**
+ * Returns the system-dependent identifier for the CD drive number cdIndex.
+ *
+ * If cdIndex is negative or greater than the number of cd drives available,
+ * NULL is returned.
+ *
+ * @returns CDDriveName
+ */
+const MBCHAR *	c3files_GetCDDriveName(int cdIndex);
 BOOL		c3files_HasCD(void);
 void		c3files_GetCDDrives(void);
 MBCHAR		*c3files_GetVolumeName(int cdIndex);

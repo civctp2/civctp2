@@ -428,3 +428,4 @@ void aui_Image::SetChromakey(sint32 r, sint32 g, sint32 b)
 
 	surf->SetChromaKey((uint8) r, (uint8) g,(uint8) b);
 }
+

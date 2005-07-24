@@ -63,8 +63,12 @@ aui_Music::SetVolume( uint8 volume )
 
 
 aui_Redbook::aui_Redbook() :
+#ifndef USE_SDL
 m_cd_device_id(-1),
-m_cd_drive_letter(0),
+#else
+m_cd_device_id(0),
+#endif
+m_cd_drive_num(0),
 m_cd_drive_index(0),
 m_cd_ok(FALSE),
 m_aux_cdrom_id(-1)
@@ -75,8 +79,12 @@ m_aux_cdrom_id(-1)
 
 aui_Redbook::~aui_Redbook()
 {
+#ifndef USE_SDL
 	m_cd_device_id = -1;
-	m_cd_drive_letter = 0;
+#else
+	m_cd_device_id = 0;
+#endif
+	m_cd_drive_num = 0;
 	m_cd_drive_index = 0;
 	m_aux_cdrom_id = -1;
 	m_cd_ok = 0;
@@ -153,6 +161,7 @@ aui_Redbook::Init()
 
 	
 	m_ntracks = mciStatusParms.dwReturn;
+#endif
 	m_first_track = 1;
 	m_last_track = m_ntracks;
 
@@ -160,7 +169,7 @@ aui_Redbook::Init()
 	m_aux_cdrom_id = CDInitVolume();
 
 	m_cd_ok = TRUE;
-#endif
+	
 	return AUI_MUSIC_ERRCODE_OK;
 }
 

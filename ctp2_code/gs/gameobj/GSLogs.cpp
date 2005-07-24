@@ -58,14 +58,14 @@ void gslog_print(char *fmt, ...)
 	FILE *f;
 	if(!s_initialized) {
 		
-		f = fopen("logs\\gslog.txt", "w");
+		f = fopen("logs" FILE_SEP "gslog.txt", "w");
 		s_initialized = 1;
 		sint32 i;
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			s_populationHack[i] = 0;
 		}
 	} else {
-		f = fopen("logs\\gslog.txt", "a");
+		f = fopen("logs" FILE_SEP "gslog.txt", "a");
 	}
 	
 	char buf[k_MAX_NAME_LEN];
@@ -92,10 +92,10 @@ void gslog_dipprint(char *fmt, ...)
 	FILE *f;
 	if(!s_dip_initialized) {
 		
-		f = fopen("logs\\diplog.txt", "w");
+		f = fopen("logs" FILE_SEP "diplog.txt", "w");
 		s_dip_initialized = 1;
 	} else {
-		f = fopen("logs\\diplog.txt", "a");
+		f = fopen("logs" FILE_SEP "diplog.txt", "a");
 	}
 	
 	char buf[k_MAX_NAME_LEN];

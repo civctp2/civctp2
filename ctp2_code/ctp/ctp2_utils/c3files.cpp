@@ -236,12 +236,12 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size)
 	if (c3files_fseek(f, 0, SEEK_END) == 0) {
 		filesize = c3files_ftell(f);
 	} else {
-		fclose(f);
+		c3files_fclose(f);
 		return NULL;
 	}
 
 	if (c3files_fseek(f, 0, SEEK_SET) != 0) {
-		fclose(f);
+		c3files_fclose(f);
 		return NULL;
 	}
 
@@ -254,11 +254,8 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size)
 	}
 
 	if (c3files_fread( bits, 1, filesize, f ) != filesize) {
-#if defined(_MSC_VER)
-      delete[filesize] bits;
-#else
-      delete[] bits;
-#endif
+		delete[] bits;
+		
 		c3files_fclose(f);
 
 		return NULL;
@@ -431,11 +428,17 @@ sint32 c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FI
 
 #define k_CTP_CD_VOLUME_NAME		"CTP2"
 
-MBCHAR	VolumeName[32];
-MBCHAR	WhichCD;
-MBCHAR	IsCD[26] = { 0 };
+MBCHAR	VolumeName[33] = { 0 };
+int 	WhichCD = -1;
+int	CDDrivesCnt = 0;
+const int kMAX_NUM_CDDRIVES = 26;
 sint32	CDIndex = 0;
 BOOL	g_hasCD = FALSE;
+
+#if defined(WIN32) && !defined(USE_SDL)
+typedef MBCHAR win32_drive_name[3];
+win32_drive_name CDDrivesNames[kMAX_NUM_CDDRIVES] = { 0 };
+#endif
 
 #include "soundmanager.h"
 extern SoundManager		*g_soundManager;
@@ -514,7 +517,7 @@ void c3files_InitializeCD(void)
 	BOOL success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
 }
 
-MBCHAR c3files_GetCTPCDDriveLetter(void)
+int c3files_GetCTPCDDriveNum(void)
 {
 	return WhichCD;
 }
@@ -528,59 +531,83 @@ BOOL c3files_HasCD(void)
 void c3files_GetCDDrives(void)
 {
 #if defined(USE_SDL)
-	int numDrives = SDL_CDNumDrives();
-	if (-1 == numDrives) {
+	CDDrivesCnt = SDL_CDNumDrives();
+	if (-1 == CDDrivesCnt) {
+		CDDrivesCnt = 0;
 		// Forgot init...
 		Assert(0);
 		return;
 	}
-	for (int i = 0; i < min(26, numDrives); i++) {
-		IsCD[i] = 1;
-	}
 #else
-    uint32		all_drives;
-    MBCHAR		i;
-    MBCHAR		drivepath[16];
+	uint32		all_drives;
+	MBCHAR		i;
+	MBCHAR		drivepath[16];
     
-	WhichCD = '\0';
+	WhichCD = -1;
+	memset(CDDrivesNames, 0, sizeof(CDDrivesNames));
+	CDDrivesCnt = 0;
 
-    strcpy(drivepath, " :\\");
-    all_drives = GetLogicalDrives();
+	strcpy(drivepath, " :\\");
+	all_drives = GetLogicalDrives();
 
-	for (i = 0; i < 26; i++)
+	for (i = 0; i < kMAX_NUM_CDDRIVES; i++)
 	{
 		if (all_drives & (1 << i))
 		{
 			drivepath[0] = i + 'A';
-			if (GetDriveType(drivepath) == DRIVE_CDROM)
-				IsCD[i] = 1;
+			if (GetDriveType(drivepath) == DRIVE_CDROM) {
+				CDDrivesNames[CDDrivesCnt][0] = drivepath[0];
+				CDDrivesNames[CDDrivesCnt][1] = ':';
+				CDDrivesCnt++;
+			}
 		}
 	}
+#endif
+}
+
+const MBCHAR *c3files_GetCDDriveName(int cdIndex)
+{
+	if (cdIndex < 0)
+		return NULL;
+
+	if (cdIndex > CDDrivesCnt)
+		return NULL;
+
+#if defined(USE_SDL)
+	return SDL_CDName(cdIndex);
+#else
+	return CDDrivesNames[cdIndex];
 #endif
 }
 
 MBCHAR *c3files_GetVolumeName(int cdIndex)
 {
 #if defined(WIN32)
-    MBCHAR drivepath[32];
-    MBCHAR FSName[32];
-    uint32 SerialNumber;
-    uint32 MaxComponentLen;
-    uint32 FSFlags;
-		MBCHAR name = (MBCHAR) cdIndex+'A';
+	if (cdIndex < 0)
+		return NULL;
+
+	if (cdIndex >= k_MAX_NUM_CDDRIVES)
+		return NULL;
+
+	MBCHAR drivepath[32];
+	MBCHAR FSName[32];
+	uint32 SerialNumber;
+	uint32 MaxComponentLen;
+	uint32 FSFlags;
+	MBCHAR name = (MBCHAR) cdIndex+'A';
     
-    strcpy(drivepath, " :\\");
-    drivepath[0] = name;
-    if (GetVolumeInformation(drivepath, VolumeName, 32, &SerialNumber,
-                             &MaxComponentLen, &FSFlags, FSName, 32)) {
-	    return(VolumeName);
-    }
+	strcpy(drivepath, " :\\");
+	drivepath[0] = name;
+	if (GetVolumeInformation(drivepath, VolumeName, 32, &SerialNumber,
+	                         &MaxComponentLen, &FSFlags, FSName, 32)) {
+		return(VolumeName);
+	}
 	return(NULL);
 #elif defined(LINUX)
 	/// \todo Add code to determine beginsector of iso_primary_sector
 	/// On german ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
 	const char *cd_dev = SDL_CDName(cdIndex);
-	FILE *cd = fopen("/dev/cdrom", "rb");
+	FILE *cd = fopen(cd_dev, "rb");
 	if (cd == NULL) {
 		fprintf(stderr, "%s\n", strerror(errno));
 		return NULL;
@@ -592,77 +619,78 @@ MBCHAR *c3files_GetVolumeName(int cdIndex)
 		return NULL;
 	}
 	struct iso_primary_descriptor ipd = { 0 };
-	size_t r = fread(&ipd, 1, sizeof(ipd), cd);
-	if (r != sizeof(ipd)) {
+	size_t s = fread(&ipd, 1, sizeof(ipd), cd);
+	if (s != sizeof(ipd)) {
 		fprintf(stderr, "Failed reading %d bytes: %s\n", sizeof(ipd),
 		        strerror(errno));
 		fclose(cd);
 		return NULL;
 	}
-	bool validName = true;
 	unsigned int i = 0;
-	while (1) {
-		if (i > min(sizeof(ipd.volume_id), sizeof(VolumeName))) {
-			validName = false;
-			break;
-		}
+	s = std::min(sizeof(ipd.volume_id), sizeof(VolumeName));
+	assert(i < s);
+	while (i < s) {
 		if ('\0' == ipd.volume_id[i]) {
 			VolumeName[i] = '\0';
-			break;
+			return VolumeName;
 		}
-		if (!isalnum(ipd.volume_id[i])) {
-			validName = false;
-			break;
+		if ((!isalnum(ipd.volume_id[i])) && (!isspace(ipd.volume_id[i]))) {
+			return NULL;
 		}
 		VolumeName[i] = ipd.volume_id[i];
 		i++;
 	}
-	if (validName) {
-		return VolumeName;
+	i--;
+	// Win32 Compat: GetVolumeInformation does not return ending spaces
+	while ((i > 0) && isspace(VolumeName[i])) {
+		i--;
 	}
-	return NULL;
+	if (isspace(VolumeName[i+1]))
+		VolumeName[i+1] = '\0';
+
+	return VolumeName;
 #endif
 }
 
-BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveLetter)
+BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveNum)
 {
 	sint32	i;
 	BOOL	found = FALSE;
-	MBCHAR	*cdName;
+	const MBCHAR *cdName;
 
 	CDIndex = 0;
 
-	if (findDriveLetter)
-		WhichCD = '\0';
+	if (findDriveNum)
+		WhichCD = -1;
 
 	if (!g_theProfileDB->IsRequireCD()) {
-		for (i=0; i<26; i++) {
-			if (IsCD[i]) {
-				if (findDriveLetter)
-					WhichCD = i + 'A';
-				g_hasCD = TRUE;
+		for (i=0; i < CDDrivesCnt; i++) {
+			if (findDriveNum) {
+				cdName = c3files_GetVolumeName(i);
+				if (cdName && !strnicmp(cdName, name, strlen(name)))
+					WhichCD = i;
 			}
+			g_hasCD = TRUE;
 		}
 		return TRUE;
 	} else {
-		for (i = 0; (i < 26) && !found; i++)
-			if (IsCD[i])
+		for (i = 0; (i < CDDrivesCnt) && !found; i++)
+		{
+			cdName = c3files_GetVolumeName(i);
+			if (cdName && !strnicmp(cdName, name, strlen(name)))
 			{
-				CDIndex++;
-				cdName = c3files_GetVolumeName(i);
-				if (cdName && !strnicmp(cdName, name, strlen(name)))
-				{
-					if (findDriveLetter)
-						WhichCD = i + 'A';
-
-					found = TRUE;
-					g_hasCD = TRUE;
-				}
+				if (findDriveNum)
+					WhichCD = i;
+				
+				found = TRUE;
+				g_hasCD = TRUE;
 			}
+		}
 
-		if (!found && findDriveLetter)
-			found = (WhichCD != '\0');
+		if (!found && findDriveNum)
+			found = (WhichCD >= 0);
 
 		return (found);
 	}
 }
+

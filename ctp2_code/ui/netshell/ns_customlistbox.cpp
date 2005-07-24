@@ -597,8 +597,8 @@ void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 	
 	switch ( g_allinoneWindow->GetMode() )
 	{
-	case g_allinoneWindow->CONTINUE_CREATE:
-	case g_allinoneWindow->CONTINUE_JOIN:
+	case AllinoneWindow::CONTINUE_CREATE:
+	case AllinoneWindow::CONTINUE_JOIN:
 		if(!g_allinoneWindow->GetScenarioInfo() ||
 			!g_allinoneWindow->GetScenarioInfo()->isScenario) {
 			item->GetTribeButton()->Enable( FALSE );
@@ -892,8 +892,8 @@ void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
 	
 	switch ( g_allinoneWindow->GetMode() )
 	{
-	case g_allinoneWindow->CONTINUE_CREATE:
-	case g_allinoneWindow->CONTINUE_JOIN:
+	case AllinoneWindow::CONTINUE_CREATE:
+	case AllinoneWindow::CONTINUE_JOIN:
 		item->GetTribeButton()->Enable( FALSE );
 		break;
 	}

@@ -140,7 +140,6 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 #else
 	if ( !m_surfaceRefCount++ )
 	{
-
 		InitializeCriticalSection(&m_cs);
 #endif
 	}

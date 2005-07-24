@@ -508,7 +508,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		shadowNames[i] = (char *)malloc(k_MAX_NAME_LENGTH<<1);
 	}
 
-	sprintf(prefixStr, ".\\%d\\", id);
+	sprintf(prefixStr, ".%s%d%s", FILE_SEP, id, FILE_SEP);
 
 	if (type == GROUPTYPE_UNIT)
 	{

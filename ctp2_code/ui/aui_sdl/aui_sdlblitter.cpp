@@ -53,16 +53,13 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
 			    srcRect->right-srcRect->left, srcRect->bottom-srcRect->top
 		    };
 		    SDL_Rect sdst = { destRect->left, destRect->top, 0, 0 };
-		    if (SDL_BlitSurface(((aui_SDLSurface *)srcSurf)->DDS(), &ssrc,
-					sdlDest->DDS(), &sdst)
-			< 0)
+		    if (SDL_BlitSurface(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst)< 0)
 		    {
 			fprintf(stderr, "Chromakey Blt failed: %s\n", SDL_GetError());
 			retcode = AUI_ERRCODE_BLTFAILED;
 		    }
 
 /*			do {
-
 				Assert(((aui_SDLSurface *)srcSurf)->DDS()->IsLost() == DD_OK);
 				Assert(((aui_SDLSurface *)destSurf)->DDS()->IsLost() == DD_OK);
 
@@ -72,24 +69,8 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
 						DDBLT_KEYSRC,
 						NULL);
 
-
-
-
-
-
-
-
-
-
-
 				if ( err != DDERR_SURFACEBUSY && err != DDERR_WASSTILLDRAWING )
 					break;
-
-
-
-
-
-
 			} while ( 1 );*/
 		}
 		else
@@ -107,15 +88,6 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
 		    }
 
 /*			do {
-
-
-
-
-
-
-
-
-
 				Assert(((aui_SDLSurface *)srcSurf)->DDS()->IsLost() == DD_OK);
 				Assert(((aui_SDLSurface *)destSurf)->DDS()->IsLost() == DD_OK);
 
@@ -128,20 +100,11 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
 				if ( err != DDERR_SURFACEBUSY && err != DDERR_WASSTILLDRAWING )
 					break;
 
-
-
-
-
-
 			} while ( 1 );*/
 		}
 	    // unlock in the opposite order
 	    SDL_UnlockMutex(sdlSrc->m_bltMutex);
 	    SDL_UnlockMutex(sdlDest->m_bltMutex);
-
-		
-		
-		
 		
 		if(err != AUI_ERRCODE_OK) {
 			DPRINTF(k_DBG_UI, ("%s:%d: err = %d\n", __FILE__, __LINE__, err));
@@ -485,4 +448,3 @@ AUI_ERRCODE aui_SDLBlitter::StretchBlt16To16(
 }
 
 #endif // __AUI_USE_SDL__
-

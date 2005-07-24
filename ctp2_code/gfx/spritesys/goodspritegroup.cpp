@@ -286,7 +286,7 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 
 	char			prefixStr[80];
 
-	sprintf(prefixStr, ".\\%d\\", id);
+	sprintf(prefixStr, ".%s%d%s", FILE_SEP, id, FILE_SEP);
 	sprintf(scriptName, "GG%.2d.txt", id);
 
 

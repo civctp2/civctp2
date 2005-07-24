@@ -54,8 +54,12 @@
 #include <vector>
 using namespace std;
 
-
-MapGrid < sint32 >::MapGridArray MapGrid < sint32 >::s_scratch;
+#ifdef __GNUC__
+// Force instantiation of static template data
+static template class MapGrid<sint32>;
+template<>
+#endif
+std::valarray<sint32> MapGrid<sint32>::s_scratch;
 
 
 MapAnalysis MapAnalysis::s_mapAnalysis;

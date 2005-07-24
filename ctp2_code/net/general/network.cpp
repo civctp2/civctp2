@@ -314,7 +314,7 @@ Network::Network() :
 #ifdef WIN32
 	char exepath[_MAX_PATH];
 	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
-		char *lastbackslash = strrchr(exepath, '\\');
+		char *lastbackslash = strrchr(exepath, FILE_SEPC);
 		if(lastbackslash) {
 			*lastbackslash = 0;
 			SetCurrentDirectory(exepath);
