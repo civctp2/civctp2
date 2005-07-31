@@ -47,14 +47,14 @@ class ldl_datablock {
 	PointerList<ldl_datablock> m_children;
 	ldl_attributelist m_attributes;
 	ldl_datablock *m_parent;
-	char *m_name;
+	const char *m_name;
 	sint32 m_hash;
 
   public:
 	ldl_datablock(PointerList<char> *templateNames);
 	ldl_datablock(ldl_datablock *tempChild);
 	ldl_datablock(sint32 hash);
-	ldl_datablock(ldl *theLdl, char *name);
+	ldl_datablock(ldl *theLdl, const char *name);
 
 	~ldl_datablock();
 	const char *GetName() { return m_name; }

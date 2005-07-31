@@ -27,20 +27,20 @@ const char *ldlif_current_file();
 
 int ldlif_find_file(const char *filename, char *buf);
 
-char *ldlif_getnameptr(const char *name);
-char *ldlif_getstringptr(const char *text);
+const char *ldlif_getnameptr(const char *name);
+const char *ldlif_getstringptr(const char *text);
 
 int ldlif_parse(const char *filename);
 
-void ldlif_add_name(void **newnames, char *name, void *oldnames);
+void ldlif_add_name(void **newnames, const char *name, void *oldnames);
 void ldlif_start_block(void *names);
 void *ldlif_end_block(void *names);
 void *ldlif_add_empty_block(void *names);
 
-void ldlif_add_bool_attribute(char *name, int val);
-void ldlif_add_int_attribute(char *name, int val);
-void ldlif_add_float_attribute(char *name, double val);
-void ldlif_add_string_attribute(char *name, char *val);
+void ldlif_add_bool_attribute(const char *name, int val);
+void ldlif_add_int_attribute(const char *name, int val);
+void ldlif_add_float_attribute(const char *name, double val);
+void ldlif_add_string_attribute(const char *name, char *val);
 
 void ldlif_indent_log(int indent);
 void ldlif_init_log();

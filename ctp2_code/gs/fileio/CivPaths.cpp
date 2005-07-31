@@ -36,10 +36,10 @@
 #include <shlobj.h>
 #endif
 
-#ifdef LINUX
 #include <stdio.h>
-#include <mntent.h>
-#include <paths.h>
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
 #endif
 
 CivPaths *g_civPaths = 0; 
@@ -47,13 +47,25 @@ CivPaths *g_civPaths = 0;
 #include "prjfile.h"
 extern ProjectFile *g_ImageMapPF;
 
-
+#define FILE_CIVPATHS_TXT "civpaths.txt"
 
 void CivPaths_InitCivPaths() 
 {
+	AUI_ERRCODE err;
 	if (g_civPaths)
 		delete g_civPaths;
-	g_civPaths = new CivPaths; 
+	g_civPaths = new CivPaths(err);
+
+	if (AUI_ERRCODE_OK != err) {
+		CivPaths_CleanupCivPaths();
+
+		if (AUI_ERRCODE_LOADFAILED == err) {
+			c3errors_FatalDialog("CivPaths", "Unable to open '%s'.",
+			                     FILE_CIVPATHS_TXT);
+		} else {
+			c3errors_FatalDialog("CivPaths", "Unable to setup CTP2 paths.");
+		}
+	}
 } 
 
 
@@ -65,28 +77,49 @@ void CivPaths_CleanupCivPaths()
 	g_civPaths = 0;
 } 
 
-CivPaths::CivPaths ()
+CivPaths::CivPaths (AUI_ERRCODE &errcode)
 :	m_hdPath                (new MBCHAR[_MAX_PATH]),
 	m_cdPath                (new MBCHAR[_MAX_PATH]),
-    m_defaultPath           (new MBCHAR[_MAX_PATH]),		
+	m_defaultPath           (new MBCHAR[_MAX_PATH]),		
 	m_localizedPath         (new MBCHAR[_MAX_PATH]),	
 	m_dataPath              (new MBCHAR[_MAX_PATH]),
-    m_extraDataPaths        (),
+	m_extraDataPaths        (),
 	m_scenariosPath         (new MBCHAR[_MAX_PATH]),	
-    m_savePath              (new MBCHAR[_MAX_PATH]),			
+	m_savePath              (new MBCHAR[_MAX_PATH]),			
 	m_saveGamePath          (new MBCHAR[_MAX_PATH]),		
 	m_saveQueuePath         (new MBCHAR[_MAX_PATH]),	
 	m_saveMPPath            (new MBCHAR[_MAX_PATH]),		
 	m_saveSCENPath          (new MBCHAR[_MAX_PATH]),		
 	m_saveMapPath           (new MBCHAR[_MAX_PATH]),		
 	m_saveClipsPath         (new MBCHAR[_MAX_PATH]),    
-    m_curScenarioPath       (NULL),	
+	m_curScenarioPath       (NULL),	
 	m_curScenarioPackPath   (NULL)
 { 
-    std::fill(m_desktopPath, m_desktopPath + _MAX_PATH, 0);	
+	std::fill(m_desktopPath, m_desktopPath + _MAX_PATH, 0);	
 
-    FILE *  fin = fopen("civpaths.txt", "r");
-    Assert(fin); 
+	FILE *  fin = fopen(FILE_CIVPATHS_TXT, "r");
+	if (!fin) {
+		const char *ctphome = c3files_GetCTPHomeDir();
+		if (ctphome) {
+			char tempname[MAX_PATH] = { 0 };
+			snprintf(tempname, MAX_PATH, "%s" FILE_SEP "%s",
+			         ctphome, FILE_CIVPATHS_TXT);
+			fin = fopen(tempname, "r");
+		}
+	}
+#ifdef LINUX
+	if (!fin) {
+		fin = fopen(PACKAGE_DATADIR FILE_SEP FILE_CIVPATHS_TXT, "r");
+	}
+	if (!fin) {
+		fin = fopen(PACKAGE_SYSCONFDIR FILE_SEP FILE_CIVPATHS_TXT, "r");
+	}
+#endif
+	Assert(fin);
+	if (!fin) {
+		errcode = AUI_ERRCODE_LOADFAILED;
+		return;
+	}
 
 	fscanf(fin, "%s", m_hdPath);
 	fscanf(fin, "%s", m_cdPath);
@@ -134,6 +167,8 @@ CivPaths::CivPaths ()
 	Assert(s != NULL);
 
 	CreateSaveFolders(fullPath);
+
+	errcode = AUI_ERRCODE_OK;
 }
 
 
@@ -166,57 +201,22 @@ CivPaths::~CivPaths()
 
 void CivPaths::CreateSaveFolders(const MBCHAR *path) 
 {
-#ifdef WIN32
-	SECURITY_ATTRIBUTES		sa;
-
-	sa.nLength = sizeof(sa);
-	sa.lpSecurityDescriptor = NULL;
-	sa.bInheritHandle = TRUE;
-	
-	CreateDirectory((LPCTSTR)path, &sa);
-#else
-	mode_t mode = 0777;
-	mkdir(path, mode);
-#endif
-	
 	MBCHAR subFolderPath[_MAX_PATH] = { 0 };
+	
+	c3files_CreateDirectory(path);
 
 	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveGamePath);
-#ifdef WIN32
-	CreateDirectory((LPCTSTR)subFolderPath, &sa);
-#else
-	mkdir(subFolderPath, mode);
-#endif
+	c3files_CreateDirectory(path);
 	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveQueuePath);
-#ifdef WIN32
-	CreateDirectory((LPCTSTR)subFolderPath, &sa);
-#else
-	mkdir(subFolderPath, mode);
-#endif
+	c3files_CreateDirectory(path);
 	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveMPPath);
-#ifdef WIN32
-	CreateDirectory((LPCTSTR)subFolderPath, &sa);
-#else
-	mkdir(subFolderPath, mode);
-#endif
+	c3files_CreateDirectory(path);
 	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveSCENPath);
-#ifdef WIN32
-	CreateDirectory((LPCTSTR)subFolderPath, &sa);
-#else
-	mkdir(subFolderPath, mode);
-#endif
+	c3files_CreateDirectory(path);
 	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveMapPath);
-#ifdef WIN32
-	CreateDirectory((LPCTSTR)subFolderPath, &sa);
-#else
-	mkdir(subFolderPath, mode);
-#endif
+	c3files_CreateDirectory(path);
 	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveClipsPath);
-#ifdef WIN32
-	CreateDirectory((LPCTSTR)subFolderPath, &sa);
-#else
-	mkdir(subFolderPath, mode);
-#endif
+	c3files_CreateDirectory(path);
 }
 
 void CivPaths::InitCDPath(void)
@@ -227,56 +227,25 @@ void CivPaths::InitCDPath(void)
 	if (ctpcd < 0)
 		return;
 
-	const MBCHAR *cdDriveName = c3files_GetCDDriveName(ctpcd);
-	if (cdDriveName == NULL)
+	const char *mount = c3files_GetCDDriveMount(tempPath, _MAX_PATH, ctpcd);
+	if (NULL == mount)
 		return;
 
-#if defined(WIN32)
-	sprintf(tempPath, "%s%s%s", cdDriveName, FILE_SEP, m_cdPath);
-	strcpy(m_cdPath, tempPath);
-#elif defined(LINUX)
-	const unsigned mntInfoCnt = 2;
-	const MBCHAR *mntInfo[] = {  _PATH_MOUNTED, _PATH_MNTTAB };
-	BOOL cdrLink = FALSE;
-	MBCHAR devlink[_MAX_PATH] = { 0 };
-	struct stat st = { 0 };
-	if (lstat(cdDriveName, &st) != 0) {
+	if (!m_cdPath[0]) {
+		strcpy(tempPath, m_cdPath);
 		return;
 	}
-	if (S_ISLNK(st.st_mode)) {
-		int len = readlink(cdDriveName, devlink, _MAX_PATH);
-		if ((len > 0) && (len < _MAX_PATH)) {
-			cdrLink = TRUE;
-			devlink[len] = '\0';
-		}
-	}
 
-	for (unsigned u = 0; u < mntInfoCnt; u++) {
-		FILE *mounts = setmntent(_PATH_MOUNTED, "r");
-		if (mounts) {
-			struct mntent *mntent;
-			while ((mntent = getmntent(mounts)) != NULL) {
-				if ((mntent->mnt_fsname == NULL) || 
-				    (mntent->mnt_dir == NULL) ||
-				    (mntent->mnt_type == NULL))
-					continue;
-			
-				if (mntent->mnt_type == MNTTYPE_IGNORE)
-					continue;
-			
-				if ((!strcasecmp(cdDriveName, mntent->mnt_fsname))
-				    || (cdrLink && (!strcasecmp(devlink, mntent->mnt_fsname)))
-				   ) {
-					sprintf(tempPath, "%s%s%s", mntent->mnt_dir, FILE_SEP, m_cdPath);
-					strcpy(m_cdPath, tempPath);
-					endmntent(mounts);
-					return;
-				}
-			}
-			endmntent(mounts);
-		}
-	}
+	if (FILE_SEPC == m_cdPath[0])
+		return;
+
+#ifdef WIN32
+	if ((strlen(m_cdPath) > 1) && (':' == m_cdPath[1]))
+		return;
 #endif
+	strcat(tempPath, FILE_SEP);
+	strcat(tempPath, m_cdPath);
+	strcpy(m_cdPath, tempPath);
 }
 
 

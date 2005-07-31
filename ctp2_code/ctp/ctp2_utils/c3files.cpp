@@ -27,6 +27,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+
 #include "CivPaths.h"
 #include "c3files.h"
 #include "c3errors.h"
@@ -42,14 +43,34 @@
 
 #include "civ3_main.h"
 
+#ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#if !defined(WIN32)
+#endif
+#ifdef HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
+
+#ifndef WIN32
 #include <dirent.h>
 #endif
-#if defined(LINUX)
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#ifdef LINUX
+#include <features.h>
+#include <sys/ioctl.h>
+#include <sys/mount.h>
+// MS_* dupes with sys/mount.h
+#include <linux/fs.h>
 #include <linux/iso_fs.h>
 #include <errno.h>
+#include <libgen.h>
+#include <mntent.h>
+#include <paths.h>
+#include <pwd.h>
 #endif
 
 extern ProfileDB *g_theProfileDB;
@@ -58,7 +79,7 @@ extern CivPaths *g_civPaths;
 
 
 
-FILE* c3files_fopen(C3DIR dirID, MBCHAR *s1, MBCHAR *s2)
+FILE* c3files_fopen(C3DIR dirID, const MBCHAR *s1, const MBCHAR *s2)
 {
 	MBCHAR		s[_MAX_PATH] = { 0 };
 
@@ -198,7 +219,7 @@ sint32 c3files_fflush(FILE *file)
 
 
 
-sint32 c3files_getfilesize(C3DIR dir, MBCHAR *filename)
+sint32 c3files_getfilesize(C3DIR dir, const MBCHAR *filename)
 {
 	sint32 filesize = 0;
 
@@ -221,7 +242,7 @@ sint32 c3files_getfilesize(C3DIR dir, MBCHAR *filename)
 
 
 
-uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size)
+uint8 *c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size)
 {
 	if ( size ) *size = 0;
 
@@ -268,7 +289,7 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size)
 	return bits;
 }
 
-BOOL c3files_PathIsValid(MBCHAR *path)
+BOOL c3files_PathIsValid(const MBCHAR *path)
 {
 #if defined(WIN32)
    struct _stat tmpstat;
@@ -287,10 +308,10 @@ BOOL c3files_PathIsValid(MBCHAR *path)
 	else return FALSE;
 }
 
-BOOL c3files_CreateDirectory(MBCHAR *path)
+BOOL c3files_CreateDirectory(const MBCHAR *path)
 {
 #if defined(WIN32)
-	return CreateDirectory(path, NULL);
+	return CreateDirectory((const LPCSTR *) path, NULL);
 #else
 	mode_t mask = 0777;
 	return mkdir(path, mask);
@@ -319,7 +340,7 @@ void c3files_StripSpaces(MBCHAR *s)
 
 
 
-sint32 c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list)
+sint32 c3files_getfilelist(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<MBCHAR> *list)
 {
 #ifdef WIN32
 	MBCHAR strbuf[256];
@@ -386,7 +407,7 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *li
 }
 
 #if defined(WIN32)
-sint32 c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *list)
+sint32 c3files_getfilelist_ex(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<WIN32_FIND_DATA> *list)
 {
 	MBCHAR strbuf[256];
 	MBCHAR path[_MAX_PATH];
@@ -444,6 +465,56 @@ win32_drive_name CDDrivesNames[kMAX_NUM_CDDRIVES] = { 0 };
 extern SoundManager		*g_soundManager;
 
 extern C3UI *g_c3ui;
+
+const MBCHAR *c3files_GetCTPHomeDir()
+{
+	static MBCHAR ctphome[MAX_PATH] = { 0 };
+	static BOOL init = FALSE;
+
+	if (!init) {
+		init = TRUE;
+#ifdef LINUX
+		MBCHAR tmp[MAX_PATH] = { 0 };
+		uid_t uid = getuid();
+		struct passwd *pwent = getpwuid(uid);
+		if (!pwent)
+			return NULL;
+
+		if (!pwent->pw_dir)
+			return NULL;
+
+		if (!*pwent->pw_dir)
+			return NULL;
+
+		size_t s = snprintf(tmp, MAX_PATH, "%s" FILE_SEP "%s",
+		                    pwent->pw_dir, ".civctp2");
+		if (s > MAX_PATH) {
+			return NULL;
+		}
+		struct stat st = { 0 };
+		if (stat(tmp, &st) == 0) {
+			if (S_ISDIR(st.st_mode)) {
+				strncpy(ctphome, tmp, MAX_PATH);
+				return ctphome;
+			} else {
+				return NULL;
+			}
+		}
+		mode_t mode = 0777;
+		if (mkdir(tmp, mode) == 0) {
+			strncpy(ctphome, tmp, MAX_PATH);
+			return ctphome;
+		}
+
+		return NULL;
+#endif
+	}
+
+	if (ctphome[0])
+		return ctphome;
+	else
+		return NULL;
+}
 
 BOOL c3files_HasLegalCD()
 {
@@ -517,6 +588,11 @@ void c3files_InitializeCD(void)
 	BOOL success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
 }
 
+int c3files_GetCDDriveCount(void)
+{
+	return CDDrivesCnt;
+}
+
 int c3files_GetCTPCDDriveNum(void)
 {
 	return WhichCD;
@@ -538,7 +614,7 @@ void c3files_GetCDDrives(void)
 		Assert(0);
 		return;
 	}
-#else
+#elif defined(WIN32)
 	uint32		all_drives;
 	MBCHAR		i;
 	MBCHAR		drivepath[16];
@@ -565,6 +641,152 @@ void c3files_GetCDDrives(void)
 #endif
 }
 
+const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size,
+                                      int cdIndex)
+{
+	if (!buf)
+		return NULL;
+
+	const MBCHAR *cdDriveName = c3files_GetCDDriveName(cdIndex);
+
+	if (!cdDriveName)
+		return NULL;
+#ifdef WIN32
+	if (strlen(cdDriveName) >= size)
+		return NULL;
+
+	strcpy(buf, cdDriveName);
+	return buf;
+#elif defined(LINUX)
+	MBCHAR tempPath[_MAX_PATH] = { 0 };
+	const size_t mntInfoCnt = 2;
+	// Do not change order of mntInfo 
+	const MBCHAR *mntInfo[mntInfoCnt] = { _PATH_MOUNTED, _PATH_MNTTAB };
+	const size_t mntOptsCnt = 23;
+	typedef struct {
+		const char *name;
+		unsigned long flag;
+		bool clear;
+	} mount_opt_t;
+	const mount_opt_t mntOpts[mntOptsCnt] = {
+		{ MNTOPT_RO,      MS_RDONLY, false },
+		{ MNTOPT_RW,      MS_RDONLY, true },
+		{ MNTOPT_NOSUID,  MS_NOSUID, false },
+		{ MNTOPT_SUID,    MS_NOSUID, true },
+		{ "nodev",        MS_NODEV, false },
+		{ "dev",          MS_NODEV, true },
+		{ "noexec",       MS_NOEXEC, false },
+		{ "exec",         MS_NOEXEC, true },
+		{ "sync",         MS_SYNCHRONOUS, false },
+		{ "async",        MS_SYNCHRONOUS, true },
+		{ "remount",      MS_REMOUNT, false },
+		{ "lock",         MS_MANDLOCK, false },
+		{ "nolock",       MS_MANDLOCK, true },
+		{ "dirsync",      MS_DIRSYNC, false },
+		{ "noatime",      MS_NOATIME, false },
+		{ "atime",        MS_NOATIME, true },
+		{ "nodiratime",   MS_NODIRATIME, false },/// \todo: check string
+		{ "bind",         MS_BIND, false },
+//		{ MS_MOVE },			// for /bin/mount
+//		{ MS_REC },
+		{ "verbose",      MS_VERBOSE, false },
+		{ "acl",          MS_POSIXACL, false },
+		{ "noacl",        MS_POSIXACL, true },
+//		{ MS_ACTIVE },
+		{ "nouser",       MS_NOUSER, false },
+		{ "user",         MS_NOUSER, true }
+	};
+	BOOL cdrLink = FALSE;
+	MBCHAR devlink[_MAX_PATH] = { 0 };
+	char *fulllink = 0;
+	struct stat st = { 0 };
+	if (lstat(cdDriveName, &st) != 0) {
+		return NULL;
+	}
+	if (S_ISLNK(st.st_mode)) {
+		int len = readlink(cdDriveName, devlink, _MAX_PATH);
+		if ((len > 0) && (len < _MAX_PATH)) {
+			cdrLink = TRUE;
+			devlink[len] = '\0';
+			strcpy(tempPath, cdDriveName);
+			char *dn = dirname(tempPath);
+			if (dn)
+				strcpy(tempPath, dn);
+			
+			strcat(tempPath, FILE_SEP);
+			strcat(tempPath, devlink);
+			fulllink = _fullpath(NULL, tempPath, 0);
+		}
+	}
+
+	for (size_t u = 0; u < mntInfoCnt; u++) {
+		FILE *mounts = setmntent(mntInfo[u], "r");
+		if (mounts) {
+			struct mntent *mntent;
+			while ((mntent = getmntent(mounts)) != NULL) {
+				if ((mntent->mnt_fsname == NULL) || 
+				    (mntent->mnt_dir == NULL) ||
+				    (mntent->mnt_type == NULL))
+					continue;
+			
+				if (mntent->mnt_type == MNTTYPE_IGNORE)
+					continue;
+			
+				if ((!strcasecmp(cdDriveName, mntent->mnt_fsname))
+				    || (cdrLink && (!strcasecmp(devlink, mntent->mnt_fsname)))
+				    || ((fulllink != NULL) && (!strcasecmp(fulllink, mntent->mnt_fsname)))
+				   ) {
+					const MBCHAR *ret = NULL;
+					// Mounted?
+					if (u == 0) {
+						strncpy(buf, mntent->mnt_dir, size);
+						ret = buf;
+					// Not mounted fstab entry
+					} else if (u == 1) {
+						unsigned long flags = MS_MGC_VAL;
+						if (hasmntopt(mntent, "defaults")) {
+							flags |= (MS_NOUSER);
+						}
+						for (size_t f = 0; f < mntOptsCnt; f++) {
+							if (hasmntopt(mntent, mntOpts[f].name))
+								if (mntOpts[f].clear)
+									flags &= ~mntOpts[f].flag;
+								else
+									flags |= mntOpts[f].flag;
+						}
+						errno = 0;
+						int rc = mount(mntent->mnt_fsname,
+						               mntent->mnt_dir,
+						               mntent->mnt_type,
+						               flags, 0);
+						if (0 == rc) {
+							strncpy(buf, mntent->mnt_dir, size);
+							ret = buf;
+						} else {
+							perror(strerror(errno));
+						}
+					}
+					
+					endmntent(mounts);
+					if (fulllink) {
+						free(fulllink);
+						fulllink = 0;
+					}
+
+					return ret;
+				}
+			}
+			endmntent(mounts);
+		}
+	}
+	if (fulllink) {
+		free(fulllink);
+		fulllink = 0;
+	}
+	return NULL;
+#endif
+}
+
 const MBCHAR *c3files_GetCDDriveName(int cdIndex)
 {
 	if (cdIndex < 0)
@@ -580,7 +802,7 @@ const MBCHAR *c3files_GetCDDriveName(int cdIndex)
 #endif
 }
 
-MBCHAR *c3files_GetVolumeName(int cdIndex)
+const MBCHAR *c3files_GetVolumeName(int cdIndex)
 {
 #if defined(WIN32)
 	if (cdIndex < 0)
@@ -652,7 +874,7 @@ MBCHAR *c3files_GetVolumeName(int cdIndex)
 #endif
 }
 
-BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveNum)
+BOOL c3files_FindCDByName(const CHAR *name, BOOL findDriveNum)
 {
 	sint32	i;
 	BOOL	found = FALSE;

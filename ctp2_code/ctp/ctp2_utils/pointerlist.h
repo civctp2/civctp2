@@ -77,33 +77,34 @@ public:
 		PointerListNode* m_prev;
 	};
 
-	PointerList() : m_head(NULL), 
-				m_tail(NULL),
-				m_count(0)
-    { ; };
+	PointerList(const bool deleteObjs = false)
+	:	m_head(NULL), 
+		m_tail(NULL),
+		m_count(0),
+		m_deleteObjs(deleteObjs)
+	{ }
 
-	virtual ~PointerList() 
+	~PointerList() 
+	{
+		DeleteAll(m_deleteObjs);
+	}
+
+	void DeleteAll(const bool deleteObjs = true)
 	{
 		while (m_head) 
-        {
+		{
 			PointerListNode * node = m_head;
 			m_head = m_head->m_next;
-			delete node;
-		}
-	};
-
-	void DeleteAll()
-	{
-		while (m_head) 
-        {
-			PointerListNode * node = m_head;
-			m_head = m_head->m_next;
-			delete node->m_obj;
+			if (m_deleteObjs)
+				delete node->m_obj;
+			node->m_next = NULL;
+			node->m_obj = NULL;
+			node->m_prev = NULL;
 			delete node;
 		}
 		m_tail = NULL;
 		m_count = 0;
-	};
+	}
 
 	void AddTail(T* obj);
 	void AddHead(T* obj);
@@ -254,6 +255,8 @@ private:
 
 	sint32 m_count;
 
+	bool m_deleteObjs;
+
 	friend class Walker;
 };
 
@@ -289,11 +292,11 @@ template <class T> inline T* PointerList<T>::RemoveHead()
 	PointerListNode* node = m_head;
 	m_head = node->m_next;
 	if (m_head)
-    {
-        m_head->m_prev = NULL;
-    }
-    else
-    {
+	{
+		m_head->m_prev = NULL;
+	}
+	else
+	{
 		m_tail = NULL;
 	}
 	T* obj = node->m_obj;
@@ -326,11 +329,11 @@ template <class T> inline T* PointerList<T>::RemoveTail()
 	PointerListNode* node = m_tail;
 	m_tail = node->m_prev;
 	if (m_tail)
-    {
-        m_tail->m_next = NULL;
-    }
-    else
-    {
+	{
+		m_tail->m_next = NULL;
+	}
+	else
+	{
 		m_head = NULL;
 	}
 	T* obj = node->m_obj;
@@ -343,44 +346,44 @@ template <class T> inline T* PointerList<T>::RemoveTail()
 
 template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
 {
-    if (!node)
-        return;
+	if (!node)
+		return;
 
 	if (node == m_head) 
-    {
+	{
 		m_head = node->m_next;
-        if (m_head)
-        {
-            m_head->m_prev = NULL;
-        }
-        else
-        {
+		if (m_head)
+		{
+			m_head->m_prev = NULL;
+		}
+		else
+		{
 			m_tail = NULL;
-        }
+		}
 	}
-    else if (node == m_tail) 
-    {
+	else if (node == m_tail) 
+	{
 		m_tail = node->m_prev;
 		if (m_tail)
-        {
-            m_tail->m_next = NULL;
-        }
-        else
-        {
+		{
+			m_tail->m_next = NULL;
+		}
+		else
+		{
 			m_head = NULL;
-        }
+		}
 	}
-    else
-    {
-        if (node->m_next)
-        {
-            node->m_next->m_prev = node->m_prev;
-        }
-        if (node->m_prev)
-        {
-            node->m_prev->m_next = node->m_next;
-        }
-    }
+	else
+	{
+		if (node->m_next)
+		{
+			node->m_next->m_prev = node->m_prev;
+		}
+		if (node->m_prev)
+		{
+			node->m_prev->m_next = node->m_next;
+		}
+	}
 
 	m_count--;
 	delete node;

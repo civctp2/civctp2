@@ -32,7 +32,7 @@ extern int ldl_parse_error;
 
 %}
 
-string 		\"[^\"\n]*[\"\n]
+string 		\"[^\"\n]*[\"\r\n]
 name		[a-zA-Z]+[a-zA-Z0-9_]*
 
 %x incl
@@ -131,9 +131,9 @@ false           { return VFALSE; }
 					return VSTRING;
 				}
 #.*\n             { g_ldlLineNumber++; }
-[ \t\r]			{ }
+[ \t\r]				{ }
 \n				{ g_ldlLineNumber++; }
-\$              { }
+\$				{ }
 .				{ return yytext[0]; }
 
 %%

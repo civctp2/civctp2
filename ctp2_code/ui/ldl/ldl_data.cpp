@@ -68,7 +68,7 @@ ldl_datablock::ldl_datablock(sint32 hash)
 	m_name = NULL;
 }
 
-ldl_datablock::ldl_datablock(ldl *theLdl, char *name)
+ldl_datablock::ldl_datablock(ldl *theLdl, const char *name)
 {
 	m_name = ldlif_getnameptr(name);
 	m_parent = NULL;
@@ -120,7 +120,7 @@ ldl_attribute *ldl_datablock::GetAttribute( const char *szName )
 	ldl_attribute *atr;
 
 	
-	char *strPtr = ldlif_getnameptr(szName);
+	const char *strPtr = ldlif_getnameptr(szName);
 
 	for (atr = m_attributes.GetHead(); atr; atr = m_attributes.GetNext(atr)) {
 		if (atr->GetName() == strPtr) {
@@ -137,7 +137,7 @@ int ldl_datablock::GetAttributeType(const char *szName)
 	ldl_attribute *atr;
 
 	
-	char *strPtr = ldlif_getnameptr(szName);
+	const char *strPtr = ldlif_getnameptr(szName);
 
 	for (atr = m_attributes.GetHead(); atr; atr = m_attributes.GetNext(atr)) {
 		if (strPtr == atr->GetName()) {

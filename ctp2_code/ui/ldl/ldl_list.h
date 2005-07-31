@@ -34,7 +34,7 @@ class ldl_attributelist {
 			m_head = m_tail = att;
 		}
 	}
-	ldl_attribute *FindAttribute(char *name) {
+	ldl_attribute *FindAttribute(const char *name) {
 		ldl_attribute *search = m_head;
 		while(search) {
 			if(search->m_name == name) {

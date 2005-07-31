@@ -763,9 +763,15 @@ template <class T> sint32 AVL<T>::GetBiggest(
 template <class T> void AVL<T>::Clear() 
 {
     m_data.Clear();
+#ifdef _MSC_VER
     m_balance = (AVL_INDEX_TYPE)0xcdcdcdcd; 
     m_ptr[0] = (AVL *)0xcdcdcdcd; 
-    m_ptr[1] = (AVL *)0xcdcdcdcd; 
+    m_ptr[1] = (AVL *)0xcdcdcdcd;
+#else
+    m_balance = AVL_MID;
+    m_ptr[0] = 0;
+    m_ptr[1] = 0;
+#endif
 }
 
 template <class T> BOOL AVL<T>::operator< (AVL<T> & compare_me) const

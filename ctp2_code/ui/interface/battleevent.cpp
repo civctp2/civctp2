@@ -42,10 +42,12 @@ BattleEvent::~BattleEvent()
 		m_dataList->DeleteAll();
 		delete m_dataList;
 	}
+	m_dataList = 0;
 
 	if (m_walker) {
 		delete m_walker;
 	}
+	m_walker = 0;
 }
 
 

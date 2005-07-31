@@ -22,11 +22,13 @@ src/mac/macbuild.sit.
 
 Installing:
 
-To install the SDK under Linux, copy h/anet.h and h/aneterr.h and 
-unpack linux86.tgz onto the machine where you want to build games.
+To install the SDK under Linux, copy h/anet.h, h/aneterr.h and
+h/anet_types.h and unpack linux86.tgz onto the machine where you want
+to build games.
 
-To install the SDK under Windows, copy h/anet.h and h/aneterr.h and 
-the win directory onto the machine where you want to build games.
+To install the SDK under Windows, copy h/anet.h, h/aneterr.h,
+h/anet_types.h and the win directory onto the machine where you want
+to build games.
 
 To install the game server, see 
 src/linux/server/README2.html and doc/testing.html.

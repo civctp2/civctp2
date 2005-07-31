@@ -63,10 +63,10 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 <incl>[ \t\r]* {}
 <incl>\"    { BEGIN(fname); }
 <fname>[a-zA-Z0-9_.\\]+\" { /* Got the include file name */
-  			if ( include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
+ 			if ( include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
 				slic_parse_error = SLIC_ERROR_INCLUDE;
 				yyterminate();
-            } else {
+			} else {
 
 				char buf[MAX_PATH];
 				char filename[MAX_PATH];

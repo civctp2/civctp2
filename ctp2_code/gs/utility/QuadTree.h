@@ -303,6 +303,9 @@ QuadTreeNode<T>::AddLeaf(QUADRANT quad, DynamicArray<T> &list)
 		case QUADRANT_NW:
 			return m_nw = new QuadTreeNode<T>(m_tree,
 											  this, list, m_x, m_y, neww, newh);
+		case QUADRANT_ERROR:
+			Assert(FALSE);
+			return NULL;
 	}
 	Assert(FALSE);
 	return NULL;
@@ -360,6 +363,8 @@ QuadTreeNode<T>::AddList(DynamicArray<T> &list)
 				if(!m_nw) AddLeaf(newQuad, list);
 				else m_nw->AddList(list);
 				break;
+			case QUADRANT_ERROR:
+				break;
 		}
 	}
 }
@@ -411,6 +416,8 @@ QuadTreeNode<T>::AddObject(T obj)
 				if(!m_nw) AddLeaf(newQuad, obj);
 				else m_nw->AddObject(obj);
 				break;
+			case QUADRANT_ERROR:
+				break;
 		}
 	}
 }
@@ -453,6 +460,8 @@ QuadTreeNode<T>::RemoveObject(T obj)
 				if(!m_nw) return;
 				m_nw->RemoveObject(obj); 
 				break;
+			case QUADRANT_ERROR:
+				break;
 		}
 	}
 }
@@ -493,6 +502,9 @@ QuadTreeNode<T>::GetAt(const MapPoint &point, T &obj)
 			case QUADRANT_NW:
 				if(!m_nw) return FALSE;
 				return m_nw->GetAt(point, obj);
+			case QUADRANT_ERROR:
+				Assert(FALSE);
+				return FALSE;
 		}
 		Assert(FALSE);
 		return FALSE;
@@ -533,6 +545,9 @@ QuadTreeNode<T>::GetAt(const MapPoint &point, DynamicArray<T> &array)
 			case QUADRANT_NW:
 				if(!m_nw) return FALSE;
 				return m_nw->GetAt(point, array);
+			case QUADRANT_ERROR:
+				Assert(FALSE);
+				return FALSE;
 		}
 #ifdef _MSC_VER
 #pragma warning (disable : 4127)
@@ -570,6 +585,9 @@ QuadTreeNode<T>::GetCount(MapPoint &point)
 			case QUADRANT_NW:
 				if(!m_nw) return 0;
 				return m_nw->GetCount(point);
+			case QUADRANT_ERROR:
+				Assert(FALSE);
+				return 0;
 		}
 		Assert(FALSE);
 		return 0;
@@ -617,6 +635,9 @@ QuadTreeNode<T>::RemoveAt(const MapPoint &point, T &removedObj)
 			case QUADRANT_NW:
 				if(!m_nw) return FALSE;
 				return m_nw->RemoveAt(point, removedObj);
+			case QUADRANT_ERROR:
+				Assert(FALSE);
+				return FALSE;
 		}
 		Assert(FALSE);
 		return FALSE;
@@ -654,6 +675,9 @@ QuadTreeNode<T>::RemoveAt(const MapPoint &point, DynamicArray<T> &array)
 			case QUADRANT_NW:
 				if(!m_nw) return FALSE;
 				return m_nw->RemoveAt(point, array);
+			case QUADRANT_ERROR:
+				Assert(FALSE);
+				return FALSE;
 		}
 		Assert(FALSE);
 		return FALSE;

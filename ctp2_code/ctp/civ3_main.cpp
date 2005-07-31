@@ -1921,6 +1921,7 @@ void main_InitializeLogs(void)
 
 int main(int argc, char **argv)
 {
+    atexit(AtExitProc);
     int const   r = CivMain(argc, argv);
 
     if (r < 0) 
@@ -2008,7 +2009,7 @@ Error:
 }
 
 #ifdef __AUI_USE_SDL__
-void SDLMessageHandler(const SDL_Event &event);
+int SDLMessageHandler(const SDL_Event &event);
 #endif
 
 #ifdef __GNUC__
@@ -2271,12 +2272,13 @@ void DoFinalCleanup(int exitCode)
 #ifndef __AUI_USE_SDL__
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 #else
-void SDLMessageHandler(const SDL_Event &event)
+int SDLMessageHandler(const SDL_Event &event)
 #endif
 {
 	AUI_ERRCODE		errcode;
 	
-	if ( !gDone )
+	if ( gDone )
+		return 0;
 
 #ifndef __AUI_USE_SDL__
 	if (g_c3ui != NULL) {
@@ -2366,22 +2368,25 @@ void SDLMessageHandler(const SDL_Event &event)
 		}
 		break;
 	case WM_CLOSE:
+#else
+	case SDL_QUIT:
+#endif
+#ifndef __AUI_USE_SDL__
 		if ( hwnd != gHwnd ) break;
-
-		
-		
-		
+#endif		
 		
 		gDone = TRUE;
 
 		
 		DoFinalCleanup();
 
-		
+#ifndef __AUI_USE_SDL__
 		DestroyWindow( hwnd );
 		gHwnd = NULL;
+#endif
 
 		return 0;
+#ifndef __AUI_USE_SDL__
 	case k_MSWHEEL_ROLLMSG :
 		{
 			sint16 dir = HIWORD(wParam);

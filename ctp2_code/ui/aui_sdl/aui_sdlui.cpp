@@ -140,6 +140,9 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
 	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, SDL_SWSURFACE);
+	if (!m_lpdds) {
+		c3errors_FatalDialog("aui_SDLUI", SDL_GetError());
+	}
 	
 	m_primary = new aui_SDLSurface(
 		&errcode,

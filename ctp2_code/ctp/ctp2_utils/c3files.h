@@ -65,7 +65,7 @@ enum C3SAVEDIR {
 	C3SAVEDIR_MAX
 };
 
-FILE*		c3files_fopen(C3DIR dirID, MBCHAR *, MBCHAR *);
+FILE*		c3files_fopen(C3DIR dirID, const MBCHAR *, const MBCHAR *);
 FILE*		c3files_freopen(const MBCHAR *, const MBCHAR *, FILE *);
 sint32		c3files_fclose(FILE *);
 
@@ -89,23 +89,39 @@ sint32		c3files_ferror(FILE *);
 void		c3files_clearerr(FILE *);
 sint32		c3files_fflush(FILE *);
 
-sint32		c3files_getfilesize(C3DIR dir, MBCHAR *filename);
-uint8		*c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size);
+sint32		c3files_getfilesize(C3DIR dir, const MBCHAR *filename);
+uint8		*c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size);
 
-BOOL		c3files_PathIsValid(MBCHAR *path);
-BOOL		c3files_CreateDirectory(MBCHAR *path);
+BOOL		c3files_PathIsValid(const MBCHAR *path);
+BOOL		c3files_CreateDirectory(const MBCHAR *path);
 
 void		c3files_StripSpaces(MBCHAR *s);
 
 
-sint32		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
+sint32		c3files_getfilelist(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<MBCHAR> *plist);
 #if defined WIN32
-sint32		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
+sint32		c3files_getfilelist_ex(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
 #endif
+
+/** Returns the users CTP2 directory within his/her home.
+ * On windows, NULL is returned. On linux, $HOME/.civctp2 will be returned.
+ *
+ * If the directory does not exist, it'll be created. If the creation
+ * fails, NULL is returned instead.
+ * 
+ * @returns Path to existing CTP2 directory within users' home
+ */
+const MBCHAR * c3files_GetCTPHomeDir();
 
 
 BOOL		c3files_HasLegalCD(void);
 void		c3files_InitializeCD(void);
+/** Returns the count of CD drives installed on the system.
+ * On error, -1 is returned.
+ *
+ * @returns CD drive count
+ */
+int		c3files_GetCDDriveCount(void);
 /** Returns the number of the CD drive, which contains the CTP2 CD.
  * 
  * If no CD drive exists or no drive contains the CTP2 CD, -1 is returned.
@@ -119,12 +135,26 @@ int		c3files_GetCTPCDDriveNum(void);
  * If cdIndex is negative or greater than the number of cd drives available,
  * NULL is returned.
  *
+ * @param cdIndex Index # of CD
  * @returns CDDriveName
  */
 const MBCHAR *	c3files_GetCDDriveName(int cdIndex);
+/** Returns the system-dependent mount point of the CD drive number cdIndex,
+ * i.e. the path to the root directory of the cd.
+ *
+ * If cdIndex is negative or greater than the number of cd drives available,
+ * NULL is returned.
+ * If the cd drive has no cd mounted, NULL is returned.
+ *
+ * @param buf Buffer for mount point retrieval
+ * @param size Size of that buffer
+ * @param cdIndex Index # of CD
+ * @returns CD Mount
+ */
+const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size, int cdIndex);
 BOOL		c3files_HasCD(void);
 void		c3files_GetCDDrives(void);
-MBCHAR		*c3files_GetVolumeName(int cdIndex);
-BOOL		c3files_FindCDByName(CHAR *name, BOOL findDriveLetter);
+const MBCHAR		*c3files_GetVolumeName(int cdIndex);
+BOOL		c3files_FindCDByName(const CHAR *name, BOOL findDriveLetter);
 
 #endif

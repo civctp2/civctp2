@@ -14,7 +14,7 @@
 
 sint32 g_check_mem; 
 
-#ifndef _DEBUG_MEMORY
+#ifdef _DEBUG_MEMORY
 
 void* operator new(const size_t size)
 {

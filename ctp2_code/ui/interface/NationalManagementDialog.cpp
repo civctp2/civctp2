@@ -1486,7 +1486,7 @@ void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *cont
 	if(selectedList->L() == 1) {
 		
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
+		city.m_id = *reinterpret_cast<uint32 *>(
 		    static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
 		    selectedList->GetAtIndex(0)
 		    ))->GetUserData());

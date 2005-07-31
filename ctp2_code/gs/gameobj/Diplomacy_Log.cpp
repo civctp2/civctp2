@@ -24,7 +24,7 @@ extern Player **g_player;
 
 Diplomacy_Log::Diplomacy_Log()
 {
-    strcpy(m_filename,"logs\\diplomacy_log.txt");
+    strcpy(m_filename,"logs" FILE_SEP "diplomacy_log.txt");
     m_player_bit_mask = 0xffffffff;
     FILE *fout = fopen(m_filename, "w"); 
     Assert(fout); 

@@ -78,7 +78,7 @@ private:
 
 public:
 	
-	CivPaths ();
+	CivPaths (AUI_ERRCODE &errcode);
 	
 	virtual ~CivPaths();
 

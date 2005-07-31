@@ -43,6 +43,10 @@
 #include "ctpdb.h"
 #include "RecordDescription.h"
 
+Datum::~Datum()
+{
+}
+
 void Datum::SetValue(union dbvalue &v)
 {
 	m_hasValue = true;

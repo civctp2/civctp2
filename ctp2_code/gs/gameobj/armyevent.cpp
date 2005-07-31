@@ -903,7 +903,7 @@ STDEHANDLER(MoveIntoTransportEvent)
 	return GEV_HD_Continue;
 }
 
-STDEHANDLER(BattleEvent)
+STDEHANDLER(BattleEventHook)
 {
 	Army army;
 	MapPoint pos;
@@ -917,13 +917,13 @@ STDEHANDLER(BattleEvent)
 	CellUnitList defender;
 	g_theWorld->GetArmy(pos, defender);
 
-	bool const  i_died = !army.AccessData()->Fight(defender);
+	bool const i_died = !army.AccessData()->Fight(defender);
 	if (!i_died) 
-    { 
+	{ 
 		for (sint32 k = 0; k < army.Num(); k++) {
 			BOOL out_of_fuel;
 			army[k].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(),
-								   out_of_fuel);
+			                       out_of_fuel);
 		}
 	}
 
@@ -1484,7 +1484,7 @@ void armyevent_Initialize()
 	g_gevManager->AddCallback(GEV_MoveUnits, GEV_PRI_Post, &s_CheckOrdersEvent);
 
 	g_gevManager->AddCallback(GEV_MoveIntoTransport, GEV_PRI_Primary, &s_MoveIntoTransportEvent);
-	g_gevManager->AddCallback(GEV_Battle, GEV_PRI_Primary, &s_BattleEvent);
+	g_gevManager->AddCallback(GEV_Battle, GEV_PRI_Primary, &s_BattleEventHook);
 	g_gevManager->AddCallback(GEV_BattleAftermath, GEV_PRI_Primary, &s_AftermathEvent);
 
 	g_gevManager->AddCallback(GEV_BeginTurnArmy, GEV_PRI_Primary, &s_BeginTurnArmyEvent);

@@ -66,18 +66,18 @@ class GameEventHookCallback;
 class GameEventHookCallback 
 {
 public:
-    virtual ~GameEventHookCallback() { ; };
+	virtual ~GameEventHookCallback() { }
 
 	virtual GAME_EVENT_HOOK_DISPOSITION 
-        GEVHookCallback(GAME_EVENT type, GameEventArgList *args) 
-    { 
-        return GEV_HD_Continue;
-    };
+	GEVHookCallback(GAME_EVENT type, GameEventArgList *args) 
+	{ 
+		return GEV_HD_Continue;
+	}
 
 	virtual void GetDescription(char * str, sint32 maxsize) 
-    { 
+	{ 
 		strncpy(str, "An undescribed callback", maxsize);
-	};
+	}
 };
 
 	

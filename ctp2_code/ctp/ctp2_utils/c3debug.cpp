@@ -68,15 +68,9 @@ int c3debug_InitDebugLog()
 {
 	MBCHAR fileName[256];
 	
+	c3files_CreateDirectory("logs");
+
 #if defined(WIN32)
-	SECURITY_ATTRIBUTES		sa;
-
-	sa.nLength = sizeof(sa);
-	sa.lpSecurityDescriptor = NULL;
-	sa.bInheritHandle = TRUE;
-	
-	CreateDirectory((LPCTSTR)"logs", &sa);
-
 	WIN32_FIND_DATA	fileData;
 	HANDLE lpFileList;
 	MBCHAR path[_MAX_PATH];
@@ -94,9 +88,6 @@ int c3debug_InitDebugLog()
 		FindClose(lpFileList);
 	}
 #else
-	mode_t mask = 0777;
-	return mkdir("logs", mask);
-
 	DIR *dir = opendir("logs");
 	Assert(dir);
 	struct dirent *dent = NULL;

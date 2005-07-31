@@ -45,6 +45,7 @@ sint32  AstarPoint::Identical(const AstarPoint &rhs) const
 
 void AstarPoint::Clear()
 {
+#if 1 // defined(_MSC_VER) && defined(_DEBUG)
     m_flags = uint8(0xcdcd);
     m_parent = (AstarPoint *) 0xcdcdcdcd; 
     m_next = (AstarPoint *)0xcdcdcdcd; 
@@ -53,4 +54,15 @@ void AstarPoint::Clear()
     m_entry_cost = (float) 0xcdcdcdcd; 
     m_future_cost = (float) 0xcdcdcdcd; 
     m_total_cost = (float) 0xcdcdcdcd;
+#else
+	m_flags = 0;
+	m_parent = 0;
+	m_next = 0;
+	m_pos.x = 0;
+	m_pos.y = 0;
+	m_past_cost = 0.0;
+	m_entry_cost = 0.0;
+	m_future_cost = 0.0;
+	m_total_cost = 0.0;
+#endif
 }

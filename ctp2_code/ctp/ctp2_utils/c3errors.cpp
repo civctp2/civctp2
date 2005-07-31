@@ -39,7 +39,7 @@ void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 	va_list		list;
 	char str[_MAX_PATH];
 
-    va_start(list, fmt);
+	va_start(list, fmt);
 	vsprintf(str, fmt, list);
 	va_end(list);
 
@@ -144,16 +144,16 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 			lstrlen(szTitleText) + lstrlen(fmt) + 33000)*sizeof(TCHAR))) == NULL)
 		return;
 
-   wsprintf(szTitle, szTitleText, szTmp);
+	wsprintf(szTitle, szTitleText, szTmp);
 #else
-   if ((szTitle = (LPTSTR)malloc((lstrlen(szTmp) + lstrlen(szTitleText) +
-                                  lstrlen(fmt) + 33000
-                                 )*sizeof(TCHAR)
-                                )
-       ) == NULL)
-      return;
+	if ((szTitle = (LPTSTR)malloc((lstrlen(szTmp) + lstrlen(szTitleText) +
+	                               lstrlen(fmt) + 33000
+	                              )*sizeof(TCHAR)
+	                             )
+	    ) == NULL)
+		return;
 
-   sprintf(szTitle, szTitleText, szTmp);
+	sprintf(szTitle, szTitleText, szTmp);
 #endif
 
 	szTmp = szTitle + (lstrlen(szTitle)+2)*sizeof(TCHAR);
