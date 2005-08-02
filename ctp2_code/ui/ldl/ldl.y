@@ -25,8 +25,8 @@ int ldl_include_stack_ptr = 0;
 %union {
 	int intval;
 	double floatval;
-	char *nameval;
-	char *stringval;
+	const char *nameval;
+	const char *stringval;
 	void *names;
 	void *block;
 }

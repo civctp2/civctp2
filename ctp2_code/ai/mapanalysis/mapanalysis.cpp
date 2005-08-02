@@ -148,7 +148,7 @@ const sint16 route_value)
 
     sint16 index = (victimId * m_piracyLossGrid.size()) + playerId;
     Assert(index >= 0);
-    Assert(index < m_piracyIncomeMatrix.size());
+    Assert((unsigned) index < m_piracyIncomeMatrix.size());
 
     m_piracyIncomeMatrix[index] += route_value;
 }
@@ -828,7 +828,7 @@ const MapPoint & MapAnalysis::GetNearestForeigner(const PLAYER_INDEX player, con
             }
 		}
     }
-    Assert(closest_player < m_empireCenter.size());
+    Assert((unsigned) closest_player < m_empireCenter.size());
     return m_empireCenter[closest_player];
 }
 
@@ -990,7 +990,7 @@ const PLAYER_INDEX victimId) const
 
     sint16 index = (victimId * m_piracyLossGrid.size()) + playerId;
     Assert(index >= 0);
-    Assert(index < m_piracyIncomeMatrix.size());
+    Assert((unsigned) index < m_piracyIncomeMatrix.size());
 
     return m_piracyIncomeMatrix[index];
 }
@@ -1287,14 +1287,14 @@ void MapAnalysis::ComputeHandicapRatios()
 
 double MapAnalysis::GetProductionHandicapRatio(const PLAYER_INDEX playerId) const
 {
-    Assert(playerId < m_productionHandicapRatio.size());
+    Assert((unsigned) playerId < m_productionHandicapRatio.size());
     Assert(playerId >= 0);
     return m_productionHandicapRatio[playerId];
 }
 
 double MapAnalysis::GetGoldHandicapRatio(const PLAYER_INDEX playerId) const
 {
-    Assert(playerId < m_goldHandicapRatio.size());
+    Assert((unsigned) playerId < m_goldHandicapRatio.size());
     Assert(playerId >= 0);
     return m_goldHandicapRatio[playerId];
 }
@@ -1302,7 +1302,7 @@ double MapAnalysis::GetGoldHandicapRatio(const PLAYER_INDEX playerId) const
 
 double MapAnalysis::GetScienceHandicapRatio(const PLAYER_INDEX playerId) const
 {
-    Assert(playerId < m_scienceHandicapRatio.size());
+    Assert((unsigned) playerId < m_scienceHandicapRatio.size());
     Assert(playerId >= 0);
     return m_scienceHandicapRatio[playerId];
 }

@@ -40,7 +40,7 @@ void *ldlif_add_empty_block(void *names);
 void ldlif_add_bool_attribute(const char *name, int val);
 void ldlif_add_int_attribute(const char *name, int val);
 void ldlif_add_float_attribute(const char *name, double val);
-void ldlif_add_string_attribute(const char *name, char *val);
+void ldlif_add_string_attribute(const char *name, const char *val);
 
 void ldlif_indent_log(int indent);
 void ldlif_init_log();

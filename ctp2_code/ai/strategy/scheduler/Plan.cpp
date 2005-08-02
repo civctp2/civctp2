@@ -387,7 +387,7 @@ sint32 Plan::Commit_Agents()
 {
 	Assert(m_the_goal);
 	Assert(m_the_squad);
-	Assert(m_matches.size() == m_the_squad->Get_Num_Agents());
+	Assert(m_matches.size() == (unsigned) m_the_squad->Get_Num_Agents());
 
     if (!m_the_goal || !m_the_squad)
     {

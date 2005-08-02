@@ -193,7 +193,7 @@ UnitActor::UnitActor(CivArchive &archive)
 
 void UnitActor::AddVision(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	BOOL revealedUnexplored = FALSE;
@@ -205,7 +205,7 @@ void UnitActor::AddVision(void)
 
 void UnitActor::RemoveVision(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	
@@ -216,7 +216,7 @@ void UnitActor::RemoveVision(void)
 
 void UnitActor::PositionActor(MapPoint &pos)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	m_pos = pos;
@@ -447,7 +447,7 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 
 void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVision)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	if (g_soundManager)
@@ -481,7 +481,7 @@ void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVi
 		{
 			BOOL revealedUnexplored = FALSE;
 			DPRINTF(k_DBG_INFO, ("Adding vision for %lx, owner %d, range %lf, center: %d,%d\n",
-								 m_unitID, m_playerNum, m_unitVisionRange,
+								 m_unitID.m_id, m_playerNum, m_unitVisionRange,
 								 m_pos.x, m_pos.y));
 
 		}
@@ -850,7 +850,7 @@ void UnitActor::Process(void)
 
 Action *UnitActor::WillDie(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	sint32		numItems = GetActionQueueNumItems();
@@ -889,7 +889,7 @@ Action *UnitActor::WillDie(void)
 
 Action *UnitActor::WillMorph(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	sint32		numItems = GetActionQueueNumItems();
@@ -918,7 +918,7 @@ Action *UnitActor::WillMorph(void)
 
 void UnitActor::DumpAllActions(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	static MapPoint pos;
@@ -976,7 +976,7 @@ void UnitActor::DumpAllActions(void)
 
 void UnitActor::EndTurnProcess(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 
@@ -1028,7 +1028,7 @@ void UnitActor::EndTurnProcess(void)
 
 void UnitActor::AddAction(Action *actionObj)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	Assert(m_unitSpriteGroup != NULL);
@@ -1064,7 +1064,7 @@ void UnitActor::AddAction(Action *actionObj)
 
 Anim *UnitActor::GetAnim(UNITACTION action)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	Assert(m_unitSpriteGroup != NULL);
@@ -1732,7 +1732,7 @@ void UnitActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
 
 void UnitActor::DrawText(sint32 x, sint32 y, MBCHAR *unitText)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	if(m_unitSpriteGroup) {
@@ -1742,7 +1742,7 @@ void UnitActor::DrawText(sint32 x, sint32 y, MBCHAR *unitText)
 
 void UnitActor::DrawHerald(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	Pixel16		color;
@@ -1805,7 +1805,7 @@ void UnitActor::DrawHerald(void)
 
 void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	TileSet		*tileSet = g_tiledMap->GetTileSet();
@@ -1872,7 +1872,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 
 void UnitActor::DrawHealthBar(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	RECT		leftRect, rightRect;
@@ -2075,7 +2075,7 @@ void UnitActor::DrawHealthBar(void)
 
 void UnitActor::DrawSelectionBrackets(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	RECT		rect;
@@ -2140,7 +2140,7 @@ void UnitActor::DrawSelectionBrackets(void)
 
 BOOL UnitActor::IsAnimating(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	if (m_curAction) 
@@ -2155,7 +2155,7 @@ BOOL UnitActor::IsAnimating(void)
 
 uint16 UnitActor::GetWidth(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	Assert(m_unitSpriteGroup != NULL);
@@ -2183,7 +2183,7 @@ uint16 UnitActor::GetWidth(void)
 
 uint16 UnitActor::GetHeight(void)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	Assert(m_unitSpriteGroup != NULL);
@@ -2211,7 +2211,7 @@ uint16 UnitActor::GetHeight(void)
 
 void UnitActor::GetBoundingRect(RECT *rect)
 {
-#ifndef _TEST
+#if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
 	Assert(rect != NULL);
@@ -2617,7 +2617,7 @@ void UnitActor::DumpActor(void)
 	sint32 i;
 
 	DPRINTF(k_DBG_UI, ("Actor %#.8lx\n", this));
-	DPRINTF(k_DBG_UI, ("  m_unitID           :%#.8lx\n", m_unitID));
+	DPRINTF(k_DBG_UI, ("  m_unitID           :%#.8lx\n", m_unitID.m_id));
 	DPRINTF(k_DBG_UI, ("  m_unitDBIndex      :%d\n", m_unitDBIndex));
 	DPRINTF(k_DBG_UI, ("  m_curAction        :%#.8lx\n", m_curAction));
 

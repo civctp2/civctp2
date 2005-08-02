@@ -617,7 +617,7 @@ namespace Os
 
 void check_leak()
 {
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(WIN32)
 	_CrtMemState new_state; 
 
 	if(g_tempLeakCheck) {
@@ -3417,7 +3417,7 @@ frame++;
 sint32 CivApp::Process(void)
 {
 	
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(WIN32)
 	if(g_tempLeakCheck) {
 		_CrtMemState new_state; 
 		_CrtMemCheckpoint(&new_state);

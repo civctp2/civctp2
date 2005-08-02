@@ -893,7 +893,6 @@ public:
 
 	double GetRationLevel() const { return 1.0; }
 
-	void BuildWonder(Unit city, sint32 wonder);
 	void AddWonder(sint32 wonder, Unit &city);
 	void RemoveWonder(sint32 wonder, BOOL destroyed);
 	uint64 GetBuiltWonders();

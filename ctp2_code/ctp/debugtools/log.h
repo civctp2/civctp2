@@ -1,22 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef LOG_H
 #define LOG_H
 
@@ -87,107 +68,13 @@ void *Log_GetLoggingPtr(void);
 void Log_AddLoggingClasses(void);
 void Hash_Init(void);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "log_on.h"
-
-
-
-
-
-
-
-
-
-
-
-
 
 void Log_Enable (LogClass log_class);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int Log_Enabled (LogClass log_class);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int Log_OutputEnabled (void);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void Log_Begin (const char *module_name, int module_line);
 #if defined(WIN32)
@@ -203,4 +90,4 @@ void Log_End (void);
 }
 #endif
 
-#endif
+#endif // LOG_H

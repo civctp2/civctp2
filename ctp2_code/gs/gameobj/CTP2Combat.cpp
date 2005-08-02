@@ -746,7 +746,8 @@ void CombatField::ReportUnits(Battle *battle, BattleEvent *event, bool initial)
 			CombatUnit cu = GetUnit(x, y);
 			if(cu.IsActive()) {
 				if(battle) {
-					DPRINTF(k_DBG_GAMESTATE, ("Positioning unit %lx (%lf HP)\n", cu.m_unit, cu.GetHP()));
+					DPRINTF(k_DBG_GAMESTATE, ("Positioning unit %lx (%lf HP)\n",
+					        cu.m_unit.m_id, cu.GetHP()));
 					battle->PositionUnit(event, !m_isOffense, cu.m_unit, x, y, initial);
 				}
 			}
@@ -1096,7 +1097,7 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 			
 			if(m_battle) {
 				BattleEvent *deathEvent = new BattleEvent(BATTLE_EVENT_TYPE_DEATH);
-				DPRINTF(k_DBG_GAMESTATE, ("Adding death for %lx\n", def->m_unit));
+				DPRINTF(k_DBG_GAMESTATE, ("Adding death for %lx\n", def->m_unit.m_id));
 				m_battle->AddUnitDeath(deathEvent,
 					(defender == &m_defenders), def->m_unit);
 				m_battle->AddEvent(deathEvent);
@@ -1198,7 +1199,7 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 			
 			if(m_battle) {
 				BattleEvent *deathEvent = new BattleEvent(BATTLE_EVENT_TYPE_DEATH);
-				DPRINTF(k_DBG_GAMESTATE, ("Adding death for %lx\n", def->m_unit));
+				DPRINTF(k_DBG_GAMESTATE, ("Adding death for %lx\n", def->m_unit.m_id));
 				m_battle->AddUnitDeath(deathEvent,
 					(defender == &m_defenders), def->m_unit);
 				m_battle->AddEvent(deathEvent);

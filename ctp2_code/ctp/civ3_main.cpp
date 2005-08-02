@@ -2107,7 +2107,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	g_civApp = new CivApp();
 
 #ifndef WIN32
-#warning "Remove unneeded arguments."
+// FIXME: Remove unneeded arguments.
 	HINSTANCE hInstance = NULL;
 	int iCmdShow = 0;
 #endif
@@ -2173,7 +2173,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
 			                       ~SDL_MOUSEEVENTMASK);
 			if (0 > n) {
-				fprintf(stderr, "PeepEvents failed: %s\n", SDL_GetError());
+				fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
 				break;
 			}
 			if (0 == n) {
@@ -2415,6 +2415,8 @@ int SDLMessageHandler(const SDL_Event &event)
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
 #else
 	}
+	
+	return 0;
 #endif
 }
 

@@ -536,7 +536,7 @@ bool Goal::Validate() const
 					
 					Assert(0);
 				}
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 				
 				break;

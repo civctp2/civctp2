@@ -1017,7 +1017,7 @@ void ArmyData::GroupArmy(Army &army)
 {
     sint32 i;
     DPRINTF(k_DBG_GAMESTATE, ("Army %lx grouping army %lx",
-                              m_id, army));
+                              m_id, army.m_id));
 
     army.SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
     bool atLeastOneAsleep = false;
@@ -1036,7 +1036,7 @@ void ArmyData::GroupArmy(Army &army)
     }
     // both armies ok
     for(i = army.Num() - 1; i >= 0; i--) {
-        DPRINTF(k_DBG_GAMESTATE, ("Inserting unit %lx\n", army[i]));
+        DPRINTF(k_DBG_GAMESTATE, ("Inserting unit %lx\n", army[i].m_id));
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
                                GEA_Unit, army[i],
                                GEA_Army, m_id,
@@ -1105,7 +1105,7 @@ void ArmyData::GroupAllUnits()
                 ul->Access(i).GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
                 ul->Access(i).ChangeArmy(Army(m_id), CAUSE_NEW_ARMY_GROUPING);
                 DPRINTF(k_DBG_GAMESTATE, ("Grouped unit %lx\n",
-                                          ul->Access(i)));
+                                          ul->Access(i).m_id));
             }
         }
     }
@@ -1145,7 +1145,7 @@ void ArmyData::GroupAllUnits()
 //----------------------------------------------------------------------------
 void ArmyData::GroupUnit(Unit &unit)
 {
-    DPRINTF(k_DBG_GAMESTATE, ("Army %lx grouping unit %lx\n", m_id, unit));
+    DPRINTF(k_DBG_GAMESTATE, ("Army %lx grouping unit %lx\n", m_id, unit.m_id));
 
 
     if(!g_theUnitPool->IsValid(unit)) {
@@ -8704,7 +8704,7 @@ void ArmyData::GetCurrentHP
     
     for (sint32 unit_idx = 0; unit_idx < n; ++unit_idx) 
 	{ 
-        Assert(count < MAX_UNIT_COUNT); 
+        Assert((unsigned) count < MAX_UNIT_COUNT); 
         unit_type[count]	= m_array[unit_idx].GetType(); 
         unit_hp[count]		= std::max<sint32>(static_cast<sint32>(m_array[unit_idx].GetHP()), 0);
         ++count; 
@@ -10158,7 +10158,8 @@ bool ArmyData::HasVeterans() const
 void ArmyData::DecrementDontKillCount()
 {
 	m_dontKillCount--;
-	Assert(m_dontKillCount >= 0);
+	// The following assertion is fruitless since m_dontKillCount is unsigned
+	//Assert(m_dontKillCount >= 0);
 	if(m_dontKillCount <= 0) {
 		if(m_needToKill) {
 			Army me(m_id);

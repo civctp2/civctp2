@@ -143,7 +143,7 @@ const ai::Agreement & AgreementMatrix::GetAgreement( const PLAYER_INDEX sender_p
 		type;														  
 
 #ifdef _DEBUG
-	Assert(index < m_agreements.size());
+	Assert((unsigned) index < m_agreements.size());
 	ai::Agreement agreement = m_agreements[ index ];
 	if (agreement != AgreementMatrix::s_badAgreement)
 	{
@@ -202,7 +202,7 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 		agreement.proposal.first_type;									   
 
 	
-	Assert(agreementIndex < m_agreements.size());
+	Assert((unsigned) agreementIndex < m_agreements.size());
 	m_agreements[agreementIndex] = agreement;
 
 #ifdef _DEBUG
@@ -228,7 +228,7 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 		reciprocalType ;												   
 	
 	
-	Assert(agreementIndex < m_agreements.size());
+	Assert((unsigned) agreementIndex < m_agreements.size());
 	m_agreements[agreementIndex] = agreement;
 
 #ifdef _DEBUG
@@ -250,7 +250,7 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 			agreement.proposal.second_type;									   
 		
 		
-		Assert(agreementIndex < m_agreements.size());
+		Assert((unsigned) agreementIndex < m_agreements.size());
 		m_agreements[agreementIndex] = agreement;
 
 #ifdef _DEBUG
@@ -276,7 +276,7 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 			reciprocalType ;												   
 		
 		
-		Assert(agreementIndex < m_agreements.size());
+		Assert((unsigned) agreementIndex < m_agreements.size());
 		m_agreements[agreementIndex] = agreement;
 		
 #ifdef _DEBUG
@@ -475,7 +475,7 @@ sint32 AgreementMatrix::TurnsAtWar(const PLAYER_INDEX & player,
 
 void AgreementMatrix::SetAgreementFast(sint32 index, const ai::Agreement &agreement)
 {
-	Assert(index < m_agreements.size());
+	Assert((unsigned) index < m_agreements.size());
 	if((unsigned) index < m_agreements.size()) {
 		m_agreements[index] = agreement;
 	}

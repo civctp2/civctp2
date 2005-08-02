@@ -13,7 +13,7 @@ void BlockPush(MBCHAR *path, MBCHAR *addition)
 	
 	Assert(addition != NULL) ;
 	
-	Assert(addition[0] != NULL) ;
+	Assert(addition[0] != 0) ;
 	
 	Assert(path != NULL) ;
 	
@@ -36,7 +36,7 @@ void BlockPop(MBCHAR *path)
 	
 	Assert(path != NULL) ;
 	
-	Assert(path[0] != NULL) ;
+	Assert(path[0] != 0) ;
 	p = strrchr(path, '.') ;										
 	
 	Assert(p!=NULL) ;

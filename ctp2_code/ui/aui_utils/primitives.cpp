@@ -1238,11 +1238,11 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 
 PRIMITIVES_ERRCODE primitives_DrawText(
 	aui_Surface *pSurface,	
-	sint32 x,							
-	sint32 y,							
-	const MBCHAR *pString,					
-	COLORREF color,						
-	BOOL bg								
+	sint32 x,
+	sint32 y,
+	const MBCHAR *pString,
+	COLORREF color,
+	BOOL bg
 	)
 {
 	Assert(pSurface);

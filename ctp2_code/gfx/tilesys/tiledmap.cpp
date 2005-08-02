@@ -252,9 +252,6 @@ TiledMap::TiledMap(MapPoint &size)
 :
 	m_isScrolling         (false),
 	m_lockedSurface       (NULL),
-#if defined(_DEBUG)
-	m_showPopHack         (false),
-#endif
 	m_surfBase            (NULL),
 	m_surfWidth           (0),
 	m_surfHeight          (0),
@@ -262,6 +259,10 @@ TiledMap::TiledMap(MapPoint &size)
 	m_surfIsLocked        (false),
 	m_overlayRec          (NULL),
 	m_drawHilite          (false)
+#if defined(_DEBUG)
+	,
+	m_showPopHack         (false)
+#endif
 {	
 	Assert(g_theWorld != NULL);
 	if (g_theWorld == NULL) 

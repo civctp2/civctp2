@@ -1,14 +1,8 @@
+#ifdef WIN32
+
+#include "ctp2_config.h"
+
 #ifdef _DEBUG
-
-
-
-
-
-
-
-
-
-
 
 #ifndef __DEBUGMEMORY_H
 #define __DEBUGMEMORY_H
@@ -241,3 +235,5 @@ void DebugMemoryHeap_GuardedClose    (const char *file, int line, MemoryHeap hea
 
 
 #endif 
+
+#endif // WIN32

@@ -1,40 +1,27 @@
+#include "ctp2_config.h"
+
 #ifdef _DEBUG
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #include "log.h"
 #include "breakpoint.h"
+#include "c3debug.h"
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+
+#ifdef WIN32
 #include <crtdbg.h>
 #include <mmsystem.h>
+typedef int time_t
+#else
+#include <stdlib.h>
+#include <time.h>
+#endif
 
+#ifdef USE_SDL
+#include <SDL.h>
+#endif
 
 LogClass LOG_FATAL = "Fatal";
 LogClass LOG_ERR = "Error";
@@ -221,7 +208,7 @@ static bool Hash_Exist (const char *hash_key)
 	while (hash_entry)
 	{
 		
-		if (_stricmp (hash_key, hash_entry->key) == 0)
+		if (stricmp (hash_key, hash_entry->key) == 0)
 		{
 			return (true);
 		}
@@ -263,7 +250,7 @@ void Hash_Add (const char *hash_key)
 		hash_entry = (HashTableEntry_Ptr) malloc (sizeof (HashTableEntry));
 
 		
-		hash_entry->key = _strdup (hash_key);
+		hash_entry->key = strdup (hash_key);
 		hash_entry->next = hash_table.bucket[hash_value];
 
 		
@@ -351,8 +338,12 @@ struct Logging
 	bool				log_all;				
 
 
-	int					base_time;				
-	CRITICAL_SECTION	entered;				
+	time_t					base_time;
+#ifdef USE_SDL
+	SDL_mutex * entered;
+#else
+	CRITICAL_SECTION	entered;
+#endif
 };
 
 
@@ -487,7 +478,7 @@ static void	Log_InitReadConfig (const char *config_filename, const char *log_fil
 		}
 		else
 		{
-			Breakpoint();  
+			Breakpoint();
 			logging->to_file = false;
 		}
 	}
@@ -495,78 +486,9 @@ static void	Log_InitReadConfig (const char *config_filename, const char *log_fil
 	
 	if (logging->to_file)
 	{
-		logging->log_filename = _strdup (log_filename);
+		logging->log_filename = strdup (log_filename);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -594,10 +516,13 @@ void Log_Open (const char *config_file, const char *log_file)
 		return;
 	}
 
-	
+#ifdef USE_SDL
+	logging->entered = SDL_CreateMutex();
+	SDL_mutexP(logging->entered);
+#else
 	InitializeCriticalSection (&logging->entered);
 	EnterCriticalSection (&logging->entered);
-
+#endif
 	
 	Hash_Init();
 	Log_AddLoggingClasses();
@@ -606,7 +531,11 @@ void Log_Open (const char *config_file, const char *log_file)
 	logging->open = true;
 	logging->module_name = NULL;
 	logging->module_line = 0;
+#ifdef WIN32
 	logging->base_time = timeGetTime();
+#else
+	logging->base_time = time(NULL);
+#endif
 	logging->to_debugger = false;
 	logging->to_file = false;
 	logging->log_filename = NULL;
@@ -619,7 +548,11 @@ void Log_Open (const char *config_file, const char *log_file)
 	Log_InitReadConfig (config_file, log_file);
 
 	
+#ifdef USE_SDL
+	SDL_mutexV(logging->entered);
+#else
 	LeaveCriticalSection (&logging->entered);
+#endif
 
 	
 	LOG (("LogClasses", "Logging the Following LogClasses:"));
@@ -660,9 +593,13 @@ void Log_Close (void)
 		free (logging->log_filename);
 	}
 
+#ifdef USE_SDL
+	SDL_DestroyMutex(logging->entered);
+	logging->entered = NULL;
+#else
 	DeleteCriticalSection (&logging->entered);
+#endif
 
-	
 	free(logging);
 	logging = NULL;
 
@@ -775,9 +712,11 @@ void Log_Begin (const char *module_name, int module_line)
 		return;
 	}
 
-	
+#ifdef USE_SDL
+	SDL_mutexP(logging->entered);
+#else
 	EnterCriticalSection (&logging->entered);
-
+#endif
 	
 	
 	if (module_name)
@@ -813,12 +752,13 @@ static inline void Log_MiddleToDebugger (char *message)
 {
 	
 	Log_EnsureLogAllocated();
-
+#ifdef WIN32
 	if (logging->to_debugger)
 	{
-	    _RPT0 (_CRT_WARN, message);
-	    _RPT0 (_CRT_WARN, "\n");
+		_RPT0 (_CRT_WARN, message);
+		_RPT0 (_CRT_WARN, "\n");
 	}
+#endif
 }
 
 
@@ -863,15 +803,14 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 	char *adjusted_module;
 	char *adjusted_module_scan;
 
-	
+#ifdef WIN32
 	elapsed_time = timeGetTime() - logging->base_time;
+#else
+	elapsed_time = time(NULL) - logging->base_time;
+#endif
 
 	
-	
-	
-
-	
-	adjusted_module = _strdup (logging->module_name);
+	adjusted_module = strdup (logging->module_name);
 	adjusted_module_scan = adjusted_module + (strlen (adjusted_module));
 
 	
@@ -893,7 +832,7 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 	
 	
 
-	adjusted_text = _strdup (message_text);
+	adjusted_text = strdup (message_text);
 	for (adjusted_text_scan = adjusted_text; *adjusted_text_scan; adjusted_text_scan++)
 	{
 		if (*adjusted_text_scan < ' ')
@@ -922,7 +861,12 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 
 
 
-void __cdecl Log_Middle (LogClass log_class, const char *format, ...)
+
+void
+#ifdef WIN32
+__cdecl
+#endif
+Log_Middle (LogClass log_class, const char *format, ...)
 {
 	
 	Log_EnsureLogAllocated();
@@ -991,8 +935,11 @@ void Log_End (void)
 		return;
 	}
 
-	
+#ifdef USE_SDL
+	SDL_mutexV(logging->entered);
+#else
 	LeaveCriticalSection (&logging->entered);
+#endif
 }
 
 #endif 

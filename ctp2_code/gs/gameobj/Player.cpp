@@ -5103,7 +5103,8 @@ Agreement Player::MakeCaptureCityPact(PLAYER_INDEX player, Unit &city)
 
 	a.SetExpires(g_theConstDB->GetPactCaptureCityExpires()) ;
 	a.SetTarget(city) ;
-	DPRINTF(k_DBG_INFO, ("Player #%d agrees with Player #%d to capture city id %d as part of a pact\n", m_owner, player, city)) ;
+	DPRINTF(k_DBG_INFO, ("Player #%d agrees with Player #%d to capture city id %d as part of a pact\n",
+	        m_owner, player, city.m_id)) ;
 
 	return (a) ;
 	}
@@ -8979,7 +8980,7 @@ void Player::RemoveDeadPlayers()
 #ifdef _DEBUG
 			for(j = 0; j < g_player[i]->m_all_units->Num(); j++) {
 				DPRINTF(k_DBG_GAMESTATE, ("Unit %lx still alive\n",
-										  g_player[i]->m_all_units->Access(j)));
+				        g_player[i]->m_all_units->Access(j).m_id));
 			}
 
 			Assert(g_player[i]->m_all_units->Num() == 0);

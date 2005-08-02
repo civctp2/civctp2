@@ -1,30 +1,21 @@
+#ifdef WIN32
+
+#include "debugmemory.h"
+
 #ifdef _DEBUG
 
-
-
-
-
-
-
-
-
-
-
-
 #include "log.h"
-#include "debugmemory.h"
 #include "debugcallstack.h"
 #include "debugassert.h"
 #include "breakpoint.h"
 #include <windows.h>		
 #include <string.h>
 
+#ifndef WIN32
+#include <stdlib.h>
+#endif
 
-
-
-
-
-
+#define k_HEAP 0x48454150 //'HEAP'
 
 struct DebugMemory;
 struct MemoryHeapDescriptor;
@@ -156,10 +147,10 @@ static void DebugMemory_CreateDefaultHeap (void)
 	heap = (MemoryHeap) malloc (sizeof (MemoryHeapDescriptor));
 
 	
-	heap->name = _strdup ("Default Heap");
+	heap->name = strdup ("Default Heap");
 
 	
-	heap->type = 'HEAP';
+	heap->type = k_HEAP;
 
 	
 	heap->handle = GetProcessHeap();
@@ -183,7 +174,7 @@ static void DebugMemory_CreateDefaultHeap (void)
 	
 	heap->next = NULL;
 	heap->last = NULL;
-#endif MEMORY_LOGGED
+#endif // MEMORY_LOGGED
 
 	debug_memory->default_heap = heap;
 }
@@ -304,7 +295,7 @@ void DebugMemory_Close (void)
 	
 	if (!g_quitfast)
 		DebugMemory_LeaksShow(99999);
-#endif MEMORY_LOGGED
+#endif // MEMORY_LOGGED
 
 	debug_memory->open = false;
 
@@ -459,7 +450,7 @@ MemoryHeap DebugMemoryHeap_FastOpen (const char *name, unsigned size_initial, un
 	heap->name = STRDUP (name);
 
 	
-	heap->type = 'HEAP';
+	heap->type = k_HEAP;
 
 	
 	heap->handle = HeapCreate (0, size_initial, size_maximum);
@@ -489,10 +480,12 @@ void DebugMemoryHeap_FastClose (MemoryHeap heap)
 	DebugMemory_EnsureInitialised();
 
 	
-	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == 'HEAP');
+	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == k_HEAP);
 
 	
-	heap->type = 'heap';
+	heap->type = 0x68656170; //'heap'
+	// NB: all the other multi-charracter constants in this file were 'HEAP', but this one was 'heap' - I suspect
+	// that this may be in error.
 
 	
 	ok = HeapDestroy (heap->handle);
@@ -525,7 +518,7 @@ void *DebugMemoryHeap_FastMalloc  (MemoryHeap heap, unsigned size)
 	DebugMemory_EnsureInitialised();
 
 	ASSERT_CLASS (LOG_MEMORY_FAIL, heap);
-	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == 'HEAP');
+	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == k_HEAP);
 
 	memory = HeapAlloc (heap->handle, 0, size);
 	if (!memory)
@@ -548,7 +541,7 @@ void *DebugMemoryHeap_FastCalloc  (MemoryHeap heap, unsigned size)
 	DebugMemory_EnsureInitialised();
 
 	ASSERT_CLASS (LOG_MEMORY_FAIL, heap);
-	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == 'HEAP');
+	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == k_HEAP);
 
 	memory = HeapAlloc (heap->handle, HEAP_ZERO_MEMORY, size);
 	if (!memory)
@@ -570,7 +563,7 @@ void *DebugMemoryHeap_FastRealloc (MemoryHeap heap, void *memory_block, unsigned
 	DebugMemory_EnsureInitialised();
 
 	ASSERT_CLASS (LOG_MEMORY_FAIL, heap);
-	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == 'HEAP');
+	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == k_HEAP);
 
 	memory = HeapReAlloc (heap->handle, 0, memory_block, size);
 	if (!memory)
@@ -609,7 +602,7 @@ void  DebugMemoryHeap_FastFree    (MemoryHeap heap, void **memory_block_ptr)
 	DebugMemory_EnsureInitialised();
 
 	ASSERT_CLASS (LOG_MEMORY_FAIL, heap);
-	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == 'HEAP');
+	ASSERT_CLASS (LOG_MEMORY_FAIL, heap->type == k_HEAP);
 
 	ok = HeapFree (heap->handle, 0, *memory_block_ptr);
 	ASSERT_CLASS (LOG_MEMORY_FAIL, ok);
@@ -626,7 +619,7 @@ void  DebugMemoryHeap_FastFree    (MemoryHeap heap, void **memory_block_ptr)
 
 
 
-#endif MEMORY_FAST
+#endif // MEMORY_FAST
 #ifdef MEMORY_LOGGED
 
 
@@ -2008,6 +2001,8 @@ void CDECL operator delete (void *mem)
 
 
 
-#endif MEMORY_LOGGED
+#endif // MEMORY_LOGGED
 
-#endif 
+#endif // _DEBUG
+
+#endif // WIN32

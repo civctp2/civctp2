@@ -178,7 +178,7 @@ void Scheduler::SaveAll(CivArchive & archive)
 Scheduler & Scheduler::GetScheduler(const sint32 & playerId)
 {
 	Assert(playerId >= 0);
-	Assert(playerId < s_theSchedulers.size());
+	Assert((unsigned) playerId < s_theSchedulers.size());
 	
 	return s_theSchedulers[playerId]; 
 }
@@ -612,11 +612,7 @@ bool Scheduler::Sort_Matches()
 
 	m_matches.sort(std::greater<Plan>());
 
-#ifdef _DEBUG
-	
-	
-	Assert(m_matches.size() == size);
-#endif // _DEBUG
+	Assert(m_matches.size() == (unsigned) size);
 
 	t2 = GetTickCount();
 	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, 

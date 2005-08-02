@@ -2698,13 +2698,14 @@ void Network::DisplayChat(aui_Surface *surf)
 		MBCHAR buf[256];
 		uint32 totalCount=0, totalBytes=0;
 		uint32 totalSent = 0, totalSentBytes = 0;
+		sint32 i;
 
-		for(sint32 i = 0; i < k_NUM_PACKET_TYPES; i++) {
+		for(i = 0; i < k_NUM_PACKET_TYPES; i++) {
 			sprintf(buf, "%c%c : Rx: %d/%d   Tx: %d/%d",
 					m_packetName[i][0], m_packetName[i][1],
 					m_packetCounter[i], m_packetBytes[i],
 					m_sentPacketCounter[i], m_sentPacketBytes[i]);
-			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE,
+			primitives_DrawText(surf, k_LEFT_EDGE,
 								k_TOP_EDGE + ((i+1) * k_TEXT_SPACING),
 								buf, 0, 0);
 			totalCount += m_packetCounter[i];
@@ -2716,12 +2717,12 @@ void Network::DisplayChat(aui_Surface *surf)
 				totalCount, totalBytes, 
 				totalSent, totalSentBytes,
 				m_blockedPackets);
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE,
+		primitives_DrawText(surf, k_LEFT_EDGE,
 							k_TOP_EDGE + ((i+1) * k_TEXT_SPACING),
 							buf, 0, 0);
 	}
 
-	primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
+	primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE,
 						m_chatStr, 0, 0);
 }
 #endif
@@ -3881,7 +3882,9 @@ void Network::Resync(sint32 playerIndex)
 		QueuePacket(id, new NetInfo(NET_INFO_CODE_RESYNC));
 		SetReady(id);
 	}
+#ifdef WIN32
 	DPRINTF(k_DBG_NET, ("Resync stack trace: %s\n", c3debug_StackTrace()));
+#endif
 }
 
 void Network::StartResync()
@@ -3964,8 +3967,10 @@ void Network::RequestResync(RESYNC_REASON reason)
 
 	if(m_waitingOnResync)
 		return;
-
+	
+#ifdef WIN32
 	DPRINTF(k_DBG_NET, ("RequestResync(%d) stack trace: %s\n", reason, c3debug_StackTrace()));
+#endif
 
 	m_readyToStart = FALSE;
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");

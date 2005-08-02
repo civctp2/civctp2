@@ -30,6 +30,7 @@
 #include <assert.h>
 #include <strings.h>
 #include "tchar.h"
+#include "ctp2_inttypes.h"
 
 /* Windows data types */
 #define BOOL uint32

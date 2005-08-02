@@ -494,7 +494,7 @@ void Director::DumpItem(DQItem *item)
 		DPRINTF(k_DBG_UI, ("  morphing_actor     :%#.8lx\n", action->morphing_actor));
 		DPRINTF(k_DBG_UI, ("  ss                 :%#.8lx (%d)\n", action->ss, action->ss->GetIndex()));
 		DPRINTF(k_DBG_UI, ("  type               :%d\n", action->type));
-		DPRINTF(k_DBG_UI, ("  id                 :%#.8lx\n", action->id));
+		DPRINTF(k_DBG_UI, ("  id                 :%#.8lx\n", action->id.m_id));
 	  }
 		break;
 	case DQITEM_HIDE: {
@@ -690,7 +690,7 @@ void Director::DumpItem(DQItem *item)
 		DQActionTerminateSound *action = (DQActionTerminateSound *)item->m_action;
 		
 		DPRINTF(k_DBG_UI, ("Terminate Sound\n"));
-		DPRINTF(k_DBG_UI, ("  terminate_sound_unit    :%#.8lx\n", action->terminate_sound_unit));
+		DPRINTF(k_DBG_UI, ("  terminate_sound_unit    :%#.8lx\n", action->terminate_sound_unit.m_id));
 		break;
 	  }
 	case DQITEM_BEGIN_SCHEDULER:

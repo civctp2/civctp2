@@ -1832,7 +1832,7 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 							GEA_End);
 
 #ifdef _DEBUG
-	uint8 magnitude = 255.0;
+	uint8 magnitude = 255;
 	g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", magnitude);
 #endif
 
@@ -2609,7 +2609,7 @@ void CtpAi::RefuelAirplane(const Army & army)
 		GEA_End);
 	
 #ifdef _DEBUG
-	uint8 magnitude = 255.0;
+	uint8 magnitude = 255;
 	g_graphicsOptions->AddTextToArmy(army, "Refuel", magnitude);
 #endif
 	

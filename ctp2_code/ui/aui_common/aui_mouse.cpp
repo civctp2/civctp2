@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
@@ -38,6 +27,8 @@
 #include <SDL.h>
 #include <SDL_thread.h>
 #endif
+
+#include <time.h>
 
 
 sint32 aui_Mouse::m_mouseRefCount = 0;
@@ -1126,7 +1117,12 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 				&screenDirtyRect,
 				RGB(255,255,255),
 				0 );
-			Sleep( 20 ); 
+#ifdef WIN32
+			Sleep( 20 );
+#else
+			struct timespec t = { 0, 20000000L };
+			nanosleep(&t, NULL);
+#endif
 			fclose(f);
 		}
 #endif 

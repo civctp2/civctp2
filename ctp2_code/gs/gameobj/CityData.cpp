@@ -178,7 +178,7 @@ extern DifficultyDB *g_theDifficultyDB;
 extern ColorSet *g_colorSet;
 
 #ifdef _DEBUG
-#include "aicause.h"
+#include "AICause.h"
 #endif
 
 #include "UnitActor.h"
@@ -1760,9 +1760,13 @@ void CityData::PayFederalProductionAbs (sint32 mil_paid,
 #ifdef _DEBUG
 	if(0 < mil_paid) {
 		if (!m_contribute_military) {
+#ifdef _MSC_VER
 #pragma warning (disable : 4127)
+#endif
 			Assert(0);
+#ifdef _MSC_VER
 #pragma warning (default : 4127)
+#endif
 			return;
 		}
 	}
@@ -3221,8 +3225,9 @@ BOOL CityData::BuildWonder(sint32 type)
 		
 		sprintf(error_msg, "Cannot build wonder %d", 
 			type);
-
+#ifdef WIN32
 		_RPT0(_CRT_WARN, error_msg);
+#endif
 #endif
 		return FALSE;
 	}

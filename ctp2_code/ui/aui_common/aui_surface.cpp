@@ -36,7 +36,7 @@
 
 sint32 aui_Surface::m_surfaceRefCount = 0;
 #ifdef USE_SDL
-SDL_mutex *		aui_Surface::m_cs = 0;
+SDL_mutex *		aui_Surface::m_cs = NULL;
 #else
 CRITICAL_SECTION	aui_Surface::m_cs;
 #endif

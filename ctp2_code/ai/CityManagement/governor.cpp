@@ -237,7 +237,7 @@ void Governor::Cleanup(void)
 Governor & Governor::GetGovernor(PLAYER_INDEX const & playerId)
 {
 	Assert(playerId >= 0);
-	Assert(playerId < s_theGovernors.size());
+	Assert((unsigned) playerId < s_theGovernors.size());
 	
 	return s_theGovernors[playerId]; 
 }

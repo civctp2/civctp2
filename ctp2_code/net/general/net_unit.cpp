@@ -136,13 +136,13 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		else if(oldVisionRange != m_unitData->m_vision_range) {
 			g_player[m_unitData->GetOwner()]->RemoveUnitVision(m_unitData->m_pos, oldVisionRange);
 			g_player[m_unitData->GetOwner()]->AddUnitVision(m_unitData->m_pos, m_unitData->m_vision_range,
-															revealed_unexplored);
+			                                                revealed_unexplored);
 		}
 #endif
 
 		if(oldowner != m_unitData->m_owner) {
 			DPRINTF(k_DBG_NET, ("Resetting unit %lx (type %d) from owner %d to %d\n",
-								uid, m_unitData->m_type,
+								uid.m_id, m_unitData->m_type,
 								oldowner, m_unitData->m_owner));
 			if(g_theUnitDB->Get(m_unitData->m_type)->GetHasPopAndCanBuild()) {
 				DPRINTF(k_DBG_NET, ("But it's a city and I'm going to assert and ignore it.\n"));

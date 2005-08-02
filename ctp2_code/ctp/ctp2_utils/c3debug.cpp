@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #ifdef _DEBUG
@@ -23,7 +11,7 @@
 #include "debugwindow.h"
 #include "civ3_main.h"
 #include "netconsole.h"
-
+#include "c3files.h"
 
 #ifndef _NO_GAME_WATCH
 
@@ -301,7 +289,7 @@ void c3debug_ExceptionExecute(CivExceptionFunction function)
 
 void c3debug_Assert(char *s, char *file, int line)
 {
-	DPRINTF(k_DBG_FIX, ("Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line)); 
+	DPRINTF(k_DBG_FIX, ("Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line));
 
 #ifdef WIN32 
 	MBCHAR *traceStr = c3debug_StackTrace();
@@ -310,6 +298,9 @@ void c3debug_Assert(char *s, char *file, int line)
 	do { 
 		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) _CrtDbgBreak(); 
 	} while (0);
+#else
+	fprintf(stderr, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
+	assert(0);
 #endif
 }	
 

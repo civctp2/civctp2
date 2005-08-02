@@ -926,7 +926,7 @@ Advances::DebugDumpTree()
 	{
 		// Report loops
 		DPRINTF(k_DBG_INFO, ("%s\n", REPORT_ADVANCE_LOOP));
-		for (size_t n = 0; n < m_size; ++n)
+		for (size_t n = 0; n < (unsigned) m_size; ++n)
 		{
 			if (LEVEL_LOOPED == level[n])
 			{

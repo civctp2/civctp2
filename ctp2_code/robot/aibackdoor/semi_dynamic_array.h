@@ -16,7 +16,7 @@
 
 
 #ifndef MALLOC
-	#ifdef _DEBUG
+	#if defined(_DEBUG) && defined(WIN32)
 		#include "debugmemory.h"
 	#else
 		#ifndef REALLOC

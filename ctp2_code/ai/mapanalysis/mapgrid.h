@@ -131,7 +131,7 @@ public:
 			     (xy_pos.x / m_resolution);
 
 		Assert(elem >= 0);
-		Assert(elem < m_values.size());
+		Assert((unsigned) elem < m_values.size());
 		
 		
 		Assert(((double) m_values[elem] + value) == (double) (m_values[elem] + value));
@@ -404,7 +404,7 @@ public:
 		elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
 			    (xy_pos.x / m_resolution);
 		Assert(elem >= 0);
-		Assert(elem < m_values.size());
+		Assert((unsigned) elem < m_values.size());
 
 		m_values[elem] = value;
 	}
@@ -447,7 +447,7 @@ public:
 	{
 		std::ostringstream ost;
 		
-		for (sint32 elem = 0; elem < m_values.size(); elem++)
+		for (sint32 elem = 0; (unsigned) elem < m_values.size(); elem++)
 		{	
 				ost.width( 3);
 				ost << m_values[elem];

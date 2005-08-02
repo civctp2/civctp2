@@ -264,7 +264,7 @@ void Battle::MakeAttackers(sint32 numAttackers, const Army &attackers)
 										attackers[i].GetType(), pos,  attackers[i].GetOwner());
 		m_attackers[i]->SetFacing(k_BATTLEVIEW_DEFAULT_ATTACKER_FACING);
 
-		DPRINTF(k_DBG_FIX, ("MakeAttackers: Actor with Unit id: %.8lx\n", m_attackers[i]->GetUnitID()));
+		DPRINTF(k_DBG_FIX, ("MakeAttackers: Actor with Unit id: %.8lx\n", m_attackers[i]->GetUnitID().m_id));
 	}
 }
 
@@ -282,7 +282,7 @@ void Battle::MakeDefenders(sint32 numDefenders, CellUnitList &defenders)
 										defenders[i].GetType(), pos,  defenders[i].GetOwner());
 		m_defenders[i]->SetFacing(k_BATTLEVIEW_DEFAULT_DEFENDER_FACING);
 		m_defenders[i]->SetFortified(defenders[i].IsEntrenched());
-		DPRINTF(k_DBG_FIX, ("MakeDefenders: Actor with Unit id: %.8lx\n", m_defenders[i]->GetUnitID()));
+		DPRINTF(k_DBG_FIX, ("MakeDefenders: Actor with Unit id: %.8lx\n", m_defenders[i]->GetUnitID().m_id));
 	}
 }
 
@@ -312,14 +312,14 @@ BattleViewActor *Battle::ActorFromUnit(BOOL isDefender, Unit theUnit)
 	Assert(actor);
 
 	if (!actor) {
-		DPRINTF(k_DBG_FIX, ("ActorFromUnit: Unit %.8lx not found in Actor lists\n", theUnit));
+		DPRINTF(k_DBG_FIX, ("ActorFromUnit: Unit %.8lx not found in Actor lists\n", theUnit.m_id));
 		for (i=0; i<m_numAttackers; i++) {
 			DPRINTF(k_DBG_FIX, ("ActorFromUnit: Attacker Actor with id: %.8lx\n", 
-								m_attackers[i] ? m_attackers[i]->GetUnitID() : 0xabcdef12));
+			        m_attackers[i] ? m_attackers[i]->GetUnitID().m_id : 0xabcdef12));
 		}
 		for (i=0; i<m_numDefenders; i++) {
 			DPRINTF(k_DBG_FIX, ("ActorFromUnit: Defender Actor with id: %.8lx\n", 
-								m_defenders[i] ? m_defenders[i]->GetUnitID() : 0xfedcba21));
+			        m_defenders[i] ? m_defenders[i]->GetUnitID().m_id : 0xfedcba21));
 		}
 	}
 

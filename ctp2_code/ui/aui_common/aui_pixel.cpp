@@ -82,7 +82,7 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPA
 	}
 	delete[256] pe;
 #else
-#warning "8bit modes wanted?"
+// TODO: 8bit modes wanted?
 	assert(0);
 #endif
 	return color;

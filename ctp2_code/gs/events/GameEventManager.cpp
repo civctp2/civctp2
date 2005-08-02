@@ -547,7 +547,7 @@ BOOL GameEventManager::CheckArg(sint32 num, char got, char want)
 	EVENTLOG(("%s ", ArgCharToName(got)));
 
 	if(got != want) {
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(WIN32)
 		c3errors_ErrorDialog("GameEventManager", "Argument %d should be of type %s.  Stack: %s", num, ArgCharToName(want), c3debug_StackTrace());
 #endif
 		return FALSE;
@@ -753,7 +753,7 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 				break;
 			case GEA_End:
 				if(*(argString) != 0) {
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(WIN32)
 					c3errors_ErrorDialog("GameEventManager", "Not enough arguments.  Stack: %s", c3debug_StackTrace());
 #endif
 					return FALSE;

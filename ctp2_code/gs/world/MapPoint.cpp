@@ -663,13 +663,13 @@ OrthogonalPoint::OrthogonalPoint(MapPoint const & rc)
 //
 //----------------------------------------------------------------------------
 OrthogonalPoint::OrthogonalPoint(OrthogonalPoint const & copy)
-:	m_point (copy.m_point),
+:
 	x       (m_point.x),
-	y       (m_point.y)
+	y       (m_point.y),
 #if !defined(_SMALL_MAPPOINTS)
-	                   ,
-	z       (m_point.z)
+	z       (m_point.z),
 #endif
+	m_point (copy.m_point)
 { }
 
 //----------------------------------------------------------------------------

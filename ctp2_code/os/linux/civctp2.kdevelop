@@ -20,24 +20,34 @@
   <kdevautoproject>
     <general>
       <activetarget>ctp2_code/ctp2</activetarget>
-      <useconfiguration>debug</useconfiguration>
+      <useconfiguration>default</useconfiguration>
     </general>
     <run>
       <mainprogram>ctp2_code/ctp2</mainprogram>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
       <programargs/>
-      <terminal>true</terminal>
+      <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
     </run>
     <configurations>
       <optimized>
         <builddir>optimized</builddir>
-        <ccompiler>GccOptions</ccompiler>
-        <cxxcompiler>GppOptions</cxxcompiler>
-        <f77compiler>G77Options</f77compiler>
-        <cxxflags>-O2 -g0</cxxflags>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevpgf77options</f77compiler>
+        <cxxflags>-O2 -g0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum</cxxflags>
+        <envvars/>
+        <configargs>-C</configargs>
+        <topsourcedir>.</topsourcedir>
+        <cppflags/>
+        <ldflags/>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags>-O2 -g0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses</cflags>
+        <f77flags/>
       </optimized>
       <debug>
         <configargs>--enable-debug=full -C</configargs>
@@ -45,7 +55,7 @@
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <cxxflags>-O0 -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -g3</cxxflags>
+        <cxxflags>-O0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -g3</cxxflags>
         <envvars/>
         <topsourcedir>.</topsourcedir>
         <cppflags/>
@@ -53,9 +63,26 @@
         <ccompilerbinary/>
         <cxxcompilerbinary/>
         <f77compilerbinary/>
-        <cflags>-O0 -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
+        <cflags>-O0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
         <f77flags/>
       </debug>
+      <default>
+        <envvars/>
+        <configargs>-C</configargs>
+        <builddir>default</builddir>
+        <topsourcedir>.</topsourcedir>
+        <cppflags/>
+        <ldflags/>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevpgf77options</f77compiler>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags>-O0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
+        <cxxflags>-O0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -g3</cxxflags>
+        <f77flags/>
+      </default>
     </configurations>
     <make>
       <envvars>

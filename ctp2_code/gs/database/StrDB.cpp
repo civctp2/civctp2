@@ -313,7 +313,7 @@ bool StringDB::GetText(MBCHAR const * get_id, MBCHAR ** new_text) const
 MBCHAR * StringDB::GetIdStr(StringId const & index) const
 { 
 	Assert(0 <= index);
-	Assert(index < m_all.size());
+	Assert(index < (signed) m_all.size());
 	return (index < 0) || (index >= (signed) m_all.size()) ? NULL : m_all[index]->m_id;
 }
 

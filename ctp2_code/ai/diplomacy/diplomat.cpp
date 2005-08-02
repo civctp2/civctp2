@@ -146,7 +146,7 @@ sint32 Diplomat::s_proposalTypeToElemIndex[PROPOSAL_MAX];
 #define RELDBG(x) { FILE *f = fopen("reldbg.txt", "a"); fprintf x; fclose(f); }
 Diplomat & Diplomat::GetDiplomat(const PLAYER_INDEX & playerId) { 
 	Assert(playerId >= 0);
-	Assert(playerId < s_theDiplomats.size());
+	Assert((unsigned) playerId < s_theDiplomats.size());
 	Assert(playerId == s_theDiplomats[playerId].GetPlayerId());
 
 	return s_theDiplomats[playerId]; 
@@ -1275,7 +1275,7 @@ void Diplomat::RecomputeRegard()
 void Diplomat::UpdateRegard(const PLAYER_INDEX foreignerId)
 {
 	Assert(foreignerId >= 0);
-	Assert(foreignerId < m_foreigners.size());
+	Assert((unsigned) foreignerId < m_foreigners.size());
 
 	
 	if (foreignerId < 0 || (unsigned) foreignerId > m_foreigners.size())
@@ -3464,7 +3464,7 @@ sint32 Diplomat::GetNewProposalPriority(const PLAYER_INDEX foreignerId,
 							  const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
-	Assert(foreignerId < m_diplomacy.size() );
+	Assert((unsigned) foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3489,7 +3489,7 @@ sint32 Diplomat::GetAcceptPriority(const PLAYER_INDEX foreignerId,
 						 const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
-	Assert(foreignerId < m_diplomacy.size() );
+	Assert((unsigned) foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3503,7 +3503,7 @@ sint32 Diplomat::GetRejectPriority(const PLAYER_INDEX foreignerId,
 						 const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
-	Assert(foreignerId < m_diplomacy.size() );
+	Assert((unsigned) foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3518,7 +3518,7 @@ sint32 Diplomat::GetSenderRegardResult(const PLAYER_INDEX foreignerId,
 							 const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
-	Assert(foreignerId < m_diplomacy.size() );
+	Assert((unsigned) foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3533,7 +3533,7 @@ sint32 Diplomat::GetReceiverRegardResult(const PLAYER_INDEX foreignerId,
 							   const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
-	Assert(foreignerId < m_diplomacy.size() );
+	Assert((unsigned) foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3551,7 +3551,7 @@ sint32 Diplomat::GetViolationRegardCost(const PLAYER_INDEX foreignerId,
 							  const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
-	Assert(foreignerId < m_diplomacy.size() );
+	Assert((unsigned) foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3566,7 +3566,7 @@ sint32 Diplomat::GetViolationTrustCost(const PLAYER_INDEX foreignerId,
 							 const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
-	Assert(foreignerId < m_diplomacy.size() );
+	Assert((unsigned) foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -5811,7 +5811,7 @@ void Diplomat::SendGreeting(const PLAYER_INDEX & foreignerId)
 
 bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 {
-	Assert(foreignerId < m_desireWarWith.size());
+	Assert((unsigned) foreignerId < m_desireWarWith.size());
 	Assert(foreignerId >= 0);
 	if (foreignerId >= 0 && (unsigned) foreignerId < m_desireWarWith.size())
 		return m_desireWarWith[foreignerId];

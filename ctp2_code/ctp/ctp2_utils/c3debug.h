@@ -31,7 +31,7 @@
 #ifndef __C3DEBUG_H__
 #define __C3DEBUG_H__
 
-
+#include "ctp2_config.h"
 
 #ifdef _DEBUG
 

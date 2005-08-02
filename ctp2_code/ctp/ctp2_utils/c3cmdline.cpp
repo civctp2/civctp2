@@ -332,11 +332,11 @@ CommandLine g_commandLine;
                              BuildWonderCommand	g_buildWonderCommand;
                              GiveAdvanceCommand	g_giveAdvanceCommand;
                              ToggleWaterCommand	g_toggleWaterCommand;
-	                         ToggleSpaceCommand	g_toggleSpaceCommand;
+                             ToggleSpaceCommand	g_toggleSpaceCommand;
                              SetCityNameCommand	g_setCityNameCommand;
                              SetCitySizeCommand	g_setCitySizeCommand;
-                             ToggleAIStr g_toggleAiStr; 
-	                         ExchangeMapCommand	g_exchangeMapCommand;
+                                    ToggleAIStr g_toggleAiStr; 
+                             ExchangeMapCommand	g_exchangeMapCommand;
                              ConvertCityCommand	g_convertCityCommand;
                              SetAIRevoltCommand g_setAIRevoltCommand;
                             NullifyWallsCommand	g_nullifyWallsCommand;
@@ -352,13 +352,15 @@ CommandLine g_commandLine;
                             GrantAdvanceCommand	g_grantAdvanceCommand;
                             DumpMessagesCommand	g_dumpMessagesCommand;
                             DumpChecksumCommand	g_dumpChecksumCommand;
-						   DumpCallStackCommand g_dumpCallStackCommand;
+#ifdef WIN32
+                           DumpCallStackCommand g_dumpCallStackCommand;
+#endif
                            MakeCeaseFireCommand	g_makeCeaseFireCommand;
                            SetGovernmentCommand	g_setGovernmentCommand;
                            CityResourcesCommand	g_cityResourcesCommand;
                            BreakAllianceCommand	g_breakAllianceCommand;
                            WithdrawOfferCommand	g_withdrawOfferCommand;
-						  ToggleQuitFastCommand g_toggleQuitFastCommand;
+                          ToggleQuitFastCommand g_toggleQuitFastCommand;
                           BreakCeaseFireCommand	g_breakCeaseFireCommand;
                           DumpAgreementsCommand	g_dumpAgreementsCommand;
                           EnslaveSettlerCommand	g_enslaveSettlerCommand;
@@ -388,7 +390,7 @@ CommandLine g_commandLine;
                       UndergroundRailwayCommand	g_undergroundRailwayCommand;
                       DisplayChecksumOffCommand	g_displayChecksumOffCommand;
                       TerrainImprovementCommand	g_terrainImprovementCommand;
-			  TerrainImprovementCompleteCommand g_terrainImprovementCompleteCommand;
+              TerrainImprovementCompleteCommand g_terrainImprovementCompleteCommand;
                       IsPollutionReducedCommand	g_isPollutionReducedCommand;
                       IsViolatingBordersCommand	g_isViolatingBordersCommand;
 
@@ -400,7 +402,7 @@ CommandLine g_commandLine;
                     InvestigateReadinessCommand	g_investigateReadinessCommand;
                     IsViolatingCeaseFireCommand	g_isViolatingCeaseFireCommand;
                     RequestDemandAdvanceCommand	g_requestDemandAdvanceCommand;
-                    PactEndPollutionCommand	g_pactEndPollutionCommand;
+                        PactEndPollutionCommand	g_pactEndPollutionCommand;
 
                    RequestOfferCeaseFireCommand	g_requestOfferCeaseFireCommand;
                   DumpDiplomaticRequestsCommand	g_dumpDiplomaticRequestsCommand;
@@ -412,14 +414,14 @@ CommandLine g_commandLine;
             RequestDemandReducePollutionCommand	g_requestDemandReducePollutionCommand;
 
            RequestOfferPermanentAllianceCommand	g_requestOfferPermanentAllianceCommand;
-        RequestOfferPactEndPollutionCommand	g_requestOfferPactEndPollutionCommand;
+            RequestOfferPactEndPollutionCommand	g_requestOfferPactEndPollutionCommand;
 
 
 
 
 
 
-		EndTurnSoundCommand	g_endTurnSoundCommand;
+                            EndTurnSoundCommand	g_endTurnSoundCommand;
 
 DRayTestCode g_DRayTestCode;
 
@@ -667,8 +669,10 @@ CommandRecord commands[] = {
 	"tfog - toggle to fog off and on"},
 	{"tsmooth", &g_toggleSmoothScrollCommand,
 	"tsmooth - toggle smooth scroll on and off"},
+#ifdef WIN32
 	{"dumpcallstack", &g_dumpCallStackCommand,
 	"dumpcallstack - test callstack dumpage to file callstack.txt"},
+#endif
 	{"tquitfast", &g_toggleQuitFastCommand,
 	"tquitfast - turn this on to NOT log memory at quit"},
 	{"timprove", &g_terrainImprovementCommand,
@@ -3097,13 +3101,12 @@ void BuildWonderCommand::Execute(sint32 argc, char **argv)
 
 
 	PLAYER_INDEX	player ;
-	ID	item ;
+	Unit	item ;
 	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
-		g_player[player]->BuildWonder(atoi(argv[1]),
-									  Unit(item));
+		g_player[player]->BuildWonder(atoi(argv[1]), item);
 	}
 }
 
@@ -3253,7 +3256,7 @@ void SaveBuildQueueCommand::Execute(sint32 argc, char **argv)
 		return ;
 
 	Assert(argv[1] != NULL) ;
-	Assert(argv[1][0] != NULL) ;
+	Assert(argv[1][0] != '\0') ;
 
 	g_selected_item->GetTopCurItem(player, item, state) ;
 	if (state != SELECT_TYPE_LOCAL_CITY)
@@ -3424,7 +3427,7 @@ void LoadBuildQueueCommand::Execute(sint32 argc, char **argv)
 		return ;
 
 	Assert(argv[1] != NULL) ;
-	Assert(argv[1][0] != NULL) ;
+	Assert(argv[1][0] != '\0') ;
 
 	g_selected_item->GetTopCurItem(player, item, state) ;
 	if (state != SELECT_TYPE_LOCAL_CITY)
@@ -5091,7 +5094,7 @@ void TileTypeCommand::Execute(sint32 argc, char** argv)
 		return ;
 
 	g_tiledMap->GetMouseTilePos(pos) ;
-
+Unit(item)
 	if(argc == 4)
 		{
 		pos.x = atoi(argv[1]) ;
@@ -5378,7 +5381,7 @@ void ToggleSmoothScrollCommand::Execute(sint32 argc, char **)
     g_smoothScroll = !g_smoothScroll;
 }
 
-
+#ifdef WIN32
 void DumpCallStackCommand::Execute(sint32 argc, char **)
 
 {
@@ -5395,15 +5398,14 @@ void DumpCallStackCommand::Execute(sint32 argc, char **)
 	
 	fclose(callstack_file);
 }
-
+#endif
 
 void ToggleQuitFastCommand::Execute(sint32 argc, char **)
 {
-#ifdef _DEBUG
-	
+#if defined(_DEBUG) && defined(WIN32)
 	extern bool g_quitfast;
 
-    g_quitfast = !g_quitfast;
+	g_quitfast = !g_quitfast;
 #endif
 }
 
@@ -5562,7 +5564,8 @@ void BuildCommand::Execute(sint32 argc, char** argv)
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
 		sint32 type = atoi(argv[1]);
-		g_player[player]->BuildUnit(type, Unit(item));
+		Unit unit = Unit(item);
+		g_player[player]->BuildUnit(type, unit);
 	}
 }
 
@@ -5747,7 +5750,7 @@ void DipLogOnCommand::Execute (sint32 argc, char** argv)
         sint32 p = atoi(argv[1]); 
         g_theDiplomacyLog->LogPlayer(p);
     } 
-#endif _DEBUG
+#endif // _DEBUG
 } 
 
 void DipLogOffCommand::Execute (sint32 argc, char** argv)
@@ -5763,7 +5766,7 @@ void DipLogOffCommand::Execute (sint32 argc, char** argv)
         sint32 p = atoi(argv[1]); 
         g_theDiplomacyLog->UnlogPlayer(p);
     } 
-#endif _DEBUG
+#endif // _DEBUG
 } 
 
 
@@ -5788,7 +5791,8 @@ void ImproveCommand::Execute(sint32 argc, char** argv)
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
-		g_player[player]->BuildImprovement(atoi(argv[1]), Unit(item));
+		Unit unit = Unit(item);
+		g_player[player]->BuildImprovement(atoi(argv[1]), unit);
 	}
 }
 
@@ -5906,24 +5910,26 @@ extern BOOL g_letUIProcess;
 
 void FastRoundCommand::Execute(sint32 argc, char **argv) 
 { 
-	
-
 	if(g_doingFastRounds)
 		return;
 
 	if (g_statusWindow)
 		g_statusWindow->Hide();
 
-    sint32 i, n; 
+	sint32 i, n; 
 
-    n = atoi(argv[1]); 
+	n = atoi(argv[1]); 
 
 	sint32 t = GetTickCount();
-	MSG	msg;
+#ifdef __AUI_USE_SDL__
+	SDL_Event event;
+#else
+	MSG msg;
+#endif
 
 	g_doingFastRounds = TRUE;
 
-    for (i=0; i<(n) && !gDone; i++) {
+	for (i=0; i<(n) && !gDone; i++) {
 		
 		NewTurnCount::StartNextPlayer(false);
 		
@@ -5931,30 +5937,54 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 		g_director->NextPlayer();
 		do {
 			g_controlPanel->Idle();
-            if (g_civApp)
-    			g_civApp->Process();
+			if (g_civApp)
+				g_civApp->Process();
 
-          	while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
-			    if (msg.message == WM_QUIT)
-				    gDone = TRUE;
-
-			    TranslateMessage(&msg);
+#if __AUI_USE_SDL__
+			while (1) {
+				int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
+						~SDL_MOUSEEVENTMASK);
+				if (0 > n) {
+					fprintf(stderr, "[FastRoundCommand::Execute] PeepEvents failed: %s\n",
+					    SDL_GetError());
+					break;
+				}
+				if (0 == n) {
+					// other events are handled in other threads
+					// or no more events
+					break;
+				}
+				if (SDL_QUIT == event.type)
+#else
+			while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
+			
+				if (msg.message == WM_QUIT)
+#endif
+					gDone = TRUE;
+#ifndef __AUI_USE_SDL__
+				TranslateMessage(&msg);
 				
 				if (msg.message == WM_CHAR) {
 					if ((MBCHAR)msg.wParam == 0x1B) 
 						i = n;
 				}
-
-			    DispatchMessage(&msg);
-    		}
-       		g_letUIProcess = FALSE;
+				
+				DispatchMessage(&msg);
+#else
+				if (SDL_KEYDOWN == event.type)
+				{
+					SDL_KeyboardEvent key = event.key;
+					if (SDLK_ESCAPE == key.keysym.sym)
+						i = n;
+				}
+#endif
+			}
+			g_letUIProcess = FALSE;
 
 		} while ((g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) &&
 			    !gDone); 
 		
-        
-        
-    } 
+	} 
 
 	t = GetTickCount() - t;
 
@@ -6311,8 +6341,9 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 
 	MBCHAR filename[_MAX_PATH];
 	g_civPaths->FindFile(C3DIR_SOUNDS, "pct.wav", filename);
-    PlaySound (filename, NULL, SND_ASYNC | SND_FILENAME);
-
+#ifdef WIN32
+	PlaySound (filename, NULL, SND_ASYNC | SND_FILENAME);
+#endif
 	return;
 }
 
@@ -6359,14 +6390,15 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
     sint32 arsize =  sizeof(commands)/sizeof(CommandRecord);
 
 	if(m_displayHelp) {
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
+		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE,
 							(MBCHAR*)"command <required_param> [optional_param]",
 							0,0);
-		for(sint32 i = m_helpStart;
+		sint32 i;
+		for(i = m_helpStart;
             (i<arsize) &&
 			commands[i].m_name != NULL && i < m_helpStart + k_HELP_LINES;
 			i++) {
-			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i-m_helpStart) * k_TEXT_SPACING,
+			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i-m_helpStart) * k_TEXT_SPACING,
 								(MBCHAR*)commands[i].m_helptext, 0, 0);
 
 
@@ -6377,11 +6409,11 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 		if(commands[i].m_name != NULL) {
 			
 			sprintf(buf, "[~help %d] for next page", (m_helpStart / k_HELP_LINES) + 1);
-			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,
+			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,
 								(MBCHAR*)buf, 0, 0);
 		}
 	} else if(m_displayCityResources) {
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
+		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE,
 						   (MBCHAR*)"player city resources",
 						   0, 0);
 		l = 0;
@@ -6398,7 +6430,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 #ifdef CTP1_TRADE
 					if((rc = cityData->GetResourceCount(r)) > 0) 
 #else
-					if(rc = (*cityData->GetCollectingResources())[r] > 0)
+					if((rc = (*cityData->GetCollectingResources())[r]) > 0)
 #endif
 					{
 						char rbuf[80];
@@ -6406,7 +6438,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 						strcat(buf, rbuf);
 					}
 				}
-				primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + l * k_TEXT_SPACING,
+				primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + l * k_TEXT_SPACING,
 									(MBCHAR*)buf, 0, 0);
 				l++;
 			}
@@ -6450,10 +6482,10 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 						break;
 				}
 				strcat(buf, buf2);
-				sprintf(buf2, " to city %d", tradeOffers->Get(j).GetToCity());
+				sprintf(buf2, " to city %d", tradeOffers->Get(j).GetToCity().m_id);
 
 				strcat(buf, buf2);
-				primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
+				primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
 				l++;
 			}
@@ -6475,29 +6507,10 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 		sprintf (buf, "Combined total : %d", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
 		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
-#else
-#ifdef _DEBUG
+#elif defined(_DEBUG) && defined(WIN32)
 		
 		_CrtMemState new_state; 
        _CrtMemCheckpoint(&new_state);
-
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
        l = 0;
        sprintf (buf, "call count %d", new_state.lCounts[1]);       
@@ -6536,7 +6549,6 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, color , 0);
 #endif
-#endif
     }
 
 	g_tiledMap->InvalidateMix();
@@ -6567,7 +6579,7 @@ void CommandLine::DisplayMem()
 	m_displayOffers = FALSE;
     m_display_mem = !m_display_mem; 
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(WIN32)
     if (m_display_mem) { 
         _CrtMemState new_state; 
         _CrtMemCheckpoint(&new_state);

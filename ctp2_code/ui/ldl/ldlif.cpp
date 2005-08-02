@@ -229,9 +229,9 @@ void ldlif_add_float_attribute(const char *name, double val)
 	s_blockStack->GetTail()->AddAttribute(attr);
 }
 
-void ldlif_add_string_attribute(const char *name, char *val)
+void ldlif_add_string_attribute(const char *name, const char *val)
 {
-	ldl_attributeValue<char *> *attr = new ldl_attributeValue<char *>(name, ATTRIBUTE_TYPE_STRING, val);
+	ldl_attributeValue<const char *> *attr = new ldl_attributeValue<const char *>(name, ATTRIBUTE_TYPE_STRING, val);
 	s_blockStack->GetTail()->AddAttribute(attr);
 }
 

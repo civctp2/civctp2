@@ -420,7 +420,9 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
     switch (kf) {
 #ifdef _PLAYTEST
 	case KEY_FUNCTION_ENTER_COMMAND: 
+#ifdef WIN32
 		segmentlist_Display();
+#endif
 		break;
 	case KEY_FUNCTION_ENTER_COMMAND_ALTERNATE:
 		commandMode = TRUE; 
