@@ -17,8 +17,9 @@
 //
 // Compiler flags
 //
-// - None
-// 
+// CTP1_TRADE
+// - Creates an executable with trade like in CTP1. Currently broken.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -43,6 +44,8 @@
 // - implemented immobile units (set MaxMovePoints equal to 0 in units.txt) 
 //   PFT 17 Mar 05
 // - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin Gühmann
+// - Removed some unsused method to removed some unused in methods in
+//   CityData.. - Aug 6th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -152,12 +155,12 @@
 #ifdef _DEBUG
 #include "aui.h"
 #include "controlpanelwindow.h"
-extern ControlPanelWindow	*g_controlPanel;
+extern ControlPanelWindow   *g_controlPanel;
 #endif
 
-extern QuadTree<Unit> *g_theUnitTree;
+extern QuadTree<Unit>       *g_theUnitTree;
 
-extern SoundManager	*g_soundManager;
+extern SoundManager         *g_soundManager;
 
 extern BOOL UnitCanCarry(sint32 dest, sint32 src);
 
@@ -170,23 +173,23 @@ extern BOOL UnitCanCarry(sint32 dest, sint32 src);
 
 
 UnitData::UnitData(
-    const sint32 t,  
-    const sint32 trans_t,  
-    const Unit &i,  
-    const PLAYER_INDEX o,   
+    const sint32 t,
+    const sint32 trans_t,
+    const Unit &i,
+    const PLAYER_INDEX o,
     const MapPoint &center_pos,
     const Unit hc,
-	UnitActor *actor
-    ) : GameObj(i.m_id)  
+    UnitActor *actor
+    ) : GameObj(i.m_id)
                    
-{ 
-    
-    
-    
-    
-    
-	
-	
+{
+
+
+
+
+
+
+
 	m_pos = center_pos;
 
 	Create(t, trans_t, i, o);
@@ -226,12 +229,13 @@ UnitData::UnitData(const sint32 t,
 	m_visibility = 0xffffffff;
 	m_temp_visibility = 0xffffffff;
 	m_radar_visibility = 0xffffffff;
-    m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, actor_pos,
+	m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, actor_pos,
 							m_owner, FALSE, (GetVisionRange()), 0);
 	m_actor->SetUnitVisionRange((GetVisionRange()));
 
 	m_pos = actor_pos;	
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::Place
@@ -277,6 +281,7 @@ void UnitData::Place(const MapPoint &center_pos)
 		}
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::Create
@@ -300,29 +305,29 @@ void UnitData::Create(const sint32 t,
 				 const Unit &i,
 				 const PLAYER_INDEX o)
 {
-    DPRINTF(k_DBG_GAMESTATE, ("Creating unit: id: %d, type: %d, owner: %d\n",
+	DPRINTF(k_DBG_GAMESTATE, ("Creating unit: id: %d, type: %d, owner: %d\n",
 							  i.m_id, t, o));
 	const UnitRecord *rec = g_theUnitDB->Get(t);
 
 	m_flags = 0;
 	m_actor = 0;
-    m_type = t; 
+	m_type = t;
 
 #ifdef _DEBUG
-    m_text[0] = 0; 
+	m_text[0] = 0; 
 #endif
-  
-    m_owner = o;
-    
-	sint32 wonderHPBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
-    m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus;
-    m_movement_points = g_theUnitDB->Get(t)->GetMaxMovePoints();
 
-    //PFT 17 Mar 05, don't FIRST_MOVE flag immobile units
+	m_owner = o;
+
+	sint32 wonderHPBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
+	m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus;
+	m_movement_points = g_theUnitDB->Get(t)->GetMaxMovePoints();
+
+	//PFT 17 Mar 05, don't FIRST_MOVE flag immobile units
 	if( !IsImmobile() )
 		SetFlag(k_UDF_FIRST_MOVE);
 
-    m_fuel = g_theUnitDB->Get(t)->GetMaxFuel(); 
+	m_fuel = g_theUnitDB->Get(t)->GetMaxFuel(); 
 
 	sint32 amt;
 	if((rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater())) {
@@ -334,27 +339,24 @@ void UnitData::Create(const sint32 t,
 		}
 	}
 
-    
-    if (rec->GetCanCarry()		&& 
-		rec->GetCargoDataPtr()	&&	
-		(0 < rec->GetCargoDataPtr()->GetMaxCargo()) 
-       )
-	{ 
-		m_cargo_list = new UnitDynamicArray(rec->GetCargoDataPtr()->GetMaxCargo());
-    } else { 
-        m_cargo_list = NULL; 
-    }
-    
-    if (g_theUnitDB->Get(m_type)->GetHasPopAndCanBuild()) 
-	{
-        m_city_data = new CityData(m_owner, i, m_pos);
-		
-		
-	}
-    else 
-        m_city_data = NULL; 
 
-    m_sprite_state = new SpriteState(g_theUnitDB->Get(t)->GetDefaultSprite()->GetValue());
+	if(rec->GetCanCarry()
+	&& rec->GetCargoDataPtr()
+	&&(0 < rec->GetCargoDataPtr()->GetMaxCargo())
+	){
+		m_cargo_list = new UnitDynamicArray(rec->GetCargoDataPtr()->GetMaxCargo());
+	} else {
+		m_cargo_list = NULL; 
+	}
+
+	if (g_theUnitDB->Get(m_type)->GetHasPopAndCanBuild())
+	{
+		m_city_data = new CityData(m_owner, i, m_pos);
+	}
+	else
+		m_city_data = NULL;
+
+	m_sprite_state = new SpriteState(g_theUnitDB->Get(t)->GetDefaultSprite()->GetValue());
 
 	m_visibility = 0;
 	m_temp_visibility = 0;
@@ -370,17 +372,17 @@ void UnitData::Create(const sint32 t,
 UnitData::UnitData(CivArchive &archive) : GameObj(0)
 {
 #ifdef _DEBUG
-    m_text[0] = 0 ;
+	m_text[0] = 0;
 #endif
 
-	m_cargo_list = NULL ;
-	m_city_data = NULL ;
-	m_actor = NULL ;
-	m_sprite_state = NULL ;
-	m_lesser = NULL ;
-	m_greater = NULL ;
+	m_cargo_list = NULL;
+	m_city_data = NULL;
+	m_actor = NULL;
+	m_sprite_state = NULL;
+	m_lesser = NULL;
+	m_greater = NULL;
 	
-	Serialize(archive) ;
+	Serialize(archive);
 }
 
 
@@ -394,13 +396,13 @@ UnitData::UnitData(CivArchive &archive) : GameObj(0)
 UnitData::~UnitData()
 
 {
-    if (m_cargo_list) { 
-        delete m_cargo_list; 
-    } 
+	if (m_cargo_list) {
+		delete m_cargo_list;
+	}
 
-    if (m_city_data) { 
-        delete m_city_data; 
-    }
+	if (m_city_data) {
+		delete m_city_data;
+	}
 
 	
 	
@@ -426,6 +428,7 @@ UnitData::~UnitData()
 		m_greater = NULL;
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::SetPosAndNothingElse
@@ -443,15 +446,14 @@ UnitData::~UnitData()
 //----------------------------------------------------------------------------
 void UnitData::SetPosAndNothingElse(const MapPoint &p)
 {
-    m_pos = p; 
+	m_pos = p; 
 
-    Assert(g_player[m_owner]); 
-    g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
-
+	Assert(g_player[m_owner]); 
+	g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
 }
 
 void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
-					  BOOL &left_map)
+                      BOOL &left_map)
 
 {
 	
@@ -463,11 +465,11 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 	RemoveUnitVision();
 	
 	UndoVision();
-    m_pos = p; 
+	m_pos = p;
 
 	
 	m_roundTheWorldMask->SetBit(m_pos.x);
-    const UnitRecord *rec = g_theUnitDB->Get(m_type);    
+	const UnitRecord *rec = g_theUnitDB->Get(m_type);
 	if(m_roundTheWorldMask->AllBitsSet() && (rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater())) {
 		g_featTracker->AddFeat("FEAT_SAILED_AROUND_WORLD", m_owner);
 	}
@@ -494,9 +496,10 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 			}
 		}
 	}
-    Assert(g_player[m_owner]); 
-    g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
+	Assert(g_player[m_owner]); 
+	g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::DeductMoveCost
@@ -522,49 +525,50 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 //----------------------------------------------------------------------------
 sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_fuel) 
 
-{   
+{
 	if(!Flag(k_UDF_PACMAN)) {
 		m_movement_points -= cost;
 		m_movement_points = std::max(m_movement_points, 0.0);
-		ClearFlag(k_UDF_FIRST_MOVE); 
+		ClearFlag(k_UDF_FIRST_MOVE);
 	}
 
 	const UnitRecord *rec = g_theUnitDB->Get(m_type); 
 
-   out_of_fuel = FALSE; 
-   if (!rec->GetNoFuelThenCrash()){ 
-	   return FALSE; 
-   } else {   
-	   m_fuel -= g_theConstDB->NonSpaceFuelCost();
+	out_of_fuel = FALSE; 
+	if (!rec->GetNoFuelThenCrash()){ 
+		return FALSE; 
+	} else {
+		m_fuel -= g_theConstDB->NonSpaceFuelCost();
 
-	   if (m_fuel <= 0) {
-		   CheckForRefuel();//refuel the unit if it's in a city, airbase, or being transported
+		if (m_fuel <= 0) {
+			CheckForRefuel();//refuel the unit if it's in a city, airbase, or being transported
 
-		   if(m_fuel <= 0) { //refuelling failed, it's NoFuelThenCrash
-			   out_of_fuel = TRUE; 
-			   
-			   if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
+			if(m_fuel <= 0) { //refuelling failed, it's NoFuelThenCrash
+				out_of_fuel = TRUE;
+			
+				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
 				  (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
-				   m_army.AddDeath(Unit(m_id), CAUSE_REMOVE_ARMY_OUTOFFUEL, -1);
-			   }
+					m_army.AddDeath(Unit(m_id), CAUSE_REMOVE_ARMY_OUTOFFUEL, -1);
+				}
 
-			   m_movement_points = 0;
-			   return TRUE; 
-		   }
-        } 
-    }
-    return FALSE; 
+				m_movement_points = 0;
+				return TRUE; 
+			}
+		}
+	}
+	return FALSE;
 }
 
 bool UnitData::IsImmobile()const {
 
-    const UnitRecord *rec = g_theUnitDB->Get(m_type);
+	const UnitRecord *rec = g_theUnitDB->Get(m_type);
 
 	if (rec->GetMaxMovePoints() < 1.0 )
 		return true;
 
 	return false;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::ResetMovement
@@ -583,27 +587,26 @@ bool UnitData::IsImmobile()const {
 //
 //----------------------------------------------------------------------------
 sint32 UnitData::ResetMovement()
+{
+	const UnitRecord *rec = g_theUnitDB->Get(m_type);    
 
-{ 
-    const UnitRecord *rec = g_theUnitDB->Get(m_type);    
-   
-    if (rec->GetLossMoveToDmgNone()) { //all entries in Units.txt have this
-        m_movement_points = rec->GetMaxMovePoints(); 
-    } else if (rec->GetLossMoveToDmgTwo()) { 
+	if (rec->GetLossMoveToDmgNone()) { //all entries in Units.txt have this
+		m_movement_points = rec->GetMaxMovePoints(); 
+	} else if (rec->GetLossMoveToDmgTwo()) { 
 		m_movement_points = 
 			std::max(2.0, rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr());
-    } else { 
-        m_movement_points = rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr(); 
-    }
+	} else {
+		m_movement_points = rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr();
+	}
 
 	sint32 amt;
 	if((rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) &&
-	   ((amt = wonderutil_GetIncreaseBoatMovement(g_player[m_owner]->m_builtWonders)) > 0)) 
+	   ((amt = wonderutil_GetIncreaseBoatMovement(g_player[m_owner]->m_builtWonders)) > 0))
 	{
 		m_movement_points += amt;
 	}
 	if((rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) &&
-		((amt = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_BOAT_MOVEMENT, m_owner)) > 0)) 
+	   ((amt = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_BOAT_MOVEMENT, m_owner)) > 0))
 	{
 		m_movement_points += amt;
 	}
@@ -615,30 +618,31 @@ sint32 UnitData::ResetMovement()
 		}
 	}
 
-    if( IsImmobile() ){//17 Mar 05, PFT, don't FIRST_MOVE flag immobile units
-        m_movement_points = 0.0;
+	if(IsImmobile()){//17 Mar 05, PFT, don't FIRST_MOVE flag immobile units
+		m_movement_points = 0.0;
 		ClearFlag(k_UDF_FIRST_MOVE);//speeds up debugging
-    }
-	else{ 
-        SetFlag(k_UDF_FIRST_MOVE);
+	}
+	else{
+		SetFlag(k_UDF_FIRST_MOVE);
 	}
 
 
 
-    ClearFlag(k_UDF_ALREADY_PERFORMED_SPACE_TRANSITION);
-    
-    if (g_theUnitDB->Get(m_type)->GetNoFuelThenCrash()) {
-		double origMovePoints = m_movement_points;
-        CheckForRefuel();//this may zero out m_movement_points
-        m_movement_points = origMovePoints;//so restore them
-        ENQUEUE();
-        return (0 < m_fuel);
-    } else { 
+	ClearFlag(k_UDF_ALREADY_PERFORMED_SPACE_TRANSITION);
 
-        ENQUEUE();
-        return TRUE; 
-    }
+	if (g_theUnitDB->Get(m_type)->GetNoFuelThenCrash()) {
+		double origMovePoints = m_movement_points;
+		CheckForRefuel();//this may zero out m_movement_points
+		m_movement_points = origMovePoints;//so restore them
+		ENQUEUE();
+		return (0 < m_fuel);
+	} else {
+
+		ENQUEUE();
+		return TRUE;
+	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::GetInserted
@@ -662,6 +666,7 @@ void UnitData::GetInserted(const Unit &transport)
 	UndoVision();
 	RemoveUnitVision();
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::GetInserted
@@ -679,7 +684,7 @@ void UnitData::GetInserted(const Unit &transport)
 //----------------------------------------------------------------------------
 sint32 UnitData::InsertCargo(const Unit &addme)
 
-{ 
+{
     Assert (m_cargo_list); 
     
     if (m_cargo_list->Num() < g_theUnitDB->Get(m_type)->GetCargoDataPtr()->GetMaxCargo()) { 
@@ -694,6 +699,7 @@ sint32 UnitData::InsertCargo(const Unit &addme)
         return FALSE; 
     }
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::GetCargoHP
@@ -732,6 +738,7 @@ sint32 UnitData::PayWages(sint32 w)
 	Assert(FALSE);
 	return 0;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::GetWagesNeeded
@@ -755,7 +762,8 @@ sint32 UnitData::GetWagesNeeded()
 	} else {
 		return 0;
 	}
-}	
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::DelFromCargo
@@ -778,6 +786,7 @@ void UnitData::DelFromCargo(const Unit delme)
     sint32 r = m_cargo_list->Del(delme); 
     Assert(r);
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::CanCarry
@@ -800,7 +809,8 @@ sint32 UnitData::CanCarry(
                           
 { 
     return UnitCanCarry(m_type, src); 
-} 
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::GetCargoCapacity
@@ -819,14 +829,15 @@ sint32 UnitData::CanCarry(
 sint32 UnitData::GetCargoCapacity() const
 
 {
-    if (m_cargo_list) { 
+	if (m_cargo_list) { 
 		
 		if (g_theUnitDB->Get(m_type)->GetCargoDataPtr())
 			return g_theUnitDB->Get(m_type)->GetCargoDataPtr()->GetMaxCargo() - m_cargo_list->Num();
-    }
+	}
 
 	return 0; 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::GetNumCarried
@@ -850,6 +861,7 @@ sint32 UnitData::GetNumCarried() const
 		return 0;
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::CargoHasLandUnits
@@ -882,6 +894,7 @@ BOOL UnitData::CargoHasLandUnits() const
 
     return(FALSE);
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::IsMovePointsEnough
@@ -923,6 +936,7 @@ BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
         return (cost <= m_movement_points ); 
     }
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::CanAtLeastOneCargoUnloadAt
@@ -957,6 +971,7 @@ BOOL UnitData::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoin
     }
     return FALSE; 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::CanThisCargoUnloadAt
@@ -1029,6 +1044,7 @@ BOOL UnitData::CanThisCargoUnloadAt(const Unit & the_cargo, const MapPoint & old
     }   
     return TRUE; 
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::UnloadCargo
@@ -1103,6 +1119,7 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 	} 	
 	return TRUE;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::UnloadSelectedCargo
@@ -1174,6 +1191,7 @@ BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 	}	
 	return TRUE;
 }
+
 // this is pre-CTP1 release:
 sint32 UnitData::CanRustle(CellUnitList &defender) const 
 {
@@ -1212,6 +1230,7 @@ sint32 UnitData::CanConvertCity(Unit &city) const
 		return false;
 	return true;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::CanBombard
@@ -1348,6 +1367,7 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 
 	return attack;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::Bombard
@@ -1407,6 +1427,7 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 		g_slicEngine->RunBombardmentTriggers(Unit(m_id), defender);
 	}
 }
+
 // not used 
 void UnitData::BombardOneRound(const UnitRecord *rec, Unit &defender, 
                                double dbonus, 
@@ -1427,6 +1448,7 @@ void UnitData::BombardOneRound(const UnitRecord *rec, Unit &defender,
    } 
    defender.SetHP(hp); 
 }
+
 // returns TRUE if this unit can bombard defender-type units
 BOOL UnitData::CanBombardType(const Unit & defender) const
 {
@@ -1463,6 +1485,7 @@ BOOL UnitData::CanBombardType(const Unit & defender) const
 	}
 	return FALSE;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::Bombard
@@ -1504,6 +1527,7 @@ BOOL UnitData::Bombard(CellUnitList &defender, BOOL isCounterBombardment)
 	}
 	return FALSE;
 }
+
 //not used
 void UnitData::FightOneRound(Unit did, double defenders_bonus, 
                              double amr, double dmr)
@@ -1527,16 +1551,17 @@ void UnitData::FightOneRound(Unit did, double defenders_bonus,
 }
 
 void UnitData::DeductHP(double fp)
-{ 
+{
 	if(g_theUnitDB->Get(m_type)->GetIsSpecialForces() || Flag(k_UDF_IS_PROFESSIONAL)) {
 		m_hp -= fp;
 	} else {
 		m_hp -= fp * (1 / g_player[m_owner]->m_readiness->GetHPModifier()); //military readiness 
 	}
 
-	
-	return; 
+
+	return;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UDUnitTypeCanSettle
@@ -1597,8 +1622,8 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
 
 
 BOOL UnitData::CanSettle(const MapPoint &pos) const 
-{ 
-    return  UDUnitTypeCanSettle(m_type, pos);
+{
+	return  UDUnitTypeCanSettle(m_type, pos);
 }
 
 
@@ -1779,7 +1804,7 @@ void BringCityIntoAge(sint32 age, Unit c)
 }
 
 BOOL UnitData::Settle()
-{    
+{
 	DPRINTF(k_DBG_GAMESTATE, ("Unit %lx settling\n", m_id));
 
     if (CanSettle(m_pos) == FALSE) {
@@ -1854,10 +1879,11 @@ void UnitData::BeginTurnCity(const Unit &me, UnitDynamicArray &dead)
 {
     Assert(m_city_data); 
 
-    if (m_city_data->BeginTurn() == FALSE) { 
+    if (m_city_data->BeginTurn() == FALSE) {
         dead.Insert(me); 
     }
 }
+
 //set this unit visible to PLAYER_INDEX player 
 void UnitData::SetVisible(PLAYER_INDEX player) 
 { 
@@ -1869,6 +1895,7 @@ void UnitData::SetVisible(PLAYER_INDEX player)
 		g_director->AddSetVisibility(m_actor, GetVisibility());
 	}
 }
+
 //set this unit invisible to PLAYER_INDEX player 
 void UnitData::UnsetVisible(PLAYER_INDEX player) 
 {
@@ -2456,34 +2483,6 @@ uint32 UnitData_UnitData_GetVersion(void)
 	return (k_UNITDATA_VERSION_MAJOR<<16 | k_UNITDATA_VERSION_MINOR) ;
 	}
 
-void UnitData::GetProductionStats(sint32 &s, sint32 &t, sint32 &f) const 
-
-{ 
-    Assert(m_city_data);
-    m_city_data->GetProductionStats(s, t, f); 
-}
-
-void UnitData::GetProjectedProductionDeltas(sint32 &s, sint32 &t, sint32 &f,
-											sint32 &science)
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return;
-
-	m_city_data->GetProjectedProductionDeltas(s,t,f, science);
-}
-
-void UnitData::GetProjectedHappinessCrime(double &hap, double &crime)
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return;
-
-    sint32 delta_martial_law; 
-	m_city_data->GetProjectedHappinessCrime(hap, crime, delta_martial_law);
-}
-
-
 void UnitData::GetConsumptionStats(sint32 &foodConsumed) const 
 {
 	Assert(m_city_data) ;
@@ -2527,22 +2526,8 @@ void UnitData::GetPop(sint32 &p)const
 void UnitData::GetTurnsToNextPop(sint32 &p)const//PFT 29 mar 05
 
 {
-    Assert(m_city_data);
-    p = m_city_data->TurnsToNextPop(); 
-}
-
-void UnitData::GetPollutionStats(sint32 &pollution) const
-	{
-	Assert(m_city_data) ;
-	m_city_data->GetPollutionStats(pollution) ;
-	}
-
-
-void UnitData::GetTradeStats(sint32 &g, sint32 &l, sint32 &sci) const
-
-{
-    Assert(m_city_data); 
-    m_city_data->GetTradeStats(g, l, sci);
+	Assert(m_city_data);
+	p = m_city_data->TurnsToNextPop();
 }
 
 void UnitData::AddTradeRoute(TradeRoute &route, BOOL fromNetwork)
@@ -3032,6 +3017,7 @@ void UnitData::KillVision()
 		UndoVision();
 	}
 }
+
 // returns squared distance
 sint32 UnitData::GetDistance(UnitData* unit1, UnitData* unit2,
 							 sint32 wrapRange)
@@ -3333,6 +3319,7 @@ void UnitData::EndTurn()
 		}
 	}
 }
+
 // not used
 BOOL UnitData::IsInsideCityRadius(const MapPoint &pos) const
 {
@@ -3474,6 +3461,7 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 
 	return def;
 }
+
 // returns this unit's attack points when attacking Unit defender
 double UnitData::GetOffense(const Unit &defender) const
 {
@@ -3493,6 +3481,7 @@ double UnitData::GetOffense(const Unit &defender) const
 		base = modAttack;
 	return base;
 }
+
 // returns this units defense points when defending against Unit attacker 	
 double UnitData::GetDefense(const Unit &attacker) const
 {
@@ -3531,6 +3520,7 @@ double UnitData::GetDefense(const Unit &attacker) const
 
 	return def;
 }
+
 // not used
 BOOL UnitData::HasAirport() const
 {
@@ -3540,6 +3530,7 @@ BOOL UnitData::HasAirport() const
 
 	return m_city_data->HasAirport();
 }
+
 // not used
 void UnitData::UseAirport()
 {
@@ -3619,6 +3610,7 @@ BOOL UnitData::StoppedBySpies(Unit &c)
 	}
 	return FALSE;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::InvestigateCity
@@ -3874,6 +3866,7 @@ failed:
 
 	return ORDER_RESULT_FAILED;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::InciteRevolution
@@ -4008,6 +4001,7 @@ ORDER_RESULT UnitData::AssassinateRuler(Unit &c)
 	ActionSuccessful(SPECATTACK_BOMBCABINET, c);
 	return ORDER_RESULT_SUCCEEDED;
 }
+
 //leftover from CTP1 ?
 ORDER_RESULT UnitData::NullifyWalls(Unit &c)
 {
@@ -4681,6 +4675,7 @@ sint32 UnitData::HowMuchLonger() const
 	if(!m_city_data) return 0;
 	return m_city_data->HowMuchLonger();
 }
+
 // not used
 sint32 UnitData::GetCombatUnits() const
 {
@@ -4688,14 +4683,6 @@ sint32 UnitData::GetCombatUnits() const
 	if(!m_city_data)
 		return 0;
 	return m_city_data->GetCombatUnits();
-}
-// not used (CityData::CanHavePopType always returns TRUE)
-BOOL UnitData::CanHavePopType(sint32 type) const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return FALSE;
-	return m_city_data->CanHavePopType(type);
 }
 
 BOOL UnitData::CanBuildUnit(sint32 type) const
@@ -4781,6 +4768,7 @@ sint32 UnitData::InjoinedBy() const
 		return -1;
 	return m_city_data->InjoinedBy();
 }
+
 // not used
 double UnitData::GetDistanceToCapitol() const
 {
@@ -4838,6 +4826,7 @@ void UnitData::SetOrders(UNIT_ORDER_TYPE order)
 	}
 }
 #endif
+
 // not used !
 double UnitData::GetOverseasDistress() const
 {
@@ -4968,6 +4957,7 @@ void UnitData::SetPacMan()
 	
 	
 }
+
 //Not used
 void UnitData::SetFirstMoveThisTurn(sint32 fm)
 {
@@ -4976,6 +4966,7 @@ void UnitData::SetFirstMoveThisTurn(sint32 fm)
 	else
 		ClearFlag(k_UDF_FIRST_MOVE);
 }
+
 // not used
 void UnitData::SetFuel(sint32 fuel)
 {
@@ -5230,6 +5221,7 @@ BOOL UnitData::HasLeftMap() const
 {
 	return Flag(k_UDF_HAS_LEFT_MAP);
 }
+
 //not used
 void UnitData::ContributeScience(double incomePercent,
 								 double &addscience,
@@ -5379,6 +5371,7 @@ sint32 UnitData::CanUndergroundRailway(const MapPoint &pos) const
 		return false;
 	return true;
 }
+
 // Returns true if this unit is next to pos and can convert a city there
 sint32 UnitData::CanConvert(const MapPoint &pos) const 
 {
@@ -5472,6 +5465,7 @@ sint32 UnitData::CanInciteRevolution(const MapPoint &pos) const
 		return false;
 	return true;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::CanCauseUnhappiness
@@ -5598,6 +5592,7 @@ sint32 UnitData::GetOutgoingTrade() const
 	}
 	return 0;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::CheckForRefuel

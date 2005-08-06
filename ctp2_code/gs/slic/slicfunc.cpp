@@ -15,6 +15,13 @@
 //
 //----------------------------------------------------------------------------
 //
+// Compiler flags
+//
+// CTP1_TRADE
+// - Creates an executable with trade like in CTP1. Currently broken.
+//
+//----------------------------------------------------------------------------
+//
 // Modifications from the original Activision code:
 //
 // - GetNearestWater function fixed by Martin Gühmann November 2nd 2003.
@@ -220,21 +227,20 @@ void SlicArgList::AddArg(SA_TYPE type, SlicSymbolData *symbol)
 //                                   Pos, String, StringId
 //
 //----------------------------------------------------------------------------
-
 BOOL SlicArgList::GetInt(sint32 arg, sint32 &value)
 {
 	Assert(arg < m_numArgs);
- 	if (m_argType[arg] == SA_TYPE_INT) 
-    {
+	if (m_argType[arg] == SA_TYPE_INT)
+	{
 		value = m_argValue[arg].m_int;
-        return TRUE;
-	} 
-    else if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
-             (m_argType[arg] == SA_TYPE_BUILTIN)
-            )
-    {
+		return TRUE;
+	}
+	else if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
+			 (m_argType[arg] == SA_TYPE_BUILTIN)
+			)
+	{
 		return m_argValue[arg].m_symbol &&
-               m_argValue[arg].m_symbol->GetIntValue(value);
+		       m_argValue[arg].m_symbol->GetIntValue(value);
 	} 
 	return FALSE;
 }
@@ -244,10 +250,10 @@ BOOL SlicArgList::GetUnit(sint32 arg, Unit &u)
 	Assert(arg < m_numArgs);
 	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
 	    (m_argType[arg] == SA_TYPE_BUILTIN) 
-       )
-    {
+	   )
+	{
 		return m_argValue[arg].m_symbol &&
-               m_argValue[arg].m_symbol->GetUnit(u);
+		       m_argValue[arg].m_symbol->GetUnit(u);
 	}
 	return FALSE;
 }
@@ -257,10 +263,10 @@ BOOL SlicArgList::GetArmy(sint32 arg, Army &a)
 	Assert(arg < m_numArgs);
 	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
 	    (m_argType[arg] == SA_TYPE_BUILTIN)
-       ) 
-    {
+	   )
+	{
 		return m_argValue[arg].m_symbol &&
-               m_argValue[arg].m_symbol->GetArmy(a);
+		       m_argValue[arg].m_symbol->GetArmy(a);
 	}
 	return FALSE;
 }
@@ -270,10 +276,10 @@ BOOL SlicArgList::GetCity(sint32 arg, Unit &city)
 	Assert(arg < m_numArgs);
 	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
 	    (m_argType[arg] == SA_TYPE_BUILTIN) 
-       )
-    {
+	   )
+	{
 		return m_argValue[arg].m_symbol &&
-               m_argValue[arg].m_symbol->GetCity(city);
+		       m_argValue[arg].m_symbol->GetCity(city);
 	}
 	return FALSE;
 }
@@ -283,10 +289,10 @@ BOOL SlicArgList::GetPos(sint32 arg, MapPoint &pos)
 	Assert(arg < m_numArgs);
 	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
 	    (m_argType[arg] == SA_TYPE_BUILTIN)
-       ) 
-    {
+	   )
+	{
 		return m_argValue[arg].m_symbol &&
-               m_argValue[arg].m_symbol->GetPos(pos);
+		       m_argValue[arg].m_symbol->GetPos(pos);
 	}
 	return FALSE;
 }
@@ -294,18 +300,18 @@ BOOL SlicArgList::GetPos(sint32 arg, MapPoint &pos)
 BOOL SlicArgList::GetPlayer(sint32 arg, sint32 &value)
 {
 	Assert(arg < m_numArgs);
-	if (m_argType[arg] == SA_TYPE_INT) 
-    {
+	if (m_argType[arg] == SA_TYPE_INT)
+	{
 		value = m_argValue[arg].m_int;
-        return TRUE;
-	} 
-    else if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
-             (m_argType[arg] == SA_TYPE_BUILTIN)
-            )
-    {
+		return TRUE;
+	}
+	else if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
+	         (m_argType[arg] == SA_TYPE_BUILTIN)
+	        )
+	{
 		return m_argValue[arg].m_symbol &&
-               m_argValue[arg].m_symbol->GetPlayer(value);
-	} 
+		       m_argValue[arg].m_symbol->GetPlayer(value);
+	}
 	return FALSE;
 }
 
@@ -318,7 +324,7 @@ BOOL SlicArgList::GetString(sint32 arg, char *&value)
 	{
 		value = const_cast<char *>(m_argValue[arg].m_symbol->GetName());
 		return TRUE;
-	} 
+	}
 	return FALSE;
 }
 
@@ -327,7 +333,7 @@ BOOL SlicArgList::GetStringId(sint32 arg, StringId &id) {
 	if(m_argType[arg] == SA_TYPE_STRING) {
 		id = m_argValue[arg].m_int;
 		return TRUE;
-	} 
+	}
 	return FALSE;
 }
 
@@ -464,7 +470,6 @@ SlicFunc::~SlicFunc()
 //              the arguments.
 //
 //----------------------------------------------------------------------------
-
 SFN_ERROR Slic_PrintInt::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 1)
@@ -541,10 +546,10 @@ SFN_ERROR Slic_AddMessage::Call(SlicArgList *args)
 									 g_slicEngine->GetContext());
 	obj->AddRecipient(recip);
 	obj->CopyFromBuiltins();
-    if (obj->GetNumPlayers() == 0)
-    {
-        obj->AddPlayer(recip);
-    }
+	if (obj->GetNumPlayers() == 0)
+	{
+		obj->AddPlayer(recip);
+	}
 	g_slicEngine->Execute(obj);
 
 	return SFN_ERROR_OK;
@@ -581,10 +586,10 @@ SFN_ERROR Slic_Message::Call(SlicArgList *args)
 									 g_slicEngine->GetContext());
 	obj->AddRecipient(recip);
 	obj->CopyFromBuiltins();
-    if (obj->GetNumPlayers() == 0)
-    {
-        obj->AddPlayer(recip);
-    }
+	if (obj->GetNumPlayers() == 0)
+	{
+		obj->AddPlayer(recip);
+	}
 	g_slicEngine->Execute(obj);
 
 	return SFN_ERROR_OK;
@@ -6861,7 +6866,6 @@ SFN_ERROR Slic_CityHasWonder::Call(SlicArgList *args)
 //              army is invalid, 0 (false) is returned.
 //
 //----------------------------------------------------------------------------
-
 SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 {
 	m_result.m_int = 0;
@@ -6897,7 +6901,6 @@ SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 //              disaster expected for a long time) is returned. 
 //
 //----------------------------------------------------------------------------
-
 SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 0)
@@ -6931,7 +6934,6 @@ SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 //              information is available, 0 (no pollution) is returned.
 //
 //----------------------------------------------------------------------------
-
 SFN_ERROR Slic_GetCurrentPollutionLevel::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 0)

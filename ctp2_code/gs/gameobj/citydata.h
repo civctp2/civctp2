@@ -26,6 +26,9 @@
 //       between #else and #endif are modified Apolyton code. The blocks 
 //       between #if and #else are the original Activision code.
 //
+// CTP1_TRADE
+// - Creates an executable with trade like in CTP1. Currently broken.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -44,6 +47,9 @@
 // - Removed private member m_turnsNextPop as there is no need to save it
 //   as its calculation is cheap and in addition there was no get method
 //   or anything else that requires to save it. - April 23rd 2005 Martin Gühmann
+// - Replaced some member names for clarity. - Aug 6th 2005 Martin Gühmann
+// - Removed a bunch of unused and incomplete methods. - Aug 6th 2005 Martin Gühmann
+// - Added new code as preparation for resource calculation redesign.- Aug 6th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -151,26 +157,26 @@ class CityData : public CityRadiusCallback {
 	sint32 m_shieldstore;
 	sint32 m_shieldstore_at_begin_turn;
 	sint32 m_build_category_at_begin_turn;
-	sint32 m_trade;
-	sint32 m_trade_lost_to_crime;
-	sint32 m_gross_trade;
+	sint32 m_net_gold;
+	sint32 m_gold_lost_to_crime;
+	sint32 m_gross_gold;
 	sint32 m_goldFromTradeRoutes;
 	sint32 m_goldLostToPiracy;
 	sint32 m_science;
 	sint32 m_luxury;
 	CITY_ATTITUDE m_city_attitude;
 	
-	sint32 m_collected_production_this_turn;
-	sint32 m_gross_production_this_turn;
-	sint32 m_shields_this_turn;
-	sint32 m_shields_lost_to_crime;
+	sint32 m_collected_production_this_turn; // Will be unused
+	sint32 m_gross_production;
+	sint32 m_net_production;
+	sint32 m_production_lost_to_crime;
 
 	uint64 m_built_improvements;
 	uint64 m_builtWonders;
 
 	double m_food_delta;
-	double m_gross_food_this_turn;
-	double m_food_produced_this_turn;
+	double m_gross_food;
+	double m_net_food;
 	double m_food_lost_to_crime;
 	double m_food_consumed_this_turn;
 
@@ -262,8 +268,8 @@ class CityData : public CityRadiusCallback {
 	bool m_buyFront;
 
 	sint32 m_max_food_from_terrain;
-	sint32 m_max_production_from_terrain;
-	sint32 m_max_trade_from_terrain;
+	sint32 m_max_prod_from_terrain;
+	sint32 m_max_gold_from_terrain;
 
 	sint32 m_growth_rate;
 	double m_overcrowdingCoeff;
@@ -296,18 +302,52 @@ class CityData : public CityRadiusCallback {
 	Resources m_sellingResources;
 	Resources m_buyingResources;
 #endif
-	Happy	*m_happy ;
+	Happy     *m_happy;
 	
-	MBCHAR	m_name[k_MAX_NAME_LEN] ;
+	MBCHAR    m_name[k_MAX_NAME_LEN] ;
 
-	sint32 *m_distanceToGood;
-
-	
-	double m_defensiveBonus;
-	
-	
+	sint32    *m_distanceToGood;
 
 	
+	double    m_defensiveBonus;
+	
+	sint32    *m_ringFood;
+	sint32    *m_ringProd;
+	sint32    *m_ringGold;
+	sint32    *m_ringSizes;
+	
+	double    m_max_processed_terrain_food;
+	double    m_max_processed_terrain_prod;
+	double    m_max_processed_terrain_gold;
+	double    m_max_processed_terrain_scie;
+
+	double    m_grossFoodCrimeLoss;
+	double    m_grossProdCrimeLoss;
+	double    m_grossGoldCrimeLoss;
+	double    m_grossScieCrimeLoss;
+
+	double    m_grossProdBioinfectionLoss;
+	double    m_grossProdFranchiseLoss;
+	double    m_grossGoldConversionLoss;
+
+	double    m_foodFromOnePop;
+	double    m_prodFromOnePop;
+	double    m_goldFromOnePop;
+	double    m_scieFromOnePop;
+
+	double    m_crimeFoodLossOfOnePop;
+	double    m_crimeProdLossOfOnePop;
+	double    m_crimeGoldLossOfOnePop;
+	double    m_crimeScieLossOfOnePop;
+
+	double    m_bioinfectionProdLossOfOnePop;
+	double    m_franchiseProdLossOfOnePop;
+	double    m_conversionGoldLossOfOnePop;
+
+	sint32    m_productionLostToBioinfection;
+	sint32    m_max_scie_from_terrain;
+	double    m_gross_science;
+	double    m_science_lost_to_crime;
 	
 	RADIUS_OP m_cityRadiusOp;
 	UnitDynamicArray *m_killList;
@@ -363,12 +403,12 @@ public:
 
 	sint32 GetStoredCityFood() const { return m_accumulated_food; }
 	sint32 GetNetCityFood() const { return sint32(m_food_delta); }
-	sint32 GetGrossCityFood() const { return sint32(m_gross_food_this_turn); }
+	sint32 GetGrossCityFood() const { return sint32(m_gross_food); }
 
 	
 	sint32 GetStarvationTurns() const {return m_starvation_turns;}
 
-	double GetProducedFood() const { return m_food_produced_this_turn; }
+	double GetProducedFood() const { return m_net_food; }
 	double GetConsumedFood() const { return m_food_consumed_this_turn; }
 
 	
@@ -382,9 +422,8 @@ public:
 	
 	double ProjectMilitaryContribution();
 	sint32 GetStoredCityProduction() const { return m_shieldstore; }
-	sint32 GetNetCityProduction() const { return m_shields_this_turn; }
-	sint32 GetGrossCityProduction() const { return m_gross_production_this_turn; }
-	sint32 GetCollectedProduction() const { return m_collected_production_this_turn; }
+	sint32 GetNetCityProduction() const { return m_net_production; }
+	sint32 GetGrossCityProduction() const { return m_gross_production; }
 
 	
 	sint32 ComputeMaterialsPaid(double percent_terrain);
@@ -458,7 +497,7 @@ public:
 	BOOL AdjustedBestTile(const double foodCoef, const double productionCoef, const double resourceCoef, MapPoint &bestPos) ;
 
 
-	void CollectOtherTrade(const BOOL projectedOnly, BOOL changeResources = TRUE);
+	void CollectOtherTrade(const bool projectedOnly, bool changeResources = true);
 	void CheckTopTen();
 	sint32 SupportBuildings(bool projectedOnly);
 	sint32 GetSupportBuildingsCost() const;
@@ -466,7 +505,7 @@ public:
 	void AddTradeRoute(TradeRoute &route, BOOL fromNetwork);
 	void DelTradeRoute(TradeRoute route);
 	sint32 IsUsedInTradeRoute(const MapPoint &qpos);
-	sint32 CalculateTradeRoutes(BOOL projectedOnly);
+	sint32 CalculateTradeRoutes(bool projectedOnly);
 	sint32 CalculateGoldFromResources();
 	void AddTradeResource(ROUTE_TYPE type, sint32 resource);
 #ifdef CTP1_TRADE
@@ -486,13 +525,13 @@ public:
 
 	bool BreakOneSourceRoute(ROUTE_TYPE type, sint32 resource);
 
-	void CollectGold(sint32 &trade, sint32 &convertedGold, sint32 &crimeLost, bool considerOnlyFromTerrain = false) const;
-	void ProcessGold(sint32 &trade, bool considerOnlyFromTerrain = false) const;
-	void ApplyGoldCoeff(sint32 &trade) const;
-	void CalcGoldLoss(const bool projectedOnly, sint32 &trade, sint32 &convertedGold, sint32 &crimeLost) const;
+	void CollectGold(sint32 &gold, sint32 &convertedGold, sint32 &crimeLost, bool considerOnlyFromTerrain = false) const;
+	void ProcessGold(sint32 &gold, bool considerOnlyFromTerrain = false) const;
+	void ApplyGoldCoeff(sint32 &gold) const;
+	void CalcGoldLoss(const bool projectedOnly, sint32 &gold, sint32 &convertedGold, sint32 &crimeLost) const;
 
-	sint32 GetNetCityGold() const { return m_trade; } 
-	sint32 GetGrossCityGold() const { return m_gross_trade; } 
+	sint32 GetNetCityGold() const { return m_net_gold; } 
+	sint32 GetGrossCityGold() const { return m_gross_gold; } 
 
 
 
@@ -565,55 +604,13 @@ public:
 
 	void GetPop(sint32 &p)const { p = m_population; }
 
-	void GetTradeStats(sint32 &g, sint32 &l, sint32 &sci) const
-	{
-		g = m_trade;
-		l = m_luxury;
-		sci = m_science;
-	}
-
-	void GetPollutionStats(sint32 &pollution) const {
-		pollution = m_total_pollution ;
-		}
-
-	void GetProductionStats(sint32 &s, sint32 &t, sint32 &f) const {
-		s = m_shieldstore;
-		t = m_trade;
-		f = 0;
-	}
-	void GetProjectedProductionDeltas(sint32 &s, sint32 &t, sint32 &f,
-	                                  sint32 &science);
-	void GetProjectedGrossProduction(sint32 &prod, sint32 &prod_crime);
-	void GetProjectedGrossFood(sint32 &food, sint32 &food_crime);
-	void GetProjectedGrossGold(sint32 &gold, sint32 &gold_crime);
-
-	void GetDetailedProjectedHappinessCrime(double &hap, double &crime);
-	void GetProjectedHappinessCrime(double &hap, double &crime, sint32 &delta_martial_law);
-	void GetProjectedFood(sint32 &food) ;
-	void GetDetailedProjectedFood(sint32 &food, sint32 &foodBeforeCrime,
-	                              sint32 &foodBeforeCrimeAndEaten);
-
-	void GetDetailedProjectedProduction(sint32 &production, sint32 &productionBeforeCrime) const;
-	void GetProjectedProduction(sint32 &production);
-	void GetDetailedProjectedTradeScience(sint32 &projected_gross_gold,
-	                                      sint32 &projected_net_gold,
-	                                      sint32 &science,
-	                                      sint32 &popScience,
-	                                      sint32 &projected_gold_before_crime,
-	                                      sint32 &projected_wages);
-	void GetProjectedTrade(sint32 &projected_gross_gold, sint32 &projected_net_gold);
-	sint32 GetDetailedProjectedTradeDeltaAdjustResource(sint32 resource, sint32 adjust);
-
-	void CollectTradeFromCell(MapPoint &popPos, sint32 &trade);
-	void GetProjectedTradeFromCell(MapPoint &pos, sint32 &trade);
-
 	void GetConsumptionStats(sint32 &foodConsumed) const {
 		foodConsumed = (sint32)(m_food_consumed_this_turn);
 	}
 
 	
-	sint32 GetTradeCrime() const { return m_trade_lost_to_crime; }
-	sint32 GetProdCrime() const { return m_shields_lost_to_crime; }
+	sint32 GetTradeCrime() const { return m_gold_lost_to_crime; }
+	sint32 GetProdCrime() const { return m_production_lost_to_crime; }
 	void GetFoodCrime( sint32 &foodCrime ) const {
 		foodCrime = (sint32)(m_food_lost_to_crime);
 	}
@@ -645,7 +642,6 @@ public:
 	sint32 GetPollution() const;
 	sint32 GetPopulationPollution() const;
 	sint32 GetProductionPollution() const;
-	void RemoveImprovements(const MapPoint &pos, sint32 owner);
 	void CityToPark(sint32 agressor);
 
 	void CityRadiusFunc(const MapPoint &pos);
@@ -747,9 +743,6 @@ public:
 #endif
 
 	sint32 GetCombatUnits() const;
-	BOOL HasPopChanged(void) const { Assert(FALSE); return FALSE; }
-	BOOL HasPopGrown(void) const { Assert(FALSE); return FALSE; }
-	BOOL HasPopStarved(void) const { Assert(FALSE); return FALSE; }
 	void IndicateImprovementBuilt(void) { m_improvementWasBuilt = TRUE ; }
 	BOOL WasImprovementBuilt(void) const { return (m_improvementWasBuilt) ; }
 	void IndicateTerrainImprovementBuilt(void) { m_terrainImprovementWasBuilt=TRUE ; }
@@ -758,8 +751,6 @@ public:
 	BOOL WasHappinessAttacked(void) const;
 	void IndicateTerrainPolluted(void) { m_terrainWasPolluted = TRUE ; }
 	BOOL WasTerrainPolluted(void) const { return (m_terrainWasPolluted) ; }
-	BOOL CanHavePopType(sint32 type) const;
-	BOOL CanHaveUIPopType(sint32 uitype) const;
 	sint32 GetScience(void) const { return (m_science) ; }
 	sint32 GetScienceFromCommerce(void) const;
 	BOOL CanBuildUnit(sint32 type) const;
@@ -772,7 +763,6 @@ public:
 	sint32 InjoinedBy() const { return m_injoinedBy; }
 
 	BOOL HaveImprovement(const sint32 type) const;
-	sint32 GetPreferedPopType() const;
 
 	void RecalculateResources();
 	sint32 CountTradeWith(PLAYER_INDEX player) const;
@@ -795,8 +785,6 @@ public:
 
 	sint32 GetHappinessFromPops();
 	sint32 GetScienceFromPops(bool considerOnlyFromTerrain = false) const;
-	sint32 GetGoldFromPops();
-	sint32 GetProductionFromPops();
 
 	sint32 GetIncomingTrade() const;
 	sint32 GetOutgoingTrade() const;
@@ -922,8 +910,8 @@ public:
 	void AddBuyFront();
 
 	sint32 GetMaxFoodFromTerrain() { return m_max_food_from_terrain; }
-	sint32 GetMaxProductionFromTerrain() { return m_max_production_from_terrain; }
-	sint32 GetMaxCommerceFromTerrain() { return m_max_trade_from_terrain; }
+	sint32 GetMaxProductionFromTerrain() { return m_max_prod_from_terrain; }
+	sint32 GetMaxCommerceFromTerrain() { return m_max_gold_from_terrain; }
 
 	sint32 GetGrowthRate() const { return m_growth_rate; }
 	double GetOvercrowdingCoefficient() const { return m_overcrowdingCoeff; }
@@ -952,7 +940,7 @@ public:
 	void   DoSupport(bool projectedOnly);
 	sint32 GetSupport() const;
 	void   SplitScience(bool projectedOnly);
-	void   SplitScience(bool projectedOnly, sint32 &trade, sint32 &science, bool considerOnlyFromTerrain = false) const;
+	void   SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, bool considerOnlyFromTerrain = false) const;
 	sint32 GetProjectedScience();
 	sint32 GetFounder() const;
 
@@ -971,6 +959,37 @@ public:
 
 	sint32 GetCityStyle() const;
 	void   SetCityStyle(sint32 style);
+	sint32 GetRing(MapPoint pos) const;
+	sint32 GetFoodFromRing(sint32 ring) const;
+	sint32 GetProdFromRing(sint32 ring) const;
+	sint32 GetGoldFromRing(sint32 ring) const;
+	sint32 GetRingSize(sint32 ring) const;
+	sint32 TilesForWorking() const {return GetRingSize(-1);}
+
+	void ProcessResources();
+	void CalculateResources();
+	void PayResources();
+
+	double ProcessFood(sint32 food) const;
+	double ProcessProd(sint32 prod) const;
+	double Processgold(sint32 gold) const;
+	double ProcessScie(sint32 scinece) const;
+	void ApplyFoodCoeff(double &food) const;
+	void ApplyProdCoeff(double &prod) const;
+	void ApplyGoldCoeff(double &gold) const;
+	void ApplyKnowledgeCoeff(double &science) const;
+
+	double BioinfectionLoss(double prod) const;
+	double FranchiseLoss(double prod) const;
+	double ConversionLoss(double gold) const;
+
+	double FoodFromOnePop(double &crimeLoss) const;
+	double ProdFromOnePop(double &crimeLoss, double &bioinfectionLoss, double &franchiseLoss) const;
+	double GoldFromOnePop(double &crimeLoss, double &conversionLoss) const;
+	double ScieFromOnePop(double &crimeLoss) const;
+
+	void ResourceFractions(double &foodFraction, double &prodFraction, double goldFraction) const;
+	sint32 GetUnemployedPeople() const;
 };
 
 uint32 CityData_CityData_GetVersion(void);

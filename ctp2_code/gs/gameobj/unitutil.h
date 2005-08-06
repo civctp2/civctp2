@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// -None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -53,8 +55,7 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 
 void unitutil_ExecuteMadLaunch(Unit & unit);
 
-#if !defined(ACTIVSION_ORIGINAL)
 sint32 unitutil_GetSmallCityMaxSize();
-#endif
+sint32 unitutil_GetMaxRadius();
 
 #endif

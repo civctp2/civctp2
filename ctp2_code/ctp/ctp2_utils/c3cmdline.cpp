@@ -17,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// CTP1_TRADE
+// - Creates an executable with trade like in CTP1. Currently broken.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -147,18 +150,18 @@ extern MBCHAR g_improvement_list_db_filename[_MAX_PATH];
 extern MBCHAR g_diplomacy_db_filename[_MAX_PATH];
 extern MBCHAR g_advance_list_db_filename[_MAX_PATH];
 
-extern ConstDB				*g_theConstDB;
+extern ConstDB              *g_theConstDB;
 extern CivilisationDatabase *g_theCivilisationDB;
 
 
-extern Background			*g_background;
-extern ChatBox				*g_chatBox;
-extern StatsWindow			*g_statsWindow;
-extern ControlPanelWindow	*g_controlPanel;
-extern C3UI					*g_c3ui;
+extern Background           *g_background;
+extern ChatBox              *g_chatBox;
+extern StatsWindow          *g_statsWindow;
+extern ControlPanelWindow   *g_controlPanel;
+extern C3UI                 *g_c3ui;
 
-extern sint32 g_check_mem; 
-extern sint32 g_robotMessages;
+extern sint32               g_check_mem;
+extern sint32               g_robotMessages;
 
 
 
@@ -206,39 +209,39 @@ static sint32 s_helpLines = 15;
 
 #define k_HELP_LINES s_helpLines
 
-extern Player**		g_player;
-extern StatusWindow* g_statusWindow;
-extern sint32		g_debugOwner;
-extern SelectedItem *g_selected_item;
-extern World		*g_theWorld;
-extern TiledMap		*g_tiledMap;
-extern UnitPool *g_theUnitPool;
+extern Player**       g_player;
+extern StatusWindow*  g_statusWindow;
+extern sint32         g_debugOwner;
+extern SelectedItem   *g_selected_item;
+extern World          *g_theWorld;
+extern TiledMap       *g_tiledMap;
+extern UnitPool       *g_theUnitPool;
 
-extern sint32		g_fog_toggle;
+extern sint32         g_fog_toggle;
 
-extern BOOL			g_smoothScroll;
+extern BOOL           g_smoothScroll;
 
-extern sint32		g_god; 
+extern sint32         g_god;
 
-extern sint32		g_isGridOn;
-extern BOOL			g_showHeralds;
-
-
-extern BOOL			g_useDDBlit;
-
-extern CivApp		*g_civApp;
-
-extern C3UI			*g_c3ui;
+extern sint32         g_isGridOn;
+extern BOOL           g_showHeralds;
 
 
-extern BOOL			g_powerPointsMode;
+extern BOOL           g_useDDBlit;
 
-sint32				g_is_debug_map_color;
-BOOL g_show_ai_dbg;
-BOOL g_doingFastRounds = FALSE;
+extern CivApp         *g_civApp;
+
+extern C3UI           *g_c3ui;
 
 
-extern BOOL		g_ai_revolt = TRUE;
+extern BOOL           g_powerPointsMode;
+
+sint32                g_is_debug_map_color;
+BOOL                  g_show_ai_dbg;
+BOOL                  g_doingFastRounds = FALSE;
+
+
+extern BOOL           g_ai_revolt = TRUE;
 
 extern void WhackScreen();
 
@@ -262,168 +265,166 @@ extern BOOL	g_drawArmyClumps;
 
 CommandLine g_commandLine;
 
-									 ZBCommand  g_zbCommand;
-                                     PopCommand	g_popCommand;
-                                     TaxCommand	g_taxCommand;
-                                     SueCommand	g_sueCommand;
+                                      ZBCommand g_zbCommand;
+                                     PopCommand g_popCommand;
+                                     TaxCommand g_taxCommand;
+                                     SueCommand g_sueCommand;
                                      PacCommand g_PacCommand;
-                                    ChatCommand	g_chatCommand;
-                                    SaveCommand	g_saveCommand;
-                                    HelpCommand	g_helpCommand;
-                                    UpgradeCity	g_upgradeCity;
-                                   BuildCommand	g_buildCommand;
-                                   OfferCommand	g_offerCommand;
-                                   FloodCommand	g_floodCommand;
-                                   OzoneCommand	g_ozoneCommand;
-                                   FrameCommand	g_frameCommand;
-                                   CloakCommand	g_cloakCommand;
-                                   ExpelCommand	g_expelCommand;
-								   LogAICommand g_logAICommand;
-                                  CreateCommand	g_createCommand;
-                                  RevoltCommand	g_revoltCommand;
-                                  SeeWWRCommand	g_SeeWWRCommand;
-                                  RustleCommand	g_rustleCommand;
-                                  StayOnCommand	g_stayOnCommand;
-                                UncloakCommand	g_uncloakCommand;
-                                 BombardCommand	g_bombardCommand;
-                                 RestoreCommand	g_restoreCommand;
-                                 RestartCommand	g_restartCommand;
-                                 ImproveCommand	g_improveCommand;
-                                 TurnOffCommand	g_turnOffCommand;
-                                 GiveMapCommand	g_giveMapCommand;
-								 LoadAIPCommand g_loadAIPCommand;
-                                ChatMaskCommand	g_chatMaskCommand;
-                                RandTestCommand	g_randTestCommand;
-                                GiveCityCommand	g_giveCityCommand;
-                                GiveGoldCommand	g_giveGoldCommand;
+                                    ChatCommand g_chatCommand;
+                                    SaveCommand g_saveCommand;
+                                    HelpCommand g_helpCommand;
+                                    UpgradeCity g_upgradeCity;
+                                   BuildCommand g_buildCommand;
+                                   OfferCommand g_offerCommand;
+                                   FloodCommand g_floodCommand;
+                                   OzoneCommand g_ozoneCommand;
+                                   FrameCommand g_frameCommand;
+                                   CloakCommand g_cloakCommand;
+                                   ExpelCommand g_expelCommand;
+                                   LogAICommand g_logAICommand;
+                                  CreateCommand g_createCommand;
+                                  RevoltCommand g_revoltCommand;
+                                  SeeWWRCommand g_SeeWWRCommand;
+                                  RustleCommand g_rustleCommand;
+                                  StayOnCommand g_stayOnCommand;
+                                 UncloakCommand g_uncloakCommand;
+                                 BombardCommand g_bombardCommand;
+                                 RestoreCommand g_restoreCommand;
+                                 RestartCommand g_restartCommand;
+                                 ImproveCommand g_improveCommand;
+                                 TurnOffCommand g_turnOffCommand;
+                                 GiveMapCommand g_giveMapCommand;
+                                 LoadAIPCommand g_loadAIPCommand;
+                                ChatMaskCommand g_chatMaskCommand;
+                                RandTestCommand g_randTestCommand;
+                                GiveCityCommand g_giveCityCommand;
+                                GiveGoldCommand g_giveGoldCommand;
                                 KillTileCommand g_killTileCommand;
-                                GiveUnitCommand	g_giveUnitCommand;
-                                SetWagesCommand	g_SetWagesCommand;
-                                TileTypeCommand	g_tileTypeCommand;
-                                SoothsayCommand	g_soothsayCommand;
-         				       BuildWhatCommand g_buildWhatCommand;
-                               FastRoundCommand	g_fastRoundCommand;      
+                                GiveUnitCommand g_giveUnitCommand;
+                                SetWagesCommand g_SetWagesCommand;
+                                TileTypeCommand g_tileTypeCommand;
+                                SoothsayCommand g_soothsayCommand;
+                               BuildWhatCommand g_buildWhatCommand;
+                               FastRoundCommand g_fastRoundCommand;
                                ClearTextCommand g_clearTextCommand;
-                               DatacheckCommand	g_datacheckCommand;
-                               InterceptCommand	g_interceptCommand;
-                               ReadinessCommand	g_readinessCommand;
-				               DebugMaskCommand	g_debugMaskCommand;
-                               ShowOwnerCommand	g_showOwnerCommand;
-                               ToggleFogCommand	g_toggleFogCommand;
-                               PlantNukeCommand	g_plantNukeCommand;
-                               FranchiseCommand	g_franchiseCommand;
-                               SlaveRaidCommand	g_slaveRaidCommand;
-                               SpewUnitsCommand	g_spewUnitsCommand;
-                               BioInfectCommand	g_bioInfectCommand;
-                               HelpLinesCommand	g_helpLinesCommand;
-                              NanoInfectCommand	g_nanoInfectCommand;
-                              DumpAlliesCommand	g_dumpAlliesCommand;
-                              TradeRouteCommand	g_tradeRouteCommand;
-                              HearGossipCommand	g_hearGossipCommand;
-                              SetWorkdayCommand	g_SetWorkdayCommand;
-                              SetRationsCommand	g_SetRationsCommand;
-                              ShowOffersCommand	g_showOffersCommand;
-                              ToggleGridCommand	g_toggleGridCommand;
-                              IndulgenceCommand	g_indulgenceCommand;
-                              ReformCityCommand	g_reformCityCommand;
-                              CreateParkCommand	g_createParkCommand;
-                              CreateRiftCommand	g_createRiftCommand;
+                               DatacheckCommand g_datacheckCommand;
+                               InterceptCommand g_interceptCommand;
+                               ReadinessCommand g_readinessCommand;
+                               DebugMaskCommand g_debugMaskCommand;
+                               ShowOwnerCommand g_showOwnerCommand;
+                               ToggleFogCommand g_toggleFogCommand;
+                               PlantNukeCommand g_plantNukeCommand;
+                               FranchiseCommand g_franchiseCommand;
+                               SlaveRaidCommand g_slaveRaidCommand;
+                               SpewUnitsCommand g_spewUnitsCommand;
+                               BioInfectCommand g_bioInfectCommand;
+                               HelpLinesCommand g_helpLinesCommand;
+                              NanoInfectCommand g_nanoInfectCommand;
+                              DumpAlliesCommand g_dumpAlliesCommand;
+                              TradeRouteCommand g_tradeRouteCommand;
+                              HearGossipCommand g_hearGossipCommand;
+                              SetWorkdayCommand g_SetWorkdayCommand;
+                              SetRationsCommand g_SetRationsCommand;
+                              ShowOffersCommand g_showOffersCommand;
+                              ToggleGridCommand g_toggleGridCommand;
+                              IndulgenceCommand g_indulgenceCommand;
+                              ReformCityCommand g_reformCityCommand;
+                              CreateParkCommand g_createParkCommand;
+                              CreateRiftCommand g_createRiftCommand;
 
-                             BuildWonderCommand	g_buildWonderCommand;
-                             GiveAdvanceCommand	g_giveAdvanceCommand;
-                             ToggleWaterCommand	g_toggleWaterCommand;
-	                         ToggleSpaceCommand	g_toggleSpaceCommand;
-                             SetCityNameCommand	g_setCityNameCommand;
-                             SetCitySizeCommand	g_setCitySizeCommand;
-                             ToggleAIStr g_toggleAiStr; 
-	                         ExchangeMapCommand	g_exchangeMapCommand;
-                             ConvertCityCommand	g_convertCityCommand;
+                             BuildWonderCommand g_buildWonderCommand;
+                             GiveAdvanceCommand g_giveAdvanceCommand;
+                             ToggleWaterCommand g_toggleWaterCommand;
+                             ToggleSpaceCommand g_toggleSpaceCommand;
+                             SetCityNameCommand g_setCityNameCommand;
+                             SetCitySizeCommand g_setCitySizeCommand;
+                                    ToggleAIStr g_toggleAiStr;
+                             ExchangeMapCommand g_exchangeMapCommand;
+                             ConvertCityCommand g_convertCityCommand;
                              SetAIRevoltCommand g_setAIRevoltCommand;
-                            NullifyWallsCommand	g_nullifyWallsCommand;
-                            SetReadinessCommand	g_SetReadinessCommand;
-                            ToggleHeraldCommand	g_toggleHeraldCommand;
-                            CalcChecksumCommand	g_calcChecksumCommand;
-                            ExchangeCityCommand	g_exchangeCityCommand;
-                            FormAllianceCommand	g_formAllianceCommand;
-                            UntradeRouteCommand	g_untradeRouteCommand;
-                            ShowAdvancesCommand	g_showAdvancesCommand;
-                            AddMaterialsCommand	g_AddMaterialsCommand;
-                            SueFranchiseCommand	g_sueFranchiseCommand;
-                            GrantAdvanceCommand	g_grantAdvanceCommand;
-                            DumpMessagesCommand	g_dumpMessagesCommand;
-                            DumpChecksumCommand	g_dumpChecksumCommand;
-						   DumpCallStackCommand g_dumpCallStackCommand;
-                           MakeCeaseFireCommand	g_makeCeaseFireCommand;
-                           SetGovernmentCommand	g_setGovernmentCommand;
-                           CityResourcesCommand	g_cityResourcesCommand;
-                           BreakAllianceCommand	g_breakAllianceCommand;
-                           WithdrawOfferCommand	g_withdrawOfferCommand;
-						  ToggleQuitFastCommand g_toggleQuitFastCommand;
-                          BreakCeaseFireCommand	g_breakCeaseFireCommand;
-                          DumpAgreementsCommand	g_dumpAgreementsCommand;
-                          EnslaveSettlerCommand	g_enslaveSettlerCommand;
-                          LoadBuildQueueCommand	g_loadBuildQueueCommand;
-                          SaveBuildQueueCommand	g_saveBuildQueueCommand;
-                          InciteUprisingCommand	g_inciteUprisingCommand;
-                         RequestGreetingCommand	g_requestGreetingCommand;
-                         PactCaptureCityCommand	g_pactCaptureCityCommand;
-                         DisplayChecksumCommand	g_displayChecksumCommand;
-                         StopTradingWithCommand	g_stopTradingWithCommand;
-                         InvestigateCityCommand	g_investigateCityCommand;
-                         StealTechnologyCommand	g_stealTechnologyCommand;
-                         RequestOfferMapCommand	g_requestOfferMapCommand;
-                        InciteRevolutionCommand	g_inciteRevolutionCommand;
-                        CauseUnhappinessCommand	g_causeUnhappinessCommand;
-                        RequestOfferCityCommand	g_requestOfferCityCommand;
-                        RequestOfferGoldCommand	g_requestOfferGoldCommand;
-                        RequestDemandMapCommand	g_requestDemandMapCommand;
-                        AssassinateRulerCommand	g_assassinateRulerCommand;
-                        ShowNetworkStatsCommand	g_showNetworkStatsCommand;
-                        IsViolatingPeaceCommand	g_isViolatingPeaceCommand;
+                            NullifyWallsCommand g_nullifyWallsCommand;
+                            SetReadinessCommand g_SetReadinessCommand;
+                            ToggleHeraldCommand g_toggleHeraldCommand;
+                            CalcChecksumCommand g_calcChecksumCommand;
+                            ExchangeCityCommand g_exchangeCityCommand;
+                            FormAllianceCommand g_formAllianceCommand;
+                            UntradeRouteCommand g_untradeRouteCommand;
+                            ShowAdvancesCommand g_showAdvancesCommand;
+                            AddMaterialsCommand g_AddMaterialsCommand;
+                            SueFranchiseCommand g_sueFranchiseCommand;
+                            GrantAdvanceCommand g_grantAdvanceCommand;
+                            DumpMessagesCommand g_dumpMessagesCommand;
+                            DumpChecksumCommand g_dumpChecksumCommand;
+                           DumpCallStackCommand g_dumpCallStackCommand;
+                           MakeCeaseFireCommand g_makeCeaseFireCommand;
+                           SetGovernmentCommand g_setGovernmentCommand;
+                           CityResourcesCommand g_cityResourcesCommand;
+                           BreakAllianceCommand g_breakAllianceCommand;
+                           WithdrawOfferCommand g_withdrawOfferCommand;
+                          ToggleQuitFastCommand g_toggleQuitFastCommand;
+                          BreakCeaseFireCommand g_breakCeaseFireCommand;
+                          DumpAgreementsCommand g_dumpAgreementsCommand;
+                          EnslaveSettlerCommand g_enslaveSettlerCommand;
+                          LoadBuildQueueCommand g_loadBuildQueueCommand;
+                          SaveBuildQueueCommand g_saveBuildQueueCommand;
+                          InciteUprisingCommand g_inciteUprisingCommand;
+                         RequestGreetingCommand g_requestGreetingCommand;
+                         PactCaptureCityCommand g_pactCaptureCityCommand;
+                         DisplayChecksumCommand g_displayChecksumCommand;
+                         StopTradingWithCommand g_stopTradingWithCommand;
+                         InvestigateCityCommand g_investigateCityCommand;
+                         StealTechnologyCommand g_stealTechnologyCommand;
+                         RequestOfferMapCommand g_requestOfferMapCommand;
+                        InciteRevolutionCommand g_inciteRevolutionCommand;
+                        CauseUnhappinessCommand g_causeUnhappinessCommand;
+                        RequestOfferCityCommand g_requestOfferCityCommand;
+                        RequestOfferGoldCommand g_requestOfferGoldCommand;
+                        RequestDemandMapCommand g_requestDemandMapCommand;
+                        AssassinateRulerCommand g_assassinateRulerCommand;
+                        ShowNetworkStatsCommand g_showNetworkStatsCommand;
+                        IsViolatingPeaceCommand g_isViolatingPeaceCommand;
 
-                       RequestDemandGoldCommand	g_requestDemandGoldCommand;
-                       CreateImprovementCommand	g_createImprovementCommand;
-                       RequestDemandCityCommand	g_requestDemandCityCommand;
-                      ToggleSmoothScrollCommand	g_toggleSmoothScrollCommand;
-                      UndergroundRailwayCommand	g_undergroundRailwayCommand;
-                      DisplayChecksumOffCommand	g_displayChecksumOffCommand;
-                      TerrainImprovementCommand	g_terrainImprovementCommand;
-			  TerrainImprovementCompleteCommand g_terrainImprovementCompleteCommand;
-                      IsPollutionReducedCommand	g_isPollutionReducedCommand;
-                      IsViolatingBordersCommand	g_isViolatingBordersCommand;
-
-
-                      RequestExchangeMapCommand	g_requestExchangeMapCommand;
-                     SetMaterialsPercentCommand	g_SetMaterialsPercentCommand;
-                     RequestExchangeCityCommand	g_requestExchangeCityCommand;
-                     RequestOfferAdvanceCommand	g_requestOfferAdvanceCommand;
-                    InvestigateReadinessCommand	g_investigateReadinessCommand;
-                    IsViolatingCeaseFireCommand	g_isViolatingCeaseFireCommand;
-                    RequestDemandAdvanceCommand	g_requestDemandAdvanceCommand;
-                    PactEndPollutionCommand	g_pactEndPollutionCommand;
-
-                   RequestOfferCeaseFireCommand	g_requestOfferCeaseFireCommand;
-                  DumpDiplomaticRequestsCommand	g_dumpDiplomaticRequestsCommand;
-                  RequestExchangeAdvanceCommand	g_requestExchangeAdvanceCommand;
-                  RequestDemandStopTradeCommand	g_requestDemandStopTradeCommand;
-                RequestDemandAttackEnemyCommand	g_requestDemandAttackEnemyCommand;
-              RequestDemandLeaveOurLandsCommand	g_requestDemandLeaveOurLandsCommand;
-             RequestOfferPactCaptureCityCommand	g_requestOfferPactCaptureCityCommand;
-            RequestDemandReducePollutionCommand	g_requestDemandReducePollutionCommand;
-
-           RequestOfferPermanentAllianceCommand	g_requestOfferPermanentAllianceCommand;
-        RequestOfferPactEndPollutionCommand	g_requestOfferPactEndPollutionCommand;
+                       RequestDemandGoldCommand g_requestDemandGoldCommand;
+                       CreateImprovementCommand g_createImprovementCommand;
+                       RequestDemandCityCommand g_requestDemandCityCommand;
+                      ToggleSmoothScrollCommand g_toggleSmoothScrollCommand;
+                      UndergroundRailwayCommand g_undergroundRailwayCommand;
+                      DisplayChecksumOffCommand g_displayChecksumOffCommand;
+                      TerrainImprovementCommand g_terrainImprovementCommand;
+              TerrainImprovementCompleteCommand g_terrainImprovementCompleteCommand;
+                      IsPollutionReducedCommand g_isPollutionReducedCommand;
+                      IsViolatingBordersCommand g_isViolatingBordersCommand;
 
 
+                      RequestExchangeMapCommand g_requestExchangeMapCommand;
+                     SetMaterialsPercentCommand g_SetMaterialsPercentCommand;
+                     RequestExchangeCityCommand g_requestExchangeCityCommand;
+                     RequestOfferAdvanceCommand g_requestOfferAdvanceCommand;
+                    InvestigateReadinessCommand g_investigateReadinessCommand;
+                    IsViolatingCeaseFireCommand g_isViolatingCeaseFireCommand;
+                    RequestDemandAdvanceCommand g_requestDemandAdvanceCommand;
+                        PactEndPollutionCommand g_pactEndPollutionCommand;
+
+                   RequestOfferCeaseFireCommand g_requestOfferCeaseFireCommand;
+                  DumpDiplomaticRequestsCommand g_dumpDiplomaticRequestsCommand;
+                  RequestExchangeAdvanceCommand g_requestExchangeAdvanceCommand;
+                  RequestDemandStopTradeCommand g_requestDemandStopTradeCommand;
+                RequestDemandAttackEnemyCommand g_requestDemandAttackEnemyCommand;
+              RequestDemandLeaveOurLandsCommand g_requestDemandLeaveOurLandsCommand;
+             RequestOfferPactCaptureCityCommand g_requestOfferPactCaptureCityCommand;
+            RequestDemandReducePollutionCommand g_requestDemandReducePollutionCommand;
+
+           RequestOfferPermanentAllianceCommand g_requestOfferPermanentAllianceCommand;
+            RequestOfferPactEndPollutionCommand g_requestOfferPactEndPollutionCommand;
 
 
 
 
-		EndTurnSoundCommand	g_endTurnSoundCommand;
-
-DRayTestCode g_DRayTestCode;
 
 
+                            EndTurnSoundCommand g_endTurnSoundCommand;
+
+                                   DRayTestCode g_DRayTestCode;
 
 
 
@@ -455,155 +456,157 @@ DRayTestCode g_DRayTestCode;
 
 
 
-ThroneRoomUpgradeCommand g_throneRoomUpgradeCommand;
-GiveMeProbeCommand g_giveMeProbeCommand;
-ToggleMapColorCommand g_toggleMapColorCommand; 
-ToggleHeuristicCommand g_toggleHeuristicCommand; 
-YumCommand g_yumCommand;
-SlicCommand g_slicCommand;
-ShowPopCommand g_showPopCommand;
-HidePopCommand g_hidePopCommand;
-HowLongCommand g_howLongCommand;
-DebugCheckMemCommand g_debugCheckMem;
-OvertimeCommand g_overtimeCommand;
-LearnWhatCommand g_learnWhatCommand;
-GivesWhatCommand g_givesWhatCommand;
-GetAdvanceCommand g_getAdvanceCommand;
-TestMessageCommand	g_testMessageCommand;
-OvertimeCostCommand g_overtimeCostCommand;
-BequeathGoldCommand	g_bequeathGoldCommand;
-InstantMessageCommand g_instantMessageCommand;
-InjoinCommand g_injoinCommand;
-FastMoveCommand g_fastMoveCommand;
-GrantAllCommand g_grantAllCommand;
-GrantManyCommand g_grantManyCommand; 
-UseLadderCommand g_useLadderCommand;
-TutorialCommand g_tutorialCommand;
-SimultaneousCommand g_simultaneousCommand;
-AutoCenterCommand g_autoCenterCommand;
-AiDumpCommand g_aiDumpCommand; 
-RegardCommand g_regardCommand ;
-AttitudeCommand g_attitudeCommand ;
-DumpFZRegardCommand g_dumpFZRegardCommand; 
-SetFZRegardCommand g_setFZRegardCommand;
-TotalWarCommand g_totalWarCommand; 
-SetUnitMovesStyleCommand g_setUnitMovesStyleCommand;
-SetClassicStyleCommand g_setClassicStyleCommand;
-SetSpeedStyleCommand g_setSpeedStyleCommand;
+
+
+                       ThroneRoomUpgradeCommand g_throneRoomUpgradeCommand;
+                             GiveMeProbeCommand g_giveMeProbeCommand;
+                          ToggleMapColorCommand g_toggleMapColorCommand;
+                         ToggleHeuristicCommand g_toggleHeuristicCommand;
+                                     YumCommand g_yumCommand;
+                                    SlicCommand g_slicCommand;
+                                 ShowPopCommand g_showPopCommand;
+                                 HidePopCommand g_hidePopCommand;
+                                 HowLongCommand g_howLongCommand;
+                           DebugCheckMemCommand g_debugCheckMem;
+                                OvertimeCommand g_overtimeCommand;
+                               LearnWhatCommand g_learnWhatCommand;
+                               GivesWhatCommand g_givesWhatCommand;
+                              GetAdvanceCommand g_getAdvanceCommand;
+                             TestMessageCommand g_testMessageCommand;
+                            OvertimeCostCommand g_overtimeCostCommand;
+                            BequeathGoldCommand g_bequeathGoldCommand;
+                          InstantMessageCommand g_instantMessageCommand;
+                                  InjoinCommand g_injoinCommand;
+                                FastMoveCommand g_fastMoveCommand;
+                                GrantAllCommand g_grantAllCommand;
+                               GrantManyCommand g_grantManyCommand;
+                               UseLadderCommand g_useLadderCommand;
+                                TutorialCommand g_tutorialCommand;
+                            SimultaneousCommand g_simultaneousCommand;
+                              AutoCenterCommand g_autoCenterCommand;
+                                  AiDumpCommand g_aiDumpCommand;
+                                  RegardCommand g_regardCommand;
+                                AttitudeCommand g_attitudeCommand;
+                            DumpFZRegardCommand g_dumpFZRegardCommand;
+                             SetFZRegardCommand g_setFZRegardCommand;
+                                TotalWarCommand g_totalWarCommand;
+                       SetUnitMovesStyleCommand g_setUnitMovesStyleCommand;
+                         SetClassicStyleCommand g_setClassicStyleCommand;
+                           SetSpeedStyleCommand g_setSpeedStyleCommand;
 
 
 
 
 
-SetCarryoverStyleCommand g_setCarryoverStyleCommand;
-SetTimedStyleCommand g_timedGameCommand;
-MainMenuCommand g_mainMenuCommand;
-SetupModeCommand g_setupModeCommand;
-ReadyCommand g_readyCommand;
-DisplayMemCommand g_displayMemCommand; 
-UseDDBlitCommand g_useDDBlitCommand;
-LoadDBCommand g_loadDBCommand;
-SellImprovementsCommand g_sellImprovementsCommand;
-SellUnitsCommand g_sellUnitsCommand;
-RobotMessagesCommand g_robotMessagesCommand;
-FZCommentCommand g_fzCommentCommand;
-AcceptOfferCommand g_acceptOfferCommand;
-DescendCommand g_descendCommand;
-NearFortCommand g_nearestFortCommand;
-NearCityCommand g_nearestCityCommand;
-ForceRevoltCommand g_forceRevoltCommand;
-ToeCommand g_toeCommand;
-WhoAmICommand g_whoAmICommand;
-AutoSaveCommand g_autoSaveCommand;
-HeapTotalsCommand g_heapTotalsCommand;
-HotSeatCommand g_hotSeatCommand;
-EmailCommand g_emailCommand;
-ScoreCommand g_scoreCommand;
-FliLogCommand g_fliLogCommand;
-SendSlaveCommand g_sendSlaveCommand;
-DisbandCommand g_disbandCommand;
-AttachCommand g_attachCommand;
-DetachCommand g_detachCommand;
-ToggleShieldSupport g_toggleShieldSupport;  
-SuperFastDebugModeCommand g_superFastDebugModeCommand;
-KillPopCommand g_killPopCommand;
-BoardCommand g_boardCommand;
-AutoGroupCommand g_autoGroupCommand;
-AddPopCommand g_addPopCommand; 
-CopyVisionCommand g_copyVisionCommand;
+                       SetCarryoverStyleCommand g_setCarryoverStyleCommand;
+                           SetTimedStyleCommand g_timedGameCommand;
+                                MainMenuCommand g_mainMenuCommand;
+                               SetupModeCommand g_setupModeCommand;
+                                   ReadyCommand g_readyCommand;
+                              DisplayMemCommand g_displayMemCommand; 
+                               UseDDBlitCommand g_useDDBlitCommand;
+                                  LoadDBCommand g_loadDBCommand;
+                        SellImprovementsCommand g_sellImprovementsCommand;
+                               SellUnitsCommand g_sellUnitsCommand;
+                           RobotMessagesCommand g_robotMessagesCommand;
+                               FZCommentCommand g_fzCommentCommand;
+                             AcceptOfferCommand g_acceptOfferCommand;
+                                 DescendCommand g_descendCommand;
+                                NearFortCommand g_nearestFortCommand;
+                                NearCityCommand g_nearestCityCommand;
+                             ForceRevoltCommand g_forceRevoltCommand;
+                                     ToeCommand g_toeCommand;
+                                  WhoAmICommand g_whoAmICommand;
+                                AutoSaveCommand g_autoSaveCommand;
+                              HeapTotalsCommand g_heapTotalsCommand;
+                                 HotSeatCommand g_hotSeatCommand;
+                                   EmailCommand g_emailCommand;
+                                   ScoreCommand g_scoreCommand;
+                                  FliLogCommand g_fliLogCommand;
+                               SendSlaveCommand g_sendSlaveCommand;
+                                 DisbandCommand g_disbandCommand;
+                                  AttachCommand g_attachCommand;
+                                  DetachCommand g_detachCommand;
+                            ToggleShieldSupport g_toggleShieldSupport;
+                      SuperFastDebugModeCommand g_superFastDebugModeCommand;
+                                 KillPopCommand g_killPopCommand;
+                                   BoardCommand g_boardCommand;
+                               AutoGroupCommand g_autoGroupCommand;
+                                  AddPopCommand g_addPopCommand; 
+                              CopyVisionCommand g_copyVisionCommand;
 
-CombatLogCommand g_combatLogCommand;
-RedrawMapCommand g_redrawMapCommand;
-GodCommand g_godCommand;
-ReloadFliCommand g_reloadFliCommand; 
-MultiCycleCommand g_multiCycleCommand;
-LeaksClearCommand g_leaksClearCommand;
-LeaksShowCommand g_leaksShowCommand;
-SlicVariableCommand g_slicVariableCommand;
-DipLogOnCommand g_dipLogOnCommand;
-DipLogOffCommand g_dipLogOffCommand;
-DirectorDumpCommand g_directorDumpCommand;
-ResyncCommand g_resyncCommand;
-CleanSpritesCommand g_cleanSpritesCommand;
-CleanScreenCommand g_cleanScreenCommand;
-ResetVisionCommand g_resetVisionCommand;
-
-
-ExportMapCommand g_exportMapCommand;
-ImportMapCommand g_importMapCommand;
+                               CombatLogCommand g_combatLogCommand;
+                               RedrawMapCommand g_redrawMapCommand;
+                                     GodCommand g_godCommand;
+                               ReloadFliCommand g_reloadFliCommand;
+                              MultiCycleCommand g_multiCycleCommand;
+                              LeaksClearCommand g_leaksClearCommand;
+                               LeaksShowCommand g_leaksShowCommand;
+                            SlicVariableCommand g_slicVariableCommand;
+                                DipLogOnCommand g_dipLogOnCommand;
+                               DipLogOffCommand g_dipLogOffCommand;
+                            DirectorDumpCommand g_directorDumpCommand;
+                                  ResyncCommand g_resyncCommand;
+                            CleanSpritesCommand g_cleanSpritesCommand;
+                             CleanScreenCommand g_cleanScreenCommand;
+                             ResetVisionCommand g_resetVisionCommand;
 
 
-InitializeDiplomacyCommand g_initializeDiplomacyCommand;
-BeginDiplomacyCommand g_beginDiplomacyCommand;
-ChooseNewProposalCommand g_chooseNewProposalCommand;
-SetNewProposalCommand g_setNewProposalCommand;
-SetHasInitiativeCommand g_setHasInitiativeCommand;
-SetResponseCommand g_setResponseCommand;
-ExecuteNewProposalCommand g_executeNewProposalCommand;
-ExecuteResponseCommand g_executeResponseCommand;
-ShowDiplomacyCommand g_showDiplomacyCommand;
-NextStateCommand g_nextStateCommand;
-SetPersonalityCommand g_setPersonalityCommand;
-DeclareWarCommand g_declareWar;
+                               ExportMapCommand g_exportMapCommand;
+                               ImportMapCommand g_importMapCommand;
 
 
-SetGovernorForCityCommand g_setGovernorForCityCommand;
-SetGovernorPwReserveCommand g_setGovernorPwReserveCommand;
+                     InitializeDiplomacyCommand g_initializeDiplomacyCommand;
+                          BeginDiplomacyCommand g_beginDiplomacyCommand;
+                       ChooseNewProposalCommand g_chooseNewProposalCommand;
+                          SetNewProposalCommand g_setNewProposalCommand;
+                        SetHasInitiativeCommand g_setHasInitiativeCommand;
+                             SetResponseCommand g_setResponseCommand;
+                      ExecuteNewProposalCommand g_executeNewProposalCommand;
+                         ExecuteResponseCommand g_executeResponseCommand;
+                           ShowDiplomacyCommand g_showDiplomacyCommand;
+                               NextStateCommand g_nextStateCommand;
+                          SetPersonalityCommand g_setPersonalityCommand;
+                              DeclareWarCommand g_declareWar;
 
 
-ToggleCellText g_toggleCellText;
-ToggleArmyText g_toggleArmyText;
+                      SetGovernorForCityCommand g_setGovernorForCityCommand;
+                    SetGovernorPwReserveCommand g_setGovernorPwReserveCommand;
 
 
-ArmyClumps		g_armyClumps;
+                                 ToggleCellText g_toggleCellText;
+                                 ToggleArmyText g_toggleArmyText;
 
 
-SetGoodsCommand g_setGoodsCommand;
+                                     ArmyClumps g_armyClumps;
+
+
+                                SetGoodsCommand g_setGoodsCommand;
 
 #ifdef DUMP_ASTAR
 
-DumpAstarCommand g_dumpAstarCommand;
+                               DumpAstarCommand g_dumpAstarCommand;
 #endif
 
 
-AiDebugCommand g_aiDebugCommand;
+                                 AiDebugCommand g_aiDebugCommand;
 
 
-ShowVictoryCommand g_showVictoryCommand;
+                             ShowVictoryCommand g_showVictoryCommand;
 
 
-ReloadSpritesCommand g_reloadSpritesCommand;
+                           ReloadSpritesCommand g_reloadSpritesCommand;
 
 
 COMMAND(ShowVisCommand);
 ShowVisCommand g_showVisCommand;
 
 CommandRecord commands[] = {
-    {"help", &g_helpCommand,
+	{"help", &g_helpCommand,
 	"help [page] - this text, default is page 0"},
 	{"helplines", &g_helpLinesCommand,
 	"helplines <lines> - this many lines for 1 page of help text"},
-    {"clear", &g_clearTextCommand,
+	{"clear", &g_clearTextCommand,
 	"clear - clear debug text from the screen"},
 	{"build", &g_buildCommand,
 	"build <city_idx> <unit_type> [player] - enter unit in build queue for city"},
@@ -622,24 +625,24 @@ CommandRecord commands[] = {
 	{"loadaip", &g_loadAIPCommand,
 	"loadaip <filename> <team_idx> - force the loading of the aip file from aip directory for specified team"},
 
-    { "whoami", &g_whoAmICommand, "whoami - what aip is loaded up"},
+	{"whoami", &g_whoAmICommand, "whoami - what aip is loaded up"},
 	{"logai", &g_logAICommand,
 	"logai <log_level> <team_idx> - set AI's level of logging"},
-    {"diplogon", &g_dipLogOnCommand, "diplogon [player] - turn on diplomacy logging for player"}, 
-    {"diplogoff", &g_dipLogOffCommand, "diplogoff [player] - turn off diplomacy logging for player"}, 
+	{"diplogon", &g_dipLogOnCommand, "diplogon [player] - turn on diplomacy logging for player"}, 
+	{"diplogoff", &g_dipLogOffCommand, "diplogoff [player] - turn off diplomacy logging for player"}, 
 	{"restart", &g_restartCommand,
 	"restart - restart game (Rereading profile.txt)"},
 	{"improve", &g_improveCommand,
 	"improve <city_idx> <improvement> [player] - insert improvement in build queue"},
-    {"crc", &g_calcChecksumCommand,
+	{"crc", &g_calcChecksumCommand,
 	"crc - show crc's"},
 	{"dumpcrc", &g_dumpChecksumCommand,
 	"dumpcrc - dump crc's to log"},
-    {"crcstart", &g_displayChecksumCommand,
+	{"crcstart", &g_displayChecksumCommand,
 	"crcstart - keep showing crc's"},
-    {"crcoff", &g_displayChecksumOffCommand,
+	{"crcoff", &g_displayChecksumOffCommand,
 	"crcoff - stop showing crc's"},
-    {"rtest", &g_randTestCommand,
+	{"rtest", &g_randTestCommand,
 	"rtest <num commands> <wait factor> - make <num commands> random moves"},
 	{"stayon", &g_stayOnCommand,
 	"stayon - stay in command mode after enter"},
@@ -737,25 +740,25 @@ CommandRecord commands[] = {
 	"dumprequests - display all diplomatic requests for current player to log file"},
 	{"dumpmessages", &g_dumpMessagesCommand,
 	"dumpmessages - display all queued messages for current player to log file"},
-    {"seestats", &g_SeeWWRCommand,
+	{"seestats", &g_SeeWWRCommand,
 	"seestats - see workday, wages and rations, material contribution, readiness"},
-    {"setworkday", &g_SetWorkdayCommand,
+	{"setworkday", &g_SetWorkdayCommand,
 	"setkworday <level> - set workday to new level"},
-    {"setwages", &g_SetWagesCommand,
+	{"setwages", &g_SetWagesCommand,
 	"setwages <level> - set wages to a new level"},
-    {"setrations", &g_SetRationsCommand,
+	{"setrations", &g_SetRationsCommand,
 	"setrations <level> - set rations to a new level "},
-    {"setmat", &g_SetMaterialsPercentCommand,
+	{"setmat", &g_SetMaterialsPercentCommand,
 	"setmat <percent> - set the percent of production for materials"},
 	{"addmat", &g_AddMaterialsCommand,
 	"addmat <value> - Give the current player %d material points"},
-    {"setready", &g_SetReadinessCommand,
+	{"setready", &g_SetReadinessCommand,
 	"setready <level> - set the readiness 0 - peace - 1 alert 2 - war"},
 	{"shownet", &g_showNetworkStatsCommand,
 	"shownet - toggle display of network stats"},
 	{"pop", &g_popCommand,
 	"pop - place or remove a pop at the mouse (place from selected city)"},
-    {"tframe", &g_frameCommand,
+	{"tframe", &g_frameCommand,
 	"tframe - turn frame rate display on or off"},
 	{"government", &g_setGovernmentCommand,
 	"government <type> - set the type of government"},
@@ -839,8 +842,8 @@ CommandRecord commands[] = {
 	"setcityname <name> - set name of city"},
 	{"setcitysize", &g_setCitySizeCommand, 
 	"setcitysize <size> - set the size of the selected city"},
-    {"taistr", &g_toggleAiStr, "taistr - toggle to ai strings on and off"}, 
- 	
+	{"taistr", &g_toggleAiStr, "taistr - toggle to ai strings on and off"}, 
+
 	{"investigatecity", &g_investigateCityCommand,
 	"investigatecity - use the selected secret agent to investigate the pointed at city"},
 	{"stealtechnology", &g_stealTechnologyCommand,
@@ -913,7 +916,7 @@ CommandRecord commands[] = {
 	"createpark - use a park ranger"},
 	{"createrift", &g_createRiftCommand,
 	"createrift - Open a rift gate to the pointed at location"},
-    {"rnd", &g_fastRoundCommand,
+	{"rnd", &g_fastRoundCommand,
 	"rnd <num> - make num rounds pass"}, 
 	{"killtile", &g_killTileCommand,
 	"killtile - kills the tile under the mouse"},
@@ -934,18 +937,18 @@ CommandRecord commands[] = {
 	 "giveswhat <num> - show what the advance will give you"},
 	{"howlong", &g_howLongCommand,
 	 "howlong - how long it will take the selected city to build the current item"},
-    {"checkmem", &g_debugCheckMem, "toggle Crt memory validate - the game goes really slow"}, 
+	{"checkmem", &g_debugCheckMem, "toggle Crt memory validate - the game goes really slow"}, 
 
-    {"slic", &g_slicCommand,
+	{"slic", &g_slicCommand,
 	 "slic <expression> - add an expression to the watch window"},
-    {"assign", &g_slicCommand,
+	{"assign", &g_slicCommand,
 	 "assign <symbol> = <value> - assign a slic symbol a value"},
 	{"bequeathgold", &g_bequeathGoldCommand,
 	"bequeathgold <amount> - just give a player some gold"},
 	{"testmessage", &g_testMessageCommand,
 	"testmessage - send a test message -- do not use!!"},
-    {"tcolor", &g_toggleMapColorCommand, "toggle map debug color"}, 
-    {"theuristic",  &g_toggleHeuristicCommand, "toggle the old astar heuristic"},
+	{"tcolor", &g_toggleMapColorCommand, "toggle map debug color"}, 
+	{"theuristic",  &g_toggleHeuristicCommand, "toggle the old astar heuristic"},
 	{"yum", &g_yumCommand,
 	 "yum - show food, production, goods for the pointed at square"},
 	{"getadvance", &g_getAdvanceCommand,
@@ -968,17 +971,17 @@ CommandRecord commands[] = {
 	 "simultaneous - toggle simultaneous mode"},
 	{"autocenter", &g_autoCenterCommand,
 	 "Toggle auto center"},
-    {"aidump", &g_aiDumpCommand,
+	{"aidump", &g_aiDumpCommand,
 	"dump the ai stats to a file"},
 	{"regard", &g_regardCommand,
 	"regard [civ] [regard] - set regard of current civ to other civ"},
 	{"attitude", &g_attitudeCommand,
 	"attitude [civ] [attitude] - set attitude of current civ to other civ"},
-    {"showregard", &g_dumpFZRegardCommand, 
-        "showregard [player] - show the regard of the player to the screen"},
-    {"setregard", &g_setFZRegardCommand, 
-        "setregard me him r - set the regard of player me to player him to r"},
-    {"totalwar", &g_totalWarCommand, "totalwar - everyone hates everyone"}, 
+	{"showregard", &g_dumpFZRegardCommand, 
+	    "showregard [player] - show the regard of the player to the screen"},
+	{"setregard", &g_setFZRegardCommand, 
+	    "setregard me him r - set the regard of player me to player him to r"},
+	{"totalwar", &g_totalWarCommand, "totalwar - everyone hates everyone"}, 
 	{"unitmoves", &g_setUnitMovesStyleCommand,
 	 "unitmoves [nummoves] - set unit moves style game for network"},
 	{"classic", &g_setClassicStyleCommand,
@@ -996,7 +999,7 @@ CommandRecord commands[] = {
 
 
 
-    {"timedgame", &g_timedGameCommand,
+	{"timedgame", &g_timedGameCommand,
 	 "timedgame <m> [s] - set time for network game to m minutes, s seconds per player"},
 	{"carryover", &g_setCarryoverStyleCommand,
 	 "carryover - enable carryover bonus for speed turns"},
@@ -1006,7 +1009,7 @@ CommandRecord commands[] = {
 	{"ready", &g_readyCommand,
 	 "ready - signal done setting up"},
 	{"ddblit", &g_useDDBlitCommand, "ddblit [on/off] - use Direct Draw for blitting"},
-    {"tmem", &g_displayMemCommand, "tmem - toggle memory display"},
+	{"tmem", &g_displayMemCommand, "tmem - toggle memory display"},
 	{"loaddb", &g_loadDBCommand, 
 	 "loaddb [dbname] - reload a database (string, advance, terrain, unit, const, improve, wonder, civ, inst, pop)"},
 	{"sellunits", &g_sellUnitsCommand,
@@ -1039,7 +1042,7 @@ CommandRecord commands[] = {
 	 "score - show the current player's score"},
 	{"flilog", &g_fliLogCommand,
 	"flilog - toggle flilog.txt logging on and off"},
-     {"reloadfli", &g_reloadFliCommand, "reloadfli [player] - reload this players ai"},
+	{"reloadfli", &g_reloadFliCommand, "reloadfli [player] - reload this players ai"},
 	{"sendslave", &g_sendSlaveCommand,
 	 "sendslave - send a slave from selected city to pointed at city"},
 	{"disband", &g_disbandCommand,
@@ -1049,7 +1052,7 @@ CommandRecord commands[] = {
 	 "attach [slot] - attach an AI to player [slot] or current player"},
 	{"detach", &g_detachCommand,
 	 "detach [slot] - detach an AI player"},
-    {"tsupport", &g_toggleShieldSupport, "tsupport - turn off and on shield support"},
+	{"tsupport", &g_toggleShieldSupport, "tsupport - turn off and on shield support"},
 	{"superfast", &g_superFastDebugModeCommand,
 	"superfast [on/off] - turn SuperFastDebugMode on and off (no goal execute)"},
 	{"killpop", &g_killPopCommand,
@@ -1057,10 +1060,10 @@ CommandRecord commands[] = {
 	{"board", &g_boardCommand,
 	 "board - board selected army into transports in the same tile"},
 	{"autogroup", &g_autoGroupCommand,
-	 "autogroup - make the game a living hell"}, 
-												 
-    {"addpop", &g_addPopCommand, 
-        "addpop - add one or more new populations to the currently selected city"},
+	 "autogroup - make the game a living hell"},
+
+	{"addpop", &g_addPopCommand, 
+	    "addpop - add one or more new populations to the currently selected city"},
 	{"copyvision", &g_copyVisionCommand,
 	 "copyvision - copy gamestate vision to screen"},
 
@@ -1081,8 +1084,8 @@ CommandRecord commands[] = {
 	
 	{"svariable", &g_slicVariableCommand,
 	 "svariable <name> - show the value of a slic variable"},
-     
-	 {"directordump", &g_directorDumpCommand,
+
+	{"directordump", &g_directorDumpCommand,
 	 "directordump - dump director stats to the logfile"},
 
 	{"resync", &g_resyncCommand,
@@ -1138,12 +1141,12 @@ CommandRecord commands[] = {
 	
 	
 
-	 {"celltext", &g_toggleCellText,
-	 "celltext - toggle the displaying of AI debug text for Cells on and off"},
-	 {"armytext", &g_toggleArmyText,
-	 "armytext - toggle the displaying of AI debug text for Armies on and off"},
+	{"celltext", &g_toggleCellText,
+	"celltext - toggle the displaying of AI debug text for Cells on and off"},
+	{"armytext", &g_toggleArmyText,
+	"armytext - toggle the displaying of AI debug text for Armies on and off"},
 
-	 
+	
 	{"armyclumps", &g_armyClumps,
 	"armyclumps - display armies as clumps of up to 3 small units"},
 
@@ -1151,8 +1154,8 @@ CommandRecord commands[] = {
 	"setgoods <good type> - place good of type at current cursor location"},
 
 #ifdef DUMP_ASTAR
-	 {"dumpastar", &g_dumpAstarCommand,
-	 "dumpsastar <filename> - dumps the astar findpath call stack to filename."},
+	{"dumpastar", &g_dumpAstarCommand,
+	"dumpsastar <filename> - dumps the astar findpath call stack to filename."},
 #endif
 
 	{"aidebug", &g_aiDebugCommand,
@@ -1168,10 +1171,10 @@ CommandRecord commands[] = {
 	{"draytest", &g_DRayTestCode,
 	"This is just my test function, it will never do anything useful in the game."},
 
-    {"reloadsprites", &g_reloadSpritesCommand,
+	{"reloadsprites", &g_reloadSpritesCommand,
 	 "Tell all UnitActors to reload their sprites."},
 
-    {"showvisibility", &g_showVisCommand, "Show visibility flags for first unit in all armies"},
+	{"showvisibility", &g_showVisCommand, "Show visibility flags for first unit in all armies"},
 	 {NULL, NULL, NULL}
 };
 
@@ -1189,7 +1192,7 @@ void ShowVisCommand::Execute(sint32 argc, char **argv)
 		}
 	}
 }
-											 
+
 void ReloadSpritesCommand::Execute(sint32 argc, char **argv)
 {
 	g_director->ReloadAllSprites();

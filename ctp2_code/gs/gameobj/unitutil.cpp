@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -51,6 +53,7 @@ static sint32 s_maxVisionRange;
 #include "CitySizeRecord.h"
 
 static sint32 s_smallCityMaxSize;
+static sint32 s_maxCitySquaredRadius;
 
 static const SpecialAttackInfoRecord *s_specialAttackMap[SPECATTACK_MAX];
 
@@ -110,6 +113,7 @@ void unitutil_Initialize()
 	sint32 min = 0x7fffffff;
 	sint32 candidate;
 	s_smallCityMaxSize = 0x7fffffff;
+	s_maxCitySquaredRadius = 0;
 
 	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
 		candidate = g_theCitySizeDB->Get(i)->GetPopulation();
@@ -120,13 +124,18 @@ void unitutil_Initialize()
 		else if(candidate >= min && candidate < s_smallCityMaxSize){
 			s_smallCityMaxSize = candidate;
 		}
+		if(s_maxCitySquaredRadius < g_theCitySizeDB->Get(i)->GetSquaredRadius()){
+			s_maxCitySquaredRadius = g_theCitySizeDB->Get(i)->GetSquaredRadius();
+		}
 	}
-
 }
 
 sint32 unitutil_GetSmallCityMaxSize()
 {
 	return s_smallCityMaxSize;
+}
+sint32 unitutil_GetMaxRadius(){
+	return s_maxCitySquaredRadius;
 }
 
 sint32 unitutil_MaxActiveDefenseRange()
