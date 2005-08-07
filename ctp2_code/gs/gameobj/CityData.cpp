@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City data
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version when set.
 //
@@ -463,6 +464,39 @@ CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
 	m_ringProd  = new sint32[g_theCitySizeDB->NumRecords()];
 	m_ringGold  = new sint32[g_theCitySizeDB->NumRecords()];
 	m_ringSizes = new sint32[g_theCitySizeDB->NumRecords()];
+
+	m_max_processed_terrain_food = 0.0;
+	m_max_processed_terrain_prod = 0.0;
+	m_max_processed_terrain_gold = 0.0;
+	m_max_processed_terrain_scie = 0.0;
+
+	m_grossFoodCrimeLoss = 0.0;
+	m_grossProdCrimeLoss = 0.0;
+	m_grossGoldCrimeLoss = 0.0;
+	m_grossScieCrimeLoss = 0.0;
+
+	m_grossProdBioinfectionLoss = 0.0;
+	m_grossProdFranchiseLoss = 0.0;
+	m_grossGoldConversionLoss = 0.0;
+
+	m_foodFromOnePop = 0.0;
+	m_prodFromOnePop = 0.0;
+	m_goldFromOnePop = 0.0;
+	m_scieFromOnePop = 0.0;
+
+	m_crimeFoodLossOfOnePop = 0.0;
+	m_crimeProdLossOfOnePop = 0.0;
+	m_crimeGoldLossOfOnePop = 0.0;
+	m_crimeScieLossOfOnePop = 0.0;
+
+	m_bioinfectionProdLossOfOnePop = 0.0;
+	m_franchiseProdLossOfOnePop = 0.0;
+	m_conversionGoldLossOfOnePop = 0.0;
+
+	m_productionLostToBioinfection = 0;
+	m_max_scie_from_terrain = 0;
+	m_gross_science = 0.0;
+	m_science_lost_to_crime = 0.0;
 
 }
 
@@ -2261,16 +2295,14 @@ void CityData::CalculateResources()
 	m_net_gold       += static_cast<sint32>(ceil((m_goldFromOnePop - m_conversionGoldLossOfOnePop) * MerchantCount()));
 	m_science        += static_cast<sint32>(ceil((m_scieFromOnePop - m_crimeScieLossOfOnePop) * ScientistCount()));
 
-
 	///////////////////////////////////////////////
-	// Add gross gold from trade routes and capitalization to gross gold
+	// Add gross gold from trade routes to gross gold
 	sint32 gold = m_goldFromTradeRoutes;
 	ApplyGoldCoeff(gold);
-	gold += m_gold_from_capitalization;
 	m_gross_gold += gold;
 
 	///////////////////////////////////////////////
-	// Add net gold from trade routes and capitalization to net gold
+	// Add net gold from trade routes to net gold
 	sint32 crimeLossGold = CrimeLoss(gold);
 	double conversionLossGold = ConversionLoss(static_cast<double>(gold - crimeLossGold));
 	m_gold_lost_to_crime += crimeLossGold;
@@ -2310,6 +2342,43 @@ void CityData::PayResources()
 	){
 		g_player[m_convertedTo]->AddGold(m_convertedGold);
 	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::AddCapitalizationAndTryToBuild
+//
+// Description: Handles build item construction and infrastructure and 
+//              capitalization generation, and adds capitalisation to losses
+//              and income.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void CityData::AddCapitalizationAndTryToBuild()
+{
+	///////////////////////////////////////////////
+	// Generate m_gold_from_capitalization for the following step
+	// And try to build something
+	TryToBuild();
+
+	///////////////////////////////////////////////
+	// Add gross gold from capitalization to gross gold
+	m_gross_gold += m_gold_from_capitalization;
+
+	///////////////////////////////////////////////
+	// Add net gold from capitalization to net gold
+	sint32 crimeLossGold = CrimeLoss(m_gold_from_capitalization);
+	double conversionLossGold = ConversionLoss(static_cast<double>(m_gold_from_capitalization - crimeLossGold));
+	m_gold_lost_to_crime += crimeLossGold;
+	m_convertedGold += static_cast<sint32>(conversionLossGold);
+	m_net_gold += m_gold_from_capitalization - crimeLossGold - static_cast<sint32>(conversionLossGold);
 }
 
 //----------------------------------------------------------------------------
@@ -3215,14 +3284,18 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 				break;
 
 			SellBuilding(cheapBuilding, FALSE);
-			SlicObject *so = new SlicObject("029NoMaint") ;
-			so->AddRecipient(GetOwner()) ;
-			so->AddCity(m_home_city) ;
-			so->AddBuilding(cheapBuilding) ;
-			g_slicEngine->Execute(so) ;
+			SlicObject *so = new SlicObject("029NoMaint");
+			so->AddRecipient(GetOwner());
+			so->AddCity(m_home_city);
+			so->AddBuilding(cheapBuilding);
+			g_slicEngine->Execute(so);
 		}
 		
 		if(g_player[m_owner]->GetGold() < m_net_gold) {
+#if defined(NEW_RESOURCE_PROCESS)
+			m_science -= m_net_gold - g_player[m_owner]->GetGold(); // m_science originally generated from gold income, so remove it if gold isn't enough.
+			if(m_science < 0) m_science = 0;
+#endif
 			g_player[m_owner]->m_gold->SetLevel(0);
 		} else {
 			g_player[m_owner]->m_gold->SubIncome(-m_net_gold);
@@ -3604,20 +3677,33 @@ sint32 CityData::BeginTurn()
 	m_pw_from_infrastructure = 0;
 	m_gold_from_capitalization = 0;
 
-	TryToBuild(); // Deal with capitalization/infrastructure. Otherwise, build the front item in this city's buildqueue.
+#if defined(NEW_RESOURCE_PROCESS)
+	PayResources();
+	CalcPollution(); // Calculate the pollution produced by this city
+	DoLocalPollution(); // Add dead tiles near polluting cities
+	AddCapitalizationAndTryToBuild()
+	DoSupport(false);
+#else
 
-	CalcPollution(); // Calculate the pollution produced by this city 
+	TryToBuild(); // Deal with capitalization/infrastructure. Otherwise, build the front item in this city's buildqueue.
+	//TryToBuild must before capitalisation computation and after production computation
+
+	CalcPollution(); // Calculate the pollution produced by this city
+	//CalcPollution must be done after calculation of m_gross_production - No problem in the new system.
 	DoLocalPollution(); // Add dead tiles near polluting cities
 
 	ProcessFood(); // Modify m_gross_food by any applicable bonus and subtract
 	               // m_food_lost_to_crime to get m_net_food
 
-	DoSupport(false);
+	DoSupport(false); // Why before split science and collect other trade?
 
 	SplitScience(false);
 
 	CollectOtherTrade(false);
+//	DoSupport(false);
+#endif
 
+	// After new resource calculation - no problem
 	EatFood(); // Calculate m_food_delta = m_net_food - m_food_consumed_this_turn 
 
 	if (GrowOrStarve()) { // Deal with city starvation and growth/shrinkage

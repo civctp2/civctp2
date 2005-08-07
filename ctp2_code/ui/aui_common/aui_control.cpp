@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG
+// - Generate debug version when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -1534,11 +1538,7 @@ aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
 			result.first++;
 		} else {
 			
-#if defined(ACTIVISION_DEFAULT)
-			result.second = std::_MAX(0L,
-#else
 			result.second = std::max(0L,
-#endif
 				result.second -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
 		}
@@ -1612,11 +1612,7 @@ bool aui_Control::FillHeight(ldl_datablock *theBlock,
 				desiredHeight;
 		}
 
-#if defined(ACTIVISION_DEFAULT)
-		height = std::_MAX(height,
-#else
 		height = std::max(height,
-#endif
 			m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
 	}
 
@@ -1707,11 +1703,7 @@ sint32 aui_Control::NumberOfColumns(sint32 numberOfRows,
 			(rowIndices[rowIndex + 1] - 1) : (m_imagesPerLayer - 1);
 
 		
-#if defined(ACTIVISION_DEFAULT)		
-		numberOfColumns = std::_MAX(numberOfColumns,
-#else
 		numberOfColumns = std::max(numberOfColumns,
-#endif
 			(imageEnd - imageStart + 1L));
 	}
 

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Player event handling
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _BFR_
+// - Force CD checking when set (build final release).
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -84,14 +88,14 @@
 
 extern TurnCount *g_turn;
 extern CivApp *g_civApp;
-extern ControlPanelWindow	*g_controlPanel;
-extern C3UI						*g_c3ui;
+extern ControlPanelWindow    *g_controlPanel;
+extern C3UI                  *g_c3ui;
 
 extern sint32 g_noai_stop_player;
 
 STDEHANDLER(ContactMadeEvent)
 {
-	GameEventArgument *firstPlayerArg = args->GetArg(GEA_Player, 0);
+	GameEventArgument *firstPlayerArg  = args->GetArg(GEA_Player, 0);
 	GameEventArgument *secondPlayerArg = args->GetArg(GEA_Player, 1);
 
 	sint32 p1, p2;
@@ -136,8 +140,8 @@ STDEHANDLER(PeaceMovementEvent)
 	Player *p = g_player[player];
 
 	g_player[player]->m_global_happiness->CalcPeaceMovement(g_player[player],
-															*g_player[player]->m_all_armies,
-															*g_player[player]->m_all_cities);
+	                                                        *g_player[player]->m_all_armies,
+	                                                        *g_player[player]->m_all_cities);
 
 	
 	
@@ -172,10 +176,10 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 
 	p->m_pop_science = 0;
 
-    p->m_gold->SetSavings();
+	p->m_gold->SetSavings();
 
-    
-    p->m_readiness->BeginTurn(p->m_government_type); 
+
+	p->m_readiness->BeginTurn(p->m_government_type);
 
 	if(p->m_capitol && g_theUnitPool->IsValid(p->m_capitol->m_id)) {
 		MapPoint pos;
@@ -186,10 +190,10 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 	g_player[player]->m_virtualGoldSpent = 0;
 
 	if(g_player[player]->GetGaiaController()->CanStartCountdown()) {
-		SlicSegment *	seg = g_slicEngine->GetSegment("GCReadyToActivateUs");
+		SlicSegment *       seg  = g_slicEngine->GetSegment("GCReadyToActivateUs");
 		if (seg && !seg->TestLastShown(player, 10000)) 
 		{
-			SlicObject *	so	= new SlicObject("GCReadyToActivateUs");
+			SlicObject *    so   = new SlicObject("GCReadyToActivateUs");
 			so->AddPlayer(player);
 			so->AddRecipient(player);
 			g_slicEngine->Execute(so);
@@ -227,12 +231,12 @@ STDEHANDLER(BeginTurnSupportEvent)
 	
 	p->BeginTurnWonders();
 
-    
-    p->BeginTurnScience();
+
+	p->BeginTurnScience();
 
 	return GEV_HD_Continue;
 }
-	
+
 STDEHANDLER(BeginTurnImprovementsEvent)
 {
 	sint32 player;
@@ -261,8 +265,8 @@ STDEHANDLER(ResetAllMovementEvent)
 
 	g_player[player]->ResetAllMovement();
 
-	g_player[player]->m_oversea_lost_unit_count = 0; 
-	g_player[player]->m_home_lost_unit_count = 0; 
+	g_player[player]->m_oversea_lost_unit_count = 0;
+	g_player[player]->m_home_lost_unit_count = 0;
 
 	return GEV_HD_Continue;
 }
@@ -335,7 +339,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 		p->m_score->AddYearAtPeace();
 	}
 
-	if (!p->m_isDead)  {  
+	if (!p->m_isDead) {
 		
 		
 		
@@ -370,17 +374,17 @@ STDEHANDLER(FinishBeginTurnEvent)
 	if(g_network.IsHost()) {
 		g_network.Block(p->m_owner);
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_GOLD,
-											   p->m_owner, p->m_gold->GetLevel()));
+		                                       p->m_owner, p->m_gold->GetLevel()));
 		// propagate PW each turn update
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_MATERIALS,
-											   p->m_owner, p->m_materialPool->GetMaterials()));
+		                                       p->m_owner, p->m_materialPool->GetMaterials()));
 		g_network.Unblock(p->m_owner);
 	}
 
 	if((p->m_playerType == PLAYER_TYPE_HUMAN ||
-		p->m_playerType == PLAYER_TYPE_NETWORK && g_network.IsLocalPlayer(p->m_owner)) &&
-	   p->m_owner == g_selected_item->GetVisiblePlayer() &&
-	   g_theProfileDB->IsAutoSelectFirstUnit()) {
+	    p->m_playerType == PLAYER_TYPE_NETWORK && g_network.IsLocalPlayer(p->m_owner)) &&
+	    p->m_owner == g_selected_item->GetVisiblePlayer() &&
+	    g_theProfileDB->IsAutoSelectFirstUnit()) {
 		if(g_selected_item->GetState() == SELECT_TYPE_NONE) {
 			g_selected_item->NextUnmovedUnit(TRUE);
 		} else if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY) {
@@ -398,8 +402,8 @@ STDEHANDLER(FinishBeginTurnEvent)
 
 	if(!g_network.IsClient()) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_FinishBuildPhase,
-							   GEA_Player, player,
-							   GEA_End);
+		                       GEA_Player, player,
+		                       GEA_End);
 	}
 
 	return GEV_HD_Continue;
@@ -488,9 +492,9 @@ STDEHANDLER(CreateCityEvent)
 					sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 					if (visiblePlayer == pl) {
 						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
-												 gamesounds_GetGameSoundID(GAMESOUNDS_GOODY_CITY),
-												 pos.x,
-												 pos.y);
+						                         gamesounds_GetGameSoundID(GAMESOUNDS_GOODY_CITY),
+						                         pos.x,
+						                         pos.y);
 					}
 				}
 			}
@@ -560,11 +564,11 @@ STDEHANDLER(SendGoodEvent)
 
 	if(g_network.IsClient()) {
 		g_network.SendAction(new NetAction(NET_ACTION_REQUEST_TRADE_ROUTE,
-										   resIndex, sourceCity.m_id, destCity.m_id));
+		                                   resIndex, sourceCity.m_id, destCity.m_id));
 	} else {
 		g_player[sourceCity.GetOwner()]->CreateTradeRoute(sourceCity, ROUTE_TYPE_RESOURCE,
-														  resIndex, destCity,
-														  sourceCity.GetOwner(), 0);
+		                                                  resIndex, destCity,
+		                                                  sourceCity.GetOwner(), 0);
 	}
 	return GEV_HD_Continue;
 }
@@ -655,14 +659,14 @@ STDEHANDLER(FinishBuildPhaseEvent)
 	}
 	
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_StartMovePhase,
-							   GEA_Player, player,
-							   GEA_End);
+		                       GEA_Player, player,
+		                       GEA_End);
 	
 
 	if(g_network.IsActive()) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NetworkTurnSync,
-							   GEA_Player, player,
-							   GEA_End);
+		                       GEA_Player, player,
+		                       GEA_End);
 	}
 
 
@@ -680,7 +684,7 @@ STDEHANDLER(StartMovePhaseEvent)
 		
 		
 		
-			
+		
 		
 		
 		
@@ -693,8 +697,8 @@ STDEHANDLER(StartMovePhaseEvent)
 
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AIFinishBeginTurn,
-							   GEA_Player, pl,
-							   GEA_End);
+		                       GEA_Player, pl,
+		                       GEA_End);
 	}
 
 	
@@ -757,7 +761,7 @@ STDEHANDLER(GiveCityEvent)
 	Assert(g_player[player] != NULL);
 	g_player[giftCity->GetOwner()]->GiveCity(player, giftCity);
 
-	return GEV_HD_Continue;	
+	return GEV_HD_Continue;
 }
 
 STDEHANDLER(EnterAgeEvent)

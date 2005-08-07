@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Empire control panel tab handling
+// Description  : Empire control panel tab handling: Domestic
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +27,7 @@
 // - Blank function added to hide the data of the previous player for hotseat
 //   games. 
 // - Use the same science percentage everywhere.
+// - Domestic control panel shows now city limit. (Aug 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -52,15 +56,15 @@
 #include "GovernmentRecord.h"
 
 #include "aui_bitmapfont.h"
-#include "c3math.h"		// AsPercentage
+#include "c3math.h"         // AsPercentage
 
-extern ColorSet				*g_colorSet;
-extern Pollution *g_thePollution;
+extern ColorSet             *g_colorSet;
+extern Pollution            *g_thePollution;
 
 AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control, 
-													   aui_Surface *surface,
-													   RECT &rect, 
-													   void *cookie)
+                                                       aui_Surface *surface,
+                                                       RECT &rect, 
+                                                       void *cookie)
 {
 	if (g_selected_item==NULL)
 		return AUI_ERRCODE_OK;
@@ -98,10 +102,10 @@ AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
 		float width = (float)(tmp.right-tmp.left);
 
 		Pixel16 colors[3]={
-							g_colorSet->GetColor(COLOR_RED),
-							g_colorSet->GetColor(COLOR_YELLOW),
-							g_colorSet->GetColor(COLOR_GREEN)
-						  };
+		                    g_colorSet->GetColor(COLOR_RED),
+		                    g_colorSet->GetColor(COLOR_YELLOW),
+		                    g_colorSet->GetColor(COLOR_GREEN)
+		                  };
 
 		for (uint32 i=0;i<3;i++)
 		{
@@ -115,9 +119,9 @@ AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
 }
 
 AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control, 
-													   aui_Surface *surface,
-													   RECT &rect, 
-													   void *cookie)
+                                                       aui_Surface *surface,
+                                                       RECT &rect, 
+                                                       void *cookie)
 {
 	
 	double total = double(g_thePollution->GetGlobalPollutionLevel());
@@ -135,7 +139,7 @@ AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
 	tmp.right -= 2;
 	tmp.bottom -= 5;
 	
-	sint32 width = (total * (tmp.right - tmp.left)) / nextEvent;
+	sint32 width = static_cast<sint32>((total * (tmp.right - tmp.left)) / nextEvent);
 	primitives_PaintRect16(surface, &tmp, g_colorSet->GetColor(COLOR_BLACK));
 
 	if(width > 0) {
@@ -153,42 +157,42 @@ AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
 
 DomesticControlPanel::DomesticControlPanel(MBCHAR *ldlBlock) :
 m_scienceLabel(static_cast<ctp2_Static*>(
-			   aui_Ldl::GetObject(ldlBlock,
-			   "DomesticTab.TabPanel.AdvanceProgress.Title"))),
+               aui_Ldl::GetObject(ldlBlock,
+               "DomesticTab.TabPanel.AdvanceProgress.Title"))),
 m_scienceIconButton(static_cast<ctp2_Button*>(
-					aui_Ldl::GetObject(ldlBlock,
-					"DomesticTab.TabPanel.AdvanceProgress."
-					"IconBorder.IconButton"))),
+                    aui_Ldl::GetObject(ldlBlock,
+                    "DomesticTab.TabPanel.AdvanceProgress."
+                    "IconBorder.IconButton"))),
 m_scienceTurnButton(static_cast<ctp2_Button*>(
-					aui_Ldl::GetObject(ldlBlock,
-					"DomesticTab.TabPanel.AdvanceProgress."
-					"IconBorder.IconButton.RadialButton"))),
+                    aui_Ldl::GetObject(ldlBlock,
+                    "DomesticTab.TabPanel.AdvanceProgress."
+                    "IconBorder.IconButton.RadialButton"))),
 m_citiesValue(static_cast<ctp2_Static*>(
-			  aui_Ldl::GetObject(ldlBlock,
-			  "DomesticTab.TabPanel.CitiesValue"))),
+              aui_Ldl::GetObject(ldlBlock,
+              "DomesticTab.TabPanel.CitiesValue"))),
 m_populationValue(static_cast<ctp2_Static*>(
-			  aui_Ldl::GetObject(ldlBlock,
-			  "DomesticTab.TabPanel.PopulationValue"))),
+                  aui_Ldl::GetObject(ldlBlock,
+                  "DomesticTab.TabPanel.PopulationValue"))),
 m_publicWorksValue(static_cast<ctp2_Static*>(
-				   aui_Ldl::GetObject(ldlBlock,
-				   "DomesticTab.TabPanel.PublicWorksValue"))),
+                   aui_Ldl::GetObject(ldlBlock,
+                   "DomesticTab.TabPanel.PublicWorksValue"))),
 m_governmentValue(static_cast<ctp2_Static*>(
-				   aui_Ldl::GetObject(ldlBlock,
-				   "DomesticTab.TabPanel.GovernmentValue"))),
+                  aui_Ldl::GetObject(ldlBlock,
+                  "DomesticTab.TabPanel.GovernmentValue"))),
 m_scienceValue(static_cast<ctp2_Static*>(
-				   aui_Ldl::GetObject(ldlBlock,
-				   "DomesticTab.TabPanel.ScienceValue"))),
+               aui_Ldl::GetObject(ldlBlock,
+               "DomesticTab.TabPanel.ScienceValue"))),
 m_pollutionValue(static_cast<ctp2_Static*>(
-				   aui_Ldl::GetObject(ldlBlock,
-				   "DomesticTab.TabPanel.PollutionValue"))),
+                 aui_Ldl::GetObject(ldlBlock,
+                 "DomesticTab.TabPanel.PollutionValue"))),
 m_menuPublicWorksValue(static_cast<ctp2_Static*>(
-	                   aui_Ldl::GetObject("MainMenu.PWStatic"))),
+                       aui_Ldl::GetObject("MainMenu.PWStatic"))),
 m_menuGoldValue(static_cast<ctp2_Static*>(
-	            aui_Ldl::GetObject("MainMenu.GoldStatic"))),
+                aui_Ldl::GetObject("MainMenu.GoldStatic"))),
 m_menuHappinessValue(static_cast<ctp2_Static*>(
-	aui_Ldl::GetObject("MainMenu.HappinessBar"))),
+                     aui_Ldl::GetObject("MainMenu.HappinessBar"))),
 m_menuPollutionValue(static_cast<ctp2_Static*>(
-	aui_Ldl::GetObject("MainMenu.PollutionBar")))
+                     aui_Ldl::GetObject("MainMenu.PollutionBar")))
 {
 	
 	Assert(m_scienceLabel);
@@ -374,7 +378,7 @@ void DomesticControlPanel::UpdateStats()
 
 	cities = g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities();
 	population = g_player[g_selected_item->GetVisiblePlayer()]->GetTotalPopulation();
-	pw = (g_player[g_selected_item->GetVisiblePlayer()]->m_materialsTax * 100.0) + 0.5;
+	pw = static_cast<sint32>((g_player[g_selected_item->GetVisiblePlayer()]->m_materialsTax * 100.0) + 0.5);
 	government = g_player[g_selected_item->GetVisiblePlayer()]->GetGovernmentType();
 
 	g_player[g_selected_item->GetVisiblePlayer()]->GetScienceTaxRate(scienceTax);
@@ -389,17 +393,17 @@ void DomesticControlPanel::UpdateStats()
 		return;
 	}
 
-	m_currentCities		=cities;     
-	m_currentPopulation	=population;
-	m_currentPW			=pw;
-	m_currentGovernment	=government;
-	m_currentScience	=science;
-	m_currentPollution	=pollution;
+	m_currentCities     = cities;
+	m_currentPopulation = population;
+	m_currentPW         = pw;
+	m_currentGovernment = government;
+	m_currentScience    = science;
+	m_currentPollution  = pollution;
 
 	
 	MBCHAR stringBuffer[50];
 
-	sprintf(stringBuffer, "%d", cities);
+	sprintf(stringBuffer, "%d/%d", cities, g_theGovernmentDB->Get(government)->GetTooManyCitiesThreshold());
 	m_citiesValue->SetText(stringBuffer);
 
 	sprintf(stringBuffer, "%d", population);
@@ -418,7 +422,7 @@ void DomesticControlPanel::UpdateStats()
 	m_pollutionValue->SetText(stringBuffer);
 
 	static_cast<ctp2_Button*>(aui_Ldl::GetObject(m_ldlBlock,
-					"DomesticTab.TabPanel"))->ShouldDraw(TRUE);
+	                                             "DomesticTab.TabPanel"))->ShouldDraw(TRUE);
 }
 
 void DomesticControlPanel::UpdateGoldPW()

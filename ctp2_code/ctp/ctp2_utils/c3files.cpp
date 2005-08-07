@@ -18,10 +18,17 @@
 //
 // Compiler flags
 //
+// _MSC_VER
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// WIN32
+// - Generates windows specific code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
+// - Added some casts. (Aug 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -52,7 +59,7 @@ extern CivPaths *g_civPaths;
 
 FILE* c3files_fopen(C3DIR dirID, MBCHAR *s1, MBCHAR *s2)
 {
-	MBCHAR		s[_MAX_PATH];
+	MBCHAR      s[_MAX_PATH];
 
 	if (g_civPaths->FindFile(dirID, s1, s) != NULL) {
 		return fopen(s, s2);
@@ -115,8 +122,8 @@ size_t c3files_fwrite(const void *p, size_t i1, size_t i2, FILE *file)
 
 sint32 c3files_fprintf(FILE *file, const MBCHAR *s, ...)
 {
-	va_list		valist;
-	sint32		val;
+	va_list     valist;
+	sint32      val;
 
 	va_start(valist, s);
 	val = (sint32)vfprintf(file, s, valist);
@@ -247,9 +254,9 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size)
 
 	if (c3files_fread( bits, 1, filesize, f ) != filesize) {
 #if defined(_MSC_VER)
-      delete[filesize] bits;
+		delete[filesize] bits;
 #else
-      delete[] bits;
+		delete[] bits;
 #endif
 		c3files_fclose(f);
 
@@ -266,11 +273,11 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR *filename, sint32 *size)
 BOOL c3files_PathIsValid(MBCHAR *path)
 {
 #if defined(WIN32)
-   struct _stat tmpstat;
+	struct _stat tmpstat;
 #else
-   struct stat  tmpstat;
+	struct stat  tmpstat;
 #endif
-	sint32			r;
+	sint32       r;
 
 #if defined(WIN32)
    r = _stat(path, &tmpstat);
@@ -287,16 +294,16 @@ BOOL c3files_CreateDirectory(MBCHAR *path)
 #if defined(WIN32)
 	return CreateDirectory(path, NULL);
 #else
-   mode_t mask = 0777;
-   return mkdir(path, mask);
+	mode_t mask = 0777;
+	return mkdir(path, mask);
 #endif
 }
 
 void c3files_StripSpaces(MBCHAR *s)
 {
-	sint32		i;
-	sint32		j;
-	sint32		len = strlen(s);
+	sint32      i;
+	sint32      j;
+	sint32      len = strlen(s);
 
 	for (i=len-1; i>=0; i--) {
 		if (s[i] == ' ') {
@@ -396,11 +403,11 @@ sint32 c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FI
 
 #define k_CTP_CD_VOLUME_NAME		"CTP2"
 
-MBCHAR	VolumeName[32];
-MBCHAR	WhichCD;
-MBCHAR	IsCD[26];
-sint32	CDIndex = 0;
-BOOL	g_hasCD = FALSE;
+MBCHAR  VolumeName[32];
+MBCHAR  WhichCD;
+MBCHAR  IsCD[26];
+sint32  CDIndex = 0;
+BOOL    g_hasCD = FALSE;
 
 #include "soundmanager.h"
 extern SoundManager		*g_soundManager;
@@ -420,9 +427,9 @@ BOOL c3files_HasLegalCD()
 		success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
 
 		
-		if (success && g_theProfileDB->IsProtected()) {		
-			BOOL		valid;
-			BOOL		silent = TRUE;
+		if (success && g_theProfileDB->IsProtected()) {
+			BOOL        valid;
+			BOOL        silent = TRUE;
 
 			valid = tracklen_CheckTrackLengths();
 			
@@ -436,19 +443,19 @@ BOOL c3files_HasLegalCD()
 			
 		}
 
-		if (!success) {			
+		if (!success) {
 			int rval = MessageBox(g_c3ui->TheHWND(),
-									appstrings_GetString(APPSTR_INSERTCDROM), 
-									appstrings_GetString(APPSTR_CDROM), 
-									MB_RETRYCANCEL | 
-										MB_ICONEXCLAMATION | 
-										MB_DEFBUTTON1 |
-										MB_SYSTEMMODAL |
-										MB_SETFOREGROUND);	
+			                      appstrings_GetString(APPSTR_INSERTCDROM),
+			                      appstrings_GetString(APPSTR_CDROM),
+			                      MB_RETRYCANCEL |
+			                      MB_ICONEXCLAMATION |
+			                      MB_DEFBUTTON1 |
+			                      MB_SYSTEMMODAL |
+			                      MB_SETFOREGROUND);
 
 			if (rval == IDCANCEL) {
 				c3errors_ErrorDialog(appstrings_GetString(APPSTR_CDROM),
-										appstrings_GetString(APPSTR_NEEDCDROM));		
+				                     appstrings_GetString(APPSTR_NEEDCDROM));
 				
 				exit(-1);
 			}
@@ -487,14 +494,14 @@ BOOL c3files_HasCD(void)
 
 void c3files_GetCDDrives(void)
 {
-    uint32		all_drives;
-    MBCHAR		i;
-    MBCHAR		drivepath[16];
-    
+	uint32      all_drives;
+	MBCHAR      i;
+	MBCHAR      drivepath[16];
+	
 	WhichCD = '\0';
 
-    strcpy(drivepath, " :\\");
-    all_drives = GetLogicalDrives();
+	strcpy(drivepath, " :\\");
+	all_drives = GetLogicalDrives();
 
 	for (i = 0; i < 26; i++)
 	{
@@ -509,26 +516,26 @@ void c3files_GetCDDrives(void)
 
 MBCHAR *c3files_GetVolumeName(MBCHAR name)
 {
-    MBCHAR drivepath[32];
-    MBCHAR FSName[32];
-    uint32 SerialNumber;
-    uint32 MaxComponentLen;
-    uint32 FSFlags;
-    
-    strcpy(drivepath, " :\\");
-    drivepath[0] = name;
-    if (GetVolumeInformation(drivepath, VolumeName, 32, &SerialNumber,
-                             &MaxComponentLen, &FSFlags, FSName, 32)) {
-	    return(VolumeName);
-    }
-    return(NULL);
+	MBCHAR drivepath[32];
+	MBCHAR FSName[32];
+	uint32 SerialNumber;
+	uint32 MaxComponentLen;
+	uint32 FSFlags;
+	
+	strcpy(drivepath, " :\\");
+	drivepath[0] = name;
+	if (GetVolumeInformation(drivepath, VolumeName, 32, &SerialNumber,
+	                         &MaxComponentLen, &FSFlags, FSName, 32)) {
+		return(VolumeName);
+	}
+	return(NULL);
 }
 
 BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveLetter)
 {
-	sint32	i;
-	BOOL	found = FALSE;
-	MBCHAR	*cdName;
+	sint32  i;
+	BOOL    found = FALSE;
+	MBCHAR  *cdName;
 
 	CDIndex = 0;
 
@@ -539,7 +546,7 @@ BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveLetter)
 		for (i=0; i<26; i++) {
 			if (IsCD[i]) {
 				if (findDriveLetter)
-					WhichCD = i + 'A';
+					WhichCD = static_cast<MBCHAR>(i + 'A');
 				g_hasCD = TRUE;
 			}
 		}
@@ -549,11 +556,11 @@ BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveLetter)
 			if (IsCD[i])
 			{
 				CDIndex++;
-        		cdName = c3files_GetVolumeName((MBCHAR)(i + 'A'));
+				cdName = c3files_GetVolumeName((MBCHAR)(i + 'A'));
 				if (cdName && !strnicmp(cdName, name, strlen(name)))
 				{
 					if (findDriveLetter)
-						WhichCD = i + 'A';
+						WhichCD = static_cast<MBCHAR>(i + 'A');
 
 					found = TRUE;
 					g_hasCD = TRUE;

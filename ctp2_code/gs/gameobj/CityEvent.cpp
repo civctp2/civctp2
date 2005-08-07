@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City Game Events
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -131,7 +134,6 @@ STDEHANDLER(CaptureCityEvent)
 		
 		if(g_rand->Next(100) < 
 		   g_theConstDB->CaptureCityAdvanceChance() * 100) {
-#if !defined(ACTIVISION_DEFAULT)
 //Added by Martin Gühmann to allow city advance gaining from
 //a captured city.
 
@@ -173,15 +175,14 @@ STDEHANDLER(CaptureCityEvent)
 			}
 
 			delete[] canSteal;
-#endif // ACTIVISION_DEFAULT
 		}
 		Assert(g_player[newOwner]); 
-		g_player[newOwner]->FulfillCaptureCityAgreement(city) ;	
+		g_player[newOwner]->FulfillCaptureCityAgreement(city);
 		g_slicEngine->RunCityCapturedTriggers(newOwner, originalOwner,
-											  city);
+		                                      city);
 		
 		if(city.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
-   		{
+		{
 			sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CITYCONQUERED);
 			if (soundID != 0)
 				g_director->AddPlaySound(soundID, city.RetPos());
@@ -236,17 +237,17 @@ STDEHANDLER(CityBuildFrontEvent)
 
 	city.CD()->BuildFront();
 
-    
-    
-    if (city.CD()->GetBuildQueue()->m_settler_pending) {
-        if (city.CD()->PopCount() == 1) {
-            SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
-            so->AddCity(city);
+
+
+	if (city.CD()->GetBuildQueue()->m_settler_pending) {
+		if (city.CD()->PopCount() == 1) {
+			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
+			so->AddCity(city);
 			so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
-            so->AddRecipient(city.GetOwner());
-            g_slicEngine->Execute(so);
-        }
-    }
+			so->AddRecipient(city.GetOwner());
+			g_slicEngine->Execute(so);
+		}
+	}
 
 	return GEV_HD_Continue;
 }
@@ -423,10 +424,10 @@ STDEHANDLER(NukeCityEvent)
 
 	for(j = 0; j < killList.Num(); j++) {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
-							   GEA_Unit, killList[j],
-							   GEA_Int, CAUSE_REMOVE_ARMY_NUKE,
-							   GEA_Player, nuker,
-							   GEA_End);
+		                       GEA_Unit, killList[j],
+		                       GEA_Int, CAUSE_REMOVE_ARMY_NUKE,
+		                       GEA_Player, nuker,
+		                       GEA_End);
 	}
 
 	return GEV_HD_Continue;
@@ -581,7 +582,7 @@ STDEHANDLER(CreateBuildingEvent)
 			so->AddRecipient(player);
 			so->AddPlayer(player);
 			g_slicEngine->Execute(so);
-		}		
+		}
 	}
 
 	if(g_player[player]->GetGaiaController()->HasMinSatsBuilt()) {
@@ -736,7 +737,7 @@ STDEHANDLER(KillTileEvent)
 	}
 	return GEV_HD_Continue;
 }
-	
+
 void cityevent_Initialize()
 {
 	g_gevManager->AddCallback(GEV_CaptureCity, GEV_PRI_Primary, &s_CaptureCityEvent);	

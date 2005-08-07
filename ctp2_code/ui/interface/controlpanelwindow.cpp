@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Control panel handling
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,7 +19,7 @@
 // Compiler flags
 //
 // _DEBUG
-// Set when generating the debug version.
+// - Set when generating the debug version.
 // 
 //----------------------------------------------------------------------------
 //
@@ -2798,7 +2799,7 @@ ControlPanelWindow::CreateTileImpBanks()
 	}
 
 			
-	for(uint32 current=0;current<g_theTerrainImprovementDB->NumRecords();current++)
+	for(sint32 current=0;current<g_theTerrainImprovementDB->NumRecords();current++)
 	{
 		found		= false;
 		group_id	= 0;

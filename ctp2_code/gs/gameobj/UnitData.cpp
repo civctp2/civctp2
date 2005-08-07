@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit data
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -2738,8 +2739,8 @@ void UnitData::DoVision(UnitDynamicArray &revealedUnits)
 
 	
 	g_theUnitTree->SearchRect(array, topleft, 
-							  (sint32)maxVisionRange * 2 + 1,
-							  (sint32)maxVisionRange * 2 + 1,
+							  static_cast<sint16>(maxVisionRange) * 2 + 1,
+							  static_cast<sint16>(maxVisionRange) * 2 + 1,
 							  ~(1 << m_owner));
 	sint32 i, n = array.Num();
 
@@ -2857,8 +2858,8 @@ void UnitData::DoVision(UnitDynamicArray &revealedUnits)
 
 	g_theInstallationTree->SearchRect(
 		instArray, topleft,
-		(sint32)maxVisionRange * 2 + 1,
-		(sint32)maxVisionRange * 2 + 1);
+		static_cast<sint16>(maxVisionRange) * 2 + 1,
+		static_cast<sint16>(maxVisionRange) * 2 + 1);
 	                    
 	n = instArray.Num();
 
@@ -2929,8 +2930,8 @@ void UnitData::UndoVision()
 
 	
 	g_theUnitTree->SearchRect(enemyArray, topleft,
-							  (sint32)(GetVisionRange()) * 2 + 1,
-							  (sint32)(GetVisionRange()) * 2 + 1,
+							  static_cast<sint16>(GetVisionRange()) * 2 + 1,
+							  static_cast<sint16>(GetVisionRange()) * 2 + 1,
 							  ~(1 << m_owner));
 	sint32 en = enemyArray.Num();
 	for(sint32 i = 0; i < en; i++) {
@@ -2951,8 +2952,8 @@ void UnitData::UndoVision()
 		
 		
 		g_theUnitTree->SearchRect(friendArray, topleft,
-								  (sint32) maxVisionRange * 2 + 1,
-								  (sint32) maxVisionRange * 2 + 1,
+								  static_cast<sint16>(maxVisionRange) * 2 + 1,
+								  static_cast<sint16>(maxVisionRange) * 2 + 1,
 								  1 << m_owner);
 		sint32 fn = friendArray.Num();
 		BOOL canBeSeen = FALSE;
@@ -2994,8 +2995,8 @@ void UnitData::UndoVision()
 
 	g_theInstallationTree->SearchRect(
 		instArray, topleft,
-		(sint32)maxVisionRange * 2 + 1,
-		(sint32)maxVisionRange * 2 + 1,
+		static_cast<sint16>(maxVisionRange) * 2 + 1,
+		static_cast<sint16>(maxVisionRange) * 2 + 1,
 		~(1 << m_owner));
 	                    
 	en = instArray.Num();
@@ -5086,7 +5087,7 @@ BOOL UnitData::IsProtectedFromSlavery() const
 	if(!m_city_data)
 		return FALSE;
 
-	return m_city_data->IsProtectedFromSlavery();
+	return m_city_data->IsProtectedFromSlavery() > 0.0;
 }
 
 

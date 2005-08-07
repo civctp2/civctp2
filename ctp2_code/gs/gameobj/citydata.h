@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : City data
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -969,6 +970,7 @@ public:
 	void ProcessResources();
 	void CalculateResources();
 	void PayResources();
+	void AddCapitalizationAndTryToBuild();
 
 	double ProcessFood(sint32 food) const;
 	double ProcessProd(sint32 prod) const;

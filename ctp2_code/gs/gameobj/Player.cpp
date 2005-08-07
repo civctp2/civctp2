@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Player game object
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -52,6 +53,8 @@
 // - Allow loading of savegames with diffrent number of goods than in 
 //   the good database. - May 28th 2005 Martin Gühmann
 // - Made version constants local, merged with linux branch.
+// - Removed unused void BeginTurnAllCities all cities method and
+//   prepared for city resource calculation redesign. - Aug. 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -2009,136 +2012,6 @@ void Player::BeginTurnScience()
 	}
 }
 
-
-void Player::BeginTurnAllCities()
-
-{
-	int i, n; 
-	UnitDynamicArray	dead;
-	
-	m_pop_science = 0;
-
-	m_gold->SetSavings();
-
-	
-	m_readiness->BeginTurn(m_government_type); 
-
-	
-	
-	if(m_capitol && g_theUnitPool->IsValid(m_capitol->m_id)) {
-		MapPoint pos;
-		m_capitol->GetPos(pos);
-		g_theWorld->FindCityDistances(m_owner, pos);
-	}
-	
-
-	n = m_all_cities->Num(); 
-	sint32 virtualGoldSpent = 0;
-	for(i = 0; i < n; i++) {
-		m_all_cities->Access(i).CalcHappiness(virtualGoldSpent, TRUE);
-		m_all_cities->Access(i).CheckRiot();
-	}
-
-	
-	
-	BeginTurnProduction(); // Doing twice?
-
-	
-	
-
-
-
-	n = m_all_cities->Num(); 
-	if (0 < n) { 
-		UnitDynamicArray tmp_city_list(n); 
-		tmp_city_list = *m_all_cities; 
-		for (i=0; i<n; i++) { 
-			if (g_theUnitPool->IsValid(tmp_city_list.Access(i))) { 
-				tmp_city_list.Access(i).BeginTurnCity(dead); // Twice
-			}
-		} 
-	}
-	m_gold->SetGrossIncome(); 
-
-	
-	if(m_playerType == PLAYER_TYPE_ROBOT &&
-	   !(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
-		sint32 age = 0; 
-		sint32 desired = sint32(double(m_gold->GetGrossIncome()) * 
-								g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAiGoldAdjustment(m_owner,age));
-		if(desired != 0) {
-			if(desired > m_gold->GetGrossIncome()) {
-				m_gold->AddIncome(desired - m_gold->GetGrossIncome());
-			} else {
-				m_gold->SubIncome(m_gold->GetGrossIncome() - desired);
-			}
-			m_gold->SetGrossIncome();
-		}
-	}
-
-	 
-	dead.KillList(CAUSE_REMOVE_ARMY_UNKNOWN, -1);
-
-	
-	
-	
-	n = m_all_cities->Num(); 
-	for (i=0; i<n; i++) { 
-		m_all_cities->Access(i).SupportBuildings();
-	}
-
-	
-	sint32 w = int(GetWagesPerPerson()); 
-	sint32 wagesNeeded = 0;
-	sint32 oldLevel = sint32(GetUnitlessWages());
-	if(oldLevel > -2) {
-		do {
-			for(i = 0; i < n; i++) {
-				wagesNeeded += m_all_cities->Access(i).GetWagesNeeded();
-			}
-			
-			if(wagesNeeded > m_gold->GetLevel()) {
-				SetWagesLevel(sint32(GetUnitlessWages()) - 1);
-				w = sint32(GetWagesPerPerson());
-			}
-		} while (wagesNeeded > m_gold->GetLevel() && GetUnitlessWages() > -1);
-	}
-
-	if(oldLevel != GetUnitlessWages()) {
-		SlicObject *so = new SlicObject("103WageLevelReset");
-		so->AddRecipient(m_owner);
-		g_slicEngine->Execute(so);
-	}
-
-	
-	
-	for (i=0; i<n; i++) { 
-		m_all_cities->Access(i).PayWages(w); 
-	}
-
-	
-	for (i=0; i<n; i++) { 
-		m_all_cities->Access(i).CalcHappiness(virtualGoldSpent, FALSE); 
-		g_slicEngine->RunCityTriggers(m_all_cities->Access(i));
-
-	}
-
-	
-	
-
-	
-	BeginTurnWonders();
-
-	
-	BeginTurnScience();
-
-	
-	for(i = m_all_cities->Num() - 1; i >= 0; i--) {
-		m_gold->AddGold(m_all_cities->Access(i).GetData()->GetCityData()->GetGoldFromCapitalization());
-	} // Already added?
-}
-
-
 void Player::BeginTurnProduction()
 
 {
@@ -2146,20 +2019,25 @@ void Player::BeginTurnProduction()
 	sint32 i;
 	sint32 mil_total=0;
 	sint32 mat_total=0;
-	sint32 actual_total=0;
 	sint32 delta;
 	sint32 materialsFromFranchise = 0;
 
+	m_total_production = 0;
 	for (i=0; i<n; i++) { 
 		m_all_cities->Access(i).CD()->CollectResources();
+#if defined(NEW_RESOURCE_PROCESS)
+		m_all_cities->Access(i).CD()->ProcessResources();
+		m_all_cities->Access(i).CD()->CalculateResources();
+		delta = m_all_cities->Access(i).GetNetCityProduction();
+#else
 		delta = m_all_cities->Access(i).CD()->ProcessProduction(false);
+#endif
 		mil_total += delta;
 		mat_total += delta;
 
-		actual_total += delta;
+		m_total_production += delta;
 	}
 
-	m_total_production = sint32(actual_total);
 
 	
 	

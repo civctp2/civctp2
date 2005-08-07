@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : General declarations
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -20,7 +21,7 @@
 // _DEBUG
 // - Generate debug version
 //
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only).
 //
 // __GNUC__
@@ -541,48 +542,45 @@ compute_scroll_deltas(sint32 time,sint32 &deltaX,sint32 &deltaY)
 	bool retval = true;
 
 	
-	float	real_time=(float)time/(1000.0f);
-
-		
-	float t=k_SMOOTH_START_TIME;
+	float real_time=(float)time/(1000.0f);
 
 	
-	real_time*=real_time;
+	real_time *= real_time;
 
-	float velocity=real_time*0.5f*k_SMOOTH_PIX_SEC_PER_SEC;
+	float velocity = real_time * 0.5f * k_SMOOTH_PIX_SEC_PER_SEC;
 
 	
-   	if (velocity<k_SMOOTH_MIN_VELOCITY)
-		velocity=k_SMOOTH_MIN_VELOCITY;
+	if (velocity < k_SMOOTH_MIN_VELOCITY)
+		velocity = k_SMOOTH_MIN_VELOCITY;
 
 	
 	deltaX *= (sint32)velocity;
 	deltaY *= (sint32)velocity;
 
 	
-	sint32 signx=(deltaX<0?-1:1);
-	sint32 signy=(deltaY<0?-1:1);	
+	sint32 signx = (deltaX < 0 ? -1 : 1);
+	sint32 signy = (deltaY < 0 ? -1 : 1);
 
-	sint32 w=k_TILE_PIXEL_WIDTH;			
-	sint32 h=k_TILE_PIXEL_HEIGHT;			
+	sint32 w = k_TILE_PIXEL_WIDTH;
+	sint32 h = k_TILE_PIXEL_HEIGHT;
 
 	
 	
-	if (abs(deltaX)>k_SMOOTH_MAX_VELOCITY)
+	if (abs(deltaX) > k_SMOOTH_MAX_VELOCITY)
 	{
-		deltaX 	= k_SMOOTH_MAX_VELOCITY*signx;
-		retval	= false;
+		deltaX = k_SMOOTH_MAX_VELOCITY * signx;
+		retval = false;
 	}
 	
 	if (abs(deltaY)>k_SMOOTH_MAX_VELOCITY)
 	{
-		deltaY	= k_SMOOTH_MAX_VELOCITY*signy;
-		retval	= false;
+		deltaY = k_SMOOTH_MAX_VELOCITY * signy;
+		retval = false;
 	}
 
-	
-  	deltaX &= 0xFFFFFFFE;
-  	deltaY &= 0xFFFFFFFE;
+
+	deltaX &= 0xFFFFFFFE;
+	deltaY &= 0xFFFFFFFE;
 
 	return retval;
 }
@@ -616,7 +614,7 @@ BOOL ui_CheckForScroll(void)
 	
 	g_tiledMap->SetScrolling(false);
 
-	s_scrolllasttick = s_scrollcurtick;	
+	s_scrolllasttick = s_scrollcurtick;
 	s_scrollcurtick	 = GetTickCount();
 
 	tickDelta = s_scrollcurtick-s_scrolllasttick;
@@ -627,7 +625,7 @@ BOOL ui_CheckForScroll(void)
 	sint32 x = g_c3ui->TheMouse()->X();
 	sint32 y = g_c3ui->TheMouse()->Y();
 
-	sint32	deltaX = 0, 
+	sint32	deltaX = 0,
 			deltaY = 0;
 
 	static sint32	lastdeltaX = 0; 
@@ -691,8 +689,8 @@ BOOL ui_CheckForScroll(void)
 			lastdeltaY = deltaY;
 
 			
-	   		
-	   		
+
+
 
 			
 			
@@ -706,8 +704,7 @@ BOOL ui_CheckForScroll(void)
 
 
 			g_tiledMap->SetScrolling(true);
-		   
-	  		g_tiledMap->ScrollMap(deltaX, deltaY);
+			g_tiledMap->ScrollMap(deltaX, deltaY);
 
 			return true;
 		}
@@ -1551,29 +1548,29 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 	MBCHAR * s;
 	
 	switch (pException->ExceptionRecord->ExceptionCode) 
-    {
-	case EXCEPTION_ACCESS_VIOLATION:		s = "Access Violation";		break;
-	case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:	s = "Array Bounds Exceeded"; break;
-	case EXCEPTION_BREAKPOINT:				s = "Breakpoint"; break;
-	case EXCEPTION_DATATYPE_MISALIGNMENT:	s = "Datatype Misalignment"; break;
-	case EXCEPTION_FLT_DENORMAL_OPERAND:	s = "Floating Point Denormal Operand"; break;
-	case EXCEPTION_FLT_DIVIDE_BY_ZERO:		s = "Floating Point Divide by Zero"; break;
-	case EXCEPTION_FLT_INEXACT_RESULT:		s = "Floating Point Inexact Result"; break;
-	case EXCEPTION_FLT_INVALID_OPERATION:	s = "Floating Point Invalid Operation"; break;
-	case EXCEPTION_FLT_OVERFLOW:			s = "Floating Point Overflow"; break;
-	case EXCEPTION_FLT_STACK_CHECK:			s = "Floating Point Stack Check"; break;
-	case EXCEPTION_FLT_UNDERFLOW:			s = "Floating Point Underflow"; break;
-	case EXCEPTION_GUARD_PAGE:				s = "Guard Page"; break;
-	case EXCEPTION_ILLEGAL_INSTRUCTION:		s = "Illegal Instruction"; break;
-	case EXCEPTION_IN_PAGE_ERROR:			s = "In-page Error"; break;
-	case EXCEPTION_INT_DIVIDE_BY_ZERO:		s = "Integer Divide By Zero"; break;
-	case EXCEPTION_INT_OVERFLOW:			s = "Integer Overflow"; break;
-	case EXCEPTION_INVALID_DISPOSITION:		s = "Invalid Disposition"; break;
-	case EXCEPTION_NONCONTINUABLE_EXCEPTION:s = "Non-Continuable Exception"; break;
-	case EXCEPTION_PRIV_INSTRUCTION:		s = "Privileged Instruction"; break;
-	case EXCEPTION_SINGLE_STEP:				s = "Single Step"; break;
-	case EXCEPTION_STACK_OVERFLOW:			s = "Stack Overflow"; break;
-	default:                        		s = "Unknown"; break;
+	{
+	case EXCEPTION_ACCESS_VIOLATION:        s = "Access Violation";                break;
+	case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:   s = "Array Bounds Exceeded";           break;
+	case EXCEPTION_BREAKPOINT:              s = "Breakpoint";                      break;
+	case EXCEPTION_DATATYPE_MISALIGNMENT:   s = "Datatype Misalignment";           break;
+	case EXCEPTION_FLT_DENORMAL_OPERAND:    s = "Floating Point Denormal Operand"; break;
+	case EXCEPTION_FLT_DIVIDE_BY_ZERO:      s = "Floating Point Divide by Zero";   break;
+	case EXCEPTION_FLT_INEXACT_RESULT:      s = "Floating Point Inexact Result";   break;
+	case EXCEPTION_FLT_INVALID_OPERATION:   s = "Floating Point Invalid Operation";break;
+	case EXCEPTION_FLT_OVERFLOW:            s = "Floating Point Overflow";         break;
+	case EXCEPTION_FLT_STACK_CHECK:         s = "Floating Point Stack Check";      break;
+	case EXCEPTION_FLT_UNDERFLOW:           s = "Floating Point Underflow";        break;
+	case EXCEPTION_GUARD_PAGE:              s = "Guard Page";                      break;
+	case EXCEPTION_ILLEGAL_INSTRUCTION:     s = "Illegal Instruction";             break;
+	case EXCEPTION_IN_PAGE_ERROR:           s = "In-page Error";                   break;
+	case EXCEPTION_INT_DIVIDE_BY_ZERO:      s = "Integer Divide By Zero";          break;
+	case EXCEPTION_INT_OVERFLOW:            s = "Integer Overflow";                break;
+	case EXCEPTION_INVALID_DISPOSITION:     s = "Invalid Disposition";             break;
+	case EXCEPTION_NONCONTINUABLE_EXCEPTION:s = "Non-Continuable Exception";       break;
+	case EXCEPTION_PRIV_INSTRUCTION:        s = "Privileged Instruction";          break;
+	case EXCEPTION_SINGLE_STEP:             s = "Single Step";                     break;
+	case EXCEPTION_STACK_OVERFLOW:          s = "Stack Overflow";                  break;
+	default:                                s = "Unknown";                         break;
 	}
 
 	DPRINTF(k_DBG_FIX, ("Exception: '%s' thrown.\n", s));
@@ -1585,7 +1582,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 #else // _DEBUG
 
 #ifdef _BFR_
-    if (g_logCrashes) 
+	if (g_logCrashes) 
 #endif
 	{
 		FILE *crashLog = fopen("logs\\crash.txt", "w");
@@ -1597,7 +1594,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 		}
 		fclose(crashLog);
 	}
-				
+
 	return EXCEPTION_EXECUTE_HANDLER;
 
 #endif // _DEBUG
@@ -1681,7 +1678,7 @@ void main_InitializeLogs(void)
 	time(&ltime);
 	now = localtime(&ltime);
 
-    g_splash_old = GetTickCount(); 
+	g_splash_old = GetTickCount(); 
 
 	strftime(timebuf, 100, "Log started at %I:%M%p %m/%d/%Y", now);
 
@@ -1793,44 +1790,44 @@ void main_InitializeLogs(void)
 
 int main(int argc, char **argv)
 {
-    int const   r = CivMain(argc, argv);
+	int const   r = CivMain(argc, argv);
 
-    if (r < 0) 
-    {
-        DoFinalCleanup(r);
-    }
+	if (r < 0) 
+	{
+		DoFinalCleanup(r);
+	}
 
-    return 0;
+	return 0;
 }
 
 #else // __GNUC__
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
-    // This stuff will have to be moved into a new int main(int argc, char **argv)
-    // once graphics are also ported to SDL
+	// This stuff will have to be moved into a new int main(int argc, char **argv)
+	// once graphics are also ported to SDL
 #if defined(WIN32) || defined(_WINDOWS)
 
 #if defined(_DEBUG)
 	SetThreadName("WinMain");
-#endif	// _DEBUG
+#endif // _DEBUG
 
-    // Make sure old versions of DDHELP.EXE won't keep files open
-    HINSTANCE handle = LoadLibrary("DDRAW.DLL");
-    if (0 != handle) {
-        FreeLibrary(handle);
-        handle = 0;
-    }
+	// Make sure old versions of DDHELP.EXE won't keep files open
+	HINSTANCE handle = LoadLibrary("DDRAW.DLL");
+	if (0 != handle) {
+		FreeLibrary(handle);
+		handle = 0;
+	}
 #endif // WIN32 || _WINDOWS
 
-   	atexit(AtExitProc);
+	atexit(AtExitProc);
 
 	__try 
-    {
+	{
 		return CivMain(hInstance, hPrevInstance, szCmdLine, iCmdShow);
 	} 
 	__except (main_CivExceptionHandler(GetExceptionInformation()))
-    {
+	{
 		DoFinalCleanup();
 	}
 
@@ -1961,7 +1958,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	if (!main_CheckDirectX()) {
 
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
-								appstrings_GetString(APPSTR_NEEDDIRECTX));
+		                     appstrings_GetString(APPSTR_NEEDDIRECTX));
 	}
 
 	
@@ -1979,7 +1976,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	CreateDirectory((LPCTSTR)"logs", &sa);
 #endif
 
-    ParseCommandLine(szCmdLine);
+	ParseCommandLine(szCmdLine);
 
 	if(g_e3Demo) {
 		if(!g_no_shell && !g_launchScenario) {
@@ -1990,8 +1987,8 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	g_civApp = new CivApp();
 
 	
-    if (g_cmdline_load) {
-        g_civApp->InitializeApp(hInstance, iCmdShow);
+	if (g_cmdline_load) {
+		g_civApp->InitializeApp(hInstance, iCmdShow);
 
 		ScenarioPack	*pack;
 		Scenario		*scen;
@@ -2080,19 +2077,19 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 void DoFinalCleanup(int)
 {
 	if (!g_exclusiveMode)
-    {
+	{
 		main_RestoreTaskBar();
-    }
+	}
 
-    if (g_civApp)
-    {
-	    g_civApp->QuitGame();
+	if (g_civApp)
+	{
+		g_civApp->QuitGame();
 
-    	delete g_civApp;
-        g_civApp = NULL;
-    }
+		delete g_civApp;
+		g_civApp = NULL;
+	}
 
-    sliccmd_clear_symbols();
+	sliccmd_clear_symbols();
 
 #ifdef _DEBUGTOOLS
 	Debug_Close();
@@ -2101,27 +2098,27 @@ void DoFinalCleanup(int)
 	appstrings_Cleanup();
 }
 
-#else   // _DEBUG
+#else // _DEBUG
 
 void DoFinalCleanup(int exitCode)
 {
-    static bool s_cleaningUpTheApp  = false;
+	static bool s_cleaningUpTheApp = false;
 
-    if (g_c3ui)
-    {
+	if (g_c3ui)
+	{
 		g_c3ui->DestroyDirectScreen();
-    }
+	}
 
 	ShowWindow(gHwnd, SW_HIDE);
 
-	if (!s_cleaningUpTheApp) 
-    {
+	if (!s_cleaningUpTheApp)
+	{
 		s_cleaningUpTheApp = true;
 
-        if (g_civApp)
-        {
+		if (g_civApp)
+		{
 			g_civApp->CleanupApp();
-        }
+		}
 	}
 
 	exit(exitCode);
@@ -2133,7 +2130,7 @@ void DoFinalCleanup(int exitCode)
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE errcode;
 
 	
 	
@@ -2147,9 +2144,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	static int swallowNextChar = 0;
 
 	switch (iMsg) {
-	case WM_CHAR :
-	    
-        
+	case WM_CHAR:
+
+
 		if(!swallowNextChar)
 			ui_HandleKeypress(wParam, lParam);
 		swallowNextChar = FALSE;
@@ -2312,34 +2309,34 @@ extern DataCheck *g_dataCheck;
 
 
 
-void DisplayFrame (aui_Surface *surf) 
+void DisplayFrame (aui_Surface *surf)
 
-{ 
-    static double fr_decay = 0.85; 
-    g_ave_frame_rate = 10.0; 
-    g_ave_frame_time = 200.0; 
-    static sint32 is_init = 1; 
-    static sint32 g_old_last_tick; 
-    sint32 new_tick; 
-    char str[80]; 
+{
+	static double fr_decay = 0.85;
+	g_ave_frame_rate = 10.0;
+	g_ave_frame_time = 200.0;
+	static sint32 is_init = 1;
+	static sint32 g_old_last_tick;
+	sint32 new_tick;
+	char str[80];
 
-    if (is_init) { 
-        g_old_last_tick; 
-        is_init = 0; 
-    }
+	if (is_init) {
+		g_old_last_tick;
+		is_init = 0;
+	}
 
-    new_tick = GetTickCount(); 
+	new_tick = GetTickCount();
 
-    double d = double (new_tick - g_old_last_tick); 
-    g_old_last_tick = new_tick;
-    if (d < 1) 
-        return; 
+	double d = double (new_tick - g_old_last_tick);
+	g_old_last_tick = new_tick;
+	if (d < 1) 
+		return; 
 
-    g_ave_frame_time = fr_decay * g_ave_frame_time + (1-fr_decay) * (d);
-    g_ave_frame_rate = fr_decay * g_ave_frame_rate + (1-fr_decay) * (1000.0/d); 
+	g_ave_frame_time = fr_decay * g_ave_frame_time + (1-fr_decay) * (d);
+	g_ave_frame_rate = fr_decay * g_ave_frame_rate + (1-fr_decay) * (1000.0/d);
 
-    sprintf (str, "ave frame rate %4.2f/sec - ave frame time %5.1fms", g_ave_frame_rate, g_ave_frame_time); 
-    primitives_DrawText((aui_DirectSurface *)surf, 100, 100, (MBCHAR *)str, 1, 0);
+	sprintf (str, "ave frame rate %4.2f/sec - ave frame time %5.1fms", g_ave_frame_rate, g_ave_frame_time);
+	primitives_DrawText((aui_DirectSurface *)surf, 100, 100, (MBCHAR *)str, 1, 0);
 
 }
 

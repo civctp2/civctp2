@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Empire control panel tab handling: Domestic
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,7 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
+// _MSC_VER
 // - When defined, allows Microsoft C++ extensions.
 // - When not defined, generates standard C++.
 //
@@ -32,7 +33,7 @@
 //
 // - Microsoft C++ extensions marked for future GCC compilation.
 // - Functionality added to hide the data of the previous player for hotseat
-//   games.  
+//   games.
 //
 //----------------------------------------------------------------------------
 
@@ -76,25 +77,25 @@ private:
 	void UpdateGoldPW();
 
 	
-	ctp2_Static *m_scienceLabel;		
-	ctp2_Button *m_scienceIconButton;	
-	ctp2_Button *m_scienceTurnButton;	
-	ctp2_Static *m_citiesValue;			
-	ctp2_Static *m_populationValue;		
-	ctp2_Static *m_publicWorksValue;	
-	ctp2_Static *m_governmentValue;		
-	ctp2_Static *m_scienceValue;		
-	ctp2_Static *m_pollutionValue;		
+	ctp2_Static *m_scienceLabel;
+	ctp2_Button *m_scienceIconButton;
+	ctp2_Button *m_scienceTurnButton;
+	ctp2_Static *m_citiesValue;
+	ctp2_Static *m_populationValue;
+	ctp2_Static *m_publicWorksValue;
+	ctp2_Static *m_governmentValue;
+	ctp2_Static *m_scienceValue;
+	ctp2_Static *m_pollutionValue;
 	
-	ctp2_Static *m_menuGoldValue;       
-	ctp2_Static *m_menuPublicWorksValue; 
-	ctp2_Static *m_menuHappinessValue;  
-	ctp2_Static *m_menuPollutionValue;  
+	ctp2_Static *m_menuGoldValue;
+	ctp2_Static *m_menuPublicWorksValue;
+	ctp2_Static *m_menuHappinessValue;
+	ctp2_Static *m_menuPollutionValue;
 
-	sint32 m_currentResearch;            
-	sint32 m_currentTurns;               
+	sint32 m_currentResearch;
+	sint32 m_currentTurns;
 	sint32 m_currentGold;
-	sint32 m_currentCities;              
+	sint32 m_currentCities;
 	sint32 m_currentPopulation;
 	sint32 m_currentPW;
 	sint32 m_currentGovernment;
