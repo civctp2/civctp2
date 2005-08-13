@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Map fog of war visibility handling
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// BATTLE_FLAGS
+//
+// HAVE_PRAGMA_ONCE
+// - Uses #pragma once preprocessor derective
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,6 +34,7 @@
 //   - Dec. 26th 2994 - Martin Gühmann
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -46,7 +53,7 @@ class UnitActor;
 class UnseenImprovementInfo {
 public:
 	UnseenImprovementInfo(TERRAIN_IMPROVEMENT type,
-						  sint32 percentComplete) {
+	                      sint32 percentComplete) {
 		m_type = type;
 		m_percentComplete = percentComplete;
 	}
@@ -71,21 +78,21 @@ public:
 		*this = *copy;
 	}
 
-	sint32 m_type; 
-	uint32 m_visibility; 
+	sint32 m_type;
+	uint32 m_visibility;
 };
 
-#define k_UCF_IS_BIOINFECTED			0x0001
-#define k_UCF_IS_NANOINFECTED			0x0002
-#define k_UCF_IS_CONVERTED				0x0004
-#define k_UCF_IS_FRANCHISED				0x0008
-#define k_UCF_IS_INJOINED				0x0010
-#define k_UCF_WAS_HAPPINESS_ATTACKED	0x0020
-#define k_UCF_HAS_HUT					0x0040
-#define k_UCF_IS_RIOTING				0x0080
-#define k_UCF_HAS_AIRPORT				0x0100
-#define k_UCF_HAS_SLEEPINGUNITS			0x0200
-#define k_UCF_IS_WATCHFUL				0x0400
+#define k_UCF_IS_BIOINFECTED            0x0001
+#define k_UCF_IS_NANOINFECTED           0x0002
+#define k_UCF_IS_CONVERTED              0x0004
+#define k_UCF_IS_FRANCHISED             0x0008
+#define k_UCF_IS_INJOINED               0x0010
+#define k_UCF_WAS_HAPPINESS_ATTACKED    0x0020
+#define k_UCF_HAS_HUT                   0x0040
+#define k_UCF_IS_RIOTING                0x0080
+#define k_UCF_HAS_AIRPORT               0x0100
+#define k_UCF_HAS_SLEEPINGUNITS         0x0200
+#define k_UCF_IS_WATCHFUL               0x0400
 
 
 
@@ -94,10 +101,10 @@ class UnseenCell
 	friend class NetUnseenCell;
 
 public:
-	uint32 m_env;
+	uint32  m_env;
 
-	sint16 m_terrain_type;
-	sint16 m_move_cost;
+	sint16  m_terrain_type;
+	sint16  m_move_cost;
 
 
 
@@ -114,17 +121,17 @@ public:
 	
 	
 	
-	uint16	m_flags;
-	sint8	m_bioInfectedOwner;
-	sint8	m_nanoInfectedOwner;
+	uint16  m_flags;
+	sint8   m_bioInfectedOwner;
+	sint8   m_nanoInfectedOwner;
 	
-	sint8	m_convertedOwner;
-	sint8	m_franchiseOwner;
-	sint8	m_injoinedOwner;
-	sint8	m_happinessAttackOwner;
+	sint8   m_convertedOwner;
+	sint8   m_franchiseOwner;
+	sint8   m_injoinedOwner;
+	sint8   m_happinessAttackOwner;
 	
-	sint16	m_citySize;
-	sint16	m_cityOwner;
+	sint16  m_citySize;
+	sint16  m_cityOwner;
 	sint16  m_citySpriteIndex;
 
 
@@ -135,12 +142,12 @@ public:
 
 
 
-	sint8 m_cell_owner;
+	sint8   m_cell_owner;
 
 	
 	
 	
-	uint32	m_slaveBits;	
+	uint32  m_slaveBits;
 
 private:
 #ifdef BATTLE_FLAGS
@@ -161,7 +168,7 @@ private:
 
 	sint32 m_poolIndex;
 	// Contains the ID of the city that owns the tile.
-	uint32  m_visibleCityOwner;
+	uint32 m_visibleCityOwner;
 public:
 	UnseenCell(const MapPoint &point);
 	UnseenCell();
@@ -186,29 +193,29 @@ public:
 	const MBCHAR *GetCityName() { return m_cityName; }
 	UnitActor *GetActor() { return m_actor; }
 
-	BOOL	IsBioInfected(void)			{ return m_flags & k_UCF_IS_BIOINFECTED; }
-	BOOL	IsNanoInfected(void)		{ return m_flags & k_UCF_IS_NANOINFECTED; }
-	BOOL	IsConverted(void)			{ return m_flags & k_UCF_IS_CONVERTED; }
-	BOOL	IsFranchised(void)			{ return m_flags & k_UCF_IS_FRANCHISED; }
-	BOOL	IsInjoined(void)			{ return m_flags & k_UCF_IS_INJOINED; }
-	BOOL	WasHappinessAttacked(void)	{ return m_flags & k_UCF_WAS_HAPPINESS_ATTACKED; }
-	BOOL	HasHut(void)				{ return m_flags & k_UCF_HAS_HUT; }
-	BOOL	IsRioting(void)				{ return m_flags & k_UCF_IS_RIOTING; }
-	BOOL	HasAirport(void)			{ return m_flags & k_UCF_HAS_AIRPORT; }
-	BOOL	HasSleepingUnits(void)		{ return m_flags & k_UCF_HAS_SLEEPINGUNITS; }
-	BOOL	IsWatchful(void)			{ return m_flags & k_UCF_IS_WATCHFUL; }
+	BOOL    IsBioInfected(void)         { return m_flags & k_UCF_IS_BIOINFECTED; }
+	BOOL    IsNanoInfected(void)        { return m_flags & k_UCF_IS_NANOINFECTED; }
+	BOOL    IsConverted(void)           { return m_flags & k_UCF_IS_CONVERTED; }
+	BOOL    IsFranchised(void)          { return m_flags & k_UCF_IS_FRANCHISED; }
+	BOOL    IsInjoined(void)            { return m_flags & k_UCF_IS_INJOINED; }
+	BOOL    WasHappinessAttacked(void)  { return m_flags & k_UCF_WAS_HAPPINESS_ATTACKED; }
+	BOOL    HasHut(void)                { return m_flags & k_UCF_HAS_HUT; }
+	BOOL    IsRioting(void)             { return m_flags & k_UCF_IS_RIOTING; }
+	BOOL    HasAirport(void)            { return m_flags & k_UCF_HAS_AIRPORT; }
+	BOOL    HasSleepingUnits(void)      { return m_flags & k_UCF_HAS_SLEEPINGUNITS; }
+	BOOL    IsWatchful(void)            { return m_flags & k_UCF_IS_WATCHFUL; }
 
-	void	SetIsBioInfected(BOOL yes)			{ if (yes) m_flags |= k_UCF_IS_BIOINFECTED; else m_flags &= ~k_UCF_IS_BIOINFECTED;}
-	void	SetIsNanoInfected(BOOL yes)			{ if (yes) m_flags |= k_UCF_IS_NANOINFECTED; else m_flags &= ~k_UCF_IS_NANOINFECTED;}
-	void	SetIsConverted(BOOL yes)			{ if (yes) m_flags |= k_UCF_IS_CONVERTED; else m_flags &= ~k_UCF_IS_CONVERTED;}
-	void	SetIsFranchised(BOOL yes)			{ if (yes) m_flags |= k_UCF_IS_FRANCHISED; else m_flags &= ~k_UCF_IS_FRANCHISED;}
-	void	SetIsInjoined(BOOL yes)				{ if (yes) m_flags |= k_UCF_IS_INJOINED; else m_flags &= ~k_UCF_IS_INJOINED;}
-	void	SetWasHappinessAttacked(BOOL yes)	{ if (yes) m_flags |= k_UCF_WAS_HAPPINESS_ATTACKED; else m_flags &= ~k_UCF_WAS_HAPPINESS_ATTACKED;}
-	void	SetHasHut(BOOL yes)					{ if (yes) m_flags |= k_UCF_HAS_HUT; else m_flags &= ~k_UCF_HAS_HUT;}
-	void	SetIsRioting(BOOL yes)				{ if (yes) m_flags |= k_UCF_IS_RIOTING; else m_flags &= ~k_UCF_IS_RIOTING;}
-	void	SetHasAirport(BOOL yes)				{ if (yes) m_flags |= k_UCF_HAS_AIRPORT; else m_flags &= ~k_UCF_HAS_AIRPORT;}
-	void	SetHasSleepingUnits(BOOL yes)		{ if (yes) m_flags |= k_UCF_HAS_SLEEPINGUNITS; else m_flags &= ~k_UCF_HAS_SLEEPINGUNITS;}
-	void	SetIsWatchful(BOOL yes)				{ if (yes) m_flags |= k_UCF_IS_WATCHFUL; else m_flags &= ~k_UCF_IS_WATCHFUL; }
+	void    SetIsBioInfected(BOOL yes)          { if (yes) m_flags |= k_UCF_IS_BIOINFECTED; else m_flags &= ~k_UCF_IS_BIOINFECTED;}
+	void    SetIsNanoInfected(BOOL yes)         { if (yes) m_flags |= k_UCF_IS_NANOINFECTED; else m_flags &= ~k_UCF_IS_NANOINFECTED;}
+	void    SetIsConverted(BOOL yes)            { if (yes) m_flags |= k_UCF_IS_CONVERTED; else m_flags &= ~k_UCF_IS_CONVERTED;}
+	void    SetIsFranchised(BOOL yes)           { if (yes) m_flags |= k_UCF_IS_FRANCHISED; else m_flags &= ~k_UCF_IS_FRANCHISED;}
+	void    SetIsInjoined(BOOL yes)             { if (yes) m_flags |= k_UCF_IS_INJOINED; else m_flags &= ~k_UCF_IS_INJOINED;}
+	void    SetWasHappinessAttacked(BOOL yes)   { if (yes) m_flags |= k_UCF_WAS_HAPPINESS_ATTACKED; else m_flags &= ~k_UCF_WAS_HAPPINESS_ATTACKED;}
+	void    SetHasHut(BOOL yes)                 { if (yes) m_flags |= k_UCF_HAS_HUT; else m_flags &= ~k_UCF_HAS_HUT;}
+	void    SetIsRioting(BOOL yes)              { if (yes) m_flags |= k_UCF_IS_RIOTING; else m_flags &= ~k_UCF_IS_RIOTING;}
+	void    SetHasAirport(BOOL yes)             { if (yes) m_flags |= k_UCF_HAS_AIRPORT; else m_flags &= ~k_UCF_HAS_AIRPORT;}
+	void    SetHasSleepingUnits(BOOL yes)       { if (yes) m_flags |= k_UCF_HAS_SLEEPINGUNITS; else m_flags &= ~k_UCF_HAS_SLEEPINGUNITS;}
+	void    SetIsWatchful(BOOL yes)             { if (yes) m_flags |= k_UCF_IS_WATCHFUL; else m_flags &= ~k_UCF_IS_WATCHFUL; }
 
 
 
@@ -222,15 +229,15 @@ public:
 	sint32 IsHealUnits(void);
 	sint32 IsFort(void);
 
-	uint32	GetSlaveBits(void) { return m_slaveBits; }	
+	uint32	GetSlaveBits(void) { return m_slaveBits; }
 
 // Added by Martin Gühmann to generate these pieces of information
 // for hidden tiles correctly as well.
 
 	sint32 GetFoodFromTerrain() const;
-    sint32 GetFoodProduced() const;
+	sint32 GetFoodProduced() const;
 	sint32 GetShieldsFromTerrain() const;
-    sint32 GetShieldsProduced() const;
+	sint32 GetShieldsProduced() const;
 	sint32 GetGoldFromTerrain() const;
 	sint32 GetGoldProduced() const;
 
@@ -245,7 +252,7 @@ public:
 	}
 	UnseenCellCarton() {m_unseenCell = NULL;}
 
-	void GetPos(MapPoint &pos) 
+	void GetPos(MapPoint &pos)
 	{
 		Assert(m_unseenCell);
 		m_unseenCell->GetPos(pos);

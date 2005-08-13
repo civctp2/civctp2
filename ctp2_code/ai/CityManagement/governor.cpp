@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : AI and automated governor handling.
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -89,6 +90,7 @@
 //   allocation. - June 18th 2005 Martin Gühmann
 // - Added OptimizeSliders method and updated TestSliders method for 
 //   better AI sliders optimisation routines. - Jul 18th 2005 Martin Gühmann
+// - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -580,6 +582,7 @@ bool Governor::FoodSliderReachedMin(SlidersSetting & sliders_setting) const
 	return player_ptr->GetRationsExpectation() - sliders_setting.m_deltaFood >= 2;
 }
 
+
 //----------------------------------------------------------------------------
 //
 // Name       : Governor::SetSliders
@@ -630,14 +633,20 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
 		city->CalcHappiness(gold, FALSE);
-
-		city->CollectResources();
-
+#if defined(NEW_RESOURCE_PROCESS)
+		city->ProcessResources();
+		city->CalculateResources();
+		city->CalcPollution();
 		city->DoSupport(true);
-		city->SplitScience(true);
-		city->ProcessFood();
-		city->CollectOtherTrade(TRUE, FALSE);
+#else
+		city->CollectResources();
 		city->ProcessProduction(true);
+		city->DoSupport(true); // Deduct wages and building costs
+		city->SplitScience(true); // Deduct science costs
+		city->CollectOtherTrade(true, false);
+		city->ProcessFood();
+		city->CalcPollution();
+#endif
 
 		// Production has an effect on pollution and polltion has an effect on happiness
 		// Of course better would be only one recalculation
@@ -1117,15 +1126,23 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		//Right direction but more debug work is needed.
 		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
+
+#if defined(NEW_RESOURCE_PROCESS)
 		city->CalcHappiness(gold, FALSE);
+		city->ProcessResources();
+		city->CalculateResources();
+		city->CalcPollution();
+		city->DoSupport(true);
+#else
 		city->CollectResources();
+		city->ProcessProduction(true);
 		city->DoSupport(true); // Deduct wages and building costs
 		city->SplitScience(true); // Deduct science costs
-
+		city->CollectOtherTrade(true, false);
 		city->ProcessFood();
-		city->CollectOtherTrade(TRUE, FALSE);
-		city->ProcessProduction(true);
-			
+		city->CalcPollution();
+#endif
+		city->CalcHappiness(gold, FALSE);
 		city->EatFood();
 		city->CalculateGrowthRate();
 
@@ -1295,7 +1312,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	||     !FoodSliderReachedMin(sliders_setting)
 	){
 
-		TestSliderSettings(     sliders_setting,      slider_tests);
+		TestSliderSettings(     sliders_setting, slider_tests);
 		value     =      slider_tests.GetValue();
 
 		if(!ProdSliderReachedMin(sliders_setting)){
@@ -1360,6 +1377,27 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			sliders_setting = food_sliders_setting;
 		}
 		else{
+			// Real equal need a better solution
+/*			if(valueProd >= value
+			&& valueProd >= valueGold
+			&& valueProd >= valueFood
+			){
+				sliders_setting = prod_sliders_setting;
+			}
+			// Real equal need a better solution
+			else if(valueGold >= value
+			&&      valueGold >= valueProd
+			&&      valueGold >= valueFood
+			){
+				sliders_setting = gold_sliders_setting;
+			}
+			// Real equal need a better solution
+			else if(valueFood >= value
+			&&      valueFood >= valueProd
+			&&      valueFood >= valueGold
+			){
+				sliders_setting = food_sliders_setting;
+			}*/
 			break;
 		}
 
@@ -1416,8 +1454,8 @@ void Governor::ComputeRoadPriorities()
 	{
 		city_unit = player_ptr->m_all_cities->Get(city_index);
 
-			
-		if (city_unit.CD()->GetUseGovernor() == false)
+
+		if (!city_unit.CD()->GetUseGovernor())
 			continue;
 
 		threat_rank = 
@@ -1450,7 +1488,7 @@ void Governor::ComputeRoadPriorities()
 			
 			
 
-	    float total_cost = 0.0;
+		float total_cost = 0.0;
 		Path found_path;
 		double trans_max_r = 0.8;
 			
@@ -1544,8 +1582,8 @@ void Governor::PlaceTileImprovements()
 		Assert(unit->GetCityData());
 		city = unit->GetCityData();
 
-			
-		if(city->GetUseGovernor() == false)
+
+		if(!city->GetUseGovernor())
 			continue;
 
 		CityInfluenceIterator it(unit.RetPos(), city->GetSizeIndex());
@@ -1876,8 +1914,13 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 
 		// Only decrease utility if the city has grown beyond the first ring.
 		if(citySize > unitutil_GetSmallCityMaxSize()){
+#if defined(NEW_RESOURCE_PROCESS)
+			sint32 ring = city->GetRing(pos);
+			goal.utility *= static_cast<double>(city->GetWorkingPeopleInRing(ring)) / static_cast<double>(city->GetRingSize(ring));
+#else
 			sint32 const	sqDist	= MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
 			goal.utility *= city->GetUtilisationRatio(sqDist);
+#endif
 		}
 	}
 	else
@@ -1946,7 +1989,7 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 // Parameters : pos: Position of the tile on the map
 //
 // Globals    : g_player:                  List of players in the game
-//				g_theWorld:                Map information
+//              g_theWorld:                Map information
 //              g_theTerrainImprovementDB: The tile improvement database
 //
 // Returns    : food_imp: Best food tile improvement
@@ -2227,17 +2270,16 @@ void Governor::AssignPopulations()
 	
 	UnitDynamicArray *city_list = g_player[m_playerId]->GetAllCitiesList();
 	CityData *city;
-	for (sint32 i = 0; i < city_list->Num(); i++) // city_list->Num() returns a sint32
+	for(sint32 i = 0; i < city_list->Num(); i++) // city_list->Num() returns a sint32
 	{
 		city = city_list->Access(i)->GetCityData();
 
 		
-		if (city->GetUseGovernor() == FALSE) // Robot check already done in GetUseGovernor
+		if(!city->GetUseGovernor()) // Robot check already done in GetUseGovernor
 			continue;
 
 		
-		if (city->GetSizeIndex() > 0)
-			
+		if(city->GetSizeIndex() > 0)
 			AssignPopulation(city);
 	}
 
@@ -2354,25 +2396,29 @@ void Governor::AssignPopulation(CityData *city) const {
 	// the resources from the inner ring and the last ring must be 
 	// stored at seperated places to use them in the HowMuchMoreFoodNeeded
 	// method.
+#if !defined(NEW_RESOURCE_PROCESS)
 	city->CollectResources();
 	city->ProcessFood();
 	city->EatFood();
+#endif
 
 	//////////////////////////////////////////////////
 	// Recalculate Happiness after specialists removal
 	sint32 vgs;
-	city->CalcHappiness(vgs,TRUE);
+	city->CalcHappiness(vgs, TRUE);
 
 	/////////////////////////////////////////////////////////////
 	// Create a copy of city data and remove all the specialists 
 	// from that copy for effect comparision.
 	// Copy should be removed in the end.
+#if !defined(NEW_RESOURCE_PROCESS)
 	CityData *tmp_city = new CityData(city);
+#endif
 	
 	/////////////////////////////////////
 	// Get maximum percent of specialists
 	// Should be removed in the end.
-    const StrategyRecord::PopAssignmentElement *pop_assignment = GetMatchingPopAssignment(city);
+	const StrategyRecord::PopAssignmentElement *pop_assignment = GetMatchingPopAssignment(city);
 	double specialists_percent = pop_assignment->GetSpecialists();
 
 	///////////////////////////////////////////////////////////////
@@ -2382,15 +2428,24 @@ void Governor::AssignPopulation(CityData *city) const {
 	double farmersEff, laborersEff, merchantsEff, scientistsEff;
 	sint32 min_workers = ComputeMinimumWorkers(city, 
 	                     farmers, laborers, merchants, scientists,
+#if defined(NEW_RESOURCE_PROCESS)
+	                     minFood, minProd, minGold, minScie);
+#else
 	                     minFood, minProd, minGold, minScie,
 	                     farmersEff, laborersEff, merchantsEff, scientistsEff);
+#endif
 
-
-	sint32 size_index, full_index, part_index;
-	city->ComputeSizeIndexes(city->PopCount(), size_index, full_index, part_index);
+	sint32 size_index = city->GetSizeIndex();
+//	sint32 size_index, full_index, part_index;
+//	city->ComputeSizeIndexes(city->PopCount(), size_index, full_index, part_index);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Get for that city the maximum number of workers that could be assigned.
+#if defined(NEW_RESOURCE_PROCESS)
+	sint32 minSpecialists = city->GetUnemployedPeople();
+	sint32 max_workers = city->TilesForWorking();
+	// Maybe fixing max_workers to the actual pop size, but the old way doesn't do it either.
+#else
 	sint32 max_workers = g_theCitySizeDB->Get(size_index)->GetMaxWorkers();
 
 	sint32 minSpecialists = 0;
@@ -2398,6 +2453,7 @@ void Governor::AssignPopulation(CityData *city) const {
 	if(max_workers < city->WorkerCount() + city->SlaveCount()){
 		minSpecialists = (city->WorkerCount() + city->SlaveCount()) - max_workers;
 	}
+#endif
 
 	min_workers -= city->SlaveCount();
 	if(min_workers < 0) min_workers = 0;
@@ -2415,27 +2471,55 @@ void Governor::AssignPopulation(CityData *city) const {
 	specialists += minSpecialists;
 
 	
-	sint32 count;
+#if !defined(NEW_RESOURCE_PROCESS)
 	sint32 delta;
 	double prev_result;
+#endif
+	sint32 count;
 
 	////////////////////////////////////////
 	// Start with the specialist assignment:
 
 	sint32 best_specialist = city->GetBestSpecialist(POP_FARMER);
 
-	sint32 foodMissing;
-	if(city->NeedMoreFood(0, foodMissing, true) 
+#if defined(NEW_RESOURCE_PROCESS)
+	sint32 foodMissing = city->HowMuchMoreFoodNeeded(0, false, true);
+	if(foodMissing > 0){
+		sint32 i;
+		sint32 workers;
+		sint32 tmpCount;
+		count = 0;
+		for(i = size_index; i >= 0; --i){
+			farmersEff = city->GetFarmersEffect(i);
+			if(farmersEff){
+				tmpCount = static_cast<sint32>(ceil(static_cast<double>(foodMissing)/farmersEff));
+				workers = city->GetWorkingPeopleInRing(i);
+				if(tmpCount > workers){
+					count += workers;
+				}
+				else{
+					count += tmpCount;
+					break;
+				}
+			}
+			else{
+				break;
+			}
+		}
+#else
+	sint32 foodMissing = city->HowMuchMoreFoodNeeded(0, false, true);
+	if(foodMissing > 0
 	&& farmersEff > 0
 	){
 		count = static_cast<sint32>(ceil(static_cast<double>(foodMissing)/farmersEff));
+#endif
 		// Remove debug messages when final debug is done
 //		DPRINTF(k_DBG_GAMESTATE, ("foodMissing: %i\n", foodMissing));
 //		DPRINTF(k_DBG_GAMESTATE, ("farmersEff: %f\n", farmersEff));
 //		DPRINTF(k_DBG_GAMESTATE, ("count: %i\n", count));
 	}
 	else{
-		count = static_cast<sint32>
+		count = static_cast<sint32> // Have to reconsider this
 			(ceil(specialists * pop_assignment->GetFarmerPercent()));
 	}
 	if(count > city->WorkerCount()){
@@ -2456,6 +2540,9 @@ void Governor::AssignPopulation(CityData *city) const {
 	if((best_specialist >= 0)
 	&& (count > 0)
 	){
+#if defined(NEW_RESOURCE_PROCESS)
+		city->ChangeSpecialists(POP_FARMER, count);
+#else
 		tmp_city->CollectResources();
 		tmp_city->ProcessFood();
 		prev_result = tmp_city->GetProducedFood();
@@ -2476,6 +2563,7 @@ void Governor::AssignPopulation(CityData *city) const {
 			
 		delta = city->FarmerCount() - tmp_city->FarmerCount();
 		tmp_city->ChangeSpecialists(POP_FARMER, delta );
+#endif
 	}
 //	DPRINTF(k_DBG_GAMESTATE, ("Farmers: %i\n", city->FarmerCount()));
 	
@@ -2492,7 +2580,9 @@ void Governor::AssignPopulation(CityData *city) const {
 	if((best_specialist >= 0)
 	&& (count > 0)
 	){
-			
+#if defined(NEW_RESOURCE_PROCESS)
+		city->ChangeSpecialists(POP_LABORER, count);
+#else
 		tmp_city->CollectResources();
 		tmp_city->ProcessProduction(true);
 		prev_result = tmp_city->GetGrossCityProduction();
@@ -2512,6 +2602,7 @@ void Governor::AssignPopulation(CityData *city) const {
 			
 		delta = city->LaborerCount() - tmp_city->LaborerCount();
 		tmp_city->ChangeSpecialists(POP_LABORER, delta );
+#endif
 	}
 
 	
@@ -2528,7 +2619,10 @@ void Governor::AssignPopulation(CityData *city) const {
 	// First pop database index is 0
 	if((best_specialist >= 0) 
 	&& (count > 0)
-	){		
+	){
+#if defined(NEW_RESOURCE_PROCESS)
+		city->ChangeSpecialists(POP_MERCHANT, count);
+#else
 		tmp_city->CollectResources();
 		tmp_city->CollectOtherTrade(TRUE, FALSE);
 		prev_result = tmp_city->GetGrossCityGold();
@@ -2538,8 +2632,7 @@ void Governor::AssignPopulation(CityData *city) const {
 		tmp_city->CollectOtherTrade(TRUE, FALSE);
 		
 		if(tmp_city->GetGrossCityGold() > prev_result){
-			delta = (count - city->MerchantCount());
-			city->ChangeSpecialists(POP_MERCHANT, delta);
+			city->ChangeSpecialists(POP_MERCHANT, count);
 		}
 		else if(tmp_city->GetGrossCityGold() < prev_result){
 			delta = (-1 * city->MerchantCount());
@@ -2548,6 +2641,7 @@ void Governor::AssignPopulation(CityData *city) const {
 		
 		delta = city->MerchantCount() - tmp_city->MerchantCount();
 		tmp_city->ChangeSpecialists(POP_MERCHANT, delta );
+#endif
 	}
 
 	
@@ -2612,13 +2706,15 @@ void Governor::AssignPopulation(CityData *city) const {
 		count = static_cast<sint32>
 			(ceil(specialists * pop_assignment->GetEntertainerPercent()));
 		
-		count = (count >= min_entertainers ? count : min_entertainers);		
+		count = (count >= min_entertainers ? count : min_entertainers);
 		count = (count <= max_entertainers ? count : max_entertainers);
 
 		count = (count <= specialists || count == min_entertainers ? count : specialists);
 
 		city->ChangeSpecialists(POP_ENTERTAINER, count);
+#if !defined(NEW_RESOURCE_PROCESS)
 		tmp_city->ChangeSpecialists(POP_ENTERTAINER, count); // All entertainers were removed before.
+#endif
 	}
 
 	if(max_workers < city->WorkerCount() + city->SlaveCount()){
@@ -2629,7 +2725,9 @@ void Governor::AssignPopulation(CityData *city) const {
 		}
 	}
 
+#if !defined(NEW_RESOURCE_PROCESS)
 	delete tmp_city;
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -2700,6 +2798,60 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sin
 
 }
 
+#if defined(NEW_RESOURCE_PROCESS)
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::GetMinNumOfFieldWorkers
+//
+// Description: Estimates the amount of needed workers to generate the amount
+//              of resources (food, production or gold) given by 
+//              resourceFraction.
+//
+// Parameters : city:             The city data of city for which the amount 
+//                                needed workers should be calculated.
+//              resourceFraction: The fraction of total resources that the
+//                                city needs as minimum.
+//
+// Globals    : g_theCitySizeDB:  The city size database.
+//
+// Returns    : The amount of minimum field wokers to generate the given 
+//              fraction of resources.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Governor::GetMinNumOfFieldWorkers(const CityData *city, double resourceFraction) const
+{
+	double totalTilesForWorking = static_cast<double>(city->TilesForWorking());
+	double numPeople;
+	double peopleFraction;
+	double neededFraction = 0.0;
+	sint32 minResource = -1; // First worker is free
+
+	sint32 i;
+	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+	{
+		numPeople = static_cast<double>(city->GetRingSize(i));
+		peopleFraction = totalTilesForWorking / numPeople;
+
+		if(resourceFraction > neededFraction + peopleFraction){
+			neededFraction += peopleFraction;
+			minResource += city->GetRingSize(i);
+		}
+		else if(resourceFraction == neededFraction + peopleFraction){
+			minResource += city->GetRingSize(i);
+			break;
+		}
+		else if(resourceFraction < neededFraction + peopleFraction){
+			double ringFraction = (resourceFraction - neededFraction) / peopleFraction;
+			minResource += static_cast<sint32>(ceil(city->GetRingSize(i) / ringFraction));
+			break;
+		}
+	}
+	return minResource;
+}
+#endif
+
 //----------------------------------------------------------------------------
 //
 // Name       : Governor::ComputeMinimumWorkers
@@ -2747,16 +2899,21 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
                                        sint32 &minFood,
                                        sint32 &minProd,
                                        sint32 &minGold,
+#if defined(NEW_RESOURCE_PROCESS)
+                                       sint32 &minScie) const
+#else
                                        sint32 &minScie,
                                        double &farmersEff,
                                        double &laborersEff,
                                        double &merchantsEff,
                                        double &scientistsEff) const
+#endif
 {
 	farmers = 0;
 	laborers = 0;
 	merchants = 0;
 	scientists = 0;
+#if !defined(NEW_RESOURCE_PROCESS)
 	minFood = 0;
 	minProd = 0;
 	minGold = 0;
@@ -2765,6 +2922,96 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 	laborersEff = 0.0;
 	merchantsEff = 0.0;
 	scientistsEff = 0.0;
+#endif
+
+#if defined(NEW_RESOURCE_PROCESS)
+
+	double farmersEff;
+	double laborersEff;
+	double merchantsEff;
+	double scientistsEff;
+
+	double food = city->GetMaxProcessFood();
+	double prod = city->GetMaxProcessProd();
+	double gold = city->GetMaxProcessGold();
+	double scie = city->GetMaxProcessScie();
+
+	double foodRequired = city->GetFoodRequired();
+	double prodRequired = 1.0; // At least one production, better requirement needed.
+	double goldRequired = static_cast<double>(city->GetSupport());
+	double scieRequired = 1.0; // At least one science, better requirement needed.
+	
+	double foodFraction = foodRequired / food;
+	double prodFraction = prodRequired / prod;
+	double goldFraction = goldRequired / gold;
+	double scieFraction = scieRequired / scie;
+
+	minFood = GetMinNumOfFieldWorkers(city, foodFraction);
+	minProd = GetMinNumOfFieldWorkers(city, prodFraction);
+	minGold = GetMinNumOfFieldWorkers(city, goldFraction);
+	minScie = GetMinNumOfFieldWorkers(city, scieFraction);
+
+	bool farmersMaxReached = false;
+	bool laborersMaxReached = false;
+	bool merchantsMaxReached = false;
+	bool scientistsMaxReached = false;
+
+	sint32 i;
+	for(i = city->GetSizeIndex(); i >= 0; --i){
+		city->GetSpecialistsEffect(i, farmersEff, laborersEff, merchantsEff, scientistsEff);
+		sint32 workers = city->GetWorkingPeopleInRing(i);
+
+		if( farmersEff > 0.0
+		&& !farmersMaxReached
+		){
+			farmers += workers;
+		}
+		else{
+			farmersMaxReached = true;
+		}
+
+		if( laborersEff > 0.0
+		&& !laborersMaxReached
+		){
+			laborers += workers;
+		}
+		else{
+			laborersMaxReached = true;
+		}
+
+		if( merchantsEff > 0.0
+		&& !merchantsMaxReached
+		){
+			merchants += workers;
+		}
+		else{
+			merchantsMaxReached = true;
+		}
+
+		if( scientistsEff > 0.0
+		&& !scientistsMaxReached
+		){
+			scientists += workers;
+		}
+		else{
+			scientistsMaxReached = true;
+		}
+	}
+
+	sint32 freeCount = city->PopCount() - city->SlaveCount();
+	if(freeCount < farmers) farmers = freeCount;
+	if(freeCount < laborers) laborers = freeCount;
+	if(freeCount < merchants) merchants = freeCount;
+	if(freeCount < scientists) scientists = freeCount;
+
+	sint32 WorkersNeeded = minFood;
+	if(WorkersNeeded < minProd) WorkersNeeded = minProd;
+	if(WorkersNeeded < minGold) WorkersNeeded = minGold;
+	if(WorkersNeeded < minScie) WorkersNeeded = minScie;
+
+	return WorkersNeeded;
+
+#else
 
 	double full_radii_food;
 	double part_radii_food;
@@ -2787,7 +3034,6 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 	const CitySizeRecord *part_rec;
 	const CitySizeRecord *full_rec;
 	MapPoint cityPos = city->GetHomeCity().RetPos();
-	sint32 workers_needed = 0;
 
 	double crimeLossFood;
 	double grossFood;
@@ -2810,6 +3056,7 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 	sint32 support;
 	sint32 bestSpecialist;
 
+	sint32 workers_needed = 0;
 	sint32 WorkersNeeded = 0;
 	
 	for(sint32 sizeIndex = 1; sizeIndex < g_theCitySizeDB->NumRecords(); sizeIndex++){
@@ -3120,8 +3367,8 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 //	DPRINTF(k_DBG_GAMESTATE, ("minScie: %i\n", minScie));
 //	DPRINTF(k_DBG_GAMESTATE, ("free: %i\n", freeCount));
 //	DPRINTF(k_DBG_GAMESTATE, ("WokersNeeded: %i\n", WorkersNeeded));
-
 	return WorkersNeeded;
+#endif
 }
 
 void Governor::ComputeDesiredUnits()
@@ -3595,8 +3842,7 @@ void Governor::FillEmptyBuildQueues()
 		ComputeNextBuildItem(city, cat, type, list_num);
 
 		
-		if (city->GetUseGovernor() == FALSE &&
-			g_player[m_playerId]->GetPlayerType() != PLAYER_TYPE_ROBOT)
+		if (!city->GetUseGovernor())
 			continue;
 
 		
@@ -3616,10 +3862,12 @@ void Governor::FillEmptyBuildQueues()
 				break; 
 			case k_GAME_OBJ_TYPE_CAPITALIZATION:
 				insert_ok = true;
+//				city->InsertCapitalization(); // How is Capitalization removed?
 				city->BuildCapitalization();
 				break;
 			case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
 				insert_ok = true;
+//				city->InsertInfrastructure(); // How is Infrastructure removed?
 				city->BuildInfrastructure();
 				break;
 			}
@@ -3718,20 +3966,19 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 		GetMatchingSequence(city, (g_player[m_playerId]->GetPlayerType() != PLAYER_TYPE_ROBOT), advice);
 
 	
-	if ( (g_player[m_playerId]->GetPlayerType() != PLAYER_TYPE_ROBOT) )
+	if((g_player[m_playerId]->GetPlayerType() != PLAYER_TYPE_ROBOT))
+	{
+		if(city->GetUseGovernor())
 		{
-			if (city->GetUseGovernor())
-			{
-				Assert(city->GetBuildListSequenceIndex() >= 0);
-				build_list_sequence = g_theBuildListSequenceDB->Get(city->GetBuildListSequenceIndex());
-			}
+			Assert(city->GetBuildListSequenceIndex() >= 0);
+			build_list_sequence = g_theBuildListSequenceDB->Get(city->GetBuildListSequenceIndex());
 		}
+	}
 
 	
 	
-	if (city->GetUseGovernor() == false || g_player[m_playerId]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+	if(!city->GetUseGovernor() || g_player[m_playerId]->GetPlayerType() == PLAYER_TYPE_ROBOT)
 	{
-		
 		sint32 suggested_sequence = build_list_sequence->GetIndex();
 		if (suggested_sequence >= 0)
 			city->SetBuildListSequenceIndex(suggested_sequence);
@@ -3747,115 +3994,95 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 	
 	
 	int elem_num;
-	for ( elem_num = 0; elem_num < build_list_sequence->GetNumBuildListElement(); elem_num++)
+	for( elem_num = 0; elem_num < build_list_sequence->GetNumBuildListElement(); elem_num++)
+	{
+		elem = build_list_sequence->GetBuildListElement(elem_num);
+
+		
+		if(elem->GetAllUnitBuildList() && !city_full)
 		{
-			elem = build_list_sequence->GetBuildListElement(elem_num);
-
-			
-			if ( elem->GetAllUnitBuildList() && !city_full) 
-				{
-					type = GetNeededUnitType(city, list_num);
-					cat = k_GAME_OBJ_TYPE_UNIT;
-
-					
-					if (type > -1)
-					{
-						
-						Assert(city->CanBuildUnit(type));
-
-						break;	
-					}
-					
-				}
-			
-			if ( elem->GetGarrisonUnitBuildList() && !city_full) 
-				{
-					type = GetNeededGarrisonUnitType(city, list_num);
-					cat = k_GAME_OBJ_TYPE_UNIT;
-
-					
-					if (type > -1)
-					{
-						
-						Assert(city->CanBuildUnit(type));
-
-						break;
-					}
-					
-				}
-			
-			else if ( elem->GetBuildingBuildList() )
-				{
-					type = GetNeededBuildingType(city, elem->GetBuildingBuildListPtr());
-					cat = k_GAME_OBJ_TYPE_IMPROVEMENT;
-
-					
-					if (type > -1 && city->CanBuildBuilding(type))
-						break;
-					
-				}
-			
-			else if ( elem->GetWonderBuildList() )
-				{
-					type = GetNeededWonderType(city, elem->GetWonderBuildListPtr());
-					cat = k_GAME_OBJ_TYPE_WONDER;
-
-					
-					if (type > -1 && city->CanBuildWonder(type))
-						break;
-					
-				}
-			
-			else if ( elem->GetFreight() )
-				{
-					type = GetNeededFreightType(list_num);
-					cat = k_GAME_OBJ_TYPE_UNIT;
-				
-					if (type > -1)
-						break;
-					
-				}
-			
-			else if ( elem->GetInfrastructure() )
-				{
-					
-					if ( city->CanBuildInfrastructure() )
-						{
-							type = 1;
-							cat = k_GAME_OBJ_TYPE_INFRASTRUCTURE;
-							
-							break;
-						}
-					
-				}
-			
-			else if ( elem->GetCapitalization() )
-				{
-					
-					if ( city->CanBuildCapitalization() )
-						{
-							type = 1;
-							cat = k_GAME_OBJ_TYPE_CAPITALIZATION;
-							
-							break;
-						}
-					
-				}
-			else
-				{
-					
-					
-				}
-		}
-
-	
-	if (elem_num >= build_list_sequence->GetNumBuildListElement() )
-		{
-			
-			DPRINTF(k_DBG_AI, ("Nothing valid found to build in city at (%d,%d), increase production allocated to units?\n"));
+			type = GetNeededUnitType(city, list_num);
 			cat = k_GAME_OBJ_TYPE_UNIT;
-			type = m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType;
+
+			
+			if(type > -1)
+			{
+				Assert(city->CanBuildUnit(type));
+				break;
+			}
 		}
+
+		if(elem->GetGarrisonUnitBuildList() && !city_full)
+		{
+			type = GetNeededGarrisonUnitType(city, list_num);
+			cat = k_GAME_OBJ_TYPE_UNIT;
+
+			if(type > -1)
+			{
+				Assert(city->CanBuildUnit(type));
+				break;
+			}
+		}
+			
+		else if(elem->GetBuildingBuildList())
+		{
+			type = GetNeededBuildingType(city, elem->GetBuildingBuildListPtr());
+			cat = k_GAME_OBJ_TYPE_IMPROVEMENT;
+
+			if(type > -1 && city->CanBuildBuilding(type))
+				break;
+
+		}
+			
+		else if(elem->GetWonderBuildList())
+		{
+			type = GetNeededWonderType(city, elem->GetWonderBuildListPtr());
+			cat = k_GAME_OBJ_TYPE_WONDER;
+
+			if(type > -1 && city->CanBuildWonder(type))
+				break;
+
+		}
+		else if(elem->GetFreight())
+		{
+			type = GetNeededFreightType(list_num);
+			cat = k_GAME_OBJ_TYPE_UNIT;
+
+			if (type > -1)
+				break;
+
+		}
+		else if(elem->GetInfrastructure())
+		{
+			if(city->CanBuildInfrastructure())
+			{
+				type = 1;
+				cat = k_GAME_OBJ_TYPE_INFRASTRUCTURE;
+				break;
+			}
+		}
+		else if(elem->GetCapitalization())
+		{
+			if ( city->CanBuildCapitalization() )
+			{
+				type = 1;
+				cat = k_GAME_OBJ_TYPE_CAPITALIZATION;
+				break;
+			}
+		}
+		else
+		{
+				
+				
+		}
+	}
+
+	if (elem_num >= build_list_sequence->GetNumBuildListElement() )
+	{
+		DPRINTF(k_DBG_AI, ("Nothing valid found to build in city at (%d,%d), increase production allocated to units?\n"));
+		cat = k_GAME_OBJ_TYPE_UNIT;
+		type = m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType;
+	}
 #ifdef _DEBUG
 	bool RICHARD_WANTS_TO_SEE_THIS_ASSERT = (type > -1);
 	Assert(RICHARD_WANTS_TO_SEE_THIS_ASSERT);
@@ -3869,7 +4096,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	Assert(g_player[m_playerId]);
 
 	
-	if ( city->GetUseGovernor() && human_city)
+	if(city->GetUseGovernor() && human_city)
 		return g_theBuildListSequenceDB->Get(city->GetBuildListSequenceIndex());
 
 	
@@ -3884,99 +4111,93 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	sint32 best_priority = -99999;
 
 	int elem_num;
-	for (elem_num = 0; elem_num < strategy.GetNumBuildListSequenceElement(); elem_num++)
+	for(elem_num = 0; elem_num < strategy.GetNumBuildListSequenceElement(); elem_num++)
+	{
+		elem = strategy.GetBuildListSequenceElement(elem_num);
+
+		if(best_elem && elem->GetPriority() < best_priority)
+			continue;
+
+			
+		if(elem->GetProductionCities())
 		{
-			
-			elem = strategy.GetBuildListSequenceElement(elem_num);
-
-			
-			if (best_elem && elem->GetPriority() < best_priority)
-				continue;
-
-			
-			if ( elem->GetProductionCities() ) 
-				{
-					rank = MapAnalysis::GetMapAnalysis().
-						GetProductionRank(city, false);
-				}
-
-			
-			else if ( elem->GetGrowthCities() ) 
-				{
-					rank = MapAnalysis::GetMapAnalysis().
-						GetGrowthRank(city, false);
-				}
-			
-			else if ( elem->GetCommerceCities() ) 
-				{
-					rank = MapAnalysis::GetMapAnalysis().
-						GetCommerceRank(city, false);
-				}
-			
-			else if (elem->GetHappyCities())
-				{
-					rank = MapAnalysis::GetMapAnalysis().
-						GetHappinessRank(city);
-				}
-			
-			else if (elem->GetThreatenedCities())
-				{
-					rank = MapAnalysis::GetMapAnalysis().
-						GetThreatRank(city);
-				}
-			
-			else if (elem->GetPowerCities())
-				{
-					rank = MapAnalysis::GetMapAnalysis().
-						GetPowerRank(city);
-				}
-			
-			else if ( elem->GetDefault() )
-				{
-					
-					if (best_elem == NULL)
-					{
-						best_priority = elem->GetPriority();
-						best_elem = elem;
-						continue;
-					}
-				}
-			else 
-				{
-					
-					Assert(false);
-					continue;
-				}
-
-			
-			if ( elem->GetTop() ) 
-				{
-					elem->GetTop(top_value);
-					if (rank >= 1.0 - top_value)
-					{
-						best_priority = elem->GetPriority();
-						best_elem = elem;
-					}
-				}
-			
-			
-			if ( elem->GetBottom() )
-				{
-					elem->GetBottom(bottom_value);
-					if (rank <= bottom_value)
-					{
-						best_priority = elem->GetPriority();
-						best_elem = elem;
-					}
-				}
+			rank = MapAnalysis::GetMapAnalysis().
+			       GetProductionRank(city, false);
 		}
 
+		else if(elem->GetGrowthCities())
+		{
+			rank = MapAnalysis::GetMapAnalysis().
+			       GetGrowthRank(city, false);
+		}
 
-	
+		else if(elem->GetCommerceCities())
+		{
+			rank = MapAnalysis::GetMapAnalysis().
+			       GetCommerceRank(city, false);
+		}
+
+		else if(elem->GetHappyCities())
+		{
+			rank = MapAnalysis::GetMapAnalysis().
+			       GetHappinessRank(city);
+		}
+
+		else if(elem->GetThreatenedCities())
+		{
+			rank = MapAnalysis::GetMapAnalysis().
+			       GetThreatRank(city);
+		}
+
+		else if(elem->GetPowerCities())
+		{
+			rank = MapAnalysis::GetMapAnalysis().
+			       GetPowerRank(city);
+		}
+
+		else if( elem->GetDefault() )
+		{
+
+			if (best_elem == NULL)
+			{
+				best_priority = elem->GetPriority();
+				best_elem = elem;
+				continue;
+			}
+		}
+		else
+		{
+			Assert(false);
+			continue;
+		}
+
+		if(elem->GetTop())
+		{
+			elem->GetTop(top_value);
+			if(rank >= 1.0 - top_value)
+			{
+				best_priority = elem->GetPriority();
+				best_elem = elem;
+			}
+		}
+
+		if(elem->GetBottom())
+		{
+			elem->GetBottom(bottom_value);
+			if(rank <= bottom_value)
+			{
+				best_priority = elem->GetPriority();
+				best_elem = elem;
+			}
+		}
+	}
+
+
+
 	Assert(best_elem);
 
 	
-	if (best_elem == NULL)
+	if(best_elem == NULL)
 	{
 		advice = -1;
 		best_elem = strategy.GetBuildListSequenceElement(elem_num-1);
@@ -3985,7 +4206,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	}
 
 	
-	if (best_elem->GetAdvice())
+	if(best_elem->GetAdvice())
 		best_elem->GetAdvice(advice);
 	else
 		advice = -1;
@@ -3996,7 +4217,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) const
 {
-	Assert( g_player[m_playerId] );
+	Assert(g_player[m_playerId]);
 
 	BUILD_UNIT_LIST max_list = BUILD_UNIT_LIST_MAX;
 	sint32 max_production = 0;

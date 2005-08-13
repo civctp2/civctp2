@@ -53,6 +53,7 @@
 //   distribution, unfortunatly it does work as exspected.
 //   - April 23rd 2005 Martin Gühmann
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
+// - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -577,13 +578,20 @@ void CityWindow::Project(CityData *cityData)
 
 	
 	cityData->CollectResources();
+#if defined(NEW_RESOURCE_PROCESS)
+	cityData->ProcessResources();
+	cityData->CalculateResources();
+	cityData->CalcPollution();
+	cityData->DoSupport(true);
+#else
+	cityData->ProcessProduction(true);
 	cityData->DoSupport(true);
 	cityData->SplitScience(true);
+	cityData->CollectOtherTrade(true, false);
 	cityData->ProcessFood();
-	cityData->CollectOtherTrade(TRUE, FALSE);
-	cityData->ProcessProduction(true);
 	cityData->CalcPollution();
-	cityData->CalcHappiness(gold, FALSE);
+#endif
+	cityData->CalcHappiness(gold, false);
 	cityData->EatFood();
 	cityData->CalculateGrowthRate();
 
@@ -2564,8 +2572,8 @@ void CityWindow::ActivateUnitCallback(aui_Control *control, uint32 action, uint3
 //
 // Description: Disband the units in the selected boxes (when confirmed).
 //
-// Parameters : result		: the user has confirmed disbanding.
-//              ud			: ? (not used)
+// Parameters : result      : the user has confirmed disbanding.
+//              ud          : ? (not used)
 //
 // Returns    : -
 //
@@ -2655,7 +2663,7 @@ void CityWindow::NotifyCityCaptured(const Unit &c)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->GetHomeCity().m_id == c.m_id) {
 			update = true;
-			delete walk.Remove();		   
+			delete walk.Remove();
 		} else {
 			walk.Next();
 		}

@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Unit 
+// Description  : Unit
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -37,6 +38,7 @@
 //   properties as well. - April 24th 2005 Martin Gühmann
 // - Removed some unsused method to removed some unused in methods in
 //   CityData.. - Aug 6th 2005 Martin Gühmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -405,7 +407,6 @@ public:
 	BOOL IsPatrolling() const;
 	void SetPatrolling(BOOL);
 
-	BOOL IsInsideCityRadius(const MapPoint &pos) const;
 	void BeginTurn();
 	void EndTurn();
 	void EndTurnCity();
