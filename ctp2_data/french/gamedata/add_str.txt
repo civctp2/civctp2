@@ -23,7 +23,7 @@
 # - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
 #   - 7th April 2005 Martin Gühmann
 # - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
-#
+# - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
 # 
 #----------------------------------------------------------------------------
 
@@ -434,10 +434,6 @@ CONTEXT_VIEW_CARGO "Voir cargaison"
 
 # For netshell list header
 str_ldl_Settlers "Colons"
-
-# Diplomacy Manager Embargo Button
-TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Frapper d'embargo"
-STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Cliquez ici pour empêcher une nation étrangère de réaliser des échanges avec vous."
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "En instaurant ce gouvernement, certaines de vos unités risquent d'être démantelées. Etes-vous sûr de vouloir changer de régime ?"

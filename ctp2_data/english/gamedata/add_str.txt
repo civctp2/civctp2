@@ -23,7 +23,7 @@
 # - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
 #   - 7th April 2005 Martin Gühmann
 # - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
-#
+# - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
 # 
 #----------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
 
-# More Stuuf for LDL_STR
+# More Stuff for LDL_STR
 # Multiplayer Disclaimer String
 str_ldl_MultiplayerDisclaimer	"Activision recommends a maximum of 4 players for Call to Power multiplayer games."
 
@@ -389,10 +389,6 @@ CONTEXT_VIEW_CARGO "  View Cargo"
 
 # For netshell list header
 str_ldl_Settlers "Settlers"
-
-# Diplomacy Manager Embargo Button
-TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Declare an Embargo"
-STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Click here to prevent a foreign nation from trading with you."
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "Enacting this government will cause some of your units to be disbanded, are you sure you wish to enact it?"
