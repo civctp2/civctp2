@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Control panel window
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,17 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// HAVE_PRAGMA_ONCE
+// - Compiles with #pragma once
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Cleaned up structure
+// - Removed unused methods: FillBank, ClearButtons and AddButton.
+//   (Aug 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -36,20 +42,20 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// #include <>      
+// #include <>
 
 //----------------------------------------------------------------------------
 // Export overview
 //----------------------------------------------------------------------------
 
-#define k_CONTROLPANEL_CITYUNIT_MODE		1
-#define k_CONTROLPANEL_UNSELECT_MODE		2
-#define k_CONTROLPANEL_LANDTILE_MODE		3
-#define k_CONTROLPANEL_SEATILE_MODE			4
-#define k_CONTROLPANEL_SPACETILE_MODE		5
-#define k_CONTROLPANEL_TERRATILE_MODE		6
-#define k_CONTROLPANEL_TILEIMP_MODE			7
-#define k_CONTROLPANEL_CIVTAB_MODE			8
+#define k_CONTROLPANEL_CITYUNIT_MODE        1
+#define k_CONTROLPANEL_UNSELECT_MODE        2
+#define k_CONTROLPANEL_LANDTILE_MODE        3
+#define k_CONTROLPANEL_SEATILE_MODE         4
+#define k_CONTROLPANEL_SPACETILE_MODE       5
+#define k_CONTROLPANEL_TERRATILE_MODE       6
+#define k_CONTROLPANEL_TILEIMP_MODE         7
+#define k_CONTROLPANEL_CIVTAB_MODE          8
 
 class ControlPanelWindow;
 
@@ -137,7 +143,6 @@ enum
 //----------------------------------------------------------------------------
 
 #include "Player.h"             // PLAYER_INDEX
-#include "buttonbank.h"         // ORDERMODE
 #include "ctp2_inttypes.h"      // sint32
 #include "c3window.h"
 #include "c3_button.h"
@@ -200,163 +205,158 @@ public:
 	virtual ~ControlPanelWindow();
 
 
-	ctp2_Window		*GetWindow()  { return m_mainWindow;};
+	ctp2_Window     *GetWindow()  { return m_mainWindow;  }
 	ctp2_MenuBar    *GetMenuBar() { return m_mainMenuBar; }
 
 	
 	
 	
-	sint32	X		();			
-	sint32	Y		();	
-	sint32	Width	();	
-	sint32	Height	();
+	sint32  X       ();
+	sint32  Y       ();
+	sint32  Width   ();
+	sint32  Height  ();
 
-	void	Idle();
-	void	Move( sint32 x, sint32 y );
-	void	Offset( sint32 dx, sint32 dy );
-	void	Resize( sint32 width, sint32 height );
-
-	
-	void	AdjustToScreen();
-
-	void	ActivateSelectedInfo(sint32 type);
-	void	DeActivateSelectedInfo();
-
-	void	BuildList(sint32 index);
-	
-	
-	void	SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit(0));
-	void	BuildUnitList();
-	void	BuildUnitListBox();
-	void	BuildCityList(const MapPoint &pos);
-	void	AppendItem(ctp2_ListBox *,MBCHAR *string);
-	void	FillBank(Army &selected, CellUnitList *all);
+	void    Idle();
+	void    Move(sint32 x, sint32 y);
+	void    Offset(sint32 dx, sint32 dy);
+	void    Resize(sint32 width, sint32 height);
 
 	
-	void	Select	();
-	void	Deselect();
+	void    AdjustToScreen();
+
+	void    ActivateSelectedInfo(sint32 type);
+	void    DeActivateSelectedInfo();
+
+	void    BuildList(sint32 index);
+	
+	
+	void    SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit(0));
+	void    BuildUnitList();
+	void    BuildUnitListBox();
+	void    BuildCityList(const MapPoint &pos);
+	void    AppendItem(ctp2_ListBox *,MBCHAR *string);
+
+
+	void    Select  ();
+	void    Deselect();
 
 	
-	void	HappinessRedisplay(aui_Surface *surface,RECT &rect,void *cookie);
+	void    HappinessRedisplay(aui_Surface *surface,RECT &rect,void *cookie);
 
 	
-	void	BuildMainMenu	();
-	void	BuildCivMenu	();
-	void	BuildCityMenu	();
-	void	BuildUnitMenu	();
-	void	BuildDipMenu	();
-	void	BuildSciMenu	();
-	void	BuildTradeMenu	();
-	void	BuildGLMenu		();
-	void	BuildStatsMenu	();
-	void	BuildOptionsMenu();
-	void	BuildEspionageMenu();
+	void    BuildMainMenu     ();
+	void    BuildCivMenu      ();
+	void    BuildCityMenu     ();
+	void    BuildUnitMenu     ();
+	void    BuildDipMenu      ();
+	void    BuildSciMenu      ();
+	void    BuildTradeMenu    ();
+	void    BuildGLMenu	      ();
+	void    BuildStatsMenu    ();
+	void    BuildOptionsMenu  ();
+	void    BuildEspionageMenu();
 
-	static void	RebuildMenus();
+	static void RebuildMenus  ();
 
-	
-	void	ClearButtons(void);
-	void	AddButton(ORDERMODE mode);
 
-	
-	void	ResetTabGroup();
-	void	CreateTabGroup(MBCHAR *ldlBlock);
-	void	CreateTab(sint32 which,MBCHAR *name);
+	void    ResetTabGroup();
+	void    CreateTabGroup(MBCHAR *ldlBlock);
+	void    CreateTab(sint32 which,MBCHAR *name);
 
 	
-	void	CreateTileImpBanks ();
-	void	ActivateTileImpBank(unsigned int group_id);
-	void	ToggleTerraforming();
+	void    CreateTileImpBanks ();
+	void    ActivateTileImpBank(unsigned int group_id);
+	void    ToggleTerraforming();
 
 	
 	
 	
 
 	
-	void	InitCivTab();
+	void    InitCivTab();
 
 	static void TabCallback(aui_Control *control, uint32 action,
-							uint32 data, void *cookie);
+	                        uint32 data, void *cookie);
 	
 	
-	void	InitMessageTab();
-	void	AddMessage(Message &message,bool initializing=false);
+	void    InitMessageTab();
+	void    AddMessage(Message &message,bool initializing=false);
 	void    SetMessageRead(Message &message);
-	void	RemoveMessage(Message &message);
-	void	PopulateMessageList(PLAYER_INDEX player);
+	void    RemoveMessage(Message &message);
+	void    PopulateMessageList(PLAYER_INDEX player);
 
 	
-	void	InitCityTab();
+	void    InitCityTab();
 
 	
-	void	InitUnitTab();
+	void    InitUnitTab();
 
 	
-	void	InitTileImpTab();
+	void    InitTileImpTab();
 
 	
-	void	BeginImprovementCycle(void *rawrecord);
-	void	BeginImprovementCycle(TerrainImprovementRecord *rec);
-	void	BeginImprovementCycle(TerrainRecord *rec);
+	void    BeginImprovementCycle(void *rawrecord);
+	void    BeginImprovementCycle(TerrainImprovementRecord *rec);
+	void    BeginImprovementCycle(TerrainRecord *rec);
 
 	
 	
 	Unit    CityPanelGetCurrent();
-	void	CityPanelRebuild();
-	void	CityPanelRedisplay();
-	void	CityPanelNextCity();
+	void    CityPanelRebuild();
+	void    CityPanelRedisplay();
+	void    CityPanelNextCity();
 
 	
 	Army    UnitPanelGetCurrent();
-	void	UnitPanelNextUnit();
-	void	UnitPanelRedisplay();
-	void	UnitPanelNextCity();
+	void    UnitPanelNextUnit();
+	void    UnitPanelRedisplay();
+	void    UnitPanelNextCity();
 
 	
-	void	TileImpPanelRedisplay();
-	void	TileImpButtonRedisplay		(uint32 player_id,uint32 index);
-	void	TerraformButtonRedisplay	(uint32 player_id,uint32 index);
+	void    TileImpPanelRedisplay();
+	void    TileImpButtonRedisplay      (uint32 player_id,uint32 index);
+	void    TerraformButtonRedisplay    (uint32 player_id,uint32 index);
 
 	
-	void	BeginOrderDelivery();
-	static void	PerformOrderAfterConfirmation(bool response, void *userData);
+	void    BeginOrderDelivery();
+	static void PerformOrderAfterConfirmation(bool response, void *userData);
 
-	void	BeginOrderDelivery(OrderRecord *rec);
-
-	
-	void	TargetingMode();
+	void    BeginOrderDelivery(OrderRecord *rec);
 
 	
-	void	OrderDeliveryUpdate();
-	void 	TileImpUpdate();
-	void 	TerraFormUpdate();
-	void 	Update();
+	void    TargetingMode();
 
 	
-	bool	IsLand(const TerrainRecord *rec);
+	void    OrderDeliveryUpdate();
+	void    TileImpUpdate();
+	void    TerraFormUpdate();
+	void    Update();
+
+	
+	bool    IsLand(const TerrainRecord *rec);
 	bool    IsOcean(const TerrainRecord *rec);
 
 	
 	bool    ExecuteTargetingModeClick(const MapPoint &pos);
 
 	
-	bool	OrderDeliveryClick(const MapPoint &pos);
-	bool 	TileImpClick(const MapPoint &pos);
-	bool 	TerraFormClick(const MapPoint &pos);
+	bool    OrderDeliveryClick(const MapPoint &pos);
+	bool    TileImpClick(const MapPoint &pos);
+	bool    TerraFormClick(const MapPoint &pos);
 
 	
-	uint32	GetTargetingMode() const {return m_targetingMode;}
+	uint32  GetTargetingMode() const {return m_targetingMode;}
 
 	const OrderRecord *GetCurrentOrder() const { return m_currentOrder; }
 
 	
 	void    ClearTargetingMode();
 
-	void SetTab(CP_TAB tab);
+	void    SetTab(CP_TAB tab);
 
 	
-	void SetProgressText(aui_Static *progressText) { m_progressText = progressText; }
-	void SetProgressBar(aui_ProgressBar *progressBar) { m_progressBar = progressBar; }
+	void    SetProgressText(aui_Static *progressText) { m_progressText = progressText; }
+	void    SetProgressBar(aui_ProgressBar *progressBar) { m_progressBar = progressBar; }
 	
 	AUI_ERRCODE UpdatePlayerBeginProgress(sint32 currentPlayer);
 	
@@ -370,95 +370,95 @@ public:
 private:
 
 	
-	void	PollCIVStatus();
-	void	PollMSGLOGStatus();
-	void	PollCITYStatus();
-	void	PollUNITStatus();
-	void	PollTILEIMPStatus();
+	void    PollCIVStatus();
+	void    PollMSGLOGStatus();
+	void    PollCITYStatus();
+	void    PollUNITStatus();
+	void    PollTILEIMPStatus();
 
-	BOOL CursorOverControlPanel();
-
-	
-	void	SetControlText(aui_Control *control,MBCHAR *fmt,...);
+	BOOL    CursorOverControlPanel();
 
 	
-	ctp2_MenuBar	*m_mainMenuBar;
+	void    SetControlText(aui_Control *control,MBCHAR *fmt,...);
 
 	
-	ctp2_Window		*m_mainWindow;
+	ctp2_MenuBar    *m_mainMenuBar;
 
 	
-	ctp2_Menu		*m_contextMenu;
+	ctp2_Window     *m_mainWindow;
 
 	
-	float	m_widthRatio;
+	ctp2_Menu       *m_contextMenu;
 
 	
-	bool	m_turnToggle;
+	float   m_widthRatio;
 
 	
-	uint32	m_targetingMode;
+	bool    m_turnToggle;
 
 	
-	OrderRecord		*m_currentOrder;
+	uint32  m_targetingMode;
 
 	
-	
-	
-
-	
-	ctp2_ListBox	*m_messageList;
+	OrderRecord     *m_currentOrder;
 
 	
 	
-	ctp2_Static		*m_numCities;		   
-	ctp2_Static		*m_totalPop;		   
-	ctp2_Static		*m_currentHappiness;		   
-	ctp2_Static		*m_currentAdvance;		   
-	ctp2_Static		*m_turnsToAdvance;		   
+	
 
 	
-	ctp2_DropDown	*m_mainDropDown;
-
-	ctp2_Static		*m_cityHappiness   ;	
-	ctp2_Static		*m_cityPopulation  ;	
-	ctp2_Static		*m_cityGrowth	   ;	
-	ctp2_Static		*m_buildingItem	   ;
-	ctp2_Static		*m_turnsRemaining  ;	
+	ctp2_ListBox    *m_messageList;
 
 	
-	ctp2_Static		*m_unitImage	;
-
-	ctp2_Static		*m_unitType		;	
-	ctp2_Static		*m_unitMove		;	
-	ctp2_Static		*m_unitAttack	;	
-	ctp2_Static		*m_unitDefense	;
-	ctp2_Static		*m_unitStatus	;	
-
-	ctp2_ListBox	*m_unitOrders;
+	
+	ctp2_Static     *m_numCities;
+	ctp2_Static     *m_totalPop;
+	ctp2_Static     *m_currentHappiness;
+	ctp2_Static     *m_currentAdvance;
+	ctp2_Static     *m_turnsToAdvance;
 
 	
-	ctp2_Static		*m_publicWorks;		   
+	ctp2_DropDown   *m_mainDropDown;
+
+	ctp2_Static     *m_cityHappiness;
+	ctp2_Static     *m_cityPopulation;
+	ctp2_Static     *m_cityGrowth;
+	ctp2_Static     *m_buildingItem;
+	ctp2_Static     *m_turnsRemaining;
+
+	
+	ctp2_Static     *m_unitImage;
+
+	ctp2_Static     *m_unitType;
+	ctp2_Static     *m_unitMove;
+	ctp2_Static     *m_unitAttack;
+	ctp2_Static     *m_unitDefense;
+	ctp2_Static     *m_unitStatus;
+
+	ctp2_ListBox    *m_unitOrders;
+
+	
+	ctp2_Static     *m_publicWorks;
 	ctp2_Button     *m_activatorButtons [CP_TILEIMP_MAX];
-	ctp2_Static		*m_tileImpPanes		[CP_TILEIMP_MAX];
-	ctp2_Button		*m_tileImpButtons	[CP_MAX_TILEIMPBUTTONS];
-	ctp2_Button		*m_terraFormButtons	[CP_MAX_TILEIMPBUTTONS];
+	ctp2_Static     *m_tileImpPanes     [CP_TILEIMP_MAX];
+	ctp2_Button     *m_tileImpButtons   [CP_MAX_TILEIMPBUTTONS];
+	ctp2_Button     *m_terraFormButtons [CP_MAX_TILEIMPBUTTONS];
 	
 	ctp2_TabGroup   *m_tabGroup;
 	ctp2_Tab        *m_tabs[CP_TAB_LAST];
 
-	unsigned		m_currentTerrainSelection; 
-	TerrainImprovementRecord	*m_currentTerrainImpRec;
-	TerrainRecord				*m_currentTerrainRec;
+	unsigned        m_currentTerrainSelection; 
+	TerrainImprovementRecord    *m_currentTerrainImpRec;
+	TerrainRecord               *m_currentTerrainRec;
 
 	
-	bool			m_terraFormMode;
+	bool            m_terraFormMode;
 
 	
 	
-	sint32				m_currentProgress;
-	aui_Static			*m_progressText;
-	aui_ProgressBar		*m_progressBar;
+	sint32              m_currentProgress;
+	aui_Static          *m_progressText;
+	aui_ProgressBar     *m_progressBar;
 };
 
 
@@ -466,15 +466,15 @@ void ThrowPartyUtilityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data);
 void GotoCityUtilityDialogBoxCallback  (Unit city, sint32 val2);
 
 
-void controlpanelwindow_Update( Unit *city = NULL );
+void controlpanelwindow_Update(Unit *city = NULL);
 
 
 sint32  controlpanelwindow_Initialize();
-sint32  controlpanelwindow_InitializeHats( void );
-void    controlpanelwindow_Cleanup( void );
+sint32  controlpanelwindow_InitializeHats(void);
+void    controlpanelwindow_Cleanup(void);
 
 
 extern ControlPanelWindow *g_controlPanel;
 
-#endif 
+#endif
 
