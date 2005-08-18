@@ -24,46 +24,46 @@
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
 #
-# 
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
-str_ldl_Already_Offer "Vous avez déjà proposé cette marchandise. Remplacer l'offre précédente ?"
+str_ldl_Already_Offer		"Vous avez déjà proposé cette marchandise. Remplacer l'offre précédente ?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER "Tous les empires s'inclineront dorénavant devant un nouveau maître ; [player.1.leader_name] a terminé le projet de vie extraterrestre."
+ENDGAME_WON_OTHER		"Tous les empires s'inclineront dorénavant devant un nouveau maître ; [player.1.leader_name] a terminé le projet de vie extraterrestre."
 
 ##Comma is the separator in numbers.  In German this would be a period. (non breakable space in French)
-str_ldl_comma	" "
+str_ldl_comma			" "
 
 ###Strings Moved Over from Junk###
 
-CAPITALIZATION 	"Capitalisation"
-INFRASTRUCTURE 	"Infrastructure"
+CAPITALIZATION			"Capitalisation"
+INFRASTRUCTURE			"Infrastructure"
 
 #Age Names#	
-AGE_NAME_ANCIENT	"Antiquité"
-#AGE_NAME_CLASS		"Classique"
-#AGE_NAME_MEDIEVAL	"Médiéval"
-AGE_NAME_RENAISS	"Renaissance"
-#AGE_NAME_INDUST	"Industrielle"
-AGE_NAME_MODERN		"Moderne"
-#AGE_NAME_COMPUTER	"Informatique"
-AGE_NAME_GENETIC	"Genetique"
-AGE_NAME_DIAMOND	"Diamant"
-#AGE_NAME_FUTURE	"Le Futur"
+AGE_NAME_ANCIENT		"Antiquité"
+#AGE_NAME_CLASS			"Classique"
+#AGE_NAME_MEDIEVAL		"Médiéval"
+AGE_NAME_RENAISS		"Renaissance"
+#AGE_NAME_INDUST		"Industrielle"
+AGE_NAME_MODERN			"Moderne"
+#AGE_NAME_COMPUTER		"Informatique"
+AGE_NAME_GENETIC		"Genetique"
+AGE_NAME_DIAMOND		"Diamant"
+#AGE_NAME_FUTURE		"Le Futur"
 
-YOU_BROKE_ALLIANCE "Vous avez rompu une alliance avec les [player.1.civ_name_plural]."
-YOU_BROKE_CEASE_FIRE "Vous avez rompu un traité de paix avec les  [player.1.civ_name_plural]."
+YOU_BROKE_ALLIANCE		"Vous avez rompu une alliance avec les [player.1.civ_name_plural]."
+YOU_BROKE_CEASE_FIRE		"Vous avez rompu un traité de paix avec les  [player.1.civ_name_plural]."
 DIPxxx3_AGREEMENT_END_POLLUTION "Ecopacte"
-CANT_ATTACK_ALLIES "Vous avez signé une alliance avec les [player.1.civ_name_plural]. Vous devez rompre cette alliance si vous voulez les attaquer. Voulez-vous la rompre maintenant ?"
-X_LAB "X-lab"
-GENE_SEQUENCER "Sequenceur de gènes"
+CANT_ATTACK_ALLIES		"Vous avez signé une alliance avec les [player.1.civ_name_plural]. Vous devez rompre cette alliance si vous voulez les attaquer. Voulez-vous la rompre maintenant ?"
+X_LAB				"X-lab"
+GENE_SEQUENCER			"Sequenceur de gènes"
 
 ###END EX_JUNK STRINGS###
 
 ##Final FINAL batch of strings hardcoded into engine 03-04-99
-str_ldl_Turn	"Tour"
+str_ldl_Turn			"Tour"
 
 
 ##Final batch of strings hardcoded into engine 02-28-99##
@@ -2684,13 +2684,13 @@ str_ldl_ND_BUILD_QUEUE			"Gest. de construction"
 str_ldl_ND_DISBAND			"Démanteler"
 str_ldl_ND_RESOURCE_TAB			"RESSOURCES"
 str_ldl_ND_RTL_CITY_NAME		"Nom de ville"
-str_ldl_ND_RTL_POPULATION		"Population"
+str_ldl_ND_RTL_POPULATION		"Pop."
 str_ldl_ND_STATUS_TAB			"STATUT"
 str_ldl_ND_STL_CITY_NAME		"Nom de ville"
 str_ldl_ND_STL_MAYOR			"Maire"
 str_ldl_ND_STL_PRIORITY			"Priorité"
 str_ldl_ND_STL_BUILDING			"Construction"
-str_ldl_ND_STL_TIME                 	"Tours"
+str_ldl_ND_STL_TIME			"Tours"
 str_ldl_ND_ST_GOVERNOR			"MAIRE :"
 str_ldl_ND_ST_RUSH_BUY			"Achat urgent"
 str_ldl_ND_ON				"Activer"

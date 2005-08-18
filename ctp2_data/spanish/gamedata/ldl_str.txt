@@ -23,7 +23,7 @@
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
-# 
+#
 #
 #----------------------------------------------------------------------------
 
@@ -2592,27 +2592,27 @@ str_ldl_DD_GOV_MARTIAL_LAW		"Ley marcial:"
 str_ldl_DD_GOV_ANTI_POLLUTION		"Medidas contra la contaminación:"
 
 # Advance Selection Pop-up
-str_ldl_ASP_GOAL				"Objetivo"
+str_ldl_ASP_GOAL			"Objetivo"
 
 # National Management
 str_ldl_NATIONAL_DIALOG_TITLE		"A D M I N I S T R A C I Ó N   N A C I O N A L"
-str_ldl_ND_ADVICE				"Consejo"
+str_ldl_ND_ADVICE			"Consejo"
 str_ldl_ND_BUILD_QUEUE			"Cola de construcción..."
 str_ldl_ND_DISBAND			"Disolver"
 str_ldl_ND_RESOURCE_TAB			"RECURSOS"
 str_ldl_ND_RTL_CITY_NAME		"Nombre de ciudad"
-str_ldl_ND_RTL_POPULATION		"Población"
+str_ldl_ND_RTL_POPULATION		"Pob."
 str_ldl_ND_STATUS_TAB			"ESTADO"
 str_ldl_ND_STL_CITY_NAME		"Nombre de la ciudad"
 str_ldl_ND_STL_MAYOR			"Alcalde"
 str_ldl_ND_STL_PRIORITY			"Prioridad"
 str_ldl_ND_STL_BUILDING			"Construcción"
-str_ldl_ND_STL_TIME                	"Turnos"
+str_ldl_ND_STL_TIME			"Turnos"
 str_ldl_ND_ST_GOVERNOR			"ALCALDE:"
 str_ldl_ND_ST_RUSH_BUY			"Compra urg."
 str_ldl_ND_ON				"ACTIVADO"
 str_ldl_ND_OFF				"DESACTIVADO"
-str_ldl_ND_EMPTY				"VACÍO"
+str_ldl_ND_EMPTY			"VACÍO"
 str_ldl_ND_NA				"N/C"
 str_ldl_ND_VERIFY_DISBAND		"¿Estás seguro de que quieres disolver las ciudades seleccionadas?"
 
