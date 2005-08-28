@@ -25,6 +25,7 @@ exclusivebits { return EXCLUSIVEBITS; }
 file          { return FILENAME; }
 string        { return STRING; }
 stringid      { return STRINGID; }
+aka           { return AKA; }
 
 {name}        {
 			      yylval.name = (char*)strdup(yytext);

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Base DB Template class
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// __TILETOOL__
+// - Probably supposed to generate the tool for creating the *.til files.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -64,6 +68,10 @@
 // - Modernised some code: e.g. implemented the modified records list as a 
 //   std::vector, so we don't have to do the memory management ourselves. 
 // - Prevented crash in Parse when m_numrecords is 0.
+// - Added the new civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Added Serialize method for datachecks. (Aug 23rd 2005 Martin Gühmann)
+// - Records can now be also parsed as quoted string. (Aug 26th 2005 Martin Gühmann)
+// - The new databases can now be ordered alphabethical like the old ones. (Aug 26th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -96,9 +104,9 @@ template <class T> CTPDatabase<T>::CTPDatabase()
 template <class T> CTPDatabase<T>::~CTPDatabase()
 {
 	if (m_records) 
-    {
+	{
 		for (sint32 i = 0; i < m_numRecords; i++) 
-        {
+		{
 			delete m_records[i];
 		}
 		delete [] m_records;
@@ -128,43 +136,115 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CTPDatabase<T>::Serialize
+//
+// Description: Store/Load CTPDatabase<T>
+//
+// Parameters : CivArchive &archive       :
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Does not Serialize the government modified stuff.
+//              Fortunately these database serialize methods are 
+//              not thought for loading, just for database check.
+//              But this is on the TODO list.
+//
+//----------------------------------------------------------------------------
+template <class T> void CTPDatabase<T>::Serialize(CivArchive &archive)
+{
+	sint32 i;
+
+	if(archive.IsStoring()) {
+		archive << m_allocatedSize;
+		archive << m_numRecords;
+		for(i = 0; i < m_numRecords; ++i){
+			m_records[i]->Serialize(archive);
+		}
+	} else {
+		archive >> m_allocatedSize;
+		archive >> m_numRecords;
+
+		delete [] m_indexToAlpha;
+		delete [] m_alphaToIndex;
+		m_indexToAlpha = (m_numRecords > 0) ? new sint32[m_numRecords] : NULL;
+		m_alphaToIndex = (m_numRecords > 0) ? new sint32[m_numRecords] : NULL;
+		m_records = new T *[m_allocatedSize];
+
+		for (i = 0; i < m_numRecords; ++i){
+			m_indexToAlpha[i]	= i;
+			m_alphaToIndex[i]	= i;
+			m_records[i] = new T(archive);
+		}
+
+		memset(m_indexToAlpha, 0, sizeof(sint32) * m_numRecords);
+		memset(m_alphaToIndex, 0, sizeof(sint32) * m_numRecords);
+
+		for(i = 0; i < m_numRecords; ++i){
+			const MBCHAR *str = m_records[i]->GetNameText();
+			for(sint32 a = 0; a < i; ++a){
+				if(_stricoll(str, m_records[m_alphaToIndex[a]]->GetNameText()) < 0)
+				{
+					memmove(
+						m_alphaToIndex + a + 1,
+						m_alphaToIndex + a,
+						(i - a) * sizeof(sint32));
+
+				
+					for(sint32 j = 0; j < i; ++j)
+						if(m_indexToAlpha[j] >= a)
+							++m_indexToAlpha[j];
+
+					break;
+
+				}
+			}
+			m_alphaToIndex[a] = i;
+			m_indexToAlpha[i] = a;
+		}
+	}
+}
+
 template <class T> T *CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 {
 	sint32 const    numberGovernmentRecords = 
-        g_theGovernmentDB ? g_theGovernmentDB->NumRecords() : 0;
+		g_theGovernmentDB ? g_theGovernmentDB->NumRecords() : 0;
 
 	Assert(index >= 0);
 	Assert(index < m_numRecords);
 	Assert(govIndex >= 0);
 	Assert(govIndex < numberGovernmentRecords);
 	
-    if((index < 0) || (index >= m_numRecords) || (govIndex < 0) || (govIndex >= numberGovernmentRecords))
+	if((index < 0) || (index >= m_numRecords) || (govIndex < 0) || (govIndex >= numberGovernmentRecords))
 		return NULL;
 
-    T *     result  = m_records[index]; // generic value (default)
+	T *     result  = m_records[index]; // generic value (default)
 
-    // Check for govermnent spefic overrides
+	// Check for govermnent spefic overrides
 	PointerList<GovernmentModifiedRecordNode>::Walker   walk = 
-        PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
+	    PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
 
 	for (bool found = false; walk.IsValid() && (!found); walk.Next()) 
-    {
+	{
 		sint32 const    thisIndex = walk.GetObj()->m_governmentModified;
 		
-        if (thisIndex == govIndex)
-        {
-            result  = m_modifiedRecords[walk.GetObj()->m_modifiedRecord];
+		if (thisIndex == govIndex)
+		{
+			result  = m_modifiedRecords[walk.GetObj()->m_modifiedRecord];
 			found   = true;
-        }
+		}
 	}
 
-    return result;
+	return result;
 }
 
 
 template <class T> const T * CTPDatabase<T>::Get(sint32 index,sint32 govIndex)
 {
-    return const_cast<const T *>(Access(index, govIndex));
+	return const_cast<const T *>(Access(index, govIndex));
 }
 
 
@@ -193,7 +273,7 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 {
 	if (obj->GetHasGovernmentsModified() && 
 	    (obj->GenericGetNumGovernmentsModified() > 0)
-	   ) 
+	   )
 	{
 		sint32 numberGovernmentRecords;
 		if (g_theGovernmentDB)
@@ -299,14 +379,29 @@ template <class T> const char *CTPDatabase<T>::GetNameStr(sint32 index)
 
 	return g_theStringDB->GetNameStr(m_records[index]->m_name);
 }
- 
+
+//----------------------------------------------------------------------------
+//
+// Name       : CTPDatabase<T>::Parse
+//
+// Description: Parses the data from text files into the data structures.
+//
+// Parameters : DBLexer *lex: The lexer used to parse the data.
+//
+// Globals    : -
+//
+// Returns    : 1 if the database was parsed successfully otherwise 0.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 {
-	sint32	isOk	= 1;
+	sint32 isOk = 1;
 
 	while (!lex->EndOfInput())
 	{
-		T *	obj		= new T();
+		T * obj = new T();
 
 		if (obj->Parse(lex))
 		{
@@ -315,19 +410,41 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 		else
 		{
 			delete obj;
-			isOk	= 0;
+			isOk = 0;
 		}
 	}
 
 	delete [] m_indexToAlpha;
-    m_indexToAlpha	= (m_numRecords > 0) ? new sint32[m_numRecords] : NULL;
 	delete [] m_alphaToIndex;
-    m_alphaToIndex	= (m_numRecords > 0) ? new sint32[m_numRecords] : NULL;
+	m_indexToAlpha = (m_numRecords > 0) ? new sint32[m_numRecords] : NULL;
+	m_alphaToIndex = (m_numRecords > 0) ? new sint32[m_numRecords] : NULL;
 
-	for (sint32 i = 0; i < m_numRecords; ++i)
-	{
-		m_indexToAlpha[i]	= i;
-		m_alphaToIndex[i]	= i;
+	memset(m_indexToAlpha, 0, sizeof(sint32) * m_numRecords);
+	memset(m_alphaToIndex, 0, sizeof(sint32) * m_numRecords);
+
+	// A merge sort algorithm is of course better, but the complexity
+	// is the same as for the old databases even the constant is the same.
+	for(sint32 i = 0; i < m_numRecords; ++i){
+		const MBCHAR *str = m_records[i]->GetNameText();
+		for(sint32 a = 0; a < i; ++a){
+			if(_stricoll(str, m_records[m_alphaToIndex[a]]->GetNameText()) < 0)
+			{
+				memmove(
+					m_alphaToIndex + a + 1,
+					m_alphaToIndex + a,
+					(i - a) * sizeof(sint32));
+
+				
+				for(sint32 j = 0; j < i; ++j)
+					if(m_indexToAlpha[j] >= a)
+						++m_indexToAlpha[j];
+
+				break;
+
+			}
+		}
+		m_alphaToIndex[a] = i;
+		m_indexToAlpha[i] = a;
 	}
 
 	return isOk;
@@ -351,9 +468,11 @@ template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer *lex, sint32 
 			index = atoi(lex->GetTokenText());
 			return true;
 		}
-		DBERROR(("Expected record name1"));
-		err = DBPARSE_OTHER;
-		return false;
+		else if(tok != k_Token_String){
+			DBERROR(("Expected record name1"));
+			err = DBPARSE_OTHER;
+			return false;
+		}
 	}
 
 	sint32 strId;
@@ -563,114 +682,113 @@ template <class T> sint32 CTPDatabase<T>::FindRecordNameIndex(const char *str) c
 	return -1;
 }
 
-#include "IconRecord.h"
+#include "IconRecord.h" // 0
 template class CTPDatabase<IconRecord>;
 
-#include "SoundRecord.h"
+#include "SoundRecord.h" // 1
 template class CTPDatabase<SoundRecord>;
 
-#include "TerrainRecord.h"
+#include "TerrainRecord.h" // 2
 template class CTPDatabase<TerrainRecord>;
 
-#include "ResourceRecord.h"
+#include "ResourceRecord.h" // 3
 template class CTPDatabase<ResourceRecord>;
 
-#include "AgeRecord.h"
+#include "AgeRecord.h" // 4
 template class CTPDatabase<AgeRecord>;
 
-#include "AdvanceRecord.h"
+#include "AdvanceRecord.h" // 5
 template class CTPDatabase<AdvanceRecord>;
 
-#include "AdvanceBranchRecord.h"
+#include "AdvanceBranchRecord.h" // 6
 template class CTPDatabase<AdvanceBranchRecord>;
 
-
-#include "FeatRecord.h"
+#include "FeatRecord.h" // 7
 template class CTPDatabase<FeatRecord>;
 
-
-#include "WonderRecord.h"
+#include "WonderRecord.h" // 8
 template class CTPDatabase<WonderRecord>;
 
-#include "WonderMovieRecord.h"
+#include "WonderMovieRecord.h" // 9
 template class CTPDatabase<WonderMovieRecord>;
 
-
-#include "BuildingRecord.h"
+#include "BuildingRecord.h" // 10
 template class CTPDatabase<BuildingRecord>;
 
 #ifndef __TILETOOL__
 
-#include "UnitRecord.h"
+#include "UnitRecord.h" // 11
 template class CTPDatabase<UnitRecord>;
 
-#include "SpriteRecord.h"
+#include "SpriteRecord.h" // 12
 template class CTPDatabase<SpriteRecord>;
 
-#include "GovernmentRecord.h"
+#include "GovernmentRecord.h" // 13
 template class CTPDatabase<GovernmentRecord>;
 
-#include "SpecialAttackInfoRecord.h"
+#include "SpecialAttackInfoRecord.h" // 14
 template class CTPDatabase<SpecialAttackInfoRecord>;
 
-#include "SpecialEffectRecord.h"
+#include "SpecialEffectRecord.h" // 15
 template class CTPDatabase<SpecialEffectRecord>;
 
-#include "TerrainImprovementRecord.h"
+#include "TerrainImprovementRecord.h" // 26
 template class CTPDatabase<TerrainImprovementRecord>;
 
-#include "OrderRecord.h"
+#include "OrderRecord.h" // 17
 template class CTPDatabase<OrderRecord>;
 
-#include "GoalRecord.h"
+#include "GoalRecord.h" // 18
 template class CTPDatabase<GoalRecord>;
 
-#include "UnitBuildListRecord.h"
+#include "UnitBuildListRecord.h" // 19
 template class CTPDatabase<UnitBuildListRecord>;
 
-#include "BuildingBuildListRecord.h"
+#include "BuildingBuildListRecord.h" // 20
 template class CTPDatabase<BuildingBuildListRecord>;
 
-#include "WonderBuildListRecord.h"
+#include "WonderBuildListRecord.h" // 21
 template class CTPDatabase<WonderBuildListRecord>;
 
-#include "ImprovementListRecord.h"
+#include "ImprovementListRecord.h" // 22
 template class CTPDatabase<ImprovementListRecord>;
 
-#include "StrategyRecord.h"
+#include "StrategyRecord.h" // 23
 template class CTPDatabase<StrategyRecord>;
 
-#include "BuildListSequenceRecord.h"
+#include "BuildListSequenceRecord.h" // 24
 template class CTPDatabase<BuildListSequenceRecord>;
 
-#include "DiplomacyRecord.h"
+#include "DiplomacyRecord.h" // 25
 template class CTPDatabase<DiplomacyRecord>;
 
-#include "AdvanceListRecord.h"
+#include "AdvanceListRecord.h" // 26
 template class CTPDatabase<AdvanceListRecord>;
 
-#include "CitySizeRecord.h"
+#include "CitySizeRecord.h" // 27
 template class CTPDatabase<CitySizeRecord>;
 
-#include "PopRecord.h"
+#include "PopRecord.h" // 28
 template class CTPDatabase<PopRecord>;
 
-#include "DiplomacyProposalRecord.h"
+#include "DiplomacyProposalRecord.h" // 29
 template class CTPDatabase<DiplomacyProposalRecord>;
 
-#include "DiplomacyThreatRecord.h"
+#include "DiplomacyThreatRecord.h" // 30
 template class CTPDatabase<DiplomacyThreatRecord>;
 
-#include "PersonalityRecord.h"
+#include "PersonalityRecord.h" // 31
 template class CTPDatabase<PersonalityRecord>;
 
-#include "EndGameObjectRecord.h"
+#include "EndGameObjectRecord.h" // 32
 template class CTPDatabase<EndGameObjectRecord>;
 
-#include "CityStyleRecord.h"
+#include "CityStyleRecord.h" // 33
 template class CTPDatabase<CityStyleRecord>;
 
-#include "AgeCityStyleRecord.h"
+#include "AgeCityStyleRecord.h" // 34
 template class CTPDatabase<AgeCityStyleRecord>;
 
-#endif 
+#include "CivilisationRecord.h" // 35
+template class CTPDatabase<CivilisationRecord>;
+#endif // __TILETOOL__

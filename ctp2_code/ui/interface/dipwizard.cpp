@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling diplomacy proposals between Human and other players.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -28,6 +28,7 @@
 // - Diplomatic proposals/responses sent from UI get the highest priority possible
 //   so that the AI won't override them: DipWizard::SendCallback
 // - Repaired crashes when the emissary photo is missing.
+// - Added female leader images. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2639,8 +2640,13 @@ void DipWizard::DisplayDiplomat(sint32 player)
 		MBCHAR const *	fileName	= NULL;
 		if ((player >= 0) && (player < k_MAX_PLAYERS) && g_player[player])
 		{
-			StringId const strID = 
-				g_player[player]->GetCivilisation()->GetDBRec()->GetEmissaryPhoto();
+			StringId strID;
+			if(g_player[player]->GetCivilisation()->GetGender() == GENDER_MALE){
+				strID = g_player[player]->GetCivilisation()->GetDBRec()->GetEmissaryPhotoMale();
+			}
+			else{
+				strID = g_player[player]->GetCivilisation()->GetDBRec()->GetEmissaryPhotoFemale();
+			}
 			fileName = g_theStringDB->GetNameStr(strID);
 		}
 

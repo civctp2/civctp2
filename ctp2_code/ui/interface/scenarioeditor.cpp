@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Scenario editor
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -43,6 +46,7 @@
 //   changing.
 // - Added icons and tooltips to city style buttons, by Martin Gühmann.
 // - Repaired backwards compatibility and possible crashes.
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -105,7 +109,7 @@
 #include "scenariowindow.h"
 
 #include "profileDB.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 
 #include "MapCopyBuffer.h"
 
@@ -1877,8 +1881,8 @@ void ScenarioEditor::SetupNations()
 
 	
 	
-	for(i = 0; i < g_theCivilisationDB->GetNumRec(); i++) {
-		const MBCHAR *name = g_theStringDB->GetNameStr(g_theCivilisationDB->Access(i)->GetCountryName());
+	for(i = 0; i < g_theCivilisationDB->NumRecords(); i++) {
+		const MBCHAR *name = g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetCountryName());
 
 		
 		AddDropDownItem(plgroup, "ScenNationItem", (MBCHAR *)name);
@@ -2482,10 +2486,10 @@ void ScenarioEditor::GetLabel(MBCHAR *labelString, sint32 playerOrCiv)
 	} else 
 	if (mode == SCEN_START_LOC_MODE_CIV) {
 		if(g_theCivilisationDB->Get(index)) {
-			sprintf(labelString, "%s (%d/%d)", 
-					g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName((CIV_INDEX)(index))),
+			sprintf(labelString, "%s (%d/%d)",
+					g_theStringDB->GetNameStr(g_theCivilisationDB->Get(index)->GetPluralCivName()),
 					index,
-					g_theCivilisationDB->GetNumRec()-1);
+					g_theCivilisationDB->NumRecords()-1);
 		} else {
 			sprintf(labelString, "???");
 		}

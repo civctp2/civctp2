@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game screen
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -93,20 +96,19 @@
 #include "SlicEngine.h"
 
 #include "MessageBoxDialog.h"
-#include "CivilisationDB.h"
 
-extern	ProfileDB			*g_theProfileDB;
-extern C3UI					*g_c3ui;
-extern CivApp				*g_civApp;
-extern c3_PopupWindow		*g_spNewGameTribeScreen;
+extern ProfileDB            *g_theProfileDB;
+extern C3UI                 *g_c3ui;
+extern CivApp               *g_civApp;
+extern c3_PopupWindow       *g_spNewGameTribeScreen;
 
-extern MBCHAR g_slic_filename[_MAX_PATH];
-extern MBCHAR g_civilisation_filename[_MAX_PATH];
+extern MBCHAR               g_slic_filename[_MAX_PATH];
+extern MBCHAR               g_civilisation_filename[_MAX_PATH];
 
 
-SPNewGameWindow				*g_spNewGameWindow		= NULL;
+SPNewGameWindow             *g_spNewGameWindow      = NULL;
 
-BOOL						g_launchIntoCheatMode = FALSE;
+BOOL                        g_launchIntoCheatMode = FALSE;
 
 void spnewgamescreen_SetupHotseatOrEmail();
 

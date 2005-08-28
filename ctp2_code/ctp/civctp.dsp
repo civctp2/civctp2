@@ -216,7 +216,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                                    exist                                    R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                    copy                                    C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                    R:\ctp2_project\ctp2_code\ctp\                                   	rem            if                                    exist                                    R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                    copy                                    C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                    R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                                          exist                                          R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                          copy                                          C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                          R:\ctp2_project\ctp2_code\ctp\                                         	rem                  if                                          exist                                          R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                          copy                                          C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                          R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -1136,22 +1136,6 @@ SOURCE=..\gfx\gfx_utils\Queue.h
 # Begin Group "database"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\gs\database\CivilisationDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\CivilisationDB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\CivilisationRec.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\CivilisationRec.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\gs\database\conceptDB.cpp
@@ -3810,6 +3794,7 @@ SOURCE=..\gs\newdb\personality.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -3821,6 +3806,7 @@ InputPath=..\gs\newdb\personality.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -3832,6 +3818,7 @@ InputPath=..\gs\newdb\personality.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -3843,6 +3830,7 @@ InputPath=..\gs\newdb\personality.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -3854,6 +3842,7 @@ InputPath=..\gs\newdb\personality.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -3865,6 +3854,7 @@ InputPath=..\gs\newdb\personality.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -3876,6 +3866,7 @@ InputPath=..\gs\newdb\personality.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -3887,6 +3878,7 @@ InputPath=..\gs\newdb\personality.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -3898,6 +3890,7 @@ InputPath=..\gs\newdb\personality.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
+USERDEP__PERSO="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\personality.cdb
@@ -4081,9 +4074,17 @@ USERDEP__ADVAN="$(ProjDir)\..\gs\dbgen\ctpdb.exe"
 ProjDir=.
 InputPath=..\gs\newdb\advance.cdb
 
-"$(ProjDir)\..\gs\newdb\AdvanceRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+BuildCmds= \
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
 
+"$(ProjDir)\..\gs\newdb\AdvanceRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\gs\newdb\AdvanceBranchRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"$(ProjDir)\..\gs\newdb\AgeRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
@@ -4622,6 +4623,129 @@ SOURCE=..\gs\newdb\CityStyleRecord.cpp
 # Begin Source File
 
 SOURCE=..\gs\newdb\CityStyleRecord.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\Civilisation.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__CIVIL="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Civilisation.cdb
+
+"$(ProjDir)\..\gs\newdb\CivilisationRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\CivilisationRecord.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\CivilisationRecord.h
 # End Source File
 # Begin Source File
 
@@ -5183,6 +5307,7 @@ InputPath=..\gs\newdb\feat.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
+USERDEP__FEAT_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\feat.cdb

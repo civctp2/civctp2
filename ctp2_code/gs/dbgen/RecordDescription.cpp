@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// WIN32
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -47,6 +49,11 @@
 // - Modified AddBitPair function to allow bit pairs to have default values
 //   so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
+// - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
+// - Output files only have spaces instead of tabs as indent and indetion
+//   was fixed. (Aug 25th 2005 Martin Gühmann)
+// - Added alias names and the possibility to have default values from 
+//   other entries. (Aug 26th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
@@ -151,22 +158,22 @@ void RecordDescription::ExportHeader(FILE *outfile)
 
 	ExportMethods(outfile);
 
-	fprintf(outfile, "//GovMod Specific accessors\n");
-	fprintf(outfile, "     bool GetHasGovernmentsModified() const { return m_hasGovernmentsModified; }\n\n");
+	fprintf(outfile, "    //GovMod Specific accessors\n");
+	fprintf(outfile, "    bool GetHasGovernmentsModified() const { return m_hasGovernmentsModified; }\n\n");
 	fprintf(outfile, "");
 	fprintf(outfile, "");
-	fprintf(outfile, "     sint32 GenericGetNumGovernmentsModified() {");
+	fprintf(outfile, "    sint32 GenericGetNumGovernmentsModified() {");
 	
 	if(!m_hasGovernmentsModified) 
-		fprintf(outfile," return 0; } \n\n\n");
+		fprintf(outfile," return 0; }\n\n\n");
 	else
-		fprintf(outfile," return m_numGovernmentsModified; } \n\n\n");
+		fprintf(outfile," return m_numGovernmentsModified; }\n\n\n");
 
-	fprintf(outfile, "     sint32 GenericGetGovernmentsModifiedIndex(sint32 index) {");
+	fprintf(outfile, "    sint32 GenericGetGovernmentsModifiedIndex(sint32 index) {");
 	if(!m_hasGovernmentsModified) 
-		fprintf(outfile," return -1; } \n\n\n");
+		fprintf(outfile," return -1; }\n\n\n");
 	else
-		fprintf(outfile," return GetGovernmentsModifiedIndex(index); } \n\n\n");
+		fprintf(outfile," return GetGovernmentsModifiedIndex(index); }\n\n\n");
 
   
 	fprintf(outfile, "}; /* %sRecord */\n\n", m_name);
@@ -233,8 +240,8 @@ void RecordDescription::ExportDataCode(FILE *outfile)
 }
 
 void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
-								 sint32 minSize, sint32 maxSize,
-								 char *subType)
+                                 sint32 minSize, sint32 maxSize,
+                                 char *subType)
 {
 	if(m_addingToMemberClass) {
 		
@@ -250,13 +257,15 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	Datum *dat = new Datum;
 	dat->m_type = type;
 	dat->m_name = nameInfo->name;
+	dat->m_akaName = nameInfo->akaName;
+	dat->m_defaultName = nameInfo->defaultName;
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
 	dat->m_subType = subType;
 	dat->m_groupList = NULL;
 	dat->m_bitPairDatum = NULL;
-	if((!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)) &&  
-	   (dat->m_maxSize <= 0)) {                         
+	if((!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)) &&
+	   (dat->m_maxSize <= 0)) {
 		switch(dat->m_type) {
 			case DATUM_INT:
 			case DATUM_FLOAT:
@@ -291,7 +300,7 @@ void RecordDescription::AddGroupedBits(char *groupName, struct namelist *list)
 		}
 		return;
 	}
-				
+	
 	
 	Datum *dat = new Datum;
 	dat->m_type = DATUM_BIT_GROUP;
@@ -377,7 +386,7 @@ void RecordDescription::ExportBits(FILE *outfile)
 		Datum *dat = walk.GetObj();
 		if(dat->m_type == DATUM_BIT || dat->m_type == DATUM_BIT_PAIR) {
 			if(!(bit % 32)) {
-				fprintf(outfile, "//\n// m_flags%d\n", bit / 32);
+				fprintf(outfile, "//\n// m_flags%d: %s\n", bit / 32, m_name);
 			}
 			sprintf(nicename, "k_%s_%s_Bit", m_name, dat->m_name);
 			fprintf(outfile, "#define %-40s 0x%08lx\n", nicename, 1 << (bit % 32));
@@ -449,13 +458,15 @@ void RecordDescription::ExportMethods(FILE *outfile)
 {
 	
 	fprintf(outfile, "    %sRecord() { Init(); };\n", m_name);
+	fprintf(outfile, "    %sRecord(CivArchive &archive) { Serialize(archive); };\n", m_name);
 	fprintf(outfile, "    ~%sRecord();\n", m_name);
 
 	//Added by Martin Gühmann functions needs a return type
 	fprintf(outfile, "    void Init();\n", m_name);
+	fprintf(outfile, "    void Serialize(CivArchive &archive);\n\n", m_name);
 
 	fprintf(outfile, "    // These methods are needed for records to conform to\n");
-	fprintf(outfile, "    // 'Orthodox Cannonical Form' and work with resizing STL vectors. \n");
+	fprintf(outfile, "    // 'Orthodox Cannonical Form' and work with resizing STL vectors.\n");
 	fprintf(outfile, "    %sRecord(const %sRecord &rval) { Init(); *this = rval; }\n", m_name, m_name);
 	fprintf(outfile, "    void operator=(const %sRecord &rval);\n\n", m_name);
 	
@@ -572,17 +583,67 @@ void RecordDescription::ExportManagement(FILE *outfile)
 		walk.Next();
 	}
 	
-	fprintf(outfile, "//GovMod Specific flag initialization\n");
+	fprintf(outfile, "    //GovMod Specific flag initialization\n");
 	if (m_hasGovernmentsModified)
 		fprintf(outfile, "    m_hasGovernmentsModified=true;\n\n");
 	else
 		fprintf(outfile, "    m_hasGovernmentsModified=false;\n\n");
 
 	fprintf(outfile, "}\n\n");
-	
+
+
+	fprintf(outfile, "void %sRecord::Serialize(CivArchive &archive)\n", m_name);
+	fprintf(outfile, "{\n");
+
+	fprintf(outfile, "    if(archive.IsStoring()) {\n");
+
+	fprintf(outfile, "        archive << m_index;\n");
+	fprintf(outfile, "        archive << GetNameText();\n");
+	for(i = 0; i  < ((m_numBits + 31)/ 32); i++) {
+		fprintf(outfile, "        archive << m_flags%d;\n", i);
+	}
+
+	walk.SetList(&m_datumList);
+	while(walk.IsValid()) {
+		Datum *dat = walk.GetObj();
+		dat->ExportSerializationStoring(outfile);
+		walk.Next();
+	}
+
+	fprintf(outfile, "    } else {\n");
+
+	fprintf(outfile, "        //GovMod Specific flag initialization\n");
+	if (m_hasGovernmentsModified)
+		fprintf(outfile, "        m_hasGovernmentsModified=true;\n\n");
+	else
+		fprintf(outfile, "        m_hasGovernmentsModified=false;\n\n");
+
+
+	fprintf(outfile, "        archive >> m_index;\n");
+	fprintf(outfile, "        {\n");
+	fprintf(outfile, "            MBCHAR* tmpStr = NULL;\n");
+	fprintf(outfile, "            archive >> tmpStr;\n");
+	fprintf(outfile, "            g_theStringDB->GetStringID(tmpStr, m_name);\n");
+	fprintf(outfile, "            SetTextName(g_theStringDB->GetNameStr(m_name));\n");
+	fprintf(outfile, "        }\n");
+	for(i = 0; i  < ((m_numBits + 31)/ 32); i++) {
+		fprintf(outfile, "        archive >> m_flags%d;\n", i);
+	}
+
+	walk.SetList(&m_datumList);
+	while(walk.IsValid()) {
+		Datum *dat = walk.GetObj();
+		dat->ExportSerializationLoading(outfile);
+		walk.Next();
+	}
+
+	fprintf(outfile, "    }\n");
+	fprintf(outfile, "}\n\n");
+
+
 	fprintf(outfile, "%sRecord::~%sRecord()\n", m_name, m_name);
 	fprintf(outfile, "{\n");
-	fprintf(outfile, "\tint index = 0;\n");
+	fprintf(outfile, "    int index = 0;\n");
 	walk.SetList(&m_datumList);
 	while(walk.IsValid()) {
 		Datum *dat = walk.GetObj();
@@ -591,11 +652,12 @@ void RecordDescription::ExportManagement(FILE *outfile)
 	}
 	fprintf(outfile, "}\n\n");
 	
+
 	fprintf(outfile, "void %sRecord::operator=(const %sRecord & rval)\n", m_name, m_name);
 	fprintf(outfile, "{\n");
-	fprintf(outfile, "\tint index = 0;\n");
+	fprintf(outfile, "    int index = 0;\n");
 	
-	fprintf(outfile, "\tm_index = rval.m_index;\n");
+	fprintf(outfile, "    m_index = rval.m_index;\n");
 
 	walk.SetList(&m_datumList);
 	while(walk.IsValid()) {
@@ -612,7 +674,7 @@ void RecordDescription::ExportMerger(FILE *outfile)
 		m_name, m_name);
 	fprintf(outfile, "{\n");
 	PointerList<Datum>::Walker walk(&m_datumList);
-	fprintf(outfile, "\tint index = 0, obj_index = 0;\n");
+	fprintf(outfile, "    int index = 0, obj_index = 0;\n");
 	while(walk.IsValid()) {
 		if(walk.GetObj()->m_type == DATUM_BIT_PAIR || 
 		   walk.GetObj()->m_maxSize >= 0 ||
@@ -621,14 +683,13 @@ void RecordDescription::ExportMerger(FILE *outfile)
 		}
 		walk.Next();
 	}
-	fprintf(outfile, "} \n\n");
+	fprintf(outfile, "}\n\n");
 
 }
 
 void RecordDescription::ExportParser(FILE *outfile)
 {
-	
-	
+
 	char nicename[k_MAX_STRING];
 
 	fprintf(outfile, "char *g_%s_Tokens[] =\n", m_name);
@@ -641,10 +702,17 @@ void RecordDescription::ExportParser(FILE *outfile)
 		}
 		walk.Next();
 	}
+	walk.SetList(&m_datumList);
+	while(walk.IsValid()) {
+		if(walk.GetObj()->m_akaName){
+			fprintf(outfile, "    \"%s\",\n", walk.GetObj()->m_akaName);
+		}
+		walk.Next();
+	}
 
 	fprintf(outfile, "};\n\n");
 	
-	fprintf(outfile, "%sRecordAccessorInfo g_%sRecord_Accessors[] = \n", m_name, m_name);
+	fprintf(outfile, "%sRecordAccessorInfo g_%sRecord_Accessors[] =\n", m_name, m_name);
 	fprintf(outfile, "{\n");
 	walk.SetList(&m_datumList);
 	while(walk.IsValid()) {
@@ -659,7 +727,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 				break;
 			case DATUM_RECORD:
 				if(dat->m_maxSize < 0) {
-					fprintf(outfile, "    {%sRecord::Get%sIndex, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { %sRecord::Get%sIndex, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				} else {
 					fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL}, /* %s (array) */\n", dat->m_name);
 				}
@@ -702,6 +770,18 @@ void RecordDescription::ExportParser(FILE *outfile)
 		}
 		walk.Next();
 	}
+
+	walk.SetList(&m_datumList);
+	while(walk.IsValid()) {
+		Datum *dat = walk.GetObj();
+		if(dat->m_akaName){
+			sprintf(nicename, "k_Token_%s_%s", m_name, dat->m_akaName);
+			fprintf(outfile, "#define %-40s ((k_Token_Custom_Base) + %d)\n", nicename, numTokens);
+			numTokens++;
+		}
+		walk.Next();
+	}
+
 	sprintf(nicename, "k_Token_%s_Max", m_name);
 	fprintf(outfile, "#define %-40s ((k_Token_Custom_Base) + %d)\n\n\n", nicename, numTokens);
 
@@ -715,8 +795,20 @@ void RecordDescription::ExportParser(FILE *outfile)
 		while(walk.IsValid()) {
 			Datum *dat = walk.GetObj();
 			if(dat->m_required) {
-				fprintf(outfile, "    if(!s_ParsedTokens.Bit(k_Token_%s_%s - k_Token_Custom_Base)) {\n", m_name, dat->m_name);
-				fprintf(outfile, "        DBERROR((\"Warning: required field %s missing\"));\n", dat->m_name);
+				if(dat->m_akaName){
+					fprintf(outfile, "    if(!s_ParsedTokens.Bit(k_Token_%s_%s - k_Token_Custom_Base)\n", m_name, dat->m_name);
+					fprintf(outfile, "    && !s_ParsedTokens.Bit(k_Token_%s_%s - k_Token_Custom_Base)\n", m_name, dat->m_akaName);
+					fprintf(outfile, "    ){\n");
+				}
+				else{
+					fprintf(outfile, "    if(!s_ParsedTokens.Bit(k_Token_%s_%s - k_Token_Custom_Base)) {\n", m_name, dat->m_name);
+				}
+				if(dat->m_defaultName){
+					fprintf(outfile, "        m_%s = m_%s;\n", dat->m_name, dat->m_defaultName);
+				}
+				else{
+					fprintf(outfile, "        DBERROR((\"Warning: required field %s missing\"));\n", dat->m_name);
+				}
 				fprintf(outfile, "    }\n");
 			}
 			walk.Next();
@@ -724,7 +816,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 	}
 	fprintf(outfile, "}\n");
 
-	fprintf(outfile, "    \n");
+	fprintf(outfile, "\n");
 	fprintf(outfile, "sint32 %sRecord::Parse(DBLexer *lex)\n", m_name);
 	fprintf(outfile, "{\n");
 	if((m_baseType != DATUM_NONE)) {
@@ -733,6 +825,9 @@ void RecordDescription::ExportParser(FILE *outfile)
 		Assert(m_datumList.GetCount() == 2);
 		fprintf(outfile, "    sint32 tok;\n");
 		fprintf(outfile, "    tok = lex->GetToken();\n");
+		fprintf(outfile, "    if(tok == k_Token_Int) {\n");
+		fprintf(outfile, "        tok = lex->GetToken(); // Accept number to make new db compatible with the old database format\n");
+		fprintf(outfile, "    }\n");
 		fprintf(outfile, "    if(tok != k_Token_Name) {\n");
 		fprintf(outfile, "        DBERROR((\"Record must start with name\"));\n");
 		fprintf(outfile, "        return 0;\n");
@@ -782,6 +877,10 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    lex->SetTokens(g_%s_Tokens, k_Token_%s_Max);\n", m_name, m_name);
 		fprintf(outfile, "    tok = lex->GetToken();\n");
 
+		fprintf(outfile, "    if(tok == k_Token_Int) {\n");
+		fprintf(outfile, "        tok = lex->GetToken(); // Accept number to make new db compatible with the old database format\n");
+		fprintf(outfile, "    }\n");
+
 		fprintf(outfile, "    if(tok != k_Token_Name) {\n");
 		fprintf(outfile, "        DBERROR((\"Record does not start with name\"));\n");
 		fprintf(outfile, "        return 0;\n");
@@ -799,16 +898,16 @@ void RecordDescription::ExportParser(FILE *outfile)
 		if(m_hasGovernmentsModified) {
 		fprintf(outfile, "    // Start of GovMod Specific lexical analysis\n");
 		fprintf(outfile, "    if(tok == k_Token_Modified) {\n");
-		fprintf(outfile, "         do {\n");
-		fprintf(outfile, "				  tok = lex->PeekAhead();\n");
-		fprintf(outfile, "				  if(tok != k_Token_Name) {\n");
-		fprintf(outfile, "					  DBERROR((\"Modified record invalid- must be Government identifier or description.  No quotes, No spaces.\"));\n");
-		fprintf(outfile, "					  return 0;\n");
-		fprintf(outfile, "				  }\n");
-		fprintf(outfile, "                g_theGovernmentDB->ParseRecordInArray(lex, (sint32 **)&m_GovernmentsModified, &m_numGovernmentsModified, err);\n");
-		fprintf(outfile, "				  tok = lex->GetToken();\n");
-		fprintf(outfile, "         } while (tok == k_Token_ModifiedDelimiter);\n");
-		fprintf(outfile, "	  }\n");
+		fprintf(outfile, "        do {\n");
+		fprintf(outfile, "            tok = lex->PeekAhead();\n");
+		fprintf(outfile, "            if(tok != k_Token_Name) {\n");
+		fprintf(outfile, "                DBERROR((\"Modified record invalid- must be Government identifier or description.  No quotes, No spaces.\"));\n");
+		fprintf(outfile, "                return 0;\n");
+		fprintf(outfile, "            }\n");
+		fprintf(outfile, "            g_theGovernmentDB->ParseRecordInArray(lex, (sint32 **)&m_GovernmentsModified, &m_numGovernmentsModified, err);\n");
+		fprintf(outfile, "            tok = lex->GetToken();\n");
+		fprintf(outfile, "        } while (tok == k_Token_ModifiedDelimiter);\n");
+		fprintf(outfile, "    }\n");
 		fprintf(outfile, "    // End of GovMod Specific lexical analysis\n");
 		}
 
@@ -819,7 +918,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "\n");
 		fprintf(outfile, "    while(!done) {\n");
 		fprintf(outfile, "        tok = lex->GetToken();\n");
-		fprintf(outfile, "        if(tok >= k_Token_Custom_Base && tok < k_Token_%s_Max) { \n", m_name);
+		fprintf(outfile, "        if(tok >= k_Token_Custom_Base && tok < k_Token_%s_Max) {\n", m_name);
 		fprintf(outfile, "            s_ParsedTokens.SetBit(tok - k_Token_Custom_Base);\n");
 		fprintf(outfile, "        }\n");
 		fprintf(outfile, "        switch(tok) {\n");
@@ -861,28 +960,31 @@ void RecordDescription::ExportTokenCases(FILE *outfile)
 			dat->ExportParseBitPairCase(outfile, m_name);
 		}
 		fprintf(outfile,         "            case k_Token_%s_%s:\n", m_name, dat->m_name);
+		if(dat->m_akaName){
+			fprintf(outfile,         "            case k_Token_%s_%s:\n", m_name, dat->m_akaName);
+		}
 		if(dat->m_maxSize == k_MAX_SIZE_VARIABLE) {
 			
 			switch(dat->m_type) {
 				case DATUM_INT:
-					fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, &m_%s, &m_num%s)) \n", dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, &m_%s, &m_num%s))\n", dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRINGID:
-					fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, &m_%s, &m_num%s)) \n", dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, &m_%s, &m_num%s))\n", dat->m_name, dat->m_name);
 					break;
 				case DATUM_FLOAT:
-					fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, &m_%s, &m_num%s)) \n", dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, &m_%s, &m_num%s))\n", dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRING:
 				case DATUM_FILE:
-					fprintf(outfile, "                if(!CTPRecord::ParseFileInArray(lex, &m_%s, &m_num%s)) \n", dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!CTPRecord::ParseFileInArray(lex, &m_%s, &m_num%s))\n", dat->m_name, dat->m_name);
 					break;
 				case DATUM_RECORD:
-					fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, (sint32 **)&m_%s, &m_num%s, err)) \n", dat->m_subType, dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, (sint32 **)&m_%s, &m_num%s, err))\n", dat->m_subType, dat->m_name, dat->m_name);
 
 					break;
 				case DATUM_STRUCT:
-					fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, &m_%s, &m_num%s)) \n", m_name, dat->m_subType, dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, &m_%s, &m_num%s))\n", m_name, dat->m_subType, dat->m_name, dat->m_name);
 					break;
 				default:
 					Assert(0);

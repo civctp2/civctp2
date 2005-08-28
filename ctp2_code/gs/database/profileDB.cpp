@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of user preferences.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -28,18 +30,19 @@
 // - Option added to select which order buttons are displayed for an army.
 // - Option added to select message adding style (top or bottom).
 // - Option added to include multiple data directories.
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3errors.h"
-#include "profileDB.h"	
+#include "profileDB.h"
 #include "MapPoint.h"
 #include "Token.h"
 #include "Globals.h"
 
 #include "StrDB.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 #include "Civilisation.h"
 #include "SimpleDynArr.h"
 #include "SlicEngine.h"
@@ -54,17 +57,16 @@
 
 #include "Action.h"
 
-extern CivPaths				*g_civPaths;
-extern StringDB				*g_theStringDB;
-extern CivilisationDatabase *g_theCivilisationDB;
-extern SlicEngine			*g_slicEngine;
-extern CivApp				*g_civApp;
-extern GameSettings			*g_theGameSettings;
-extern SoundManager			*g_soundManager;
+extern CivPaths             *g_civPaths;
+extern StringDB             *g_theStringDB;
+extern SlicEngine           *g_slicEngine;
+extern CivApp               *g_civApp;
+extern GameSettings         *g_theGameSettings;
+extern SoundManager         *g_soundManager;
 extern Player              **g_player;
 
 #include "Diplomacy_Log.h"
-extern Diplomacy_Log *g_theDiplomacyLog; 
+extern Diplomacy_Log        *g_theDiplomacyLog; 
 
 
 ProfileDB::ProfileDB()
@@ -76,7 +78,7 @@ ProfileDB::ProfileDB()
 {
 	m_vars = new PointerList<ProfileVar>;
 
-    m_autocenter = TRUE;
+	m_autocenter = TRUE;
 
 	m_mapSize = MAPSIZE_MEDIUM;
 
@@ -106,7 +108,7 @@ ProfileDB::ProfileDB()
 	m_enemyIntrude = FALSE;
 	m_unitLostWarning = FALSE;
 	m_tradeLostWarning = FALSE;
-	m_cityLostWarning = FALSE; 
+	m_cityLostWarning = FALSE;
 	m_invulnerableTrade = FALSE;
 	m_fullScreenMovies = FALSE;
 	m_showCityInfluence = FALSE;
@@ -119,7 +121,7 @@ ProfileDB::ProfileDB()
 
 	
 	
-	m_civIndex = (CIV_INDEX)16; 
+	m_civIndex = (CIV_INDEX)16;
 
 	m_gameName[0] = '\0';
 	m_leaderName[0] = '\0';
@@ -128,9 +130,9 @@ ProfileDB::ProfileDB()
 	m_ruleSets[0] = '\0';
 	m_isSaved = FALSE;
 	m_isScenario = FALSE;
-    m_gender = GENDER_MALE; 
+	m_gender = GENDER_MALE;
 
-    m_cheat_age = 0; 
+	m_cheat_age = 0;
 
 	m_autoSave = FALSE;
 
@@ -191,7 +193,7 @@ ProfileDB::ProfileDB()
 	m_max_players = 16;
 
 	m_allow_ai_settle_move_cheat = FALSE;
-    m_is_diplomacy_log_on = FALSE; 
+	m_is_diplomacy_log_on = FALSE; 
 	m_unitCompleteMessages = FALSE;
 	m_nonContinuousUnitCompleteMessages = FALSE;
 
@@ -385,12 +387,8 @@ ProfileDB::ProfileDB()
 
 void ProfileDB::DefaultSettings(void)
 {
-	
-	
-
-	
-	StringId	leaderNameId = g_theCivilisationDB->GetLeaderName((CIV_INDEX)m_civIndex);
-	StringId	civNameId = g_theCivilisationDB->GetPluralCivName((CIV_INDEX)m_civIndex);
+	StringId    leaderNameId = g_theCivilisationDB->Get(m_civIndex)->GetLeaderNameMale();
+	StringId    civNameId = g_theCivilisationDB->Get(m_civIndex)->GetPluralCivName();
 
 	strcpy(m_leaderName, g_theStringDB->GetNameStr(leaderNameId));
 	strcpy(m_civName, g_theStringDB->GetNameStr(civNameId));
@@ -414,23 +412,23 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 
 	if(!forTutorial) {
 		profileTxtFile = g_civPaths->FindFile(C3DIR_DIRECT, "userprofile.txt",
-											  profileName);
+		                                      profileName);
 		if(!profileTxtFile || !c3files_PathIsValid(profileTxtFile)) {
 			profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
-												  "profile.txt", profileName);
+			                                      "profile.txt", profileName);
 		}
 	} else {
 		
 		m_loadedFromTutorial = TRUE;
-        profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
-                                              "tut_profile.txt", profileName);
+		profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
+		                                      "tut_profile.txt", profileName);
 	}
 	
-    if (profileTxtFile == NULL) { 
-        m_nPlayers = 3; 
-	    m_ai_on = FALSE;
+	if (profileTxtFile == NULL) { 
+		m_nPlayers = 3; 
+		m_ai_on = FALSE;
 		return FALSE;
-    } else { 
+	} else {
 		FILE *pro_file = c3files_fopen(C3DIR_DIRECT, profileTxtFile, "r");
 		if(pro_file) {
 			
@@ -558,7 +556,7 @@ BOOL ProfileDB::Parse(FILE *file)
 		}
 	}
 
-    return TRUE; 
+	return TRUE; 
 }
 
 void ProfileDB::SetTutorialAdvice( BOOL val )
@@ -582,24 +580,24 @@ void ProfileDB::SetTutorialAdvice( BOOL val )
 
 void ProfileDB::SetDiplmacyLog(BOOL b)
 {
-    if (b) { 
-        if (m_is_diplomacy_log_on) {
-            Assert(g_theDiplomacyLog); 
-        } else { 
-            m_is_diplomacy_log_on = TRUE; 
-            Assert(g_theDiplomacyLog); 
-            g_theDiplomacyLog = new Diplomacy_Log;
-        }
-    } else { 
-        if (m_is_diplomacy_log_on) { 
-            m_is_diplomacy_log_on = FALSE; 
-            Assert(g_theDiplomacyLog);
-            delete g_theDiplomacyLog; 
-            g_theDiplomacyLog=NULL; 
-        } else { 
-            Assert(g_theDiplomacyLog == NULL); 
-        }
-    }
+	if (b) {
+		if (m_is_diplomacy_log_on) {
+			Assert(g_theDiplomacyLog);
+		} else {
+			m_is_diplomacy_log_on = TRUE;
+			Assert(g_theDiplomacyLog); 
+			g_theDiplomacyLog = new Diplomacy_Log;
+		}
+	} else {
+		if (m_is_diplomacy_log_on) {
+			m_is_diplomacy_log_on = FALSE;
+			Assert(g_theDiplomacyLog);
+			delete g_theDiplomacyLog;
+			g_theDiplomacyLog=NULL;
+		} else {
+			Assert(g_theDiplomacyLog == NULL);
+		}
+	}
 }
 
 void ProfileDB::SetPollutionRule( BOOL rule ) 
@@ -611,15 +609,15 @@ void ProfileDB::SetPollutionRule( BOOL rule )
 	}
 }
 
-void ProfileDB::SetSFXVolume(sint32 vol)	
+void ProfileDB::SetSFXVolume(sint32 vol)
 {
 	m_sfxVolume = vol; 
 	if ( g_soundManager ) {
 		g_soundManager->SetVolume( SOUNDTYPE_SFX, vol );
 	}
-}		
+}
 
-void ProfileDB::SetVoiceVolume(sint32 vol)				
+void ProfileDB::SetVoiceVolume(sint32 vol)
 { 
 	m_voiceVolume = vol; 
 	if ( g_soundManager ) {
@@ -627,7 +625,7 @@ void ProfileDB::SetVoiceVolume(sint32 vol)
 	}
 }
 
-void ProfileDB::SetMusicVolume(sint32 vol)				
+void ProfileDB::SetMusicVolume(sint32 vol)
 { 
 	m_musicVolume = vol; 
 	if ( g_soundManager ) {
@@ -637,7 +635,7 @@ void ProfileDB::SetMusicVolume(sint32 vol)
 
 void ProfileDB::SetDifficulty(uint32 x)
 { 
-	Assert((x>=0) && (x<7)); 
+	Assert((x>=0) && (x<7));
 	if(x >= 0 && x < 7) {
 		m_difficulty = x;
 		if(g_player) {
@@ -646,8 +644,8 @@ void ProfileDB::SetDifficulty(uint32 x)
 				if(g_player[p]) {
 					delete g_player[p]->m_difficulty;
 					g_player[p]->m_difficulty = new Difficulty(m_difficulty,
-															   p,
-															   g_player[p]->m_playerType != PLAYER_TYPE_ROBOT);
+					                                           p,
+					                                           g_player[p]->m_playerType != PLAYER_TYPE_ROBOT);
 				}
 			}
 		}
@@ -655,7 +653,7 @@ void ProfileDB::SetDifficulty(uint32 x)
 }
 
 void ProfileDB::Var(char *name, PROF_VAR_TYPE type, sint32 *numValue,
-					char *stringValue, bool visible)
+                    char *stringValue, bool visible)
 {
 	m_vars->AddTail(new ProfileVar(name, type, numValue, stringValue, visible));
 }

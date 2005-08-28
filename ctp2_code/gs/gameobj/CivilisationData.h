@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Civilisation data
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -15,10 +16,9 @@
 //
 //----------------------------------------------------------------------------
 //
-//
 // Compiler flags
 // 
-// _MSC_VER		
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -28,6 +28,7 @@
 // - #pragma once commented out
 // - Import structure modified to allow mingw compilation.
 // - Prevent crash when settling in the Alexander scenario.
+// - Replaced old civilsation databse by new one. (Aug 21st 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -38,14 +39,14 @@
 #ifndef __CIVILISATION_DATA_H__
 #define __CIVILISATION_DATA_H__
 
-#if defined(_MSC_VER) 
+#if defined(_MSC_VER)
 
 #include "GameObj.h"
 #include "ID.h"
-#include "CivilisationRec.h"
+#include "CivilisationRecord.h"
 #include "gstypes.h"
 
-extern enum CIV_INDEX ;
+extern enum CIV_INDEX;
 enum GENDER;
 
 #else	// _MSC_VER
@@ -64,21 +65,24 @@ class	CivilisationData;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "c3types.h"			// MBCHAR, sint..., uint...
-#include "civarchive.h"			// CivArchive
+#include "c3types.h"            // MBCHAR, sint..., uint...
+#include "civarchive.h"         // CivArchive
 #include "GameObj_types.h"
-#include "CivilisationRec.h"	// k_MAX_CITY_NAMES
-#include "dbtypes.h"			// k_MAX_NAME_LEN
-#include "GameObj.h"			// GAMEOBJ
-#include "gstypes.h"			// PLAYER_INDEX
-#include "ID.h"					// ID
+#include "CivilisationRecord.h" // k_MAX_CityName
+#include "dbtypes.h"            // k_MAX_NAME_LEN
+#include "GameObj.h"            // GAMEOBJ
+#include "gstypes.h"            // PLAYER_INDEX
+#include "ID.h"                 // ID
 
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
 
 
-#endif	// _MSC_VER
+#endif  // _MSC_VER
+#define k_MAX_NAME_LEN           512 // Why isn't dbtypes.h included
+#define k_CAPITAL_UNDEFINED       -1 // From CivilisationRec.h
+#define k_CITY_NAME_UNDEFINED     -1 // From CivilisationRec.h
 
 class CivilisationData : public GAMEOBJ
 	{
@@ -86,21 +90,21 @@ class CivilisationData : public GAMEOBJ
 		
 		
 
-		PLAYER_INDEX	m_owner ;									
+		PLAYER_INDEX    m_owner;
 
-		uint8			m_cityname_count[k_MAX_CITY_NAMES] ;		
+		uint8           m_cityname_count[k_MAX_CityName];
 		
-		CIV_INDEX		m_civ ;										
+		CIV_INDEX       m_civ;
 
-		GENDER			m_gender;
+		GENDER          m_gender;
 
-		sint32			m_cityStyle;								
+		sint32          m_cityStyle;
 
-		MBCHAR			m_leader_name[k_MAX_NAME_LEN],
-                        m_personality_description[k_MAX_NAME_LEN],
-						m_civilisation_name[k_MAX_NAME_LEN],
-						m_country_name[k_MAX_NAME_LEN],
-						m_singular_name[k_MAX_NAME_LEN] ;
+		MBCHAR          m_leader_name[k_MAX_NAME_LEN],
+		                m_personality_description[k_MAX_NAME_LEN],
+		                m_civilisation_name[k_MAX_NAME_LEN],
+		                m_country_name[k_MAX_NAME_LEN],
+		                m_singular_name[k_MAX_NAME_LEN];
 		
 		
 
@@ -114,36 +118,36 @@ class CivilisationData : public GAMEOBJ
 		friend class NetCivilization;
 
 	public:
-		CivilisationData(const ID &id) ;
-		CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender) ;
-		CivilisationData(CivArchive &archive) ;
+		CivilisationData(const ID &id);
+		CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender);
+		CivilisationData(CivArchive &archive);
 
-		void Serialize(CivArchive &archive) ;
+		void Serialize(CivArchive &archive);
 
-		PLAYER_INDEX GetOwner(void) const { return (m_owner) ; }	
-		CIV_INDEX GetCivilisation(void) const { return (m_civ) ; }	
+		PLAYER_INDEX GetOwner(void) const { return (m_owner) ; }
+		CIV_INDEX GetCivilisation(void) const { return (m_civ) ; }
 		GENDER GetGender(void) const { return m_gender; }
 
-		sint32 GetAnyCityName(void) const ;
-		sint32 GetCapitalName(void) const ;
+		sint32 GetAnyCityName(void) const;
+		sint32 GetCapitalName(void) const;
 
 		void GetCityName(const sint32 name, MBCHAR *s) const;
-		void UseCityName(const sint32 name) ;
-		void ReleaseCityName(const sint32 name) ;
-		sint32 GetUseCount(const sint32 name) const ;
+		void UseCityName(const sint32 name);
+		void ReleaseCityName(const sint32 name);
+		sint32 GetUseCount(const sint32 name) const;
 
 		MBCHAR *GetLeaderName(void) ;
-		void SetLeaderName(const MBCHAR *s) ;
+		void SetLeaderName(const MBCHAR *s);
 
-        void SetPersonalityDescription(const MBCHAR* s);
-        MBCHAR* GetPersonalityDescription(void);
+		void SetPersonalityDescription(const MBCHAR* s);
+		MBCHAR* GetPersonalityDescription(void);
 
-		void GetPluralCivName(MBCHAR *s) ;
-		void SetPluralCivName(const MBCHAR *s) ;
-		void GetCountryName(MBCHAR *s) ;
-		void SetCountryName(const MBCHAR *s) ;
-		void GetSingularCivName(MBCHAR *s) ;
-		void SetSingularCivName(const MBCHAR *s) ;
+		void GetPluralCivName(MBCHAR *s);
+		void SetPluralCivName(const MBCHAR *s);
+		void GetCountryName(MBCHAR *s);
+		void SetCountryName(const MBCHAR *s);
+		void GetSingularCivName(MBCHAR *s);
+		void SetSingularCivName(const MBCHAR *s);
 
 		sint32 GetCityStyle(void) const;
 		void SetCityStyle( sint32 cityStyle ) { m_cityStyle = cityStyle; }
@@ -152,6 +156,6 @@ class CivilisationData : public GAMEOBJ
 		void ResetCiv(CIV_INDEX newCivIndex, GENDER gender);
 
 		void ResetStrings();
-	} ;
+	};
 
 #endif

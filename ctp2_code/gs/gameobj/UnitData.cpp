@@ -86,7 +86,6 @@
 
 #include "c3math.h"
 #include "Vision.h"
-#include "CivilisationDB.h"
 #include "CivilisationPool.h"
 #include "SelItem.h"
 #include "tiledmap.h"
@@ -175,15 +174,15 @@ extern BOOL UnitCanCarry(sint32 dest, sint32 src);
 
 
 UnitData::UnitData(
-    const sint32 t,
-    const sint32 trans_t,
-    const Unit &i,
-    const PLAYER_INDEX o,
-    const MapPoint &center_pos,
-    const Unit hc,
-    UnitActor *actor
-    ) : GameObj(i.m_id)
-                   
+	const sint32 t,
+	const sint32 trans_t,
+	const Unit &i,
+	const PLAYER_INDEX o,
+	const MapPoint &center_pos,
+	const Unit hc,
+	UnitActor *actor
+	) : GameObj(i.m_id)
+
 {
 
 

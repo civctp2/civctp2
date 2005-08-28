@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main menu screen
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG
+// - Generates debug information when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +28,7 @@
 // - Shifted buttons from the "Single Player" subscreen into this one to
 //   simplify the interface.
 //   (JJB)
+// - Removed civilisation database refferences. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,8 +50,6 @@
 #include "c3_listitem.h"
 #include "c3_dropdown.h"
 #include "StrDB.h"
-#include "CivilisationDB.h"
-#include "CivilisationPool.h"
 
 #include "ctp2_button.h"
 
@@ -54,7 +57,6 @@
 #include "initialplaywindow.h"
 
 extern StringDB						*g_theStringDB;
-extern CivilisationDatabase			*g_theCivilisationDB;
 
 
 

@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version
 //
@@ -30,6 +30,10 @@
 // USE_LOGGING
 // - Enable logging facilities - even when not using the debug build.
 //
+// _BFR_
+// - Force CD checking when set (build final release).
+// - If not defined it enables some more loogs.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -41,6 +45,7 @@
 // - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
+// - Removed refferences to CivilisationDB. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -113,7 +118,6 @@
 #include "player.h"
 #include "UnitPool.h"
 #include "profileDB.h"
-#include "CivilisationDB.h"
 #include "TurnCnt.h"
 #include "ConstDB.h"
 
@@ -172,125 +176,123 @@
 
 
 #include "civscenarios.h"
-extern CivScenarios		*g_civScenarios;
+extern CivScenarios     *g_civScenarios;
 
 #include "ctpregistry.h"
 #include "sliccmd.h"    // sliccmd_clear_symbols
 
 #ifndef WM_MOUSEWHEEL
-#define WM_MOUSEWHEEL (WM_MOUSELAST+1)  
+#define WM_MOUSEWHEEL (WM_MOUSELAST+1)
 #endif
 
 #ifdef _DEBUG
 #include "debug.h"
 #endif
 
-#define k_LDLName				"civ3.ldl"
-#define k_LDL640Name			"civ3_640.ldl"
-#define k_CursorName			"cursor2.tif"
+#define k_LDLName                   "civ3.ldl"
+#define k_LDL640Name                "civ3_640.ldl"
+#define k_CursorName                "cursor2.tif"
 
-#define k_SHARED_SURFACE_WIDTH	1024
-#define k_SHARED_SURFACE_HEIGHT	768
-#define k_SHARED_SURFACE_BPP	16
-
-
-#define k_SMOOTH_PIX_SEC_PER_SEC	8.0f
-#define k_SMOOTH_MIN_VELOCITY		4.0f			
-#define k_SMOOTH_MAX_VELOCITY		(k_TILE_PIXEL_HEIGHT>>1) 			
-#define k_SMOOTH_START_TIME			(int)(1000.0f*(float)sqrt(k_SMOOTH_MIN_VELOCITY*2.0f/k_SMOOTH_PIX_SEC_PER_SEC))
-#define k_SMOOTH_SLOW_TIME			(int)(500.0f*(float)sqrt(k_SMOOTH_MAX_VELOCITY*2.0f/k_SMOOTH_PIX_SEC_PER_SEC))
-
-extern sint32 g_splash_cur; 
-extern sint32 g_splash_old; 
-extern char g_splash_buf[100]; 
+#define k_SHARED_SURFACE_WIDTH      1024
+#define k_SHARED_SURFACE_HEIGHT     768
+#define k_SHARED_SURFACE_BPP        16
 
 
-HWND			gHwnd;
-HINSTANCE		gHInstance;
-BOOL			gDone = FALSE;
-LPCSTR			gszMainWindowClass = "CTP II";
-LPCSTR			gszMainWindowName = "CTP II";
-sint32			g_ScreenWidth = 0;
-sint32			g_ScreenHeight = 0;
+#define k_SMOOTH_PIX_SEC_PER_SEC    8.0f
+#define k_SMOOTH_MIN_VELOCITY       4.0f
+#define k_SMOOTH_MAX_VELOCITY       (k_TILE_PIXEL_HEIGHT>>1)
+#define k_SMOOTH_START_TIME         (int)(1000.0f*(float)sqrt(k_SMOOTH_MIN_VELOCITY*2.0f/k_SMOOTH_PIX_SEC_PER_SEC))
+#define k_SMOOTH_SLOW_TIME          (int)(500.0f*(float)sqrt(k_SMOOTH_MAX_VELOCITY*2.0f/k_SMOOTH_PIX_SEC_PER_SEC))
+
+extern sint32                       g_splash_cur; 
+extern sint32                       g_splash_old; 
+extern char                         g_splash_buf[100]; 
 
 
-C3UI				*g_c3ui = NULL;
-StatusWindow		*g_statusWindow = NULL;
-extern DebugWindow	*g_debugWindow;
-aui_Surface			*g_sharedSurface = NULL;
+HWND                                gHwnd;
+HINSTANCE                           gHInstance;
+BOOL                                gDone = FALSE;
+LPCSTR                              gszMainWindowClass = "CTP II";
+LPCSTR                              gszMainWindowName = "CTP II";
+sint32                              g_ScreenWidth = 0;
+sint32                              g_ScreenHeight = 0;
 
-BOOL			g_smoothScroll = FALSE;
+
+C3UI                                *g_c3ui = NULL;
+StatusWindow                        *g_statusWindow = NULL;
+extern DebugWindow                  *g_debugWindow;
+aui_Surface                         *g_sharedSurface = NULL;
+
+BOOL                                g_smoothScroll = FALSE;
 
 
 
-RECT			g_backgroundViewport = { 0, 0, 0, 0 };
-sint32			g_is565Format = TRUE;
-sint32			g_modalWindow = 0;
+RECT                                g_backgroundViewport = { 0, 0, 0, 0 };
+sint32                              g_is565Format = TRUE;
+sint32                              g_modalWindow = 0;
 
-BOOL			g_helpMode = TRUE;
+BOOL                                g_helpMode = TRUE;
 
 #ifdef _DEBUG
-extern sint32 g_debugOwner;
-extern Player** g_player;
-extern BOOL		g_toggleAdvances ;
-extern SelectedItem *g_selected_item; 
+extern sint32                       g_debugOwner;
+extern Player                       **g_player;
+extern BOOL                         g_toggleAdvances ;
+extern SelectedItem                 *g_selected_item; 
 #endif
 
 
-extern StringDB						*g_theStringDB; 
-extern Database <GovernmentRecord>	*g_theGovernmentDB; 
-extern CivilisationDatabase			*g_theCivilisationDB ;
-extern ConstDB						*g_theConstDB; 
-extern World						*g_theWorld; 
-extern UnitPool						*g_theUnitPool; 
-extern Pollution					*g_thePollution;
-extern sint32					    g_is_rand_test; 
-extern void ai_rand_test(); 
-extern ProfileDB *g_theProfileDB; 
-extern TurnCount *g_turn;
+extern StringDB                     *g_theStringDB;
+extern ConstDB                      *g_theConstDB;
+extern World                        *g_theWorld;
+extern UnitPool                     *g_theUnitPool;
+extern Pollution                    *g_thePollution;
+extern sint32                       g_is_rand_test;
+extern void                         ai_rand_test();
+extern ProfileDB                    *g_theProfileDB;
+extern TurnCount                    *g_turn;
 
 
-static uint32   s_scrollcurtick	=0;
-static uint32   s_scrolllasttick=0;
-static sint32   s_scrolltime	=k_SMOOTH_START_TIME;
-static uint32   s_accelTickStart = 0;
+static uint32                       s_scrollcurtick =0;
+static uint32                       s_scrolllasttick=0;
+static sint32                       s_scrolltime =k_SMOOTH_START_TIME;
+static uint32                       s_accelTickStart = 0;
 
 
-extern CivPaths				*g_civPaths;
+extern CivPaths                     *g_civPaths;
 
 
-extern ColorSet				*g_colorSet;
+extern ColorSet                     *g_colorSet;
 
 
 
 
 
-extern C3Window		*g_turnWindow;
-extern StatsWindow			*g_statsWindow;
-extern ControlPanelWindow	*g_controlPanel;
+extern C3Window                     *g_turnWindow;
+extern StatsWindow                  *g_statsWindow;
+extern ControlPanelWindow           *g_controlPanel;
 
-sint32	g_terrainPollution ;
-
-
-SpriteStateDB               *g_theSpriteStateDB;
+sint32                              g_terrainPollution;
 
 
-SpriteStateDB				*g_theGoodsSpriteStateDB;
-SpriteStateDB				*g_theCitySpriteStateDB;
-
-Director					*g_director;
-double						g_ave_frame_rate = 10.0;
-double						g_ave_frame_time = 200.0;
-ScreenManager				*g_screenManager = NULL;
+SpriteStateDB                       *g_theSpriteStateDB;
 
 
-TiledMap					*g_tiledMap = NULL;
+SpriteStateDB                       *g_theGoodsSpriteStateDB;
+SpriteStateDB                       *g_theCitySpriteStateDB;
+
+Director                            *g_director;
+double                              g_ave_frame_rate = 10.0;
+double                              g_ave_frame_time = 200.0;
+ScreenManager                       *g_screenManager = NULL;
 
 
-RadarMap					*g_radarMap = NULL;
+TiledMap                            *g_tiledMap = NULL;
 
 
-CivApp						*g_civApp = NULL;
+RadarMap                            *g_radarMap = NULL;
+
+
+CivApp                              *g_civApp = NULL;
 
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
@@ -2301,13 +2303,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
 }
-
-#ifdef _DEBUG
-#include "DataCheck.h"
-extern DataCheck *g_dataCheck; 
-#endif
-
-
 
 void DisplayFrame (aui_Surface *surf)
 

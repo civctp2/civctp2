@@ -1,5 +1,32 @@
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer civ packet handling.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "net_civ.h"
@@ -7,14 +34,13 @@
 #include "net_util.h"
 
 #include "CivilisationPool.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 
 #include "player.h"
 
 #include "c3_utilitydialogbox.h"
 
 extern Player **g_player;
-extern CivilisationDatabase *g_theCivilisationDB;
 extern c3_UtilityPlayerListPopup *g_networkPlayersScreen;
 
 NetCivilization::NetCivilization(CivilisationData *data)
@@ -37,7 +63,7 @@ void NetCivilization::Packetize(uint8 *buf, uint16 &size)
 	PUSHSTRING(m_data->m_singular_name);
 	PUSHSTRING(m_data->m_personality_description);
 	
-	uint16 numCityNames = (uint16)g_theCivilisationDB->GetNumCities(m_data->m_civ);
+	uint16 numCityNames = (uint16)g_theCivilisationDB->Get(m_data->m_civ)->GetNumCityName();
 	PUSHSHORT(numCityNames);
 	sint32 i;
 	for(i = 0; i < numCityNames; i++) {
@@ -121,4 +147,4 @@ void NetSetLeaderName::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 }
 
 
-	
+

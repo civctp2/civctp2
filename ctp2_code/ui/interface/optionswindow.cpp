@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The options window
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -16,15 +45,12 @@
 #include "c3_listitem.h"
 #include "c3_dropdown.h"
 #include "StrDB.h"
-#include "CivilisationDB.h"
-#include "CivilisationPool.h"
 #include "network.h"
 
 #include "spnewgamewindow.h" 
 #include "optionswindow.h"
 
 extern StringDB						*g_theStringDB;
-extern CivilisationDatabase			*g_theCivilisationDB;
 extern Network						g_network;
 
 

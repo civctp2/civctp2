@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// Win32
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,8 +29,14 @@
 //   is merged in that is set. - Sep. 28th 2004 Martin Gühmann
 // - Updated ExportBitPairAccessorProto function so that the default
 //   values of bits can be accesses if these bits have default values.
+// - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
+// - Output files only have spaces instead of tabs as indent and indetion
+//   was fixed. (Aug 25th 2005 Martin Gühmann)
+// - Added alias names and the possibility to have default values from 
+//   other entries. (Aug 26th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
@@ -131,7 +139,7 @@ void Datum::ExportVariable(FILE *outfile, sint32 indent)
 	
 	if((m_maxSize > 0) || (m_maxSize == k_MAX_SIZE_VARIABLE)) {
 		fprintf(outfile, "%s", indent ? "        ": "    ");
-		fprintf(outfile, "sint32           m_num%s;\n", m_name);
+		fprintf(outfile, "sint32            m_num%s;\n", m_name);
 	}
 }
 
@@ -148,7 +156,12 @@ void Datum::ExportRangeDefines(FILE *outfile)
 
 void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recordName)
 {
-	fprintf(outfile,         "    bool             Get%s() const { return (m_flags%d & k_%s_%s_Bit) != 0; }\n", 
+	char *ind = "";
+	if(indent) {
+		ind = "    ";
+	}
+
+	fprintf(outfile,             "%s    bool             Get%s() const { return (m_flags%d & k_%s_%s_Bit) != 0; }\n", ind,
 			m_name, m_bitNum / 32, recordName, m_name);
 	switch(m_bitPairDatum->m_type) {
 		case DATUM_INT:
@@ -156,123 +169,123 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 
 //Added by Martin Gühmann
 			if(!m_hasValue){
-				fprintf(outfile, "    bool             Get%s(sint32 &value) const {\n", m_name);
-				fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
+				fprintf(outfile, "%s    bool             Get%s(sint32 &value) const {\n", ind, m_name);
+				fprintf(outfile, "%s                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n", ind,
 					m_bitNum / 32, recordName, m_name);
-				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
-				fprintf(outfile, "                         return true;\n");
-				fprintf(outfile, "                     }\n");
+				fprintf(outfile, "%s                         value = m_%s;\n", ind, m_bitPairDatum->m_name);
+				fprintf(outfile, "%s                         return true;\n", ind);
+				fprintf(outfile, "%s                     }\n", ind);
 			}
 			else{
-				fprintf(outfile, "    bool             Get%s(sint32 &value) const {\n", m_name);
-				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
-				fprintf(outfile, "                         return ((m_flags%d & k_%s_%s_Bit) != 0);\n",
+				fprintf(outfile, "%s    bool             Get%s(sint32 &value) const {\n", ind, m_name);
+				fprintf(outfile, "%s                         value = m_%s;\n", ind, m_bitPairDatum->m_name);
+				fprintf(outfile, "%s                         return ((m_flags%d & k_%s_%s_Bit) != 0);\n", ind,
 					m_bitNum / 32, recordName, m_name);
-				fprintf(outfile, "                     }\n");
+				fprintf(outfile, "%s                     }\n", ind);
 			}
 			break;
 		case DATUM_FLOAT:
 
 //Added by Martin Gühmann
 			if(!m_hasValue){
-				fprintf(outfile, "    bool             Get%s(double &value) const {\n", m_name);
-				fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
+				fprintf(outfile, "%s    bool             Get%s(double &value) const {\n", ind, m_name);
+				fprintf(outfile, "%s                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n", ind,
 					m_bitNum / 32, recordName, m_name);
-				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
-				fprintf(outfile, "                         return true;\n");
-				fprintf(outfile, "                     }\n");
+				fprintf(outfile, "%s                         value = m_%s;\n", ind, m_bitPairDatum->m_name);
+				fprintf(outfile, "%s                         return true;\n", ind);
+				fprintf(outfile, "%s                     }\n", ind);
 			}
 			else{
-				fprintf(outfile, "    bool             Get%s(double &value) const {\n", m_name);
-				fprintf(outfile, "                         value = m_%s;\n", m_bitPairDatum->m_name);
-				fprintf(outfile, "                         return ((m_flags%d & k_%s_%s_Bit) != 0);\n",
+				fprintf(outfile, "%s    bool             Get%s(double &value) const {\n", ind, m_name);
+				fprintf(outfile, "%s                         value = m_%s;\n", ind, m_bitPairDatum->m_name);
+				fprintf(outfile, "%s                         return ((m_flags%d & k_%s_%s_Bit) != 0);\n", ind,
 					m_bitNum / 32, recordName, m_name);
-				fprintf(outfile, "                     }\n");
+				fprintf(outfile, "%s                     }\n", ind);
 			}
 
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
-			fprintf(outfile, "    bool             Get%s(const char *&text) const {\n", m_name);
-			fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
+			fprintf(outfile,     "%s    bool             Get%s(const char *&text) const {\n", ind, m_name);
+			fprintf(outfile,     "%s                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n", ind,
 					m_bitNum / 32, recordName, m_name);
-			fprintf(outfile, "                         text = m_%s;\n", m_bitPairDatum->m_name);
-			fprintf(outfile, "                         return true;\n");
-			fprintf(outfile, "                     }\n");
+			fprintf(outfile,     "%s                         text = m_%s;\n", ind, m_bitPairDatum->m_name);
+			fprintf(outfile,     "%s                         return true;\n", ind);
+			fprintf(outfile,     "%s                     }\n", ind);
 			break;
 		case DATUM_RECORD:
-			fprintf(outfile, "    bool             Get%sIndex(sint32 &index) const {\n", m_name);
-			fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
+			fprintf(outfile,     "%s    bool             Get%sIndex(sint32 &index) const {\n", ind, m_name);
+			fprintf(outfile,     "%s                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n", ind,
 					m_bitNum / 32, recordName, m_name);
-			fprintf(outfile, "                         index = m_%s;\n", m_bitPairDatum->m_name);
-			fprintf(outfile, "                         return true;\n");
-			fprintf(outfile, "                     }\n");
+			fprintf(outfile,     "%s                         index = m_%s;\n", ind, m_bitPairDatum->m_name);
+			fprintf(outfile,     "%s                         return true;\n", ind);
+			fprintf(outfile,     "%s                     }\n", ind);
 			
-			fprintf(outfile, "    bool             Get%s(const %sRecord *&rec) const;\n", m_name, m_bitPairDatum->m_subType);
-			fprintf(outfile, "    const %sRecord  *Get%sPtr() const;\n", m_bitPairDatum->m_subType, m_name);
+			fprintf(outfile,     "%s    bool             Get%s(const %sRecord *&rec) const;\n", ind, m_name, m_bitPairDatum->m_subType);
+			fprintf(outfile,     "%s    const %sRecord  *Get%sPtr() const;\n", ind, m_bitPairDatum->m_subType, m_name);
 			break;
 		case DATUM_STRUCT:
-			fprintf(outfile, "    bool             Get%s(const %s *&ptr) const {\n", m_name, m_bitPairDatum->m_subType);
-			fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n",
+			fprintf(outfile,     "%s    bool             Get%s(const %s *&ptr) const {\n", ind, m_name, m_bitPairDatum->m_subType);
+			fprintf(outfile,     "%s                         if((m_flags%d & k_%s_%s_Bit) == 0) return false;\n", ind,
 					m_bitNum / 32, recordName, m_name);
-			fprintf(outfile, "                         ptr = &m_%s;\n", m_bitPairDatum->m_name);
-			fprintf(outfile, "                         return true;\n");
-			fprintf(outfile, "                     }\n");
-			fprintf(outfile, "    const %s        *Get%sPtr() const {\n", m_bitPairDatum->m_subType, m_name);
-			fprintf(outfile, "                         if((m_flags%d & k_%s_%s_Bit) == 0) return NULL;\n",
+			fprintf(outfile,     "%s                         ptr = &m_%s;\n", ind, m_bitPairDatum->m_name);
+			fprintf(outfile,     "%s                         return true;\n", ind);
+			fprintf(outfile,     "%s                     }\n", ind);
+			fprintf(outfile,     "%s    const %s        *Get%sPtr() const {\n", ind, m_bitPairDatum->m_subType, m_name);
+			fprintf(outfile,     "%s                         if((m_flags%d & k_%s_%s_Bit) == 0) return NULL;\n", ind,
 					m_bitNum / 32, recordName, m_name);
-			fprintf(outfile, "                         return &m_%s;\n", m_bitPairDatum->m_name);
-			fprintf(outfile, "                     }\n");
+			fprintf(outfile,     "%s                         return &m_%s;\n", ind, m_bitPairDatum->m_name);
+			fprintf(outfile,     "%s                     }\n", ind);
 			break;
 	}
-			
 }
 
 void Datum::ExportAccessor(FILE *outfile, sint32 indent, char *recordName)
 {
+	char *ind = "";
 	if(indent) {
-		fprintf(outfile, "    ");
+		ind = "    ";
 	}
 
 	if(m_maxSize <= 0) {
 		switch(m_type) {
 			case DATUM_INT:
 			case DATUM_STRINGID:
-				fprintf(outfile, "    sint32           Get%s() const { return m_%s; }\n", m_name, m_name);
+				fprintf(outfile, "%s    sint32           Get%s() const { return m_%s; }\n", ind, m_name, m_name);
 				break;
 			case DATUM_BIT:
-				fprintf(outfile, "    bool             Get%s() const { return (m_flags%d & k_%s_%s_Bit) != 0; }\n",
-						m_name, m_bitNum / 32, recordName, m_name);
+				fprintf(outfile, "%s    bool             Get%s() const { return (m_flags%d & k_%s_%s_Bit) != 0; }\n",
+						ind, m_name, m_bitNum / 32, recordName, m_name);
 				break;
 			case DATUM_BIT_PAIR:
 				ExportBitPairAccessorProto(outfile, indent, recordName);
 				break;
 				
 			case DATUM_FLOAT:
-				fprintf(outfile, "    double           Get%s() const { return m_%s; }\n", m_name, m_name);
+				fprintf(outfile, "%s    double           Get%s() const { return m_%s; }\n", ind, m_name, m_name);
 				break;
 			case DATUM_STRING:
 			case DATUM_FILE:
-				fprintf(outfile, "    const char      *Get%s() const { return m_%s; }\n", m_name, m_name);
+				fprintf(outfile, "%s    const char      *Get%s() const { return m_%s; }\n", ind, m_name, m_name);
 				break;
 			case DATUM_RECORD:
-				fprintf(outfile, "    sint32           Get%sIndex() const { return m_%s; }\n", m_name, m_name);
-				fprintf(outfile, "    const %sRecord *Get%s() const;\n", m_subType, m_name);
+				fprintf(outfile, "%s    sint32           Get%sIndex() const { return m_%s; }\n", ind, m_name, m_name);
+				fprintf(outfile, "%s    const %sRecord *Get%s() const;\n", ind, m_subType, m_name);
 				break;
 			case DATUM_STRUCT:
-				fprintf(outfile, "    const %s *Get%s() const { return &m_%s; }\n", m_subType, m_name, m_name);
+				fprintf(outfile, "%s    const %s *Get%s() const { return &m_%s; }\n", ind, m_subType, m_name, m_name);
 				break;
 			case DATUM_BIT_GROUP:
 			{
-				fprintf(outfile, "\n    //\n    // %s flag group\n", m_name);
-				fprintf(outfile, "    uint32           Get%s() const { return m_%s; }\n", m_name, m_name);
+				fprintf(outfile, "\n%s    //\n%s    // %s flag group\n", ind, ind, m_name);
+				fprintf(outfile, "%s    uint32           Get%s() const { return m_%s; }\n", ind, m_name, m_name);
 				struct namelist *node = m_groupList;
 				while(node) {
-					fprintf(outfile, "    bool             Get%s%s() const { return (m_%s & k_%s_%s_%s_Bit) != 0; }\n",
-							m_name, node->name, m_name, recordName, m_name, node->name);
+					fprintf(outfile, "%s    bool             Get%s%s() const { return (m_%s & k_%s_%s_%s_Bit) != 0; }\n",
+							ind, m_name, node->name, m_name, recordName, m_name, node->name);
 					node = node->next;
 				}
-				fprintf(outfile, "    // End %s flag group\n    //\n", m_name);
+				fprintf(outfile, "%s    // End %s flag group\n    //\n", ind, m_name);
 				break;
 			}
 			default:
@@ -294,13 +307,13 @@ void Datum::ExportAccessor(FILE *outfile, sint32 indent, char *recordName)
 				break;
 			case DATUM_RECORD:
 				fprintf(outfile, "    sint32           Get%sIndex(sint32 index) const;\n", m_name);
-				fprintf(outfile, "    const %sRecord *Get%s(sint32 index) const;\n", m_subType, m_name);
+				fprintf(outfile, "    const %sRecord  *Get%s(sint32 index) const;\n", m_subType, m_name);
 				break;
 			case DATUM_STRUCT:
-				fprintf(outfile, "    const %s *Get%s(sint32 index) const;\n", m_subType, m_name);
+				fprintf(outfile, "    const %s        *Get%s(sint32 index) const;\n", m_subType, m_name);
 				break;
 		}
-		fprintf(outfile, "    sint32           GetNum%s() const { return m_num%s;}\n", m_name, m_name);
+		fprintf(outfile,         "    sint32           GetNum%s() const { return m_num%s;}\n", m_name, m_name);
 	}
 }
 
@@ -390,12 +403,78 @@ void Datum::ExportDataCode(FILE *outfile, char *recordName)
 	}
 }
 
+void Datum::ExportBitPairSerializationStoring(FILE *outfile)
+{
+	Assert(m_type == DATUM_BIT_PAIR);
+	Assert(m_bitPairDatum);
+
+	switch(m_bitPairDatum->m_type) {
+		case DATUM_STRINGID:
+			fprintf(outfile, "        {\n");
+			fprintf(outfile, "            MBCHAR* tmpString = g_theStringDB->GetIdStr(m_%s);\n", m_bitPairDatum->m_name);
+			fprintf(outfile, "            archive << tmpString;\n");
+			fprintf(outfile, "        }\n\n");
+			break;
+		case DATUM_INT:
+		case DATUM_FLOAT:
+		case DATUM_RECORD:
+		case DATUM_BIT_GROUP:
+			fprintf(outfile, "        archive << m_%s;\n", m_bitPairDatum->m_name);
+			break;
+		case DATUM_STRUCT:
+			fprintf(outfile, "        m_%s.Serialize(archive);\n", m_bitPairDatum->m_name);
+			break;
+		case DATUM_FILE:
+		case DATUM_STRING:
+			fprintf(outfile, "        archive << m_%s;\n", m_bitPairDatum->m_name);
+			break;
+		default:
+			Assert(0);
+			break;
+	}
+}
+
+void Datum::ExportBitPairSerializationLoading(FILE *outfile)
+{
+	Assert(m_type == DATUM_BIT_PAIR);
+	Assert(m_bitPairDatum);
+
+	switch(m_bitPairDatum->m_type) {
+			case DATUM_STRINGID:
+				fprintf(outfile, "        {\n");
+				fprintf(outfile, "            MBCHAR* tmpString = NULL;\n");
+				fprintf(outfile, "            archive >> tmpString;\n");
+				fprintf(outfile, "            g_theStringDB->GetStringID(tmpString, m_%s);\n", m_bitPairDatum->m_name);
+				fprintf(outfile, "            delete[] tmpString;\n");
+				fprintf(outfile, "        }\n\n");
+				break;
+			case DATUM_INT:
+			case DATUM_FLOAT:
+			case DATUM_RECORD:
+			case DATUM_BIT_GROUP:
+				fprintf(outfile, "        archive >> m_%s;\n", m_bitPairDatum->m_name);
+				break;
+				break;
+			case DATUM_STRUCT:
+				fprintf(outfile, "        memset((uint8*)&m_%s, 0, sizeof(m_%s));\n", m_bitPairDatum->m_name, m_bitPairDatum->m_name);
+				fprintf(outfile, "        m_%s.Serialize(archive);\n", m_bitPairDatum->m_name);
+				break;
+			case DATUM_FILE:
+			case DATUM_STRING:
+				fprintf(outfile, "        m_%s = NULL;\n", m_bitPairDatum->m_name);
+				fprintf(outfile, "        archive >> m_%s;\n\n", m_bitPairDatum->m_name);
+				break;
+			default:
+				Assert(0);
+				break;
+	}
+}
+
 void Datum::ExportBitPairInitialization(FILE *outfile)
 {
 	Assert(m_type == DATUM_BIT_PAIR);
 	Assert(m_bitPairDatum);
 
-// Added by Martin Gühmann
 	switch(m_bitPairDatum->m_type) {
 		case DATUM_INT:
 		case DATUM_STRINGID:
@@ -488,8 +567,14 @@ void Datum::ExportInitialization(FILE *outfile)
 		fprintf(outfile, "    m_%s = NULL;\n", m_name);
 		fprintf(outfile, "    m_num%s = 0;\n", m_name);
 	} else if(m_maxSize > 0) {
-		fprintf(outfile, "    memset(m_%s, 0, sizeof(m_%s));\n", m_name, m_name);
-		fprintf(outfile, "    m_num%s = 0;\n", m_name);
+		if(m_type == DATUM_STRINGID){
+			fprintf(outfile, "    memset(m_%s, 0, sizeof(m_%s));\n", m_name, m_name);
+			fprintf(outfile, "    m_num%s = 0;\n", m_name);
+		}
+		else{
+			fprintf(outfile, "    memset(m_%s, 0, sizeof(m_%s));\n", m_name, m_name);
+			fprintf(outfile, "    m_num%s = 0;\n", m_name);
+		}
 	} else {
 		switch(m_type) {
 			case DATUM_INT:
@@ -530,41 +615,238 @@ void Datum::ExportInitialization(FILE *outfile)
 	}
 }
 
+void Datum::ExportSerializationStoring(FILE *outfile){
+
+	const char *typestring = "";
+	switch(m_type) {
+		case DATUM_INT:
+		case DATUM_STRINGID:
+			typestring = "sint32";
+			break;
+		case DATUM_BIT:
+			typestring = "uint8";
+			break;
+		case DATUM_FLOAT:
+			typestring = "double";
+			break;
+		case DATUM_STRING:
+		case DATUM_FILE:
+			typestring = "char";
+			break;
+		case DATUM_RECORD:
+			typestring = "sint32";
+			break;
+		case DATUM_STRUCT:
+			typestring = m_subType;
+			break;
+		case DATUM_BIT_GROUP:
+			typestring = "uint32";
+			break;
+	}
+
+	if(m_maxSize == k_MAX_SIZE_VARIABLE) {
+		if(m_type == DATUM_STRINGID){
+			fprintf(outfile, "        // Free stringID not implemented\n", m_name);
+		}
+		else if(m_type == DATUM_STRUCT){
+			fprintf(outfile, "\n        {\n");
+			fprintf(outfile, "            archive << m_num%s;\n", m_name);
+			fprintf(outfile, "            for(sint32 i = 0; i < m_num%s; ++i){\n", m_name);
+			fprintf(outfile, "                m_%s[i].Serialize(archive);\n", m_name);
+			fprintf(outfile, "            }\n");
+			fprintf(outfile, "        }\n\n");
+		}
+		else{
+			fprintf(outfile, "        archive << m_num%s;\n", m_name);
+			fprintf(outfile, "        archive.Store((uint8*)m_%s, m_num%s * sizeof(%s));\n\n", m_name, m_name, typestring);
+		}
+	} else if(m_maxSize > 0) {
+		if(m_type == DATUM_STRINGID){
+			fprintf(outfile, "\n        {\n");
+			fprintf(outfile, "            MBCHAR* tmpString;\n");
+			fprintf(outfile, "            archive << m_num%s;\n", m_name);
+			fprintf(outfile, "            for(sint32 i = 0; i < m_num%s; ++i){\n", m_name);
+			fprintf(outfile, "                tmpString = g_theStringDB->GetIdStr(m_%s[i]);\n", m_name);
+			fprintf(outfile, "                archive << tmpString;\n");
+			fprintf(outfile, "            }\n");
+			fprintf(outfile, "        }\n\n");
+		}
+		else{
+			fprintf(outfile, "        archive << m_num%s;\n", m_name);
+			fprintf(outfile, "        archive.Store((uint8*)&m_%s, sizeof(m_%s));\n", m_name, m_name);
+		}
+	} else {
+		switch(m_type) {
+			case DATUM_STRINGID:
+				fprintf(outfile, "        {\n");
+				fprintf(outfile, "            MBCHAR* tmpString = g_theStringDB->GetIdStr(m_%s);\n", m_name);
+				fprintf(outfile, "            archive << tmpString;\n");
+				fprintf(outfile, "        }\n\n");
+				break;
+			case DATUM_INT:
+			case DATUM_FLOAT:
+			case DATUM_RECORD:
+			case DATUM_BIT_GROUP:
+				fprintf(outfile, "        archive << m_%s;\n", m_name);
+				break;
+				break;
+			case DATUM_STRUCT:
+				fprintf(outfile, "        m_%s.Serialize(archive);\n", m_name);
+				break;
+			case DATUM_FILE:
+			case DATUM_STRING:
+				fprintf(outfile, "        archive << m_%s;\n", m_name);
+				break;
+			case DATUM_BIT:
+				// Does not need to be implemented
+				break;
+			case DATUM_BIT_PAIR:
+				ExportBitPairSerializationStoring(outfile);
+				break;
+			default:
+				Assert(0);
+				break;
+		}
+	}
+}
+
+void Datum::ExportSerializationLoading(FILE *outfile)
+{
+	const char *typestring = "";
+	switch(m_type) {
+		case DATUM_INT:
+		case DATUM_STRINGID:
+			typestring = "sint32";
+			break;
+		case DATUM_BIT:
+			typestring = "uint8";
+			break;
+		case DATUM_FLOAT:
+			typestring = "double";
+			break;
+		case DATUM_STRING:
+		case DATUM_FILE:
+			typestring = "char";
+			break;
+		case DATUM_RECORD:
+			typestring = "sint32";
+			break;
+		case DATUM_STRUCT:
+			typestring = m_subType;
+			break;
+		case DATUM_BIT_GROUP:
+			typestring = "uint32";
+			break;
+	}
+
+	if(m_maxSize == k_MAX_SIZE_VARIABLE) {
+		if(m_type == DATUM_STRINGID){
+			fprintf(outfile, "        // Free stringID not implemented\n", m_name);
+		}
+		else if(m_type == DATUM_STRUCT){
+			fprintf(outfile, "\n        {\n");
+			fprintf(outfile, "            archive >> m_num%s;\n", m_name);
+			fprintf(outfile, "            m_%s = new %s[m_num%s];\n", m_name, typestring, m_name);
+			fprintf(outfile, "            for(sint32 i = 0; i < m_num%s; ++i){\n", m_name);
+			fprintf(outfile, "                m_%s[i].Serialize(archive);\n", m_name);
+			fprintf(outfile, "            }\n");
+			fprintf(outfile, "        }\n\n");
+		}
+		else{
+			fprintf(outfile, "        archive >> m_num%s;\n", m_name);
+			fprintf(outfile, "        archive.Load((uint8*)m_%s, m_num%s * sizeof(%s));\n\n", m_name, m_name, typestring);
+		}
+	} else if(m_maxSize > 0) {
+		if(m_type == DATUM_STRINGID){
+			fprintf(outfile, "\n        {\n");
+			fprintf(outfile, "            MBCHAR* tmpString;\n");
+			fprintf(outfile, "            archive >> m_num%s;\n", m_name);
+			fprintf(outfile, "            for(sint32 i = 0; i < m_num%s; ++i){\n", m_name);
+			fprintf(outfile, "                tmpString = NULL;\n");
+			fprintf(outfile, "                archive << tmpString;\n");
+			fprintf(outfile, "                g_theStringDB->GetStringID(tmpString, m_%s[i]);\n", m_name);
+			fprintf(outfile, "                delete[] tmpString;\n");
+			fprintf(outfile, "            }\n");
+			fprintf(outfile, "        }\n\n");
+		}
+		else{
+			fprintf(outfile, "        archive >> m_num%s;\n", m_name);
+			fprintf(outfile, "        archive.Load((uint8*)&m_%s, sizeof(m_%s));\n", m_name, m_name);
+		}
+	} else {
+		switch(m_type) {
+			case DATUM_STRINGID:
+				fprintf(outfile, "        {\n");
+				fprintf(outfile, "            MBCHAR* tmpString = NULL;\n");
+				fprintf(outfile, "            archive >> tmpString;\n");
+				fprintf(outfile, "            g_theStringDB->GetStringID(tmpString, m_%s);\n", m_name);
+				fprintf(outfile, "            delete[] tmpString;\n");
+				fprintf(outfile, "        }\n\n");
+				break;
+			case DATUM_INT:
+			case DATUM_FLOAT:
+			case DATUM_RECORD:
+			case DATUM_BIT_GROUP:
+				fprintf(outfile, "        archive >> m_%s;\n", m_name);
+				break;
+				break;
+			case DATUM_STRUCT:
+				fprintf(outfile, "        memset((uint8*)&m_%s, 0, sizeof(m_%s));\n", m_name, m_name);
+				fprintf(outfile, "        m_%s.Serialize(archive);\n", m_name);
+				break;
+			case DATUM_FILE:
+			case DATUM_STRING:
+				fprintf(outfile, "        m_%s = NULL;\n", m_name);
+				fprintf(outfile, "        archive >> m_%s;\n\n", m_name);
+				break;
+			case DATUM_BIT:
+				// Does not need to be implemented
+				break;
+			case DATUM_BIT_PAIR:
+				ExportBitPairSerializationLoading(outfile);
+				break;
+			default:
+				Assert(0);
+				break;
+		}
+	}
+}
+
 void Datum::ExportDestructor(FILE *outfile)
 {
 	
 	if (m_maxSize == k_MAX_SIZE_VARIABLE) {
-		fprintf(outfile, "\t// free array %s \n ", m_name);
+		fprintf(outfile, "    // free array %s\n", m_name);
 		switch (m_type) 
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
 		case DATUM_FLOAT:
 		case DATUM_RECORD:
-			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
-			fprintf(outfile, "\tm_%s = NULL; \n", m_name );
-			fprintf(outfile, "\tm_num%s = 0; \n\n", m_name );
+			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
+			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
+			fprintf(outfile, "    m_%s = NULL;\n", m_name );
+			fprintf(outfile, "    m_num%s = 0;\n\n", m_name );
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
-			fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-			fprintf(outfile, "\t\t{ \n" );
-			fprintf(outfile, "\t\t\t// free string elements\n",m_name);
-			fprintf(outfile, "\t\t\tif (m_%s[index]) \n", m_name );
-			fprintf(outfile, "\t\t\t\tdelete m_%s[index]; \n", m_name );
-			fprintf(outfile, "\t\t} \n" );
-			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
-			fprintf(outfile, "\tm_%s = NULL; \n", m_name );
-			fprintf(outfile, "\tm_num%s = 0; \n\n", m_name );
+			fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        // free string elements\n",m_name);
+			fprintf(outfile, "        if (m_%s[index])\n", m_name );
+			fprintf(outfile, "            delete m_%s[index];\n", m_name );
+			fprintf(outfile, "    }\n");
+			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
+			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
+			fprintf(outfile, "    m_%s = NULL;\n", m_name );
+			fprintf(outfile, "    m_num%s = 0;\n\n", m_name );
 			break;
 		case DATUM_STRUCT:
-			fprintf(outfile, "\t\t\t// free struct elements\n",m_name);
-			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
-			fprintf(outfile, "\tm_%s = NULL; \n", m_name );
-			fprintf(outfile, "\tm_num%s = 0; \n\n", m_name );
+			fprintf(outfile, "    // free struct elements\n",m_name);
+			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
+			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
+			fprintf(outfile, "    m_%s = NULL;\n", m_name );
+			fprintf(outfile, "    m_num%s = 0;\n\n", m_name );
 			break;
 		}
 	} else if ( m_type ==  DATUM_BIT_PAIR ) 
@@ -579,18 +861,18 @@ void Datum::ExportDestructor(FILE *outfile)
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
-			fprintf(outfile, "\t// free string attribute %s\n",m_bitPairDatum->m_name);
-			fprintf(outfile, "\tif (m_%s) \n", m_bitPairDatum->m_name );
-			fprintf(outfile, "\t\tdelete m_%s; \n", m_bitPairDatum->m_name );
-			fprintf(outfile, "\tm_%s = NULL; \n\n", m_bitPairDatum->m_name );
+			fprintf(outfile, "    // free string attribute %s\n",m_bitPairDatum->m_name);
+			fprintf(outfile, "    if (m_%s)\n", m_bitPairDatum->m_name );
+			fprintf(outfile, "        delete m_%s;\n", m_bitPairDatum->m_name );
+			fprintf(outfile, "    m_%s = NULL;\n\n", m_bitPairDatum->m_name );
 			break;
 		}
 	} else if ( m_type == DATUM_FILE || m_type == DATUM_STRING )
 	{
-		fprintf(outfile, "\t// free string attribute %s\n",m_name);
-		fprintf(outfile, "\tif (m_%s) \n", m_name );
-		fprintf(outfile, "\t\tdelete m_%s; \n", m_name );
-		fprintf(outfile, "\tm_%s = NULL; \n\n", m_name );
+		fprintf(outfile, "    // free string attribute %s\n",m_name);
+		fprintf(outfile, "    if (m_%s)\n", m_name );
+		fprintf(outfile, "        delete m_%s;\n", m_name );
+		fprintf(outfile, "    m_%s = NULL;\n\n", m_name );
 	}
 }
 
@@ -598,136 +880,136 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 {
 	
 	if (m_maxSize == k_MAX_SIZE_VARIABLE) {
-		fprintf(outfile, "\t// free array %s \n ", m_name);
+		fprintf(outfile, "    // free array %s\n", m_name);
 		switch (m_type) 
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
 		case DATUM_RECORD:
-			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
-			fprintf(outfile, "\t\tm_%s = NULL; \n", m_name );
-			fprintf(outfile, "\t\tm_num%s = 0; \n", m_name );
-			fprintf(outfile, "\t}\n");
+			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
+			fprintf(outfile, "        m_%s = NULL;\n", m_name );
+			fprintf(outfile, "        m_num%s = 0;\n", m_name );
+			fprintf(outfile, "    }\n");
 
-			fprintf(outfile, "\tif (rval.m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tm_%s = new sint32 [rval.m_num%s]; \n", m_name, m_name );
-			fprintf(outfile, "\t\tmemcpy(m_%s, rval.m_%s, sizeof(sint32)*rval.m_num%s); \n\n", m_name, m_name, m_name);
-			fprintf(outfile, "\t} \n" );
-			fprintf(outfile, "\tm_num%s = rval.m_num%s;\n\n",m_name,m_name);
+			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        m_%s = new sint32 [rval.m_num%s];\n", m_name, m_name );
+			fprintf(outfile, "        memcpy(m_%s, rval.m_%s, sizeof(sint32)*rval.m_num%s);\n", m_name, m_name, m_name);
+			fprintf(outfile, "    }\n");
+			fprintf(outfile, "    m_num%s = rval.m_num%s;\n\n",m_name,m_name);
 			break;
 		case DATUM_FLOAT:
-			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n\n", m_name, m_name );
-			fprintf(outfile, "\t\tm_%s = NULL; \n", m_name );
-			fprintf(outfile, "\t\tm_num%s = 0; \n", m_name );
-			fprintf(outfile, "\t}\n");
+			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        delete [m_num%s] m_%s;\n\n", m_name, m_name );
+			fprintf(outfile, "        m_%s = NULL;\n", m_name );
+			fprintf(outfile, "        m_num%s = 0;\n", m_name );
+			fprintf(outfile, "    }\n");
 
-			fprintf(outfile, "\tif (rval.m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t{\n", m_name );
-			fprintf(outfile, "\t\tm_%s = new double [rval.m_num%s]; \n\n", m_name, m_name );
-			fprintf(outfile, "\t\tmemcpy(m_%s, rval.m_%s, sizeof(double)*rval.m_num%s); \n\n", m_name, m_name, m_name);
-			fprintf(outfile, "\t} \n" );
-			fprintf(outfile, "\tm_num%s = rval.m_num%s;\n\n",m_name,m_name);
+			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
+			fprintf(outfile, "    {\n", m_name );
+			fprintf(outfile, "        m_%s = new double [rval.m_num%s];\n\n", m_name, m_name );
+			fprintf(outfile, "        memcpy(m_%s, rval.m_%s, sizeof(double)*rval.m_num%s);\n", m_name, m_name, m_name);
+			fprintf(outfile, "    }\n");
+			fprintf(outfile, "    m_num%s = rval.m_num%s;\n\n",m_name,m_name);
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
-			fprintf(outfile, "\t// free string elements of %s[]\n",m_name);
-			fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-			fprintf(outfile, "\t\t{ \n" );
-			fprintf(outfile, "\t\t\t// free string elements\n",m_name);
-			fprintf(outfile, "\t\t\tdelete m_%s[index]; \n", m_name );
-			fprintf(outfile, "\t\t} \n\n" );
+			fprintf(outfile, "    // free string elements of %s[]\n",m_name);
+			fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+			fprintf(outfile, "        {\n");
+			fprintf(outfile, "            // free string elements\n",m_name);
+			fprintf(outfile, "            delete m_%s[index];\n", m_name );
+			fprintf(outfile, "        }\n\n");
 			
-			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
-			fprintf(outfile, "\t\tm_%s = NULL; \n", m_name );
-			fprintf(outfile, "\t}\n\n");
+			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
+			fprintf(outfile, "        m_%s = NULL;\n", m_name );
+			fprintf(outfile, "    }\n\n");
 
-			fprintf(outfile, "\tif (rval.m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tm_%s = new char* [rval.m_num%s];\n", m_name, m_name );
-			fprintf(outfile, "\t}\n\n");
+			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        m_%s = new char* [rval.m_num%s];\n", m_name, m_name );
+			fprintf(outfile, "    }\n\n");
 
-			fprintf(outfile, "\t// copy string elements of %s[]\n",m_name);
-			fprintf(outfile, "\tfor (index = 0; index < rval.m_num%s; index++) \n", m_name );
-			fprintf(outfile, "\t{ \n" );
-			fprintf(outfile, "\t\t\tm_%s[index] = new char [strlen(rval.m_%s[index])+1]; \n", m_name, m_name);
-			fprintf(outfile, "\t\t\tstrcpy(m_%s[index], rval.m_%s[index]); \n", m_name, m_name);
-			fprintf(outfile, "\t} \n" );
-			fprintf(outfile, "\tm_num%s = rval.m_num%s;\n\n",m_name,m_name);
+			fprintf(outfile, "    // copy string elements of %s[]\n",m_name);
+			fprintf(outfile, "    for (index = 0; index < rval.m_num%s; index++)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "            m_%s[index] = new char [strlen(rval.m_%s[index])+1];\n", m_name, m_name);
+			fprintf(outfile, "            strcpy(m_%s[index], rval.m_%s[index]);\n", m_name, m_name);
+			fprintf(outfile, "    }\n");
+			fprintf(outfile, "    m_num%s = rval.m_num%s;\n\n",m_name,m_name);
 			break;
 
 		case DATUM_STRUCT:
-			fprintf(outfile, "\t// free struct elements of %s[]\n",m_name);
-			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
-			fprintf(outfile, "\t\tm_%s = NULL; \n", m_name );
-			fprintf(outfile, "\t}\n\n");
+			fprintf(outfile, "    // free struct elements of %s[]\n",m_name);
+			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
+			fprintf(outfile, "        m_%s = NULL;\n", m_name );
+			fprintf(outfile, "    }\n\n");
 
-			fprintf(outfile, "\tif (rval.m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tm_%s = new %s [rval.m_num%s];\n", m_name, m_subType, m_name );
-			fprintf(outfile, "\t}\n\n");
+			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        m_%s = new %s [rval.m_num%s];\n", m_name, m_subType, m_name );
+			fprintf(outfile, "    }\n\n");
 
-			fprintf(outfile, "\t// copy struct elements of %s[]\n",m_name);
-			fprintf(outfile, "\tfor (index = 0; index < rval.m_num%s; index++) \n", m_name );
-			fprintf(outfile, "\t\t{ \n" );
-			fprintf(outfile, "\t\t\tm_%s[index] = rval.m_%s[index]; \n", m_name, m_name);
-			fprintf(outfile, "\t} \n" );
-			fprintf(outfile, "\tm_num%s = rval.m_num%s;\n\n",m_name,m_name);
+			fprintf(outfile, "    // copy struct elements of %s[]\n",m_name);
+			fprintf(outfile, "    for (index = 0; index < rval.m_num%s; index++)\n", m_name );
+			fprintf(outfile, "        {\n");
+			fprintf(outfile, "            m_%s[index] = rval.m_%s[index];\n", m_name, m_name);
+			fprintf(outfile, "    }\n");
+			fprintf(outfile, "    m_num%s = rval.m_num%s;\n\n",m_name,m_name);
 
 			break;
 		}
 	}
 	else if ( m_maxSize > 0 )
 	{
-		fprintf(outfile, "\t// copy fixed sized array %s[] \n ", m_name);
+		fprintf(outfile, "    // copy fixed sized array %s[]\n", m_name);
 		switch (m_type) 
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
 		case DATUM_RECORD:
-			fprintf(outfile, "\t\tmemcpy(m_%s, rval.m_%s, sizeof(sint32)*rval.m_num%s); \n\n", m_name, m_name, m_name);
+			fprintf(outfile, "    memcpy(m_%s, rval.m_%s, sizeof(sint32)*rval.m_num%s);\n\n", m_name, m_name, m_name);
 			break;
 		case DATUM_FLOAT:
-			fprintf(outfile, "\t\tmemcpy(m_%s, rval.m_%s, sizeof(double)*rval.m_num%s); \n\n", m_name, m_name, m_name);
+			fprintf(outfile, "    memcpy(m_%s, rval.m_%s, sizeof(double)*rval.m_num%s);\n\n", m_name, m_name, m_name);
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
-			fprintf(outfile, "\t// free string elements of %s[]\n",m_name);
-			fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-			fprintf(outfile, "\t\t{ \n" );
-			fprintf(outfile, "\t\t\t// free string elements\n",m_name);
-			fprintf(outfile, "\t\t\tdelete m_%s[index]; \n", m_name );
-			fprintf(outfile, "\t\t} \n\n" );
+			fprintf(outfile, "    // free string elements of %s[]\n",m_name);
+			fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        // free string elements\n",m_name);
+			fprintf(outfile, "        delete m_%s[index];\n", m_name );
+			fprintf(outfile, "    }\n\n");
 			
-			fprintf(outfile, "\t// copy string elements of %s[]\n",m_name);
-			fprintf(outfile, "\tfor (index = 0; index < rval.m_num%s; index++) \n", m_name );
-			fprintf(outfile, "\t{ \n" );
-			fprintf(outfile, "\t\t\tm_%s[index] = new char [strlen(rval.m_%s[index])+1]; \n", m_name, m_name);
-			fprintf(outfile, "\t\t\tstrcpy(m_%s[index], rval.m_%s[index]); \n", m_name, m_name);
-			fprintf(outfile, "\t} \n" );
+			fprintf(outfile, "    // copy string elements of %s[]\n",m_name);
+			fprintf(outfile, "    for (index = 0; index < rval.m_num%s; index++)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        m_%s[index] = new char [strlen(rval.m_%s[index])+1];\n", m_name, m_name);
+			fprintf(outfile, "        strcpy(m_%s[index], rval.m_%s[index]);\n", m_name, m_name);
+			fprintf(outfile, "    }\n\n");
 			break;
 
 		case DATUM_STRUCT:
-			fprintf(outfile, "\t// copy struct elements of %s[]\n",m_name);
-			fprintf(outfile, "\tfor (index = 0; index < rval.m_num%s; index++) \n", m_name );
-			fprintf(outfile, "\t\t{ \n" );
-			fprintf(outfile, "\t\t\tm_%s[index] = rval.m_%s[index]; \n", m_name, m_name);
-			fprintf(outfile, "\t} \n" );
+			fprintf(outfile, "    // copy struct elements of %s[]\n",m_name);
+			fprintf(outfile, "    for (index = 0; index < rval.m_num%s; index++)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        m_%s[index] = rval.m_%s[index];\n", m_name, m_name);
+			fprintf(outfile, "    }\n\n");
 
 			break;
 		}
 	} 
 	else if ( m_type ==  DATUM_BIT_PAIR ) 
 	{
-		fprintf(outfile, "\tm_flags%d = rval.m_flags%d; \n",
+		fprintf(outfile, "    m_flags%d = rval.m_flags%d;\n",
 			m_bitNum / 32, m_bitNum / 32);
 		switch(m_bitPairDatum->m_type) 
 		{
@@ -736,32 +1018,32 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 		case DATUM_FLOAT:
 		case DATUM_RECORD:
 		case DATUM_STRUCT:
-			fprintf(outfile, "\t\tm_%s = rval.m_%s; \n\n", 
+			fprintf(outfile, "    m_%s = rval.m_%s;\n\n", 
 				m_bitPairDatum->m_name, m_bitPairDatum->m_name );
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
-			fprintf(outfile, "\t\t{ \n" );
-			fprintf(outfile, "\t\t\tdelete m_%s; \n", m_bitPairDatum->m_name );
-			fprintf(outfile, "\t\t\tm_%s = new char[strlen(rval.m_%s)+1]; \n", 
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        delete m_%s;\n", m_bitPairDatum->m_name );
+			fprintf(outfile, "        m_%s = new char[strlen(rval.m_%s)+1];\n", 
 				m_bitPairDatum->m_name, m_bitPairDatum->m_name );
-			fprintf(outfile, "\t\t\tstrcpy(m_%s, rval.m_%s); \n",
+			fprintf(outfile, "        strcpy(m_%s, rval.m_%s);\n",
 				m_bitPairDatum->m_name, m_bitPairDatum->m_name );
-			fprintf(outfile, "\t\t} \n\n" );
+			fprintf(outfile, "    }\n\n");
 			break;
 		}
 	} else if ( m_type == DATUM_FILE || m_type == DATUM_STRING )
 	{
-			fprintf(outfile, "\tif (m_%s) \n", m_name );
-			fprintf(outfile, "\t{ \n");
-			fprintf(outfile, "\tdelete m_%s; \n\n", m_name );
-			fprintf(outfile, "\t}\n\n");
+			fprintf(outfile, "    if (m_%s)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "    delete m_%s;\n\n", m_name );
+			fprintf(outfile, "    }\n\n");
 
-			fprintf(outfile, "\tif (rval.m_%s) \n", m_name );
-			fprintf(outfile, "\t{ \n");
-			fprintf(outfile, "\t\tm_%s = new char [strlen(rval.m_%s)+1]; \n", m_name, m_name);
-			fprintf(outfile, "\t\tstrcpy(m_%s, rval.m_%s);\n", m_name, m_name);
-			fprintf(outfile, "\t}\n\n");
+			fprintf(outfile, "    if (rval.m_%s)\n", m_name );
+			fprintf(outfile, "    {\n");
+			fprintf(outfile, "        m_%s = new char [strlen(rval.m_%s)+1];\n", m_name, m_name);
+			fprintf(outfile, "        strcpy(m_%s, rval.m_%s);\n", m_name, m_name);
+			fprintf(outfile, "    }\n\n");
 	}
 	else {
 		switch(m_type) 
@@ -772,10 +1054,10 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 		case DATUM_RECORD:
 		case DATUM_STRUCT:
 		case DATUM_BIT_GROUP:
-			fprintf(outfile, "\tm_%s = rval.m_%s; \n\n", m_name, m_name);
+			fprintf(outfile, "    m_%s = rval.m_%s;\n\n", m_name, m_name);
 			break;
 		case DATUM_BIT:
-			fprintf(outfile, "\tm_flags%d = rval.m_flags%d; \n",m_bitNum / 32, m_bitNum / 32);
+			fprintf(outfile, "    m_flags%d = rval.m_flags%d;\n\n",m_bitNum / 32, m_bitNum / 32);
 			break;
 		default:
 			Assert(0);
@@ -840,129 +1122,129 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
 				{
-					fprintf(outfile, "\t// replace array m_%s \n ", m_name);
-					fprintf(outfile, "\tif (m_num%s != rval.m_num%s)\n ", m_name, m_name);
-					fprintf(outfile, "\t{ \n" );
-					fprintf(outfile, "\t\tdelete m_%s;\n ", m_name, m_name);
-					fprintf(outfile, "\t\tm_%s = new sint32 [rval.m_num%s];\n ", m_name, m_name);
-					fprintf(outfile, "\t} \n\n" );
+					fprintf(outfile, "    // replace array m_%s\n", m_name);
+					fprintf(outfile, "    if (m_num%s != rval.m_num%s)\n", m_name, m_name);
+					fprintf(outfile, "    {\n");
+					fprintf(outfile, "        delete m_%s;\n", m_name, m_name);
+					fprintf(outfile, "        m_%s = new sint32 [rval.m_num%s];\n", m_name, m_name);
+					fprintf(outfile, "    }\n\n");
 				}
-				fprintf(outfile, "\t\tm_num%s = rval.m_num%s;\n ", m_name, m_name);
-				fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-				fprintf(outfile, "\t{ \n" );
-				fprintf(outfile, "\t\t// replace atomic element %s\n", m_name);
-				fprintf(outfile, "\t\tm_%s[index] = rval.m_%s[index]; \n", m_name, m_name);
-				fprintf(outfile, "\t} \n\n" );
+				fprintf(outfile, "        m_num%s = rval.m_num%s;\n", m_name, m_name);
+				fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+				fprintf(outfile, "    {\n");
+				fprintf(outfile, "        // replace atomic element %s\n", m_name);
+				fprintf(outfile, "        m_%s[index] = rval.m_%s[index];\n", m_name, m_name);
+				fprintf(outfile, "    }\n\n");
 				break;
 			case DATUM_FLOAT:
 				
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
 				{
-					fprintf(outfile, "\t// replace array m_%s \n ", m_name);
-					fprintf(outfile, "\tif (m_num%s != rval.m_num%s)\n ", m_name, m_name);
-					fprintf(outfile, "\t{ \n" );
-					fprintf(outfile, "\t\tdelete m_%s;\n ", m_name, m_name);
-					fprintf(outfile, "\t\tm_%s = new double [rval.m_num%s];\n ", m_name, m_name);
-					fprintf(outfile, "\t} \n\n" );
+					fprintf(outfile, "    // replace array m_%s\n", m_name);
+					fprintf(outfile, "    if (m_num%s != rval.m_num%s)\n", m_name, m_name);
+					fprintf(outfile, "    {\n");
+					fprintf(outfile, "        delete m_%s;\n", m_name, m_name);
+					fprintf(outfile, "        m_%s = new double [rval.m_num%s];\n", m_name, m_name);
+					fprintf(outfile, "    }\n\n");
 				}
-				fprintf(outfile, "\t\tm_num%s = rval.m_num%s;\n ", m_name, m_name);
-				fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-				fprintf(outfile, "\t{ \n" );
-				fprintf(outfile, "\t\t// replace atomic element %s\n", m_name);
-				fprintf(outfile, "\t\tm_%s[index] = rval.m_%s[index]; \n", m_name, m_name);
-				fprintf(outfile, "\t} \n\n" );
+				fprintf(outfile, "        m_num%s = rval.m_num%s;\n", m_name, m_name);
+				fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+				fprintf(outfile, "    {\n");
+				fprintf(outfile, "        // replace atomic element %s\n", m_name);
+				fprintf(outfile, "        m_%s[index] = rval.m_%s[index];\n", m_name, m_name);
+				fprintf(outfile, "    }\n\n");
 				break;
 			case DATUM_RECORD:
 				
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
 				{
-					fprintf(outfile, "\t// resize m_%s if necessary\n",m_name);
-					fprintf(outfile, "\tif (rval.m_num%s > m_num%s)\n ", m_name, m_name);
-					fprintf(outfile, "\t{ \n" );
-					fprintf(outfile, "\t\tdelete m_%s;\n ", m_name);
-					fprintf(outfile, "\t\tm_%s = NULL;\n ", m_name);
-					fprintf(outfile, "\t\tif (rval.m_num%s > 0)\n ", m_name);
-					fprintf(outfile, "\t\t\tm_%s = new sint32 [rval.m_num%s]; \n", m_name, m_name );
-					fprintf(outfile, "\t\tm_num%s = rval.m_num%s;\n ", m_name, m_name);
-					fprintf(outfile, "\t} \n\n" );
+					fprintf(outfile, "    // resize m_%s if necessary\n",m_name);
+					fprintf(outfile, "    if (rval.m_num%s > m_num%s)\n", m_name, m_name);
+					fprintf(outfile, "    {\n");
+					fprintf(outfile, "        delete m_%s;\n", m_name);
+					fprintf(outfile, "        m_%s = NULL;\n", m_name);
+					fprintf(outfile, "        if (rval.m_num%s > 0)\n", m_name);
+					fprintf(outfile, "            m_%s = new sint32 [rval.m_num%s];\n", m_name, m_name );
+					fprintf(outfile, "        m_num%s = rval.m_num%s;\n", m_name, m_name);
+					fprintf(outfile, "    }\n\n");
 				}
-				fprintf(outfile, "\t// copy values of rval.m_%s to m_%s\n",m_name,m_name);
-				fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-				fprintf(outfile, "\t{ \n ");
-				fprintf(outfile, "\t\tif (index < rval.m_num%s)\n ", m_name);
-				fprintf(outfile, "\t\t\tm_%s[index] = rval.m_%s[index];\n", m_name, m_name );
-				fprintf(outfile, "\t} \n ");
+				fprintf(outfile, "    // copy values of rval.m_%s to m_%s\n",m_name,m_name);
+				fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+				fprintf(outfile, "    {\n");
+				fprintf(outfile, "        if (index < rval.m_num%s)\n", m_name);
+				fprintf(outfile, "            m_%s[index] = rval.m_%s[index];\n", m_name, m_name );
+				fprintf(outfile, "    }\n");
 				break;
 			case DATUM_FILE:
 			case DATUM_STRING:
-				fprintf(outfile, "\t// replace string elements of m_%s\n",m_name);
-				fprintf(outfile, "\t// first remove old elements of m_%s\n",m_name);
-				fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-				fprintf(outfile, "\t{ \n" );
-				fprintf(outfile, "\t\tif (m_%s[index])\n ", m_name);
-				fprintf(outfile, "\t\t\tdelete m_%s[index];\n ", m_name);
-				fprintf(outfile, "\t} \n" );
+				fprintf(outfile, "    // replace string elements of m_%s\n",m_name);
+				fprintf(outfile, "    // first remove old elements of m_%s\n",m_name);
+				fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+				fprintf(outfile, "    {\n");
+				fprintf(outfile, "        if (m_%s[index])\n", m_name);
+				fprintf(outfile, "            delete m_%s[index];\n", m_name);
+				fprintf(outfile, "    }\n");
 				
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
 				{
-					fprintf(outfile, "\tdelete m_%s;\n ", m_name);
-					fprintf(outfile, "\tm_%s = new char * [m_num%s];\n ", m_name, m_name);
+					fprintf(outfile, "    delete m_%s;\n", m_name);
+					fprintf(outfile, "    m_%s = new char * [m_num%s];\n", m_name, m_name);
 				}
-				fprintf(outfile, "\t// copy values of rval.m_%s to m_%s\n",m_name,m_name);
-				fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-				fprintf(outfile, "\t{ \n ");
-				fprintf(outfile, "\t\tm_%s[index] = new char[strlen(rval.m_%s[index])+1]; \n", m_name, m_name );
-				fprintf(outfile, "\t\tstrcpy(m_%s[index], rval.m_%s[index]); \n", m_name, m_name );
-				fprintf(outfile, "\t} \n ");
+				fprintf(outfile, "    // copy values of rval.m_%s to m_%s\n",m_name,m_name);
+				fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+				fprintf(outfile, "    {\n");
+				fprintf(outfile, "        m_%s[index] = new char[strlen(rval.m_%s[index])+1];\n", m_name, m_name );
+				fprintf(outfile, "        strcpy(m_%s[index], rval.m_%s[index]);\n", m_name, m_name );
+				fprintf(outfile, "    }\n");
 				break;
 			case DATUM_STRUCT:
-				fprintf(outfile, "\t// replace struct elements of m_%s\n",m_name);
-				fprintf(outfile, "\tfor (index = 0; index < m_num%s; index++) \n", m_name );
-				fprintf(outfile, "\t{ \n" );
-				fprintf(outfile, "\t\t// find matching struct element\n" );
+				fprintf(outfile, "    // replace struct elements of m_%s\n",m_name);
+				fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+				fprintf(outfile, "    {\n");
+				fprintf(outfile, "        // find matching struct element\n" );
 				
-				fprintf(outfile, "\t\tfor (int obj_index = 0; obj_index < rval.m_num%s; obj_index++) \n", m_name );
-				fprintf(outfile, "\t\t\tif (m_%s[index] == rval.m_%s[obj_index]) {\n", m_name, m_name );
-				fprintf(outfile, "\t\t\t\t// replace struct element \n");
-				fprintf(outfile, "\t\t\t\tm_%s[index] = rval.m_%s[obj_index]; \n", m_name, m_name);
+				fprintf(outfile, "        for (int obj_index = 0; obj_index < rval.m_num%s; obj_index++)\n", m_name );
+				fprintf(outfile, "            if (m_%s[index] == rval.m_%s[obj_index]){\n", m_name, m_name );
+				fprintf(outfile, "                // replace struct element\n");
+				fprintf(outfile, "                m_%s[index] = rval.m_%s[obj_index];\n", m_name, m_name);
 				
-				fprintf(outfile, "\t\t\t\t}\n");
+				fprintf(outfile, "                }\n");
 				
 				
-				fprintf(outfile, "\t} \n" );
+				fprintf(outfile, "    }\n");
 			}
 
-	} else if ( m_type ==  DATUM_BIT_PAIR ) 
+	} else if ( m_type ==  DATUM_BIT_PAIR )
 		{
-			fprintf(outfile, "\t// only replace values that have been set\n");
-			fprintf(outfile, "\tif((rval.m_flags%d & k_%s_%s_Bit) != 0) \n",
+			fprintf(outfile, "    // only replace values that have been set\n");
+			fprintf(outfile, "    if((rval.m_flags%d & k_%s_%s_Bit) != 0)\n",
 					m_bitNum / 32, recordName, m_name);
-			switch(m_bitPairDatum->m_type) 
+			switch(m_bitPairDatum->m_type)
 				{
 				case DATUM_INT:
 				case DATUM_STRINGID:
 				case DATUM_FLOAT:
 				case DATUM_RECORD:
 				case DATUM_STRUCT:
-					fprintf(outfile, "\t\tm_%s = rval.m_%s; \n\n", 
+					fprintf(outfile, "    m_%s = rval.m_%s;\n\n", 
 							m_bitPairDatum->m_name, m_bitPairDatum->m_name );
 					break;
 				case DATUM_FILE:
 				case DATUM_STRING:
-					fprintf(outfile, "\t\t{ \n" );
-					fprintf(outfile, "\t\t\tdelete m_%s; \n", m_bitPairDatum->m_name );
-					fprintf(outfile, "\t\t\tm_%s = new char[strlen(rval.m_%s)+1]; \n", 
-							m_bitPairDatum->m_name, m_bitPairDatum->m_name );
-					fprintf(outfile, "\t\t\tstrcpy(m_%s, rval.m_%s); \n",
-							m_bitPairDatum->m_name, m_bitPairDatum->m_name );
-					fprintf(outfile, "\t\t} \n\n" );
+					fprintf(outfile, "    {\n");
+					fprintf(outfile, "        delete m_%s;\n", m_bitPairDatum->m_name);
+					fprintf(outfile, "        m_%s = new char[strlen(rval.m_%s)+1];\n", 
+							m_bitPairDatum->m_name, m_bitPairDatum->m_name);
+					fprintf(outfile, "        strcpy(m_%s, rval.m_%s);\n",
+							m_bitPairDatum->m_name, m_bitPairDatum->m_name);
+					fprintf(outfile, "    }\n\n");
 					break;
 				}
-	} else if ( m_type == DATUM_BIT_GROUP )	{
-		fprintf(outfile, "\t// only replace values that have been set\n");
-		fprintf(outfile, "\tif(rval.m_%s != 0x0) \n", m_name);
+	} else if ( m_type == DATUM_BIT_GROUP ) {
+		fprintf(outfile, "    // only replace values that have been set\n");
+		fprintf(outfile, "    if(rval.m_%s != 0x0)\n", m_name);
 
 		
-		fprintf(outfile, "\t\tm_%s = rval.m_%s; \n\n", m_name, m_name);
+		fprintf(outfile, "        m_%s = rval.m_%s;\n\n", m_name, m_name);
 	}
 }

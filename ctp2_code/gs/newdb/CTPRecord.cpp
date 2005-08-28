@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Database Record template class
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "CTPDatabase.h"
@@ -8,7 +37,6 @@
 
 bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElements)
 {
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Int) {
 		DBERROR(("Expected integer"));
@@ -31,7 +59,6 @@ bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElement
 
 bool CTPRecord::ParseFloatInArray(DBLexer *lex, double **array, sint32 *numElements)
 {
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Int && tok != k_Token_Float) {
 		DBERROR(("Expected number"));
@@ -54,7 +81,6 @@ bool CTPRecord::ParseFloatInArray(DBLexer *lex, double **array, sint32 *numEleme
 
 bool CTPRecord::ParseFileInArray(DBLexer *lex, char ***array, sint32 *numElements)
 {
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_String) {
 		DBERROR(("Expected filename"));
@@ -79,7 +105,6 @@ bool CTPRecord::ParseFileInArray(DBLexer *lex, char ***array, sint32 *numElement
 
 bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 **array, sint32 *numElements)
 {
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Name) {
 		DBERROR(("Expected stringid"));
@@ -108,7 +133,6 @@ bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 **array, sint32 *numEl
 
 bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize)
 {
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Int) {
 		DBERROR(("Expected integer"));
@@ -128,7 +152,6 @@ bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 *array, sint32 *numElements
 
 bool CTPRecord::ParseFloatInArray(DBLexer *lex, double *array, sint32 *numElements, sint32 maxSize)
 {
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Int && tok != k_Token_Float) {
 		DBERROR(("Expected number"));
@@ -148,7 +171,6 @@ bool CTPRecord::ParseFloatInArray(DBLexer *lex, double *array, sint32 *numElemen
 
 bool CTPRecord::ParseFileInArray(DBLexer *lex, char **array, sint32 *numElements, sint32 maxSize)
 {
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_String) {
 		DBERROR(("Expected quoted string"));
@@ -169,7 +191,6 @@ bool CTPRecord::ParseFileInArray(DBLexer *lex, char **array, sint32 *numElements
 
 bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize)
 {
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Name) {
 		DBERROR(("Expected string id"));

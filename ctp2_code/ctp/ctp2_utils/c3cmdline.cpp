@@ -18,8 +18,15 @@
 //
 // Compiler flags
 //
+// _DEBUG
+// - Generates debug information when set.
+//
 // CTP1_TRADE
 // - Creates an executable with trade like in CTP1. Currently broken.
+//
+// _PLAYTEST
+// DUMP_ASTAR
+// _DEBUG_MEMORY
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +34,7 @@
 //
 // - Removed non-standard include file <iostream.h>.
 // - Standardised min/max usage.
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -35,7 +43,7 @@
 #include "c3cmdline.h"
 
 
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 #include "ConstDB.h"
 
 #include "c3ui.h"
@@ -150,7 +158,6 @@ extern MBCHAR g_diplomacy_db_filename[_MAX_PATH];
 extern MBCHAR g_advance_list_db_filename[_MAX_PATH];
 
 extern ConstDB              *g_theConstDB;
-extern CivilisationDatabase *g_theCivilisationDB;
 
 
 extern Background           *g_background;
@@ -6153,7 +6160,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 	if (!strcmp(argv[1], "wonder")) {
 		
 		delete g_theWonderDB;
-        g_theWonderDB = new CTPDatabase<WonderRecord>;
+		g_theWonderDB = new CTPDatabase<WonderRecord>;
 		
 		if (g_theWonderDB) {
 			if(!g_theWonderDB->Parse(C3DIR_GAMEDATA, g_wonder_filename)) {
@@ -6167,9 +6174,13 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 	if (!strcmp(argv[1], "civ")) {
 		
 		delete g_theCivilisationDB;
-		g_theCivilisationDB = new CivilisationDatabase();
-		if (!g_theCivilisationDB->Initialise(g_civilisation_filename, C3DIR_GAMEDATA)) {
-			Assert (FALSE);
+		g_theCivilisationDB = new CTPDatabase<CivilisationRecord>;
+		if (g_theCivilisationDB) {
+			if(!g_theCivilisationDB->Parse(C3DIR_GAMEDATA, g_civilisation_filename)) {
+				Assert(FALSE);
+				return;
+			}
+		} else {
 			return;
 		}
 	} else

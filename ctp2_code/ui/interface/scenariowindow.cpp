@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Scenario selection window
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed refferences to the civilisation database. (Aug 21st 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -21,8 +50,6 @@
 
 
 #include "StrDB.h"
-#include "CivilisationDB.h"
-#include "CivilisationPool.h"
 
 #include "civscenarios.h"
 
@@ -36,16 +63,15 @@
 
 #include "civapp.h"
 
-extern StringDB						*g_theStringDB;
-extern CivilisationDatabase			*g_theCivilisationDB;
-extern CivScenarios					*g_civScenarios;
+extern StringDB                     *g_theStringDB;
+extern CivScenarios                 *g_civScenarios;
 extern C3UI                         *g_c3ui;
-extern sint32 g_startInfoType;
-extern CivApp *g_civApp;
+extern sint32                       g_startInfoType;
+extern CivApp                       *g_civApp;
 
-ScenarioWindow *s_ScenarioWindow = NULL;
+ScenarioWindow                      *s_ScenarioWindow = NULL;
 
-extern MBCHAR				g_scenarioName[k_SCENARIO_NAME_MAX];
+extern MBCHAR                       g_scenarioName[k_SCENARIO_NAME_MAX];
 
 
 

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic Built In 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -44,6 +47,7 @@
 //   Note: leaderperonality should be leaderpersonality but as it is used
 //   in the text files I don't fix it.
 // - Decreased number of Slic errors for mods.
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -62,7 +66,7 @@
 #include "UnitRecord.h"
 #include "TerrImprove.h"
 #include "Civilisation.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 #include "StrDB.h"
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
@@ -952,7 +956,7 @@ class PlayerSymbol_CivNamePlural : public SlicStructMemberData {
 		if(res) {
 			Assert(pl >= 0 && pl < k_MAX_PLAYERS && g_player[pl]);
 			if(pl >= 0 && pl < k_MAX_PLAYERS && g_player[pl]) {
-				return g_theCivilisationDB->GetPluralCivName((*(g_player[pl]->m_civilisation))->GetCivilisation());
+				return g_theCivilisationDB->Get((*(g_player[pl]->m_civilisation))->GetCivilisation())->GetPluralCivName();
 			} else {
 				return -1;
 			}
@@ -978,7 +982,7 @@ class PlayerSymbol_CivNameSingular : public SlicStructMemberData {
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
 		if(res && g_player[pl]) {
-			return g_theCivilisationDB->GetSingularCivName((*(g_player[pl]->m_civilisation))->GetCivilisation());
+			return g_theCivilisationDB->Get((*(g_player[pl]->m_civilisation))->GetCivilisation())->GetSingularCivName();
 		}
 		return -1;
 	}
@@ -1006,9 +1010,9 @@ class PlayerSymbol_LeaderName : public SlicStructMemberData {
 			
 			
 			if(g_player[pl]->m_civilisation->GetGender() == GENDER_MALE) {
-				id = g_theCivilisationDB->GetLeaderName((*(g_player[pl]->m_civilisation))->GetCivilisation());
+				id = g_theCivilisationDB->Get((*(g_player[pl]->m_civilisation))->GetCivilisation())->GetLeaderNameMale();
 			} else {
-				id = g_theCivilisationDB->GetLeaderNameFemale((*(g_player[pl]->m_civilisation))->GetCivilisation());
+				id = g_theCivilisationDB->Get((*(g_player[pl]->m_civilisation))->GetCivilisation())->GetLeaderNameFemale();
 			}
 			if(id >= 0 &&
 			   strcmp(g_player[pl]->GetLeaderName(),
@@ -1037,7 +1041,7 @@ class PlayerSymbol_CountryName : public SlicStructMemberData {
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
 		if(res) {
-			return g_theCivilisationDB->GetCountryName((*(g_player[pl]->m_civilisation))->GetCivilisation());
+			return g_theCivilisationDB->Get((*(g_player[pl]->m_civilisation))->GetCivilisation())->GetCountryName();
 		}
 		return -1;
 	}

@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The victory window plays the win/lose video
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed refferences to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -98,8 +117,6 @@
 
 #include "Civilisation.h"
 #include "CivilisationData.h"
-#include "CivilisationDB.h"
-#include "CivilisationPool.h"
 
 #include "c3_listitem.h"
 #include "resource.h"
@@ -112,49 +129,49 @@
 #include "IconRecord.h"
 
 
-extern sint32		g_ScreenWidth;
-extern sint32		g_ScreenHeight;
-extern C3UI			*g_c3ui;
-extern ColorSet		*g_colorSet;
-extern CivPaths		*g_civPaths;
-extern TopTen		*g_theTopTen;
-extern CivApp       *g_civApp;
+extern sint32                   g_ScreenWidth;
+extern sint32                   g_ScreenHeight;
+extern C3UI                     *g_c3ui;
+extern ColorSet                 *g_colorSet;
+extern CivPaths                 *g_civPaths;
+extern TopTen                   *g_theTopTen;
+extern CivApp                   *g_civApp;
 
 
 extern PointerList<Player>      *g_deadPlayer;
 
-extern sint32					g_modalWindow;
+extern sint32                   g_modalWindow;
 
 #include "network.h"
 
 
-VictoryWindow			*g_victoryWindow = NULL;
+VictoryWindow                   *g_victoryWindow = NULL;
 
 
-static ctp2_Button			*s_okButton;
-static ctp2_Static			**s_staticControls;
-static aui_StringTable		*s_stringTable;
+static ctp2_Button              *s_okButton;
+static ctp2_Static              **s_staticControls;
+static aui_StringTable          *s_stringTable;
 
-static HighScoreWindowPopup	*s_highScoreWin;
-
-
-
+static HighScoreWindowPopup     *s_highScoreWin;
 
 
 
-static LineGraph			*s_graph;
-static ctp2_ListBox			*s_graphList;
-static ctp2_Button			*s_lineOrZeroSumButton;
-static BOOL					s_lineGraph;
-static ctp2_ListBox			*s_scoreList;
-
-static ctp2_ListBox			*s_wonderList;
-
-static ctp2_Static			*s_wonderBlock;
 
 
 
-static ctp2_Static			**s_wonderIcons;
+static LineGraph                *s_graph;
+static ctp2_ListBox             *s_graphList;
+static ctp2_Button              *s_lineOrZeroSumButton;
+static BOOL                     s_lineGraph;
+static ctp2_ListBox             *s_scoreList;
+
+static ctp2_ListBox             *s_wonderList;
+
+static ctp2_Static              *s_wonderBlock;
+
+
+
+static ctp2_Static              **s_wonderIcons;
 
 
 

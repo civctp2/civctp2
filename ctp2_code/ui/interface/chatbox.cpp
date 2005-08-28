@@ -1,9 +1,9 @@
-
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : user interface for chatbox
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,15 +17,17 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - added toggles for army and cell text graphic options. PFT, 07 Mar 05
-//
+// - Added toggles for army and cell text graphic options. PFT, 07 Mar 05
 //
 //----------------------------------------------------------------------------
+
 #include "c3.h"
 
 #include "aui_surface.h"

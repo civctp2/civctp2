@@ -1,10 +1,42 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Checks weather the databases match in MP.
+//                Needs to be redone just checks 3 databases.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Increased k_MAX_DBS to reflect the actual number of databases to check
+//
+//----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
 #ifndef __NET_CRC_H__
 #define __NET_CRC_H__
 #include "net_packet.h"
 
-#define k_MAX_DBS 15
+#define k_MAX_DBS 39
 
 class NetCRC : public Packetizer
 {

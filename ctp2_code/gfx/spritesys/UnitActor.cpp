@@ -18,6 +18,9 @@
 //
 // Compiler flags
 //
+// _DEBUG
+// - Generates debug information when set.
+//
 // _DEBUG_MEMORY
 // - Generates debug information when set.
 //
@@ -37,6 +40,7 @@
 //   by Martin Gühmann.
 // - Prevented crashes with invalid (i.e. killed or destroyed) units.
 // - PFT 29 mar 05, show # turns until city next grows a pop.
+// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -85,7 +89,6 @@
 #include "soundmanager.h"
 
 #include "Civilisation.h"
-#include "CivilisationDB.h"
 #include "player.h"
 
 #include "debugmemory.h"
@@ -120,7 +123,6 @@ extern SpriteStateDB	*g_theCitySpriteStateDB;
 extern TurnCount		*g_turn;
 extern SoundManager		*g_soundManager;
 
-extern CivilisationDatabase	*g_theCivilisationDB;
 extern Player			**g_player;
 
 extern BOOL				g_unitCompletedAction;

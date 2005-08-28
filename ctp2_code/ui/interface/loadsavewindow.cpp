@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Save and load game window
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _JAPANESE
+// - Adds special modifications for a japanese version of the executable
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Repaired memory leak.
+// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -51,8 +56,6 @@
 #include "c3textfield.h"
 
 #include "StrDB.h"
-#include "CivilisationDB.h"
-#include "CivilisationPool.h"
 #include "profileDB.h"
 #include "TurnCnt.h"
 
@@ -72,7 +75,6 @@
 
 extern C3UI							*g_c3ui;
 extern StringDB						*g_theStringDB;
-extern CivilisationDatabase			*g_theCivilisationDB;
 extern ProfileDB					*g_theProfileDB;
 extern TurnCount					*g_turn;
 

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The Slic Engine
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -45,6 +48,7 @@
 // - Memory leaks repaired.
 // - Redesigned to prevent memory leaks and crashes.
 // - Reuse SlicSegment pool between SlicEngine sessions.
+// - Added slic civilisation database support
 //
 //----------------------------------------------------------------------------
 
@@ -98,7 +102,7 @@ extern TutorialWin *g_tutorialWin;
 #include "SlicBuiltin.h"
 #include "SlicBuiltinEnum.h"
 #include "SlicArray.h"
-										  
+
 #include "sourcelist.h"
 #include "SlicFrame.h"
 
@@ -138,6 +142,7 @@ extern TutorialWin *g_tutorialWin;
 #include "UnitBuildListRecord.h"
 #include "WonderBuildListRecord.h"
 #include "WonderMovieRecord.h"
+#include "CivilisationRecord.h"
 
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
@@ -184,7 +189,7 @@ SlicEngine::SlicEngine()
 	m_functionHash          (NULL),
 	m_uiHash                (new StringHash<SlicUITrigger> (k_SEGMENT_HASH_SIZE)),
 	m_dbHash                (NULL),
-    m_symTab                (new SlicSymTab(0)),
+	m_symTab                (new SlicSymTab(0)),
 	m_context               (NULL),
 	m_disabledClasses       (new SimpleDynamicArray<sint32>),
 	m_uiExecuteObjects      (new PointerList<SlicObject>),
@@ -203,38 +208,38 @@ SlicEngine::SlicEngine()
 	m_contextStack          (new PointerList<SlicObject>),
 	m_breakRequested        (false)
 {
-    size_t i;
+	size_t i;
 	for (i = 0; i < TRIGGER_LIST_MAX; ++i) 
-    {
+	{
 		m_triggerLists[i] = new PointerList<SlicSegment>;
 	}
 
-    for (i = 0; i < k_MAX_PLAYERS; ++i)
-    {
-        m_records[i] = NULL;
-    }
+	for (i = 0; i < k_MAX_PLAYERS; ++i)
+	{
+		m_records[i] = NULL;
+	}
 
-    std::fill(m_timer, m_timer + k_NUM_TIMERS, NOT_IN_USE);
-    std::fill(m_triggerKey, m_triggerKey + k_MAX_TRIGGER_KEYS, KEY_UNDEFINED);
-    std::fill(m_builtins, m_builtins + SLIC_BUILTIN_MAX, (SlicSymbolData const *) NULL);
-    std::fill(m_builtin_desc, m_builtin_desc + SLIC_BUILTIN_MAX, (SlicStructDescription *) NULL);
-    std::fill(m_researchText, m_researchText + 256, 0);
-    std::fill(m_modFunc, m_modFunc + mod_MAX, (SlicModFunc *) NULL); 
+	std::fill(m_timer, m_timer + k_NUM_TIMERS, NOT_IN_USE);
+	std::fill(m_triggerKey, m_triggerKey + k_MAX_TRIGGER_KEYS, KEY_UNDEFINED);
+	std::fill(m_builtins, m_builtins + SLIC_BUILTIN_MAX, (SlicSymbolData const *) NULL);
+	std::fill(m_builtin_desc, m_builtin_desc + SLIC_BUILTIN_MAX, (SlicStructDescription *) NULL);
+	std::fill(m_researchText, m_researchText + 256, 0);
+	std::fill(m_modFunc, m_modFunc + mod_MAX, (SlicModFunc *) NULL); 
 
 	AddStructs(true);
-    AddBuiltinFunctions();
+	AddBuiltinFunctions();
 	AddDatabases();
 }
 
 SlicEngine::SlicEngine(CivArchive &archive)
-:   m_tutorialActive        (FALSE),
+:	m_tutorialActive        (FALSE),
 	m_tutorialPlayer        (SINGLE_PLAYER_DEFAULT),
 	m_currentMessage        (new Message(0)),
 	m_segmentHash           (new SlicSegmentHash(k_SEGMENT_HASH_SIZE)),
 	m_functionHash          (NULL),
 	m_uiHash                (new StringHash<SlicUITrigger>(k_SEGMENT_HASH_SIZE)),
 	m_dbHash                (NULL),
-    m_symTab                (new SlicSymTab(0)),
+	m_symTab                (new SlicSymTab(0)),
 	m_context               (NULL),
 	m_disabledClasses       (new SimpleDynamicArray<sint32>),
 	m_uiExecuteObjects      (new PointerList<SlicObject>),
@@ -253,9 +258,9 @@ SlicEngine::SlicEngine(CivArchive &archive)
 	m_contextStack          (new PointerList<SlicObject>),
 	m_breakRequested        (false)
 {
-    size_t i;
+	size_t i;
 	for (i = 0; i < TRIGGER_LIST_MAX; ++i) 
-    {
+	{
 		m_triggerLists[i] = new PointerList<SlicSegment>;
 	}
 
@@ -3021,11 +3026,16 @@ void SlicEngine::AddDatabases()
 																  g_WonderMovieRecord_Accessors,
 																  g_WonderMovie_Tokens,
 																  k_Num_WonderMovieRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<CivilisationRecord, 
+									CivilisationRecordAccessorInfo>("CivilisationDB", g_theCivilisationDB,
+																  g_CivilisationRecord_Accessors,
+																  g_Civilisation_Tokens,
+																  k_Num_CivilisationRecord_Tokens));
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
 {
-    return m_dbHash ? m_dbHash->Access(name) : NULL;
+	return m_dbHash ? m_dbHash->Access(name) : NULL;
 }
 
 #define SMF_2A(name, a1, a2) m_modFunc[name] = new SlicModFunc(#name, a1, a2, ST_END);
@@ -3034,8 +3044,8 @@ SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
 void SlicEngine::AddModFuncs()
 {
 	for (size_t i = 0; i < mod_MAX; ++i) 
-    {
-        delete m_modFunc[i];
+	{
+		delete m_modFunc[i];
 		m_modFunc[i] = NULL;
 	}
 

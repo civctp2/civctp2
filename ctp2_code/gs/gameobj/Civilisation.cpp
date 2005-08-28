@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Civilisation handling.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,7 +31,7 @@
 #include "c3.h"
 #include "civarchive.h"
 #include "player.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 #include "CivilisationPool.h"
 #include "network.h"
 #include "SelItem.h"
@@ -43,11 +46,11 @@
 #include "net_vision.h"
 #include "ctpai.h"
 
-extern ProfileDB* g_theProfileDB; 
-	extern	Player	**g_player ;
+extern ProfileDB* g_theProfileDB;
+extern Player   **g_player;
 
-	extern	CivilisationPool	*g_theCivilisationtPool ;
-	extern SelectedItem *g_selected_item;
+extern CivilisationPool *g_theCivilisationtPool ;
+extern SelectedItem *g_selected_item;
 
 extern World *g_theWorld;
 
@@ -59,10 +62,10 @@ extern World *g_theWorld;
 
 
 void Civilisation::KillCivilisation()
-	{
-	Civilisation	tmp(*this) ;
-	tmp.RemoveAllReferences() ;
-	}
+{
+	Civilisation	tmp(*this);
+	tmp.RemoveAllReferences();
+}
 
 
 
@@ -73,10 +76,10 @@ void Civilisation::KillCivilisation()
 
 
 void Civilisation::RemoveAllReferences()
-	{
+{
 	g_theCivilisationPool->Release(GetCivilisation());
-	g_theCivilisationPool->Del(*this) ;
-	}
+	g_theCivilisationPool->Del(*this);
+}
 
 
 
@@ -87,9 +90,9 @@ void Civilisation::RemoveAllReferences()
 
 
 const CivilisationData* Civilisation::GetData() const
-	{
-	return (g_theCivilisationPool->GetData(*this)) ;
-	}
+{
+	return (g_theCivilisationPool->GetData(*this));
+}
 
 
 
@@ -100,9 +103,9 @@ const CivilisationData* Civilisation::GetData() const
 
 
 CivilisationData* Civilisation::AccessData() const
-	{
-	return (g_theCivilisationPool->AccessData(*this)) ;
-	}
+{
+	return (g_theCivilisationPool->AccessData(*this));
+}
 
 PLAYER_INDEX civilisation_NewCivilisationOrVandals(PLAYER_INDEX old_owner)
 {
@@ -138,20 +141,20 @@ PLAYER_INDEX civilisation_NewCivilisationOrVandals(PLAYER_INDEX old_owner)
 
 void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner)
 {
-	g_player[pi] = NULL ;									
+	g_player[pi] = NULL;
 	if(g_network.IsActive()) {
 		g_network.AddCivilization(pi, PLAYER_TYPE_ROBOT, CIV_INDEX_RANDOM);
 	}
-			
+	
 	g_player[pi] = new Player(PLAYER_INDEX(pi), 0, PLAYER_TYPE_ROBOT, CIV_INDEX_RANDOM, GENDER_RANDOM) ;
 			
-	g_selected_item->AddPlayer(pi) ;
+	g_selected_item->AddPlayer(pi);
 			
 			
 	if (g_theProfileDB->IsAIOn()) {
 	}
-			
-	Assert(g_player[pi]) ;
+	
+	Assert(g_player[pi]);
 
 	if(pi != PLAYER_INDEX_VANDALS && g_player[pi] && 
 	   (old_owner >= 0) && g_player[old_owner]) {

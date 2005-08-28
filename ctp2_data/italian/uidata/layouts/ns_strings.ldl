@@ -293,8 +293,8 @@ strings {
 	worldshapestrings {
 		string	string0	"str_ldl_Earth_World"
 		string	string1	"str_ldl_Doughnut_World"
+		string	string2	"str_ldl_Flat_World"
 		string	string3	"str_ldl_Uranus_World"
-		string	string4	"str_ldl_Flat_World"
 	}
 
 	difficulty1 {

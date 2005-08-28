@@ -1,0 +1,41 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Unit type descriptor
+#  Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+#  Disclaimer
+#
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+# - Created file. (Aug 21st 2005 Martin Gühmann)
+#
+#-----------------------------------------------------------------------------
+
+Civilisation{
+   StringID              SingularCivName        aka CIV_SINGULAR
+   StringID              PluralCivName          aka CIV_PLURAL
+   StringID              CountryName            aka CIV_COUNTRY
+   StringID              LeaderNameMale         aka CIV_LEADER_NAME
+   StringID              LeaderNameFemale       aka CIV_LEADER_NAME_FEMALE
+   StringID              EmissaryPhotoMale      aka CIV_EMISSARY_PHOTO
+   StringID              EmissaryPhotoFemale    = EmissaryPhotoMale
+   StringID              PersonalityDescription aka CIV_PERSONALITY_DESCRIPTION
+   Record Personality    PersonalityMale        aka CIV_PERSONALITY_MALE
+   Record Personality    PersonalityFemale      aka CIV_PERSONALITY_FEMALE
+   int                   Parchment = 0          aka CIV_PARCHMENT
+   int                   Capital = 0
+   bit                   IsCapital              aka CITY_IS_CAPITAL
+   Record CityStyle      CityStyle              aka CIV_CITY_STYLE
+   StringID[0..500]      CityName               aka CIV_CITY_NAME
+}
