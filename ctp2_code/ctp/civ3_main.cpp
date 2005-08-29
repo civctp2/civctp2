@@ -46,6 +46,7 @@
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
 // - Removed refferences to CivilisationDB. (Aug 20th 2005 Martin Gühmann)
+// - Removed refferences to old SpriteStateDBs. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -131,7 +132,6 @@
 #include "Sprite.h"
 #include "UnitSpriteGroup.h"
 #include "tiledmap.h"
-#include "SpriteStateDB.h"
 #include "SpriteGroupList.h"
 #include "director.h"
 
@@ -273,12 +273,6 @@ extern ControlPanelWindow           *g_controlPanel;
 
 sint32                              g_terrainPollution;
 
-
-SpriteStateDB                       *g_theSpriteStateDB;
-
-
-SpriteStateDB                       *g_theGoodsSpriteStateDB;
-SpriteStateDB                       *g_theCitySpriteStateDB;
 
 Director                            *g_director;
 double                              g_ave_frame_rate = 10.0;

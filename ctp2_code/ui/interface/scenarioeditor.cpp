@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Scenario editor
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 // - Added icons and tooltips to city style buttons, by Martin Gühmann.
 // - Repaired backwards compatibility and possible crashes.
 // - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
+// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -118,7 +119,7 @@
 #include "CivPaths.h"
 #include "ctp2_dropdown.h"
 
-#include "RiskDB.h"
+#include "RiskRecord.h"
 #include "DiffDB.h"
 
 #include "Cell.h"
@@ -2802,11 +2803,11 @@ void ScenarioEditor::SetupGlobalControls()
 	dd->Clear();
 	table = new aui_StringTable(&err, "SPRiskLevelStringTable");
 	if(dd) {
-		for(i = 0; i < g_theRiskDB->GetNumRec(); i++) {
+		for(i = 0; i < g_theRiskDB->NumRecords(); i++) {
 			
 
 
-
+			// Should be taken from the string database directly
 			AddDropDownItem(dd, "ScenBarbarianItem", table->GetString(i));	
 		}
 		dd->SetSelectedItem(g_theProfileDB->GetRiskLevel());

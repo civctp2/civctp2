@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -92,7 +92,6 @@
 #include "profileDB.h"
 #include "pollution.h"
 #include "EndGame.h"
-#include "EndGameDB.h"
 #include "WonderTracker.h"
 
 
@@ -1811,12 +1810,12 @@ sint32 infowin_LabReady()
 	EndGame *endGame = p->m_endGame;
 
 	
-	for (sint32 i = 0; i < g_theEndGameDB->m_nRec; i++) 
-	{
+//	for (sint32 i = 0; i < g_theEndGameDB->m_nRec; i++) 
+//	{
 		
 		
 		
-	}
+//	}
 
 	return FALSE;
 }

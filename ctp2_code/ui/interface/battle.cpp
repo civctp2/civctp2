@@ -1,37 +1,47 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Battle view actor handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
-#include "XY_Coordinates.h"
 #include "Army.h"
 #include "World.h"
-#include "ConstDB.h"
-#include "installationtree.h"
-#include "installation.h"
-
-#include "TerrainImprovementRecord.h"
 #include "Cell.h"
 #include "cellunitlist.h"
-#include "citydata.h"
-#include "Unit.h"
-#include "UnitData.h"
 #include "player.h"
-#include "AgeRecord.h"
-#include "ConstDB.h"
-#include "SpriteStateDB.h"
-
-#include "pixelutils.h"
 #include "colorset.h"
 
 #include "battleevent.h"
-#include "battleview.h"
-#include "battleviewwindow.h"
 #include "battle.h"
 #include "battleviewactor.h"
 #include "EffectActor.h"
-#include "gamesounds.h"
 #include "soundmanager.h"
-#include "AgeRecord.h"
 #include "SpriteState.h"
 
 #include "UnitRecord.h"
@@ -44,7 +54,6 @@
 extern World		*g_theWorld;
 extern ColorSet		*g_colorSet;
 extern Player		**g_player;
-extern ConstDB		*g_theConstDB;
 
 
 Battle::Battle() :

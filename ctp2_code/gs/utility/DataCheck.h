@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Data check utility
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -85,6 +85,7 @@ enum CRC_TYPE
 	CRC_TYPE_POLLUTION_DB,
 	CRC_TYPE_POPULATION_DB,
 	CRC_TYPE_RESOURCE_DB,
+	CRC_TYPE_RISK_DB,
 	CRC_TYPE_SOUND_DB,
 	CRC_TYPE_SPECIAL_ATTACK_INFO_DB,
 	CRC_TYPE_SPECIAL_EFFECT_DB,

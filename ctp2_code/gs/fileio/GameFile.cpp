@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Game file handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,6 +30,7 @@
 // - Fixed the scenario savegame bug (but not for autosave, that still needs to be done)
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Made progress bar more fluently. (Aug 22nd 2005 Martin Gühmann)
+// - Removed old sprite state databases. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -51,7 +52,6 @@
 #include "World.h"
 #include "gameinit.h"
 #include "player.h"
-#include "SpriteStateDB.h"
 #include "civarchive.h"
 #include "gamefile.h"
 #include "citydata.h"
@@ -201,14 +201,6 @@ extern  StringDB                    *g_theStringDB;
 extern  ConceptDB                   *g_theConceptDB;
 extern  ConstDB                     *g_theConstDB;
 extern  ThroneDB                    *g_theThroneDB;
-extern  SpriteStateDB               *g_theSpriteStateDB;
-
-
-
-
-
-extern  SpriteStateDB               *g_theGoodsSpriteStateDB;
-extern  SpriteStateDB               *g_theCitySpriteStateDB;
 extern  DifficultyDB                *g_theDifficultyDB;
 extern  RandomGenerator             *g_rand;
 extern  TurnCount                   *g_turn; 
@@ -421,7 +413,6 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 100 );
 
-	g_theSpriteStateDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 110 );
 
@@ -433,11 +424,9 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 120 );
 
-	g_theGoodsSpriteStateDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 130 );
 
-	g_theCitySpriteStateDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 140 );
 
@@ -961,7 +950,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
 		"InitProgressWindow",
-		710 );
+		1090 );
 
 	
 	MBCHAR s[_MAX_PATH];
@@ -1269,12 +1258,12 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	}
 
 
-	g_theProgressWindow->StartCountingTo( 700 );
+	g_theProgressWindow->StartCountingTo( 1080 );
 
 	
-	g_civApp->InitializeGame(archive); // Has to be reconsidered
+	g_civApp->InitializeGame(archive);
 
-	g_theProgressWindow->StartCountingTo( 710 );
+	g_theProgressWindow->StartCountingTo( 1090 );
 
 
 #ifndef _NO_GAME_WATCH

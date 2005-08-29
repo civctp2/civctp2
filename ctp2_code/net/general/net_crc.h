@@ -3,8 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Checks weather the databases match in MP.
-//                Needs to be redone just checks 3 databases.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,7 +35,7 @@
 #define __NET_CRC_H__
 #include "net_packet.h"
 
-#define k_MAX_DBS 39
+#define k_MAX_DBS 40
 
 class NetCRC : public Packetizer
 {

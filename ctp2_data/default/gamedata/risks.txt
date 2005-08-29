@@ -1,99 +1,123 @@
-4
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : The risk level database text file
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Converted to the new database format. The old format can still be parsed.
+#   (Aug 29th 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
+#4 #Risk levels
+
 RISK_VILLAGES_ONLY {
-	BARBARIAN_HUT_CHANCE 0.00
-	MAX_HUT_BARBARIANS 0
-	GOLD_HUT_CHANCE 0.3
-	MAX_HUT_GOLD 300
-	ADVANCE_HUT_CHANCE 0.15
-	MAX_HUT_ADVANCE_PREREQUISITES 1
-	UNIT_HUT_CHANCE 0.25
-	MAX_UNIT_PREREQUISITES 2
-	CITY_HUT_CHANCE 0.05
-	SETTLER_HUT_CHANCE 0.05
-	MIN_HUT_GOLD 150
+	HutChanceBarbarian 0.00
+	HutChanceGold 0.3
+	HutChanceAdvance 0.15
+	HutChanceUnit 0.25
+	HutChanceCity 0.05
+	HutChanceSettler 0.05
+	HutMaxBarbarians 0
+	HutMaxAdvancePrerequisites 1
+	HutMaxUnitPrerequisites 2
+	HutMaxGold 300
+	HutMinGold 150
 	
-	BARBARIAN_CHANCE 0.00   #Chance of barbarians appearing at random
+	BarbarianChance 0.00   #Chance of barbarians appearing at random
 
 	# When choosing barbarian types, all units available to players
 	# are looked at.  The best unit that will be considered is the RANK_MAX'th
 	# best unit available to anyone (0 meaning the best unit)
 	# The worst that will be considered is the RANK_MIN'th.
 	# value is determined solely by attack strength.
-	BARBARIAN_RANK_MAX 15
-	BARBARIAN_RANK_MIN 30
-	MAX_SPONTANEOUS_BARBARIANS 0
-	FIRST_BARBARIAN_TURN 20
-	LAST_BARBARIAN_TURN 350
-	MINIMUM_BARBARIAN_DISTANCE 5
+	BarbarianUnitRankMax 15
+	BarbarianUnitRankMin 30
+	MaxSpontaniousBarbarians 0
+	BarbarianFirstTurn 20
+	BarbarianLastTurn 350
+	BarbarianMinimumDistance 5
 }
-		
+
 RISK_BORING_HORDES {
-	BARBARIAN_HUT_CHANCE 0.10
-	MAX_HUT_BARBARIANS 3
-	GOLD_HUT_CHANCE 0.25
-	MAX_HUT_GOLD 400
-	ADVANCE_HUT_CHANCE 0.15
-	MAX_HUT_ADVANCE_PREREQUISITES 1
-	UNIT_HUT_CHANCE 0.25
-	MAX_UNIT_PREREQUISITES 3
-	CITY_HUT_CHANCE 0.05
-	SETTLER_HUT_CHANCE 0.05
-	MIN_HUT_GOLD 200
+	HutChanceBarbarian 0.10
+	HutChanceGold 0.25
+	HutChanceAdvance 0.15
+	HutChanceUnit 0.25
+	HutChanceCity 0.05
+	HutChanceSettler 0.05
+	HutMaxBarbarians 3
+	HutMaxAdvancePrerequisites 1
+	HutMaxUnitPrerequisites 3
+	HutMaxGold 400
+	HutMinGold 200
 	
-	BARBARIAN_CHANCE 0.04   #Chance of barbarians appearing at random
+	BarbarianChance 0.04   #Chance of barbarians appearing at random
 
-
-	BARBARIAN_RANK_MAX 15
-	BARBARIAN_RANK_MIN 25
-	MAX_SPONTANEOUS_BARBARIANS 2
-	FIRST_BARBARIAN_TURN 20
-	LAST_BARBARIAN_TURN 350
-	MINIMUM_BARBARIAN_DISTANCE 5
+	BarbarianUnitRankMax 15
+	BarbarianUnitRankMin 25
+	MaxSpontaniousBarbarians 2
+	BarbarianFirstTurn 20
+	BarbarianLastTurn 350
+	BarbarianMinimumDistance 5
 }
 
 RISK_DECENT_HORDES {
-	BARBARIAN_HUT_CHANCE 0.20
-	MAX_HUT_BARBARIANS 4
-	GOLD_HUT_CHANCE 0.25
-	MAX_HUT_GOLD 500
-	ADVANCE_HUT_CHANCE 0.15
-	MAX_HUT_ADVANCE_PREREQUISITES 1
-	UNIT_HUT_CHANCE 0.15
-	MAX_UNIT_PREREQUISITES 4
-	CITY_HUT_CHANCE 0.05
-	SETTLER_HUT_CHANCE 0.05
-	MIN_HUT_GOLD 250
+	HutChanceBarbarian 0.20
+	HutChanceGold 0.25
+	HutChanceAdvance 0.15
+	HutChanceUnit 0.15
+	HutChanceCity 0.05
+	HutChanceSettler 0.05
+	HutMaxBarbarians 4
+	HutMaxAdvancePrerequisites 1
+	HutMaxUnitPrerequisites 4
+	HutMaxGold 500
+	HutMinGold 250
 	
-	BARBARIAN_CHANCE 0.06   #Chance of barbarians appearing at random
+	BarbarianChance 0.06   #Chance of barbarians appearing at random
 
-	BARBARIAN_RANK_MAX 10
-	BARBARIAN_RANK_MIN 20
-	MAX_SPONTANEOUS_BARBARIANS 2
-	FIRST_BARBARIAN_TURN 20
-	LAST_BARBARIAN_TURN 350
-	MINIMUM_BARBARIAN_DISTANCE 5
-} 
-
-RISK_RAGING_HORDES {
-	BARBARIAN_HUT_CHANCE 0.25
-	MAX_HUT_BARBARIANS 4
-	GOLD_HUT_CHANCE 0.2
-	MAX_HUT_GOLD 700
-	ADVANCE_HUT_CHANCE 0.20
-	MAX_HUT_ADVANCE_PREREQUISITES 1
-	UNIT_HUT_CHANCE 0.15
-	MAX_UNIT_PREREQUISITES 5
-	CITY_HUT_CHANCE 0.05
-	SETTLER_HUT_CHANCE 0.1
-	MIN_HUT_GOLD 350
-	
-	BARBARIAN_CHANCE 0.10   #Chance of barbarians appearing at random
-
-	BARBARIAN_RANK_MAX 8
-	BARBARIAN_RANK_MIN 15
-	MAX_SPONTANEOUS_BARBARIANS 2
-	FIRST_BARBARIAN_TURN 20
-	LAST_BARBARIAN_TURN 350
-	MINIMUM_BARBARIAN_DISTANCE 5
+	BarbarianUnitRankMax 10
+	BarbarianUnitRankMin 20
+	MaxSpontaniousBarbarians 2
+	BarbarianFirstTurn 20
+	BarbarianLastTurn 350
+	BarbarianMinimumDistance 5
 }
 
+RISK_RAGING_HORDES {
+	HutChanceBarbarian 0.25
+	HutChanceGold 0.2
+	HutChanceAdvance 0.20
+	HutChanceUnit 0.15
+	HutChanceCity 0.05
+	HutChanceSettler 0.1
+	HutMaxBarbarians 4
+	HutMaxAdvancePrerequisites 1
+	HutMaxUnitPrerequisites 5
+	HutMaxGold 700
+	HutMinGold 350
+	
+	BarbarianChance 0.10   #Chance of barbarians appearing at random
+
+	BarbarianUnitRankMax 8
+	BarbarianUnitRankMin 15
+	MaxSpontaniousBarbarians 2
+	BarbarianFirstTurn 20
+	BarbarianLastTurn 350
+	BarbarianMinimumDistance 5
+}

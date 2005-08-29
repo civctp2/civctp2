@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : New game (SP, MP, scenario) initialisation
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // - Allowed for nPlayers to be 2 or 3 - JJB 2005/06/28
 // - Removed auto-tutorial on low difficulty - JJB 2005/06/28
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -73,7 +74,6 @@
 #include "player.h"
 
 #include "RandGen.h"
-#include "SpriteStateDB.h"
 
 #include "TradePool.h"
 #include "gameinit.h"
@@ -120,8 +120,6 @@
 #include "TopTen.h"
 #include "SoundRecord.h"
 
-#include "RiskDB.h"
-
 #include "PlayListDB.h"
 
 #include "Wormhole.h"
@@ -130,7 +128,6 @@
 #include "Exclusions.h"
 
 #include "network.h"
-#include "EndGameDB.h"
 #include "PollutionDB.h"
 
 #include "debugmemory.h"
@@ -216,11 +213,9 @@ InstallationQuadTree        *g_theInstallationTree = NULL;
 TopTen                      *g_theTopTen = NULL;
 TurnCount                   *g_turn = NULL;
 ProfileDB                   *g_theProfileDB = NULL;
-RiskDatabase                *g_theRiskDB = NULL;
 MovieDB                     *g_theWonderMovieDB = NULL;
 MovieDB                     *g_theVictoryMovieDB = NULL;
 FilenameDB                  *g_theMessageIconFileDB = NULL;
-FilenameDB                  *g_theGoodsIconDB = NULL;
 Pool<Order>                 *g_theOrderPond = NULL;
 Pool<UnseenCell>            *g_theUnseenPond = NULL;
 
@@ -262,7 +257,7 @@ MBCHAR g_advancedb_filename[_MAX_PATH];
 MBCHAR g_concepticondb_filename[_MAX_PATH];
 MBCHAR g_tileimprovementdb_filename[_MAX_PATH];
 MBCHAR g_tileimprovementicondb_filename[_MAX_PATH];
-MBCHAR g_spritestatedb_filename[_MAX_PATH];
+MBCHAR g_spritestatedb_filename[_MAX_PATH]; // Free slot
 MBCHAR g_specialeffectdb_filename[_MAX_PATH];
 MBCHAR g_specialattackinfodb_filename[_MAX_PATH];
 MBCHAR g_city_style_db_filename[_MAX_PATH];
@@ -272,8 +267,8 @@ MBCHAR g_age_city_style_db_filename[_MAX_PATH];
 
 
 
-MBCHAR g_goodsspritestatedb_filename[_MAX_PATH];
-MBCHAR g_cityspritestatedb_filename[_MAX_PATH];
+MBCHAR g_goodsspritestatedb_filename[_MAX_PATH]; // Future free slot
+MBCHAR g_cityspritestatedb_filename[_MAX_PATH]; // Free slot
 MBCHAR g_uniticondb_filename[_MAX_PATH];
 MBCHAR g_wondericondb_filename[_MAX_PATH];
 MBCHAR g_improveicondb_filename[_MAX_PATH];
@@ -323,10 +318,6 @@ CIV_INDEX gameinit_GetCivForSlot(sint32 slot);
 
 
 
-
-extern SpriteStateDB      *g_theSpriteStateDB;
-extern SpriteStateDB      *g_theGoodsSpriteStateDB;
-extern SpriteStateDB      *g_theCitySpriteStateDB;
 
 extern HWND               gHwnd; 
 extern void               verifyYwrap();
@@ -1286,6 +1277,8 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	else
 		return FALSE;
 
+	Assert(g_slicEngine);
+
 	
 	g_theProfileDB->SetTutorialAdvice(FALSE);
 	g_theProfileDB->SetThroneRoom(FALSE);
@@ -1293,7 +1286,6 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	g_theProfileDB->SetRiskLevel(0);
 	g_theProfileDB->SetNonRandomCivs(TRUE);
 	
-	Assert(g_slicEngine); // Why here?
 
 
 

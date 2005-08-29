@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Goody hut handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Update the display (rush buy buttons) when receiving gold.
 // - Speeded up goody hut advance and unit selection.
+// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -47,7 +51,7 @@
 #include "tiledmap.h"
 #include "Barbarians.h"
 #include "profileDB.h"      // g_theProfileDB
-#include "RiskDB.h"
+#include "RiskRecord.h"
 #include "AdvanceRecord.h"
 #include "SelItem.h"
 #include "GameSettings.h"
@@ -57,13 +61,12 @@
 
 #include "MainControlPanel.h"
 
-extern Player **g_player;
-extern RandomGenerator *g_rand;
-extern ConstDB *g_theConstDB;
-extern TiledMap		*g_tiledMap;
+extern Player          **g_player;
+extern RandomGenerator  *g_rand;
+extern ConstDB          *g_theConstDB;
+extern TiledMap		    *g_tiledMap;
 
-extern SelectedItem	*g_selected_item;
-extern RiskDatabase *g_theRiskDB;
+extern SelectedItem	    *g_selected_item;
 
 namespace
 {
@@ -97,27 +100,27 @@ namespace
 //----------------------------------------------------------------------------
         GoodyRiskData
         (
-            GameSettings const *    settings,
-            RiskDatabase const *    risks
+            GameSettings      const *    settings,
+            CTPDatabase<RiskRecord> *    risks
         )
         {
-	        sint32 const        gameRiskLevel   = 
-                std::min<sint32>(settings->GetRisk(), risks->GetNumRec() - 1);
+	        sint32  gameRiskLevel   = 
+                std::min<sint32>(settings->GetRisk(), risks->NumRecords() - 1);
             m_risk                  = risks->Get(gameRiskLevel);
             Assert(m_risk);
 
             m_BarbarianThreshold    = 
-                static_cast<size_t>(m_risk->m_barbarianHutChance * 100.0);       
+                static_cast<size_t>(m_risk->GetHutChanceBarbarian() * 100.0);       
             m_GoldThreshold         = m_BarbarianThreshold +
-                static_cast<size_t>(m_risk->m_goldChance * 100.0);
+                static_cast<size_t>(m_risk->GetHutChanceGold() * 100.0);
             m_AdvanceThreshold      = m_GoldThreshold +
-                static_cast<size_t>(m_risk->m_advanceChance * 100.0);
+                static_cast<size_t>(m_risk->GetHutChanceAdvance() * 100.0);
             m_UnitThreshold         = m_AdvanceThreshold +
-                static_cast<size_t>(m_risk->m_unitChance * 100.0);
+                static_cast<size_t>(m_risk->GetHutChanceUnit() * 100.0);
             m_CityThreshold         = m_UnitThreshold +
-                static_cast<size_t>(m_risk->m_cityChance * 100.0);
+                static_cast<size_t>(m_risk->GetHutChanceCity() * 100.0);
             m_SettlerThreshold      = m_CityThreshold +
-                static_cast<size_t>(m_risk->m_settlerChance * 100.0);
+                static_cast<size_t>(m_risk->GetHutChanceSettler() * 100.0);
         };
 
 //----------------------------------------------------------------------------
@@ -135,7 +138,7 @@ namespace
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-        GOODY   Select(sint32 randomValue) const
+        GOODY   Select(uint32 randomValue) const
         {
             if (randomValue < m_BarbarianThreshold)
             {
@@ -182,8 +185,8 @@ namespace
 //----------------------------------------------------------------------------
         sint32  GoldAmount(sint32 randomValue) const
         {
-            return m_risk->m_minGold +
-                   (((m_risk->m_maxGold - m_risk->m_minGold) * randomValue) / 
+            return m_risk->GetHutMinGold() +
+                   (((m_risk->GetHutMaxGold() - m_risk->GetHutMinGold()) * randomValue) / 
                         k_VALUE_RANGE
                    );        
         }
@@ -206,7 +209,7 @@ namespace
 //----------------------------------------------------------------------------
         sint32  GetMaxAdvanceLeap(void) const
         {
-            return m_risk->m_maxAdvancePrerequisites;
+            return m_risk->GetHutMaxAdvancePrerequisites();
         }
 
 //----------------------------------------------------------------------------
@@ -227,7 +230,7 @@ namespace
 //----------------------------------------------------------------------------
         sint32  GetMaxUnitAdvanceLeap(void) const
         {
-            return m_risk->m_maxUnitPrerequisites;
+            return m_risk->GetHutMaxUnitPrerequisites();
         }
 
     private:
@@ -342,7 +345,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 
     case GOODY_SETTLER:
         {
-		    for (size_t i = 0; i < g_theUnitDB->NumRecords(); ++i) 
+		    for (size_t i = 0; i < static_cast<size_t>(g_theUnitDB->NumRecords()); ++i) 
             {
 			    if (g_theUnitDB->Get(i)->GetSettleLand()) 
                 {

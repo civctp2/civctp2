@@ -207,7 +207,6 @@
 #include "stringutils.h"
 #include "screenutils.h"
 
-#include "EndGameDB.h"
 #include "EndgameWindow.h"
 
 #include "GameSettings.h"

@@ -41,94 +41,63 @@
 // - Prevented crashes with invalid (i.e. killed or destroyed) units.
 // - PFT 29 mar 05, show # turns until city next grows a pop.
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 
-#include "aui.h"
-#include "aui_surface.h"
 #include "aui_bitmapfont.h"
 
-#include "pixelutils.h"
-#include "tileutils.h"
 #include "primitives.h"
-#include "TileInfo.h"
-
-#include "Unit.h"	
 #include "UnitData.h"
 #include "SelItem.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "civarchive.h"
 #include "screenmanager.h"
-#include "Cell.h"
-
-#include "FacedSprite.h"
-#include "UnitSpriteGroup.h"
 #include "SpriteState.h"
-#include "Actor.h"
 #include "SpriteGroupList.h"
 #include "tiledmap.h"
-#include "Anim.h"
 #include "UnitActor.h"
-#include "ActorPath.h"
-#include "Action.h"
 #include "director.h"
 #include "colorset.h"
 #include "UnitPool.h"
 #include "ArmyPool.h"
 #include "maputils.h"
-#include "TurnCnt.h"
-#include "network.h"
-#include "SpriteStateDB.h"
-#include "AgeRecord.h"
 #include "cellunitlist.h"
-#include "WonderRecord.h"
 
 #include "soundmanager.h"
 
-#include "Civilisation.h"
 #include "player.h"
 
 #include "debugmemory.h"
 #include "UnitRecord.h"
 
 #include "wonderutil.h"
-#include "TerrainRecord.h"
 
 #include "ArmyData.h"
 
 #include "CityStyleRecord.h"
 #include "AgeCityStyleRecord.h"
 
-BOOL		g_showHeralds = TRUE;
+BOOL                    g_showHeralds = TRUE;
 
-#define k_doInvisible FALSE
+#define k_SHIELD_ON_TIME        650
+#define k_SHIELD_OFF_TIME       150
 
-#define k_SHIELD_ON_TIME		650
-#define k_SHIELD_OFF_TIME		150
-
-extern ColorSet			*g_colorSet;
-extern SpriteGroupList	*g_unitSpriteGroupList;
-extern SpriteGroupList	*g_citySpriteGroupList;
-extern TiledMap			*g_tiledMap;
-extern Director			*g_director;
-extern SelectedItem		*g_selected_item;
+extern ColorSet         *g_colorSet;
+extern SpriteGroupList  *g_unitSpriteGroupList;
+extern SpriteGroupList  *g_citySpriteGroupList;
+extern TiledMap         *g_tiledMap;
+extern Director         *g_director;
+extern SelectedItem     *g_selected_item;
 extern UnitPool         *g_theUnitPool;
-extern ArmyPool			*g_theArmyPool;
-extern World			*g_theWorld;
-extern ScreenManager	*g_screenManager;
-extern SpriteStateDB	*g_theCitySpriteStateDB;
-extern TurnCount		*g_turn;
-extern SoundManager		*g_soundManager;
+extern ArmyPool         *g_theArmyPool;
+extern ScreenManager    *g_screenManager;
+extern SoundManager     *g_soundManager;
 
-extern Player			**g_player;
-
-extern BOOL				g_unitCompletedAction;
+extern Player           **g_player;
 
 #include "profileDB.h"
-extern ProfileDB		*g_theProfileDB;
+extern ProfileDB        *g_theProfileDB;
 
 #ifndef _DEBUG_MEMORY
 #define STOMPCHECK() if (m_curAction) { Assert(_CrtIsMemoryBlock(m_curAction, sizeof(Action),NULL,NULL,NULL));}

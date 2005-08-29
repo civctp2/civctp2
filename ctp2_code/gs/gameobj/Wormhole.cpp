@@ -1,4 +1,35 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Wormhole handling.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - The good sprite index is now taken from the resource database instead of
+//   the good's sprite state database. However this file isn't used as the
+//   wormhole has been removed from the game, but maybe there is someone
+//   who whishes to put it back into the game. (Aug 29th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Wormhole.h"
@@ -11,7 +42,6 @@
 #include "pointerlist.h"
 #include "RandGen.h"
 #include "UnitRec.h"
-#include "SpriteStateDB.h"
 #include "GoodActor.h"
 #include "director.h"
 #include "UnitPool.h"
@@ -20,8 +50,8 @@
 #include "net_endgame.h"
 #include "directions.h"
 #include "gamefile.h"
+#include "ResourceRecord.h"
 
-extern SpriteStateDB	*g_theGoodsSpriteStateDB;
 
 #define k_WORMHOLE_GOOD_ID_STR		"WORMHOLE"
 
@@ -31,7 +61,7 @@ Wormhole::Wormhole(sint32 discoverer)
 {
 	m_discoverer = discoverer;
 
-	sint16 centerY = g_theWorld->GetYHeight() / 2;
+	sint16 centerY = static_cast<sint16>(g_theWorld->GetYHeight() / 2);
 	sint32 orbitHeight = (g_theWorld->GetYHeight() * g_theConstDB->WormholeOrbitHeightPercentage()) / 100;
 	m_topY = centerY - orbitHeight / 2;
 	m_bottomY = centerY + orbitHeight / 2;
@@ -43,15 +73,14 @@ Wormhole::Wormhole(sint32 discoverer)
 	m_discoveredAt = g_turn->GetRound();
 
 	
-	sint32 id;
-	id = g_theGoodsSpriteStateDB->GetDefaultVal(g_theGoodsSpriteStateDB->FindTypeIndex(k_WORMHOLE_GOOD_ID_STR));
+	sint32 id = g_theResourceDB->Get(g_theResourceDB->FindRecordNameIndex(k_WORMHOLE_GOOD_ID_STR))->GetSpriteID();
 	m_actor = new GoodActor(id, m_pos);
 }
 
 Wormhole::Wormhole(sint32 discoverer, MapPoint &startPos)
 {
 	m_discoverer = discoverer;
-	sint16 centerY = g_theWorld->GetYHeight() / 2;
+	sint16 centerY =  static_cast<sint16>(g_theWorld->GetYHeight() / 2);
 	sint32 orbitHeight = (g_theWorld->GetYHeight() * g_theConstDB->WormholeOrbitHeightPercentage()) / 100;
 	m_topY = centerY - orbitHeight / 2;
 	m_bottomY = centerY + orbitHeight / 2;
@@ -63,18 +92,16 @@ Wormhole::Wormhole(sint32 discoverer, MapPoint &startPos)
 	m_discoveredAt = g_turn->GetRound();
 
 	
-	sint32 id;
-	id = g_theGoodsSpriteStateDB->GetDefaultVal(g_theGoodsSpriteStateDB->FindTypeIndex(k_WORMHOLE_GOOD_ID_STR));
+	sint32 id = g_theResourceDB->Get(g_theResourceDB->FindRecordNameIndex(k_WORMHOLE_GOOD_ID_STR))->GetSpriteID();
 	m_actor = new GoodActor(id, m_pos);
 }
-	
+
 Wormhole::Wormhole(CivArchive &archive)
 {
 	m_entries = new PointerList<EntryRecord>;
 	Serialize(archive);
 	
-	sint32 id;
-	id = g_theGoodsSpriteStateDB->GetDefaultVal(g_theGoodsSpriteStateDB->FindTypeIndex(k_WORMHOLE_GOOD_ID_STR));
+	sint32 id = g_theResourceDB->Get(g_theResourceDB->FindRecordNameIndex(k_WORMHOLE_GOOD_ID_STR))->GetSpriteID();
 	m_actor = new GoodActor(id, m_pos);
 }
 

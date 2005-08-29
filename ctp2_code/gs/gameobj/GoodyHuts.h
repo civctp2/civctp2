@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Goody hut handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,7 +35,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// #include <>      
+// #include <>
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -64,7 +67,6 @@ enum GOODY
 class CivArchive;
 class MapPoint;
 class NetCellList;
-class RiskRecord;
 
 //----------------------------------------------------------------------------
 // Class declarations

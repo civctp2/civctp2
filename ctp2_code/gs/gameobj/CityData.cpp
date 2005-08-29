@@ -157,7 +157,6 @@
 #include "ArmyPool.h"
 #include "ArmyData.h"
 #include "Score.h"
-#include "EndGameDB.h"
 #include "Exclusions.h"
 #include "WonderTracker.h"
 #include "MaterialPool.h"
@@ -3995,7 +3994,7 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	const UnitRecord* urec = NULL;
 	const WonderRecord* wrec = NULL;
 	const BuildingRecord* irec = NULL;
-	const EndGameRecord *egrec = NULL;
+//	const EndGameRecord *egrec = NULL; // Maybe usefull later
 	uint32 oldCategory;
 	if(m_build_queue.GetHead())
 		oldCategory = m_build_queue.GetHead()->m_category;
