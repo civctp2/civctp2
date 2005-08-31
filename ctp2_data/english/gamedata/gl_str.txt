@@ -3,6 +3,7 @@
 # Project      : Call To Power 2
 # File type    : String text file
 # Description  : Contains the records localized names (English)
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -21,8 +22,9 @@
 # - Added new age strings.
 # - Added new city style strings.
 # - Moved build list sequence strings from ldl_str.txt and add_str.txt.
-#   - Mar. 7th 2005 Martin Gühmann 
-# 
+#   - Mar. 7th 2005 Martin Gühmann
+# - Moved risk strings from junk_str.txt. (Aug 31st 2005 Martin Gühmann)
+#
 #----------------------------------------------------------------------------
 
 #### ADVANCE STRINGS ####
@@ -502,7 +504,9 @@ CONCEPT_ATROCITY				"Atrocity"
 CONCEPT_BARBARIANS				"Barbarians"
 CONCEPT_CAPITALIZATION				"Capitalization"
 CONCEPT_CITY					"City"
+CONCEPT_CLASSIC_AGE				"Classical Age"
 CONCEPT_COMMERCE				"Commerce"
+CONCEPT_COMPUTER_AGE				"Information Age"
 CONCEPT_CRIME					"Crime"
 CONCEPT_DEFENSE					"Defense"
 CONCEPT_DIAMOND_AGE				"Diamond Age"
@@ -512,6 +516,7 @@ CONCEPT_EMBARGO					"Embargo"
 CONCEPT_EMPIRE_SIZE				"Empire Size"
 CONCEPT_FOOD					"Food"
 CONCEPT_FUEL					"Fuel"
+CONCEPT_FUTURE_AGE				"The Future"
 CONCEPT_GENETIC_AGE				"Genetic Age"
 CONCEPT_GOLD					"Gold"
 CONCEPT_GOODS					"Goods"
@@ -519,8 +524,10 @@ CONCEPT_GOVERNMENTS				"Government"
 CONCEPT_GROWTH					"Growth"
 CONCEPT_HAPPINESS				"Happiness"
 CONCEPT_IMPROVEMENTS				"Improvements"
+CONCEPT_INDUSTRIAL_AGE				"Industrial Age"
 CONCEPT_INFRASTRUCTURE				"Infrastructure"
 CONCEPT_MAINTENANCE_COST			"Maintenance Cost"
+CONCEPT_MEDIEVAL_AGE				"Medieval Period"
 CONCEPT_MILITARY_READINESS			"Military Readiness"
 CONCEPT_MODERN_AGE				"Modern	Age"
 CONCEPT_OFFER					"Offer"
@@ -559,21 +566,13 @@ CONCEPT_VETERANS				"Veterans"
 CONCEPT_VICTORY_CONDITIONS			"Victory - General"
 CONCEPT_VICTORY_CONQUEST			"Victory - Bloodlust"
 CONCEPT_VICTORY_DIPLOMATIC			"Victory - Diplomatic"
-CONCEPT_VICTORY_PTS_AT_2300			"Victory - 2300	AD"
-CONCEPT_VICTORY_SCIENCE				"Victory - Gaia	Controller"
+CONCEPT_VICTORY_PTS_AT_2300			"Victory - 2300 AD"
+CONCEPT_VICTORY_SCIENCE				"Victory - Gaia Controller"
 CONCEPT_VISION					"Vision"
 CONCEPT_WAGES					"Wages"
 CONCEPT_WONDERS					"Wonders"
 CONCEPT_WORK_HOURS				"Work Hours"
 CONCEPT_WORKER					"Worker"
-
-##citymod2 additions
-
-CONCEPT_CLASSIC_AGE				"Classical Age"
-CONCEPT_INDUSTRIAL_AGE				"Industrial Age"
-CONCEPT_COMPUTER_AGE				"Information Age"
-CONCEPT_FUTURE_AGE				"The Future"
-CONCEPT_MEDIEVAL_AGE				"Medieval Period"
 
 
 #### Pop STRINGS ####
@@ -656,14 +655,14 @@ ORDER_ATTACK					"Assault"
 ORDER_BIO_INFECT				"Infect City"
 ORDER_BOARD_TRANSPORT				"Load"
 ORDER_BOMBARD					"Bombard"
+ORDER_CLEAR_TARGET				"Clear Target"
 ORDER_CONVERT					"Convert City"
 ORDER_CREATE_PARK				"Nanite Cleansing"
-ORDER_CLEAR_TARGET				"Clear Target"
 ORDER_DISBAND_ARMY				"Disband Unit"
 ORDER_ESTABLISH_EMBASSY				"Establish Embassy"
 ORDER_EXPEL					"Expel Unit"
-ORDER_FORTIFY					"Fortify"
 ORDER_FAITH_HEALING				"Faith Healing"
+ORDER_FORTIFY					"Fortify"
 ORDER_FRANCHISE					"Franchise"
 ORDER_INCITE_REVOLUTION				"Incite Revolution"
 ORDER_INCITE_UPRISING				"Aid Uprising"
@@ -704,40 +703,47 @@ PERSONALITY_CALLENBACH_DESCRIPTION		"Populist Zealot"
 
 ### Age Strings ###
 
-AGE_ONE		"Ancient"
-AGE_TWO		"Classic"
-AGE_THREE	"Middle Ages"
-AGE_FOUR	"Renaissance"
-AGE_FIVE	"Industrial"
-AGE_SIX		"Modern"
-AGE_SEVEN	"Information Age"
-AGE_EIGHT	"Genetic"
-AGE_NINE	"Diamond"
-AGE_TEN		"Future"
+AGE_ONE						"Ancient"
+AGE_TWO						"Classic"
+AGE_THREE					"Middle Ages"
+AGE_FOUR					"Renaissance"
+AGE_FIVE					"Industrial"
+AGE_SIX						"Modern"
+AGE_SEVEN					"Information Age"
+AGE_EIGHT					"Genetic"
+AGE_NINE					"Diamond"
+AGE_TEN						"Future"
 
 ### City Style Strings ###
 
-CITY_STYLE_ROMAN	"Roman Style"
-CITY_STYLE_ARAB		"Arabian Style"
-CITY_STYLE_ASIAN	"Asian Style"
-CITY_STYLE_AMERICAN	"American Style"
-CITY_STYLE_CASTLE	"Castle Style"
-CITY_STYLE_EGYPTAIN	"Egyptian Style"
-CITY_STYLE_PALACE	"Palace Style"
+CITY_STYLE_ROMAN				"Roman Style"
+CITY_STYLE_ARAB					"Arabian Style"
+CITY_STYLE_ASIAN				"Asian Style"
+CITY_STYLE_AMERICAN				"American Style"
+CITY_STYLE_CASTLE				"Castle Style"
+CITY_STYLE_EGYPTAIN				"Egyptian Style"
+CITY_STYLE_PALACE				"Palace Style"
 
 ### Build Sequences from ldl_str.txt ###
 
-BUILD_LIST_SEQUENCE_PRODUCTION		"Production"
-BUILD_LIST_SEQUENCE_GROWTH		"Growth"
-BUILD_LIST_SEQUENCE_OFFENSE		"Offense"
-BUILD_LIST_SEQUENCE_DEFENSE		"Defense"
-BUILD_LIST_SEQUENCE_SCIENCE		"Science"
-BUILD_LIST_SEQUENCE_GOLD		"Gold"
-BUILD_LIST_SEQUENCE_WONDERS		"Wonders"
-BUILD_LIST_SEQUENCE_HAPPINESS		"Happiness"
-BUILD_LIST_SEQUENCE_DEFAULT		"Default"
-BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST	"Wonders (Sci.)"
-BUILD_LIST_SEQUENCE_WONDERS_MILITARIST	"Wonders (Mil.)"
-BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC	"Wonders (Econ.)"
-BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN	"Wonders (Ecot.)"
-BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC	"Wonders (Dipl.)"
+BUILD_LIST_SEQUENCE_PRODUCTION			"Production"
+BUILD_LIST_SEQUENCE_GROWTH			"Growth"
+BUILD_LIST_SEQUENCE_OFFENSE			"Offense"
+BUILD_LIST_SEQUENCE_DEFENSE			"Defense"
+BUILD_LIST_SEQUENCE_SCIENCE			"Science"
+BUILD_LIST_SEQUENCE_GOLD			"Gold"
+BUILD_LIST_SEQUENCE_WONDERS			"Wonders"
+BUILD_LIST_SEQUENCE_HAPPINESS			"Happiness"
+BUILD_LIST_SEQUENCE_DEFAULT			"Default"
+BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST		"Wonders (Sci.)"
+BUILD_LIST_SEQUENCE_WONDERS_MILITARIST		"Wonders (Mil.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC		"Wonders (Econ.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN		"Wonders (Ecot.)"
+BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"Wonders (Dipl.)"
+
+##Risk strings moved from junk_str.txt ##
+RISK_NO_DANGER_HERE				"No Danger Here"
+RISK_VILLAGES_ONLY				"Ruins Only"
+RISK_BORING_HORDES				"Bandits"
+RISK_DECENT_HORDES				"Raiders"
+RISK_RAGING_HORDES				"Marauders"

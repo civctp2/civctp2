@@ -3,6 +3,7 @@
 # Project      : Call To Power 2
 # File type    : String text file
 # Description  : Main string file (Spanish)
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -17,7 +18,7 @@
 #
 # Modifications from the original Activision code:
 #
-# - Moved build list sequence strings to gl_str.txt. Has to be done when gl_str.txt is available.
+# - Moved build list sequence strings to gl_str.txt.
 #   - April 7th 2005 Martin Gühmann
 # - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
@@ -1096,7 +1097,7 @@ str_ldl_Reserves	"Reservas"
 str_ldl_RESET_DEFAULTS	"RESTABLECER"
 str_ldl_RESET_ROUTE	"RESTABLECER"
 str_ldl_RESTART	"REINICIAR"
-str_ldl_Restless_Tribes	" Tribus inquietas"
+str_ldl_Restless_Tribes	"Tribus inquietas"
 str_ldl_REV	"REV."
 str_ldl_REV_COLON	"REV:"
 str_ldl_Review	"Revisar"
@@ -1107,7 +1108,7 @@ str_ldl_Revolution_Risk	"Riesgo de revolución"
 str_ldl_RIOT	"DISTURB."
 str_ldl_RIOT_COLON	"DISTURB:"
 str_ldl_Riot_Risk	"Riesgo de disturbios"
-str_ldl_Roving_Bands	"  Bandas ambulantes"
+str_ldl_Roving_Bands	"Bandas ambulantes"
 str_ldl_Rules	"Reglas"
 str_ldl_RUSH_BUY	"COMPRA"
 str_ldl_Sale_Price_COLON	"Precio de venta:"
@@ -2869,15 +2870,6 @@ INFOBAR_CITY 				"Ciudad: "
 INFOBAR_UNEXPLORED 			"Inexplorado"
 
 UNIT_HOPLITE_NEW 				"Hoplita"
-
-BUILD_LIST_SEQUENCE_PRODUCTION 	"Producción"
-BUILD_LIST_SEQUENCE_GROWTH 		"Crecim."
-BUILD_LIST_SEQUENCE_OFFENSE 		"Ataque"
-BUILD_LIST_SEQUENCE_DEFENSE 		"Defensa"
-BUILD_LIST_SEQUENCE_SCIENCE 		"Ciencia"
-BUILD_LIST_SEQUENCE_GOLD 		"Oro"
-BUILD_LIST_SEQUENCE_WONDERS 		"Maravillas"
-BUILD_LIST_SEQUENCE_HAPPINESS 	"Felicidad"
 
 MOVED_ALL_ARMIES_GENIUS 		"¡Has movido todos tus ejércitos, debes de ser un genio!"
 

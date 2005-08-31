@@ -3,6 +3,7 @@
 # Project      : Call To Power 2
 # File type    : String text file
 # Description  : Main string file (Italian)
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
