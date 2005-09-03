@@ -142,7 +142,6 @@ enum POP_TYPE {
 	POP_MAX
 };
 
-struct TileValue;
 struct TerrainValue;
 
 class CityData : public CityRadiusCallback {

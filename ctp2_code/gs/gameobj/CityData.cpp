@@ -136,7 +136,6 @@
 #include "TradeRoute.h"
 #include "Gold.h"
 #include "Cell.h"
-#include "TileVal.h"
 #include "installationtree.h"
 #include "CivilisationPool.h"
 #include "AICause.h"

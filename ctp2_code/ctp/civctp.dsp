@@ -216,7 +216,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                                            exist                                            R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                            copy                                            C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                            R:\ctp2_project\ctp2_code\ctp\                                           	rem                    if                                            exist                                            R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                            copy                                            C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                            R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                                             exist                                             R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                             copy                                             C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                             R:\ctp2_project\ctp2_code\ctp\                                            	rem                     if                                             exist                                             R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                             copy                                             C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                             R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -1932,10 +1932,6 @@ SOURCE=..\gs\gameobj\TerrImprovePool.cpp
 # Begin Source File
 
 SOURCE=..\gs\gameobj\TerrImprovePool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\gameobj\TileVal.h
 # End Source File
 # Begin Source File
 
@@ -14281,14 +14277,6 @@ SOURCE=..\ai\diplomacy\ProposalAnalysis.cpp
 # Begin Source File
 
 SOURCE=..\ai\diplomacy\ProposalAnalysis.h
-# End Source File
-# End Group
-# Begin Group "personality"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\ai\personality\aip2.h
 # End Source File
 # End Group
 # Begin Group "strategy"
