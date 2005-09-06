@@ -91,6 +91,7 @@
 // - Added OptimizeSliders method and updated TestSliders method for 
 //   better AI sliders optimisation routines. - Jul 18th 2005 Martin Gühmann
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
+// - Repaired incorrect AddEvent parameters.
 //
 //----------------------------------------------------------------------------
 
@@ -107,7 +108,7 @@
 #include "citydata.h"
 #include "UnitData.h"
 #include "UnitPool.h"
-#include "globals.h"
+#include "Globals.h"
 #include "World.h"
 #include "BuildListSequenceRecord.h"
 #include "UnitBuildListRecord.h"
@@ -169,29 +170,75 @@ Governor const &            Governor::INVALID           = UniqueInvalidGovernor;
 Governor::GovernorVector    Governor::s_theGovernors;
 Governor::TiGoalQueue       Governor::s_tiQueue;
 
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ResizeAll
+//
+// Description: Resize the Governor data for a (different?) number of players.
+//
+// Parameters : newMaxPlayerId	: number of players (highest player id)
+//
+// Globals    : s_theGovernors 	: updated
+//
+// Returns    : -
+//
+// Remark(s)  : static function
+//
+//----------------------------------------------------------------------------
 void Governor::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 {
-	sint32 old_size = s_theGovernors.size();
+	size_t const	old_size = s_theGovernors.size();
 
 	s_theGovernors.resize(newMaxPlayerId);
 
-	
-	for(sint32 i = old_size; i < newMaxPlayerId; i++)
+	for (size_t i = old_size; i < newMaxPlayerId; ++i)
 	{
 		s_theGovernors[i].SetPlayerId(i);
 	}
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::LoadAll
+//
+// Description: Restore the Governor data from an archived stream
+//
+// Parameters : archive			: stream to restore from
+//
+// Globals    : s_theGovernors 	: updated
+//
+// Returns    : -
+//
+// Remark(s)  : static function
+//				Assumption: The size of s_theGovernors has been updated 
+//                          (read from stream) before calling this function.
+//
+//----------------------------------------------------------------------------
 void Governor::LoadAll(CivArchive & archive)
 {
-	for(uint32 i = 0; i < s_theGovernors.size(); i++)
+	for (uint32 i = 0; i < s_theGovernors.size(); i++)
 	{
 		s_theGovernors[i].Load(archive);
 	}
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::SaveAll
+//
+// Description: Save the Governor data to an archived stream
+//
+// Parameters : archive			: stream to save to
+//
+// Globals    : s_theGovernors 	: input (not modified)
+//
+// Returns    : -
+//
+// Remark(s)  : static function
+//				Assumption: The size of s_theGovernors has been saved 
+//                          (written to stream) before calling this function.
+//
+//----------------------------------------------------------------------------
 void Governor::SaveAll(CivArchive & archive)
 {
 	for (uint32 i = 0; i < s_theGovernors.size(); i++)
@@ -4937,21 +4984,22 @@ void Governor::ManageGoodsTradeRoutes()
 	
 	new_routes.sort();
 
-	
-	GoodsRouteList::iterator route_iter = new_routes.begin();
-	while (route_iter != new_routes.end() && unused_freight > 0)
+    for 
+    (
+		GoodsRouteList::iterator route_iter = new_routes.begin();
+	    (route_iter != new_routes.end()) && (unused_freight > 0);
+        ++route_iter
+    )
 	{
 		if (route_iter->m_cost < unused_freight) 
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
-				GEA_Int, route_iter->m_resource,
-				GEA_City, &route_iter->m_sourceCity,
-				GEA_City, &route_iter->m_destinationCity,
-				GEA_End);
+				                   GEA_Int,         route_iter->m_resource,
+				                   GEA_City,        route_iter->m_sourceCity,
+				                   GEA_City,        route_iter->m_destinationCity,
+				                   GEA_End
+                                  );
 			unused_freight -= route_iter->m_cost;
 		}
-	
-		
-		route_iter++;
 	}
 }
