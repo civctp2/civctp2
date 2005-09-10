@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source file
-// Description  :
+// Description  : Activision User Interface: Main user interface
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -18,11 +18,18 @@
 //
 // Compiler flags
 //
+// _DEBUG
+// - Generate debug version when set.
+//
+// LOCK_SURFACES_ONCE
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - moved CalculateHash to aui_Base
+// - Moved CalculateHash to aui_Base
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -167,7 +174,7 @@ AUI_ERRCODE aui_UI::InitCommon(
 	
 	if ( ldlFilename )
 	{
-		AUI_ERRCODE errcode;
+		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 		m_ldl = new aui_Ldl( &errcode, ldlFilename );
 		Assert( AUI_NEWOK(m_ldl,errcode) );
 		if ( !AUI_NEWOK(m_ldl,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -212,7 +219,7 @@ AUI_ERRCODE aui_UI::InitCommon(
 
 AUI_ERRCODE aui_UI::CreateScreen( void )
 {
-	AUI_ERRCODE retcode;
+	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
 	
 	
@@ -1332,7 +1339,7 @@ void aui_UI::SetEditMode( BOOL mode )
 
 AUI_ERRCODE aui_UI::CreateEditModeDialog(BOOL make)
 {
-	AUI_ERRCODE auiErr;
+	AUI_ERRCODE auiErr = AUI_ERRCODE_OK;
 
 	if ( make ) {
 		if ( m_editWindow ) return AUI_ERRCODE_OK;

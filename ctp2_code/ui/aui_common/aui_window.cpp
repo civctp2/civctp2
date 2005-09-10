@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Activision User Interface window
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// __AUI_USE_DIRECTX__
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -79,7 +98,6 @@ AUI_ERRCODE aui_Window::InitCommon( sint32 bpp, AUI_WINDOW_TYPE type )
 
 	m_stencil = NULL;
 
-															
 	m_bpp = bpp ? bpp : g_ui->BitsPerPixel();
 	m_type = type;
 	m_surface = NULL;
@@ -92,7 +110,7 @@ AUI_ERRCODE aui_Window::InitCommon( sint32 bpp, AUI_WINDOW_TYPE type )
 
 	m_grabPoint.x = m_grabPoint.y = 0;
 
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_grabRegion = new aui_Region(
 		&errcode,
 		aui_UniqueId(),
@@ -148,40 +166,6 @@ AUI_ERRCODE aui_Window::CreateSurface( void )
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 aui_Window::~aui_Window()
 {
 	if ( m_grabRegion )
@@ -195,11 +179,6 @@ aui_Window::~aui_Window()
 		delete m_surface;
 		m_surface = NULL;
 	}
-
-
-
-
-
 
 
 	if ( m_dirtyList )
@@ -220,7 +199,6 @@ aui_Window::~aui_Window()
 		m_focusList = NULL;
 	}
 }
-
 
 
 AUI_ERRCODE aui_Window::Move( sint32 x, sint32 y )
@@ -245,13 +223,11 @@ AUI_ERRCODE aui_Window::Move( sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_Window::MoveOG( void )
 {
 	AUI_ERRCODE errcode = Move( m_ogX, m_ogY );
 	return errcode;
 }
-
 
 AUI_ERRCODE aui_Window::Offset( sint32 dx, sint32 dy )
 {
@@ -276,12 +252,8 @@ AUI_ERRCODE aui_Window::Offset( sint32 dx, sint32 dy )
 }
 
 
-
 AUI_ERRCODE aui_Window::Resize( sint32 width, sint32 height )
 {
-	
-	
-	
 	BOOL reallocSurface = FALSE;
 	if ( m_surface )
 	{
@@ -292,11 +264,6 @@ AUI_ERRCODE aui_Window::Resize( sint32 width, sint32 height )
 		{
 			delete m_surface;
 			m_surface = NULL;
-
-
-
-
-
 
 		}
 	}
@@ -320,7 +287,6 @@ AUI_ERRCODE aui_Window::Resize( sint32 width, sint32 height )
 
 	if ( reallocSurface ) MakeSureSurfaceIsValid();
 
-	
 	m_dirtyList->Flush();
 	Draw();
 
@@ -328,18 +294,10 @@ AUI_ERRCODE aui_Window::Resize( sint32 width, sint32 height )
 }
 
 
-
 AUI_ERRCODE aui_Window::AddChild( aui_Region *child )
 {
-	
 	Assert( child != NULL );
 	if ( !child ) return AUI_ERRCODE_INVALIDPARAM;
-
-
-
-
-
-
 
 
 
@@ -353,7 +311,6 @@ AUI_ERRCODE aui_Window::AddChild( aui_Region *child )
 
 	return errcode;
 }
-
 
 
 AUI_ERRCODE aui_Window::RemoveChild( uint32 controlId )
@@ -431,10 +388,8 @@ void aui_Window::MakeSureSurfaceIsValid( void )
 	{
 		CreateSurface();
 
-
 	}
 }
-
 
 
 void aui_Window::DeleteSurfaceIfDynamic( void )
@@ -444,20 +399,12 @@ void aui_Window::DeleteSurfaceIfDynamic( void )
 		delete m_surface;
 		m_surface = NULL;
 
-
-
-
-
-
 	}
 }
 
 
-
-
 AUI_ERRCODE aui_Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_surface;
@@ -471,8 +418,6 @@ AUI_ERRCODE aui_Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	return AUI_ERRCODE_OK;
 }
-
-
 
 
 AUI_ERRCODE aui_Window::Invalidate( RECT *rect )
@@ -498,14 +443,12 @@ AUI_ERRCODE aui_Window::Invalidate( RECT *rect )
 }
 
 
-
 AUI_ERRCODE aui_Window::AddDirtyRect( RECT *rect )
 {
 	if ( !rect ) return AddDirtyRect( 0, 0, m_width, m_height );
 
 	return AddDirtyRect( rect->left, rect->top, rect->right, rect->bottom );
 }
-
 
 
 AUI_ERRCODE aui_Window::AddDirtyRect( sint32 left, sint32 top, sint32 right, sint32 bottom )
@@ -559,10 +502,6 @@ uint32 aui_Window::SetTransparent( BOOL transparent, BOOL opaqueControls )
 	{
 		m_attributes &= ~k_WINDOW_ATTRIBUTE_TRANSPARENT;
 
-
-
-
-
 	}
 
 	m_opaqueControls = opaqueControls;
@@ -576,7 +515,6 @@ uint32 aui_Window::SetTransparent( BOOL transparent, BOOL opaqueControls )
 
 	return oldAttributes;
 }
-
 
 
 uint32 aui_Window::SetTranslucent( BOOL translucent, BOOL opaqueControls )
@@ -590,17 +528,11 @@ uint32 aui_Window::SetTranslucent( BOOL translucent, BOOL opaqueControls )
 		if ( !IsDynamic() || !IsHidden() )
 		{
 			if ( !m_surface ) CreateSurface();
-
 		}
 	}
 	else
 	{
 		m_attributes &= ~k_WINDOW_ATTRIBUTE_TRANSLUCENT;
-
-
-
-
-
 	}
 
 	m_opaqueControls = opaqueControls;
@@ -614,7 +546,6 @@ uint32 aui_Window::SetTranslucent( BOOL translucent, BOOL opaqueControls )
 
 	return oldAttributes;
 }
-
 
 
 uint32 aui_Window::SetStronglyModal( BOOL stronglyModal )
@@ -633,7 +564,6 @@ uint32 aui_Window::SetStronglyModal( BOOL stronglyModal )
 
 	return oldAttributes;
 }
-
 
 
 uint32 aui_Window::SetWeaklyModal( BOOL weaklyModal )
@@ -682,10 +612,6 @@ uint32 aui_Window::SetDynamic( BOOL dynamic )
 			m_surface = NULL;
 
 
-
-
-
-
 		}
 	}
 	else
@@ -696,7 +622,6 @@ uint32 aui_Window::SetDynamic( BOOL dynamic )
 	
 	return oldAttributes;
 }
-
 
 
 AUI_ERRCODE aui_Window::Draw( aui_Surface *surface, sint32 x, sint32 y )
@@ -711,17 +636,12 @@ AUI_ERRCODE aui_Window::Draw( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-
-
-
-
 void aui_Window::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
 	if ( IsStronglyModal() )
 		
 		if ( !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
 }
-
 
 
 void aui_Window::MouseLDragAway( aui_MouseEvent *mouseData )

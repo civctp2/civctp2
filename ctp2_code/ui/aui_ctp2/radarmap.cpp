@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : User interface radar map
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,9 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 // - Borders on the minimap are now shown if fog of war is off or god mode
 //   is on, even if the there is no contact to that civilisation.
 //   - Mar. 4th 2005 Martin Gühmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 

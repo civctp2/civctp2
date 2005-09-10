@@ -2,8 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
-// Id           : $Id:$
+// Description  : The civilization 3 dropdown menu
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ C3DropDown::C3DropDown(
 
 AUI_ERRCODE C3DropDown::CreateComponents( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	m_button = new PictureButton(
 		&errcode,

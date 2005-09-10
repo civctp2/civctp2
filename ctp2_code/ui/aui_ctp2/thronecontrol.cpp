@@ -1,6 +1,32 @@
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Throne control (probably unused but worth to be reimplemented)
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _SHOW_UPGRADE_RECTS
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -133,7 +159,7 @@ void ThroneControl::InitCommonLdl(MBCHAR *ldlBlock)
 	s_throneImage[5] = datablock->GetString( k_THRONE_LDL_RELIGIOUS );
 
 	
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -166,7 +192,7 @@ void ThroneControl::InitCommonLdl(MBCHAR *ldlBlock)
 
 void ThroneControl::InitCommon(void)
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR s[_MAX_PATH];
 
 	if (!g_civPaths->GetSpecificPath(C3DIR_PICTURES, s, FALSE)) return;
@@ -294,7 +320,7 @@ void ThroneControl::SetDrawOrder( sint8 a, sint8 b, sint8 c, sint8 d, sint8 e )
 
 aui_Surface *ThroneControl::InitializeNewBG( MBCHAR *filename )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_Surface *tempBG = NULL;
 
 	
@@ -329,7 +355,7 @@ aui_Surface *ThroneControl::InitializeNewBG( MBCHAR *filename )
 
 void ThroneControl::CrossFadeImage( MBCHAR *filename )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_Surface *tempBG = NULL;
 
 	sint32 width = m_upgradeImage[ m_selectedImage ]->TheSurface()->Width();
@@ -374,7 +400,7 @@ void ThroneControl::CrossFadeImage( MBCHAR *filename )
 
 void ThroneControl::DisplayZoomedImage( MBCHAR *filename )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	if ( m_zoomedImage ) {
 		RemoveSubControl( m_zoomedImage->Id() );
@@ -411,7 +437,7 @@ void ThroneControl::HilightImage( sint32 index )
 	sint32 height = m_upgradeRect[index].bottom - m_upgradeRect[index].top;
 
 	RECT rect = { 0, 0, width, height };
-	AUI_ERRCODE errcode;	
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;	
 
 	
 	if ( !m_oldCutout ) {

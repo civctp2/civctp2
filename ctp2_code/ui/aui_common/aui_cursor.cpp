@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Activision User Interface cursor
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// __AUI_USE_DIRECTX__
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -71,7 +90,7 @@ AUI_ERRCODE aui_Cursor::SetHotspot( sint32 x, sint32 y )
 
 AUI_ERRCODE aui_Cursor::LoadEmpty( sint32 width, sint32 height, sint32 bpp )
 {
-	AUI_ERRCODE retcode;
+	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
 #ifdef __AUI_USE_DIRECTX__
 	m_surface = new aui_DirectSurface(

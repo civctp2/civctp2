@@ -1,14 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The civilization 3 utility dialog box
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -390,7 +408,7 @@ void C3UtilityPlayerListButtonActionCallback( aui_Control *control, uint32 actio
 
 c3_UtilityCityListPopup::c3_UtilityCityListPopup( c3_UtilityCityListCallback *callback, MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -425,7 +443,7 @@ c3_UtilityCityListPopup::c3_UtilityCityListPopup( c3_UtilityCityListCallback *ca
 
 sint32 c3_UtilityCityListPopup::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "TitleLabel");
@@ -539,7 +557,7 @@ sint32 c3_UtilityCityListPopup::UpdateData( void )
 
 c3_PiracyPopup::c3_PiracyPopup( c3_PiracyCallback *callback, MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -573,7 +591,7 @@ c3_PiracyPopup::c3_PiracyPopup( c3_PiracyCallback *callback, MBCHAR *ldlBlock )
 
 sint32 c3_PiracyPopup::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -682,7 +700,7 @@ sint32 c3_PiracyPopup::UpdateData( void )
 
 c3_ExpelPopup::c3_ExpelPopup( c3_ExpelCallback *callback, MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -716,7 +734,7 @@ c3_ExpelPopup::c3_ExpelPopup( c3_ExpelCallback *callback, MBCHAR *ldlBlock )
 
 sint32 c3_ExpelPopup::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -800,7 +818,7 @@ c3_UtilityTextFieldPopup::c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback*
 												   MBCHAR *messageText, MBCHAR *ldlBlock, void *data,
 													bool wantEmpties)
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -863,7 +881,7 @@ c3_UtilityTextFieldPopup::c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback*
 
 sint32 c3_UtilityTextFieldPopup::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "TitleLabel");
@@ -964,7 +982,7 @@ sint32 c3_UtilityTextFieldPopup::UpdateData( void )
 
 c3_UtilityTextMessagePopup::c3_UtilityTextMessagePopup( MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback* callback,  MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -1001,7 +1019,7 @@ c3_UtilityTextMessagePopup::c3_UtilityTextMessagePopup( MBCHAR *text, sint32 typ
 
 sint32 c3_UtilityTextMessagePopup::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "TitleLabel");
@@ -1221,7 +1239,7 @@ void c3_RemoveAbortMessage( void )
 
 c3_UtilityAbortPopup::c3_UtilityAbortPopup( MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback* callback,  MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -1255,7 +1273,7 @@ c3_UtilityAbortPopup::c3_UtilityAbortPopup( MBCHAR *text, sint32 type, c3_Utilit
 
 sint32 c3_UtilityAbortPopup::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -1371,7 +1389,7 @@ void c3_UtilityAbortPopup::kh_Close()
 
 c3_UtilityPlayerListPopup::c3_UtilityPlayerListPopup( c3_UtilityPlayerListCallback *callback, MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -1405,7 +1423,7 @@ c3_UtilityPlayerListPopup::c3_UtilityPlayerListPopup( c3_UtilityPlayerListCallba
 
 sint32 c3_UtilityPlayerListPopup::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	

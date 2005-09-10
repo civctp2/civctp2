@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Line graph
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +27,7 @@
 // - Repaired memory leaks.
 // - Resolved ambigious calls of std::max.
 // - Removed all warnings on .NET
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -274,7 +278,7 @@ void LineGraph::DrawLines(int eventsOfset)
 {
 	sint32		color = (sint32)COLOR_RED;
 	sint32		i, j;
-	sint32		xpos, ypos, oldxpos, oldypos;
+	sint32		xpos = 0, ypos = 0, oldxpos = 0, oldypos = 0;
 	double		point;
 	BOOL		first;
 	

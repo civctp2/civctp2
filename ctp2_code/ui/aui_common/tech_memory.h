@@ -16,12 +16,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _MSC_VER
+// - Seems that this should be removed
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Variable scope corrected
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -140,7 +144,7 @@ tech_Memory< T >::~tech_Memory()
 template< class T >
 T *tech_Memory< T >::New( void )
 {
-	T *t;
+	T *t = NULL;
 
 	if ( m_pLast )
 	{
@@ -223,7 +227,7 @@ void tech_Memory< T >::UnuseElement( T *t )
 	if ( !t ) return;
 
 	
-	size_t offset;
+	size_t offset = 0;
 	Block *			pBlock = m_pFirst;
 	for ( ; pBlock ; pBlock = pBlock->pNext )
 	{
