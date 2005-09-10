@@ -16,6 +16,12 @@
 //
 //----------------------------------------------------------------------------
 //
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
 // Modifications from the original Activision code:
 //
 // - Switched INF/CAP typo corrected by Peter Triggs
@@ -32,6 +38,7 @@
 //   (L. Hirth 6/2004)
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
 // - Made Build Manager window non-modal. - July 24th 2005 Martin Gühmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -251,7 +258,7 @@ AUI_ERRCODE EditQueue::Initialize()
 	if(s_editQueue)
 		return AUI_ERRCODE_OK;
 
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_editQueue = new EditQueue(&err);
 
 	Assert(err == AUI_ERRCODE_OK);
@@ -1834,7 +1841,7 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 			bq->Clear();
 		}
 
-		sint32 insIndex;
+		sint32 insIndex = 0;
 		switch(eqAction) {
 			case EDIT_QUEUE_MULTI_ACTION_INSERT:
 				

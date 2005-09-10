@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Science window
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Use the same science percentage everywhere.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -310,7 +314,7 @@ void sciencewin_AdvanceListCallback( aui_Control *control, uint32 action, uint32
 sint32 knowledgewin_Initialize( void )
 {
 
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -531,7 +535,7 @@ sint32 knowledgewin_Initialize( void )
 
 sint32 knowledgewin_InitGraphicTrim( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	sprintf( imageBlock, "%s.%s", windowBlock, "Lt" );
@@ -1121,7 +1125,7 @@ sint32 sciencewin_Cleanup( void )
 
 ScienceWin::ScienceWin( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	strcpy(windowBlock,"ScienceWin");
@@ -1146,7 +1150,7 @@ ScienceWin::ScienceWin( void )
 
 sint32 ScienceWin::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 

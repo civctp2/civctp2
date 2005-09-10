@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The tutorial window
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -34,7 +63,6 @@ extern C3UI			*g_c3ui;
 extern Player		**g_player;
 extern SelectedItem	*g_selected_item; 
 
-extern aui_Surface	*g_sharedSurface;
 extern SlicEngine	*g_slicEngine;
 
 extern ProfileDB	*g_theProfileDB;
@@ -123,7 +151,7 @@ sint32 tutorialwin_Cleanup( void )
 
 TutorialWin::TutorialWin( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	strcpy(windowBlock,"TutorialWin");
@@ -146,7 +174,7 @@ TutorialWin::TutorialWin( void )
 
 sint32 TutorialWin::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -198,9 +226,7 @@ TutorialWin::~TutorialWin( void )
 
 void TutorialWin::Display( void )
 {
-	AUI_ERRCODE errcode;
-
-	errcode = g_c3ui->AddWindow( m_window );
+	AUI_ERRCODE errcode = g_c3ui->AddWindow( m_window );
 	Assert( errcode == AUI_ERRCODE_OK );
 
 
@@ -209,9 +235,7 @@ void TutorialWin::Display( void )
 
 void TutorialWin::Remove( void )
 {
-	AUI_ERRCODE errcode;
-
-	errcode = g_c3ui->RemoveWindow( m_window->Id() );
+	AUI_ERRCODE errcode = g_c3ui->RemoveWindow( m_window->Id() );
 	Assert( errcode == AUI_ERRCODE_OK );
 
 
@@ -220,7 +244,7 @@ void TutorialWin::Remove( void )
 
 sint32 TutorialWin::UpdateData( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR title[_MAX_PATH];
 	sint32 i = 0;
@@ -253,7 +277,7 @@ sint32 TutorialWin::UpdateData( void )
 
 sint32 TutorialWin::AddToList( MBCHAR *text, sint32 index )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	

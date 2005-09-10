@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -26,6 +26,7 @@
 //
 // - Memory leaks repaired, cleanup in destructor.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -160,7 +161,7 @@ void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint3
 
 HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -192,7 +193,7 @@ HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
 
 sint32 HotseatList::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of the key mapping screen
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _PLAYTEST
+// - Builds executable with additional features for playtesting
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - 
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -128,7 +132,7 @@ sint32 km_screen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE km_screen_Initialize( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		groupBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -307,7 +311,7 @@ sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam )
 
 sint32 km_screen_loadKeyList( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldl[_MAX_PATH];
 
 	sint32 i;

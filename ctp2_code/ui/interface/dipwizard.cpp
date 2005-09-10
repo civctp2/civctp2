@@ -29,6 +29,7 @@
 //   so that the AI won't override them: DipWizard::SendCallback
 // - Repaired crashes when the emissary photo is missing.
 // - Added female leader images. (Aug 20th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -328,7 +329,7 @@ AUI_ERRCODE DipWizard::Initialize()
 		return AUI_ERRCODE_OK;
 
 	
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_dipWizard = new DipWizard(&err);
 
 	Assert(err == AUI_ERRCODE_OK);
@@ -1089,7 +1090,7 @@ void DipWizard::UpdateExchangeStage()
 	if(m_proposal >= 0)
 		rec = g_theDiplomacyProposalDB->Get(m_proposal);
 
-	ctp2_TabButton *tabButton;
+	ctp2_TabButton *tabButton = NULL;
 	ctp2_Tab *tab[3];
 	bool changeTab = false;
 	sint32 shown = -1;
@@ -2689,7 +2690,7 @@ void DipWizard::CheckIntelligence(aui_Control *control, uint32 action, uint32 da
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	sint32 pl;
+	sint32 pl = -1;
 
 	switch(GetStage()) {
 		case DIP_WIZ_STAGE_RECIPIENT:

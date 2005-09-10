@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -28,6 +28,7 @@
 // - Always return to main menu, never SP menu (JJB)
 // - Repaired memory leaks.
 // - Added tribe index check.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -203,7 +204,7 @@ sint32 spnewgamescreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE spnewgamescreen_Initialize( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( g_spNewGameWindow ) return AUI_ERRCODE_OK; 

@@ -1,13 +1,33 @@
-
-//ranking.cpp
-
-//Pollution power graph added by Martin Gühmann on November the 2nd
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer chat box
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// OLD_GRAPHS
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -332,7 +352,7 @@ sint32 SetupRankingGraph(
 	
 	
 	BOOL dumpStrings = FALSE;
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	if (!s_stringTable) {
 		s_stringTable = new aui_StringTable( &errcode, "InfoStrings" );

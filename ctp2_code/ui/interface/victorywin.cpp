@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The victory window plays the win/lose video
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Removed refferences to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -284,7 +285,7 @@ sint32 victorywin_SetLineGraph( BOOL lineGraph)
 
 sint32 victorywin_Initialize( sint32 type )
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( g_victoryWindow ) 
@@ -404,7 +405,7 @@ sint32 victorywin_Cleanup( void )
 
 sint32 victorywin_AddWonders( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	int i = 0;
@@ -865,7 +866,7 @@ sint32 HighScoreListItem::Compare(ctp2_ListItem *item2, uint32 column)
 
 HighScoreWindowPopup::HighScoreWindowPopup( sint32 type )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	strcpy(windowBlock, "HighScoreWindowPopup");
@@ -906,7 +907,7 @@ HighScoreWindowPopup::HighScoreWindowPopup( sint32 type )
 
 sint32 HighScoreWindowPopup::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	

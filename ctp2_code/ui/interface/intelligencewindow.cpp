@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Intelligence window (diplomacy subwindow)
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Update the state of the embargo and war buttons after confirmation.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -151,7 +152,7 @@ AUI_ERRCODE IntelligenceWindow::Initialize()
 		return AUI_ERRCODE_OK;
 	}
 
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_intelligenceWindow = new IntelligenceWindow(&err);
 	Assert(err == AUI_ERRCODE_OK);
 

@@ -73,7 +73,7 @@ sint32 loadsavemapscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( g_loadSaveMapWindow ) return AUI_ERRCODE_OK; 

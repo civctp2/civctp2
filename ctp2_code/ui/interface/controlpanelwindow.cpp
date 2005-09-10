@@ -51,6 +51,7 @@
 //   CityPanelRebuild - notice the strange immediate return) are never called,
 //   and some variables (e.g. m_mainDropDown) are not NULL-initialised in the 
 //   constructor. Maybe this is some leftover of the CTP1 code?
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -556,7 +557,7 @@ sint32 controlpanelwindow_Initialize()
 		MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 		strcpy(windowBlock, "ControlPanelWindow");
 
-		AUI_ERRCODE		errcode;
+		AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 		g_controlPanel = new ControlPanelWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
 		Assert( AUI_NEWOK(g_controlPanel, errcode) );
 		if ( !AUI_NEWOK(g_controlPanel, errcode) ) return -1;
@@ -2763,7 +2764,7 @@ ControlPanelWindow::CreateTileImpBanks()
 
 	const	IconRecord *irec;
 	bool	found;
-	uint32	row,column,theClass,group_id;
+	uint32	row = 0, column = 0, theClass = 0, group_id = 0;
 
 
 	
@@ -2900,7 +2901,7 @@ ControlPanelWindow::CreateTileImpBanks()
 				a_button->SetStatusText(g_theStringDB->GetNameStr( timpRec->GetStatusbar() ));
 				aui_TipWindow *tipwin = (aui_TipWindow *)a_button->GetTipWindow();
 				if(!tipwin) {
-					AUI_ERRCODE errcode;
+					AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 					tipwin = new aui_TipWindow(&errcode, aui_UniqueId(), "DefaultTipWindow");
 					Assert( AUI_NEWOK(tipwin,errcode) );
 					if ( AUI_NEWOK(tipwin,errcode) ) {

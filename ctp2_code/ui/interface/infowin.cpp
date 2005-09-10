@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Old CTP1 info window, seems that most parts aren't used.
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -143,7 +143,6 @@ extern WorkMap					*g_workMap;
 extern ConstDB					*g_theConstDB;
 extern TurnCount				*g_turn; 
 
-extern aui_Surface				*g_sharedSurface;
 extern ProfileDB                *g_theProfileDB;
 extern Pollution				*g_thePollution; 
 
@@ -599,7 +598,7 @@ sint32 infowin_Cleanup_Controls( void )
 
 sint32 infowin_Init_Controls( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			controlSubBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1124,7 +1123,7 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 	
 	
 	BOOL dumpStrings = FALSE;
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	if (!s_stringTable) {
 		s_stringTable = new aui_StringTable( &errcode, "InfoStrings" );

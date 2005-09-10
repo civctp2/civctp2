@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Great library
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// HAVE_PRAGMA_ONCE
+// - Uses #pragma once preprocessor derective
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

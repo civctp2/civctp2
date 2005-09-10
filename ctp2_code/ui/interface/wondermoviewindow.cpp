@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description	: Wonder movie pop-up window
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -100,7 +104,7 @@ WonderMovieWindow::~WonderMovieWindow()
 AUI_ERRCODE WonderMovieWindow::InitCommonLdl(MBCHAR *ldlBlock)
 {
 	MBCHAR			buttonBlock[k_AUI_LDL_MAXBLOCK+1];
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	sprintf(buttonBlock, "%s.%s", ldlBlock, "MovieButton");
 	m_movieButton = new aui_MovieButton(&errcode, aui_UniqueId(), buttonBlock, wondermoviewin_MovieButtonCallback);
