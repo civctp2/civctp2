@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Army data handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -50,6 +50,8 @@
 // - Implemented GovernmentModified for UnitDB - April 30th 2005 Martin Gühmann
 // - Added unit record and civilisation information to some messageboxes.
 // - Repaired crash when inciting an uprising succeeds.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Positions of units on transports are now updated. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2653,7 +2655,7 @@ void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray 
 		top_src = m_array[0];
 
 	
-	UnitActor **restOfStack; 
+	UnitActor **restOfStack = NULL; 
 	sint32 numRest = m_nElements - 1;
 
 	if (numRest > 0) {
@@ -2730,7 +2732,7 @@ BOOL ArmyData::CanSlaveRaid(double &success, double &death,
 BOOL ArmyData::CanSlaveRaid(double &success, double &death, 
 							sint32 &timer, sint32 &amount) const
 {
-	UnitRecord::SlaveRaidsData *data;
+	UnitRecord::SlaveRaidsData *data = NULL;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if( !m_array[i].GetDBRec()->GetSlaveRaids(data)) {
 			
@@ -3857,7 +3859,7 @@ BOOL ArmyData::CanConvertCity(const MapPoint &point) const
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 {
-	double chance, death_chance;
+	double chance = 0.0, death_chance = 0.0;
 	double best_chance = 0.0;
 	double best_death_chance = 0.0;
 	sint32 best_uindex = -1;
@@ -6801,7 +6803,7 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 		}
 	}
 
-	uint8 dirs;
+	uint8 dirs = 0;
 	sint32 dd;
 	MapPoint chk;
 	if(!doneRemoving) {
@@ -6966,7 +6968,7 @@ void ArmyData::MoveActors(const MapPoint &pos,
 	sint32 numRevealed = revealedUnits.Num();
 
 	
-	UnitActor **restOfStack; 
+	UnitActor **restOfStack = NULL; 
 	sint32 numRest = 0;
 
 	Unit nonDead(0);
@@ -7087,6 +7089,11 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 			g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
 			r = m_array[i].MoveToPosition(pos, revealedUnits, revealedUnexplored);
 
+			if(m_array[i].GetNumCarried() > 0){
+				sint32 j;
+				for(j = 0; j < m_array[i].GetNumCarried(); ++j)
+				m_array[i].GetData()->GetCargoList()->Access(j).SetPosAndNothingElse(pos);
+			}
 			
 			if(revealedUnits.Num() > 0 && !m_array[i].GetDBRec()->GetSingleUse()) {
 #ifdef _DEBUG
@@ -7119,8 +7126,8 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		}
 	}
 	if(anyVisible && g_radarMap) {
-		g_radarMap->RedrawTile(&oldPos);
-		g_radarMap->RedrawTile(&m_pos);
+		g_radarMap->RedrawTile(&oldPos); // oldPos only used here
+		g_radarMap->RedrawTile(&m_pos); // m_pos hasn't been modified so oldPos and m_pos are still identical
 	}
 
 	if(HasLeftMap()) {
@@ -7382,7 +7389,7 @@ BOOL ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 	sint32		numRevealed = 0;
 
 	
-	UnitActor **restOfStack; 
+	UnitActor **restOfStack = NULL; 
 	sint32 numRest = m_nElements - 1;
 
 	if (numRest > 0) {
