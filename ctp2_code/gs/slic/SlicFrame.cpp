@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic code interpreter
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -35,6 +36,7 @@
 // - Added bitwise operator handling
 // - Repaired memory leaks.
 // - Repaired crash with invalid input.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1117,6 +1119,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(symval);
 			if(symval) {
 				sval1.m_int = symval->GetArray()->GetSize();
+			}
+			else{
+				sval1.m_int = 0;
 			}
 			m_stack->Push(SS_TYPE_INT, sval1);
 			break;

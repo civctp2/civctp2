@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of a list of Units in the same cell
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -28,6 +29,7 @@
 //   suggestions by NelsonAndBronte.
 // - Make unit types with 0 movement stand still (compiler option).
 // - Handled crashes with invalid units.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -749,7 +751,7 @@ BOOL CellUnitList::GetMovementTypeAir() const
 BOOL CellUnitList::CanBeCargoPodded() const
 {
 	sint32 i;
-	sint32 cargoPodType;
+	sint32 cargoPodType = -1;
 	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
 		if(g_theUnitDB->Get(i)->GetCargoPod()) {
 			cargoPodType = i;

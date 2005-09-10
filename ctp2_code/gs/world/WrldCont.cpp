@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : World continent handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 
 #include "XY_Coordinates.h"
@@ -690,7 +720,7 @@ void World::Grassfire8(const BOOL is_choke_land, sint16 **tmp_map)
     } 
 
     
-    sint16 v, mv;
+    sint16 v, mv = 0; // Reconsider!
     MapPoint w; 
     for (pos.x=0; pos.x < m_size.x; pos.x++) { 
         for (pos.y=0; pos.y < m_size.y; pos.y++) { 
@@ -773,8 +803,8 @@ void World::ClipGF(sint16 **tmp_map)
     sint16 curr, v;
     sint16 threshold_min = 1; 
     sint16 threshold_max = 1; 
-    sint32 count; 
-    BOOL going_up;
+    sint32 count = 0; 
+    BOOL going_up = FALSE;
     
     
      for (pos.x=0; pos.x<m_size.x; pos.x++) { 

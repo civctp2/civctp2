@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : World generator
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,8 +18,12 @@
 //
 // Compiler flags
 // 
-// - None
-// 
+// _DEBUG
+// - Generate debug version
+//
+// DUMP_TERRAIN_HEIGHT_MAPS
+// USE_COM_REPLACEMENT
+// CELL_COLOR
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,6 +38,7 @@
 // - Wrap handling improved
 // - Using /importmap to import a text map no longer causes the river mouths
 //   to be deleted - 2005-07-01 Shaun Dove
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1309,7 +1315,7 @@ void World::GenerateDeepWater()
 	sint32 cur = -1;
 
 	MapPoint tmp; 
-	sint32 minx, miny, rmin, ocount, dcount, k; 
+	sint32 minx = 0, miny = 0, rmin, ocount, dcount, k; 
 	BOOL find; 
 	sint32 radius = 2; 
 	sint32 delta = 1; 
@@ -1811,7 +1817,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
     sint32 searching; 
 	MapPoint chk;
 	sint32 s;
-	sint32 badx, bady;
+	sint32 badx = 0, bady = 0;
 	float badmax = -1.0;
 
     maxx = 0; 
@@ -2948,7 +2954,7 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 	sint32 maxheight;
 	sint32 xsrch, ysrch;
 	sint32 xend, yend;
-	sint32 maxx, maxy;
+	sint32 maxx = 0, maxy = 0;
 
 	BOOL atMouth;
 	
@@ -3011,7 +3017,7 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 			while(!atMouth) {
 				sint32 xc, yc;
 				sint32 lowest = 0x7fffffff;
-				sint32 lowx, lowy;
+				sint32 lowx = 0x7fffffff, lowy = 0x7fffffff;
 				CHKCOORD(x, y);
 
 				sint32 curheight = map[y * m_size.x + x];

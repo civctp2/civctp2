@@ -1,11 +1,32 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer terrain improvement packet handling.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -24,11 +45,42 @@ extern World *g_theWorld;
 extern Player **g_player;
 extern TiledMap *g_tiledMap;
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetTerrainImprovement::NetTerrainImprovement
+//
+// Description: Constructor
+//
+// Parameters : TerrainImprovementData *data: The terrain improvement data to
+//                                            send/retrieve.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 NetTerrainImprovement::NetTerrainImprovement(TerrainImprovementData *data)
 {
 	m_data = data;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetTerrainImprovement::Packetize
+//
+// Description: Generate an application data packet to transmit.
+//
+// Parameters : buf         : buffer to store the message
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetTerrainImprovement::Packetize(uint8 *buf, uint16 &size)
 {
 	buf[0] = k_PACKET_TERRAIN_ID >> 8;
@@ -45,12 +97,29 @@ void NetTerrainImprovement::Packetize(uint8 *buf, uint16 &size)
 	PUSHLONG(m_data->m_materialCost);
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetFeatTracker::Unpacketize
+//
+// Description: Retrieve the data from a received application data packet.
+//
+// Parameters : id          : Sender identification?
+//              buf         : Buffer with received message
+//              size        : Length of received message (in bytes)
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetTerrainImprovement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 {
 	Assert(MAKE_CIV3_ID(buf[0], buf[1]) == k_PACKET_TERRAIN_ID);
 	sint32 pos = 2;
 	MapPoint oldpoint;
-	PLAYER_INDEX oldOwner;
+	PLAYER_INDEX oldOwner = -1;
 
 	TerrainImprovement imp;
 	PULLLONGTYPE(imp, TerrainImprovement);

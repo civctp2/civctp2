@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Feat tracking
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
 // - Propagate feat accomplishments.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -388,7 +392,7 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 		return 0;
 
 	sint32 result = 0;
-	sint32 sub;
+	sint32 sub = 0;
 	PointerList<Feat>::Walker walk(m_effectList[effect]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->GetPlayer() == player) {

@@ -254,7 +254,7 @@ sint32 NetCRC::SerializeDBs()
 //
 // Globals    : -
 //
-// Returns    : size        : number of bytes stored in buf
+// Returns    : -
 //
 // Remark(s)  : -
 //

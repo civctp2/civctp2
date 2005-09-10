@@ -4,7 +4,7 @@
 // File type    : C++ source
 // Description  : Multiplayer endgame packet handling. This file looks like
 //                unused or not updated accordingly.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -72,7 +72,7 @@ NetEndGame::NetEndGame(sint32 owner)
 //
 // Globals    : -
 //
-// Returns    : size        : number of bytes stored in buf
+// Returns    : -
 //
 // Remark(s)  : -
 //

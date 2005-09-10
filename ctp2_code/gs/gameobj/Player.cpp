@@ -55,6 +55,7 @@
 // - Made version constants local, merged with linux branch.
 // - Removed unused void BeginTurnAllCities all cities method and
 //   prepared for city resource calculation redesign. - Aug. 7th 2005 Martin Gühmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -199,8 +200,6 @@
 
 #include "statswindow.h"
 #include "sci_advancescreen.h"
-
-#include "c3_hypertextbox.h"
 
 #include "sciencewin.h"
 
@@ -3529,7 +3528,7 @@ void Player::AcceptTradeOffer(TradeOffer offer, Unit &sourceCity, Unit &destCity
 		
 		
 	} else {
-		SlicObject *so;
+		SlicObject *so = NULL;
 		if(offer.GetOfferType() == ROUTE_TYPE_RESOURCE) {
 			so = new SlicObject("90AcceptTradeOffer");
 			so->AddGood(offer.GetOfferResource());
@@ -3857,8 +3856,8 @@ void Player::AddPopScience(const sint32 d)
 
 void Player::AddScience(const sint32 delta)
 {
-    sint32 wonderAdvanceChance;
-    sint32 gotadvance;
+    sint32 wonderAdvanceChance = 0;
+    sint32 gotadvance = 0;
     BOOL gotRandomAdvance;
 
 	m_science->AddScience(delta);
@@ -8605,7 +8604,7 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 	BOOL previouslyWon = m_hasWonTheGame;
 	BOOL previouslyLost = m_hasLostTheGame;
 
-	sint32 i, aPlayer;
+	sint32 i, aPlayer = 0; // Maybe has to be reconsidered (Barbs)
 	sint32 count = 0;
 
 	
