@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Game type selection UI
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -120,7 +123,7 @@ AUI_ERRCODE GameSelectWindow::InitCommon( void )
 
 AUI_ERRCODE GameSelectWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
 	
@@ -590,7 +593,7 @@ AUI_ERRCODE StartSelectingWindow::InitCommon( void )
 
 AUI_ERRCODE StartSelectingWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
 	

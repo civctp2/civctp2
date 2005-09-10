@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Lobby window for multiplayer games.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
 // - Memory leak report prevented.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -104,7 +108,7 @@ AUI_ERRCODE LobbyWindow::InitCommon( void )
 	wait = false;
 
 	
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_PPStrings = new aui_StringTable(
 		&errcode,
 		"strings.ppt" );
@@ -128,7 +132,7 @@ AUI_ERRCODE LobbyWindow::InitCommon( void )
 
 AUI_ERRCODE LobbyWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
 	

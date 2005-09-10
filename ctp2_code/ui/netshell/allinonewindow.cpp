@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Collection of all setup windows.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,6 +30,7 @@
 // - Memory leak repaired.
 // - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 // - The ages in the summary are now displayed correctly.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -182,7 +183,7 @@ AUI_ERRCODE AllinoneWindow::InitCommon( void )
 	if ( !m_controls ) return AUI_ERRCODE_MEMALLOCFAILED;
 	memset( m_controls, 0, m_numControls * sizeof( aui_Control *) );
 
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	g_rulesWindow = new DialogBoxWindow(
 		&errcode,
 		"ruleswindow",
@@ -261,7 +262,7 @@ AUI_ERRCODE AllinoneWindow::InitCommon( void )
 
 AUI_ERRCODE AllinoneWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
 	
@@ -1486,7 +1487,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 		m_createdExclusions = false;
 	}
 
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_Action *action;
 
 	
@@ -1496,7 +1497,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 	listbox->SetAbsorbancy( FALSE );
 	sint32 height = listbox->Height();
 
-	aui_Switch *item;
+	aui_Switch *item = NULL;
 	tech_WLList<aui_Switch *> unitList;
 
 	m_numAvailUnits = g_nsUnits->GetStrings()->GetNumStrings();
@@ -5248,7 +5249,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	
 	{
 		displayedSomething = true;
-		AUI_ERRCODE errcode;
+		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 		static ns_String mapsize( "strings.mapsize" );
 		static aui_StringTable mapsizestrings( &errcode, "strings.mapsizestrings" );

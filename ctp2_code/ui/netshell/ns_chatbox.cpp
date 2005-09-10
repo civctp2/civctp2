@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer chat box
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -26,7 +45,6 @@
 #include "ns_string.h"
 
 #include "ns_chatbox.h"
-
 
 
 ns_ChatBox::ns_ChatBox(
@@ -70,7 +88,6 @@ ns_ChatBox::ns_ChatBox(
 }
 
 
-
 void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, char *m) {
 	COLORREF color = 0x00ffffff;
 	BOOL bold = FALSE;
@@ -107,39 +124,8 @@ void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, char *m) {
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	AppendText( buf, color, bold, italic );
 }
-
 
 AUI_ERRCODE ns_ChatBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
@@ -151,10 +137,9 @@ AUI_ERRCODE ns_ChatBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE ns_ChatBox::CreateComponents( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	m_inputField = new C3TextField(
 		&errcode,
@@ -284,12 +269,10 @@ void ns_ChatBox::InputFieldAction::Execute(
 }
 
 
-
 AUI_ERRCODE ns_ChatBox::RepositionItems( void )
 {
 	return aui_TextBox::RepositionItems();
 }
-
 
 
 AUI_ERRCODE ns_ChatBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )

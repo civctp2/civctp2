@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer header
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -18,7 +37,6 @@
 #include "aui_ldl.h"
 
 #include "ns_header.h"
-
 
 
 ns_Header::ns_Header(
@@ -54,7 +72,6 @@ ns_Header::ns_Header(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 ns_Header::ns_Header(
@@ -95,12 +112,10 @@ ns_Header::ns_Header(
 }
 
 
-
 AUI_ERRCODE ns_Header::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 
 AUI_ERRCODE ns_Header::InitCommon( void )
@@ -109,10 +124,9 @@ AUI_ERRCODE ns_Header::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE ns_Header::CreateSwitches( MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	
 	aui_Ldl *theLdl = g_ui->GetLdl();
