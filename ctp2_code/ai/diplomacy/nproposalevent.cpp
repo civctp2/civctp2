@@ -1,17 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : New proposal event handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -2262,7 +2277,7 @@ STDEHANDLER(RequestHonorMilitaryAgeement_NewProposalEvent)
 
 STDEHANDLER(RequestEndEmbargo_NewProposalEvent)
 {
-	DIPLOMATIC_TONE tone;
+	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_NOT_CHOSEN;
 
 	
 	if (gameEventType == GEV_DesireMotivation)

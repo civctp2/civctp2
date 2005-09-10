@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Stack class structure implementation for debugging stack.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -35,6 +36,7 @@
 //
 // - Fix unreferenced warnings in regular compilation by placing intialization
 //   of buff and err inside #ifndef statements.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //     
 //////////////////////////////////////////////////////////////////////////////
 
@@ -206,9 +208,9 @@ void Debug_SetFAFirst(void *ptr)
 
 void Debug_AddFunction (char *name, unsigned address)
 {
-  FUNCTION_ADDRESS *new_function;
-  FUNCTION_ADDRESS *pointer;
-  FUNCTION_ADDRESS *last;
+  FUNCTION_ADDRESS *new_function = NULL;
+  FUNCTION_ADDRESS *pointer = NULL;
+  FUNCTION_ADDRESS *last = NULL;
 
   
   new_function = (FUNCTION_ADDRESS *) malloc (sizeof (FUNCTION_ADDRESS));

@@ -1,16 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Proposal response event handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -1565,7 +1581,7 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 	else if ((receiver_pollution / sender_pollution) < 1.0)
 	{
 		DiplomacyArg arg;
-		double percent;
+		double percent = 0.0;
 		DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_EQUAL;
 		
 		if (receiver_diplomat.GetPersonality()->GetDiscoveryEcotopian())

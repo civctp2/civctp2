@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -54,7 +83,6 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 
 	
 	Pixel16		*destPixel;
-	Pixel16		*srcPixel = (Pixel16 *)frame;
 
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
@@ -867,7 +895,6 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 
 	
 	Pixel16			*destPixel;
-	Pixel16			*srcPixel = (Pixel16 *)data;
 
 	Pixel16			*table = data+1;
 	Pixel16			*dataStart = table + m_height;
@@ -931,8 +958,8 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 			sint32		oldend1 = 0, 
 						oldend2 = 0;
 
-			Pixel16			firstPixel, 
-							secondPixel;
+			Pixel16			firstPixel  = 0, 
+							secondPixel = 0;
 
 			end1 = ReadTag(&mode1, &rowData1, &alpha1);
 			end2 = ReadTag(&mode2, &rowData2, &alpha2);
@@ -1142,7 +1169,6 @@ void Sprite::DrawFlashLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 
 	
 	Pixel16	*destPixel;
-	Pixel16  *srcPixel = (Pixel16 *)frame;
 
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
@@ -1235,7 +1261,6 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 
 	
 	Pixel16	*destPixel;
-	Pixel16  *srcPixel = (Pixel16 *)frame;
 
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
@@ -1351,7 +1376,6 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 
 	
 	Pixel16			*destPixel;
-	Pixel16			*srcPixel = (Pixel16 *)data;
 
 	Pixel16			*table = data+1;
 	Pixel16			*dataStart = table + m_height;
@@ -1418,8 +1442,8 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 			sint32		oldend1 = 0, 
 						oldend2 = 0;
 
-			Pixel16			firstPixel, 
-							secondPixel;
+			Pixel16			firstPixel  = 0, 
+							secondPixel = 0;
 
 			end1 = ReadTag(&mode1, &rowData1, &alpha1);
 			end2 = ReadTag(&mode2, &rowData2, &alpha2);
@@ -1610,7 +1634,6 @@ void Sprite::DrawReflectionLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, si
 
 	
 	Pixel16	*destPixel;
-	Pixel16  *srcPixel = (Pixel16 *)frame;
 
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;

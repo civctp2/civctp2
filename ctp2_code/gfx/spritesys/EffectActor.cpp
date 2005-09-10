@@ -1,15 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
- 
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Effect actor
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed some unused local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -41,7 +58,6 @@ EffectActor::EffectActor(SpriteState *ss, const MapPoint &pos)
 : Actor(ss)
 {
 	GROUPTYPE		type;
-	RECT			tmpRect = {0, 0, 10, 16};
 
 	
 	m_effectVisibility = NULL;
@@ -256,7 +272,7 @@ void EffectActor::GetNextAction(BOOL isVisible)
 		m_curAction = NULL;
 	}
 
-		Action *pendingAction = LookAtNextAction();
+		Action *pendingAction = LookAtNextAction(); // Not used
 		
 		
 	if (numItems > 0) 
@@ -363,7 +379,6 @@ void EffectActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 {
 	uint16			flags = k_DRAWFLAGS_NORMAL;
 	Pixel16			color=0;
-	BOOL			directionAttack = FALSE;
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
@@ -386,7 +401,6 @@ void EffectActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 void EffectActor::DrawDirectWithFlags(aui_Surface *surf, sint32 x, sint32 y, uint16 flags)
 {
 	Pixel16			color=0;
-	BOOL			directionAttack = FALSE;
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 

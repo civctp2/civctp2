@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Tile map handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,10 +18,10 @@
 //
 // Compiler flags
 //
-// - _DEBUG
-//   Set when generating the debug version
-// - __BIG_DIRTY_BLITS__
-// - __USING_SPANS__
+// _DEBUG
+// - Set when generating the debug version
+// __BIG_DIRTY_BLITS__
+// __USING_SPANS__
 // 
 //----------------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // - Prevented crashes on game startup and exit.
 // - The good sprite index is now retrieved from the resource database 
 //   instaed of good sprite state database. (Aug 29th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -317,7 +318,7 @@ TiledMap::TiledMap(MapPoint &size)
 	m_font = NULL;
 
 	
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_StringTable		*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
 	Assert( AUI_NEWOK(stringTable, errcode) );
 
@@ -1514,8 +1515,8 @@ void TiledMap::PostProcessMap(BOOL regenTilenums)
 	MapPoint		pos;
 	sint16			i,j;
 	MapPoint		*size;
-	TILEINDEX       origTilenum;
-	uint8           origMega;
+	TILEINDEX       origTilenum = 0;
+	uint8           origMega = 0;
 
 	Assert (g_theWorld != NULL);
 	if (g_theWorld == NULL) return;
@@ -1524,7 +1525,7 @@ void TiledMap::PostProcessMap(BOOL regenTilenums)
 
 	sint32		width = size->x;
 
-	TileInfo		*theTileInfo;
+	TileInfo		*theTileInfo = NULL;
 
 	for (i=0; i<m_mapBounds.bottom; i++) {
 		for (j=0; j<m_mapBounds.right; j++) {
@@ -2302,6 +2303,7 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 //	&& ucell.m_unseenCell->GetImprovements()->GetCount() > 0
 	){
 		env = ucell.m_unseenCell->GetEnv();
+		numDBImprovements = 0; // Maybe has to be reconsidered
 		numImprovements = ucell.m_unseenCell->GetImprovements()->GetCount();
 		hasGoody = ucell.m_unseenCell->HasHut();
 	} 
@@ -3136,7 +3138,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 					g_selected_item->GetTopCurItem(selectedPlayer, selectedID, selectType);
 
 					Unit		selectedUnit;
-					COLOR		color;
+					COLOR		color = COLOR_BLACK;
 
 					if(selectType == SELECT_TYPE_LOCAL_CITY) 
 					{
@@ -3956,7 +3958,7 @@ sint32 TiledMap::DrawCityRadius(const MapPoint &cpos, COLOR color, sint32 pop)
 	
 	if(g_theWorld->GetCell(cpos)->HasCity()) 
 	{
-		return 0;
+		return 0; // Following code not used
 		CityInfluenceIterator it(cpos, g_theWorld->GetCity(cpos).CD()->GetSizeIndex());
 
 		for(it.Start(); !it.End(); it.Next()) {
@@ -5513,7 +5515,8 @@ void TiledMap::ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1,
 	static sint32		alpha1, alpha2;
 	static sint32		oldend1, oldend2;
 
-	Pixel16			pixel1, pixel2;
+	Pixel16				pixel1 = 0;
+	Pixel16				pixel2 = 0;
 
 	if (pos == -1) {
 		end1 = ReadTag(&mode1, rowData1, &alpha1);

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Sprite file handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Crash prevention, small clean-ups.
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -156,9 +158,6 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 	   SetFilePos(current_pos);
 	}
 
-	uint32 test=GetFilePos();
-
-	
 	for (i=0; i<s->GetNumFrames(); i++) 
 	{
 		
@@ -518,9 +517,6 @@ void SpriteFile::ReadSpriteDataBasic(Sprite *s)
 		SetFilePos(GetFilePos() + size);
 	}
 
-	uint32 test=GetFilePos();
-	
-	
 	size        = msizes[0];
 	ActualData  = (Pixel16 *)new uint8[size];
 
@@ -1337,7 +1333,7 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 		else 
 		{
 			WriteData((uint32)FALSE);
-			offset[i] = -1;
+			offset[i] = static_cast<uint32>(-1);
 			
 		}
 	}
@@ -1592,7 +1588,7 @@ SPRITEFILEERR SpriteFile::Write(GoodSpriteGroup *s)
 		{
 			
 			WriteData((uint32)FALSE);
-			offset[i] = -1;
+			offset[i] = static_cast<uint32>(-1);
 		}
 
 	}
@@ -2740,7 +2736,7 @@ SpriteFile::CompressData_LZW1(void *Data,unsigned &DataLen)
  p_control=p_dst; 
  p_dst+=2;
  
- while (TRUE)
+ while (true)
  {
 	uint8 *p,*s; 
 	uint16 unroll=16,len;
@@ -2858,7 +2854,7 @@ SpriteFile::DeCompressData_LZW1(void *Data,unsigned CompressedLen,unsigned Actua
 	 
  uint32 loops=0,subloops=0;
 	
- uint16 controlbits=0, control;
+ uint16 controlbits=0, control=0;
  uint8 *p_src=p_src_first+LZW1_FLAG_BYTES, *p_dst=p_dst_first,
        *p_src_post=p_src_first+src_len;
  

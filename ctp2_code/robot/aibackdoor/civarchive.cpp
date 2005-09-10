@@ -1,14 +1,38 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Civilization archive for storing and loading the information to/from savegames
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+// ARCHIVE_TYPE_CHECK
+// linux // Why lower case?
+//
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin Gühmann)
+// - Removed DoubleUp method. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3types.h"
@@ -16,7 +40,6 @@
 #include "c3errors.h"
 
 #include "civarchive.h"
-#include "ic3CivArchive.h"
 
 
 #ifdef _DEBUG
@@ -195,35 +218,6 @@ void CivArchive::SetSize(uint32 ulSize)
 	m_bIsStoring = false ;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-void CivArchive::DoubleUp(void)
-{
-	uint8	*pbData ;
-    {
-    BOOL OBSOLETE_CODE=0; 
-    Assert(OBSOLETE_CODE); 
-    }
-
-    Assert(0<m_ulAllocated); 
-	pbData = new uint8[m_ulAllocated * 2] ;							
-	memcpy(pbData, m_pbBaseMemory, m_ulLength) ;					
-	m_pbInsert = pbData + (m_pbInsert - m_pbBaseMemory) ;			
-	m_ulAllocated *= 2 ;											
-	delete m_pbBaseMemory ;
-	m_pbBaseMemory = pbData ;										
-}
 
 
 

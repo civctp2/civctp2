@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  :
+// Description  : Civilization archive for storing and loading the information to/from savegames
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -30,6 +30,7 @@
 // Modifications from the original Activision code:
 //
 // - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin Gühmann)
+// - Removed DoubleUp method. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -68,7 +69,6 @@ class CivArchive : public IC3CivArchive
 		uint8	*m_pbBaseMemory,									
 				*m_pbInsert ;										
 
-		void DoubleUp() ;											
 		void DoubleExpand(uint32 ulAmount) ;						
 
 	public:

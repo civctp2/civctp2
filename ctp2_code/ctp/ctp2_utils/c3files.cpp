@@ -29,6 +29,7 @@
 // Modifications from the original Activision code:
 //
 // - Added some casts. (Aug 7th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -429,7 +430,6 @@ BOOL c3files_HasLegalCD()
 		
 		if (success && g_theProfileDB->IsProtected()) {
 			BOOL        valid;
-			BOOL        silent = TRUE;
 
 			valid = tracklen_CheckTrackLengths();
 			
@@ -478,7 +478,7 @@ BOOL c3files_HasLegalCD()
 void c3files_InitializeCD(void)
 {
 	c3files_GetCDDrives();
-	BOOL success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
+	c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
 }
 
 MBCHAR c3files_GetCTPCDDriveLetter(void)

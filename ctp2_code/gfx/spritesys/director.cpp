@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of the action on the screen
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG
+// - Generate debug version when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,6 +29,8 @@
 //   waiting for it to finish.
 // - Prevented messages appearing out of turn in hoseat mode
 // - PFT 29 mar 05, show # turns until city next grows a pop
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Otcommented some unreachable code. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -372,10 +378,10 @@ void Director::Process(void)
 
 		
 
-		g_director->ProcessActiveUnits();
-		g_director->ProcessActiveEffects();
+		ProcessActiveUnits();
+		ProcessActiveEffects();
 
-		g_director->ProcessTradeRouteAnimations();
+		ProcessTradeRouteAnimations();
 		if(g_tiledMap)
 			g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
 
@@ -1393,7 +1399,7 @@ void Director::TradeActorCreate(TradeRoute newRoute)
 void Director::TradeActorDestroy(TradeRoute routeToDestroy)
 {
 	ListPos			pos, foundPos;
-	TradeActor		*tActor;
+	TradeActor		*tActor = NULL;
 
 	foundPos = pos = m_tradeActorList->GetHeadPosition();
 	for (uint32 i=0; i<m_tradeActorList->L(); i++) 
@@ -1709,7 +1715,7 @@ void Director::NextPlayer(BOOL forcedUpdate)
 		return;
 	}
 #else
-	return;
+	return; // Next code isn't used, should it be used?
 #endif
 	m_nextPlayer = TRUE; 
 	
@@ -3666,8 +3672,8 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	UnitActor	*theDead = action->death_dead;
 	UnitActor	*theVictor = action->death_victor;
-	Anim		*deathAnim;
-	Anim		*victorAnim;
+	Anim		*deathAnim = NULL;
+	Anim		*victorAnim = NULL;
 	uint32		deathActionType = UNITACTION_NONE, 
 				victorActionType = UNITACTION_NONE;
 

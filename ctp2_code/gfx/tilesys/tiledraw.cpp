@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Tile drawing.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -19,6 +20,9 @@
 // 
 // _DEBUG
 // - Adds some aditional assertions to the code.
+//
+// _MSC_VER
+// - Marked Microsoft specific assembler code
 //
 //----------------------------------------------------------------------------
 //
@@ -48,6 +52,7 @@
 // - Added option to draw wonders on top of roads.
 // - PFT 29 mar 05, show # turns until city next grows a pop.
 // - Removed .NET warnings. - April 23rd 2005 Martin Gühmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -423,7 +428,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else{
 
 		 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
-				const TerrainImprovementRecord::Effect *effect;
+				const TerrainImprovementRecord::Effect *effect = 0;
 				if(rec!=NULL)
 					effect = terrainutil_GetTerrainEffect(rec, pos);
 
@@ -1436,7 +1441,7 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 
 	
-	Pixel16 srcPixel, transPixel;
+	Pixel16 srcPixel, transPixel = 0;
 	uint16 *pDestPixel;
 
 	{
@@ -1628,7 +1633,7 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 	dataPtr = data;
 
 	
-	Pixel16 srcPixel, transPixel;
+	Pixel16 srcPixel, transPixel = 0;
 	uint16 *pDestPixel;
 
 	
@@ -3326,7 +3331,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
 								 sint32 destWidth, sint32 destHeight, Pixel16 color)
 {
-	uint8			*surfBase, *origBase;
+	uint8			*surfBase = NULL, *origBase = NULL;
 	AUI_ERRCODE		errcode;
 
 	if (data == NULL) return;
@@ -3713,7 +3718,7 @@ sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, 
 void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
 								 sint32 destWidth, sint32 destHeight, sint32 flags)
 {
-	uint8			*surfBase, *origBase;
+	uint8			*surfBase = NULL, *origBase = NULL;
 	AUI_ERRCODE		errcode;
 	sint32			surfWidth, surfHeight, surfPitch;
 	BOOL			wasUnlocked = FALSE;
@@ -4349,7 +4354,7 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 	dataPtr = data;
 
 	
-	Pixel16 srcPixel, transPixel;
+	Pixel16 srcPixel, transPixel = 0;
 	uint16 *pDestPixel;
 
 	
@@ -4506,7 +4511,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH*m_scale)/2);
 	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEADROOM*m_scale)/2;
 	BOOL		fog;
-	uint32		slaveBits;
+	uint32		slaveBits = 0;
 
 	sint32 surfWidth = surf->Width();
 	sint32 surfHeight = surf->Height();
@@ -5374,7 +5379,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
 								 sint32 destWidth, sint32 destHeight, Pixel16 color, sint32 blendValue)
 {
-	uint8			*surfBase, *origBase;
+	uint8			*surfBase = NULL, *origBase = NULL;
 	AUI_ERRCODE		errcode;
 
 	if (data == NULL) return;
