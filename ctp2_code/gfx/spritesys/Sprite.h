@@ -1,30 +1,56 @@
-
-
-
-
-
-
-
-
-
-
-
- 
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Sprite
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added separate counters in Sprite-derived classes to prevent crashes.
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
-#include "pixelutils.h"
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
 
-enum SPRITETYPE {
+// #include <>
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class Sprite;
+
+enum SPRITETYPE 
+{
 	SPRITETYPE_NORMAL,
 	SPRITETYPE_FACED,
 	SPRITETYPE_FACEDWSHADOW,
 
-	SPRITETYPE_MAX
+	SPRITETYPE_MAX          // dummy last entry, used as counter
 };
 
 #define k_SPRITE_BASEFACING 0 
@@ -40,24 +66,26 @@ enum SPRITETYPE {
 #define k_BIT_DRAWFLAGS_DESATURATED		0x00000080
 
 
-
 #define k_BIT_DRAWFLAGS_SPECIAL1	    (k_BIT_DRAWFLAGS_TRANSPARENCY |	\
 										 k_BIT_DRAWFLAGS_FOGGED		  |	\
 										 k_BIT_DRAWFLAGS_DESATURATED  )
 
+#define k_DRAWFLAGS_NORMAL		        k_BIT_DRAWFLAGS_FEATHERING
 
 
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
-
-
-
-#define k_DRAWFLAGS_NORMAL		(k_BIT_DRAWFLAGS_FEATHERING)
+#include "pixelutils.h"
 
 class aui_Surface;
 class Token;
-class Sprite;
 
-
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+ 
 typedef  void (Sprite::*_SPRITE_DRAWLOW1)(Pixel16 *frame, 
 										  sint32 drawX, sint32 drawY, 
 										  sint32 width, sint32 height,
@@ -74,10 +102,8 @@ typedef  void (Sprite::*_SPRITE_DRAWLOW2)(Pixel16 *frame,
 										  uint16 flags,
 										  BOOL reversed);
 
-
 class Sprite 
 {
-
 public:
 	Sprite();
 	virtual ~Sprite();
@@ -121,8 +147,8 @@ public:
 	virtual BOOL	HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
 						Pixel16 outlineColor, uint16 flags);
 
-	uint16			GetNumFrames(void) { return m_numFrames; };
-	void			SetNumFrames(uint16 num) { m_numFrames = num; }
+	virtual uint16	GetNumFrames(void) const { return m_numFrames; };
+	virtual void	SetNumFrames(uint16 num) { m_numFrames = num; }
 
 	sint32			GetCurrentFrame(void) { return m_currentFrame; };
 	void			SetCurrentFrame(sint16 cFrame) { m_currentFrame = cFrame; };
@@ -138,7 +164,7 @@ public:
 
 	sint32			ParseFromTokens(Token *theToken);
 
-	void			AllocateFrameArrays(void);
+	void			AllocateFrameArrays(size_t count);
 	void			AllocateFrameArraysBasic(void);
 
 	
@@ -216,7 +242,7 @@ protected:
 	
 	
 	
-	inline void Sprite::__Copy_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
+	void Sprite::__Copy_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 	{
 		while(num)
 		{
@@ -230,7 +256,7 @@ protected:
 	
 	
 	
-	inline void Sprite::__Copy_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
+	void Sprite::__Copy_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 	{
 		while(num)
 		{

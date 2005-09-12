@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,7 +25,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000) 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -39,7 +36,7 @@
 #ifndef __SPRITEFILE_H__
 #define __SPRITEFILE_H__
 
-#define k_SPRITEFILE_TAG			'SPRF'
+#define k_SPRITEFILE_TAG            0x53505246 //'SPRF'
 #define k_SPRITEFILE_VERSION0		0x00010003 
 #define k_SPRITEFILE_VERSION1		0x00020000 
 #define k_SPRITEFILE_VERSION2		0x00020001 
@@ -202,8 +199,8 @@ public:
 
 	SPRITEFILEERR	ReadData(void *data, size_t bytes);
 
-	sint32			GetFilePos(void);
-	void			SetFilePos(sint32 pos);
+	size_t			GetFilePos(void);
+	void			SetFilePos(size_t pos);
 
 protected:
 	unsigned	m_version;			
@@ -224,16 +221,16 @@ protected:
 	SPRITEFILEERR	Write_v20(UnitSpriteGroup *s);
 
 	
-	void *CompressData  (void *Data,unsigned &DataLen);
-	void *DeCompressData(void *Data,unsigned CompressedLen,unsigned ActualLen);
+	uint8 *CompressData  (void *Data, size_t &DataLen);
+	uint8 *DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen);
 	
 	
-	void *CompressData_Default  (void *Data,unsigned &DataLen);
-	void *DeCompressData_Default(void *Data,unsigned CompressedLen,unsigned ActualLen);
+	uint8 *CompressData_Default  (void *Data, size_t &DataLen);
+	uint8 *DeCompressData_Default(void *Data, size_t CompressedLen, size_t ActualLen);
 
 	
-	void *CompressData_LZW1  (void *Data,unsigned &DataLen);
-	void *DeCompressData_LZW1(void *Data,unsigned CompressedLen,unsigned ActualLen);
+	uint8 *CompressData_LZW1  (void *Data, size_t &DataLen);
+	uint8 *DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualLen);
 
 private:
 	FILE *      m_file;

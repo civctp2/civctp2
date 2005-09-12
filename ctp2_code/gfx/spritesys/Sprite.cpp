@@ -1,18 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Sprite
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added separate counters in Sprite-derived classes to prevent crashes.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "Sprite.h"
 
 #include "pixelutils.h"
 #include "tiffutils.h"
@@ -23,7 +39,6 @@
 #include "aui.h"
 #include "aui_surface.h"
 
-#include "Sprite.h"
 #include "SpriteFile.h"
 #include "Anim.h"
 #include "screenmanager.h"
@@ -68,29 +83,14 @@ Sprite::Sprite()
 
 Sprite::~Sprite()
 {
-	if (m_frames != NULL) {
-		for (sint32 i=0; i<m_numFrames; i++) {
-			if (m_frames[i] != NULL) {
-				delete[] (m_frames[i]);
-			}
-			if (m_miniframes[i] != NULL) {
-				delete[] (m_miniframes[i]);
-			}
-		}
-
-		delete[] m_frames;
-		delete[] m_miniframes;
+	for (size_t i = 0; i < m_numFrames; ++i) 
+    {
+		delete [] (m_frames[i]);
+		delete [] (m_miniframes[i]);
 	}
 
-
-
-
-
-
-
-
-
-
+	delete [] m_frames;
+	delete [] m_miniframes;
 }
 
 
@@ -186,7 +186,7 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 
 	if (bpp!=4)
 	{
-		printf("TGA Sprite File not 32-bits\n",imageFiles[index]);
+		printf("TGA Sprite File not 32-bits(%s)\n",imageFiles[index]);
 		*imageData=NULL;
 		fcloseall();
 		exit(0);
@@ -216,7 +216,6 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
 	if (m_frames != NULL) 
 	{
 		free(m_frames);
-		m_frames = NULL;
 	}
 
 	
@@ -230,7 +229,6 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
 	if (m_miniframes != NULL) 
 	{
 		free(m_miniframes);
-		m_miniframes = NULL;
 	}
 
 	
@@ -830,12 +828,13 @@ sint32 Sprite::ParseFromTokens(Token *theToken)
 
 
 
-void Sprite::AllocateFrameArrays(void)
+void Sprite::AllocateFrameArrays(size_t count)
 {
+    Assert(!m_frames && !m_miniframes);
 
-	m_frames = new Pixel16*[GetNumFrames()];
-
-	m_miniframes = new Pixel16*[GetNumFrames()];
+	m_frames        = new Pixel16*[count];
+	m_miniframes    = new Pixel16*[count];
+    m_numFrames     = count;
 }
 
 
