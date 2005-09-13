@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : User interface - image handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Crashes prevented.
+// - Use of delete to free memory. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -53,14 +57,14 @@ aui_ImageBase::aui_ImageBase
 	MBCHAR *        ldlBlock,
 	bool            loadOnDemand 
 )
-:   m_stateImageNames           (NULL),
+:	m_stateImageNames           (NULL),
 	m_numberOfStateImageNames   (0),
 	m_numStateImageGroups       (0),
 	m_stateImageGroups          (NULL),
-    m_loadOnDemand              (loadOnDemand),
-	m_chromaRed	   		        (k_DEFAULT_CHROMA_RED),
-	m_chromaGreen		        (k_DEFAULT_CHROMA_GREEN),
-	m_chromaBlue		        (k_DEFAULT_CHROMA_BLUE),
+	m_loadOnDemand              (loadOnDemand),
+	m_chromaRed                 (k_DEFAULT_CHROMA_RED),
+	m_chromaGreen               (k_DEFAULT_CHROMA_GREEN),
+	m_chromaBlue                (k_DEFAULT_CHROMA_BLUE),
 	m_chromaSpecified           (false)
 {
 	InitCommonLdl(ldlBlock);
@@ -75,14 +79,14 @@ aui_ImageBase::aui_ImageBase
 	AUI_IMAGEBASE_BLTFLAG imagebltflag,
 	bool loadOnDemand 
 )
-:   m_stateImageNames           (NULL),
+:	m_stateImageNames           (NULL),
 	m_numberOfStateImageNames   (0),
 	m_numStateImageGroups       (0),
 	m_stateImageGroups          (NULL),
-    m_loadOnDemand              (loadOnDemand),
-	m_chromaRed	   		        (k_DEFAULT_CHROMA_RED),
-	m_chromaGreen		        (k_DEFAULT_CHROMA_GREEN),
-	m_chromaBlue		        (k_DEFAULT_CHROMA_BLUE),
+	m_loadOnDemand              (loadOnDemand),
+	m_chromaRed                 (k_DEFAULT_CHROMA_RED),
+	m_chromaGreen               (k_DEFAULT_CHROMA_GREEN),
+	m_chromaBlue                (k_DEFAULT_CHROMA_BLUE),
 	m_chromaSpecified           (false)
 {
 	InitCommon(numStateImageGroups, imageblttype, imagebltflag);
@@ -216,7 +220,6 @@ sint32 aui_ImageBase::FindNumStateImageGroupsFromLdl( ldl_datablock *block )
 }
 
 
-
 AUI_ERRCODE aui_ImageBase::InitCommon(
 	sint32 numStateImageGroups,
 	AUI_IMAGEBASE_BLTTYPE imageblttype,
@@ -258,7 +261,7 @@ aui_ImageBase::~aui_ImageBase()
 	if (m_stateImageNames) 
     {
 		for (int index = 0; index < m_numberOfStateImageNames; index++)
-			if(m_stateImageNames[index]) free(m_stateImageNames[index]);
+			if(m_stateImageNames[index]) delete m_stateImageNames[index];
 
 		delete [] m_stateImageNames;
 	}
@@ -364,7 +367,7 @@ aui_Image *aui_ImageBase::SetImage(
 
 			
 			if(m_stateImageNames[index]) {
-				free(m_stateImageNames[index]);
+				delete m_stateImageNames[index];
 			}
 
 			
@@ -399,7 +402,7 @@ aui_Image *aui_ImageBase::SetImage(
 
 			
 			if(m_stateImageNames[index]) {
-				free(m_stateImageNames[index]);
+				delete m_stateImageNames[index];
 				m_stateImageNames[index] = NULL;
 			}
 		}

@@ -3473,7 +3473,7 @@ Fundorte:
 [END]
 
 [TERRAIN_SWAMP_GOOD_TWO_GAMEPLAY]
-Reis ist eine Getreideart (Oryza sativa) der Grasfamilie, wahrscheinlich beheimatet am Ganges, Chang (Yangtze) und im Delta des Euphrates. Zu finden is Reis nur in feuchten <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpfgebieten<e>, und stellt den Massen riesige <L:DATABASE_CONCEPT,CONCEPT_FOOD>Nahrungsmengen<e> zur Verfügung.
+Reis ist eine Getreideart (Oryza sativa) der Grasfamilie, wahrscheinlich beheimatet am Ganges, Chang (Yangtze) und im Delta des Euphrates. Zu finden is Reis nur in feuchten <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Sumpfgebieten<e>, und stellt den Massen riesige <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungsmengen<e> zur Verfügung.
 [END]
 
 [TERRAIN_SWAMP_GOOD_TWO_HISTORICAL]
@@ -5086,7 +5086,7 @@ Die Kerkerhaft wurde ebenfalls als eine effektive Form der Bestrafung angesehen.
 
 [IMPROVE_COURTHOUSE_PREREQ]
 Voraussetzung:
-<L:DATABASE_ADVANCES,ADVANCE_JJURISPRUDENCE>Rechtswissenschaft<e
+<L:DATABASE_ADVANCES,ADVANCE_JURISPRUDENCE>Rechtswissenschaft<e>
 
 Kosten:
 {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>

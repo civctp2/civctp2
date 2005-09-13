@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Activision User Interface - ldl handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed memory leaks.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -688,7 +707,7 @@ aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR *rootBlock)
 
 	
 	if (!isAtomic) {
-		err = BuildHierarchyFromLeaf(dataBlock);
+		err = BuildHierarchyFromLeaf(dataBlock, myRegion);
 		Assert(err == AUI_ERRCODE_OK);
 		if (err != AUI_ERRCODE_OK)
 			return NULL;
@@ -726,7 +745,7 @@ aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR *rootBlock)
 
 
 
-AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent)
+AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent, aui_Region *region)
 {
 	ldl_datablock *dataBlock;
 
@@ -771,13 +790,14 @@ AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent)
 		
 		
 		
-		
 		if (!isAtomic) {
-			err = BuildHierarchyFromLeaf(dataBlock);
+			err = BuildHierarchyFromLeaf(dataBlock, myRegion);
 			Assert(err == AUI_ERRCODE_OK);
 			if (err != AUI_ERRCODE_OK)
 				return err;
 		}
+
+		region->AddChild(myRegion);
 
 		walk.Next();
 	}
@@ -999,8 +1019,7 @@ AUI_ERRCODE aui_Ldl::DeleteHierarchyFromLeaf(ldl_datablock *parent)
 		if (!region)
 			return AUI_ERRCODE_INVALIDPARAM;
 		
-		
-		delete region;		
+		delete region;
 		walk.Next();
 	}
 

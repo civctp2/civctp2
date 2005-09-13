@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface region
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -323,7 +323,7 @@ aui_Region::~aui_Region()
 	delete [] m_ldlBlock;
 
 	if (g_attractWindow && CanAttract()) 
-    {
+	{
 		g_attractWindow->RemoveRegion(this);
 	}
 }

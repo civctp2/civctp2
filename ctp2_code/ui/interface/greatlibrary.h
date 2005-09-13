@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Great library
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,6 +29,7 @@
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
 // - Added function to look up an item name on creation index.
+// - Added alpha <-> index functions. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -337,6 +338,8 @@ public:
 	ctp2_Window *GetWindow( void );
 
 	void FixTabs();
+	sint32 GetIndexFromAlpha(sint32 alpha, DATABASE theDatabase) const;
+	sint32 GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const;
 };
 
 class TechListItem: public ctp2_ListItem

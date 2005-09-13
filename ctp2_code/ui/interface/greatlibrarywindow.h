@@ -1,8 +1,37 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : The window of the Great Libary
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Memory leaks repaired in LoadText by Martin Gühmann.
+// - Added variable and requirement retriever methods. (Sep 13th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __GREATLIBRARYWINDOW_H__
 #define __GREATLIBRARYWINDOW_H__
-
 
 
 #include "greatlibrary.h"
@@ -18,9 +47,7 @@ class ctp2_HyperTextBox;
 class ctp2_Window;
 class ctp2_Static;
 
-
-class GreatLibraryWindow 
-{
+class GreatLibraryWindow {
 public:
 	ctp2_Window		*m_window;
 
@@ -29,26 +56,6 @@ public:
 	static const int GREAT_LIBRARY_PANEL_BLANK;
 	GreatLibraryWindow(AUI_ERRCODE *err);
 	~GreatLibraryWindow();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	virtual AUI_ERRCODE Idle (void);
 
@@ -73,13 +80,13 @@ public:
 
 	
 	char * GetIconRecText( int database, int item,
-		bool historical);
+		uint8 historical);
 
 	
 	char * GetHistoricalText( int database, int item );
-
-	
 	char * GetGameplayText( int database, int item );
+	char * GetRequirementsText( int database, int item );
+	char * GetVariablesText( int database, int item );
 
 	
 	sint32 SetTechMode ( sint32 mode, DATABASE database );
@@ -88,7 +95,7 @@ public:
 	void SetTechDatabase( DATABASE database ) { m_database = database; }
 	DATABASE GetTechDatabase( void ) { return m_database; }
 
-    sint32 LoadText( ctp2_HyperTextBox *textbox, char *filename, SlicObject &so );
+	sint32 LoadText( ctp2_HyperTextBox *textbox, char *filename, SlicObject &so );
 	sint32 LoadHistoricalText( SlicObject &so );
 	sint32 LoadGameplayText ( SlicObject &so );
 	sint32 LoadRequirementsText ( SlicObject &so );
