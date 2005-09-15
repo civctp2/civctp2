@@ -44,7 +44,7 @@
 	typedef std::vector<BoundingRect, dbgallocator<BoundingRect> > BoundingRectVector;
 	typedef std::vector<sint32, dbgallocator<sint32> > Sint32Vector;
 	typedef std::vector<sint16, dbgallocator<sint16> > Sint16Vector;
-	typedef std::vector<uint32, dbgallocator<sint16> > Uint32Vector;
+	typedef std::vector<uint32, dbgallocator<uint32> > Uint32Vector;
 	typedef std::vector<MapPoint, dbgallocator<MapPoint> > MapPointVector;
 	typedef std::vector<double, dbgallocator<double> > DoubleVector;
 #else

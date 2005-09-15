@@ -22,10 +22,11 @@ CTP2_WIN32_ZLIB_INC=\
 	-I$(ctp2_code)/libs/zlib
 else
 CTP2_LIBANET_LDFLAGS = \
-	$(ctp2_code)/libs/anet/linux86/lib/dp2.a \
-	$(ctp2_code)/libs/anet/linux86/lib/dp2d.a \
-	$(ctp2_code)/libs/anet/linux86/lib/dp2p.a \
-	$(ctp2_code)/libs/anet/linux86/lib/dp2l.a
+	libs/anet/src/linux/dp/libdp2.la
+# These are dp2 compiled with different compiler flags
+#	$(ctp2_code)/libs/anet/linux86/lib/dp2d.a \
+#	$(ctp2_code)/libs/anet/linux86/lib/dp2p.a \
+#	$(ctp2_code)/libs/anet/linux86/lib/dp2l.a
 CTP2_LIBOSNOWIN32_LDFLAGS = \
 	os/nowin32/libosnowin32.la
 endif

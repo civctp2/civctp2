@@ -1,10 +1,11 @@
-all: $(ctp2_code)/libs/anet/linux86.tgz
+#
+# $Id: $
+#
 
-clean:
-	$(MAKE) -C $(ctp2_code)/libs/anet $@
+if INTERNAL_ANET
+ANET_SRCDIR = anet
+endif
 
-distclean install install-data purge:
+SUBDIRS = \
+	$(ANET_SRCDIR)
 
-$(ctp2_code)/libs/anet/linux86.tgz: $(top_builddir)/ctp2_code/libs/Makefile \
-		$(ctp2_code)/libs/anet/Makefile
-	$(MAKE) -C $(ctp2_code)/libs/anet all

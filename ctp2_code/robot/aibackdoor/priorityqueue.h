@@ -44,6 +44,9 @@
 #define __DA_PRIORITY_QUEUE__ 1
 
 #include "dynarr.h"
+#ifdef _DEBUG
+#include "World.h"
+#endif
 
 template <class T> class DAPriorityQueue { 
 	DynamicArray<T*> m_queue; 

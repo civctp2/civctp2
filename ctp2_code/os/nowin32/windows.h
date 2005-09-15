@@ -141,8 +141,12 @@ BOOL PtInRect(struct RECT* pr, struct POINT m);
 void SetRect(struct RECT* R, int left, int top, int right, int bottom);
 void SubtractRect(struct RECT* r, const struct RECT* a, const struct RECT* b);
 #define lstrlen(s) strlen(s)
+#ifndef stricmp
 int stricmp(const char* s1, const char* s2);
+#endif
+#ifndef strnicmp
 int strnicmp(const char *str1, const char *str2, size_t n);
+#endif
 char* strupr(char* str);
 
 #endif

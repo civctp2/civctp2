@@ -129,7 +129,20 @@ fi
 if test 0 -eq 1; then
 	AC_DEFINE(CTP2_ENABLE_SLICDEBUG,1,[Enable slic debugging code])
 fi
-
+enable_anet=no
+AC_ARG_ENABLE([anet],
+              AC_HELP_STRING([--enable-anet],[enable external anet library]),,
+	      [enable_anet=no])
+AC_MSG_CHECKING([wether to build with internal anet library])
+if test x$enable_anet == xno; then
+	AC_MSG_RESULT([yes])
+	AC_CONFIG_SUBDIRS([ctp2_code/libs/anet])
+else
+	AC_MSG_ERROR([
+		Using installed libanet is not supported, yet.
+	])
+fi
+AM_CONDITIONAL(INTERNAL_ANET, test x$enable_anet == xno)
 AC_DEFINE(_BFR_,1,[Build final release])
 AC_SUBST(_BFR_)
 AC_SUBST(CTP2_ENABLE_SLICDEBUG)

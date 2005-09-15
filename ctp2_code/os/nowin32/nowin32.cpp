@@ -216,13 +216,17 @@ void SetRect(struct RECT* R, int left, int top, int right, int bottom)
 	R->top = top;
 	R->bottom = bottom;
 }
+#ifndef stricmp
 int stricmp(const char* s1, const char* s2)
 {
 	return strcasecmp(s1, s2);
 }
+#endif
+#ifndef strnicmp
 int strnicmp(const char *str1, const char *str2, size_t n)
 {
 	return strncasecmp(str1, str2, n);
 }
+#endif
 
 #endif // !WIN32
