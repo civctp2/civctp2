@@ -7,10 +7,11 @@ clean:
 	-rm -rf md5
 
 d3des/unpacked: d3des.zip
-	unzip -a $<
+	$(UNZIP) -a $<
 	patch -p0 < d3des.const.patch
 	touch $@
 
 md5/unpacked: md5.zip
-	unzip -a $<
+	$(UNZIP) -a $<
 	touch $@
+

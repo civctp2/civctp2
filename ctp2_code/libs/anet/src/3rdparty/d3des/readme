@@ -1,7 +1,0 @@
-This code by Richard Outerbridge implements DES with optional
-double and triple encryption.  I think it's pretty fast, and
-it doesn't take up much memory at runtime.
-Richard leaves a copyright notice on the code but encourages
-free use of the code.
-
-Mark Riordan   mrr@scss3.cl.msu.edu

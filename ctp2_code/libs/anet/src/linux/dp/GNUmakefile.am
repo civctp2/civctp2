@@ -1,0 +1,64 @@
+#
+# Normal:    libdp2.la
+# Debug:     libdp2d.la
+# Profiling: libdp2p.la
+# Logging:   libdp2l.la
+#
+
+NORMAL_LIB = libdp2.la
+if ANET_BUILD_DEBUG
+DEBUG_LIB = libdp2d.la
+endif
+if ANET_BUILD_PROFILING
+PROFILING_LIB = libdp2p.la
+endif
+if ANET_BUILD_LOG
+LOG_LIB = libdp2l.la
+endif
+
+noinst_LTLIBRARIES = \
+	$(NORMAL_LIB) \
+	$(DEBUG_LIB) \
+	$(PROFILING_LIB) \
+	$(LOG_LIB)
+AM_CFLAGS = \
+	-DUNIX \
+	-Dcdecl="" \
+	-D__NO_ANONYMOUS_UNIONS__ \
+	"-DPACK=__attribute ((packed))" \
+	-Dstrnicmp=strncasecmp \
+	-Dstricmp=strcasecmp \
+	-Ddp_ANET2 \
+	-DCOMM_INST
+AM_CPPFLAGS = \
+	-I. \
+	-I$(top_srcdir)/h \
+	-I$(top_srcdir)/src/aeh \
+	-I$(top_srcdir)/demo/utils \
+	-I$(top_srcdir)/3rdparty/d3des \
+	-I$(top_srcdir)/3rdparty/md5
+libdp2_la_SOURCES = \
+	../uudp/uudps.c ../../dp/dictset.c ../../../demo/utils/logpkt.c \
+	../../dp/dp2.c dpmem.c dpdll.c ../../dp/dynatab.c ../../dp/assoctab.c \
+	../../dp/dprint.c ../../dp/q.c ../../dp/ini.c ../../dp/dpuser.c \
+	../../dp/dpio.c ../../dp/hkeytab.c ../../dp/dptab.c \
+	../../../demo/utils/dpcrc32.c ../../dp/delay.c ../../dp/enumsrv2.c \
+	enumapp.c launchap.c ../../dp/dpexcept.c ../../aeh/aeh.c ../../aeh/aehmap.c \
+	../../aeh/aehlog.c ../../dp/dpprivy.c \
+	../../dp/dpscore.c ../../dp/deltas.c ../../tca/tserv.c ../../tca/tserva.c \
+	../../tca/tca.c ../../tca/tcapw.c ../../tca/crypttab.c \
+	../../score/scorerep.c ../../../demo/utils/mywcs.c ../../3rdparty/md5/md5c.c \
+	../../3rdparty/d3des/d3des.c ../../dp/dpshutdn.c ../../dp/launchparams.c
+DP_COMMON_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS)
+libdp2_la_CFLAGS = $(DP_COMMON_CFLAGS) $(ANET_CFLAGS_NORMAL)
+
+libdp2d_la_SOURCES = $(libdp2_la_SOURCES)
+libdp2d_la_CFLAGS = $(DP_COMMON_CFLAGS) $(ANET_CFLAGS_DEBUG)
+
+libdp2p_la_SOURCES = $(libdp2_la_SOURCES)
+libdp2p_la_CFLAGS = $(DP_COMMON_CFLAGS) $(ANET_CFLAGS_PROFILE)
+
+libdp2l_la_SOURCES = $(libdp2_la_SOURCES)
+libdp2l_la_CFLAGS = $(DP_COMMON_CFLAGS) $(ANET_CFLAGS_LOG)
+
+

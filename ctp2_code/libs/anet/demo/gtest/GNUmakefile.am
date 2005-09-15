@@ -1,0 +1,60 @@
+#
+# $Id: $
+#
+
+NORMAL_GTEST = gtest
+if ANET_BUILD_DEBUG
+DEBUG_GTEST = gtestd
+endif
+if ANET_BUILD_PROFILING
+PROFILING_GTEST = gtestp
+endif
+if ANET_BUILD_LOG
+LOG_GTEST = gtestl
+endif
+noinst_PROGRAMS = \
+	$(NORMAL_GTEST) \
+	$(DEBUG_GTEST) \
+	$(PROFILING_GTEST) \
+	$(LOG_GTEST)
+
+AM_CPPFLAGS = \
+	-I. \
+	-I$(top_srcdir)/h \
+	-I$(top_srcdir)/demo/utils
+PACK=__attribute__ ((packed))
+AM_CFLAGS = \
+	-DUNIX \
+	-Dcdecl="" \
+	"-D__NO_ANONYMOUS_UNIONS__" \
+	"-DPACK=$(PACK)" \
+	-Dstrnicmp=strncasecmp \
+	-Dstricmp=strcasecmp \
+	-Ddp_ANET2
+
+gtest_SOURCES = \
+	gtest.c \
+	../utils/raw.c ../utils/avgstat.c
+gtest_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_NORMAL)
+gtest_LDFLAGS = \
+	$(LIBBSD_COMPAT) \
+	../../src/linux/dp/libdp2.la 
+
+gtestd_SOURCES = $(gtest_SOURCES)
+gtestd_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_DEBUG)
+gtestd_LDFLAGS = \
+	$(LIBBSD_COMPAT) \
+	../../src/linux/dp/libdp2d.la
+
+gtestp_SOURCES = $(gtest_SOURCES)
+gtestp_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_PROFILING)
+gtestp_LDFLAGS = \
+	$(LIBBSD_COMPAT) \
+	../../src/linux/dp/libdp2p.la
+
+gtestl_SOURCES = $(gtest_SOURCES)
+gtestl_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_LOG)
+gtestl_LDFLAGS = \
+	$(LIBBSD_COMPAT) \
+	../../src/linux/dp/libdp2l.la
+
