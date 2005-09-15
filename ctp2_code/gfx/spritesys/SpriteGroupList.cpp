@@ -334,7 +334,7 @@ BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 			m_spriteList[index]->DeallocateStorage();
 			m_spriteList[index]->DeallocateFullLoadAnims();
 
-			err = LoadSprite(index, m_spriteList[index]->GetType(), LOADTYPE_BASIC,(GAME_ACTION)0);
+			err = LoadSprite(index, m_spriteList[index]->GetType(), LOADTYPE_BASIC,(GAME_ACTION)0); // No idea why, but without releasing the old sprite a bad idea
 			Assert(err == SPRITELISTERR_OK);
 		} else {
 			

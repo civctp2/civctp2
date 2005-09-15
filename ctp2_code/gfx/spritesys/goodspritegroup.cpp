@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Good sprite handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Moved common SpriteGroup member handling to SpriteGroup.
 // - Prevent crashes on failed file operations.
+// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -254,24 +258,28 @@ void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 	delete file;
 }
 
+void GoodSpriteGroup::DeallocateStorage(void)
+{
+	for (sint32 i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
+	{
+	    delete m_sprites[i];
+		m_sprites[i] = NULL;
+	}
+}
 
-
-
-
-
-
-
-
-
-
+void GoodSpriteGroup::DeallocateFullLoadAnims(void)
+{
+	for (sint32 i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
+	{
+		delete m_anims[i];
+		m_anims[i] = NULL;
+	}
+}
 
 void GoodSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
 {
 	primitives_DrawText((aui_DirectSurface *)g_screenManager->GetSurface(), x, y, (MBCHAR *)s, 0, 0);
 }
-
-
-
 
 sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 {

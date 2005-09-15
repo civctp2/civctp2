@@ -676,7 +676,7 @@ void CityData::Serialize(CivArchive &archive)
 
 //----------------------------------------------------------------------------
 //
-// Name       : NeedsCanalTunnel
+// Name       : CityData::NeedsCanalTunnel
 //
 // Description: Test if a city built at MapPoint &center_point would need a CanalTunnel
 //
@@ -686,7 +686,7 @@ void CityData::Serialize(CivArchive &archive)
 //
 // Returns    : TRUE if center_point is in water terrain and doesn't have a tunnel
 //
-// Remark(s)  : 
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 BOOL NeedsCanalTunnel(MapPoint &center_point)

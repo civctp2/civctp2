@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Common sprite handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Moved common SpriteGroup member handling to SpriteGroup.
+// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -86,7 +90,18 @@ sint32 SpriteGroup::GetNumFrames(GAME_ACTION action)
 
 void SpriteGroup::DeallocateStorage(void)
 {
+	for(sint32 i = ACTION_0; i < ACTION_MAX; i++){
+		delete m_anims[i];
+		m_anims[i] = NULL;
+	}
+}
 
+void SpriteGroup::DeallocateFullLoadAnims(void)
+{
+	for(sint32 i = ACTION_0; i < ACTION_MAX; i++){
+		delete m_anims[i];
+		m_anims[i] = NULL;
+	}
 }
 
 void SpriteGroup::Draw(	 sint32 drawX, 
