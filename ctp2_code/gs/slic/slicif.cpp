@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : SLIC interpreter functions
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -37,6 +37,7 @@
 // - Added debugging code for bitwise operator
 // - Prevented crash with invalid Slic input.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added database array access. (Sep 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -885,11 +886,12 @@ void slicif_add_op(SOP op, ...)
 			break;
 		}
 		case SOP_DBNAMEREF:
+		case SOP_DBNAMEARRAY:
 		{
 			conduit = va_arg(vl, SlicDBInterface *);
 			Assert(conduit);
 
-			//Get get variable name in the argument list.
+			//Get variable name in the argument list.
 			name = va_arg(vl, char*);
 			symval = slicif_get_symbol(name);
 			if(!symval) {
@@ -940,6 +942,55 @@ void slicif_add_op(SOP op, ...)
 
 			break;
 		}
+		case SOP_DBNAMECONSTARRAY:
+		{
+			conduit = va_arg(vl, SlicDBInterface *);
+			Assert(conduit);
+
+			//Get variable name in the argument list.
+			ival = va_arg(vl, int);
+
+			//Get referenced name of a flag from the according database.
+			name = va_arg(vl, char*);
+			if(!conduit->IsTokenInDB(name)){
+				sprintf(errbuf, "Token %s not found in %s", name, conduit->GetName());
+				yyerror(errbuf);
+			}
+
+			//Save the database name to the code data, by saving every
+			//single char including the /0 char.
+			int i;
+			dbName = const_cast<char*>(conduit->GetName());
+			for(i = 0; dbName[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = dbName[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = dbName[i];
+			s_code_ptr += sizeof(char);
+
+			*((int*)s_code_ptr) = ival;
+			s_code_ptr += sizeof(int);
+
+			//Do the same thing with the record member name:
+			for(i = 0; name[i] != '\0'; ++i){
+				*((char*)s_code_ptr) = name[i];
+				s_code_ptr += sizeof(char);
+			}
+			*((char*)s_code_ptr) = name[i];
+			s_code_ptr += sizeof(char);
+
+			if(!s_argValuePushed && (s_parenLevel > 0)) {
+				
+				s_argValuePushed = true;
+				s_argSymbol = NULL;
+				s_argMemberIndex = -1;
+			} else {
+				
+				s_argSymbol = NULL;
+			}
+
+			break;
+		}
 		case SOP_DB:
 		{
 			conduit = va_arg(vl, SlicDBInterface *);
@@ -964,6 +1015,7 @@ void slicif_add_op(SOP op, ...)
 			break;
 		}
 		case SOP_DBREF:
+		case SOP_DBARRAY:
 		{
 			conduit = va_arg(vl, SlicDBInterface *);
 			Assert(conduit);
@@ -1000,8 +1052,6 @@ void slicif_add_op(SOP op, ...)
 
 			break;
 		}
-		case SOP_DBARRAY:
-			break;
 		case SOP_DBSIZE:
 		{
 			//Added by Martin Gühmann to figure out via 
@@ -1426,12 +1476,13 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(int);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
+					fprintf(debuglog, "%s\n", dbName);
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf(debuglog, "%s\n", dbName);
 
 					symval = g_slicEngine->GetSymbol(ival);
 					if(!symval) {
+						fprintf(debuglog, "%s\n", dbName);
 						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 						return;
 					}
@@ -1460,16 +1511,79 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
+					fprintf(debuglog, "%s\n", dbName);
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf(debuglog, "%s\n", dbName);
 
 					symval = g_slicEngine->GetSymbol(ival);
 					if(!symval) {
+						fprintf(debuglog, "%s\n", dbName);
 						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 						return;
 					}
 					fprintf(debuglog, "%s(%s).%s, %s == (%d)\n", dbName, symval->GetName(), name, symval->GetName(), ival);
+				}
+				break;
+			}
+			case SOP_DBNAMEARRAY:
+			{
+				//Get the database name:
+				int i;
+				dbName = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				ival = *((int*)codePtr);
+				codePtr += sizeof(int);
+
+				//Get the member name:
+				name = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				if(!g_slicEngine->GetDBConduit(dbName)) {
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
+				} else {
+					symval = g_slicEngine->GetSymbol(ival);
+					if(!symval) {
+						fprintf(debuglog, "%s\n", dbName);
+						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+						return;
+					}
+					fprintf(debuglog, "%s(%s).%s[], %s == (%d)\n", dbName, symval->GetName(), name, symval->GetName(), ival);
+				}
+				break;
+			}
+			case SOP_DBNAMECONSTARRAY:
+			{
+				//Get the database name:
+				int i;
+				dbName = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				ival = *((int*)codePtr);
+				codePtr += sizeof(int);
+
+				//Get the member name:
+				name = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				if(!g_slicEngine->GetDBConduit(dbName)) {
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
+				} else {
+					fprintf(debuglog, "%s(%s).%s[]\n", dbName, g_slicEngine->GetDBConduit(dbName)->GetRecordNameByIndex(ival), name);
 				}
 				break;
 			}
@@ -1484,6 +1598,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
+					fprintf(debuglog, "%s\n", dbName);
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
 					fprintf(debuglog, "%s\n", dbName);
@@ -1508,6 +1623,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
+					fprintf(debuglog, "%s\n", dbName);
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
 					fprintf(debuglog, "%s(..).%s\n", dbName, name);
@@ -1515,7 +1631,30 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				break;
 			}
 			case SOP_DBARRAY:
+			{
+				//Get the database name:
+				int i;
+				dbName = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				//Get the member name:
+				name = ((char*)codePtr);
+				for(i = 0; *((char*)codePtr) != '\0'; ++i){
+					codePtr += sizeof(char);
+				}
+				codePtr += sizeof(char);
+
+				if(!g_slicEngine->GetDBConduit(dbName)) {
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
+				} else {
+					fprintf(debuglog, "%s(..).%s[]\n", dbName, name);
+				}
 				break;
+			}
 			case SOP_DBSIZE:
 			{
 				//Added by Martin Gühmann to figure out via 
@@ -1529,6 +1668,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
+					fprintf(debuglog, "%s\n", dbName);
 					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
 					fprintf(debuglog, "%s\n", dbName);
@@ -2074,8 +2214,8 @@ void slicif_check_hard_string_argument()
 // Description: Handels slic database access.
 //
 // Parameters : const char *dbname: A name of a database in slic.
-//              void **dbptr: A pointer that can be converted into
-//              a SlicDBInterface interface object.
+//              void **dbptr:       A pointer that can be converted into
+//                                  a SlicDBInterface interface object.
 //
 // Globals    : -
 //
@@ -2103,9 +2243,9 @@ int slicif_find_db(const char *dbname, void **dbptr)
 //
 // Description: Handels slic database access.
 //
-// Parameters : void *dbptr represents a database for instance UnitDB.
-//              const char *name represents name that can be found
-//              in the given database for instance UNIT_SETTLER.
+// Parameters : void *dbptr:      Represents a database for instance UnitDB.
+//              const char *name: Represents name that can be found in the 
+//                                given database for instance UNIT_SETTLER.
 //
 // Globals    : -
 //
@@ -2138,11 +2278,11 @@ int slicif_find_db_index(void *dbptr, const char *name)
 //
 // Description: Handels slic database access.
 //
-// Parameters : void *dbptr: Represents a database for instance UnitDB.
-//              const char *recname: Represents name that can be found
-//              in the given database for instance UNIT_SETTLER.
-//              const char *valname: Represents a flag of an entry in 
-//              the given database for instance MaxMovePoints.
+// Parameters : void *dbptr:         Represents a database for instance UnitDB.
+//              const char *recname: Represents name that can be found in the 
+//                                   given database for instance UNIT_SETTLER.
+//              const char *valname: Represents a flag of an entry in the given 
+//                                   database for instance MaxMovePoints.
 //
 // Globals    : -
 //
@@ -2187,10 +2327,10 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 //
 // Description: Handels slic database access.
 //
-// Parameters : void *dbptr: Represents a database for instance UnitDB.
-//              int index: Represents an index in the given database.
-//              const char *valname: Represents a flag of an entry in 
-//              the given database for instance MaxMovePoints.
+// Parameters : void *dbptr:         Represents a database for instance UnitDB.
+//              int index:           Represents an index in the given database.
+//              const char *valname: Represents a flag of an entry in the given 
+//                                   database for instance MaxMovePoints.
 //
 // Globals    : -
 //
@@ -2224,7 +2364,101 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 	return conduit->GetValue(index, valname);
 }
 
-//Added by Martin Gühmann
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_find_db_array_value
+//
+// Description: Handels slic database access.
+//
+// Parameters : void *dbptr:         Represents a database for instance UnitDB.
+//              const char *recname: Represents name that can be found in the 
+//                                   given database for instance UNIT_SETTLER.
+//              const char *valname: Represents a flag of an entry in the given 
+//                                   database for instance MaxMovePoints.
+//              sint32 val:          Represents an array index.
+//
+// Globals    : -
+//
+// Returns    : Gets the value of a flag of a given entry in a given 
+//              database. For instance UnitDB(UNIT_SETTLER).MaxMovePoints 
+//              gives the value of the MaxMovePoints flag of the entry 
+//              in UnitDB with the internal name UNIT_SETTLER.
+//              
+// Remark(s)  : This function is called at copiling time in normal slic 
+//              function but called at run time from the Great Libary.
+//
+//----------------------------------------------------------------------------
+int slicif_find_db_array_value(void *dbptr, const char *recname, const char *valname, int val)
+{
+	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
+	char errbuf[1024];
+	Assert(conduit);
+	if(!conduit)
+		return 0;
+
+	sint32 index;
+	if((index = conduit->GetIndex(recname)) < 0) {
+		sprintf(errbuf, "%s not found in %s", recname, conduit->GetName());
+		yyerror(errbuf);
+		return 0;
+	}
+#if 0
+	//Looks like it interferes at other places
+	//but I leave it in for possible later use.
+	if(!conduit->IsTokenInDB(valname)){
+		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
+		yyerror(errbuf);
+	}
+#endif
+
+	return conduit->GetValue(index, valname, val);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : slicif_find_db_array_value_by_index
+//
+// Description: Handels slic database access.
+//
+// Parameters : void *dbptr:         Represents a database for instance UnitDB.
+//              int index:           Represents an index in the given database.
+//              const char *valname: Represents a flag of an entry in the given 
+//                                   database for instance MaxMovePoints.
+//              sint32 val:          Represents an array index.
+//
+// Globals    : -
+//
+// Returns    : Gets the value of a flag of a given entry in a given 
+//              database. For instance UnitDB(0).MaxMovePoints gives
+//              the value of the MaxMovePoints flag of the first entry in
+//              UnitDB.
+//              
+// Remark(s)  : This function is called both at copiling time and run time 
+//              in normal slic function but called at run time from the 
+//              Great Libary.
+//
+//
+//----------------------------------------------------------------------------
+int slicif_find_db_array_value_by_index(void *dbptr, int index, const char *valname, int val)
+{
+	SlicDBInterface * conduit = reinterpret_cast<SlicDBInterface *>(dbptr);
+	Assert(conduit);
+	if(!conduit)
+		return 0;
+
+#if 0
+	//Looks like it interferes at other places
+	//but I leave it in for possible later use.
+	if(!conduit->IsTokenInDB(valname)){
+		char errbuf[1024];
+		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
+		yyerror(errbuf);
+	}
+#endif
+	return conduit->GetValue(index, valname, val);
+}
+
+
 
 //----------------------------------------------------------------------------
 //

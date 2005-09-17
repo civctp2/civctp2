@@ -29,9 +29,11 @@
 //   so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 // - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
-// - Output files only have spaces instead of tabs as indent and indetion
+// - Output files only have spaces instead of tabs as indent and indention
 //   was fixed. (Aug 25th 2005 Martin Gühmann)
 // - Added alias names. (Aug 26th 2005 Martin Gühmann)
+// - Costum structs can now include other custom structs, given both are
+//   direct members of the record class (Support for DiffDB). (Sep 15th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -307,6 +309,7 @@ void MemberClass::ExportInitialization(FILE *outfile, char *recordName)
 	
 	fprintf(outfile, "void %sRecord::%s::operator=(const %s & rval)\n", recordName, m_name, m_name);
 	fprintf(outfile, "{\n");
+	fprintf(outfile, "    int index = 0;\n");
 	walk.SetList(&m_datumList);
 	while(walk.IsValid()) {
 		walk.GetObj()->ExportOperatorEqual(outfile);
@@ -555,7 +558,7 @@ void MemberClass::ExportTokenCases(FILE *outfile, char *recordName)
 					fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, &m_%s, &m_num%s, err)) {\n", dat->m_subType, dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRUCT:
-					fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, &m_%s, &m_num%s)) {\n", m_name, dat->m_subType, dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, &m_%s, &m_num%s)) {\n", recordName, dat->m_subType, dat->m_name, dat->m_name);
 					break;
 				default:
 					Assert(0);
@@ -589,7 +592,7 @@ void MemberClass::ExportTokenCases(FILE *outfile, char *recordName)
 					break;
 				case DATUM_STRUCT:
 					fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, &m_%s, &m_num%s, k_MAX_%s)) {\n", 
-							m_name, dat->m_subType, dat->m_name, dat->m_name, dat->m_name);
+							recordName, dat->m_subType, dat->m_name, dat->m_name, dat->m_name);
 					break;
 				default:
 					Assert(0);

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The Slic Engine
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -48,7 +48,8 @@
 // - Memory leaks repaired.
 // - Redesigned to prevent memory leaks and crashes.
 // - Reuse SlicSegment pool between SlicEngine sessions.
-// - Added slic civilisation database support
+// - Added slic civilisation database support.
+// - Added slic risk database support. (Sep 15th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -143,6 +144,7 @@ extern TutorialWin *g_tutorialWin;
 #include "WonderBuildListRecord.h"
 #include "WonderMovieRecord.h"
 #include "CivilisationRecord.h"
+#include "RiskRecord.h"
 
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
@@ -3031,6 +3033,11 @@ void SlicEngine::AddDatabases()
 																  g_CivilisationRecord_Accessors,
 																  g_Civilisation_Tokens,
 																  k_Num_CivilisationRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<RiskRecord, 
+									RiskRecordAccessorInfo>("RiskDB", g_theRiskDB,
+																  g_RiskRecord_Accessors,
+																  g_Risk_Tokens,
+																  k_Num_RiskRecord_Tokens));
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Matrix of all diplomatic agreements between players
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG
+// - Generate debug version when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -96,7 +100,6 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 			}
 		}
 }
-
 
 void AgreementMatrix::Load(CivArchive & archive)
 {

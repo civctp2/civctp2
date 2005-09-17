@@ -54,6 +54,9 @@
 //   was fixed. (Aug 25th 2005 Martin Gühmann)
 // - Added alias names and the possibility to have default values from 
 //   other entries. (Aug 26th 2005 Martin Gühmann)
+// - Added accessors for slic database array access. (Sep 16th 2005 Martin Gühman)
+// - Made float arrays possible. (Sep 16th 2005 Martin Gühman)
+// - Made value of int databases accessable. (Sep 16th 2005 Martin Gühman)
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
@@ -96,8 +99,8 @@ void RecordDescription::SetBaseType(DATUM_TYPE type)
 	Datum *dat = new Datum;
 	dat->m_type = type;
 	dat->m_name = name;
-	dat->m_minSize = 0;
-	dat->m_maxSize = 0;
+	dat->m_minSize = -1;
+	dat->m_maxSize = -1;
 	dat->m_subType = NULL;
 	dat->m_groupList = NULL;
 	dat->m_bitPairDatum = NULL;
@@ -111,8 +114,8 @@ void RecordDescription::SetBaseType(DATUM_TYPE type)
 	dat = new Datum;
 	dat->m_type = DATUM_STRING;
 	dat->m_name = name;
-	dat->m_minSize = 0;
-	dat->m_maxSize = 0;
+	dat->m_minSize = -1;
+	dat->m_maxSize = -1;
 	dat->m_subType = NULL;
 	dat->m_groupList = NULL;
 	dat->m_bitPairDatum = NULL;
@@ -142,10 +145,12 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	fprintf(outfile, "\nclass %sRecord : public CTPRecord\n{\npublic:\n", m_name);
 	
 	fprintf(outfile, "    typedef sint32 (%sRecord::*IntAccessor)() const;\n", m_name);
-	fprintf(outfile, "    typedef bool (%sRecord::*BoolAccessor)() const;\n", m_name);
+	fprintf(outfile, "    typedef bool   (%sRecord::*BoolAccessor)() const;\n", m_name);
 	fprintf(outfile, "    typedef double (%sRecord::*FloatAccessor)() const ;\n", m_name);
-	fprintf(outfile, "    typedef bool (%sRecord::*BitIntAccessor)(sint32 &val) const;\n", m_name);
-	fprintf(outfile, "    typedef bool (%sRecord::*BitFloatAccessor)(double &val) const;\n", m_name);
+	fprintf(outfile, "    typedef bool   (%sRecord::*BitIntAccessor)(sint32 &val) const;\n", m_name);
+	fprintf(outfile, "    typedef bool   (%sRecord::*BitFloatAccessor)(double &val) const;\n", m_name);
+	fprintf(outfile, "    typedef sint32 (%sRecord::*IntArrayAccessor)(sint32 index) const;\n", m_name);
+	fprintf(outfile, "    typedef double (%sRecord::*FloatArrayAccessor)(sint32 index) const ;\n", m_name);
 
 	ExportMemberClasses(outfile);
 	fprintf(outfile, "private:\n");
@@ -183,6 +188,8 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	fprintf(outfile, "    %sRecord::FloatAccessor m_floatAccessor;\n", m_name);
 	fprintf(outfile, "    %sRecord::BitIntAccessor m_bitIntAccessor;\n", m_name);
 	fprintf(outfile, "    %sRecord::BitFloatAccessor m_bitFloatAccessor;\n", m_name);
+	fprintf(outfile, "    %sRecord::IntArrayAccessor m_intArrayAccessor;\n", m_name);
+	fprintf(outfile, "    %sRecord::FloatArrayAccessor m_floatArrayAccessor;\n", m_name);
 	fprintf(outfile, "};\n");
 
 	fprintf(outfile, "extern %sRecordAccessorInfo g_%sRecord_Accessors[];\n", m_name, m_name);
@@ -720,35 +727,39 @@ void RecordDescription::ExportParser(FILE *outfile)
 		switch(dat->m_type) {
 			case DATUM_INT:
 				if(dat->m_maxSize < 0) {
-					fprintf(outfile, "    { %sRecord::Get%s, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { %sRecord::Get%s, NULL, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				} else {
-					fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL}, /* %s (array) */\n", dat->m_name);
+					fprintf(outfile, "    { %sRecord::GetNum%s, NULL, NULL, NULL, NULL, %sRecord::Get%s, NULL}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
 				}
 				break;
 			case DATUM_RECORD:
 				if(dat->m_maxSize < 0) {
-					fprintf(outfile, "    { %sRecord::Get%sIndex, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { %sRecord::Get%sIndex, NULL, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				} else {
-					fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL}, /* %s (array) */\n", dat->m_name);
+					fprintf(outfile, "    { %sRecord::GetNum%s, NULL, NULL, NULL, NULL, %sRecord::Get%sIndex, NULL}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
 				}
 				break;
 			case DATUM_BIT:
-				fprintf(outfile, "    { NULL, %sRecord::Get%s, NULL, NULL, NULL },\n", m_name, dat->m_name);
+				fprintf(outfile, "    { NULL, %sRecord::Get%s, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				break;
 			case DATUM_FLOAT:
-				fprintf(outfile, "    { NULL, NULL, %sRecord::Get%s, NULL, NULL },\n", m_name, dat->m_name);
+				if(dat->m_maxSize < 0) {
+					fprintf(outfile, "    { NULL, NULL, %sRecord::Get%s, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+				} else {
+					fprintf(outfile, "    { %sRecord::GetNum%s, NULL, NULL, NULL, NULL, NULL, %sRecord::Get%s}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
+				}
 				break;
 			case DATUM_BIT_PAIR:
 				if(dat->m_bitPairDatum->m_type == DATUM_INT) {
-					fprintf(outfile, "    { NULL, NULL, NULL, %sRecord::Get%s, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { NULL, NULL, NULL, %sRecord::Get%s, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				} else if(dat->m_bitPairDatum->m_type == DATUM_FLOAT) {
-					fprintf(outfile, "    { NULL, NULL, NULL, NULL, %sRecord::Get%s},\n", m_name, dat->m_name);
+					fprintf(outfile, "    { NULL, NULL, NULL, NULL, %sRecord::Get%s, NULL, NULL },\n", m_name, dat->m_name);
 				} else {
-					fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL}, /* %s */\n", dat->m_name);
+					fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* %s */\n", dat->m_name);
 				}
 				
 			default:
-				fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL}, /* %s */\n", dat->m_name);
+				fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* %s */\n", dat->m_name);
 				break;
 		}
 		walk.Next();

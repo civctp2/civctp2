@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handels slic database access
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// HAVE_PRAGMA_ONCE
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +27,7 @@
 // - Added two new functions for better slic error 
 //   messages and for access on the number of entries 
 //   in a database, addion by Martin Gühmann.
+// - Added database array access. (Sep 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -37,6 +41,7 @@ public:
 	virtual sint32 GetIndex(const char *name) = 0;
 	virtual const char *GetName() = 0;
 	virtual sint32 GetValue(sint32 index, const char *valname) = 0;
+	virtual sint32 GetValue(sint32 index, const char *valname, const sint32 val) = 0;
 	virtual const MBCHAR *GetRecordName(const char *id) = 0;
 	virtual const MBCHAR *GetRecordNameByIndex(sint32 index) = 0;
 	virtual sint32 GetRecordNameID(const char *id) = 0;
@@ -76,9 +81,8 @@ public:
 
 	sint32 GetValue(sint32 index, const char *valname) {
 		const T *rec = m_db->Get(index);
-//Added by Martin Gühmann to avoid an access violation
 		Assert(rec);
-		if(!rec)return 0;
+		if(!rec)return 0; //Added by Martin Gühmann to avoid an access violation
 		sint32 i;
 		for(i = 0; i < m_numTokens; i++) {
 			if(stricmp(valname, m_tokens[i]) == 0) {
@@ -98,6 +102,24 @@ public:
 					if(!(rec->*m_accessors[i].m_bitFloatAccessor)(val))
 						return 0;
 					return (sint32)(val * 100);
+				}
+			}
+		}
+		return 0;
+	}
+
+	sint32 GetValue(sint32 index, const char *valname, const sint32 val){
+		const T *rec = m_db->Get(index);
+		Assert(rec);
+		if(!rec)return 0;
+		sint32 i;
+		for(i = 0; i < m_numTokens; i++) {
+			if(stricmp(valname, m_tokens[i]) == 0) {
+				if(m_accessors[i].m_intArrayAccessor) {
+					return (rec->*m_accessors[i].m_intArrayAccessor)(val);
+				}
+				else if(m_accessors[i].m_floatArrayAccessor) {
+					return (sint32)((rec->*m_accessors[i].m_floatArrayAccessor)(val) * 100);
 				}
 			}
 		}
