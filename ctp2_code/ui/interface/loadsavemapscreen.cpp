@@ -1,5 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Prevented memory leak report at the end of the program.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "loadsavemapwindow.h"
 
 #include "civ3_main.h"
 #include "civapp.h"
@@ -22,7 +51,6 @@
 
 #include "initialplaywindow.h"
 #include "spnewgamewindow.h"
-#include "loadsavemapwindow.h"
 
 extern C3UI					*g_c3ui;
 extern CivApp				*g_civApp;
@@ -36,35 +64,29 @@ static uint32 s_type = LSMS_TOTAL;
 static c3_Static					*s_name					= NULL;
 static aui_StringTable				*s_nameString			= NULL;
 
-void loadsavemapscreen_setMyType(uint32 type);
-
-
 
 sint32	loadsavemapscreen_displayMyWindow(uint32 type)
 {
-	sint32 retval=0;
-	if(!g_loadSaveMapWindow) { retval = loadsavemapscreen_Initialize(); }
-
+	AUI_ERRCODE const   retval = loadsavemapscreen_Initialize();
 	
-	
-	g_loadSaveMapWindow->CleanUpSaveMapInfo();
-
-	if(retval == AUI_ERRCODE_OK) {
+	if (g_loadSaveMapWindow) 
+    {
+	    g_loadSaveMapWindow->CleanUpSaveMapInfo();
 		g_loadSaveMapWindow->SetType(type);
 
+        Assert(g_c3ui);
 		g_c3ui->AddWindow(g_loadSaveMapWindow);
+        g_c3ui->RegisterCleanup(&loadsavemapscreen_Cleanup);
 	}
 
-	return retval;
+	return static_cast<sint32>(retval);
 }
 sint32 loadsavemapscreen_removeMyWindow(uint32 action)
 {
-	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
+	if (action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return 0;
 
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( g_loadSaveMapWindow->Id() );
-	Assert( auiErr == AUI_ERRCODE_OK );
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(g_loadSaveMapWindow->Id());
+	Assert(auiErr == AUI_ERRCODE_OK);
 
 	return 1;
 }
@@ -73,12 +95,10 @@ sint32 loadsavemapscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
 	if ( g_loadSaveMapWindow ) return AUI_ERRCODE_OK; 
 
-
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	MBCHAR		windowBlock[k_AUI_LDL_MAXBLOCK + 1];
 	strcpy(windowBlock, "LoadSaveMapWindow");
 
 	g_loadSaveMapWindow= new LoadSaveMapWindow(&errcode, aui_UniqueId(), windowBlock, 16 , AUI_WINDOW_TYPE_FLOATING);
@@ -88,7 +108,6 @@ AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *ca
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
-	
 	switch ( g_loadSaveMapWindow->GetType() )
 	{
 	case LSMS_LOAD_GAMEMAP:
@@ -101,14 +120,9 @@ AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *ca
 	}
 
 	g_loadSaveMapWindow->GetDeleteButton()->Enable( FALSE );
-
-
-
-
 	g_loadSaveMapWindow->GetListOne()->GetHeader()->Enable( FALSE );
 	g_loadSaveMapWindow->GetListTwo()->GetHeader()->Enable( FALSE );
 
-	
 	if ( callback )
 		g_loadSaveMapWindow->GetOkButton()->SetActionFuncAndCookie(
 			callback, NULL );
@@ -119,16 +133,15 @@ AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *ca
 
 
 
-AUI_ERRCODE loadsavemapscreen_Cleanup()
+void loadsavemapscreen_Cleanup(void)
 {
-	if ( !g_loadSaveMapWindow  ) return AUI_ERRCODE_OK; 
+    if (g_c3ui && g_loadSaveMapWindow)
+    {
+        g_c3ui->RemoveWindow(g_loadSaveMapWindow->Id());
+    }
 
-	g_c3ui->RemoveWindow( g_loadSaveMapWindow->Id() );
-
-	delete g_loadSaveMapWindow;
-	g_loadSaveMapWindow = NULL;
-
-	return AUI_ERRCODE_OK;
+    delete g_loadSaveMapWindow;
+    g_loadSaveMapWindow = NULL;
 }
 
 

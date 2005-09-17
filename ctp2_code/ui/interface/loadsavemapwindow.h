@@ -1,9 +1,67 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Load/save map window
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Changed loadsavemapscreen_Cleanup so it can function as UiCleanupCallback.
+//
+//----------------------------------------------------------------------------
 
-
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
 
 #ifndef LOADSAVEMAPWINDOW_FLAG
 #define LOADSAVEMAPWINDOW_FLAG
+
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// #include <>      
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class LoadSaveMapWindow;
+class LSMGameMapsListItem;
+class LSMSaveMapsListItem;
+
+enum LSMS_TYPE
+{ 
+	LSMS_FIRST=0, 
+	
+	LSMS_LOAD_GAMEMAP=0, 
+	LSMS_SAVE_GAMEMAP,
+
+	LSMS_TOTAL
+};
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
 #include "pointerlist.h"
 #include "gamefile.h"
@@ -19,13 +77,15 @@ class TextTab;
 class c3_ListBox;
 class aui_TabGroup;
 
+//----------------------------------------------------------------------------
+// General declarations
+//----------------------------------------------------------------------------
 
 sint32 loadsavemapscreen_displayMyWindow(uint32 type);
 sint32 loadsavemapscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE loadsavemapscreen_Initialize(
 	aui_Control::ControlActionCallback *callback = NULL );
-AUI_ERRCODE loadsavemapscreen_Cleanup();
-
+void loadsavemapscreen_Cleanup(void);
 
 void loadsavemapscreen_executePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void loadsavemapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
@@ -34,14 +94,9 @@ void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 d
 void loadsavemapscreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void loadsavemapscreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-typedef enum { 
-	LSMS_FIRST=0, 
-	
-	LSMS_LOAD_GAMEMAP=0, 
-	LSMS_SAVE_GAMEMAP,
-
-	LSMS_TOTAL
-} LSMS_TYPE;
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 class LoadSaveMapWindow : public c3_PopupWindow
 {

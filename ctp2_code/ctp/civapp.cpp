@@ -672,8 +672,8 @@ sint32 CivApp::InitializeAppUI(void)
 
 	if (g_useIntroMovie && !g_no_shell) 
 	{
-		intromoviewin_Initialize();
-		intromoviewin_DisplayIntroMovie();
+  		intromoviewin_Initialize();
+    	intromoviewin_DisplayIntroMovie();
 	} else {
 
 		if (g_soundManager) {
@@ -1632,17 +1632,8 @@ sint32 CivApp::CleanupAppUI(void)
 	//Added by Martin Gühmann to clean up the status bar correctly.
 	StatusBar::CleanUp();
 
-	if (g_c3ui)
-	{
-		delete g_c3ui->TheMovieManager();
-		delete g_c3ui->TheKeyboard();
-		delete g_c3ui->TheMouse();
-		delete g_c3ui->TheBlitter();
-		delete g_c3ui->TheMemMap();
-		delete g_c3ui;
-		g_c3ui = NULL;
-	}
-
+    delete g_c3ui;
+    g_c3ui = NULL;
 	
 	delete g_GreatLibPF;
 	g_GreatLibPF = NULL;
