@@ -17,6 +17,22 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
+/*----------------------------------------------------------------------------
+ *
+ * Disclaimer
+ *
+ * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+ *
+ * This material has been modified by the Apolyton CtP2 Source Code Project. 
+ * Contact the authors at ctp2source@apolyton.net.
+ *
+ * Modifications from the Activision Anet 0.10 code:
+ *
+ * - 2005/03/11: Added return statements to prevent compiler complaints.
+ *
+ *----------------------------------------------------------------------------
+ */
+
 #define SEMIRELIABLE_SESSIONS
 /* #define DONT_RETAIN_SESSFLAGS */
 /* #define USE_dp_enableNewPlayers */
@@ -2012,6 +2028,10 @@ dp_myplayers_cb(
 		if (err != dp_RES_OK)
 			DPRINT(("dp_myplayers_cb: dptab_delete returns err:%d\n", err));
 	}
+
+#if !defined(ANET_ORIGINAL)
+	return dp_RES_OK;
+#endif
 }
 
 /*----------------------------------------------------------------------
@@ -4841,6 +4861,9 @@ dp_result_t DP_APIX dp_addClient(dp_t *dp, playerHdl_t src,
 		DPRINT(("dp_addClient: can't subscribeExceptions, err:%d\n", err));
 		return err;
 	}
+#if !defined(ANET_ORIGINAL)
+	return err;
+#endif
 }
 
 /*----------------------------------------------------------------------

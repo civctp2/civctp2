@@ -17,6 +17,22 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
+/*----------------------------------------------------------------------------
+ *
+ * Disclaimer
+ *
+ * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+ *
+ * This material has been modified by the Apolyton CtP2 Source Code Project. 
+ * Contact the authors at ctp2source@apolyton.net.
+ *
+ * Modifications from the Activision Anet 0.10 code:
+ *
+ * - 2005/03/11: Removed (unused, missing file) updater functionality.
+ *
+ *----------------------------------------------------------------------------
+ */
+
 /*--------------------------------------------------------------------------
  Enumerate applications installed on this machine.
 
@@ -427,10 +443,12 @@ static void showErr()
  dp_RES_USER_CANCELLED if user offered patch, but declined it.
 -------------------------------------------------------------------------*/
 #define BIND_UPDATER_LATE
+#if defined(ANET_ORIGINAL)
 #include "..\3rdparty\updater\update.h"
-
+#endif
 DP_API dp_result_t DP_APIX dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app)
 {
+#if defined(ANET_ORIGINAL)
 	int res;
 	char productCode[256];
 
@@ -476,6 +494,7 @@ DP_API dp_result_t DP_APIX dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app)
 	}
 	if (res == dkupddll_ERR_OK)
 		return dp_RES_OK;
+#endif /* ANET_ORIGINAL */
 	return dp_RES_EMPTY;
 }
 #endif
