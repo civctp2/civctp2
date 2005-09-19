@@ -410,7 +410,7 @@ void Datum::ExportBitPairSerializationStoring(FILE *outfile)
 
 	switch(m_bitPairDatum->m_type) {
 		case DATUM_STRINGID:
-			fprintf(outfile, "        {\n");
+			fprintf(outfile, "        if(Get%s()){\n", m_name);
 			fprintf(outfile, "            MBCHAR* tmpString = g_theStringDB->GetIdStr(m_%s);\n", m_bitPairDatum->m_name);
 			fprintf(outfile, "            archive << tmpString;\n");
 			fprintf(outfile, "        }\n\n");
@@ -442,10 +442,12 @@ void Datum::ExportBitPairSerializationLoading(FILE *outfile)
 	switch(m_bitPairDatum->m_type) {
 			case DATUM_STRINGID:
 				fprintf(outfile, "        {\n");
-				fprintf(outfile, "            MBCHAR* tmpString = NULL;\n");
-				fprintf(outfile, "            archive >> tmpString;\n");
-				fprintf(outfile, "            g_theStringDB->GetStringID(tmpString, m_%s);\n", m_bitPairDatum->m_name);
-				fprintf(outfile, "            delete[] tmpString;\n");
+				fprintf(outfile, "            if(Get%s()){\n", m_name);
+				fprintf(outfile, "                MBCHAR* tmpString = NULL;\n");
+				fprintf(outfile, "                archive >> tmpString;\n");
+				fprintf(outfile, "                g_theStringDB->GetStringID(tmpString, m_%s);\n", m_bitPairDatum->m_name);
+				fprintf(outfile, "                delete[] tmpString;\n");
+				fprintf(outfile, "            }\n");
 				fprintf(outfile, "        }\n\n");
 				break;
 			case DATUM_INT:

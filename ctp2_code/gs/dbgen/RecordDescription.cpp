@@ -605,7 +605,12 @@ void RecordDescription::ExportManagement(FILE *outfile)
 	fprintf(outfile, "    if(archive.IsStoring()) {\n");
 
 	fprintf(outfile, "        archive << m_index;\n");
-	fprintf(outfile, "        archive << GetNameText();\n");
+	fprintf(outfile, "        if(m_name >= 0){\n");
+	fprintf(outfile, "            archive << GetIDText();\n");
+	fprintf(outfile, "        }\n");
+	fprintf(outfile, "        else{\n");
+	fprintf(outfile, "            archive << static_cast<MBCHAR*>(NULL);\n");
+	fprintf(outfile, "        }\n");
 	for(i = 0; i  < ((m_numBits + 31)/ 32); i++) {
 		fprintf(outfile, "        archive << m_flags%d;\n", i);
 	}
