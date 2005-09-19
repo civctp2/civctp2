@@ -559,7 +559,7 @@ static void dumpBuf(const char *msg, const char *buf, int len)
 #define dpio_dprintAdr(adr, len)
 #else
 void dpio_dprintAdr(
-	char adr[dp_MAX_ADR_LEN],
+	unsigned char adr[dp_MAX_ADR_LEN],
 	int adrLen)
 {
 	char buf[256];
@@ -570,8 +570,8 @@ void dpio_dprintAdr(
     } else {
 		buf[0] = 0;
 		for (i=0; i<adrLen-1; i++)
-			sprintf(buf + 3*i, "%02x:", ((unsigned char *)adr)[i]);
-		sprintf(buf + 3*i, "%02x", ((unsigned char *)adr)[i]);
+			sprintf(buf + 3*i, "%02x:", adr[i]);
+		sprintf(buf + 3*i, "%02x", adr[i]);
 		DPRINT(("%s", buf));
 	}
 }
@@ -806,7 +806,7 @@ void dpio_setMaxPlayerHdls(dpio_t *dpio, int maxHdls) {
  Returns length of address in bytes, or 0 upon error.
  Output buffer must be big enough, or buffer won't be valid.
 -----------------------------------------------------------------------*/
-DP_API int dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
+DP_API int dpio_scanAdr(dpio_t *dpio, char *hostname, unsigned char *adrbuf, size_t buflen)
 {
 	commScanAddrReq_t req;
 	commScanAddrResp_t resp;
@@ -905,10 +905,10 @@ playerHdl_t dpio_openHdlRaw2(dpio_t *dpio, void *adr, void *adr2, long flags)
 	if (!commSayHi( &cshReq, &cshResp, dpio->commPtr )) 
 	{
 		DPRINT(("dpio_openHdlRaw: adr "));
-		dpio_dprintAdr((char *) adr, dpio->myAdrLen);
+		dpio_dprintAdr(adr, dpio->myAdrLen);
 		if (adr2) {
 			DPRINT((", "));
-			dpio_dprintAdr((char *) adr2, dpio->myAdrLen);
+			dpio_dprintAdr(adr2, dpio->myAdrLen);
 		}
 		DPRINT((" error: commSayHi returns status %d\n", cshResp.status));
 		dpio_assertValid(dpio);
@@ -916,10 +916,10 @@ playerHdl_t dpio_openHdlRaw2(dpio_t *dpio, void *adr, void *adr2, long flags)
 	}
 	h = cshResp.player;
 	DPRINT(("dpio_openHdlRaw: adr "));
-	dpio_dprintAdr((char *) adr, dpio->myAdrLen);
+	dpio_dprintAdr(adr, dpio->myAdrLen);
 	if (adr2) {
 		DPRINT((", "));
-		dpio_dprintAdr((char *) adr2, dpio->myAdrLen);
+		dpio_dprintAdr(adr2, dpio->myAdrLen);
 	}
 	DPRINT((" status:%3u h:%x\n", cshResp.status, h));
 	dpio_assertValid(dpio);
@@ -1032,8 +1032,8 @@ dpio_thawHdl(
 	playerHdl_t* hdl,
 	FILE* file)
 {
-	char adr[dp_MAX_ADR_LEN];
-	char adr2[dp_MAX_ADR_LEN];
+	unsigned char adr[dp_MAX_ADR_LEN];
+	unsigned char adr2[dp_MAX_ADR_LEN];
 	long flags;
 	char bTy;
 
@@ -1422,8 +1422,9 @@ void dpio_set_clocks(dpio_t *dpio, int clocksPerSec)
 	if (dpio->maxTxInterval < dpio->minTxInterval)
 		dpio->maxTxInterval = dpio->minTxInterval * 4;
 
-	if (dpio->maxTxInterval > dpio->maxRxInterval / 2)
+	if (dpio->maxTxInterval > dpio->maxRxInterval / 2) {
 		DPRINT (("dpio_set_clocks: warning: maxTxInterval too large\n"));
+	}
 	DPRINT(("dpio_set_clocks: cps:%d minTx:%d maxTx:%d maxRx:%d lat:%d\n",
 		clocksPerSec, dpio->minTxInterval, dpio->maxTxInterval, dpio->maxRxInterval, dpio->latency));
 }
@@ -1471,7 +1472,7 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, in
 	}
 
 	DPRINT(("dpio_hdl2adr: h:%x len:%d Adr: ", h, *len));
-	dpio_dprintAdr((char *)adr, resp.addrLen);
+	dpio_dprintAdr(adr, resp.addrLen);
 	DPRINT(("\n"));
 	(void) dpio;
 	return dp_RES_OK;
@@ -1801,8 +1802,9 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 			&& (percent >= 0)
 			&& (percent <= 100))
 				dpio->rxDropPercent = percent;
-			else
+			else {
 				DPRINT(("dpio_create: [DEBUG]/pktloss must be between 0 and 100, was '%s' = %d\n", s, percent));
+			}
 		}
 		s = dpini_readParameter("fault", FALSE);
 		if (s && *s) {
@@ -1839,7 +1841,9 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		|| (1!=sscanf(s, "%d", &bps))
 		|| (bps < 0)
 		|| (bps > 100000000)) {
-			if (s && *s) DPRINT(("dpio_create: [DEBUG]/bitsPerSec must be between 0 and 100 million, was '%s' = %d\n", s, bps));
+			if (s && *s) {
+				DPRINT(("dpio_create: [DEBUG]/bitsPerSec must be between 0 and 100 million, was '%s' = %d\n", s, bps));
+			}
 			/*bps = 20000;*/
 			bps = 0;
 		}
@@ -1996,8 +2000,9 @@ dp_result_t dpio_q_packet(
 	pktnum = pw->next_pktnum++;
 	nq++;
 	p->body.pktnum = SwapBytes2(pktnum);
-	if (pw->next_pktnum == 0)
+	if (pw->next_pktnum == 0) {
 		DPRINT(("dpio_q_packet: tx wrapped to pktnum 0 (normal)\n"));
+	}
 	memcpy(p->body.data, buffer, size);
 
 	/*DPRINT(("dpio_q_packet: cleared ack %d: ", j)); dpio_pw(pw); */
@@ -2310,9 +2315,10 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 	DPRINT(("\n"));
 	err = dpio_q_packet(dpio, h, pc, dpio_SYN_PACKET_ID, data, pktlen);
 
-	if (err != dp_RES_OK)
+	if (err != dp_RES_OK) {
 		DPRINT(("dpio_openHdl: error: sending to h:%x got err %d; will retransmit\n",
 			h, err));
+	}
 
 
 #ifdef dp_STATS
@@ -3134,7 +3140,7 @@ static dp_result_t dpio_getReliable(
 static dp_result_t dpio_getRaw(
 	dpio_t   *dpio,
 	playerHdl_t *pcallerSrc,
-	char *pktadr,
+	unsigned char *pktadr,
 	void *callerBuf,
 	size_t *pcallerBufLen)
 {
@@ -3296,8 +3302,8 @@ dp_result_t dpio_get(
 	commRxPktResp_t	rxPktResp;
 	void			*localMsg;
 	size_t			localMsgLen;
-	char *srcAdr;
-	char *srcAdr2;
+	unsigned char *srcAdr;
+	unsigned char *srcAdr2;
 	dp_result_t err;
 	dp_result_t res;
 	dpio_data_packet_t  *pDat;
@@ -3398,8 +3404,9 @@ dp_result_t dpio_get(
 		}
 		pktnum = SwapBytes2(pAck->pktnum);
 		pw = &pc->tx;
-		if (pc->state != dpio_STATE_ESTABLISHED)
+		if (pc->state != dpio_STATE_ESTABLISHED) {
 			DPRINT(("dpio_get: not established! windowbase %d, h:%x state:%x\n", pw->windowBase, h, pc->state));
+		}
 
 		/* Update the transmit window to reflect the acknowledgement. */
 		res = dpio_gotAck(dpio, pc, pktnum, h
@@ -3538,13 +3545,13 @@ dp_result_t dpio_get(
 					}
 
 					DPRINT(("dpio_get: src address in packet     : "));
-					dpio_dprintAdr((char*)(pDat->data+2), dpio->myAdrLen);
+					dpio_dprintAdr((pDat->data+2), dpio->myAdrLen);
 					DPRINT(("\n"));
 					DPRINT(("dpio_get: src 2nd address in packet : "));
-					dpio_dprintAdr((char*)(pDat->data + 3 + dpio->myAdrLen * 2), dpio->myAdrLen);
+					dpio_dprintAdr((pDat->data + 3 + dpio->myAdrLen * 2), dpio->myAdrLen);
 					DPRINT(("\n"));
 					DPRINT(("dpio_get: src address from comm     : "));
-					dpio_dprintAdr((char*)rxPktResp.adr, dpio->myAdrLen);
+					dpio_dprintAdr(rxPktResp.adr, dpio->myAdrLen);
 					DPRINT(("\n"));
 				}
 			}
@@ -3553,7 +3560,7 @@ dp_result_t dpio_get(
 			if (rxPktResp.length >= sizeof(dp_packetType_t) + 
 				sizeof(dpio_data_packet_t) - dpio_MAXLEN_RELIABLE
 				+ 2 + 2*dpio->myAdrLen) {
-				char *destAdr =(char*)(pDat->data+2+dpio->myAdrLen); 
+				unsigned char *destAdr = (pDat->data+2+dpio->myAdrLen); 
 
 				if (memcmp(dpio->myAdr, destAdr, dpio->myAdrLen)) {
 					DPRINT(("dpio_get: SYN for wrong host received, ignoring\n"));
@@ -3658,7 +3665,7 @@ dp_result_t dpio_get(
 			if (rxPktResp.length >= sizeof(dp_packetType_t) + 
 				sizeof(dpio_data_packet_t) - dpio_MAXLEN_RELIABLE
 				+ 2 + 2*dpio->myAdrLen) {
-				char *destAdr =(char*)(pDat->data+2+dpio->myAdrLen); 
+				unsigned char *destAdr =(pDat->data+2+dpio->myAdrLen); 
 				DPRINT(("dpio_get: SYN has dest adr "));
 				dpio_dprintAdr(destAdr, dpio->myAdrLen);
 				DPRINT((" myAdr is "));
@@ -4029,8 +4036,9 @@ dp_result_t dpio_get(
 			DPRINT(("dpio_get: ignoring pktnum %d because it's outside window; windowbase %d\n",
 				pktnum, pw->windowBase));
 		}
-		if (pw->next_pktnum < pw->windowBase)
+		if (pw->next_pktnum < pw->windowBase) {
 			DPRINT(("dpio_get: rx wrapped around pktnum 0 (normal)\n"));
+		}
 /* define TICKLEFINBUG */
 #ifdef TICKLEFINBUG
 		/* To demonstrate the ACK for FIN bug, never acknowledge 
@@ -4466,8 +4474,9 @@ dp_result_t dpio_put_reliable2(
 		}
 #endif
 		/* Can't be queue full at this point */
-		if (err != dp_RES_OK)
+		if (err != dp_RES_OK) {
 			DPRINT(("dpio_put_reliable: warning: couldn't send, err:%d!\n", err));
+		}
 		/* but it can be "closed handle" */
 		if (err == dp_RES_PEER_CLOSED) {
 			if (errDest) *errDest = dests[i];
@@ -4578,8 +4587,9 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
 			dpio_closeHdl(dpio, h);
 			DPRINT(("dpio_findTimedOutHost: retried close of h:%x state:%x\n", h, pc->state));
 		}
-		if ((pc->state & dpio_STATE_CLOSED) == dpio_STATE_CLOSED)
+		if ((pc->state & dpio_STATE_CLOSED) == dpio_STATE_CLOSED) {
 			DPRINT(("dpio_findTimedOutHost: attempting to close h:%x state:%x\n", h, pc->state));
+		}
 		if (((pc->state & dpio_STATE_CLOSED) == dpio_STATE_CLOSED)
 		&&  (txw->windowBase == txw->next_pktnum)) { /* No tx waiting */
 			int i;

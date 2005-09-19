@@ -301,8 +301,9 @@ dp_result_t dp_subscribeExceptions(dptab_t *dptab, playerHdl_t h)
 	key[0] = dp_KEY_EXCEPTIONS;
 	if (!(tab = getExceptionTable(dptab))) return dp_RES_BAD;
 	err = dptab_addPublisher(dptab, tab, key, 1, h);
-	if (err != dp_RES_OK)
+	if (err != dp_RES_OK) {
 		DPRINT(("dp_subscribeExceptions: can't add h:%x as publisher?, err:%d\n", h, err));
+	}
 	return err;
 }
 
@@ -460,8 +461,9 @@ static int writetofile(aeh_t *aeh)
 	aeh_SetCurrent(__LINE__, __FILE__);
 	err = aeh_writeOutputStream(aeh, &aehbuf);
 	if (err != aeh_RES_OK && err != aeh_RES_FULL) return err;
-	if (err == aeh_RES_FULL)
+	if (err == aeh_RES_FULL) {
 		aehDPRINT(("writetofile: info size larger than aef_BUF_MAXLEN\n"));
+	}
 	aeh_SetCurrent(__LINE__, __FILE__);
 	err = aehlog_Create("", &aehlog);
 	if (err != aeh_RES_OK) return err;

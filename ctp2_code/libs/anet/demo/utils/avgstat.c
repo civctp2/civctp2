@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include <stdio.h>
+#include <string.h>
 #include "avgstat.h"
 
 #ifdef dp_STATS
@@ -199,7 +200,7 @@ dp_result_t dp_avgstat_print(dp_t *dp,
 		return dp_RES_BAD;
 
 	for (i = 0; i <= dp_STAT_MAX; i++) {
-		 sprintf(obuf, "%s : in %d, out %d, dropped %d, waiting %d", names[i], stats->stats[i].in, stats->stats[i].out, stats->stats[i].dropped, stats->stats[i].waiting); 
+		 sprintf(obuf, "%s : in %ld, out %ld, dropped %ld, waiting %ld", names[i], stats->stats[i].in, stats->stats[i].out, stats->stats[i].dropped, stats->stats[i].waiting); 
 		 printfn(obuf, printcontext);
 	}	
 	return dp_RES_OK;

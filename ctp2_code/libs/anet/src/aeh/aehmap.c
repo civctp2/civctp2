@@ -261,19 +261,22 @@ static int aeh_map_Load(aeh_map_t *aehmap)
 		fgets (buffer, BUFFER_SIZE, fp);
 		if (feof (fp))
 			done = 1;
-		if (strncmp(buffer, " Preferred", strlen(" Preferred")-1) == 0)
-			if (sscanf(buffer, " %*s %*s %*s %*s %x", &prefadr) != 1)
+		if (strncmp(buffer, " Preferred", strlen(" Preferred")-1) == 0) {
+			if (sscanf(buffer, " %*s %*s %*s %*s %x", &prefadr) != 1) {
 				aehDPRINT(("aeh_map_Load: error getting preferred address\n"));
+			}
+		}
 		if (sscanf (buffer, "%s", name) == 1) {
 			if (strcmp (name, "Address") == 0)
 				done = 1;
 		}
 	}
 
-	if (prefadr)
+	if (prefadr) {
 		done = 0;
-	else
+	} else {
 		aehDPRINT(("didn't get preferred adr\n"));
+	}
 	aehmap->load_addr = prefadr;
 	fgets (buffer, BUFFER_SIZE, fp);  /* ignore single blank line */
 

@@ -1003,8 +1003,9 @@ dptab_addSubscriber(
 				DPRINT(("dptab_addSubscriber: horrible err: can't send var\n"));
 				break;	/* Horrible error */
 			}
-		} else
+		} else {
 			DPRINT(("dptab_addSubscriber: ignoring var; hops = %d\n",tag.hops));
+		}
 	}
 
 	dptab_assertValid(dptab);
@@ -2168,7 +2169,7 @@ static dptab_xfer_t *dptab_xfer_insert(dptab_peer_t *peer, dptab_table_t *table,
 	temp.hops = hops;
 	temp.subkeylen = subkeylen;
 	temp.cur_offset = offset;
-	temp.is_delete = (offset == dptab_OFFSET_DELETE);
+	temp.is_delete = ((unsigned) offset == dptab_OFFSET_DELETE);
 	temp.xferid = peer->next_xferid++;
 	memcpy(temp.subkey, subkey, sizeof(subkey[0]) * subkeylen);
 #if 0
@@ -3348,8 +3349,10 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 
 			DPRINT(("dptab_handlePacket: small: len %d, varlen %d\n", len, varlen));
 
+			/* len<0 always false
 			if (len < 0)
 				break;
+			*/
 			/* New scheme for deleting is to send record with "length"
 			 * dptab_SIZE_DELETE
 			 */

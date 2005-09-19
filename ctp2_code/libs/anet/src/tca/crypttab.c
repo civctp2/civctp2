@@ -47,9 +47,9 @@ void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 	int nwritten;
 	int n;
 	size_t chunk;
-	char buf[crypttab_RW_BUFFER_SIZE];
-	char *pbuf;
-	char unitbuf[crypttab_RW_BUFFER_SIZE];
+	unsigned char buf[crypttab_RW_BUFFER_SIZE];
+	unsigned char *pbuf;
+	unsigned char unitbuf[crypttab_RW_BUFFER_SIZE];
 	
 	d.magic = dynatab_encrypted_MAGIC;
 	d.n_used = tab->n_used;
@@ -133,9 +133,9 @@ void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8
 		int n;
 		int n_end;
 		size_t chunk;
-		char buf[crypttab_RW_BUFFER_SIZE];
-		char *pbuf;
-		char unitbuf[crypttab_RW_BUFFER_SIZE];
+		unsigned char buf[crypttab_RW_BUFFER_SIZE];
+		unsigned char *pbuf;
+		unsigned char unitbuf[crypttab_RW_BUFFER_SIZE];
 		
 		p = dynatab_subscript_grow(tab, d.n_used-1);
 		if (!p) {

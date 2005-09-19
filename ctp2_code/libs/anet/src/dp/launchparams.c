@@ -69,7 +69,7 @@ dp_result_t dp_launchParams_parse(dp_launchParams_t *params, char *line)
 	case 'v': params->EnablePlayervars=1; break;
 	case 'n': strcpy(params->Driver,arg); break;
 	case 'l': {
-				  int	i = 0;
+				  unsigned int	i = 0;
 				  char	*tok;
 				  char	argcopy[65];
 				  

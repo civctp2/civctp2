@@ -340,7 +340,7 @@ dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, int *sessidle
  recently tried to join.
  Silently ignores calls with uid == dp_UID_NONE
 ----------------------------------------------------------------------*/
-dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, int sessidlen, dp_species_t sessType);
+dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const unsigned char *sessid, int sessidlen, dp_species_t sessType);
 
 #endif	/* NO_NETWORK */
 

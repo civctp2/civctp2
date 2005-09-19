@@ -141,7 +141,7 @@ dp_result_t scorerep_setLeaver(scorerep_t *rep, dpid_t dpId, dp_uid_t uid)
  representation in the given scorerep_t.
  Overwrites the previous value of this score for the given player.
 --------------------------------------------------------------------------*/
-dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId, const char *blob, unsigned short bloblen)
+dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId, const unsigned char *blob, unsigned short bloblen)
 {
 	scorerep_player_t *player;
 
@@ -195,7 +195,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 {
 	int i;
 	short nPlayers;
-	char *pbuf;
+	unsigned char *pbuf;
 	scorerep_player_t *player;
 	
 	ASSERTMEM();
@@ -404,7 +404,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 {
 	dp_result_t err;
-	const char *pbuf;
+	const unsigned char *pbuf;
 	int i;
 	short nPlayers;
 	dpid_t *ids;
@@ -413,7 +413,7 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 
 	precondition(rep);
 	precondition(repbuf);
-	precondition(repbuf->len >= 0 && repbuf->len <= scorerep_MAX_BUFLEN);
+	precondition(/* repbuf->len >= 0 && (Expression always true) */ repbuf->len <= scorerep_MAX_BUFLEN);
 	ASSERTMEM();
 	
 	/* Iterate through the elements of the buffer, merrily calling
@@ -448,11 +448,11 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 		return dp_RES_BAD;
 	}
 	
-	ids = (short *)pbuf;
+	ids = (dpid_t *)pbuf;
 	pbuf += sizeof(short) * nPlayers;
-	uids = (long *)pbuf;
+	uids = (dp_uid_t *)pbuf;
 	pbuf += sizeof(long) * nPlayers;
-	bloblens = (short *)pbuf;
+	bloblens = (unsigned short *)pbuf;
 	pbuf += sizeof(short) * nPlayers;
 
 	for (i = 0; i < nPlayers; i++) {
@@ -494,7 +494,7 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 --------------------------------------------------------------------------*/
 dp_result_t scorerep_player_toBuf(const scorerep_player_t *player, scorerep_buf_t *repbuf)
 {
-	char *pbuf;
+	unsigned char *pbuf;
 	
 	/* save in the following format:
 	 * struct {
@@ -536,7 +536,7 @@ dp_result_t scorerep_player_toBuf(const scorerep_player_t *player, scorerep_buf_
 --------------------------------------------------------------------------*/
 dp_result_t scorerep_player_fromBuf(scorerep_player_t *player, const scorerep_buf_t *repbuf)
 {
-	const char *pbuf;
+	const unsigned char *pbuf;
 
 	precondition(player);
 	ASSERTMEM();

@@ -385,7 +385,7 @@ DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, 
 
 	/* Place this score into the matrix */
 	DPRINT(("dpReportScoreBuf: Reporting score for id:%d uid:%d\n", dpId, uid));
-	err = scorerep_set(dp->scorerep, dpId, uid, scoreId, scorebuf, scorelen);
+	err = scorerep_set(dp->scorerep, dpId, uid, scoreId, (const unsigned char*) scorebuf, scorelen);
 	ASSERTMEM();
 	if (err != dp_RES_OK) {
 		DPRINT(("dpReportScoreBuf: scorerep_set returns err:%d\n", err));

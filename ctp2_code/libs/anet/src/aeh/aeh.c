@@ -356,7 +356,7 @@ static int aeh_modfunc_Fill(aeh_modfunc_t *modfunc, aeh_mapcat_t *aehmapcat, aeh
 	aeh_map_func_t *pointer;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!modfunc || !stk || !aehmapcat || !(aehmapcat->map) ||
-		((mapindex >= 0) && (mapindex >= aehmapcat->nmap))) {
+		((mapindex >= 0) && ((unsigned) mapindex >= aehmapcat->nmap))) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return aeh_RES_BAD;
 	}
@@ -393,8 +393,9 @@ static int aeh_modfunc_Fill(aeh_modfunc_t *modfunc, aeh_mapcat_t *aehmapcat, aeh
 	 * function */
 	mapbuf = (aehmapcat->map)+mapindex;
 	pointer = mapbuf->firstfunc;
-	if (!pointer)
+	if (!pointer) {
 		aehDPRINT(("aeh_modfunc_Fill: no mapfile loaded for entry %d in stack trace\n", mapindex));
+	}
 	if (mapbuf->reldir) {
 		while (pointer) {
 			if (stk->offset_addr >= pointer->start_addr) {
@@ -438,7 +439,7 @@ static int aeh_modfunc_Fill(aeh_modfunc_t *modfunc, aeh_mapcat_t *aehmapcat, aeh
 static char *aeh_StkModName(const aeh_t *aeh, const unsigned int stk_index)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
-	if (!aeh || (aeh->stk[stk_index].mod_index < 0) ||
+	if (!aeh || /* (aeh->stk[stk_index].mod_index < 0) || */ /* Expression always false */
 		(aeh->stk[stk_index].mod_index > aeh->nmod)) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return NULL;
@@ -459,7 +460,7 @@ static char *aeh_StkModName(const aeh_t *aeh, const unsigned int stk_index)
 /* Given aeh and index in stack trace, return corresponding module crc */
 static unsigned long aeh_StkModCrc(const aeh_t *aeh, const unsigned int stk_index)
 {
-  	if (!aeh || (aeh->stk[stk_index].mod_index < 0) ||
+  	if (!aeh || /* (aeh->stk[stk_index].mod_index < 0) || */ /* Expression always false */
 		(aeh->stk[stk_index].mod_index > aeh->nmod) ||
 		(aeh->stk[stk_index].mod_index == 0)) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -962,8 +963,8 @@ unsigned long aeh_getSignature(const aeh_t *aeh)
 				i, mod_index, aeh->nmod));
 			return 0;
 		}
-		crc = dp_crc32_inc((char *)&aeh->mod[mod_index-1].crc, sizeof(long), crc);
-		crc = dp_crc32_inc((char *)&aeh->stk[i].offset_addr, sizeof(long), crc);
+		crc = dp_crc32_inc((unsigned char*) &aeh->mod[mod_index-1].crc, sizeof(long), crc);
+		crc = dp_crc32_inc((unsigned char*) &aeh->stk[i].offset_addr, sizeof(long), crc);
 	}
 	return ~crc;	/* Return one's complement as per crc32 spec */
 }
@@ -1112,7 +1113,7 @@ int aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat)
 		int modind = aeh->stk[i].mod_index - 1;
 		if (modind < 0)
 			index = -1;
-		else if (modind >= aeh->nmod) {
+		else if ((unsigned) modind >= aeh->nmod) {
 			aehDPRINT(("aeh_getAllInfo: bug: mod_index %d > aeh->nmod %d\n",
 				aeh->stk[i].mod_index, aeh->nmod));
 			index = -1;
@@ -1442,7 +1443,7 @@ int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len)
 static int putStream(unsigned char **p, const void *dat, unsigned int lendat, unsigned char *peos)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
-	if ((peos < *p) || (peos - *p < lendat)) {
+	if ((peos < *p) || ((unsigned)(peos - *p) < lendat)) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}
@@ -1454,7 +1455,7 @@ static int putStream(unsigned char **p, const void *dat, unsigned int lendat, un
 static int getStream(const unsigned char **p, void *dat, unsigned int lendat, const unsigned char *peos)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
-	if ((peos < *p) || (peos - *p < lendat)) {
+	if ((peos < *p) || ((unsigned)(peos - *p) < lendat)) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}
@@ -1467,7 +1468,7 @@ static int putCharStream(unsigned char **p, const char *dat, unsigned char *peos
 {
 	unsigned int lendat = 0;
 	aeh_SetCurrent(__LINE__, __FILE__);
-	if ((peos < *p) || (peos - *p < sizeof(lendat))) {
+	if ((peos < *p) || ((unsigned)(peos - *p) < sizeof(lendat))) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}
@@ -1489,12 +1490,12 @@ static int getCharStream(const unsigned char **p, char **dat, const unsigned cha
 {
 	unsigned int lendat = 0;
 	aeh_SetCurrent(__LINE__, __FILE__);
-	if ((peos < *p) || (peos - *p < sizeof(lendat))) {
+	if ((peos < *p) || ((unsigned)(peos - *p) < sizeof(lendat))) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}
 	readSwap((const void**)p, &lendat, sizeof(lendat));
-	if ((peos < *p) || (peos - *p < lendat)) {
+	if ((peos < *p) || ((unsigned)(peos - *p) < lendat)) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}

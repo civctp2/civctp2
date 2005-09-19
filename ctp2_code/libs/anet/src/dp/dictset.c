@@ -65,7 +65,7 @@ MSVC's warning level is set to 4.
 
 #include <assert.h>
 #include <limits.h>
-#ifdef __MWERKS__
+#if defined(__MWERKS__) || defined(__GNUC__)
     #include <string.h>
 #else
     #include <malloc.h>
@@ -575,7 +575,7 @@ dcstFreeze(
 	(void) fp;
 
 	/* Check postconditions */
-	/*dcst_ASSERTVALID(pDcst);			/* set rendered invalid */
+	/*dcst_ASSERTVALID(pDcst);*/			/* set rendered invalid */
 
 	return dcst_STATUS_DEFERRED;
 }
@@ -597,7 +597,7 @@ dcstThaw(
 	(void) fp;
 
 	/* Check postconditions */
-	/*dcst_ASSERTVALID(pDcst);					/* set restored to invalid state */
+	/*dcst_ASSERTVALID(pDcst);*/					/* set restored to invalid state */
 
 	return dcst_STATUS_DEFERRED;
 }

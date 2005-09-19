@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 typedef struct {
 	dp_uid_t uid;			 /* This player's uid */
 	unsigned short bloblen;  /* This player's score blob length */
-	char blob[scorerep_MAX_BLOBLEN];  /* This player's score blob */
+	unsigned char blob[scorerep_MAX_BLOBLEN];  /* This player's score blob */
 } scorerep_player_t;
 
 #define scorerep_FLAGS_SELFEXIT 1	/* I'm leaving and reporting all scores */
@@ -56,7 +56,7 @@ typedef struct {
 #define scorerep_MAX_BUFLEN 1024
 typedef struct {
 	size_t len;				/* how many bytes of buf are significant */
-	char buf[scorerep_MAX_BUFLEN];
+	unsigned char buf[scorerep_MAX_BUFLEN];
 } scorerep_buf_t;
 
 /*-------------------------------------------------------------------------
@@ -84,7 +84,7 @@ dp_result_t scorerep_setLeaver(scorerep_t *rep, dpid_t dpId, dp_uid_t uid);
  representation in the given scorerep_t.
  Overwrites the previous value of this score for the given player.
 --------------------------------------------------------------------------*/
-dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId, const char *blob, unsigned short bloblen);
+dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId, const unsigned char *blob, unsigned short bloblen);
 
 /*--------------------------------------------------------------------------
  Convert a scorerep_t to a scorerep_buf_t suitable for writing to disk or

@@ -150,7 +150,7 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
  Returns OK if server new, ALREADY if old.
 --------------------------------------------------------------------------*/
 
-static dp_result_t addServer(dp_t *dp, char *adrbuf, int adrlen, char *hostname, size_t hostnamelen)
+static dp_result_t addServer(dp_t *dp, unsigned char *adrbuf, int adrlen, char *hostname, size_t hostnamelen)
 {
 	dp_serverInfo_t server;
 	dp_serverInfo_t *pserver;
@@ -173,7 +173,7 @@ static dp_result_t addServer(dp_t *dp, char *adrbuf, int adrlen, char *hostname,
 			));
 
 	/* Do we already have this server in our list?  If so, ignore new entry */
-	err = dptab_get_bykey(dp->serverpings, adrbuf, dp->dpio->myAdrLen,
+	err = dptab_get_bykey(dp->serverpings, (char*)adrbuf, dp->dpio->myAdrLen,
 		(void **)&pserver, &serverlen);
 	if (err == dp_RES_OK) {
 		DPRINT(("addServer: already have server; ignoring\n"));
@@ -190,7 +190,7 @@ static dp_result_t addServer(dp_t *dp, char *adrbuf, int adrlen, char *hostname,
 	for (j=0; j<dp_SERVER_NPINGS; j++)
 		RES(&server)->rtt_ms[j] = -1;
 
-	dptab_set(dp->dt, dp->serverpings, adrbuf, dp->dpio->myAdrLen,
+	dptab_set(dp->dt, dp->serverpings, (char*)adrbuf, dp->dpio->myAdrLen,
 		&server, sizeof(server), 0, PLAYER_ME);
 
 	assert(adrlen == dp->dpio->myAdrLen);
@@ -214,7 +214,7 @@ int dp_PASCAL dp_servers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t sr
 	if (status != dp_RES_CREATED)
 		return 0;
 
-	if (addServer(dp, subkey, subkeylen, buf, total) == dp_RES_OK) {
+	if (addServer(dp, (unsigned char*)subkey, subkeylen, buf, total) == dp_RES_OK) {
 		err = dptab_get_bykey(dp->serverpings, subkey, dp->dpio->myAdrLen, (void **)&server, &serverlen);
 		if (err == dp_RES_OK) {
 			dp_serverInfo_t serv = *server;
@@ -481,7 +481,7 @@ void dp_initEnumServers(dp_t *dp)
 		bootstrap = get_bootstrap_list();
 		for (sn=0; bootstrap[sn].ip; sn++) {
 			int adrlen;
-			char adrbuf[dp_MAX_ADR_LEN];
+			unsigned char adrbuf[dp_MAX_ADR_LEN];
 
 			/* Don't use DNS - it's too slow.  We really need to update
 			 * this list dynamically!
@@ -761,7 +761,7 @@ dp_result_t dpHandleServerPingResponsePacket(
 
 	/* Get a pointer to the server record */
 	memcpy(adrbuf, pkt->body.data+sizeof(clock_t), dp->dpio->myAdrLen);
-	err = dptab_get_bykey(dp->serverpings, adrbuf, dp->dpio->myAdrLen, (void **)&server, &serverlen);
+	err = dptab_get_bykey(dp->serverpings, (char*) adrbuf, dp->dpio->myAdrLen, (void **)&server, &serverlen);
 	if (err != dp_RES_OK) {
 		/* Odd - we didn't ping them... */
 		DPRINT(("dpHandleServerPingResponsePacket: Can't find server adr %u.%u.%u.%u\n", adrbuf[0], adrbuf[1], adrbuf[2], adrbuf[3]));
@@ -804,7 +804,7 @@ dp_result_t dpHandleServerPingResponsePacket(
 	 * local byte order, even in table.
 	 * This may trigger a callback which informs the user via local message.
 	 */
-	dptab_set(dp->dt, dp->serverpings, adrbuf, dp->dpio->myAdrLen, &serv, sizeof(serv), 1, PLAYER_ME);
+	dptab_set(dp->dt, dp->serverpings, (char*) adrbuf, dp->dpio->myAdrLen, &serv, sizeof(serv), 1, PLAYER_ME);
 
 
 	DPRINT(("dpHandleServerPingResponsePacket: host %s, rtt %d, loss %d%%; sent at T:%d, now t:%d\n", 

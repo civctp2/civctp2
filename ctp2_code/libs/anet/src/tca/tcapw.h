@@ -67,7 +67,7 @@ typedef struct {
  * representation of a user's password.
  */
 typedef struct {
-	char hpw[tcapw_LEN_HASHPW] PACK;
+	unsigned char hpw[tcapw_LEN_HASHPW] PACK;
 } tcapw_hpw_t;
 
 /* Hashed passwords are stored on disk as an encrypted array of this

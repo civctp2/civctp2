@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "eclock.h"
 
-static nCalls = 0;
+static int nCalls = 0;
 
 /*------------------------------------------------------------------------------
  Return the filename that the next call to logPkt_open() will use.
@@ -155,7 +155,7 @@ void logPkt(FILE *outFile, const void *buffer, size_t length, unsigned long peer
 	}
 	*p++ = 0;
 	
-	fprintf(outFile, "%2s %10d %2d %3d : %s\n", tag, eclock(), peer, length, tbuf);
+	fprintf(outFile, "%2s %10ld %2ld %3d : %s\n", tag, eclock(), peer, length, tbuf);
 }
 
 #endif

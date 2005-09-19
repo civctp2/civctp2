@@ -57,8 +57,9 @@ int aehlog_Create(const char *logpath, aehlog_t *aehlog)
 	} else {
 		if (!getTempDir(aehlog->path, sizeof(aehlog->path)-strlen(aehlog_EXCEPTION_FILE)-1)) return aeh_RES_BAD;
 		strcat(aehlog->path, aehlog_EXCEPTION_FILE);
-		if (strlen(aehlog->path) > aeh_MAX_PATH)
+		if (strlen(aehlog->path) > aeh_MAX_PATH) {
 			aehDPRINT(("aehlog_Create: aehlog->path %d too large\n", strlen(aehlog->path)));
+		}
 	}
 	aehlog_clear(aehlog);
 	aeh_SetCurrent(__LINE__, __FILE__);
@@ -238,7 +239,7 @@ int aehlog_readfrombuf(aeh_buf_t *aehbuf, unsigned int *ninst, const char *buf, 
 	const char *ptr = buf;
 	int aehlog_tag;
 
-	if (!aehbuf || !buf || (buflen < 3 * sizeof(int)))
+	if (!aehbuf || !buf || ((unsigned) buflen < 3 * sizeof(int)))
 		return -1;
 	void *vptr = (void *) &ptr;
 	readSwap((const void**)&vptr, &aehlog_tag, sizeof(aehlog_tag));
@@ -269,7 +270,7 @@ int aehlog_writetobuf(const aeh_buf_t *aehbuf, const unsigned int ninst, char *b
 	char *ptr = buf;
 	int aehlog_tag = aehlog_MAGIC;
 
-	if (!aehbuf || !buf || (buflen < (int)aehbuf->buflen + 3*sizeof(int)))
+	if (!aehbuf || !buf || ((unsigned) buflen < (int)aehbuf->buflen + 3*sizeof(int)))
 		return -1;
 	if (aehbuf->buflen > aeh_BUF_MAXLEN) {
 		aehDPRINT(("aehlog_writetobuf: err: aehbuf->buflen %d > max %d\n", aehbuf->buflen, aeh_BUF_MAXLEN));
@@ -295,7 +296,7 @@ static int checkDupException(const unsigned char *buf, unsigned int size, unsign
 	long fpos;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	fseek(aehlog->fp, 0L, SEEK_SET);
-	while ((fpos = ftell(aehlog->fp)) >= 0 && fpos < fsize) {
+	while ((fpos = ftell(aehlog->fp)) >= 0 && (unsigned) fpos < fsize) {
 		fgetpos(aehlog->fp, &fptr);
 		if ((err = aehlog_readfromfile(aehlog, &tmpaehbuf, &ninst)) != aeh_RES_OK) {
 			if (err == aeh_RES_EMPTY) break;
