@@ -16,6 +16,8 @@ CTP2_WIN32_ZLIB_INC=\
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
+libgsslic_la_LDFLAGS = -static
+
 libgsslic_la_SOURCES = \
 	lex.yysc.c \
 	lex.yysl.c \
@@ -47,8 +49,6 @@ libgsslic_la_SOURCES = \
 	SlicStruct.cpp \
 	SlicSymbol.cpp \
 	SlicSymTab.cpp
-
-libgsslic_la_LDFLAGS = -static
 
 lex.yysc.c: sliccmd.l ysc.tab.h
 	$(LEX) -i -Pyysc -o$@ $<

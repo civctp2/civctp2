@@ -1403,10 +1403,13 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph16(
 						if ( *srcBuf == 255 )
 							*destBuf++ = pixelColor;
 						else
-							*destBuf++ = aui_Pixel::Blend555(
+						{
+							*destBuf = aui_Pixel::Blend555(
 								pixelColor,
 								*destBuf,
 								*srcBuf >> 3 );
+							destBuf++;
+						}
 					}
 					else
 						destBuf++;
@@ -1428,10 +1431,13 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph16(
 						if ( *srcBuf == 255 )
 							*destBuf++ = pixelColor;
 						else
-							*destBuf++ = aui_Pixel::Blend565(
+						{
+							*destBuf = aui_Pixel::Blend565(
 								pixelColor,
 								*destBuf,
 								*srcBuf >> 3 );
+							destBuf++;
+						}
 					}
 					else
 						destBuf++;

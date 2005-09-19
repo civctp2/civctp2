@@ -491,9 +491,10 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	ToWindow( &rect );
 
 #ifndef __AUI_USE_DIRECTX__
+	SDL_Surface* SDLsurf = static_cast<aui_SDLSurface*>(surface)->DDS();
 	// fill background
 	SDL_Rect r1 = { rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top };
-	SDL_FillRect(static_cast<aui_SDLSurface*>(surface)->DDS(), &r1, 0xffff);
+	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, 0, 0xff, 0xff));
 
 	m_Font->DrawString(surface, &rect, &rect, m_Text,
 	                   k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT,
@@ -503,7 +504,7 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	int offset = m_Font->GetStringWidth(m_Text);
 	m_Text[m_selStart] = save;
 	SDL_Rect r2 = { rect.left+offset-1, rect.top+2, 2, rect.bottom-rect.top-4 };
-	SDL_FillRect(static_cast<aui_SDLSurface*>(surface)->DDS(), &r2, 0);
+	SDL_FillRect(SDLsurf, &r2, 0);
 #else
 	if ( m_hwnd && m_memdc )
 	{

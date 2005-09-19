@@ -21,89 +21,29 @@ CTP2_WIN32_MILES_INC=\
 CTP2_WIN32_ZLIB_INC=\
 	-I$(ctp2_code)/libs/zlib
 else
-CTP2_LIBANET_LDFLAGS = \
+CTP2_LIBANET_LDADD = \
 	libs/anet/src/linux/dp/libdp2.la
 # These are dp2 compiled with different compiler flags
 #	$(ctp2_code)/libs/anet/linux86/lib/dp2d.a \
 #	$(ctp2_code)/libs/anet/linux86/lib/dp2p.a \
 #	$(ctp2_code)/libs/anet/linux86/lib/dp2l.a
-CTP2_LIBOSNOWIN32_LDFLAGS = \
+CTP2_LIBOSNOWIN32_LDADD = \
 	os/nowin32/libosnowin32.la
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
 include $(ctp2_code)/os/autoconf/Makefile.common
 
+ctp2_LDADD = \
+	gs/newdb/libgsnewdb.la \
+	gs/slic/libgsslic.la \
+	$(CTP2_LIBANET_LDADD) \
+	$(CTP2_LIBOSNOWIN32_LDADD)
+
+ctp2_LDFLAGS = \
+	$(CTP2_LDFLAGS)
+
 ctp2_SOURCES = \
-	gs/newdb/lex.dbl.c \
-	gs/newdb/AdvanceBranchRecord.cpp \
-	gs/newdb/AdvanceListRecord.cpp \
-	gs/newdb/AdvanceRecord.cpp \
-	gs/newdb/AgeCityStyleRecord.cpp \
-	gs/newdb/AgeRecord.cpp \
-	gs/newdb/BuildListSequenceRecord.cpp \
-	gs/newdb/BuildingBuildListRecord.cpp \
-	gs/newdb/BuildingRecord.cpp \
-	gs/newdb/CitySizeRecord.cpp \
-	gs/newdb/CityStyleRecord.cpp \
-	gs/newdb/DiplomacyProposalRecord.cpp \
-	gs/newdb/DiplomacyRecord.cpp \
-	gs/newdb/DiplomacyThreatRecord.cpp \
-	gs/newdb/EndGameObjectRecord.cpp \
-	gs/newdb/FeatRecord.cpp \
-	gs/newdb/GoalRecord.cpp \
-	gs/newdb/GovernmentRecord.cpp \
-	gs/newdb/IconRecord.cpp \
-	gs/newdb/ImprovementListRecord.cpp \
-	gs/newdb/OrderRecord.cpp \
-	gs/newdb/PersonalityRecord.cpp \
-	gs/newdb/PopRecord.cpp \
-	gs/newdb/ResourceRecord.cpp \
-	gs/newdb/SoundRecord.cpp \
-	gs/newdb/SpecialAttackInfoRecord.cpp \
-	gs/newdb/SpecialEffectRecord.cpp \
-	gs/newdb/SpriteRecord.cpp \
-	gs/newdb/StrategyRecord.cpp \
-	gs/newdb/TerrainImprovementRecord.cpp \
-	gs/newdb/TerrainRecord.cpp \
-	gs/newdb/UnitBuildListRecord.cpp \
-	gs/newdb/UnitRecord.cpp \
-	gs/newdb/WonderBuildListRecord.cpp \
-	gs/newdb/WonderMovieRecord.cpp \
-	gs/newdb/WonderRecord.cpp \
-	gs/newdb/CTPDatabase.cpp \
-	gs/newdb/CTPRecord.cpp \
-	gs/newdb/DBLexer.cpp \
-	gs/slic/lex.yysc.c \
-	gs/slic/lex.yysl.c \
-	gs/slic/ysc.tab.c \
-	gs/slic/ysc.tab.h \
-	gs/slic/ysl.tab.c \
-	gs/slic/ysl.tab.h \
-	gs/slic/QuickSlic.cpp \
-	gs/slic/SlicArray.cpp \
-	gs/slic/SlicBuiltin.cpp \
-	gs/slic/SlicButton.cpp \
-	gs/slic/sliccmd.cpp \
-	gs/slic/SlicConditional.cpp \
-	gs/slic/SlicConst.cpp \
-	gs/slic/SlicContext.cpp \
-	gs/slic/SlicEngine.cpp \
-	gs/slic/SlicEyePoint.cpp \
-	gs/slic/SlicFrame.cpp \
-	gs/slic/slicfunc.cpp \
-	gs/slic/slicfuncai.cpp \
-	gs/slic/slicif.cpp \
-	gs/slic/sliciffile.cpp \
-	gs/slic/SlicModFunction.cpp \
-	gs/slic/SlicNamedSymbol.cpp \
-	gs/slic/slicobject.cpp \
-	gs/slic/SlicRecord.cpp \
-	gs/slic/SlicSegment.cpp \
-	gs/slic/SlicStack.cpp \
-	gs/slic/SlicStruct.cpp \
-	gs/slic/SlicSymbol.cpp \
-	gs/slic/SlicSymTab.cpp \
 	ctp/ctp2_utils/appstrings.cpp \
 	ctp/ctp2_utils/c3cmdline.cpp \
 	ctp/ctp2_utils/c3cpu.cpp \
@@ -800,11 +740,6 @@ ctp2_SOURCES = \
 	ai/CityManagement/governor.cpp \
 	ai/ctpai.cpp \
 	ai/ctpaidebug.cpp
-
-ctp2_LDADD = \
-	$(CTP2_LIBANET_LDFLAGS) \
-	$(CTP2_LIBOSNOWIN32_LDFLAGS) \
-	$(CTP2_LDFLAGS)
 
 gs/slic/lex.yysc.c: $(ctp2_code)/gs/slic/sliccmd.l gs/slic/ysc.tab.h
 	$(LEX) -i -Pyysc -o$@ $<

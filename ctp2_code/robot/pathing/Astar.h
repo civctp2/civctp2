@@ -16,6 +16,7 @@
 #ifndef ASTAR_H
 #define ASTAR_H 1
 
+#include "Path.h"
 #include "astarpnt.h"
 #include "priorityqueue.h"
 

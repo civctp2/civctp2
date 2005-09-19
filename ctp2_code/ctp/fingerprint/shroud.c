@@ -177,7 +177,7 @@ size_t shroud_read( shroud_t *sfile, char *buffer, size_t length )
 	size = fread( buffer, 1, length, sfile->file );
 
 	/* Decode the bytes in 'buffer.' */
-	shroud_decode( buffer, size, sfile->curpos );
+	shroud_decode( (unsigned char*) buffer, size, sfile->curpos );
 
 	/* Update 'curpos.' */
 	sfile->curpos += size;

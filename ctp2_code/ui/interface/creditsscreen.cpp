@@ -1332,6 +1332,11 @@ c3_CreditsText * c3_CreditsText::Parse(FILE *textfile)
 			
 			for (i = 0; ((i < 127) && (!IsDelimeter(c))); i++, c = (char)fgetc(textfile) )
 			{
+				if (c == '\r')
+				{
+					i--;
+					continue;
+				}
 				currToken[i] = c;
 				if (IsComment(c))
 				{
@@ -1348,14 +1353,17 @@ c3_CreditsText * c3_CreditsText::Parse(FILE *textfile)
 		}
 		else
 		{
-			
 			c = (char)fgetc(textfile);
-			for (i = 0; (((unsigned) i < k_CreditsLineLen) && (c != '\n')); i++, c = (char)fgetc(textfile) )
+			for (i = 0; ((i < 127) && (c != '\n'));
+				i++, c = (char)fgetc(textfile) )
 			{
+				if (c == '\r')
+				{
+					i--;
+					continue;
+				}
 				currToken[i] = c;
 #if 0
-				
-				
 				if (IsComment(c)) 
 				{
 					ReadToEOL(textfile);

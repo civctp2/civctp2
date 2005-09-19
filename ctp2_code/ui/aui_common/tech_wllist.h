@@ -427,7 +427,7 @@ void tech_WLList< T >::DeleteAt( ListPos position )
 
 	if ( pOldLink == m_pHead )
 	{
-		if ( m_pHead = pOldLink->pNext )
+		if ((m_pHead = pOldLink->pNext))
 			m_pHead->pPrev = NULL;
 	}
 	else
@@ -435,7 +435,7 @@ void tech_WLList< T >::DeleteAt( ListPos position )
 
 	if ( pOldLink == m_pTail )
 	{
-		if ( m_pTail = pOldLink->pPrev )
+		if ((m_pTail = pOldLink->pPrev))
 			m_pTail->pNext = NULL;
 	}
 	else

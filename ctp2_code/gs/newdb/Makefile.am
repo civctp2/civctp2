@@ -19,6 +19,8 @@ CTP2_WIN32_ZLIB_INC=\
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
+libgsnewdb_la_LDFLAGS = -static
+
 libgsnewdb_la_SOURCES = \
 	lex.dbl.c \
 	AdvanceBranchRecord.cpp \
@@ -60,8 +62,6 @@ libgsnewdb_la_SOURCES = \
 	CTPRecord.cpp \
 	DBLexer.cpp \
 	DBLexer.cpp
-
-libgsnewdb_la_LDFLAGS = -static
 
 newdb_CDBTYPES = \
 	AdvanceBranchRecord \

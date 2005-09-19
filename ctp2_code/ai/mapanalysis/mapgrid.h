@@ -56,8 +56,6 @@ public:
 
 	~MapGrid()
 	{
-		s_scratch.resize(0);
-		
 #ifdef _MSC_VER
 		m_values.free();
 #endif
@@ -75,24 +73,6 @@ public:
 		
 		m_xGridSize = (xSize / resolution)*2;
 		m_yGridSize = (ySize / resolution);
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
 		if (xSize / resolution != 0)
 			m_xGridSize += 2;
@@ -172,11 +152,12 @@ public:
 		
 		if (cycles <= 0) return;
 
-		std::valarray<_Ty> *map_from_ptr = &m_values;
-		std::valarray<_Ty> *map_to_ptr = &s_scratch;
+		std::valarray<_Ty> scratch;
+		scratch.resize(m_xGridSize*m_yGridSize);
 		
-		s_scratch.resize(m_xGridSize*m_yGridSize);
-
+		std::valarray<_Ty> *map_from_ptr = &m_values;
+		std::valarray<_Ty> *map_to_ptr = &scratch;
+		
 		while(cycles-- > 0)
 		{
 			
@@ -240,13 +221,9 @@ public:
 					
 					max_value = sint32(max_value * RELAX_DIAGONAL);
 					max_value = sint32(max_value * coefficient);
-						
 					
 					
-
-					
-					
-     				cur_value = *pCurFrom;
+					cur_value = *pCurFrom;
 					if (max_value > cur_value) cur_value = max_value;
 
 					
@@ -270,11 +247,10 @@ public:
 			map_to_ptr = map_tmp_ptr;
 		} 
 		
-		
-		
-		
 		if (map_from_ptr != &m_values)
 			m_values = *map_from_ptr;
+		
+		scratch.resize(0);
 	}
 
 
@@ -520,9 +496,6 @@ private:
 
 	
 	sint32 m_resolution;
-	
-	
-	static std::valarray<_Ty> s_scratch;
 	
 	
 	std::valarray<_Ty> m_values;

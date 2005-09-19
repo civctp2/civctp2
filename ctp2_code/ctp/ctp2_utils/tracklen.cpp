@@ -399,6 +399,13 @@ DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 	if( hFile == INVALID_HANDLE_VALUE ) {
 #else
 	FILE *f = fopen(szTemp, "r");
+	
+	if (!f)
+	{
+		strcpy( szTemp, szFile );
+		f = fopen(szTemp, "r");
+	}
+	
 	if (!f) {
 #endif
 		tracklen_DPRINT((tracklen_buf, "tracklen_LoadEncryptedKey: can't open %s\n", szTemp));

@@ -1,7 +1,7 @@
 <?xml version = '1.0'?>
 <kdevelop>
   <general>
-    <author/>
+    <author></author>
     <email>ctp2source@apolyton.net</email>
     <version>$VERSION$</version>
     <projectmanagement>KDevAutoProject</projectmanagement>
@@ -11,7 +11,7 @@
     </ignoreparts>
     <projectdirectory>../../..</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <secondaryLanguages>
       <language>C</language>
     </secondaryLanguages>
@@ -68,20 +68,20 @@
       </debug>
       <default>
         <envvars/>
-        <configargs>-C</configargs>
+        <configargs>-C --disable-shared</configargs>
         <builddir>default</builddir>
         <topsourcedir>.</topsourcedir>
-        <cppflags/>
-        <ldflags/>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
         <cflags>-O0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
-        <cxxflags>-O0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -g3</cxxflags>
-        <f77flags/>
+        <cxxflags>-O0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -Wno-non-virtual-dtor -g3</cxxflags>
+        <f77flags></f77flags>
       </default>
     </configurations>
     <make>
@@ -90,20 +90,20 @@
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
       <abortonerror>true</abortonerror>
-      <numberofjobs>1</numberofjobs>
+      <numberofjobs>2</numberofjobs>
       <dontact>false</dontact>
-      <makebin>make</makebin>
+      <makebin>make -r</makebin>
       <prio>0</prio>
     </make>
   </kdevautoproject>
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>true</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -203,7 +203,7 @@
     </codecompletion>
     <references/>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -231,8 +231,8 @@
   </kdevfileview>
   <kdevvisualadvance>
     <emulator>VisualBoyAdvance</emulator>
-    <binary/>
-    <addOptions/>
+    <binary></binary>
+    <addOptions></addOptions>
     <terminal>false</terminal>
     <fullscreen>false</fullscreen>
     <graphicFilter>-f0</graphicFilter>

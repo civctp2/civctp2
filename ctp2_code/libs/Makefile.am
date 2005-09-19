@@ -1,5 +1,5 @@
 #
-# $Id: $
+# $Id$
 #
 
 if INTERNAL_ANET

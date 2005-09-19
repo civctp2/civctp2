@@ -6230,9 +6230,9 @@ void AllinoneTribeCallback(
 	
 	if ( !item->GetPlayer() && !item->GetAIPlayer() ) return;
 
-	uint16 key = item->IsAI() ?
-		key = *(uint16 *)item->GetAIPlayer()->GetKey()->buf :
-		key = *(uint16 *)item->GetPlayer()->GetKey()->buf;
+	uint16 key = ( item->IsAI() ?
+		*(uint16 *)item->GetAIPlayer()->GetKey()->buf :
+		*(uint16 *)item->GetPlayer()->GetKey()->buf );
 
 	
 	

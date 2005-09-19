@@ -54,7 +54,7 @@ protected:
 			size_t remainder = dataSize % k_TECH_MEMORY_BITSPERDWORD;
 			if ( remainder ) usedSize++;
 
-			if ( used = new unsigned[ usedSize ] )
+			if ((used = new unsigned[ usedSize ]))
 			{
 				
 				memset( used, 0, usedSize * sizeof( unsigned ) );
@@ -146,7 +146,7 @@ T *tech_Memory< T >::New( void )
 	{
 		if ( !(t = UseFreeElement()) )
 		{
-			if ( m_pLast->pNext = new Block( m_blockSize ) )
+			if ((m_pLast->pNext = new Block( m_blockSize )))
 			{
 				m_pLast = m_pLast->pNext;
 
@@ -157,7 +157,7 @@ T *tech_Memory< T >::New( void )
 	}
 	else
 	{
-		if ( m_pLast = m_pFirst = new Block( m_blockSize ) )
+		if ((m_pLast = m_pFirst = new Block( m_blockSize )))
 		{
 			*(m_pLast->used) |= 1;
 			t = m_pLast->data;

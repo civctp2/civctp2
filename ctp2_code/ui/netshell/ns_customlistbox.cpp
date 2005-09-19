@@ -47,13 +47,19 @@
 
 sint32 ns_TransportListBox::m_version = 102;
 
-
+template<>
 bool NETFunc::ListHandler<nf_PlayerSetup>::Handle(NETFunc::Message *m) {return false;}
+
+template<>
 void NETFunc::ListHandler<nf_PlayerSetup>::SetKey(void) {}
 
+template<>
 bool NETFunc::ListHandler<nf_GameSetup>::Handle(NETFunc::Message *m) {return false;}
+
+template<>
 void NETFunc::ListHandler<nf_GameSetup>::SetKey(void) {}
 
+template<>
 bool NETFunc::ListHandler<nf_AIPlayer>::Handle(NETFunc::Message *m) {
 	nf_AIPlayer t;
 	if(m->GetCode() == NETFunc::Message::ENTERGAME) {
@@ -79,9 +85,14 @@ bool NETFunc::ListHandler<nf_AIPlayer>::Handle(NETFunc::Message *m) {
 	}
 	return false;
 }
+
+template<>
 void NETFunc::ListHandler<nf_AIPlayer>::SetKey(void) {}
 
+template<>
 bool NETFunc::ListHandler<NETFunc::Transport>::Handle(NETFunc::Message *m) {return false;}
+
+template<>
 void NETFunc::ListHandler<NETFunc::Transport>::SetKey(void) {}
 
 ns_PlayerSetupListBox::ns_PlayerSetupListBox (
@@ -759,10 +770,6 @@ void ns_GPlayerListBox::UpdateHPlayerItem(
 		SetText( ping );
 
 	item->SetTribe( playersetup.GetTribe() );
-
-
-
-	
 	
 	if ( !selfMotivated )
 	{
@@ -773,10 +780,7 @@ void ns_GPlayerListBox::UpdateHPlayerItem(
 	m_hplayerlistbox->ShouldDraw();
 }
 
-
-
-
-
+template<>
 AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 	ns_Item<NETFunc::Player, ns_Player> *item,
 	sint32 i )

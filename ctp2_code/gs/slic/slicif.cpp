@@ -82,7 +82,7 @@ static int s_found_trigger;
 static int s_file_num = 0;
 
 static int s_if_level = 0;
-struct {
+struct IfStackDescriptor { // I chose this name "IfStackDescriptor" largely on a whim to avoid an "anonymous type" warning - JJB
 	int count;
 	unsigned char *array[k_MAX_SLIC_LEVELS];
 } s_if_stack[k_MAX_SLIC_LEVELS];

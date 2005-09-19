@@ -31,7 +31,7 @@ extern CivPaths	*g_civPaths;
 
 static MBCHAR *s_throneImage[ k_THRONE_IMAGES + 1 ];
 
-static POINT	s_upgradeLoc[k_THRONE_IMAGES] = { 0, 230, 204, 204, 210, 300, 284, 380, 410, 250 };
+static POINT	s_upgradeLoc[k_THRONE_IMAGES] = { { 0, 230 }, { 204, 204 }, { 210, 300 }, { 284, 380 }, { 410, 250 } };
 
 static	Pixel16 s_highlightColor[k_THRONE_IMAGES] = { 0xffff, 0xffff, 0xffff, 0xffff, 0xffff };
 
