@@ -52,10 +52,12 @@
 //   CityData.. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added city data to "settle too close"-report.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "UnitData.h"
 
 #include "ConstDB.h"
 #include "StrDB.h"
@@ -63,7 +65,6 @@
 
 #include "GameObj.h"
 
-#include "UnitData.h"
 #include "UnitDynArr.h"
 
 #include "citydata.h"
@@ -97,7 +98,7 @@
 #include "SlicEngine.h"
 #include "SlicObject.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "HappyTracker.h"
 #include "AchievementTracker.h"
 
@@ -107,7 +108,7 @@
 #include "Wormhole.h"
 #include "victorymoviewin.h"
 #include "cellunitlist.h"
-#include "order.h"
+#include "Order.h"
 
 #include "Diffcly.h"
 #include "DiffDB.h"
@@ -151,7 +152,7 @@
 #include "terrainutil.h"
 #include "buildingutil.h"
 #include "BuildingRecord.h"
-#include "gold.h"
+#include "Gold.h"
 #include "ArmyData.h"
 #include "WonderTracker.h"
 
@@ -178,15 +179,15 @@ extern BOOL UnitCanCarry(sint32 dest, sint32 src);
 
 
 UnitData::UnitData(
-	const sint32 t,
-	const sint32 trans_t,
-	const Unit &i,
-	const PLAYER_INDEX o,
-	const MapPoint &center_pos,
-	const Unit hc,
-	UnitActor *actor
-	) : GameObj(i.m_id)
-
+    const sint32 t,
+    const sint32 trans_t,
+    const Unit &i,
+    const PLAYER_INDEX o,
+    const MapPoint &center_pos,
+    const Unit hc,
+    UnitActor *actor
+    ) : GameObj(i.m_id)
+                   
 {
 
 
@@ -1072,11 +1073,6 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 						   BOOL justOneUnit, Unit &theUnit)
 
 {
-    sint32 i, n; 	
-    static CellUnitList defender; 
-	defender.Clear();
-	UnitData *tmp = NULL; 
-
 	if(!m_cargo_list)
 		return FALSE;
 
@@ -1090,12 +1086,12 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 		max_debark = min(k_MAX_ARMY_SIZE - cell->GetNumUnits(),
 						 k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits());
 	}
-	n = m_cargo_list->Num();
+	sint32 const        n       = m_cargo_list->Num();
 	sint32 count = 0;
-	const UnitRecord *myRec = g_theUnitDB->Get(m_type);
+	UnitRecord const*   myRec   = g_theUnitDB->Get(m_type);
     Unit passenger; 
 
-	for (i=n-1; 0 <=i ; i--) { 
+	for (sint32 i=n-1; 0 <=i ; i--) { 
 
 		if(justOneUnit && theUnit != m_cargo_list->Access(i))
 			continue;
@@ -1112,11 +1108,10 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
             passenger .SetPosAndNothingElse(m_pos);     
  		    passenger .UnsetIsInTransport(); 
   
-			static UnitDynamicArray revealedUnits;
-			BOOL revealedUnexplored;
-			revealedUnits.Clear();
+			UnitDynamicArray revealedUnits;
 			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
 
+			BOOL revealedUnexplored;
 			passenger.AddUnitVision(revealedUnexplored);
 			
 			debark.Insert(passenger );  
@@ -1143,11 +1138,6 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 //----------------------------------------------------------------------------
 BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 {	
-    sint32 i, n; 	
-    static CellUnitList defender; 
-	defender.Clear();
-	UnitData *tmp = NULL; 
-
 	if(!m_cargo_list)
 		return FALSE;
 
@@ -1156,12 +1146,12 @@ BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 	sint32 max_debark = min(k_MAX_ARMY_SIZE - cell->GetNumUnits(),
 							k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits());// not m_cargo_list ?
 
-	n = m_cargo_list->Num();
+	sint32 const        n       = m_cargo_list->Num();
 	sint32 count = 0;
-	const UnitRecord *myRec = g_theUnitDB->Get(m_type);
+	UnitRecord const    *myRec  = g_theUnitDB->Get(m_type);
     Unit passenger; 
 
-	for (i=n-1; 0 <=i ; i--) { 
+	for (sint32 i=n-1; 0 <=i ; i--) { 
 		if(!m_cargo_list->Access(i).Flag(k_UDF_TEMP_TRANSPORT_SELECT))
 			continue;
 
@@ -1179,18 +1169,15 @@ BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
             passenger .SetPosAndNothingElse(m_pos);     
  		    passenger .UnsetIsInTransport(); 
   
-			static UnitDynamicArray revealedUnits;
-			BOOL revealedUnexplored;
-			revealedUnits.Clear();
-			g_theWorld->InsertUnit(m_pos, passenger,
-											revealedUnits);
+			UnitDynamicArray revealedUnits;
+			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
 
             ID tmp_id = m_army.m_id;
             g_player[m_owner]->RegisterUnloadCargo(&tmp_id, passenger.GetType(), (sint32)passenger.GetHP()); 
 
+			BOOL revealedUnexplored;
 			passenger.AddUnitVision(revealedUnexplored);
 			
-
 			debark.Insert(passenger );  
         }
 	}	
@@ -1817,11 +1804,15 @@ BOOL UnitData::Settle()
         return FALSE; 
 	}
 
-    if (g_theWorld->GetCell(m_pos)->GetCityOwner().IsValid()) {
-        
+
+    Unit    nearbyCity  = g_theWorld->GetCell(m_pos)->GetCityOwner();
+
+    if (nearbyCity.IsValid()) 
+    {
         SlicObject *so = new SlicObject("29IASettlingTooClose") ;
-        so->AddRecipient(m_owner) ;
-        g_slicEngine->Execute(so) ;
+        so->AddRecipient(m_owner);
+        so->AddCity(nearbyCity);
+        g_slicEngine->Execute(so);
 
 		DPRINTF(k_DBG_GAMESTATE, ("Tile already owned!\n"));
         return FALSE;
@@ -2064,8 +2055,7 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
    m_owner = newo; // Now change owner
    AddUnitVision(revealedUnexplored);
 
-   static UnitDynamicArray revealed_units;
-   revealed_units.Clear();
+   UnitDynamicArray revealed_units;
    DoVision(revealed_units);
 
 
@@ -2174,8 +2164,7 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 
 	}
 
-	static UnitDynamicArray revealed_units;
-	revealed_units.Clear();
+	UnitDynamicArray revealed_units;
 	DoVision(revealed_units);
 
     ENQUEUE() ;
@@ -2938,7 +2927,8 @@ void UnitData::UndoVision()
 							  static_cast<sint16>(GetVisionRange()) * 2 + 1,
 							  ~(1 << m_owner));
 	sint32 en = enemyArray.Num();
-	for(sint32 i = 0; i < en; i++) {
+	sint32 i;
+	for(i = 0; i < en; i++) {
 		
 		if(!(enemyArray[i].GetRealVisibility() & (1 << m_owner)))
 			continue;
@@ -3153,9 +3143,6 @@ void UnitData::Entrench()
 								 ST_UNIT, Unit(m_id),
 								 ST_PLAYER, m_owner,
 								 ST_END);
-	
-
-	
 }
 
 void UnitData::Detrench()
@@ -3189,7 +3176,8 @@ void UnitData::CityRadiusFunc(const MapPoint &pos)
 	   cell->GetCity().GetOwner() != m_owner &&
 	   cell->GetCity().IsCapitol() &&
 	   g_rand->Next(100) < sint32(g_theConstDB->HearGossipChance() * 100.0)) {
-		HearGossip(cell->GetCity());
+	   	Unit unit = cell->GetCity();
+		HearGossip(unit);
 	}
 }
 
@@ -3467,7 +3455,7 @@ double UnitData::GetOffense(const Unit &defender) const
 	}
 
 	sint32 intAttack = (sint32)base;
-	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, Unit(m_id), defender, intAttack);
+	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
 	if(modAttack != intAttack)
 		base = modAttack;
 	return base;
@@ -3505,7 +3493,7 @@ double UnitData::GetDefense(const Unit &attacker) const
 	}
 
 	sint32 intDef = (sint32)def;
-	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, Unit(m_id), attacker, intDef);
+	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
 	if(modDef != intDef)
 		def = modDef;
 
@@ -3628,7 +3616,7 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::InvestigateCityData *data;
+	const UnitRecord::InvestigateCityData *data;
 	g_theUnitDB->Get(m_type)->GetInvestigateCity(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -3716,7 +3704,7 @@ ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
 															  num);
 	double randChance, specChance, deathChance;
 	BOOL r;
-	UnitRecord::StealTechnologyData *data;
+	const UnitRecord::StealTechnologyData *data;
 	r = g_theUnitDB->Get(m_type)->GetStealTechnology(data);
 	randChance = data->GetRandomChance();
 	specChance = data->GetSpecificChance();
@@ -3884,7 +3872,7 @@ ORDER_RESULT UnitData::InciteRevolution(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::InciteRevolutionData *data;
+	const UnitRecord::InciteRevolutionData *data;
 	g_theUnitDB->Get(m_type)->GetInciteRevolution(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -3948,7 +3936,7 @@ ORDER_RESULT UnitData::AssassinateRuler(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::AssasinateRulerData *data;
+	const UnitRecord::AssasinateRulerData *data;
 	g_theUnitDB->Get(m_type)->GetAssasinateRuler(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -4101,8 +4089,7 @@ void UnitData::HearGossip(Unit &c)
 	sint32 oplayer = c.GetOwner();
 	sint32 cost;
 	sint32 maxCost = 0;
-	static UnitDynamicArray maxCostUnits;
-	maxCostUnits.Clear();
+	UnitDynamicArray maxCostUnits;
 	SlicObject *so = NULL;
 
 	switch(g_rand->Next(3)) {
@@ -4508,7 +4495,7 @@ sint32 UnitData::GetNumTradeRoutes() const
 {
 	Assert(m_city_data);
 	if(!m_city_data)
-		return NULL;
+		return 0;
 	return m_city_data->GetNumTradeRoutes();
 }
 
@@ -5262,7 +5249,7 @@ void UnitData::ChangeArmy(const Army &army, CAUSE_NEW_ARMY cause)
 			g_network.Unblock(m_owner);
 	} else if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner) && cause != CAUSE_NEW_ARMY_NETWORK) {
 		g_network.SendAction(new NetAction(NET_ACTION_GROUP_ARMY,
-										   army, m_id));
+										   army.m_id, m_id));
 	}
 
 	if(g_theArmyPool->IsValid(m_army)) {
