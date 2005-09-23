@@ -87,7 +87,10 @@ static int copy_file(char *srcFName, char *dstFName)
 
 	Assert(inFile);
 	if (!inFile)
+	{
+		fprintf(stderr, "dbgen: file '%s' not found", srcFName);
 		return -1;
+	}
 
 	FILE *outFile = fopen(dstFName, "w");
 	Assert(outFile);
