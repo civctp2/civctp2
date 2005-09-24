@@ -812,7 +812,7 @@ Error:
 	if (m_tileSetData != NULL)
 		delete[] m_tileSetData;
 
-	c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+	c3errors_FatalDialog("Tile Set", "%d: Unable to load tileset.", __LINE__);
 }
 
 void TileSet::QuickLoadMapped(void)
@@ -838,7 +838,7 @@ void TileSet::QuickLoadMapped(void)
 						FILE_ATTRIBUTE_NORMAL,
 						NULL);
 	if (m_fileHandle == INVALID_HANDLE_VALUE) {
-		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		c3errors_FatalDialog("Tile Set", "%d: Unable to load tileset.", __LINE__);
 		return;
 	}
 
@@ -846,7 +846,7 @@ void TileSet::QuickLoadMapped(void)
 
 	size = GetFileSize(m_fileHandle, NULL);
 	if (size <= 0) {
-		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		c3errors_FatalDialog("Tile Set", "%d: Unable to load tileset.", __LINE__);
 		return;
 	}
 
@@ -859,7 +859,7 @@ void TileSet::QuickLoadMapped(void)
 
 	if (m_mappedFileHandle == INVALID_HANDLE_VALUE) {
 		CloseHandle(m_fileHandle);
-		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		c3errors_FatalDialog("Tile Set", "%d: Unable to load tileset.", __LINE__);
 		return;
 	}
 
@@ -870,15 +870,15 @@ void TileSet::QuickLoadMapped(void)
 						0);
 #else
 	struct stat st;
-	int rc = stat(filename, &st);
+	int rc = stat(path, &st);
 	if (0 != rc) {
-		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		c3errors_FatalDialog("Tile Set", "%d: Unable to load tileset '%s'.", __LINE__, filename);
 		return;
 	}
 	m_MMapSize = st.st_size;
-	m_fd = open(filename, O_RDONLY);
+	m_fd = open(path, O_RDONLY);
 	if (m_fd < 0) {
-		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		c3errors_FatalDialog("Tile Set", "%d: Unable to load tileset '%s'.", __LINE__, filename);
 		return;
 	}
 	m_tileSetData = (uint8 *)mmap(0, m_MMapSize, PROT_READ, MAP_PRIVATE, m_fd, 0);
@@ -891,7 +891,7 @@ void TileSet::QuickLoadMapped(void)
 #else
 		close(m_fd);
 #endif
-		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		c3errors_FatalDialog("Tile Set", "%d: Unable to load tileset.", __LINE__);
 		return;
 	}
 

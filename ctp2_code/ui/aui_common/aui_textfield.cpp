@@ -40,7 +40,8 @@ aui_TextField::aui_TextField(
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Win( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_Win( retval, id, ldlBlock, ActionFunc, cookie ),
+	m_Font(NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -65,7 +66,8 @@ aui_TextField::aui_TextField(
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
-	aui_Win( retval, id, x, y, width, height, ActionFunc, cookie )
+	aui_Win( retval, id, x, y, width, height, ActionFunc, cookie ),
+	m_Font(NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -247,13 +249,12 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	m_selStart = m_selEnd = strlen(m_Text);
 	
 	m_Font = g_ui->LoadBitmapFont(m_desiredFont);
-	if (m_Font == NULL) {
-		AUI_ERRCODE e;
-		m_Font = new aui_BitmapFont(&e, "/usr/X11R6/lib/X11/fonts/truetype/times.ttf");
-		m_Font->Load();
-		m_Font->SetPointSize(12);
-	}
 	Assert(m_Font);
+	// FIXME: HACK: I'm setting the font size here because it doesn't seem to be
+	// being set anywhere else, which was causing textboxes to display no text.
+	// With this fix they do display text, but it's usually of the wrong size.
+	// More needs to be done on this problem
+	m_Font->SetPointSize(k_AUI_TEXTBASE_DEFAULT_FONTSIZE);
 #endif
 	
 	sint32 newHeight = m_height - Mod(m_height,m_textHeight);
@@ -286,8 +287,8 @@ aui_TextField::~aui_TextField()
 #else
 	if (m_Font )
 	{
-		delete m_Font;
-		m_Font = 0;
+		g_ui->UnloadBitmapFont(m_Font);;
+		m_Font = NULL;
 	}
 	
 	delete[] m_Text;
@@ -494,7 +495,7 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	SDL_Surface* SDLsurf = static_cast<aui_SDLSurface*>(surface)->DDS();
 	// fill background
 	SDL_Rect r1 = { rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top };
-	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, 0, 0xff, 0xff));
+	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, 0xff, 0xff, 0xff));
 
 	m_Font->DrawString(surface, &rect, &rect, m_Text,
 	                   k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT,

@@ -1,18 +1,9 @@
 - When you quit the game, it segfaults
-- The cursor colours are messed up
-- The background colour of the textbox controls is cyan (I think this is due to
-	my changes on line 497 of ui/aui_textfield.cpp, where the colour used to be
-	'0xffff', and I changed this to 'SDL_MapRGB(SDLsurf->format, 0, 0xff, 0xff)'
-	-- that being my best guess as to what was in fact intended.  It is clear now
-	that I was wrong, but I don't know what colour is wanted)
-- No text ever appears in textbox controls, either from the source or from
-	typing into them
+- The text in text controls is the wrong size (see HACK message in
+  ui/aui_common/aui_textfield.cpp)
 - Something in the CD code generates an 'Operation not permitted' message
 	whenever there is a CD in the drive, and a 'No medium found' message when
 	there isn't (I suspect the CD music-related code)
-- On the credits screen the flames are framed by black boxes, rather than the
-	background showing through -- this is probably some kind of alpha channel
-	problem
 - The intro movie doesn't play
 - It is necessary to click somewhere after the 'Loading' dialog to reach the
 	main menu
@@ -21,5 +12,20 @@
 	even though /dev/sequencer does exist on my machine
 - When trying to start a network game, the game freezes whilst searching for
 	servers and is very difficult to kill
-- Upon cancelling the 'Load game' dialog, the game segfaults
+- There are frequent minor graphics glitches, including:
+  - The cursor colours are messed up
+  - On the credits screen the flames are framed by black boxes, rather than the
+    background showing through -- this is probably some kind of alpha channel
+    problem
+  - The drawing of map tiles isn't working properly
+  - Units tend to vanish immediately after being drawn
+  - Pixels have a tendency to be shifted around by the cursor - I feel this is
+    another symptom of whatever problem is causing the cursor colours to be
+    mesed up.
+  - The numbers along the path that shows when a unit is being given a move
+    order are missing
+- The game uses a lot of CPU all the time
+- The window of the game has no title
+- Keyboard input doesn't work
+- Either saving doesn't work or loading fails to find savegames
 

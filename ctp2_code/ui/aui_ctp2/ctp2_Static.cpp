@@ -331,7 +331,7 @@ AUI_ERRCODE ctp2_Static::DrawThis(
 		if (m_window)
 			if ( surface == m_window->TheSurface() )
 				m_window->AddDirtyRect( &rect );
-		return m_drawFunc(this, surface, rect, m_drawCookie);		
+		return m_drawFunc(this, surface, rect, m_drawCookie);
 	}
 	
 	

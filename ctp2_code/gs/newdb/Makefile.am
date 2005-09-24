@@ -326,14 +326,18 @@ SpriteRecord.stamp: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 StrategyRecord.cpp \
 StrategyRecord.h: StrategyRecord.stamp
 
-StrategyRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
+StrategyRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
+		GoalRecord.h \
+		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
 TerrainImprovementRecord.cpp \
 TerrainImprovementRecord.h: TerrainImprovementRecord.stamp
 
-TerrainImprovementRecord.stamp: $(ctp2_code)/gs/newdb/terrimprove.cdb $(CTPDB)
+TerrainImprovementRecord.stamp: $(ctp2_code)/gs/newdb/terrimprove.cdb \
+		TerrainRecord.h \
+		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 

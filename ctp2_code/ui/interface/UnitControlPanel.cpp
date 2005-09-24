@@ -961,7 +961,7 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 {
 	
 	Unit unit;
-	unit.m_id = *reinterpret_cast<uint32 *>(cookie);
+	unit.m_id = (uint32)(cookie);
 
 	
 	AUI_ERRCODE errorCode =

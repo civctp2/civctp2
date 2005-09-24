@@ -20,7 +20,7 @@
   <kdevautoproject>
     <general>
       <activetarget>ctp2_code/ctp2</activetarget>
-      <useconfiguration>default</useconfiguration>
+      <useconfiguration>optimized</useconfiguration>
     </general>
     <run>
       <mainprogram>ctp2_code/ctp2</mainprogram>
@@ -37,17 +37,17 @@
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <cxxflags>-O2 -g0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum</cxxflags>
+        <cxxflags>-O3 -fno-strict-aliasing -g0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -Wno-non-virtual-dtor</cxxflags>
         <envvars/>
         <configargs>-C</configargs>
         <topsourcedir>.</topsourcedir>
-        <cppflags/>
-        <ldflags/>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
         <cflags>-O2 -g0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses</cflags>
-        <f77flags/>
+        <f77flags></f77flags>
       </optimized>
       <debug>
         <configargs>--enable-debug=full -C</configargs>
@@ -71,17 +71,17 @@
         <configargs>-C --disable-shared</configargs>
         <builddir>default</builddir>
         <topsourcedir>.</topsourcedir>
-        <cppflags></cppflags>
-        <ldflags></ldflags>
+        <cppflags/>
+        <ldflags/>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <ccompilerbinary></ccompilerbinary>
-        <cxxcompilerbinary></cxxcompilerbinary>
-        <f77compilerbinary></f77compilerbinary>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
         <cflags>-O0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
         <cxxflags>-O0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -Wno-non-virtual-dtor -g3</cxxflags>
-        <f77flags></f77flags>
+        <f77flags/>
       </default>
     </configurations>
     <make>

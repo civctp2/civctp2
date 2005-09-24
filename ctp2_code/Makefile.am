@@ -1042,14 +1042,18 @@ $(NEWDB_TARGET)SpriteRecord.stamp: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 $(NEWDB_TARGET)StrategyRecord.cpp \
 $(NEWDB_TARGET)StrategyRecord.h: $(NEWDB_TARGET)StrategyRecord.stamp
 
-$(NEWDB_TARGET)StrategyRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
+$(NEWDB_TARGET)StrategyRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
+		GoalRecord.h \
+		$(CTPDB)
 	$(CTPDB) $(NEWDB_TARGET) < $<
 	touch $@
 
 $(NEWDB_TARGET)TerrainImprovementRecord.cpp \
 $(NEWDB_TARGET)TerrainImprovementRecord.h: $(NEWDB_TARGET)TerrainImprovementRecord.stamp
 
-$(NEWDB_TARGET)TerrainImprovementRecord.stamp: $(ctp2_code)/gs/newdb/terrimprove.cdb $(CTPDB)
+$(NEWDB_TARGET)TerrainImprovementRecord.stamp: $(ctp2_code)/gs/newdb/terrimprove.cdb \
+		TerrainRecord.h \
+		$(CTPDB)
 	$(CTPDB) $(NEWDB_TARGET) < $<
 	touch $@
 
