@@ -44,6 +44,7 @@
 // - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -1096,7 +1097,7 @@ Anim *UnitActor::GetAnim(UNITACTION action)
 		anim->AdjustDelay(rand() % 2000);
 	}
 	
-	return anim;
+	return anim; // Has to be deleted outside.
 }
 
 #define k_FAKE_DEATH_FRAMES			15		
@@ -2489,12 +2490,12 @@ UnitActor::TryAnimation(Action *actionObj,UNITACTION action)
 	
 	FullLoad(action);
 
-	
-	if(GetAnim(action)!=NULL)
+	Anim *theAnim = GetAnim(action); // theAnim must be deleted
+	if(theAnim!=NULL)
 	{ 
 	  actionObj->SetAnimPos(GetHoldingCurAnimPos(action));
 	  actionObj->SetSpecialDelayProcess(GetHoldingCurAnimSpecialDelayProcess(action));
-	  actionObj->SetAnim(GetAnim(action));
+	  actionObj->SetAnim(theAnim);
 	  return true;
 	}
 	

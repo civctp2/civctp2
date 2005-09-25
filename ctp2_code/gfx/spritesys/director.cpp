@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of the action on the screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,7 +30,8 @@
 // - Prevented messages appearing out of turn in hoseat mode
 // - PFT 29 mar 05, show # turns until city next grows a pop
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Otcommented some unreachable code. (Sep 9th 2005 Martin Gühmann)
+// - Outcommented some unreachable code. (Sep 9th 2005 Martin Gühmann)
+// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -3695,16 +3696,23 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		
 		
 		
-		if(theDead->HasDeath() && theDead->GetAnim(UNITACTION_VICTORY))
+		if(theDead->HasDeath())
 		{
 			
 			
 			if (theDead->GetLoadType() != LOADTYPE_FULL) 
 				theDead->FullLoad(UNITACTION_VICTORY);
 
-			deathActionType = UNITACTION_VICTORY;
-			deathAnim = theDead->GetAnim((UNITACTION)deathActionType);
-		} 
+			deathAnim = theDead->GetAnim((UNITACTION)deathActionType); // deathAnim must be deleted
+
+			if(deathAnim){
+				deathActionType = UNITACTION_VICTORY;
+			}
+			else{
+				deathActionType = UNITACTION_FAKE_DEATH;
+				deathAnim = theDead->MakeFakeDeath();
+			}
+		}
 		else
 		{
 			

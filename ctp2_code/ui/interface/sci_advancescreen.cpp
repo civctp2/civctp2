@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Window to select next advance to research
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +27,7 @@
 // - Start the great library with the current research project of the player.
 // - Start the "change to"-list with the current research selected.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -411,6 +412,7 @@ AUI_ERRCODE sci_advancescreen_Cleanup()
 	mycleanup( s_message );
 
 	mycleanup( s_advanceString );
+	mycleanup( s_scienceGoalTree );
 
 	delete s_sci_advanceScreen;
 	s_sci_advanceScreen = NULL;
@@ -516,7 +518,6 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 sint32 sci_advancescreen_loadList( void ) 
 {
 

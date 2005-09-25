@@ -3,7 +3,8 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 utility dialog box
-// Id           : $Id:$
+// Id           : $Id$
+// Comment      : This file is a mess.
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -1118,11 +1120,11 @@ void c3_UtilityTextMessagePopup::RemoveWindow( void )
 	auiErr = g_c3ui->RemoveWindow( m_window->Id() );
 	Assert( auiErr == AUI_ERRCODE_OK );
 
-	c3_UtilityTextMessageCleanupAction *tempAction = new c3_UtilityTextMessageCleanupAction;
-
-	g_c3ui->AddAction(tempAction);
-
 	keypress_RemoveHandler(m_window);
+
+	delete g_utilityTextMessage;
+	g_utilityTextMessage = NULL;
+
 }
 
 sint32 c3_UtilityTextMessagePopup::UpdateData( MBCHAR *text )
@@ -1144,6 +1146,7 @@ void c3_UtilityTextMessageCleanupAction::Execute(aui_Control *control,
 	if (g_utilityTextMessage)
 		g_utilityTextMessage->Cleanup();
 
+	delete g_utilityTextMessage;
 	g_utilityTextMessage = NULL;
 }
 
@@ -1167,10 +1170,11 @@ void c3_UtilityAbortCleanupAction::Execute(aui_Control *control,
 									uint32 action,
 									uint32 data )
 {
-	
+	// That's a design: Deleting from a member function a global object from the same type.
 	if (g_utilityAbort)
 		g_utilityAbort->Cleanup();
 
+	delete g_utilityAbort;
 	g_utilityAbort = NULL;
 }
 
@@ -1193,6 +1197,7 @@ void c3_KillTextMessage( void )
 	if (g_utilityTextMessage)
 		g_utilityTextMessage->Cleanup();
 
+	delete g_utilityTextMessage;
 	g_utilityTextMessage = NULL;
 }
 
@@ -1228,10 +1233,6 @@ void c3_RemoveAbortMessage( void )
 		g_utilityAbort->RemoveWindow();
 	}
 }
-
-
-
-
 
 
 
@@ -1314,6 +1315,7 @@ sint32 c3_UtilityAbortPopup::Cleanup( void )
 
 	mycleanup( m_abort );
 	mycleanup( m_meter );
+	mycleanup( m_text  );
 
 	m_type = 0;
 	
@@ -1351,7 +1353,8 @@ void c3_UtilityAbortPopup::RemoveWindow( void )
 
 	keypress_RemoveHandler(this);
 
-	g_c3ui->AddAction( new c3_UtilityAbortCleanupAction );
+	delete g_utilityAbort;
+	g_utilityAbort = NULL;
 
 }
 

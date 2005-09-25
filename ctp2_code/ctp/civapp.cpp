@@ -86,6 +86,7 @@
 //   database (unused), replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
 // - The right color set is now selected afterwards the ProfileDB is available. (Aug 29th 2005 Martin Gühmann)
 // - Added cleanup of gaia controller and info window. (Sep 13th 2005 Martin Gühmann)
+// - Added ArmyData and Network cleanup. (Sep 25th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -303,6 +304,7 @@ int g_gameWatchID = -1;
 #include "SlicSegment.h"            // SlicSegment::Cleanup
 #include "infowindow.h"             // Info Window cleanup
 #include "sciencevictorydialog.h"   // Gaja controller window cleanup
+#include "ArmyData.h"               // ArmyData::Cleanup
 
 #ifdef LINUX
 #include <time.h>
@@ -1824,6 +1826,7 @@ sint32 CivApp::CleanupApp(void)
 {
 	if (m_appLoaded)
 	{
+		g_network.Cleanup();
 		GreatLibrary::Shutdown_Great_Library_Data();
 		Splash::Cleanup();
 		messagewin_Cleanup();
@@ -1833,7 +1836,7 @@ sint32 CivApp::CleanupApp(void)
 
 		delete g_theMessagePool;
 		g_theMessagePool = NULL;
-		
+
 		CivScenarios::Cleanup();
 		SoundManager::Cleanup();
 
@@ -1854,6 +1857,7 @@ sint32 CivApp::CleanupApp(void)
 		CleanupAppDB();
 		CivPaths_CleanupCivPaths();
 		SlicSegment::Cleanup();
+		ArmyData::Cleanup();
 
 // COM needed for DirectX Moviestuff
 #ifdef WIN32	
