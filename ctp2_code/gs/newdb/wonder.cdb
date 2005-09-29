@@ -38,6 +38,11 @@ Wonder {
 	Record CityStyle[] CultureOnly //added by E -- can only build wonders if civ has certain citystyle
 	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
 	Record CityStyle[] CityStyleOnly //added by E--can only build wonders at cities with certain citystyle 
+	Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
+	Record Resource[] NeedsCityGoodAll //a city must have all resource to build wonder
+	Record Resource[] NeedsCityGoodAnyCity //FU
+      
+
 
 	# Flags
 	Bit(Int) ReduceReadinessCost

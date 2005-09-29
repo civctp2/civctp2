@@ -100,6 +100,9 @@
 // - Added new code as preparation for resource calculation redesign.- Aug 6th 2005 Martin Gühmann
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 // - Removed more unused methods. (Aug 12th 2005 Martin Gühmann)
+// - NeedsCityGood added to CanBuildUnit, CanBuildBuilding, and CanBuild Wonder
+//   requiring a good in the radius or if the city is buying it before a it can be 
+//   built. (Sept 29nd 2005 by E)
 //
 //----------------------------------------------------------------------------
 
@@ -2412,6 +2415,18 @@ double CityData::ProcessFood(sint32 food) const
 	///////////////////////////////////////////////
 	// Add food from citizen
 	// No food from citizen. Maybe something to add.
+
+	///////////////////////////////////////////////
+	//Add If City has a good checks if it has a Food Percent bonus and give to city
+	//
+//	const ResourceRecord *rec = g_theResourceDB->GetFoodPercent();
+//				rec->GetFoodPercent(p) > 0
+//						found = true;
+//			}
+//		}
+//	}
+		grossFood += grossFood * (HasResource()->g_theResourceDB->GetFoodPercent(p)) ;
+	
 	
 	return grossFood;
 }
@@ -5352,8 +5367,12 @@ sint32 CityData::GetCombatUnits() const
 //
 // Remark(s)  : Added CityStyleOnly check to build units in specific
 //              CityStyle types.
-//            : Added PrerequisiteBuilding check to see if a city has a building
+//		      : Added PrerequisiteBuilding check to see if a city has a building
 //              needed to build a unit.
+//		      : Added NeedsCityGood checks unit good and sees if the city 
+//			    has the either good in its radius or is buying the good from trade.
+//		      : Added NeedsCityGoodAll checks unit good and sees if the city 
+//			    has all of the goods in its radius or is buying the good from trade.
 //
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildUnit(sint32 type) const
@@ -5391,6 +5410,35 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		if(!found)
 			return FALSE;
 	}
+
+//  Start Resources section - more to add later 
+//  Added by E - Compares Unit NeedsCityGood to the resources collected our bought by the city, can be either/or
+
+	if(rec->GetNumNeedsCityGood() > 0) {
+		sint32 g;
+		bool found = false;
+		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
+			if((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > 0){
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+//  Added by E - Compares Unit NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
+
+
+	if(rec->GetNumNeedsCityGoodAll() > 0) {
+		sint32 g;
+		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
+			if((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) == 0)
+			return FALSE;
+		}
+	}
+
+//End Resources Code
+
 
 	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, TRUE, m_home_city.m_id, rec->GetIndex()))
 		return FALSE;
@@ -5449,6 +5497,10 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 //              GovernmentType flag for Buidings limits Buildings to govt type.
 //              CultureOnly flag added by E. It allows only civilizations with 
 //              the same CityStyle as CultureOnly's style to build that building.
+//		      : Added NeedsCityGood checks building good and sees if the city 
+//			    has the either good in its radius or is buying the good from trade.
+//		      : Added NeedsCityGoodAll checks building good and sees if the city 
+//			    has all of the goods in its radius or is buying the good from trade.
 //
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildBuilding(sint32 type) const
@@ -5456,35 +5508,35 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 	if(g_exclusions->IsBuildingExcluded(type))
 		return FALSE;
 
-	const BuildingRecord* irec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
+	const BuildingRecord* rec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
 	
 	
-	Assert(irec != NULL);
-	if (!irec) 
+	Assert(rec != NULL);
+	if (!rec) 
 		return FALSE;
 
-	if(!g_player[m_owner]->HasAdvance(irec->GetEnableAdvanceIndex()) && irec->GetEnableAdvanceIndex() >= 0) {
+	if(!g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()) && rec->GetEnableAdvanceIndex() >= 0) {
 		return FALSE;
 	}
 
 	sint32 o;
-	for(o = 0; o < irec->GetNumObsoleteAdvance(); o++) {
-		if(g_player[m_owner]->HasAdvance(irec->GetObsoleteAdvanceIndex(o)))
+	for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
+		if(g_player[m_owner]->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
 			return FALSE;
 	}
 	
 	MapPoint pos;
 	m_home_city.GetPos(pos);
 	if(g_theWorld->IsWater(pos)) {
-		if(irec->GetCantBuildInSea())
+		if(rec->GetCantBuildInSea())
 			return FALSE;
 	} else {
-		if(irec->GetCantBuildOnLand())
+		if(rec->GetCantBuildOnLand())
 			return FALSE;
 	}
 	
 	
-	if (irec->GetCoastalBuilding()) {
+	if (rec->GetCoastalBuilding()) {
 		if(!g_theWorld->IsNextToWater(pos.x, pos.y))
 			return FALSE;
 	}
@@ -5494,26 +5546,26 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		return FALSE;
 	}
 
-	if((irec->GetNuclearPlant() &&
+	if((rec->GetNuclearPlant() &&
 	   wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders()))) {
 		return FALSE;
 	}
 
 	
-	if(irec->GetNumPrerequisiteBuilding() > 0) {
-		for(o = 0; o < irec->GetNumPrerequisiteBuilding(); o++) {
-			sint32 b = irec->GetPrerequisiteBuildingIndex(o);
+	if(rec->GetNumPrerequisiteBuilding() > 0) {
+		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
+			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
 			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
 				return FALSE;
 		}
 	}
 
 // Added GovernmentType flag from Units to use for Buildings
-	if(irec->GetNumGovernmentType() > 0) {
+	if(rec->GetNumGovernmentType() > 0) {
 		sint32 i;
 		bool found = false;
-		for(i = 0; i < irec->GetNumGovernmentType(); i++) {
-			if(irec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType()) {
+		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
+			if(rec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType()) {
 				found = true;
 				break;
 			}
@@ -5523,11 +5575,11 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 	}
 
 // Added by E - Compares Building CityStyle to the CityStyle of the City
-	if(irec->GetNumCityStyleOnly() > 0) {
+	if(rec->GetNumCityStyleOnly() > 0) {
 		sint32 s;
 		bool found = false;
-		for(s = 0; s < irec->GetNumCityStyleOnly(); s++) {
-			if(irec->GetCityStyleOnlyIndex(s) == m_cityStyle) {
+		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
+			if(rec->GetCityStyleOnlyIndex(s) == m_cityStyle) {
 				found = true;
 				break;
 			}
@@ -5537,11 +5589,26 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 	}
 
 // Added by E - Compares Building CultureOnly to the Player's CityStyle
-	if(irec->GetNumCultureOnly() > 0) {
+	if(rec->GetNumCultureOnly() > 0) {
 		sint32 s;
 		bool found = false;
-		for(s = 0; s < irec->GetNumCultureOnly(); s++) {
-			if(irec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
+			if(rec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+//  Start Resources section - more to add later 
+//  Added by E - Compares Building NeedsCityGood to the resources collected our bought by the city, can be either/or
+
+	if(rec->GetNumNeedsCityGood() > 0) {
+		sint32 g;
+		bool found = false;
+		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
+			if((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > 0){
 				found = true;
 				break;
 			}
@@ -5550,7 +5617,20 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			return FALSE;
 	}
 
-	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, irec->GetIndex());
+//  Added by E - Compares Building NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
+
+	if(rec->GetNumNeedsCityGoodAll() > 0) {
+		sint32 g;
+		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
+			if((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) == 0)
+			return FALSE;
+		}
+	}
+
+//End Resources Code
+
+
+	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, rec->GetIndex());
 }
 
 //----------------------------------------------------------------------------
@@ -5577,6 +5657,10 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 //              the same CityStyle as CultureOnly's style to build that wonder.
 //            : PrerequisiteBuilding checks if a city has a building in order
 //              to build a wonder. Added by E.
+//		      : Added NeedsCityGood checks wonder good and sees if the city 
+//			    has the either good in its radius or is buying the good from trade.
+//		      : Added NeedsCityGoodAll checks wonder good and sees if the city 
+//			    has all of the goods in its radius or is buying the good from trade.
 //
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildWonder(sint32 type) const
@@ -5642,6 +5726,33 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		if(!found)
 			return FALSE;
 	}
+//  Start Resources section - more to add later 
+//  Added by E - Compares Unit NeedsCityGood to the resources collected our bought by the city, can be either/or
+
+	if(rec->GetNumNeedsCityGood() > 0) {
+		sint32 g;
+		bool found = false;
+		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
+			if((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > 0){
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+//  Added by E - Compares Wonder NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
+
+	if(rec->GetNumNeedsCityGoodAll() > 0) {
+		sint32 g;
+		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
+			if((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) == 0)
+			return FALSE;
+		}
+	}
+
+//End Resources Code
 
 	return g_slicEngine->CallMod(mod_CanCityBuildWonder, TRUE, m_home_city.m_id, type);
 }

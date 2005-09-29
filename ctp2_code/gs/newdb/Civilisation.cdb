@@ -38,4 +38,74 @@ Civilisation{
    bit                   IsCapital              aka CITY_IS_CAPITAL
    Record CityStyle      CityStyle              aka CIV_CITY_STYLE
    StringID[0..500]      CityName               aka CIV_CITY_NAME
+// for national flags
+//   StringID              NationUnitFlag      
+// from building.cdb to add Civilisation traits
+	Bit(Float) OffenseBonusLand
+	Bit(Float) OffenseBonusWater
+	Bit(Float) OffenseBonusAir
+    Bit(Int)   HappyInc
+    Bit        DoubleTelevangelists
+    Bit(Float) ProductionPercent
+	Bit(Float) FoodPercent
+	Bit(Float) CommercePercent
+	Bit(Float) SciencePercent
+    Bit        NoUnhappyPeople
+    Bit        NoRushBuyPenalty
+	Bit(Float) LowerCrime
+	Bit(Float) LowerPeaceMovement
+	Bit(Int)   GoldPerCitizen
+	Bit        ProtectFromNukes
+	Bit(Float) ProtectFromBioAgents
+	Bit(Float) ProtectFromNanoVirus
+	Bit        Television
+	Bit        Brokerage
+	Bit        NuclearPlant
+	Bit(Float) SciencePerPop
+	Bit(Int)   RaiseOvercrowdingLevel
+	Bit(Int)   RaiseMaxPopulation
+	Bit(Int)   StarvationProtection
+// from Wonder.cdb for additional civ attributes
+	Bit(Int) ReduceReadinessCost
+	Bit EmbassiesEverywhere
+	Bit(Int) DecCrimePercent
+	Bit(Int) IncKnowledgePercent
+	Bit(Int) DecEmpireSize
+	Bit(Int) IncHappinessEmpire
+	Bit(Int) IncConvertedCitiesFeePercent
+	Bit(Int) GoldPerWaterTradeRoute
+	Bit(Int) GoldPerTelevision
+	Bit GlobalRadar
+	Bit SpiesEverywhere
+	Bit(Int) GoldPerInternationalTradeRoute
+	Bit ProtectFromBiologicalWarfare
+	Bit(Int) PollutersToParks
+	Bit(Int) ReduceWorldPollution
+	Bit AllCitizensContent
+	Bit EliminateNukes
+	Bit AllBoatsDeepWater
+	Bit(Int) IncreaseBoatMovement
+	Bit FreeTradeRoutes
+	Bit(Int) DecreaseMaintenance
+	Bit(Int) RandomAdvanceChance
+	Bit(Int) IncreaseHp
+	Bit(Int) MultiplyTradeRoutes
+	Bit(Int) IncreaseScientists
+	Bit(Int) OtherCivRandomAdvanceChance
+	Bit(Int) IncreaseProduction
+	Bit(Int) BonusGold
+	Bit(Int) IncreaseFoodAllCities
+	Bit(Int) TemporaryFullHappiness
+	Bit RevoltingCitiesJoinPlayer
+	Bit NoPollutionUnhappiness
+	Bit EmbassiesEverywhereEvenAtWar
+	Bit(Int) IncreaseSpecialists
+	Bit(Int) IncreaseCathedrals
+	Bit(Int) IncreaseBrokerages
+	Bit(Int) IncreaseRegard
+	Bit PreventConversion
+	Bit ProtectFromBarbarians
+	Bit(Record Building) BuildingEverywhere
+	Bit(Float) PollutionPercent
+	Bit(Float) PollutionAmount
 }

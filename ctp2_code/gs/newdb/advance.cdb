@@ -21,7 +21,9 @@
 #  - ExcludesAdvance - added by E; future use; allow some advances to close off 
 #                    other branches, possibly for future ages
 #  - CultureOnly - added by E; can only research if civ has certain citystyle
-# 
+#  - NeedsCityGoodAnyCity - added by E, to require goods to research a tech
+#
+#
 #-----------------------------------------------------------------------------
 
 Advance {
@@ -35,6 +37,8 @@ Advance {
 	Record Age Age
 	Record CityStyle[] CultureOnly //added by E -- can only research if civ has certain citystyle
 	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
+	Record Resource[] NeedsCityGoodAnyCity //FU
+      
 
 	Bit DeepOcean
 	Bit Capitalization
@@ -49,6 +53,11 @@ Advance {
 	Bit AlienLife
 	Bit MagLev
 	Bit Tunnels
+	//added for future tech option
+	Bit(Float) ProductionPercent
+	Bit(Float) FoodPercent
+	Bit(Float) CommercePercent
+	Bit(Float) SciencePercent
 	Bit GLHidden
 
     Int PowerPoints = 0

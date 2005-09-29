@@ -10,6 +10,11 @@ Resource {
 	Record Sound Sound
 	Record Icon Icon
 	Record Government[] GovernmentsModified	
+//
+    Bit(Float) ProductionPercent
+	Bit(Float) FoodPercent
+	Bit(Float) CommercePercent
+	Bit(Float) SciencePercent
 	Bit GLHidden
 }
 	
