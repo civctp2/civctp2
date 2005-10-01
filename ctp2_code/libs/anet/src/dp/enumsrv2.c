@@ -487,7 +487,7 @@ void dp_initEnumServers(dp_t *dp)
 			 * this list dynamically!
 			 */
 			adrlen = dpio_scanAdr(dp->dpio, bootstrap[sn].ip, 
-					adrbuf, sizeof(adrbuf));
+					(char*) adrbuf, sizeof(adrbuf));
 			if (adrlen == dp->dpio->myAdrLen)
 				addServer(dp, adrbuf, adrlen,
 					bootstrap[sn].hostname, strlen(bootstrap[sn].hostname));

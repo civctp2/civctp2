@@ -45,8 +45,8 @@ libgfxspritesys_la_SOURCES = \
 	spriteutils.cpp \
 	UnitSpriteGroup.cpp \
 	director.cpp \
-	directorevent.cpp \
 	screenmanager.cpp
+# directorevent.cpp removed to top level Makefile.am due to bizarre linking problems
 
 libgfxspritesys_la_LDFLAGS = -static
 

@@ -468,10 +468,11 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wid
 	returnBuf = new Pixel16[resultSize];
 
 	memcpy(returnBuf, outBuf, resultSize * sizeof(Pixel16));
+	delete[] outBuf;
 	if (size)
 		*size = resultSize * sizeof(Pixel16);
 
-	return (Pixel16 *)returnBuf;
+	return returnBuf;
 }
 
 
@@ -523,6 +524,7 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height, s
 	returnBuf = new Pixel16[resultSize];
 
 	memcpy(returnBuf, outBuf, resultSize * sizeof(Pixel16));
+	delete[] outBuf;
 	if (size)
 		*size = resultSize * sizeof(Pixel16);
 

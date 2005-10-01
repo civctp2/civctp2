@@ -6,7 +6,9 @@ SUBDIRS = \
 	os \
 	mapgen \
 	gs \
-	libs
+	gfx \
+	libs \
+	sound
 
 bin_PROGRAMS = ctp2
 # This hack shortens include path list,
@@ -35,8 +37,20 @@ CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 include $(ctp2_code)/os/autoconf/Makefile.common
 
 ctp2_LDADD = \
-	gs/newdb/libgsnewdb.la \
+	gfx/gfx_utils/libgfxgfx_utils.la \
+	gfx/layers/libgfxlayers.la \
+	gfx/spritesys/libgfxspritesys.la \
+	gfx/tilesys/libgfxtilesys.la \
+	gs/database/libgsdatabase.la \
+	gs/events/libgsevents.la \
+	gs/fileio/libgsfileio.la \
+	gs/gameobj/libgsgameobj.la \
+	gs/newdb/libgsnewdb.a \
+	gs/outcom/libgsoutcom.la \
 	gs/slic/libgsslic.la \
+	gs/utility/libgsutility.la \
+	gs/world/libgsworld.la \
+	sound/libsound.la \
 	$(CTP2_LIBANET_LDADD) \
 	$(CTP2_LIBOSNOWIN32_LDADD)
 
@@ -70,216 +84,8 @@ ctp2_SOURCES = \
 	ctp/civ3_main.cpp \
 	ctp/civapp.cpp \
 	ctp/display.cpp \
-	gs/database/CivilisationDB.cpp \
-	gs/database/CivilisationRec.cpp \
-	gs/database/conceptdb.cpp \
-	gs/database/ConstDB.cpp \
-	gs/database/DB.cpp \
-	gs/database/DiffDB.cpp \
-	gs/database/EndGameDB.cpp \
-	gs/database/EndGameRecord.cpp \
-	gs/database/filenamedb.cpp \
-	gs/database/gwdb.cpp \
-	gs/database/GWRecord.cpp \
-	gs/database/highscoredb.cpp \
-	gs/database/InstDB.cpp \
-	gs/database/InstRec.cpp \
-	gs/database/MapDB.cpp \
-	gs/database/MapRecord.cpp \
-	gs/database/moviedb.cpp \
-	gs/database/orderdb.cpp \
-	gs/database/PlayListDB.cpp \
-	gs/database/pollutiondb.cpp \
-	gs/database/PollutionRecord.cpp \
-	gs/database/profileDB.cpp \
-	gs/database/Rec.cpp \
-	gs/database/RiskDB.cpp \
-	gs/database/StrDB.cpp \
-	gs/database/StrRec.cpp \
-	gs/database/thronedb.cpp \
-	gs/database/UVDB.cpp \
-	gs/database/UVRecord.cpp \
-	gs/gameobj/AchievementTracker.cpp \
-	gs/gameobj/Advances.cpp \
-	gs/gameobj/advanceutil.cpp \
-	gs/gameobj/Agreement.cpp \
-	gs/gameobj/AgreementData.cpp \
-	gs/gameobj/AgreementPool.cpp \
-	gs/gameobj/Army.cpp \
-	gs/gameobj/ArmyData.cpp \
-	gs/gameobj/armyevent.cpp \
-	gs/gameobj/ArmyPool.cpp \
-	gs/gameobj/barbarians.cpp \
-	gs/gameobj/bldque.cpp \
-	gs/gameobj/buildingutil.cpp \
-	gs/gameobj/CityData.cpp \
-	gs/gameobj/CityEvent.cpp \
-	gs/gameobj/CityInfluenceIterator.cpp \
-	gs/gameobj/CityRadius.cpp \
-	gs/gameobj/Civilisation.cpp \
-	gs/gameobj/CivilisationData.cpp \
-	gs/gameobj/civilisationpool.cpp \
-	gs/gameobj/combatevent.cpp \
-	gs/gameobj/CriticalMessagesPrefs.cpp \
-	gs/gameobj/CTP2Combat.cpp \
-	gs/gameobj/Diffcly.cpp \
-	gs/gameobj/Diplomacy_Log.cpp \
-	gs/gameobj/DiplomaticRequest.cpp \
-	gs/gameobj/DiplomaticRequestData.cpp \
-	gs/gameobj/DiplomaticRequestPool.cpp \
-	gs/gameobj/EmptyTile.cpp \
-	gs/gameobj/endgame.cpp \
-	gs/gameobj/Events.cpp \
-	gs/gameobj/EventTracker.cpp \
-	gs/gameobj/Exclusions.cpp \
-	gs/gameobj/FeatTracker.cpp \
-	gs/gameobj/gaiacontroller.cpp \
-	gs/gameobj/GameObj.cpp \
-	gs/gameobj/GameSettings.cpp \
-	gs/gameobj/Gold.cpp \
-	gs/gameobj/GoodyHuts.cpp \
-	gs/gameobj/GSLogs.cpp \
-	gs/gameobj/Happy.cpp \
-	gs/gameobj/happytracker.cpp \
-	gs/gameobj/ID.cpp \
-	gs/gameobj/improvementevent.cpp \
-	gs/gameobj/installation.cpp \
-	gs/gameobj/installationdata.cpp \
-	gs/gameobj/installationpool.cpp \
-	gs/gameobj/MaterialPool.cpp \
-	gs/gameobj/Message.cpp \
-	gs/gameobj/messagedata.cpp \
-	gs/gameobj/MessagePool.cpp \
-	gs/gameobj/ObjPool.cpp \
-	gs/gameobj/Order.cpp \
-	gs/gameobj/Player.cpp \
-	gs/gameobj/PlayerAI.cpp \
-	gs/gameobj/PlayerEvent.cpp \
-	gs/gameobj/PlayerTurn.cpp \
-	gs/gameobj/PlayHap.cpp \
-	gs/gameobj/Pollution.cpp \
-	gs/gameobj/Readiness.cpp \
-	gs/gameobj/Regard.cpp \
-	gs/gameobj/Resources.cpp \
-	gs/gameobj/Sci.cpp \
-	gs/gameobj/Score.cpp \
-	gs/gameobj/Strengths.cpp \
-	gs/gameobj/TaxRate.cpp \
-	gs/gameobj/terrainutil.cpp \
-	gs/gameobj/TerrImprove.cpp \
-	gs/gameobj/TerrImproveData.cpp \
-	gs/gameobj/TerrImprovePool.cpp \
-	gs/gameobj/TopTen.cpp \
-	gs/gameobj/TradeBids.cpp \
-	gs/gameobj/tradeevent.cpp \
-	gs/gameobj/TradeOffer.cpp \
-	gs/gameobj/TradeOfferData.cpp \
-	gs/gameobj/TradeOfferPool.cpp \
-	gs/gameobj/TradePool.cpp \
-	gs/gameobj/TradeRoute.cpp \
-	gs/gameobj/TradeRouteData.cpp \
-	gs/gameobj/tradeutil.cpp \
-	gs/gameobj/Unit.cpp \
-	gs/gameobj/UnitData.cpp \
-	gs/gameobj/unitevent.cpp \
-	gs/gameobj/UnitPool.cpp \
-	gs/gameobj/unitutil.cpp \
-	gs/gameobj/Vision.cpp \
-	gs/gameobj/WonderTracker.cpp \
-	gs/gameobj/wonderutil.cpp \
-	gs/gameobj/Wormhole.cpp \
-	gs/gameobj/XY_Coordinates.cpp \
-	gs/utility/AgreementDynArr.cpp \
-	gs/utility/checksum.cpp \
-	gs/utility/CivDynArr.cpp \
-	gs/utility/clock.cpp \
-	gs/utility/DataCheck.cpp \
-	gs/utility/DiplDynArr.cpp \
-	gs/utility/ErrMsg.cpp \
-	gs/utility/gameinit.cpp \
-	gs/utility/MapFile.cpp \
-	gs/utility/MsgDynArr.cpp \
-	gs/utility/newturncount.cpp \
-	gs/utility/RandGen.cpp \
-	gs/utility/stringutils.cpp \
-	gs/utility/TradeDynArr.cpp \
-	gs/utility/TurnCnt.cpp \
-	gs/utility/TurnCntEvent.cpp \
-	gs/utility/UnitDynArr.cpp \
-	gs/world/Cell.cpp \
-	gs/world/cellunitlist.cpp \
-	gs/world/MapPoint.cpp \
-	gs/world/UnseenCell.cpp \
-	gs/world/wldgen.cpp \
-	gs/world/WorldDistance.cpp \
-	gs/world/worldevent.cpp \
-	gs/world/WrldCity.cpp \
-	gs/world/WrldCont.cpp \
-	gs/world/WrldPoll.cpp \
-	gs/world/WrlEnv.cpp \
-	gs/world/WrlImprove.cpp \
-	gs/world/WrlUnit.cpp \
-	gs/fileio/CivPaths.cpp \
-	gs/fileio/civscenarios.cpp \
-	gs/fileio/GameFile.cpp \
-	gs/fileio/prjfile.cpp \
-	gs/fileio/Token.cpp \
-	gs/events/GameEvent.cpp \
-	gs/events/GameEventArgList.cpp \
-	gs/events/GameEventArgument.cpp \
-	gs/events/GameEventDescription.cpp \
-	gs/events/GameEventHook.cpp \
-	gs/events/GameEventManager.cpp \
-	gs/outcom/c3rand.cpp \
-	gfx/gfx_utils/arproces.cpp \
-	gfx/gfx_utils/ColorSet.cpp \
-	gfx/gfx_utils/gfx_options.cpp \
-	gfx/gfx_utils/pixelutils.cpp \
-	gfx/gfx_utils/targautils.cpp \
-	gfx/gfx_utils/tiffutils.cpp \
-	gfx/gfx_utils/videoutils.cpp \
 	gfx/layers/citylayer.cpp \
-	gfx/spritesys/action.cpp \
-	gfx/spritesys/Actor.cpp \
-	gfx/spritesys/ActorPath.cpp \
-	gfx/spritesys/Anim.cpp \
-	gfx/spritesys/battleviewactor.cpp \
-	gfx/spritesys/EffectActor.cpp \
-	gfx/spritesys/goodactor.cpp \
-	gfx/spritesys/TradeActor.cpp \
-	gfx/spritesys/UnitActor.cpp \
-	gfx/spritesys/workeractor.cpp \
-	gfx/spritesys/CitySpriteGroup.cpp \
-	gfx/spritesys/effectspritegroup.cpp \
-	gfx/spritesys/FacedSprite.cpp \
-	gfx/spritesys/FacedSpriteWshadow.cpp \
-	gfx/spritesys/goodspritegroup.cpp \
-	gfx/spritesys/Sprite.cpp \
-	gfx/spritesys/spritefile.cpp \
-	gfx/spritesys/SpriteGroup.cpp \
-	gfx/spritesys/SpriteGroupList.cpp \
-	gfx/spritesys/SpriteHitTest.cpp \
-	gfx/spritesys/SpriteList.cpp \
-	gfx/spritesys/SpriteLow555.cpp \
-	gfx/spritesys/SpriteLow565.cpp \
-	gfx/spritesys/SpriteState.cpp \
-	gfx/spritesys/SpriteStateDB.cpp \
-	gfx/spritesys/spriteutils.cpp \
-	gfx/spritesys/UnitSpriteGroup.cpp \
-	gfx/spritesys/director.cpp \
 	gfx/spritesys/directorevent.cpp \
-	gfx/spritesys/screenmanager.cpp \
-	gfx/tilesys/maputils.cpp \
-	gfx/tilesys/BaseTile.cpp \
-	gfx/tilesys/resourcemap.cpp \
-	gfx/tilesys/tiledmap.cpp \
-	gfx/tilesys/tiledraw.cpp \
-	gfx/tilesys/tiledrawroad.cpp \
-	gfx/tilesys/TileHighlight.cpp \
-	gfx/tilesys/TileInfo.cpp \
-	gfx/tilesys/tileset.cpp \
-	gfx/tilesys/tileutils.cpp \
-	gfx/tilesys/workmap.cpp \
 	net/general/net_achievement.cpp \
 	net/general/net_action.cpp \
 	net/general/net_agreement.cpp \
@@ -339,11 +145,6 @@ ctp2_SOURCES = \
 	robot/pathing/unitastar.cpp \
 	robot/aibackdoor/bset.cpp \
 	robot/aibackdoor/civarchive.cpp \
-	sound/civsound.cpp \
-	sound/gamesounds.cpp \
-	sound/soundevent.cpp \
-	sound/soundmanager.cpp \
-	sound/soundutils.cpp \
 	ui/aui_common/aui_action.cpp \
 	ui/aui_common/aui_animate.cpp \
 	ui/aui_common/aui_audiomanager.cpp \
@@ -977,7 +778,9 @@ $(NEWDB_TARGET)IconRecord.stamp: $(ctp2_code)/gs/newdb/icon.cdb $(CTPDB)
 $(NEWDB_TARGET)ImprovementListRecord.cpp \
 $(NEWDB_TARGET)ImprovementListRecord.h: $(NEWDB_TARGET)ImprovementListRecord.stamp
 
-$(NEWDB_TARGET)ImprovementListRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
+$(NEWDB_TARGET)ImprovementListRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
+		$(NEWDB_TARGET)TerrainImprovementRecord.h \
+		$(CTPDB)
 	$(CTPDB) $(NEWDB_TARGET) < $<
 	touch $@
 

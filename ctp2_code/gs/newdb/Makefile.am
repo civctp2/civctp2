@@ -4,7 +4,7 @@
 
 include $(ctp2_code)/os/autoconf/Makefile.common
 
-noinst_LTLIBRARIES = libgsnewdb.la
+noinst_LIBRARIES = libgsnewdb.a
 # This hack shortens include path list,
 # but prohibits using a separate build dir
 #ctp2_code=..
@@ -19,9 +19,9 @@ CTP2_WIN32_ZLIB_INC=\
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
-libgsnewdb_la_LDFLAGS = -static
+#libgsnewdb_a_LDFLAGS = -static
 
-libgsnewdb_la_SOURCES = \
+libgsnewdb_a_SOURCES = \
 	lex.dbl.c \
 	AdvanceBranchRecord.cpp \
 	AdvanceListRecord.cpp \
@@ -261,7 +261,9 @@ IconRecord.stamp: $(ctp2_code)/gs/newdb/icon.cdb $(CTPDB)
 ImprovementListRecord.cpp \
 ImprovementListRecord.h: ImprovementListRecord.stamp
 
-ImprovementListRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
+ImprovementListRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
+		TerrainImprovementRecord.h \
+		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 

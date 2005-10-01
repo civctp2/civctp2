@@ -2206,7 +2206,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 	if (lpDirList == INVALID_HANDLE_VALUE) return list;
 #else
 	d = opendir(dirPath);
-	if (!dir) return list;
+	if (!d) return list;
 #endif
 
 	GameInfo			*gameInfo;
@@ -2217,7 +2217,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 		if (!dent) continue;
 		
 		snprintf(path, sizeof(path), "%s%s%s", dirPath, FILE_SEP, dent->d_name);
-		if (!stat(path, &tmpstat))
+		if (stat(path, &tmpstat))
 			continue;
 		
 		if (S_ISDIR(tmpstat.st_mode)) {
@@ -2264,7 +2264,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 				if (!dent2) continue;
 				
 				snprintf(path, sizeof(path), "%s%s%s", gameInfo->path, FILE_SEP, dent2->d_name);
-				if (!stat(path, &tmpstat)) continue;
+				if (stat(path, &tmpstat)) continue;
 				
 				if (!S_ISDIR(tmpstat.st_mode)) {
 					name = dent2->d_name;

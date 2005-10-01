@@ -616,7 +616,7 @@ void controlpanelwindow_DisbandCity(bool response, void *userData)
 		return;
 
 	if(response) {
-		Unit city(*reinterpret_cast<uint32 *>(userData));
+		Unit city(reinterpret_cast<uint32>(userData));
 		if(city.IsValid()) {
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
 		}

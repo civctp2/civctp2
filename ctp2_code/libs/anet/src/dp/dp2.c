@@ -4020,7 +4020,7 @@ DP_API dp_result_t dpResolveHostname(
 		}
 	}
 				
-	if (dpio_scanAdr(dp->dpio, hostname, (unsigned char*) adrbuf, dp_MAX_ADR_LEN) == 0)
+	if (dpio_scanAdr(dp->dpio, hostname, adrbuf, dp_MAX_ADR_LEN) == 0)
 		return dp_RES_BAD;
 
 	dp_assertValid(dp);
@@ -4867,6 +4867,8 @@ static dp_result_t dp_selectSessionForHost
 		dp_packetType_t tag;
 		dp_select_sess_packet_t body;
 	} *pkt = (void *)pktbuf;
+	sessSelect.currentPlayers = 0;
+	sessSelect.karma = 0;
 
 	if ((nsess = dptab_tableSize(dp->mysessions)) == 0)
 		return dp_RES_EMPTY;
@@ -4996,7 +4998,7 @@ dpHandleJoinSession(
 	char hostbuf[dpio_MAXLEN_RELIABLE];
 	size_t hostlen;
 	dp_sessionContext_t **spp;
-	dp_sessionContext_t *sp;
+	dp_sessionContext_t *sp = NULL;
 	dp_session_t sess;
 	int hops;
 
@@ -6476,7 +6478,7 @@ DP_API dp_result_t dpClose(
 		for (i=0; i<dp->players->subscribers->n_used; i++) {
 			assoctab_item_t *pe;
 			assoctab_item_t *mype;
-			playerHdl_t h;
+			playerHdl_t h = 0;
 			pe = assoctab_getkey(dp->players->subscribers, i);
 			if (!pe) {
 				DPRINT(("dpClose: bug: couldn't find all subs for h:%x\n", h));
@@ -8591,7 +8593,7 @@ static dp_result_t dpSendVote(dp_t *dp, dpid_t candidate, playerHdl_t dest)
 		char body[2] PACK;
 	} pkt;
 
-	dp_result_t		err;
+	dp_result_t		err = 0;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
 	int ndests;
 	int i;

@@ -37,10 +37,10 @@ FacedSprite::FacedSprite()
 {
 	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++)
 	{
-		m_frames[facing] = 0;
-		m_framesSizes[facing] = 0;
-		m_miniframes[facing] = 0;
-		m_miniframesSizes[facing] = 0;
+		m_frames[facing] = NULL;
+		m_framesSizes[facing] = NULL;
+		m_miniframes[facing] = NULL;
+		m_miniframesSizes[facing] = NULL;
 	}
 	m_type = SPRITETYPE_FACED;
 }
@@ -55,6 +55,7 @@ FacedSprite::~FacedSprite()
 		if (m_frames[facing] != NULL) {
 			for (i=0; i<m_numFrames; i++) {
 				delete[] m_frames[facing][i];
+				m_frames[facing][i] = NULL;
 			}
 			delete[] m_frames[facing];
 			m_frames[facing] = NULL;
@@ -66,6 +67,7 @@ FacedSprite::~FacedSprite()
 		if (m_miniframes[facing] != NULL) {
 			for (i=0; i<m_numFrames; i++) {
 				delete[] m_miniframes[facing][i];
+				m_miniframes[facing][i] = NULL;
 			}
 			delete [] m_miniframes[facing];
 			m_miniframes[facing] = NULL;
@@ -192,7 +194,7 @@ void FacedSprite::SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_
 	Assert(m_frames[facing] != NULL);
 	Assert(m_framesSizes[facing] != NULL);
 	
-	if (facing < k_NUM_FACINGS)
+	if (facing >= k_NUM_FACINGS)
 		return;
 	if (frame >= m_numFrames)
 		return;
@@ -205,10 +207,10 @@ void FacedSprite::SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, s
 {
 	Assert(facing < k_NUM_FACINGS);
 	Assert(frame < m_numFrames);
-	Assert(m_frames[facing] != NULL);
-	Assert(m_framesSizes[facing] != NULL);
+	Assert(m_miniframes[facing] != NULL);
+	Assert(m_miniframesSizes[facing] != NULL);
 
-	if (facing < k_NUM_FACINGS)
+	if (facing >= k_NUM_FACINGS)
 		return;
 	if (frame >= m_numFrames)
 		return;
@@ -244,9 +246,9 @@ void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
 			if (facing < 5)
-				(this->*_DrawLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLow)(m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else
-				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLowReversed)(m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 		} else {
 			
 			sint32 destWidth = (sint32)(m_width * scale);
@@ -284,9 +286,9 @@ BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 faci
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
 			if (facing < 5)
-				return HitTestLow(mousePt, (Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				return HitTestLow(mousePt, m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else
-				return HitTestLowReversed(mousePt, (Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				return HitTestLowReversed(mousePt, m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 		} else {
 			
 			sint32 destWidth = (sint32)(m_width * scale);
@@ -351,9 +353,9 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
 			if (facing < 5) {
-				(this->*_DrawLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLow)(m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			} else {
-				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLowReversed)(m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 		} else {
 			
@@ -415,15 +417,15 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
 			if (facing < 4 && facing > 0)
 			{
-				(this->*_DrawLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLow)(m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 			else if (facing == 4 || facing == 0)
 			{
-				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLowReversed)(m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 			else
 			{
-				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLowReversed)(m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 		} else {
 			
@@ -498,9 +500,10 @@ void FacedSprite::AllocateFrameArrays(void)
 	sint32 i;
 
 	for (i=0; i<k_NUM_FACINGS; i++) {
-		m_frames[i] = (Pixel16 **)new uint8[sizeof(Pixel16 *) * GetNumFrames()];
-		m_framesSizes[i] = (size_t *)new size_t[GetNumFrames()];
-		m_miniframes[i] = (Pixel16 **)new uint8[sizeof(Pixel16 *) * GetNumFrames()];
+		m_frames[i] = new Pixel16*[GetNumFrames()];
+		m_framesSizes[i] = new size_t[GetNumFrames()];
+		m_miniframes[i] = new Pixel16*[GetNumFrames()];
+		m_miniframesSizes[i] = new size_t[GetNumFrames()];
 	}
 }
 

@@ -3533,7 +3533,7 @@ int main( int argc, char *argv[] )
 
 int gtest( int argc, char *argv[] )
 {
-	dp_result_t   err;
+	dp_result_t   err = 0;
 	char kbuf[512];
 	char buf[512];
 	kbuf[0] = 0;

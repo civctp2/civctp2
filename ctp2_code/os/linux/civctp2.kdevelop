@@ -1,7 +1,7 @@
 <?xml version = '1.0'?>
 <kdevelop>
   <general>
-    <author></author>
+    <author/>
     <email>ctp2source@apolyton.net</email>
     <version>$VERSION$</version>
     <projectmanagement>KDevAutoProject</projectmanagement>
@@ -11,7 +11,7 @@
     </ignoreparts>
     <projectdirectory>../../..</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <secondaryLanguages>
       <language>C</language>
     </secondaryLanguages>
@@ -20,7 +20,7 @@
   <kdevautoproject>
     <general>
       <activetarget>ctp2_code/ctp2</activetarget>
-      <useconfiguration>optimized</useconfiguration>
+      <useconfiguration>default</useconfiguration>
     </general>
     <run>
       <mainprogram>ctp2_code/ctp2</mainprogram>
@@ -41,13 +41,13 @@
         <envvars/>
         <configargs>-C</configargs>
         <topsourcedir>.</topsourcedir>
-        <cppflags></cppflags>
-        <ldflags></ldflags>
-        <ccompilerbinary></ccompilerbinary>
-        <cxxcompilerbinary></cxxcompilerbinary>
-        <f77compilerbinary></f77compilerbinary>
-        <cflags>-O2 -g0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses</cflags>
-        <f77flags></f77flags>
+        <cppflags/>
+        <ldflags/>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags>-O3 -fno-strict-aliasing -g0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses</cflags>
+        <f77flags/>
       </optimized>
       <debug>
         <configargs>--enable-debug=full -C</configargs>
@@ -99,11 +99,11 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs></programargs>
-      <gdbpath></gdbpath>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <programargs/>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>true</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -203,7 +203,7 @@
     </codecompletion>
     <references/>
     <creategettersetter>
-      <prefixGet></prefixGet>
+      <prefixGet/>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -231,8 +231,8 @@
   </kdevfileview>
   <kdevvisualadvance>
     <emulator>VisualBoyAdvance</emulator>
-    <binary></binary>
-    <addOptions></addOptions>
+    <binary/>
+    <addOptions/>
     <terminal>false</terminal>
     <fullscreen>false</fullscreen>
     <graphicFilter>-f0</graphicFilter>

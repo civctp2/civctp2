@@ -159,9 +159,14 @@ AC_OUTPUT([
    ctp2_code/gs/Makefile
    ctp2_code/gs/database/Makefile
    ctp2_code/gs/dbgen/Makefile
+   ctp2_code/gs/events/Makefile
+   ctp2_code/gs/fileio/Makefile
    ctp2_code/gs/gameobj/Makefile
    ctp2_code/gs/newdb/Makefile
+   ctp2_code/gs/outcom/Makefile
    ctp2_code/gs/slic/Makefile
+   ctp2_code/gs/utility/Makefile
+   ctp2_code/gs/world/Makefile
    ctp2_code/libs/Makefile
    ctp2_code/mapgen/Makefile
    ctp2_code/os/Makefile

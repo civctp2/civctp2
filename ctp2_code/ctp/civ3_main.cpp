@@ -198,6 +198,7 @@ extern CivScenarios		*g_civScenarios;
 #define k_SHARED_SURFACE_HEIGHT	768
 #define k_SHARED_SURFACE_BPP	16
 
+#define k_MAX_CMD_LINE 1024
 
 #define k_SMOOTH_PIX_SEC_PER_SEC	8.0f
 #define k_SMOOTH_MIN_VELOCITY		4.0f			
@@ -1324,7 +1325,13 @@ void ParseCommandLine(MBCHAR *szCmdLine)
 	}
 #endif// _BFR_
 #else // WIN32
-	const MBCHAR *szCmdLine = "";
+	MBCHAR szCmdLine[k_MAX_CMD_LINE] = { '\0' };
+	MBCHAR tmp[k_MAX_CMD_LINE] = { '\0' };
+	for (int i=1; i<argc; i++) {
+		strncpy(tmp, szCmdLine, k_MAX_CMD_LINE-1);
+		snprintf(szCmdLine, k_MAX_CMD_LINE-1, "%s %s", tmp, argv[i]);
+	}
+	szCmdLine[k_MAX_CMD_LINE-1]='\0';
 #endif // WIN32
 
     char *archive_file = NULL;

@@ -594,7 +594,7 @@ sint32 sci_advancescreen_loadList( void )
 		s_advanceList->SelectItem(index);
 		ctp2_ListItem *	item = 
 			reinterpret_cast<ctp2_ListItem *>(s_advanceList->GetSelectedItem());
-		isIndexOk = (research == *reinterpret_cast<sint32 *>(item->GetUserData()));
+		isIndexOk = (research == reinterpret_cast<sint32>(item->GetUserData()));
 	}
 
 	s_sci_advanceScreen->ShouldDraw(TRUE);

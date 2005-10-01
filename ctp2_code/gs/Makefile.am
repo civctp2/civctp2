@@ -4,5 +4,12 @@
 SUBDIRS=\
 	dbgen \
 	newdb \
-	slic
+	slic \
+	database \
+	events \
+	fileio \
+	gameobj \
+	outcom \
+	utility \
+	world
 
