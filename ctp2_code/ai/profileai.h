@@ -1,3 +1,5 @@
+#ifndef __ai__profileai_h__
+#define __ai__profileai_h__ 1
 
 #ifdef _Debug
 
@@ -23,4 +25,7 @@
 #define Squad_List_Vector SLV_
 #define Scheduler_Vector SV_
 
-#endif _Debug
+#endif // _Debug
+
+#endif // __ai__profileai_h__
+

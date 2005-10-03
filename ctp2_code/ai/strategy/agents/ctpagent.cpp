@@ -43,7 +43,7 @@
 #include "ArmyData.h"
 #include "player.h"
 #include "Events.h"
-#include "order.h"
+#include "Order.h"
 #include "GameEventUser.h"
 #include "CTPDatabase.h"
 #include "OrderRecord.h"
@@ -137,7 +137,7 @@ void CTPAgent::Set_Army(const Army & army)
 #ifdef _DEBUG_SCHEDULER
 	Assert(army->m_theAgent == NULL);
 	army->m_theAgent = this;
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 }
 
 
@@ -161,7 +161,7 @@ bool CTPAgent::Get_Is_Dead() const
 
 #ifdef _DEBUG_SCHEDULER
 	Assert(m_army->m_theAgent == this);
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
     
     if (m_army->GetOwner() != m_playerId)
@@ -190,7 +190,7 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 
 #ifdef _DEBUG_SCHEDULER
 	Assert(m_army->m_theAgent == this);
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 	m_army->CharacterizeArmy(
 		isspecial, 

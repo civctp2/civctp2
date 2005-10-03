@@ -107,7 +107,6 @@ extern TurnCount *g_turn;
 
 
 #include <algorithm>
-using namespace std;
 
 #include "Diplomat.h"
 #include "AgreementMatrix.h"
@@ -335,18 +334,15 @@ void Diplomat::Load(CivArchive & archive)
 {
 	uint16	count;
 	size_t	i;
-	char *str;
-	ai::Agreement agreement;
-	Threat threat;
+	Threat  threat;
 	AiState ai_state;
 
 	
 	Initialize();
 
-	
 	archive >> count;
-	str = new char [count+1];
-	archive.Load((uint8 *)str, count);
+	char * str  = new char [count+1];
+	archive.Load((uint8 *) str, count);
 	str[count] = '\0';
 	SetPersonalityName(str);
 	delete [] str;
@@ -380,28 +376,26 @@ void Diplomat::Load(CivArchive & archive)
 	}
 
 	for (uint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
+	{
+		m_lastMotivation[foreigner] = m_motivations.end();
+		if (foreigner < count)
 		{
-			m_lastMotivation[foreigner] = m_motivations.end();
-			if (foreigner < count)
-			{
-				m_foreigners[foreigner].Load(archive);
-				archive.Load((uint8 *)&ai_state, sizeof(AiState));
-			}
-			else
-			{
-				m_foreigners[foreigner].Initialize();
-				ai_state.dbIndex = -1;
-			}
-			
-			
-			if (g_player[m_playerId] && g_player[foreigner])
-			{
-				ChangeDiplomacy(foreigner, ai_state.dbIndex);
-
-				
-				UpdateRegard(foreigner);
-			}
+			m_foreigners[foreigner].Load(archive);
+			archive.Load((uint8 *)&ai_state, sizeof(AiState));
 		}
+		else
+		{
+			m_foreigners[foreigner].Initialize();
+			ai_state.dbIndex = -1;
+		}
+		
+		if (g_player[m_playerId] && g_player[foreigner])
+		{
+			ChangeDiplomacy(foreigner, ai_state.dbIndex);
+			UpdateRegard(foreigner);
+		}
+	}
+
 	archive >> m_diplomcyVictoryCompleteTurn;
 	archive >> m_nuclearAttackTarget;
 
@@ -470,10 +464,8 @@ void Diplomat::Save(CivArchive & archive) const
 
 void Diplomat::Cleanup()
 {
-	
 	m_motivations.clear();
 
-	
 	for (uint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
 	{
 		m_foreigners[foreigner].Initialize();
@@ -485,9 +477,7 @@ void Diplomat::Cleanup()
 	m_diplomacy.resize(0);
 	m_desireWarWith.resize(0);
 
-	
 	m_threats.clear();
-	
 	
 	m_bestDiplomaticState = s_badAiState;
 	m_personality = 0x0;
@@ -535,16 +525,13 @@ void Diplomat::Initialize()
 	}
 	
 	m_motivations.clear();
-
 	
 	for (uint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
 	{
 		InitForeigner(foreigner);
 	}
 
-	
 	m_threats.clear();
-	
 	
 	Assert(g_thePersonalityDB);
 	m_nuclearAttackTarget = -1;
@@ -701,7 +688,7 @@ PLAYER_INDEX Diplomat::GetPlayerId() const {
 
 
 void Diplomat::SetPersonalityName(const char *personality_name) {
-	m_personalityName = string(personality_name);
+	m_personalityName = std::string(personality_name);
 
 	
 	sint32 index;
@@ -713,7 +700,8 @@ void Diplomat::SetPersonalityName(const char *personality_name) {
 }
 
 
-string Diplomat::GetPersonalityName() const {
+std::string Diplomat::GetPersonalityName() const 
+{
 	return m_personalityName;
 }
 
@@ -1921,7 +1909,7 @@ void Diplomat::AddRejection(const PLAYER_INDEX & foreignerId)
 const Threat & Diplomat::GetThreatById(const sint32 & id) const {
 	static Threat bad_threat;
 	
-	ThreatList::const_iterator found = find(m_threats.begin(), m_threats.end(), id);
+	ThreatList::const_iterator found = std::find(m_threats.begin(), m_threats.end(), id);
 	if (found != m_threats.end())
 		return *found;
 	else
@@ -1931,7 +1919,7 @@ const Threat & Diplomat::GetThreatById(const sint32 & id) const {
 
 void Diplomat::RemoveThreatById(const sint32 & id) {
 	
-	ThreatList::iterator found = find(m_threats.begin(), m_threats.end(), id);
+	ThreatList::iterator found = std::find(m_threats.begin(), m_threats.end(), id);
 	if (found != m_threats.end())
 		m_threats.erase(found);
 	else
@@ -2598,7 +2586,7 @@ void Diplomat::ExecuteResponse( const PLAYER_INDEX sender,
 	  {
 	    ProposalAnalysis::LogDebugResult(response);
 	  }
-#endif _BFR_
+#endif // _BFR_
 
 	Assert(response.type != RESPONSE_INVALID);
 	if (response.type == RESPONSE_INVALID)
@@ -3435,7 +3423,7 @@ void Diplomat::ExecuteNewProposal( const PLAYER_INDEX & receiver ) {
 
 #ifndef _BFR_
 	ProposalAnalysis::LogDebugResult(proposal);
-#endif _BFR_
+#endif // _BFR_
 }
 
 
@@ -4709,8 +4697,6 @@ void Diplomat::UpdateAttributes()
 	
 	Player *player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
-	Assert(g_theArmyPool);
-	
 	
 	m_friendCount = 0;
 	m_enemyCount = 0;
@@ -4891,11 +4877,11 @@ void Diplomat::UpdateAttributes()
 		for (i = 0; i < num_armies; i++)
 		{
 			army = foreign_player_ptr->m_all_armies->Access(i);
-			if ( g_theArmyPool->IsValid(army) )
+			if (army.IsValid())
 			{
 				army->GetPos(pos);
 				cell_owner = g_theWorld->GetCell(pos)->GetOwner();
-				bool is_threat = (army->HasCargo() == TRUE);
+				bool is_threat = army->HasCargo();
 				if (!is_threat)
 				{
 					army->CharacterizeArmy(isspecial,
@@ -4921,26 +4907,23 @@ void Diplomat::UpdateAttributes()
 		
 	} 
 	
-	sint32 num_cities = player_ptr->m_all_cities->Num();
-	sint32 r;
-	TradeRoute route;
-	Unit city;
-	sint32 value;
+	sint32 const    num_cities = player_ptr->m_all_cities->Num();
+	TradeRoute      route;
+	Unit            city;
 	
 	for (i = 0; i < num_cities; i++)
 	{
 		city = player_ptr->m_all_cities->Access(i);
-		Assert( g_theUnitPool->IsValid(city) );
+		Assert(city.IsValid());
 		
 		
-		for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) 
+		for(sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) 
 		{
 			route = city.CD()->GetTradeSourceList()->Access(r);
 			
 			
-			value = route->GetValue();
 			foreigner = route->GetDestination().GetOwner();
-			m_foreigners[foreigner].AddTradeValue(value);
+			m_foreigners[foreigner].AddTradeValue(route->GetValue());
 		}
 	}
 
@@ -5003,7 +4986,6 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 		}
 
 	sint32 num_cities = player_ptr->m_all_cities->Num();
-	sint32 i,r;
 	TradeRoute route;
 	Unit city;
 	PiracyHistory piracy;
@@ -5012,13 +4994,13 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 	sint32 piracy_regard_cost;
 
 	
-	for (i = 0; i < num_cities; i++)
+	for (sint32 i = 0; i < num_cities; i++)
 		{
 			city = player_ptr->m_all_cities->Access(i);
-			Assert( g_theUnitPool->IsValid(city) );
+			Assert(city.IsValid());
 
 			
-			for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
+			for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
 				route = city.CD()->GetTradeSourceList()->Access(r);
 
 				
@@ -5040,9 +5022,9 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 										piracy_str_id );
 
 						
-						piracy_iter = find(m_piracyHistory.begin(), 
-										   m_piracyHistory.end(), 
-										   piracy);
+						piracy_iter = std::find(m_piracyHistory.begin(), 
+										        m_piracyHistory.end(), 
+										        piracy);
 
 						if (piracy_iter != m_piracyHistory.end())
 							{
@@ -5359,36 +5341,30 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 		return;
 	
 	Player * player_ptr = g_player[m_playerId];
-	Assert(player_ptr != NULL);
-	Assert(player_ptr->m_all_armies != NULL);
-	
-	sint32 num_armies = player_ptr->m_all_armies->Num();
-	Army army;
+	Assert(player_ptr && player_ptr->m_all_armies);
 	
 	NukeTargetList nuke_city_list;
-	
-	
 	ComputeNukeTargets(nuke_city_list, foreignerId);
 
+	sint32 num_armies = player_ptr->m_all_armies->Num();
 	
 	Unit unit;
-	list<Unit> weapon_list;
-	Assert(player_ptr->m_all_units);
-	for(sint32 i = 0; i < player_ptr->m_all_units->Num(); i++) {
-		
+	std::list<Unit> weapon_list;
+	for (sint32 i = 0; i < num_armies; i++) 
+    {
 		unit = player_ptr->m_all_units->Access(i);
 		
-		if(!unit.GetDBRec()->GetNuclearAttack())
-			continue;
+		if (unit.GetDBRec()->GetNuclearAttack())
+        {
+    		if (unit->GetArmy().m_id != 0)
+            {
+			    unit->GetArmy()->ClearOrders();
+            }
 
-		
-		if (unit->GetArmy().m_id != 0)
-			unit->GetArmy()->ClearOrders();
-
-		weapon_list.push_back(unit);
+		    weapon_list.push_back(unit);
+        }
 	}
 
-	
 	bool no_first_strike = false;
 	if (m_strategy.GetNuclearFirstStrikeDisabled() ||
 		!m_strategy.GetNuclearFirstStrikeEnabled())
@@ -5401,11 +5377,11 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 			no_first_strike = true;
 	}
 
-	
+	Army army;
 	NukeTargetList::iterator city_iter;
 	MapPoint target_pos;
-	list<Unit>::iterator nuke_iter;
-	list<Unit>::iterator closest_nuke_iter;
+	std::list<Unit>::iterator nuke_iter;
+	std::list<Unit>::iterator closest_nuke_iter;
 	MapPoint weapon_pos;
 	sint32 closest_nuke_dist;
 	sint32 tmp_nuke_dist;
@@ -5432,9 +5408,12 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 			closest_nuke_dist = 99999;
 			target_pos = city_iter->second->GetPos();
 			
-			for (nuke_iter = weapon_list.begin();
-			nuke_iter != weapon_list.end();
-			nuke_iter++)
+			for 
+            (
+                nuke_iter = weapon_list.begin();
+			    nuke_iter != weapon_list.end();
+			    ++nuke_iter
+            )
 			{
 				if (!g_theUnitPool->IsValid((*nuke_iter).m_id))
 					continue;
@@ -5472,7 +5451,7 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 				weapon_list.erase(closest_nuke_iter);
 
 				
-				city_iter++;
+				++city_iter;
 			}
 			else
 			{
@@ -5490,8 +5469,7 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX targetId) const
 {
 	Player * player_ptr;
-	sint32 nuke_count;
-	pair<sint32, Unit> nuke_target;
+	std::pair<sint32, Unit> nuke_target;
 	Unit city;
 
 	city_list.clear();
@@ -5523,7 +5501,7 @@ void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX
 			if (regard >= COLDWAR_REGARD)
 				continue;
 			
-			nuke_count = 
+			sint32 const    nuke_count = 
 				MapAnalysis::GetMapAnalysis().GetNuclearWeaponsCount(foreignerId);
 			
 			
@@ -5554,130 +5532,117 @@ void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX
 		}
 	}
 	
-	city_list.sort(greater<pair<sint32, Unit> >());
+	city_list.sort(std::greater<std::pair<sint32, Unit> >());
 }
 
 
 void Diplomat::DisbandNuclearWeapons(const double percent)
 {
-	Assert(g_player[m_playerId]);
-	Player *player_ptr = g_player[m_playerId];
-
+	Player *    player_ptr = g_player[m_playerId];
+	Assert(player_ptr && player_ptr->m_all_units);
 	
 	if (player_ptr == NULL)
 		return;
 	
-	sint32 total_weapons = 0;
-	Unit unit;
-	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
-		
-		unit = player_ptr->m_all_units->Access(i);
-		if (!g_theUnitPool->IsValid(unit.m_id))
-			continue;
+	sint32  total_weapons = 0;
+	Unit    unit;
+    sint32  i;
 
-		if(unit.GetDBRec()->GetNuclearAttack())
-			total_weapons++;
+	for (i = player_ptr->m_all_units->Num() - 1; i >= 0; --i) 
+    {
+		unit = player_ptr->m_all_units->Access(i);
+		if (unit.IsValid() && unit.GetDBRec()->GetNuclearAttack())
+        {
+			++total_weapons;
+        }
 	}
 
 	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
 
-	
-	Assert(player_ptr->m_all_units);
-	for(i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); i--) {
-		
+	for (i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); --i)
+    {
 		unit = player_ptr->m_all_units->Access(i);
-		if (!g_theUnitPool->IsValid(unit.m_id))
-			continue;
-
-		if(unit.GetDBRec()->GetNuclearAttack())
+		if (unit.IsValid() && unit.GetDBRec()->GetNuclearAttack())
 		{
 			unit.Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			total_weapons--;
+			--total_weapons;
 		}
 	}
-	MapAnalysis::GetMapAnalysis().SetNuclearWeaponsCount(m_playerId, total_weapons);
 
+	MapAnalysis::GetMapAnalysis().SetNuclearWeaponsCount(m_playerId, total_weapons);
 }
 
 
 void Diplomat::DisbandBioWeapons(const double percent)
 {
-	Assert(g_player[m_playerId]);
-	Player *player_ptr = g_player[m_playerId];
-	
+	Player *    player_ptr = g_player[m_playerId];
+    Assert(player_ptr && player_ptr->m_all_units);
 	
 	if (player_ptr == NULL)
 		return;
 	
-	sint32 total_weapons = 0;
-	Unit unit;
-	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
-		
-		unit = player_ptr->m_all_units->Access(i);
-		if (!g_theUnitPool->IsValid(unit.m_id))
-			continue;
+	sint32  total_weapons = 0;
+	Unit    unit;
+    sint32  i;
 
-		if(unit.GetDBRec()->GetBioTerror())
-			total_weapons++;
+	for (i = player_ptr->m_all_units->Num() - 1; i >= 0; --i) 
+    {
+		unit = player_ptr->m_all_units->Access(i);
+		if (unit.IsValid() && unit.GetDBRec()->GetBioTerror())
+        {
+			++total_weapons;
+        }
 	}
 
 	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
 
-	
-	Assert(player_ptr->m_all_units);
-	for(i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); i--) {
-		
+	for (i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); --i) 
+    {
 		unit = player_ptr->m_all_units->Access(i);
-		if (!g_theUnitPool->IsValid(unit.m_id))
-			continue;
-
-		if(unit.GetDBRec()->GetBioTerror())
+		if (unit.IsValid() && unit.GetDBRec()->GetBioTerror())
 		{
 			unit.Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			total_weapons--;
+			--total_weapons;
 		}
 	}
+
 	MapAnalysis::GetMapAnalysis().SetBioWeaponsCount(m_playerId, total_weapons);
 }
 
 
 void Diplomat::DisbandNanoWeapons(const double percent)
 {
-	Assert(g_player[m_playerId]);
-	Player *player_ptr = g_player[m_playerId];
-	
+	Player *    player_ptr = g_player[m_playerId];
+	Assert(player_ptr && player_ptr->m_all_units);
 	
 	if (player_ptr == NULL)
 		return;
 	
-	sint32 total_weapons = 0;
-	Unit unit;
-	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
-		
-		unit = player_ptr->m_all_units->Access(i);
-		if (!g_theUnitPool->IsValid(unit.m_id))
-			continue;
+	sint32  total_weapons = 0;
+	Unit    unit;
+    sint32  i;
 
-		if(unit.GetDBRec()->GetCreateParks())
-			total_weapons++;
+	for (i = player_ptr->m_all_units->Num() - 1; i >= 0; --i) 
+    {
+		unit = player_ptr->m_all_units->Access(i);
+		if (unit.IsValid() && unit.GetDBRec()->GetCreateParks())
+        {
+			++total_weapons;
+        }
 	}
 
 	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
 
-	
-	Assert(player_ptr->m_all_units);
-	for(i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); i--) {
-		
+	for(i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); --i) 
+    {
 		unit = player_ptr->m_all_units->Access(i);
-		if (!g_theUnitPool->IsValid(unit.m_id))
-			continue;
-
-		if(unit.GetDBRec()->GetCreateParks())
+		if (unit.IsValid() && unit.GetDBRec()->GetCreateParks())
 		{
 			unit.Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			total_weapons--;
+			--total_weapons;
 		}
 	}
+
 	MapAnalysis::GetMapAnalysis().SetNanoWeaponsCount(m_playerId, total_weapons);
 }
 
@@ -5802,9 +5767,9 @@ void Diplomat::SendGreeting(const PLAYER_INDEX & foreignerId)
 		greeting = m_personality->GetWeakGreeting();
 	}
 
-	SlicObject *so = new SlicObject((MBCHAR *)"DIPLOMACY_POPUP_GREETING");
+	SlicObject *so = new SlicObject("DIPLOMACY_POPUP_GREETING");
 	so->AddRecipient(foreignerId);
-	so->AddCivilisation(m_playerId) ;
+	so->AddCivilisation(m_playerId);
 	MBCHAR buf[k_MAX_NAME_LEN];
 	stringutils_Interpret(g_theStringDB->GetNameStr(greeting), *so, buf);
 	so->AddAction(buf);

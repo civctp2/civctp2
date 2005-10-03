@@ -5,20 +5,19 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __AGENT_H__
 #define __AGENT_H__ 1
 
+class Agent;
+
 #include "c3.h"
 
-
-
-#pragma warning(disable: 4786)
-
 #include "scheduler_types.h"
-#include "squad_strength.h"
+#include "squad_Strength.h"
 
 
 
@@ -133,4 +132,4 @@ protected:
 	bool m_detached;
 };
 
-#endif __AGENT_H__
+#endif // __AGENT_H__

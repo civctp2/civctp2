@@ -35,6 +35,9 @@
 #ifndef __CTP_AI_H__
 #define __CTP_AI_H__
 
+class CtpAi;
+
+#include "Player.h" // PLAYER_INDEX
 class Army;
 class MapPoint;
 class Unit;

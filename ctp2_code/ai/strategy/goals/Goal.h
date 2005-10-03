@@ -17,30 +17,30 @@
 //
 // Compiler flags
 //
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
-//       between #else and #endif are modified Apolyton code. The blocks that
-//       are active for _MSC_VER value 1200 are the original Activision code.
+// None
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-//
-// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will be changed on wounded case) - Calvitix
+// - Removed MSVC specific code
+// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will 
+//   be changed on wounded case) - Calvitix
 //
 //----------------------------------------------------------------------------
 
 #ifndef __GOAL_H__
-    #define __GOAL_H__
-    #pragma warning(disable: 4786)
-    #include "Plan.h"
-    #include "Scheduler_Types.h"
-    #include "Squad_Strength.h"
-    #include <string>
+#define __GOAL_H__
+
+#include <list>
+#include <string>
+
+class Goal;
+
+#include "Plan.h"
+#include "scheduler_types.h"
+#include "squad_Strength.h"
+
 class Goal
 {
 public:
@@ -66,9 +66,6 @@ public:
 
 
     virtual ~Goal();
-
-
-    virtual void Init();
 
 
     virtual Goal & operator = (const Goal & goal);

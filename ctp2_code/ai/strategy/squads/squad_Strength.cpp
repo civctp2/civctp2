@@ -17,14 +17,6 @@
 //
 // Compiler flags
 //
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
-//       between #else and #endif are modified Apolyton code. The blocks that
-//       are active for _MSC_VER value 1200 are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,44 +24,24 @@
 // - Changed the > operator (used by Goal::IsSatisfied method)
 //   Original method only test attack or defense param.
 //   New methode take the sum of all strength (attack, defense, ranged,...)
-//   by Calvitix.
+//   by Calvitix and Martin Gühmann.
 // - Handled problem with invalid units.
-// - Added a test in > operator based on number of agent (to permit 
-//   neversatisfied goals) - Calvitix
-// - Disabled Calvitix last change of the > operator as it slows down the
-//   game on maps with more than one continent massively. Nevertheless this
-//   operator needs to be reworked. - Feb. 21st 2005 Martin Gühmann
-// - Better version of Calvitix' operator added, but still experimental and
-//   therefore disabled. - Feb. 24th 2005 Martin Gühmann
-// - Added and enabled anti-symmetrical > operator. - April 14th 2005 Martin Gühmann
 // 
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "squad_Strength.h"
 
-#include "Agent.h"
-#include "squad_strength.h"
+#include "agent.h"
 #include "cellunitlist.h"
 #include "World.h"
 #include "UnitRecord.h"
 #include "debugassert.h"
 
-Squad_Strength::Squad_Strength()
-{
-	Init();
-} 
-
-
 Squad_Strength::Squad_Strength(const Squad_Strength &squad_strength)
 {
 	*this = squad_strength;
 }
-
-
-Squad_Strength::~Squad_Strength()
-{
-} 
-
 
 Squad_Strength & Squad_Strength::operator= (const Squad_Strength &squad_strength)
 {
@@ -101,54 +73,42 @@ Squad_Strength & Squad_Strength::operator= (const Squad_Strength &squad_strength
     return *this;
 }
 
-#if 0
-// A better operator implemented than that of Calvitix
-// but it is still experimental and therefore here disabled.
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 {
-	
-	bool greater = 
-		(m_attack_str > squad_strength.m_attack_str) ||
-		(m_defense_str > squad_strength.m_defense_str) ||
-		(m_transport > squad_strength.m_transport);
-	
-	
-	bool greater_defenders = (m_defenders  > squad_strength.m_defenders );
-	bool greater_ranged = (m_ranged > squad_strength.m_ranged);
-	bool greater_ranged_str = (m_ranged_str  > squad_strength.m_ranged_str );
+    // Transport squads should always be always bigger:
+    if (m_transport > squad_strength.m_transport)
+    {
+        return true;
+    }
+    else if (m_transport < squad_strength.m_transport)
+    {
+	  return false;
+    }
 
-	
-	bool greater_value = (m_value > squad_strength.m_value);
-	bool greater_agents = (m_agent_count > squad_strength.m_agent_count);
+    // Equal transport strength: test the battle strength
 
-	return greater;
-}
-#else
-bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
-{
-	// Transport squads should always be always bigger:
-	if(m_transport > squad_strength.m_transport)
-		return true;
-	else if(m_transport < squad_strength.m_transport)
-		return false;
+    // Attack difference
+    sint16 const attack_cpr = (m_attack_str - squad_strength.m_attack_str);
+    // Defense difference
+    sint16 const defense_cpr = (m_defense_str - squad_strength.m_defense_str);
+    // ranged difference
+    sint16 const ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
+    // value difference
+    sint16 const value_cpr = (m_value - squad_strength.m_value);
 
-	// Attack difference
-	sint16 attack_cpr = (m_attack_str - squad_strength.m_attack_str);
-	// Defense difference
-	sint16 defense_cpr = (m_defense_str - squad_strength.m_defense_str);
-	// ranged difference
-	sint16 ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
-	// value difference
-	sint16 value_cpr = (m_value - squad_strength.m_value);
+    sint16 const battle_cpr = attack_cpr	+ defense_cpr + ranged_cpr + value_cpr;
+    if (battle_cpr > 0)
+    {
+        return true;
+    }
+    else if (battle_cpr < 0)
+    {
+        return false;
+    }
 
-	// The addition of all differences has to be greater than 0
-	// it is certainly better than only testing attack or defense
-	// but can be improved (for exemple, by applying a ratio on the greater score
-	if((attack_cpr + defense_cpr + ranged_cpr + value_cpr) > 0)
-		return true;
+    // Equal battle strength: test the agent count
 
-	// Test the nb of agent too
-	if(m_agent_count > 0 && squad_strength.m_agent_count > 0){
+    if (m_agent_count > 0 && squad_strength.m_agent_count > 0){
 
 		//If only agent count is a criterion : (for special units for example)
 		if(m_attack_str + m_defense_str + m_ranged_str + m_value  == 0
@@ -157,9 +117,8 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 			return (m_agent_count > squad_strength.m_agent_count);
 		}
 	}
-	return false;
+    return false;
 }
-#endif
 
 
 Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)
@@ -230,8 +189,7 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 	
 	if (army == NULL)
 	{
-		Init();
-		m_agent_count = 1;	// why not 0 ??? 
+		*this           = Squad_Strength(1); // why not 0 ??? 
 		return;
 	}
 

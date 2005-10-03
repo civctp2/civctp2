@@ -543,7 +543,7 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Goal_Changes()
 	Prune_Goals();
 
 	
-	m_neededSquadStrength.Init();
+	m_neededSquadStrength       = Squad_Strength(0);
 	m_maxUndercommittedPriority = Goal::BAD_UTILITY;
 
 	return TIME_SLICE_DONE;

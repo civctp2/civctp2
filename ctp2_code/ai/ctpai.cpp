@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main Ai File
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -65,7 +65,7 @@
 #include "ctpgoal.h"
 #include "ctpai.h"
 #include "GoalRecord.h"
-#include "squad.h"
+#include "Squad.h"
 #include "mapanalysis.h"
 #include "governor.h"
 #include "AgreementMatrix.h"
@@ -104,7 +104,7 @@
 #include "World.h"
 #include "time.h"
 #include "Cell.h"
-#include "gold.h"
+#include "Gold.h"
 #include "RandGen.h"
 #include "GameSettings.h"
 #include "SelItem.h"
@@ -2729,7 +2729,8 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 
 			
 			bool stop_research = false;
-			for (int foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
+			sint32 foreignerId;
+			for (foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 			{
 				const ai::Agreement	& agreement = 
 					AgreementMatrix::s_agreements.GetAgreement(player, foreignerId, PROPOSAL_OFFER_STOP_RESEARCH);

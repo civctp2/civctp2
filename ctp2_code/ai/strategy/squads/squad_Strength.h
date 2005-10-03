@@ -9,40 +9,40 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __AGENT_STRENGTH_H__
 #define __AGENT_STRENGTH_H__
 
+class Squad_Strength;
+
+#include "MapPoint.h"            // MapPoint
 #include "scheduler_types.h"
-#include "MapPoint.h"
+// sint16, sint32
 
-class Squad_Strength { 
-
+class Squad_Strength 
+{ 
 public:
-
-  	
-  	
-    
-	
-  	
-
-	
-	
-	
-
-  	
-    Squad_Strength(); 
+    Squad_Strength(sint16 agent_count = 0)
+    : m_agent_count      (agent_count),
+	  m_attack_str       (0.0),
+      m_defense_str      (0.0),
+      m_ranged_str       (0.0),
+	  m_value            (0),
+	  m_transport        (0),
+	  m_defenders        (0),
+	  m_ranged           (0),
+	  m_land_bombard_str (0.0),
+	  m_water_bombard_str(0.0),
+	  m_air_bombard_str  (0.0)
+    { ; }; 
 
 	
     Squad_Strength(const Squad_Strength &squad_strength); 
 
   	
-    virtual ~Squad_Strength(); 
+    virtual ~Squad_Strength() { ; }; 
 
-	
-	
-	void Init();
 
-	
 	Squad_Strength& operator= (const Squad_Strength &squad_strength);
 
 	
@@ -120,13 +120,6 @@ public:
 
 protected:
 
-	
-	
-	
-	
-	
-
-	
     sint16 m_agent_count;  
 
 	
@@ -153,39 +146,6 @@ protected:
 	double m_land_bombard_str;
 	double m_water_bombard_str;
 	double m_air_bombard_str;
-
-	
-	
-	
-	
-	
-
 }; 
-
-
-
-
-
-
-
-
-
-
-
-
-inline void Squad_Strength::Init()
-{
-	m_agent_count = 0;
-	m_attack_str = 0.0;
-	m_defense_str = 0.0;
-	m_ranged_str = 0.0;
-	m_value = 0;
-	m_transport = 0;
-	m_defenders = 0;
-	m_ranged = 0;
-	m_land_bombard_str = 0.0;
-	m_water_bombard_str = 0.0;
-	m_air_bombard_str = 0.0;
-}
 
 #endif // __AGENT_STRENGTH_H__

@@ -17,13 +17,7 @@
 //
 // Compiler flags
 //
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
-//       between #else and #endif are modified Apolyton code. The blocks that
-//       are active for _MSC_VER value 1200 are the original Activision code.
+// None
 //
 //----------------------------------------------------------------------------
 //
@@ -34,11 +28,13 @@
 // - Added methods to Ungroup armies - Calvitix
 // - Changes the const attribute for Compute_Matching_Value 
 //   (Raw_Priority will be changed on wounded case) - Calvitix
+// - Removed Microsoft specific code.
 //
 //----------------------------------------------------------------------------
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CTP_GOAL_H__
     #define __CTP_GOAL_H__ 1
 
@@ -67,22 +63,12 @@ enum SUB_TASK_TYPE
 class CTPGoal : public Goal
 {
 public:
-
-
     CTPGoal();
-
-
     virtual ~CTPGoal();
 
 
     bool operator == (const CTPGoal & rval) const;
-
-
     bool operator < (const CTPGoal & rval) const;
-
-
-    void Init();
-
 
     void Set_Target_Pos(const MapPoint & pos);
 
@@ -222,4 +208,4 @@ protected:
 };
 
 
-#endif __CTP_GOAL_H__
+#endif // __CTP_GOAL_H__
