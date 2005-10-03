@@ -87,6 +87,7 @@
 // - The right color set is now selected afterwards the ProfileDB is available. (Aug 29th 2005 Martin Gühmann)
 // - Added cleanup of gaia controller and info window. (Sep 13th 2005 Martin Gühmann)
 // - Added ArmyData and Network cleanup. (Sep 25th 2005 Martin Gühmann)
+// - Added graphicsresscreen_Cleanup. (Sep 25th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -305,6 +306,7 @@ int g_gameWatchID = -1;
 #include "infowindow.h"             // Info Window cleanup
 #include "sciencevictorydialog.h"   // Gaja controller window cleanup
 #include "ArmyData.h"               // ArmyData::Cleanup
+#include "graphicsresscreen.h"      // graphicsresscreen_Cleanup
 
 #ifdef LINUX
 #include <time.h>
@@ -1633,6 +1635,9 @@ sint32 CivApp::CleanupAppUI(void)
 	musicscreen_Cleanup();
 	//Added by Martin Gühmann to clean up the status bar correctly.
 	StatusBar::CleanUp();
+	loadsavescreen_Cleanup();
+	graphicsresscreen_Cleanup();
+	km_screen_Cleanup();
 
     delete g_c3ui;
     g_c3ui = NULL;
@@ -2647,7 +2652,6 @@ sint32 CivApp::CleanupGameUI(void)
 	tutorialwin_Cleanup();
 
 	
-	km_screen_Cleanup();
 	workwin_Cleanup();
 
 	
@@ -2671,7 +2675,6 @@ sint32 CivApp::CleanupGameUI(void)
 	initialplayscreen_Cleanup();
 	
 	DiplomacyDetails::Cleanup();
-	loadsavescreen_Cleanup();
 
 	return 0;
 }

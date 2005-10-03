@@ -50,6 +50,8 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 // - Removed some unreachable code. (Sep 9th 2005 Martin Gühmann)
+// - Moved debug tools handling to c3.h, so that the leak reporter doesn't
+//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1679,10 +1681,6 @@ void main_InitializeLogs(void)
 	DPRINTF(k_DBG_FIX, ("**  Direct X Version: 0x%x\n", g_dxver));
 	DPRINTF(k_DBG_FIX, ("**    Cur ScreenSize: %d x %d\n", g_ScreenWidth, g_ScreenHeight));
 
-#ifdef _DEBUGTOOLS
-	
-	Debug_Open();
-#endif
 }
 
 
@@ -1992,10 +1990,6 @@ void DoFinalCleanup(int)
 	}
 
 	sliccmd_clear_symbols();
-
-#ifdef _DEBUGTOOLS
-	Debug_Close();
-#endif
 
 	appstrings_Cleanup();
 }
