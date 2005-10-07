@@ -55,15 +55,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "c3.h"             // Pre-compiled header
+#include "civ3_main.h"      // Own declarations: consistency check
 
 #include "aui.h"
 #include "pixelutils.h"
 #include "colorset.h"
 #include "civapp.h"
-
-#include "civ3_main.h"
-
 
 #include "c3ui.h"
 #include "c3blitter.h"
@@ -179,12 +177,9 @@
 #include <SDL_mixer.h>
 #endif
 
-
-#include "civscenarios.h"
-extern CivScenarios     *g_civScenarios;
-
+#include "civscenarios.h"   // g_civScenarios
 #include "ctpregistry.h"
-#include "sliccmd.h"    // sliccmd_clear_symbols
+#include "sliccmd.h"        // sliccmd_clear_symbols
 
 #ifndef WM_MOUSEWHEEL
 #define WM_MOUSEWHEEL (WM_MOUSELAST+1)
@@ -262,16 +257,7 @@ static uint32                       s_scrolllasttick=0;
 static sint32                       s_scrolltime =k_SMOOTH_START_TIME;
 static uint32                       s_accelTickStart = 0;
 
-
 extern CivPaths                     *g_civPaths;
-
-
-extern ColorSet                     *g_colorSet;
-
-
-
-
-
 extern C3Window                     *g_turnWindow;
 extern StatsWindow                  *g_statsWindow;
 extern ControlPanelWindow           *g_controlPanel;
@@ -305,12 +291,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 Network g_network;
 
-
-DrawHandler background_draw_handler;
-
-
 extern Background			*g_background;
-
 extern Splash				*g_splash;
 
 BOOL g_letUIProcess = FALSE;
@@ -382,7 +363,7 @@ int ui_Initialize(void)
 	}
 
 	
-	g_colorSet->Initialize();
+	ColorSet::Initialize();
 
 	SPLASH_STRING("Initializing Paths...");
 
@@ -476,7 +457,7 @@ int ui_Initialize(void)
 
 	
 	while ( ShowCursor( FALSE ) >= 0 )
-		;
+	;
 
 	return AUI_ERRCODE_OK;
 }
@@ -645,22 +626,22 @@ BOOL ui_CheckForScroll(void)
 	{
 		switch (g_civApp->GetKeyboardScrollingKey()) 
 		{
-			case DIK_UPARROW:
+			case AUI_KEYBOARD_KEY_UPARROW:
 					deltaX = 0;
 					deltaY = -1;
 					scrolled = TRUE;
 				break;
-			case DIK_LEFTARROW:
+			case AUI_KEYBOARD_KEY_LEFTARROW:
 					deltaX = -1;
 					deltaY = 0;
 					scrolled = TRUE;
 				break;
-			case DIK_RIGHTARROW:
+			case AUI_KEYBOARD_KEY_RIGHTARROW:
 					deltaX = 1;
 					deltaY = 0;
 					scrolled = TRUE;
 				break;
-			case DIK_DOWNARROW:
+			case AUI_KEYBOARD_KEY_DOWNARROW:
 					deltaX = 0;
 					deltaY = 1;
 					scrolled = TRUE;
@@ -1141,7 +1122,7 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f);
 
 
 void ParseCommandLine(PSTR szCmdLine)
-{ 
+{
 #ifndef _BFR_
 	if(stricmp(szCmdLine, "crash.txt") == 0) {
 		FILE *txt = fopen("crashmap.txt", "w");
@@ -1154,7 +1135,7 @@ void ParseCommandLine(PSTR szCmdLine)
     
     char *archive_file; 
     archive_file = strstr(szCmdLine, "-l");
-    if (NULL == archive_file) { 
+    if (NULL == archive_file) {
         g_cmdline_load = FALSE; 
     } else { 
         g_cmdline_load = TRUE; 
@@ -1242,7 +1223,7 @@ void ParseCommandLine(PSTR szCmdLine)
     } else if (NULL != strstr(szCmdLine, "age5")) { 
         g_cheat_age = 5; 
     }
-#endif _DEBUG
+#endif // _DEBUG
 
 	if (g_noAssertDialogs) {
 		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
@@ -1269,11 +1250,11 @@ DWORD main_GetRemainingSwapSpace(void)
 
 	if( main_filehelper_GetOS() != VER_PLATFORM_WIN32_NT )
 		dwRet += ms.dwAvailPhys;
-
+	
 	return dwRet;
-}
-
-
+		}
+		
+	
 BOOL main_VerifyRAMToRun(void)
 {
 	DWORD space = main_GetRemainingSwapSpace();
@@ -1576,13 +1557,13 @@ void main_InitializeLogs(void)
 	time_t		ltime;
 	struct tm	*now;
 
-
+	
 	
 	
 	time(&ltime);
 	now = localtime(&ltime);
 
-	g_splash_old = GetTickCount(); 
+    g_splash_old = GetTickCount();
 
 	strftime(timebuf, 100, "Log started at %I:%M%p %m/%d/%Y", now);
 
@@ -1805,7 +1786,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	char exepath[_MAX_PATH];
 	char launchcommand[_MAX_PATH];
 	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
-		
+				
 		
 		
 		
@@ -1844,7 +1825,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	
 	appstrings_Initialize();
-
+	
 	
 	
 	
@@ -1876,7 +1857,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	CreateDirectory((LPCTSTR)"logs", &sa);
 #endif
 
-	ParseCommandLine(szCmdLine);
+    ParseCommandLine(szCmdLine);
 
 	if(g_e3Demo) {
 		if(!g_no_shell && !g_launchScenario) {
@@ -1899,7 +1880,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			
 			
 			g_civPaths->SetCurScenarioPackPath(pack->m_path);
-
+			
 			
 			g_theProfileDB->SetIsScenario(TRUE);
 
@@ -1928,7 +1909,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			
 			
 			g_civPaths->SetCurScenarioPackPath(pack->m_path);
-
+			
 			
 			g_theProfileDB->SetIsScenario(TRUE);
 
@@ -1951,7 +1932,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	{
 		g_civApp->Process();
 
-		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) 
+		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
 		{
 			if (WM_QUIT == msg.message)
 			{
@@ -2027,7 +2008,7 @@ void DoFinalCleanup(int exitCode)
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	AUI_ERRCODE errcode;
-
+	
 	
 	
 	if ( !gDone )
@@ -2196,7 +2177,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
-}
+	}
 
 void DisplayFrame (aui_Surface *surf)
 
@@ -2214,7 +2195,7 @@ void DisplayFrame (aui_Surface *surf)
 		is_init = 0;
 	}
 
-	new_tick = GetTickCount();
+    new_tick = GetTickCount(); 
 
 	double d = double (new_tick - g_old_last_tick);
 	g_old_last_tick = new_tick;

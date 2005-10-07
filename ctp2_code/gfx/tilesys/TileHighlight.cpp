@@ -17,8 +17,7 @@
 //
 // Compiler flags
 // 
-// USE_STOP_ZERO_MOVEMENT
-// - When defined, prevents unit without movement points from moving.
+// None.
 //
 //----------------------------------------------------------------------------
 //
@@ -30,30 +29,33 @@
 // - Standardised min/max usage.
 // - Added some bombard code (PFT)
 // - Repaired crash when no order is active.
+// - Corrected turn box computation for ship paths through cities.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+
 #include "aui.h"
 
 #include "dynarr.h"
-#include "SelItem.h"
+#include "SelItem.h"        // g_selected_item
 #include "MapPoint.h"
 #include "Path.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "World.h"          // g_theWorld
 #include "ID.h"
 #include "Army.h"
 #include "Order.h"
 #include "cellunitlist.h"
-#include "player.h"
+#include "player.h"         // g_player
+#include "controlpanelwindow.h"
+#include "OrderRecord.h"
 
 #include "aui_surface.h"
 
 #include "maputils.h"
 #include "primitives.h"
 #include "tiledmap.h"
-#include "colorset.h"
+#include "colorset.h"       // g_colorSet
 #include "director.h"
 
 #include "buttonbank.h"
@@ -62,17 +64,12 @@
 
 #include "MoveFlags.h"
 
-#include "ArmyData.h" //PFT 12 apr 05
+#include "ArmyData.h" 
+#include "TerrainRecord.h"
 #include "UnitData.h"
 
-extern SelectedItem		*g_selected_item;
-extern Player			**g_player;
-extern World			*g_theWorld;
-extern ColorSet			*g_colorSet;
 
-
-extern ORDERMODE		g_orderModeOrder;
-
+#define	k_TURN_BOX_SIZE_MINIMUM		4
 #define k_TURN_BOX_SIZE				8
 #define k_TURN_XOFFSET				2
 #define k_TURN_YOFFSET				4
@@ -83,20 +80,11 @@ extern ORDERMODE		g_orderModeOrder;
 #define k_TURN_COLOR_WAIT		    COLOR_YELLOW
 #define k_TURN_COLOR_STOP			COLOR_RED
 #define k_TURN_COLOR_UNFINISHED		COLOR_GRAY
-
 #define k_TURN_COLOR_SPECIAL        COLOR_GREEN
-
-#define	k_TURN_BOX_SIZE_MINIMUM		4
-
-#define k_DASH_LENGTH				4
-
-#define k_DOT_LENGTH                2  //PFT 07 Mar 05 
 #define k_TURN_COLOR_PROJECTILE     COLOR_WHITE
 
-#include "TerrainRecord.h"
-
-#include "controlpanelwindow.h"
-#include "OrderRecord.h"
+#define k_DASH_LENGTH				4
+#define k_DOT_LENGTH                2  //PFT 07 Mar 05 
 
 
 namespace // unnamed = static
@@ -135,11 +123,16 @@ double GetEntryCost
 		(!a_Army.IsAtLeastOneMoveLand())
 	   ) 
 	{ 
-		// Army without land units
-		sint32	icost;
-		if (g_theWorld->GetTerrain(a_Place)->GetEnvBase()->GetMovement(icost)) 
+		// Army without land units: do not use roads/tunnels etc.
+        TerrainRecord::Modifiers const * bareTerrainProperties  =
+            (g_theWorld->HasCity(a_Place))
+            ? g_theWorld->GetTerrain(a_Place)->GetEnvCityPtr()
+            : g_theWorld->GetTerrain(a_Place)->GetEnvBase();
+
+	    sint32	icost;
+		if (bareTerrainProperties->GetMovement(icost)) 
 		{
-			cost = icost;
+		    cost = icost;
 		}
 	}
 
@@ -280,12 +273,6 @@ void TiledMap::DrawLegalMove
 	
 	double			currMovementPoints;
     sel_army.CurMinMovementPoints(currMovementPoints); 
-#if defined(USE_STOP_ZERO_MOVEMENT)
-	if (currMovementPoints == 0.0)
-	{
-		return;	// The selected army contains a non-mover.
-	}
-#endif
 	if (currMovementPoints < 1.0)
 	{
 		currMovementPoints = -1.0;

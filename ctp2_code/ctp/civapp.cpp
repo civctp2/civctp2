@@ -493,8 +493,6 @@ bool g_tempLeakCheck = false;
 sint32 g_allocatedAtStart;
 
 
-extern ColorSet	*			g_colorSet; // TODO: export from ColorSet.h
-
 namespace
 {
 
@@ -549,8 +547,6 @@ void InitDataIncludePath(void)
 	{
 		g_civPaths->InsertExtraDataPath(*p);
 	}
-
-
 }
 
 //----------------------------------------------------------------------------
@@ -562,7 +558,6 @@ void InitDataIncludePath(void)
 // Parameters : -
 //
 // Globals    : g_theProfileDB  : user preferences (read)
-//              g_colorSet      : color set in use during the game (updated)
 //
 // Returns    : -
 //
@@ -572,15 +567,8 @@ void InitDataIncludePath(void)
 //----------------------------------------------------------------------------
 void SelectColorSet(void)
 {
-
-	sint32	useColorSet = g_theProfileDB->GetValueByName("ColorSet");
-
-	if ((useColorSet < 0) || (useColorSet >= k_MAX_COLOR_SET))
-	{
-		useColorSet = 0;
-	}
-
-	g_colorSet->Import(useColorSet);
+    Assert(g_theProfileDB);
+	ColorSet::Initialize(g_theProfileDB->GetValueByName("ColorSet"));
 }
 
 } // namespace
@@ -1580,12 +1568,9 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 
 	g_theProgressWindow->StartCountingTo( 620 );
 
-	if (g_c3ui->TheMouse()) {
-		double sensitivity = 0.0;
-
-		
-		sensitivity = 0.25 * (1 + g_theProfileDB->GetMouseSpeed());
-
+	if (g_c3ui->TheMouse()) 
+    {
+		double const sensitivity = 0.25 * (1 + g_theProfileDB->GetMouseSpeed());
 		g_c3ui->TheMouse()->Sensitivity() = sensitivity;
 	}
 
@@ -1613,10 +1598,6 @@ sint32 CivApp::QuickInit(HINSTANCE hInstance, int iCmdShow)
 }
 
 
-extern ColorSet	*g_colorSet;
-
-
-
 sint32 CivApp::CleanupAppUI(void)
 {
 	NetShell::Leave( k_NS_FLAGS_DESTROY );
@@ -1633,7 +1614,6 @@ sint32 CivApp::CleanupAppUI(void)
 	gameplayoptions_Cleanup();
 	soundscreen_Cleanup();
 	musicscreen_Cleanup();
-	//Added by Martin Gühmann to clean up the status bar correctly.
 	StatusBar::CleanUp();
 	loadsavescreen_Cleanup();
 	graphicsresscreen_Cleanup();
@@ -1641,6 +1621,11 @@ sint32 CivApp::CleanupAppUI(void)
 
     delete g_c3ui;
     g_c3ui = NULL;
+
+#if !defined(__AUI_USE_SDL__)
+	sint32 const cleanBaseRefCount = aui_Base::GetBaseRefCount();
+	Assert(0 == cleanBaseRefCount);
+#endif
 	
 	delete g_GreatLibPF;
 	g_GreatLibPF = NULL;
@@ -1650,10 +1635,6 @@ sint32 CivApp::CleanupAppUI(void)
 
 	delete g_SoundPF;
 	g_SoundPF = NULL;
-
-	
-	delete g_colorSet;
-    g_colorSet = NULL;
 
 	return 0;
 }
@@ -3546,28 +3527,19 @@ void CivApp::RestoreAutoSave(PLAYER_INDEX player)
 
 void CivApp::PostStartGameAction(void)
 {
-	StartGameAction		*startGameAction = new StartGameAction();
-
-	if (startGameAction)
-		g_c3ui->AddAction(startGameAction);
+	g_c3ui->AddAction(new StartGameAction());
 }
 
 
 void CivApp::PostSpriteTestAction(void)
 {
-	SpriteTestAction		*spriteTestAction = new SpriteTestAction();
-
-	if (spriteTestAction)
-		g_c3ui->AddAction(spriteTestAction);
+	g_c3ui->AddAction(new SpriteTestAction());
 }
 
 
 void CivApp::PostLoadSaveGameAction(MBCHAR *name)
 {
-	LoadSaveGameAction		*loadsaveGameAction = new LoadSaveGameAction(name);
-
-	if (loadsaveGameAction)
-		g_c3ui->AddAction(loadsaveGameAction);
+	g_c3ui->AddAction(new LoadSaveGameAction(name));
 }
 
 void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
@@ -3634,26 +3606,16 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 
 void CivApp::PostLoadSaveGameMapAction(MBCHAR *name)
 {
-	LoadSaveGameMapAction		*loadsaveGameMapAction = new LoadSaveGameMapAction(name);
-
-	if (loadsaveGameMapAction)
-		g_c3ui->AddAction(loadsaveGameMapAction);
+    g_c3ui->AddAction(new LoadSaveGameMapAction(name));
 }
 
 void CivApp::PostRestartGameAction(void)
 {
-	RestartGameAction		*restartGameAction = new RestartGameAction();
-
-	if (restartGameAction)
-		g_c3ui->AddAction(restartGameAction);
+	g_c3ui->AddAction(new RestartGameAction());
 }
 
 void CivApp::PostRestartGameSameMapAction(void)
 {
-	
-	
-	
-
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
 	if(p && g_theProfileDB) {
@@ -3661,46 +3623,28 @@ void CivApp::PostRestartGameSameMapAction(void)
 		g_theProfileDB->SetCivIndex(p->m_civilisation->GetCivilisation());
 	}
 
-	RestartGameSameMapAction *restartGameSameMapAction =
-		new RestartGameSameMapAction();
-
-	if (restartGameSameMapAction)
-		g_c3ui->AddAction(restartGameSameMapAction);
+	g_c3ui->AddAction(new RestartGameSameMapAction());
 }
 
 void CivApp::PostQuitToSPShellAction(void)
 {
-	QuitToSPShellAction *quitToSPShellAction =
-		new QuitToSPShellAction();
-
-	if (quitToSPShellAction)
-		g_c3ui->AddAction(quitToSPShellAction);
+	g_c3ui->AddAction(new QuitToSPShellAction());
 }
 
 void CivApp::PostQuitToLobbyAction(void)
 {
-	QuitToLobbyAction *quitToLobbyAction =
-		new QuitToLobbyAction();
-
-	if (quitToLobbyAction)
-		g_c3ui->AddAction(quitToLobbyAction);
+	g_c3ui->AddAction(new QuitToLobbyAction());
 }
 
 void CivApp::PostEndGameAction(void)
 {
-	EndGameAction *endGameAction = new EndGameAction();
-	if (endGameAction)
-		g_c3ui->AddAction(endGameAction);
+	g_c3ui->AddAction(new EndGameAction());
 }
 
 void CivApp::PostLoadScenarioGameAction(MBCHAR *filename)
 {
-	LoadScenarioGameAction *loadScenarioGameAction = new LoadScenarioGameAction(filename);
-	if (loadScenarioGameAction)
-		g_c3ui->AddAction(loadScenarioGameAction);
+	g_c3ui->AddAction(new LoadScenarioGameAction(filename));
 }
-
-
 
 void StartGameAction::Execute(aui_Control *control, uint32 action, uint32 data )
 {
