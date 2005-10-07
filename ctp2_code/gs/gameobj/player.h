@@ -35,6 +35,7 @@
 // - Import structure improved, merged with linux version.
 // - Made player.h to compile again.
 // - Removed unused void BeginTurnAllCities all cities method. - Aug. 7th 2005 Martin Gühmann
+// - Added civilisation specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -326,7 +327,7 @@ public:
 
 	MilitaryReadiness *m_readiness;
 	PlayerHappiness   *m_global_happiness;
-	Civilisation      *m_civilisation ;
+	Civilisation      *m_civilisation;
 
 	Throne            *m_throne;
 
@@ -1140,6 +1141,7 @@ public:
 	sint32 GetGovernorPwReserve() const;
 
 	sint32 CountCityHappiness(sint32 &rioting, sint32 &content, sint32 &happy);
+	sint32 CityHappinessIncrease() const;
 
 
 	sint16 GetCargoCapacity() const;

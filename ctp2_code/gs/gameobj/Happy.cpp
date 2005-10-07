@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Happiness handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +28,8 @@
 // - Reimplemented m_timedChanges as std::list, to prevent Asserts
 // - Added Copy method to copy data from another instance into this
 //   instance, savely. - Jul 7th 2005 Martin Gühmann
+// - Added happiness boni for players civilisation and city's city style. 
+//   (Oct 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -575,6 +578,28 @@ void Happy::CountAffectivePop(CityData &cd)
 {
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : Happy::CalcHappiness
+//
+// Description: Calculates the city's happiness.
+//
+// Parameters : CityData &cd:              The city data to calculate 
+//                                         the happiness for.
+//              BOOL projectedOnly:        Calculate only projections.
+//              sint32 &delta_martial_law: Filled with the difference 
+//                                         of old and ne happiness
+//              BOOL isFirstPass:          Whether the method was already
+//                                         called this turn.
+//
+// Globals    : g_slicEngine: The slic engine
+//              g_player:     The list of players
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly, 
                           sint32 &delta_martial_law, 
                           BOOL isFirstPass)
@@ -585,8 +610,9 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 	CountAffectivePop(cd);
 
 	
-	m_happiness = CalcBase(p); 
-
+	m_happiness  = CalcBase(p);
+	m_happiness += p->CityHappinessIncrease();
+	m_happiness += cd.StyleHappinessIncr();
 	
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
 		return;

@@ -103,6 +103,7 @@
 // - NeedsCityGood added to CanBuildUnit, CanBuildBuilding, and CanBuild Wonder
 //   requiring a good in the radius or if the city is buying it before a it can be 
 //   built. (Sept 29nd 2005 by E)
+// - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -8460,3 +8461,25 @@ void CityData::GetSpecialistsEffect(sint32 ring, double &farmersEff, double &lab
 	scientistsEff = m_scientistsEff[ring];
 }
 #endif
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::StyleHappinessIncr
+//
+// Description: Gets the amount of happiness increase associated to the 
+//              city's city style.
+//
+// Parameters : -
+//
+// Globals    : g_theCityStyleDB: The city style database
+//              g_player:         The list of players
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 CityData::StyleHappinessIncr() const
+{
+	return g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetHappyInc();
+}

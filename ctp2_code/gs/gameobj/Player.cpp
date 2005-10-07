@@ -20,7 +20,14 @@
 //
 // CTP1_TRADE
 // - Creates an executable with trade like in CTP1. Currently broken.
-// 
+//
+// BATTLE_FLAGS
+//
+// _DEBUG_INCOMPATIBLE
+//
+// _DEBUG
+// - Generate debug version when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -56,6 +63,7 @@
 // - Removed unused void BeginTurnAllCities all cities method and
 //   prepared for city resource calculation redesign. - Aug. 7th 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added civilisation specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -10471,7 +10479,26 @@ sint32 Player::CountCityHappiness(sint32 &rioting, sint32 &content, sint32 &happ
 	return m_all_cities->Num();
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::StyleHappinessIncr
+//
+// Description: Gets the amount of happiness increase associated to the 
+//              player's civilisation.
+//
+// Parameters : -
+//
+// Globals    : g_theCivilisationDB: The city civilisation database
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+sint32 Player::CityHappinessIncrease() const
+{
+	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetHappyInc();
+}
 
 sint16 Player::GetCargoCapacity() const
 {

@@ -54,6 +54,7 @@
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 // - Removed CITY_TILE_SIZE and k_CITY_RADIUS they aren't used. (Aug 12th 2005 Martin Gühmann)
 // - Removed more unused methods. (Aug 12th 2005 Martin Gühmann)
+// - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1028,6 +1029,8 @@ public:
 	double GetScientistsEffect(sint32 ring){ return m_scientistsEff[ring];}
 
 #endif
+
+	sint32 StyleHappinessIncr() const;
 };
 
 uint32 CityData_CityData_GetVersion(void);
