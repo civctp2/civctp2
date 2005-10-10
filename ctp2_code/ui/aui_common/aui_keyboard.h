@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header file
-// Description  :
+// Description  : User interface: keyboard handling
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -17,6 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+// 
+// __AUI_USE_DIRECTX__
+// Use DirectX 
 //
 //----------------------------------------------------------------------------
 //
@@ -24,54 +27,78 @@
 //
 //
 //----------------------------------------------------------------------------
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __AUI_KEYBOARD_H__
 #define __AUI_KEYBOARD_H__
 
-
-#include "aui_base.h"
-#include "aui_input.h"
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
 
 #if defined(__AUI_USE_DIRECTX__)
+#include <dinput.h>	    	// DIK_...
+#endif
+
+// Not really a library, but needed in the export section
+#include "ctp2_inttypes.h"	// uint##
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class aui_Keyboard;
+
 enum AUI_KEYBOARD_KEY
 {
-	AUI_KEYBOARD_KEY_FIRST = 0,
-	AUI_KEYBOARD_KEY_INVALID = 0,
-	AUI_KEYBOARD_KEY_ESCAPE = DIK_ESCAPE,
-	AUI_KEYBOARD_KEY_RETURN = DIK_RETURN,
-	AUI_KEYBOARD_KEY_SPACE = DIK_SPACE,
-	AUI_KEYBOARD_KEY_TAB = DIK_TAB,
-	AUI_KEYBOARD_KEY_LAST
-};
+	AUI_KEYBOARD_KEY_FIRST              = 0,
+	AUI_KEYBOARD_KEY_INVALID            = 0,
+#if defined(__AUI_USE_DIRECTX__)
+	AUI_KEYBOARD_KEY_ESCAPE             = DIK_ESCAPE,
+	AUI_KEYBOARD_KEY_RETURN             = DIK_RETURN,
+	AUI_KEYBOARD_KEY_SPACE              = DIK_SPACE,
+	AUI_KEYBOARD_KEY_TAB                = DIK_TAB,
+	AUI_KEYBOARD_KEY_UPARROW            = DIK_UPARROW,
+	AUI_KEYBOARD_KEY_DOWNARROW          = DIK_DOWNARROW,
+	AUI_KEYBOARD_KEY_LEFTARROW          = DIK_LEFTARROW,
+	AUI_KEYBOARD_KEY_RIGHTARROW         = DIK_RIGHTARROW,
 #else
-enum AUI_KEYBOARD_KEY
-{
-	AUI_KEYBOARD_KEY_FIRST = 0,
-	AUI_KEYBOARD_KEY_INVALID = 0,
 	AUI_KEYBOARD_KEY_ESCAPE,
 	AUI_KEYBOARD_KEY_RETURN,
 	AUI_KEYBOARD_KEY_SPACE,
 	AUI_KEYBOARD_KEY_TAB,
+	AUI_KEYBOARD_KEY_UPARROW,
+	AUI_KEYBOARD_KEY_DOWNARROW,
+	AUI_KEYBOARD_KEY_LEFTARROW,
+	AUI_KEYBOARD_KEY_RIGHTARROW,
+#endif // __AUI_USE_DIRECTX__
 	AUI_KEYBOARD_KEY_LAST
 };
-#endif 
-
-
 
 
 struct aui_KeyboardEvent
 {
-	uint32	key;	
-	BOOL	down;	
-	uint32	time;	
+	uint32	    key;	
+	BOOL	    down;	
+	uint32	    time;	
 };
 
-
-
 #define k_KEYBOARD_MAXINPUT		24
-
 #define k_KEYBOARD_MAXSTATE		256
 
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
+#include "aui_base.h"
+#include "aui_input.h"
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 class aui_Keyboard : public aui_Base, public virtual aui_Input
 {
@@ -91,10 +118,9 @@ public:
 	aui_KeyboardEvent	*GetLatestKeyboardEvent( void ) { return &m_data; }
 
 protected:
-	aui_KeyboardEvent m_data;	
-	uint8 m_keyboardState[ k_KEYBOARD_MAXSTATE ];
+	aui_KeyboardEvent 	m_data;	
+	uint8 			    m_keyboardState[k_KEYBOARD_MAXSTATE];
 		
 };
 
-
-#endif 
+#endif // __AUI_KEYBOARD_H__
