@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : General declarations
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -34,9 +34,17 @@
 #include "c3.h"
 
 #ifdef _DEBUGTOOLS
-static int s_AutoDebugCounter = 0;
-AutoDebug::AutoDebug(){ if(s_AutoDebugCounter == 0){ Debug_Open();} s_AutoDebugCounter++; }
-AutoDebug::~AutoDebug(){ if(s_AutoDebugCounter == 1){ Debug_Close();} s_AutoDebugCounter--; }
+// Should be the first thing in the program that is created and 
+// the last thing that is destroyed, so that we catch all leaks
+// and don't catch anything that is freed after the leak report,
+// as it was the case with the old way leaks were reported.
+// Since this is supposed to be the very last thing that goes, 
+// you might already back at the desktop while CTP2 is running 
+// is the background writing the leak report.
+static AutoDebug autoDebug;
+
+AutoDebug::AutoDebug(){ Debug_Open(); }
+AutoDebug::~AutoDebug(){ Debug_Close(); }
 #endif
 
 #ifdef _MSC_VER

@@ -3173,10 +3173,12 @@ str_ldl_version "2004-07-26"
 str_ldl_RANKING_POLLUTION		"âòêı"
 str_ldl_RANKING_WONDER		"éµïsévãc"
 
-str_profile_CloseOnEyepoint			"Close Message When Clicking Eyeball"
-str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
+str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
+str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
-str_profile_RecentAtTop				"Put New Messages At Top"
+str_profile_RecentAtTop                         "Put New Messages At Top"
+str_profile_CityClick                           "Select City Instead Of Army"
+str_profile_DebugSlic                           "Slic Debug Messages"
 
 ### Great Libary Strings ###
 

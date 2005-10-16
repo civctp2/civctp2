@@ -32,6 +32,9 @@
 // - Option added to include multiple data directories.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Option added to select whether an army is selected or a city is selected,
+//   if both options are available. (Oct 8th 2005 Martin Gühmann)
+// - DebugSlic and GoodAnim are now part of the advance options. (Oct 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -75,7 +78,8 @@ ProfileDB::ProfileDB()
 	m_colorSet(0),
 	m_showExpensive(FALSE),
 	m_showOrderUnion(FALSE),
-	m_recentAtTop(FALSE)
+	m_recentAtTop(FALSE),
+	m_cityClick(FALSE)
 {
 	m_vars = new PointerList<ProfileVar>;
 
@@ -245,7 +249,7 @@ ProfileDB::ProfileDB()
 
 	Var("NumPlayers", PV_NUM, &m_nPlayers, NULL, false);
 	Var("AiOn", PV_BOOL, &m_ai_on, NULL, false);
-    Var("UseNiceStart", PV_BOOL, &m_use_nice_start, NULL, false); 
+	Var("UseNiceStart", PV_BOOL, &m_use_nice_start, NULL, false); 
 	Var("UseMapPlugin", PV_BOOL, &m_use_map_plugin, NULL, false);
 	
 	Var("Difficulty", PV_NUM, &m_difficulty, NULL, false);
@@ -254,7 +258,7 @@ ProfileDB::ProfileDB()
 	Var("Pollution", PV_BOOL, &m_pollution, NULL, false);
 	Var("UnitAnim", PV_BOOL, &m_unitAnim, NULL);
 
-	Var("GoodAnim", PV_BOOL, &m_goodAnim, NULL, false);
+	Var("GoodAnim", PV_BOOL, &m_goodAnim, NULL);
 	Var("TradeAnim", PV_BOOL, &m_tradeAnim, NULL);
 	Var("WaterAnim", PV_BOOL, &m_waterAnim, NULL, false);
 	Var("LibraryAnim", PV_BOOL, &m_libraryAnim, NULL, false);
@@ -329,7 +333,7 @@ ProfileDB::ProfileDB()
 	Var("AlienEndGame", PV_BOOL, &m_alienEndGame, NULL, false);
 	Var("UnitCompleteMessages", PV_BOOL, &m_unitCompleteMessages, NULL);
 	Var("NonContinuousUnitCompleteMessages", PV_BOOL, &m_nonContinuousUnitCompleteMessages, NULL);
-	Var("DebugSlic", PV_BOOL, &m_debugSlic, NULL, false);
+	Var("DebugSlic", PV_BOOL, &m_debugSlic, NULL);
 	Var("DiplomacyLog", PV_BOOL, &m_is_diplomacy_log_on, NULL, false);
 	Var("CheatAge", PV_NUM, &m_cheat_age, NULL, false);
 	Var("DontKillMessages", PV_BOOL, &m_dontKillMessages, NULL, false);
@@ -384,6 +388,7 @@ ProfileDB::ProfileDB()
 	Var("ShowOrderUnion", PV_BOOL, &m_showOrderUnion, NULL);
 	Var("RecentAtTop", PV_BOOL, &m_recentAtTop, NULL);
 	Var("RuleSets", PV_STRING, NULL, m_ruleSets, false);
+	Var("CityClick", PV_BOOL, &m_cityClick, NULL);
 }
 
 void ProfileDB::DefaultSettings(void)

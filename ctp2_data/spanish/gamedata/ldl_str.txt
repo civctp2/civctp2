@@ -3121,10 +3121,12 @@ str_profile_AutoOpenCityWindow                  "Abrir Cola de construc. al crea
 str_profile_ShowEnemyHealth                     "Mostrar Estado de salud enemigos"
 str_profile_ShowCityInfluence                   "Mostrar influencia ciudad"
 str_profile_ShowPoliticalBorders                "Mostrar fronteras nacionales"
-str_profile_CloseOnEyepoint			"Close Message When Clicking Eyeball"
-str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
+str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
+str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
-str_profile_RecentAtTop				"Put New Messages At Top"
+str_profile_RecentAtTop                         "Put New Messages At Top"
+str_profile_CityClick                           "Select City Instead Of Army"
+str_profile_DebugSlic                           "Slic Debug Messages"
 
 str_ldl_City_Manager_Title  "A D M I N I S T R A C I Ó N    D E   L A   C I U D A D"
 

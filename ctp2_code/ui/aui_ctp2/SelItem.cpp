@@ -4,6 +4,7 @@
 // File type    : C++ source
 // File name    : ui\aui_ctp2\SetItem.cpp
 // Description  : Handles stuff about selected items.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,6 +30,8 @@
 //   correct stop player is set.
 // - #01 Standardization of city selection and focus handling  
 //   (L. Hirth 6/2004)
+// - Entrenching units are treated like Entrenched units. (Oct 16th 2005 Martin Gühmann)
+// - Added select city instead of army option. (Oct 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -966,15 +969,12 @@ void SelectedItem::Refresh()
 				} else {
 					SetSelectUnit(Unit(0));
 				}
-			} 
-#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
-			  else {
+			}
+			else {
 				m_ignoreCitySelect = TRUE;
 
 				m_ignoreCitySelect = FALSE;
 			}
-#endif
-
 		}
 	}
 
@@ -983,14 +983,7 @@ void SelectedItem::Refresh()
 void SelectedItem::SetSelectCity(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 {
-	
-#if defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
-	if(!m_ignoreCitySelect) {
-		SetSelectUnit(u, all, isDoubleClick);
-	}
-#else
-    SetSelectUnit(u, all, isDoubleClick);
-#endif
+	SetSelectUnit(u, all, isDoubleClick);
 }
 
 void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
@@ -1004,8 +997,6 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
     BOOL didSelect = FALSE;
 
-    sint32 n;
-    
     m_auto_unload = FALSE;
 
 	m_waypoints.Clear();
@@ -1015,9 +1006,8 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 	if(!g_theUnitPool->IsValid(u))
 		return;
 
-    if (u.IsCity()) { 
-        n = g_player[o]->m_all_cities->Num(); 
-        
+    if (u.IsCity()) {
+
 		if(o == u.GetOwner()) {
 			m_select_state[o] = SELECT_TYPE_LOCAL_CITY;
 		} else {
@@ -1048,8 +1038,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 			}
 		}
 	} else { 
-        n = g_player[o]->m_all_armies->Num(); 
-        
+
 		if(o == u.GetOwner()) {
 			m_select_state[o] = SELECT_TYPE_LOCAL_ARMY;
 		} else {
@@ -1082,10 +1071,12 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 			}
 			if(selectedCombatUnits) {
 				for(i = 0; i < army->Num(); i++) {
-					if(army->Access(i).GetAttack() > 0 &&
-					   army->Access(i).GetArmy() != m_selected_army[o] &&
-					   !army->Access(i).IsAsleep() &&
-					   !army->Access(i).IsEntrenched()) {
+					if(army->Access(i).GetAttack() > 0
+					&& army->Access(i).GetArmy() != m_selected_army[o]
+					&&!army->Access(i).IsAsleep()
+					&&!army->Access(i).IsEntrenched()
+					&&!army->Access(i).IsEntrenching()
+					){
 						m_selected_army[o].AddOrders(UNIT_ORDER_GROUP_UNIT, NULL, pos, (uint32)army->Access(i));
 					}
 				}
@@ -1111,14 +1102,12 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 	
 	if (g_controlPanel) {
-		Unit top = u;
-
 		
 		if (u.GetOwner() == o) {
 
 
 
-			if (top.IsCity()) {
+			if (u.IsCity()) {
 				MainControlPanel::SelectedCity();
 
 			} else {
@@ -1224,12 +1213,12 @@ void SelectedItem::Deselect(PLAYER_INDEX player)
 	if(GetSelectedCity(c))
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityDeselected, GEA_City, c, GEA_End);
 	
-#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
+	// #01 Standardization of city selection and focus handling  
 	if (g_controlPanel) {
 		m_ignoreCitySelect = TRUE;
 		m_ignoreCitySelect = FALSE;
 	}
-#endif
+
 	m_select_state[player] = SELECT_TYPE_NONE;
 
 	if(m_good_path) {
@@ -1257,7 +1246,16 @@ sint32 SelectedItem::GetTopUnitOrCity(const MapPoint &pos, Unit &top)
 {
 	BOOL	unitIsThere = FALSE;
 
-	unitIsThere = g_theWorld->GetTopVisibleUnit(pos, top);
+	if(g_theProfileDB->GetValueByName("CityClick")
+	&& g_theWorld->IsCity(pos)
+	){
+		top = g_theWorld->GetCity(pos);
+		unitIsThere = TRUE;
+	}
+	else{
+		unitIsThere = g_theWorld->GetTopVisibleUnit(pos, top);
+	}
+
 	if (!unitIsThere) {
 		Cell *cell = g_theWorld->GetCell(pos);
 		if (cell->GetCity().m_id != 0) {
@@ -1267,7 +1265,9 @@ sint32 SelectedItem::GetTopUnitOrCity(const MapPoint &pos, Unit &top)
 		if (cell->GetNumUnits() > 0) {
 			sint32 i;
 			for(i = 0; i < cell->GetNumUnits(); i++) {
-				if(!cell->AccessUnit(i).IsEntrenched()) {
+				if(!cell->AccessUnit(i).IsEntrenched()
+				&& !cell->AccessUnit(i).IsEntrenching()
+				){
 					top = cell->AccessUnit(i);
 					unitIsThere = TRUE;
 					break;
@@ -1289,7 +1289,7 @@ sint32 SelectedItem::GetTopUnit(const MapPoint &pos, Unit &top)
 		Cell *cell = g_theWorld->GetCell(pos);
 		for (sint32 i=0; i< cell->GetNumUnits(); i++) {
 			u = cell->AccessUnit(i);
-			if (!u.IsCity() && !u.IsEntrenched()) {
+			if (!u.IsCity() && !u.IsEntrenched() && !u.IsEntrenching()) {
 				top = u;
 				unitIsThere = TRUE;
 				break;

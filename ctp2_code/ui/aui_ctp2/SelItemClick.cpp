@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Selection item click handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,19 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Bug fix: prevent easy invisible unit detection, by reporting the basic 
 //   terrain info when (right-)clicking on an enemy object.
+// - Added selection of goods. (Oct 8th 2005 Martin Gühmann)
+// - Added option to open cities or the army manager if there are units
+//   on top of a city. (Oct 8th 2005 Martin Gühmann)
+// - Treat entrenching units like entrenched units. (Oct 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1114,11 +1121,11 @@ void SelectedItem::SelectArmyStartMoveClick(const MapPoint &pos, const aui_Mouse
 void SelectedItem::SelectCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	
-	if(!GetIsPathing()) {
+	if(!GetIsPathing()){
 		Unit top;
 		GetTopUnitOrCity(pos, top);
 		SetSelectCity(top);
-		if(doubleClick) {
+		if(doubleClick){
 			if(top.IsCity())
 				CityWindow::Display(top.CD());
 			else
@@ -1150,7 +1157,6 @@ void SelectedItem::SelectEnemyArmyClick(const MapPoint &pos, const aui_MouseEven
 
 void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
 	Unit top;
 	GetTopUnitOrCity(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityClicked, GEA_City, top, GEA_End);
@@ -1193,7 +1199,6 @@ void SelectedItem::UnloadClick(const MapPoint &pos, const aui_MouseEvent *data, 
 // Remark(s)  : When the tile is unexplored, nothing will be shown.
 //
 //----------------------------------------------------------------------------
-
 void SelectedItem::TerrainContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	if(g_player[GetVisiblePlayer()] && g_player[GetVisiblePlayer()]->IsExplored(pos)) {
@@ -1216,7 +1221,6 @@ void SelectedItem::TerrainContextClick(const MapPoint &pos, const aui_MouseEvent
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void SelectedItem::ArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	SelectArmyClick(pos, data, FALSE);
@@ -1239,7 +1243,6 @@ void SelectedItem::ArmyContextClick(const MapPoint &pos, const aui_MouseEvent *d
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	SelectCityClick(pos, data, FALSE);
@@ -1262,7 +1265,6 @@ void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *d
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	// Report the underlying terrain information. This is just being useful. 
@@ -1284,7 +1286,6 @@ void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEve
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void SelectedItem::EnemyArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	// Report the underlying terrain information. For visible units, this is 
@@ -1299,6 +1300,9 @@ void SelectedItem::TradeRouteContextClick(const MapPoint &pos, const aui_MouseEv
 
 void SelectedItem::GoodContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
+	if(g_player[GetVisiblePlayer()] && g_player[GetVisiblePlayer()]->IsExplored(pos)) {
+		helptile_displayData(pos);
+	}
 }
 
 
@@ -1572,12 +1576,20 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 						}
 					}
 				}
-				
+				else if(hasUnitOrCity && top.IsCity()) {
+
+					if(top.GetOwner() == visiblePlayer) {
+						return SELECT_TYPE_LOCAL_CITY;
+					} else {
+						return SELECT_TYPE_REMOTE_CITY;
+					}
+				}				
 				
 				break;
 			case SELECT_TYPE_LOCAL_ARMY:
 				if(hasUnitOrCity && top.IsCity()) {
-					if(top.GetOwner() == visiblePlayer) {						
+
+					if(top.GetOwner() == visiblePlayer) {
 						return SELECT_TYPE_LOCAL_CITY;
 					} else {
 						return SELECT_TYPE_REMOTE_CITY;
@@ -1617,37 +1629,40 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 		}
 	}
 
-	
-	if (GetTopUnitOrCity(pos, top)) {
+	if(GetTopUnitOrCity(pos, top)){
 		
-		if (top.IsCity()) {
-			if (top.GetOwner() == visiblePlayer) {
-				if(g_theWorld->GetCell(pos)->GetNumUnits() > 0) {
+		if(top.IsCity()){
+			if(top.GetOwner() == visiblePlayer){
+				if(!g_theProfileDB->GetValueByName("CityClick")
+				&& g_theWorld->GetCell(pos)->GetNumUnits() > 0
+				){
 					sint32 i;
-					for(i = 0; i < g_theWorld->GetCell(pos)->GetNumUnits(); i++) {
-						if(!g_theWorld->GetCell(pos)->AccessUnit(i).IsEntrenched()) {
+					for(i = 0; i < g_theWorld->GetCell(pos)->GetNumUnits(); i++){
+						if(!g_theWorld->GetCell(pos)->AccessUnit(i).IsEntrenched()
+						&& !g_theWorld->GetCell(pos)->AccessUnit(i).IsEntrenching()
+						){
 							return SELECT_TYPE_LOCAL_ARMY;
 						}
 					}
 				}
 				return SELECT_TYPE_LOCAL_CITY;
-			} else {
+			}
+			else{
 				return SELECT_TYPE_REMOTE_CITY;
 			}
-		} else {
-			if (top.GetOwner() == visiblePlayer) {
-				
+		}
+		else{
+			if(top.GetOwner() == visiblePlayer){
 				return SELECT_TYPE_LOCAL_ARMY;
-			} else {
+			}
+			else{
 				return SELECT_TYPE_REMOTE_ARMY;
 			}
 		}
-	} else {
-		
-		
-		
 	}
-
+	else if(g_theWorld->IsGood(pos)){
+		return SELECT_TYPE_GOOD;
+	}
 	
 	return SELECT_TYPE_NONE;
 }

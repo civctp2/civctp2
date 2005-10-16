@@ -3195,10 +3195,12 @@ str_profile_AutoOpenCityWindow                  "Ouvrir Gest. de construction qd
 str_profile_ShowEnemyHealth                     "Afficher santé unité ennemie"
 str_profile_ShowCityInfluence                   "Afficher influence ville"
 str_profile_ShowPoliticalBorders                "Afficher frontières nationales"
-str_profile_CloseOnEyePoint			"Fermer les messages en cliquant sur l'oeil"
-str_profile_ShowExpensive			"Afficher effets aménag. de case trop coûteux"
-str_profile_ShowOrderUnion                      "Show All Army Orders" 
-str_profile_RecentAtTop				"Put New Messages At Top"
+str_profile_CloseOnEyePoint                     "Fermer les messages en cliquant sur l'oeil"
+str_profile_ShowExpensive                       "Afficher effets aménag. de case trop coûteux"
+str_profile_ShowOrderUnion                      "Afficher les ordres pour les armées" 
+str_profile_RecentAtTop                         "Mettre les nouveaux messages en tête de liste"
+str_profile_CityClick                           "Sélectionner la ville au lieu de l'armée"
+str_profile_DebugSlic                           "Slic Debug Messages"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"0ptions Musique"

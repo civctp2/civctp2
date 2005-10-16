@@ -16,12 +16,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Option added to close a message box automatically on eyepoint clicking.
+// - Messages are closed if an open command is executed and there is already
+//   an open messages, enables left click close. (Oct 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -83,6 +87,11 @@ void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 dat
 	if ( !g_c3ui->GetWindow( m_iconWindow->GetWindow()->Id( ))) {
 		m_iconWindow->SetCurrentIconButton( m_iconWindow->GetIconButton() );
 		m_iconWindow->GetWindow()->ShowWindow( TRUE );
+	}
+	else{
+		m_iconWindow->SetCurrentIconButton( NULL );
+		m_iconWindow->GetWindow()->ShowWindow( FALSE );
+		return;
 	}
 
 	
@@ -186,7 +195,6 @@ void MessageLibraryAction::Execute( aui_Control *control, uint32 action, uint32 
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void MessageStandardEyePointAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;

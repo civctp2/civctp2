@@ -44,6 +44,8 @@
 // - Improved structure + linux branch synchronisation.
 // - Added world shape handling.
 // - Made file compiable in Win32 Test configuration
+// - Option added to select whether an army is selected or a city is selected,
+//   if both options are available. (Oct 8th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -58,7 +60,7 @@
 // Library imports
 //----------------------------------------------------------------------------
 
-#include <string.h>				// strcpy
+#include <string.h>            // strcpy
 
 //----------------------------------------------------------------------------
 // Exported names
@@ -317,12 +319,13 @@ class ProfileDB {
     double m_homogenous;
     sint32 m_richness;
 
-    sint32	m_closeEyepoint;		// Close message box when clicking the eyepoint.
-    sint32	m_colorSet;				// The # to use when opening colors#.txt.
-    sint32	m_showExpensive;		// Show cost and effects of expensive actions.
-    sint32	m_showOrderUnion;		// Show order button when any unit is capable.
-    sint32	m_recentAtTop;			// Add the most recent messages at the top.
-    MBCHAR  m_ruleSets[MAX_PATH];	// Data directory "include" path
+    sint32 m_closeEyepoint;        // Close message box when clicking the eyepoint.
+    sint32 m_colorSet;             // The # to use when opening colors#.txt.
+    sint32 m_showExpensive;        // Show cost and effects of expensive actions.
+    sint32 m_showOrderUnion;       // Show order button when any unit is capable.
+    sint32 m_recentAtTop;          // Add the most recent messages at the top.
+    MBCHAR m_ruleSets[MAX_PATH];   // Data directory "include" path
+    sint32 m_cityClick;            // Opens/selects a city instead of an army.
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;
