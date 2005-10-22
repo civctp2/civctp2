@@ -26,6 +26,10 @@
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Reorganised to try to prevent crashes.
+// - Number of colors in a ColorsXX.txt must be now either 58 like in the 
+//   original game or 74 like in the source code edition. If there are just
+//   58 the missing player colors are filled with the map colors at that 
+//   like in the original version. (Oct 22nd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
  
@@ -42,7 +46,11 @@ extern sint32 g_is565Format;
 namespace
 {
 
-ColorSet    s_theUniqueColorSet;
+size_t const OLD_COLOR_NUMBER = 58;
+size_t const NEW_COLOR_NUMBER = 74;
+size_t const COLOR_DIFFERENCE = NEW_COLOR_NUMBER - OLD_COLOR_NUMBER;
+
+ColorSet     s_theUniqueColorSet;
 
 //----------------------------------------------------------------------------
 //
@@ -167,8 +175,10 @@ void ColorSet::Import(uint32 fileNumber)
 
         sint32 fileColorCount = 0;
         theToken.GetNumber(fileColorCount); 
-        if (fileColorCount <= 0) 
-        { 
+        if(fileColorCount <= 0
+		||(fileColorCount != OLD_COLOR_NUMBER
+		&& fileColorCount != NEW_COLOR_NUMBER)
+		){ 
 	        throw std::exception("Illegal number of colors.");
         }
 
@@ -179,8 +189,8 @@ void ColorSet::Import(uint32 fileNumber)
             throw std::exception("Error before open brace."); 
         }
 
-        m_colors.resize(static_cast<size_t>(fileColorCount));
-        for (size_t i = 0; i < static_cast<size_t>(fileColorCount); ++i) 
+        m_colors.resize(static_cast<size_t>(NEW_COLOR_NUMBER));
+        for (size_t i = 0; i < NEW_COLOR_NUMBER; ++i) 
         {
 	        if (!token_ParseKeywordNext(&theToken, TOKEN_COLORSET_COLOR)) 
             {
@@ -197,7 +207,20 @@ void ColorSet::Import(uint32 fileNumber)
 
             // When g_is565Format is true, pixeluitls_Conver565to555 is an
             // identity operation.
-	        m_colors[i] = pixelutils_Convert565to555(rgb565);
+			if(fileColorCount == OLD_COLOR_NUMBER
+			&& COLOR_PLAYER18 == static_cast<COLOR>(i)
+			){
+				i = static_cast<size_t>(COLOR_TERRAIN_0);
+			}
+			if(fileColorCount == OLD_COLOR_NUMBER 
+			&& static_cast<COLOR>(i - COLOR_DIFFERENCE) < COLOR_TERRAIN_0
+			){
+		        m_colors[i] = pixelutils_Convert565to555(rgb565);
+		        m_colors[i - COLOR_DIFFERENCE] = m_colors[i];
+			}
+			else{
+		        m_colors[i] = pixelutils_Convert565to555(rgb565);
+			}
         }
 
         if (!token_ParseAnCloseBraceNext(&theToken))

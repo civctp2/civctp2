@@ -16,13 +16,14 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added new colors above player 15 by Martin Gühmann
-// - Moved new colors to the back for mod compatibility.
 //
 //----------------------------------------------------------------------------
 
@@ -78,6 +79,24 @@ enum COLOR {
 	COLOR_PLAYER16,
 	COLOR_PLAYER17,
 
+	// Added by Martin Gühmann to support more players with colors
+	COLOR_PLAYER18,
+	COLOR_PLAYER19,
+	COLOR_PLAYER20,
+	COLOR_PLAYER21,
+	COLOR_PLAYER22,
+	COLOR_PLAYER23,
+	COLOR_PLAYER24,
+	COLOR_PLAYER25,
+	COLOR_PLAYER26,
+	COLOR_PLAYER27,
+	COLOR_PLAYER28,
+	COLOR_PLAYER29,
+	COLOR_PLAYER30,
+	COLOR_PLAYER31,
+	COLOR_PLAYER32,
+	COLOR_PLAYER33,
+
 	COLOR_TERRAIN_0,
 	COLOR_TERRAIN_1,
 	COLOR_TERRAIN_2,
@@ -113,25 +132,6 @@ enum COLOR {
 
 	COLOR_UI_BOX,
 	COLOR_GRAY,
-
-	// Added by Martin Gühmann to support more players with colors
-    // Back-inserted for mod compatibility.
-	COLOR_PLAYER18,
-	COLOR_PLAYER19,
-	COLOR_PLAYER20,
-	COLOR_PLAYER21,
-	COLOR_PLAYER22,
-	COLOR_PLAYER23,
-	COLOR_PLAYER24,
-	COLOR_PLAYER25,
-	COLOR_PLAYER26,
-	COLOR_PLAYER27,
-	COLOR_PLAYER28,
-	COLOR_PLAYER29,
-	COLOR_PLAYER30,
-	COLOR_PLAYER31,
-	COLOR_PLAYER32,
-	COLOR_PLAYER33,
 
 	COLOR_MAX
 };
