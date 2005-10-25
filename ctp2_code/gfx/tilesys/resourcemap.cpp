@@ -27,6 +27,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "resourcemap.h"
+
 #include "aui.h"
 #include "aui_blitter.h"
 #include "aui_directsurface.h"
@@ -36,51 +38,36 @@
 
 #include "primitives.h"
 #include "globals.h"
-#include "player.h"
-
+#include "player.h"                     // g_player
 #include "dynarr.h"
-#include "SelItem.h"
-
-#include "director.h"
-
-#include "tiledmap.h"
+#include "SelItem.h"                    // g_selected_item
+#include "director.h"                   // g_director
+#include "tiledmap.h"                   // g_tiledMap
 #include "BaseTile.h"
 #include "TileInfo.h"
 #include "tileset.h"
-#include "colorset.h"
-
-#include "resourcemap.h"
+#include "colorset.h"                   // g_colorSet
 #include "Unit.h"
-#include "UnitPool.h"
-
+#include "UnitPool.h"                   // g_theUnitPool
 #include "c3_updateaction.h"
-
 #include "Actor.h"
 #include "UnitActor.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "World.h"                      // g_theWorld
 #include "Cell.h"
 #include "MapPoint.h"
 #include "WonderRecord.h"
 #include "c3ui.h"
 #include "GoodActor.h"
-
 #include "citydata.h"
 #include "textutils.h"
-
 #include "maputils.h"
 #include "SlicEngine.h"
-#include "profileDB.h"
-
-
+#include "profileDB.h"                  // g_theProfileDB
 #include "CityRadius.h"
-#include "StrDB.h"
+#include "StrDB.h"                      // g_theStringDB
 #include "UnitData.h"
-
 #include "GameEventManager.h"
-
 #include "CityInfluenceIterator.h"
-
 #include "ldl_user.h"
 
 #define k_NUDGE		48					
@@ -103,16 +90,7 @@
 
 #define k_MAX_CITY_RADIUS       3
 
-extern TiledMap			*g_tiledMap;
-extern Player			**g_player;
-extern SelectedItem		*g_selected_item;
-extern Director			*g_director;
-extern ColorSet			*g_colorSet;
-extern World			*g_theWorld;
 extern C3UI				*g_c3ui;
-extern UnitPool			*g_theUnitPool;
-extern ProfileDB		*g_theProfileDB;
-extern StringDB			*g_theStringDB;
 
 
 
@@ -123,9 +101,10 @@ ResourceMap::ResourceMap(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	:	
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
+		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -141,9 +120,10 @@ ResourceMap::ResourceMap(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	:	
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
+		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon( k_RESOURCEMAP_DEFAULT_SCALE );	

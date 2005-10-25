@@ -12,6 +12,8 @@
 
 
 #include "c3.h"
+#include "workmap.h"
+
 #include "aui.h"
 #include "aui_blitter.h"
 #include "aui_directsurface.h"
@@ -20,51 +22,38 @@
 #include "aui_stringtable.h"
 
 #include "primitives.h"
-#include "globals.h"
-#include "player.h"
-
+#include "Globals.h"
+#include "player.h"             // g_player
 #include "dynarr.h"
-#include "SelItem.h"
-
-#include "director.h"
-
-#include "tiledmap.h"
+#include "SelItem.h"            // g_selected_item
+#include "director.h"           // g_director
+#include "tiledmap.h"           // g_tiledMap
 #include "BaseTile.h"
 #include "TileInfo.h"
 #include "tileset.h"
-#include "colorset.h"
-
-#include "workmap.h"
+#include "colorset.h"           // g_colorSet
 #include "Unit.h"
-#include "UnitPool.h"
-
+#include "UnitPool.h"           // g_theUnitPool
 #include "c3_updateaction.h"
-
 #include "Actor.h"
 #include "UnitActor.h"
 #include "workeractor.h"
 #include "XY_Coordinates.h"
-#include "World.h"
+#include "World.h"              // g_theWorld
 #include "Cell.h"
 #include "MapPoint.h"
 #include "WonderRecord.h"
 #include "c3ui.h"
 #include "GoodActor.h"
-
 #include "citydata.h"
 #include "textutils.h"
-
 #include "maputils.h"
 #include "SlicEngine.h"
-#include "profileDB.h"
-
-
+#include "profileDB.h"          // g_theProfileDB
 #include "CityRadius.h"
-#include "StrDB.h"
+#include "StrDB.h"              // g_theStringDB
 #include "UnitData.h"
-
 #include "GameEventManager.h"
-
 #include "CityInfluenceIterator.h"
 
 #define k_NUDGE		48					
@@ -84,16 +73,7 @@
 
 #define k_OFFSET_WIDTH			62
 
-extern TiledMap			*g_tiledMap;
-extern Player			**g_player;
-extern SelectedItem		*g_selected_item;
-extern Director			*g_director;
-extern ColorSet			*g_colorSet;
-extern World			*g_theWorld;
 extern C3UI				*g_c3ui;
-extern UnitPool			*g_theUnitPool;
-extern ProfileDB		*g_theProfileDB;
-extern StringDB			*g_theStringDB;
 
 
 
@@ -104,9 +84,10 @@ WorkMap::WorkMap(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	:	
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
+		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -122,9 +103,10 @@ WorkMap::WorkMap(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
+		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon( k_WORKMAP_DEFAULT_SCALE );	
@@ -185,7 +167,7 @@ void WorkMap::InitCommon( sint32 scale)
 	m_drawHilite = FALSE;
 
 	
-	m_unit = NULL;
+	m_unit = Unit(0);
 
 	
 	m_updateAction = NULL;
@@ -465,7 +447,8 @@ return 0;
 		}
 		maputils_MapX2TileX(pos.x,pos.y,&i);
 
-		for (sint32 x = 0;x < 3;x++) {
+		sint32 x;
+		for (x = 0;x < 3;x++) {
 			if (x==0 && (y==0 || y==6)) continue;
 			if ( !m_scale )
 				CalculateWrap(m_surface, pos.y, i+x, x*96+nudge,y*24);
@@ -496,10 +479,8 @@ return 0;
 			}
 			
 			
-			if (m_worker[index]) {
-				delete m_worker[index];
-				m_worker[index] = NULL;
-			}
+			delete m_worker[index];
+			m_worker[index] = NULL;
 			index++;
 
 
@@ -552,11 +533,8 @@ return 0;
 			}
 
 			
-			if (m_worker[index]) {
-				delete m_worker[index];
-				m_worker[index] = NULL;
-			}
-			
+			delete m_worker[index];
+			m_worker[index] = NULL;
 			index++;
 
 
@@ -655,7 +633,8 @@ sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint3
 		}
 		maputils_MapX2TileX(pos.x,pos.y,&i);
 
-		for (sint32 x = 0;x < 3;x++) {
+		sint32 x;
+		for (x = 0;x < 3;x++) {
 			if (x==0 && (y==0 || y==6)) continue;
 			if ( !m_scale )
 				DrawImprovements(pSurface, pos.y, i+x, x*96+nudge+xOff,y*24+yOff);
@@ -1131,15 +1110,15 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 
 	if (x >= 0 && y >= 0 && x < surface->Width() && y < surface->Height()) {
 
-		width = textutils_GetWidth((aui_DirectSurface *)surface,name);
-		height = textutils_GetHeight((aui_DirectSurface *)surface,name);
+		width = textutils_GetWidth(surface,name);
+		height = textutils_GetHeight(surface,name);
 		rect.left = x;
 		rect.top = y;
 		rect.right = x+width;
 		rect.bottom = y+height;;
 
 		textutils_ColoredDropString(
-			(aui_DirectSurface *)surface,
+			surface,
 			name,
 			x,
 			y,
@@ -1156,8 +1135,8 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 	sprintf(str,"%i",pop);
 	y+=yoffset;
 
-	width = textutils_GetWidth((aui_DirectSurface *)surface,str);
-	height = textutils_GetHeight((aui_DirectSurface *)surface,str);
+	width = textutils_GetWidth(surface,str);
+	height = textutils_GetHeight(surface,str);
 
 	sint32	popEdgeSize = (sint32)((double)k_POP_BOX_SIZE);
 	sint32 nudge = 0;
@@ -1175,7 +1154,7 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 	primitives_FrameRect16(surface,&popRect,0x0000);
 
 	textutils_CenteredColoredDropString(
-		(aui_DirectSurface *)surface,
+		surface,
 		str,
 		&popRect,
 		k_POP_PTSIZE,

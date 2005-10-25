@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -201,16 +199,9 @@ protected:
 	MapPoint	m_topLeftPos;	
 
 	// Event handlers
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseMoveInside;
-	virtual MouseEventCallback MouseMoveAway;
-#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
-#endif
-
 };
 
 #endif

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Tile utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -408,7 +408,7 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 			
             
 			if (firstNonEmpty != -1)
-				*table++ = -1;
+				*table++ = (Pixel16) -1;
             
 		}
 	}
@@ -683,7 +683,7 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 
 		
 		empty = tileutils_EncodeScanline16(srcPixel, width, &dataPtr, sourceDataIs565);
-    if (!empty) {
+	if (!empty) {
 			if (firstNonEmpty == -1) {
 				
 				*firstNonEmptyPtr = y;
@@ -698,7 +698,7 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 			
             
 			if (firstNonEmpty != -1)
-				*table++ = -1;
+				*table++ = (Pixel16) -1;
             
 		}
 	}
@@ -1168,7 +1168,7 @@ Pixel16 *tileutils_LoadStencilImage(uint16 from, uint16 to)
 	FILE		*file;
 
 
-	sprintf(fname, "output" FILE_SEP "xitions" FILE_SEP "gtft%#.2d%#.2d.bin", from, to);
+	sprintf(fname, "output" FILE_SEP "xitions" FILE_SEP "gtft%.2d%.2d.bin", from, to);
 
 	file = fopen(fname, "rb");
 	if (file != NULL) {
@@ -1386,7 +1386,7 @@ sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 	MBCHAR		filename[_MAX_PATH];
 
 	
-	sprintf(filename, "gtft%#.2d%#.2d.tif", fromType, toType);
+	sprintf(filename, "gtft%.2d%.2d.tif", fromType, toType);
 	ageChar = 'f';
 
 	
@@ -1538,7 +1538,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 	bork = tileutils_CreateBorkBork();
 
-	sprintf(filename, "source" FILE_SEP "basetiles" FILE_SEP "GT%cB%#.4d.tif", ageChar, tileNum);
+	sprintf(filename, "source" FILE_SEP "basetiles" FILE_SEP "GT%cB%.4d.tif", ageChar, tileNum);
 
 	if (baseType == TERRAIN_WATER_BEACH) {
 		
@@ -1692,7 +1692,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 	Pixel16		*hatData=NULL;
 	uint32		hatDataLen=0;
 
-	sprintf(filename, "source" FILE_SEP "hats" FILE_SEP "GTFh%#.4d.tif", tileNum);
+	sprintf(filename, "source" FILE_SEP "hats" FILE_SEP "GTFh%.4d.tif", tileNum);
 	hatTif = tileutils_TIF2mem(filename, &width, &height);
 	if (hatTif) {
 		hatData = (Pixel16 *)tileutils_EncodeTile((Pixel32 *)hatTif, width, height, &hatDataLen);
@@ -1731,7 +1731,7 @@ uint16 tileutils_CompileImprovements(FILE *file)
 	int			r;
 
 	for (i=0; i<k_MAX_IMPROVEMENTS; i++) {
-		sprintf(filename, "source%simprove%sGTFM%#.3d.tif",
+		sprintf(filename, "source%simprove%sGTFM%.3d.tif",
 		        FILE_SEP, FILE_SEP, i);
 #ifdef WIN32
 		r = (sint32)_stat(filename, &tmpstat);
@@ -1744,7 +1744,7 @@ uint16 tileutils_CompileImprovements(FILE *file)
 	fwrite((void *)&count, 1, sizeof(uint16), file);
 
 	for (i=0; i<k_MAX_IMPROVEMENTS; i++) {
-		sprintf(filename, "source%simprove%sGTFM%#.3d.tif",
+		sprintf(filename, "source%simprove%sGTFM%.3d.tif",
 		        FILE_SEP, FILE_SEP, i);
 		tif = tileutils_TIF2mem(filename, &width, &height);
 		if (tif) {
@@ -1850,7 +1850,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				if (!token_ParseValNext(theToken, TOKEN_TILESET_TILE_TRANS_3, tmp)) return FALSE;
 				hasTransition[3] = tmp;
 
-				printf(" * Basetile %#.3d\n", tileNum);
+				printf(" * Basetile %.3d\n", tileNum);
 
 				sint32 i;
 				for(i = 0; i < g_theTerrainDB->NumRecords(); i++) {
@@ -1891,12 +1891,11 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 				megaTileLengths[numMegaTiles] = len;
 
-				MegaTileStep	*steps = new MegaTileStep[len];
-
 				for (i=0; i<len; i++) {
-					uint8		dir = 0;
 
 					if (!token_ParseKeywordNext(theToken, TOKEN_TILESET_MEGATILE_INFO)) return FALSE;
+
+					uint8		dir = 0;
 
 					switch (configStr[i]) {
 					case k_MEGATILE_DIRECTION_CHAR_X : dir = k_MEGATILE_DIRECTION_X; break;
@@ -1985,7 +1984,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 				if (!token_ParseAnCloseBraceNext(theToken)) return FALSE;
 
-				printf(" * Transform %#.3d\n", numTransforms);
+				printf(" * Transform %.3d\n", numTransforms);
 
 				numTransforms++;
 				Assert (numTransforms < k_MAX_TRANSFORMS);
@@ -2008,7 +2007,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 				tileutils_ExtractStencils(fromType, toType);
 
-				printf(" * Transition %#.2d->%#.2d\n", fromType, toType);
+				printf(" * Transition %.2d->%.2d\n", fromType, toType);
 				
 				numTransitions++;
 			}
@@ -2034,7 +2033,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				char		*tif;
 				uint16		width, height;
 
-				sprintf(filename, "source" FILE_SEP "rivers" FILE_SEP "GTFL%#.2d.tif", tmp);
+				sprintf(filename, "source" FILE_SEP "rivers" FILE_SEP "GTFL%.2d.tif", tmp);
 				tif = tileutils_TIF2mem(filename, &width, &height);
 
 				uint32		dataLen=0;

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Tile drawing.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 // - PFT 29 mar 05, show # turns until city next grows a pop.
 // - Removed .NET warnings. - April 23rd 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Display non-growth as "---"
 //
 //----------------------------------------------------------------------------
 
@@ -64,25 +65,20 @@
 #include "pixelutils.h"
 #include "primitives.h"
 #include "background.h"
-
 #include "pointerlist.h"
 #include "dynarr.h"
-
-#include "SelItem.h"
+#include "SelItem.h"                // g_selected_item
 #include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "World.h"                  // g_theWorld
 #include "Cell.h"
 #include "Unit.h"
 #include "TerrImprove.h"
 #include "TerrImproveData.h"
-
 #include "tiledmap.h"
 #include "TileInfo.h"
 #include "tileset.h"
 #include "BaseTile.h"
-#include "colorset.h"
-
+#include "colorset.h"               // g_colorSet
 #include "maputils.h"
 #include "textutils.h"
 #include "citydata.h"
@@ -91,33 +87,20 @@
 #include "director.h"
 #include "screenmanager.h"
 #include "UnitActor.h"
-
 #include "UnseenCell.h"
-
-#include "profileDB.h"
-
+#include "profileDB.h"              // g_theProfileDB
 #include "network.h"
 #include "chatlist.h"
 #include "pointerlist.h"
 #include "StrDB.h"
-
-extern ProfileDB	*g_theProfileDB;
-
-
 #include "terrainutil.h"
 #include "TerrainRecord.h"
 #include "TerrImprove.h"
 #include "TerrainImprovementRecord.h"
 #include "TerrImprovePool.h"
-
 #include "Civilisation.h"
 
-
-
-extern SelectedItem	*g_selected_item;
 extern Background	*g_background;
-extern World		*g_theWorld;
-extern ColorSet		*g_colorSet;
 extern ScreenManager *g_screenManager;
 
 extern sint32		g_fog_toggle;
@@ -129,6 +112,12 @@ static sint32		g_bio_flash = 0;
 
 #define k_POP_BOX_SIZE_MINIMUM	10
 
+namespace
+{   
+    // Do not display digits when the number of turns till next pop is too large
+    int const  THRESHOLD_SLOW_GROWTH    = 100;      // limit to 2 digits
+    char const TEXT_NONE []             = "---";
+}
 
 #ifdef _DEBUG
 
@@ -198,7 +187,8 @@ void  TiledMap::RectMetricNewLoop()
    num_loops += 1.0;
   
 }
-#endif
+
+#endif // _DEBUG
 
 
 bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y,bool clip)
@@ -206,7 +196,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 	
 	
 	
-	UnseenCellCarton	ucell;
 	uint32				env;
 	Cell				*cell = NULL;
 	BOOL				isAirfield,
@@ -214,7 +203,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 						isRadar,
 						isHealUnits,
 						isFort;
-	bool				fog;
 	Pixel16				*data = NULL;
 	BOOL				hasHut;
 
@@ -228,15 +216,15 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		return drewSomething;
 
 	
-	fog = ( (m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos)));
+	bool	  fog                   = 
+          m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos);
 
-	BOOL visiblePlayerOwnsThis = FALSE;
-    
-	if (g_selected_item->GetVisiblePlayer()==g_theWorld->GetOwner(pos)) 
-		visiblePlayerOwnsThis = TRUE;
+	bool    visiblePlayerOwnsThis = 
+	    (g_selected_item->GetVisiblePlayer() == g_theWorld->GetOwner(pos)); 
 
 	std::vector<Pixel16 *>	drawOnTop;	// things above road level
 
+	UnseenCellCarton	ucell;
 	if(!g_fog_toggle // Draw the right stuff if fog of war is off
 	&& !visiblePlayerOwnsThis
 	&&  m_localVision->GetLastSeen(pos, ucell)
@@ -652,11 +640,8 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 {
 	sint32		start, end;
-	sint32		errcode;
 	uint8		*pSurfBase;
-	sint32		i;
 	sint32		x, y;
-	Pixel16		selectColorPixel;
 
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
@@ -672,7 +657,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 
 	AddDirtyToMix(x, y, width, height);
 
-	errcode = surf->Lock(NULL, (LPVOID *)&pSurfBase, 0);
+	sint32 errcode = surf->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
 	
@@ -687,14 +672,12 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 
 	sint32 row = 0;
 
-	selectColorPixel = g_colorSet->GetColor(g_curSelectColor);
 
 	extern BOOL g_killMode;
+	Pixel16 selectColorPixel = 
+		g_colorSet->GetColor(g_killMode ? COLOR_RED : g_curSelectColor);
 	
-	if (g_killMode)
-		selectColorPixel = g_colorSet->GetColor(COLOR_RED);
-
-	for (i=k_TILE_PIXEL_HEADROOM; i<k_TILE_GRID_HEIGHT;) 
+	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;) 
 	{
 		start = m_tileHitMask[i].start;
 		end   = m_tileHitMask[i].end  ;
@@ -730,12 +713,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color)
 {
 	sint32		start, end;
-	uint8		*surfBase;
-	sint32		surfPitch;
-
-	sint32		i;
 	sint32		x, y;
-	Pixel16		selectColorPixel;
 
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
@@ -751,8 +729,8 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR 
 
 	AddDirtyToMix(x, y, width, height);
 
-	surfBase = g_screenManager->GetSurfBase();
-	surfPitch = g_screenManager->GetSurfPitch();
+	uint8		*surfBase = g_screenManager->GetSurfBase();
+	sint32	 surfPitch = g_screenManager->GetSurfPitch();
 
 	
 	uint16 *pDestPixel;
@@ -762,10 +740,9 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR 
 	sint32 tot = num;
 
 	sint32 row = 0;
+	Pixel16		selectColorPixel = g_colorSet->GetColor(color);
 
-	selectColorPixel = g_colorSet->GetColor(color);
-
-	for (i=k_TILE_PIXEL_HEADROOM; i<k_TILE_GRID_HEIGHT;) 
+	for (sint32 i = k_TILE_PIXEL_HEADROOM; i<k_TILE_GRID_HEIGHT;) 
 	{
 		start = (sint32) ((double)m_tileHitMask[i].start * m_scale);
 		end = (sint32)((double)m_tileHitMask[i].end * m_scale);
@@ -793,11 +770,8 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR 
 void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect)
 {
 	sint32		start, end;
-	sint32		errcode;
 	uint8		*pSurfBase;
-	sint32		i;
 	sint32		x, y;
-	Pixel16		selectColorPixel;
 
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y, mapViewRect);
 
@@ -816,7 +790,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapView
 
 	AddDirtyToMix(x, y, width, height);
 
-	errcode = surf->Lock(NULL, (LPVOID *)&pSurfBase, 0);
+	sint32		errcode = surf->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
 	
@@ -830,10 +804,9 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapView
 	sint32 tot = num;
 
 	sint32 row = 0;
+	Pixel16		selectColorPixel = g_colorSet->GetColor(g_curSelectColor);
 
-	selectColorPixel = g_colorSet->GetColor(g_curSelectColor);
-
-	for (i=k_TILE_PIXEL_HEADROOM; i<k_TILE_GRID_HEIGHT;) 
+	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;) 
 	{
 		start = (sint32) ((double)m_tileHitMask[i].start * m_scale);
 		end   = (sint32)((double)m_tileHitMask[i].end * m_scale);
@@ -1091,11 +1064,10 @@ sint32 TiledMap::QuickBlackBackGround(aui_Surface *surface)
 
 sint32 TiledMap::DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y)
 {
-	uint8			*surfBase;
 
 	if (!surface) surface = m_surface;
 
-	surfBase = m_surfBase;
+	uint8	*surfBase = m_surfBase;
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -4611,8 +4583,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								owner = unit.GetActor()->GetPlayerNum();
 							}
 							
-							name = (MBCHAR *)cityData->GetName();
-							
+							name = cityData->GetName();
 							isBioInfected = cityData->IsBioInfected();
 							isNanoInfected = cityData->IsNanoInfected();
 							isConverted = cityData->IsConverted();
@@ -4834,10 +4805,18 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
                             y = popRect.bottom + 1;
 
 							// nextpop rect, PFT
-							if (owner == g_selected_item->GetVisiblePlayer()){
+							if (owner == g_selected_item->GetVisiblePlayer())
+                            {
                                 //put the number of turns until the city's nextpop in str
 								MBCHAR strn[80];
-								sprintf(strn,"%i",nextpop);
+                                if (nextpop < THRESHOLD_SLOW_GROWTH)
+                                {
+                					 sprintf(strn, "%i", nextpop);
+                                }
+                                else
+                                {
+                                     sprintf(strn, "%s", TEXT_NONE);
+                                }
                                 //width and height of the pop number 
 								width = m_font->GetStringWidth(strn);
 								if (width < k_POP_BOX_SIZE_MINIMUM)
