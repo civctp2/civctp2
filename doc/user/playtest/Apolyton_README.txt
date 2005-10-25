@@ -34,6 +34,41 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 Changelog:
 
+2005-10-23
+Fixed: Misc crashes
+Fixed: Broken/incorrect links in the great library
+Fixed: Topic display bug in great library
+Fixed: Hosting of MP games on XP machines
+Fixed: SLIC error related to missing city
+Fixed: Prediction of movement times for ships moving through cities
+Added: New database flags for making construction of units, buildings and wonders depend on the existence of goods
+Changed: Message boxes to be non-modal
+Added: Option to select a city first instead of an army
+Added: DebugSlic and GoodAnim options
+Added: Two more colour sets
+
+2005-09-12
+Fixed: Bug with gold income
+Added: City limit to domestic control panel
+Changed: Information window remains open across turns
+Changed: Opening score tab of information window no longer closes other windows
+Added: Gold loss due to conversion and production loss due to franchising to national manager resource tab
+Added: Special attack window to display the cost of a special attack
+Added: Construction time to tileimp tracker window
+Fixed: Crashes when deleting tileimps
+Added: Option to end game on db error
+Fixed: MP database sync check
+Added: Female leader pictures
+Fixed: Age display in MP summary
+Fixed: Colors used on single player selection screen
+
+2005-08-02
+Fixed: Bugs with /importmap
+Fixed: Misc crashes
+Fixed: Updating of values caused by alteration of sliders on national management dialog
+Fixed: Bug preventing rush buying an item inserted before Capitalization or Infrastructure
+Added: Buttons linking the National, City and Build Managers
+
 2005-06-28
 Fixed: Crash caused by loading savegames with the wrong number of goods
 Fixed: Misc crashes
