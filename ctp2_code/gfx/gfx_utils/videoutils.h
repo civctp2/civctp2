@@ -1,16 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __VIDEOUTILS_H__
 #define __VIDEOUTILS_H__
 

@@ -28,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -83,7 +83,7 @@ public:
 	virtual ~CivPaths();
 
 	
-	void CreateSaveFolders(MBCHAR *path);
+	void CreateSaveFolders(const MBCHAR *path);
 
 	
 	void InitCDPath(void);
@@ -94,7 +94,7 @@ public:
 	
 	
 	
-	MBCHAR *FindFile(C3DIR dir, MBCHAR *filename, MBCHAR *path,
+	MBCHAR *FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
                      BOOL silent=0, BOOL check_prjfile=1);
 	
 	
@@ -104,7 +104,7 @@ public:
 	MBCHAR *GetScenarioRootPath(MBCHAR *path);
 
 	
-	void	SetCurScenarioPath(MBCHAR *path);
+	void	SetCurScenarioPath(const MBCHAR *path);
 	
 	MBCHAR *GetCurScenarioPath(void);
 	
@@ -113,7 +113,7 @@ public:
 
 	
 	
-	void	SetCurScenarioPackPath(MBCHAR *path);
+	void	SetCurScenarioPackPath(const MBCHAR *path);
 	
 	MBCHAR	* GetCurScenarioPackPath(void);
 	

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Targa file format utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -54,49 +54,42 @@ bool Get_TGA_Dimension (char *fname,
                         int &Height,
                         int &Bpp)
 {
-	TGAHEADER head;
-	int bpp;
-
-	FILE *fp;
-	fp = fopen(fname, "rb");
+	FILE *  fp  = fopen(fname, "rb");
 
 	if (fp == NULL) {
 		char	Str[128];
 
 		sprintf(Str,"%s not found.",fname);
 		MessageBox(NULL,Str,NULL,MB_OK);
-		return NULL;
+		return false;
 	}
 	setvbuf(fp, NULL, _IONBF, 0);
 
+	TGAHEADER head;
 	if (fread(&head, sizeof(TGAHEADER), 1, fp) < 1)
 	{
 		DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
 		fclose(fp);
-		return(0);
+		return false;
 	}
 
-	if (head.PixelDepth == 16) {
-		bpp = 2;
-	} else if (head.PixelDepth == 24) {
-		bpp = 3;
-	} else if (head.PixelDepth == 32) {
-		bpp = 4;
-	}
-	else
-	{
+	switch (head.PixelDepth)
+    {
+    case 16:
+    case 24:
+    case 32:
+        // Correct format
+	    Width   = head.ImageWidth;
+	    Height  = head.ImageHeight;
+	    Bpp     = head.PixelDepth / 8;
+        fclose(fp);
+        return true;
+    
+    default:
 		DPRINTF(k_DBG_UI, ("File \"%s\" is not a 16, 24 or 32 bit Targa\n", fname));
 		fclose(fp);
-		return(0);
+		return false;
 	}
-
-	Width = head.ImageWidth;
-	Height = head.ImageHeight;
-	Bpp=bpp;
-
-	fclose(fp);
-
-	return TRUE;
 }
 
 #if	0 // Unused
@@ -133,7 +126,7 @@ bool Load_TGA_File_Simple(char *fname,
 
 		sprintf(Str,"%s not found.",fname);
 		MessageBox(NULL,Str,NULL,MB_OK);
-		return NULL;
+		return false;
 	}
 
 	setvbuf(fp, NULL, _IONBF, 0);
@@ -142,7 +135,7 @@ bool Load_TGA_File_Simple(char *fname,
 	{
 		DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
 		fclose(fp);
-		return(0);
+		return false;
 	}
 
 	switch (head.PixelDepth)
@@ -153,7 +146,7 @@ bool Load_TGA_File_Simple(char *fname,
 	default:
 		DPRINTF(k_DBG_UI, ("File \"%s\" is not a 16, 24 or 32 bit Targa\n", fname));
 		fclose(fp);
-		return(0);
+		return false;
 	}
 
 	width  = head.ImageWidth;
@@ -181,7 +174,7 @@ bool Load_TGA_File_Simple(char *fname,
 		{
 			DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
 			fclose(fp);
-			return(0);
+			return false;
 		}
 
 
@@ -211,7 +204,7 @@ bool Load_TGA_File_Simple(char *fname,
 				free(tmpbuf);
 				free(tmpbuf1);
 				tmpbuf=NULL;
-				return(0);
+				return false;
 			}
 			fclose(fp);
 
@@ -227,7 +220,7 @@ bool Load_TGA_File_Simple(char *fname,
 					free(tmpbuf);
 					free(tmpbuf1);
 					tmpbuf=NULL;
-					return(0);
+					return false;
 				}
 				dp += byteCount;
 			}
@@ -236,7 +229,7 @@ bool Load_TGA_File_Simple(char *fname,
 	free(tmpbuf);
 	free(tmpbuf1);
 	tmpbuf=NULL;
-	return(1);
+	return true;
 }
 
 
@@ -287,7 +280,7 @@ bool Load_TGA_File(char *fname,
 
 		sprintf(Str,"%s not found.",fname);
 		MessageBox(NULL,Str,NULL,MB_OK);
-		return NULL;
+		return false;
 	}
 
 	setvbuf(fp, NULL, _IONBF, 0);
@@ -296,7 +289,7 @@ bool Load_TGA_File(char *fname,
 	{
 		DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
 		fclose(fp);
-		return(0);
+		return false;
 	}
 
 	switch (head.PixelDepth)
@@ -307,7 +300,7 @@ bool Load_TGA_File(char *fname,
 	default:
 		DPRINTF(k_DBG_UI, ("File \"%s\" is not a 16, 24 or 32 bit Targa\n", fname));
 		fclose(fp);
-		return(0);
+		return false;
 	}
 
 	width  = head.ImageWidth;
@@ -334,7 +327,7 @@ bool Load_TGA_File(char *fname,
 			{
 				DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
 				fclose(fp);
-				return(0);
+				return false;
 			}
 
 			if (convertToNative)
@@ -376,7 +369,7 @@ bool Load_TGA_File(char *fname,
 				free(tmpbuf);
 				free(tmpbuf1);
 				tmpbuf=NULL;
-				return(0);
+				return false;
 			}
 			fclose(fp);
 
@@ -439,7 +432,7 @@ bool Load_TGA_File(char *fname,
 	free(tmpbuf);
 	free(tmpbuf1);
 	tmpbuf=NULL;
-	return(1);
+	return true;
 }
 
 int	write_tga(char *fname, int width, int height, unsigned char *data)
@@ -453,7 +446,7 @@ int	write_tga(char *fname, int width, int height, unsigned char *data)
 
 		sprintf(Str,"%s not found.",fname);
 		MessageBox(NULL,Str,NULL,MB_OK);
-		return NULL;
+		return 0;
 	}
 	setvbuf(fp, NULL, _IONBF, 0);
 

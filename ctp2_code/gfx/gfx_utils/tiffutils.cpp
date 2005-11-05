@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : tiff image format utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,10 +29,11 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "tiffio.h"
-#include "tiffutils.h"
 
-char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height)
+#include "tiffutils.h"
+#include <tiffio.h>
+
+char *tiffutils_LoadTIF(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	TIFF* tif = TIFFOpen(filename, "r");
 
@@ -54,6 +55,13 @@ char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height)
 			{
 
 				destImage = (char *)malloc(npixels * sizeof(uint32));
+				if (!destImage) {
+					_TIFFfree(raster);
+					TIFFClose(tif);
+					return NULL;
+				}
+				if (size)
+					*size = npixels * sizeof(uint32);
 				memcpy(destImage, raster, npixels * sizeof(uint32));
 
 				_TIFFfree(raster);
@@ -70,7 +78,8 @@ char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height)
 	return NULL;
 }
 
-char *TIF2mem(char *filename, uint16 *width, uint16 *height)
+
+char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	TIFF    *tif = TIFFOpen(filename, "r");
 	char    *image = NULL;
@@ -91,6 +100,12 @@ char *TIF2mem(char *filename, uint16 *width, uint16 *height)
 		sint32 bytesPerRow = w * 4;
 
 		image = (char *)malloc(npixels * sizeof(uint32));
+		if (image == NULL) {
+			TIFFClose(tif);
+			return NULL;
+		}
+		if (size)
+			*size = npixels * sizeof(uint32);
 		char *imagePtr = image;
 
 		raster = (char *) _TIFFmalloc(npixels * sizeof(uint32));
@@ -119,7 +134,8 @@ char *TIF2mem(char *filename, uint16 *width, uint16 *height)
 	return image;
 }
 
-int	TIFGetMetrics(char *filename, uint16 *width, uint16 *height)
+
+int TIFGetMetrics(const char *filename, uint16 *width, uint16 *height)
 {
 	TIFF    *tif = TIFFOpen(filename, "r");
 	uint32  w=0, h=0;
@@ -138,7 +154,7 @@ int	TIFGetMetrics(char *filename, uint16 *width, uint16 *height)
 	return 0;
 }
 
-int	TIFLoadIntoBuffer16(char *filename, uint16 *width, uint16 *height, uint16 imageRowBytes, uint16 *buffer, BOOL is565)
+int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uint16 imageRowBytes, uint16 *buffer, BOOL is565)
 {
 	TIFF    *tif = TIFFOpen(filename, "r");
 	uint32  w=0, h=0;
@@ -221,7 +237,8 @@ int	TIFLoadIntoBuffer16(char *filename, uint16 *width, uint16 *height, uint16 im
 
 
 
-char *StripTIF2Mem(char *filename, uint16 *width, uint16 *height)
+
+char *StripTIF2Mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	uint32      imageLength;
 	uint32      imageWidth;
@@ -256,6 +273,8 @@ char *StripTIF2Mem(char *filename, uint16 *width, uint16 *height)
 	stripSize = (sint32) TIFFStripSize(tif);
 	buf = (char *)malloc(stripSize);
 	outBuf = (char *)malloc(imageWidth * imageLength * 4);
+	if (size)
+		*size = imageWidth * imageLength * 4;
 	outBufPtr = outBuf;
 
 
