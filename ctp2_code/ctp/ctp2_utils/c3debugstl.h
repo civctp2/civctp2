@@ -33,7 +33,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -64,8 +64,13 @@ public:
 	    }
 	};
 	
-	void deallocate(void _FARQ *_P, size_type)
-		{if (_P) operator delete(_P); }
+	void deallocate(void _FARQ *_P, size_type _N)
+	{
+        if (_P) 
+        {
+            BaseAllocator::deallocate(_P, _N);
+        }
+    }
 };
 #else
 // TODO: Make the debug allocator std::allocator compliant.
@@ -74,4 +79,4 @@ public:
 #endif
 
 
-#endif __C3DEBUGSTL_H__
+#endif // __C3DEBUGSTL_H__

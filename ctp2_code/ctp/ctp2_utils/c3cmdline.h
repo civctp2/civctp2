@@ -15,9 +15,10 @@
 #ifndef _C3CMDLINE_H_
 #define _C3CMDLINE_H_
 
-class aui_Surface; 
-
 class Command;
+class CommandLine;
+
+class aui_Surface; 
 
 struct CommandRecord
 {
@@ -411,7 +412,6 @@ private:
 };
 
 extern CommandLine g_commandLine;
-#else
-class CommandLine;
+
 #endif
 #endif

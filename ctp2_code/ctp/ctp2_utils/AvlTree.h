@@ -668,16 +668,16 @@ AvlNode<KeyType>::Check() const {
    int  diffHeight = rightHeight - leftHeight;
    if (LEFT_IMBALANCE(diffHeight) || RIGHT_IMBALANCE(diffHeight)) {
       valid = 0;
-      cerr << "Height difference is " << diffHeight
-           << " at node " << Key() << endl;
+      std::cerr << "Height difference is " << diffHeight
+                << " at node " << Key() << std::endl;
    }
 
       
    if (diffHeight != myBal) {
       valid = 0;
-      cerr << "Height difference " << diffHeight
-           << " doesnt match balance-factor of " << myBal
-           << " at node " << Key() << endl;
+      std::cerr << "Height difference " << diffHeight
+                << " doesnt match balance-factor of " << myBal
+                << " at node " << Key() << std::endl;
    }
 
       
@@ -685,15 +685,15 @@ AvlNode<KeyType>::Check() const {
             &&
        (mySubtree[LEFT]->Compare(Key()) == MIN_CMP)) {
       valid = 0;
-      cerr << "Node " << Key() << " is *smaller* than left subtree"
-           << mySubtree[LEFT]->Key() << endl;
+      std::cerr << "Node " << Key() << " is *smaller* than left subtree"
+                << mySubtree[LEFT]->Key() << std::endl;
    }
    if ((mySubtree[RIGHT])
             &&
        (mySubtree[RIGHT]->Compare(Key()) == MAX_CMP)) {
       valid = 0;
-      cerr << "Node " << Key() << " is *greater* than right subtree"
-           << mySubtree[RIGHT]->Key() << endl;
+      std::cerr << "Node " << Key() << " is *greater* than right subtree"
+                << mySubtree[RIGHT]->Key() << std::endl;
    }
 
    return  valid;
@@ -720,13 +720,13 @@ Dump(ostream & os,
 {
     unsigned  len = (level * 5) + 1;
     if ((order == LTREE) && (node->Subtree(LEFT) == NULL)) {
-       Indent(os, len) << "     **NULL**" << endl;
+       Indent(os, len) << "     **NULL**" << std::endl;
     }
     if (order == KEY) {
-       Indent(os, len) << node->Key() << ":" << node->Bal() << endl;
+       Indent(os, len) << node->Key() << ":" << node->Bal() << std::endl;
     }
     if ((order == RTREE) && (node->Subtree(RIGHT) == NULL)) {
-       Indent(os, len) << "     **NULL**" << endl;
+       Indent(os, len) << "     **NULL**" << std::endl;
     }
 }
 
@@ -735,7 +735,7 @@ static void
 Dump(ostream & os, const AvlNode<KeyType> * node, int level=0)
 {
    if (node == NULL) {
-      os << "***EMPTY TREE***" << endl;
+      os << "***EMPTY TREE***" << std::endl;
    } else {
       Dump(os, RTREE, node, level);
       if (node->Subtree(RIGHT)  !=  NULL) {

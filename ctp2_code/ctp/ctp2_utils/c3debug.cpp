@@ -1,18 +1,38 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Debugging
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG			(automatically set when choosing the Debug configuration)
+// _NO_GAME_WATCH
+// USE_LOGGING		Enable logging for the release/final version.
+//                  The debug version has logging enabled always.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - 
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 
 #include "aui.h"
 #include "debugwindow.h"
@@ -302,12 +322,15 @@ void c3debug_Assert(char *s, char *file, int line)
 	MBCHAR *traceStr = c3debug_StackTrace();
 	DPRINTF(k_DBG_FIX, ("Stack Trace: '%s'\n", traceStr));
 
+#if defined(_DEBUG)
     do { 
 
 
- 		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) _CrtDbgBreak(); 
+	
+		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) _CrtDbgBreak(); 
 
 	} while (0);
+#endif
 }	
 
 #endif 

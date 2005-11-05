@@ -42,14 +42,14 @@
 #include "aui_ui.h"
 extern aui_UI *g_ui;
 
-extern StringDB *g_theStringDB ;
+extern	StringDB	*g_theStringDB ;
 
 void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 {
-	va_list list;
+	va_list		list;
 	char str[_MAX_PATH];
 
-	va_start(list, fmt);
+    va_start(list, fmt);
 	vsprintf(str, fmt, list);
 	va_end(list);
 
@@ -60,10 +60,12 @@ void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 	
 	Report("Fatal error.  Aborting.\n");
 
+#if defined(WIN32)
 #ifndef _DEBUG
 #ifndef _BFR_
 	sint32 *s = 0;
 	*s = 0;
+#endif
 #endif
 #endif
 	
@@ -73,72 +75,79 @@ void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 
 void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
 {
-	va_list list;
+	va_list		list ;
 
-	MBCHAR  str[_MAX_PATH],
-	        *dbTitle,
-	        *dbError;
+	MBCHAR	str[_MAX_PATH],
+			*dbTitle,
+			*dbError ;
 
-	strcpy(str, module);
+	strcpy(str, module) ;
 	if (!g_theStringDB->GetText(str, &dbTitle))
-		c3errors_FatalDialog("string db", "%s missing from string db", module);
+		c3errors_FatalDialog("string db", "%s missing from string db", module) ;
 
-	strcpy(str, err);
+	strcpy(str, err) ;
 	if (!g_theStringDB->GetText(str, &dbError))
-		c3errors_FatalDialog("string db", "%s missing from string db", err);
+		c3errors_FatalDialog("string db", "%s missing from string db", err) ;
 
-	va_start(list, dbError);
-	vsprintf(str, dbError, list);
-	va_end(list);
+	// TODO: I've changed the second argument in the following from dbError (which made no sense)
+	//   into err.  I think that this is what was originally intended, but since the feature this
+	//   code implements is never actually used anywhere, I expect it makes little difference.
+	//   nevertheless, that this works should be checked at some point.  The same applies to the
+	//   next function (c3errors_ErrorDialogFromDB) - JJB
+	va_start(list, err) ;
+	vsprintf(str, dbError, list) ;
+	va_end(list) ;
 
-	MessageBox(NULL, str, dbTitle, MB_OK | MB_ICONEXCLAMATION);
+	MessageBox(NULL, str, dbTitle, MB_OK | MB_ICONEXCLAMATION) ;
 
-	Assert(FALSE);
+	Assert(FALSE) ;
 	
-	Report("Fatal error.  Aborting.\n");
+	Report("Fatal error.  Aborting.\n") ;
 
+#if defined(WIN32)
 #ifndef _DEBUG
 #ifndef _BFR_
 	sint32 *s = 0;
 	*s = 0;
 #endif
 #endif
+#endif
 
-	exit(-1);
+	exit(-1) ;
 }
 
 
 void c3errors_ErrorDialogFromDB(const char *module, const char *err, ...)
 	{
-	va_list list;
+	va_list		list ;
 
-	MBCHAR  str[_MAX_PATH],
-	        *dbTitle,
-	        *dbError;
+	MBCHAR	str[_MAX_PATH],
+			*dbTitle,
+			*dbError ;
 
 	strcpy(str, module) ;
 	if (!g_theStringDB->GetText(str, &dbTitle))
-		c3errors_FatalDialog("string db", "%s missing from string db", module);
+		c3errors_FatalDialog("string db", "%s missing from string db", module) ;
 
 	strcpy(str, err) ;
 	if (!g_theStringDB->GetText(str, &dbError))
-		c3errors_FatalDialog("string db", "%s missing from string db", err);
+		c3errors_FatalDialog("string db", "%s missing from string db", err) ;
 
-	va_start(list, dbError);
-	vsprintf(str, dbError, list);
-	va_end(list);
+	va_start(list, err) ;
+	vsprintf(str, dbError, list) ;
+	va_end(list) ;
 
-	MessageBox(NULL, str, dbTitle, MB_OK | MB_ICONEXCLAMATION);
+	MessageBox(NULL, str, dbTitle, MB_OK | MB_ICONEXCLAMATION) ;
 }
 
 
 void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 {
-	LPTSTR          szTitle;
-	LPTSTR          szTmp;
-	LPCTSTR         szTitleText = "%s Error";
-	LPCTSTR         szDefaultModule = "CTP 2";
-	va_list         list;
+	LPTSTR			szTitle;
+	LPTSTR			szTmp;
+	LPCTSTR			szTitleText = "%s Error";
+	LPCTSTR			szDefaultModule = "CTP 2";
+	va_list			list;
 
 	szTmp = (module == NULL) ? (LPTSTR)szDefaultModule : (LPTSTR)module;
 
@@ -147,16 +156,16 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 			lstrlen(szTitleText) + lstrlen(fmt) + 33000)*sizeof(TCHAR))) == NULL)
 		return;
 
-	wsprintf(szTitle, szTitleText, szTmp);
+   wsprintf(szTitle, szTitleText, szTmp);
 #else
-	if ((szTitle = (LPTSTR)malloc((lstrlen(szTmp) + lstrlen(szTitleText) +
-	                               lstrlen(fmt) + 33000
-	                              )*sizeof(TCHAR)
-	                             )
-	    ) == NULL)
-	   return;
+   if ((szTitle = (LPTSTR)malloc((lstrlen(szTmp) + lstrlen(szTitleText) +
+                                  lstrlen(fmt) + 33000
+                                 )*sizeof(TCHAR)
+                                )
+       ) == NULL)
+      return;
 
-	sprintf(szTitle, szTitleText, szTmp);
+   sprintf(szTitle, szTitleText, szTmp);
 #endif
 
 	szTmp = szTitle + (lstrlen(szTitle)+2)*sizeof(TCHAR);
@@ -176,7 +185,7 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 #if defined(WIN32)
 	LocalFree(szTitle);
 #else
-	free(szTitle);
+   free(szTitle);
 #endif
 	
 #ifndef _DEBUG

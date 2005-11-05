@@ -42,10 +42,8 @@
 #ifdef _PLAYTEST
 #include "c3cmdline.h"
 
-
 #include "CivilisationRecord.h"
 #include "ConstDB.h"
-
 #include "c3ui.h"
 #include "debugmemory.h"
 #include "log.h"
@@ -55,7 +53,6 @@
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
-#include "c3ui.h"
 #include "background.h"
 #include "statuswindow.h"
 #include "civ3_main.h"
@@ -64,7 +61,6 @@
 #include "TradePool.h"
 #include "UnitData.h"
 #include "citydata.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrImprove.h"
 #include "Readiness.h"
@@ -86,14 +82,12 @@
 
 #include "SlicObject.h"
 #include "SlicEngine.h"
-
 #include "statswindow.h"
 #include "controlpanelwindow.h"
-
 #include "chatbox.h"
+
 #include "Score.h"
 #include "Happy.h"
-
 
 #include "debugwindow.h"
 
@@ -103,11 +97,11 @@
 #include "sc.tab.h"
 
 #include "watchlist.h"
+
 #include "UnitRecord.h"
 #include "DBLexer.h"
 #include "TerrainRecord.h"
 #include "ResourceRecord.h"
-
 
 #include "GoalRecord.h"
 #include "UnitBuildListRecord.h"
@@ -170,7 +164,6 @@ extern sint32               g_check_mem;
 extern sint32               g_robotMessages;
 
 
-
 #include "aui.h"
 #include "aui_surface.h"
 #include "primitives.h"
@@ -191,16 +184,12 @@ extern sint32               g_robotMessages;
 #include "SpriteFile.h"
 
 #include "gameinit.h"
-
 #include "aicause.h"
 #include "TurnCnt.h"
 
-
 #include "civapp.h"
-#include "TurnCnt.h"
 
 #include "AttractWindow.h"
-
 #include "screenutils.h"
 
 #include "UnitPool.h"
@@ -259,7 +248,6 @@ extern Director *g_director;
 
 
 extern BOOL	g_drawArmyClumps;
-
 
 #include "sciencewin.h"
 #include "greatlibrary.h"
