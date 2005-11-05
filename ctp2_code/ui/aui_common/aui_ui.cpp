@@ -66,23 +66,25 @@ aui_UI::aui_UI(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *ldlFilename )
+	const MBCHAR *ldlFilename )
 	:
 	aui_Region( retval, 0, 0, 0, width, height )
 {
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
+	if (AUI_SUCCESS(*retval))
+    {
+	    Assert( aui_Base::GetBaseRefCount() == 2 );
+        if (2 == aui_Base::GetBaseRefCount())
+        {
+	        g_ui = this;
+        }
 
-	Assert( aui_Base::GetBaseRefCount() == 2 );
-	g_ui = aui_Base::GetBaseRefCount() == 2 ? this : NULL;
+	    *retval = InitCommon(hinst, hwnd, bpp, ldlFilename);
 
-	*retval = InitCommon( hinst, hwnd, bpp, ldlFilename );
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
-
-	*retval = CreateScreen();
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
+	    if (AUI_SUCCESS(*retval))
+        {
+	        *retval = CreateScreen();
+        }
+    }
 }
 
 
@@ -91,7 +93,7 @@ AUI_ERRCODE aui_UI::InitCommon(
 	HINSTANCE hinst,
 	HWND hwnd,
 	sint32 bpp,
-	MBCHAR *ldlFilename )
+	const MBCHAR *ldlFilename )
 {
 	m_hinst = hinst;
 	m_hwnd = hwnd;
@@ -186,6 +188,7 @@ AUI_ERRCODE aui_UI::InitCommon(
 
 	
 	m_dxver = 0;
+#ifdef __AUI_USE_DIRECTX__
 	HANDLE dll = LoadLibrary( "dll\\util\\dxver" );
 	if ( dll )
 	{
@@ -211,6 +214,7 @@ AUI_ERRCODE aui_UI::InitCommon(
 
 		FreeLibrary( (HINSTANCE)dll );
 	}
+#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -236,99 +240,33 @@ extern void free_crc();
 
 aui_UI::~aui_UI()
 {
-	if ( m_editMode )
+	if (m_editMode)
 	{
-		SetEditMode( FALSE );
+		SetEditMode(FALSE);
 	}
 
-	if ( m_primary )
-	{
-		delete m_primary;
-		m_primary = NULL;
-	}
-
-	if ( m_colorAreas )
-	{
-		delete m_colorAreas;
-		m_colorAreas = NULL;
-	}
-	
-	if ( m_imageAreas )
-	{
-		delete m_imageAreas;
-		m_imageAreas = NULL;
-	}
-	
-	if ( m_imageResource )
-	{
-		delete m_imageResource;
-		m_imageResource = NULL;
-	}
-
-	if ( m_cursorResource )
-	{
-		delete m_cursorResource;
-		m_cursorResource = NULL;
-	}
-
-	if ( m_bitmapFontResource )
-	{
-		delete m_bitmapFontResource;
-		m_bitmapFontResource = NULL;
-	}
-
-	if ( m_dirtyList )
-	{
-		delete m_dirtyList;
-		m_dirtyList = NULL;
-	}
-
-	if ( m_actionList )
-	{
-		delete m_actionList;
-		m_actionList = NULL;
-	}
-
-	if (m_destructiveActionList) 
-	{
-		delete m_destructiveActionList;
-		m_destructiveActionList = NULL;
-	}
-
-	if ( m_winList )
-	{
-		delete m_winList;
-		m_winList = NULL;
-	}
-
-	if ( m_dirtyRectInfoList )
-	{
-		delete m_dirtyRectInfoList;
-		m_dirtyRectInfoList = NULL;
-	}
-
-	if ( m_dirtyRectInfoMemory )
-	{
-		delete m_dirtyRectInfoMemory;
-		m_dirtyRectInfoMemory = NULL;
-	}
+	delete m_primary;
+	delete m_colorAreas;
+	delete m_imageAreas;
+	delete m_imageResource;
+	delete m_cursorResource;
+	delete m_bitmapFontResource;
+	delete m_dirtyList;
+	delete m_actionList;
+	delete m_destructiveActionList;
+	delete m_winList;
+	delete m_dirtyRectInfoList;
+	delete m_dirtyRectInfoMemory;
 
 	aui_Ldl::Remove(this);
-
+	delete m_ldl;
 	
-	if ( m_ldl )
-	{
-		delete m_ldl;
-		m_ldl = NULL;
-	}
-
-	
-	g_ui = NULL;
+	if (this == g_ui)
+    {
+        g_ui = NULL;
+    }
 
 	free_crc();
-
-	sint32 test = aui_Base::GetBaseRefCount();
-	Assert( aui_Base::GetBaseRefCount() == 2 );
 }
 
 
@@ -419,7 +357,7 @@ aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
 
 	SetRect( &m_imageRect, x, y, x, y );
 
-	if ( m_image = image )
+	if ((m_image = image))
 	{
 		m_imageRect.right += m_image->TheSurface()->Width();
 		m_imageRect.bottom += m_image->TheSurface()->Height();
@@ -466,8 +404,8 @@ AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 		
 		if ( !GetChild( child->Id() ) )
 		{
-			
-			for ( sint32 j = m_childList->L(); j; j-- )
+			sint32 j;
+			for ( j = m_childList->L(); j; j-- )
 			{
 				ListPos curPosition = position;
 
@@ -816,7 +754,8 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 		if ( m_imageAreas ) m_imageAreas->Flush();
 
 		ListPos position = m_dirtyList->GetHeadPosition();
-		for ( sint32 i = m_dirtyList->L(); i; i-- )
+		sint32 i;
+		for ( i = m_dirtyList->L(); i; i-- )
 		{
 			RECT *dirtyRect = m_dirtyList->GetNext( position );
 
@@ -884,7 +823,8 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 
 			
 			ListPos dirtyPosition = m_dirtyList->GetHeadPosition();
-			for ( sint32 j = m_dirtyList->L(); j; j-- )
+			sint32 j;
+			for ( j = m_dirtyList->L(); j; j-- )
 			{
 				RECT *rect = m_dirtyList->GetNext( dirtyPosition );
 
@@ -916,7 +856,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 				windowDirtyList->Flush();
 				windowDirtyList->AddRect( &windowRect );
 				
-				if ( j = m_childList->L() - i )
+				if ((j = m_childList->L() - i))
 				{
 					
 					
@@ -1671,13 +1611,13 @@ AUI_ERRCODE aui_UI::HandleJoystickEvents( void )
 }
 
 
-
 AUI_ERRCODE aui_UI::HandleWindowsMessage(
 	HWND hwnd,
 	UINT message,
 	WPARAM wParam,
 	LPARAM lParam )
 {
+#ifdef __AUI_USE_DIRECTX__
 	AUI_ERRCODE errcode = AUI_ERRCODE_UNHANDLED;
 
 	
@@ -1901,13 +1841,15 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 		
 		}
 		}
-#endif 
+#endif // _DEBUG
 		break;
 	}
 
 	return errcode;
+#else
+	return AUI_ERRCODE_UNHANDLED;
+#endif// __AUI_USE_DIRECTX__
 }
-
 
 
 AUI_ERRCODE aui_UI::AltTabOut( void )
@@ -1926,7 +1868,7 @@ AUI_ERRCODE aui_UI::AltTabOut( void )
 			delete m_primary;
 			m_primary = NULL;
 		}
-
+#ifdef __AUI_USE_DIRECTX__
 	while ( ShowCursor( TRUE ) < 0 )
 		; 
 
@@ -1937,7 +1879,7 @@ AUI_ERRCODE aui_UI::AltTabOut( void )
 		while ( !IsIconic( m_hwnd ) )
 			::ShowWindow( m_hwnd, SW_MINIMIZE );
 	}
-
+#endif
 	return AUI_ERRCODE_OK;
 }
 
@@ -1945,22 +1887,23 @@ AUI_ERRCODE aui_UI::AltTabOut( void )
 
 AUI_ERRCODE aui_UI::AltTabIn( void )
 {
+#ifdef __AUI_USE_DIRECTX__
 	if ( m_minimize )
 		while ( GetForegroundWindow() != m_hwnd )
 			::ShowWindow( m_hwnd, SW_RESTORE );
 
 	while ( ShowCursor( FALSE ) >= 0 )
 		; 
-
+#endif
 	if ( !m_primary ) CreateScreen();
-
+#ifdef __AUI_USE_DIRECTX__
 	if ( m_minimize )
 	{
 		POINT point;
 		GetCursorPos( &point );
 		m_mouse->SetPosition( &point );
 	}
-
+#endif
 	m_mouse->Acquire();
 	m_mouse->Resume();
 
@@ -2047,7 +1990,8 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 		
 		
 		BOOL moveCount = 0;
-		for ( sint32 i = numEvents - 1; i; i--, thisEvent++ )
+		sint32 i;
+		for ( i = numEvents - 1; i; i--, thisEvent++ )
 		{
 			
 			if ( baseEvent->lbutton == thisEvent->lbutton
@@ -2059,7 +2003,7 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 			else
 			{
 				
-				for ( sint32 j = moveCount; (baseEvent++)->movecount = j; j-- );
+				for ( sint32 j = moveCount; ((baseEvent++)->movecount = j); j-- );
 
 				
 				moveCount = 0;
@@ -2067,13 +2011,13 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 		}
 
 		
-		for ( i = moveCount; (baseEvent++)->movecount = i; i-- );
+		for ( i = moveCount; ((baseEvent++)->movecount = i); i-- );
 
 		
 		
 		
 
-		for ( i = numEvents - 1; (events++)->framecount = i; i-- );
+		for ( i = numEvents - 1; ((events++)->framecount = i); i-- );
 	}
 
 	return AUI_ERRCODE_OK;

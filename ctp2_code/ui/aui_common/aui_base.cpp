@@ -25,6 +25,7 @@
 // - Moved CalculateHash() from aui_UI
 //
 //----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "aui_base.h"
 
@@ -53,14 +54,12 @@ void gen_crc_table()
       
       g_crcTable[i] = crc_accum;
    }
-
-   return;
 }
 
 void free_crc()
 {
-   if(g_crcTable)
-      delete [] g_crcTable;
+    delete [] g_crcTable;
+    g_crcTable = NULL;
 }
 
 uint32 update_crc(uint32 crc_accum, const MBCHAR *data_blk_ptr, sint32 data_blk_size)

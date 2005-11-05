@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface header
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -44,9 +44,9 @@ aui_Header::aui_Header(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
-	aui_SwitchGroup( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_SwitchGroup( retval, id, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -70,9 +70,9 @@ aui_Header::aui_Header(
 	sint32 width,
 	sint32 height )
 	:
-	aui_SwitchGroup( retval, id, x, y, width, height ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_SwitchGroup( retval, id, x, y, width, height )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

@@ -101,7 +101,22 @@ public:
 	static uint32 m_windowClassId;
 
 protected:
-	aui_Window() : aui_Region() {}
+	aui_Window()
+    :   aui_Region          (),  
+	    m_surface           (NULL),
+        m_opaqueControls    (FALSE),		
+        m_bpp               (0),
+        m_type              (AUI_WINDOW_TYPE_STANDARD),
+    	m_dirtyList         (NULL),
+        m_isDragging        (FALSE),
+        m_grabRegion        (NULL),
+        m_ogX               (0),
+	    m_ogY               (0),
+        m_stencil           (NULL),
+        m_focusControl      (NULL),
+        m_focusList         (NULL)
+    { ; };
+
 	AUI_ERRCODE InitCommon( sint32 bpp, AUI_WINDOW_TYPE type );
 #if defined(_MSC_VER)
 	friend class aui_UI;
@@ -239,7 +254,7 @@ protected:
 	aui_Control *m_focusControl;
 	tech_WLList<aui_Region *> *m_focusList;
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && 0
 	virtual MouseEventCallback PostChildrenCallback;
 
 	

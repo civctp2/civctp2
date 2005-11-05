@@ -62,31 +62,33 @@ uint32 aui_Region::m_regionClassId = aui_UniqueId();
 
 
 
-aui_Region::aui_Region(
-	AUI_ERRCODE *retval,
-	uint32 id,
-	MBCHAR *ldlBlock )
+aui_Region::aui_Region
+(
+	AUI_ERRCODE *   retval,
+	uint32          id,
+	MBCHAR *        ldlBlock 
+)
+:
+    aui_Base()
 {
-	*retval = InitCommonLdl( id, ldlBlock );
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
+	*retval = InitCommonLdl(id, ldlBlock);
 }
 
 
 
-aui_Region::aui_Region(
-	AUI_ERRCODE *retval,
-	uint32 id,
-	sint32 x,
-	sint32 y,
-	sint32 width,
-	sint32 height )
-	:
+aui_Region::aui_Region
+(
+	AUI_ERRCODE *   retval,
+	uint32          id,
+	sint32          x,
+	sint32          y,
+	sint32          width,
+	sint32          height 
+)
+:
 	aui_Base()
 {
-	*retval = InitCommon( id, x, y, width, height );
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
+	*retval = InitCommon(id, x, y, width, height);
 }
 
 
@@ -226,7 +228,7 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 	MBCHAR *anchor;
 
 	
-	if ( anchor = block->GetString( k_AUI_LDL_HANCHOR ) )
+	if ((anchor = block->GetString( k_AUI_LDL_HANCHOR )))
 	{
 		if ( stricmp( anchor, "right" ) == 0 ) {
 			m_dim->AnchorRight();
@@ -241,7 +243,7 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 		m_dim->AnchorLeft();
 
 	
-	if ( anchor = block->GetString( k_AUI_LDL_VANCHOR ) )
+	if ((anchor = block->GetString( k_AUI_LDL_VANCHOR )))
 	{
 		if ( stricmp( anchor, "bottom" ) == 0 )
 			m_dim->AnchorBottom();

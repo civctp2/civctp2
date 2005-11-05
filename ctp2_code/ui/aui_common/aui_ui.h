@@ -43,7 +43,7 @@
 
 class			aui_UI;
 
-extern aui_UI *	g_ui;
+extern class aui_UI *	g_ui;
 
 #define			k_AUI_UI_NOCOLOR	0xff000000
 
@@ -79,8 +79,6 @@ extern aui_UI *	g_ui;
 // Class declarations
 //----------------------------------------------------------------------------
 
-
-
 class aui_UI : public aui_Region
 {
 public:
@@ -92,7 +90,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *ldlFilename = NULL );
+		const MBCHAR *ldlFilename = NULL );
 	virtual ~aui_UI();
 
 protected:
@@ -101,7 +99,7 @@ protected:
 		HINSTANCE hinst,
 		HWND hwnd,
 		sint32 bpp,
-		MBCHAR *ldlFilename );
+		const MBCHAR *ldlFilename );
 	AUI_ERRCODE CreateScreen( void );
 
 public:
@@ -146,34 +144,34 @@ public:
 	aui_Resource<aui_Image> *GetImageResource( void ) const
 		{ return m_imageResource; }
 
-	aui_Image	*LoadImage( MBCHAR *name )
+	aui_Image	*LoadImage( const MBCHAR *name )
 		{ return m_imageResource->Load( name, C3DIR_PICTURES ); }
 
 	AUI_ERRCODE	UnloadImage( aui_Image *resource )
 		{ return m_imageResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadImage( MBCHAR *name )
+	AUI_ERRCODE	UnloadImage( const MBCHAR *name )
 		{ return m_imageResource->Unload( name ); }
 
-	AUI_ERRCODE	AddImageSearchPath( MBCHAR *path )
+	AUI_ERRCODE	AddImageSearchPath( const MBCHAR *path )
 		{ return m_imageResource->AddSearchPath( path ); }
-	AUI_ERRCODE	RemoveImageSearchPath( MBCHAR *path )
+	AUI_ERRCODE	RemoveImageSearchPath( const MBCHAR *path )
 		{ return m_imageResource->RemoveSearchPath( path ); }
 
 	
 	aui_Resource<aui_Cursor> *GetCursorResource( void ) const
 		{ return m_cursorResource; }
 
-	aui_Cursor	*LoadCursor( MBCHAR *name )
+	aui_Cursor	*LoadCursor( const MBCHAR *name )
 		{ return m_cursorResource->Load( name, C3DIR_CURSORS ); }
 
 	AUI_ERRCODE	UnloadCursor( aui_Cursor *resource )
 		{ return m_cursorResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadCursor( MBCHAR *name )
+	AUI_ERRCODE	UnloadCursor( const MBCHAR *name )
 		{ return m_cursorResource->Unload( name ); }
 
-	AUI_ERRCODE	AddCursorSearchPath( MBCHAR *path )
+	AUI_ERRCODE	AddCursorSearchPath( const MBCHAR *path )
 		{ return m_cursorResource->AddSearchPath( path ); }
-	AUI_ERRCODE	RemoveCursorSearchPath( MBCHAR *path )
+	AUI_ERRCODE	RemoveCursorSearchPath( const MBCHAR *path )
 		{ return m_cursorResource->RemoveSearchPath( path ); }
 
 	
@@ -183,49 +181,49 @@ public:
 	
 	
 	
-	aui_BitmapFont	*LoadBitmapFont( MBCHAR *name, uint32 size = 0 )
+	aui_BitmapFont	*LoadBitmapFont( const MBCHAR *name, uint32 size = 0 )
 		{ return m_bitmapFontResource->Load( name, C3DIR_DIRECT, size ); }
 
 	AUI_ERRCODE	UnloadBitmapFont( aui_BitmapFont *resource )
 		{ return m_bitmapFontResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadBitmapFont( MBCHAR *name )
+	AUI_ERRCODE	UnloadBitmapFont( const MBCHAR *name )
 		{ return m_bitmapFontResource->Unload( name ); }
 
-	AUI_ERRCODE	AddBitmapFontSearchPath( MBCHAR *path )
+	AUI_ERRCODE	AddBitmapFontSearchPath( const MBCHAR *path )
 		{ return m_bitmapFontResource->AddSearchPath( path ); }
-	AUI_ERRCODE	RemoveBitmapFontSearchPath( MBCHAR *path )
+	AUI_ERRCODE	RemoveBitmapFontSearchPath( const MBCHAR *path )
 		{ return m_bitmapFontResource->RemoveSearchPath( path ); }
 
 	
 	aui_AudioManager *TheAudioManager( void ) const { return m_audioManager; }
 
-	aui_Sound	*LoadSound( MBCHAR *name )
+	aui_Sound	*LoadSound( const MBCHAR *name )
 		{ return m_audioManager ? m_audioManager->Load( name ) : NULL; }
 
 	AUI_ERRCODE	UnloadSound( aui_Sound *resource )
 		{ return m_audioManager ? m_audioManager->Unload( resource ) : AUI_ERRCODE_HACK; }
-	AUI_ERRCODE	UnloadSound( MBCHAR *name )
+	AUI_ERRCODE	UnloadSound( const MBCHAR *name )
 		{ return m_audioManager ? m_audioManager->Unload( name ) : AUI_ERRCODE_HACK; }
 
-	AUI_ERRCODE	AddSoundSearchPath( MBCHAR *path )
+	AUI_ERRCODE	AddSoundSearchPath( const MBCHAR *path )
 		{ return m_audioManager ? m_audioManager->AddSearchPath( path ) : AUI_ERRCODE_HACK; }
-	AUI_ERRCODE	RemoveSoundSearchPath( MBCHAR *path )
+	AUI_ERRCODE	RemoveSoundSearchPath( const MBCHAR *path )
 		{ return m_audioManager ? m_audioManager->RemoveSearchPath( path ) : AUI_ERRCODE_HACK; }
 
 	
 	aui_MovieManager *TheMovieManager( void ) const { return m_movieManager; }
 
-	aui_Movie	*LoadMovie( MBCHAR *name)
+	aui_Movie	*LoadMovie( const MBCHAR *name)
 		{ return m_movieManager ? m_movieManager->Load( name, C3DIR_VIDEOS  ) : NULL; }
 
 	AUI_ERRCODE	UnloadMovie( aui_Movie *resource )
 		{ return m_movieManager ? m_movieManager->Unload( resource ) : AUI_ERRCODE_HACK; }
-	AUI_ERRCODE	UnloadMovie( MBCHAR *name )
+	AUI_ERRCODE	UnloadMovie( const MBCHAR *name )
 		{ return m_movieManager ? m_movieManager->Unload( name ) : AUI_ERRCODE_HACK; }
 
-	AUI_ERRCODE	AddMovieSearchPath( MBCHAR *path )
+	AUI_ERRCODE	AddMovieSearchPath( const MBCHAR *path )
 		{ return m_movieManager ? m_movieManager->AddSearchPath( path ) : AUI_ERRCODE_HACK; }
-	AUI_ERRCODE	RemoveMovieSearchPath( MBCHAR *path )
+	AUI_ERRCODE	RemoveMovieSearchPath( const MBCHAR *path )
 		{ return m_movieManager ? m_movieManager->RemoveSearchPath( path ) : AUI_ERRCODE_HACK; }
 
 	
@@ -293,7 +291,7 @@ public:
 
 	
 	BOOL		IsChildWin( HWND hwnd ) const
-	{ return (BOOL)m_winList->Find( hwnd ); }
+	{ return (m_winList->Find(hwnd) ? TRUE : FALSE); }
 	AUI_ERRCODE	AddWin( HWND hwnd );
 	AUI_ERRCODE	RemoveWin( HWND hwnd );
 

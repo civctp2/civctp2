@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface cursor
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 
 aui_Cursor::aui_Cursor(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	MBCHAR const *filename )
 	:
 	aui_Image( retval, filename )
 {

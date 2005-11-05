@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface mouse handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -69,11 +69,8 @@ aui_Mouse::aui_Mouse(
 	AUI_ERRCODE *retval,
 	MBCHAR *ldlBlock )
 	:
-	aui_Input( retval )
+	aui_Input()
 {
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
-
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -650,7 +647,10 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 	if ( ResumeThread( m_thread ) != 0xffffffff )
 	{
 		
-		if ( !m_acquired ) Acquire();
+		if (!IsAcquired()) 
+        {
+            Acquire();
+        }
 
 		
 		SetEvent( m_resumeEvent );

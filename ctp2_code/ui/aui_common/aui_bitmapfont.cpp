@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface bitmap font
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@ TT_Engine aui_BitmapFont::m_ttEngine = { NULL };
 
 aui_BitmapFont::aui_BitmapFont(
 	AUI_ERRCODE *retval,
-	MBCHAR *descriptor )
+	MBCHAR const *descriptor )
 	:
 	aui_Base()
 {
@@ -115,7 +115,7 @@ void aui_BitmapFont::DescriptorToAttributes(
 
 
 
-AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR *descriptor )
+AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR const *descriptor )
 {
 	AUI_ERRCODE errcode = SetFilename( descriptor );
 	Assert( AUI_SUCCESS(errcode) );
@@ -221,7 +221,7 @@ aui_BitmapFont::~aui_BitmapFont()
 
 
 
-AUI_ERRCODE aui_BitmapFont::SetFilename( MBCHAR *descriptor )
+AUI_ERRCODE aui_BitmapFont::SetFilename( MBCHAR const * descriptor )
 {
 	memset( m_descriptor, '\0', sizeof( m_descriptor ) );
 
@@ -1077,7 +1077,7 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 			return AUI_ERRCODE_OK;
 
 		case '\b': 
-			if ( gi = GetGlyphInfo( ' ' ) )
+			if ((gi = GetGlyphInfo( ' ' )))
 				penPos->x -= gi->advance;
 			break;
 

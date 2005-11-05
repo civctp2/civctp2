@@ -19,8 +19,7 @@
 
 #include "pixelutils.h"
 #include "primitives.h"
-#include "colorset.h"
-extern ColorSet *g_colorSet;
+#include "colorset.h"   // g_colorSet
 
 
 aui_TipWindow::aui_TipWindow(

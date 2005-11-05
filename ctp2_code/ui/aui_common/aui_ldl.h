@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Activision User Interface - ldl handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -98,12 +98,12 @@ public:
 	
 	aui_Ldl(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlFilename );
+		MBCHAR const * ldlFilename );
 	virtual ~aui_Ldl();
 
 protected:
 	aui_Ldl() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR *ldlFilename );
+	AUI_ERRCODE InitCommon( MBCHAR const * ldlFilename );
 
 public:
 	

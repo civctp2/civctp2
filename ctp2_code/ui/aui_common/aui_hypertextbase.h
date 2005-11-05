@@ -74,7 +74,6 @@ protected:
 		BOOL shadow,
 		COLORREF shadowColor,
 		uint32 flags );
-	static void DestroyHyperStatic( aui_Static *hs );
 
 	AUI_ERRCODE DrawThisHyperText(
 		aui_Surface *destSurf,

@@ -18,7 +18,7 @@
 
 aui_Sound::aui_Sound(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	MBCHAR const * filename )
 	:
 	aui_Base()
 {
@@ -36,7 +36,7 @@ aui_Sound::~aui_Sound()
 
 
 
-AUI_ERRCODE aui_Sound::InitCommon( MBCHAR *filename )
+AUI_ERRCODE aui_Sound::InitCommon( MBCHAR const *filename )
 {
 	m_format = NULL;
 	m_data = NULL;
@@ -50,7 +50,7 @@ AUI_ERRCODE aui_Sound::InitCommon( MBCHAR *filename )
 
 
 
-AUI_ERRCODE aui_Sound::SetFilename( MBCHAR *filename)
+AUI_ERRCODE aui_Sound::SetFilename( MBCHAR const *filename)
 {
 	Unload();
 

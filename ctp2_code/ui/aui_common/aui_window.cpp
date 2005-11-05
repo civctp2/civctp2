@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -91,7 +91,6 @@ aui_Window::aui_Window(
 }
 
 
-
 AUI_ERRCODE aui_Window::InitCommon( sint32 bpp, AUI_WINDOW_TYPE type )
 {
 	m_surface = NULL;
@@ -168,37 +167,13 @@ AUI_ERRCODE aui_Window::CreateSurface( void )
 
 aui_Window::~aui_Window()
 {
-	if ( m_grabRegion )
-	{
-		delete m_grabRegion;
-		m_grabRegion = NULL;
-	}
-
-	if ( m_surface )
-	{
 		delete m_surface;
-		m_surface = NULL;
-	}
-
-
-	if ( m_dirtyList )
-	{
 		delete m_dirtyList;
-		m_dirtyList = NULL;
-	}
-
-	if(m_stencil)
-	{
+	delete m_grabRegion;	
 		free(m_stencil);
-		m_stencil = NULL;
-	}
-
-	if(m_focusList)
-	{
+	delete m_focusControl;
 		delete m_focusList;
-		m_focusList = NULL;
 	}
-}
 
 
 AUI_ERRCODE aui_Window::Move( sint32 x, sint32 y )

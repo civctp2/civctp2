@@ -78,12 +78,27 @@ enum AUI_KEYBOARD_KEY
 	AUI_KEYBOARD_KEY_LAST
 };
 
+const uint32 AUI_KEYBOARD_MOD_LSHIFT    = 0x0001;
+const uint32 AUI_KEYBOARD_MOD_RSHIFT    = 0x0002;
+const uint32 AUI_KEYBOARD_MOD_LCTRL     = 0x0004;
+const uint32 AUI_KEYBOARD_MOD_RCTRL     = 0x0008;
+const uint32 AUI_KEYBOARD_MOD_LALT      = 0x0010;
+const uint32 AUI_KEYBOARD_MOD_RALT      = 0x0020;
+const uint32 AUI_KEYBOARD_MOD_LWIN      = 0x0040;
+const uint32 AUI_KEYBOARD_MOD_RWIN      = 0x0080;
+const uint32 AUI_KEYBOARD_MOD_WINMENU   = 0x0100;
 
 struct aui_KeyboardEvent
 {
 	uint32	    key;	
 	BOOL	    down;	
 	uint32	    time;	
+
+	aui_KeyboardEvent()
+	:	key	    (0),
+		down	(false),
+		time	(0)
+	{ ; };
 };
 
 #define k_KEYBOARD_MAXINPUT		24
@@ -103,24 +118,18 @@ struct aui_KeyboardEvent
 class aui_Keyboard : public aui_Base, public virtual aui_Input
 {
 public:
-	
-	aui_Keyboard(
-		AUI_ERRCODE *retval );
+	aui_Keyboard();
 	virtual ~aui_Keyboard();
 
-protected:
-	aui_Keyboard() {}
-	AUI_ERRCODE	InitCommon( void );
-
-public:
-	
-	AUI_ERRCODE			GetKeyboardState( uint8 *keyboardState );
-	aui_KeyboardEvent	*GetLatestKeyboardEvent( void ) { return &m_data; }
+	AUI_ERRCODE         GetKeyboardState(uint8 * keyboardState) const;
+	aui_KeyboardEvent * GetLatestKeyboardEvent(void) 
+	{ 
+		return &m_data; 
+	};
 
 protected:
 	aui_KeyboardEvent 	m_data;	
 	uint8 			    m_keyboardState[k_KEYBOARD_MAXSTATE];
-		
 };
 
 #endif // __AUI_KEYBOARD_H__

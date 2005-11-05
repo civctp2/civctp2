@@ -60,7 +60,7 @@ class aui_Sound : public aui_Base
 public:
 	aui_Sound(
 		AUI_ERRCODE *retval,
-		MBCHAR *filename = NULL );
+		MBCHAR const * filename = NULL );
 	virtual ~aui_Sound();
 
 	virtual AUI_ERRCODE Load(
@@ -74,11 +74,11 @@ public:
 	virtual void Stop( void ) {}
 
 	MBCHAR *GetFilename( void ) const { return (MBCHAR *)m_filename; }
-	virtual AUI_ERRCODE SetFilename ( MBCHAR  *filename );
+	virtual AUI_ERRCODE SetFilename ( MBCHAR const *filename );
 
 protected:
 	aui_Sound() : aui_Base() {}
-	AUI_ERRCODE InitCommon ( MBCHAR *filename );
+	AUI_ERRCODE InitCommon ( MBCHAR const *filename );
 
 protected:
 	MBCHAR m_filename[ MAX_PATH + 1 ];
@@ -97,7 +97,7 @@ class aui_Sound2D : public aui_Sound
 public:
 	aui_Sound2D(
 		AUI_ERRCODE *retval,
-		MBCHAR *filename = NULL )
+		MBCHAR const * filename = NULL )
 		:
 	aui_Sound( retval, filename ) {}
 	virtual ~aui_Sound2D() {}

@@ -43,25 +43,26 @@ extern StringDB	*g_theStringDB;
 
 
 
-aui_TextBase::aui_TextBase(
-	MBCHAR *ldlBlock,
-	const MBCHAR *text )
+aui_TextBase::aui_TextBase
+(
+	MBCHAR *        ldlBlock,
+	const MBCHAR *  text 
+)
 {
-	AUI_ERRCODE errcode = InitCommonLdl(
-		ldlBlock,
-		text );
-	Assert( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) ) return;
+	InitCommonLdl(ldlBlock,	text);
 }
 
 
 
-aui_TextBase::aui_TextBase(
-	const MBCHAR *text,
-	uint32 maxLength )
+aui_TextBase::aui_TextBase
+(
+	const MBCHAR *  text,
+	uint32          maxLength 
+)
 {
-	AUI_ERRCODE errcode = InitCommon(
-		text,
+	InitCommon
+    (
+        text,
 		maxLength,
 		k_AUI_TEXTBASE_DEFAULT_FONTNAME,
 		k_AUI_TEXTBASE_DEFAULT_FONTSIZE,
@@ -71,10 +72,8 @@ aui_TextBase::aui_TextBase(
 		k_AUI_TEXTBASE_DEFAULT_ITALIC,
 		k_AUI_TEXTBASE_DEFAULT_UNDERLINE,
 		k_AUI_TEXTBASE_DEFAULT_SHADOW,
-		k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER |
-			k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER );
-	Assert( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) ) return;
+		k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER | k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER
+    );
 }
 
 
@@ -294,7 +293,7 @@ aui_TextBase::~aui_TextBase()
 {
 	delete [] m_text;
 
-	if (m_textfont)
+	if (m_textfont && g_ui)
 	{
 		g_ui->UnloadBitmapFont(m_textfont);
 	}

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : User interface - image handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -57,15 +57,16 @@ aui_ImageBase::aui_ImageBase
 	MBCHAR *        ldlBlock,
 	bool            loadOnDemand 
 )
-:	m_stateImageNames           (NULL),
-	m_numberOfStateImageNames   (0),
+:
 	m_numStateImageGroups       (0),
 	m_stateImageGroups          (NULL),
 	m_loadOnDemand              (loadOnDemand),
-	m_chromaRed                 (k_DEFAULT_CHROMA_RED),
-	m_chromaGreen               (k_DEFAULT_CHROMA_GREEN),
-	m_chromaBlue                (k_DEFAULT_CHROMA_BLUE),
-	m_chromaSpecified           (false)
+	m_chromaRed	   		        (k_DEFAULT_CHROMA_RED),
+	m_chromaGreen		        (k_DEFAULT_CHROMA_GREEN),
+	m_chromaBlue		        (k_DEFAULT_CHROMA_BLUE),
+	m_chromaSpecified           (false),
+	m_numberOfStateImageNames   (0),
+	m_stateImageNames           (NULL)
 {
 	InitCommonLdl(ldlBlock);
 }
@@ -79,15 +80,16 @@ aui_ImageBase::aui_ImageBase
 	AUI_IMAGEBASE_BLTFLAG imagebltflag,
 	bool loadOnDemand 
 )
-:	m_stateImageNames           (NULL),
-	m_numberOfStateImageNames   (0),
+:
 	m_numStateImageGroups       (0),
 	m_stateImageGroups          (NULL),
 	m_loadOnDemand              (loadOnDemand),
-	m_chromaRed                 (k_DEFAULT_CHROMA_RED),
-	m_chromaGreen               (k_DEFAULT_CHROMA_GREEN),
-	m_chromaBlue                (k_DEFAULT_CHROMA_BLUE),
-	m_chromaSpecified           (false)
+	m_chromaRed	   		        (k_DEFAULT_CHROMA_RED),
+	m_chromaGreen		        (k_DEFAULT_CHROMA_GREEN),
+	m_chromaBlue		        (k_DEFAULT_CHROMA_BLUE),
+	m_chromaSpecified           (false),
+	m_numberOfStateImageNames   (0),
+	m_stateImageNames           (NULL)
 {
 	InitCommon(numStateImageGroups, imageblttype, imagebltflag);
 }

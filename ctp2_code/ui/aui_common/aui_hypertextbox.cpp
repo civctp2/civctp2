@@ -19,9 +19,6 @@
 
 #include "aui_hypertextbox.h"
 
-#pragma optimize ("", off)
-
-
 aui_HyperTextBox::aui_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -29,9 +26,9 @@ aui_HyperTextBox::aui_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_HyperTextBase( retval, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -58,9 +55,9 @@ aui_HyperTextBox::aui_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_HyperTextBase( retval, NULL, 0 )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -178,11 +175,7 @@ AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 
 aui_HyperTextBox::~aui_HyperTextBox()
 {
-	if ( m_ranger )
-	{
-		delete m_ranger;
-		m_ranger = NULL;
-	}
+	delete m_ranger;
 }
 
 
@@ -250,7 +243,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 			case 'c':
 			{
-				uint8 r, g, b;
+				unsigned int r, g, b;
 				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
 				m_hyperColorOld = m_hyperColor;
 				m_hyperColor = RGB(r,g,b);
@@ -271,7 +264,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 			case 'h':
 			{
-				uint32 r, g, b;
+				unsigned int r, g, b;
 				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
 				m_hyperShadowColor = RGB(r,g,b);
 			}
@@ -417,9 +410,9 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				}
 
 				
-				if ( m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS )
+				if (m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS)
 				{
-					DestroyHyperStatic( m_hyperStaticList->RemoveHead() );
+					delete m_hyperStaticList->RemoveHead();
 
 					sint32 topY = m_hyperStaticList->GetHead()->Y();
 					ListPos pos = m_hyperStaticList->GetHeadPosition();
@@ -561,4 +554,3 @@ void HyperTextBoxRangerActionCallback(
 	}
 }
 
-#pragma optimize ("", on)

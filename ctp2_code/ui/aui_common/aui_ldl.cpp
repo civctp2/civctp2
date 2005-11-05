@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface - ldl handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -110,7 +110,7 @@ static cmp_t CompareByString(aui_LdlObject *obj1, aui_LdlObject *obj2)
 
 aui_Ldl::aui_Ldl(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlFilename )
+	MBCHAR const *ldlFilename )
 	:
 	aui_Base()
 {
@@ -121,7 +121,7 @@ aui_Ldl::aui_Ldl(
 
 
 
-AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR *ldlFilename )
+AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
 {
 	if ( !m_objectListByObject && !m_objectListByString)
 	{

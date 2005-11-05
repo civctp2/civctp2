@@ -33,6 +33,7 @@
 
 
 #include "aui_control.h"
+#include "aui_keyboard.h"
 
 
 class aui_Surface;
@@ -93,23 +94,7 @@ protected:
 	BOOL	m_isRepeating;	
 	sint32	m_repeatCount;	
 							
-#if defined(_MSC_VER)	
-	virtual KeyboardEventCallback KeyboardCallback;
-
-	virtual MouseEventCallback PostChildrenCallback;
-
-	
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway;
-
-	
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside;
-
-	virtual MouseEventCallback MouseRDropInside;
-#else
-	virtual void	KeyboardCallback(aui_KeyBoardEvent * keyboardData);
+	virtual void	KeyboardCallback(aui_KeyboardEvent * keyboardData);
 	
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
@@ -119,7 +104,6 @@ protected:
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
-#endif
 };
 
 

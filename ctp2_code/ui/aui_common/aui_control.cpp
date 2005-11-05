@@ -84,63 +84,64 @@ uint32 aui_Control::m_controlClassId = aui_UniqueId();
 static const MBCHAR *const k_AUI_CONTROL_LDL_STATUS_TEXT	=	"statustext";
 
 
-aui_Control::aui_Control(
-	AUI_ERRCODE *retval,
-	uint32 id,
-	MBCHAR *ldlBlock,
-	ControlActionCallback *ActionFunc,
-	void *cookie )
+aui_Control::aui_Control
+(
+	AUI_ERRCODE *           retval,
+	uint32                  id,
+	MBCHAR *                ldlBlock,
+	ControlActionCallback * ActionFunc,
+	void *                  cookie 
+)
 :
-	aui_Region              (retval, id, ldlBlock),
 	aui_ImageBase           (ldlBlock),
 	aui_TextBase            (ldlBlock, (const MBCHAR *) NULL),
+	aui_Region              (retval, id, ldlBlock),
 	aui_SoundBase           (ldlBlock),
+	m_stringTable           (NULL),
+	m_allocatedTip          (false),
 	m_statusText            (NULL),
 	m_numberOfLayers        (0), 
-    m_imagesPerLayer        (0),
+	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
-	m_layerRenderFlags      (NULL),
-	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
-    m_stringTable           (NULL),
-    m_allocatedTip          (false)
+	m_layerRenderFlags      (NULL)
 {
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
-
-	*retval = InitCommonLdl( ldlBlock, ActionFunc, cookie );
-	Assert( AUI_SUCCESS(*retval) );
+	if (AUI_SUCCESS(*retval))
+    {
+	    *retval = InitCommonLdl(ldlBlock, ActionFunc, cookie);
+    }
 }
 
 
 
-aui_Control::aui_Control(
-	AUI_ERRCODE *retval,
-	uint32 id,
-	sint32 x,
-	sint32 y,
-	sint32 width,
-	sint32 height,
-	ControlActionCallback *ActionFunc,
-	void *cookie )
+aui_Control::aui_Control
+(
+	AUI_ERRCODE *           retval,
+	uint32                  id,
+	sint32                  x,
+	sint32                  y,
+	sint32                  width,
+	sint32                  height,
+	ControlActionCallback * ActionFunc,
+	void *                  cookie 
+)
 :
-	aui_Region              (retval, id, x, y, width, height),
 	aui_ImageBase           ((sint32) 0),
 	aui_TextBase            (NULL),
+	aui_Region              (retval, id, x, y, width, height),
 	aui_SoundBase           ((MBCHAR **) NULL),
+	m_stringTable           (NULL),
+	m_allocatedTip          (false),
 	m_statusText            (NULL),
 	m_numberOfLayers        (0), 
-    m_imagesPerLayer        (0),
+	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
 	m_layerRenderFlags      (NULL),
-	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
-    m_stringTable           (NULL),
-    m_allocatedTip          (false)
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
 {
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
-
-	*retval = InitCommon( ActionFunc, cookie );
-	Assert( AUI_SUCCESS(*retval) );
+	if (AUI_SUCCESS(*retval))
+    {
+    	*retval = InitCommon(ActionFunc, cookie);
+	}
 }
 
 

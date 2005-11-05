@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface movie window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -45,7 +45,7 @@ aui_Movie *aui_Movie::m_onScreenMovie = NULL;
 
 aui_Movie::aui_Movie(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	MBCHAR const * filename )
 	:
 	aui_Base()
 {
@@ -56,7 +56,7 @@ aui_Movie::aui_Movie(
 
 
 
-AUI_ERRCODE aui_Movie::InitCommon( MBCHAR *filename )
+AUI_ERRCODE aui_Movie::InitCommon( MBCHAR const * filename )
 {
 	m_format = NULL;
 	m_surface = NULL;
@@ -99,7 +99,7 @@ aui_Movie::~aui_Movie()
 
 
 
-AUI_ERRCODE aui_Movie::SetFilename( MBCHAR *filename )
+AUI_ERRCODE aui_Movie::SetFilename( MBCHAR const *filename )
 {
 	
 	Unload();
@@ -153,7 +153,7 @@ aui_Surface *aui_Movie::SetDestSurface( aui_Surface *surface )
 {
 	aui_Surface *prevSurface = m_surface;
 
-	if ( m_surface = surface )
+	if ((m_surface = surface))
 	{
 		RECT surfRect =
 		{

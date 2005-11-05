@@ -37,7 +37,6 @@ unsigned char *tech_MemMap::GetFileBits(
 	unsigned long *outfilesize )
 {
 	if ( outfilesize ) *outfilesize = 0;
-
 	unsigned long filesize;
 	unsigned char *bits;
 	FILE *f = fopen( filename, "rb" );
@@ -65,7 +64,7 @@ unsigned char *tech_MemMap::GetFileBits(
 	}
 
 	if ( fread( bits, 1, filesize, f ) != filesize ) {
-		delete[filesize] bits;
+		delete [] bits;
 		fclose(f);
 		return NULL;
 	}
@@ -81,8 +80,6 @@ unsigned char *tech_MemMap::GetFileBits(
 
 void tech_MemMap::ReleaseFileBits( unsigned char *&bits )
 {
-	if (bits) {
-		delete[] bits;
-		bits = NULL;
-	}
+	delete [] bits;
+	bits = NULL;
 }

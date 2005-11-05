@@ -373,88 +373,6 @@ protected:
 
 	typedef void (MouseEventCallback)( aui_MouseEvent *mouseData );
 	
-#if defined(_MSC_VER)
-	virtual MouseEventCallback PreChildrenCallback {}
-	virtual MouseEventCallback PostChildrenCallback {}
-
-	
-	virtual MouseEventCallback MouseMoveOver;
-	virtual MouseEventCallback MouseMoveAway {}
-	virtual MouseEventCallback MouseMoveInside;
-	virtual MouseEventCallback MouseMoveOutside {}
-
-	
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway {}
-	virtual MouseEventCallback MouseLDragInside;
-	virtual MouseEventCallback MouseLDragOutside {}
-	virtual MouseEventCallback MouseRDragOver;
-	virtual MouseEventCallback MouseRDragAway {}
-	virtual MouseEventCallback MouseRDragInside;
-	virtual MouseEventCallback MouseRDragOutside {}
-
-	
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLGrabOutside {}
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside {}
-	virtual MouseEventCallback MouseRGrabInside;
-	virtual MouseEventCallback MouseRGrabOutside {}
-	virtual MouseEventCallback MouseRDropInside;
-	virtual MouseEventCallback MouseRDropOutside {}
-
-	
-	
-	
-	virtual MouseEventCallback MouseLDoubleClickInside;
-	virtual MouseEventCallback MouseLDoubleClickOutside;
-	virtual MouseEventCallback MouseRDoubleClickInside;
-	virtual MouseEventCallback MouseRDoubleClickOutside;
-
-	
-	virtual MouseEventCallback MouseNoChange;
-
-	
-	
-	
-	MouseEventCallback MouseMoveOverEdit {}
-	MouseEventCallback MouseMoveAwayEdit {}
-	MouseEventCallback MouseMoveInsideEdit {}
-	MouseEventCallback MouseMoveOutsideEdit {}
-	
-	
-	MouseEventCallback MouseLDragOverEdit;
-	MouseEventCallback MouseLDragAwayEdit;
-	MouseEventCallback MouseLDragInsideEdit;
-	MouseEventCallback MouseLDragOutsideEdit;
-	MouseEventCallback MouseRDragOverEdit {}
-	MouseEventCallback MouseRDragAwayEdit {}
-	MouseEventCallback MouseRDragInsideEdit {}
-	MouseEventCallback MouseRDragOutsideEdit {}
-
-	
-	MouseEventCallback MouseLGrabInsideEdit;
-	MouseEventCallback MouseLGrabOutsideEdit;
-	MouseEventCallback MouseLDropInsideEdit;
-	MouseEventCallback MouseLDropOutsideEdit;
-	MouseEventCallback MouseRGrabInsideEdit;
-	MouseEventCallback MouseRGrabOutsideEdit;
-	MouseEventCallback MouseRDropInsideEdit;
-	MouseEventCallback MouseRDropOutsideEdit;
-
-	
-	MouseEventCallback MouseLGrabEditMode;
-	MouseEventCallback MouseLDropEditMode;
-	MouseEventCallback MouseLDragEditMode;
-
-	
-	
-	
-	MouseEventCallback MouseLDoubleClickInsideEdit {}
-	MouseEventCallback MouseLDoubleClickOutsideEdit {}
-	MouseEventCallback MouseRDoubleClickInsideEdit {}
-	MouseEventCallback MouseRDoubleClickOutsideEdit {}
-#else
 	virtual void	PreChildrenCallback(aui_MouseEvent * mouseData) {};
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData) {};
 
@@ -519,8 +437,6 @@ protected:
 	void			MouseLDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
 	void			MouseRDoubleClickInsideEdit(aui_MouseEvent * mouseData) {};
 	void			MouseRDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
-
-#endif
 };
 
 
