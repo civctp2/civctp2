@@ -1021,9 +1021,22 @@ void ArmyData::GroupArmy(Army &army)
              return;
         }
     }
+    //exclude cantgroup units by E 18-Oct-2005
+    for(i = 0; i < army.Num(); i++){//check incoming army for immobile units
+        if(army[i].CantGroup()){
+             return;
+        }
+    }
     //incoming army ok, so
     for(i = 0; i < m_nElements; i++) {// check this army
         if(army[i].IsImmobile()){
+              return;
+        }
+    }
+
+	    //incoming army ok, so
+    for(i = 0; i < m_nElements; i++) {// check this army
+        if(army[i].CantGroup()){
               return;
         }
     }
@@ -4641,14 +4654,20 @@ BOOL ArmyData::CanPillage(uint32 & uindex) const
 	GetPos(pos);
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	
+
+	//NOT WORKING...added by E for Visible Wonders and Urban Sprawl 
+	//const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get();
+	//if(rec->CantPillage()) {
+	//		return false;
+	//}
+	//OR THIS? TerrainImprovementRecord::GetCantPillage
+	//const TerrainImprovementRecord::Effect *eff;
+	//	eff = terrainutil_GetTerrainEffect(rec, cell->GetTerrain());
+	//	if(!eff)
+	//		return false;
+
 	sint32 num_improvements = cell->GetNumDBImprovements();
 	if (num_improvements <= 0) {
-		
-		
-		
-		
-		
 		
 			return false;
 		

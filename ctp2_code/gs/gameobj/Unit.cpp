@@ -889,6 +889,11 @@ bool Unit::IsImmobile()const
 	return AccessData()->IsImmobile();
 }
 
+bool Unit::CantGroup()const
+{
+	return AccessData()->CantGroup();
+}
+
 sint32 Unit::ResetMovement()
 
 {

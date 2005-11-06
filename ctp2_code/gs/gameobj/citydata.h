@@ -711,6 +711,9 @@ public:
 	sint32 IsConvertedTo() const { return m_convertedTo; }
 
 	BOOL HasResource(sint32 resource) const;
+// added by E for resources Oct 2005
+	BOOL HasNeededGood(sint32 resource) const;
+	BOOL HasEitherGood(sint32 resource) const;
 #ifdef CTP1_TRADE
 	const Resources *GetResources() const { return &m_resources; }
 	const Resources *GetLocalResources() const { return &m_localResources; }

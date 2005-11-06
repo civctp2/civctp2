@@ -575,6 +575,16 @@ bool UnitData::IsImmobile()const {
 	return false;
 }
 
+bool UnitData::CantGroup()const {
+
+	const UnitRecord *rec = g_theUnitDB->Get(m_type);
+
+	if (rec->GetCantGroup())
+		return true;
+
+	return false;
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::ResetMovement
@@ -5835,3 +5845,5 @@ bool UnitData::CanBeachAssaultRightNow()
 
 	return false;
 }
+
+

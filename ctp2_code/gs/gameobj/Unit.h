@@ -209,6 +209,7 @@ public:
 	BOOL CanBeachAssault() const;
 
 	bool IsImmobile()const; //PFT
+	bool CantGroup()const; //by E
 	sint32 ResetMovement();
 
 	BOOL CanExpelPop()const;

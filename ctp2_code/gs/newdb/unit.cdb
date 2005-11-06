@@ -86,11 +86,13 @@ Unit {
 	Record Unit      UpgradeTo //FutureUse to create Upgrade Paths, cost based on difference ShieldCost x Gold?
 	Record CityStyle[] CultureOnly //added by E -- can only build units if civ has certain citystyle
 	Record CityStyle[] CityStyleOnly //added by E--can only build units at cities with certain citystyle 
+	Record Civilisation[] CivilisationOnly //added by E -- can only build units if player is a specific civ
 	Record TerrainImprovement     SettleImprovement // future use - for units to make specific imps like forts
     Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build unit
-	Record Resource[] NeedsCityGoodAnyCity //FU
-      
+	Record Resource[] NeedsCityGoodCapitol //FU
+	Record Resource[] NeedsCityGoodAnyCity //FU      
+
 	Bits Size {
 		Small,
 		Medium,

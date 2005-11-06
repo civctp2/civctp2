@@ -30,6 +30,7 @@
 #  - NeedsWaterSupply- added by E; FutureUse; can only build on rivers or adjacent to 
 #                      other IsWaterSupply imps
 #  - PlantGood - added by E; FutureUse; imp that places a good instead
+#  - EnablesGood - to replace plants good
 #
 #-----------------------------------------------------------------------------
 TerrainImprovement {
@@ -121,6 +122,7 @@ TerrainImprovement {
 	Record CityStyle[] CultureOnly //added by E -- can only build imps if civ has certain citystyle
 	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
 	Record Resource[] IsRestrictedToGood //added by E -- can only build imps if tile has good
+	Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
 	Bit(Struct Effect) Effect
 	Struct Effect[] TerrainEffect
 

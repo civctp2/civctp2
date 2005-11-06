@@ -268,6 +268,7 @@ public:
 	void ClearFlag(uint32 f) { m_flags &= ~(f); }
 
 	bool IsImmobile()const; //PFT
+	bool CantGroup()const; //by E
 	sint32 ResetMovement();
 	
 	void GetPos(MapPoint &p) const { p = m_pos; };

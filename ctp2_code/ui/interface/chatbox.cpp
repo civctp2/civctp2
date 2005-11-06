@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : user interface for chatbox
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -556,6 +556,18 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		}
 	}
     else
+
+	if(!strncmp(s, "/ArmyName", 8)  && !g_network.IsActive()) {
+		
+        if(g_graphicsOptions->IsArmyNameOn()){
+			g_graphicsOptions->ArmyNameOff();
+        }
+		else
+            g_graphicsOptions->ArmyNameOn();
+	}
+
+    else
+
 	if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) {
 		
         if(g_graphicsOptions->IsArmyTextOn()){

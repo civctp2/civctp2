@@ -21,6 +21,10 @@
 #  - CultureOnly //added by E -- can only build wonders if civ has certain citystyle
 #  - CityStyleOnly //added by E -- can only build wonders at cities with certain citystyle 
 #  - PrerequisiteBuilding  // Added by E to limit wonders to cities with certain buildings
+#  - EnablesGood //added by E allows a wonder to give a city a good 
+#  - NeedsCityGood - requires a good to build wonder
+#  - NeedsCityGoodAll - requires a 1 or more good to build wonder
+#  - NeedsCityGoodAnyCity - requires any city to have good to build wonder
 # 
 #-----------------------------------------------------------------------------
 
@@ -41,7 +45,7 @@ Wonder {
 	Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build wonder
 	Record Resource[] NeedsCityGoodAnyCity //FU
-      
+      Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
 
 
 	# Flags

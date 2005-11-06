@@ -340,7 +340,7 @@ COMMAND(SetGovernorPwReserveCommand);
 
 COMMAND(ToggleCellText);
 COMMAND(ToggleArmyText);
-
+COMMAND(ToggleArmyName);
 
 COMMAND(ArmyClumps);
 

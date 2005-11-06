@@ -64,6 +64,13 @@
 //   prepared for city resource calculation redesign. - Aug. 7th 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added civilisation specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
+// - NeedsCityGoodCapitol code added to CanBuildUnit; limits unit construction by 
+//   comparing a unit's NeedscityGoodAnyCity flag to a player's cities if they have a good. 
+//   by E October 20 2005  ---- Not Optimized
+// - NeedsCityGoodAnyCity code added to CanBuildUnit; limits unit construction by 
+//   comparing a unit's NeedscityGoodAnyCity flag to a player's cities if they have a good. 
+//   by E October 23 2005
+// -  
 //
 //----------------------------------------------------------------------------
 
@@ -1828,42 +1835,6 @@ BOOL Player::RegisterCityAttack(const Unit &c, const PLAYER_INDEX &his_owner,
 	}
 	return TRUE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void Player::ResetAllMovement()
@@ -10147,6 +10118,60 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 			return FALSE;
 	}
 
+// Added by E - Compares Unit CivilisationOnly to the Player's Civilisation
+//	if(rec->GetNumCultureOnly() > 0) {
+//		sint32 s;
+//		bool found = false;
+// 		for(sint32 c = 0; c < g_theCivilisationDB->NumRecords(); c++) {
+//		g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)
+//		for(s = 0; s < rec->GetNumCivilisationOnly(); s++) {
+//			if(rec->GetCivilisationOnlyIndex(s) == m_civilisation()) {
+//				found = true;
+//				break;
+//			}
+//		}
+//		if(!found)
+//			return FALSE;
+//	}
+	
+	
+// Added by E - checks if capitol for buying or colecting a good and makes availble in all cities, not optimized
+
+	if(rec->GetNumNeedsCityGoodCapitol()) {
+		
+		sint32 i, g, n = m_all_cities->Num();
+		for(g = 0; g < rec->GetNumNeedsCityGoodCapitol(); g++) {
+			for(i = 0; i < n; i++) {
+				if(m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodCapitolIndex(g)))
+			return FALSE;
+			}
+		}
+	}
+
+
+	// Added by E - checks all cities for buying or collecting a good and makes availble in all cities, but its either/or not AND
+	if(rec->GetNumNeedsCityGoodAnyCity()) {
+		
+		sint32 i, g;
+		bool goodavail = false;
+
+			for(i = 0; i < m_all_cities->Num(); i++) {
+				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+					if(m_all_cities->Access(i).AccessData()->GetCityData()->HasEitherGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+						goodavail = true;
+						break;
+					}
+				}
+					if(goodavail){
+					break;
+					}
+			}
+			if(!goodavail)
+			return FALSE;
+	}
+
+// end resources
+	
 
 	if(rec->GetNuclearAttack() &&
 	   wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders())) {
@@ -10359,6 +10384,8 @@ void Player::SetDiplomaticState(const PLAYER_INDEX p, const DIPLOMATIC_STATE s)
 										   p, realState));
 	}
 } 
+
+//adding Hidden Nationality Here? - E
 void Player::ThisMeansWAR(PLAYER_INDEX defense_owner)
 {
 	Assert(0 <= defense_owner); 
@@ -10369,45 +10396,38 @@ void Player::ThisMeansWAR(PLAYER_INDEX defense_owner)
 
     PLAYER_INDEX attack_owner = m_owner;
 
-   
-    
-    
-    
-    
-    
+//  Assert(unit.GetOwner() == m_owner);
+//  
+//	sint32 type;
+//	const UnitRecord *rec = g_theUnitDB->Get(type);
+//	if (rec->GetHiddenNationality() == 0) {
 
+//	for(j = 0; j < m_all_units->Num(); j++) {
+//		if(m_all_units->Access(j).HiddenNationality) 
+//	}
+	
+	
+	
 	if ((attack_owner != 0) && (defense_owner != 0) && 
-		!AgreementMatrix::s_agreements.HasAgreement(attack_owner, defense_owner, PROPOSAL_TREATY_DECLARE_WAR)) {
-        SlicObject *so = new SlicObject("128CivStartedWar");
+		!AgreementMatrix::s_agreements.HasAgreement(attack_owner, defense_owner, PROPOSAL_TREATY_DECLARE_WAR)) { 
+//
+//	if (unit.GetDBRec()->GetHiddenNationality() == 0)	{
+//add hidden nationality flag here g_theUnitDB->Get(t)->GetHiddenNAtionality;
+		
+		SlicObject *so = new SlicObject("128CivStartedWar");
         so->AddCivilisation(attack_owner);
         so->AddCivilisation(defense_owner);
         so->AddAllRecipientsBut(attack_owner);
         g_slicEngine->Execute(so);
     }        
 
-    
+//	}
 	sint32 oldBrokenAlliances = m_broken_alliances_and_cease_fires;
-	
 	
 	Diplomat::GetDiplomat(m_owner).DeclareWar(defense_owner);
 
-	
-    
-    
-    
-    
-    
-    
-
-    
     g_player[m_owner]->RegisterAttack(defense_owner);
     g_player[defense_owner]->RegisterAttack(m_owner);
-
-	
-	
-	
-	
-
 
 }
 

@@ -570,6 +570,7 @@ CommandLine g_commandLine;
 
                                  ToggleCellText g_toggleCellText;
                                  ToggleArmyText g_toggleArmyText;
+								 ToggleArmyText g_toggleArmyName;
 
 
                                      ArmyClumps g_armyClumps;
@@ -1139,6 +1140,8 @@ CommandRecord commands[] = {
 	"celltext - toggle the displaying of AI debug text for Cells on and off"},
 	{"armytext", &g_toggleArmyText,
 	"armytext - toggle the displaying of AI debug text for Armies on and off"},
+	{"armyname", &g_toggleArmyName,
+	"armyname - toggle the displaying of name for Armies on and off"},
 
 	
 	{"armyclumps", &g_armyClumps,
@@ -1573,6 +1576,14 @@ void ToggleArmyText::Execute(sint32 argc, char **argv)
 	}
 }
 
+void ToggleArmyName::Execute(sint32 argc, char **argv)
+{
+	if (g_graphicsOptions->IsArmyNameOn()) {
+		g_graphicsOptions->ArmyNameOff();
+	} else {
+		g_graphicsOptions->ArmyNameOn();
+	}
+}
 
 void ArmyClumps::Execute(sint32 argc, char **argv)
 {

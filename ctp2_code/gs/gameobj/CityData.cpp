@@ -104,6 +104,13 @@
 //   requiring a good in the radius or if the city is buying it before a it can be 
 //   built. (Sept 29nd 2005 by E)
 // - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
+// - Implemented EnablesGood for buildings, wonders and tile improvements now they 
+//   give goods to a city by E November 5th 2005
+// - To ProcessFood,ProcessProduction,ProcessGold, ProcessScience added a check that 
+//   if a city has or is buying a good than you can get a bonus. EfficiencyOrCrime 
+//   flag affects all four.  - added by E November 5th 2005
+//     
+//
 //
 //----------------------------------------------------------------------------
 
@@ -1785,6 +1792,22 @@ sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, 
 			g_player[m_franchise_owner]->AddProductionFromFranchise(franchiseLoss);
 	}
 
+//Added by E - EXPORT BONUSES TO GOODS if has good than a production bonus	
+	sint32 good;
+	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
+		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
+			grossProduction += ceil(grossProduction * (g_theResourceDB->Get(good))->GetProductionPercent());		
+		}
+	}
+
+//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
+	sint32 g;
+	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
+		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
+			grossProduction += ceil(grossProduction * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
+		}
+	}
+
 	return shields;
 }
 #endif
@@ -2004,7 +2027,7 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 //
 // Returns    : -
 //
-// Remark(s)  : -
+// Remark(s)  : Added EnablesGood check for tile improvemnts.
 //
 //----------------------------------------------------------------------------
 void CityData::CollectResources() 
@@ -2040,6 +2063,38 @@ void CityData::CollectResources()
 	memset(m_scientistsEff, 0, sizeof(double) * g_theCitySizeDB->NumRecords());
 #endif
 
+
+// Add if city has building GetEnablesGood >0 then that good will be dded to the city for trade
+    sint32 good; 
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
+		if(m_built_improvements & ((uint64)1 << b)) {
+			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+//      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
+			if (rec->GetNumEnablesGood() > 0){
+				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+  						m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
+				}
+			}
+		}
+	}
+
+// end building enables good
+
+// Add if city has wonder GetEnablesGood >0 then that good will be dded to the city for trade
+    sint32 wgood; 
+	for(sint32 w = 0; w < g_theWonderDB->NumRecords(); w++) {
+		if(m_builtWonders & ((uint64)1 << w)) {
+			const WonderRecord *rec = wonderutil_Get(w);
+//      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
+			if (rec->GetNumEnablesGood() > 0){
+				for(wgood = 0; wgood < rec->GetNumEnablesGood(); wgood++) {
+  						m_collectingResources.AddResource(rec->GetEnablesGoodIndex(wgood));
+				}
+			}
+		}
+	}
+// end wonder enables good
+
 	CityInfluenceIterator it(cityPos, m_sizeIndex);
 	for(it.Start(); !it.End(); it.Next()) {
 		Cell *cell = g_theWorld->GetCell(it.Pos());
@@ -2056,6 +2111,21 @@ void CityData::CollectResources()
 		){
 			m_collectingResources.AddResource(good);
 		}
+
+
+// Added by E (10-29-2005) - If a tileimp
+
+		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
+			if (rec->GetNumEnablesGood() > 0){
+				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+  						m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
+				}
+			}
+		}
+
 	}
 
 #if defined(NEW_RESOURCE_PROCESS)
@@ -2393,7 +2463,7 @@ void CityData::ComputeSpecialistsEffects()
 //
 // Returns    : Returns the amount of gross food this turn.
 //
-// Remark(s)  : -
+// Remark(s)  : By E - this function appears not to be used
 //
 //----------------------------------------------------------------------------
 double CityData::ProcessFood(sint32 food) const
@@ -2418,16 +2488,9 @@ double CityData::ProcessFood(sint32 food) const
 	// No food from citizen. Maybe something to add.
 
 	///////////////////////////////////////////////
-	//Add If City has a good checks if it has a Food Percent bonus and give to city
-	//
-//	const ResourceRecord *rec = g_theResourceDB->GetFoodPercent();
-//				rec->GetFoodPercent(p) > 0
-//						found = true;
-//			}
-//		}
-//	}
-		grossFood += grossFood * (HasResource()->g_theResourceDB->GetFoodPercent(p)) ;
-	
+
+		
+
 	
 	return grossFood;
 }
@@ -2745,6 +2808,23 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 		grossFood += FarmerCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_FARMER], g_player[m_owner]->GetGovernmentType())->GetFood();
 	}
+
+//Added by E - EXPORT BONUSES TO GOODS This gives a bonus of food	
+	sint32 good;
+	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
+		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
+			grossFood += ceil(grossFood * (g_theResourceDB->Get(good))->GetFoodPercent());		
+		}
+	}
+
+//Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
+	sint32 g;
+	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
+		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
+			grossFood += ceil(grossFood * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
+		}
+	}
+
 
 	producedFood = ProcessFinalFood(foodLostToCrime, grossFood);
 
@@ -3895,7 +3975,8 @@ BOOL CityData::BuildUnit(sint32 type)
 
 BOOL CityData::BuildImprovement(sint32 type)
 {
-	Assert(CanBuildBuilding(type));
+	Assert(
+		ing(type));
 	if(!CanBuildBuilding(type))
 		return FALSE;
 
@@ -4875,11 +4956,23 @@ BOOL CityData::HasResource(sint32 resource) const
 	return m_collectingResources[resource] > m_sellingResources[resource];
 }
 
+//Added by E -- this city is collecting or buying some sint32 resource 
+BOOL CityData::HasNeededGood(sint32 resource) const
+{
+	return m_buyingResources[resource] + m_collectingResources[resource] == 0;
+}
+
+BOOL CityData::HasEitherGood(sint32 resource) const
+{
+	return m_buyingResources[resource] + m_collectingResources[resource] > 0;
+}
+
 //this city is collecting some sint32 resource
 BOOL CityData::IsLocalResource(sint32 resource) const
 {
 	return m_collectingResources[resource] > 0;
 }
+
 
 //filters out non-resource trade
 bool CityData::GetResourceTradeRoute(sint32 resource, TradeRoute & route) const
@@ -5986,6 +6079,23 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	sci += sci * p;
 	sci = sci * g_player[m_home_city.GetOwner()]->GetKnowledgeCoef();
 	sci += sci * static_cast<double>(wonderutil_GetIncreaseKnowledgePercentage(g_player[m_home_city.GetOwner()]->GetBuiltWonders())) / 100.0;
+	
+//Added by E - EXPORT BONUSES TO GOODS This gives a bonus of food	
+	sint32 good;
+	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
+		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
+			sci += ceil(sci * (g_theResourceDB->Get(good))->GetSciencePercent());		
+		}
+	}
+
+//Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
+	sint32 g;
+	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
+		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
+			sci += ceil(sci * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
+		}
+	}
+	
 	
 	if(!considerOnlyFromTerrain
 	&& m_specialistDBIndex[POP_SCIENTIST] >= 0 
@@ -7310,6 +7420,7 @@ void CityData::CollectGold(sint32 &gold, sint32 &convertedGold, sint32 &crimeLos
 	ProcessGold(gold, considerOnlyFromTerrain);
 	ApplyGoldCoeff(gold);
 	CalcGoldLoss(true, gold, convertedGold, crimeLost);
+
 }
 
 //----------------------------------------------------------------------------
@@ -7347,6 +7458,23 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 		gold += MerchantCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT], g_player[m_owner]->GetGovernmentType())->GetCommerce();
 	}
+//Added by E - EXPORT BONUSES TO GOODS This gives a bonus of gold	
+	sint32 good;
+	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
+		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
+			gold += ceil(gold * (g_theResourceDB->Get(good))->GetCommercePercent());		
+		}
+	}
+
+//Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
+	sint32 g;
+	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
+		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
+			gold += ceil(gold * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
+		}
+	}
+
+
 }
 
 //----------------------------------------------------------------------------
@@ -7763,6 +7891,7 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 sint32 CityData::CrimeLoss(sint32 gross) const
 {
 	sint32 crime_loss = static_cast<sint32>(ceil(gross * m_happy->GetCrime()));
+
 	
 	if (crime_loss < 0) 
 		crime_loss = 0;
