@@ -33,14 +33,14 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_ImageBase( ldlBlock ),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	aui_Radio(
 		retval,
 		id,
 		ldlBlock,
 		ActionFunc,
 		cookie ),
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	m_image( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -71,6 +71,8 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 	sint32 state,
 	sint32 numStates )
 	:
+	aui_ImageBase( numStates ),
+	aui_TextBase( text ),
 	aui_Radio(
 		retval,
 		id,
@@ -82,8 +84,6 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 		cookie,
 		state,
 		numStates ),
-	aui_ImageBase( numStates ),
-	aui_TextBase( text ),
 	m_image( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );

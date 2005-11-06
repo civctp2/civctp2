@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -29,7 +27,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -87,17 +85,10 @@ public:
 								 sint32 x = 0, sint32 y = 0);
 
 	
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway;
-#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
-#endif
 	
 	static const sint32 k_CTP2_BUTTON_LAYER_FLAG_UP;
 	static const sint32 k_CTP2_BUTTON_LAYER_FLAG_DOWN;

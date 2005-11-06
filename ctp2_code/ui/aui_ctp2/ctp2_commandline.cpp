@@ -6,7 +6,7 @@
 #include "c3ui.h"
 
 #include "pixelutils.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
 #include "primitives.h"
 
 #include "ctp2_commandline.h"
@@ -15,8 +15,6 @@
 #define k_CTP2_COMMANDLINE_FONT_FILE	"lucon.ttf"
 #define k_CTP2_COMMANDLINE_FONT_SIZE	8
 #define k_CTP2_COMMANDLINE_WIDTH_CHAR	"W"
-
-extern ColorSet		*g_colorSet;
 
 extern C3UI			*g_c3ui;
 
@@ -51,7 +49,7 @@ ctp2_CommandLine::ctp2_CommandLine(aui_Surface *surface, RECT *rect)
 
 ctp2_CommandLine::~ctp2_CommandLine()
 {
-	if (m_font) 
+	if (g_c3ui && m_font) 
 		g_c3ui->UnloadBitmapFont(m_font);
 }
 

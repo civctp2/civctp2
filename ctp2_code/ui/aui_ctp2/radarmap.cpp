@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : User interface radar map
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -57,35 +57,28 @@
 #include "aui_ldl.h"
 #include "aui_action.h"
 #include "c3ui.h"
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "player.h"                 // g_player
+#include "World.h"                  // g_theWorld
 #include "Cell.h"
 #include "UnseenCell.h"
 #include "citydata.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "pixelutils.h"
-#include "colorset.h"
-#include "SelItem.h"
-#include "tiledmap.h"
+#include "colorset.h"               // g_colorSet
+#include "SelItem.h"                // g_selected_item
+#include "tiledmap.h"               // g_tiledMap
 #include "director.h"
 #include "maputils.h"
 #include "primitives.h"
-#include "profileDB.h"
+#include "profileDB.h"              // g_theProfileDB
 #include "pointerlist.h"
 #include "terrainutil.h"
 #include "Scheduler.h"
 
 
 extern C3UI				*g_c3ui;
-extern TiledMap			*g_tiledMap;
-extern Player			**g_player;
 extern PointerList<Player> *g_deadPlayer;
-extern ProfileDB		*g_theProfileDB;
-extern SelectedItem		*g_selected_item;
-extern ColorSet			*g_colorSet;
-extern World			*g_theWorld;
 
 extern sint32 g_fog_toggle;
 extern sint32 g_god;
@@ -108,9 +101,10 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
+		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -131,9 +125,10 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
+		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon();	
@@ -783,7 +778,7 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 	};
 
 	
-	sint32 middle = ceil(xPosition + m_tilePixelWidth/2);
+	sint32 middle = sint32(ceil(xPosition + m_tilePixelWidth/2));
 
 	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
 	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
@@ -1237,7 +1232,7 @@ void RadarMap::UpdateMap(aui_Surface *surf, sint32 x, sint32 y)
 //	RadarMap::ComputeCenteredMap
 //		
 //---------------------------------------------------------------------------
-MapPoint RadarMap::ComputeCenteredMap(MapPoint &pos, RECT *viewRect)
+MapPoint RadarMap::ComputeCenteredMap(MapPoint const & pos, RECT *viewRect)
 {
 	RECT *mapViewRect = viewRect;
 
@@ -1266,7 +1261,7 @@ MapPoint RadarMap::ComputeCenteredMap(MapPoint &pos, RECT *viewRect)
 //  - Used to focus the RadarMap to a specific point 
 //
 //---------------------------------------------------------------------------
-MapPoint RadarMap::CenterMap(MapPoint &pos)
+MapPoint RadarMap::CenterMap(MapPoint const & pos)
 {
 	MapPoint LastPT = m_lastCenteredPoint;
 	if(LastPT.x == 0 && LastPT.y == 0)

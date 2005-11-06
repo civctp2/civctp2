@@ -31,14 +31,12 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
 #ifndef ___BMH_RADAR_MAP_HEADER
 #define ___BMH_RADAR_MAP_HEADER
-
-
 
 #include "aui_control.h"
 #include "MapPoint.h"
@@ -46,14 +44,13 @@
 #include "Unit.h"
 #include "pixeltypes.h"
 #include "profileDB.h"
+#include "colorset.h"
 
 
 enum C3_RADAR_ACTION {
 	C3_RADAR_ACTION_NULL,
 	C3_RADAR_ACTION_MAX
 };
-enum COLOR;
-
 
 class aui_Surface;
 class MapPoint;
@@ -105,8 +102,8 @@ public:
 
 	
 	BOOL		IncludePointInView(MapPoint &pos, sint32 radius);
-	MapPoint	ComputeCenteredMap(MapPoint &pos, RECT *viewRect);	
-	MapPoint	CenterMap( MapPoint &pos );
+	MapPoint	ComputeCenteredMap(MapPoint const & pos, RECT *viewRect);	
+	MapPoint	CenterMap(const MapPoint &pos );
 	void		Setup( void );
 	void		Update( void );
 	void		RedrawTile( const MapPoint *point );
@@ -117,13 +114,8 @@ public:
 	
 	virtual AUI_ERRCODE			DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback	MouseLGrabInside;
-	virtual MouseEventCallback	MouseRGrabInside;
-#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
-#endif
 
 	virtual AUI_ERRCODE			Idle( void );
 

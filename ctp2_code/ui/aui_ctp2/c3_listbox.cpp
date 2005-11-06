@@ -57,10 +57,9 @@
 
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
 
 extern aui_UI		*g_ui;
-extern ColorSet		*g_colorSet;
 
 
 
@@ -71,9 +70,9 @@ c3_ListBox::c3_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ListBox(),
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ListBox(),
 	PatternBase(ldlBlock, (MBCHAR *)NULL)
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
@@ -114,9 +113,9 @@ c3_ListBox::c3_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
+	aui_ListBox(),
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );

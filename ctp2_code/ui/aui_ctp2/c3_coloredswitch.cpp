@@ -10,7 +10,7 @@
 
 #include "c3ui.h"
 #include "pixelutils.h"
-#include "colorset.h"
+#include "colorset.h"               // g_colorSet
 #include "c3_coloredswitch.h"
 #include "patternbase.h"
 #include "pattern.h"
@@ -20,7 +20,6 @@
 
 extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;
-extern ColorSet		*g_colorSet;
 
 
 c3_ColoredSwitch::c3_ColoredSwitch(
@@ -30,9 +29,9 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -58,9 +57,9 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 	sint32 state,
 	sint32 numStates )
 	:
-	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	aui_ImageBase( numStates ),
 	aui_TextBase( NULL ),
+	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	PatternBase(pattern)
 {
 	Assert( AUI_SUCCESS(*retval) );

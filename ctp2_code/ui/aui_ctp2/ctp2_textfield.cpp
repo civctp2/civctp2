@@ -35,9 +35,9 @@ ctp2_TextField::ctp2_TextField(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_TextField( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextField( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -61,10 +61,10 @@ ctp2_TextField::ctp2_TextField(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_TextField( retval, id, x + 2, y + 2, width - 4, height - 4, text, ActionFunc, cookie ),
-	PatternBase( pattern ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	aui_TextField( retval, id, x + 2, y + 2, width - 4, height - 4, text, ActionFunc, cookie ),
+	PatternBase( pattern )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

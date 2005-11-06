@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 dropdown menu
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -64,9 +64,9 @@ c3_DropDown::c3_DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_DropDown(),
-	aui_TextBase( NULL ),
 	aui_ImageBase( (sint32)0 ),
+	aui_TextBase( NULL ),
+	aui_DropDown(),
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon(id, x, y, width, height);
@@ -98,9 +98,9 @@ c3_DropDown::c3_DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_DropDown(),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_DropDown(),
 	PatternBase(ldlBlock, NULL)
 {
 	*retval = aui_Region::InitCommonLdl(id, ldlBlock);

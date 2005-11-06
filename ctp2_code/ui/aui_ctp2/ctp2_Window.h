@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -29,7 +27,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -85,14 +83,8 @@ public:
 		m_weaklyModalCancelCookie = cookie;
 	}
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLGrabOutside;
-	virtual MouseEventCallback MouseLDropOutside;
-#else
 	virtual void	MouseLGrabOutside		(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropOutside		(aui_MouseEvent * mouseData);	
-#endif
-
 	
 	void	SetBevelMode(bool on_or_off) { m_bevel=on_or_off;};
 

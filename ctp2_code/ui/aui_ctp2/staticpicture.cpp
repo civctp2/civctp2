@@ -32,9 +32,9 @@ StaticPicture::StaticPicture(
 	MBCHAR *ldlBlock,
 	MBCHAR *picture )
 	:
-	aui_Static( retval, id, ldlBlock ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	aui_Static( retval, id, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -55,9 +55,9 @@ StaticPicture::StaticPicture(
 	sint32 height,
 	MBCHAR *picture )
 	:
-	aui_Static( retval, id, x, y, width, height ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	aui_Static( retval, id, x, y, width, height )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

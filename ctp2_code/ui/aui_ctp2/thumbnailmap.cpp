@@ -35,31 +35,24 @@
 #include "aui_action.h"
 
 #include "c3ui.h"
+#include "thumbnailmap.h"
 
-#include "player.h"
+#include "player.h"             // g_player
 #include "XY_Coordinates.h"
-#include "World.h"
+#include "World.h"              // g_theWorld
 #include "Cell.h"
 #include "UnseenCell.h"
 #include "citydata.h"
 #include "Unit.h"
 #include "UnitData.h"
-
 #include "pixelutils.h"
-#include "colorset.h"
-#include "SelItem.h"
-#include "tiledmap.h"
-
+#include "colorset.h"           // g_colorSet
+#include "SelItem.h"            // g_selected_item
+#include "tiledmap.h"           // g_tiledMap
 #include "primitives.h"
 
-#include "thumbnailmap.h"
 
 extern C3UI				*g_c3ui;
-extern TiledMap			*g_tiledMap;
-extern Player			**g_player;
-extern SelectedItem		*g_selected_item;
-extern ColorSet			*g_colorSet;
-extern World			*g_theWorld;
 
 
 ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
@@ -67,9 +60,10 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
+		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -85,9 +79,10 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
+		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon();	
@@ -95,13 +90,8 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 
 ThumbnailMap::~ThumbnailMap()
 {
-	if (m_mapSurface)
-		delete m_mapSurface;
-
-	if ( m_cityList ) {
-		delete m_cityList;
-		m_cityList = NULL;
-	}
+	delete m_mapSurface;
+	delete m_cityList;
 }
 
 
@@ -137,7 +127,7 @@ void ThumbnailMap::InitCommon(void)
 	m_tilePixelHeight = 0.0;
 
 	m_selectedRoute = NULL;
-	m_selectedCity = NULL;
+	m_selectedCity = 0;
 
 	m_displayUnits = TRUE;
 	m_displayLandOwnership = TRUE;
@@ -177,10 +167,7 @@ void ThumbnailMap::BuildCityList(void)
 {
 	sint32		p, i;
 
-	if (m_cityList) {
-		delete m_cityList;
-	}
-
+	delete m_cityList;
 	m_cityList = new DynamicArray<CityInfo>();
 
 	for (p=0; p<k_MAX_PLAYERS; p++) {
@@ -206,7 +193,9 @@ void ThumbnailMap::BuildCityList(void)
 			}
 
 			info.city = cities->Access(i);
-			pt = MapToPixel(&info.city.RetPos()); 
+			
+			MapPoint cityPos = info.city.RetPos();
+			pt = MapToPixel(&cityPos);
 			
 			SetRect(&cityRect, pt.x, pt.y, (sint32)(pt.x + m_tilePixelWidth), (sint32)(pt.y + m_tilePixelHeight));
 			OffsetRect(&cityRect, (sint32)(m_tilePixelWidth/2), (sint32)(m_tilePixelHeight/2));

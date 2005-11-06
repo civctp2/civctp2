@@ -50,10 +50,10 @@ CityInventoryListBox::CityInventoryListBox(AUI_ERRCODE *retval,
 			MBCHAR *ldlBlock,
 			ControlActionCallback *ActionFunc,
 			void *cookie )
-		:
-		C3ListBox(retval, id, ldlBlock, ActionFunc, cookie),
-		aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	:
+	aui_ImageBase( ldlBlock ),
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	C3ListBox(retval, id, ldlBlock, ActionFunc, cookie)
 {
 	InitCommon(ldlBlock);
 }
@@ -68,9 +68,9 @@ CityInventoryListBox::CityInventoryListBox (
 		MBCHAR *pattern,
 		ControlActionCallback *ActionFunc,
 		void *cookie):
-	C3ListBox(retval, id, x, y, width, height, pattern, ActionFunc, cookie),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	C3ListBox(retval, id, x, y, width, height, pattern, ActionFunc, cookie)
 {
 	InitCommon(NULL);
 }
@@ -111,11 +111,10 @@ sint32 CityInventoryListBox::FillInventoryBox(const Unit &unit)
 				
 				item = new StaticTextItem(
 					&errcode,
-
 					i,
 					5, 0, 100, 15,
 					str,
-					NULL,
+					0,
 					8,
 					i,
 					k_GAME_OBJ_TYPE_IMPROVEMENT);
@@ -139,7 +138,7 @@ sint32 CityInventoryListBox::FillInventoryBox(const Unit &unit)
 
 					5, 0, 100, 15,
 					str,
-					NULL,
+					0,
 					8,
 					j,
 					k_GAME_OBJ_TYPE_WONDER);
@@ -216,12 +215,10 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
-
 					i,
-
 					5, 0, 100, 15,
 					str,
-					NULL,
+					0,
 					8,
 					i,
 					k_GAME_OBJ_TYPE_UNIT,
@@ -248,12 +245,10 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
-
 					i,
-
 					5, 0, 100, 15,
 					str,
-					NULL,
+					0,
 					8,
 					i,
 					k_GAME_OBJ_TYPE_IMPROVEMENT,
@@ -280,12 +275,10 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
-
 					i,
-
 					5, 0, 100, 15,
 					str,
-					NULL,
+					0,
 					8,
 					i,
 					k_GAME_OBJ_TYPE_WONDER,
@@ -318,7 +311,7 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 			}
 
 		}
-		FillInventoryBox(NULL);
+		FillInventoryBox(0);
 		FillInventoryBox(unit);
 		bq = unit.GetData()->GetCityData()->GetBuildQueue();
 		bn = bq->GetHead();

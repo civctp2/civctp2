@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 slidometer
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -46,15 +46,13 @@
 #include "c3ui.h"
 
 #include "primitives.h"
-#include "colorset.h"
+#include "colorset.h"       // g_colorSet
 
 #include "c3_slidometer.h"
 
-#include "SlicEngine.h"
+#include "SlicEngine.h"     // g_slicEngine
 
 extern C3UI			*g_c3ui;
-extern SlicEngine	*g_slicEngine;
-extern ColorSet		*g_colorSet;
 
 
 
@@ -65,9 +63,9 @@ c3_Slidometer::c3_Slidometer(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_Ranger()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -114,9 +112,9 @@ c3_Slidometer::c3_Slidometer(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(),
-	aui_TextBase( NULL ),
 	aui_ImageBase( (sint32)0 ),
+	aui_TextBase( NULL ),
+	aui_Ranger(),
 	m_percentFilled(percentFilled)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );

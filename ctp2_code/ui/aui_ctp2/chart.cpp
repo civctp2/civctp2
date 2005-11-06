@@ -15,7 +15,7 @@
 #include "c3_hypertipwindow.h"
 #include "aui_hypertextbox.h"
 
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
 #include "c3windows.h"
 
 #include "ctp2_button.h"
@@ -36,7 +36,6 @@
 
 #include "advanceutil.h"
 
-extern ColorSet		*g_colorSet;
 extern C3UI			*g_c3ui;
 extern ProjectFile	*g_GreatLibPF;
 
@@ -48,9 +47,9 @@ Chart::Chart( AUI_ERRCODE *retval,
 			 ControlActionCallback *ActionFunc,
 			 void *cookie )
 	:
-	ctp2_Static( retval, id, ldlBlock ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	ctp2_Static( retval, id, ldlBlock )
 {
 	InitCommon( ldlBlock );
 }
@@ -65,9 +64,9 @@ Chart::Chart( AUI_ERRCODE *retval,
 			 ControlActionCallback *ActionFunc,
 			 void *cookie )
 	:
-	ctp2_Static( retval, id, x, y, width, height, pattern, NULL, 0, 0, 0 ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
-	aui_ImageBase( (sint32)0 )
+	ctp2_Static( retval, id, x, y, width, height, pattern, NULL, 0, 0, 0 )
 {
 	InitCommon( NULL );
 }

@@ -36,9 +36,9 @@ PictureButton::PictureButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie )
 {
 	m_upPicture = NULL;
 	m_downPicture = NULL;
@@ -53,9 +53,9 @@ PictureButton::PictureButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_Button(retval, id, ldlBlock, ActionFunc, cookie),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	aui_Button(retval, id, ldlBlock, ActionFunc, cookie)
 {
 	m_upPicture = NULL;
 	m_downPicture = NULL;

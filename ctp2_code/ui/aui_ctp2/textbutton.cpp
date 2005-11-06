@@ -33,7 +33,6 @@
 
 #include "SlicEngine.h"
 
-extern ColorSet		*g_colorSet;
 extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;
 
@@ -45,10 +44,9 @@ TextButton::TextButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	c3_Button( retval, id, ldlBlock, ActionFunc, cookie ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
-
-	aui_ImageBase( ldlBlock )
+	c3_Button( retval, id, ldlBlock, ActionFunc, cookie )
 {
 }
 
@@ -66,10 +64,9 @@ TextButton::TextButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	c3_Button( retval, id, x, y, width, height, pattern, ActionFunc, cookie ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text ),
-
-	aui_ImageBase( (sint32)0 )
+	c3_Button( retval, id, x, y, width, height, pattern, ActionFunc, cookie )
 {
 }
 

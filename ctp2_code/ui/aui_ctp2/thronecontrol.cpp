@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Throne control (probably unused but worth to be reimplemented)
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -92,9 +92,10 @@ ThroneControl::ThroneControl(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
+		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -110,9 +111,10 @@ ThroneControl::ThroneControl(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
+		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon();	

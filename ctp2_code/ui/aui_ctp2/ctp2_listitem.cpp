@@ -14,9 +14,9 @@
 
 ctp2_ListItem::ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 	:
-	aui_Item( retval, aui_UniqueId(), ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_Item( retval, aui_UniqueId(), ldlBlock),
 	PatternBase(ldlBlock, (MBCHAR *)NULL)
 {
 	m_userData = NULL;

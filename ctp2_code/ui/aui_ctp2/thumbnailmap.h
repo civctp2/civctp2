@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 // BATTLE_FLAGS
 // ?
 //
@@ -32,7 +29,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -152,17 +149,10 @@ public:
 	
 	virtual AUI_ERRCODE			DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback	MouseLGrabInside;
-	virtual MouseEventCallback	MouseRGrabInside;
-	virtual MouseEventCallback	MouseNoChange;
-	virtual MouseEventCallback	MouseMoveInside;
-#else
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseRGrabInside(aui_MouseEvent * data);
     virtual void	MouseNoChange(aui_MouseEvent * data);
     virtual void	MouseMoveInside(aui_MouseEvent * data);
-#endif
 
 	virtual AUI_ERRCODE			Idle( void );
 

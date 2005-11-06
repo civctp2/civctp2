@@ -3,7 +3,7 @@
 #include "c3.h"
 #include "aui.h"
 #include "aui_ldl.h"
-#include "aui_ui.h"
+#include "aui_ui.h"             // g_ui
 #include "aui_window.h"
 #include "aui_gamespecific.h"
 
@@ -12,10 +12,7 @@
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"
-
-extern aui_UI		*g_ui;
-extern ColorSet		*g_colorSet;
+#include "colorset.h"           // g_colorSet
 
 
 ctp2_Static::ctp2_Static(
@@ -23,9 +20,9 @@ ctp2_Static::ctp2_Static(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
-	aui_Static( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Static( retval, id, ldlBlock ),
 	PatternBase(ldlBlock, NULL)
 {
 	m_drawFunc			= NULL;
@@ -58,9 +55,9 @@ ctp2_Static::ctp2_Static(
 	uint32 bevelWidth,
 	uint32 bevelType)
 	:
-	aui_Static( retval, id, x, y, width, height, text, maxLength),
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text, maxLength ),
+	aui_Static( retval, id, x, y, width, height, text, maxLength),
 	PatternBase(pattern)
 {
 	

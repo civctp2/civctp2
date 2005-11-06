@@ -41,9 +41,9 @@ C3Spinner::C3Spinner(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	aui_Ranger()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -110,9 +110,9 @@ C3Spinner::C3Spinner(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	aui_Ranger()
 {
 	aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );
@@ -147,7 +147,7 @@ C3Spinner::C3Spinner(
 
 AUI_ERRCODE C3Spinner::InitCommon( BOOL isVertical )
 {
-	if ( m_isVertical = isVertical )
+	if ((m_isVertical = isVertical))
 		m_valX = m_minX = m_maxX = m_incX = m_pageX = 0;
 	else
 		m_valY = m_minY = m_maxY = m_incY = m_pageY = 0;
@@ -235,7 +235,7 @@ AUI_ERRCODE C3Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	sprintf( s, "%d", 100 - ( m_isVertical ? GetValueY() : GetValueX() ) );
 
 	primitives_DropText(
-		(aui_DirectSurface *)surface,
+		surface,
 		rect.left + 5,
 		rect.top + 5,
 		s,

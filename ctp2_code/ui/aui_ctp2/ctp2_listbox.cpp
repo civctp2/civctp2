@@ -31,7 +31,7 @@
 #include "c3.h"
 #include "aui.h"
 
-#include "aui_ui.h"
+#include "aui_ui.h"                 // g_ui
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_ranger.h"
@@ -49,16 +49,10 @@
 
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"
+#include "colorset.h"               // g_colorSet
 
 #include "ctp2_MenuButton.h"
 #include "aui_dragdropwindow.h"
-
-
-
-extern aui_UI		*g_ui;
-extern ColorSet		*g_colorSet;
-
 
 
 
@@ -74,9 +68,9 @@ ctp2_ListBox::ctp2_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ListBox(),
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ListBox(),
 	PatternBase(ldlBlock, (MBCHAR *)NULL)
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
@@ -119,9 +113,9 @@ ctp2_ListBox::ctp2_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
+	aui_ListBox(),
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );

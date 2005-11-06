@@ -12,6 +12,7 @@
 
 
 #include "c3.h"
+#include "iconbutton.h"
 
 #include "aui.h"
 #include "pattern.h"
@@ -21,20 +22,12 @@
 #include "aui_ldl.h"
 
 #include "pixelutils.h"
-#include "colorset.h"
-
-#include "CivPaths.h"
-
-
+#include "colorset.h"       // g_colorSet
+#include "CivPaths.h"       // g_civPaths
 #include "primitives.h"
 
-#include "iconbutton.h"
-
 #include "c3ui.h"
-
 extern C3UI			*g_c3ui;
-extern CivPaths		*g_civPaths;
-extern ColorSet		*g_colorSet;
 
 
 IconButton::IconButton(
@@ -50,11 +43,11 @@ IconButton::IconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
+	aui_ImageBase( (sint32)0 ),
+	aui_TextBase(NULL),
 	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie ),
 	PatternBase( pattern ),
-	m_color(color ),
-	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	m_color(color )
 {
 	InitCommon(icon);
 
@@ -67,10 +60,10 @@ IconButton::IconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
-	PatternBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
+	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 	InitCommon(ldlBlock, TRUE);
 

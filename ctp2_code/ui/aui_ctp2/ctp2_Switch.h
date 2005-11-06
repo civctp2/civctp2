@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -67,22 +64,18 @@ public:
 
 	void SetBevelWidth(uint32 w) { m_bevelWidth = w; };
 	sint32 BevelWidth( void ) const { return m_bevelWidth; }
-protected:
-	ctp2_Switch() : aui_Switch() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( sint32 bevelWidth  );
 
-public:
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLDoubleClickInside;
-#else
 	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
-#endif
+
+protected:
+	ctp2_Switch() : aui_Switch() {}
+	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommon( sint32 bevelWidth  );
 
 private:
 	sint32	m_bevelWidth;

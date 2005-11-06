@@ -32,7 +32,7 @@ extern C3UI		*g_c3ui;
 
 Picture::Picture(
 	AUI_ERRCODE *retval,
-	MBCHAR *szFileName )
+	MBCHAR const * szFileName )
 : aui_Image( retval, szFileName ), m_mipmap( NULL )
 {
 	Load();

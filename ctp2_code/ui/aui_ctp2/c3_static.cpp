@@ -12,56 +12,55 @@
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
 
 extern aui_UI		*g_ui;
-extern ColorSet		*g_colorSet;
 
 
-c3_Static::c3_Static(
-	AUI_ERRCODE *retval,
-	uint32 id,
-	MBCHAR *ldlBlock )
-	:
-	aui_Static( retval, id, ldlBlock ),
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	PatternBase(ldlBlock, NULL)
+c3_Static::c3_Static
+(
+	AUI_ERRCODE *   retval,
+	uint32          id,
+	MBCHAR *        ldlBlock 
+)
+:
+	aui_ImageBase   (ldlBlock),
+	aui_TextBase    (ldlBlock, (MBCHAR *) NULL),
+	aui_Static      (retval, id, ldlBlock),
+	PatternBase     (ldlBlock, NULL)
 {
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
-
-	*retval = InitCommonLdl( ldlBlock );
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
+	if (AUI_SUCCESS(*retval))
+    {
+	    *retval = InitCommonLdl(ldlBlock);
+	}
 }
 
 
 
-c3_Static::c3_Static(
-	AUI_ERRCODE *retval,
-	uint32 id,
-	sint32 x,
-	sint32 y,
-	sint32 width,
-	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
-	uint32 maxLength,
-	uint32 bevelWidth,
-	uint32 bevelType)
-	:
-	aui_Static( retval, id, x, y, width, height, text, maxLength),
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( text, maxLength ),
-	PatternBase(pattern)
+c3_Static::c3_Static
+(
+	AUI_ERRCODE *   retval,
+	uint32          id,
+	sint32          x,
+	sint32          y,
+	sint32          width,
+	sint32          height,
+	MBCHAR *        pattern,
+	MBCHAR *        text,
+	uint32          maxLength,
+	uint32          bevelWidth,
+	uint32          bevelType
+)
+:
+	aui_ImageBase   ((sint32) 0),
+	aui_TextBase    (text, maxLength),
+	aui_Static      (retval, id, x, y, width, height, text, maxLength),
+	PatternBase     (pattern)
 {
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
-
-	*retval = InitCommon(bevelWidth, bevelType);
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
+	if (AUI_SUCCESS(*retval))
+    {
+	    *retval = InitCommon(bevelWidth, bevelType);
+    }
 }
 
 

@@ -49,8 +49,10 @@ extern sint32			g_isFastCpu; // Actual permernent set to 1
 
 
 TileControl::TileControl(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock )
-	: aui_Control(retval,id,ldlBlock), 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), aui_ImageBase( ldlBlock )
-
+:
+	aui_ImageBase( ldlBlock ),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_Control(retval,id,ldlBlock)
 {
 
 }
@@ -65,9 +67,9 @@ TileControl::TileControl(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie )
 {
 
 }

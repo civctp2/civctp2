@@ -37,13 +37,13 @@ PictureSwitch::PictureSwitch(
 	void *cookie,
 	BOOL selected )
 :
+	aui_ImageBase( (sint32)0 ),
+	aui_TextBase(NULL),
 	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, selected ),
 	m_pictureOn( pictureOn ),
 	m_pictureOff( pictureOff ),
 	m_pictureActiveOn( pictureActiveOn ),
-	m_pictureActiveOff( pictureActiveOff ),
-	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	m_pictureActiveOff( pictureActiveOff )
 {
 }
 

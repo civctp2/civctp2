@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Call to Power 2 hypertextbox
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -59,7 +59,6 @@
 
 extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;
-extern ColorSet		*g_colorSet;
 
 #define k_CTP2_HYPERTEXTBOX_BEVELWIDTH	2
 #define k_CTP2_HYPERTEXTBOX_INSETWIDTH	5
@@ -410,11 +409,10 @@ AUI_ERRCODE ctp2_HyperTextBox::InitCommon( void )
 
 ctp2_HyperTextBox::~ctp2_HyperTextBox()
 {
-	if ( m_hyperLinkList ) {
+	if (m_hyperLinkList) 
+    {
 		RemoveHyperLinks();
-
 		delete m_hyperLinkList;
-		m_hyperLinkList = NULL;
 	}
 }
 
@@ -473,9 +471,8 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 
 AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 {
-	if ( !hyperText )
+	if (!hyperText)
 	{
-		
 		RemoveHyperStatics();
 		RemoveHyperLinks();
 		m_curStaticPos.x = 0;
@@ -492,11 +489,11 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 
 
-	sint32 hyperLinkDB = 0;
-	sint32 hyperLinkIndex = 0;
-	sint32 isHyperLink = FALSE;
-	COLORREF oldColor = 0;
-	sint32 oldUnderline = 0;
+	sint32      hyperLinkDB     = 0;
+	sint32      hyperLinkIndex  = k_GL_INDEX_INVALID;
+	bool        isHyperLink     = false;
+	COLORREF    oldColor        = 0;
+	sint32      oldUnderline    = 0;
 
 	while ( ptr != stop )
 	{
@@ -525,7 +522,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				uint8 r, g, b;
 				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
 				m_hyperColorOld = m_hyperColor;
-				m_hyperColor = RGB(r,g,b);
+				m_hyperColor    = RGB(r,g,b);
 			}
 			break;
 
@@ -551,16 +548,13 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			case 'l':
 				sscanf( ++ptr, ":%d,%d>", &hyperLinkDB, &hyperLinkIndex );
 				
-				
-				
-				
-				oldUnderline = m_hyperUnderline;
-				oldColor = m_hyperColor;
-				m_hyperColorOld = m_hyperColor;
+				oldUnderline        = m_hyperUnderline;
+				oldColor            = m_hyperColor;
+				m_hyperColorOld     = m_hyperColor;
 
-				m_hyperUnderline = 1;
-				m_hyperColor = RGB(0,0,100);
-				isHyperLink = TRUE;
+				m_hyperUnderline    = 1;
+				m_hyperColor        = RGB(0,0,100);
+				isHyperLink         = true;
 				break;
 
 			
@@ -597,29 +591,16 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 				ptr			= std::find(copyEnd, stop, '>');
 
-
-
-
-				
-
-
-				
-				hyperLinkDB = GreatLibrary::Get_Database_From_Name(hyperLinkDB_name);
-				hyperLinkIndex = 
+				hyperLinkDB         = 
+                    GreatLibrary::Get_Database_From_Name(hyperLinkDB_name);
+				hyperLinkIndex      = 
 					GreatLibrary::Get_Object_Index_From_Name(hyperLinkDB, hyperLinkIndex_name);
-		
-
-				
-				
-				
-				
-				oldUnderline = m_hyperUnderline;
-				oldColor = m_hyperColor;
-				m_hyperColorOld = m_hyperColor;
-
-				m_hyperUnderline = 1;
-				m_hyperColor = RGB(0,0,100);
-				isHyperLink = TRUE;
+				oldUnderline        = m_hyperUnderline;
+				oldColor            = m_hyperColor;
+				m_hyperColorOld     = m_hyperColor;
+				m_hyperUnderline    = 1;
+				m_hyperColor        = RGB(0,0,100);
+				isHyperLink         = true;
 				break;
 				}
 
@@ -643,7 +624,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					}
 
 					m_hyperUnderline	= oldUnderline;
-					isHyperLink			= FALSE;
+					isHyperLink			= false;
 				}
 				m_hyperColor = m_hyperColorOld;
 				break;
@@ -675,11 +656,11 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			FormatText(ptr, nextStop, hyperLinkDB, hyperLinkIndex, isHyperLink);
 			ptr	= nextStop;
 
-			
-			if ( isHyperLink ) {
-				isHyperLink = FALSE;
-				m_hyperUnderline = oldUnderline;
-				m_hyperColor = oldColor;
+			if (isHyperLink) 
+            {
+				isHyperLink         = false;
+				m_hyperUnderline    = oldUnderline;
+				m_hyperColor        = oldColor;
 			}
 		}
 	}
@@ -692,18 +673,11 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 void ctp2_HyperTextBox::RemoveHyperLinks( void )
 {
-	ListPos position = m_hyperLinkList->GetHeadPosition();
-	for ( sint32 i = m_hyperLinkList->L(); i; i-- )
-		DestroyHyperLink( m_hyperLinkList->RemoveTail() );
-}
-
-
-void ctp2_HyperTextBox::DestroyHyperLink( ctp2_HyperLink *hl )
-{
-	Assert( hl != NULL );
-	if ( !hl ) return;
-
-	delete hl;
+	for (sint32 i = m_hyperLinkList->L(); i; --i)
+    {
+		delete m_hyperLinkList->RemoveTail();
+    }
+    m_selectedHyperLink = NULL;
 }
 
 

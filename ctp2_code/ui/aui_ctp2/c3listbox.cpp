@@ -12,6 +12,7 @@
 
 
 #include "c3.h"
+#include "c3listbox.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -20,15 +21,11 @@
 #include "aui_ldl.h"
 #include "c3_ranger.h"
 #include "pattern.h"
-
 #include "pixelutils.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
 #include "primitives.h"
 
-#include "c3listbox.h"
 
-
-extern ColorSet		*g_colorSet;
 
 
 C3ListBox::C3ListBox(
@@ -38,9 +35,9 @@ C3ListBox::C3ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ListBox(),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_ListBox()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -86,9 +83,9 @@ C3ListBox::C3ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ListBox(),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
-	aui_ImageBase( (sint32)0 )
+	aui_ListBox()
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );

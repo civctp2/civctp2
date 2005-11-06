@@ -26,7 +26,7 @@
 extern C3UI		*g_c3ui;
 
 Icon::Icon(	AUI_ERRCODE *retval,
-			MBCHAR *szFileName)
+			MBCHAR const * szFileName)
 :
 aui_Image(retval, szFileName)
 {

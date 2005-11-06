@@ -12,6 +12,7 @@
 
 
 #include "c3.h"
+#include "coloriconswitch.h"
 
 #include "aui.h"
 #include "pattern.h"
@@ -21,20 +22,12 @@
 #include "aui_ldl.h"
 
 #include "pixelutils.h"
-#include "colorset.h"
-
-#include "CivPaths.h"
-
-
+#include "colorset.h"       // g_colorSet
+#include "CivPaths.h"       // g_civPaths
 #include "primitives.h"
-
-#include "coloriconswitch.h"
-
 #include "c3ui.h"
 
 extern C3UI			*g_c3ui;
-extern CivPaths		*g_civPaths;
-extern ColorSet		*g_colorSet;
 
 
 ColorIconSwitch::ColorIconSwitch(
@@ -49,10 +42,9 @@ ColorIconSwitch::ColorIconSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	c3_Switch( retval, id, x, y, width, height, pattern, ActionFunc, cookie ),
-
+	aui_ImageBase( 1, AUI_IMAGEBASE_BLTTYPE_STRETCH ),
 	aui_TextBase(NULL),
-	aui_ImageBase( 1, AUI_IMAGEBASE_BLTTYPE_STRETCH )
+	c3_Switch( retval, id, x, y, width, height, pattern, ActionFunc, cookie )
 {
 	m_shrinkToFit = FALSE;
 	m_filename = NULL;
@@ -69,10 +61,9 @@ ColorIconSwitch::ColorIconSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	c3_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
-
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	c3_Switch( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	m_shrinkToFit = FALSE;
 	m_filename = NULL;

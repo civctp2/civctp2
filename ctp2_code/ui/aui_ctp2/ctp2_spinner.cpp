@@ -43,9 +43,9 @@ ctp2_Spinner::ctp2_Spinner(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(retval, id, ldlBlock),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	aui_Ranger(retval, id, ldlBlock)
 {
 	m_spinnerActionFunc = ActionFunc;
 	m_spinnerCookie = cookie;

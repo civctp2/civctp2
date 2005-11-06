@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 ranger
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -57,9 +57,9 @@ c3_Ranger::c3_Ranger(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_Ranger()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -105,9 +105,9 @@ c3_Ranger::c3_Ranger(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_Ranger(),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
-	aui_ImageBase( (sint32)0 )
+	aui_Ranger()
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );
@@ -249,7 +249,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 			ldl_datablock *dataBlock;
 
 			sprintf( block, "RangerRight" );
-			if ( dataBlock = theLdl->GetLdl()->FindDataBlock( block ) )
+			if ((dataBlock = theLdl->GetLdl()->FindDataBlock( block )))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -300,7 +300,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 
 			i = 3;
 			sprintf( block, "RangerLeft" );
-			if ( dataBlock = theLdl->GetLdl()->FindDataBlock( block ) )
+			if ((dataBlock = theLdl->GetLdl()->FindDataBlock( block )))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -356,7 +356,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 			ldl_datablock *dataBlock;
 
 			sprintf( block, "RangerDown" );
-			if ( dataBlock = theLdl->GetLdl()->FindDataBlock( block ) )
+			if ((dataBlock = theLdl->GetLdl()->FindDataBlock( block )))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -406,7 +406,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 
 			i = 1;
 			sprintf( block, "RangerUp" );
-			if ( dataBlock = theLdl->GetLdl()->FindDataBlock( block ) )
+			if ((dataBlock = theLdl->GetLdl()->FindDataBlock( block )))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,

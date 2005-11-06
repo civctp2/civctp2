@@ -1,20 +1,20 @@
 
 
 #include "c3.h"
+#include "ctp2_textbuffer.h"
 
 #include "c3ui.h"
+#include "colorset.h"                   // g_colorSet
+
 extern C3UI		*g_c3ui;
 
 
-#include "ctp2_textbuffer.h"
 
 #define k_CTP2_TEXTBUFFER_FONT_FILE		"lucon.ttf"
 #define k_CTP2_TEXTBUFFER_FONT_SIZE		8
 
 
 #define k_CTP2_TEXTBUFFER_WIDTH_CHAR	"W"
-
-extern ColorSet		*g_colorSet;
 
 
 ctp2_TextBuffer::ctp2_TextBuffer(aui_Surface *destSurface, RECT *destRect, sint32 scrollbackLines)
@@ -70,7 +70,7 @@ ctp2_TextBuffer::ctp2_TextBuffer(aui_Surface *destSurface, RECT *destRect, sint3
 
 ctp2_TextBuffer::~ctp2_TextBuffer()
 {
-	if (m_font) 
+	if (g_c3ui && m_font) 
 		g_c3ui->UnloadBitmapFont(m_font);
 
 	

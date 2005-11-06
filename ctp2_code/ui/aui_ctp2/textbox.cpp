@@ -35,8 +35,6 @@
 
 
 extern C3UI			*g_c3ui;
-extern ColorSet		*g_colorSet;
-
 
 
 TextBox::TextBox(
@@ -51,9 +49,9 @@ TextBox::TextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_TextBox(),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL, k_TEXTBOX_MAXTEXT * k_TEXTBOX_MAXITEMS ),
-	aui_ImageBase( (sint32)0 )
+	aui_TextBox()
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );
@@ -92,9 +90,9 @@ TextBox::TextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_TextBox(),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_TextBox()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );

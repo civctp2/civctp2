@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -64,13 +61,8 @@ class ctp2_MenuButton : public c3_Button
   protected:
 	ctp2_MenuButton() : c3_Button() {}
 	
-#if defined(_MSC_VER)	
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDragAway;
-#else
 	virtual void	MouseLGrabInside	(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway		(aui_MouseEvent * mouseData);
-#endif
 
 	friend class ctp2_ListBox;
 

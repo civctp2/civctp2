@@ -36,10 +36,10 @@ C3Thumb::C3Thumb(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_Thumb( retval, id, x, y, width, height, ActionFunc, cookie ),
-	PatternBase( pattern ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_ImageBase( (sint32)0 )
+	aui_Thumb( retval, id, x, y, width, height, ActionFunc, cookie ),
+	PatternBase( pattern )
 {
 }
 
@@ -51,10 +51,10 @@ C3Thumb::C3Thumb(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_Thumb( retval, id, ldlBlock, ActionFunc, cookie ),
-	PatternBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_Thumb( retval, id, ldlBlock, ActionFunc, cookie ),
+	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 }
 

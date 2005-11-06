@@ -12,6 +12,7 @@
 
 
 #include "c3.h"
+#include "textswitch.h"
 
 #include "aui.h"
 #include "aui_surface.h"
@@ -19,21 +20,13 @@
 #include "pattern.h"
 #include "aui_ldl.h"
 #include "aui_action.h"
-
 #include "c3ui.h"
-
 #include "pixelutils.h"
-#include "colorset.h"
-
+#include "colorset.h"       // g_colorSet
 #include "primitives.h"
 #include "textutils.h"
+#include "SlicEngine.h"     // g_slicEngine
 
-#include "textswitch.h"
-
-#include "SlicEngine.h"
-
-extern ColorSet		*g_colorSet;
-extern SlicEngine	*g_slicEngine;
 extern C3UI			*g_c3ui;
 
 
@@ -44,10 +37,10 @@ TextSwitch::TextSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
+	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
-	PatternBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ImageBase( ldlBlock )
+	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
+	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 }
 
@@ -66,10 +59,10 @@ TextSwitch::TextSwitch(
 	void *cookie,
 	BOOL selected )
 	:
-	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, selected ),
+	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text ),
-	PatternBase( pattern ),
-	aui_ImageBase( (sint32)0 )
+	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, selected ),
+	PatternBase( pattern )
 {
 }
 
@@ -130,7 +123,7 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-			textutils_CenteredDropString((aui_DirectSurface *)surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_HILITE, 0);
+			textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_HILITE, 0);
 		}
 	}
 	else
@@ -141,7 +134,7 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-			textutils_CenteredDropString((aui_DirectSurface *)surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
+			textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
 
 		}
 	}

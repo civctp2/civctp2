@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 hyper text box
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -55,7 +55,6 @@
 
 extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;
-extern ColorSet		*g_colorSet;
 
 #define k_C3_HYPERTEXTBOX_BEVELWIDTH	2
 #define k_C3_HYPERTEXTBOX_INSETWIDTH	5
@@ -72,10 +71,9 @@ c3_HyperTextBox::c3_HyperTextBox(
 	bool draw_frame
 	)
 	:
-
-	aui_HyperTextBox(),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+	aui_HyperTextBox(),
 	PatternBase(ldlBlock, NULL)
 {
 	
@@ -127,10 +125,10 @@ c3_HyperTextBox::c3_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	PatternBase(pattern),
-	aui_HyperTextBox(retval, id, x,y, width, height, ActionFunc, cookie),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL )
+	aui_TextBase( NULL ),
+	aui_HyperTextBox(retval, id, x,y, width, height, ActionFunc, cookie),
+	PatternBase(pattern)
 {
 	
 	m_draw_frame = false;
@@ -190,11 +188,10 @@ AUI_ERRCODE c3_HyperTextBox::InitCommon( void )
 
 c3_HyperTextBox::~c3_HyperTextBox()
 {
-	if ( m_hyperLinkList ) {
+	if (m_hyperLinkList) 
+    {
 		RemoveHyperLinks();
-
 		delete m_hyperLinkList;
-		m_hyperLinkList = NULL;
 	}
 }
 
@@ -253,9 +250,8 @@ AUI_ERRCODE c3_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 
 AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 {
-	if ( !hyperText )
+	if (!hyperText)
 	{
-		
 		RemoveHyperStatics();
 		RemoveHyperLinks();
 		m_curStaticPos.x = 0;
@@ -270,15 +266,12 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 	const MBCHAR *ptr = hyperText;
 	const MBCHAR *stop = ptr + len;
 
-
-	
-	sint32 adjWidth = m_width;
-
-	sint32 hyperLinkDB = 0;
-	sint32 hyperLinkIndex = 0;
-	sint32 isHyperLink = FALSE;
-	COLORREF oldColor = 0;
-	sint32 oldUnderline = 0;
+	sint32      adjWidth        = m_width;
+	sint32      hyperLinkDB     = 0;
+	sint32      hyperLinkIndex  = 0;
+	bool        isHyperLink     = false;
+	COLORREF    oldColor        = 0;
+	sint32      oldUnderline    = 0;
 
 	while ( ptr != stop )
 	{
@@ -342,7 +335,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 				m_hyperUnderline = 1;
 				m_hyperColor = RGB(0,0,100);
-				isHyperLink = TRUE;
+				isHyperLink = true;
 				break;
 
 			
@@ -369,12 +362,8 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				
 				while (isalnum(*ptr) || (*ptr == '_'))
 				{
-					*copy_to = *ptr;
-					ptr++;
-					copy_to++;
+					*copy_to++ = *ptr++;
 				}
-
-				
 				*copy_to = 0;
 
 				
@@ -387,12 +376,8 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				
 				while (isalnum(*ptr) || (*ptr == '_'))
 				{
-					*copy_to = *ptr;
-					ptr++;
-					copy_to++;
+					*copy_to++ = *ptr++;
 				}
-
-				
 				*copy_to = 0;
 
 				
@@ -636,17 +621,12 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				
 				if ( m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS )
 				{
-					
-					DestroyHyperStatic( m_hyperStaticList->RemoveHead() );
+					delete m_hyperStaticList->RemoveHead();
 
-					
 					sint32 topY = m_hyperStaticList->GetHead()->Y();
-				
-					
 					ListPos pos = m_hyperStaticList->GetHeadPosition();
 					for ( sint32 i = m_hyperStaticList->L()-1; i; i-- )
 						m_hyperStaticList->GetNext( pos )->Offset( 0, -topY );
-					
 					
 					m_virtualHeight -= topY;
 					m_curStaticPos.y -= topY;
@@ -654,11 +634,8 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 				
 				if ( isHyperLink ) {
-					c3_HyperLink *hl;
+					c3_HyperLink * hl = new c3_HyperLink;
 
-					hl = new c3_HyperLink;
-
-					
 					hl->m_static = hs;
 					hl->m_db = hyperLinkDB;
 					hl->m_index = hyperLinkIndex;
@@ -686,18 +663,11 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 void c3_HyperTextBox::RemoveHyperLinks( void )
 {
-	ListPos position = m_hyperLinkList->GetHeadPosition();
-	for ( sint32 i = m_hyperLinkList->L(); i; i-- )
-		DestroyHyperLink( m_hyperLinkList->RemoveTail() );
-}
-
-
-void c3_HyperTextBox::DestroyHyperLink( c3_HyperLink *hl )
-{
-	Assert( hl != NULL );
-	if ( !hl ) return;
-
-	delete hl;
+	for (sint32 i = m_hyperLinkList->L(); i; --i)
+    {
+		delete m_hyperLinkList->RemoveTail();
+    }
+    m_selectedHyperLink = NULL;
 }
 
 
