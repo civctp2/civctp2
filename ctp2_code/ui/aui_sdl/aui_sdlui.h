@@ -73,6 +73,7 @@ public:
 protected:
    //LPDIRECTDRAWSURFACE m_lpdds; 
    bool                m_isCoinitialized;
+	SDL_Surface        *m_lpdds;
 };
 
 

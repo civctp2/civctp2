@@ -43,7 +43,7 @@ extern SoundManager *g_soundManager;
 
 aui_DirectMovie::aui_DirectMovie(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	MBCHAR const * filename )
 	:
 	aui_Movie( retval, filename )
 {

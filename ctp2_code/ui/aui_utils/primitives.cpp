@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The primitive rectabgles for painting
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,6 +29,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "primitives.h"
+
 #include "c3math.h"
 
 #include "globals.h"
@@ -44,13 +46,11 @@
 #include "c3ui.h"
 
 #include "pixelutils.h"
-#include "primitives.h"
 #include "textutils.h"
 #include "tileset.h"
-#include "colorset.h"
+#include "colorset.h"               // g_colorSet
 
 extern sint32		g_is565Format;
-extern ColorSet		*g_colorSet;
 extern C3UI			*g_c3ui;
 
 
@@ -242,7 +242,7 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 		double fy = src_y - floor(src_y);
 		for (sint32 i=0;i<width;i++)
 		{
-			uint32 x = floor(src_x);
+			uint32 x = uint32(floor(src_x));
 			if (!bFilter)
 			{
 				pDstPixel[i] = pSrcPixel[x];
@@ -1261,10 +1261,10 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 
 
 PRIMITIVES_ERRCODE primitives_DrawText(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pDirectSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF color,						
 	BOOL bg								
 	)
@@ -1318,9 +1318,9 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 
 
 PRIMITIVES_ERRCODE primitives_DrawBoundedText(
-		aui_DirectSurface *pDirectSurface,	
+		aui_Surface *pDirectSurface,	
 		RECT *bound,						
-		MBCHAR *pString,				
+		const MBCHAR *pString,				
 		COLORREF color,					
 		BOOL bg							
 		)
@@ -1383,10 +1383,10 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 
 
 PRIMITIVES_ERRCODE primitives_DrawTextBatch(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pDirectSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR **pString,					
+	const MBCHAR **pString,					
 	sint32 numStrings,					
 	COLORREF color,						
 	BOOL bg								
@@ -1452,10 +1452,10 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 
 
 PRIMITIVES_ERRCODE primitives_DropText(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pDirectSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF color,						
 	BOOL bg								
 	)
@@ -1520,10 +1520,10 @@ PRIMITIVES_ERRCODE primitives_DropText(
 
 
 PRIMITIVES_ERRCODE primitives_ColoredDropText(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pDirectSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF textColor,						
 	COLORREF dropColor,						
 	BOOL bg								
@@ -1584,9 +1584,9 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 }
 
 PRIMITIVES_ERRCODE primitives_DropTextCentered(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pDirectSurface,	
 	RECT *destRect,
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF color,						
 	BOOL bg								
 	)
@@ -1652,9 +1652,9 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 }
 
 PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pDirectSurface,	
 	RECT *destRect,
-	MBCHAR *pString,					
+	const MBCHAR *pString,					
 	COLORREF textColor,						
 	COLORREF dropColor,						
 	BOOL bg								
@@ -1729,10 +1729,10 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 
 
 PRIMITIVES_ERRCODE primitives_DropTextBatch(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pDirectSurface,	
 	sint32 x,							
 	sint32 y,							
-	MBCHAR **pString,					
+	const MBCHAR **pString,					
 	sint32 numStrings,					
 	COLORREF color,						
 	BOOL bg								

@@ -27,7 +27,7 @@ class aui_DirectSound : public aui_Sound
 public:
 	aui_DirectSound(
 		AUI_ERRCODE *retval,
-		MBCHAR *filename = NULL );
+		MBCHAR const * filename = NULL );
 	virtual ~aui_DirectSound();
 
 	virtual AUI_ERRCODE Load(

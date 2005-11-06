@@ -26,7 +26,7 @@ public:
 	
 	aui_DirectMovie(
 		AUI_ERRCODE *retval,
-		MBCHAR *filename = NULL );
+		MBCHAR const * filename = NULL );
 	virtual ~aui_DirectMovie();
 
 protected:

@@ -20,19 +20,16 @@ aui_DirectJoystick::aui_DirectJoystick(
 	uint32 lMin,
 	uint32 lMax)
 	:
-	aui_Joystick( retval ),
-	aui_Input( retval ),
-	aui_DirectInput( retval, FALSE ),
-	m_lpDI2Joystick( NULL ),
-	m_lMin( lMin ),
-	m_lMax( lMax )
+	aui_Joystick	(),
+	aui_Input		(),
+	aui_DirectInput	(retval, FALSE),
+	m_lpDI2Joystick	(NULL),
+	m_lMin		(lMin),
+	m_lMax		(lMax)
 {
-	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = CreateDirectJoystick();
-
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
