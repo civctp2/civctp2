@@ -34,6 +34,13 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 Changelog:
 
+2005-11-05
+(E's Changes Only)
+Added: NeedsCityGood and NeedsCityGoodAll added to CanBuildUnit, CanBuildBuilding, and CanBuild Wonder
+Added:Implemented EnablesGood for buildings, wonders and tile improvements now they give goods to a city 
+Added:To ProcessFood,ProcessProduction,ProcessGold, ProcessScience added a check that if a city has or is buying a good than you can get a bonus. EfficiencyOrCrime flag affects all four. 
+Added: NeedsCityGoodAnyCity allows for a unit to be built in any city if one city has the good
+
 2005-10-23
 Fixed: Misc crashes
 Fixed: Broken/incorrect links in the great library
