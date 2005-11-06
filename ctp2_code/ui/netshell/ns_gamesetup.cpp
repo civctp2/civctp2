@@ -136,7 +136,8 @@ void nf_GameSetup::Pack()
 	Push( m_difficulty1 );
 	Push( m_difficulty2 );
 
-	for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
+	sint32 i;
+	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		Push( m_tribeSlots[ i ] );
 	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		Push( m_savedTribeSlots[ i ] );
@@ -196,7 +197,8 @@ void nf_GameSetup::Unpack()
 	Pop( m_difficulty1 );
 	Pop( m_difficulty2 );
 
-	for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
+	sint32 i;
+	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		Pop( m_tribeSlots[ i ] );
 	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		Pop( m_savedTribeSlots[ i ] );

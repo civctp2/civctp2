@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Network (multiplayer) user interface
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -143,9 +143,11 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 				g_netshell->GotoScreen( SCREEN_ALLINONE );
 				w->Update();
 			}
-		} else
-			
+		} else {
+#ifdef WIN32
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
+#endif
+		}
 	} else
 	
 		g_netshell->GotoScreen( SCREEN_CONNECTIONSELECT );
@@ -153,16 +155,19 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 	return AUI_ERRCODE_OK;
 }
 
-class EnterMainMenuAction:public aui_Action
+class EnterMainMenuAction : public aui_Action
 {
-  public:
-	virtual ActionCallback Execute;
+public: 
+	virtual void	Execute
+	(                             
+		aui_Control	*	control,
+		uint32			action, 
+		uint32			data   
+	)
+    {
+        EnterMainMenu();
+    };
 };
-
-void EnterMainMenuAction::Execute(aui_Control *control, uint32 action, uint32 data)
-{
-	EnterMainMenu();
-}
 
 
 void NetShell::Leave( uint32 flags, BOOL safe )
@@ -599,8 +604,8 @@ void NetShell::DestroyScreens( void )
 	SaveGameSetupList();
 
 
-	
-	for ( sint32 i = 0; i < (sint32)SCREEN_MAX; i++ )
+	sint32 i;
+	for ( i = 0; i < (sint32)SCREEN_MAX; i++ )
 		if ( m_screens[ i ] ) delete m_screens[ i ];
 	memset( m_screens, 0, sizeof( m_screens ) );
 

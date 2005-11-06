@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer chat box
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -54,9 +54,9 @@ ns_ChatBox::ns_ChatBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	TextBox( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	TextBox( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -181,7 +181,7 @@ ns_ChatBox::~ns_ChatBox()
 
 	if ( m_inputField )
 	{
-		if ( action = m_inputField->GetAction() )
+		if ((action = m_inputField->GetAction()))
 			delete action;
 		delete m_inputField;
 		m_inputField = NULL;

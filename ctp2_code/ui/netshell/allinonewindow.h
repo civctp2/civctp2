@@ -327,59 +327,39 @@ protected:
 	ns_ScenarioInfo m_scenInfo;
 
 	
+    AUI_ACTION_BASIC(GameNameTextFieldAction);
+    AUI_ACTION_BASIC(PPTSwitchAction);
+	AUI_ACTION_BASIC(KickButtonAction);
+    AUI_ACTION_BASIC(InfoButtonAction);
+    AUI_ACTION_BASIC(OKButtonAction);
+	AUI_ACTION_BASIC(CancelButtonAction);
+    AUI_ACTION_BASIC(ReviewButtonAction);
+	AUI_ACTION_BASIC(LockSwitchAction);
+    AUI_ACTION_BASIC(AddAIButtonAction);
+    AUI_ACTION_BASIC(DialogBoxPopDownAction);
+    AUI_ACTION_BASIC(PlayersListBoxAction);
+	AUI_ACTION_BASIC(PlayStyleDropDownAction);
+	AUI_ACTION_BASIC(RulesButtonAction);
+    AUI_ACTION_BASIC(ExclusionsButtonAction);
+	AUI_ACTION_BASIC(RulesOKButtonAction);
+    AUI_ACTION_BASIC(ExclusionsOKButtonAction);
+    AUI_ACTION_BASIC(DynamicJoinSwitchAction);
+    AUI_ACTION_BASIC(HandicappingSwitchAction);
+	AUI_ACTION_BASIC(BloodlustSwitchAction);
+    AUI_ACTION_BASIC(PollutionSwitchAction);
+    AUI_ACTION_BASIC(CivPointsButtonAction);
+    AUI_ACTION_BASIC(PwPointsButtonAction);
+	AUI_ACTION_BASIC(AgesButtonAction);
+    AUI_ACTION_BASIC(MapSizeButtonAction);
+    AUI_ACTION_BASIC(WorldTypeButtonAction);
+    AUI_ACTION_BASIC(WorldShapeButtonAction);
+    AUI_ACTION_BASIC(DifficultyButtonAction);
 
-	class GameNameTextFieldAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class PPTSwitchAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-	friend PPTSwitchAction;
-
-	class KickButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class InfoButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class OKButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class CancelButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class ReviewButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class LockSwitchAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class AddAIButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-
-
-
-
-
-
-	class DialogBoxPopDownAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class PlayersListBoxAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-
-
-
-
-
-
-
-
-
-	class PlayStyleDropDownAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-	friend PlayStyleDropDownAction;
+	friend class CivPointsButtonAction;
+	friend class HandicappingSwitchAction;
+	friend class PlayStyleDropDownAction;
+	friend class PPTSwitchAction;
+	friend class PwPointsButtonAction;
 
 
 
@@ -389,91 +369,21 @@ protected:
 
 
 
-	class RulesButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class ExclusionsButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-
-
-
-	class RulesOKButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class ExclusionsOKButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-
-	class DynamicJoinSwitchAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-
-
-
-
-
-
-	class HandicappingSwitchAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-	friend HandicappingSwitchAction;
-
-
-
-
-
-	class BloodlustSwitchAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-
-
-
-
-
-
-
-
-
-	class PollutionSwitchAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class CivPointsButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-	friend CivPointsButtonAction;
-
-	class PwPointsButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-	friend PwPointsButtonAction;
-
-
-
-
-
-
-
-
-
-	class AgesButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class MapSizeButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class WorldTypeButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class WorldShapeButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class DifficultyButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
 	class UnitExclusionAction : public aui_Action
 	{
 	public:
-		UnitExclusionAction( sint32 index )
-			: m_index( index ) {}
-		virtual ActionCallback Execute;
+		UnitExclusionAction(sint32 index)
+        :   aui_Action  (),
+            m_index     (index) 
+        { ; };
+
+	    virtual void	Execute
+	    (                             
+		    aui_Control	*	control,
+		    uint32			action, 
+		    uint32			data   
+	    );                          
+
 	private:
 		sint32 m_index;
 	};
@@ -481,9 +391,18 @@ protected:
 	class ImprovementExclusionAction : public aui_Action
 	{
 	public:
-		ImprovementExclusionAction( sint32 index )
-			: m_index( index ) {}
-		virtual ActionCallback Execute;
+		ImprovementExclusionAction(sint32 index)
+        :   aui_Action  (),
+            m_index     (index) 
+        { ; };
+
+	    virtual void	Execute
+	    (                             
+		    aui_Control	*	control,
+		    uint32			action, 
+		    uint32			data   
+	    ); 
+                         
 	private:
 		sint32 m_index;
 	};
@@ -491,9 +410,18 @@ protected:
 	class WonderExclusionAction : public aui_Action
 	{
 	public:
-		WonderExclusionAction( sint32 index )
-			: m_index( index ) {}
-		virtual ActionCallback Execute;
+		WonderExclusionAction(sint32 index)
+        :   aui_Action  (),
+            m_index     (index) 
+        { ; };
+
+	    virtual void	Execute
+	    (                             
+		    aui_Control	*	control,
+		    uint32			action, 
+		    uint32			data   
+	    );   
+                       
 	private:
 		sint32 m_index;
 	};

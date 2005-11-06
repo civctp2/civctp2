@@ -2,16 +2,17 @@
 #define __NETFUNC_H__
 
 #include "anet.h"
+#include <locale>
+#include <iterator>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include <list>
-
-
-
-
-
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_thread.h>
+#endif
 
 class NETFunc {
 public:
@@ -94,9 +95,9 @@ struct KeyStruct {
 
 
 class Keys {
-friend NETFunc;
+friend class NETFunc;
 protected:
-	KeyStruct key;
+	KeyStruct curkey;
 public:
 	
 	Keys(void);
@@ -106,7 +107,7 @@ public:
 
 
 class Key {
-friend NETFunc;
+friend class NETFunc;
 protected:
 	KeyStruct key;
 public:
@@ -132,27 +133,39 @@ public:
 
 template<class T>
 class List:public std::list<T *> {
-friend NETFunc;
+friend class NETFunc;
 public:
-	
+#if defined(_MSC_VER)
 	iterator Find(T *t) {
 		iterator i = end();
-		if(size())
-		for(i = begin(); i != end(); i++)
+#else
+	typename NETFunc::List<T>::iterator Find(T *t) {
+		typename NETFunc::List<T>::iterator i = this->end();
+#endif
+		if(this->size())
+		for(i = this->begin(); i != this->end(); i++)
 			if(t->Equals(*i))
 				break;
 		return i;
 	}
 	
 	void Clr(void) {
+#if defined(_MSC_VER)
 		for(iterator i = begin(); i != end(); i++)
+#else
+		for(typename NETFunc::List<T>::iterator i = this->begin(); i != this->end(); i++)
+#endif
 			delete *i;
-		clear();
+		this->clear();
 	}
 	
 	T *Add(T *t) {
+#if defined(_MSC_VER)
 		iterator i = Find(t);
-		if(i == end()) {
+#else
+		typename NETFunc::List<T>::iterator i = Find(t);
+#endif
+		if(i == this->end()) {
 			push_back(t);
 			return t;
 		} else {
@@ -163,16 +176,26 @@ public:
 	}
 	
 	void Del(T *t) {
+#if defined(_MSC_VER)
 		iterator i = Find(t);
-		if(i != end()) {
+#else
+		typename NETFunc::List<T>::iterator i = Find(t);
+#endif
+
+		if(i != this->end()) {
 			delete *i;
 			erase(i);
 		}
 	}
 	
 	T *Chg(T *t) {
+#if defined(_MSC_VER)
 		iterator i = Find(t);
-		if(i != end()) {
+#else
+		typename NETFunc::List<T>::iterator i = Find(t);
+#endif
+
+		if(i != this->end()) {
 			memcpy(*i, t, sizeof(T));
 			return *i;
 		} else {
@@ -183,13 +206,21 @@ public:
 	}
 	
 	virtual ~List(void) {
+#if defined(_MSC_VER)
 		for(iterator i = begin(); i != end(); i++)
+#else
+		for(typename NETFunc::List<T>::iterator i = this->begin(); i != this->end(); i++)
+#endif
 			delete *i;
 	}
 	
 	List(List<T> *l) {
 		if(l)
+#if defined(_MSC_VER)
 			for(iterator i = l->begin(); i != l->end(); i++)
+#else
+			for(typename NETFunc::List<T>::iterator i = l->begin(); i != l->end(); i++)
+#endif
 				Add(new T(**i));
 	}
 	
@@ -203,7 +234,7 @@ class Messages;
 
 
 class Message:public Key {
-friend NETFunc;
+friend class NETFunc;
 	char *body;
 	dpid_t sender;
 	size_t size;
@@ -255,7 +286,7 @@ public:
 		UNLAUNCH			= dppt_MAKE(nf_PACKET_INITIALBYTE, 29)
 	};
 	
-	typedef __int16 CODE;
+	typedef sint16 CODE;
 
 	
 	Message(CODE c, void *p, size_t s);
@@ -267,7 +298,7 @@ public:
 	
 	Message(void *p, size_t s, dpid_t id, bool b = true);
 	
-	~Message(void);
+	virtual ~Message(void);
 	
 	CODE GetCode(void);
 	
@@ -281,7 +312,7 @@ public:
 	
 	dpid_t GetSender(void);
 };
-friend Message;
+friend class Message;
 
 
 
@@ -445,9 +476,9 @@ public:
 	}
 	
 	void SetKey(KeyStruct *k) {
-		if(!empty()) {
+		if(!this->empty()) {
 			Destroy();
-			Clr();
+			this->Clr();
 		}
 		if(key.buf[0] == dp_KEY_PLAYERS) {
 			if(k) {
@@ -498,7 +529,7 @@ public:
 	
 	Server(dp_object_t *o, KeyStruct *k, long f);
 	
-	~Server(void);
+	virtual ~Server(void);
 	
 	char *GetName(void);
 	
@@ -522,7 +553,7 @@ public:
 	
 	Contact(void);
 	
-	~Contact(void);
+	virtual ~Contact(void);
 	
 	char *GetName(void);
 	
@@ -559,7 +590,7 @@ public:
 	
 	Port(void);
 	
-	~Port(void);
+	virtual ~Port(void);
 	
 	commPortName_t *GetPort(void);
 	
@@ -587,20 +618,18 @@ public:
 };
 
 PortList portList;
-friend PortList;
+friend class PortList;
 
 
 
 
-
+#ifdef USE_SDL
+static int ConnectThread(void *t);
+static int ReConnectThread(void *r);
+#else
 static DWORD WINAPI ConnectThread(LPVOID t);
-
-
-
-
-
 static DWORD WINAPI ReConnectThread(LPVOID r);
-
+#endif
 
 
 
@@ -614,7 +643,7 @@ static DWORD WINAPI ReConnectThread(LPVOID r);
 
 
 class Transport:public Key {
-friend PortList;
+friend class PortList;
 protected:
 	dp_transport_t		transport;
 	comm_driverInfo_t	description;
@@ -682,7 +711,7 @@ public:
 	commInitReq_t		*GetParams(void);	
 };
 static TransportSetup *transport;
-friend TransportSetup;
+friend class TransportSetup;
 
 
 
@@ -701,7 +730,7 @@ public:
 	
 	TYPE GetType(void);
 };
-friend Internet;
+friend class Internet;
 
 
 
@@ -714,7 +743,7 @@ public:
 	
 	TYPE GetType(void);
 };
-friend IPX;
+friend class IPX;
 
 
 
@@ -731,7 +760,7 @@ public:
 	
 	TYPE GetType(void);
 };
-friend Modem;
+friend class Modem;
 
 
 
@@ -746,14 +775,18 @@ public:
 	
 	TYPE GetType(void);
 };
-friend NullModem;
+friend class NullModem;
 
 
 
 class TransportList:public List<Transport> {
 	KeyStruct key;
 
+#ifdef WIN32
 static void __stdcall
+#else
+static void
+#endif
 	CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context);
 public:
 	
@@ -762,7 +795,7 @@ public:
 	~TransportList(void);
 };
 TransportList transportList;
-friend TransportList;
+friend class TransportList;
 
 
 
@@ -774,7 +807,7 @@ friend TransportList;
 
 
 class AIPlayer:public Key, public Packet {
-friend NETFunc;
+friend class NETFunc;
 protected:
 	char	name[dp_PNAMELEN];
 	unsigned char group;
@@ -802,7 +835,7 @@ public:
 	
 	STATUS Load(FILE *f);
 };
-friend AIPlayer;
+friend class AIPlayer;
 
 
 
@@ -819,7 +852,7 @@ public:
 	bool Handle(dp_t *p, Message *m, dpid_t from = dp_ID_BROADCAST);
 };
 AIPlayers *aiPlayers;
-friend AIPlayers;
+friend class AIPlayers;
 
 class Players;
 
@@ -827,8 +860,8 @@ class Players;
 
 
 class Player:public Key {
-friend NETFunc;
-friend Players;
+friend class NETFunc;
+friend class Players;
 #define nf_GROUPMASTER	0x40
 #define nf_READYLAUNCH	0x20
 #define nf_GROUPNUMBER	0x1f
@@ -849,7 +882,7 @@ public:
 	
 	void Set(dp_playerId_t *p);
 	
-	~Player(void);
+	virtual ~Player(void);
 	
 	dpid_t GetId(void);
 	
@@ -877,7 +910,7 @@ public:
 	
 	bool IsReadyToLaunch(void);
 };
-friend Player;
+friend class Player;
 static Player player;
 static dp_uid_t userId;
 
@@ -899,12 +932,12 @@ public:
 	bool Handle(Message *m);
 };
 Players players;
-friend Players;
+friend class Players;
 
 
 
 class PlayerStat:public Key, public Packet {
-friend NETFunc;
+friend class NETFunc;
 protected:
 	char	name[dp_PNAMELEN];
 	unsigned char group;
@@ -944,7 +977,7 @@ public:
 	
 	STATUS Update(dp_t *p, bool r = false);
 };
-friend PlayerStat;
+friend class PlayerStat;
 
 
 
@@ -963,7 +996,7 @@ public:
 	bool Handle(dp_t *p, Message *m, dpid_t from = dp_ID_BROADCAST);
 };
 PlayerStats *playerStats;
-friend PlayerStats;
+friend class PlayerStats;
 
 
 
@@ -977,7 +1010,7 @@ friend PlayerStats;
 
 
 class PlayerSetup:public Player, public Packet {
-friend NETFunc;
+friend class NETFunc;
 #define nf_PLAYERDESCLEN 128
 private:
 	char description[nf_PLAYERDESCLEN];
@@ -1020,7 +1053,7 @@ public:
 	
 	void SetReadyToLaunch(bool b);
 };
-friend PlayerSetup;
+friend class PlayerSetup;
 
 
 
@@ -1036,10 +1069,10 @@ friend PlayerSetup;
 class Game;
 class Lobby;
 class Session:public Key {
-friend NETFunc;
-friend ListHandler<Game>;
-friend ListHandler<Lobby>;
-friend ListHandler<Session>;
+friend class NETFunc;
+friend class ListHandler<Game>;
+friend class ListHandler<Lobby>;
+friend class ListHandler<Session>;
 protected:
 	dp_session_t session;
 	long flags;
@@ -1076,12 +1109,12 @@ public:
 	bool IsCurrentSession(void);
 };
 static Session session;
-friend Session;
+friend class Session;
 
 
 
 class Game:public Session {
-friend NETFunc;
+friend class NETFunc;
 #define nf_LAUNCHED 0x40
 #define nf_SYNCLAUNCH 0x20
 protected:
@@ -1106,12 +1139,12 @@ public:
 	
 	void SetHostile(bool h);
 };
-friend Game;
+friend class Game;
 
 
 
 class Lobby:public Session {
-friend NETFunc;
+friend class NETFunc;
 bool bad;
 public:
 	
@@ -1124,7 +1157,7 @@ public:
 	bool IsBad(void);
 };
 static Lobby lobby;
-friend Lobby;
+friend class Lobby;
 
 
 
@@ -1157,7 +1190,7 @@ class PlayerList {
 
 
 class GameSetup:public Game, public Packet {
-friend NETFunc;
+friend class NETFunc;
 #define nf_GAMEDESCLEN 128
 	char	description[nf_GAMEDESCLEN];
 	
@@ -1212,7 +1245,7 @@ public:
 	
 	STATUS Update(bool b = false);
 };
-friend GameSetup;
+friend class GameSetup;
 
 
 
@@ -1420,11 +1453,13 @@ public:
 
 
 private:
-	
+#ifdef USE_SDL
+	SDL_Thread *threadHandle;
+	Uint32 threadId;
+#else
 	HANDLE threadHandle;
-	
 	DWORD threadId;
-	
+#endif
 	static long cancelDial;
 	
 	dp_appParam_t appParam;
@@ -1494,12 +1529,18 @@ void Execute(void);
 
 STATUS Close(void);
 
-
+#ifdef WIN32
 static int __stdcall
+#else
+static int
+#endif
 SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *context);
 
-
+#ifdef WIN32
 static void __stdcall
+#else
+static void
+#endif
 PlayerCallBack(dpid_t id, dp_char_t *n, long flags, void *context);
 
 
@@ -1513,7 +1554,7 @@ public:
 	void Reset(void);
 };
 Lobbies lobbies;
-friend Lobbies;
+friend class Lobbies;
 
 
 
@@ -1524,7 +1565,7 @@ public:
 	bool Check(Key *s);
 };
 static Hostiles hostiles;
-friend Hostiles;
+friend class Hostiles;
 
 
 
@@ -1535,7 +1576,7 @@ public:
 	bool Check(Key *p);
 };
 static Mutes mutes;
-friend Mutes;
+friend class Mutes;
 };
 
 #endif 

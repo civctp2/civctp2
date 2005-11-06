@@ -109,5 +109,7 @@
  *    `char[]'. */
 /* #undef YYTEXT_POINTER */
 
+#define CTP2_ENABLE_SLICDEBUG 1
+
 #endif
 

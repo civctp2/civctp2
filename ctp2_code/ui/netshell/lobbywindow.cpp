@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Lobby window for multiplayer games.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -473,7 +473,7 @@ AUI_ERRCODE LobbyWindow::Idle( void )
 	
 	while(n) {
 		
-		if(m = g_netfunc->GetMessage()) {
+		if((m = g_netfunc->GetMessage())) {
 			
 			
 			g_netfunc->HandleMessage(m);
@@ -796,7 +796,8 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 	aui_Switch *ms = (aui_Switch *)(w->FindControl(LobbyWindow::CONTROL_MUTESWITCH));
 
 	ListPos position = justDeselectedList.GetHeadPosition();
-	for ( sint32 i = justDeselectedList.L(); i; i-- ) {
+	sint32 i;
+	for ( i = justDeselectedList.L(); i; i-- ) {
 		index = justDeselectedList.GetNext( position );
 		ns_PlayerItem *item = (ns_PlayerItem *)listbox->GetItemByIndex(index);
 		NETFunc::Player *player = item->GetNetShellObject()->GetNETFuncObject();

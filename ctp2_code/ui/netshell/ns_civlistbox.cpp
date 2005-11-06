@@ -26,26 +26,18 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ns_civlistbox.h"
 
 #include "aui_ui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_window.h"
 #include "aui_item.h"
-
 #include "c3_ranger.h"
-
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"
-
+#include "colorset.h"       // g_colorSet
 #include "ns_header.h"
-
-#include "ns_civlistbox.h"
-
-
-extern ColorSet		*g_colorSet;
-
 
 
 ns_CivListBox::ns_CivListBox(
@@ -55,9 +47,9 @@ ns_CivListBox::ns_CivListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ListBox(),
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ListBox(),
 	PatternBase(ldlBlock, (MBCHAR *)NULL)
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
@@ -100,9 +92,9 @@ ns_CivListBox::ns_CivListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
+	aui_ListBox(),
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
@@ -452,9 +444,9 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	ns_CivListBox( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	ns_CivListBox( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -479,11 +471,11 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
+	aui_ImageBase((sint32) 0),
+	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
 	ns_CivListBox(
 		retval, id, x, y, width, height, pattern, bevelWidth, bevelType,
-		ActionFunc, cookie ),
-	aui_ImageBase((sint32) 0),
-	aui_TextBase((MBCHAR const *) NULL, (uint32) 0)
+		ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

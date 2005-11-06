@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic source list
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,7 +30,7 @@
 
 #include "c3.h"
 
-
+#ifdef CTP2_ENABLE_SLICDEBUG
 
 
 #include "aui.h"
@@ -71,25 +71,36 @@
 #include "SlicConditional.h"
 
 #include "pixelutils.h"
-#include "colorset.h"
+#include "colorset.h"               // g_colorSet
 
 extern C3UI			*g_c3ui;
-extern ColorSet						*g_colorSet;
+
 SourceList *g_sourceList = NULL;
 
 class SourceListItemContinueAction : public aui_Action
 {
 public:
-	SourceListItem *m_item;
+	SourceListItemContinueAction(SourceListItem *item) 
+    :   aui_Action  (),
+        m_item      (item)
+    { ; };
+    virtual ~SourceListItemContinueAction(void) { ; };
 
-	SourceListItemContinueAction(SourceListItem *item) {
-		m_item = item;
-	}
-
-	ActionCallback Execute
+	virtual void Execute
+    (
+        aui_Control *   control,
+	    uint32          action,
+	    uint32          data
+    )
 	{
-		m_item->Continue();
+        if (m_item)
+        {
+		    m_item->Continue();
+        }
 	}
+
+private:
+	SourceListItem *    m_item;
 };
 
 
@@ -149,6 +160,24 @@ SourceList::SourceList(SourceListCallback *callback, MBCHAR *ldlBlock)
 
 	
 	Initialize( windowBlock );
+}
+
+SourceList::~SourceList(void)
+{
+    if (g_c3ui && m_window)
+    {
+	    g_c3ui->RemoveWindow(m_window->Id());
+    }
+
+	delete m_continue;
+	delete m_list;
+	delete m_window;
+	delete m_exit;
+	delete m_step;
+	delete m_stepInto;
+	delete m_status;
+	// m_callback : reference only
+	// m_segment  : reference only
 }
 
 void SourceListActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -250,23 +279,20 @@ sint32 SourceList::Initialize(MBCHAR *windowBlock)
 	return 0;
 }
 	
-sint32 SourceList::Cleanup(void)
+void SourceList::Cleanup(void)
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+    if (g_c3ui && m_window)
+    {
+        g_c3ui->RemoveWindow(m_window->Id());
+    }
 
-	g_c3ui->RemoveWindow( m_window->Id() );
-
-	mycleanup( m_continue );
-	mycleanup( m_list );
-	
-	m_callback = NULL;
-
-	delete m_window;
-	m_window = NULL;
-
-	return 0 ;
-
+#define mycleanup(mypointer) delete mypointer; mypointer = NULL;
+    mycleanup(m_continue);
+    mycleanup(m_list);
+    mycleanup(m_window);
 #undef mycleanup
+
+    m_callback = NULL;
 }
 
 void SourceList::DisplayWindow(SlicSegment *segment)
@@ -396,9 +422,9 @@ void SourceList::StepInto()
 SourceListItem::SourceListItem(AUI_ERRCODE *retval, sint32 index,
 							   SlicSegment *segment, MBCHAR *line,
 							   sint32 lineNumber, MBCHAR *ldlBlock) :
-	c3_ListItem(retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem(retval, ldlBlock)
 {
 	m_index = index;
 	m_segment = segment;
@@ -537,13 +563,13 @@ static c3_UtilityTextFieldPopup *s_conditionalPopup = NULL;
 class KillConditionalPopupAction : public aui_Action
 {
 public:
-	ActionCallback Execute
+	virtual void Execute(aui_Control* control,
+	                     uint32 action,
+	                     uint32 data)
 	{
-		if(s_conditionalPopup) {
-			delete s_conditionalPopup;
-			s_conditionalPopup = NULL;
-		}
-	}
+		delete s_conditionalPopup;
+		s_conditionalPopup = NULL;
+	};
 };
 
 void SourceListItemConditionalCallback(MBCHAR *text, sint32 val2, void *data)
@@ -577,7 +603,7 @@ void SourceListItem::EditConditional()
 	if(!s_conditionalPopup)
 	s_conditionalPopup = new c3_UtilityTextFieldPopup(SourceListItemConditionalCallback,
 													  NULL,
-													  cond ? (char*)cond->GetExpression() : "",
+													  cond ? (char *)cond->GetExpression() : "",
 													  NULL,
 													  "SourceListConditionalPopup",
 													  this,
@@ -586,3 +612,6 @@ void SourceListItem::EditConditional()
 
 	
 }
+
+#endif // CTP2_ENABLE_SLICDEBUG
+

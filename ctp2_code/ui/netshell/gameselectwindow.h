@@ -59,19 +59,10 @@ public:
 	};
 
 protected:
-	
-
-	class DeleteButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class OKButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class CancelButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class GameListBoxAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
+    AUI_ACTION_BASIC(DeleteButtonAction);
+	AUI_ACTION_BASIC(OKButtonAction);
+	AUI_ACTION_BASIC(CancelButtonAction);
+	AUI_ACTION_BASIC(GameListBoxAction);
 };
 
 
@@ -113,22 +104,11 @@ public:
 	};
 
 protected:
-	
-
-	class NewButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class GameSetupButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class SavedButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class ScenarioButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class CancelButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
+    AUI_ACTION_BASIC(NewButtonAction);
+	AUI_ACTION_BASIC(GameSetupButtonAction);
+    AUI_ACTION_BASIC(SavedButtonAction);
+    AUI_ACTION_BASIC(ScenarioButtonAction);
+	AUI_ACTION_BASIC(CancelButtonAction);
 };
 
 
