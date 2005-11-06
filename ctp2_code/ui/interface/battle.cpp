@@ -29,16 +29,16 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "battle.h"
 
 #include "Army.h"
-#include "World.h"
+#include "World.h"                  // g_theWorld
 #include "Cell.h"
 #include "cellunitlist.h"
-#include "player.h"
-#include "colorset.h"
+#include "player.h"                 // g_player
+#include "colorset.h"               // g_colorSet
 
 #include "battleevent.h"
-#include "battle.h"
 #include "battleviewactor.h"
 #include "EffectActor.h"
 #include "soundmanager.h"
@@ -51,9 +51,6 @@
 #include "unitutil.h"
 #include "ArmyData.h"
 
-extern World		*g_theWorld;
-extern ColorSet		*g_colorSet;
-extern Player		**g_player;
 
 
 Battle::Battle() :
@@ -79,13 +76,7 @@ m_fortifiedBonus(0.0)
 
 Battle::~Battle()
 {
-	
-	
-	
-	
-	
-	if(m_eventQueue)
-		delete m_eventQueue;
+    delete m_eventQueue;
 }
 
 
@@ -106,7 +97,7 @@ PointerList<BattleEvent> *Battle::GrabEventQueue()
 }
 
 
-void Battle::Initialize(Army &attackers, CellUnitList &defenders)
+void Battle::Initialize(Army const & attackers, CellUnitList const & defenders)
 {
 	m_numAttackers = attackers.Num();
 	m_numDefenders = defenders.Num();
@@ -261,7 +252,7 @@ void Battle::Initialize(Army &attackers, CellUnitList &defenders)
 
 
 
-void Battle::MakeAttackers(sint32 numAttackers, Army &attackers)
+void Battle::MakeAttackers(sint32 numAttackers, Army const &attackers)
 {
 	sint32			i;
 	MapPoint		pos;
@@ -279,7 +270,7 @@ void Battle::MakeAttackers(sint32 numAttackers, Army &attackers)
 
 
 
-void Battle::MakeDefenders(sint32 numDefenders, CellUnitList &defenders)
+void Battle::MakeDefenders(sint32 numDefenders, CellUnitList const & defenders)
 {
 	sint32			i;
 	MapPoint		pos;

@@ -79,14 +79,12 @@
 #include "EditQueue.h"
 #include "citywindow.h"
 
+#include "colorset.h"                   // g_colorSet
+#include "ConstDB.h"                    // g_theConstDB
 #include "director.h"
-#include "ConstDB.h"
-#include "colorset.h"
-
 #include "network.h"
 
-extern ConstDB  *g_theConstDB;
-extern ColorSet *g_colorSet;
+extern C3UI *g_c3ui;
 
 
 class BuildQueueDropdownItem {
@@ -131,8 +129,6 @@ static const sint32 k_NMD_SPEC_LABORER      = 6;
 static const sint32 k_NMD_SPEC_MERCHANT     = 7;
 static const sint32 k_NMD_SPEC_SCIENTIST    = 8;
 static const sint32 k_NMD_SPEC_COMBAT_UNITS = 9;
-
-extern C3UI *g_c3ui;
 
 
 NationalManagementDialog *g_nationalManagementDialog = NULL;

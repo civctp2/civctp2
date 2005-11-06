@@ -273,8 +273,6 @@ public:
 
 	
 	void Back();
-
-	
 	void Forward();
 
 	void Display( void );
@@ -286,8 +284,8 @@ public:
 
 
 
-	sint32 GreatLibrary::ClearHistory( void );
-	sint32 HandleSetGoal( void );
+	void    ClearHistory(void);
+	void    HandleSetGoal(void);
 
 	MBCHAR const *  GetItemName(int database, int item) const;      // lexicographic index
     MBCHAR const *  GetObjectName(int database, int index) const;   // database index
@@ -298,8 +296,8 @@ public:
 		int the_database
 	);
 
-	sint32 HandleIndexButton( ctp2_Button *button );
-	sint32 HandleListButton
+	void    HandleIndexButton( ctp2_Button *button );
+	void    HandleListButton
 	( 
 		aui_Control *control, 
 		uint32 action, 
@@ -307,7 +305,7 @@ public:
 		void *cookie 
 	);
 
-	sint32 UpdateList( DATABASE database );
+	void UpdateList(DATABASE database);
 
 	BOOL GetSci( void ) { return m_sci; }
 	void SetSci( BOOL sci ) { m_sci = sci; }

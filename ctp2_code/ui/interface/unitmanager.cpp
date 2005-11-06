@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit manager
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -83,8 +83,6 @@ static MBCHAR *s_unitManagerAdviceBlock = "UnitManagerAdviceWindow";
 bool UnitManager::sm_statsTabVisible = true;
 
 extern C3UI *g_c3ui;
-
-extern ColorSet *g_colorSet;
 
 #define k_UNITMAN_STATS 0
 #define k_UNITMAN_TACTICAL 1

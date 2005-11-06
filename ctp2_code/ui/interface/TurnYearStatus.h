@@ -10,12 +10,10 @@
 #ifndef ___BMH_TURN_YEAR_STATUS_HEADER
 #define ___BMH_TURN_YEAR_STATUS_HEADER
 
+class TurnYearStatus;
 
-#include <string>
-
-
-#include "Globals.h"
-
+#include "c3types.h"    // MBCHAR, uint32 
+#include "Player.h"     // PLAYER_INDEX
 
 class aui_Control;
 class ctp2_Button;

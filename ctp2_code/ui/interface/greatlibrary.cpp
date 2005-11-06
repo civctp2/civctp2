@@ -143,8 +143,6 @@ extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
 
 extern C3UI			*g_c3ui;
-extern ColorSet		*g_colorSet;
-
 extern sint32		g_modalWindow;
 
 extern ConceptDB					*g_theConceptDB;
@@ -474,25 +472,16 @@ int GreatLibrary::Get_Database_From_Name
 	char * database_name
 )
 {
-	
 	for (int i = 0; i < DATABASE_MAX; i++)
 	{
-		
 		if (!strcmp(database_name, s_database_names[i]))
 		{
-			
 			return i;
-
 		} 
-
 	} 
 
-	
 	Assert(false);
-
-	
-	return 0;
-
+	return k_GL_INDEX_INVALID;
 }
 
 
@@ -507,153 +496,101 @@ int GreatLibrary::Get_Database_From_Name
 
 int GreatLibrary::Get_Object_Index_From_Name
 (
-	int which_database,					
-	char * object_name
+	int     which_database,					
+	char *  object_name
 )
 {
+	int     index;
+	char *  db_item_name = NULL;
 	
-	
-	int index;
-	
-	
-	char * db_item_name = NULL;
-
-
-	
-	switch ( which_database ) {
+	switch (which_database) 
+    {
 	case DATABASE_UNITS:
 		for (index = 0; index < g_theUnitDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theUnitDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
-
 		break;
 
 	case DATABASE_SEARCH:
-		
-		
 		return 0;
-		break;
 
 	case DATABASE_ORDERS:
 		for (index = 0; index < g_theOrderDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theOrderDB->Get(index)->m_name);
-
 			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
-
-
 		break;
 
 	case DATABASE_RESOURCE:
 		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theResourceDB->Get(index)->m_name);
-
 			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
-
-
 		break;
 
 	case DATABASE_BUILDINGS:
 		for (index = 0; index < g_theBuildingDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theBuildingDB->Get(index)->m_name);
-
 			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
-
 		break;
 
 	case DATABASE_WONDERS:
 		for (index = 0; index < g_theWonderDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theWonderDB->Get(index)->m_name);
-
 			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
 
 		break;
 
 	case DATABASE_ADVANCES:
-
 		for (index = 0; index < g_theAdvanceDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theAdvanceDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
-
-
 		break;
 
 	case DATABASE_TERRAIN:
 	{
 		for (index = 0; index < g_theTerrainDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theTerrainDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
 
 		break;
@@ -661,17 +598,13 @@ int GreatLibrary::Get_Object_Index_From_Name
 	case DATABASE_CONCEPTS:
 		for (index = 0; index < g_theConceptDB->m_nConcepts; index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theConceptDB->GetConceptInfo(index)->m_name);
-
 			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
 
 			} 
-
 		} 
 
 		break;
@@ -679,17 +612,12 @@ int GreatLibrary::Get_Object_Index_From_Name
 	case DATABASE_GOVERNMENTS:
 		for (index = 0; index < g_theGovernmentDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theGovernmentDB->Get(index)->m_name);
-
 			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
 
 		break;
@@ -697,36 +625,27 @@ int GreatLibrary::Get_Object_Index_From_Name
 	case DATABASE_TILE_IMPROVEMENTS:
 		for (index = 0; index < g_theTerrainImprovementDB->NumRecords(); index++)
 		{
-			
 			db_item_name = g_theStringDB->GetIdStr(g_theTerrainImprovementDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
 				return index;
-
 			} 
-
 		} 
-
 		break;
 
 	default:
-		BOOL InvalidDatabase = FALSE;
+		bool InvalidDatabase = FALSE;
 		DPRINTF(k_DBG_GAMESTATE, ("DB: %i\n", which_database));
 		Assert(InvalidDatabase);
-		break;
+        return k_GL_INDEX_INVALID;
 	}
 
-	
 	bool bad_object_name = false;
-
 	DPRINTF(k_DBG_GAMESTATE, ("Bad object Name: %s, DB: %i\n", object_name, which_database));
 	Assert(bad_object_name);
-
 	
-	return 0;
+	return k_GL_INDEX_INVALID;
 }
 
 
@@ -918,9 +837,7 @@ void GreatLibrary_Topics_List_Callback
 	void *cookie 
 )
 {
-	
 	g_greatLibrary->HandleListButton(control, action, data, cookie);
-
 }
 
 
@@ -937,7 +854,6 @@ TechListItem::TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database,
 
 	*retval = InitCommonLdl(index, database, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
 
@@ -1344,33 +1260,10 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 
 GreatLibrary::~GreatLibrary( void )
 {
-	
-	
-
-
-
-
-
-	if (m_window) delete m_window;
-
-	
-	
-	
-	if(m_techTree)
-	{
-		delete m_techTree;
-		m_techTree = NULL;
-	}
-	if (m_string)
-	{
-		delete m_string;
-		m_string = NULL;
-	}
-	if (m_techMovie)
-	{
-		delete m_techMovie;
-		m_techMovie = NULL;
-	}
+    delete m_window;
+	delete m_techTree;
+	delete m_string;
+	delete m_techMovie;
 }
 
 void GreatLibrary::Display( void )
@@ -1411,6 +1304,8 @@ void GreatLibrary::Remove( void )
 
 sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_to_history )
 {
+    if (theMode < 0)
+        return 0;
 
 	m_selectedIndex = theMode;
 
@@ -1444,7 +1339,6 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	SetCategoryName(theDatabase);
 
 	
-	SlicObject so;
 	
 	if(theDatabase == DATABASE_SEARCH) {
 		
@@ -1452,16 +1346,10 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		theMode = g_greatLibrary->m_search_results[theMode].m_item;
 	}
 
-	if ( theDatabase == DATABASE_ADVANCES)
-	{
-		m_techTab->Enable( TRUE );
-		FixTabs();
-	} else
-	{
-		m_techTab->Enable( FALSE );
-		FixTabs();
-	}
+	m_techTab->Enable(DATABASE_ADVANCES == theDatabase);
+	FixTabs();
 	
+	SlicObject so;
 	bool enableGoal = false;
 	
 	switch ( theDatabase ) {
@@ -1533,21 +1421,13 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		break;
 	}
 
-	if(enableGoal) {
-		m_setGoalButton->Enable(TRUE);
-	} else {
-		m_setGoalButton->Enable(FALSE);
-	}
-
+	m_setGoalButton->Enable(enableGoal);
 	m_database = theDatabase;
 
-	
 	if (add_to_history)
 	{
-		
 		Great_Library_Item new_gl_page;
 
-		
 		new_gl_page.m_database = real_database;
 		new_gl_page.m_item = real_index;
 
@@ -1563,27 +1443,9 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 		
 		m_history.push_back(new_gl_page);
-
-		
 		m_history_position = m_history.size() - 1;
-
-		
 		m_forwardButton->Enable(FALSE);
-
-		
-		if (m_history_position == 0)
-		{
-			
-			m_backButton->Enable(FALSE);
-
-		} 
-
-		else
-		{
-			
-			m_backButton->Enable(TRUE);
-		}
-
+		m_backButton->Enable(m_history_position > 0);
 	} 
 	
 	
@@ -1613,81 +1475,17 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		GetWindow()->ShouldDraw();
 	}
 
-	
-	m_window->SetTechTree ( m_techTree );
-	m_window->SetTechMovie ( m_techMovie );
-
-	
-	int text_load_result;
-
-	
-	text_load_result = m_window->LoadGameplayText(so);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	text_load_result = m_window->LoadHistoricalText(so);
-	if(text_load_result == GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK) {
-		m_historicalTab->Enable(FALSE);
-	} else {
-		m_historicalTab->Enable(TRUE);
-	}
+	m_window->SetTechTree(m_techTree);
+	m_window->SetTechMovie(m_techMovie);
+    m_window->LoadGameplayText(so);
+	int const text_load_result = m_window->LoadHistoricalText(so);
+	m_historicalTab->Enable
+        (text_load_result != GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK);
 	FixTabs();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 
 	m_window->LoadRequirementsText(so);
 	m_window->LoadVariablesText(so);
 
-	
 	if ( g_theProfileDB->IsLibraryAnim() ) {
 		if (m_techMovie) {
 			if (m_techMovie->Open()) 
@@ -1700,13 +1498,16 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 			GetWindow()->ShouldDraw();
 		}
 	}
-	else {
-		if ( !m_window->LoadTechStill() ) {
-			m_techStillShot->Hide();
-		}
-		else {
+	else 
+    {
+		if (m_window->LoadTechStill()) 
+        {
 			m_techStillShot->Show();
 			GetWindow()->ShouldDraw();
+		}
+		else 
+        {
+			m_techStillShot->Hide();
 		}
 	}
 
@@ -1732,12 +1533,11 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	return 0;
 }
 
-sint32 GreatLibrary::ClearHistory( void )
+void GreatLibrary::ClearHistory( void )
 {
-	m_history_position = 0;
 	m_history.clear();
-	m_selectedIndex = -1;
-	return 0;
+	m_history_position  = 0;
+	m_selectedIndex     = k_GL_INDEX_INVALID;
 }
 
 
@@ -1864,41 +1664,33 @@ sint32 GreatLibrary::ClearHistory( void )
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 GreatLibrary::HandleSetGoal( void )
+void GreatLibrary::HandleSetGoal( void )
 {
-
+	const MBCHAR * selection_name = GetItemName(m_database, m_window->GetTechMode());
 	
-	MBCHAR goal_set_message[500];
+	if (selection_name)
+    {
+    	MBCHAR goal_set_message[500];
+    	int tmp = g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
 
-	
-	const MBCHAR *selection_name = GetItemName(m_database, m_window->GetTechMode());
+	    if(tmp == 1){
+		    const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
+		    if (!fmt) fmt = "Goal set to: %s";
+		    sprintf(goal_set_message, fmt, selection_name);
+	    }
+	    else if(tmp == 0){
+		    const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalKnown");
+		    if (!fmt) fmt = "%s is already known. No goal was set.";
+		    sprintf(goal_set_message, fmt, selection_name);
+	    }
+	    else{
+		    const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryNoGoalPossible");
+		    if (!fmt) fmt = "%s cannot be researched.";
+		    sprintf(goal_set_message, fmt, selection_name);
+	    }
 
-	
-	if (!selection_name)
-		return -1;
-
-	int tmp = g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
-	if(tmp == 1){
-		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
-		if(!fmt) fmt = "Goal set to: %s";
-		sprintf(goal_set_message, fmt, selection_name);
 		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
-	}
-	else if(tmp == 0){
-		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalKnown");
-		if(!fmt) fmt = "%s is already known. No goal was set.";
-		sprintf(goal_set_message, fmt, selection_name);
-		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
-	}
-	else{
-		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryNoGoalPossible");
-		if(!fmt) fmt = "%s cannot be researched.";
-		sprintf(goal_set_message, fmt, selection_name);
-		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
-	}
-
-
-	return 0;
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -2164,7 +1956,7 @@ void GreatLibrary::SetCategoryName
 
 
 
-sint32 GreatLibrary::HandleIndexButton( ctp2_Button *button )
+void GreatLibrary::HandleIndexButton( ctp2_Button *button )
 {
 
 
@@ -2208,11 +2000,9 @@ sint32 GreatLibrary::HandleIndexButton( ctp2_Button *button )
 	SetCategoryName(newDatabase);
 
 	m_page = 0;
-	m_selectedIndex = -1;
+	m_selectedIndex = k_GL_INDEX_INVALID;
 	m_topics_list->ShouldDraw();
 	UpdateList( newDatabase );
-	
-	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -2317,47 +2107,29 @@ sint32 GreatLibrary::GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const
 //
 // Globals    : -
 //
-// Returns    : Always 0
+// Returns    : -
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 GreatLibrary::HandleListButton
+void GreatLibrary::HandleListButton
 (
-	aui_Control *control, 
-	uint32 action, 
-	uint32 data, 
-	void *cookie 
+	aui_Control *   control, 
+	uint32          action, 
+	uint32          data, 
+	void *          cookie 
 )
 {
+	if (AUI_LISTBOX_ACTION_SELECT == action) 
+    {
+		ctp2_ListItem *item = (ctp2_ListItem *) m_topics_list->GetSelectedItem();
 
-	
-	int index;
-
-	switch ( action ) {
-	case AUI_LISTBOX_ACTION_SELECT:
-
-		ctp2_ListItem *item;
-
-		
-		item = (ctp2_ListItem *)m_topics_list->GetSelectedItem();
-		if (!item) 
-			return 0;
-
-		
-		index = (int) item->GetUserData();
-
-		
-		SetLibrary( GetIndexFromAlpha(index, m_listDatabase), m_listDatabase );
-
-
-		break;
-
-	case AUI_LISTBOX_ACTION_DOUBLECLICKSELECT:
-		break;
-	}
-
-	return 0;
+		if (item) 
+		{
+		    int const   index = reinterpret_cast<int>(item->GetUserData());
+    		SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
+        }
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -2370,12 +2142,12 @@ sint32 GreatLibrary::HandleListButton
 //
 // Globals    : g_the<whatever>DB
 //
-// Returns    : Always 0
+// Returns    : -
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 GreatLibrary::UpdateList( DATABASE database ) 
+void GreatLibrary::UpdateList( DATABASE database ) 
 {
 	sint32 index;
 
@@ -2546,15 +2318,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	default:
+        return;
 
-
-		return FALSE;
 	}
 
 	m_maxIndex = index;
-
-	return 0;
-
 }
 
 //----------------------------------------------------------------------------
@@ -2574,72 +2342,45 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 //----------------------------------------------------------------------------
 int GreatLibrary::Get_Database_Size(int the_database)
 {
-	int num = 0;
+	switch (the_database) 
+    {
+	default:
+        return 0;
 
-	switch ( the_database ) {
-	case DATABASE_UNITS:
-		num = g_theUnitDB->NumRecords();
-
-		break;
+	case DATABASE_UNITS:    
+        return g_theUnitDB->NumRecords();
 
 	case DATABASE_SEARCH:
-		
-		num = m_search_results.size();
-		break;
+		return m_search_results.size();
 
 	case DATABASE_ORDERS:
-		num = g_theOrderDB->NumRecords();
-
-		break;
+		return g_theOrderDB->NumRecords();
 
 	case DATABASE_RESOURCE:
-		num = g_theResourceDB->NumRecords();
-
-		break;
+		return g_theResourceDB->NumRecords();
 
 	case DATABASE_BUILDINGS:
-		num = g_theBuildingDB->NumRecords();
-
-		break;
+		return g_theBuildingDB->NumRecords();
 
 	case DATABASE_WONDERS:
-		num = g_theWonderDB->NumRecords();
-
-		break;
+		return g_theWonderDB->NumRecords();
 
 	case DATABASE_ADVANCES:
-		num = g_theAdvanceDB->NumRecords();
-
-		break;
+		return g_theAdvanceDB->NumRecords();
 
 	case DATABASE_TERRAIN:
-		num = g_theTerrainDB->NumRecords();
-
-		break;
+		return g_theTerrainDB->NumRecords();
 
 	case DATABASE_CONCEPTS:
-		num = g_theConceptDB->GetNumConcepts();
-
-		break;
+		return g_theConceptDB->GetNumConcepts();
 
 	case DATABASE_GOVERNMENTS:
-		num = g_theGovernmentDB->NumRecords();
-
-		break;
+		return g_theGovernmentDB->NumRecords();
 
 	case DATABASE_TILE_IMPROVEMENTS:
-		num = g_theTerrainImprovementDB->NumRecords();
-
-		break;
-
-	default:
-
-		
-		break;
+		return g_theTerrainImprovementDB->NumRecords();
 
 	}
-
-	return num;
 }
 
 //----------------------------------------------------------------------------
@@ -2743,19 +2484,12 @@ void GreatLibrary::Search_Great_Library()
 
 void GreatLibrary::Force_A_Search()
 {
-	
-	m_listDatabase = DATABASE_SEARCH;
-
-	
+	m_listDatabase  = DATABASE_SEARCH;
+	m_page          = 0;
+	m_selectedIndex = k_GL_INDEX_INVALID;
 	SetCategoryName(m_listDatabase);
-
-	m_page = 0;
-	m_selectedIndex = -1;
 	m_topics_list->ShouldDraw();
-
-	
-	UpdateList( m_listDatabase );
-
+	UpdateList(m_listDatabase);
 }
 
 //----------------------------------------------------------------------------
@@ -2775,34 +2509,18 @@ void GreatLibrary::Force_A_Search()
 //----------------------------------------------------------------------------
 void GreatLibrary::Back()
 {
-	
-	enum DATABASE next_database;
-	int next_index;
+	if (m_history_position > 0)
+    {
+	    m_history_position--;
+	    
+	    m_backButton->Enable(m_history_position > 0);
+	    m_forwardButton->Enable(true);
+	    
+	    enum DATABASE   next_database   = m_history[m_history_position].m_database;
+	    int             next_index      = m_history[m_history_position].m_item;
 
-	
-	if (m_history_position <= 0)
-		return;
-
-	
-	m_history_position--;
-
-	
-	if (m_history_position == 0)
-	{
-		
-		m_backButton->Enable(FALSE);
-
-	} 
-
-	
-	m_forwardButton->Enable(TRUE);
-
-	
-	next_database = m_history[m_history_position].m_database;
-	next_index = m_history[m_history_position].m_item;
-
-	
-	SetLibrary(next_index, next_database, false);
+	    SetLibrary(next_index, next_database, false);
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -2822,34 +2540,18 @@ void GreatLibrary::Back()
 //----------------------------------------------------------------------------
 void GreatLibrary::Forward()
 {
+	if (m_history_position + 1 < m_history.size())
+    {
+    	m_history_position++;
 	
-	enum DATABASE next_database;
-	int next_index;
+    	m_backButton->Enable(true);
+		m_forwardButton->Enable(m_history_position + 1 < m_history.size());
 
-	
-	if (m_history_position >= m_history.size() - 1)
-		return;
+	    enum DATABASE   next_database   = m_history[m_history_position].m_database;
+	    int             next_index      = m_history[m_history_position].m_item;
 
-	
-	m_history_position++;
-
-	
-	if (m_history_position == m_history.size() - 1)
-	{
-		
-		m_forwardButton->Enable(FALSE);
-
-	} 
-
-	
-	m_backButton->Enable(TRUE);
-
-	
-	next_database = m_history[m_history_position].m_database;
-	next_index = m_history[m_history_position].m_item;
-
-	
-	SetLibrary(next_index, next_database, false);
+	    SetLibrary(next_index, next_database, false);
+    }
 }
 
 

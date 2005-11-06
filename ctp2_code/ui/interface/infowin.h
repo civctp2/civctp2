@@ -7,13 +7,17 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __INFOWIN_H__
 #define __INFOWIN_H__
 
-#include "c3_listitem.h"
-#include "Unit.h"
+class InfoBigListItem;
+class InfoPlayerListItem;
+class InfoScoreLabelListItem;
+class InfoScoreListItem;
+class InfoWonderListItem;
 
 enum {
 	k_INFOWIN_DATA_NULL,
@@ -30,7 +34,10 @@ enum {
 	k_INFOWIN_POLLUTION_SETTING
 };
 
-class Unit;
+#include "aui_action.h"     // AUI_ACTION_BASIC
+#include "c3_listitem.h"    // c3_ListItem
+#include "Unit.h"           // Unit
+
 class LineGraph;
 
 
@@ -201,17 +208,11 @@ private:
 
 };
 
-class InfoCleanupAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(InfoCleanupAction);
 
-
-
-sint32 infowin_Initialize( void );
-sint32 infowin_Cleanup( void );
-sint32 infowin_Cleanup_Controls( void );
+sint32  infowin_Initialize( void );
+void    infowin_Cleanup(void);
+void    infowin_Cleanup_Controls(void);
 
 
 sint32 infowin_Init_Controls( MBCHAR *windowBlock );

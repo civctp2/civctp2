@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,10 +27,9 @@
 //----------------------------------------------------------------------------
 
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
-
 
 #ifndef __MESSAGEMODAL_H__
 #define __MESSAGEMODAL_H__
@@ -83,13 +79,8 @@ public:
 	Message				*GetMessage( void ) { return &m_message; }
 
 protected:
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDragAway;
-#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
-#endif
 
 	AUI_ERRCODE CreateWindowEdges( MBCHAR *ldlBlock );
 	AUI_ERRCODE CreateResponses( MBCHAR *ldlBlock );

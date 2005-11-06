@@ -1,6 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SCIENCEWIN_H__
 #define __SCIENCEWIN_H__
 
@@ -50,7 +51,7 @@ public:
 	C3Window	*m_window;
 
 	ScienceWin( void );
-	~ScienceWin( void );
+	virtual ~ScienceWin( void );
 
 	sint32 Initialize( MBCHAR *windowBlock );
 protected:
@@ -91,7 +92,7 @@ public:
 	void kh_Close();
 
 	sint32 UpdateData( SCI_UPDATE update );
-	sint32 UpdateList( void );
+	void UpdateList(void);
 
 	c3_ListBox *AdvanceList( void ) { return m_advanceList; }
 	c3_Button *PlusButton( void ) { return m_plusButton; }
@@ -202,13 +203,22 @@ sint32 knowledgewin_Cleanup( void );
 class SW_UpdateAction : public c3_UpdateAction 
 {
 public:
-	SW_UpdateAction( BOOL all = FALSE ) { m_all = all;};
+	SW_UpdateAction(bool all = false)
+    :   c3_UpdateAction (),
+        m_all           (all)
+    { ; };
 
-	virtual	~SW_UpdateAction() {};
-	virtual ActionCallback	Execute;
+	virtual	~SW_UpdateAction(void) { ; };
+
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
+
 private:
-
-	BOOL m_all;
+	bool    m_all;
 };
 
 #endif

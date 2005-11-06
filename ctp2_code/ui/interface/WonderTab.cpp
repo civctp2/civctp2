@@ -10,67 +10,42 @@
 
 
 #include "c3.h"
-
-#include "aui_ldl.h"
-#include "ctp2_Window.h"
-#include "ctp2_button.h"
-#include "c3ui.h"
-#include "ctp2_Static.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-
-
-#include "StrDB.h"
-
-
 #include "WonderTab.h"
 
-
-#include "linegraph.h"
-
-
-#include "aui_uniqueid.h"
-
-
+#include "aui_ldl.h"
 #include "aui_stringtable.h"
-
-
-#include "colorset.h"
-
-
-#include "rankingtab.h"
-
-#include "EventTracker.h"
-
-#include "WonderRecord.h"
-#include "IconRecord.h"
-#include "DiffDB.h"
-#include "profileDB.h"
-
-
-
-#include "c3_button.h"
-
-#include "Unit.h"
+#include "aui_uniqueid.h"
 #include "citydata.h"
-#include "player.h"
 #include "Civilisation.h"
-
+#include "colorset.h"           // g_colorSet
+#include "c3_button.h"
+#include "c3ui.h"
+#include "ctp2_button.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
+#include "ctp2_Static.h"
+#include "ctp2_Window.h"
+#include "DiffDB.h"
+#include "EventTracker.h"
+#include "GameSettings.h"
+#include "IconRecord.h"
+#include "linegraph.h"
+#include "player.h"
+#include "profileDB.h"
+#include "rankingtab.h"
+#include "StrDB.h"              // g_theStringDB
+#include "Unit.h"
+#include "WonderRecord.h"
 #include "WonderTracker.h"
 
-#include "colorset.h"
-
-#include "GameSettings.h"
 
 extern C3UI *g_c3ui;
-extern StringDB *g_theStringDB;
 
 static sint32			s_currentWonderDisplay;
 static c3_Button		*s_eventsInfoButton[17];
 
 extern DifficultyDB *g_theDifficultyDB;
 extern PointerList<Player>      *g_deadPlayer;
-extern ColorSet *g_colorSet;
 
 
 WonderTab::WonderTab(ctp2_Window *parent) :

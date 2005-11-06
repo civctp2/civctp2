@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer chat box
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,51 +30,31 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-#include "aui_ldl.h"
-#include "ctp2_Window.h"
-#include "ctp2_button.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "c3ui.h"
-#include "ctp2_dropdown.h"
-#include "ctp2_Static.h"
-#include "ctp2_listbox.h"
-
-
-#include "StrDB.h"
-
-
 #include "rankingtab.h"
 
-
-#include "linegraph.h"
-
-
-#include "aui_uniqueid.h"
-
-
-#include "player.h"
-
-
+#include "aui_ldl.h"
 #include "aui_stringtable.h"
-
-
-#include "colorset.h"
-
-
-#include "infowin.h"
-#include "TurnCnt.h"
-#include "gstypes.h"
-#include "Strengths.h"
+#include "aui_uniqueid.h"
+#include "c3ui.h"
 #include "CivilisationPool.h"
+#include "colorset.h"           // g_colorSet
+#include "ctp2_button.h"
+#include "ctp2_dropdown.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
+#include "ctp2_Static.h"
+#include "ctp2_Window.h"
+#include "gstypes.h"
+#include "infowin.h"
+#include "linegraph.h"
+#include "player.h"
+#include "StrDB.h"              // g_theStringDB
+#include "Strengths.h"
+#include "TurnCnt.h"            // g_turn
 
 
 extern C3UI *g_c3ui;
-extern StringDB *g_theStringDB;
 extern PointerList<Player>      *g_deadPlayer;
-extern TurnCount				*g_turn; 
-extern ColorSet		*g_colorSet;
 
 static aui_StringTable	*s_stringTable;
 
@@ -88,14 +68,14 @@ RankingTab * RankingTab::s_current_ranking_tab = NULL;
 
 
 RankingTab::RankingTab(ctp2_Window *parent) :
+	m_infoGraph(static_cast<LineGraph *>(
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph"))),
 	m_rankingDropDown(static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(
 		"InfoDialog.TabGroup.Tab3.TabPanel.RankSelect.Pulldown"))),
 	m_lineOrZeroSumButton(static_cast<ctp2_Button*>(
 		aui_Ldl::GetObject("InfoDialog.TabGroup.Tab3.TabPanel.LineOrZeroSum"))),
 	m_infoPlayerList(static_cast<ctp2_ListBox *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoPlayerList"))),
-	m_infoGraph(static_cast<LineGraph *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph")))
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoPlayerList")))
 {
 
 	
@@ -293,13 +273,13 @@ void RankingTab::CleanupGraph()
 	
 	if (m_infoGraphData)
 	{
-		for( sint32 i = 0 ; i < m_infoYCount ; i++ )
+		for (size_t i = 0 ; i < m_infoYCount; ++i)
 		{
 			delete m_infoGraphData[i];
-			m_infoGraphData[i] = NULL;
 		}
-		delete m_infoGraphData;
+		delete [] m_infoGraphData;
 		m_infoGraphData = NULL;
+        m_infoYCount    = 0;
 	}
 }
 
@@ -403,7 +383,7 @@ sint32 SetupRankingGraph(
 	
 	if (!infoXCount) 
 	{
-		delete color;
+		delete [] color;
 		
 		pInfoGraph->RenderGraph();
 		return infoYCount;
@@ -566,7 +546,7 @@ sint32 SetupRankingGraph(
 	
 	pInfoGraph->RenderGraph();
 	
-	delete color;
+	delete [] color;
 
 	
 	

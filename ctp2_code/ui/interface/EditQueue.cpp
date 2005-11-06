@@ -44,6 +44,7 @@
 
 #include "c3.h"
 #include "EditQueue.h"
+
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "ctp2_Window.h"
@@ -81,6 +82,7 @@
 #include "network.h"
 #include "IconRecord.h"
 #include "NationalManagementDialog.h"
+#include "Globals.h"
 
 static EditQueue *s_editQueue = NULL;
 
@@ -1104,11 +1106,7 @@ void EditQueue::UpdateButtons()
 		}
 	}
 
-	if(visList && visList->GetSelectedItem()) {
-		m_addButton->Enable(TRUE);
-	} else {
-		m_addButton->Enable(FALSE);
-	}
+    m_addButton->Enable(visList && visList->GetSelectedItem());
 }
 
 
@@ -1904,7 +1902,7 @@ void EditQueue::SaveCallback(aui_Control *control, uint32 action, uint32 data, v
 	}
 
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
-	strcat(saveFileName, "\\");
+	strcat(saveFileName, FILE_SEP);
 	strcat(saveFileName, saveName);
 
 	FILE *test = c3files_fopen(C3DIR_DIRECT, saveFileName, "r");
@@ -1941,7 +1939,7 @@ void EditQueue::Save(const MBCHAR *saveFileName)
 	if(s_editQueue->m_cityData) {
 		s_editQueue->m_cityData->SaveQueue(saveFileName);
 	} else {
-		FILE *saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)saveFileName, "w");
+		FILE * saveFile = c3files_fopen(C3DIR_DIRECT, saveFileName, "w");
 		Assert(saveFile);
 		if(!saveFile) return;
 		
@@ -2011,7 +2009,7 @@ void EditQueue::LoadQueryCallback(bool response, void *data)
 
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, "\\");
+	strcat(loadFileName, FILE_SEP);
 	strcat(loadFileName, loadName);
 
 	if(s_editQueue->m_cityData) {
@@ -2032,14 +2030,12 @@ void  EditQueue::LoadCustom(const MBCHAR *loadName)
 {
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, "\\");
+	strcat(loadFileName, FILE_SEP);
 	strcat(loadFileName, loadName);
 
 	s_editQueue->m_customBuildList.DeleteAll();
 
-	FILE	*fpQueue ;
-
-	fpQueue = c3files_fopen(C3DIR_DIRECT, (char *)loadFileName, "r");
+	FILE	*fpQueue = c3files_fopen(C3DIR_DIRECT, loadFileName, "r");
 	if(!fpQueue) return;
 
 	char buf[k_MAX_NAME_LEN];
@@ -2141,12 +2137,10 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 {
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, "\\");
+	strcat(loadFileName, FILE_SEP);
 	strcat(loadFileName, queueName);
 
-	FILE	*fpQueue ;
-
-	fpQueue = c3files_fopen(C3DIR_DIRECT, (char *)loadFileName, "r");
+	FILE * fpQueue = c3files_fopen(C3DIR_DIRECT, loadFileName, "r");
 	if(!fpQueue) return;
 
 	m_queueContents->Clear();
@@ -2376,7 +2370,12 @@ class ConfirmOverwriteQueueAction:public aui_Action
   public:
 	ConfirmOverwriteQueueAction(MBCHAR *saveFileName, const MBCHAR *text) { m_saveFileName = saveFileName; strncpy(m_text, text, 256); m_text[256] = 0; }
 
-	virtual ActionCallback Execute;
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	); 
 
   private:
 	MBCHAR m_text[257];
@@ -2393,12 +2392,7 @@ void ConfirmOverwriteQueueAction::Execute(aui_Control *control, uint32 action, u
 	MessageBoxDialog::Query(buf, "QueryOverwiteQueue", EditQueue::SaveQueryCallback, (void *)m_saveFileName);
 };
 
-class MustEnterNameAction : public aui_Action
-{
-  public:
-	  MustEnterNameAction() {};
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(MustEnterNameAction);
 
 void MustEnterNameAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
@@ -2415,7 +2409,7 @@ void EditQueue::SaveNameResponse(bool response, const char *text, void *userData
 			
 		static MBCHAR saveFileName[_MAX_PATH];
 		g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
-		strcat(saveFileName, "\\");
+		strcat(saveFileName, FILE_SEP);
 		strcat(saveFileName, text);
 
 		FILE *test = c3files_fopen(C3DIR_DIRECT, saveFileName, "r");

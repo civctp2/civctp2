@@ -43,7 +43,7 @@
 #include "SelItem.h"
 #include "aui_blitter.h"
 #include "pixelutils.h"
-#include "colorset.h"
+#include "colorset.h"               // g_colorSet
 #include "aui_stringtable.h"
 #include "aui_tipwindow.h"
 #include "ctp2_hypertextbox.h"
@@ -69,14 +69,14 @@
 #include "network.h"
 #include "net_action.h"
 
+extern C3UI                 *g_c3ui;
+
 static IntelligenceWindow   *s_intelligenceWindow = NULL;
 static MBCHAR               *s_intelligenceBlock = "IntelligenceWindow";
 static MBCHAR               *s_intelligenceAdviceBlock = "IntelligenceAdvice";
 ctp2_ListBox                *IntelligenceWindow::sm_list = NULL;
 
-extern C3UI                 *g_c3ui;
 
-extern ColorSet             *g_colorSet;
 
 aui_StringTable             *IntelligenceWindow::sm_strengthImages = NULL;
 aui_StringTable             *IntelligenceWindow::sm_embassyImages = NULL;

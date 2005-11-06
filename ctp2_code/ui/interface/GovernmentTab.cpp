@@ -20,7 +20,7 @@
 #include "player.h"
 #include "SelItem.h"
 #include "StrDB.h"
-#include "colorset.h"
+#include "colorset.h"                   // g_colorSet
 
 #include "soundmanager.h"
 #include "gamesounds.h"
@@ -28,8 +28,6 @@
 #include "UnitDynArr.h"
 #include "UnitRecord.h"
 #include "MessageBoxDialog.h"
-
-extern ColorSet	*g_colorSet;
 
 
 template <class type> const MBCHAR *ComparisonCharacter(type left, type right)

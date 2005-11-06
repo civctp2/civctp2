@@ -76,7 +76,7 @@ void String_Search::Set_Search_Key
 
 		
 		
-		m_skip_table[key_char] = m_key_length - j - 1;
+		m_skip_table[(int)key_char] = m_key_length - j - 1;
 
 	} 
 }
@@ -138,7 +138,7 @@ bool String_Search::Search
 		{
 			
 
-			t = m_skip_table[string_char];
+			t = m_skip_table[(int)string_char];
 
 			
 			i += (m_key_length-j > t) ? m_key_length-j : t;

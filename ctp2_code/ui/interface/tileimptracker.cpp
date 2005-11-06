@@ -32,32 +32,27 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "tileimptracker.h"
 
 #include "aui.h"
 #include "aui_ldl.h"
 #include "c3ui.h"
 #include "aui_uniqueid.h"
-
-#include "tileimptracker.h"
 #include "c3window.h"
 #include "c3_static.h"
-
 #include "primitives.h"
-
 #include "SelItem.h"
 #include "TerrImprovePool.h"
 #include "player.h"
 #include "maputils.h"
 #include "World.h"
 #include "Cell.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
+#include "profileDB.h"          // g_theProfileDB
 #include "terrainutil.h"
 #include "TerrainRecord.h"
 
 extern C3UI             *g_c3ui;
-extern ColorSet         *g_colorSet;
-
-#include "profileDB.h"  // g_theProfileDB
 
 namespace
 {

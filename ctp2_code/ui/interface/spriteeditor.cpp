@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Sprite editor
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -124,7 +124,6 @@ extern TiledMap 	*g_tiledMap;
 extern C3Window			*g_toolbar;
 extern SelectedItem		*g_selected_item;
 extern Player			**g_player;
-extern ColorSet			*g_colorSet;
 extern ProfileDB		*g_theProfileDB;
 
 

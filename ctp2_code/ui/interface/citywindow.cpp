@@ -93,8 +93,7 @@
 
 #include "StrDB.h"
 #include "ConstDB.h"
-#include "colorset.h"
-extern ColorSet                     *g_colorSet;
+#include "colorset.h"               // g_colorSet
 
 #include "BldQue.h"
 #include "gold.h"
@@ -134,10 +133,9 @@ extern ProjectFile                  *g_GreatLibPF;
 #include "aicause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include "ArmyPool.h"	// g_armyPool
 
-
-static CityWindow                   *s_cityWindow = NULL;
 extern C3UI                         *g_c3ui;
 
+static CityWindow                   *s_cityWindow = NULL;
 static MBCHAR                       *s_cityWindowBlock = "CityWindow";
 static MBCHAR                       *s_cityStatsBlock = "CityStatisticsWindow";
 

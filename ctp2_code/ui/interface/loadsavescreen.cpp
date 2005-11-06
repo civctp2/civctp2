@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // you_want_ai_civs_from_singleplayer_saved_game_showing_up_in_netshell
 //
 //----------------------------------------------------------------------------
@@ -223,17 +223,19 @@ AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callb
 
 
 
-AUI_ERRCODE loadsavescreen_Cleanup()
+void loadsavescreen_Cleanup()
 {
-	if ( !g_loadsaveWindow  ) return AUI_ERRCODE_OK; 
-
+	if (g_loadsaveWindow)
+    {
+        if (g_c3ui)
+        {
 	g_c3ui->RemoveWindow( g_loadsaveWindow->Id() );
+        }
 	keypress_RemoveHandler(g_loadsaveWindow);
 
 	delete g_loadsaveWindow;
 	g_loadsaveWindow = NULL;
-
-	return AUI_ERRCODE_OK;
+}
 }
 
 void loadsavescreen_PostCleanupAction(void)
@@ -381,22 +383,22 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 			
 			
 			
-			
+ 			
 			BOOL foundOne = FALSE;
 
-			for (i=0; i<k_MAX_PLAYERS; i++) {
-				MBCHAR		*civName;
-				MBCHAR		*dbString;
+ 			for (i=0; i<k_MAX_PLAYERS; i++) {
+ 				MBCHAR		*civName;
+ 				MBCHAR		*dbString;
 
-				civName = s_tempSaveInfo->civList[i];
+ 				civName = s_tempSaveInfo->civList[i];
 				dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->Get(tribeIndex)->GetPluralCivName());
-				if (strlen(civName) > 0) {
-					if (!stricmp(dbString, civName)) {
-						
-						g_scenarioUsePlayerNumber = i;
+ 				if (strlen(civName) > 0) {
+ 					if (!stricmp(dbString, civName)) {
+ 						
+ 						g_scenarioUsePlayerNumber = i;
 						foundOne = TRUE;
-						break;
-					}
+ 						break;
+	 				}
 				}
 			}
 
@@ -972,7 +974,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 	uint32 i;
 	for(i = 0; i < k_MAX_PLAYERS; i++)
 	{
-		if(g_player[ i ])
+		if ( g_player[ i ] )
 		{
 			TribeSlot ts;
 

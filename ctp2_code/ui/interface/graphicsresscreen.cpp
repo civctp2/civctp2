@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Graphics resolution screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -237,9 +237,9 @@ void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 d
 
 ScreenResListItem::ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

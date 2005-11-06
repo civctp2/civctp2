@@ -28,27 +28,25 @@
 // - File created. (Aug 15th 2005 Martin Gühmann)
 // - Made special attack window doesn't appear anymore if the costs
 //   are zero. (Aug 18th 2005 Martin Gühmann)
+// - Compatibility fixes to prevent crashes and Asserts.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SpecialAttackWindow.h"
-#include "colorset.h"
-#include "primitives.h"
-#include "c3ui.h"
 
-#include "aui_uniqueid.h"
-
-#include "c3_static.h"
-
-#include "SelItem.h"
-#include "player.h"
-#include "maputils.h"
-#include "World.h"
 #include "ArmyData.h"
+#include "aui_uniqueid.h"
+#include "colorset.h"               // g_colorSet
+#include "c3_static.h"
+#include "c3ui.h"
+#include "maputils.h"
+#include "player.h"
+#include "primitives.h"
+#include "SelItem.h"
+#include "World.h"
 
 extern C3UI             *g_c3ui;
-extern ColorSet         *g_colorSet;
 
 namespace
 {
@@ -87,20 +85,25 @@ sint32 specialAttackWindow_Initialize()
 	Assert(AUI_NEWOK(g_theSpecialAttackWindow, errcode));
 	if(!AUI_SUCCESS(errcode)) return -1;
 
+	aui_Ldl * theLdl = g_ui->GetLdl();
+
 	sprintf(controlBlock, "%s.%s", textBlock, "SpecialAttackCostN");
-	s_saWindowCostN = new c3_Static( &errcode, aui_UniqueId(), controlBlock);
-	Assert(AUI_NEWOK(s_saWindowCostN, errcode));
-	if(!AUI_SUCCESS(errcode)) return -1;
+    if (theLdl->IsValid(controlBlock))
+    {
+	    s_saWindowCostN = new c3_Static( &errcode, aui_UniqueId(), controlBlock);
+    }
 
 	sprintf(controlBlock, "%s.%s", textBlock, "SpecialAttackCostV");
-	s_saWindowCostV = new c3_Static( &errcode, aui_UniqueId(), controlBlock);
-	Assert(AUI_NEWOK(s_saWindowCostV, errcode));
-	if(!AUI_SUCCESS(errcode)) return -1;
+    if (theLdl->IsValid(controlBlock))
+    {
+	    s_saWindowCostV = new c3_Static( &errcode, aui_UniqueId(), controlBlock);
+    }
 
 	sprintf(controlBlock, "%s.%s", textBlock, "Background");
-	s_saWindowBackground = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
-	Assert(AUI_NEWOK(s_saWindowBackground, errcode));
-	if(!AUI_SUCCESS(errcode)) return -1;
+    if (theLdl->IsValid(controlBlock))
+    {
+	    s_saWindowBackground = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
+    }
 
 	errcode = aui_Ldl::SetupHeirarchyFromRoot(textBlock);
 	Assert(AUI_SUCCESS(errcode));
@@ -154,9 +157,12 @@ void specialAttackWindow_DisplayData(MapPoint &p, sint32 type)
 		costs = g_theOrderDB->Get(type)->GetGold();
 	}
 
-	MBCHAR       mytext[256];
-	sprintf(mytext,"%d", costs);
-	s_saWindowCostV->SetText(mytext);
+    if (s_saWindowCostV)
+    {
+	    MBCHAR       mytext[256];
+	    sprintf(mytext,"%d", costs);
+	    s_saWindowCostV->SetText(mytext);
+    }
 
 	sint32       x, y;
 	maputils_MapXY2PixelXY(p.x,p.y,&x,&y);

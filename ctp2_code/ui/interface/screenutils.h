@@ -30,18 +30,21 @@
 //
 //----------------------------------------------------------------------------
 
+
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SCREENUTILS_H__
 #define __SCREENUTILS_H__
 
 #ifdef _DEBUG
 
-#define SET_TIME                g_screenTime = GetTickCount();
+#define SET_TIME				g_screenTime = GetTickCount();
 
-#define GET_ELAPSED_TIME(x)     g_screenTime = (GetTickCount() - g_screenTime) * 0.001;\
-                                MBCHAR str[50];\
-                                sprintf( str, "%4.2f secs - %s", g_screenTime, x );\
-                                if ( g_debugWindow) g_debugWindow->AddText( str );
+#define GET_ELAPSED_TIME(x)		g_screenTime = (GetTickCount() - g_screenTime) * 0.001;	\
+								MBCHAR str[50];	\
+								sprintf( str, "%4.2f secs - %s", g_screenTime, x );	\
+								if ( g_debugWindow) g_debugWindow->AddText( str );
 #endif
 
 class Sequence;

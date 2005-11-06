@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Wonder movie window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -64,9 +64,6 @@ void wondermoviewin_Initialize(Sequence *seq)
 	if (g_wonderMovieWindow == NULL) {
 		g_wonderMovieWindow = new WonderMovieWindow(&errcode, aui_UniqueId(), "WonderMovieWindow", 16);
 		Assert(errcode == AUI_ERRCODE_OK);
-		if (errcode != AUI_ERRCODE_OK)
-			g_wonderMovieWindow = NULL;
-		Assert(g_wonderMovieWindow != NULL);
 
 		g_wonderMovieWindow->SetSequence(seq);
 	}

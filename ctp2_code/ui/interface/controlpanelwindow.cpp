@@ -104,7 +104,7 @@
 
 #include "c3cmdline.h"
 #include "SelItem.h"
-#include "player.h"
+#include "player.h"                     // g_player
 #include "c3window.h"
 #include "ctp2_Window.h"
 #include "ctp2_Menu.h"
@@ -124,27 +124,27 @@
 #include "IconRecord.h"
 #include "SelItem.h"
 #include "TurnCnt.h"
-#include "UnitPool.h"
+#include "UnitPool.h"                   // g_theUnitPool
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitRecord.h"
-#include "StrDB.h"
+#include "StrDB.h"                      // g_theStringDB
 #include "screenutils.h"
 #include "Advances.h"
 #include "AdvanceRecord.h"
 #include "advanceutil.h"
 #include "ArmyData.h"
-#include "ArmyPool.h"
+#include "ArmyPool.h"                   // g_theArmyPool
 #include "cellunitlist.h"
 #include "Cell.h"
-#include "World.h"
-#include "director.h"
+#include "World.h"                      // g_theWorld
+#include "director.h"                   // g_director
 #include "Events.h"
 #include "GameEventUser.h"
 #include "TerrainRecord.h"
 
 #include "pixelutils.h"
-#include "colorset.h"
+#include "colorset.h"                   // g_colorSet
 #include "primitives.h"
 
 #include "controlpanelwindow.h"
@@ -196,8 +196,8 @@
 #include "helptile.h"
 
 #include "SpecialAttackWindow.h"
-#include "gameinit.h"            // g_startHotseatGame
-#include <string>                // std::string
+#include "gameinit.h"                   // g_startHotseatGame
+#include <string>                       // std::string
 
 extern ProgressWindow *g_theProgressWindow;
 
@@ -223,17 +223,8 @@ extern ProgressWindow *g_theProgressWindow;
 extern sint32               g_ScreenWidth;
 extern sint32               g_ScreenHeight;
 extern C3UI                 *g_c3ui;
-extern Background           *g_background;
-extern UnitPool             *g_theUnitPool;
-extern StringDB             *g_theStringDB;
 extern InfoBar              *g_infoBar;
-extern Player               **g_player;
-extern World                *g_theWorld;
 extern CursorManager        *g_cursorManager;
-extern ArmyPool             *g_theArmyPool;
-extern Director             *g_director;
-extern ColorSet             *g_colorSet;
-
 extern KEYMAP               *theKeyMap;
 
 
@@ -488,7 +479,8 @@ void GotoCityUtilityDialogBoxCallback(Unit city, sint32 val2)
 
 	if (city.IsValid())
 	{
-	    g_selected_item->Goto(city.RetPos());
+	    MapPoint        destPos = city.RetPos();
+	    g_selected_item->Goto(destPos);
 	}
 }
 
@@ -1127,12 +1119,12 @@ ControlPanelWindow::ControlPanelWindow(
 	MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type ) : 
+m_mainWindow(NULL),
+m_contextMenu(NULL),
 m_turnToggle(true),
-m_terraFormMode(false),
 m_targetingMode(CP_TARGETING_MODE_OFF),
 m_currentOrder(NULL),
-m_contextMenu(NULL),
-m_mainWindow(NULL)
+m_terraFormMode(false)
 {
 	
 	*retval = AUI_ERRCODE_OK;
@@ -1830,7 +1822,7 @@ void ControlPanelWindow::PerformOrderAfterConfirmation(bool response, void *user
 	{
 		((OrderDataRec*)userData)->data->PerformOrder(((OrderDataRec*)userData)->rec);
 	}
-	delete userData;
+	delete (OrderDataRec*) userData;
 }
 
 

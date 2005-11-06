@@ -207,22 +207,26 @@ MessageBoxDialog::~MessageBoxDialog()
 
 class DismissMessageBoxAction : public aui_Action
 {
-  public:
-	DismissMessageBoxAction(MessageBoxDialog *dialog) {
-		m_dialog = dialog;
-	}
-	virtual ~DismissMessageBoxAction() {}
+public:
+	DismissMessageBoxAction(MessageBoxDialog * dialog)
+    :   aui_Action  (),
+        m_dialog    (dialog)
+    { ; };
+	virtual ~DismissMessageBoxAction(void) { ; };
 
-	virtual ActionCallback Execute;
-  private:
-	MessageBoxDialog *m_dialog;
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	)
+    {
+        delete  m_dialog;
+    };
+
+private:
+	MessageBoxDialog *  m_dialog;
 };
-
-void DismissMessageBoxAction::Execute(aui_Control *control, uint32 action, uint32 data)
-{
-	delete m_dialog;
-	m_dialog = NULL;
-}
 
 
 void MessageBoxDialog::LeftButtonActionCallback(aui_Control *control,

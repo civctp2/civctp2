@@ -27,26 +27,18 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "TurnYearStatus.h"
 
-
 #include <sstream>
-
-
 #include "aui_ldl.h"
 #include "ctp2_button.h"
 #include "newturncount.h"
 #include "StrDB.h"
 #include "ctp2_Static.h"
-
 #include "SelItem.h"
 #include "player.h"
-
 #include "primitives.h"
-#include "colorset.h"
-extern ColorSet *g_colorSet;
+#include "colorset.h"           // g_colorSet
 
 
 bool g_useCustomYear = false;
@@ -64,7 +56,7 @@ const MBCHAR *TurnYearStatus::GetCurrentYear()
 		g_player[g_selected_item->GetVisiblePlayer()]->m_current_round :
 		NewTurnCount::GetCurrentRound();
 	if(g_useCustomYear && g_pTurnLengthOverride) {
-		if(round >= g_turnLengthOverrideSize) {
+		if((unsigned) round >= g_turnLengthOverrideSize) {
 			round = g_turnLengthOverrideSize - 1;
 		}
 		strcpy(buf, g_pTurnLengthOverride[round].text);

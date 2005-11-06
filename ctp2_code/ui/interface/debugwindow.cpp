@@ -12,25 +12,21 @@
 
 
 #include "c3.h"
+#include "debugwindow.h"
 
 #include "aui.h"
 #include "aui_control.h"
-
-#include "pattern.h"
-#include "primitives.h"
-
-
-#include "debugwindow.h"
 #include "c3cmdline.h"
 #include "c3ui.h"
-
+#include "colorset.h"       // g_colorSet
+#include "pattern.h"
+#include "primitives.h"
 #include "textbox.h"
 
 extern C3UI				*g_c3ui;
 
 
-#include "colorset.h"
-extern ColorSet *g_colorSet;
+
 DebugWindow::DebugWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,

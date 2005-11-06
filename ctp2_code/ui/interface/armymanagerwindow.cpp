@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Army manager window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,12 +29,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "armymanagerwindow.h"
+
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "aui_blitter.h"
 #include "c3ui.h"
 
-#include "armymanagerwindow.h"
 #include "Army.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
@@ -62,14 +63,13 @@
 #include "GameEventUser.h"
 #include "Events.h"
 #include "primitives.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
 
 #include "network.h"
 
 #include "UnitPool.h"
 
 extern C3UI *g_c3ui;
-extern ColorSet	*g_colorSet;
 
 static ArmyManagerWindow *s_armyWindow = NULL;
 static MBCHAR *s_armyWindowBlock = "ArmyManager";
@@ -113,12 +113,10 @@ ArmyManagerWindow::~ArmyManagerWindow()
 	if(m_armies) {
 		m_armies->DeleteAll();
 		delete m_armies;
-		m_armies = NULL;
 	}
 
 	if(m_window) {
 		aui_Ldl::DeleteHierarchyFromRoot(s_armyWindowBlock);
-		m_window = NULL;
 	}
 }
 
@@ -683,8 +681,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 	}
 
 	sint32 i;
-	static CellUnitList units;
-	units.Clear();
+	CellUnitList units;
 
 	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
 		MBCHAR switchName[k_MAX_NAME_LEN];
@@ -802,8 +799,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 	theArmy = node->m_army;
 	sint32 i;
 
-	static CellUnitList units;
-	units.Clear();
+	CellUnitList units;
 
 	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
 		MBCHAR switchName[k_MAX_NAME_LEN];

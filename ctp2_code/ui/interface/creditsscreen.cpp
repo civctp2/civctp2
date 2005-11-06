@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The credit screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,12 +30,9 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "creditsscreen.h"
 
-#include <algorithm>	// std::fill
-
+#include <algorithm>	            // std::fill
 #include "aui_action.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
@@ -49,13 +46,10 @@
 #include "ctp2_button.h"
 #include "UIUtils.h"
 #include "primitives.h"
-#include "soundmanager.h"
-
+#include "soundmanager.h"           // g_soundManager
 #include "aui_bitmapfont.h"
 #include "MessageBoxDialog.h"
-#include "colorset.h"
-
-
+#include "colorset.h"               // g_colorSet
 #include "StrDB.h"
 
 
@@ -100,7 +94,6 @@ extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
 extern C3UI*		g_c3ui;
 extern StringDB*	g_theStringDB;
-extern SoundManager	*g_soundManager;
 
 
 CreditsWindow*			g_creditsWindow = NULL;		
@@ -109,12 +102,7 @@ CreditsWindow*			g_creditsWindow = NULL;
 C3Window *GetInitialPlayScreen();
 
 
-class RemoveCreditsAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
-
+AUI_ACTION_BASIC(RemoveCreditsAction);
 
 void RemoveCreditsAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
@@ -749,14 +737,14 @@ public:
 		MBCHAR *		ldlBlock
 	) 
 	:	aui_Static(retval, id, ldlBlock),
+		m_lastIdle(GetTickCount()),
 		m_numPages(0),
 		m_pPages(NULL),
 		m_pCurrPage(NULL),
-		m_numFonts(0),
 		m_definingFont(false),
 		m_currFontNumber(0),
 		m_currFontSize(0),
-		m_lastIdle(GetTickCount())
+		m_numFonts(0)
 	{
 		std::fill(m_fonts, m_fonts + kCreditsTextNumFonts, (aui_BitmapFont *) NULL);
 
@@ -785,15 +773,15 @@ public:
 		uint32			maxLength	= 0 
 	) 
 	:	aui_Static(retval, id, x, y, width, height, text, maxLength),
+		m_lastIdle(GetTickCount()),
 		m_numPages(0),
 		m_pPages(NULL),
 		m_pCurrPage(NULL),
-		m_numFonts(0),
 		m_definingFont(false),
 		m_currFontNumber(0),
 		m_currFontSize(0),
 		m_animationSpeed(3000),
-		m_lastIdle(GetTickCount())
+		m_numFonts(0)
 	{
 		std::fill(m_fonts, m_fonts + kCreditsTextNumFonts, (aui_BitmapFont *) NULL);
 	};
@@ -1248,7 +1236,6 @@ void cCreditsPage::ResetLines(void)
 
 
 
-extern ColorSet		*g_colorSet;
 AUI_ERRCODE c3_CreditsText::DrawThis(aui_Surface *pSurface, sint32 x, sint32 y)
 {
 

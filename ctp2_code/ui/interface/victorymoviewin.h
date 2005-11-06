@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __VICTORYMOVIEWIN__
 #define __VICTORYMOVIEWIN__
 
@@ -16,9 +16,6 @@ void victorymoviewin_Cleanup();
 
 void victorymoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie);
 
-class CloseVictoryMovieAction : public aui_Action
-{
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(CloseVictoryMovieAction);
 
 #endif

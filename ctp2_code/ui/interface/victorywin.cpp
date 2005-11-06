@@ -24,13 +24,14 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed refferences to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Removed references to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Cleaned up static data.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
+#include "victorywin.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -69,7 +70,6 @@
 #include "c3window.h"
 #include "c3windows.h"
 #include "victorywindow.h"
-#include "victorywin.h"
 #include "infowin.h"
 #include "c3fancywindow.h"
 #include "aui_stringtable.h"
@@ -77,7 +77,7 @@
 #include "screenutils.h"
 
 
-#include "CivPaths.h"
+#include "CivPaths.h"           // g_civPaths
 #include "ObjPool.h"
 #include "Cell.h"
 #include "MapPoint.h"
@@ -115,35 +115,26 @@
 #include "highscoredb.h"
 #include "GameSettings.h"
 
-
+#include "c3_listitem.h"
+#include "civapp.h"
 #include "Civilisation.h"
 #include "CivilisationData.h"
-
-#include "c3_listitem.h"
+#include "colorset.h"           // g_colorSet
+#include "IconRecord.h"
 #include "resource.h"
 #include "thumbnailmap.h"
-#include "colorset.h"
-#include "civapp.h"
+#include "network.h"
 #include "TurnCnt.h"
-
 #include "wonderutil.h"
-#include "IconRecord.h"
-
 
 extern sint32                   g_ScreenWidth;
 extern sint32                   g_ScreenHeight;
 extern C3UI                     *g_c3ui;
-extern ColorSet                 *g_colorSet;
-extern CivPaths                 *g_civPaths;
 extern TopTen                   *g_theTopTen;
 extern CivApp                   *g_civApp;
-
-
 extern PointerList<Player>      *g_deadPlayer;
-
 extern sint32                   g_modalWindow;
 
-#include "network.h"
 
 
 VictoryWindow                   *g_victoryWindow = NULL;
@@ -355,51 +346,33 @@ sint32 victorywin_RemoveWindow( void )
 	return 1;
 }
 
-sint32 victorywin_Cleanup( void )
+void victorywin_Cleanup( void )
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-	sint32 i = 0;
+    // The individual "s_wonderIcons[i]" items will be deleted through 
+    // DeleteHierarchyFromRoot(s_VictoryWindowBlock) in the destructor
+    // of g_victoryWindow.
+    delete [] s_wonderIcons;
+    s_wonderIcons = NULL;
 
-	if ( !g_victoryWindow ) return 0; 
+    if (s_graphList)
+    {
+        s_graphList->Clear();
+    }
+    if (s_wonderList)
+    {
+        s_wonderList->Clear();
+    }
+    if (s_scoreList)
+    {
+        s_scoreList->Clear();
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	mycleanup( s_highScoreWin );
-
-	mycleanup( s_stringTable );
-
-	delete g_victoryWindow;
-	g_victoryWindow = NULL;
-
-	return 0;
-
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
+    {
+	    mycleanup(s_highScoreWin);
+	    mycleanup(s_stringTable);
+        mycleanup(g_victoryWindow);
+    }
 #undef mycleanup
 }
 
@@ -411,9 +384,8 @@ sint32 victorywin_AddWonders( MBCHAR *windowBlock )
 	int i = 0;
 	int j = 0;
 
-	sint32 iconNum = k_VICWIN_WONDERICON_MAX;
-	s_wonderIcons = new ctp2_Static *[iconNum];
-
+	s_wonderIcons = new ctp2_Static *[k_VICWIN_WONDERICON_MAX];
+    
 	
 	
 	
@@ -779,9 +751,9 @@ sint32 victorywin_DisplayHighScore( void )
 
 HighScoreListItem::HighScoreListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 score, MBCHAR *ldlBlock)
 	:
-	ctp2_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	ctp2_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -955,25 +927,23 @@ HighScoreWindowPopup::~HighScoreWindowPopup( void )
 	Cleanup();
 }
 
-sint32 HighScoreWindowPopup::Cleanup( void )
+void HighScoreWindowPopup::Cleanup( void )
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+    if (m_window && g_c3ui)
+    {
+	    g_c3ui->RemoveWindow(m_window->Id());
+    }
 
-	g_c3ui->RemoveWindow( m_window->Id() );
-
-	mycleanup( m_continueButton );
-	mycleanup( m_creditsButton );
-	mycleanup( m_quitButton );
-
-	mycleanup( m_list );
-	mycleanup( m_title );
-	mycleanup( m_highScoreDB );
-
-	delete m_window;
-	m_window = NULL;
-
-	return 0 ;
-
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
+    {
+	    mycleanup( m_continueButton );
+	    mycleanup( m_creditsButton );
+	    mycleanup( m_quitButton );
+	    mycleanup( m_list );
+	    mycleanup( m_title );
+	    mycleanup( m_highScoreDB );
+	    mycleanup( m_window );
+    }
 #undef mycleanup
 }
 
@@ -1358,13 +1328,8 @@ sint32 victorywin_GetRankName( sint32 player, MBCHAR *name, sint32 gameResult )
 
 
 
-sint32 victorywin_IsOnScreen()
+bool victorywin_IsOnScreen()
 {
-	if(!g_victoryWindow || !g_c3ui->GetWindow(g_victoryWindow->m_window->Id())) {
-		if(s_highScoreWin && g_c3ui->GetWindow(s_highScoreWin->GetWindow()->Id())) {
-			return 1;
-		}
-		return 0;
-	}
-	return 1;
+    return  (g_victoryWindow && g_c3ui->GetWindow(g_victoryWindow->m_window->Id())) || 
+            (s_highScoreWin  && g_c3ui->GetWindow(s_highScoreWin->GetWindow()->Id()));
 }

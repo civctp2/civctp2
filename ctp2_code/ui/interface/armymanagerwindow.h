@@ -2,14 +2,19 @@
 #ifndef ARMY_MANAGER_WINDOW_H__
 #define ARMY_MANAGER_WINDOW_H__
 
-class ctp2_Window;
-class ctp2_ListItem;
-class ctp2_ListBox;
-class ctp2_Static;
+class ArmyListNode;
+class ArmyManagerWindow;
 
 #include "MapPoint.h"
 #include "Army.h"
 #include "Unit.h"
+#include "aui_Control.h"    // aui_Control
+#include "ctp2_inttypes.h"  // uint32
+
+class ctp2_Window;
+class ctp2_ListItem;
+class ctp2_ListBox;
+class ctp2_Static;
 
 template <class T> class PointerList;
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling single player game start options. 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 #include "c3.h"
 #include "spnewgameplayersscreen.h"
 
+#include "aui_uniqueid.h"
 #include "c3window.h"
 #include "c3_popupwindow.h"
 #include "c3_button.h"
@@ -46,24 +47,14 @@
 #include "c3_static.h"
 #include "c3slider.h"
 #include "c3ui.h"
-
-//Added by Martin Gühmann
+#include "colorset.h"                   // g_colorSet
 #include "ctp2_spinner.h"
 #include "ctp2_Static.h"
-
-#include "colorset.h"
-extern ColorSet			*g_colorSet;
-
-
-#include "aui_uniqueid.h"
-
-#include "profileDB.h"
-
-#include "spnewgamewindow.h"
 #include "keypress.h"
+#include "profileDB.h"                  // g_theProfileDB
+#include "spnewgamewindow.h"
 
 extern C3UI			*g_c3ui;
-extern ProfileDB	*g_theProfileDB;
 
 namespace
 {
@@ -136,13 +127,10 @@ sint32	spnewgameplayersscreen_displayMyWindow()
 	sint32 retval=0;
 	if(!s_spNewGamePlayersScreen) { retval = spnewgameplayersscreen_Initialize(); }
 
-	AUI_ERRCODE auiErr;
+	AUI_ERRCODE auiErr = g_c3ui->AddWindow(s_spNewGamePlayersScreen);
+	Assert(auiErr == AUI_ERRCODE_OK);
 
-	auiErr = g_c3ui->AddWindow(s_spNewGamePlayersScreen);
 	keypress_RegisterHandler(s_spNewGamePlayersScreen);
-
-
-	Assert( auiErr == AUI_ERRCODE_OK );
 
 	return retval;
 }

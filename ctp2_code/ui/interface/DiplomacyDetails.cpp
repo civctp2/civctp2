@@ -81,7 +81,7 @@
 
 #include "mapanalysis.h"
 #include "intelligencewindow.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
 #include "aui_blitter.h"
 #include "aui_stringtable.h"
 #include "AgreementMatrix.h"
@@ -103,10 +103,9 @@ static MBCHAR               *s_DiplomacyDetailsBlock = "DiplomacyDetails";
 #define k_STRONG_STRENGTH  50
 
 extern C3UI                 *g_c3ui;
-ctp2_Button                 *DiplomacyDetails::m_cancelButton = NULL;
 
+ctp2_Button                 *DiplomacyDetails::m_cancelButton = NULL;
 ctp2_ListBox                *DiplomacyDetails::sm_list = NULL;
-extern ColorSet             *g_colorSet;
 aui_StringTable             *DiplomacyDetails::sm_strengthImages = NULL;
 aui_StringTable             *DiplomacyDetails::sm_embassyImages = NULL;
 

@@ -9,13 +9,12 @@
 
 #include "pixelutils.h"
 #include "primitives.h"
-#include "colorset.h"
+#include "colorset.h"               // g_colorSet
 
 #include "splash.h"
 
 extern C3UI			*g_c3ui;
 Splash				*g_splash;
-extern ColorSet		*g_colorSet;
 
 void Splash::Initialize(void)
 {
@@ -24,9 +23,7 @@ void Splash::Initialize(void)
 
 void Splash::Cleanup(void)
 {
-	if (g_splash)
-		delete g_splash;
-	
+	delete g_splash;
 	g_splash = NULL;
 }
 
@@ -49,11 +46,9 @@ Splash::~Splash()
 
 void Splash::AddText(MBCHAR *text)
 {
-	aui_DirectSurface		*surface;
-
 	if (!g_c3ui) return;
 	
-	surface = (aui_DirectSurface *)g_c3ui->Primary();
+	aui_DirectSurface * surface = (aui_DirectSurface *) g_c3ui->Primary();
 
 	if (!surface) return;
 
@@ -62,12 +57,9 @@ void Splash::AddText(MBCHAR *text)
 
 void Splash::AddTextNL(MBCHAR *text)
 {
-	
-	aui_DirectSurface		*surface;
-
 	if (!g_c3ui) return;
 	
-	surface = (aui_DirectSurface *)g_c3ui->Primary();
+	aui_DirectSurface * surface = (aui_DirectSurface *)g_c3ui->Primary();
 
 	if (!surface) return;
 
@@ -80,12 +72,9 @@ void Splash::AddTextNL(MBCHAR *text)
 
 void Splash::AddHilitedTextNL(MBCHAR *text)
 {
-	
-	aui_DirectSurface		*surface;
-
 	if (!g_c3ui) return;
 	
-	surface = (aui_DirectSurface *)g_c3ui->Primary();
+	aui_DirectSurface * surface = (aui_DirectSurface *) g_c3ui->Primary();
 
 	if (!surface) return;
 

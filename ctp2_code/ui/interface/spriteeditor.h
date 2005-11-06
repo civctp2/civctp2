@@ -3,8 +3,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SPRITEEDITOR_H__
 #define __SPRITEEDITOR_H__
 

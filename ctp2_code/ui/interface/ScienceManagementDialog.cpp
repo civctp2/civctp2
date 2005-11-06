@@ -38,7 +38,7 @@
 #include "aui_ldl.h"
 #include "aui_switch.h"
 #include "c3ui.h"
-#include "colorset.h"
+#include "colorset.h"               // g_colorSet
 #include "ctp2_button.h"
 #include "ctp2_hypertextbox.h"
 #include "ctp2_listbox.h"
@@ -64,13 +64,12 @@
 #include "GovernmentRecord.h"
 #include "terrainutil.h"
 
+extern C3UI			*g_c3ui;
+extern ProjectFile	*g_GreatLibPF;
 
 static const sint32 k_SMD_CIVILIZATION_COLUMNS	= 8;
 
 
-extern C3UI			*g_c3ui;
-extern ColorSet		*g_colorSet;
-extern ProjectFile	*g_GreatLibPF;
 
 
 ScienceManagementDialog *g_scienceManagementDialog = NULL;

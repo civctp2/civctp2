@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Science window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -53,7 +53,7 @@
 
 #include "pixelutils.h"
 #include "c3_switch.h"
-#include "colorset.h"
+#include "colorset.h"               // g_colorSet
 #include "tileset.h"
 #include "c3_icon.h"
 
@@ -72,7 +72,7 @@
 #include "aui_listbox.h"
 #include "c3_listbox.h"
 
-#include "StrDB.h"
+#include "StrDB.h"                  // g_theStringDB
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "Unit.h"
@@ -90,9 +90,9 @@
 #include "debugwindow.h"
 
 #include "UnitData.h"
-#include "player.h"
+#include "player.h"                 // g_player
 #include "PlayHap.h"
-#include "SelItem.h"
+#include "SelItem.h"                // g_selected_item
 #include "Sci.h"
 
 #include "chart.h"
@@ -115,16 +115,11 @@
 #include "keypress.h"
 
 #include "AdvanceBranchRecord.h"
-#include "c3math.h"		// AsPercentage
+#include "c3math.h"		            // AsPercentage
 
-
+extern sint32			    g_modalWindow;
 extern C3UI					*g_c3ui;
-extern Player				**g_player;
-extern SelectedItem			*g_selected_item; 
 extern DebugWindow			*g_debugWindow;
-extern StringDB				*g_theStringDB;
-extern ColorSet				*g_colorSet;
-
 extern aui_Surface			*g_sharedSurface;
 
 
@@ -180,8 +175,6 @@ static c3_Static		*s_civText;
 
 
 
-
-extern sint32			g_modalWindow;
 
 void sciencewin_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -694,9 +687,9 @@ sint32 knowledgewin_Cleanup( void )
 
 KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -759,9 +752,9 @@ sint32 KnowledgeListItem::Compare(c3_ListItem *item2, uint32 column)
 
 EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -826,9 +819,9 @@ sint32 EmbassyListItem::Compare(c3_ListItem *item2, uint32 column)
 
 AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -1479,7 +1472,7 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	return 0;
 }
 
-sint32 ScienceWin::UpdateList( void )
+void ScienceWin::UpdateList(void)
 {
 	AUI_ERRCODE errcode;
 	MBCHAR		ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1510,8 +1503,6 @@ sint32 ScienceWin::UpdateList( void )
 			}
 		}
 	}
-
-	return 0;
 }
 
 

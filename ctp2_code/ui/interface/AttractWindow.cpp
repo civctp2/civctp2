@@ -1,6 +1,7 @@
 
 
 #include "c3.h"
+#include "AttractWindow.h"
 
 #include "c3errors.h"
 
@@ -14,12 +15,9 @@
 #include "pixelutils.h"
 #include "primitives.h"
 
-#include "colorset.h"
-
-#include "AttractWindow.h"
+#include "colorset.h"           // g_colorSet
 
 extern C3UI			*g_c3ui;
-extern ColorSet		*g_colorSet;
 
 AttractWindow		*g_attractWindow;
 

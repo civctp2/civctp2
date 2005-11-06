@@ -70,10 +70,10 @@ m_diplomacyButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
 	"ShortcutPad.DiplomacyButton"))),
 m_scienceButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
 	"ShortcutPad.ScienceButton"))),
-m_greatLibraryButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
-	"ShortcutPad.GreatLibraryButton"))),
 m_tradeButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
-	"ShortcutPad.TradeButton")))
+	"ShortcutPad.TradeButton"))),
+m_greatLibraryButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
+	"ShortcutPad.GreatLibraryButton")))
 {
 	
 	Assert(m_cityManagementButton);

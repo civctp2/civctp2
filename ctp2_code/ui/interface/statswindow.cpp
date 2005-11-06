@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Statistics window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,7 +30,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
+#include "statswindow.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -56,14 +56,10 @@
 #include "c3windows.h"
 
 
-#include "tiledmap.h"
-
-#include "statswindow.h"
-
-#include "colorset.h"
-
-#include "SelItem.h"
-#include "player.h"
+#include "tiledmap.h"                   // g_tiledMap
+#include "colorset.h"                   // g_colorSet
+#include "SelItem.h"                    // g_selected_item
+#include "player.h"                     // g_player
 #include "UnitDynArr.h"
 
 #include "screenutils.h"
@@ -80,22 +76,10 @@
 #include "MessageBoxDialog.h"
 
 
-extern sint32 g_ScreenWidth;
-extern sint32 g_ScreenHeight;
-
-
+extern sint32       g_ScreenWidth;
+extern sint32       g_ScreenHeight;
 extern C3UI			*g_c3ui;
-extern TiledMap 	*g_tiledMap;
-
-extern C3Window			*g_toolbar;
-
-extern SelectedItem		*g_selected_item;
-extern Player			**g_player;
-extern ColorSet			*g_colorSet;
-
-extern sint32	g_screenWidth;
-extern sint32	g_screenHeight;
-
+extern C3Window		*g_toolbar;
 extern C3Window		*g_turnWindow;
 
 

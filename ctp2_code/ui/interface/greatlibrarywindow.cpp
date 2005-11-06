@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The window of the Great Libary
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -96,7 +96,6 @@
 
 const int GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK = 999;
 
-extern ColorSet						*g_colorSet;
 extern CivPaths						*g_civPaths;
 extern sint32						g_ScreenWidth;
 extern sint32						g_ScreenHeight;
@@ -300,7 +299,6 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 //----------------------------------------------------------------------------
 sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, SlicObject &so)
 {
-    char *text;
 
 
     if (textbox == NULL)
@@ -317,7 +315,7 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
 
 	
-	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
+    char * text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 
 	delete [] lower_case_filename;
 
@@ -430,10 +428,10 @@ void GreatLibraryWindow::PlayTechMovie ( void )
 
 sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 {
-	m_mode = theMode;
-	m_database = theDatabase;
+	m_mode      = theMode;
+	m_database  = theDatabase;
 
-	const IconRecord *iconRec = NULL;
+	const IconRecord *  iconRec = NULL;
 
 	
 	switch ( theDatabase ) {

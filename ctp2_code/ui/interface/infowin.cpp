@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // - None
 //
 //----------------------------------------------------------------------------
@@ -29,58 +29,41 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
+#include "infowin.h"
 
 #include "aui.h"
+#include "aui_stringtable.h"
+#include "aui_textfield.h"
 #include "aui_uniqueid.h"
-#include "c3ui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_ranger.h"
-#include "screenutils.h"
-
-
-#include "textbutton.h"
 #include "c3_button.h"
-
-
+#include "c3_dropdown.h"
+#include "c3_listbox.h"
 #include "c3_static.h"
+#include "c3ui.h"
+#include "c3windows.h"
+#include "colorset.h"               // g_colorSet
+#include "controlpanelwindow.h"     // g_controlPanel
+#include "controlsheet.h"
+#include "infowindow.h"
+#include "pixelutils.h"
+#include "player.h"                 // g_player
+#include "radarmap.h"
+#include "screenutils.h"
 #include "staticpicture.h"
 #include "textbox.h"
-#include "c3_listbox.h"
-#include "controlsheet.h"
-#include "aui_textfield.h"
-#include "c3_dropdown.h"
+#include "textbutton.h"
 #include "thermometer.h"
-#include "aui_stringtable.h"
-
-
-#include "workmap.h"
-
-
-#include "pixelutils.h"
-#include "radarmap.h"
-
-
-#include "colorset.h"
-#include "c3windows.h"
-#include "infowin.h"
-#include "infowindow.h"
-#include "controlpanelwindow.h"
-
-
-
-
-#include "player.h"
-#include "UnitRec.h"
-#include "XY_Coordinates.h"
-#include "World.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
-#include "citydata.h"
-#include "StrDB.h"
-#include "ConstDB.h"
+#include "UnitRec.h"
+#include "World.h"                  // g_theWorld
+#include "workmap.h"
+#include "StrDB.h"                  // g_theStringDB
+#include "ConstDB.h"                // g_theConstDB
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "Advances.h"
@@ -89,66 +72,41 @@
 #include "Score.h"
 #include "DiffDB.h"
 #include "Diffcly.h"
-#include "profileDB.h"
+#include "profileDB.h"              // g_theProfileDB
 #include "pollution.h"
 #include "EndGame.h"
 #include "WonderTracker.h"
-
-
 #include "Civilisation.h"
-#include "CivilisationData.h"
-#include "CivilisationPool.h"
-
-
-
-#include "CivPaths.h"
-#include "SelItem.h"
+// #include "CivilisationData.h"
+#include "CivilisationPool.h"       // g_theCivilisationPool;
+#include "CivPaths.h"               // g_civPaths
+#include "SelItem.h"                // g_selected_item
 #include "BldQue.h"
 #include "ObjPool.h"
 #include "Cell.h"
 #include "c3files.h"
 #include "pointerlist.h"
 #include "linegraph.h"
-#include "TurnCnt.h"
+#include "TurnCnt.h"                // g_turn
 #include "Strengths.h"
-#include "UnitPool.h"
-
+#include "UnitPool.h"               // g_theUnitPool
 #include "keypress.h"
-
 #include "wonderutil.h"
-
 #include "EventTracker.h"
-
 #include "GameSettings.h"
 
 
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
 extern C3UI			*g_c3ui;
-extern CivPaths		*g_civPaths;
-extern ColorSet		*g_colorSet;
-extern World		*g_theWorld;
 extern TopTen		*g_theTopTen;
 extern DifficultyDB	*g_theDifficultyDB;
-
-extern Player					**g_player;
 extern PointerList<Player>      *g_deadPlayer;
-extern SelectedItem				*g_selected_item; 
-extern StringDB					*g_theStringDB;
-extern ControlPanelWindow		*g_controlPanel;
-extern UnitPool					*g_theUnitPool;
-
 extern sint32					g_modalWindow;
 extern WorkMap					*g_workMap;
-extern ConstDB					*g_theConstDB;
-extern TurnCount				*g_turn; 
-
-extern ProfileDB                *g_theProfileDB;
 extern Pollution				*g_thePollution; 
 
 
-#include "CivilisationPool.h"
-extern CivilisationPool			*g_theCivilisationPool;
 
 #define k_INFORADAR_WIDTH		202
 #define k_INFORADAR_HEIGHT		151
@@ -226,7 +184,6 @@ void InfoCleanupAction::Execute(aui_Control *control,
 									uint32 action,
 									uint32 data )
 {
-	
 	infowin_Cleanup();
 }
 
@@ -483,62 +440,17 @@ sint32 infowin_Initialize( void )
 
 }
 
-sint32 infowin_Cleanup( void )
+void infowin_Cleanup(void)
 {
-	return 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-sint32 infowin_Cleanup_Controls( void )
+void infowin_Cleanup_Controls(void)
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
 
 	mycleanup( s_titleBox );
 	mycleanup( s_bottomRightBox );
 	mycleanup( s_bottomRightImage );
-
 	mycleanup( s_civNameBox );
 	mycleanup( s_turnsBox );
 	mycleanup( s_foundedBox );
@@ -548,51 +460,42 @@ sint32 infowin_Cleanup_Controls( void )
 	mycleanup( s_foundedLabel );
 	mycleanup( s_pollutionLabel );
 	mycleanup( s_pollutionTherm );
-
 	mycleanup( s_infoPlayerList );
 	mycleanup( s_infoBigList );
 	mycleanup( s_infoScoreList );
 	mycleanup( s_infoWonderList );
 	mycleanup( s_pollutionList );
-
 	mycleanup( s_infoGraph );
 	mycleanup( s_pollutionGraph );
 
-	
 	if (s_infoGraphData)
 	{
 		for( sint32 i = 0 ; i < s_infoYCount ; i++ )
 		{
 			delete s_infoGraphData[i];
-			s_infoGraphData[i] = NULL;
 		}
-		delete s_infoGraphData;
+		delete [] s_infoGraphData;
 		s_infoGraphData = NULL;
 	}
 
-	
 	if (s_pollutionGraphData)
 	{
 		for( sint32 i = 0 ; i < s_pollutionYCount ; i++ )
 		{
 			delete s_pollutionGraphData[i];
-			s_pollutionGraphData[i] = NULL;
 		}
-		delete s_pollutionGraphData;
+		delete [] s_pollutionGraphData;
 		s_pollutionGraphData = NULL;
 	}
 
-
-	mycleanup( s_bigButton );
-	mycleanup( s_wonderButton );
-	mycleanup( s_strengthButton );
-	mycleanup( s_scoreButton );
-	mycleanup( s_labButton );
-	mycleanup( s_throneButton );
-	mycleanup( s_pollutionButton );
-
-	return 0;
-
+	mycleanup(s_bigButton);
+	mycleanup(s_wonderButton);
+	mycleanup(s_strengthButton);
+	mycleanup(s_scoreButton);
+	mycleanup(s_labButton);
+	mycleanup(s_throneButton);
+	mycleanup(s_pollutionButton);
+    mycleanup(s_stringTable);
 #undef mycleanup
 }
 
@@ -1172,7 +1075,7 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 	
 	if (!infoXCount) 
 	{
-		delete color;
+		delete [] color;
 		
 		infoGraph->RenderGraph();
 		return 0;
@@ -1271,12 +1174,8 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 	infoGraph->RenderGraph();
 
 	
-	delete color;
+	delete [] color;
 
-	
-	
-	
-	
 	if (dumpStrings) {
 		delete s_stringTable;
 		s_stringTable = NULL;
@@ -1847,9 +1746,9 @@ sint32 infowin_GetWonderCityName( sint32 index, MBCHAR *name)
 
 InfoBigListItem::InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -2087,9 +1986,9 @@ sint32 InfoBigListItem::Compare(c3_ListItem *item2, uint32 column)
 
 InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -2192,9 +2091,9 @@ sint32 InfoWonderListItem::Compare(c3_ListItem *item2, uint32 column)
 
 InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -2279,9 +2178,9 @@ sint32 InfoScoreListItem::Compare(c3_ListItem *item2, uint32 column)
 
 InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval, MBCHAR *label, MBCHAR *text, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -2344,9 +2243,9 @@ sint32 InfoScoreLabelListItem::Compare(c3_ListItem *item2, uint32 column)
 
 InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

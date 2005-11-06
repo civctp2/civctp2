@@ -26,7 +26,7 @@ sint32 loadsavescreen_displayMyWindow(uint32 type);
 sint32 loadsavescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback
 									   *callback = NULL );
-AUI_ERRCODE loadsavescreen_Cleanup();
+void loadsavescreen_Cleanup(void);
 
 void loadsavescreen_SaveGame(MBCHAR *usePath = NULL, MBCHAR *useName = NULL);
 
@@ -251,10 +251,7 @@ private:
 };
 
 
-class LSCleanupAction : public aui_Action
-{
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(LSCleanupAction);
 
 extern LoadSaveWindow				*g_loadsaveWindow;
 

@@ -19,7 +19,7 @@
 #include "aui_action.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
-#include "aui_directsurface.h"
+#include "aui_surface.h"
 #include "aui_blitter.h"
 #include "aui_stringtable.h"
 #include "aui_static.h"
@@ -120,17 +120,17 @@ class c3_DarkenArea : public aui_Static {
 public:
 	
 	c3_DarkenArea(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
-		aui_Static(retval, id, ldlBlock),
 		aui_ImageBase( ldlBlock ),
-		aui_TextBase( ldlBlock, (MBCHAR *)NULL )
+		aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+		aui_Static(retval, id, ldlBlock)
 		{ }
 
 	
 	c3_DarkenArea(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
 		MBCHAR *text, uint32 maxLength) :
-		aui_Static(retval, id, x, y, width, height),
 		aui_ImageBase( (sint32)0 ),
-		aui_TextBase( text, maxLength )
+		aui_TextBase( text, maxLength ),
+		aui_Static(retval, id, x, y, width, height)
 		{ }
 
 	
@@ -147,7 +147,6 @@ AUI_ERRCODE c3_DarkenArea::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 
 	
 	DarkenSurface(surface, &rect, k_ENDGAME_DARKEN_VALUE);
-
 	
 	return(aui_Static::DrawThis(surface, x, y));
 }
@@ -158,14 +157,16 @@ public:
 	
 	
 	c3_YetAnotherProgressBar(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
-	aui_ProgressBar( retval, id, ldlBlock ),
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ) {}
+		aui_ImageBase( ldlBlock ),
+		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+		aui_ProgressBar( retval, id, ldlBlock )
+	{}
 
 	c3_YetAnotherProgressBar(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height) :
-	aui_ProgressBar( retval, id, x, y, width, height ),
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ) {}
+		aui_ImageBase( (sint32)0 ),
+		aui_TextBase( NULL ),
+		aui_ProgressBar( retval, id, x, y, width, height )
+	{}
 
 protected:
 	c3_YetAnotherProgressBar() : aui_ProgressBar() {}
@@ -292,17 +293,17 @@ class c3_Blend : public aui_Static {
 public:
 	
 	c3_Blend(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
-		aui_Static(retval, id, ldlBlock),
 		aui_ImageBase( ldlBlock, true ),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
+		aui_TextBase((const MBCHAR *)NULL, (uint32)0),
+		aui_Static(retval, id, ldlBlock)
 		{ m_blendVal = 0; m_soundID = -1; }
 
 	
 	c3_Blend(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
 		const MBCHAR *text = NULL, uint32 maxLength = 0 ) :
-		aui_Static(retval, id, x, y, width, height, text, maxLength),
 		aui_ImageBase( (sint32)0, AUI_IMAGEBASE_BLTTYPE_COPY, AUI_IMAGEBASE_BLTFLAG_COPY, true),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
+		aui_TextBase((const MBCHAR *)NULL, (uint32)0),
+		aui_Static(retval, id, x, y, width, height, text, maxLength)
 		{ m_blendVal = 0; m_soundID = -1; }
 
 	
@@ -505,9 +506,9 @@ public:
 
 	
 	c3_Animation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
-		c3_Blend(retval, id, ldlBlock),
 		aui_ImageBase( ldlBlock, true ),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
+		aui_TextBase((const MBCHAR *)NULL, (uint32)0),
+		c3_Blend(retval, id, ldlBlock)
 		{ 	
 			
 			m_frames = NULL;
@@ -520,9 +521,9 @@ public:
 	
 	c3_Animation(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
 		const MBCHAR *text = NULL, uint32 maxLength = 0 ) :
-		c3_Blend(retval, id, x, y, width, height, text, maxLength),
 		aui_ImageBase( (sint32)0, AUI_IMAGEBASE_BLTTYPE_COPY, AUI_IMAGEBASE_BLTFLAG_COPY, true),
-		aui_TextBase((MBCHAR *)NULL, (uint32)0)
+		aui_TextBase((const MBCHAR *)NULL, (uint32)0),
+		c3_Blend(retval, id, x, y, width, height, text, maxLength)
 		{
 			
 			m_frames = NULL;
@@ -746,8 +747,8 @@ EndGameWindow::~EndGameWindow()
 
 void EndGameWindow::SetStage(sint32 stage, sint32 lastStage)
 {
-	
-	for(int index = 0; index < m_numberOfStages; index++) {
+	int index;
+	for(index = 0; index < m_numberOfStages; index++) {
 		if(index == stage) {
 			m_embryoStage[index]->ShowThis();
 			if(index == lastStage) m_embryoStage[index]->SetBlend(k_C3_BLEND_MAXBLEND);

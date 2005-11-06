@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main menu screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -70,14 +70,21 @@ extern StringDB						*g_theStringDB;
 InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 		: C3Window(retval,id,ldlBlock,bpp,type,bevel),
-		m_sp(NULL), m_mp(NULL), m_load(NULL), m_continue(NULL), m_instant(NULL),
-		m_mapeditor(NULL), m_quit(NULL), m_background(NULL), m_email(NULL),
+		m_sp(NULL),
+		m_email(NULL),
+		m_hotseat(NULL),
+		m_mp(NULL),
+		m_quit(NULL),
 		// Code for new buttons taken from spwindow.cpp and altered
+		m_tutorial(NULL), 
 		m_newgame(NULL), 
 		m_loadgame(NULL),
-		m_tutorial(NULL), 
 		m_options(NULL), 
-		m_hotseat(NULL)
+		m_load(NULL),
+		m_continue(NULL),
+		m_instant(NULL),
+		m_mapeditor(NULL),
+		m_background(NULL)
 {
 	ctp2_Static *testBox=new ctp2_Static(retval, aui_UniqueId(),"InitPlayWindow.TestTextBox");
 

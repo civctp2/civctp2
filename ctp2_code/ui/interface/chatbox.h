@@ -1,7 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __CHATBOX_H__
 #define __CHATBOX_H__
 

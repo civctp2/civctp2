@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : The progress window displays the progress at loading and saving
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,9 +18,6 @@
 //
 // Compiler flags
 //
-// _MSC_VER
-// - Compiler version (for the Microsoft C++ compiler only)
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -29,7 +26,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -87,9 +84,10 @@ public:
 		uint32 id,
 		MBCHAR *ldlBlock )
 		:
-		aui_ProgressBar( retval, id, ldlBlock ),
 		aui_ImageBase( ldlBlock ),
-		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ) {}
+		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+		aui_ProgressBar( retval, id, ldlBlock )
+	{}
 	virtual ~StandardProgressBar() {}
 
 protected:

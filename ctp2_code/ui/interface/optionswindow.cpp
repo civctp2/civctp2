@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The options window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -65,12 +65,6 @@ OptionsWindow::OptionsWindow( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock, 
 							 AUI_WINDOW_TYPE type, bool bevel) :
 c3_PopupWindow(retval,id,ldlBlock,bpp,type,bevel)
 {
-	m_graphics = m_sound = m_music = m_newgame = m_savegame = m_loadgame =
-		m_restart = m_gameplay = m_mapeditor = m_keyboard =
-		m_quittoshell = NULL;
-
-	m_configHeader = m_gameHeader = NULL;
-
 	m_graphics = spNew_ctp2_Button(retval,ldlBlock,"GraphicsButton",optionsscreen_graphicsPress);
 	m_sound = spNew_ctp2_Button(retval,ldlBlock,"SoundButton",optionsscreen_soundPress);
 	m_music = spNew_ctp2_Button(retval,ldlBlock,"MusicButton",optionsscreen_musicPress);
@@ -100,7 +94,7 @@ c3_PopupWindow(retval,id,ldlBlock,bpp,type,bevel)
 
 OptionsWindow::~OptionsWindow()
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) delete mypointer
 
 	mycleanup( m_quittoshell );
 	mycleanup( m_keyboard );

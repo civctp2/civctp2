@@ -235,10 +235,11 @@ void scenarioeditor_SetSaveOptionsFromMode(void)
 }
 
 ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
-:	m_terrainImpSwitches(NULL),		
+:
 	m_terrainSwitches(NULL),
-	m_xWrapButton(NULL),			// never used?
-	m_yWrapButton(NULL)				// never used?
+	m_terrainImpSwitches(NULL),
+	m_xWrapButton(NULL),  // never used?
+	m_yWrapButton(NULL)   // never used?
 {
 	m_initializing = true;
 
@@ -402,7 +403,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	m_paintTerrainImprovement = -1;		
 	m_brushSize = 1;
 	m_unitIndex = -1;
-	m_cityStyle = -2;
+	m_cityStyle = CITY_STYLE_EDITOR;
 	//Added by Martin Gühmann to initialize the pop number
 	//for newly created cities
 	m_newPopSize = 1;
@@ -1939,12 +1940,12 @@ void ScenarioEditor::SetupNations()
 
 void ScenarioEditor::AddLeftList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	ScenarioEditor::AddAddButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, NULL, NULL);	
+	ScenarioEditor::AddAddButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, 0, NULL);	
 }
 
 void ScenarioEditor::AddRightList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	ScenarioEditor::AddRemoveButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, NULL, NULL);
+	ScenarioEditor::AddRemoveButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, 0, NULL);
 }
 
 void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
@@ -2940,22 +2941,14 @@ void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data,
 	g_theProfileDB->SetPollutionRule(!g_theProfileDB->IsPollutionRule());
 }
 
-class ReopenEditorAction : public aui_Action
-{
-  public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(ReopenEditorAction);
 
 void ReopenEditorAction::Execute(aui_Control *control, uint32 action, uint32 data )
 {
 	ScenarioEditor::Display();
 }
 
-class PostReopenEditorActionAction : public aui_Action
-{
-  public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(PostReopenEditorActionAction);
 
 void PostReopenEditorActionAction::Execute(aui_Control *control, uint32 action, uint32 data )
 {

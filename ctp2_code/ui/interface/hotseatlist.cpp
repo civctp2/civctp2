@@ -418,9 +418,9 @@ HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
 								 sint32 civ, BOOL isHuman, MBCHAR *email,
 								 MBCHAR *ldlBlock)
 	:
-	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	c3_ListItem( retval, ldlBlock)
 {
 	m_index = index;
 
