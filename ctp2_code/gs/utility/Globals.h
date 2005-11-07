@@ -19,9 +19,11 @@
 // Compiler flags
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1200)
+
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
+
 #ifndef GLOBALS_H
 #define GLOBALS_H 1
 
@@ -51,12 +53,6 @@
 #define k_MAX_CIVILISATIONS	64
 #define k_MAP_WRAPAROUND 5
 
-
-
-#pragma warning (disable: 4661) 
-
-#include "gstypes.h"
-#include "directions.h"
 
 enum ATTITUDE { 
     ATTITUDE_NULL,

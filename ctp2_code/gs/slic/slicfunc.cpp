@@ -303,7 +303,7 @@ BOOL SlicArgList::GetPlayer(sint32 arg, sint32 &value)
 	if (m_argType[arg] == SA_TYPE_INT)
 	{
 		value = m_argValue[arg].m_int;
-		return TRUE;
+		return (value >= 0) && (value < k_MAX_PLAYERS);
 	}
 	else if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
 	         (m_argType[arg] == SA_TYPE_BUILTIN)
@@ -436,7 +436,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 	return newArgs;
 }
 
-SlicFunc::SlicFunc(char *name, SLIC_FUNC_RET_TYPE type)
+SlicFunc::SlicFunc(char const * name, SLIC_FUNC_RET_TYPE type)
 {
 	m_type = type;
 	m_name = new char[strlen(name) + 2];
@@ -447,8 +447,7 @@ SlicFunc::SlicFunc(char *name, SLIC_FUNC_RET_TYPE type)
 
 SlicFunc::~SlicFunc()
 {
-	if(m_name)
-		delete [] m_name;
+	delete [] m_name;
 }
 
 //----------------------------------------------------------------------------
@@ -3993,15 +3992,7 @@ SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 	}
 
 	PLAYER_INDEX	player;
-	if (args->GetPlayer(0, player))
-	{
-		if ((player < 0) || (player >= k_MAX_PLAYERS))
-		{
-			return SFN_ERROR_OUT_OF_RANGE;
-		}
-
-	}
-	else
+	if (!args->GetPlayer(0, player))
 	{
 		return SFN_ERROR_TYPE_ARGS;
 	}
@@ -4259,16 +4250,12 @@ SFN_ERROR Slic_GameOver::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
-	if(!args->GetInt(0, player))
+	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
 	sint32 reason;
 	if(!args->GetInt(1, reason))
 		return SFN_ERROR_TYPE_ARGS;
-
-	if(!g_player[player]) {
-		return SFN_ERROR_DEAD_PLAYER;
-	}
 
 	if(reason == 0) {
 		g_player[player]->GameOver(GAME_OVER_LOST_OUT_OF_TIME, -1);

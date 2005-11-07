@@ -16,7 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // - None
 // 
 //----------------------------------------------------------------------------
@@ -97,7 +97,7 @@
 #include "A_Star_Heuristic_Cost.h"
 #include "World.h"
 #include "messagemodal.h"
-#include "aicause.h"
+#include "AICause.h"
 
 #include "GameSettings.h"
 #include "Score.h"
@@ -388,7 +388,7 @@ void TurnCount::BeginNewRound()
     if (g_theDiplomacyLog) { 
         g_theDiplomacyLog->BeginRound();
     }
-#endif _DEBUG
+#endif // _DEBUG
 
 	Barbarians::BeginYear();
 
@@ -494,7 +494,7 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 		}
 
 	}
-#endif _DEBUG
+#endif // _DEBUG
 
 	if(g_network.IsHost()) {
 		

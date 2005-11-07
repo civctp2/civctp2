@@ -47,6 +47,8 @@
 
 #include "c3.h" 
 #include "c3debug.h"
+#include <ios>
+#include <iostream>
 
 #include "aui.h"
 
@@ -107,7 +109,7 @@
 #include "profileDB.h"
 #include "c3errors.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "Advances.h"
 
 #include "SlicEngine.h"
@@ -133,7 +135,7 @@
 #include "debugmemory.h"
 #include "TradeBids.h"
 
-#include "order.h"
+#include "Order.h"
 #include "UnseenCell.h"
 #include "pool.h"
 
@@ -181,38 +183,38 @@ extern Director *g_director;
 #include "ResourceRecord.h"
 
 
-StringDB                    *g_theStringDB=NULL;
+StringDB                    *g_theStringDB=NULL; 
 ConceptDB                   *g_theConceptDB = NULL;
-PollutionDatabase           *g_thePollutionDB=NULL;
-GlobalWarmingDatabase       *g_theGWDB=NULL;
-OzoneDatabase               *g_theUVDB=NULL;
-ConstDB                     *g_theConstDB=NULL;
+PollutionDatabase           *g_thePollutionDB=NULL ;
+GlobalWarmingDatabase       *g_theGWDB=NULL ;
+OzoneDatabase               *g_theUVDB=NULL ;
+ConstDB                     *g_theConstDB=NULL; 
 ThroneDB                    *g_theThroneDB = NULL;
-DifficultyDB                *g_theDifficultyDB = NULL;
+DifficultyDB                *g_theDifficultyDB = NULL; 
 
 PlayListDB                  *g_thePlayListDB = NULL;
 
-World                       *g_theWorld=NULL;
-UnitPool                    *g_theUnitPool=NULL;
+World                       *g_theWorld=NULL; 
+UnitPool                    *g_theUnitPool=NULL; 
 ArmyPool                    *g_theArmyPool=NULL;
 Player                      **g_player=NULL;
 PointerList<Player>         *g_deadPlayer = NULL;
-RandomGenerator             *g_rand=NULL;
+RandomGenerator             *g_rand=NULL; 
 TradePool                   *g_theTradePool = NULL;
 TradeOfferPool              *g_theTradeOfferPool = NULL;
 QuadTree<Unit>              *g_theUnitTree = NULL;
-Pollution                   *g_thePollution=NULL;
-DiplomaticRequestPool       *g_theDiplomaticRequestPool=NULL;
-MessagePool                 *g_theMessagePool=NULL;
-CivilisationPool            *g_theCivilisationPool=NULL;
-AgreementPool               *g_theAgreementPool=NULL;
+Pollution                   *g_thePollution=NULL ;
+DiplomaticRequestPool       *g_theDiplomaticRequestPool=NULL ;
+MessagePool                 *g_theMessagePool=NULL ;
+CivilisationPool            *g_theCivilisationPool=NULL ;
+AgreementPool               *g_theAgreementPool=NULL ;
 TerrainImprovementPool      *g_theTerrainImprovementPool = NULL;
 InstallationPool            *g_theInstallationPool = NULL;
 InstallationQuadTree        *g_theInstallationTree = NULL;
 
-TopTen                      *g_theTopTen = NULL;
-TurnCount                   *g_turn = NULL;
-ProfileDB                   *g_theProfileDB = NULL;
+TopTen                      *g_theTopTen = NULL ; 
+TurnCount                   *g_turn = NULL; 
+ProfileDB                   *g_theProfileDB = NULL; 
 MovieDB                     *g_theWonderMovieDB = NULL;
 MovieDB                     *g_theVictoryMovieDB = NULL;
 FilenameDB                  *g_theMessageIconFileDB = NULL;
@@ -247,7 +249,7 @@ MBCHAR g_governmenticondb_filename[_MAX_PATH];
 MBCHAR g_wonder_filename[_MAX_PATH];
 MBCHAR g_constdb_filename[_MAX_PATH]; 
 MBCHAR g_pop_filename[_MAX_PATH];
-MBCHAR g_civilisation_filename[_MAX_PATH];
+MBCHAR g_civilisation_filename[_MAX_PATH] ;
 MBCHAR g_agedb_filename[_MAX_PATH];
 MBCHAR g_thronedb_filename[_MAX_PATH];
 MBCHAR g_conceptdb_filename[_MAX_PATH];
@@ -634,15 +636,15 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 
 void gameinit_PlaceInitalUnits()
 {
-	sint32 j;
-	MapPoint pos;
+	sint32 j; 
+	MapPoint pos; 
 		
-	for (j=0; j<k_MAX_PLAYERS; j++) {
+	for (j=0; j<k_MAX_PLAYERS; j++) { 
 		if(!g_player[j]) continue;
 		pos.x = static_cast<sint16>(j * 2);
 		pos.y = 2;
 		gameinit_SpewUnits(j, pos);
-	}
+	}	
 }
 
 sint32 gameinit_InitializeGameFiles(void)
@@ -651,15 +653,15 @@ sint32 gameinit_InitializeGameFiles(void)
 	
 	MBCHAR str1[_MAX_PATH];
 
-	MBCHAR dir[_MAX_PATH];
-	FILE *fin;
+	MBCHAR dir[_MAX_PATH]; 
+	FILE *fin; 
 	MBCHAR		*fn = "InitializeGameFiles";
 
 	g_abort_parse = FALSE; 
 
 	fin = c3files_fopen(C3DIR_GAMEDATA, "gamefile.txt", "r");
 
-	dir[0] = NULL;
+	dir[0] = 0;
 
 	r=fscanf (fin, "%s", str1); 
 	if (r == EOF) { 
@@ -676,7 +678,7 @@ sint32 gameinit_InitializeGameFiles(void)
 	}
 	sprintf(g_sounddb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1);
+	r = fscanf (fin, "%s", str1);	  
 	if (r == EOF) { 
 		c3errors_ErrorDialog  (fn, "Missing constants file"); 
 		return FALSE; 
@@ -1255,7 +1257,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	g_theTradeOfferPool = new TradeOfferPool();
 	Assert(g_theTradeOfferPool);
 
-	g_thePollution = new Pollution();
+	g_thePollution = new Pollution() ;
 	Assert(g_thePollution);
 
 	g_theTopTen = new TopTen();
@@ -1294,16 +1296,16 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	SPLASH_STRING("Initializing Object Pools...");
 
 	g_theTerrainImprovementPool = new TerrainImprovementPool();
-	Assert(g_theTerrainImprovementPool);
+	Assert(g_theTerrainImprovementPool) ;
 
-	g_theDiplomaticRequestPool = new DiplomaticRequestPool();
-	Assert(g_theDiplomaticRequestPool);
+	g_theDiplomaticRequestPool = new DiplomaticRequestPool() ;
+	Assert(g_theDiplomaticRequestPool) ;
 
-	g_theCivilisationPool = new CivilisationPool();
-	Assert(g_theCivilisationPool);
+	g_theCivilisationPool = new CivilisationPool() ;
+	Assert(g_theCivilisationPool) ;
 
-	g_theAgreementPool = new AgreementPool();
-	Assert(g_theAgreementPool);
+	g_theAgreementPool = new AgreementPool() ;
+	Assert(g_theAgreementPool) ;
 
 	
 	
@@ -1313,8 +1315,8 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 		g_theMessagePool = NULL;
 	}
 
-	g_theMessagePool = new MessagePool();
-	Assert(g_theMessagePool);
+	g_theMessagePool = new MessagePool() ;
+	Assert(g_theMessagePool) ;
 
 	
 	if (g_theCriticalMessagesPrefs) 
@@ -1323,11 +1325,11 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 		g_theCriticalMessagesPrefs = NULL;
 	}
 
-	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs();
-	Assert(g_theCriticalMessagesPrefs);
+	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs() ;
+	Assert(g_theCriticalMessagesPrefs) ;
 
 	g_theInstallationPool = new InstallationPool();
-	Assert(g_theInstallationPool);
+	Assert(g_theInstallationPool) ;
 
 	g_theInstallationPool->RebuildQuadTree();
 
@@ -1681,7 +1683,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 
 	if (&archive) { 
-		g_theWorld = new World(archive);
+		g_theWorld = new World(archive) ;
 		if(
 		
 
@@ -1826,7 +1828,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	if (&archive && loadEverything) {
 		if(g_saveFileVersion < 55) {
-			g_theTopTen = new TopTen(archive);
+			g_theTopTen = new TopTen(archive) ;
 		} else {
 			g_theTopTen = new TopTen();
 		}
@@ -1875,7 +1877,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			g_theProfileDB->SetTutorialAdvice(FALSE);
 		}
 	}
-	Assert(g_slicEngine);
+	Assert(g_slicEngine) ;
 
 
 
@@ -1888,36 +1890,36 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	else
 		g_theTerrainImprovementPool = new TerrainImprovementPool();
 
-	Assert(g_theTerrainImprovementPool);
+	Assert(g_theTerrainImprovementPool) ;
 
 	if (&archive && loadEverything) {
 		if(g_saveFileVersion < 55) {
-			g_theDiplomaticRequestPool = new DiplomaticRequestPool(archive);
+			g_theDiplomaticRequestPool = new DiplomaticRequestPool(archive) ;
 		} else {
-			g_theDiplomaticRequestPool = new DiplomaticRequestPool();
+			g_theDiplomaticRequestPool = new DiplomaticRequestPool() ;
 		}
 	} else
-		g_theDiplomaticRequestPool = new DiplomaticRequestPool();
+		g_theDiplomaticRequestPool = new DiplomaticRequestPool() ;
 
-	Assert(g_theDiplomaticRequestPool);
+	Assert(g_theDiplomaticRequestPool) ;
 
 	if (&archive && loadEverything)
-		g_theCivilisationPool = new CivilisationPool(archive);
+		g_theCivilisationPool = new CivilisationPool(archive) ;
 	else
-		g_theCivilisationPool = new CivilisationPool();
+		g_theCivilisationPool = new CivilisationPool() ;
 
-	Assert(g_theCivilisationPool);
+	Assert(g_theCivilisationPool) ;
 
 	if (&archive && loadEverything) {
 		if(g_saveFileVersion < 55) {
-			g_theAgreementPool = new AgreementPool(archive);
+			g_theAgreementPool = new AgreementPool(archive) ;
 		} else {
 			g_theAgreementPool = new AgreementPool;
 		}
 	} else
-		g_theAgreementPool = new AgreementPool();
+		g_theAgreementPool = new AgreementPool() ;
 
-	Assert(g_theAgreementPool);
+	Assert(g_theAgreementPool) ;
 
 	
 	
@@ -1927,11 +1929,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 
 	if (&archive && loadEverything)
-		g_theMessagePool = new MessagePool(archive);
+		g_theMessagePool = new MessagePool(archive) ;
 	else
-		g_theMessagePool = new MessagePool();
+		g_theMessagePool = new MessagePool() ;
 
-	Assert(g_theMessagePool);
+	Assert(g_theMessagePool) ;
 
 	
 	if (g_theCriticalMessagesPrefs) 
@@ -1939,15 +1941,15 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		delete g_theCriticalMessagesPrefs;
 		g_theCriticalMessagesPrefs = NULL;
 	}
-	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs();
-	Assert(g_theCriticalMessagesPrefs);
+	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs() ;
+	Assert(g_theCriticalMessagesPrefs) ;
 
 	if(&archive && loadEverything)
 		g_theInstallationPool = new InstallationPool(archive);
 	else
 		g_theInstallationPool = new InstallationPool();
 
-	Assert(g_theInstallationPool);
+	Assert(g_theInstallationPool) ;
 
 	g_theInstallationPool->RebuildQuadTree();
 

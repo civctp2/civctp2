@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _QUAD_TREE_H_
 #define _QUAD_TREE_H_
 
@@ -178,14 +170,15 @@ QuadTreeNode<T>::QuadTreeNode(QuadTree<T> *tree,
 							  T val, 
 							  sint16 x, sint16 y, 
 							  sint16 width, sint16 height)
-	: m_ne(NULL),
+	: 
+	  m_x(x), m_y(y),
+	  m_width(width), m_height(height),
+	  m_ne(NULL),
 	  m_se(NULL),
 	  m_sw(NULL),
 	  m_nw(NULL),
 	  m_parent(parent),
 	  m_isLeaf(TRUE),
-	  m_x(x), m_y(y),
-	  m_width(width), m_height(height),
 	  m_tree(tree)
 {
 	m_array.Insert(val);
@@ -197,14 +190,15 @@ QuadTreeNode<T>::QuadTreeNode(QuadTree<T> *tree,
 							  DynamicArray<T> &list, 
 							  sint16 x, sint16 y, 
 							  sint16 width, sint16 height)
-	: m_ne(NULL),
+	: 
+	  m_x(x), m_y(y),
+	  m_width(width), m_height(height),
+	  m_ne(NULL),
 	  m_se(NULL),
 	  m_sw(NULL),
 	  m_nw(NULL),
 	  m_parent(parent),
 	  m_isLeaf(TRUE),
-	  m_x(x), m_y(y),
-	  m_width(width), m_height(height),
 	  m_tree(tree)
 {
 	m_array.Concat(list);
@@ -245,9 +239,8 @@ QuadTreeNode<T>::FindQuadrant(const MapPoint &pos)
 	if(pos.x >= QCX && pos.y >= QCY) return QUADRANT_SE;
 	if(pos.x < QCX && pos.y >= QCY) return QUADRANT_SW;
 	if(pos.x < QCX && pos.y < QCY) return QUADRANT_NW;
-#pragma warning( disable : 4127)									
-		Assert(FALSE);
-#pragma warning( default : 4127)									
+
+    Assert(FALSE);
 	return QUADRANT_ERROR;
 }
 
@@ -533,9 +526,13 @@ QuadTreeNode<T>::GetAt(const MapPoint &point, DynamicArray<T> &array)
 				if(!m_nw) return FALSE;
 				return m_nw->GetAt(point, array);
 		}
-#pragma warning (disable : 4127)									
+#ifdef _MSC_VER
+#pragma warning (disable : 4127)
+#endif
 		Assert(FALSE);
-#pragma warning (default : 4127)									
+#ifdef _MSC_VER
+#pragma warning (default : 4127)
+#endif		
 		return FALSE;
 	}
 }

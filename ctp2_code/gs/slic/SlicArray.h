@@ -17,7 +17,7 @@ private:
 	SLIC_SYM m_varType; 
 	SlicStackValue *m_array;
 	sint32 m_arraySize;
-	sint32 m_allocatedSize;
+	uint32 m_allocatedSize;
 	SlicStructDescription *m_structTemplate;
 	bool m_sizeIsFixed;
 

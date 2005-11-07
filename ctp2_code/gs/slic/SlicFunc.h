@@ -171,14 +171,14 @@ protected:
 	SlicFuncResult m_result;
 
 public:
-	SlicFunc(char *name, SLIC_FUNC_RET_TYPE type);
+	SlicFunc(char const * name, SLIC_FUNC_RET_TYPE type);
 	SlicFunc(CivArchive &archive);
 	virtual ~SlicFunc();
 	void Serialize(CivArchive &archive);
 	SlicFuncResult GetResult() { return m_result; }
 	SLIC_FUNC_RET_TYPE GetReturnType() { return m_type; }
 
-	const char *GetName() const { return m_name; }
+	char const *GetName() const { return m_name; }
 	virtual SFN_ERROR Call(SlicArgList *args) 
 	{
 		DPRINTF(k_DBG_SLIC, ("Hey you!  Stop that!\n"));

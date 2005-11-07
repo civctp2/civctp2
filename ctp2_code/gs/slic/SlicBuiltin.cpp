@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic Built In 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -236,8 +236,8 @@ class UnitSymbol_Type : public SlicStructMemberData {
 	BOOL GetIntValue(sint32 &value) const {
 		Unit unit;
 		BOOL res = m_parent->GetDataSymbol()->GetUnit(unit);
-		Assert(res);
-		if(unit.IsValid()) {
+		if(unit.IsValid()) 
+        {
 			value = unit.GetType();
 			return TRUE;
 		} else {
