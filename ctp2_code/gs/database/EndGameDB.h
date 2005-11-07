@@ -1,13 +1,14 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ENDGAME_DB_H__
 #define __ENDGAME_DB_H__
 
 #include "Rec.h"
 #include "DB.h"
 #include "EndGameRecord.h"
-
-class Token;
-enum C3DIR;
+#include "c3files.h"
+#include "Token.h"
 
 class EndGameDatabase : public Database<EndGameRecord> {
 private:

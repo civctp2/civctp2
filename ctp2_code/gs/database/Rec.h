@@ -25,18 +25,21 @@
 // - #pragma once commented out.
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1200)
+
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
 #ifndef __REC_H__
 #define __REC_H__ 1
 
+class Record;
+
 class CivArchive; 
 
 #define k_MAX_OBSOLETE 8
 
-#include "dbtypes.h"
+#include "dbtypes.h"    // StringId
 
 class Record {  
 public:

@@ -10,8 +10,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __POLLUTION_RECORD_H__
 #define __POLLUTION_RECORD_H__
 

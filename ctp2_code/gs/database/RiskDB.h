@@ -1,12 +1,14 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __RISKDB_H__
 #define __RISKDB_H__
 #include "DB.h"
 #include "Rec.h"
+#include "c3files.h"
+#include "Token.h"
 
 class CivArchive;
-class Token;
-enum C3DIR;
 
 #include "RiskRecord.h"
 

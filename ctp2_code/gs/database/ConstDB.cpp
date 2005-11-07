@@ -35,7 +35,7 @@
 #include "pollution.h"
 #include "ConstDB.h"
 #include "c3errors.h"
-#include "globals.h"
+#include "Globals.h"
 
 extern ConstDB *g_theConstDB; 
 

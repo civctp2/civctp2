@@ -155,12 +155,10 @@ template <class T> void Database<T>::AddRec(const StringId sid, sint32 &i)
 	Assert (m_nRec < m_max_nRec);
 	
 	m_rec[m_nRec].SetName(sid);
-
-	
-	
 	{
 		const MBCHAR *str = g_theStringDB->GetNameStr( sid );
-		for ( sint32 a = 0; a < m_nRec; ++a )
+		sint32 a;
+		for (a = 0; a < m_nRec; ++a )
 		{
 			if ( _stricoll( str, g_theStringDB->GetNameStr(
 				m_rec[ m_alphaToIndex[ a ] ].GetName() ) ) < 0 )

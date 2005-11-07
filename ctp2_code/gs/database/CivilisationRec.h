@@ -1,7 +1,3 @@
-
-
-
-
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
@@ -29,22 +25,24 @@
 // - #pragma once commented out.
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
 #ifndef __CIVILISATION_REC_H__
 #define __CIVILISATION_REC_H__
 
-#include "Rec.h"
-class Token;
-
-
-class CivArchive ;
+class CivilisationRecord;
 
 #define k_MAX_CITY_NAMES		500
 #define k_CAPITAL_UNDEFINED		-1
 #define k_CITY_NAME_UNDEFINED	-1
+
+#include "Rec.h"        // Record
+#include "dbtypes.h"    // StringId
+
+class Token;
+class CivArchive ;
 
 class CivilisationRecord : public Record
 	{

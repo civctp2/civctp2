@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ENDGAME_RECORD_H__
 #define __ENDGAME_RECORD_H__
 

@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
 //
@@ -28,21 +26,22 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
 #ifndef __CIVILISATION_DATABASE_H__
 #define __CIVILISATION_DATABASE_H__
 
+class CivilisationDatabase;
+
+#include "GameObj_types.h"      // CIV_INDEX
 #include "DB.h"
 #include "CivilisationRec.h"
+#include "c3files.h"
 
 class CivArchive ;
 class Token ;
-
-enum CIV_INDEX ;
-enum C3DIR;
 
 class CivilisationDatabase : public Database<CivilisationRecord>
 	{
@@ -144,3 +143,4 @@ class CivilisationDatabase : public Database<CivilisationRecord>
 extern CivilisationDatabase *g_theCivilisationDB ;
 
 #endif
+

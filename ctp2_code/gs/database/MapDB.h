@@ -1,13 +1,14 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MAPDB_H__
 #define __MAPDB_H__
 
 #include "Rec.h"
 #include "DB.h"
 #include "MapRecord.h"
-
-class Token;
-enum C3DIR;
+#include "c3files.h"
+#include "Token.h"
 
 class MapDatabase : public Database<MapRecord> {
 public:

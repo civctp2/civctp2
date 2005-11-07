@@ -80,6 +80,9 @@ void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	if((!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)) &&  
 	   (dat->m_maxSize <= 0)) {                         
 		switch(dat->m_type) {
+			default:
+				break;
+
 			case DATUM_INT:
 			case DATUM_FLOAT:
 			case DATUM_STRUCT:

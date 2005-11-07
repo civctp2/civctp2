@@ -274,6 +274,8 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	if((!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)) &&
 	   (dat->m_maxSize <= 0)) {
 		switch(dat->m_type) {
+			default:
+				break;
 			case DATUM_INT:
 			case DATUM_FLOAT:
 			case DATUM_STRUCT:
@@ -1124,10 +1126,10 @@ void RecordDescription::ExportDataParsers(FILE *outfile)
 	while(walk.IsValid()) {
 		Datum *dat = walk.GetObj();
 		switch(dat->m_type) {
+			default:
+				break;
 			case DATUM_BIT_GROUP:
 				dat->ExportBitGroupParser(outfile, m_name);
-				break;
-			case DATUM_STRUCT:
 				break;
 		}
 		walk.Next();

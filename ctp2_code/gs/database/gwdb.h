@@ -10,17 +10,18 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GW_DB_H__
 #define __GW_DB_H__
 
 #include "DB.h"
 #include "GWRecord.h"
 #include "gstypes.h"
+#include "c3files.h"
 
 class CivArchive ;
-enum C3DIR;
 
 class GlobalWarmingDatabase : public Database <GWRecord>
 	{

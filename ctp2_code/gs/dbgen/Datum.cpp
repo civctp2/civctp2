@@ -34,6 +34,7 @@
 //   was fixed. (Aug 25th 2005 Martin Gühmann)
 // - Added alias names and the possibility to have default values from 
 //   other entries. (Aug 26th 2005 Martin Gühmann)
+// - Modernised destructor code.
 //
 //----------------------------------------------------------------------------
 
@@ -50,6 +51,37 @@
 
 #include "ctpdb.h"
 #include "RecordDescription.h"
+
+
+char const * Datum::TypeString(void)
+{
+    switch (m_type)
+    {
+    default:                
+        return "void";
+
+	case DATUM_BIT:         
+        return "uint8";
+
+	case DATUM_BIT_GROUP:
+		return "uint32";
+
+	case DATUM_FILE:
+	case DATUM_STRING:      
+        return "char";
+
+	case DATUM_FLOAT:       
+        return "double";
+
+    case DATUM_INT:         
+	case DATUM_RECORD:
+	case DATUM_STRINGID:    
+        return "sint32";
+
+	case DATUM_STRUCT:
+		return m_subType;
+	}
+}
 
 void Datum::SetValue(union dbvalue &v)
 {
@@ -90,7 +122,6 @@ void Datum::ExportVariable(FILE *outfile, sint32 indent)
 
 	
 	char sizestring[50];
-	const char *typestring = "";
 	char comment[k_MAX_STRING];
 	char star = ' ';
 	char notFixedStar = ' ';
@@ -105,38 +136,30 @@ void Datum::ExportVariable(FILE *outfile, sint32 indent)
 		sizestring[0] = 0;
 	}
 
-	switch(m_type) {
-		case DATUM_INT:
-		case DATUM_STRINGID:
-			typestring = "sint32";
-			break;
-		case DATUM_BIT:
-			typestring = "uint8";
-			Assert(0);
-			break;			
-		case DATUM_FLOAT:
-			typestring = "double";
-			break;
-		case DATUM_STRING:
-		case DATUM_FILE:
-			typestring = "char";
-			star = '*';
-			break;
-		case DATUM_RECORD:
-			typestring = "sint32";
-			sprintf(comment, " // Index into %s database", m_subType);
-			break;
-		case DATUM_STRUCT:
-			typestring = m_subType;
-			break;
-		case DATUM_BIT_GROUP:
-			typestring = "uint32";
-			break;
-	}
-	fprintf(outfile, "%s", indent ? "        " : "    ");
-	fprintf(outfile, "%-15s %c%cm_%s%s;%s\n", typestring, star, notFixedStar, m_name, sizestring, comment);
 
-	
+	switch (m_type) 
+    {
+    default:    
+        star = ' ';
+        break;
+
+	case DATUM_BIT:
+		Assert(0);
+		break;			
+
+	case DATUM_STRING:
+	case DATUM_FILE:
+		star = '*';
+		break;
+
+	case DATUM_RECORD:
+		sprintf(comment, " // Index into %s database", m_subType);
+		break;
+	}
+
+	fprintf(outfile, "%s", indent ? "        " : "    ");
+	fprintf(outfile, "%-15s %c%cm_%s%s;%s\n", TypeString(), star, notFixedStar, m_name, sizestring, comment);
+
 	if((m_maxSize > 0) || (m_maxSize == k_MAX_SIZE_VARIABLE)) {
 		fprintf(outfile, "%s", indent ? "        ": "    ");
 		fprintf(outfile, "sint32            m_num%s;\n", m_name);
@@ -163,6 +186,8 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 
 	fprintf(outfile,             "%s    bool             Get%s() const { return (m_flags%d & k_%s_%s_Bit) != 0; }\n", ind,
 			m_name, m_bitNum / 32, recordName, m_name);
+
+
 	switch(m_bitPairDatum->m_type) {
 		case DATUM_INT:
 		case DATUM_STRINGID:
@@ -328,8 +353,6 @@ void Datum::ExportRangeCheck(FILE *outfile)
 
 void Datum::ExportDataCode(FILE *outfile, char *recordName)
 {
-	
-	
 	if(m_maxSize <= 0) {
 		switch(m_type) {
 			case DATUM_RECORD:
@@ -618,34 +641,6 @@ void Datum::ExportInitialization(FILE *outfile)
 }
 
 void Datum::ExportSerializationStoring(FILE *outfile){
-
-	const char *typestring = "";
-	switch(m_type) {
-		case DATUM_INT:
-		case DATUM_STRINGID:
-			typestring = "sint32";
-			break;
-		case DATUM_BIT:
-			typestring = "uint8";
-			break;
-		case DATUM_FLOAT:
-			typestring = "double";
-			break;
-		case DATUM_STRING:
-		case DATUM_FILE:
-			typestring = "char";
-			break;
-		case DATUM_RECORD:
-			typestring = "sint32";
-			break;
-		case DATUM_STRUCT:
-			typestring = m_subType;
-			break;
-		case DATUM_BIT_GROUP:
-			typestring = "uint32";
-			break;
-	}
-
 	if(m_maxSize == k_MAX_SIZE_VARIABLE) {
 		if(m_type == DATUM_STRINGID){
 			fprintf(outfile, "        // Free stringID not implemented\n", m_name);
@@ -660,7 +655,7 @@ void Datum::ExportSerializationStoring(FILE *outfile){
 		}
 		else{
 			fprintf(outfile, "        archive << m_num%s;\n", m_name);
-			fprintf(outfile, "        archive.Store((uint8*)m_%s, m_num%s * sizeof(%s));\n\n", m_name, m_name, typestring);
+			fprintf(outfile, "        archive.Store((uint8*)m_%s, m_num%s * sizeof(%s));\n\n", m_name, m_name, TypeString());
 		}
 	} else if(m_maxSize > 0) {
 		if(m_type == DATUM_STRINGID){
@@ -714,33 +709,6 @@ void Datum::ExportSerializationStoring(FILE *outfile){
 
 void Datum::ExportSerializationLoading(FILE *outfile)
 {
-	const char *typestring = "";
-	switch(m_type) {
-		case DATUM_INT:
-		case DATUM_STRINGID:
-			typestring = "sint32";
-			break;
-		case DATUM_BIT:
-			typestring = "uint8";
-			break;
-		case DATUM_FLOAT:
-			typestring = "double";
-			break;
-		case DATUM_STRING:
-		case DATUM_FILE:
-			typestring = "char";
-			break;
-		case DATUM_RECORD:
-			typestring = "sint32";
-			break;
-		case DATUM_STRUCT:
-			typestring = m_subType;
-			break;
-		case DATUM_BIT_GROUP:
-			typestring = "uint32";
-			break;
-	}
-
 	if(m_maxSize == k_MAX_SIZE_VARIABLE) {
 		if(m_type == DATUM_STRINGID){
 			fprintf(outfile, "        // Free stringID not implemented\n", m_name);
@@ -748,7 +716,7 @@ void Datum::ExportSerializationLoading(FILE *outfile)
 		else if(m_type == DATUM_STRUCT){
 			fprintf(outfile, "\n        {\n");
 			fprintf(outfile, "            archive >> m_num%s;\n", m_name);
-			fprintf(outfile, "            m_%s = new %s[m_num%s];\n", m_name, typestring, m_name);
+			fprintf(outfile, "            m_%s = new %s[m_num%s];\n", m_name, TypeString(), m_name);
 			fprintf(outfile, "            for(sint32 i = 0; i < m_num%s; ++i){\n", m_name);
 			fprintf(outfile, "                m_%s[i].Serialize(archive);\n", m_name);
 			fprintf(outfile, "            }\n");
@@ -756,7 +724,7 @@ void Datum::ExportSerializationLoading(FILE *outfile)
 		}
 		else{
 			fprintf(outfile, "        archive >> m_num%s;\n", m_name);
-			fprintf(outfile, "        archive.Load((uint8*)m_%s, m_num%s * sizeof(%s));\n\n", m_name, m_name, typestring);
+			fprintf(outfile, "        archive.Load((uint8*)m_%s, m_num%s * sizeof(%s));\n\n", m_name, m_name, TypeString());
 		}
 	} else if(m_maxSize > 0) {
 		if(m_type == DATUM_STRINGID){
@@ -816,65 +784,41 @@ void Datum::ExportSerializationLoading(FILE *outfile)
 
 void Datum::ExportDestructor(FILE *outfile)
 {
-	
-	if (m_maxSize == k_MAX_SIZE_VARIABLE) {
+	if (m_maxSize == k_MAX_SIZE_VARIABLE) 
+    {
 		fprintf(outfile, "    // free array %s\n", m_name);
 		switch (m_type) 
 		{
-		case DATUM_INT:
-		case DATUM_STRINGID:
-		case DATUM_FLOAT:
-		case DATUM_RECORD:
-			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
-			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
-			fprintf(outfile, "    m_%s = NULL;\n", m_name );
-			fprintf(outfile, "    m_num%s = 0;\n\n", m_name );
+		default:    // Plain array
+			fprintf(outfile, "    delete [] m_%s;\n", m_name );
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
-			fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
+			fprintf(outfile, "    for (index = 0; index < m_num%s; ++index)\n", m_name );
 			fprintf(outfile, "    {\n");
-			fprintf(outfile, "        // free string elements\n",m_name);
-			fprintf(outfile, "        if (m_%s[index])\n", m_name );
-			fprintf(outfile, "            delete m_%s[index];\n", m_name );
+			fprintf(outfile, "        delete m_%s[index];\n", m_name );
 			fprintf(outfile, "    }\n");
-			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
-			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
-			fprintf(outfile, "    m_%s = NULL;\n", m_name );
-			fprintf(outfile, "    m_num%s = 0;\n\n", m_name );
-			break;
-		case DATUM_STRUCT:
-			fprintf(outfile, "    // free struct elements\n",m_name);
-			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
-			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
-			fprintf(outfile, "    m_%s = NULL;\n", m_name );
-			fprintf(outfile, "    m_num%s = 0;\n\n", m_name );
-			break;
+			fprintf(outfile, "    delete [] m_%s;\n", m_name );
+            break;
 		}
-	} else if ( m_type ==  DATUM_BIT_PAIR ) 
+	} 
+    else if ( m_type ==  DATUM_BIT_PAIR ) 
 	{
-		switch(m_bitPairDatum->m_type) 
+		switch (m_bitPairDatum->m_type) 
 		{
-		case DATUM_INT:
-		case DATUM_STRINGID:
-		case DATUM_FLOAT:
-		case DATUM_RECORD:
-		case DATUM_STRUCT:
+		default:    // No action
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
 			fprintf(outfile, "    // free string attribute %s\n",m_bitPairDatum->m_name);
-			fprintf(outfile, "    if (m_%s)\n", m_bitPairDatum->m_name );
-			fprintf(outfile, "        delete m_%s;\n", m_bitPairDatum->m_name );
-			fprintf(outfile, "    m_%s = NULL;\n\n", m_bitPairDatum->m_name );
+			fprintf(outfile, "    delete m_%s;\n", m_bitPairDatum->m_name );
 			break;
 		}
-	} else if ( m_type == DATUM_FILE || m_type == DATUM_STRING )
+	} 
+    else if ( m_type == DATUM_FILE || m_type == DATUM_STRING )
 	{
 		fprintf(outfile, "    // free string attribute %s\n",m_name);
-		fprintf(outfile, "    if (m_%s)\n", m_name );
-		fprintf(outfile, "        delete m_%s;\n", m_name );
-		fprintf(outfile, "    m_%s = NULL;\n\n", m_name );
+		fprintf(outfile, "    delete m_%s;\n", m_name );
 	}
 }
 
@@ -888,35 +832,18 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 		case DATUM_INT:
 		case DATUM_STRINGID:
 		case DATUM_RECORD:
-			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
-			fprintf(outfile, "    {\n");
-			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
-			fprintf(outfile, "        m_%s = NULL;\n", m_name );
-			fprintf(outfile, "        m_num%s = 0;\n", m_name );
-			fprintf(outfile, "    }\n");
+		case DATUM_FLOAT:
+			fprintf(outfile, "    delete [] m_%s;\n", m_name );
+			fprintf(outfile, "    m_%s = NULL;\n", m_name );
 
 			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
 			fprintf(outfile, "    {\n");
 			fprintf(outfile, "        m_%s = new sint32 [rval.m_num%s];\n", m_name, m_name );
-			fprintf(outfile, "        memcpy(m_%s, rval.m_%s, sizeof(sint32)*rval.m_num%s);\n", m_name, m_name, m_name);
+			fprintf(outfile, "        memcpy(m_%s, rval.m_%s, sizeof(%s)*rval.m_num%s);\n", m_name, m_name, TypeString(), m_name);
 			fprintf(outfile, "    }\n");
 			fprintf(outfile, "    m_num%s = rval.m_num%s;\n\n",m_name,m_name);
 			break;
-		case DATUM_FLOAT:
-			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
-			fprintf(outfile, "    {\n");
-			fprintf(outfile, "        delete [m_num%s] m_%s;\n\n", m_name, m_name );
-			fprintf(outfile, "        m_%s = NULL;\n", m_name );
-			fprintf(outfile, "        m_num%s = 0;\n", m_name );
-			fprintf(outfile, "    }\n");
 
-			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
-			fprintf(outfile, "    {\n", m_name );
-			fprintf(outfile, "        m_%s = new double [rval.m_num%s];\n\n", m_name, m_name );
-			fprintf(outfile, "        memcpy(m_%s, rval.m_%s, sizeof(double)*rval.m_num%s);\n", m_name, m_name, m_name);
-			fprintf(outfile, "    }\n");
-			fprintf(outfile, "    m_num%s = rval.m_num%s;\n\n",m_name,m_name);
-			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
 			fprintf(outfile, "    // free string elements of %s[]\n",m_name);
@@ -926,11 +853,8 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "            delete m_%s[index];\n", m_name );
 			fprintf(outfile, "        }\n\n");
 			
-			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
-			fprintf(outfile, "    {\n");
-			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
-			fprintf(outfile, "        m_%s = NULL;\n", m_name );
-			fprintf(outfile, "    }\n\n");
+			fprintf(outfile, "    delete [] m_%s;\n", m_name );
+			fprintf(outfile, "    m_%s = NULL;\n", m_name );
 
 			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
 			fprintf(outfile, "    {\n");
@@ -950,7 +874,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "    // free struct elements of %s[]\n",m_name);
 			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
 			fprintf(outfile, "    {\n");
-			fprintf(outfile, "        delete [m_num%s] m_%s;\n", m_name, m_name );
+			fprintf(outfile, "        delete [] m_%s;\n", m_name );
 			fprintf(outfile, "        m_%s = NULL;\n", m_name );
 			fprintf(outfile, "    }\n\n");
 
@@ -977,11 +901,10 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 		case DATUM_INT:
 		case DATUM_STRINGID:
 		case DATUM_RECORD:
-			fprintf(outfile, "    memcpy(m_%s, rval.m_%s, sizeof(sint32)*rval.m_num%s);\n\n", m_name, m_name, m_name);
-			break;
 		case DATUM_FLOAT:
-			fprintf(outfile, "    memcpy(m_%s, rval.m_%s, sizeof(double)*rval.m_num%s);\n\n", m_name, m_name, m_name);
+			fprintf(outfile, "    memcpy(m_%s, rval.m_%s, sizeof(%s)*rval.m_num%s);\n\n", m_name, m_name, TypeString(), m_name);
 			break;
+
 		case DATUM_FILE:
 		case DATUM_STRING:
 			fprintf(outfile, "    // free string elements of %s[]\n",m_name);
@@ -1036,10 +959,8 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 		}
 	} else if ( m_type == DATUM_FILE || m_type == DATUM_STRING )
 	{
-			fprintf(outfile, "    if (m_%s)\n", m_name );
-			fprintf(outfile, "    {\n");
-			fprintf(outfile, "    delete m_%s;\n\n", m_name );
-			fprintf(outfile, "    }\n\n");
+			fprintf(outfile, "    delete m_%s;\n", m_name );
+			fprintf(outfile, "    m_%s = NULL;\n\n", m_name );
 
 			fprintf(outfile, "    if (rval.m_%s)\n", m_name );
 			fprintf(outfile, "    {\n");
@@ -1183,8 +1104,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				fprintf(outfile, "    // first remove old elements of m_%s\n",m_name);
 				fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
 				fprintf(outfile, "    {\n");
-				fprintf(outfile, "        if (m_%s[index])\n", m_name);
-				fprintf(outfile, "            delete m_%s[index];\n", m_name);
+				fprintf(outfile, "        delete m_%s[index];\n", m_name);
 				fprintf(outfile, "    }\n");
 				
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
