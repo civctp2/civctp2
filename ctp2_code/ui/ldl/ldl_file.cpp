@@ -11,7 +11,11 @@
 
 #include "c3.h"
 
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#elif defined(WIN32)
 #include <direct.h>
+#endif
 
 #include "ldl_file.hpp"
 #include "ldl_attr.hpp"
@@ -22,7 +26,7 @@
 
 
 
-ldl::ldl(char *fname, char *outputDir, BOOL bUseInternalMemmap )
+ldl::ldl(const char *fname, const char *outputDir, BOOL bUseInternalMemmap )
 {
 	ReadData( fname );
 }
@@ -32,7 +36,7 @@ ldl::~ldl( void )
 	ldlif_deallocate_stuff();
 }
 
-BOOL ldl::ReadData( char *fname )
+BOOL ldl::ReadData(const char *fname )
 {
 	ldlif_parse(strrchr(fname, '\\') + 1);
 

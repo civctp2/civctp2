@@ -740,19 +740,23 @@ sint32 Cell::GetNumTradeRoutes() const
 
 TradeRoute Cell::GetTradeRoute(sint32 index) const
 {
-	static TradeRoute r(0);
-	if(!m_objects)
-		return r;
+	static TradeRoute invalidRoute;
 
-	sint32 i, c = 0;
-	for(i = 0; i < m_objects->Num(); i++) {
-		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE) {
-			if(c == index)
-				return TradeRoute(m_objects->Access(i).m_id);
-			c++;
-		}
-	}
-	return r;
+	if (m_objects)
+    {
+	    sint32 c = 0;
+	    for (sint32 i = 0; i < m_objects->Num(); ++i) 
+        {
+		    if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE) 
+            {
+			    if (c == index)
+				    return TradeRoute(m_objects->Access(i).m_id);
+			    c++;
+		    }
+	    }
+    }
+
+	return invalidRoute;
 }
 
 void Cell::InsertImprovement(const TerrainImprovement &imp)

@@ -90,15 +90,15 @@
 
 
 template <class T> CTPDatabase<T>::CTPDatabase()
-:	m_indexToAlpha(NULL),
-	m_alphaToIndex(NULL),
-	m_modifiedRecords()
+:
+    m_numRecords        (0),
+    m_modifiedRecords   (),
+    m_indexToAlpha      (NULL),
+    m_alphaToIndex      (NULL),
+    m_allocatedSize     (k_INITIAL_DB_SIZE)
 {
-	m_numRecords = 0;
-	m_allocatedSize = k_INITIAL_DB_SIZE;
-	m_records = new T *[m_allocatedSize];
-
-	m_modifiedList = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize];
+    m_records       = new T *[m_allocatedSize];
+    m_modifiedList  = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize];
 }
 
 
@@ -117,11 +117,16 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 	delete [] m_alphaToIndex;
 
 
-	for (size_t j = 0; j < m_modifiedRecords.size(); ++j)
-	{
-		delete m_modifiedRecords[j];
-	}
-	m_modifiedRecords.clear();
+    for 
+    (
+        std::vector<T *>::iterator p = m_modifiedRecords.begin();
+        p != m_modifiedRecords.end();
+        ++p
+    )
+    {
+        delete *p;
+    }
+    std::vector<T *>().swap(m_modifiedRecords);
 
 	if (m_modifiedList) 
 	{

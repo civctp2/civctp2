@@ -17,10 +17,6 @@
 #define __AGREEMENT_MATRIX_H__
 
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4786)
-#endif
-
 #include <vector>
 #include "c3debugstl.h"
 
@@ -40,13 +36,7 @@ public:
 	static ai::Agreement s_badAgreement;
 	static AgreementMatrix s_agreements;
 
-#ifdef _DEBUG
-	
-	typedef std::vector<ai::Agreement, dbgallocator<ai::Agreement> > AgreementVector;
-#else
-	
 	typedef std::vector<ai::Agreement> AgreementVector;
-#endif
 
 	AgreementMatrix();
 
@@ -109,7 +99,7 @@ public:
 
 	
 	
-	inline sint32 AgreementIndex(const PLAYER_INDEX & sender_player,
+	sint32 AgreementIndex(const PLAYER_INDEX & sender_player,
 							     const PLAYER_INDEX & receiver_player) const
 	{
 		
@@ -122,7 +112,7 @@ public:
 	
 	
 	
-	inline sint32 HasAgreementIndexed(const sint32 index,
+	sint32 HasAgreementIndexed(const sint32 index,
 							   const PROPOSAL_TYPE type,
 							   const sint32 curRound) const
 	{

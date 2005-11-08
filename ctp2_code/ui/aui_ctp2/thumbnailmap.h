@@ -36,22 +36,11 @@
 #ifndef __THUMBNAILMAP_H__
 #define __THUMBNAILMAP_H__
 
-#include "patternbase.h"
-#include "aui_control.h"
-#include "colorset.h"
+struct  CityInfo;
+class   ThumbnailMap;
 
-#include "Unit.h"
-#include "dynarr.h"
-
-#define k_THUMBNAIL_CITY_BLINK_RATE		1000
-
-
-typedef BOOL (CityFilterProc)(Unit city);
-
-
-
-
-enum C3_THUMBNAIL_ACTION {
+enum    C3_THUMBNAIL_ACTION 
+{
 	C3_THUMBNAIL_ACTION_NULL,
 	C3_THUMBNAIL_ACTION_SELECTEDCITY,
 	C3_THUMBNAIL_ACTION_SELECTEDROUTE,
@@ -60,10 +49,21 @@ enum C3_THUMBNAIL_ACTION {
 };
 
 
+#define k_THUMBNAIL_CITY_BLINK_RATE		1000
 
+#include "patternbase.h"
+#include "aui_control.h"
+#include "colorset.h"				// COLOR
 
-enum COLOR;
+#include "Unit.h"
+#include "dynarr.h"
 class CivArchive;
+class aui_Surface;
+class MapPoint;
+class TradeRoute;
+
+typedef BOOL (CityFilterProc)(Unit city);
+
 struct CityInfo {
 	Unit		city;
 	RECT		cityRect;
@@ -75,11 +75,6 @@ struct CityInfo {
 	virtual void Castrate() {}
     virtual void DelPointers() {}
 };
-
-
-class aui_Surface;
-class MapPoint;
-class TradeRoute;
 
 class ThumbnailMap : public aui_Control, public PatternBase
 {
@@ -162,7 +157,6 @@ private:
 	aui_Surface						*m_mapSurface;		
 	MapPoint						*m_mapSize;
 	COLOR							*m_mapOverlay;		
-	MapPoint						m_clickedCell;		
 
 	sint32							m_centerX,			
 									m_centerY;

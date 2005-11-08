@@ -140,23 +140,17 @@
 #include "gaiacontroller.h"
 #include "AgreementMatrix.h"
 #include "WonderTracker.h"
-
 #include "ctpai.h"
-
 #include "CityAstar.h"
 extern CityAstar g_city_astar;
 
-
 #include "profileai.h"
-
 #include <algorithm>
 #include "Scheduler.h"
 #include "ctpgoal.h"
 #include "mapanalysis.h"
-
 #include "network.h"
 #include "net_action.h"
-
 #include "TerrainRecord.h" // Use terrain database
 #include "unitutil.h" // Use unit utilities
 
@@ -1553,36 +1547,6 @@ void Governor::ComputeRoadPriorities()
 				
 			AddRoadPriority(found_path, threat_rank);
 		}
-
-#if 0 //to add roads around city - Calvitix
-		// Disabled Martin Gühmann
-		Path around_path;
-		found_path.Clear();
-		MapPoint neighbor;
-		found_path.JustSetStart(city_unit.RetPos());
-		for (int i=0; i <= SOUTH; i++) 
-		{ 
-		
-			if (!city_unit.RetPos().GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) 
-				continue;
-			
-			if (found_path.Num() < 2)
-			{
-				found_path.InsertFront(neighbor);
-			}
-			else
-			{
-				found_path.InsertEnd(neighbor);
-				found_path.InsertEnd(city_unit.RetPos());
-			}
-		}
-		found_path.GetStartPoint(neighbor);
-		if (neighbor.x > 0 && neighbor.y > 0)
-		{
-			AddRoadPriority(found_path, threat_rank/1.2);
-		}
-#endif
-		
 	} 
 }
 
@@ -2432,7 +2396,7 @@ const StrategyRecord::PopAssignmentElement *Governor::GetMatchingPopAssignment(c
 //
 //----------------------------------------------------------------------------
 void Governor::AssignPopulation(CityData *city) const {
-
+    // Reset all specialists to workers
 	city->ChangeSpecialists(POP_ENTERTAINER, -1 * city->EntertainerCount());
 	city->ChangeSpecialists(POP_FARMER, -1 * city->FarmerCount());
 	city->ChangeSpecialists(POP_LABORER, -1 * city->LaborerCount());
@@ -2455,14 +2419,6 @@ void Governor::AssignPopulation(CityData *city) const {
 	sint32 vgs;
 	city->CalcHappiness(vgs, TRUE);
 
-	/////////////////////////////////////////////////////////////
-	// Create a copy of city data and remove all the specialists 
-	// from that copy for effect comparision.
-	// Copy should be removed in the end.
-#if !defined(NEW_RESOURCE_PROCESS)
-	CityData *tmp_city = new CityData(city);
-#endif
-	
 	/////////////////////////////////////
 	// Get maximum percent of specialists
 	// Should be removed in the end.
@@ -2470,7 +2426,7 @@ void Governor::AssignPopulation(CityData *city) const {
 	double specialists_percent = pop_assignment->GetSpecialists();
 
 	///////////////////////////////////////////////////////////////
-	// Get the amount of workers needed for base ressources supply.
+	// Get the amount of workers needed for base resources supply.
 	sint32 farmers, laborers, merchants, scientists, 
 	       minFood, minProd, minGold, minScie; 
 	double farmersEff, laborersEff, merchantsEff, scientistsEff;
@@ -2495,7 +2451,6 @@ void Governor::AssignPopulation(CityData *city) const {
 	// Maybe fixing max_workers to the actual pop size, but the old way doesn't do it either.
 #else
 	sint32 max_workers = g_theCitySizeDB->Get(size_index)->GetMaxWorkers();
-
 	sint32 minSpecialists = 0;
 
 	if(max_workers < city->WorkerCount() + city->SlaveCount()){
@@ -2518,17 +2473,12 @@ void Governor::AssignPopulation(CityData *city) const {
 	specialists = (specialists <= max_workers) ? specialists : max_workers;
 	specialists += minSpecialists;
 
-	
-#if !defined(NEW_RESOURCE_PROCESS)
-	sint32 delta;
-	double prev_result;
-#endif
-	sint32 count;
 
 	////////////////////////////////////////
 	// Start with the specialist assignment:
 
 	sint32 best_specialist = city->GetBestSpecialist(POP_FARMER);
+	sint32 count           = 0;
 
 #if defined(NEW_RESOURCE_PROCESS)
 	sint32 foodMissing = city->HowMuchMoreFoodNeeded(0, false, true);
@@ -2536,7 +2486,6 @@ void Governor::AssignPopulation(CityData *city) const {
 		sint32 i;
 		sint32 workers;
 		sint32 tmpCount;
-		count = 0;
 		for(i = size_index; i >= 0; --i){
 			farmersEff = city->GetFarmersEffect(i);
 			if(farmersEff){
@@ -2555,6 +2504,13 @@ void Governor::AssignPopulation(CityData *city) const {
 			}
 		}
 #else
+	/////////////////////////////////////////////////////////////
+	// Create a copy of city data for effect comparision.
+	// Copy should be removed in the end.
+	CityData * tmp_city = new CityData(city);
+	sint32 delta;
+	double prev_result;
+
 	sint32 foodMissing = city->HowMuchMoreFoodNeeded(0, false, true);
 	if(foodMissing > 0
 	&& farmersEff > 0
@@ -2591,24 +2547,32 @@ void Governor::AssignPopulation(CityData *city) const {
 #if defined(NEW_RESOURCE_PROCESS)
 		city->ChangeSpecialists(POP_FARMER, count);
 #else
+        // Test situation without specialists
 		tmp_city->CollectResources();
 		tmp_city->ProcessFood();
 		prev_result = tmp_city->GetProducedFood();
 //		DPRINTF(k_DBG_GAMESTATE, ("PrevResult: %f\n", prev_result));
 
+        // Test situation with specialists
 		tmp_city->ChangeSpecialists(POP_FARMER, count);
 		tmp_city->CollectResources();
 		tmp_city->ProcessFood();
 		
 		if(tmp_city->GetProducedFood() > prev_result){
+            // The specialists are beneficial: employ in the real city.
 			city->ChangeSpecialists(POP_FARMER, count);
 		}			
 		else if(tmp_city->GetProducedFood() < prev_result){
+            // The specialists are producing less than workers: fire them all?
+            // This should not do anything, because there should be none left 
+		// after the reset at the start.
+			Assert(0 == city->FarmerCount());
 			delta = (-1 * city->FarmerCount());
 			city->ChangeSpecialists(POP_FARMER, delta);
 		}
 //		DPRINTF(k_DBG_GAMESTATE, ("NewResult: %f\n", tmp_city->GetProducedFood()));
-			
+		
+        // Synchronise the tmp_city with the real city.
 		delta = city->FarmerCount() - tmp_city->FarmerCount();
 		tmp_city->ChangeSpecialists(POP_FARMER, delta );
 #endif
@@ -2692,7 +2656,11 @@ void Governor::AssignPopulation(CityData *city) const {
 #endif
 	}
 
-	
+#if !defined(NEW_RESOURCE_PROCESS)
+	// Not used anymore 
+	delete tmp_city;
+#endif
+
 	best_specialist = city->GetBestSpecialist(POP_SCIENTIST);
 
 	count = static_cast<sint32>
@@ -2760,9 +2728,6 @@ void Governor::AssignPopulation(CityData *city) const {
 		count = (count <= specialists || count == min_entertainers ? count : specialists);
 
 		city->ChangeSpecialists(POP_ENTERTAINER, count);
-#if !defined(NEW_RESOURCE_PROCESS)
-		tmp_city->ChangeSpecialists(POP_ENTERTAINER, count); // All entertainers were removed before.
-#endif
 	}
 
 	if(max_workers < city->WorkerCount() + city->SlaveCount()){
@@ -2772,10 +2737,6 @@ void Governor::AssignPopulation(CityData *city) const {
 			city->ChangeSpecialists(POP_SCIENTIST, minSpecialists);
 		}
 	}
-
-#if !defined(NEW_RESOURCE_PROCESS)
-	delete tmp_city;
-#endif
 }
 
 //----------------------------------------------------------------------------
@@ -2809,20 +2770,21 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sin
 		return;
 
 	sint32 per_pop_happiness = g_thePopDB->Get(entertainer_type)->GetHappiness();
+    if (per_pop_happiness <= 0)
+    {
+		Assert(0);
+		return;
+    }
 
 	sint32 needed = g_theConstDB->GetRiotLevel();
 	sint32 maximum = g_theConstDB->GetVeryHappyThreshold();
 	sint32 current = static_cast<sint32>(city->GetHappiness());
-	double min_delta;
-	double max_delta;
 
-	if(per_pop_happiness <= 0){
-		Assert(0);
-		return;
-	}
 
-	min_delta = static_cast<double>(needed - current) / static_cast<double>(per_pop_happiness);
-	max_delta = static_cast<double>(maximum - current) / static_cast<double>(per_pop_happiness);	
+	double min_delta = static_cast<double>(needed - current) / 
+                         static_cast<double>(per_pop_happiness);
+	double max_delta = static_cast<double>(maximum - current) / 
+                         static_cast<double>(per_pop_happiness);	
 	
 	if (min_delta < 0) {
 		min_delta = floor(min_delta);
@@ -2870,17 +2832,14 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sin
 //----------------------------------------------------------------------------
 sint32 Governor::GetMinNumOfFieldWorkers(const CityData *city, double resourceFraction) const
 {
-	double totalTilesForWorking = static_cast<double>(city->TilesForWorking());
-	double numPeople;
-	double peopleFraction;
+	double const totalTilesForWorking = static_cast<double>(city->TilesForWorking());
 	double neededFraction = 0.0;
 	sint32 minResource = -1; // First worker is free
 
-	sint32 i;
-	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+	for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
 	{
-		numPeople = static_cast<double>(city->GetRingSize(i));
-		peopleFraction = totalTilesForWorking / numPeople;
+		double const numPeople = static_cast<double>(city->GetRingSize(i));
+		double const peopleFraction = totalTilesForWorking / numPeople;
 
 		if(resourceFraction > neededFraction + peopleFraction){
 			neededFraction += peopleFraction;
@@ -2896,6 +2855,7 @@ sint32 Governor::GetMinNumOfFieldWorkers(const CityData *city, double resourceFr
 			break;
 		}
 	}
+
 	return minResource;
 }
 #endif
@@ -2961,19 +2921,8 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 	laborers = 0;
 	merchants = 0;
 	scientists = 0;
-#if !defined(NEW_RESOURCE_PROCESS)
-	minFood = 0;
-	minProd = 0;
-	minGold = 0;
-	minScie = 0;
-	farmersEff = 0.0;
-	laborersEff = 0.0;
-	merchantsEff = 0.0;
-	scientistsEff = 0.0;
-#endif
 
 #if defined(NEW_RESOURCE_PROCESS)
-
 	double farmersEff;
 	double laborersEff;
 	double merchantsEff;
@@ -3004,8 +2953,7 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 	bool merchantsMaxReached = false;
 	bool scientistsMaxReached = false;
 
-	sint32 i;
-	for(i = city->GetSizeIndex(); i >= 0; --i){
+	for (sint32 i = city->GetSizeIndex(); i >= 0; --i){
 		city->GetSpecialistsEffect(i, farmersEff, laborersEff, merchantsEff, scientistsEff);
 		sint32 workers = city->GetWorkingPeopleInRing(i);
 
@@ -3060,6 +3008,14 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 	return WorkersNeeded;
 
 #else
+	minFood = 0;
+	minProd = 0;
+	minGold = 0;
+	minScie = 0;
+	farmersEff = 0.0;
+	laborersEff = 0.0;
+	merchantsEff = 0.0;
+	scientistsEff = 0.0;
 
 	double full_radii_food;
 	double part_radii_food;
@@ -3421,7 +3377,6 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 
 void Governor::ComputeDesiredUnits()
 {
-	
 	m_currentUnitCount.resize(g_theUnitDB->NumRecords());
 
 	sint16 list_num;
@@ -3430,36 +3385,28 @@ void Governor::ComputeDesiredUnits()
 	sint32 best_unit_type;
 
 	double unit_support_percent; 
-	sint32 total_unit_support;
 	double unit_support_percent_by_type = 0.0;
 	sint32 total_unit_support_by_type;
-	sint32 total_unallocated_support;
 	sint32 garrison_count;
-	sint32 army_index;
-	sint32 city_index;
-	sint32 unit_index;
-	Player *player_ptr;
+    sint32 city_index;
 	Army army;
 	Unit unit;
 	sint32 desired_count;
 	double freight_per_unit;
 
-	sint32 max_cities = 
-		g_theGovernmentDB->Get(g_player[m_playerId]->GetGovernmentType())->GetTooManyCitiesThreshold();
-	sint32 num_cities = g_player[m_playerId]->GetNumCities();
-	sint32 needed_cities = (max_cities - num_cities);
+	Assert(g_player[m_playerId]);
+	Player * player_ptr = g_player[m_playerId];
 
-	
-	
-	total_unallocated_support = 0;
-	
+	sint32 max_cities = 
+		g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->GetTooManyCitiesThreshold();
+	sint32 num_cities = player_ptr->GetNumCities();
+	sint32 needed_cities = (max_cities - num_cities);
+	sint32 total_unallocated_support = 0;
 	
 	Assert(strategy.GetUnitSupportPercent());
 	strategy.GetUnitSupportPercent(unit_support_percent);
 	
-	Assert(g_player[m_playerId]);
-	player_ptr = g_player[m_playerId];
-	total_unit_support = static_cast<sint32>
+	sint32 total_unit_support = static_cast<sint32>
 		(player_ptr->GetTotalProduction() * unit_support_percent);
 	
 	Assert(g_theUnitDB);
@@ -3470,11 +3417,11 @@ void Governor::ComputeDesiredUnits()
 	
 	
 	sint32 num_armies = player_ptr->m_all_armies->Num();
-	for (army_index = 0; army_index < num_armies; army_index++)
+	for (sint32 army_index = 0; army_index < num_armies; army_index++)
 	{
 		army = player_ptr->m_all_armies->Get(army_index);
 
-		for (unit_index = 0; unit_index < army->Num(); unit_index++)
+		for (sint32 unit_index = 0; unit_index < army->Num(); unit_index++)
 		{
 			unit = army.Get(unit_index);
 
@@ -3506,12 +3453,8 @@ void Governor::ComputeDesiredUnits()
 		}
 	} 
 
-	
 	m_maximumUnitShieldCost = 0;
-
-	
 	m_currentUnitShieldCost = 0;
-
 	
 	sint16 needed_transport = Scheduler::GetScheduler(m_playerId).
 		GetMostNeededStrength().Get_Transport();
@@ -3782,7 +3725,7 @@ void Governor::ComputeDesiredUnits()
 
 			unit->GetPos(pos);
 			units_ptr = g_theWorld->GetArmyPtr(pos);
-			for (unit_index = 0; unit_index < units_ptr->Num(); unit_index++)
+			for (sint32 unit_index = 0; unit_index < units_ptr->Num(); unit_index++)
 				{
 					
 					if (!g_theUnitPool->IsValid(units_ptr->Get(unit_index)))
@@ -3929,13 +3872,11 @@ double Governor::PercentUnbuilt(const BUILD_UNIT_LIST unit_list) const
 	if (m_buildUnitList[unit_list].m_bestType >= 0 && 
 		m_buildUnitList[unit_list].m_maximumCount > 0)
 		{
-			
 			return ( m_buildUnitList[unit_list].m_desiredCount /
 				m_buildUnitList[unit_list].m_maximumCount );
 		}
 
-	
-	return (0.0);
+	return 0.0;
 }
 
 
@@ -3959,8 +3900,6 @@ StringId Governor::GetUnitsAdvice(SlicContext & sc) const
 	stringutils_SetStaticStringId(lowMilitaryRankAdviceId, "LOW_MILITARY_RANK_ADVICE");
 	stringutils_SetStaticStringId(highMilitaryRankAdviceId, "HIGH_MILITARY_RANK_ADVICE");
 
-	
-	double percent_unbuilt;
 	double max_percent_unbuilt = 0.0;
 	sint32 max_needed_list = -1;
 	for (sint32 list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
@@ -3976,7 +3915,7 @@ StringId Governor::GetUnitsAdvice(SlicContext & sc) const
 			if ( (BUILD_UNIT_LIST) list_num == BUILD_UNIT_LIST_FREIGHT ) 
 				continue;
 
-			percent_unbuilt = PercentUnbuilt((BUILD_UNIT_LIST) list_num);
+			double const percent_unbuilt = PercentUnbuilt((BUILD_UNIT_LIST) list_num);
 			if (percent_unbuilt > max_percent_unbuilt)
 				{
 					max_percent_unbuilt = percent_unbuilt;
@@ -4151,15 +4090,12 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	
-	double top_value;
-	double bottom_value;
 	double rank = 0.0; 
 	const StrategyRecord::BuildListSequenceElement *elem = NULL;
 	const StrategyRecord::BuildListSequenceElement *best_elem = NULL;
 	sint32 best_priority = -99999;
 
-	int elem_num;
-	for(elem_num = 0; elem_num < strategy.GetNumBuildListSequenceElement(); elem_num++)
+	for (int elem_num = 0; elem_num < strategy.GetNumBuildListSequenceElement(); elem_num++)
 	{
 		elem = strategy.GetBuildListSequenceElement(elem_num);
 
@@ -4221,6 +4157,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 		if(elem->GetTop())
 		{
+			double top_value;
 			elem->GetTop(top_value);
 			if(rank >= 1.0 - top_value)
 			{
@@ -4231,6 +4168,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 		if(elem->GetBottom())
 		{
+			double bottom_value;
 			elem->GetBottom(bottom_value);
 			if(rank <= bottom_value)
 			{
@@ -4243,21 +4181,17 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 
 	Assert(best_elem);
-
+	advice = -1;
 	
 	if(best_elem == NULL)
 	{
-		advice = -1;
 		best_elem = strategy.GetBuildListSequenceElement(elem_num-1);
 		if (best_elem == NULL)
 			return g_theBuildListSequenceDB->Get(0);
 	}
 
-	
 	if(best_elem->GetAdvice())
 		best_elem->GetAdvice(advice);
-	else
-		advice = -1;
 
 	return best_elem->GetBuildListSequence();
 }
@@ -4766,8 +4700,8 @@ StringId Governor::GetTacticalAdvice(SlicContext & sc) const
 
 	CellUnitList garrison;
 	Unit city;
-	sint32 i,j;
-	for (i = 0; i < num_cities; i++)
+	sint32 j;
+	for (sint32 i = 0; i < num_cities; i++)
 	{
 		city = player_ptr->m_all_cities->Access(i);
 		Assert( g_theUnitPool->IsValid(city) );
@@ -4792,7 +4726,7 @@ StringId Governor::GetTacticalAdvice(SlicContext & sc) const
 
 	
 	sint32 launch_target = Diplomat::GetDiplomat(m_playerId).GetNuclearLaunchTarget();
-	if ( launch_target != -1)
+	if (launch_target >= 0)
 	{
 		sc.AddPlayer(launch_target);
 		return nukeAdviceId;
@@ -4829,10 +4763,7 @@ void Governor::ManageGoodsTradeRoutes()
 	Assert(g_player[m_playerId] != NULL);
 	Player *player_ptr = g_player[m_playerId];
 
-	sint32 cur_round = player_ptr->GetCurRound();
-
 	Unit city;
-	sint32 i,g,d; // Are compared against sint32
 	UnitDynamicArray *city_list = player_ptr->GetAllCitiesList();
 	double unused_freight = player_ptr->GetUnusedFreight();
 	double total_freight = player_ptr->GetTotalFreight();
@@ -4843,14 +4774,12 @@ void Governor::ManageGoodsTradeRoutes()
 	m_neededFreight = 0.0;
 
 	
-	for (i = 0; i < city_list->Num(); i++) {
+	for (sint32 i = 0; i < city_list->Num(); i++) {
 		city = city_list->Access(i);
 
-		
-		for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
+		for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++) {
 			if(city.CD()->IsLocalResource(g)) {
 				
-				sint32 op;
 				Unit maxCity;
 				sint32 maxPrice = 0;
 				sint32 bestPrice = 0;
@@ -4860,7 +4789,7 @@ void Governor::ManageGoodsTradeRoutes()
 				TradeRoute curDestRoute;
 
 				
-				if(	city.CD()->HasResource(g) == FALSE &&	
+				if(	!city.CD()->HasResource(g) &&	
 					city.CD()->GetResourceTradeRoute(g, curDestRoute)) 
 				{
 					sellingPrice = 
@@ -4869,11 +4798,10 @@ void Governor::ManageGoodsTradeRoutes()
 				else 
 				{
 					curDestRoute.m_id = 0;
-					sellingPrice = -1;
 				}
 
 				
-				for(op = 1; op < k_MAX_PLAYERS; op++) {
+				for (sint32 op = 1; op < k_MAX_PLAYERS; op++) {
 
 					if(!g_player[op]) continue;
 					if(m_playerId != op && !player_ptr->HasContactWith(op)) continue;
@@ -4887,7 +4815,7 @@ void Governor::ManageGoodsTradeRoutes()
 						continue;
 
 					
-					for(d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
+					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
 						
 						if(!(destCity.GetVisibility() & (1 << m_playerId))) 

@@ -28,11 +28,34 @@
 //   pointer. - May 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __WORLD_H__
 #define __WORLD_H__
+
+class World; 
+
+enum WORLD_RADIUS_OP 
+{
+	WORLD_RADIUS_OP_SET_RADIUS,
+	WORLD_RADIUS_OP_IRRIGATION_CHECK,
+	WORLD_RADIUS_OP_CITY_SEARCH,
+};
+
+enum MAP_GENERATOR 
+{
+	MAP_GENERATOR_ORIGINAL,
+	MAP_GENERATOR_PLUGIN
+};
+
+#define GROUND_Z 0
+#define SPACE_Z 1
+
+#define k_WORLD_VERSION_MAJOR	0									
+#define k_WORLD_VERSION_MINOR	0									
 
 #include "MapPoint.h"
 #include "CityRadius.h"
@@ -55,7 +78,6 @@ class CellUnitList;
 class Army;
 class A_Star_Heuristic_Cost;
 class TerrainRecord;
-enum WORLD_DIRECTION;
 
 typedef Cell * CellPtr; 
 typedef CellPtr * CellYarray;
@@ -73,22 +95,8 @@ interface IMapGenerator;
 #include "IMapGen.h"
 #include <ltdl.h>
 #endif
-#define k_WORLD_VERSION_MAJOR	0									
-#define k_WORLD_VERSION_MINOR	0									
 
-enum WORLD_RADIUS_OP {
-	WORLD_RADIUS_OP_SET_RADIUS,
-	WORLD_RADIUS_OP_IRRIGATION_CHECK,
-	WORLD_RADIUS_OP_CITY_SEARCH,
-};
 
-enum MAP_GENERATOR {
-	MAP_GENERATOR_ORIGINAL,
-		MAP_GENERATOR_PLUGIN
-};
-
-#define GROUND_Z 0
-#define SPACE_Z 1
 struct MapPointNode;
 
 
@@ -261,10 +269,8 @@ public:
     void GenerateDeepWater();
     void NewGenerateDeepWater();
 
-    BOOL GetAdjacentLand(MapPoint &pos, MapPoint &land);
-
-	
-	BOOL GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const;
+    BOOL GetAdjacentLand(MapPoint const & pos, MapPoint & land) const;
+    BOOL GetAdjacentOcean(MapPoint const & pos, sint32 & water_cont) const;
     
     void GenerateTrenches();
     void GenerateVolcano();
@@ -695,9 +701,6 @@ public:
 extern World *g_theWorld;
 
 uint32 World_World_GetVersion(void) ;
-#else 
-
-class World; 
 
 #endif
 

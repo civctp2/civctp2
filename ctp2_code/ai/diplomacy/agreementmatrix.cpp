@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Matrix of all diplomatic agreements between players
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -60,36 +60,23 @@ AgreementMatrix::AgreementMatrix()
 
 void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 {
-	
-	AgreementVector old_agreements(m_agreements);
 	// Just make sure that we can rely on testing against m_maxPlayers to have
 	// a valid index in g_player.
 	Assert(newMaxPlayers <= k_MAX_PLAYERS);
 	m_maxPlayers = std::min<sint16>(newMaxPlayers, k_MAX_PLAYERS);
 	
-	m_agreements.clear();
-	
-	
-	m_agreements.resize( m_maxPlayers * m_maxPlayers * PROPOSAL_MAX, s_badAgreement );
+	AgreementVector	old_agreements;
+	m_agreements.swap(old_agreements);
 
-#ifdef _DEBUG
-	
-	if (m_agreements.size() == 0)
-	{
-		m_agreements.~vector();
-		return;
-	}
-#endif _DEBUG
+	if (m_maxPlayers > 0)
+      {
+              m_agreements.resize(m_maxPlayers * m_maxPlayers * PROPOSAL_MAX, s_badAgreement);
 
-	
-	
-	
-	
-
-	for (size_t index = 0; index < old_agreements.size(); index++ )
+		for (size_t index = 0; index < old_agreements.size(); ++index)
 		{
 			PLAYER_INDEX const	senderId	= old_agreements[index].senderId;
 			PLAYER_INDEX const	receiverId	= old_agreements[index].receiverId;
+
 			if (senderId > -1 && senderId < m_maxPlayers &&
 				receiverId > -1 && receiverId < m_maxPlayers &&
 				g_player[senderId] && !g_player[senderId]->IsDead() &&
@@ -99,6 +86,7 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 				SetAgreement( old_agreements[index] );
 			}
 		}
+	}
 }
 
 void AgreementMatrix::Load(CivArchive & archive)

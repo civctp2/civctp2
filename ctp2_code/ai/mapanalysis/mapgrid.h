@@ -17,10 +17,6 @@
 #define __MAP_GRID_H__
 
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4786)
-#endif
-
 #ifdef min
 	#undef min
 #endif

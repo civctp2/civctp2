@@ -36,7 +36,6 @@
 #include "c3.h"
 
 #include "aui.h"
-
 #include "dynarr.h"
 #include "SelItem.h"        // g_selected_item
 #include "MapPoint.h"
@@ -49,21 +48,15 @@
 #include "player.h"         // g_player
 #include "controlpanelwindow.h"
 #include "OrderRecord.h"
-
 #include "aui_surface.h"
-
 #include "maputils.h"
 #include "primitives.h"
 #include "tiledmap.h"
 #include "colorset.h"       // g_colorSet
 #include "director.h"
-
 #include "buttonbank.h"
-
 #include "textutils.h"
-
 #include "MoveFlags.h"
-
 #include "ArmyData.h" 
 #include "TerrainRecord.h"
 #include "UnitData.h"
@@ -278,7 +271,7 @@ void TiledMap::DrawLegalMove
 		currMovementPoints = -1.0;
 	}
 
-	BOOL			isFirstMove			= sel_army.GetFirstMoveThisTurn();//return Flag(k_UDF_FIRST_MOVE)
+	bool			isFirstMove			= sel_army.GetFirstMoveThisTurn();//return Flag(k_UDF_FIRST_MOVE)
 
     sint32			num_tiles_to_half;//in case we need dotted path lines
     sint32			num_tiles_to_empty;
@@ -741,12 +734,12 @@ void TiledMap::DrawLegalMove
 						primitives_PaintRect16(pSurface, &turnRect, g_colorSet->GetColor(actual_line_color));
 						primitives_FrameRect16(pSurface, &turnRect, 0);
 
-						sint32 const	width	= textutils_GetWidth((aui_DirectSurface *) pSurface, turnNumber);
-						sint32 const	height	= textutils_GetHeight((aui_DirectSurface *) pSurface, turnNumber);
+						sint32 const	width	= textutils_GetWidth(pSurface, turnNumber);
+						sint32 const	height	= textutils_GetHeight(pSurface, turnNumber);
 						sint32 const	textX	= x - (width >> 1);
 						sint32 const	textY	= y - (height >> 1);
 							
-						primitives_DrawText((aui_DirectSurface *) pSurface, textX, textY, turnNumber, 0, 1);
+						primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
 					}
 				} 
 			} 
@@ -794,21 +787,19 @@ void TiledMap::DrawLegalMove
 					primitives_FrameRect16(pSurface, &turnRect, 0);
 					 
 
-					sint32 const	width	= textutils_GetWidth((aui_DirectSurface *) pSurface, turnNumber);
-					sint32 const	height	= textutils_GetHeight((aui_DirectSurface *) pSurface, turnNumber);
+					sint32 const	width	= textutils_GetWidth(pSurface, turnNumber);
+					sint32 const	height	= textutils_GetHeight(pSurface, turnNumber);
 					sint32 const	textX	= x - (width >> 1);
 					sint32 const	textY	= y - (height >> 1);
 					 
-					primitives_DrawText((aui_DirectSurface *) pSurface, textX, textY, turnNumber, 0, 1);
+					primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
 				}
 			}
 		}
 	}
 }
 
-void TiledMap::DrawUnfinishedMove(
-	aui_Surface *pSurface	
-	)
+void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 {
     PLAYER_INDEX pIndex;
 	ID id;
@@ -818,50 +809,38 @@ void TiledMap::DrawUnfinishedMove(
         return; 
     } 
 
-	MapPoint currPos, prevPos;
-
-	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH*m_scale)/2);
-	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEIGHT*m_scale);
-    Army sel_army;
-
-	
-
-	double currMovementPoints = 0.0;
-	sint32 isFirstMove = FALSE;
-    sel_army = Army(id);
+    Army 	sel_army 			= Army(id);
     Assert(sel_army.m_id != (0)); 
-
 	if ( !sel_army.GetOrder(0) ) return;
 	if ( !sel_army.GetOrder(0)->m_path ) return;
 	
 	//PFT: handle immobile units
-    for(sint32 i=0; i<sel_army.AccessData()->Num(); i++){
-		if(sel_army.AccessData()->m_array[i]->IsImmobile())
+    for (sint32 i = 0; i < sel_army.AccessData()->Num(); i++)
+    {
+		if (sel_army.AccessData()->m_array[i]->IsImmobile())
 			return;
 	}
 	
 	Path goodPath(sel_army.GetOrder(0)->m_path);
 
+	double 	currMovementPoints 	= 0.0;
     sel_army.CurMinMovementPoints(currMovementPoints); 
 	if (currMovementPoints < 1.0)
 		currMovementPoints = -1.0;
 
-	isFirstMove =  sel_army.GetFirstMoveThisTurn();
+	bool	isFirstMove 		= sel_army.GetFirstMoveThisTurn();
 
     sint32 num_tiles_to_half; 
     sint32 num_tiles_to_empty;
-
-	
-	
-	
-	
-
     sel_army.CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty);
+    
     sint32 line_segement_count = 0; 
     //get the army's currPos
-	sel_army.GetPos(currPos);
-	MapPoint tempPos;
-	goodPath.Start( tempPos );
+	MapPoint	currPos;
+    sel_army.GetPos(currPos);
+
+	MapPoint    tempPos;
+	goodPath.Start(tempPos);
 	//update line_segement_count to the army's currPos
 	while ( tempPos != currPos && !goodPath.IsEnd()) {
 		goodPath.Next(tempPos);
@@ -869,6 +848,10 @@ void TiledMap::DrawUnfinishedMove(
 	}
 
 	//draw the (COLOR_GRAY) path from currPos
+	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH*m_scale)/2);
+	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEIGHT*m_scale);
+	
+	MapPoint prevPos;
 	while (!goodPath.IsEnd()) 
 	{
 		prevPos = currPos;
@@ -900,24 +883,15 @@ void TiledMap::DrawUnfinishedMove(
 				currMovementPoints -= cost;
 		}
 		
-		if (currMovementPoints < 0)	{ 
-			
-			
-            
-			
-		}
-		else if (FEQUAL(currMovementPoints,0.0)) 
+		if (FEQUAL(currMovementPoints,0.0)) 
 			currMovementPoints = -1;
 		
 		if (prevPos != currPos) 
 		{
-			sint32 x1, y1, x2, y2;
-			
-			
 			if (TileIsVisible(prevPos.x, prevPos.y) &&
 				TileIsVisible(currPos.x, currPos.y))
 			{
-				
+				sint32 x1, y1, x2, y2;
 				maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
 				maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
 				
@@ -943,37 +917,28 @@ void TiledMap::DrawUnfinishedMove(
 		}
 	} 
 
-	
 	line_segement_count++;
 	sint32 turn = 0;
 	currMovementPoints=0.0;
 	double prevMovementPoints=0.0;
 	double maxMovementPoints=0.0;
-	double count=0.0;
 	
-	
-	
-	if (sType == SELECT_TYPE_LOCAL_ARMY)
+	sel_army = Army(id);
+	sel_army.CurMinMovementPoints(currMovementPoints); 
+	double count = currMovementPoints; 
+	sel_army.MinMovementPoints(maxMovementPoints); 
+	if (maxMovementPoints < 1.0)
+		maxMovementPoints = -1.0;
+		
+	isFirstMove =  sel_army.GetFirstMoveThisTurn();
+		
+	if (currMovementPoints < 1.0)
 	{
-		sel_army = Army(id);
-		Assert(sel_army.m_id != (0)); 
-		sel_army.CurMinMovementPoints(currMovementPoints); 
-		count = currMovementPoints; 
-		sel_army.MinMovementPoints(maxMovementPoints); 
-		if (maxMovementPoints < 1.0)
-			maxMovementPoints = -1.0;
-		
-		isFirstMove =  sel_army.GetFirstMoveThisTurn();
-		
-		if (currMovementPoints < 1.0)
-		{
-			currMovementPoints = -1;
-			prevMovementPoints = 0;
-			count = maxMovementPoints;
-			isFirstMove = 1;
-		}
+		currMovementPoints = -1;
+		prevMovementPoints = 0;
+		count = maxMovementPoints;
+		isFirstMove = true;
 	}
-	
 	
 	sel_army.GetPos(currPos);
 	goodPath.Start( tempPos );
@@ -986,8 +951,6 @@ void TiledMap::DrawUnfinishedMove(
 		prevPos = currPos;
 		goodPath.Next(currPos);
 		
-		Assert(sel_army);
-
 		if (!(m_localVision->IsExplored(currPos) || sel_army.GetMovementTypeAir()))
 			break;
 
@@ -1014,14 +977,12 @@ void TiledMap::DrawUnfinishedMove(
 		}
 		
 		if (prevMovementPoints < 1.0)		
-			
 			turnColor = g_colorSet->GetColor(k_TURN_COLOR_UNFINISHED);
 		else if (currMovementPoints <1.0)	
 			currMovementPoints = -1;
 		
 		if (count > 0)
 		{
-			
 			if (isFirstMove)
 			{
 				if (cost > count) 
@@ -1029,19 +990,19 @@ void TiledMap::DrawUnfinishedMove(
 				else
 					count -= cost;
 				
-				isFirstMove = 0;
+				isFirstMove = false;
 			}
 			else 
 				count -= cost;
 		}
 		
-		sint32 countWasZero = 0;
+		bool countWasZero = false;
 		if ((-0.01 < count) && (count < 0.01))
 		{
-			drawPos = currPos;
-			isFirstMove = 1;
-			countWasZero = 1;
-			count = -1;
+			drawPos 		= currPos;
+			isFirstMove 	= true;
+			countWasZero 	= true;
+			count 			= -1;
 		}
 		
 		if (count < 0)
@@ -1049,6 +1010,7 @@ void TiledMap::DrawUnfinishedMove(
 			count = maxMovementPoints;
 			
 			if (!countWasZero)
+			{
 				if (cost > count)
 					count = -1;
 				else
@@ -1084,17 +1046,16 @@ void TiledMap::DrawUnfinishedMove(
 						
 						COLORREF color = g_colorSet->GetColorRef(k_TURN_COLOR);
 						
-						sint32 width = textutils_GetWidth((aui_DirectSurface *) pSurface, turnNumber);
-						sint32 height = textutils_GetHeight((aui_DirectSurface *) pSurface, turnNumber);
+						sint32 width = textutils_GetWidth(pSurface, turnNumber);
+						sint32 height = textutils_GetHeight(pSurface, turnNumber);
 						
 						sint32 textX = x - (width>>1);
 						sint32 textY = y - (height>>1);
 						
-						primitives_DrawText((aui_DirectSurface *) pSurface, textX, textY, turnNumber, color, 1);
-						
-						
+						primitives_DrawText(pSurface, textX, textY, turnNumber, color, 1);
 					}
 				}
+			}
 		}
 	}	
 }

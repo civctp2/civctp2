@@ -630,16 +630,8 @@ void ProposalAnalysis::ComputeRegardResultFromProfit(DiplomacyResult & senderRes
 
 bool ProposalAnalysis::IsSimpleGift(const NewProposal & proposal)
 {
-	
-	if (proposal.detail.second_type != PROPOSAL_NONE)
-		return false;
-
-	
-	if (IsGift(proposal.detail))
-		return true;
-
-	
-	return false;
+    return IsGift(proposal.detail) && 
+           (proposal.detail.second_type == PROPOSAL_NONE);
 }
 
 
@@ -651,16 +643,7 @@ bool ProposalAnalysis::IsGift(const ProposalData & proposal_data)
 	const DiplomacyProposalRecord *second_rec = 
 		g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex(proposal_data.second_type));
 	
-	if (second_rec->GetCategoryGift())
-	{
-		return true;
-	}
-
-	if (first_rec->GetCategoryGift())
-	{
-		return true;
-	}
-	return false;
+	return second_rec->GetCategoryGift() || first_rec->GetCategoryGift();
 }
 
 
@@ -716,27 +699,15 @@ bool ProposalAnalysis::GetTreatyFromProposal(const ProposalData & proposal_data,
 	{
 		treaty_type = proposal_data.second_type;
 		treaty_arg = proposal_data.second_arg;
-
-		
-		if (treaty_found)
-			treaty_found = false;
-		else
-			treaty_found = true;
+		treaty_found = !treaty_found;
 	}
 
-	
-	return (treaty_found);
+	return treaty_found;
 }
 
 
 bool ProposalAnalysis::IsAcceptResponse(const Response & response)
 {
-	
-	if (response.type != RESPONSE_COUNTER && 
-		response.type != RESPONSE_ACCEPT)
-		return false;
-
-	
 	if (response.type == RESPONSE_COUNTER)
 	{
 		switch (response.counter.second_type)
@@ -759,7 +730,6 @@ bool ProposalAnalysis::IsAcceptResponse(const Response & response)
 			return true;
 		}
 	}
-
 	
 	return false;
 }

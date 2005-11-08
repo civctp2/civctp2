@@ -35,7 +35,7 @@
 #ifndef __CELL_H__
 #define __CELL_H__ 1
 
-
+class Cell;
 
 
 
@@ -123,12 +123,12 @@ class CellUnitList;
 class ID;
 
 class MapPoint;
-typedef sint32 PLAYER_INDEX;
 
 #define CELL_COLOR 1
 
 #include "Unit.h"
 
+#include "Player.h"     // PLAYER_INDEX
 
 
 
@@ -361,13 +361,5 @@ public:
 };
 
 uint32 Cell_CELL_GetVersion(void) ;
-#else
-
-#ifdef WIN32
-class CELL;
-typedef class CELL Cell;
-#else
-class Cell;
-#endif
 
 #endif

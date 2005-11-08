@@ -16,10 +16,6 @@
 #define __PROPOSAL_ANALYSIS_H__
 
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4786)
-#endif
-
 #include "diplomattypes.h"
 
 class ProposalAnalysis {

@@ -68,7 +68,8 @@
 #define yyss ldlss
 #define yysslim ldlsslim
 #define yyvs ldlvs
-#define yystacksize ldlstacksize
+// Removed since redefined later
+//#define yystacksize ldlstacksize
 
 #define yygrowstack ldlgrowstack
 #define yyrule ldlrule

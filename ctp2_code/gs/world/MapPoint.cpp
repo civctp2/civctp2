@@ -635,14 +635,16 @@ void MapPoint::rc2xy(const MapPoint & rc_pos, const MapPoint & map_size )
 //----------------------------------------------------------------------------
 OrthogonalPoint::OrthogonalPoint(MapPoint const & rc)
 #if defined(_SMALL_MAPPOINTS)
-:	m_point ((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y),
-	x       (m_point.x),
-	y       (m_point.y)
-#else
-:	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y, rc.z),
+:
 	x       (m_point.x),
 	y       (m_point.y),
-	z       (m_point.z)
+	m_point ((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y)
+#else
+:
+	x       (m_point.x),
+	y       (m_point.y),
+	z       (m_point.z),
+	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y, rc.z)
 #endif
 { }
 
@@ -662,13 +664,13 @@ OrthogonalPoint::OrthogonalPoint(MapPoint const & rc)
 //
 //----------------------------------------------------------------------------
 OrthogonalPoint::OrthogonalPoint(OrthogonalPoint const & copy)
-:	m_point (copy.m_point),
+:
 	x       (m_point.x),
-	y       (m_point.y)
+	y       (m_point.y),
 #if !defined(_SMALL_MAPPOINTS)
-	                   ,
-	z       (m_point.z)
+	z       (m_point.z),
 #endif
+	m_point (copy.m_point)
 { }
 
 //----------------------------------------------------------------------------

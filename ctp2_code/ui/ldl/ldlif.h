@@ -30,7 +30,7 @@ int ldlif_find_file(const char *filename, char *buf);
 char *ldlif_getnameptr(const char *name);
 char *ldlif_getstringptr(const char *text);
 
-int ldlif_parse(char *filename);
+int ldlif_parse(const char *filename);
 
 void ldlif_add_name(void **newnames, char *name, void *oldnames);
 void ldlif_start_block(void *names);

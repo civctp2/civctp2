@@ -228,10 +228,7 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 
 	
 	
-	static UnitDynamicArray startUnits;
-	static UnitDynamicArray destUnits;
-	startUnits.Clear();
-	destUnits.Clear();
+	UnitDynamicArray startUnits;
 	GetAdjacentUnits(startUnits, start);
 	sint32 i;
 	BOOL canSeeStartUnit = FALSE;
@@ -260,6 +257,7 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 	if(!canSeeStartUnit)
 		return FALSE;
 
+	UnitDynamicArray destUnits;
 	GetAdjacentUnits(destUnits, dest);
 	for(i = 0; i < destUnits.Num(); i++) {
 		if(destUnits[i].GetOwner() != owner &&

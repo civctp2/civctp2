@@ -43,8 +43,7 @@
 #include "CityRadius.h"
 #ifdef _DEBUG
 #include "pixelutils.h"
-#include "colorset.h"
-extern ColorSet *g_colorSet;
+#include "colorset.h"           // g_colorSet
 #endif
 #include "TradeDynArr.h"
 #include "RandGen.h"

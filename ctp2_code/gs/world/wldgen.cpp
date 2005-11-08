@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : World generator
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -113,23 +113,24 @@ void TemperatureFilter(sint8 *map, sint32 *histogram);
 extern MapPoint g_mp_size;
 
 World::World(const MapPoint m, const int xw, const int yw)
-:   m_current_plugin        (NULL),
-	m_distanceQueue         (NULL),
+:   
+    m_isYwrap               (yw),
+    m_isXwrap               (xw),
+    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
+    m_size                  (m),
     m_map                   (NULL), 
-    m_tmpx                  (NULL),
-    m_cellArray             (NULL),
     m_water_next_too_land   (NULL), 
     m_land_next_too_water   (NULL),  
     m_water_size            (NULL), 
     m_land_size             (NULL),
-    m_goodValue             (NULL),
+    m_cellArray             (NULL),
+    m_tmpx                  (NULL),
     m_tileInfoStorage       (NULL),
-    A_star_heuristic        (NULL),
+    m_goodValue             (NULL),
     m_num_civ_starts        (0),
-    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
-    m_isXwrap               (xw),
-    m_isYwrap               (yw),
-    m_size                  (m)
+    m_current_plugin        (NULL),
+    m_distanceQueue         (NULL),
+    A_star_heuristic        (NULL)
 { 
     Assert(0 < m_size.x); 
     Assert(0 < m_size.y); 
@@ -222,20 +223,21 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 
 
 World::World(CivArchive &archive, BOOL fromMapFile)
-:   m_current_plugin        (NULL),
-	m_distanceQueue         (NULL),
+:   
+    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
     m_map                   (NULL), 
-    m_tmpx                  (NULL),
-    m_cellArray             (NULL),
     m_water_next_too_land   (NULL), 
     m_land_next_too_water   (NULL),  
     m_water_size            (NULL), 
     m_land_size             (NULL),
-    m_goodValue             (NULL),
+    m_cellArray             (NULL),
+    m_tmpx                  (NULL),
     m_tileInfoStorage       (NULL),
-    A_star_heuristic        (NULL),
+    m_goodValue             (NULL),
     m_num_civ_starts        (0),
-    m_mapGenerator          (MAP_GENERATOR_PLUGIN)
+    m_current_plugin        (NULL),
+    m_distanceQueue         (NULL),
+    A_star_heuristic        (NULL)
 //  m_isXwrap, m_isYwrap, m_size: set by Serialize
 {
 	if ( fromMapFile )
@@ -1003,117 +1005,28 @@ void World::ComputeGoodsValues()
 
 
 sint32 World::IsNextToLand(const sint32 i, const sint32 j) 
-
 {  
-    
-    MapPoint pos, n; 
-    
-    pos.Set(i, j); 
-   
-    if(pos.GetNeighborPosition(NORTH, n)) {
-	   if (IsLand(n) || IsMountain(n)) { 
-		   return TRUE; 
-	   }
-	}
-	
-    if(pos.GetNeighborPosition(NORTHWEST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
-		}
-	}
+    MapPoint pos(i, j);
+    MapPoint n; 
 
-	if(pos.GetNeighborPosition(NORTHEAST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
-		}
-	}
+    return GetAdjacentLand(pos, n);    
+}
 
-    if(pos.GetNeighborPosition(SOUTH, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(SOUTHWEST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(SOUTHEAST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(WEST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(EAST, n)) {
-		if (IsLand(n) || IsMountain(n)) {
-			return TRUE; 
-		}
-	}
+BOOL World::GetAdjacentLand(MapPoint const & pos, MapPoint & land) const
+{  
+    for (sint16 dir = 0; dir < NOWHERE; ++dir) 
+    {
+        if (pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), land)) 
+        {
+            if (IsLand(land) || IsMountain(land)) 
+            { 
+		    return TRUE; 
+	      }
+        }
+    }
 
     return FALSE; 
 }
-
-BOOL World::GetAdjacentLand(MapPoint &pos, MapPoint &land) 
-{  
-    if(pos.GetNeighborPosition(NORTH, land)) {
-	   if (IsLand(land) || IsMountain(land)) { 
-		   return TRUE; 
-	   }
-	}
-	
-    if(pos.GetNeighborPosition(NORTHWEST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
-		}
-	}
-
-	if(pos.GetNeighborPosition(NORTHEAST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(SOUTH, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(SOUTHWEST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(SOUTHEAST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(WEST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(EAST, land)) {
-		if (IsLand(land) || IsMountain(land)) {
-			return TRUE; 
-		}
-	}
-
-    return FALSE; 
-}
-
 
 BOOL World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 {
@@ -1146,11 +1059,10 @@ BOOL World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 
 
 sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y) 
-	{  
-    MapPoint	pos,
-				n ;
+{  
+    MapPoint	pos (x,y);
+    MapPoint	n ;
     
-	pos.Set(x, y) ;
     if(pos.GetNeighborPosition(NORTH, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
@@ -1205,9 +1117,8 @@ sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y)
 sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j) 
 
 { 
-    MapPoint pos, n; 
-    
-    pos.Set(i, j); 
+    MapPoint pos (i, j);
+    MapPoint n; 
    
     if(pos.GetNeighborPosition(NORTH, n))
 		if (GetCell(n)->m_terrain_type == t) return TRUE; 
@@ -1251,10 +1162,8 @@ sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j)
 
 sint32 World::IsNextToWater(const sint32 i, const sint32 j) 
 {  
-    
-    MapPoint pos, n; 
-    
-    pos.Set(i, j); 
+    MapPoint pos (i, j);
+    MapPoint n; 
    
     if(pos.GetNeighborPosition(NORTH, n))
 		if (IsWater(n)) return TRUE; 
@@ -1286,10 +1195,9 @@ sint32 World::IsNextToWater(const sint32 i, const sint32 j)
 sint32 World::IsNextToWaterNotDiagonals(const sint32 i, const sint32 j) 
 {  
     
-    MapPoint pos, n; 
-    
-    pos.Set(i, j); 
-   
+    MapPoint pos (i, j);
+    MapPoint n; 
+
     if(pos.GetNeighborPosition(NORTHWEST, n))
 		if (IsWater(n)) return TRUE; 
 
@@ -1793,7 +1701,7 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
         
 		for (it.Start(); !it.End(); it.Next())
         { 
-            MapPoint &  pos     = it.Pos();
+            MapPoint pos     = it.Pos();
 			Cell *cell = m_map[pos.x][pos.y];
 			if ((numCounted[cell->m_terrain_type] < maxToCount) ||
 			    IsRiver(pos) || IsGood(pos)
@@ -1914,7 +1822,7 @@ void World::FlattenCumScore(sint32 d, float **cum_score,
 	SquareIterator  it  (start, d);
     for (it.Start(); !it.End(); it.Next())
     {		
-        MapPoint &  pos = it.Pos();
+        MapPoint pos = it.Pos();
 		sint32 dist = start.NormalizedDistance(pos);		  
 		s = float(d - dist) / (float(d) +1.0f);   // unused?
 		cum_score[pos.x][pos.y] = -50000.0f; 
@@ -3409,14 +3317,14 @@ BOOL World::ImportMap(MBCHAR *filename)
 			BOOL hasGood;
 			sint32 terrainType;
 			uint32 env;
-
+			
 			fscanf(infile, "%d,%d,%d,%d,%ld\t", 
 					&terrainType,
 					&hasHut,
 					&hasRiver,
 					&hasGood,
 					&env);
-
+			
 			cell = GetCell(pos);
 
 			
