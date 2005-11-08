@@ -3975,8 +3975,7 @@ BOOL CityData::BuildUnit(sint32 type)
 
 BOOL CityData::BuildImprovement(sint32 type)
 {
-	Assert(
-		ing(type));
+	Assert(CanBuildBuilding(type));
 	if(!CanBuildBuilding(type))
 		return FALSE;
 
