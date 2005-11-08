@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Network framework
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // _DEBUG
 // - Generates debug information when set.
 //
@@ -39,11 +39,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Cell.h"
-
-
-#include "net_types.h"
 #include "network.h"
+
+#include "Cell.h"
+#include "net_types.h"
 #include "net_io.h"
 #include "net_anet.h"
 #include "net_thread.h"
@@ -92,7 +91,6 @@
 #include "net_cheat.h"
 #endif
 
-
 #include "UnitData.h"
 #include "player.h"
 #include "XY_Coordinates.h"
@@ -100,7 +98,7 @@
 #include "UnitPool.h"
 #include "citydata.h"
 #include "TradeRouteData.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Path.h"
 #include "Agreement.h"
 #include "CivilisationPool.h"
@@ -118,66 +116,45 @@
 #include "chatbox.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
-#include "order.h"
+#include "Order.h"
 #include "UnseenCell.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "Exclusions.h"
-
-
-
 #include "profileDB.h"
 #include "pointerlist.h"
-
 #include "c3_utilitydialogbox.h"
-
-
 #include "netfunc.h"
 #include "netshell.h"
-
 #include "civapp.h"
-
 #include "StrDB.h"
-extern StringDB               *g_theStringDB;
+extern StringDB					*g_theStringDB;
 
 #include "GameSettings.h"
 #include "AgeRecord.h"
 #include "CivilisationRecord.h"
-
 #include "GameEventManager.h"
-
 #include "ctpai.h"
 #include "chatlist.h"
-
 #include "soundmanager.h"
 #include "gamesounds.h"
-
 #include "progresswindow.h"
-extern ProgressWindow         *g_theProgressWindow;
+extern ProgressWindow *g_theProgressWindow;
 
-extern TurnCount              *g_turn;
-extern TiledMap               *g_tiledMap;
-extern RadarMap               *g_radarMap;
-extern ProfileDB              *g_theProfileDB;
-extern NETFunc                *g_netfunc;
-extern DiplomaticRequestPool  *g_theDiplomaticRequestPool;
-extern CivApp                 *g_civApp;
-
+extern TurnCount *g_turn;
+extern TiledMap *g_tiledMap;
+extern RadarMap     *g_radarMap;
+extern ProfileDB *g_theProfileDB;
+extern NETFunc *g_netfunc;
+extern DiplomaticRequestPool *g_theDiplomaticRequestPool;
+extern CivApp *g_civApp;
 
 #include "SelItem.h"
-
-
 #include "resource.h"
-
 #include "director.h"
-
-//#include "GameOver.h"
 #include "civ3_main.h"
-
 #include "sci_advancescreen.h"
-
 #include "c3_utilitydialogbox.h"
-
 #include "aui_button.h"
 #ifdef _DEBUG
 #include "aui.h"
@@ -187,22 +164,16 @@ extern CivApp                 *g_civApp;
 
 #include "controlpanelwindow.h"
 #include "MainControlPanel.h"
-extern ControlPanelWindow     *g_controlPanel;
+extern ControlPanelWindow		*g_controlPanel;
 
 #include "RandGen.h"
-
 #include "stringutils.h"
-
 #include "screenutils.h"
-
 #include "battleviewwindow.h"
 #include "c3ui.h"
-
 #include "sci_advancescreen.h"
-
 #include "dipwizard.h"
 #include "Diplomat.h"
-
 #include "CTP2Combat.h"
 #include "Strengths.h"
 
@@ -216,10 +187,10 @@ extern ChatBox *g_chatBox;
 
 extern c3_UtilityPlayerListPopup *g_networkPlayersScreen;
 
-void battleview_ExitButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
 
-void network_AbortCallback(sint32 type )
+void network_AbortCallback( sint32 type )
 {
 	
 
@@ -262,18 +233,18 @@ namespace
 		};
 	
 	private:
-		Packetizer * m_Packet;
+		Packetizer *	m_Packet;
 	};
 
 } // namespace
 
 Network::Network() :
-	m_initialized(FALSE),
+	m_state(NETSTATE_READY),
 	m_pid(0),
 	m_hostId(0),
 	m_iAmHost(FALSE),
 	m_iAmClient(FALSE),
-	m_state(NETSTATE_READY),
+	m_initialized(FALSE),
 	m_processingNewPlayers(FALSE)
 {
 	m_noThread = FALSE;
@@ -319,12 +290,7 @@ Network::Network() :
 	m_condensePopMoves = FALSE;
 	m_enactedDiplomaticRequests = new DynamicArray<DiplomaticRequest>;
 
-	
-	
-
-	
-	
-
+#ifdef WIN32
 	char exepath[_MAX_PATH];
 	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
 		char *lastbackslash = strrchr(exepath, '\\');
@@ -348,6 +314,7 @@ Network::Network() :
 		Assert(r == sizeof(m_guid));
 		fclose(guidFile);
 	}
+#endif
 
 	m_progress = -1;
 	m_extraTimePerCity = 0;
@@ -368,58 +335,40 @@ Network::~Network()
 {
 	m_deleting = TRUE;
 
-	if(m_netIO) {
-		delete m_netIO;
-		m_netIO = NULL;
+	delete m_netIO;
+
+	for (size_t i = 0; i < k_MAX_PLAYERS; i++) 
+    {
+		delete m_playerData[i];
 	}
 
-	for(uint16 i = 0; i < k_MAX_PLAYERS; i++) {
-		if(m_playerData[i]) {
-			delete m_playerData[i];
-			m_playerData[i] = NULL;
-		}
+
+	delete m_newPlayerList;
+
+	while (!m_sessionList->IsEmpty()) 
+    {
+	    delete m_sessionList->RemoveHead();
 	}
-	SessionData* ses;
-	while(!m_sessionList->IsEmpty()) {
-		ses = m_sessionList->RemoveHead();
-		delete ses;
-	}
+	delete m_sessionList;
 
-	if(m_newPlayerList)
-		delete m_newPlayerList;
+	delete m_gameObjects;
+	delete m_deadUnitList;
+	delete m_resetCityOwnerHackList;
 
-	if(m_sessionList)
-		delete m_sessionList;
-
-	if(m_gameObjects)
-		delete m_gameObjects;
-
-	if(m_deadUnitList)
-		delete m_deadUnitList;
-
-	if(m_resetCityOwnerHackList)
-		delete m_resetCityOwnerHackList;
-
-	if(m_nsPlayerInfo) {
+	if (m_nsPlayerInfo) 
+    {
 		m_nsPlayerInfo->DeleteAll();
 		delete m_nsPlayerInfo;
 	}
 
-	if(m_nsAIPlayerInfo) {
+	if (m_nsAIPlayerInfo) 
+    {
 		m_nsAIPlayerInfo->DeleteAll();
 		delete m_nsAIPlayerInfo;
 	}
 
-	if(m_enactedDiplomaticRequests) {
-		delete m_enactedDiplomaticRequests;
-		m_enactedDiplomaticRequests = NULL;
-	}
-
-	if(m_rememberExclusions) {
-		delete m_rememberExclusions;
-		m_rememberExclusions = NULL;
-	}
-
+	delete m_enactedDiplomaticRequests;
+	delete m_rememberExclusions;
 	delete m_chatList;
 }
 
@@ -600,39 +549,44 @@ void Network::InitFromNetFunc()
 			const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
 			
 			char nonConstStr[1024];
-			if(str)
+			if(str) {
 				strcpy(nonConstStr, str);
-			c3_AbortMessage(str ? nonConstStr : "Waiting on players", k_UTILITY_ABORT, network_AbortCallback );
+			} else {
+				strcpy(nonConstStr, "Waiting on players");
+			}
+			c3_AbortMessage(nonConstStr, k_UTILITY_ABORT, network_AbortCallback);
 		} else if(!m_crcError) {
 			const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_FOR_DATA");
 			char nonConstStr[1024];
-			if(str)
+			if(str) {
 				strcpy(nonConstStr, str);
-			
-			c3_AbortMessage(str ? nonConstStr : "Waiting on data", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
+			} else {
+				strcpy(nonConstStr, "Waiting on data");
 		}
+			c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
 	}
+}
 }
 
 void Network::SetNSPlayerInfo(uint16 id,
-                              char *name,
-                              int civ,
-                              int group,
-                              int civpoints,
-                              int settlers)
+							  char *name,
+							  int civ,
+							  int group,
+							  int civpoints,
+							  int settlers)
 {
 	if(group > 0) {
 		m_teamsEnabled = TRUE;
 	}
 
 	m_nsPlayerInfo->AddTail(new NSPlayerInfo(id, name, civ, group, civpoints,
-                                             settlers));
+											 settlers));
 }
 
 void Network::SetNSAIPlayerInfo(int civ,
-                                int group,
-                                int civpoints,
-                                int settlers)
+								int group,
+								int civpoints,
+								int settlers)
 {
 	m_nsAIPlayerInfo->AddTail(new NSAIPlayerInfo(civ, group, civpoints, settlers));
 }
@@ -964,10 +918,10 @@ void Network::Join(sint32 index )
 
 
 void
-Network::EnumTransport(NET_ERR result,
-                       sint32 index,
-                       const char* transname,
-                       void* transdata)
+Network::EnumTransport(NET_ERR result, 
+					   sint32 index,      
+					   const char* transname, 
+					   void* transdata) 
 {
 	DPRINTF(k_DBG_NET, ("Transport %d: %s\n", index, transname));
 
@@ -985,10 +939,10 @@ Network::EnumTransport(NET_ERR result,
 
 
 void
-Network::EnumSession(NET_ERR result,
-                     sint32 index,
-                     const char* sessionName,
-                     void* sessionData)
+Network::EnumSession(NET_ERR result, 
+					 sint32 index,      
+					 const char* sessionName, 
+					 void* sessionData) 
 {
 	if(result == NET_ERR_OK) {
 		DPRINTF(k_DBG_NET, ("Session %d: %s\n", index, sessionName));
@@ -1020,69 +974,69 @@ Network::GetHandler(uint8* buf,
 {
 	Packetizer *handler = NULL;
 	switch(MAKE_CIV3_ID(buf[0], buf[1])) {
-		case k_PACKET_CELL_ID:                 handler = new NetCellData;           break;
-		case k_PACKET_CELL_LIST_ID:            handler = new NetCellList;           break;
-		case k_PACKET_UNIT_ID:                 handler = new NetUnit;               break;
-		case k_PACKET_ACTION_ID:               handler = new NetAction;             break;
-		case k_PACKET_INFO_ID:                 handler = new NetInfo;               break;
-		case k_PACKET_CITY_ID:                 handler = new NetCity;               break;
-		case k_PACKET_DIFFICULTY_ID:           handler = new NetDifficulty;         break;
-		case k_PACKET_PLAYER_ID:               handler = new NetPlayer;             break;
-		case k_PACKET_TRADE_ROUTE_ID:          handler = new NetTradeRoute;         break;
-		case k_PACKET_TRADE_OFFER_ID:          handler = new NetTradeOffer;         break;
-		case k_PACKET_RAND_ID:                 handler = new NetRand;               break;
-		case k_PACKET_TERRAIN_ID:              handler = new NetTerrainImprovement; break;
-		case k_PACKET_INSTALLATION_ID:         handler = new NetInstallation;       break;
-		case k_PACKET_CHAT_ID:                 handler = new NetChat;               break;
-		case k_PACKET_READINESS_ID:            handler = new NetReadiness;          break;
-		case k_PACKET_HAPPY_ID:                handler = new NetHappy;              break;
-		case k_PACKET_PLAYER_HAPPY_ID:         handler = new NetPlayerHappy;        break;
-		case k_PACKET_REPORT_ID:               handler = new NetReport;             break;
-		case k_PACKET_UNIT_MOVE_ID:            handler = new NetUnitMove;           break;
-		case k_PACKET_UNIT_ORDER_ID:           handler = new NetOrder;              break;
-		case k_PACKET_AGREEMENT_ID:            handler = new NetAgreement;          break;
-		case k_PACKET_CIVILIZATION_ID:         handler = new NetCivilization;       break;
-		case k_PACKET_CITY_NAME_ID:            handler = new NetCityName;           break;
-		case k_PACKET_DIP_PROPOSAL_ID:         handler = new NetDipProposal;        break;
-		case k_PACKET_DIP_RESPONSE_ID:         handler = new NetDipResponse;        break;
-		case k_PACKET_MESSAGE_ID:              handler = new NetMessage;            break;
-		case k_PACKET_CITY2_ID:                handler = new NetCity2;              break;
-		case k_PACKET_POLLUTION_ID:            handler = new NetPollution;          break;
-		case k_PACKET_CITY_BQ_ID:              handler = new NetCityBuildQueue;     break;
-		case k_PACKET_KEYS_ID:                 handler = new NetKeys;               break;
-		case k_PACKET_GAME_SETTINGS_ID:        handler = new NetGameSettings;       break;
-		case k_PACKET_NEW_ARMY_ID:             handler = new NetNewArmy;            break;
-		case k_PACKET_REMOVE_ARMY_ID:          handler = new NetRemoveArmy;         break;
-		case k_PACKET_CRC_ID:                  handler = new NetCRC;                break;
-		case k_PACKET_ARMY_ID:                 handler = new NetArmy;               break;
-		case k_PACKET_WONDER_TRACKER_ID:       handler = new NetWonderTracker;      break;
-		case k_PACKET_ACHIEVEMENT_TRACKER_ID:  handler = new NetAchievementTracker; break;
-		case k_PACKET_VISION_ID:               handler = new NetVision;             break;
-		case k_PACKET_UNSEEN_CELL_ID:          handler = new NetUnseenCell;         break;
-		case k_PACKET_EXCLUSIONS_ID:           handler = new NetExclusions;         break;
-		case k_PACKET_RESOURCES_ID:            handler = new NetCityResources;      break;
-		case k_PACKET_UNIT_HP_ID:              handler = new NetUnitHP;             break;
-		case k_PACKET_CELL_UNIT_ORDER_ID:      handler = new NetCellUnitOrder;      break;
-		case k_PACKET_ADD_PLAYER_ID:           handler = new NetAddPlayer;          break;
-		case k_PACKET_RESEARCH_ID:             handler = new NetResearch;           break;
-		case k_PACKET_GUID_ID:                 handler = new NetGuid;               break;
-		case k_PACKET_STRENGTH_ID:             handler = new NetStrengths;          break;
-		case k_PACKET_FULL_STRENGTHS_ID:       handler = new NetFullStrengths;      break;
-		case k_PACKET_NET_INFO_MESSAGE_ID:     handler = new NetInfoMessage;        break;
-		case k_PACKET_ENDGAME_ID:              handler = new NetEndGame;            break;
-		case k_PACKET_WORMHOLE_ID:             handler = new NetWormhole;           break;
-		case k_PACKET_SET_PLAYER_GUID_ID:      handler = new NetSetPlayerGuid;      break;
-		case k_PACKET_SET_LEADER_NAME_ID:      handler = new NetSetLeaderName;      break;
-		case k_PACKET_WORLD_ID:                handler = new NetWorld;              break;
-		case k_PACKET_DIP_AGREEMENT_MATRIX_ID: handler = new NetAgreementMatrix;    break;
-		case k_PACKET_GROUP_REQUEST_ID:        handler = new NetGroupRequest;       break;
-		case k_PACKET_UNGROUP_REQUEST_ID:      handler = new NetUngroupRequest;     break;
-		case k_PACKET_SCORES_ID:               handler = new NetScores;             break;
+		case k_PACKET_CELL_ID:			handler = new NetCellData; break;
+		case k_PACKET_CELL_LIST_ID:		handler = new NetCellList; break;
+		case k_PACKET_UNIT_ID:			handler = new NetUnit; break;
+		case k_PACKET_ACTION_ID:		handler = new NetAction; break;
+		case k_PACKET_INFO_ID:			handler = new NetInfo; break;
+		case k_PACKET_CITY_ID:			handler = new NetCity; break;
+		case k_PACKET_DIFFICULTY_ID:    handler = new NetDifficulty; break;
+		case k_PACKET_PLAYER_ID:        handler = new NetPlayer; break;
+		case k_PACKET_TRADE_ROUTE_ID:   handler = new NetTradeRoute; break;
+		case k_PACKET_TRADE_OFFER_ID:   handler = new NetTradeOffer; break;
+		case k_PACKET_RAND_ID:          handler = new NetRand; break;
+		case k_PACKET_TERRAIN_ID:       handler = new NetTerrainImprovement; break;
+		case k_PACKET_INSTALLATION_ID:  handler = new NetInstallation; break;
+		case k_PACKET_CHAT_ID:          handler = new NetChat; break;
+		case k_PACKET_READINESS_ID:     handler = new NetReadiness; break;
+		case k_PACKET_HAPPY_ID:         handler = new NetHappy; break;
+		case k_PACKET_PLAYER_HAPPY_ID:  handler = new NetPlayerHappy; break;
+		case k_PACKET_REPORT_ID:        handler = new NetReport; break;
+		case k_PACKET_UNIT_MOVE_ID:     handler = new NetUnitMove; break;
+		case k_PACKET_UNIT_ORDER_ID:    handler = new NetOrder; break;
+		case k_PACKET_AGREEMENT_ID:     handler = new NetAgreement; break;
+		case k_PACKET_CIVILIZATION_ID:  handler = new NetCivilization; break;
+		case k_PACKET_CITY_NAME_ID:     handler = new NetCityName; break;
+		case k_PACKET_DIP_PROPOSAL_ID:  handler = new NetDipProposal; break;
+		case k_PACKET_DIP_RESPONSE_ID:  handler = new NetDipResponse; break;
+		case k_PACKET_MESSAGE_ID:       handler = new NetMessage; break;
+		case k_PACKET_CITY2_ID:         handler = new NetCity2; break;
+		case k_PACKET_POLLUTION_ID:     handler = new NetPollution; break;
+		case k_PACKET_CITY_BQ_ID:       handler = new NetCityBuildQueue; break;
+		case k_PACKET_KEYS_ID:          handler = new NetKeys; break;
+		case k_PACKET_GAME_SETTINGS_ID: handler = new NetGameSettings; break;
+		case k_PACKET_NEW_ARMY_ID:      handler = new NetNewArmy; break;
+		case k_PACKET_REMOVE_ARMY_ID:   handler = new NetRemoveArmy; break;
+		case k_PACKET_CRC_ID:           handler = new NetCRC; break;
+		case k_PACKET_ARMY_ID:          handler = new NetArmy; break;
+		case k_PACKET_WONDER_TRACKER_ID: handler= new NetWonderTracker; break;
+		case k_PACKET_ACHIEVEMENT_TRACKER_ID: handler= new NetAchievementTracker; break;
+		case k_PACKET_VISION_ID:        handler = new NetVision; break;
+		case k_PACKET_UNSEEN_CELL_ID:   handler = new NetUnseenCell; break;
+		case k_PACKET_EXCLUSIONS_ID:    handler = new NetExclusions; break;
+		case k_PACKET_RESOURCES_ID:     handler = new NetCityResources; break;
+		case k_PACKET_UNIT_HP_ID:       handler = new NetUnitHP; break;
+		case k_PACKET_CELL_UNIT_ORDER_ID: handler = new NetCellUnitOrder; break;
+		case k_PACKET_ADD_PLAYER_ID:    handler = new NetAddPlayer; break;
+		case k_PACKET_RESEARCH_ID:      handler = new NetResearch; break;
+		case k_PACKET_GUID_ID:          handler = new NetGuid; break;
+		case k_PACKET_STRENGTH_ID:      handler = new NetStrengths; break;
+		case k_PACKET_FULL_STRENGTHS_ID: handler = new NetFullStrengths; break;
+		case k_PACKET_NET_INFO_MESSAGE_ID: handler = new NetInfoMessage; break;
+		case k_PACKET_ENDGAME_ID:       handler = new NetEndGame; break;
+		case k_PACKET_WORMHOLE_ID:      handler = new NetWormhole; break;
+		case k_PACKET_SET_PLAYER_GUID_ID: handler = new NetSetPlayerGuid; break;
+		case k_PACKET_SET_LEADER_NAME_ID: handler = new NetSetLeaderName; break;
+		case k_PACKET_WORLD_ID:           handler = new NetWorld; break;
+		case k_PACKET_DIP_AGREEMENT_MATRIX_ID: handler = new NetAgreementMatrix; break;
+		case k_PACKET_GROUP_REQUEST_ID: handler = new NetGroupRequest; break;
+		case k_PACKET_UNGROUP_REQUEST_ID: handler = new NetUngroupRequest; break;
+		case k_PACKET_SCORES_ID:          handler = new NetScores; break;
 
-		case k_PACKET_FEAT_TRACKER_ID:         handler = new NetFeatTracker();      break;
+		case k_PACKET_FEAT_TRACKER_ID:	handler = new NetFeatTracker(); break;
 
 #ifdef _DEBUG
-		case k_PACKET_CHEAT_ID:                handler = new NetCheat;              break;
+		case k_PACKET_CHEAT_ID:         handler = new NetCheat; break;
 #endif
 	}
 	if(handler) {
@@ -1095,9 +1049,9 @@ Network::GetHandler(uint8* buf,
 }
 
 
-void Network::PacketReady(sint32 from,
-                          uint8* buf,
-                          sint32 size)
+void Network::PacketReady(sint32 from, 
+						  uint8* buf, 
+						  sint32 size) 
 {
 	if(m_deleting)
 		return;
@@ -1118,8 +1072,8 @@ void Network::PacketReady(sint32 from,
 }
 
 
-void Network::AddPlayer(uint16 id,
-                        char* name)
+void Network::AddPlayer(uint16 id, 
+						char* name) 
 {
 	if(m_iAmHost) {
 		QueuePacketToAll(new NetAddPlayer(id, name));
@@ -1128,7 +1082,7 @@ void Network::AddPlayer(uint16 id,
 	for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
 		if(m_playerData[i] && m_playerData[i]->m_id == id) {
 			DPRINTF(k_DBG_NET, ("AddPlayer(%d) but already have that player.\n",
-			                    id));
+								id));
 			return;
 		}
 	}
@@ -1137,7 +1091,7 @@ void Network::AddPlayer(uint16 id,
 	while(walk.IsValid()) {
 		if(walk.GetObj()->m_id == id) {
 			DPRINTF(k_DBG_NET, ("AddPlayer(%d), but player %d (%s) is already in the new player list\n",
-			                    id, name));
+								id, name));
 			return;
 		}
 		walk.Next();
@@ -1293,9 +1247,12 @@ void Network::ChangeHost(uint16 id)
 	m_hostId = id;
 	const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_FOR_DATA");
 	char nonConstStr[1024];
-	if(str)
+	if(str) {
 		strcpy(nonConstStr, str);
-	c3_AbortMessage(str ? nonConstStr : "Waiting on data", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
+	} else {
+		strcpy(nonConstStr, "Waiting on data");
+}
+	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
 }
 
 void Network::SessionLost()
@@ -1337,16 +1294,16 @@ void Network::SetReady(uint16 id)
 	QueuePacket(player->m_id, new NetCRC());
 
 	QueuePacket(player->m_id, new NetGameSettings(size->x, size->y,
-	                                              g_theProfileDB->GetNPlayers(),
-	                                              m_gameStyle,
-	                                              m_unitMovesPerSlice,
-	                                              m_totalStartTime,
-	                                              m_turnStartTime,
-	                                              m_extraTimePerCity));
+												  g_theProfileDB->GetNPlayers(),
+												  m_gameStyle,
+												  m_unitMovesPerSlice,
+												  m_totalStartTime,
+												  m_turnStartTime,
+												  m_extraTimePerCity));
 
 	
 	NetInfo* netInfo = new NetInfo(NET_INFO_CODE_PLAYER_INDEX, 
-	                               index, player->m_id);
+								   index, player->m_id);
 	QueuePacket(player->m_id, netInfo);
 		
 	SetupPlayerFromNSPlayerInfo(player->m_id, index);
@@ -1356,7 +1313,7 @@ void Network::SetReady(uint16 id)
 		if(!g_player[i]) continue;
 		if(m_playerData[i] && i != index) {
 			NetInfo* netInfo2 = new NetInfo(NET_INFO_CODE_PLAYER_INDEX,
-			                                i, m_playerData[i]->m_id);
+											i, m_playerData[i]->m_id);
 			QueuePacket(player->m_id, netInfo2);
 		}
 	}
@@ -1369,8 +1326,8 @@ void Network::SetReady(uint16 id)
 		}
 		if(g_tiledMap) {
 			g_tiledMap->NextPlayer();
-			g_tiledMap->CopyVision();
-			g_tiledMap->InvalidateMix();
+            g_tiledMap->CopyVision();
+            g_tiledMap->InvalidateMix();
 			g_tiledMap->InvalidateMap();
 			g_tiledMap->Refresh();
 		}
@@ -1468,7 +1425,7 @@ void Network::SetReady(uint16 id)
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
 		
-		chunkPackets.AddTail(new NetSetPlayerGuid(p));
+		chunkPackets.AddTail( new NetSetPlayerGuid(p));
 
 		
 		UnitDynamicArray *unitList = g_player[p]->GetAllCitiesList();
@@ -1477,14 +1434,14 @@ void Network::SetReady(uint16 id)
 			unitData = g_theUnitPool->GetUnit(unitList->Get(n).m_id);
 
 			
-			chunkPackets.AddTail(new NetUnit(unitData));
+			chunkPackets.AddTail( new NetUnit(unitData));
 
 			
-			chunkPackets.AddTail(new NetCity(unitData, TRUE));
-			chunkPackets.AddTail(new NetCityName(unitData->GetCityData()));
-			chunkPackets.AddTail(new NetCity2(unitData->GetCityData(), TRUE));
-			chunkPackets.AddTail(new NetCityBuildQueue(unitData->GetCityData()));
-			chunkPackets.AddTail(
+			chunkPackets.AddTail( new NetCity(unitData, TRUE));
+			chunkPackets.AddTail( new NetCityName(unitData->GetCityData()));
+			chunkPackets.AddTail( new NetCity2(unitData->GetCityData(), TRUE));
+			chunkPackets.AddTail( new NetCityBuildQueue(unitData->GetCityData()));
+			chunkPackets.AddTail( 
 						new NetHappy(unitList->Get(n), 
 									 unitData->GetCityData()->GetHappy(),
 									 TRUE));
@@ -1498,16 +1455,16 @@ void Network::SetReady(uint16 id)
 		
 		unitList = g_player[p]->GetAllUnitList();
 		for(n = 0; n < unitList->Num(); n++) {
-			chunkPackets.AddTail(new NetUnit(g_theUnitPool->GetUnit(unitList->Get(n).m_id)));
+			chunkPackets.AddTail( new NetUnit(g_theUnitPool->GetUnit(unitList->Get(n).m_id)));
 		}
 
 		
 		for(n = 0; n < g_player[p]->m_all_armies->Num(); n++) {
 			Army army = g_player[p]->m_all_armies->Access(n);
-			chunkPackets.AddTail(
+			chunkPackets.AddTail( 
 						new NetArmy(g_theArmyPool->AccessArmy(army)));
 
-			chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_ADD_ARMY,
+			chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_ADD_ARMY,
 												  p,
 												  CAUSE_NEW_ARMY_INITIAL,
 												  g_player[p]->m_all_armies->Access(n)));
@@ -1517,7 +1474,7 @@ void Network::SetReady(uint16 id)
 				const Order *order = army.GetOrder(m);
 				Assert(order);
 				if(order) {
-					chunkPackets.AddTail(new NetOrder(p,
+					chunkPackets.AddTail( new NetOrder(p,
 														   army,
 														   order->m_order,
 														   order->m_path,
@@ -1534,32 +1491,32 @@ void Network::SetReady(uint16 id)
 		for(n = 0; n < traderList->Num(); n++) {
 			UnitData* unitData;
 			unitData = g_theUnitPool->GetUnit(traderList->Get(n).m_id);
-			chunkPackets.AddTail(new NetUnit(unitData));
+			chunkPackets.AddTail( new NetUnit(unitData));
 		}
 
 		
 		n = g_player[p]->m_terrainImprovements->Num();
 		for(i = 0; i < n; i++) {
-			chunkPackets.AddTail(new NetTerrainImprovement(g_player[p]->m_terrainImprovements->Access(i).AccessData()));
+			chunkPackets.AddTail( new NetTerrainImprovement(g_player[p]->m_terrainImprovements->Access(i).AccessData()));
 		}
 
 		
 		n = g_player[p]->m_allInstallations->Num();
 		for(i = 0; i < n; i++) {
-			chunkPackets.AddTail(new NetInstallation(g_player[p]->m_allInstallations->Access(i).AccessData()));
+			chunkPackets.AddTail( new NetInstallation(g_player[p]->m_allInstallations->Access(i).AccessData()));
 		}
 
 		
-		chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_GOLD,
-		                                 p, g_player[p]->m_gold->GetLevel()));
+		chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_GOLD,
+											  p, g_player[p]->m_gold->GetLevel()));
 		
-		chunkPackets.AddTail(new NetReadiness(g_player[p]->m_readiness));
+		chunkPackets.AddTail( new NetReadiness(g_player[p]->m_readiness));
 
 		
-		chunkPackets.AddTail(new NetPlayerHappy((uint8)p, g_player[p]->m_global_happiness, TRUE));
+		chunkPackets.AddTail( new NetPlayerHappy((uint8)p, g_player[p]->m_global_happiness, TRUE));
 		
 		
-		chunkPackets.AddTail(new NetCivilization(g_player[p]->m_civilisation->AccessData()));
+		chunkPackets.AddTail( new NetCivilization(g_player[p]->m_civilisation->AccessData()));
 
 		
 		
@@ -1573,11 +1530,11 @@ void Network::SetReady(uint16 id)
 		g_player[p]->m_vision->GetUnseenCellList(array);
 		n = array.Num();
 		for(i = 0; i < n; i++) {
-			chunkPackets.AddTail(new NetUnseenCell(array[i].m_unseenCell,
-			                                       p));
+			chunkPackets.AddTail( new NetUnseenCell(array[i].m_unseenCell,
+														p));
 		}
 
-		chunkPackets.AddTail(new NetEndGame(p));
+		chunkPackets.AddTail( new NetEndGame(p));
 
 		playerPercent += percentPerPlayer;
 		CPROGRESS(55 + static_cast<uint32>(playerPercent * 30));
@@ -1587,19 +1544,19 @@ void Network::SetReady(uint16 id)
 
 	PROGRESS(85);
 
-	chunkPackets.AddTail(new NetWormhole());
+	chunkPackets.AddTail( new NetWormhole());
 
-	chunkPackets.AddTail(new NetPollution());
+	chunkPackets.AddTail( new NetPollution());
 
-	chunkPackets.AddTail(new NetWonderTracker());
-	chunkPackets.AddTail(new NetAchievementTracker());
-	chunkPackets.AddTail(new NetFeatTracker());
-	chunkPackets.AddTail(new NetExclusions());
+	chunkPackets.AddTail( new NetWonderTracker());
+	chunkPackets.AddTail( new NetAchievementTracker());
+	chunkPackets.AddTail( new NetFeatTracker());
+	chunkPackets.AddTail( new NetExclusions());
 
-	chunkPackets.AddTail(new NetWorld());
+	chunkPackets.AddTail( new NetWorld());
 	n = g_theTradePool->m_all_routes->Num();
 	for(i = 0; i < n; i++) {
-		chunkPackets.AddTail(new NetTradeRoute(g_theTradePool->m_all_routes->Access(i).AccessData(), false));
+		chunkPackets.AddTail( new NetTradeRoute(g_theTradePool->m_all_routes->Access(i).AccessData(), false));
 	}
 
 	PROGRESS(90);
@@ -1608,26 +1565,26 @@ void Network::SetReady(uint16 id)
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
 			if(g_theWorld->GetCell(x, y)->GetNumUnits() >= 2) {
-				chunkPackets.AddTail(new NetCellUnitOrder(x, y));
+				chunkPackets.AddTail( new NetCellUnitOrder(x, y));
 			}
 		}
 	}
 
 	
-	chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_END_UNITS, 
+	chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_END_UNITS, 
 										  g_theUnitPool->HackGetKey(),
 										  g_theArmyPool->HackGetKey()));
 	
 	PROGRESS(95);
 
-	chunkPackets.AddTail(new NetAgreementMatrix);
+	chunkPackets.AddTail( new NetAgreementMatrix);
 
-	chunkPackets.AddTail(new NetRand());
+	chunkPackets.AddTail( new NetRand());
 
-	chunkPackets.AddTail(new NetKeys());
-	chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_YEAR,
-	                                 g_turn->GetRound(),
-	                                 g_turn->GetYear()));
+	chunkPackets.AddTail( new NetKeys());
+	chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_YEAR,
+										  g_turn->GetRound(),
+										  g_turn->GetYear()));
 
 	ChunkList(player->m_id, &chunkPackets);
 	Assert(!chunkPackets.GetHead());
@@ -1636,26 +1593,26 @@ void Network::SetReady(uint16 id)
 		sint32 index = IdToIndex(player->m_id);
 		MapPoint center = g_player[index]->m_setupCenter;
 		QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_SETUP_MODE,
-		                                      m_setupMode));
+											  m_setupMode));
 		QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_SETUP_AREA,
-		                                      index,
-		                                      center.x, center.y,
-		                                      g_player[index]->m_setupRadius));
+											  index,
+											  center.x, center.y,
+											  g_player[index]->m_setupRadius));
 		QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_POWER_POINTS,
-		                                      index,
-		                                      g_player[index]->m_powerPoints));
+											  index,
+											  g_player[index]->m_powerPoints));
 	}
 
 	PROGRESS(100);
 
 	SendJoinedMessage(player->m_name, index);
 	QueuePacket(player->m_id, new NetInfoMessage(NET_MSG_PLAYER_JOINED,
-	                                             m_playerData[m_playerIndex]->m_name,
-	                                             m_playerIndex));
+												 m_playerData[m_playerIndex]->m_name,
+												 m_playerIndex));
 
 	
 	QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_TURN,
-	                                      g_selected_item->GetCurPlayer()));
+										  g_selected_item->GetCurPlayer()));
 
 	if(index == g_selected_item->GetCurPlayer()) {
 		player->m_ackBeginTurn = TRUE;
@@ -1961,16 +1918,16 @@ Network::SendActionBookmark(NetAction* netAction)
 
 void
 Network::SendOrder(sint32 owner, const Army &army, UNIT_ORDER_TYPE o,
-                   Path *a_path, const MapPoint &point, sint32 arg,
-                   GAME_EVENT event)
+				   Path *a_path, const MapPoint &point, sint32 arg,
+				   GAME_EVENT event)
 {
 	if(m_hostId == 0) {
 		m_netIO->GetHostId(m_hostId);
 	}
 
 	QueuePacket(m_hostId, new NetOrder(owner, army, 
-	                                   o, a_path, point,
-	                                   arg, event));
+									   o, a_path, point,
+									   arg, event));
 }
 
 void Network::SendToServer(Packetizer *packet)
@@ -1984,9 +1941,9 @@ void Network::SendToServer(Packetizer *packet)
 
 void
 Network::QueuePacket(uint16 id, 
-                     Packetizer* packet) 
+					 Packetizer* packet) 
 {
-	PacketManager l_AutoRelease(packet);
+	PacketManager	l_AutoRelease(packet);
 
 	if(m_iAmClient && m_waitingOnResync)
 		return;
@@ -2017,7 +1974,7 @@ Network::QueuePacket(uint16 id,
 		}
 		packet->AddRef();
 	}
-	ProcessSends();
+	ProcessSends(); 
 }
 
 
@@ -2102,7 +2059,7 @@ Network::QueuePacketToAll(Packetizer* packet)
 			}
 		}
 	}
-	ProcessSends();
+	ProcessSends(); 
 
 }
 
@@ -2444,8 +2401,8 @@ Network::ProcessNewPlayer(uint16 id)
 				g_director->NextPlayer();
 			}
 			if(g_tiledMap) {
-				g_tiledMap->NextPlayer();
-				g_tiledMap->CopyVision();
+                g_tiledMap->NextPlayer();
+                g_tiledMap->CopyVision();
 				g_tiledMap->InvalidateMix();
 				g_tiledMap->InvalidateMap();
 				g_tiledMap->Refresh();
@@ -2630,7 +2587,7 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 
 	NetChat *chatPacket = new NetChat(m_chatMask, str, (sint16)len);
 	chatPacket->AddRef();
-	if (IsActive()) {
+    if (IsActive()) {
 #if 0
 		MBCHAR tempStr[_MAX_PATH];
 		memcpy(tempStr, str, len);
@@ -2928,8 +2885,8 @@ PlayerData::PlayerData(char* name, uint16 id) :
 	m_id(id),
 	m_index(-1),
 	m_frozen(FALSE),
-	m_blocked(0),
 	m_ready(FALSE),
+	m_blocked(0),
 	m_ackBeginTurn(FALSE)
 {
 	if(name) {
@@ -3684,14 +3641,17 @@ void Network::SetProgress(sint32 progress)
 		return;
 
 	m_progress = progress;
-	c3_AbortUpdateData(NULL, (progress > 100 ? 100 : progress) );
+	c3_AbortUpdateData( NULL, (progress > 100 ? 100 : progress) );
 	if(m_progress >= 100) {
 		const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
 		
 		char nonConstStr[1024];
-		if(str)
+		if(str) {
 			strcpy(nonConstStr, str);
-		c3_AbortUpdateData(str ? nonConstStr : "Waiting on players", 100);
+	} else {
+			strcpy(nonConstStr, "Waiting on players");
+		}
+		c3_AbortUpdateData(nonConstStr, 100);
 	} else {
 		c3_AbortUpdateData(NULL, progress);
 
@@ -3932,9 +3892,12 @@ void Network::StartResync()
 
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");
 	char nonConstStr[1024];
-	if(str)
+	if(str) {
 		strcpy(nonConstStr, str);
-	c3_AbortMessage(str ? nonConstStr : "Resyncing", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
+	} else {
+		strcpy(nonConstStr, "Resyncing");
+	}
+	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
 
 	if(g_gevManager)
 		g_gevManager->NotifyResync();
@@ -3967,9 +3930,12 @@ void Network::RequestResync(RESYNC_REASON reason)
 	m_readyToStart = FALSE;
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");
 	char nonConstStr[1024];
-	if(str)
+	if(str) {
 		strcpy(nonConstStr, str);
-	c3_AbortMessage(str ? nonConstStr : "Resyncing", k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
+	} else {
+		strcpy(nonConstStr, "Resyncing");
+	}
+	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
 
 	SendAction(new NetAction(NET_ACTION_REQUEST_RESYNC, reason));
 

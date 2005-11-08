@@ -357,10 +357,13 @@ void NetCRC::Error(char *buf)
 	DPRINTF(k_DBG_NET, ("NetCRC: %s\n", buf));
 	const char *str = g_theStringDB->GetNameStr("str_ldl_mp_dbase_out_of_synch");
 	char nonConstStr[1024];
-	if(str)
+	if (str) {
 		strcpy(nonConstStr, str);
+	} else {
+		strcpy(nonConstStr, "Databases out of sync, returning to lobby");
+	}
 	c3_RemoveAbortMessage();
 	g_civApp->ProcessGraphicsCallback();
-	c3_AbortMessage( str ? nonConstStr : "Databses out of sync, returning to lobby" , k_UTILITY_ABORT, network_AbortCallback );
+	c3_AbortMessage(nonConstStr, k_UTILITY_ABORT, network_AbortCallback );
 	g_network.SetCRCError();
 }

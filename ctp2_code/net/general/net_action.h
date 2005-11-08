@@ -1,19 +1,10 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _NET_ACTION_H_
 #define _NET_ACTION_H_
 
-#include "net_packet.h"
-#include "MapPoint.h"
+class NetAction;
 
 enum NET_ACTION {
 	NET_ACTION_MOVE_UNIT,
@@ -191,21 +182,22 @@ enum NET_ACTION {
 
 #define k_MAX_NET_ACTION_ARGS 7
 
+#include "net_packet.h"     // Packetizer
+#include "ctp2_inttypes.h"  // uint<n>
+
 class NetAction : public Packetizer
 {
 public:
-	
 	NetAction(NET_ACTION action, ...);
 	NetAction();
 
 	void Packetize(uint8* buf, uint16& size);
 	void Unpacketize(uint16 id, uint8* buf, uint16 size);
+
 private:
 	NET_ACTION m_action;
 	uint32 m_data[k_MAX_NET_ACTION_ARGS];
 	static const uint32 m_args[NET_ACTION_NULL];
 };
 
-#else
-class NetAction;
 #endif

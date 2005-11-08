@@ -26,7 +26,7 @@
 
 #include "Cell.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "ctpai.h"
 
 extern UnitPool* g_theUnitPool;

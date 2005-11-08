@@ -1,5 +1,7 @@
 #include "c3.h"
 #include "Cell.h"
+
+#include "Globals.h"        // k_GAME_OBJ_TERRAIN_IMPROVEMENT
 #include "net_cell.h"
 #include "net_util.h"
 #include "network.h"
@@ -12,8 +14,6 @@
 #include "TradeDynArr.h"
 #include "ObjPool.h"
 #include "TerrImprovePool.h"
-
-#include "XY_Coordinates.h"
 #include "World.h"
 
 #define SEND_MOVE_COST

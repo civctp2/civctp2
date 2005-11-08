@@ -58,7 +58,7 @@
 #include "QuadTree.h"
 #include "Vision.h"
 #include "TaxRate.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Sci.h"
 #include "message.h"
 #include "MessagePool.h"
@@ -93,13 +93,11 @@ extern C3UI					*g_c3ui;
 #include "radarmap.h"
 #include "radarwindow.h"
 #include "director.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "CivPaths.h"
 #include "installationpool.h"
 #include "soundmanager.h"
 #include "gamesounds.h"
-#include "aicause.h"
-
 #include "HappyTracker.h"
 #include "WonderTracker.h"
 #include "AchievementTracker.h"
@@ -109,7 +107,7 @@ extern C3UI					*g_c3ui;
 #include "SlicObject.h"
 #include "TradePool.h"
 
-#include "globals.h"
+#include "Globals.h"
 
 #include "wonderutil.h"
 
@@ -1221,8 +1219,9 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				TradeOffer offer(m_data2);
 				Assert(g_theTradeOfferPool->IsValid(offer));
 				if(g_theTradeOfferPool->IsValid(offer)) {
-					g_player[m_data]->AcceptTradeOffer(offer, Unit(m_data3),
-													   Unit(m_data4));
+					Unit unit1(m_data3);
+					Unit unit2(m_data4);
+					g_player[m_data]->AcceptTradeOffer(offer, unit1, unit2);
 				}
 			}
 			break;
@@ -1733,7 +1732,8 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 
 			Army army(m_data);
-			army->GroupUnit(Unit(m_data2));
+			Unit unit(m_data2);
+			army->GroupUnit(unit);
 
 			if(army.GetOwner() == g_selected_item->GetVisiblePlayer()) {
 				

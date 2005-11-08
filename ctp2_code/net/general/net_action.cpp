@@ -24,12 +24,13 @@
 //   the city to another player (bug #26)
 //
 //----------------------------------------------------------------------------
+
 #include "c3.h"
+#include "net_action.h"
 
 #include "Cell.h"
 
 #include "network.h"
-#include "net_action.h"
 #include "net_util.h"
 #include "net_info.h"
 #include "net_rand.h"
@@ -46,7 +47,7 @@
 #include "installation.h"
 #include "TerrImprove.h"
 #include "installationpool.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "DiplomaticRequest.h"
 #include "DiplomaticRequestPool.h"
 #include "message.h"
@@ -54,13 +55,13 @@
 #include "UnitData.h"
 #include "citydata.h"
 #include "TurnCnt.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "Advances.h"
 #include "MaterialPool.h"
 #include "TerrImprovePool.h"
 #include "net_playerdata.h"
 #include "UnitPool.h"
-#include "order.h"
+#include "Order.h"
 #include "ArmyPool.h"
 #include "tiledmap.h"
 #include "radarmap.h"
@@ -289,8 +290,9 @@ const uint32 NetAction::m_args[NET_ACTION_NULL] = {
 };
 
 
-NetAction::NetAction(NET_ACTION action, ...) :
-	m_action(action)
+NetAction::NetAction(NET_ACTION action, ...)
+:
+	m_action    (action)
 {
 	va_list vl;
 	uint32 i;
@@ -316,12 +318,13 @@ NetAction::NetAction(NET_ACTION action, ...) :
 }
 
 NetAction::NetAction()
+:
+    m_action    (NET_ACTION_NULL)
 {
 }
 
 
-void
-NetAction::Packetize(uint8* buf, uint16& size)
+void NetAction::Packetize(uint8* buf, uint16& size)
 {
 	buf[0] = 'A';
 	buf[1] = 'A';
@@ -436,7 +439,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_BUILD:
 			DPRINTF(k_DBG_NET, ("Server: Building unit type %d at city %d\n", m_data[0], m_data[1]));
 			if(g_player[index]) {
-				g_player[index]->BuildUnit(m_data[0], Unit(m_data[1]));
+				Unit unit = Unit(m_data[1]);
+				g_player[index]->BuildUnit(m_data[0], unit);
 			}
 			break;
 		case NET_ACTION_TAX_RATES:
@@ -455,8 +459,10 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_BUILD_IMP:
 			DPRINTF(k_DBG_NET, ("Server: Building improvement %d at city %d\n",
 								m_data[0], m_data[1]));
-			if(g_player[index])
-				g_player[index]->BuildImprovement(m_data[0], Unit(m_data[1]));
+			if(g_player[index]) {
+				Unit unit(m_data[1]);
+				g_player[index]->BuildImprovement(m_data[0], unit);
+			}
 			break;
 		case NET_ACTION_CREATE_TRADE_ROUTE:
 		{
@@ -476,7 +482,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 						m_data[5],
 						m_data[6]);
 				g_network.Unblock(index);
-				Assert(route != TradeRoute(0));
+				Assert(route.IsValid());
 			}
 
 			if((uint32)route != m_data[4]) {
@@ -486,7 +492,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(g_theTradePool->IsValid(otherRoute))
 					g_network.QueuePacket(id, new NetTradeRoute(otherRoute.AccessData(), true));
 
-				if(route != TradeRoute(0)) {
+				if (route.IsValid()) 
+                {
 					g_network.QueuePacket(id, new NetTradeRoute(route.AccessData(), true));
 				}
 			} else {
@@ -1254,7 +1261,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_CHANGE_BUILD:
 		{
 			if(g_player[index]) {
-				g_player[index]->ChangeCurrentlyBuildingItem(Unit(m_data[0]), m_data[1], m_data[2]);
+				Unit unit(m_data[0]);
+				g_player[index]->ChangeCurrentlyBuildingItem(unit, m_data[1], m_data[2]);
 			}
 			break;
 		}
@@ -1562,7 +1570,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_network.QueuePacket(id, new NetInfo(NET_INFO_CODE_ACK_OBJECT,
 													  m_data[0]));
 			} else {
-				c3errors_ErrorDialog("NET TESTING", "NAK: Army 0x%lx should be 0x%lx", m_data[0], pd->m_createdArmies[0]);
+				c3errors_ErrorDialog("NET TESTING", "NAK: Army 0x%lx should be 0x%lx",
+					m_data[0], pd->m_createdArmies[0].m_id);
 				g_network.QueuePacket(id,
 									  new NetInfo(NET_INFO_CODE_NAK_OBJECT,
 												  m_data[0], (uint32)pd->m_createdArmies[0]));
@@ -1708,8 +1717,11 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Client %d takes trade offer %lx\n", index, m_data[0]));
 			TradeOffer offer(m_data[0]);
 			if(g_theTradeOfferPool->IsValid(offer)) {
-				if(g_player[index])
-					g_player[index]->AcceptTradeOffer(offer, Unit(m_data[1]), Unit(m_data[2]));
+				if(g_player[index]) {
+					Unit unit1(m_data[1]);
+					Unit unit2(m_data[2]);
+					g_player[index]->AcceptTradeOffer(offer, unit1, unit2);
+				}
 			}
 			break;
 		}

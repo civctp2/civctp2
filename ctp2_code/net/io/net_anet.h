@@ -1,7 +1,8 @@
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _ANETIO_H_
 #define _ANETIO_H_
 
@@ -104,7 +105,7 @@ private:
 	friend int dp_PASCAL anet_CreateSessionCallback(dp_session_t *ps,
 												 sint32 *pTimeout,
 												 sint32 flags,
-												 void* context);
+							 void* context);
 
 	void PlayerReady(dpid_t id, char_t *name, sint32 flags);
 	friend void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, char_t *name,
@@ -113,9 +114,9 @@ private:
 
 	void PlayerCallback(dpid_t id, dp_char_t *name,	long flags);
 	friend void dp_PASCAL anet_EnumPlayers(dpid_t id,
-								dp_char_t *name,
-								long flags,
-								void *context);
+						dp_char_t *name,
+						long flags,
+						void *context);
 };
 
 #endif

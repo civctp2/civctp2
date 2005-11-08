@@ -46,7 +46,7 @@
 
 #include "UnitPool.h"
 #include "player.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "Unit.h"
 #include "BldQue.h"
 
@@ -453,10 +453,6 @@ void NetCity2::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLBYTETYPE(m_data->m_franchise_owner, sint8);
 	PULLBYTETYPE(m_data->m_franchiseTurnsRemaining, sint8);
-	
-#ifdef _DEBUG
-	
-#endif
 	PULLBYTETYPE(m_data->m_watchfulTurns, sint8);
 	PULLBYTETYPE(m_data->m_bioInfectionTurns, sint8);
 	PULLBYTETYPE(m_data->m_nanoInfectionTurns, sint8);
