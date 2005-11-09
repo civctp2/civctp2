@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Battle view actor handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -45,7 +45,6 @@ extern SpriteGroupList  *g_unitSpriteGroupList;
 extern TiledMap         *g_tiledMap;
 extern UnitPool         *g_theUnitPool;
 extern SoundManager     *g_soundManager;
-extern ColorSet         *g_colorSet;
 
 BattleViewActor::BattleViewActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner)
 : Actor(ss)
@@ -122,14 +121,11 @@ BattleViewActor::~BattleViewActor()
 
 void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 {
-	Anim		*anim;
+	Anim * anim = CreateAnim(UNITACTION_IDLE);
 
-	anim = GetAnim(UNITACTION_IDLE);
-
-	
 	if (anim == NULL) 
 	{
-		anim = GetAnim(UNITACTION_MOVE);
+		anim = CreateAnim(UNITACTION_MOVE);
 		Assert(anim != NULL);
 	}
 
@@ -276,7 +272,7 @@ void BattleViewActor::AddAction(Action *actionObj)
 
 }
 
-Anim *BattleViewActor::GetAnim(UNITACTION action)
+Anim *BattleViewActor::CreateAnim(UNITACTION action)
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return NULL;
@@ -302,9 +298,7 @@ Anim *BattleViewActor::GetAnim(UNITACTION action)
 		}
 	}
 
-	Anim	*anim = new Anim();
-	*anim = *origAnim;
-	anim->SetSpecialCopyDelete(ANIMXEROX_COPY);
+	Anim * anim = new Anim(*origAnim);
 
 	if(action == UNITACTION_IDLE)
 	{

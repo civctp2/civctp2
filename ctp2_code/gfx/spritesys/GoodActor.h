@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GOODACTOR_H__
 #define __GOODACTOR_H__
 
@@ -45,7 +46,7 @@ public:
 
 	void			DumpAllActions();
 
-	Anim			*GetAnim(GOODACTION action);
+	Anim *          CreateAnim(GOODACTION action);
 
 	void			DrawSelectionBrackets(void);
 	BOOL			Draw(BOOL fogged = FALSE);

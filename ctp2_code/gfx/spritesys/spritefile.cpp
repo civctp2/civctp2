@@ -991,16 +991,11 @@ void SpriteFile::ReadSpriteDataGeneral(FacedSpriteWshadow **sprite)
 
 void SpriteFile::ReadAnimDataBasic(Anim *a)
 {
-	
-	
-	uint16		*u;
-
 	ReadAnimDataFull(a);
 
-	
 	a->SetPlaybackTime(a->GetPlaybackTime() / a->GetNumFrames());
 	a->SetNumFrames(1);
-	u = a->GetFrames();
+	uint16 *    u = a->GetFrames();
 	u[0] = 0;
 }
 
@@ -1075,7 +1070,7 @@ SPRITEFILEERR SpriteFile::Create(SPRITEFILETYPE type,unsigned version,unsigned c
 #else
 	MBCHAR fullPath[_MAX_PATH];
 	g_civPaths->GetSpecificPath(C3DIR_SPRITES, fullPath, FALSE);
-	sprintf(path, "%s\\%s", fullPath, m_filename);
+	sprintf(path, "%s%s%s", fullPath, FILE_SEP, m_filename);
 #endif
 
     if (m_file)
@@ -1470,9 +1465,6 @@ SPRITEFILEERR SpriteFile::CloseWrite()
 
 SPRITEFILEERR SpriteFile::Open(SPRITEFILETYPE *type)
 {
-	SPRITEFILEERR	err;
-	uint32			data;
-
 	if (m_file)
     {
         c3files_fclose(m_file);
@@ -1482,8 +1474,8 @@ SPRITEFILEERR SpriteFile::Open(SPRITEFILETYPE *type)
 	Assert(m_file != NULL);
 	if (m_file == NULL) return SPRITEFILEERR_NOOPEN;
 
-	
-	err = ReadData((void *)&data, sizeof(data));
+	uint32			data;
+	SPRITEFILEERR	err = ReadData((void *)&data, sizeof(data));
 
 	if (data != k_SPRITEFILE_TAG) 
 	{
@@ -1494,10 +1486,7 @@ SPRITEFILEERR SpriteFile::Open(SPRITEFILETYPE *type)
 	
 	err = ReadData((void *)&data, sizeof(data));
 
-
 	m_version = data;
-
-	
 	switch(m_version)
 	{
 	   case k_SPRITEFILE_VERSION2: 

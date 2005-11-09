@@ -41,7 +41,7 @@
 
 #include "tech_wllist.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include "player.h"
 #include "dynarr.h"
 #include "UnitPool.h"
@@ -109,8 +109,6 @@ extern RadarMap			*g_radarMap;
 extern TiledMap			*g_tiledMap;
 extern UnitPool			*g_theUnitPool;
 extern Background		*g_background;
-extern ColorSet			*g_colorSet;
-
 extern SelectedItem		*g_selected_item;
 extern SoundManager		*g_soundManager;
 
@@ -146,10 +144,10 @@ BOOL					g_useHandler = FALSE;
 DQItem::DQItem(DQITEM_TYPE type, DQAction *action, DQHandler *handler)
 :
 m_type(type),
-m_action(action),
-m_handler(handler),
 m_addedToSavedList(FALSE),
-m_owner(-1)
+m_owner(-1),
+m_action(action),
+m_handler(handler)
 {
 	m_sequence = g_director->NewSequence();
 	m_sequence->SetItem(this);
@@ -160,11 +158,8 @@ m_owner(-1)
 DQItem::~DQItem()
 {
 	//DPRINTF(k_DBG_GAMESTATE, ("Deleting item @ %lx, type=%d\n", this, m_type));
-	if (m_sequence)
-		delete m_sequence;
-
-	if (m_action)
-		delete m_action;
+	delete m_sequence;
+	delete m_action;
 }
 
 #define k_MAX_DISPATCHED_QUEUE_ITEMS		1000
@@ -215,41 +210,20 @@ Director::Director(void)
 
 Director::~Director(void)
 {
-	if (m_dispatchedItems)
-		delete m_dispatchedItems;
-
-	if (m_itemQueue)
-		delete m_itemQueue;
-
-	if (m_savedItems)
-		delete m_savedItems;
-
-	if (m_itemWalker)
-		delete m_itemWalker;
-
-	if (m_activeUnitList) delete m_activeUnitList;
-	m_activeUnitList = NULL;
-
-
-
-
-	if (m_activeEffectList) delete m_activeEffectList;
-		m_activeEffectList = NULL;
-
-	if (m_tradeActorList) delete m_tradeActorList;
-	m_tradeActorList = NULL;
-	
-	m_masterCurTime = 0;
+	delete m_dispatchedItems;
+	delete m_itemQueue;
+	delete m_savedItems;
+	delete m_itemWalker;
+    delete m_activeUnitList;
+    delete m_activeEffectList;
+    delete m_tradeActorList;
 }
 
 void Director::Kill(UnitActor *actor)
 {
-	ListPos		pos;
-
-	
 	actor->DumpAllActions();
 
-	pos = m_activeUnitList->Find(actor, m_activeUnitList->GetHeadPosition());
+	ListPos pos = m_activeUnitList->Find(actor, m_activeUnitList->GetHeadPosition());
 	if (pos) 
 	{
 		if (m_processingActiveUnits) {
@@ -257,7 +231,7 @@ void Director::Kill(UnitActor *actor)
 		} else {
 			m_activeUnitList->DeleteAt(pos);
 			delete actor;
-			actor = NULL;
+			actor = NULL;   // Updating a local? TODO: check if actor should be *&.
 		}
 	}
 }
@@ -265,12 +239,8 @@ void Director::Kill(UnitActor *actor)
 
 void Director::FastKill(UnitActor *actor)
 {
-	ListPos		pos;
-
-	
 	actor->DumpAllActions();
-
-	pos = m_activeUnitList->Find(actor, m_activeUnitList->GetHeadPosition());
+	ListPos		pos = m_activeUnitList->Find(actor, m_activeUnitList->GetHeadPosition());
 	if (pos) 
 	{
 		if (m_processingActiveUnits) {
@@ -304,9 +274,8 @@ void Director::FastKill(UnitActor *actor)
 
 void Director::FastKill(EffectActor *actor)
 {
-	ListPos		pos;
-
-	pos = m_activeEffectList->Find(actor, m_activeEffectList->GetHeadPosition());
+	ListPos		pos = 
+        m_activeEffectList->Find(actor, m_activeEffectList->GetHeadPosition());
 	if (pos) 
 	{
 		if (m_processingActiveEffects) {
@@ -338,9 +307,7 @@ void Director::UpdateTimingClock(void)
 	m_lastTickCount = GetTickCount();
 
 	
-	m_timeLog[m_timeLogIndex] = elapsed;
-	m_timeLogIndex++;
-
+	m_timeLog[m_timeLogIndex++] = elapsed;
 	
 	if (m_timeLogIndex >= k_TIME_LOG_SIZE) {
 		
@@ -951,9 +918,7 @@ void Director::ActionFinished(Sequence *seq)
 
 Sequence *Director::NewSequence(void)
 {
-	Sequence *seq = new Sequence(++m_curSequenceID);
-
-	return seq;
+	return new Sequence(++m_curSequenceID);
 }
 
 
@@ -1297,9 +1262,8 @@ void Director::ActiveUnitRemove(UnitActor *unitActor)
 	if(unitActor==NULL)
 	  return;
 
-	ListPos		pos;
-
-	pos = m_activeUnitList->Find(unitActor, m_activeUnitList->GetHeadPosition());
+	ListPos		pos = 
+        m_activeUnitList->Find(unitActor, m_activeUnitList->GetHeadPosition());
 	
 	if (pos) 
 	{
@@ -1345,25 +1309,23 @@ void Director::ActiveUnitRemove(UnitActor *unitActor)
 
 void Director::ActiveEffectAdd(EffectActor *effectActor)
 {
-	ListPos		pos;
-
 	Assert(effectActor);
+	ListPos		pos = 
+        m_activeEffectList->Find(effectActor, m_activeEffectList->GetHeadPosition());
 
-	
-	Assert((uint32)effectActor > (uint32)0x00010000);
-
-	pos = m_activeEffectList->Find(effectActor, m_activeEffectList->GetHeadPosition());
-	if(!pos)
+	if (!pos)
+    {
 		pos = m_activeEffectList->AddHead(effectActor);
+    }
 }
 
 
 
 void Director::ActiveEffectRemove(EffectActor *effectActor)
 {
-	ListPos		pos;
+	ListPos		pos = 
+        m_activeEffectList->Find(effectActor, m_activeEffectList->GetHeadPosition());
 
-	pos = m_activeEffectList->Find(effectActor, m_activeEffectList->GetHeadPosition());
 	if (pos) 
 	{
 		m_activeEffectList->DeleteAt(pos);
@@ -1374,26 +1336,24 @@ void Director::ActiveEffectRemove(EffectActor *effectActor)
 
 void Director::TradeActorCreate(TradeRoute newRoute)
 {
-	ListPos			pos, foundPos;
-	TradeActor		*tActor;
 
-	foundPos = pos = m_tradeActorList->GetHeadPosition();
-	for (uint32 i=0; i<m_tradeActorList->L(); i++) 
+	ListPos         pos         = m_tradeActorList->GetHeadPosition();
+    ListPos         foundPos    = pos;
+
+	for (size_t i = 0; i < m_tradeActorList->L(); ++i) 
 	{
-		tActor = m_tradeActorList->GetNext(pos);
+	    TradeActor *    tActor  = m_tradeActorList->GetNext(pos);
 		
-		Assert(tActor != NULL);
-		if(tActor->GetRouteID() == newRoute)
+		Assert(tActor);
+		if (tActor->GetRouteID() == newRoute)
 			break;
 		else
 			foundPos = pos;
 	}
 	
-	
-	if(!foundPos)
+	if (!foundPos)
 	{
-		tActor = new TradeActor(newRoute);
-		pos = m_tradeActorList->AddHead(tActor);
+		pos = m_tradeActorList->AddHead(new TradeActor(newRoute));
 	}
 }
 
@@ -1452,21 +1412,16 @@ BOOL Director::IsActive(UnitActor *unitActor)
 #endif
 uint32 Director::ProcessActiveUnits(void)
 {
-	ListPos			pos, actorPos;
 	UnitActor		*actor;
 
 	if (m_activeUnitList->IsEmpty()) return 0;
 
-	
-	
-	
-
 	m_processingActiveUnits = TRUE;
 
 	
-	pos = m_activeUnitList->GetHeadPosition();
+	ListPos			pos = m_activeUnitList->GetHeadPosition();
 
-	for (sint32 i=m_activeUnitList->L(); i; i--) 
+	for (size_t i = m_activeUnitList->L(); i > 0; --i) 
 	{
 		Assert(pos);
 		if (pos) {
@@ -1481,8 +1436,9 @@ uint32 Director::ProcessActiveUnits(void)
 
 	
 	pos = m_activeUnitList->GetHeadPosition();
-	for (i=m_activeUnitList->L(); i; i--) {
-		actorPos = pos;
+	for (size_t n = m_activeUnitList->L(); n > 0; --n) 
+    {
+		ListPos actorPos = pos;
 		actor = m_activeUnitList->GetNext(pos);
 		if (actor) {
 			if (actor->GetKillNow())
@@ -1529,15 +1485,16 @@ uint32 Director::ProcessActiveUnits(void)
 
 uint32 Director::ProcessActiveEffects(void)
 {
-	ListPos				pos, actorPos;
-	EffectActor			*actor;
+	ListPos			actorPos;
+	EffectActor	*   actor;
 
 	if (m_activeEffectList->IsEmpty()) return 0;
 
 	m_processingActiveEffects = TRUE;
 
-	pos = m_activeEffectList->GetHeadPosition();
-	for (sint32 i=m_activeEffectList->L(); i; i--) {
+	ListPos         pos = m_activeEffectList->GetHeadPosition();
+	for (size_t i = m_activeEffectList->L(); i > 0; --i) 
+    {
 		actorPos = pos;
 
 		actor = m_activeEffectList->GetNext(pos);
@@ -1549,7 +1506,8 @@ uint32 Director::ProcessActiveEffects(void)
 	m_processingActiveEffects = FALSE;
 
 	pos = m_activeEffectList->GetHeadPosition();
-	for (i=m_activeEffectList->L(); i; i--) {
+	for (size_t n = m_activeEffectList->L(); n > 0; --n) 
+    {
 		actorPos = pos;
 
 		actor = m_activeEffectList->GetNext(pos);
@@ -1564,40 +1522,33 @@ uint32 Director::ProcessActiveEffects(void)
 
 void Director::ProcessTradeRouteAnimations(void)
 {
-	ListPos			pos;
-	TradeActor		*tActor;
-	uint32			numToProcess;
-
 	if (!g_theProfileDB->IsTradeAnim()) return;
-
 	if (m_tradeActorList->IsEmpty()) return;
 
-	pos = m_tradeActorList->GetHeadPosition();
-	numToProcess = m_tradeActorList->L();
-	for (uint32 i=0; i<numToProcess; i++) 
+	ListPos             pos             = m_tradeActorList->GetHeadPosition();
+	size_t const        numToProcess    = m_tradeActorList->L();
+	for (size_t i = 0; i < numToProcess; ++i) 
 	{
-		tActor = m_tradeActorList->GetNext(pos);
-		Assert(tActor != NULL);
-		if (tActor != NULL)
+	    TradeActor *    actor           = m_tradeActorList->GetNext(pos);
+		Assert(actor);
+		if (actor)
 		{
-			
-			tActor->Process();
+			actor->Process();
 		}
 	}
 }
 
 void Director::OffsetActiveUnits(sint32 deltaX, sint32 deltaY)
 {
-	ListPos			pos;
-	UnitActor		*actor;
-	uint32			numToProcess;
+	ListPos             pos             = m_activeUnitList->GetHeadPosition();
+	size_t const        numToProcess    = m_activeUnitList->L();
 
-	pos = m_activeUnitList->GetHeadPosition();
-	numToProcess = m_activeUnitList->L();
-	for (uint32 i=0; i<numToProcess; i++) {
-		actor = m_activeUnitList->GetNext(pos);
-		Assert(actor != NULL);
-		if (actor != NULL) {
+	for (size_t i = 0; i < numToProcess; ++i) 
+    {
+		UnitActor *     actor = m_activeUnitList->GetNext(pos);
+		Assert(actor);
+		if (actor) 
+        {
 			actor->SetX(actor->GetX() + deltaX);
 			actor->SetY(actor->GetY() + deltaY);
 		}
@@ -2207,15 +2158,9 @@ void Director::AddSpecialEffect(MapPoint &pos, sint32 spriteID, sint32 soundID)
 void Director::AddCombatFlash(MapPoint &pos)
 {
 	DQActionCombatFlash		*action = new DQActionCombatFlash;
-	DQItem					*item = new DQItem(DQITEM_COMBATFLASH, action, dh_combatflash);
-
-
-
+	DQItem				*item = new DQItem(DQITEM_COMBATFLASH, action, dh_combatflash);
 
 	action->flash_pos = pos;
-
-
-
 
 	m_itemQueue->AddTail(item);
 }
@@ -2838,18 +2783,10 @@ void Director::AddPlaySound(sint32 soundID, MapPoint &pos)
 	if (soundID <= 0) return;
 
 	DQActionPlaySound	*action = new DQActionPlaySound;
-	DQItem				*item = new DQItem(DQITEM_PLAYSOUND, action, dh_playSound);
-
-
-
+	DQItem			*item = new DQItem(DQITEM_PLAYSOUND, action, dh_playSound);
 
 	action->playsound_soundID = soundID;
 	action->playsound_pos = pos;
-
-
-
-
-
 
 	m_itemQueue->AddTail(item);
 }
@@ -3078,7 +3015,7 @@ void Director::IncrementPendingGameActions()
 void Director::DecrementPendingGameActions()
 {
 	m_pendingGameActions--;
-	Assert(m_pendingGameActions >= 0);
+ 	Assert(m_pendingGameActions >= 0);
 
 	if(m_pendingGameActions <= 0) {
 		m_pendingGameActions = 0;
@@ -3337,11 +3274,11 @@ void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 		
 		
 		
-		Anim *anim = projectileEnd->GetAnim(EFFECTACTION_PLAY);
+		Anim * anim = projectileEnd->CreateAnim(EFFECTACTION_PLAY);
 		if (anim == NULL) 
 		{
 			
-			anim = projectileEnd->GetAnim(EFFECTACTION_FLASH);
+			anim = projectileEnd->CreateAnim(EFFECTACTION_FLASH);
 			Assert(anim != NULL);
 			if (anim == NULL) 
 			{
@@ -3353,6 +3290,7 @@ void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 				actionObj = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
 				Assert(actionObj != NULL);
 				if (actionObj == NULL) {
+                    delete anim;
 					g_director->ActionFinished(seq);
 					return;
 				}
@@ -3363,20 +3301,14 @@ void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 			actionObj = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
 			Assert(actionObj != NULL);
 			if (actionObj == NULL) {
+                delete anim;
 				g_director->ActionFinished(seq);
 				return;
 			}
 		}
 
-
-		
-		
 		actionObj->SetAnim(anim);
-
-		
 		projectileEnd->AddAction(actionObj);
-
-		
 		g_director->ActiveEffectAdd(projectileEnd);
 	}
 
@@ -3703,7 +3635,7 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 			if (theDead->GetLoadType() != LOADTYPE_FULL) 
 				theDead->FullLoad(UNITACTION_VICTORY);
 
-			deathAnim = theDead->GetAnim((UNITACTION)deathActionType); // deathAnim must be deleted
+			deathAnim = theDead->CreateAnim((UNITACTION)deathActionType); // deathAnim must be deleted
 
 			if(deathAnim){
 				deathActionType = UNITACTION_VICTORY;
@@ -3748,7 +3680,7 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 			
 			victorActionType = UNITACTION_VICTORY;
 
-			victorAnim = theVictor->GetAnim((UNITACTION)victorActionType);
+			victorAnim = theVictor->CreateAnim((UNITACTION)victorActionType);
 			if (victorAnim == NULL) 
 			{
 				theVictor = NULL;
@@ -3959,10 +3891,10 @@ void dh_work(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		actor->FullLoad(UNITACTION_WORK);
 
 	
-	Anim	*anim = actor->GetAnim(UNITACTION_WORK);
+	Anim	*anim = actor->CreateAnim(UNITACTION_WORK);
 	if (anim == NULL) 
 	{
-		anim = actor->GetAnim(UNITACTION_MOVE);
+		anim = actor->CreateAnim(UNITACTION_MOVE);
 
 		if (!anim) {
 			delete actionObj;
@@ -4007,8 +3939,7 @@ void dh_fastkill(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	Assert(action);
 	if (!action) return;
 
-	UnitActor *actor;
-	actor = action->dead;
+	UnitActor * actor = action->dead;
 	Assert(actor);
 	if (!actor) return;
 
@@ -4050,8 +3981,7 @@ void dh_setVisibility(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType
 {
 	DQActionSetVisibility	*action = (DQActionSetVisibility *)itemAction;
 
-	UnitActor	*actor;
-	actor = action->setvisibility_actor;
+	UnitActor	* actor = action ? action->setvisibility_actor : NULL;
 	Assert(actor);
 	if (!actor) return;
 
@@ -4064,8 +3994,7 @@ void dh_setOwner(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 {
 	DQActionSetOwner	*action = (DQActionSetOwner *)itemAction;
 
-	UnitActor	*actor;
-	actor = action->setowner_actor;
+	UnitActor	* actor = action ? action->setowner_actor : NULL;
 	Assert(actor);
 	if (!actor) return;
 
@@ -4079,10 +4008,8 @@ void dh_setVisionRange(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 {
 	DQActionSetVisionRange	*action = (DQActionSetVisionRange *)itemAction;
 
-	UnitActor *actor;
-	actor = action->setvisionrange_actor;
-	Assert(actor);
-
+	UnitActor * actor = action ? action->setvisionrange_actor : NULL;
+    Assert(actor);
 	if (!actor) return;
 
 	actor->SetUnitVisionRange(action->range);
@@ -4097,35 +4024,21 @@ void dh_combatflash(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	SpriteState		*ss = new SpriteState(99);
 	EffectActor		*flash = new EffectActor(ss, action->flash_pos);
 
-	Action *actionObj= NULL;
 
-	Anim *anim = flash->GetAnim(EFFECTACTION_PLAY);
+	Anim *anim = flash->CreateAnim(EFFECTACTION_PLAY);
 	if (anim == NULL) 
 	{
-		
-		anim = flash->GetAnim(EFFECTACTION_FLASH);
+		anim = flash->CreateAnim(EFFECTACTION_FLASH);
 		Assert(anim != NULL);
 	}
 
-	if (!anim) {
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	actionObj = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) {
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	
-	actionObj->SetAnim(anim);
-
-	
-	flash->AddAction(actionObj);
-
-	g_director->ActiveEffectAdd(flash);
+	if (anim)
+    {
+	    Action * actionObj = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
+        actionObj->SetAnim(anim);
+   	    flash->AddAction(actionObj);
+   	    g_director->ActiveEffectAdd(flash);
+    }
 
 	g_director->ActionFinished(seq);
 }
@@ -4136,7 +4049,6 @@ void dh_copyVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	g_tiledMap->CopyVision();
 	g_radarMap->Update();
-
 	g_director->ActionFinished(seq);
 }
 
@@ -4489,39 +4401,20 @@ void dh_speceffect(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	SpriteState		*ss = new SpriteState(spriteID);
 	EffectActor		*effectActor = new EffectActor(ss, pos);
 
-	Action *actionObj= NULL;
+	Anim *  anim = effectActor->CreateAnim(EFFECTACTION_PLAY);
 
-	
-	
-	
-	Anim *anim = effectActor->GetAnim(EFFECTACTION_PLAY);
-	if (anim == NULL) 
+	if (anim) 
 	{
-		g_director->ActionFinished(seq);
-		return;
-	}
+	    Action * actionObj = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
+	    actionObj->SetAnim(anim);
+	    effectActor->AddAction(actionObj);
+	    g_director->ActiveEffectAdd(effectActor);
 
-	actionObj = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) {
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	
-	actionObj->SetAnim(anim);
-
-	
-	effectActor->AddAction(actionObj);
-
-	
-	g_director->ActiveEffectAdd(effectActor);
-
-	
-	if (g_soundManager)
-		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
-
-
+	    if (g_soundManager)
+        {
+		    g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
+        }
+    }
 	
 	g_director->ActionFinished(seq);
 }
@@ -4566,10 +4459,10 @@ void dh_attackpos(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	if (theAttacker->GetLoadType() != LOADTYPE_FULL) 
 		theAttacker->FullLoad(UNITACTION_ATTACK);
 
-	AttackerAnim = theAttacker->GetAnim(UNITACTION_ATTACK);
+	AttackerAnim = theAttacker->CreateAnim(UNITACTION_ATTACK);
 
 	if (AttackerAnim == NULL) 
-		AttackerAnim = theAttacker->GetAnim(UNITACTION_IDLE);
+		AttackerAnim = theAttacker->CreateAnim(UNITACTION_IDLE);
 
 	AttackerActionObj->SetAnim(AttackerAnim);
 

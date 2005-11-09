@@ -94,8 +94,8 @@ public:
 	void			SetHotPoint(uint16 facing, sint32 x, sint32 y) { m_hotPoints[facing].x = x; m_hotPoints[facing].y = y; }
 	void			SetHotPoints(POINT *points) { memcpy(m_hotPoints, points, sizeof(m_hotPoints)); }
 
-	sint32			ParseFromTokens(Token *theToken);
-	void			AllocateFrameArrays(size_t count);
+	virtual sint32	ParseFromTokens(Token *theToken);
+	virtual void	AllocateFrameArrays(size_t count);
 
 	virtual uint16	GetNumFrames(void) const    { return m_facedFrameCount; };
 	virtual void	SetNumFrames(uint16 num)    { m_facedFrameCount = num; }

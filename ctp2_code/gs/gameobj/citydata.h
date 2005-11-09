@@ -18,15 +18,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER
-// - When defined, allows Microsoft C++ extensions.
-// - When not defined, generates standard C++.
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
-//       between #if and #else are the original Activision code.
-//
 // CTP1_TRADE
 // - Creates an executable with trade like in CTP1. Currently broken.
 //
@@ -58,16 +49,19 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
 #ifndef __CITY_DATA_H__
 #define __CITY_DATA_H__ 1
 
-#include "ctp2_enums.h"
+class CityData;
+
 #include "Unit.h"
+
 #include "BldQue.h"
+#include "HappyTracker.h"           // HAPPY_REASON
 
 
 #include "UnitDynArr.h"
@@ -93,55 +87,6 @@ class Cell;
 #define k_PEOPLE_PER_POPULATION 10000
 //#define NEW_RESOURCE_PROCESS 1
 
-
-enum OPTIMISE_STATE {
-	OPTIMISE_STATE_NONE,
-	OPTIMISE_STATE_FOOD,
-	OPTIMISE_STATE_PRODUCTION,
-	OPTIMISE_STATE_GOLD,
-	OPTIMISE_STATE_HAPPINESS,
-	OPTIMISE_STATE_SCIENCE,
-	OPTIMISE_STATE_INVALID,
-};
-
-enum CITY_ATTITUDE {
-	CITY_ATTITUDE_CONTENT,
-	CITY_ATTITUDE_WE_LOVE_THE_KING,
-	CITY_ATTITUDE_HAPPY,
-	CITY_ATTITUDE_DISORDER,
-};
-
-enum RADIUS_OP {
-	RADIUS_OP_UKNOWN = -1,
-	RADIUS_OP_REMOVE_IMPROVEMENTS = 0,
-	RADIUS_OP_KILL_UNITS,
-	RADIUS_OP_RESET_OWNER,
-	RADIUS_OP_KILL_TILE,
-	RADIUS_OP_ADD_GOODS,
-	RADIUS_OP_COUNT_GOODS,
-};
-
-
-enum UPRISING_CAUSE {
-	UPRISING_CAUSE_NONE,
-	UPRISING_CAUSE_SLAVE_STARVED,
-	UPRISING_CAUSE_UNGUARDED_SLAVES,
-	UPRISING_CAUSE_INCITED,
-	UPRISING_CAUSE_INTERNAL, 
-};
-
-
-
-enum POP_TYPE {
-	POP_WORKER,
-	POP_SCIENTIST,
-	POP_ENTERTAINER,
-	POP_FARMER,
-	POP_LABORER,
-	POP_MERCHANT,
-	POP_SLAVE,
-	POP_MAX
-};
 
 struct TerrainValue;
 
@@ -395,7 +340,7 @@ public:
 	CityData(CivArchive &archive);
 	CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_pos);
 	CityData(CityData *copy);
-	~CityData();
+	virtual ~CityData();
 
 	void Copy(CityData *copy);
 	void Serialize(CivArchive &archive);

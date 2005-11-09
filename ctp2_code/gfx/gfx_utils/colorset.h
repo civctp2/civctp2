@@ -168,6 +168,7 @@ public:
 	COLORREF	GetLightColorRef(COLOR color) const;
 
 	static void	Initialize(uint32 fileNumber = 0);
+    static void Cleanup(void);
 
 private:
     void        Import(uint32 fileNumber = 0);

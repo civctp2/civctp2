@@ -123,8 +123,8 @@ public:
 	void			UnlockSurface(void);
 	void			SetSurface(void);
 
-	uint16			GetType(void) { return m_type; }
-	void			SetType(uint16 type) { m_type = (SPRITETYPE)type; }
+	uint16			GetType(void) { return static_cast<uint16>(m_type); }
+	void			SetType(uint16 type) { m_type = static_cast<SPRITETYPE>(type); }
 
 	uint16			GetWidth(void) { return m_width; }
 	uint16			GetHeight(void) { return m_height; }
@@ -162,11 +162,8 @@ public:
 	void			SetFrameData(uint16 frameNum, Pixel16 *data);
 	void			SetMiniFrameData(uint16 frameNum, Pixel16 *data);
 
-	sint32			ParseFromTokens(Token *theToken);
-
-	void			AllocateFrameArrays(size_t count);
-	void			AllocateFrameArraysBasic(void);
-
+	virtual sint32	ParseFromTokens(Token *theToken);
+	virtual void	AllocateFrameArrays(size_t count);
 	
 	void			InitializeDrawLow();
 

@@ -52,7 +52,7 @@
 #include "Token.h"
 
 #ifndef __SPRITETEST__
-	#include "TiledMap.h"
+	#include "tiledmap.h"
 
 	extern CivPaths *g_civPaths;
 
@@ -194,7 +194,7 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 	}
 
 	sprintf(prefixStr, ".\\%d\\", id);
-	sprintf(scriptName, "GX%#.2d.txt", id);
+	sprintf(scriptName, "GX%.2d.txt", id);
 
 printf("Processing '%s'\n", scriptName);
 
@@ -223,10 +223,10 @@ printf("Processing '%s'\n", scriptName);
 		for(i=0; i<effectSprite->GetNumFrames(); i++) 
 		{
 
-			sprintf(name, "%sGX%#.2dES.%d.tif", prefixStr,  id, i+effectSprite->GetFirstFrame());
+			sprintf(name, "%sGX%.2dES.%d.tif", prefixStr,  id, i+effectSprite->GetFirstFrame());
 			strcpy(shadowNames[i], name);
 
-			sprintf(name, "%sGX%#.2dEA.%d.tif", prefixStr, id, i+effectSprite->GetFirstFrame());
+			sprintf(name, "%sGX%.2dEA.%d.tif", prefixStr, id, i+effectSprite->GetFirstFrame());
 			strcpy(imageNames[i], name);
 		}
 
@@ -263,7 +263,7 @@ printf("Processing '%s'\n", scriptName);
 		
 		for(i=0; i<flashSprite->GetNumFrames(); i++) 
 		{
-			sprintf(name, "%sGX%#.2dFA.%d.tif", prefixStr, id, i+flashSprite->GetFirstFrame());
+			sprintf(name, "%sGX%.2dFA.%d.tif", prefixStr, id, i+flashSprite->GetFirstFrame());
 			strcpy(imageNames[i], name);
 			
 			strcpy(shadowNames[i], "");

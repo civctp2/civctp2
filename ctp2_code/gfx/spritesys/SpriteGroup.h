@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Common sprite handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,8 +36,7 @@
 
 #include "Action.h"
 #include "FacedSprite.h"
-
-enum TOKEN_TYPES;
+#include "Token.h"
 
 #define k_NUM_FIREPOINTS		8
 

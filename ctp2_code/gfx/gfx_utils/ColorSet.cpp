@@ -125,6 +125,26 @@ ColorSet::~ColorSet()
 
 //----------------------------------------------------------------------------
 //
+// Name       : ColorSet::Cleanup
+//
+// Description: Release all color data.
+//
+// Parameters : -
+//
+// Globals    : s_theUniqueColorSet : cleaned
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void ColorSet::Cleanup(void)
+{
+    std::vector<Pixel16>().swap(s_theUniqueColorSet.m_colors);
+}
+
+//----------------------------------------------------------------------------
+//
 // Name       : ColorSet::Initialize
 //
 // Description: Fill the color data from a file.

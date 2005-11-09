@@ -32,22 +32,29 @@
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UNIT_DATA_H__ 
 #define __UNIT_DATA_H__ 1
 
+class UnitData;
+class VisibilityDurationArray;
+
+#include "Unit.h"
 #include "GameObj.h"
 #include "MapPoint.h"
 #include "Unit.h"
 #include "citydata.h"
 #include "Army.h"
+#include "Order.h"          // ORDER_RESULT
+#include "Player.h"         // k_MAX_PLAYERS
+#include "UnitActor.h"      // UnitActor
 
 
 class UnitList;
 class citydata; 
 class SpriteState; 
-class UnitActor; 
 class TradeRoute;
 class Installation;
 class UnitDynamicArray;
@@ -56,25 +63,10 @@ template <class T> class DynamicArray;
 class SlicObject;
 class BitMask;
 
-enum UNIT_ORDER_TYPE;
-enum HAPPY_REASON;
-
 #define k_UNITDATA_VERSION_MAJOR    0
 #define k_UNITDATA_VERSION_MINOR    0
 
 #define k_DEFAULT_VIS_DURATION_SIZE 2
-#ifndef k_MAX_PLAYERS
-
-#define k_MAX_PLAYERS 32
-#endif
-
-enum UNIT_COMMAND {
-	UNIT_COMMAND_NEAREST_CITY,
-	UNIT_COMMAND_NEAREST_FORT,
-	UNIT_COMMAND_NEAREST_AIRFIELD,
-	UNIT_COMMAND_ENTRENCH,
-	UNIT_COMMAND_SLEEP
-};
 
 class VisibilityDurationArray
 {
@@ -148,8 +140,6 @@ private:
 	friend class NetUnit;
 };
 
-enum CAUSE_REMOVE_CITY; 
-
 #define k_UDF_FIRST_MOVE                             0x00000001
 #define k_UDF_IS_VET                                 0x00000002
 #define k_UDF_IS_IN_TRANSPORT                        0x00000004
@@ -182,8 +172,6 @@ enum CAUSE_REMOVE_CITY;
 #define k_UDF_MAD_LAUNCHED                           0x10000000
 #define k_UDF_TELEPORT_DEATH                         0x20000000 
 #define k_UDF_BEACH_ASSAULT_LEGAL                    0x40000000
-
-enum DEFAULT_PLACE_POP;
 
 class UnitData : public GAMEOBJ,
                  public CityRadiusCallback
@@ -288,10 +276,10 @@ public:
 	void GetCargoHP(sint32 &i, sint32 unit_type[100],
 	                sint32 unit_hp[100]);
 
-	BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision) const;
-	BOOL CanThisCargoUnloadAt(const Unit &the_cargo, const MapPoint & old_pos, const MapPoint & new_pos, const BOOL & use_vision) const;
-	BOOL UnloadCargo(const MapPoint &new_pos, Army &debark,
-	                 BOOL justOneUnit, Unit &theUnit);
+    BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision) const;
+    BOOL CanThisCargoUnloadAt(const Unit &the_cargo, const MapPoint & old_pos, const MapPoint & new_pos, const BOOL & use_vision) const;
+    BOOL UnloadCargo(const MapPoint &new_pos, Army &debark,
+					 BOOL justOneUnit, const Unit &theUnit);
 	BOOL UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);
 
 
@@ -449,7 +437,7 @@ public:
 	BOOL GetMilitaryContribution() const;
 
 	static sint32 GetDistance(UnitData *unit1, UnitData *unit2, sint32 wrap);
-	static sint32 GetDistance(Installation &inst, UnitData *unit2, sint32 wrap);
+	static sint32 GetDistance(const Installation &inst, UnitData *unit2, sint32 wrap);
 	static sint32 GetDistance(const UnitData *unit, const MapPoint &pos, sint32 wrap);
 	static sint32 GetDistance(const MapPoint &pos1, const MapPoint &pos2, sint32 wrap);
 
@@ -512,7 +500,7 @@ public:
 	BOOL HasCityWalls() const;
 	BOOL HasForceField() const;
 
-	BOOL StoppedBySpies(Unit &c);
+	BOOL StoppedBySpies(const Unit &c);
 	ORDER_RESULT InvestigateCity(Unit &c);
 	ORDER_RESULT StealTechnology(Unit &c, sint32 whichAdvance);
 	ORDER_RESULT InciteRevolution(Unit &c);
@@ -536,7 +524,7 @@ public:
 	sint32 GetFranchiseTurnsRemaining() const;
 	void SetFranchiseTurnsRemaining(sint32 turns);
 
-	BOOL CanSee(Army &al) const;
+	BOOL CanSee(const Army &al) const;
 
 #ifdef _DEBUG
 	void SetIgnoreHappiness(BOOL v); 
@@ -694,7 +682,7 @@ public:
 	void BuildCapitalization();
 	void BuildInfrastructure();
 
-	void ActionSuccessful(SPECATTACK attack, Unit &c);
+	void ActionSuccessful(SPECATTACK attack, const Unit &c);
 	void ActionUnsuccessful(void);;
 
 	const Unit &GetTransport() const;
@@ -708,7 +696,7 @@ public:
 
 	void CheckVisionRadius();
 
-	void SetTargetCity(Unit &city);
+	void SetTargetCity(const Unit &city);
 	const Unit &GetTargetCity();
 
 	bool CanBeachAssaultRightNow();
@@ -716,5 +704,4 @@ public:
 
 uint32 UnitData_UnitData_GetVersion(void) ;
 #endif
-
 

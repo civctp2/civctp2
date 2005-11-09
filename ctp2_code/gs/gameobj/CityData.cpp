@@ -110,8 +110,6 @@
 //   if a city has or is buying a good than you can get a bonus. EfficiencyOrCrime 
 //   flag affects all four.  - added by E November 5th 2005
 //     
-//
-//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -180,8 +178,6 @@
 
 #include "DiffDB.h"
 extern DifficultyDB *g_theDifficultyDB;
-
-extern ColorSet *g_colorSet;
 
 #ifdef _DEBUG
 #include "aicause.h"
@@ -317,193 +313,195 @@ extern ProfileDB	     *g_theProfileDB;
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-CityData::CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_point)
-:	m_cityStyle(CITY_STYLE_GENERIC),
-	m_min_turns_revolt(0)
+CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
+:
+    m_owner                             (owner),
+	m_slaveBits                         (0),
+	m_accumulated_food                  (0),
+	m_shieldstore                       (0),
+	m_shieldstore_at_begin_turn         (0),
+	m_build_category_at_begin_turn      (-4),
+	m_net_gold                          (0),
+	m_gold_lost_to_crime                (0),
+	m_gross_gold                        (0),
+	m_goldFromTradeRoutes               (0),
+	m_goldLostToPiracy                  (0),
+	m_science                           (0),
+	m_luxury                            (0),
+	m_city_attitude                     (CITY_ATTITUDE_CONTENT),
+	m_collected_production_this_turn    (0),
+	m_gross_production                  (0),
+	m_net_production                    (0),
+	m_production_lost_to_crime          (0),
+	m_built_improvements                (0),
+	m_builtWonders                      (0),
+	m_food_delta                        (0.0),
+	m_gross_food                        (0.0),
+	m_net_food                          (0.0),
+	m_food_lost_to_crime                (0.0),
+	m_food_consumed_this_turn           (0.0),
+	m_total_pollution                   (0),
+	m_cityPopulationPollution           (0),
+	m_cityIndustrialPollution           (0),
+	m_foodVatPollution                  (0),
+	m_cityPollutionCleaner              (0),
+	m_contribute_materials              (true),
+	m_contribute_military               (true),
+	m_capturedThisTurn                  (false),
+	m_spied_upon                        (0),
+	m_walls_nullified                   (false),
+	m_franchise_owner                   (PLAYER_UNASSIGNED),
+	m_franchiseTurnsRemaining           (-1),
+	m_watchfulTurns                     (-1),
+	m_bioInfectionTurns                 (-1),
+	m_bioInfectedBy                     (PLAYER_UNASSIGNED),
+	m_nanoInfectionTurns                (-1),
+	m_nanoInfectedBy                    (PLAYER_UNASSIGNED),
+	m_convertedTo                       (PLAYER_UNASSIGNED),
+	m_convertedGold                     (0),
+	m_convertedBy                       (CONVERTED_BY_NOTHING),
+	m_terrainWasPolluted                (false),
+	m_happinessAttacked                 (false),
+	m_terrainImprovementWasBuilt        (false),
+	m_improvementWasBuilt               (false),
+	m_isInjoined                        (false),
+	m_injoinedBy                        (PLAYER_UNASSIGNED),
+	m_airportLastUsed                   (-1),
+	m_founder                           (owner),
+	m_wages_paid                        (0),
+	m_pw_from_infrastructure            (0),
+	m_gold_from_capitalization          (0),
+	m_buildInfrastructure               (false),
+	m_buildCapitalization               (false),
+	m_paidForBuyFront                   (false),
+	m_doUprising                        (UPRISING_CAUSE_NONE),
+	m_turnFounded                       (g_turn ? g_turn->GetRound() : 0),
+	m_productionLostToFranchise         (0),
+	m_probeRecoveredHere                (false),
+	m_lastCelebrationMsg                (-1),
+	m_alreadySoldABuilding              (false),
+	m_population                        (0),
+	m_partialPopulation                 (0),
+//	sint16 m_numSpecialists[POP_MAX];
+//	sint32 m_specialistDBIndex[POP_MAX];
+	m_sizeIndex                         (0),
+	m_workerFullUtilizationIndex        (0),
+	m_workerPartialUtilizationIndex     (0),
+	m_useGovernor                       (false),
+	m_buildListSequenceIndex            (0),
+	m_garrisonOtherCities               (false),
+	m_garrisonComplete                  (false),
+	m_currentGarrison                   (0),
+	m_neededGarrison                    (0),
+	m_currentGarrisonStrength           (0.0),
+	m_neededGarrisonStrength            (0.0),
+	m_sellBuilding                      (-1),
+	m_buyFront                          (false),
+	m_max_food_from_terrain             (0),
+	m_max_prod_from_terrain             (0),
+	m_max_gold_from_terrain             (0),
+	m_growth_rate                       (0),
+	m_overcrowdingCoeff                 (0.0),
+	m_starvation_turns                  (0),
+	m_cityStyle                         (CITY_STYLE_GENERIC),
+	m_pos                               (center_point),
+	m_is_rioting                        (false),
+	m_home_city                         (hc),
+	m_min_turns_revolt                  (0),
+	m_build_queue                       (),
+	m_tradeSourceList                   (),
+	m_tradeDestinationList              (),
+#ifdef CTP1_TRADE
+	m_resources                         (),
+	m_localResources                    (),
+#else
+	m_collectingResources               (),
+	m_sellingResources                  (),
+	m_buyingResources                   (),
+#endif
+	m_happy                             (new Happy()),
+//	MBCHAR    m_name[k_MAX_NAME_LEN];
+//	sint32    *m_distanceToGood;
+	m_defensiveBonus                    (0.0),
+//	sint32    *m_ringFood;
+//	sint32    *m_ringProd;
+//	sint32    *m_ringGold;
+//	sint32    *m_ringSizes;
+#if defined(NEW_RESOURCE_PROCESS)
+//	double    *m_farmersEff;
+//	double    *m_laborersEff;
+//	double    *m_merchantsEff;
+//	double    *m_scientistsEff;
+	m_max_processed_terrain_food        (0.0),
+	m_max_processed_terrain_prod        (0.0),
+	m_max_processed_terrain_gold        (0.0),
+	m_max_processed_terrain_scie        (0.0),
+	m_grossFoodCrimeLoss                (0.0),
+	m_grossProdCrimeLoss                (0.0),
+	m_grossGoldCrimeLoss                (0.0),
+	m_grossScieCrimeLoss                (0.0),
+	m_grossProdBioinfectionLoss         (0.0),
+	m_grossProdFranchiseLoss            (0.0),
+	m_grossGoldConversionLoss           (0.0),
+//	double    m_foodFromOnePop;
+//	double    m_prodFromOnePop;
+//	double    m_goldFromOnePop;
+//	double    m_scieFromOnePop;
+//	double    m_crimeFoodLossOfOnePop;
+//	double    m_crimeProdLossOfOnePop;
+//	double    m_crimeGoldLossOfOnePop;
+//	double    m_crimeScieLossOfOnePop;
+//	double    m_bioinfectionProdLossOfOnePop;
+//	double    m_franchiseProdLossOfOnePop;
+//	double    m_conversionGoldLossOfOnePop;
+	m_productionLostToBioinfection      (0),
+	m_max_scie_from_terrain             (0),
+	m_gross_science                     (0.0),
+	m_science_lost_to_crime             (0.0),
+#endif	
+	m_cityRadiusOp                      (RADIUS_OP_UKNOWN),
+	m_killList                          (NULL),
+	m_radiusNewOwner                    (0),
+    m_tilecount                         (0), 
+//            m_whichtile;
+    m_tempGoodAdder                     (NULL),
+    m_tempGood                          (-1), 
+    m_tempGoodCount                     (0),
+	m_sentInefficientMessageAlready     (false)
+#ifdef _DEBUG
+  , m_ignore_happiness                  (false) 
+#endif
 {
-	sint32 i;
-
 	m_name[0] = 0;
-
-	m_owner = o;
-	m_founder = o;
-	m_home_city = hc;
-	m_slaveBits = 0; 
-	m_accumulated_food = 0;
-	m_shieldstore = 0;
-	m_shieldstore_at_begin_turn = 0;
-	m_net_production = 0;
-	m_net_gold = 0;
-	m_science = 0;
-	m_luxury = 0;
-	m_isInjoined = FALSE;
-	m_capturedThisTurn = FALSE ;
-
-	m_city_attitude = CITY_ATTITUDE_CONTENT;
-
 	m_build_queue.SetOwner(m_owner);
 	m_build_queue.SetCity(m_home_city);
-	m_built_improvements = 0;
-	m_builtWonders = 0;
-	m_total_pollution = 0;
-	m_cityPopulationPollution=0;
-	m_cityIndustrialPollution=0;
-	m_cityPollutionCleaner=0;
-	m_foodVatPollution = 0;
-
-	m_contribute_materials = TRUE;
-	m_contribute_military = TRUE;
-
-	m_spied_upon = 0;
-	m_walls_nullified = FALSE;
-	m_franchise_owner = -1;
-	m_franchiseTurnsRemaining = -1;
-
-	m_growth_rate=0;
-
-#ifdef _DEBUG
-	m_ignore_happiness = FALSE; 
-#endif
-	m_watchfulTurns = -1;
-	m_bioInfectionTurns = -1;
-	m_nanoInfectionTurns = -1;
-	m_convertedTo = -1;
-	m_convertedBy = CONVERTED_BY_NOTHING;
-	m_terrainWasPolluted=FALSE;
-	m_happinessAttacked=FALSE;
-	m_terrainImprovementWasBuilt=FALSE;
-	m_improvementWasBuilt=FALSE;
-
-	m_is_rioting = FALSE;
-
-	m_gross_gold = 0;
-	m_gold_lost_to_crime = 0;
-	m_production_lost_to_crime = 0;
-	m_goldFromTradeRoutes = 0;
-	m_goldLostToPiracy = 0;
-	m_collected_production_this_turn = 0;
-	m_gross_production = 0;
-	m_food_delta = 0.0; // = m_net_food - m_food_consumed_this_turn
-	m_gross_food = 0.0;
-	m_net_food = 0.0;
-	m_food_lost_to_crime = 0.0;
-	m_food_consumed_this_turn = 0.0;
-	m_convertedGold = 0;
-	m_injoinedBy = 0;
-	m_killList = NULL;
-	m_radiusNewOwner  = 0;
-	m_cityRadiusOp = RADIUS_OP_UKNOWN;
-	m_bioInfectedBy = -1;
-	m_nanoInfectedBy = -1;
-
-	m_happy = new Happy;
-	
-	g_theWorld->SetCapitolDistanceDirtyFlags(1<<o);
-
-	m_airportLastUsed = -1;
-
-	m_wages_paid = 0;
-
-	m_buildInfrastructure = FALSE;
-	m_buildCapitalization = FALSE;
-	m_gold_from_capitalization = 0;
-	m_pw_from_infrastructure = 0;
+	g_theWorld->SetCapitolDistanceDirtyFlags(1 << owner);
 
 	// Set the style of the founder of the city - if any.
-	if (g_player[o] && g_player[o]->GetCivilisation())
+	if (g_player[owner] && g_player[owner]->GetCivilisation())
 	{
-		m_cityStyle = g_player[o]->GetCivilisation()->GetCityStyle();
+		m_cityStyle = g_player[owner]->GetCivilisation()->GetCityStyle();
 	}
 
-	m_doUprising = UPRISING_CAUSE_NONE;
-
-	Assert(g_turn);
-	m_turnFounded = g_turn->GetRound();
-
-	m_productionLostToFranchise = 0;
-
-	m_build_category_at_begin_turn = -4;
-	m_lastCelebrationMsg = -1;
-	m_alreadySoldABuilding = FALSE;
-	m_sentInefficientMessageAlready = FALSE;
-
-
-	m_population = 0;
-	m_partialPopulation = 0;
-	for(i = 0; i < POP_MAX; i++) {
-		m_numSpecialists[i] = 0;
+	for (size_t i = 0; i < POP_MAX; ++i) 
+    {
+		m_numSpecialists[i]     = 0;
+        m_specialistDBIndex[i]  = -1;
 	}
-
-
-	m_useGovernor = FALSE;
-	m_buildListSequenceIndex = 0;
-	m_garrisonOtherCities = FALSE;
-	m_garrisonComplete = FALSE;
-	m_currentGarrison = 0;
-	m_neededGarrison = 0;
-	m_currentGarrisonStrength = 0.0;
-	m_neededGarrisonStrength = 0.0;
-
-
-	m_sizeIndex = 0;
-
-	m_sellBuilding = -1;
-	m_buyFront = false;
-	m_paidForBuyFront = false;
-
-	m_workerPartialUtilizationIndex = 0;
-	m_workerFullUtilizationIndex = 0;
 
 	ResetStarvationTurns();
-	m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
 
-	m_pos = center_point;
-
-	m_defensiveBonus= 0;
-
-	m_ringFood  = new sint32[g_theCitySizeDB->NumRecords()];
-	m_ringProd  = new sint32[g_theCitySizeDB->NumRecords()];
-	m_ringGold  = new sint32[g_theCitySizeDB->NumRecords()];
-	m_ringSizes = new sint32[g_theCitySizeDB->NumRecords()];
+	m_distanceToGood    = new sint32[g_theResourceDB->NumRecords()];
+	m_ringFood          = new sint32[g_theCitySizeDB->NumRecords()];
+	m_ringProd          = new sint32[g_theCitySizeDB->NumRecords()];
+	m_ringGold          = new sint32[g_theCitySizeDB->NumRecords()];
+	m_ringSizes         = new sint32[g_theCitySizeDB->NumRecords()];
 
 #if defined(NEW_RESOURCE_PROCESS)
-	m_farmersEff    = new double[g_theCitySizeDB->NumRecords()];
-	m_laborersEff   = new double[g_theCitySizeDB->NumRecords()];
-	m_merchantsEff  = new double[g_theCitySizeDB->NumRecords()];
-	m_scientistsEff = new double[g_theCitySizeDB->NumRecords()];
-
-	m_max_processed_terrain_food = 0.0;
-	m_max_processed_terrain_prod = 0.0;
-	m_max_processed_terrain_gold = 0.0;
-	m_max_processed_terrain_scie = 0.0;
-
-	m_grossFoodCrimeLoss = 0.0;
-	m_grossProdCrimeLoss = 0.0;
-	m_grossGoldCrimeLoss = 0.0;
-	m_grossScieCrimeLoss = 0.0;
-
-	m_grossProdBioinfectionLoss = 0.0;
-	m_grossProdFranchiseLoss = 0.0;
-	m_grossGoldConversionLoss = 0.0;
-
-	m_foodFromOnePop = 0.0;
-	m_prodFromOnePop = 0.0;
-	m_goldFromOnePop = 0.0;
-	m_scieFromOnePop = 0.0;
-
-	m_crimeFoodLossOfOnePop = 0.0;
-	m_crimeProdLossOfOnePop = 0.0;
-	m_crimeGoldLossOfOnePop = 0.0;
-	m_crimeScieLossOfOnePop = 0.0;
-
-	m_bioinfectionProdLossOfOnePop = 0.0;
-	m_franchiseProdLossOfOnePop = 0.0;
-	m_conversionGoldLossOfOnePop = 0.0;
-
-	m_productionLostToBioinfection = 0;
-	m_max_scie_from_terrain = 0;
-	m_gross_science = 0.0;
-	m_science_lost_to_crime = 0.0;
+	m_farmersEff        = new double[g_theCitySizeDB->NumRecords()];
+	m_laborersEff       = new double[g_theCitySizeDB->NumRecords()];
+	m_merchantsEff      = new double[g_theCitySizeDB->NumRecords()];
+	m_scientistsEff     = new double[g_theCitySizeDB->NumRecords()];
 #endif
 }
 
@@ -742,20 +740,18 @@ BOOL NeedsCanalTunnel(MapPoint &center_point)
 //----------------------------------------------------------------------------
 void CityData::Initialize(sint32 settlerType)
 {
-	MapPoint center_point;
-	m_home_city.GetPos(center_point);
+	MapPoint center_point(m_home_city.RetPos());
+
 	if (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.AddCreatedObject(m_home_city.AccessData());
 	}
-
 
 	FindBestSpecialists();
 
 	sint32 martialLaw;
 	m_happy->CalcHappiness(*this, FALSE, martialLaw, TRUE);
 
-	
-	const UnitRecord *settlerRec;
+	const UnitRecord * settlerRec   = NULL;
 	sint32 numPops = 1;
 	if(settlerType >= 0) {
 		settlerRec = g_theUnitDB->Get(settlerType, g_player[m_owner]->GetGovernmentType());
@@ -763,7 +759,6 @@ void CityData::Initialize(sint32 settlerType)
 			numPops = settlerRec->GetSettleSize();
 		
 	} else {
-		settlerRec = NULL;
 		//Added by Martin Gühmann to make sure that also cities
 		//created by the Scenario editor have a size
 		if(settlerType == -2 && ScenarioEditor::PlaceCityMode() && ScenarioEditor::CitySize() > 0)
@@ -857,10 +852,9 @@ void CityData::Initialize(sint32 settlerType)
 	else
 		name = civData->GetAnyCityName();
 
-	m_cityStyle = civ->GetCityStyle();
 	//Added by Martin Gühmann to make sure that cities created 
 	//by the scenario editor keep their style
-	if (settlerType == -2 && ScenarioEditor::PlaceCityMode())
+	if ((settlerType == CITY_STYLE_EDITOR) && ScenarioEditor::PlaceCityMode())
 	{
 		m_cityStyle = ScenarioEditor::CityStyle();
 	}
@@ -876,10 +870,6 @@ void CityData::Initialize(sint32 settlerType)
 		SetName(GetName());
 	}
 
-	m_probeRecoveredHere = FALSE;
-
-	
-	
 	if(g_network.IsActive() && g_network.GetStartingAge() > 0) {
 		sint32 i;
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
@@ -1207,7 +1197,7 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 		g_network.Block(m_owner);
 	}
 	
-	PLAYER_INDEX        newowner    = -1;
+	PLAYER_INDEX        newowner    = PLAYER_UNASSIGNED;
 
 	if(wonderutil_GetRevoltingCitiesJoinPlayer(g_theWonderTracker->GetBuiltWonders())) {
 		sint32 p;
@@ -1222,7 +1212,7 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 					
 					
 					if(newowner == m_owner) {
-						newowner = -1;
+						newowner = PLAYER_UNASSIGNED;
 					} else {
 						joined_egalatarians = TRUE;
 					}
@@ -1438,11 +1428,9 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 	Unit       srcCity,
 	           destCity;
 
-	sint32     i,
-	           n;
+	sint32      i;
+	sint32      n = m_tradeSourceList.Num();
 
-	
-	n = m_tradeSourceList.Num();
 	for(i = 0; i < n; i++)
 	{
 		route = m_tradeSourceList[i];
@@ -1486,13 +1474,7 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 //----------------------------------------------------------------------------
 void CityData::CalcPollution(void)
 {
-	sint32 populationPolluting,productionPolluting;
-	sint32 i;
-	uint64 buildingCheck;
-	double buildingPollution,buildingProductionPercentage,buildingPopulationPercentage,temp;
-
-
-	populationPolluting = PopCount() - 
+	sint32 populationPolluting = PopCount() - 
 		g_theDifficultyDB->GetPollutionStartPopulationLevel(g_theGameSettings->GetDifficulty());
 	if(populationPolluting < 0) 
 	{
@@ -1504,7 +1486,7 @@ void CityData::CalcPollution(void)
 
 	populationPolluting = (sint32)(populationPolluting * g_player[m_owner]->GetPollutionCoef());
 
-	productionPolluting = m_gross_production -
+	sint32 productionPolluting = m_gross_production -
 		g_theDifficultyDB->GetPollutionStartProductionLevel(g_theGameSettings->GetDifficulty());
 	if(productionPolluting < 0)
 	{
@@ -1516,9 +1498,13 @@ void CityData::CalcPollution(void)
 
 	productionPolluting = (sint32)(productionPolluting * g_player[m_owner]->GetPollutionCoef());
 
-	buildingPollution=0.0;
-	buildingProductionPercentage=0.0;
-	buildingPopulationPercentage=0.0;
+	double buildingPollution=0.0;
+	double buildingProductionPercentage=0.0;
+	double buildingPopulationPercentage=0.0;
+	sint32 i;
+	uint64 buildingCheck;
+	double temp;
+
 	for(i=0; i<g_theBuildingDB->NumRecords(); i++)
 	{
 		buildingCheck = (uint64)1 << (uint64)i;
@@ -1663,7 +1649,6 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 {
 	double gross_production = collected_production;
 
-	//Added missing casts in order to remove warnings
 	gross_production = ceil(gross_production * workday_per_person);
 
 	double prodBonus;
@@ -4868,19 +4853,26 @@ void CityData::NanoInfect( sint32 player )
 
 void CityData::SpreadBioTerror()
 {
-	Unit *c;
+	Unit c;
 	sint32 i, n = m_tradeSourceList.Num();
 	for(i = 0; i < n; i++) {
-		c = &(m_tradeSourceList[i].GetDestination());
-		if ((c->IsBioImmune()) || (c->IsBioInfected()))
+		// FIXME: I believe that this is not having the intended effect because c reaches here by
+		// value rather than by reference.  The previous code took the address of 
+		// m_tradeSourceList[i].GetDestination() and used that, but since that generated a
+		// "taking address of temporary" warning, I'm fairly sure it was the wrong thing to do,
+		// and investigating the implmentation of m_tradeSourceList[i].GetDestination() increased my
+		// worries.  I've made these changes as a temporary solution, but this needs to be further
+		// investigated. - JJB 2005/07/02
+		c = m_tradeSourceList[i].GetDestination();
+		if ((c.IsBioImmune()) || (c.IsBioInfected()))
 			continue;
 
 		if(g_rand->Next(100) < sint32(g_theConstDB->BioInfectionSpreadChance()
-		                              * 100.0)) {
-			c->BioInfect(0);
+			                          * 100.0)) {
+			c.BioInfect(0);
 			SlicObject *so = new SlicObject("047InfectedViaTrade");
-			so->AddCity(*c);
-			so->AddRecipient(c->GetOwner());
+			so->AddCity(c);
+			so->AddRecipient(c.GetOwner());
 			g_slicEngine->Execute(so);
 		}
 	}
@@ -4888,19 +4880,20 @@ void CityData::SpreadBioTerror()
 
 void CityData::SpreadNanoTerror()
 {
-	Unit *c;
+	Unit c;
 	sint32 i, n = m_tradeSourceList.Num();
 	for(i = 0; i < n; i++) {
-		c = &(m_tradeSourceList[i].GetDestination());
-		if ((c->IsNanoImmune()) || (c->IsNanoInfected()))
+		// FIXME: See comment in CityData::SpreadBioTerror above - same applies here.
+		c = m_tradeSourceList[i].GetDestination();
+		if ((c.IsNanoImmune()) || (c.IsNanoInfected()))
 			continue;
 
 		if(g_rand->Next(100) < sint32(g_theConstDB->NanoInfectionSpreadChance()
-		                              * 100.0)) {
-			c->NanoInfect(0);
+			                          * 100.0)) {
+			c.NanoInfect(0);
 			SlicObject *so = new SlicObject("047InfectedViaTrade");
-			so->AddCity(*c);
-			so->AddRecipient(c->GetOwner());
+			so->AddCity(c);
+			so->AddRecipient(c.GetOwner());
 			g_slicEngine->Execute(so);
 		}
 	}
@@ -5369,12 +5362,13 @@ void CityData::SellBuilding(sint32 which, BOOL byChoice)
 
 void CityData::SetRoad() const
 {
-	MapPoint pos;
-	m_home_city.GetPos(pos);
-	Cell *cell = g_theWorld->GetCell(pos);
+	MapPoint    pos     (m_home_city.RetPos());
+	Cell *      cell    = g_theWorld->GetCell(pos);
 
-	const TerrainImprovementRecord *rec = terrainutil_GetBestRoad(m_owner, pos);
-	if(rec) {
+	TerrainImprovementRecord const *
+                rec     = terrainutil_GetBestRoad(m_owner, pos);
+	if (rec) 
+    {
 		cell->InsertDBImprovement(rec->GetIndex());
 	}
 #if 0
@@ -6226,7 +6220,7 @@ void CityData::BuildInfrastructure()
 		return;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
-		g_network.SendAction(new NetAction(NET_ACTION_BUILD_INFRASTRUCTURE, m_home_city));
+		g_network.SendAction(new NetAction(NET_ACTION_BUILD_INFRASTRUCTURE, m_home_city.m_id));
 	} else if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_INFRASTRUCTURE, m_home_city));
@@ -6250,7 +6244,7 @@ void CityData::BuildCapitalization()
 		return;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
-		g_network.SendAction(new NetAction(NET_ACTION_BUILD_CAPITALIZATION, m_home_city));
+		g_network.SendAction(new NetAction(NET_ACTION_BUILD_CAPITALIZATION, m_home_city.m_id));
 	} else if(g_network.IsHost()) {
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_CAPITALIZATION, m_home_city));

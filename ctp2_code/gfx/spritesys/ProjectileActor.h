@@ -9,8 +9,10 @@
 
 
 
-
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
+
 #ifndef __PROJECTILEACTOR_H__
 #define __PROJECTILEACTOR_H__
 
@@ -44,7 +46,7 @@ public:
 	void			AddAction(Action *actionObj);
 	void			GetNextAction(BOOL isVisible = TRUE);
 
-	Anim			*GetAnim(PROJECTILEACTION action);
+	Anim *          CreateAnim(PROJECTILEACTION action);
 
 	void			Draw(void);
 

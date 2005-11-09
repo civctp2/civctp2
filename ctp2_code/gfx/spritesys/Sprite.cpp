@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Sprite
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -839,14 +839,6 @@ void Sprite::AllocateFrameArrays(size_t count)
 }
 
 
-
-void Sprite::AllocateFrameArraysBasic(void)
-{
-	m_frames = new Pixel16*[1];
-	m_miniframes = new Pixel16*[1];
-}
-
-
 void Sprite::Export(FILE *file)
 {
 	extern TokenData	g_allTokens[];
@@ -900,7 +892,7 @@ inline Pixel16 Sprite::average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, P
 		g0 = (g1 + g2 + g3 + g4) >> 2;
 		b0 = (b1 + b2 + b3 + b4) >> 2;
 
-		return (r0 << 11) | (g0 << 5) | b0;
+		return static_cast<Pixel16>((r0 << 11) | (g0 << 5) | b0);
 	} else {
 		r1 = (pixel1 & 0x7C00) >> 10;
 		g1 = (pixel1 & 0x03E0) >> 5;
@@ -922,7 +914,7 @@ inline Pixel16 Sprite::average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, P
 		g0 = (g1 + g2 + g3 + g4) >> 2;
 		b0 = (b1 + b2 + b3 + b4) >> 2;
 
-		return (r0 << 10) | (g0 << 5) | b0;
+		return static_cast<Pixel16>((r0 << 10) | (g0 << 5) | b0);
 	}
 }
 
@@ -948,7 +940,7 @@ inline Pixel16 Sprite::average(Pixel16 pixel1, Pixel16 pixel2)
 		g0 = (g1 + g2) >> 1;
 		b0 = (b1 + b2) >> 1;
 
-		return (r0 << 11) | (g0 << 5) | b0;
+		return static_cast<Pixel16>((r0 << 11) | (g0 << 5) | b0);
 	} else {
 		r1 = (pixel1 & 0x7C00) >> 10;
 		g1 = (pixel1 & 0x03E0) >> 5;
@@ -962,7 +954,7 @@ inline Pixel16 Sprite::average(Pixel16 pixel1, Pixel16 pixel2)
 		g0 = (g1 + g2) >> 1;
 		b0 = (b1 + b2) >> 1;
 
-		return (r0 << 10) | (g0 << 5) | b0;
+		return static_cast<Pixel16>((r0 << 10) | (g0 << 5) | b0);
 	}
 }
 

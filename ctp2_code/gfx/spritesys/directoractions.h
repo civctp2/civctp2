@@ -1,18 +1,21 @@
 #ifndef __DIRECTORACTIONS_H__
 #define __DIRECTORACTIONS_H__
 
+class DQAction;
+
 class UnitActor;
 class ProjectileActor;
 class EffectActor;
 class TradeActor;
 class aui_Surface;
 class Battle;
-enum GAME_OVER;
 class SpriteState;
 
-#include "message.h"
 #include "Unit.h"
+
 #include "MapPoint.h"
+#include "message.h"
+#include "GameOver.h"
 
 class DQAction {
 public:

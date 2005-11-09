@@ -11,8 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __EFFECTSPRITEGROUP_H__
 #define __EFFECTSPRITEGROUP_H__
 

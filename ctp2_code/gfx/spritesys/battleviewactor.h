@@ -51,7 +51,7 @@ public:
 	void			GetNextAction(BOOL isVisible = TRUE);
 	void			AddIdle(BOOL NoIdleJustDelay = FALSE);
 
-	Anim			*GetAnim(UNITACTION action);
+	Anim *          CreateAnim(UNITACTION action);
 	
 	BOOL			HasThisAnim(UNITACTION action) { if (!m_unitSpriteGroup) return FALSE; return (m_unitSpriteGroup->GetAnim((GAME_ACTION)action) != NULL); }
 	Anim			*MakeFakeDeath(void);

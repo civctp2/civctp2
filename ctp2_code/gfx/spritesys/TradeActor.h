@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TRADEACTOR_H__
 #define __TRADEACTOR_H__
 
@@ -40,7 +41,7 @@ public:
 	void			GetNextAction(void);
 	void			AddIdle(void);
 
-	Anim			*GetAnim(GOODACTION action);
+	Anim *          CreateAnim(GOODACTION action);
 
 	void			Draw(Vision *tileLocalVision);
 	void			DrawText(sint32 x, sint32 y, MBCHAR *goodText);

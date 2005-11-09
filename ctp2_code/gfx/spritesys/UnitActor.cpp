@@ -86,7 +86,6 @@ BOOL                    g_showHeralds = TRUE;
 #define k_SHIELD_ON_TIME        650
 #define k_SHIELD_OFF_TIME       150
 
-extern ColorSet         *g_colorSet;
 extern SpriteGroupList  *g_unitSpriteGroupList;
 extern SpriteGroupList  *g_citySpriteGroupList;
 extern TiledMap         *g_tiledMap;
@@ -486,18 +485,15 @@ void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVi
 
 void UnitActor::AddIdle(BOOL NoIdleJustDelay)
 {
-	Anim		*anim;
-
-	anim = GetAnim(UNITACTION_IDLE);
-	m_frame = 0;
+	Anim *  anim    = CreateAnim(UNITACTION_IDLE);
+	m_frame         = 0;
 
 	
 	if (anim == NULL) {
-		anim = GetAnim(UNITACTION_MOVE);
+		anim = CreateAnim(UNITACTION_MOVE);
 		Assert(anim != NULL);
 	}
 
-	Action		*idleAction;
 
 	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
 	{
@@ -505,7 +501,9 @@ void UnitActor::AddIdle(BOOL NoIdleJustDelay)
 	}
 
 
-	if(NoIdleJustDelay == TRUE) {
+	Action		*idleAction;
+
+	if (NoIdleJustDelay) {
 		idleAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 
 								0, 
 								TRUE);
@@ -527,17 +525,12 @@ void UnitActor::AddIdle(BOOL NoIdleJustDelay)
 
 void UnitActor::ActionQueueUpIdle(BOOL NoIdleJustDelay)
 {
-	Anim		*anim;
-
-
-
-
-	anim = GetAnim(UNITACTION_IDLE);
+	Anim * anim = CreateAnim(UNITACTION_IDLE);
 
 	
 	if (anim == NULL) 
 	{
-		anim = GetAnim(UNITACTION_MOVE);
+		anim = CreateAnim(UNITACTION_MOVE);
 		Assert(anim != NULL);
 	}
 
@@ -1044,7 +1037,7 @@ void UnitActor::AddAction(Action *actionObj)
 	}
 }
 
-Anim *UnitActor::GetAnim(UNITACTION action)
+Anim *UnitActor::CreateAnim(UNITACTION action)
 {
 #ifndef _TEST
 	STOMPCHECK();
@@ -1074,11 +1067,9 @@ Anim *UnitActor::GetAnim(UNITACTION action)
 		}
 	}
 
-	Anim	*anim = new Anim();
-	*anim = *origAnim;
-	anim->SetSpecialCopyDelete(ANIMXEROX_COPY);
+	Anim * anim = new Anim(*origAnim);
 
-	if(anim->GetType() == ANIMTYPE_LOOPED)
+	if (anim->GetType() == ANIMTYPE_LOOPED)
 	{
 
 		anim->SetDelayEnd(m_holdingCurAnimDelayEnd[action]);
@@ -2326,17 +2317,8 @@ UnitActor::ActionMove(Action *actionObj)
 	if (actionObj == NULL) 
 		return false;
 
-	Anim	 *anim		=	NULL;
-	sint32    visiblePlayer;
-	
-	
-	sint32	  speed				= g_theProfileDB->GetUnitSpeed();
-	sint32	  maxActionCounter	= k_MAX_UNIT_MOVEMENT_ITERATIONS - speed;
-
-	
 	if(GetNeedsToDie())
 	   return false;
-
 	
 	SetIsFortifying(FALSE);
 	SetIsFortified (FALSE);
@@ -2347,45 +2329,37 @@ UnitActor::ActionMove(Action *actionObj)
 	actionObj->SetSpecialDelayProcess(GetHoldingCurAnimSpecialDelayProcess(UNITACTION_MOVE));
 	actionObj->SetCurrentEndCondition(ACTIONEND_PATHEND);
 	
-	
-	
 	if (GetLoadType()!=LOADTYPE_FULL) 
 	 	FullLoad(UNITACTION_MOVE);
 
-	
-	anim = GetAnim(UNITACTION_MOVE);
-	
+	Anim * anim	= CreateAnim(UNITACTION_MOVE);
 	Assert(anim != NULL);
-   
-	
-	if (anim == NULL) 
+   	if (anim == NULL) 
    		return false;
 
-	
 	actionObj->SetAnim(anim);
-
 	actionObj->SetUnitsVisibility(GetUnitVisibility());
 	actionObj->SetUnitVisionRange(GetUnitVisionRange());
-
-	actionObj->SetMaxActionCounter(maxActionCounter);
+	actionObj->SetMaxActionCounter
+        (k_MAX_UNIT_MOVEMENT_ITERATIONS - g_theProfileDB->GetUnitSpeed());
 	actionObj->SetCurActionCounter(0);
 
 	AddAction(actionObj);
 
-	
-	
-	
-	if (GetIsTransported()==k_TRANSPORTREMOVEONLY) 
+	if (GetIsTransported() == k_TRANSPORTREMOVEONLY) 
+    {
 		TerminateLoopingSound(SOUNDTYPE_SFX);
+    }
 	else 
 	{
-		visiblePlayer = g_selected_item->GetVisiblePlayer();
+	    sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
 
 		if ((visiblePlayer == GetPlayerNum()) ||
 			(GetUnitVisibility() & (1 << visiblePlayer))) 
+        {
 			AddLoopingSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
+        }
    	}
-
 	
 	return true;
 }
@@ -2403,33 +2377,25 @@ UnitActor::ActionAttack(Action *actionObj,sint32 facing)
 	if(GetNeedsToDie()) 
 	   return false;
 
-	sint32    visiblePlayer = g_selected_item->GetVisiblePlayer();
-	
-	
 	actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
-	
 	
    	if(!TryAnimation(actionObj,UNITACTION_ATTACK))
 	   if(!TryAnimation(actionObj,UNITACTION_IDLE))
 	 	 return false;
 	
 	actionObj->SetActionType(UNITACTION_ATTACK);
-
-	
 	actionObj->SetFacing(facing);
-
-	
 	actionObj->SetUnitsVisibility(GetUnitVisibility());
 	actionObj->SetUnitVisionRange(GetUnitVisionRange());
 
-	
 	AddAction(actionObj);
 
 	
 	TerminateLoopingSound(SOUNDTYPE_SFX);
 
+	sint32 const    visiblePlayer = g_selected_item->GetVisiblePlayer();
 	
-	  if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer))) 
+    if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer))) 
 		  AddSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
 
 	
@@ -2448,9 +2414,6 @@ UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)
 	if(GetNeedsToDie()) 
 	   return false;
 
-	sint32    visiblePlayer = g_selected_item->GetVisiblePlayer();
-	
-	
 	actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
 
 	
@@ -2461,25 +2424,19 @@ UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)
 
 	
 	actionObj->SetActionType(UNITACTION_ATTACK);
-
-	
 	actionObj->SetFacing(facing);
-
-	
 	actionObj->SetUnitsVisibility(GetUnitVisibility());
 	actionObj->SetUnitVisionRange(GetUnitVisionRange());
-
 	
 	AddAction(actionObj);
-
 	
 	TerminateLoopingSound(SOUNDTYPE_SFX);
 
+	sint32 const    visiblePlayer = g_selected_item->GetVisiblePlayer();
 	
 	  if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer))) 
 		  AddSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
 
-	
 	return true;
 }
 
@@ -2487,16 +2444,15 @@ UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)
 bool 
 UnitActor::TryAnimation(Action *actionObj,UNITACTION action)
 {
-	
 	FullLoad(action);
 
-	Anim *theAnim = GetAnim(action); // theAnim must be deleted
-	if(theAnim!=NULL)
+	Anim * theAnim = CreateAnim(action); // theAnim must be deleted
+	if (theAnim)
 	{ 
-	  actionObj->SetAnimPos(GetHoldingCurAnimPos(action));
-	  actionObj->SetSpecialDelayProcess(GetHoldingCurAnimSpecialDelayProcess(action));
-	  actionObj->SetAnim(theAnim);
-	  return true;
+        actionObj->SetAnimPos(GetHoldingCurAnimPos(action));
+        actionObj->SetSpecialDelayProcess(GetHoldingCurAnimSpecialDelayProcess(action));
+        actionObj->SetAnim(theAnim);
+        return true;
 	}
 	
 	return false;
@@ -2508,7 +2464,7 @@ void UnitActor::DumpFullLoad(void)
 	if (!m_unitSpriteGroup) return;
 	if (m_loadType != LOADTYPE_FULL) return;
 
-	BOOL purged = g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_FULL);
+	bool purged = g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_FULL);
 
 	if (purged) {
 		m_unitSpriteGroup = NULL;

@@ -391,48 +391,14 @@ UnitData::UnitData(CivArchive &archive) : GameObj(0)
 	Serialize(archive);
 }
 
-
-
-
-
-
-
-
-
 UnitData::~UnitData()
-
 {
-	if (m_cargo_list) {
-		delete m_cargo_list;
-	}
-
-	if (m_city_data) {
-		delete m_city_data;
-	}
-
-	
-	
-	if (m_actor)
-		delete m_actor;
-
-	if(m_roundTheWorldMask) {
-		delete m_roundTheWorldMask;
-		m_roundTheWorldMask = NULL;
-	}
-
-	
-	if (m_lesser)
-	{
-		delete m_lesser;
-		m_lesser = NULL;
-	}
-
-	
-	if (m_greater)
-	{
-		delete m_greater;
-		m_greater = NULL;
-	}
+	delete m_cargo_list;
+	delete m_city_data;
+	delete m_actor;
+	delete m_roundTheWorldMask;
+	delete m_lesser;
+	delete m_greater;
 }
 
 //----------------------------------------------------------------------------
@@ -1080,7 +1046,7 @@ BOOL UnitData::CanThisCargoUnloadAt(const Unit & the_cargo, const MapPoint & old
 //
 //----------------------------------------------------------------------------
 BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
-						   BOOL justOneUnit, Unit &theUnit)
+						   BOOL justOneUnit, const Unit &theUnit)
 
 {
 	if(!m_cargo_list)
@@ -3031,7 +2997,7 @@ sint32 UnitData::GetDistance(UnitData* unit1, UnitData* unit2,
 	return GetDistance(unit1, u2pos, wrapRange);
 }
 
-sint32 UnitData::GetDistance(Installation &inst, UnitData* unit2,
+sint32 UnitData::GetDistance(const Installation &inst, UnitData* unit2,
 							 sint32 wrapRange)
 {
 	MapPoint iPos;
@@ -3400,14 +3366,17 @@ BOOL UnitData::SafeFromNukes() const
 double UnitData::GetPositionDefense(const Unit &attacker) const
 {
 	const UnitRecord *myRec = g_theUnitDB->Get(m_type);
-	double def, basedef;
-	Cell *cell = g_theWorld->GetCell(m_pos);
-	
-	def = basedef = myRec->GetDefense();
-	
-	if(g_theWorld->IsWater(m_pos) && !(myRec->GetMovementTypeSea() || myRec->GetMovementTypeShallowWater())) {
+
+	if (g_theWorld->IsWater(m_pos) && 
+        !(myRec->GetMovementTypeSea() || myRec->GetMovementTypeShallowWater())
+       ) 
+    {
 		return 1.0;
 	}
+
+	Cell *          cell    = g_theWorld->GetCell(m_pos);
+    double const    basedef = myRec->GetDefense();
+    double          def     = basedef;
 
 	if(cell->GetCity().m_id != (0)) 
 	{
@@ -3454,11 +3423,9 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 // returns this unit's attack points when attacking Unit defender
 double UnitData::GetOffense(const Unit &defender) const
 {
-	const UnitRecord *myRec = g_theUnitDB->Get(m_type);
-	Unit city;
-	city = g_theWorld->GetCity(m_pos);
-
-	double base = myRec->GetAttack();
+	const UnitRecord *  myRec   = g_theUnitDB->Get(m_type);
+	Unit                city    = g_theWorld->GetCity(m_pos);
+	double              base    = myRec->GetAttack();
 
 	if(city.IsValid()) {
 		base += city.CD()->GetOffenseBonus(defender);
@@ -3558,7 +3525,7 @@ BOOL UnitData::HasForceField() const
 	return m_city_data->HasForceField();
 }
 
-BOOL UnitData::StoppedBySpies(Unit &c)
+BOOL UnitData::StoppedBySpies(const Unit &c)
 {
 	SlicObject	*so ;
 	MapPoint pos;
@@ -4239,7 +4206,7 @@ sint32 UnitData::GetFranchiseTurnsRemaining() const
 	return m_city_data->GetFranchiseTurnsRemaining();
 }
 
-BOOL UnitData::CanSee(Army &al) const
+BOOL UnitData::CanSee(const Army &al) const
 {
 	sint32 i, n = al.Num();
 	for(i = 0; i < n; i++) {
@@ -5665,7 +5632,7 @@ void UnitData::BuildCapitalization()
 	}
 }
 
-void UnitData::ActionSuccessful(SPECATTACK attack, Unit &c)
+void UnitData::ActionSuccessful(SPECATTACK attack, const Unit &c)
 {
 	sint32		soundID, spriteID;
 
@@ -5808,7 +5775,7 @@ void UnitData::CheckVisionRadius()
 #endif
 }
 
-void UnitData::SetTargetCity(Unit &city)
+void UnitData::SetTargetCity(const Unit &city)
 {
 	m_target_city = city;
 	if(m_target_city.IsValid()) {

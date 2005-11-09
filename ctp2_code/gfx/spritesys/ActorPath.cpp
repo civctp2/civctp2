@@ -11,17 +11,11 @@
 
 
 #include "c3.h"
-
-#include "aui.h"
-#include "pixelutils.h"
-#include "spriteutils.h"
-
-#include "Anim.h"
 #include "ActorPath.h"
-#include "tiledmap.h"
-#include "maputils.h"
 
-extern TiledMap			*g_tiledMap;
+#include "maputils.h"           // maputils_MapXY2PixelXY
+#include "spriteutils.h"        // spriteutils_DeltaToFacing
+
 
 ActorPath::ActorPath(uint16 numPoints)
 {
@@ -85,8 +79,6 @@ void ActorPath::SetPos(uint16 pointNum, sint32 x, sint32 y)
 
 void ActorPath::CalcPosition(sint32 start, sint32 end, sint32 current, POINT *pos)
 {
-	double		rat;
-
 	if (start == end) {
 		*pos = m_pos[POINTSPOSTYPE_STARTPOS];
 		return;
@@ -102,18 +94,16 @@ void ActorPath::CalcPosition(sint32 start, sint32 end, sint32 current, POINT *po
 	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_ENDPOS].x, m_pos[POINTSPOSTYPE_ENDPOS].y, 
 							&(m_points[POINTSPOSTYPE_ENDPOS].x), &(m_points[POINTSPOSTYPE_ENDPOS].y));
 
-	rat = (double)current / (double)(end - start);
+	double const rat = (double) current / (double)(end - start);
 
 	pos->x = m_points[POINTSPOSTYPE_STARTPOS].x + (uint32)((m_points[POINTSPOSTYPE_ENDPOS].x - m_points[POINTSPOSTYPE_STARTPOS].x) * rat);
 	pos->y = m_points[POINTSPOSTYPE_STARTPOS].y + (uint32)((m_points[POINTSPOSTYPE_ENDPOS].y - m_points[POINTSPOSTYPE_STARTPOS].y) * rat);
 }
 
-void ActorPath::CalcFacing(sint32 start, sint32 end, sint32 current, uint16 *facing)
+sint32 ActorPath::CalcFacing(sint32 start, sint32 end, sint32 current) const
 {
-	sint32 x, y;
+	sint32 const x = m_points[POINTSPOSTYPE_ENDPOS].x - m_points[POINTSPOSTYPE_STARTPOS].x;
+	sint32 const y = m_points[POINTSPOSTYPE_ENDPOS].y - m_points[POINTSPOSTYPE_STARTPOS].y;
 
-	x = m_points[POINTSPOSTYPE_ENDPOS].x - m_points[POINTSPOSTYPE_STARTPOS].x;
-	y = m_points[POINTSPOSTYPE_ENDPOS].y - m_points[POINTSPOSTYPE_STARTPOS].y;
-
-	*facing = (uint16)spriteutils_DeltaToFacing(x, y);
+	return spriteutils_DeltaToFacing(x, y);
 }

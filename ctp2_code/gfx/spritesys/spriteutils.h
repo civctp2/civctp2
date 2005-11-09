@@ -38,6 +38,9 @@
 
 #define k_EMPTY_TABLE_ENTRY	0xFFFF
 
+#include "ctp2_inttypes.h"  // sint##, uint##
+#include "pixeltypes.h"     // Pixel##
+
 void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, uint16 height);
 
 

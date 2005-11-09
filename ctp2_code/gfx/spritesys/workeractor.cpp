@@ -96,9 +96,8 @@ void WorkerActor::Initialize(sint32 index, const MapPoint &pos)
 
 void WorkerActor::AddIdle(void)
 {
-
 	m_curAction = new Action(UNITACTION_IDLE, ACTIONEND_ANIMEND);
-	m_curAction->SetAnim(GetAnim(UNITACTION_IDLE));
+	m_curAction->SetAnim(CreateAnim(UNITACTION_IDLE));
 	m_curUnitAction = UNITACTION_IDLE;
 }
 
@@ -182,14 +181,18 @@ void WorkerActor::AddAction(Action *actionObj)
 
 	m_actionQueue.Enqueue(actionObj);
 
-	if (m_curAction) {
-		if (m_curAction->GetAnim()->GetType() == ANIMTYPE_LOOPED) {
-			m_curAction->SetFinished(TRUE);
-		}
-	}
+	if (m_curAction)
+    {
+        if (!m_curAction->GetAnim() || 
+       	(m_curAction->GetAnim()->GetType() == ANIMTYPE_LOOPED) 
+       )
+        {
+		m_curAction->SetFinished(TRUE);
+        }
+    }
 }
 
-Anim *WorkerActor::GetAnim(UNITACTION action)
+Anim *WorkerActor::CreateAnim(UNITACTION action)
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return NULL;
@@ -203,12 +206,8 @@ Anim *WorkerActor::GetAnim(UNITACTION action)
 		Assert(origAnim != NULL);
 		return NULL;
 	}
-	Anim	*anim = new Anim();
-	*anim = *origAnim;
-	anim->SetSpecialCopyDelete(ANIMXEROX_COPY);
 
-	return anim;
-
+	return new Anim(*origAnim);
 }
 
 void WorkerActor::Draw(void)

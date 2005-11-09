@@ -31,7 +31,6 @@
 
 #define k_doInvisible FALSE
 
-extern ColorSet			*g_colorSet;
 extern SpriteGroupList	*g_projectileSpriteGroupList;
 extern TiledMap			*g_tiledMap;
 extern Director			*g_director;
@@ -316,7 +315,7 @@ void ProjectileActor::AddAction(Action *actionObj)
 
 }
 
-Anim *ProjectileActor::GetAnim(PROJECTILEACTION action)
+Anim *ProjectileActor::CreateAnim(PROJECTILEACTION action)
 {
 	Assert(m_projectileSpriteGroup != NULL);
 	if (m_projectileSpriteGroup == NULL) return NULL;
@@ -331,12 +330,7 @@ Anim *ProjectileActor::GetAnim(PROJECTILEACTION action)
 		return NULL;
 	}
 
-	Anim	*anim = new Anim();
-	*anim = *origAnim;
-	anim->SetSpecialCopyDelete(ANIMXEROX_COPY);
-
-	return anim;
-
+	return new Anim(*origAnim);
 }
 
 void ProjectileActor::Draw(void)

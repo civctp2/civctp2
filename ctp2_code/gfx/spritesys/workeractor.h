@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __WORKERACTOR_H__
 #define __WORKERACTOR_H__
 
@@ -41,7 +42,7 @@ public:
 	void			GetNextAction(void);
 	void			AddIdle(void);
 
-	Anim			*GetAnim(UNITACTION action);
+	Anim *          CreateAnim(UNITACTION action);
 
 	void			Draw(void);
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);

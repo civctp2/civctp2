@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Good sprite handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -28,7 +28,9 @@
 //
 //----------------------------------------------------------------------------
 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GOODSPRITEGROUP_H__
 #define __GOODSPRITEGROUP_H__
 
@@ -83,7 +85,7 @@ public:
 	POINT			GetHotPoint(GOODACTION action);
 
 
-	
+ 
 	sint32			Parse(uint16 id,GROUPTYPE group);
 
 private:

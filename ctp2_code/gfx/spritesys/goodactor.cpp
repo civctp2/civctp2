@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Good actor
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -173,18 +173,17 @@ void GoodActor::PositionActor(MapPoint &pos)
 
 void GoodActor::AddIdle(void)
 {
-	
 	if (m_curAction) return;
 
 	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_ANIMEND);
 
-	Anim	*anim = GetAnim(GOODACTION_IDLE);
-	if (!anim) return;
-
-	m_curAction->SetAnim(anim);
-	m_curAction->SetDelay(0);
-
-	m_curGoodAction = GOODACTION_IDLE;
+	Anim * anim = CreateAnim(GOODACTION_IDLE);
+	if (anim) 
+    {
+	    m_curAction->SetAnim(anim);
+	    m_curAction->SetDelay(0);
+	    m_curGoodAction = GOODACTION_IDLE;
+    }
 }
 
 void GoodActor::Process(void)
@@ -301,7 +300,7 @@ void GoodActor::DumpAllActions(void)
 }
 
 
-Anim *GoodActor::GetAnim(GOODACTION action)
+Anim *GoodActor::CreateAnim(GOODACTION action)
 {
 	Assert(m_goodSpriteGroup != NULL);
 	if (m_goodSpriteGroup == NULL) return NULL;
@@ -316,12 +315,7 @@ Anim *GoodActor::GetAnim(GOODACTION action)
 		return NULL;
 	}
 
-	Anim	*anim = new Anim();
-	*anim = *origAnim;
-	anim->SetSpecialCopyDelete(ANIMXEROX_COPY);
-
-	return anim;
-
+	return new Anim(*origAnim);
 }
 
 void GoodActor::DrawSelectionBrackets(void)
