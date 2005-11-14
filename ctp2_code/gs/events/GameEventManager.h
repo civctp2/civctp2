@@ -4,6 +4,7 @@
 
 #include "GameEventTypes.h"
 #include "GameEventDescription.h"
+#include "GameEventArgument.h"
 
 class GameEvent;
 template <class T> class PointerList;
@@ -54,8 +55,13 @@ public:
 	GAME_EVENT_ERR RemoveCallback(GAME_EVENT type, GameEventHookCallback *cb);
 
 	
-	GAME_EVENT_ERR ActivateHook(GAME_EVENT type, GameEventArgList *args, sint32 &resumeIndex);
-	GAME_EVENT_ERR ResumeHook(GAME_EVENT type, GameEventArgList *args, sint32 startIndex, sint32 &resumeIndex);
+	GAME_EVENT_ERR ActivateHook
+    (
+        GAME_EVENT          type, 
+        GameEventArgList *  args, 
+        sint32              startIndex, 
+        sint32 &            resumeIndex
+    );
 
 	
 	GAME_EVENT GetEventIndex(const MBCHAR *name);

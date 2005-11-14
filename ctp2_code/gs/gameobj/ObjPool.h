@@ -25,14 +25,15 @@
 // - #pragma once commented out.
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1000)
+
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
+
 #ifndef __OBJ_POOL_H__
 #define __OBJ_POOL_H__ 1
 
-#include "GameObj.h"
-#include "ID.h"
+class ObjPool;
 
 
 #define k_OBJ_POOL_TABLE_SIZE 1024
@@ -58,6 +59,9 @@
 
 #define k_OBJPOOL_VERSION_MAJOR		0								
 #define k_OBJPOOL_VERSION_MINOR		0								
+
+#include "GameObj.h"
+#include "ID.h"
 
 class CivArchive ;
 

@@ -15,15 +15,13 @@
 #include "director.h"
 #include "TerrainRecord.h"
 #include "pixelutils.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorSet
 #include "TradeDynArr.h"
 #include "profileDB.h"
 #include "ResourceRecord.h"
 #include "Globals.h"
 #include "Events.h"
 #include "GameEventUser.h"
-
-extern ColorSet *g_colorSet;
 
 class aui_Surface;
 
@@ -65,7 +63,7 @@ TradeRoute TradePool::Create(Unit sourceCity,
 		
 		
 		delete newData;
-		return TradeRoute(0);
+		return TradeRoute();
 	}
 
 	Insert(newData);

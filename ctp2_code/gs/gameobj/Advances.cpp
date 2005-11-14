@@ -231,63 +231,49 @@ void Advances::UpdateCitySprites(BOOL forceUpdate)
 
 void Advances::SetHasAdvance(AdvanceType advance)
 {
-	if(m_hasAdvance[advance]) {
-		
-		
+	if (   !g_player[m_owner]       // non-existing player
+        || m_hasAdvance[advance]    // advance already known
+        || !g_slicEngine->CallMod   // forbidden by game settings
+                (mod_CanPlayerHaveAdvance, TRUE, m_owner, advance)
+       )  
+    {
 		return;
 	}
-	if(!g_slicEngine->CallMod(mod_CanPlayerHaveAdvance, TRUE, m_owner, advance))
-		return;
 
-	m_hasAdvance[advance] = TRUE;
+	m_hasAdvance[advance]   = TRUE;
+	m_canResearch[advance]  = FALSE;
 
-	const AdvanceRecord	*rec;
-	rec = g_theAdvanceDB->Get(advance);
+    const AdvanceRecord	* rec = g_theAdvanceDB->Get(advance);
 	
-	m_canResearch[advance] = FALSE;
+	if (rec->GetDeepOcean()) 
+    {
+		g_player[m_owner]->SetDeepOceanVisible(TRUE);
 
-	
-	if (rec->GetDeepOcean()) {
-		if (g_player[m_owner]) {
-			g_player[m_owner]->SetDeepOceanVisible(TRUE);
-		}
-
-		
-		if (g_tiledMap) {
+		if (g_tiledMap) 
+        {
 			g_tiledMap->Refresh();
 			g_tiledMap->InvalidateMix();
 		}
 	}
 
-	if(rec->GetCapitalization()) {
+	if (rec->GetCapitalization()) 
+    {
 		g_player[m_owner]->m_can_build_capitalization = TRUE;
 	}
 
-	if(rec->GetInfrastructure()) {
+	if (rec->GetInfrastructure()) 
+    {
 		g_player[m_owner]->m_can_build_infrastructure = TRUE;
 	}
 
-	
-	if ( rec->GetTransform()) {
+	if (rec->GetTransform()) 
+    {
 		g_player[m_owner]->m_can_use_terra_tab = TRUE;
 	}
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
     if (strcmp(g_theStringDB->GetIdStr(g_theAdvanceDB->Get(advance)->m_name),
-               "ADVANCE_AERODYNAMICS") == 0) {
+               "ADVANCE_AERODYNAMICS") == 0) 
+    {
         QuickSlic("42IAAirportTip", m_owner, TRUE);
     }
 
@@ -338,73 +324,65 @@ Advances::GrantAdvance()
 
 void Advances::GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient) 
 {
-
-
-
-
-
-
 	DPRINTF(k_DBG_GAMESTATE, ("Advance: Player %d was given %s\n", m_owner,
 			g_theAdvanceDB->GetNameStr(adv)));
 
-	if(m_hasAdvance[adv]) {
-		
+	if (    m_hasAdvance[adv]           // already known
+         || !g_slicEngine->CallMod      // forbidden by game settings
+                (mod_CanPlayerHaveAdvance, TRUE, m_owner, adv) 
+       ) 
+    {
 		return;
 	}
 
-	if(!g_slicEngine->CallMod(mod_CanPlayerHaveAdvance, TRUE, m_owner, adv))
-		
-		return;
+	if (g_network.IsActive() && g_network.SetupMode()) 
+    {
+        // Multiplayer game setup
 
-	sint32 pointCost = g_theAdvanceDB->Get(adv)->GetPowerPoints();
-	if(g_network.IsActive() && g_network.SetupMode()) {
-		if(g_player[m_owner]->GetPoints() < pointCost)
-			
-			return;
+	    sint32 const pointCost = g_theAdvanceDB->Get(adv)->GetPowerPoints();
 
-		
-		
-		
-		if(g_network.IsClient() && m_owner != g_selected_item->GetVisiblePlayer())
-			return;
+		if (g_player[m_owner]->GetPoints() < pointCost)
+			return; // Too expensive
 
-		if(g_network.IsHost()) {
-			if(!fromClient && m_owner != g_selected_item->GetVisiblePlayer())
-				return;
+		if (g_network.IsClient() && m_owner != g_selected_item->GetVisiblePlayer())
+			return; // Not for me
+
+		if (g_network.IsHost()) 
+        {
+			if (!fromClient && m_owner != g_selected_item->GetVisiblePlayer())
+				return; // Not for me
 		}
 
 		g_player[m_owner]->DeductPoints(pointCost);
-		if(g_network.IsClient()) {
-			g_network.SendAction(new NetAction(NET_ACTION_ADVANCE_CHEAT,
-											   adv));
+		
+        if (g_network.IsClient()) 
+        {
+			g_network.SendAction(new NetAction(NET_ACTION_ADVANCE_CHEAT, adv));
 		}
 	}
 
 
 	SetHasAdvance(adv);
 
-	m_discovered++;
+	++m_discovered;
+	m_total_cost += g_theAdvanceDB->Get(adv)->GetCost();
 
-	
-	m_total_cost = m_total_cost + g_theAdvanceDB->Get(adv)->GetCost();
-
-	if(g_network.IsActive()) {
-		if(g_network.IsHost()) {
-			g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADVANCE,
-										  m_owner, adv, m_discovered,
-										  g_player[m_owner]->m_science->GetLevel()));
-		}
+	if (g_network.IsActive() && g_network.IsHost()) 
+    {
+		g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADVANCE,
+									  m_owner, adv, m_discovered,
+									  g_player[m_owner]->m_science->GetLevel()
+                                     )
+                         );
 	}
 }
 
 void Advances::GiveAdvancePlusPrerequisites(AdvanceType adv)
 {
-	if(!g_slicEngine->CallMod(mod_CanPlayerHaveAdvance, TRUE, m_owner, adv))
-		return;
-
 	GiveAdvance(adv, CAUSE_SCI_INITIAL, FALSE);
-	sint32 i;
-	for(i = 0; i < g_theAdvanceDB->Get(adv)->GetNumPrerequisites(); i++) {
+
+	for (sint32 i = 0; i < g_theAdvanceDB->Get(adv)->GetNumPrerequisites(); i++) 
+    {
 		if(adv == g_theAdvanceDB->Get(adv)->GetPrerequisitesIndex(i))
 			continue;
 		if(!HasAdvance(g_theAdvanceDB->Get(adv)->GetPrerequisitesIndex(i))) {
@@ -428,8 +406,8 @@ void Advances::TakeAdvance(AdvanceType adv)
 	if(!m_hasAdvance[adv])
 		return;
 
-	sint32 pointCost = g_theAdvanceDB->Get(adv)->GetPowerPoints();
 	if(g_network.IsActive() && g_network.SetupMode()) {
+	    sint32 pointCost = g_theAdvanceDB->Get(adv)->GetPowerPoints();
 		g_player[m_owner]->AddPoints(pointCost);
 		if(g_network.IsClient()) {
 			g_network.SendAction(new NetAction(NET_ACTION_TAKE_ADVANCE_CHEAT,
@@ -459,7 +437,7 @@ void Advances::InitialAdvance(AdvanceType adv)
 
 	
 	
-	m_total_cost = m_total_cost + g_theAdvanceDB->Get(adv)->GetCost();
+	m_total_cost += g_theAdvanceDB->Get(adv)->GetCost();
 
 	if(g_network.IsActive() && g_network.IsHost()) {
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADVANCE,

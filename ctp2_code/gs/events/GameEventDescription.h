@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GAME_EVENT_DESCRIPTION_H__
 #define __GAME_EVENT_DESCRIPTION_H__
 
@@ -8,32 +9,6 @@ struct GameEventDescription {
 	char *description;
 	char *args;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #ifdef EVENT
 #undef EVENT
@@ -262,7 +237,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(ReactionMotivation, "Find new proposals motivated as reactions to game events", "%P%P")
 	EVENT(FearMotivation, "Find new proposal for fear motivation", "%P%P%i")
 	EVENT(DesireMotivation,"Find new proposal for desire motivation", "%P%P%i")
-	EVENT(NewProposal, "A new proposal ha sbeen made.", "%P%P")
+	EVENT(NewProposal, "A new proposal has been made.", "%P%P")
 	EVENT(Threaten, "A player has been threatened.", "%P%P")
 	EVENT(Counter, "A proposal has been countered.", "%P%P")
 	EVENT(Reject, "A proposal has been rejected.", "%P%P")

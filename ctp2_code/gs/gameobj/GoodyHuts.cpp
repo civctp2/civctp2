@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // - None
 //
 //----------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 #include "c3.h"
 #include "GoodyHuts.h"
 
+#include "c3math.h"         // AsPercentage
 #include "player.h"
 #include "RandGen.h"
 #include "AICause.h"
@@ -61,12 +62,12 @@
 
 #include "MainControlPanel.h"
 
-extern Player          **g_player;
-extern RandomGenerator  *g_rand;
-extern ConstDB          *g_theConstDB;
-extern TiledMap		    *g_tiledMap;
+extern Player **g_player;
+extern RandomGenerator *g_rand;
+extern ConstDB *g_theConstDB;
+extern TiledMap		*g_tiledMap;
 
-extern SelectedItem	    *g_selected_item;
+extern SelectedItem	*g_selected_item;
 
 namespace
 {
@@ -100,27 +101,27 @@ namespace
 //----------------------------------------------------------------------------
         GoodyRiskData
         (
-            GameSettings      const *    settings,
-            CTPDatabase<RiskRecord> *    risks
+            GameSettings const *        settings,
+            CTPDatabase<RiskRecord> *   risks
         )
         {
-	        sint32  gameRiskLevel   = 
+	        sint32 const    gameRiskLevel   = 
                 std::min<sint32>(settings->GetRisk(), risks->NumRecords() - 1);
             m_risk                  = risks->Get(gameRiskLevel);
             Assert(m_risk);
 
             m_BarbarianThreshold    = 
-                static_cast<size_t>(m_risk->GetHutChanceBarbarian() * 100.0);       
+                AsPercentage(m_risk->GetHutChanceBarbarian());
             m_GoldThreshold         = m_BarbarianThreshold +
-                static_cast<size_t>(m_risk->GetHutChanceGold() * 100.0);
+                AsPercentage(m_risk->GetHutChanceGold());
             m_AdvanceThreshold      = m_GoldThreshold +
-                static_cast<size_t>(m_risk->GetHutChanceAdvance() * 100.0);
+                AsPercentage(m_risk->GetHutChanceAdvance());
             m_UnitThreshold         = m_AdvanceThreshold +
-                static_cast<size_t>(m_risk->GetHutChanceUnit() * 100.0);
+                AsPercentage(m_risk->GetHutChanceUnit());
             m_CityThreshold         = m_UnitThreshold +
-                static_cast<size_t>(m_risk->GetHutChanceCity() * 100.0);
+                AsPercentage(m_risk->GetHutChanceCity());
             m_SettlerThreshold      = m_CityThreshold +
-                static_cast<size_t>(m_risk->GetHutChanceSettler() * 100.0);
+                AsPercentage(m_risk->GetHutChanceSettler());
         };
 
 //----------------------------------------------------------------------------
@@ -235,12 +236,12 @@ namespace
 
     private:
         RiskRecord const *  m_risk;
-        size_t              m_BarbarianThreshold;       
-        size_t              m_GoldThreshold;
-        size_t              m_AdvanceThreshold;
-        size_t              m_UnitThreshold;
-        size_t              m_CityThreshold;
-        size_t              m_SettlerThreshold;
+        int                 m_BarbarianThreshold;       
+        int                 m_GoldThreshold;
+        int                 m_AdvanceThreshold;
+        int                 m_UnitThreshold;
+        int                 m_CityThreshold;
+        int                 m_SettlerThreshold;
     };
 
 } // namespace

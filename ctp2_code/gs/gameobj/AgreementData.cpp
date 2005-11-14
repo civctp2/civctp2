@@ -458,7 +458,7 @@ void AgreementData::Dump(const sint32 i)
 			break ;
 
 		case AGREEMENT_TYPE_PACT_CAPTURE_CITY :
-			sprintf(s, "%s capture city %d", s, m_targetCity) ;
+			sprintf(s, "%s capture city %d", s, m_targetCity.m_id) ;
 			break ;
 
 		case AGREEMENT_TYPE_PACT_END_POLLUTION :
@@ -840,7 +840,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 			}
 
 			pInput++ ;												
-			*pToken = NULL ;										
+			*pToken = 0 ;										
 			pToken = sToken;
 
 			
@@ -848,7 +848,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 			while (*pToken && (*pToken!='.'))						
 				*p++=*pToken++ ;
 
-			*p = NULL ;												
+			*p = 0 ;												
 			pToken++ ;												
 
 			
@@ -858,7 +858,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 				while (*pToken && (*pToken!='.'))					
 					*p++=*pToken++ ;
 
-				*p = NULL ;											
+				*p = 0 ;											
 				if (!pToken) {										
 					c3errors_ErrorDialog("error", "malformed class string") ;
 					strcpy(sInterpreted, msg);
@@ -868,7 +868,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 				pToken++ ;											
 				}
 			else
-				sNum[0] = NULL ;
+				sNum[0] = 0 ;
 
 			
 			strcpy(sMember, pToken) ;								
@@ -961,7 +961,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 
 		}
 
-	*pOutput = NULL ;												
+	*pOutput = 0 ;												
 	}
 
 

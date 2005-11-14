@@ -1,32 +1,25 @@
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MESSAGE_H__ 
 #define __MESSAGE_H__
 
-#include "ID.h"
-#include "MessageData.h"
+class Message;
 
-extern enum MESSAGE_RESPONSE_TYPE ;
-typedef sint32 AdvanceType;
+#include "Advances.h"       // AdvanceType
+#include "ID.h"             // ID
+#include "MessageData.h"    // MESSAGE_RESPONSE_TYPE, MESSAGE_TYPE
+#include "Player.h"         // PLAYER_INDEX
 
 class Message : public ID
-	{
-	public:
-
-		
-		
+{
+public:
 		Message() : ID() { return ; }
 		Message(sint32 val) : ID(val) { return ; }
 		Message(uint32 val) : ID(val) { return ; }
+#ifdef WIN32
 		Message(const int val) : ID(val) { return ; }
-		Message(const unsigned int val) : ID(val) { return ; }
+#endif
 
 		void KillMessage() ;
 		void Kill() { KillMessage() ; }
@@ -76,10 +69,6 @@ class Message : public ID
 
 		void SetUseDirector() { AccessData()->SetUseDirector(); }
 		BOOL UseDirector() const { return GetData()->UseDirector(); }
-	} ;
-
-#else
-
-class Message ;
+};
 
 #endif

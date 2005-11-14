@@ -74,7 +74,6 @@ class Civilisation : public ID
 		Civilisation(uint32 val) : ID(val) { return ; }
 #if defined(WIN32)
 		Civilisation(const int val) : ID(val) { return ; }
-		Civilisation(const unsigned int val) : ID(val) { return ; }
 #endif
 
 		CivilisationData *operator -> () const { return AccessData(); }

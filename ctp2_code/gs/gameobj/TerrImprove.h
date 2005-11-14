@@ -25,7 +25,6 @@ public:
 	TerrainImprovement (uint32 val) : ID (val) { return; }; 
 #ifdef WIN32
 	TerrainImprovement (const int val) : ID (val) { return; }; 
-	TerrainImprovement (const unsigned int val) : ID (val) { return; }; 
 #endif
 
 	TerrainImprovementData *operator -> () const { return AccessData(); }

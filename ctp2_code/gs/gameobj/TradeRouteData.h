@@ -34,6 +34,8 @@
 #ifndef _TRADEROUTEDATA_H_
 #define _TRADEROUTEDATA_H_
 
+class TradeRouteData;
+
 #include "GameObj.h"
 #include "Unit.h"
 #include "TradeRoute.h"
@@ -46,14 +48,6 @@
 #define k_TRADEROUTE_NO_PATH		0
 #define k_TRADEROUTE_ORIGINAL_PATH	1
 #define k_TRADEROUTE_SELECTED_PATH	2
-
-
-enum ROUTE_TYPE {
-	ROUTE_TYPE_RESOURCE,
-	ROUTE_TYPE_FOOD,
-	ROUTE_TYPE_GOLD,
-	ROUTE_TYPE_SLAVE, 
-};
 
 class Path;
 
@@ -167,7 +161,6 @@ public:
 	
 	void ClearPath();
 	void AddWayPoint(MapPoint pos);
-	BOOL GeneratePath(const PLAYER_INDEX owner);
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 					DynamicArray<MapPoint> &fullpath,
 					double &cost);
@@ -207,9 +200,9 @@ public:
 	void SetPiratingArmy(Army &a);
 	Army GetPiratingArmy();
 	bool IsBeingPirated();
+
+private:
+	bool GeneratePath();
 };
 
-#else
-class TradeRouteData;
-enum ROUTE_TYPE;
 #endif

@@ -201,7 +201,7 @@ void CivPaths::CreateSaveFolders(const MBCHAR *path)
 void CivPaths::InitCDPath(void)
 {
 	MBCHAR tempPath[_MAX_PATH];
-	sprintf(tempPath, "%c:\\%s", c3files_GetCTPCDDriveLetter(), m_cdPath);
+	sprintf(tempPath, "%c:%s%s", c3files_GetCtpCdId(), FILE_SEP, m_cdPath);
 	strcpy(m_cdPath, tempPath);
 }
 

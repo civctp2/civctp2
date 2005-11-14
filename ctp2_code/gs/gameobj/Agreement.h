@@ -29,7 +29,6 @@ class Agreement : public ID
 		Agreement(uint32 val) : ID(val) { return ; }
 #ifdef WIN32
 		Agreement(const int val) : ID(val) { return ; }
-		Agreement(const unsigned int val) : ID(val) { return ; }
 #endif
 
 		void KillAgreement() ;

@@ -71,6 +71,9 @@ private:
 
 } // namespace
 
+
+char const GameEventHookCallback::DESCRIPTION_MISSING[] = "An undescribed callback";
+
 //----------------------------------------------------------------------------
 //
 // Name       : GameEventHook::GameEventHook
@@ -109,7 +112,7 @@ GameEventHook::GameEventHook(GAME_EVENT type)
 //----------------------------------------------------------------------------
 GameEventHook::~GameEventHook()
 {
-    m_callbacks.clear();
+    std::list<Node>().swap(m_callbacks);
 }
 
 //----------------------------------------------------------------------------
@@ -139,9 +142,14 @@ void GameEventHook::AddCallback
 )
 {
     Assert(cb);
-
     if (cb)
     {
+#if defined(_DEBUG)
+        char desc   [1024];
+        cb->GetDescription(desc, 1024);
+        Assert(strncmp(desc, GameEventHookCallback::DESCRIPTION_MISSING, 1024));
+#endif
+
         std::list<Node>::iterator   walk = m_callbacks.begin();
 
         while ((walk != m_callbacks.end()) && (walk->m_priority < pri))
@@ -190,33 +198,6 @@ void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
 //
 // Name       : GameEventHook::Activate
 //
-// Description: Start executing all event handlers in the list in sequence.
-//
-// Parameters : args            : parameters to pass to the event handlers
-//
-// Globals    : -
-//
-// Returns    : resumeIndex     : the index of the first event handler that 
-//                                has not been executed yet.
-//              GAME_EVENT_ERR  : result of execution
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-GAME_EVENT_ERR GameEventHook::Activate
-(
-    GameEventArgList *  args, 
-    sint32 &            resumeIndex
-)
-{
-    return Resume(args, 0, resumeIndex);
-};
-
-
-//----------------------------------------------------------------------------
-//
-// Name       : GameEventHook::Resume
-//
 // Description: Resume executing the event handlers in the list in sequence.
 //
 // Parameters : args            : parameters to pass to the event handlers
@@ -232,7 +213,7 @@ GAME_EVENT_ERR GameEventHook::Activate
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-GAME_EVENT_ERR GameEventHook::Resume
+GAME_EVENT_ERR GameEventHook::Activate
 (
     GameEventArgList *  args, 
     sint32              startIndex, 
@@ -286,14 +267,14 @@ GAME_EVENT_ERR GameEventHook::Run
         ++resumeIndex;
 
 #if defined(_DEBUG)
-        {
-            char desc[1024];
-		    running.m_cb->GetDescription(desc, 1024);
-		    EVENTLOG(("  %s\n", desc));
-		}
+        // Scope removed deliberately, so the description is available when
+        // errors occur in GEVHookCallback.
+        char desc[1024];
+	    running.m_cb->GetDescription(desc, 1024);
+	    EVENTLOG(("  %s\n", desc));
 #endif //_DEBUG
 
-		GAME_EVENT_HOOK_DISPOSITION const disp = 
+		GAME_EVENT_HOOK_DISPOSITION const disp =  
             running.m_cb->GEVHookCallback(m_type, args);
 
 		switch (disp) 

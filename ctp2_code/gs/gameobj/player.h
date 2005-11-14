@@ -100,7 +100,6 @@ enum PLAYER_TYPE
 	PLAYER_TYPE_NETWORK
 };
 
-typedef sint32      AdvanceType;
 typedef sint32      PLAYER_INDEX;
 typedef sint32      TERRAIN_IMPROVEMENT;
 
@@ -114,7 +113,7 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "Advances.h"           // Advances
+#include "Advances.h"           // Advances, AdvanceType
 #include "AgreementTypes.h"     // AGREEMENT_TYPE
 #include "AICause.h"            // CAUSE_..., ERR_BUILD_INST
 #include "directions.h"         // WORLD_DIRECTION
@@ -122,10 +121,10 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 #include "GameOver.h"           // GAME_OVER
 #include "MapPoint.h"           // MapPoint
 #include "PollutionConst.h"     // k_MAX_EVENT_POLLUTION_TURNS, etc.
-#include "TradeRoute.h"         // TradeRoute
+#include "TradeRoute.h"         // TradeRoute, ROUTE_TYPE
 #include "Readiness.h"          // READINESS_LEVEL
 #include "Strengths.h"          // STRENGTH_CAT
-#include "UnitData.h"           // UNIT_COMMAND
+#include "Unit.h"               // UNIT_COMMAND
 
 template <class T> class DynamicArray;
 template <class T> class Database;

@@ -19,7 +19,6 @@ class DiplomaticRequest : public ID
 		DiplomaticRequest(uint32 val) : ID(val) { return ; }
 #ifdef WIN32
 		DiplomaticRequest(const int val) : ID(val) { return ; }
-		DiplomaticRequest(const unsigned int val) : ID(val) { return ; }
 #endif
 
 		void KillRequest() ;

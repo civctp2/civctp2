@@ -25,6 +25,7 @@
 #  - NeedsCityGoodAll - requires a 1 or more good to build building
 #  - NeedsCityGoodAnyCity - requires any city to have good to build building
 #  - EnablesGood //added by E allows a building to give a city a good 
+#  - Added default values for UpkeepPerPop and UpkeepPerCity 
 #
 #-----------------------------------------------------------------------------
 Building {
@@ -41,13 +42,13 @@ Building {
 	Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build building
 	Record Resource[] NeedsCityGoodAnyCity //FU
-      Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
+    Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
 
 
 	Int ProductionCost
 	Int Upkeep
-	Int UpkeepPerPop   //FU added by E to make improvemnts more expensive with city growth
-	Int UpkeepPerCity  //FU added by E to make improvemnts more expensive with city growth
+	Int UpkeepPerPop  = 0 //FU added by E to make improvemnts more expensive with city growth
+	Int UpkeepPerCity = 0 //FU added by E to make improvemnts more expensive with city growth
 
     # flags 
     Bit        Capitol
@@ -87,7 +88,7 @@ Building {
 	Bit(Int)   RaiseMaxPopulation
 	Bit(Int)   StarvationProtection
 	Bit        CoastalBuilding				//DW - Added to fix bug #895
-      Bit        OnePerCiv					//FU - for national projects
+    Bit        OnePerCiv					//FU - for national projects
 
 	Bit(Float) OffenseBonusLand
 	Bit(Float) OffenseBonusWater

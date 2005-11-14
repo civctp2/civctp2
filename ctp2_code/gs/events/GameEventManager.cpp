@@ -5,10 +5,11 @@
 
 
 #include "c3.h"
+#include "GameEventManager.h"
+
 #include "c3errors.h"
 #include "c3debug.h"
 
-#include "GameEventManager.h"
 #include "GameEventHook.h"
 #include "GameEventDescription.h"
 #include "GameEventArgList.h"
@@ -25,6 +26,7 @@
 #include "TradeRoute.h"
 
 #include "director.h"
+#include "SelItem.h"                // g_selected_item
 
 GameEventManager *g_gevManager = NULL;
 
@@ -36,64 +38,56 @@ extern BOOL g_eventLog;
 
 void gameEventManager_Initialize()
 {
+    delete g_gevManager;
 	g_gevManager = new GameEventManager();
 }
 
 void gameEventManager_Cleanup()
 {
-	if(g_gevManager) {
-		delete g_gevManager;
-		g_gevManager = NULL;
-	}
+	delete g_gevManager;
+	g_gevManager = NULL;
 }
 
 GameEventManager::GameEventManager()
+:
+	m_eventList         (new PointerList<GameEvent>),
+#if defined(_DEBUG)
+	m_eventHistory      (new PointerList<GameEvent>),
+#endif
+    // 	GameEventHook *m_hooks[GEV_MAX];
+    m_processing        (false),
+	m_processingEvent   (GEV_MAX),
+	m_serial            (0),
+    m_needUserInput     (false),
+    m_pauseCount        (0)
 {
-	m_eventList = new PointerList<GameEvent>;
-	m_processing = false;
-	m_processingEvent = GEV_MAX;
-	m_needUserInput = false;
-	m_pauseCount = 0;
-
 #ifdef _DEBUG
-	m_eventHistory = new PointerList<GameEvent>;
-
-	
-	FILE *f = fopen(EVENTLOGNAME, "w");
+	FILE *  f = fopen(EVENTLOGNAME, "w");
 	fclose(f);
 #endif
 
-	sint32 i;
-	for(i = 0; i < GEV_MAX; i++) {
-		
-		m_hooks[i] = NULL;
-	}
-
-	m_serial = 0;
+	std::fill(m_hooks, m_hooks + GEV_MAX, (GameEventHook *) NULL);
 }
 
 GameEventManager::~GameEventManager()
 {
-	if(m_eventList) {
+	if (m_eventList) 
+    {
 		m_eventList->DeleteAll();
 		delete m_eventList;
-		m_eventList = NULL;
 	}
 
 #ifdef _DEBUG
-	if(m_eventHistory) {
+	if (m_eventHistory) 
+    {
 		m_eventHistory->DeleteAll();
 		delete m_eventHistory;
-		m_eventHistory = NULL;
 	}
 #endif
 
-	sint32 i;
-	for(i = 0; i < GEV_MAX; i++) {
-		if(m_hooks[i]) {
-			delete m_hooks[i];
-			m_hooks[i] = NULL;
-		}
+	for (size_t i = 0; i < GEV_MAX; ++i) 
+    {
+		delete m_hooks[i];
 	}
 }
 
@@ -160,7 +154,6 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 	
 	GameEvent *newEvent = new GameEvent(type, argList, m_serial++, m_processingEvent);
 
-	newEvent->SetType(type);	
 	switch(insert) {
 		case GEV_INSERT_Front:
 			m_eventList->AddHead(newEvent);
@@ -180,52 +173,36 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 	
 	g_director->IncrementPendingGameActions();
 
-	
-	Process();
-
-	return GEV_ERR_OK;
+	return Process();
 }
 
 GAME_EVENT_ERR GameEventManager::Process()
 {
-	if(m_processing)
-		
-		return GEV_ERR_OK;
+    if (m_processing)   // busy already?
+    {
+        return GEV_ERR_OK;
+    }
 
-	
-	if(!m_eventList->GetHead()) {
+    m_processing        = true;
+	GAME_EVENT_ERR  err = GEV_ERR_OK;
+
+    while ((GEV_ERR_OK == err) 
+            && m_eventList->GetHead()
+            && !g_slicEngine->AtBreak() 
+            && !m_needUserInput
+            && !m_pauseCount
+          )
+    {
+        err             = ProcessHead();
+    }
+	m_processing        = false;
+
+	if (GEV_ERR_NeedUserInput == err)
+    {		
+		m_needUserInput = true;
 		return GEV_ERR_OK;
 	}
 
-	if(g_slicEngine->AtBreak() || m_needUserInput || m_pauseCount)
-		return GEV_ERR_OK;
-
-	EVENTLOG(("\nGameEventManager::Process()\n"));
-
-	
-	m_processing = true;
-
-	GAME_EVENT_ERR err = GEV_ERR_OK;
-
-	do {
-		
-		err = ProcessHead();
-	} while(m_eventList->GetHead() && err == GEV_ERR_OK && !g_slicEngine->AtBreak() && !m_needUserInput && !m_pauseCount);
-
-	switch(err) {
-		case GEV_ERR_OK:
-			err = GEV_ERR_OK;
-			break;
-		case GEV_ERR_NeedUserInput:
-			
-			
-			err = GEV_ERR_OK;
-			m_needUserInput = true;
-			break;
-		default:
-			break;
-	}
-	m_processing = false;
 	return err;
 }
 
@@ -299,28 +276,19 @@ GAME_EVENT_ERR GameEventManager::RemoveCallback(GAME_EVENT type,
 	return GEV_ERR_OK;
 }
 
-GAME_EVENT_ERR GameEventManager::ActivateHook(GAME_EVENT type, 
+GAME_EVENT_ERR GameEventManager::ActivateHook
+(
+    GAME_EVENT          type, 
 											  GameEventArgList *args,
-											  sint32 &resumeIndex)
+	sint32              startIndex,
+	sint32 &            resumeIndex
+)
 {
 	Assert(type < GEV_MAX);
 	if((type >= GEV_MAX) || !m_hooks[type])
-		
 		return GEV_ERR_OK;
 
-	return m_hooks[type]->Activate(args, resumeIndex);
-}
-
-GAME_EVENT_ERR GameEventManager::ResumeHook(GAME_EVENT type,
-											GameEventArgList *args,
-											sint32 startIndex,
-											sint32 &resumeIndex)
-{
-	if(!m_hooks[type])
-		
-		return GEV_ERR_OK;
-
-	return m_hooks[type]->Resume(args, startIndex, resumeIndex);
+	return m_hooks[type]->Activate(args, 0, resumeIndex);
 }
 
 char *GameEventManager::ArgCharToName(char want)

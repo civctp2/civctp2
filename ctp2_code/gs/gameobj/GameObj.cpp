@@ -46,19 +46,19 @@ void GAMEOBJ::operator delete(void *ptr)
 {
 	GAMEOBJ *obj = (GAMEOBJ *)ptr;
 	if(!obj->m_isFromPool)
-		::delete ptr;
+		::delete obj;
 }
 
 void GAMEOBJ::operator delete(void *ptr, size_t size)
 {
 	GAMEOBJ *obj = (GAMEOBJ *)ptr;
 	if(!obj->m_isFromPool)
-		::delete ptr;
+		::delete obj;
 }
 
 void GAMEOBJ::operator delete[] (void *ptr, size_t size)
 {
-	::delete[] (ptr);
+	::delete[] ((GAMEOBJ*)ptr);
 }
 
 

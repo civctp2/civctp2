@@ -28,7 +28,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Microsoft extensions embedded in _MSC_VER defines (no functional change).
+// - Microsoft extensions removed.
 // - Import order modified to enable GCC compilation (no functional change).
 // - Option added to enable viewing info on actions that are too expensive.
 // - Modified GetWorldShape function to allow four possible shapes instead
@@ -43,7 +43,7 @@
 // - Option added to include multiple data directories.
 // - Improved structure + linux branch synchronisation.
 // - Added world shape handling.
-// - Made file compiable in Win32 Test configuration
+// - Made file compilable in Win32 Test configuration.
 // - Option added to select whether an army is selected or a city is selected,
 //   if both options are available. (Oct 8th 2005 Martin Gühmann)
 //
@@ -68,7 +68,6 @@
 
 class   ProfileDB;
 class   ProfileVar;
-enum    MAPSIZE;
 
 enum    PROF_VAR_TYPE
 {
@@ -100,6 +99,7 @@ enum WORLD_SHAPE
 #include "civarchive.h"			// CivArchive
 #include "Civilisation.h"		// GENDER
 #include "CivilisationPool.h"	// CIV_INDEX
+#include "Globals.h"            // MAPSIZE
 #include "gstypes.h"			// PLAYER_INDEX
 #include "MapPoint.h"			// MapPoint
 #include "pointerlist.h"		// PointerList
@@ -109,16 +109,18 @@ enum WORLD_SHAPE
 // Class declarations
 //----------------------------------------------------------------------------
 
-class ProfileVar {
+class ProfileVar 
+{
 public:
     ProfileVar(char *name, PROF_VAR_TYPE type, sint32 *numValue,
-               char *stringValue, bool visible) {
-        m_name = name;
-        m_type = type;
-        m_numValue = numValue;
-        m_stringValue = stringValue;
-        m_visible = visible;
-    }
+               char *stringValue, bool visible) 
+    :
+        m_name          (name),
+        m_type          (type),
+        m_numValue      (numValue),
+        m_stringValue   (stringValue),
+        m_visible       (visible)
+    { ; }
 
     char *m_name;
     PROF_VAR_TYPE m_type;
@@ -127,11 +129,9 @@ public:
     bool m_visible;
 };
 
-class ProfileDB {
-
-
-
-
+class ProfileDB 
+{
+private:
     sint32 m_nPlayers;
 
     sint32 m_ai_on;
@@ -365,7 +365,7 @@ public:
 
 
     //Added by Martin Gühmann to avoid an assert if NumPlayer is under the maximum supported players.
-    void SetNPlayers(uint32 n)					{ Assert((n>2) && (n<=k_MAX_PLAYERS)); m_nPlayers = n; }
+    void SetNPlayers(uint32 n)				{ Assert((n > 1) && (n <= k_MAX_PLAYERS)); m_nPlayers = n; }
 
     void SetLeaderName(MBCHAR *name)			{ strcpy(m_leaderName, name); }
     void SetCivName(MBCHAR *name)				{ strcpy(m_civName, name); }

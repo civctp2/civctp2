@@ -259,7 +259,6 @@ public:
 	Unit (ID i) : ID (i.m_id) { return; };
 #if defined(WIN32)
 	Unit (const int val) : ID (val) { return; };
-	Unit (const unsigned int val) : ID (val) { return; };
 #endif
 	
 	UnitData *operator -> () const { return AccessData(); }

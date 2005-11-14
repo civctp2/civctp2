@@ -18,25 +18,14 @@ GameEvent::GameEvent(GAME_EVENT type, GameEventArgList *args, sint32 serial, GAM
 
 GameEvent::~GameEvent()
 {
-	if(m_argList) {
-		delete m_argList;
-		m_argList = NULL;
-	}
+	delete m_argList;
 }
 
 GAME_EVENT_ERR GameEvent::Process(BOOL &complete)
 {
-	complete = FALSE;
-
-	GAME_EVENT_ERR err;
-	if(m_resumeIndex >= 0)
-		err = g_gevManager->ResumeHook(m_type, m_argList, m_resumeIndex, m_resumeIndex);
-	else
-		err = g_gevManager->ActivateHook(m_type, m_argList, m_resumeIndex);
-
-	if(err != GEV_ERR_NeedUserInput)
-		complete = TRUE;
-
+	GAME_EVENT_ERR const    err = 
+        g_gevManager->ActivateHook(m_type, m_argList, m_resumeIndex, m_resumeIndex);
+    complete = (err != GEV_ERR_NeedUserInput);
 	return err;
 }
 
