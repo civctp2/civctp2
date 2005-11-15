@@ -1,12 +1,30 @@
 # Makefile for third party code used by tca
 
+noinst_DATA = d3des/unpacked md5/unpacked
+D3DES_ZIP_CONTENTS = \
+	d3des/d3des.c \
+	d3des/d3des.h \
+	d3des/readme
+MD5_ZIP_CONTENTS = \
+	md5/Makefile \
+	md5/README \
+	md5/global.h \
+	md5/md5-announcement.txt \
+	md5/md5.1 \
+	md5/md5.1.ps \
+	md5/md5.1.txt \
+	md5/md5.h \
+	md5/md5c.c \
+	md5/mddriver.c \
+	md5/rfc1321.txt
+CLEANFILES = \
+	$(noinst_DATA) \
+	$(D3DES_ZIP_CONTENTS) \
+	$(MD5_ZIP_CONTENTS)
+
 unpack: d3des/unpacked md5/unpacked
 
-clean:
-	-rm -rf d3des
-	-rm -rf md5
-
-d3des/unpacked: d3des.zip
+d3des/unpacked: d3des.zip d3des.const.patch
 	$(UNZIP) -a $<
 	patch -p0 < d3des.const.patch
 	touch $@
