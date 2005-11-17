@@ -2230,7 +2230,7 @@ void Director::AddEndTurn(void)
 			
 			sint32 i;
 			for(i = 0; i < p->m_all_armies->Num(); i++) {
-				IncrementPendingGameActions();
+//				IncrementPendingGameActions();
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 									   GEA_Army, p->m_all_armies->Access(i).m_id,
 									   GEA_End);
@@ -2300,7 +2300,7 @@ void Director::AddAttack(Unit attacker, Unit defender)
 
 	static Army army;
 
-	if (attacker != Unit(0)) 
+	if (attacker != Unit()) 
 	{
 		attackerActor = attacker.GetActor();
 		action->attacker = attackerActor;
@@ -2316,7 +2316,7 @@ void Director::AddAttack(Unit attacker, Unit defender)
 		}
 	}
 
-	if (defender != Unit(0)) 
+	if (defender != Unit()) 
 	{
 		defenderActor			= defender.GetActor();
 		action->defender		= defenderActor;

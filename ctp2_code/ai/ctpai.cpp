@@ -245,12 +245,7 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 	CTPGoal_ptr goal_ptr;
 	GOAL_TYPE goal_type;
 
-	Assert(city != ID(0));
-	Assert(g_theUnitPool->IsValid(city) == TRUE);
-
-	
-	
-
+	Assert(city.IsValid());
 	
 	for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 	{
@@ -281,12 +276,7 @@ void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreig
 	CTPGoal_ptr goal_ptr;
 	GOAL_TYPE goal_type;
 
-	Assert(city != ID(0));
-	Assert(g_theUnitPool->IsValid(city) == TRUE);
-
-	
-	
-
+	Assert(city.IsValid());
 	
 	for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 	{
@@ -496,15 +486,10 @@ STDEHANDLER(CtpAi_AddUnitToArmyEvent)
 
 STDEHANDLER(CtpAi_CreatedArmyEvent)
 {
-	MapPoint pos;
 	Army army;
 
-	
 	if (!args->GetArmy(0, army))
 		return GEV_HD_Continue;
-	Assert(army != ID(0));
-	Assert(g_theArmyPool->IsValid(army) == TRUE);
-
 	
 	if (army->CanSettle() && 
 		Diplomat::GetDiplomat(army.GetOwner()).ShouldEscortSettlers())
@@ -512,7 +497,6 @@ STDEHANDLER(CtpAi_CreatedArmyEvent)
 		CtpAi::GroupWithEscort(army);
 	}
 
-	
 	CtpAi::AddGoalsForArmy(army);
 
 	return GEV_HD_Continue;
@@ -924,7 +908,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 		if(player_ptr->m_playerType == PLAYER_TYPE_ROBOT &&
 		   (!g_network.IsClient() || g_network.IsLocalPlayer(playerId))) {
 			for(i = 0; i < player_ptr->m_all_armies->Num(); i++) {
-				g_director->IncrementPendingGameActions();
+//				g_director->IncrementPendingGameActions();
 
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 									   GEA_Army, player_ptr->m_all_armies->Access(i).m_id,

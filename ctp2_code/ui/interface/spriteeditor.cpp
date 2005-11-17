@@ -187,19 +187,13 @@ void FileButtonActionCallback( aui_Control *control, uint32 action, uint32 data,
 
 void AnimCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_spriteEditWindow->SetAnimation((sint32)cookie);
-
-	g_spriteEditWindow->m_frame=0;
-	g_spriteEditWindow->m_facing=3;
-	
-	g_spriteEditWindow->m_loopInProgress=false;; 
-	g_spriteEditWindow->m_stopAfterLoop =true;
-
-
-	
+	g_spriteEditWindow->m_frame             = 0;
+	g_spriteEditWindow->m_facing            = k_DEFAULTSPRITEFACING;
+	g_spriteEditWindow->m_loopInProgress    = false;; 
+	g_spriteEditWindow->m_stopAfterLoop     = true;
 	g_spriteEditWindow->BeginAnimation();
 }
 
@@ -277,24 +271,28 @@ int SpriteEditWindow_Initialize( void )
 
 	g_spriteEditWindow->Show();
 
+    if (g_c3ui)
+    {
+        g_c3ui->RegisterCleanup(&SpriteEditWindow_Cleanup);
+    }
+
 	return 0;
 }
 
 
 
-int SpriteEditWindow_Cleanup( void )
+void SpriteEditWindow_Cleanup(void)
 {
-	
-	if ( !g_spriteEditWindow ) return 0; 
-
-	g_c3ui->RemoveWindow( g_spriteEditWindow->Id() );
+	if (g_c3ui && g_spriteEditWindow) 
+    {
+	    g_c3ui->RemoveWindow(g_spriteEditWindow->Id());
+    }
 
 	delete g_compression_buff;
+    g_compression_buff = NULL;
 
 	delete g_spriteEditWindow;
 	g_spriteEditWindow = NULL;
-
-	return 0;
 }
 
 
@@ -333,7 +331,7 @@ SpriteEditWindow::SpriteEditWindow(
 	m_stopAfterLoop		=true;
 	m_lastTime			=0;
 
-	m_facing		=3; 
+	m_facing		=k_DEFAULTSPRITEFACING; 
 	m_frame			=0; 
 	m_animation		=UNITACTION_MOVE;
 	m_currentAnim	=NULL;	 
@@ -388,11 +386,35 @@ SpriteEditWindow::SpriteEditWindow(
 
 	
 	g_compression_buff = new unsigned char[COM_BUFF_SIZE];
-
-	
 	LoadSprite("GU02");
 }
 
+SpriteEditWindow::~SpriteEditWindow()
+{
+//	m_currentAnim, m_spriteData: Not deleted (reference only)
+//	delete m_largeSurface   : TODO (crashes)
+//  delete m_actionObj      : TODO (crashes)
+	delete m_currentSprite;
+	delete m_spriteSurface;
+	delete m_Load;	 
+	delete m_Save;	 
+	delete m_fileName;
+	delete m_MOVEAnim;  
+	delete m_ATTACKAnim;
+	delete m_IDLEAnim;  
+	delete m_VICTORYAnim;
+	delete m_WORKAnim;  
+	delete m_stepPlus;
+	delete m_stepMinus;
+	delete m_playOnce;
+	delete m_playLoop;
+	delete m_facingPlus;
+	delete m_facingMinus;
+	delete m_largeImage;
+	delete m_hotCoordsCurrent;
+	delete m_hotCoordsMouse;
+	delete m_hotCoordsHerald;
+}
 
 
 void	
@@ -601,17 +623,12 @@ SpriteEditWindow::FileExists(char *name)
 	if (name==NULL)
 		return false;
 
-	
 	MBCHAR spritePath[_MAX_PATH];
 	MBCHAR fullPath[_MAX_PATH];
 	g_civPaths->GetSpecificPath(C3DIR_SPRITES, spritePath, FALSE);
-	sprintf(fullPath, "%s\\%s", spritePath,name);
-
+	sprintf(fullPath, "%s%s%s", spritePath, FILE_SEP, name);
 	
-	if (c3files_PathIsValid(fullPath))
-		return true;
-	
-	return false;
+	return c3files_PathIsValid(fullPath);
 }
 
 
@@ -645,19 +662,13 @@ SpriteEditWindow::LoadSprite(char *name)
 
 	
 	m_frame=0;
-	m_facing=3;
+	m_facing=k_DEFAULTSPRITEFACING;
 
 	
-	if (m_currentSprite!=NULL)
-		delete m_currentSprite;
+	delete m_currentSprite;
+    delete m_spriteSurface;
 
-	
-	if (m_spriteSurface!=NULL)
-	    delete m_spriteSurface;
-
-	
 	m_currentSprite = new UnitSpriteGroup(GROUPTYPE_UNIT);
-	
 	m_currentSprite->LoadFull(tbuffer);
 
 	
@@ -769,10 +780,7 @@ SpriteEditWindow::BeginAnimation()
 	m_actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
 	m_actionObj->SetCurActionCounter(0);
 	m_actionObj->SetFinished(FALSE);
-
-	
 	m_actionObj->SetAnim(m_currentAnim);
-
 	m_currentAnim->SetType(ANIMTYPE_LOOPED);
 	m_actionObj->SetUnitsVisibility(1000);
 	m_actionObj->SetUnitVisionRange(1000);
@@ -899,7 +907,7 @@ SpriteEditWindow::ReDrawLargeSprite( )
 		pt.x = 0;
 		pt.y = 0;
 
-		if (m_facing>=5)
+		if (m_facing >= k_NUM_FACINGS)
 			pt.x =m_spriteData->GetWidth();
 
 		sav=m_currentSprite->GetHotPoint((UNITACTION)m_animation,m_facing);

@@ -4,11 +4,7 @@
 #ifndef __SELECTED_ITEM_H__
 #define __SELECTED_ITEM_H__ 1
 
-#include "MapPoint.h"
-#include "Path.h"
-#include "Army.h"
-#include "Unit.h"
-#include "gstypes.h"
+class SelectedItem;
 
 enum SELECT_TYPE { 
 SELECT_TYPE_NONE,
@@ -44,6 +40,12 @@ enum SELECT_MODE {
 	SELECT_MODE_MAX
 };
 
+#include "MapPoint.h"
+#include "Path.h"
+#include "Army.h"
+#include "Unit.h"
+#include "gstypes.h"
+
 class Unit;
 class CivArchive; 
 class NetUnit; 
@@ -53,8 +55,6 @@ class OrderRecord;
 
 #define k_SELECTED_ITEM_VERSION_MAJOR 0 
 #define k_SELECTED_ITEM_VERSION_MINOR 0
-
-class SelectedItem;
 
 class SelectedItem {
 	typedef void (SelectedItem::*ClickFunctionPtr) (const MapPoint &pos,
@@ -248,7 +248,7 @@ public:
 	void Goto(MapPoint &dest);
 
 	void EnterMovePath(sint32 owner, Army &army,
-					   MapPoint &src, MapPoint &dest);
+			const MapPoint &src, const MapPoint &dest);
 	void EntrenchArmy(sint32 owner, sint32 index);
 	void SleepArmy(sint32 owner, sint32 index);
 	void InterceptTrade(void);
@@ -262,7 +262,7 @@ public:
 	void EndUnitTurn();
 
 	void DirectorUnitSelection(uint32 flags);
-	void ForceDirectorSelect(Army &army);
+	void ForceDirectorSelect(const Army &army);
     void RegisterUIClick();
 	void RegisterManualEndTurn();
 	void UpdateSelectedItem( void );
@@ -322,10 +322,6 @@ BOOL CanAutoSelect(const Army &army);
 extern uint32 SelectedItem_GetVersion(void);
 
 extern SelectedItem *g_selected_item;
-
-#else
-
-class SelectedItem; 
 
 #endif
 

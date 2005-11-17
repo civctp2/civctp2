@@ -20,9 +20,6 @@
 // _DEBUG
 // - Generate debug version
 //
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 // USE_SDL
 // - Compile with sdl support instead of mss (define: civsound.h)
 //----------------------------------------------------------------------------
@@ -35,7 +32,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -92,8 +89,6 @@ public:
 
 	void DumpAllSounds();
 
-	void ConvertCoordinates(const sint32 &x, const sint32 &y,
-                            sint32 &soundX, sint32 &soundY, sint32 &soundZ);
 	void ProcessRedbook(void);
 	void Process(const uint32 &target_milliseconds, uint32 &used_milliseconds);
 	

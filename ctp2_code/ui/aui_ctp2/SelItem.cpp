@@ -4,7 +4,7 @@
 // File type    : C++ source
 // File name    : ui\aui_ctp2\SetItem.cpp
 // Description  : Handles stuff about selected items.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -134,9 +134,6 @@
 
 extern ControlPanelWindow	*g_controlPanel;
 extern WorkWindow				*g_workWindow;
-
-extern ColorSet					*g_colorSet;
-
 extern UnitAstar				*g_theUnitAstar; 
 extern Pollution				*g_thePollution ;
 
@@ -333,12 +330,12 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
     switch (s_state) { 
     case SELECT_TYPE_NONE: 
     case SELECT_TYPE_REMOTE_ARMY:
-		s_item = 0;
+		s_item = ID();
 		break;
     case SELECT_TYPE_REMOTE_CITY:
 		s_item = m_selected_city[s_player];
 		s_player = m_remote_owner[s_player];
-		Assert(s_item != ID(0));
+		Assert(s_item != ID());
         break; 
     case SELECT_TYPE_LOCAL_ARMY:
     case SELECT_TYPE_LOCAL_ARMY_UNLOADING:
@@ -349,7 +346,7 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 				
 				
 				
-				s_item = ID(0);
+				s_item = ID();
 				s_state = SELECT_TYPE_NONE;
 			} else {
 				s_item = m_selected_army[s_player];
@@ -359,18 +356,18 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 			
 			Assert(FALSE);
 			s_state = SELECT_TYPE_NONE;
-			s_item = ID(0);
+			s_item = ID();
 		}
 		break;
     case SELECT_TYPE_LOCAL_CITY: 
 		s_item =  m_selected_city[s_player];
-		Assert(s_item.m_id != (0)); 
+		Assert(s_item.m_id != 0); 
 		break; 
     case SELECT_TYPE_TRADE_ROUTE: 
-        s_item = 0; 
+        s_item = ID(); 
         break;
 	case SELECT_TYPE_GOOD:
-		s_item = 0;
+		s_item = ID();
 		break;
     default:
         Assert(0);
@@ -576,7 +573,7 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 				}
 				if(selectArmy.NumOrders() > 0) {
 					
-					g_director->IncrementPendingGameActions();
+//					g_director->IncrementPendingGameActions();
 					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 										   GEA_Army, selectArmy,
 										   GEA_End);
@@ -967,7 +964,7 @@ void SelectedItem::Refresh()
 				if (GetTopUnit(pos, top)) {
 					SetSelectUnit(top);
 				} else {
-					SetSelectUnit(Unit(0));
+					SetSelectUnit(Unit());
 				}
 			}
 			else {
@@ -1001,7 +998,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 	m_waypoints.Clear();
 
-	g_controlPanel->SetStack(Army(0), NULL); // empty function
+	g_controlPanel->SetStack(Army(), NULL); // empty function
 
 	if(!g_theUnitPool->IsValid(u))
 		return;
@@ -1015,15 +1012,14 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 		}
 
 		m_selected_city[o] = u;
-		MapPoint	pos;
-		static CellUnitList	army;
-		army.Clear();
+		MapPoint	    pos;
+		CellUnitList	army;
 
 		u.GetPos(pos);
 		m_select_pos[o] = pos;
 		g_theWorld->GetCell(pos)->GetArmy(army);
 		
-		g_controlPanel->SetStack(Army(0), &army);
+		g_controlPanel->SetStack(Army(), &army);
 
 		didSelect = TRUE;
 
@@ -1560,8 +1556,8 @@ void SelectedItem::SelectTradeRoute( const MapPoint &pos )
 			
 			cell->GetTradeRoute(i).AddSelectedWayPoint(pos);
 
-			
-			g_grabbedItem->SetGrabbedItem(&cell->GetTradeRoute(i));
+			TradeRoute tradeRouteItem = cell->GetTradeRoute(i);
+			g_grabbedItem->SetGrabbedItem(&tradeRouteItem);
 
 			
 			cell->GetTradeRoute(i).ClearSelectedCellData(cell->GetTradeRoute(i));
@@ -2458,7 +2454,7 @@ void SelectedItem::Goto(MapPoint &dest)
 }
 
 void SelectedItem::EnterMovePath(sint32 owner, Army &army,
-								 MapPoint &src, MapPoint &dest)
+								 MapPoint const & src, MapPoint const & dest)
 {
 	Path *good_path = new Path, bad_path;
 	sint32 is_broken;
@@ -2634,7 +2630,7 @@ void SelectedItem::DirectorUnitSelection(uint32 flags)
 	}
 }
 
-void SelectedItem::ForceDirectorSelect(Army &army)
+void SelectedItem::ForceDirectorSelect(const Army &army)
 {
 	if(g_theArmyPool->IsValid(army) &&
 	   army.GetOwner() == GetVisiblePlayer()) {
