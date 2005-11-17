@@ -3241,7 +3241,7 @@ void ScenarioEditor::ClearWorld(aui_Control *control, uint32 action, uint32 data
 		}
 	}
 
-	Unit c(0);
+	Unit c;
 
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {

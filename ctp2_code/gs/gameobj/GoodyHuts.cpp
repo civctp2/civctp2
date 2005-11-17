@@ -528,7 +528,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			DPRINTF(k_DBG_GAMESTATE, ("You get unit %d\n", m_value));
 			Unit u = g_player[owner]->CreateUnit(m_value,
 												 point,
-												 Unit(0),
+												 Unit(),
 												 FALSE,
 												 CAUSE_NEW_ARMY_GOODY_HUT);
 

@@ -17,15 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are active for _MSC_VER value 1200 are the original 
-//       Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -38,8 +29,6 @@
 
 #ifndef FEAT_TRACKER_H__
 #define FEAT_TRACKER_H__
-
-
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -90,9 +79,8 @@ sint32 const	USE_CURRENT_ROUND			= -1;
 // Class declarations
 //----------------------------------------------------------------------------
 
-
-
-class Feat {
+class Feat 
+{
   public:
 	Feat(sint32 type, sint32 player, sint32 round = USE_CURRENT_ROUND);
 

@@ -25,7 +25,8 @@
 // - #pragma once commented out.
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1000)
+
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 #ifndef __GAME_OBJ_H__

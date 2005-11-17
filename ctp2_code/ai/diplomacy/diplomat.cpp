@@ -1368,39 +1368,29 @@ sint32 Diplomat::AddAgreement(const PLAYER_INDEX & foreignerId)
 
 void Diplomat::EnactStopPiracy(const PLAYER_INDEX victimId, const PLAYER_INDEX pirateId)
 {
-	Player *player_ptr = g_player[victimId];
-	Assert(player_ptr != NULL);
+	Player * player_ptr = g_player[victimId];
+	Assert(player_ptr);
 
-	sint32 num_cities = player_ptr->m_all_cities->Num();
-	sint32 i,r;
-	TradeRoute route;
-	Unit city;
-	Army army;
-
+	sint32 const num_cities = player_ptr ? player_ptr->m_all_cities->Num() : 0;
 	
-	for (i = 0; i < num_cities; i++)
+	for (sint32 i = 0; i < num_cities; i++)
 	{
-		city = player_ptr->m_all_cities->Access(i);
-		Assert( g_theUnitPool->IsValid(city) );
+		Unit city = player_ptr->m_all_cities->Access(i);
+		Assert(city.IsValid());
 		
-		
-		for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) 
+		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); ++r) 
 		{
-			route = city.CD()->GetTradeSourceList()->Access(r);
+			TradeRoute  route = city.CD()->GetTradeSourceList()->Access(r);
+			Army        army  = route->GetPiratingArmy();
 
-			
-			army = route->GetPiratingArmy();
-			if (!g_theArmyPool->IsValid(army))
-				continue;
-			
-			
-			if (army.GetOwner() == pirateId)
+			if (army.IsValid() && (army.GetOwner() == pirateId))
 			{
-				
-				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SetPiratingArmy,
-					   GEA_TradeRoute, route,
-					   GEA_Army, Army(0),
-					   GEA_End);
+				g_gevManager->AddEvent
+                    (GEV_INSERT_Tail, GEV_SetPiratingArmy,
+					 GEA_TradeRoute, route,
+					 GEA_Army, 0,
+					 GEA_End
+                    );
 			}
 		} 
 	} 
@@ -1575,19 +1565,17 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		Diplomat::GetDiplomat(receiver).DisbandNanoWeapons(proposal_arg.percent);
 		break;
 	case PROPOSAL_OFFER_GIVE_ADVANCE:
-		
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GrantAdvance,
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GrantAdvance,
 			GEA_Player, receiver,
-			GEA_Int, proposal_arg.advanceType,
-			GEA_Int, 0,
+			GEA_Int,    proposal_arg.advanceType,
+			GEA_Int,    CAUSE_SCI_DIPLOMACY,
 			GEA_End);
 		break;
 	case PROPOSAL_REQUEST_GIVE_ADVANCE:
-		
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GrantAdvance,
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GrantAdvance,
 			GEA_Player, sender,
-			GEA_Int, proposal_arg.advanceType,
-			GEA_Int, 0,
+			GEA_Int,    proposal_arg.advanceType,
+			GEA_Int,    CAUSE_SCI_DIPLOMACY,
 			GEA_End);
 		break;
 	case PROPOSAL_OFFER_GIVE_GOLD:
@@ -6072,7 +6060,7 @@ void Diplomat::ThrowParty(const PLAYER_INDEX foreignerId)
 
 bool Diplomat::ReadyToParty() const
 {
-	if (m_lastParty <0)
+	if (m_lastParty < 0)
 		return true;
 	if (m_lastParty + 10 < NewTurnCount::GetCurrentRound())
 		return true;
@@ -6173,8 +6161,7 @@ void Diplomat::HasLaunchedNanoAttack(const bool val)
 
 void Diplomat::ClearInitiatives()
 {
-	sint32 p;
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
+	for (sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 		if(g_player[p]) {
 			SetReceiverHasInitiative(p, false);
 			Diplomat::GetDiplomat(p).SetReceiverHasInitiative(m_playerId, false);
@@ -6187,15 +6174,13 @@ void Diplomat::ClearInitiatives()
 
 bool Diplomat::FirstTurnOfWar() const
 {
-	uint32 foreignerId;
 	sint32 duration;
 
-	
 	if (g_player[m_playerId] == NULL)
 		return false;
 
 	bool at_war = false;
-	for (foreignerId = 1; foreignerId < m_foreigners.size(); foreignerId++)
+	for (size_t foreignerId = 1; foreignerId < m_foreigners.size(); ++foreignerId)
 	{
 		
 		if (foreignerId == m_playerId)

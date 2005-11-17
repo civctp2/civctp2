@@ -97,7 +97,7 @@ TerrainImprovementPool::Create(sint32 owner,
        )
 	{
 		// Invalid or inapplicable improvement 
-		return TerrainImprovement(0);
+		return TerrainImprovement();
 	}
 
 	// Obscure the improvement for all but the owner

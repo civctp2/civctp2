@@ -1,37 +1,38 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once 
-
+#endif
 #ifndef __BSET_H__
 #define __BSET_H__ 1
 
-struct IC3CivArchive; 
+class BSetID;
+template <class T> class BSet; 
+template <class T> class BSetNode; 
 
-
-    class CivArchive; 
-
-
-enum BSET_STACK { 
+enum BSET_STACK 
+{ 
     BSET_CUR_UNDONE, 
     BSET_CUR_DONE, 
     BSET_LESSER_DONE, 
-    BSET_GREATER_DONE, 
-
+    BSET_GREATER_DONE 
 }; 
 
-class BSetID { 
+#include "ctp2_inttypes.h"
+struct IC3CivArchive; 
+class CivArchive; 
 
+
+class BSetID 
+{ 
+private:
     uint32 val; 
 
 public:
-
     BSetID (); 
     BSetID (IC3CivArchive *);
-    BSetID (const int &copy_me);
-    BSetID (const uint32 &copy_me); 
+    BSetID (const uint32 &copy_me);
     BSetID (const sint32 &copy_me); 
-    BSetID (const BSetID &copy_me); 
+    BSetID (const BSetID &copy_me);
 
-    BSetID& operator= (const int &copy_me); 
     BSetID& operator= (const uint32 &copy_me); 
     BSetID& operator= (const sint32 &copy_me); 
     BSetID& operator= (const BSetID &copy_me); 
@@ -52,20 +53,18 @@ public:
     void DelPointers();
 
     void Serialize(CivArchive &archive); 
-
     void Serialize(IC3CivArchive *archive); 
 };
 
-template <class T> class BSet; 
-
-template <class T> class BSetNode { 
-
-	BSetID m_id; 
-	BSetNode *m_lesser, *m_greater; 
-	T *m_data; 
+template <class T> class BSetNode 
+{ 
+private:
+    BSetID     m_id; 
+    BSetNode * m_lesser;
+    BSetNode * m_greater; 
+    T *        m_data; 
 
 public:
-
     BSetNode();
     ~BSetNode();    
 
@@ -74,51 +73,40 @@ public:
     void SetId(BSetID val) { m_id = val; }
     void SetData(T* d);
     
-    friend BSet<T>; 
+    friend class BSet<T>; 
 }; 
 
 template <class T> BSetNode<T>::BSetNode()
-{
-    m_id=BSetID(0); 
-	m_lesser = NULL; 
-    m_greater = NULL; 
-	m_data = NULL; 
-}
+:
+    m_id        (),
+    m_lesser    (NULL),
+    m_greater   (NULL),
+    m_data      (NULL)
+{ ; }
 
 template <class T> BSetNode<T>::~BSetNode()
-
 { 
-    if (m_lesser) { 
-        delete m_lesser; 
-        m_lesser = NULL; 
-    } 
-
-    if (m_greater) { 
-        delete m_greater; 
-        m_greater = NULL; 
-    }
-
+    delete m_lesser; 
+    delete m_greater; 
     delete m_data; 
-    m_data = NULL; 
-
 }
 
 template <class T> BSetNode<T>::BSetNode(BSetID id, T *d)
-
-{ 
-    m_id = id; 
-    m_lesser = NULL; 
-    m_greater = NULL; 
-    m_data = d; 
-} 
+:
+    m_id        (id),
+    m_lesser    (NULL),
+    m_greater   (NULL),
+    m_data      (d)
+{ ; }
 
 template <class T> void BSetNode<T>::SetData(T* d)
 {
     m_data = d; 
 }
 
-template <class T> class BSet { 
-
+template <class T> class BSet 
+{ 
+private:
     sint32 m_num;
     uint32 m_nInserted; 
 	BSetNode<T> *m_root; 
@@ -138,7 +126,6 @@ template <class T> class BSet {
     void Init();
 
 public: 
-
     BSet(); 
     ~BSet();
 
@@ -157,19 +144,15 @@ public:
     BOOL Last() const;
     T *Next(BSetID &id); 
 
-    
     T *Find(const BSetID &id);
     BOOL Del(const BSetID &id);
-
 }; 
 
 
 template <class T> BSet<T>::BSet() 
-
 {
     Init(); 
 }
-
 
 template <class T> void BSet<T>::Init()
 { 
@@ -181,8 +164,8 @@ template <class T> void BSet<T>::Init()
     m_stack = new BSetNode<T>*[m_stack_size]; 
     m_stack_state = new BSET_STACK[m_stack_size]; 
 
-    sint32 i; 
-    for (i=0; i<m_stack_size; i++) { 
+    for (sint32 i = 0; i < m_stack_size; ++i) 
+    { 
         m_stack_state[i] = BSET_GREATER_DONE; 
         m_stack[i] = NULL; 
     } 
@@ -192,24 +175,13 @@ template <class T> void BSet<T>::Init()
 
 template <class T> BSet<T>::~BSet()
 {
-    delete[] m_stack_state;
-    m_stack_state = NULL; 
-    delete[] m_stack; 
-    m_stack = NULL; 
-
-    if (m_root) { 
-        delete m_root; 
-        m_root = NULL; 
-    } 
+    delete [] m_stack_state;
+    delete [] m_stack; 
+    delete m_root; 
 }
-
-extern uint32 BitsFlip(uint32 val);
 
 template <class T> void BSet<T>::Serialize(IC3CivArchive *archive)
 { 
-    sint32 i; 
-    BSetNode<T> *p; 
-
     if (archive->IsStoring()) { 
         archive->Store((uint8*)&m_num, sizeof(m_num));
         archive->Store((uint8*)&m_nInserted, sizeof(m_nInserted));
@@ -221,15 +193,15 @@ template <class T> void BSet<T>::Serialize(IC3CivArchive *archive)
         archive->Load((uint8*)&m_num, sizeof(m_num));
         archive->Load((uint8*)&m_nInserted, sizeof(m_nInserted));  
 
-
         if (0 < m_num) { 
             m_root = new BSetNode<T>; 
             m_root->m_id.Serialize(archive); 
             m_root->m_data = new T(archive); 
           
     
-            for (i=1; i<m_num; i++) { 
-                p = new BSetNode<T>; 
+            for (sint32 i = 1; i < m_num; ++i)
+            { 
+                BSetNode<T> * p = new BSetNode<T>; 
                 p->m_id.Serialize(archive); 
                 p->m_data = new T(archive); 
               
@@ -254,7 +226,6 @@ template <class T> void BSet<T>::RecurseSerialize(IC3CivArchive *archive, BSetNo
 }
 
 template <class T> BSetID BSet<T>::RawInsert(BSetNode<T> *p, BSetNode<T> *i)
-
 { 
 #ifdef _DEBUG
     sint32 finite_loop=0; 
@@ -278,7 +249,7 @@ Assert(++finite_loop < 100000);
             } 
         } else { 
             Assert(0); 
-            return BSetID(0); 
+            return BSetID(); 
         } 
     } 
     return i->m_id; 
@@ -291,40 +262,32 @@ template <class T>  BSetID BSet<T>::InsertNode(BSetNode<T> *an)
 
     if (m_root == NULL) {
         m_root = an; 
-        return  an->m_id; 
+        return an->m_id; 
     } 
 
     return RawInsert(m_root, an);  
-
 }
 
 template <class T>  BSetID BSet<T>::Insert(T *data)
 {
+    extern uint32 BitsFlip(uint32 val);
 
-    BSetID id; 
-
-    id = BitsFlip(m_nInserted); 
-
-    BSetNode<T> *i = new BSetNode<T>(id, data);     
+    BSetID        id  = BitsFlip(m_nInserted); 
+    BSetNode<T> * i   = new BSetNode<T>(id, data);     
     return InsertNode(i); 
-
 }
 
 
 template <class T> void BSet<T>::TestStackSize()
-
 { 
-    
-    BSetNode<T> **tmp_stack; 
-    BSET_STACK *tmp_stack_state; 
-
-    if ((m_stack_size-1) <= m_stack_head) {
-        tmp_stack = new BSetNode<T>*[m_stack_size*2];
+    if (m_stack_size <= (1 + m_stack_head)) 
+    {
+        BSetNode<T> ** tmp_stack = new BSetNode<T>*[m_stack_size*2];
         memcpy (tmp_stack, m_stack, m_stack_size * sizeof(BSetNode<T>*)); 
         delete[] m_stack;
         m_stack = tmp_stack; 
    
-        tmp_stack_state = new BSET_STACK[m_stack_size*2]; 
+        BSET_STACK * tmp_stack_state = new BSET_STACK[m_stack_size*2]; 
         memcpy (tmp_stack_state, m_stack_state, m_stack_size*sizeof(sint32));
         delete[] m_stack_state; 
         m_stack_state = tmp_stack_state;
@@ -339,7 +302,6 @@ template <class T> T* BSet<T>::First(BSetID &id)
         m_stack_head = -1; 
         m_stack[0] = NULL; 
         m_stack_state[0] = BSET_CUR_DONE; 
-
         id = 0; 
         return NULL; 
     } 
@@ -351,7 +313,8 @@ template <class T> T* BSet<T>::First(BSetID &id)
 }
 
 template <class T> BOOL BSet<T>::Last() const
-{   return 0 <= m_stack_head;
+{   
+    return 0 <= m_stack_head;
 }
 
 template <class T> void BSet<T>::NextLesser(BSetID &id) 
@@ -376,7 +339,6 @@ template <class T> void BSet<T>::NextGreater(BSetID &id)
 
 template <class T> T *BSet<T>::Next(BSetID &id)
 {
-
 #ifdef _DEBUG
     sint32 finite_loop=0; 
 #endif
@@ -412,7 +374,6 @@ Assert(++finite_loop < 100000);
 }
 
 template <class T> T *BSet<T>::Find(const BSetID &id)
-
 {
     if (m_root == NULL) 
         return NULL; 
@@ -444,13 +405,11 @@ Assert(++finite_loop < 100000);
 }
 
 template <class T> BOOL BSet<T>::Del(const BSetID &id)
-
 {
     if (m_root == NULL) 
         return FALSE; 
 
     BSetNode<T> **p = &m_root; 
-    BSetNode<T> *del_me; 
 
 #ifdef _DEBUG
     sint32 finite_loop=0; 
@@ -459,7 +418,7 @@ template <class T> BOOL BSet<T>::Del(const BSetID &id)
     while (TRUE) { 
 Assert(++finite_loop < 100000); 
         if ((*p)->m_id == id) { 
-            del_me = *p; 
+            BSetNode<T> * del_me = *p; 
             if ((*p)->m_lesser) { 
                if ((*p)->m_greater) { 
                     RawInsert((*p)->m_lesser, (*p)->m_greater); 
@@ -473,9 +432,7 @@ Assert(++finite_loop < 100000);
 
             del_me->m_lesser = NULL;  
             del_me->m_greater = NULL; 
-
             delete del_me; 
-            del_me = NULL; 
             m_num--; 
             return TRUE; 
         } else if (id < (*p)->m_id) { 
@@ -498,14 +455,11 @@ Assert(++finite_loop < 100000);
 
 template <class T> void BSet<T>::Clear()
 {
-
-    m_nInserted = 0; 
-    m_num = 0; 
+    m_nInserted  = 0; 
+    m_num        = 0; 
     m_stack_head = 0; 
-    if (m_root) { 
-        delete m_root; 
-        m_root = NULL; 
-    } 
+    delete m_root; 
+    m_root = NULL; 
 }
 
-#endif __BSET_H__
+#endif // __BSET_H__

@@ -9,6 +9,8 @@
 
 
 #include "c3.h"
+#include "DiplomaticRequestData.h"
+
 #include "c3errors.h"
 
 #include "Globals.h"
@@ -20,7 +22,6 @@
 #include "message.h"
 #include "DiplomaticRequest.h"
 #include "MessageData.h"
-#include "DiplomaticRequestData.h"
 #include "MessagePool.h"
 #include "StrDB.h"
 #include "UnitData.h"
@@ -57,64 +58,40 @@ extern TradePool *g_theTradePool;
 
 
 
-DiplomaticRequestData::DiplomaticRequestData(const ID id) : GAMEOBJ(id.m_id)
-	{
-	
-    m_round = g_turn->GetRound() ;
-
-	m_owner = PLAYER_INDEX_INVALID ;
-	m_recipient = PLAYER_INDEX_INVALID ;
-	m_thirdParty = PLAYER_INDEX_INVALID ;
-	m_request = REQUEST_TYPE_NULL ;
-	m_response = REQUEST_RESPONSE_TYPE_NULL ;
-
-	m_advance = 0;
-	m_reciprocalAdvance = 0;
-	m_targetCity = 0;
-	m_reciprocalCity = 0;
-	m_amount = 0 ;
-	m_tone = k_MESSAGE_TONE_NEUTRAL;
-
-
-	}
+DiplomaticRequestData::DiplomaticRequestData(const ID id) 
+: 
+    GAMEOBJ             (id.m_id),
+	m_round             (g_turn ? g_turn->GetRound() : 0),
+    m_owner             (PLAYER_INDEX_INVALID),
+	m_recipient         (PLAYER_INDEX_INVALID),
+	m_thirdParty        (PLAYER_INDEX_INVALID),
+    m_request           (REQUEST_TYPE_NULL),
+    m_response          (REQUEST_RESPONSE_TYPE_NULL),
+    m_tone              (k_MESSAGE_TONE_NEUTRAL),
+    m_advance           (0),
+    m_reciprocalAdvance (0),	
+    m_targetCity        (),
+	m_reciprocalCity    (),
+	m_amount            (0)
+{ ; }
 
 
-
-
-
-
-
-
-DiplomaticRequestData::DiplomaticRequestData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX recipient, const REQUEST_TYPE request) : GAMEOBJ(id.m_id)
-	{
-	m_owner = owner ;
-	m_recipient = recipient ;
-	m_request = request ;
-
-	
-	m_round = g_turn->GetRound() ;
-	m_thirdParty = PLAYER_INDEX_INVALID ;
-	m_response = REQUEST_RESPONSE_TYPE_NULL ;
-
-	m_advance = 9;
-	m_reciprocalAdvance = 0;
-	m_targetCity = 0;
-	m_reciprocalCity = 0;
-	m_amount = 0 ;
-	m_tone = k_MESSAGE_TONE_NEUTRAL;
-
-
-	}
-
-
-
-
-
-
-
-
-
-
+DiplomaticRequestData::DiplomaticRequestData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX recipient, const REQUEST_TYPE request)
+: 
+    GAMEOBJ             (id.m_id),
+	m_round             (g_turn ? g_turn->GetRound() : 0),
+    m_owner             (owner),
+	m_recipient         (recipient),
+	m_thirdParty        (PLAYER_INDEX_INVALID),
+    m_request           (request),
+    m_response          (REQUEST_RESPONSE_TYPE_NULL),
+    m_tone              (k_MESSAGE_TONE_NEUTRAL),
+    m_advance           (9),
+    m_reciprocalAdvance (0),	
+    m_targetCity        (),
+	m_reciprocalCity    (),
+	m_amount            (0)
+{ ; }
 
 
 void DiplomaticRequestData::Serialize(CivArchive &archive)

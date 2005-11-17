@@ -28,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once 
 #endif
 
@@ -186,4 +186,4 @@ public:
 };
 
 
-#endif __BIT_TABLE_H__
+#endif // __BIT_TABLE_H__

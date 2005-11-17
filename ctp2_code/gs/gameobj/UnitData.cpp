@@ -452,7 +452,7 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 		SetFlag(k_UDF_IN_WORMHOLE);
 		g_player[m_owner]->m_readiness->UnsupportUnit(Unit(m_id),
 													  g_player[m_owner]->m_government_type);
-		g_player[m_owner]->RecoveredProbe(Unit(0));
+		g_player[m_owner]->RecoveredProbe(Unit());
 	} else {
 		left_map = FALSE;
 		AddUnitVision(revealed_unexplored);
@@ -1934,13 +1934,13 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 	if(!u.IsNoZoc()) {
 		
 		g_theWorld->RemoveZOC(m_pos, m_owner);
-		g_theWorld->AddOtherArmyZOC(m_pos, m_owner, Army(0), me);
+		g_theWorld->AddOtherArmyZOC(m_pos, m_owner, Army(), me);
 		sint32 dd;
 		for(dd = 0; dd < (sint32)NOWHERE; dd++) {
 			MapPoint npos;
 			if(m_pos.GetNeighborPosition((WORLD_DIRECTION)dd, npos)) {
 				g_theWorld->RemoveZOC(npos, m_owner);
-				g_theWorld->AddOtherArmyZOC(npos, m_owner, Army(0), me);
+				g_theWorld->AddOtherArmyZOC(npos, m_owner, Army(), me);
 				g_theWorld->AddZOC(npos, newo);
 			}
 		}
@@ -2126,7 +2126,7 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 	} 
 #endif
 
-	g_player[new_owner]->InsertUnitReference(me, new_cause, Unit(0)) ;
+	g_player[new_owner]->InsertUnitReference(me, new_cause, Unit()) ;
 
 	AddUnitVision(revealedUnexplored);
 	
@@ -2585,11 +2585,12 @@ ORDER_RESULT UnitData::InterceptTrade()
 		if ( source_owner == m_owner )
 			continue;
 		
-		
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy,
-			GEA_TradeRoute, route,
-			GEA_Army, m_army,
-			GEA_End);
+		g_gevManager->AddEvent
+            (GEV_INSERT_AfterCurrent,   GEV_SetPiratingArmy,
+			 GEA_TradeRoute,            route,
+			 GEA_Army,                  m_army,
+			 GEA_End
+            );
 
 		numPirated++;
 
@@ -5113,7 +5114,7 @@ void UnitData::ExitWormhole(MapPoint &pos)
 	
 	
 	
-	g_player[m_owner]->RecoveredProbe(Unit(0));
+	g_player[m_owner]->RecoveredProbe(Unit());
 	Unit me(m_id);
 	
 

@@ -1220,7 +1220,7 @@ SFN_ERROR Slic_Kill::Call(SlicArgList *args)
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
 
-	if(message == Message(0))
+	if(message == Message())
 		return SFN_ERROR_NOT_IN_BUTTON;
 
 	g_slicEngine->KillCurrentMessage();
@@ -1235,7 +1235,7 @@ SFN_ERROR Slic_MinimizeAction::Call(SlicArgList *args)
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
 
-	if(message == Message(0))
+	if(message == Message())
 		return SFN_ERROR_NOT_IN_BUTTON;
 
 	g_slicEngine->AddCurrentMessage();
@@ -1434,7 +1434,7 @@ SFN_ERROR Slic_Accept::Call(SlicArgList *args)
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
 
-	if(message == Message(0))
+	if(message == Message())
 		return SFN_ERROR_NOT_IN_BUTTON;
 
 	
@@ -1455,7 +1455,7 @@ SFN_ERROR Slic_Reject::Call(SlicArgList *args)
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
 
-	if(message == Message(0))
+	if(message == Message())
 		return SFN_ERROR_NOT_IN_BUTTON;
 
 	
@@ -1601,7 +1601,7 @@ SFN_ERROR Slic_Research::Call(SlicArgList *args)
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
 
-	if(message == Message(0))
+	if(message == Message())
 		return SFN_ERROR_NOT_IN_BUTTON;
 
 	sint32 player = message.GetOwner();
@@ -1762,7 +1762,7 @@ SFN_ERROR Slic_SetGovernment::Call(SlicArgList *args)
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
 
-	if(message == Message(0))
+	if(message == Message())
 		return SFN_ERROR_NOT_IN_BUTTON;
 
 	sint32 player = message.GetOwner();
@@ -1821,7 +1821,7 @@ SFN_ERROR Slic_StealSpecificAdvance::Call(SlicArgList *args)
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
 
-	if(message == Message(0))
+	if(message == Message())
 		return SFN_ERROR_NOT_IN_BUTTON;
 
 	AdvanceType adv = message.GetSelectedAdvance();
@@ -2014,7 +2014,7 @@ SFN_ERROR Slic_SendTradeBid::Call(SlicArgList *args)
 								   15);
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
-	if(message != Message(0)) {
+	if(message != Message()) {
 		g_slicEngine->KillCurrentMessage();
 	}
 	return SFN_ERROR_OK;
@@ -2049,7 +2049,7 @@ SFN_ERROR Slic_AcceptTradeBid::Call(SlicArgList *args)
 									 context->GetGold(0));
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
-	if(message != Message(0)) {
+	if(message != Message()) {
 		g_slicEngine->KillCurrentMessage();
 	}
 	return SFN_ERROR_OK;
@@ -2084,7 +2084,7 @@ SFN_ERROR Slic_RejectTradeBid::Call(SlicArgList *args)
 									 context->GetGold(0));
 	Message message;
 	g_slicEngine->GetCurrentMessage(message);
-	if(message != Message(0)) {
+	if(message != Message()) {
 		g_slicEngine->KillCurrentMessage();
 	}
 
@@ -3311,11 +3311,11 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 		Unit unit;
 		if(g_player[owner]) {
 			unit = g_player[owner]->CreateUnit(type, upos,
-													Unit(0),
+													Unit(),
 													FALSE,
 													CAUSE_NEW_ARMY_SCENARIO);
 		}
-		if(unit.m_id == (0)) {
+		if(unit.m_id == 0) {
 			m_result.m_int = 0;
 		} else {
 			m_result.m_int = 1;

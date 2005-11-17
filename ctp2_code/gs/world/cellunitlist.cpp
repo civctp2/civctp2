@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of a list of Units in the same cell
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -380,7 +380,7 @@ bool CellUnitList::GetTopVisibleUnitOfMoveType
     uint32	min_vis			= 0xffffffff; 
 	double	minmove			= -1;
 
-	Army	selectedArmy(0);
+	Army	selectedArmy;
 	g_selected_item->GetSelectedArmy(selectedArmy);
 
 	for (sint32 i = 0; i < m_nElements; ++i)
@@ -542,7 +542,7 @@ Unit CellUnitList::GetTopVisibleUnit(PLAYER_INDEX const looker) const
         }
     }                                
     
-    return Unit(0); 
+    return Unit(); 
 }
 
 BOOL CellUnitList::CanBeSued() const
@@ -979,7 +979,7 @@ void CellUnitList::ComputeStrength(double & attack,
         attack += (double) (rec->GetAttack() 
 			* m_array[i].GetHP()
 			* firepower); 
-        defense += (double) (m_array[i]->GetPositionDefense(Unit(0)) 
+        defense += (double) (m_array[i]->GetPositionDefense(Unit()) 
 			* m_array[i].GetHP()
 			* firepower);
         r = rec->GetZBRangeAttack()	

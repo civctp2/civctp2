@@ -675,7 +675,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			break;
 		default:
 		{
-			Army a(0);
+			Army a;
 			if(!g_selected_item->GetSelectedArmy(a)) {
 				MapPoint pos = g_selected_item->GetCurSelectPos();
 				Cell *cell = g_theWorld->GetCell(pos);
@@ -3739,7 +3739,7 @@ Army
 ControlPanelWindow::UnitPanelGetCurrent()
 {
 	
-	Army army(0);
+	Army army;
 
 	
 	sint32 p_index = g_selected_item->GetVisiblePlayer();

@@ -127,7 +127,7 @@ void ThumbnailMap::InitCommon(void)
 	m_tilePixelHeight = 0.0;
 
 	m_selectedRoute = NULL;
-	m_selectedCity = 0;
+	m_selectedCity = Unit();
 
 	m_displayUnits = TRUE;
 	m_displayLandOwnership = TRUE;

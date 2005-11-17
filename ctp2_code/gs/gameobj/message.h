@@ -17,9 +17,6 @@ public:
 		Message() : ID() { return ; }
 		Message(sint32 val) : ID(val) { return ; }
 		Message(uint32 val) : ID(val) { return ; }
-#ifdef WIN32
-		Message(const int val) : ID(val) { return ; }
-#endif
 
 		void KillMessage() ;
 		void Kill() { KillMessage() ; }

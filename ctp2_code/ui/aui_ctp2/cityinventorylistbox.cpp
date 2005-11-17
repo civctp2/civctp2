@@ -311,7 +311,7 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 			}
 
 		}
-		FillInventoryBox(0);
+		FillInventoryBox(Unit());   // clear
 		FillInventoryBox(unit);
 		bq = unit.GetData()->GetCityData()->GetBuildQueue();
 		bn = bq->GetHead();

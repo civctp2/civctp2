@@ -186,7 +186,7 @@ namespace
 SlicEngine::SlicEngine()
 :   m_tutorialActive        (FALSE),
 	m_tutorialPlayer        (SINGLE_PLAYER_DEFAULT),
-	m_currentMessage        (new Message(0)),
+	m_currentMessage        (new Message()),
 	m_segmentHash           (new SlicSegmentHash(k_SEGMENT_HASH_SIZE)),
 	m_functionHash          (NULL),
 	m_uiHash                (new StringHash<SlicUITrigger> (k_SEGMENT_HASH_SIZE)),
@@ -236,7 +236,7 @@ SlicEngine::SlicEngine()
 SlicEngine::SlicEngine(CivArchive &archive)
 :	m_tutorialActive        (FALSE),
 	m_tutorialPlayer        (SINGLE_PLAYER_DEFAULT),
-	m_currentMessage        (new Message(0)),
+	m_currentMessage        (new Message()),
 	m_segmentHash           (new SlicSegmentHash(k_SEGMENT_HASH_SIZE)),
 	m_functionHash          (NULL),
 	m_uiHash                (new StringHash<SlicUITrigger>(k_SEGMENT_HASH_SIZE)),
@@ -1080,7 +1080,7 @@ void SlicEngine::KillCurrentMessage()
 	if(!g_theMessagePool->IsValid(*m_currentMessage))
 		return;
 	m_currentMessage->Kill();
-	*m_currentMessage = Message(0);
+	*m_currentMessage = Message();
 }
 
 void SlicEngine::AddCurrentMessage()
@@ -1091,7 +1091,7 @@ void SlicEngine::AddCurrentMessage()
 		return;
 
 	m_currentMessage->Minimize();
-	*m_currentMessage = Message(0);
+	*m_currentMessage = Message();
 }
 
 PointerList<SlicRecord> *SlicEngine::GetRecords(sint32 player)

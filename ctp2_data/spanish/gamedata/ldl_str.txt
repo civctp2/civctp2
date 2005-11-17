@@ -3143,8 +3143,3 @@ str_tbl_ldl_Gamestate_Debug		"Eliminar errores del estado del juego (playtest)"
 str_tbl_ldl_Rand_Test			"Prueba al azar (playtest)"
 str_tbl_ldl_Command_Enter		"Insertar comando (playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Insertar comando alterno (playtest)"
-
-# Añadido para Extender el Manejo Nacional 6/2004 L. Hirth
-str_ldl_ND_RTL_WORKER		"Tra."
-str_ldl_ND_RTL_SLAVE		"Esc."
-str_ldl_ND_RTL_COMBAT_UNITS	"Mil."

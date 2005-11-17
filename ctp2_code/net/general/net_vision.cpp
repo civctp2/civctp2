@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer vision packet handling.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -415,7 +415,7 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		
 		
 		SpriteState *ss = new SpriteState(0);
-		Unit		unitID = Unit(0);
+		Unit		unitID;
 		
 		
 		uint16 dbIndex;

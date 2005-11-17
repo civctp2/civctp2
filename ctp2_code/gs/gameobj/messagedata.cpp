@@ -96,7 +96,7 @@ MessageData::MessageData(const ID id) : GAMEOBJ(id.m_id)
 	m_isRead = FALSE;
 	m_cityList = new UnitDynamicArray ;
 	m_text = NULL ;
-	m_request = DiplomaticRequest(0) ;
+	m_request = DiplomaticRequest() ;
 	if (g_turn)
 		m_timestamp = g_turn->GetYear() ;
 	else
@@ -140,7 +140,7 @@ MessageData::MessageData(const ID id, const PLAYER_INDEX owner, const PLAYER_IND
 	m_cityList = new UnitDynamicArray ;
 	m_text = new char[strlen(s) + 1];
 	strcpy(m_text, s) ;
-	m_request = DiplomaticRequest(0) ;
+	m_request = DiplomaticRequest() ;
 	m_timestamp = g_turn->GetYear() ;
 	m_advanceSet = FALSE;
 	m_window = NULL;  

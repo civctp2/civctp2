@@ -620,8 +620,8 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 			Assert(action);
 			if (!action) continue;
 
-			action->SetUnit(Unit(0));
-			action->SetArmy(Army(0));
+			action->SetUnit(Unit());
+			action->SetArmy(Army());
 		}
 	} else {
 		sint32		count = fullArmy->Num();
@@ -643,8 +643,8 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 			Assert(action);
 			if (!action) continue;
 
-			action->SetUnit(Unit(0));
-			action->SetArmy(Army(0));
+			action->SetUnit(Unit());
+			action->SetArmy(Army());
 
 		}
 

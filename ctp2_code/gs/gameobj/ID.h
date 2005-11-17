@@ -65,16 +65,9 @@ public:
 	ID () { m_id = 0; };
 	ID (sint32 val) { m_id = val; }; 
 	ID (uint32 val) { m_id = val; }; 
-#if defined(WIN32)
-	ID (const int val) {
-		Assert (0 <= val); 
-		m_id = unsigned int (val); }; 
-#endif
 	
 	void Castrate() { } 
 	void DelPointers() {} 
-	
-	
 	
 	operator int() const  { return m_id; }; 
 	operator unsigned int() const  { return m_id; }; 

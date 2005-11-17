@@ -667,7 +667,7 @@ Unit SlicContext::GetCity(sint32 index) const
 	}
 
 	if(!m_cityList)
-		return Unit(0);
+		return Unit();
 
 	return m_cityList->Access(index);
 }
@@ -689,7 +689,7 @@ Unit SlicContext::GetUnit(sint32 index) const
 	}
 
 	if(!m_unitList)
-		return Unit(0);
+		return Unit();
 	return m_unitList->Access(index);
 }
 
@@ -703,7 +703,7 @@ sint32 SlicContext::GetNumUnits() const
 Army SlicContext::GetArmy(sint32 index) const
 {
 	if(!m_armyList)
-		return Army(0);
+		return Army();
 	return m_armyList->Access(index);
 }
 
@@ -1118,7 +1118,7 @@ sint32 SlicContext::GetNumTradeOffers() const
 TradeOffer SlicContext::GetTradeOffer(sint32 index) const
 {
 	if(!m_tradeOffersList || index < 0 || index >= m_tradeOffersList->Num())
-		return TradeOffer(0);
+		return TradeOffer();
 
 	return m_tradeOffersList->Access(index);
 }

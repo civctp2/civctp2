@@ -252,7 +252,7 @@ sint32 Cell::RemoveUnitReference(const Unit &u)
 
        return TRUE; 
    } else if (u == GetCity()) { 
-        SetCity(Unit(0));
+        SetCity(Unit());
         return TRUE;
    } else {
 
@@ -882,15 +882,15 @@ CellUnitList *Cell::UnitArmy()
 
 Unit &Cell::AccessUnit(sint32 index)
 {
-	static Unit zero(0);
+	static Unit invalid;
 	Assert(m_unit_army);
 	if(!m_unit_army) {
-		return zero;
+		return invalid;
 	}
 
 	Assert(index >= 0 && index < m_unit_army->Num());
 	if(index < 0 || index >= m_unit_army->Num()) {
-		return zero;
+		return invalid;
 	}
 
 	return m_unit_army->Access(index);
@@ -910,17 +910,13 @@ void Cell::SetCity(const Unit &c)
 
 Unit Cell::GetCity() const
 {
-	static Unit u(0);
-	if(m_env & k_MASK_ENV_CITY) {
-		
-		
-		
+	if (m_env & k_MASK_ENV_CITY) 
+    {
 		return m_city;
-	} else {
-		
-		
-		
-		return u;
+	} 
+    else 
+    {
+		return Unit();
 	}
 }
 
@@ -970,24 +966,23 @@ TerrainImprovement Cell::AccessImprovement(sint32 index)
 			}
 		}
 	}
+
 	Assert(FALSE);
-	static TerrainImprovement t(0);
-	return t;
+	return TerrainImprovement();
 }
 
 void Cell::CreateGoodyHut()
 {
-	if ( !m_jabba ) {
+	if (!m_jabba) 
+    {
 		m_jabba = new GoodyHut();
 	}
 }
 
 void Cell::DeleteGoodyHut()
 {
-	if (m_jabba != NULL) {
-		delete m_jabba;
-		m_jabba = NULL;
-	}
+	delete m_jabba;
+	m_jabba = NULL;
 }
 
 BOOL Cell::HasWormhole() const
@@ -1189,8 +1184,7 @@ ID Cell::GetObject(sint32 index)
 	if(m_objects)	  
 		return m_objects->Access(index);
 
-	static ID id(0);
-	return id;
+	return ID();
 }
 
 void Cell::InsertDBImprovement(sint32 type)

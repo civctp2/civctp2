@@ -548,7 +548,7 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 
 		for(j = 0; j < nUnits; j++) 
 		{
-			id =  g_player[i]->CreateUnit(settler, player_start_list[which], Unit(0), 
+			id =  g_player[i]->CreateUnit(settler, player_start_list[which], Unit(), 
 										  FALSE, CAUSE_NEW_ARMY_INITIAL); 
 		}
 
@@ -557,7 +557,7 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 		g_theProfileDB->SetCheatAge(g_cheat_age);
 		if (g_theProfileDB->GetCheatAge(age)) {
 		for(; j <9; j++) {
-			id =  g_player[i]->CreateUnit(settler, player_start_list[which], Unit(0), 
+			id =  g_player[i]->CreateUnit(settler, player_start_list[which], Unit(), 
 			                              FALSE, CAUSE_NEW_ARMY_INITIAL);
 		}
 		}
@@ -589,7 +589,7 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 					}
 				}  while(!g_theWorld->CanEnter(pos, g_theUnitDB->Get(i)->GetMovementType()));
 				
-				Unit id1 = g_player[player]->CreateUnit(i, pos, Unit(0), 
+				Unit id1 = g_player[player]->CreateUnit(i, pos, Unit(), 
 				                                        FALSE, CAUSE_NEW_ARMY_INITIAL); 
 				id1.SetIsProfessional(TRUE); 
 			}
@@ -622,7 +622,7 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 					}
 				}  while(!g_theWorld->CanEnter(pos, g_theUnitDB->Get(uid)->GetMovementType()));
 
-				Unit id1 = g_player[player]->CreateUnit(uid, pos, Unit(0), 
+				Unit id1 = g_player[player]->CreateUnit(uid, pos, Unit(), 
 				                                        FALSE, CAUSE_NEW_ARMY_INITIAL); 
 				id1.SetIsProfessional(TRUE); 
 				
@@ -2511,7 +2511,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				} else {
 					settler = landSettler;
 				}
-				g_player[i]->CreateUnit(settler, point, Unit(0),
+				g_player[i]->CreateUnit(settler, point, Unit(),
 										FALSE, CAUSE_NEW_ARMY_INITIAL);
 			}
 		}

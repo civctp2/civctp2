@@ -3215,8 +3215,3 @@ str_tbl_ldl_Rand_Test			"Zufallstest (Playtest)"
 str_tbl_ldl_Command_Enter		"Kommando eingeben (Playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Alternativkommando eingeben (Playtest)"
 
-# Added for extended National Management 6/2004 L. Hirth
-str_ldl_ND_RTL_WORKER		"Arb."
-str_ldl_ND_RTL_SLAVE		"Skl."
-str_ldl_ND_RTL_COMBAT_UNITS	"Mil."
-

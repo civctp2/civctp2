@@ -169,7 +169,7 @@ void ResourceMap::InitCommon( sint32 scale)
 	m_drawHilite = FALSE;
 
 	
-	m_unit = NULL;
+	m_unit = Unit();
 
 	
 	m_updateAction = NULL;
@@ -180,7 +180,7 @@ void ResourceMap::InitCommon( sint32 scale)
 									   16, (g_c3ui)->DD());
 	
 
-	Assert( m_surface != NULL );
+	Assert(m_surface);
 	if ( !m_surface ) return;
 
 	m_string = new aui_StringTable( &errcode, "ResourceMapStrings" );
@@ -291,27 +291,21 @@ sint32 ResourceMap::DrawSurface(void)
 	sint32 width = m_surface->Width();
 	sint32 height = m_surface->Height();
 
-	
 	RECT rect = {0,0,width,height};
 	primitives_PaintRect16(m_surface,&rect,0x0000);
 
-	MapPoint pos;
-	MapPoint newpos;
-
-	
 	if ( !g_theUnitPool->IsValid(m_unit) ) return -1;
 
+	MapPoint pos;
 	
 	if (m_unit.m_id)
 		m_unit.GetData()->GetPos(pos);
 	else
 		return 0;
 
-	
 	double scale = g_tiledMap->GetScale();
 	sint32 zoomLevel = g_tiledMap->GetZoomLevel();
 
-	
 	if ( m_scale ) {
 		g_tiledMap->SetZoomLevel(k_ZOOM_SMALLEST );
 	}
@@ -319,17 +313,12 @@ sint32 ResourceMap::DrawSurface(void)
 		g_tiledMap->SetZoomLevel(k_ZOOM_NORMAL );
 	}
 
-
-
-	
-	
-	
-	MapPoint	myPos1 = pos, 
-				myPos2;
-	sint32		leftEdge, topEdge; 
 	
 	g_tiledMap->RecalculateViewRect(m_normalizedViewRect);
 
+	MapPoint	myPos1 = pos; 
+	sint32	leftEdge;
+	sint32	topEdge; 
 	maputils_MapXY2PixelXY(myPos1.x, myPos1.y, &leftEdge, &topEdge, &m_normalizedViewRect);
 	leftEdge -= g_tiledMap->GetZoomTilePixelWidth() * k_MAX_CITY_RADIUS;
 	topEdge -= g_tiledMap->GetZoomTilePixelHeight() * k_MAX_CITY_RADIUS;
@@ -364,19 +353,15 @@ sint32 ResourceMap::DrawSurface(void)
 sint32 ResourceMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint32 yOff )
 {
 	MapPoint pos;
-	MapPoint newpos;
 
-	
 	if (m_unit.m_id)
 		m_unit.GetData()->GetPos(pos);
 	else
 		return 0;
 
-	
 	double scale = g_tiledMap->GetScale();
 	sint32 zoomLevel = g_tiledMap->GetZoomLevel();
 
-	
 	if ( m_scale ) {
 		g_tiledMap->SetZoomLevel(k_ZOOM_SMALLEST );
 	}
@@ -384,9 +369,7 @@ sint32 ResourceMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, s
 		g_tiledMap->SetZoomLevel(k_ZOOM_NORMAL );
 	}
 
-	sint32 i;
-
-	
+	MapPoint newpos;
 	for (sint32 j =0;j < 3;j++) {
 		pos.GetNeighborPosition(NORTHWEST, newpos);
 		pos = newpos;
@@ -401,7 +384,7 @@ sint32 ResourceMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, s
 	m_mapViewRect.top = 2;
 	m_mapViewRect.bottom = 9;
 	
-	sint32 nudge;
+	sint32 nudge = 0;
 	sint32 index = 0;
 	sint32 frame = 0;
 
@@ -422,9 +405,12 @@ sint32 ResourceMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, s
 			pos.GetNeighborPosition(SOUTHEAST, newpos);
 			nudge = 0;
 		}
+
+        sint32 i;
 		maputils_MapX2TileX(pos.x,pos.y,&i);
 
-		for (sint32 x = 0;x < 3;x++) {
+		sint32 x;
+		for (x = 0; x < 3; ++x) {
 			if (x==0 && (y==0 || y==6)) continue;
 			if ( !m_scale )
 				DrawImprovements(pSurface, pos.y, i+x, x*96+nudge+xOff,y*24+yOff);
@@ -464,21 +450,17 @@ sint32 ResourceMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, s
 
 BOOL ResourceMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
 {
-	ResourceMap		*resourceMap = (ResourceMap *)context;
-	UnitActor	*actor;
-	sint32		x, y;
-	Unit		city;
-	sint32		mapWidth, mapHeight;
-
-
-	city = g_theWorld->GetCell(pos)->GetCity();
+	Unit		city = g_theWorld->GetCell(pos)->GetCity();
 	if (city.m_id == 0) return FALSE;
 
-	actor = city.GetActor();
+	UnitActor * actor = city.GetActor();
 	if (!actor) return FALSE;
 
+	sint32		mapWidth, mapHeight;
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
 	
+	ResourceMap		*resourceMap = (ResourceMap *)context;
+	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y, resourceMap->GetNormalizedViewRect());
 
 	x -= resourceMap->GetLeftEdge();
@@ -488,11 +470,13 @@ BOOL ResourceMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
 	if (y < 0) y += (mapHeight * g_tiledMap->GetZoomTilePixelHeight()/2);
 
 
-	if ( !resourceMap->GetScale() ) {
-		actor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_LARGEST));
-	}
-	else {
+	if (resourceMap->GetScale()) 
+	{
 		actor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST));
+	}
+	else 
+	{
+		actor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_LARGEST));
 	}
 	
 	return TRUE;
@@ -500,21 +484,17 @@ BOOL ResourceMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
 
 BOOL ResourceMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *context)
 {
-	ResourceMap		*resourceMap = (ResourceMap *)context;
-	UnitActor	*actor;
-	sint32		x, y;
-	Unit		city;
-	sint32		mapWidth, mapHeight;
-
-
-	city = g_theWorld->GetCell(pos)->GetCity();
+	Unit		city = g_theWorld->GetCell(pos)->GetCity();
 	if (city.m_id == 0) return FALSE;
 
-	actor = city.GetActor();
+	UnitActor	*actor = city.GetActor();
 	if (!actor) return FALSE;
 
+	sint32		mapWidth, mapHeight;
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
 	
+	ResourceMap		*resourceMap = (ResourceMap *)context;
+	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y, resourceMap->GetNormalizedViewRect());
 
 	x -= resourceMap->GetLeftEdge();
@@ -523,11 +503,13 @@ BOOL ResourceMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *cont
 	if (x < 0) x += (mapWidth * g_tiledMap->GetZoomTilePixelWidth());
 	if (y < 0) y += (mapHeight * g_tiledMap->GetZoomTilePixelHeight()/2);
 
-	if ( !resourceMap->GetScale() ) {
-		actor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_LARGEST));
-	}
-	else {
+	if (resourceMap->GetScale()) 
+	{
 		actor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST));
+	}
+	else 
+	{
+		actor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_LARGEST));
 	}
 	
 	return TRUE;
@@ -536,21 +518,19 @@ BOOL ResourceMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *cont
 
 BOOL ResourceMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
 {
-	ResourceMap		*resourceMap = (ResourceMap *)context;
-	GoodActor	*goodActor;
-	sint32		mapWidth, mapHeight;
-	sint32		x, y;
 
 	TileInfo *curTileInfo = g_tiledMap->GetTileInfo(pos);
 	Assert(curTileInfo != NULL);
 	if(!curTileInfo || !curTileInfo->HasGoodActor()) return FALSE;
 	
-	goodActor = curTileInfo->GetGoodActor();
-
+	GoodActor	*goodActor = curTileInfo->GetGoodActor();
 	if (!goodActor) return FALSE;
 
+	sint32		mapWidth, mapHeight;
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
 	
+	ResourceMap		*resourceMap = (ResourceMap *)context;
+	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y, resourceMap->GetNormalizedViewRect());
 
 	x -= resourceMap->GetLeftEdge();
@@ -560,11 +540,12 @@ BOOL ResourceMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
 	if (x < 0) x += (mapWidth * g_tiledMap->GetZoomTilePixelWidth());
 	if (y < 0) y += (mapHeight * g_tiledMap->GetZoomTilePixelHeight()/2);
 
-	if ( !resourceMap->GetScale() ) {
-		goodActor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_LARGEST));
+	if (resourceMap->GetScale()) 
+	{
+		goodActor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST));
 	}
 	else {
-		goodActor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST));
+		goodActor->DrawDirect(pSurface, x, y, g_tiledMap->GetZoomScale(k_ZOOM_LARGEST));
 	}
 
 	return TRUE;
@@ -572,12 +553,11 @@ BOOL ResourceMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
 
 BOOL ResourceMap::DrawATile(aui_Surface *pSurface, MapPoint &pos, void *context)
 {
-	ResourceMap		*resourceMap = (ResourceMap *)context;
-	sint32		x, y;
 	sint32		mapWidth, mapHeight;
-
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
 	
+	ResourceMap		*resourceMap = (ResourceMap *)context;
+	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y, resourceMap->GetNormalizedViewRect());
 
 	x -= resourceMap->GetLeftEdge();
@@ -647,11 +627,7 @@ BOOL ResourceMap::DrawATile(aui_Surface *pSurface, MapPoint &pos, void *context)
 BOOL ResourceMap::DrawResourceMapThing(aui_Surface *pSurface, ResourceMapDrawFunc *func)
 {
 	MapPoint	pos = m_unit.RetPos();
-	MapPoint	wpos;
 
-	
-	
-	
 	sint32 zoomLevel = g_tiledMap->GetZoomLevel();
 
 	if ( m_scale ) g_tiledMap->SetZoomLevel(k_ZOOM_SMALLEST );
@@ -685,36 +661,16 @@ BOOL ResourceMap::DrawSprites(aui_Surface *pSurface, RECT *destRect)
 	if(!g_theUnitPool->IsValid(m_unit)) return FALSE;
 
 	MapPoint pos;
-
-
 	m_unit.GetData()->GetPos(pos);
 
-	
-	
 	DrawResourceMapThing(pSurface, DrawAGood);
-
-	
 	DrawResourceMapThing(pSurface, DrawACity);
-
 	
 	m_totalFood = m_totalProd = m_totalGold = 0;	
 
-	
 	Cell *cell = g_theWorld->GetCell( pos );
 	m_totalFood += cell->GetFoodProduced();
 	m_totalProd += cell->GetShieldsProduced();
-	m_totalGold += 0; 
-
-
-
-
-
-
-
-
-
-
-
 	
 	return TRUE;
 }
@@ -733,28 +689,20 @@ sint32 ResourceMap::CalculateWrap(
 			sint32 y
 			)
 {
-
-	MapPoint	pos;
-	sint16		river = -1;
-
-	
 	maputils_WrapPoint(j,i,&j,&i);
 
-	
 	sint32 k = maputils_TileX2MapX(j,i);
 
 	MapPoint tempPos (k, i);
-
-	pos = tempPos;
+	MapPoint	pos = tempPos;
 	
 	TileInfo *tileInfo = g_tiledMap->GetTileInfo(pos);
 	if (tileInfo == NULL) return -1;
 	
-	river = tileInfo->GetRiverPiece();
-	
 	BaseTile *baseTile = g_tiledMap->GetTileSet()->GetBaseTile(tileInfo->GetTileNum());
 	if (baseTile == NULL) return -1;
 	
+	sint16	river = tileInfo->GetRiverPiece();
 	
 	if ( !m_scale ) {
 		
@@ -802,26 +750,13 @@ sint32 ResourceMap::DrawImprovements(
 			sint32 y
 			)
 {
-	sint16		river = -1;
-
-	
 	maputils_WrapPoint(j,i,&j,&i);
-
 	
 	sint32 k = maputils_TileX2MapX(j,i);
 
 	MapPoint pos (k, i);
 	
-	
-	if ( !m_scale ) {
-		
-		g_tiledMap->DrawImprovementsLayer(NULL, pos, x, y);
-
-	}
-	else {	
-		
-		g_tiledMap->DrawImprovementsLayer(NULL, pos, x, y);
-	}
+	g_tiledMap->DrawImprovementsLayer(NULL, pos, x, y);
 	
 	return 0;
 }
@@ -829,11 +764,11 @@ sint32 ResourceMap::DrawImprovements(
 
 void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit &unit)
 {
-	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH)/2);
-	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEADROOM);
-
 	Assert(unit.IsCity());
 	if (!unit.IsCity()) return;
+
+	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH)/2);
+	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEADROOM);
 
 	y-= yoffset;
 	
@@ -845,15 +780,15 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 
 	if (x >= 0 && y >= 0 && x < surface->Width() && y < surface->Height()) {
 
-		width = textutils_GetWidth((aui_DirectSurface *)surface,name);
-		height = textutils_GetHeight((aui_DirectSurface *)surface,name);
+		width = textutils_GetWidth(surface,name);
+		height = textutils_GetHeight(surface,name);
 		rect.left = x;
 		rect.top = y;
 		rect.right = x+width;
 		rect.bottom = y+height;;
 
 		textutils_ColoredDropString(
-			(aui_DirectSurface *)surface,
+			surface,
 			name,
 			x,
 			y,
@@ -870,8 +805,8 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 	sprintf(str,"%i",pop);
 	y+=yoffset;
 
-	width = textutils_GetWidth((aui_DirectSurface *)surface,str);
-	height = textutils_GetHeight((aui_DirectSurface *)surface,str);
+	width = textutils_GetWidth(surface, str);
+	height = textutils_GetHeight(surface, str);
 
 	sint32	popEdgeSize = (sint32)((double)k_POP_BOX_SIZE);
 	sint32 nudge = 0;
@@ -889,7 +824,7 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 	primitives_FrameRect16(surface,&popRect,0x0000);
 
 	textutils_CenteredColoredDropString(
-		(aui_DirectSurface *)surface,
+		surface,
 		str,
 		&popRect,
 		k_POP_PTSIZE,
@@ -901,7 +836,6 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 
 sint32 ResourceMap::UpdateFromSurface(aui_Surface *destSurface, RECT *destRect)
 {
-	
 	if(m_usedRect.right - m_usedRect.left < m_usedRect.bottom - m_usedRect.top) {
 		
 		sint32 diff = (m_usedRect.bottom - m_usedRect.top) - (m_usedRect.right - m_usedRect.left);
@@ -930,40 +864,25 @@ sint32 ResourceMap::UpdateFromSurface(aui_Surface *destSurface, RECT *destRect)
 
 void ResourceMap::Click(aui_MouseEvent *data)
 {	
-	UnitActor		*actor=NULL;
 	MapPoint		pos;
-	Unit			top;
-	POINT			point;
+	POINT			point = data->position;
 
-	point = data->position;
-
-	if (MousePointToTilePos(point, pos)) {
-		if (data->lbutton && !data->rbutton) {
-			
+	if (MousePointToTilePos(point, pos)) 
+	{
+		if (data->lbutton && !data->rbutton) 
+		{
 			HandlePop(pos);
-		} else {
-			if (data->rbutton && !data->lbutton) {
-				
-			} else {
-				
-			}
 		}
 	}
 }
 
 BOOL ResourceMap::PointInMask(POINT hitPt)
 {
-	sint32		x, y;
+	double const scale = (m_scale) ? 0.5 : 1.0;
+	sint32 const x = (sint32)((double)hitPt.x / scale);
+	sint32 const y = (sint32)(((double)hitPt.y / scale) + k_TILE_PIXEL_HEADROOM);
 
 	TILEHITMASK *thm = g_tiledMap->GetTileHitMask();
-
-	double scale = 1.0;
-	if ( m_scale ) {
-		scale = 0.5;
-	}
-
-	x = (sint32)((double)hitPt.x / scale);
-	y = (sint32)(((double)hitPt.y / scale) + k_TILE_PIXEL_HEADROOM);
 
 	if (x >= thm[y].start &&
 		x <= thm[y].end) 
@@ -974,36 +893,25 @@ BOOL ResourceMap::PointInMask(POINT hitPt)
 
 BOOL ResourceMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 {
-	sint32			width, height;
-	MapPoint		pos;
-	POINT			hitPt;
-	sint32			x, y;
-	sint32			maxX;
-
-	double scale = 1.0;
-	if ( m_scale ) {
-		scale = 0.5;
-	}
-
-	sint32			headroom = (sint32)((double)k_TILE_PIXEL_HEADROOM * scale);
-
-	width = (sint32)((double)k_TILE_GRID_WIDTH * scale);
-	height = (sint32)((double)(k_TILE_GRID_HEIGHT-k_TILE_PIXEL_HEADROOM) * scale);
-
-	x = point.x;
-	y = point.y;
-
+	double const scale = (m_scale) ? 0.5 : 1.0;
+	sint32	headroom = (sint32)((double)k_TILE_PIXEL_HEADROOM * scale);
+	sint32 width = (sint32)((double)k_TILE_GRID_WIDTH * scale);
+	sint32 height = (sint32)((double)(k_TILE_GRID_HEIGHT-k_TILE_PIXEL_HEADROOM) * scale);
+	sint32 x = point.x;
+	sint32 y = point.y;
 	
 	if (!(m_mapViewRect.top & 1)) 
 		y -= headroom;
 
+	MapPoint		pos;
 	pos.x = (sint16) (x / width + m_mapViewRect.left);
 	pos.y = (sint16) ((y / height) + m_mapViewRect.top/2);
  
+	POINT			hitPt;
 	hitPt.x = x % width;
 	hitPt.y = y % height;
 
-	maxX = m_mapBounds.right;
+	sint32 maxX = m_mapBounds.right;
 
 	if (!PointInMask(hitPt)) {
 		
@@ -1064,13 +972,6 @@ BOOL ResourceMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 
 	if (tilePos.x <0) tilePos.x = g_theWorld->GetWidth() + tilePos.x; 
 	else if (g_theWorld->GetWidth() <= tilePos.x) tilePos.x = tilePos.x - (sint16)g_theWorld->GetWidth(); 
-		
-	MapPoint tempPos;
-
-	
-	if (m_unit.m_id) {
-		m_unit.GetData()->GetPos(tempPos);
-	}
 
 	return TRUE;
 }
@@ -1095,55 +996,25 @@ void ResourceMap::DrawHiliteMouseTile(aui_Surface *destSurf, RECT *destRect)
 	
 	g_tiledMap->DrawHitMask(destSurf, m_hiliteMouseTile, &m_mapViewRect, destRect);
 
-	
 	g_tiledMap->SetZoomLevel(zoomLevel);
 	g_tiledMap->SetScale( scale );
 }
 
 void ResourceMap::HandlePop( MapPoint point )
 {
-	
 	MapPoint mp;
-
-	
 	m_unit.GetData()->GetPos(mp);
 
-	
-	sint32 diffX, diffY;
-	diffY = 5 - point.y;
-	diffX = 2 - point.x;
+	sint32 diffY = 5 - point.y;
+	sint32 diffX = 2 - point.x;
 
-	
 	sint32 x = mp.x - diffX;
 	sint32 y = mp.y - diffY;
 
-	
-	
 	sint32 xx, yy;
-	maputils_WrapPoint( x, y, &xx, &yy);
+	maputils_WrapPoint(x, y, &xx, &yy);
 	point.x = (sint16)xx;
 	point.y = (sint16)yy;
-
-
-
-	Cell *cell;
-	cell = g_theWorld->GetCell(point);
-
-	
-
-	return;
-
-	PLAYER_INDEX	player ;
-	ID	item ;
-	SELECT_TYPE	state ;
-	
-	g_selected_item->GetTopCurItem(player, item, state);
-	Assert(player == g_selected_item->GetVisiblePlayer());
-	if(player != g_selected_item->GetVisiblePlayer())
-		return;
-	
-	Assert( m_unit != Unit(0) );
-
 }
 
 
@@ -1152,11 +1023,11 @@ void ResourceMap::HandlePop( MapPoint point )
 AUI_ERRCODE ResourceMap::Idle( void )
 {
 	static uint32 lastDraw = 0;
-	if (GetTickCount() - lastDraw > 100) lastDraw = GetTickCount();
-	else return AUI_ERRCODE_OK;
-
-	
-	DrawThis(NULL, 0, 0);
+	if (GetTickCount() - lastDraw > 100) 
+	{
+		lastDraw = GetTickCount();
+		DrawThis(NULL, 0, 0);
+	}
 
 	return AUI_ERRCODE_OK;
 }

@@ -4,15 +4,17 @@
 #ifndef __ORDER_H__
 #define __ORDER_H__
 
-#include "ctp2_enums.h"
+class Order;
 
-class GameEventArgList;
-enum GAME_EVENT;
-enum CURSORINDEX;
-class OrderRecord;
+enum ORDER_RESULT {
+	ORDER_RESULT_ILLEGAL,
+	ORDER_RESULT_FAILED,
+	ORDER_RESULT_SUCCEEDED,
+	ORDER_RESULT_INCOMPLETE,
+	ORDER_RESULT_SUCCEEDED_INCOMPLETE,
+};
 
-
-#include "MapPoint.h"
+#include "Unit.h"       // UNIT_ORDER_TYPE
 
 struct OrderInfo {
 	UNIT_ORDER_TYPE m_type;
@@ -28,8 +30,16 @@ extern OrderInfo g_orderInfo[];
 extern sint32 g_numOrderInfo;
 extern sint32 g_orderInfoMap[UNIT_ORDER_MAX];
 
-class Path;
+
+#include "GameEventDescription.h"
+#include "cursormanager.h"
+#include "MapPoint.h"
+
 class CivArchive;
+class GameEventArgList;
+class OrderRecord;
+class Path;
+
 
 class Order {
 public:

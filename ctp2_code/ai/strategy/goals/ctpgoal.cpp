@@ -264,7 +264,7 @@ const MapPoint & CTPGoal::Get_Target_Pos() const
 {
 	static MapPoint pos;    // ugly life-time extension
 
-	if (m_target_army != ID(0)) 
+	if (m_target_army != ID()) 
 	{
 		if (m_target_army.IsValid())
         {
@@ -276,7 +276,7 @@ const MapPoint & CTPGoal::Get_Target_Pos() const
 			pos.y = -1;
 		}
 	}
-	else if (m_target_city != ID(0))
+	else if (m_target_city != ID())
 	{
 		
 		if (m_target_city.IsValid())
@@ -376,10 +376,10 @@ PLAYER_INDEX CTPGoal::Get_Target_Owner() const
 		target_owner = m_target_army.GetOwner();
 	}
 	else if(goal_record->GetTargetTypePetrolStation()){
-		if(m_target_city != ID(0) || g_theWorld->IsAirfield(Get_Target_Pos())){
+		if(m_target_city != ID() || g_theWorld->IsAirfield(Get_Target_Pos())){
 			target_owner = g_theWorld->GetOwner(Get_Target_Pos());
 		}
-		else if(m_target_army != ID(0)){
+		else if(m_target_army != ID()){
 			target_owner = m_target_army.GetOwner();
 		}
 	}
@@ -1467,7 +1467,7 @@ bool CTPGoal::Get_Totally_Complete() const
 	
 	if ( goal_record->GetTargetTypeChokePoint() )
 	{
-		ArmyData army(0);
+		ArmyData army(Army());
 		
 		g_theWorld->GetArmy(target_pos, army);
 		if ( army.GetOwner() != m_playerId )

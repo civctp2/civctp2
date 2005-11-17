@@ -39,11 +39,11 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "BldQue.h"
+
 #include "c3errors.h"
 #include "c3files.h"
-
 #include "gamefile.h"
-#include "BldQue.h"
 #include "ObjPool.h"
 #include "Unit.h"
 #include "MapPoint.h"
@@ -53,7 +53,7 @@
 #include "BuildingRecord.h"
 #include "AICause.h"
 #include "Checksum.h"
-#include "CivPaths.h"
+#include "CivPaths.h"               // g_civPaths
 #include "WonderRecord.h"
 #include "StrDB.h"
 #include "network.h"
@@ -63,49 +63,37 @@
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "QuickSlic.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
-#include "soundmanager.h"
+#include "soundmanager.h"           // g_soundManager
 #include "gamesounds.h"
 #include "SelItem.h"
 
 #include "UnitData.h"
 #include "UnitPool.h"
-
 #include "profileDB.h"
-
 #include "WonderTracker.h"
 #include "wondermoviewin.h"
 #include "DiffDB.h"
-
-#include "controlpanelwindow.h"
-
+#include "controlpanelwindow.h"     // g_controlPanel
 #include "director.h"
-
 #include "GameSettings.h"
 #include "AgeRecord.h"
 #include "GovernmentRecord.h"
 
 #include "UnitRecord.h"
-
 #include "GameEventManager.h"
-
-
 #include "Globals.h"
-
 #include "buildingutil.h"
 #include "wonderutil.h"
 
-extern	ControlPanelWindow	*g_controlPanel;
-extern	CivPaths	*g_civPaths ;
-extern	SoundManager *g_soundManager;
 extern DifficultyDB     *g_theDifficultyDB;
 
 #define k_BUILDQUEUE_VERSION_MAJOR	0									
 #define k_BUILDQUEUE_VERSION_MINOR	1									
 
 extern void player_ActivateSpaceButton(sint32 pl);
+
 
 BuildQueue::BuildQueue()
 { 
@@ -125,22 +113,12 @@ BuildQueue::BuildQueue()
 
 BuildQueue::~BuildQueue()
 { 
-	if(m_list) 
+	if (m_list) 
     {
 		m_list->DeleteAll();
 		delete m_list;
 	}
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -191,24 +169,6 @@ uint32 BldQue_BuildQueue_GetVersion(void)
 {
 	return (k_BUILDQUEUE_VERSION_MAJOR<<16 | k_BUILDQUEUE_VERSION_MINOR) ;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 sint32 BuildQueue::Load(const MBCHAR *file)
@@ -331,7 +291,7 @@ sint32 BuildQueue::Save(const MBCHAR *file)
 		walk.Next();
 	}
 	c3files_fclose(fpQueue);
-	return (1);
+	return 1;
 }
 
 	
@@ -376,7 +336,6 @@ void BuildQueue::EndTurn(void)
 
 
 void BuildQueue::Clear(BOOL fromServer)
-
 {
 	if(!fromServer && g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_CLEAR_QUEUE,
@@ -387,40 +346,35 @@ void BuildQueue::Clear(BOOL fromServer)
 									  (uint32)m_city));
 		g_network.Unblock(m_owner);
 	}
-										   
-    while (m_list->GetHead()) {
-		if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_WONDER)
-		{
-            m_wonderStopped = m_list->GetHead()->m_type;
+
+    BuildNode * head    = m_list->GetHead();
 			
-			g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
-		}
-
-		delete m_list->RemoveHead();
-    } 
-
-	Assert(m_list->GetCount() == 0);
+    if (head && (k_GAME_OBJ_TYPE_WONDER == head->m_category))
+    {
+        m_wonderStopped = head->m_type;
+        g_theWonderTracker->ClearBuildingWonder(m_wonderStopped, m_owner);
+    }
+		
+    m_list->DeleteAll();
 }
 
 void BuildQueue::ClearAllButHead(BOOL fromServer)
 {
-	if(m_list->GetCount() < 2)
-		return;
+	if (m_list->GetCount() > 1)
+    {
+	    if(!fromServer && g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
+		    g_network.SendAction(new NetAction(NET_ACTION_CLEAR_QUEUE_EXCEPT_HEAD));
+	    } else if(g_network.IsHost()) {
+		    g_network.Block(m_owner);
+		    g_network.Enqueue(new NetInfo(NET_INFO_CODE_CLEAR_QUEUE_EXCEPT_HEAD,
+									      (uint32)m_city));
+		    g_network.Unblock(m_owner);
+	    }
 
-	if(!fromServer && g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
-		g_network.SendAction(new NetAction(NET_ACTION_CLEAR_QUEUE_EXCEPT_HEAD));
-	} else if(g_network.IsHost()) {
-		g_network.Block(m_owner);
-		g_network.Enqueue(new NetInfo(NET_INFO_CODE_CLEAR_QUEUE_EXCEPT_HEAD,
-									  (uint32)m_city));
-		g_network.Unblock(m_owner);
-	}
-
-	
-	
-	BuildNode *head = m_list->RemoveHead();
-	m_list->DeleteAll();
-	m_list->AddHead(head);
+	    BuildNode * head = m_list->RemoveHead();
+	    m_list->DeleteAll();
+	    m_list->AddHead(head);
+    }
 }
 
 bool BuildQueue::BuildFrontUnit(BOOL forceFinish)
@@ -624,14 +578,18 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 void BuildQueue::FinishBuildFront(Unit &u)
 {
 	CityData *cd = m_city.CD();
-	if(m_list->GetHead() && m_list->GetHead() == m_frontWhenBuilt) {
-		
-		if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_WONDER) {
+	if (m_list->GetHead() && m_list->GetHead() == m_frontWhenBuilt) 
+    {
+		if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_WONDER)
+        {
 			SendMsgWonderComplete(cd, m_list->GetHead()->m_type) ;
 			m_wonderComplete = m_list->GetHead()->m_type;
 			g_theWonderTracker->ClearBuildingWonder(m_list->GetHead()->m_type, m_owner);
-		} else if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_UNIT) {	
-			if (g_theUnitDB->Get(m_list->GetHead()->m_type)->GetWormholeProbe()) {	
+		} 
+        else if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_UNIT) 
+        {	
+			if (g_theUnitDB->Get(m_list->GetHead()->m_type)->GetWormholeProbe()) 
+            {	
 				SendMsgWormholeProbeComplete() ;
 			}
 		}
@@ -639,7 +597,7 @@ void BuildQueue::FinishBuildFront(Unit &u)
 		
 		bool            isEmpty     = m_list->GetCount() <= 1;
 		bool            doRemove    = false;
-		SlicObject *so = NULL;
+		SlicObject *    so          = NULL;
 
 		if ((m_list->GetHead()->m_category != k_GAME_OBJ_TYPE_UNIT)         ||
 		    !isEmpty                                                        || 
@@ -766,21 +724,8 @@ void BuildQueue::FinishBuildFront(Unit &u)
 
 	}
 
-	if (m_list->GetHead()) { 
-		
-		if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_WONDER) {
-			m_wonderStarted = m_list->GetHead()->m_type;
-			
-			g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
-		}
-		else if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_UNIT) {		
-			SendMsgWormholeProbeStarted() ;
-		} else if(m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE) {
-			m_city.CD()->BuildInfrastructure();
-		} else if(m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION) {
-			m_city.CD()->BuildCapitalization();
-		}
-	}
+    // Check special actions for the (new) first item
+    HandleProductionStart();
         
 	if(g_network.IsHost()) {
 		g_network.Block(cd->GetHomeCity().GetOwner());
@@ -797,6 +742,53 @@ void BuildQueue::FinishBuildFront(Unit &u)
 	m_frontWhenBuilt = NULL;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : HandleProductionStart
+//
+// Description: Check whether to do anything special when switching to a new
+//              production item.
+//
+// Parameters : -
+//
+// Globals    : g_theWonderTracker  : updated when a wonder is started
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void BuildQueue::HandleProductionStart(void)
+{
+    BuildNode * newHead = m_list->GetHead();
+    
+    if (newHead)
+    {
+        switch (newHead->m_category)
+        {
+        default:
+            // No special actions
+            break;
+
+        case k_GAME_OBJ_TYPE_WONDER:
+			m_wonderStarted = newHead->m_type;
+			g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
+            break;
+
+		case k_GAME_OBJ_TYPE_UNIT:
+			SendMsgWormholeProbeStarted();
+            break;
+
+        case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
+            m_city.CD()->BuildInfrastructure();
+            break;
+
+        case k_GAME_OBJ_TYPE_CAPITALIZATION:
+			m_city.CD()->BuildCapitalization();
+            break;
+		}
+    }
+}
 
 void BuildQueue::SendMsgWonderComplete(CityData *cd, sint32 wonder)
 {
@@ -842,9 +834,7 @@ void BuildQueue::SendMsgWonderStopped(sint32 type)
 		g_network.Unblock(m_owner);
 	}
 
-	SlicObject *so ;
-
-	so = new SlicObject("44aWonderStopped") ;
+	SlicObject *    so = new SlicObject("44aWonderStopped") ;
 	so->AddCivilisation(m_owner) ;
 	so->AddWonder(type) ;
 	so->AddAllRecipientsBut(m_owner);
@@ -854,9 +844,7 @@ void BuildQueue::SendMsgWonderStopped(sint32 type)
 
 void BuildQueue::SendMsgWonderAlmostComplete(void)
 {
-	SlicObject *so ;
-
-	so = new SlicObject("45WonderAlmostFinished") ;
+	SlicObject *    so = new SlicObject("45WonderAlmostFinished") ;
 	so->AddCivilisation(m_owner) ;
 	so->AddWonder(m_list->GetHead()->m_type) ;
 	so->AddAllRecipientsBut(m_owner);
@@ -873,9 +861,7 @@ void BuildQueue::SendMsgWonderStarted(sint32 type)
 		g_network.Unblock(m_owner);
 	}
 
-	SlicObject *so ;
-
-	so = new SlicObject("44WonderStarted") ;
+	SlicObject *    so = new SlicObject("44WonderStarted") ;
 	so->AddCivilisation(m_owner) ;
 	so->AddWonder(type) ;
 	so->AddAllRecipientsBut(m_owner);
@@ -886,6 +872,7 @@ void BuildQueue::SendMsgWonderStarted(sint32 type)
 void BuildQueue::SendMsgWormholeProbeStarted(void)
 {
 	return; 
+#if 0   // CTP1 leftover
 	SlicObject *so ;
 
 	
@@ -902,12 +889,14 @@ void BuildQueue::SendMsgWormholeProbeStarted(void)
 	so->AddUnit(m_list->GetHead()->m_type) ;
 	so->AddAllRecipientsBut(m_owner);
 	g_slicEngine->Execute(so) ;
+#endif
 }
 
 
 void BuildQueue::SendMsgWormholeProbeComplete(void)
 {
 	return; 
+#if 0   // CTP1 leftover
 	SlicObject	*so ;
 
 	so = new SlicObject("64WormholeProbeCompleted") ;
@@ -915,6 +904,7 @@ void BuildQueue::SendMsgWormholeProbeComplete(void)
 	so->AddUnit(m_list->GetHead()->m_type) ;
 	so->AddAllRecipientsBut(m_owner);
     g_slicEngine->Execute(so) ;
+#endif
 }
 
 
@@ -926,19 +916,7 @@ void BuildQueue::RemoveHead()
         delete m_list->RemoveHead();
 
         // Check the new head, if any
-        BuildNode * newHead = m_list->GetHead();
-        if (newHead)
-        {
-            if (newHead->m_category == k_GAME_OBJ_TYPE_WONDER) 
-            {
-		    m_wonderStarted = newHead->m_type;
-                g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
-            }
-            else if (newHead->m_category == k_GAME_OBJ_TYPE_UNIT) 
-            {	
-		    SendMsgWormholeProbeStarted();
-            }
-        }
+        HandleProductionStart();
     }
     // else: No action: queue was empty
 }
@@ -1028,15 +1006,7 @@ void BuildQueue::ReplaceHead(sint32 cat, sint32 t, sint32 cost)
 		}
 
         m_list->GetHead()->m_cost = cost; 
-		if (cat == k_GAME_OBJ_TYPE_WONDER) {
-            m_wonderStarted = t;
-			
-			g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner);
-		}
-		else if (m_list->GetHead()->m_category == k_GAME_OBJ_TYPE_UNIT)		
-			{
-			SendMsgWormholeProbeStarted() ;
-			}
+        HandleProductionStart();
 
 		if (g_soundManager) {
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();

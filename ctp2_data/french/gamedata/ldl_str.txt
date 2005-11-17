@@ -25,7 +25,6 @@
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
 #
-#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -3215,8 +3214,3 @@ str_tbl_ldl_Gamestate_Debug		"Etat mode Debug (playtest)"
 str_tbl_ldl_Rand_Test			"Rand test (playtest)"
 str_tbl_ldl_Command_Enter		"Saisie de commande (playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Saisie de commande (alternative) (playtest)"
-
-# Added for extended National Management 6/2004 L. Hirth
-str_ldl_ND_RTL_WORKER		"Trav."
-str_ldl_ND_RTL_SLAVE		"Escl."
-str_ldl_ND_RTL_COMBAT_UNITS	"Mil."

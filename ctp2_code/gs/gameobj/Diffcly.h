@@ -4,9 +4,10 @@
 #ifndef __DIFFICULTY_H__
 #define __DIFFICULTY_H__ 1
 
-class CivArchive ;
+class Difficulty;
 
-typedef sint32 PLAYER_INDEX;
+#include "player.h" // PLAYER_INDEX
+class CivArchive;
 
 #define k_DIFFICULTY_VERSION_MAJOR	0									
 #define k_DIFFICULTY_VERSION_MINOR	0									
@@ -117,8 +118,5 @@ public:
 }; 
 
 uint32 Diffcly_Difficulty_GetVersion(void) ;
-#else 
-
-class Difficulty; 
 
 #endif

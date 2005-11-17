@@ -21,9 +21,6 @@ public:
 	TradeOffer () : ID() { return; } ; 
 	TradeOffer (sint32 val) : ID (val) { return; }; 
 	TradeOffer (uint32 val) : ID (val) { return; }; 
-#ifdef WIN32
-	TradeOffer (const int val) : ID (val) { return; }; 
-#endif
 
 	void KillOffer();
 	void Kill() { KillOffer(); }

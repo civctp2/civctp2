@@ -167,7 +167,7 @@ void WorkMap::InitCommon( sint32 scale)
 	m_drawHilite = FALSE;
 
 	
-	m_unit = Unit(0);
+	m_unit = Unit();
 
 	
 	m_updateAction = NULL;
@@ -1625,8 +1625,7 @@ void WorkMap::HandlePop( MapPoint point )
 	if(player != g_selected_item->GetVisiblePlayer())
 		return;
 	
-	Assert( m_unit != Unit(0) );
-
+	Assert(m_unit != Unit());
 }
 
 

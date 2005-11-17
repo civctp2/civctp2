@@ -117,7 +117,7 @@ extern TradeAstar g_theTradeAstar;
 Army Player::GetArmyList(uint32 army_id, BOOL &is_unknown_id)
 { 
 	Assert(FALSE);
-	return Army(0);
+	return Army();
 }
 
 void Player::GetArmyPos(const uint32 army_id, BOOL &is_unknown_id, MapPoint &p1)const

@@ -185,9 +185,10 @@
 #define WM_MOUSEWHEEL (WM_MOUSELAST+1)
 #endif
 
-#ifdef _DEBUG
+#if defined(_DEBUG)
 #include "debug.h"
-#endif
+#include "SlicSegment.h"    // SlicSegment::Cleanup
+#endif // _DEBUG 
 
 #define k_LDLName                   "civ3.ldl"
 #define k_LDL640Name                "civ3_640.ldl"
@@ -364,6 +365,7 @@ int ui_Initialize(void)
 
 	
 	ColorSet::Initialize();
+    g_c3ui->RegisterCleanup(&ColorSet::Cleanup);
 
 	SPLASH_STRING("Initializing Paths...");
 
@@ -1563,6 +1565,10 @@ void main_InitializeLogs(void)
 	time(&ltime);
 	now = localtime(&ltime);
 
+#if defined(_DEBUG) && defined(_DEBUGTOOLS)
+	Debug_Open();
+#endif
+
     g_splash_old = GetTickCount();
 
 	strftime(timebuf, 100, "Log started at %I:%M%p %m/%d/%Y", now);
@@ -1965,14 +1971,17 @@ void DoFinalCleanup(int)
 	if (g_civApp)
 	{
 		g_civApp->QuitGame();
-
 		delete g_civApp;
 		g_civApp = NULL;
 	}
 
 	sliccmd_clear_symbols();
-
+    SlicSegment::Cleanup();
 	appstrings_Cleanup();
+
+#if defined(_DEBUGTOOLS)
+	Debug_Close();
+#endif
 }
 
 #else // _DEBUG

@@ -17,15 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
-//       1200 are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -39,27 +30,22 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
 #ifndef __DYNAMIC_ARRAY_H__
 #define __DYNAMIC_ARRAY_H__ 1
 
-#include "c3.h"
-
-class CivArchive; 
-
-#include "civarchive.h"
-
-
+template <class T> class DynamicArray;
 #define k_FUDGE_MAX_ARMY_SIZE 9
 
-enum CAUSE_REMOVE_ARMY; 
+#include "AICause.h"
+#include "ctp2_inttypes.h"
+#include "civarchive.h"
+#include "Player.h"
 
-template <class T> class DynamicArray {
-
-        
+template <class T> class DynamicArray {   
 public:
     
 	
@@ -89,14 +75,7 @@ public:
     DynamicArray (const DynamicArray<T> &copyme); 
     virtual ~DynamicArray(); 
 
-    virtual void DelPointers() { 
-        if (m_array) { 
-            delete [] m_array; 
-			m_array = NULL;
-            Castrate();
-        }
-    }
-	virtual void Castrate() 
+    virtual void DelPointers()
 	{ 
 		m_maxElements = 0; 
 		m_nElements = 0; 

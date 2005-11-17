@@ -890,7 +890,7 @@ void World::CutImprovements(const MapPoint &point)
 		if(rec && rec->GetIntBorderRadius(intRad)) {
 			rec->GetSquaredBorderRadius(sqRad);
 			MapPoint ISuck = point;
-			terrainutil_RemoveBorders(ISuck, thisCell->GetOwner(), intRad, sqRad, Unit(0));
+			terrainutil_RemoveBorders(ISuck, thisCell->GetOwner(), intRad, sqRad, Unit());
 		}
 		thisCell->RemoveDBImprovement(thisCell->GetDBImprovement(0));
 	}

@@ -318,7 +318,7 @@ void UnitControlPanel::SetSelectionMode(UnitSelectionMode mode)
 void UnitControlPanel::UpdateSingleSelectionDisplay()
 {
 	Army army = GetSelectedArmy();	
-	Unit unit(0);
+	Unit unit;
 	double movement = -1;
 	double health = -1;
 	sint32 cargo = -1;
@@ -612,7 +612,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 		return;
 
 	Army army = GetSelectedArmy();	
-	Unit unit(0);
+	Unit unit;
 
 	if (army.IsValid()) 
     {
@@ -809,14 +809,14 @@ Army UnitControlPanel::GetSelectedArmy()
 	
 	
 	if(!g_selected_item)
-		return(Army(0));
+		return(Army());
 
 	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	
 	if(!player)
-		return(Army(0));
+		return(Army());
 
 	
 	ID id;
@@ -845,7 +845,7 @@ Army UnitControlPanel::GetSelectedArmy()
 	}
 
 	
-	return(Army(0));
+	return Army();
 }
 
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -38,11 +38,6 @@ BSetID::BSetID ()
     val = 0; 
 } 
 
-BSetID::BSetID (const int &copy_me)
-{ 
-    val = uint32(copy_me); 
-}
-
 BSetID::BSetID (const uint32 &copy_me)
 { 
     val = copy_me; 
@@ -56,12 +51,6 @@ BSetID::BSetID (const sint32 &copy_me)
 BSetID::BSetID (const BSetID &copy_me)
 { 
     val = copy_me.val;
-}
-
-BSetID& BSetID::operator = (const int &copy_me)
-{
-    val = uint32(copy_me); 
-    return *this;
 }
 
 BSetID& BSetID::operator= (const uint32 &copy_me)

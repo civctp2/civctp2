@@ -98,7 +98,7 @@ void CTPAgent::Init()
     Agent::Init();
     
     
-    m_army = 0; 
+    m_army = Army(); 
 
 	
 	m_squad_class = SQUAD_CLASS_DEFAULT;

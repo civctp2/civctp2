@@ -189,7 +189,7 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 				count++;
 				Unit u = g_player[PLAYER_INDEX_VANDALS]->CreateUnit(unitIndex,
 														   neighbor,
-														   Unit(0),
+														   Unit(),
 														   FALSE,
 														   CAUSE_NEW_ARMY_INITIAL);
 				if(u.m_id == 0)

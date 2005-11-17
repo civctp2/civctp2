@@ -10,10 +10,14 @@
 
 
 
-
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
+
 #ifndef __BATTLEORDERBOX_H__
 #define __BATTLEORDERBOX_H__
+
+class BattleOrderBox;
 
 #include "controlsheet.h"
 #include "pixelutils.h"
@@ -36,8 +40,6 @@ class c3_ColoredStatic;
 class BattleOrderBox : public ControlSheet
 {
 public:
-
-	
 	BattleOrderBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -59,21 +61,18 @@ public:
 
 	virtual ~BattleOrderBox();
 
-	
 	virtual AUI_ERRCODE	Show( void );
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL,
 								sint32 x = 0,
 								sint32 y = 0);
 
-public:
 	void	SetSingleUnit(Unit theUnit);
 	void	SetStackMode(BOOL stackDisplay);
-	void	SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit(0));
+	void	SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit());
 
 	sint32	ToggleStackDisplay( void );
 
 	BOOL	GetStackDisplay( void ) { return m_stackDisplay; }
-
 
 private:
 	RECT			m_unitRect[k_MAX_BOB_UNITS];
@@ -103,8 +102,6 @@ private:
 	c3_Static		*m_unitName;
 
 	c3_ColoredStatic *m_cargo[ k_CARGO_CAPACITY ];
-
 };
-
 
 #endif 

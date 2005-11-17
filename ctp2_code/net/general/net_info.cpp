@@ -1400,7 +1400,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_theWorld->InsertUnit(pos, unit, revealedUnits);
 				g_player[unit.GetOwner()]->InsertUnitReference(unit,
 															   CAUSE_NEW_ARMY_UPRISING,
-															   Unit(0));
+															   Unit());
 			}
 			break;
 		}

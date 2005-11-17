@@ -111,11 +111,11 @@ TradeOffer TradeOfferPool::GetTradeOffer(sint32 index)
 {
 	Assert(index >= 0 && index < m_all_offers->Num());
 	if(index < 0 || index >= m_all_offers->Num()) {
-		return TradeOffer(0);
+		return TradeOffer();
 	}
 	Assert(m_all_offers);
 	if(!m_all_offers)
-		return TradeOffer(0);
+		return TradeOffer();
 
 	return m_all_offers->Access(index);
 }

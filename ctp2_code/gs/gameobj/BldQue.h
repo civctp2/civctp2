@@ -107,7 +107,8 @@ private:
 	sint32                      m_wonderComplete;
 	BuildNode *                 m_frontWhenBuilt;
 
-	
+	void HandleProductionStart(void);
+
 	void SendMsgWormholeProbeStarted(void) ;
 	void SendMsgWonderStarted(sint32 type) ;
 	void SendMsgWormholeProbeComplete(void) ;

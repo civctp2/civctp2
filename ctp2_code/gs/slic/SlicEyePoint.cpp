@@ -63,7 +63,7 @@ SlicEyePoint::SlicEyePoint(const MapPoint &point, const MBCHAR *name,
 	} else {
 		m_name = NULL;
 	}
-	m_message = new Message(0);
+	m_message = new Message();
 	m_data = data;
 	m_type = type;
 	m_unit = unit;
@@ -105,7 +105,7 @@ SlicEyePoint::~SlicEyePoint()
 
 SlicEyePoint::SlicEyePoint(CivArchive &archive)
 {
-	m_message = new Message(0);
+	m_message = new Message();
 	Serialize(archive);
 }
 
@@ -208,8 +208,8 @@ void SlicEyePoint::Callback()
 			g_tiledMap->InvalidateMap();
 			break;
 		case EYE_POINT_TYPE_ADVANCE:
-			Assert(*m_message != Message(0));
-			if(*m_message != Message(0)) {
+			Assert(*m_message != Message());
+			if(*m_message != Message()) {
 				m_message->SetSelectedAdvance(m_data);				
 			}
 			if(obj)

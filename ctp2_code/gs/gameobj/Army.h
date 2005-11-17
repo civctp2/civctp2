@@ -65,9 +65,6 @@ public:
 	Army(sint32 val) : ID(val) {}
 	Army(uint32 val) : ID(val) {}
 	Army(ID i) : ID(i.m_id) {}
-#if defined(WIN32)
-	Army(const int val) : ID(val) {}
-#endif
 
 	ArmyData *operator -> () const { return AccessData(); }
 

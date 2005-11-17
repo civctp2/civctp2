@@ -2153,9 +2153,9 @@ void SendSlaveCommand::Execute(sint32 argc, char **argv)
 		g_tiledMap->GetMouseTilePos(pos);
 		Cell *cell = g_theWorld->GetCell(pos);
 		Unit toCity = cell->GetCity();
-		Assert(toCity != Unit(0));
+		Assert(toCity != Unit());
 		
-		if(toCity != Unit(0)) {
+		if(toCity != Unit()) {
 			Assert(toCity.GetOwner() == fromCity.GetOwner());
 			if(toCity.GetOwner() != fromCity.GetOwner())
 				return;
@@ -2202,7 +2202,7 @@ void ForceRevoltCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->GetMouseTilePos(point);
 
 	Cell *cell = g_theWorld->GetCell(point);
-	if(cell->GetCity() != Unit(0)) {
+	if(cell->GetCity() != Unit()) {
 		cell->GetCity().AccessData()->GetCityData()->Revolt(g_player[cell->GetCity().GetOwner()]->m_civRevoltingCitiesShouldJoin, TRUE);
 	}
 }
@@ -2639,7 +2639,7 @@ void PacCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->GetMouseTilePos(pos);
 
 	Unit newu = g_player[player]->CreateUnit(g_theUnitDB->NumRecords() - 1, 
-											 pos, Unit(0), 
+											 pos, Unit(), 
 											 FALSE, CAUSE_NEW_ARMY_INITIAL);
 	newu.AccessData()->SetPacMan();
 }
@@ -5645,7 +5645,7 @@ void CreateCommand::Execute(sint32 argc, char** argv)
         if(unitList->Num() > 0) {
 	        city = unitList->Get(city_idx);
         } else {
-	        city = Unit(0);
+	        city = Unit();
         }
 
         Unit newu = g_player[player]->CreateUnit(type, pos, city, 

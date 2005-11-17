@@ -41,7 +41,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
- 
+#include "Unit.h" 
 
 
 #include "Globals.h"
@@ -55,7 +55,6 @@
 #include "UnitRec.h"
 
 #include "dynarr.h"
-#include "Unit.h"
 #include "UnitDynArr.h"
 
 #include "citydata.h"
@@ -65,7 +64,6 @@
 #include "player.h"
 #include "pollution.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"
 
 #include "UnitData.h"
@@ -2539,14 +2537,14 @@ void Unit::UpdateZOCForRemoval()
 
 		if(updateZoc) {
 			g_theWorld->RemoveZOC(pos, GetOwner());
-			g_theWorld->AddOtherArmyZOC(pos, GetOwner(), Army(0), Unit(0));
+			g_theWorld->AddOtherArmyZOC(pos, GetOwner(), Army(), Unit());
 			
 			sint32 dd;
 			for(dd = 0; dd < (sint32)NOWHERE; dd++) {
 				MapPoint npos;
 				if(pos.GetNeighborPosition((WORLD_DIRECTION)dd, npos)) {
 					g_theWorld->RemoveZOC(npos, GetOwner());
-					g_theWorld->AddOtherArmyZOC(npos, GetOwner(), Army(0), Unit(0));
+					g_theWorld->AddOtherArmyZOC(npos, GetOwner(), Army(), Unit());
 				}
 			}
 		}

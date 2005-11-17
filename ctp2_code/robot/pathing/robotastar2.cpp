@@ -171,7 +171,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	const BOOL check_units_in_cell = TRUE;
     sint32 is_broken_path = FALSE; 
 	const BOOL pretty_path = FALSE;
-	static Path bad_path;
+	Path bad_path;
 
     m_pathType = pathType; 
 	m_transDestCont = trans_dest_cont;

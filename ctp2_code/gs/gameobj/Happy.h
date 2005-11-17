@@ -17,9 +17,6 @@
 //
 // Compiler flags
 //
-// _MSC_VER
-// - Compiler version (for the Microsoft C++ compiler only)
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,7 +27,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 

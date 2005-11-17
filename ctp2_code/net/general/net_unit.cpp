@@ -150,7 +150,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				Assert(ahaSoItDoesHappen);
 			} else {
 				g_player[oldowner]->RemoveUnitReference(uid, CAUSE_REMOVE_ARMY_UNKNOWN, m_unitData->m_owner);
-				g_player[m_unitData->m_owner]->InsertUnitReference(uid, CAUSE_NEW_ARMY_UNKNOWN, Unit(0));
+				g_player[m_unitData->m_owner]->InsertUnitReference(uid, CAUSE_NEW_ARMY_UNKNOWN, Unit());
 			}
 		}
 
@@ -183,13 +183,13 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		sint32 trans_t = g_theUnitDB->Get(unitType)->GetTransType();
 		if(m_actorId.m_id != (0)) {
 			m_unitData = new UnitData(unitType, trans_t, uid, unitOwner,
-									  unitPos, Unit(0),
+									  unitPos, Unit(),
 									  m_actorId.AccessData()->m_actor);
 			m_actorId.AccessData()->m_actor = NULL;
 		} else {
 			if(!(flags & k_UDF_TEMP_SLAVE_UNIT)) {
 				m_unitData = new UnitData(unitType, trans_t,
-										  uid, unitOwner, unitPos, Unit(0));
+										  uid, unitOwner, unitPos, Unit());
 			} else {
 				m_unitData = new UnitData(unitType, trans_t,
 										  uid, unitOwner, unitPos);
@@ -236,9 +236,10 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			} else if(!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT)) {
 				g_theWorld->InsertUnit(m_unitData->m_pos, uid, revealed);
 			}
-			if(!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT)) {
-				g_player[m_unitData->m_owner]->InsertUnitReference(
-																   uid, CAUSE_NEW_ARMY_NETWORK, Unit(0));
+			if (!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT)) 
+            {
+				g_player[m_unitData->m_owner]->InsertUnitReference
+                    (uid, CAUSE_NEW_ARMY_NETWORK, Unit());
 			}
 		}
 	}

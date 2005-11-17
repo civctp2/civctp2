@@ -142,7 +142,7 @@ void C3UtilityCityListButtonActionCallback( aui_Control *control, uint32 action,
 	if ((c3_Button*)control == popup->m_window->Cancel())
 	{
 		if (popup->m_callback)
-			popup->m_callback( Unit(0), FALSE );
+			popup->m_callback(Unit(), FALSE);
 
 		
 		popup->RemoveWindow();

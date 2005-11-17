@@ -1051,7 +1051,7 @@ void CityData::PrepareToRemove(const CAUSE_REMOVE_ARMY cause,
 	CityInfluenceIterator it(m_home_city.RetPos(), m_sizeIndex);
 	for(it.Start(); !it.End(); it.Next()) {
 		if(it.Pos() == m_home_city.RetPos()) continue;
-		g_theWorld->GetCell(it.Pos())->SetCityOwner(Unit(0));
+		g_theWorld->GetCell(it.Pos())->SetCityOwner(Unit());
 	}
 }
 
@@ -6778,7 +6778,7 @@ void CityData::AdjustSizeIndices()
 			CityInfluenceIterator it(m_home_city.RetPos(), oldSizeIndex);
 			for(it.Start(); !it.End(); it.Next()) {
 				if(it.Pos() != m_home_city.RetPos())
-					g_theWorld->GetCell(it.Pos())->SetCityOwner(0);
+					g_theWorld->GetCell(it.Pos())->SetCityOwner(Unit());
 			}
 		}
 		GenerateCityInfluence(m_home_city.RetPos(), m_sizeIndex);

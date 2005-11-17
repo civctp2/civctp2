@@ -6,22 +6,26 @@
 
 
 
-
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
+
 #ifndef _NET_UNIT_H_
 #define _NET_UNIT_H_
+
+class NetUnit;
+class NetUnitMove;
+class NetUnitHP;
 
 #include "net_packet.h"
 #include "MapPoint.h"
 #include "Unit.h"
 
 class UnitData;
-class Unit;
-class MapPoint;
 
 class NetUnit : public Packetizer {
 public:
-	NetUnit(UnitData*, Unit useActor = 0);
+	NetUnit(UnitData*, Unit useActor = Unit());
 	NetUnit() {}
 
 	void Packetize(uint8* buf, uint16& size);
@@ -64,6 +68,4 @@ private:
 	Unit m_unit;
 };
 
-#else
-class NetUnit;
 #endif

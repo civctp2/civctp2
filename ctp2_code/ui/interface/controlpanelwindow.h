@@ -230,7 +230,7 @@ public:
 	void    BuildList(sint32 index);
 	
 	
-	void    SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit(0));
+	void    SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit());
 	void    BuildUnitList();
 	void    BuildUnitListBox();
 	void    BuildCityList(const MapPoint &pos);

@@ -888,7 +888,7 @@ bool MapFile::LoadUnits(uint8 *buf, sint32 size)
 			} else {
 				if(m_unitTypeMap[type] >= 0) {
 					MapPoint pos(x,y);
-					g_player[owner]->CreateUnit(m_unitTypeMap[type], pos, Unit(0), FALSE, CAUSE_NEW_ARMY_CHEAT);
+					g_player[owner]->CreateUnit(m_unitTypeMap[type], pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
 				}
 			}
 		}

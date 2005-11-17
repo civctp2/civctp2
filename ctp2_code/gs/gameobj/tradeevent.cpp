@@ -1,6 +1,7 @@
 
 #include "c3.h"
 #include "tradeevent.h"
+
 #include "TradeRoute.h"
 #include "GameEventUser.h"
 #include "Events.h"
@@ -9,13 +10,13 @@
 
 STDEHANDLER(KillTradeRouteEvent)
 {
-	TradeRoute route;
-	CAUSE_KILL_TRADE_ROUTE cause;
+	TradeRoute  route;
+	sint32      cause;
 
 	if(!args->GetTradeRoute(0, route)) return GEV_HD_Continue;
-	if(!args->GetInt(0, (sint32 &)cause)) return GEV_HD_Continue;
+	if(!args->GetInt(0, cause)) return GEV_HD_Continue;
 
-	route.Kill(cause);
+	route.Kill(static_cast<CAUSE_KILL_TRADE_ROUTE>(cause));
 	return GEV_HD_Continue;
 }
 
@@ -26,9 +27,7 @@ STDEHANDLER(SetPiratingArmyEvent)
 	Army a;
 
 	if(!args->GetTradeRoute(0, route)) return GEV_HD_Continue;
-	
-	
-	args->GetArmy(0, a);
+	args->GetArmy(0, a);    // invalid army = stop pirating
 
 	route->SetPiratingArmy(a);
 

@@ -1486,7 +1486,7 @@ BOOL SlicFrame::RunAt(sint32 startOffset)
 void SlicFrame::ClearMessageData()
 {
 	if(!m_messageData) {
-		m_messageData = new MessageData(ID(0));
+		m_messageData = new MessageData(ID());
 	}
 
 	m_messageData->m_owner = PLAYER_INDEX_INVALID;
@@ -1497,7 +1497,7 @@ void SlicFrame::ClearMessageData()
 		delete [] m_messageData->m_text;
 	}
 	m_messageData->m_text = NULL;
-	m_messageData->m_request = ID(0);
+	m_messageData->m_request = ID();
 	if (g_turn)
 		m_messageData->m_timestamp = g_turn->GetYear();
 	else

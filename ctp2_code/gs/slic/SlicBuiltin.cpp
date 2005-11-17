@@ -747,7 +747,7 @@ class PlayerSymbol_LargestCity : public SlicStructMemberData {
 			}
             else
             {
-                city = Unit(0); // invalid
+                city = Unit(); // invalid
             }
         }
 		return res;

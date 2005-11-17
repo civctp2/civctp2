@@ -221,7 +221,7 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 				delete cell->m_unit_army;
 				cell->m_unit_army = NULL;
 			}
-			cell->SetCity(Unit(0));
+			cell->SetCity(Unit());
 			
 			if(cell->m_objects) {
 				delete cell->m_objects;

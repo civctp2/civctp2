@@ -249,7 +249,9 @@ class aui_Surface;
 #define k_UNIT_VERSION_MINOR    0
 
 
-class Unit : public ID {
+class Unit : public ID 
+{
+private:
 	void RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, sint32 killedBy);
 
 public:
@@ -257,9 +259,6 @@ public:
 	Unit (sint32 val) : ID (val) { return; };
 	Unit (uint32 val) : ID (val) { return; };
 	Unit (ID i) : ID (i.m_id) { return; };
-#if defined(WIN32)
-	Unit (const int val) : ID (val) { return; };
-#endif
 	
 	UnitData *operator -> () const { return AccessData(); }
 #ifdef _DEBUG

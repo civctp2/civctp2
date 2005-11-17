@@ -61,10 +61,6 @@ extern "C" {
 #define A_ZILLION A_REALLY_BIG_POSITIVE_REAL_NUMBER
 #define A_REALLY_BIG_NEGATIVE_REAL_NUMBER -1000000000
 
-#define is ==
-#define are ==
-#define isnt !=
-
 
 #ifdef STRATEGY_DEMO_BUILD
 #define RED 0
@@ -72,22 +68,12 @@ extern "C" {
 #define BLUE 2
 #endif
 
-
-
-
-
 #define DEBUG 1
 
 #define BEGIN_DEBUG 
 #define END_DEBUG 
 
 #define MAX_STRING 100
-
-#define and &&
-
-#define or ||
-
-#define not !
 
 #define TRUE 1
 #define FALSE 0

@@ -35,11 +35,10 @@
 #include "MapPoint.h"
 #include "c3debugstl.h"
 
-typedef std::list<MapPoint, dbgallocator<MapPoint> > MapPoint_List;
-typedef std::list<std::pair<sint32, MapPoint>, dbgallocator<std::pair<sint32, MapPoint> > > Scored_MapPoint_List;
+typedef std::list<MapPoint> MapPoint_List;
+typedef std::list<std::pair<sint32, MapPoint> > Scored_MapPoint_List;
 
 
-class MapPoint;
 class Unit;
 
 class GaiaController {

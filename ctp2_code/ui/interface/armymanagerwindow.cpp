@@ -706,7 +706,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 				g_network.SendGroupRequest(units, node->m_army);
 			}
 		} else {
-			g_network.SendGroupRequest(units, Army(0));
+			g_network.SendGroupRequest(units, Army());
 		}
 		return;
 	}

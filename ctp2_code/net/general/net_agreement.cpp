@@ -128,7 +128,7 @@ void NetClientAgreement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	Agreement ag;
 	PULLLONGTYPE(ag, Agreement);
 
-	m_data = new AgreementData(0);
+	m_data = new AgreementData(ID());
 
 	NetAgreement::UnpacketizeData(m_data, buf, pos, size);
 
