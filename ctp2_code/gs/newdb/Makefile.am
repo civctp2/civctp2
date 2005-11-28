@@ -119,6 +119,8 @@ CTPDB=$(top_builddir)/ctp2_code/gs/dbgen/ctpdb$(EXEEXT)
 $(CTPDB): ../dbgen/Makefile
 	$(MAKE) -C ../dbgen
 
+CTPDatabase.cpp: $(newdb_CDBHDRFILES)
+
 AdvanceBranchRecord.cpp \
 AdvanceBranchRecord.h: AdvanceBranchRecord.stamp
 
@@ -360,7 +362,9 @@ UnitBuildListRecord.stamp: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 UnitRecord.cpp \
 UnitRecord.h: UnitRecord.stamp
 
-UnitRecord.stamp: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
+UnitRecord.stamp: $(ctp2_code)/gs/newdb/unit.cdb \
+		TerrainImprovementRecord.h \
+		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 

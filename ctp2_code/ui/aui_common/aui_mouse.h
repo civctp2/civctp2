@@ -85,6 +85,9 @@ struct aui_MouseEvent
 
 #define k_MOUSE_DEFAULTANIMDELAY	100
 
+// HACK: Use this global variable to halt mouse event handling
+// thread on game exit
+extern BOOL g_mouseShouldTerminateThread;
 
 class aui_Mouse : public aui_Base, public virtual aui_Input
 {

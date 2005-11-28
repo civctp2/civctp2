@@ -25,11 +25,11 @@ CLEANFILES = \
 unpack: d3des/unpacked md5/unpacked
 
 d3des/unpacked: d3des.zip d3des.const.patch
-	$(UNZIP) -a $<
-	patch -p0 < d3des.const.patch
+	$(UNZIP) -o -a $<
+	patch -p0 < $(word 2,$^)
 	touch $@
 
 md5/unpacked: md5.zip
-	$(UNZIP) -a $<
+	$(UNZIP) -o -a $<
 	touch $@
 

@@ -2848,7 +2848,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 #ifndef USE_COM_REPLACEMENT
 		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", szTemp);
 #else
-		c3errors_ErrorDialog("Map Generator", "Error while trying to load library '%s': %s, using builtin map generator", szTemp, lt_dlerror());
+		c3errors_ErrorDialog("Map Generator", "Error while trying to load library '%s': '%s'.  Using builtin map generator", szTemp, lt_dlerror());
 		lt_dlexit();
 #endif
 		return NULL;

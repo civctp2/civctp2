@@ -3180,6 +3180,10 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 #endif
 	static uint32	lastTicks = curTicks;
 
+	if (m_appLoaded) {
+		g_c3ui->Process();
+	}
+
 	if (g_c3ui->TheMouse()) {
 		if (g_c3ui->TheMouse()->IsSuspended() ) {
 #ifdef USE_SDL
@@ -3216,11 +3220,6 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 					g_tiledMap->CopyMixDirtyRects(g_background->GetDirtyList());
 
 					
-					
-					
-					
-					
-
 					g_c3ui->Process();
 
 					
@@ -3229,6 +3228,15 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 					uint32 used_milliseconds;
 
 					ProcessNet(target_milliseconds, used_milliseconds);
+#ifdef __AUI_USE_SDL__
+					// Because of the way keyboard events are handled in SDL, we
+					// need to escape this loop if there are any SDL_KeyEvents pending
+					
+					if (0 != SDL_PeepEvents(NULL, 1, SDL_PEEKEVENT,
+							SDL_EVENTMASK(SDL_KEYUP) | SDL_EVENTMASK(SDL_KEYDOWN))) {
+						break;
+					}
+#endif
 				} while (ui_CheckForScroll());
 
 				
@@ -3252,10 +3260,6 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 				lastTicks = curTicks;
 			}
 		}
-	}
-
-	if (m_appLoaded) {
-		g_c3ui->Process();
 	}
 
 	if (m_gameLoaded && !g_modalWindow && g_tiledMap) {

@@ -32,7 +32,9 @@ aui_SDLMouse::GetInput(void)
       SDL_Event od;
       // check for one of the mouse events
       int numElements =
-         SDL_PeepEvents(&od, 1, SDL_GETEVENT, SDL_MOUSEEVENTMASK);
+         SDL_PeepEvents(&od, 1, SDL_GETEVENT,
+         		SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | 
+         			SDL_EVENTMASK(SDL_MOUSEBUTTONUP));
       if (0 > numElements) {
          fprintf(stderr, "PeepEvents failed: %s\n", SDL_GetError());
          return AUI_ERRCODE_GETDEVICEDATAFAILED;

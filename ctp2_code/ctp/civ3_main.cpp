@@ -479,10 +479,10 @@ int ui_Initialize(void)
 			"truetype/msttcorefonts"
 		};
 		for (int pIdx = 0; pIdx < maxPaths; pIdx++) {
-			for (int dIdx = 0; dIdx < maxPaths; dIdx++) {
+			for (int dIdx = 0; dIdx < maxDirs; dIdx++) {
 				struct stat st = { 0 };
 				snprintf(s, sizeof(s), "%s/%s",
-			         	fontPaths[pIdx], fontDirs[dIdx]);
+					fontPaths[pIdx], fontDirs[dIdx]);
 				int rc = stat(s, &st);
 				if ((rc == 0) && (S_ISDIR(st.st_mode))) {
 					g_c3ui->AddBitmapFontSearchPath(s);
@@ -1283,11 +1283,17 @@ void AtExitProc(void)
 
 #if defined(USE_SDL)
 # if 0
-    // What about this?
-    Mix_CloseAudio();
+	// What about this?
+	Mix_CloseAudio();
 # endif
-
-    SDL_Quit();
+	g_mouseShouldTerminateThread = TRUE;
+	
+	// Destroy the mutex used for the secondary keyboard event queue
+#ifdef __AUI_USE_SDL__
+	SDL_DestroyMutex(g_secondaryKeyboardEventQueueMutex);
+	g_secondaryKeyboardEventQueueMutex = NULL;
+#endif
+	SDL_Quit();
 #endif
 }
 
@@ -2163,7 +2169,10 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	} else {
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 	}
-
+	
+#ifdef __AUI_USE_SDL__
+	g_secondaryKeyboardEventQueueMutex = SDL_CreateMutex();
+#endif
 	
 	for (gDone = FALSE; !gDone; )
 	{
@@ -2178,7 +2187,8 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		{
 #ifdef __AUI_USE_SDL__
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
-			                       ~SDL_MOUSEEVENTMASK);
+			                       ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
+							SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 			if (0 > n) {
 				fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
 				break;
@@ -2202,6 +2212,21 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				DispatchMessage(&msg);
 			}
 #else // !__AUI_USE_SDL__
+			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
+			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+				if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex)) {
+					fprintf(stderr, "[CivMain] SDL_LockMutex failed: %s\n", SDL_GetError());
+					break;
+				}
+				
+				g_secondaryKeyboardEventQueue.push(event);
+				
+				if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex)) {
+					fprintf(stderr, "[CivMain] SDL_UnlockMutex failed: %s\n", SDL_GetError());
+					break;
+				}
+			}
+			
 			SDLMessageHandler(event);
 #endif // !__AUI_USE_SDL__
 		}
@@ -2307,6 +2332,7 @@ int SDLMessageHandler(const SDL_Event &event)
 #else
 	switch(event.type) {
 	case SDL_KEYDOWN:
+		printf("[SDLMessageHandler] Reached SDL_KEYDOWN\n");
 		// TODO: Add Event handling here
 		break;
 #endif

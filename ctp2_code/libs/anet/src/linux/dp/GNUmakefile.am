@@ -32,6 +32,7 @@ AM_CFLAGS = \
 	-DCOMM_INST
 AM_CPPFLAGS = \
 	-I. \
+	-I$(top_builddir)/src \
 	-I$(top_srcdir)/h \
 	-I$(top_srcdir)/src/aeh \
 	-I$(top_srcdir)/demo/utils \

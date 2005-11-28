@@ -5943,7 +5943,8 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 #if __AUI_USE_SDL__
 			while (1) {
 				int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
-						~SDL_MOUSEEVENTMASK);
+						~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
+							SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 				if (0 > n) {
 					fprintf(stderr, "[FastRoundCommand::Execute] PeepEvents failed: %s\n",
 					    SDL_GetError());

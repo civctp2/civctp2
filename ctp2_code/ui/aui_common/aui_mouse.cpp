@@ -38,6 +38,10 @@ SDL_mutex *aui_Mouse::m_lpcs = NULL;
 LPCRITICAL_SECTION aui_Mouse::m_lpcs = NULL;
 #endif
 
+#ifdef USE_SDL
+BOOL g_mouseShouldTerminateThread = FALSE;
+#endif
+
 #define k_AUI_MOUSE_THREAD_SLEEP_TIME	10
 
 #include "civapp.h"
@@ -699,8 +703,10 @@ inline BOOL aui_Mouse::ShouldTerminateThread( void )
 			ResetEvent( m_resumeEvent );
 		}
 	}
-#endif
 	return FALSE;
+#else
+	return g_mouseShouldTerminateThread;
+#endif
 }
 
 

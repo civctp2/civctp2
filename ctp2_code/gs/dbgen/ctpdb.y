@@ -45,10 +45,10 @@
  *
  *----------------------------------------------------------------------------
  */
+#include <stdio.h>
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "ctpdb.h"

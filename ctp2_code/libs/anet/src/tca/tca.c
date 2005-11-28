@@ -30,9 +30,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "eclock.h"
 #include "mywcs.h"		/* extra wcs functions */
 #define D2DES
-#include "../3rdparty/d3des/d3des.h"
-#include "../3rdparty/md5/global.h"		/* for md5 */ 
-#include "../3rdparty/md5/md5.h"
+#include "3rdparty/d3des/d3des.h"
+#include "3rdparty/md5/global.h"		/* for md5 */ 
+#include "3rdparty/md5/md5.h"
 
 /* Secret stuff the caller doesn't really need to know:
  *

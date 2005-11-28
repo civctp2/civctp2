@@ -1,5 +1,3 @@
-- When you quit the game, it segfaults and prints "PeepEvents Failed:" a highly
-  variable number of times
 - The text in text controls is the wrong size (see HACK message in
   ui/aui_common/aui_textfield.cpp)
 - Something in the CD code generates an 'Operation not permitted' message
@@ -33,4 +31,6 @@
 - The window of the game has no title
 - Keyboard input doesn't work
 - The mousewheel does nothing
+- If only the first map plugin is loadable, then the game gets stuck in an
+  infinite loop when creating a new game
 
