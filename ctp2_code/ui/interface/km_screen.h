@@ -67,7 +67,7 @@ sint32 km_screen_removeMyWindow(uint32 action);
 AUI_ERRCODE km_screen_Initialize( void );
 AUI_ERRCODE km_screen_Cleanup();
 sint32 km_screen_loadKeyList( void );
-sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam );
+sint32 km_screen_remapKey( WPARAM wParam );
 
 void km_screen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, void *cookie );

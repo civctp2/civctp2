@@ -33,4 +33,5 @@
 - The mousewheel does nothing
 - If only the first map plugin is loadable, then the game gets stuck in an
   infinite loop when creating a new game
+- The SDL keyboard support assumes that the user has a British keyboard
 

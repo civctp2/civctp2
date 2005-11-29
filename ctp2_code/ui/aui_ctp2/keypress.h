@@ -22,7 +22,7 @@ class KeyboardHandler;
 extern void init_keymap();
 extern void init_defaultKeymap();
 extern void cleanup_keymap();
-extern sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam);
+extern sint32 ui_HandleKeypress(WPARAM wParam);
 
 void keypress_RegisterHandler(KeyboardHandler *handler);
 void keypress_RemoveHandler(KeyboardHandler *handler);

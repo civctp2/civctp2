@@ -278,7 +278,7 @@ void km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, voi
 	}
 }
 
-sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam )
+sint32 km_screen_remapKey( WPARAM wParam )
 {
 	KeyListItem *item;
 
@@ -428,7 +428,7 @@ MBCHAR *km_GetKeyName(uint32 code)
 		case '\t' + 128: strcpy(str, g_theStringDB->GetNameStr("KEY_NAME_TAB")); break;
 		case '\r' + 128: strcpy(str, g_theStringDB->GetNameStr("KEY_NAME_ENTER"));  break;
 		case ' ': strcpy(str, g_theStringDB->GetNameStr("KEY_NAME_SPACE"));   break;
-		case 8 + 128:   strcpy(str, g_theStringDB->GetNameStr("KEY_NAME_BACKSPACE")); break;
+		case '\b' + 128:   strcpy(str, g_theStringDB->GetNameStr("KEY_NAME_BACKSPACE")); break;
 		case '0' + 128: strcpy(str, "F10"); break;
 		case '!' + 128: strcpy(str, "F11"); break;
 		case '@' + 128: strcpy(str, "F12"); break;

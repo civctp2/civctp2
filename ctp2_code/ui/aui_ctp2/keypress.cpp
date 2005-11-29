@@ -280,7 +280,7 @@ sint32 g_keypress_stop_player;
 
 BOOL	commandMode = FALSE;
 
-sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
+sint32 ui_HandleKeypress(WPARAM wParam)
 
 {
 
@@ -305,7 +305,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			case 29: 
 			case 28:
 #else
-			case SDLK_ESCAPE:
+			case SDLK_ESCAPE + 256:
 			case SDLK_LEFT + 256:
 			case SDLK_RIGHT + 256:
 			case SDLK_UP + 256:
@@ -315,7 +315,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 				return TRUE;
 			default:
 				
-				km_screen_remapKey( wParam, lParam );
+				km_screen_remapKey( wParam );
 				return TRUE;
 		}
 	}
@@ -325,7 +325,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		switch(wParam) {
 			case '\r' + 128: wParam = '\r'; break;
 			case '\t' + 128: wParam = '\t'; break;
-			case 8 + 128: wParam = 8; break;
+			case '\b' + 128: wParam = '\b'; break;
 		}
 		commandMode = g_commandLine.AddKey(wParam);
 		return TRUE;
@@ -335,7 +335,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 #ifndef USE_SDL	
 	if (wParam == VK_ESCAPE) {
 #else
-	if (wParam == SDLK_ESCAPE) {
+	if (wParam == SDLK_ESCAPE + 256) {
 #endif
 		extern OptionsWindow *g_optionsWindow;
 		
