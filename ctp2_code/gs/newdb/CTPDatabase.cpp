@@ -191,7 +191,9 @@ template <class T> void CTPDatabase<T>::Serialize(CivArchive &archive)
 
 		for(i = 0; i < m_numRecords; ++i){
 			const MBCHAR *str = m_records[i]->GetNameText();
-			for(sint32 a = 0; a < i; ++a){
+			sint32 a;
+			for (a = 0; a < i; ++a)
+			{
 				if(_stricoll(str, m_records[m_alphaToIndex[a]]->GetNameText()) < 0)
 				{
 					memmove(
@@ -199,7 +201,6 @@ template <class T> void CTPDatabase<T>::Serialize(CivArchive &archive)
 						m_alphaToIndex + a,
 						(i - a) * sizeof(sint32));
 
-				
 					for(sint32 j = 0; j < i; ++j)
 						if(m_indexToAlpha[j] >= a)
 							++m_indexToAlpha[j];
@@ -432,7 +433,9 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 	// is the same as for the old databases even the constant is the same.
 	for(sint32 i = 0; i < m_numRecords; ++i){
 		const MBCHAR *str = m_records[i]->GetNameText();
-		for(sint32 a = 0; a < i; ++a){
+		sint32 a;
+		for (a = 0; a < i; ++a)
+		{
 			if(_stricoll(str, m_records[m_alphaToIndex[a]]->GetNameText()) < 0)
 			{
 				memmove(

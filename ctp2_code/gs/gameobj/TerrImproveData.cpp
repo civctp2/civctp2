@@ -129,11 +129,10 @@ BOOL TerrainImprovementData::Complete(void)
 
 	terrainutil_DoVision(m_point);
 
-	if(rec->GetIntBorderRadius() && rec->GetSquaredBorderRadius()) {
-		sint32 intRad, sqRad;
-		rec->GetIntBorderRadius(intRad);
-		rec->GetSquaredBorderRadius(sqRad);
-
+	sint32 intRad;
+    sint32 sqRad;
+	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) 
+    {
 		GenerateBorders(m_point, m_owner, intRad, sqRad);
 	}
 

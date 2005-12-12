@@ -90,7 +90,9 @@ class Cell;
 
 struct TerrainValue;
 
-class CityData : public CityRadiusCallback {
+class CityData : public CityRadiusCallback 
+{
+private:
 
 //----------------------------------------------------------------------------
 // Do not change anything in the types or order of the following variable 
@@ -472,7 +474,6 @@ public:
 #endif
 
 	sint32 CalcWages(sint32 wage) const;
-	BOOL PayWages(sint32 wage, bool projectedOnly);
 	sint32 GetWagesNeeded(const sint32 & wages_per_person) const;
 	sint32 GetWagesNeeded();
 
@@ -979,6 +980,10 @@ public:
 #endif
 
 	sint32 StyleHappinessIncr() const;
+
+private:
+    bool    IsBankrupting(void) const;
+	bool    PayWages(bool projectedOnly);
 };
 
 uint32 CityData_CityData_GetVersion(void);

@@ -143,7 +143,7 @@ void AgreementData::Init()
 	m_agreement = AGREEMENT_TYPE_NULL;		
   
 	m_round = -1;
-    m_expires = -1;	
+    m_expires = k_EXPIRATION_NEVER;	
 	m_isBroken = FALSE;
     m_targetCity = Unit(); 
 }

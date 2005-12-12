@@ -586,12 +586,11 @@ bool CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 
 	
 	sint32 range = 0;
-	if (order_type >= 0 && g_theOrderDB->Get(order_type)->GetRange())
+	if (order_type >= 0)
 	{
-		g_theOrderDB->Get(order_type)->GetRange(range);
+		(void) g_theOrderDB->Get(order_type)->GetRange(range);
 	}
 
-	
 	Assert(range < 10);
 
 	
@@ -641,14 +640,10 @@ void CTPAgent::Execute_Order(const sint32 & order_type, const MapPoint & target_
 
 	
 	sint32 range = 0;
-	if (g_theOrderDB->Get(order_type)->GetRange())
-	{
-		g_theOrderDB->Get(order_type)->GetRange(range);
-	}
+	(void) g_theOrderDB->Get(order_type)->GetRange(range);
 
 	if (range > 0)
 	{
-		
 		g_gevManager->AddEvent( GEV_INSERT_Tail, 
 							static_cast<GAME_EVENT>(game_event), 
 							GEA_Army, m_army, 
@@ -657,13 +652,10 @@ void CTPAgent::Execute_Order(const sint32 & order_type, const MapPoint & target_
 	}
 	else
 	{
-	
-		
 		g_gevManager->AddEvent( GEV_INSERT_Tail, 
 			static_cast<GAME_EVENT>(game_event), 
 			GEA_Army, m_army, 
 			GEA_End);
-
 	}
 
 	

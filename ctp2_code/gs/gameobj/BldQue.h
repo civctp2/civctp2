@@ -17,7 +17,11 @@
 //
 // Compiler flags
 //
+// CTP1_HAS_RISEN_FROM_THE_GRAVE
+// Activate CTP1 wormhole probe production reporting
+//
 // HAVE_PRAGMA_ONCE
+// Compiler supports #pragma once
 //
 //----------------------------------------------------------------------------
 //
@@ -107,11 +111,14 @@ private:
 	sint32                      m_wonderComplete;
 	BuildNode *                 m_frontWhenBuilt;
 
+    void HandleProductionComplete(void);
 	void HandleProductionStart(void);
-
-	void SendMsgWormholeProbeStarted(void) ;
+    void HandleProductionStop(void);
+#if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
+	void SendMsgWormholeProbeStarted(void);
+	void SendMsgWormholeProbeComplete(void);
+#endif
 	void SendMsgWonderStarted(sint32 type) ;
-	void SendMsgWormholeProbeComplete(void) ;
 	void SendMsgWonderCompleteOwner(CityData *cd, sint32 wonder) ;
 	void SendMsgWonderCompleteEveryone(CityData *cd, sint32 wonder) ;
 	void SendMsgWonderAlmostComplete(void) ;
@@ -191,6 +198,9 @@ public:
 	bool IsItemInQueue(uint32 cat, sint32 type);
 
 	BuildQueue & operator= (const BuildQueue &copy);
+
+private:
+    void SynchroniseNetworkData(void) const;
 };
 
 

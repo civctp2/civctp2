@@ -93,8 +93,8 @@ STDEHANDLER(ThreatenAttackCity_CounterResponseEvent)
 
 	Response threat_response;
 
-	threat_response.priority =	sender_diplomat.
-		GetRejectPriority( receiver, response.counter.second_type );
+	threat_response.priority = static_cast<sint16>
+		(sender_diplomat.GetRejectPriority(receiver, response.counter.second_type));
 
 	
 	threat_response.type = RESPONSE_THREATEN;				
@@ -707,7 +707,7 @@ STDEHANDLER(ReciprocateAction_CounterResponseEvent)
 	
 	Response counter_response;
 	
-	counter_response.priority = accept_priority;
+	counter_response.priority = static_cast<sint16>(accept_priority);
 	counter_response.type = RESPONSE_ACCEPT; 
 	counter_response.counter.tone = DIPLOMATIC_TONE_EQUAL;	
 	counter_response.senderId = sender;

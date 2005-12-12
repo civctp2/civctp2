@@ -28,8 +28,7 @@
 //   should be safe.
 //
 // USE_LOGGING
-// - Enable logging when set, even when not a debug version. This is not
-//   original Activision code.
+// - Enable logging when set, even when not building a debug version. 
 //
 //----------------------------------------------------------------------------
 //
@@ -109,134 +108,99 @@
 // - To ProcessFood,ProcessProduction,ProcessGold, ProcessScience added a check that 
 //   if a city has or is buying a good than you can get a bonus. EfficiencyOrCrime 
 //   flag affects all four.  - added by E November 5th 2005
+// - Corrected building maintenance deficit spending handling.
 //     
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3errors.h"
-
-#include "DB.h"
-#include "BuildingRecord.h"
-#include "TerrainRecord.h"
-#include "StrDB.h"
-#include "AdvanceRecord.h"
-#include "ConstDB.h"
-
-#include "cellunitlist.h"
-#include "UnitRecord.h"
-#include "UnitPool.h"
 #include "citydata.h"
-#include "XY_Coordinates.h"
-#include "World.h"
 
-#include "player.h"
-#include "RandGen.h"
-
-#include "network.h"
-#include "net_info.h"
-#include "net_action.h"
-
-#include "civarchive.h"
-#include "Checksum.h"
-#include "SelItem.h"
-#include "WonderRecord.h"
-#include "pollution.h"
-#include "TradeRoute.h"
-#include "Gold.h"
-#include "Cell.h"
-#include "installationtree.h"
-#include "CivilisationPool.h"
-#include "AICause.h"
-#include "director.h"
-#include "MessagePool.h"
+#include "AdvanceRecord.h"
 #include "Advances.h"
-#include "SlicSegment.h"
-#include "TerrainRecord.h"
-#include "TopTen.h"
-#include "Happy.h"
-#include "HappyTracker.h"
-#include "TurnCnt.h"
-
-
-#include "profileDB.h"
-#include "TaxRate.h"
-
-#include "ArmyPool.h"
-#include "ArmyData.h"
-#include "Score.h"
-#include "Exclusions.h"
-#include "WonderTracker.h"
-#include "MaterialPool.h"
-
-#include "colorset.h"
-#include "tiledmap.h"
-
-#include "TradeOffer.h"
-
-#include "Readiness.h"
-
-
-#include "DiffDB.h"
-extern DifficultyDB *g_theDifficultyDB;
-
-#ifdef _DEBUG
-#include "aicause.h"
-#endif
-
-#include "UnitActor.h"
-
-#include "soundmanager.h"
-extern SoundManager *g_soundManager;
-
-#include "GameSettings.h"
-#include "TradeOfferPool.h"
-
+#include "advanceutil.h"
+#include "AgeCityStyleRecord.h"
 #include "Agreement.h"
 #include "AgreementTypes.h"
-
-#include "SpecialAttackInfoRecord.h"
-#include "SpecialEffectRecord.h"
-
-#include "GovernmentRecord.h"
-#include "UnitData.h"
-#include "advanceutil.h"
-#include "ResourceRecord.h"
-
-#include "terrainutil.h"
-
-#include "GameEventManager.h"
-
-#include "unitutil.h"
-
-#include "SlicEngine.h"
-#include "SlicObject.h"
-
-#include "Globals.h"
-
+#include "AICause.h"
+#include <algorithm>                    // std::min
+#include "ArmyData.h"
+#include "ArmyPool.h"
+#include "BuildingRecord.h"
+#include "buildingutil.h"
+#include "c3errors.h"
+#include "Cell.h"
+#include "cellunitlist.h"
+#include "Checksum.h"
 #include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
-
-#include "PopRecord.h"
-
-#include "buildingutil.h"
-#include "wonderutil.h"
-
-#include "FeatTracker.h"
-
 #include "CityStyleRecord.h"
-#include "AgeCityStyleRecord.h"
-#include "TradePool.h"
-
+#include "civarchive.h"
+#include "CivilisationPool.h"
+#include "colorset.h"
+#include "ConstDB.h"                    // g_theConstDB
+#include "DB.h"
+#include "DiffDB.h"
+#include "Diplomat.h"                   // To be able to retrieve the current strategy
+#include "director.h"                   // g_director
+#include "Exclusions.h"
+#include "FeatTracker.h"
+#include "GameEventManager.h"
 #include "gamefile.h"
-
-//Added by Martin Gühmann to handle 
-//city creation by Scenario Editor properly
+#include "GameSettings.h"
+#include "Globals.h"
+#include "Gold.h"
+#include "GovernmentRecord.h"
+#include "Happy.h"
+#include "HappyTracker.h"
+#include "installationtree.h"
+#include "MaterialPool.h"
+#include "MessagePool.h"
+#include "net_action.h"
+#include "net_info.h"
+#include "network.h"
+#include "player.h"                     // g_player
+#include "pollution.h"
+#include "PopRecord.h"
+#include "profileDB.h"                  // g_theProfileDB
+#include "RandGen.h"                    // g_rand
+#include "Readiness.h"
+#include "ResourceRecord.h"
 #include "scenarioeditor.h"
-#include "StrategyRecord.h"         // For accessing the strategy database
-#include "Diplomat.h"               // To be able to retrieve the current strategy
-#include <algorithm>                // std::min
+#include "Score.h"
+#include "SelItem.h"                    // g_selected_item
+#include "SlicEngine.h"
+#include "SlicObject.h"
+#include "SlicSegment.h"
+#include "soundmanager.h"               // g_soundManager
+#include "SpecialAttackInfoRecord.h"
+#include "SpecialEffectRecord.h"
+#include "StrategyRecord.h"             // For accessing the strategy database
+#include "StrDB.h"                      // g_theStringDB
+#include "TaxRate.h"
+#include "TerrainRecord.h"
+#include "terrainutil.h"
+#include "tiledmap.h"
+#include "TopTen.h"
+#include "TradeOffer.h"
+#include "TradeOfferPool.h"
+#include "TradePool.h"
+#include "TradeRoute.h"
+#include "TurnCnt.h"                    // g_turn
+#include "UnitActor.h"
+#include "UnitData.h"
+#include "UnitPool.h"                   // g_theUnitPool
+#include "UnitRecord.h"
+#include "unitutil.h"
+#include "WonderRecord.h"
+#include "WonderTracker.h"
+#include "wonderutil.h"
+#include "World.h"                      // g_theWorld
 
-extern void player_ActivateSpaceButton(sint32 pl);
+extern DifficultyDB *   g_theDifficultyDB;
+extern Pollution *      g_thePollution;
+extern TopTen *         g_theTopTen;
+
+
 
 
 class HackCityArchive : public CivArchive
@@ -280,21 +244,6 @@ public:
 #define PROJECTED_CHECK_START
 #define PROJECTED_CHECK_END
 #endif
-
-extern TopTen            *g_theTopTen;
-extern World             *g_theWorld; 
-extern Player            **g_player; 
-extern UnitPool          *g_theUnitPool; 
-extern StringDB          *g_theStringDB;
-extern RandomGenerator   *g_rand; 
-extern ConstDB           *g_theConstDB;
-extern SelectedItem      *g_selected_item;
-extern Director          *g_director;
-
-extern Pollution         *g_thePollution;
-
-extern TurnCount         *g_turn;
-extern ProfileDB	     *g_theProfileDB;
 
 //----------------------------------------------------------------------------
 //
@@ -492,6 +441,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	ResetStarvationTurns();
 
 	m_distanceToGood    = new sint32[g_theResourceDB->NumRecords()];
+
 	m_ringFood          = new sint32[g_theCitySizeDB->NumRecords()];
 	m_ringProd          = new sint32[g_theCitySizeDB->NumRecords()];
 	m_ringGold          = new sint32[g_theCitySizeDB->NumRecords()];
@@ -706,12 +656,10 @@ BOOL NeedsCanalTunnel(MapPoint &center_point)
 		return FALSE;
 	}
 
-	const TerrainRecord *rec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(center_point));
-	if(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	TerrainRecord const * rec = 
+        g_theTerrainDB->Get(g_theWorld->GetTerrainType(center_point));
+
+	return rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater();
 }
 
 //----------------------------------------------------------------------------
@@ -1033,21 +981,40 @@ bool CityData::IsACopy()
 	return this != m_home_city.CD();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::IsBankrupting
+//
+// Description: Determines whether the current city maintenance costs would 
+//              cause a negative amount of gold. 
+//
+// Parameters : -
+//
+// Globals    : g_player    : player data
+//
+// Returns    : bool        : current maintenance costs can not be afforded
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool CityData::IsBankrupting(void) const
+{
+    return (m_net_gold < 0) && (g_player[m_owner]->GetGold() < -m_net_gold);
+}
+
 void CityData::PrepareToRemove(const CAUSE_REMOVE_ARMY cause,
                                PLAYER_INDEX killedBy)
 {
-	sint32 i;
-
-
-	uint64 wonders=m_builtWonders;
-	for(i=0; wonders; i++) {
-		if (wonders & 1) {
+	uint64 wonders = m_builtWonders;
+	for (sint32 i = 0; wonders; ++i) 
+    {
+		if (wonders & 1) 
+        {
 			g_player[m_owner]->RemoveWonder(i, TRUE);
 		}
 		wonders >>= 1;
 	}
 
-	
 	CityInfluenceIterator it(m_home_city.RetPos(), m_sizeIndex);
 	for(it.Start(); !it.End(); it.Next()) {
 		if(it.Pos() == m_home_city.RetPos()) continue;
@@ -1132,7 +1099,7 @@ BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
 	if (m_min_turns_revolt != 0) 
 		return FALSE;
 
-	return (m_happy->ShouldRevolt(inciteBonus)) ;
+	return m_happy->ShouldRevolt(inciteBonus);
 }
 
 //----------------------------------------------------------------------------
@@ -1281,32 +1248,41 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 		                       GEA_End);
 	}
 
-	sint32       soundID = -1, spriteID = -1;
 
-	const SpecialAttackInfoRecord *specRec;
-	specRec = unitutil_GetSpecialAttack(SPECATTACK_REVOLUTION);
-	if(specRec) {
-		soundID = specRec->GetSoundIDIndex();
-		spriteID = specRec->GetSpriteID()->GetValue();
-	}
+	SpecialAttackInfoRecord const * specRec = 
+        unitutil_GetSpecialAttack(SPECATTACK_REVOLUTION);
 
-	if (spriteID != -1 && soundID != -1) {
-		g_director->AddSpecialAttack(m_home_city.GetActor()->GetUnitID(), m_home_city, SPECATTACK_REVOLUTION);
-	} else {
-		if (soundID != -1) {
-			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == m_owner) || 
-				(m_home_city.GetVisibility() & (1 << visiblePlayer))) {
+	if (specRec) 
+    {
+    	sint32 const soundID = specRec->GetSoundIDIndex();
 
-				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, 
-				                         m_home_city.RetPos().x, m_home_city.RetPos().y);
-			}
-		}
+        if (soundID >= 0)
+        {
+		    sint32 const spriteID = specRec->GetSpriteID()->GetValue();
+
+            if (spriteID >= 0)
+            {
+                g_director->AddSpecialAttack
+                    (m_home_city.GetActor()->GetUnitID(), m_home_city, SPECATTACK_REVOLUTION);
+            }
+            else
+            {
+			    sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
+			    if ((visiblePlayer == m_owner) || 
+				    (m_home_city.GetVisibility() & (1 << visiblePlayer))
+                   ) 
+                {
+    				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, 
+				                             m_home_city.RetPos().x, m_home_city.RetPos().y);
+	    		}
+            }
+            
+        }
 	}
 
 	// Modified by kaan to address bug # 12
 	// Prevent city from revolting twice in the same turn.
-	m_min_turns_revolt = (uint8)g_theConstDB->GetMinTurnsBetweenRevolt(); 
+	m_min_turns_revolt = static_cast<uint8>(g_theConstDB->GetMinTurnsBetweenRevolt()); 
 }
 
 //----------------------------------------------------------------------------
@@ -1362,9 +1338,7 @@ void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units,
 	
 	
 
-	static CellUnitList	units;
-	units.Clear();
-
+	CellUnitList	units;
 	MapPoint city_pos;
 
 	sint32   i,
@@ -1376,10 +1350,8 @@ void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units,
 
 	revealed_foreign_units = FALSE;
 	revealed_unexplored = FALSE;
-	static UnitDynamicArray revealed;
-	static DynamicArray<Army> moveArmies;
-	moveArmies.Clear();
-	revealed.Clear();
+	UnitDynamicArray revealed;
+	DynamicArray<Army> moveArmies;
 
 	for (i=0; i<n; i++){
 		revealed.Clear();
@@ -1474,29 +1446,42 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 //----------------------------------------------------------------------------
 void CityData::CalcPollution(void)
 {
+	if (!g_theGameSettings->GetPollution())
+	{
+		m_cityPopulationPollution   = 0;
+		m_cityIndustrialPollution   = 0;
+		m_total_pollution           = 0;
+        return;
+	}
+
 	sint32 populationPolluting = PopCount() - 
 		g_theDifficultyDB->GetPollutionStartPopulationLevel(g_theGameSettings->GetDifficulty());
-	if(populationPolluting < 0) 
+	
+    if (populationPolluting <= 0) 
 	{
 		populationPolluting = 0;
 	}
 	else
+    {
 		populationPolluting = (sint32)(populationPolluting * 
 			g_theDifficultyDB->GetPollutionPopulationRatio(g_theGameSettings->GetDifficulty()));
 
-	populationPolluting = (sint32)(populationPolluting * g_player[m_owner]->GetPollutionCoef());
+	    populationPolluting = (sint32)(populationPolluting * g_player[m_owner]->GetPollutionCoef());
+    }
 
 	sint32 productionPolluting = m_gross_production -
 		g_theDifficultyDB->GetPollutionStartProductionLevel(g_theGameSettings->GetDifficulty());
-	if(productionPolluting < 0)
+	if (productionPolluting <= 0)
 	{
 		productionPolluting = 0;
 	}
 	else
+    {
 		productionPolluting = (sint32)(productionPolluting * 
 			g_theDifficultyDB->GetPollutionProductionRatio(g_theGameSettings->GetDifficulty()));
 
-	productionPolluting = (sint32)(productionPolluting * g_player[m_owner]->GetPollutionCoef());
+	    productionPolluting = (sint32)(productionPolluting * g_player[m_owner]->GetPollutionCoef());
+    }
 
 	double buildingPollution=0.0;
 	double buildingProductionPercentage=0.0;
@@ -1542,22 +1527,13 @@ void CityData::CalcPollution(void)
 		}
 	}
 
-	if(g_theGameSettings->GetPollution())
-	{
-		m_cityPopulationPollution=populationPolluting;
-		m_cityIndustrialPollution=productionPolluting;
-
-		m_total_pollution=m_cityPopulationPollution+m_cityIndustrialPollution+m_foodVatPollution;
-		m_total_pollution+=(sint32)(populationPolluting*buildingPopulationPercentage);
-		m_total_pollution+=(sint32)(productionPolluting*buildingProductionPercentage);
-		m_total_pollution+=(sint32)buildingPollution;
-	}
-	else
-	{
-		m_cityPopulationPollution=0;
-		m_cityIndustrialPollution=0;
-		m_total_pollution=0;
-	}
+	m_cityPopulationPollution   = populationPolluting;
+	m_cityIndustrialPollution   = productionPolluting;
+	m_total_pollution           = 
+        populationPolluting + productionPolluting + m_foodVatPollution + 
+        static_cast<sint32>(populationPolluting * buildingPopulationPercentage) +
+	    static_cast<sint32>(productionPolluting * buildingProductionPercentage) +
+        static_cast<sint32>(buildingPollution);
 }
 
 //----------------------------------------------------------------------------
@@ -1764,32 +1740,42 @@ sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, 
 
 	grossProduction = 
 	    ComputeGrossProduction(g_player[m_owner]->GetWorkdayPerPerson(),
-	                          collectedProduction,
-	                          crimeLoss,
-	                          franchiseLoss,
-	                          considerOnlyFromTerrain);
+	                           collectedProduction,
+	                           crimeLoss,
+	                           franchiseLoss,
+	                           considerOnlyFromTerrain
+							  );
 	
-	sint32 shields = grossProduction -
-	    (crimeLoss + franchiseLoss);
+	sint32 const shields			= grossProduction - (crimeLoss + franchiseLoss);
 
-	if( m_franchise_owner >= 0 ) {
+	if (m_franchise_owner >= 0)
+	{
 		if(!projectedOnly)
 			g_player[m_franchise_owner]->AddProductionFromFranchise(franchiseLoss);
 	}
+	
 
 //Added by E - EXPORT BONUSES TO GOODS if has good than a production bonus	
-	sint32 good;
-	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
-		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
-			grossProduction += ceil(grossProduction * (g_theResourceDB->Get(good))->GetProductionPercent());		
-		}
-	}
-
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
-	sint32 g;
-	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
-		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
-			grossProduction += ceil(grossProduction * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
+	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+	{
+		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		{
+			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
+			if (goodData)
+			{
+				double goodBonus;
+				if (goodData->GetProductionPercent(goodBonus))
+				{
+					grossProduction += static_cast<sint32>(ceil(grossProduction * goodBonus));
+				}
+
+				double goodEfficiency;
+				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+				{
+					grossProduction += static_cast<sint32>(ceil(grossProduction * goodEfficiency));
+				}
+			}
 		}
 	}
 
@@ -1800,7 +1786,7 @@ sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, 
 // used in NewTurnCount::VerifyEndTurn
 double CityData::ProjectMilitaryContribution()
 {
-	return (double)m_net_production; 
+	return static_cast<double>(m_net_production); 
 }
 
 //----------------------------------------------------------------------------
@@ -1831,8 +1817,6 @@ void CityData::PayFederalProduction (double percent_military,
                                      sint32 &mat_paid)
 
 {
-
-
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	sint32 origShields = m_net_production;
 #endif
@@ -1850,9 +1834,7 @@ void CityData::PayFederalProduction (double percent_military,
 	}
 
 	DPRINTF(k_DBG_GAMESTATE, ("City %lx: S: %d, %d mil(%lf), %d mat(%lf)\n", (uint32)m_home_city, origShields, mil_paid, percent_military, mat_paid, percent_terrain));
-
 	Assert (0 <= m_net_production);
-
 }
 
 void CityData::PayFederalProductionAbs (sint32 mil_paid, 
@@ -1863,13 +1845,10 @@ void CityData::PayFederalProductionAbs (sint32 mil_paid,
 #ifdef _DEBUG
 	if(0 < mil_paid) {
 		if (!m_contribute_military) {
-#pragma warning (disable : 4127)
 			Assert(0);
-#pragma warning (default : 4127)
 			return;
 		}
 	}
-
 #endif
 
 	m_net_production -= mil_paid;
@@ -1907,29 +1886,21 @@ void CityData::AddShieldsToBuilding()
 #if !defined(NEW_RESOURCE_PROCESS)
 void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const
 {
-	const CitySizeRecord *fullRec = NULL, *partRec = NULL;
-	if(m_workerFullUtilizationIndex >= 0) {
+	CitySizeRecord const *  fullRec = NULL;
+	if (m_workerFullUtilizationIndex >= 0) 
+    {
 		fullRec = g_theCitySizeDB->Get(m_workerFullUtilizationIndex);
 	}
+    fullRadius  = (fullRec) ? fullRec->GetSquaredRadius() : 0;
 
-	if(m_workerPartialUtilizationIndex >= 0 && 
-	   m_workerPartialUtilizationIndex < g_theCitySizeDB->NumRecords()) {
+    CitySizeRecord const *  partRec = NULL;
+	if ((m_workerPartialUtilizationIndex >= 0) && 
+	    (m_workerPartialUtilizationIndex < g_theCitySizeDB->NumRecords())
+       ) 
+    {
 		partRec = g_theCitySizeDB->Get(m_workerPartialUtilizationIndex);
-	} else {
-		partRec = NULL;
 	}
-
-	if(fullRec) {
-		fullRadius = fullRec->GetSquaredRadius();
-	} else {
-		fullRadius = 0;
-	}
-
-	if(partRec) {
-		partRadius = partRec->GetSquaredRadius();
-	} else {
-		partRadius = 0;
-	}
+	partRadius  = (partRec) ? partRec->GetSquaredRadius() : 0;
 }
 
 //----------------------------------------------------------------------------
@@ -2036,16 +2007,18 @@ void CityData::CollectResources()
 	MapPoint cityPos = m_home_city.RetPos();
 
 	m_collectingResources.Clear();
-	memset(m_ringFood,  0, sizeof(sint32) * g_theCitySizeDB->NumRecords());
-	memset(m_ringProd,  0, sizeof(sint32) * g_theCitySizeDB->NumRecords());
-	memset(m_ringGold,  0, sizeof(sint32) * g_theCitySizeDB->NumRecords());
-	memset(m_ringSizes, 0, sizeof(sint32) * g_theCitySizeDB->NumRecords());
+    size_t const    maxRing = static_cast<size_t>(g_theCitySizeDB->NumRecords());
+
+    std::fill(m_ringFood,       m_ringFood      + maxRing,  0);
+    std::fill(m_ringProd,       m_ringProd      + maxRing,  0);
+    std::fill(m_ringGold,       m_ringGold      + maxRing,  0);
+    std::fill(m_ringSizes,      m_ringSizes     + maxRing,  0);
 
 #if defined(NEW_RESOURCE_PROCESS)
-	memset(m_farmersEff,    0, sizeof(double) * g_theCitySizeDB->NumRecords());
-	memset(m_laborersEff,   0, sizeof(double) * g_theCitySizeDB->NumRecords());
-	memset(m_merchantsEff,  0, sizeof(double) * g_theCitySizeDB->NumRecords());
-	memset(m_scientistsEff, 0, sizeof(double) * g_theCitySizeDB->NumRecords());
+	std::fill(m_farmersEff,     m_farmersEff    + maxRing,  0);
+	std::fill(m_laborersEff,    m_laborersEff   + maxRing,  0);
+    std::fill(m_merchantsEff,   m_merchantsEff  + maxRing,  0);
+	std::fill(m_scientistsEff,  m_scientistsEff + maxRing,  0);
 #endif
 
 
@@ -2055,10 +2028,8 @@ void CityData::CollectResources()
 		if(m_built_improvements & ((uint64)1 << b)) {
 			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
 //      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			if (rec->GetNumEnablesGood() > 0){
-				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
-  						m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
-				}
+			for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+				m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
 			}
 		}
 	}
@@ -2071,10 +2042,8 @@ void CityData::CollectResources()
 		if(m_builtWonders & ((uint64)1 << w)) {
 			const WonderRecord *rec = wonderutil_Get(w);
 //      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			if (rec->GetNumEnablesGood() > 0){
-				for(wgood = 0; wgood < rec->GetNumEnablesGood(); wgood++) {
-  						m_collectingResources.AddResource(rec->GetEnablesGoodIndex(wgood));
-				}
+			for(wgood = 0; wgood < rec->GetNumEnablesGood(); wgood++) {
+  				m_collectingResources.AddResource(rec->GetEnablesGoodIndex(wgood));
 			}
 		}
 	}
@@ -2104,34 +2073,41 @@ void CityData::CollectResources()
 		sint32 imp = cell->GetDBImprovement(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 //      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			if (rec->GetNumEnablesGood() > 0){
-				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
-  						m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
-				}
+			for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+  					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
 			}
 		}
 
 	}
 
 #if defined(NEW_RESOURCE_PROCESS)
-
-	sint32 i;
-	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+	for (size_t i = 0; i < maxRing; ++i)
+    {
 		m_max_food_from_terrain += m_ringFood[i];
 		m_max_prod_from_terrain += m_ringProd[i];
 		m_max_gold_from_terrain += m_ringGold[i];
 	}
 
 #else // Should go next time
-	sint32 i;
-	for(i = 0; i <= m_workerFullUtilizationIndex; ++i){
+	for (sint32 i = 0; i <= m_workerFullUtilizationIndex; ++i)
+    {
 		fullFoodTerrainTotal += m_ringFood[i];
 		fullProdTerrainTotal += m_ringProd[i];
 		fullGoldTerrainTotal += m_ringGold[i];
 	}
 	partFoodTerrainTotal = m_ringFood[m_workerPartialUtilizationIndex];
 	partProdTerrainTotal = m_ringProd[m_workerPartialUtilizationIndex];
-	partGoldTerrainTotal = m_ringGold[m_workerPartialUtilizationIndex];
+
+    if (m_is_rioting)
+    {
+        // No Gold at all.
+        partGoldTerrainTotal = 0;
+        fullGoldTerrainTotal = 0;
+    }
+    else
+    {
+	    partGoldTerrainTotal = m_ringGold[m_workerPartialUtilizationIndex];
+    }
 
 	double const	utilizationRatio	= GetUtilisationRatio(partSquaredRadius);
 
@@ -2139,11 +2115,6 @@ void CityData::CollectResources()
 	m_max_prod_from_terrain = fullProdTerrainTotal + partProdTerrainTotal;
 	m_max_gold_from_terrain = fullGoldTerrainTotal + partGoldTerrainTotal;
 
-	if(m_is_rioting) {
-		m_max_gold_from_terrain = 0;
-		fullGoldTerrainTotal = 0;
-		partGoldTerrainTotal = 0;
-	}
 
 	m_gross_food = fullFoodTerrainTotal + ceil(utilizationRatio * double(partFoodTerrainTotal));
 	m_gross_production = (sint32)(fullProdTerrainTotal + ceil(utilizationRatio * double(partProdTerrainTotal)));
@@ -2795,6 +2766,7 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 	}
 
 //Added by E - EXPORT BONUSES TO GOODS This gives a bonus of food	
+// TODO: check. GetFoodPercent returns a bool. You probably want the value!
 	sint32 good;
 	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
 		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
@@ -2803,13 +2775,13 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 	}
 
 //Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
+// TODO: check. GetEfficiencyOrCrime returns a bool. You probably want the value!
 	sint32 g;
 	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
 		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
 			grossFood += ceil(grossFood * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
 		}
 	}
-
 
 	producedFood = ProcessFinalFood(foodLostToCrime, grossFood);
 
@@ -2833,17 +2805,12 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 // Remark(s)  : foodLossToCrime and grossFood are modified
 //
 //----------------------------------------------------------------------------
-double CityData::ProcessFinalFood(double &foodLossToCrime, double &grossFood) const{
-
+double CityData::ProcessFinalFood(double &foodLossToCrime, double &grossFood) const
+{
 	grossFood = ceil(grossFood * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetFoodCoef());
+	foodLossToCrime = CrimeLoss(grossFood);
 
-	double producedFood = grossFood;
-
-	foodLossToCrime = CrimeLoss(producedFood);
-	
-	producedFood -= foodLossToCrime;
-
-	return producedFood;
+	return grossFood - foodLossToCrime;
 }
 #endif
 
@@ -3361,49 +3328,63 @@ sint32 CityData::CalculateGoldFromResources()
 // Parameters : projectedOnly: Whether costs should be paid or just be
 //                             estimated.
 //
-// Globals    : -
+// Globals    : g_player
 //
-// Returns    : The building upkeep costs
+// Returns    : sint32      : The building upkeep costs
 //
-// Remark(s)  : -
+// Remark(s)  : Assumption  : g_player[m_owner] is non-NULL
 //
 //----------------------------------------------------------------------------
 sint32 CityData::SupportBuildings(bool projectedOnly)
 {
+	sint32 const    buildingUpkeep = GetSupportBuildingsCost();
+    m_net_gold   -= buildingUpkeep;
 
-	sint32 buildingUpkeep = GetSupportBuildingsCost();
-	m_net_gold -= buildingUpkeep;
-	if(m_net_gold < 0 && !projectedOnly) {
-		
-		sint32 wonderLevel = wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
+    if (!projectedOnly)
+    {
+	    if (m_net_gold < 0)
+        {
+		    // Spending deficit 
+		    sint32 const    wonderLevel = 
+                wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
 
-		while((-m_net_gold > g_player[m_owner]->GetGold()) && (m_built_improvements != 0)) {
-			sint32 cheapBuilding = buildingutil_GetCheapestBuilding(m_built_improvements, wonderLevel);
-			Assert(cheapBuilding >= 0);
-			if(cheapBuilding < 0)
-				break;
+		    while (IsBankrupting() && (m_built_improvements != 0)) 
+            {
+			    sint32 const    cheapBuilding = 
+                    buildingutil_GetCheapestBuilding(m_built_improvements, wonderLevel);
+			    Assert(cheapBuilding >= 0);
+			    if (cheapBuilding < 0)
+				    break;
 
-			SellBuilding(cheapBuilding, FALSE);
-			SlicObject *so = new SlicObject("029NoMaint");
-			so->AddRecipient(GetOwner());
-			so->AddCity(m_home_city);
-			so->AddBuilding(cheapBuilding);
-			g_slicEngine->Execute(so);
-		}
-		
-		if(g_player[m_owner]->GetGold() < m_net_gold) {
+			    SellBuilding(cheapBuilding, FALSE);
+			    SlicObject * so = new SlicObject("029NoMaint");
+			    so->AddRecipient(GetOwner());
+			    so->AddCity(m_home_city);
+			    so->AddBuilding(cheapBuilding);
+			    g_slicEngine->Execute(so);
+		    }
+		    
+		    if (IsBankrupting()) 
+            {
 #if defined(NEW_RESOURCE_PROCESS)
-			m_science -= m_net_gold - g_player[m_owner]->GetGold(); // m_science originally generated from gold income, so remove it if gold isn't enough.
-			if(m_science < 0) m_science = 0;
+			    m_science -= m_net_gold - g_player[m_owner]->GetGold(); // m_science originally generated from gold income, so remove it if gold isn't enough.
+			    if (m_science < 0) 
+                {
+                    m_science = 0;
+                }
 #endif
-			g_player[m_owner]->m_gold->SetLevel(0);
-		} else {
-			g_player[m_owner]->m_gold->SubIncome(-m_net_gold);
-		}
-		m_net_gold = 0;
-	}
-	if(!projectedOnly)
+			    g_player[m_owner]->m_gold->SetLevel(0);
+		    } 
+            else 
+            {
+			    g_player[m_owner]->m_gold->SubIncome(-m_net_gold);
+		    }
+
+		    m_net_gold = 0;
+	    }
+
 		g_player[m_owner]->m_gold->AddMaintenance(buildingUpkeep);
+    }
 
 	return buildingUpkeep;
 }
@@ -3456,34 +3437,41 @@ sint32 CityData::CalcWages(sint32 wage) const
 //
 // Description: Pays the wages.
 //
-// Parameters : wage:          The amount of wages for one pop
-//              projectedOnly: Whether wages should be paid or only estimated.
+// Parameters : wage            : The amount of wages for one pop
+//              projectedOnly   : Whether wages should be paid or only estimated.
 //
-// Globals    : g_player:      List of players	
+// Globals    : g_player        : List of players	
 //
-// Returns    : Whether the player can afford to pay wages
+// Returns    : bool            : The player can afford to pay all wages
 //
-// Remark(s)  : -
+// Remark(s)  : Assumption      : g_player[m_owner] is non-NULL
 //
 //----------------------------------------------------------------------------
-BOOL CityData::PayWages(sint32 wage, bool projectedOnly)
+bool CityData::PayWages(bool projectedOnly)
 {
-	m_wages_paid = CalcWages(wage);
-	if(!projectedOnly) {
+	m_wages_paid = 
+        CalcWages(static_cast<sint32>(g_player[m_owner]->GetWagesPerPerson()));
+	m_net_gold  -= m_wages_paid;
+
+	if (!projectedOnly) 
+    {
 		g_player[m_owner]->m_gold->AddWages(m_wages_paid);
-	}
-	m_net_gold -= m_wages_paid;
-	if(m_net_gold < 0 && !projectedOnly) {
-		if(-m_net_gold < g_player[m_owner]->GetGold()) {
-			g_player[m_owner]->m_gold->SubIncome(-m_net_gold); 
-		} else {
-			g_player[m_owner]->m_gold->SubIncome(g_player[m_owner]->GetGold());
-			return FALSE;
-		}
-	}
 
-
-	return TRUE; 
+        if (m_net_gold < 0) 
+        {
+		    if (IsBankrupting()) 
+            {
+			    g_player[m_owner]->m_gold->SubIncome(g_player[m_owner]->GetGold());
+			    return false;
+		    } 
+            else 
+            {
+			    g_player[m_owner]->m_gold->SubIncome(-m_net_gold); 
+		    }
+	    }
+	}
+	
+	return true; 
 }
 
 //----------------------------------------------------------------------------
@@ -3650,7 +3638,7 @@ void CityData::DelTradeRoute(TradeRoute route)
 void CityData::CheckTopTen()
 { 
 #if 0
-	sint32	pos ;
+	sint32	pos;
 
 	
 	if (g_theTopTen->IsTopTenCity(m_home_city, TOPTENTYPE_BIGGEST_CITY, pos)) {
@@ -4147,13 +4135,7 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 			return FALSE;
 		}
 	default:
-#ifdef WIN32
-#pragma warning (disable : 4127)
-#endif
 		Assert(0);
-#ifdef WIN32
-#pragma warning (default : 4127)
-#endif
 		break;
 	}
 
@@ -4232,9 +4214,7 @@ double CityData::GetDefendersBonusNoWalls() const
 void CityData::ImprovementHealUnitsInCity() const
 {
 #if 0
-	static CellUnitList a;
-	a.Clear();
-
+	CellUnitList a;
 	MapPoint pos;
 
 	m_home_city.GetPos(pos); 
@@ -4254,9 +4234,7 @@ void CityData::ImprovementHealUnitsInCity() const
 void CityData::ImprovementRefuelUnitsInCity() const
 {
 #if 0
-	static CellUnitList a;
-	a.Clear();
-
+	CellUnitList a;
 	MapPoint pos;
 
 	m_home_city.GetPos(pos);
@@ -4408,13 +4386,7 @@ void CityData::CityRadiusFunc(const MapPoint &pos)
 			}
 			break;
 		default:
-#ifdef WIN32
-#pragma warning (disable : 4127)
-#endif
 			Assert(FALSE);
-#ifdef WIN32
-#pragma warning (default : 4127)
-#endif
 			break;
 	}
 }
@@ -4428,8 +4400,7 @@ void CityData::CityToPark(sint32 agressor)
 	m_cityRadiusOp = RADIUS_OP_REMOVE_IMPROVEMENTS;
 	CityRadiusIterator(cpos, this);
 
-	static UnitDynamicArray killList;
-	killList.Clear();
+	UnitDynamicArray killList;
 	m_killList = &killList;
 	m_cityRadiusOp = RADIUS_OP_KILL_UNITS;
 	CityRadiusIterator(cpos, this);
@@ -4438,11 +4409,9 @@ void CityData::CityToPark(sint32 agressor)
 	tempKillList.Concat(*m_killList);
 
 	m_home_city.Kill(CAUSE_REMOVE_ARMY_PARKRANGER, agressor);
-	sint32 i;
-	for(i = 0; i < tempKillList.Num(); i++) {
-		
-		
-		
+
+	for (sint32 i = 0; i < tempKillList.Num(); i++) 
+    {
 		if(g_theUnitPool->IsValid(tempKillList[i])) {
 			tempKillList[i].Kill(CAUSE_REMOVE_ARMY_PARKRANGER, agressor);
 		}
@@ -4607,15 +4576,14 @@ void CityData::ModifySpecialAttackChance(UNIT_ORDER_TYPE attack,
 
 void CityData::RemoveOneSlave(PLAYER_INDEX p)
 {
-	if(SlaveCount() < 1)
-		return;
-
-	ChangeSpecialists(POP_SLAVE, -1);
-
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillPop,
-	                       GEA_City, m_home_city.m_id,
-	                       GEA_End);
-	
+	if (SlaveCount() > 0)
+    {
+    	ChangeSpecialists(POP_SLAVE, -1);
+    	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillPop,
+	                           GEA_City,        m_home_city.m_id,
+	                           GEA_End
+                              );
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -4836,13 +4804,11 @@ void CityData::BioInfect( sint32 player )
 
 void CityData::NanoInfect( sint32 player )
 {
-	sint32 i;
-
 	m_nanoInfectedBy = player;
 	m_nanoInfectionTurns = g_theConstDB->NanoInfectionTurns();
 	DPRINTF(k_DBG_GAMESTATE, ("City %lx: all buildings and wonders destroyed\n", uint32(m_home_city)));
 	
-	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		if(m_built_improvements & ((uint64)1 << i)) {
 			if(g_rand->Next(100) < (g_theConstDB->GetNanoBuildingKillPercentage() * 100.0)) {
 				DestroyImprovement(i);
@@ -4854,8 +4820,8 @@ void CityData::NanoInfect( sint32 player )
 void CityData::SpreadBioTerror()
 {
 	Unit c;
-	sint32 i, n = m_tradeSourceList.Num();
-	for(i = 0; i < n; i++) {
+	sint32 n = m_tradeSourceList.Num();
+	for (sint32 i = 0; i < n; i++) {
 		// FIXME: I believe that this is not having the intended effect because c reaches here by
 		// value rather than by reference.  The previous code took the address of 
 		// m_tradeSourceList[i].GetDestination() and used that, but since that generated a
@@ -4881,8 +4847,9 @@ void CityData::SpreadBioTerror()
 void CityData::SpreadNanoTerror()
 {
 	Unit c;
-	sint32 i, n = m_tradeSourceList.Num();
-	for(i = 0; i < n; i++) {
+	sint32 n = m_tradeSourceList.Num();
+	for (sint32 i = 0; i < n; i++) 
+    {
 		// FIXME: See comment in CityData::SpreadBioTerror above - same applies here.
 		c = m_tradeSourceList[i].GetDestination();
 		if ((c.IsNanoImmune()) || (c.IsNanoInfected()))
@@ -4969,17 +4936,17 @@ BOOL CityData::IsLocalResource(sint32 resource) const
 //filters out non-resource trade
 bool CityData::GetResourceTradeRoute(sint32 resource, TradeRoute & route) const
 {
-	sint32 i;
-	for(i = 0; i < m_tradeSourceList.Num(); i++) {
+	for (sint32 i = 0; i < m_tradeSourceList.Num(); i++) 
+    {
 		ROUTE_TYPE type;
 		sint32 rr;
 		m_tradeSourceList[i].GetSourceResource(type, rr);
-		if(type != ROUTE_TYPE_RESOURCE) continue;
-		if(rr != resource) continue;
 
-		
-		route = m_tradeSourceList[i];
-		return true;
+		if ((type == ROUTE_TYPE_RESOURCE) && (rr == resource))
+        {
+		    route = m_tradeSourceList[i];
+		    return true;
+        }
 	}	
 	return false;
 }
@@ -4987,17 +4954,17 @@ bool CityData::GetResourceTradeRoute(sint32 resource, TradeRoute & route) const
 // filters out non-resource trade
 bool CityData::IsSellingResourceTo(sint32 resource, Unit & destination) const
 {
-	sint32 i;
-	for(i = 0; i < m_tradeSourceList.Num(); i++) {
+	for (sint32 i = 0; i < m_tradeSourceList.Num(); i++) 
+    {
 		ROUTE_TYPE type;
 		sint32 rr;
 		m_tradeSourceList[i].GetSourceResource(type, rr);
-		if(type != ROUTE_TYPE_RESOURCE) continue;
-		if(rr != resource) continue;
 
-		
-		destination.m_id = m_tradeSourceList[i].GetDestination().m_id;
-		return true;
+		if ((type == ROUTE_TYPE_RESOURCE) && (rr == resource))
+        {
+		    destination = m_tradeSourceList[i].GetDestination();
+		    return true;
+        }
 	}	
 	destination.m_id = 0;
 	return false;
@@ -5005,22 +4972,16 @@ bool CityData::IsSellingResourceTo(sint32 resource, Unit & destination) const
 
 sint32 CityData::LoadQueue(const MBCHAR *file)
 {
-	sint32 r;
-
-	r = m_build_queue.Load(file);
+	sint32 r = m_build_queue.Load(file);
 	m_build_queue.SetOwner(m_owner);
-
-	return (r) ;
+	return r;
 }
 
 sint32 CityData::SaveQueue(const MBCHAR *file)
 {
-	sint32 r;
-
-	r = m_build_queue.Save(file);
+	sint32 r = m_build_queue.Save(file);
 	m_build_queue.SetOwner(m_owner);
-
-	return (r) ;
+	return r;
 }
 
 uint32 CityData_CityData_GetVersion(void)
@@ -5392,8 +5353,8 @@ void CityData::SetSize(sint32 size)
 	if(size == PopCount())
 		return;
 
-	sint32 i;
-	for(i = 0; i < size - PopCount(); i++) {
+	for (sint32 i = 0; i < size - PopCount(); i++) 
+    {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 		                       GEA_City, m_home_city.m_id,
 		                       GEA_End);
@@ -5412,7 +5373,8 @@ void CityData::AddTradedResources(Resources &resources)
 	ROUTE_TYPE type;
 	sint32 res;
 
-	for(sint32 i = 0; i < m_tradeSourceList.Num(); i++) {
+	for (sint32 i = 0; i < m_tradeSourceList.Num(); i++) 
+    {
 		m_tradeSourceList[i].GetSourceResource(type, res);
 		if(type == ROUTE_TYPE_RESOURCE) {
 			resources.AddResource(res);
@@ -6074,6 +6036,7 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	sci += sci * static_cast<double>(wonderutil_GetIncreaseKnowledgePercentage(g_player[m_home_city.GetOwner()]->GetBuiltWonders())) / 100.0;
 	
 //Added by E - EXPORT BONUSES TO GOODS This gives a bonus of food	
+// TODO: check. GetSciencePercent returns a bool. You probably want the value!
 	sint32 good;
 	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
 		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
@@ -6082,6 +6045,7 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	}
 
 //Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
+// TODO: check. GetEfficiencyOrCrime returns a bool. You probably want the value!
 	sint32 g;
 	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
 		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
@@ -7248,13 +7212,11 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 void CityData::DoSupport(bool projectedOnly)
 {
 	Assert(g_player[m_owner]);
-	if (g_player[m_owner] == NULL)
-		return;
-
-	
-	PayWages((sint32)g_player[m_owner]->GetWagesPerPerson(), projectedOnly);
-
-	SupportBuildings(projectedOnly);
+	if (g_player[m_owner])
+    {
+	    (void) PayWages(projectedOnly);
+	    (void) SupportBuildings(projectedOnly);
+    }
 }
 
 sint32 CityData::GetSupport() const
@@ -7452,22 +7414,28 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT], g_player[m_owner]->GetGovernmentType())->GetCommerce();
 	}
 //Added by E - EXPORT BONUSES TO GOODS This gives a bonus of gold	
-	sint32 good;
-	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
-		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
-			gold += ceil(gold * (g_theResourceDB->Get(good))->GetCommercePercent());		
-		}
-	}
-
 //Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
-	sint32 g;
-	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
-		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
-			gold += ceil(gold * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
+	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+	{
+		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		{
+			ResourceRecord const * goodData	= g_theResourceDB->Get(good);
+			if (goodData)
+			{
+				double	goodBonus;
+				if (goodData->GetCommercePercent(goodBonus))
+				{
+					gold += static_cast<sint32>(ceil(gold * goodBonus));
+				}
+
+				double goodEfficiency;
+				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+				{
+					gold += static_cast<sint32>(ceil(gold * goodEfficiency));
+				}
+			}
 		}
 	}
-
-
 }
 
 //----------------------------------------------------------------------------
@@ -7884,12 +7852,7 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 sint32 CityData::CrimeLoss(sint32 gross) const
 {
 	sint32 crime_loss = static_cast<sint32>(ceil(gross * m_happy->GetCrime()));
-
-	
-	if (crime_loss < 0) 
-		crime_loss = 0;
-
-	return crime_loss;
+	return std::max<sint32>(0, crime_loss);
 }
 
 //----------------------------------------------------------------------------
@@ -7911,11 +7874,7 @@ sint32 CityData::CrimeLoss(sint32 gross) const
 double CityData::CrimeLoss(double gross) const
 {
 	double crime_loss = ceil(gross * m_happy->GetCrime()); // Remove ceil
-	
-	if (crime_loss < 0) 
-		crime_loss = 0;
-
-	return crime_loss;
+	return std::max<double>(0, crime_loss);
 }
 
 #if defined(NEW_RESOURCE_PROCESS)

@@ -795,15 +795,16 @@ double DifficultyDB::GetAlliedVictoryBonus(sint32 diff)
 
 double DifficultyDBRecord::GetAiTechnologyCost(const sint32 playerId, const sint32 age) const
 {
-	float rank_percent = MapAnalysis::GetMapAnalysis().GetScienceHandicapRatio(playerId);
+	double const	rank_percent		= 
+		MapAnalysis::GetMapAnalysis().GetScienceHandicapRatio(playerId);
 	float percent_spread;
 	float value_spread;
 	float rank_spread_percent;
 	float value;
-	const double & max_behind_value = m_ai_max_behind_technology_cost[age];
-	const double & min_behind_value = m_ai_min_behind_technology_cost[age];
-	const double & max_ahead_value = m_ai_max_ahead_technology_cost[age];
-	const double & min_ahead_value = m_ai_min_ahead_technology_cost[age];
+	const double &	max_behind_value	= m_ai_max_behind_technology_cost[age];
+	const double &	min_behind_value	= m_ai_min_behind_technology_cost[age];
+	const double &	max_ahead_value		= m_ai_max_ahead_technology_cost[age];
+	const double &	min_ahead_value		= m_ai_min_ahead_technology_cost[age];
 
 	if (rank_percent < m_ai_min_behind_percent)
 	{
@@ -836,7 +837,8 @@ double DifficultyDBRecord::GetAiTechnologyCost(const sint32 playerId, const sint
 
 double DifficultyDBRecord::GetAiProductionCostAdjustment(const sint32 playerId, const sint32 age) const
 {
-	float rank_percent = MapAnalysis::GetMapAnalysis().GetProductionHandicapRatio(playerId);
+	double const	rank_percent = 
+		MapAnalysis::GetMapAnalysis().GetProductionHandicapRatio(playerId);
 	float percent_spread;
 	float value_spread;
 	float rank_spread_percent;
@@ -877,7 +879,8 @@ double DifficultyDBRecord::GetAiProductionCostAdjustment(const sint32 playerId, 
 
 double DifficultyDBRecord::GetAiGoldAdjustment(const sint32 playerId, const sint32 age) const
 {
-	float rank_percent = MapAnalysis::GetMapAnalysis().GetGoldHandicapRatio(playerId);
+	double const	rank_percent = 
+		MapAnalysis::GetMapAnalysis().GetGoldHandicapRatio(playerId);
 	float percent_spread;
 	float value_spread;
 	float rank_spread_percent;

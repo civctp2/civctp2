@@ -1652,8 +1652,8 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 
 
-	
-	baseTile->SetTileDataLen(len*2);
+	Assert(len >= 0);
+	baseTile->SetTileDataLen(static_cast<uint16>(len*2));
 
 	
 	Pixel16		*dataCopy = new Pixel16[len];

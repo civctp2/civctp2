@@ -2131,18 +2131,21 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		
 		
 		
-		g_rand->Initialize(time(0));
+		g_rand->Initialize(static_cast<sint32>(time(0)));
 	}
 
 	g_theProgressWindow->StartCountingTo( 630 );
 
-	if(g_isScenario) {
-		
-		sint32 p;
-		for(p = 0; p < k_MAX_PLAYERS; p++) {
-			if(g_player[p]) {
-				g_player[p]->m_civilisation->ResetCiv(g_player[p]->m_civilisation->GetCivilisation(),
-													  g_player[p]->m_civilisation->GetGender());
+	if (g_isScenario) 
+	{
+		for (size_t p = 0; p < k_MAX_PLAYERS; ++p) 
+		{
+			if (g_player[p]) 
+			{
+				g_player[p]->m_civilisation->ResetCiv
+					(g_player[p]->m_civilisation->GetCivilisation(),
+					 g_player[p]->m_civilisation->GetGender()
+					);
 			}
 		}
 	}

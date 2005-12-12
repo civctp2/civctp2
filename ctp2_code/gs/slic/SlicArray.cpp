@@ -272,16 +272,16 @@ BOOL SlicArray::Insert(sint32 untestedIndex, SS_TYPE type, SlicStackValue value)
 	}
 
 	
-	if(index >= m_arraySize) {
-		if(m_sizeIsFixed) {
+	if (index >= static_cast<size_t>(m_arraySize)) 
+	{
+		if (m_sizeIsFixed) 
+		{
 			
 			return FALSE;
 		}
 
-		
-		
-		if(index > m_arraySize) {
-			
+		if (index > static_cast<size_t>(m_arraySize)) 
+		{
 			memset(&m_array[m_arraySize], 0, (index - m_arraySize) * sizeof(SlicStackValue));
 		}
 		m_arraySize = index + 1;

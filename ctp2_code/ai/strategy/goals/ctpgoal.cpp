@@ -1467,7 +1467,7 @@ bool CTPGoal::Get_Totally_Complete() const
 	
 	if ( goal_record->GetTargetTypeChokePoint() )
 	{
-		ArmyData army(Army());
+		ArmyData army	= Army();
 		
 		g_theWorld->GetArmy(target_pos, army);
 		if ( army.GetOwner() != m_playerId )
@@ -2413,18 +2413,13 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 	sint32 army_cont;
 	sint32 army_is_land;
 	uint32 move_intersection;
-	sint32 range;
 	BOOL city_found;
 	Unit nearest_city;
 	sint32 target_cont;
 	double city_distance;
 
-	if ( g_theGoalDB->Get(m_goal_type)->GetExecute()->GetRange() )
-		g_theGoalDB->Get(m_goal_type)->GetExecute()->GetRange(range);
-	else
-		range = 0;
-
-	
+	sint32 range = 0;
+	(void) g_theGoalDB->Get(m_goal_type)->GetExecute()->GetRange(range);
 	
 	
 	bool check_dest;

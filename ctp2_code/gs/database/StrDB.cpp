@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : String database
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -275,7 +275,7 @@ bool StringDB::GetText(MBCHAR const * get_id, MBCHAR ** new_text) const
 MBCHAR * StringDB::GetIdStr(StringId const & index) const
 { 
 	Assert(0 <= index);
-	Assert(index < m_all.size());
+	Assert(static_cast<size_t>(index) < m_all.size());
 	return (index < 0) || (index >= static_cast<sint32>(m_all.size())) ? NULL : m_all[index]->m_id;
 }
 

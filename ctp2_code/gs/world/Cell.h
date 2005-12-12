@@ -126,9 +126,9 @@ class MapPoint;
 
 #define CELL_COLOR 1
 
-#include "Unit.h"
-
+#include "gstypes.h"    // TERRAIN_TYPES
 #include "Player.h"     // PLAYER_INDEX
+#include "Unit.h"
 
 
 

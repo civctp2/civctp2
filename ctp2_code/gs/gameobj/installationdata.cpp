@@ -123,8 +123,8 @@ void InstallationData::DoVision()
 	DynamicArray<Installation> instArray;
 
 	g_theInstallationTree->SearchRect(instArray, topleft,
-									  sint32(maxVisionRange) * 2 + 1,
-									  sint32(maxVisionRange) * 2 + 1,
+									  static_cast<sint16>(maxVisionRange) * 2 + 1,
+									  static_cast<sint16>(maxVisionRange) * 2 + 1,
 									  m_owner >= 0 ? ~(1 << m_owner) : 0xffffffff);
 	sint32 in = instArray.Num();
 	sint32 i;
@@ -162,8 +162,8 @@ void InstallationData::DoVision()
 	DynamicArray<Unit> unitArray;
 
 	g_theUnitTree->SearchRect(unitArray, topleft,
-							  sint32(maxVisionRange) * 2 + 1,
-							  sint32(maxVisionRange) * 2 + 1,
+							  static_cast<sint16>(maxVisionRange) * 2 + 1,
+							  static_cast<sint16>(maxVisionRange) * 2 + 1,
 							  ~(1 << m_owner));
 	sint32 un = unitArray.Num();
 	for(i = 0; i < un; i++) {
@@ -202,8 +202,8 @@ void InstallationData::CheckVision(sint32 owner)
 	DynamicArray<Installation> instArray;
 
 	g_theInstallationTree->SearchRect(instArray, topleft,
-									  sint32(maxVisionRange) * 2 + 1,
-									  sint32(maxVisionRange) * 2 + 1,
+									  static_cast<sint16>(maxVisionRange) * 2 + 1,
+									  static_cast<sint16>(maxVisionRange) * 2 + 1,
 									  1 << owner);
 	sint32 in = instArray.Num();
 	BOOL canBeSeen = FALSE;
@@ -233,8 +233,8 @@ void InstallationData::CheckVision(sint32 owner)
 		topleft.x -= sint16(maxVisionRange);
 		DynamicArray<Unit> unitArray;
 		g_theUnitTree->SearchRect(unitArray, topleft,
-								  sint32(maxVisionRange) * 2 + 1,
-								  sint32(maxVisionRange) * 2 + 1,
+								  static_cast<sint16>(maxVisionRange) * 2 + 1,
+								  static_cast<sint16>(maxVisionRange) * 2 + 1,
 								  1 << owner);
 		sint32 un = unitArray.Num();
 		for(i = 0; i < un; i++) {

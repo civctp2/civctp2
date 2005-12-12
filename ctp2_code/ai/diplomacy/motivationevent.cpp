@@ -86,9 +86,9 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 
 	
 	sint32 at_risk_value = 
-		scheduler.GetValueUnsatisfiedGoals(defend_goal_type);
+		scheduler.GetValueUnsatisfiedGoals(static_cast<GOAL_TYPE>(defend_goal_type));
 	CTPGoal_ptr ctp_goal_ptr = 
-		(CTPGoal_ptr) scheduler.GetHighestPriorityGoal(defend_goal_type, false);
+		(CTPGoal_ptr) scheduler.GetHighestPriorityGoal(static_cast<GOAL_TYPE>(defend_goal_type), false);
 
 	sint32 cityId = 0;
 	if (ctp_goal_ptr != NULL)
@@ -101,7 +101,7 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 	if (at_risk_value > total_value * 0.10) {
 		sint32 priority;
 		diplomat.GetCurrentStrategy().GetFearCityDefense(priority);
-		motivation.priority = priority;
+		motivation.priority = static_cast<sint16>(priority);
 		motivation.type = MOTIVATION_FEAR_CITY_DEFENSE;
 		motivation.arg.cityId = cityId;
 		motivation.adviceStrId = adviceId;

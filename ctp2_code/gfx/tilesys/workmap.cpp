@@ -1436,57 +1436,39 @@ void WorkMap::Click(aui_MouseEvent *data)
 
 BOOL WorkMap::PointInMask(POINT hitPt)
 {
-	sint32		x, y;
+	TILEHITMASK *	thm			= g_tiledMap->GetTileHitMask();
+	double const	scale		= (m_scale) ? 0.5 : 1.0;
+	sint32 const	x			= (sint32)((double)hitPt.x / scale);
+	sint32 const 	y			= (sint32)(((double)hitPt.y / scale) + k_TILE_PIXEL_HEADROOM);
 
-	TILEHITMASK *thm = g_tiledMap->GetTileHitMask();
-
-	double scale = 1.0;
-	if ( m_scale ) {
-		scale = 0.5;
-	}
-
-	x = (sint32)((double)hitPt.x / scale);
-	y = (sint32)(((double)hitPt.y / scale) + k_TILE_PIXEL_HEADROOM);
-
-	if (x >= thm[y].start &&
-		x <= thm[y].end) 
-		return TRUE;
-
-	return FALSE;
+	return (x >= thm[y].start) && (x <= thm[y].end);
 }
 
 BOOL WorkMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 {
-	sint32			width, height;
-	MapPoint		pos;
-	POINT			hitPt;
-	sint32			x, y;
-	sint32			maxX;
 
-	double scale = 1.0;
-	if ( m_scale ) {
-		scale = 0.5;
-	}
+	double const	scale		= (m_scale) ? 0.5 : 1.0;
+	sint32			headroom	= static_cast<sint32>(k_TILE_PIXEL_HEADROOM * scale);
 
-	sint32			headroom = (sint32)((double)k_TILE_PIXEL_HEADROOM * scale);
+	sint32			width		= static_cast<sint32>(k_TILE_GRID_WIDTH * scale);
+	sint32			height		= static_cast<sint32>
+		((k_TILE_GRID_HEIGHT-k_TILE_PIXEL_HEADROOM) * scale);
 
-	width = (sint32)((double)k_TILE_GRID_WIDTH * scale);
-	height = (sint32)((double)(k_TILE_GRID_HEIGHT-k_TILE_PIXEL_HEADROOM) * scale);
+	sint32			x			= point.x;
+	sint32			y			= point.y;
 
-	x = point.x;
-	y = point.y;
-
-	
 	if (!(m_mapViewRect.top & 1)) 
 		y -= headroom;
 
-	pos.x = (sint16) (x / width + m_mapViewRect.left);
-	pos.y = (sint16) ((y / height) + m_mapViewRect.top/2);
+	MapPoint		pos	((x / width) + m_mapViewRect.left, 
+						 (y / height) + m_mapViewRect.top / 2
+						);
  
+	POINT			hitPt;
 	hitPt.x = x % width;
 	hitPt.y = y % height;
 
-	maxX = m_mapBounds.right;
+	sint32			maxX		= m_mapBounds.right;
 
 	if (!PointInMask(hitPt)) {
 		
@@ -1503,7 +1485,7 @@ BOOL WorkMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 				tilePos.x = pos.x - pos.y;
 				tilePos.y = pos.y * 2 + 1;
 			} else {
-				tilePos.x = maxX + pos.x - pos.y;
+				tilePos.x = static_cast<sint16>(maxX + pos.x - pos.y);
 				tilePos.y = pos.y * 2 + 1;
 			}
 		}
@@ -1512,14 +1494,20 @@ BOOL WorkMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 			tilePos.x = pos.x - pos.y;
 			tilePos.y = pos.y * 2;
 		} else {
-			tilePos.x = maxX + pos.x - pos.y;
+			tilePos.x = static_cast<sint16>(maxX + pos.x - pos.y);
 			tilePos.y = pos.y * 2;
 		}
 	}
 
 	if (g_theWorld->IsYwrap()) {
-		if (tilePos.x <0) tilePos.x = g_theWorld->GetWidth() + tilePos.x; 
-		else if (g_theWorld->GetWidth() <= tilePos.x) tilePos.x = tilePos.x - (sint16)g_theWorld->GetWidth(); 
+		if (tilePos.x <0) 
+		{
+			tilePos.x += static_cast<sint16>(g_theWorld->GetWidth()); 
+		}
+		else if (g_theWorld->GetWidth() <= tilePos.x) 
+		{
+			tilePos.x -= static_cast<sint16>(g_theWorld->GetWidth()); 
+		}
 		
 		sint16 sx, sy;
 		if (tilePos.y < 0) {
@@ -1540,18 +1528,23 @@ BOOL WorkMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 			tilePos.y = 0; 
 			return FALSE; 
 		} else if (g_theWorld->GetHeight() <= tilePos.y) { 
-			tilePos.y = g_theWorld->GetHeight() -1;
+			tilePos.y = static_cast<sint16>(g_theWorld->GetHeight() - 1);
 			return FALSE; 
 		} 
 	}
 
-	if (tilePos.x <0) tilePos.x = g_theWorld->GetWidth() + tilePos.x; 
-	else if (g_theWorld->GetWidth() <= tilePos.x) tilePos.x = tilePos.x - (sint16)g_theWorld->GetWidth(); 
+	if (tilePos.x <0) 
+	{
+		tilePos.x += static_cast<sint16>(g_theWorld->GetWidth());
+	}
+	else if (g_theWorld->GetWidth() <= tilePos.x) 
+	{
+		tilePos.x -= static_cast<sint16>(g_theWorld->GetWidth()); 
+	}
 		
-	MapPoint tempPos;
-
-	
-	if (m_unit.m_id) {
+	if (m_unit.m_id) 
+	{
+		MapPoint tempPos;
 		m_unit.GetData()->GetPos(tempPos);
 	}
 

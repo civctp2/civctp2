@@ -6374,10 +6374,14 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
 							(MBCHAR*)"command <required_param> [optional_param]",
 							0,0);
-		for(sint32 i = m_helpStart;
-            (i<arsize) &&
-			commands[i].m_name != NULL && i < m_helpStart + k_HELP_LINES;
-			i++) {
+		sint32 i;
+		for 
+		(
+			i = m_helpStart;
+            (i < arsize) && commands[i].m_name && (i < m_helpStart + k_HELP_LINES);
+			++i
+		) 
+		{
 			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i-m_helpStart) * k_TEXT_SPACING,
 								(MBCHAR*)commands[i].m_helptext, 0, 0);
 
@@ -6386,7 +6390,8 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 
 
 		}
-		if(commands[i].m_name != NULL) {
+		if (commands[i].m_name) 
+		{
 			
 			sprintf(buf, "[~help %d] for next page", (m_helpStart / k_HELP_LINES) + 1);
 			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,

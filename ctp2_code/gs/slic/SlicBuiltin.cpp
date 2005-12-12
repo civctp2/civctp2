@@ -384,14 +384,18 @@ class CitySymbol_Happiness : public SlicStructMemberData {
 	DEF_MAKECOPY(CitySymbol_Happiness);
 
 	SLIC_SYM GetType() const { return SLIC_SYM_IVAR; }
-	BOOL GetIntValue(sint32 &value) const {
+	BOOL GetIntValue(sint32 &value) const 
+	{
 		Unit city;
 		BOOL res = m_parent->GetDataSymbol()->GetCity(city);
 		Assert(res);
-		if(city.IsValid()) {
-			value = city.GetHappiness();
+		if (city.IsValid()) 
+		{
+			value = static_cast<sint32>(city.GetHappiness());
 			return TRUE;
-		} else {
+		} 
+		else 
+		{
 			return FALSE;
 		}
 	}
@@ -1195,22 +1199,22 @@ class PlayerSymbol_SirCap : public SlicStructMemberData {
 class PlayerSymbol_PublicWorksTax : public SlicStructMemberData {
 	DEF_MAKECOPY(PlayerSymbol_PublicWorksTax);
 
-	BOOL GetIntValue(sint32 &value) const {
+	BOOL GetIntValue(sint32 &value) const 
+	{
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if(res)
-			{
-			value = g_player[pl]->m_materialsTax*100;
+		if (res)
+		{
+			value = static_cast<sint32>(g_player[pl]->m_materialsTax * 100.0);
 			return TRUE;
-			}
+		}
 		else
-			{
+		{
 			value = 0;
 			return FALSE;
-			}
 		}
-
+	}
 };
 
 class PlayerSymbol_PublicWorksLevel : public SlicStructMemberData {

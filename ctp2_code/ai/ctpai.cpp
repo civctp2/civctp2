@@ -540,10 +540,13 @@ void CtpAi::GroupWithEscort(const Army & army)
 				continue;
 
 			unit_rec = g_theUnitDB->Get(tmp_army[0].GetType());
-			tmp_strength = unit_rec->GetAttack() * 
-				unit_rec->GetDefense() *
-				unit_rec->GetFirepower() *
-				unit_rec->GetArmor();
+			tmp_strength = static_cast<sint32>
+				(unit_rec->GetAttack() * 
+				 unit_rec->GetDefense() *
+				 unit_rec->GetFirepower() *
+				 unit_rec->GetArmor()
+				);
+
 			if (min_strength < 0 || tmp_strength < min_strength)
 				{
 					min_strength = tmp_strength;
@@ -2787,13 +2790,10 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 
 	
 	sint32 threat_bonus = 0;
-	if (strategy.GetRushBuyThreatBonus())
-		strategy.GetRushBuyThreatBonus(threat_bonus);
+	(void) strategy.GetRushBuyThreatBonus(threat_bonus);
 
-	
 	double reserve_percent = 0.0;
-	if (strategy.GetRushBuyReservePercent())
-		strategy.GetRushBuyReservePercent(reserve_percent);
+	(void) strategy.GetRushBuyReservePercent(reserve_percent);
 
     sint32 lost_to_cleric;
 	sint32 lost_to_crime;

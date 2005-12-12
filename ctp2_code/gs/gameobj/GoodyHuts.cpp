@@ -139,7 +139,7 @@ namespace
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-        GOODY   Select(uint32 randomValue) const
+        GOODY   Select(sint32 randomValue) const
         {
             if (randomValue < m_BarbarianThreshold)
             {

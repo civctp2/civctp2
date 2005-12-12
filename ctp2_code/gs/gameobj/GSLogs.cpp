@@ -44,10 +44,9 @@
 #include "profileDB.h"
 #include "c3math.h"		// AsPercentage
 
-static s_initialized = 0;
-static s_dip_initialized = 0;
-
-static s_populationHack[k_MAX_PLAYERS];
+static bool s_initialized		= false;
+static bool s_dip_initialized	= false;
+static int	s_populationHack[k_MAX_PLAYERS];
 
 void gslog_print(char *fmt, ...)
 {
@@ -56,16 +55,15 @@ void gslog_print(char *fmt, ...)
 		return;
 
 	FILE *f;
-	if(!s_initialized) {
-		
-		f = fopen("logs\\gslog.txt", "w");
-		s_initialized = 1;
-		sint32 i;
-		for(i = 0; i < k_MAX_PLAYERS; i++) {
-			s_populationHack[i] = 0;
-		}
-	} else {
+	if (s_initialized) 
+	{
 		f = fopen("logs\\gslog.txt", "a");
+	}
+	else
+	{
+		f = fopen("logs\\gslog.txt", "w");
+		s_initialized = true;
+		std::fill(s_populationHack, s_populationHack + k_MAX_PLAYERS, 0);
 	}
 	
 	char buf[k_MAX_NAME_LEN];
@@ -90,12 +88,14 @@ void gslog_dipprint(char *fmt, ...)
 		return;
 
 	FILE *f;
-	if(!s_dip_initialized) {
-		
-		f = fopen("logs\\diplog.txt", "w");
-		s_dip_initialized = 1;
-	} else {
+	if (s_dip_initialized) 
+	{
 		f = fopen("logs\\diplog.txt", "a");
+	} 
+	else 
+	{
+		f = fopen("logs\\diplog.txt", "w");
+		s_dip_initialized = true;
 	}
 	
 	char buf[k_MAX_NAME_LEN];
@@ -117,12 +117,13 @@ void gslog_LogPlayerStats(sint32 player)
 	if(!g_theProfileDB->GetEnableLogs())
 		return;
 
-	if(!g_player[player]) return;
-
-	
 	Player *pl = g_player[player];
 
-	gslog_print("[Player %d] [Turn %d]\n", player, g_player[player]->m_current_round);
+	if (!pl) return;
+
+	
+
+	gslog_print("[Player %d] [Turn %d]\n", player, pl->m_current_round);
 
 	
 	

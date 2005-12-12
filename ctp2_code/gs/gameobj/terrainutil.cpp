@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Terrain utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -887,9 +887,8 @@ double terrainutil_GetMaxVisionRange()
 							rec->GetTerrainEffect(j);
 						
 						Assert(effect);
-						if(effect && effect->GetVisionRange())
+						if(effect && effect->GetVisionRange(range))
 						{
-							effect->GetVisionRange(range);
 							if (range > max_vision_range)
 								max_vision_range = range;
 						}
@@ -906,15 +905,16 @@ double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint &pos)
 
 	sint32 range = 0;
 	Assert(rec);
-	if(rec) {
-		
+	if (rec) 
+    {
 		const TerrainImprovementRecord::Effect *eff = 
 			terrainutil_GetTerrainEffect(rec, pos);
 		Assert(eff);
-		if(eff && eff->GetVisionRange())
-			{
-				eff->GetVisionRange(range);
-			}
+
+		if (eff)
+        {
+            (void) eff->GetVisionRange(range);
+	    }
 	}
 	return range;
 }

@@ -78,14 +78,6 @@ int Cell::PlayerLandArea(int player)
 	Assert(player<k_MAX_PLAYERS);
 
 #ifdef _DEBUG
-	
-	
-	
-	
-	
-	
-	
-	static t=0;
 	int t1 = m_playerLandArea[player+1];
 	int arr[k_MAX_PLAYERS+1];
 	g_theWorld->WholePlayerLandArea(arr);

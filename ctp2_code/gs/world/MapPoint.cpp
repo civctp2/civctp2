@@ -313,11 +313,11 @@ MapPointData MapPoint::NormalizedSubtract(MapPoint const & dest) const
 
 	if (g_theWorld->IsXwrap())
 	{
-		diff.x = WrapDelta(diff.x, 2 * g_mp_size.x);
+		diff.x = static_cast<sint16>(WrapDelta(diff.x, 2 * g_mp_size.x));
 	}
 	if (g_theWorld->IsYwrap())
 	{
-		diff.y = WrapDelta(diff.y, g_mp_size.y);
+		diff.y = static_cast<sint16>(WrapDelta(diff.y, g_mp_size.y));
 	}
 
 	return diff;
@@ -913,7 +913,7 @@ SquareIterator::SquareIterator(MapPoint const & center, sint32 size)
 	m_wrappedCur    (center),
 	m_startX        (center.x),
 	m_endX          (center.x),
-	m_row           (size),
+	m_row           (static_cast<sint16>(size)),
 	m_intRadius     (static_cast<sint16>(size)),
 	m_testXY        (OrthogonalPoint(m_center))
 {

@@ -378,7 +378,7 @@ SFN_ERROR Slic_LogRegardEvent::Call(SlicArgList *args)
 		delta, 
 		static_cast<REGARD_EVENT_TYPE>(type), 
 		explain,
-		duration);
+		static_cast<sint16>(duration));
 
 	return SFN_ERROR_OK;
 }

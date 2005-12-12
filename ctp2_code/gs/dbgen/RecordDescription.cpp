@@ -76,14 +76,15 @@
 extern "C" int g_generateRequirementWarnings;
 
 RecordDescription::RecordDescription(char *name)
+:
+	m_datumList                 (),
+	m_memberClasses             (),
+	m_hasGovernmentsModified    (false),
+	m_numBits                   (0),
+	m_addingToMemberClass       (false),
+	m_baseType                  (DATUM_NONE)
 {
 	strncpy(m_name, name, k_MAX_RECORD_NAME);
-	m_numBits = 0;
-
-		m_hasGovernmentsModified = false;	
-
-	m_addingToMemberClass = false;
-	m_baseType = DATUM_NONE;
 }
 
 RecordDescription::~RecordDescription()
@@ -125,7 +126,6 @@ void RecordDescription::SetBaseType(DATUM_TYPE type)
 
 void RecordDescription::ExportHeader(FILE *outfile)
 {
-	
 	fprintf(outfile, "#ifndef __%s_RECORD_H__\n#define __%s_RECORD_H__\n\n",
 			m_name, m_name);
 
@@ -734,33 +734,33 @@ void RecordDescription::ExportParser(FILE *outfile)
 		switch(dat->m_type) {
 			case DATUM_INT:
 				if(dat->m_maxSize < 0) {
-					fprintf(outfile, "    { %sRecord::Get%s, NULL, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { &%sRecord::Get%s, NULL, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				} else {
-					fprintf(outfile, "    { %sRecord::GetNum%s, NULL, NULL, NULL, NULL, %sRecord::Get%s, NULL}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
+					fprintf(outfile, "    { &%sRecord::GetNum%s, NULL, NULL, NULL, NULL, &%sRecord::Get%s, NULL}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
 				}
 				break;
 			case DATUM_RECORD:
 				if(dat->m_maxSize < 0) {
-					fprintf(outfile, "    { %sRecord::Get%sIndex, NULL, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { &%sRecord::Get%sIndex, NULL, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				} else {
-					fprintf(outfile, "    { %sRecord::GetNum%s, NULL, NULL, NULL, NULL, %sRecord::Get%sIndex, NULL}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
+					fprintf(outfile, "    { &%sRecord::GetNum%s, NULL, NULL, NULL, NULL, &%sRecord::Get%sIndex, NULL}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
 				}
 				break;
 			case DATUM_BIT:
-				fprintf(outfile, "    { NULL, %sRecord::Get%s, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+				fprintf(outfile, "    { NULL, &%sRecord::Get%s, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				break;
 			case DATUM_FLOAT:
 				if(dat->m_maxSize < 0) {
-					fprintf(outfile, "    { NULL, NULL, %sRecord::Get%s, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { NULL, NULL, &%sRecord::Get%s, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				} else {
-					fprintf(outfile, "    { %sRecord::GetNum%s, NULL, NULL, NULL, NULL, NULL, %sRecord::Get%s}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
+					fprintf(outfile, "    { &%sRecord::GetNum%s, NULL, NULL, NULL, NULL, NULL, &%sRecord::Get%s}, /* %s (array) */\n", m_name, dat->m_name, m_name, dat->m_name, dat->m_name);
 				}
 				break;
 			case DATUM_BIT_PAIR:
 				if(dat->m_bitPairDatum->m_type == DATUM_INT) {
-					fprintf(outfile, "    { NULL, NULL, NULL, %sRecord::Get%s, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { NULL, NULL, NULL, &%sRecord::Get%s, NULL, NULL, NULL },\n", m_name, dat->m_name);
 				} else if(dat->m_bitPairDatum->m_type == DATUM_FLOAT) {
-					fprintf(outfile, "    { NULL, NULL, NULL, NULL, %sRecord::Get%s, NULL, NULL },\n", m_name, dat->m_name);
+					fprintf(outfile, "    { NULL, NULL, NULL, NULL, &%sRecord::Get%s, NULL, NULL },\n", m_name, dat->m_name);
 				} else {
 					fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* %s */\n", dat->m_name);
 				}
