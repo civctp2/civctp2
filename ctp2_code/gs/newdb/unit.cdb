@@ -166,10 +166,15 @@ Unit {
 	Bit CanBeSued		
 	Bit AttackFromSpaceship	
 	Bit CantBeAttacked		
-	Bit CargoPod			
-	Bit IsMounted				
-	Bit IgnoreCityWalls		
+	Bit CargoPod	
+	Bit IsFoot	// added by E for additional battle modifiers Dec-7-2005	
+	Bit IsMounted	
+	Bit IsSiege  // added by E for additional battle modifiers Dec-7-2005
+	Bit IsWheeled // added by E for additional battle modifiers Dec-7-2005
+	Bit IsMechanized // added by E for additional battle modifiers Dec-7-2005
+	Bit IsHelicopter // added by E for additional battle modifiers Dec-7-2005
 	Bit IsSubmarine			
+	Bit IgnoreCityWalls	
 
 	Bit NoLandAttack			
 	Bit NoSeaAttack			
@@ -181,11 +186,28 @@ Unit {
 
 	Bit Paratrooper			
 	Bit AssistedDrops			
-	Bit BonusAgainstMounted	
+	Bit BonusAgainstFoot // added by E for additional battle modifiers Dec-7-2005
+	Bit BonusAgainstMounted
+	Bit BonusAgainstSiege // added by E for additional battle modifiers Dec-7-2005
+	Bit BonusAgainstWheeled // added by E for additional battle modifiers Dec-7-2005
+	Bit BonusAgainstMechanized // added by E for additional battle modifiers Dec-7-2005
+	Bit BonusAgainstHelicopter // added by E for additional battle modifiers Dec-7-2005
+	Bit BonusAgainstGuerrilla // added by E for additional battle modifiers Dec-13-2005
+	Bit BonusAgainstSpecialForces // added by E for additional battle modifiers Dec-13-2005
+	Bit BonusAgainstSubmarine // added by E for additional battle modifiers Dec-13-2005
 	Bit SingleUse				
 	Bit BonusAirDefense		
 
-	Bit WoodenShip			
+	Bit WoodenShip	
+	Bit AttackFootBonus // added by E for additional battle modifiers Dec-7-2005
+	Bit AttackMountedBonus // added by E for additional battle modifiers Dec-7-2005
+	Bit AttackSiegeBonus // added by E for additional battle modifiers Dec-7-2005
+	Bit AttackWheeledBonus // added by E for additional battle modifiers Dec-7-2005
+	Bit AttackMechanizedBonus // added by E for additional battle modifiers Dec-7-2005
+	Bit AttackHelicopterBonus // added by E for additional battle modifiers Dec-7-2005
+	Bit AttackSpecialForcesBonus // added by E for additional battle modifiers Dec-13-2005
+	Bit AttackCivilianBonus // added by E for additional battle modifiers Dec-13-2005
+	Bit AttackGuerrillaBonus // added by E for additional battle modifiers Dec-13-2005
 	Bit AttackWoodenShipBonus	
 	Bit HasAttackCityBonus		
 	Bit HasAttackBonusSubmarine	
@@ -202,6 +224,11 @@ Unit {
 	Bit EstablishEmbassy		
 	Bit ThrowParty			
 	Bit HearGossip			
+
+##	Struct AttackAgeBonus {
+##		Record Age Age
+##		Bit Bonus
+##	}
 
 	Struct StealTechnologyData {
 		Float RandomChance
@@ -294,6 +321,9 @@ Unit {
 	Bit CreateRift			
 	Bit CanCloak
 	Bit HiddenNationality //future use for Civ3 like trait maybe same as Cloak?				
+	Bit SneakAttack //Can attack without war declared 	
+	Bit SneakPillage //Can Pillage without war declared	
+	Bit SneakBombard //Can Bombard without war declared
 	Bit ParatrooperTransport
 	Bit CantBuild
 
@@ -441,6 +471,14 @@ Unit {
 	Bit(Float) WoodenShipBonus
 	Bit(Float) AttackCityBonus
 	Bit(Float) AttackBonusSubmarine
+	Bit(Float) FootBonus // added by E for additional battle modifiers Dec-31-2005
+	Bit(Float) SiegeBonus // added by E for additional battle modifiers Dec-31-2005
+	Bit(Float) WheeledBonus // added by E for additional battle modifiers Dec-31-2005
+	Bit(Float) MechanizedBonus // added by E for additional battle modifiers Dec-31-2005
+	Bit(Float) HelicopterBonus // added by E for additional battle modifiers Dec-31-2005
+	Bit(Float) SpecialForcesBonus // added by E for additional battle modifiers Dec-31-2005
+	Bit(Float) CivilianBonus // added by E for additional battle modifiers Dec-31-2005
+	Bit(Float) GuerrillaBonus // added by E for additional battle modifiers Dec-31-2005
 
 	Bit(Int) CargoModule
 

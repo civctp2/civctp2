@@ -653,6 +653,49 @@ STDEHANDLER(CreateWonderEvent)
 	Unit u;
 	c.CD()->GetBuildQueue()->FinishBuildFront(u);
 	SlicObject *so;
+//EMOD for visible wonders INWORK 18NOV2005
+//
+//	Cell *cell;
+//	MapPoint pos;
+//	MapPoint cityPos = c.RetPos();
+//	if wonder-showOnMap >0
+//
+//		CityInfluenceIterator it(c.RetPos(), city->GetSizeIndex());
+//
+//		for(it.Start(); !it.End(); it.Next()) 
+//		{
+//
+//			if(c.RetPos() == it.Pos())
+//				continue;
+//
+//			cell = g_theWorld->GetCell(it.Pos());
+//
+//			if(!(cell->GetCityOwner() == c))
+//				continue;
+//
+//			if(cell->GetNumImprovements() > 0)  //NOT NEEDED
+//					continue;	    //NOT NEEDED	
+//
+//			rec = g_theTerrainImprovementDB->Get(g_theWonderDB->Get(wonder)->GetShowOnMap(type));
+//			effect = terrainutil_CanPlayerBuildAt(rec, c->GetOwner(), pos);
+//
+//			Assert(effect);
+//			if(effect){
+//			{
+//				g_gevManager->AddEvent(GEV_INSERT_Tail,
+//			                      GEV_CreateImprovement,
+//			                      GEA_Player,      m_playerId,
+//			                      GEA_MapPoint,    pos,
+//			                      GEA_Int,         type,
+//			                      GEA_Int,         0,
+//			                      GEA_End);
+//			}
+//		} 
+//	} 
+// end EMOD
+
+
+
 	if(wonder == wonderutil_GetFobCityIndex()) {
 		so = new SlicObject("911ForbiddenCityPeace");
 		so->AddRecipient(c.GetOwner());

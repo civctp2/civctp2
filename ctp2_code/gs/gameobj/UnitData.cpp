@@ -1333,6 +1333,34 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 		attack += baseattack * rec->GetAttackBonusSubmarine();
 	}
 
+	// EMOD
+	if(defrec->GetIsFoot()) {
+		attack += baseattack * rec->GetAttackFootBonus();
+	}
+
+	if(defrec->GetIsMounted()) {
+		attack += baseattack * rec->GetAttackMountedBonus();
+	}
+
+
+	if(defrec->GetIsSiege()) {
+		attack += baseattack * rec->GetAttackSiegeBonus();
+	}
+
+	if(defrec->GetIsWheeled()) {
+		attack += baseattack * rec->GetAttackWheeledBonus();
+	}
+
+	if(defrec->GetIsMechanized()) {
+		attack += baseattack * rec->GetAttackMechanizedBonus();
+	}
+
+	if(defrec->GetIsHelicopter()) {
+		attack += baseattack * rec->GetAttackHelicopterBonus();
+	}
+	//end EMOD
+
+
 	return attack;
 }
 
@@ -1783,15 +1811,16 @@ BOOL UnitData::Settle()
 
     Unit    nearbyCity  = g_theWorld->GetCell(m_pos)->GetCityOwner();
 
-    if (nearbyCity.IsValid()) 
+// EMOD add here for adding settlers to cities?
+    
+	if (nearbyCity.IsValid()) 
     {
-        SlicObject *so = new SlicObject("29IASettlingTooClose") ;
-        so->AddRecipient(m_owner);
-        so->AddCity(nearbyCity);
-        g_slicEngine->Execute(so);
-
-		DPRINTF(k_DBG_GAMESTATE, ("Tile already owned!\n"));
-        return FALSE;
+		SlicObject *so = new SlicObject("29IASettlingTooClose") ;
+		so->AddRecipient(m_owner);
+		so->AddCity(nearbyCity);
+		g_slicEngine->Execute(so);
+			DPRINTF(k_DBG_GAMESTATE, ("Tile already owned!\n"));
+		return FALSE;
     }
 
 	if(m_movement_points < g_theConstDB->SpecialActionMoveCost() &&
@@ -1815,14 +1844,19 @@ BOOL UnitData::Settle()
         } 
 	}
 
+
+
+
   	const UnitRecord *rec = g_theUnitDB->Get(m_type);   
     sint32 t = rec->GetSettleCityTypeIndex();
+
 
 	if((g_theWorld->IsWater(m_pos) || g_theWorld->IsShallowWater(m_pos)) && 
 	   !g_theUnitDB->Get(t)->GetMovementTypeSea()) {
 		DPRINTF(k_DBG_GAMESTATE, ("Wrong terrain type\n"));
 		return FALSE;
-	}	
+	}
+
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 						   GEV_KillUnit,
 						   GEA_Unit, m_id,
@@ -3462,6 +3496,9 @@ double UnitData::GetDefense(const Unit &attacker) const
 		}
 	}
 
+
+
+
 	if(attackRec->GetIsMounted()) {
 		def += myRec->GetDefense() * myRec->GetBonusAgainstMounted();
 	}
@@ -3469,6 +3506,27 @@ double UnitData::GetDefense(const Unit &attacker) const
 	if(attackRec->GetMovementTypeAir()) {
 		def += myRec->GetDefense() * myRec->GetBonusAirDefense();
 	}
+	//Additional Battle Modifiers by E 12-05-2005
+	if(attackRec->GetIsFoot()) {
+		def += myRec->GetDefense() * myRec->GetBonusAgainstFoot();
+	}
+
+	if(attackRec->GetIsSiege()) {
+		def += myRec->GetDefense() * myRec->GetBonusAgainstSiege();
+	}
+
+	if(attackRec->GetIsWheeled()) {
+		def += myRec->GetDefense() * myRec->GetBonusAgainstWheeled();
+	}
+
+	if(attackRec->GetIsMechanized()) {
+		def += myRec->GetDefense() * myRec->GetBonusAgainstMechanized();
+	}
+
+	if(attackRec->GetIsHelicopter()) {
+		def += myRec->GetDefense() * myRec->GetBonusAgainstHelicopter();
+	}
+	// end EMOD
 
 	sint32 intDef = (sint32)def;
 	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);

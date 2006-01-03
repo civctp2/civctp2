@@ -3074,7 +3074,19 @@ sint32 Player::Settle(Army &settle_army)
 
     if (g_theWorld->HasCity(pos)) { 
 		DPRINTF(k_DBG_GAMESTATE, ("Settling on top of a city\n"));
+
+//    EMOD  here for adding settler to a city?
+//		Unit c = g_theWorld->GetCity(pos);
+//		c.CD()->ChangePopulation(1);
+//		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+//						   GEV_KillUnit,
+//						   GEA_Unit, settle_army.m_id,
+//						   GEA_Int, CAUSE_REMOVE_ARMY_SETTLE,
+//						   GEA_Player, -1,
+//						   GEA_End);
+//   EMOD
         return FALSE; 
+//		return TRUE; 
 	}
 
 	
@@ -10352,7 +10364,7 @@ void Player::SetDiplomaticState(const PLAYER_INDEX p, const DIPLOMATIC_STATE s)
 	}
 } 
 
-//adding Hidden Nationality Here? - E
+//ThisMeansWar is not used
 void Player::ThisMeansWAR(PLAYER_INDEX defense_owner)
 {
 	Assert(0 <= defense_owner); 
@@ -10363,23 +10375,9 @@ void Player::ThisMeansWAR(PLAYER_INDEX defense_owner)
 
     PLAYER_INDEX attack_owner = m_owner;
 
-//  Assert(unit.GetOwner() == m_owner);
-//  
-//	sint32 type;
-//	const UnitRecord *rec = g_theUnitDB->Get(type);
-//	if (rec->GetHiddenNationality() == 0) {
 
-//	for(j = 0; j < m_all_units->Num(); j++) {
-//		if(m_all_units->Access(j).HiddenNationality) 
-//	}
-	
-	
-	
 	if ((attack_owner != 0) && (defense_owner != 0) && 
 		!AgreementMatrix::s_agreements.HasAgreement(attack_owner, defense_owner, PROPOSAL_TREATY_DECLARE_WAR)) { 
-//
-//	if (unit.GetDBRec()->GetHiddenNationality() == 0)	{
-//add hidden nationality flag here g_theUnitDB->Get(t)->GetHiddenNAtionality;
 		
 		SlicObject *so = new SlicObject("128CivStartedWar");
         so->AddCivilisation(attack_owner);

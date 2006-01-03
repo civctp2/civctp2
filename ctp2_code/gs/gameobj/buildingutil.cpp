@@ -2,6 +2,8 @@
 //building.cpp
 //Fixed buildingutil_GetOffenseBonusAir and buildingutil_GetOffenseBonusWater
 //Fix by NelsonAndBronte on 04-11-2003
+//EMOD note UpkeepPerPop to buildingutil_GetTotalUpkeep  12-27-2005
+//EMOD note UpkeepPerCity to buildingutil_GetTotalUpkeep  12-27-2005
 
 
 #include "c3.h"
@@ -74,6 +76,9 @@ sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
 		if(built_improvements & shiftbit(i)) {
 			if(g_theBuildingDB->Get(i)->GetUpkeep() > wonderLevel) {
 				upkeep += g_theBuildingDB->Get(i)->GetUpkeep();
+
+// EMOD add UpkeepPerPop here  12-27-2005
+//EMOD add UpkeepPerCity here  12-27-2005
 			}
 		}
 	}

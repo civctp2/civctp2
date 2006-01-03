@@ -102,6 +102,7 @@ TerrainImprovement {
 		Bit NeedsWorker //futureUse - can't build unless IsWorker unit is on square
 		Bit NeedsWaterSupply //futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
 		Bit Airport
+		Bit Colony      //FU
 		Bit ListeningPost
 		Bit Endgame
 		Bit(Int) VisionRange

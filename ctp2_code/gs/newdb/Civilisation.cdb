@@ -44,6 +44,7 @@ Civilisation{
 // for national flags
 //   StringID              NationUnitFlag      
 // from building.cdb to add Civilisation traits
+	Bit(Record Feat) TriggerFeat
 	Bit(Float) OffenseBonusLand
 	Bit(Float) OffenseBonusWater
 	Bit(Float) OffenseBonusAir

@@ -35,6 +35,9 @@
 //   flag so a tile improvement can only be built on a tile with a 
 //   certain good on it - (E 2005/03/12)
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
+// - added terrainutil_HasColony - 18NOV2005 E
+// - Colony check to terrainutil_IsInstallation - 18NOV2005 E  needs rework
+//
 //
 //----------------------------------------------------------------------------
 
@@ -674,7 +677,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 			}
 		}
 
-//added by E. Improvement can only be built on a tile with a certain good on it		
+// EMOD Improvement can only be built on a tile with a certain good on it		
 		if(rec->GetNumIsRestrictedToGood () == 0) {
 			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
 				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
@@ -748,6 +751,32 @@ bool terrainutil_HasAirfield(const MapPoint & pos)
 	}
 	return false;
 }
+
+
+// EMOD added 18Nov2005 allows for a cell check if it has a Colony improvement
+//bool terrainutil_HasColony(const MapPoint & pos)
+//{
+//	Cell *cell = g_theWorld->GetCell(pos);
+//
+//	
+//	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+//
+//		
+//		sint32 imp = cell->GetDBImprovement(i);
+//		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//
+//		Assert(rec);
+//		if(rec) {
+//			
+//			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+//			
+//			if(eff && eff->Getcolony())
+//				return true;
+//		}
+//	}
+//	return false;
+//}
+// end E Mod
 
 bool terrainutil_HasListeningPost(const MapPoint & pos)
 {
@@ -859,6 +888,9 @@ bool terrainutil_IsInstallation(const sint32 type)
 				if (effect->GetAirport() ||
 					effect->GetDefenseBonus() ||
 					effect->GetRadar() ||
+// EMOD added Colony check
+//					effect->GetColony() ||
+// end EMOD
 					effect->GetListeningPost() ||
 					effect->GetEndgame())
 					return true;

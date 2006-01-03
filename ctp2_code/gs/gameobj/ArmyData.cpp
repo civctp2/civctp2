@@ -53,6 +53,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Positions of units on transports are now updated. (Sep 9th 2005 Martin Gühmann)
 // - Improved grouping checks.
+// - SneakBomard check added to BombardCity and Bombard
 //
 //----------------------------------------------------------------------------
 
@@ -5187,10 +5188,13 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 				DPRINTF(k_DBG_GAMESTATE, ("Removing one pop from 0x%lx\n", c.m_id));
 				c.CD()->ChangePopulation(-1);
 			}
-			
-			Diplomat & defending_diplomat = Diplomat::GetDiplomat(c.GetOwner());
 
-			defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
+//EMOD
+			if(!m_array[i].GetDBRec()->GetSneakBombard()) {  //EMOD added by E for sneak bombarding
+
+				Diplomat & defending_diplomat = Diplomat::GetDiplomat(c.GetOwner());
+				defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
+			}
 		}
 
 		return atLeastOneBombarded;
@@ -5281,8 +5285,10 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 				if(numAttacks == 1){
                     // Inform defender 
 					PLAYER_INDEX defense_owner = defender.GetOwner();
-					Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
-					defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
+					if(!m_array[i].GetDBRec()->GetSneakBombard()) {  //EMOD added by E for sneak bombarding
+						Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
+						defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
+					}
 				}
 				// * Added auto-center for bombardment
                 if (defender.GetOwner() == g_selected_item->GetVisiblePlayer())
@@ -9899,6 +9905,10 @@ void ArmyData::AssociateEventsWithOrdersDB()
 
 void ArmyData::Settle()
 {
+
+	// else EMOD
+
+
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 						   GEV_Settle,
 						   GEA_Army, m_id,

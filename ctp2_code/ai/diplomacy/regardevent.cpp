@@ -1,7 +1,47 @@
 
 
 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Regard Event
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+// _SLOW_BUT_SAFE
+// - Define 2 other symbols (PROJECTED_CHECK_START and PROJECTED_CHECK_END) 
+//   when set. But the defined symbols are never used, so this doesn't do
+//   anything at all. This makes preprocessing and compilation slower, but
+//   should be safe.
+//
+// USE_LOGGING
+// - Enable logging when set, even when not a debug version. This is not
+//   original Activision code.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//  - Hidden Nationality check added to AfterBattle by E 18 Nov 2005 if unit is 
+//    not Hidden Nationality then Regard Event is Logged 
+//
+//----------------------------------------------------------------------------
 
 
 
@@ -74,7 +114,7 @@ STDEHANDLER(KillUnitRegardEvent)
 		return GEV_HD_Continue;
 	}
 
-	
+	DPRINTF(k_DBG_AI, ("//	Kill Unit regard event\n"));  //EMOD added
 	
 	CellUnitList army;
 	g_theWorld->GetArmy(u.RetPos(), army);
@@ -152,111 +192,6 @@ STDEHANDLER(BorderIncursionRegardEvent)
 	return GEV_HD_Continue;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 STDEHANDLER(InvaderMovementRegardEvent)
 {
 	Army a;
@@ -319,6 +254,7 @@ STDEHANDLER(BattleAftermathRegardEvent)
 {
 	Army army;
 	MapPoint pos;
+
 	Unit ta;
 	Unit td;
 	sint32 attack_owner, defense_owner;
@@ -338,10 +274,38 @@ STDEHANDLER(BattleAftermathRegardEvent)
 	if(!args->GetPlayer(1, defense_owner))
 		return GEV_HD_Continue;
 
-	Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
+// EMOD
+	DPRINTF(k_DBG_AI, ("//	All Sneakattack\n")); // EMOD
 
+	bool AllSneakAttack = true;
+
+	sint32 i;
+	if(army.IsValid()) {
+		for(i = 0; i < army.Num(); i++) {
+			if(!army[i].GetDBRec()->GetSneakAttack()){
+				AllSneakAttack = false;
+				break;
+			}	
+		}
+	}
+
+	Cell *cell = g_theWorld->GetCell(pos);
+	CellUnitList *defender = g_theWorld->GetCell(pos)->UnitArmy();
+		for(i = 0; i < defender->Num(); i++) {
+			if(!defender->Access(i).GetDBRec()->GetSneakAttack()){
+				AllSneakAttack = false;
+				break;
+			}
+		}
+
+		
 	
-	defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	if(!AllSneakAttack){
+
+		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
+		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	}
+
 
 	return GEV_HD_Continue;
 }
@@ -1294,8 +1258,18 @@ STDEHANDLER(PillageUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
+// EMOD - Hidden Nationality check added by E 19 Nov 2005 - if unit is not Hidden Nationality then Regard Event is Logged 
+	if(!(unit.GetDBRec()->GetSneakPillage() == true)) {
+
+//; || (!(td.GetDBRec()->GetHiddenNationality() == true)); 
+//original code
 	victim_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+//  end original code
+	}
+// end EMOD
+
+	
+
 
 	return GEV_HD_Continue;
 }
