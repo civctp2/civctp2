@@ -17,7 +17,8 @@
 //
 // Compiler flags
 //
-// - None
+// CTP1_TRADE
+// - Creates an executable with trade like in CTP1. Currently broken.
 //
 //----------------------------------------------------------------------------
 //

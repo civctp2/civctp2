@@ -17,8 +17,11 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
+//
+// CTP1_TRADE
+// - Creates an executable with trade like in CTP1. Currently broken.
 //
 //----------------------------------------------------------------------------
 //
@@ -32,6 +35,8 @@
 //   - April 24th 2005 Martin Gühmann
 // - Moved UnitValidForOrder from ArmyData to be able to access the Unit
 //   properties as well. - April 24th 2005 Martin Gühmann
+// - Removed some unsused method to removed some unused in methods in
+//   CityData.. - Aug 6th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -65,8 +70,8 @@ class SlicObject;
 class CityData;
 class aui_Surface;
 
-#define k_UNIT_VERSION_MAJOR	0
-#define k_UNIT_VERSION_MINOR	0
+#define k_UNIT_VERSION_MAJOR    0
+#define k_UNIT_VERSION_MINOR    0
 
 enum CAUSE_REMOVE_ARMY;
 enum CAUSE_REMOVE_CITY; 
@@ -76,9 +81,9 @@ typedef sint32 AdvanceType;
 enum WORLD_DIRECTION;
 
 class Unit : public ID {
-    void RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, sint32 killedBy);
+	void RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, sint32 killedBy);
 
-public: 
+public:
 	Unit () : ID() { return; } ;
 	Unit (sint32 val) : ID (val) { return; };
 	Unit (uint32 val) : ID (val) { return; };
@@ -260,7 +265,7 @@ public:
 
 	BOOL GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID);
 
-	
+
 	BOOL CanSettle(const MapPoint &pos) const;
 
 	BOOL IsSettleLand() const;
@@ -300,10 +305,8 @@ public:
 	sint32 ImprovementCanRefuel(const Unit &u) const;
 	void UnsetIsInTransport();
 
-	void GetProductionStats(sint32 &s, sint32 &t, sint32 &f) const;
 	void GetPop(sint32 &p)const;
 	void GetTurnsToNextPop(sint32 &p)const;//PFT 29 mar 05, show # turns until city next grows a pop
-	void GetTradeStats(sint32 &g, sint32 &l, sint32 &sci) const;
 	sint32 IsCity() const;
 	void DrawCityStats(aui_Surface *surf, sint32 x, sint32 y);
 
@@ -438,7 +441,7 @@ public:
 	BOOL CanSee(const Army &army) const;
 
 #ifdef _DEBUG
-	void SetIgnoreHappiness(BOOL v); 
+	void SetIgnoreHappiness(BOOL v);
 #endif
 
 
@@ -502,9 +505,7 @@ public:
 
 	void SetCitySize(sint32 size);
 	sint32 GetCombatUnits() const;
-	void GetProjectedHappinessCrime(double &hap, double &crime);
 
-	BOOL CanHavePopType(sint32 type) const;
 	BOOL CanBuildUnit(sint32 type) const;
 	BOOL CanBuildBuilding(sint32 type) const;
 	
@@ -623,6 +624,6 @@ public:
 uint32 Unit_Unit_GetVersion(void) ;
 #else
 
-class Unit; 
+class Unit;
 
 #endif

@@ -77,7 +77,8 @@ void Player::BeginTurn()
 		g_controlPanel->GetWindow()->DrawChildren();
 	}
 
-	for(sint32 i = m_messages->Num() - 1; i >= 0; i--) {
+	sint32 i;
+	for(i = m_messages->Num() - 1; i >= 0; i--) {
 		if(!g_theMessagePool->IsValid(m_messages->Access(i))) {
 			m_messages->DelIndex(i);
 			continue;
@@ -147,35 +148,34 @@ void Player::BeginTurn()
 							   GEA_Player, m_owner,
 							   GEA_End);
 
-		{
 			
-			sint32 n = m_all_cities->Num();
-			sint32 i;
-			for(i = 0; i < n; i++) {
-				g_gevManager->AddEvent(GEV_INSERT_Tail,
-									   GEV_CityTurnPreProduction,
-									   GEA_City, m_all_cities->Access(i),
-									   GEA_End);
-			}
-			
+		sint32 n = m_all_cities->Num();
+		////////////////////////
+		for(i = 0; i < n; i++) {
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
-								   GEV_BeginTurnProduction,
-								   GEA_Player, m_owner,
-								   GEA_End);
-			
-			
-			for(i = 0; i < n; i++) {
-				g_gevManager->AddEvent(GEV_INSERT_Tail,
-									   GEV_CityBeginTurn,
-									   GEA_City, m_all_cities->Access(i),
-									   GEA_End);
-			}
-			
-			g_gevManager->AddEvent(GEV_INSERT_Tail,
-								   GEV_BeginTurnSupport,
-								   GEA_Player, m_owner,
+								   GEV_CityTurnPreProduction,
+								   GEA_City, m_all_cities->Access(i),
 								   GEA_End);
 		}
+			
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
+							   GEV_BeginTurnProduction,
+							   GEA_Player, m_owner,
+							   GEA_End);
+			
+			
+		for(i = 0; i < n; i++) {
+			g_gevManager->AddEvent(GEV_INSERT_Tail,
+								   GEV_CityBeginTurn,
+								   GEA_City, m_all_cities->Access(i),
+								   GEA_End);
+		}
+		//////////////////////// Have to be merged? Or seperated?
+			
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
+							   GEV_BeginTurnSupport,
+							   GEA_Player, m_owner,
+							   GEA_End);
 
 		
 		

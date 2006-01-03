@@ -16,12 +16,20 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// CTP1_TRADE
+// - Creates an executable with trade like in CTP1. Currently broken.
+//
+// _DEBUG
+// - Generate debug version when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Activision patch reimplementation: propagate the defensive bonus.
+// - Replaced some member names to match the new one in CityData. 
+//   - Aug 6th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -74,7 +82,7 @@ void NetCity::Packetize(uint8* buf, uint16& size)
 	PUSHLONG(cityData->m_slaveBits);
 	PUSHLONG(cityData->m_shieldstore);
 	PUSHLONG(cityData->m_shieldstore_at_begin_turn);
-	PUSHLONG(cityData->m_trade);
+	PUSHLONG(cityData->m_net_gold);
 	PUSHLONG(cityData->m_science);
 	PUSHLONG(cityData->m_luxury);
 	PUSHLONG(cityData->m_city_attitude);
@@ -206,7 +214,7 @@ void NetCity::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			cityData->m_shieldstore = shieldstore;
 		}
 		PLCHK(cityData->m_shieldstore_at_begin_turn);
-		PLCHK(cityData->m_trade);
+		PLCHK(cityData->m_net_gold);
 		PLCHK(cityData->m_science);
 		PLCHK(cityData->m_luxury);
 		PULLLONGTYPE(cityData->m_city_attitude, CITY_ATTITUDE);
@@ -280,7 +288,7 @@ void NetCityName::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	PULLLONGTYPE(home_city, Unit);
 	char name[k_MAX_NAME_LEN];
 	PULLSTRING(name);
-	if(g_theUnitPool->IsValid(home_city)) {		
+	if(g_theUnitPool->IsValid(home_city)) {
 		if(!home_city->GetCityData()) {
 			
 			
@@ -318,16 +326,16 @@ void NetCity2::Packetize(uint8* buf, uint16 &size)
 
 	PUSHLONG((uint32)m_data->m_home_city);
 	
-	PUSHLONG(m_data->m_trade_lost_to_crime);
-	PUSHLONG(m_data->m_gross_trade);
+	PUSHLONG(m_data->m_gold_lost_to_crime);
+	PUSHLONG(m_data->m_gross_gold);
 	PUSHLONG(m_data->m_goldFromTradeRoutes);
-	PUSHLONG(m_data->m_gross_production_this_turn);
-	PUSHLONG(m_data->m_shields_this_turn);
-	PUSHLONG(m_data->m_shields_lost_to_crime);
+	PUSHLONG(m_data->m_gross_production);
+	PUSHLONG(m_data->m_net_production);
+	PUSHLONG(m_data->m_production_lost_to_crime);
 	PUSHLONG64((uint64)m_data->m_builtWonders);
 	PUSHDOUBLE(m_data->m_food_delta);
-	PUSHDOUBLE(m_data->m_gross_food_this_turn);
-	PUSHDOUBLE(m_data->m_food_produced_this_turn);
+	PUSHDOUBLE(m_data->m_gross_food);
+	PUSHDOUBLE(m_data->m_net_food);
 	PUSHDOUBLE(m_data->m_food_lost_to_crime);
 	PUSHDOUBLE(m_data->m_food_consumed_this_turn);
 	PUSHLONG(m_data->m_total_pollution);
@@ -412,22 +420,22 @@ void NetCity2::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		}
 	}
 
-	double oldgross = m_data->m_gross_food_this_turn, 
-		oldproduced = m_data->m_food_produced_this_turn, 
+	double oldgross = m_data->m_gross_food, 
+		oldproduced = m_data->m_net_food, 
 		oldconsumed = m_data->m_food_consumed_this_turn;
 	double oldLostToCrime = m_data->m_food_lost_to_crime;
 	sint32 oldaccum = m_data->m_accumulated_food;
 
-	PULLLONG(m_data->m_trade_lost_to_crime);
-	PULLLONG(m_data->m_gross_trade);
+	PULLLONG(m_data->m_gold_lost_to_crime);
+	PULLLONG(m_data->m_gross_gold);
 	PULLLONG(m_data->m_goldFromTradeRoutes);
-	PULLLONG(m_data->m_gross_production_this_turn);
-	PULLLONG(m_data->m_shields_this_turn);
-	PULLLONG(m_data->m_shields_lost_to_crime);
+	PULLLONG(m_data->m_gross_production);
+	PULLLONG(m_data->m_net_production);
+	PULLLONG(m_data->m_production_lost_to_crime);
 	PULLLONG64(m_data->m_builtWonders);
 	PULLDOUBLE(m_data->m_food_delta);
-	PULLDOUBLE(m_data->m_gross_food_this_turn);
-	PULLDOUBLE(m_data->m_food_produced_this_turn);
+	PULLDOUBLE(m_data->m_gross_food);
+	PULLDOUBLE(m_data->m_net_food);
 	PULLDOUBLE(m_data->m_food_lost_to_crime);
 	PULLDOUBLE(m_data->m_food_consumed_this_turn);
 	PULLLONG(m_data->m_total_pollution);
@@ -489,15 +497,15 @@ void NetCity2::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	if(m_data->m_owner == g_network.GetPlayerIndex() &&
 		!isInitialPacket) {
-		Assert(oldgross == m_data->m_gross_food_this_turn);
+		Assert(oldgross == m_data->m_gross_food);
 		Assert(oldLostToCrime == m_data->m_food_lost_to_crime);
-		Assert(oldproduced == m_data->m_food_produced_this_turn);
+		Assert(oldproduced == m_data->m_net_food);
 		Assert(oldconsumed == m_data->m_food_consumed_this_turn);
 		Assert(oldaccum == m_data->m_accumulated_food);
 
-		if(oldgross != m_data->m_gross_food_this_turn ||
+		if(oldgross != m_data->m_gross_food ||
 		   oldLostToCrime != m_data->m_food_lost_to_crime ||
-		   oldproduced != m_data->m_food_produced_this_turn ||
+		   oldproduced != m_data->m_net_food ||
 		   oldconsumed != m_data->m_food_consumed_this_turn ||
 		   oldaccum != m_data->m_accumulated_food) {
 			g_network.RequestResync(RESYNC_CITY_STATS);
