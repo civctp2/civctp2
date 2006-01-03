@@ -1549,7 +1549,7 @@ aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
 			result.first++;
 		} else {
 			
-			result.second = std::max(0L,
+			result.second = std::max(0,
 				result.second -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
 		}
@@ -1715,7 +1715,7 @@ sint32 aui_Control::NumberOfColumns(sint32 numberOfRows,
 
 		
 		numberOfColumns = std::max(numberOfColumns,
-			(imageEnd - imageStart + 1L));
+			(imageEnd - imageStart + 1));
 	}
 
 	
