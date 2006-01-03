@@ -32,6 +32,10 @@
 //   (L. Hirth 6/2004)
 // - Entrenching units are treated like Entrenched units. (Oct 16th 2005 Martin Gühmann)
 // - Added select city instead of army option. (Oct 16th 2005 Martin Gühmann)
+// - Added option to avoid an end turn if there are cities with empty build 
+//   queues. (Oct. 22nd 2005 Martin Gühmann) Doesn't really work.
+// - Added option to allow end turn if the game runs in the background,
+//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -635,8 +639,7 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 		return;
 	}
 
-	if(
-	   g_theProfileDB->IsAutoTurnCycle() && !g_network.IsActive()) {
+	if(g_theProfileDB->IsAutoTurnCycle() && !g_network.IsActive()) {
 		sint32 i;
 		BOOL endTurn = TRUE;
 
@@ -658,10 +661,10 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 		if(endTurn) {
 			for(i = p->m_all_cities->Num() - 1; i >= 0; i--) {
 				Unit city = p->m_all_cities->Access(i);
-				if(city.GetData()->GetCityData()->
-				   GetBuildQueue()->GetHead() == NULL &&
-				   !city.GetData()->GetCityData()->IsBuildingInfrastructure() &&
-				   !city.GetData()->GetCityData()->IsBuildingCapitalization()) {
+				if(city.GetData()->GetCityData()->GetBuildQueue()->GetHead() == NULL
+				&&!city.GetData()->GetCityData()->IsBuildingInfrastructure() 
+				&&!city.GetData()->GetCityData()->IsBuildingCapitalization()
+				){
 					SetSelectCity(p->m_all_cities->Access(i));
 					if(IsAutoCenterOn()) {
 						MapPoint pos;
@@ -671,6 +674,15 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 						}
 					}
 					endTurn = FALSE;
+					// TODO: Figure out why this doesn't work. 
+					// Hint MaybeAutoEndTurn, well that's obvious, but for now ...
+					// But apart from that this code doesn't seem to do the 
+					// desired effect on the auto end turn code, either.
+					if(!g_theProfileDB->GetValueByName("EndTurnWithEmptyBuildQueues")
+					&& g_player[GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_HUMAN
+					){
+						return;
+					}
 					break;
 				}
 			}
@@ -678,10 +690,11 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 
 		
 		
-		if(endTurn) {
-			if(g_c3ui->TopWindowIsNonBackground()) {
-				endTurn = FALSE;
-			}
+		if(endTurn
+		&& g_c3ui->TopWindowIsNonBackground()
+		&& !g_theProfileDB->GetValueByName("RunInBackground")
+		){
+			endTurn = FALSE;
 		}
 			
 		

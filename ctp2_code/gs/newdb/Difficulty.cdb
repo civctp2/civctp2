@@ -1,0 +1,151 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Difficuilt type descriptor
+#  Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+#  Disclaimer
+#
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+# - Created file. (Sep 5th 2005 Martin Gühmann)
+#
+#-----------------------------------------------------------------------------
+
+Difficulty{
+	int					BaseContentment		aka BASE_CONTENTMENT			# starting happiness
+	int					GranaryCoeff		aka GRANARY_COEF				# a city needs this number times the pop food to grow
+	float				BigCityScale		aka BIG_CITY_SCALE				# how much each unhappy person matters
+	float				BigCityOffset		aka BIG_CITY_OFFSET				# population above this size are unhappy
+	int					ScienceHandicap		aka SCIENCE_HANDICAP			# How much extra science to get advances
+	float				PollutionMultiplier	aka POLLUTION_MULTIPLIER		# how much extra pollution
+	float				RiotChance			aka RIOT_CHANCE					# chance of rioting for each happiness point below const->RIOT_LEVEL
+	float				StarvationEffect	aka STARVATION_EFFECT			# How much happiness a city loses when starving
+	int					StartingGold		aka STARTING_GOLD				# How much gold the player starts with
+	int					VisionBonus			aka SUPER_STEALTH_FUN_FACTOR	# I can see for miles & miles
+	int					BaseScore			aka	BASE_SCORE					# base score from which to generate the civ score
+
+	Struct Period{
+		int StartTurn    aka START_TURN
+		int YearsPerTurn aka YEARS_PER_TURN
+	}
+
+	Struct TimeScale{
+		int StartYear aka START_YEAR
+		int NumPeriods aka NUM_PERIODS
+		Struct Period[] Period aka PERIOD
+		StringID NegativeYearFormat aka NEGATIVE_YEAR_FORMAT
+		StringID PositiveYearFormat aka POSITIVE_YEAR_FORMAT
+	}
+
+	Struct TimeScale	TimeScale aka TIME_SCALE
+
+	float				FeatsFactor					aka FEATS_FACTOR
+	float				AdvanceFactor				aka ADVANCES_FACTOR
+	float				WondersFactor				aka WONDERS_FACTOR
+	float				Cities0To3Factor			aka CITIES0TO30_FACTOR
+	float				Cities3To10Factor			aka CITIES30TO100_FACTOR
+	float				Cities10To50Factor			aka CITIES100TO500_FACTOR
+	float				Cities50PlusFactor			aka CITIES500PLUS_FACTOR
+	float				CitiesRecapturedFactor		aka CITIES_RECAPTURED_FACTOR
+	float				PopulationFactor			aka POPULATION_FACTOR
+	float				RankFactor					aka RANK_FACTOR
+	float				OpponentsConqueredFactor	aka OPPONENTS_CONQUERED_FACTOR
+	float				AlliesFactor				aka ALLIES_FACTOR
+	float				WonderVictoryBonus			aka WONDER_VICTORY_BONUS
+	float				SploVictoryBonus			aka SOLO_VICTORY_BONUS
+	float				AlliedVictoryBonus			aka ALLIED_VICTORY_BONUS
+
+	int					AIStartUnits				aka AI_START_UNITS
+	int					AIStartGold					aka AI_START_GOLD
+	int					AIStartAdvances				aka AI_START_ADVANCES
+	int					AIStartPublicWorks			aka AI_START_PUBLIC_WORKS
+	int					HumanStartLocation			aka HUMAN_START_LOCATION
+
+	int					AIIntelligenceFactor			aka AI_INTELLIGENCE_FACTOR
+	int					AIGangUpFactor					aka AI_GANG_UP_FACTOR
+	int					DistanceFromCapitolAdjustment	aka DISTANCE_FROM_CAPITOL_ADJUSTMENT
+	int					AIDistanceFromCapitolAdjustment	aka AI_DISTANCE_FROM_CAPITOL_ADJUSTMENT
+	int					PollutionAdjust					aka POLLUTION_ADJUST
+
+	# Resource Adjustment Amounts
+	# when ai is ranked by this amount or less below lowest ranked human, 
+	# then use AI_MIN_BEHIND_TECHNOLOGY_* numbers
+	float				AIMinBehind					aka	AI_MIN_BEHIND_PERCENT
+
+	# when ai is ranked by this amount or less below lowest ranked human, 
+	# then use ai_max_behind* numbers
+	float				AIMaxBehind					aka	AI_MAX_BEHIND_PERCENT
+
+	# when ai is ranked by atleast this amount above highest ranked human,
+	# then use ai_min_ahead* numbers
+	float				AIMinAhead					aka	AI_MIN_AHEAD_PERCENT
+
+	# when ai is ranked by this amount or more above highest ranked human,
+	# then use ai_max_ahead* numbers
+	float				AIMaxAhead					aka	AI_MAX_AHEAD_PERCENT
+
+	# note: scale values linearly between max-min when amount 
+	# behind/ahead are between min-max
+
+	# % amount to multiply advance cost by per age for ai
+	float[]				AIMinBehindTechnologyCosts			aka	AI_MIN_BEHIND_TECHNOLOGY_COST
+	float[]				AIMaxBehindTechnologyCosts			aka	AI_MAX_BEHIND_TECHNOLOGY_COST
+
+	# % amount to multiply production cost by per age for ai
+	float[]				AIMinBehindProductionCostAdjustment	aka	AI_MIN_BEHIND_PRODUCTION_COST_ADJUSTMENT
+	float[]				AIMaxBehindProductionCostAdjustment	aka	AI_MAX_BEHIND_PRODUCTION_COST_ADJUSTMENT
+
+	# multiplier for gold collected for ai
+	float[]				AIMinBehindGoldCostAdjustment		aka	AI_MIN_BEHIND_GOLD_ADJUSTMENT
+	float[]				AIMaxBehindGoldCostAdjustment		aka	AI_MAX_BEHIND_GOLD_ADJUSTMENT 
+
+	# % amount to multiply advance cost by per age for ai
+	float[]				AIMinAheadTrchnologyCost			aka	AI_MIN_AHEAD_TECHNOLOGY_COST
+	float[]				AIMaxAheadTrchnologyCost			aka	AI_MAX_AHEAD_TECHNOLOGY_COST
+
+	# % amount to multiply production cost by per age for ai
+	float[]				AIMinAheadProductionCostAdjustment	aka	AI_MIN_AHEAD_PRODUCTION_COST_ADJUSTMENT
+	float[]				AIMaxAheadProductionCostAdjustment	aka	AI_MAX_AHEAD_PRODUCTION_COST_ADJUSTMENT
+
+	# multiplier for gold collected fo ai
+	float[]				AIMinAheadGoldAdjustment			aka	AI_MIN_AHEAD_GOLD_ADJUSTMENT
+	float[]				AIMaxAheadGoldAdjustment			aka	AI_MAX_AHEAD_GOLD_ADJUSTMENT
+
+	int					MaxHumanAdvances					aka	MAX_HUMAN_ADVANCES
+	int					MaxAIAdvances						aka	MAX_AI_ADVANCES
+	float				HumanScienceBonus					aka	HUMAN_SCIENCE_BONUS		# % amount to add to advance cost for the player
+	float				HumanFoodBonus						aka	HUMAN_FOOD_BONUS		# % amount to add to food collected for the player
+
+	#Starting Condtions
+	int					ExtraSettlerChance					aka	EXTRA_SETTLER_CHANCE
+
+	struct AdvanceChance{
+		# Don't change in this struct anything, otherwise you break loading the old DiffDB.txt.
+		Record Advance StartAdvance
+		int            HumanChance    # Needs to be checked
+		int            AIChance       # Needs to be checked
+	}
+
+	struct AdvanceChances{
+		struct AdvanceChance[] AdvanceChance
+	}
+
+	struct AdvanceChances AdvanceChances aka ADVANCE_CHANCES
+
+	int					PollutionStartProductionLevel		aka	POLLUTION_START_PRODUCTION_LEVEL
+	int					PollutionStartPopulationLevel		aka	POLLUTION_START_POPULATION_LEVEL
+	int					PollutionProductionRatio			aka	POLLUTION_PRODUCTION_RATIO
+	int					PollutionPopulationRatio			aka	POLLUTION_POPULATION_RATIO
+
+}

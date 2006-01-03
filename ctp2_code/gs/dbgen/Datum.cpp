@@ -35,6 +35,7 @@
 // - Added alias names and the possibility to have default values from 
 //   other entries. (Aug 26th 2005 Martin Gühmann)
 // - Modernised destructor code.
+// - Fixed operator equal generation for non-integer arrays. (Jan 3rd 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -838,7 +839,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 
 			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
 			fprintf(outfile, "    {\n");
-			fprintf(outfile, "        m_%s = new sint32 [rval.m_num%s];\n", m_name, m_name );
+			fprintf(outfile, "        m_%s = new %s[rval.m_num%s];\n", m_name, TypeString(), m_name );
 			fprintf(outfile, "        memcpy(m_%s, rval.m_%s, sizeof(%s)*rval.m_num%s);\n", m_name, m_name, TypeString(), m_name);
 			fprintf(outfile, "    }\n");
 			fprintf(outfile, "    m_num%s = rval.m_num%s;\n\n",m_name,m_name);

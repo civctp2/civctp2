@@ -273,6 +273,7 @@ int g_gameWatchID = -1;
 #include "AdvanceListRecord.h"
 #include "PersonalityRecord.h"
 #include "CivilisationRecord.h"
+//#include "DifficultyRecord.h"
 
 #include "UnitDynArr.h"
 
@@ -744,6 +745,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	DBLexer *lex = NULL;
 
 	g_theUnitDB = new CTPDatabase<UnitRecord>;
+//	g_theDifficultyDB = new CTPDatabase<DifficultyRecord>;
 	g_theIconDB = new CTPDatabase<IconRecord>;
 	g_theAdvanceDB = new CTPDatabase<AdvanceRecord>;
 	g_theSpriteDB = new CTPDatabase<SpriteRecord>;
@@ -911,6 +913,15 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 		if (!g_theDifficultyDB->Parse(g_difficultydb_filename))
 			return FALSE;
 	}
+
+	// TODO: Replace all the old uses of g_theDifficultyDB by the new all 
+	// over the code. However the old DiffDB.txt can be parsed this is tested.
+//	if(g_theDifficultyDB) {
+//		if (!g_theDifficultyDB->Parse(C3DIR_GAMEDATA, g_difficultydb_filename)) {
+//			ExitGame();
+//			return FALSE;
+//		}
+//	}
 
 	g_theProgressWindow->StartCountingTo( 150 );
 
@@ -1273,6 +1284,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	if(!g_theFeatDB->ResolveReferences()) return FALSE;
 	if(!g_theEndGameObjectDB->ResolveReferences()) return FALSE;
 	if(!g_theRiskDB->ResolveReferences()) return FALSE;
+//	if(!g_theDifficultyDB->ResolveReferences()) return FALSE;
 
 	g_theProgressWindow->StartCountingTo( 510 );
 

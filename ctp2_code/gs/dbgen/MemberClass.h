@@ -27,6 +27,7 @@
 // - Modified AddBitPair function to allow bit pairs to have default values
 //   so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
+// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -53,6 +54,7 @@ public:
 	void ExportInitialization(FILE *outfile, char *recordName);
 	void ExportParser(FILE *outfile, char *recordName);
 	void ExportTokenCases(FILE *outfile, char *recordName);
+	void ExportDefaultToken(FILE *outfile, char *recordName);
 	void ExportOtherRecordIncludes(FILE *outfile);
 	void ExportDataCode(FILE *outfile, char *recordName);
 	void ExportResolver(FILE *outfile, const char *recordName);

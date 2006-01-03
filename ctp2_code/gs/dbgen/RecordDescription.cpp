@@ -57,6 +57,8 @@
 // - Added accessors for slic database array access. (Sep 16th 2005 Martin Gühman)
 // - Made float arrays possible. (Sep 16th 2005 Martin Gühman)
 // - Made value of int databases accessable. (Sep 16th 2005 Martin Gühman)
+// - If database records have no name a default name is generated. e.g.
+//   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin Gühman)
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
@@ -488,7 +490,7 @@ void RecordDescription::ExportMethods(FILE *outfile)
 
 
 	fprintf(outfile, "    void CheckRequiredFields(DBLexer *lex);\n");
-	fprintf(outfile, "    sint32 Parse(DBLexer *lex);\n\n");
+	fprintf(outfile, "    sint32 Parse(DBLexer *lex, sint32 numRecords);\n\n");
 	fprintf(outfile, "    void ResolveDBReferences();\n");
 	fprintf(outfile, "    void Merge(const %sRecord & rval);\n", m_name);
 
@@ -835,7 +837,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 	fprintf(outfile, "}\n");
 
 	fprintf(outfile, "\n");
-	fprintf(outfile, "sint32 %sRecord::Parse(DBLexer *lex)\n", m_name);
+	fprintf(outfile, "sint32 %sRecord::Parse(DBLexer *lex, sint32 numRecords)\n", m_name);
 	fprintf(outfile, "{\n");
 	if((m_baseType != DATUM_NONE)) {
 		
@@ -886,7 +888,12 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "}\n");
 	} else {
 		
-		
+		char uppName[256];
+		strcpy(uppName, m_name);
+		for(short unsigned int i = 0; i < strlen(m_name); i++){
+			uppName[i] = toupper(m_name[i]);
+		}
+
 		fprintf(outfile, "    bool done = false;\n");
 		fprintf(outfile, "    sint32 result = 0;\n");
 		fprintf(outfile, "    sint32 tok;\n");
@@ -900,18 +907,27 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    }\n");
 
 		fprintf(outfile, "    if(tok != k_Token_Name) {\n");
-		fprintf(outfile, "        DBERROR((\"Record does not start with name\"));\n");
-		fprintf(outfile, "        return 0;\n");
+		fprintf(outfile, "        char newName[256];\n");
+		fprintf(outfile, "        sprintf(newName, \"%s_%s\", numRecords);\n", uppName, "%i");
+		fprintf(outfile, "        if(!g_theStringDB->GetStringID(\"newName\", m_name)) {\n");
+		
+		
+		fprintf(outfile, "            g_theStringDB->InsertStr(\"newName\", \"newName\");\n");
+		fprintf(outfile, "            if(!g_theStringDB->GetStringID(\"newName\", m_name))\n");
+		fprintf(outfile, "                SetTextName(\"newName\");\n");
+		fprintf(outfile, "        }\n");
 		fprintf(outfile, "    }\n");
-		fprintf(outfile, "    if(!g_theStringDB->GetStringID(lex->GetTokenText(), m_name)) {\n");
+		fprintf(outfile, "    else{\n");
+		fprintf(outfile, "        if(!g_theStringDB->GetStringID(lex->GetTokenText(), m_name)) {\n");
 		
 		
-		fprintf(outfile, "        g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());\n");
-		fprintf(outfile, "        if(!g_theStringDB->GetStringID(lex->GetTokenText(), m_name))\n");
-		fprintf(outfile, "            SetTextName(lex->GetTokenText());\n");
+		fprintf(outfile, "            g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());\n");
+		fprintf(outfile, "            if(!g_theStringDB->GetStringID(lex->GetTokenText(), m_name))\n");
+		fprintf(outfile, "                SetTextName(lex->GetTokenText());\n");
+		fprintf(outfile, "        }\n");
+		fprintf(outfile, "        tok = lex->GetToken();\n");
 		fprintf(outfile, "    }\n");
 		fprintf(outfile, "\n");
-		fprintf(outfile, "    tok = lex->GetToken();\n");
 
 		if(m_hasGovernmentsModified) {
 		fprintf(outfile, "    // Start of GovMod Specific lexical analysis\n");

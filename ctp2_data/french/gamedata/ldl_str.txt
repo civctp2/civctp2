@@ -3199,7 +3199,9 @@ str_profile_ShowExpensive                       "Afficher effets aménag. de case
 str_profile_ShowOrderUnion                      "Afficher les ordres pour les armées" 
 str_profile_RecentAtTop                         "Mettre les nouveaux messages en tête de liste"
 str_profile_CityClick                           "Sélectionner la ville au lieu de l'armée"
-str_profile_DebugSlic                           "Slic Debug Messages"
+str_profile_DebugSlic                           "Messages du débogueur de Slic"
+str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
+str_profile_RunInBackground                     "Allow end turn in background"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"0ptions Musique"

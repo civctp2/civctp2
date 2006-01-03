@@ -737,7 +737,7 @@ public:
 
 	void SetPlayerType(PLAYER_TYPE pt);
 
-	double GetPlayerType() { return m_playerType; };
+	PLAYER_TYPE GetPlayerType() { return m_playerType; };
 
 
 	static bool IsThisPlayerARobot(const sint32 &p)

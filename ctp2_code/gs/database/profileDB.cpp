@@ -35,6 +35,10 @@
 // - Option added to select whether an army is selected or a city is selected,
 //   if both options are available. (Oct 8th 2005 Martin Gühmann)
 // - DebugSlic and GoodAnim are now part of the advance options. (Oct 16th 2005 Martin Gühmann)
+// - Added option to avoid an end turn if there are cities with empty build 
+//   queues. (Oct. 22nd 2005 Martin Gühmann)
+// - Added option to allow end turn if the game runs in the background,
+//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -189,18 +193,20 @@ ProfileDB::ProfileDB()
     m_continent                         (USE_UNKNOWN),
     m_homogenous                        (USE_UNKNOWN),
     m_richness                          (USE_UNKNOWN),
-	m_closeEyepoint                     (FALSE),
-	m_colorSet                          (0),
-	m_showExpensive                     (FALSE),
-	m_showOrderUnion                    (FALSE),
-	m_recentAtTop                       (FALSE),
-	m_cityClick                         (FALSE),
+    m_closeEyepoint                     (FALSE),
+    m_colorSet                          (0),
+    m_showExpensive                     (FALSE),
+    m_showOrderUnion                    (FALSE),
+    m_recentAtTop                       (FALSE),
+    m_cityClick                         (FALSE),
+    m_dontSave                          (FALSE),
+    m_endTurnWithEmptyBuildQueues       (FALSE),
+    m_runInBackground                   (FALSE),
     m_vars                              (new PointerList<ProfileVar>),
-    m_loadedFromTutorial                (FALSE),
-    m_dontSave                          (FALSE)
+    m_loadedFromTutorial                (FALSE)
 {
 	for (size_t player = 0; player < k_MAX_PLAYERS; ++player) 
-    {
+	{
 		m_ai_personality[player][0] = 0;
 	}
 
@@ -210,16 +216,16 @@ ProfileDB::ProfileDB()
 	m_saveNote[0]           = 0;
 	m_ruleSets[0]           = 0;
 	m_gameWatchDirectory[0] = 0;
-
-    for (size_t map_pass = 0; map_pass < k_NUM_MAP_PASSES; ++map_pass)
-    {
-        m_map_plugin_name[map_pass][0]  = 0;
-        m_map_settings[map_pass]        = NULL;
-    };
+	
+	for (size_t map_pass = 0; map_pass < k_NUM_MAP_PASSES; ++map_pass)
+	{
+		m_map_plugin_name[map_pass][0]  = 0;
+		m_map_settings[map_pass]        = NULL;
+	};
 
 	Var("NumPlayers", PV_NUM, &m_nPlayers, NULL, false);
 	Var("AiOn", PV_BOOL, &m_ai_on, NULL, false);
-    Var("UseNiceStart", PV_BOOL, &m_use_nice_start, NULL, false); 
+	Var("UseNiceStart", PV_BOOL, &m_use_nice_start, NULL, false); 
 	Var("UseMapPlugin", PV_BOOL, &m_use_map_plugin, NULL, false);
 	
 	Var("Difficulty", PV_NUM, &m_difficulty, NULL, false);
@@ -354,6 +360,8 @@ ProfileDB::ProfileDB()
 	Var("RecentAtTop", PV_BOOL, &m_recentAtTop, NULL);
 	Var("RuleSets", PV_STRING, NULL, m_ruleSets, false);
 	Var("CityClick", PV_BOOL, &m_cityClick, NULL);
+	Var("EndTurnWithEmptyBuildQueues", PV_BOOL, &m_endTurnWithEmptyBuildQueues, NULL);
+	Var("RunInBackground", PV_BOOL, &m_runInBackground, NULL);
 }
 
 void ProfileDB::DefaultSettings(void)
@@ -370,8 +378,8 @@ ProfileDB::~ProfileDB()
 {
 	Save();
 
-    if (m_vars) 
-    {
+	if (m_vars) 
+	{
 		m_vars->DeleteAll();
 		delete m_vars;
 	}
@@ -383,49 +391,49 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 	MBCHAR *profileTxtFile;
 
 	if (forTutorial) 
-    {
+	{
 		m_loadedFromTutorial = TRUE;
 		profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
 		                                      "tut_profile.txt", profileName);
-    }
-    else
-    {
+	}
+	else
+	{
 		profileTxtFile = g_civPaths->FindFile(C3DIR_DIRECT, "userprofile.txt",
 		                                      profileName);
 		if (!profileTxtFile || !c3files_PathIsValid(profileTxtFile)) 
-        {
+		{
 			profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
 			                                      "profile.txt", profileName);
 		}
 	}
 	
 	if (profileTxtFile) 
-    { 
-		FILE * pro_file = c3files_fopen(C3DIR_DIRECT, profileTxtFile, "r");
-
+	{
+		FILE *pro_file = c3files_fopen(C3DIR_DIRECT, profileTxtFile, "r");
+			
 		if (pro_file) 
-        {
+		{
 			sint32 const    saved_width     = m_screenResWidth;
 			sint32 const    saved_height    = m_screenResHeight;
 			BOOL const      res             = Parse(pro_file);
 			fclose(pro_file);
 
 			if (res) 
-            {
+			{
 				Save();
 			}
 
 			if (forTutorial) 
-            {
-				m_screenResWidth    = saved_width;
-				m_screenResHeight   = saved_height;
+			{
+				m_screenResWidth = saved_width;
+				m_screenResHeight = saved_height;
 			}
 			
 			return res;
 		}
 	}
-    else 
-    {
+	else 
+	{
 		m_nPlayers  = PLAYER_COUNT_DEFAULT; 
 		m_ai_on     = FALSE;
 	} 
@@ -461,7 +469,7 @@ BOOL ProfileDB::Parse(FILE *file)
 			return FALSE;
 		}
 
-        char *  value = name + 1;
+		char *  value = name + 1;
 		while(*value != '=' && *value != 0) {
 			if(isspace(*value))
 				*value = 0;
@@ -528,7 +536,7 @@ BOOL ProfileDB::Parse(FILE *file)
 		}
 	}
 
-	return TRUE; 
+	return TRUE;
 }
 
 void ProfileDB::SetTutorialAdvice( BOOL val )
@@ -538,16 +546,16 @@ void ProfileDB::SetTutorialAdvice( BOOL val )
 
 void ProfileDB::SetDiplmacyLog(BOOL b)
 {
-	if (b == m_is_diplomacy_log_on) 
-    {
-	    // No action: keep current log status
-    }
+	if (b == m_is_diplomacy_log_on)
+	{
+		// No action: keep current log status
+	}
 	else
-    {
-        delete g_theDiplomacyLog;
-        g_theDiplomacyLog       = b ? new Diplomacy_Log : NULL;
-        m_is_diplomacy_log_on   = b;
-    }       
+	{
+		delete g_theDiplomacyLog;
+		g_theDiplomacyLog       = b ? new Diplomacy_Log : NULL;
+		m_is_diplomacy_log_on   = b;
+	}
 }
 
 void ProfileDB::SetPollutionRule( BOOL rule ) 
@@ -675,5 +683,3 @@ void ProfileDB::SetValueByName(const char *name, sint32 value)
 		walk.Next();
 	}
 }
-
-

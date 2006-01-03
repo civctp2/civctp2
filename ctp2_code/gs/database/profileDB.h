@@ -46,6 +46,10 @@
 // - Made file compilable in Win32 Test configuration.
 // - Option added to select whether an army is selected or a city is selected,
 //   if both options are available. (Oct 8th 2005 Martin Gühmann)
+// - Added option to avoid an end turn if there are cities with empty build 
+//   queues. (Oct. 22nd 2005 Martin Gühmann)
+// - Added option to allow end turn if the game runs in the background,
+//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -144,13 +148,13 @@ private:
     sint32 m_difficulty;
     sint32 m_risklevel;
 
-    sint32	m_genocide,
+    sint32  m_genocide,
             m_trade,
             m_simplecombat,
             m_pollution,
             m_lineofsight;
 
-    sint32	m_unitAnim,
+    sint32  m_unitAnim,
 
             m_goodAnim,
             m_tradeAnim,
@@ -170,10 +174,10 @@ private:
             m_cityLostWarning,
             m_autocenter;
 
-    sint32	m_fullScreenMovies;
-    sint32	m_showCityInfluence;
+    sint32  m_fullScreenMovies;
+    sint32  m_showCityInfluence;
 
-    sint32	m_invulnerableTrade,
+    sint32  m_invulnerableTrade,
             m_fogOfWar,
             m_startType;
 
@@ -326,6 +330,8 @@ private:
     sint32 m_recentAtTop;          // Add the most recent messages at the top.
     MBCHAR m_ruleSets[MAX_PATH];   // Data directory "include" path
     sint32 m_cityClick;            // Opens/selects a city instead of an army.
+    sint32 m_endTurnWithEmptyBuildQueues; // End turn even if there are empty build queues (human player only)
+    sint32 m_runInBackground;      // Allow the application to run in the background with autoturn
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;

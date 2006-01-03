@@ -169,7 +169,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
-# ADD CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include\\" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /Yu"c3.h" /FD /c
+# ADD CPP /nologo /G5 /MD /W4 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include\\" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /Yu"c3.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -4535,6 +4535,129 @@ SOURCE=..\gs\newdb\DBTokens.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\gs\newdb\Difficulty.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__DIFFI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Difficulty.cdb
+
+"$(ProjDir)\..\gs\newdb\DifficultyRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\DifficultyRecord.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\DifficultyRecord.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\gs\newdb\DiplomacyProposalRecord.cpp
 # End Source File
 # Begin Source File
@@ -4785,6 +4908,7 @@ SOURCE=..\gs\newdb\EndGameObject.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb
@@ -4796,6 +4920,7 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb
@@ -4807,6 +4932,7 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb
@@ -4818,6 +4944,7 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb
@@ -4829,6 +4956,7 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb
@@ -4840,6 +4968,7 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb
@@ -4851,6 +4980,7 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb
@@ -4862,6 +4992,7 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb
@@ -4873,6 +5004,7 @@ InputPath=..\gs\newdb\EndGameObject.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
 
+USERDEP__ENDGA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
 InputPath=..\gs\newdb\EndGameObject.cdb

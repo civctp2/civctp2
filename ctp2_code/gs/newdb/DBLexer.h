@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,6 +30,7 @@
 //   more details  _____ by MrBaggins Jan-04
 //
 //   * Added PeekAheadText member function prototype
+// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -79,6 +82,7 @@ class DBLexer
 	bool m_atEnd;
 	PointerList<DBCustomTokens> *m_customTokenStack;
 	char m_filename[_MAX_PATH];
+	sint32 m_currentToken;
 
 
 public:
@@ -92,9 +96,15 @@ public:
 	bool GetStringIdAssignment(sint32 &strId);
 	bool GetFileAssignment(char *&filename);
 
+	bool GetInt(sint32 &value);
+	bool GetFloat(double &value);
+	bool GetStringId(sint32 &strId);
+	bool GetFile(char *&filename);
+
 	void SetTokens(char **tokens, sint32 maxToken);
 	void RestoreTokens();
 
+	sint32 GetCurrentToken();
 	sint32 GetToken();
 	sint32 PeekAhead();
 

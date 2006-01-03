@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Base DB Template class header
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 // - Modernised some code: e.g. implemented the modified records list as a 
 //   std::vector, so we don't have to do the memory management ourselves.
 // - Added Serialize method for datachecks. (Aug 23rd 2005 Martin Gühmann)
+// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -146,6 +147,7 @@ public:
 	sint32 FindRecordNameIndex(const char *str) const;
 
 	bool GetRecordFromLexer(DBLexer *lex, sint32 &index, DBPARSE_ERROR &err);
+	bool GetCurrentRecordFromLexer(DBLexer *lex, sint32 &index, DBPARSE_ERROR &err);
 	bool ParseRecordInArray(DBLexer *lex, sint32 **array, sint32 *numElements, DBPARSE_ERROR &err);
 	bool ParseRecordInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize, DBPARSE_ERROR &err);
 	bool ResolveReferences();
