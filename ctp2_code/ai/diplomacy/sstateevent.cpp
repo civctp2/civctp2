@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : AI startegy control
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -438,25 +441,10 @@ STDEHANDLER(NuclearStrike_NextSStateEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	AiState state;
 
-#if defined(ACTIVISION_DEFAULT)
-	if ((diplomat.GetPersonality()->GetDiscoveryMilitary() ||
-		 diplomat.GetPersonality()->GetDiscoveryScientist()) &&
-		(diplomat.GetPersonality()->GetTrustworthinessChaotic() &&
-		 diplomat.GetPersonality()->GetAlignmentEvil()))
-	{
-		state.priority = 150;		   
-		g_theStrategyDB->GetNamedItem("STRATEGY_LAUNCH_NUKES", state.dbIndex);
-		
-
-		
-		diplomat.ConsiderStrategicState(state);
-	}
-#else
 	if(diplomat.GetPersonality()->GetNuclearStrikeStrategy()){
 		state.priority = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetPriority();
 		state.dbIndex = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetStrategyIndex();
 	}
-#endif
 
 	return GEV_HD_Continue;
 }

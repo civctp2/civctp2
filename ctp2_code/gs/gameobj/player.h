@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C/C++ header
 // Description  : Player game object header
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,12 @@
 //
 // Compiler flags
 //
-// - None
+// BATTLE_FLAGS
+//
+// _DEBUG_INCOMPATIBLE
+//
+// _DEBUG
+// - Generate debug version when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -28,6 +34,7 @@
 // - Made GetCivilisation method const - May 7th 2005 Martin Gühmann
 // - Import structure improved, merged with linux version.
 // - Made player.h to compile again.
+// - Removed unused void BeginTurnAllCities all cities method. - Aug. 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -738,14 +745,13 @@ public:
 
 	static bool IsThisPlayerARobot(const sint32 &p)
 	{
-	    Assert(0 <= p);
-	    Assert(p < k_MAX_PLAYERS);
+		Assert(0 <= p);
+		Assert(p < k_MAX_PLAYERS);
 		Assert(g_player);
 		Assert(g_player[p]);
 		return (g_player[p]->GetPlayerType() == PLAYER_TYPE_ROBOT);
 	}
 
-	void BeginTurnAllCities();
 	void BeginTurnWonders();
 	sint32 CalcWonderGold();
 	sint32 CalcTotalBuildingUpkeep();

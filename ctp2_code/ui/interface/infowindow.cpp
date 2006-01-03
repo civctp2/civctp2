@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Information window
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added Update function so that the info window doesn't need to be closed
+//   for update during the turns. - Aug 7th 2005 Martin
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -76,6 +96,30 @@ void InfoWindow::Open(void)
 
 	g_c3ui->AddWindow(s_InfoWindow->m_window);
 	s_InfoWindow->Show();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : InfoWindow::Update
+//
+// Description: Updates the information window without closing it.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void InfoWindow::Update(void)
+{
+	if(s_InfoWindow
+	&&!s_InfoWindow->m_window->IsHidden()
+	){
+		s_InfoWindow->Show();
+	}
 }
 
 void InfoWindow::Close(void)

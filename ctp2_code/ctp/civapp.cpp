@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main application initilisation, processing, and cleanup.
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -1967,7 +1968,7 @@ sint32 CivApp::CleanupAppDB(void)
 	g_pTurnLengthOverride = NULL;
 
 	m_dbLoaded = FALSE;
-    return 0;
+	return 0;
 }
 
 
@@ -1978,48 +1979,48 @@ sint32 CivApp::CleanupAppDB(void)
 sint32 CivApp::CleanupApp(void)
 {
 	if (m_appLoaded)
-    {
-	    GreatLibrary::Shutdown_Great_Library_Data();
-    	Splash::Cleanup();
-    	messagewin_Cleanup();
+	{
+		GreatLibrary::Shutdown_Great_Library_Data();
+		Splash::Cleanup();
+		messagewin_Cleanup();
 
-	    delete g_slicEngine;
-	    g_slicEngine = NULL;
+		delete g_slicEngine;
+		g_slicEngine = NULL;
 
-	    delete g_theMessagePool;
-	    g_theMessagePool = NULL;
-	    
-	    CivScenarios::Cleanup();
-        SoundManager::Cleanup();
+		delete g_theMessagePool;
+		g_theMessagePool = NULL;
+		
+		CivScenarios::Cleanup();
+		SoundManager::Cleanup();
 
-        delete g_theProfileDB; 
-        g_theProfileDB = NULL; 
+		delete g_theProfileDB; 
+		g_theProfileDB = NULL; 
 
-   	    delete g_theConstDB; 
-	    g_theConstDB = NULL; 
+		delete g_theConstDB; 
+		g_theConstDB = NULL; 
 
-	    gameinit_Cleanup();
-	    events_Cleanup();
-	    gameEventManager_Cleanup();
-	    g_network.Cleanup();
-	    CursorManager::Cleanup();
-	    sharedsurface_Cleanup();
-   	    CleanupAppUI();
-   	    cleanup_keymap();
-   	    CleanupAppDB();
-   	    CivPaths_CleanupCivPaths();
-        SlicSegment::Cleanup();
+		gameinit_Cleanup();
+		events_Cleanup();
+		gameEventManager_Cleanup();
+		g_network.Cleanup();
+		CursorManager::Cleanup();
+		sharedsurface_Cleanup();
+		CleanupAppUI();
+		cleanup_keymap();
+		CleanupAppDB();
+		CivPaths_CleanupCivPaths();
+		SlicSegment::Cleanup();
 
 // COM needed for DirectX Moviestuff
-#ifdef WIN32    
-	    CoUninitialize();
+#ifdef WIN32	
+		CoUninitialize();
 #endif
 
-	    display_Cleanup();
-    }
+		display_Cleanup();
+	}
 
 	m_appLoaded = FALSE;
-    return 0;
+	return 0;
 }
 
 

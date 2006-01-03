@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG_MEMORY
+// - Generates debug information when set.
+//
+// _TEST
+// ?
+//
+// _ACTOR_DRAW_OPTIMIZATION
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -1362,7 +1371,7 @@ void UnitActor::DrawCityWalls(BOOL fogged)
 
 			if (matchingSprite) 
 			{
-				cityImage = tileSet->GetImprovementData(matchingSprite->GetWalls());
+				cityImage = tileSet->GetImprovementData(static_cast<uint16>(matchingSprite->GetWalls()));
 			}
 			// else: keep default
 		}
@@ -1415,24 +1424,7 @@ void UnitActor::DrawCityWalls(BOOL fogged)
 void UnitActor::DrawForceField(BOOL fogged)
 {
 	sint32 which;
-#if defined(ACTIVISION_DEFAULT)
-	sint32 nudgeX, nudgeY;
 
-	if (g_theWorld->IsLand(m_pos)) {
-		nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
-		nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
-		which = 154;
-	} else
-	if (g_theWorld->IsWater(m_pos)) {
-		nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
-		nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
-		which = 155;
-	} else {
-		nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
-		nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
-		which = 156;
-	}
-#else
 	sint32 const	nudgeX	= 
 		(sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
 	sint32 const	nudgeY = 
@@ -1500,7 +1492,6 @@ void UnitActor::DrawForceField(BOOL fogged)
 		}
 	}
 	// else: keep default
-#endif
 
 	
 	Pixel16 *cityImage = g_tiledMap->GetTileSet()->GetImprovementData((uint16)which);

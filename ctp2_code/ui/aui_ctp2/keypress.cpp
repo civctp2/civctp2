@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Key press handling
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,13 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _PLAYTEST
+// - Generates version with utilities for playtesting
+//
+// _DEBUG
+// - Generate debug version when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,6 +32,8 @@
 // - Start the great library with the current research project of the player.
 // - Disabled restart key in network, hot seat and email gmase, by 
 //   Martin Gühmann.
+// - Opening the score tab of the info window doesn't close other windows
+//   anymore like the other tabs. - Aug 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -687,7 +696,6 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 		break;
 	case KEY_FUNCTION_OPEN_INFO_SCREEN:
 		if ( !g_modalWindow ) {
-			close_AllScreens();
 			InfoWindow::SelectScoreTab();
 			InfoWindow::Open();
 		}

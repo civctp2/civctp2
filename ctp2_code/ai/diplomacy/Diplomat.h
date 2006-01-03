@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : declarations for the Diplomat class
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,8 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------

@@ -18,11 +18,18 @@
 //
 // Compiler flags
 //
+// _MSC_VER
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// WIN32
+// - Generates windows specific code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - added linux specific code
+// - Added some casts. (Aug 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -81,7 +88,7 @@ extern CivPaths *g_civPaths;
 
 FILE* c3files_fopen(C3DIR dirID, const MBCHAR *s1, const MBCHAR *s2)
 {
-	MBCHAR		s[_MAX_PATH] = { 0 };
+	MBCHAR s[_MAX_PATH] = { 0 };
 
 	if (g_civPaths->FindFile(dirID, s1, s) != NULL) {
 		return fopen(s, s2);
@@ -144,8 +151,8 @@ size_t c3files_fwrite(const void *p, size_t i1, size_t i2, FILE *file)
 
 sint32 c3files_fprintf(FILE *file, const MBCHAR *s, ...)
 {
-	va_list		valist;
-	sint32		val;
+	va_list     valist;
+	sint32      val;
 
 	va_start(valist, s);
 	val = (sint32)vfprintf(file, s, valist);
@@ -292,11 +299,11 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size)
 BOOL c3files_PathIsValid(const MBCHAR *path)
 {
 #if defined(WIN32)
-   struct _stat tmpstat;
+	struct _stat tmpstat;
 #else
-   struct stat  tmpstat;
+	struct stat  tmpstat;
 #endif
-	sint32			r;
+	sint32       r;
 
 #if defined(WIN32)
    r = _stat(path, &tmpstat);
@@ -320,9 +327,9 @@ BOOL c3files_CreateDirectory(const MBCHAR *path)
 
 void c3files_StripSpaces(MBCHAR *s)
 {
-	sint32		i;
-	sint32		j;
-	sint32		len = strlen(s);
+	sint32      i;
+	sint32      j;
+	sint32      len = strlen(s);
 
 	for (i=len-1; i>=0; i--) {
 		if (s[i] == ' ') {
@@ -366,7 +373,9 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<MBCHA
 	if (lpFileList ==  INVALID_HANDLE_VALUE) return FALSE;
 	
 	lpFileName = new MBCHAR[256];
-	strcpy(lpFileName, fileData.cFileName);
+	strcpy(lpFileName,fileData.cFileName);
+	list->AddTail(lpFileName);
+	
 	while(FindNextFile(lpFileList,&fileData))
 	{
 		lpFileName = new MBCHAR[256];
@@ -543,18 +552,18 @@ BOOL c3files_HasLegalCD()
 		if (!success) {
 #ifdef WIN32			
 			int rval = MessageBox(g_c3ui->TheHWND(),
-									appstrings_GetString(APPSTR_INSERTCDROM), 
-									appstrings_GetString(APPSTR_CDROM), 
-									MB_RETRYCANCEL | 
-										MB_ICONEXCLAMATION | 
-										MB_DEFBUTTON1 |
-										MB_SYSTEMMODAL |
-										MB_SETFOREGROUND);	
+			                      appstrings_GetString(APPSTR_INSERTCDROM),
+			                      appstrings_GetString(APPSTR_CDROM),
+			                      MB_RETRYCANCEL |
+			                      MB_ICONEXCLAMATION |
+			                      MB_DEFBUTTON1 |
+			                      MB_SYSTEMMODAL |
+			                      MB_SETFOREGROUND);
 
 			if (rval == IDCANCEL) {
 #endif // WIN32
 				c3errors_ErrorDialog(appstrings_GetString(APPSTR_CDROM),
-										appstrings_GetString(APPSTR_NEEDCDROM));		
+				                     appstrings_GetString(APPSTR_NEEDCDROM));
 				
 				exit(-1);
 #ifdef WIN32
