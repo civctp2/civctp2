@@ -249,14 +249,11 @@ sint32 RobotAstar2::EntryCost( const MapPoint &prev,
 							   BOOL &is_zoc, 
 							   ASTAR_ENTRY_TYPE &entry )
 {
-	BOOL r = TRUE;
-	r = UnitAstar::EntryCost(prev, pos, cost, static_cast<BOOL>(is_zoc), entry); 
+	BOOL r = UnitAstar::EntryCost(prev, pos, cost, is_zoc, entry); 
 
-	if (r == FALSE)  { 
-		return FALSE; 
-	} 
-
-	switch (m_pathType) 
+	if (r)  
+    { 
+	    switch (m_pathType) 
 		{
 		case PATH_TYPE_TRANSPORT:
 			r = TransportPathCallback(r, prev, pos, is_zoc, cost, entry);
@@ -266,13 +263,15 @@ sint32 RobotAstar2::EntryCost( const MapPoint &prev,
 			break;
 		}
 
-    if (cost < 1.0) 
-        cost = 1.0; 
-
-	if (((r == FALSE) || (k_ASTAR_BIG <= cost)) && 
-		(entry != ASTAR_RETRY_DIRECTION)) { 
-		return FALSE;
-	}
+        if (cost < 1.0)
+        { 
+            cost = 1.0; 
+        }
+        else if ((k_ASTAR_BIG <= cost) && (entry != ASTAR_RETRY_DIRECTION)) 
+        { 
+		    return FALSE;
+	    }
+    }
 
     return r; 
 }      

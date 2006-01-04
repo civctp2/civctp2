@@ -114,7 +114,7 @@ Pool<DATA_TYPE>::~Pool()
 template <class DATA_TYPE>
 DATA_TYPE * Pool<DATA_TYPE>::Get_Next_Pointer(int & which_element_is_it) 
 {
-	if (count >= (chunks.size() * chunk_size))
+	if (count >= (static_cast<int>(chunks.size()) * chunk_size))
 	{
 		if (!Prepare_New_Chunk())
 		{
