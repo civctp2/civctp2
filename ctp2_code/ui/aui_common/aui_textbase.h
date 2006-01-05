@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Text base class
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,8 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -26,6 +27,7 @@
 //
 // - Initialised all members in the default constructor, to prevent a crash 
 //   in the destructor.
+// - Added left and right to textblttype. (Aug 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -75,7 +77,9 @@ class aui_BitmapFont;
 
 
 #define k_AUI_TEXTBASE_LDL_BLTTYPE				"textblttype"
+#define k_AUI_TEXTBASE_LDL_LEFT					"left"
 #define k_AUI_TEXTBASE_LDL_CENTER				"center"
+#define k_AUI_TEXTBASE_LDL_RIGHT				"right"
 #define k_AUI_TEXTBASE_LDL_FILL					"fill"
 
 

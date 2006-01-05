@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : General text handling
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Unload font when something fails.
+// - Added left, center and right to textblttype. (Aug 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -138,6 +142,18 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 	if ( type )
 	{
 		if ( !stricmp( type, k_AUI_TEXTBASE_LDL_FILL ) )
+			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT |
+				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
+		else if ( !stricmp( type, k_AUI_TEXTBASE_LDL_LEFT ) )
+			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT |
+				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
+		else if ( !stricmp( type, k_AUI_TEXTBASE_LDL_CENTER ) )
+			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER |
+				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
+		else if ( !stricmp( type, k_AUI_TEXTBASE_LDL_RIGHT ) )
+			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTRIGHT |
+				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
+		else
 			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT |
 				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
 	}
