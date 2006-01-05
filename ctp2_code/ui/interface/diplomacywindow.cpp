@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Diplomacy window
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -76,14 +79,14 @@
 #include "DiplomacyDetails.h"
 #include "Diplomat.h"
 
-static MBCHAR *s_dipWindowBlock = "DiplomacyWindow";
-static DiplomacyWindow *s_dipWindow;
-extern  C3UI				*g_c3ui;
-extern ColorSet *g_colorSet;
-static MBCHAR *k_DIP_WINDOW_ATTRACT_BUTTON = "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton";
+static MBCHAR                 *s_dipWindowBlock = "DiplomacyWindow";
+static DiplomacyWindow        *s_dipWindow;
+extern C3UI                   *g_c3ui;
+extern ColorSet               *g_colorSet;
+static MBCHAR                 *k_DIP_WINDOW_ATTRACT_BUTTON = "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton";
 
-#define k_INTELLIGENCE_TAB 0
-#define k_NEGOTIATION_TAB 1
+#define k_INTELLIGENCE_TAB    0
+#define k_NEGOTIATION_TAB     1
 #define k_CREATE_PROPOSAL_TAB 2
 
 char *DiplomacyWindow::sm_toneIcons[DIPLOMATIC_TONE_MAX] = {
@@ -189,9 +192,9 @@ DiplomacyWindow::DiplomacyWindow(AUI_ERRCODE *err)
 }
 
 ctp2_Button * DiplomacyWindow::sm_detailsButton;
-ctp2_Button	* DiplomacyWindow::sm_warButton;
-ctp2_Button	* DiplomacyWindow::sm_embargoButton;
-ctp2_Button	* DiplomacyWindow::sm_messageButton;
+ctp2_Button * DiplomacyWindow::sm_warButton;
+ctp2_Button * DiplomacyWindow::sm_embargoButton;
+ctp2_Button * DiplomacyWindow::sm_messageButton;
 
 DiplomacyWindow::~DiplomacyWindow()
 {
@@ -1564,7 +1567,7 @@ bool DiplomacyWindow::AddProposalData(SlicObject &so, sint32 proposal, Diplomacy
 			so.AddInt(arg.pollution);
 			return true;
 		case k_DiplomacyProposal_Arg1_Percent_Bit:
-			so.AddInt(sint32(arg.percent * 100.0));
+			so.AddInt(static_cast<sint32>(arg.percent * 100.0));
 			return true;
 		default:
 			return true;
@@ -2373,11 +2376,11 @@ void DiplomacyWindow::RequestPollutionValue(sint32 player)
 	
 	spinner->SetMaximum(sint32(g_player[player]->GetPollutionLevel() * 0.95), 0);
 	
-	spinner->SetMinimum(sint32(g_player[player]->GetPollutionLevel() * 0.25), 0);
+	spinner->SetMinimum(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.25), 0);
 	
-	spinner->SetPage(sint32(g_player[player]->GetPollutionLevel() * 0.20), 0);
+	spinner->SetPage(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.20), 0);
 	
-	spinner->SetIncrement(sint32(g_player[player]->GetPollutionLevel() * 0.10), 0);
+	spinner->SetIncrement(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.10), 0);
 
 	g_c3ui->AddWindow(m_pollutionRequestWindow);
 }

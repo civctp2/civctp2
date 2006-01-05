@@ -27,17 +27,17 @@
 #### General Message Strings ####
 
 ## Instant Action Messages ##
-IA_BREAK_TREATY     			"Si nous violons notre traité avec les {player[1].civ_name_plural}, non seulement nous susciterons leur courroux, mais nous courrons également le risque de baisser dans l'estime des dirigeants de ce monde.  Etes-vous sûr de vouloir agir dans ce sens, {player[0].sir} ?"
-IA_BREAK_CEASE_FIRE 			"{player[0].sir_cap}, êtes-vous sûr de vouloir rompre le traité de paix avec les {player[1].civ_name_plural} ?"
-IA_BREAK_NO_PIRACY  			"{player[0].sir_cap}, voulez-vous vraiment que nous pirations cette route commerciale ? Nous avions convenu de ne pas entraver les échanges de cette nation."
-IA_AUTO_UNLOAD 				"Voulez-vous que nos soldats débarquent ici, {player[0].sir} ?"
-IA_ENTERING_LANDS   			"{player[0].sir_cap}, voulez-vous vraiment que nos forces envahissent le territoire des {player[1].civ_name_plural} ?"
-IA_OUT_OF_FUEL 				"Vu les ordres que vous avez donnés, nos avions risquent de tomber en panne d'essence et de s'écraser. Etes-vous sûr de vouloir les détruire, {player[0].sir} ?"
-IA_BREAK_ECOPACT    			"{player[0].sir_cap}, nos villes sont trop polluantes. Nous allons bientôt violer les termes de notre pacte anti-pollution avec les {player[1].civ_name_plural}."
-IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, nous avons convenu de respecter les frontières des {player[1].civ_name_plural}.  Voulez-vous courir le risque de susciter leur courroux en déplaçant des unités sur leur territoire ?"
-IA_PILLAGE_OWN_LAND 			"Cet aménagement de case a été élaboré par notre peuple. Etes-vous sûr de vouloir anéantir le fruit de leur travail ?"
-IA_SELL_IMPROVEMENT 			"La vente {building[0].name#PREPOSITION} de cette ville vous rapportera {gold[0].value} pièces d'or. Etes-vous sûr de vouloir vendre cet aménagement ?"
-IA_FREE_SLAVES 				"Voulez-vous affranchir les esclaves de {city[0].name} ? "
+IA_BREAK_TREATY				"Si nous violons notre traité avec les {player[1].civ_name_plural}, non seulement nous susciterons leur courroux, mais nous courrons également le risque de baisser dans l'estime des dirigeants de ce monde.  Etes-vous sûr de vouloir agir dans ce sens, {player[0].sir} ?"
+IA_BREAK_CEASE_FIRE			"{player[0].sir_cap}, êtes-vous sûr de vouloir rompre le traité de paix avec les {player[1].civ_name_plural} ?"
+IA_BREAK_NO_PIRACY			"{player[0].sir_cap}, voulez-vous vraiment que nous pirations cette route commerciale ? Nous avions convenu de ne pas entraver les échanges de cette nation."
+IA_AUTO_UNLOAD				"Voulez-vous que nos soldats débarquent ici, {player[0].sir} ?"
+IA_ENTERING_LANDS			"{player[0].sir_cap}, voulez-vous vraiment que nos forces envahissent le territoire des {player[1].civ_name_plural} ?"
+IA_OUT_OF_FUEL				"Vu les ordres que vous avez donnés, nos avions risquent de tomber en panne d'essence et de s'écraser. Etes-vous sûr de vouloir les détruire, {player[0].sir} ?"
+IA_BREAK_ECOPACT			"{player[0].sir_cap}, nos villes sont trop polluantes. Nous allons bientôt violer les termes de notre pacte anti-pollution avec les {player[1].civ_name_plural}."
+IA_BREAK_LEAVE_OUR_LANDS		"{player[0].sir_cap}, nous avons convenu de respecter les frontières des {player[1].civ_name_plural}.  Voulez-vous courir le risque de susciter leur courroux en déplaçant des unités sur leur territoire ?"
+IA_PILLAGE_OWN_LAND			"Cet aménagement de case a été élaboré par notre peuple. Etes-vous sûr de vouloir anéantir le fruit de leur travail ?"
+IA_SELL_IMPROVEMENT			"La vente {building[0].name#PREPOSITION} de cette ville vous rapportera {gold[0].value} pièces d'or. Etes-vous sûr de vouloir vendre cet aménagement ?"
+IA_FREE_SLAVES				"Voulez-vous affranchir les esclaves de {city[0].name} ? "
 IA_POLLUTION_ENDS_GOVERNMENT  		"Le peuple a jugé notre politique écologique hypocrite et intolérable. Les rebelles ont renversé le gouvernement. Notre empire est désormaisf réduit à l'anarchie."
 IA_MAX_CITIES_REACHED  			"Vous avez atteint le nombre maximal de villes autorisé par votre gouvernement actuel. Si vous étendez davantage votre empire, le mécontentement de vos citoyens grandira. Peut-être devriez-vous envisager de changer de gouvernement ?"
 IA_SETTLING_TOO_CLOSE    		"Vous ne pouvez pas construire de ville à l'intérieur d'une autre ville. Il serait préférable que nous trouvions un emplacement plus favorable à notre expansion."
@@ -55,7 +55,7 @@ IA_WAR_DISCONTENT_RISING 		"{player[0].sir_cap}, un trop grand nombre de nos uni
 
 
 ## Diplomacy Messages ##
-TREATY_TO_EXPIRE			"Our treaty with the {player[0].civ_name_plural} is about to expire."
+TREATY_TO_EXPIRE			"Notre traité avec les {player[0].civ_name_plural} est sur le point d'expirer."
 BROKE_TREATY 				"Les {player[0].civ_name_plural} ont rompu leur traité avec les {player[1].civ_name_plural}."
 NO_PIRACY_BROKEN 			"Les {player[0].civ_name_plural} ont été pris en train de pirater nos routes commerciales."
 ECOPACT_BROKEN 				"Les {player[0].civ_name_plural} ont violé le pacte anti-pollution qu'ils ont signé avec nous. Leurs villes sont en train de polluer le monde à vitesse grand V !"
@@ -69,18 +69,18 @@ ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}, nous avons violé notre alliance 
 ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}, les {player[1].civ_name_plural} auraient rompu l'alliance qui les liait aux {player[2].civ_name_plural}."
 ALL_AGREEMENTS_BROKEN_BY_AI 		"{player[1].leader_name} a un message pour nous, {player[0].sir} : vu les circonstances, les {player[2].civ_name_plural} ne peuvent plus honorer leurs accords. Considérez tous les pactes, traités et accords conclus avec nous comme nuls et non avenus."
 
-## Usful diplomacy messages that should be reimplemented ##
-CEASE_FIRE_BROKEN			"The dishonorable {player[0].civ_name_plural} have violated our peace treaty agreement, attacking us without provocation."
-LEAVE_OUR_LANDS_BROKEN			"The {player[0].civ_name_plural} have violated the stop trespassing agreement."
-LEAVE_OUR_LANDS_BROKEN_BY_YOU		"You have violated your promise to pull your troops out of {player[0].civ_name_singular} territory."
-REDUCE_POLLUTION_BROKEN			"The{player[0].civ_name_plural} have violated the reduce pollution agreement."
-REDUCE_POLLUTION_BROKEN_BY_YOU		"You have violated your reduce pollution agreement with the {player[0].civ_name_plural}."
-STOP_TRADE_WITH_BROKEN			"The insolent {player[0].civ_name_plural} have violated their agreement to stop trading with the {player[1].civ_name_plural}."
-STOP_TRADE_WITH_BROKEN_BY_YOU		"You have violated your agreement with the {player[0].civ_name_plural} to stop trading with the {player[1].civ_name_plural}."
-END_POLLUTION_BROKEN			"The {player[0].civ_name_plural} have violated the pact to end pollution."
-END_POLLUTION_BROKEN_BY_YOU		"You have violated the pact to end pollution with the {player[0].civ_name_plural}."
-ATTACK_ENEMY_BROKEN			"The {player[0].civ_name_plural} have violated their agreement to attack the {player[1].civ_name_plural}."
-ATTACK_ENEMY_BROKEN_BY_YOU		"You have violated your agreement with the {player[0].civ_name_plural} to attack the {player[1].civ_name_plural}."
+## Useful diplomacy messages that should be reimplemented ##
+CEASE_FIRE_BROKEN			"Les infâmes {player[0].civ_name_plural} ont violé le traité de paix que nous avions conclu, ils nous ont attaqués sans la moindre provocation de notre part."
+LEAVE_OUR_LANDS_BROKEN			"Les {player[0].civ_name_plural} ont violé l'accord de non-intrusion conclu avec nous."
+LEAVE_OUR_LANDS_BROKEN_BY_YOU		"Vous n'avez pas respecté votre promesse de retirer vos troupes du territoire {player[0].civ_name_singular}."
+REDUCE_POLLUTION_BROKEN			"Les {player[0].civ_name_plural} ont violé l'accord anti-pollution."
+REDUCE_POLLUTION_BROKEN_BY_YOU		"Vous avez violé l'accord anti-pollution conclu avec les {player[0].civ_name_plural}."
+STOP_TRADE_WITH_BROKEN			"Les misérables {player[0].civ_name_plural} ont violé l'embargo décrété contre les {player[1].civ_name_plural}."
+STOP_TRADE_WITH_BROKEN_BY_YOU		"Vous avez violé l'embargo décrété contre les {player[0].civ_name_plural} avec les {player[1].civ_name_plural}."
+END_POLLUTION_BROKEN			"Les {player[0].civ_name_plural} ont violé le pacte conclu afin de mettre un terme à la pollution."
+END_POLLUTION_BROKEN_BY_YOU		"Vous avez violé le pacte conclu avec les {player[0].civ_name_plural} afin de mettre un terme à la pollution."
+ATTACK_ENEMY_BROKEN			"Les {player[0].civ_name_plural} ont violé l'accord conclu avec vous dans le but d'attaquer les {player[1].civ_name_plural}."
+ATTACK_ENEMY_BROKEN_BY_YOU		"Vous avez violé l'accord conclu avec les {player[0].civ_name_plural} dans le but d'attaquer les {player[1].civ_name_plural}."
 
 
 ## Empire & City Related ##
@@ -147,7 +147,7 @@ WORLD_POLLUTION_SPACE_LAUNCH 		"Nos satellites ont détecté une hausse de la poll
 WORLD_POLLUTION_WARNING 		"La pollution mondiale a atteint un niveau toxique. Le monde est sur le point de vivre une catastrophe écologique."
 WORLD_POLLUTION_NUCLEAR_WAR 		"La guerre nucléaire ravage l'environnement. Nous avons détecté des retombées radioactives dans l'atmosphère."
 WORLD_POLLUTION_GLOBAL_WARMING 		"Notre planète n'est plus en mesure de supporter la pollution constante des terres. L'incapacité de la communauté internationale à réduire les émissions risque d'entraîner un réchauffement imminent de la planète."
-WORLD_POLLUTION_FLOODING_IMMINENT       "Le réchauffement de la Terre a entraîné une montée du niveau des océans. Nos plus grands météorologues prédisent une inondation sans précédent si la pollution de l'environnement se poursuit."
+WORLD_POLLUTION_FLOODING_IMMINENT	"Le réchauffement de la Terre a entraîné une montée du niveau des océans. Nos plus grands météorologues prédisent une inondation sans précédent si la pollution de l'environnement se poursuit."
 WORLD_POLLUTION_FLOODING_MINOR 		"Nous commençons à voir les effets du réchauffement de la Terre sur notre climat. Les inondations menacent nos villes et les conditions météorologiques sont pour le moins inquiétantes."
 WORLD_POLLUTION_VIRIDIAN 		"Avec le réchauffement de la Terre, notre planète est devenue un désert quasi inhabitable. Les Viridians avaient raison !"
 GROSS_POLLUTER 				"Il s'agit d'une catastrophe écologique. La pollution a atteint un niveau toxique et les terres autour de {city[0].name} vont être dévastées."
@@ -164,41 +164,41 @@ WONDER_ALMOST_FINISHED 			"Il ne nous reste plus beaucoup de temps. {player[0].l
 WONDER_COMPLETE_OWNER 			"La grandeur de notre empire est le fruit du travail accompli par nos citoyens.  {city[0].name} a terminé {wonder[0].name#ARTICLE} !"
 WONDER_COMPLETE_ALL 			"Un événement fâcheux vient de se produire.  {player[0].leader_name} a terminé {wonder[0].name#ARTICLE}."
 WONDER_DESTROYED 			"Lors de l'attaque de la ville de {city[0].name}, {wonder[0].name#ARTICLE} a disparu.  Notre planète a perdu une merveille."  
-NANITE_DEFUSER_ELIMINATES_NUKES 	"Les {player[0].civ_name_plural} ont construit {wonder[0].name#ARTICLE}. Cette merveille a effectivement permis d'éliminer toutes les armes nucléaires de la  planète."
-FORBIDDEN_CITY_PEACE 			"Nous sommes parvenus à construire la Cité interdite."
-CITY_JOINE_YOUR_CIV  			"Depuis la promulgation de l'Acte d'égalité, notre empire est devenu le refuge de tous les opprimés de la planète. Les citoyens de {city[0].name} se sont révoltés, se séparant des {player[0].civ_name_plural} pour intégrer notre empire."
-NO_EMBASSIES_WONDER 			"La Cité interdite nous empêche d'établir une ambassade avec les {player[0].civ_name_plural}."
-WONDER_OBSOLETE 			"La découverte {advance[0].name#PREPOSITION} a rendu {wonder[0].name#ARTICLE} obsolète."
+NANITE_DEFUSER_ELIMINATES_NUKES		"Les {player[0].civ_name_plural} ont construit {wonder[0].name#ARTICLE}. Cette merveille a effectivement permis d'éliminer toutes les armes nucléaires de la  planète."
+FORBIDDEN_CITY_PEACE			"Nous sommes parvenus à construire la Cité interdite."
+CITY_JOINE_YOUR_CIV			"Depuis la promulgation de l'Acte d'égalité, notre empire est devenu le refuge de tous les opprimés de la planète. Les citoyens de {city[0].name} se sont révoltés, se séparant des {player[0].civ_name_plural} pour intégrer notre empire."
+NO_EMBASSIES_WONDER			"La Cité interdite nous empêche d'établir une ambassade avec les {player[0].civ_name_plural}."
+WONDER_OBSOLETE				"La découverte {advance[0].name#PREPOSITION} a rendu {wonder[0].name#ARTICLE} obsolète."
 
 ## Ruins ##
-DISCOVERED_REMNANTS_OF_ANCIENT_CIV 	"Nous avons trouvé les vestiges d'une ancienne culture. Au milieu des ruines, les explorateurs ont découvert le secret d'un nouveau progrès. Désormais, nous possédons la connaissance {advance[0].name#PREPOSITION}."
-RUIN_BECOMES_CITY 			"Nous avons découvert une tribu cachée dont les membres nous prennent pour des héros de leur mythologie. Ceux-ci se sont intégrés avec joie à notre empire."
-NOMADS_HAVE_JOINED_YOU 			"Un groupe de nomades a fait serment d'allégeance à votre empire."
-MERCENARIES_HAVE_JOINED_YOU 		"Attirés par l'appât du gain,  des mercenaires ont intégré notre empire."
-DISCOVERED_ANCIENT_TREASURE 		"Parmi les ruines d'une civilisation disparue depuis la nuit des temps, nous avons découvert un trésor d'une valeur de {gold[0].value} pièces d'or."
+DISCOVERED_REMNANTS_OF_ANCIENT_CIV	"Nous avons trouvé les vestiges d'une ancienne culture. Au milieu des ruines, les explorateurs ont découvert le secret d'un nouveau progrès. Désormais, nous possédons la connaissance {advance[0].name#PREPOSITION}."
+RUIN_BECOMES_CITY			"Nous avons découvert une tribu cachée dont les membres nous prennent pour des héros de leur mythologie. Ceux-ci se sont intégrés avec joie à notre empire."
+NOMADS_HAVE_JOINED_YOU			"Un groupe de nomades a fait serment d'allégeance à votre empire."
+MERCENARIES_HAVE_JOINED_YOU		"Attirés par l'appât du gain,  des mercenaires ont intégré notre empire."
+DISCOVERED_ANCIENT_TREASURE		"Parmi les ruines d'une civilisation disparue depuis la nuit des temps, nous avons découvert un trésor d'une valeur de {gold[0].value} pièces d'or."
 BESET_BY_VANDALS 			"Préparez-vous au combat ! Nos unités sont tombées dans un embuscade des Barbares."
 BESET_BY_NOTHING 			"Les fouilles que nous effectuons dans ces ruines n'ont rien donné pour le moment."
 
 ## Government ##
-CANT_CHANGE_GOV 			"Vous ne pouvez pas changer de gouvernement avant de découvrir un nouveau progrès en la matière."
-CHANGE_GOV_WARNING 			"Les changements de gouvernement sont généralement suivis d'une brève période d'anarchie.  Voulez-vous quand même opter pour {government[0].name#ARTICLE} ?"
-PLAYER_DISCOVERS_NEW_GOVERNMENT 	"Vous avez découvert le gouvernement du type {GovernmentDB(government[0].type)}. Voulez-vous instaurer un nouveau gouvernement ?"
+CANT_CHANGE_GOV				"Vous ne pouvez pas changer de gouvernement avant de découvrir un nouveau progrès en la matière."
+CHANGE_GOV_WARNING			"Les changements de gouvernement sont généralement suivis d'une brève période d'anarchie.  Voulez-vous quand même opter pour {government[0].name#ARTICLE} ?"
+PLAYER_DISCOVERS_NEW_GOVERNMENT		"Vous avez découvert le gouvernement du type {GovernmentDB(government[0].type)}. Voulez-vous instaurer un nouveau gouvernement ?"
 
 ## Advances ##
-PICK_NEW_DISCOVERY 			"En découvrant <l:4,000>{advance[0].name#ARTICLE}<e>, nos chercheurs ont fait un grand pas dans la connaissance de l'humain, ouvrant de nouvelles perspectives scientifiques et culturelles.  Sélectionnez un nouveau progrès sur lequel entamer des recherches."
-UNIT_OBSOLETE_CIVWIDE 			"La découverte {advance[0].name#PREPOSITION} a rendu les unités suivantes obsolètes."
+PICK_NEW_DISCOVERY			"En découvrant <l:4,000>{advance[0].name#ARTICLE}<e>, nos chercheurs ont fait un grand pas dans la connaissance de l'humain, ouvrant de nouvelles perspectives scientifiques et culturelles.  Sélectionnez un nouveau progrès sur lequel entamer des recherches."
+UNIT_OBSOLETE_CIVWIDE			"La découverte {advance[0].name#PREPOSITION} a rendu les unités suivantes obsolètes."
 
 ## Units ##
-NO_SUPPORT 				"Faute d'entretien, des unités ont été démantelées."
-ONE_OR_MORE_UNITS_WILL_CRASH 		"Votre {unit[1].name} risque de manquer de carburant si son tour ne se termine pas dans une ville ou une base aérienne."
-UNIT_EXPELLED 				"Les {player[0].civ_name_plural} ont expulsé quelques-unes de nos unités de leur territoire."
+NO_SUPPORT				"Faute d'entretien, des unités ont été démantelées."
+ONE_OR_MORE_UNITS_WILL_CRASH		"Votre {unit[1].name} risque de manquer de carburant si son tour ne se termine pas dans une ville ou une base aérienne."
+UNIT_EXPELLED				"Les {player[0].civ_name_plural} ont expulsé quelques-unes de nos unités de leur territoire."
 
 ## Warfare ##
-CITIES_CAPTURED_VICTIM 			"La ville de {city[0].name} est tombée entre les mains des forces ennemies !"
-CAPITAL_CITY_CAPTURED_VICTIM 		"Notre capitale, {city[0].name}, a été prise d'assaut par les forces ennemies !"
-CAPITAL_CITY_CAPTURED_ATTACKER 		"Quelle victoire ! Nous avons conquis la capitale des {player[0].civ_name_plural}."
-CIV_STARTED_WAR 			"Les {player[0].civ_name_plural} sont entrés en guerre avec les {player[1].civ_name_plural}."
-ADVANCE_FROM_CAPTURING_CITY 		"{player[0].sir_cap}, lors du pillage de la cité de {city[0].name} que nous venons de conquérir, nos troupes se sont emparées du secret de {advance[0].name}."
+CITIES_CAPTURED_VICTIM			"La ville de {city[0].name} est tombée entre les mains des forces ennemies !"
+CAPITAL_CITY_CAPTURED_VICTIM		"Notre capitale, {city[0].name}, a été prise d'assaut par les forces ennemies !"
+CAPITAL_CITY_CAPTURED_ATTACKER		"Quelle victoire ! Nous avons conquis la capitale des {player[0].civ_name_plural}."
+CIV_STARTED_WAR				"Les {player[0].civ_name_plural} sont entrés en guerre avec les {player[1].civ_name_plural}."
+ADVANCE_FROM_CAPTURING_CITY		"{player[0].sir_cap}, lors du pillage de la cité de {city[0].name} que nous venons de conquérir, nos troupes se sont emparées du secret de {advance[0].name}."
 ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, c'est avec horreur que nous apprenons que les {player[1].civ_name_plural} nous ont pris la cité de {city[0].name} et qu'ils se sont également emparés du secret de {advance[0].name}."
 
 ## Combat ##
@@ -434,25 +434,25 @@ HOTSEAT_ARMY_ATTACKED 			"Les {player[0].civ_name_plural} ont attaqué votre {uni
 ### Trust Warning Messages ###
 ### Global Trust Loss ###
 TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, nous avons tué une unité civile des {player[1].civ_name_plural} ! Cela est considéré comme un crime de guerre. Outre les {player[1].civ_name_plural}, nous avons bouleversé le monde entier."
-TRUST_LOSS_UNPROVOKED_ATTACK            "{player[0].sir_cap}, nous avons attaqué les {player[1].civ_name_plural} sans avertissement ni provocation préalables ! Ils se sentent profondément trahis par notre conduite. Pis encore, la communauté internationale met en cause notre fiabilité."
-MILITARY_PACT_BROKEN_BY_YOU       "{player[0].sir_cap}, en refusant d'envoyer des troupes sur les premières lignes des {player[1].civ_name_plural}, nous avons violé notre pacte militaire. Ils se sentent trahis."
-TRUST_LOSS_VIOLATED_PEACE_TREATY        "{player[0].sir_cap}, en attaquant les {player[1].civ_name_plural}, nous avons violé notre traité de paix ! Vu leur indignation, ils risquent de conseiller aux autres nations de se méfier de nous."
-ALLIANCE_BROKEN_BY_YOU            "{player[0].sir_cap}, nous avons violé notre alliance avec les {player[1].civ_name_plural} ! Ceux-ci sont furieux contre nous ! Plus aucune nation ne nous fera confiance après une telle traîtrise !"
+TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}, nous avons attaqué les {player[1].civ_name_plural} sans avertissement ni provocation préalables ! Ils se sentent profondément trahis par notre conduite. Pis encore, la communauté internationale met en cause notre fiabilité."
+MILITARY_PACT_BROKEN_BY_YOU		"{player[0].sir_cap}, en refusant d'envoyer des troupes sur les premières lignes des {player[1].civ_name_plural}, nous avons violé notre pacte militaire. Ils se sentent trahis."
+TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}, en attaquant les {player[1].civ_name_plural}, nous avons violé notre traité de paix ! Vu leur indignation, ils risquent de conseiller aux autres nations de se méfier de nous."
+ALLIANCE_BROKEN_BY_YOU			"{player[0].sir_cap}, nous avons violé notre alliance avec les {player[1].civ_name_plural} ! Ceux-ci sont furieux contre nous ! Plus aucune nation ne nous fera confiance après une telle traîtrise !"
 
 ### Nation-specific Trust Loss ###
 IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, nous avons accepté de respecter les frontières des {player[1].civ_name_plural}. Allez-vous vous risquer à susciter leur courroux en déplaçant des unités sur leur territoire ?"
-TRUST_LOSS_FAIL_TO_WITHDRAW             "{player[0].sir_cap}, nous n'avons pas retiré nos troupes du territoire des {player[1].civ_name_plural}. Désormais, ils se méfient et risquent de rechigner à signer des accords avec nous."
-TRUST_LOSS_FAIL_TO_STOP_PIRACY          "Les {player[1].civ_name_plural} sont furieux car nous n'avons pas cessé de pirater leurs routes commerciales. A l'avenir, les {player[1].civ_name_plural} ne nous feront plus confiance."
-TRUST_LOSS_FAIL_TO_REDUCE_WEAPONS       ""
-TRUST_LOSS_FAIL_TO_REDUCE_POLLUTION     ""
-TRUST_LOSS_VIOLATED_CEASE_FIRE          "{player[0].sir_cap}, nous avons violé l'accord de cessez-le-feu signé avec les {player[1].civ_name_plural}. Ils sont furieux contre nous et risquent de ne plus nous faire confiance."
-TRUST_LOSS_VIOLATED_RESEARCH_PACT       "{player[0].sir_cap}, nos récentes actions ont constitué une violation de notre pacte de recherche avec les {player[1].civ_name_plural}. Désormais, ils se méfient de nous et s'interrogent sur nos intentions."
-ECO_PACT_BROKEN_BY_YOU      "{player[0].sir_cap}, nous avons violé l'éco-pacte que nous avons signé avec {player[1].civ_name_plural}. Ceux-ci nous en veulent."
-TRUST_LOSS_VIOLATED_TRADE_PACT          "{player[0].sir_cap}, nos récentes actions nous ont contraints à renoncer au pacte commercial signé avec les {player[1].civ_name_plural}. Il s'agit d'un acte de trahison qu'ils ne sont pas près d'oublier !"
+TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}, nous n'avons pas retiré nos troupes du territoire des {player[1].civ_name_plural}. Désormais, ils se méfient et risquent de rechigner à signer des accords avec nous."
+TRUST_LOSS_FAIL_TO_STOP_PIRACY		"Les {player[1].civ_name_plural} sont furieux car nous n'avons pas cessé de pirater leurs routes commerciales. A l'avenir, les {player[1].civ_name_plural} ne nous feront plus confiance."
+TRUST_LOSS_FAIL_TO_REDUCE_WEAPONS	""
+TRUST_LOSS_FAIL_TO_REDUCE_POLLUTION	""
+TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}, nous avons violé l'accord de cessez-le-feu signé avec les {player[1].civ_name_plural}. Ils sont furieux contre nous et risquent de ne plus nous faire confiance."
+TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}, nos récentes actions ont constitué une violation de notre pacte de recherche avec les {player[1].civ_name_plural}. Désormais, ils se méfient de nous et s'interrogent sur nos intentions."
+ECO_PACT_BROKEN_BY_YOU			"{player[0].sir_cap}, nous avons violé l'éco-pacte que nous avons signé avec {player[1].civ_name_plural}. Ceux-ci nous en veulent."
+TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, nos récentes actions nous ont contraints à renoncer au pacte commercial signé avec les {player[1].civ_name_plural}. Il s'agit d'un acte de trahison qu'ils ne sont pas près d'oublier !"
 
 #Nano-Terror#
 IMMUNE_TO_NANO_TERROR_VICTIM		"Votre peuple peut à nouveau dormir sur ses deux oreilles. La ville de {city[0].name} est à l'abri des nano-attaques."
-NANO_TERROR_FAILED_VICTIM			"Nos scientifiques ont contrecarré un complot ennemi visant à saboter les usines de {city[0].name} à l'aide d'une terrible arme nano-technologique."
-NANO_TERROR_COMPLETE_VICTIM			"Des étrangers ont libéré un virus nano-technologique dans la ville de {city[0].name}."
-NANO_TERROR_FAILED_AGRESSOR			"Vos tentatives pour sauver la Terre ont avorté. Votre nano-attaque est un échec."
+NANO_TERROR_FAILED_VICTIM		"Nos scientifiques ont contrecarré un complot ennemi visant à saboter les usines de {city[0].name} à l'aide d'une terrible arme nano-technologique."
+NANO_TERROR_COMPLETE_VICTIM		"Des étrangers ont libéré un virus nano-technologique dans la ville de {city[0].name}."
+NANO_TERROR_FAILED_AGRESSOR		"Vos tentatives pour sauver la Terre ont avorté. Votre nano-attaque est un échec."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Malgré tous vos efforts, l'ennemi s'est aperçu de votre ruse. La ville que vous avez pris pour cible est immunisée contre les nano-attaques."

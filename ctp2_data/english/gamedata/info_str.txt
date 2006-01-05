@@ -69,7 +69,7 @@ ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}, we have violated our Alliance wi
 ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}, we have received word that the {player[1].civ_name_plural} have broken their alliance with the {player[2].civ_name_plural}."
 ALL_AGREEMENTS_BROKEN_BY_AI 		"{player[1].leader_name} has a message for us, {player[0].sir}:  Due to external forces and extenuating circumstances, {player[2].country_name} can no longer honor its agreements with you.  Consider all Pacts, Treaties and Agreements with us null and void."
 
-## Usful diplomacy messages that should be reimplemented ##
+## Useful diplomacy messages that should be reimplemented ##
 CEASE_FIRE_BROKEN			"The dishonorable {player[0].civ_name_plural} have violated our peace treaty agreement, attacking us without provocation."
 LEAVE_OUR_LANDS_BROKEN			"The {player[0].civ_name_plural} have violated the stop trespassing agreement."
 LEAVE_OUR_LANDS_BROKEN_BY_YOU		"You have violated your promise to pull your troops out of {player[0].civ_name_singular} territory."

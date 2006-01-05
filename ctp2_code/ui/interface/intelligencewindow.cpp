@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Intelligence window (diplomacy subwindow)
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -64,31 +67,31 @@
 #include "network.h"
 #include "net_action.h"
 
-static IntelligenceWindow *s_intelligenceWindow = NULL;
-static MBCHAR *s_intelligenceBlock = "IntelligenceWindow";
-static MBCHAR *s_intelligenceAdviceBlock = "IntelligenceAdvice";
-ctp2_ListBox *IntelligenceWindow::sm_list = NULL;
+static IntelligenceWindow   *s_intelligenceWindow = NULL;
+static MBCHAR               *s_intelligenceBlock = "IntelligenceWindow";
+static MBCHAR               *s_intelligenceAdviceBlock = "IntelligenceAdvice";
+ctp2_ListBox                *IntelligenceWindow::sm_list = NULL;
 
-extern C3UI *g_c3ui;
+extern C3UI                 *g_c3ui;
 
-extern ColorSet *g_colorSet;
+extern ColorSet             *g_colorSet;
 
-aui_StringTable *IntelligenceWindow::sm_strengthImages = NULL;
-aui_StringTable *IntelligenceWindow::sm_embassyImages = NULL;
+aui_StringTable             *IntelligenceWindow::sm_strengthImages = NULL;
+aui_StringTable             *IntelligenceWindow::sm_embassyImages = NULL;
 
-ctp2_Window *IntelligenceWindow::sm_showTreatyDetail = NULL;
+ctp2_Window                 *IntelligenceWindow::sm_showTreatyDetail = NULL;
 
 
-#define k_INT_FLAG_COL		0
-#define k_INT_NATION_COL	1		
-#define k_INT_REGARD_COL	2		
-#define k_INT_STRENGTH_COL	3		
-#define k_INT_EMBASSY_COL	4		
-#define k_INT_TREATIES_COL	5		
+#define k_INT_FLAG_COL      0
+#define k_INT_NATION_COL    1
+#define k_INT_REGARD_COL    2
+#define k_INT_STRENGTH_COL  3
+#define k_INT_EMBASSY_COL   4
+#define k_INT_TREATIES_COL  5
 
-#define k_WEAK_STRENGTH -50
-#define k_EQUAL_STRENGTH 0
-#define k_STRONG_STRENGTH 50
+#define k_WEAK_STRENGTH   -50
+#define k_EQUAL_STRENGTH    0
+#define k_STRONG_STRENGTH  50
 
 IntelligenceWindow::IntelligenceWindow(AUI_ERRCODE *err)
 {

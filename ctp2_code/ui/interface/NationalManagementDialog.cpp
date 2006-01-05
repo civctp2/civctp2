@@ -107,30 +107,32 @@ public:
 };
 
 
-static const sint32 k_NMD_RES_CITY_NAME     = 0;
-static const sint32 k_NMD_RES_POPULATION    = 1;
-static const sint32 k_NMD_RES_HAPPINESS     = 2;
-static const sint32 k_NMD_RES_FOOD          = 3;
-static const sint32 k_NMD_RES_PRODUCTION    = 4;
-static const sint32 k_NMD_RES_GOLD          = 5;
-static const sint32 k_NMD_RES_SCIENCE       = 6;
-static const sint32 k_NMD_RES_POLLUTION     = 7;
-static const sint32 k_NMD_RES_CRIME         = 8;
-static const sint32 k_NMD_STAT_CITY_NAME    = 0;
-static const sint32 k_NMD_STAT_MAYOR        = 1;
-static const sint32 k_NMD_STAT_PRIORITY     = 2;
-static const sint32 k_NMD_STAT_BUILDING     = 3;
-static const sint32 k_NMD_STAT_TIME         = 4;
-static const sint32 k_NMD_SPEC_CITY_NAME    = 0;
-static const sint32 k_NMD_SPEC_POPULATION   = 1;
-static const sint32 k_NMD_SPEC_WORKER       = 2;
-static const sint32 k_NMD_SPEC_SLAVE        = 3;
-static const sint32 k_NMD_SPEC_ENTERTAINER  = 4;
-static const sint32 k_NMD_SPEC_FARMER       = 5;
-static const sint32 k_NMD_SPEC_LABORER      = 6;
-static const sint32 k_NMD_SPEC_MERCHANT     = 7;
-static const sint32 k_NMD_SPEC_SCIENTIST    = 8;
-static const sint32 k_NMD_SPEC_COMBAT_UNITS = 9;
+static const sint32 k_NMD_RES_CITY_NAME     =  0;
+static const sint32 k_NMD_RES_POPULATION    =  1;
+static const sint32 k_NMD_RES_HAPPINESS     =  2;
+static const sint32 k_NMD_RES_FOOD          =  3;
+static const sint32 k_NMD_RES_PRODUCTION    =  4;
+static const sint32 k_NMD_RES_GOLD          =  5;
+static const sint32 k_NMD_RES_SCIENCE       =  6;
+static const sint32 k_NMD_RES_POLLUTION     =  7;
+static const sint32 k_NMD_RES_CRIME         =  8;
+static const sint32 k_NMD_RES_CONVERSION    =  9;
+static const sint32 k_NMD_RES_FRANCHISE     = 10;
+static const sint32 k_NMD_STAT_CITY_NAME    =  0;
+static const sint32 k_NMD_STAT_MAYOR        =  1;
+static const sint32 k_NMD_STAT_PRIORITY     =  2;
+static const sint32 k_NMD_STAT_BUILDING     =  3;
+static const sint32 k_NMD_STAT_TIME         =  4;
+static const sint32 k_NMD_SPEC_CITY_NAME    =  0;
+static const sint32 k_NMD_SPEC_POPULATION   =  1;
+static const sint32 k_NMD_SPEC_WORKER       =  2;
+static const sint32 k_NMD_SPEC_SLAVE        =  3;
+static const sint32 k_NMD_SPEC_ENTERTAINER  =  4;
+static const sint32 k_NMD_SPEC_FARMER       =  5;
+static const sint32 k_NMD_SPEC_LABORER      =  6;
+static const sint32 k_NMD_SPEC_MERCHANT     =  7;
+static const sint32 k_NMD_SPEC_SCIENTIST    =  8;
+static const sint32 k_NMD_SPEC_COMBAT_UNITS =  9;
 
 extern C3UI *g_c3ui;
 
@@ -809,6 +811,27 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 		column->SetTextColor(colorNorm);
 	}
 
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_CONVERSION)) {
+		sint32 convertedGold = cityData->GetConvertedGold();
+		sprintf(stringBuffer, "%d", convertedGold);
+		column->SetText(stringBuffer);
+		if (convertedGold > 0 && cityData->GetConvertedTo() > -1) {
+			COLOR color = g_colorSet->ComputePlayerColor(cityData->GetConvertedTo());
+			column->SetTextColor(g_colorSet->GetColorRef(color));
+		} else
+			column->SetTextColor(colorNorm);
+	}
+
+	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_FRANCHISE)) {
+		sint32 franchise = cityData->GetProductionLostToFranchise();
+		sprintf(stringBuffer, "%d", franchise);
+		column->SetText(stringBuffer);
+		if (franchise > 0 && cityData->GetFranchiseOwner() > -1) {
+			COLOR color = g_colorSet->ComputePlayerColor(cityData->GetFranchiseOwner());
+			column->SetTextColor(g_colorSet->GetColorRef(color));
+		} else
+			column->SetTextColor(colorNorm);
+	}
 	
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_CITY_NAME)) {
 		column->SetText(cityData->GetName());
@@ -1192,6 +1215,8 @@ sint32 NationalManagementDialog::CompareResources(ctp2_ListItem *item1,
 		case k_NMD_RES_SCIENCE:
 		case k_NMD_RES_POLLUTION:
 		case k_NMD_RES_CRIME:
+		case k_NMD_RES_CONVERSION:
+		case k_NMD_RES_FRANCHISE:
 			result = atoi(column1->GetText()) - atoi(column2->GetText());
 			break;
 		
