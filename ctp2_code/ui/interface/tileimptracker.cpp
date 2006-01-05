@@ -110,12 +110,12 @@ sint32 tileimptracker_Initialize()
 
 	sprintf( controlBlock, "%s.%s", textBlock, "TimeN");
 	s_trackerTimeN = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
-	Assert( AUI_NEWOK(s_trackerMatN, errcode) );
+	Assert( AUI_NEWOK(s_trackerTimeN, errcode) );
 	if( !AUI_SUCCESS(errcode) ) return -1;
 
 	sprintf( controlBlock, "%s.%s", textBlock, "TimeV");
 	s_trackerTimeV = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
-	Assert( AUI_NEWOK(s_trackerMatV, errcode) );
+	Assert( AUI_NEWOK(s_trackerTimeV, errcode) );
 	if( !AUI_SUCCESS(errcode) ) return -1;
 
 	sprintf( controlBlock, "%s.%s", textBlock, "MatN");

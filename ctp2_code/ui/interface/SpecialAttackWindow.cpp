@@ -26,6 +26,8 @@
 //
 // - This file is not part of the original source code.
 // - File created. (Aug 15th 2005 Martin Gühmann)
+// - Made special attack window doesn't appear anymore if the costs
+//   are zero. (Aug 18th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -168,8 +170,13 @@ void specialAttackWindow_DisplayData(MapPoint &p, sint32 type)
 		s_saWindowBorderColor = COLOR_RED;
 	}
 
-	g_c3ui->AddWindow(g_theSpecialAttackWindow);
-	g_theSpecialAttackWindow->ShouldDraw();
+	if(costs > 0){
+		g_c3ui->AddWindow(g_theSpecialAttackWindow);
+		g_theSpecialAttackWindow->ShouldDraw();
+	}
+	else{
+		g_c3ui->RemoveWindow(g_theSpecialAttackWindow->Id());
+	}
 }
 
 //----------------------------------------------------------------------------

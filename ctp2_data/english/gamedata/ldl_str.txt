@@ -24,7 +24,7 @@
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
 #
-# 
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -38,8 +38,8 @@ str_ldl_comma	","
 
 ###Strings Moved Over from Junk###
 
-CAPITALIZATION 	"Capitalization "
-INFRASTRUCTURE 	"Infrastructure "
+CAPITALIZATION	"Capitalization"
+INFRASTRUCTURE	"Infrastructure"
 
 #Age Names#	
 AGE_NAME_ANCIENT		"Ancient"
@@ -2677,29 +2677,29 @@ str_ldl_DD_GOV_MARTIAL_LAW			"Martial Law Effectiveness:"
 str_ldl_DD_GOV_ANTI_POLLUTION		"Anti-Pollution & Tolerance:"
 
 # Advance Selection Pop-up
-str_ldl_ASP_GOAL					"Goal"
+str_ldl_ASP_GOAL			"Goal"
 
 # National Management
 str_ldl_NATIONAL_DIALOG_TITLE		"N A T I O N A L   M A N A G E R"
-str_ldl_ND_ADVICE					"Advice"
-str_ldl_ND_BUILD_QUEUE				"Build Manager..."
-str_ldl_ND_DISBAND					"Disband"
-str_ldl_ND_RESOURCE_TAB				"RESOURCES"
-str_ldl_ND_RTL_CITY_NAME			"City Name"
-str_ldl_ND_RTL_POPULATION			"Population"
-str_ldl_ND_STATUS_TAB				"STATUS"
-str_ldl_ND_STL_CITY_NAME			"City Name"
-str_ldl_ND_STL_MAYOR				"Mayor"
-str_ldl_ND_STL_PRIORITY				"Priority"
-str_ldl_ND_STL_BUILDING				"Building"
-str_ldl_ND_STL_TIME                 "Turns"
-str_ldl_ND_ST_GOVERNOR				"MAYOR:"
-str_ldl_ND_ST_RUSH_BUY				"Rush Buy"
-str_ldl_ND_ON						"ON"
-str_ldl_ND_OFF						"OFF"
-str_ldl_ND_EMPTY					"EMPTY"
-str_ldl_ND_NA						"N/A"
-str_ldl_ND_VERIFY_DISBAND			"Do you wish to disband the selected cities?"
+str_ldl_ND_ADVICE			"Advice"
+str_ldl_ND_BUILD_QUEUE			"Build Manager..."
+str_ldl_ND_DISBAND			"Disband"
+str_ldl_ND_RESOURCE_TAB			"RESOURCES"
+str_ldl_ND_RTL_CITY_NAME		"City Name"
+str_ldl_ND_RTL_POPULATION		"Pop."
+str_ldl_ND_STATUS_TAB			"STATUS"
+str_ldl_ND_STL_CITY_NAME		"City Name"
+str_ldl_ND_STL_MAYOR			"Mayor"
+str_ldl_ND_STL_PRIORITY			"Priority"
+str_ldl_ND_STL_BUILDING			"Building"
+str_ldl_ND_STL_TIME			"Turns"
+str_ldl_ND_ST_GOVERNOR			"MAYOR:"
+str_ldl_ND_ST_RUSH_BUY			"Rush Buy"
+str_ldl_ND_ON				"ON"
+str_ldl_ND_OFF				"OFF"
+str_ldl_ND_EMPTY			"EMPTY"
+str_ldl_ND_NA				"N/A"
+str_ldl_ND_VERIFY_DISBAND		"Do you wish to disband the selected cities?"
 
 # Science Management
 str_ldl_SCIENCE_DIALOG_TITLE		"S C I E N C E   M A N A G E R"
