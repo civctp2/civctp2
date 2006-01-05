@@ -26,6 +26,8 @@
 // - Updates the graphics of tile improvements under contruction every 
 //   turn, so that the process to completeness of a tile improvements is 
 //   visualized. - Oct. 16th 2004 Martin Gühmann
+// - Moved network handling from TerrainImprovementData constructor to prevent 
+//   reporting the temporary when completing the tile improvement.
 //
 //----------------------------------------------------------------------------
 
@@ -59,20 +61,16 @@ TerrainImprovementData::TerrainImprovementData(ID id,
 											   MapPoint pnt,
 											   sint32 type,
 											   sint32 extraData)
-	: GameObj(id.m_id)
+:   GameObj             (id.m_id),
+    m_owner             (owner),
+    m_type              (type),
+    m_point             (pnt),
+	m_turnsToComplete   (terrainutil_GetProductionTime(type, pnt, extraData)),
+	m_transformType     (extraData),
+	m_materialCost      (terrainutil_GetProductionCost(type, pnt, extraData)),
+    m_isComplete        (false),
+    m_isBuilding        (false)
 {
-	m_owner = owner;
-	m_type = type;
-	m_point = pnt;
-
-	m_turnsToComplete = terrainutil_GetProductionTime(type, pnt, extraData);
-	m_materialCost = terrainutil_GetProductionCost(type, pnt, extraData);
-	m_isComplete = false;
-	m_isBuilding = false;
-
-	g_theWorld->GetCell(pnt)->SetColor(20);
-
-	ENQUEUE();
 }
 
 TerrainImprovementData::TerrainImprovementData(CivArchive &archive) : GameObj(0)

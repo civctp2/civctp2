@@ -36,6 +36,7 @@
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
 //   - April 13th 2005 Martin Gühmann
 // - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
+// - Prevented crash with multiple instances of an improvement that is deleted.
 //
 //----------------------------------------------------------------------------
 
@@ -768,7 +769,11 @@ void Cell::RemoveImprovement(const TerrainImprovement &imp)
 {
 	if (m_objects)
 	{
-		m_objects->Del(imp);
+        while (m_objects->Del(imp))
+        {
+            // Check for and delete multiple instances
+        }
+
 		size_t const	count	= m_objects->Num();
 		
 		for (size_t i = 0; i < count; ++i)
