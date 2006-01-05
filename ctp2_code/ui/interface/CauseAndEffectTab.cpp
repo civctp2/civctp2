@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Empire manager main tab
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -32,6 +33,7 @@
 //   losses and production modifies pollution and pollution modifies crime.
 //   This means all the values are modified even if only a single slider
 //   is moved. Jul 7th 2005 Martin Gühmann
+// - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -667,14 +669,20 @@ void CauseAndEffectTab::UpdateCities()
 		
 		static sint32 gold = 0;
 		
-		cityData->CalcHappiness(gold, false); 
 		cityData->CollectResources();
+#if defined(NEW_RESOURCE_PROCESS)
+		cityData->ProcessResources();
+		cityData->CalculateResources();
+		cityData->CalcPollution();
+		cityData->DoSupport(true);
+#else
+		cityData->ProcessProduction(true);
 		cityData->DoSupport(true);
 		cityData->SplitScience(true);
 		cityData->ProcessFood();
 		cityData->CollectOtherTrade(true, false);
-		cityData->ProcessProduction(true);
-		
+#endif
+		cityData->CalcHappiness(gold, false);
 		cityData->EatFood();
 		cityData->CalculateGrowthRate();
 	}

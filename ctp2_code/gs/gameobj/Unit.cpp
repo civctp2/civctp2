@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -19,8 +20,6 @@
 //
 // CTP1_TRADE
 // - Creates an executable with trade like in CTP1. Currently broken.
-// - Removed some unsused method to removed some unused in methods in
-//   CityData.. - Aug 6th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 //
@@ -35,6 +34,9 @@
 // - Moved UnitValidForOrder from ArmyData to be able to access the Unit
 //   properties as well. - April 24th 2005 Martin Gühmann
 // - Implemented GovernmentModified for the UnitDB.  - April 24th 2005 Martin Gühmann
+// - Removed some unsused method to removed some unused in methods in
+//   CityData.. - Aug 6th 2005 Martin Gühmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1731,11 +1733,6 @@ BOOL Unit::IsPatrolling() const
 void Unit::SetPatrolling(BOOL patrolling)
 {
 	AccessData()->SetPatrolling(patrolling);
-}
-
-BOOL Unit::IsInsideCityRadius(const MapPoint &pos) const
-{
-	return GetData()->IsInsideCityRadius(pos);
 }
 
 void Unit::AddHappyTimer(sint32 turns, double adjust,

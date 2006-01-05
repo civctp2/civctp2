@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Unit data
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -19,7 +20,7 @@
 //
 // CTP1_TRADE
 // - Creates an executable with trade like in CTP1. Currently broken.
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,6 +29,7 @@
 // - Added IsImmobile( )const; PFT 10 apr 05, to identify immobile units
 // - Removed some unsused method to removed some unused in methods in
 //   CityData.. - Aug 6th 2005 Martin Gühmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -474,7 +476,6 @@ public:
 
 	void CalcHappiness(sint32 &virtualGoldSpent, BOOL firstPass) { Assert(m_city_data); m_city_data->CalcHappiness(virtualGoldSpent, firstPass); } 
 
-	BOOL IsInsideCityRadius(const MapPoint &pos) const;
 	void BeginTurn();
 	void AddHappyTimer(sint32 turns, double adjust, HAPPY_REASON reason);
 	void EndTurnCity();

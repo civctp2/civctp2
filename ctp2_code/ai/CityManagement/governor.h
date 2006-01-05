@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : AI and automated governor handling.
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -43,6 +44,7 @@
 // - Added no test sliders struct.
 // - Added OptimizeSliders method to have a better routine for AI sliders
 //   optimisation. - Jul 18th 2005 Martin Gühmann
+// - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -289,13 +291,15 @@ public:
 	                           sint32 &minFood,
 	                           sint32 &minProd,
 	                           sint32 &minGold,
+#if defined(NEW_RESOURCE_PROCESS)
+	                           sint32 &minScie) const;
+#else
 	                           sint32 &minScie,
 	                           double &farmersEff,
 	                           double &laborersEff,
 	                           double &merchantsEff,
 	                           double &scientistsEff) const;
-	
-
+#endif
 	
 	void ComputeDesiredUnits();
 
@@ -454,9 +458,9 @@ private:
 	
 	UnitCountVector m_currentUnitCount;
 
-	
-	
-
+#if defined(NEW_RESOURCE_PROCESS)
+	sint32 GetMinNumOfFieldWorkers(const CityData *city, double resourceFraction) const;
+#endif
 	
 	double m_neededFreight;
 

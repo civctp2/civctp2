@@ -47,6 +47,7 @@
 // - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin Gühmann
 // - Removed some unsused method to removed some unused in methods in
 //   CityData.. - Aug 6th 2005 Martin Gühmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3314,20 +3315,6 @@ void UnitData::EndTurn()
 			g_network.Unblock(m_owner);
 		}
 	}
-}
-
-// not used
-BOOL UnitData::IsInsideCityRadius(const MapPoint &pos) const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return FALSE;
-
-	sint32 ls = GetDistance(this, pos, k_CITY_RADIUS * 2);
-	if(ls <= (((double)k_CITY_RADIUS + 0.5) * ((double)k_CITY_RADIUS + 0.5)))
-		return TRUE;
-	else
-		return FALSE;
 }
 
 void UnitData::InitializeCityData(sint32 settlerType)
