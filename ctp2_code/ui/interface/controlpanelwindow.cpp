@@ -1928,7 +1928,7 @@ ControlPanelWindow::OrderDeliveryUpdate()
 	ArmyData *data=army.AccessData();
 
 	if(data==NULL){
-		specialAttackWindow_DisplayData(pos, -1);
+		specialAttackWindow_DisplayData(pos, static_cast<sint32>(-1));
 		return;
 	}
 
@@ -1959,14 +1959,14 @@ ControlPanelWindow::OrderDeliveryUpdate()
 			} else {
 				g_cursorManager->SetCursor(CURSORINDEX_MOVE);
 			}
-			specialAttackWindow_DisplayData(pos, -1);
+			specialAttackWindow_DisplayData(pos, static_cast<sint32>(-1));
 		} else {
 			g_cursorManager->SetCursor(Order::GetCursor(m_currentOrder));
 			if(army->CheckWasEnemyVisible(pos, true)){
-				specialAttackWindow_DisplayData(pos, m_currentOrder->GetIndex());
+				specialAttackWindow_DisplayData(pos, static_cast<sint32>(m_currentOrder->GetIndex()));
 			}
 			else{
-				specialAttackWindow_DisplayData(pos, -1);
+				specialAttackWindow_DisplayData(pos, static_cast<sint32>(-1));
 			}
 		}
 	} else {
@@ -1975,7 +1975,7 @@ ControlPanelWindow::OrderDeliveryUpdate()
 		} else {
 			g_cursorManager->SetCursor(Order::GetCursor(m_currentOrder));
 		}
-		specialAttackWindow_DisplayData(pos, -1);
+		specialAttackWindow_DisplayData(pos, static_cast<sint32>(-1));
 	}
 
 }
@@ -2316,7 +2316,7 @@ void ControlPanelWindow::ClearTargetingMode()
 	MapPoint pos;
 	g_tiledMap->GetMouseTilePos(pos);
 	tileimptracker_DisplayData(pos, -1);
-	specialAttackWindow_DisplayData(pos, -1);
+	specialAttackWindow_DisplayData(pos, static_cast<sint32>(-1));
 }
 
 void

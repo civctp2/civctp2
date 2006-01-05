@@ -44,7 +44,7 @@
 #include "SoundRecord.h"
 #include "soundmanager.h"
 #include "SelItem.h"
-#include "Network.h"                    // g_network
+#include "network.h"                    // g_network
 
 TerrainImprovementPool::TerrainImprovementPool() 
 	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)

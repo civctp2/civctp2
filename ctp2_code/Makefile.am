@@ -348,6 +348,7 @@ ctp2_SOURCES = \
 	ui/interface/MainControlPanel.cpp \
 	ui/interface/ShortcutPad.cpp \
 	ui/interface/StatusBar.cpp \
+	ui/interface/SpecialAttackWindow.cpp \
 	ui/interface/TurnYearStatus.cpp \
 	ui/interface/ZoomPad.cpp \
 	ui/interface/controlpanelwindow.cpp \
