@@ -241,8 +241,9 @@ AUI_ERRCODE aui_Resource<T>::AddSearchPath( const MBCHAR *path )
 	
 	const MBCHAR *last = path + len - 1;
 	Assert( *last != FILE_SEPC );
-	while ( *last == FILE_SEPC ) {
-		len--;
+	while ( len && ( *last == FILE_SEPC )) {
+		if (--len)
+			last--;
 	}
 	if (0 == len) {
 		len++;
