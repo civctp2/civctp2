@@ -76,7 +76,7 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 	{
 		if (m_frames[facing]) 
 		{
-			for (size_t n = 0; n < m_shadowFramesCount; n++) {
+			for (size_t n = 0; n < m_shadowFrameCount; n++) {
 				if (m_frames[facing][n])
 					delete m_frames[facing][0];
 
@@ -92,7 +92,7 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 		}
 		if (m_miniframes[facing]) 
 		{
-			for (size_t n = 0; n < m_shadowFramesCount; n++) {
+			for (size_t n = 0; n < m_shadowFrameCount; n++) {
 				if (m_miniframes[facing][n])
 					delete m_miniframes[facing][0];
 
@@ -109,7 +109,7 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 		}
 		if (m_shadowFrames[facing]) 
 		{
-			for (size_t n = 0; n < m_shadowFramesCount; n++) {
+			for (size_t n = 0; n < m_shadowFrameCount; n++) {
 				if (m_shadowFrames[facing][n])
 					delete m_shadowFrames[facing][0];
 
@@ -126,7 +126,7 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 		}
 		if (m_miniShadowFrames[facing] != NULL) 
 		{
-			for (size_t n = 0; n < m_shadowFramesCount; n++) {
+			for (size_t n = 0; n < m_shadowFrameCount; n++) {
 				if (m_miniShadowFrames[facing][n])
 					delete m_miniShadowFrames[facing][0];
 
@@ -163,7 +163,7 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 				spriteutils_CreateQuarterSize((Pixel32 *)tif, m_width, m_height, (Pixel32 **)&minitif, TRUE);
 				
 				size_t framesize = 0;
-				m_frames[facing][i]     = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height, &framesize;
+				m_frames[facing][i]     = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height, &framesize);
 				m_framesSizes[facing][i] = (m_frames[facing][i] ? framesize : 0);
 		                m_miniframes[facing][i] = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, m_width >> 1, m_height >> 1, &framesize);
 		                m_miniframesSizes[facing][i] = (m_miniframes[facing][i] ? framesize : 0);
@@ -218,7 +218,7 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 			
 				size_t framesize = 0;
 				m_frames[facing][i]     = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height, &framesize);
-				m_frameSizes[facing][i] = (m_frames[facing][i] ? framesize : 0);
+				m_framesSizes[facing][i] = (m_frames[facing][i] ? framesize : 0);
 				m_miniframes[facing][i] = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, m_width >> 1, m_height >> 1, &framesize);
 				m_miniframesSizes[facing][i] = (m_miniframes[facing][i] ? framesize : 0);
 

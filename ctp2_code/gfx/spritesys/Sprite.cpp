@@ -95,7 +95,6 @@ Sprite::~Sprite()
 			if (m_miniframes[i]) {
 				delete[] m_miniframes[i];
 				m_miniframes[i] = 0;
-	}
 			}
 	}
 	if (m_frames) {
