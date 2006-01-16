@@ -30,6 +30,7 @@
 //
 // - added linux specific code
 // - Added some casts. (Aug 7th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -594,7 +595,7 @@ void c3files_InitializeCD(void)
 	}
 #endif
 	c3files_GetCDDrives();
-	BOOL success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
+	c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
 }
 
 int c3files_GetCDDriveCount(void)

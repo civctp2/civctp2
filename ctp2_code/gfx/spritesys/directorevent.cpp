@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Director events
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "GameEventUser.h"
@@ -51,7 +80,7 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	sint32 numRevealed = 0;
 
 	
-	UnitActor **restOfStack; 
+	UnitActor **restOfStack = NULL; 
 	sint32 numRest = a->Num() - 1;
 
 	if (numRest > 0) {
@@ -60,11 +89,11 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	}
 
 	
-	UnitActor	**revealedActors;
+	UnitActor	**revealedActors = NULL;
 	
 	if (numRevealed > 0) {
 		
-		
+		// Something missing here.
 			
 		
 	} else {

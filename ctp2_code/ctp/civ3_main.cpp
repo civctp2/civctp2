@@ -47,6 +47,9 @@
 // - Display the main thread function name in the debugger.
 // - Removed refferences to CivilisationDB. (Aug 20th 2005 Martin Gühmann)
 // - Removed refferences to old SpriteStateDBs. (Aug 29th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed some unreachable code. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -347,7 +350,7 @@ bool g_autoAltTab = false;
 
 int ui_Initialize(void)
 {
-	AUI_ERRCODE auiErr;
+	AUI_ERRCODE auiErr = AUI_ERRCODE_OK;
 
 	char s[_MAX_PATH+1];
 
@@ -616,11 +619,6 @@ compute_scroll_deltas(sint32 time,sint32 &deltaX,sint32 &deltaY)
 	sint32 signx = (deltaX < 0 ? -1 : 1);
 	sint32 signy = (deltaY < 0 ? -1 : 1);
 
-	sint32 w = k_TILE_PIXEL_WIDTH;
-	sint32 h = k_TILE_PIXEL_HEIGHT;
-
-	
-	
 	if (abs(deltaX) > k_SMOOTH_MAX_VELOCITY)
 	{
 		deltaX = k_SMOOTH_MAX_VELOCITY * signx;
@@ -649,7 +647,7 @@ BOOL ui_CheckForScroll(void)
 	static BOOL isMouseScrolling = FALSE;
 
 	
-	const int k_MAX_SMOOTH_SCROLL = 64;
+//	const int k_MAX_SMOOTH_SCROLL = 64;
 	const int k_TICKS_PER_ACCELERATION = 50;
 
 	sint32		hscroll = g_tiledMap->GetZoomTilePixelWidth();
@@ -1007,7 +1005,7 @@ sint32 sharedsurface_Initialize( void )
 {
 	
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	return errcode;
+	return errcode; // Return ends code here needs to be considered if g_sharedSurface is really needed
 
 	Assert( g_sharedSurface == NULL );
 	if ( !g_sharedSurface )
@@ -1142,106 +1140,14 @@ int radar_Initialize(void)
 int main_RestoreGame(const MBCHAR *filename)
 {
 
-	g_civApp->LoadSavedGame((MBCHAR *)filename);
+	return g_civApp->LoadSavedGame((MBCHAR *)filename);
 
-return 0;
-
-    char filepath[_MAX_PATH]={0}; 
-    FILE *fin=NULL; 
-    g_civPaths->GetSavePath(C3SAVEDIR_GAME, filepath) ;				
-	strcat(filepath, filename) ;									
-    fin = fopen(filepath, "r"); 
-    if (fin == NULL) { 
-        c3errors_ErrorDialog("Load save game", "Could not open %s", filename);
-        return 0; 
-    } 
-    fclose (fin); 
-
-	
-	g_network.Cleanup() ;											
-
-	radarwindow_Cleanup();
-	tile_Cleanup() ;
-	gameinit_Cleanup() ;											
-
-	messagewin_PurgeMessages();
-	workwin_Cleanup();
-	sprite_Cleanup() ;
-	
-	
-	
-
-	sprite_Initialize() ;
-	GameFile::RestoreGame(filename) ;
-	tile_Initialize(TRUE) ;
-	radar_Initialize() ;
-
-	
-	g_tiledMap->InvalidateMap();
-
-	return (0) ;
 }
 
 
 int main_Restart()
 {
-	g_civApp->RestartGame();
-
-return 0;
-
-	
-
-
-	
-	g_network.Cleanup();
-	
-	
-
-	radarwindow_Cleanup();
-
-	
-	tile_Cleanup();
-	
-	
-	gameinit_Cleanup();
-	
-	
-
-	messagewin_PurgeMessages();
-	workwin_Cleanup();
-	
-	
-	sprite_Cleanup();
-	
-	
-
-
-
-	
-	sprite_Initialize();
-
-	
-	
-	gameinit_Initialize(-1, -1, (*(CivArchive *)(NULL)));
-
-	
-	tile_Initialize(FALSE);
-
-
-	
-	
-
-
-    
-    roboinit_Initalize(*(CivArchive *)(NULL)); 
-
-	
-	radar_Initialize();
-
-
-	g_tiledMap->InvalidateMap();
-
-	return 0;
+	return g_civApp->RestartGame();
 }
 
 static HWND s_taskBar;

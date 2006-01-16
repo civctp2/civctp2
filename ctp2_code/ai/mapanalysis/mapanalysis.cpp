@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Map analysis
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,17 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Relaxed an Assert to prevent lots of popups with e.g. the CTC mod.
 // - Corrected the Distance To Empire Center computation
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -897,7 +902,7 @@ const PLAYER_INDEX & opponentId) const
 {
 
     double most_at_risk_value = 0.0;
-    double ratio;
+    double ratio = 0.0;
 
 
     Player * player_ptr = g_player[playerId];

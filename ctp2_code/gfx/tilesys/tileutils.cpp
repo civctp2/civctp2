@@ -1,16 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
-  
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Tile utilities
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// WIN32
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -314,7 +330,7 @@ char tileutils_EncodeScanline(Pixel32 *scanline, int width, Pixel16 **outBufPtr)
 	unsigned char	alpha;
 	int				pos;
 	Pixel16			*startPtr;
-	char			empty;
+	char			empty = FALSE;
 
 	pos = 0;
 
@@ -323,8 +339,6 @@ char tileutils_EncodeScanline(Pixel32 *scanline, int width, Pixel16 **outBufPtr)
 
 	while (scanPtr < (scanline + width)) {
 		pix32 = *scanPtr;
-		
-		empty = FALSE;
 
 		RGB32Info(pix32, &pix16, &alpha);
 		pix32 = pix32 & 0x00FFFFFF;
@@ -355,7 +369,7 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 						*tableStart;
 	Pixel16				*startOfData;
 	Pixel16				*dataPtr, *startDataPtr;
-	char				empty;
+	char				empty = FALSE;
 	int					firstNonEmpty=-1;
 	unsigned short int *firstNonEmptyPtr;
 	unsigned short int *endLinePtr;
@@ -386,7 +400,7 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 				firstNonEmpty = 0;
 			}
 
-			
+		
 			*table++ = startDataPtr - startOfData;
 			lastNonEmpty = y;
 		} else {
@@ -595,7 +609,7 @@ char tileutils_EncodeScanline16(Pixel16 *scanline, int width, Pixel16 **outBufPt
 	Pixel16			*scanPtr = scanline;
 	int				pos;
 	Pixel16			*startPtr;
-	char			empty;
+	char			empty = FALSE;
 
 	pos = 0;
 
@@ -606,7 +620,6 @@ char tileutils_EncodeScanline16(Pixel16 *scanline, int width, Pixel16 **outBufPt
 		pix16 = *scanPtr;
 		if (sourceDataIs565)
 			pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
-		empty = FALSE;
 		switch (pix16) {
 		case k_16_BIT_SKIP_PIXEL :
 			empty = tileutils_EncodeSkipRun16(&scanPtr, &pos, width, outBufPtr, sourceDataIs565);
@@ -634,7 +647,7 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 						*tableStart;
 	Pixel16				*startOfData;
 	Pixel16				*dataPtr, *startDataPtr;
-	char				empty;
+	char				empty = FALSE;
 	int					firstNonEmpty=-1;
 	unsigned short int *firstNonEmptyPtr;
 	unsigned short int *endLinePtr;
@@ -1881,7 +1894,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				MegaTileStep	*steps = new MegaTileStep[len];
 
 				for (i=0; i<len; i++) {
-					uint8		dir;
+					uint8		dir = 0;
 
 					if (!token_ParseKeywordNext(theToken, TOKEN_TILESET_MEGATILE_INFO)) return FALSE;
 

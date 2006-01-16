@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Goal handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,9 @@
 //
 // Compiler flags
 //
-// - None
+// _DEBUG_SCHEDULER
+// _DEBUG
+// - Generate debug version
 // 
 //----------------------------------------------------------------------------
 //
@@ -30,7 +33,7 @@
 // - Added an attribute for the goal subtask (used by armytext display)
 // - Changed the task forces for goals (based on objectif's threat)
 // - Added a Debug Log (activated with k_dbg_scheduler_all) to see the goal priority computing
-//  (raw priority, plus value of each modifier)
+//   (raw priority, plus value of each modifier)
 // - Added an Ungroup condition that can be associated to goals (as it exists RallyFirst) - Calvitix
 // - Added consitions for Treaspassing units : (to favorise their Retreat) - Calvitix
 // - Added conditions for wounded units : IsWoundedbonus (see goals.txt) - Calvitix
@@ -51,6 +54,7 @@
 //   routes and tileimps. - Feb. 21st 2005 Martin Gühmann
 // - Started to reimplement the refuel order. - May 7th 2005 Martin Gühmann
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -374,7 +378,7 @@ sint32 CTPGoal::Get_Target_Value() const
 
 PLAYER_INDEX CTPGoal::Get_Target_Owner() const
 {
-	PLAYER_INDEX target_owner;
+	PLAYER_INDEX target_owner = -1;
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
 	Assert(goal_record);
 	
@@ -698,7 +702,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		empty > 0 && 
 		m_agents.size() > 1)
 	{
-		CTPAgent const *target_agent_ptr;
+		CTPAgent const *target_agent_ptr = NULL;
 		
 		for (Agent_List::const_iterator agent_iter = m_agents.begin(); agent_iter != m_agents.end(); agent_iter++)
 		{
@@ -1279,7 +1283,7 @@ bool CTPGoal::Get_Totally_Complete() const
 	
 	bool isspecial; 
 	bool isstealth = false;
-	sint32 maxattack;
+	sint32 maxattack = 0;
 	bool iscivilian = false;
 	if ( goal_record->GetTargetTypeAttackUnit() ||
 		goal_record->GetTargetTypeSpecialUnit() ) 
@@ -2205,14 +2209,14 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 	BOOL city_found;
 	MapPoint nearest_airfield;
 	Unit nearest_city;
-	double city_distance;
+	double city_distance = 0.0;
 	sint32 cargo_cont;
 
 	switch (sub_task)
 	{
 
 	case SUB_TASK_AIRLIFT:
-		
+	{	
 		
 		
 		start_pos = the_army->Get_Pos(); 
@@ -2222,7 +2226,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		
 		airfield_found = g_player[m_playerId]->
 			GetNearestAirfield(start_pos, nearest_airfield, cargo_cont);
-		double airfield_distance;
+		double airfield_distance = 0.0;
 		city_found = g_player[m_playerId]->
 			GetNearestCity(start_pos, nearest_city, city_distance, FALSE);
 		if (airfield_found)
@@ -2278,7 +2282,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		}
 	
 		break;
-								
+	}							
 	case SUB_TASK_TRANSPORT_TO_BOARD:
 		
 		check_dest = false;

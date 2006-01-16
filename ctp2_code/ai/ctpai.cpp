@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main Ai File
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -51,6 +52,7 @@
 //   in the city units that are waiting for being moved out. 
 //    - Feb. 21st 2005 Martin Gühmann
 // - Improved AI sliders optimization. - Jul 18th 2005 Martin Gühmann
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1326,7 +1328,6 @@ void CtpAi::Save(CivArchive & archive)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 {
 	Assert(deadPlayerId < s_maxPlayers);
@@ -1625,7 +1626,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 // Remark(s)  : Assumption: playerId points to a valid computer player.
 //
 //----------------------------------------------------------------------------
-
 void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId)
 {
 	Player *		player_ptr	= g_player[playerId];
@@ -1716,7 +1716,6 @@ void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId)
 // Remark(s)  : Assumption: playerId points to a valid computer player.
 //
 //----------------------------------------------------------------------------
-
 void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
 {
 	Player *		player_ptr = g_player[playerId];
@@ -1733,7 +1732,6 @@ void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
 		MapPoint	pos(city.RetPos());
 		g_theWorld->GetArmy(pos, garrison);
        
-        Army		move_army();
         sint32		min_size	= k_MAX_ARMY_SIZE;
 
 		for (sint32 j = 0; j < garrison.Num(); ++j)

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Diplomacy
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 // - Improved CleanupAll.
 // - Some agreements have limited duration, PFT 05 MAR 05
 // - Replaced old civilisation database by new civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2053,7 +2054,7 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 	StringId strId;
 	sint32 regard_cost=0;
 	sint32 trust_cost=0;
-	char *str_buf;
+	char *str_buf = NULL;
 
 	switch (threat.detail.type)
 	{
@@ -3300,7 +3301,7 @@ void Diplomat::ChooseNewProposal(const PLAYER_INDEX & foreignerId) {
 	else
 		{
 			Motivation topMotivation = *motivation_iter;
-			GAME_EVENT motivation_event;
+			GAME_EVENT motivation_event = static_cast<GAME_EVENT>(0);
 	
 			switch (topMotivation.type)
 			{

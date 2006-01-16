@@ -92,6 +92,7 @@
 //   better AI sliders optimisation routines. - Jul 18th 2005 Martin Gühmann
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 // - Repaired incorrect AddEvent parameters.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3430,7 +3431,7 @@ void Governor::ComputeDesiredUnits()
 
 	double unit_support_percent; 
 	sint32 total_unit_support;
-	double unit_support_percent_by_type;
+	double unit_support_percent_by_type = 0.0;
 	sint32 total_unit_support_by_type;
 	sint32 total_unallocated_support;
 	sint32 garrison_count;
@@ -4152,7 +4153,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	
 	double top_value;
 	double bottom_value;
-	double rank; 
+	double rank = 0.0; 
 	const StrategyRecord::BuildListSequenceElement *elem = NULL;
 	const StrategyRecord::BuildListSequenceElement *best_elem = NULL;
 	sint32 best_priority = -99999;
@@ -4462,7 +4463,7 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 		build_list_rec = strategy.GetFreightUnitListPtr();
 		break;
 	default:
-		
+		build_list_rec = NULL;
 		Assert(false);
 		break;
 	}
@@ -4655,7 +4656,7 @@ sint32 Governor::ComputeBestMilitaryReadiness() const
 {
 	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
-	sint32 new_level;
+	sint32 new_level = 0;
 	if (strategy.GetReadinessLevel())
 		strategy.GetReadinessLevel(new_level);
 

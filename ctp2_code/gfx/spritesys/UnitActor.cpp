@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Unit
+// Description  : Unit actor
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -42,6 +42,8 @@
 // - PFT 29 mar 05, show # turns until city next grows a pop.
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -459,7 +461,6 @@ void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVi
 		   m_playerNum == g_selected_item->GetVisiblePlayer() &&
 		   !m_isUnseenCellActor)
 		{
-			BOOL revealedUnexplored = FALSE;
 			DPRINTF(k_DBG_INFO, ("Adding vision for %lx, owner %d, range %lf, center: %d,%d\n",
 								 m_unitID.m_id, m_playerNum, m_unitVisionRange,
 								 m_pos.x, m_pos.y));
@@ -1227,7 +1228,7 @@ void UnitActor::DrawFortified(BOOL fogged)
 
 void UnitActor::DrawFortifying(BOOL fogged)
 {
-	Pixel16			*fortifiedImage = g_tiledMap->GetTileSet()->GetImprovementData(34);
+	Pixel16			*fortifiedImage = g_tiledMap->GetTileSet()->GetImprovementData(34); // Not refferenced
 
 	sint32	x = m_x + (sint32)(double)(k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale()), 
 			y = m_y + (sint32)(double)(k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
@@ -1632,7 +1633,7 @@ BOOL UnitActor::Draw(BOOL fogged)
 			DrawCityWalls(fogged);
 		}
 
-		uint16 oldTransparency;
+		uint16 oldTransparency = 0;
 		if (isCloaked) {
 			oldTransparency = m_transparency;
 			m_transparency = 8 + (rand() % 5);

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source file
 // Description  : Tribe relations handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Marked MS version specific code.
 // - Standardised <list> import.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -288,7 +292,7 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 
 	
 	m_regardTotal = baseRegard;
-	const DiplomacyRecord::RegardDecay *regard_decay;
+	const DiplomacyRecord::RegardDecay *regard_decay = NULL;
 		
 	
 	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++) {
@@ -632,7 +636,7 @@ void Foreigner::LogDebugStatus(const DiplomacyRecord & diplomacy) const
 	RegardEventList::const_iterator event_iter;
 	double decay;
 	sint32 round;
-	const DiplomacyRecord::RegardDecay *regard_decay;
+	const DiplomacyRecord::RegardDecay *regard_decay = NULL;
 	
 	
 	gslog_dipprint("     delta  : rnds/decay : regard change reason (type) \n");

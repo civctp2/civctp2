@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Sprite file handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Crash prevention, small clean-ups.
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -157,9 +159,6 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 	   SetFilePos(current_pos);
 	}
 
-	size_t test=GetFilePos();
-
-	
 	for (i=0; i<s->GetNumFrames(); i++) 
 	{
 		
@@ -234,19 +233,19 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 			size_t size,compressed_size;
 			size = normal_ssizes[j][i];
 
-		    CompressedData = CompressData((void *)s->GetFrameData(j,i),size);
+			CompressedData = CompressData((void *)s->GetFrameData(j,i),size);
   
 			compressed_size = size;
 			
 			if(m_version>k_SPRITEFILE_VERSION1)
-			   WriteData((uint32)normal_ssizes[j][i]);
+				WriteData((uint32)normal_ssizes[j][i]);
 
 			WriteData((uint8 *)CompressedData, compressed_size);
 		
-		    compressed_ssizes[j][i] = size;
+			compressed_ssizes[j][i] = size;
 
 			
-			delete[] (unsigned char*) CompressedData;
+			delete[] (uint8 *) CompressedData;
 		}
 
 		
@@ -519,9 +518,6 @@ void SpriteFile::ReadSpriteDataBasic(Sprite *s)
 		SetFilePos(GetFilePos() + size);
 	}
 
-	uint32 test=GetFilePos();
-	
-	
 	size        = msizes[0];
 	ActualData  = (Pixel16 *)new uint8[size];
 
@@ -1210,7 +1206,7 @@ SPRITEFILEERR SpriteFile::Create(SPRITEFILETYPE type,unsigned version,unsigned c
 #else
 	MBCHAR fullPath[_MAX_PATH];
 	g_civPaths->GetSpecificPath(C3DIR_SPRITES, fullPath, FALSE);
-	sprintf(path, "%s%s%s", fullPath, FILE_SEP, m_filename);
+	sprintf(path, "%s" FILE_SEP "%s", fullPath, m_filename);
 #endif
 
 	if (m_file)
@@ -1332,7 +1328,7 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 		else 
 		{
 			WriteData((uint32)FALSE);
-			offset[i] = (unsigned) -1;
+			offset[i] = static_cast<uint32>(-1);
 			
 		}
 	}
@@ -1587,7 +1583,7 @@ SPRITEFILEERR SpriteFile::Write(GoodSpriteGroup *s)
 		{
 			
 			WriteData((uint32)FALSE);
-			offset[i] = (unsigned) -1;
+			offset[i] = static_cast<uint32>(-1);
 		}
 
 	}
@@ -2710,7 +2706,7 @@ SpriteFile::CompressData_LZW1(void *Data, size_t &DataLen)
  p_control=p_dst; 
  p_dst+=2;
  
- while (TRUE)
+ while (true)
  {
 	uint8 *p,*s; 
 	uint16 unroll=16,len;
@@ -2813,7 +2809,7 @@ SpriteFile::DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualL
 	 
  uint32 loops=0,subloops=0;
 	
- uint16 controlbits=0, control;
+ uint16 controlbits=0, control=0;
  uint8 *p_src=p_src_first+LZW1_FLAG_BYTES, *p_dst=p_dst_first,
        *p_src_post=p_src_first+src_len;
  

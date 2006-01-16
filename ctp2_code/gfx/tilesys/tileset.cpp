@@ -1,15 +1,37 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Tile set
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// HAVE_UNISTD_H
+// HAVE_SYS_STAT_H
+// HAVE_SYS_TYPES_H
+// LINUX
+// WIN32
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
- 
 #include "c3.h"
 
 #include "XY_Coordinates.h"
@@ -317,7 +339,6 @@ Error:
 
 void TileSet::LoadTransforms(FILE *file)
 {
-	MBCHAR		ageChar = 'f';
 	uint16		numTransforms;
 	sint16		*transform;
 	sint32		i;
@@ -338,7 +359,6 @@ void TileSet::LoadTransforms(FILE *file)
 
 void TileSet::LoadRiverTransforms(FILE *file)
 {
-	MBCHAR		ageChar = 'f';
 	uint16		numRiverTransforms;
 	sint16		*transform;
 	sint32		i;
@@ -381,7 +401,6 @@ void TileSet::LoadRiverTransforms(FILE *file)
 
 void TileSet::LoadImprovements(FILE *file)
 {
-	MBCHAR		ageChar = 'f';
 	uint16		numImprovements;
 	sint32		i;
 	uint32		len;
@@ -418,7 +437,6 @@ void TileSet::LoadImprovements(FILE *file)
 
 void TileSet::LoadMegaTiles(FILE *file)
 {
-	MBCHAR		ageChar = 'f';
 	sint32		i;
 
 	if (file) {
@@ -451,10 +469,8 @@ uint8 TileSet::ReverseDirection(sint32 dir)
 	case k_MEGATILE_DIRECTION_W	: return k_MEGATILE_DIRECTION_E;
 	default:
 		Assert(FALSE);
-		return (unsigned) -1;
+		return static_cast<uint8>(-1);
 	}
-
-	return (unsigned) -1;
 }
 
 void TileSet::LoadMapIcons(void)
@@ -561,7 +577,6 @@ void TileSet::Load(void)
 
 void TileSet::QuickLoadTransforms(uint8 **dataPtr)
 {
-	MBCHAR		ageChar = 'f';
 	uint16		numTransforms;
 	sint32		i;
 
@@ -746,7 +761,7 @@ void TileSet::QuickLoad(void)
 	MBCHAR		filename[_MAX_PATH];
 	FILE		*file;
 	fpos_t		pos;
-	size_t		fileSize;
+	size_t		fileSize = 0;
 	uint8		*dataPtr;
 	size_t		count;
 
