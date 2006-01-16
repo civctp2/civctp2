@@ -1,4 +1,32 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The civilization 3 popup window
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -62,7 +90,7 @@ c3_PopupWindow::c3_PopupWindow(
 
 AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 {		
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
 
@@ -158,7 +186,7 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 
 AUI_ERRCODE c3_PopupWindow::Resize( sint32 width, sint32 height )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	errcode = C3Window::Resize( width, height );
 
@@ -238,7 +266,7 @@ AUI_ERRCODE c3_PopupWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -277,7 +305,7 @@ sint32 c3_PopupWindow::AddCancel(
 	void *cookie,
 	MBCHAR *buttonBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -303,7 +331,7 @@ sint32 c3_PopupWindow::AddOk(
 	void *cookie,
 	MBCHAR *buttonBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -329,7 +357,7 @@ sint32 c3_PopupWindow::AddClose(
 	void *cookie,
 	MBCHAR *buttonBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -355,7 +383,7 @@ sint32 c3_PopupWindow::AddYes(
 	void *cookie,
 	MBCHAR *buttonBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -381,7 +409,7 @@ sint32 c3_PopupWindow::AddNo(
 	void *cookie,
 	MBCHAR *buttonBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	

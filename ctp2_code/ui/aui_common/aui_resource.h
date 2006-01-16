@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : User interface general resource handling
+// Description  : Activision User Interface general resource handling
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// WIN32
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,6 +29,7 @@
 // - Crash preventions
 // - moved aui_UI::CalculateHash -> aui_Base::CalculateHash
 // - fixed some filesystem portability issues
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -134,7 +137,7 @@ aui_ResourceElement<TT>::aui_ResourceElement(
 	// Temporary patch: modern code would use std::string and initialiser
 	strcpy(name, newName);
 	
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	resource = new TT( &errcode, fullPath );
 	Assert( AUI_NEWOK(resource,errcode) );
 	if ( !AUI_NEWOK(resource,errcode) ) return;

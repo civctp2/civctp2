@@ -1,12 +1,34 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Activision User Interface region
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
+// - Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -905,7 +927,7 @@ aui_DragDropWindow *aui_Region::CreateDragDropWindow( aui_Control *dragDropItem 
 
 	
 	
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_DragDropWindow *ddw = new aui_DragDropWindow(
 		&errcode,
 		dragDropItem,	

@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Activision User Interface movie window
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -377,7 +396,7 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 	aui_Mouse *mouse = g_ui->TheMouse();
 	sint32 numEvents;
 	static aui_MouseEvent mouseEvents[ k_MOUSE_MAXINPUT ];
-	aui_MouseEvent *mouseState;
+	aui_MouseEvent *mouseState = NULL;
 
 	if (mouse) {
 		

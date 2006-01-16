@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Battle order box.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,11 +18,14 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added unit display name.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -104,7 +108,7 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 	MBCHAR			fortifyBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	RECT			iconRect;
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	
 	sint32	i,j;
 

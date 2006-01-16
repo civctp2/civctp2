@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : User interface element: list with rangers.
+// Description  : Activision User Interface element: list with rangers.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Always focus on the latest message.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -179,7 +183,7 @@ AUI_ERRCODE aui_ListBox::InitCommon( void )
 
 	m_buildingTheList = FALSE;		
 
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	m_pane =
 		new aui_Static( &errcode, aui_UniqueId(), 0, 0, m_width, m_height );
@@ -1228,7 +1232,7 @@ aui_DragDropWindow *aui_ListBox::CreateDragDropWindow( aui_Control *dragDropItem
 	};
 	dragDropItem->ToWindow( &itemPoint );
 
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_DragDropWindow *ddw = new aui_DragDropWindow(
 		&errcode,
 		dragDropItem,

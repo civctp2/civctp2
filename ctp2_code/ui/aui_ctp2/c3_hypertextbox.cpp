@@ -1,12 +1,32 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The civilization 3 hyper text box
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -201,7 +221,7 @@ AUI_ERRCODE c3_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 				this );
 	}
 
-	MBCHAR *pattern;
+	MBCHAR *pattern = NULL;
 
 	if (m_pattern)
 		pattern = m_pattern->GetFilename();
@@ -256,8 +276,8 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 	sint32 hyperLinkDB = 0;
 	sint32 hyperLinkIndex = 0;
 	sint32 isHyperLink = FALSE;
-	COLORREF oldColor;
-	sint32 oldUnderline;
+	COLORREF oldColor = 0;
+	sint32 oldUnderline = 0;
 
 	while ( ptr != stop )
 	{

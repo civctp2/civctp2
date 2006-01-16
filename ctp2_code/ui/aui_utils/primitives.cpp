@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The primitive rectabgles for painting
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 #include "c3.h"
 #include "c3math.h"
 
@@ -1255,7 +1284,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
-	sint32 oldMode;
+	sint32 oldMode = 0;
 
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
@@ -1268,7 +1297,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	oldColor = SetTextColor(hdc, color);
 
 	
-	HFONT hOldFont;
+	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
@@ -1307,7 +1336,7 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
-	sint32 oldMode;
+	sint32 oldMode = 0;
 #endif
 
 	Assert(pSurface);
@@ -1327,7 +1356,7 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	oldColor = SetTextColor(hdc, g_colorSet->GetColorRef(COLOR_BUTTON_TEXT_DROP));
 
 	
-	HFONT hOldFont;
+	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
@@ -1384,7 +1413,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	HRESULT hr;
 	COLORREF oldColor;
 	TEXTMETRIC tm;
-	sint32 oldMode;
+	sint32 oldMode = 0;
 
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
@@ -1399,7 +1428,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	oldColor = SetTextColor(hdc, color);
 
 	
-	HFONT hOldFont;
+	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
@@ -1452,7 +1481,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
-	sint32 oldMode;
+	sint32 oldMode = 0;
 
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
@@ -1465,7 +1494,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	oldColor = SetTextColor(hdc, 0);
 
 	
-	HFONT hOldFont;
+	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
@@ -1522,7 +1551,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
-	sint32 oldMode;
+	sint32 oldMode = 0;
 
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
@@ -1535,7 +1564,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	oldColor = SetTextColor(hdc, 0);
 
 	
-	HFONT hOldFont;
+	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
@@ -1585,7 +1614,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	HDC			hdc;
 	HRESULT		hr;
 	COLORREF	oldColor;
-	sint32		oldMode;
+	sint32		oldMode = 0;
 	SIZE		size;
 	sint32		x,y;
 
@@ -1600,7 +1629,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	oldColor = SetTextColor(hdc, 0);
 
 	
-	HFONT hOldFont;
+	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
@@ -1655,7 +1684,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	HDC			hdc;
 	HRESULT		hr;
 	COLORREF	oldColor;
-	sint32		oldMode;
+	sint32		oldMode = 0;
 	SIZE		size;
 	sint32		x,y;
 
@@ -1670,7 +1699,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	oldColor = SetTextColor(hdc, 0);
 
 	
-	HFONT hOldFont;
+	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
@@ -1736,7 +1765,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	HRESULT hr;
 	COLORREF oldColor;
 	TEXTMETRIC tm;
-	sint32 oldMode;
+	sint32 oldMode = 0;
 	sint32 saveY = y;
 
 	hr = pSurface->GetDC(&hdc);
@@ -1752,7 +1781,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	oldColor = SetTextColor(hdc, 0);
 
 	
-	HFONT hOldFont;
+	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
@@ -3084,9 +3113,9 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 	Assert(pSurface);
 	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	sint32 xStart;
-	sint32 xEnd;
-	sint32 y;
+	sint32 xStart = 0;
+	sint32 xEnd = 0;
+	sint32 y = 0;
 
 	switch ( a )
 	{
@@ -3212,9 +3241,9 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 	Assert(pSurface);
 	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	sint32 xStart;
-	sint32 xEnd;
-	sint32 y;
+	sint32 xStart = 0;
+	sint32 xEnd = 0;
+	sint32 y = 0;
 
 	switch ( a )
 	{
@@ -3515,7 +3544,7 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 
 
 
-	Pixel16 *image;
+	Pixel16 *image = NULL;
 
 
 	TileSet *tileSet = g_tiledMap->GetTileSet();

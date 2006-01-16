@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : User interface hypertext link box
+// Description  : Call to Power 2 hypertextbox
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,6 +28,7 @@
 // - Interpret a zero-length link text as display of the text from gl_str.txt.
 //   Example: <L:DATABASE_UNITS,UNIT_STEALTH_BOMBER><e> will display a
 //            "Stealth Bomber" hyperlink when using the English version.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -438,7 +442,7 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 				this );
 	}
 
-	MBCHAR *pattern;
+	MBCHAR *pattern = NULL;
 
 	if (m_pattern)
 		pattern = m_pattern->GetFilename();
@@ -491,8 +495,8 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 	sint32 hyperLinkDB = 0;
 	sint32 hyperLinkIndex = 0;
 	sint32 isHyperLink = FALSE;
-	COLORREF oldColor;
-	sint32 oldUnderline;
+	COLORREF oldColor = 0;
+	sint32 oldUnderline = 0;
 
 	while ( ptr != stop )
 	{

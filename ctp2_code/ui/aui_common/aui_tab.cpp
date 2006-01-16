@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Activision User Interface tab
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_uniqueid.h"
@@ -75,10 +94,10 @@ AUI_ERRCODE aui_Tab::InitCommon( MBCHAR *ldlBlock )
 	sprintf( block, "%s.%s", ldlBlock, "pane" );
 
 	
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_pane = new aui_Static( &errcode, aui_UniqueId(), block );
 	Assert( AUI_NEWOK(m_pane,errcode) );
-	if ( !AUI_NEWOK(m_pane,errcode) ) return AUI_ERRCODE_OK;
+	if ( !AUI_NEWOK(m_pane,errcode) ) return AUI_ERRCODE_OK; // Returnin OK?
 
 	m_pane->SetBlindness( TRUE );
 
@@ -88,7 +107,7 @@ AUI_ERRCODE aui_Tab::InitCommon( MBCHAR *ldlBlock )
 	
 	AddChild( m_pane );
 
-	return AUI_ERRCODE_OK;
+	return AUI_ERRCODE_OK; // Why not errcode?
 }
 
 
@@ -101,7 +120,7 @@ AUI_ERRCODE aui_Tab::InitCommon( sint32 paneWidth, sint32 paneHeight )
 
 	
 	
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_pane = new aui_Static(
 		&errcode,
 		aui_UniqueId(),

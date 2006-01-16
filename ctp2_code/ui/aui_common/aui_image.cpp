@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : User interface - image handling
+// Description  : Activision User Interface - image handling
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +16,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// __AUI_USE_DIRECTX__
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Crash prevented.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -161,7 +164,7 @@ aui_Image::AttachSurface(aui_Surface *s)
 
 AUI_ERRCODE aui_Image::LoadEmpty( sint32 width, sint32 height, sint32 bpp )
 {
-	AUI_ERRCODE retcode;
+	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
 	m_surface = aui_Factory::new_Surface(
 		retcode,
@@ -180,7 +183,7 @@ AUI_ERRCODE aui_Image::LoadFileMapped( sint32 width, sint32 height,
                                        sint32 bpp, sint32 pitch, 
                                        uint8 *buffer )
 {
-	AUI_ERRCODE retcode;
+	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
 	m_surface = new aui_Surface(
 		&retcode,
