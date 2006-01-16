@@ -33,6 +33,7 @@ libgsnewdb_a_SOURCES = \
 	BuildingRecord.cpp \
 	CitySizeRecord.cpp \
 	CityStyleRecord.cpp \
+	CivilisationRecord.cpp \
 	DiplomacyProposalRecord.cpp \
 	DiplomacyRecord.cpp \
 	DiplomacyThreatRecord.cpp \
@@ -74,6 +75,7 @@ newdb_CDBTYPES = \
 	BuildingRecord \
 	CitySizeRecord \
 	CityStyleRecord \
+	CivilisationRecord \
 	DiplomacyProposalRecord \
 	DiplomacyRecord \
 	DiplomacyThreatRecord \
@@ -196,6 +198,13 @@ CityStyleRecord.cpp \
 CityStyleRecord.h: CityStyleRecord.stamp
 
 CityStyleRecord.stamp: $(ctp2_code)/gs/newdb/citystyle.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+CivilisationRecord.cpp \
+CivilisationRecord.h: CivilisationRecord.stamp
+
+CivilisationRecord.stamp: $(ctp2_code)/gs/newdb/Civilisation.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 

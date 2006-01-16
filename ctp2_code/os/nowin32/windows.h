@@ -107,7 +107,9 @@ typedef struct hwnd_t* HWND;
 #define _MAX_DIR _MAX_FNAME
 #define _MAX_PATH PATH_MAX
 #define MAX_PATH PATH_MAX
-#define MB_OK 0
+#define IDNO      7
+#define MB_OK     0
+#define MB_YESNO  4
 #define MB_ICONEXCLAMATION 0
 #define SND_ASYNC 0x0001
 #define SND_FILENAME 0x00020000L
@@ -147,6 +149,7 @@ int stricmp(const char* s1, const char* s2);
 #ifndef strnicmp
 int strnicmp(const char *str1, const char *str2, size_t n);
 #endif
+int _stricoll(const char *str1, const char *str2);
 char* strupr(char* str);
 
 #endif

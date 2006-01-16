@@ -229,4 +229,41 @@ int strnicmp(const char *str1, const char *str2, size_t n)
 }
 #endif
 
+int _stricoll(const char *str1, const char *str2)
+{
+	char *sl1 = NULL;
+	char *sl2 = NULL;
+
+	if (str1) {
+		size_t s1 = strxfrm(sl1, str1, 0);
+		s1++;
+		sl1 = (char *) malloc(s1);
+		if (!sl1)
+			return -1;
+		strxfrm(sl1, str1, --s1);
+		sl1[s1] = '\0';
+	}
+	if (str2) {
+		size_t s2 = strxfrm(sl2, str2, 0);
+		s2++;
+		sl2 = (char *) malloc(s2);
+		if (!sl2) {
+			if (sl1)
+				free(sl1);
+			return 1;
+		}
+		strxfrm(sl2, str2, --s2);
+		sl2[s2] = '\0';
+	}
+
+	int ret = strcasecmp(sl1, sl2);
+
+	if (sl1)
+		free(sl1);
+	if (sl2)
+		free(sl2);
+
+	return ret;
+}
+
 #endif // !WIN32

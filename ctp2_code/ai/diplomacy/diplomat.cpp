@@ -5454,7 +5454,7 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 			if (closest_nuke_iter != weapon_list.end())
 			{
 				sint32 nuke_range = static_cast<sint32>
-					sint32(((*closest_nuke_iter).GetDBRec()->GetMaxMovePoints() / k_MOVE_AIR_COST) - 5);
+					(((*closest_nuke_iter).GetDBRec()->GetMaxMovePoints() / k_MOVE_AIR_COST) - 5);
 				close_enough = ((nuke_range * nuke_range) > closest_nuke_dist);
 			}
 
