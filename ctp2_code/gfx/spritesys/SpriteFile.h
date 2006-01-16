@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

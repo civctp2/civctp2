@@ -1,21 +1,48 @@
-
-
-
-
-
-
-
-
-
-
-
- 
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Sprite with facings and shadows 
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added separate counters in Sprite-derived classes to prevent crashes.
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __FACEDSPRITEWSHADOW_H__
 #define __FACEDSPRITEWSHADOW_H__
+
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// #include <>
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class FacedSpriteWshadow;
 
 #define k_MAX_FACINGS		8
 #define k_NUM_FACINGS		5
@@ -23,15 +50,25 @@
 #define k_MAX_NAMES			100
 #define k_MAX_NAME_LENGTH	_MAX_PATH
 
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
+
 #include "Sprite.h"
 
-class Token;
 class aui_Surface;
+class Token;
 
-class FacedSpriteWshadow : public Sprite {
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+
+class FacedSpriteWshadow : public Sprite 
+{
 public:
 	FacedSpriteWshadow();
-	~FacedSpriteWshadow();
+	virtual ~FacedSpriteWshadow();
 
 	void			Import(uint16 nframes, char *files[k_NUM_FACINGS][k_MAX_NAMES], char *shadowFiles[k_NUM_FACINGS][k_MAX_NAMES]);
 	void			Import(uint16 nframes, char *files[k_NUM_FACINGS][k_MAX_NAMES]);
@@ -79,10 +116,14 @@ public:
 	void			SetHotPoints(POINT *points) { memcpy(m_hotPoints, points, sizeof(m_hotPoints)); }
 
 	sint32			ParseFromTokens(Token *theToken);
-	void			AllocateFrameArrays(void);
+	void			AllocateFrameArrays(size_t count);
 
 	void			SetHasShadow(BOOL val) { m_hasShadow = val; }
 	BOOL			GetHasShadow() { return m_hasShadow; }
+
+	virtual uint16	GetNumFrames(void) const    { return m_shadowFrameCount; };
+	virtual void	SetNumFrames(uint16 num)    { m_shadowFrameCount = num; }
+
 
 protected:
 	Pixel16			**m_frames[k_NUM_FACINGS];
@@ -98,6 +139,8 @@ protected:
 	uint16			m_hasShadow;
 
 	POINT			m_hotPoints[k_NUM_FACINGS];
+
+	size_t          m_shadowFrameCount;         // number of valid entries per facing in the Pixel16 ** variables
 };
 
 #endif

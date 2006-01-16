@@ -1,18 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Sprite
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added separate counters in Sprite-derived classes to prevent crashes.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "Sprite.h"
 
 #include "pixelutils.h"
 #include "tiffutils.h"
@@ -23,7 +39,6 @@
 #include "aui.h"
 #include "aui_surface.h"
 
-#include "Sprite.h"
 #include "SpriteFile.h"
 #include "Anim.h"
 #include "screenmanager.h"
@@ -47,17 +62,17 @@ Sprite::Sprite()
 	m_hotPoint.y = 0;
 
 	m_numFrames = 0;
-	m_frames = NULL;
-	m_framesSizes = NULL;
-	m_miniframes = NULL;
-	m_miniframesSizes = NULL;
+	m_frames = 0;
+	m_framesSizes = 0;
+	m_miniframes = 0;
+	m_miniframesSizes = 0;
 	m_currentFrame = 0;
 	m_firstFrame = 0;
 
 	m_type = SPRITETYPE_NORMAL;
 
-	m_surface = NULL;
-	m_surfBase = NULL;
+	m_surface = 0;
+	m_surfBase = 0;
 	m_surfWidth = 0;
 	m_surfHeight = 0;
 	m_surfPitch = 0;
@@ -80,6 +95,7 @@ Sprite::~Sprite()
 			if (m_miniframes[i]) {
 				delete[] m_miniframes[i];
 				m_miniframes[i] = 0;
+	}
 			}
 	}
 	if (m_frames) {
@@ -223,7 +239,6 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
 	if (m_frames != NULL) 
 	{
 		free(m_frames);
-		m_frames = NULL;
 	}
 
 	
@@ -237,7 +252,6 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
 	if (m_miniframes != NULL) 
 	{
 		free(m_miniframes);
-		m_miniframes = NULL;
 	}
 
 	
@@ -855,12 +869,13 @@ sint32 Sprite::ParseFromTokens(Token *theToken)
 
 
 
-void Sprite::AllocateFrameArrays(void)
+void Sprite::AllocateFrameArrays(size_t count)
 {
+    Assert(!m_frames && !m_miniframes);
 
-	m_frames = new Pixel16*[GetNumFrames()];
-
-	m_miniframes = new Pixel16*[GetNumFrames()];
+	m_frames        = new Pixel16*[count];
+	m_miniframes    = new Pixel16*[count];
+    m_numFrames     = count;
 }
 
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Sprite file handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,10 +27,12 @@
 //
 // - Crash prevention, small clean-ups.
 // - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Fixed crashes when zooming out and exiting the program.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "SpriteFile.h"
 
 #include "pixelutils.h"
 #include "tiffutils.h"
@@ -48,10 +50,8 @@
 
 #include "EffectSpriteGroup.h"
 #include "Anim.h"
-#include "SpriteFile.h"
 #include "CivPaths.h"               // g_civPaths
 #include "profileDB.h"              // g_theProfileDB
-
 
 #ifdef __MAKESPR__
 unsigned char g_compression_buff[COM_BUFF_SIZE];
@@ -78,35 +78,21 @@ SpriteFile::~SpriteFile()
 
 void SpriteFile::WriteSpriteData(Sprite *s)
 {
-	size_t    current_pos;
-	
-	
 	WriteData(s->GetType());
-	
 	WriteData(s->GetWidth());
-	
 	WriteData(s->GetHeight());
-	
 	WriteData((sint32)s->GetHotPoint().x);
-	
 	WriteData((sint32)s->GetHotPoint().y);
-
-	
 	WriteData(s->GetFirstFrame());
-
-	
 	WriteData(s->GetNumFrames());
 
-	
 	uint16		i;
-	size_t		size,compressed_size;
+	size_t		size;
 	uint32		normal_ssizes[800];
 	uint32		normal_msizes[800];
 	uint32		compressed_ssizes[800];
 
-	
 	size_t    frame_offset_pos=GetFilePos();
-
 	
 	for (i=0; i<s->GetNumFrames(); i++) 
 	{
@@ -117,21 +103,15 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 	WriteData((uint8 *)normal_ssizes,s->GetNumFrames()*sizeof(uint32));
 	WriteData((uint8 *)normal_msizes,s->GetNumFrames()*sizeof(uint32));
 
-	
-	uint8 *CompressedData;
-
-	
 	for (i=0; i<s->GetNumFrames(); i++) 
 	{
-		
-		
 		spriteutils_ConvertPixelFormatForFile(s->GetFrameData(i), s->GetWidth(), s->GetHeight());
 
 		size = s->GetFrameDataSize(i);
 	   
-		CompressedData = CompressData((void *)s->GetFrameData(i),size);
+		uint8 * CompressedData = CompressData((void *)s->GetFrameData(i),size);
 
-		compressed_size = size;
+		size_t const    compressed_size = size;
 
 		if(m_version>k_SPRITEFILE_VERSION1)
 		{
@@ -139,30 +119,25 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 			WriteData((uint32)normal_ssizes[i]);
 		}
 
-		WriteData((uint8 *)CompressedData, compressed_size);
+		WriteData(CompressedData, compressed_size);
 	
 		compressed_ssizes[i] = compressed_size;
 
-		
-		delete[] (unsigned char*) CompressedData;
+		delete [] CompressedData;
 	}
 	
 	
 	if(m_version>k_SPRITEFILE_VERSION1)
 	{
-	   current_pos = GetFilePos();
+	    size_t const    current_pos = GetFilePos();
        
 	   SetFilePos(frame_offset_pos);
-	   
 	   WriteData((uint8 *)compressed_ssizes,s->GetNumFrames()*sizeof(uint32));
-	
 	   SetFilePos(current_pos);
 	}
 
 	for (i=0; i<s->GetNumFrames(); i++) 
 	{
-		
-		
 		spriteutils_ConvertPixelFormatForFile(s->GetMiniFrameData(i), s->GetWidth()/2, s->GetHeight()/2);
 		size = s->GetMiniFrameDataSize(i);
 		WriteData((uint8 *)s->GetMiniFrameData(i), size);
@@ -171,41 +146,26 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 
 void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 {
-	
 	uint16 num_frames=s->GetNumFrames();
 
-	
 	uint32		normal_ssizes[k_MAX_FACINGS][128];
 	uint32		normal_msizes[k_MAX_FACINGS][128];
 	uint32		compressed_ssizes[k_MAX_FACINGS][128];
 	size_t		frame_offsets[k_MAX_FACINGS];
-	size_t    current_pos;
 
-	
 	WriteData(s->GetType());
-	
 	WriteData(s->GetWidth());
-	
 	WriteData(s->GetHeight());
-	
 	WriteData((uint8 *)s->GetHotPoints(), sizeof(POINT) * k_NUM_FACINGS);
-
-	
 	WriteData(s->GetFirstFrame());
-
-	
 	WriteData(num_frames);
-
-	
 
 	uint16	i, j;
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		frame_offsets[j] = GetFilePos();
 
-		
 		for (i=0; i<num_frames; i++)
 		{
 			normal_ssizes[j][i] = s->GetFrameDataSize(j, i);
@@ -218,29 +178,24 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 	}	
 
 	
-	uint8 *CompressedData;
-
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		for (i=0; i<num_frames; i++) 
 		{
-			
-			
 			spriteutils_ConvertPixelFormatForFile(s->GetFrameData(j,i), 
 													s->GetWidth(), s->GetHeight());
 
 			size_t size,compressed_size;
 			size = normal_ssizes[j][i];
 
-			CompressedData = CompressData((void *)s->GetFrameData(j,i),size);
+			uint8 * CompressedData = CompressData((void *)s->GetFrameData(j,i),size);
   
 			compressed_size = size;
 			
 			if(m_version>k_SPRITEFILE_VERSION1)
 				WriteData((uint32)normal_ssizes[j][i]);
 
-			WriteData((uint8 *)CompressedData, compressed_size);
+			WriteData(CompressedData, compressed_size);
 		
 			compressed_ssizes[j][i] = size;
 
@@ -261,7 +216,7 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 	
 	if(m_version>k_SPRITEFILE_VERSION1)
 	{
-	   current_pos = GetFilePos();
+        size_t const    current_pos = GetFilePos();
        
 	   for (j=0; j<k_NUM_FACINGS; j++) 
 	   {
@@ -274,30 +229,18 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 
 void SpriteFile::WriteFacedSpriteWshadowData(FacedSpriteWshadow *s)
 {
-	
 	WriteData(s->GetType());
-	
 	WriteData(s->GetWidth());
-	
 	WriteData(s->GetHeight());
-	
 	WriteData((uint8 *)s->GetHotPoints(), sizeof(POINT) * k_NUM_FACINGS);
-
-	
 	WriteData(s->GetFirstFrame());
-
-	
 	WriteData(s->GetNumFrames());
-	
 	WriteData((uint16)s->GetHasShadow());
-
-	
 
 	uint16	i, j;
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		for (i=0; i<s->GetNumFrames(); i++) 
 		{
 			size_t size;
@@ -463,15 +406,12 @@ void SpriteFile::ReadSpriteDataBasic(Sprite *s)
 
 	
 	ReadData((void *)&data16, sizeof(data16));
-	s->SetNumFrames((uint16)data16);
+	s->AllocateFrameArrays(data16);
 
-	s->AllocateFrameArrays();
 
-	
 	uint16		i;
 	uint32		ssizes[800];
 	uint32		msizes[800];
-	Pixel16		*CompressedData,*ActualData;
 	uint32		size,actual_size;
 
 	
@@ -485,7 +425,7 @@ void SpriteFile::ReadSpriteDataBasic(Sprite *s)
 	size = ssizes[0];
 
 	
-	CompressedData = (Pixel16 *)new uint8[size];
+	Pixel16	*   CompressedData = (Pixel16 *) new uint8[size];
 	
 	
 	if(m_version>k_SPRITEFILE_VERSION1)
@@ -497,7 +437,7 @@ void SpriteFile::ReadSpriteDataBasic(Sprite *s)
 	ReadData((void *)CompressedData, size);
 
 	
-	ActualData = (Pixel16 *)DeCompressData(CompressedData,size,actual_size);
+	Pixel16	*   ActualData = (Pixel16 *) DeCompressData(CompressedData,size,actual_size);
 
 	
 	delete CompressedData;
@@ -562,15 +502,13 @@ void SpriteFile::ReadSpriteDataFull(Sprite *s)
 
 	
 	ReadData((void *)&data16, sizeof(data16));
-	s->SetNumFrames((uint16)data16);
+	s->AllocateFrameArrays(data16);
 
-	s->AllocateFrameArrays();
 
-	
 	uint16		i;
 	uint32		ssizes[800];
 	uint32		msizes[800];
-	Pixel16		*CompressedData,*ActualData;
+	Pixel16		*ActualData;
 	uint32		size,actual_size;
 
 	
@@ -578,42 +516,27 @@ void SpriteFile::ReadSpriteDataFull(Sprite *s)
 
 	ReadData((uint8 *)msizes, sizeof(uint32) * s->GetNumFrames());
 
-	
 	for (i=0; i<s->GetNumFrames(); i++) 
 	{
 		size = ssizes[i];
 
-		
-		CompressedData = (Pixel16 *)new uint8[size];
-	
+		Pixel16 *   CompressedData = (Pixel16 *)new uint8[size];
 		
 		if(m_version>k_SPRITEFILE_VERSION1)
 		   ReadData((void *)&actual_size,sizeof(uint32));
 		else
 			actual_size = size;
 		
-		
 		ReadData((void *)CompressedData, size);
-		
 		
 		ActualData = (Pixel16 *)DeCompressData(CompressedData,size,actual_size);
 		
-		
 		delete CompressedData;
 
-		
 		spriteutils_ConvertPixelFormat((Pixel16 *)ActualData, s->GetWidth(), s->GetHeight());
-		
-		
 		s->SetFrameData(i, ActualData);
-	
-	
-	
-	
-	
 	}
 
-	
 	for (i=0; i<s->GetNumFrames(); i++) 
 	{
 		size = msizes[i];
@@ -629,23 +552,18 @@ void SpriteFile::SkipSpriteData(void)
 	uint16		data16;
 	uint32		data32;
 
+	ReadData((void *)&data16, sizeof(data16));
+	
+	ReadData((void *)&data16, sizeof(data16));
+	
+	ReadData((void *)&data32, sizeof(data32));
+	
+	ReadData((void *)&data32, sizeof(data32));
+	
+	ReadData((void *)&data16, sizeof(data16));
+
 	uint16		numFrames;
-
-	
-	ReadData((void *)&data16, sizeof(data16));
-	
-	ReadData((void *)&data16, sizeof(data16));
-	
-	ReadData((void *)&data32, sizeof(data32));
-	
-	ReadData((void *)&data32, sizeof(data32));
-	
-	ReadData((void *)&data16, sizeof(data16));
-
-	
-	ReadData((void *)&data16, sizeof(data16));
-	numFrames = (uint16)data16;
-
+	ReadData((void *)&numFrames, sizeof(numFrames));
 	
 	uint16		i;
 	uint32		ssizes[800];
@@ -677,7 +595,6 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 	uint16		data16;
 	POINT		points[k_NUM_FACINGS];
 
-	
 	ReadData((void *)&data16, sizeof(data16));
 	s->SetWidth(data16);
 	
@@ -691,30 +608,25 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 	s->SetFirstFrame(data16);
 	
 	ReadData((void *)&data16, sizeof(data16));
-	s->SetNumFrames((uint16)data16);
-	s->AllocateFrameArrays();
+	s->AllocateFrameArrays(data16);
 
-	
 	uint16		i, j;
 	size_t		ssizes[k_MAX_FACINGS][512];
 	size_t		msizes[k_MAX_FACINGS][512];
-	Pixel16		*CompressedData,*ActualData;
 	size_t		size,actual_size;
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		ReadData((uint8 *)ssizes[j], sizeof(uint32) * s->GetNumFrames());
-		
 		ReadData((uint8 *)msizes[j], sizeof(uint32) * s->GetNumFrames());
 	}
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
+      	// Read normal size sprites
 		size = ssizes[j][0];
 		
-		CompressedData = (Pixel16 *)new uint8[size];
-		
+		Pixel16 *   CompressedData = (Pixel16 *)new uint8[size];
 		
 		if(m_version>k_SPRITEFILE_VERSION1)
 		   ReadData((void *)&actual_size,sizeof(uint32));
@@ -724,9 +636,7 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 		
 		ReadData((void *)CompressedData, size);
 
-		
-		ActualData = (Pixel16 *)DeCompressData(CompressedData,size,actual_size);
-
+		Pixel16 * ActualData = (Pixel16 *)DeCompressData(CompressedData,size,actual_size);
 		
 		delete CompressedData;
 
@@ -745,7 +655,7 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 			s->SetFrameData(j, i, NULL, 0);
 		}
 
-		
+	      // Read small size sprites (zoomed out)
 		size = msizes[j][0];
 		ActualData = (Pixel16 *)new uint8[size];
 		ReadData((void *)ActualData, size);
@@ -756,7 +666,7 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 		{
 			size = msizes[j][i];
 			SetFilePos(GetFilePos() + size);
-			s->SetFrameData(j, i, NULL, 0);
+			s->SetMiniFrameData(j, i, NULL, 0);
 		}
 	}
 
@@ -768,7 +678,6 @@ void SpriteFile::ReadFacedSpriteDataFull(FacedSprite *s)
 	uint16		data16;
 	POINT		points[k_NUM_FACINGS];
 
-	
 	ReadData((void *)&data16, sizeof(data16));
 	s->SetWidth(data16);
 	
@@ -782,55 +691,45 @@ void SpriteFile::ReadFacedSpriteDataFull(FacedSprite *s)
 	s->SetFirstFrame(data16);
 	
 	ReadData((void *)&data16, sizeof(data16));
-	s->SetNumFrames((uint16)data16);
-	s->AllocateFrameArrays();
+	s->AllocateFrameArrays(data16);
 
 	
 	uint16		i, j;
 	uint32		ssizes[k_MAX_FACINGS][800];
 	uint32		msizes[k_MAX_FACINGS][800];
-	Pixel16		*CompressedData,*ActualData;
+	Pixel16		*ActualData;
 	uint32		size,actual_size;
 
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		ReadData((uint8 *)ssizes[j], sizeof(uint32) * s->GetNumFrames());
-		
 		ReadData((uint8 *)msizes[j], sizeof(uint32) * s->GetNumFrames());
 	}
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		for (i=0; i<s->GetNumFrames(); i++) 
 		{
 			size = ssizes[j][i];
 
-			CompressedData = (Pixel16 *)new uint8[size];
-			
+			Pixel16 * CompressedData = (Pixel16 *)new uint8[size];
 			
 			if(m_version>k_SPRITEFILE_VERSION1)
 			   ReadData((void *)&actual_size,sizeof(uint32));
 			else
 			   actual_size = size;
 			
-			
 			ReadData((void *)CompressedData, size);
 			
-			
-			ActualData = (Pixel16 *)DeCompressData(CompressedData,size,actual_size);
-			
+			Pixel16 * ActualData = (Pixel16 *)DeCompressData(CompressedData,size,actual_size);
 			
 			delete CompressedData;
-			
 			
 			spriteutils_ConvertPixelFormat((Pixel16 *)ActualData, s->GetWidth(), s->GetHeight());
 			s->SetFrameData(j, i, ActualData, actual_size);
 		}
 
-		
 		for (i=0; i<s->GetNumFrames(); i++) 
 		{
 			size = msizes[j][i];
@@ -846,9 +745,7 @@ void SpriteFile::SkipFacedSpriteData(void)
 {
 	uint16		data16;
 	POINT		points[k_NUM_FACINGS];
-	uint16		numFrames;
 
-	
 	ReadData((void *)&data16, sizeof(data16));
 	
 	ReadData((void *)&data16, sizeof(data16));
@@ -857,10 +754,9 @@ void SpriteFile::SkipFacedSpriteData(void)
 	
 	ReadData((void *)&data16, sizeof(data16));
 	
-	ReadData((void *)&data16, sizeof(data16));
-	numFrames = data16;
+	uint16		numFrames;
+	ReadData((void *)&numFrames, sizeof(numFrames));
 
-	
 	uint16		i, j;
 	uint32		ssizes[k_NUM_FACINGS][800];
 	uint32		msizes[k_NUM_FACINGS][800];
@@ -869,22 +765,18 @@ void SpriteFile::SkipFacedSpriteData(void)
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		ReadData((uint8 *)ssizes[j], sizeof(uint32) * numFrames);
-		
 		ReadData((uint8 *)msizes[j], sizeof(uint32) * numFrames);
 	}
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		for (i=0; i<numFrames; i++) 
 		{
 			size = ssizes[j][i];
 			SetFilePos(GetFilePos() + size);
 		}
 
-		
 		for (i=0; i<numFrames; i++) 
 		{
 			size = msizes[j][i];
@@ -898,7 +790,6 @@ void SpriteFile::ReadFacedSpriteWshadowData(FacedSpriteWshadow *s)
 	uint16		data16;
 	POINT		points[k_NUM_FACINGS];
 
-	
 	ReadData((void *)&data16, sizeof(data16));
 	s->SetWidth(data16);
 	
@@ -912,8 +803,7 @@ void SpriteFile::ReadFacedSpriteWshadowData(FacedSpriteWshadow *s)
 	s->SetFirstFrame(data16);
 	
 	ReadData((void *)&data16, sizeof(data16));
-	s->SetNumFrames((uint16)data16);
-	s->AllocateFrameArrays();
+	s->AllocateFrameArrays(data16);
 	
 	ReadData((void *)&data16, sizeof(data16));
 	s->SetHasShadow(data16);
@@ -928,22 +818,18 @@ void SpriteFile::ReadFacedSpriteWshadowData(FacedSpriteWshadow *s)
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		ReadData((uint8 *)ssizes[j], sizeof(uint32) * s->GetNumFrames());
-		
 		ReadData((uint8 *)msizes[j], sizeof(uint32) * s->GetNumFrames());
+
 		if(s->GetHasShadow())
 		{
-			
 			ReadData((uint8 *)sh_ssizes[j], sizeof(uint32) * s->GetNumFrames());
-			
 			ReadData((uint8 *)sh_msizes[j], sizeof(uint32) * s->GetNumFrames());
 		}
 	}
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		
 		for (i=0; i<s->GetNumFrames(); i++) 
 		{
 			size = ssizes[j][i];
@@ -1019,7 +905,6 @@ void SpriteFile::ReadSpriteDataGeneralBasic(Sprite **sprite)
 {
 	uint16		data16;
 
-	
 	ReadData((void *)&data16, sizeof(data16));
 
 	if ((SPRITETYPE)data16 == SPRITETYPE_NORMAL) 
@@ -1167,30 +1052,15 @@ void SpriteFile::ReadAnimDataFull(Anim *a)
 void SpriteFile::SkipAnimData(void)
 {
 	uint16		data16;
-	
-	
 	uint16		numFrames;
 
-	
 	ReadData(&data16, sizeof(data16));
-	
-	
+	ReadData(&numFrames, sizeof(numFrames));
 	ReadData(&data16, sizeof(data16));
-	numFrames = data16;
-
-	
 	ReadData(&data16, sizeof(data16));
-	
-	
-	ReadData(&data16, sizeof(data16));
-	
 	
 	SetFilePos(GetFilePos() + sizeof(uint16) * numFrames);
-
-	
 	SetFilePos(GetFilePos() + sizeof(POINT) * numFrames);
-
-	
 	SetFilePos(GetFilePos() + sizeof(uint16) * numFrames);
 }
 
@@ -1289,22 +1159,18 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 {
 	uint16		i;
 	uint32		offset[UNITACTION_MAX];
-	POINT		NoData;
+	size_t const    start_of_offsets = GetFilePos();
 	
-	unsigned    start_of_offsets=GetFilePos();
 
-	
 	for (i=0; i<UNITACTION_MAX; i++) 
 		WriteData((uint32)0);
 
 	
 	for (i=0; i<UNITACTION_MAX; i++) 
 	{
-		Sprite	*sprite;
+		Sprite	* sprite = s->GetGroupSprite((GAME_ACTION) i);
 
-		sprite = s->GetGroupSprite((GAME_ACTION)i);
-		
-		if (sprite != NULL) 
+		if (sprite) 
 		{
 			WriteData((uint32)TRUE);
 			
@@ -1329,31 +1195,26 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 		{
 			WriteData((uint32)FALSE);
 			offset[i] = static_cast<uint32>(-1);
-			
 		}
 	}
 
 	
 	WriteData((uint16)0); 
-
-	
     WriteData((uint16)0); 
 
 	
+	POINT		NoData;
 	for(i=0;i<k_NUM_FACINGS;i++) 
   		WriteData((uint8 *)&NoData, sizeof(POINT));
 
-	
 	for (i=0; i<UNITACTION_MAX; i++) 
 		WriteData((uint8 *)s->GetShieldPoints((UNITACTION)i), sizeof(POINT) * k_NUM_FACINGS);
 
 	WriteData((uint16)s->HasDeath());
 	WriteData((uint16)s->HasDirectional());
 
-	
 	SetFilePos(start_of_offsets);
 
-	
 	for (i=0; i<UNITACTION_MAX; i++) 
 		WriteData(offset[i]);
 	
@@ -1368,29 +1229,21 @@ SpriteFile::Write_v20(UnitSpriteGroup *s)
 {
 	uint16		i;
 	int  		offset[ACTION_MAX+1];
+	size_t const    start_of_offsets = GetFilePos();
 
-	
-	unsigned    start_of_offsets=GetFilePos();
-
-	
 	for (i=0; i<ACTION_MAX+1; i++) 
 		offset[i] = -1;	
 	
-	
 	WriteData((uint8*)offset, sizeof(int) * (ACTION_MAX+1));
 
-	
 	for (i=0;i<ACTION_MAX; i++) 
 	{
-		Sprite	*sprite;
+		Sprite *    sprite = s->GetGroupSprite((GAME_ACTION)i);
 
-		sprite = s->GetGroupSprite((GAME_ACTION)i);
-		
-		if (sprite!=NULL) 
+		if (sprite) 
 		{
 			offset[i] = GetFilePos();
 	 
-			
 			switch(sprite->GetType())
 			{
 			case	SPRITETYPE_NORMAL:
@@ -1417,10 +1270,8 @@ SpriteFile::Write_v20(UnitSpriteGroup *s)
 	WriteData((uint16)s->HasDeath());
 	WriteData((uint16)s->HasDirectional());
 
-	
 	SetFilePos(start_of_offsets);
 
-	
 	WriteData((uint8*)offset, sizeof(int) * (ACTION_MAX+1));
 
 	return SPRITEFILEERR_OK;
