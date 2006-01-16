@@ -2041,7 +2041,7 @@ void CDECL operator delete (void *mem)
 
 }
 
-#endif
+#endif // _DEBUG_MEMORY
 
 
 
@@ -2050,4 +2050,3 @@ void CDECL operator delete (void *mem)
 
 #endif // _DEBUG
 
-#endif // WIN32

@@ -954,7 +954,7 @@ void slicif_add_op(SOP op, ...)
 			name = va_arg(vl, char*);
 			if(!conduit->IsTokenInDB(name)){
 				sprintf(errbuf, "Token %s not found in %s", name, conduit->GetName());
-				yyerror(errbuf);
+				yyslerror(errbuf);
 			}
 
 			//Save the database name to the code data, by saving every
@@ -2028,14 +2028,14 @@ void slicif_add_local_struct(char *structtype, char *name)
 	SlicStruct *theStruct = g_slicEngine->GetStruct(structtype);
 	if(!theStruct) {
 		sprintf(errbuf, "Unknown struct %s", structtype);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 		return;
 	}
 
 	slicif_get_local_name(localname, name);
 	if((sym == slicif_find_sym(localname, 1))) {
 		sprintf(errbuf, "%s already defined locally", name);
-		yyerror(errbuf);
+		yyslerror(errbuf);
 		return;
 	}
 
@@ -2314,7 +2314,7 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 	//but I leave it in for possible later use.
 	if(!conduit->IsTokenInDB(valname)){
 		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 #endif
 
@@ -2358,7 +2358,7 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 	if(!conduit->IsTokenInDB(valname)){
 		char errbuf[1024];
 		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 #endif
 	return conduit->GetValue(index, valname);
@@ -2399,7 +2399,7 @@ int slicif_find_db_array_value(void *dbptr, const char *recname, const char *val
 	sint32 index;
 	if((index = conduit->GetIndex(recname)) < 0) {
 		sprintf(errbuf, "%s not found in %s", recname, conduit->GetName());
-		yyerror(errbuf);
+		yyslerror(errbuf);
 		return 0;
 	}
 #if 0
@@ -2407,7 +2407,7 @@ int slicif_find_db_array_value(void *dbptr, const char *recname, const char *val
 	//but I leave it in for possible later use.
 	if(!conduit->IsTokenInDB(valname)){
 		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 #endif
 
@@ -2452,7 +2452,7 @@ int slicif_find_db_array_value_by_index(void *dbptr, int index, const char *valn
 	if(!conduit->IsTokenInDB(valname)){
 		char errbuf[1024];
 		sprintf(errbuf, "Token %s not found in %s", valname, conduit->GetName());
-		yyerror(errbuf);
+		yyslerror(errbuf);
 	}
 #endif
 	return conduit->GetValue(index, valname, val);
