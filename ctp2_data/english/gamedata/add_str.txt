@@ -4,6 +4,7 @@
 # File type    : String text file
 # Description  : Contains additional strings that should go to other files
 #                eventually (English)
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -24,7 +25,8 @@
 #   - 7th April 2005 Martin Gühmann
 # - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
 # - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
-# 
+# - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
+#
 #----------------------------------------------------------------------------
 
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
@@ -341,27 +343,6 @@ str_SE_FindPosY "Enter a Y coordinate"
 str_SE_FindMe "Click to center on the X,Y coordinate"
 str_SE_RemoveGoods "Remove all goods from the map"
 str_SE_GenerateGoods "Add goods to the map"
-
-### Changed Strings
-## add {city[0].name}
-#IA_SETTLING_TOO_CLOSE   		"We cannot build a new city within the city limits of {city[0].name}. Therefore, we should find a location more conducive to expansion."
-
-### Trust Warning Messages ###
-### Global Trust Loss ###
-TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, we have killed a {player[1].civ_name_singular} civilian unit!  This is considered a war crime in the eyes of the world.  We have not only upset the {player[1].civ_name_plural}, but every other nation."
-TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}, we have attacked the {player[1].civ_name_plural} without warning or provocation!  They feel deeply betrayed at our violation of standard conduct.  To make matters worse, the world community is now questioning our trustworthiness."
-MILITARY_PACT_BROKEN_BY_YOU 		"{player[0].sir_cap}, by not sending our troops to the {player[1].civ_name_singular} front lines, we have violated our Military Pact with them.  They are feeling betrayed."
-TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}, by attacking the {player[1].civ_name_plural} we have violated our established peace treaty with them!  They are outraged and will certainly warn the other nations of the world to be wary of us in the future."
-ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}, we have violated our Alliance with the {player[1].civ_name_plural}!  They are deeply upset with us!  It is doubtful that any nation will trust us after such an egregious violation of trust!"
-
-### Nation-specific Trust Loss ###
-IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, we have agreed to respect {player[1].civ_name_singular} borders.  Would you like to risk angering them by moving units onto their territory?"
-TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}, we have failed to withdraw our troops from {player[1].civ_name_singular} lands.  They are growing wary of us, and will be hesitant to enter agreements with us in the future."
-TRUST_LOSS_FAIL_TO_STOP_PIRACY		"Because we have continued to pirate {player[1].civ_name_singular} trade routes, they are angry with us.  The {player[1].civ_name_plural} may not trust us in the future."
-TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}, we have violated our cease fire with the {player[1].civ_name_plural}.  They are deeply upset with us, and may no longer trust us as a result."
-TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}, our recent actions have constituted a violation of our Research Pact with the {player[1].civ_name_plural}.  They are now wary of us, and question our intentions."
-TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, our recent actions have forced us to renege on our Trade Pact with the {player[1].civ_name_plural}.  This is a violation of trust that they will not soon forget!"
-ECOPACT_BROKEN_BY_YOU 			"{player[0].sir_cap}, we have violated our Pollution Pact with {player[1].country_name}.  They are not happy with us!"
 
 # Filename prefix for quicksaves.
 QUICKSAVE_NAME "QUICKSAVE"

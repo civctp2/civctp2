@@ -4,6 +4,7 @@
 # File type    : String text file
 # Description  : Civ specific strings, e.g civ names, civ leaders,
 #                city names (German)
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -20,10 +21,10 @@
 #
 # - Moved back diplomacy photo strings from add_str.txt.
 # - Added a bunch of new civs.
-# 
+#
 #----------------------------------------------------------------------------
 
-#### Empire/Civilisation Names (maximum of 64 Civilisations) ####
+#### Empire/Civilisation Names ####
 
 
 ##### kjm 021699 - added - this goes into the investigate diplomacy screen
@@ -40,7 +41,7 @@ PERSONALITY_DESCRIPTION_SCI_FEW		"Umgänglich"
 #	
 # TEMP LEADER NAME -- PLEASE REMOVE WHEN YOU ADD REAL FEMALE LEADER NAMES	
 #	
-TEMP_LEADER_NAME_FEMALE	"Jean D'Arc"
+TEMP_LEADER_NAME_FEMALE			"Jean D'Arc"
 #	
 #	
 
@@ -123,62 +124,62 @@ CARTHAGINIAN_DIPLOMAT_PHOTO	"updp050.tga"
 SWEDISH_DIPLOMAT_PHOTO		"updp050.tga"
 AZTEC_DIPLOMAT_PHOTO		"updp050.tga"
 ITALIAN_DIPLOMAT_PHOTO		"updp050.tga"
-BANTU_DIPLOMAT_PHOTO   		"updp050.tga"
-SLAVIC_DIPLOMAT_PHOTO  		"updp050.tga"
-MINOAN_DIPLOMAT_PHOTO  		"updp050.tga"
-HARAPPAN_DIPLOMAT_PHOTO  	"updp050.tga"
-HITTITE_DIPLOMAT_PHOTO  	"updp050.tga"
-SHANG_DIPLOMAT_PHOTO  		"updp050.tga"
-ETRUSCAN_DIPLOMAT_PHOTO  	"updp050.tga"
-ABORIGINE_DIPLOMAT_PHOTO  	"updp050.tga"
-ARGENTINIAN_DIPLOMAT_PHOTO  	"updp050.tga"
-KHMER_DIPLOMAT_PHOTO  		"updp050.tga"
-MALIAN_DIPLOMAT_PHOTO  		"updp050.tga"
+BANTU_DIPLOMAT_PHOTO		"updp050.tga"
+SLAVIC_DIPLOMAT_PHOTO		"updp050.tga"
+MINOAN_DIPLOMAT_PHOTO		"updp050.tga"
+HARAPPAN_DIPLOMAT_PHOTO		"updp050.tga"
+HITTITE_DIPLOMAT_PHOTO		"updp050.tga"
+SHANG_DIPLOMAT_PHOTO		"updp050.tga"
+ETRUSCAN_DIPLOMAT_PHOTO		"updp050.tga"
+ABORIGINE_DIPLOMAT_PHOTO	"updp050.tga"
+ARGENTINIAN_DIPLOMAT_PHOTO	"updp050.tga"
+KHMER_DIPLOMAT_PHOTO		"updp050.tga"
+MALIAN_DIPLOMAT_PHOTO		"updp050.tga"
 
 
 ## Insert as portion of Strings.txt
 
-BARBARIAN "Barbaren"
+BARBARIAN			"Barbaren"
 
-BARBARIAN_LEADERM_NAME "Attila"
-BARBARIAN_LEADERF_NAME "Tannis"
-BARBARIAN_SINGULAR "Barbaren"
-BARBARIAN_PLURAL "Barbaren"
-BARBARIAN_COUNTRY_NAME "Barbarenstämme"
+BARBARIAN_LEADERM_NAME		"Attila"
+BARBARIAN_LEADERF_NAME		"Tannis"
+BARBARIAN_SINGULAR		"Barbaren"
+BARBARIAN_PLURAL		"Barbaren"
+BARBARIAN_COUNTRY_NAME		"Barbarenstämme"
 
-BARBARIAN_CITY_1 "Wandalen"
-BARBARIAN_CITY_2 "Ostgoten"
-BARBARIAN_CITY_3 "Westgoten"
-BARBARIAN_CITY_4 "Burgunder"
-BARBARIAN_CITY_5 "Langobarden"
-BARBARIAN_CITY_6 "Pikten"
-BARBARIAN_CITY_7 "Hunnen"
-BARBARIAN_CITY_8 "Kelten"
-BARBARIAN_CITY_9 "Normannen"
-BARBARIAN_CITY_10 "Gallier"
-BARBARIAN_CITY_11 "Alemannen"
-BARBARIAN_CITY_12 "Jüten"
-BARBARIAN_CITY_13 "Angeln"
-BARBARIAN_CITY_14 "Sachsen"
-BARBARIAN_CITY_15 "Markomannen"
-BARBARIAN_CITY_16 "Cherusker"
-BARBARIAN_CITY_17 "Franken"
-BARBARIAN_CITY_18 "Teutonen"
-BARBARIAN_CITY_19 "Bulgaren"
-BARBARIAN_CITY_20 "Alamanen"
-BARBARIAN_CITY_21 "Sweben"
-BARBARIAN_CITY_22 "Friesen"
-BARBARIAN_CITY_23 "Awaren"
-BARBARIAN_CITY_24 "Magjaren"
-BARBARIAN_CITY_25 "Gepiden"
-BARBARIAN_CITY_26 "Alanen"
-BARBARIAN_CITY_27 "Rugier"
-BARBARIAN_CITY_28 "Sueven"
-BARBARIAN_CITY_29 "Lombarden"
-BARBARIAN_CITY_30 "Thüringer"
+BARBARIAN_CITY_1		"Wandalen"
+BARBARIAN_CITY_2		"Ostgoten"
+BARBARIAN_CITY_3		"Westgoten"
+BARBARIAN_CITY_4		"Burgunder"
+BARBARIAN_CITY_5		"Langobarden"
+BARBARIAN_CITY_6		"Pikten"
+BARBARIAN_CITY_7		"Hunnen"
+BARBARIAN_CITY_8		"Kelten"
+BARBARIAN_CITY_9		"Normannen"
+BARBARIAN_CITY_10		"Gallier"
+BARBARIAN_CITY_11		"Alemannen"
+BARBARIAN_CITY_12		"Jüten"
+BARBARIAN_CITY_13		"Angeln"
+BARBARIAN_CITY_14		"Sachsen"
+BARBARIAN_CITY_15		"Markomannen"
+BARBARIAN_CITY_16		"Cherusker"
+BARBARIAN_CITY_17		"Franken"
+BARBARIAN_CITY_18		"Teutonen"
+BARBARIAN_CITY_19		"Bulgaren"
+BARBARIAN_CITY_20		"Alamanen"
+BARBARIAN_CITY_21		"Sweben"
+BARBARIAN_CITY_22		"Friesen"
+BARBARIAN_CITY_23		"Awaren"
+BARBARIAN_CITY_24		"Magjaren"
+BARBARIAN_CITY_25		"Gepiden"
+BARBARIAN_CITY_26		"Alanen"
+BARBARIAN_CITY_27		"Rugier"
+BARBARIAN_CITY_28		"Sueven"
+BARBARIAN_CITY_29		"Lombarden"
+BARBARIAN_CITY_30		"Thüringer"
 
 
-GREEK "Griechen"
+GREEK				"Griechen"
 
 GREEK_LEADERM_NAME "Alexander der Große"
 GREEK_LEADERF_NAME "Helena"

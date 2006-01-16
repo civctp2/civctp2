@@ -4,6 +4,7 @@
 # File type    : String text file
 # Description  : Contains additional strings that should go to other files
 #                eventually (Italian)
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -24,7 +25,8 @@
 #   - 7th April 2005 Martin Gühmann
 # - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
 # - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
-# 
+# - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
+#
 #----------------------------------------------------------------------------
 
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
@@ -55,50 +57,6 @@ str_ldl_CityAdvisor "Consigliere cittadino"
 
 # City Window
 str_ldl_CityWindowUpkeep "Manutenzione"
-
-# Diplomat pictures.  Bit weird storing these in a string file, but it works.
-# Transplanted, and modified (filenames are updp* now, ctp1 was upd*), from civ_str.txt 
-GREEK_DIPLOMAT_PHOTO		"updp023.tga"
-AMERICAN_DIPLOMAT_PHOTO	"updp010.tga"
-SCOTTISH_DIPLOMAT_PHOTO	"updp044.tga"
-IRISH_DIPLOMAT_PHOTO			"updp028.tga"
-ENGLISH_DIPLOMAT_PHOTO	"updp019.tga"
-NATIVE_AMERICAN_DIPLOMAT_PHOTO	"updp035.tga"
-GERMAN_DIPLOMAT_PHOTO	"updp022.tga"
-FRENCH_DIPLOMAT_PHOTO	"updp021.tga"
-JAPANESE_DIPLOMAT_PHOTO	"updp030.tga"
-CHINESE_DIPLOMAT_PHOTO	"updp015.tga"
-RUSSIAN_DIPLOMAT_PHOTO	"updp043.tga"
-SPANISH_DIPLOMAT_PHOTO	"updp045.tga"
-PORTUGUESE_DIPLOMAT_PHOTO	"updp041.tga"
-DUTCH_DIPLOMAT_PHOTO	"updp017.tga"
-VIKING_DIPLOMAT_PHOTO	"updp048.tga"
-ROMAN_DIPLOMAT_PHOTO	"updp042.tga"
-EGYPTIAN_DIPLOMAT_PHOTO	"updp018.tga"
-PERSIAN_DIPLOMAT_PHOTO	"updp038.tga"
-TURKISH_DIPLOMAT_PHOTO	"updp047.tga"
-PHOENICIAN_DIPLOMAT_PHOTO	"updp039.tga"
-WELSH_DIPLOMAT_PHOTO	"updp049.tga"
-CUBAN_DIPLOMAT_PHOTO	"updp016.tga"
-ZULU_DIPLOMAT_PHOTO	"updp050.tga"
-HEBREW_DIPLOMAT_PHOTO	"updp024.tga"
-ASSYRIAN_DIPLOMAT_PHOTO	"updp011.tga"
-INDIAN_DIPLOMAT_PHOTO	"updp026.tga"
-THAI_DIPLOMAT_PHOTO	"updp046.tga"
-POLYNESIAN_DIPLOMAT_PHOTO	"updp040.tga"
-INDONESIAN_DIPLOMAT_PHOTO	"updp027.tga"
-JAMAICAN_DIPLOMAT_PHOTO		"updp029.tga"
-INCAN_DIPLOMAT_PHOTO	"updp025.tga"
-MAYAN_DIPLOMAT_PHOTO	"updp032.tga"
-CANADIAN_DIPLOMAT_PHOTO	"updp014.tga"
-NIGERIAN_DIPLOMAT_PHOTO	"updp037.tga"
-KOREAN_DIPLOMAT_PHOTO	"updp031.tga"
-BRAZILIAN_DIPLOMAT_PHOTO	"updp013.tga"
-AUSTRALIAN_DIPLOMAT_PHOTO	"updp012.tga"
-MEXICAN_DIPLOMAT_PHOTO	"updp033.tga"
-ETHIOPIAN_DIPLOMAT_PHOTO	"updp020.tga"
-MONGOLIAN_DIPLOMAT_PHOTO	"updp034.tga"
-NICARAGUAN_DIPLOMAT_PHOTO	"updp036.tga"
 
 # Dip wizard strings
 # Gets displayed on the "Accept" button depending on context
@@ -386,27 +344,6 @@ str_SE_FindPosY "Inserisci coordinata Y"
 str_SE_FindMe "Clicca per centrare sulle coordinate X,Y"
 str_SE_RemoveGoods "Rimuovi tutte le merci dalla mappa"
 str_SE_GenerateGoods "Aggiungi merci alla mappa"
-
-### Changed Strings
-## add {city[0].name}
-#IA_SETTLING_TOO_CLOSE   		"Non possiamo costruire una nuova città all'interno dei confini di {city[0].name}. Quindi, dovremo trovare una posizione più adatta a espanderci."
-
-### Trust Warning Messages ###
-### Global Trust Loss ###
-TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, abbiamo ucciso un'unità civile {player[1].civ_name_plural#PREPOSITION}! È un crimine di guerra, agli occhi del mondo. Non abbiamo irritato solamente {player[1].civ_name_plural#ARTICLE}, ma tutte le nazioni."
-TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}, abbiamo attaccato {player[1].civ_name_plural#ARTICLE} senza preavviso e senza motivo! Si sentono traditi dalla nostra condotta. A complicare la situazione, la comunità mondiale sta iniziando a chiedersi se siamo degni di fiducia."
-MILITARY_PACT_BROKEN_BY_YOU 		"{player[0].sir_cap}, non avendo inviato le nostre truppe sul fronte {player[1].country_name#ARTICLED_PREPOSITION}, abbiamo violato il patto militare stipulato con loro. Si sentono traditi."
-TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}, avendo attaccato {player[1].civ_name_plural#ARTICLE}, abbiamo violato il trattato di pace siglato con loro! Si sentono oltraggiati e sicuramente suggeriranno alle altre nazioni di diffidare di noi, in futuro."
-ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}, abbiamo violato l'alleanza stretta con {player[1].civ_name_plural#ARTICLE}! Sono profondamente irritati con noi! Dopo una violazione del genere, è improbabile che qualche altra nazione ci possa dare fiducia!"
-
-### Nation-specific Trust Loss ###
-IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, ci eravamo impegnati a rispettare i confini {player[1].country_name#ARICLED_PREPOSITION}. Vuoi rischiare di irritarli muovendo delle unità sul loro terriorio?"
-TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}, non abbiamo ritirato le nostre truppe {player[1].country_name#FROM}. Stanno diventando sospettosi e, probabilmente, ci penseranno bene prima di stringere nuovi accordi con noi."
-TRUST_LOSS_FAIL_TO_STOP_PIRACY		"Poiché abbiamo continuato a compiere azioni di pirateria sulle rotte commerciali {player[1].country_name#ARTICLED_PREPOSITION}, adesso sono arrabbiati con noi. {player[1].civ_name_plural#ARTICLE_CAP} non si fideranno più di noi."
-TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}, abbiamo violato la tregua con {player[1].civ_name_plural#ARTICLE}. Sono profondamente irritati e potrebbero smettere di fidarsi di noi."
-TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}, le nostre recenti azioni hanno violato il patto di ricerca stipulato con {player[1].civ_name_plural#ARTICLE}. Adesso sono diffidenti verso di noi e si interrogano sulle nostre intenzioni."
-TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, le nostre ultime azioni ci hanno costretto a rinnegare il patto commerciale stipulato con {player[1].civ_name_plural#ARTICLE}. Non dimenticheranno facilmente un simile affronto!"
-ECOPACT_BROKEN_BY_YOU 			"{player[0].sir_cap}, abbiamo violato il nostro patto anti-inquinamento con {player[1].country_name#ARTICLE}. Sono irritati con noi!"
 
 # Filename prefix for quicksaves.
 QUICKSAVE_NAME "SALVATAGGIO RAPIDO"
