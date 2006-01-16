@@ -26,6 +26,7 @@
 //
 // - Added Update function so that the info window doesn't need to be closed
 //   for update during the turns. - Aug 7th 2005 Martin
+// - Added cleanup method. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -54,6 +55,7 @@ public:
 	static void SelectRankingTab(void);
 	static void SelectScoreTab(void);
 	static void SelectWonderTab(void);
+	static void Cleanup(void);
 
 	ctp2_Window *GetWindow() {return m_window;}
 

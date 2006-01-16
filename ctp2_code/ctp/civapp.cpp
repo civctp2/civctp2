@@ -85,6 +85,7 @@
 // - Removed old sprite state databases, removed olf good's icon 
 //   database (unused), replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
 // - The right color set is now selected afterwards the ProfileDB is available. (Aug 29th 2005 Martin Gühmann)
+// - Added cleanup of gaia controller and info window. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -299,7 +300,9 @@ int g_gameWatchID = -1;
 #include "unitmanager.h"
 #include "EditQueue.h"
 #include "ProfileEdit.h"
-#include "SlicSegment.h"    // SlicSegment::Cleanup
+#include "SlicSegment.h"            // SlicSegment::Cleanup
+#include "infowindow.h"             // Info Window cleanup
+#include "sciencevictorydialog.h"   // Gaja controller window cleanup
 
 #if defined(USE_SDL) || defined(__AUI_USE_SDL__)
 #include <SDL.h>
@@ -1632,7 +1635,7 @@ sint32 CivApp::CleanupAppUI(void)
 {
 	NetShell::Leave( k_NS_FLAGS_DESTROY );
 
-    // Clean up any opened screens	
+	// Clean up any opened screens
 	greatlibrary_Cleanup();
 	spnewgamescreen_Cleanup();
 	spnewgametribescreen_Cleanup();
@@ -1647,16 +1650,16 @@ sint32 CivApp::CleanupAppUI(void)
 	//Added by Martin Gühmann to clean up the status bar correctly.
 	StatusBar::CleanUp();
 
-    if (g_c3ui)
-    {
-	    delete g_c3ui->TheMovieManager();
-	    delete g_c3ui->TheKeyboard();
-	    delete g_c3ui->TheMouse();
-	    delete g_c3ui->TheBlitter();
-	    delete g_c3ui->TheMemMap();
-	    delete g_c3ui;
-	    g_c3ui = NULL;
-    }
+	if (g_c3ui)
+	{
+		delete g_c3ui->TheMovieManager();
+		delete g_c3ui->TheKeyboard();
+		delete g_c3ui->TheMouse();
+		delete g_c3ui->TheBlitter();
+		delete g_c3ui->TheMemMap();
+		delete g_c3ui;
+		g_c3ui = NULL;
+	}
 
 	
 	delete g_GreatLibPF;
@@ -2664,8 +2667,8 @@ sint32 CivApp::CleanupGameUI(void)
 
 
 	InfoBar::Cleanup();
-
-	
+	InfoWindow::Cleanup();
+	ScienceVictoryDialog::Cleanup();
 	
 	sci_advancescreen_Cleanup();
 	infowin_Cleanup();

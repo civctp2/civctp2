@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Great library handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -38,6 +38,9 @@
 // - Exported database name size max.
 // - Added function to look up an item name on creation index.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Fixed display of topics after the fixing of the alphanumerical
+//   indexing of the databases. (Sep 13th 2005 Martin Gühmann)
+// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -232,7 +235,7 @@ enum Read_Library_State
 
 void GreatLibrary::Load_Great_Library()
 {
-	Assert(m_great_library_info);	// Using m_great_library_info-> later on.
+	Assert(m_great_library_info); // Using m_great_library_info-> later on.
 	if (!m_great_library_info)
 	{
 		return;
@@ -711,6 +714,7 @@ int GreatLibrary::Get_Object_Index_From_Name
 
 	default:
 		BOOL InvalidDatabase = FALSE;
+		DPRINTF(k_DBG_GAMESTATE, ("DB: %i\n", which_database));
 		Assert(InvalidDatabase);
 		break;
 	}
@@ -718,7 +722,7 @@ int GreatLibrary::Get_Object_Index_From_Name
 	
 	bool bad_object_name = false;
 
-	
+	DPRINTF(k_DBG_GAMESTATE, ("Bad object Name: %s, DB: %i\n", object_name, which_database));
 	Assert(bad_object_name);
 
 	
@@ -1051,7 +1055,7 @@ sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci )
 			g_greatLibrary->SetLibrary( theMode, DATABASE_ADVANCES );
 		}
 		else {
-			g_greatLibrary->SetLibrary( g_greatLibrary->m_window->GetTechMode(), g_greatLibrary->m_window->GetTechDatabase() );
+			g_greatLibrary->SetLibrary(g_greatLibrary->m_window->GetTechMode(), g_greatLibrary->m_window->GetTechDatabase() );
 		}
 		g_greatLibrary->SetSci( sci );
 		g_greatLibrary->GetWindow()->MoveOG();
@@ -1435,16 +1439,7 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		theDatabase = g_greatLibrary->m_search_results[theMode].m_database;
 		theMode = g_greatLibrary->m_search_results[theMode].m_item;
 	}
-	else
-	{
-		if(theDatabase == DATABASE_CONCEPTS)
-		{
-			theMode = g_theConceptDB->m_alphaToIndex[ theMode ];
-		}
-	}
 
-	
-	
 	if ( theDatabase == DATABASE_ADVANCES)
 	{
 		m_techTab->Enable( TRUE );
@@ -1877,8 +1872,6 @@ sint32 GreatLibrary::HandleSetGoal( void )
 	if (!selection_name)
 		return -1;
 
-//Added by Martin Gühmann
-
 	int tmp = g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
 	if(tmp == 1){
 		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
@@ -2069,12 +2062,22 @@ ctp2_Window *GreatLibrary::GetWindow( void )
 	return m_window->m_window;
 }
 
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::SetCategoryName
+//
+// Description: Get the - language dependent - name of a database item.
+//
+// Parameters : the_database    : The database category to set
+//              item            : index of the item in the database
+//
+// Globals    : g_theStringDB
+//
+// Returns    : -
+//
+// Remark(s)  : Added database search category
+//
+//----------------------------------------------------------------------------
 void GreatLibrary::SetCategoryName
 (
 	int the_database
@@ -2127,15 +2130,21 @@ void GreatLibrary::SetCategoryName
 
 		break;
 		
-	case DATABASE_ORDERS:			
+	case DATABASE_ORDERS:
 		
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_ORDERS"));
 
 		break;
 
-	case DATABASE_RESOURCE:			
+	case DATABASE_RESOURCE:
 		
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_GOODS"));
+
+		break;
+
+	case DATABASE_SEARCH:
+		
+		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_SEARCH"));
 
 		break;
 
@@ -2176,7 +2185,6 @@ sint32 GreatLibrary::HandleIndexButton( ctp2_Button *button )
 	}
 	else if ( button == m_advancesButton ) {
 		newDatabase = DATABASE_ADVANCES;
-		
 	}
 	else if ( button == m_governButton ) {
 		newDatabase = DATABASE_GOVERNMENTS;
@@ -2202,15 +2210,115 @@ sint32 GreatLibrary::HandleIndexButton( ctp2_Button *button )
 	return 0;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::GetIndexFromAlpha
+//
+// Description: Gets the real database index from an language specific
+//              alphanumeric index.
+//
+// Parameters : sint32 alpha:         The language specific alphanumeric index
+//              DATABASE theDatabase: Index of the item in the database
+//
+// Globals    : g_the<whatever>DB
+//
+// Returns    : The database index
+//
+// Remark(s)  : If database is invalid or search alpha is returned.
+//
+//----------------------------------------------------------------------------
+sint32 GreatLibrary::GetIndexFromAlpha(sint32 alpha, DATABASE theDatabase) const
+{
+	switch ( theDatabase ) 
+	{
+		case DATABASE_UNITS:
+			return g_theUnitDB->m_alphaToIndex[alpha];
+		case DATABASE_BUILDINGS:
+			return g_theBuildingDB->m_alphaToIndex[alpha];
+		case DATABASE_WONDERS:
+			return g_theWonderDB->m_alphaToIndex[alpha];
+		case DATABASE_ADVANCES:
+			return g_theAdvanceDB->m_alphaToIndex[alpha];
+		case DATABASE_TERRAIN:
+			return g_theTerrainDB->m_alphaToIndex[alpha];
+		case DATABASE_CONCEPTS:
+			return g_theConceptDB->m_alphaToIndex[alpha];
+		case DATABASE_GOVERNMENTS:
+			return g_theGovernmentDB->m_alphaToIndex[alpha];
+		case DATABASE_TILE_IMPROVEMENTS:
+			return g_theTerrainImprovementDB->m_alphaToIndex[alpha];
+		case DATABASE_ORDERS:
+			return g_theOrderDB->m_alphaToIndex[alpha];
+		case DATABASE_RESOURCE:
+			return g_theResourceDB->m_alphaToIndex[alpha];
+		default:
+			return alpha;
+	}
+}
 
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::GetAlphaFromIndex
+//
+// Description: Gets the alphanumeric language specific alphanumeric index
+//              from an index into the according database.
+//
+// Parameters : sint32 index:         An index into the given database
+//              DATABASE theDatabase: Database index
+//
+// Globals    : g_the<whatever>DB
+//
+// Returns    : The alphanumeric language specific index
+//
+// Remark(s)  : If database is invalid or search index is returned.
+//
+//----------------------------------------------------------------------------
+sint32 GreatLibrary::GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const
+{
+	switch ( theDatabase ) 
+	{
+		case DATABASE_UNITS:
+			return g_theUnitDB->m_indexToAlpha[index];
+		case DATABASE_BUILDINGS:
+			return g_theBuildingDB->m_indexToAlpha[index];
+		case DATABASE_WONDERS:
+			return g_theWonderDB->m_indexToAlpha[index];
+		case DATABASE_ADVANCES:
+			return g_theAdvanceDB->m_indexToAlpha[index];
+		case DATABASE_TERRAIN:
+			return g_theTerrainDB->m_indexToAlpha[index];
+		case DATABASE_CONCEPTS:
+			return g_theConceptDB->m_indexToAlpha[index];
+		case DATABASE_GOVERNMENTS:
+			return g_theGovernmentDB->m_indexToAlpha[index];
+		case DATABASE_TILE_IMPROVEMENTS:
+			return g_theTerrainImprovementDB->m_indexToAlpha[index];
+		case DATABASE_ORDERS:
+			return g_theOrderDB->m_indexToAlpha[index];
+		case DATABASE_RESOURCE:
+			return g_theResourceDB->m_indexToAlpha[index];
+		default:
+			return index;
+	}
+}
 
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::HandleListButton
+//
+// Description: Displays the selected topic when it is klicked in the listbox.
+//
+// Parameters : 
+//
+// Globals    : -
+//
+// Returns    : Always 0
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 GreatLibrary::HandleListButton
-( 
+(
 	aui_Control *control, 
 	uint32 action, 
 	uint32 data, 
@@ -2235,7 +2343,7 @@ sint32 GreatLibrary::HandleListButton
 		index = (int) item->GetUserData();
 
 		
-		SetLibrary( index, m_listDatabase );
+		SetLibrary( GetIndexFromAlpha(index, m_listDatabase), m_listDatabase );
 
 
 		break;
@@ -2247,16 +2355,21 @@ sint32 GreatLibrary::HandleListButton
 	return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::UpdateList
+//
+// Description: Fills the topic listbox.
+//
+// Parameters : DATABASE Database: Database index
+//
+// Globals    : g_the<whatever>DB
+//
+// Returns    : Always 0
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 GreatLibrary::UpdateList( DATABASE database ) 
 {
 	sint32 index;
@@ -2268,7 +2381,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 	switch ( database ) {
 	case DATABASE_UNITS:
 
-#define HIDE(db, index) (db->Get(index)->GetGLHidden())
+#define HIDE(db, index) (db->Get(db->m_alphaToIndex[index])->GetGLHidden())
 
 		
 		for (index = 0; index < g_theUnitDB->NumRecords(); index++)
@@ -2280,7 +2393,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theUnitDB->GetName(
 						g_theUnitDB->m_alphaToIndex[index])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2296,16 +2409,10 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			int real_index = m_search_results[index].m_item;
 			enum DATABASE real_database = m_search_results[index].m_database;
 
-			
-			if(real_database == DATABASE_CONCEPTS)
-			{
-				real_index = g_theConceptDB->m_indexToAlpha[ real_index ];
-			}
-
-			
+			real_index = GetAlphaFromIndex(real_index, real_database);
 			Add_Item_To_Topics_List(GetItemName(real_database, real_index), index);
 
-		} 
+		}
 
 
 		break;
@@ -2320,7 +2427,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theOrderDB->GetName(
 						g_theOrderDB->m_alphaToIndex[ index ])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2328,13 +2435,12 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		
 		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
-			//added by Martin Gühmann
 			if(HIDE(g_theResourceDB, index)) continue;
 			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theResourceDB->GetName(
 						g_theResourceDB->m_alphaToIndex[ index ])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2348,7 +2454,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theBuildingDB->GetName(
 						g_theBuildingDB->m_alphaToIndex[ index ])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2362,7 +2468,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theWonderDB->GetName(
 						g_theWonderDB->m_alphaToIndex[ index ])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2376,7 +2482,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theAdvanceDB->GetName(
 						g_theAdvanceDB->m_alphaToIndex[ index ])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2390,7 +2496,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theTerrainDB->GetName(
 						g_theTerrainDB->m_alphaToIndex[ index ])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2402,7 +2508,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theConceptDB->GetNameStr(
 							g_theConceptDB->m_alphaToIndex[ index ]), index);
 
-		} 
+		}
 
 		break;
 
@@ -2416,7 +2522,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(
 						g_theGovernmentDB->m_alphaToIndex[ index ])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2430,7 +2536,7 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->GetName(
 						g_theTerrainImprovementDB->m_alphaToIndex[ index ])), index);
 
-		} 
+		}
 
 		break;
 
@@ -2446,15 +2552,21 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 
 }
 
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::Get_Database_Size
+//
+// Description: Gets the size of a database.
+//
+// Parameters : DATABASE the_database: Database index
+//
+// Globals    : g_the<whatever>DB
+//
+// Returns    : Size of the given database
+//
+// Remark(s)  : Returns 0 if database is invalid
+//
+//----------------------------------------------------------------------------
 int GreatLibrary::Get_Database_Size(int the_database)
 {
 	int num = 0;
@@ -2525,15 +2637,22 @@ int GreatLibrary::Get_Database_Size(int the_database)
 	return num;
 }
 
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::Search_Great_Library
+//
+// Description: Searches in the topic titles, historic gameplay, vari and prereq
+//              texts of the Great Library for a key word.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void GreatLibrary::Search_Great_Library()
 {
 	
@@ -2545,6 +2664,9 @@ void GreatLibrary::Search_Great_Library()
 	
 	char * gameplay_text = NULL;
 	char * historical_text = NULL;
+	char * title_text = NULL;
+	char * requirements_text = NULL;
+	char * variables_text = NULL;
 
 	
 	Great_Library_Item current;
@@ -2571,42 +2693,39 @@ void GreatLibrary::Search_Great_Library()
 	
 	for (int i = DATABASE_UNITS; i < DATABASE_SEARCH; i++)
 	{
-		
 		for (int j = 0; j < Get_Database_Size(i); j++)
 		{
-			
 			match = false;
 
-			
-			current.m_database = (enum DATABASE) i;
-			current.m_item = j;
-
-			
 			gameplay_text = m_window->GetGameplayText(i, j);
-
-			
 			if (gameplay_text)
 				match |= String_Search::Search(gameplay_text);
 
-			
 			historical_text = m_window->GetHistoricalText(i, j);
-
-			
 			if (historical_text)
 				match |= String_Search::Search(historical_text);
 
+			title_text = const_cast<char*>(GetObjectName(i, j));
+			if (title_text)
+				match |= String_Search::Search(title_text);
+
+			requirements_text = m_window->GetRequirementsText(i, j);
+			if (requirements_text)
+				match |= String_Search::Search(requirements_text);
+
+			variables_text = m_window->GetVariablesText(i, j);
+			if (variables_text)
+				match |= String_Search::Search(variables_text);
 			
 			if (match)
 			{
-				
+				current.m_database = (enum DATABASE) i;
+				current.m_item = j;
+			
 				m_search_results.push_back(current);
-
 			} 
-
 		} 
 	} 
-
-
 }
 
 
@@ -2634,14 +2753,21 @@ void GreatLibrary::Force_A_Search()
 
 }
 
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::Back
+//
+// Description: Shows the previous topic.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void GreatLibrary::Back()
 {
 	
@@ -2674,15 +2800,21 @@ void GreatLibrary::Back()
 	SetLibrary(next_index, next_database, false);
 }
 
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::Forward
+//
+// Description: Shows the next topic, given back was used before.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void GreatLibrary::Forward()
 {
 	

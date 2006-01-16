@@ -114,7 +114,7 @@
 #include "ConstDB.h"
 
 #include "cellunitlist.h"
-#include "UnitRec.h"
+#include "UnitRecord.h"
 #include "UnitPool.h"
 #include "citydata.h"
 #include "XY_Coordinates.h"
@@ -130,7 +130,6 @@
 #include "civarchive.h"
 #include "Checksum.h"
 #include "SelItem.h"
-#include "pixelutils.h"
 #include "WonderRecord.h"
 #include "pollution.h"
 #include "TradeRoute.h"
@@ -166,13 +165,6 @@
 #include "TradeOffer.h"
 
 #include "Readiness.h"
-
-
-#include "c3window.h"
-#include "statswindow.h"
-
-#include "Order.h"
-
 
 
 #include "DiffDB.h"

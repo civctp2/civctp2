@@ -236,7 +236,7 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 //----------------------------------------------------------------------------
 SlicSegment::SlicSegment(CivArchive &archive)
 :	GameEventHookCallback       (),
-    m_type                      (TYPE_DEFAULT),
+	m_type                      (TYPE_DEFAULT),
 	m_codeSize                  (0),
 	m_num_trigger_symbols       (0),
 	m_num_parameters            (0),
@@ -252,13 +252,13 @@ SlicSegment::SlicSegment(CivArchive &archive)
 	m_code                      (NULL),
 	m_uiComponent               (NULL),
 	m_filename                  (NULL),
-    m_trigger_symbols_indices   (NULL),
+	m_trigger_symbols_indices   (NULL),
 	m_trigger_symbols           (NULL),
 	m_parameter_indices         (NULL),
 	m_parameter_symbols         (NULL)
-    // m_poolIndex              (filled when retrieving from the pool) 
+	// m_poolIndex              (filled when retrieving from the pool) 
 {
-    std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
+	std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
 	Serialize(archive);
 }
 
@@ -323,19 +323,19 @@ SlicSegment::~SlicSegment()
 //----------------------------------------------------------------------------
 void * SlicSegment::operator new(size_t)
 {
-    if (!s_segmentPond)
-    {
-        s_segmentPond = new Pool<SlicSegment>(SEGMENT_POOL_SIZE);
-	} 
+	if (!s_segmentPond)
+	{
+		s_segmentPond = new Pool<SlicSegment>(SEGMENT_POOL_SIZE);
+	}
 
 	int index;
 	SlicSegment *   seg = static_cast<SlicSegment *>
-        (s_segmentPond->Get_Next_Pointer(index));
+		(s_segmentPond->Get_Next_Pointer(index));
 
-    if (seg)
-    {
-	    seg->SetPoolIndex(index);
-    }
+	if (seg)
+	{
+		seg->SetPoolIndex(index);
+	}
 
 		return seg;
 	}
@@ -358,15 +358,15 @@ void * SlicSegment::operator new(size_t)
 //----------------------------------------------------------------------------
 void SlicSegment::operator delete(void *ptr)
 {
-    SlicSegment * seg = static_cast<SlicSegment *>(ptr);
-    if (seg)
-    {
-        int const poolIndex = seg->GetPoolIndex();
-        if ((poolIndex >= 0) && s_segmentPond)
-    {
-            s_segmentPond->Release_Pointer(poolIndex);
+	SlicSegment * seg = static_cast<SlicSegment *>(ptr);
+	if (seg)
+	{
+		int const poolIndex = seg->GetPoolIndex();
+		if ((poolIndex >= 0) && s_segmentPond)
+		{
+			s_segmentPond->Release_Pointer(poolIndex);
+		}
 	}
-}
 }
 
 BOOL SlicSegment::TestLastShown(sint32 player, sint32 turn)
@@ -422,13 +422,13 @@ void SlicSegment::Serialize(CivArchive &archive)
 		m_code = (uint8*)malloc(m_codeSize);
 		archive.Load((uint8*)m_code, m_codeSize);
 
-        if (m_num_trigger_symbols < 1) {  
-            m_trigger_symbols_indices = NULL; 
-            m_trigger_symbols = NULL; 
-        } else { 
-    		m_trigger_symbols_indices = new sint32[m_num_trigger_symbols];
-	    	archive.Load((uint8*)m_trigger_symbols_indices, m_num_trigger_symbols * sizeof(sint32));
-        }
+		if (m_num_trigger_symbols < 1) {  
+			m_trigger_symbols_indices = NULL; 
+			m_trigger_symbols = NULL; 
+		} else { 
+			m_trigger_symbols_indices = new sint32[m_num_trigger_symbols];
+			archive.Load((uint8*)m_trigger_symbols_indices, m_num_trigger_symbols * sizeof(sint32));
+		}
 
 		archive.Load((uint8*)m_lastShown, k_MAX_PLAYERS * sizeof(sint32));
 
@@ -441,7 +441,7 @@ void SlicSegment::Serialize(CivArchive &archive)
 		}
 
 		archive >> m_num_parameters;
-        m_parameter_indices = (m_num_parameters > 0) ? new sint32[m_num_parameters] : NULL;
+		m_parameter_indices = (m_num_parameters > 0) ? new sint32[m_num_parameters] : NULL;
 		sint32 i;
 		for(i = 0; i < m_num_parameters; i++) {
 			m_parameter_indices[i] = archive.GetSINT32();
@@ -899,7 +899,7 @@ SlicConditional *SlicSegment::NewConditional(sint32 line, const char *expression
 
 void SlicSegment::Cleanup(void)
 {
-    delete s_segmentPond;
-    s_segmentPond = NULL;
+	delete s_segmentPond;
+	s_segmentPond = NULL;
 }
 

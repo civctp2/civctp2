@@ -26,6 +26,7 @@
 //
 // - Added Update function so that the info window doesn't need to be closed
 //   for update during the turns. - Aug 7th 2005 Martin
+// - Added cleanup method. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -179,3 +180,27 @@ InfoWindow::~InfoWindow(void)
 		delete m_wonder_tab;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : InfoWindow::Cleanup
+//
+// Description: Deletes the static InfoWindow.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void InfoWindow::Cleanup(void)
+{
+	if(s_InfoWindow) {
+		s_InfoWindow->m_window->Hide();
+		g_c3ui->RemoveWindow(s_InfoWindow->m_window->Id());
+		delete s_InfoWindow;
+		s_InfoWindow = NULL;
+	}
+}

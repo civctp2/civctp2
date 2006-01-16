@@ -3454,7 +3454,7 @@ Location:
 [END]
 
 [TERRAIN_SWAMP_GOOD_TWO_GAMEPLAY]
-Rice is a cereal grain (Oryza sativa) of the grass family, probably native to the Ganges, Tigris, Chang (Yangtze), and Euphrates River deltas. Growing only in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>, rice provides large amounts of <L:DATABASE_CONCEPT,CONCEPT_FOOD>food<e> for the masses.
+Rice is a cereal grain (Oryza sativa) of the grass family, probably native to the Ganges, Tigris, Chang (Yangtze), and Euphrates River deltas. Growing only in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>, rice provides large amounts of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>food<e> for the masses.
 [END]
 
 [TERRAIN_SWAMP_GOOD_TWO_HISTORICAL]
