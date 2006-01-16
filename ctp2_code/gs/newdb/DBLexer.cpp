@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Database lexer (tokenizer/scanner)
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,12 +18,16 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Repaired memory leaks.
 // - Prevented files staying open.
+// - Fixed PeekAhead method so that the real next token is returned.
+//   (Sept 3rd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -187,23 +192,35 @@ sint32 DBLexer::GetToken()
 
 	m_atEnd = (TOKEN_UNDEFINED == m_nextToken);
 
-	DBToken *dbtok;
-
-	if(tok == k_Token_Name) {
-		if((dbtok = m_tokenHash->Access(m_tokenText[m_whichTokenText]))) {
+	if(tok == k_Token_Name){
+		DBToken *dbtok = m_tokenHash->Access(m_tokenText[m_whichTokenText]);
+		if(dbtok){
 			return dbtok->GetValue();
-		} else {
+		}
+		else{
 			return k_Token_Name;
 		}
-	} else {
+	}
+	else{
 		return tok;
 	}
 }
 
 sint32 DBLexer::PeekAhead()
 {
-	
-	return m_nextToken;
+	if(m_nextToken == k_Token_Name){
+		sint32 nextTokenText = (m_whichTokenText + 1) % k_TOKEN_HISTORY_SIZE;
+		DBToken *dbtok = m_tokenHash->Access(m_tokenText[nextTokenText]);
+		if(dbtok){
+			return dbtok->GetValue();
+		}
+		else{
+			return k_Token_Name;
+		}
+	}
+	else{
+		return m_nextToken;
+	}
 }
 
 const char *DBLexer::GetTokenText()

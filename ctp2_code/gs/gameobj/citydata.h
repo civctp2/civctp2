@@ -120,7 +120,6 @@ enum RADIUS_OP {
 	RADIUS_OP_COUNT_GOODS,
 };
 
-struct TileValue;
 struct TerrainValue;
 
 class CityData : public CityRadiusCallback {
