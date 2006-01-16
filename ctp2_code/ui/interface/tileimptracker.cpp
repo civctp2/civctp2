@@ -27,6 +27,7 @@
 // - Added option to show info for tile improvements that are too expensive
 //   and made it modifiable in-game.
 // - Added a construction time line to the tileimp tracker window. (Aug 14th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -241,7 +242,7 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 		        food, production,
 		        gold;
 
-		sint32 extraData;
+		sint32 extraData = 0;
 
 		time = terrainutil_GetProductionTime(s_tileImprovementNum, p, 0);
 		mat = terrainutil_GetProductionCost(s_tileImprovementNum, p, 0);

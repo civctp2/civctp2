@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Save and load game window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +27,7 @@
 //
 // - Repaired memory leak.
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -128,7 +129,7 @@ AUI_ERRCODE LoadSaveWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	
 
@@ -330,7 +331,7 @@ LoadSaveWindow::~LoadSaveWindow()
 
 void LoadSaveWindow::FillListOne(void)
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	if (!m_fileList) return;
 
@@ -365,7 +366,7 @@ void LoadSaveWindow::FillListOne(void)
 
 void LoadSaveWindow::FillListTwo(GameInfo *info)
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	Assert(m_listTwo);
 	if (m_listTwo == NULL) return;
@@ -419,7 +420,7 @@ void LoadSaveWindow::FillListTwo(GameInfo *info)
 
 void LoadSaveWindow::FillCivList(SaveInfo *info)
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	Assert(m_civsList);
 	if (m_civsList == NULL) return;

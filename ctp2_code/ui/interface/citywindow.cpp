@@ -54,6 +54,7 @@
 //   - April 23rd 2005 Martin Gühmann
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
 // - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -452,7 +453,7 @@ AUI_ERRCODE CityWindow::Initialize()
 		return AUI_ERRCODE_OK;
 
 	
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_cityWindow = new CityWindow(&err);
 
 	Assert(err == AUI_ERRCODE_OK);

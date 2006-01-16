@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Keep the embargo and war buttons enabled until confirmed by the player.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -236,7 +237,7 @@ AUI_ERRCODE DiplomacyWindow::Initialize()
 		return AUI_ERRCODE_OK;
 
 	
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_dipWindow = new DiplomacyWindow(&err);
 
 	Assert(err == AUI_ERRCODE_OK);

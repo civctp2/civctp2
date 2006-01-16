@@ -48,6 +48,7 @@
 // - Repaired backwards compatibility and possible crashes.
 // - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 // - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -503,7 +504,7 @@ AUI_ERRCODE ScenarioEditor::Initialize()
 	if(s_scenarioEditor)
 		return AUI_ERRCODE_OK;
 
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_scenarioEditor = new ScenarioEditor(&err);
 	Assert(err == AUI_ERRCODE_OK);
 
@@ -2776,7 +2777,7 @@ void ScenarioEditor::SetupGlobalControls()
 	ctp2_Static *box = NULL;
 	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.MapSize");
 
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	aui_StringTable *table = new aui_StringTable(&err, "SPMapSizeStringTable");
 
 	Assert(err == AUI_ERRCODE_OK);
@@ -3469,8 +3470,8 @@ void ScenarioEditor::FindPosNow(aui_Control *control, uint32 action, uint32 data
 
 	MBCHAR Xtext[MAX_CHARS];
 	MBCHAR Ytext[MAX_CHARS];
-	uint32 posX;
-	uint32 posY;
+	uint32 posX = 0;
+	uint32 posY = 0;
 
 	ctp2_TextField *tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosXField");
 	if(!tf->GetFieldText(Xtext, MAX_CHARS)) {

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling diplomacy details about other players.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@ AUI_ERRCODE DiplomacyDetails::Initialize()
 		return AUI_ERRCODE_OK;
 
 	
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_DiplomacyDetails = new DiplomacyDetails(&err);
 
 	Assert(err == AUI_ERRCODE_OK);

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Great library handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,6 +37,7 @@
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
 // - Added function to look up an item name on creation index.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -146,8 +148,6 @@ extern ConceptDB					*g_theConceptDB;
 extern StringDB						*g_theStringDB;
 extern ProfileDB			*g_theProfileDB;
 
-extern aui_Surface			*g_sharedSurface;
-
 static char const s_database_names[DATABASE_MAX][GL_MAX_DB_NAME_SIZE] =
 {
 	"DATABASE_DEFAULT",
@@ -256,9 +256,9 @@ void GreatLibrary::Load_Great_Library()
 		const int MAX_ENTRY	= k_MAX_GL_ENTRY;
 		char the_name[MAX_NAME];
 		char the_entry[MAX_ENTRY];
-		int name_pos;
-		int entry_pos;
-		char * end_ptr;		
+		int name_pos = 0;
+		int entry_pos = 0;
+		char * end_ptr = NULL;		
 
 #if defined(_JAPANESE)
 		int end_pos;
@@ -1081,7 +1081,7 @@ sint32 greatlibrary_Cleanup( void )
 
 GreatLibrary::GreatLibrary( sint32 theMode )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	m_page = 0;
@@ -1168,7 +1168,7 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 
 sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -1359,7 +1359,7 @@ GreatLibrary::~GreatLibrary( void )
 
 void GreatLibrary::Display( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	
 	GetWindow()->SetType(AUI_WINDOW_TYPE_FLOATING);
 	errcode = g_c3ui->AddWindow( GetWindow() );
@@ -1381,7 +1381,7 @@ void GreatLibrary::Display( void )
 
 void GreatLibrary::Remove( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	errcode = g_c3ui->RemoveWindow( GetWindow()->Id() );
 	Assert( errcode == AUI_ERRCODE_OK );
@@ -2154,7 +2154,7 @@ sint32 GreatLibrary::HandleIndexButton( ctp2_Button *button )
 {
 
 
-	DATABASE newDatabase;
+	DATABASE newDatabase = DATABASE_DEFAULT;
 
 	if ( button == m_unitsButton ) {
 		newDatabase = DATABASE_UNITS;

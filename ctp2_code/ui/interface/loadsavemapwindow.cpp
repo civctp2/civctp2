@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The load/save map window
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -75,7 +104,7 @@ AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	
 
@@ -210,7 +239,7 @@ LoadSaveMapWindow::~LoadSaveMapWindow()
 
 void LoadSaveMapWindow::FillListOne(void)
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	if (!m_fileList) return;
 	if (m_fileList->GetCount() <= 0) return;
@@ -242,7 +271,7 @@ void LoadSaveMapWindow::FillListOne(void)
 
 void LoadSaveMapWindow::FillListTwo(GameMapInfo *info)
 {
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	Assert(m_listTwo);
 	if (m_listTwo == NULL) return;

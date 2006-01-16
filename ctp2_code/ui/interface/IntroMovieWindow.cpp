@@ -1,4 +1,32 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The intro movie window object
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -65,7 +93,7 @@ IntroMovieWindow::~IntroMovieWindow()
 AUI_ERRCODE IntroMovieWindow::InitCommonLdl(MBCHAR *ldlBlock)
 {
 	MBCHAR			buttonBlock[k_AUI_LDL_MAXBLOCK+1];
-	AUI_ERRCODE		errcode;
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	sprintf(buttonBlock, "%s.%s", ldlBlock, "MovieButton");
 	m_movieButton = new aui_MovieButton(&errcode, aui_UniqueId(), buttonBlock, intromoviewin_MovieButtonCallback);

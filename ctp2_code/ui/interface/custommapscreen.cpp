@@ -4,6 +4,7 @@
 // File type    : C++ source
 // Description  : Dialog for altering map properties
 //                (dry/wet, ocean/land, etc.)
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,6 +29,7 @@
 //   could cause problems in the new interface (Its removal could also cause
 //   problems, but I'm not sure what it did, so I don't know...)
 //   (JJB)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -157,7 +161,7 @@ sint32 custommapscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 

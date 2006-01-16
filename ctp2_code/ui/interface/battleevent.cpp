@@ -1,4 +1,32 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Battle event player
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -276,7 +304,7 @@ void BattleEvent::ProcessExplode(void)
 			if (!m_animating) {
 
 				if (actor) {
-					Action		*action;
+					Action		*action = NULL;
 
 					Anim		*anim = actor->GetAnim(EFFECTACTION_PLAY);
 					if (anim == NULL) {
@@ -475,9 +503,9 @@ BattleViewActor *BattleEvent::GetActor(void)
 {
 	if (m_dataList->GetCount() <= 0) return NULL;
 
-	PointerList<BattleEventData>::PointerListNode	*node;
-	BattleEventData									*eventData;
-	BattleViewActor									*actor;
+	PointerList<BattleEventData>::PointerListNode	*node = NULL;
+	BattleEventData									*eventData = NULL;
+	BattleViewActor									*actor = NULL;
 
 	node = m_dataList->GetHeadNode();
 	Assert(node);
