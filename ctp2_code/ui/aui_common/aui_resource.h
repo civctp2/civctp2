@@ -229,7 +229,7 @@ AUI_ERRCODE aui_Resource<T>::AddSearchPath( const MBCHAR *path )
 	Assert( path != NULL );
 	if ( !path ) return AUI_ERRCODE_INVALIDPARAM;
 
-	uint32 len = strlen( path );
+	size_t len = strlen( path );
 
 	Assert( len != 0 );
 	if ( !len ) return AUI_ERRCODE_INVALIDPARAM;
