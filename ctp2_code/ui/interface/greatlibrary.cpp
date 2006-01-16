@@ -32,14 +32,15 @@
 //   enabling advance has been researched already, by Martin Gühmann.
 // - The tech goal can now also set for tile improvements, by Martin Gühmann.
 // - Handle Japanese input data, by t.s. (2003.12).
-// - Memory leaks repaired at the root.
+// - Memory leaks repaired.
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
+// - Added function to look up an item name on creation index.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
+#include "greatlibrary.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -109,7 +110,6 @@
 
 #include "greatlibrarywindow.h"
 #include "directvideo.h"
-#include "greatlibrary.h"
 
 #include "keypress.h"
 #include "UnitRecord.h"
@@ -129,7 +129,7 @@
 #include "String_Search.h"
 
 #include "sci_advancescreen.h"
-#include "stdlib.h"
+#include <stdlib.h>
 
 
 
@@ -418,7 +418,7 @@ void GreatLibrary::Load_Great_Library()
 							entry_copy[strlen(the_entry)] = 0;
 
 							
-							for (int j = 0; (unsigned) j < strlen(name_copy); j++)
+							for (size_t j = 0; j < strlen(name_copy); j++)
 								name_copy[j] = tolower(name_copy[j]);
 
 							
@@ -1903,109 +1903,148 @@ sint32 GreatLibrary::HandleSetGoal( void )
 	return 0;
 }
 
-
-
-
-
-
-
-
-
-
-const MBCHAR * GreatLibrary::GetItemName(int database, int item)
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::GetItemName
+//
+// Description: Get the - language dependent - name of a database item.
+//
+// Parameters : database        : database
+//              item            : *lexicographic* index of the item in the 
+//                                database
+//
+// Globals    : g_theStringDB
+//              g_the<whatever>DB
+//              g_greatLibrary
+//
+// Returns    : MBCHAR const *  : name of the database item
+//
+// Remark(s)  : See also GetObjectName
+//
+//----------------------------------------------------------------------------
+MBCHAR const * GreatLibrary::GetItemName(int database, int item) const
 {
-	
-	if (item == -1)
+	if (item < 0)
 		return NULL;
 
 	
 	switch ( database ) 
 	{
-	case DATABASE_UNITS:
+	default:
+		return NULL;
 
+	case DATABASE_UNITS:
 		return g_theStringDB->GetNameStr(g_theUnitDB->GetName(
 				g_theUnitDB->m_alphaToIndex[item])) ;
 
-		break;
-
 	case DATABASE_SEARCH:
+		{
+		    enum DATABASE   real_database   =
+                g_greatLibrary->m_search_results[item].m_database;
+		    int             real_index      =
+                g_greatLibrary->m_search_results[item].m_item;
 		
-		enum DATABASE real_database;
-		int real_index;
-
-		
-		real_database = g_greatLibrary->m_search_results[item].m_database;
-		real_index = g_greatLibrary->m_search_results[item].m_item;
-
-		
-		return GetItemName(real_database, real_index);
-		break;
+    		return GetItemName(real_database, real_index);
+        }
 
 	case DATABASE_ORDERS:
-
 		return g_theStringDB->GetNameStr(g_theOrderDB->GetName(
 				g_theOrderDB->m_alphaToIndex[item])) ;
 
-		break;
-
 	case DATABASE_RESOURCE:
-
 		return g_theStringDB->GetNameStr(g_theResourceDB->GetName(
 				g_theResourceDB->m_alphaToIndex[item])) ;
 
-		break;
-
 	case DATABASE_BUILDINGS:
-
 		return g_theStringDB->GetNameStr(g_theBuildingDB->GetName(
 				g_theBuildingDB->m_alphaToIndex[item])) ;
 
-		break;
-
 	case DATABASE_WONDERS:
-
 		return g_theStringDB->GetNameStr(g_theWonderDB->GetName(
 				g_theWonderDB->m_alphaToIndex[item])) ;
 
-		break;
-
 	case DATABASE_ADVANCES:
-
 		return g_theStringDB->GetNameStr(g_theAdvanceDB->GetName(
 				g_theAdvanceDB->m_alphaToIndex[item])) ;
 
-		break;
-
 	case DATABASE_TERRAIN:
-
 		return g_theStringDB->GetNameStr(g_theTerrainDB->GetName(
 				g_theTerrainDB->m_alphaToIndex[item])) ;
 
-		break;
-
 	case DATABASE_CONCEPTS:
-
 		return g_theConceptDB->GetNameStr(
 				g_theConceptDB->m_alphaToIndex[item]) ;
 
-		break;
-
 	case DATABASE_GOVERNMENTS:
-
 		return g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(
 				g_theGovernmentDB->m_alphaToIndex[item])) ;
-		break;
 
 	case DATABASE_TILE_IMPROVEMENTS:
-
 		return g_theStringDB->GetNameStr(g_theTerrainImprovementDB->GetName(
 				g_theTerrainImprovementDB->m_alphaToIndex[item])) ;
-		break;
 
+	} // switch
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : GreatLibrary::GetObjectName
+//
+// Description: Get the - language dependent - name of a database item.
+//
+// Parameters : database        : database
+//              item            : index of the item in the database
+//
+// Globals    : g_theStringDB
+//              g_the<whatever>DB
+//
+// Returns    : MBCHAR const *  : name of the database item
+//
+// Remark(s)  : See also GetItemName
+//
+//----------------------------------------------------------------------------
+MBCHAR const * GreatLibrary::GetObjectName(int database, int index) const
+{
+	if (index < 0)
+		return NULL;
+
+	
+	switch (database) 
+	{
 	default:
 		return NULL;
-	};
 
+	case DATABASE_UNITS:
+		return g_theStringDB->GetNameStr(g_theUnitDB->GetName(index));
+
+	case DATABASE_ORDERS:
+		return g_theStringDB->GetNameStr(g_theOrderDB->GetName(index));
+
+	case DATABASE_RESOURCE:
+		return g_theStringDB->GetNameStr(g_theResourceDB->GetName(index));
+
+	case DATABASE_BUILDINGS:
+		return g_theStringDB->GetNameStr(g_theBuildingDB->GetName(index));
+
+	case DATABASE_WONDERS:
+		return g_theStringDB->GetNameStr(g_theWonderDB->GetName(index));
+
+	case DATABASE_ADVANCES:
+		return g_theStringDB->GetNameStr(g_theAdvanceDB->GetName(index));
+
+	case DATABASE_TERRAIN:
+		return g_theStringDB->GetNameStr(g_theTerrainDB->GetName(index));
+
+	case DATABASE_CONCEPTS:
+		return g_theConceptDB->GetNameStr(index);
+
+	case DATABASE_GOVERNMENTS:
+		return g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(index));
+
+	case DATABASE_TILE_IMPROVEMENTS:
+		return g_theStringDB->GetNameStr(g_theTerrainImprovementDB->GetName(index));
+
+	} // switch database
 }
 
 
@@ -2017,13 +2056,9 @@ const MBCHAR * GreatLibrary::GetItemName(int database, int item)
 
 
 
-
-const MBCHAR * GreatLibrary::GetSelectionName()
+const MBCHAR * GreatLibrary::GetSelectionName() const
 { 
-
-	
 	return GetItemName(m_database, m_selectedIndex);
-
 }
 
 

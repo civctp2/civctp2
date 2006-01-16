@@ -17,15 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
-//       1200 are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,9 +24,9 @@
 // - Microsoft extensions marked.
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
+// - Added function to look up an item name on creation index.
 //
 //----------------------------------------------------------------------------
-
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -45,10 +36,11 @@
 #define __GREATLIBRARY_H__
 
 #include "ctp2_enums.h"
-#include "ctp2_listitem.h"
-#include "keyboardhandler.h"
 #include <vector>	// std::vector
 
+class GreatLibrary;
+class Great_Library_Item;
+class TechListItem;
 #define k_GL_TREE_LEFT		5
 #define k_GL_TREE_TOP		40
 #define k_GL_TREE_WIDTH		750
@@ -84,6 +76,9 @@ enum LIB_STRING {
 	LIB_STRING_INDEX,
 	LIB_STRING_TREE
 };
+
+#include "ctp2_listitem.h"
+#include "keyboardhandler.h"
 
 class Chart;
 class ctp2_HyperTextBox;
@@ -276,8 +271,11 @@ public:
 
 	sint32 GreatLibrary::ClearHistory( void );
 	sint32 HandleSetGoal( void );
-	const MBCHAR *GetItemName(int database, int item);
-	const MBCHAR *GetSelectionName();
+
+	MBCHAR const *  GetItemName(int database, int item) const;      // lexicographic index
+    MBCHAR const *  GetObjectName(int database, int index) const;   // database index
+	MBCHAR const *  GetSelectionName() const;
+
 	void SetCategoryName
 	(
 		int the_database

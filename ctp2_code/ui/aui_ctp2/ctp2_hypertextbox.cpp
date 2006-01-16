@@ -626,7 +626,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					// Perform database text lookup.
 					if (hyperLinkDB)
 					{
-						MBCHAR const *	ptr	= g_greatLibrary->GetItemName
+						MBCHAR const *	ptr	= g_greatLibrary->GetObjectName
 												(hyperLinkDB, hyperLinkIndex);
 						
 						FormatText(ptr, 
