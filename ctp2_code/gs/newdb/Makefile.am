@@ -47,6 +47,7 @@ libgsnewdb_a_SOURCES = \
 	PersonalityRecord.cpp \
 	PopRecord.cpp \
 	ResourceRecord.cpp \
+	RiskRecord.cpp \
 	SoundRecord.cpp \
 	SpecialAttackInfoRecord.cpp \
 	SpecialEffectRecord.cpp \
@@ -89,6 +90,7 @@ newdb_CDBTYPES = \
 	PersonalityRecord \
 	PopRecord \
 	ResourceRecord \
+	RiskRecord \
 	SoundRecord \
 	SpecialAttackInfoRecord \
 	SpecialEffectRecord \
@@ -304,6 +306,14 @@ ResourceRecord.h: ResourceRecord.stamp
 
 ResourceRecord.stamp: $(ctp2_code)/gs/newdb/terrain.cdb \
 		SoundRecord.h \
+		$(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+RiskRecord.cpp \
+RiskRecord.h: RiskRecord.stamp
+
+RiskRecord.stamp: $(ctp2_code)/gs/newdb/Risk.cdb \
 		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@

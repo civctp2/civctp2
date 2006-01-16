@@ -40,6 +40,7 @@
 
 #include "soundmanager.h"
 #include "colorset.h"
+#include "aui_surface.h"
 
 extern SpriteGroupList  *g_unitSpriteGroupList;
 extern TiledMap         *g_tiledMap;

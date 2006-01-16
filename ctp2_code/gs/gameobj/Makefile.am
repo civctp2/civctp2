@@ -46,7 +46,6 @@ libgsgameobj_la_SOURCES = \
 	DiplomaticRequestData.cpp \
 	DiplomaticRequestPool.cpp \
 	EmptyTile.cpp \
-	endgame.cpp \
 	Events.cpp \
 	EventTracker.cpp \
 	Exclusions.cpp \

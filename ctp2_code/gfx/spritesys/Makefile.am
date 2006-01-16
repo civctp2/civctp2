@@ -41,7 +41,6 @@ libgfxspritesys_la_SOURCES = \
 	SpriteLow555.cpp \
 	SpriteLow565.cpp \
 	SpriteState.cpp \
-	SpriteStateDB.cpp \
 	spriteutils.cpp \
 	UnitSpriteGroup.cpp \
 	director.cpp \

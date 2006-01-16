@@ -23,14 +23,10 @@ libgsdatabase_la_SOURCES = \
 	ConstDB.cpp \
 	DB.cpp \
 	DiffDB.cpp \
-	EndGameDB.cpp \
-	EndGameRecord.cpp \
 	filenamedb.cpp \
 	gwdb.cpp \
 	GWRecord.cpp \
 	highscoredb.cpp \
-	InstDB.cpp \
-	InstRec.cpp \
 	MapDB.cpp \
 	MapRecord.cpp \
 	moviedb.cpp \
@@ -40,7 +36,6 @@ libgsdatabase_la_SOURCES = \
 	PollutionRecord.cpp \
 	profileDB.cpp \
 	Rec.cpp \
-	RiskDB.cpp \
 	StrDB.cpp \
 	StrRec.cpp \
 	thronedb.cpp \
