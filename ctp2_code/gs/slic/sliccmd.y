@@ -6,6 +6,7 @@
 // Description  : Defines what valid slic commands are.
 //                This file sliccmd.y is compiled to sc.tab.c
 //                and therefore you find this text in both files.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,14 +18,17 @@
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.                                                              
 //
 //----------------------------------------------------------------------------
-//                                                                                                                                                                         
+//
 // Compiler flags
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Exponetiation operator '**' added.
+// - Added database array access. (Sep 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -372,6 +376,19 @@ expression: expression '+' expression
 
 				$$.v.type = EXP_VAL_INT;
 				$$.v.value = slicif_find_db_value($1.v.dbptr, $3.v.name, $6.v.name);
+				$$.v.sym = NULL;
+			}
+		}
+    |   DBREF '(' expression ')' REF NAME '[' expression ']'
+        {
+			if($3.v.type == EXP_VAL_INT) {
+				$$.v.type = EXP_VAL_INT;
+				$$.v.value = slicif_find_db_array_value_by_index($1.v.dbptr, $3.v.value, $6.v.name, $8.v.value);
+				$$.v.sym = NULL;
+			} else {
+
+				$$.v.type = EXP_VAL_INT;
+				$$.v.value = slicif_find_db_array_value($1.v.dbptr, $3.v.name, $6.v.name, $8.v.value);
 				$$.v.sym = NULL;
 			}
 		}

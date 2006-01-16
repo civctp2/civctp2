@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic code interpreter
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -37,6 +37,7 @@
 // - Repaired memory leaks.
 // - Repaired crash with invalid input.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added database array access. (Sep 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1138,7 +1139,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 			codePtr += sizeof(char);
 
-			ival = *((sint32*)codePtr);
+			ival = *((int*)codePtr);
 			codePtr += sizeof(int);
 			symval = g_slicEngine->GetSymbol(ival);
 
@@ -1178,7 +1179,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			codePtr += sizeof(char);
 			Assert(conduit);
 
-			ival = *((sint32*)codePtr);
+			ival = *((int*)codePtr);
 			codePtr += sizeof(int);
 			symval = g_slicEngine->GetSymbol(ival);
 			if(!symval) {
@@ -1200,6 +1201,97 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
 				sval3.m_int = conduit->GetValue(sval3.m_int, name);
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
+					c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
+				}
+				sval3.m_int = 0;
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			break;
+		}
+		case SOP_DBNAMEARRAY:
+		{
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+			Assert(conduit);
+
+			ival = *((int*)codePtr);
+			codePtr += sizeof(int);
+			symval = g_slicEngine->GetSymbol(ival);
+			if(!symval) {
+				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
+				stopped = TRUE;
+				break;
+			}
+
+			//Get the member:
+			name = (char*)codePtr;
+			Assert(name);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+
+			sval1.m_sym = symval;
+			sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
+
+			sp = m_stack->Pop(type2, sval2);
+			Assert(sp >= 0);
+
+			sval2.m_int = Eval(type2, sval2);
+
+			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+				sval3.m_int = conduit->GetValue(sval3.m_int, name, sval2.m_int);
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
+					c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
+				}
+				sval3.m_int = 0;
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			break;
+		}
+		case SOP_DBNAMECONSTARRAY:
+		{
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+			Assert(conduit);
+
+			sval3.m_int = *((int*)codePtr);
+			codePtr += sizeof(int);
+
+			//Get the member:
+			name = (char*)codePtr;
+			Assert(name);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+
+			sp = m_stack->Pop(type2, sval2);
+			Assert(sp >= 0);
+
+			sval2.m_int = Eval(type2, sval2);
+
+			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+				sval3.m_int = conduit->GetValue(sval3.m_int, name, sval2.m_int);
 				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			else{
@@ -1276,7 +1368,47 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			break;
 		}
 		case SOP_DBARRAY:
+		{
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+
+			//Get the member:
+			name = (char*)codePtr;
+			Assert(name);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+
+			sp = m_stack->Pop(type1, sval1);
+			Assert(sp >= 0);
+
+			sval1.m_int = Eval(type1, sval1);
+
+			sp = m_stack->Pop(type2, sval2);
+			Assert(sp >= 0);
+
+			sval2.m_int = Eval(type2, sval2);
+
+			if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){		
+				sval3.m_int = conduit->GetValue(sval2.m_int, name, sval1.m_int);
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
+					c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval2.m_int, conduit->GetName());
+				}
+				sval2.m_int = 0;
+				m_stack->Push(SS_TYPE_INT, sval2);
+			}
 			break;
+		}
 		case SOP_DBSIZE:
 		{
 			//Added by Martin Gühmann to figure out via 
