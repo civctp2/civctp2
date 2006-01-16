@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Network (multiplayer) user interface
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Prevented memory leaks and debug exit popups.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -81,7 +84,7 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 		if ( !g_netshell )
 		{
 			
-			AUI_ERRCODE errcode;
+			AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 			g_netshell = new NetShell( &errcode );
 			Assert( AUI_NEWOK(g_netshell,errcode) );
@@ -256,7 +259,7 @@ AUI_ERRCODE NetShell::InitCommon( void )
 	g_nsImprovements = new ns_Improvements;
 	g_nsWonders = new ns_Wonders;
 
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	m_bg = new aui_Control(
 		&errcode,
@@ -275,7 +278,7 @@ AUI_ERRCODE NetShell::InitCommon( void )
 
 AUI_ERRCODE NetShell::CreateScreens( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	aui_Screen *screen;
 	aui_Window *window;

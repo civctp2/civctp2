@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Listbox for network game setup
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Corrected strange access of non-static members from static data.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -102,7 +106,7 @@ template<class T,class NetShellT>
 void ns_ListBox<T,NetShellT>::Insert( T *object )
 {
 	
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	ns_Item<T,NetShellT> *item = new ns_Item<T,NetShellT>(
 		&errcode,
 		aui_UniqueId(),
@@ -302,7 +306,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 		for ( sint32 i = 1; i < numProperties; i++ )
 		{
 			
-			AUI_ERRCODE errcode;
+			AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 			ns_Item<T,NetShellT> *childItem = new ns_Item<T,NetShellT>(
 				&errcode,
 				aui_UniqueId(),

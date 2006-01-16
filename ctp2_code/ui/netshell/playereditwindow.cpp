@@ -1,16 +1,34 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer player edit window
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
@@ -20,26 +38,16 @@
 #include "aui_radio.h"
 #include "aui_stringtable.h"
 
-
 #include "c3_button.h"
 #include "textradio.h"
 #include "c3textfield.h"
 
-
 #include "netshell.h"
-
-
-
-
-
-
-
 
 
 #include "playereditwindow.h"
 #include "playerselectwindow.h"
 #include "ns_customlistbox.h"
-
 
 
 PlayerEditWindow::PlayerEditWindow(
@@ -65,7 +73,6 @@ PlayerEditWindow::PlayerEditWindow(
 }
 
 
-
 AUI_ERRCODE PlayerEditWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -79,14 +86,12 @@ AUI_ERRCODE PlayerEditWindow::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
 	
-
 	aui_Control *control;
 
 	control = new c3_Static(
@@ -244,53 +249,6 @@ AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 	m_controls[ CONTROL_PLAYERINFOTEXTFIELD ] = control;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	control = new aui_Button(
 		&errcode,
 		aui_UniqueId(),
@@ -309,12 +267,10 @@ AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 
 
 	
-
 	aui_Ldl::SetupHeirarchyFromRoot( "playereditwindow" );
 
 
 	
-
 	aui_Action *action;
 
 	action = new OKButtonAction;
@@ -329,18 +285,15 @@ AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 
 
 	
-
 	SetStronglyModal( TRUE );
 
 
 	return AUI_ERRCODE_OK;
 }
 
-
 PlayerEditWindow::~PlayerEditWindow()
 {
 }
-
 
 
 void PlayerEditWindow::SetPlayerSetup(nf_PlayerSetup *p)
@@ -348,20 +301,11 @@ void PlayerEditWindow::SetPlayerSetup(nf_PlayerSetup *p)
 	m_playersetup = p;
 }
 
-
 void PlayerEditWindow::SetMode(Mode m)
 {
 	mode = m;
 	switch(mode) {
 	case EDIT_GAMESETUP:
-
-
-
-
-
-
-
-
 
 		m_controls[ CONTROL_PLAYERNAMETEXTFIELD ]->Enable( true );
 		m_controls[ CONTROL_ICQTEXTFIELD ]->Enable( true );
@@ -374,15 +318,6 @@ void PlayerEditWindow::SetMode(Mode m)
 
 	case EDIT:
 
-
-
-
-
-
-
-
-
-
 		m_controls[ CONTROL_PLAYERNAMETEXTFIELD ]->Enable( true );
 		m_controls[ CONTROL_ICQTEXTFIELD ]->Enable( true );
 		m_controls[ CONTROL_EMAILTEXTFIELD ]->Enable( true );
@@ -393,15 +328,6 @@ void PlayerEditWindow::SetMode(Mode m)
 		break;
 
 	case VIEW:
-
-
-
-
-
-
-
-
-
 
 		m_controls[ CONTROL_PLAYERNAMETEXTFIELD ]->Enable( false );
 		m_controls[ CONTROL_ICQTEXTFIELD ]->Enable( false );
@@ -414,43 +340,19 @@ void PlayerEditWindow::SetMode(Mode m)
 	}
 }
 
-
 PlayerEditWindow::Mode PlayerEditWindow::GetMode()
 {
 	return mode;
 }
 
-
 AUI_ERRCODE PlayerEditWindow::Idle( void )
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE PlayerEditWindow::SetParent( aui_Region *region )
 {
-	
-	if ( region ) {
+		if ( region ) {
 		((aui_Control *)FindControl( CONTROL_PLAYERNAMETEXTFIELD ))->
 			SetKeyboardFocus();
 
@@ -491,14 +393,6 @@ AUI_ERRCODE PlayerEditWindow::SetParent( aui_Region *region )
 					SetFieldText(m_playersetup->GetDescription());
 
 
-
-
-
-
-
-
-
-
 		}
 		else
 		{
@@ -534,19 +428,10 @@ AUI_ERRCODE PlayerEditWindow::SetParent( aui_Region *region )
 					SetFieldText("");
 
 
-
-
-
-
-
-
-
-
 		}
 	}
 	return ns_Window::SetParent( region );
 }
-
 
 
 void PlayerEditWindow::OKButtonAction::Execute(
@@ -569,19 +454,12 @@ void PlayerEditWindow::OKButtonAction::Execute(
 	char info[nf_PLAYERDESCLEN + 1];
 
 
-
-
-
-
-
 	((aui_TextField *)
 	 (p->FindControl( PlayerEditWindow::CONTROL_PLAYERNAMETEXTFIELD)))->
 		GetFieldText(name, dp_PNAMELEN);
 
-	
 	if(strlen(name) == 0) return;
 
-	
 	char scannedName[ 256 ] = "";
 	sscanf( name, "%s", scannedName );
 	if (strlen(scannedName) == 0) return;
@@ -615,21 +493,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 		GetFieldText(info, nf_PLAYERDESCLEN);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	if(p->GetPlayerSetup()) {
 		if(p->GetMode() == p->EDIT || p->GetMode() == p->EDIT_GAMESETUP) {
 
@@ -640,11 +503,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 			p->GetPlayerSetup()->SetExperience(experience);
 
 
-
-
-
-
-
 			p->GetPlayerSetup()->SetDescription(info);
 
 			p->GetPlayerSetup()->Update();
@@ -652,7 +510,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 			if(l->FindItem(p->GetPlayerSetup()))
 			{
 				l->ChangeItem(p->GetPlayerSetup());
-
 			}
 		}
 	} else {
@@ -666,11 +523,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 		p->GetPlayerSetup()->SetExperience(experience);
 
 
-
-
-
-
-
 		p->GetPlayerSetup()->SetDescription(info);
 
 		p->GetPlayerSetup()->Update();
@@ -680,14 +532,9 @@ void PlayerEditWindow::OKButtonAction::Execute(
 		l->SelectItem(l->FindItem(p->GetPlayerSetup()));
 	}
 
-
-
-
 		g_netshell->GetCurrentScreen()->RemoveWindow(p->Id());
 		w->Update();
-
 }
-
 
 
 void PlayerEditWindow::CancelButtonAction::Execute(
@@ -699,5 +546,4 @@ void PlayerEditWindow::CancelButtonAction::Execute(
 
 	PlayerEditWindow *p = (PlayerEditWindow *)(control->GetParentWindow());
 	g_netshell->GetCurrentScreen()->RemoveWindow(p->Id());
-
 }

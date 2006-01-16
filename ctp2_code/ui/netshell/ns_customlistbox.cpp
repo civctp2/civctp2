@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Listbox for network game setup
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +27,7 @@
 // - Corrected strange access of non-static members from static data.
 // - Replaced typename T in specialized template member function by the 
 //   the type for that the function is specialized, by Martin Gühmann.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -572,7 +576,7 @@ void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 {
 	ns_ListBox<NETFunc::Player, ns_GPlayer>::Insert( player );
 
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	ns_HPlayerItem *item = new ns_HPlayerItem(
 		&errcode,
 		player,
@@ -860,7 +864,7 @@ void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
 {
 	ns_ListBox<nf_AIPlayer, ns_AIPlayer>::Insert( player );
 
-	AUI_ERRCODE errcode;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	ns_HPlayerItem *item = new ns_HPlayerItem(
 		&errcode,
 		player,

@@ -1,25 +1,15 @@
 
 
 
-
-
-
-
-
-
-
-
 #ifndef __NS_HEADER_H__
 #define __NS_HEADER_H__
 
 #include "ns_listbox.h"
 #include "aui_header.h"
 
-
 class ns_Header : public aui_Header
 {
 public:
-	
 	ns_Header(
 		AUI_ERRCODE *retval,
 		uint32 id,
