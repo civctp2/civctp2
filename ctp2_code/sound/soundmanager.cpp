@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : General declarations
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,13 +26,15 @@
 //
 // USE_SDL
 // - Compile with sdl support instead of mss (define: civsound.h)
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - #pragmas commented out
-// - includes fixed for case sensitive filesystems
-// - added sdl sound and cdrom support
+// - Includes fixed for case sensitive filesystems
+// - Added sdl sound and cdrom support
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -600,7 +603,7 @@ SoundManager::TerminateLoopingSound(const SOUNDTYPE &type,
 void
 SoundManager::TerminateAllLoopingSounds(const SOUNDTYPE &type)
 {
-	PointerList<CivSound>::PointerListNode *node;
+	PointerList<CivSound>::PointerListNode *node = NULL;
 
 	switch (type) {
 	case SOUNDTYPE_SFX:
@@ -633,7 +636,7 @@ SoundManager::TerminateAllLoopingSounds(const SOUNDTYPE &type)
 void
 SoundManager::TerminateSounds(const SOUNDTYPE &type)
 {
-	PointerList<CivSound>::PointerListNode *node;
+	PointerList<CivSound>::PointerListNode *node = NULL;
 
 	switch (type) {
 	case SOUNDTYPE_SFX:
@@ -871,9 +874,9 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
                           const uint32 &associatedObject,
                           const sint32 &x, const sint32 &y)
 {
-	PointerList<CivSound>::PointerListNode *node;
+	PointerList<CivSound>::PointerListNode *node = NULL;
 
-	sint32 volume;
+	sint32 volume = 0;
 
 	switch (type) {
 	case SOUNDTYPE_SFX:

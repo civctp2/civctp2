@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Build queue handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,6 +30,7 @@
 //   from the database. - Feb. 23rd 2005 Martin Gühmann
 // - Added assignment operator. - Jul 16th 2005 Martin Gühmann
 // - Removed old endgame database, doesn't seem to be uses. (Aug 29th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -256,9 +258,9 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 	if(!fpQueue) return 0;
 
 	char buf[k_MAX_NAME_LEN];
-	sint32 category;
-	sint32 type;
-	sint32 cost;
+	sint32 category = 0;
+	sint32 type = 0;
+	sint32 cost = 0;
 	while(!c3files_feof(fpQueue)) {
 		
 		if(!c3files_fgets(buf, k_MAX_NAME_LEN, fpQueue))

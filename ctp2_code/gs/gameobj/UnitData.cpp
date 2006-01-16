@@ -18,6 +18,9 @@
 //
 // Compiler flags
 //
+// _DEBUG
+// - Generate debug version
+//
 // CTP1_TRADE
 // - Creates an executable with trade like in CTP1. Currently broken.
 //
@@ -48,6 +51,7 @@
 // - Removed some unsused method to removed some unused in methods in
 //   CityData.. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -4094,7 +4098,7 @@ void UnitData::HearGossip(Unit &c)
 	sint32 maxCost = 0;
 	static UnitDynamicArray maxCostUnits;
 	maxCostUnits.Clear();
-	SlicObject *so;
+	SlicObject *so = NULL;
 
 	switch(g_rand->Next(3)) {
         case 0: {

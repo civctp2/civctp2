@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : SLIC interpreter functions
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,8 @@
 //
 // Compiler flags
 //
-// - None
+// _DEBUG
+// - Generate debug version
 //
 //----------------------------------------------------------------------------
 //
@@ -34,6 +36,7 @@
 //   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
 // - Added debugging code for bitwise operator
 // - Prevented crash with invalid Slic input.
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -484,7 +487,7 @@ void slicif_add_op(SOP op, ...)
 			char *structname = va_arg(vl, char *);
 			name = va_arg(vl, char *);
 			symval = slicif_get_symbol(structname);
-			sint32 member;
+			sint32 member = 0;
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", structname);
 				yyslerror(errbuf);
@@ -526,7 +529,7 @@ void slicif_add_op(SOP op, ...)
 			name = va_arg(vl, char *);
 			
 			symval = slicif_get_symbol(structname);
-			sint32 member;
+			sint32 member = 0;
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", structname);
 				yyslerror(errbuf);

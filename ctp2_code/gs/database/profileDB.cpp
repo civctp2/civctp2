@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of user preferences.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -31,6 +31,7 @@
 // - Option added to select message adding style (top or bottom).
 // - Option added to include multiple data directories.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -433,8 +434,8 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 		if(pro_file) {
 			
 			
-			sint32 saved_width;
-			sint32 saved_height;
+			sint32 saved_width = 0;
+			sint32 saved_height = 0;
 
 			if (forTutorial) {
 				saved_width = m_screenResWidth;
