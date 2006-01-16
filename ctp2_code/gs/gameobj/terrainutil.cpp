@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Terrain utilities
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,8 @@
 //
 // Compiler flags
 //
-// - None
+// __TILETOOL__
+// - Probably supposed to generate the tool for creating the *.til files.
 //
 //----------------------------------------------------------------------------
 //

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : String utilities
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,7 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
@@ -33,6 +34,7 @@
 // - Microsoft extensions marked.
 // - Made the interpretation text size a parameter to support the German 
 //   version.
+// - Removed unneeded inlcude file. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,18 +47,16 @@
 
 class SlicContext;
 
-#include "dbtypes.h"
-
 #define k_MAX_INTERP_LEN 4096
 
 void stringutils_HackColor(BOOL on);
 
 void stringutils_Interpret
 (
-	MBCHAR const *	msg,
-	SlicContext &	slicObj,
-	MBCHAR *		sInterpreted,
-	size_t const	a_Capacity	= k_MAX_INTERP_LEN
+	MBCHAR const *  msg,
+	SlicContext &   slicObj,
+	MBCHAR *        sInterpreted,
+	size_t const    a_Capacity = k_MAX_INTERP_LEN
 );
 
 void stringutils_SetStaticStringId(StringId & stringId, char * stringName);

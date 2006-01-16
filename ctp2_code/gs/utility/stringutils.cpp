@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : String utilities
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,43 +28,15 @@
 // - fixed for japanese by t.s. 2003.12
 // - Made the interpretation text size a parameter to support the German 
 //   version.
+// - Removed unneeded inlcude files. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 
 #include "StrDB.h"
-#include "AgeRecord.h"
-#include "CivilisationDB.h"
-#include "WonderRecord.h"
-#include "AdvanceRecord.h"
-#include "GovernmentRecord.h"
-
-#include "TurnCnt.h"
-
-#include "Civilisation.h"
-#include "player.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitPool.h"
-#include "MessageData.h"
-
 #include "SlicContext.h"
-#include "RandGen.h"
-
-#include "pixelutils.h"
-#include "colorset.h"
-
 #include "stringutils.h"
-#include "BuildingRecord.h"
-
-#include "SlicSymbol.h"
-#include "SlicEngine.h"
-#include "SlicNamedSymbol.h"
-#include "UnitRecord.h"
-#include "GovernmentRecord.h"
-#include "ResourceRecord.h"
-
 #include "sliccmd.h"
 #include "ysc.tab.h"
 

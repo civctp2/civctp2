@@ -18,7 +18,14 @@
 //
 // Compiler flags
 //
-// -None
+// _DEBUG
+// - Generate debug version when set.
+//
+// HAVE_UNISTD_H
+//
+// WIN32
+//
+// _MAX_PATH
 //
 //----------------------------------------------------------------------------
 //
@@ -280,7 +287,6 @@ void db_end_record(char *name)
 {
 	char filename[1024];
 	FILE *outfile = NULL;
-
 	
 	sprintf(filename, "%s%s%sRecord.h.new",
 	        db_get_code_directory(), FILE_SEP, name);
@@ -323,7 +329,6 @@ void db_end_record(char *name)
 
 	delete g_record;
 	g_record = NULL;
-
 }
 
 void db_make_int_db(char *name)

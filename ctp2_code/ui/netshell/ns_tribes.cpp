@@ -1,17 +1,36 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer tribe screen
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 #include "StrDB.h"
 
 #include "aui_uniqueid.h"
@@ -24,7 +43,6 @@
 ns_Tribes *g_nsTribes = NULL;
 
 
-extern CivilisationDatabase *g_theCivilisationDB;
 extern StringDB *g_theStringDB;
 
 
@@ -34,7 +52,7 @@ ns_Tribes::ns_Tribes()
 	Assert( g_nsTribes == NULL );
 	if ( !g_nsTribes )
 	{
-		sint32 numCivs = g_theCivilisationDB->GetCivilisations();
+		sint32 numCivs = g_theCivilisationDB->NumRecords();
 
 		
 		Assert( numCivs <= k_TRIBES_MAX - 1 );
@@ -53,7 +71,7 @@ ns_Tribes::ns_Tribes()
 		for ( sint32 i = 0; i < numCivs; i++ )
 		{
 			StringId stringNum =
-				g_theCivilisationDB->GetSingularCivName( (CIV_INDEX)i );
+				g_theCivilisationDB->Get(i)->GetSingularCivName();
 			const MBCHAR *name = g_theStringDB->GetNameStr( stringNum );
 
 			m_stringtable->SetString( name, i + 1 );

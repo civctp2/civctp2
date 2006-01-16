@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Multiplayer packet handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,7 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following

@@ -18,10 +18,18 @@
 //
 // Compiler flags
 //
+// _DEBUG
+// - Generate debug version when set.
+//
+// USE_COM_REPLACEMENT
+// HUNT_SERIALIZE
+// _MSC_VER
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
+// - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -127,6 +135,9 @@ class CivArchive : public IC3CivArchive
 		CivArchive &operator<< (const uint64 &val) {
 			PutUINT64(val); return (*this);
 		}
+		CivArchive &operator<< (const MBCHAR *val) {
+			PutMBCHAR(val); return (*this);
+		}
 		void PutDOUBLE(const double &val) {
 			
 			double temp = val; 
@@ -164,6 +175,16 @@ class CivArchive : public IC3CivArchive
 			uint64 temp = SDL_SwapLE64(val);
 			Store((uint8 *)&temp, sizeof(temp));
 		}
+		void PutMBCHAR(const MBCHAR *val) {
+			if(val){
+				uint32 len = strlen(val) + 1;
+				PutUINT32(len);
+				Store((uint8 *)val, len * sizeof(MBCHAR));
+			}
+			else{
+				PutUINT32(0);
+			}
+		}
 
 #if !defined(USE_COM_REPLACEMENT)
       STDMETHODIMP_ (void) Load(uint8 *pbData, uint32 ulLen);
@@ -199,6 +220,9 @@ class CivArchive : public IC3CivArchive
 		}
 		CivArchive &operator>> (uint64 &val) {
 			val = GetUINT64(); return (*this);
+		}
+		CivArchive &operator>> (MBCHAR *val) {
+			val = GetMBCHAR(); return (*this);
 		}
 		double GetDOUBLE(void) {
 			double val;
@@ -245,6 +269,17 @@ class CivArchive : public IC3CivArchive
 			uint64 val;
 			Load((uint8 *)&val, sizeof(val));
 			return SDL_SwapLE64(val);
+		}
+		MBCHAR *GetMBCHAR(void) {
+			uint32 len = GetUINT32();
+			if(len > 0){
+				MBCHAR *val = new MBCHAR[len];
+				Load((uint8 *)val, len * sizeof(MBCHAR));
+				return val;
+			}
+			else{
+				return NULL;
+			}
 		}
 	
 		void PerformMagic(uint32 id) ;

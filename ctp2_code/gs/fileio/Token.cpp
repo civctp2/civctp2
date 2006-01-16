@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Token handling for the old style database files.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,7 +19,10 @@
 // Compiler flags
 // 
 // __MAKESPR__
+// - Probably supposed to generate the sprite make tool.
+//
 // __TILETOOL__
+// - Probably supposed to generate the tool for creating the *.til files.
 //
 // _JAPANESE
 // - Use SJIS token parsing when set.

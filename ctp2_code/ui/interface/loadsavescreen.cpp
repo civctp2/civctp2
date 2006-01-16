@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Load/save screen
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// you_want_ai_civs_from_singleplayer_saved_game_showing_up_in_netshell
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Repaired memory leaks.
 // - Updated tribe index check.
+// - Replaced the old civilisation database by a new one. (Aug 21st 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -95,9 +99,7 @@ extern ProfileDB			*g_theProfileDB;
 extern StringDB				*g_theStringDB;
 
 
-#include "CivilisationDB.h"
-extern CivilisationDatabase	*g_theCivilisationDB;
-
+#include "CivilisationRecord.h"
 
 extern sint32				g_scenarioUsePlayerNumber;
 
@@ -385,22 +387,22 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 			
 			
 			
- 			
+			
 			BOOL foundOne = FALSE;
 
- 			for (i=0; i<k_MAX_PLAYERS; i++) {
- 				MBCHAR		*civName;
- 				MBCHAR		*dbString;
+			for (i=0; i<k_MAX_PLAYERS; i++) {
+				MBCHAR		*civName;
+				MBCHAR		*dbString;
 
- 				civName = s_tempSaveInfo->civList[i];
-				dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName(tribeIndex));
- 				if (strlen(civName) > 0) {
- 					if (!stricmp(dbString, civName)) {
- 						
- 						g_scenarioUsePlayerNumber = i;
+				civName = s_tempSaveInfo->civList[i];
+				dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->Get(tribeIndex)->GetPluralCivName());
+				if (strlen(civName) > 0) {
+					if (!stricmp(dbString, civName)) {
+						
+						g_scenarioUsePlayerNumber = i;
 						foundOne = TRUE;
- 						break;
-	 				}
+						break;
+					}
 				}
 			}
 
@@ -530,7 +532,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 			if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED) {
 				
 				spnewgametribescreen_enableTribes();
-				spnewgametribescreen_setTribeIndex(1 + rand() % (g_theCivilisationDB->m_nRec - 1));
+				spnewgametribescreen_setTribeIndex(1 + rand() % (g_theCivilisationDB->NumRecords() - 1));
 			} else {
 				if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_NOLOCS) {
 					
@@ -581,8 +583,8 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 								civName = s_tempSaveInfo->civList[i];
 								if (strlen(civName) > 0) {
 									
-									for (sint32 j=0; j<g_theCivilisationDB->GetNumRec(); j++) {
-										dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName((CIV_INDEX)j));
+									for (sint32 j=0; j<g_theCivilisationDB->NumRecords(); j++) {
+										dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->Get(j)->GetPluralCivName());
 										
 										if (!stricmp(dbString, civName)) {
 											
@@ -972,11 +974,12 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 	
 	nf_GameSetup gs;
 
-	sint32 i = 0;
+	
 	sint32 j = 0;
-	for ( i = 0; i < k_MAX_PLAYERS; i++ )
+	uint32 i;
+	for(i = 0; i < k_MAX_PLAYERS; i++)
 	{
-		if ( g_player[ i ] )
+		if(g_player[ i ])
 		{
 			TribeSlot ts;
 
@@ -1259,7 +1262,8 @@ void loadsavescreen_SaveSCENGame(void)
 			TribeSlot ts;
 
 			// These fields don't matter for the savedtribeslots.
-			ts.isAI = ts.key = 0;
+			ts.isAI = 0;
+			ts.key  = 0;
 
 			// This is the only important field.
 			// +1 because netshell treats zero as "none" w/ barbarians == 1.
@@ -1521,7 +1525,7 @@ void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 d
 	// If another list item was previously selected, make sure to dump its
 	// extended info
 	tech_WLList<sint32> *lastList = list->GetSelectedListLastTime();
-	for (sint32 i=0; (unsigned) i<lastList->L(); i++) {
+	for (uint32 i=0; i<lastList->L(); i++) {
 		sint32 index = lastList->GetAtIndex(i);
 		LSSavesListItem *oldItem = (LSSavesListItem *)list->GetItemByIndex(index);
 		if (oldItem != NULL) {

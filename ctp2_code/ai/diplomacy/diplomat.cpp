@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Diplomacy
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,14 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG
+// - Generates debug information when set.
+//
+// _BFR_
+// - Force CD checking when set (build final release).
+// - If not defined it anabled some more loogs.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,6 +41,7 @@
 // - Prevented crash on incorrect input (personality typo).
 // - Improved CleanupAll.
 // - Some agreements have limited duration, PFT 05 MAR 05
+// - Replaced old civilisation database by new civilisation database. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -86,8 +95,7 @@
 #include "AICause.h"
 
 
-#include "CivilisationDB.h"
-extern	CivilisationDatabase	*g_theCivilisationDB ;
+#include "CivilisationRecord.h"
 #include "Civilisation.h"
 
 extern sint32 g_saveFileVersion;
@@ -120,7 +128,7 @@ using namespace std;
 #include "net_diplomacy.h"
 
 #include "RandGen.h"
-extern	RandomGenerator	*g_rand ;
+extern	RandomGenerator *g_rand;
 
 using namespace ai;
 
@@ -190,7 +198,7 @@ void Diplomat::ResizeAll(const PLAYER_INDEX & newMaxPlayers)
 
 void Diplomat::CleanupAll()
 {
-	for (sint32 i = 0; (unsigned) i < s_theDiplomats.size(); i++)
+	for (uint32 i = 0; i < s_theDiplomats.size(); i++)
 	{
 		
 		s_theDiplomats[i].Cleanup();
@@ -203,7 +211,7 @@ void Diplomat::CleanupAll()
 void Diplomat::InitializeAll() 
 {
 	
-	for (sint32 i = 0; (unsigned) i < s_theDiplomats.size(); i++)
+	for (uint32 i = 0; i < s_theDiplomats.size(); i++)
 	{
 		s_theDiplomats[i].Initialize();
 	}
@@ -217,7 +225,7 @@ void Diplomat::LoadAll(CivArchive & archive)
 	
 	AgreementMatrix::s_agreements.Load(archive);
 
-	for (sint32 i = 0; (unsigned) i < s_theDiplomats.size(); i++)
+	for (uint32 i = 0; i < s_theDiplomats.size(); i++)
 	{
 		
 		s_theDiplomats[i].Load(archive);
@@ -232,7 +240,7 @@ void Diplomat::SaveAll(CivArchive & archive)
 	
 	AgreementMatrix::s_agreements.Save(archive);
 
-	for (sint32 i = 0; (unsigned) i < s_theDiplomats.size(); i++)
+	for (uint32 i = 0; i < s_theDiplomats.size(); i++)
 		{
 			
 			s_theDiplomats[i].Save(archive);
@@ -241,7 +249,7 @@ void Diplomat::SaveAll(CivArchive & archive)
 
 void Diplomat::DebugStatusAll() {
 	
-	for (int playerId = 1; (unsigned) playerId < s_theDiplomats.size(); playerId++) {
+	for (uint32 playerId = 1; playerId < s_theDiplomats.size(); playerId++) {
 
 		
 		if (!g_player[playerId] || g_player[playerId]->IsDead())
@@ -370,7 +378,7 @@ void Diplomat::Load(CivArchive & archive)
 		Resize(count);
 	}
 
-	for (sint32 foreigner=0; (unsigned) foreigner < m_foreigners.size(); foreigner++)
+	for (uint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
 		{
 			m_lastMotivation[foreigner] = m_motivations.end();
 			if (foreigner < count)
@@ -440,13 +448,13 @@ void Diplomat::Save(CivArchive & archive) const
 
 	
 	archive << static_cast<uint16>(m_foreigners.size());
-	for (sint32 foreigner=0; (unsigned) foreigner < m_foreigners.size(); foreigner++)
-		{
-			m_foreigners[foreigner].Save(archive);
+	for (uint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
+	{
+		m_foreigners[foreigner].Save(archive);
 
-			
-			archive.Store((uint8 *) &(m_diplomaticStates[foreigner]), sizeof(AiState));
-		}
+		
+		archive.Store((uint8 *) &(m_diplomaticStates[foreigner]), sizeof(AiState));
+	}
 	archive << m_diplomcyVictoryCompleteTurn;
 	archive << m_nuclearAttackTarget;
 	archive << m_lastParty;
@@ -465,10 +473,10 @@ void Diplomat::Cleanup()
 	m_motivations.clear();
 
 	
-	for (sint32 foreigner=0; (unsigned) foreigner < m_lastMotivation.size(); foreigner++)
-		{
-			m_foreigners[foreigner].Initialize();
-		}
+	for (uint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
+	{
+		m_foreigners[foreigner].Initialize();
+	}
 
 	m_lastMotivation.resize(0);
 	m_foreigners.resize(0);
@@ -506,32 +514,32 @@ void Diplomat::Initialize()
 {
 	if ((m_playerId >= 0) && (m_playerId < k_MAX_PLAYERS))
 	{
-		Player *		player	= g_player[m_playerId];
-		Civilisation *	civ		= player ? player->GetCivilisation() : NULL;
-		CivilisationRecord const *	
-						civRec	= civ ? civ->GetDBRec() : NULL;	
+		Player *        player  = g_player[m_playerId];
+		Civilisation *  civ     = player ? player->GetCivilisation() : NULL;
+		CivilisationRecord const *
+		                civRec  = civ ? civ->GetDBRec() : NULL;
 
 		if (civRec)
 		{
 			SetPersonalityName(GENDER_MALE == civ->GetGender()
-							   ? civRec->GetMalePersonality()
-							   : civRec->GetFemalePersonality()
-							  );
+			                   ? civRec->GetPersonalityMale()->GetIDText()
+			                   : civRec->GetPersonalityFemale()->GetIDText()
+			                   );
 		}
 	}
 
 	if (!m_personality)
 	{
-		m_personality	= g_thePersonalityDB->Get(0);
+		m_personality = g_thePersonalityDB->Get(0);
 	}
 	
 	m_motivations.clear();
 
 	
-	for (sint32 foreigner=0; (unsigned) foreigner < m_lastMotivation.size(); foreigner++)
-		{
-			InitForeigner(foreigner);
-		}
+	for (uint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
+	{
+		InitForeigner(foreigner);
+	}
 
 	
 	m_threats.clear();
@@ -563,7 +571,7 @@ void Diplomat::InitForeigner(const PLAYER_INDEX & foreigner)
 void Diplomat::DebugStatus(const PLAYER_INDEX & foreignerId) const
 {
 	
-	for (int tmp_foreignerId = 1; (unsigned) tmp_foreignerId< m_foreigners.size(); tmp_foreignerId++) {
+	for (uint32 tmp_foreignerId = 1; tmp_foreignerId< m_foreigners.size(); tmp_foreignerId++) {
 		
 		if (tmp_foreignerId == m_playerId)
 			continue;
@@ -760,10 +768,10 @@ void Diplomat::BeginTurn()
 	m_motivations.clear();
 
 	
-	for (sint32 foreigner=0; (unsigned) foreigner < m_lastMotivation.size(); foreigner++)
-		{
+	for (uint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
+	{
 			m_lastMotivation[foreigner] = m_motivations.end();
-		}
+	}
 
 	
 	for ( ForeignerVector::iterator iter = m_foreigners.begin(); 
@@ -783,7 +791,7 @@ void Diplomat::BeginTurn()
 	NextStrategicState();
 
 	
-	for(sint32 foreignerId=1; (unsigned) foreignerId < m_foreigners.size(); foreignerId++) {
+	for(uint32 foreignerId=1; foreignerId < m_foreigners.size(); foreignerId++) {
 		
 		if (foreignerId == m_playerId)
 			continue;
@@ -832,13 +840,13 @@ void Diplomat::BeginTurn()
 				{
 					sint32 turns_to_activate;
 					rec->GetTurnsToActivate(turns_to_activate);
-					m_diplomcyVictoryCompleteTurn = 
-						NewTurnCount::GetCurrentRound() + turns_to_activate;
+					m_diplomcyVictoryCompleteTurn = static_cast<sint16>
+					    (NewTurnCount::GetCurrentRound() + turns_to_activate);
 				}
 				else
 				{
 					
-					m_diplomcyVictoryCompleteTurn = NewTurnCount::GetCurrentRound() + 1;
+					m_diplomcyVictoryCompleteTurn = static_cast<sint16>(NewTurnCount::GetCurrentRound() + 1);
 				}
 			}
 			else
@@ -864,7 +872,7 @@ void Diplomat::LogRegardEvent( const PLAYER_INDEX & foreignerId,
 	
 	
 	RegardEvent regardEvent(regardDelta, 
-							NewTurnCount::GetCurrentRound()+1, explain, duration);
+							static_cast<sint16>(NewTurnCount::GetCurrentRound()+1), explain, duration);
 	m_foreigners[foreignerId].LogRegardEvent(type, regardEvent);
 }
 
@@ -1158,7 +1166,7 @@ void Diplomat::ApplyGlobalTrustChange(const PLAYER_INDEX & foreignerId, const ai
 	}
 #endif
 
-	for (sint32 i = 1; (unsigned) i < s_theDiplomats.size(); i++)
+	for (uint32 i = 1; i < s_theDiplomats.size(); i++)
 		{
 			if (i != foreignerId)
 				s_theDiplomats[i].ApplyTrustChange(foreignerId, trust_delta, NULL);
@@ -1238,7 +1246,7 @@ void Diplomat::RecomputeRegard()
 	sint32 wonder_regard = wonderutil_GetIncreaseRegard(g_player[m_playerId]->GetBuiltWonders());
 
 	
- 	for (sint32 foreignerId = 1; (unsigned) foreignerId < m_foreigners.size(); foreignerId++) {
+ 	for (uint32 foreignerId = 1; foreignerId < m_foreigners.size(); foreignerId++) {
 
 		
 		if (g_player[m_playerId]->HasContactWith(foreignerId))
@@ -1278,7 +1286,7 @@ void Diplomat::UpdateRegard(const PLAYER_INDEX foreignerId)
 	Assert((unsigned) foreignerId < m_foreigners.size());
 
 	
-	if (foreignerId < 0 || (unsigned) foreignerId > m_foreigners.size())
+	if (foreignerId < 0 || static_cast<uint32>(foreignerId) > m_foreigners.size())
 		return;
 
 	ai::Regard baseRegard = GetBaseRegard(foreignerId);
@@ -1346,7 +1354,7 @@ sint32 Diplomat::AddAgreement(const PLAYER_INDEX & foreignerId)
 	agreement.id = GetNextId();
 	agreement.senderId = m_playerId;
 	agreement.receiverId = foreignerId;
-	agreement.start = player_ptr->GetCurRound();
+	agreement.start = static_cast<sint16>(player_ptr->GetCurRound());
 	
 	agreement.end = -1; 
 
@@ -1355,7 +1363,7 @@ sint32 Diplomat::AddAgreement(const PLAYER_INDEX & foreignerId)
 	negotiation_event.proposal = sender_proposal;
 	negotiation_event.response = receiver_response;
 	negotiation_event.agreement = agreement;
-	negotiation_event.round = NewTurnCount::GetCurrentRound();
+	negotiation_event.round = static_cast<sint16>(NewTurnCount::GetCurrentRound());
 	AddNewNegotiationEvent(foreignerId, negotiation_event);
 
 	
@@ -1756,7 +1764,7 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 	ai::Agreement agreement;
 	agreement.senderId = m_playerId;
 	agreement.receiverId = foreignerId;
-	agreement.start = NewTurnCount::GetCurrentRound();
+	agreement.start = static_cast<sint16>(NewTurnCount::GetCurrentRound());
 	agreement.end = -1;
 	agreement.proposal.first_type = PROPOSAL_TREATY_DECLARE_WAR;
 
@@ -1813,7 +1821,7 @@ void Diplomat::SetEmbargo(const PLAYER_INDEX foreignerId, const bool state)
 		threat.id = GetNextId();
 		threat.senderId = m_playerId;
 		threat.receiverId = foreignerId;
-		threat.start = NewTurnCount::GetCurrentRound();
+		threat.start = static_cast<sint16>(NewTurnCount::GetCurrentRound());
 		threat.end = -1; 
 		
 		
@@ -1900,7 +1908,7 @@ void Diplomat::AddRejection(const PLAYER_INDEX & foreignerId)
 	NegotiationEvent negotiation_event;
 	negotiation_event.proposal = sender_proposal;
 	negotiation_event.response = receiver_response;
-	negotiation_event.round = NewTurnCount::GetCurrentRound();
+	negotiation_event.round = static_cast<sint16>(NewTurnCount::GetCurrentRound());
 	AddNewNegotiationEvent(foreignerId, negotiation_event);
 }
 
@@ -1965,7 +1973,7 @@ sint32 Diplomat::AddThreat(const PLAYER_INDEX & foreignerId) {
 	threat.id = GetNextId();
 	threat.senderId = m_playerId;
 	threat.receiverId = foreignerId;
-	threat.start = NewTurnCount::GetCurrentRound();
+	threat.start = static_cast<sint16>(NewTurnCount::GetCurrentRound());
 	threat.end = -1; 
 
 	
@@ -1973,7 +1981,7 @@ sint32 Diplomat::AddThreat(const PLAYER_INDEX & foreignerId) {
 	negotiation_event.proposal = sender_proposal;
 	negotiation_event.response = receiver_response;
 	negotiation_event.threat = threat;
-	negotiation_event.round = NewTurnCount::GetCurrentRound();
+	negotiation_event.round = static_cast<sint16>(NewTurnCount::GetCurrentRound());
 	AddNewNegotiationEvent(foreignerId, negotiation_event);
 
 	
@@ -2470,7 +2478,7 @@ void Diplomat::ConsiderResponse( const PLAYER_INDEX senderId,
 
 	Response response;
 	
-	response.priority = priority;
+	response.priority = static_cast<sint16>(priority);
 	response.receiverId = m_playerId;
 	response.senderId = senderId;
 	response.type = response_type;
@@ -2493,7 +2501,7 @@ void Diplomat::ConsiderCounterResponse( const PLAYER_INDEX senderId,
 
 	Response response;
 
-	response.priority = priority;
+	response.priority = static_cast<sint16>(priority);
 	response.receiverId = m_playerId;
 	response.senderId = senderId;
 
@@ -3050,7 +3058,7 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 
 	Player *foreigner_ptr;
 
-	int foreignerId;
+	uint32 foreignerId;
 	bool found = false;
 
 	
@@ -4286,8 +4294,8 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 
 	
 	sint32 stop_researching_adv;
-	PLAYER_INDEX foreignerId;
-	for (foreignerId = 1; (unsigned) foreignerId < s_theDiplomats.size(); foreignerId)
+	uint32 foreignerId;
+	for (foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId)
 		{
 			
 			if (TestEffectiveRegard(foreignerId, ALLIED_REGARD ))
@@ -4470,7 +4478,7 @@ sint32 Diplomat::GetAdvanceLevelPercent(const PLAYER_INDEX &foreignId) const {
 
 sint16 Diplomat::AtWarCount() const {
 	sint16 atWarCount = 0;
-	for (int foreigner = 1; (unsigned) foreigner < m_foreigners.size(); foreigner++)
+	for (uint32 foreigner = 1; foreigner < m_foreigners.size(); foreigner++)
 		atWarCount += 
 			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreigner,PROPOSAL_TREATY_DECLARE_WAR);
 	return atWarCount;
@@ -4479,7 +4487,7 @@ sint16 Diplomat::AtWarCount() const {
 
 sint16 Diplomat::EffectiveAtWarCount() {
 	int atWarCount = 0;
-	for (int foreigner = 0; (unsigned) foreigner < m_foreigners.size(); foreigner++)
+	for (uint32 foreigner = 0; foreigner < m_foreigners.size(); foreigner++)
 		atWarCount += 
 			( TestEffectiveRegard(foreigner, HOTWAR_REGARD ) );
 	return atWarCount;
@@ -4713,7 +4721,7 @@ void Diplomat::UpdateAttributes()
 	m_enemyThreat = 0;
 
 	
-	PLAYER_INDEX foreigner;
+	uint32 foreigner;
 	sint32 i;
 	for ( foreigner = 1;  (unsigned) foreigner< m_foreigners.size(); foreigner++ ) 
 	{
@@ -5105,7 +5113,7 @@ void Diplomat::ComputeIncursionPermission()
 	Assert(s_theDiplomats.size() <= sizeof(uint32) * 8);
 
 	
-	for (sint32 foreignerId = 1; (unsigned) foreignerId < s_theDiplomats.size() ; foreignerId++)
+	for (uint32 foreignerId = 1; foreignerId < s_theDiplomats.size() ; foreignerId++)
 		{
 			
 		if (foreignerId == m_playerId)
@@ -5260,7 +5268,7 @@ PLAYER_INDEX Diplomat::ComputeNuclearLaunchTarget()
 	
 	
 	sint32 tmp_nuke_count;
-	for (sint32 foreignerId = 1; (unsigned) foreignerId < s_theDiplomats.size(); foreignerId++)
+	for (uint32 foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId++)
 	{
 		
 		player_ptr = g_player[foreignerId];
@@ -5445,7 +5453,7 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 			bool close_enough = false;
 			if (closest_nuke_iter != weapon_list.end())
 			{
-				sint32 nuke_range = 
+				sint32 nuke_range = static_cast<sint32>
 					sint32(((*closest_nuke_iter).GetDBRec()->GetMaxMovePoints() / k_MOVE_AIR_COST) - 5);
 				close_enough = ((nuke_range * nuke_range) > closest_nuke_dist);
 			}
@@ -5491,7 +5499,7 @@ void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX
 	city_list.clear();
 
 	
-	for (sint32 foreignerId = 0; (unsigned) foreignerId < s_theDiplomats.size(); foreignerId++)
+	for (uint32 foreignerId = 0; foreignerId < s_theDiplomats.size(); foreignerId++)
 	{
 		
 		player_ptr = g_player[foreignerId];
@@ -5536,10 +5544,10 @@ void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX
 				nuke_target.first = city.CD()->GetValue();
 				
 				
-				nuke_target.first += sint32(city->IsCapitol() ? nuke_target.first * 0.25 : 0);
+				nuke_target.first += (city->IsCapitol() ? static_cast<sint32>(nuke_target.first * 0.25) : 0);
 
 				
-				nuke_target.first += sint32(regard <= HOTWAR_REGARD ? nuke_target.first * 0.75 : 0); 
+				nuke_target.first += (regard <= HOTWAR_REGARD ? static_cast<sint32>(nuke_target.first * 0.75) : 0); 
 
 				nuke_target.second = city.m_id;
 
@@ -5574,7 +5582,7 @@ void Diplomat::DisbandNuclearWeapons(const double percent)
 			total_weapons++;
 	}
 
-	sint32 goal_weapons = sint32(total_weapons * (1.0 - percent));
+	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
 
 	
 	Assert(player_ptr->m_all_units);
@@ -5617,7 +5625,7 @@ void Diplomat::DisbandBioWeapons(const double percent)
 			total_weapons++;
 	}
 
-	sint32 goal_weapons = sint32(total_weapons * (1.0 - percent));
+	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
 
 	
 	Assert(player_ptr->m_all_units);
@@ -5659,7 +5667,7 @@ void Diplomat::DisbandNanoWeapons(const double percent)
 			total_weapons++;
 	}
 
-	sint32 goal_weapons = sint32(total_weapons * (1.0 - percent));
+	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
 
 	
 	Assert(player_ptr->m_all_units);
@@ -5683,7 +5691,7 @@ void Diplomat::ExecutePersistantAgreements()
 {
 	AgreementMatrix & agreements = AgreementMatrix::s_agreements;
 	
-	for (sint16 foreignerId = 1; (unsigned) foreignerId < m_foreigners.size(); foreignerId++)
+	for (uint32 foreignerId = 1; foreignerId < m_foreigners.size(); foreignerId++)
 	{
 		
 		if (foreignerId == m_playerId)
@@ -5740,7 +5748,7 @@ void Diplomat::ExecutePersistantAgreements()
 		if (reduce_pollution.start != -1 && reduce_pollution.end == -1 &&
 			agreement_duration > 25)
 		{
-			sint32 target_pollution = reduce_pollution.proposal.first_arg.pollution;
+			uint32 target_pollution = reduce_pollution.proposal.first_arg.pollution;
 			
 			if (g_player[foreignerId]->GetPollutionLevel() > (unsigned) target_pollution)
 			{
@@ -5765,7 +5773,7 @@ void Diplomat::ExecutePersistantAgreements()
 			
 			Assert(pollution_pact.start != -1 && pollution_pact.end == -1);
 
-			sint32 target_pollution = pollution_pact.proposal.first_arg.pollution;
+			uint32 target_pollution = pollution_pact.proposal.first_arg.pollution;
 			
 			if (g_player[foreignerId]->GetPollutionLevel() > (unsigned) target_pollution)
 			{
@@ -5813,7 +5821,7 @@ bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 {
 	Assert((unsigned) foreignerId < m_desireWarWith.size());
 	Assert(foreignerId >= 0);
-	if (foreignerId >= 0 && (unsigned) foreignerId < m_desireWarWith.size())
+	if (foreignerId >= 0 && static_cast<uint32>(foreignerId) < m_desireWarWith.size())
 		return m_desireWarWith[foreignerId];
 	return false;
 }
@@ -5940,7 +5948,7 @@ bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 	DIPLOMATIC_STRENGTH lowest_relative_strength = DIPLOMATIC_STRENGTH_VERY_STRONG;
 	PLAYER_INDEX weakest_enemy = -1; 
 
-	for (PLAYER_INDEX otherId = 1; (unsigned) otherId < m_foreigners.size(); otherId++) {
+	for (uint32 otherId = 1; otherId < m_foreigners.size(); otherId++) {
 
 		foreigner_ptr = g_player[otherId];
 
@@ -6001,7 +6009,7 @@ bool Diplomat::CanFormAlliance(const PLAYER_INDEX foreignerId)
 	Assert(foreigner_ptr);
 
 	
-	for (sint32 thirdpartyId = 1; (unsigned) thirdpartyId < m_foreigners.size(); thirdpartyId++) {
+	for (uint32 thirdpartyId = 1; thirdpartyId < m_foreigners.size(); thirdpartyId++) {
 		
 		if (thirdpartyId == m_playerId ||
 			thirdpartyId == foreignerId)
@@ -6097,7 +6105,7 @@ void Diplomat::ThrowParty(const PLAYER_INDEX foreignerId)
 			REGARD_EVENT_DIPLOMACY,
 			strId,
 			10);
-		m_lastParty = NewTurnCount::GetCurrentRound();
+		m_lastParty = static_cast<sint16>(NewTurnCount::GetCurrentRound());
 	}
 }
 
@@ -6219,7 +6227,7 @@ void Diplomat::ClearInitiatives()
 
 bool Diplomat::FirstTurnOfWar() const
 {
-	PLAYER_INDEX foreignerId;
+	uint32 foreignerId;
 	sint32 duration;
 
 	
@@ -6227,7 +6235,7 @@ bool Diplomat::FirstTurnOfWar() const
 		return false;
 
 	bool at_war = false;
-	for ( foreignerId = 1;  (unsigned) foreignerId< m_foreigners.size(); foreignerId++ ) 
+	for (foreignerId = 1; foreignerId < m_foreigners.size(); foreignerId++)
 	{
 		
 		if (foreignerId == m_playerId)

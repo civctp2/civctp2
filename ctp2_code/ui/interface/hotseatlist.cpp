@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired, cleanup in destructor.
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -81,7 +85,7 @@
 #include "keypress.h"
 
 #include "hotseatlist.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 
 #include "gameinit.h"
 
@@ -96,7 +100,6 @@
 extern C3UI			*g_c3ui;
 extern Player **g_player;
 extern StringDB *g_theStringDB;
-extern CivilisationDatabase *g_theCivilisationDB;
 
 HotseatList *g_hotseatList = NULL;
 extern ProfileDB *g_theProfileDB;
@@ -361,7 +364,7 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 	while(!found) {
 		do {
 			curCiv++;
-			if(curCiv >= g_theCivilisationDB->m_nRec)
+			if(curCiv >= g_theCivilisationDB->NumRecords())
 				curCiv = 0;
 		} while(g_theCivilisationDB->m_alphaToIndex[curCiv] == 0); 
 
@@ -518,7 +521,7 @@ void HotseatListItem::Update(void)
 
 	
 	subButton = (c3_Button *)GetChildByIndex(0);
-	subButton->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(m_civ)->m_singular_name));
+	subButton->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(m_civ)->GetSingularCivName()));
 
 	
 	if (hotseatlist_PlayerCivsLocked()) {

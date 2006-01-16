@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Civilisation pool
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Prevent assigning the same civilisation index twice.
 // - Recycle civilisation indices to prevent a game crash.
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -31,7 +35,7 @@
 #include "Unit.h"
 #include "player.h"
 #include "StrDB.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 #include "CivilisationPool.h"
 #include "civarchive.h"
 #include "RandGen.h"
@@ -44,10 +48,9 @@ extern	Player	**g_player ;
 
 extern	StringDB	*g_theStringDB ;
 
-extern	CivilisationDatabase	*g_theCivilisationDB ;
 
 extern RandomGenerator *g_rand;
-	
+
 extern ProfileDB *g_theProfileDB;
 
 
@@ -95,17 +98,17 @@ CivilisationPool::~CivilisationPool(void)
 
 
 void CivilisationPool::Serialize(CivArchive &archive)
-	{
+{
 	CivilisationData	*newData ;
 
 	sint32	i,
 			count = 0 ;
 
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
 #define CIVPOOL_MAGIC 0xBCDE0123
 	if (archive.IsStoring())
-		{
+	{
 		archive.PerformMagic(CIVPOOL_MAGIC) ;
 		ObjPool::Serialize(archive);
 
@@ -118,23 +121,23 @@ void CivilisationPool::Serialize(CivArchive &archive)
 			if(m_table[i])
 				((CivilisationData *)(m_table[i]))->Serialize(archive) ;
 		m_usedCivs->Serialize(archive);
-		}
+	}
 	else
-		{
+	{
 		archive.TestMagic(CIVPOOL_MAGIC) ;
 		ObjPool::Serialize(archive);
 
 		archive>>count;
 		for (i=0; i<count; i++)
-			{
+		{
 			newData = new CivilisationData(archive) ;
 			Insert(newData) ;
-			}
-
-		m_usedCivs->Serialize(archive);
 		}
 
+		m_usedCivs->Serialize(archive);
 	}
+
+}
 
 
 
@@ -149,30 +152,30 @@ void CivilisationPool::Serialize(CivArchive &archive)
 
 Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requiredCiv, GENDER gender)
 {
-	sint32 const	numCivs	= g_theCivilisationDB->GetCivilisations();
+	sint32 const	numCivs	= g_theCivilisationDB->NumRecords();
 	CIV_INDEX		civ		= requiredCiv;
 
 	if (CIV_INDEX_RANDOM == civ)
 	{
-		if (g_theProfileDB->IsNonRandomCivs()) 
+		if (g_theProfileDB->IsNonRandomCivs())
 		{
 			civ = static_cast<CIV_INDEX>(owner);
-		} 
-		else 
+		}
+		else
 		{
 			civ = static_cast<CIV_INDEX>(g_rand->Next(numCivs));
 		}
 	}
 
-	for (sint32 c = 0; m_usedCivs->IsPresent(civ) && (c < numCivs); ++c) 
+	for (sint32 c = 0; m_usedCivs->IsPresent(civ) && (c < numCivs); ++c)
 	{
 		civ = static_cast<CIV_INDEX>((civ + 1 < numCivs) ? civ + 1 : 1);
 	}
 
-	if (civ >= numCivs) 
+	if (civ >= numCivs)
 	{
-		c3errors_FatalDialogFromDB("CIVILIZATION_ERROR", "CIVILIZATION_NO_MORE_CIVS_AVAILABLE") ;
-		civ = CIV_INDEX_VANDALS;								
+		c3errors_FatalDialogFromDB("CIVILIZATION_ERROR", "CIVILIZATION_NO_MORE_CIVS_AVAILABLE");
+		civ = CIV_INDEX_VANDALS;
 	}
 
 	Assert((civ >= CIV_INDEX_CIV_0) && (civ < numCivs));
@@ -187,33 +190,33 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 	
 	m_usedCivs->Insert(civ);
 
-	StringId	strId = (gender == GENDER_MALE) 
-						? g_theCivilisationDB->GetLeaderName(civ)
-						: g_theCivilisationDB->GetLeaderNameFemale(civ);
+	StringId	strId = (gender == GENDER_MALE)
+						? g_theCivilisationDB->Get(civ)->GetLeaderNameMale()
+						: g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();
 
-    newData->SetLeaderName(g_theStringDB->GetNameStr(strId)) ;
+	newData->SetLeaderName(g_theStringDB->GetNameStr(strId));
 
-    strId = g_theCivilisationDB->GetPersonalityDescription((CIV_INDEX)(civ));
-    newData->SetPersonalityDescription(g_theStringDB->GetNameStr(strId)); 
+	strId = g_theCivilisationDB->Get(civ)->GetPersonalityDescription();
+	newData->SetPersonalityDescription(g_theStringDB->GetNameStr(strId));
 
 
-	strId = g_theCivilisationDB->GetPluralCivName((CIV_INDEX)(civ)) ;
-	newData->SetPluralCivName(g_theStringDB->GetNameStr(strId)) ;
-	strId = g_theCivilisationDB->GetCountryName((CIV_INDEX)(civ)) ;
-	newData->SetCountryName(g_theStringDB->GetNameStr(strId)) ;
-	strId = g_theCivilisationDB->GetSingularCivName((CIV_INDEX)(civ)) ;
-	newData->SetSingularCivName(g_theStringDB->GetNameStr(strId)) ;
+	strId = g_theCivilisationDB->Get(civ)->GetPluralCivName();
+	newData->SetPluralCivName(g_theStringDB->GetNameStr(strId));
+	strId = g_theCivilisationDB->Get(civ)->GetCountryName();
+	newData->SetCountryName(g_theStringDB->GetNameStr(strId));
+	strId = g_theCivilisationDB->Get(civ)->GetSingularCivName();
+	newData->SetSingularCivName(g_theStringDB->GetNameStr(strId));
 
-	newData->SetCityStyle(g_theCivilisationDB->GetCityStyle((CIV_INDEX)(civ)));
+	newData->SetCityStyle(g_theCivilisationDB->Get(civ)->GetCityStyleIndex());
 
-	Insert(newData) ;
-	DPRINTF(k_DBG_INFO, ("Civilisation %d is in use\n", civ)) ;
+	Insert(newData);
+	DPRINTF(k_DBG_INFO, ("Civilisation %d is in use\n", civ));
 
 	if(g_network.IsHost()) {
 		g_network.Enqueue(newData);
 	}
 
-	return (newCivilisation) ;
+	return (newCivilisation);
 }
 
 //----------------------------------------------------------------------------
@@ -222,7 +225,7 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 //
 // Description: Release a civilisation index for reuse.
 //
-// Parameters : civ		: civilisation index to release
+// Parameters : civ:       Civilisation index to release
 //
 // Globals    : -
 //
@@ -231,7 +234,6 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void CivilisationPool::Release(CIV_INDEX const & civ)
 {
 	sint32 const	usedCount = m_usedCivs->Num();

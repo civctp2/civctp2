@@ -88,7 +88,6 @@
 #include "director.h"
 #include "RandGen.h"
 #include "Regard.h"
-#include "CivilisationDB.h"
 #include "CivilisationPool.h"
 #include "MessagePool.h"
 

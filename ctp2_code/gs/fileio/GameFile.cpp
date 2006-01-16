@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Game file handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _NO_GAME_WATCH
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,6 +28,9 @@
 // - Readded Activision patch new magic number 66.
 // - Fixed autosave directory name for scenarios to match normal directory.
 // - Fixed the scenario savegame bug (but not for autosave, that still needs to be done)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
+// - Made progress bar more fluently. (Aug 22nd 2005 Martin Gühmann)
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -57,7 +63,7 @@
 #include "SelItem.h"
 #include "gwdb.h"
 #include "UVDB.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 #include "pollution.h"
 
 #include "RoboInit.h"
@@ -164,23 +170,23 @@ struct MagicValue {
 
 #define k_NUM_MAGIC_VALUES 18
 MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
-	{ "CTP0049", 49 },
-    { "CTP0050", 50},
+	{ "CTP0049", 49},
+	{ "CTP0050", 50},
 	{ "CTP0051", 51},
 	{ "CTP0052", 52},
-    { "CTP0053", 53},
-    { "CTP0054", 54},
-    { "CTP0055", 55},
-    { "CTP0056", 56},
+	{ "CTP0053", 53},
+	{ "CTP0054", 54},
+	{ "CTP0055", 55},
+	{ "CTP0056", 56},
 	{ "CTP0057", 57},
 	{ "CTP0058", 58},
 	{ "CTP0059", 59},
 	{ "CTP0060", 60},
 	{ "CTP0061", 61},
-    { "CTP0062", 62},
-    { "CTP0063", 63},
-    { "CTP0064", 64},
-    { "CTP0065", 65},
+	{ "CTP0062", 62},
+	{ "CTP0063", 63},
+	{ "CTP0064", 64},
+	{ "CTP0065", 65},
 	{ "CTP0066", 66}
 };
 
@@ -189,47 +195,46 @@ sint32 gamefile_CurrentVersion()
 	return s_magicValue[k_NUM_MAGIC_VALUES - 1].version;
 }
 
-extern	CivPaths	*g_civPaths ;
-extern	CivApp		*g_civApp;
+extern  CivPaths                    *g_civPaths;
+extern  CivApp                      *g_civApp;
 
-extern	World						*g_theWorld ;
-extern	Player						**g_player ;
-extern	UnitPool					*g_theUnitPool ;
-extern	StringDB					*g_theStringDB ;
-extern	ConceptDB					*g_theConceptDB ;
-extern	ConstDB						*g_theConstDB ;
-extern	ThroneDB					*g_theThroneDB;
-extern	SpriteStateDB				*g_theSpriteStateDB ;
-
-
+extern  World                       *g_theWorld;
+extern  Player                      **g_player;
+extern  UnitPool                    *g_theUnitPool;
+extern  StringDB                    *g_theStringDB;
+extern  ConceptDB                   *g_theConceptDB;
+extern  ConstDB                     *g_theConstDB;
+extern  ThroneDB                    *g_theThroneDB;
+extern  SpriteStateDB               *g_theSpriteStateDB;
 
 
 
-extern	SpriteStateDB				*g_theGoodsSpriteStateDB;
-extern	SpriteStateDB				*g_theCitySpriteStateDB;
-extern	DifficultyDB				*g_theDifficultyDB ;
-extern  RandomGenerator				*g_rand;
-extern  TurnCount					*g_turn; 
-extern	SelectedItem				*g_selected_item; 
-extern	PollutionDatabase			*g_thePollutionDB ;
-extern	GlobalWarmingDatabase		*g_theGWDB ;
-extern	OzoneDatabase				*g_theUVDB ;
-extern	CivilisationDatabase		*g_theCivilisationDB ;
-extern	Pollution					*g_thePollution ;
-extern	TopTen						*g_theTopTen ;
 
-extern  TerrainImprovementPool		*g_theTerrainImprovementPool;
-extern  InstallationPool			*g_theInstallationPool;
-extern  TurnCount					*g_turn; 
-extern	DiplomaticRequestPool		*g_theDiplomaticRequestPool ;
-extern	CivilisationPool			*g_theCivilisationPool ;
-extern	AgreementPool				*g_theAgreementPool ;
-extern	MessagePool					*g_theMessagePool ;
 
-extern  ProfileDB                     *g_theProfileDB; 
-extern	nf_GameSetup				g_gamesetup;
+extern  SpriteStateDB               *g_theGoodsSpriteStateDB;
+extern  SpriteStateDB               *g_theCitySpriteStateDB;
+extern  DifficultyDB                *g_theDifficultyDB;
+extern  RandomGenerator             *g_rand;
+extern  TurnCount                   *g_turn; 
+extern  SelectedItem                *g_selected_item; 
+extern  PollutionDatabase           *g_thePollutionDB;
+extern  GlobalWarmingDatabase       *g_theGWDB;
+extern  OzoneDatabase               *g_theUVDB;
+extern  Pollution                   *g_thePollution;
+extern  TopTen                      *g_theTopTen;
 
-extern sint32						g_is565Format;
+extern  TerrainImprovementPool      *g_theTerrainImprovementPool;
+extern  InstallationPool            *g_theInstallationPool;
+extern  TurnCount                   *g_turn; 
+extern  DiplomaticRequestPool       *g_theDiplomaticRequestPool;
+extern  CivilisationPool            *g_theCivilisationPool;
+extern  AgreementPool               *g_theAgreementPool;
+extern  MessagePool                 *g_theMessagePool;
+
+extern  ProfileDB                   *g_theProfileDB; 
+extern  nf_GameSetup                g_gamesetup;
+
+extern sint32                       g_is565Format;
 
 sint32 g_saveFileVersion = -1;
 sint32 g_startInfoType = STARTINFOTYPE_NONE;
@@ -244,18 +249,18 @@ MBCHAR g_scenarioName[k_SCENARIO_NAME_MAX];
 
 void GameFile::RestoreGame(const MBCHAR *filename)
 {
-	GameFile	*game ;
+	GameFile *game;
 
-	game = new GameFile ;
+	game = new GameFile;
 	game->Restore(filename);
 
-	delete game ;
-} 
+	delete game;
+}
 
 
 void GameFile::RestoreScenarioGame(MBCHAR *name)
 {
-	GameFile	*game;
+	GameFile *game;
 
 	game = new GameFile;
 	game->Restore(name);
@@ -264,9 +269,9 @@ void GameFile::RestoreScenarioGame(MBCHAR *name)
 
 void GameFile::SaveGame(const MBCHAR *filename, SaveInfo *info)
 {
-	GameFile	*game ;
+	GameFile *game;
 
-	game = new GameFile ;
+	game = new GameFile;
 	game->Save(filename, info);
 	
 	delete game;
@@ -290,7 +295,7 @@ static uint32 CompressData(uint8 *inbuf, size_t insize,
 	
 	err = compress2(*outbuf, &tsize, inbuf, insize, Z_DEFAULT_COMPRESSION);
 	*outsize = tsize;
-    
+	
 	return(err == Z_OK);
 }
 
@@ -345,7 +350,7 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 100 );
 
-	g_theSpriteStateDB->Serialize(archive) ;						
+	g_theSpriteStateDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 110 );
 
@@ -357,7 +362,7 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 120 );
 
-	g_theGoodsSpriteStateDB->Serialize(archive);					
+	g_theGoodsSpriteStateDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 130 );
 
@@ -377,11 +382,11 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 170 );
 
-	g_theDifficultyDB->Serialize(archive) ;							
+	g_theDifficultyDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 180 );
 
-	g_theConstDB->Serialize(archive) ;								
+	g_theConstDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 190 );
 
@@ -401,11 +406,11 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 230 );
 
-    
+
 
 	g_theProgressWindow->StartCountingTo( 240 );
 
-  	
+
 
 	g_theProgressWindow->StartCountingTo( 250 );
 
@@ -414,19 +419,22 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 270 );
 
-	g_thePollutionDB->Serialize(archive) ;							
+	g_thePollutionDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 280 );
 
-	g_theGWDB->Serialize(archive) ;									
+	g_theGWDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 290 );
 
-	g_theUVDB->Serialize(archive) ;									
+	g_theUVDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 300 );
 
-	g_theCivilisationDB->Serialize(archive) ;						
+	// SaveDB is only called if CivApp::m_saveDBInGameFile is TRUE
+	// fortunatly this is never the case in CTP2 and can be removed
+	// without any problems
+//	g_theCivilisationDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 310 );
 
@@ -451,29 +459,29 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 
 	FILE	*fpSave = NULL;
-    
+
 	size_t ulLen;
 	uint32 n ;
 
-	sint32	i ;
+	sint32	i;
 
-	clock_t	start, finish ;
+	clock_t	start, finish;
 
-	CivArchive	archive ;
+	CivArchive	archive;
 
-	MBCHAR	sHeader[_MAX_PATH] ;
+	MBCHAR	sHeader[_MAX_PATH];
 
 	size_t compressedSize = 0;
 	uint8	*compressedData = NULL;
 
-	start = clock() ;
+	start = clock();
 
-	archive.SetStore() ;
+	archive.SetStore();
 
-	Assert(k_MAX_PLAYERS!=0) ;
+	Assert(k_MAX_PLAYERS!=0);
 	if (k_MAX_PLAYERS <= 0) {
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_INCORRECT_NUM_PLAYERS") ;
-		return (GAMEFILE_ERR_STORE_FAILED) ;
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_INCORRECT_NUM_PLAYERS");
+		return (GAMEFILE_ERR_STORE_FAILED);
 	}
 
 	
@@ -499,29 +507,29 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	
 	
-	archive<<World_World_GetVersion() ;
-	archive<<Player_Player_GetVersion() ;
-    archive<<SelectedItem_GetVersion(); 
-	archive<<Advances_Advances_GetVersion() ;
+	archive<<World_World_GetVersion();
+	archive<<Player_Player_GetVersion();
+	archive<<SelectedItem_GetVersion(); 
+	archive<<Advances_Advances_GetVersion();
 	
-	archive<<BldQue_BuildQueue_GetVersion() ;
-	archive<<CityData_CityData_GetVersion() ;
-	archive<<Diffcly_Difficulty_GetVersion() ;
-	archive<<GameObj_GameObj_GetVersion() ;
-	archive<<Gold_Gold_GetVersion() ;
-	archive<<ID_ID_GetVersion() ;
-	archive<<ObjPool_ObjPool_GetVersion() ;
-	archive<<Sci_Science_GetVersion() ;
-	archive<<TaxRate_TaxRate_GetVersion() ;
-	archive<<Unit_Unit_GetVersion() ;
-	archive<<UnitData_UnitData_GetVersion() ;
-	archive<<UnitPool_UnitPool_GetVersion() ;
-	archive<<Cell_CELL_GetVersion() ;
-	archive<<MapPoint_MapPoint_GetVersion() ;
+	archive<<BldQue_BuildQueue_GetVersion();
+	archive<<CityData_CityData_GetVersion();
+	archive<<Diffcly_Difficulty_GetVersion();
+	archive<<GameObj_GameObj_GetVersion();
+	archive<<Gold_Gold_GetVersion();
+	archive<<ID_ID_GetVersion();
+	archive<<ObjPool_ObjPool_GetVersion();
+	archive<<Sci_Science_GetVersion();
+	archive<<TaxRate_TaxRate_GetVersion();
+	archive<<Unit_Unit_GetVersion();
+	archive<<UnitData_UnitData_GetVersion();
+	archive<<UnitPool_UnitPool_GetVersion();
+	archive<<Cell_CELL_GetVersion();
+	archive<<MapPoint_MapPoint_GetVersion();
 
 	
 
-    g_rand->Serialize(archive);
+	g_rand->Serialize(archive);
 
 	PROGRESS( 110 );
 
@@ -550,22 +558,22 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	}
 #endif
 
-	g_theWorld->Serialize(archive) ;								
+	g_theWorld->Serialize(archive);
 
 	PROGRESS( 130 );
 
 	if(saveEverything)
-		g_turn->Serialize(archive);										
+		g_turn->Serialize(archive);
 
 	PROGRESS( 140 );
 
 	if(saveEverything)
-		g_selected_item->Serialize(archive);							
+		g_selected_item->Serialize(archive);
 
 	PROGRESS( 150 );
 
 	if(saveEverything)
-		g_theUnitPool->Serialize(archive) ;								
+		g_theUnitPool->Serialize(archive);
 
 	PROGRESS( 160 );
 
@@ -577,7 +585,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	PROGRESS( 180 );
 
 	if(saveEverything)
-		g_theTradePool->Serialize(archive);                             
+		g_theTradePool->Serialize(archive);
 
 	PROGRESS( 190 );
 
@@ -588,7 +596,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	PROGRESS( 200 );
 
 	if(saveEverything)
-		g_thePollution->Serialize(archive) ;							
+		g_thePollution->Serialize(archive);
 
 	PROGRESS( 210 );
 
@@ -598,12 +606,12 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 220 );
 
-	g_slicEngine->Serialize(archive);								
+	g_slicEngine->Serialize(archive);
 
 	PROGRESS( 230 );
 
 	if(saveEverything)
-		g_theTerrainImprovementPool->Serialize(archive);				
+		g_theTerrainImprovementPool->Serialize(archive);
 
 	PROGRESS( 240 );
 
@@ -614,7 +622,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	PROGRESS( 250 );
 
 	if(saveEverything)
-		g_theCivilisationPool->Serialize(archive) ;						
+		g_theCivilisationPool->Serialize(archive);
 
 	PROGRESS( 260 );
 
@@ -625,12 +633,12 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	PROGRESS( 270 );
 
 	if(saveEverything)
-		g_theMessagePool->Serialize(archive) ;							
+		g_theMessagePool->Serialize(archive);
 
 	PROGRESS( 280 );
 
 	if(saveEverything)
-		g_theInstallationPool->Serialize(archive);						
+		g_theInstallationPool->Serialize(archive);
 
 
 	PROGRESS( 290 );
@@ -687,7 +695,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 		}
 		archive << playerAlive;
 		if(playerAlive)
-			g_player[i]->Serialize(archive) ;
+			g_player[i]->Serialize(archive);
 	}
 
 
@@ -712,9 +720,9 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	
 
 	
-	
-    
-    
+
+
+
 
 	if(saveEverything)
 		CtpAi::Save(archive);
@@ -722,29 +730,29 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	PROGRESS( 360 );
 
 	
-	fpSave=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "wb") ;	
-	if (fpSave == NULL)												
-		{
-		c3errors_ErrorDialogFromDB("SAVE_ERROR", "SAVE_FAILED_TO_SAVE") ;	
+	fpSave=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "wb");
+	if (fpSave == NULL)
+	{
+		c3errors_ErrorDialogFromDB("SAVE_ERROR", "SAVE_FAILED_TO_SAVE");
 
 		if(showProgress) { 
 			ProgressWindow::EndProgress( g_theProgressWindow );
 		}
-		return (GAMEFILE_ERR_STORE_FAILED) ;
-		}
+		return (GAMEFILE_ERR_STORE_FAILED);
+	}
 
 	PROGRESS( 370 );
 
 	
-	strcpy(sHeader, k_GAME_MAGIC_VALUE) ;
-	n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpSave) ;
+	strcpy(sHeader, k_GAME_MAGIC_VALUE);
+	n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpSave);
 	if (n!=sizeof(k_GAME_MAGIC_VALUE))
-		{
-		c3files_fclose(fpSave) ;
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME") ;
+	{
+		c3files_fclose(fpSave);
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME");
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
-		}
+		return (GAMEFILE_ERR_STORE_FAILED);
+	}
 
 	
 	
@@ -774,55 +782,55 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	if (createdInfo)
 		delete info;
 	
-	ulLen = archive.StreamLen() ;
-	n = c3files_fwrite(&ulLen, sizeof(ulLen), 1, fpSave) ;
+	ulLen = archive.StreamLen();
+	n = c3files_fwrite(&ulLen, sizeof(ulLen), 1, fpSave);
 	if (n!=1)
-		{
-		c3files_fclose(fpSave) ;
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME") ;
+	{
+		c3files_fclose(fpSave);
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME");
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
-		}
+		return (GAMEFILE_ERR_STORE_FAILED);
+	}
 
 	PROGRESS( 500 );
 
-    
+
 	if (!CompressData(archive.GetStream(), ulLen, 
 					  &compressedData, &compressedSize))
-		{
-		c3files_fclose(fpSave) ;
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME") ;
+	{
+		c3files_fclose(fpSave);
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME");
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
-		}
+		return (GAMEFILE_ERR_STORE_FAILED);
+	}
 
 	PROGRESS( 510 );
 
 	
-	n = c3files_fwrite(&compressedSize, sizeof(compressedSize), 1, fpSave) ;
+	n = c3files_fwrite(&compressedSize, sizeof(compressedSize), 1, fpSave);
 	if (n!=1)
 		{
-		c3files_fclose(fpSave) ;
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME") ;
+		c3files_fclose(fpSave);
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME");
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
+		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
 	PROGRESS( 520 );
 
 	
-	n = c3files_fwrite(compressedData, sizeof(uint8), compressedSize, fpSave) ;
+	n = c3files_fwrite(compressedData, sizeof(uint8), compressedSize, fpSave);
 	if (n != compressedSize)
 		{
-		c3files_fclose(fpSave) ;
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME") ;
+		c3files_fclose(fpSave);
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME");
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
+		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
-    delete compressedData;
+	delete compressedData;
 
-	c3files_fclose(fpSave) ;										
+	c3files_fclose(fpSave);
 
 #ifndef _NO_GAME_WATCH
 	
@@ -835,15 +843,15 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	gameWatch.SaveGame(g_gameWatchID, gameWatchFilename);
 #endif
 
-	finish = clock() ;
-	DPRINTF(k_DBG_FILE, ("Time to save game data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC)) ;
+	finish = clock();
+	DPRINTF(k_DBG_FILE, ("Time to save game data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC));
 	
 	if(showProgress) { 
 		ProgressWindow::EndProgress( g_theProgressWindow );
 	}
 
-	return (GAMEFILE_ERR_STORE_OK) ;
-	}
+	return (GAMEFILE_ERR_STORE_OK);
+}
 
 
 
@@ -860,28 +868,28 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 uint32 GameFile::Restore(const MBCHAR *filepath)
 	{
-	FILE	*fpLoad ;
+	FILE	*fpLoad;
 
 	uint32	ver, n;
 	uLong ulLen;
 
-	clock_t	start, finish ;
+	clock_t	start, finish;
 
-	MBCHAR sHeader[_MAX_PATH] ;
+	MBCHAR sHeader[_MAX_PATH];
 
-	CivArchive	archive ;
+	CivArchive	archive;
 
 	uLong	tlen = 0;
 	uLong	compressedSize = 0;
 	uint8	*compressedData = NULL;
 
-	start = clock() ;
+	start = clock();
 
 	
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
 		"InitProgressWindow",
-		230 );
+		710 );
 
 	
 	MBCHAR s[_MAX_PATH];
@@ -889,23 +897,25 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	g_theProgressWindow->StartCountingTo( 10, s );
 
-	fpLoad=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb") ;			
+	fpLoad=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");
 	if (fpLoad == NULL) {
-		c3errors_ErrorDialog("LOAD_ERROR", "LOAD_FAILED_TO_LOAD_GAME") ;	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		c3errors_ErrorDialog("LOAD_ERROR", "LOAD_FAILED_TO_LOAD_GAME");
+		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
+	g_theProgressWindow->StartCountingTo( 20 );
 
-	
-	n = c3files_fread(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpLoad) ;
-	Assert(n==sizeof(k_GAME_MAGIC_VALUE)) ;
+	n = c3files_fread(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpLoad);
+	Assert(n==sizeof(k_GAME_MAGIC_VALUE));
 	if (n!=sizeof(k_GAME_MAGIC_VALUE))
 		{
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_UNABLE_TO_READ_GAME") ;
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_UNABLE_TO_READ_GAME");
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		return (GAMEFILE_ERR_LOAD_FAILED);
 		}
+
+	g_theProgressWindow->StartCountingTo( 30 );
 
 	g_saveFileVersion = -1;
 	sint32 i;
@@ -916,279 +926,283 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 		}
 	}
 
-	if(g_saveFileVersion < 0) {
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_NOT_A_SAVEGAME_FILE") ;
+	g_theProgressWindow->StartCountingTo( 40 );
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+	if(g_saveFileVersion < 0) {
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_NOT_A_SAVEGAME_FILE");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
-	
+	g_theProgressWindow->StartCountingTo( 50 );
 
 	SaveInfo *info = new SaveInfo();
 
 	LoadExtendedGameInfo(fpLoad, info);
 
-	
-	SetProfileFromExtendedInfo(info);
-
-	
-	delete info;
-
-	
-	n = c3files_fread(&ulLen, sizeof(ulLen), 1, fpLoad) ;
-	Assert(n==1) ;
-	if (n!=1)
-		{
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-
-	archive.SetSize(ulLen) ;
-	archive.SetLoad() ;
-
-	
-	n = c3files_fread(&compressedSize, sizeof(compressedSize), 1, fpLoad) ;
-	Assert(n==1) ;
-	if (n!=1)
-		{
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-
-	
-	compressedData = new uint8[compressedSize];
-	n = c3files_fread(compressedData, sizeof(uint8), compressedSize, fpLoad) ;
-	if (n!=compressedSize)
-		{
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-
-	c3files_fclose(fpLoad) ;
-
-    
-    tlen = ulLen;
-	int q;
-    if (((q = uncompress(archive.GetStream(), &tlen, compressedData, compressedSize)) != Z_OK) || 
-        (tlen != ulLen)) {
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE") ;
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-    }
-        
-    delete compressedData;
-    
-	
-	archive>>ver ;
-	if (ver!=World_World_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-
-	g_theProgressWindow->StartCountingTo( 20 );
-
-	archive>>ver ;
-	if (ver!=Player_Player_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-
-	g_theProgressWindow->StartCountingTo( 30 );
-
-    archive>>ver; 
-    if (ver != SelectedItem_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-
-	g_theProgressWindow->StartCountingTo( 40 );
-
-	archive>>ver ;
-	if (ver!=Advances_Advances_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-
-#if 0
-	g_theProgressWindow->StartCountingTo( 50 );
-
-	archive>>ver ;
-	if (ver!=ArmyList_ArmyList_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-#endif
-
 	g_theProgressWindow->StartCountingTo( 60 );
 
-	archive>>ver ;
-	if (ver!=BldQue_BuildQueue_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
+	SetProfileFromExtendedInfo(info);
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	delete info;
 
 	g_theProgressWindow->StartCountingTo( 70 );
 
-	archive>>ver ;
-	if (ver!=CityData_CityData_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	n = c3files_fread(&ulLen, sizeof(ulLen), 1, fpLoad);
+	Assert(n==1);
+	if (n!=1)
+	{
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
 
 	g_theProgressWindow->StartCountingTo( 80 );
 
-	archive>>ver ;
-	if (ver!=Diffcly_Difficulty_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
+	archive.SetSize(ulLen);
+	archive.SetLoad();
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-	
 	g_theProgressWindow->StartCountingTo( 90 );
 
-	archive>>ver ;
-	if (ver!=GameObj_GameObj_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
+	n = c3files_fread(&compressedSize, sizeof(compressedSize), 1, fpLoad);
+	Assert(n==1);
+	if (n!=1)
+	{
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE");
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
 	g_theProgressWindow->StartCountingTo( 100 );
 
-	archive>>ver ;
-	if (ver!=Gold_Gold_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	compressedData = new uint8[compressedSize];
+	n = c3files_fread(compressedData, sizeof(uint8), compressedSize, fpLoad);
+	if (n!=compressedSize)
+	{
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
 
 	g_theProgressWindow->StartCountingTo( 110 );
 
-	archive>>ver ;
-	if (ver!=ID_ID_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	c3files_fclose(fpLoad);
 
 	g_theProgressWindow->StartCountingTo( 120 );
 
-	archive>>ver ;
-	if (ver!=ObjPool_ObjPool_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	tlen = ulLen;
+	int q;
+	if (((q = uncompress(archive.GetStream(), &tlen, compressedData, compressedSize)) != Z_OK) || 
+		(tlen != ulLen)) {
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE");
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+	delete compressedData;
 
 	g_theProgressWindow->StartCountingTo( 130 );
 
+	archive>>ver;
+	if (ver!=World_World_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
 	g_theProgressWindow->StartCountingTo( 140 );
 
+	archive>>ver;
+	if (ver!=Player_Player_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
 
 	g_theProgressWindow->StartCountingTo( 150 );
 
+	archive>>ver; 
+	if (ver != SelectedItem_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
 
 	g_theProgressWindow->StartCountingTo( 160 );
 
-	archive>>ver ;
-	if (ver!=Sci_Science_GetVersion())
+	archive>>ver;
+	if (ver!=Advances_Advances_GetVersion())
 		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
 		}
 
 	g_theProgressWindow->StartCountingTo( 170 );
+#if 0
 
-	archive>>ver ;
-	if (ver!=TaxRate_TaxRate_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	archive>>ver;
+	if (ver!=ArmyList_ArmyList_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+#endif
 
 	g_theProgressWindow->StartCountingTo( 180 );
 
-	archive>>ver ;
-	if (ver!=Unit_Unit_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	archive>>ver;
+	if (ver!=BldQue_BuildQueue_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
 
 	g_theProgressWindow->StartCountingTo( 190 );
 
-	archive>>ver ;
-	if (ver!=UnitData_UnitData_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
+	archive>>ver;
+	if (ver!=CityData_CityData_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
 	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
 
 	g_theProgressWindow->StartCountingTo( 200 );
 
-	archive>>ver ;
-	if (ver!=UnitPool_UnitPool_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	archive>>ver;
+	if (ver!=Diffcly_Difficulty_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
 
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+	
 	g_theProgressWindow->StartCountingTo( 210 );
 
-	archive>>ver ;
-	if (ver!=Cell_CELL_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
+	archive>>ver;
+	if (ver!=GameObj_GameObj_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
 
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+	
 	g_theProgressWindow->StartCountingTo( 220 );
 
-	archive>>ver ;
-	if (ver!=MapPoint_MapPoint_GetVersion())
-		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
-
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
-		}
-
+	archive>>ver;
+	if (ver!=Gold_Gold_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
 
 	g_theProgressWindow->StartCountingTo( 230 );
 
+	archive>>ver;
+	if (ver!=ID_ID_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
 	
-	g_civApp->InitializeGame(archive);
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
 
+	g_theProgressWindow->StartCountingTo( 240 );
+
+	archive>>ver;
+	if (ver!=ObjPool_ObjPool_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+	g_theProgressWindow->StartCountingTo( 250 );
+
+	archive>>ver;
+	if (ver!=Sci_Science_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+	g_theProgressWindow->StartCountingTo( 260 );
+
+	archive>>ver;
+	if (ver!=TaxRate_TaxRate_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+	g_theProgressWindow->StartCountingTo( 270 );
+
+	archive>>ver;
+	if (ver!=Unit_Unit_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+	g_theProgressWindow->StartCountingTo( 280 );
+
+	archive>>ver;
+	if (ver!=UnitData_UnitData_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+	g_theProgressWindow->StartCountingTo( 290 );
+
+	archive>>ver;
+	if (ver!=UnitPool_UnitPool_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+	g_theProgressWindow->StartCountingTo( 300 );
+
+	archive>>ver;
+	if (ver!=Cell_CELL_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+	
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+	g_theProgressWindow->StartCountingTo( 310 );
+
+	archive>>ver;
+	if (ver!=MapPoint_MapPoint_GetVersion())
+	{
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
+
+		return (GAMEFILE_ERR_LOAD_FAILED);
+	}
+
+
+	g_theProgressWindow->StartCountingTo( 700 );
+
+	
+	g_civApp->InitializeGame(archive); // Has to be reconsidered
+
+	g_theProgressWindow->StartCountingTo( 710 );
 
 
 #ifndef _NO_GAME_WATCH
@@ -1201,14 +1215,14 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	g_gameWatchID = gameWatch.LoadGame(gameWatchFilename);
 #endif
 
-	finish = clock() ;
-	DPRINTF(k_DBG_FILE, ("Time to load game data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC)) ;
+	finish = clock();
+	DPRINTF(k_DBG_FILE, ("Time to load game data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC));
 	
 
 	ProgressWindow::EndProgress( g_theProgressWindow );
 
 
-	return (GAMEFILE_ERR_LOAD_OK) ;
+	return (GAMEFILE_ERR_LOAD_OK);
 }
 
 
@@ -1221,28 +1235,28 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 	sint32		n;
 
 	
-	n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile) ;
+	n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
 	
-	n = c3files_fread(info->leaderName, sizeof(uint8), k_MAX_NAME_LEN, saveFile) ;
+	n = c3files_fread(info->leaderName, sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
 	
-	n = c3files_fread(info->civName, sizeof(uint8), k_MAX_NAME_LEN, saveFile) ;
+	n = c3files_fread(info->civName, sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
 	
-	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile) ;
+	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
@@ -1321,7 +1335,7 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 
 	
 	sint32 numPlayers;
-	n = c3files_fread(&numPlayers, sizeof(uint8), sizeof(sint32), saveFile) ;
+	n = c3files_fread(&numPlayers, sizeof(uint8), sizeof(sint32), saveFile);
 	if (n != sizeof(sint32)) {
 		c3files_fclose(saveFile);
 		return FALSE;
@@ -1331,10 +1345,10 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
     
     sint32 has_robot; 
 	for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
-        c3files_fread(&has_robot, sizeof(uint8), sizeof(sint32), saveFile) ;
+        c3files_fread(&has_robot, sizeof(uint8), sizeof(sint32), saveFile);
 
         if (has_robot) { 
-		    n = c3files_fread(info->civList[i], sizeof(uint8), k_MAX_NAME_LEN, saveFile) ;
+		    n = c3files_fread(info->civList[i], sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 		    if (n != k_MAX_NAME_LEN) {
 			    c3files_fclose(saveFile);
 			    return FALSE;
@@ -1477,28 +1491,28 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 	sint32		n;
 
 	
-	n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile) ;
+	n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
 	
-	n = c3files_fread(info->leaderName, sizeof(uint8), k_MAX_NAME_LEN, saveFile) ;
+	n = c3files_fread(info->leaderName, sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
 	
-	n = c3files_fread(info->civName, sizeof(uint8), k_MAX_NAME_LEN, saveFile) ;
+	n = c3files_fread(info->civName, sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
 	
-	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile) ;
+	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
@@ -1551,7 +1565,7 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 
 		
 		sint32 numPlayers;
-		n = c3files_fread(&numPlayers, sizeof(uint8), sizeof(sint32), saveFile) ;
+		n = c3files_fread(&numPlayers, sizeof(uint8), sizeof(sint32), saveFile);
 		if (n != sizeof(sint32)) {
 			c3files_fclose(saveFile);
 			return FALSE;
@@ -1561,10 +1575,10 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		
 		sint32 has_robot; 
 		for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
-			c3files_fread(&has_robot, sizeof(uint8), sizeof(sint32), saveFile) ;
+			c3files_fread(&has_robot, sizeof(uint8), sizeof(sint32), saveFile);
 
 			if (has_robot) { 
-				n = c3files_fread(info->civList[i], sizeof(uint8), k_MAX_NAME_LEN, saveFile) ;
+				n = c3files_fread(info->civList[i], sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 				if (n != k_MAX_NAME_LEN) {
 					c3files_fclose(saveFile);
 					return FALSE;
@@ -2084,7 +2098,7 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 {
 	FILE		*saveFile = NULL;
 	MBCHAR		filepath[_MAX_PATH];
-	MBCHAR		header[_MAX_PATH] ;
+	MBCHAR		header[_MAX_PATH];
 	sint32		n;
 
 	sprintf(filepath, "%s%s%s", path, FILE_SEP, info->fileName);
@@ -2094,9 +2108,9 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 		return FALSE;
 
 	
-	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), saveFile) ;
+	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), saveFile);
 	if (n!=sizeof(k_GAME_MAGIC_VALUE)) {
-		c3files_fclose(saveFile) ;
+		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
@@ -2112,7 +2126,7 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 	}
 
 	if(g_saveFileVersion < 0) {
-		c3files_fclose(saveFile) ;
+		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
@@ -2138,7 +2152,7 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 BOOL GameFile::FetchExtendedSaveInfo(MBCHAR *fullPath, SaveInfo *info)
 {
 	FILE		*saveFile = NULL;
-	MBCHAR		header[_MAX_PATH] ;
+	MBCHAR		header[_MAX_PATH];
 	sint32		n;
 
 	saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)fullPath, "rb");
@@ -2146,9 +2160,9 @@ BOOL GameFile::FetchExtendedSaveInfo(MBCHAR *fullPath, SaveInfo *info)
 		return FALSE;
 
 	
-	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), saveFile) ;
+	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), saveFile);
 	if (n!=sizeof(k_GAME_MAGIC_VALUE)) {
-		c3files_fclose(saveFile) ;
+		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
@@ -2164,7 +2178,7 @@ BOOL GameFile::FetchExtendedSaveInfo(MBCHAR *fullPath, SaveInfo *info)
 	}
 
 	if(g_saveFileVersion < 0) {
-		c3files_fclose(saveFile) ;
+		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
@@ -2491,22 +2505,22 @@ GameMapInfo::GameMapInfo()
 
 void GameMapFile::RestoreGameMap(const MBCHAR *filename)
 	{
-	GameMapFile	*gameMap ;
+	GameMapFile	*gameMap;
 
-    gameMap = new GameMapFile ;
+    gameMap = new GameMapFile;
 	
 	gameMap->Restore(filename);
 
-	delete gameMap ;
+	delete gameMap;
 	} 
 
 void GameMapFile::SaveGameMap(const MBCHAR *filename, SaveMapInfo *info)
 	{
-	GameMapFile	*gameMap ;
+	GameMapFile	*gameMap;
 
-	gameMap = new GameMapFile ;
-	gameMap->Save(filename, info) ;
-    delete gameMap ;
+	gameMap = new GameMapFile;
+	gameMap->Save(filename, info);
+    delete gameMap;
 	}
 
 GameMapFile::GameMapFile(void)
@@ -2520,45 +2534,45 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 	FILE	*fpSave = NULL;
     
 	uint32	ulLen,
-			n ;
+			n;
 
-	clock_t	start, finish ;
+	clock_t	start, finish;
 
-	CivArchive	archive ;
+	CivArchive	archive;
 
-	MBCHAR	sHeader[_MAX_PATH] ;
+	MBCHAR	sHeader[_MAX_PATH];
 
-	start = clock() ;
+	start = clock();
 
-	archive.SetStore() ;
-
-	
-	archive<<World_World_GetVersion() ;
+	archive.SetStore();
 
 	
+	archive<<World_World_GetVersion();
 
 	
-	g_theWorld->SerializeJustMap(archive) ;								
+
+	
+	g_theWorld->SerializeJustMap(archive);								
 
 
 	
-	fpSave=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "wb") ;	
+	fpSave=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "wb");	
 	if (fpSave == NULL)												
 		{
-		c3errors_ErrorDialogFromDB("SAVE_ERROR", "SAVE_FAILED_TO_SAVE") ;	
+		c3errors_ErrorDialogFromDB("SAVE_ERROR", "SAVE_FAILED_TO_SAVE");	
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
+		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
 	
-	strcpy(sHeader, k_GAMEMAP_MAGIC_VALUE) ;
-	n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), fpSave) ;
+	strcpy(sHeader, k_GAMEMAP_MAGIC_VALUE);
+	n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), fpSave);
 	if (n!=sizeof(k_GAMEMAP_MAGIC_VALUE))
 		{
-		c3files_fclose(fpSave) ;
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME") ;
+		c3files_fclose(fpSave);
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME");
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
+		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
 	
@@ -2585,75 +2599,75 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 	if (createdInfo)
 		delete info;
 	
-	ulLen = archive.StreamLen() ;
-	n = c3files_fwrite(&ulLen, sizeof(ulLen), 1, fpSave) ;
+	ulLen = archive.StreamLen();
+	n = c3files_fwrite(&ulLen, sizeof(ulLen), 1, fpSave);
 	if (n!=1)
 		{
-		c3files_fclose(fpSave) ;
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME") ;
+		c3files_fclose(fpSave);
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME");
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
+		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
 	
-	n = c3files_fwrite(archive.GetStream(), sizeof(uint8), ulLen, fpSave) ;
+	n = c3files_fwrite(archive.GetStream(), sizeof(uint8), ulLen, fpSave);
 	if (n != ulLen)
 		{
-		c3files_fclose(fpSave) ;
-		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME") ;
+		c3files_fclose(fpSave);
+		c3errors_FatalDialogFromDB("SAVE_ERROR", "SAVE_UNABLE_TO_WRITE_SAVEGAME");
 
-		return (GAMEFILE_ERR_STORE_FAILED) ;
+		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
-	c3files_fclose(fpSave) ;										
+	c3files_fclose(fpSave);										
 
-	finish = clock() ;
-	DPRINTF(k_DBG_FILE, ("Time to save gamemap data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC)) ;
+	finish = clock();
+	DPRINTF(k_DBG_FILE, ("Time to save gamemap data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC));
 	
-	return (GAMEFILE_ERR_STORE_OK) ;
+	return (GAMEFILE_ERR_STORE_OK);
 	}
 
 
 uint32 GameMapFile::Restore(const MBCHAR *filepath)
 	{
-	FILE	*fpLoad ;
+	FILE	*fpLoad;
 
 	uint32	ver,
 			ulLen,
-			n ;
+			n;
 
-	clock_t	start, finish ;
+	clock_t	start, finish;
 
-	MBCHAR sHeader[_MAX_PATH] ;
+	MBCHAR sHeader[_MAX_PATH];
 
-	CivArchive	archive ;
+	CivArchive	archive;
 
-	start = clock() ;
+	start = clock();
 
-	fpLoad=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb") ;			
+	fpLoad=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");			
 	if (fpLoad == NULL) {
-		c3errors_ErrorDialog("LOAD_ERROR", "LOAD_FAILED_TO_LOAD_GAME") ;	
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		c3errors_ErrorDialog("LOAD_ERROR", "LOAD_FAILED_TO_LOAD_GAME");	
+		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
 
 	
-	n = c3files_fread(sHeader, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), fpLoad) ;
-	Assert(n==sizeof(k_GAMEMAP_MAGIC_VALUE)) ;
+	n = c3files_fread(sHeader, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), fpLoad);
+	Assert(n==sizeof(k_GAMEMAP_MAGIC_VALUE));
 	if (n!=sizeof(k_GAMEMAP_MAGIC_VALUE))
 		{
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_UNABLE_TO_READ_GAME") ;
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_UNABLE_TO_READ_GAME");
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		return (GAMEFILE_ERR_LOAD_FAILED);
 		}
 
 	if (strcmp(sHeader, k_GAMEMAP_MAGIC_VALUE))
 		{
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_NOT_A_SAVEGAME_FILE") ;
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_NOT_A_SAVEGAME_FILE");
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		return (GAMEFILE_ERR_LOAD_FAILED);
 		}
 
 	
@@ -2669,38 +2683,38 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 	delete info;
 
 	
-	n = c3files_fread(&ulLen, sizeof(ulLen), 1, fpLoad) ;
-	Assert(n==1) ;
+	n = c3files_fread(&ulLen, sizeof(ulLen), 1, fpLoad);
+	Assert(n==1);
 	if (n!=1)
 		{
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE") ;
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE");
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		return (GAMEFILE_ERR_LOAD_FAILED);
 		}
 
-	archive.SetSize(ulLen) ;
-	archive.SetLoad() ;
+	archive.SetSize(ulLen);
+	archive.SetLoad();
 
 	
-	n = c3files_fread(archive.GetStream(), sizeof(uint8), ulLen, fpLoad) ;
+	n = c3files_fread(archive.GetStream(), sizeof(uint8), ulLen, fpLoad);
 	if (n!=ulLen)
 		{
-		c3files_fclose(fpLoad) ;
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE") ;
+		c3files_fclose(fpLoad);
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE");
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		return (GAMEFILE_ERR_LOAD_FAILED);
 		}
 
-	c3files_fclose(fpLoad) ;
+	c3files_fclose(fpLoad);
 
 	
-	archive>>ver ;
+	archive>>ver;
 	if (ver!=World_World_GetVersion())
 		{
-		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO") ;
+		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
 
-		return (GAMEFILE_ERR_LOAD_FAILED) ;
+		return (GAMEFILE_ERR_LOAD_FAILED);
 		}
 
 
@@ -2711,10 +2725,10 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 	if ( !g_theWorld ) return FALSE;
 
 
-	finish = clock() ;
-	DPRINTF(k_DBG_FILE, ("Time to load gamemap data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC)) ;
+	finish = clock();
+	DPRINTF(k_DBG_FILE, ("Time to load gamemap data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC));
 	
-	return (GAMEFILE_ERR_LOAD_OK) ;
+	return (GAMEFILE_ERR_LOAD_OK);
 }
 
 BOOL GameMapFile::LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
@@ -2722,14 +2736,14 @@ BOOL GameMapFile::LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 	sint32		n;
 
 	
-	n = c3files_fread(info->gameMapName, sizeof(uint8), _MAX_PATH, saveFile) ;
+	n = c3files_fread(info->gameMapName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
 	
-	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile) ;
+	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
@@ -2842,7 +2856,7 @@ BOOL GameMapFile::ValidateGameMapFile(MBCHAR *path, SaveMapInfo *info)
 {
 	FILE		*saveFile = NULL;
 	MBCHAR		filepath[_MAX_PATH];
-	MBCHAR		header[_MAX_PATH] ;
+	MBCHAR		header[_MAX_PATH];
 	sint32		n;
 
 	sprintf(filepath, "%s%s%s", path, FILE_SEP, info->fileName);
@@ -2852,15 +2866,15 @@ BOOL GameMapFile::ValidateGameMapFile(MBCHAR *path, SaveMapInfo *info)
 		return FALSE;
 
 	
-	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), saveFile) ;
+	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), saveFile);
 	if (n!=sizeof(k_GAMEMAP_MAGIC_VALUE)) {
-		c3files_fclose(saveFile) ;
+		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
 	
 	if (strcmp(header, k_GAMEMAP_MAGIC_VALUE)) {
-		c3files_fclose(saveFile) ;
+		c3files_fclose(saveFile);
 		return FALSE;
 	}
 

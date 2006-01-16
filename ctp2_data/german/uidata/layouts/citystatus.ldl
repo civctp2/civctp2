@@ -4,24 +4,24 @@
 #  File type    : LDL layout description 
 #  Description  : Main ldl file
 #  Id           : $Id$
-# 
+#
 ################################################################################
-# 
+#
 #  Disclaimer
 # 
 #  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 # 
 #  This material has been developed at apolyton.net by the Apolyton CtP2 
 #  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-# 
+#
 ################################################################################
-# 
+#
 #  Modifications from the original Activision code:
 #
 # - Added a city manager button. - July 24th 2005 Martin Gühmann
 # - Added conversion loss and franchise loss column to the resource list
 #   tab. (Aug 14th 2005 Martin Gühmann)
-# 
+#
 ################################################################################
 
 # citystatus.ldl

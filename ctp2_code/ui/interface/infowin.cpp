@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -95,7 +98,6 @@
 
 #include "Civilisation.h"
 #include "CivilisationData.h"
-#include "CivilisationDB.h"
 #include "CivilisationPool.h"
 
 
@@ -1531,7 +1533,7 @@ sint32 infowin_UpdatePollutionData( void )
 		sprintf(strbuf, "%d", turnsLeft);
 		double const	val0 = g_thePollution->GetGlobalPollutionLevel();
 		double const	val1 = g_thePollution->GetNextTrigger();
-		percent = sint32(100 * (val0 / val1));
+		percent = static_cast<sint32>(100.0 * (val0 / val1));
 	}
 
 	s_pollutionBox->SetText(strbuf);

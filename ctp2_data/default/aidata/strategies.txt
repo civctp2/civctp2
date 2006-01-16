@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : Text file
 // Description  : The AI startegy's data
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -44,6 +45,8 @@
 //   that there are now civs building Abolitionists.
 // - Increased priority for the refuel goal as it is now available for 
 //   units only that needs refueling. - April 30th 2005 Martin Gühmann
+// - Used the values of ApolytonPack-GoodMod for RoadUtilityBonus,
+//   ImproveProductionBonus and ImproveGrowthBonus. (Aug 26th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -177,13 +180,13 @@ STRATEGY_DEFAULT {
     FixPollutionThreshold  2000
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  200
-      
+    RoadUtilityBonus  300
+
     // bonus for building production tile improvements
-    ImproveProductionBonus  150
+    ImproveProductionBonus  120
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  100
+    ImproveGrowthBonus  130
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -1174,13 +1177,13 @@ STRATEGY_SCIENTIST_DEFAULT {
     FixPollutionThreshold  2000
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  200
-      
+    RoadUtilityBonus  300
+
     // bonus for building production tile improvements
-    ImproveProductionBonus  150
+    ImproveProductionBonus  120
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  100
+    ImproveGrowthBonus  130
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -1636,13 +1639,13 @@ STRATEGY_MILITARIST_DEFAULT {
     FixPollutionThreshold  200
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  250
-      
+    RoadUtilityBonus  350
+
     // bonus for building production tile improvements
-    ImproveProductionBonus  150
+    ImproveProductionBonus  120
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  100
+    ImproveGrowthBonus  130
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2097,13 +2100,13 @@ STRATEGY_ECONOMIC_DEFAULT {
     FixPollutionThreshold  200
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  200
-      
+    RoadUtilityBonus  300
+
     // bonus for building production tile improvements
-    ImproveProductionBonus  150
+    ImproveProductionBonus  120
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  100
+    ImproveGrowthBonus  130
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2557,13 +2560,13 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     FixPollutionThreshold  200
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  200
-      
+    RoadUtilityBonus  300
+
     // bonus for building production tile improvements
-    ImproveProductionBonus  150
+    ImproveProductionBonus  120
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  100
+    ImproveGrowthBonus  130
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -3016,13 +3019,13 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     FixPollutionThreshold  200
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  200
-      
+    RoadUtilityBonus  300
+
     // bonus for building production tile improvements
-    ImproveProductionBonus  150
+    ImproveProductionBonus  120
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  100
+    ImproveGrowthBonus  130
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75

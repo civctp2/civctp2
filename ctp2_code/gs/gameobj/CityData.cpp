@@ -112,7 +112,6 @@
 #include "StrDB.h"
 #include "AdvanceRecord.h"
 #include "ConstDB.h"
-#include "CivilisationDB.h"
 
 #include "cellunitlist.h"
 #include "UnitRec.h"

@@ -1,4 +1,32 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The battleview
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed refference to outdated special effect database. (Aug 26th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_uniqueid.h"
@@ -70,7 +98,6 @@ extern ConstDB				*g_theConstDB;
 
 
 extern Player				**g_player;
-extern SpriteStateDB		*g_theSpecialEffectDB;
 extern Director				*g_director;
 extern sint32				g_modalWindow;
 
@@ -336,7 +363,7 @@ int battleview_DefenderSort( const void *arg1, const void *arg2 )
 		return -1;
 	}
 
-#if 0	
+#if 0
 	
 
 	if (sa1->y < sa2->y) {

@@ -1,6 +1,35 @@
-/**
- * $Id$
+/*----------------------------------------------------------------------------
+ *
+ * Project      : Call To Power 2
+ * File type    : C++ header
+ * Description  : Database code generator
+ * Id           : $Id:$
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Disclaimer
+ *
+ * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+ *
+ * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * Source Code Project. Contact the authors at ctp2source@apolyton.net.
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Compiler flags
+ *
+ * - None
+ *
+ *----------------------------------------------------------------------------
+ *
+ * Modifications from the original Activision code:
+ *
+ * - Added akaName and defaultName to the structs namelist and namevalueflags
+ *   for support of the old database format. (Aug 26th 2005 Martin Gühmann)
+ *
+ *----------------------------------------------------------------------------
  */
+
 #ifndef __CTPDB_H__
 #define __CTPDB_H__
 
@@ -32,6 +61,8 @@ union dbvalue {
 
 struct namelist {
 	char *name;
+	char *akaName;
+	char *defaultName;
 	uint8 flags;
 	union dbvalue v;
 	struct namelist *next;
@@ -53,6 +84,8 @@ struct bitpairtype {
 
 struct namevalueflags {
 	char *name;
+	char *akaName;
+	char *defaultName;
 	uint8 flags;
 	union dbvalue v;
 };

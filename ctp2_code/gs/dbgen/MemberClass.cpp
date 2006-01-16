@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// WIN32
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,8 +28,13 @@
 // - Modified AddBitPair function to allow bit pairs to have default values
 //   so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
+// - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
+// - Output files only have spaces instead of tabs as indent and indetion
+//   was fixed. (Aug 25th 2005 Martin Gühmann)
+// - Added alias names. (Aug 26th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
@@ -54,13 +61,15 @@ MemberClass::~MemberClass()
 }
 
 void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
-						   sint32 minSize, sint32 maxSize,
-						   char *subType)
+                           sint32 minSize, sint32 maxSize,
+                           char *subType)
 {
 	
 	Datum *dat = new Datum;
 	dat->m_type = type;
 	dat->m_name = nameInfo->name;
+	dat->m_akaName = nameInfo->akaName;
+	dat->m_defaultName = nameInfo->defaultName;
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
 	dat->m_subType = subType;
@@ -163,7 +172,7 @@ void MemberClass::ExportBits(FILE *outfile)
 		Datum *dat = walk.GetObj();
 		if(dat->m_type == DATUM_BIT || dat->m_type == DATUM_BIT_PAIR) {
 			if(!(bit % 32)) {
-				fprintf(outfile, "//\n// m_flags%d\n", bit / 32);
+				fprintf(outfile, "//\n// m_flags%d: %s\n", bit / 32, m_name);
 			}
 			sprintf(nicename, "k_%s_%s_Bit", m_name, dat->m_name);
 			fprintf(outfile, "#define %-40s 0x%08lx\n", nicename, 1 << (bit % 32));
@@ -215,17 +224,18 @@ void MemberClass::ExportData(FILE *outfile)
 void MemberClass::ExportMethods(FILE *outfile)
 {
 	fprintf(outfile, "        %s();\n", m_name);
+	fprintf(outfile, "        %s(CivArchive &archive){ Serialize(archive); };\n", m_name);
 	fprintf(outfile, "        ~%s();\n", m_name);
 	fprintf(outfile, "        void operator=(const %s & rval);\n", m_name);
-	fprintf(outfile, "        bool operator==(const %s & rval) { \n", m_name);
+	fprintf(outfile, "        bool operator==(const %s & rval) {\n", m_name);
 	
 	PointerList<Datum>::Walker walk(&m_datumList);
 	bool record_element_found = false;
 	while(walk.IsValid()) {
 		if(walk.GetObj()->m_type == DATUM_RECORD) {
-			fprintf(outfile, "          if (m_%s != rval.m_%s) \n", 
+			fprintf(outfile, "          if (m_%s != rval.m_%s)\n",
 					walk.GetObj()->m_name, walk.GetObj()->m_name);
-			fprintf(outfile, "             return false; \n"); 
+			fprintf(outfile, "             return false;\n"); 
 			record_element_found = true;
 		}
 		walk.Next();
@@ -233,14 +243,15 @@ void MemberClass::ExportMethods(FILE *outfile)
 
 	
 	if (record_element_found == false) {
-		fprintf(outfile, "          return false; \n"); 
+		fprintf(outfile, "          return false;\n"); 
 	}
 	else {
-		fprintf(outfile, "          return true; \n");
+		fprintf(outfile, "          return true;\n");
 	}
-	fprintf(outfile, "        } \n\n");
+	fprintf(outfile, "        }\n\n");
 
 	
+	fprintf(outfile, "        void Serialize(CivArchive &archive);\n");
 	fprintf(outfile, "        sint32 Parse(DBLexer *lex);\n");
 	fprintf(outfile, "        sint32 ParseSequential(DBLexer *lex);\n");
 	fprintf(outfile, "        static sint32 ParseInArray(DBLexer *lex, %s **array, sint32 *numElements);\n", m_name);
@@ -287,7 +298,7 @@ void MemberClass::ExportInitialization(FILE *outfile, char *recordName)
 		walk.GetObj()->ExportInitialization(outfile);
 		walk.Next();
 	}
-	fprintf(outfile, "}\n");
+	fprintf(outfile, "}\n\n");
 
 	
 	fprintf(outfile, "%sRecord::%s::~%s()\n", recordName, m_name, m_name);
@@ -297,7 +308,7 @@ void MemberClass::ExportInitialization(FILE *outfile, char *recordName)
 		walk.GetObj()->ExportDestructor(outfile);
 		walk.Next();
 	}
-	fprintf(outfile, "}\n");
+	fprintf(outfile, "}\n\n");
 
 	
 	fprintf(outfile, "void %sRecord::%s::operator=(const %s & rval)\n", recordName, m_name, m_name);
@@ -307,8 +318,41 @@ void MemberClass::ExportInitialization(FILE *outfile, char *recordName)
 		walk.GetObj()->ExportOperatorEqual(outfile);
 		walk.Next();
 	}
-	fprintf(outfile, "}\n");
+	fprintf(outfile, "}\n\n");
 
+
+	fprintf(outfile, "void %sRecord::%s::Serialize(CivArchive &archive)\n", recordName, m_name, m_name);
+	fprintf(outfile, "{\n");
+
+	fprintf(outfile, "    if(archive.IsStoring()) {\n");
+
+	for(i = 0; i  < ((m_numBits + 31)/ 32); i++) {
+		fprintf(outfile, "        archive << m_flags%d;\n", i);
+	}
+
+	walk.SetList(&m_datumList);
+	while(walk.IsValid()) {
+		Datum *dat = walk.GetObj();
+		dat->ExportSerializationStoring(outfile);
+		walk.Next();
+	}
+
+	fprintf(outfile, "    } else {\n");
+
+	for(i = 0; i  < ((m_numBits + 31)/ 32); i++) {
+		fprintf(outfile, "        archive >> m_flags%d;\n", i);
+	}
+
+	walk.SetList(&m_datumList);
+	while(walk.IsValid()) {
+		Datum *dat = walk.GetObj();
+		dat->ExportSerializationLoading(outfile);
+		walk.Next();
+	}
+
+	fprintf(outfile, "    }\n");
+
+	fprintf(outfile, "}\n\n");
 
 }
 
@@ -317,10 +361,19 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 	char nicename[k_MAX_STRING];
 	sint32 numTokens = 0;
 
+	// TODO add aka and default names.
+
 	PointerList<Datum>::Walker walk(&m_datumList);
 	fprintf(outfile, "static char *s_%s_%s_Tokens[] = {\n", recordName, m_name);
 	while(walk.IsValid()) {
 		fprintf(outfile, "    \"%s\",\n", walk.GetObj()->m_name);
+		walk.Next();
+	}
+	walk.SetList(&m_datumList);
+	while(walk.IsValid()) {
+		if(walk.GetObj()->m_akaName){
+			fprintf(outfile, "    \"%s\",\n", walk.GetObj()->m_akaName);
+		}
 		walk.Next();
 	}
 	fprintf(outfile, "};\n");
@@ -330,6 +383,16 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 		sprintf(nicename, "k_Token_%s_%s_%s", recordName, m_name, walk.GetObj()->m_name);
 		fprintf(outfile, "#define %-40s ((k_Token_Custom_Base) + %d)\n", nicename, numTokens);
 		numTokens++;
+		walk.Next();
+	}
+	walk.SetList(&m_datumList);
+	while(walk.IsValid()) {
+		Datum *dat = walk.GetObj();
+		if(dat->m_akaName){
+			sprintf(nicename, "k_Token_%s_%s_%s", recordName, m_name, dat->m_akaName);
+			fprintf(outfile, "#define %-40s ((k_Token_Custom_Base) + %d)\n", nicename, numTokens);
+			numTokens++;
+		}
 		walk.Next();
 	}
 	fprintf(outfile, "#define k_Token_%s_%s_Max ((k_Token_Custom_Base) + %d)\n", 
@@ -442,7 +505,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 	fprintf(outfile, "    if(*numElements > 0) {\n");
 	fprintf(outfile, "        %s *oldArray = *array;\n", m_name);
 	fprintf(outfile, "        *array = new %s[(*numElements) + 1];\n", m_name);
-	fprintf(outfile, "        for (int i=0; i < (*numElements); i++) \n");
+	fprintf(outfile, "        for (int i=0; i < (*numElements); i++)\n");
 	fprintf(outfile, "             (*array)[i] = oldArray[i];\n");
 	fprintf(outfile, "        delete [] oldArray;\n");
 	fprintf(outfile, "    } else {\n");
@@ -475,6 +538,9 @@ void MemberClass::ExportTokenCases(FILE *outfile, char *recordName)
 	while(walk.IsValid()) {
 		Datum *dat = walk.GetObj();
 		fprintf(outfile,         "            case k_Token_%s_%s_%s:\n", recordName, m_name, dat->m_name);
+		if(dat->m_akaName){
+			fprintf(outfile,         "            case k_Token_%s_%s_%s:\n", recordName, m_name, dat->m_akaName);
+		}
 		if(dat->m_maxSize == k_MAX_SIZE_VARIABLE) {
 			
 			switch(dat->m_type) {
@@ -545,7 +611,7 @@ void MemberClass::ExportTokenCases(FILE *outfile, char *recordName)
 				case DATUM_STRINGID:
 					fprintf(outfile, "                if(!lex->GetStringIdAssignment(m_%s)) {\n", dat->m_name);
 					fprintf(outfile, "                    done = true; break;\n");
-					fprintf(outfile, "                \n");
+					fprintf(outfile, "                }\n");
 					break;
 				case DATUM_BIT:
 					fprintf(outfile, "                m_flags%d |= k_%s_%s_Bit;\n", dat->m_bitNum / 32,

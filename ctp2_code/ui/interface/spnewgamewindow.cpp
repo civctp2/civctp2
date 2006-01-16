@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single Player New game Start Screen
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,6 +29,7 @@
 // - Tribe index check updated.
 // - Allowed for a number of players less than 3 to be displayed
 //   - JJB 2005/06/28
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -50,7 +54,7 @@
 #include "c3_dropdown.h"
 #include "StrDB.h"
 #include "profileDB.h"
-#include "CivilisationDB.h"
+#include "CivilisationRecord.h"
 #include "CivilisationPool.h"
 #include "c3textfield.h"
 
@@ -65,7 +69,6 @@
 
 extern ProfileDB					*g_theProfileDB;
 extern StringDB						*g_theStringDB;
-extern CivilisationDatabase			*g_theCivilisationDB;
 extern LoadSaveMapWindow			*g_loadSaveMapWindow;
 
 
@@ -404,14 +407,14 @@ SPProfileBox::SPProfileBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) 
 	{
 		int i=0,numClans;
 		
-		numClans = g_theCivilisationDB->GetCivilisations();
+		numClans = g_theCivilisationDB->NumRecords();
 		
 		m_spClan		= spNew_c3_DropDown(retval,ldlBlock,"Clan",spnewgamescreen_clanSelect);
 
 		
 		while(i<numClans) {
 			aui_Item	*item = NULL;
-			const MBCHAR *cName = g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName(CIV_INDEX(i)));
+			const MBCHAR *cName = g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetPluralCivName());
 			item = (aui_Item*)new SPDropDownListItem(retval, "SPDropDownListItem", "Clan", cName);
 			if (item)
 				m_spClan->AddItem(item );
@@ -464,7 +467,7 @@ void SPProfileBox::SetLeader(uint32 index)
 	{
 		const MBCHAR *name =
 			g_theStringDB->GetNameStr(
-				g_theCivilisationDB->GetLeaderName(CIV_INDEX(index)));
+				g_theCivilisationDB->Get(index)->GetLeaderNameMale());
 
 		m_spName->SetFieldText(name);
 	}
