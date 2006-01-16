@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The battleview
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,83 +25,24 @@
 // Modifications from the original Activision code:
 //
 // - Removed refference to outdated special effect database. (Aug 26th 2005 Martin Gühmann)
+// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "aui_uniqueid.h"
 #include "aui_directsurface.h"
-#include "aui_control.h"
-#include "aui_ldl.h"
 #include "aui_blitter.h"
-#include "aui_stringtable.h"
-
 #include "c3ui.h"
-#include "c3_button.h"
-#include "c3window.h"
-#include "c3fancywindow.h"
-#include "c3_static.h"
-#include "c3_icon.h"
-
-#include "pointerlist.h"
-
-#include "pixelutils.h"
-#include "primitives.h"
-#include "colorset.h"
-
-#include "XY_Coordinates.h"
-#include "Army.h"
-#include "World.h"
-#include "ConstDB.h"
-
-
-
-#include "Cell.h"
-#include "cellunitlist.h"
-
-#include "Anim.h"
-#include "Action.h"
-#include "tileset.h"
-
-#include "gamesounds.h"
-#include "soundmanager.h"
-
-#include "player.h"
-
-#include "SpriteState.h"
-#include "SpriteStateDB.h"
-
-#include "EffectActor.h"
-#include "AgeRecord.h"
-
 #include "battleviewactor.h"
 #include "battleview.h"
 #include "battle.h"
-#include "battleviewwindow.h"
 #include "battleevent.h"
-
-#include "director.h"
-
-#include "tileset.h"
-#include "AgeRecord.h"
 #include "GameEventManager.h"
-
 #include "CTP2Combat.h"
 
 #include "aui_Factory.h"
 
 extern C3UI					*g_c3ui;
-extern ColorSet				*g_colorSet;
-extern SoundManager			*g_soundManager;
-extern World				*g_theWorld;
-extern ConstDB				*g_theConstDB;
-
-
-extern Player				**g_player;
-extern Director				*g_director;
-extern sint32				g_modalWindow;
-
-extern BattleViewWindow		*g_battleViewWindow;
 
 BattleView::BattleView()
 {

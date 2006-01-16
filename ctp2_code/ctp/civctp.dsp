@@ -216,7 +216,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                                          exist                                          R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                          copy                                          C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                          R:\ctp2_project\ctp2_code\ctp\                                         	rem                  if                                          exist                                          R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                          copy                                          C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                          R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                                            exist                                            R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                            copy                                            C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                            R:\ctp2_project\ctp2_code\ctp\                                           	rem                    if                                            exist                                            R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                            copy                                            C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                            R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -868,14 +868,6 @@ SOURCE=..\gfx\spritesys\SpriteState.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\gfx\spritesys\SpriteStateDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gfx\spritesys\SpriteStateDB.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\gfx\spritesys\spriteutils.cpp
 # End Source File
 # Begin Source File
@@ -1170,26 +1162,6 @@ SOURCE=..\gs\database\DiffDB.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\gs\database\EndGameDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\EndGameDB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\EndGameRecord.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\EndGameRecord.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\EndGameToken.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\gs\database\FilenameDB.cpp
 # End Source File
 # Begin Source File
@@ -1222,22 +1194,6 @@ SOURCE=..\gs\database\highscoredb.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\gs\database\InstDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\InstDB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\InstRec.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\InstRec.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\gs\database\MapDB.cpp
 # End Source File
 # Begin Source File
@@ -1263,14 +1219,6 @@ SOURCE=..\gs\database\MovieDB.cpp
 # Begin Source File
 
 SOURCE=..\gs\database\MovieDB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\OrderDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\OrderDB.h
 # End Source File
 # Begin Source File
 
@@ -1315,14 +1263,6 @@ SOURCE=..\gs\database\Rec.cpp
 # Begin Source File
 
 SOURCE=..\gs\database\Rec.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\RiskDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\RiskDB.h
 # End Source File
 # Begin Source File
 
@@ -5906,6 +5846,129 @@ SOURCE=..\gs\newdb\ResourceRecord.cpp
 # Begin Source File
 
 SOURCE=..\gs\newdb\ResourceRecord.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\Risk.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__RISK_="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Risk.cdb
+
+"$(ProjDir)\..\gs\newdb\RiskRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\RiskRecord.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\RiskRecord.h
 # End Source File
 # Begin Source File
 
@@ -13210,18 +13273,6 @@ SOURCE=..\ui\interface\spriteeditor.cpp
 # Begin Source File
 
 SOURCE=..\ui\interface\spriteeditor.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\ui\interface\spscreen.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\ui\interface\spwindow.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\ui\interface\spwindow.h
 # End Source File
 # Begin Source File
 

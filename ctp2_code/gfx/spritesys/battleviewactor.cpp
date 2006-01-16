@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Battle view actor handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,59 +17,39 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Prevented NULL-dereferencing crash.
+// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 
-#include "aui.h"
-#include "aui_surface.h"
-
-#include "TileInfo.h"
-
-#include "Unit.h"	
-#include "UnitData.h"
-#include "screenmanager.h"
-
-#include "FacedSprite.h"
-#include "UnitSpriteGroup.h"
 #include "SpriteState.h"
-#include "Actor.h"
 #include "SpriteGroupList.h"
 #include "tiledmap.h"
-#include "tileset.h"
-#include "Anim.h"
 #include "battleviewactor.h"
-#include "ActorPath.h"
-#include "Action.h"
-
-#include "director.h"
 #include "UnitPool.h"
-#include "SpriteStateDB.h"
 #include "primitives.h"
 
 #include "soundmanager.h"
 #include "colorset.h"
 
-extern SpriteGroupList	*g_unitSpriteGroupList;
-extern TiledMap			*g_tiledMap;
-extern Director			*g_director;
+extern SpriteGroupList  *g_unitSpriteGroupList;
+extern TiledMap         *g_tiledMap;
 extern UnitPool         *g_theUnitPool;
-extern World			*g_theWorld;
-extern ScreenManager	*g_screenManager;
-extern SpriteStateDB	*g_theCitySpriteStateDB;
-extern SoundManager		*g_soundManager;
-extern ColorSet			*g_colorSet;
+extern SoundManager     *g_soundManager;
+extern ColorSet         *g_colorSet;
 
 BattleViewActor::BattleViewActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner)
 : Actor(ss)
-{	
+{
 	uint32 spriteID;
 
 	GetIDAndType(owner, ss, id, unitType, pos, &spriteID, &m_type);

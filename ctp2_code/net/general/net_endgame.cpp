@@ -1,22 +1,82 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer endgame packet handling. This file looks like
+//                unused or not updated accordingly.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Removed old endgame database include file. (Aug 20th 2005 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 
 #include "net_endgame.h"
 #include "network.h"
 #include "Wormhole.h"
-#include "EndGame.h"
+#include "EndGame.h" // Not part of the project
 #include "net_util.h"
 #include "player.h"
-#include "EndGameDB.h"
 
 #include "pointerlist.h"
 
 extern Player **g_player;
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetEndGame::NetEndGame
+//
+// Description: Constructor
+//
+// Parameters : sint32 owner: The owner of the according endgame.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 NetEndGame::NetEndGame(sint32 owner)
 {
 	m_owner = (uint8)owner;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetEndGame::Packetize
+//
+// Description: Generate an application data packet to transmit.
+//
+// Parameters : buf         : buffer to store the message
+//
+// Globals    : -
+//
+// Returns    : size        : number of bytes stored in buf
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetEndGame::Packetize(uint8 *buf, uint16 &size)
 {
 	size = 0;
@@ -35,6 +95,23 @@ void NetEndGame::Packetize(uint8 *buf, uint16 &size)
 
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetEndGame::Unpacketize
+//
+// Description: Retrieve the data from a received application data packet.
+//
+// Parameters : id          : Sender identification?
+//              buf         : Buffer with received message
+//              size        : Length of received message (in bytes)
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetEndGame::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 {
 	uint16 pos = 0;
@@ -63,6 +140,21 @@ void NetEndGame::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetWormhole::Packetize
+//
+// Description: Generate an application data packet to transmit.
+//
+// Parameters : buf         : buffer to store the message
+//
+// Globals    : -
+//
+// Returns    : size        : number of bytes stored in buf
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetWormhole::Packetize(uint8 *buf, uint16 &size)
 {
 	size = 0;
@@ -95,6 +187,23 @@ void NetWormhole::Packetize(uint8 *buf, uint16 &size)
 	}
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetWormhole::Unpacketize
+//
+// Description: Retrieve the data from a received application data packet.
+//
+// Parameters : id          : Sender identification?
+//              buf         : Buffer with received message
+//              size        : Length of received message (in bytes)
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetWormhole::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 {
 	uint16 pos = 0;

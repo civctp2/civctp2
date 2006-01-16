@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Base DB Template class
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -72,6 +72,7 @@
 // - Added Serialize method for datachecks. (Aug 23rd 2005 Martin Gühmann)
 // - Records can now be also parsed as quoted string. (Aug 26th 2005 Martin Gühmann)
 // - The new databases can now be ordered alphabethical like the old ones. (Aug 26th 2005 Martin Gühmann)
+// - Added the new risk database. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -793,4 +794,7 @@ template class CTPDatabase<AgeCityStyleRecord>;
 
 #include "CivilisationRecord.h" // 35
 template class CTPDatabase<CivilisationRecord>;
+
+#include "RiskRecord.h" // 36
+template class CTPDatabase<RiskRecord>;
 #endif // __TILETOOL__

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Data check utility
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -26,6 +26,7 @@
 //
 // - Replced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Fixed the BeginTurn, DumpChecksum and DisplayCRC methods. (Aug 25th 2005 Martin Gühmann)
+// - Added the risk database. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -70,6 +71,7 @@
 #include "PollutionDB.h"               // Old database
 #include "PopRecord.h"
 #include "ResourceRecord.h"
+#include "RiskRecord.h"
 #include "SoundRecord.h"
 #include "SpecialAttackInfoRecord.h"
 #include "SpecialEffectRecord.h"
@@ -285,6 +287,7 @@ void DataCheck::BeginTurn(void)
 	g_thePollutionDB->Serialize(*archive);
 	g_thePopDB->Serialize(*archive);
 	g_theResourceDB->Serialize(*archive);
+	g_theRiskDB->Serialize(*archive);
 	g_theSoundDB->Serialize(*archive);
 	g_theSpecialAttackInfoDB->Serialize(*archive);
 	g_theSpecialEffectDB->Serialize(*archive);
@@ -360,6 +363,7 @@ void DataCheck::BeginTurn(void)
 	CHECK_DB(g_thePollutionDB, CRC_TYPE_POLLUTION_DB);
 	CHECK_DB(g_thePopDB, CRC_TYPE_POPULATION_DB);
 	CHECK_DB(g_theResourceDB, CRC_TYPE_RESOURCE_DB);
+	CHECK_DB(g_theRiskDB, CRC_TYPE_RISK_DB);
 	CHECK_DB(g_theSoundDB, CRC_TYPE_SOUND_DB);
 	CHECK_DB(g_theSpecialAttackInfoDB, CRC_TYPE_SPECIAL_ATTACK_INFO_DB);
 	CHECK_DB(g_theSpecialEffectDB, CRC_TYPE_SPECIAL_EFFECT_DB);
@@ -726,6 +730,7 @@ void DataCheck::DisplayCRC(aui_Surface *surf) const
 		draw_crc(surf, "POLLUTION", CRC_TYPE_POLLUTION_DB, x, y);                     y+=d;
 		draw_crc(surf, "POP", CRC_TYPE_POPULATION_DB, x, y);                          y+=d;
 		draw_crc(surf, "RESOURCE", CRC_TYPE_RESOURCE_DB, x, y);                       y+=d;
+		draw_crc(surf, "RISK", CRC_TYPE_RISK_DB, x, y);                               y+=d;
 		draw_crc(surf, "SOUND", CRC_TYPE_SOUND_DB, x, y);                             y+=d;
 		draw_crc(surf, "SPECIAL_ATTACK_INFO", CRC_TYPE_SPECIAL_ATTACK_INFO_DB, x, y); y+=d;
 		draw_crc(surf, "SPECIAL_EFFECT", CRC_TYPE_SPECIAL_EFFECT_DB, x, y);           y+=d;
@@ -809,6 +814,7 @@ void DataCheck::DumpChecksum(void)
 	DumpSingleCRC("POLLUTION", CRC_TYPE_POLLUTION_DB);
 	DumpSingleCRC("POP", CRC_TYPE_POPULATION_DB);
 	DumpSingleCRC("RESOURCE", CRC_TYPE_RESOURCE_DB);
+	DumpSingleCRC("RISK", CRC_TYPE_RISK_DB);
 	DumpSingleCRC("SOUND", CRC_TYPE_SOUND_DB);
 	DumpSingleCRC("SPECIAL_ATTACK_INFO", CRC_TYPE_SPECIAL_ATTACK_INFO_DB);
 	DumpSingleCRC("SPECIAL_EFFECT", CRC_TYPE_SPECIAL_EFFECT_DB);

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Army data handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,8 @@
 //
 // Compiler flags
 //
-// - None
+// _DEBUG
+// - Generate debug version when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -59,12 +61,9 @@
 #include "World.h"
 #include "player.h"
 #include "director.h"
-#include "CivPaths.h"
 #include "SelItem.h"
-#include "installationtree.h"
 
 #include "terrainutil.h"
-#include "installation.h"
 #include "RandGen.h"
 #include "Cell.h"
 #include "Agreement.h"
@@ -94,7 +93,6 @@
 #include "StrDB.h"
 #include "WonderRecord.h"
 #include "TerrainRecord.h"
-#include "SpriteStateDB.h"
 #include "GameSettings.h"
 
 #include "UnitRecord.h"
@@ -109,9 +107,6 @@
 #include "gamesounds.h"
 #include "Order.h"
 #include "cellunitlist.h"
-
-#include "CityAstar.h"
-extern CityAstar g_city_astar;
 
 #include "AgreementPool.h"
 extern AgreementPool *g_theAgreementPool;
@@ -150,7 +145,6 @@ extern Pollution *g_thePollution;
 BOOL g_smokingCrack = TRUE;
 BOOL g_useOrderQueues = TRUE;
 
-extern CivPaths *g_civPaths;
 extern RandomGenerator *g_rand ;
 extern QuadTree<Unit> *g_theUnitTree;
 extern UnitAstar *g_theUnitAstar;
@@ -170,9 +164,6 @@ extern SoundManager *g_soundManager;
 #include "profileDB.h"
 #include "Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog;
-
-#include "c3ui.h"
-extern C3UI *g_c3ui;
 
 namespace
 {
@@ -5917,9 +5908,9 @@ BOOL ArmyData::ExecuteOrders(bool propagate)
 		}
 
 #ifdef _DEBUG
-            if (g_theDiplomacyLog) { 
-                g_theDiplomacyLog->PopRegardRequest(); 
-            } 
+			if (g_theDiplomacyLog) {
+				g_theDiplomacyLog->PopRegardRequest(); 
+			}
 #endif // _DEBUG
 
 		if(!g_theArmyPool->IsValid(me)) {

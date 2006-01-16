@@ -3,8 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Checks weather the databases match in MP.
-//                Needs to be redone just checks 3 databases.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +26,7 @@
 //
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Fixed SerializeDBs method to fix the database in saync check. (Aug 25th 2005 Martin Gühmann)
+// - Added the risk database for sync check. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -70,6 +70,7 @@
 #include "PollutionDB.h"               // Old database
 #include "PopRecord.h"
 #include "ResourceRecord.h"
+#include "RiskRecord.h"
 #include "SoundRecord.h"
 #include "SpecialAttackInfoRecord.h"
 #include "SpecialEffectRecord.h"
@@ -228,16 +229,17 @@ sint32 NetCRC::SerializeDBs()
 	CHECKDB(g_thePollutionDB);         // 26
 	CHECKDB(g_thePopDB);               // 27
 	CHECKDB(g_theResourceDB);          // 28
-	CHECKDB(g_theSoundDB);             // 29
-	CHECKDB(g_theSpecialAttackInfoDB); // 30
-	CHECKDB(g_theSpecialEffectDB);     // 31
-	CHECKDB(g_theSpriteDB);            // 32
-	CHECKDB(g_theStrategyDB);          // 33
-	CHECKDB(g_theTerrainDB);           // 34
-	CHECKDB(g_theUnitDB);              // 35
-	CHECKDB(g_theUnitBuildListDB);     // 36
-	CHECKDB(g_theWonderDB);            // 37
-	CHECKDB(g_theWonderBuildListDB);   // 38
+	CHECKDB(g_theRiskDB);              // 29
+	CHECKDB(g_theSoundDB);             // 30
+	CHECKDB(g_theSpecialAttackInfoDB); // 31
+	CHECKDB(g_theSpecialEffectDB);     // 32
+	CHECKDB(g_theSpriteDB);            // 33
+	CHECKDB(g_theStrategyDB);          // 34
+	CHECKDB(g_theTerrainDB);           // 35
+	CHECKDB(g_theUnitDB);              // 36
+	CHECKDB(g_theUnitBuildListDB);     // 37
+	CHECKDB(g_theWonderDB);            // 38
+	CHECKDB(g_theWonderBuildListDB);   // 39
 	
 	return numchecked;
 }

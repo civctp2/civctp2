@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : SLIC functions
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 // - Improved argument checking of Get<Type> functions.
 // - AOM facilitation: set player[0] to the recipient when undefined.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
+// - Removed the old endgame database. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -124,9 +125,7 @@
 #include "AgreementPool.h"
 #include "net_action.h"
 #include "net_info.h"
-#include "EndGameDB.h"
 #include "MaterialPool.h"
-#include "SpriteStateDB.h"
 #include "SoundRecord.h"
 #include "CivilisationRecord.h"
 #include "civ3_main.h"
@@ -5331,6 +5330,9 @@ SFN_ERROR Slic_IsWonderInBuildList::Call(SlicArgList *args)
 
 SFN_ERROR Slic_IsEndgameInBuildList::Call(SlicArgList *args)
 {
+	return SFN_ERROR_BAD_FUNCTION;
+#if 0
+// Endgame now building wonder
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -5357,6 +5359,7 @@ SFN_ERROR Slic_IsEndgameInBuildList::Call(SlicArgList *args)
 		}
 	}
 	return SFN_ERROR_OK;
+#endif
 }
 
 SFN_ERROR Slic_IsUnitAtHead::Call(SlicArgList *args)
@@ -5508,6 +5511,9 @@ SFN_ERROR Slic_AddWonderToBuildList::Call(SlicArgList *args)
 
 SFN_ERROR Slic_AddEndgameToBuildList::Call(SlicArgList *args)
 {
+	return SFN_ERROR_BAD_FUNCTION;
+#if 0
+// Endgame now building wonder
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -5527,6 +5533,7 @@ SFN_ERROR Slic_AddEndgameToBuildList::Call(SlicArgList *args)
 
 	city.BuildEndGame(type);
 	return SFN_ERROR_OK;
+#endif
 }
 
 SFN_ERROR Slic_KillUnitFromBuildList::Call(SlicArgList *args)
@@ -5640,6 +5647,9 @@ SFN_ERROR Slic_KillWonderFromBuildList::Call(SlicArgList *args)
 
 SFN_ERROR Slic_KillEndgameFromBuildList::Call(SlicArgList *args)
 {
+	return SFN_ERROR_BAD_FUNCTION;
+#if 0
+// Endgame now building wonder
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -5671,6 +5681,7 @@ SFN_ERROR Slic_KillEndgameFromBuildList::Call(SlicArgList *args)
 		}
 	}
 	return SFN_ERROR_OK;
+#endif
 }
 
 SFN_ERROR Slic_SetPW::Call(SlicArgList *args)

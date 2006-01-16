@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Barbarian placement and generation
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,9 +27,9 @@
 // - Alter the algorithm used to place barbarians in single player games,
 //   making it the same as that used in multiplayer games - JJB 2004/12/13
 // - Add a NoBarbarian flag which makes the unit not appear as barbarian
+// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "Barbarians.h"
@@ -39,7 +42,7 @@
 #include "Advances.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "RiskDB.h"
+#include "RiskRecord.h"
 #include "profileDB.h"
 #include "network.h"
 #include "UnitDynArr.h"
@@ -76,7 +79,7 @@ BOOL SomeoneCanHave(const UnitRecord *rec)
 sint32 Barbarians::ChooseUnitType()
 {
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-	sint32 num_best_units = risk->m_barbarianUnitRankMin;
+	sint32 num_best_units = risk->GetBarbarianUnitRankMin();
 	BestUnit *best = new BestUnit[num_best_units];
 	sint32 i, j, k;
 	sint32 count = 0;
@@ -126,10 +129,10 @@ sint32 Barbarians::ChooseUnitType()
 		count = num_best_units;
 
 	sint32 rankMax;
-	if(risk->m_barbarianUnitRankMax >= count) {
+	if(risk->GetBarbarianUnitRankMax() >= count) {
 		rankMax = count - 1;
 	} else {
-		rankMax = risk->m_barbarianUnitRankMax;
+		rankMax = risk->GetBarbarianUnitRankMax();
 	}
 	sint32 whichbest = g_rand->Next(count - rankMax) + rankMax;
 	if(whichbest >= count)
@@ -147,8 +150,8 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 		return FALSE;
 
 
-	if(g_turn->GetRound() < g_theRiskDB->Get(g_theGameSettings->GetRisk())->m_firstBarbarianTurn ||
-	   g_turn->GetRound() >= g_theRiskDB->Get(g_theGameSettings->GetRisk())->m_lastBarbarianTurn) {
+	if(g_turn->GetRound() < g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianFirstTurn() ||
+	   g_turn->GetRound() >= g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianLastTurn()) {
 		return FALSE;
 	}
 
@@ -160,9 +163,9 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 
 	sint32 maxBarbarians;
 	if(fromGoodyHut) {
-		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->m_maxHutBarbarians - 1) + 1;
+		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetHutMaxBarbarians() - 1) + 1;
 	} else {
-		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->m_maxSpontaneousBarbarians - 1) + 1;
+		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians() - 1) + 1;
 	}
 
 	sint32 count = 0;
@@ -205,10 +208,10 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 void Barbarians::BeginYear()
 {
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-	if(g_turn->GetRound() < risk->m_firstBarbarianTurn)
+	if(g_turn->GetRound() < risk->GetBarbarianFirstTurn())
 		return;
 
-	if(g_rand->Next(10000) < risk->m_barbarianChance * 10000) {
+	if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
 		MapPoint point;
 		sint32 tries;
 		sint32 p;

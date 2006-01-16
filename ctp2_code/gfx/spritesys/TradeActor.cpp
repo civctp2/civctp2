@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Trade actor handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Prevented memory leaks and double deletes.
+// - The good sprite index is now retrieved from the resource database
+//   instead from the good sprite state database. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -47,7 +52,6 @@
 #include "Anim.h"
 #include "TradeActor.h"
 #include "GoodActor.h"
-#include "SpriteStateDB.h"
 #include "StrDB.h"
 
 #include "ActorPath.h"
@@ -58,7 +62,6 @@
 #include "ResourceRecord.h"
 
 extern SpriteGroupList	*g_goodSpriteGroupList;
-extern SpriteStateDB	*g_theGoodsSpriteStateDB;
 
 TradeActor::TradeActor(TradeRoute newRoute)
 {
@@ -80,13 +83,7 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	
 	Assert(g_goodSpriteGroupList);
 	
-	StringId id = g_theResourceDB->GetName(m_routeResource);
-	Assert(id);
-
-	MBCHAR *str = g_theStringDB->GetIdStr(id);
-	Assert(str);
-
-	sint32 index = g_theGoodsSpriteStateDB->GetDefaultVal(g_theGoodsSpriteStateDB->FindTypeIndex(str));
+	sint32 index = g_theResourceDB->Get(m_routeResource)->GetSpriteID();
 
 	m_goodSpriteGroup = (GoodSpriteGroup *)g_goodSpriteGroupList->GetSprite(index, type, LOADTYPE_BASIC,(GAME_ACTION)0);
 

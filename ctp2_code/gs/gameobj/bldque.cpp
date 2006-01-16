@@ -28,6 +28,7 @@
 // - Players are now notified if someone starts to build the first wonder
 //   from the database. - Feb. 23rd 2005 Martin Gühmann
 // - Added assignment operator. - Jul 16th 2005 Martin Gühmann
+// - Removed old endgame database, doesn't seem to be uses. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -70,7 +71,6 @@
 
 #include "WonderTracker.h"
 #include "wondermoviewin.h"
-#include "EndGameDB.h"
 #include "DiffDB.h"
 
 #include "controlpanelwindow.h"
@@ -738,7 +738,7 @@ void BuildQueue::FinishBuildFront(Unit &u)
 					} else {
 						so = new SlicObject("38EndgameBuilt");
 					}
-					so->AddAction(g_theStringDB->GetNameStr(g_theEndGameDB->Get(m_list->GetHead()->m_type)->m_name));
+	//				so->AddAction(g_theStringDB->GetNameStr(g_theEndGameDB->Get(m_list->GetHead()->m_type)->m_name));
 					break;
 				default:
 					Assert(FALSE);
@@ -779,7 +779,7 @@ void BuildQueue::FinishBuildFront(Unit &u)
 						so->AddAction(g_theStringDB->GetNameStr(wonderutil_Get(next->m_type)->m_name));
 						break;
 					case k_GAME_OBJ_TYPE_ENDGAME_OBJECT:
-						so->AddAction(g_theStringDB->GetNameStr(g_theEndGameDB->Get(next->m_type)->m_name));
+//						so->AddAction(g_theStringDB->GetNameStr(g_theEndGameDB->Get(next->m_type)->m_name));
 						break;
 					case k_GAME_OBJ_TYPE_CAPITALIZATION:
 						so->AddAction(g_theStringDB->GetNameStr("CAPITALIZATION"));
@@ -1202,7 +1202,7 @@ double BuildQueue::GetTypeCoeff() const
 		case k_GAME_OBJ_TYPE_UNIT: return grec->GetUnitRushModifier();
 		case k_GAME_OBJ_TYPE_IMPROVEMENT: return grec->GetBuildingRushModifier();
 		case k_GAME_OBJ_TYPE_WONDER: return grec->GetWonderRushModifier();
-		case k_GAME_OBJ_TYPE_ENDGAME_OBJECT: return grec->GetEndGameRushModifier();
+//		case k_GAME_OBJ_TYPE_ENDGAME_OBJECT: return grec->GetEndGameRushModifier();
 		default:
 			return 1.0;
 	}
@@ -1274,8 +1274,8 @@ void BuildQueue::Dump(const sint32 shieldstore, MBCHAR *s)
 				strcat(s, g_theStringDB->GetNameStr(wonderutil_Get(node->m_type)->m_name)) ;
 				break ;
 			case k_GAME_OBJ_TYPE_ENDGAME_OBJECT:
-				strcat(s, g_theStringDB->GetNameStr(g_theEndGameDB->Get(node->m_type)->m_name));
-				break;
+//				strcat(s, g_theStringDB->GetNameStr(g_theEndGameDB->Get(node->m_type)->m_name));
+//				break;
 
 			default :
 				Assert(0) ;
@@ -1533,7 +1533,7 @@ sint32 BuildQueue::GetCost(sint32 cat, sint32 t)
 		case k_GAME_OBJ_TYPE_IMPROVEMENT:
 			return g_theBuildingDB->Get(t)->GetProductionCost();
 		case k_GAME_OBJ_TYPE_ENDGAME_OBJECT:
-			return g_theEndGameDB->Get(t)->GetCost();
+//			return g_theEndGameDB->Get(t)->GetCost();
 		default:
 			return 0x7fffffff;
 	}

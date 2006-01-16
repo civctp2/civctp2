@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Tile map handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -38,6 +39,8 @@
 // - Improved destructor (useless code removed, corrected delete [])
 // - Removed .NET compiler warnings. - April 23rd 2005 Martin Gühmann
 // - Prevented crashes on game startup and exit.
+// - The good sprite index is now retrieved from the resource database 
+//   instaed of good sprite state database. (Aug 29th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -73,7 +76,6 @@
 #include "MapPoint.h"
 #include "UnseenCell.h"
 #include "GoodyHuts.h"
-#include "SpriteStateDB.h"
 #include "TerrainRecord.h"
 #include "StrDB.h"
 
@@ -155,58 +157,57 @@
 #include "radarwindow.h"
 #include "ctp2_Window.h"
 
-extern World		*g_theWorld;
-extern UnitPool		*g_theUnitPool;
+extern World            *g_theWorld;
+extern UnitPool         *g_theUnitPool;
 
-extern ColorSet			*g_colorSet;
-extern CivPaths			*g_civPaths;
-extern Player			**g_player;
-extern C3UI				*g_c3ui;
-extern sint32			g_is565Format;
-extern SelectedItem		*g_selected_item;
-extern Director			*g_director;
-extern Background		*g_background;
-extern RadarMap			*g_radarMap;
-extern RECT				g_backgroundViewport;
-extern ScreenManager	*g_screenManager;
-extern SpriteStateDB	*g_theGoodsSpriteStateDB;
-extern StringDB			*g_theStringDB;
+extern ColorSet         *g_colorSet;
+extern CivPaths         *g_civPaths;
+extern Player           **g_player;
+extern C3UI             *g_c3ui;
+extern sint32           g_is565Format;
+extern SelectedItem     *g_selected_item;
+extern Director         *g_director;
+extern Background       *g_background;
+extern RadarMap         *g_radarMap;
+extern RECT             g_backgroundViewport;
+extern ScreenManager    *g_screenManager;
+extern StringDB         *g_theStringDB;
 extern ControlPanelWindow *g_controlPanel;
 extern TurnCount        *g_turn;
-extern ArmyPool			*g_theArmyPool;
+extern ArmyPool         *g_theArmyPool;
 extern SpriteEditWindow *g_spriteEditWindow;
 
 
-extern GrabItem			*g_grabbedItem;
-extern sint32			g_tradeSelectedState;
+extern GrabItem         *g_grabbedItem;
+extern sint32           g_tradeSelectedState;
 
-extern sint32			g_fog_toggle;
-extern sint32			g_god; 
+extern sint32           g_fog_toggle;
+extern sint32           g_god; 
 
-extern sint32		g_isCheatModeOn;
+extern sint32           g_isCheatModeOn;
 
-extern sint32		g_isCityPadOn;
+extern sint32           g_isCityPadOn;
 
-sint32		g_unitNum = -1;
-sint32		g_cityNum = -1;
-BOOL g_killMode = FALSE;
+sint32                  g_unitNum = -1;
+sint32                  g_cityNum = -1;
+BOOL                    g_killMode = FALSE;
 
-extern sint32		g_toolbarCurPlayer;	
+extern sint32           g_toolbarCurPlayer; 
 
-extern sint32		g_isLegalMode;
+extern sint32           g_isLegalMode;
 
-sint32		g_tileImprovementMode = 0;
-extern sint32		g_specialAttackMode;
-extern ProfileDB	*g_theProfileDB; 
-extern TiledMap		*g_tiledMap;
-
-
+sint32                  g_tileImprovementMode = 0;
+extern sint32           g_specialAttackMode;
+extern ProfileDB        *g_theProfileDB; 
+extern TiledMap         *g_tiledMap;
 
 
-BOOL	g_isTransportOn = FALSE;
 
-extern BOOL g_show_ai_dbg; 
-extern sint32				g_modalWindow;
+
+BOOL                    g_isTransportOn = FALSE;
+
+extern BOOL             g_show_ai_dbg; 
+extern sint32           g_modalWindow;
 
 Pixel16 tcolor;
 
@@ -366,10 +367,10 @@ TiledMap::~TiledMap()
 	delete m_mapDirtyList;
 	delete m_localVision;
 	delete m_tileSet;
-	// m_surface	    not deleted: reference only			
+	// m_surface        not deleted: reference only
 	// m_surfBase       not deleted: reference only
 	// m_overlayRec     not deleted: reference only
-	// m_lockedSurface  not deleted: reference only	
+	// m_lockedSurface  not deleted: reference only
 }
 
 sint32 TiledMap::Initialize(RECT *viewRect)
@@ -1364,30 +1365,14 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 {
 	uint8			index;
 	sint32			goodIndex;
-	sint32			goodSpriteID;
 
 	if (theTileInfo->HasGoodActor())
 		theTileInfo->DeleteGoodActor();
 
 	
 	
-	if (g_theWorld->IsGood(pos)) {
-		
-		
-		MBCHAR name[_MAX_PATH];
-		g_theWorld->GetCell(pos)->GetGoodsIndex(goodIndex);
-		strcpy(name, g_theTerrainDB->Get(g_theWorld->GetTerrainType(pos))->GetResources(goodIndex)->GetIDText());
-
-		
-		
-		
-		sint32 goodSpriteIndex = g_theGoodsSpriteStateDB->FindTypeIndex(name);
-		Assert(goodSpriteIndex >= 0);
-		if (goodSpriteIndex >= 0) {
-			goodSpriteID = g_theGoodsSpriteStateDB->GetDefaultVal(goodSpriteIndex);
-			if (goodSpriteID >= 0)
-				theTileInfo->SetGoodActor(goodSpriteID, pos);
-		}
+	if(g_theWorld->GetGood(pos, goodIndex)) {
+		theTileInfo->SetGoodActor(g_theResourceDB->Get(goodIndex)->GetSpriteID(), pos);
 	}
 
 	index = static_cast<uint8>(g_theWorld->GetTerrain(pos.x, pos.y));
