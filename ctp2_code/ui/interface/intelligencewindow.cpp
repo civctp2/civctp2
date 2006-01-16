@@ -26,6 +26,7 @@
 //
 // - Update the state of the embargo and war buttons after confirmation.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Moved cleanup of statics into the the cleanup method. (Sep 14th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -135,15 +136,6 @@ IntelligenceWindow::~IntelligenceWindow()
 	aui_Ldl::DeleteHierarchyFromRoot(s_intelligenceAdviceBlock);
 	m_adviceWindow = NULL;
 
-	if(sm_strengthImages) {
-		delete sm_strengthImages;
-		sm_strengthImages = NULL;
-	}
-
-	if(sm_embassyImages) {
-		delete sm_embassyImages;
-		sm_embassyImages = NULL;
-	}
 }
 
 AUI_ERRCODE IntelligenceWindow::Initialize()
@@ -175,6 +167,16 @@ AUI_ERRCODE IntelligenceWindow::Cleanup()
 
 		aui_Ldl::DeleteHierarchyFromRoot("IntelTreatyDetail");
 		sm_showTreatyDetail = NULL;
+	}
+
+	if(sm_strengthImages) {
+		delete sm_strengthImages;
+		sm_strengthImages = NULL;
+	}
+
+	if(sm_embassyImages) {
+		delete sm_embassyImages;
+		sm_embassyImages = NULL;
 	}
 
 	return AUI_ERRCODE_OK;

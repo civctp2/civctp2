@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Stack class structure implementation for debugging stack.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -37,7 +37,8 @@
 // - Fix unreferenced warnings in regular compilation by placing intialization
 //   of buff and err inside #ifndef statements.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//     
+// - Added alternative show leaks function. (Sep 15th 2005 Martin Gühmann)
+//
 //////////////////////////////////////////////////////////////////////////////
 
 #include "c3.h"
@@ -679,7 +680,24 @@ void DebugCallStack_Show  (LogClass log_class, unsigned *call_stack, int number)
 #endif
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : DebugCallStack_ShowToFile
+//
+// Description: Writes the leaks report to a file in up-down wise.
+//
+// Parameters : LogClass log_class:   Unused
+//              unsigned *call_stack: The call stack with unfreed memory.
+//              int number:           The number of calls from the stack to report
+//              FILE *file:           File to write the leak report
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void DebugCallStack_ShowToFile  (LogClass log_class, unsigned *call_stack, int number, FILE *file)
 {
 #ifdef WIN32
@@ -715,12 +733,57 @@ void DebugCallStack_ShowToFile  (LogClass log_class, unsigned *call_stack, int n
 #endif
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : DebugCallStack_ShowToAltFile
+//
+// Description: Writes the leaks report to a file in bottom-up wise.
+//
+// Parameters : LogClass log_class:   Unused
+//              unsigned *call_stack: The call stack with unfreed memory.
+//              int number:           The number of calls from the stack to report
+//              FILE *file:           File to write the leak report
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void DebugCallStack_ShowToAltFile  (LogClass log_class, unsigned *call_stack, int number, FILE *file)
+{
+	unsigned caller;         
+	char *caller_name;       
+	int index = 3;
+	
+	char buff[8196];
+	char cpyBuff[8196];
+	
+	caller = call_stack[index];
+	int offset;		
+	caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
+	sprintf(buff, "[%s]", caller_name, buff);
+	index++;
+	
+	while ((index < number) && (call_stack[index] != 0)) {
+		
+		
+		caller = call_stack[index];
+		int offset;
+		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
+		
+		strcpy(cpyBuff, buff);
+		sprintf(buff, "[%s] %s", caller_name, cpyBuff);
+		
+		
+		
+		index++;
+	}
 
-
-
-
-
-
+	fprintf(file, "%s", buff);
+	fprintf(file, "\n");
+}
 
 char * c3debug_StackTrace(void)
 {

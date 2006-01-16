@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit & city sprite handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// __MAKESPR__
+// - Probably supposed to generate the sprite make tool.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,6 +30,7 @@
 // - Moved common SpriteGroup member handling to SpriteGroup.
 // - Removed Assert to make mod battles less tedious to debug.
 // - Cleaned up some superfluous tests.
+// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
@@ -84,9 +89,9 @@ UnitSpriteGroup::~UnitSpriteGroup()
 
 void UnitSpriteGroup::DeallocateStorage(void)
 {
-	for (int i=UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
+	for (sint32 i = UNITACTION_MOVE; i < UNITACTION_MAX; i++) 
 	{
-	    delete m_sprites[i];
+		delete m_sprites[i];
 		m_sprites[i] = NULL;
 	}
 }
@@ -100,13 +105,10 @@ void UnitSpriteGroup::DeallocateStorage(void)
 
 void UnitSpriteGroup::DeallocateFullLoadAnims(void)
 {
-	for (sint32 i = UNITACTION_MOVE + 1; i < UNITACTION_MAX; i++) 
+	for (sint32 i = UNITACTION_MOVE; i < UNITACTION_MAX; i++) 
 	{
-		if (i != UNITACTION_IDLE) 
-		{
-			delete m_anims[i];
-			m_anims[i] = NULL;
-		}
+		delete m_anims[i];
+		m_anims[i] = NULL;
 	}
 }
 

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header file
-// Description  :
+// Description  : Debug call stack
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -18,10 +18,14 @@
 //
 // Compiler flags
 //
+// HAVE_PRAGMA_ONCE
+// __cplusplus
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
+// - Added alternative show leaks function. (Sep 15th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -46,6 +50,7 @@ void DebugCallStack_Save  (unsigned *call_stack, int number, unsigned long Ebp);
 
 void DebugCallStack_Show  (LogClass log_class, unsigned *call_stack, int number);
 void DebugCallStack_ShowToFile  (LogClass log_class, unsigned *call_stack, int number, FILE *file);
+void DebugCallStack_ShowToAltFile  (LogClass log_class, unsigned *call_stack, int number, FILE *file);
 
 void *Debug_GetFAFirst(void);
 void Debug_SetFAFirst(void *ptr);

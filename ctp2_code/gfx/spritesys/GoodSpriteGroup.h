@@ -1,16 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Good sprite handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed memory leaks.
+//
+//----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -41,6 +57,9 @@ public:
 	GoodSpriteGroup(GROUPTYPE type);
 	virtual ~GoodSpriteGroup();
 
+	void			DeallocateStorage(void);
+	void			DeallocateFullLoadAnims(void);
+
 	void			LoadBasic(char *filename);
 	void			LoadFull(char *filename);
 
@@ -61,23 +80,13 @@ public:
 
 
 
-
-
-
-
-
- 
 	POINT			GetHotPoint(GOODACTION action);
 
 
- 
 	
 	sint32			Parse(uint16 id,GROUPTYPE group);
 
 private:
-
-
-
 
 
 };
