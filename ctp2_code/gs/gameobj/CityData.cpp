@@ -62,7 +62,7 @@
 // - Updated NeedMoreFood function for better estimation. 
 //   - April 4th 2005 Martin Gühmann
 // - Changed CollectResources to add in the food, production, and gold from the resource. 
-// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
+// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, ideally 
 //   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
 // - Track city growth with updated TurnsToNextPop method - PFT 29 mar 05
 // - Improved running time of TurnsToNextPop method and removed superflous call
@@ -105,10 +105,11 @@
 // - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
 // - Implemented EnablesGood for buildings, wonders and tile improvements now they 
 //   give goods to a city by E November 5th 2005
-// - To ProcessFood,ProcessProduction,ProcessGold, ProcessScience added a check that 
-//   if a city has or is buying a good than you can get a bonus. EfficiencyOrCrime 
-//   flag affects all four.  - added by E November 5th 2005
+// - Goodexport Bonuses - To ProcessFood,ProcessProduction,ProcessGold, ProcessScience 
+//   added a check that if a city has or is buying a good than you can get a bonus. 
+//   EfficiencyOrCrime flag affects all four.  - added by E November 5th 2005
 // - Corrected building maintenance deficit spending handling.
+// - Correct GoodExport bonuses (thanks fromafar) by E 11-Jan-2006
 //     
 //----------------------------------------------------------------------------
 
@@ -1643,6 +1644,30 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 		gross_production += LaborerCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_LABORER], g_player[m_owner]->GetGovernmentType())->GetProduction();
 	}
+//Added by E - EXPORT BONUSES TO GOODS if has good than a production bonus	Finally Works! 1-13-2006
+//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
+	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+	{
+		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		{
+			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
+			if (goodData)
+			{
+				double goodBonus;
+				if (goodData->GetProductionPercent(goodBonus))
+				{
+					gross_production += static_cast<sint32>(ceil(gross_production * goodBonus));
+				}
+
+				double goodEfficiency;
+				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+				{
+					gross_production += static_cast<sint32>(ceil(gross_production * goodEfficiency));
+				}
+			}
+		}
+	}
+// end EMOD
 
 	return ComputeProductionLosses(static_cast<sint32>(gross_production), crime_loss, franchise_loss);
 }
@@ -1755,29 +1780,7 @@ sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, 
 	}
 	
 
-//Added by E - EXPORT BONUSES TO GOODS if has good than a production bonus	
-//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
-	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
-	{
-		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
-		{
-			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
-			if (goodData)
-			{
-				double goodBonus;
-				if (goodData->GetProductionPercent(goodBonus))
-				{
-					grossProduction += static_cast<sint32>(ceil(grossProduction * goodBonus));
-				}
-
-				double goodEfficiency;
-				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
-				{
-					grossProduction += static_cast<sint32>(ceil(grossProduction * goodEfficiency));
-				}
-			}
-		}
-	}
+//EMOD removed (ProductionPercent didnt work here
 
 	return shields;
 }
@@ -2067,7 +2070,7 @@ void CityData::CollectResources()
 		}
 
 
-// Added by E (10-29-2005) - If a tileimp
+// Added by E (10-29-2005) - If a tileimp has enablegood then give to city
 
 		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
 		sint32 imp = cell->GetDBImprovement(i);
@@ -2532,6 +2535,31 @@ double CityData::ProcessGold(sint32 gold) const
 	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
 	grossGold += static_cast<double>(goldPerCitizen * PopCount());
 
+//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
+//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
+	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+	{
+		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		{
+			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
+			if (goodData)
+			{
+				double goodBonus;
+				if (goodData->GetCommercePercent(goodBonus))
+				{
+					grossGold += static_cast<sint32>(ceil(grossGold * goodBonus));
+				}
+
+				double goodEfficiency;
+				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+				{
+					grossGold += static_cast<sint32>(ceil(grossGold * goodEfficiency));
+				}
+			}
+		}
+	}
+
+
 	return grossGold;
 }
 
@@ -2584,6 +2612,33 @@ double CityData::ProcessScie(sint32 science) const
 	///////////////////////////////////////////////
 	// Add science from citizen
 	// No science from citizen. Maybe something to add.
+
+
+//Added by E - EXPORT BONUSES TO GOODS if has good than a science bonus	
+//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
+	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+	{
+		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		{
+			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
+			if (goodData)
+			{
+				double goodBonus;
+				if (goodData->GetSciencePercent(goodBonus))
+				{
+					grossScience += static_cast<sint32>(ceil(grossScience * goodBonus));
+				}
+
+				double goodEfficiency;
+				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+				{
+					grossScience += static_cast<sint32>(ceil(grossScience * goodEfficiency));
+				}
+			}
+		}
+	}
+
+
 
 	if(grossScience < 0.0) {
 		grossScience = 0.0;
@@ -2765,6 +2820,7 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 			g_thePopDB->Get(m_specialistDBIndex[POP_FARMER], g_player[m_owner]->GetGovernmentType())->GetFood();
 	}
 
+// This seemed to work though...
 //Added by E - EXPORT BONUSES TO GOODS This gives a bonus of food	
 // TODO: check. GetFoodPercent returns a bool. You probably want the value!
 	sint32 good;
@@ -4207,6 +4263,12 @@ double CityData::GetDefendersBonusNoWalls() const
 {
 	double b;
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), b);
+
+// EMOD - add influence or culture defese bonus here?
+// EMOD - compute reductions in defense by siege units here?
+
+
+
 	return b;
 }
 
@@ -4523,6 +4585,28 @@ void CityData::SetCapitol(const BOOL delay_registration)
 		}
 	}
 }
+
+//  Added by E to add religions?
+//BOOL CityData::IsHolyCity() const
+//{
+//	return Wonderutil_GetDesignatesHolyCity(g_player[m_owner]->m_builtWonders);
+//  }
+
+//void CityData::SetCapitol(const BOOL delay_registration)
+//{
+//	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+//		if(g_theWonderDB->Get(i, g_player[m_owner]->GetReligionType())->GetHolyCity()) {
+//			
+//			m_builtWonders |= ((uint64)1 << i);
+//
+//			if (!delay_registration) { 
+//				g_player[m_owner]->RegisterCreateBuilding(m_home_city, i);
+//				g_player[m_owner]->RegisterNewCapitolBuilding(m_home_city);
+//			}
+//			return;
+//		}
+//	}
+//}
 
 void CityData::MakeFranchise(sint32 player)
 {
@@ -6035,25 +6119,6 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	sci = sci * g_player[m_home_city.GetOwner()]->GetKnowledgeCoef();
 	sci += sci * static_cast<double>(wonderutil_GetIncreaseKnowledgePercentage(g_player[m_home_city.GetOwner()]->GetBuiltWonders())) / 100.0;
 	
-//Added by E - EXPORT BONUSES TO GOODS This gives a bonus of food	
-// TODO: check. GetSciencePercent returns a bool. You probably want the value!
-	sint32 good;
-	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
-		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
-			sci += ceil(sci * (g_theResourceDB->Get(good))->GetSciencePercent());		
-		}
-	}
-
-//Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
-// TODO: check. GetEfficiencyOrCrime returns a bool. You probably want the value!
-	sint32 g;
-	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
-		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
-			sci += ceil(sci * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
-		}
-	}
-	
-	
 	if(!considerOnlyFromTerrain
 	&& m_specialistDBIndex[POP_SCIENTIST] >= 0 
 	&& m_specialistDBIndex[POP_SCIENTIST] < g_thePopDB->NumRecords()) {
@@ -7412,30 +7477,32 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_MERCHANT] >= 0) {
 		gold += MerchantCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT], g_player[m_owner]->GetGovernmentType())->GetCommerce();
+
 	}
+// did this old Gold bonus work?
 //Added by E - EXPORT BONUSES TO GOODS This gives a bonus of gold	
 //Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
-	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
-	{
-		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
-		{
-			ResourceRecord const * goodData	= g_theResourceDB->Get(good);
-			if (goodData)
-			{
-				double	goodBonus;
-				if (goodData->GetCommercePercent(goodBonus))
-				{
-					gold += static_cast<sint32>(ceil(gold * goodBonus));
-				}
-
-				double goodEfficiency;
-				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
-				{
-					gold += static_cast<sint32>(ceil(gold * goodEfficiency));
-				}
-			}
-		}
-	}
+//	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+//	{
+//		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+//		{
+//			ResourceRecord const * goodData	= g_theResourceDB->Get(good);
+//			if (goodData)
+//			{
+//				double	goodBonus;
+//				if (goodData->GetCommercePercent(goodBonus))
+//				{
+//					gold += static_cast<sint32>(ceil(gold * goodBonus));
+//				}
+//
+//				double goodEfficiency;
+//				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+//				{
+//					gold += static_cast<sint32>(ceil(gold * goodEfficiency));
+//				}
+//			}
+//		}
+//	}
 }
 
 //----------------------------------------------------------------------------

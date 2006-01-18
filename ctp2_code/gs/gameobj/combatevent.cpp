@@ -20,13 +20,17 @@ extern C3UI *g_c3ui;
 
 STDEHANDLER(RunCombatEvent)
 {
-	Army a;
-	MapPoint p;
+	Army army;
+	MapPoint pos;
 	sint32 attacker, defender;
 
-	if(!args->GetArmy(0, a))
+	if(!args->GetArmy(0, army))
 		return(GEV_HD_Continue);
-	if(!args->GetPos(0, p))
+
+	//
+		args->GetArmy(0, army);
+	//
+	if(!args->GetPos(0, pos))
 		return(GEV_HD_Continue);
 	if(!args->GetPlayer(0, attacker))
 		return(GEV_HD_Continue);
@@ -45,24 +49,31 @@ STDEHANDLER(RunCombatEvent)
     }
     else if (g_theCurrentBattle->IsDone()) 
     {
+           
+
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_BattleAftermath,
-							   GEA_Army, a, 
-                               GEA_MapPoint, p, 
-                               GEA_Unit, a[0],
-							   GEA_Unit, g_theWorld->GetCell(p)->AccessUnit(0),
+							   GEA_Army, army, 
+                               GEA_MapPoint, pos, 
+                               GEA_Unit, army[0],
+							   GEA_Unit, g_theWorld->GetCell(pos)->AccessUnit(0),
 							   GEA_Player, attacker, 
                                GEA_Player, defender,
 							   GEA_Int, 1, 
 							   GEA_End
-                              );
+                               );
+
+
+// EMOD - Add SneakAttack here?
+
+
 		g_theCurrentBattle->KillUnits();
 //	    g_director->DecrementPendingGameActions();
 	} 
     else 
     {	
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_RunCombat,
-							   GEA_Army, a, 
-                               GEA_MapPoint, p,
+							   GEA_Army, army, 
+                               GEA_MapPoint, pos,
 							   GEA_Player, attacker, 
                                GEA_Player, defender,
 							   GEA_End

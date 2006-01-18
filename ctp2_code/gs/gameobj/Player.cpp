@@ -70,6 +70,7 @@
 // - NeedsCityGoodAnyCity code added to CanBuildUnit; limits unit construction by 
 //   comparing a unit's NeedscityGoodAnyCity flag to a player's cities if they have a good. 
 //   by E October 23 2005
+// - TODO add readiness modifier for building upkeep in CalcTotalBuildingUpkeep? 1-17-2006
 //
 //----------------------------------------------------------------------------
 
@@ -2225,6 +2226,10 @@ sint32 Player::CalcTotalBuildingUpkeep()
 		Unit *c = &(m_all_cities->Access(i));
 		bu += buildingutil_GetTotalUpkeep(c->GetImprovements(),
 		                                  wonderLevel);
+
+//    EMOD    	add new readiness modifier for buildings here?
+// 		bu *= GetSupportModifier(g_player[m_owner]->GetGovernmentType()
+
 	}		 
 
 	return(bu);

@@ -349,6 +349,7 @@ Unit {
 	Bit SpaceCityCanBuild
 	Bit IsSpecialForces
       Bit IsPeaceKeeper
+	  Bit IsGuerrilla  //EMOD
 	Bit IsWorker //future use -- with TerrImp flag NeedsWorker to limit certain imps or Civ3-like mods
 	Bit NotAffectedByLandMines
 	Bit InternalReserved

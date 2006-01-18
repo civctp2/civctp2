@@ -1555,6 +1555,9 @@ BOOL ArmyData::CanFight(CellUnitList &defender)
             if(rec->GetCanAttack() & defender[j].GetDBRec()->GetMovementType())
                 return TRUE;
 
+// EmOD add CantBeAttacked / Peacekeeper here??
+// Add Peacekeeper wonder flag where if you are at peace the enemy cant declare war and cant attack your troops?
+
             if(!defender[j].GetDBRec()->GetMovementTypeSea() && !defender[j].GetDBRec()->GetMovementTypeAir() &&
                g_theWorld->IsWater(pos) &&
                (rec->GetCanAttack() &
@@ -4678,17 +4681,6 @@ BOOL ArmyData::CanPillage(uint32 & uindex) const
 	Cell *cell = g_theWorld->GetCell(pos);
 
 
-	//NOT WORKING...added by E for Visible Wonders and Urban Sprawl 
-	//const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get();
-	//if(rec->CantPillage()) {
-	//		return false;
-	//}
-	//OR THIS? TerrainImprovementRecord::GetCantPillage
-	//const TerrainImprovementRecord::Effect *eff;
-	//	eff = terrainutil_GetTerrainEffect(rec, cell->GetTerrain());
-	//	if(!eff)
-	//		return false;
-
 	sint32 num_improvements = cell->GetNumDBImprovements();
 	if (num_improvements <= 0) {
 		
@@ -4742,6 +4734,19 @@ BOOL ArmyData::CanPillage() const
 			return false;
 		}
 	}
+
+
+
+//EMOD - this doesnt work STILL  1-17-2006
+//	for(sint32 j = 0; j < cell->GetNumDBImprovements(); j++) {
+		sint32 imp = cell->GetNumImprovements();
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+
+			if(trec->GetCantPillage()){ 
+			return false;
+			}
+//	}
+
 
 	return true;
 }
@@ -5190,6 +5195,19 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 			}
 
 //EMOD
+			
+			// Add wondercheck for EnablesPunativeAirstrikes
+////////////////////////
+//		for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
+//			if(!g_player[c.GetOwner()]->m_builtWonders & ((uint64)1 << (uint64)i))
+//				continue;
+//
+//			if(wonderutil_Get(i)->GetEnablesPunativeAirstrikes()) {
+//				so->AddWonder(i);
+//				break;
+//			}
+//		}
+//////////////////////
 			if(!m_array[i].GetDBRec()->GetSneakBombard()) {  //EMOD added by E for sneak bombarding
 
 				Diplomat & defending_diplomat = Diplomat::GetDiplomat(c.GetOwner());
@@ -5284,6 +5302,21 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 				numAttacks++;
 				if(numAttacks == 1){
                     // Inform defender 
+
+					//EMOD
+					// add WonderCheck for EnablesPunativeAirstrikes
+////////////////////////
+//		for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
+//			if(!g_player[c.GetOwner()]->m_builtWonders & ((uint64)1 << (uint64)i))
+//				continue;
+//
+//			if(wonderutil_Get(i)->GetEnablesPunativeAirstrikes()) {
+//				so->AddWonder(i);
+//				break;
+//			}
+//		}
+//////////////////////
+
 					PLAYER_INDEX defense_owner = defender.GetOwner();
 					if(!m_array[i].GetDBRec()->GetSneakBombard()) {  //EMOD added by E for sneak bombarding
 						Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
@@ -6670,6 +6703,28 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 		!g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
 		!g_player[m_owner]->WillViolatePact(defense_owner) &&
 		CanFight(defender)) { 
+
+///////////////////////////////////
+//
+//  THe WillViolate stuff might have to change to !AtWar?
+//
+// EMOD add a pop up here?
+//	SlicObject *so;
+//	if(g_network.IsActive() && g_network.TeamsEnabled() &&
+//	   g_player[m_owner]->m_networkGroup == g_player[defense_owner]->m_networkGroup) {
+//		so = new SlicObject("110aCantAttackTeammates");
+//	} else if(!IsEnemy(defense_owner)) {
+//	so = new SlicObject("110bCantAttackHaveTreaty");
+//	so->AddRecipient(m_owner);
+//	so->AddCivilisation(defense_owner);
+//	so->AddUnit(m_array[0]);
+//	so->AddLocation(pos);
+//	so->AddOrder(order);
+//	g_slicEngine->Execute(so);
+//	g_selected_item->ForceDirectorSelect(Army(m_id));
+//	return FALSE;
+//
+//////////////////////////////
 		
 		InformAI(UNIT_ORDER_FINISH_ATTACK, pos); 
 
@@ -7888,8 +7943,10 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 
 	if(defenderSucks) {
 		
+
 		if(ta.IsValid()) {
 			g_director->AddAttack(ta, td);
+			
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 								   GEV_BattleAftermath,
 								   GEA_Army, m_id,
@@ -7931,8 +7988,36 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 							   GEA_Army, m_id,
 							   GEA_MapPoint, pos,
 							   GEA_End);
-		
+	
+
 	}
+
+
+// EMOD logviolationevent added here like bombard. It required removing logviolationevent from regardevent 
+//  because it goes from armydata to combatevent to regardevent
+// the code works for defenders and attackers BUT if you stack a SneakAttack with a non and attack with it, 
+//	its still a sneak attack thats a TO DO  1-17-2006  
+
+
+	bool AllSneakAttack = true;
+
+	if(!m_array[i].GetDBRec()->GetSneakAttack()){
+		for(i = 0; i < defender.Num(); i++) {
+			if(!defender[i].GetDBRec()->GetSneakAttack()){
+				AllSneakAttack = false;
+				break;
+			}			
+		}
+	}
+		
+	
+	if(!AllSneakAttack){
+
+		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
+		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	}
+
+// end EMOD
 
 	Assert(m_dontKillCount);
 	if(m_dontKillCount) {
@@ -7942,6 +8027,11 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 			me.Kill();
 			return FALSE;
 		}
+
+			
+// maybe it should be last?		
+//		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
+//		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 	}
 
 	return FALSE;

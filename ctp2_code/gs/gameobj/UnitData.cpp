@@ -504,6 +504,8 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 		ClearFlag(k_UDF_FIRST_MOVE);
 	}
 
+// EMOD add something here for treat all as roads?
+
 	const UnitRecord *rec = g_theUnitDB->Get(m_type); 
 
 	out_of_fuel = FALSE; 
@@ -738,6 +740,9 @@ sint32 UnitData::PayWages(sint32 w)
 //----------------------------------------------------------------------------
 sint32 UnitData::GetWagesNeeded()
 {
+
+// EMOD - Add something like unit wages? each unit has a citizen wage but can be multiplied?
+
 	Assert(m_city_data);
 	if(m_city_data) {
 		return m_city_data->GetWagesNeeded();
@@ -1329,37 +1334,51 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 		attack += baseattack * rec->GetAttackCityBonus();
 	}
 
+// EMOD - add something here about city defense bonus reduced?
+
 	if(defrec->GetIsSubmarine()) {
 		attack += baseattack * rec->GetAttackBonusSubmarine();
 	}
 
 	// EMOD
 	if(defrec->GetIsFoot()) {
-		attack += baseattack * rec->GetAttackFootBonus();
+		attack += baseattack * rec->GetFootBonus();
 	}
 
 	if(defrec->GetIsMounted()) {
-		attack += baseattack * rec->GetAttackMountedBonus();
+		attack += baseattack * rec->GetMountedBonus();
 	}
 
 
 	if(defrec->GetIsSiege()) {
-		attack += baseattack * rec->GetAttackSiegeBonus();
+		attack += baseattack * rec->GetSiegeBonus();
 	}
 
 	if(defrec->GetIsWheeled()) {
-		attack += baseattack * rec->GetAttackWheeledBonus();
+		attack += baseattack * rec->GetWheeledBonus();
 	}
 
 	if(defrec->GetIsMechanized()) {
-		attack += baseattack * rec->GetAttackMechanizedBonus();
+		attack += baseattack * rec->GetMechanizedBonus();
+	}
+
+	if(defrec->GetIsSpecialForces()) {
+		attack += baseattack * rec->GetSpecialForcesBonus();
 	}
 
 	if(defrec->GetIsHelicopter()) {
-		attack += baseattack * rec->GetAttackHelicopterBonus();
+		attack += baseattack * rec->GetHelicopterBonus();
 	}
-	//end EMOD
 
+	if(defrec->GetCivilian()) {
+		attack += baseattack * rec->GetCivilianBonus();
+	}
+
+	if(defrec->GetIsGuerrilla()) {
+		attack += baseattack * rec->GetGuerrillaBonus();
+	}
+	
+	//end EMOD
 
 	return attack;
 }
@@ -1515,6 +1534,9 @@ BOOL UnitData::Bombard(CellUnitList &defender, BOOL isCounterBombardment)
 		if(!(defender[i].GetVisibility() & (1 << m_owner)) && !g_theWorld->GetCity(defender[i].RetPos()).IsValid())
 			continue;
 
+// EMOD - add something like bombarding reduces city defenses here?
+
+
 		if (CanBombardType(defender[i]) || rec->GetSingleUse())
 		{
 			Bombard(rec, defender[i], isCounterBombardment);
@@ -1596,12 +1618,13 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
 	}
 	if (g_theWorld->HasCity(pos)) 
 		return FALSE;
-
+//EMOD
 	for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
 		if(rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
 			return TRUE;
 		}
 	}
+// end EMOD
 
 	if (rec->GetSettleLand() && g_theWorld->IsLand(pos))
 		return TRUE; 
@@ -3508,24 +3531,38 @@ double UnitData::GetDefense(const Unit &attacker) const
 	}
 	//Additional Battle Modifiers by E 12-05-2005
 	if(attackRec->GetIsFoot()) {
-		def += myRec->GetDefense() * myRec->GetBonusAgainstFoot();
+		def += myRec->GetDefense() * myRec->GetFootBonus();
 	}
 
 	if(attackRec->GetIsSiege()) {
-		def += myRec->GetDefense() * myRec->GetBonusAgainstSiege();
+		def += myRec->GetDefense() * myRec->GetSiegeBonus();
 	}
 
 	if(attackRec->GetIsWheeled()) {
-		def += myRec->GetDefense() * myRec->GetBonusAgainstWheeled();
+		def += myRec->GetDefense() * myRec->GetWheeledBonus();
 	}
 
 	if(attackRec->GetIsMechanized()) {
-		def += myRec->GetDefense() * myRec->GetBonusAgainstMechanized();
+		def += myRec->GetDefense() * myRec->GetMechanizedBonus();
 	}
 
 	if(attackRec->GetIsHelicopter()) {
-		def += myRec->GetDefense() * myRec->GetBonusAgainstHelicopter();
+		def += myRec->GetDefense() * myRec->GetHelicopterBonus();
 	}
+
+		if(attackRec->GetIsGuerrilla()) {
+		def += myRec->GetDefense() * myRec->GetGuerrillaBonus();
+	}
+
+	if(attackRec->GetCivilian()) {
+		def += myRec->GetDefense() * myRec->GetCivilianBonus();
+	}
+
+		if(attackRec->GetIsSpecialForces()) {
+		def += myRec->GetDefense() * myRec->GetSpecialForcesBonus();
+	}
+
+
 	// end EMOD
 
 	sint32 intDef = (sint32)def;
