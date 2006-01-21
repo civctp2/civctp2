@@ -53,7 +53,14 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Positions of units on transports are now updated. (Sep 9th 2005 Martin Gühmann)
 // - Improved grouping checks.
-// - SneakBomard check added to BombardCity and Bombard
+// - SneakBomard check added to BombardCity and Bombard  by E 17-JAN-2006
+// - SneakAttck added to ::Fight because it works here   by E 17-JAN-2006
+// - Immobile (and CantGroup) don't work     by E 17-JAN-2006
+// - CantPillage Implemented   by E 20-JAN-2006
+// - NonLethalBombard Implemented  by E 20-JAN-2006   But the bar will go WAY
+//   negative if it keeps getting hit!
+// - CanBombardTiles implemented - tiles can be bombarded by E 20-JAN-2006
+// - CollateralTileDamage Implemented by E 20-JAN-2006
 //
 //----------------------------------------------------------------------------
 
@@ -871,6 +878,7 @@ BOOL ArmyData::CanSettle() const
         Assert(g_theUnitPool->IsValid(m_array[i]));
         if(g_theUnitPool->IsValid(m_array[i])
         && g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType())->GetSettle()
+// EMOD add CanSettleOn here also?
         && m_array[i].CanPerformSpecialAction())
             return TRUE;
     }
@@ -4737,17 +4745,6 @@ BOOL ArmyData::CanPillage() const
 
 
 
-//EMOD - this doesnt work STILL  1-17-2006
-//	for(sint32 j = 0; j < cell->GetNumDBImprovements(); j++) {
-		sint32 imp = cell->GetNumImprovements();
-		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-
-			if(trec->GetCantPillage()){ 
-			return false;
-			}
-//	}
-
-
 	return true;
 }
 
@@ -4781,22 +4778,32 @@ ORDER_RESULT ArmyData::Pillage(BOOL test_ownership)
         return ORDER_RESULT_ILLEGAL;
     }        
     
+
+
 	if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
 	   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)))
 		if(test_ownership && !VerifyAttack(UNIT_ORDER_PILLAGE_UNCONDITIONALLY, m_pos, cellOwner))
 			return ORDER_RESULT_ILLEGAL;
 
 
-
-	
-    
-    
-    
-    
-
-	//InformAI(UNIT_ORDER_PILLAGE, m_pos); //does nothing here but could be implemented
+//InformAI(UNIT_ORDER_PILLAGE, m_pos); //does nothing here but could be implemented
 
 	AddSpecialActionUsed(m_array[uindex]);
+
+//EMOD - this fianlly works 20-JAN-2006
+
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	sint32 imp = cell->GetDBImprovement(i);
+	const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+
+		for(imp = 0; imp < trec->GetCantPillage(); imp++) {
+			if(trec->GetCantPillage()){
+				return ORDER_RESULT_ILLEGAL;
+			}
+			return ORDER_RESULT_SUCCEEDED;
+		}
+	}
+	
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_PillageUnit,
 						   GEA_Unit, m_array[uindex],
@@ -5067,7 +5074,21 @@ BOOL ArmyData::CanBombard(const MapPoint &point) const
 	g_theWorld->GetArmy(point, defender);
 	sint32 i;
 	
-	if (defender.Num() < 1)
+	if (defender.Num() < 1) {
+// EMOD Bombard tile Imps by E	20-JAN-2006
+		Cell *cell = g_theWorld->GetCell(point);
+		for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++) {
+		sint32 imp = cell->GetDBImprovement(ti);
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+			for(imp = 0; imp < trec->GetCantPillage(); imp++) {
+				if(!trec->GetCantPillage()){
+				    return true;
+				}
+			}
+		return false;
+		}
+	}
+// end EMOD
 		return false;
 
     for (i = m_nElements - 1; i>= 0; i--) { 
@@ -5268,9 +5289,35 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
     if (defender.Num() < 1) {//no defenders		
 		if(BombardCity(point, TRUE)) {//so if there's a city, bombard it
 			return ORDER_RESULT_SUCCEEDED;
-		}
-		return ORDER_RESULT_ILLEGAL;//or allow bombarding tile improvements?
+		} else {
+// EMOD Bombard tile Imps  by E	20-JAN-2006
+			for (i = 0; i< m_nElements; i++) { 
+				if (m_array[i].GetDBRec()->GetCanBombardTiles()) { 
+					Cell *cell = g_theWorld->GetCell(point);
+					sint32 cellOwner = cell->GetOwner();
+					for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++) {
+					sint32 imp = cell->GetDBImprovement(ti);
+					const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+						if(trec->GetCantPillage() == 0){
+							for(i = 0; i < m_nElements; i++) {
+								if(!m_array[i].GetDBRec()->GetSneakBombard()) {  //EMOD added by E for sneak bombarding
+									Diplomat & defending_diplomat = Diplomat::GetDiplomat(cellOwner);
+									defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);{
+										g_theWorld->CutImprovements(point);{
+											return ORDER_RESULT_SUCCEEDED;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			}
+		return ORDER_RESULT_ILLEGAL;//or allow bombarding tile improvements?  NOW ADDED by E
 	}
+
+//end EMOD
     // defenders present
 	for(i = 0; i < defender.Num(); i++) {//return illegal if at least one can't be attacked
 		if(defender[i].Flag(k_UDF_CANT_BE_ATTACKED))
@@ -5347,22 +5394,46 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
     //do counterbombarding and kill off attacking units
     for (i = 0; i<defender.Num(); i++) { 
         if (defender[i].CanCounterBombard(*this)) { 
-            defender[i].Bombard(*this, TRUE); 
+			defender[i].Bombard(*this, TRUE); 
         } 
     }
     
+
     for (i = m_nElements - 1; 0 <= i; i--) { 
         if (m_array[i].GetHP() < 0.999) {
-            m_array[i].KillUnit(CAUSE_REMOVE_ARMY_COUNTERBOMBARD, defender.GetOwner());  
-        } 
+			if (!defender[i].GetDBRec()->GetNonLethalBombard()) {  //EMOD Non-LethalBombard like Civ3 OPTIONAL 20-JAN-2006
+			    m_array[i].KillUnit(CAUSE_REMOVE_ARMY_COUNTERBOMBARD, defender.GetOwner());  
+			}
+		}
     }
     
     //kill off defending units that were newly damaged
     for (i = defender.Num() - 1; 0 <= i; i--) { 
         if (defender[i].GetHP() < 0.999) {
-            defender[i].KillUnit(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());  
-        } 
-    }
+			if (!m_array[i].GetDBRec()->GetNonLethalBombard()) {   //EMOD Non-LethalBombard like Civ3 OPTIONAL 20-JAN-2006
+				defender[i].KillUnit(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());{  
+				for (i = 0; i< m_nElements; i++) { 
+					if (m_array[i].GetDBRec()->GetCollateralTileDamage()) { 
+						Cell *cell = g_theWorld->GetCell(point);
+						sint32 cellOwner = cell->GetOwner();
+						for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++) {
+						sint32 imp = cell->GetDBImprovement(ti);
+						const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+							if(trec->GetCantPillage() == 0){
+								for(i = 0; i < m_nElements; i++) {
+									g_theWorld->CutImprovements(point);{
+												return ORDER_RESULT_SUCCEEDED;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		}
+    		return ORDER_RESULT_ILLEGAL;
+	}
     //if there's a city at point, try to destroy a building and kill a pop
 	BombardCity(point, FALSE);
 	return ORDER_RESULT_SUCCEEDED;
@@ -7996,7 +8067,7 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 // EMOD logviolationevent added here like bombard. It required removing logviolationevent from regardevent 
 //  because it goes from armydata to combatevent to regardevent
 // the code works for defenders and attackers BUT if you stack a SneakAttack with a non and attack with it, 
-//	its still a sneak attack thats a TO DO  1-17-2006  
+//	its still a sneak attack thats a TO DO  1-17-2006; for now sneakattck units will be cant group  
 
 
 	bool AllSneakAttack = true;
@@ -8016,6 +8087,7 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
 		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 	}
+
 
 // end EMOD
 

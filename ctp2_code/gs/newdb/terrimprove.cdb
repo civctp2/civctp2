@@ -98,11 +98,15 @@ TerrainImprovement {
 		#Added by Martin Gühmann for Trade redirection
 		Bit(Int) Freight
 		Bit Radar
-		Bit CantPillage //futureUse added by E to prevent pillage of certain imps 
 		Bit NeedsWorker //futureUse - can't build unless IsWorker unit is on square
 		Bit NeedsWaterSupply //futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
 		Bit Airport
+
 		Bit Colony      //FU
+		Bit Fort 	//FU
+		Bit Urban	//FU
+		Bit DeniedToEnemy	//FU
+
 		Bit ListeningPost
 		Bit Endgame
 		Bit(Int) VisionRange
@@ -112,6 +116,7 @@ TerrainImprovement {
 		Record Advance EnableAdvance
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost
+		Bit(Int) GoldCost //FU
 		Int ProductionTime
 		Int TilesetIndex
 	}
@@ -147,5 +152,5 @@ TerrainImprovement {
 	# Display level (0 = ground level = under roads, > 0 = on top of roads)
 	Int DisplayLevel	= 0
 	# Pillage prevention
-	Bit	CantPillage
+	Bit	CantPillage //futureUse added by E to prevent pillage of certain imps 
 }

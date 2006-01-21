@@ -42,13 +42,18 @@ Building {
 	Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build building
 	Record Resource[] NeedsCityGoodAnyCity //FU
-    Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
+	Record Resource[] EnablesGood //added by E -- having a bldg gives a city a good
+
+	Record Resource[] RequiresGood //added by E -- having a bldg gives a city a good
+    	Record Resource[] ProducesGood //added by E -- having a bldg gives a city a good
+	Bit(Int) SquaredRadius //FU
+	Bit(Int) IntRadius    //FU
 
 
 	Int ProductionCost
 	Int Upkeep
-	Int UpkeepPerPop  = 0 //FU added by E to make improvemnts more expensive with city growth
-	Int UpkeepPerCity = 0 //FU added by E to make improvemnts more expensive with city growth
+	Bit(Int) UpkeepPerPop  = 0 //FU added by E to make improvemnts more expensive with city growth
+	Bit(Int) UpkeepPerCity = 0 //FU added by E to make improvemnts more expensive with city growth
 
     # flags 
     Bit        Capitol

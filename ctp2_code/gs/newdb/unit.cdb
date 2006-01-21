@@ -36,6 +36,11 @@
 #  - NeedsCityGood // Added by E to implement strategic resources   
 #  - PrerequisiteBuilding  // Added by E to limit units to cities with certain buildings
 #  - NeedsCityGoodAll //FU ttempt to implement strategic resources
+#  - AllTerrainAsImprovement // future use - like AllTerrainRoads
+#  - ObsoleteByUnit //FU instead of avdance for later upgrade
+#  - NonLethalBombard  //lessen bombard strengthen like old civ3
+#  - CanBombardTiles  //allows bombarding of tile improvements
+#  - CollateralTileDamage  //if a defender is ona tile then improvements cut too
 # 
 #-----------------------------------------------------------------------------
 
@@ -91,7 +96,13 @@ Unit {
     Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build unit
 	Record Resource[] NeedsCityGoodCapitol //FU
-	Record Resource[] NeedsCityGoodAnyCity //FU      
+	Record Resource[] NeedsCityGoodAnyCity //FU
+
+	Record TerrainImprovement     AllTerrainAsImprovement // future use - like AllTerrainRoads
+	Record Unit [] ObsoleteByUnit //FU intead of avdance for later upgrade
+    Bit NonLethalBombard  //lessen bombard strengthen like old civ3
+	Bit CanBombardTiles  //allows bombarding of tile improvements
+	Bit CollateralTileDamage  //if a defender is ona tile then improvements cut too
 
 	Bits Size {
 		Small,

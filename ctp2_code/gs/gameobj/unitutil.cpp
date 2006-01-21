@@ -25,6 +25,7 @@
 //
 // - Added unitutil_GetSmallCityMaxSize to figure out the maximum population
 //   size a ring one city. - Oct. 6th 2004 Martin Gühmann
+// - EMOD TO DO add check for buildings and wonder for ring size
 //
 //----------------------------------------------------------------------------
 
@@ -127,6 +128,9 @@ void unitutil_Initialize()
 		if(s_maxCitySquaredRadius < g_theCitySizeDB->Get(i)->GetSquaredRadius()){
 			s_maxCitySquaredRadius = g_theCitySizeDB->Get(i)->GetSquaredRadius();
 		}
+		// EMOD add else if or if here? to check built buildings and wonders and get squared Radius
+
+
 	}
 }
 

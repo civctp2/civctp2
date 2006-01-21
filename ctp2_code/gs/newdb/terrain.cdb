@@ -18,6 +18,11 @@ Resource {
 	Bit(Float) EfficiencyOrCrime		//added by E -=crime +=efficiency
       Bit(Int)   HappyInc				//added by E when a city has or buyinga good it gets a bonus
 
+	Bit IsBonuSGood
+	Bit IsStrategicGood
+	Bit IsLuxuryGood
+
+
 	Bit GLHidden
 }
 	
