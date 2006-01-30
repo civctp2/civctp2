@@ -271,10 +271,6 @@ str_tbl_ldl_GOOD	"Gut"
 str_tbl_ldl_EXCELLENT	"Bestens"
 ##
 
-## rsh011899 - added for civ status screen
-str_ldl_CAPS_GOVERNMENT	"Regierung"
-##
-
 str_ldl_POPSCIENCE	"In Wissenschaft umgewandeltes Gold"
 str_ldl_POPPW	"In staatl. Bautrupps umgewandelte Produktion"
 str_ldl_PLANE	"Spieler gestartet"
@@ -518,22 +514,6 @@ str_ldl_CAPS_DOMESTIC	"Inland"
 str_ldl_CAPS_FOREIGN	"Ausland"
 
 str_ldl_NEXT	"Weiter"
-
-# Age Names
-AGE_NAME_ANCIENT	"Die Antike"
-AGE_NAME_RENAISS	"Die Renaissance"
-AGE_NAME_MODERN	"Die Moderne"
-AGE_NAME_GENETIC	"Die Genetische Ära"
-AGE_NAME_DIAMOND	"Die Diamantene Ära"
-
-
-
-
-
-
-
-
-
 
 # strings for victory window
 str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"Ihr Punktestand beträgt:"

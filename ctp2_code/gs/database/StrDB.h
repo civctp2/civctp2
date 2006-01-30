@@ -31,6 +31,8 @@
 // Modifications from the original Activision code:
 //
 // - Reimplemented containers as vectors, to make it less error prone.
+// - Load default strings if they are missing in the database so that mods
+//   also have a full set of strings. (Jan 30th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -101,6 +103,8 @@ public:
 		MBCHAR **				new_text
 	) const;
 
+	void Export(MBCHAR * file);
+
 
 private:
 	std::vector<StringRecord *>	m_all;	// a flattened list version of m_head
@@ -132,7 +136,8 @@ private:
 		MBCHAR **				new_text
 	) const;
 
-	sint32					ParseAStringEntry(Token * strToken);
+	bool					ParseAStringEntry            (Token *strToken);
+	bool					ParseAStringEntryNoDuplicates(Token *strToken);
 };
 
 #endif	// Multiple include guard

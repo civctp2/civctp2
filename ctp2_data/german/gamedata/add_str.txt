@@ -343,10 +343,6 @@ REGARD_EVENT_WONDER "Die {player[0].civ_name_plural} sind angesichts unserer imp
 # for the keymap screen
 str_tbl_ldl_Advanced_Options "Erweiterte Optionen"
 
-# Two items on the options menu
-str_ldl_ZoomOut "Vergrößern"
-str_ldl_ZoomIn "Verkleinern"
-
 # Added for network games, there are more restrictions on when you can initiate diplomacy
 str_code_CantInitiateDiplomacyNow "Sie können kein neues Gesuch absenden, solange Sie nicht am Zug sind oder solange noch eine Antwort auf ein früheres Gesuch aussteht."
 

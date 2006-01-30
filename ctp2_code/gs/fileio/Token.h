@@ -21,7 +21,10 @@
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
+//
 // - #pragma once commented out.
+// - Added new token so that the loading of default strings can be 
+//   prevented. (Jan 30th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -634,6 +637,7 @@ enum TOKEN_TYPES {
 
 		
 		TOKEN_CONST_LAST,
+		TOKEN_DO_NOT_IMPORT_DEFAULTS,
 		TOKEN_MAX   
 };
 
