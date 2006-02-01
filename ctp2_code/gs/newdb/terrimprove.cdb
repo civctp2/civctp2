@@ -106,6 +106,9 @@ TerrainImprovement {
 		Bit Fort 	//FU
 		Bit Urban	//FU
 		Bit DeniedToEnemy	//FU
+		Bit(Int) BonusFoodExport //FU
+		Bit(Int) BonusProductionExport //FU
+		Bit(Int) BonusGoldExport //FU
 
 		Bit ListeningPost
 		Bit Endgame

@@ -99,6 +99,7 @@ Unit {
 	Record Resource[] NeedsCityGoodAnyCity //FU
 
 	Record TerrainImprovement     AllTerrainAsImprovement // future use - like AllTerrainRoads
+	Record TerrainImprovement     InfiniteTerrainMovement // future use - for Barb leaders?
 	Record Unit [] ObsoleteByUnit //FU intead of avdance for later upgrade
     Bit NonLethalBombard  //lessen bombard strengthen like old civ3
 	Bit CanBombardTiles  //allows bombarding of tile improvements

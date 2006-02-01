@@ -54,13 +54,14 @@
 // - Positions of units on transports are now updated. (Sep 9th 2005 Martin Gühmann)
 // - Improved grouping checks.
 // - SneakBomard check added to BombardCity and Bombard  by E 17-JAN-2006
-// - SneakAttck added to ::Fight because it works here   by E 17-JAN-2006
+// - SneakAttack added to ::Fight because it works here   by E 17-JAN-2006
 // - Immobile (and CantGroup) don't work     by E 17-JAN-2006
 // - CantPillage Implemented   by E 20-JAN-2006
 // - NonLethalBombard Implemented  by E 20-JAN-2006   But the bar will go WAY
 //   negative if it keeps getting hit!
 // - CanBombardTiles implemented - tiles can be bombarded by E 20-JAN-2006
 // - CollateralTileDamage Implemented by E 20-JAN-2006
+// - AllTerrainAsImprovement impelemented in DeductMoveCost by E 24-JAN-2006
 //
 //----------------------------------------------------------------------------
 
@@ -4790,20 +4791,21 @@ ORDER_RESULT ArmyData::Pillage(BOOL test_ownership)
 
 	AddSpecialActionUsed(m_array[uindex]);
 
-//EMOD - this fianlly works 20-JAN-2006
+		bool CanPillageTileImp = true;
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-	sint32 imp = cell->GetDBImprovement(i);
-	const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-
-		for(imp = 0; imp < trec->GetCantPillage(); imp++) {
+		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 			if(trec->GetCantPillage()){
-				return ORDER_RESULT_ILLEGAL;
+				CanPillageTileImp = false;
+				break;
 			}
-			return ORDER_RESULT_SUCCEEDED;
 		}
-	}
 	
+
+		if(!CanPillageTileImp){
+			return ORDER_RESULT_ILLEGAL;
+		}	
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_PillageUnit,
 						   GEA_Unit, m_array[uindex],
@@ -5411,7 +5413,7 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
     for (i = defender.Num() - 1; 0 <= i; i--) { 
         if (defender[i].GetHP() < 0.999) {
 			if (!m_array[i].GetDBRec()->GetNonLethalBombard()) {   //EMOD Non-LethalBombard like Civ3 OPTIONAL 20-JAN-2006
-				defender[i].KillUnit(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());{  
+				defender[i].KillUnit(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());  
 				for (i = 0; i< m_nElements; i++) { 
 					if (m_array[i].GetDBRec()->GetCollateralTileDamage()) { 
 						Cell *cell = g_theWorld->GetCell(point);
@@ -5431,7 +5433,7 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 				}
 			}
 		}
-		}
+//	}
     		return ORDER_RESULT_ILLEGAL;
 	}
     //if there's a city at point, try to destroy a building and kill a pop
@@ -7880,7 +7882,33 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 			} else {
 				c = cost;
 			}
-		}else if(m_array[i].Flag(k_UDF_FOUGHT_THIS_TURN)) {
+
+// EMOD this code made it so the unit could move infinite on terrain with mvmnt of 1????
+
+//		}else if(g_theUnitDB->Get(m_array[i]->GetType(), g_player[GetOwner()]->GetGovernmentType())->GetAllTerrainAsImprovement() > 0 ){
+//			for(sint32 ti = 0; ti < g_theTerrainImprovementDB->NumRecords(); ti++) {
+//				const UnitRecord *urec = g_theUnitDB->Get(m_array[i]->GetType(), g_player[GetOwner()]->GetGovernmentType());
+//				sint32 imp = urec->GetAllTerrainAsImprovementIndex();
+//				const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//				const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+//				sint32 moveCost;
+//				cost = effect->GetMoveCost(moveCost);
+//			}
+//EMOD			
+// EMOD for All Terrain As improvement
+//
+//		}else if(g_theUnitDB->Get(m_array[i]->GetType(), g_player[GetOwner()]->GetGovernmentType())->GetAllTerrainAsImprovement() > 0 ){
+//			for(sint32 ti = 0; ti < g_theTerrainImprovementDB->NumRecords(); ti++) {
+//					//for(i = 0; i < m_nElements; i++) {
+//				const UnitRecord *urec = g_theUnitDB->Get(m_array[i]->GetType(), g_player[GetOwner()]->GetGovernmentType());
+//				sint32 imp = urec->GetAllTerrainAsImprovementIndex();
+//				const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//				const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+//				sint32 moveCost;
+//				cost = effect->GetMoveCost(moveCost);
+//			}
+//EMOD
+		}else if(m_array[i].Flag(k_UDF_FOUGHT_THIS_TURN)) {  // Add Blitz/multiple attacks here?
 			c = m_array[i].GetMovementPoints();
 		}else {
 			c = cost;
@@ -8004,6 +8032,49 @@ sint32 ArmyData::Fight(CellUnitList &defender)
     double amr = 1.0 / GetHPModifier(); 
     double dmr = 1.0 / defender.GetHPModifier(); 
 
+// add two bools and an OR statment might solve the loop problem...1-28-2006
+
+	bool AlltaSneakAttack = true;
+	if(ta.IsValid()) {
+		for(i = 0; i < m_nElements; i++){
+			if(!m_array[i].GetDBRec()->GetSneakAttack()){
+				AlltaSneakAttack = false;
+				break;
+			}
+		}
+	}
+	
+	if (ta.m_id == 0) {
+		if(!m_array[0].GetDBRec()->GetSneakAttack()){
+				AlltaSneakAttack = false;
+		}
+	}
+
+
+	bool AllDefSneakAttack = true;
+	for(i = 0; i < defender.Num(); i++) {
+		if(!defender[i].GetDBRec()->GetSneakAttack()){
+			AllDefSneakAttack = false;
+			break;
+		}
+	} 
+
+	if (td.m_id == 0) {
+		if(!defender[0].GetDBRec()->GetSneakAttack()){
+			AllDefSneakAttack = false;
+		}
+	}
+		
+	
+	if(!AlltaSneakAttack && !AllDefSneakAttack){
+		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
+		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	}
+
+
+
+// end EMOD
+
 	bool defenderSucks = true;
 	for(i = 0; i < defender.Num(); i++) {
 		if(defender[i].GetAttack() > 0) {
@@ -8063,33 +8134,6 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 
 	}
 
-
-// EMOD logviolationevent added here like bombard. It required removing logviolationevent from regardevent 
-//  because it goes from armydata to combatevent to regardevent
-// the code works for defenders and attackers BUT if you stack a SneakAttack with a non and attack with it, 
-//	its still a sneak attack thats a TO DO  1-17-2006; for now sneakattck units will be cant group  
-
-
-	bool AllSneakAttack = true;
-
-	if(!m_array[i].GetDBRec()->GetSneakAttack()){
-		for(i = 0; i < defender.Num(); i++) {
-			if(!defender[i].GetDBRec()->GetSneakAttack()){
-				AllSneakAttack = false;
-				break;
-			}			
-		}
-	}
-		
-	
-	if(!AllSneakAttack){
-
-		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
-		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
-	}
-
-
-// end EMOD
 
 	Assert(m_dontKillCount);
 	if(m_dontKillCount) {

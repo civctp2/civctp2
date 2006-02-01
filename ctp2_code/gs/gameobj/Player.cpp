@@ -3086,15 +3086,8 @@ sint32 Player::Settle(Army &settle_army)
 		for(i = m_all_units->Num() - 1; i >= 0; i--) {
 			m_all_units->Access(i).KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());  
 		}	
-//		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-//						   GEV_KillUnit,
-//						   GEA_Unit, settle_army.m_id,
-//						   GEA_Int, CAUSE_REMOVE_ARMY_SETTLE,
-//						   GEA_Player, -1,
-//						   GEA_End);
 //   EMOD
         return FALSE; 
-//		return TRUE; 
 	}
 
 	

@@ -916,6 +916,15 @@ BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
 			sint32	icost;
 			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 			cost = icost;
+// EMOD for AllTerrainAsImprovement added here
+//
+//		}else if(g_theUnitDB->Get(GetType())->GetAllTerrainAsImprovement()) > 0 ){
+//			for(sint32 i = 0; i < g_theTerrainImprovementDB->Get(); i++) {
+//			sint32 imp = g_theUnitDB->Get(GetType())->GetAllTerrainAsImprovement(i));
+//			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//				cost = rec->GetMoveCost();
+//			}
+//EMOD
         } else { 
             cost = g_theWorld->GetMoveCost(pos); 
         } 
