@@ -206,7 +206,7 @@ CityStyleRecord.stamp: $(ctp2_code)/gs/newdb/citystyle.cdb $(CTPDB)
 CivilisationRecord.cpp \
 CivilisationRecord.h: CivilisationRecord.stamp
 
-CivilisationRecord.stamp: $(ctp2_code)/gs/newdb/Civilisation.cdb $(CTPDB)
+CivilisationRecord.stamp: $(ctp2_code)/gs/newdb/Civilisation.cdb $(CTPDB) PersonalityRecord.stamp
 	$(CTPDB) . < $<
 	touch $@
 

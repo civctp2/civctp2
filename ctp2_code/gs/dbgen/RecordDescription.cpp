@@ -165,8 +165,6 @@ void RecordDescription::ExportHeader(FILE *outfile)
 
 	fprintf(outfile, "    //GovMod Specific accessors\n");
 	fprintf(outfile, "    bool GetHasGovernmentsModified() const { return m_hasGovernmentsModified; }\n\n");
-	fprintf(outfile, "");
-	fprintf(outfile, "");
 	fprintf(outfile, "    sint32 GenericGetNumGovernmentsModified() {");
 	
 	if(!m_hasGovernmentsModified) 
@@ -475,8 +473,8 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	fprintf(outfile, "    ~%sRecord();\n", m_name);
 
 	//Added by Martin Gühmann functions needs a return type
-	fprintf(outfile, "    void Init();\n", m_name);
-	fprintf(outfile, "    void Serialize(CivArchive &archive);\n\n", m_name);
+	fprintf(outfile, "    void Init();\n");
+	fprintf(outfile, "    void Serialize(CivArchive &archive);\n\n");
 
 	fprintf(outfile, "    // These methods are needed for records to conform to\n");
 	fprintf(outfile, "    // 'Orthodox Cannonical Form' and work with resizing STL vectors.\n");

@@ -664,7 +664,7 @@ void Datum::ExportSerializationStoring(FILE *outfile){
 
 	if(m_maxSize == k_MAX_SIZE_VARIABLE) {
 		if(m_type == DATUM_STRINGID){
-			fprintf(outfile, "        // Free stringID not implemented\n", m_name);
+			fprintf(outfile, "        // Free stringID not implemented\n");
 		}
 		else if(m_type == DATUM_STRUCT){
 			fprintf(outfile, "\n        {\n");
@@ -759,7 +759,7 @@ void Datum::ExportSerializationLoading(FILE *outfile)
 
 	if(m_maxSize == k_MAX_SIZE_VARIABLE) {
 		if(m_type == DATUM_STRINGID){
-			fprintf(outfile, "        // Free stringID not implemented\n", m_name);
+			fprintf(outfile, "        // Free stringID not implemented\n");
 		}
 		else if(m_type == DATUM_STRUCT){
 			fprintf(outfile, "\n        {\n");
@@ -850,7 +850,7 @@ void Datum::ExportDestructor(FILE *outfile)
 		case DATUM_STRING:
 			fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
 			fprintf(outfile, "    {\n");
-			fprintf(outfile, "        // free string elements\n",m_name);
+			fprintf(outfile, "        // free string elements\n");
 			fprintf(outfile, "        if (m_%s[index])\n", m_name );
 			fprintf(outfile, "            delete m_%s[index];\n", m_name );
 			fprintf(outfile, "    }\n");
@@ -860,7 +860,7 @@ void Datum::ExportDestructor(FILE *outfile)
 			fprintf(outfile, "    m_num%s = 0;\n\n", m_name );
 			break;
 		case DATUM_STRUCT:
-			fprintf(outfile, "    // free struct elements\n",m_name);
+			fprintf(outfile, "    // free struct elements\n");
 			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
 			fprintf(outfile, "        delete[] m_%s;\n", m_name );
 			fprintf(outfile, "    m_%s = NULL;\n", m_name );
@@ -938,7 +938,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "    }\n");
 
 			fprintf(outfile, "    if (rval.m_num%s > 0)\n", m_name );
-			fprintf(outfile, "    {\n", m_name );
+			fprintf(outfile, "    {\n");
 			fprintf(outfile, "        m_%s = new double [rval.m_num%s];\n\n", m_name, m_name );
 			fprintf(outfile, "        memcpy(m_%s, rval.m_%s, sizeof(double)*rval.m_num%s);\n", m_name, m_name, m_name);
 			fprintf(outfile, "    }\n");
@@ -949,7 +949,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "    // free string elements of %s[]\n",m_name);
 			fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
 			fprintf(outfile, "        {\n");
-			fprintf(outfile, "            // free string elements\n",m_name);
+			fprintf(outfile, "            // free string elements\n");
 			fprintf(outfile, "            delete m_%s[index];\n", m_name );
 			fprintf(outfile, "        }\n\n");
 			
@@ -1020,7 +1020,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "    // free string elements of %s[]\n",m_name);
 			fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
 			fprintf(outfile, "    {\n");
-			fprintf(outfile, "        // free string elements\n",m_name);
+			fprintf(outfile, "        // free string elements\n");
 			fprintf(outfile, "        delete m_%s[index];\n", m_name );
 			fprintf(outfile, "    }\n\n");
 			
@@ -1174,7 +1174,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 					fprintf(outfile, "    // replace array m_%s\n", m_name);
 					fprintf(outfile, "    if (m_num%s != rval.m_num%s)\n", m_name, m_name);
 					fprintf(outfile, "    {\n");
-					fprintf(outfile, "        delete m_%s;\n", m_name, m_name);
+					fprintf(outfile, "        delete m_%s;\n", m_name);
 					fprintf(outfile, "        m_%s = new sint32 [rval.m_num%s];\n", m_name, m_name);
 					fprintf(outfile, "    }\n\n");
 				}
@@ -1192,7 +1192,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 					fprintf(outfile, "    // replace array m_%s\n", m_name);
 					fprintf(outfile, "    if (m_num%s != rval.m_num%s)\n", m_name, m_name);
 					fprintf(outfile, "    {\n");
-					fprintf(outfile, "        delete m_%s;\n", m_name, m_name);
+					fprintf(outfile, "        delete m_%s;\n", m_name);
 					fprintf(outfile, "        m_%s = new double [rval.m_num%s];\n", m_name, m_name);
 					fprintf(outfile, "    }\n\n");
 				}

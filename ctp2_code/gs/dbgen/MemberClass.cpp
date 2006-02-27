@@ -324,7 +324,7 @@ void MemberClass::ExportInitialization(FILE *outfile, char *recordName)
 	fprintf(outfile, "}\n\n");
 
 
-	fprintf(outfile, "void %sRecord::%s::Serialize(CivArchive &archive)\n", recordName, m_name, m_name);
+	fprintf(outfile, "void %sRecord::%s::Serialize(CivArchive &archive)\n", recordName, m_name);
 	fprintf(outfile, "{\n");
 
 	fprintf(outfile, "    if(archive.IsStoring()) {\n");
