@@ -1,0 +1,221 @@
+THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+
+This document provides instructions on how to compile the Civilization: Call
+To Power 2 source code and install the game on your Linux system.
+
+
+
+== Conventions used in this document ==
+=======================================
+
+Things you need to type into the shell are on a new line and prefixed with the
+string "shell>". This is your shell prompt. So if you see:
+
+shell> cd foo
+
+then this means you should type "cd foo" at your shell prompt.
+
+
+
+== Things you need to compile the Civ:CTP source ==
+===================================================
+
+- Berkeley YACC (byacc). Avaibility and install instructions depend on your
+  Linux distribution. If all fails, search for the source code by googling for
+  "byacc" (it's trivial to compile and install).
+
+- SDL and its header files. Almost every distribution comes with the necessary
+  SDL packages, but you probably need to install the SDL development packages
+  to get the header files.
+
+- X11 and its header files. The same as with SDL, check that you have the
+  development packages of XFree86 or X.org installed.
+
+- Unzip. Especially unpacking the data files won't work if you don't have the
+  unzip utility installed.
+
+- GCC, make, automake, autoconf
+
+- The usual UN*X/Linux tools. This means bash, (g)awk, sed, Perl, etc. You
+  normally already have them installed.
+
+- Microsoft's TrueType fonts. Specifically, you'll need "arial.ttf",
+  "times.ttf" and "timesbd.ttf". If you don't have them, just google for them,
+  they are easy to find and available freely. 
+
+
+== How to compile the Civ:CTP2 source with Linux ==
+===================================================
+
+A small suggestion first: don't work as root ! Always work (and compile) as a
+normal user. This prevents unrepairable accidents, however unlikely they are.
+
+You need to decide where you want Civ:CTP2 to be installed. Let's
+assume your user name is "foo" and you want the final game to reside in your
+home directory "/home/foo/CTP2". If you want to install the game system wide
+then "/usr/local/CTP2" would be a good path.
+
+Note that this document assumes you're using the path "/home/foo/CTP2" to
+avoid permission problems/changing to the root account.
+
+So, let's start:
+
+
+0. Go to the source code top level directory.
+
+
+1. Run "configure". Assuming you want CTP2 installed in "/home/foo/CTP2" you
+   would type:
+   
+   shell> ./configure --prefix=/home/foo/CTP2 --bindir=/home/foo/CTP2/ctp2_program/ctp
+
+   Note the "--bindir" option ! If you omit that, the "ctp2" binary will be
+   installed in "/home/foo/CTP2/bin", but this is not what we want, because
+   when we unpack the data some configuration files will be installed in
+   "/home/foo/CTP2/ctp2_program/ctp", so this is where we want our binary to
+   be installed as well.
+
+   If configure fails then you're normally missing one of the previously
+   mentioned packages or don't have a supported version installed. I'm sorry,
+   but you have to fix those problems on your own.
+
+
+2. Run "make". Simply type:
+
+   shell> make
+
+   This takes a loooong time. Go grab a good book or have a nice meal.
+   Depending on the speed of your system this can take up to almost 2 hours
+   (this was measured on a Pentium III 850MHz laptop, I assume your machine is
+   faster ;-)
+
+   If the compilation aborts and you're not a developer capable of fixing the
+   problems yourself, please contact the CTP2 developers at the Apolyton
+   forum:
+   
+   http://apolyton.net/forums/forumdisplay.php?forumid=213
+
+
+3. Run "make install" in the source directory.
+
+   shell> make install
+
+   If you've decided to install into a global directory like "/usr/local/CTP2"
+   then you need to use "su" or "sudo":
+
+   shell> su -c "make install"
+
+   or
+
+   shell> sudo make install
+
+   You'll get asked for your root password.
+
+
+
+== How to unpack the Civ:CTP2 data files ==
+===========================================
+
+1. Mount your Civ:CTP2 CD. Again, this is system dependant. This document
+   assumes the mount point "/media/cdrom".
+
+
+2. Create the directory where you want the game to be install into:
+
+   shell> mkdir -p /home/foo/CTP2
+
+   Then "cd" into the directory:
+
+   shell> cd /home/foo/CTP2
+
+
+3. Unzip "civlang.ctp":
+
+   shell> unzip /media/cdrom/Setup/data/civlang.ctp
+   
+   This will install a lot of new files in your CTP2 directory: you will get
+   a "Scenarios" directory, a "ctp2_data/<yourlanguage>" directory with the
+   language data of your CTP2 version and some configuration files in
+   "ctp2_program/ctp". These files were the reason for the "--bindir" option
+   for "configure".
+
+
+4. Unzip "civmain.ctp":
+
+   shell> unzip /media/cdrom/Setup/data/civmain.ctp
+
+   This will install most of the data files like pictures, sounds and control
+   files into "ctp2_data/default" and some more files in the "Scenarios"
+   directory.
+
+   There will be some file collisions: if "unzip" tells you that certain files
+   exist and ask you whether to replace them, answer "(N)one" (just enter an
+   uppercase "N" and press return).
+   
+
+5. Call the "fix_data_names.sh" script from the "tools" directory in your CTP2
+   source directory:
+
+   shell> /path/to/ctp2_source/tools/fix_data_names.sh
+
+   This will fix some names of data files. The problem is that CTP2 was
+   developed on Windows and its file systems are case insensitive while Linux
+   file systems are case sensitive and thus won't find some files if we don't
+   rename them.
+
+   (Let's not get into the gory details, I know NTFS can be case sensitive
+   and that FAT based file systems are case insensitive under Linux as well)
+
+
+6. Copy the new data files from the source directory:
+
+   shell> cp -Rf /path/to/ctp2_source/ctp2_data ./
+
+   This installs new/updated data files. If you omit this step you won't be
+   able to change the screen resolution, for example.
+
+
+7. Call "fix_data_names.sh" again:
+
+   shell> /path/to/ctp2_source/tools/fix_data_names.sh
+
+   The reason we're calling it two times is because in the source some of the
+   data files have a different case then in ZIP files on the CD. So if we'd
+   call "fix_data_names.sh" only once we'd risk mixing files that shouldn't be
+   mixed.
+
+   So the first time we call "fix_data_names.sh" makes sure the names are in a
+   consistent state. We then copy the new data files and fix their names as
+   well and are now sure that the data files are up to date, have the correct
+   case and aren't mixed up.
+
+
+8. Install the TrueType fonts:
+
+   shell> cp /path/to/arial.ttf /home/foo/CTP2/ctp2_data/default/uidata/fonts/
+   shell> cp /path/to/times.ttf /home/foo/CTP2/ctp2_data/default/uidata/fonts/
+   shell> cp /path/to/timesbd.ttf /home/foo/CTP2/ctp2_data/default/uidata/fonts/
+
+   Pay attention to the cases of the file names ! They must be lower case. If
+   they contain uppercase characters you must rename them.
+
+
+
+
+== Finally ==
+=============
+
+You did it ! If everything worked as expected, then you can now cd into your
+CTP2 program dir:
+
+shell> cd /home/foo/CTP2/ctp2_program/ctp
+
+and call the game:
+
+shell> ./ctp2
+
+If you encountered problems with this document or have suggestions on how to
+improve it, please e-mail me at marc@darkdust.net.
+
+Have fun !
+	Marc
