@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface mouse handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -335,7 +335,10 @@ void aui_Mouse::SetClip( RECT *clip )
 		SetClip( 0, 0, g_ui->Width(), g_ui->Height() );
 }
 
-
+aui_MouseEvent *GetLatestMouseEvent( void )
+{
+	return &m_data;
+}
 
 void aui_Mouse::SetCursor( sint32 index, MBCHAR *cursor )
 {
@@ -380,6 +383,11 @@ void aui_Mouse::SetCurrentCursor( sint32 index )
 }
 
 
+aui_Cursor *GetCurrentCursor( void ) const
+{
+	return *m_curCursor;
+}
+
 
 sint32 aui_Mouse::GetCurrentCursorIndex(void) 
 {
@@ -394,11 +402,23 @@ sint32 aui_Mouse::GetCurrentCursorIndex(void)
 }
 
 
+uint32 GetAnimDelay( void ) const
+{
+	return m_animDelay;
+}
+
+
 void aui_Mouse::SetAnimDelay( uint32 animDelay )
 {
 	m_animDelay = animDelay;
 }
 
+
+void GetAnimIndexes( sint32 *firstIndex, sint32 *lastIndex )
+{
+	if ( firstIndex ) *firstIndex = m_firstIndex;
+	if ( lastIndex ) *lastIndex = m_lastIndex;
+}
 
 
 void aui_Mouse::SetAnimIndexes( sint32 firstIndex, sint32 lastIndex )
@@ -555,6 +575,17 @@ void aui_Mouse::DestroyPrivateBuffers( void )
 }
 
 
+uint32 GetFlags(void)
+{
+	return m_flags;
+}
+
+
+void SetFlags(uint32 flags)
+{
+	m_flags = flags;
+}
+
 
 AUI_ERRCODE aui_Mouse::End( void )
 {
@@ -705,7 +736,43 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 #endif
 }
 
+AUI_ERRCODE Show( void )
+{
+	m_showCount++;
+	return AUI_ERRCODE_OK;
+}
 
+AUI_ERRCODE Hide( void )
+{
+	if ( !m_showCount )
+	{
+		
+		Suspend( TRUE );
+		m_showCount--;
+		Resume();
+	}
+	return AUI_ERRCODE_OK;
+}
+
+BOOL IsSuspended( void ) const
+{
+	return m_suspendCount;
+}
+
+BOOL IsHidden( void ) const
+{
+	return m_showCount < 0;
+}
+
+sint32	X( void )
+{
+	return m_data.position.x;
+}
+
+sint32	Y( void )
+{
+	return m_data.position.y;
+}
 
 inline BOOL aui_Mouse::ShouldTerminateThread( void )
 {
@@ -832,8 +899,15 @@ AUI_ERRCODE aui_Mouse::SetHotspot( sint32 x, sint32 y, sint32 index )
 	return AUI_ERRCODE_OK;
 }
 
+double &Sensitivity( void )
+{
+	return m_sensitivity;
+}
 
-
+aui_Cursor *GetCursor( sint32 index ) const
+{
+	return m_cursors[ index ];
+}
 
 AUI_ERRCODE aui_Mouse::ReactToInput( void )
 {
@@ -1655,6 +1729,17 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 }
 
 
+#ifdef USE_SDL
+SDL_mutex *LPCS(void) const
+{
+	return m_lpcs;
+}
+#else // USE_SDL
+LPCRITICAL_SECTION LPCS( void ) const
+{
+	return m_lpcs;
+}
+#endif // USE_SDL
 
 
 AUI_ERRCODE aui_Mouse::Erase( void )

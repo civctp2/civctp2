@@ -112,34 +112,20 @@ public:
 	AUI_ERRCODE Suspend( BOOL eraseCursor );
 	AUI_ERRCODE Resume( void );
 
-	AUI_ERRCODE Show( void )
-	{
-		m_showCount++;
-		return AUI_ERRCODE_OK;
-	}
-	AUI_ERRCODE Hide( void )
-	{
-		if ( !m_showCount )
-		{
-			
-			Suspend( TRUE );
-			m_showCount--;
-			Resume();
-		}
-		return AUI_ERRCODE_OK;
-	}
+	AUI_ERRCODE Show( void );
+	AUI_ERRCODE Hide( void );
 
-	BOOL IsSuspended( void ) const { return m_suspendCount; }
-	BOOL IsHidden( void ) const { return m_showCount < 0; }
+	BOOL IsSuspended( void ) const;
+	BOOL IsHidden( void ) const;
 
 	
-	sint32	X( void ) { return m_data.position.x; }
-	sint32	Y( void ) { return m_data.position.y; }
+	sint32	X( void );
+	sint32	Y( void );
 
 	void SetClip( sint32 left, sint32 top, sint32 right, sint32 bottom );
 	void SetClip( RECT *clip );
 
-	aui_MouseEvent *GetLatestMouseEvent( void ) { return &m_data; }
+	aui_MouseEvent *GetLatestMouseEvent( void );
 
 	AUI_ERRCODE SetPosition( sint32 x, sint32 y );
 	AUI_ERRCODE SetPosition( POINT *point );
@@ -149,23 +135,19 @@ public:
 	AUI_ERRCODE	SetHotspot( sint32 x, sint32 y, sint32 index = 0 );
 
 	
-	double		&Sensitivity( void ) { return m_sensitivity; }
+	double		&Sensitivity( void );
 
-	aui_Cursor *GetCursor( sint32 index ) const { return m_cursors[ index ]; }
+	aui_Cursor *GetCursor( sint32 index ) const;
 	void SetCursor( sint32 index, MBCHAR *cursor );
 
-	aui_Cursor *GetCurrentCursor( void ) const { return *m_curCursor; }
+	aui_Cursor *GetCurrentCursor( void ) const;
 	sint32		GetCurrentCursorIndex(void) ;
 	void		SetCurrentCursor( sint32 index );
 
-	uint32 GetAnimDelay( void ) const { return m_animDelay; }
+	uint32 GetAnimDelay( void ) const;
 	void SetAnimDelay( uint32 animDelay );
 
-	void GetAnimIndexes( sint32 *firstIndex, sint32 *lastIndex )
-	{
-		if ( firstIndex ) *firstIndex = m_firstIndex;
-		if ( lastIndex ) *lastIndex = m_lastIndex;
-	}
+	void GetAnimIndexes( sint32 *firstIndex, sint32 *lastIndex );
 	void SetAnimIndexes( sint32 firstIndex, sint32 lastIndex );
 
 	void SetAnim( sint32 anim );
@@ -194,9 +176,9 @@ public:
 		aui_DirtyList *imageAreas );
 
 #ifdef USE_SDL
-	SDL_mutex *LPCS(void) const { return m_lpcs; }
+	SDL_mutex *LPCS(void) const;
 #else
-	LPCRITICAL_SECTION LPCS( void ) const { return m_lpcs; }
+	LPCRITICAL_SECTION LPCS( void ) const;
 #endif
 
 	
@@ -204,8 +186,8 @@ public:
 	AUI_ERRCODE CreatePrivateBuffers( void );
 	void DestroyPrivateBuffers( void );
 
-	uint32 GetFlags(void) { return m_flags;}
-	void SetFlags(uint32 flags) { m_flags = flags; }
+	uint32 GetFlags(void);
+	void SetFlags(uint32 flags);
 
 protected:
 	static sint32 m_mouseRefCount;
