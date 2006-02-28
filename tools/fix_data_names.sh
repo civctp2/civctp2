@@ -13,7 +13,11 @@ if [ -n "$1" -a -d "$1" ] ; then
 	cd "$1"
 fi
 
-if [ ! \( -d "default" -a -d "english" \) ] ; then
+if [ -d "ctp2_data" ] ; then
+	cd "ctp2_data"
+fi
+
+if [ ! -d "default/gamedata" ] ; then
 	echo -n "You have to cd into the ctp2_data directory before calling "
 	echo " this script !"
 	exit 1
@@ -26,17 +30,20 @@ LANGUAGES="english french german italian japanese spanish"
 # file, followed by a colon and the new file name. If the path starts with
 # "LANGUAGE", that file is renamed in all directories defined in the LANGUAGES
 # variable.
-NAMES=( "LANGUAGE/uidata/layouts/SpriteEditor.ldl:spriteeditor.ldl"
-	"LANGUAGE/gamedata/Strings.txt:strings.txt"
+NAMES=(	"LANGUAGE/gamedata/Strings.txt:strings.txt"
+	"LANGUAGE/uidata/layouts/SpriteEditor.ldl:spriteeditor.ldl"
+	"default/aidata/AdvanceLists.txt:advancelists.txt"
+	"default/aidata/BuildingBuildLists.txt:buildingbuildlists.txt"
+	"default/aidata/BuildListSequences.txt:buildlistsequences.txt"
+	"default/aidata/Goals.txt:goals.txt"
+	"default/aidata/ImprovementLists.txt:improvementlists.txt"
+	"default/aidata/UnitBuildLists.txt:unitbuildlists.txt"
+	"default/aidata/WonderBuildLists.txt:wonderbuildlists.txt"
 	"default/gamedata/Advance.txt:advance.txt"
+	"default/gamedata/EndGameObjects.txt:endgameobjects.txt"
+	"default/gamedata/Orders.txt:orders.txt"
 	"default/gamedata/Units.txt:units.txt"
 	"default/gamedata/Wonder.txt:wonder.txt"
-	"default/gamedata/Orders.txt:orders.txt"
-	"default/gamedata/EndGameObjects.txt:endgameobjects.txt"
-	"default/aidata/Goals.txt:goals.txt"
-	"default/aidata/WonderBuildLists.txt:wonderbuildlists.txt"
-	"default/aidata/BuildingBuildLists.txt:buildingbuildlists.txt"
-	"default/aidata/ImprovementLists.txt:improvementlists.txt"
 	"default/graphics/cursors/UC001.tga:uc001.tga"
 	"default/graphics/cursors/UC002.tga:uc002.tga"
 	"default/graphics/cursors/UC003.tga:uc003.tga"
@@ -115,7 +122,7 @@ function rename_file() {
 		newname="$3"
 
 		if [ ! -e "$dir/$oldname" ] ; then
-			return
+			return 
 		fi
 		
 		echo "Renaming \"$oldname\" to \"$newname\" in \"$dir\""
@@ -137,8 +144,8 @@ for entry in "${NAMES[@]}" ; do
 		# iterate over the LANGUAGES variable and insert its entries
 		# at the place of "LANGUAGE" in the directory name.
 		for language in $LANGUAGES ; do
-			rename_file "${dir/LANGUAGE/$language}" "$oldname" \
-				"$newname"
+			tmpdir="$language/${dir#*/}"
+			rename_file "$tmpdir" "$oldname" "$newname"
 		done
 	else
 		# Normal directory name, just rename
