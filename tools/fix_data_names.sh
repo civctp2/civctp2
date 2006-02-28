@@ -111,6 +111,8 @@ NAMES=(	"LANGUAGE/gamedata/Strings.txt:strings.txt"
 	"default/graphics/cursors/UC085.tga:UC085.TGA"
 	"default/graphics/cursors/UC086.tga:UC086.TGA"
 	"default/graphics/cursors/UC087.tga:UC087.TGA"
+	"default/graphics/cursors/UC088.tga:UC088.TGA"
+	"default/graphics/cursors/UC089.tga:UC089.TGA"
 	"default/graphics/pictures/UG026.TGA:ug026.tga"
 	"default/graphics/pictures/UG027.TGA:ug027.tga"
 )
