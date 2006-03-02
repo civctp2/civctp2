@@ -110,6 +110,13 @@
 //   EfficiencyOrCrime flag affects all four.  - added by E November 5th 2005
 // - Corrected building maintenance deficit spending handling.
 // - Correct GoodExport bonuses (thanks fromafar) by E 11-Jan-2006
+// - Implemented 'OnePerCiv' in CanBuildBuilding allowing for Small wonders by E 2-14-2006
+// - GoldPerCity in ProcessGold by E 2-14-2006
+// - GoldPerUnit in ProcessGold by E 2-24-2006
+// - GoldPerUnitReadiness in ProcessGold by E 2-24-2006
+// - Add Civilization and Citystyle Bonuses to Gold, Food, science, production by either a 
+//   bonus (just a solid integer) or by a percentage. by E 2-27-2006
+// - Added Increase Borders to AddImprovement (hopefully it works) by E 2-28-2006
 //     
 //----------------------------------------------------------------------------
 
@@ -1644,6 +1651,19 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 		gross_production += LaborerCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_LABORER], g_player[m_owner]->GetGovernmentType())->GetProduction();
 	}
+
+//EMOD Civilization and Citystyle bonuses
+	//gross_production += ceil(gross_production * g_player[m_owner]->GetCivilisation()->GetCivilisation()->GetProductionPercent());
+	
+	//gross_production += g_theCivilisationDB->Get(g_player[m_owner]->GetCivilisation())->GetBonusProduction();
+
+	gross_production += ceil(gross_production * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetProductionPercent());
+
+	//gross_production += g_player[m_owner]->GetCivilisation()->GetBonusProduction();
+
+	gross_production += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusProduction();
+
+
 //Added by E - EXPORT BONUSES TO GOODS if has good than a production bonus	Finally Works! 1-13-2006
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
 	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
@@ -1667,6 +1687,23 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 			}
 		}
 	}
+
+	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		{
+			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
+			if (tgoodData)
+			{
+				sint32 tgoodBonus;
+				if (tgoodData->GetTradeProduction(tgoodBonus))
+				{
+					gross_production += tgoodBonus;
+				}
+			}
+		}
+	}
+
 // end EMOD
 
 	return ComputeProductionLosses(static_cast<sint32>(gross_production), crime_loss, franchise_loss);
@@ -1889,12 +1926,28 @@ void CityData::AddShieldsToBuilding()
 #if !defined(NEW_RESOURCE_PROCESS)
 void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const
 {
+    
+// EMOD	
+//	sint32 bldgradius; 
+//	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
+//		if(m_built_improvements & ((uint64)1 << b)) {
+//			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+//			for(bldgradius = 0; bldgradius < rec->GetSquaredRadius(); bldgradius++); 
+//		}
+//	}
+
+// end EMOD
 	CitySizeRecord const *  fullRec = NULL;
 	if (m_workerFullUtilizationIndex >= 0) 
     {
 		fullRec = g_theCitySizeDB->Get(m_workerFullUtilizationIndex);
 	}
-    fullRadius  = (fullRec) ? fullRec->GetSquaredRadius() : 0;
+
+//	if (fullRec >= bldgradius) { //EMOD
+		fullRadius  = (fullRec) ? fullRec->GetSquaredRadius() : 0;
+//	} else {  //EMOD
+//		fullRadius  = bldgradius;   //EMOD
+//	}
 
     CitySizeRecord const *  partRec = NULL;
 	if ((m_workerPartialUtilizationIndex >= 0) && 
@@ -1903,7 +1956,13 @@ void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) co
     {
 		partRec = g_theCitySizeDB->Get(m_workerPartialUtilizationIndex);
 	}
-	partRadius  = (partRec) ? partRec->GetSquaredRadius() : 0;
+
+//	if (fullRec >= bldgradius) { //EMOD
+		partRadius  = (partRec) ? partRec->GetSquaredRadius() : 0;
+//	} else {  //EMOD
+//		partRadius  = bldgradius;   //EMOD
+//	}
+
 }
 
 //----------------------------------------------------------------------------
@@ -2232,7 +2291,7 @@ void CityData::ProcessResources()
 //
 // Returns    : -
 //
-// Remark(s)  : -
+// Remark(s)  : Maybe I should add the civilization bonuses here?
 //
 //----------------------------------------------------------------------------
 void CityData::CalculateResources()
@@ -2292,6 +2351,10 @@ void CityData::CalculateResources()
 	m_science        += static_cast<sint32>(ceil((m_scieFromOnePop - m_crimeScieLossOfOnePop) * ScientistCount()));
 
 	ComputeSpecialistsEffects();
+
+	///////////////////////////////////////////////
+	// Add bonus percentage from civilization? EMOD
+
 
 	///////////////////////////////////////////////
 	// Add gross gold from trade routes to gross gold
@@ -2511,6 +2574,10 @@ double CityData::ProcessProd(sint32 prod) const
 //----------------------------------------------------------------------------
 double CityData::ProcessGold(sint32 gold) const
 {
+
+//EMOD is this not used?????????
+
+
 	double grossGold = 0.0;
 	if(gold > 0) {
 		
@@ -2531,34 +2598,9 @@ double CityData::ProcessGold(sint32 gold) const
 	}
 
 	///////////////////////////////////////////////
-	// Add gold from citizen
+	// Add(or if negative Subtract) gold per citizen
 	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
 	grossGold += static_cast<double>(goldPerCitizen * PopCount());
-
-//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
-//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
-	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
-	{
-		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
-		{
-			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
-			if (goodData)
-			{
-				double goodBonus;
-				if (goodData->GetCommercePercent(goodBonus))
-				{
-					grossGold += static_cast<sint32>(ceil(grossGold * goodBonus));
-				}
-
-				double goodEfficiency;
-				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
-				{
-					grossGold += static_cast<sint32>(ceil(grossGold * goodEfficiency));
-				}
-			}
-		}
-	}
-
 
 	return grossGold;
 }
@@ -2575,7 +2617,7 @@ double CityData::ProcessGold(sint32 gold) const
 //
 // Returns    : Returns the amount of gross science this turn.
 //
-// Remark(s)  : -
+// Remark(s)  : not used? never generated any errors no matter what I put in
 //
 //----------------------------------------------------------------------------
 double CityData::ProcessScie(sint32 science) const
@@ -2614,6 +2656,16 @@ double CityData::ProcessScie(sint32 science) const
 	// No science from citizen. Maybe something to add.
 
 
+//EMOD Civilization and Citystyle bonuses
+	grossScience += ceil(grossScience * g_player[m_owner]->GetCivilisation()->GetSciencePercent());
+
+	grossScience += ceil(grossScience * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetSciencePercent());
+
+	grossScience += g_player[m_owner]->GetCivilisation()->GetBonusScience();
+
+	grossScience += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusScience();
+
+
 //Added by E - EXPORT BONUSES TO GOODS if has good than a science bonus	
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
 	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
@@ -2633,6 +2685,22 @@ double CityData::ProcessScie(sint32 science) const
 				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
 				{
 					grossScience += static_cast<sint32>(ceil(grossScience * goodEfficiency));
+				}
+			}
+		}
+	}
+
+	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		{
+			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
+			if (tgoodData)
+			{
+				sint32 tgoodBonus;
+				if (goodData->GetTradeScience(tgoodBonus))
+				{
+					grossScience += tgoodBonus;
 				}
 			}
 		}
@@ -2820,22 +2888,55 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 			g_thePopDB->Get(m_specialistDBIndex[POP_FARMER], g_player[m_owner]->GetGovernmentType())->GetFood();
 	}
 
-// This seemed to work though...
-//Added by E - EXPORT BONUSES TO GOODS This gives a bonus of food	
-// TODO: check. GetFoodPercent returns a bool. You probably want the value!
-	sint32 good;
-	for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
-		if((m_buyingResources[good] + m_collectingResources[good] - m_sellingResources[good]) > 0){
-			grossFood += ceil(grossFood * (g_theResourceDB->Get(good))->GetFoodPercent());		
+//EMOD Civilization and Citystyle bonuses 
+
+	//grossFood += ceil(grossFood * g_player[m_owner]->GetCivilisation()->GetFoodPercent());
+
+	grossFood += ceil(grossFood * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetFoodPercent());
+
+	//grossFood += g_player[m_owner]->GetCivilisation()->GetBonusFood();
+
+	grossFood += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusFood();
+
+
+//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (27-FEB-2006)	
+//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
+	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+	{
+		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		{
+			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
+			if (goodData)
+			{
+				double goodBonus;
+				if (goodData->GetFoodPercent(goodBonus))
+				{
+					grossFood += static_cast<sint32>(ceil(grossFood * goodBonus));
+				}
+
+				double goodEfficiency;
+				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+				{
+					grossFood += static_cast<sint32>(ceil(grossFood * goodEfficiency));
+				}
+			}
 		}
 	}
 
-//Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
-// TODO: check. GetEfficiencyOrCrime returns a bool. You probably want the value!
-	sint32 g;
-	for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
-		if((m_buyingResources[g] + m_collectingResources[g] - m_sellingResources[g]) > 0){
-			grossFood += ceil(grossFood * (g_theResourceDB->Get(g))->GetEfficiencyOrCrime());		
+//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying (27-FEB-2006)	
+	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		{
+			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
+			if (tgoodData)
+			{
+				sint32 tgoodBonus;
+				if (tgoodData->GetTradeFood(tgoodBonus))
+				{
+					grossFood += tgoodBonus;
+				}
+			}
 		}
 	}
 
@@ -4087,6 +4188,8 @@ BOOL CityData::BuildWonder(sint32 type)
 void CityData::AddWonder(sint32 type)
 {
 	m_builtWonders |= (uint64(1) << type);
+
+// EMOD add HolyCity?
 }
 
 BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
@@ -5630,10 +5733,12 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 //              GovernmentType flag for Buidings limits Buildings to govt type.
 //              CultureOnly flag added by E. It allows only civilizations with 
 //              the same CityStyle as CultureOnly's style to build that building.
-//		      : Added NeedsCityGood checks building good and sees if the city 
-//			    has the either good in its radius or is buying the good from trade.
-//		      : Added NeedsCityGoodAll checks building good and sees if the city 
-//			    has all of the goods in its radius or is buying the good from trade.
+//	      : Added NeedsCityGood checks building good and sees if the city 
+//	        has the either good in its radius or is buying the good from trade.
+//	      : Added NeedsCityGoodAll checks building good and sees if the city 
+//	        has all of the goods in its radius or is buying the good from trade.
+//	      : Added OnePerCiv checks if any civ already built building
+//	      : Added Buildingfeat checks if any civ has built num or percent of buildings
 //
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildBuilding(sint32 type) const
@@ -5692,6 +5797,47 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 				return FALSE;
 		}
 	}
+//EMOD OnePerCiv allows for buildings to be Small Wonders
+	if(rec->GetOnePerCiv()) {
+			for(o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
+				if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings())){ 
+					return FALSE;
+				}
+			}
+	}
+
+//EMOD from feats but needs a number of builds to build, goes with small wonders 2-24-2006
+	const BuildingRecord::BuildingFeat *bf;
+		
+		if(rec->GetBuilding(bf)) {
+			
+			if(bf->GetBuildingIndex()) {				
+				sint32 numCities = 0;
+				sint32 c;
+				for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
+					Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
+					if(aCity.CD()->HaveImprovement(bf->GetBuildingIndex()))
+						numCities++;
+				}
+				
+				sint32 num, percent;
+				
+				if(bf->GetNum(num)) {
+					if(numCities >= num) {
+						return TRUE;
+					}
+					return FALSE;
+				} else if(bf->GetPercentCities(percent)) {
+					sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
+					if(havePercent >= percent) {
+						return TRUE;
+					}
+					return FALSE;
+				}
+			}
+		}
+
+
 
 // Added GovernmentType flag from Units to use for Buildings
 	if(rec->GetNumGovernmentType() > 0) {
@@ -5790,10 +5936,11 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 //              the same CityStyle as CultureOnly's style to build that wonder.
 //            : PrerequisiteBuilding checks if a city has a building in order
 //              to build a wonder. Added by E.
-//		      : Added NeedsCityGood checks wonder good and sees if the city 
-//			    has the either good in its radius or is buying the good from trade.
-//		      : Added NeedsCityGoodAll checks wonder good and sees if the city 
-//			    has all of the goods in its radius or is buying the good from trade.
+//	      : Added NeedsCityGood checks wonder good and sees if the city 
+//	        has the either good in its radius or is buying the good from trade.
+//	      : Added NeedsCityGoodAll checks wonder good and sees if the city 
+//	        has all of the goods in its radius or is buying the good from trade.
+//	      : Added Buildingfeat checks if any civ has built num or percent of buildings
 //
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildWonder(sint32 type) const
@@ -5831,6 +5978,38 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		if(!found)
 			return FALSE;
 	}
+
+//EMOD from feats but needs a number of builds to build, goes with wonders 2-24-2006
+	const WonderRecord::BuildingFeat *bf;
+		
+		if(rec->GetBuilding(bf)) {
+			
+			if(bf->GetBuildingIndex()) {				
+				sint32 numCities = 0;
+				sint32 c;
+				for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
+					Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
+					if(aCity.CD()->HaveImprovement(bf->GetBuildingIndex()))
+						numCities++;
+				}
+				
+				sint32 num, percent;
+				
+				if(bf->GetNum(num)) {
+					if(numCities >= num) {
+						return TRUE;
+					}
+					return FALSE;
+				} else if(bf->GetPercentCities(percent)) {
+					sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
+					if(havePercent >= percent) {
+						return TRUE;
+					}
+					return FALSE;
+				}
+			}
+		}
+
 
 // Added by E - Compares Wonder CityStyle to the CityStyle of the City
 	if(rec->GetNumCityStyleOnly() > 0) {
@@ -7121,6 +7300,10 @@ void CityData::AddBuyFront()
 
 void CityData::AddImprovement(sint32 type)
 {
+
+	MapPoint m_point(m_home_city.RetPos()); //EMOD add for borders
+	const BuildingRecord *rec = g_theBuildingDB->Get(type); //EMOD add for borders
+
 	SetImprovements(m_built_improvements | ((uint64)1 << (uint64)type));
 	IndicateImprovementBuilt();
 	g_player[m_owner]->RegisterCreateBuilding(m_home_city, type);
@@ -7129,6 +7312,16 @@ void CityData::AddImprovement(sint32 type)
 		g_player[m_owner]->SetCapitol(m_home_city); 
 		g_player[m_owner]->RegisterNewCapitolBuilding(m_home_city);
 	}
+
+	sint32 intRad;
+    	sint32 sqRad;
+	//EMOD increases city borders
+	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) {
+		GenerateBorders(m_point, m_owner, intRad, sqRad);
+	}
+	//end Emod
+
+	//EMOD - Add Holy City here?
 
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 
@@ -7471,38 +7664,83 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 		gold += static_cast<sint32>(gold * featPercent / 100.0);
 	}
 
+	//not necessary? this says only terrain
 	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
 	gold += goldPerCitizen * PopCount();
+
+	//EMOD not sure its needed here though
+	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings());
+	gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
+	gold += goldPerCity * g_player[m_owner]->m_all_cities->Num();
+
+	///////////////////////////////////////////////
+	// EMOD - Add(or if negative Subtract) gold per unit
+	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings());
+	gold += static_cast<double>(goldPerUnit * g_player[m_owner]->m_all_units->Num());
+
+	///////////////////////////////////////////////
+	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by readiness level
+	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings());
+	gold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+
 
 	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_MERCHANT] >= 0) {
 		gold += MerchantCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT], g_player[m_owner]->GetGovernmentType())->GetCommerce();
 
 	}
-// did this old Gold bonus work?
-//Added by E - EXPORT BONUSES TO GOODS This gives a bonus of gold	
-//Added by E - EXPORT BONUSES TO GOODS This Causes a crime effect if negative and efficiency if positive	
-//	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
-//	{
-//		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
-//		{
-//			ResourceRecord const * goodData	= g_theResourceDB->Get(good);
-//			if (goodData)
-//			{
-//				double	goodBonus;
-//				if (goodData->GetCommercePercent(goodBonus))
-//				{
-//					gold += static_cast<sint32>(ceil(gold * goodBonus));
-//				}
-//
-//				double goodEfficiency;
-//				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
-//				{
-//					gold += static_cast<sint32>(ceil(gold * goodEfficiency));
-//				}
-//			}
-//		}
-//	}
+
+//EMOD Civilization and Citystyle bonuses
+	//gold += ceil(gold * g_player[m_owner]->GetCivilisation()->GetCommercePercent());
+
+	gold += ceil(gold * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetCommercePercent());
+
+	//gold += g_player[m_owner]->GetCivilisation()->GetBonusGold();
+
+	gold += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusGold();
+
+
+
+//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
+//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
+	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+	{
+		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		{
+			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
+			if (goodData)
+			{
+				double goodBonus;
+				if (goodData->GetCommercePercent(goodBonus))
+				{
+					gold += static_cast<sint32>(ceil(gold * goodBonus));
+				}
+
+				double goodEfficiency;
+				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+				{
+					gold += static_cast<sint32>(ceil(gold * goodEfficiency));
+				}
+			}
+		}
+	}
+
+//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
+	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		{
+			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
+			if (tgoodData)
+			{
+				sint32 tgoodBonus;
+				if (tgoodData->GetTradeGold(tgoodBonus))
+				{
+					gold += tgoodBonus;
+				}
+			}
+		}
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -8421,13 +8659,32 @@ sint32 CityData::GetRing(MapPoint pos) const
 {
 	MapPoint cityPos = m_home_city.RetPos();
 
+//EMOD
+//	sint32 bldgradius; 
+///	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
+//		if(m_built_improvements & ((uint64)1 << b)) {
+//			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+//			for(bldgradius = 0; bldgradius < rec->GetSquaredRadius(); bldgradius++); 
+//		}
+//	}
+	
+	
+//End EMOD	
 	sint32 i, squaredRadius, squaredDistance;
 	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
 		squaredRadius = g_theCitySizeDB->Get(i)->GetSquaredRadius();
 		squaredDistance = MapPoint::GetSquaredDistance(cityPos, pos);
-		if(squaredDistance <= squaredRadius){
-			return i;
+
+//		if(bldgradius > squaredRadius){ //EMOD
+//			if(squaredDistance <= bldgradius){
+//				return bldgradius;
+//			}
+//		} else {
+			if(squaredDistance <= squaredRadius){
+				return i;
+//			}
 		}
+	
 	}
 
 	Assert(false);

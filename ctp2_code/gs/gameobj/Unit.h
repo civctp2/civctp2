@@ -314,6 +314,7 @@ public:
 	sint32 GetFirstMoveThisTurn() const;
 
 	sint32 GetShieldHunger() const;
+	sint32 GetGoldHunger() const;
 	sint32 GetFoodHunger() const;
 
 	sint32 IsIgnoresZOC() const;
@@ -322,6 +323,7 @@ public:
 	sint32 GetMovementTypeSea() const;
 	sint32 GetMovementTypeShallowWater() const;
 	sint32 GetMovementTypeAir() const;
+	sint32 GetAllTerrainAsImprovement() const;  //EMOD
 	sint32 GetMovementTypeSpace() const;
 	sint32 GetMovementTypeMountain() const;
 	sint32 IsSameMovementType(uint32 bit_field) const;

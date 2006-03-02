@@ -103,6 +103,14 @@ Wonder {
 	Bit StartGaiaController
 	Bit GLHidden
 
+    	Struct BuildingFeat {
+        	Record Building Building
+        	Bit(Int) Num
+        	Bit(Int) PercentCities
+    	}
+
+    	Bit(struct BuildingFeat) Building
+
 	Bit(Record Building) BuildingEverywhere
 
 	Bit(Float) PollutionPercent

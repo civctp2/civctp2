@@ -1,9 +1,37 @@
-
-//building.cpp
-//Fixed buildingutil_GetOffenseBonusAir and buildingutil_GetOffenseBonusWater
-//Fix by NelsonAndBronte on 04-11-2003
-//EMOD note UpkeepPerPop to buildingutil_GetTotalUpkeep  12-27-2005
-//EMOD note UpkeepPerCity to buildingutil_GetTotalUpkeep  12-27-2005
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Building data handling
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Fixed buildingutil_GetOffenseBonusAir and buildingutil_GetOffenseBonusWater
+// - Fix by NelsonAndBronte on 04-11-2003
+// - EMOD GetGoldPerCity added to work like GoldPerPop  2-15-2006
+// - EMOD GetGoldPerUnit added to work like GoldPerPop  2-24-2006
+// - EMOD GetGoldPerUnitReadiness added to work like GoldPerPop 2-24-2006
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -229,6 +257,39 @@ sint32 buildingutil_GetGoldPerCitizen(const uint64 built_improvements)
 	FOREACH_BUILT(GetGoldPerCitizen) {
 		sint32 mod;
 		rec->GetGoldPerCitizen(mod);
+		goldMod += mod;
+	}
+	return goldMod;
+}
+
+sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements) //EMOD
+{
+	sint32 goldMod = 0;
+	FOREACH_BUILT(GetGoldPerCity) {
+		sint32 mod;
+		rec->GetGoldPerCity(mod);
+		goldMod += mod;
+	}
+	return goldMod;
+}
+
+sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements) //EMOD
+{
+	sint32 goldMod = 0;
+	FOREACH_BUILT(GetGoldPerUnit) {
+		sint32 mod;
+		rec->GetGoldPerUnit(mod);
+		goldMod += mod;
+	}
+	return goldMod;
+}
+
+sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements) //EMOD
+{
+	sint32 goldMod = 0;
+	FOREACH_BUILT(GetGoldPerUnitReadiness) {
+		sint32 mod;
+		rec->GetGoldPerUnitReadiness(mod);
 		goldMod += mod;
 	}
 	return goldMod;

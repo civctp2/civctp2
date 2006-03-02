@@ -43,16 +43,22 @@ Civilisation{
 
 // for national flags
 //   StringID              NationUnitFlag      
-// from building.cdb to add Civilisation traits
+
+    Bit(Float) ProductionPercent = 0
+	Bit(Float) FoodPercent = 0
+	Bit(Float) CommercePercent = 0
+	Bit(Float) SciencePercent = 0
+	Bit(Int) BonusGold = 0
+	Bit(Int) BonusFood = 0
+	Bit(Int) BonusProduction = 0
+	Bit(Int) BonusScience = 0
+
+// FU from building.cdb to add Civilisation traits
 	Bit(Record Feat) TriggerFeat
 	Bit(Float) OffenseBonusLand
 	Bit(Float) OffenseBonusWater
 	Bit(Float) OffenseBonusAir
     Bit        DoubleTelevangelists
-    Bit(Float) ProductionPercent
-	Bit(Float) FoodPercent
-	Bit(Float) CommercePercent
-	Bit(Float) SciencePercent
     Bit        NoUnhappyPeople
     Bit        NoRushBuyPenalty
 	Bit(Float) LowerCrime
@@ -96,7 +102,6 @@ Civilisation{
 	Bit(Int) IncreaseScientists
 	Bit(Int) OtherCivRandomAdvanceChance
 	Bit(Int) IncreaseProduction
-	Bit(Int) BonusGold
 	Bit(Int) IncreaseFoodAllCities
 	Bit(Int) TemporaryFullHappiness
 	Bit RevoltingCitiesJoinPlayer

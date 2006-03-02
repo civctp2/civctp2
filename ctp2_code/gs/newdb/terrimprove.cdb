@@ -98,28 +98,29 @@ TerrainImprovement {
 		#Added by Martin Gühmann for Trade redirection
 		Bit(Int) Freight
 		Bit Radar
-		Bit NeedsWorker //futureUse - can't build unless IsWorker unit is on square
-		Bit NeedsWaterSupply //futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
+		Bit NeedsWorker 		//futureUse - can't build unless IsWorker unit is on square
+		Bit NeedsWaterSupply 		//futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
 		Bit Airport
 
-		Bit Colony      //FU
-		Bit Fort 	//FU
-		Bit Urban	//FU
-		Bit DeniedToEnemy	//FU
-		Bit(Int) BonusFoodExport //FU
-		Bit(Int) BonusProductionExport //FU
-		Bit(Int) BonusGoldExport //FU
+		Bit Colony      		//FU
+		Bit Fort 			//FU
+		Bit Urban			//FU
+		Bit Installation		//FU
+		Bit DeniedToEnemy		//FU
+		Bit(Int) BonusFoodExport 	//FU
+		Bit(Int) BonusProductionExport 	//FU
+		Bit(Int) BonusGoldExport 	//FU
 
 		Bit ListeningPost
 		Bit Endgame
 		Bit(Int) VisionRange
 		Bit(Int) RadarRange
 		Bit(Float) DefenseBonus
-		Bit(Int) PlantGood //added by E for future imp that places a good instead
+		Bit(Int) PlantGood 		//FU - no longer necessary?
 		Record Advance EnableAdvance
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost
-		Bit(Int) GoldCost //FU
+		Bit(Int) GoldCost 		//FU
 		Int ProductionTime
 		Int TilesetIndex
 	}
@@ -128,10 +129,10 @@ TerrainImprovement {
 	Record Sound Sound
 	Record Terrain[] CantBuildOn
 	Record Government[] GovernmentsModified
-	Record CityStyle[] CultureOnly //added by E -- can only build imps if civ has certain citystyle
-	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
-	Record Resource[] IsRestrictedToGood //added by E -- can only build imps if tile has good
-	Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
+	Record CityStyle[] CultureOnly 		//added by E -- can only build imps if civ has certain citystyle
+	Record Government[] GovernmentType 	//added by E --- a copy of unit Government type code
+	Record Resource[] IsRestrictedToGood 	//added by E -- can only build imps if tile has good
+	Record Resource[] EnablesGood 		//added by E -- having a TI gives a city a good
 	Bit(Struct Effect) Effect
 	Struct Effect[] TerrainEffect
 
@@ -149,6 +150,11 @@ TerrainImprovement {
 
 	Bit(Int) IntBorderRadius
 	Bit(Int) SquaredBorderRadius
+	Bit(Int) MoveBonus
+	Bit Colony      //FU
+	Bit(Int) BonusFoodExport //FU
+	Bit(Int) BonusProductionExport //FU
+	Bit(Int) BonusGoldExport //FU
 
 	Bit GLHidden
 

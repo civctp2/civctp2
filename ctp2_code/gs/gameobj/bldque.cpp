@@ -42,6 +42,8 @@
 // When swapping the wonder production of 2 cities, you may get 4 reports.
 // To improve reporting further, the wonder start/stop changes would have to go 
 // through a "clearinghouse" for the entire civilisation.
+// - Add PopCostsToBuild to allow for Units with higher than 1 (BuildingRemovesaPop) 
+// population cost to be removed from a city.
 //
 //----------------------------------------------------------------------------
 
@@ -408,6 +410,17 @@ bool BuildQueue::BuildFrontUnit(BOOL forceFinish)
 				return false;
 			}
 		}
+//EMOD to prevent units with POP > 1 from disbanding city
+		if(g_theUnitDB->Get(m_list->GetHead()->m_type)->GetPopCostsToBuild() &&
+		   cd->PopCount() < g_theUnitDB->Get(m_list->GetHead()->m_type)->GetPopCostsToBuild() + 1 &&
+		   !forceFinish) {
+			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
+			   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
+				//m_settler_pending = TRUE;
+				return false;
+			}
+		}
+// end EMOD
 
 		DPRINTF(k_DBG_GAMESTATE, ("City %lx building unit: %s\n",
 								  (uint32)cd->GetHomeCity(),
@@ -1625,8 +1638,16 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
 				cd->ChangePopulation(-1);
 			}
-		}
+// EMOD
+			sint32 pop = u.GetDBRec()->GetPopCostsToBuild();
+			if(u.GetDBRec()->GetPopCostsToBuild() > 0) {
+				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
+				cd->ChangePopulation(-pop);
+			}
+
+//end EMOD
 		
+		}
 		
 		
 		

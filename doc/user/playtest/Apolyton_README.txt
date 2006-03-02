@@ -24,22 +24,62 @@ your CTP dir and unzip this into the copy, so that you can preserve an
 unchanged copy for playing mods, etc.
 
 Please report any problems, bugs, crashes, etc. in the following threads:
-http://apolyton.net/forums/showthread.php?threadid=103817
-http://apolyton.net/forums/showthread.php?threadid=115144
-http://apolyton.net/forums/showthread.php?threadid=127059
+http://apolyton.net/forums/showthread.php?s=&threadid=147969
 
 Playtesting would be most useful if it tests the most recent changes, which
 are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
-
-2005-11-05
-(E's Changes Only)
+2006-02-15
+Updated: BUGS list to reflect fixes and new discoveries
+Updated: Improved error messages in tileset.cpp
+Updated: zlib (1.2.3) and tiff (3.7.3) libraries
+Fixed:Improved dbgen error message
+Fixed:Corrected turn box computation for ship paths through cities.
+Fixed:1.1 patch savegame compatibility fix
+Fixed: player color above player 16 and allow loading of the original color set again. Now there are only two valid number of colors for a ColorsXX.txt 58 and 74 - original and source code version respectively. For the 58 color version the missing player colors are copied from the terrain colors so that the result is like in the original game
+Fixed: mistake in tileset.cpp which prevented loading of tile file
+Fixed: mis-cast in UnitControlPanel.cpp
+Fixed: Prevent useless Assert pop-up (Governor.cpp) with the debug version
+Fixed: Rreport start of wonder when deleting the first item and the second item is a wonder
+Fixed: Removed texts that have been replaced with icons
+Fixed: Removed after redistribution of contents
+Fixed: Corrected building maintenance deficit spending handling.
+Fixed: Load strings from default files if a mod misses them
+Fixed: Added token so that the default strings aren't scanned for missing strings
+Fixed, added some strings and removed some duplicated strings
+Fixed: corrected endless path computation in an AOM game
+Added: NeedsCityGood, NeedsCityGoodAll, and NeedsCityGoodAny flags
+Added:Redesigned ColorSet to prevent a crash during start-up.
+Added: to Civilisation and CityStyle databases happiness increasement flags
+Added: Message boxes are now non-modal, left click on a message in the message list, the message is opened if it is not open, otherwise it is closed, right click removes the message from list, if it is open it is closed in addition. Left clicking on another message opens that and closes the first message. Alert boxes are left as they are modal.
+Added: option to select a city first instead of an active army.
+Added: DebugSlic and GoodAnim to the advanced options.
+Added:Used option to select a city first instead of an active army. Unfortunately this doesn't quite work. But for now this should be enough.
+Added:Made the autoDebug object more conform to the standart, maybe I move its struct to seperate header and source files
+Added: Improved handling of multiple build queue actions in a turn.
+Added:Display very slow or non-growth as ---
 Added: NeedsCityGood and NeedsCityGoodAll added to CanBuildUnit, CanBuildBuilding, and CanBuild Wonder
 Added:Implemented EnablesGood for buildings, wonders and tile improvements now they give goods to a city 
-Added:To ProcessFood,ProcessProduction,ProcessGold, ProcessScience added a check that if a city has or is buying a good than you can get a bonus. EfficiencyOrCrime flag affects all four. 
+Added:To ProcessFood,ProcessProduction, EfficiencyOrCrime added a check that if a city has or is buying a good than you can get a bonus.   
 Added: NeedsCityGoodAnyCity allows for a unit to be built in any city if one city has the good
+Added: Sneakattack - can attack with out declaring war or be attacked, like Hidden Nationality
+Added: Sneakbombard so you can bombard without war declared
+Added: new combat modifiers based on mounted and woodship bonus (see unit.cdb for flags) 
+Added: new DifficultyDB to the project however, the DifficultyDB must still be replaced
+Added: two new options to the profile database:
+- One for allowing end turns while the game is running in the background
+- One that is supposed to stop end turns if there is a city with empty build queue, doesn't work yet.
+Added: Reneralised production start reporting
+Added: Settlers can now be added to a city! 
+Added: Terrain Improvement flag CantPillage now works
+Added: NonLethalBombard - now the NLB flag doesnt destroy units (but weakens them)
+Added: CanBombardTiles - Tile Improvements can now be bombarded and destroyed
+Added: CollateralTileDamage - if unit has flag it will destroy the tile imps the unit they attack is on (lethal and nonlethal bombard) 
+Added: GoldPerCity building flag. add subtract gold based on the number of cities your empire has
+Added: OnePerCiv -  buildings can now be Small Wonders/National Projects 
+
 
 2005-10-23
 Fixed: Misc crashes
@@ -48,7 +88,6 @@ Fixed: Topic display bug in great library
 Fixed: Hosting of MP games on XP machines
 Fixed: SLIC error related to missing city
 Fixed: Prediction of movement times for ships moving through cities
-Added: New database flags for making construction of units, buildings and wonders depend on the existence of goods
 Changed: Message boxes to be non-modal
 Added: Option to select a city first instead of an army
 Added: DebugSlic and GoodAnim options

@@ -1904,14 +1904,24 @@ void UnitActor::DrawHealthBar(void)
 
 	if(unit.IsValid()) {
 		if(stackSize > 1 && myCell->GetNumUnits()) {
-			ratio = myCell->UnitArmy()->GetAverageHealthPercentage();
+			if (myCell->UnitArmy()->GetAverageHealthPercentage() > 0) { // added by E (EMOD)
+				ratio = myCell->UnitArmy()->GetAverageHealthPercentage();
+			} else {
+				ratio = 0.0;
+				}
 		} else {
 			
 			
-			if (m_healthPercent < 0) 
-				ratio = unit.GetHP() / unit.GetDBRec()->GetMaxHP();
-			else
-				ratio = m_healthPercent;
+			if (m_healthPercent < 0) {     //switch from < makes it zero
+				if (unit.GetHP() / unit.GetDBRec()->GetMaxHP() > 0) { // added by E (EMOD)
+					ratio =	unit.GetHP() / unit.GetDBRec()->GetMaxHP();
+				} else {
+					ratio = 0.0;
+				}
+			
+			} else {
+				ratio = 0.0;   //m_healthPercent;
+			}
 		}
 	} else {
 		if (m_healthPercent >= 0.0)

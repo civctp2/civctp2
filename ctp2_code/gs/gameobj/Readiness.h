@@ -34,6 +34,7 @@ private:
     double m_delta; 
     double m_hp_modifier; 
     double m_cost; 
+    double m_costGold; //EMOD
     double m_percent_last_turn; 
 	READINESS_LEVEL m_readinessLevel;
     BOOL m_ignore_unsupport; 
@@ -69,10 +70,13 @@ public:
     double GetPecentLastTurn() const { return m_percent_last_turn; } 
 
     void SupportUnit(const Unit &u, sint32 gov); 
+    void SupportUnitGold(const Unit &u, sint32 gov); //EMOD
 	double GetSupportCost(const Unit &u);
+	double GetSupportCostGold(const Unit &u); //EMOD
     void UnsupportUnit(const Unit &u, sint32 gov); 
     void KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_all_armies, sint32 mil_total);
 	void RecalcCost();
+	void RecalcCostGold(); //EMOD
 
     void Serialize(CivArchive &archive);
 

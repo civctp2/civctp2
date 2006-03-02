@@ -37,6 +37,7 @@
 // - Removed some unsused method to removed some unused in methods in
 //   CityData.. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+// - Added GetAllTerrainAsImp by E 2-24-2006
 //
 //----------------------------------------------------------------------------
 
@@ -338,6 +339,12 @@ void Unit::FastKill()
 BOOL Unit::IsValid() const
 {
 	return g_theUnitPool->IsValid(*this);
+}
+
+sint32 Unit::GetGoldHunger() const  //EMOD
+
+{
+	return GetDBRec()->GetGoldHunger();
 }
 
 sint32 Unit::GetShieldHunger() const
@@ -785,6 +792,12 @@ sint32 Unit::GetMovementTypeAir() const
 
 {
 	return GetDBRec()->GetMovementTypeAir();
+}
+
+sint32 Unit::GetAllTerrainAsImprovement() const  //EMOD
+
+{
+	return GetDBRec()->GetAllTerrainAsImprovementIndex();  //EMOD
 }
 
 sint32 Unit::GetMovementTypeSpace() const

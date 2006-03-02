@@ -34,7 +34,7 @@ MilitaryReadiness::MilitaryReadiness(sint32 o)
     m_pad = 0; 
     m_readinessLevel = READINESS_LEVEL_WAR;
     m_cost = 0; 
-//  m_costGold = 0;
+    m_costGold = 0; //EMOD
     m_ignore_unsupport = FALSE; 
 	m_hp_modifier = 1.0;
 	m_owner = o;
@@ -126,18 +126,18 @@ void MilitaryReadiness::SupportUnit(const Unit &u, sint32 gov)
 	g_network.Unblock(m_owner);
 }
 
-////////////////////////
-//void MilitaryReadiness::SupportUnitGold(const Unit &u, sint32 gov)
-//
-//{
-//	double unitCost = GetSupportCostGold(u);
-//
-//	m_costGold += unitCostGold;
-//
-//	g_network.Block(m_owner);
-//	ENQUEUE();
-//	g_network.Unblock(m_owner);
-//}
+//EMOD
+void MilitaryReadiness::SupportUnitGold(const Unit &u, sint32 gov)
+
+{
+	double unitCostGold = GetSupportCostGold(u);
+
+	m_costGold += unitCostGold;
+
+	g_network.Block(m_owner);
+	ENQUEUE();
+	g_network.Unblock(m_owner);
+}
 
 double MilitaryReadiness::GetSupportCost(const Unit &u)
 {
@@ -162,30 +162,32 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 	return unitCost;
 }
 
-/////////////////////////////////////
-//double MilitaryReadiness::GetSupportCost(const Unit &u)
-//{
-//	if(u.GetIsProfessional())
-//		return 0;
-//
-//	if(u.GetNeedsNoSupport())
-//		return 0;
-//
-//      // if(u.GetDBRec()->GetGoldHunger() > 0) { Is this needed for backwards compatibility?
-//	double unitCostGold;
-//	if(u.GetDBRec()->GetIsSpecialForces()) {
-//		unitCostGold = u.GetGoldHunger() * GetSpecialForcesSupportModifier(g_player[m_owner]->GetGovernmentType());
-//	} else {
-//		unitCostGold = u.GetGoldHunger() * GetSupportModifier(g_player[m_owner]->GetGovernmentType());
-//	}
-//	unitCostGold -= unitCost * 
-//		double((double)wonderutil_GetReadinessCostReduction(
-//			g_player[m_owner]->GetBuiltWonders()) / 100.0);
-//
-//	unitCostGold *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
-//
-//	return unitCostGold;
-//}
+//EMOD
+double MilitaryReadiness::GetSupportCostGold(const Unit &u)
+{
+	if(u.GetIsProfessional())
+		return 0;
+
+	if(u.GetNeedsNoSupport())
+		return 0;
+
+	double unitCostGold;
+ if(u.GetDBRec()->GetGoldHunger() > 0) { //Is this needed for backwards compatibility?
+
+	if(u.GetDBRec()->GetIsSpecialForces()) {
+		unitCostGold = u.GetGoldHunger() * GetSpecialForcesSupportModifier(g_player[m_owner]->GetGovernmentType());
+	} else {
+		unitCostGold = u.GetGoldHunger() * GetSupportModifier(g_player[m_owner]->GetGovernmentType());
+	}
+
+	unitCostGold -= unitCostGold * 
+		double((double)wonderutil_GetReadinessCostReduction(
+			g_player[m_owner]->GetBuiltWonders()) / 100.0);
+
+	unitCostGold *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
+ }
+	return unitCostGold;
+}
 
 
 
@@ -255,25 +257,25 @@ struct UnitCost {
 };
 
 
-///////////////////////
-//void MilitaryReadiness::RecalcCostGold()
-//{
-//	m_cost = 0;
-//	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
-//  int i, j, n, m; 
-//    n = all_armies->Num(); 
-//  for (i=0; i<n; i++) { 
-//        m=all_armies->Access(i).Num(); 
-//        for (j=0; j<m; j++) { 
-//			m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
-//        }
-//    }
-//}
-//
-//struct UnitCostGold { 
-//  Unit u; 
-//   double costGold; 
-//};
+//EMOD
+void MilitaryReadiness::RecalcCostGold()
+{
+	m_costGold = 0;
+	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
+	int i, j, n, m; 
+	n = all_armies->Num(); 
+	for (i=0; i<n; i++) { 
+        	m=all_armies->Access(i).Num(); 
+        	for (j=0; j<m; j++) { 
+			m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
+        	}
+    	}	
+}
+
+struct UnitCostGold { 
+  Unit u; 
+   double costGold; 
+};
 
 
 

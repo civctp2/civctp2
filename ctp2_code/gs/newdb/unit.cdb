@@ -95,15 +95,20 @@ Unit {
 	Record TerrainImprovement     SettleImprovement // future use - for units to make specific imps like forts
     Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build unit
-	Record Resource[] NeedsCityGoodCapitol //FU
-	Record Resource[] NeedsCityGoodAnyCity //FU
+	Record Resource[] NeedsCityGoodCapitol //implemented by E
+	Record Resource[] NeedsCityGoodAnyCity //implemented by E
 
 	Record TerrainImprovement     AllTerrainAsImprovement // future use - like AllTerrainRoads
 	Record TerrainImprovement     InfiniteTerrainMovement // future use - for Barb leaders?
 	Record Unit [] ObsoleteByUnit //FU intead of avdance for later upgrade
-    Bit NonLethalBombard  //lessen bombard strengthen like old civ3
+    	Bit NonLethalBombard  //lessen bombard strengthen like old civ3
 	Bit CanBombardTiles  //allows bombarding of tile improvements
 	Bit CollateralTileDamage  //if a defender is ona tile then improvements cut too
+    	Bit PrecisionStrike  //FU when bombing city only destroys buildings
+    	Bit TargetsCivilians  //FU when bombing city only kills a pop
+
+	Bit CanRebase  //allows bombarding of tile improvements
+	Bit MultipleAttacks  //FU
 
 	Bits Size {
 		Small,
@@ -360,8 +365,8 @@ Unit {
 	Bit SeaCityCanBuild
 	Bit SpaceCityCanBuild
 	Bit IsSpecialForces
-      Bit IsPeaceKeeper
-	  Bit IsGuerrilla  //EMOD
+      	Bit IsPeaceKeeper
+	Bit IsGuerrilla  //EMOD
 	Bit IsWorker //future use -- with TerrImp flag NeedsWorker to limit certain imps or Civ3-like mods
 	Bit NotAffectedByLandMines
 	Bit InternalReserved

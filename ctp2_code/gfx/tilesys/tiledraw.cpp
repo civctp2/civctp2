@@ -933,7 +933,7 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
-	sint32 width = GetZoomTilePixelWidth();
+	sint32 width = GetZoomTilePixelWidth();  // changing here got rid of the border
 	sint32 height = GetZoomTilePixelHeight();
 
 	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
@@ -2672,9 +2672,9 @@ if (y > surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 	
 	for(sint32 j=0; j<k_TILE_PIXEL_HEIGHT; j++) {
 		if (j<=23) {
-			startX = (23-j)*2;
+			startX = (23-j)*2;////not for border pixels
 		} else {
-			startX = (j-24)*2;
+			startX = (j-24)*2; //not for border pixels
 		}
 		endX = k_TILE_PIXEL_WIDTH - startX;
 
@@ -4600,6 +4600,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							primitives_PaintRect16(surf, &clipRect, GetColor(COLOR_BLACK));
 							
 							InflateRect(&boxRect, 1, 1);//get ready to do borders (clipRect - boxRect now= a one pixel border)
+							                            // this is only for the cityname box EMOD note    
 
 							clipRect = boxRect;//copy boxRect to the working surface clipRect
                             //adjust clipRect to fit on the screen

@@ -53,6 +53,7 @@
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added city data to "settle too close"-report.
+// - NonLethalBombard implemented in UnitData::Bombard 15-FEB-2006 
 //
 //----------------------------------------------------------------------------
 
@@ -325,6 +326,8 @@ void UnitData::Create(const sint32 t,
 
 	m_owner = o;
 
+//EMOD add civ bonus
+
 	sint32 wonderHPBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
 	m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus;
 	m_movement_points = g_theUnitDB->Get(t)->GetMaxMovePoints();
@@ -498,15 +501,33 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_fuel) 
 
 {
-	if(!Flag(k_UDF_PACMAN)) {
-		m_movement_points -= cost;
-		m_movement_points = std::max(m_movement_points, 0.0);
-		ClearFlag(k_UDF_FIRST_MOVE);
-	}
+
+	const UnitRecord *rec = g_theUnitDB->Get(m_type);
 
 // EMOD add something here for treat all as roads?
+	
+	if(!Flag(k_UDF_PACMAN)) {
+//		if(rec->GetAllTerrainAsImprovement() > 0 ){
+//			MapPoint pos;
+//			sint32 imp = rec->GetAllTerrainAsImprovementIndex();
+//			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+//			const TerrainImprovementRecord::Effect *effect;
+//				effect = terrainutil_GetTerrainEffect(trec, pos);
+//				if(effect && effect->GetMoveCost()) {
+//					m_movement_points -= effect->GetMoveCost();
+//					m_movement_points = std::max(m_movement_points, 0.0);
+//					ClearFlag(k_UDF_FIRST_MOVE);
+//				}
+//		} else {//EMOD
+			m_movement_points -= cost;
+			m_movement_points = std::max(m_movement_points, 0.0);
+			ClearFlag(k_UDF_FIRST_MOVE);
+//		}
+	}
 
-	const UnitRecord *rec = g_theUnitDB->Get(m_type); 
+
+
+//	const UnitRecord *rec = g_theUnitDB->Get(m_type);  // original code
 
 	out_of_fuel = FALSE; 
 	if (!rec->GetNoFuelThenCrash()){ 
@@ -1442,9 +1463,18 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 	for (i=0; i<n; i++) { 
 		if (g_rand->Next(100) < p) { 
 			hp -= f * dmr; 
-		} 
-	}
-	defender.SetHP(hp); 
+			if(rec->GetNonLethalBombard()){	//EMOD for NonLethalBombard
+				if (hp < 0.999) {			//EMOD 
+					defender.SetHP(1.0);	//EMOD
+				}							//EMOD
+			} else {						//EMOD
+					defender.SetHP(hp);		//from original code 
+			}								//EMOD
+		}				
+	} // end EMOD
+
+	//defender.SetHP(hp); //original code
+	
 	if(isCounterBombardment) {
 		g_slicEngine->RunCounterBombardmentTriggers(Unit(m_id), defender);
 	} else {
@@ -3308,6 +3338,8 @@ void UnitData::BeginTurn()
 void UnitData::EndTurn()
 {
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
+
+//EMOD add civbonus
 
 	sint32     wonderBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
 	double          origHP  = m_hp;

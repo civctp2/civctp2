@@ -70,7 +70,8 @@
 // - NeedsCityGoodAnyCity code added to CanBuildUnit; limits unit construction by 
 //   comparing a unit's NeedscityGoodAnyCity flag to a player's cities if they have a good. 
 //   by E October 23 2005
-// - TODO add readiness modifier for building upkeep in CalcTotalBuildingUpkeep? 1-17-2006
+// - Settlers can be added to cities by E 1-17-2006
+// - added readiness modifier for building upkeep in CalcTotalBuildingUpkeep by E 2-24-2006
 //
 //----------------------------------------------------------------------------
 
@@ -1244,6 +1245,7 @@ Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 	}
 
 	m_readiness->SupportUnit(u, m_government_type); 
+	m_readiness->SupportUnitGold(u, m_government_type); 
 
 	return u; 
 }
@@ -1999,6 +2001,7 @@ void Player::BeginTurnProduction()
 	sint32 mat_total=0;
 	sint32 delta;
 	sint32 materialsFromFranchise = 0;
+//	sint32 materialsfromColonies = 0;   //EMOD
 
 	m_total_production = 0;
 	for (i=0; i<n; i++) { 
@@ -2030,6 +2033,36 @@ void Player::BeginTurnProduction()
 	if(m_productionFromFranchises > m_readiness->GetCost()) {
 		materialsFromFranchise = (sint32)(m_productionFromFranchises - m_readiness->GetCost());
 	}
+
+//EMOD - Get production for TradeProduction Tile Imps
+	//int tin;
+	//tin = m_terrainImprovements->Num();
+	//sint32 ColonyPW;
+
+	//for(i = 0; i < tin; i++) {
+		//for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+		//const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
+		//if(m_terrainImprovements->Access(i).GetDBRec->GetColony()) {
+		//	materialsFromColonies += m_terrainImprovements->Access(i).GetDBRec()->GetBonusProductionExport();
+		//}
+	//}
+
+//	for(i = 0; i < m_allInstallations->Num(); i++) {
+//		if(m_allInstallations->Access(i).GetDBRec->GetColony()) {
+//			materialsFromColonies = m_terrainImprovements->Access(i).GetDBRec()->GetBonusProductionExport();
+//		}
+//	}
+
+
+//Note these constitute an installation according to terrainutil_isinstallation
+//				if (effect->GetAirport() ||
+//					effect->GetDefenseBonus() ||
+//					effect->GetRadar() ||
+//					effect->GetListeningPost() ||
+//					effect->GetEndgame())
+//
+//
+// end EMOD
 
 	DPRINTF(k_DBG_GAMESTATE, ("Cost before killing units: %lf\n", m_readiness->GetCost()));
 
@@ -2078,7 +2111,12 @@ void Player::BeginTurnProduction()
 	if(materialsFromFranchise > 0) {
 		m_materialPool->AddMaterials(materialsFromFranchise);
 	}
-	
+//EMOD
+//	if(materialsFromColonies > 0) {
+//		m_materialPool->AddMaterials(materialsFromColonies);
+//	}	
+//end emod
+
 	m_productionFromFranchises = 0;
 }
 
@@ -2228,7 +2266,7 @@ sint32 Player::CalcTotalBuildingUpkeep()
 		                                  wonderLevel);
 
 //    EMOD    	add new readiness modifier for buildings here?
-// 		bu *= GetSupportModifier(g_player[m_owner]->GetGovernmentType()
+ 		bu *= GetSupportModifier();
 
 	}		 
 

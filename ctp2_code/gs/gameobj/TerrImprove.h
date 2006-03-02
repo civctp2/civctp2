@@ -31,6 +31,7 @@ public:
 	void Kill() { KillImprovement(); }
 	void RemoveAllReferences();
 
+	//const TerrainImprovementRecord * GetDBRec() const;  //added by E although the game uses installations?
 	const TerrainImprovementData *GetData() const;
 	TerrainImprovementData *AccessData() const;
 

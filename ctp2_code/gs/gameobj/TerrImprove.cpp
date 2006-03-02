@@ -42,6 +42,12 @@ void TerrainImprovement::RemoveAllReferences()
 	Assert(r);
 }
 
+//const TerrainImprovementRecord *TerrainImprovement::GetDBRec() const //added by E to access imps 3-1-2006
+//{
+//	return g_theTerrainImprovementDB->Get(GetData()->GetType());
+//}
+
+
 const TerrainImprovementData *TerrainImprovement::GetData() const
 {
 	return g_theTerrainImprovementPool->GetTerrainImprovement(*this);

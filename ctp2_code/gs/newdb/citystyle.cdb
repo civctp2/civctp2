@@ -37,6 +37,16 @@ AgeCityStyle {
 
 	Struct SizeSprite[] Sprites
 	Int HappyInc        = 0
+
+//Bonuses by E
+    Bit(Float) ProductionPercent = 0
+	Bit(Float) FoodPercent = 0
+	Bit(Float) CommercePercent = 0
+	Bit(Float) SciencePercent = 0
+	Bit(Int) BonusGold = 0
+	Bit(Int) BonusFood = 0
+	Bit(Int) BonusProduction = 0
+	Bit(Int) BonusScience = 0
 }
 
 CityStyle {
@@ -44,4 +54,12 @@ CityStyle {
 
 	Bit(File) CPIcon            // City icon file
 	Int HappyInc        = 0     // Base city happiness increasement
+    Bit(Float) ProductionPercent = 0
+	Bit(Float) FoodPercent = 0
+	Bit(Float) CommercePercent = 0
+	Bit(Float) SciencePercent = 0
+	Bit(Int) BonusGold = 0
+	Bit(Int) BonusFood = 0
+	Bit(Int) BonusProduction = 0
+	Bit(Int) BonusScience = 0
 }
