@@ -30,7 +30,22 @@ Playtesting would be most useful if it tests the most recent changes, which
 are described briefly below, and in more detail in ChangeLog.txt
 
 
+
 Changelog:
+2006-03-02
+Added: EnablesVeterans flag for buildings. Now if a city has a flag with this building your units start as veterans (like civ3)
+Added: PopCostsToBuild flag. Add an integer here in unitstxt and units can cost 1 or more population points. I havent instituted a disband city warning yet though
+
+2006-03-01
+Added:  GoldPerUnit - like my previous GoldPerCity flag but its just the flag value times the number of units (like Civ3). I stuck it to the palace to represent unit costs. Value seen in City Management (not national)
+Added: GoldPerUnitReadiness - same as above but added the readiness impact. Value seen in City Management (not national)
+Added:  Need Number of buildings to Build - like the feat it can now be a flag for building a building (especially with OnePerCiv) or a wonder.
+Added: Citystyle Bonuses to Gold, Food, and production by either a bonus (just a solid integer) or by a percentage. 
+Added: Increase Borders to AddImprovement. Buildings can now do city radius!
+Added: multipleattack flag but not fully implemented (you can move after attacking or bombarding but not attack again)
+Added: TotalBuildingUpkeep: building upkeep also has a negative impact by being affected by your readiness and is deducted from the city gold (I can remove this if too much hate for it but it makes gold and readiness more significant)
+
+
 2006-02-15
 Updated: BUGS list to reflect fixes and new discoveries
 Updated: Improved error messages in tileset.cpp

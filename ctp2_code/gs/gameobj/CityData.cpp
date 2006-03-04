@@ -1652,14 +1652,13 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 			g_thePopDB->Get(m_specialistDBIndex[POP_LABORER], g_player[m_owner]->GetGovernmentType())->GetProduction();
 	}
 
-//EMOD Civilization and Citystyle bonuses
-	//gross_production += ceil(gross_production * g_player[m_owner]->GetCivilisation()->GetCivilisation()->GetProductionPercent());
+//EMOD Civilization bonuses
+	//gross_production += ceil(gross_production * g_player[m_owner]->GetCivilisation()->GetProductionPercent());
 	
-	//gross_production += g_theCivilisationDB->Get(g_player[m_owner]->GetCivilisation())->GetBonusProduction();
+	//gross_production += g_player[m_owner]->GetCivilisation()->GetProductionBonus();
 
+//EMOD Citystyle bonuses
 	gross_production += ceil(gross_production * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetProductionPercent());
-
-	//gross_production += g_player[m_owner]->GetCivilisation()->GetBonusProduction();
 
 	gross_production += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusProduction();
 
@@ -1927,27 +1926,14 @@ void CityData::AddShieldsToBuilding()
 void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const
 {
     
-// EMOD	
-//	sint32 bldgradius; 
-//	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
-//		if(m_built_improvements & ((uint64)1 << b)) {
-//			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
-//			for(bldgradius = 0; bldgradius < rec->GetSquaredRadius(); bldgradius++); 
-//		}
-//	}
-
-// end EMOD
 	CitySizeRecord const *  fullRec = NULL;
 	if (m_workerFullUtilizationIndex >= 0) 
     {
 		fullRec = g_theCitySizeDB->Get(m_workerFullUtilizationIndex);
 	}
 
-//	if (fullRec >= bldgradius) { //EMOD
 		fullRadius  = (fullRec) ? fullRec->GetSquaredRadius() : 0;
-//	} else {  //EMOD
-//		fullRadius  = bldgradius;   //EMOD
-//	}
+
 
     CitySizeRecord const *  partRec = NULL;
 	if ((m_workerPartialUtilizationIndex >= 0) && 
@@ -1957,11 +1943,8 @@ void CityData::GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) co
 		partRec = g_theCitySizeDB->Get(m_workerPartialUtilizationIndex);
 	}
 
-//	if (fullRec >= bldgradius) { //EMOD
 		partRadius  = (partRec) ? partRec->GetSquaredRadius() : 0;
-//	} else {  //EMOD
-//		partRadius  = bldgradius;   //EMOD
-//	}
+
 
 }
 

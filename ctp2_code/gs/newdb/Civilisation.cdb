@@ -41,24 +41,27 @@ Civilisation{
    StringID[0..500]      CityName               aka CIV_CITY_NAME
    Int                   HappyInc = 0
 
+//Civ Specific Bonuses
+
+   Int 		ProductionBonus = 0
+   Int 		FoodBonus = 0
+   Int 		CommerceBonus = 0
+   Int 		ScienceBonus = 0
+   Int		IncreaseBoatMovement = 0
+   Int		IncreaseHp = 0
+
 // for national flags
 //   StringID              NationUnitFlag      
-
-    Bit(Float) ProductionPercent = 0
-	Bit(Float) FoodPercent = 0
-	Bit(Float) CommercePercent = 0
-	Bit(Float) SciencePercent = 0
-	Bit(Int) BonusGold = 0
-	Bit(Int) BonusFood = 0
-	Bit(Int) BonusProduction = 0
-	Bit(Int) BonusScience = 0
-
-// FU from building.cdb to add Civilisation traits
+// from building.cdb to add Civilisation traits
 	Bit(Record Feat) TriggerFeat
 	Bit(Float) OffenseBonusLand
 	Bit(Float) OffenseBonusWater
 	Bit(Float) OffenseBonusAir
     Bit        DoubleTelevangelists
+    //Bit(Float) ProductionPercent
+	//Bit(Float) FoodPercent
+	//Bit(Float) CommercePercent
+	//Bit(Float) SciencePercent
     Bit        NoUnhappyPeople
     Bit        NoRushBuyPenalty
 	Bit(Float) LowerCrime
@@ -93,15 +96,16 @@ Civilisation{
 	Bit AllCitizensContent
 	Bit EliminateNukes
 	Bit AllBoatsDeepWater
-	Bit(Int) IncreaseBoatMovement
+	//Bit(Int) IncreaseBoatMovement
 	Bit FreeTradeRoutes
 	Bit(Int) DecreaseMaintenance
 	Bit(Int) RandomAdvanceChance
-	Bit(Int) IncreaseHp
+	//Bit(Int) IncreaseHp
 	Bit(Int) MultiplyTradeRoutes
 	Bit(Int) IncreaseScientists
 	Bit(Int) OtherCivRandomAdvanceChance
 	Bit(Int) IncreaseProduction
+	Bit(Int) BonusGold
 	Bit(Int) IncreaseFoodAllCities
 	Bit(Int) TemporaryFullHappiness
 	Bit RevoltingCitiesJoinPlayer

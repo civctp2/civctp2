@@ -88,6 +88,13 @@ public:
 
 	sint32 GetCityStyle( void ) { return AccessData()->GetCityStyle(); }
 
+   //sint32 GetCityStyle( void ) { return AccessData()->GetProductionBonus(); }
+   //sint32 GetCityStyle( void ) { return AccessData()->GetFoodBonus(); }
+   //sint32 GetCityStyle( void ) { return AccessData()->GetCommerceBonus(); }
+   //sint32 GetCityStyle( void ) { return AccessData()->GetScienceBonus(); }
+   //sint32 GetCityStyle( void ) { return AccessData()->GetIncreaseBoatMovement(); }
+   //sint32 GetCityStyle( void ) { return AccessData()->GetIncreaseHp(); }
+
 	
 	void ResetCiv(CIV_INDEX newCivIndex, GENDER gender) { AccessData()->ResetCiv(newCivIndex, gender); }
 } ;

@@ -5330,7 +5330,7 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 //end EMOD
 
 
-    // defenders present
+// defenders present code starts here
 	for(i = 0; i < defender.Num(); i++) {//return illegal if at least one can't be attacked
 		if(defender[i].Flag(k_UDF_CANT_BE_ATTACKED))
 			return ORDER_RESULT_ILLEGAL;
@@ -5345,14 +5345,37 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))//??? see VerifyAttack
 			return ORDER_RESULT_ILLEGAL;
 
-    sint32 numAttacks = 0;
+//EMOD SpecialBombardments PrecisionStrike and TargetsCivilians check can only attack cities
+
+	for (i = m_nElements - 1; i>= 0; i--) { 
+		if(m_array[i].GetDBRec()->GetPrecisionStrike() || m_array[i].GetDBRec()->GetTargetsCivilians()){
+			Unit c = g_theWorld->GetCell(point)->GetCity();
+			if(c.m_id != 0) {  		// These bombard units can only attack cities
+				if(!c.GetOwner() == m_owner) {
+					if(!c.Flag(k_UDF_CANT_BE_ATTACKED)) {
+						if (m_array[i].GetDBRec()->GetPrecisionStrike()) { 
+							c.DestroyRandomBuilding();
+							return ORDER_RESULT_SUCCEEDED;
+						} else if (m_array[i].GetDBRec()->GetTargetsCivilians()){
+							c.CD()->ChangePopulation(-1);
+							return ORDER_RESULT_SUCCEEDED;
+						}
+					}
+				}
+			}
+			return ORDER_RESULT_ILLEGAL;
+		}
+	}
+
+
+      sint32 numAttacks = 0;
 	sint32 numAlive = m_nElements;
 	BOOL out_of_fuel;
     
     for (i = m_nElements - 1; i>= 0; i--) { 
 		if(!m_array[i].CanPerformSpecialAction())
 			continue;
-		
+
         if (m_array[i].CanBombard(defender)) { 
 
 DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].CanBombard(defender)));
@@ -6271,6 +6294,19 @@ BOOL ArmyData::ExecuteMoveOrder(Order *order)
 	} else {//UNIT_ORDER_MOVE_TO or UNIT_ORDER_VICTORY_MOVE
 		if(m_pos == order->m_point)
 			return TRUE;
+// EMOD - Rebasing of aircraft
+		//if(g_theUnitDB->Get()->GetCanRebase()) {
+		//	if (m_city_data->HasAirport(m_point) || terrainutil_HasAirfield(m_point)) {  //add unit later?
+ 		//				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_Teleport,
+		//						   GEA_Army, m_id,
+		//						   GEA_MapPoint, m_point,
+		//						   GEA_End);
+		//	
+		//	}
+		//	return FALSE;
+		//}
+
+// end EMOD	
 
 		d = m_pos.GetNeighborDirection(order->m_point);//direction from m_pos to target point
 		if(d == NOWHERE) {
@@ -7933,25 +7969,31 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 {
 	sint32 i;
 	double cost = g_theWorld->GetMoveCost(pos);
+	sint32  movebonus; // = g_theUnitDB->Get()->GetMoveBonus();
 	double c;
 	BOOL out_of_fuel;
 
 	for(i = m_nElements - 1; i >= 0; i--) {
 		if(m_array[i].GetMovementTypeAir()) {
 			c = k_MOVE_AIR_COST;
-//emod
-//		} else if(m_array[i].GetAllTerrainAsImprovement()) {
-//				const UnitRecord *urec = g_theUnitDB->Get(m_array[i]->GetType(), g_player[GetOwner()]->GetGovernmentType());
-//				sint32 imp = urec->GetAllTerrainAsImprovementIndex();
-//				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-//				double moveCost = trec->GetMoveBonus();
-//				if(m_array[i].GetMovementTypeLand()) {
-//				//if (trec->GetMoveBonus() > 0) {
-//					c = moveCost;
-//				}else {
-//					c = cost;
+//EMOD
+		} else if(m_array[i].GetDBRec()->GetMoveBonus(movebonus) > 0) {
+					c = movebonus;
+		//	} else {
+		//		c = cost;
+		//	}
+// end EMOD			
+//DEnied to Enemy check here?
+// if (pos) has imp and is denied to enemy
+// If cellowner != m_owner
+// if cellowner and m_owner at war
+//	sint32	dcost;
+//(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(dcost);
+//	c = dcost;
+//			} else {
+//				c = cost;
 //			}
-//
+
 		} else if(g_theWorld->IsTunnel(pos)) {
 			if(!m_array[i].GetMovementTypeLand()) {
 				sint32	icost;
@@ -7961,6 +8003,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 				c = cost;
 			}
 		}else if(m_array[i].Flag(k_UDF_FOUGHT_THIS_TURN)) {  // Add Blitz/multiple attacks here?
+//EMOD
 			if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {					
 				c = m_array[i].GetMovementPoints();
 			}else {

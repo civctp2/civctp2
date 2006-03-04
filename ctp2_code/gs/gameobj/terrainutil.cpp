@@ -695,23 +695,23 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		}
 
 // EMOD for contiguous irrigation
-//		if(rec->GetNeedsWaterSupply () > 0) {
-//			RadiusIterator it(center, intRad, sqRad);
-//			for(it.Start(); !it.End(); it.Next()) {
-//			Cell *cell = g_theWorld->GetCell(it.Pos());
-//				for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-//				sint32 imp = cell->GetDBImprovement(i);
-//				const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-//					
-//if tile needs water
-//	iterator
-//		if cell needs water or is a river
-//			then true
-//					if(rec->)){
-//
-//					if (rec->GetNumEnablesGood() > 0){
-//						for(good = 0; good < rec->GetNumEnablesGood(); good++) {
-//
+		if(rec->GetNeedsIrrigation ()) {
+			RadiusIterator it(pos, 8);
+			MapPoint mpos;
+			for(it.Start(); !it.End(); it.Next()) {
+			mpos = it.Pos();
+			//Cell *cell = g_theWorld->GetCell(it.Pos());
+				//for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+					//if(cell->GetDBImprovement(i)->GetNeedsIrrigation());
+					if(g_theWorld->IsRiver(mpos) || g_theWorld->IsRiver(pos)) { 
+						return true;
+					}
+					return false;
+				}				
+			//}
+		}
+//if(g_theWorld->IsIrrigation(0, mpos) || g_theWorld->IsRiver(mpos) || g_theWorld->IsIrrigation(i, pos) || g_theWorld->IsRiver(pos)) { 
+					
 //end EMOD
 	}
 	return true;
@@ -879,6 +879,7 @@ bool terrainutil_IsInstallation(const sint32 type)
 				if (effect->GetAirport() ||
 					effect->GetDefenseBonus() ||
 					effect->GetRadar() ||
+					effect->GetColony() ||  //EMOD
 					effect->GetListeningPost() ||
 					effect->GetEndgame())
 					return true;

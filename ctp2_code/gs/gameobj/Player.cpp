@@ -2034,36 +2034,6 @@ void Player::BeginTurnProduction()
 		materialsFromFranchise = (sint32)(m_productionFromFranchises - m_readiness->GetCost());
 	}
 
-//EMOD - Get production for TradeProduction Tile Imps
-	//int tin;
-	//tin = m_terrainImprovements->Num();
-	//sint32 ColonyPW;
-
-	//for(i = 0; i < tin; i++) {
-		//for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
-		//const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
-		//if(m_terrainImprovements->Access(i).GetDBRec->GetColony()) {
-		//	materialsFromColonies += m_terrainImprovements->Access(i).GetDBRec()->GetBonusProductionExport();
-		//}
-	//}
-
-//	for(i = 0; i < m_allInstallations->Num(); i++) {
-//		if(m_allInstallations->Access(i).GetDBRec->GetColony()) {
-//			materialsFromColonies = m_terrainImprovements->Access(i).GetDBRec()->GetBonusProductionExport();
-//		}
-//	}
-
-
-//Note these constitute an installation according to terrainutil_isinstallation
-//				if (effect->GetAirport() ||
-//					effect->GetDefenseBonus() ||
-//					effect->GetRadar() ||
-//					effect->GetListeningPost() ||
-//					effect->GetEndgame())
-//
-//
-// end EMOD
-
 	DPRINTF(k_DBG_GAMESTATE, ("Cost before killing units: %lf\n", m_readiness->GetCost()));
 
 	if(!m_first_city) {
@@ -2146,6 +2116,21 @@ void Player::BeginTurnImprovements()
 		
 	}
 
+	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnimps?
+
+
+	
+	//for(i = 0; i < m_terrainImprovements->Num(); i++) {
+	//	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
+	//	const TerrainImprovementRecord::Effect *effect = rec->GetTerrainEffect(i);
+		//Assert(effect);
+		//if(effect) {
+	//		if (effect->GetColony()) {
+	//			m_gold->AddGold(effect->GetBonusProductionExport()); //could be rec?
+				//m_materialPool->AddMaterials(effect->GetBonusProductionExport()); //could be rec?
+			//}
+	//	}
+	//}
 	
 }
 

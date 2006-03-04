@@ -1639,18 +1639,30 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 				cd->ChangePopulation(-1);
 			}
 // EMOD
-			sint32 pop = u.GetDBRec()->GetPopCostsToBuild();
-			if(u.GetDBRec()->GetPopCostsToBuild() > 0) {
-				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
-				cd->ChangePopulation(-pop);
+			sint32 pop; 
+			for (pop = 0; pop < u.GetDBRec()->GetPopCostsToBuild(); ++pop) {
+				if(u.GetDBRec()->GetPopCostsToBuild(pop) > 0) {
+					cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
+					cd->ChangePopulation(-pop);
+				}
 			}
+		}
 
-//end EMOD
-		
+
+// if cd had building enables veterans
+// then 	u.SetVeteran();
+
+		uint64 i;
+		uint64 buildings = cd->GetEffectiveBuildings();
+		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+			if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesVeterans()) {
+				if((buildings & ((uint64)1 << uint64(i)))) {
+					u.SetVeteran();
+				}
+			}
 		}
 		
-		
-		
+//end EMOD		
 		FinishBuildFront(u);
 	}
 }
