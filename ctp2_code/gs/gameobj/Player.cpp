@@ -2081,11 +2081,7 @@ void Player::BeginTurnProduction()
 	if(materialsFromFranchise > 0) {
 		m_materialPool->AddMaterials(materialsFromFranchise);
 	}
-//EMOD
-//	if(materialsFromColonies > 0) {
-//		m_materialPool->AddMaterials(materialsFromColonies);
-//	}	
-//end emod
+
 
 	m_productionFromFranchises = 0;
 }
@@ -2118,20 +2114,20 @@ void Player::BeginTurnImprovements()
 
 	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnimps?
 
-
-	
-	//for(i = 0; i < m_terrainImprovements->Num(); i++) {
-	//	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
-	//	const TerrainImprovementRecord::Effect *effect = rec->GetTerrainEffect(i);
-		//Assert(effect);
-		//if(effect) {
+	//MapPoint pos;
+	//for(sint32 b = 0; b < g_theTerrainImprovementDB->NumRecords(); b++) {
+	//	if(m_allInstallations && ((uint64)1 << b)) {
+	//	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(b);
+	//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
 	//		if (effect->GetColony()) {
-	//			m_gold->AddGold(effect->GetBonusProductionExport()); //could be rec?
-				//m_materialPool->AddMaterials(effect->GetBonusProductionExport()); //could be rec?
-			//}
+	//			m_materialPool->AddMaterials(rec->GetBonusProductionExport());
+	//		}
 	//	}
 	//}
-	
+
+	//
+
+
 }
 
 void Player::BeginTurnEnemyUnits()

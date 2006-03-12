@@ -41,6 +41,7 @@
 #  - NonLethalBombard  //lessen bombard strengthen like old civ3
 #  - CanBombardTiles  //allows bombarding of tile improvements
 #  - CollateralTileDamage  //if a defender is ona tile then improvements cut too
+#  - GoodyHutExcluded //Prevents Some Units from appearing
 # 
 #-----------------------------------------------------------------------------
 
@@ -595,6 +596,7 @@ Unit {
     Bit Civilian
 
     Bit NoBarbarian 					// added by tombom
+    Bit GoodyHutExcluded				// Prevents Some Units from appearing by E
 
     Bit Leader						// Special "king" unit
 }

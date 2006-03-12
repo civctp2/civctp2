@@ -31,6 +31,7 @@
 #                      other IsWaterSupply imps
 #  - PlantGood - added by E; FutureUse; imp that places a good instead
 #  - EnablesGood - to replace plants good
+#  - Added enablesgood to effect to make different goods on different terrains (wheat, cattle, wine)
 #
 #-----------------------------------------------------------------------------
 TerrainImprovement {
@@ -115,10 +116,10 @@ TerrainImprovement {
 		Bit(Int) VisionRange
 		Bit(Int) RadarRange
 		Bit(Float) DefenseBonus
-		Bit(Int) PlantGood 		//FU - no longer necessary?
 		Record Advance EnableAdvance
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost
+		Record Resource[] EnablesGood 		//added by E -- having a TI gives a city a good
 		Bit(Int) GoldCost 		//FU
 		Int ProductionTime
 		Int TilesetIndex

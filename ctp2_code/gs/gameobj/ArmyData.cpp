@@ -5347,25 +5347,25 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 
 //EMOD SpecialBombardments PrecisionStrike and TargetsCivilians check can only attack cities
 
-	for (i = m_nElements - 1; i>= 0; i--) { 
-		if(m_array[i].GetDBRec()->GetPrecisionStrike() || m_array[i].GetDBRec()->GetTargetsCivilians()){
-			Unit c = g_theWorld->GetCell(point)->GetCity();
-			if(c.m_id != 0) {  		// These bombard units can only attack cities
-				if(!c.GetOwner() == m_owner) {
-					if(!c.Flag(k_UDF_CANT_BE_ATTACKED)) {
-						if (m_array[i].GetDBRec()->GetPrecisionStrike()) { 
-							c.DestroyRandomBuilding();
-							return ORDER_RESULT_SUCCEEDED;
-						} else if (m_array[i].GetDBRec()->GetTargetsCivilians()){
-							c.CD()->ChangePopulation(-1);
-							return ORDER_RESULT_SUCCEEDED;
-						}
-					}
-				}
-			}
-			return ORDER_RESULT_ILLEGAL;
-		}
-	}
+//	for (i = m_nElements - 1; i>= 0; i--) { 
+//		if(m_array[i].GetDBRec()->GetPrecisionStrike() || m_array[i].GetDBRec()->GetTargetsCivilians()){
+//			Unit c = g_theWorld->GetCell(point)->GetCity();
+//			if(c.m_id != 0) {  		// These bombard units can only attack cities
+//				if(!c.GetOwner() == m_owner) {
+//					if(!c.Flag(k_UDF_CANT_BE_ATTACKED)) {
+//						if (m_array[i].GetDBRec()->GetPrecisionStrike()) { 
+//							c.DestroyRandomBuilding();
+//							return ORDER_RESULT_SUCCEEDED;
+//						} else if (m_array[i].GetDBRec()->GetTargetsCivilians()){
+//							c.CD()->ChangePopulation(-1);
+//							return ORDER_RESULT_SUCCEEDED;
+//						}
+//					}
+//				}
+//			}
+//			return ORDER_RESULT_ILLEGAL;
+//		}
+//	}
 
 
       sint32 numAttacks = 0;

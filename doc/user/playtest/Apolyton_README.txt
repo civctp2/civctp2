@@ -32,6 +32,10 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
+2006-03-11
+Added: GoodyHutExcluded flag for Units. Units with this flag shouldn't appear from a goody hut.
+Added: Enablesgood in terraineffect - allows for different goods for same imp on different terrains
+
 2006-03-02
 Added: EnablesVeterans flag for buildings. Now if a city has a flag with this building your units start as veterans (like civ3)
 Added: PopCostsToBuild flag. Add an integer here in unitstxt and units can cost 1 or more population points. I havent instituted a disband city warning yet though

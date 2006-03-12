@@ -27,6 +27,8 @@
 // - Update the display (rush buy buttons) when receiving gold.
 // - Speeded up goody hut advance and unit selection.
 // - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
+// - GoodyHutExcluded added to unit radomizer to prevent some units from appearing
+//   by E 8-MAR-2006
 //
 //----------------------------------------------------------------------------
 
@@ -374,6 +376,8 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 				    continue;   // would die immediately here
 			    if (rec->GetAttack() < 1)               
 				    continue;   // defenseless?
+			    if (rec->GetGoodyHutExcluded())
+				    continue;   // EMOD new flag to prevent some unts from appearing
 			    if (rec->GetHasPopAndCanBuild())
 				    continue;   // settler, handled separately
 			    if (g_exclusions->IsUnitExcluded(i))    

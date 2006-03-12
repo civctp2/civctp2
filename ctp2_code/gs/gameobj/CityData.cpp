@@ -2067,14 +2067,17 @@ void CityData::CollectResources()
 #endif
 
 
-// Add if city has building GetEnablesGood >0 then that good will be dded to the city for trade
-    sint32 good; 
+// Add if city has building GetEnablesGood >0 then that good will be added to the city for trade
+
+	sint32 good; 
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
 		if(m_built_improvements & ((uint64)1 << b)) {
-			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
-//      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			for(good = 0; good < rec->GetNumEnablesGood(); good++) {
-				m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
+		const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+	//  Check If needsGood for the building a make bonuses dependent on having that good for further bonus
+			if (rec->GetNumEnablesGood() > 0){
+				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
+				}
 			}
 		}
 	}
@@ -2082,17 +2085,19 @@ void CityData::CollectResources()
 // end building enables good
 
 // Add if city has wonder GetEnablesGood >0 then that good will be dded to the city for trade
-    sint32 wgood; 
+    //sint32 wgood; 
 	for(sint32 w = 0; w < g_theWonderDB->NumRecords(); w++) {
 		if(m_builtWonders & ((uint64)1 << w)) {
-			const WonderRecord *rec = wonderutil_Get(w);
+			const WonderRecord *wrec = wonderutil_Get(w);
 //      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			for(wgood = 0; wgood < rec->GetNumEnablesGood(); wgood++) {
-  				m_collectingResources.AddResource(rec->GetEnablesGoodIndex(wgood));
+			if (wrec->GetNumEnablesGood() > 0){
+				for(good = 0; good < wrec->GetNumEnablesGood(); good++) {
+  					m_collectingResources.AddResource(wrec->GetEnablesGoodIndex(good));
+				}
 			}
 		}
 	}
-// end wonder enables good
+
 
 	CityInfluenceIterator it(cityPos, m_sizeIndex);
 	for(it.Start(); !it.End(); it.Next()) {
@@ -2110,20 +2115,33 @@ void CityData::CollectResources()
 		){
 			m_collectingResources.AddResource(good);
 		}
-
-
-// Added by E (10-29-2005) - If a tileimp has enablegood then give to city
-
+		// Added by E (10-29-2005) - If a tileimp has enablegood then give to city
 		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
 		sint32 imp = cell->GetDBImprovement(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-//      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+			if (rec->GetNumEnablesGood() > 0){
+				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
   					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
+				}
 			}
 		}
-
+	//EMOD enablesgood applied to terrain::effect
+		sint32 tgood;
+		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++) {
+		sint32 timp = cell->GetDBImprovement(t);
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
+			//for(sint32 j = 0; j < trec->GetNumTerrainEffect(); j++) {
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
+				if (effect->GetNumEnablesGood() > 0){
+					for(tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++) {
+  						m_collectingResources.AddResource(effect->GetEnablesGoodIndex(tgood));
+					}
+				}
+			//}
+		}
 	}
+
+
 
 #if defined(NEW_RESOURCE_PROCESS)
 	for (size_t i = 0; i < maxRing; ++i)
@@ -7645,9 +7663,69 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 
 		sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_COMMERCE, m_owner);
 		gold += static_cast<sint32>(gold * featPercent / 100.0);
+
+//EMOD these three EMODs moved inside the less than 0 to prevent multiplication of percent to zero values
+//EMOD Civilization and Citystyle bonuses
+	//gold += ceil(gold * g_player[m_owner]->GetCivilisation()->GetCommercePercent());
+
+	gold += ceil(gold * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetCommercePercent());
+
+//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
+//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
+		for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+		{
+			if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+			{
+				ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
+				if (goodData)
+				{
+					double goodBonus;
+					if (goodData->GetCommercePercent(goodBonus))
+					{
+					gold += static_cast<sint32>(ceil(gold * goodBonus));
+					}
+
+					double goodEfficiency;
+					if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+					{
+					gold += static_cast<sint32>(ceil(gold * goodEfficiency));
+					}
+				}
+			}
+		}
+
 	}
 
-	//not necessary? this says only terrain
+	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_MERCHANT] >= 0) {
+		gold += MerchantCount() *
+			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT], g_player[m_owner]->GetGovernmentType())->GetCommerce();
+
+	}
+//EMOD Civilization and Citystyle bonuses
+	//gold += g_player[m_owner]->GetCivilisation()->GetBonusGold();
+
+	gold += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusGold();
+
+
+//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
+	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		{
+			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
+			if (tgoodData)
+			{
+				sint32 tgoodBonus;
+				if (tgoodData->GetTradeGold(tgoodBonus))
+				{
+					gold += tgoodBonus;
+				}
+			}
+		}
+	}
+
+//EMOD moved to the end to avoid commercepercent multiplying flags that are likely to be used in the negative
+
 	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
 	gold += goldPerCitizen * PopCount();
 
@@ -7666,64 +7744,6 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings());
 	gold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
 
-
-	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_MERCHANT] >= 0) {
-		gold += MerchantCount() *
-			g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT], g_player[m_owner]->GetGovernmentType())->GetCommerce();
-
-	}
-
-//EMOD Civilization and Citystyle bonuses
-	//gold += ceil(gold * g_player[m_owner]->GetCivilisation()->GetCommercePercent());
-
-	gold += ceil(gold * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetCommercePercent());
-
-	//gold += g_player[m_owner]->GetCivilisation()->GetBonusGold();
-
-	gold += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusGold();
-
-
-
-//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
-//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
-	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
-	{
-		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
-		{
-			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
-			if (goodData)
-			{
-				double goodBonus;
-				if (goodData->GetCommercePercent(goodBonus))
-				{
-					gold += static_cast<sint32>(ceil(gold * goodBonus));
-				}
-
-				double goodEfficiency;
-				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
-				{
-					gold += static_cast<sint32>(ceil(gold * goodEfficiency));
-				}
-			}
-		}
-	}
-
-//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
-	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
-	{
-		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
-		{
-			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
-			if (tgoodData)
-			{
-				sint32 tgoodBonus;
-				if (tgoodData->GetTradeGold(tgoodBonus))
-				{
-					gold += tgoodBonus;
-				}
-			}
-		}
-	}
 }
 
 //----------------------------------------------------------------------------

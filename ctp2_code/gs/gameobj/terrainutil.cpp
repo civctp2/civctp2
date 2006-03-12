@@ -695,21 +695,21 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		}
 
 // EMOD for contiguous irrigation
-		if(rec->GetNeedsIrrigation ()) {
-			RadiusIterator it(pos, 8);
-			MapPoint mpos;
-			for(it.Start(); !it.End(); it.Next()) {
-			mpos = it.Pos();
-			//Cell *cell = g_theWorld->GetCell(it.Pos());
-				//for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-					//if(cell->GetDBImprovement(i)->GetNeedsIrrigation());
-					if(g_theWorld->IsRiver(mpos) || g_theWorld->IsRiver(pos)) { 
-						return true;
-					}
-					return false;
-				}				
-			//}
-		}
+//		if(rec->GetNeedsIrrigation ()) {
+
+//		RadiusIterator it(pos, 1);
+//		for(it.Start(); !it.End(); it.Next()) {
+//		Cell *cell = g_theWorld->GetCell(it.Pos());
+//			for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+//			sint32 imp = cell->GetDBImprovement(i);
+//			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//			if(g_theWorld->IsRiver(pos)) { //|| rec->GetNeedsIrrigation()) { 
+//						return true;
+//					}
+//					return false;
+//				}				
+//			}
+//		}
 //if(g_theWorld->IsIrrigation(0, mpos) || g_theWorld->IsRiver(mpos) || g_theWorld->IsIrrigation(i, pos) || g_theWorld->IsRiver(pos)) { 
 					
 //end EMOD
