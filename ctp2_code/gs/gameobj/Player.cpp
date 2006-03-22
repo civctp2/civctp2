@@ -2112,20 +2112,19 @@ void Player::BeginTurnImprovements()
 		
 	}
 
-	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnimps?
+	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction?
 
-	//MapPoint pos;
-	//for(sint32 b = 0; b < g_theTerrainImprovementDB->NumRecords(); b++) {
-	//	if(m_allInstallations && ((uint64)1 << b)) {
-	//	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(b);
-	//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
-	//		if (effect->GetColony()) {
-	//			m_materialPool->AddMaterials(rec->GetBonusProductionExport());
-	//		}
-	//	}
-	//}
-
-	//
+//	MapPoint pos;
+//	for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+//	Installation inst = m_allInstallations->Access(b);
+//	const TerrainImprovementRecord *rec = inst.GetDBRec();
+//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+//		if (effect->GetColony()) {
+//			if (effect->GetBonusProductionExport() > 0){
+//				m_materialPool->AddMaterials(effect->GetBonusProductionExport());
+//			}
+//		}
+//	}
 
 
 }
@@ -7652,6 +7651,12 @@ sint32 Player::GetNumCities() const
 {
 	return m_all_cities->Num(); 
 }
+
+sint32 Player::GetNumUnits() const  //EMOD
+{
+	return m_all_units->Num(); 
+}
+
 
 sint32 Player::GetMaxCityCount() const 
 {

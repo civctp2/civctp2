@@ -116,6 +116,7 @@ TerrainImprovement {
 		Bit(Int) VisionRange
 		Bit(Int) RadarRange
 		Bit(Float) DefenseBonus
+		Record CityStyle[] CultureOnly 		//added by E -- can only build imps if civ has certain citystyle
 		Record Advance EnableAdvance
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost

@@ -521,6 +521,27 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 			return false;
 	}
 
+// Added by E - Compares Improvement's CultureOnly to the Player's CityStyle for terrain effects
+	for(sint32 b = 0; b < g_theTerrainDB->NumRecords(); b++) {
+	const TerrainImprovementRecord::Effect *eff;
+	bool found = false;
+	eff = terrainutil_GetTerrainEffect(rec, b);
+		if(eff) {
+			if(eff->GetNumCultureOnly() > 0) {
+				sint32 t;
+				for(t = 0; t < eff->GetNumCultureOnly(); t++) {
+					if(eff->GetCultureOnlyIndex(t) == g_player[pl]->GetCivilisation()->GetCityStyle()) {
+						found = true;
+						break;
+					}
+				}
+			}
+		}		
+		if(!found)
+			return false;
+	}
+
+	
 	if(terrainutil_PlayerHasAdvancesFor(rec, pl)) {
 		
 		if(!checkMaterials)

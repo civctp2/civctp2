@@ -3495,8 +3495,25 @@ sint32 CityData::CalculateGoldFromResources()
 //----------------------------------------------------------------------------
 sint32 CityData::SupportBuildings(bool projectedOnly)
 {
-	sint32 const    buildingUpkeep = GetSupportBuildingsCost();
-    m_net_gold   -= buildingUpkeep;
+	sint32     buildingUpkeep = GetSupportBuildingsCost();
+
+	//EMOD notadd upkeep per city
+	sint32 UpkeepPerCity = buildingutil_GetUpkeepPerCity(GetEffectiveBuildings());
+	buildingUpkeep += UpkeepPerCity * g_player[m_owner]->m_all_cities->Num();
+
+	///////////////////////////////////////////////
+	// EMOD - Add upkeep per unit
+	sint32 UpkeepPerUnit = buildingutil_GetUpkeepPerUnit(GetEffectiveBuildings());
+	buildingUpkeep += UpkeepPerUnit * g_player[m_owner]->m_all_units->Num();
+
+	///////////////////////////////////////////////
+	// EMOD - upkeep per unit and multiplied by readiness level
+	sint32 UpkeepPerUnitWagesReadiness = buildingutil_GetUpkeepPerUnitWagesReadiness(GetEffectiveBuildings());
+	buildingUpkeep += UpkeepPerUnitWagesReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+	
+//end EMOD
+
+	m_net_gold   -= buildingUpkeep;
 
     if (!projectedOnly)
     {
@@ -3543,6 +3560,10 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 
 		g_player[m_owner]->m_gold->AddMaintenance(buildingUpkeep);
     }
+
+//Add if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+// if (buildingupkeep < 0){
+//			buildingupkeep = 0
 
 	return buildingUpkeep;
 }
@@ -5108,6 +5129,8 @@ BOOL CityData::HasNeededGood(sint32 resource) const
 {
 	return m_buyingResources[resource] + m_collectingResources[resource] == 0;
 }
+
+//EMOD - add GoodIsPirated? 3-13-2006
 
 BOOL CityData::HasEitherGood(sint32 resource) const
 {
@@ -7732,7 +7755,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	//EMOD not sure its needed here though
 	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings());
 	gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
-	gold += goldPerCity * g_player[m_owner]->m_all_cities->Num();
+	//gold += goldPerCity * g_player[m_owner]->m_all_cities->Num();
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit
@@ -7743,6 +7766,15 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by readiness level
 	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings());
 	gold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+
+//EMOD to assist AI
+	if(gold < 0) {
+		if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
+			gold = 0;
+		} else {
+			gold = gold;
+		}
+	}
 
 }
 

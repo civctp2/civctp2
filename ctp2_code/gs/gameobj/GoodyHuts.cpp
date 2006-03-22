@@ -315,9 +315,12 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 		    for (AdvanceType i = 0; i < g_theAdvanceDB->NumRecords(); ++i) 
             {
                 if (advances->HasAdvance(i)) 
-                    continue;   // known
+					continue;   // known
 
-			    if ((g_theAdvanceDB->Get(i)->GetNumPrerequisites() > 0) &&
+				if (g_theAdvanceDB->Get(i)->GetGoodyHutExcluded())
+				    continue;   // EMOD new flag to prevent some unts from appearing
+
+				if ((g_theAdvanceDB->Get(i)->GetNumPrerequisites() > 0) &&
 			        (g_theAdvanceDB->Get(i)->GetPrerequisitesIndex(0) == i)
                    )
                     continue;   // undiscoverable

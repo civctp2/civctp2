@@ -236,8 +236,19 @@ STDEHANDLER(CityBuildFrontEvent)
 		return GEV_HD_Continue;
 
 	city.CD()->BuildFront();
-
-
+//EMOD
+//	const UnitRecord *u = g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetHead()->m_type);
+//Crash!
+//	if (u->GetPopCostsToBuild() > 0) {
+//		if (city.CD()->PopCount() == u->GetPopCostsToBuild()) {
+//			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
+//			so->AddCity(city);
+//			so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
+//			so->AddRecipient(city.GetOwner());
+//			g_slicEngine->Execute(so);
+//		}
+//	}
+// EMOD for popcoststo build
 
 	if (city.CD()->GetBuildQueue()->m_settler_pending) {
 		if (city.CD()->PopCount() == 1) {

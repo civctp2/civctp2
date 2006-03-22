@@ -649,6 +649,53 @@ void Advances::ResetCanResearch(sint32 justGot)
 						justEnabled = TRUE;
 					}
 				}
+
+//	if(rec->GetNumNeedsCityGood() > 0) {  //EMOD use as template for EitherPreReq, for more fluid tech tree
+//		sint32 g;
+//		bool found = false;
+//		for(g = 0; g < rec->GetNumEitherPrerequisites(); g++) {
+////				for(sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++) {
+//					if(rec->GetIndex() == rec->GetPrerequisitesIndex(prereq)) {
+//						canResearch = FALSE;
+//						continue;
+//					}
+//
+//					if(!m_hasAdvance[rec->GetPrerequisitesIndex(prereq)]) {
+//						
+//						canResearch = FALSE;
+//					}
+//					if(rec->GetPrerequisitesIndex(prereq) == justGot)
+////						justEnabled = TRUE;
+//			if(m_hasAdvance[rec->GetEitherPrerequisitesIndex(g)] > 0){
+//				canResearch = true;
+//				break;
+//			}
+//		}
+//		if(!canResearch)
+//			return FALSE;
+//	}
+
+// Added by E - checks all cities for buying or collecting a good, but its either/or not AND; this is to have tech's require resources
+//	if(rec->GetNumNeedsCityGoodAnyCity()) {
+//		sint32 i, g;
+//		bool goodavail = false;
+//
+//			for(i = 0; i < m_all_cities->Num(); i++) {
+//				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+//					if(m_all_cities->Access(i).AccessData()->GetCityData()->HasEitherGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+//						goodavail = true;
+//						break;
+//					}
+//				}
+//					if(goodavail){
+//					break;
+//					}
+//			}
+//			if(!goodavail)
+//			return FALSE;
+//	}
+//
+
 				if(justEnabled && canResearch) {
 					m_canResearch[i] = TRUE;
 				}

@@ -24,6 +24,9 @@ double buildingutil_GetPreventConversion(const uint64 built_improvements);
 double buildingutil_GetPreventSlavery(const uint64 built_improvements);
 double buildingutil_GetLowerPeaceMovement(const uint64 built_improvements);
 sint32 buildingutil_GetGoldPerCitizen(const uint64 built_improvements);
+sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvements); // EMOD
 sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements); // EMOD
 sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements); // EMOD
 sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements); // EMOD

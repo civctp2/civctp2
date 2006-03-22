@@ -287,8 +287,11 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
     if (sint32(m_cost) <= mil_total) 
         return; 
 
-    
-
+//EMOD  AI can run deficit? but cant build production?
+    if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+        return; 
+    } else { 
+//EMOD
     sint32 n_units = 0, n_prof_units;
     sint32 i, j, n, m;
 
@@ -404,7 +407,7 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 
     delete [] all_units; 
 	delete [] prof_units;
-
+ } //EMOD
 }
 
 sint32 MilitaryReadiness::GetTurnsToNewReadiness()

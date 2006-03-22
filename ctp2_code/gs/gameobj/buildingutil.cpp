@@ -99,18 +99,23 @@ sint32 buildingutil_GetProductionCost(const sint32 building_type)
 sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
 										   sint32 wonderLevel)
 {
+    //sint32 owner = 0;
 	sint32 upkeep = 0;
 	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		if(built_improvements & shiftbit(i)) {
 			if(g_theBuildingDB->Get(i)->GetUpkeep() > wonderLevel) {
 				upkeep += g_theBuildingDB->Get(i)->GetUpkeep();
 
-// EMOD add UpkeepPerPop here  12-27-2005
-//EMOD add UpkeepPerCity here  12-27-2005
+//EMOD added new Upkeep calculations (3-13-2006) out commented because AI wouldnt do science????
+//				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerUnitWagesReadiness * g_player[m_owner]->GetNumUnits() * g_player[owner]->m_readiness->GetSupportModifier(g_player[owner]->GetGovernmentType()) * g_player[owner]->GetWagesPerPerson();
+//				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerCity * g_player[m_owner]->GetNumCities();
+//				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerCitySq * g_player[owner]->GetNumCities() *  g_player[owner]->GetNumCities();
+//				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerUnit * g_player[owner]->GetNumUnits();
+//end EMOD
 			}
 		}
 	}
-	return upkeep;
+		return upkeep;
 }
 
 sint32 buildingutil_GetBlgUpkeep(const sint32 building_type)
@@ -129,6 +134,8 @@ sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements,
 			if(g_theBuildingDB->Get(i)->GetUpkeep() > wonderLevel && g_theBuildingDB->Get(i)->GetUpkeep() < lowcost) {
 				lowcost = g_theBuildingDB->Get(i)->GetUpkeep();
 				low = i;
+// EMOD add new upkeep calucations?
+
 			}
 		}
 	}
@@ -290,6 +297,39 @@ sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements) //E
 	FOREACH_BUILT(GetGoldPerUnitReadiness) {
 		sint32 mod;
 		rec->GetGoldPerUnitReadiness(mod);
+		goldMod += mod;
+	}
+	return goldMod;
+}
+
+sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements) //EMOD
+{
+	sint32 goldMod = 0;
+	FOREACH_BUILT(GetUpkeepPerCity) {
+		sint32 mod;
+		rec->GetUpkeepPerCity(mod);
+		goldMod += mod;
+	}
+	return goldMod;
+}
+
+sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements) //EMOD
+{
+	sint32 goldMod = 0;
+	FOREACH_BUILT(GetUpkeepPerUnit) {
+		sint32 mod;
+		rec->GetUpkeepPerUnit(mod);
+		goldMod += mod;
+	}
+	return goldMod;
+}
+
+sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvements) //EMOD
+{
+	sint32 goldMod = 0;
+	FOREACH_BUILT(GetUpkeepPerUnitWagesReadiness) {
+		sint32 mod;
+		rec->GetUpkeepPerUnitWagesReadiness(mod);
 		goldMod += mod;
 	}
 	return goldMod;

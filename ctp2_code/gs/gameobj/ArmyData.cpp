@@ -6840,7 +6840,7 @@ BOOL ArmyData::CheckSpecialUnitMove(const MapPoint &pos)
 //				
 // Returns    : BOOL
 //
-// Remark(s)  : -
+// Remark(s)  : Added check for at war instead of other agreements
 //
 //----------------------------------------------------------------------------
 BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
@@ -6854,32 +6854,15 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 	BOOL i_died = FALSE;
 
 	PLAYER_INDEX defense_owner = defender.GetOwner();
-	if (IsEnemy(defense_owner) && 
-		!g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
-		!g_player[m_owner]->WillViolatePact(defense_owner) &&
+//EMOD
+	if (AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && 
+
+//outcommented because not called?
+//	if (IsEnemy(defense_owner) && 
+//		!g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
+//		!g_player[m_owner]->WillViolatePact(defense_owner) &&
 		CanFight(defender)) { 
 
-///////////////////////////////////
-//
-//  THe WillViolate stuff might have to change to !AtWar?
-//
-// EMOD add a pop up here?
-//	SlicObject *so;
-//	if(g_network.IsActive() && g_network.TeamsEnabled() &&
-//	   g_player[m_owner]->m_networkGroup == g_player[defense_owner]->m_networkGroup) {
-//		so = new SlicObject("110aCantAttackTeammates");
-//	} else if(!IsEnemy(defense_owner)) {
-//	so = new SlicObject("110bCantAttackHaveTreaty");
-//	so->AddRecipient(m_owner);
-//	so->AddCivilisation(defense_owner);
-//	so->AddUnit(m_array[0]);
-//	so->AddLocation(pos);
-//	so->AddOrder(order);
-//	g_slicEngine->Execute(so);
-//	g_selected_item->ForceDirectorSelect(Army(m_id));
-//	return FALSE;
-//
-//////////////////////////////
 		
 		InformAI(UNIT_ORDER_FINISH_ATTACK, pos); 
 
@@ -6968,15 +6951,34 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 // Remark(s)  : I think at least some of this is redundant: WillViolatePact returns true if the two
 //            : players have AGREEMENT_TYPE_PACT_CAPTURE_CITY or AGREEMENT_TYPE_PACT_END_POLLUTION
 //            : which are from an obsolete enum.  
+//		  : EMOD changed to !AtWar to prevnt accidental attacks
 //
 //----------------------------------------------------------------------------
 BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 							sint32 defense_owner)
 {
-	if(IsEnemy(defense_owner) &&
-	   !g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
-	   !g_player[m_owner]->WillViolatePact(defense_owner))
-		return TRUE;
+//EMOD
+	if (!AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)){
+
+//outcommented original
+//	if(IsEnemy(defense_owner) &&
+//	   !g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
+//	   !g_player[m_owner]->WillViolatePact(defense_owner))
+// EMOD
+	//	if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN){
+	//		SlicObject *so = new SlicObject("110bCantAttackHaveTreaty") ;
+	//		so->AddRecipient(m_owner);
+	//		so->AddCivilisation(defense_owner);
+	//		so->AddUnit(m_array[0]);
+	//		so->AddLocation(pos);
+	//		so->AddOrder(order);
+	//		g_slicEngine->Execute(so);
+	//		g_selected_item->ForceDirectorSelect(Army(m_id));
+	//		return FALSE;
+	//	}
+	//}
+// end EMOD
+	//	return TRUE;
 	   
 	SlicObject *so;
 	if(g_network.IsActive() && g_network.TeamsEnabled() &&
@@ -6996,6 +6998,8 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 	g_slicEngine->Execute(so);
 	g_selected_item->ForceDirectorSelect(Army(m_id));
 	return FALSE;
+	}
+	return TRUE;
 }
 
 //----------------------------------------------------------------------------

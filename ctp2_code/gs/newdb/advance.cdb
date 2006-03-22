@@ -59,6 +59,7 @@ Advance {
 	Bit(Float) CommercePercent
 	Bit(Float) SciencePercent
 	Bit GLHidden
+	Bit GoodyHutExcluded
 
     Int PowerPoints = 0
 	Bit(Float) PollutionSizeModifier

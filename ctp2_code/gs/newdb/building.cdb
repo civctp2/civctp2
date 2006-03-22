@@ -58,8 +58,10 @@ Building {
 	Bit(Int) GoldPerCity = 0 		//add/subtract gold based on player's number of cities by E
 	Bit(Int) GoldPerUnit = 0 		//add/subtract gold based on player's number of units by E 
 	Bit(Int) GoldPerUnitReadiness = 0 	//add/subtract gold based on player's number of units multiplied by readiness level by E
-	Bit(Int) GoldPerUnitWages = 0 		//FU added by E 
-	Bit(Int) GoldPerUnitReadinessWages = 0 	//FU added by E 
+	Bit(Int) UpkeepPerUnit = 0 		//FU added by E 
+	Bit(Int) UpkeepPerUnitWagesReadiness = 0 //FU added by E 
+	Bit(Int) UpkeepPerCity = 0 		//FU added by E 
+	Bit(Int) UpkeepPerCitySq = 0 		//FU added by E
 
     # flags 
     	Bit        Capitol

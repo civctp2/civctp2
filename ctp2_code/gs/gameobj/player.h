@@ -499,7 +499,7 @@ public:
 
 	Unit GetTopSelectedArmy(const sint32 selected_army);
 
-
+	sint32  GetNumUnits() const;   //EMOD
 	sint32  GetNumCities() const;
 	sint32  GetMaxCityCount() const;
 	sint32  GetNearestCity(const MapPoint &pos, Unit &nearest, double &distance,
