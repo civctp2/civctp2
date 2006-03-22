@@ -144,8 +144,8 @@ str_ldl_Pollution_Level	"Verschm.-Niveau:"
 
 
 
-CANT_ATTACK_HAVE_TREATY	"Mit dieser Aktion verstoßen wir gegen unser Abkommen mit den {player[1].civ_name_plural#DAT}. Wollen Sie wirklich fortfahren?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für alle Einheiten {player[1].civ_name_plural#ARTICLE_GEN}, daher bitten sie darum, dass wir ihre Truppen so schnell wie möglich vertreiben."
+CANT_ATTACK_HAVE_TREATY	"Mit dieser Aktion verstoßen wir gegen unser Abkommen mit den {player[0].civ_name_plural#DAT}. Wollen Sie wirklich fortfahren?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für alle Einheiten {player[0].civ_name_plural#ARTICLE_GEN}, daher bitten sie darum, dass wir ihre Truppen so schnell wie möglich vertreiben."
 
 
 str_ldl_RES_CHANGE_BUTTON	"Auflösung"

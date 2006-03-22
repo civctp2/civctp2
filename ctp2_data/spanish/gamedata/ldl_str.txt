@@ -146,8 +146,8 @@ str_ldl_Pollution_Level	"Nivel de contamin."
 
 
 
-CANT_ATTACK_HAVE_TREATY	"Esta acción romperá tu tratado con los [player.1.civ_name_plural].  ¿Quieres continuar?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Los [player.1.civ_name_plural] no encuentran alojamiento para todos sus ejércitos en nuestro territorio. Prometen retirar sus unidades tan pronto como sea posible."
+CANT_ATTACK_HAVE_TREATY	"Esta acción romperá tu tratado con los {player[0].civ_name_plural}.  ¿Quieres continuar?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Los {player[0].civ_name_plural} no encuentran alojamiento para todos sus ejércitos en nuestro territorio. Prometen retirar sus unidades tan pronto como sea posible."
 
 
 str_ldl_RES_CHANGE_BUTTON	"Tamaño de pantalla"

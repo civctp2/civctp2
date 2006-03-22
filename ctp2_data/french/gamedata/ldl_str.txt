@@ -146,8 +146,8 @@ str_ldl_Pollution_Level		"Niveau de pollution"
 
 
 
-CANT_ATTACK_HAVE_TREATY	"Cette action rompra notre traité avec les [player.1.civ_name_plural]. Voulez-vous poursuivre ?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Les [player.1.civ_name_plural] n'ont pas réussi à loger toutes leurs forces sur notre territoire. Ils ont promis de les retirer dès que possible."
+CANT_ATTACK_HAVE_TREATY	"Cette action rompra notre traité avec les {player[0].civ_name_plural}. Voulez-vous poursuivre ?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Les {player[0].civ_name_plural} n'ont pas réussi à loger toutes leurs forces sur notre territoire. Ils ont promis de les retirer dès que possible."
 
 
 str_ldl_RES_CHANGE_BUTTON	"Résolution"

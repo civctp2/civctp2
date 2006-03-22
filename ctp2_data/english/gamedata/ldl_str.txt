@@ -146,8 +146,8 @@ str_ldl_Pollution_Level	"Pollution Level"
 
 
 
-CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the [player.1.civ_name_plural].  Are you sure you wish to continue?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED "The [player.1.civ_name_plural] were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
+CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the {player[0].civ_name_plural}.  Are you sure you wish to continue?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED "The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
 
 
 str_ldl_RES_CHANGE_BUTTON	"Screen Size"

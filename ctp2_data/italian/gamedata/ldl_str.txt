@@ -142,8 +142,8 @@ str_ldl_Pollution_Level	"Livello inquinamento"
 
 
 
-CANT_ATTACK_HAVE_TREATY	"Quest'azione romperà il nostro trattato con {player[1].civ_name_plural#ARTICLE}. Sei sicuro di voler continuare?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"{player[1].civ_name_plural#ARTICLE_CAP} non sono riusciti a togliere tutte le loro armate dal nostro territorio. Si impegnano a rimuovere le loro unità al più presto."
+CANT_ATTACK_HAVE_TREATY	"Quest'azione romperà il nostro trattato con {player[0].civ_name_plural#ARTICLE}. Sei sicuro di voler continuare?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"{player[0].civ_name_plural#ARTICLE_CAP} non sono riusciti a togliere tutte le loro armate dal nostro territorio. Si impegnano a rimuovere le loro unità al più presto."
 
 
 str_ldl_RES_CHANGE_BUTTON	"Risoluzione video"
