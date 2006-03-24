@@ -32,6 +32,13 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
+2006-03-22
+Added: production bonus to AI, they dont run production deficits
+Added: GoodyHutExcluded flag (just in case) for advances
+Added: messages for verifyattack and move into enemy. If you move into an enemy or attack WIHOUT declaring war you will get a pop, but the pop doesnt let you declare war (yet) you have to do that through the diplomacy screen.
+Added: newupkeep flags,although not necessary (may remove)
+Added: gold bonus to AI so they dont have to be hurt by negative values. If a cities gold is lss than zero for an AI it is automatically set to zero so they dont get hurt by new gold modifiers
+
 2006-03-11
 Added: GoodyHutExcluded flag for Units. Units with this flag shouldn't appear from a goody hut.
 Added: Enablesgood in terraineffect - allows for different goods for same imp on different terrains

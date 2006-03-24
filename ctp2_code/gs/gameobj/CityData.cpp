@@ -2113,7 +2113,10 @@ void CityData::CollectResources()
 		&& MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius
 #endif
 		){
-			m_collectingResources.AddResource(good);
+			if (g_theResourceDB->Get(good)->GetCantTrade == 0);  //TODO: doesn't work
+			//EMOD 3-22-2006 to prevent free collection of goods
+				m_collectingResources.AddResource(good);
+			//}
 		}
 		// Added by E (10-29-2005) - If a tileimp has enablegood then give to city
 		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
@@ -2130,14 +2133,12 @@ void CityData::CollectResources()
 		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++) {
 		sint32 timp = cell->GetDBImprovement(t);
 		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
-			//for(sint32 j = 0; j < trec->GetNumTerrainEffect(); j++) {
-			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
-				if (effect->GetNumEnablesGood() > 0){
-					for(tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++) {
-  						m_collectingResources.AddResource(effect->GetEnablesGoodIndex(tgood));
-					}
+		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
+			if (effect->GetNumEnablesGood() > 0){
+				for(tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++) {
+					m_collectingResources.AddResource(effect->GetEnablesGoodIndex(tgood));
 				}
-			//}
+			}
 		}
 	}
 

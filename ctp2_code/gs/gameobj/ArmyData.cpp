@@ -5456,7 +5456,7 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 	if(!AlltaSneakBombard && !AllDefSneakAttack){
 		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
 		defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
-	}
+	} 
 //end EMOD
 
 
@@ -6854,7 +6854,10 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 	BOOL i_died = FALSE;
 
 	PLAYER_INDEX defense_owner = defender.GetOwner();
+
 //EMOD
+
+	PLAYER_INDEX   attack_owner = GetOwner(); 
 	if (AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && 
 
 //outcommented because not called?
@@ -6926,10 +6929,77 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 			return FALSE;
 		}
 	} else {
-		VerifyAttack(UNIT_ORDER_MOVE_TO, pos, defense_owner);
-		return FALSE;
+//EMOD to allow for sneak attacks without popup	
+		Unit ta = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+
+		//Army me(m_id);
+		if (ta.m_id == 0) {
+			ta = m_array[0];
+		}
+
+		Unit td = defender.GetTopVisibleUnit(g_selected_item->GetVisiblePlayer()); 
+    
+	
+		if (td.m_id == 0) {
+			td = defender[0];
+		}
+		
+		bool AlltaSneakAttack = true;
+		sint32 i;
+		for (i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
+			if(!m_array[i].GetDBRec()->GetSneakAttack()){
+				AlltaSneakAttack = false;
+				break;
+			}
+		}
+	
+	
+		if (ta.m_id == 0) {
+			if(!m_array[0].GetDBRec()->GetSneakAttack()){
+				AlltaSneakAttack = false;
+			}
+		}
+
+		bool AllDefSneakAttack = true;
+		for(i = 0; i < defender.Num(); i++) {
+			if(!defender[i].GetDBRec()->GetSneakAttack()){
+				AllDefSneakAttack = false;
+				break;
+			}
+		} 
+
+		if (td.m_id == 0) {
+			if(!defender[0].GetDBRec()->GetSneakAttack()){
+				AllDefSneakAttack = false;
+			}
+		}
+		
+	
+		if(!AlltaSneakAttack && !AllDefSneakAttack){
+//end EMOD
+			VerifyAttack(UNIT_ORDER_MOVE_TO, pos, defense_owner);
+			return FALSE;
+		} else {//EMOD
+			Fight(defender);
+
+		} //EMOD
+//SneakBombard here?
+				bool AlltaSneakBombard = true;
+		for (i = m_nElements - 1; i>= 0; i--) { 
+			if(!m_array[i].GetDBRec()->GetSneakBombard()){
+				AlltaSneakBombard = false;
+				break;
+			}
+		}
+
+		if(!m_array[0].GetDBRec()->GetSneakBombard()){
+				AlltaSneakBombard = false;
+		}
+//end EMOD
+	
+	
 	}
-	return TRUE;
+	return FALSE;
 }
 
 //----------------------------------------------------------------------------
@@ -6964,20 +7034,6 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 //	if(IsEnemy(defense_owner) &&
 //	   !g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
 //	   !g_player[m_owner]->WillViolatePact(defense_owner))
-// EMOD
-	//	if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN){
-	//		SlicObject *so = new SlicObject("110bCantAttackHaveTreaty") ;
-	//		so->AddRecipient(m_owner);
-	//		so->AddCivilisation(defense_owner);
-	//		so->AddUnit(m_array[0]);
-	//		so->AddLocation(pos);
-	//		so->AddOrder(order);
-	//		g_slicEngine->Execute(so);
-	//		g_selected_item->ForceDirectorSelect(Army(m_id));
-	//		return FALSE;
-	//	}
-	//}
-// end EMOD
 	//	return TRUE;
 	   
 	SlicObject *so;
@@ -7182,8 +7238,38 @@ BOOL ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 		if(alliedCity) {
 			
 			Unit city = g_theWorld->GetCity(pos);
+			//EMOD to allow for sneak attacks without popup	
+		Unit ta = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+
+	
+		if (ta.m_id == 0) {
+			ta = m_array[0];
+		}
+
+		
+		bool AlltaSneakAttack = true;
+		sint32 i;
+		for (i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
+			if(!m_array[i].GetDBRec()->GetSneakAttack()){
+				AlltaSneakAttack = false;
+				break;
+			}
+		}
+	
+	
+		if (ta.m_id == 0) {
+			if(!m_array[0].GetDBRec()->GetSneakAttack()){
+				AlltaSneakAttack = false;
+			}
+		}
+
+		if(!AlltaSneakAttack){
+//end EMOD
 			VerifyAttack(UNIT_ORDER_MOVE_TO, pos, city.GetOwner());
-			return FALSE;
+						return FALSE;
+		}//EMOD
+		return TRUE;
+
 		}
 	
 		if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
