@@ -39,12 +39,12 @@
 PERSONALITY_KAHN {
   DefaultStrategy STRATEGY_MILITARIST_DEFAULT
 
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
+  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 1250  }
+  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 750   }
+  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 800  }
 
   LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_AGRESSIVE_START   Priority 200  }
+  StartStrategy            {  Strategy STRATEGY_AGRESSIVE_START   Priority 1200  }
 
   NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES      Priority 150  }
   MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
@@ -53,7 +53,7 @@ PERSONALITY_KAHN {
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
   ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 200 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -89,8 +89,8 @@ PERSONALITY_KAHN {
 PERSONALITY_GHANDI {
   DefaultStrategy STRATEGY_DIPLOMATIC_DEFAULT
 
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
+  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 750  }
+  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 875   }
   SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
 
   LastStartTurn 75
@@ -101,8 +101,8 @@ PERSONALITY_GHANDI {
   AverageNukesStrategy     {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 800 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 200 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -139,8 +139,8 @@ PERSONALITY_GHANDI {
 PERSONALITY_STALIN {
   DefaultStrategy STRATEGY_MILITARIST_DEFAULT
 
-  FullAttackStrategy      {  Strategy STRATEGY_ATTACK          Priority 250  }
-  BuildupStrengthStrategy {  Strategy STRATEGY_DEFEND          Priority 75   }
+  FullAttackStrategy      {  Strategy STRATEGY_ATTACK          Priority 950  }
+  BuildupStrengthStrategy {  Strategy STRATEGY_DEFEND          Priority 875   }
   SeigeCitiesStrategy     {  Strategy STRATEGY_SEIGE           Priority 200  }
 
   LastStartTurn 75
@@ -190,9 +190,9 @@ PERSONALITY_STALIN {
 PERSONALITY_CEASAR {
   DefaultStrategy STRATEGY_MILITARIST_DEFAULT
 
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
+  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 850  }
+  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 775   }
+  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 900  }
 
   LastStartTurn 75
   StartStrategy            {  Strategy STRATEGY_AGRESSIVE_START   Priority 200  }
@@ -203,7 +203,7 @@ PERSONALITY_CEASAR {
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
   ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 700 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -239,9 +239,9 @@ PERSONALITY_CEASAR {
 PERSONALITY_DEGAULLE {
   DefaultStrategy STRATEGY_MILITARIST_DEFAULT
 
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
+  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 850  }
+  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 750   }
+  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 800  }
 
   LastStartTurn 75
   StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
@@ -251,8 +251,8 @@ PERSONALITY_DEGAULLE {
   AverageNukesStrategy     {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 900 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 800 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -289,9 +289,9 @@ PERSONALITY_DEGAULLE {
 PERSONALITY_MEDICI {
   DefaultStrategy STRATEGY_ECONOMIC_DEFAULT
 
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
+  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 850  }
   BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
+  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 800  }
 
   LastStartTurn 75
   StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
@@ -305,7 +305,7 @@ PERSONALITY_MEDICI {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 950  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -340,7 +340,7 @@ PERSONALITY_TELLER {
   DefaultStrategy STRATEGY_SCIENTIST_DEFAULT
 
   FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
+  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 975   }
   SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
 
   LastStartTurn 75
@@ -391,7 +391,7 @@ PERSONALITY_STRANGELOVE {
 
   FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
   BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
+  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 700  }
 
   LastStartTurn 75
   StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
@@ -442,7 +442,7 @@ PERSONALITY_CALLENBACH {
   DefaultStrategy STRATEGY_ECOTOPIAN_DEFAULT
 
   FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
+  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 1175   }
   SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
 
   LastStartTurn 75
@@ -453,8 +453,8 @@ PERSONALITY_CALLENBACH {
   AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 110 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 100 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -492,7 +492,7 @@ PERSONALITY_NADER {
   DefaultStrategy STRATEGY_ECOTOPIAN_DEFAULT
 
   FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
+  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 975   }
   SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
 
   LastStartTurn 75
@@ -503,8 +503,8 @@ PERSONALITY_NADER {
   AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 110 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 2000 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -520,8 +520,8 @@ PERSONALITY_NADER {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 1000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
 
   Exploration: Medium
   Expansion: Average

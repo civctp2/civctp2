@@ -2069,14 +2069,19 @@ void CityData::CollectResources()
 
 // Add if city has building GetEnablesGood >0 then that good will be added to the city for trade
 
-	sint32 good; 
+	sint32 good;
+	//sint32 igood;
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
 		if(m_built_improvements & ((uint64)1 << b)) {
 		const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
 	//  Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			if (rec->GetNumEnablesGood() > 0){
-				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
-					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
+			if(rec->GetNumEnablesGood() > 0){
+				//for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
+					for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+						//if(rec->GetEnablesGoodIndex(igood) == good) {
+							m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
+						//}
+					//}
 				}
 			}
 		}
@@ -2113,7 +2118,7 @@ void CityData::CollectResources()
 		&& MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius
 #endif
 		){
-			if (g_theResourceDB->Get(good)->GetCantTrade == 0);  //TODO: doesn't work
+			//if (g_theResourceDB->Get(good)->GetCantTrade == 0);  //TODO: doesn't work
 			//EMOD 3-22-2006 to prevent free collection of goods
 				m_collectingResources.AddResource(good);
 			//}
@@ -2123,6 +2128,7 @@ void CityData::CollectResources()
 		sint32 imp = cell->GetDBImprovement(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 			if (rec->GetNumEnablesGood() > 0){
+				//for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
 				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
   					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
 				}
@@ -2135,6 +2141,7 @@ void CityData::CollectResources()
 		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
 		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
 			if (effect->GetNumEnablesGood() > 0){
+				//for(tgood = 0; tgood < g_theResourceDB->NumRecords(); tgood++) {
 				for(tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++) {
 					m_collectingResources.AddResource(effect->GetEnablesGoodIndex(tgood));
 				}

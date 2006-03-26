@@ -61,6 +61,8 @@
 // - CollateralTileDamage Implemented by E 20-JAN-2006
 // - AllTerrainAsImprovement NOT impelemented in DeductMoveCost
 // - NonLethalBombard removed and put in UnitData::Bombard 15-FEB-2006  
+// - VerifyAttcak modified to prevent accidental wars - 24-MAR-2006
+// - verifyttack removed from bombard because the player should know where the point it 25-MAR-2006
 //
 //----------------------------------------------------------------------------
 
@@ -5174,12 +5176,13 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 			if(!ok)
 				continue;
 
-			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-			   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
-				if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, c.GetOwner())) {
-					return FALSE;
-				}
-			}
+			// Removed Verify because the player shouldn't accidentally bombard since its a button and aim
+			//if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
+			// (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
+			//	if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, c.GetOwner())) {
+			//		return FALSE;
+			//	}
+			//}
 
 			AddSpecialActionUsed(m_array[i]);
 			MapPoint nonConstPos = point;
@@ -5340,10 +5343,11 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-	   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)))
-		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))//??? see VerifyAttack
-			return ORDER_RESULT_ILLEGAL;
+// Removed Verify because the player shouldn't accidentally bombard since its a button and aim
+//	if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
+//	   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)))
+//		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))//??? see VerifyAttack
+//			return ORDER_RESULT_ILLEGAL;
 
 //EMOD SpecialBombardments PrecisionStrike and TargetsCivilians check can only attack cities
 
@@ -6983,18 +6987,6 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 			Fight(defender);
 
 		} //EMOD
-//SneakBombard here?
-				bool AlltaSneakBombard = true;
-		for (i = m_nElements - 1; i>= 0; i--) { 
-			if(!m_array[i].GetDBRec()->GetSneakBombard()){
-				AlltaSneakBombard = false;
-				break;
-			}
-		}
-
-		if(!m_array[0].GetDBRec()->GetSneakBombard()){
-				AlltaSneakBombard = false;
-		}
 //end EMOD
 	
 	
