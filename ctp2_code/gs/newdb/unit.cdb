@@ -102,7 +102,7 @@ Unit {
 
 	Bit(Int) MoveBonus     				//FU - Instead of specifying an imp why not define the movecost here? by E
 
-	Record TerrainImprovement     AllTerrainAsImprovement // future use - like AllTerrainRoads
+	Record TerrainImprovement[]     AllTerrainAsImprovement // future use - like AllTerrainRoads
 	Record Unit [] ObsoleteByUnit 			//FU intead of avdance for later upgrade
     	Bit NonLethalBombard  				//lessen bombard strengthen like old civ3
 	Bit CanBombardTiles  				//allows bombarding of tile improvements

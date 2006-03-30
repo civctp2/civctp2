@@ -642,6 +642,7 @@ STDEHANDLER(CreateWonderEvent)
 	wonderutil_AddBuilt(wonder);
 	g_player[c->GetOwner()]->AddWonder(wonder, c);
 	g_player[c->GetOwner()]->RegisterCreateWonder(c, wonder);
+	c.CD()->AddWonder(wonder);  //EMOD I think it was left out
 
 	
 	if (c->GetOwner() == g_selected_item->GetVisiblePlayer() &&

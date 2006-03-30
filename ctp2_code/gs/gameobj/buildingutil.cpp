@@ -302,6 +302,17 @@ sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements) //E
 	return goldMod;
 }
 
+sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements) //EMOD
+{
+	sint32 goldMod = 0;
+	FOREACH_BUILT(GetGoldPerUnitSupport) {
+		sint32 mod;
+		rec->GetGoldPerUnitSupport(mod);
+		goldMod += mod;
+	}
+	return goldMod;
+}
+
 sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements) //EMOD
 {
 	sint32 goldMod = 0;

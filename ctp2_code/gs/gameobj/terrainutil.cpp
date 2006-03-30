@@ -730,7 +730,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 //			for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
 //			sint32 imp = cell->GetDBImprovement(i);
 //			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-//			if(g_theWorld->IsRiver(pos)) { //|| rec->GetNeedsIrrigation()) { 
+//			if(g_theWorld->IsRiver(Pos)) { //|| rec->GetNeedsIrrigation()) { 
 //						return true;
 //					}
 //					return false;

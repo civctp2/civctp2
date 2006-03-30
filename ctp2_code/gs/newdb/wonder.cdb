@@ -48,7 +48,10 @@ Wonder {
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build wonder
 	Record Resource[] NeedsCityGoodAnyCity //FU
       Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
+	Record TerrainImprovement[] ShowOnMap //FU
 
+	Bit(Int) SquaredBorderRadius 		//FU added by E
+	Bit(Int) IntBorderRadius    		//FU added by E
 
 	# Flags
 	Bit(Int) ReduceReadinessCost

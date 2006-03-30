@@ -2921,6 +2921,26 @@ sint32 Player::GetTotalUnitCost()
 	return cost;
 }
 
+sint32 Player::GetTotalGoldHunger()
+{
+	sint32 unit_num, unit_idx;
+
+	unit_num = m_all_units->Num();
+	sint32 cost = 0;
+	UnitRecord *rec=NULL;
+	for (unit_idx=0; unit_idx<unit_num; unit_idx++) {
+		rec = g_theUnitDB->Access(m_all_units->Access(unit_idx).GetType());
+		Assert(rec);
+
+		if (rec->GetHasPopAndCanBuild()) continue;
+
+		if (rec->GetIsTrader()) continue;
+
+		cost += rec->GetGoldHunger();
+	}
+
+	return cost;
+}
 
 void Player::DelTailPathOrder(sint32 index)
 

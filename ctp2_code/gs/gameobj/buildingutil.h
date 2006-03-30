@@ -28,6 +28,7 @@ sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements); // EMOD
 sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements); // EMOD
 sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvements); // EMOD
 sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements); // EMOD
 sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements); // EMOD
 sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements); // EMOD
 BOOL buildingutil_GetProtectFromNukes(const uint64 built_improvements);

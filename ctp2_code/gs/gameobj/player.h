@@ -726,6 +726,7 @@ public:
 
 	sint32 GetTotalProduction() const { return m_total_production; }
 	sint32 GetTotalUnitCost();
+	sint32 GetTotalGoldHunger();//EMOD
 
 	double GetHPModifier();
 	double GetSupportModifier();

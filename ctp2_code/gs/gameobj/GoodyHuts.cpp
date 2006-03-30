@@ -327,8 +327,11 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 
                 if (advances->GetMinPrerequisites(i, maxNovelty) <= maxNovelty)
                 {
-                    possible[nextPossible++] = i;
-                }
+                    possible[nextPossible++] = i;			    
+			} else {
+				continue; //EMOD to prevent Bureaubert crash
+				}
+				//continue; 
                 // else: too advanced
 		    }
 
@@ -390,12 +393,12 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 
 			    if (advances->GetMinPrerequisites
                         (rec->GetEnableAdvanceIndex(), maxNovelty) 
-                    <= maxNovelty
-                   )
-                {
-				    possible[nextPossible++] = i;
-			    }
-                // else : too advanced
+                    <= maxNovelty)  {
+				   possible[nextPossible++] = i;
+			    } else {
+				continue; //EMOD to prevent Bureaubert crash
+				}
+				// else : too advanced
 		    }
 
 		    if (nextPossible) 

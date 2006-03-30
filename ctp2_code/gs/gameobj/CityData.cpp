@@ -187,6 +187,8 @@
 #include "TaxRate.h"
 #include "TerrainRecord.h"
 #include "terrainutil.h"
+#include "TerrainImprovementRecord.h"   	//EMOD
+#include "TerrImprovePool.h"			//EMOD
 #include "tiledmap.h"
 #include "TopTen.h"
 #include "TradeOffer.h"
@@ -4215,11 +4217,54 @@ BOOL CityData::BuildWonder(sint32 type)
 	}
 }
 
-void CityData::AddWonder(sint32 type)
+void CityData::AddWonder(sint32 type)  //not used?
 {
+
+	const WonderRecord* wrec = wonderutil_Get(type); //added by E
+	MapPoint cityPos(m_home_city.RetPos());
+	MapPoint Pos; 
+
 	m_builtWonders |= (uint64(1) << type);
 
-// EMOD add HolyCity?
+		sint32 intRad;
+    	sint32 sqRad;
+	//EMOD increases city borders
+	if (wrec->GetIntBorderRadius(intRad) && wrec->GetSquaredBorderRadius(sqRad)) {
+		GenerateBorders(cityPos, m_owner, intRad, sqRad);
+	}
+	//end Emod
+
+//EMOD Visible Wonders should go here like the radius for AddImprovement 3-27-2006
+if (wrec->GetNumShowOnMap() > 0){
+	CityInfluenceIterator it(cityPos, m_sizeIndex);
+	for(it.Start(); !it.End(); it.Next()) {
+		Cell *cell = g_theWorld->GetCell(it.Pos());
+		//sint32 ring = GetRing(it.Pos());
+		sint32 s;
+		for(s = 0; s < wrec->GetNumShowOnMap(); s++) {
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(s);
+		//if terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos)
+			if(terrainutil_CanPlayerBuildAt(rec, m_owner, Pos)) {
+			//CreateImprovement(sint32 dbIndex, MapPoint &point, sint32 extraData)
+				g_player[m_owner]->CreateImprovement(wrec->GetShowOnMapIndex(s), Pos, 0);
+					//g_player[m_owner]->CreateImprovement(rec->GetIndex(),  Pos, 0);
+				//g_gevManager->AddEvent(GEV_INSERT_Tail,
+			        //               GEV_CreateImprovement,
+			          //             GEA_Player,      m_owner,
+			            //           GEA_MapPoint,    Pos,
+			              //         GEA_Int,         s, //type,
+			                //       GEA_Int,         0,
+			                  //     GEA_End);
+			}
+		}
+	}
+}
+
+// EMOD add HolyCity...need to link to religion DB (once Religion DB is done)
+//	if (wonderutil_GetDesignatesHolyCity((uint64)1 << (uint64)type)) {
+//		g_player[m_owner]->SetHolyCity(m_home_city); 
+//		g_player[m_owner]->RegisterNewHolyCity(m_home_city);
+//	}
 }
 
 BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
@@ -4389,7 +4434,15 @@ void CityData::NewGovernment(sint32 government_type)
 double CityData::GetDefendersBonus() const
 
 {
-	return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef();
+// EMOD add population as a contributor to defense for AI, to make larger cities even tougher. It takes total population * defense coefficient * percentage of people that are happy (and most likely to resist)
+	if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
+			return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef() + (PopCount() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef()) * (m_happy->GetHappiness() * .01);
+
+		} else {
+			return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef();
+
+		}
+	//return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef();
 }
 
 double CityData::GetDefendersBonusNoWalls() const
@@ -5134,15 +5187,15 @@ BOOL CityData::HasResource(sint32 resource) const
 
 //Added by E -- this city is collecting or buying some sint32 resource 
 BOOL CityData::HasNeededGood(sint32 resource) const
-{
-	return m_buyingResources[resource] + m_collectingResources[resource] == 0;
+{ //3-27-2006 added selling resource impact
+	return m_buyingResources[resource] + m_collectingResources[resource] - m_sellingResources[resource] == 0;
 }
 
 //EMOD - add GoodIsPirated? 3-13-2006
 
 BOOL CityData::HasEitherGood(sint32 resource) const
-{
-	return m_buyingResources[resource] + m_collectingResources[resource] > 0;
+{//3-27-2006 added selling resource impact
+	return m_buyingResources[resource] + m_collectingResources[resource] > m_sellingResources[resource];
 }
 
 //this city is collecting some sint32 resource
@@ -5686,7 +5739,9 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		sint32 g;
 		bool found = false;
 		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
-			if((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > 0){
+			// outcommented so the seeler and recipient don't both have bonus
+			// if((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > 0){
+			if ((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > m_sellingResources[rec->GetNeedsCityGoodIndex(g)]){
 				found = true;
 				break;
 			}
@@ -5700,7 +5755,9 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 	if(rec->GetNumNeedsCityGoodAll() > 0) {
 		sint32 g;
 		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
-			if((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) == 0)
+			//if((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) == 0)
+			// I assumed subtracting to equal zero gives same effect
+			if ((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) - m_sellingResources[rec->GetNeedsCityGoodAllIndex(g)]== 0)
 			return FALSE;
 		}
 	}
@@ -7334,6 +7391,7 @@ void CityData::AddImprovement(sint32 type)
 {
 
 	MapPoint m_point(m_home_city.RetPos()); //EMOD add for borders
+	MapPoint Pos;
 	const BuildingRecord *rec = g_theBuildingDB->Get(type); //EMOD add for borders
 
 	SetImprovements(m_built_improvements | ((uint64)1 << (uint64)type));
@@ -7351,7 +7409,32 @@ void CityData::AddImprovement(sint32 type)
 	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) {
 		GenerateBorders(m_point, m_owner, intRad, sqRad);
 	}
+
 	//end Emod
+//if (rec->GetNumShowOnMap() > 0){
+	CityInfluenceIterator it(m_point, m_sizeIndex);
+	for(it.Start(); !it.End(); it.Next()) {
+		Cell *cell = g_theWorld->GetCell(it.Pos());
+		//sint32 ring = GetRing(it.Pos());
+		sint32 s;
+		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+		//if terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos)
+			if(terrainutil_CanPlayerBuildAt(trec, m_owner, Pos)) {
+			//CreateImprovement(sint32 dbIndex, MapPoint &point, sint32 extraData)
+				//g_player[m_owner]->CreateImprovement(rec->GetShowOnMapIndex(s), Pos, 1);
+					//g_player[m_owner]->CreateImprovement(rec->GetIndex(),  Pos, 0);
+				g_gevManager->AddEvent(GEV_INSERT_Tail,
+			                       GEV_CreateImprovement,
+			                       GEA_Player,      m_owner,
+			                       GEA_MapPoint,    Pos,
+			                       GEA_Int,         s, //type,
+			                       GEA_Int,         0,
+			                       GEA_End);
+//			}
+		}
+	}
+}
 
 	//EMOD - Add Holy City here?
 
@@ -7760,11 +7843,12 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
 	gold += goldPerCitizen * PopCount();
 
-	//EMOD not sure its needed here though
+	//////////////////////////////////
+	//EMOD - GoldPerCity but now it multiplied to the max number of cities to allow for higher gold hits to humans 3-27-2006
 	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings());
-	gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
-	//gold += goldPerCity * g_player[m_owner]->m_all_cities->Num();
-
+	//gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
+	gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
+	
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit
 	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings());
@@ -7774,6 +7858,14 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by readiness level
 	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings());
 	gold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+	
+
+	///////////////////////////////////////////////
+	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
+	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings());
+	gold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->GetTotalGoldHunger() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+    //Not calculating goldhunger see calctotalupkeep?
+
 
 //EMOD to assist AI
 	if(gold < 0) {

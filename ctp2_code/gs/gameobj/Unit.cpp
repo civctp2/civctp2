@@ -794,11 +794,11 @@ sint32 Unit::GetMovementTypeAir() const
 	return GetDBRec()->GetMovementTypeAir();
 }
 
-sint32 Unit::GetAllTerrainAsImprovement() const  //EMOD
+//sint32 Unit::GetAllTerrainAsImprovement() const  //EMOD
 
-{
-	return GetDBRec()->GetAllTerrainAsImprovementIndex();  //EMOD
-}
+//{
+//	return GetDBRec()->GetAllTerrainAsImprovementIndex();  //EMOD
+//}
 
 sint32 Unit::GetMovementTypeSpace() const
 

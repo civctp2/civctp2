@@ -146,7 +146,7 @@ str_ldl_Pollution_Level	"Pollution Level"
 
 
 
-CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the {player[0].civ_name_plural}.  Are you sure you wish to continue?"
+CANT_ATTACK_HAVE_TREATY "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
 AT_LEAST_ONE_COULDNT_BE_EXPELLED "The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
 
 

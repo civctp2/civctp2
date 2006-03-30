@@ -51,12 +51,14 @@ Building {
     	Record Resource[] ProducesGood 		//added by E -- having a bldg gives a city a good
 	Bit(Int) SquaredBorderRadius 		//FU added by E
 	Bit(Int) IntBorderRadius    		//FU added by E
+	Record TerrainImprovement[] ShowOnMap //FU
 
 
 	Int ProductionCost
 	Int Upkeep
 	Bit(Int) GoldPerCity = 0 		//add/subtract gold based on player's number of cities by E
 	Bit(Int) GoldPerUnit = 0 		//add/subtract gold based on player's number of units by E 
+	Bit(Int) GoldPerUnitSupport = 0		//coefficient applied to gold hunger, readiness, and govt coefficient
 	Bit(Int) GoldPerUnitReadiness = 0 	//add/subtract gold based on player's number of units multiplied by readiness level by E
 	Bit(Int) UpkeepPerUnit = 0 		//FU added by E 
 	Bit(Int) UpkeepPerUnitWagesReadiness = 0 //FU added by E 
