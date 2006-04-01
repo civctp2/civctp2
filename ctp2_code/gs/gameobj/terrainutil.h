@@ -30,6 +30,7 @@ bool terrainutil_PlayerHasAdvancesForTerrain(const TerrainImprovementRecord *rec
 bool terrainutil_PlayerHasAdvancesFor(const TerrainImprovementRecord *rec, sint32 pl);
 bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, bool checkMaterials);
 bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos);
+bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos); //EMOD
 void terrainutil_GetDefenseBonus(const MapPoint & pos, double & terrain_bonus, double & fort_bonus);
 bool terrainutil_HasAirfield(const MapPoint & pos);
 bool terrainutil_HasListeningPost(const MapPoint & pos);

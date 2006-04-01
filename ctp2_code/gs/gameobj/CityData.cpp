@@ -116,7 +116,15 @@
 // - GoldPerUnitReadiness in ProcessGold by E 2-24-2006
 // - Add Civilization and Citystyle Bonuses to Gold, Food, science, production by either a 
 //   bonus (just a solid integer) or by a percentage. by E 2-27-2006
-// - Added Increase Borders to AddImprovement (hopefully it works) by E 2-28-2006
+// - Added Increase Borders to AddImprovement by E 2-28-2006
+// - GoldPerUnitSupport in ProcessGold by E 3-24-2006 uses goldhunger
+// - Has EitherGood and HasNeedGood now checks selling goods by E 3-27-2006 
+// - Added Increase borders to AddWonder 3-28-2006
+// - Added ShowOnMap to wonders and buildings (a work in progress)
+// - Added IsCoastal check to canbuildwonders 3-31-2006
+// - Added ObsoleteUnit so units can be obsolete by the availability of other units by E 3-31-2006
+// - Added UpgradeTo so units can be obsolete by the availability of unit they upgrade to by E 3-31-2006
+// 
 //     
 //----------------------------------------------------------------------------
 
@@ -2072,18 +2080,13 @@ void CityData::CollectResources()
 // Add if city has building GetEnablesGood >0 then that good will be added to the city for trade
 
 	sint32 good;
-	//sint32 igood;
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
 		if(m_built_improvements & ((uint64)1 << b)) {
 		const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
 	//  Check If needsGood for the building a make bonuses dependent on having that good for further bonus
 			if(rec->GetNumEnablesGood() > 0){
-				//for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
-					for(good = 0; good < rec->GetNumEnablesGood(); good++) {
-						//if(rec->GetEnablesGoodIndex(igood) == good) {
-							m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
-						//}
-					//}
+				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
 				}
 			}
 		}
@@ -4217,7 +4220,7 @@ BOOL CityData::BuildWonder(sint32 type)
 	}
 }
 
-void CityData::AddWonder(sint32 type)  //not used?
+void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now it does 3-26-2006 EMOD
 {
 
 	const WonderRecord* wrec = wonderutil_Get(type); //added by E
@@ -4226,7 +4229,8 @@ void CityData::AddWonder(sint32 type)  //not used?
 
 	m_builtWonders |= (uint64(1) << type);
 
-		sint32 intRad;
+//EMOD wonders add borders too
+	sint32 intRad;
     	sint32 sqRad;
 	//EMOD increases city borders
 	if (wrec->GetIntBorderRadius(intRad) && wrec->GetSquaredBorderRadius(sqRad)) {
@@ -4234,31 +4238,22 @@ void CityData::AddWonder(sint32 type)  //not used?
 	}
 	//end Emod
 
-//EMOD Visible Wonders should go here like the radius for AddImprovement 3-27-2006
-if (wrec->GetNumShowOnMap() > 0){
-	CityInfluenceIterator it(cityPos, m_sizeIndex);
+//EMOD Visible Wonders 3-31-2006
+	CityInfluenceIterator it(cityPos, m_sizeIndex); 
 	for(it.Start(); !it.End(); it.Next()) {
 		Cell *cell = g_theWorld->GetCell(it.Pos());
-		//sint32 ring = GetRing(it.Pos());
+		if(cityPos == it.Pos())
+				continue;
 		sint32 s;
 		for(s = 0; s < wrec->GetNumShowOnMap(); s++) {
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(s);
-		//if terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos)
-			if(terrainutil_CanPlayerBuildAt(rec, m_owner, Pos)) {
-			//CreateImprovement(sint32 dbIndex, MapPoint &point, sint32 extraData)
-				g_player[m_owner]->CreateImprovement(wrec->GetShowOnMapIndex(s), Pos, 0);
-					//g_player[m_owner]->CreateImprovement(rec->GetIndex(),  Pos, 0);
-				//g_gevManager->AddEvent(GEV_INSERT_Tail,
-			        //               GEV_CreateImprovement,
-			          //             GEA_Player,      m_owner,
-			            //           GEA_MapPoint,    Pos,
-			              //         GEA_Int,         s, //type,
-			                //       GEA_Int,         0,
-			                  //     GEA_End);
+			if(terrainutil_CanPlayerSpecialBuildAt(rec, m_owner, it.Pos())) {
+				g_player[m_owner]->CreateSpecialImprovement(wrec->GetShowOnMapIndex(s), it.Pos(), 0);
+
 			}
 		}
 	}
-}
+
 
 // EMOD add HolyCity...need to link to religion DB (once Religion DB is done)
 //	if (wonderutil_GetDesignatesHolyCity((uint64)1 << (uint64)type)) {
@@ -5709,6 +5704,26 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 	MapPoint pos;
 	m_home_city.GetPos(pos);
 
+
+// Added by E - units can be obsolete by the availability of other units
+	if(rec->GetNumObsoleteUnit() > 0) {
+		sint32 newunit;
+		for(newunit = 0; newunit < rec->GetNumObsoleteUnit(); newunit++) {
+			if(CanBuildUnit(rec->GetObsoleteUnitIndex(newunit)))
+				return FALSE;
+		}
+	}
+
+// Added by E - units can be obsolete by the availability of unit the upgrade to
+	if(rec->GetNumUpgradeTo() > 0) {
+		sint32 newunit;
+		for(newunit = 0; newunit < rec->GetNumUpgradeTo(); newunit++) {
+			if(CanBuildUnit(rec->GetUpgradeToIndex(newunit)))
+			//if(g_player[m_owner]->CanBuildUnit(rec->GetUpgradeToIndex(newunit)) //because of resources cities maybe different
+				return FALSE;
+		}
+	}
+
 // Added by E - checks if a city has a building required to build the unit
 	if(rec->GetNumPrerequisiteBuilding() > 0) {
 		sint32 o;
@@ -6044,6 +6059,10 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 // Added Wonder database 
 	const WonderRecord* rec = wonderutil_Get(type);
 
+	
+	MapPoint pos;
+	m_home_city.GetPos(pos);
+
 // Added PrerequisiteBuilding checks if city has building to build wonder 
 	if(rec->GetNumPrerequisiteBuilding() > 0) {
 		sint32 o;
@@ -6065,6 +6084,12 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			}
 		}
 		if(!found)
+			return FALSE;
+	}
+
+//EMOD - Added Coastal Buildings to wonders 
+	if (rec->GetCoastalBuilding()) {
+		if(!g_theWorld->IsNextToWater(pos.x, pos.y))
 			return FALSE;
 	}
 
@@ -7412,29 +7437,7 @@ void CityData::AddImprovement(sint32 type)
 
 	//end Emod
 //if (rec->GetNumShowOnMap() > 0){
-	CityInfluenceIterator it(m_point, m_sizeIndex);
-	for(it.Start(); !it.End(); it.Next()) {
-		Cell *cell = g_theWorld->GetCell(it.Pos());
-		//sint32 ring = GetRing(it.Pos());
-		sint32 s;
-		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
-		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-		//if terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos)
-			if(terrainutil_CanPlayerBuildAt(trec, m_owner, Pos)) {
-			//CreateImprovement(sint32 dbIndex, MapPoint &point, sint32 extraData)
-				//g_player[m_owner]->CreateImprovement(rec->GetShowOnMapIndex(s), Pos, 1);
-					//g_player[m_owner]->CreateImprovement(rec->GetIndex(),  Pos, 0);
-				g_gevManager->AddEvent(GEV_INSERT_Tail,
-			                       GEV_CreateImprovement,
-			                       GEA_Player,      m_owner,
-			                       GEA_MapPoint,    Pos,
-			                       GEA_Int,         s, //type,
-			                       GEA_Int,         0,
-			                       GEA_End);
-//			}
-		}
-	}
-}
+
 
 	//EMOD - Add Holy City here?
 

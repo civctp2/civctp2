@@ -54,6 +54,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added city data to "settle too close"-report.
 // - NonLethalBombard implemented in UnitData::Bombard 15-FEB-2006 
+// - Added MOveBonus to DeductMove so we can AllTerrainAsRoad-like units 3-31-2006
 //
 //----------------------------------------------------------------------------
 
@@ -551,6 +552,13 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 			}
 		}
 	}
+
+	if (rec->GetMoveBonus() > 0) {  //EMOD
+			m_movement_points -= rec->GetMoveBonus(); 
+	} else {
+			m_movement_points -= cost;
+			}
+	
 	return FALSE;
 }
 

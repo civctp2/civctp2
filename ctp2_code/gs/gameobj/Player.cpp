@@ -2083,6 +2083,21 @@ void Player::BeginTurnProduction()
 	}
 
 
+	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction?
+
+//	MapPoint pos;
+//	for(sint32 b = 0; b < g_theTerrainImprovementDB->NumRecords(); b++) {
+//	for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+//	Installation inst = m_allInstallations->Access(b);
+//	const TerrainImprovementRecord *rec = inst.GetDBRec();
+//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+//		if (effect->GetColony()) {
+//			if (effect->GetBonusProductionExport() > 0){
+//				m_materialPool->AddMaterials(effect->GetBonusProductionExport());
+//			}
+//		}
+//	}
+
 	m_productionFromFranchises = 0;
 }
 
@@ -2112,19 +2127,7 @@ void Player::BeginTurnImprovements()
 		
 	}
 
-	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction?
-
-//	MapPoint pos;
-//	for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
-//	Installation inst = m_allInstallations->Access(b);
-//	const TerrainImprovementRecord *rec = inst.GetDBRec();
-//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
-//		if (effect->GetColony()) {
-//			if (effect->GetBonusProductionExport() > 0){
-//				m_materialPool->AddMaterials(effect->GetBonusProductionExport());
-//			}
-//		}
-//	}
+	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction? removed because crash
 
 
 }
@@ -2927,16 +2930,19 @@ sint32 Player::GetTotalGoldHunger()
 
 	unit_num = m_all_units->Num();
 	sint32 cost = 0;
+	sint32 i;
 	UnitRecord *rec=NULL;
-	for (unit_idx=0; unit_idx<unit_num; unit_idx++) {
-		rec = g_theUnitDB->Access(m_all_units->Access(unit_idx).GetType());
-		Assert(rec);
+	//for (unit_idx=0; unit_idx<unit_num; unit_idx++) {
+		//rec = g_theUnitDB->Access(m_all_units->Access(unit_idx).GetType());
+	for(i = m_all_units->Num() - 1; i >= 0; i--) {
+		//*rec = m_all_units->Access(i).GetDBRec();
+		//Assert(rec);
 
-		if (rec->GetHasPopAndCanBuild()) continue;
+		if (m_all_units->Access(i).GetDBRec()->GetHasPopAndCanBuild()) continue;
 
-		if (rec->GetIsTrader()) continue;
+		if (m_all_units->Access(i).GetDBRec()->GetIsTrader()) continue;
 
-		cost += rec->GetGoldHunger();
+		cost += m_all_units->Access(i).GetDBRec()->GetGoldHunger();
 	}
 
 	return cost;
@@ -7175,6 +7181,39 @@ TerrainImprovement Player::CreateImprovement(sint32 dbIndex,
 	return theImprovement;
 }
 
+TerrainImprovement Player::CreateSpecialImprovement(sint32 dbIndex,
+											 MapPoint &point,
+											 sint32 extraData)
+{
+	TerrainImprovement theImprovement;
+	ERR_BUILD_INST err;
+
+//	if(!CanCreateImprovement(dbIndex, point, extraData, true, err))
+//		return theImprovement;
+
+	theImprovement = g_theTerrainImprovementPool->Create(m_owner,
+														 point,
+														 dbIndex,
+														 extraData);
+
+	if(g_theTerrainImprovementPool->IsValid(theImprovement.m_id)) {
+		if(g_network.IsClient()) {
+			g_network.AddCreatedObject(theImprovement.AccessData());
+			g_network.SendAction(new NetAction(NET_ACTION_TERRAIN_IMPROVEMENT, 
+											   dbIndex, 
+											   (sint32)point.x, (sint32)point.y,
+											   extraData,
+											   theImprovement.m_id));											   
+		}
+		m_terrainImprovements->Insert(theImprovement);
+		if(theImprovement.GetMaterialCost() <= m_materialPool->GetMaterials()) {
+			theImprovement.StartBuilding();
+		}
+	}
+
+	return theImprovement;
+}
+
 sint32 Player::GetMaterialsStored() const
 { 
    return m_materialPool->GetMaterials(); 
@@ -8997,7 +9036,7 @@ sint32 Player::GetTotalResources()
 
 
 
-void Player::BeginTurnMonopoly(void)
+void Player::BeginTurnMonopoly(void)  //EMOD add back in but grant a feat? 
 	{
 #ifdef CTP1_TRADE
 	SlicObject	*so ;

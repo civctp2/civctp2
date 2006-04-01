@@ -704,6 +704,8 @@ public:
                               ERR_BUILD_INST &err);
 	TerrainImprovement CreateImprovement(sint32 dbIndex, MapPoint &point,
 										 sint32 extraData);
+	TerrainImprovement CreateSpecialImprovement(sint32 dbIndex, MapPoint &point,
+										 sint32 extraData);  //EMOD
 
 	void AddImprovement(TerrainImprovement imp);
 	void RemoveImprovementReferences(TerrainImprovement imp);

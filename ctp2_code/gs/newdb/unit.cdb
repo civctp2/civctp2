@@ -89,7 +89,8 @@ Unit {
 	Record Building[] PrerequisiteBuilding  	// Added by E to limit units to cities with certain buildings
 	Record Government[] GovernmentsModified
 	Record Terrain[] CanSettleOn 			//added by E restricts settling to certain terrains
-	Record Unit      UpgradeTo 			//FutureUse to create Upgrade Paths, cost based on difference ShieldCost x Gold?
+	Record Unit[]     UpgradeTo 			//FutureUse to create Upgrade Paths, cost based on difference ShieldCost x Gold?
+	Record Unit[]     ObsoleteUnit 			//added by E
 	Record CityStyle[] CultureOnly 			//added by E -- can only build units if civ has certain citystyle
 	Record CityStyle[] CityStyleOnly 		//added by E--can only build units at cities with certain citystyle 
 	Record Civilisation[] CivilisationOnly 		//added by E -- can only build units if player is a specific civ

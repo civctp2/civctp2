@@ -723,14 +723,14 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 
 // EMOD for contiguous irrigation
 //		if(rec->GetNeedsIrrigation ()) {
-
-//		RadiusIterator it(pos, 1);
-//		for(it.Start(); !it.End(); it.Next()) {
-//		Cell *cell = g_theWorld->GetCell(it.Pos());
-//			for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-//			sint32 imp = cell->GetDBImprovement(i);
-//			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-//			if(g_theWorld->IsRiver(Pos)) { //|| rec->GetNeedsIrrigation()) { 
+//
+//			RadiusIterator it(pos, 1);
+//			for(it.Start(); !it.End(); it.Next()) {
+//			Cell *cell = g_theWorld->GetCell(it.Pos());
+//				for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+//				sint32 imp = cell->GetDBImprovement(i);
+//				const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//					if(g_theWorld->IsRiver(it.Pos()) || rec->GetNeedsIrrigation()) { 
 //						return true;
 //					}
 //					return false;
@@ -738,9 +738,93 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 //			}
 //		}
 //if(g_theWorld->IsIrrigation(0, mpos) || g_theWorld->IsRiver(mpos) || g_theWorld->IsIrrigation(i, pos) || g_theWorld->IsRiver(pos)) { 
-					
+
+//	if (rec->GetNeedsIrrigation()) {
+//		if(!g_theWorld->IsNextToRiver(pos.x, pos.y)) // && !g_theWorld->IsNextToIrrigation(pos.x, pos.y))
+//			return false;
+//	}
+
+
 //end EMOD
 	}
+	return true;
+}
+
+bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos)
+{
+	sint32 i;
+
+	Assert(rec != NULL);
+	if(rec == NULL)
+		return false;
+
+	Assert(pl >= 0);
+	Assert(pl < k_MAX_PLAYERS);
+	if(pl < 0 || pl >= k_MAX_PLAYERS)
+		return false;
+
+	Assert(g_player[pl]);
+	if(!g_player[pl])
+		return false;
+
+	Cell *cell = g_theWorld->GetCell(pos);
+	Assert(cell);
+	if(!cell)
+		return false;
+
+	if(cell->GetOwner() == -1) {
+		if(rec->GetIntBorderRadius()) {
+			if(!g_player[pl]->IsVisible(pos)) {
+				
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	if(cell->GetOwner() >= 0 && cell->GetOwner() != pl)
+	{
+		bool const haveAlliance	= 
+			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
+		if(cell->GetOwner() > 0 && haveAlliance) {
+			if(rec->GetClassRoad() ||
+				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {
+				
+				
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+
+	if(g_theWorld->GetCity(pos).IsValid())
+		return false;
+
+
+		if(rec->GetNumIsRestrictedToGood () == 0) {
+			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
+				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
+					return false;
+				}
+			}
+		}
+		else {
+			sint32 good;
+			if (g_theWorld->GetGood(pos, good)) {
+				for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
+					if(rec->GetIsRestrictedToGoodIndex(i) == good) {
+						return true; 
+					}
+				}
+				return false;
+			}
+		}
+
+	
 	return true;
 }
 
