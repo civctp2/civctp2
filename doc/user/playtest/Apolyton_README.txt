@@ -32,6 +32,15 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
+2006-04-01
+Added: ShowOnMap now you can specify a certain tileimp to be built is a wonder or building is built
+Added: ObsoleteUnit flag; units can be obsolete by other units availability not just techs
+Added: MoveBonus flag for units; now you can specify how much points a unit will lose when it moves. MoveBonus 33 is like Civ2's AllTerrainAsRoads. Note going to different cost imps might not be possible if you lack move points.
+Added: GoldPerUnitSupport Units have a GoldHunger impact on cost
+Added: GoldHunger units can now have a variable gold cost
+Added: BorderRadius for wonders so wonders can increase border radius
+ 
+
 2006-03-22
 Added: production bonus to AI, they dont run production deficits
 Added: GoodyHutExcluded flag (just in case) for advances

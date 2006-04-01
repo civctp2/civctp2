@@ -52,7 +52,7 @@ Building {
 	Bit(Int) SquaredBorderRadius 		//FU added by E
 	Bit(Int) IntBorderRadius    		//FU added by E
 	Record TerrainImprovement[] ShowOnMap //FU
-
+	Record TerrainImprovement[] ShowOnMapRadius //FU
 
 	Int ProductionCost
 	Int Upkeep

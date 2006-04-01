@@ -4238,20 +4238,27 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 	}
 	//end Emod
 
-//EMOD Visible Wonders 3-31-2006
+//EMOD Visible Wonders 4-1-2006
 	CityInfluenceIterator it(cityPos, m_sizeIndex); 
 	for(it.Start(); !it.End(); it.Next()) {
 		Cell *cell = g_theWorld->GetCell(it.Pos());
 		if(cityPos == it.Pos())
 				continue;
-		sint32 s;
-		for(s = 0; s < wrec->GetNumShowOnMap(); s++) {
-		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(s);
-			if(terrainutil_CanPlayerSpecialBuildAt(rec, m_owner, it.Pos())) {
-				g_player[m_owner]->CreateSpecialImprovement(wrec->GetShowOnMapIndex(s), it.Pos(), 0);
-
+			sint32 s;
+			bool SpotFound = true;
+			for(s = 0; s < wrec->GetNumShowOnMap(); s++) {
+				const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(s);
+				if(!terrainutil_CanPlayerSpecialBuildAt(rec, m_owner, it.Pos())) {
+					SpotFound = false;
+					break;
+				}
+				if(!SpotFound){
+					continue;
+				} else {
+					g_player[m_owner]->CreateSpecialImprovement(wrec->GetShowOnMapIndex(s), it.Pos(), 0);
+					return;
+				}
 			}
-		}
 	}
 
 
@@ -7436,7 +7443,39 @@ void CityData::AddImprovement(sint32 type)
 	}
 
 	//end Emod
-//if (rec->GetNumShowOnMap() > 0){
+//EMOD Visible Buildings 4-1-2006
+	CityInfluenceIterator it(m_point, m_sizeIndex); 
+	for(it.Start(); !it.End(); it.Next()) {
+		Cell *cell = g_theWorld->GetCell(it.Pos());
+		if(m_point == it.Pos())
+				continue;
+			sint32 s;
+			bool SpotFound = true;
+			for(s = 0; s < rec->GetNumShowOnMap(); s++) {
+				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+				if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
+					SpotFound = false;
+					break;
+				}
+				if(!SpotFound){
+					continue;
+				} else {
+					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), it.Pos(), 0);
+					return;
+				}
+			}
+//EMOD - FU 4-1-2006 visible tileimps, but it builds them all around the radius and should cost PW 
+			for(s = 0; s < rec->GetNumShowOnMapRadius(); s++) { 
+				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+				if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
+					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapRadiusIndex(s), it.Pos(), 0);
+				}
+			}
+	
+	}
+
+
+
 
 
 	//EMOD - Add Holy City here?
