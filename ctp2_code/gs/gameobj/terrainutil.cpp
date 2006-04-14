@@ -332,7 +332,20 @@ sint32 terrainutil_GetProductionCost(sint32 impType, const MapPoint &pos, sint32
 	return effect->GetProductionCost();
 }
 
+sint32 terrainutil_GetBonusProductionExport(sint32 impType, const MapPoint &pos, sint32 extraData) //EMOD
+{
+	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(impType);
+	Assert(rec);
+	if(!rec)
+		return -1;
 
+	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+
+	if(!effect)
+		return -1;
+
+	return effect->GetBonusProductionExport();
+}
 
 void terrainutil_DoVision(const MapPoint &point)
 {

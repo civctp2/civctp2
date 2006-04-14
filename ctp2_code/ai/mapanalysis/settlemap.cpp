@@ -1,4 +1,43 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : City data
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+// _SLOW_BUT_SAFE
+// - Define 2 other symbols (PROJECTED_CHECK_START and PROJECTED_CHECK_END) 
+//   when set. But the defined symbols are never used, so this doesn't do
+//   anything at all. This makes preprocessing and compilation slower, but
+//   should be safe.
+//
+// USE_LOGGING
+// - Enable logging when set, even when not building a debug version. 
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - ComputeSettleValue modified to prevent AI from trying to settle on places it cant
+// 
+//     
+//----------------------------------------------------------------------------
 
 
 
@@ -60,6 +99,33 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 		score += cell->GetScore();
 	}
 
+//EMOD if the cell has a score of zero, the AI won't attempt at all 4-10-2006
+	if (g_theWorld->GetCell(pos)->GetScore() == 0) {
+		score = 0;
+	}
+//EMOD to allow for AI notto settle some places
+//	If Unit Get SettleType 
+//		GetCell(pos) != settletype
+//		score = 0;
+//EMOD
+//  sint32 i;
+//	const UnitRecord *rec = g_theUnitDB->Get(unit_type); 
+//	for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
+//		if(!rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
+//			score = 0;
+//		}
+//	}
+// end EMOD
+//
+//	if !(rec->GetSettleLand() && g_theWorld->IsLand(pos))
+//		score = 0; 
+//	else if (rec->GetSettleMountain() && g_theWorld->IsMountain(pos))
+//		score = 0; 
+//	else if (rec->GetSettleWater() && g_theWorld->IsWater(pos))
+//		score = 0; 
+//	else if (rec->GetSettleSpace() && g_theWorld->IsSpace(pos))
+//		score = 0;
+//end EMOD
 	return score;
 }
 

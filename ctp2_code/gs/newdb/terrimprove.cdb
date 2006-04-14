@@ -136,6 +136,7 @@ TerrainImprovement {
 	Record Resource[] EnablesGood 		//added by E -- having a TI gives a city a good
 	Bit(Struct Effect) Effect
 	Struct Effect[] TerrainEffect
+	Bit DeniedToEnemy		//FU
 
 	Record Icon Icon
 	#MDS 090800 not sure about this, trying to add 2 new fields...

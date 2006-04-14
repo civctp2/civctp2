@@ -72,6 +72,8 @@
 //   by E October 23 2005
 // - Settlers can be added to cities by E 1-17-2006
 // - added readiness modifier for building upkeep in CalcTotalBuildingUpkeep by E 2-24-2006
+// - Corrected error in adding settlers to cities that actually killed all units, 
+//   not just the settler. by E 4-10-2006
 //
 //----------------------------------------------------------------------------
 
@@ -2001,7 +2003,8 @@ void Player::BeginTurnProduction()
 	sint32 mat_total=0;
 	sint32 delta;
 	sint32 materialsFromFranchise = 0;
-//	sint32 materialsfromColonies = 0;   //EMOD
+//	sint32 materialsfromColonies = 0;  
+	 //EMOD
 
 	m_total_production = 0;
 	for (i=0; i<n; i++) { 
@@ -2082,7 +2085,13 @@ void Player::BeginTurnProduction()
 		m_materialPool->AddMaterials(materialsFromFranchise);
 	}
 
-
+	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction? removed because crash
+	//	for(i = 0; i < m_allInstallations->Num(); i++) {
+	//for(i = 0; i < m_terrainImprovements->Num(); i++) {
+	//	if(m_terrainImprovements->Access(i).GetBonusProductionExport() > 0) {
+	//		m_materialPool->AddMaterials(m_terrainImprovements->Access(i).GetBonusProductionExport());
+	//	}
+	//}
 	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction?
 
 //	MapPoint pos;
@@ -2101,7 +2110,7 @@ void Player::BeginTurnProduction()
 	m_productionFromFranchises = 0;
 }
 
-void Player::BeginTurnImprovements()
+void Player::BeginTurnImprovements()  //this might only be for tileimps under construction
 {
 	int i, n;
 	
@@ -2117,7 +2126,6 @@ void Player::BeginTurnImprovements()
 		}
 	}
 
-	
 	for(i=0; i < n; i++) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_ImprovementAddTurn,
@@ -2126,8 +2134,8 @@ void Player::BeginTurnImprovements()
 
 		
 	}
+	
 
-	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction? removed because crash
 
 
 }
@@ -2934,7 +2942,7 @@ sint32 Player::GetTotalGoldHunger()
 	UnitRecord *rec=NULL;
 	//for (unit_idx=0; unit_idx<unit_num; unit_idx++) {
 		//rec = g_theUnitDB->Access(m_all_units->Access(unit_idx).GetType());
-	for(i = m_all_units->Num() - 1; i >= 0; i--) {
+	for(i = 0; i < m_all_units->Num(); i++) {
 		//*rec = m_all_units->Access(i).GetDBRec();
 		//Assert(rec);
 
@@ -3119,20 +3127,7 @@ sint32 Player::Settle(Army &settle_army)
         return FALSE; 
 	}
 
- 	settle_army.GetPos(pos);
 
-    if (g_theWorld->HasCity(pos)) { 
-		DPRINTF(k_DBG_GAMESTATE, ("Settling on top of a city\n"));
-
-//    EMOD  here for adding settler to a city?
-		Unit c = g_theWorld->GetCity(pos);
-		c.CD()->ChangePopulation(1);
-		for(i = m_all_units->Num() - 1; i >= 0; i--) {
-			m_all_units->Access(i).KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());  
-		}	
-//   EMOD
-        return FALSE; 
-	}
 
 	
 	
@@ -3147,6 +3142,27 @@ sint32 Player::Settle(Army &settle_army)
         
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		BOOL isVisible = settle_army[0].GetVisibility() & (1 << visiblePlayer);
+ 		
+		settle_army.GetPos(pos);
+
+    if (g_theWorld->HasCity(pos)) { 
+		DPRINTF(k_DBG_GAMESTATE, ("Settling on top of a city\n"));
+
+//    EMOD  here for adding settler to a city?
+		Unit c = g_theWorld->GetCity(pos);
+		c.CD()->ChangePopulation(1);
+		settle_army[i].KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());
+		// This called ALL player Units to be killed!
+//		for(i = m_all_units->Num() - 1; i >= 0; i--) {
+//		m_all_units->Access(i).KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());  
+//		}	
+//   EMOD
+        return TRUE; 
+	}
+
+
+
+
         if (settle_army[i].Settle()) { 
             searching = FALSE;
 
@@ -7223,6 +7239,10 @@ sint32 Player::GetMaterialsStored() const
 void Player::AddImprovement(TerrainImprovement imp)
 {
 	m_terrainImprovements->Insert(imp);
+
+
+// Use add improvement like AddWonder and addbuilding?
+
 }
 
 void Player::RemoveImprovementReferences(TerrainImprovement imp)

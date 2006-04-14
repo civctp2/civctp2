@@ -959,7 +959,7 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 
 	sint32 startI, endI;
 	if(side == NORTHWEST || side == NORTHEAST) {
-		startI = k_TILE_PIXEL_HEADROOM;
+		startI = k_TILE_PIXEL_HEADROOM;  // E - pixel headroom is the space on the tga above the square tileset.h has these values
 		endI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
 	} else {
 		startI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
@@ -998,7 +998,7 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 			continue;
 		}
 
-		pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1));
+		pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1)); //EMOD change here
 		if(west) {
 			*pDestPixel = selectColorPixel;
 			*(pDestPixel + 1) = selectColorPixel;
@@ -1051,7 +1051,7 @@ sint32 TiledMap::QuickBlackBackGround(aui_Surface *surface)
 	return (AUI_ERRCODE_OK == errcode) ? AUI_ERRCODE_OK : AUI_ERRCODE_BLTFAILED;
 }
 
-sint32 TiledMap::DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y)
+sint32 TiledMap::DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y) //EMOD this is for unexplored? could add bracket like icons that make it more like civ3
 {
 
 	if (!surface) surface = m_surface;
@@ -5556,7 +5556,7 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-			DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID);
+			DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
 		}
 
 		neighborCityOwner = GetVisibleCityOwner(neighbor);		

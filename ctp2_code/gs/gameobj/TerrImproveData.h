@@ -52,6 +52,7 @@ private:
 	sint32 m_turnsToComplete;
 	TERRAIN_TYPES m_transformType;
 	sint32 m_materialCost;
+	sint32 m_materialBonus;
 	bool m_isComplete;
 	bool m_isBuilding;
 
@@ -74,6 +75,8 @@ public:
 	BOOL Complete(void);
 	BOOL AddTurn(sint32 turns);
 	sint32 PercentComplete() const;
+
+	sint32 GetBonusProductionExport() const { return m_materialBonus; } //EMOD 4-5-2006
 	sint32 GetMaterialCost() const { return m_materialCost; }
 	bool IsBuilding() const { return m_isBuilding; }
 

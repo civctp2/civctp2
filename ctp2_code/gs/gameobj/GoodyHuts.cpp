@@ -325,6 +325,8 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
                    )
                     continue;   // undiscoverable
 
+				//remove this and use advances->m_researching ??? EMOD
+
                 if (advances->GetMinPrerequisites(i, maxNovelty) <= maxNovelty)
                 {
                     possible[nextPossible++] = i;			    
@@ -370,7 +372,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
     case GOODY_UNIT:
         {
             Advances const *    advances     = g_player[owner]->m_advances;
-		    sint32 *            possible     = new sint32[g_theAdvanceDB->NumRecords()];
+		    sint32 *            possible     = new sint32[g_theUnitDB->NumRecords()]; //EMOD changed from AdvancesDB recomended by Fromafar 4-12-2006
 		    size_t              nextPossible = 0;
             sint32 const        maxNovelty   = risk.GetMaxUnitAdvanceLeap();
 
@@ -511,6 +513,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 		case GOODY_ADVANCE:
 			so = new SlicObject("79DiscoveredRemnantsOfAncientCivilisation") ;
 			DPRINTF(k_DBG_GAMESTATE, ("You find advance %d\n", m_value));
+				//remove this and use advances->m_researching ??? EMOD
 			g_player[owner]->m_advances->GiveAdvance(m_value, CAUSE_SCI_GOODY);
 			so->AddRecipient(owner);
 			so->AddAdvance(m_value);

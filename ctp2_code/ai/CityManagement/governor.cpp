@@ -409,6 +409,7 @@ sint32 Governor::ComputeBestGovernment() const
 	for (sint32 gov_index = 0; government_index == -1 && gov_index < strategy.GetNumGovernment(); gov_index++)
 		{
 			const GovernmentRecord *rec = strategy.GetGovernment(gov_index);
+			//const GovernmentRecord *rec = strategy.GetGovernmentIndex; //EMOD would this fix the occasional crash? 4-8-2006
 			
 			
 			if (player_ptr->HasAdvance(rec->GetEnableAdvanceIndex()) == false)

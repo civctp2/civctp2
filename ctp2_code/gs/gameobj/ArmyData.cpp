@@ -63,6 +63,11 @@
 // - NonLethalBombard removed and put in UnitData::Bombard 15-FEB-2006  
 // - VerifyAttcak modified to prevent accidental wars - 24-MAR-2006
 // - verifyttack removed from bombard because the player should know where the point it 25-MAR-2006
+// - CanCaptureTile added to Pillage and work by E 4-12-2006
+// - CanBeGifted added to disband, allow humans to give units to AI by E 4-12-2006
+// - DeniedtoEnemy added to DeductMove if an imp has this then when at war you dont
+//   the tileimps move bonus only the base terrain (intent for railroads not roads) 
+//   by E 4-12-2006
 //
 //----------------------------------------------------------------------------
 
@@ -4798,15 +4803,29 @@ ORDER_RESULT ArmyData::Pillage(BOOL test_ownership)
 		sint32 imp = cell->GetDBImprovement(i);
 		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 			if(trec->GetCantPillage()){
-				CanPillageTileImp = false;
-				break;
+				return ORDER_RESULT_ILLEGAL;
+				//CanPillageTileImp = false;
+				//break;
 			}
 		}
-	
+//EMOD to allow units to take a tile if they have a flag instead of pillging, sometimes it good to take a fortress
+// use will probably go to lawyers or diplomats this us temporary until i can make it an order that costs gold
+		for(sint32 j = 0; j < m_nElements; j++) {
+			if(m_array[j].GetDBRec()->GetCanCaptureTile()) {
+				if (cellOwner != m_owner) {
+					cell->SetOwner(m_owner);
+					g_theWorld->ChangeOwner(pos, cellOwner, m_owner);
+					//add gold check and subtract gold
+					return ORDER_RESULT_SUCCEEDED;
+				}
+			}
+		}
 
-		if(!CanPillageTileImp){
-			return ORDER_RESULT_ILLEGAL;
-		}	
+
+
+//		if(!CanPillageTileImp){
+//			return ORDER_RESULT_ILLEGAL;
+//		}	
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_PillageUnit,
 						   GEA_Unit, m_array[uindex],
@@ -7473,25 +7492,9 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		g_selected_item->RegisterRemovedArmy(m_owner, Army(m_id));
 	}
 
-//	for(i = 0; i < m_nElements; i++) {
-//		if(!(g_theUnitDB->Get(m_array[i]->GetType(), g_player[GetOwner()]->GetGovernmentType())->GetAllTerrainAsImprovement())) {
-		
+
 //original	
 	DeductMoveCost(pos);
-
-
-//		} else {  
-//			BOOL out_of_fuel;
-
-//			const UnitRecord *urec = g_theUnitDB->Get(m_array[i]->GetType(), g_player[GetOwner()]->GetGovernmentType());
-//			sint32 imp = urec->GetAllTerrainAsImprovementIndex();
-//			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-//			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, pos);
-
-//			m_array[i].DeductMoveCost(trec->GetMoveBonus(), out_of_fuel); 
-//		}
-//
-//	}
 
 	m_pos = pos;
 }
@@ -8044,38 +8047,45 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 //				
 // Returns    : -
 //
-// Remark(s)  : - 
+// Remark(s)  : - Attempted MoveBonus here, but it appears this is only for terrain
+//				Unit data is for Units 
+//				- Added Denied to enemy check 4-11-2006
 //
 //----------------------------------------------------------------------------
 void ArmyData::DeductMoveCost(const MapPoint &pos)
 {
 	sint32 i;
-	double cost = g_theWorld->GetMoveCost(pos);
+	double cost = g_theWorld->GetMoveCost(pos);   //GetEnvBase()->GetMovement() non imps for Denyenemy
 	sint32  movebonus; // = g_theUnitDB->Get()->GetMoveBonus();
 	double c;
 	BOOL out_of_fuel;
+//EMOD
+	Cell *cell = g_theWorld->GetCell(pos);
+	sint32 CellOwner = cell->GetOwner();
 
+
+//end EMOD
 	for(i = m_nElements - 1; i >= 0; i--) {
 		if(m_array[i].GetMovementTypeAir()) {
 			c = k_MOVE_AIR_COST;
-//EMOD
+//EMOD - this code may no longer be necessay since i think this code only gets the cost of the pos and unitdata is used for the unit deduct cost
 		} else if(m_array[i].GetDBRec()->GetMoveBonus(movebonus) > 0) {
 					c = movebonus;
-		//	} else {
-		//		c = cost;
-		//	}
-// end EMOD			
-//DEnied to Enemy check here?
-// if (pos) has imp and is denied to enemy
-// If cellowner != m_owner
-// if cellowner and m_owner at war
-//	sint32	dcost;
-//(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(dcost);
-//	c = dcost;
-//			} else {
-//				c = cost;
-//			}
+//end EMOD
+//EMOD for having some tileimps not allowed for enemy movement like railroads 4-12-2006
+		} else if(m_array[i].GetOwner() != CellOwner) {  //this denies all?
+			sint32 j = 0;
+			sint32 imp = cell->GetDBImprovement(j);
+			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+			if ((AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)) && (trec->GetDeniedToEnemy())){  //i.e. RailRoads see Cell::CalcTerrainMoveCost?
+				sint32 enemycost;
+				(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(enemycost);
+				c = enemycost;
+			} else {
+				c = cost;
+			}
 
+//end EMOD
 		} else if(g_theWorld->IsTunnel(pos)) {
 			if(!m_array[i].GetMovementTypeLand()) {
 				sint32	icost;
@@ -8094,6 +8104,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 		}else {
 			c = cost;
 		}
+//end EMOD
 //original
 //			c = m_array[i].GetMovementPoints();
 //		}else {
@@ -8102,7 +8113,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 
 		out_of_fuel = FALSE;
 		m_array[i].DeductMoveCost(c, out_of_fuel);
-	}
+	} 
 }
 
 sint32 ArmyData::Fight(CellUnitList &defender)
@@ -8478,7 +8489,10 @@ void ArmyData::SetUnloadMovementPoints()
 //Disband an army. Recover 1/2 it's ShieldCost if it's in a city.
 void ArmyData::Disband()
 {
-	
+
+	Cell *cell = g_theWorld->GetCell(m_pos);
+	sint32 CellOwner = cell->GetOwner();	
+
 	if(g_player[m_owner]->m_all_armies->Num() < 2 &&
 	   g_player[m_owner]->m_all_cities->Num() < 1)
 		return;
@@ -8490,8 +8504,30 @@ void ArmyData::Disband()
 		if(city.m_id != (0)) {
 			city.AccessData()->GetCityData()->AddShields(m_array[i].GetDBRec()->GetShieldCost() / 2);
 		}
-		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//	}
+
+//EMOD Gift Units for Human Player 4-12-2006
+
+//	for(i = m_nElements - 1; i >= 0; i--) {
+		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)){
+			if(m_array[i].GetDBRec()->GetCanBeGifted()){
+			sint32 newunit = m_array[i].GetType();
+				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) {
+					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+					g_player[CellOwner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+				//	g_player[CellOwner]->CreateUnit(unitIndex,m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_DIPLOMACY);
+				} else {
+					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+				}
+			} else {
+				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+			}
+		} else {
+			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+		}
 	}
+///
 
 	
 	if ( g_selected_item->GetSelectedCity(city) ) {
@@ -8587,10 +8623,9 @@ BOOL ArmyData::CanMove()
 	BOOL noneMoved = TRUE;
 	BOOL allOverSpecialCost = TRUE;
 	for(i = 0; i < m_nElements; i++) {
-		if(m_array[i].GetMovementPoints() < 1) {
-			
-			return FALSE;
-		}
+	//	if(m_array[i].GetMovementPoints() < 1) {  //how come this doesnt affect roads? does it affect MoveBonus - E
+	//		return FALSE;
+	//	}
 		if(!m_array[i].GetFirstMoveThisTurn())
 			noneMoved = FALSE;
 		if(!m_array[i].CanPerformSpecialAction())

@@ -41,6 +41,7 @@ public:
 	MapPoint GetLocation() const { return GetData()->GetLocation(); }
 	sint32 GetCompletion() const { return GetData()->GetCompletion(); }
 	sint32 PercentComplete() const { return GetData()->PercentComplete(); }
+	sint32 GetBonusProductionExport() const { return GetData()->GetBonusProductionExport(); } //EMOD 4-5-2006
 	sint32 GetMaterialCost() const { return GetData()->GetMaterialCost(); }
 	bool IsBuilding() const { return GetData()->IsBuilding(); }
 

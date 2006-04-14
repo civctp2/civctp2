@@ -205,6 +205,136 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 
 #define k_MAX_BARBARIAN_TRIES 400
 
+//PIRATES?
+sint32 Barbarians::ChooseSeaUnitType()
+{
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	sint32 num_best_units = risk->GetBarbarianUnitRankMin();
+	BestUnit *best = new BestUnit[num_best_units];
+	sint32 i, j, k;
+	sint32 count = 0;
+
+	for(i = 0; i < num_best_units; i++) {
+		best[i].index = -1;
+		best[i].attack = -1;
+	}
+
+	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
+		const UnitRecord *rec = g_theUnitDB->Get(i);
+		if(rec->GetCantBuild())
+			continue;
+
+		if(!rec->GetMovementTypeSea())
+			continue;
+		
+		if(rec->GetAttack() < 1)
+			continue;
+
+		if(g_exclusions && g_exclusions->IsUnitExcluded(i))
+			continue;
+		if(rec->GetNoBarbarian())
+			continue;
+	
+		
+		
+
+		if(SomeoneCanHave(rec)) {
+			for(j = 0; j < num_best_units; j++) {
+				if(rec->GetAttack() > best[j].attack) {
+					for(k = num_best_units - 1; k >= j+1; k--) {
+						best[k] = best[k-1];
+					}
+					best[j].index = i;
+					best[j].attack = (sint32)rec->GetAttack();
+					count++;
+					break;
+				}
+			}
+		}
+	}
+
+	Assert(count > 0);
+
+	if(count > num_best_units)
+		count = num_best_units;
+
+	sint32 rankMax;
+	if(risk->GetBarbarianUnitRankMax() >= count) {
+		rankMax = count - 1;
+	} else {
+		rankMax = risk->GetBarbarianUnitRankMax();
+	}
+	sint32 whichbest = g_rand->Next(count - rankMax) + rankMax;
+	if(whichbest >= count)
+		whichbest = count - 1;
+
+	sint32 ret = best[whichbest].index;
+	delete [] best;
+	return ret;
+}
+
+//EMOD to add sea barbarians
+BOOL Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,  
+							   BOOL fromGoodyHut)
+{
+	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
+		return FALSE;
+
+
+	if(g_turn->GetRound() < g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianFirstTurn() ||
+	   g_turn->GetRound() >= g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianLastTurn()) {
+		return FALSE;
+	}
+
+	sint32 unitIndex = Barbarians::ChooseSeaUnitType();
+	sint32 d;
+	MapPoint neighbor;
+	BOOL tried[NOWHERE];
+	sint32 triedCount = 0;
+
+	sint32 maxBarbarians;
+	if(fromGoodyHut) {
+		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetHutMaxBarbarians() - 1) + 1;
+	} else {
+		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians() - 1) + 1;
+	}
+
+	sint32 count = 0;
+	for(d = sint32(NORTH); d < sint32(NOWHERE); d++) {
+		tried[d] = FALSE;
+	}
+
+	for(count = 0; count < maxBarbarians && triedCount < 8;) {
+		sint32 use = g_rand->Next(NOWHERE);
+		while(tried[use]) {
+			use++;
+			if(use >= NOWHERE)
+				use = NORTH;
+		}
+	
+		tried[use] = TRUE;
+		triedCount++;
+		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor)) {
+			if(g_theWorld->IsWater(neighbor) &&
+			   !g_theWorld->IsCity(neighbor)) {
+				count++;
+				Unit u = g_player[PLAYER_INDEX_VANDALS]->CreateUnit(unitIndex,
+														   neighbor,
+														   Unit(),
+														   FALSE,
+														   CAUSE_NEW_ARMY_INITIAL);
+				if(u.m_id == 0)
+					count--;
+			}
+		}
+	}
+	return count != 0;
+}
+
+//end EMOD
+
+
+
 void Barbarians::BeginYear()
 {
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
@@ -235,5 +365,28 @@ void Barbarians::BeginYear()
 		if(tries < k_MAX_BARBARIAN_TRIES) {
 			AddBarbarians(point, -1, FALSE);
 		}
+//EMOD for Pirates
+		sint32 ptries;
+		for(ptries = 0; ptries < k_MAX_BARBARIAN_TRIES; ptries++) {
+			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
+			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
+			
+			if (!g_theWorld->IsWater(point)) {
+				continue;
+			}
+			
+			for(p = 1; p < k_MAX_PLAYERS; p++) {
+				if(g_player[p] && g_player[p]->IsVisible(point))
+					break;
+			}
+			if(p >= k_MAX_PLAYERS) {
+				break;
+			}
+		}
+		if(ptries < k_MAX_BARBARIAN_TRIES) {
+			AddPirates(point, -1, FALSE);
+		}
+//end EMOD
+		
 	}
 }

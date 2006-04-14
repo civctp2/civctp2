@@ -258,13 +258,13 @@ struct UnitCost {
 
 
 //EMOD
-void MilitaryReadiness::TotalUnitGoldSupport()
+sint32 MilitaryReadiness::TotalUnitGoldSupport()
 {
 //based on RecalcCost, this coade (renamed from RecalcCostGold) gets all support gold hunger from units * govt coefficient * readiness 
 
 	m_costGold = 0;
 	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
-	int i, j, n, m; 
+	sint32 i, j, n, m; 
 	n = all_armies->Num(); 
 	for (i=0; i<n; i++) { 
         	m=all_armies->Access(i).Num(); 
@@ -272,7 +272,10 @@ void MilitaryReadiness::TotalUnitGoldSupport()
 			m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
         	}
     	}	
+return m_costGold;
 }
+
+
 
 struct UnitCostGold { 
   Unit u; 

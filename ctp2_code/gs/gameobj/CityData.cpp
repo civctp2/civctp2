@@ -4098,6 +4098,25 @@ void CityData::CheckRiot()
 			so->AddRecipient(m_owner);
 			g_slicEngine->Execute(so);
 			g_player[m_owner]->m_score->AddRiot();
+
+
+// EMOD to add graphics to rioting cities //need to change and add sprite and where to put effect sprite
+//			SpecialAttackInfoRecord const * specRec = unitutil_GetSpecialAttack(SPECATTACK_REVOLUTION);  //this unitutil looks like old stuff
+//			if (specRec) {
+//  		sint32 const soundID = specRec->GetSoundIDIndex();
+//		        if (soundID >= 0) {
+//					sint32 const spriteID = specRec->GetSpriteID()->GetValue();
+//		            if (spriteID >= 0) {
+//						g_director->AddSpecialAttack (m_home_city.GetActor()->GetUnitID(), m_home_city, SPECATTACK_REVOLUTION);
+//					} else {
+//					sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
+//						if ((visiblePlayer == m_owner) || (m_home_city.GetVisibility() & (1 << visiblePlayer)) ){
+//	    					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_home_city.RetPos().x, m_home_city.RetPos().y);
+//	    				}
+//					}
+//				}
+//			}
+			//end EMOD
 		}
 	}
 }
@@ -4223,43 +4242,60 @@ BOOL CityData::BuildWonder(sint32 type)
 void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now it does 3-26-2006 EMOD
 {
 
-	const WonderRecord* wrec = wonderutil_Get(type); //added by E
-	MapPoint cityPos(m_home_city.RetPos());
-	MapPoint Pos; 
+	const WonderRecord* rec = wonderutil_Get(type); //added by E
+	MapPoint m_point(m_home_city.RetPos());
+	//MapPoint Pos; 
 
 	m_builtWonders |= (uint64(1) << type);
 
 //EMOD wonders add borders too
 	sint32 intRad;
-    	sint32 sqRad;
+   	sint32 sqRad;
 	//EMOD increases city borders
-	if (wrec->GetIntBorderRadius(intRad) && wrec->GetSquaredBorderRadius(sqRad)) {
-		GenerateBorders(cityPos, m_owner, intRad, sqRad);
+	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) {
+		GenerateBorders(m_point, m_owner, intRad, sqRad);
 	}
 	//end Emod
-
-//EMOD Visible Wonders 4-1-2006
-	CityInfluenceIterator it(cityPos, m_sizeIndex); 
+//
+//EMOD Visible wonders 4-1-2006
+	MapPoint SpotFound;
+	CityInfluenceIterator it(m_point, m_sizeIndex); 
+	MapPoint pos;
+	sint32 totalTiles=0;
+	sint32 t;
 	for(it.Start(); !it.End(); it.Next()) {
+	//		totalTiles++;
+	//	}
+
 		Cell *cell = g_theWorld->GetCell(it.Pos());
-		if(cityPos == it.Pos())
+		if(m_point == it.Pos())
 				continue;
-			sint32 s;
-			bool SpotFound = true;
-			for(s = 0; s < wrec->GetNumShowOnMap(); s++) {
-				const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(s);
-				if(!terrainutil_CanPlayerSpecialBuildAt(rec, m_owner, it.Pos())) {
-					SpotFound = false;
-					break;
-				}
-				if(!SpotFound){
-					continue;
-				} else {
-					g_player[m_owner]->CreateSpecialImprovement(wrec->GetShowOnMapIndex(s), it.Pos(), 0);
-					return;
-				}
+		sint32 s;
+		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
+			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+			//if(!HasTileImpInRadius(rec->GetShowOnMapIndex(s), it.Pos())) {
+
+			//	if(!HasTileImpInRadius(rec->GetShowOnMapIndex(s), it.Pos())) {
+					SpotFound = it.Pos(); //
+					//cell.GetPos(); 
+					if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, pos)) {
+					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), pos, 0);
+			//	}
 			}
+		}
 	}
+
+//EMOD - FU 4-1-2006 visible tileimps, but it builds them all around the radius i.e. GreatWall builds Great walls
+//		for(s = 0; s < rec->GetNumShowOnMapRadius(); s++) { 
+//			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+//			if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
+//					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapRadiusIndex(s), it.Pos(), 0);
+//			}
+//		}
+	
+//	}
+
+
 
 
 // EMOD add HolyCity...need to link to religion DB (once Religion DB is done)
@@ -5206,6 +5242,19 @@ BOOL CityData::IsLocalResource(sint32 resource) const
 	return m_collectingResources[resource] > 0;
 }
 
+bool CityData::HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const
+{
+	//MapPoint cityPos(m_home_city.RetPos());
+	CityInfluenceIterator it(cityPos, m_sizeIndex);
+
+	for(it.Start(); !it.End(); it.Next()) {
+	Cell *cell = g_theWorld->GetCell(it.Pos());
+	
+		if(cell->GetDBImprovement(tileimp) > 0);
+			return true;
+	}
+	return false;
+}
 
 //filters out non-resource trade
 bool CityData::GetResourceTradeRoute(sint32 resource, TradeRoute & route) const
@@ -7442,6 +7491,15 @@ void CityData::AddImprovement(sint32 type)
 		GenerateBorders(m_point, m_owner, intRad, sqRad);
 	}
 
+	//EMOD creates a unit once built, allows for militia unit
+//	sint32 unit;
+//	for(unit = 0; unit < rec->GetNumCreatesUnit(); unit++) {
+//		if (rec->GetCreatesUnitIndex(unit) > 0) {
+//			g_player[m_owner]->CreateUnit(rec->GetCreatesUnitIndex(unit), m_point, m_home_city, FALSE, CAUSE_NEW_ARMY);
+//		}
+//	}
+
+
 	//end Emod
 //EMOD Visible Buildings 4-1-2006
 	CityInfluenceIterator it(m_point, m_sizeIndex); 
@@ -7449,28 +7507,37 @@ void CityData::AddImprovement(sint32 type)
 		Cell *cell = g_theWorld->GetCell(it.Pos());
 		if(m_point == it.Pos())
 				continue;
-			sint32 s;
-			bool SpotFound = true;
-			for(s = 0; s < rec->GetNumShowOnMap(); s++) {
-				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-				if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-					SpotFound = false;
-					break;
-				}
-				if(!SpotFound){
-					continue;
-				} else {
+		sint32 s;
+		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
+			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+			if(!HasTileImpInRadius(rec->GetShowOnMapIndex(s), it.Pos())) {
+				if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
 					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), it.Pos(), 0);
-					return;
 				}
 			}
+
+
+//			bool SpotFound = true;
+//			for(s = 0; s < rec->GetNumShowOnMap(); s++) {
+//				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+//				if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
+//					SpotFound = false;
+//					break;
+//				}
+//				if(!SpotFound){
+//					continue;
+//				} else {
+//					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), it.Pos(), 0);
+//					return;
+//				}
+		}
 //EMOD - FU 4-1-2006 visible tileimps, but it builds them all around the radius and should cost PW 
-			for(s = 0; s < rec->GetNumShowOnMapRadius(); s++) { 
-				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-				if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
+		for(s = 0; s < rec->GetNumShowOnMapRadius(); s++) { 
+			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+			if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
 					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapRadiusIndex(s), it.Pos(), 0);
-				}
 			}
+		}
 	
 	}
 
@@ -7905,7 +7972,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
 	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings());
-	gold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->GetTotalGoldHunger() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+	gold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
     //Not calculating goldhunger see calctotalupkeep?
 
 

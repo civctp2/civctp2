@@ -21,6 +21,7 @@ sint32 terrainutil_GetTimeToBuild(const MapPoint &pos, sint32 fromType, sint32 t
 
 sint32 terrainutil_GetProductionTime(sint32 impType, const MapPoint &pos, sint32 extraData);
 sint32 terrainutil_GetProductionCost(sint32 impType, const MapPoint &pos, sint32 extraData);
+sint32 terrainutil_GetBonusProductionExport(sint32 impType, const MapPoint &pos, sint32 extraData); //EMOD 4-5-2006
 const TerrainImprovementRecord::Effect *terrainutil_GetTerrainEffect(const TerrainImprovementRecord *rec,
 																	 const MapPoint &pos);
 const TerrainImprovementRecord::Effect *terrainutil_GetTerrainEffect(const TerrainImprovementRecord *rec,

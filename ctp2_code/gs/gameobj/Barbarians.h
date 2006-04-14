@@ -16,6 +16,9 @@ public:
 	static sint32 ChooseUnitType();
 	static BOOL AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 							  BOOL fromGoodyHut);
+	static sint32 ChooseSeaUnitType();
+	static BOOL AddPirates(const MapPoint &point, PLAYER_INDEX meat,
+							  BOOL fromGoodyHut);
 	static void BeginYear();
 };
 	

@@ -32,6 +32,14 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
+2006-04-13
+Added: CanCaptureTile check in pillage. units with this flag capture nemy tiles instead of pillaging them
+Added: CanBeGifted to units and now a human player can gift units to players not at war with
+Added: DeniedToEnemy, tileimps that have a movecost wont count with this flag for players you are at war with
+Added: Sea pirates! barbarians may have navies
+Added: If the terrain score equals 0 than the AI won't try to settle there (hopefully)
+Fixed: Bug that disbanded all units when you tried to add settler to city 
+Fixed: Goodyhut crash caused by having more units than advances
 2006-04-01
 Added: ShowOnMap now you can specify a certain tileimp to be built is a wonder or building is built
 Added: ObsoleteUnit flag; units can be obsolete by other units availability not just techs

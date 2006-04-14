@@ -177,6 +177,7 @@ TerrainImprovementPool::Serialize(CivArchive &archive)
 	}
 }
 
+//not implemented??? E 4-7-2006
 BOOL TerrainImprovementPool::HasImprovement(const MapPoint &point,
 											TERRAIN_IMPROVEMENT type,
 											sint32 extraData)

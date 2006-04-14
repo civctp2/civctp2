@@ -77,7 +77,7 @@ public:
     void KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_all_armies, sint32 mil_total);
 	void RecalcCost();
 	//void RecalcCostGold(); //EMOD
-	void TotalUnitGoldSupport(); //EMOD
+	sint32 TotalUnitGoldSupport(); //EMOD
 
     void Serialize(CivArchive &archive);
 

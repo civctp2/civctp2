@@ -46,6 +46,9 @@
 // - Removed CITY_TILE_SIZE and k_CITY_RADIUS they aren't used. (Aug 12th 2005 Martin Gühmann)
 // - Removed more unused methods. (Aug 12th 2005 Martin Gühmann)
 // - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
+// - Added	BOOL HasNeededGood by E
+// - Added	BOOL HasEitherGood by E
+// - Added	BOOL HasTileImpInRadius by E 4-7-2006 bool if a city has imp in radius
 //
 //----------------------------------------------------------------------------
 
@@ -669,6 +672,7 @@ public:
 #endif
 
 	BOOL IsLocalResource( sint32 resource ) const;
+	bool HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const; //EMOD 4-7-2006 bool if a city has imp in radius
 
 	
 	

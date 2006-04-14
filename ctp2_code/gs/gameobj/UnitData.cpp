@@ -54,7 +54,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added city data to "settle too close"-report.
 // - NonLethalBombard implemented in UnitData::Bombard 15-FEB-2006 
-// - Added MOveBonus to DeductMove so we can AllTerrainAsRoad-like units 3-31-2006
+// - Added MoveBonus to DeductMove so we can AllTerrainAsRoad-like units 3-31-2006 by E
 //
 //----------------------------------------------------------------------------
 
@@ -505,30 +505,14 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
 
-// EMOD add something here for treat all as roads?
-	
 	if(!Flag(k_UDF_PACMAN)) {
-//		if(rec->GetAllTerrainAsImprovement() > 0 ){
-//			MapPoint pos;
-//			sint32 imp = rec->GetAllTerrainAsImprovementIndex();
-//			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-//			const TerrainImprovementRecord::Effect *effect;
-//				effect = terrainutil_GetTerrainEffect(trec, pos);
-//				if(effect && effect->GetMoveCost()) {
-//					m_movement_points -= effect->GetMoveCost();
-//					m_movement_points = std::max(m_movement_points, 0.0);
-//					ClearFlag(k_UDF_FIRST_MOVE);
-//				}
-//		} else {//EMOD
+
 			m_movement_points -= cost;
 			m_movement_points = std::max(m_movement_points, 0.0);
 			ClearFlag(k_UDF_FIRST_MOVE);
-//		}
 	}
 
 
-
-//	const UnitRecord *rec = g_theUnitDB->Get(m_type);  // original code
 
 	out_of_fuel = FALSE; 
 	if (!rec->GetNoFuelThenCrash()){ 
@@ -565,6 +549,9 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 bool UnitData::IsImmobile()const {
 
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
+
+//	if (rec->GetCantmove())
+//		return true;
 
 	if (rec->GetMaxMovePoints() < 1.0 )
 		return true;
@@ -937,22 +924,21 @@ BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
         if (g_theUnitDB->Get(GetType())->GetMovementTypeAir() ) { 
             cost = k_MOVE_AIR_COST; 
 		// Prevent ships from diving under and using tunnels.
-		} 
-		else if (g_theWorld->IsTunnel(pos) && 
+		} else if(g_theUnitDB->Get(GetType())->GetMoveBonus() > 0) {
+			cost = g_theUnitDB->Get(GetType())->GetMoveBonus();
+
+		} else if (g_theWorld->IsTunnel(pos) && 
 		         !g_theUnitDB->Get(m_type)->GetMovementTypeLand()
 		        ) 
 		{
 			sint32	icost;
 			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 			cost = icost;
-// EMOD for AllTerrainAsImprovement added here
-//
-//		}else if(g_theUnitDB->Get(GetType())->GetAllTerrainAsImprovement()) > 0 ){
-//			for(sint32 i = 0; i < g_theTerrainImprovementDB->Get(); i++) {
-//			sint32 imp = g_theUnitDB->Get(GetType())->GetAllTerrainAsImprovement(i));
-//			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-//				cost = rec->GetMoveCost();
-//			}
+// EMOD for DeniedtoEnemy added here?
+//		} else if (!g_theWorld->GetOwner(pos) == m_owner) {
+//			sint32	ecost;
+//			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(ecost);
+//			cost = ecost;
 //EMOD
         } else { 
             cost = g_theWorld->GetMoveCost(pos); 
@@ -1881,8 +1867,7 @@ BOOL UnitData::Settle()
 
     Unit    nearbyCity  = g_theWorld->GetCell(m_pos)->GetCityOwner();
 
-// EMOD add here for adding settlers to cities?
-    
+   
 	if (nearbyCity.IsValid()) 
     {
 		SlicObject *so = new SlicObject("29IASettlingTooClose") ;
