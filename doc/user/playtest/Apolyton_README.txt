@@ -32,9 +32,9 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
-2006-04-13
+2006-04-14
 Added: CanCaptureTile check in pillage. units with this flag capture nemy tiles instead of pillaging them
-Added: CanBeGifted to units and now a human player can gift units to players not at war with
+Added: CanBeGifted to units and now a human player can gift units to players not at war with and you get regard bonus based on attack divided by 5
 Added: DeniedToEnemy, tileimps that have a movecost wont count with this flag for players you are at war with
 Added: Sea pirates! barbarians may have navies
 Added: If the terrain score equals 0 than the AI won't try to settle there (hopefully)

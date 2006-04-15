@@ -8062,6 +8062,8 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 //EMOD
 	Cell *cell = g_theWorld->GetCell(pos);
 	sint32 CellOwner = cell->GetOwner();
+	sint32 j = 0;
+	sint32 imp = cell->GetDBImprovement(j);
 
 
 //end EMOD
@@ -8069,22 +8071,9 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 		if(m_array[i].GetMovementTypeAir()) {
 			c = k_MOVE_AIR_COST;
 //EMOD - this code may no longer be necessay since i think this code only gets the cost of the pos and unitdata is used for the unit deduct cost
-		} else if(m_array[i].GetDBRec()->GetMoveBonus(movebonus) > 0) {
-					c = movebonus;
-//end EMOD
-//EMOD for having some tileimps not allowed for enemy movement like railroads 4-12-2006
-		} else if(m_array[i].GetOwner() != CellOwner) {  //this denies all?
-			sint32 j = 0;
-			sint32 imp = cell->GetDBImprovement(j);
-			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-			if ((AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)) && (trec->GetDeniedToEnemy())){  //i.e. RailRoads see Cell::CalcTerrainMoveCost?
-				sint32 enemycost;
-				(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(enemycost);
-				c = enemycost;
-			} else {
-				c = cost;
-			}
-
+		} else if(m_array[i].GetDBRec()->GetMoveBonus()) {
+			sint32 movebonus = m_array[i].GetDBRec()->GetMoveBonus();
+			c = movebonus;
 //end EMOD
 		} else if(g_theWorld->IsTunnel(pos)) {
 			if(!m_array[i].GetMovementTypeLand()) {
@@ -8101,6 +8090,17 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 			}else {
 				c = cost;
 			}
+			//EMOD for having some tileimps not allowed for enemy movement like railroads 4-12-2006
+		} else if((m_array[i].GetOwner() != CellOwner) && (CellOwner > 0) && (cell->GetDBImprovement(j) > 0)) {  //this denies all?
+			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+			if (AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && trec->GetDeniedToEnemy()){  //i.e. RailRoads see Cell::CalcTerrainMoveCost?
+				sint32 enemycost;
+				(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(enemycost);
+				c = enemycost;
+			} else {
+				c = cost;
+			}
+//end EMOD
 		}else {
 			c = cost;
 		}
@@ -8491,7 +8491,8 @@ void ArmyData::Disband()
 {
 
 	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();	
+	sint32 CellOwner = cell->GetOwner();
+	Diplomat & cell_diplomat = Diplomat::GetDiplomat(CellOwner);
 
 	if(g_player[m_owner]->m_all_armies->Num() < 2 &&
 	   g_player[m_owner]->m_all_cities->Num() < 1)
@@ -8508,15 +8509,16 @@ void ArmyData::Disband()
 //	}
 
 //EMOD Gift Units for Human Player 4-12-2006
-
-//	for(i = m_nElements - 1; i >= 0; i--) {
 		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)){
 			if(m_array[i].GetDBRec()->GetCanBeGifted()){
-			sint32 newunit = m_array[i].GetType();
-				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) {
+				sint32 newunit = m_array[i].GetType();
+				sint32 regardcost = (m_array[i].GetDBRec()->GetAttack()) / 5;
+				if((g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) && (CellOwner > 0)) {
+					StringId strId;
+					g_theStringDB->GetStringID("REGARD_EVENT_UNITS_GIFTED", strId);
 					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 					g_player[CellOwner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-				//	g_player[CellOwner]->CreateUnit(unitIndex,m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_DIPLOMACY);
+					cell_diplomat.LogRegardEvent(m_owner, regardcost, REGARD_EVENT_GOLD, strId);
 				} else {
 					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 				}

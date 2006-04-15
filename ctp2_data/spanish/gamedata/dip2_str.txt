@@ -48,7 +48,7 @@ REGARD_EVENT_ENEMY_NANO_INFECTED_CITY "No se ha olvidado nuestro uso subversivo 
 REGARD_EVENT_ENEMY_CREATED_PARK "Nuestro uso destructivo de la nanotecnología ha provocado que los {player[0].civ_name_plural} nos teman y nos odien."
 REGARD_EVENT_ENEMY_INJOINED_CITY "Nuestro uso de las paralizaciones para reducir la productividad de las ciudades de {player[0].civ_name_singular} es una fuente de fricción entre nuestras naciones."
 REGARD_EVENT_ENEMY_PILLAGED "Están furiosos porque nuestro ejército ha saqueado su mejoras de casilla."
-
+REGARD_EVENT_UNITS_GIFTED "Your generosity has not been forgotten. TRANSLATE PLEASE."
 
 
 ##

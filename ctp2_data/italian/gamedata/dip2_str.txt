@@ -51,7 +51,7 @@ REGARD_EVENT_ENEMY_NANO_INFECTED_CITY "Il nostro uso sovversivo della nanotecnol
 REGARD_EVENT_ENEMY_CREATED_PARK "Il ricorso alla nanotecnologia ha suscitato odio e timore nei nostri confronti da parte {player[0].civ_name_plural#PREPOSITION}."
 REGARD_EVENT_ENEMY_INJOINED_CITY "Il nostro ricorso alle ingiunzioni per ostacolare la produzione nelle città {player[0].country_name#ARTICLED_PREPOSITION} è fonte di attrito fra le nostre nazioni."
 REGARD_EVENT_ENEMY_PILLAGED "Sono irritati per il fatto che le nostre truppe hanno razziato i loro miglioramenti di casella."
-
+REGARD_EVENT_UNITS_GIFTED "Your generosity has not been forgotten. TRANSLATE PLEASE."
 ##
 ## Motivations
 ## 

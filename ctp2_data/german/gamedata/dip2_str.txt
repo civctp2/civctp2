@@ -49,7 +49,7 @@ REGARD_EVENT_ENEMY_NANO_INFECTED_CITY "Über die Tatsache, dass wir unsere Nanote
 REGARD_EVENT_ENEMY_CREATED_PARK "Die {player[0].civ_name_plural} fürchten und verabscheuen uns, weil wir unsere Nanotechnologie für zerstörerische Zwecke einsetzen."
 REGARD_EVENT_ENEMY_INJOINED_CITY "Weil wir Handelsembargos als Mittel einsetzen, um die Produktivität {player[0].civ_name_singular#UNDEF_PLURAL_NOM} Städte zu schwächen, ist es zum Bruch zwischen unseren Nationen gekommen."
 REGARD_EVENT_ENEMY_PILLAGED "Sie sind völlig außer sich, weil unsere Truppen ihre Feld-Modernisierungen geplündert haben."
-
+REGARD_EVENT_UNITS_GIFTED "Your generosity has not been forgotten. TRANSLATE PLEASE."
 ##
 ## Motivations
 ## 
