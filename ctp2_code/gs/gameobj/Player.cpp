@@ -2934,17 +2934,9 @@ sint32 Player::GetTotalUnitCost()
 
 sint32 Player::GetTotalGoldHunger()
 {
-	sint32 unit_num, unit_idx;
-
-	unit_num = m_all_units->Num();
 	sint32 cost = 0;
 	sint32 i;
-	UnitRecord *rec=NULL;
-	//for (unit_idx=0; unit_idx<unit_num; unit_idx++) {
-		//rec = g_theUnitDB->Access(m_all_units->Access(unit_idx).GetType());
 	for(i = 0; i < m_all_units->Num(); i++) {
-		//*rec = m_all_units->Access(i).GetDBRec();
-		//Assert(rec);
 
 		if (m_all_units->Access(i).GetDBRec()->GetHasPopAndCanBuild()) continue;
 
@@ -7202,7 +7194,7 @@ TerrainImprovement Player::CreateSpecialImprovement(sint32 dbIndex,
 											 sint32 extraData)
 {
 	TerrainImprovement theImprovement;
-	ERR_BUILD_INST err;
+//	ERR_BUILD_INST err;
 
 //	if(!CanCreateImprovement(dbIndex, point, extraData, true, err))
 //		return theImprovement;
@@ -7215,11 +7207,11 @@ TerrainImprovement Player::CreateSpecialImprovement(sint32 dbIndex,
 	if(g_theTerrainImprovementPool->IsValid(theImprovement.m_id)) {
 		if(g_network.IsClient()) {
 			g_network.AddCreatedObject(theImprovement.AccessData());
-			g_network.SendAction(new NetAction(NET_ACTION_TERRAIN_IMPROVEMENT, 
-											   dbIndex, 
+			g_network.SendAction(new NetAction(NET_ACTION_TERRAIN_IMPROVEMENT,
+											   dbIndex,
 											   (sint32)point.x, (sint32)point.y,
 											   extraData,
-											   theImprovement.m_id));											   
+											   theImprovement.m_id));
 		}
 		m_terrainImprovements->Insert(theImprovement);
 		if(theImprovement.GetMaterialCost() <= m_materialPool->GetMaterials()) {

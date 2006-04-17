@@ -4262,7 +4262,6 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 	CityInfluenceIterator it(m_point, m_sizeIndex); 
 	MapPoint pos;
 	sint32 totalTiles=0;
-	sint32 t;
 	for(it.Start(); !it.End(); it.Next()) {
 	//		totalTiles++;
 	//	}
@@ -5248,9 +5247,9 @@ bool CityData::HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const
 	CityInfluenceIterator it(cityPos, m_sizeIndex);
 
 	for(it.Start(); !it.End(); it.Next()) {
-	Cell *cell = g_theWorld->GetCell(it.Pos());
+		Cell *cell = g_theWorld->GetCell(it.Pos());
 	
-		if(cell->GetDBImprovement(tileimp) > 0);
+		if(cell->GetDBImprovement(tileimp) > 0)
 			return true;
 	}
 	return false;

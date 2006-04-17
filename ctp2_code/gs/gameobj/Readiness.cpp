@@ -172,20 +172,21 @@ double MilitaryReadiness::GetSupportCostGold(const Unit &u)
 		return 0;
 
 	double unitCostGold;
- if(u.GetDBRec()->GetGoldHunger() > 0) { //Is this needed for backwards compatibility?
+	sint32 goldHunger;
+	if(u.GetDBRec()->GetGoldHunger(goldHunger)) {
 
-	if(u.GetDBRec()->GetIsSpecialForces()) {
-		unitCostGold = u.GetGoldHunger() * GetSpecialForcesSupportModifier(g_player[m_owner]->GetGovernmentType());
-	} else {
-		unitCostGold = u.GetGoldHunger() * GetSupportModifier(g_player[m_owner]->GetGovernmentType());
+		if(u.GetDBRec()->GetIsSpecialForces()) {
+			unitCostGold = static_cast<double>(goldHunger) * GetSpecialForcesSupportModifier(g_player[m_owner]->GetGovernmentType());
+		} else {
+			unitCostGold = static_cast<double>(goldHunger) * GetSupportModifier(g_player[m_owner]->GetGovernmentType());
+		}
+
+		unitCostGold -= unitCostGold * 
+			double((double)wonderutil_GetReadinessCostReduction(
+				g_player[m_owner]->GetBuiltWonders()) / 100.0);
+
+		unitCostGold *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
 	}
-
-	unitCostGold -= unitCostGold * 
-		double((double)wonderutil_GetReadinessCostReduction(
-			g_player[m_owner]->GetBuiltWonders()) / 100.0);
-
-	unitCostGold *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
- }
 	return unitCostGold;
 }
 

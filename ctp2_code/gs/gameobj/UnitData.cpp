@@ -500,7 +500,6 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 //
 //----------------------------------------------------------------------------
 sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_fuel) 
-
 {
 
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
@@ -537,11 +536,12 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 		}
 	}
 
-	if (rec->GetMoveBonus() > 0) {  //EMOD
-			m_movement_points -= rec->GetMoveBonus(); 
+	sint32 bonus;
+	if(rec->GetMoveBonus(bonus)) {  //EMOD
+		m_movement_points -= bonus;
 	} else {
-			m_movement_points -= cost;
-			}
+		m_movement_points -= cost;
+	}
 	
 	return FALSE;
 }
@@ -915,37 +915,38 @@ BOOL UnitData::CargoHasLandUnits() const
 //
 //----------------------------------------------------------------------------
 BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
-{    
-    if (Flag(k_UDF_FIRST_MOVE)) {
-        return TRUE; 
-    } else { 
-        double cost; 
+{
+	if (Flag(k_UDF_FIRST_MOVE)) {
+		return TRUE;
+	} else {
+		double cost;
+		sint32 fixMoveCosts;
 
-        if (g_theUnitDB->Get(GetType())->GetMovementTypeAir() ) { 
-            cost = k_MOVE_AIR_COST; 
+		if (g_theUnitDB->Get(GetType())->GetMovementTypeAir() ) {
+			cost = k_MOVE_AIR_COST;
+		} else if(g_theUnitDB->Get(GetType())->GetMoveBonus(fixMoveCosts)) {
+			cost = static_cast<double>(fixMoveCosts);
+
 		// Prevent ships from diving under and using tunnels.
-		} else if(g_theUnitDB->Get(GetType())->GetMoveBonus() > 0) {
-			cost = g_theUnitDB->Get(GetType())->GetMoveBonus();
-
 		} else if (g_theWorld->IsTunnel(pos) && 
-		         !g_theUnitDB->Get(m_type)->GetMovementTypeLand()
-		        ) 
+		          !g_theUnitDB->Get(m_type)->GetMovementTypeLand()
+		          )
 		{
-			sint32	icost;
+			sint32 icost;
 			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 			cost = icost;
 // EMOD for DeniedtoEnemy added here?
 //		} else if (!g_theWorld->GetOwner(pos) == m_owner) {
-//			sint32	ecost;
+//			sint32 ecost;
 //			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(ecost);
 //			cost = ecost;
 //EMOD
-        } else { 
-            cost = g_theWorld->GetMoveCost(pos); 
-        } 
+		} else {
+			cost = g_theWorld->GetMoveCost(pos);
+		}
 
-        return (cost <= m_movement_points ); 
-    }
+		return (cost <= m_movement_points );
+	}
 }
 
 //----------------------------------------------------------------------------

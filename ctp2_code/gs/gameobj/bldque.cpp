@@ -1639,12 +1639,10 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 				cd->ChangePopulation(-1);
 			}
 // EMOD
-			sint32 pop; 
-			for (pop = 0; pop < u.GetDBRec()->GetPopCostsToBuild(); ++pop) {
-				if(u.GetDBRec()->GetPopCostsToBuild(pop) > 0) {
-					cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
-					cd->ChangePopulation(-pop);
-				}
+			sint32 pop;
+			if(u.GetDBRec()->GetPopCostsToBuild(pop)) {
+				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
+				cd->ChangePopulation(-pop);
 			}
 		}
 

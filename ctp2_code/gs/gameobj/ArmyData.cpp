@@ -8071,21 +8071,20 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 		if(m_array[i].GetMovementTypeAir()) {
 			c = k_MOVE_AIR_COST;
 //EMOD - this code may no longer be necessay since i think this code only gets the cost of the pos and unitdata is used for the unit deduct cost
-		} else if(m_array[i].GetDBRec()->GetMoveBonus()) {
-			sint32 movebonus = m_array[i].GetDBRec()->GetMoveBonus();
+		} else if(m_array[i].GetDBRec()->GetMoveBonus(movebonus)) {
 			c = movebonus;
 //end EMOD
 		} else if(g_theWorld->IsTunnel(pos)) {
 			if(!m_array[i].GetMovementTypeLand()) {
-				sint32	icost;
-				(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
+				sint32 icost;
+				g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 				c = icost;
 			} else {
 				c = cost;
 			}
 		}else if(m_array[i].Flag(k_UDF_FOUGHT_THIS_TURN)) {  // Add Blitz/multiple attacks here?
 //EMOD
-			if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {					
+			if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {
 				c = m_array[i].GetMovementPoints();
 			}else {
 				c = cost;
@@ -8095,7 +8094,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 			if (AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && trec->GetDeniedToEnemy()){  //i.e. RailRoads see Cell::CalcTerrainMoveCost?
 				sint32 enemycost;
-				(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(enemycost);
+				g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(enemycost);
 				c = enemycost;
 			} else {
 				c = cost;

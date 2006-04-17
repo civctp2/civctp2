@@ -403,46 +403,31 @@ sint32 Governor::ComputeBestGovernment() const
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
-	bool config_found = false;
 	bool obsolete;
-	sint32 government_index = -1;
-	for (sint32 gov_index = 0; government_index == -1 && gov_index < strategy.GetNumGovernment(); gov_index++)
-		{
-			const GovernmentRecord *rec = strategy.GetGovernment(gov_index);
-			//const GovernmentRecord *rec = strategy.GetGovernmentIndex; //EMOD would this fix the occasional crash? 4-8-2006
+	for(sint32 gov_index = 0; gov_index < strategy.GetNumGovernment(); gov_index++){
+		const GovernmentRecord *rec = strategy.GetGovernment(gov_index);
 			
-			
-			if (player_ptr->HasAdvance(rec->GetEnableAdvanceIndex()) == false)
-				continue;
+		if(!player_ptr->HasAdvance(rec->GetEnableAdvanceIndex()))
+			continue;
 
-			
-			obsolete = false;
-			for (sint8 i=0; i < rec->GetNumObsoleteAdvance() && !obsolete; i++)
-				{
-					
-					if (player_ptr->HasAdvance(rec->GetObsoleteAdvance(i)->GetIndex())) 
-						{
-							obsolete = true;
-						}
-				}
-			if (obsolete)
-				continue;
-
-			
-			sint32 diff = rec->GetTooManyCitiesThreshold() - player_ptr->GetNumCities();
-			if (diff < 0)
-				continue;
-
-			
-			
-			
-
-			
-			government_index = rec->GetIndex();
+		obsolete = false;
+		for(sint32 i = 0; i < rec->GetNumObsoleteAdvance(); i++){
+			if(player_ptr->HasAdvance(rec->GetObsoleteAdvance(i)->GetIndex())){
+				obsolete = true;
+				break;
+			}
 		}
-	
-	
-	return government_index;
+		if (obsolete)
+			continue;
+
+		sint32 diff = rec->GetTooManyCitiesThreshold() - player_ptr->GetNumCities();
+		if (diff < 0)
+			continue;
+
+		return rec->GetIndex();
+	}
+
+	return -1;
 }
 
 
