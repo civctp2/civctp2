@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : SLIC AI functions
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -58,6 +58,7 @@ extern StringDB *g_theStringDB;
 #include "mapanalysis.h"
 #include "player.h"
 #include "ProposalAnalysis.h"
+#include "SlicSymbol.h"
 
 namespace
 {
