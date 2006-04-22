@@ -40,7 +40,6 @@
 //
 //----------------------------------------------------------------------------
 
-
 #include "c3.h"
 
 
@@ -91,7 +90,6 @@ namespace
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 bool IsValid
 (
 	GOAL_TYPE const &								a_Goal,
@@ -174,7 +172,6 @@ void Scheduler::SaveAll(CivArchive & archive)
 //         ThreatenedCity_MotivationEvent
 //
 //////////////////////////////
-
 Scheduler & Scheduler::GetScheduler(const sint32 & playerId)
 {
 	Assert(playerId >= 0);
@@ -380,9 +377,7 @@ void Scheduler::Planning_Status_Reset()
 //
 //  5. Count up total number of agents available to match
 //
-
 //////////////////////////////////////////////////////////////////////////
-
 Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 {
 	SQUAD_CLASS old_class;
@@ -475,9 +470,7 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 //
 //  make squads available for goals
 //
-
 //////////////////////////////////////////////////////////////////////////
-
 void Scheduler::Reset_Squad_Execution()
 {
 	Squad_List::iterator squad_ptr_iter = m_squads.begin();
@@ -503,9 +496,7 @@ void Scheduler::Reset_Squad_Execution()
 //
 //  2. Prune_Goals
 //
-
 //////////////////////////////////////////////////////////////////////////
-
 Scheduler::TIME_SLICE_STATE Scheduler::Process_Goal_Changes()
 {
 
@@ -566,9 +557,7 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Goal_Changes()
 //
 //  3. Sort matches list.
 //
-
 //////////////////////////////////////////////////////////////////////////
-
 bool Scheduler::Sort_Matches()
 {
 	Plan_List::iterator plan_iter = m_matches.begin();
@@ -712,9 +701,7 @@ bool Scheduler::Sort_Matches()
 //     all agents to donor squads. If over committed, rollback
 //     excess agents to donor squads.
 //
-
 //////////////////////////////////////////////////////////////////////////
-
 void Scheduler::Match_Resources(const bool move_armies)
 {
 	Goal_ptr goal_ptr;
@@ -942,7 +929,6 @@ void Scheduler::Match_Resources(const bool move_armies)
 // 4) Also called by CtpAi_KillCityEvent, CtpAi_NukeCityUnit, CtpAi_ImprovementComplete.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 {
 	
@@ -961,7 +947,6 @@ void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 // or an army is created.
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
-
 void Scheduler::Add_New_Squad(const Squad_ptr & new_squad)
 {
 
@@ -995,8 +980,7 @@ void Scheduler::Add_New_Squad(const Squad_ptr & new_squad)
 //  Remove_Goal
 //
 //  called by Scheduler::Prioritize_Goals() when
-
-
+////////////////////////////////////////////////////////////
 Scheduler::Sorted_Goal_Iter Scheduler::Remove_Goal(const Scheduler::Sorted_Goal_Iter & sorted_goal_iter)
 {
 	GOAL_TYPE goal_type = sorted_goal_iter->second->Get_Goal_Type();
@@ -1094,7 +1078,6 @@ Scheduler::Sorted_Goal_List Scheduler::Get_Top_Goals(const int &number) const
 // Remark(s)  : Used in ThreatenedCity_MotivationEvent to trigger MOTIVATION_FEAR_CITY_DEFENSE
 //
 //----------------------------------------------------------------------------
-
 sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const 
 {
 	sint32	total_value	= 0;
@@ -1150,7 +1133,6 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 //              and in ThreatenedCity_MotivationEvent to trigger MOTIVATION_FEAR_CITY_DEFENSE
 //
 //----------------------------------------------------------------------------
-
 Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const 
 {
 	if (IsValid(type, m_goals_of_type)) 
@@ -1191,7 +1173,6 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 // Used in ctpai when adding Explore, Settle, and MiscMap targets for goals
 //
 ///////////////////////////////////////////////////////////////////////////
-
 sint16 Scheduler::CountGoalsOfType(const GOAL_TYPE & type) const
 {
 	return IsValid(type, m_goals_of_type) 
@@ -1216,9 +1197,7 @@ sint16 Scheduler::CountGoalsOfType(const GOAL_TYPE & type) const
 //
 //  4. Sort goals_of_class lists.
 //
-
 //////////////////////////////////////////////////////////////////////////
-
 bool Scheduler::Prioritize_Goals()
 {
 	Goal_List::iterator goal_ptr_iter;
@@ -1432,9 +1411,7 @@ bool Scheduler::Prioritize_Goals()
 //
 //  4. Otherwise, if not matches exist for this goal, add them.
 //
-
 //////////////////////////////////////////////////////////////////////////
-
 bool Scheduler::Prune_Goals()
 {
 	
@@ -1602,8 +1579,7 @@ bool Scheduler::Prune_Goals()
 //              Add_Transport_Matches_For_Goal
 //
 //
-
-
+/////////////////////////////////////////////////////////////////////////////
 bool Scheduler::Add_New_Match_For_Goal_And_Squad
 ( 
  const Sorted_Goal_Iter & goal_iter,		   
@@ -1684,7 +1660,6 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
 //   for each squad that qualifies, to the plan
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
 sint32 Scheduler::Add_New_Matches_For_Goal
 (
  const Sorted_Goal_Iter & goal_iter			
@@ -1735,8 +1710,7 @@ sint32 Scheduler::Add_New_Matches_For_Goal
 //
 //   called by Process_Squad_Changes
 //
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////
 sint32 Scheduler::Add_New_Matches_For_Squad
 (
  const Squad_List::iterator & squad_iter		
@@ -1801,8 +1775,6 @@ sint32 Scheduler::Add_New_Matches_For_Squad
 //  target for the freed agents in this phase.
 //
 //////////////////////////////////////////////////////////////////////////
-
-
 bool Scheduler::Free_Undercommitted_Goal()
 {
 	bool undercommittment_found = false;

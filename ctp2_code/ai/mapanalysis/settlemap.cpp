@@ -35,21 +35,10 @@
 // Modifications from the original Activision code:
 //
 // - ComputeSettleValue modified to prevent AI from trying to settle on places it cant
-// 
-//     
+// - Restored ComputeSettleValue as it does not prevent the AI from settling
+//   at places it can't settle.
+//
 //----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
 
 #include "c3.h"
 #include "settlemap.h"
@@ -88,6 +77,25 @@ SettleMap::SettleMap()
 {
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SettleMap::ComputeSettleValue
+//
+// Description: Calculates a settling score for the given position, which is 
+//              independent of unit abilities to settle at a certain location.
+//              The settle score is the sum of scores of tiles in a radius of
+//              two tiles around the given position.
+//
+// Parameters : const MapPoint & pos: The position for that the settle
+//                                    score should be computed.
+//
+// Globals    : g_theWorld: The game world
+//
+// Returns    : double:     The settle score for the given map position
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 {
 	sint32 score = 0;
@@ -99,33 +107,11 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 		score += cell->GetScore();
 	}
 
+// Stupit idea and does not really work.
 //EMOD if the cell has a score of zero, the AI won't attempt at all 4-10-2006
-	if (g_theWorld->GetCell(pos)->GetScore() == 0) {
-		score = 0;
-	}
-//EMOD to allow for AI notto settle some places
-//	If Unit Get SettleType 
-//		GetCell(pos) != settletype
+//	if (g_theWorld->GetCell(pos)->GetScore() == 0) {
 //		score = 0;
-//EMOD
-//  sint32 i;
-//	const UnitRecord *rec = g_theUnitDB->Get(unit_type); 
-//	for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
-//		if(!rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
-//			score = 0;
-//		}
 //	}
-// end EMOD
-//
-//	if !(rec->GetSettleLand() && g_theWorld->IsLand(pos))
-//		score = 0; 
-//	else if (rec->GetSettleMountain() && g_theWorld->IsMountain(pos))
-//		score = 0; 
-//	else if (rec->GetSettleWater() && g_theWorld->IsWater(pos))
-//		score = 0; 
-//	else if (rec->GetSettleSpace() && g_theWorld->IsSpace(pos))
-//		score = 0;
-//end EMOD
 	return score;
 }
 

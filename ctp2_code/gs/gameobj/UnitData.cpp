@@ -43,18 +43,20 @@
 //   current owner. If you loose a city to someone else you know who the 
 //   b*st*rd is. When changing hands the city isn't anymore removed and
 //   then added back to the wolrd. - Mar. 4th 2005 Martin Gühmann
-// - added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show 
+// - Added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show 
 //   # turns until city grows
-// - implemented immobile units (set MaxMovePoints equal to 0 in units.txt) 
+// - Implemented immobile units (set MaxMovePoints equal to 0 in units.txt) 
 //   PFT 17 Mar 05
 // - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin Gühmann
 // - Removed some unsused method to removed some unused in methods in
-//   CityData.. - Aug 6th 2005 Martin Gühmann
+//   CityData. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added city data to "settle too close"-report.
 // - NonLethalBombard implemented in UnitData::Bombard 15-FEB-2006 
 // - Added MoveBonus to DeductMove so we can AllTerrainAsRoad-like units 3-31-2006 by E
+// - Old settle terrain flags are ignored if new CanSettleOn terrain flags are 
+//   defined. (April 22nd 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1636,7 +1638,6 @@ void UnitData::DeductHP(double fp)
 //              Modders will define this in Unit.txt as CanSettleOn: X.  
 //              The flag adds an additional option in order to restrict 
 //              where cities can be built. 
-//              
 //
 //----------------------------------------------------------------------------
 BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos) 
@@ -1653,10 +1654,13 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
 	if (g_theWorld->HasCity(pos)) 
 		return FALSE;
 //EMOD
-	for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
-		if(rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
-			return TRUE;
+	if (rec->GetNumCanSettleOn() > 0){
+		for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
+			if(rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
+				return TRUE;
+			}
 		}
+		return FALSE;
 	}
 // end EMOD
 

@@ -124,8 +124,7 @@
 // - Added IsCoastal check to canbuildwonders 3-31-2006
 // - Added ObsoleteUnit so units can be obsolete by the availability of other units by E 3-31-2006
 // - Added UpgradeTo so units can be obsolete by the availability of unit they upgrade to by E 3-31-2006
-// 
-//     
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -4239,35 +4238,32 @@ BOOL CityData::BuildWonder(sint32 type)
 	}
 }
 
-void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now it does 3-26-2006 EMOD
+void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now it does 3-26-2006 EMOD // No it isn't it is called in Player::AddWonder.
 {
 
 	const WonderRecord* rec = wonderutil_Get(type); //added by E
-	MapPoint m_point(m_home_city.RetPos());
-	//MapPoint Pos; 
+	MapPoint point(m_home_city.RetPos());
 
 	m_builtWonders |= (uint64(1) << type);
 
 //EMOD wonders add borders too
 	sint32 intRad;
-   	sint32 sqRad;
+	sint32 sqRad;
 	//EMOD increases city borders
 	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) {
-		GenerateBorders(m_point, m_owner, intRad, sqRad);
+		GenerateBorders(point, m_owner, intRad, sqRad);
 	}
 	//end Emod
 //
 //EMOD Visible wonders 4-1-2006
 	MapPoint SpotFound;
-	CityInfluenceIterator it(m_point, m_sizeIndex); 
+	CityInfluenceIterator it(point, m_sizeIndex); 
 	MapPoint pos;
 	sint32 totalTiles=0;
 	for(it.Start(); !it.End(); it.Next()) {
-	//		totalTiles++;
-	//	}
 
 		Cell *cell = g_theWorld->GetCell(it.Pos());
-		if(m_point == it.Pos())
+		if(point == it.Pos())
 				continue;
 		sint32 s;
 		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
@@ -5243,14 +5239,16 @@ BOOL CityData::IsLocalResource(sint32 resource) const
 
 bool CityData::HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const
 {
-	//MapPoint cityPos(m_home_city.RetPos());
 	CityInfluenceIterator it(cityPos, m_sizeIndex);
 
 	for(it.Start(); !it.End(); it.Next()) {
 		Cell *cell = g_theWorld->GetCell(it.Pos());
-	
-		if(cell->GetDBImprovement(tileimp) > 0)
-			return true;
+
+		sint32 i;
+		for(i = 0; i < cell->GetNumDBImprovements(); ++i){
+			if(cell->GetDBImprovement(i) == tileimp)
+				return true;
+		}
 	}
 	return false;
 }
@@ -7470,7 +7468,7 @@ void CityData::AddBuyFront()
 void CityData::AddImprovement(sint32 type)
 {
 
-	MapPoint m_point(m_home_city.RetPos()); //EMOD add for borders
+	MapPoint point(m_home_city.RetPos()); //EMOD add for borders
 	MapPoint Pos;
 	const BuildingRecord *rec = g_theBuildingDB->Get(type); //EMOD add for borders
 
@@ -7487,24 +7485,24 @@ void CityData::AddImprovement(sint32 type)
     	sint32 sqRad;
 	//EMOD increases city borders
 	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) {
-		GenerateBorders(m_point, m_owner, intRad, sqRad);
+		GenerateBorders(point, m_owner, intRad, sqRad);
 	}
 
 	//EMOD creates a unit once built, allows for militia unit
 //	sint32 unit;
 //	for(unit = 0; unit < rec->GetNumCreatesUnit(); unit++) {
 //		if (rec->GetCreatesUnitIndex(unit) > 0) {
-//			g_player[m_owner]->CreateUnit(rec->GetCreatesUnitIndex(unit), m_point, m_home_city, FALSE, CAUSE_NEW_ARMY);
+//			g_player[m_owner]->CreateUnit(rec->GetCreatesUnitIndex(unit), point, m_home_city, FALSE, CAUSE_NEW_ARMY);
 //		}
 //	}
 
 
 	//end Emod
 //EMOD Visible Buildings 4-1-2006
-	CityInfluenceIterator it(m_point, m_sizeIndex); 
+	CityInfluenceIterator it(point, m_sizeIndex); 
 	for(it.Start(); !it.End(); it.Next()) {
 		Cell *cell = g_theWorld->GetCell(it.Pos());
-		if(m_point == it.Pos())
+		if(point == it.Pos())
 				continue;
 		sint32 s;
 		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
@@ -7888,9 +7886,9 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 
 //EMOD these three EMODs moved inside the less than 0 to prevent multiplication of percent to zero values
 //EMOD Civilization and Citystyle bonuses
-	//gold += ceil(gold * g_player[m_owner]->GetCivilisation()->GetCommercePercent());
+		//gold += ceil(gold * g_player[m_owner]->GetCivilisation()->GetCommercePercent());
 
-	gold += ceil(gold * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetCommercePercent());
+		gold += ceil(gold * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetCommercePercent());
 
 //Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
@@ -7904,13 +7902,13 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 					double goodBonus;
 					if (goodData->GetCommercePercent(goodBonus))
 					{
-					gold += static_cast<sint32>(ceil(gold * goodBonus));
+						gold += static_cast<sint32>(ceil(gold * goodBonus));
 					}
 
 					double goodEfficiency;
 					if (goodData->GetEfficiencyOrCrime(goodEfficiency))
 					{
-					gold += static_cast<sint32>(ceil(gold * goodEfficiency));
+						gold += static_cast<sint32>(ceil(gold * goodEfficiency));
 					}
 				}
 			}
@@ -7972,17 +7970,18 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
 	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings());
 	gold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
-    //Not calculating goldhunger see calctotalupkeep?
+	//Not calculating goldhunger see calctotalupkeep?
 
 
 //EMOD to assist AI
-	if(gold < 0) {
-		if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
-			gold = 0;
-		} else {
-			gold = gold;
-		}
-	}
+// Turn it into an option otherwise No
+//	if(gold < 0) {
+//		if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
+//			gold = 0;
+//		} else {
+//			gold = gold;
+//		}
+//	}
 
 }
 

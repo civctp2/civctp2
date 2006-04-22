@@ -33,59 +33,87 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 Changelog:
 2006-04-14
-Added: CanCaptureTile check in pillage. units with this flag capture nemy tiles instead of pillaging them
-Added: CanBeGifted to units and now a human player can gift units to players not at war with and you get regard bonus based on attack divided by 5
-Added: DeniedToEnemy, tileimps that have a movecost wont count with this flag for players you are at war with
+Added: CanCaptureTile check in pillage. Units with this flag capture nemy tiles
+  instead of pillaging them
+Added: CanBeGifted to units and now a human player can gift units to players 
+  not at war with and you get regard bonus based on attack divided by 5
+Added: DeniedToEnemy, tileimps that have a movecost wont count with this flag 
+  for players you are at war with
 Added: Sea pirates! barbarians may have navies
 Added: If the terrain score equals 0 than the AI won't try to settle there (hopefully)
 Fixed: Bug that disbanded all units when you tried to add settler to city 
 Fixed: Goodyhut crash caused by having more units than advances
+
 2006-04-01
-Added: ShowOnMap now you can specify a certain tileimp to be built is a wonder or building is built
-Added: ObsoleteUnit flag; units can be obsolete by other units availability not just techs
-Added: MoveBonus flag for units; now you can specify how much points a unit will lose when it moves. MoveBonus 33 is like Civ2's AllTerrainAsRoads. Note going to different cost imps might not be possible if you lack move points.
+Added: ShowOnMap now you can specify a certain tileimp to be built is a wonder 
+  or building is built
+Added: ObsoleteUnit flag; units can be obsolete by other units availability not 
+  just techs
+Added: MoveBonus flag for units; now you can specify how much points a unit 
+  will lose when it moves. MoveBonus 33 is like Civ2's AllTerrainAsRoads. Note 
+  going to different cost imps might not be possible if you lack move points.
 Added: GoldPerUnitSupport Units have a GoldHunger impact on cost
 Added: GoldHunger units can now have a variable gold cost
 Added: BorderRadius for wonders so wonders can increase border radius
- 
 
 2006-03-22
 Added: production bonus to AI, they dont run production deficits
 Added: GoodyHutExcluded flag (just in case) for advances
-Added: messages for verifyattack and move into enemy. If you move into an enemy or attack WIHOUT declaring war you will get a pop, but the pop doesnt let you declare war (yet) you have to do that through the diplomacy screen.
+Added: messages for verifyattack and move into enemy. If you move into an enemy 
+  or attack WIHOUT declaring war you will get a popup, but the popup doesnt let 
+  you declare war (yet) you have to do that through the diplomacy screen.
 Added: newupkeep flags,although not necessary (may remove)
-Added: gold bonus to AI so they dont have to be hurt by negative values. If a cities gold is lss than zero for an AI it is automatically set to zero so they dont get hurt by new gold modifiers
+Added: gold bonus to AI so they dont have to be hurt by negative values. If a 
+  cities gold is less than zero for an AI it is automatically set to zero so 
+  they dont get hurt by new gold modifiers
 
 2006-03-11
-Added: GoodyHutExcluded flag for Units. Units with this flag shouldn't appear from a goody hut.
-Added: Enablesgood in terraineffect - allows for different goods for same imp on different terrains
+Added: GoodyHutExcluded flag for Units. Units with this flag shouldn't appear 
+  from a goody hut.
+Added: Enablesgood in terraineffect - allows for different goods for same imp 
+  on different terrains
 
 2006-03-02
-Added: EnablesVeterans flag for buildings. Now if a city has a flag with this building your units start as veterans (like civ3)
-Added: PopCostsToBuild flag. Add an integer here in unitstxt and units can cost 1 or more population points. I havent instituted a disband city warning yet though
+Added: EnablesVeterans flag for buildings. Now if a city has a flag with this 
+  building your units start as veterans (like civ3)
+Added: PopCostsToBuild flag. Add an integer here in unitstxt and units can cost
+  one or more population points. I havent instituted a disband city warning yet 
+  though
 
 2006-03-01
-Added:  GoldPerUnit - like my previous GoldPerCity flag but its just the flag value times the number of units (like Civ3). I stuck it to the palace to represent unit costs. Value seen in City Management (not national)
-Added: GoldPerUnitReadiness - same as above but added the readiness impact. Value seen in City Management (not national)
-Added:  Need Number of buildings to Build - like the feat it can now be a flag for building a building (especially with OnePerCiv) or a wonder.
-Added: Citystyle Bonuses to Gold, Food, and production by either a bonus (just a solid integer) or by a percentage. 
+Added:  GoldPerUnit - like my previous GoldPerCity flag but its just the flag 
+  value times the number of units (like Civ3). I stuck it to the palace to 
+  represent unit costs. Value seen in City Management (not national)
+Added: GoldPerUnitReadiness - same as above but added the readiness impact. 
+  Value seen in City Management (not national)
+Added:  Need Number of buildings to Build - like the feat it can now be a flag 
+  for building a building (especially with OnePerCiv) or a wonder.
+Added: Citystyle Bonuses to Gold, Food, and production by either a bonus 
+  (just a solid integer) or by a percentage. 
 Added: Increase Borders to AddImprovement. Buildings can now do city radius!
-Added: multipleattack flag but not fully implemented (you can move after attacking or bombarding but not attack again)
-Added: TotalBuildingUpkeep: building upkeep also has a negative impact by being affected by your readiness and is deducted from the city gold (I can remove this if too much hate for it but it makes gold and readiness more significant)
-
+Added: multipleattack flag but not fully implemented (you can move after 
+  attacking or bombarding but not attack again)
+Added: TotalBuildingUpkeep: building upkeep also has a negative impact by being 
+  affected by your readiness and is deducted from the city gold (I can remove 
+  this if too much hate for it but it makes gold and readiness more significant)
 
 2006-02-15
 Updated: BUGS list to reflect fixes and new discoveries
 Updated: Improved error messages in tileset.cpp
 Updated: zlib (1.2.3) and tiff (3.7.3) libraries
-Fixed:Improved dbgen error message
-Fixed:Corrected turn box computation for ship paths through cities.
-Fixed:1.1 patch savegame compatibility fix
-Fixed: player color above player 16 and allow loading of the original color set again. Now there are only two valid number of colors for a ColorsXX.txt 58 and 74 - original and source code version respectively. For the 58 color version the missing player colors are copied from the terrain colors so that the result is like in the original game
+Fixed: Improved dbgen error message
+Fixed: Corrected turn box computation for ship paths through cities.
+Fixed: 1.1 patch savegame compatibility fix
+Fixed: player color above player 16 and allow loading of the original color set 
+  again. Now there are only two valid number of colors for a ColorsXX.txt 
+  58 and 74 - original and source code version respectively. For the 58 color 
+  version the missing player colors are copied from the terrain colors so that 
+  the result is like in the original game
 Fixed: mistake in tileset.cpp which prevented loading of tile file
 Fixed: mis-cast in UnitControlPanel.cpp
 Fixed: Prevent useless Assert pop-up (Governor.cpp) with the debug version
-Fixed: Rreport start of wonder when deleting the first item and the second item is a wonder
+Fixed: Rreport start of wonder when deleting the first item and the second 
+  item is a wonder
 Fixed: Removed texts that have been replaced with icons
 Fixed: Removed after redistribution of contents
 Fixed: Corrected building maintenance deficit spending handling.
@@ -94,35 +122,51 @@ Fixed: Added token so that the default strings aren't scanned for missing string
 Fixed, added some strings and removed some duplicated strings
 Fixed: corrected endless path computation in an AOM game
 Added: NeedsCityGood, NeedsCityGoodAll, and NeedsCityGoodAny flags
-Added:Redesigned ColorSet to prevent a crash during start-up.
+Added: Redesigned ColorSet to prevent a crash during start-up.
 Added: to Civilisation and CityStyle databases happiness increasement flags
-Added: Message boxes are now non-modal, left click on a message in the message list, the message is opened if it is not open, otherwise it is closed, right click removes the message from list, if it is open it is closed in addition. Left clicking on another message opens that and closes the first message. Alert boxes are left as they are modal.
+Added: Message boxes are now non-modal, left click on a message in the message 
+  list, the message is opened if it is not open, otherwise it is closed, right 
+  click removes the message from list, if it is open it is closed in addition. 
+  Left clicking on another message opens that and closes the first message. 
+  Alert boxes are left as they are modal.
 Added: option to select a city first instead of an active army.
 Added: DebugSlic and GoodAnim to the advanced options.
-Added:Used option to select a city first instead of an active army. Unfortunately this doesn't quite work. But for now this should be enough.
-Added:Made the autoDebug object more conform to the standart, maybe I move its struct to seperate header and source files
+Added: Used option to select a city first instead of an active army. 
+  Unfortunately this doesn't quite work. But for now this should be enough.
+Added: Made the autoDebug object more conform to the standart, maybe I move its 
+  struct to seperate header and source files
 Added: Improved handling of multiple build queue actions in a turn.
-Added:Display very slow or non-growth as ---
-Added: NeedsCityGood and NeedsCityGoodAll added to CanBuildUnit, CanBuildBuilding, and CanBuild Wonder
-Added:Implemented EnablesGood for buildings, wonders and tile improvements now they give goods to a city 
-Added:To ProcessFood,ProcessProduction, EfficiencyOrCrime added a check that if a city has or is buying a good than you can get a bonus.   
-Added: NeedsCityGoodAnyCity allows for a unit to be built in any city if one city has the good
-Added: Sneakattack - can attack with out declaring war or be attacked, like Hidden Nationality
+Added: Display very slow or non-growth as ---
+Added: NeedsCityGood and NeedsCityGoodAll added to CanBuildUnit, 
+  CanBuildBuilding, and CanBuild Wonder
+Added: Implemented EnablesGood for buildings, wonders and tile improvements now
+  they give goods to a city 
+Added: To ProcessFood,ProcessProduction, EfficiencyOrCrime added a check that if
+  a city has or is buying a good than you can get a bonus.   
+Added: NeedsCityGoodAnyCity allows for a unit to be built in any city if one 
+  city has the good
+Added: Sneakattack - can attack with out declaring war or be attacked, like 
+  Hidden Nationality
 Added: Sneakbombard so you can bombard without war declared
-Added: new combat modifiers based on mounted and woodship bonus (see unit.cdb for flags) 
-Added: new DifficultyDB to the project however, the DifficultyDB must still be replaced
+Added: new combat modifiers based on mounted and woodship bonus (see unit.cdb 
+  for flags)
+Added: new DifficultyDB to the project however, the DifficultyDB must still be 
+  replaced
 Added: two new options to the profile database:
 - One for allowing end turns while the game is running in the background
-- One that is supposed to stop end turns if there is a city with empty build queue, doesn't work yet.
+- One that is supposed to stop end turns if there is a city with empty build 
+    queue, doesn't work yet.
 Added: Reneralised production start reporting
 Added: Settlers can now be added to a city! 
 Added: Terrain Improvement flag CantPillage now works
-Added: NonLethalBombard - now the NLB flag doesnt destroy units (but weakens them)
+Added: NonLethalBombard - now the NLB flag doesnt destroy units (but weakens 
+  them)
 Added: CanBombardTiles - Tile Improvements can now be bombarded and destroyed
-Added: CollateralTileDamage - if unit has flag it will destroy the tile imps the unit they attack is on (lethal and nonlethal bombard) 
-Added: GoldPerCity building flag. add subtract gold based on the number of cities your empire has
+Added: CollateralTileDamage - if unit has flag it will destroy the tile imps 
+  the unit they attack is on (lethal and nonlethal bombard) 
+Added: GoldPerCity building flag. add subtract gold based on the number of 
+  cities your empire has
 Added: OnePerCiv -  buildings can now be Small Wonders/National Projects 
-
 
 2005-10-23
 Fixed: Misc crashes

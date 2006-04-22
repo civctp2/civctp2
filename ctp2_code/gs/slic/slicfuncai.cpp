@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : SLIC AI functions
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,9 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-//----------------------------------------------------------------------------
 //
+// - None
+//
+//----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
@@ -32,6 +34,11 @@
 // - Improved mod handling for Diplomod/WAW: reduces Asserts, restored 
 //   compatibility.
 // - Added missing arguments for some proposals.
+// - Implemented the following slic functions
+//   - INT GetProjectedScience(player) / INT GetProjectedScience(city)
+//   - INT GetStopResearchingAdvance(player,foreigner)
+//   - INT GetMostAtRiskCity(player, foreigner, &cityvar)
+//   These functions compile but still need to be tested. (April 22nd 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1448,7 +1455,7 @@ SFN_ERROR Slic_GetLastResponseType::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-    m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).type;
+    m_result.m_int = Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).type;
 
     DPRINTF(k_DBG_SLIC, ("Slic_GetLastResponseType:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
 
@@ -1613,10 +1620,10 @@ SFN_ERROR Slic_GetNewProposalPriority::Call(SlicArgList *args)
 // INT GetNextAdvance(player);
 // returns the advanceDB index of the first advance from the player's AdvanceList_XXX
 // that the player has not yet researched
-
 SFN_ERROR Slic_GetNextAdvance::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 1)
+	m_result.m_int = 0;
+	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -1708,7 +1715,7 @@ SFN_ERROR Slic_GetPersonalityType::Call(SlicArgList *args)
 // by foreigner. 
 
 SFN_ERROR Slic_GetAtRiskCitiesValue::Call(SlicArgList *args)
-{   
+{
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -1724,7 +1731,7 @@ SFN_ERROR Slic_GetAtRiskCitiesValue::Call(SlicArgList *args)
 
 	m_result.m_int = MapAnalysis::GetMapAnalysis().AtRiskCitiesValue(player,foreigner);
 
-    DPRINTF(k_DBG_SLIC, ("Slic_GetAtRiskCitiesValue:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_GetAtRiskCitiesValue:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }
@@ -1813,6 +1820,7 @@ SFN_ERROR Slic_RoundGold::Call(SlicArgList *args)
 // can't find this
 SFN_ERROR Slic_GetPollutionLevelPromisedTo::Call(SlicArgList *args)
 {
+	// See ExecutePersistantAgreements how it is done
 	m_result.m_int = 0;
 	return SFN_ERROR_OK;
 }
@@ -1846,7 +1854,23 @@ SFN_ERROR Slic_GetPiracyIncomeFrom::Call(SlicArgList *args)
 SFN_ERROR Slic_GetProjectedScience::Call(SlicArgList *args)
 {
 	m_result.m_int = 0;
-	return SFN_ERROR_OK;
+    if(args->m_numArgs != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	PLAYER_INDEX player;
+    Unit         city;
+
+	if(args->GetPlayer(0, player)){
+		m_result.m_int = MapAnalysis::GetMapAnalysis().GetProjectedScience(player);
+		return SFN_ERROR_OK;
+	}
+	else if(args->GetCity(0, city)){
+		m_result.m_int = city.GetCityData()->GetProjectedScience();
+		return SFN_ERROR_OK;
+	}
+	else{
+		return SFN_ERROR_TYPE_ARGS;
+	}
 }
 
 // INT CanFormAlliance(player,foreigner)
@@ -1873,9 +1897,24 @@ SFN_ERROR Slic_CanFormAlliance::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
+// INT GetStopResearchingAdvance(player,foreigner)
+// Returns the stop advance database index, -1 if there is no such advance for whatever reason
 SFN_ERROR Slic_GetStopResearchingAdvance::Call(SlicArgList *args)
 {
-	m_result.m_int = 0;
+    if(args->m_numArgs != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	sint32 argNum = 0;
+	PLAYER_INDEX player;
+	PLAYER_INDEX foreigner;
+	
+	if(!args->GetPlayer(argNum++, player))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!args->GetPlayer(argNum++, foreigner))
+		return SFN_ERROR_TYPE_ARGS;
+
+	m_result.m_int = Diplomat::GetDiplomat(player).GetStopResearchingAdvance(foreigner);
 	return SFN_ERROR_OK;
 }
 
@@ -2136,25 +2175,52 @@ SFN_ERROR Slic_GetCounterProposalResult::Call(SlicArgList *args)
                 return SFN_ERROR_OK;
 		    default:m_result.m_int = 0;
 		}
-    }
+	}
 	
 	return SFN_ERROR_OK;
 }
 
-//INT GetMostAtRiskCity(player, foreigner, &cityvar) ? TBD
-
+//INT GetMostAtRiskCity(player, foreigner, &cityvar)
 SFN_ERROR Slic_GetMostAtRiskCity::Call(SlicArgList *args)
 {
-    
-    m_result.m_int = 0;
+	m_result.m_int = 0;
+	if(args->m_numArgs != 3)
+	return SFN_ERROR_NUM_ARGS;
+
+	PLAYER_INDEX player;
+	PLAYER_INDEX foreigner;
+	
+	if(!args->GetPlayer(0, player))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!args->GetPlayer(1, foreigner))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(args->m_argType[2] != SA_TYPE_INT_VAR) {
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	SlicSymbolData *sym = args->m_argValue[2].m_symbol;
+	if(sym->GetType() != SLIC_SYM_CITY && sym->GetType() != SLIC_SYM_STRUCT) {
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	Unit atrisk_city;
+	m_result.m_int = MapAnalysis::GetMapAnalysis().MostAtRiskCity(player, atrisk_city, foreigner);
+
+
+	if(atrisk_city.m_id == 0) {
+		return SFN_ERROR_OK;
+	}
+
+	sym->SetCity(atrisk_city);
 	return SFN_ERROR_OK;
 }
 
 // VOID DeclareWar(player, foreigner); 
-
 SFN_ERROR Slic_DeclareWar::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;

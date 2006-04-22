@@ -4797,35 +4797,36 @@ ORDER_RESULT ArmyData::Pillage(BOOL test_ownership)
 
 	AddSpecialActionUsed(m_array[uindex]);
 
-		bool CanPillageTileImp = true;
+//	bool CanPillageTileImp = true;
 
-		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-		sint32 imp = cell->GetDBImprovement(i);
-		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-			if(trec->GetCantPillage()){
-				return ORDER_RESULT_ILLEGAL;
-				//CanPillageTileImp = false;
-				//break;
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	sint32 imp = cell->GetDBImprovement(i);
+	const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+		if(trec->GetCantPillage()){
+			return ORDER_RESULT_ILLEGAL;
+			//CanPillageTileImp = false;
+			//break;
+		}
+	}
+//EMOD to allow units to take a tile if they have a flag instead of pillging, 
+	// sometimes it good to take a fortress use will probably go to lawyers 
+	// or diplomats this us temporary until i can make it an order that costs gold
+	for(sint32 j = 0; j < m_nElements; j++) {
+		if(m_array[j].GetDBRec()->GetCanCaptureTile()) {
+			if (cellOwner != m_owner) {
+				cell->SetOwner(m_owner);
+				g_theWorld->ChangeOwner(pos, cellOwner, m_owner);
+				//add gold check and subtract gold
+				return ORDER_RESULT_SUCCEEDED;
 			}
 		}
-//EMOD to allow units to take a tile if they have a flag instead of pillging, sometimes it good to take a fortress
-// use will probably go to lawyers or diplomats this us temporary until i can make it an order that costs gold
-		for(sint32 j = 0; j < m_nElements; j++) {
-			if(m_array[j].GetDBRec()->GetCanCaptureTile()) {
-				if (cellOwner != m_owner) {
-					cell->SetOwner(m_owner);
-					g_theWorld->ChangeOwner(pos, cellOwner, m_owner);
-					//add gold check and subtract gold
-					return ORDER_RESULT_SUCCEEDED;
-				}
-			}
-		}
+	}
 
 
 
-//		if(!CanPillageTileImp){
-//			return ORDER_RESULT_ILLEGAL;
-//		}	
+//	if(!CanPillageTileImp){
+//		return ORDER_RESULT_ILLEGAL;
+//	}	
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_PillageUnit,
 						   GEA_Unit, m_array[uindex],
@@ -8044,12 +8045,12 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 // Parameters : MapPoint &pos
 //
 // Globals    : -
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : - Attempted MoveBonus here, but it appears this is only for terrain
-//				Unit data is for Units 
-//				- Added Denied to enemy check 4-11-2006
+//                Unit data is for Units 
+//              - Added Denied to enemy check 4-11-2006
 //
 //----------------------------------------------------------------------------
 void ArmyData::DeductMoveCost(const MapPoint &pos)
@@ -8509,7 +8510,7 @@ void ArmyData::Disband()
 
 //EMOD Gift Units for Human Player 4-12-2006
 		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)){
-			if(m_array[i].GetDBRec()->GetCanBeGifted()){
+			if(m_array[i].GetDBRec()->GetCanBeGifted()){ // Well without this unit isn't gifted, but this flag is superflous if this is an order of its own
 				sint32 newunit = m_array[i].GetType();
 				sint32 regardcost = (m_array[i].GetDBRec()->GetAttack()) / 5;
 				if((g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) && (CellOwner > 0)) {
@@ -8546,7 +8547,7 @@ void ArmyData::Disband()
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : sint32 
 //
 // Remark(s)  : -
@@ -8554,20 +8555,20 @@ void ArmyData::Disband()
 //----------------------------------------------------------------------------
 sint32 ArmyData::GetMinFuel()
 {
-    sint32 i, minFuel, currFuel; 
-    
-	minFuel = currFuel = 0x7fffffff; 
+	sint32 i, minFuel, currFuel;
 
-    for ( i = 0; i < m_nElements; i++ ) { 
+	minFuel = currFuel = 0x7fffffff;
+
+	for ( i = 0; i < m_nElements; i++ ) {
 		if(!m_array[i].GetDBRec()->GetNoFuelThenCrash())
 			continue;
 		currFuel = m_array[i].GetFuel();
-        if (currFuel < minFuel) {
+		if (currFuel < minFuel) {
 			minFuel = currFuel;
-        }
-    }
-    
-    return minFuel;
+		}
+	}
+	
+	return minFuel;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -8583,7 +8584,7 @@ sint32 ArmyData::GetMinFuel()
 //                                   before running out of fuel.
 //
 // Globals    : -
-//				
+//
 // Returns    : - 
 //
 // Remark(s)  : -
@@ -8592,27 +8593,27 @@ sint32 ArmyData::GetMinFuel()
 void ArmyData::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const
 {
 
-    num_tiles_to_half = 1000000; 
-    num_tiles_to_empty = 1000000; 
+	num_tiles_to_half = 1000000;
+	num_tiles_to_empty = 1000000;
 
-    sint32 unit_idx; 
-    sint32 fuel_remaining; 
-    sint32 max_fuel; 
-    sint32 fuel_to_half; 
-    for (unit_idx = 0; unit_idx < m_nElements; unit_idx++ ) { 
-        // if the unit is a plane, get how much fuel it has left and (from unitDB) it's max_fuel
-        if (!m_array[unit_idx].GetUsedFuel (fuel_remaining, max_fuel)) continue; 
+	sint32 unit_idx;
+	sint32 fuel_remaining;
+	sint32 max_fuel;
+	sint32 fuel_to_half;
+	for (unit_idx = 0; unit_idx < m_nElements; unit_idx++ ) {
+		// if the unit is a plane, get how much fuel it has left and (from unitDB) it's max_fuel
+		if (!m_array[unit_idx].GetUsedFuel (fuel_remaining, max_fuel)) continue;
 
-        fuel_to_half = fuel_remaining - max_fuel / 2; 
-        
-        if (fuel_to_half < num_tiles_to_half) { 
+		fuel_to_half = fuel_remaining - max_fuel / 2;
+		
+		if (fuel_to_half < num_tiles_to_half) {
 			num_tiles_to_half = std::max<sint32>(fuel_to_half, 0);
-        }
+		}
 
-        if (fuel_remaining < num_tiles_to_empty) { 
-            num_tiles_to_empty = fuel_remaining; 
-        }
-    }
+		if (fuel_remaining < num_tiles_to_empty) {
+			num_tiles_to_empty = fuel_remaining;
+		}
+	}
 }
 
 
