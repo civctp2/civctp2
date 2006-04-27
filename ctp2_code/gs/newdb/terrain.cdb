@@ -16,7 +16,7 @@ Resource {
 	Bit(Float) CommercePercent			//added by E when a city has or buying a good it gets a bonus
 	Bit(Float) SciencePercent			//added by E when a city has or buying a good it gets a bonus
 	Bit(Float) EfficiencyOrCrime		//added by E -=crime +=efficiency
-      Bit(Int)   HappyInc				//added by E when a city has or buying a good it gets a bonus
+	Int HappyInc        = 0				//added by E when a city has or buying a good it gets a bonus
 	Bit(Int) TradeGold = 0
 	Bit(Int) TradeFood = 0
 	Bit(Int) TradeProduction = 0

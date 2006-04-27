@@ -124,6 +124,7 @@
 // - Added IsCoastal check to canbuildwonders 3-31-2006
 // - Added ObsoleteUnit so units can be obsolete by the availability of other units by E 3-31-2006
 // - Added UpgradeTo so units can be obsolete by the availability of unit they upgrade to by E 3-31-2006
+// - CantTrade flag for Goods now works by E 4-26-2006
 //
 //----------------------------------------------------------------------------
 
@@ -1157,6 +1158,7 @@ void CityData::NoRevoltCountdown()
 // Returns    : -
 //
 // Remark(s)  : - causeIsExternal defaults to FALSE in citydata.h
+//			  : - Sometimes a city constantly revolts needs fixing
 //
 //----------------------------------------------------------------------------
 void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
@@ -2122,10 +2124,10 @@ void CityData::CollectResources()
 		&& MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius
 #endif
 		){
-			//if (g_theResourceDB->Get(good)->GetCantTrade == 0);  //TODO: doesn't work
-			//EMOD 3-22-2006 to prevent free collection of goods
+			if(g_theResourceDB->Get(good)->GetCantTrade() == 0){  
+			//EMOD 4-26-2006 to prevent free collection of goods
 				m_collectingResources.AddResource(good);
-			//}
+			}
 		}
 		// Added by E (10-29-2005) - If a tileimp has enablegood then give to city
 		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
@@ -2667,59 +2669,6 @@ double CityData::ProcessScie(sint32 science) const
 	///////////////////////////////////////////////
 	// Add science from citizen
 	// No science from citizen. Maybe something to add.
-
-
-//EMOD Civilization and Citystyle bonuses
-	grossScience += ceil(grossScience * g_player[m_owner]->GetCivilisation()->GetSciencePercent());
-
-	grossScience += ceil(grossScience * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetSciencePercent());
-
-	grossScience += g_player[m_owner]->GetCivilisation()->GetBonusScience();
-
-	grossScience += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusScience();
-
-
-//Added by E - EXPORT BONUSES TO GOODS if has good than a science bonus	
-//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
-	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
-	{
-		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
-		{
-			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
-			if (goodData)
-			{
-				double goodBonus;
-				if (goodData->GetSciencePercent(goodBonus))
-				{
-					grossScience += static_cast<sint32>(ceil(grossScience * goodBonus));
-				}
-
-				double goodEfficiency;
-				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
-				{
-					grossScience += static_cast<sint32>(ceil(grossScience * goodEfficiency));
-				}
-			}
-		}
-	}
-
-	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
-	{
-		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
-		{
-			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
-			if (tgoodData)
-			{
-				sint32 tgoodBonus;
-				if (goodData->GetTradeScience(tgoodBonus))
-				{
-					grossScience += tgoodBonus;
-				}
-			}
-		}
-	}
-
-
 
 	if(grossScience < 0.0) {
 		grossScience = 0.0;
@@ -4238,7 +4187,7 @@ BOOL CityData::BuildWonder(sint32 type)
 	}
 }
 
-void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now it does 3-26-2006 EMOD // No it isn't it is called in Player::AddWonder.
+void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now it does 3-26-2006 EMOD // No it isn't it is called in Player::AddWonder. //it doesn't look like it does :)
 {
 
 	const WonderRecord* rec = wonderutil_Get(type); //added by E
@@ -4255,29 +4204,31 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 	}
 	//end Emod
 //
-//EMOD Visible wonders 4-1-2006
+//EMOD Visible wonders 4-25-2006 
 	MapPoint SpotFound;
 	CityInfluenceIterator it(point, m_sizeIndex); 
-	MapPoint pos;
-	sint32 totalTiles=0;
-	for(it.Start(); !it.End(); it.Next()) {
+	
+	sint32 s;
+	for(s = 0; s < rec->GetNumShowOnMap(); s++) {
+	const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+	
 
-		Cell *cell = g_theWorld->GetCell(it.Pos());
-		if(point == it.Pos())
+		for(it.Start(); !it.End(); it.Next()) {
+			//Cell *cell = g_theWorld->GetCell(it.Pos());
+			Cell *ncell = g_theWorld->GetCell(it.Pos());
+			Cell *ocell = g_theWorld->GetCell(SpotFound);
+			if(point == it.Pos())
 				continue;
-		sint32 s;
-		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
-			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-			//if(!HasTileImpInRadius(rec->GetShowOnMapIndex(s), it.Pos())) {
 
-			//	if(!HasTileImpInRadius(rec->GetShowOnMapIndex(s), it.Pos())) {
-					SpotFound = it.Pos(); //
-					//cell.GetPos(); 
-					if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, pos)) {
-					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), pos, 0);
-			//	}
+			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
+				if(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain()) {
+					SpotFound = it.Pos(); 
+				} else { 
+					SpotFound = it.Pos(); 
+				}
 			}
 		}
+		g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), SpotFound, 0);
 	}
 
 //EMOD - FU 4-1-2006 visible tileimps, but it builds them all around the radius i.e. GreatWall builds Great walls
@@ -6360,7 +6311,7 @@ void CityData::ContributeScience(double incomePercent,
 	double s;
 	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s);
 	addscience += addscience * s;
-	
+
 }
 
 //----------------------------------------------------------------------------
@@ -7976,7 +7927,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 //EMOD to assist AI
 // Turn it into an option otherwise No
 //	if(gold < 0) {
-//		if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
+//		if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
 //			gold = 0;
 //		} else {
 //			gold = gold;
@@ -9130,3 +9081,16 @@ sint32 CityData::StyleHappinessIncr() const
 {
 	return g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetHappyInc();
 }
+
+//sint32 CityData::GoodHappinessIncr() const
+//{
+//  sint32 tgood, tgoodBonus;
+//	for (tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+//	{
+//		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+//		{
+//			return g_theResourceDB->Get(tgood)->GetHappyInc();
+//		}
+//	}
+//	return 0;
+//}

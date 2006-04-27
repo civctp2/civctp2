@@ -99,17 +99,19 @@ TerrainImprovement {
 		#Added by Martin Gühmann for Trade redirection
 		Bit(Int) Freight
 		Bit Radar
-		Bit NeedsWorker 		//futureUse - can't build unless IsWorker unit is on square
+		Bit NeedsWorker 				//futureUse - can't build unless IsWorker unit is on square
 		Bit Airport
 
-		Bit Colony      		//FU
-		Bit Fort 			//FU
-		Bit Urban			//FU
-		Bit Installation		//FU
-		Bit DeniedToEnemy		//FU
-		Bit(Int) BonusFoodExport 	//FU
+		Bit Colony      				//FU
+		Bit Fort 						//FU
+		Bit Urban						//FU
+		Bit Installation				//FU
+		Bit DeniedToEnemy				//FU
+		Bit(Int) BonusFoodExport 		//FU
 		Bit(Int) BonusProductionExport 	//FU
-		Bit(Int) BonusGoldExport 	//FU
+		Bit(Int) BonusGoldExport 		//FU
+		Bit CanBeCaptured				//FU
+		Bit CanUpgrade					//FU
 
 		Bit ListeningPost
 		Bit Endgame
@@ -121,7 +123,7 @@ TerrainImprovement {
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost
 		Record Resource[] EnablesGood 		//added by E -- having a TI gives a city a good
-		Bit(Int) GoldCost 		//FU
+		Bit(Int) GoldCost 				//FU
 		Int ProductionTime
 		Int TilesetIndex
 	}
@@ -130,13 +132,13 @@ TerrainImprovement {
 	Record Sound Sound
 	Record Terrain[] CantBuildOn
 	Record Government[] GovernmentsModified
-	Record CityStyle[] CultureOnly 		//added by E -- can only build imps if civ has certain citystyle
-	Record Government[] GovernmentType 	//added by E --- a copy of unit Government type code
+	Record CityStyle[] CultureOnly 			//added by E -- can only build imps if civ has certain citystyle
+	Record Government[] GovernmentType 		//added by E --- a copy of unit Government type code
 	Record Resource[] IsRestrictedToGood 	//added by E -- can only build imps if tile has good
-	Record Resource[] EnablesGood 		//added by E -- having a TI gives a city a good
+	Record Resource[] EnablesGood 			//added by E -- having a TI gives a city a good
 	Bit(Struct Effect) Effect
 	Struct Effect[] TerrainEffect
-	Bit DeniedToEnemy		//FU
+	Bit DeniedToEnemy						//FU
 
 	Record Icon Icon
 	#MDS 090800 not sure about this, trying to add 2 new fields...
@@ -157,7 +159,7 @@ TerrainImprovement {
 	Bit(Int) BonusFoodExport //FU
 	Bit(Int) BonusProductionExport //FU
 	Bit(Int) BonusGoldExport //FU
-	Bit NeedsIrrigation 		//futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
+	Bit NeedsIrrigation 					//futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
 		
 
 	Bit GLHidden

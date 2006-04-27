@@ -35,6 +35,9 @@
 //   flag so a tile improvement can only be built on a tile with a 
 //   certain good on it - (E 2005/03/12)
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
+// - terrainutil_CanPlayerSpecialBuildAt added by E 4-1-2006
+// - Added outcommented terrainutil_HasUpgrader, terrainutil_CanBeCaptured, 
+//   terrainutil_HasColony by E (4-25-2006) fo future use
 //
 //----------------------------------------------------------------------------
 
@@ -869,6 +872,75 @@ void terrainutil_GetDefenseBonus(const MapPoint & pos, double & terrain_bonus, d
 		}
 	}
 }
+
+//bool terrainutil_HasUpgrader(const MapPoint & pos)
+//{
+//	Cell *cell = g_theWorld->GetCell(pos);
+//
+//	
+//	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+//
+//		
+//		sint32 imp = cell->GetDBImprovement(i);
+//		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//
+//		Assert(rec);
+//		if(rec) {
+//			
+//			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+//			
+//			if(eff && eff->GetCanUpgrade())
+//				return true;
+//		}
+//	}
+//	return false;
+//}
+
+//bool terrainutil_CanBeCaptured(const MapPoint & pos)
+//{
+//	Cell *cell = g_theWorld->GetCell(pos);
+//
+//	
+//	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+//
+//		
+//		sint32 imp = cell->GetDBImprovement(i);
+//		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//
+//		Assert(rec);
+//		if(rec) {
+//			
+//			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+//			
+//			if(eff && eff->GetCanBeCaptured())
+//				return true;
+//		}
+//	}
+//	return false;
+//}
+
+//bool terrainutil_HasColony(const MapPoint & pos)
+//{
+//	Cell *cell = g_theWorld->GetCell(pos);
+//
+//	
+//	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+//
+//		
+//		sint32 imp = cell->GetDBImprovement(i);
+//		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+//
+//		Assert(rec);
+//		if(rec) {
+//			
+//			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+//			
+//			if(eff && eff->GetColony())
+//				return true;
+//		}
+//	}
+//	return false;
+//}
 
 bool terrainutil_HasAirfield(const MapPoint & pos)
 {

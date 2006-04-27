@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Happiness handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -613,6 +613,7 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 	m_happiness  = CalcBase(p);
 	m_happiness += p->CityHappinessIncrease();
 	m_happiness += cd.StyleHappinessIncr();
+//	m_happiness += cd.GoodHappinessIncr()
 	
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
 		return;

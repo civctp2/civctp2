@@ -68,6 +68,12 @@
 // - DeniedtoEnemy added to DeductMove if an imp has this then when at war you dont
 //   the tileimps move bonus only the base terrain (intent for railroads not roads) 
 //   by E 4-12-2006
+// - Updated Multiple Attack flag by E 4-25-2006
+// - Upgrade code added to Sleep by E 4-25-2006 (outcommented)
+// - PrecisionStrike flag enabled by E; units with flag will only hit 
+//   buildings (bomb everywhere else though) in cities 4-26-2006
+// - TargetsCivilians flag enabled by E; units with flag will only kill 
+//   civilians in cities (bomb everywhere else though) 4-26-2006
 //
 //----------------------------------------------------------------------------
 
@@ -112,6 +118,7 @@
 #include "WonderRecord.h"
 #include "TerrainRecord.h"
 #include "GameSettings.h"
+#include "GovernmentRecord.h"   //EMOD to access government data
 
 #include "UnitRecord.h"
 #include "SpecialAttackInfoRecord.h"
@@ -938,11 +945,45 @@ BOOL ArmyData::IsAsleep() const
 // Put this army on sentinal duty.
 void ArmyData::Sleep()
 {
-    sint32 i;
-    for(i = 0; i < m_nElements; i++) {
+//ORIGINAL
+//    sint32 i;
+//    for(i = 0; i < m_nElements; i++) {
+//
+//EMOD upgrade code 4-25-2006 outcommented
+
+	sint32 i;
+	sint32 s = 0;
+	Unit city = g_theWorld->GetCity(m_pos);
+	for(i = m_nElements - 1; i >= 0; i--) {
+	
+//		if((city.m_id != (0)) && (m_array[i].GetDBRec()->GetUpgradeToIndex(s)))  {  // add terrainutil_HasAirfield(m_pos) || terrainutil_HasFort(m_pos) || terrainutil_HasUpgrader(m_pos)
+//			for(s = 0; s < m_array[i].GetDBRec()->GetNumUpgradeTo(); s++) {
+//			sint32 s = m_array[i].GetDBRec()->GetNumUpgradeTo(); // s++) {  //m_array[i].GetDBRec()->GetUpgradeToIndex(s)
+//				if(city.AccessData()->GetCityData()->CanBuildUnit(m_array[i].GetDBRec()->GetUpgradeToIndex(s))){
+//					sint32 newunit = m_array[i].GetDBRec()->GetUpgradeToIndex(s);
+//					sint32 newshields = m_array[i].GetDBRec()->GetShieldCost() * 2;
+//					sint32 oldshields = m_array[i].GetDBRec()->GetShieldCost();
+//					sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
+//					sint32 goldcost = (newshields - oldshields);// * rushmod;
+//
+//					if((city.AccessData()->GetCityData()->CanBuildUnit(m_array[i].GetDBRec()->GetUpgradeToIndex(s))) ){//&& (g_player[m_owner]->m_gold->GetLevel() > goldcost)) { //&& (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)
+//						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//						g_player[m_owner]->CreateUnit(s, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+//						g_player[m_owner]->m_gold->SubGold(goldcost);
+//					} else {
+//						g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
+//                              GEA_Unit, m_array[i],
+//                            GEA_End);
+//					}
+//
+//			}
+//		} else {
+
+//end EMOD
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
                                GEA_Unit, m_array[i],
                                GEA_End);
+//		}
 
     }
 }
@@ -4811,12 +4852,16 @@ ORDER_RESULT ArmyData::Pillage(BOOL test_ownership)
 //EMOD to allow units to take a tile if they have a flag instead of pillging, 
 	// sometimes it good to take a fortress use will probably go to lawyers 
 	// or diplomats this us temporary until i can make it an order that costs gold
+	//			sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();	
+	//			sint32 impgold = cell->AccessImprovement(i).GetMaterialCost();
+	//			sint32 terraingold = cell->GetGoldFromTerrain();
+	//			sint32 goldcost = (terraingold + impgold) * rushmod;
 	for(sint32 j = 0; j < m_nElements; j++) {
-		if(m_array[j].GetDBRec()->GetCanCaptureTile()) {
+		if(m_array[j].GetDBRec()->GetCanCaptureTile()) { // add && (g_player[m_owner]->m_gold->GetLevel() > goldcost) && (terrainutil_CanBeCaptured(m_pos))) {
 			if (cellOwner != m_owner) {
 				cell->SetOwner(m_owner);
 				g_theWorld->ChangeOwner(pos, cellOwner, m_owner);
-				//add gold check and subtract gold
+				//add g_player[m_owner]->m_gold->SubGold(goldcost);
 				return ORDER_RESULT_SUCCEEDED;
 			}
 		}
@@ -5219,7 +5264,7 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 				if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {					
 					m_array[i].SetMovementPoints(0.0);
 				} else {
-					m_array[i].DeductMoveCost(k_MOVE_COMBAT_COST, out_of_fuel);
+					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
 				} 
 
 			}
@@ -5236,16 +5281,26 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 
 // add precision strike flag
 
+			if(m_array[i].GetDBRec()->GetPrecisionStrike()) {
+				c.DestroyRandomBuilding();
+			} else {
+			
 			if(r < g_theConstDB->BombardDestroyBuildingChance() * prob) {
 				c.DestroyRandomBuilding();
+			}
 			}
 			
 
 // add Targets Civilian Flag
 
+			if(m_array[i].GetDBRec()->GetTargetsCivilians()) {
+				c.CD()->ChangePopulation(-1);
+			} else {
+
 			if(c.PopCount() > 1 && (g_rand->Next(100) < g_theConstDB->BombardKillPopChance() * prob)) {
 				DPRINTF(k_DBG_GAMESTATE, ("Removing one pop from 0x%lx\n", c.m_id));
 				c.CD()->ChangePopulation(-1);
+			}
 			}
 
 //EMOD
@@ -5263,12 +5318,11 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 //		}
 //////////////////////
 
-			//for(i = 0; i < m_nElements; i++) {  // is this for necessary since it already looped?
 				if(!m_array[i].GetDBRec()->GetSneakBombard()){  //EMOD added by E for sneak bombarding
 					Diplomat & defending_diplomat = Diplomat::GetDiplomat(c.GetOwner());
 					defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
 				}
-			//}
+
 		}
 		return atLeastOneBombarded;
 	}
@@ -5369,27 +5423,9 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 //		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))//??? see VerifyAttack
 //			return ORDER_RESULT_ILLEGAL;
 
-//EMOD SpecialBombardments PrecisionStrike and TargetsCivilians check can only attack cities
 
-//	for (i = m_nElements - 1; i>= 0; i--) { 
-//		if(m_array[i].GetDBRec()->GetPrecisionStrike() || m_array[i].GetDBRec()->GetTargetsCivilians()){
-//			Unit c = g_theWorld->GetCell(point)->GetCity();
-//			if(c.m_id != 0) {  		// These bombard units can only attack cities
-//				if(!c.GetOwner() == m_owner) {
-//					if(!c.Flag(k_UDF_CANT_BE_ATTACKED)) {
-//						if (m_array[i].GetDBRec()->GetPrecisionStrike()) { 
-//							c.DestroyRandomBuilding();
-//							return ORDER_RESULT_SUCCEEDED;
-//						} else if (m_array[i].GetDBRec()->GetTargetsCivilians()){
-//							c.CD()->ChangePopulation(-1);
-//							return ORDER_RESULT_SUCCEEDED;
-//						}
-//					}
-//				}
-//			}
-//			return ORDER_RESULT_ILLEGAL;
-//		}
-//	}
+
+
 
 
       sint32 numAttacks = 0;
@@ -5399,6 +5435,16 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
     for (i = m_nElements - 1; i>= 0; i--) { 
 		if(!m_array[i].CanPerformSpecialAction())
 			continue;
+
+//EMOD SpecialBombardments PrecisionStrike and TargetsCivilians check can only attack cities
+		if(m_array[i].GetDBRec()->GetPrecisionStrike() || m_array[i].GetDBRec()->GetTargetsCivilians()){
+			if(BombardCity(point, TRUE)) {//so if there's a city, bombard it
+				return ORDER_RESULT_SUCCEEDED;
+			}
+			return ORDER_RESULT_ILLEGAL;
+		}
+			
+//	
 
         if (m_array[i].CanBombard(defender)) { 
 
@@ -5440,7 +5486,7 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 				if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {					
 					m_array[i].SetMovementPoints(0.0);
 				} else {
-					m_array[i].DeductMoveCost(k_MOVE_COMBAT_COST, out_of_fuel);
+					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel); //k_MOVE_COMBAT_COST
 				} 
 			}
 		}
@@ -8129,8 +8175,10 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 	sint32 i;
 
 	for(i = 0; i < m_nElements; i++) {
-		//EMOD add multiple attack flag here?
-		m_array[i].SetFlag(k_UDF_FOUGHT_THIS_TURN);
+		//EMOD add multiple attack flag here? 4-25-2006
+		if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {
+			m_array[i].SetFlag(k_UDF_FOUGHT_THIS_TURN);
+		}
 	}
 
 	for(i = 0; i < defender.Num(); i++) {

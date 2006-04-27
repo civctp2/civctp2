@@ -3491,6 +3491,12 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 				walldef=buildingutil_GetCityWallsDefense(cityData->GetEffectiveBuildings());
 				def=(def+wallval);
 			}
+//			double deductwall;
+//			deductwall = myRec->GetReducesDefensesBonus ();
+//			if(deductwall)
+//			{
+//				def -= deductwall;
+//			}
 		}
 	} 
 

@@ -1927,6 +1927,9 @@ void Player::BeginTurnScience()
 
 	totalScience += sint32(double(totalScience) * 
 										   (double(g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_SCIENCE, m_owner)) / 100.0));
+
+	// If city hasgood
+
 #endif
 	sint32 totalScience = 0;
 	sint32 i;
