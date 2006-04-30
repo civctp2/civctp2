@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : turncounter handles the clockwork of turn progression
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,9 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// - None
-// 
+//
+// _DEBUG
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,6 +28,7 @@
 // - Altered filename generating for PBEM saves (JJB 2004/12/30)
 // - Moved needs refueling check to Unit.cpp to remove code duplication.
 //   - April 24th 2005 Martin Gühmann
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #include "c3.h"
@@ -50,7 +52,8 @@
 #include "player.h"
 #include "profileDB.h"
 #include "CivPaths.h"
-#include "DiffDB.h"
+#include "DifficultyRecord.h"
+#include "Diffcly.h"
 #include "ConstDB.h"
 #include "StrDB.h"
 #include "BuildingRecord.h"
@@ -128,7 +131,6 @@ extern TiledMap                 *g_tiledMap;
 
 extern ProfileDB                *g_theProfileDB;
 extern RadarMap                 *g_radarMap;
-extern DifficultyDB             *g_theDifficultyDB;
 extern ConstDB                  *g_theConstDB;
 extern StringDB                 *g_theStringDB;
 
@@ -174,7 +176,7 @@ void TurnCount::Init()
 	m_round = 0;
 	m_simultaneousMode = FALSE;
 	m_activePlayers = g_theProfileDB->GetNPlayers();
-	m_year = g_theDifficultyDB->GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
+	m_year = diffutil_GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
 	m_lastBeginTurn = -1;
 	m_isHotSeat = FALSE;
 	m_isEmail = FALSE;
@@ -193,7 +195,7 @@ void TurnCount::Init(CivArchive &archive)
 void TurnCount::SkipToRound(sint32 round)
 {
 	m_round = round;
-	m_year = g_theDifficultyDB->GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
+	m_year = diffutil_GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
 }
 
 void TurnCount::Serialize(CivArchive &archive) 
@@ -395,7 +397,7 @@ void TurnCount::BeginNewRound()
 	ChooseHappinessPlayer();
 
 	
-	m_year += g_theDifficultyDB->GetYearIncrementFromTurn(g_theGameSettings->GetDifficulty(), m_round);
+	m_year += diffutil_GetYearIncrementFromTurn(g_theGameSettings->GetDifficulty(), m_round);
 
 	RunNewYearMessages() ;
 	if(g_network.IsHost()) {

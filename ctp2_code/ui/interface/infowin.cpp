@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Do not trigger disaster warnings when there is no pollution at all.
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -70,14 +71,13 @@
 #include "TopTen.h"
 #include "AgeRecord.h"
 #include "Score.h"
-#include "DiffDB.h"
+#include "DifficultyRecord.h"
 #include "Diffcly.h"
 #include "profileDB.h"              // g_theProfileDB
 #include "pollution.h"
 #include "EndGame.h"
 #include "WonderTracker.h"
 #include "Civilisation.h"
-// #include "CivilisationData.h"
 #include "CivilisationPool.h"       // g_theCivilisationPool;
 #include "CivPaths.h"               // g_civPaths
 #include "SelItem.h"                // g_selected_item
@@ -96,88 +96,87 @@
 #include "GameSettings.h"
 
 
-extern sint32		g_ScreenWidth;
-extern sint32		g_ScreenHeight;
-extern C3UI			*g_c3ui;
-extern TopTen		*g_theTopTen;
-extern DifficultyDB	*g_theDifficultyDB;
+extern sint32                   g_ScreenWidth;
+extern sint32                   g_ScreenHeight;
+extern C3UI                     *g_c3ui;
+extern TopTen                   *g_theTopTen;
 extern PointerList<Player>      *g_deadPlayer;
-extern sint32					g_modalWindow;
-extern WorkMap					*g_workMap;
-extern Pollution				*g_thePollution; 
+extern sint32                   g_modalWindow;
+extern WorkMap                  *g_workMap;
+extern Pollution                *g_thePollution; 
 
 
 
-#define k_INFORADAR_WIDTH		202
-#define k_INFORADAR_HEIGHT		151
+#define k_INFORADAR_WIDTH       202
+#define k_INFORADAR_HEIGHT      151
 
 
-ctp2_Window			*g_infoWindow = NULL;
+ctp2_Window                     *g_infoWindow = NULL;
 
 
-static c3_Button	*s_exitButton;
+static c3_Button                *s_exitButton;
 
-static sint32		s_infoSetting;
-static sint32		s_infoDataSetting;
+static sint32                   s_infoSetting;
+static sint32                   s_infoDataSetting;
 
-static aui_StringTable	*s_stringTable;
-
-
-static sint32		s_infoXCount;
-static sint32		s_infoYCount;
-static double		**s_infoGraphData;
+static aui_StringTable          *s_stringTable;
 
 
-static sint32		s_pollutionXCount;
-static sint32		s_pollutionYCount;
-static double		**s_pollutionGraphData;
+static sint32                   s_infoXCount;
+static sint32                   s_infoYCount;
+static double                   **s_infoGraphData;
 
 
-static c3_Static		*s_civNameLabel;
-static c3_Static		*s_turnsLabel;
-static c3_Static		*s_foundedLabel;
-static c3_Static		*s_pollutionLabel;
-
-static c3_Static		*s_civNameBox;
-static c3_Static		*s_turnsBox;
-static c3_Static		*s_foundedBox;
-static c3_Static		*s_pollutionBox;
-
-static c3_Static		*s_titleBox;
-
-static c3_ListBox		*s_infoBigList;
-static c3_ListBox		*s_infoWonderList;
-static c3_ListBox		*s_infoPlayerList;
-static c3_ListBox		*s_infoScoreList;
-static c3_ListBox		*s_pollutionList;
-
-static LineGraph		*s_infoGraph;
-static LineGraph		*s_pollutionGraph;
-
-static Thermometer		*s_pollutionTherm;
-
-static c3_Button		*s_returnButton;
-static c3_Button		*s_bigButton;
-static c3_Button		*s_wonderButton;
-static c3_Button		*s_strengthButton;
-static c3_Button		*s_scoreButton;
-static c3_Button		*s_pollutionButton;
-
-static c3_Button		*s_eventsInfoButton[17];
-static c3_Button		*s_eventsInfoButtonLeft,*s_eventsInfoButtonRight;
-static sint32			s_currentWonderDisplay;
-
-static c3_Button		*s_labButton;
-static c3_Button		*s_throneButton;
-
-static RadarMap			*s_infoRadar;
+static sint32                   s_pollutionXCount;
+static sint32                   s_pollutionYCount;
+static double                   **s_pollutionGraphData;
 
 
-static c3_Static		*s_bottomRightBox;
-static c3_Static		*s_bottomRightImage;
+static c3_Static                *s_civNameLabel;
+static c3_Static                *s_turnsLabel;
+static c3_Static                *s_foundedLabel;
+static c3_Static                *s_pollutionLabel;
+
+static c3_Static                *s_civNameBox;
+static c3_Static                *s_turnsBox;
+static c3_Static                *s_foundedBox;
+static c3_Static                *s_pollutionBox;
+
+static c3_Static                *s_titleBox;
+
+static c3_ListBox               *s_infoBigList;
+static c3_ListBox               *s_infoWonderList;
+static c3_ListBox               *s_infoPlayerList;
+static c3_ListBox               *s_infoScoreList;
+static c3_ListBox               *s_pollutionList;
+
+static LineGraph                *s_infoGraph;
+static LineGraph                *s_pollutionGraph;
+
+static Thermometer              *s_pollutionTherm;
+
+static c3_Button                *s_returnButton;
+static c3_Button                *s_bigButton;
+static c3_Button                *s_wonderButton;
+static c3_Button                *s_strengthButton;
+static c3_Button                *s_scoreButton;
+static c3_Button                *s_pollutionButton;
+
+static c3_Button                *s_eventsInfoButton[17];
+static c3_Button                *s_eventsInfoButtonLeft,*s_eventsInfoButtonRight;
+static sint32                   s_currentWonderDisplay;
+
+static c3_Button                *s_labButton;
+static c3_Button                *s_throneButton;
+
+static RadarMap                 *s_infoRadar;
 
 
-static sint32			s_minRound = 0;
+static c3_Static                *s_bottomRightBox;
+static c3_Static                *s_bottomRightImage;
+
+
+static sint32                   s_minRound = 0;
 
 
 void InfoCleanupAction::Execute(aui_Control *control,
@@ -747,10 +746,10 @@ sint32 infowin_UpdateCivData( void )
 		sint32 turnFounded = unit->GetData()->GetCityData()->GetTurnFounded();
 
 		
-		const char *yearStr = g_theDifficultyDB->GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turnFounded);
+		const char *yearStr = diffutil_GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turnFounded);
 
 #if 0
-		sint32 yearFounded = g_theDifficultyDB->GetYearFromTurn(g_theProfileDB->GetDifficulty(), turnFounded);
+		sint32 yearFounded = diffutil_GetYearFromTurn(g_theProfileDB->GetDifficulty(), turnFounded);
 
 		
 		if (yearFounded > 0)

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Turn count handler
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +27,7 @@
 // - Relaxed assert
 // - Moved needs refueling check to Unit.cpp to remove code duplication.
 //   - April 24th 2005 Martin Gühmann
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -47,7 +51,8 @@
 #include "SlicSegment.h"
 #include "SlicEngine.h"
 #include "profileDB.h"
-#include "DiffDB.h"
+#include "DifficultyRecord.h"
+#include "Diffcly.h"
 #include "tiledmap.h"
 
 #include "pollution.h"
@@ -92,9 +97,6 @@ extern Pollution                *g_thePollution;
 
 
 extern ProfileDB                *g_theProfileDB; 
-
-extern DifficultyDB             *g_theDifficultyDB;
-
 
 extern MessageModal             *g_modalMessage;
 
@@ -146,10 +148,11 @@ void NewTurnCount::StartNextPlayer(bool stop)
 #if 0
 	
 	
-	if((g_player[current_player]->GetPlayerType() == PLAYER_TYPE_HUMAN ||
-		(g_player[current_player]->GetPlayerType() == PLAYER_TYPE_NETWORK &&
-		 g_network.IsLocalPlayer(current_player))) &&
-	   g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) {
+	if((g_player[current_player]->GetPlayerType() == PLAYER_TYPE_HUMAN
+	|| (g_player[current_player]->GetPlayerType() == PLAYER_TYPE_NETWORK
+	&&  g_network.IsLocalPlayer(current_player)))
+	&&  g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()
+	){
 		g_player[current_player]->m_endingTurn = TRUE;
 		g_player[current_player]->ProcessUnitOrders();
 		g_player[current_player]->m_endingTurn = FALSE;
@@ -298,7 +301,7 @@ sint32 NewTurnCount::GetCurrentYear(sint32 player)
 
 	sint32 round = g_player[current_player]->GetCurRound();
 
-	return g_theDifficultyDB->GetYearFromTurn(g_theGameSettings->GetDifficulty(), round);
+	return diffutil_GetYearFromTurn(g_theGameSettings->GetDifficulty(), round);
 }
 
 sint32 NewTurnCount::GetCurrentRound()

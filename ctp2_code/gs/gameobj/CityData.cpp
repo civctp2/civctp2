@@ -127,6 +127,11 @@
 // - CantTrade flag for Goods now works by E 4-26-2006 (outcomment to allow for CanCollectGood)
 // - CanCollectGood BOOL added by E to check goods for
 //   CantTrade or Available and Vanish Advances 4-27-2006
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Made AI deficit gold spending depending on the dificulty settings. (April 29th 2006 Martin Gühmann)
+// - Made good requirements consistent with each, all requirements are now
+//   the same: The city needs more goods that it buys and collects than it
+//   sells. (April 30th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -157,7 +162,7 @@
 #include "colorset.h"
 #include "ConstDB.h"                    // g_theConstDB
 #include "DB.h"
-#include "DiffDB.h"
+#include "DifficultyRecord.h"
 #include "Diplomat.h"                   // To be able to retrieve the current strategy
 #include "director.h"                   // g_director
 #include "Exclusions.h"
@@ -197,8 +202,8 @@
 #include "TaxRate.h"
 #include "TerrainRecord.h"
 #include "terrainutil.h"
-#include "TerrainImprovementRecord.h"   	//EMOD
-#include "TerrImprovePool.h"			//EMOD
+#include "TerrainImprovementRecord.h"   //EMOD
+#include "TerrImprovePool.h"            //EMOD
 #include "tiledmap.h"
 #include "TopTen.h"
 #include "TradeOffer.h"
@@ -216,7 +221,6 @@
 #include "wonderutil.h"
 #include "World.h"                      // g_theWorld
 
-extern DifficultyDB *   g_theDifficultyDB;
 extern Pollution *      g_thePollution;
 extern TopTen *         g_theTopTen;
 
@@ -577,10 +581,7 @@ void CityData::Serialize(CivArchive &archive)
 		sint32 const    ressourceNum    = m_collectingResources.GetNum();
 
 		// TODO: Clean up this mess later, and test what would happen when the good 
-		// database size would decrease, instead of increase. Also consider the 
-		// global variable that is never reinitialised. What happens when loading a 
-		// game (mod/scenario) with a different number of goods? It is deleted on the 
-		// end of the load so no problem for the next save game.
+		// database size would decrease, instead of increase.
 
 		if(ressourceNum == g_theResourceDB->NumRecords()){
 			m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
@@ -1472,26 +1473,26 @@ void CityData::CalcPollution(void)
 		m_cityPopulationPollution   = 0;
 		m_cityIndustrialPollution   = 0;
 		m_total_pollution           = 0;
-        return;
+		return;
 	}
 
 	sint32 populationPolluting = PopCount() - 
-		g_theDifficultyDB->GetPollutionStartPopulationLevel(g_theGameSettings->GetDifficulty());
+		g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetPollutionStartPopulationLevel();
 	
-    if (populationPolluting <= 0) 
+	if (populationPolluting <= 0) 
 	{
 		populationPolluting = 0;
 	}
 	else
-    {
+	{
 		populationPolluting = (sint32)(populationPolluting * 
-			g_theDifficultyDB->GetPollutionPopulationRatio(g_theGameSettings->GetDifficulty()));
+			g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetPollutionPopulationRatio());
 
-	    populationPolluting = (sint32)(populationPolluting * g_player[m_owner]->GetPollutionCoef());
-    }
+		populationPolluting = (sint32)(populationPolluting * g_player[m_owner]->GetPollutionCoef());
+	}
 
 	sint32 productionPolluting = m_gross_production -
-		g_theDifficultyDB->GetPollutionStartProductionLevel(g_theGameSettings->GetDifficulty());
+		g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetPollutionStartProductionLevel();
 	if (productionPolluting <= 0)
 	{
 		productionPolluting = 0;
@@ -1499,7 +1500,7 @@ void CityData::CalcPollution(void)
 	else
     {
 		productionPolluting = (sint32)(productionPolluting * 
-			g_theDifficultyDB->GetPollutionProductionRatio(g_theGameSettings->GetDifficulty()));
+			g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetPollutionProductionRatio());
 
 	    productionPolluting = (sint32)(productionPolluting * g_player[m_owner]->GetPollutionCoef());
     }
@@ -1680,7 +1681,7 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
 	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
 	{
-		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		if(HasNeededGood(good))
 		{
 			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
 			if (goodData)
@@ -1702,16 +1703,12 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 
 	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
 	{
-		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		if(HasNeededGood(tgood))
 		{
 			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
 			if (tgoodData)
 			{
-				sint32 tgoodBonus;
-				if (tgoodData->GetTradeProduction(tgoodBonus))
-				{
-					gross_production += tgoodBonus;
-				}
+				gross_production += tgoodData->GetTradeProduction();
 			}
 		}
 	}
@@ -2065,17 +2062,17 @@ void CityData::CollectResources()
 	MapPoint cityPos = m_home_city.RetPos();
 
 	m_collectingResources.Clear();
-    size_t const    maxRing = static_cast<size_t>(g_theCitySizeDB->NumRecords());
+	size_t const    maxRing = static_cast<size_t>(g_theCitySizeDB->NumRecords());
 
-    std::fill(m_ringFood,       m_ringFood      + maxRing,  0);
-    std::fill(m_ringProd,       m_ringProd      + maxRing,  0);
-    std::fill(m_ringGold,       m_ringGold      + maxRing,  0);
-    std::fill(m_ringSizes,      m_ringSizes     + maxRing,  0);
+	std::fill(m_ringFood,       m_ringFood      + maxRing,  0);
+	std::fill(m_ringProd,       m_ringProd      + maxRing,  0);
+	std::fill(m_ringGold,       m_ringGold      + maxRing,  0);
+	std::fill(m_ringSizes,      m_ringSizes     + maxRing,  0);
 
 #if defined(NEW_RESOURCE_PROCESS)
 	std::fill(m_farmersEff,     m_farmersEff    + maxRing,  0);
 	std::fill(m_laborersEff,    m_laborersEff   + maxRing,  0);
-    std::fill(m_merchantsEff,   m_merchantsEff  + maxRing,  0);
+	std::fill(m_merchantsEff,   m_merchantsEff  + maxRing,  0);
 	std::fill(m_scientistsEff,  m_scientistsEff + maxRing,  0);
 #endif
 
@@ -2083,12 +2080,12 @@ void CityData::CollectResources()
 // Add if city has building GetEnablesGood >0 then that good will be added to the city for trade
 
 	sint32 good;
-	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
-		if(m_built_improvements & ((uint64)1 << b)) {
-		const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
-	//  Check If needsGood for the building a make bonuses dependent on having that good for further bonus
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
+		if(m_built_improvements & ((uint64)1 << b)){
+			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+	//		Check If needsGood for the building a make bonuses dependent on having that good for further bonus
 			if(rec->GetNumEnablesGood() > 0){
-				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
+				for(good = 0; good < rec->GetNumEnablesGood(); good++){
 					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
 				}
 			}
@@ -2097,15 +2094,14 @@ void CityData::CollectResources()
 
 // end building enables good
 
-// Add if city has wonder GetEnablesGood >0 then that good will be dded to the city for trade
-    //sint32 wgood; 
-	for(sint32 w = 0; w < g_theWonderDB->NumRecords(); w++) {
-		if(m_builtWonders & ((uint64)1 << w)) {
+	// Add if city has wonder GetEnablesGood >0 then that good will be dded to the city for trade
+	for(sint32 w = 0; w < g_theWonderDB->NumRecords(); w++){
+		if(m_builtWonders & ((uint64)1 << w)){
 			const WonderRecord *wrec = wonderutil_Get(w);
-//      Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			if (wrec->GetNumEnablesGood() > 0){
-				for(good = 0; good < wrec->GetNumEnablesGood(); good++) {
-  					m_collectingResources.AddResource(wrec->GetEnablesGoodIndex(good));
+//			Check If needsGood for the building a make bonuses dependent on having that good for further bonus
+			if(wrec->GetNumEnablesGood() > 0){
+				for(good = 0; good < wrec->GetNumEnablesGood(); good++){
+					m_collectingResources.AddResource(wrec->GetEnablesGoodIndex(good));
 				}
 			}
 		}
@@ -2133,25 +2129,23 @@ void CityData::CollectResources()
 			}
 		}
 		// Added by E (10-29-2005) - If a tileimp has enablegood then give to city
-		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-		sint32 imp = cell->GetDBImprovement(i);
-		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++){
+			sint32 imp = cell->GetDBImprovement(i);
+			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 			if (rec->GetNumEnablesGood() > 0){
-				//for(good = 0; good < g_theResourceDB->NumRecords(); good++) {
 				for(good = 0; good < rec->GetNumEnablesGood(); good++) {
-  					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
+					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
 				}
 			}
 		}
-	//EMOD enablesgood applied to terrain::effect
+		//EMOD enablesgood applied to terrain::effect
 		sint32 tgood;
-		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++) {
-		sint32 timp = cell->GetDBImprovement(t);
-		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
-		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
-			if (effect->GetNumEnablesGood() > 0){
-				//for(tgood = 0; tgood < g_theResourceDB->NumRecords(); tgood++) {
-				for(tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++) {
+		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++){
+			sint32 timp = cell->GetDBImprovement(t);
+			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
+			if(effect->GetNumEnablesGood() > 0){
+				for(tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++){
 					m_collectingResources.AddResource(effect->GetEnablesGoodIndex(tgood));
 				}
 			}
@@ -2162,7 +2156,7 @@ void CityData::CollectResources()
 
 #if defined(NEW_RESOURCE_PROCESS)
 	for (size_t i = 0; i < maxRing; ++i)
-    {
+	{
 		m_max_food_from_terrain += m_ringFood[i];
 		m_max_prod_from_terrain += m_ringProd[i];
 		m_max_gold_from_terrain += m_ringGold[i];
@@ -2170,7 +2164,7 @@ void CityData::CollectResources()
 
 #else // Should go next time
 	for (sint32 i = 0; i <= m_workerFullUtilizationIndex; ++i)
-    {
+	{
 		fullFoodTerrainTotal += m_ringFood[i];
 		fullProdTerrainTotal += m_ringProd[i];
 		fullGoldTerrainTotal += m_ringGold[i];
@@ -2868,7 +2862,7 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
 	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
 	{
-		if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+		if(HasNeededGood(good))
 		{
 			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
 			if (goodData)
@@ -2891,16 +2885,12 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 //Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying (27-FEB-2006)	
 	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
 	{
-		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		if(HasNeededGood(tgood))
 		{
-			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
+			ResourceRecord const * tgoodData = g_theResourceDB->Get(tgood);
 			if (tgoodData)
 			{
-				sint32 tgoodBonus;
-				if (tgoodData->GetTradeFood(tgoodBonus))
-				{
-					grossFood += tgoodBonus;
-				}
+				grossFood += tgoodData->GetTradeFood();
 			}
 		}
 	}
@@ -4196,7 +4186,7 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 	const WonderRecord* rec = wonderutil_Get(type); //added by E
 	MapPoint point(m_home_city.RetPos());
 
-	m_builtWonders |= (uint64(1) << type);
+	m_builtWonders |= (uint64(1) << (uint64)type);
 
 //EMOD wonders add borders too
 	sint32 intRad;
@@ -5136,12 +5126,12 @@ void CityData::SpreadNanoTerror()
 
 BOOL CityData::IsBioImmune() const
 {
-	return 	wonderutil_GetProtectFromBiologicalWarfare(g_player[m_owner]->m_builtWonders);
+	return wonderutil_GetProtectFromBiologicalWarfare(g_player[m_owner]->m_builtWonders);
 }
 
 BOOL CityData::IsNanoImmune() const
 {
-	return 	wonderutil_GetProtectFromBiologicalWarfare(g_player[m_owner]->m_builtWonders);
+	return wonderutil_GetProtectFromBiologicalWarfare(g_player[m_owner]->m_builtWonders);
 }
 
 bool CityData::IsProtectedFromConversion()
@@ -5178,26 +5168,21 @@ void CityData::Unconvert(BOOL makeUnhappy)
 }
 
 //this city is collecting more sint32 resource than than it is selling
-BOOL CityData::HasResource(sint32 resource) const
+bool CityData::HasResource(sint32 resource) const
 {
 	return m_collectingResources[resource] > m_sellingResources[resource];
 }
 
 //Added by E -- this city is collecting or buying some sint32 resource 
-BOOL CityData::HasNeededGood(sint32 resource) const
+bool CityData::HasNeededGood(sint32 resource) const
 { //3-27-2006 added selling resource impact
-	return m_buyingResources[resource] + m_collectingResources[resource] - m_sellingResources[resource] == 0;
+	return m_buyingResources[resource] + m_collectingResources[resource] - m_sellingResources[resource] > 0;
 }
 
 //EMOD - add GoodIsPirated? 3-13-2006
 
-BOOL CityData::HasEitherGood(sint32 resource) const
-{//3-27-2006 added selling resource impact
-	return m_buyingResources[resource] + m_collectingResources[resource] > m_sellingResources[resource];
-}
-
 //this city is collecting some sint32 resource
-BOOL CityData::IsLocalResource(sint32 resource) const
+bool CityData::IsLocalResource(sint32 resource) const
 {
 	return m_collectingResources[resource] > 0;
 }
@@ -5711,7 +5696,7 @@ sint32 CityData::GetCombatUnits() const
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildUnit(sint32 type) const
 {
-// Added by Martin Gühmann
+	// Added by Martin Gühmann
 	if(!g_player[m_owner]->CanBuildUnit(type))
 		return FALSE;
 
@@ -5723,7 +5708,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 	m_home_city.GetPos(pos);
 
 
-// Added by E - units can be obsolete by the availability of other units
+	// Added by E - units can be obsolete by the availability of other units
 	if(rec->GetNumObsoleteUnit() > 0) {
 		sint32 newunit;
 		for(newunit = 0; newunit < rec->GetNumObsoleteUnit(); newunit++) {
@@ -5732,7 +5717,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		}
 	}
 
-// Added by E - units can be obsolete by the availability of unit the upgrade to
+	// Added by E - units can be obsolete by the availability of unit the upgrade to
 	if(rec->GetNumUpgradeTo() > 0) {
 		sint32 newunit;
 		for(newunit = 0; newunit < rec->GetNumUpgradeTo(); newunit++) {
@@ -5742,7 +5727,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		}
 	}
 
-// Added by E - checks if a city has a building required to build the unit
+	// Added by E - checks if a city has a building required to build the unit
 	if(rec->GetNumPrerequisiteBuilding() > 0) {
 		sint32 o;
 		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
@@ -5751,7 +5736,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 				return FALSE;
 		}
 	}
-// Added by E - Compares Unit CityStyle to the CityStyle of the City
+	// Added by E - Compares Unit CityStyle to the CityStyle of the City
 	if(rec->GetNumCityStyleOnly() > 0) {
 		sint32 s;
 		bool found = false;
@@ -5765,16 +5750,13 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 			return FALSE;
 	}
 
-//  Start Resources section - more to add later 
-//  Added by E - Compares Unit NeedsCityGood to the resources collected our bought by the city, can be either/or
-
-	if(rec->GetNumNeedsCityGood() > 0) {
+	// Start Resources section - more to add later 
+	// Added by E - Compares Unit NeedsCityGood to the resources collected our bought by the city, can be either/or
+	if(rec->GetNumNeedsCityGood() > 0){
 		sint32 g;
 		bool found = false;
-		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
-			// outcommented so the seeler and recipient don't both have bonus
-			// if((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > 0){
-			if ((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > m_sellingResources[rec->GetNeedsCityGoodIndex(g)]){
+		for(g = 0; g < rec->GetNumNeedsCityGood(); g++){
+			if(HasNeededGood(rec->GetNeedsCityGoodIndex(g))){
 				found = true;
 				break;
 			}
@@ -5782,20 +5764,17 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		if(!found)
 			return FALSE;
 	}
-//  Added by E - Compares Unit NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
 
-
+	// Added by E - Compares Unit NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
 	if(rec->GetNumNeedsCityGoodAll() > 0) {
 		sint32 g;
 		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
-			//if((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) == 0)
-			// I assumed subtracting to equal zero gives same effect
-			if ((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) - m_sellingResources[rec->GetNeedsCityGoodAllIndex(g)]== 0)
-			return FALSE;
+			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
+				return FALSE;
 		}
 	}
 
-//End Resources Code
+	//End Resources Code
 
 
 	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, TRUE, m_home_city.m_id, rec->GetIndex()))
@@ -5817,19 +5796,18 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		
 		
 		if(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) {
-			
 			if(g_theWorld->IsNextToWater(pos.x, pos.y)) {
 				return TRUE;
 			}
 			
 			return FALSE;
-		} else if(rec->GetMovementTypeAir()) {
+		}
+		else if(rec->GetMovementTypeAir()) {
 			return TRUE;
 		}
 		return FALSE;
 	}
 
-	
 	return TRUE;
 }
 
@@ -5850,17 +5828,17 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 //
 // Returns    : Whether the city can build the building specified by type.
 //
-// Remark(s)  : CityStyleOnly added by E. Limits certain buildings to be built  
-//              only at certain cities of certain styles.
-//              GovernmentType flag for Buidings limits Buildings to govt type.
-//              CultureOnly flag added by E. It allows only civilizations with 
-//              the same CityStyle as CultureOnly's style to build that building.
-//	      : Added NeedsCityGood checks building good and sees if the city 
-//	        has the either good in its radius or is buying the good from trade.
-//	      : Added NeedsCityGoodAll checks building good and sees if the city 
-//	        has all of the goods in its radius or is buying the good from trade.
-//	      : Added OnePerCiv checks if any civ already built building
-//	      : Added Buildingfeat checks if any civ has built num or percent of buildings
+// Remark(s)  : - CityStyleOnly added by E. Limits certain buildings to be built  
+//                only at certain cities of certain styles.
+//              - GovernmentType flag for Buidings limits Buildings to govt type.
+//              - CultureOnly flag added by E. It allows only civilizations with 
+//                the same CityStyle as CultureOnly's style to build that building.
+//              - Added NeedsCityGood checks building good and sees if the city 
+//                has the either good in its radius or is buying the good from trade.
+//              - Added NeedsCityGoodAll checks building good and sees if the city 
+//                has all of the goods in its radius or is buying the good from trade.
+//              - Added OnePerCiv checks if any civ already built building
+//              - Added Buildingfeat checks if any civ has built num or percent of buildings
 //
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildBuilding(sint32 type) const
@@ -5919,49 +5897,48 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 				return FALSE;
 		}
 	}
-//EMOD OnePerCiv allows for buildings to be Small Wonders
+	//EMOD OnePerCiv allows for buildings to be Small Wonders
 	if(rec->GetOnePerCiv()) {
-			for(o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
-				if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings())){ 
-					return FALSE;
-				}
-			}
-	}
-
-//EMOD from feats but needs a number of builds to build, goes with small wonders 2-24-2006
-	const BuildingRecord::BuildingFeat *bf;
-		
-		if(rec->GetBuilding(bf)) {
-			
-			if(bf->GetBuildingIndex()) {				
-				sint32 numCities = 0;
-				sint32 c;
-				for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
-					Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-					if(aCity.CD()->HaveImprovement(bf->GetBuildingIndex()))
-						numCities++;
-				}
-				
-				sint32 num, percent;
-				
-				if(bf->GetNum(num)) {
-					if(numCities >= num) {
-						return TRUE;
-					}
-					return FALSE;
-				} else if(bf->GetPercentCities(percent)) {
-					sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
-					if(havePercent >= percent) {
-						return TRUE;
-					}
-					return FALSE;
-				}
+		for(o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
+			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings())){ 
+				return FALSE;
 			}
 		}
+	}
+
+	//EMOD from feats but needs a number of builds to build, goes with small wonders 2-24-2006
+	const BuildingRecord::BuildingFeat *bf;
+		
+	if(rec->GetBuilding(bf)) {
+
+		if(bf->GetBuildingIndex()) {
+			sint32 numCities = 0;
+			sint32 c;
+			for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
+				Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
+				if(aCity.CD()->HaveImprovement(bf->GetBuildingIndex()))
+					numCities++;
+			}
+			sint32 num, percent;
+
+			if(bf->GetNum(num)) {
+				if(numCities >= num) {
+					return TRUE;
+				}
+				return FALSE;
+			} else if(bf->GetPercentCities(percent)) {
+				sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
+				if(havePercent >= percent) {
+					return TRUE;
+				}
+				return FALSE;
+			}
+		}
+	}
 
 
 
-// Added GovernmentType flag from Units to use for Buildings
+	// Added GovernmentType flag from Units to use for Buildings
 	if(rec->GetNumGovernmentType() > 0) {
 		sint32 i;
 		bool found = false;
@@ -5975,7 +5952,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			return FALSE;
 	}
 
-// Added by E - Compares Building CityStyle to the CityStyle of the City
+	// Added by E - Compares Building CityStyle to the CityStyle of the City
 	if(rec->GetNumCityStyleOnly() > 0) {
 		sint32 s;
 		bool found = false;
@@ -5989,7 +5966,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			return FALSE;
 	}
 
-// Added by E - Compares Building CultureOnly to the Player's CityStyle
+	// Added by E - Compares Building CultureOnly to the Player's CityStyle
 	if(rec->GetNumCultureOnly() > 0) {
 		sint32 s;
 		bool found = false;
@@ -6002,14 +5979,14 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		if(!found)
 			return FALSE;
 	}
-//  Start Resources section - more to add later 
-//  Added by E - Compares Building NeedsCityGood to the resources collected our bought by the city, can be either/or
 
+	// Start Resources section - more to add later 
+	// Added by E - Compares Building NeedsCityGood to the resources collected our bought by the city, can be either/or
 	if(rec->GetNumNeedsCityGood() > 0) {
 		sint32 g;
 		bool found = false;
 		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
-			if((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > 0){
+			if(HasNeededGood(rec->GetNeedsCityGoodIndex(g))){
 				found = true;
 				break;
 			}
@@ -6018,17 +5995,16 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			return FALSE;
 	}
 
-//  Added by E - Compares Building NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
-
+	// Added by E - Compares Building NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
 	if(rec->GetNumNeedsCityGoodAll() > 0) {
 		sint32 g;
 		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
-			if((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) == 0)
-			return FALSE;
+			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
+				return FALSE;
 		}
 	}
 
-//End Resources Code
+	//End Resources Code
 
 
 	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, rec->GetIndex());
@@ -6051,18 +6027,18 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 //
 // Returns    : Whether the city can build the wonder specified by type.
 //
-// Remark(s)  : CityStyleOnly added by E. Limits certain wonders to be built  
-//              only at certain cities of certain styles.
-//            : GovernmentType flag for wonders limits wonders to govt type.
-//            : CultureOnly flag added by E. It allows only civilizations with 
-//              the same CityStyle as CultureOnly's style to build that wonder.
-//            : PrerequisiteBuilding checks if a city has a building in order
-//              to build a wonder. Added by E.
-//	      : Added NeedsCityGood checks wonder good and sees if the city 
-//	        has the either good in its radius or is buying the good from trade.
-//	      : Added NeedsCityGoodAll checks wonder good and sees if the city 
-//	        has all of the goods in its radius or is buying the good from trade.
-//	      : Added Buildingfeat checks if any civ has built num or percent of buildings
+// Remark(s)  : - CityStyleOnly added by E. Limits certain wonders to be built 
+//                only at certain cities of certain styles.
+//              - GovernmentType flag for wonders limits wonders to govt type.
+//              - CultureOnly flag added by E. It allows only civilizations with 
+//                the same CityStyle as CultureOnly's style to build that wonder.
+//              - PrerequisiteBuilding checks if a city has a building in order
+//                to build a wonder. Added by E.
+//              - Added NeedsCityGood checks wonder good and sees if the city 
+//                has the either good in its radius or is buying the good from trade.
+//              - Added NeedsCityGoodAll checks wonder good and sees if the city 
+//                has all of the goods in its radius or is buying the good from trade.
+//              - Added Buildingfeat checks if any civ has built num or percent of buildings
 //
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildWonder(sint32 type) const
@@ -6074,14 +6050,14 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		return FALSE;
 
 
-// Added Wonder database 
+	// Added Wonder database 
 	const WonderRecord* rec = wonderutil_Get(type);
 
 	
 	MapPoint pos;
 	m_home_city.GetPos(pos);
 
-// Added PrerequisiteBuilding checks if city has building to build wonder 
+	// Added PrerequisiteBuilding checks if city has building to build wonder 
 	if(rec->GetNumPrerequisiteBuilding() > 0) {
 		sint32 o;
 		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
@@ -6091,7 +6067,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		}
 	}
 	
-// Added GovernmentType flag from Units to use for Wonders
+	// Added GovernmentType flag from Units to use for Wonders
 	if(rec->GetNumGovernmentType() > 0) {
 		sint32 i;
 		bool found = false;
@@ -6105,45 +6081,44 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			return FALSE;
 	}
 
-//EMOD - Added Coastal Buildings to wonders 
+	// EMOD - Added Coastal Buildings to wonders 
 	if (rec->GetCoastalBuilding()) {
 		if(!g_theWorld->IsNextToWater(pos.x, pos.y))
 			return FALSE;
 	}
 
-//EMOD from feats but needs a number of builds to build, goes with wonders 2-24-2006
+	// EMOD from feats but needs a number of builds to build, goes with wonders 2-24-2006
 	const WonderRecord::BuildingFeat *bf;
-		
-		if(rec->GetBuilding(bf)) {
-			
-			if(bf->GetBuildingIndex()) {				
-				sint32 numCities = 0;
-				sint32 c;
-				for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
-					Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-					if(aCity.CD()->HaveImprovement(bf->GetBuildingIndex()))
-						numCities++;
+
+	if(rec->GetBuilding(bf)) {
+		if(bf->GetBuildingIndex()) {
+			sint32 numCities = 0;
+			sint32 c;
+			for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
+				Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
+				if(aCity.CD()->HaveImprovement(bf->GetBuildingIndex()))
+					numCities++;
+			}
+
+			sint32 num, percent;
+
+			if(bf->GetNum(num)) {
+				if(numCities >= num) {
+					return TRUE;
 				}
-				
-				sint32 num, percent;
-				
-				if(bf->GetNum(num)) {
-					if(numCities >= num) {
-						return TRUE;
-					}
-					return FALSE;
-				} else if(bf->GetPercentCities(percent)) {
-					sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
-					if(havePercent >= percent) {
-						return TRUE;
-					}
-					return FALSE;
+				return FALSE;
+			} else if(bf->GetPercentCities(percent)) {
+				sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
+				if(havePercent >= percent) {
+					return TRUE;
 				}
+				return FALSE;
 			}
 		}
+	}
 
 
-// Added by E - Compares Wonder CityStyle to the CityStyle of the City
+	// Added by E - Compares Wonder CityStyle to the CityStyle of the City
 	if(rec->GetNumCityStyleOnly() > 0) {
 		sint32 s;
 		bool found = false;
@@ -6157,7 +6132,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			return FALSE;
 	}
 
-// Added by E - Compares Wonder CultureOnly to the Player's CityStyle
+	// Added by E - Compares Wonder CultureOnly to the Player's CityStyle
 	if(rec->GetNumCultureOnly() > 0) {
 		sint32 s;
 		bool found = false;
@@ -6170,14 +6145,14 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		if(!found)
 			return FALSE;
 	}
-//  Start Resources section - more to add later 
-//  Added by E - Compares Unit NeedsCityGood to the resources collected our bought by the city, can be either/or
 
+	// Start Resources section - more to add later 
+	// Added by E - Compares Unit NeedsCityGood to the resources collected or bought by the city, can be either/or
 	if(rec->GetNumNeedsCityGood() > 0) {
 		sint32 g;
 		bool found = false;
 		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
-			if((m_buyingResources[rec->GetNeedsCityGoodIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodIndex(g)]) > 0){
+			if(HasNeededGood(rec->GetNeedsCityGoodIndex(g))){
 				found = true;
 				break;
 			}
@@ -6186,20 +6161,20 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			return FALSE;
 	}
 
-//  Added by E - Compares Wonder NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
-
+	// Added by E - Compares Wonder NeedsCityGoodAll to the resources collected or bought by the city, must be all listed
 	if(rec->GetNumNeedsCityGoodAll() > 0) {
 		sint32 g;
 		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
-			if((m_buyingResources[rec->GetNeedsCityGoodAllIndex(g)] + m_collectingResources[rec->GetNeedsCityGoodAllIndex(g)]) == 0)
-			return FALSE;
+			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
+				return FALSE;
 		}
 	}
 
-//End Resources Code
+	//End Resources Code
 
 	return g_slicEngine->CallMod(mod_CanCityBuildWonder, TRUE, m_home_city.m_id, type);
 }
+
 // no longer used
 void CityData::RemoveWonderFromQueue(sint32 type)
 {
@@ -7788,7 +7763,7 @@ void CityData::CollectOtherTrade(const bool projectedOnly, bool changeResources)
 
 	if(!projectedOnly) {
 		g_player[m_owner]->m_gold->AddIncome(m_net_gold);
-	}	
+	}
 
 }
 
@@ -7859,7 +7834,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
 		for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
 		{
-			if ((m_buyingResources[good] + m_collectingResources[good]) > m_sellingResources[good])
+			if(HasNeededGood(good))
 			{
 				ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
 				if (goodData)
@@ -7895,16 +7870,12 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 //Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
 	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
 	{
-		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		if(HasNeededGood(tgood))
 		{
-			ResourceRecord const *	tgoodData	= g_theResourceDB->Get(tgood);
+			ResourceRecord const * tgoodData = g_theResourceDB->Get(tgood);
 			if (tgoodData)
 			{
-				sint32 tgoodBonus;
-				if (tgoodData->GetTradeGold(tgoodBonus))
-				{
-					gold += tgoodBonus;
-				}
+				gold += tgoodData->GetTradeGold();
 			}
 		}
 	}
@@ -7938,16 +7909,13 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	//Not calculating goldhunger see calctotalupkeep?
 
 
-//EMOD to assist AI
-// Turn it into an option otherwise No
-//	if(gold < 0) {
-//		if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-//			gold = 0;
-//		} else {
-//			gold = gold;
-//		}
-//	}
-
+	//EMOD to assist AI
+	if(gold < 0){
+		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIGoldDeficit()
+		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
+			gold = 0;
+		}
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -9096,37 +9064,59 @@ sint32 CityData::StyleHappinessIncr() const
 	return g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetHappyInc();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GoodHappinessIncr
+//
+// Description: Returns how much the goods in the city radius increase the
+//              city's happiness
+//
+// Parameters : -
+//
+// Globals    : g_theResourceDB: The resource database
+//
+// Returns    : sint32 the increasement of happiness of all goods in the 
+//              city radius
+//
+// Remark(s)  : Maybe this should only be the happiness increase of the good 
+//              with maximum increase.
+//
+//----------------------------------------------------------------------------
 sint32 CityData::GoodHappinessIncr() const
 {
-  sint32 tgood, tgoodBonus;
-	for (tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	sint32 i;
+	sint32 totalHappinessInc = 0;
+	for(i = 0; i < g_theResourceDB->NumRecords(); ++i)
 	{
-		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		if(HasNeededGood(i))
 		{
-			return g_theResourceDB->Get(tgood)->GetHappyInc();
+			totalHappinessInc += g_theResourceDB->Get(i)->GetHappyInc();
 		}
 	}
-	return 0;
+	return totalHappinessInc;
 }
 
-BOOL CityData::CanCollectGood(sint32 good) const 
+bool CityData::CanCollectGood(sint32 good) const 
 //EMOD to check Good flags to see if a player can collect it. Modelled on CanBuildBuilding. 4-27-2006
 {
 	const ResourceRecord *rec = g_theResourceDB->Get(good);
 	if(!rec)
-		return FALSE;
+		return false;
 
 
-	if(rec->GetCantTrade() > 0){ 
-				return FALSE;
+	if(rec->GetCantTrade()){
+		return false;
 	}
 
-	if(!g_player[m_owner]->HasAdvance(rec->GetAvailableAdvanceIndex()) && rec->GetAvailableAdvanceIndex() >= 0) {
-		return FALSE;
+	if(!g_player[m_owner]->HasAdvance(rec->GetAvailableAdvanceIndex()) 
+	&& rec->GetAvailableAdvanceIndex() >= 0) { // HasAdvance returns TRUE if the passed parameter is negative
+		return false;
 	}
 
-	if(g_player[m_owner]->HasAdvance(rec->GetVanishAdvanceIndex()) && rec->GetVanishAdvanceIndex() >= 0) {
-		return FALSE;
+	if(g_player[m_owner]->HasAdvance(rec->GetVanishAdvanceIndex()) 
+	&& rec->GetVanishAdvanceIndex() >= 0) {
+		return false;
 	}
-	return TRUE;
+	return true;
 }
+

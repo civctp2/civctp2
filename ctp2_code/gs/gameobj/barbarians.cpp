@@ -28,6 +28,9 @@
 //   making it the same as that used in multiplayer games - JJB 2004/12/13
 // - Add a NoBarbarian flag which makes the unit not appear as barbarian
 // - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
+// - Added Pirate generation. (April 14th 2006 E)
+// - Game does not try to generate barbarian units of invalid type anymore
+//   if there is no valid unit type available. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -123,22 +126,23 @@ sint32 Barbarians::ChooseUnitType()
 		}
 	}
 
-	Assert(count > 0);
+	sint32 ret = -1;
+	if(count > 0){
+		if(count > num_best_units)
+			count = num_best_units;
 
-	if(count > num_best_units)
-		count = num_best_units;
+		sint32 rankMax;
+		if(risk->GetBarbarianUnitRankMax() >= count) {
+			rankMax = count - 1;
+		} else {
+			rankMax = risk->GetBarbarianUnitRankMax();
+		}
+		sint32 whichbest = g_rand->Next(count - rankMax) + rankMax;
+		if(whichbest >= count)
+			whichbest = count - 1;
 
-	sint32 rankMax;
-	if(risk->GetBarbarianUnitRankMax() >= count) {
-		rankMax = count - 1;
-	} else {
-		rankMax = risk->GetBarbarianUnitRankMax();
+		ret = best[whichbest].index;
 	}
-	sint32 whichbest = g_rand->Next(count - rankMax) + rankMax;
-	if(whichbest >= count)
-		whichbest = count - 1;
-
-	sint32 ret = best[whichbest].index;
 	delete [] best;
 	return ret;
 }
@@ -156,6 +160,9 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 	}
 
 	sint32 unitIndex = Barbarians::ChooseUnitType();
+
+	if(unitIndex < 0) return FALSE;
+
 	sint32 d;
 	MapPoint neighbor;
 	BOOL tried[NOWHERE];
@@ -253,22 +260,23 @@ sint32 Barbarians::ChooseSeaUnitType()
 		}
 	}
 
-	Assert(count > 0);
+	sint32 ret = -1;
+	if(count > 0){
+		if(count > num_best_units)
+			count = num_best_units;
 
-	if(count > num_best_units)
-		count = num_best_units;
+		sint32 rankMax;
+		if(risk->GetBarbarianUnitRankMax() >= count) {
+			rankMax = count - 1;
+		} else {
+			rankMax = risk->GetBarbarianUnitRankMax();
+		}
+		sint32 whichbest = g_rand->Next(count - rankMax) + rankMax;
+		if(whichbest >= count)
+			whichbest = count - 1;
 
-	sint32 rankMax;
-	if(risk->GetBarbarianUnitRankMax() >= count) {
-		rankMax = count - 1;
-	} else {
-		rankMax = risk->GetBarbarianUnitRankMax();
+		ret = best[whichbest].index;
 	}
-	sint32 whichbest = g_rand->Next(count - rankMax) + rankMax;
-	if(whichbest >= count)
-		whichbest = count - 1;
-
-	sint32 ret = best[whichbest].index;
 	delete [] best;
 	return ret;
 }
@@ -287,6 +295,9 @@ BOOL Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 	}
 
 	sint32 unitIndex = Barbarians::ChooseSeaUnitType();
+
+	if(unitIndex < 0) return FALSE;
+
 	sint32 d;
 	MapPoint neighbor;
 	BOOL tried[NOWHERE];

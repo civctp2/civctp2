@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Advance (tech) handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// -None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Safeguard FindLevel against infinite recursion.
 // - Speeded up goody hut advance and unit selection.
+// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -54,7 +58,8 @@
 #include "Sci.h"
 #include "Gold.h"
 
-#include "DiffDB.h"
+#include "DifficultyRecord.h"
+#include "Diffcly.h"
 #include "profileDB.h"
 #include "ConstDB.h"
 #include "RandGen.h"
@@ -72,35 +77,34 @@
 #include "wonderutil.h"
 #include "MainControlPanel.h"
 
-#include <stdexcept>	// overflow_error
+#include <stdexcept>    // overflow_error
 
 namespace
 {
-	char const	REPORT_ADVANCE_LOOP[]	= "Advance loop detected";
+    char const  REPORT_ADVANCE_LOOP[]   = "Advance loop detected";
     char const  REPORT_ADVANCE_SELF[]   = "Advance undiscoverable";
 }
 
 extern Player** g_player;
 
-extern SelectedItem *g_selected_item;
-extern TiledMap		*g_tiledMap;
-extern DifficultyDB *g_theDifficultyDB;
-extern ProfileDB    *g_theProfileDB;
-extern ConstDB      *g_theConstDB;
-extern RandomGenerator *g_rand;
-extern StringDB     *g_theStringDB ;
+extern SelectedItem     *g_selected_item;
+extern TiledMap         *g_tiledMap;
+extern ProfileDB        *g_theProfileDB;
+extern ConstDB          *g_theConstDB;
+extern RandomGenerator  *g_rand;
+extern StringDB         *g_theStringDB ;
 extern CivilisationPool *g_theCivilisationPool;
 
 #define k_MAX_ADVANCE_TURNS 1000
 
-#define k_ADVANCES_VERSION_MAJOR	0								
-#define k_ADVANCES_VERSION_MINOR	0								
+#define k_ADVANCES_VERSION_MAJOR	0
+#define k_ADVANCES_VERSION_MINOR	0
 
 
 Advances::Advances()
 {
 	m_size = g_theAdvanceDB->NumRecords();
-    Assert(m_size);
+	Assert(m_size);
 	m_hasAdvance = new uint8[m_size];
 	m_canResearch = new uint8[m_size];
 	m_turnsSinceOffered = new uint16[m_size];
@@ -115,7 +119,7 @@ Advances::Advances()
 Advances::Advances(sint32 num)
 {
 	m_size = num;
-    Assert(m_size);
+	Assert(m_size);
 	m_hasAdvance = new uint8[m_size];
 	memset(m_hasAdvance, 0, m_size * sizeof(uint8));
 	m_canResearch = new uint8[m_size];
@@ -848,18 +852,15 @@ sint32 Advances::GetCost(const AdvanceType adv) const
 	if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
 	   !(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 		sint32 age = 0; 
-		if(age >= k_MAX_AGES)
-			age = k_MAX_AGES - 1;
-
-		cost = sint32(ceil(double(cost) * 
-							g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAiTechnologyCost(m_owner,age)));
+		cost = static_cast<sint32>(ceil(static_cast<double>(cost) * 
+		                           diffutil_GetAiTechnologyCost(g_theGameSettings->GetDifficulty(), m_owner, age)));
 	} else {
-		cost += sint32(ceil((double(cost) * g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->m_human_science_bonus)));
+		cost += static_cast<sint32>(ceil(static_cast<double>(cost) * 
+		          g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetHumanScienceBonus()));
 	}
 
 	return cost;
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -970,7 +971,7 @@ Advances::DebugDumpTree()
 void
 Advances::Serialize(CivArchive& archive)
 {
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
 	if(archive.IsStoring()) {
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_discovered)+sizeof(m_discovered));

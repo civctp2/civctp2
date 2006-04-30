@@ -63,7 +63,7 @@
 //     inspected by those other database classes.
 //
 //----------------------------------------------------------------------------
-// 
+//
 // - When quitting to New Game, go to main menu rather than SP screen
 // - Removed cleanup code for SP screen (JJB)
 // - Removed some of Martin's library cleanup code, after correcting the 
@@ -88,6 +88,7 @@
 // - Added cleanup of gaia controller and info window. (Sep 13th 2005 Martin Gühmann)
 // - Added ArmyData and Network cleanup. (Sep 25th 2005 Martin Gühmann)
 // - Added graphicsresscreen_Cleanup. (Sep 25th 2005 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -113,7 +114,6 @@
 #include "gwdb.h"
 #include "UVDB.h"
 #include "BuildingRecord.h"
-#include "DiffDB.h"
 #include "thronedb.h"
 #include "conceptdb.h"
 
@@ -273,7 +273,7 @@ int g_gameWatchID = -1;
 #include "AdvanceListRecord.h"
 #include "PersonalityRecord.h"
 #include "CivilisationRecord.h"
-//#include "DifficultyRecord.h"
+#include "DifficultyRecord.h"
 
 #include "UnitDynArr.h"
 
@@ -338,7 +338,6 @@ extern OzoneDatabase            *g_theUVDB;
 extern PollutionDatabase        *g_thePollutionDB;
 extern ConstDB                  *g_theConstDB; 
 extern ThroneDB                 *g_theThroneDB;
-extern DifficultyDB             *g_theDifficultyDB; 
 
 extern ProfileDB                *g_theProfileDB;
 extern MovieDB                  *g_theVictoryMovieDB;
@@ -745,7 +744,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	DBLexer *lex = NULL;
 
 	g_theUnitDB = new CTPDatabase<UnitRecord>;
-//	g_theDifficultyDB = new CTPDatabase<DifficultyRecord>;
+	g_theDifficultyDB = new CTPDatabase<DifficultyRecord>;
 	g_theIconDB = new CTPDatabase<IconRecord>;
 	g_theAdvanceDB = new CTPDatabase<AdvanceRecord>;
 	g_theSpriteDB = new CTPDatabase<SpriteRecord>;
@@ -904,24 +903,12 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 140 );
 
-	if (&archive)
-		g_theDifficultyDB = new DifficultyDB(archive);
-	else
-		g_theDifficultyDB = new DifficultyDB;
-	Assert(g_theDifficultyDB); 
-	if (g_theDifficultyDB) {
-		if (!g_theDifficultyDB->Parse(g_difficultydb_filename))
+	if(g_theDifficultyDB) {
+		if (!g_theDifficultyDB->Parse(C3DIR_GAMEDATA, g_difficultydb_filename)) {
+			ExitGame();
 			return FALSE;
+		}
 	}
-
-	// TODO: Replace all the old uses of g_theDifficultyDB by the new all 
-	// over the code. However the old DiffDB.txt can be parsed this is tested.
-//	if(g_theDifficultyDB) {
-//		if (!g_theDifficultyDB->Parse(C3DIR_GAMEDATA, g_difficultydb_filename)) {
-//			ExitGame();
-//			return FALSE;
-//		}
-//	}
 
 	g_theProgressWindow->StartCountingTo( 150 );
 
@@ -1284,7 +1271,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	if(!g_theFeatDB->ResolveReferences()) return FALSE;
 	if(!g_theEndGameObjectDB->ResolveReferences()) return FALSE;
 	if(!g_theRiskDB->ResolveReferences()) return FALSE;
-//	if(!g_theDifficultyDB->ResolveReferences()) return FALSE;
+	if(!g_theDifficultyDB->ResolveReferences()) return FALSE;
 
 	g_theProgressWindow->StartCountingTo( 510 );
 

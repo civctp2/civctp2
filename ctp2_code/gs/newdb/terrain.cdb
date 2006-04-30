@@ -5,23 +5,23 @@ Resource {
 	Int SpriteID
 	Float Probability
 	Bit CantTrade
-	Record Advance        VisibleAdvance  //added by E FutureUse
-	Record Advance        AvailableAdvance  //added by E; if you have advance then you can collect/trade it
-	Record Advance        VanishAdvance    //added by E; if you have advance then you cant collect/trade it
+	Record Advance        VisibleAdvance     // Added by E FutureUse
+	Record Advance        AvailableAdvance   // Added by E; if you have advance then you can collect/trade it
+	Record Advance        VanishAdvance      // Added by E; if you have advance then you cant collect/trade it
 	Record Sound Sound
 	Record Icon Icon
-	Record Government[] GovernmentsModified	
-//
-      Bit(Float) ProductionPercent			//added by E when a city has or buying a good it gets a bonus
-	Bit(Float) FoodPercent				//added by E when a city has or buying a good it gets a bonus
-	Bit(Float) CommercePercent			//added by E when a city has or buying a good it gets a bonus
-	Bit(Float) SciencePercent			//added by E when a city has or buying a good it gets a bonus
-	Bit(Float) EfficiencyOrCrime		//added by E -=crime +=efficiency
-	Int HappyInc        = 0				//added by E when a city has or buying a good it gets a bonus
-	Bit(Int) TradeGold = 0
-	Bit(Int) TradeFood = 0
-	Bit(Int) TradeProduction = 0
-	Bit(Int) TradeScience = 0
+	Record Government[] GovernmentsModified
+
+	Bit(Float) ProductionPercent             // Added by E when a city has or buying a good it gets a bonus
+	Bit(Float) FoodPercent                   // Added by E when a city has or buying a good it gets a bonus
+	Bit(Float) CommercePercent               // Added by E when a city has or buying a good it gets a bonus
+	Bit(Float) SciencePercent                // Added by E when a city has or buying a good it gets a bonus
+	Bit(Float) EfficiencyOrCrime             // Added by E -=crime +=efficiency
+	Int        HappyInc          = 0         // Added by E when a city has or buying a good it gets a bonus
+	Int        TradeGold         = 0
+	Int        TradeFood         = 0
+	Int        TradeProduction   = 0
+	Int        TradeScience      = 0         // Unused
 
 	Bit IsBonusGood
 	Bit IsStrategicGood
@@ -76,7 +76,7 @@ Terrain {
 		Trade,
 		ShallowWater,
 		Space
-	}		
+	}
 
 	# Map record to the pseudo-enum (TERRAIN_*, not an enum any more)
 	Bits InternalType {

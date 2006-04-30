@@ -31,6 +31,7 @@
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Made progress bar more fluently. (Aug 22nd 2005 Martin Gühmann)
 // - Removed old sprite state databases. (Aug 29th 2005 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,7 +46,6 @@
 #include "AdvanceRecord.h"
 #include "BuildingRecord.h"
 #include "Diffcly.h"
-#include "DiffDB.h"
 #include "TerrainRecord.h"
 #include "CivPaths.h"
 #include "XY_Coordinates.h"
@@ -55,7 +55,6 @@
 #include "civarchive.h"
 #include "gamefile.h"
 #include "citydata.h"
-#include "Diffcly.h"
 #include "UnitData.h"
 #include "RandGen.h"
 #include "TradePool.h"
@@ -205,7 +204,6 @@ extern  StringDB                    *g_theStringDB;
 extern  ConceptDB                   *g_theConceptDB;
 extern  ConstDB                     *g_theConstDB;
 extern  ThroneDB                    *g_theThroneDB;
-extern  DifficultyDB                *g_theDifficultyDB;
 extern  RandomGenerator             *g_rand;
 extern  TurnCount                   *g_turn; 
 extern  SelectedItem                *g_selected_item; 
@@ -371,7 +369,7 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 170 );
 
-	g_theDifficultyDB->Serialize(archive);
+//	g_theDifficultyDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 180 );
 

@@ -42,6 +42,7 @@
 // - Removed auto-tutorial on low difficulty - JJB 2005/06/28
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -63,7 +64,7 @@
 #include "UVDB.h"
 
 #include "BuildingRecord.h"
-#include "DiffDB.h"
+#include "DifficultyRecord.h"
 
 #include "moviedb.h"
 
@@ -183,38 +184,38 @@ extern Director *g_director;
 #include "ResourceRecord.h"
 
 
-StringDB                    *g_theStringDB=NULL; 
+StringDB                    *g_theStringDB=NULL;
 ConceptDB                   *g_theConceptDB = NULL;
-PollutionDatabase           *g_thePollutionDB=NULL ;
-GlobalWarmingDatabase       *g_theGWDB=NULL ;
-OzoneDatabase               *g_theUVDB=NULL ;
-ConstDB                     *g_theConstDB=NULL; 
+PollutionDatabase           *g_thePollutionDB=NULL;
+GlobalWarmingDatabase       *g_theGWDB=NULL;
+OzoneDatabase               *g_theUVDB=NULL;
+ConstDB                     *g_theConstDB=NULL;
 ThroneDB                    *g_theThroneDB = NULL;
-DifficultyDB                *g_theDifficultyDB = NULL; 
+
 
 PlayListDB                  *g_thePlayListDB = NULL;
 
-World                       *g_theWorld=NULL; 
-UnitPool                    *g_theUnitPool=NULL; 
+World                       *g_theWorld=NULL;
+UnitPool                    *g_theUnitPool=NULL;
 ArmyPool                    *g_theArmyPool=NULL;
 Player                      **g_player=NULL;
 PointerList<Player>         *g_deadPlayer = NULL;
-RandomGenerator             *g_rand=NULL; 
+RandomGenerator             *g_rand=NULL;
 TradePool                   *g_theTradePool = NULL;
 TradeOfferPool              *g_theTradeOfferPool = NULL;
 QuadTree<Unit>              *g_theUnitTree = NULL;
-Pollution                   *g_thePollution=NULL ;
-DiplomaticRequestPool       *g_theDiplomaticRequestPool=NULL ;
-MessagePool                 *g_theMessagePool=NULL ;
-CivilisationPool            *g_theCivilisationPool=NULL ;
-AgreementPool               *g_theAgreementPool=NULL ;
+Pollution                   *g_thePollution=NULL;
+DiplomaticRequestPool       *g_theDiplomaticRequestPool=NULL;
+MessagePool                 *g_theMessagePool=NULL;
+CivilisationPool            *g_theCivilisationPool=NULL;
+AgreementPool               *g_theAgreementPool=NULL;
 TerrainImprovementPool      *g_theTerrainImprovementPool = NULL;
 InstallationPool            *g_theInstallationPool = NULL;
 InstallationQuadTree        *g_theInstallationTree = NULL;
 
-TopTen                      *g_theTopTen = NULL ; 
-TurnCount                   *g_turn = NULL; 
-ProfileDB                   *g_theProfileDB = NULL; 
+TopTen                      *g_theTopTen = NULL;
+TurnCount                   *g_turn = NULL;
+ProfileDB                   *g_theProfileDB = NULL;
 MovieDB                     *g_theWonderMovieDB = NULL;
 MovieDB                     *g_theVictoryMovieDB = NULL;
 FilenameDB                  *g_theMessageIconFileDB = NULL;
@@ -247,9 +248,9 @@ MBCHAR g_installation_filename[_MAX_PATH];
 MBCHAR g_government_filename[_MAX_PATH];
 MBCHAR g_governmenticondb_filename[_MAX_PATH];
 MBCHAR g_wonder_filename[_MAX_PATH];
-MBCHAR g_constdb_filename[_MAX_PATH]; 
+MBCHAR g_constdb_filename[_MAX_PATH];
 MBCHAR g_pop_filename[_MAX_PATH];
-MBCHAR g_civilisation_filename[_MAX_PATH] ;
+MBCHAR g_civilisation_filename[_MAX_PATH];
 MBCHAR g_agedb_filename[_MAX_PATH];
 MBCHAR g_thronedb_filename[_MAX_PATH];
 MBCHAR g_conceptdb_filename[_MAX_PATH];
@@ -321,7 +322,7 @@ CIV_INDEX gameinit_GetCivForSlot(sint32 slot);
 
 
 
-extern HWND               gHwnd; 
+extern HWND               gHwnd;
 extern void               verifyYwrap();
 extern Splash             *g_splash;
 
@@ -482,9 +483,9 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 
 
 
-	Unit id; 
-	DifficultyDBRecord *drec = g_theDifficultyDB->Get(g_theProfileDB->GetDifficulty());
-	sint32 humanStart = drec->m_human_start_location;
+	Unit id;
+	const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theProfileDB->GetDifficulty());
+	sint32 humanStart = drec->GetHumanStartLocation();
 	if(humanStart > nPlayers - 1)
 		humanStart = nPlayers - 1;
 	while(player_start_list[humanStart].x < 0 && humanStart >= 0)
@@ -533,10 +534,10 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 			else 
 				if (g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT) 
 				{
-					nUnits = drec->m_ai_start_units;
+					nUnits = drec->GetAIStartUnits();
 				}
 
-				if (g_player_start_score[which] < sint32(drec->m_extra_settler_chance)) 
+				if (g_player_start_score[which] < sint32(drec->GetExtraSettlerChance()))
 
 				{
 					nUnits++;

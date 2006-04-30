@@ -659,10 +659,9 @@ public:
 	void Unconvert(BOOL makeUnhappy = TRUE);
 	sint32 IsConvertedTo() const { return m_convertedTo; }
 
-	BOOL HasResource(sint32 resource) const;
+	bool HasResource(sint32 resource) const;
 // added by E for resources Oct 2005
-	BOOL HasNeededGood(sint32 resource) const;
-	BOOL HasEitherGood(sint32 resource) const;
+	bool HasNeededGood(sint32 resource) const;
 #ifdef CTP1_TRADE
 	const Resources *GetResources() const { return &m_resources; }
 	const Resources *GetLocalResources() const { return &m_localResources; }
@@ -671,7 +670,7 @@ public:
 	const Resources *GetBuyingResources() const { return &m_buyingResources; }
 #endif
 
-	BOOL IsLocalResource( sint32 resource ) const;
+	bool IsLocalResource( sint32 resource ) const;
 	bool HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const; //EMOD 4-7-2006 bool if a city has imp in radius
 
 	
@@ -984,11 +983,11 @@ public:
 #endif
 
 	sint32 StyleHappinessIncr() const;
-	sint32 CityData::GoodHappinessIncr() const; //EMOD 4-27-2006
-	BOOL CityData::CanCollectGood(sint32 good) const; //EMOD 4-27-2006 
+	sint32 GoodHappinessIncr() const; //EMOD 4-27-2006
+	bool CanCollectGood(sint32 good) const; //EMOD 4-27-2006 
 
 private:
-    bool    IsBankrupting(void) const;
+	bool    IsBankrupting(void) const;
 	bool    PayWages(bool projectedOnly);
 };
 

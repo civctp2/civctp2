@@ -27,6 +27,7 @@
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Fixed SerializeDBs method to fix the database in saync check. (Aug 25th 2005 Martin Gühmann)
 // - Added the risk database for sync check. (Aug 29th 2005 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -53,7 +54,7 @@
 #include "CityStyleRecord.h"
 #include "CivilisationRecord.h"
 #include "ConstDB.h"                   // Old database
-#include "DiffDB.h"                    // Old database
+#include "DifficultyRecord.h"
 #include "DiplomacyRecord.h"
 #include "DiplomacyProposalRecord.h"
 #include "DiplomacyThreatRecord.h"
@@ -92,7 +93,6 @@ extern StringDB                *g_theStringDB;
 extern ProfileDB               *g_theProfileDB;
 
 extern ConstDB                 *g_theConstDB;
-extern DifficultyDB            *g_theDifficultyDB;
 extern GlobalWarmingDatabase   *g_theGWDB;
 extern OzoneDatabase           *g_theUVDB;
 extern PollutionDatabase       *g_thePollutionDB;
@@ -309,7 +309,7 @@ void NetCRC::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	if(num != remoteNum) {
 		// No idea what this should do, this can only happen if the 
-		// remote executable is compiled from a different bversion 
+		// remote executable is compiled from a different version 
 		// of the source code.
 		Error("Number of databases doesn't even match, sheesh!");
 		return;

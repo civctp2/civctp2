@@ -74,6 +74,7 @@
 // - added readiness modifier for building upkeep in CalcTotalBuildingUpkeep by E 2-24-2006
 // - Corrected error in adding settlers to cities that actually killed all units, 
 //   not just the settler. by E 4-10-2006
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -201,7 +202,7 @@
 
 #include "Score.h"
 
-#include "DiffDB.h"
+#include "DifficultyRecord.h"
 
 #include "EndGame.h"
 
@@ -289,7 +290,6 @@ extern InstallationQuadTree     *g_theInstallationTree;
 
 extern RadarMap                 *g_radarMap;
 extern CivApp                   *g_civApp;
-extern DifficultyDB             *g_theDifficultyDB;
 extern sint32                   g_numGoods; // To fix games with altered ressource database
 extern sint32                   *g_newGoods;
 
@@ -502,8 +502,8 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	if(!treatAsRobot) {
 		m_gold->SetLevel(m_difficulty->GetStartingGold());
 	} else {
-		m_gold->SetLevel(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->m_ai_start_gold);
-		m_materialPool->SetLevel(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->m_ai_start_public_works);
+		m_gold->SetLevel(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIStartGold());
+		m_materialPool->SetLevel(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIStartPublicWorks());
 	}
 
 	m_is_turn_over = FALSE;
@@ -546,12 +546,12 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_advances->SetOwner(m_owner);
 
 	sint32 maxAdvances;
-	DifficultyDBRecord *drec = g_theDifficultyDB->Get(diff);
+	const DifficultyRecord *drec = g_theDifficultyDB->Get(diff);
 
 	if(treatAsRobot) {
-		maxAdvances = drec->m_max_ai_advances;
+		maxAdvances = drec->GetMaxAIAdvances();
 	} else {
-		maxAdvances = drec->m_max_human_advances;
+		maxAdvances = drec->GetMaxHumanAdvances();
 	}
 
 	sint32 startAge = 0;
@@ -562,30 +562,30 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	sint32 someAdvanceIHave = -1;
 	if(startAge == 0) {
 		sint32 granted = 0;
-		PointerList<DiffAdvanceChance>::Walker walk(drec->m_advanceChances);
 
-		while(walk.IsValid()) {
+		const DifficultyRecord::AdvanceChances *dasrec = drec->GetAdvanceChances();
+		for(sint32 i = 0; i < dasrec->GetNumAdvanceChance(); ++i){
+			const DifficultyRecord::AdvanceChance *darec = dasrec->GetAdvanceChance(i);
 			sint32 chance;
 			if(treatAsRobot) {
-				chance = walk.GetObj()->m_aiChance;
+				chance = darec->GetAIChance();
 			} else {
-				chance = walk.GetObj()->m_humanChance;
+				chance = darec->GetHumanChance();
 			}
 
 			if(chance >= 100) {
-				m_advances->InitialAdvance(walk.GetObj()->m_adv);
-				someAdvanceIHave = walk.GetObj()->m_adv;
+				m_advances->InitialAdvance(darec->GetStartAdvanceIndex());
+				someAdvanceIHave = darec->GetStartAdvanceIndex();
 				granted++;
 			} else if(granted < maxAdvances) {
 				if(g_rand->Next(100) < chance) {
-					m_advances->InitialAdvance(walk.GetObj()->m_adv);
+					m_advances->InitialAdvance(darec->GetStartAdvanceIndex());
 					granted++;
-					someAdvanceIHave = walk.GetObj()->m_adv;
+					someAdvanceIHave = darec->GetStartAdvanceIndex();
 				}
 			}
-
-			walk.Next();
 		}
+
 	} else {
 		
 		sint32 i;
@@ -603,7 +603,7 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 				someAdvanceIHave = i;
 			}
 		}
-	}		
+	}
 	m_advances->ResetCanResearch(someAdvanceIHave);
 	uint8 *canResearch = m_advances->CanResearch();
 
@@ -4368,14 +4368,14 @@ void Player::Revolt(const sint32 idx)
 
 
 void Player::GiveAdvance(PLAYER_INDEX recipient, AdvanceType adv, CAUSE_SCI cause)
-	{
-    if (HasAdvance(adv)) { 
-		g_player[recipient]->m_advances->GiveAdvance(adv, cause) ;
-    } else { 
-        Assert(0); 
-        return; 
-    } 
+{
+	if (HasAdvance(adv)) {
+		g_player[recipient]->m_advances->GiveAdvance(adv, cause);
+	} else {
+		Assert(0);
+		return;
 	}
+}
 
 
 
@@ -4391,16 +4391,16 @@ void Player::GiveAdvance(PLAYER_INDEX recipient, AdvanceType adv, CAUSE_SCI caus
 
 
 void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
-	{
-    UnitDynamicArray    revealed;
+{
+	UnitDynamicArray    revealed;
 	MapPoint	p ;
-    BOOL revealed_unexplored; 
+	BOOL revealed_unexplored; 
 	Unit	u = m_all_units->Get(unit_idx).m_id ;
 
 	GetCapitolPos(p) ;
 	u.ResetUnitOwner(other_player, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
 	u.SetPosition(p, revealed, revealed_unexplored) ;
-	}
+}
 
 
 
@@ -4415,22 +4415,22 @@ void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 
 
 void Player::StopTradingWith(PLAYER_INDEX bannedRecipient)
-	{
+{
 	sint32	c,
-			cityNum ;
+			cityNum;
 
-	CityData	*cityData ;
+	CityData	*cityData;
 
-	cityNum = m_all_cities->Num() ;
+	cityNum = m_all_cities->Num();
 	for (c=0; c<cityNum; c++)
-		{
-		cityData = m_all_cities->Get(c).GetData()->GetCityData() ;
-		cityData->StopTradingWith(bannedRecipient) ;
-		}
-
+	{
+		cityData = m_all_cities->Get(c).GetData()->GetCityData();
+		cityData->StopTradingWith(bannedRecipient);
 	}
 
-	
+}
+
+
 
 
 
@@ -4443,10 +4443,10 @@ void Player::StopTradingWith(PLAYER_INDEX bannedRecipient)
 
 
 void Player::FormAlliance(PLAYER_INDEX ally)
-	{
-	g_player[ally]->SetAlliance(m_owner) ;
-	g_player[m_owner]->SetAlliance(ally) ;
-	}
+{
+	g_player[ally]->SetAlliance(m_owner);
+	g_player[m_owner]->SetAlliance(ally);
+}
 
 
 
@@ -4460,15 +4460,15 @@ void Player::FormAlliance(PLAYER_INDEX ally)
 
 
 void Player::SetAlliance(PLAYER_INDEX ally)
-	{
-	Assert(ally!=m_owner) ;
-	if (ally == m_owner)											
-		return ;
+{
+	Assert(ally!=m_owner);
+	if (ally == m_owner)
+		return;
 
-	mask_alliance |= (0x01<<ally) ;									
+	mask_alliance |= (0x01<<ally);
 
-    
-    SetDiplomaticState(ally, DIPLOMATIC_STATE_ALLIED);
+
+	SetDiplomaticState(ally, DIPLOMATIC_STATE_ALLIED);
 	
 	g_player[ally]->SetDiplomaticState(m_owner, DIPLOMATIC_STATE_ALLIED);
 }
@@ -4485,14 +4485,14 @@ void Player::SetAlliance(PLAYER_INDEX ally)
 
 
 void Player::ClearAlliance(PLAYER_INDEX ally)
-	{
-	Assert(ally!=m_owner) ;
-	if (ally == m_owner)											
-		return ;
+{
+	Assert(ally!=m_owner);
+	if (ally == m_owner)
+		return;
 
-	mask_alliance &= ~(0x01<<ally) ;								
+	mask_alliance &= ~(0x01<<ally);
 
-    SetDiplomaticState(ally, DIPLOMATIC_STATE_NEUTRAL);
+	SetDiplomaticState(ally, DIPLOMATIC_STATE_NEUTRAL);
 	
 	g_player[ally]->SetDiplomaticState(m_owner, DIPLOMATIC_STATE_NEUTRAL);
 }
@@ -4559,12 +4559,12 @@ void Player::BreakAlliance(PLAYER_INDEX ally)
 
 void Player::ExchangeMap(PLAYER_INDEX recipient)
 {
-	GiveMap(recipient) ;											
-	g_player[recipient]->GiveMap(m_owner) ;							
+	GiveMap(recipient);
+	g_player[recipient]->GiveMap(m_owner);
 	
 	
 	
-	}
+}
 
 
 
@@ -4578,12 +4578,12 @@ void Player::ExchangeMap(PLAYER_INDEX recipient)
 
 
 void Player::GiveMap(PLAYER_INDEX recipient)
-	{
-	g_player[recipient]->m_vision->MergeMap(m_vision) ;
+{
+	g_player[recipient]->m_vision->MergeMap(m_vision);
 	if(g_selected_item->GetVisiblePlayer() == recipient) {
 		g_director->AddCopyVision();
 	}
-	}
+}
 
 
 
@@ -4596,19 +4596,19 @@ void Player::GiveMap(PLAYER_INDEX recipient)
 
 
 BOOL Player::IsPollutionReduced(void)
-	{
+{
 
 #define k_DIPLOMATIC_REDUCE_POLLUTION_THRESHOLD		10
 
 	if (GetPollutionLevel() > k_DIPLOMATIC_REDUCE_POLLUTION_THRESHOLD)
 		{
-		DPRINTF(k_DBG_INFO, ("Player %d pollution is above threshold\n", m_owner)) ;
+		DPRINTF(k_DBG_INFO, ("Player %d pollution is above threshold\n", m_owner));
 
-		return (FALSE) ;
+		return (FALSE);
 		}
 
 	return (TRUE) ;
-	}
+}
 
 
 
@@ -4622,18 +4622,18 @@ BOOL Player::IsPollutionReduced(void)
 
 
 BOOL Player::IsViolatingPeace(PLAYER_INDEX player)
-	{
+{
 	if (mask_alliance & (0x01 << player))
-		{
+	{
 		DPRINTF(k_DBG_INFO, ("Player %d is violating Player %d\n", m_owner, player)) ;
 
 		return (TRUE) ;
-		}
+	}
 
 	DPRINTF(k_DBG_INFO, ("Player %d is not violating Player %d\n", m_owner, player)) ;
 
 	return (FALSE) ;
-	}
+}
 
 
 
@@ -4708,7 +4708,7 @@ Agreement Player::FindAgreement(const PLAYER_INDEX otherParty) const
 	return Agreement();
 }
 
-	
+
 
 
 
@@ -4724,9 +4724,9 @@ Agreement Player::FindAgreement(const PLAYER_INDEX otherParty) const
 
 
 BOOL Player::FulfillCaptureCityAgreement(Unit city)
-	{
+{
 
-return TRUE; 
+return TRUE;
 	AgreementDynamicArray	killList ;
 
 	sint32	i,
@@ -4738,10 +4738,10 @@ return TRUE;
 	
 	agreedNum = m_agreed->Num() ;
 	for (i=0; i<agreedNum; i++)
-		{
+	{
 		agree = m_agreed->Get(i) ;
 		if ((agree.GetAgreement() == AGREEMENT_TYPE_PACT_CAPTURE_CITY) && (agree.GetTarget() == city))
-			{
+		{
 			
 			so = new SlicObject("85PactFulfilledCityCapturedFirstParty") ;
 			so->AddRecipient(m_owner) ;
@@ -4770,12 +4770,12 @@ return TRUE;
 
 			g_slicEngine->Execute(so) ;
 			killList.Insert(agree) ;								
-			}
+		}
 		else
-			{
+		{
 			
 			Assert(FALSE) ;
-			}
+		}
 
 
 
@@ -4786,14 +4786,14 @@ return TRUE;
 		}
 
 	if (killList.Num())
-		{
+	{
 	    killList.KillList() ;		
 
 		return (TRUE) ;												
-		}
+	}
 
 	return (FALSE) ;												
-	}
+}
 
 
 
@@ -10235,7 +10235,7 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 
 			for(i = 0; i < m_all_cities->Num(); i++) {
 				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
-					if(m_all_cities->Access(i).AccessData()->GetCityData()->HasEitherGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+					if(m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
 						goodavail = true;
 						break;
 					}

@@ -35,6 +35,7 @@
 // - Costum structs can now include other custom structs, given both are
 //   direct members of the record class (Support for DiffDB). (Sep 15th 2005 Martin Gühmann)
 // - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
+// - Fixed subsubstruct generation so that it can be used in DiffDB.txt. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -912,6 +913,7 @@ void MemberClass::ExportDataCode(FILE *outfile, char *recordName)
 				break;
 
 			default:
+//				Assert(false);
 				break;
 			}
 		} else {
@@ -929,7 +931,15 @@ void MemberClass::ExportDataCode(FILE *outfile, char *recordName)
 				fprintf(outfile, "    return g_the%sDB->Get(m_%s[index]);\n", dat->m_subType, dat->m_name);
 				fprintf(outfile, "}\n\n");
 				break;
+			case DATUM_STRUCT:
+				fprintf(outfile, "const %sRecord::%s *%sRecord::%s::Get%s(sint32 index) const\n", recordName, dat->m_subType, recordName, m_name, dat->m_name);
+				fprintf(outfile, "{\n");
+				dat->ExportRangeCheck(outfile);
+				fprintf(outfile, "    return &m_%s[index];\n", dat->m_name);
+				fprintf(outfile, "}\n\n");
+				break;
 			default:
+				Assert(false);
 				break;
 			}
 		}

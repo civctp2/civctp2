@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The wonder tab of the info window.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "WonderTab.h"
@@ -25,7 +44,7 @@
 #include "ctp2_listitem.h"
 #include "ctp2_Static.h"
 #include "ctp2_Window.h"
-#include "DiffDB.h"
+#include "Diffcly.h"
 #include "EventTracker.h"
 #include "GameSettings.h"
 #include "IconRecord.h"
@@ -39,12 +58,11 @@
 #include "WonderTracker.h"
 
 
-extern C3UI *g_c3ui;
+extern C3UI                     *g_c3ui;
 
-static sint32			s_currentWonderDisplay;
-static c3_Button		*s_eventsInfoButton[17];
+static sint32                   s_currentWonderDisplay;
+static c3_Button                *s_eventsInfoButton[17];
 
-extern DifficultyDB *g_theDifficultyDB;
 extern PointerList<Player>      *g_deadPlayer;
 
 
@@ -119,7 +137,7 @@ void WonderTab::AddWonderItem(sint32 wonder, sint32 player, sint32 turn)
 			st = (ctp2_Static *)box->GetChildByIndex(2);
 			Assert(st);
 			if(st) {
-				const char *year = g_theDifficultyDB->GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turn);
+				const char *year = diffutil_GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turn);
 				if(year) {
 					st->SetText(year);
 				} else {

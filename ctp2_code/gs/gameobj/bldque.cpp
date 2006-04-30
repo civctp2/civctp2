@@ -23,6 +23,14 @@
 //
 //----------------------------------------------------------------------------
 //
+// Note:
+// The build queue start/stop reports are considering local modifications only.
+// When swapping the wonder production of 2 cities, you may get 4 reports.
+// To improve reporting further, the wonder start/stop changes would have to go 
+// through a "clearinghouse" for the entire civilisation.
+//
+//----------------------------------------------------------------------------
+//
 // Modifications from the original Activision code:
 //
 // - Allow infastructure and capitalisation when loading the build queue
@@ -34,16 +42,9 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Report (wonder) start of second item when deleting the first item.
 // - Improved handling of multiple build queue actions in a turn.
-//
-//----------------------------------------------------------------------------
-//
-// Note:
-// The build queue start/stop reports are considering local modifications only.
-// When swapping the wonder production of 2 cities, you may get 4 reports.
-// To improve reporting further, the wonder start/stop changes would have to go 
-// through a "clearinghouse" for the entire civilisation.
 // - Add PopCostsToBuild to allow for Units with higher than 1 (BuildingRemovesaPop) 
-// population cost to be removed from a city.
+//   population cost to be removed from a city.
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -83,7 +84,7 @@
 #include "profileDB.h"
 #include "WonderTracker.h"
 #include "wondermoviewin.h"
-#include "DiffDB.h"
+#include "Diffcly.h"
 #include "controlpanelwindow.h"     // g_controlPanel
 #include "director.h"
 #include "GameSettings.h"
@@ -96,10 +97,9 @@
 #include "buildingutil.h"
 #include "wonderutil.h"
 
-extern DifficultyDB     *g_theDifficultyDB;
 
-#define k_BUILDQUEUE_VERSION_MAJOR	0									
-#define k_BUILDQUEUE_VERSION_MINOR	1									
+#define k_BUILDQUEUE_VERSION_MAJOR	0
+#define k_BUILDQUEUE_VERSION_MINOR	1
 
 namespace
 {
@@ -1069,11 +1069,8 @@ void BuildQueue::RawInsertTail(sint32 cat, sint32 t, sint32 cost)
 		if(g_player[o]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
 			!(g_network.IsClient() && g_network.IsLocalPlayer(o))) {
 			sint32 age = 0; 
-			if(age >= k_MAX_AGES)
-				age = k_MAX_AGES - 1;
-			cost = sint32(double(cost) * 
-						   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->
-							GetAiProductionCostAdjustment(o, age)));
+			cost = static_cast<sint32>(static_cast<double>(cost) * 
+				diffutil_GetAiProductionCostAdjustment(g_theGameSettings->GetDifficulty(), o, age));
 		}
 	}
 
@@ -1098,14 +1095,11 @@ void BuildQueue::ReplaceHead(sint32 cat, sint32 t, sint32 cost)
 		sint32 o = m_city.GetOwner();
 		if(g_player[o]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
 			!(g_network.IsClient() && g_network.IsLocalPlayer(o))) {
-			sint32 age = 0; 
-			if(age >= k_MAX_AGES)
-				age = k_MAX_AGES - 1;
-			cost = sint32(double(cost) * 
-						   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->
-							GetAiProductionCostAdjustment(o,age)));
+			sint32 age = 0;
+			cost = static_cast<sint32>(static_cast<double>(cost) * 
+				diffutil_GetAiProductionCostAdjustment(g_theGameSettings->GetDifficulty(), o, age));
 		}
-        oldHead->m_cost     = cost; 
+        oldHead->m_cost     = cost;
 
         HandleProductionStart();
 

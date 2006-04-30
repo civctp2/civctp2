@@ -27,6 +27,7 @@
 // - Replced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Fixed the BeginTurn, DumpChecksum and DisplayCRC methods. (Aug 25th 2005 Martin Gühmann)
 // - Added the risk database. (Aug 29th 2005 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -54,7 +55,7 @@
 #include "CityStyleRecord.h"
 #include "CivilisationRecord.h"
 #include "ConstDB.h"                   // Old database
-#include "DiffDB.h"                    // Old database
+#include "DifficultyRecord.h"
 #include "DiplomacyRecord.h"
 #include "DiplomacyProposalRecord.h"
 #include "DiplomacyThreatRecord.h"
@@ -107,19 +108,18 @@ extern  RandomGenerator         *g_rand;
 
 // The Databases
 extern  ProfileDB               *g_theProfileDB;
-	extern	StringDB	*g_theStringDB ;
-	extern	ConstDB					*g_theConstDB ;
-	extern	GlobalWarmingDatabase	*g_theGWDB ;
-extern  DifficultyDB            *g_theDifficultyDB;
-	extern	OzoneDatabase			*g_theUVDB ;
+extern  StringDB    *g_theStringDB ;
+extern  ConstDB                 *g_theConstDB ;
+extern  GlobalWarmingDatabase   *g_theGWDB ;
+extern  OzoneDatabase           *g_theUVDB ;
 extern  PollutionDatabase       *g_thePollutionDB;
 
 // The Pools
 extern  AgreementPool           *g_theAgreementPool;
 extern  CivilisationPool        *g_theCivilisationPool;
-	extern	DiplomaticRequestPool	*g_theDiplomaticRequestPool ;
-	extern	MessagePool				*g_theMessagePool ;
-	extern  TerrainImprovementPool	*g_theTerrainImprovementPool;
+extern  DiplomaticRequestPool   *g_theDiplomaticRequestPool ;
+extern  MessagePool             *g_theMessagePool ;
+extern  TerrainImprovementPool  *g_theTerrainImprovementPool;
 extern  TradePool               *g_theTradePool;
 extern  TradeOfferPool          *g_theTradeOfferPool;
 extern  UnitPool                *g_theUnitPool;
@@ -132,7 +132,7 @@ extern  Player                  **g_player;
 extern  TopTen                  *g_theTopTen;
 
 
-	DataCheck	*g_dataCheck ;
+        DataCheck               *g_dataCheck;
 
 
 
@@ -145,9 +145,9 @@ extern  TopTen                  *g_theTopTen;
 
 
 void DataCheck_Init(void)
-	{ 
+{
 
-	} 
+}
 
 
 
@@ -161,17 +161,17 @@ void DataCheck_Init(void)
 
 
 void DataCheck_Requiem(void)
-	{
+{
 	
 	
 	
 	if (g_dataCheck)
-		{
-		delete g_dataCheck ;
-		g_dataCheck = NULL ;
-		}
-
+	{
+		delete g_dataCheck;
+		g_dataCheck = NULL;
 	}
+
+}
 
 
 
@@ -185,21 +185,21 @@ void DataCheck_Requiem(void)
 
 
 DataCheck::DataCheck()
-	{
-	sint32	i,
-			j ;
+{
+	sint32  i,
+	        j;
 
-    m_is_display = FALSE ;
+	m_is_display = FALSE ;
 	for (i=CRC_TYPE_MIN; i<CRC_TYPE_MAX; i++)
-		{
-        for (j=0; j<CRC_ARRAY_MAX; j++)
-			m_old_crc[i][j] = m_crc[i][j] = 0 ;
+	{
+		for (j=0; j<CRC_ARRAY_MAX; j++)
+			m_old_crc[i][j] = m_crc[i][j] = 0;
 
-		m_time[i] = 0 ;
-		}
-
-	m_total_time = 0 ;
+		m_time[i] = 0;
 	}
+
+	m_total_time = 0;
+}
 
 
 
@@ -224,43 +224,43 @@ DataCheck::DataCheck()
 
 
 void DataCheck::BeginTurn(void)
-	{
-    CheckSum	*check ;
-    
-    CivArchive	*archive ;
-    
-    sint32	i, j ;
-    
-	clock_t	start, finish ;
+{
+	CheckSum	*check;
+	
+	CivArchive	*archive;
+	
+	sint32	i, j;
+	
+	clock_t start, finish;
 
-    for(i=CRC_TYPE_MIN; i<CRC_TYPE_MAX; i++)
-        for (j=0; j<CRC_ARRAY_MAX; j++)
-            m_old_crc[i][j] = m_crc[i][j] ;
-        
-    
+	for(i=CRC_TYPE_MIN; i<CRC_TYPE_MAX; i++)
+		for (j=0; j<CRC_ARRAY_MAX; j++)
+			m_old_crc[i][j] = m_crc[i][j];
+		
+	
 	memset(&m_time, 0, CRC_TYPE_MAX * sizeof(uint32));
-    
-	start = clock() ;
-    archive = new CivArchive() ;
-    archive->SetStore() ;
-    check = new CheckSum() ;
+	
+	start = clock();
+	archive = new CivArchive();
+	archive->SetStore();
+	check = new CheckSum() ;
 	// No idea what was serialized here
-    check->AddData(archive->GetStream(), archive->StreamLen()) ;
-    check->Done(m_crc[CRC_TYPE_GLOBAL][CRC_ARRAY_0], m_crc[CRC_TYPE_GLOBAL][CRC_ARRAY_1], m_crc[CRC_TYPE_GLOBAL][CRC_ARRAY_2], m_crc[CRC_TYPE_GLOBAL][CRC_ARRAY_3]) ;
-    delete archive ;
-    delete check ;
-	finish = clock() ;
-	m_time[CRC_TYPE_GLOBAL] = finish - start ;
+	check->AddData(archive->GetStream(), archive->StreamLen());
+	check->Done(m_crc[CRC_TYPE_GLOBAL][CRC_ARRAY_0], m_crc[CRC_TYPE_GLOBAL][CRC_ARRAY_1], m_crc[CRC_TYPE_GLOBAL][CRC_ARRAY_2], m_crc[CRC_TYPE_GLOBAL][CRC_ARRAY_3]);
+	delete archive;
+	delete check;
+	finish = clock();
+	m_time[CRC_TYPE_GLOBAL] = finish - start;
 	// should be replaced by:
 //	CHECK_DB(???, CRC_TYPE_GLOBAL);
-  
+
 	CHECK_DB(g_rand, CRC_TYPE_RAND);
-    
-	start = clock() ;
-	archive = new CivArchive() ;
-    archive->SetStore() ;
-    check = new CheckSum() ;
-    
+
+	start = clock();
+	archive = new CivArchive();
+	archive->SetStore();
+	check = new CheckSum();
+
 	// Fill in missing databases
 	g_theAdvanceDB->Serialize(*archive);
 	g_theAdvanceBranchDB->Serialize(*archive);
@@ -271,8 +271,8 @@ void DataCheck::BeginTurn(void)
 	g_theCitySizeDB->Serialize(*archive);
 	g_theCityStyleDB->Serialize(*archive);
 	g_theCivilisationDB->Serialize(*archive);
-	g_theConstDB->Serialize(*archive) ;								
-	g_theDifficultyDB->Serialize(*archive) ;						
+	g_theConstDB->Serialize(*archive);                  // Old database
+	g_theDifficultyDB->Serialize(*archive);
 	g_theDiplomacyDB->Serialize(*archive);
 	g_theDiplomacyProposalDB->Serialize(*archive);
 	g_theDiplomacyThreatDB->Serialize(*archive);
@@ -282,7 +282,7 @@ void DataCheck::BeginTurn(void)
 	g_theIconDB->Serialize(*archive);
 	g_theImprovementListDB->Serialize(*archive);
 	g_theOrderDB->Serialize(*archive);
-	g_theUVDB->Serialize(*archive) ;								
+	g_theUVDB->Serialize(*archive);                     // Old database
 	g_thePersonalityDB->Serialize(*archive);
 	g_thePollutionDB->Serialize(*archive);
 	g_thePopDB->Serialize(*archive);
@@ -299,39 +299,39 @@ void DataCheck::BeginTurn(void)
 	g_theWonderDB->Serialize(*archive);
 	g_theWonderBuildListDB->Serialize(*archive);
 
-    check->AddData(archive->GetStream(), archive->StreamLen()) ;
-    check->Done(m_crc[CRC_TYPE_DB][CRC_ARRAY_0], m_crc[CRC_TYPE_DB][CRC_ARRAY_1], m_crc[CRC_TYPE_DB][CRC_ARRAY_2], m_crc[CRC_TYPE_DB][CRC_ARRAY_3]) ;
-    delete archive ;
-    delete check ;
-	finish = clock() ;
-	m_time[CRC_TYPE_DB] = finish - start ;
+	check->AddData(archive->GetStream(), archive->StreamLen());
+	check->Done(m_crc[CRC_TYPE_DB][CRC_ARRAY_0], m_crc[CRC_TYPE_DB][CRC_ARRAY_1], m_crc[CRC_TYPE_DB][CRC_ARRAY_2], m_crc[CRC_TYPE_DB][CRC_ARRAY_3]);
+	delete archive;
+	delete check;
+	finish = clock();
+	m_time[CRC_TYPE_DB] = finish - start;
 
 	// Continue with single database check
-    
-	start = clock() ;
-    archive = new CivArchive() ;
-    archive->SetStore() ;
-    check = new CheckSum() ;
+	
+	start = clock();
+	archive = new CivArchive();
+	archive->SetStore();
+	check = new CheckSum();
 //	g_theProfileDB->Serialize(*archive);
-    check->AddData(archive->GetStream(), archive->StreamLen()) ;
-    check->Done(m_crc[CRC_TYPE_PROFILE_DB][CRC_ARRAY_0], m_crc[CRC_TYPE_PROFILE_DB][CRC_ARRAY_1], m_crc[CRC_TYPE_PROFILE_DB][CRC_ARRAY_2], m_crc[CRC_TYPE_PROFILE_DB][CRC_ARRAY_3]) ;
-    delete archive ;
-    delete check ;
-	finish = clock() ;
-	m_time[CRC_TYPE_PROFILE_DB] = finish - start ;
+	check->AddData(archive->GetStream(), archive->StreamLen());
+	check->Done(m_crc[CRC_TYPE_PROFILE_DB][CRC_ARRAY_0], m_crc[CRC_TYPE_PROFILE_DB][CRC_ARRAY_1], m_crc[CRC_TYPE_PROFILE_DB][CRC_ARRAY_2], m_crc[CRC_TYPE_PROFILE_DB][CRC_ARRAY_3]);
+	delete archive;
+	delete check;
+	finish = clock();
+	m_time[CRC_TYPE_PROFILE_DB] = finish - start;
 
-    
-	start = clock() ;
-    archive = new CivArchive() ;
-    archive->SetStore() ;
-    check = new CheckSum() ;
+	
+	start = clock();
+	archive = new CivArchive();
+	archive->SetStore();
+	check = new CheckSum();
 //	g_theStringDB->Serialize(*archive);
-    check->AddData(archive->GetStream(), archive->StreamLen()) ;
-    check->Done(m_crc[CRC_TYPE_STRING_DB][CRC_ARRAY_0], m_crc[CRC_TYPE_STRING_DB][CRC_ARRAY_1], m_crc[CRC_TYPE_STRING_DB][CRC_ARRAY_2], m_crc[CRC_TYPE_STRING_DB][CRC_ARRAY_3]) ;
-    delete archive ;
-    delete check ;
+	check->AddData(archive->GetStream(), archive->StreamLen());
+	check->Done(m_crc[CRC_TYPE_STRING_DB][CRC_ARRAY_0], m_crc[CRC_TYPE_STRING_DB][CRC_ARRAY_1], m_crc[CRC_TYPE_STRING_DB][CRC_ARRAY_2], m_crc[CRC_TYPE_STRING_DB][CRC_ARRAY_3]);
+	delete archive ;
+	delete check ;
 	finish = clock() ;
-	m_time[CRC_TYPE_STRING_DB] = finish - start ;
+	m_time[CRC_TYPE_STRING_DB] = finish - start;
 
 	
 	CHECK_DB(g_theAdvanceDB, CRC_TYPE_ADVANCE_DB);
@@ -389,26 +389,26 @@ void DataCheck::BeginTurn(void)
 	CHECK_DB(g_theTopTen, CRC_TYPE_TOPTEN);
 	CHECK_DB(g_theWorld, CRC_TYPE_WORLD);
 	
-	start = clock() ;
-    archive = new CivArchive() ;
-    archive->SetStore() ;
-    check = new CheckSum() ;
-    for (i=0; i<k_MAX_PLAYERS; i++) {
+	start = clock();
+	archive = new CivArchive();
+	archive->SetStore();
+	check = new CheckSum();
+	for (i=0; i<k_MAX_PLAYERS; i++) {
 		if(!g_player[i]) continue;
-        g_player[i]->Serialize(*archive) ;
+		g_player[i]->Serialize(*archive);
 	}
-    
-    check->AddData(archive->GetStream(), archive->StreamLen()) ;
-    check->Done(m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_0], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_1], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_2], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_3]) ;
-    delete archive ;
-    delete check ;
-	finish = clock() ;
+	
+	check->AddData(archive->GetStream(), archive->StreamLen());
+	check->Done(m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_0], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_1], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_2], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_3]);
+	delete archive;
+	delete check;
+	finish = clock();
 	m_time[CRC_TYPE_PLAYER] = finish - start ;
-    
-	m_total_time = 0 ;
+
+	m_total_time = 0;
 	for(i = 0; i < CRC_ARRAY_MAX; ++i)
-		m_total_time += m_time[i] ;
-	}
+		m_total_time += m_time[i];
+}
 
 
 
@@ -423,15 +423,15 @@ void DataCheck::BeginTurn(void)
 
 
 sint32 DataCheck::IsWorldChanged () const
-	{ 
-    sint32	i ;
+{
+	sint32 i;
 
-    for (i=0; i<CRC_ARRAY_MAX; i++)
-        if (m_crc[CRC_TYPE_WORLD][i] != m_old_crc[CRC_TYPE_WORLD][i])
-            return (TRUE) ;
-    
-	return (FALSE) ;
-	}
+	for (i=0; i<CRC_ARRAY_MAX; i++)
+		if (m_crc[CRC_TYPE_WORLD][i] != m_old_crc[CRC_TYPE_WORLD][i])
+			return (TRUE);
+
+	return (FALSE);
+}
 
 
 
@@ -446,15 +446,15 @@ sint32 DataCheck::IsWorldChanged () const
 
 
 sint32 DataCheck::IsGlobalChanged () const 
-	{
-    sint32	i ;
+{
+	sint32 i;
 
-    for (i=0; i<CRC_ARRAY_MAX; i++)
-        if (m_crc[CRC_TYPE_GLOBAL][i] != m_old_crc[CRC_TYPE_GLOBAL][i])
-            return (TRUE) ;
+	for (i=0; i<CRC_ARRAY_MAX; i++)
+		if (m_crc[CRC_TYPE_GLOBAL][i] != m_old_crc[CRC_TYPE_GLOBAL][i])
+			return (TRUE);
 
-	return (FALSE) ;
-	}
+	return (FALSE);
+}
 
 
 
@@ -470,13 +470,12 @@ sint32 DataCheck::IsGlobalChanged () const
 
 
 sint32 DataCheck::IsRandChanged () const 
+{
+	sint32 i;
 
-{ 
-    sint32	i;
-
-    for (i=0; i<CRC_ARRAY_MAX; i++) {
-        if (m_crc[CRC_TYPE_RAND][i] != m_old_crc[CRC_TYPE_RAND][i]) {
-            return TRUE;
+	for (i=0; i<CRC_ARRAY_MAX; i++) {
+		if (m_crc[CRC_TYPE_RAND][i] != m_old_crc[CRC_TYPE_RAND][i]) {
+			return TRUE;
 		}
 	}
 
@@ -496,15 +495,15 @@ sint32 DataCheck::IsRandChanged () const
 
 
 sint32 DataCheck::IsDBChanged () const
-	{ 
-    sint32	i ;
+{
+	sint32	i;
 
-    for (i=0; i<CRC_ARRAY_MAX; i++)
-        if (m_crc[CRC_TYPE_DB][i] != m_old_crc[CRC_TYPE_DB][i])
-            return (TRUE) ;
+	for (i=0; i<CRC_ARRAY_MAX; i++)
+		if (m_crc[CRC_TYPE_DB][i] != m_old_crc[CRC_TYPE_DB][i])
+			return (TRUE);
 
 	return (FALSE) ;
-	}
+}
 
 
 
@@ -519,16 +518,15 @@ sint32 DataCheck::IsDBChanged () const
 
 
 sint32 DataCheck::IsPlayerChanged () const
+{
+	sint32 i;
 
-{ 
-    sint32	i; 
-
-    for (i=0; i<CRC_ARRAY_MAX; i++) { 
-        if (m_crc[CRC_TYPE_PLAYER][i] != m_old_crc[CRC_TYPE_PLAYER][i]) {
-            return TRUE;
-        }
-    }
-    return FALSE;
+	for (i=0; i<CRC_ARRAY_MAX; i++) {
+		if (m_crc[CRC_TYPE_PLAYER][i] != m_old_crc[CRC_TYPE_PLAYER][i]) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 
@@ -543,9 +541,8 @@ sint32 DataCheck::IsPlayerChanged () const
 
 
 sint32 DataCheck::IsPopChanged () const
-
-{ 
-    return FALSE;
+{
+	return FALSE;
 }
 
 
@@ -560,16 +557,15 @@ sint32 DataCheck::IsPopChanged () const
 
 
 sint32 DataCheck::IsUnitChanged () const
+{
+	sint32 i;
 
-{ 
-    sint32	i ;
-
-    for (i=0; i<CRC_ARRAY_MAX; i++) { 
-        if (m_crc[CRC_TYPE_UNITPOOL][i] != m_old_crc[CRC_TYPE_UNITPOOL][i]) {
-            return TRUE;
-        }
-    }
-    return FALSE;
+	for (i=0; i<CRC_ARRAY_MAX; i++) {
+		if (m_crc[CRC_TYPE_UNITPOOL][i] != m_old_crc[CRC_TYPE_UNITPOOL][i]) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 
@@ -585,19 +581,19 @@ sint32 DataCheck::IsUnitChanged () const
 
 
 BOOL DataCheck::GetCRC(CRC_TYPE group, uint32 &a, uint32 &b, uint32 &c, uint32 &d)
-	{
-	Assert(group>=CRC_TYPE_MIN) ;
-	Assert(group<CRC_TYPE_MAX) ;
+{
+	Assert(group>=CRC_TYPE_MIN);
+	Assert(group<CRC_TYPE_MAX);
 	if ((group<CRC_TYPE_MIN) || (group>=CRC_TYPE_MAX))
-		return (FALSE) ;
+		return (FALSE);
 
-	a = m_crc[group][CRC_ARRAY_0] ;
-	b = m_crc[group][CRC_ARRAY_1] ;
-	c = m_crc[group][CRC_ARRAY_2] ;
-	d = m_crc[group][CRC_ARRAY_3] ;
+	a = m_crc[group][CRC_ARRAY_0];
+	b = m_crc[group][CRC_ARRAY_1];
+	c = m_crc[group][CRC_ARRAY_2];
+	d = m_crc[group][CRC_ARRAY_3];
 
-	return (TRUE) ;
-	}
+	return (TRUE);
+}
 
 
 
@@ -612,9 +608,9 @@ BOOL DataCheck::GetCRC(CRC_TYPE group, uint32 &a, uint32 &b, uint32 &c, uint32 &
 
 
 void DataCheck::SetDisplay(sint32 val)
-	{ 
-    m_is_display = val ;
-	}
+{
+	m_is_display = val;
+}
 
 
 
@@ -629,16 +625,16 @@ void DataCheck::SetDisplay(sint32 val)
 
 
 sint32 DataCheck::IsChanged(sint32 t) const 
-	{
-    sint32	i ;
+{
+	sint32 i;
 
-	Assert((t>=0) && (t<CRC_TYPE_MAX)) ;
-    for(i=0; i<CRC_ARRAY_MAX; i++)
-        if (m_crc[t][i] != m_old_crc[t][i])
-            return (TRUE) ;
+	Assert((t>=0) && (t<CRC_TYPE_MAX));
+	for(i=0; i<CRC_ARRAY_MAX; i++)
+		if (m_crc[t][i] != m_old_crc[t][i])
+			return (TRUE);
 
-	return (FALSE) ; 
-	}
+	return (FALSE);
+}
 
  
 
@@ -649,20 +645,20 @@ sint32 DataCheck::IsChanged(sint32 t) const
 
 
 void DataCheck::draw_crc(aui_Surface *surf, char str1[80], sint32 t, sint32 x, sint32 y) const
+{
+	MBCHAR	str2[80];
+
+	primitives_DrawText(surf, x, y, (MBCHAR *)str1, 0, 0);
+
+	if (IsChanged(t))
 	{
-    MBCHAR	str2[80] ;
-
-    primitives_DrawText(surf, x, y, (MBCHAR *)str1, 0, 0) ;
-
-    if (IsChanged(t))
-		{
-        sprintf(str2, "***") ;
-      	primitives_DrawText(surf, x+100, y, (MBCHAR *)str2, 3050, 1) ;
-	    }
-
-    sprintf (str2, "%08X %08X %08X %08X  %4.2lf", m_crc[t][CRC_ARRAY_0], m_crc[t][CRC_ARRAY_1], m_crc[t][CRC_ARRAY_2], m_crc[t][CRC_ARRAY_3], (double)(m_time[t]) / CLOCKS_PER_SEC) ;
- 	primitives_DrawText(surf, x+125, y, (MBCHAR *)str2, 0, 0) ;
+		sprintf(str2, "***");
+		primitives_DrawText(surf, x+100, y, (MBCHAR *)str2, 3050, 1);
 	}
+
+	sprintf (str2, "%08X %08X %08X %08X  %4.2lf", m_crc[t][CRC_ARRAY_0], m_crc[t][CRC_ARRAY_1], m_crc[t][CRC_ARRAY_2], m_crc[t][CRC_ARRAY_3], (double)(m_time[t]) / CLOCKS_PER_SEC);
+	primitives_DrawText(surf, x+125, y, (MBCHAR *)str2, 0, 0);
+}
 
 
 
@@ -673,14 +669,14 @@ void DataCheck::draw_crc(aui_Surface *surf, char str1[80], sint32 t, sint32 x, s
 
 
 void DataCheck::draw_time(aui_Surface *surf, sint32 x, sint32 y) const
-	{
-    MBCHAR	s[80] ;
+{
+	MBCHAR s[80];
 
-    sprintf(s, "Total time %4.2lf", (double)(m_total_time) / CLOCKS_PER_SEC) ;
- 	primitives_DrawText(surf, x, y, s, 0, 0) ;
-	}
+	sprintf(s, "Total time %4.2lf", (double)(m_total_time) / CLOCKS_PER_SEC);
+	primitives_DrawText(surf, x, y, s, 0, 0);
+}
 
-	
+
 
 
 
@@ -689,13 +685,13 @@ void DataCheck::draw_time(aui_Surface *surf, sint32 x, sint32 y) const
 
 
 void DataCheck::DisplayCRC(aui_Surface *surf) const 
-	{
-    sint32	x=100,
-			y=80,
-			d=16;
+{
+	sint32 x=100,
+	       y=80,
+	       d=16;
 
-    if (!m_is_display)
-        return ;
+	if (!m_is_display)
+		return ;
 
 	if(m_is_display > 1) {
 		draw_crc(surf, "DB", CRC_TYPE_DB, x, y);                                      y+=d;
@@ -743,9 +739,9 @@ void DataCheck::DisplayCRC(aui_Surface *surf) const
 		draw_crc(surf, "WONDER_BUILD_LIST", CRC_TYPE_WONDER_BUILD_LIST_DB, x, y);     y+=25;
 	}
 
-	x+=300 ;
+	x+=300;
 	draw_crc(surf, "GLOBAL", CRC_TYPE_GLOBAL, x, y);                                     y+=d;
-	draw_crc(surf, "RAND", CRC_TYPE_RAND, x, y);                                       	 y+=d;
+	draw_crc(surf, "RAND", CRC_TYPE_RAND, x, y);                                         y+=d;
 	draw_crc(surf, "AGREEMENT_POOL", CRC_TYPE_AGREEMENTPOOL, x, y);                      y+=d;
 	draw_crc(surf, "CIVILISATION_POOL", CRC_TYPE_CIVILISATIONPOOL, x, y);                y+=d;
 	draw_crc(surf, "DIPLOMACY_REQUEST_POOL", CRC_TYPE_DIPLOMATICREQUESTPOOL, x, y);      y+=d;
@@ -762,13 +758,13 @@ void DataCheck::DisplayCRC(aui_Surface *surf) const
 	draw_crc(surf, "WORLD", CRC_TYPE_WORLD, x, y);                                       y+=d;
 	draw_crc(surf, "PLAYER", CRC_TYPE_PLAYER, x, y);                                     y+=d;
 
-	draw_time(surf, x, y) ;
-	}
+	draw_time(surf, x, y);
+}
 
 void DataCheck::DumpSingleCRC(MBCHAR *grp, sint32 t)
-	{
+{
 	DPRINTF(k_DBG_INFO, ("%s     %08X %08X %08X %08X  %4.2lf\n", grp, m_crc[t][CRC_ARRAY_0], m_crc[t][CRC_ARRAY_1], m_crc[t][CRC_ARRAY_2], m_crc[t][CRC_ARRAY_3], (double)(m_time[t]) / CLOCKS_PER_SEC)) ;
-	}
+}
 
 
 
@@ -779,68 +775,68 @@ void DataCheck::DumpSingleCRC(MBCHAR *grp, sint32 t)
 
 
 void DataCheck::DumpChecksum(void)
-	{
-	DumpSingleCRC("GLOBAL", CRC_TYPE_GLOBAL);
-	DumpSingleCRC("RAND", CRC_TYPE_RAND);
-	DumpSingleCRC("DB", CRC_TYPE_DB) ;
-	DumpSingleCRC("PROFILE", CRC_TYPE_PROFILE_DB) ;
-	DumpSingleCRC("STRING", CRC_TYPE_STRING_DB) ;
-	DumpSingleCRC("ADVANCE", CRC_TYPE_ADVANCE_DB) ;
-	DumpSingleCRC("ADVANCE_BRANCH", CRC_TYPE_ADVANCE_BRANCH_DB);
-	DumpSingleCRC("ADVANCE_LIST", CRC_TYPE_ADVANCE_LIST_DB);
-	DumpSingleCRC("AGE", CRC_TYPE_AGE_DB);
-	DumpSingleCRC("AGE_CITY_STYLE", CRC_TYPE_AGE_CITY_STYLE_DB);
-	DumpSingleCRC("BUILD_LIST_SEQUENCE", CRC_TYPE_BUILD_LIST_SEQUENCE_DB);
-	DumpSingleCRC("BUILDING", CRC_TYPE_BUILDING_DB);
-	DumpSingleCRC("BUILDING_BUILD_LIST", CRC_TYPE_BUILDING_BUILD_LIST_DB);
-	DumpSingleCRC("CITY_SIZE", CRC_TYPE_CITY_SIZE_DB);
-	DumpSingleCRC("CITY_STYLE", CRC_TYPE_CITY_STYLE_DB);
-	DumpSingleCRC("CIVILISATION", CRC_TYPE_CIVILISATION_DB);
-	DumpSingleCRC("CONST", CRC_TYPE_CONST_DB) ;
-	DumpSingleCRC("DIFFICULTY", CRC_TYPE_DIFFICULTY_DB) ;
-	DumpSingleCRC("DIPLOMACY", CRC_TYPE_DIPLOMACY_DB);
-	DumpSingleCRC("DIPLOMACY_PROPOSAL", CRC_TYPE_DIPLOMACY_PROPOSAL_DB);
-	DumpSingleCRC("DIPLOMACY_THREAT", CRC_TYPE_DIPLOMACY_THREAT_DB);
-	DumpSingleCRC("END_GAME_OBJECT", CRC_TYPE_END_GAME_OBJECT_DB);
-	DumpSingleCRC("FEAT", CRC_TYPE_FEAT_DB);
-	DumpSingleCRC("GLOBAL_WARMING", CRC_TYPE_GLOBAL_WARMING_DB);
-	DumpSingleCRC("GOAL", CRC_TYPE_GOAL_DB);
-	DumpSingleCRC("GOVERNMENT", CRC_TYPE_GOVERNMENT_DB);
-	DumpSingleCRC("ICON", CRC_TYPE_ICON_DB);
-	DumpSingleCRC("IMPROVEMENT_LIST", CRC_TYPE_IMPROVEMENT_LIST_DB);
-	DumpSingleCRC("ORDER", CRC_TYPE_ORDER_DB);
-	DumpSingleCRC("OZONE", CRC_TYPE_OZONE_DB);
-	DumpSingleCRC("PERSONALITY", CRC_TYPE_PERSONALITY_DB);
-	DumpSingleCRC("POLLUTION", CRC_TYPE_POLLUTION_DB);
-	DumpSingleCRC("POP", CRC_TYPE_POPULATION_DB);
-	DumpSingleCRC("RESOURCE", CRC_TYPE_RESOURCE_DB);
-	DumpSingleCRC("RISK", CRC_TYPE_RISK_DB);
-	DumpSingleCRC("SOUND", CRC_TYPE_SOUND_DB);
-	DumpSingleCRC("SPECIAL_ATTACK_INFO", CRC_TYPE_SPECIAL_ATTACK_INFO_DB);
-	DumpSingleCRC("SPECIAL_EFFECT", CRC_TYPE_SPECIAL_EFFECT_DB);
-	DumpSingleCRC("SPRITE", CRC_TYPE_SPRITE_DB);
-	DumpSingleCRC("STRATEGY", CRC_TYPE_STRATEGY_DB);
-	DumpSingleCRC("TERRAIN", CRC_TYPE_TERRAIN_DB);
-	DumpSingleCRC("UNIT", CRC_TYPE_UNIT_DB);
-	DumpSingleCRC("UNIT_BUILD_LIST", CRC_TYPE_UNIT_BUILD_LIST_DB);
-	DumpSingleCRC("WONDER", CRC_TYPE_WONDER_DB);
-	DumpSingleCRC("WONDER_BUILD_LIST", CRC_TYPE_WONDER_BUILD_LIST_DB);
+{
+	DumpSingleCRC("GLOBAL",                   CRC_TYPE_GLOBAL);
+	DumpSingleCRC("RAND",                     CRC_TYPE_RAND);
+	DumpSingleCRC("DB",                       CRC_TYPE_DB);
+	DumpSingleCRC("PROFILE",                  CRC_TYPE_PROFILE_DB);
+	DumpSingleCRC("STRING",                   CRC_TYPE_STRING_DB);
+	DumpSingleCRC("ADVANCE",                  CRC_TYPE_ADVANCE_DB);
+	DumpSingleCRC("ADVANCE_BRANCH",           CRC_TYPE_ADVANCE_BRANCH_DB);
+	DumpSingleCRC("ADVANCE_LIST",             CRC_TYPE_ADVANCE_LIST_DB);
+	DumpSingleCRC("AGE",                      CRC_TYPE_AGE_DB);
+	DumpSingleCRC("AGE_CITY_STYLE",           CRC_TYPE_AGE_CITY_STYLE_DB);
+	DumpSingleCRC("BUILD_LIST_SEQUENCE",      CRC_TYPE_BUILD_LIST_SEQUENCE_DB);
+	DumpSingleCRC("BUILDING",                 CRC_TYPE_BUILDING_DB);
+	DumpSingleCRC("BUILDING_BUILD_LIST",      CRC_TYPE_BUILDING_BUILD_LIST_DB);
+	DumpSingleCRC("CITY_SIZE",                CRC_TYPE_CITY_SIZE_DB);
+	DumpSingleCRC("CITY_STYLE",               CRC_TYPE_CITY_STYLE_DB);
+	DumpSingleCRC("CIVILISATION",             CRC_TYPE_CIVILISATION_DB);
+	DumpSingleCRC("CONST",                    CRC_TYPE_CONST_DB);
+	DumpSingleCRC("DIFFICULTY",               CRC_TYPE_DIFFICULTY_DB);
+	DumpSingleCRC("DIPLOMACY",                CRC_TYPE_DIPLOMACY_DB);
+	DumpSingleCRC("DIPLOMACY_PROPOSAL",       CRC_TYPE_DIPLOMACY_PROPOSAL_DB);
+	DumpSingleCRC("DIPLOMACY_THREAT",         CRC_TYPE_DIPLOMACY_THREAT_DB);
+	DumpSingleCRC("END_GAME_OBJECT",          CRC_TYPE_END_GAME_OBJECT_DB);
+	DumpSingleCRC("FEAT",                     CRC_TYPE_FEAT_DB);
+	DumpSingleCRC("GLOBAL_WARMING",           CRC_TYPE_GLOBAL_WARMING_DB);
+	DumpSingleCRC("GOAL",                     CRC_TYPE_GOAL_DB);
+	DumpSingleCRC("GOVERNMENT",               CRC_TYPE_GOVERNMENT_DB);
+	DumpSingleCRC("ICON",                     CRC_TYPE_ICON_DB);
+	DumpSingleCRC("IMPROVEMENT_LIST",         CRC_TYPE_IMPROVEMENT_LIST_DB);
+	DumpSingleCRC("ORDER",                    CRC_TYPE_ORDER_DB);
+	DumpSingleCRC("OZONE",                    CRC_TYPE_OZONE_DB);
+	DumpSingleCRC("PERSONALITY",              CRC_TYPE_PERSONALITY_DB);
+	DumpSingleCRC("POLLUTION",                CRC_TYPE_POLLUTION_DB);
+	DumpSingleCRC("POP",                      CRC_TYPE_POPULATION_DB);
+	DumpSingleCRC("RESOURCE",                 CRC_TYPE_RESOURCE_DB);
+	DumpSingleCRC("RISK",                     CRC_TYPE_RISK_DB);
+	DumpSingleCRC("SOUND",                    CRC_TYPE_SOUND_DB);
+	DumpSingleCRC("SPECIAL_ATTACK_INFO",      CRC_TYPE_SPECIAL_ATTACK_INFO_DB);
+	DumpSingleCRC("SPECIAL_EFFECT",           CRC_TYPE_SPECIAL_EFFECT_DB);
+	DumpSingleCRC("SPRITE",                   CRC_TYPE_SPRITE_DB);
+	DumpSingleCRC("STRATEGY",                 CRC_TYPE_STRATEGY_DB);
+	DumpSingleCRC("TERRAIN",                  CRC_TYPE_TERRAIN_DB);
+	DumpSingleCRC("UNIT",                     CRC_TYPE_UNIT_DB);
+	DumpSingleCRC("UNIT_BUILD_LIST",          CRC_TYPE_UNIT_BUILD_LIST_DB);
+	DumpSingleCRC("WONDER",                   CRC_TYPE_WONDER_DB);
+	DumpSingleCRC("WONDER_BUILD_LIST",        CRC_TYPE_WONDER_BUILD_LIST_DB);
 
-	DumpSingleCRC("AGREEMENT_POOL", CRC_TYPE_AGREEMENTPOOL);
-	DumpSingleCRC("CIVILISATION_POOL", CRC_TYPE_CIVILISATIONPOOL);
-	DumpSingleCRC("DIPLOMACY_REQUEST_POOL", CRC_TYPE_DIPLOMATICREQUESTPOOL);
-	DumpSingleCRC("TERRAINIMPROVEMENT_POOL", CRC_TYPE_TERRAIN_IMPROVEMENT_POOL);
-	DumpSingleCRC("MESSAGE_POOL", CRC_TYPE_MESSAGEPOOL);
+	DumpSingleCRC("AGREEMENT_POOL",           CRC_TYPE_AGREEMENTPOOL);
+	DumpSingleCRC("CIVILISATION_POOL",        CRC_TYPE_CIVILISATIONPOOL);
+	DumpSingleCRC("DIPLOMACY_REQUEST_POOL",   CRC_TYPE_DIPLOMATICREQUESTPOOL);
+	DumpSingleCRC("TERRAINIMPROVEMENT_POOL",  CRC_TYPE_TERRAIN_IMPROVEMENT_POOL);
+	DumpSingleCRC("MESSAGE_POOL",             CRC_TYPE_MESSAGEPOOL);
 	DumpSingleCRC("TERRAIN_IMPROVEMENT_POOL", CRC_TYPE_TERRAIN_IMPROVEMENT_POOL);
-	DumpSingleCRC("TRADE_POOL", CRC_TYPE_TRADEPOOL);
-	DumpSingleCRC("TRADEOFFER_POOL", CRC_TYPE_TRADEOFFERPOOL);
-	DumpSingleCRC("UNIT_POOL", CRC_TYPE_UNITPOOL);
+	DumpSingleCRC("TRADE_POOL",               CRC_TYPE_TRADEPOOL);
+	DumpSingleCRC("TRADEOFFER_POOL",          CRC_TYPE_TRADEOFFERPOOL);
+	DumpSingleCRC("UNIT_POOL",                CRC_TYPE_UNITPOOL);
 
-	DumpSingleCRC("POLLUTION", CRC_TYPE_POLLUTION);
-	DumpSingleCRC("SELECTED", CRC_TYPE_SELECTED_ITEM);
-	DumpSingleCRC("TOPTEN", CRC_TYPE_TOPTEN);
-	DumpSingleCRC("WORLD", CRC_TYPE_WORLD) ;
-	DumpSingleCRC("PLAYER", CRC_TYPE_PLAYER) ;
+	DumpSingleCRC("POLLUTION",                CRC_TYPE_POLLUTION);
+	DumpSingleCRC("SELECTED",                 CRC_TYPE_SELECTED_ITEM);
+	DumpSingleCRC("TOPTEN",                   CRC_TYPE_TOPTEN);
+	DumpSingleCRC("WORLD",                    CRC_TYPE_WORLD);
+	DumpSingleCRC("PLAYER",                   CRC_TYPE_PLAYER);
 
-	DPRINTF(k_DBG_INFO, ("Total time %4.2lf\n", (double)(m_total_time) / CLOCKS_PER_SEC)) ;
-	}
+	DPRINTF(k_DBG_INFO, ("Total time %4.2lf\n", (double)(m_total_time) / CLOCKS_PER_SEC));
+}

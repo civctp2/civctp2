@@ -638,11 +638,10 @@ STDEHANDLER(CreateWonderEvent)
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 	if(!args->GetInt(0, wonder)) return GEV_HD_Continue;
 
-	c.CD()->SetWonders(c.CD()->GetBuiltWonders() | ((uint64)1 << (uint64)wonder));
+	c.CD()->AddWonder(wonder);
 	wonderutil_AddBuilt(wonder);
 	g_player[c->GetOwner()]->AddWonder(wonder, c);
 	g_player[c->GetOwner()]->RegisterCreateWonder(c, wonder);
-//	c.CD()->AddWonder(wonder);  //EMOD I think it was left out // No it is called in Player::AddWonder
 
 	
 	if (c->GetOwner() == g_selected_item->GetVisiblePlayer() &&
