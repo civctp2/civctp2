@@ -955,35 +955,40 @@ void ArmyData::Sleep()
 	sint32 s = 0;
 	Unit city = g_theWorld->GetCity(m_pos);
 	for(i = m_nElements - 1; i >= 0; i--) {
+		sint32 owner = m_array[i].GetOwner();
 	
-//		if((city.m_id != (0)) && (m_array[i].GetDBRec()->GetUpgradeToIndex(s)))  {  // add terrainutil_HasAirfield(m_pos) || terrainutil_HasFort(m_pos) || terrainutil_HasUpgrader(m_pos)
-//			for(s = 0; s < m_array[i].GetDBRec()->GetNumUpgradeTo(); s++) {
+		if((city.m_id != (0)) && (m_array[i].GetDBRec()->GetUpgradeToIndex(s)))  {  // add terrainutil_HasAirfield(m_pos) || terrainutil_HasFort(m_pos) || terrainutil_HasUpgrader(m_pos)
+			for(s = 0; s < m_array[i].GetDBRec()->GetNumUpgradeTo(); s++) {
 //			sint32 s = m_array[i].GetDBRec()->GetNumUpgradeTo(); // s++) {  //m_array[i].GetDBRec()->GetUpgradeToIndex(s)
-//				if(city.AccessData()->GetCityData()->CanBuildUnit(m_array[i].GetDBRec()->GetUpgradeToIndex(s))){
+				if(city.AccessData()->GetCityData()->CanBuildUnit(m_array[i].GetDBRec()->GetUpgradeToIndex(s))){
 //					sint32 newunit = m_array[i].GetDBRec()->GetUpgradeToIndex(s);
 //					sint32 newshields = m_array[i].GetDBRec()->GetShieldCost() * 2;
 //					sint32 oldshields = m_array[i].GetDBRec()->GetShieldCost();
 //					sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
 //					sint32 goldcost = (newshields - oldshields);// * rushmod;
 //
-//					if((city.AccessData()->GetCityData()->CanBuildUnit(m_array[i].GetDBRec()->GetUpgradeToIndex(s))) ){//&& (g_player[m_owner]->m_gold->GetLevel() > goldcost)) { //&& (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)
-//						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-//						g_player[m_owner]->CreateUnit(s, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-//						g_player[m_owner]->m_gold->SubGold(goldcost);
-//					} else {
-//						g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
-//                              GEA_Unit, m_array[i],
-//                            GEA_End);
-//					}
-//
-//			}
-//		} else {
+					if((city.AccessData()->GetCityData()->CanBuildUnit(m_array[i].GetDBRec()->GetUpgradeToIndex(s))) ){//&& (g_player[m_owner]->m_gold->GetLevel() > goldcost)) { //&& (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)
+						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+						g_player[owner]->CreateUnit(s, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+//						g_player[owner]->m_gold->SubGold(goldcost);
+					} else {
+						g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
+                            GEA_Unit, m_array[i],
+                            GEA_End);
+					}
+				} else {
+					        g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
+                               GEA_Unit, m_array[i],
+                               GEA_End);
+				}
+			}
+		} else {
 
 //end EMOD
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
                                GEA_Unit, m_array[i],
                                GEA_End);
-//		}
+		}
 
     }
 }
@@ -5260,11 +5265,13 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 
 //EMOD Multiple Attacks/Blitz removed it from only Air to a separate flag - 2-24-2006
 				//if(!m_array[i].GetDBRec()->GetMovementTypeAir()) {  //this allowed for multiple air bombard
-
-				if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {					
-					m_array[i].SetMovementPoints(0.0);
-				} else {
+				//4-28-2006 EMOD changed to allow fighters to move after attack but not attack again
+				if(m_array[i].GetDBRec()->GetMultipleAttacks()) {					
 					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
+				} else if(m_array[i].GetDBRec()->GetMovementTypeAir()) {
+					m_array[i].DeductMoveCost(k_MOVE_COMBAT_COST, out_of_fuel);
+				} else {
+					m_array[i].SetMovementPoints(0.0);
 				} 
 
 			}
@@ -5483,11 +5490,19 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 
 				//if(!m_array[i].GetDBRec()->GetMovementTypeAir()) {  //this allowed for multiple air bombard
 
-				if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {					
-					m_array[i].SetMovementPoints(0.0);
+				if(m_array[i].GetDBRec()->GetMultipleAttacks()) {					
+					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
+				} else if(m_array[i].GetDBRec()->GetMovementTypeAir()) {
+					m_array[i].DeductMoveCost(k_MOVE_COMBAT_COST, out_of_fuel);
 				} else {
-					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel); //k_MOVE_COMBAT_COST
-				} 
+					m_array[i].SetMovementPoints(0.0);
+				}
+
+//				if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {					
+//					m_array[i].SetMovementPoints(0.0);
+//				} else {
+//					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel); //k_MOVE_COMBAT_COST
+//				} 
 			}
 		}
 	}
@@ -6364,16 +6379,18 @@ BOOL ArmyData::ExecuteMoveOrder(Order *order)
 	} else {//UNIT_ORDER_MOVE_TO or UNIT_ORDER_VICTORY_MOVE
 		if(m_pos == order->m_point)
 			return TRUE;
-// EMOD - Rebasing of aircraft
-		//if(g_theUnitDB->Get()->GetCanRebase()) {
-		//	if (m_city_data->HasAirport(m_point) || terrainutil_HasAirfield(m_point)) {  //add unit later?
+// EMOD - Rebasing of units, especially aircraft
+		//for (i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
+		//	if(!m_array[i].GetDBRec()->GetCanRebase()){
+		//		if (m_city_data->HasAirport(m_point) || terrainutil_HasAirfield(m_point)) {  //add unit later?
  		//				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_Teleport,
 		//						   GEA_Army, m_id,
 		//						   GEA_MapPoint, m_point,
 		//						   GEA_End);
 		//	
+		//		}
+		//		return FALSE;
 		//	}
-		//	return FALSE;
 		//}
 
 // end EMOD	

@@ -64,4 +64,8 @@ double buildingutil_GetOffenseBonusLand(const uint64 built_improvements);
 double buildingutil_GetOffenseBonusWater(const uint64 built_improvements);
 double buildingutil_GetOffenseBonusAir(const uint64 built_improvements);
 
+BOOL buildingutil_IsObsolete(sint32 building_type); //EMOD 4-28-2006
+BOOL buildingutil_GetEmbassiesEverywhereEvenAtWar(const uint64 built_improvements); //EMOD 4-28-2006
+sint32 buildingutil_GetIncreaseHP(const sint32 building_type); //EMOD 4-28-2006
+
 #endif

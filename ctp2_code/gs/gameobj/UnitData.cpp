@@ -332,7 +332,9 @@ void UnitData::Create(const sint32 t,
 //EMOD add civ bonus
 
 	sint32 wonderHPBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
-	m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus;
+ //   sint32 buildingHPBonus = buildingutil_GetIncreaseHP(m_city_data->GetEffectiveBuildings()); //EMOD 4-27-2006 m_city_data or cityData?
+//	m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus + buildingHPBonus;
+		m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus;
 	m_movement_points = g_theUnitDB->Get(t)->GetMaxMovePoints();
 
 	//PFT 17 Mar 05, don't FIRST_MOVE flag immobile units
@@ -350,7 +352,11 @@ void UnitData::Create(const sint32 t,
 			m_movement_points += amt;
 		}
 	}
-
+// EMOD Crashes because the first unit doesn't have a city 
+//	sint32 buildingHPBonus = 0;
+//	if((buildingHPBonus = buildingutil_GetIncreaseHP(m_city_data->GetEffectiveBuildings())) > 0) {
+//			m_hp += buildingHPBonus;
+//	}
 
 	if(rec->GetCanCarry()
 	&& rec->GetCargoDataPtr()

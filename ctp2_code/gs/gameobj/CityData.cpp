@@ -124,7 +124,9 @@
 // - Added IsCoastal check to canbuildwonders 3-31-2006
 // - Added ObsoleteUnit so units can be obsolete by the availability of other units by E 3-31-2006
 // - Added UpgradeTo so units can be obsolete by the availability of unit they upgrade to by E 3-31-2006
-// - CantTrade flag for Goods now works by E 4-26-2006
+// - CantTrade flag for Goods now works by E 4-26-2006 (outcomment to allow for CanCollectGood)
+// - CanCollectGood BOOL added by E to check goods for
+//   CantTrade or Available and Vanish Advances 4-27-2006
 //
 //----------------------------------------------------------------------------
 
@@ -2124,7 +2126,8 @@ void CityData::CollectResources()
 		&& MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius
 #endif
 		){
-			if(g_theResourceDB->Get(good)->GetCantTrade() == 0){  
+			//if(g_theResourceDB->Get(good)->GetCantTrade() == 0){  
+			if(CanCollectGood(good)){	
 			//EMOD 4-26-2006 to prevent free collection of goods
 				m_collectingResources.AddResource(good);
 			}
@@ -4221,15 +4224,26 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 				continue;
 
 			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-				if(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain()) {
-					SpotFound = it.Pos(); 
-				} else { 
+				if((!g_theWorld->GetCell(SpotFound)) ||
+				(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) {
 					SpotFound = it.Pos(); 
 				}
 			}
 		}
 		g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), SpotFound, 0);
 	}
+
+//for all tiles in the city radius do
+//    if current tile allows building of wonder imp do
+//        if no good tile has been found yet
+//        or current tile is better than found tile do
+//            foundTile := currentTile
+//        end
+//    end
+//end
+
+//place wonder improvement on foundTile
+
 
 //EMOD - FU 4-1-2006 visible tileimps, but it builds them all around the radius i.e. GreatWall builds Great walls
 //		for(s = 0; s < rec->GetNumShowOnMapRadius(); s++) { 
@@ -9082,15 +9096,37 @@ sint32 CityData::StyleHappinessIncr() const
 	return g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetHappyInc();
 }
 
-//sint32 CityData::GoodHappinessIncr() const
-//{
-//  sint32 tgood, tgoodBonus;
-//	for (tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
-//	{
-//		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
-//		{
-//			return g_theResourceDB->Get(tgood)->GetHappyInc();
-//		}
-//	}
-//	return 0;
-//}
+sint32 CityData::GoodHappinessIncr() const
+{
+  sint32 tgood, tgoodBonus;
+	for (tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if ((m_buyingResources[tgood] + m_collectingResources[tgood]) > m_sellingResources[tgood])
+		{
+			return g_theResourceDB->Get(tgood)->GetHappyInc();
+		}
+	}
+	return 0;
+}
+
+BOOL CityData::CanCollectGood(sint32 good) const 
+//EMOD to check Good flags to see if a player can collect it. Modelled on CanBuildBuilding. 4-27-2006
+{
+	const ResourceRecord *rec = g_theResourceDB->Get(good);
+	if(!rec)
+		return FALSE;
+
+
+	if(rec->GetCantTrade() > 0){ 
+				return FALSE;
+	}
+
+	if(!g_player[m_owner]->HasAdvance(rec->GetAvailableAdvanceIndex()) && rec->GetAvailableAdvanceIndex() >= 0) {
+		return FALSE;
+	}
+
+	if(g_player[m_owner]->HasAdvance(rec->GetVanishAdvanceIndex()) && rec->GetVanishAdvanceIndex() >= 0) {
+		return FALSE;
+	}
+	return TRUE;
+}

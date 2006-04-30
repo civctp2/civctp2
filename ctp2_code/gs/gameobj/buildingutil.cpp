@@ -30,6 +30,9 @@
 // - EMOD GetGoldPerCity added to work like GoldPerPop  2-15-2006
 // - EMOD GetGoldPerUnit added to work like GoldPerPop  2-24-2006
 // - EMOD GetGoldPerUnitReadiness added to work like GoldPerPop 2-24-2006
+// - buildingutil_IsObsolete added by E so buildings can be obsolete ike wonders 4-28-2006
+// - buildingutil_GetEmbassiesEverywhereEvenAtWar
+// - buildingutil_GetIncreaseHP
 //
 //----------------------------------------------------------------------------
 
@@ -615,4 +618,40 @@ double buildingutil_GetOffenseBonusAir(const uint64 built_improvements)
 			best = cur;
 	}
 	return best;
+}
+
+BOOL buildingutil_IsObsolete(sint32 building_type)
+{
+    const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
+	sint32 nObsolete = rec->GetNumObsoleteAdvance();
+	if(nObsolete <= 0)
+		return FALSE;
+
+	for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
+		if(!g_player[p]) continue;
+
+		for(sint32 o = 0; o < nObsolete; o++) {
+			if(g_player[p]->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
+				return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+BOOL buildingutil_GetEmbassiesEverywhereEvenAtWar(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetEmbassiesEverywhereEvenAtWar) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+sint32 buildingutil_GetIncreaseHP(const sint32 building_type)
+{
+    const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
+	Assert(rec);
+	if(rec == NULL)
+		return 0;
+
+    return rec->GetIncreaseHP();
 }

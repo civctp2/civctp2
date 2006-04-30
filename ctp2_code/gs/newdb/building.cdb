@@ -102,10 +102,11 @@ Building {
 	Bit(Int)   RaiseOvercrowdingLevel
 	Bit(Int)   RaiseMaxPopulation
 	Bit(Int)   StarvationProtection
+	Bit EmbassiesEverywhereEvenAtWar
 
 	Bit        CoastalBuilding		//DW - Added to fix bug #895
     	Bit        OnePerCiv			//EMOD implement 2-14-2006
-	Bit(Int)   IncreaseHp			//FU - EMOD
+	Bit(Int)   IncreaseHP			//FU - EMOD
 	Bit   EnablesVeterans		//FU - EMOD 
 
     Struct BuildingFeat {               	//from feats implemented by E 2-24-2006

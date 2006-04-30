@@ -984,6 +984,8 @@ public:
 #endif
 
 	sint32 StyleHappinessIncr() const;
+	sint32 CityData::GoodHappinessIncr() const; //EMOD 4-27-2006
+	BOOL CityData::CanCollectGood(sint32 good) const; //EMOD 4-27-2006 
 
 private:
     bool    IsBankrupting(void) const;

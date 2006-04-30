@@ -30,6 +30,8 @@
 //   instance, savely. - Jul 7th 2005 Martin Gühmann
 // - Added happiness boni for players civilisation and city's city style. 
 //   (Oct 7th 2005 Martin Gühmann)
+// - Added GoodHappinessIncrease if a good give a happy bonus then if the city 
+//   is buying or collecting then it will add to that city's happiness (4-27-2006 by E)
 //
 //----------------------------------------------------------------------------
 
@@ -613,7 +615,7 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 	m_happiness  = CalcBase(p);
 	m_happiness += p->CityHappinessIncrease();
 	m_happiness += cd.StyleHappinessIncr();
-//	m_happiness += cd.GoodHappinessIncr()
+	m_happiness += cd.GoodHappinessIncr();		//EMOD 4-27-2006 to allow for luxury goods
 	
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
 		return;

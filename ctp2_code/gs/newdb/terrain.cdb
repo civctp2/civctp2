@@ -5,8 +5,9 @@ Resource {
 	Int SpriteID
 	Float Probability
 	Bit CantTrade
-	Record Advance             AvailableAdvance  //added by E FutureUse
-	Record Advance        VanishAdvance    //added by E FutureUse
+	Record Advance        VisibleAdvance  //added by E FutureUse
+	Record Advance        AvailableAdvance  //added by E; if you have advance then you can collect/trade it
+	Record Advance        VanishAdvance    //added by E; if you have advance then you cant collect/trade it
 	Record Sound Sound
 	Record Icon Icon
 	Record Government[] GovernmentsModified	
@@ -22,7 +23,7 @@ Resource {
 	Bit(Int) TradeProduction = 0
 	Bit(Int) TradeScience = 0
 
-	Bit IsBonuSGood
+	Bit IsBonusGood
 	Bit IsStrategicGood
 	Bit IsLuxuryGood
 
