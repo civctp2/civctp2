@@ -32,6 +32,15 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
+2006-04-29
+Added: TargetsCivilians where a unit that bombs a city hits civilians not units.
+Added: PrecisionStrike where a unit that bombs a city hits buildings not units.
+Added: MultipleAttack flag units with this flag can attack as amny times as they have move points
+Added: AvailableAdvance for goods, now you can specifyan advance required in order for a city to collect (it will still be on the map though)
+Added: VanishAdvance for goods, now you can specify an advance that stops a city from collecting a good
+Added: CantTrade a good can never be collected, just a bonus (like an oasis)
+Added: HappyInc flag for goods, now goods that are traded can add happiness to a city 
+ 
 2006-04-14
 Added: CanCaptureTile check in pillage. Units with this flag capture nemy tiles
   instead of pillaging them

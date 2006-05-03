@@ -74,6 +74,7 @@
 //   buildings (bomb everywhere else though) in cities 4-26-2006
 // - TargetsCivilians flag enabled by E; units with flag will only kill 
 //   civilians in cities (bomb everywhere else though) 4-26-2006
+// - Added check in VerifyAttack to exclude barbarians 5-2-2006 by E
 //
 //----------------------------------------------------------------------------
 
@@ -942,55 +943,38 @@ BOOL ArmyData::IsAsleep() const
     return m_array[0].IsAsleep();
 }
 
-// Put this army on sentinal duty.
+// Put this army on sentinal duty or upgrade it.
 void ArmyData::Sleep()
 {
-//ORIGINAL
-//    sint32 i;
-//    for(i = 0; i < m_nElements; i++) {
-//
-//EMOD upgrade code 4-25-2006 outcommented
+	Cell *cell = g_theWorld->GetCell(m_pos);
+	sint32 CellOwner = cell->GetOwner();
 
 	sint32 i;
 	sint32 s = 0;
+	//rec = g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType());
 	Unit city = g_theWorld->GetCity(m_pos);
 	for(i = m_nElements - 1; i >= 0; i--) {
-		sint32 owner = m_array[i].GetOwner();
-	
-		if((city.m_id != (0)) && (m_array[i].GetDBRec()->GetUpgradeToIndex(s)))  {  // add terrainutil_HasAirfield(m_pos) || terrainutil_HasFort(m_pos) || terrainutil_HasUpgrader(m_pos)
-			for(s = 0; s < m_array[i].GetDBRec()->GetNumUpgradeTo(); s++) {
-//			sint32 s = m_array[i].GetDBRec()->GetNumUpgradeTo(); // s++) {  //m_array[i].GetDBRec()->GetUpgradeToIndex(s)
-				if(city.AccessData()->GetCityData()->CanBuildUnit(m_array[i].GetDBRec()->GetUpgradeToIndex(s))){
-//					sint32 newunit = m_array[i].GetDBRec()->GetUpgradeToIndex(s);
-//					sint32 newshields = m_array[i].GetDBRec()->GetShieldCost() * 2;
-//					sint32 oldshields = m_array[i].GetDBRec()->GetShieldCost();
-//					sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
-//					sint32 goldcost = (newshields - oldshields);// * rushmod;
-//
-					if((city.AccessData()->GetCityData()->CanBuildUnit(m_array[i].GetDBRec()->GetUpgradeToIndex(s))) ){//&& (g_player[m_owner]->m_gold->GetLevel() > goldcost)) { //&& (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)
-						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-						g_player[owner]->CreateUnit(s, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-//						g_player[owner]->m_gold->SubGold(goldcost);
-					} else {
-						g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
-                            GEA_Unit, m_array[i],
-                            GEA_End);
-					}
+		const UnitRecord *rec = m_array[i].GetDBRec();
+		if((city.m_id != (0)) && (rec->GetNumUpgradeTo() > 0))  { 
+			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
+				//sint32 oldshield = rec->GetShieldCost();
+				//sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s))->GetShieldCost();
+				sint32 newunit = rec->GetUpgradeToIndex(s);
+				if(rec->GetUpgradeToIndex(s) == city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s))){
+					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+					g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
 				} else {
-					        g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
-                               GEA_Unit, m_array[i],
-                               GEA_End);
+				    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
+                           GEA_Unit, m_array[i],
+                           GEA_End);
 				}
 			}
 		} else {
-
-//end EMOD
-        g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
-                               GEA_Unit, m_array[i],
-                               GEA_End);
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
+                     GEA_Unit, m_array[i],
+                     GEA_End);
 		}
-
-    }
+	}
 }
 
 // Activate this army from sentinal duty.
@@ -7102,8 +7086,8 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 							sint32 defense_owner)
 {
-//EMOD
-	if (!AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)){
+//EMOD  added defense_powner doesn't equal barbarians 5-2-2006
+	if ((defense_owner != 0) && (!AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR))){
 
 //outcommented original
 //	if(IsEnemy(defense_owner) &&
@@ -8574,7 +8558,7 @@ void ArmyData::Disband()
 //	}
 
 //EMOD Gift Units for Human Player 4-12-2006
-		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)){
+		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && (CellOwner != m_owner)){
 			if(m_array[i].GetDBRec()->GetCanBeGifted()){ // Well without this unit isn't gifted, but this flag is superflous if this is an order of its own
 				sint32 newunit = m_array[i].GetType();
 				sint32 regardcost = (m_array[i].GetDBRec()->GetAttack()) / 5;
@@ -8593,6 +8577,7 @@ void ArmyData::Disband()
 		} else {
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
+		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 	}
 ///
 

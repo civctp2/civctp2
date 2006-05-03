@@ -1232,7 +1232,8 @@ alertBox '110bCantAttackHaveTreaty' {
 	}
 
 	Button(ID_BUTTON_YES) {
-		BreakAlliance(player[0]);
+		//BreakAlliance(player[0]);
+		DeclareWar(g.player, player[0]);
 		AddOrder(unit[0], location[0]);
 		Kill();
 	}
@@ -2914,4 +2915,16 @@ messagebox '911ImminentFlood' {
 #include "scenario.slc"
 
 #include "diplomacy.slc"
+
+#include "Civ3_CantGroup.slc"
+
+//#include "Civ3_GuerrillaWar.slc"
+
+#include "GiftUnit.slc"
+
+//#include "Civ3_diplomod.slc"
+//#include "Civ3_wonders.slc"
+
+
+
 

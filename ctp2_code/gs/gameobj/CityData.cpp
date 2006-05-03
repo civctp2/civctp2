@@ -775,7 +775,10 @@ void CityData::Initialize(sint32 settlerType)
 	
 	sint32 good;
 	if(g_theWorld->GetGood(center_point, good)) {
-		m_collectingResources.AddResource(good);
+		if(CanCollectGood(good)){	
+		//EMOD 5-01-2006 to prevent free collection of goods
+			m_collectingResources.AddResource(good);
+		}
 	}
 	
 	cell->SetEnv(cell->GetEnv() & ~(k_MASK_ENV_IRRIGATION |
@@ -4199,7 +4202,7 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 //
 //EMOD Visible wonders 4-25-2006 
 	MapPoint SpotFound;
-	CityInfluenceIterator it(point, m_sizeIndex); 
+	CityInfluenceIterator it(point, GetVisionRadius());  //m_sizeIndex 
 	
 	sint32 s;
 	for(s = 0; s < rec->GetNumShowOnMap(); s++) {
@@ -7104,7 +7107,9 @@ void CityData::AdjustSizeIndices()
 	for(it.Start(); !it.End(); it.Next()) {
 		sint32 good;
 		if(g_theWorld->GetGood(it.Pos(), good)) {
-			m_collectingResources.AddResource(good);
+			if(CanCollectGood(good)){  //EMOD to prevent Free Collection of a good 5-1-2006
+				m_collectingResources.AddResource(good);
+			}
 		}
 	}
 
