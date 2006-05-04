@@ -32,6 +32,9 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
+2006-05-03
+Added: UpgradeTo flag now implemented. With enough gold you can upgrade units by sleeping them in your city
+
 2006-04-29
 Added: TargetsCivilians where a unit that bombs a city hits civilians not units.
 Added: PrecisionStrike where a unit that bombs a city hits buildings not units.

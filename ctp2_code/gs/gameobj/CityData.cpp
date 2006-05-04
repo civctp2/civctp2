@@ -3980,6 +3980,20 @@ sint32 CityData::BeginTurn()
 			m_terrainImprovementWasBuilt = TRUE;
 	}
 
+//If City is collecting good that is adds slaves
+//changepop...add slave.
+//	for (sint32 slavegood = 0; slavegood < g_theResourceDB->NumRecords(); ++slavegood) 
+//	{
+//		if(HasNeededGood(slavegood))
+//		{
+//			if(g_theResourceDB->Get(slavegood)->GetAddsASlave())
+//			{
+//				ChangeSpecialists(POP_SLAVE, +1);
+//			}
+//		}
+//	}
+
+
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 
 	return TRUE;
@@ -5395,6 +5409,10 @@ BOOL CityData::BuyFront()
 	// * Can't rush buy capitalization/infrastructure
 	if(m_buildInfrastructure || m_buildCapitalization)
 		return FALSE;
+
+	//cant rush wonders? 
+	//g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner)
+	// if(m_build_queue.Get
 
 	if(m_shieldstore >= m_build_queue.GetFrontCost()) {
 		
@@ -7516,7 +7534,12 @@ void CityData::FindGoodDistances()
 		if(g_theWorld->GetGoodValue(i) <= g_theConstDB->GetMaxGoodValue()) {
 			goodsToFind++;
 		}
-		m_distanceToGood[i] = 0;
+//		Causes gold values to go incredibly high
+//		} else if(g_theResourceDB->Get(i)->GetIsBonusGood()) {		//EMOD for special goods
+//			m_distanceToGood[i] = g_theResourceDB->Get(i)->GetGold();
+//		} else {
+			m_distanceToGood[i] = 0;
+//		}
 	}
 
 //	g_theWorld->FindDistances(m_owner, m_home_city.RetPos(), goodsToFind,

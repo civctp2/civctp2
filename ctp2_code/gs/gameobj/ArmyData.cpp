@@ -950,19 +950,23 @@ void ArmyData::Sleep()
 	sint32 CellOwner = cell->GetOwner();
 
 	sint32 i;
-	sint32 s = 0;
+	sint32 s;
+
 	//rec = g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType());
 	Unit city = g_theWorld->GetCity(m_pos);
 	for(i = m_nElements - 1; i >= 0; i--) {
 		const UnitRecord *rec = m_array[i].GetDBRec();
 		if((city.m_id != (0)) && (rec->GetNumUpgradeTo() > 0))  { 
 			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
-				//sint32 oldshield = rec->GetShieldCost();
-				//sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s))->GetShieldCost();
+				sint32 oldshield = rec->GetShieldCost();
+				sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s))->GetShieldCost();
+				sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
+				sint32 goldcost = (newshield - oldshield) * rushmod;
 				sint32 newunit = rec->GetUpgradeToIndex(s);
-				if(rec->GetUpgradeToIndex(s) == city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s))){
+				if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s)) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){
 					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 					g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+					g_player[m_owner]->m_gold->SubGold(goldcost);
 				} else {
 				    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
                            GEA_Unit, m_array[i],
@@ -8536,6 +8540,8 @@ void ArmyData::SetUnloadMovementPoints()
 }
 
 //Disband an army. Recover 1/2 it's ShieldCost if it's in a city.
+//Gift in friendly territory until a new order is made
+//out comment notes for possible future Great Leaders
 void ArmyData::Disband()
 {
 
@@ -8550,8 +8556,16 @@ void ArmyData::Disband()
 	sint32 i;
 	Unit city = g_theWorld->GetCity(m_pos);
 	for(i = m_nElements - 1; i >= 0; i--) {
-		
+		const UnitRecord *rec = m_array[i].GetDBRec();
 		if(city.m_id != (0)) {
+//			if(rec->GetIsGreatBuilder() {
+//				city.AccessData()->GetCityData()->AddShields(CURRENT ITEM Shields);
+//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//			} else {
+//			if(rec->GetIsGreatArtist() {
+//				city.AccessData()->GetCityData()->AddInfluence(rec->GetInfluencePoints());
+//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//			} else {
 			city.AccessData()->GetCityData()->AddShields(m_array[i].GetDBRec()->GetShieldCost() / 2);
 		}
 //		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
@@ -8559,7 +8573,7 @@ void ArmyData::Disband()
 
 //EMOD Gift Units for Human Player 4-12-2006
 		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && (CellOwner != m_owner)){
-			if(m_array[i].GetDBRec()->GetCanBeGifted()){ // Well without this unit isn't gifted, but this flag is superflous if this is an order of its own
+			if(m_array[i].GetDBRec()->GetCanBeGifted()){ // Without this, unit isn't gifted but this flag is superflous if this is an order of its own
 				sint32 newunit = m_array[i].GetType();
 				sint32 regardcost = (m_array[i].GetDBRec()->GetAttack()) / 5;
 				if((g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) && (CellOwner > 0)) {
@@ -8571,13 +8585,18 @@ void ArmyData::Disband()
 				} else {
 					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 				}
+//			}else if(rec->GetMerchantGold() {
+//				sint32 merchantgold = get distance from capitol to m_pos * (rec->GetMerchantGold)
+//				player AddGold(merchantgold);
+//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//			} else {
 			} else {
 				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 			}
 		} else {
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
-		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);  //This caused the r570 Bureaubert crash
 	}
 ///
 
