@@ -22,11 +22,13 @@ Resource {
 	Int        TradeFood         = 0
 	Int        TradeProduction   = 0
 	Int        TradeScience      = 0         // Unused
+	Int        AddPopulation	 = 0
+	Int        AddSlave			 = 0
 
 	Bit IsBonusGood
 	Bit IsStrategicGood
 	Bit IsLuxuryGood
-
+	Bit AddsASlave							//New flag that adds a slave to a city for each turn
 
 	Bit GLHidden
 }

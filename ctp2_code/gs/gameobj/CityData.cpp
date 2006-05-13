@@ -132,6 +132,11 @@
 // - Made good requirements consistent with each, all requirements are now
 //   the same: The city needs more goods that it buys and collects than it
 //   sells. (April 30th 2006 Martin Gühmann)
+// - Add AddsASlave to goods for beginturn. If you have the good then a slave 
+//   is added each turn you have that good. E 5-12-2006
+// - CivilisationOnly added to CanBuildBuilding and CnBuildWonder E 5-12-2006
+// - NeedsFeatToBuild added to CanBuildBuilding and CanBuildWonder E 5-12-2006
+// - OnePerCiv added to CanBuildWonder E 5-12-2006
 //
 //----------------------------------------------------------------------------
 
@@ -3980,19 +3985,17 @@ sint32 CityData::BeginTurn()
 			m_terrainImprovementWasBuilt = TRUE;
 	}
 
-//If City is collecting good that is adds slaves
+//EMOD - AddsASlave If City is collecting good that is adds slaves  
 //changepop...add slave.
-//	for (sint32 slavegood = 0; slavegood < g_theResourceDB->NumRecords(); ++slavegood) 
-//	{
-//		if(HasNeededGood(slavegood))
-//		{
-//			if(g_theResourceDB->Get(slavegood)->GetAddsASlave())
-//			{
-//				ChangeSpecialists(POP_SLAVE, +1);
-//			}
-//		}
-//	}
-
+	for (sint32 slavegood = 0; slavegood < g_theResourceDB->NumRecords(); ++slavegood){
+		if(g_theResourceDB->Get(slavegood)->GetAddsASlave()) {
+			if(HasNeededGood(slavegood)) {  //&& if(!wonderutil_GetFreeSlaves(g_theWonderTracker->GetBuiltWonders()))
+				ChangePopulation(+1);
+				ChangeSpecialists(POP_SLAVE, +1);
+			}
+		}
+	}
+//end EMOD
 
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 
@@ -4440,7 +4443,8 @@ double CityData::GetDefendersBonus() const
 
 {
 // EMOD add population as a contributor to defense for AI, to make larger cities even tougher. It takes total population * defense coefficient * percentage of people that are happy (and most likely to resist)
-	if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
+			if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAICityDefenderBonus()
+		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
 			return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef() + (PopCount() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef()) * (m_happy->GetHappiness() * .01);
 
 		} else {
@@ -6001,6 +6005,20 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			return FALSE;
 	}
 
+// Added by E - Compares CivilisationOnly to the Player's Civilisation	5-11-2006
+	if(rec->GetNumCivilisationOnly() > 0) {
+		sint32 c;
+		bool found = false;
+		for(c = 0; c < rec->GetNumCivilisationOnly(); c++) {
+			if(rec->GetCivilisationOnlyIndex(c) == g_player[m_owner]->m_civilisation->GetCivilisation()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
 	// Start Resources section - more to add later 
 	// Added by E - Compares Building NeedsCityGood to the resources collected our bought by the city, can be either/or
 	if(rec->GetNumNeedsCityGood() > 0) {
@@ -6025,7 +6043,43 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		}
 	}
 
+	if(rec->GetNumNeedsCityGoodAnyCity()) {
+		
+		sint32 i, g;
+		bool goodavail = false;
+
+			for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
+				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+					if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+						goodavail = true;
+						break;
+					}
+				}
+					if(goodavail){
+					break;
+					}
+			}
+			if(!goodavail)
+			return FALSE;
+	}
+
 	//End Resources Code
+
+	// Added by E - Compares NeedsFeatToBuild to the FeatTracker	5-11-2006	
+	if(rec->GetNumNeedsFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
+			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(f))) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+
 
 
 	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, rec->GetIndex());
@@ -6064,15 +6118,50 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 //----------------------------------------------------------------------------
 BOOL CityData::CanBuildWonder(sint32 type) const
 {
-	if(g_exclusions->IsWonderExcluded(type))
-		return FALSE;
-
-	if(!wonderutil_IsAvailable(type, m_owner))
-		return FALSE;
-
 
 	// Added Wonder database 
 	const WonderRecord* rec = wonderutil_Get(type);
+	//	const WonderRecord *rec = g_theWonderDB->Get(wonder);
+	
+	if(g_exclusions->IsWonderExcluded(type))
+		return FALSE;
+
+	//out commented to allow more flexibility on wonder building options
+	//if(!wonderutil_IsAvailable(type, m_owner))
+	//	return FALSE;
+
+// took data from wonderutil_IsAvailable to keep same checks but allow some flexibility
+
+	if(rec->GetOnePerCiv == 0) {  //added as a new check to allow regular wonders to be OnePerCiv
+		if(g_theWonderTracker->HasWonderBeenBuilt(type)) {
+			return FALSE;
+		}
+	}
+
+	if(rec->GetOnePerCiv()) { //GetEffectiveBuildings should include wonders too
+		for(sint32 o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
+			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings())){ 
+				return FALSE;
+			}
+		}
+	}
+
+	if(rec->GetEnableAdvanceIndex() >= 0 && 
+	   !g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()))
+		return FALSE;
+
+	
+	if(wonderutil_IsObsolete(type))
+		return FALSE;
+
+	
+	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
+		return FALSE;
+	}
+// emd EMOD
+
+
+
 
 	
 	MapPoint pos;
@@ -6167,6 +6256,40 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			return FALSE;
 	}
 
+	// Added by E - Compares CivilisationOnly to the Player's Civilisation	5-11-2006
+	if(rec->GetNumCivilisationOnly() > 0) {
+		sint32 c;
+		bool found = false;
+		for(c = 0; c < rec->GetNumCivilisationOnly(); c++) {
+			if(rec->GetCivilisationOnlyIndex(c) == g_player[m_owner]->m_civilisation->GetCivilisation()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+	if(rec->GetNumNeedsCityGoodAnyCity()) {
+		
+		sint32 i, g;
+		bool goodavail = false;
+
+			for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
+				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+					if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+						goodavail = true;
+						break;
+					}
+				}
+					if(goodavail){
+					break;
+					}
+			}
+			if(!goodavail)
+			return FALSE;
+	}
+
 	// Start Resources section - more to add later 
 	// Added by E - Compares Unit NeedsCityGood to the resources collected or bought by the city, can be either/or
 	if(rec->GetNumNeedsCityGood() > 0) {
@@ -6192,6 +6315,19 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 	}
 
 	//End Resources Code
+
+		if(rec->GetNumNeedsFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
+			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(f))) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
 
 	return g_slicEngine->CallMod(mod_CanCityBuildWonder, TRUE, m_home_city.m_id, type);
 }

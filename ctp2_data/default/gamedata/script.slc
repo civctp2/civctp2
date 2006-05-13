@@ -2916,14 +2916,6 @@ messagebox '911ImminentFlood' {
 
 #include "diplomacy.slc"
 
-#include "Civ3_CantGroup.slc"
-
-//#include "Civ3_GuerrillaWar.slc"
-
-#include "GiftUnit.slc"
-
-//#include "Civ3_diplomod.slc"
-//#include "Civ3_wonders.slc"
 
 
 

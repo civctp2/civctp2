@@ -151,4 +151,5 @@ Difficulty{
 	Int					PollutionPopulationRatio			aka	POLLUTION_POPULATION_RATIO
 	Bit					NoAIProductionDeficit
 	Bit					NoAIGoldDeficit
+	Bit					AICityDefenderBonus
 }

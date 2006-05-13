@@ -127,6 +127,7 @@ class FeatTracker {
 	void FindBuildingFeats();
 	void CheckBuildingFeat(Unit &city, sint32 building);
 	void CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom);
+	bool HasFeat(sint32 type) const;			//EMOD
 
 	static void InitializeEvents();
 	static void CleanupEvents();

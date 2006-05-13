@@ -99,6 +99,7 @@ Unit {
 	Record Resource[] NeedsCityGoodAll 		//a city must have all resource to build unit
 	Record Resource[] NeedsCityGoodCapitol 		//implemented by E
 	Record Resource[] NeedsCityGoodAnyCity 		//implemented by E
+	Record Feat[] NeedsFeatToBuild		// implemented by E
 
 
 	Bit(Int) MoveBonus     				//FU - Instead of specifying an imp why not define the movecost here? by E

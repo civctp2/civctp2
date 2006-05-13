@@ -26,14 +26,26 @@ unchanged copy for playing mods, etc.
 Please report any problems, bugs, crashes, etc. in the following threads:
 http://apolyton.net/forums/showthread.php?s=&threadid=147969
 
+Latest Source Code files at: http://ctp2.darkdust.net/
+
 Playtesting would be most useful if it tests the most recent changes, which
 are described briefly below, and in more detail in ChangeLog.txt
 
 
 
 Changelog:
+2006-05-13
+Added: AICityDefenderBonus to difficulty database, it adds population size to city defense.
+Added: NeedsFeatToBuild to Units, Buildings, and Wonders. Needs more testing.
+Added: CivilisationOnly to Units, Buildings, and Wonders.
+Added: NeedsCityGoodAnyCity to Advances. Now you can specify that you have to have a good somewhere to research. 
+Added: AddsASlave to goods. Now if you are collecting a good with this flag it wil add a slave to your city.
+Added: OnePerCiv to Wonders. But still needs work.
+
 2006-05-03
 Added: UpgradeTo flag now implemented. With enough gold you can upgrade units by sleeping them in your city
+Added: flags for the difficulty dependent AI gold deficit (NoAIGoldDeficit) and units over production cheats (NoAIProductionDeficit).
+					
 
 2006-04-29
 Added: TargetsCivilians where a unit that bombs a city hits civilians not units.

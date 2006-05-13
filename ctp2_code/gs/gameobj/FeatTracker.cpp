@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Feat tracking
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +27,7 @@
 // - Memory leak repaired.
 // - Propagate feat accomplishments.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added HasFeat to check if a feat has been achieved by E 5-11-2006
 //
 //----------------------------------------------------------------------------
 
@@ -543,6 +544,18 @@ void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 		Assert(unknown_feat);
 		return;
 	}
+}
+
+
+//EMOD added to check if a player achieved a feat 5-11-2006
+bool FeatTracker::HasFeat(sint32 type) const
+{
+//
+//	const FeatRecord *rec = g_theFeatDB->Get(type);
+//	Assert(rec);
+//	if(!rec) return;
+	
+	return m_achieved[type]; 
 }
 
 //----------------------------------------------------------------------------

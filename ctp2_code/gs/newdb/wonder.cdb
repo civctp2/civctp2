@@ -27,6 +27,7 @@
 #  - NeedsCityGoodAll - requires a 1 or more good to build wonder
 #  - NeedsCityGoodAnyCity - requires any city to have good to build wonder
 #  - EnablesPunativeAirstrikes //added by E(1-14-2006) allows airstrikes without war
+#  - Added OnePerCiv for Small Wonders
 # 
 #-----------------------------------------------------------------------------
 
@@ -47,11 +48,14 @@ Wonder {
 	Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build wonder
 	Record Resource[] NeedsCityGoodAnyCity //FU
-      Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
+    Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
 	Record TerrainImprovement[] ShowOnMap //FU
+	Record Civilisation[] CivilisationOnly 
+	Record Feat[] NeedsFeatToBuild		// implemented by E
 
 	Bit(Int) SquaredBorderRadius 		//FU added by E
 	Bit(Int) IntBorderRadius    		//FU added by E
+	Bit		OnePerCiv					//EMOD implement 5-12-2006
 
 	# Flags
 	Bit(Int) ReduceReadinessCost

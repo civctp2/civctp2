@@ -75,6 +75,7 @@
 // - Corrected error in adding settlers to cities that actually killed all units, 
 //   not just the settler. by E 4-10-2006
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - NeedsFeatToBuild and CivilisationOnly added to CanBuildUnit by E 5-12-2006
 //
 //----------------------------------------------------------------------------
 
@@ -2089,26 +2090,36 @@ void Player::BeginTurnProduction()
 	}
 
 	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction? removed because crash
+
 	//	for(i = 0; i < m_allInstallations->Num(); i++) {
-	//for(i = 0; i < m_terrainImprovements->Num(); i++) {
-	//	if(m_terrainImprovements->Access(i).GetBonusProductionExport() > 0) {
-	//		m_materialPool->AddMaterials(m_terrainImprovements->Access(i).GetBonusProductionExport());
-	//	}
-	//}
+//	if ((m_terrainImprovements->Num() > 0) && (0 < n)) {
+//		for(i = 0; i < m_terrainImprovements->Num(); i++) {
+//			if (m_terrainImprovements->Access(i).GetBonusProductionExport()) {
+//			sint32 prod = m_terrainImprovements->Access(i).GetBonusProductionExport();
+//				m_materialPool->AddMaterials(prod);
+			//	m_materialPool->AddMaterials(m_terrainImprovements->Access(i).GetBonusProductionExport());
+//			}
+//		}
+//	}
 	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction?
 
 //	MapPoint pos;
 //	for(sint32 b = 0; b < g_theTerrainImprovementDB->NumRecords(); b++) {
-//	for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
-//	Installation inst = m_allInstallations->Access(b);
-//	const TerrainImprovementRecord *rec = inst.GetDBRec();
-//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
-//		if (effect->GetColony()) {
-//			if (effect->GetBonusProductionExport() > 0){
-//				m_materialPool->AddMaterials(effect->GetBonusProductionExport());
-//			}
+//	if ((m_allInstallations->Num() > 0) && (0 < n)) {
+//		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+//			Installation inst = m_allInstallations->Access(b);
+//			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			//const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+			//if (effect->GetColony()) {
+//				sint32 prod = inst.GetDBRec->GetBonusProductionExport();
+//				if (inst.GetDBRec->GetBonusProductionExport()) {
+			//	if (effect->GetBonusProductionExport(prod)){
+//					m_materialPool->AddMaterials(prod);
+//				}
+			//}
 //		}
 //	}
+//end EMOD
 
 	m_productionFromFranchises = 0;
 }
@@ -2138,7 +2149,15 @@ void Player::BeginTurnImprovements()  //this might only be for tileimps under co
 		
 	}
 	
-
+//	if (n > 0) {
+//		for(i = 0; i < m_terrainImprovements->Num(); i++) {
+//			if (m_terrainImprovements->Access(i).GetBonusProductionExport()) {
+//			sint32 prod = m_terrainImprovements->Access(i).GetBonusProductionExport();
+//				m_materialPool->AddMaterials(prod);
+			//	m_materialPool->AddMaterials(m_terrainImprovements->Access(i).GetBonusProductionExport());
+//			}
+//		}
+//	}
 
 
 }
@@ -10196,22 +10215,33 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 			return FALSE;
 	}
 
-// Added by E - Compares Unit CivilisationOnly to the Player's Civilisation
-//	if(rec->GetNumCultureOnly() > 0) {
-//		sint32 s;
-//		bool found = false;
-// 		for(sint32 c = 0; c < g_theCivilisationDB->NumRecords(); c++) {
-//		g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)
-//		for(s = 0; s < rec->GetNumCivilisationOnly(); s++) {
-//			if(rec->GetCivilisationOnlyIndex(s) == m_civilisation()) {
-//				found = true;
-//				break;
-//			}
-//		}
-//		if(!found)
-//			return FALSE;
-//	}
-	
+// Added by E - Compares Unit CivilisationOnly to the Player's Civilisation	5-11-2006
+	if(rec->GetNumCivilisationOnly() > 0) {
+		sint32 c;
+		bool found = false;
+		for(c = 0; c < rec->GetNumCivilisationOnly(); c++) {
+			if(rec->GetCivilisationOnlyIndex(c) == g_player[m_owner]->m_civilisation->GetCivilisation()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
+
+// Added by E - Compares Unit NeedsFeatToBuild to the FeatTracker	5-11-2006	
+	if(rec->GetNumNeedsFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
+			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(f))) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
 	
 // Added by E - checks if capitol for buying or colecting a good and makes availble in all cities, not optimized
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Advance (tech) handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -507,6 +507,30 @@ void Advances::ResetCanResearch(sint32 justGot)
 					if(rec->GetPrerequisitesIndex(prereq) == justGot)
 						justEnabled = TRUE;
 				}
+/////////////////EMOD for Advances requiring Goods
+				if(rec->GetNumNeedsCityGoodAnyCity()) {
+		
+					sint32 i, g;
+					sint32 n = g_player[m_owner]->m_all_cities->Num();
+					bool goodavail = false;
+
+					for(i = 0; i < n; i++) {
+						for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+							if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+								goodavail = true;
+								break;
+							}
+						}
+						if(goodavail){
+							justEnabled = TRUE;
+						}
+					}
+					if(!goodavail)
+						canResearch = FALSE;
+				}
+/////////////////EMOD for Advances requiring Goods
+
+
 			}
 			m_canResearch[adv] = canResearch;
 			if(canResearch) {
