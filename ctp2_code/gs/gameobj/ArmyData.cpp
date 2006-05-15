@@ -964,6 +964,7 @@ void ArmyData::Sleep()
 				sint32 goldcost = (newshield - oldshield) * rushmod;
 				sint32 newunit = rec->GetUpgradeToIndex(s);
 				if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s)) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){
+					//m_array[i].SetType(newunit);
 					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 					g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
 					g_player[m_owner]->m_gold->SubGold(goldcost);
@@ -7090,8 +7091,11 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 							sint32 defense_owner)
 {
+
 //EMOD  added defense_powner doesn't equal barbarians 5-2-2006
-	if ((defense_owner != 0) && (!AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR))){
+	if(!AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)){
+
+
 
 //outcommented original
 //	if(IsEnemy(defense_owner) &&
@@ -7099,24 +7103,24 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 //	   !g_player[m_owner]->WillViolatePact(defense_owner))
 	//	return TRUE;
 	   
-	SlicObject *so;
-	if(g_network.IsActive() && g_network.TeamsEnabled() &&
-	   g_player[m_owner]->m_networkGroup == g_player[defense_owner]->m_networkGroup) {
-		so = new SlicObject("110aCantAttackTeammates");
-	} else if(!IsEnemy(defense_owner)) {
+		SlicObject *so;
+		if(g_network.IsActive() && g_network.TeamsEnabled() &&
+			g_player[m_owner]->m_networkGroup == g_player[defense_owner]->m_networkGroup) {
+			so = new SlicObject("110aCantAttackTeammates");
+		} else if(!IsEnemy(defense_owner)) {
 		so = new SlicObject("110CantAttackAllies");
-	} else {
+		} else {
 		so = new SlicObject("110bCantAttackHaveTreaty");
-	}
+		}
 
-	so->AddRecipient(m_owner);
-	so->AddCivilisation(defense_owner);
-	so->AddUnit(m_array[0]);
-	so->AddLocation(pos);
-	so->AddOrder(order);
-	g_slicEngine->Execute(so);
-	g_selected_item->ForceDirectorSelect(Army(m_id));
-	return FALSE;
+		so->AddRecipient(m_owner);
+		so->AddCivilisation(defense_owner);
+		so->AddUnit(m_array[0]);
+		so->AddLocation(pos);
+		so->AddOrder(order);
+		g_slicEngine->Execute(so);
+		g_selected_item->ForceDirectorSelect(Army(m_id));
+		return FALSE;
 	}
 	return TRUE;
 }

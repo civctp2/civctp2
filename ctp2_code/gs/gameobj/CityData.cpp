@@ -6127,37 +6127,36 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		return FALSE;
 
 	//out commented to allow more flexibility on wonder building options
-	//if(!wonderutil_IsAvailable(type, m_owner))
-	//	return FALSE;
+	if(!wonderutil_IsAvailable(type, m_owner))
+		return FALSE;
 
 // took data from wonderutil_IsAvailable to keep same checks but allow some flexibility
 
-	if(rec->GetOnePerCiv == 0) {  //added as a new check to allow regular wonders to be OnePerCiv
-		if(g_theWonderTracker->HasWonderBeenBuilt(type)) {
-			return FALSE;
-		}
-	}
+//	if(rec->GetOnePerCiv == 0) {  //added as a new check to allow regular wonders to be OnePerCiv
+//		if(g_theWonderTracker->HasWonderBeenBuilt(type)) {
+//			return FALSE;
+//		}
+//	}
+//
+//	if(rec->GetOnePerCiv()) { //GetEffectiveBuildings should include wonders too
+//		for(sint32 o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
+//			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings())){ 
+//				return FALSE;
+//			}
+//		}
+//	}
 
-	if(rec->GetOnePerCiv()) { //GetEffectiveBuildings should include wonders too
-		for(sint32 o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
-			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings())){ 
-				return FALSE;
-			}
-		}
-	}
-
-	if(rec->GetEnableAdvanceIndex() >= 0 && 
-	   !g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()))
-		return FALSE;
-
-	
-	if(wonderutil_IsObsolete(type))
-		return FALSE;
+//	if(rec->GetEnableAdvanceIndex() >= 0 && 
+//	   !g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()))
+//		return FALSE;
 
 	
-	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
-		return FALSE;
-	}
+//	if(wonderutil_IsObsolete(type))
+//		return FALSE;
+	
+//	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
+//		return FALSE;
+//	}
 // emd EMOD
 
 

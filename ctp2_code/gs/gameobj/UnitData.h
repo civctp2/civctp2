@@ -361,6 +361,7 @@ public:
 	void ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 	                    CAUSE_REMOVE_ARMY cause) ;
 	void BeginTurnCity(const Unit &me, UnitDynamicArray &dead);
+	void SetType(sint32 type);
 
 
 

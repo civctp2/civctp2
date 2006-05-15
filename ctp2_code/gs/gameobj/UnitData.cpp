@@ -5038,6 +5038,13 @@ void UnitData::SetOwner(PLAYER_INDEX newo)
 	ENQUEUE(); 
 }
 
+void UnitData::SetType(sint32 type)
+{ 
+	m_type = type; 
+	//ENQUEUE(); 
+}
+
+
 void UnitData::SetHP(const double hp)
 {
 	m_hp = hp;

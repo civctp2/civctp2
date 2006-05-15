@@ -918,6 +918,12 @@ void Unit::SetHP(const double newval)
 	AccessData()->SetHP(newval); 
 }
 
+void Unit::SetType(const sint32 type)
+
+{
+	AccessData()->SetType(type); 
+}
+
 void Unit::SetHPToMax()
 
 {

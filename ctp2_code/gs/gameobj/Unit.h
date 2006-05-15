@@ -787,6 +787,8 @@ public:
 
 	bool NeedsRefueling() const;
 	bool UnitValidForOrder(const OrderRecord * order_rec) const;
+
+	void SetType(const sint32 type);  //EMOD
 };
 
 uint32 Unit_Unit_GetVersion(void) ;
