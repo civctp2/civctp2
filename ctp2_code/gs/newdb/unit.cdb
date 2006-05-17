@@ -86,35 +86,35 @@ Unit {
 
 	Record Advance             EnableAdvance
 	Record Advance[0..5]        ObsoleteAdvance
-	Record Building[] PrerequisiteBuilding  	// Added by E to limit units to cities with certain buildings
+	Record Building[] PrerequisiteBuilding  // Added by E to limit units to cities with certain buildings
 	Record Government[] GovernmentsModified
 	Record Terrain[] CanSettleOn 			//added by E restricts settling to certain terrains
 	Record Unit[]     UpgradeTo 			//FutureUse to create Upgrade Paths, cost based on difference ShieldCost x Gold?
 	Record Unit[]     ObsoleteUnit 			//added by E
 	Record CityStyle[] CultureOnly 			//added by E -- can only build units if civ has certain citystyle
 	Record CityStyle[] CityStyleOnly 		//added by E--can only build units at cities with certain citystyle 
-	Record Civilisation[] CivilisationOnly 		//added by E -- can only build units if player is a specific civ
-	Record TerrainImprovement     SettleImprovement // future use - for units to make specific imps like forts
-    	Record Resource[] NeedsCityGood 		// must have good in radius of city or buying resource to build 
+	Record Civilisation[] CivilisationOnly 	//added by E -- can only build units if player is a specific civ
+	Record TerrainImprovement[]     SettleImprovement // future use - for units to make specific imps like forts
+    	Record Resource[] NeedsCityGood 	// must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll 		//a city must have all resource to build unit
-	Record Resource[] NeedsCityGoodCapitol 		//implemented by E
-	Record Resource[] NeedsCityGoodAnyCity 		//implemented by E
-	Record Feat[] NeedsFeatToBuild		// implemented by E
+	Record Resource[] NeedsCityGoodCapitol 	//implemented by E
+	Record Resource[] NeedsCityGoodAnyCity 	//implemented by E
+	Record Feat[] NeedsFeatToBuild			// implemented by E
 
 
-	Bit(Int) MoveBonus     				//FU - Instead of specifying an imp why not define the movecost here? by E
+	Bit(Int) MoveBonus     					//FU - Instead of specifying an imp why not define the movecost here? by E
 
 	Record TerrainImprovement[]     AllTerrainAsImprovement // future use - like AllTerrainRoads
 	Record Unit [] ObsoleteByUnit 			//FU intead of avdance for later upgrade
-    	Bit NonLethalBombard  				//lessen bombard strengthen like old civ3
-	Bit CanBombardTiles  				//allows bombarding of tile improvements
-	Bit CollateralTileDamage  			//if a defender is on a tile then improvements cut too
-    	Bit PrecisionStrike  				//FU when bombing city only destroys buildings
-    	Bit TargetsCivilians  				//FU when bombing city only kills a pop
+    Bit NonLethalBombard  					//lessen bombard strengthen like old civ3
+	Bit CanBombardTiles  					//allows bombarding of tile improvements
+	Bit CollateralTileDamage  				//if a defender is on a tile then improvements cut too
+    Bit PrecisionStrike  					//FU when bombing city only destroys buildings
+    Bit TargetsCivilians  					//FU when bombing city only kills a pop
 
-	Bit CanRebase  					//FU to rebase CantMove units
-	Bit MultipleAttacks  				//FU
-	Bit CanBeGifted						//FU
+	Bit CanRebase  							//FU to rebase CantMove units
+	Bit MultipleAttacks  					//FU
+	Bit CanBeGifted							//FU
 
 	Bits Size {
 		Small,
@@ -190,7 +190,7 @@ Unit {
 	Bit AttackFromSpaceship	
 	Bit CantBeAttacked		
 	Bit CargoPod	
-	Bit IsFoot					// added by E for additional battle modifiers Dec-7-2005	
+	Bit IsFoot						// added by E for additional battle modifiers Dec-7-2005	
 	Bit IsMounted	
 	Bit IsSiege  					// added by E for additional battle modifiers Dec-7-2005
 	Bit IsWheeled 					// added by E for additional battle modifiers Dec-7-2005
@@ -216,7 +216,7 @@ Unit {
 	Bit BonusAgainstMechanized 			// added by E for additional battle modifiers Dec-7-2005
 	Bit BonusAgainstHelicopter 			// added by E for additional battle modifiers Dec-7-2005
 	Bit BonusAgainstGuerrilla 			// added by E for additional battle modifiers Dec-13-2005
-	Bit BonusAgainstSpecialForces 			// added by E for additional battle modifiers Dec-13-2005
+	Bit BonusAgainstSpecialForces 		// added by E for additional battle modifiers Dec-13-2005
 	Bit BonusAgainstSubmarine 			// added by E for additional battle modifiers Dec-13-2005
 	Bit SingleUse				
 	Bit BonusAirDefense		
@@ -228,7 +228,7 @@ Unit {
 	Bit AttackWheeledBonus 				// added by E for additional battle modifiers Dec-7-2005
 	Bit AttackMechanizedBonus			// added by E for additional battle modifiers Dec-7-2005
 	Bit AttackHelicopterBonus 			// added by E for additional battle modifiers Dec-7-2005
-	Bit AttackSpecialForcesBonus			// added by E for additional battle modifiers Dec-13-2005
+	Bit AttackSpecialForcesBonus		// added by E for additional battle modifiers Dec-13-2005
 	Bit AttackCivilianBonus 			// added by E for additional battle modifiers Dec-13-2005
 	Bit AttackGuerrillaBonus 			// added by E for additional battle modifiers Dec-13-2005
 	Bit AttackWoodenShipBonus	
@@ -343,10 +343,10 @@ Unit {
 	Bit NoSlaves				
 	Bit CreateRift			
 	Bit CanCloak
-	Bit HiddenNationality 				//future use for Civ3 like trait maybe same as Cloak?				
-	Bit SneakAttack 				//Can attack without war declared 	
-	Bit SneakPillage 				//Can Pillage without war declared	
-	Bit SneakBombard 				//Can Bombard without war declared
+	Bit HiddenNationality 						//future use for Civ3 like trait maybe same as Cloak?				
+	Bit SneakAttack 							//Can attack without war declared 	
+	Bit SneakPillage 							//Can Pillage without war declared	
+	Bit SneakBombard 							//Can Bombard without war declared
 	Bit ParatrooperTransport
 	Bit CantBuild
 
@@ -370,8 +370,8 @@ Unit {
 	Bit LandCityCanBuild
 	Bit SeaCityCanBuild
 	Bit SpaceCityCanBuild
-	Bit IsSpecialForces
-      	Bit IsPeaceKeeper
+	Bit IsSpecialForces				//EMOD
+    Bit IsPeaceKeeper				//EMOD
 	Bit IsGuerrilla  				//EMOD
 	Bit IsWorker 					//future use -- with TerrImp flag NeedsWorker to limit certain imps or Civ3-like mods
 	Bit NotAffectedByLandMines
@@ -594,13 +594,14 @@ Unit {
 	Bit GLHidden
 
     Bit CantMove
-    Bit CantGroup 					// for future use to make solo moving units
 
     // set this flag for units that non-evil AI's should not attack
     Bit Civilian
 
     Bit NoBarbarian 					// added by tombom
     Bit GoodyHutExcluded				// Prevents Some Units from appearing by E
+	Bit CanHarvest						//added by E to add Gold and Shields from terrain
+	Bit CantGroup 					// for future use to make solo moving units
 
     Bit Leader						// Special "king" unit
 }

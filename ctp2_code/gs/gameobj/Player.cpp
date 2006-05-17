@@ -2085,40 +2085,63 @@ void Player::BeginTurnProduction()
 														 mat_paid);
 		m_materialPool->AddMaterials(mat_paid);
 	}
+
 	if(materialsFromFranchise > 0) {
 		m_materialPool->AddMaterials(materialsFromFranchise);
 	}
 
-	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction? removed because crash
+//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction? removed because crash
 
-	//	for(i = 0; i < m_allInstallations->Num(); i++) {
-//	if ((m_terrainImprovements->Num() > 0) && (0 < n)) {
-//		for(i = 0; i < m_terrainImprovements->Num(); i++) {
-//			if (m_terrainImprovements->Access(i).GetBonusProductionExport()) {
-//			sint32 prod = m_terrainImprovements->Access(i).GetBonusProductionExport();
-//				m_materialPool->AddMaterials(prod);
-			//	m_materialPool->AddMaterials(m_terrainImprovements->Access(i).GetBonusProductionExport());
-//			}
-//		}
-//	}
-	//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction?
-
-//	MapPoint pos;
-//	for(sint32 b = 0; b < g_theTerrainImprovementDB->NumRecords(); b++) {
-//	if ((m_allInstallations->Num() > 0) && (0 < n)) {
+//	if ((0 < m_allInstallations->Num()) && (0 < n)) {
 //		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
 //			Installation inst = m_allInstallations->Access(b);
 //			const TerrainImprovementRecord *rec = inst.GetDBRec();
-			//const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
-			//if (effect->GetColony()) {
-//				sint32 prod = inst.GetDBRec->GetBonusProductionExport();
-//				if (inst.GetDBRec->GetBonusProductionExport()) {
-			//	if (effect->GetBonusProductionExport(prod)){
-//					m_materialPool->AddMaterials(prod);
-//				}
-			//}
+//			sint32 bonus;
+//			if (rec->GetBonusProductionExport(bonus)) {
+//					m_materialPool->AddMaterials(bonus);
+//			}
 //		}
 //	}
+
+//EMOD New Version 5-16-2006
+
+	if ((0 < m_allInstallations->Num()) && (0 < n)) {
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+			Installation inst = m_allInstallations->Access(b);
+			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			Cell *instcell = g_theWorld->GetCell(inst.RetPos());
+			
+			sint32 bpe;
+			if (rec->GetBonusProductionExport(bpe)) {
+					m_materialPool->AddMaterials(bpe);
+			}
+
+			sint32 bge;
+			if (rec->GetBonusGoldExport(bge)) {
+				m_gold->AddGold(bpe);
+			}
+
+			if (rec->GetCanExportTileValue()) {
+					m_materialPool->AddMaterials(instcell->GetShieldsProduced());
+					m_gold->AddGold(instcell->GetGoldProduced());
+			}
+
+			sint32 good;
+			if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(inst.RetPos(), good))){
+				for (sint32 c=0; c < n; c++) { 
+					CityData *cd = m_all_cities->Access(c).GetData()->GetCityData();
+					if(!cd->IsLocalResource (good)) {
+					//	cd->GetCollectingResources.AddResource(good, 1);
+						//break;  may have to add a break like sneakattack because only one city should receive it
+					}
+				}
+			}
+		}
+	}
+
+
+
+
 //end EMOD
 
 	m_productionFromFranchises = 0;
@@ -2149,15 +2172,7 @@ void Player::BeginTurnImprovements()  //this might only be for tileimps under co
 		
 	}
 	
-//	if (n > 0) {
-//		for(i = 0; i < m_terrainImprovements->Num(); i++) {
-//			if (m_terrainImprovements->Access(i).GetBonusProductionExport()) {
-//			sint32 prod = m_terrainImprovements->Access(i).GetBonusProductionExport();
-//				m_materialPool->AddMaterials(prod);
-			//	m_materialPool->AddMaterials(m_terrainImprovements->Access(i).GetBonusProductionExport());
-//			}
-//		}
-//	}
+
 
 
 }

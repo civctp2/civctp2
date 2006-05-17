@@ -35,10 +35,21 @@
 // Modifications from the original Activision code:
 //
 // - ComputeSettleValue modified to prevent AI from trying to settle on places it cant
-// - Restored ComputeSettleValue as it does not prevent the AI from settling
-//   at places it can't settle.
-//
+// 
+//     
 //----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "settlemap.h"
@@ -56,6 +67,10 @@
 #include "mapanalysis.h"
 #include "StrategyRecord.h"
 #include "Diplomat.h"
+#include "Unit.h"
+#include "UnitRecord.h"
+#include "UnitData.h"
+#include "UnitPool.h"
 
 #include "boundingrect.h"
 
@@ -77,25 +92,6 @@ SettleMap::SettleMap()
 {
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : SettleMap::ComputeSettleValue
-//
-// Description: Calculates a settling score for the given position, which is 
-//              independent of unit abilities to settle at a certain location.
-//              The settle score is the sum of scores of tiles in a radius of
-//              two tiles around the given position.
-//
-// Parameters : const MapPoint & pos: The position for that the settle
-//                                    score should be computed.
-//
-// Globals    : g_theWorld: The game world
-//
-// Returns    : double:     The settle score for the given map position
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
 double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 {
 	sint32 score = 0;
@@ -107,11 +103,33 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 		score += cell->GetScore();
 	}
 
-// Stupit idea and does not really work.
 //EMOD if the cell has a score of zero, the AI won't attempt at all 4-10-2006
-//	if (g_theWorld->GetCell(pos)->GetScore() == 0) {
+	if (g_theWorld->GetCell(pos)->GetScore() == 0) {
+		score = 0;
+	}
+//EMOD to allow for AI notto settle some places
+//	If Unit Get SettleType 
+//		GetCell(pos) != settletype
 //		score = 0;
+//EMOD
+//  sint32 i;
+//	const UnitRecord *rec = g_theUnitDB->Get(unit_type); 
+//	for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
+//		if(!rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
+//			score = 0;
+//		}
 //	}
+// end EMOD
+//
+//	if !(rec->GetSettleLand() && g_theWorld->IsLand(pos))
+//		score = 0; 
+//	else if (rec->GetSettleMountain() && g_theWorld->IsMountain(pos))
+//		score = 0; 
+//	else if (rec->GetSettleWater() && g_theWorld->IsWater(pos))
+//		score = 0; 
+//	else if (rec->GetSettleSpace() && g_theWorld->IsSpace(pos))
+//		score = 0;
+//end EMOD
 	return score;
 }
 
@@ -244,6 +262,28 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		}
 #endif _DEBUG
 
+
+//EMOD for AI settling 5-15-2006
+		Player *player_ptr = g_player[playerId];
+		Assert(player_ptr);
+		if (player_ptr == NULL)
+			return;
+
+		bool settle_mountain = false;
+		Unit unit;
+		//list<Unit> weapon_list;
+		//Assert(player_ptr->m_all_units);
+		for(sint32 i = 0; i < player_ptr->m_all_units->Num(); i++) {
+		
+			unit = player_ptr->m_all_units->Access(i);
+			if (unit.GetDBRec()->GetSettleMountain())
+			{
+				settle_mountain = true;
+				break;
+			}
+		}
+
+///end EMOD
 		
 		if (!CanSettlePos(rc_pos))
 			continue;
@@ -262,7 +302,12 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 			continue;
 		}
 
-		
+/////EMOD for AI Settling 
+	
+		if (!settle_mountain && g_theWorld->IsMountain(rc_pos))
+			continue;	
+////
+
 		if (!settle_water && g_theWorld->IsWater(rc_pos))
 			continue;
 

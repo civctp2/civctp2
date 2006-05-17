@@ -2092,7 +2092,7 @@ void CityData::CollectResources()
 		if(m_built_improvements & ((uint64)1 << b)){
 			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
 	//		Check If needsGood for the building a make bonuses dependent on having that good for further bonus
-			if(rec->GetNumEnablesGood() > 0){
+			if((rec->GetNumEnablesGood() > 0) && (IsBuildingOperational(b))){
 				for(good = 0; good < rec->GetNumEnablesGood(); good++){
 					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
 				}
@@ -5922,10 +5922,14 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 				return FALSE;
 		}
 	}
-	//EMOD OnePerCiv allows for buildings to be Small Wonders
+	
+//EMOD OnePerCiv allows for buildings to be Small Wonders
 	if(rec->GetOnePerCiv()) {
-		for(o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
-			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings())){ 
+		sint32 numCities = 0;
+		sint32 c;
+		for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
+			Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
+			if(aCity.CD()->HaveImprovement(type)) {
 				return FALSE;
 			}
 		}
@@ -6138,9 +6142,10 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 //		}
 //	}
 //
-//	if(rec->GetOnePerCiv()) { //GetEffectiveBuildings should include wonders too
-//		for(sint32 o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
-//			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings())){ 
+	//EMOD OnePerCiv allows for buildings to be Small Wonders
+//	if(rec->GetOnePerCiv()) {
+//		for(o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
+//			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings() & ((uint64)1 << (uint64)type))){ 
 //				return FALSE;
 //			}
 //		}
@@ -7980,6 +7985,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 {
 	if(gold > 0) {
 		
+	//(IsBuildingOperational(b))
 		double goldBonus;
 		buildingutil_GetCommercePercent(GetEffectiveBuildings(), goldBonus, m_owner);
 		gold += static_cast<sint32>(gold * goldBonus);
@@ -9259,6 +9265,22 @@ sint32 CityData::GoodHappinessIncr() const
 	return totalHappinessInc;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CanCollectGood
+//
+// Description: Returns true if a city can collect the good 
+//
+// Parameters : -
+//
+// Globals    : g_theResourceDB: The resource database
+//
+// Returns    : bool if the prerequisites are met to collect a good
+//
+// Remark(s)  : Additional checks may be added
+//
+//----------------------------------------------------------------------------
+
 bool CityData::CanCollectGood(sint32 good) const 
 //EMOD to check Good flags to see if a player can collect it. Modelled on CanBuildBuilding. 4-27-2006
 {
@@ -9283,3 +9305,116 @@ bool CityData::CanCollectGood(sint32 good) const
 	return true;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::IsbuildingOperational
+//
+// Description: Returns true if the buildings prereqs are still available 
+//
+// Parameters : -
+//
+// Globals    : g_theBuildingDB: The building database
+//
+// Returns    : bool if the prerequisites are met for the buildings flags to 
+//				operate
+//
+// Remark(s)  : Additional checks may be added
+//
+//----------------------------------------------------------------------------
+
+//EMOD to check if a building can operate. Modelled on CanBuildBuilding. 4-27-2006
+
+bool CityData::IsBuildingOperational(sint32 type) const
+{
+
+	const BuildingRecord* rec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
+	
+	
+	Assert(rec != NULL);
+	if (!rec) 
+		return false;
+
+
+	sint32 o;
+	for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
+		if(g_player[m_owner]->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
+			return false;
+	}
+	
+	if((rec->GetNuclearPlant() &&
+	   wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders()))) {
+		return false;
+	}
+
+	
+	if(rec->GetNumPrerequisiteBuilding() > 0) {
+		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
+			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
+			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
+				return false;
+		}
+	}
+
+	// Added GovernmentType flag from Units to use for Buildings
+	if(rec->GetNumGovernmentType() > 0) {
+		sint32 i;
+		bool found = false;
+		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
+			if(rec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	// Start Resources section - more to add later 
+	// Added by E - Compares Building NeedsCityGood to the resources collected our bought by the city, can be either/or
+	if(rec->GetNumNeedsCityGood() > 0) {
+		sint32 g;
+		bool found = false;
+		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
+			if(HasNeededGood(rec->GetNeedsCityGoodIndex(g))){
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	// Added by E - Compares Building NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
+	if(rec->GetNumNeedsCityGoodAll() > 0) {
+		sint32 g;
+		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
+			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
+				return false;
+		}
+	}
+
+	if(rec->GetNumNeedsCityGoodAnyCity()) {
+		
+		sint32 i, g;
+		bool goodavail = false;
+
+			for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
+				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+					if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+						goodavail = true;
+						break;
+					}
+				}
+					if(goodavail){
+					break;
+					}
+			}
+			if(!goodavail)
+			return false;
+	}
+
+	//End Resources Code
+
+
+	return true;
+}

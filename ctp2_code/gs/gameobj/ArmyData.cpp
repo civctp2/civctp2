@@ -75,6 +75,10 @@
 // - TargetsCivilians flag enabled by E; units with flag will only kill 
 //   civilians in cities (bomb everywhere else though) 4-26-2006
 // - Added check in VerifyAttack to exclude barbarians 5-2-2006 by E
+// - Added CanHarvest to BeginTurn for Units that have the flag CanHarvest and 
+//   are Entrenched by E 5-15-2006
+// - Added Gold Cost to CanCaptureTile 5-16-2006 by E
+// - Added SettleImprovement to disband 5-16-2006 by E
 //
 //----------------------------------------------------------------------------
 
@@ -1515,6 +1519,20 @@ ArmyData::CheckActiveDefenders(MapPoint &pos, BOOL cargoPodCheck)
 //----------------------------------------------------------------------------
 void ArmyData::BeginTurn()
 {
+
+//EMOD to add Harvesting Units 5-15-2006
+
+	for(sint32 i = 0; i < m_nElements; i++) {
+		Cell *cell = g_theWorld->GetCell(m_pos);
+		sint32 shields = cell->GetShieldsProduced();
+		const UnitRecord *rec = m_array[i].GetDBRec();
+		if((m_array[i].IsEntrenched()) && (rec->GetCanHarvest()) && (cell->GetShieldsProduced() > 0)) {
+			g_player[m_owner]->m_gold->AddGold(cell->GetGoldProduced());
+			//g_player[m_owner]->m_materialPool->AddMaterials(shields);
+		}
+	}
+//END EMOD
+
     m_flags &= ~(k_CULF_EXECUTED_THIS_TURN);
     if(m_isPirating) {//then collect gold from trade routes that this army is pirating
         Cell *cell = g_theWorld->GetCell(m_pos);
@@ -4851,11 +4869,14 @@ ORDER_RESULT ArmyData::Pillage(BOOL test_ownership)
 	//			sint32 terraingold = cell->GetGoldFromTerrain();
 	//			sint32 goldcost = (terraingold + impgold) * rushmod;
 	for(sint32 j = 0; j < m_nElements; j++) {
-		if(m_array[j].GetDBRec()->GetCanCaptureTile()) { // add && (g_player[m_owner]->m_gold->GetLevel() > goldcost) && (terrainutil_CanBeCaptured(m_pos))) {
+		sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetWonderRushModifier();
+		sint32 goldcost = (cell->GetGoldProduced() * cell->GetNumDBImprovements()) * rushmod;
+		if((m_array[j].GetDBRec()->GetCanCaptureTile()) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){ // && (terrainutil_CanBeCaptured(m_pos))) {
 			if (cellOwner != m_owner) {
 				cell->SetOwner(m_owner);
 				g_theWorld->ChangeOwner(pos, cellOwner, m_owner);
-				//add g_player[m_owner]->m_gold->SubGold(goldcost);
+				g_player[cellOwner]->m_gold->AddGold(goldcost); //may crash because of barbs?
+				g_player[m_owner]->m_gold->SubGold(goldcost);
 				return ORDER_RESULT_SUCCEEDED;
 			}
 		}
@@ -8552,6 +8573,7 @@ void ArmyData::Disband()
 	Cell *cell = g_theWorld->GetCell(m_pos);
 	sint32 CellOwner = cell->GetOwner();
 	Diplomat & cell_diplomat = Diplomat::GetDiplomat(CellOwner);
+	sint32 good;
 
 	if(g_player[m_owner]->m_all_armies->Num() < 2 &&
 	   g_player[m_owner]->m_all_cities->Num() < 1)
@@ -8591,18 +8613,28 @@ void ArmyData::Disband()
 				}
 //			}else if(rec->GetMerchantGold() {
 //				sint32 merchantgold = get distance from capitol to m_pos * (rec->GetMerchantGold)
-//				player AddGold(merchantgold);
+//				g_player[m_owner]->m_gold->AddGold(merchantgold);
 //				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 //			} else {
 			} else {
 				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 			}
+//EMOD Settle Improvements for disbanding units 5-16-20006  so far only for goods
+			
+	//	}else if(rec->GetNumSettleImprovement() > 0) {  //Added to allow units settle improvements
+	//		for(sint32 imp = 0; imp < rec->GetNumSettleImprovement(); imp++) {
+				//const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+	//			sint32 newimp = rec->GetSettleImprovementIndex(imp);
+	//			if(g_theWorld->GetGood(m_pos, good)) { // || (terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, m_pos()))) {
+	//				g_player[m_owner]->CreateSpecialImprovement(rec->GetSettleImprovementIndex(imp), m_pos, 0);
+	//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+	//			}
+	//		}
 		} else {
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
-//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);  //This caused the r570 Bureaubert crash
 	}
-///
+
 
 	
 	if ( g_selected_item->GetSelectedCity(city) ) {

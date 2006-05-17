@@ -34,6 +34,11 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 
 Changelog:
+2006-05-16
+Added: Tileimps with colony and  BonusProductionExport, BonusGoldExport, CanExportTileValue flags can add shields outside player radius.
+Fixed: OnePerCiv now works for buildings
+Added: CanHarvest to units that also CanEntrench. Adds the terrain gold to your treasury
+
 2006-05-13
 Added: AICityDefenderBonus to difficulty database, it adds population size to city defense.
 Added: NeedsFeatToBuild to Units, Buildings, and Wonders. Needs more testing.
