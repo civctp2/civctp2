@@ -55,6 +55,7 @@
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
 // - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2417,7 +2418,8 @@ void CityWindow::FillPollutionList()
 		}
 	}
 
-	for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+	sint32 i;
+	for (i = 0; i < g_theBuildingDB->NumRecords(); i++)
 	{
 		if (m_cityData->HaveImprovement(i))
 		{

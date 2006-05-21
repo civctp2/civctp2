@@ -8977,7 +8977,6 @@ sint32 CityData::GetCityStyle() const
 //----------------------------------------------------------------------------
 void CityData::SetCityStyle(sint32 style)
 {
-
 	m_cityStyle = style;
 	UpdateSprite();
 }
@@ -9201,7 +9200,7 @@ sint32 CityData::GetRingSize(sint32 ring) const
 //----------------------------------------------------------------------------
 void CityData::GetSpecialistsEffect(sint32 ring, double &farmersEff, double &laborersEff, double &merchantsEff, double &scientistsEff) const
 {
-	assert(ring >= 0 && ring < g_theCitySizeDB->NumRecords());
+	Assert(ring >= 0 && ring < g_theCitySizeDB->NumRecords());
 	if(ring < 0 || ring >= g_theCitySizeDB->NumRecords()) ring = 0;
 
 	farmersEff = m_farmersEff[ring];
@@ -9280,7 +9279,6 @@ sint32 CityData::GoodHappinessIncr() const
 // Remark(s)  : Additional checks may be added
 //
 //----------------------------------------------------------------------------
-
 bool CityData::CanCollectGood(sint32 good) const 
 //EMOD to check Good flags to see if a player can collect it. Modelled on CanBuildBuilding. 4-27-2006
 {
@@ -9316,14 +9314,13 @@ bool CityData::CanCollectGood(sint32 good) const
 // Globals    : g_theBuildingDB: The building database
 //
 // Returns    : bool if the prerequisites are met for the buildings flags to 
-//				operate
+//              operate
 //
 // Remark(s)  : Additional checks may be added
+//              EMOD to check if a building can operate. Modelled on 
+//              CanBuildBuilding. 4-27-2006
 //
 //----------------------------------------------------------------------------
-
-//EMOD to check if a building can operate. Modelled on CanBuildBuilding. 4-27-2006
-
 bool CityData::IsBuildingOperational(sint32 type) const
 {
 
@@ -9405,12 +9402,12 @@ bool CityData::IsBuildingOperational(sint32 type) const
 						break;
 					}
 				}
-					if(goodavail){
+				if(goodavail){
 					break;
-					}
+				}
 			}
 			if(!goodavail)
-			return false;
+				return false;
 	}
 
 	//End Resources Code

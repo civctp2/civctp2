@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -134,7 +135,8 @@ PRIMITIVES_ERRCODE primitives_FrameRect16(
 	inc1 = (surfPitch >> 1) - width;
 	inc2 = width - 1;
 
-	for (sint32 i=width;i;i--)
+	sint32 i;
+	for (i=width;i;i--)
 		*pDest++ = color;
 
 	sint32 tempHeight = height - 2;
@@ -444,8 +446,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 	if (flag)
 	{
-		
-		for (sint32 j = level;j;j--)
+		sint32 j;
+		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{

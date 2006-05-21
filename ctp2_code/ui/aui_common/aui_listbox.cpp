@@ -26,6 +26,7 @@
 //
 // - Always focus on the latest message.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -656,7 +657,8 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 
 	
 	ListPos position = m_selectedList->GetHeadPosition();
-	for ( sint32 i = m_selectedList->L(); i; i-- )
+	sint32 i;
+	for ( i = m_selectedList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
 		sint32 curIndex = m_selectedList->GetNext( position );

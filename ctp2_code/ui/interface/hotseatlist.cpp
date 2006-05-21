@@ -27,6 +27,7 @@
 // - Memory leaks repaired, cleanup in destructor.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -619,11 +620,12 @@ BOOL		s_playerCivsLocked;
 
 void hotseatlist_ClearOptions(void)
 {
-	for(sint32 i=0; i<k_MAX_PLAYERS; i++) {
+	sint32 i;
+	for(i=0; i<k_MAX_PLAYERS; i++) {
 		s_hotseatCivList[i] = (CIV_INDEX)0;
 	}
 
-	for (i=0; i<CIV_INDEX_INVALID; i++) {
+	for(i=0; i<CIV_INDEX_INVALID; i++) {
 		s_legalCivList[i] = FALSE;
 	}
 

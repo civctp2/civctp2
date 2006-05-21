@@ -43,6 +43,7 @@
 //      aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo2( MBCHAR *c )
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code (May 21th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -266,7 +267,8 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	Assert( n != 0 );
 	if ( !n ) return AUI_ERRCODE_HACK;
 
-	for ( uint16 i = 0; i < n; i++ )
+	uint16 i;
+	for ( i = 0; i < n; i++ )
 	{
 		uint16 platform, encoding;
 		TT_Get_CharMap_ID( m_ttFace, i, &platform, &encoding );

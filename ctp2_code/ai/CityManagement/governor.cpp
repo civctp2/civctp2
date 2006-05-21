@@ -93,6 +93,7 @@
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 // - Repaired incorrect AddEvent parameters.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -4078,7 +4079,8 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	const StrategyRecord::BuildListSequenceElement *best_elem = NULL;
 	sint32 best_priority = -99999;
 
-	for (int elem_num = 0; elem_num < strategy.GetNumBuildListSequenceElement(); elem_num++)
+	sint32 elem_num;
+	for(elem_num = 0; elem_num < strategy.GetNumBuildListSequenceElement(); elem_num++)
 	{
 		elem = strategy.GetBuildListSequenceElement(elem_num);
 

@@ -27,6 +27,7 @@
 // - Repaired memory leaks.
 // - Updated tribe index check.
 // - Replaced the old civilisation database by a new one. (Aug 21st 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -386,7 +387,7 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
  			
 			BOOL foundOne = FALSE;
 
- 			for (i=0; i<k_MAX_PLAYERS; i++) {
+ 			for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
  				MBCHAR		*civName;
  				MBCHAR		*dbString;
 

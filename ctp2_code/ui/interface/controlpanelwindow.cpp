@@ -52,6 +52,7 @@
 //   and some variables (e.g. m_mainDropDown) are not NULL-initialised in the 
 //   constructor. Maybe this is some leftover of the CTP1 code?
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standatized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2730,18 +2731,18 @@ ControlPanelWindow::CreateTileImpBanks()
 	m_tileImpPanes[CP_TERRAFORM_LAND ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tfLandButtonBank"   );
 
 
-	
-	for	(sint32 i=0;i<CP_TILEIMP_MAX;i++)
+	sint32 i;
+	for(i=0;i<CP_TILEIMP_MAX;i++)
 	{
 		if ((m_activatorButtons[i]!=NULL)&&(i<CP_TILEIMP_MAX))
 			m_activatorButtons[i]->SetActionFuncAndCookie(TileImpSelectionCallback,(void *)i);
-   
+
 		if (m_tileImpPanes[i]!=NULL)
 			m_tileImpPanes[i]->Hide();
 	}
 
 	
-	for	(i=0;i<CP_MAX_TILEIMPBUTTONS;i++)
+	for(i=0;i<CP_MAX_TILEIMPBUTTONS;i++)
 	{
 		m_tileImpButtons[i]=NULL;
 		m_terraFormButtons[i]=NULL;

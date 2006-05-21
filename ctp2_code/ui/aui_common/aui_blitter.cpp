@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Activision User Interface blitter
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Standardized code (May 21th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -1361,10 +1380,11 @@ AUI_ERRCODE aui_Blitter::BevelBlt8(
 
 		
 
-		
-		for ( sint32 i = 0; i < bevelThickness; i++ )
+		sint32 i;
+		sint32 j;
+		for ( i = 0; i < bevelThickness; i++ )
 		{
-			for ( sint32 j = i; j; j-- )
+			for ( j = i; j; j-- )
 			{
 				
 				*destBuf++ = white;
@@ -1389,7 +1409,7 @@ AUI_ERRCODE aui_Blitter::BevelBlt8(
 		
 		for ( i = skipHeight; i; i-- )
 		{
-			for ( sint32 j = bevelThickness; j; j-- )
+			for ( j = bevelThickness; j; j-- )
 			{
 				
 				*destBuf++ = white;
@@ -1412,7 +1432,7 @@ AUI_ERRCODE aui_Blitter::BevelBlt8(
 		
 		for ( i = bevelThickness; i; i-- )
 		{
-			for ( sint32 j = i - 1; j; j-- )
+			for ( j = i - 1; j; j-- )
 			{
 				
 				*destBuf++ = white;
@@ -2230,16 +2250,6 @@ AUI_ERRCODE aui_Blitter::StencilBlt16(
 
 	return retcode;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 typedef sint16 spanIndex;

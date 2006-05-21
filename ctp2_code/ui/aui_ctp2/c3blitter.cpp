@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 blitter
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -47,15 +48,10 @@ unsigned which_blit=0;
 
 C3Blitter::C3Blitter() 
 {
-   
-   
-   
-   if(CheckMMXTechnology())	
-	   
-	   
-	   _Blt16To16Fast =Blt16To16Fast;
-   else
-	   _Blt16To16Fast =Blt16To16Fast;
+	if(CheckMMXTechnology())	
+		_Blt16To16Fast = &C3Blitter::Blt16To16Fast;
+	else
+		_Blt16To16Fast = &C3Blitter::Blt16To16Fast;
 };
 
 
@@ -69,28 +65,28 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	if ((flags & k_AUI_BLITTER_FLAG_FAST)) 
 	{
 		
-#ifdef _TRY_ALL_BLITTERS	
-	  
-  	   	switch(which_blit)
-  	   	{
-  	   	case 0:_Blt16To16Fast=Blt16To16Fast   ; break;
-  	    case 1:_Blt16To16Fast=Blt16To16FastFPU;	break;
-  	    case 2:_Blt16To16Fast=Blt16To16FastMMX;	break;
-  	   	}
+#ifdef _TRY_ALL_BLITTERS
+	
+		switch(which_blit)
+		{
+			case 0:_Blt16To16Fast = &C3Blitter::Blt16To16Fast   ; break;
+			case 1:_Blt16To16Fast = &C3Blitter::Blt16To16FastFPU; break;
+			case 2:_Blt16To16Fast = &C3Blitter::Blt16To16FastMMX; break;
+		}
 
-	   	which_blit ++;
-	 
+		which_blit ++;
+
 		if(which_blit>2)
-		   which_blit = 0;
+			which_blit = 0;
 		
-	   
+
 #endif
 		return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
-	} else {	
+	} else {
 		if (g_useDDBlit)
 			return aui_DirectBlitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 		else
-		   	return aui_Blitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
+			return aui_Blitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 	}
 }
 

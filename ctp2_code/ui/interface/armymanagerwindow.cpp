@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -854,7 +855,8 @@ void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data,
 
 	bool enableRemoveButton=true;
 	bool enableRemoveAllButton=false;
-	for(int i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	sint8 i;
+	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
 		MBCHAR switchName[k_MAX_NAME_LEN];
 		sprintf(switchName, "InArmyBox.Unit%d", i);		
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);

@@ -2113,7 +2113,7 @@ void Player::BeginTurnProduction()
 			
 			sint32 bpe;
 			if (rec->GetBonusProductionExport(bpe)) {
-					m_materialPool->AddMaterials(bpe);
+				m_materialPool->AddMaterials(bpe);
 			}
 
 			sint32 bge;
@@ -2122,13 +2122,13 @@ void Player::BeginTurnProduction()
 			}
 
 			if (rec->GetCanExportTileValue()) {
-					m_materialPool->AddMaterials(instcell->GetShieldsProduced());
-					m_gold->AddGold(instcell->GetGoldProduced());
+				m_materialPool->AddMaterials(instcell->GetShieldsProduced());
+				m_gold->AddGold(instcell->GetGoldProduced());
 			}
 
 			sint32 good;
 			if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(inst.RetPos(), good))){
-				for (sint32 c=0; c < n; c++) { 
+				for (sint32 c=0; c < n; c++) {
 					CityData *cd = m_all_cities->Access(c).GetData()->GetCityData();
 					if(!cd->IsLocalResource (good)) {
 					//	cd->GetCollectingResources.AddResource(good, 1);
@@ -10185,6 +10185,10 @@ BOOL Player::CanBuildCapitalization() const { return m_can_build_capitalization;
 BOOL Player::CanBuildUnit(const sint32 type) const
 {
 	const UnitRecord *rec = g_theUnitDB->Get(type);
+
+	Assert(rec);
+	if(rec == NULL)
+		return FALSE;
 
 	if (!HasAdvance(rec->GetEnableAdvanceIndex()))
 		return FALSE;

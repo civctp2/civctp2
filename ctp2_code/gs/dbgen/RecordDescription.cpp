@@ -909,12 +909,12 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    if(tok != k_Token_Name) {\n");
 		fprintf(outfile, "        char newName[256];\n");
 		fprintf(outfile, "        sprintf(newName, \"%s_%s\", numRecords);\n", uppName, "%i");
-		fprintf(outfile, "        if(!g_theStringDB->GetStringID(\"newName\", m_name)) {\n");
+		fprintf(outfile, "        if(!g_theStringDB->GetStringID(newName, m_name)) {\n");
 		
 		
-		fprintf(outfile, "            g_theStringDB->InsertStr(\"newName\", \"newName\");\n");
-		fprintf(outfile, "            if(!g_theStringDB->GetStringID(\"newName\", m_name))\n");
-		fprintf(outfile, "                SetTextName(\"newName\");\n");
+		fprintf(outfile, "            g_theStringDB->InsertStr(newName, newName);\n");
+		fprintf(outfile, "            if(!g_theStringDB->GetStringID(newName, m_name))\n");
+		fprintf(outfile, "                SetTextName(newName);\n");
 		fprintf(outfile, "        }\n");
 		fprintf(outfile, "    }\n");
 		fprintf(outfile, "    else{\n");

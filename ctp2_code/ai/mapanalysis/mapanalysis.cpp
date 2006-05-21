@@ -27,6 +27,7 @@
 // - Relaxed an Assert to prevent lots of popups with e.g. the CTC mod.
 // - Corrected the Distance To Empire Center computation
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -206,10 +207,8 @@ void MapAnalysis::BeginTurn()
 
     ComputeHandicapRatios();
 
-
-	
-	
-    for (sint16 player = 0; player < m_threatGrid.size(); player++)
+	sint16 player;
+    for(player = 0; player < m_threatGrid.size(); player++)
     {
 
         m_threatGrid[player].Clear();
@@ -436,7 +435,7 @@ void MapAnalysis::BeginTurn()
 
     const sint8 cycles = 1;
     const double coef = 0.8;
-    for (player = 0; player < m_threatGrid.size(); player++)
+    for(player = 0; player < m_threatGrid.size(); player++)
     {
         m_threatGrid[player].Relax(cycles, coef);
         m_valueGrid[player].Relax(cycles, coef);

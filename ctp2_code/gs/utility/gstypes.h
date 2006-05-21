@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header file
-// Description  :
+// Description  : Type definitions
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -18,11 +18,16 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
+// - None
 //
+//----------------------------------------------------------------------------
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #pragma once
 #endif

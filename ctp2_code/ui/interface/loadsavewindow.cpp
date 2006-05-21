@@ -28,6 +28,7 @@
 // - Repaired memory leak.
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -604,7 +605,8 @@ BOOL LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
 
 		
 		sint32 numCivs = 0;
-		for (sint32 i=1; i<k_MAX_PLAYERS; i++) {
+		sint32 i;
+		for (i=1; i<k_MAX_PLAYERS; i++) {
 			
 			MBCHAR			s[_MAX_PATH];
 			PLAYER_INDEX	currentCiv = g_selected_item->GetVisiblePlayer();

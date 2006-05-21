@@ -39,6 +39,8 @@
 //   queues. (Oct. 22nd 2005 Martin Gühmann)
 // - Added option to allow end turn if the game runs in the background,
 //   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
+// - Options CityClick, EndTurnWithEmptyBuildQueues and RunInBackground
+//   removed from advance options since they do not work. (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -359,9 +361,9 @@ ProfileDB::ProfileDB()
 	Var("ShowOrderUnion", PV_BOOL, &m_showOrderUnion, NULL);
 	Var("RecentAtTop", PV_BOOL, &m_recentAtTop, NULL);
 	Var("RuleSets", PV_STRING, NULL, m_ruleSets, false);
-	Var("CityClick", PV_BOOL, &m_cityClick, NULL);
-	Var("EndTurnWithEmptyBuildQueues", PV_BOOL, &m_endTurnWithEmptyBuildQueues, NULL);
-	Var("RunInBackground", PV_BOOL, &m_runInBackground, NULL);
+	Var("CityClick", PV_BOOL, &m_cityClick, NULL, false);
+	Var("EndTurnWithEmptyBuildQueues", PV_BOOL, &m_endTurnWithEmptyBuildQueues, NULL, false);
+	Var("RunInBackground", PV_BOOL, &m_runInBackground, NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)

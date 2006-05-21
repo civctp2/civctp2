@@ -1,9 +1,32 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Call to Power 2 user interface tabgroup
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Standardized code (May 21th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -107,7 +130,8 @@ AUI_ERRCODE ctp2_TabGroup::Draw(aui_Surface *surface, sint32 x, sint32 y)
 		
 		
 		ListPos position = ChildList()->GetHeadPosition();
-		for(int countdown = ChildList()->L(); countdown; countdown--) {
+		int countdown;
+		for(countdown = ChildList()->L(); countdown; countdown--) {
 			
 			ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));
 

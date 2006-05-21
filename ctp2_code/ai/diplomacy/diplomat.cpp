@@ -43,6 +43,7 @@
 // - Some agreements have limited duration, PFT 05 MAR 05
 // - Replaced old civilisation database by new civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -4097,7 +4098,8 @@ sint32 Diplomat::GetNextAdvance() const
 
 	
 	sint32 advance_index = -1;
-	for (sint32 wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
+	sint32 wanted_advance;
+	for(wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
 	{
 		advance_index = rec->GetAdvance(wanted_advance)->GetIndex();
 
@@ -4109,7 +4111,7 @@ sint32 Diplomat::GetNextAdvance() const
 		break;
 	}
 
-	if (wanted_advance == rec->GetNumAdvance())
+	if(wanted_advance == rec->GetNumAdvance())
 	{
 		
 		return -1;
@@ -4136,7 +4138,8 @@ sint32 Diplomat::GetDesiredAdvanceFrom( const PLAYER_INDEX & foreignerId, const 
 
 	
 	sint32 advance_index = -1;
-	for (sint32 wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
+	sint32 wanted_advance;
+	for(wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
 	{
 
 		advance_index = rec->GetAdvance(wanted_advance)->GetIndex();
@@ -4319,8 +4322,8 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 		ai::Regard best_friend_regard = MIN_REGARD;
 		PLAYER_INDEX best_friend = -1;
 
-		
-		for (sint32 unit_type = 0; unit_type < g_theUnitDB->NumRecords(); unit_type++)
+		sint32 unit_type;
+		for (unit_type = 0; unit_type < g_theUnitDB->NumRecords(); unit_type++)
 		{
 			const UnitRecord *unit_rec = g_theUnitDB->Get(unit_type);
 			if (unit_rec->GetEnableAdvance() &&

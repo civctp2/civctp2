@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit tab of the control panel
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Option added to select which order buttons are displayed for an army.
 // - Added unit display name.
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -702,8 +706,8 @@ void UnitControlPanel::UpdateOrderButtons()
 	m_lastSelectedArmy = army;
 	m_lastSelectedArmyCount = army.IsValid() ? army.Num() : 0;
 
-	
-	for(sint32 orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
+	sint32 orderIndex;
+	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
 		
 		m_orderButton[orderIndex]->ExchangeImage(4, 0, NULL);
 		m_orderButton[orderIndex]->ShouldDraw();

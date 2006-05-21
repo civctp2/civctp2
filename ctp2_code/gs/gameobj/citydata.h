@@ -46,9 +46,9 @@
 // - Removed CITY_TILE_SIZE and k_CITY_RADIUS they aren't used. (Aug 12th 2005 Martin Gühmann)
 // - Removed more unused methods. (Aug 12th 2005 Martin Gühmann)
 // - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
-// - Added	BOOL HasNeededGood by E
-// - Added	BOOL HasEitherGood by E
-// - Added	BOOL HasTileImpInRadius by E 4-7-2006 bool if a city has imp in radius
+// - Added HasNeededGood method by E
+// - Added HasEitherGood method by E
+// - Added HasTileImpInRadius method by E 4-7-2006 bool if a city has imp in radius
 //
 //----------------------------------------------------------------------------
 
@@ -306,7 +306,7 @@ private:
 	sint32    m_max_scie_from_terrain;
 	double    m_gross_science;
 	double    m_science_lost_to_crime;
-#endif	
+#endif
 
 	RADIUS_OP m_cityRadiusOp;
 	UnitDynamicArray *m_killList;
