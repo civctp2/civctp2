@@ -24,7 +24,7 @@ Resource {
 	Int        TradeScience      = 0         // Unused
 	Int        AddPopulation	 = 0
 	Int        AddSlave			 = 0
-
+	
 	Bit IsBonusGood
 	Bit IsStrategicGood
 	Bit IsLuxuryGood
@@ -66,6 +66,7 @@ Terrain {
 	Struct Modifiers EnvBase
 	Bit(Struct Modifiers) EnvCity
 	Bit(Struct Modifiers) EnvRiver
+	Bit(Int) HostileTerrainCost = 0
 
 	Record Resource[0..4] Resources
 	Bit NoIndex

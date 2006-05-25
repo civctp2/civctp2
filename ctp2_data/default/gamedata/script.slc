@@ -967,6 +967,7 @@ alertbox '83DiscoveredAncientTreasure' {
 
 alertbox '84BesetByVandals' {
 	Text(ID_BESET_BY_VANDALS) ;
+	DeclareWar(g.player, player[0]);  //EMOD
 	Button(ID_BUTTON_CLOSE) {
 		Kill();
 	}
@@ -1723,6 +1724,7 @@ messagebox '029NoMaint' {
 messagebox '033BarbarianWarning' {
 	Text(ID_BARBARIAN_WARNING) ;
 	MessageType("MILITARY");
+
 }
 
 messagebox '040GrossPolluter' {
@@ -2906,6 +2908,17 @@ messagebox '911ImminentFlood' {
 	Text(ID_WORLD_POLLUTION_FLOODING_IMMINENT);
 	MessageType("POLLUTION");
 }	
+
+alertbox 'BarbWar' {
+	//Text(ID_BESET_BY_VANDALS) ;
+	DeclareWar(g.player, player[0]);
+	AddOrder(unit[0], location[0]);
+		Kill();
+}
+
+
+
+
 
 #include "feats.slc"
 

@@ -788,16 +788,16 @@ bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, si
 	if(!cell)
 		return false;
 
-	if(cell->GetOwner() == -1) {
-		if(rec->GetIntBorderRadius()) {
-			if(!g_player[pl]->IsVisible(pos)) {
+//	if(cell->GetOwner() == -1) {
+//		if(rec->GetIntBorderRadius()) {
+//			if(!g_player[pl]->IsVisible(pos)) {
 				
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
+//				return false;
+//			}
+//		} else {
+//			return false;
+//		}
+//	}
 
 	if(cell->GetOwner() >= 0 && cell->GetOwner() != pl)
 	{

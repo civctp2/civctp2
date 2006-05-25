@@ -76,6 +76,7 @@
 //   not just the settler. by E 4-10-2006
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - NeedsFeatToBuild and CivilisationOnly added to CanBuildUnit by E 5-12-2006
+// - Added Tile Imps that export values to gold and PW by E 5-18-2006
 //
 //----------------------------------------------------------------------------
 
@@ -127,6 +128,7 @@
 #include "TerrainImprovementRecord.h"
 
 #include "Readiness.h"
+#include "ResourceRecord.h" //EMOD
 
 #include "UnseenCell.h"
 #include "MaterialPool.h"
@@ -1998,6 +2000,7 @@ void Player::BeginTurnScience()
 	}
 }
 
+//Added a PW and Gold export improvement
 void Player::BeginTurnProduction()
 
 {
@@ -2007,8 +2010,6 @@ void Player::BeginTurnProduction()
 	sint32 mat_total=0;
 	sint32 delta;
 	sint32 materialsFromFranchise = 0;
-//	sint32 materialsfromColonies = 0;  
-	 //EMOD
 
 	m_total_production = 0;
 	for (i=0; i<n; i++) { 
@@ -2131,7 +2132,8 @@ void Player::BeginTurnProduction()
 				for (sint32 c=0; c < n; c++) {
 					CityData *cd = m_all_cities->Access(c).GetData()->GetCityData();
 					if(!cd->IsLocalResource (good)) {
-					//	cd->GetCollectingResources.AddResource(good, 1);
+						//cd->GetCollectingResources()->AddResource(good);
+						//cd->m_collectingResources.AddResource(good); //GetCollectingResources()->AddResource(good);
 						//break;  may have to add a break like sneakattack because only one city should receive it
 					}
 				}
@@ -2342,6 +2344,24 @@ sint32 Player::CalcWonderGold()
 			}
 		}
 	}
+
+/////////EMOD - use as model for Holy City getting gold from all temples of its religion
+//	sint32 goldPerTelevision = wonderutil_GetGoldPerTelevision(m_builtWonders);
+//	if(goldPerTelevision > 0) {
+//		for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
+//			if(p == m_owner)
+//				continue;
+//			if(!g_player[p]) continue;
+
+//			n = g_player[p]->m_all_cities->Num();
+//			for(i = 0; i < n; i++) {
+//				if(buildingutil_GetTelevision(
+//					g_player[p]->m_all_cities->Access(i).CD()->GetEffectiveBuildings())) {
+//					totalWonderGold += goldPerTelevision * g_player[p]->m_all_cities->Access(i).PopCount();
+//				}
+//			}
+//		}
+//	}
 
 	sint32 wonderBonusGold = wonderutil_GetBonusGold(m_builtWonders);
 	totalWonderGold += wonderBonusGold;

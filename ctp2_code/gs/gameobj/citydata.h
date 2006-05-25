@@ -986,6 +986,7 @@ public:
 	sint32 GoodHappinessIncr() const; //EMOD 4-27-2006
 	bool CanCollectGood(sint32 good) const; //EMOD 4-27-2006 
 	bool IsBuildingOperational(sint32 type) const; //EMOD 5-15-2006
+	sint32 SectarianHappiness() const; //EMOD 5-24-2006
 
 private:
 	bool    IsBankrupting(void) const;

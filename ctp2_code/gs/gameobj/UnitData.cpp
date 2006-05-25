@@ -512,12 +512,20 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
 
-	if(!Flag(k_UDF_PACMAN)) {
+//EMOD
+	sint32 bonus;
+	if(rec->GetMoveBonus(bonus)) {  //EMOD 
+		m_movement_points -= bonus;
+//	} else {
+//		m_movement_points -= cost; //outcomment here so air isn't deducted twice
+	}
+	if(!Flag(k_UDF_PACMAN) && (rec->GetMoveBonus(bonus) == 0)) {  //needed to add this flag because it seemed to affect movebonus too
 
 			m_movement_points -= cost;
 			m_movement_points = std::max(m_movement_points, 0.0);
 			ClearFlag(k_UDF_FIRST_MOVE);
 	}
+
 
 
 
@@ -543,14 +551,6 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 			}
 		}
 	}
-
-	sint32 bonus;
-	if(rec->GetMoveBonus(bonus)) {  //EMOD
-		m_movement_points -= bonus;
-	} else {
-		m_movement_points -= cost;
-	}
-	
 	return FALSE;
 }
 
@@ -943,12 +943,6 @@ BOOL UnitData::IsMovePointsEnough(const MapPoint &pos) const
 			sint32 icost;
 			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 			cost = icost;
-// EMOD for DeniedtoEnemy added here?
-//		} else if (!g_theWorld->GetOwner(pos) == m_owner) {
-//			sint32 ecost;
-//			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(ecost);
-//			cost = ecost;
-//EMOD
 		} else {
 			cost = g_theWorld->GetMoveCost(pos);
 		}
@@ -3316,7 +3310,7 @@ void UnitData::BeginTurn()
 
 		if (rec->GetNoFuelThenCrash() && 
 			terrainutil_HasAirfield(m_pos) &&
-			g_theWorld->GetOwner(m_pos) == m_owner &&
+			g_theWorld->GetOwner(m_pos) == m_owner &&    //EMOD TODO add treaty?
 			m_fuel < rec->GetMaxFuel()) {
 			m_fuel = rec->GetMaxFuel();
 			needsEnqueue = TRUE;
@@ -5721,6 +5715,10 @@ sint32 UnitData::GetOutgoingTrade() const
 //----------------------------------------------------------------------------
 BOOL UnitData::CheckForRefuel()
 {
+
+	//	Cell *cell = g_theWorld->GetCell(m_pos);
+	//sint32 CellOwner = cell->GetOwner();
+
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
 	if (IsBeingTransported()) { 
 		m_fuel = rec->GetMaxFuel();
@@ -5737,7 +5735,7 @@ BOOL UnitData::CheckForRefuel()
 	
 	if(g_theWorld->IsInstallation(m_pos)) {
 		if( terrainutil_HasAirfield(m_pos) &&
-			g_theWorld->GetOwner(m_pos) == m_owner) {
+			g_theWorld->GetOwner(m_pos) == m_owner) { //add (!IsEnemy(CellOwner) || if((!AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR))
 			m_fuel = rec->GetMaxFuel();
 			m_movement_points = 0;
 			return TRUE;

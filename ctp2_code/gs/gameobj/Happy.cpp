@@ -32,6 +32,7 @@
 //   (Oct 7th 2005 Martin Gühmann)
 // - Added GoodHappinessIncrease if a good give a happy bonus then if the city 
 //   is buying or collecting then it will add to that city's happiness (4-27-2006 by E)
+// - Aded SectarianHappiness modifier by E 5-24-2006
 //
 //----------------------------------------------------------------------------
 
@@ -616,7 +617,8 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 	m_happiness += p->CityHappinessIncrease();
 	m_happiness += cd.StyleHappinessIncr();
 	m_happiness += cd.GoodHappinessIncr();		//EMOD 4-27-2006 to allow for luxury goods
-	
+	m_happiness += cd.SectarianHappiness();		//EMOD 5-26-2006 affects of religious and ethnic violence
+
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
 		return;
 	}

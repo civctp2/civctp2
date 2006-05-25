@@ -136,7 +136,13 @@
 //   is added each turn you have that good. E 5-12-2006
 // - CivilisationOnly added to CanBuildBuilding and CnBuildWonder E 5-12-2006
 // - NeedsFeatToBuild added to CanBuildBuilding and CanBuildWonder E 5-12-2006
-// - OnePerCiv added to CanBuildWonder E 5-12-2006
+// - OnePerCiv added to CanBuildWonder E 5-12-2006 (doesn't work)
+// - OnePerCiv fixed E 5-16-2006
+// - Added Science bonuses from goods and citystyle to GetScienceFromPops
+//   this should be where it is needed (E 5-17-2006)
+// - AICityDefenderBonus added as an option for AI defenders by E 5-16-2006
+// - Added a SectarianHappiness function by E 5-24-2006
+// - IsXenephobia govts now kill off foreign populations
 //
 //----------------------------------------------------------------------------
 
@@ -3523,10 +3529,6 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 		g_player[m_owner]->m_gold->AddMaintenance(buildingUpkeep);
     }
 
-//Add if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-// if (buildingupkeep < 0){
-//			buildingupkeep = 0
-
 	return buildingUpkeep;
 }
 
@@ -3993,6 +3995,14 @@ sint32 CityData::BeginTurn()
 				ChangePopulation(+1);
 				ChangeSpecialists(POP_SLAVE, +1);
 			}
+		}
+	}
+
+//end EMOD
+//EMOD Fascist governments now kill off alien populations
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsXenophobia()) {
+		if(g_player[m_owner]->GetCivilisation()->GetCityStyle() != m_cityStyle) {
+			ChangePopulation(-1);
 		}
 	}
 //end EMOD
@@ -6164,9 +6174,9 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 //	}
 // emd EMOD
 
-
-
-
+////////////////////////////////////////////////
+//EMOD TODO: count up the number of wonders in a city and compare it to the difficultydb wondercitylimit and add to a buildingflag additional wonder to city and a govt modifier?
+/////////////////////////////////////////////////
 	
 	MapPoint pos;
 	m_home_city.GetPos(pos);
@@ -6559,6 +6569,47 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	}
 
 	sci += buildingutil_GetIncreaseSciencePerPop(GetEffectiveBuildings()) * static_cast<double>(PopCount() - SlaveCount());
+
+//EMOD Citystyle bonuses
+
+	sci += ceil(sci * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetSciencePercent());
+
+//Added by E - EXPORT BONUSES TO GOODS if has good than a science bonus  (11-JAN-2006)	
+//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
+	for (sint32 good = 0; good < g_theResourceDB->NumRecords(); ++good) 
+	{
+		if(HasNeededGood(good))
+		{
+			ResourceRecord const *	goodData	= g_theResourceDB->Get(good);
+			if (goodData)
+			{
+				double goodBonus;
+				if (goodData->GetSciencePercent(goodBonus))
+				{
+					sci += static_cast<sint32>(ceil(sci * goodBonus));
+				}
+
+				double goodEfficiency;
+				if (goodData->GetEfficiencyOrCrime(goodEfficiency))
+				{
+					sci += static_cast<sint32>(ceil(sci * goodEfficiency));
+				}
+			}
+		}
+	}
+//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
+	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if(HasNeededGood(tgood))
+		{
+			ResourceRecord const * tgoodData = g_theResourceDB->Get(tgood);
+			if (tgoodData)
+			{
+				sci += tgoodData->GetTradeScience();
+			}
+		}
+	}
+
 
 	double p;
 	buildingutil_GetSciencePercent(GetEffectiveBuildings(), p);
@@ -9415,3 +9466,36 @@ bool CityData::IsBuildingOperational(sint32 type) const
 
 	return true;
 }
+
+sint32 CityData::SectarianHappiness() const  //EMOD
+// this code creates a happiness modifier based off of the factors of:
+{
+	sint32 i;
+	sint32 SectarianHappiness = 0;
+	uint64 buildingCheck;
+
+// checks if a city has a buildng that conflicts with another (mosques, churches, synagogues, etc)
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness()) {
+		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
+			if(m_built_improvements & ((uint64)1 << b)){
+				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+				for(sint32 conflictb = 0; conflictb < rec->GetNumConflictsWithBuilding(); conflictb++) {
+					if((rec->GetNumConflictsWithBuilding()) && HaveImprovement(rec->GetConflictsWithBuildingIndex(conflictb))) {
+						SectarianHappiness -= g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness();
+					}
+				}
+			}
+		}
+// checks if the citystle of the city is different than the person that owns it for cultural/ethnic strife
+		if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+			SectarianHappiness -= g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness();
+		}
+
+// checks if the original owner of the city has a different govt than the occupier for political strife
+		if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
+			SectarianHappiness -= g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness();
+		}
+	}
+	return SectarianHappiness;
+}
+

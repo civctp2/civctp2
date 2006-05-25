@@ -55,8 +55,8 @@ Wonder {
 
 	Bit(Int) SquaredBorderRadius 		//FU added by E
 	Bit(Int) IntBorderRadius    		//FU added by E
-	Bit		OnePerCiv					//EMOD implement 5-12-2006
-
+	Bit		 OnePerCiv					//EMOD implement 5-12-2006
+	
 	# Flags
 	Bit(Int) ReduceReadinessCost
 	Bit EmbassiesEverywhere
@@ -118,6 +118,12 @@ Wonder {
 
     	Bit(struct BuildingFeat) Building
 
+    Struct BuildingGold {
+        	Record Building Building
+        	Bit(Int) Gold 
+    	}
+
+    Bit(struct BuildingGold) BuildingGold
 	Bit(Record Building) BuildingEverywhere
 
 	Bit(Float) PollutionPercent

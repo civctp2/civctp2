@@ -103,6 +103,9 @@ Unit {
 
 
 	Bit(Int) MoveBonus     					//FU - Instead of specifying an imp why not define the movecost here? by E
+	Bit(Int) MerchantGold					// FU - to allow a unit to grant gold in other territory
+	Bit      IsGreatBuilder					//FU - completes building 
+	Bit      IsGreatArtist					//FU - one day I may add culture / influence 
 
 	Record TerrainImprovement[]     AllTerrainAsImprovement // future use - like AllTerrainRoads
 	Record Unit [] ObsoleteByUnit 			//FU intead of avdance for later upgrade
@@ -111,6 +114,7 @@ Unit {
 	Bit CollateralTileDamage  				//if a defender is on a tile then improvements cut too
     Bit PrecisionStrike  					//FU when bombing city only destroys buildings
     Bit TargetsCivilians  					//FU when bombing city only kills a pop
+    Bit ImmuneToHostileTerrain				//FU protects units from terrain that deducts HP
 
 	Bit CanRebase  							//FU to rebase CantMove units
 	Bit MultipleAttacks  					//FU

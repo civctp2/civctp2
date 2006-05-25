@@ -51,6 +51,7 @@ Building {
 	Record Resource[] EnablesGood 		//added by E -- having a bldg gives a city a good
 	Record Civilisation[] CivilisationOnly 
 	Record Feat[] NeedsFeatToBuild		// implemented by E
+	Record Building[] ConflictsWithBuilding  //FU for SectarianHappiness
 
 
 	Record Resource[] RequiresGood 		//added by E -- having a bldg gives a city a good

@@ -6048,6 +6048,8 @@ void Diplomat::ThrowParty(const PLAYER_INDEX foreignerId)
 	{
 		sint32 regard_bonus;
 		StringId strId;
+
+//Add random regard bonus generator for throw party
 		GetCurrentDiplomacy(foreignerId).GetHoldReceptionRegardBonus(regard_bonus);
 		
 		g_theStringDB->GetStringID("REGARD_EVENT_HOLD_RECEPTION",strId);

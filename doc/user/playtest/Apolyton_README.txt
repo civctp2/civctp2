@@ -31,9 +31,24 @@ Latest Source Code files at: http://ctp2.darkdust.net/
 Playtesting would be most useful if it tests the most recent changes, which
 are described briefly below, and in more detail in ChangeLog.txt
 
-
+Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Changelog:
+2006-05-24
+Fixed: Removed War from slave attacks now just regardcost
+Fixed: There is now no pop-up when you attack a barbarian
+Added: HostileTerrainCost to terrain. deducts this int from your unit's hp when in hostile terrain.
+Added: ImmuneToHostileTerrain to units, they wont get deduction (nor if it has a fort)
+Added: SettleImprovement to entenched units. (they need the PW to finish it)
+Fixed: pillage non-owned improvement bug.
+Fixed: there is now no pop-up for pillaging. you should know it.
+Fixed: Bomber movement now works like before.
+Added: a unit with SettleBuilding builds that building in in enemy city when the city is converted (for religion spreading)
+Added: Not fully tested by SectarianHappiness Int to DiffDB. Should suffer happiness if citystyles or govts are differnt than the founders
+Added: IsXenophobia to governments. If you have a govt wit this flag then city's of a different city style will lose 1 pop per turn
+Added: Barbariancamps to DiffDB. If a barb entrenches this flag wil have them create a city
+
+
 2006-05-16
 Added: Tileimps with colony and  BonusProductionExport, BonusGoldExport, CanExportTileValue flags can add shields outside player radius.
 Fixed: OnePerCiv now works for buildings

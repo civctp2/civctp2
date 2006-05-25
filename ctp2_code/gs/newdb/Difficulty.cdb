@@ -149,7 +149,9 @@ Difficulty{
 	Int					PollutionStartPopulationLevel		aka	POLLUTION_START_POPULATION_LEVEL
 	Int					PollutionProductionRatio			aka	POLLUTION_PRODUCTION_RATIO
 	Int					PollutionPopulationRatio			aka	POLLUTION_POPULATION_RATIO
-	Bit					NoAIProductionDeficit
-	Bit					NoAIGoldDeficit
-	Bit					AICityDefenderBonus
+	Bit					NoAIProductionDeficit				#AI doesn't lose units
+	Bit					NoAIGoldDeficit						# AI cities don't go negative
+	Bit					AICityDefenderBonus					# AI population adds to city defenses
+	Bit					BarbarianCamps						# entrenched barbarians create a city
+	Bit(Int)			SectarianHappiness = 0				# Conflicting religious, citystyles and city govts cause unhappiness
 }

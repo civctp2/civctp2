@@ -78,9 +78,14 @@
 // - Added CanHarvest to BeginTurn for Units that have the flag CanHarvest and 
 //   are Entrenched by E 5-15-2006
 // - Added Gold Cost to CanCaptureTile 5-16-2006 by E
-// - Added SettleImprovement to disband 5-16-2006 by E
+// - Added SettleImprovement to beginturn 5-27-2006 by E
 // - Armies with a CanSettleOn only unit are now recognized as settler armies. (May 21st 2006 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
+// - Added HostileTerrain so units in terrain that has this value lose 5-27-2006 by E
+// - Added Great Merchant Gold 5-27-2006 by E
+// - Added barbariancamps to entnched barbs  5-27-2006 by E
+// - Added SettleBuilding check to convertcity, this way a religious unit can add 
+//   a building to the city converted. a possibilityfor using religion in Ctp2 by E 5-27-2006
 //
 //----------------------------------------------------------------------------
 
@@ -125,7 +130,6 @@
 #include "WonderRecord.h"
 #include "TerrainRecord.h"
 #include "GameSettings.h"
-#include "GovernmentRecord.h"   //EMOD to access government data
 
 #include "UnitRecord.h"
 #include "SpecialAttackInfoRecord.h"
@@ -173,6 +177,12 @@ extern Pollution *g_thePollution;
 #include "buildingutil.h"
 #include "Diplomat.h"
 #include "radarmap.h"
+#include "GovernmentRecord.h"   //EMOD to access government data
+#include "DifficultyRecord.h"   //EMOD
+#include "TerrImprovePool.h"    //EMOD
+#include "TerrainImprovementRecord.h"  //EMOD
+#include "MaterialPool.h"  //EMOD
+#include "BuildingRecord.h" //EMOD
 
 BOOL g_smokingCrack = TRUE;
 BOOL g_useOrderQueues = TRUE;
@@ -1523,6 +1533,8 @@ ArmyData::CheckActiveDefenders(MapPoint &pos, BOOL cargoPodCheck)
 void ArmyData::BeginTurn()
 {
 
+
+
 //EMOD to add Harvesting Units 5-15-2006
 
 	for(sint32 i = 0; i < m_nElements; i++) {
@@ -1531,9 +1543,73 @@ void ArmyData::BeginTurn()
 		const UnitRecord *rec = m_array[i].GetDBRec();
 		if((m_array[i].IsEntrenched()) && (rec->GetCanHarvest()) && (cell->GetShieldsProduced() > 0)) {
 			g_player[m_owner]->m_gold->AddGold(cell->GetGoldProduced());
-			//g_player[m_owner]->m_materialPool->AddMaterials(shields);
+			g_player[m_owner]->m_materialPool->AddMaterials(shields);
 		}
 	}
+
+
+	for(sint32 unit2 = 0; unit2 < m_nElements; unit2++) {
+		const UnitRecord *urec = m_array[unit2].GetDBRec();
+		if((m_array[unit2].IsEntrenched()) && (urec->GetNumSettleImprovement())) {  //Added to allow units settle improvements
+			for(sint32 imp = 0; imp < urec->GetNumSettleImprovement(); imp++) {
+				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+				sint32 newimp = urec->GetSettleImprovementIndex(imp);
+				if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, m_pos)) {
+					g_player[m_owner]->CreateSpecialImprovement(newimp, m_pos, 0);
+					m_array[unit2].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+				}
+
+			}
+		}
+	}
+//END EMOD
+
+//EMOD Barbarian Camps
+
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianCamps())
+		{
+		for(sint32 barb = 0; barb < m_nElements; barb++) {
+			Cell *cell = g_theWorld->GetCell(m_pos);
+			const UnitRecord *rec = m_array[barb].GetDBRec();
+			if((m_array[barb].IsEntrenched()) && (!g_theWorld->GetCity(m_pos)) && (m_owner == PLAYER_INDEX_VANDALS)) {
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateCity,
+				   GEA_Player, PLAYER_INDEX_VANDALS,
+				   GEA_MapPoint, m_pos,
+				   GEA_Int, CAUSE_NEW_CITY_GOODY_HUT,
+				   GEA_Int, -1,
+				   GEA_End);
+			}
+		}
+	}
+////
+
+
+
+//END EMOD barb camps
+
+//EMOD TODO: If Hostileterrain and not fort than deduct HP from the unit
+	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
+	sint32 hpcost;
+	if(trec->GetHostileTerrainCost(hpcost)) {  //EMOD 
+		for(sint32 u = 0; u < m_nElements; u++) {
+			const UnitRecord *urec = m_array[u].GetDBRec();
+			if ((!urec->GetImmuneToHostileTerrain()) && (!terrainutil_HasFort(m_pos))) {
+				m_array[u].DeductHP(hpcost);
+			}
+
+			if (m_array[u].GetHP() < 0.999) {
+				m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
+			}
+		}
+	}
+
+
+//If diff->chokeunit and unit is surrounded
+//	RadiusIterator it(cityPos, m_sizeIndex);
+//	for(it.Start(); !it.End(); it.Next()) {
+//		if(g_theWorld->GetArmy(it.Pos()), owner != m_owner
+//			m_array[i].DeductHP(1);
+
 //END EMOD
 
     m_flags &= ~(k_CULF_EXECUTED_THIS_TURN);
@@ -4040,6 +4116,25 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 							   GEA_City, city,
 							   GEA_End);
 		
+//EMOD - if city can convert building & settlebuilding it builds that building there. Used to spread religions
+
+	    for (i = m_nElements - 1; i>= 0; i--) { 
+			const UnitRecord *urec = m_array[i].GetDBRec();
+			if(m_array[i].GetDBRec()->GetNumSettleBuilding()) {
+				for(sint32 b = 0; b < urec->GetNumSettleBuilding(); b++) {
+					sint32 bi = urec->GetSettleBuildingIndex(b);
+					Assert(bi >= 0);
+					Assert(bi < g_theBuildingDB->NumRecords());
+					if(bi >= 0 && bi < g_theBuildingDB->NumRecords()) {
+						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreateBuilding,
+				                       GEA_City, city,
+				                       GEA_Int, bi,
+				                       GEA_End);
+					}
+				}
+			}
+		}
+// end EMOD
 		return ORDER_RESULT_SUCCEEDED;
 	} 
     else 
@@ -4845,7 +4940,8 @@ ORDER_RESULT ArmyData::Pillage(BOOL test_ownership)
 
 	if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
 	   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)))
-		if(test_ownership && !VerifyAttack(UNIT_ORDER_PILLAGE_UNCONDITIONALLY, m_pos, cellOwner))
+	   	if(test_ownership && !CanPillage(uindex))
+		//if(test_ownership && VerifyAttack(UNIT_ORDER_PILLAGE_UNCONDITIONALLY, m_pos, cellOwner))
 			return ORDER_RESULT_ILLEGAL;
 
 
@@ -4869,8 +4965,6 @@ ORDER_RESULT ArmyData::Pillage(BOOL test_ownership)
 	// or diplomats this us temporary until i can make it an order that costs gold
 	//			sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();	
 	//			sint32 impgold = cell->AccessImprovement(i).GetMaterialCost();
-	//			sint32 terraingold = cell->GetGoldFromTerrain();
-	//			sint32 goldcost = (terraingold + impgold) * rushmod;
 	for(sint32 j = 0; j < m_nElements; j++) {
 		sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetWonderRushModifier();
 		sint32 goldcost = (cell->GetGoldProduced() * cell->GetNumDBImprovements()) * rushmod;
@@ -7116,10 +7210,8 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 							sint32 defense_owner)
 {
 
-//EMOD  added defense_powner doesn't equal barbarians 5-2-2006
+//EMOD  added defense_powner doesn't equal barbarians 5-24-2006
 	if(!AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR)){
-
-
 
 //outcommented original
 //	if(IsEnemy(defense_owner) &&
@@ -7127,12 +7219,23 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 //	   !g_player[m_owner]->WillViolatePact(defense_owner))
 	//	return TRUE;
 	   
+
+//	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsParliamentary()) {
+//		random calculation.
+//				if Rand > g  * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetOverseasCoef()
+//		so = new SlicObject("Dove Party cries for peace");
+//		if Rand > g
+//		so = new SlicObject("Hawks declare war");
+//
 		SlicObject *so;
 		if(g_network.IsActive() && g_network.TeamsEnabled() &&
 			g_player[m_owner]->m_networkGroup == g_player[defense_owner]->m_networkGroup) {
 			so = new SlicObject("110aCantAttackTeammates");
 		} else if(!IsEnemy(defense_owner)) {
 		so = new SlicObject("110CantAttackAllies");
+		} else if(defense_owner == PLAYER_INDEX_VANDALS) {
+		//Diplomat::GetDiplomat(m_owner).DeclareWar(PLAYER_INDEX_VANDALS);
+		so = new SlicObject("BarbWar");
 		} else {
 		so = new SlicObject("110bCantAttackHaveTreaty");
 		}
@@ -8613,25 +8716,15 @@ void ArmyData::Disband()
 				} else {
 					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 				}
-//			}else if(rec->GetMerchantGold() {
-//				sint32 merchantgold = get distance from capitol to m_pos * (rec->GetMerchantGold)
-//				g_player[m_owner]->m_gold->AddGold(merchantgold);
-//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-//			} else {
-			} else {
-				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//EMOD merchant code
+		//	}else if(rec->GetMerchantGold()) {
+		//		sint32 capdis = m_owner->GetDistanceToCapitol();
+		//		sint32 merchantgold = capdis * rec->GetMerchantGold();
+		//		g_player[m_owner]->m_gold->AddGold(merchantgold);
+		//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+		//	} else {
+		//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 			}
-//EMOD Settle Improvements for disbanding units 5-16-20006  so far only for goods
-			
-	//	}else if(rec->GetNumSettleImprovement() > 0) {  //Added to allow units settle improvements
-	//		for(sint32 imp = 0; imp < rec->GetNumSettleImprovement(); imp++) {
-				//const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-	//			sint32 newimp = rec->GetSettleImprovementIndex(imp);
-	//			if(g_theWorld->GetGood(m_pos, good)) { // || (terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, m_pos()))) {
-	//				g_player[m_owner]->CreateSpecialImprovement(rec->GetSettleImprovementIndex(imp), m_pos, 0);
-	//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-	//			}
-	//		}
 		} else {
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}

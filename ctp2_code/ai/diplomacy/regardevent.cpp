@@ -274,42 +274,11 @@ STDEHANDLER(BattleAftermathRegardEvent)
 	if(!args->GetPlayer(1, defense_owner))
 		return GEV_HD_Continue;
 
-// EMOD
-//	DPRINTF(k_DBG_AI, ("//	All Sneakattack\n")); // EMOD
-
-//	bool AllSneakAttack = true;
-
-//	sint32 i;
-//	if(army.IsValid()) {
-//		for(i = 0; i < army.Num(); i++) {
-//			if(!army[i].GetDBRec()->GetSneakAttack()){
-//				AllSneakAttack = false;
-//				break;
-//			}	
-//		}
-//	}
-
-//	Cell *cell = g_theWorld->GetCell(pos);
-//	CellUnitList *defender = g_theWorld->GetCell(pos)->UnitArmy();
-//		for(i = 0; i < defender->Num(); i++) {
-//			if(!defender->Access(i).GetDBRec()->GetSneakAttack()){
-//				AllSneakAttack = false;
-//				break;
-//			}
-//		}
-
-		
-	
-//	if(!AllSneakAttack){
-
 
 // out commented and put into armydata::fight	
 //		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
 //		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
-	
-//	}
-// end EMOD
 
 	return GEV_HD_Continue;
 }
@@ -679,6 +648,7 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetSlaveRaidRegardCost(cost);
+// cost should be variable not standard each time
 
 	
 	StringId strId;
@@ -688,8 +658,8 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
-	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	//EMOD - Outcommented to encourage Human use of slavers.
+	//city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
