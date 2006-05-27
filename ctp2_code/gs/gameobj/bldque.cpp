@@ -411,8 +411,9 @@ bool BuildQueue::BuildFrontUnit(BOOL forceFinish)
 			}
 		}
 //EMOD to prevent units with POP > 1 from disbanding city  with settler_pending
-		if(g_theUnitDB->Get(m_list->GetHead()->m_type)->GetPopCostsToBuild() &&
-		   cd->PopCount() < g_theUnitDB->Get(m_list->GetHead()->m_type)->GetPopCostsToBuild() + 1 &&
+		sint32 unitpop;
+		if(g_theUnitDB->Get(m_list->GetHead()->m_type)->GetPopCostsToBuild(unitpop) &&
+		   (cd->PopCount() == unitpop) &&
 		   !forceFinish) {
 			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
 			   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {

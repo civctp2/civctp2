@@ -142,7 +142,11 @@
 //   this should be where it is needed (E 5-17-2006)
 // - AICityDefenderBonus added as an option for AI defenders by E 5-16-2006
 // - Added a SectarianHappiness function by E 5-24-2006
-// - IsXenephobia govts now kill off foreign populations
+// - IsXenephobic govts now kill off foreign populations by E 5-26-2006
+// - Implemented HasGulags, IsCapitalist, IsTechnocracy, IsAgrarian, HasMindlessTelevision
+//   govt flags that force specialist changes by E 5-25-2006
+// - Implemented ExcludedbyBuilding and CantSell by E 5-25-2006
+// - Added IncreaseHP to AddImprovement by E 5-25-2006
 //
 //----------------------------------------------------------------------------
 
@@ -4000,13 +4004,54 @@ sint32 CityData::BeginTurn()
 
 //end EMOD
 //EMOD Fascist governments now kill off alien populations
-	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsXenophobia()) {
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsXenophobic()) {
 		if(g_player[m_owner]->GetCivilisation()->GetCityStyle() != m_cityStyle) {
 			ChangePopulation(-1);
 		}
 	}
 //end EMOD
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetHasGulags()) {
+		if(PopCount() > SlaveCount()) {
+			ChangeSpecialists(POP_SLAVE, +1);
+		}
+	}
+	
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsCapitalist()) {
+		if(PopCount() > (MerchantCount() * 2)) {
+			ChangeSpecialists(POP_MERCHANT, +1);
+		}
+	}
 
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsTechnocracy()) {
+		if(PopCount() > (ScientistCount() * 3)) {
+			ChangeSpecialists(POP_SCIENTIST, +1);
+		}
+	}
+	
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsAgrarian()) {
+		if(PopCount() > FarmerCount()) {
+			ChangeSpecialists(POP_FARMER, +1);
+		}
+	}
+	
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetHasMindlessTelevision()) {
+		if(PopCount() > EntertainerCount()) {
+			ChangeSpecialists(POP_ENTERTAINER, +1);
+		}
+	}
+//EMOD if Player PrereqBuilding is different than the government than destroy it 
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
+		if(m_built_improvements & ((uint64)1 << b)){
+		const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+			for(sint32 conflictg = 0; conflictg < rec->GetNumGovernmentType(); conflictg++) {
+				if(rec->GetExcludedbyGovernmentTypeIndex(conflictg) != g_player[m_owner]->GetGovernmentType()) {
+							DestroyImprovement(b);
+					}
+			}
+		}
+	}
+			
+//END EMOD
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 
 	return TRUE;
@@ -4812,6 +4857,20 @@ void CityData::SetCapitol(const BOOL delay_registration)
 //		}
 //	}
 //}
+//	if (IsHolyCity) { //(isWatchful)
+//		cityIcon = tileSet->GetMapIconData(wrec->ReligionIcon()); //MAPICON_WATCHFUL
+//		Assert(cityIcon); 
+//		if (!cityIcon) return;
+//		cityIcon = tileSet->GetMapIconData(wrec->ReligionIcon());
+//		iconDim = tileSet->GetMapIconDimensions(wrec->ReligionIcon());
+
+//		color = GetColor(COLOR_YELLOW, fog);
+//		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+//		AddDirtyRectToMix(iconRect);
+
+//		iconRect.left += iconDim.x;
+//		iconRect.right += iconDim.x;
+//	}
 
 void CityData::MakeFranchise(sint32 player)
 {
@@ -5585,6 +5644,9 @@ void CityData::SellBuilding(sint32 which, BOOL byChoice)
 		if(byChoice) {
 			if(m_alreadySoldABuilding)
 				return;
+//EMOD to make unsellable buildings
+			if(g_theBuildingDB->Get(which, g_player[m_owner]->GetGovernmentType())->GetCantSell())
+				return;
 
 			if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 				g_network.SendAction(new NetAction(NET_ACTION_SELL_BUILDING,
@@ -5771,6 +5833,16 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 				return FALSE;
 		}
 	}
+//EMOD reverse of prereq - this building prevent other buildings good for state religion etc
+	if(rec->GetNumExcludedbyBuilding() > 0) {
+		for(sint32 o = 0; o < rec->GetNumExcludedbyBuilding(); o++) {
+			sint32 b = rec->GetExcludedbyBuildingIndex(o);
+			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b))){
+				return TRUE;
+			}
+			return FALSE;
+		}
+	}
 	// Added by E - Compares Unit CityStyle to the CityStyle of the City
 	if(rec->GetNumCityStyleOnly() > 0) {
 		sint32 s;
@@ -5932,6 +6004,19 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 				return FALSE;
 		}
 	}
+//EMOD reverse of prereq - this building prevent other buildings good for state religion etc
+	if(rec->GetNumExcludedbyBuilding() > 0) {
+		//bool bfound = false;
+		sint32 e;
+		for(e = 0; e < rec->GetNumExcludedbyBuilding(); e++) {
+			sint32 b = rec->GetExcludedbyBuildingIndex(e);
+			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b))){
+				return TRUE;
+			}
+		return FALSE;
+		}
+	}
+
 	
 //EMOD OnePerCiv allows for buildings to be Small Wonders
 	if(rec->GetOnePerCiv()) {
@@ -5945,7 +6030,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		}
 	}
 
-	//EMOD from feats but needs a number of builds to build, goes with small wonders 2-24-2006
+//EMOD from feats but needs a number of builds to build, goes with small wonders 2-24-2006
 	const BuildingRecord::BuildingFeat *bf;
 		
 	if(rec->GetBuilding(bf)) {
@@ -7691,8 +7776,14 @@ void CityData::AddImprovement(sint32 type)
 		}
 	
 	}
-
-
+//EMOD for Buildings to increase HP
+	sint32 hpBonus = buildingutil_GetIncreaseHP((uint64)1 << type);
+	if(hpBonus > 0) {
+		sint32 i, n = g_player[m_owner]->m_all_units->Num();
+		for(i = 0; i < n; i++) {
+			g_player[m_owner]->m_all_units->Access(i).AddWonderHPBonus(hpBonus);
+		}
+	}
 
 
 
@@ -9473,27 +9564,64 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 	sint32 i;
 	sint32 SectarianHappiness = 0;
 	uint64 buildingCheck;
+	sint32 sh;
+
+
+	
+	
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness(sh)) {
 
 // checks if a city has a buildng that conflicts with another (mosques, churches, synagogues, etc)
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness()) {
 		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
 			if(m_built_improvements & ((uint64)1 << b)){
 				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+	
+// checks if a city has a buildng that conflicts with another (mosques, churches, synagogues, etc)				
 				for(sint32 conflictb = 0; conflictb < rec->GetNumConflictsWithBuilding(); conflictb++) {
 					if((rec->GetNumConflictsWithBuilding()) && HaveImprovement(rec->GetConflictsWithBuildingIndex(conflictb))) {
-						SectarianHappiness -= g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness();
+						SectarianHappiness -= sh;
+					}
+				
+// checks if ANY city has a building that conflicts with another (mosques, churches, synagogues, etc); For State Religion Building
+					sint32 numCities = 0;
+					sint32 c;
+					for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
+						Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
+						if(aCity.CD()->HaveImprovement(rec->GetConflictsWithBuildingIndex(conflictb))){
+							SectarianHappiness -= sh;
+					
+						}
 					}
 				}
+			
+
+//checks if govt conflicts prereqgovt
+
+				for(sint32 conflictg = 0; conflictg < rec->GetNumGovernmentType(); conflictg++) {
+					if(rec->GetGovernmentTypeIndex(conflictg) != g_player[m_owner]->GetGovernmentType()) {
+								SectarianHappiness -= sh;
+					}
+				}
+//checks if cultureonly conflicts
+
+				for(sint32 conflictc = 0; conflictc < rec->GetNumCultureOnly(); conflictc++) {
+					if(rec->GetCultureOnlyIndex(conflictc) != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+						SectarianHappiness -= sh;
+					}
+				}
+//end Buildings
 			}
 		}
+
+
 // checks if the citystle of the city is different than the person that owns it for cultural/ethnic strife
 		if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-			SectarianHappiness -= g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness();
+			SectarianHappiness -= sh;
 		}
 
 // checks if the original owner of the city has a different govt than the occupier for political strife
 		if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
-			SectarianHappiness -= g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness();
+			SectarianHappiness -= sh;
 		}
 	}
 	return SectarianHappiness;

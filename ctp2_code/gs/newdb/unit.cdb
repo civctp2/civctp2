@@ -87,6 +87,7 @@ Unit {
 	Record Advance             EnableAdvance
 	Record Advance[0..5]        ObsoleteAdvance
 	Record Building[] PrerequisiteBuilding  // Added by E to limit units to cities with certain buildings
+	Record Building[] ExcludedbyBuilding    //to prevent some units being built
 	Record Government[] GovernmentsModified
 	Record Terrain[] CanSettleOn 			//added by E restricts settling to certain terrains
 	Record Unit[]     UpgradeTo 			//FutureUse to create Upgrade Paths, cost based on difference ShieldCost x Gold?

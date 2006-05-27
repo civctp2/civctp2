@@ -52,6 +52,8 @@ Building {
 	Record Civilisation[] CivilisationOnly 
 	Record Feat[] NeedsFeatToBuild		// implemented by E
 	Record Building[] ConflictsWithBuilding  //FU for SectarianHappiness
+	Record Building[] ExcludedbyBuilding  //cantbuild if have this building
+	Record Government[] ExcludedbyGovernmentType //destroyed if not of this government
 
 
 	Record Resource[] RequiresGood 		//added by E -- having a bldg gives a city a good
@@ -62,6 +64,7 @@ Building {
 	Record TerrainImprovement[] ShowOnMapRadius //FU
 
 	Bit(Float) TreasuryInterest			//FU
+	Bit CantSell						//Some Buildings Cant Be Sold
 
 
 	Int ProductionCost

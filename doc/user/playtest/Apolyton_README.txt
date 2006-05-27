@@ -34,6 +34,21 @@ are described briefly below, and in more detail in ChangeLog.txt
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Changelog:
+2006-05-27
+Added: HasGulags flag to govt. Each turn a citizen is turned to a slave in this govt
+Added: IsCapitalist flag to govt. Each turn a citizen is turned to a merchant in this govt
+Added: IsTechnocracy flag to govt. Each turn a citizen is turned to a scientist in this govt
+Added: IsAgraraian flag to govt. Each turn a citizen is turned toa farmer in this govt
+Added: HasMindlessTelevision flag to govt. Each turn a citizen is turned toa entertainer in this govt
+Added: CantSell to buildings
+Added: ExcludedbyBuilding if you have any bldgs in the list you cant build this building
+Added: Reform City destroys a building if you have a building that conflicts with settlebuilding of the reforming unit
+Added: GoldPerBuildingAnywhere to wonders (uses with BuildingAnywhere), works like GoldPerTelevision but you can 
+specify which building to collect from (multiplied by population)
+Added: IncreaseHP addeed to buildings. Gives a bonus HP only when building is first built
+Fixed: IsXenophobia changed to IsXenophobic
+
+
 2006-05-24
 Fixed: Removed War from slave attacks now just regardcost
 Fixed: There is now no pop-up when you attack a barbarian

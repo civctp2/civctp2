@@ -4215,6 +4215,22 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 							   GEA_Unit, m_array[uindex].m_id,
 							   GEA_City, c.m_id,
 							   GEA_End);
+//EMOD added for reforming units to destroy religious buildings, if they can build there own
+		for (sint32 i2 = m_nElements - 1; i2>= 0; i2--) { 
+			const UnitRecord *urec = m_array[i2].GetDBRec();
+			if(m_array[i2].GetDBRec()->GetNumSettleBuilding()) {
+				for(sint32 b = 0; b < urec->GetNumSettleBuilding(); b++) {
+					const BuildingRecord *brec = g_theBuildingDB->Get(urec->GetSettleBuildingIndex(b));
+					if(brec->GetNumConflictsWithBuilding()) {
+						for(sint32 conflictb = 0; conflictb < brec->GetNumConflictsWithBuilding(); conflictb++) {
+							if(c.CD()->HaveImprovement(brec->GetConflictsWithBuildingIndex(conflictb))) {
+								c.CD()->DestroyImprovement(brec->GetConflictsWithBuildingIndex(conflictb));
+							}
+						}
+					}	
+				}
+			}
+		}
 		return ORDER_RESULT_SUCCEEDED;
 	} else {
 		DPRINTF(k_DBG_GAMESTATE, ("Reformation failed\n"));
@@ -7226,6 +7242,10 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 //		so = new SlicObject("Dove Party cries for peace");
 //		if Rand > g
 //		so = new SlicObject("Hawks declare war");
+		double DoveVeto = 0;
+		if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetParliamentaryVoteChance()) {
+			DoveVeto = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetParliamentaryVoteChance();
+		}
 //
 		SlicObject *so;
 		if(g_network.IsActive() && g_network.TeamsEnabled() &&
@@ -7233,6 +7253,9 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 			so = new SlicObject("110aCantAttackTeammates");
 		} else if(!IsEnemy(defense_owner)) {
 		so = new SlicObject("110CantAttackAllies");
+// EMOD - Added Civ2 style Dove Party that prevents war if you have ParliamentaryVoteChance govt
+		} else if(g_rand->Next(100) < sint32(DoveVeto * 100.0)) {
+		so = new SlicObject("Civ2Doves");  //	so = new SlicObject("110CantAttackAllies"); 
 		} else if(defense_owner == PLAYER_INDEX_VANDALS) {
 		//Diplomat::GetDiplomat(m_owner).DeclareWar(PLAYER_INDEX_VANDALS);
 		so = new SlicObject("BarbWar");

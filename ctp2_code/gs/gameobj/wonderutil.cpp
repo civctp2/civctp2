@@ -1,4 +1,41 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Wonderutil game object
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// CTP1_TRADE
+// - Creates an executable with trade like in CTP1. Currently broken.
+//
+// BATTLE_FLAGS
+//
+// _DEBUG_INCOMPATIBLE
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - wonderutil_IsObsolete now has two new checks GovernmentType and ObsoleteGovernmentType
+//   switching from or two these obsoletes your wonder by E 5-27-2006
+//
+//----------------------------------------------------------------------------
 
 
 
@@ -360,6 +397,8 @@ BOOL wonderutil_IsBuilt(sint32 wonder)
 
 BOOL wonderutil_IsObsolete(sint32 wonder)
 {
+
+	sint32  m_owner = wonderutil_GetOwner(wonder);
 	const WonderRecord *rec = g_theWonderDB->Get(wonder);
 	sint32 nObsolete = rec->GetNumObsoleteAdvance();
 	if(nObsolete <= 0)
@@ -373,6 +412,19 @@ BOOL wonderutil_IsObsolete(sint32 wonder)
 				return TRUE;
 		}
 	}
+//EMOD if you change from the govt that allows for the wonder to be built you make it obsolete
+	for(sint32 conflictg = 0; conflictg < rec->GetNumGovernmentType(); conflictg++) {
+		if(rec->GetGovernmentTypeIndex(conflictg) != g_player[m_owner]->GetGovernmentType()) {
+					return TRUE;
+		}
+	}
+//EMOD if you switch to this govt it will obsolete the wonder 9ie communism for religious wonders)
+	for(sint32 conflictg1 = 0; conflictg1 < rec->GetNumObsoleteGovernmentType(); conflictg1++) {
+		if(rec->GetObsoleteGovernmentTypeIndex(conflictg1) != g_player[m_owner]->GetGovernmentType()) {
+					return TRUE;
+		}
+	}
+
 	return FALSE;
 }
 
@@ -402,4 +454,8 @@ sint32 wonderutil_GetFobCityIndex()
 	}
 	return i;
 }
-
+//EMOD
+sint32 wonderutil_GetGoldPerBuildingAnywhere(const uint64 builtWonders)
+{
+	INT_WNDR(GetGoldPerBuildingAnywhere);
+}

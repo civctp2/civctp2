@@ -77,6 +77,7 @@
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - NeedsFeatToBuild and CivilisationOnly added to CanBuildUnit by E 5-12-2006
 // - Added Tile Imps that export values to gold and PW by E 5-18-2006
+// - Added GoldperBuildingAnywhere to wondergold by E 5-26-2006
 //
 //----------------------------------------------------------------------------
 
@@ -2138,6 +2139,17 @@ void Player::BeginTurnProduction()
 					}
 				}
 			}
+
+  //EMOD if intborderradius is 0 then can we get rid of the top code to gove colonies an optional radius?
+			if (rec->GetCanExportTileValueRadius()) {
+				RadiusIterator it(inst.RetPos(),rec->GetIntBorderRadius());    //m_sizeIndex);
+				for(it.Start(); !it.End(); it.Next()) {
+					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
+						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
+						m_gold->AddGold(radiuscell->GetGoldProduced());
+				}
+			}
+			//
 		}
 	}
 
@@ -2346,22 +2358,31 @@ sint32 Player::CalcWonderGold()
 	}
 
 /////////EMOD - use as model for Holy City getting gold from all temples of its religion
-//	sint32 goldPerTelevision = wonderutil_GetGoldPerTelevision(m_builtWonders);
-//	if(goldPerTelevision > 0) {
-//		for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
-//			if(p == m_owner)
-//				continue;
-//			if(!g_player[p]) continue;
-
-//			n = g_player[p]->m_all_cities->Num();
-//			for(i = 0; i < n; i++) {
-//				if(buildingutil_GetTelevision(
-//					g_player[p]->m_all_cities->Access(i).CD()->GetEffectiveBuildings())) {
-//					totalWonderGold += goldPerTelevision * g_player[p]->m_all_cities->Access(i).PopCount();
-//				}
-//			}
-//		}
-//	}
+		sint32 GoldPerBuildingAnywhere = wonderutil_GetGoldPerBuildingAnywhere(m_builtWonders);
+	if(GoldPerBuildingAnywhere > 0) {
+		sint32 w;	
+		for(w = g_theWonderDB->NumRecords() - 1; w >= 0; w--) {
+		const WonderRecord *wrec = g_theWonderDB->Get(w);
+			if (wrec->GetNumBuildingAnywhere() >0) {
+				for(sint32 h = 0; h < wrec->GetNumBuildingAnywhere(); h++) {
+					for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
+						if(p == m_owner)
+							continue;
+						if(!g_player[p]) 
+							continue;
+			
+						sint32 n = g_player[p]->m_all_cities->Num();
+						for(sint32 i = 0; i < n; i++) {
+							if(g_player[p]->m_all_cities->Access(i).CD()->HaveImprovement(wrec->GetBuildingAnywhereIndex(h))) {
+								totalWonderGold += GoldPerBuildingAnywhere * g_player[p]->m_all_cities->Access(i).PopCount();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+//end EMOD
 
 	sint32 wonderBonusGold = wonderutil_GetBonusGold(m_builtWonders);
 	totalWonderGold += wonderBonusGold;

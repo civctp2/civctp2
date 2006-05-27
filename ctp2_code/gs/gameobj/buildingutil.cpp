@@ -646,12 +646,13 @@ BOOL buildingutil_GetEmbassiesEverywhereEvenAtWar(const uint64 built_improvement
 	return FALSE;
 }
 
-sint32 buildingutil_GetIncreaseHP(const sint32 building_type)
+sint32 buildingutil_GetIncreaseHP(const uint64 built_improvements)
 {
-    const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
-	Assert(rec);
-	if(rec == NULL)
-		return 0;
-
-    return rec->GetIncreaseHP();
+		sint32 amt = 0;
+	FOREACH_BUILT(GetIncreaseHP) {
+		sint32 l;
+		rec->GetIncreaseHP(l);
+		amt += l;
+	}
+	return amt;
 }

@@ -231,24 +231,27 @@ STDEHANDLER(CityBeginTurnVisionEvent)
 
 STDEHANDLER(CityBuildFrontEvent)
 {
+	sint32 unitpop;
 	Unit city;
 	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
 	city.CD()->BuildFront();
-//EMOD
-//	const UnitRecord *u = g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetHead()->m_type);
-//Crash!
-//	if (u->GetPopCostsToBuild() > 0) {
-//		if (city.CD()->PopCount() == u->GetPopCostsToBuild()) {
+//EMOD attempt to fix 5-24-2006
+//	if (g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetBuildQueType())){
+//	const UnitRecord *u = g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetBuildQueType());
+//			if (u->GetPopCostsToBuild(unitpop)) {
+//			if ((city.CD()->PopCount() < unitpop) || (city.CD()->PopCount() == unitpop)) {
 //			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
 //			so->AddCity(city);
 //			so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
 //			so->AddRecipient(city.GetOwner());
 //			g_slicEngine->Execute(so);
+//			}
 //		}
 //	}
-// EMOD for popcoststo build
+
+// end EMOD for popcoststo build
 
 	if (city.CD()->GetBuildQueue()->m_settler_pending) {
 		if (city.CD()->PopCount() == 1) {

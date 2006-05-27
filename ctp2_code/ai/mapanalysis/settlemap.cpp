@@ -104,9 +104,9 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 	}
 
 //EMOD if the cell has a score of zero, the AI won't attempt at all 4-10-2006
-	if (g_theWorld->GetCell(pos)->GetScore() == 0) {
-		score = 0;
-	}
+//	if (g_theWorld->GetCell(pos)->GetScore() == 0) {
+//		score = 0;
+//	}
 //EMOD to allow for AI notto settle some places
 //	If Unit Get SettleType 
 //		GetCell(pos) != settletype

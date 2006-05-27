@@ -141,6 +141,7 @@ TerrainImprovement {
 	Bit DeniedToEnemy						//FU
 	Bit CanExportTileValue						//added by E New Colony code
 	Bit CanExportGood						//added by E New Colony code
+	Bit CanExportTileValueRadius
 
 	Record Icon Icon
 	#MDS 090800 not sure about this, trying to add 2 new fields...

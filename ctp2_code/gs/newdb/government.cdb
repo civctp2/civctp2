@@ -106,9 +106,14 @@ Int WarDiscontentMaxUnits
 Float WarDiscontentPerUnit
 
 	Bit IsEcotopia
-      Bit IsParliamentary //added for future use
+	Bit(Float) ParliamentaryVoteChance //added for future use
 	Bit IsAnarchy //added for future use
-	Bit IsXenophobia //added for future use
+	Bit IsXenophobic //kills foreign population each turn
+	Bit HasGulags   //changes pop to slaves each turn
+	Bit IsCapitalist  //Adds merchants each turn
+	Bit IsTechnocracy  //Adds scientists each turn
+	Bit IsAgrarian  //Adds farmers each turn
+	Bit HasMindlessTelevision  //Adds entertainers each turn
 	Bit GLHidden
 
 	// The discovery of governments of the same rank 

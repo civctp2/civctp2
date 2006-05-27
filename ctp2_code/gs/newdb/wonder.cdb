@@ -28,6 +28,7 @@
 #  - NeedsCityGoodAnyCity - requires any city to have good to build wonder
 #  - EnablesPunativeAirstrikes //added by E(1-14-2006) allows airstrikes without war
 #  - Added OnePerCiv for Small Wonders
+#  - ObsoleteGovernmenttype //added by E obsoletes wonders only if player switches to govt
 # 
 #-----------------------------------------------------------------------------
 
@@ -44,6 +45,7 @@ Wonder {
 	Record Government[] GovernmentsModified  // Added by MrBaggins
 	Record CityStyle[] CultureOnly //added by E -- can only build wonders if civ has certain citystyle
 	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
+	Record Government[] ObsoleteGovernmentType //added by E --- switching to this obsoletes your imp
 	Record CityStyle[] CityStyleOnly //added by E--can only build wonders at cities with certain citystyle 
 	Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll //a city must have all resource to build wonder
@@ -125,6 +127,11 @@ Wonder {
 
     Bit(struct BuildingGold) BuildingGold
 	Bit(Record Building) BuildingEverywhere
+	Bit(Record Building) ConflictsWithBuilding
+
+	##Bit(Record Building) BuildingAnywhere
+	Record Building[] BuildingAnywhere
+	Bit(Int) GoldPerBuildingAnywhere 
 
 	Bit(Float) PollutionPercent
 	Bit(Float) PollutionAmount
