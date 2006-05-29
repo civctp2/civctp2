@@ -31,6 +31,7 @@
 // - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 // - The ages in the summary are now displayed correctly.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code. (May 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1365,7 +1366,8 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 		listbox =
 			(aui_ListBox *)m_controls[ CONTROL_UNITSLISTBOX ];
-		for ( sint32 i = listbox->NumItems(); i; i-- )
+		sint32 i;
+		for ( i = listbox->NumItems(); i; i-- )
 		{
 			aui_Item *item = listbox->GetItemByIndex( 0 );
 			listbox->RemoveItem( item->Id() );

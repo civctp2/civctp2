@@ -3,38 +3,40 @@
 #  Project      : Call To Power 2
 #  File type    : dbgen input
 #  Description  : Government type descriptor
-# 
-# ----------------------------------------------------------------------------
-# 
+#  Id           : $Id:$
+#
+#-----------------------------------------------------------------------------
+#
 #  Disclaimer
-# 
+#
 #  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-# 
+#
 #  This material has been developed at apolyton.net by the Apolyton CtP2 
 #  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-# 
+#
 #-----------------------------------------------------------------------------
-# 
+#
 #  Modifications from the original Activision code:
-# 
-#  - IsAnarchy //FU; creates barbarian rebels during anarchy, collapsed-state
-#  - IsXenophobia //FU; trait that reduces pop for city's of different citystyle
-#  - CultureOnly //added by E -- can only be govt if civ has certain citystyle
-#  - IsParliamentary // FU; to bring back Civ2 Democracy where govt vetoes war
-# 
+#
+#  - IsAnarchy       : This creates barbarian rebels during anarchy. (FutureUse)(E)
+#  - IsXenophobic    : Reduces the population of a city with a certain city style. (FutureUse)(E)
+#  - CultureOnly     : Government only available if civ has certain citystyle. (E)
+#  - IsParliamentary : Government vetoes war like in Civ2. (FutureUse)(E)
+#
 #-----------------------------------------------------------------------------
+
 Government {
 	Float PositiveWorkdayCoef
 	Float NegativeWorkdayCoef
-	Int WorkdayExpectation
+	Int   WorkdayExpectation
 
 	Float PositiveWagesCoef
 	Float NegativeWagesCoef
-	Int WagesExpectation
+	Int   WagesExpectation
 
 	Float PositiveRationsCoef
-    Float NegativeRationsCoef
-	Int RationsExpectation
+	Float NegativeRationsCoef
+	Int   RationsExpectation
 
 	Float KnowledgeCoef
 	Float PollutionCoef
@@ -43,15 +45,15 @@ Government {
 	Float ConquestDistress
 	Float ConquestDistressDecay
 	Float EmpireDistanceScale
-	Int MinEmpireDistance
-	Int MaxEmpireDistance
-	Int TooManyCitiesThreshold
+	Int   MinEmpireDistance
+	Int   MaxEmpireDistance
+	Int   TooManyCitiesThreshold
 	Float TooManyCitiesCoefficient
-	Int MaxMartialLawUnits
+	Int   MaxMartialLawUnits
 	Float MartialLawEffect
-	Int MartialLawThreshold
+	Int   MartialLawThreshold
 
-	Int AtHomeRadius
+	Int   AtHomeRadius
 	Float OverseasCoef
 
 	Float OverseasDefeatDecay
@@ -60,10 +62,10 @@ Government {
 	Float HomeDefeatCoef
 
 	Float CrimeCoef
-	Int CrimeOffset
+	Int   CrimeOffset
 
-	Int ProfessionalUnits
-	Int TurnsToNewReadiness
+	Int   ProfessionalUnits
+	Int   TurnsToNewReadiness
 	Float ReadyPeaceCoef
 	Float ReadyPeaceHP
 	Float ReadyAlertCoef
@@ -71,54 +73,54 @@ Government {
 	Float ReadyWarCoef
 	Float ReadyWarHP
 
-Float FoodCoef
-Float GoldCoef
-Float ProductionCoef
-Float SupportCoef
-Float DefenseCoef
+	Float FoodCoef
+	Float GoldCoef
+	Float ProductionCoef
+	Float SupportCoef
+	Float DefenseCoef
 
-Record Advance EnableAdvance
-Record Advance[0..5] ObsoleteAdvance
-Record CityStyle[] CultureOnly //added by E -- govt only if civ has certain citystyle
+	Record Advance       EnableAdvance
+	Record Advance[0..5] ObsoleteAdvance
+	Record CityStyle[]   CultureOnly // Added by E -- govt only if civ has certain citystyle
 
-Record Icon Icon
-Int GrowthRank
-Int ProductionRank
-Int ScienceRank
-Int GoldRank
-Int MilitaryRank
-Int CommerceRank
-Int PollutionRank
-Int LoyaltyRank
-Int MartialLawRank
+	Record Icon Icon
+	Int   GrowthRank
+	Int   ProductionRank
+	Int   ScienceRank
+	Int   GoldRank
+	Int   MilitaryRank
+	Int   CommerceRank
+	Int   PollutionRank
+	Int   LoyaltyRank
+	Int   MartialLawRank
 
-Float MaxScienceRate
-Float UnitRushModifier
-Float BuildingRushModifier
-Float WonderRushModifier
-Float EndGameRushModifier
+	Float MaxScienceRate
+	Float UnitRushModifier
+	Float BuildingRushModifier
+	Float WonderRushModifier
+	Float EndGameRushModifier
 
-Int MaxIncomingTrade
-Int MaxOutgoingTrade
-Float InfrastructureCoefficient
-Float CapitalizationCoefficient
-Int WarDiscontentMaxUnits
-Float WarDiscontentPerUnit
+	Int   MaxIncomingTrade
+	Int   MaxOutgoingTrade
+	Float InfrastructureCoefficient
+	Float CapitalizationCoefficient
+	Int   WarDiscontentMaxUnits
+	Float WarDiscontentPerUnit
 
-	Bit IsEcotopia
-	Bit(Float) ParliamentaryVoteChance //added for future use
-	Bit IsAnarchy //added for future use
-	Bit IsXenophobic //kills foreign population each turn
-	Bit HasGulags   //changes pop to slaves each turn
-	Bit IsCapitalist  //Adds merchants each turn
-	Bit IsTechnocracy  //Adds scientists each turn
-	Bit IsAgrarian  //Adds farmers each turn
-	Bit HasMindlessTelevision  //Adds entertainers each turn
-	Bit GLHidden
+	Bit   IsEcotopia
+	Int   ParliamentaryVoteChance = 0 // Added for future use
+	Bit   IsAnarchy                   // Added for future use
+	Bit   IsXenophobic                // Kills foreign population each turn
+	Bit   HasGulags                   // Changes pop to slaves each turn
+	Bit   IsCapitalist                // Adds merchants each turn
+	Bit   IsTechnocracy               // Adds scientists each turn
+	Bit   IsAgrarian                  // Adds farmers each turn
+	Bit   HasMindlessTelevision       // Adds entertainers each turn
+	Bit   GLHidden                    // Makes the db record disappear from the GL
 
 	// The discovery of governments of the same rank 
 	// trigger different advice than higher ranked ones
-	Int Rank
+	Int   Rank
 	StringId SameRankAdvice
 	StringId HigherRankAdvice
 }

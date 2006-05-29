@@ -121,8 +121,8 @@ Difficulty{
 	Float[]				AIMaxAheadProductionCostAdjustment	aka	AI_MAX_AHEAD_PRODUCTION_COST_ADJUSTMENT
 
 	# multiplier for gold collected fo ai
-	Float[]				AIMinAheadGoldCostAdjustment			aka	AI_MIN_AHEAD_GOLD_ADJUSTMENT
-	Float[]				AIMaxAheadGoldCostAdjustment			aka	AI_MAX_AHEAD_GOLD_ADJUSTMENT
+	Float[]				AIMinAheadGoldCostAdjustment		aka	AI_MIN_AHEAD_GOLD_ADJUSTMENT
+	Float[]				AIMaxAheadGoldCostAdjustment		aka	AI_MAX_AHEAD_GOLD_ADJUSTMENT
 
 	Int					MaxHumanAdvances					aka	MAX_HUMAN_ADVANCES
 	Int					MaxAIAdvances						aka	MAX_AI_ADVANCES
@@ -149,9 +149,9 @@ Difficulty{
 	Int					PollutionStartPopulationLevel		aka	POLLUTION_START_POPULATION_LEVEL
 	Int					PollutionProductionRatio			aka	POLLUTION_PRODUCTION_RATIO
 	Int					PollutionPopulationRatio			aka	POLLUTION_POPULATION_RATIO
-	Bit					NoAIProductionDeficit				#AI doesn't lose units
+	Bit					NoAIProductionDeficit				# AI doesn't lose units
 	Bit					NoAIGoldDeficit						# AI cities don't go negative
 	Bit					AICityDefenderBonus					# AI population adds to city defenses
 	Bit					BarbarianCamps						# entrenched barbarians create a city
-	Bit(Int)			SectarianHappiness = 0				# Conflicting religious, citystyles and city govts cause unhappiness
+	Bit(Int)			SectarianHappiness					# Conflicting religious, citystyles and city govts cause unhappiness
 }

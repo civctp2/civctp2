@@ -231,27 +231,28 @@ STDEHANDLER(CityBeginTurnVisionEvent)
 
 STDEHANDLER(CityBuildFrontEvent)
 {
-	sint32 unitpop;
 	Unit city;
 	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
 	city.CD()->BuildFront();
-//EMOD attempt to fix 5-24-2006
+
+	// EMOD attempt to fix 5-24-2006
+//	sint32 unitpop;
 //	if (g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetBuildQueType())){
-//	const UnitRecord *u = g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetBuildQueType());
-//			if (u->GetPopCostsToBuild(unitpop)) {
+//		const UnitRecord *u = g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetBuildQueType());
+//		if (u->GetPopCostsToBuild(unitpop)) {
 //			if ((city.CD()->PopCount() < unitpop) || (city.CD()->PopCount() == unitpop)) {
-//			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
-//			so->AddCity(city);
-//			so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
-//			so->AddRecipient(city.GetOwner());
-//			g_slicEngine->Execute(so);
+//				SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
+//				so->AddCity(city);
+//				so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
+//				so->AddRecipient(city.GetOwner());
+//				g_slicEngine->Execute(so);
 //			}
 //		}
 //	}
 
-// end EMOD for popcoststo build
+	// end EMOD for popcoststo build
 
 	if (city.CD()->GetBuildQueue()->m_settler_pending) {
 		if (city.CD()->PopCount() == 1) {

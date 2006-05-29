@@ -1,3 +1,27 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Resource and terrain type descriptor
+#  Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+#  Disclaimer
+#
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+# - Added customized ruin hut graphics possibility. (Martin Gühmann)
+#
+#-----------------------------------------------------------------------------
+
 Resource {
 	Int Gold
 	Int Food = 0
@@ -66,7 +90,7 @@ Terrain {
 	Struct Modifiers EnvBase
 	Bit(Struct Modifiers) EnvCity
 	Bit(Struct Modifiers) EnvRiver
-	Bit(Int) HostileTerrainCost = 0
+	Bit(Int) HostileTerrainCost
 
 	Record Resource[0..4] Resources
 	Bit NoIndex

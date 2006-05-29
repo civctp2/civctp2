@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -482,7 +482,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 		
 		sint32 temp = top+1;
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -516,8 +517,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 	}
 	else
 	{
-		
-		for (sint32 j = level;j;j--)
+		sint32 j;
+		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
@@ -552,7 +553,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 		
 		sint32 temp = top+1;
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for ( i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -679,8 +681,8 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 	if (flag)
 	{
-		
-		for (sint32 j = level;j;j--)
+		sint32 j;
+		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
@@ -717,7 +719,8 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 		
 		sint32 temp = top+1;
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -753,8 +756,8 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 	}
 	else
 	{
-		
-		for (sint32 j = level;j;j--)
+		sint32 j;
+		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
@@ -791,7 +794,8 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 		
 		sint32 temp = top+1;
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -903,8 +907,8 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 	sint32 tempInc = inc;
 
 	{
-		
-		for (sint32 j = level;j;j--)
+		sint32 j;
+		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
@@ -941,7 +945,8 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 
 		
 		sint32 temp = top+1;
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -1775,8 +1780,8 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 
 	SetTextColor(hdc, dropTextColor);
 
-	
-	for (sint32 i=0;i < numStrings;i++)
+	sint32 i;
+	for (i=0;i < numStrings;i++)
 	{
 
 		TextOut(hdc,x+1,y+1,pString[i],strlen(pString[i]));
@@ -1899,8 +1904,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -1949,8 +1954,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2075,8 +2080,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2119,8 +2124,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2238,8 +2243,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i=0;i < level;i++)
+		sint32 i;
+		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2286,8 +2291,8 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i=0;i < level;i++)
+		sint32 i;
+		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2597,8 +2602,8 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2650,8 +2655,8 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2793,8 +2798,8 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2840,8 +2845,8 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i = 0;i < level;i++)
+		sint32 i;
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2976,8 +2981,8 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i=0;i < level;i++)
+		sint32 i;
+		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -3027,8 +3032,8 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
-		for (sint32 i=0;i < level;i++)
+		sint32 i;
+		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 

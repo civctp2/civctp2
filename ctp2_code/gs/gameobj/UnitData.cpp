@@ -514,7 +514,7 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 
 //EMOD
 	sint32 bonus;
-	if(rec->GetMoveBonus(bonus)) {  //EMOD 
+	if(rec->GetMoveBonus(bonus)) {  //EMOD
 		m_movement_points -= bonus;
 //	} else {
 //		m_movement_points -= cost; //outcomment here so air isn't deducted twice
@@ -529,9 +529,9 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 
 
 
-	out_of_fuel = FALSE; 
-	if (!rec->GetNoFuelThenCrash()){ 
-		return FALSE; 
+	out_of_fuel = FALSE;
+	if (!rec->GetNoFuelThenCrash()){
+		return FALSE;
 	} else {
 		m_fuel -= g_theConstDB->NonSpaceFuelCost();
 
@@ -547,7 +547,7 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 				}
 
 				m_movement_points = 0;
-				return TRUE; 
+				return TRUE;
 			}
 		}
 	}
@@ -1643,17 +1643,17 @@ void UnitData::DeductHP(double fp)
 BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos) 
 {
 	sint32 i;
-	const UnitRecord *rec = g_theUnitDB->Get(unit_type);   
+	const UnitRecord *rec = g_theUnitDB->Get(unit_type);
 	sint32 t = rec->GetSettleCityTypeIndex();
 	if (t < 0) {
-		return FALSE;      
+		return FALSE;
 	}
 	if (g_theUnitDB->Get(t)->GetHasPopAndCanBuild() == FALSE) {
-		return FALSE;                               
+		return FALSE;
 	}
 	if (g_theWorld->HasCity(pos)) 
 		return FALSE;
-//EMOD
+
 	if (rec->GetNumCanSettleOn() > 0){
 		for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
 			if(rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
@@ -1662,7 +1662,6 @@ BOOL UDUnitTypeCanSettle(sint32 unit_type, const MapPoint &pos)
 		}
 		return FALSE;
 	}
-// end EMOD
 
 	if (rec->GetSettleLand() && g_theWorld->IsLand(pos))
 		return TRUE; 

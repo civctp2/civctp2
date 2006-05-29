@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Call to Power 2 user interface tabgroup
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -195,7 +195,8 @@ void ctp2_TabGroup::SelectTab(ctp2_Tab *tab)
 			
 			
 			ListPos position = ChildList()->GetHeadPosition();
-			for(int countdown = ChildList()->L(); countdown; countdown--) {
+			size_t countdown;
+			for(countdown = ChildList()->L(); countdown; countdown--) {
 				
 				ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));
 

@@ -30,7 +30,7 @@
 // - Added option to open cities or the army manager if there are units
 //   on top of a city. (Oct 8th 2005 Martin Gühmann)
 // - Treat entrenching units like entrenched units. (Oct 16th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ void SelectedItem::SetupClickFunctions()
 		for(clicked = SELECT_TYPE_NONE; clicked < SELECT_TYPE_MAX; clicked = SELECT_TYPE(sint32(clicked) + 1)) {
 			for(button = SELECT_BUTTON_LEFT; button < SELECT_BUTTON_MAX; button = SELECT_BUTTON(sint32(button) + 1)) {
 				for(mode = SELECT_MODE_RIGHT; mode < SELECT_MODE_MAX; mode = SELECT_MODE(sint32(mode) + 1)) {
-					m_clickFunc[selected][clicked][button][mode] = NullClick;
+					m_clickFunc[selected][clicked][button][mode] = &SelectedItem::NullClick;
 				}
 			}
 		}

@@ -38,7 +38,8 @@
 // - Repaired crash with invalid input.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added database array access. (Sep 16th 2005 Martin Gühmann)
-// - Repaired crashes with game saved with original Activision executable. 
+// - Repaired crashes with game saved with original Activision executable.
+// - Standardized code. (May 29th 2006 Martin Gühmann) 
 //
 //----------------------------------------------------------------------------
 
@@ -557,7 +558,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
-			sval3.m_int = (int)pow(Eval(type2, sval2), Eval(type1, sval1));
+			sval3.m_int = (int)pow(static_cast<double>(Eval(type2, sval2)), Eval(type1, sval1));
 			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
 		// Bitwise operators:

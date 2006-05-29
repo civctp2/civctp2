@@ -93,7 +93,7 @@
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 // - Repaired incorrect AddEvent parameters.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1614,7 +1614,12 @@ void Governor::PlaceTileImprovements()
 
 	strategy.GetMaxEvalTileImprovements(max_eval);
 	max_eval = MIN(max_eval, (sint32)s_tiQueue.size());
+
+#if _HAS_ITERATOR_DEBUGGING || _SECURE_SCL
+	TiGoalQueue::iterator max_iter = TiGoalQueue::iterator(&s_tiQueue[max_eval], &s_tiQueue);
+#else
 	TiGoalQueue::iterator max_iter = TiGoalQueue::iterator(&s_tiQueue[max_eval]);
+#endif
 	
 	std::partial_sort(s_tiQueue.begin(), max_iter, s_tiQueue.end(), std::greater<TiGoal>());
 
@@ -3584,9 +3589,9 @@ void Governor::ComputeDesiredUnits()
 				{
 					Assert(total_unit_support_by_type >= 0);
 					m_buildUnitList[list_num].m_maximumCount = 
-						static_cast<sint16>(floor(total_unit_support_by_type / 
+						static_cast<sint16>(floor(static_cast<double>(total_unit_support_by_type / 
 											g_theUnitDB->Get(best_unit_type)->GetShieldHunger()
-										   ));
+										   )));
 					
 					
 					total_unallocated_support = total_unit_support_by_type - 

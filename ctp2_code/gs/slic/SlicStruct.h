@@ -32,6 +32,7 @@
 //
 // - pragma once marked as MS specific.
 // - Accessor functionality added. 
+// - Standardized code. (May 29th 2006 Martin Gühmann) 
 //
 //----------------------------------------------------------------------------
 
@@ -103,7 +104,7 @@ public:
 	virtual SlicSymbolData *CreateDataSymbol();
 
 	friend class SlicStructInstance;
-	friend slicsymbol_Load(CivArchive &archive);
+	friend SlicSymbolData *slicsymbol_Load(CivArchive &archive);
 private:
 	char *m_name;
 	SLIC_BUILTIN m_type;

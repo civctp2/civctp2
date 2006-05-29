@@ -26,7 +26,7 @@
 //
 // - Always focus on the latest message.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -918,14 +918,15 @@ sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 	sint32 width = 0;
 	sint32 count = 0;
 
-	for (
-		sint32 i = m_numColumns - m_widthList->L();
+	sint32 i;
+	for(
+		i = m_numColumns - m_widthList->L();
 		i > 0 && (width += m_maxItemWidth) <= m_width;
 		i-- )
 			count++;
 
 	ListPos position = m_widthList->GetTailPosition();
-	for (
+	for(
 		i = m_widthList->L();
 		i && (width += m_widthList->GetPrev( position )) <= m_width;
 		i-- )
@@ -1332,7 +1333,8 @@ void aui_ListBox::WhatsChanged(
 
 	
 	ListPos position = m_selectedList->GetHeadPosition();
-	for ( sint32 i = m_selectedList->L(); i; i-- )
+	sint32 i;
+	for ( i = m_selectedList->L(); i; i-- )
 	{
 		sint32 itemIndex = m_selectedList->GetNext( position );
 		if ( !m_selectedListLastTime->Find( itemIndex ) )
@@ -1777,7 +1779,8 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 					sint32		firstIndex = 999999, 
 								index;
 					
-					for (sint32 i=0; i<(sint32)(m_visualSelectedList->L()); i++) {
+					sint32 i;
+					for (i=0; i<(sint32)(m_visualSelectedList->L()); i++) {
 						index = m_visualSelectedList->GetAtIndex(i);
 						if (index <= firstIndex) firstIndex = index;
 					}

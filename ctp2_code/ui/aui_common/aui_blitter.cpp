@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface blitter
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -1549,10 +1549,11 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 
 		if ( destSurf->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555 )
 		{
-			
-			for ( sint32 i = 0; i < bevelThickness; i++ )
+			sint32 i;
+			for ( i = 0; i < bevelThickness; i++ )
 			{
-				for ( sint32 j = i; j; j-- )
+				sint32 j;
+				for ( j = i; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
@@ -1577,7 +1578,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 			
 			for ( i = skipHeight; i; i-- )
 			{
-				for ( sint32 j = bevelThickness; j; j-- )
+				sint32 j;
+				for ( j = bevelThickness; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
@@ -1600,7 +1602,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 			
 			for ( i = bevelThickness; i; i-- )
 			{
-				for ( sint32 j = i - 1; j; j-- )
+				sint32 j;
+				for ( j = i - 1; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
@@ -1624,10 +1627,11 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 		}
 		else 
 		{
-			
-			for ( sint32 i = 0; i < bevelThickness; i++ )
+			sint32 i;
+			for ( i = 0; i < bevelThickness; i++ )
 			{
-				for ( sint32 j = i; j; j-- )
+				sint32 j;
+				for ( j = i; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
@@ -1652,7 +1656,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 			
 			for ( i = skipHeight; i; i-- )
 			{
-				for ( sint32 j = bevelThickness; j; j-- )
+				sint32 j;
+				for ( j = bevelThickness; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
@@ -1675,7 +1680,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 			
 			for ( i = bevelThickness; i; i-- )
 			{
-				for ( sint32 j = i - 1; j; j-- )
+				sint32 j;
+				for ( j = i - 1; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
@@ -3101,7 +3107,7 @@ AUI_ERRCODE aui_Blitter::SpanBlt16To16(
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
 				aui_SpanList *curSpanList = srcSpanListArray;
-				const height = srcSurf->Height();
+				const sint32 height = srcSurf->Height();
 				const aui_SpanList *stopSpanList = curSpanList + height;
 
 				do

@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -684,7 +684,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 	sint32 i;
 	CellUnitList units;
 
-	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
 		MBCHAR switchName[k_MAX_NAME_LEN];
 		sprintf(switchName, "OutOfArmyBox.Unit%d", i);		
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
@@ -891,7 +891,8 @@ void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 da
 	bool enableAddAllButton=false;
 	ctp2_ListBox *armyList = (ctp2_ListBox *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList");
 	ctp2_ListItem *item = (ctp2_ListItem *)armyList->GetSelectedItem();
-	for(int i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	uint8 i;
+	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
 		MBCHAR switchName[k_MAX_NAME_LEN];
 		sprintf(switchName, "OutOfArmyBox.Unit%d", i);		
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);

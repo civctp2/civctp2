@@ -43,7 +43,7 @@
 // - Some agreements have limited duration, PFT 05 MAR 05
 // - Replaced old civilisation database by new civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -4229,7 +4229,8 @@ sint32 Diplomat::GetNextKeyAdvance() const
 	
 	
 	const AdvanceRecord *rec;
-	for (sint32 advance_index = 0; advance_index < g_theAdvanceDB->NumRecords(); advance_index++)
+	sint32 advance_index;
+	for (advance_index = 0; advance_index < g_theAdvanceDB->NumRecords(); advance_index++)
 	{
 		rec = g_theAdvanceDB->Get(advance_index);
 
@@ -6042,22 +6043,20 @@ bool Diplomat::CanExtortCityFrom(const PLAYER_INDEX foreginerId, const sint32 ma
 
 void Diplomat::ThrowParty(const PLAYER_INDEX foreignerId)
 {
-	
-	
 	if (ReadyToParty())
 	{
 		sint32 regard_bonus;
 		StringId strId;
 
-//Add random regard bonus generator for throw party
+		//Add random regard bonus generator for throw party
 		GetCurrentDiplomacy(foreignerId).GetHoldReceptionRegardBonus(regard_bonus);
 		
 		g_theStringDB->GetStringID("REGARD_EVENT_HOLD_RECEPTION",strId);
 		LogRegardEvent(foreignerId,
-			regard_bonus,
-			REGARD_EVENT_DIPLOMACY,
-			strId,
-			10);
+		               regard_bonus,
+		               REGARD_EVENT_DIPLOMACY,
+		               strId,
+		               10);
 		m_lastParty = static_cast<sint16>(NewTurnCount::GetCurrentRound());
 	}
 }

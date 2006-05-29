@@ -368,7 +368,7 @@ void BuildQueue::Clear(BOOL fromServer)
 void BuildQueue::ClearAllButHead(BOOL fromServer)
 {
 	if (m_list->GetCount() > 1)
-    {
+	{
 	    if(!fromServer && g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		    g_network.SendAction(new NetAction(NET_ACTION_CLEAR_QUEUE_EXCEPT_HEAD));
 	    } else if(g_network.IsHost()) {
@@ -381,7 +381,7 @@ void BuildQueue::ClearAllButHead(BOOL fromServer)
 	    BuildNode * head = m_list->RemoveHead();
 	    m_list->DeleteAll();
 	    m_list->AddHead(head);
-    }
+	}
 }
 
 bool BuildQueue::BuildFrontUnit(BOOL forceFinish)
@@ -410,7 +410,7 @@ bool BuildQueue::BuildFrontUnit(BOOL forceFinish)
 				return false;
 			}
 		}
-//EMOD to prevent units with POP > 1 from disbanding city  with settler_pending
+		//EMOD to prevent units with POP > 1 from disbanding city  with settler_pending
 		sint32 unitpop;
 		if(g_theUnitDB->Get(m_list->GetHead()->m_type)->GetPopCostsToBuild(unitpop) &&
 		   (cd->PopCount() == unitpop) &&
@@ -421,7 +421,7 @@ bool BuildQueue::BuildFrontUnit(BOOL forceFinish)
 				return false;
 			}
 		}
-// end EMOD
+		// end EMOD
 
 		DPRINTF(k_DBG_GAMESTATE, ("City %lx building unit: %s\n",
 								  (uint32)cd->GetHomeCity(),

@@ -1,4 +1,38 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Building data handling
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - buildingutil_GetGoldPerCity added to work like GoldPerPop (2-15-2006 E)
+// - buildingutil_GetGoldPerUnit added to work like GoldPerPop (2-24-2006 E)
+// - buildingutil_GetGoldPerUnitReadiness added to work like GoldPerPop (2-24-2006 E)
+// - buildingutil_IsObsolete added so buildings can be obsolete like wonders (4-28-2006 E)
+// - buildingutil_GetEmbassiesEverywhereEvenAtWar (E)
+// - buildingutil_GetIncreaseHP (E)
+//
+//----------------------------------------------------------------------------
 
 #ifndef __BUILDING_UTIL_H__
 #define __BUILDING_UTIL_H__

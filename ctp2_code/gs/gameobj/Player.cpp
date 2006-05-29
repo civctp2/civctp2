@@ -2072,7 +2072,7 @@ void Player::BeginTurnProduction()
 	
 	sint32 mil_paid, mat_paid;
 	sint32 mil_paid_total=0; 
-    sint32 r; 
+	sint32 r; 
 	
 	if (0 < n) { 
 		for (i=0; i<(n-1); i++) { 
@@ -2092,8 +2092,8 @@ void Player::BeginTurnProduction()
 		m_materialPool->AddMaterials(materialsFromFranchise);
 	}
 
-//EMOD - Get production for TradeProduction Tile Imps  move to beginturnproduction? removed because crash
-
+	// EMOD - Get production for TradeProduction Tile Imps  move 
+	// to beginturnproduction? removed because crash
 //	if ((0 < m_allInstallations->Num()) && (0 < n)) {
 //		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
 //			Installation inst = m_allInstallations->Access(b);
@@ -2105,8 +2105,7 @@ void Player::BeginTurnProduction()
 //		}
 //	}
 
-//EMOD New Version 5-16-2006
-
+	// EMOD New Version 5-16-2006
 	if ((0 < m_allInstallations->Num()) && (0 < n)) {
 		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
 			Installation inst = m_allInstallations->Access(b);
@@ -2140,23 +2139,23 @@ void Player::BeginTurnProduction()
 				}
 			}
 
-  //EMOD if intborderradius is 0 then can we get rid of the top code to gove colonies an optional radius?
+			// EMOD if intborderradius is 0 then can we get rid of 
+			// the top code to gove colonies an optional radius?
 			if (rec->GetCanExportTileValueRadius()) {
-				RadiusIterator it(inst.RetPos(),rec->GetIntBorderRadius());    //m_sizeIndex);
+				RadiusIterator it(inst.RetPos(),rec->GetIntBorderRadius());
 				for(it.Start(); !it.End(); it.Next()) {
 					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
-						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
-						m_gold->AddGold(radiuscell->GetGoldProduced());
+					m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
+					m_gold->AddGold(radiuscell->GetGoldProduced());
 				}
 			}
-			//
 		}
 	}
 
 
 
 
-//end EMOD
+	// End EMOD
 
 	m_productionFromFranchises = 0;
 }
@@ -2357,12 +2356,12 @@ sint32 Player::CalcWonderGold()
 		}
 	}
 
-/////////EMOD - use as model for Holy City getting gold from all temples of its religion
-		sint32 GoldPerBuildingAnywhere = wonderutil_GetGoldPerBuildingAnywhere(m_builtWonders);
+	// EMOD - use as model for Holy City getting gold from all temples of its religion
+	sint32 GoldPerBuildingAnywhere = wonderutil_GetGoldPerBuildingAnywhere(m_builtWonders);
 	if(GoldPerBuildingAnywhere > 0) {
-		sint32 w;	
+		sint32 w;
 		for(w = g_theWonderDB->NumRecords() - 1; w >= 0; w--) {
-		const WonderRecord *wrec = g_theWonderDB->Get(w);
+			const WonderRecord *wrec = g_theWonderDB->Get(w);
 			if (wrec->GetNumBuildingAnywhere() >0) {
 				for(sint32 h = 0; h < wrec->GetNumBuildingAnywhere(); h++) {
 					for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
@@ -2382,7 +2381,7 @@ sint32 Player::CalcWonderGold()
 			}
 		}
 	}
-//end EMOD
+	//end EMOD
 
 	sint32 wonderBonusGold = wonderutil_GetBonusGold(m_builtWonders);
 	totalWonderGold += wonderBonusGold;

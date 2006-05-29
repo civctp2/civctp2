@@ -1,6 +1,3 @@
-
-
-
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
@@ -42,14 +39,6 @@
 //    not Hidden Nationality then Regard Event is Logged 
 //
 //----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 #include "c3.h"
 
@@ -646,9 +635,9 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
+	// cost should be variable not standard each time
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetSlaveRaidRegardCost(cost);
-// cost should be variable not standard each time
 
 	
 	StringId strId;

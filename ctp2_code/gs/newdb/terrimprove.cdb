@@ -3,37 +3,47 @@
 #  Project      : Call To Power 2
 #  File type    : DbGen input
 #  Description  : Terrain improvement record definition
-# 
-# ----------------------------------------------------------------------------
-# 
-#  Disclaimer
-# 
-#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-# 
-#  This material has been developed at apolyton.net by the Apolyton CtP2 
-#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-# 
-#-----------------------------------------------------------------------------
-# 
-#  Modifications from the original Activision code:
-# 
-#  - Sound added.
-#  - Added Freight for trade redirection.
-#  - Government modifier added.
-#  - DisplayLevel and CanPillage added to support visible wonders.
-#  - GovernmentType - added by E; a copy of unit Government type code
-#  - CultureOnly - added by E; can only research if civ has certain citystyle
-#  - IsRestrictedToGood - added by E; can only build imps if tile has good
-#  - Wonder and Urban Class - added by E; FutureUse; for visible wonders and citysprawl
-#  - CantPillage - added by E; FutureUse; prevent pillage of certain imps 
-#  - NeedsWorker - added by E; FutureUse; can't build unless IsWorker unit is on square
-#  - NeedsWaterSupply- added by E; FutureUse; can only build on rivers or adjacent to 
-#                      other IsWaterSupply imps
-#  - PlantGood - added by E; FutureUse; imp that places a good instead
-#  - EnablesGood - to replace plants good
-#  - Added enablesgood to effect to make different goods on different terrains (wheat, cattle, wine)
+#  Id           : $Id:$
 #
 #-----------------------------------------------------------------------------
+#
+#  Disclaimer
+#
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+#  - Sound                 : Added for construction sound like in CTP1. (Martin Gühmann)
+#  - Freight               : Tileimp gives new trade freight costs for its 
+#                            cell for trade routing. (Martin Gühmann)
+#  - GovernmentsModified   : Added for tielimp government modification.
+#  - DisplayLevel          : Tileimp is forced to be displayed on a certain 
+#                            level of tileimps at its location to support 
+#                            visible wonders. (E)
+#  - CantPillage           : Tileimp cannot be pillaged to support visible wonders. (E)
+#  - GovernmentType        : Tileimp can only be built under the given government (E)
+#  - CultureOnly           : Tileimp can only be researched if civ has a certain citystyle (E)
+#  - IsRestrictedToGood    : Tileimp can only be built on a certain good. (E)
+#  - Added bit Wonder for visible wonders in
+#    - Class                 (FutureUse)(by E)
+#    - Excludes              (FutureUse)(by E)
+#  - Added bit Urban for city sprawl in
+#    - Class                 (FutureUse)(by E)
+#    - Excludes              (FutureUse)(by E)
+#  - NeedsWorker           : Tileimp needs worker unit on its square to be built. (FutureUse) (E)
+#  - NeedsWaterSupply      : Tileimp Can only be build on rivers or adjacent to 
+#                            rivers or other tileimps with flag IsWaterSupply (FutureUse) (E)
+#  - PlantGood             : Tileimp is replaced by a good on construction completion (FutureUse) (E)
+#  - Enablesgood in Effect : Tileimp is replaced by a good on construction 
+#                            completion according to the position's terrain type (FutureUse)(E)
+#
+#-----------------------------------------------------------------------------
+
 TerrainImprovement {
 	Bits Class {
 		Farm,
@@ -49,8 +59,8 @@ TerrainImprovement {
 		LandDetector,
 		OceanDetector,
 		Terraform,
-		Wonder, //added by E for visible wonders
-		Urban //added by E for future Urban Sprawl
+		Wonder,             // For visible wonders (E)
+		Urban               // For future Urban Sprawl (E)
 	}
 
 	Bits Excludes {
@@ -67,8 +77,8 @@ TerrainImprovement {
 		LandDetector,
 		OceanDetector,
 		Terraform,
-		Wonder, //added by E for visible wonders
-		Urban //added by E for future Urban Sprawl
+		Wonder,            // For visible wonders (E)
+		Urban              // For future Urban Sprawl (E)
 	}
 
 	Bits CanSee {
@@ -96,34 +106,33 @@ TerrainImprovement {
 		Bit(Int) BonusProduction
 		Bit(Int) BonusGold
 		Bit(Int) MoveCost
-		#Added by Martin Gühmann for Trade redirection
-		Bit(Int) Freight
+		Bit(Int) Freight                    // For trade routing (Martin Gühmann)
 		Bit Radar
-		Bit NeedsWorker 				//futureUse - can't build unless IsWorker unit is on square
+		Bit NeedsWorker                     // FutureUse - can't build unless IsWorker unit is on square
 		Bit Airport
 
-		Bit Colony      				//FU
-		Bit Fort 						//FU
-		Bit Urban						//FU
-		Bit Installation				//FU
-		Bit DeniedToEnemy				//FU
-		Bit(Int) BonusFoodExport 		//FU
-		Bit(Int) BonusProductionExport 	//FU
-		Bit(Int) BonusGoldExport 		//FU
-		Bit CanBeCaptured				//FU
-		Bit CanUpgrade					//FU
+		Bit Colony                          // FU (future use)
+		Bit Fort                            // FU
+		Bit Urban                           // FU
+		Bit Installation                    // FU
+		Bit DeniedToEnemy                   // FU
+		Bit(Int) BonusFoodExport            // FU
+		Bit(Int) BonusProductionExport      // FU
+		Bit(Int) BonusGoldExport            // FU
+		Bit CanBeCaptured                   // FU
+		Bit CanUpgrade                      // FU
 
 		Bit ListeningPost
 		Bit Endgame
 		Bit(Int) VisionRange
 		Bit(Int) RadarRange
 		Bit(Float) DefenseBonus
-		Record CityStyle[] CultureOnly 		//added by E -- can only build imps if civ has certain citystyle
+		Record CityStyle[] CultureOnly      // Can only build imps if civ has certain citystyle
 		Record Advance EnableAdvance
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost
-		Record Resource[] EnablesGood 		//added by E -- having a TI gives a city a good
-		Bit(Int) GoldCost 				//FU
+		Record Resource[] EnablesGood       // Having a TI gives a city a good
+		Bit(Int) GoldCost                   // FU
 		Int ProductionTime
 		Int TilesetIndex
 	}
@@ -132,15 +141,15 @@ TerrainImprovement {
 	Record Sound Sound
 	Record Terrain[] CantBuildOn
 	Record Government[] GovernmentsModified
-	Record CityStyle[] CultureOnly 			//added by E -- can only build imps if civ has certain citystyle
-	Record Government[] GovernmentType 		//added by E --- a copy of unit Government type code
-	Record Resource[] IsRestrictedToGood 	//added by E -- can only build imps if tile has good
-	Record Resource[] EnablesGood 			//added by E -- having a TI gives a city a good
+	Record CityStyle[] CultureOnly          // Can only build imps if civ has certain citystyle (E)
+	Record Government[] GovernmentType      // A copy of unit Government type code (E)
+	Record Resource[] IsRestrictedToGood    // Can only build imps if tile has good (E)
+	Record Resource[] EnablesGood           // Having a TI gives a city a good (E)
 	Bit(Struct Effect) Effect
 	Struct Effect[] TerrainEffect
-	Bit DeniedToEnemy						//FU
-	Bit CanExportTileValue						//added by E New Colony code
-	Bit CanExportGood						//added by E New Colony code
+	Bit DeniedToEnemy                       // FU
+	Bit CanExportTileValue                  // New Colony code (E)
+	Bit CanExportGood                       // New Colony code (E)
 	Bit CanExportTileValueRadius
 
 	Record Icon Icon
@@ -149,7 +158,6 @@ TerrainImprovement {
 	StringId Statusbar
 
 	Int Level # If a farm, is it farm 1, farm 2, farm 3?  same thing for any type.
-	#Removed limit of three for Construction Tile by Martin Gühmann
 	Int[] ConstructionTiles
 
 	Bit(Record Terrain) TerraformTerrain # Only meaningful if Class == Terraform
@@ -158,17 +166,16 @@ TerrainImprovement {
 	Bit(Int) IntBorderRadius
 	Bit(Int) SquaredBorderRadius
 	Bit(Int) MoveBonus
-	Bit Colony      //FU
-	Bit(Int) BonusFoodExport //FU
-	Bit(Int) BonusProductionExport //FU
-	Bit(Int) BonusGoldExport //FU
-	Bit NeedsIrrigation 					//futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
-		
+	Bit Colony                              // FU
+	Bit(Int) BonusFoodExport                // FU
+	Bit(Int) BonusProductionExport          // FU
+	Bit(Int) BonusGoldExport                // FU
+	Bit NeedsIrrigation                     // FU Can only be build on rivers or adjacent to rivers or other tileimps with flag IsWaterSupply
 
 	Bit GLHidden
 
 	# Display level (0 = ground level = under roads, > 0 = on top of roads)
-	Int DisplayLevel	= 0
+	Int DisplayLevel = 0
 	# Pillage prevention
-	Bit	CantPillage //futureUse added by E to prevent pillage of certain imps 
+	Bit CantPillage // FU Tileimp cannot be pillaged (E)
 }

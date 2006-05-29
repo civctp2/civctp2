@@ -27,7 +27,7 @@
 // - Repaired memory leaks.
 // - Updated tribe index check.
 // - Replaced the old civilisation database by a new one. (Aug 21st 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -557,7 +557,8 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 						
 						
 						BOOL noCivsInList = TRUE;
-						for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
+						sint32 i;
+						for (i=0; i<k_MAX_PLAYERS; i++) {
 							if (s_tempSaveInfo->playerCivIndexList[i] > 0) {
 								noCivsInList = FALSE;
 								break;

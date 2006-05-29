@@ -27,15 +27,14 @@
 //
 // - Fixed buildingutil_GetOffenseBonusAir and buildingutil_GetOffenseBonusWater
 // - Fix by NelsonAndBronte on 04-11-2003
-// - EMOD GetGoldPerCity added to work like GoldPerPop  2-15-2006
-// - EMOD GetGoldPerUnit added to work like GoldPerPop  2-24-2006
-// - EMOD GetGoldPerUnitReadiness added to work like GoldPerPop 2-24-2006
-// - buildingutil_IsObsolete added by E so buildings can be obsolete ike wonders 4-28-2006
-// - buildingutil_GetEmbassiesEverywhereEvenAtWar
-// - buildingutil_GetIncreaseHP
+// - buildingutil_GetGoldPerCity added to work like GoldPerPop (2-15-2006 E)
+// - buildingutil_GetGoldPerUnit added to work like GoldPerPop (2-24-2006 E)
+// - buildingutil_GetGoldPerUnitReadiness added to work like GoldPerPop (2-24-2006 E)
+// - buildingutil_IsObsolete added so buildings can be obsolete like wonders (4-28-2006 E)
+// - buildingutil_GetEmbassiesEverywhereEvenAtWar (E)
+// - buildingutil_GetIncreaseHP (E)
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "c3errors.h"
@@ -272,7 +271,7 @@ sint32 buildingutil_GetGoldPerCitizen(const uint64 built_improvements)
 	return goldMod;
 }
 
-sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements) //EMOD
+sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
 	FOREACH_BUILT(GetGoldPerCity) {
@@ -283,7 +282,7 @@ sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements) //EMOD
 	return goldMod;
 }
 
-sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements) //EMOD
+sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
 	FOREACH_BUILT(GetGoldPerUnit) {
@@ -294,7 +293,7 @@ sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements) //EMOD
 	return goldMod;
 }
 
-sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements) //EMOD
+sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
 	FOREACH_BUILT(GetGoldPerUnitReadiness) {
@@ -305,7 +304,7 @@ sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements) //E
 	return goldMod;
 }
 
-sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements) //EMOD
+sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
 	FOREACH_BUILT(GetGoldPerUnitSupport) {
@@ -316,7 +315,7 @@ sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements) //EMO
 	return goldMod;
 }
 
-sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements) //EMOD
+sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
 	FOREACH_BUILT(GetUpkeepPerCity) {
@@ -327,7 +326,7 @@ sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements) //EMOD
 	return goldMod;
 }
 
-sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements) //EMOD
+sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
 	FOREACH_BUILT(GetUpkeepPerUnit) {
@@ -338,7 +337,7 @@ sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements) //EMOD
 	return goldMod;
 }
 
-sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvements) //EMOD
+sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
 	FOREACH_BUILT(GetUpkeepPerUnitWagesReadiness) {
@@ -622,7 +621,7 @@ double buildingutil_GetOffenseBonusAir(const uint64 built_improvements)
 
 BOOL buildingutil_IsObsolete(sint32 building_type)
 {
-    const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
+	const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
 	sint32 nObsolete = rec->GetNumObsoleteAdvance();
 	if(nObsolete <= 0)
 		return FALSE;
@@ -648,11 +647,11 @@ BOOL buildingutil_GetEmbassiesEverywhereEvenAtWar(const uint64 built_improvement
 
 sint32 buildingutil_GetIncreaseHP(const uint64 built_improvements)
 {
-		sint32 amt = 0;
+	sint32 amt = 0;
 	FOREACH_BUILT(GetIncreaseHP) {
-		sint32 l;
-		rec->GetIncreaseHP(l);
-		amt += l;
+		sint32 hp;
+		rec->GetIncreaseHP(hp);
+		amt += hp;
 	}
 	return amt;
 }

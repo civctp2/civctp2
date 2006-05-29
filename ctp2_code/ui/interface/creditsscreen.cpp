@@ -26,6 +26,7 @@
 //
 // - Corrected initialisations that were causing ambiguity. 
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code. (May 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -85,8 +86,8 @@
 
 
 
-const k_CreditsLineLen = 80;
-const kCreditsTextNumFonts = 6;
+const uint8 k_CreditsLineLen = 80;
+const uint8 kCreditsTextNumFonts = 6;
 
 
 
