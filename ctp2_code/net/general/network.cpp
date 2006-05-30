@@ -293,7 +293,7 @@ Network::Network() :
 #ifdef WIN32
 	char exepath[_MAX_PATH];
 	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
-		char *lastbackslash = strrchr(exepath, '\\');
+		char *lastbackslash = strrchr(exepath, FILE_SEPC);
 		if(lastbackslash) {
 			*lastbackslash = 0;
 			SetCurrentDirectory(exepath);
@@ -719,7 +719,7 @@ Network::Process()
 			return;
 	}
 
-	static sint32 battleEndedTime = -1;
+	static time_t battleEndedTime = -1;
 
 	
 	if(g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id()) && (!g_theCurrentBattle || g_theCurrentBattle->IsDone())) {
@@ -736,7 +736,7 @@ Network::Process()
 		
 	if(m_gameStyle & (k_GAME_STYLE_SPEED | k_GAME_STYLE_SPEED_CITIES)) {
 
-		sint32 timeNow = time(0); 
+		time_t timeNow = time(0); 
 
 		bool diplomacyShouldPause = false;
 		if(!DipWizard::CanInitiateRightNow() && IsMyTurn()) {
@@ -782,9 +782,12 @@ Network::Process()
 	}
 
 	if(m_gameStyle & k_GAME_STYLE_TOTAL_TIME) {
-		if(IsMyTurn() && 
-		   (m_totalTimeUsed + (time(0) - m_turnStartedAt) > m_totalStartTime)) {
-			
+		if (    IsMyTurn() 
+             && (m_totalTimeUsed + static_cast<sint32>(time(0) - m_turnStartedAt) > 
+                 m_totalStartTime
+                )
+           ) 
+        {
 			g_player[g_selected_item->GetCurPlayer()]->
 				GameOver(GAME_OVER_LOST_OUT_OF_TIME, -1);
 		}
@@ -836,7 +839,7 @@ void Network::ProcessSends()
 						}
 
 #ifdef _DEBUG
-						LogSentPacket(sbuf[0], sbuf[1], size);
+						LogSentPacket(sbuf[0], sbuf[1], static_cast<uint16>(size));
 #endif
 						break;
 					case NET_ERR_WOULDBLOCK:
@@ -1348,7 +1351,6 @@ void Network::SetReady(uint16 id)
 
 	PROGRESS(0);
 	
-	uint16 cells = 0;
 	NetCellList* cellList = NULL;
 
 	double percentMap = 0;
@@ -1430,8 +1432,8 @@ void Network::SetReady(uint16 id)
 		
 		UnitDynamicArray *unitList = g_player[p]->GetAllCitiesList();
 		for(n = 0; n < unitList->Num(); n++) {
-			UnitData* unitData;
-			unitData = g_theUnitPool->GetUnit(unitList->Get(n).m_id);
+			UnitData * unitData = 
+                g_theUnitPool->GetUnit(unitList->Get(n).m_id);
 
 			
 			chunkPackets.AddTail( new NetUnit(unitData));
@@ -1489,8 +1491,8 @@ void Network::SetReady(uint16 id)
 		
 		UnitDynamicArray* traderList = g_player[p]->GetTradersList();
 		for(n = 0; n < traderList->Num(); n++) {
-			UnitData* unitData;
-			unitData = g_theUnitPool->GetUnit(traderList->Get(n).m_id);
+			UnitData * unitData = 
+                g_theUnitPool->GetUnit(traderList->Get(n).m_id);
 			chunkPackets.AddTail( new NetUnit(unitData));
 		}
 
@@ -2387,7 +2389,7 @@ Network::ProcessNewPlayer(uint16 id)
 		
 		
 		
-		sint32 oldVisPlayer = g_selected_item->GetVisiblePlayer();
+//		sint32 oldVisPlayer = g_selected_item->GetVisiblePlayer();
 		if(player->m_id != m_pid) {
 			g_player[newslot]->SetPlayerType(PLAYER_TYPE_NETWORK);
 		} else {
@@ -2664,7 +2666,7 @@ void Network::DisplayChat(aui_Surface *surf)
 					m_packetName[i][0], m_packetName[i][1],
 					m_packetCounter[i], m_packetBytes[i],
 					m_sentPacketCounter[i], m_sentPacketBytes[i]);
-			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE,
+			primitives_DrawText(surf, k_LEFT_EDGE,
 								k_TOP_EDGE + ((i+1) * k_TEXT_SPACING),
 								buf, 0, 0);
 			totalCount += m_packetCounter[i];
@@ -2676,13 +2678,12 @@ void Network::DisplayChat(aui_Surface *surf)
 				totalCount, totalBytes, 
 				totalSent, totalSentBytes,
 				m_blockedPackets);
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE,
-							k_TOP_EDGE + ((i+1) * k_TEXT_SPACING),
+		primitives_DrawText(surf, k_LEFT_EDGE,
+							k_TOP_EDGE + ((k_NUM_PACKET_TYPES+1) * k_TEXT_SPACING),
 							buf, 0, 0);
 	}
 
-	primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
-						m_chatStr, 0, 0);
+	primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE, m_chatStr, 0, 0);
 }
 #endif
 
@@ -2972,7 +2973,7 @@ sint32 Network::GetTurnStartTime() const
 
 sint32 Network::GetTurnStartedAt() const
 {
-    return m_turnStartedAt;
+    return static_cast<sint32>(m_turnStartedAt);
 }
 
 sint32 Network::GetTurnEndsAt() const
@@ -3138,7 +3139,7 @@ void Network::SetMyTurn(BOOL turn)
 	} else {
 		if(m_isMyTurn) {
 			
-			sint32 timeUsed = time(0) - m_turnStartedAt;
+			sint32 timeUsed = static_cast<sint32>(time(0) - m_turnStartedAt);
 			m_totalTimeUsed += timeUsed;
 			if((m_gameStyle & k_GAME_STYLE_SPEED) &&
 			   (m_gameStyle & k_GAME_STYLE_CARRYOVER)) {

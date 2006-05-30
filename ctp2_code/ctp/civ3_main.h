@@ -52,7 +52,7 @@ int ui_Process(void);
 BOOL ui_CheckForScroll(void);
 
 sint32 sharedsurface_Initialize( void );
-sint32 sharedsurface_Cleanup( void );
+void   sharedsurface_Cleanup( void );
 
 int sprite_Initialize(void);
 int sprite_Update(aui_Surface *surf);

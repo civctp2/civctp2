@@ -33,9 +33,13 @@ void Direction::Serialize(CivArchive &archive)
 
 
 Path::Path()
-
+:
+    m_next_dir          (0),
+	m_start             (-1, -1),
+    m_step              (),
+    m_current           (-1, -1), 
+    m_next              (0)
 { 
-    Clear(); 
 } 
 
 
@@ -48,7 +52,6 @@ Path::Path(const Path *copy) : m_step(copy->m_step)
 }
 
 void Path::Clear() 
-
 { 
     m_step.Clear(); 
     m_next = 0; 
@@ -58,7 +61,6 @@ void Path::Clear()
 } 
 
 void Path::FlattenAstarList(AstarPoint *best)
-
 {
     AstarPoint *ptr=NULL, *old = NULL;
     sint32 i; 
@@ -149,9 +151,7 @@ void Path::FlattenNormalizedPointList(const MapPoint &start,
 
 
 void Path::Start(MapPoint &p)
-
 {
-
     m_next = 0; 
 	m_next_dir = 0;
     m_current = m_start; 
@@ -220,7 +220,7 @@ void Path::ClipStartToCurrent()
 
  
 
-void Path::GetStartPoint(MapPoint &pos)
+void Path::GetStartPoint(MapPoint &pos) const
 {
     pos = m_start;
 }
@@ -256,7 +256,7 @@ void Path::IncDir()
 	m_next_dir++; 
 }
 
-void Path::Concat(Path &otherpath)
+void Path::Concat(Path const & otherpath)
 {
 	sint32 i, n = otherpath.m_step.Num();
 	MapPoint start_pos;

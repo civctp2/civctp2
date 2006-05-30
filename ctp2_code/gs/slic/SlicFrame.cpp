@@ -38,7 +38,7 @@
 // - Repaired crash with invalid input.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added database array access. (Sep 16th 2005 Martin Gühmann)
-// - Repaired crashes with game saved with original Activision executable.
+// - Repaired crashes with game saved with original Activision executable. 
 // - Standardized code. (May 29th 2006 Martin Gühmann) 
 //
 //----------------------------------------------------------------------------
@@ -165,26 +165,18 @@ BOOL SlicFrame::ArrayLookup(SS_TYPE arrayType, SlicStackValue array,
 							SS_TYPE indexType, SlicStackValue indexValue,
 							SS_TYPE &retType, SlicStackValue &retValue)
 {
-	SlicSymbolData *arraySym;
-	sint32 index;
+	SlicSymbolData * arraySym = SlicStack::GetSymbol(arrayType, array);
 
-	if(!(arraySym = SlicStack::GetSymbol(arrayType, array))) {
-		
+	if (arraySym) 
+    {
+	    sint32 index = Eval(indexType, indexValue);
+	    return arraySym->ArrayLookup(index, retType, retValue);
+    }
+    else
+    {
 		c3errors_ErrorDialog("Slic", "Array is not a variable");
 		return FALSE;
 	}
-
-	
-	if(!arraySym) {
-		
-		return FALSE;
-	}
-
-	
-	index = Eval(indexType, indexValue);
-	
-	
-	return arraySym->ArrayLookup(index, retType, retValue);
 }
 
 
@@ -362,8 +354,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 {
 	unsigned char* codePtr = &m_segment->m_code[m_offset];
 	unsigned char* origCodePtr = &m_segment->m_code[m_offset];
+#if defined(SLIC_DOUBLES)
 	double dval;
-
+#endif
 	
 	sint32 ival, ival2; 
 
@@ -383,31 +376,34 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 	switch(op) {
 		case SOP_PUSHI:
-			ival = *((sint32*)codePtr);
+			sval1.m_int = *(reinterpret_cast<sint32 *>(codePtr));
 			codePtr += sizeof(sint32);
-
-			sval1.m_int = ival;
 			m_stack->Push(SS_TYPE_INT, sval1);
-
 			break;
+
 		case SOP_PUSHD:
+#if defined(SLIC_DOUBLES)
 			dval = *((double*)codePtr);
+            // Probably some handling missing here. Now, we just skip some bytes.
+#endif
 			codePtr += sizeof(sint32);
 			break;
+
 		case SOP_PUSHV:
-			ival = *((sint32*)codePtr);
+			ival = *((sint32 *)codePtr);
 			codePtr += sizeof(int);
-			symval = g_slicEngine->GetSymbol(ival);
-			if(!symval) {
+			sval1.m_sym = g_slicEngine->GetSymbol(ival);
+			if (sval1.m_sym) 
+            {
+                m_stack->Push(SS_TYPE_SYM, sval1);
+            }
+            else
+            {
 				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
 				stopped = TRUE;
-				break;
 			}
-
-			sval1.m_sym = symval;		
-			m_stack->Push(SS_TYPE_SYM, sval1);
-
 			break;
+
 		case SOP_PUSHM:
 		{
 			ival = *((sint32*)codePtr);
@@ -558,7 +554,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
-			sval3.m_int = (int)pow(static_cast<double>(Eval(type2, sval2)), Eval(type1, sval1));
+			sval3.m_int = static_cast<int>
+				(pow(static_cast<double>(Eval(type2, sval2)), Eval(type1, sval1)));
 			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
 		// Bitwise operators:
@@ -904,9 +901,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			codePtr += sizeof(sint32); 
 			break;
 		case SOP_JMP:
-			ival = *((sint32 *)codePtr);
-			m_offset = ival;
-			calcOffset = FALSE;
+			m_offset    = *(reinterpret_cast<sint32 *>(codePtr));
+			calcOffset  = FALSE;
 			break;
 		case SOP_BNT:
 			ival = *((sint32 *)codePtr);
@@ -958,7 +954,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			break;
 		case SOP_ASSN:
 			ival = *((sint32*)codePtr);
-			codePtr += sizeof(int);
+			codePtr += sizeof(sint32);
 
 			symval = g_slicEngine->GetSymbol(ival);
 			if(!symval) {
@@ -975,7 +971,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		case SOP_ASSNA:
 			
 			ival = *((sint32 *)codePtr);
-			codePtr += sizeof(int);
+			codePtr += sizeof(sint32);
 			symval = g_slicEngine->GetSymbol(ival);
 			if(!symval) {
 				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d in array assignment", ival));
@@ -1167,8 +1163,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		case SOP_DBNAME:
 		{
 			conduit     = GetDatabase(codePtr);
-			ival        = *((int*)codePtr);
-			codePtr    += sizeof(int);
+			ival        = *((sint32 *)codePtr);
+			codePtr    += sizeof(sint32);
 			symval      = g_slicEngine->GetSymbol(ival);
 
 			if (conduit && symval) 
@@ -1197,8 +1193,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		case SOP_DBNAMEREF:
 		{
 			conduit     = GetDatabase(codePtr);
-			ival        = *((int*)codePtr);
-			codePtr    += sizeof(int);
+			ival        = *((sint32 *)codePtr);
+			codePtr    += sizeof(sint32);
 			symval      = g_slicEngine->GetSymbol(ival);
 
 			if (conduit && symval) 
@@ -1284,8 +1280,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
             if (conduit)
             {
-			    sval3.m_int = *((int*)codePtr);
-			    codePtr    += sizeof(int);
+			    sval3.m_int = *((sint32 *)codePtr);
+			    codePtr    += sizeof(sint32);
 			    //Get the member:
 			    name = reinterpret_cast<char *>(codePtr);
 			    Assert(name);
@@ -1499,10 +1495,7 @@ void SlicFrame::ClearMessageData()
 	}
 	m_messageData->m_text = NULL;
 	m_messageData->m_request = ID();
-	if (g_turn)
-		m_messageData->m_timestamp = g_turn->GetYear();
-	else
-		m_messageData->m_timestamp = 0;
+	m_messageData->m_timestamp = g_turn ? g_turn->GetYear() : 0;
 }
 
 void SlicFrame::SetMessageData(MessageData *data)

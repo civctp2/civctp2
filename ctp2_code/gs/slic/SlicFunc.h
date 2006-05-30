@@ -45,20 +45,7 @@
 #ifndef __SLICFUNC_H__
 #define __SLICFUNC_H__
 
-
-#define k_MAX_SLIC_ARGS 8
-
-class CivArchive;
-class SlicSegment;
-class SlicSymbolData;
-class Unit;
-class MapPoint;
-class GameEventArgList;
-class Army;
-
-typedef sint32 StringId;
-
-#include "GameEventDescription.h"
+#include <vector>
 
 enum SA_TYPE {
 	SA_TYPE_INT,
@@ -108,10 +95,41 @@ enum SLIC_FUNC_RET_TYPE {
 	SFR_ARMY
 };
 
-struct SlicArg {
-	sint32 m_int;
-	SlicSegment* m_segment;
-	SlicSymbolData *m_symbol;
+struct  SlicArg;
+class   SlicArgList;
+class   SlicFunc;
+class   SlicStringToToken;
+
+#include "dbtypes.h"                // StringId;
+#include "GameEventDescription.h"
+class Army;
+class CivArchive;
+class GameEventArgList;
+class MapPoint;
+class SlicSegment;
+class SlicSymbolData;
+class Unit;
+
+struct SlicArg 
+{
+    SlicArg
+    (
+        SA_TYPE             a_Type      = SA_TYPE_INT,
+        sint32              a_Value     = 0,
+        SlicSegment *       a_Segment   = NULL,
+        SlicSymbolData *    a_Symbol    = NULL
+    )
+    :
+        m_int               (a_Value),
+        m_segment           (a_Segment),
+        m_symbol            (a_Symbol),
+        m_type              (a_Type)
+    { ; }
+
+    sint32                  m_int;
+	SlicSegment *           m_segment;
+	SlicSymbolData *        m_symbol;
+    SA_TYPE                 m_type;
 };
 
 class SlicStringToToken {
@@ -133,27 +151,38 @@ public:
 	void Serialize(CivArchive &archive) {};
 };
 
-class SlicArgList {
+class SlicArgList 
+{
 public:
 	SlicArgList();
+
 	void AddArg(SA_TYPE type, sint32 value);
 	void AddArg(SlicSegment *segment, SlicSymbolData *symbol);
 	void AddArg(SA_TYPE type, SlicSymbolData *symbol);
-	void Clear() { m_numArgs = 0; }
-	BOOL GetInt(sint32 arg, sint32 &value);
-	BOOL GetPlayer(sint32 arg, sint32 &value);
-	BOOL GetString(sint32 arg, char *&value);
-	BOOL GetUnit(sint32 arg, Unit &u);
-	BOOL GetCity(sint32 arg, Unit &city);
-	BOOL GetPos(sint32 arg, MapPoint &pos);
-	BOOL GetArmy(sint32 arg, Army &a);
-	BOOL GetStringId(sint32 arg, StringId &id);
+	
+    void Clear() 
+    { 
+        m_argValue.clear(); 
+    };
+
+	bool GetInt(sint32 arg, sint32 &value) const;
+	bool GetPlayer(sint32 arg, sint32 &value) const;
+	bool GetString(sint32 arg, char *&value) const;
+	bool GetUnit(sint32 arg, Unit &u) const;
+	bool GetCity(sint32 arg, Unit &city) const;
+	bool GetPos(sint32 arg, MapPoint &pos) const;
+	bool GetArmy(sint32 arg, Army &a) const;
+	bool GetStringId(sint32 arg, StringId &id) const;
 
 	GameEventArgList *CreateGameEventArgs(GAME_EVENT ev);
+    void ReleaseSymbols(void);
 
-	SA_TYPE m_argType[k_MAX_SLIC_ARGS];
-	SlicArg m_argValue[k_MAX_SLIC_ARGS];
-	sint32 m_numArgs;
+    size_t Count(void) const
+    {
+        return m_argValue.size();
+    }
+
+    std::vector<SlicArg>    m_argValue;
 };
 
 union SlicFuncResult {

@@ -68,7 +68,6 @@ bool CtpAiDebug::IsDebugGoalTypeSet()
 
 bool CtpAiDebug::IsDebugArmyIdSet()
 {
-	bool found = false;
 	for (sint32 i = 0; i < k_MAX_ARMY_SIZE; i++)
 	{
 		if (s_debugArmies[i] != -1)

@@ -489,12 +489,15 @@ ProgressWindow *g_theProgressWindow = NULL;
 extern sint32 g_scenarioUsePlayerNumber;
 
 
-bool g_tempLeakCheck = false;
-sint32 g_allocatedAtStart;
+bool    g_tempLeakCheck = false;
+
 
 
 namespace
 {
+#if defined(_DEBUG)
+size_t  g_allocatedAtStart;
+#endif
 
 //----------------------------------------------------------------------------
 //
@@ -515,19 +518,19 @@ namespace
 //----------------------------------------------------------------------------
 void InitDataIncludePath(void)
 {
-	MBCHAR const            DIR_SEPARATOR  = ';';
 	MBCHAR                  ruleSets[MAX_PATH];
 	strcpy(ruleSets, g_theProfileDB->GetRuleSets());
 
 	std::vector<MBCHAR *>   pathStarts;
 	MBCHAR *                nextPath    = ruleSets;
+    size_t const            ruleSetSize = strlen(ruleSets);
 
-	for (size_t	toDo = strlen(ruleSets); toDo > 0; )
+	for (size_t	toDo = ruleSetSize; toDo > 0; )
 	{
 		pathStarts.push_back(nextPath);
-		nextPath = std::find(nextPath, nextPath + toDo, DIR_SEPARATOR); 
+		nextPath = std::find(nextPath, nextPath + toDo, PATH_SEPC); 
 
-		if (nextPath < ruleSets + toDo)
+		if (nextPath < ruleSets + ruleSetSize)
 		{
 			*nextPath++	= 0;
 			toDo		= strlen(nextPath);
@@ -3091,7 +3094,7 @@ sint32 CivApp::ProcessProfile(void)
 
 frame++;
 
-	exit(0);
+//	exit(0);
 
 	return 0;
 }

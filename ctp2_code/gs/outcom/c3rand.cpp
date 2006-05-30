@@ -81,7 +81,7 @@ C3Rand::C3Rand(CivArchive &archive)
 void C3Rand::Serialize(CivArchive &archive)
 {
     if (archive.IsStoring()) { 
-        archive << m_refCount; 
+        archive << static_cast<uint32>(m_refCount); 
         archive.PutSINT32(m_ownGenerator);
 
         if (m_ownGenerator) { 
@@ -89,7 +89,9 @@ void C3Rand::Serialize(CivArchive &archive)
         } 
       
     } else { 
-        archive >> m_refCount; 
+        uint32  l_refCount;
+        archive >> l_refCount; 
+        m_refCount  = l_refCount;
         m_ownGenerator = archive.GetSINT32();
         if (m_ownGenerator) { 
 

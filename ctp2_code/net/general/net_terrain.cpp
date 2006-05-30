@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer terrain improvement packet handling.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,21 +29,16 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-#include "network.h"
 #include "net_terrain.h"
-#include "net_util.h"
 
+#include "gstypes.h"            // TERRAIN_TYPES
+#include "network.h"
+#include "net_util.h"
 #include "TerrImprove.h"
 #include "TerrImprovePool.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "player.h"
-#include "tiledmap.h"
-
-extern World *g_theWorld;
-extern Player **g_player;
-extern TiledMap *g_tiledMap;
+#include "World.h"              // g_theWorld
+#include "player.h"             // g_player
+#include "tiledmap.h"           // g_tiledMap
 
 //----------------------------------------------------------------------------
 //
@@ -61,10 +56,9 @@ extern TiledMap *g_tiledMap;
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-NetTerrainImprovement::NetTerrainImprovement(TerrainImprovementData *data)
-{
-	m_data = data;
-}
+NetTerrainImprovement::NetTerrainImprovement(TerrainImprovementData * data)
+:   m_data  (data)
+{ ; }
 
 //----------------------------------------------------------------------------
 //

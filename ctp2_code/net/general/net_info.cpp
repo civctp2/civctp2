@@ -301,7 +301,7 @@ NetInfo::Packetize(uint8* buf, uint16& size)
 {
 	buf[0] = 'I';
 	buf[1] = 'I';
-	putshort(&buf[2], m_type);
+	putshort(&buf[2], static_cast<sint16>(m_type));
 	size = 4;
 	if(m_args[m_type] > 0) {
 		putlong(&buf[4], m_data); size += 4;

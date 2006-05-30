@@ -506,14 +506,9 @@ STDEHANDLER(CtpAi_CreatedArmyEvent)
 
 void CtpAi::GroupWithEscort(const Army & army)
 {
-	
 	if (army.Num() > 1)
 		return;
 
-	
-	PLAYER_INDEX playerId = army->GetOwner();
-
-	
 	sint32 min_strength = -1;
 	sint32 tmp_strength;
 	Army min_army;
@@ -569,46 +564,32 @@ void CtpAi::GroupWithEscort(const Army & army)
 
 void CtpAi::AddGoalsForArmy(const Army &army)
 {	
-	PLAYER_INDEX playerId;
-	PLAYER_INDEX foreignerId;
+	PLAYER_INDEX    playerId = army.GetOwner();
 
-	playerId = army.GetOwner();
-
-	CTPGoal_ptr goal_ptr;
-	GOAL_TYPE goal_type;
-
-	
-	
-	
-
-	
-	CTPAgent *new_agent = new CTPAgent();
+	CTPAgent *      new_agent = new CTPAgent();
 	new_agent->Set_Army(army);
 	new_agent->Set_Player_Number(playerId);
-		
-	
-	Squad *new_squad = new Squad();
+
+	Squad *         new_squad = new Squad();
 	new_squad->Add_Agent(new_agent);
-		
-	
-	
 	Scheduler::GetScheduler(playerId).Add_New_Squad(new_squad);
 
-	
-	for (foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
+
+    for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
-		
-		for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+		for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 		{
 			// Speed-up only, no functional change.
 			GoalRecord const *	goal	= g_theGoalDB->Get(goal_type);
 
-			if(goal
-			&&(goal->GetTargetTypeAttackUnit() 
-			|| goal->GetTargetTypeSpecialUnit())
-			&&(goal->GetTargetOwnerSelf() == (foreignerId == playerId))
-			){
-				goal_ptr = new CTPGoal();
+			if (    goal
+			     && (   goal->GetTargetTypeAttackUnit() 
+			         || goal->GetTargetTypeSpecialUnit()
+                    )
+			     && (goal->GetTargetOwnerSelf() == (foreignerId == playerId))
+			   )
+            {
+	            CTPGoal_ptr     goal_ptr = new CTPGoal();
 				goal_ptr->Set_Type(goal_type);
 				goal_ptr->Set_Player_Index(foreignerId);
 				goal_ptr->Set_Target_Army(army);
@@ -739,32 +720,23 @@ STDEHANDLER(CtpAi_ConsiderNuclearWar)
 
 STDEHANDLER(CtpAi_BeginSchedulerEvent)
 {
-	time_t t1;
-	time_t t2;
-
 	PLAYER_INDEX playerId;
-
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
-	sint32 round;
-	if (g_player[playerId] != NULL)
-		round = g_player[playerId]->GetCurRound();
-	else
-		return GEV_HD_Continue;		
+	sint32 round = g_player[playerId]->GetCurRound();
 
 #ifdef _DEBUG
-	static bool first=true;
-	if (first) {
-		int a;
-		Assert(a=(playerId == g_selected_item->GetCurPlayer()));
-		if (!a) first=false;
+	static bool s_allOk = true;
+	if (s_allOk) 
+    {
+		s_allOk = (playerId == g_selected_item->GetCurPlayer());
+		Assert(s_allOk);
 	}
 #endif
 
 	
-	t1 = GetTickCount();
+	time_t  t1 = GetTickCount();
 	DPRINTF(k_DBG_AI, ("\n\n"));
 	DPRINTF(k_DBG_AI, ("//\n"));
 	DPRINTF(k_DBG_AI, ("// PROCESS SQUAD CHANGES -- Turn %d\n", round));
@@ -776,7 +748,7 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 	
 	Scheduler::GetScheduler(playerId).Reset_Squad_Execution();
 
-	t2 = GetTickCount();
+	time_t  t2 = GetTickCount();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
 
 	t1 = GetTickCount();
@@ -814,31 +786,19 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 
 STDEHANDLER(CtpAi_ProcessMatchesEvent)
 {
-	sint32 t1;
-	sint32 t2;
+	PLAYER_INDEX    playerId;
+	sint32          cycle;
 
-	PLAYER_INDEX playerId;
-	sint32 cycle;
-
-	
-	if (!args->GetPlayer(0, playerId))
+    if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
-
 	
 	if (!args->GetInt(0, cycle))
 		return GEV_HD_Continue;
 
-	sint32 round;
-	Player *player_ptr = g_player[playerId];
-	if (g_player[playerId] != NULL)
-		round = player_ptr->GetCurRound();
-	else
-		return GEV_HD_Continue;	
-	
+	Player *    player_ptr  = g_player[playerId];
+	sint32      round       = player_ptr->GetCurRound();
+	time_t      t1          = GetTickCount();
 
-
-
-	t1 = GetTickCount();
 	DPRINTF(k_DBG_AI, ("\n\n"));
 	DPRINTF(k_DBG_AI, ("//\n"));
 	DPRINTF(k_DBG_AI, ("// PROCESS SQUAD CHANGES -- Turn %d\n", round));
@@ -846,7 +806,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	
 	
 	Scheduler::GetScheduler(playerId).Process_Squad_Changes();
-	t2 = GetTickCount();
+	time_t      t2          = GetTickCount();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
 
     
@@ -874,16 +834,14 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 
 	// Modified by Martin Gühmann so that this can be exposed to const.txt
 	if ( cycle < g_theConstDB->GetMaxMatchListCycles() + diff_cycles)
-		{
+	{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
 								   GEA_Player, playerId,
 								   GEA_Int, cycle, 
 								   GEA_End);
-		}
-	
+	}
 	else 
 	{
-		
 		if ( player_ptr->m_playerType == PLAYER_TYPE_ROBOT )
 		{
 			CtpAi::ExecuteOpportunityActions(playerId);
@@ -1720,8 +1678,6 @@ void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
 		MapPoint	pos(city.RetPos());
 		g_theWorld->GetArmy(pos, garrison);
        
-        sint32		min_size	= k_MAX_ARMY_SIZE;
-
 		for (sint32 j = 0; j < garrison.Num(); ++j)
         {
 			//there is a problem to determine if units are in garrison or just pathing through the city
@@ -1819,7 +1775,7 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 							GEA_End);
 
 #ifdef _DEBUG
-	uint8 magnitude = 255.0;
+	uint8 magnitude = 255;
 	g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", magnitude);
 #endif
 
@@ -1964,31 +1920,21 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 
 void CtpAi::Resize() 
 {
-	
-	sint32 old_player_count = s_maxPlayers;
 	s_maxPlayers = 0;
-	sint32 index;
-	for(index = 0; index < k_MAX_PLAYERS; index++) {
-		if (g_player[index] != NULL)
-			{
-				
-				if (index + 1 > s_maxPlayers)
-					s_maxPlayers = index + 1;
-			}
+
+	for (sint32 index = 0; index < k_MAX_PLAYERS; ++index) 
+    {
+		if (g_player[index])
+		{
+            s_maxPlayers = std::max<sint32>(index + 1, s_maxPlayers);
+		}
 	}
-
-	
 	Assert(s_maxPlayers > 0);
+
 	Scheduler::ResizeAll(s_maxPlayers);
-
-	
 	AgreementMatrix::s_agreements.Resize(s_maxPlayers);
-
-	
 	Diplomat::ResizeAll(s_maxPlayers);
 
-	
-	
 	sint32 resolution = 10;
 
 	
@@ -2091,7 +2037,10 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 
 	SettleMap::SettleTargetList targets;
 	SettleMap::s_settleMap.GetSettleTargets(playerId, targets);
-
+    if (targets.empty())
+    {
+        return;
+    }
 	
 	SettleMap::SettleTarget settle_target;
 	CTPGoal_ptr goal_ptr;
@@ -2228,8 +2177,6 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 	
 void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 {
-	sint32 committed_units = 0;
-
 	Unit city;
 	MapPoint pos;
 	Army army;
@@ -2548,7 +2495,7 @@ void CtpAi::RefuelAirplane(const Army & army)
 	
 	
 	
-	double trans_max_r = 0.8;
+	float const trans_max_r = 0.8f;
 	Path new_path;
 	float total_cost;
 	if (! RobotAstar2::s_aiPathing.FindPath(RobotAstar2::PATH_TYPE_DEFAULT,
@@ -2581,7 +2528,7 @@ void CtpAi::RefuelAirplane(const Army & army)
 		GEA_End);
 	
 #ifdef _DEBUG
-	uint8 magnitude = 255.0;
+	uint8 magnitude = 255;
 	g_graphicsOptions->AddTextToArmy(army, "Refuel", magnitude);
 #endif
 	
@@ -2596,7 +2543,6 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 	if (player_ptr == NULL)
 		return;
 	sint32 num_armies = player_ptr->m_all_armies->Num();
-	sint32 num_cities = player_ptr->m_all_cities->Num();
 	Army army;
 
 	

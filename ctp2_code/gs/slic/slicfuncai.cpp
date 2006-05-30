@@ -313,7 +313,7 @@ bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &ne
 
 	// Diplomatic tone as optional argument
 	sint32	tone;
-	if ((argNum < args->m_numArgs) && args->GetInt(argNum++, tone))
+	if ((static_cast<size_t>(argNum) < args->Count()) && args->GetInt(argNum++, tone))
 	{
 		Assert((tone >= DIPLOMATIC_TONE_NOT_CHOSEN) && (tone < DIPLOMATIC_TONE_MAX));
 		new_proposal.detail.tone = static_cast<DIPLOMATIC_TONE>(tone);
@@ -353,7 +353,7 @@ bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &ne
 
 SFN_ERROR Slic_LogRegardEvent::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 5)
+	if (args->Count() < 5)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -396,7 +396,7 @@ SFN_ERROR Slic_LogRegardEvent::Call(SlicArgList *args)
 // the last int is a REGARD_EVENT_TYPE, use REGARD_EVENT_ALL = 7 to get total regard
 SFN_ERROR Slic_GetPublicRegard::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 3)
+	if (args->Count() < 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -425,7 +425,7 @@ SFN_ERROR Slic_GetPublicRegard::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetEffectiveRegard::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -448,7 +448,7 @@ SFN_ERROR Slic_GetEffectiveRegard::Call(SlicArgList *args)
 // returns how much does first player trust second player
 SFN_ERROR Slic_GetTrust::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -473,7 +473,7 @@ SFN_ERROR Slic_GetTrust::Call(SlicArgList *args)
 
 SFN_ERROR Slic_SetTrust::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 3)
+	if (args->Count() < 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -498,7 +498,7 @@ SFN_ERROR Slic_SetTrust::Call(SlicArgList *args)
 
 SFN_ERROR Slic_RecomputeRegard::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 1)
+	if (args->Count() < 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -519,7 +519,7 @@ SFN_ERROR Slic_RecomputeRegard::Call(SlicArgList *args)
 
 SFN_ERROR Slic_HasAgreementWithAnyone::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -543,7 +543,7 @@ SFN_ERROR Slic_HasAgreementWithAnyone::Call(SlicArgList *args)
 
 SFN_ERROR Slic_HasAgreement::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 3)
+	if (args->Count() < 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -573,7 +573,7 @@ SFN_ERROR Slic_HasAgreement::Call(SlicArgList *args)
 
 SFN_ERROR Slic_CancelAgreement::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 3)
+	if (args->Count() < 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -600,7 +600,7 @@ SFN_ERROR Slic_CancelAgreement::Call(SlicArgList *args)
 
 SFN_ERROR Slic_TurnsSinceLastWar::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -622,7 +622,7 @@ SFN_ERROR Slic_TurnsSinceLastWar::Call(SlicArgList *args)
 
 SFN_ERROR Slic_TurnsAtWar::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -646,7 +646,7 @@ SFN_ERROR Slic_TurnsAtWar::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastHotwarAttack::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -670,7 +670,7 @@ SFN_ERROR Slic_GetLastHotwarAttack::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastColdwarAttack::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -708,7 +708,7 @@ SFN_ERROR Slic_GetLastColdwarAttack::Call(SlicArgList *args)
 
 SFN_ERROR Slic_ConsiderResponse::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 4)
+	if (args->Count() < 4)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -733,7 +733,7 @@ DPRINTF(k_DBG_SLIC, ("ConsiderResponse:sender %d, receiver %d, type %d\n",
 // as Slic_ConsiderResponse (but priority should be set to 0 ?)
 SFN_ERROR Slic_SetResponse::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 6)
+	if (args->Count() < 6)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -760,7 +760,7 @@ SFN_ERROR Slic_SetResponse::Call(SlicArgList *args)
 // here type is a MOTIVATION_TYPE
 SFN_ERROR Slic_ConsiderMotivation::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 3)
+	if (args->Count() < 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -850,7 +850,7 @@ SFN_ERROR Slic_ConsiderMotivation::Call(SlicArgList *args)
 //-------------------------------------------------------------------------------------------
 SFN_ERROR Slic_ConsiderNewProposal::Call(SlicArgList *args)
 {
-	if (args->m_numArgs < 8)
+	if (args->Count() < 8)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -890,7 +890,7 @@ DPRINTF(k_DBG_SLIC, ("ConsiderNewProposal:sender %d, receiver %d, prop %d\n",
 //------------------------------------------------------------------------------------------- 
 SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
 {
-	if (args->m_numArgs < 8)
+	if (args->Count() < 8)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -901,7 +901,7 @@ SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
 
 	// Diplomatic tone as optional argument
 	sint32	tone;
-	if ((argNum < args->m_numArgs) && args->GetInt(argNum++, tone))
+	if ((static_cast<size_t>(argNum) < args->Count()) && args->GetInt(argNum++, tone))
 	{
 		Assert((tone >= DIPLOMATIC_TONE_NOT_CHOSEN) && (tone < DIPLOMATIC_TONE_MAX));
 		new_proposal.detail.tone = static_cast<DIPLOMATIC_TONE>(tone);
@@ -920,7 +920,7 @@ SFN_ERROR Slic_SetNewProposal::Call(SlicArgList *args)
 
 SFN_ERROR Slic_ConsiderStrategicState::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 3)
+	if (args->Count() < 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
@@ -946,11 +946,11 @@ SFN_ERROR Slic_ConsiderStrategicState::Call(SlicArgList *args)
 
     // optional string arguments:
 
-	if (args->m_numArgs > argNum && args->GetInt(argNum++, spystr_id))
+	if (args->Count() > static_cast<size_t>(argNum) && args->GetInt(argNum++, spystr_id))
 		state.spyStrId = spystr_id;
-	if (args->m_numArgs > argNum && args->GetInt(argNum++, advicestr_id))
+	if (args->Count() > static_cast<size_t>(argNum) && args->GetInt(argNum++, advicestr_id))
 		state.spyStrId = advicestr_id;
-	if (args->m_numArgs > argNum && args->GetInt(argNum++, newsstr_id))
+	if (args->Count() > static_cast<size_t>(argNum) && args->GetInt(argNum++, newsstr_id))
 		state.spyStrId = newsstr_id;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(player);
@@ -969,7 +969,7 @@ SFN_ERROR Slic_ConsiderStrategicState::Call(SlicArgList *args)
 
 SFN_ERROR Slic_ComputeCurrentStrategy::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 1)
+	if (args->Count() < 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
@@ -993,7 +993,7 @@ SFN_ERROR Slic_ComputeCurrentStrategy::Call(SlicArgList *args)
 
 SFN_ERROR Slic_ConsiderDiplomaticState::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 4)
+	if (args->Count() < 4)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
@@ -1020,11 +1020,11 @@ SFN_ERROR Slic_ConsiderDiplomaticState::Call(SlicArgList *args)
 	sint32 spystr_id;
 	sint32 advicestr_id;
 	sint32 newsstr_id;
-	if (args->m_numArgs > argNum && args->GetInt(argNum++, spystr_id))
+	if (args->Count() > static_cast<size_t>(argNum) && args->GetInt(argNum++, spystr_id))
 		state.spyStrId = spystr_id;
-	if (args->m_numArgs > argNum && args->GetInt(argNum++, advicestr_id))
+	if (args->Count() > static_cast<size_t>(argNum) && args->GetInt(argNum++, advicestr_id))
 		state.spyStrId = advicestr_id;
-	if (args->m_numArgs > argNum && args->GetInt(argNum++, newsstr_id))
+	if (args->Count() > static_cast<size_t>(argNum) && args->GetInt(argNum++, newsstr_id))
 		state.spyStrId = newsstr_id;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(player);
@@ -1042,7 +1042,7 @@ SFN_ERROR Slic_ConsiderDiplomaticState::Call(SlicArgList *args)
 
 SFN_ERROR Slic_ChangeDiplomaticState::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
@@ -1071,7 +1071,7 @@ SFN_ERROR Slic_ChangeDiplomaticState::Call(SlicArgList *args)
 SFN_ERROR Slic_GetTradeFrom::Call(SlicArgList *args)
 {
 //Implemented by Peter Triggs
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
@@ -1095,7 +1095,7 @@ SFN_ERROR Slic_GetTradeFrom::Call(SlicArgList *args)
 SFN_ERROR Slic_GetTributeFrom::Call(SlicArgList *args)
 {
 //Implemented by Peter Triggs
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
@@ -1119,7 +1119,7 @@ SFN_ERROR Slic_GetTributeFrom::Call(SlicArgList *args)
 SFN_ERROR Slic_GetGoldSurplusPercent::Call(SlicArgList *args)
 {
 //Implemented by Peter Triggs
-	if(args->m_numArgs < 1)
+	if (args->Count() < 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
@@ -1147,7 +1147,7 @@ SFN_ERROR Slic_CanBuySurplus::Call(SlicArgList *args)
 SFN_ERROR Slic_GetAdvanceLevelPercent::Call(SlicArgList *args)
 {
 //Implemented by Peter Triggs
-    if(args->m_numArgs < 2)
+    if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 player;
@@ -1170,7 +1170,7 @@ SFN_ERROR Slic_GetAdvanceLevelPercent::Call(SlicArgList *args)
 
 SFN_ERROR Slic_AtWarCount::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 1)
+	if (args->Count() < 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1190,7 +1190,7 @@ SFN_ERROR Slic_AtWarCount::Call(SlicArgList *args)
 
 SFN_ERROR Slic_EffectiveAtWarCount::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 1)
+	if (args->Count() < 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1210,7 +1210,7 @@ SFN_ERROR Slic_EffectiveAtWarCount::Call(SlicArgList *args)
 
 SFN_ERROR Slic_AtWarWith::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1238,7 +1238,7 @@ SFN_ERROR Slic_AtWarWith::Call(SlicArgList *args)
 
 SFN_ERROR Slic_EffectiveWarWith::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 2)
+	if (args->Count() < 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1263,7 +1263,7 @@ SFN_ERROR Slic_EffectiveWarWith::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetNuclearLaunchTarget::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 1)
+	if (args->Count() < 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1284,7 +1284,7 @@ SFN_ERROR Slic_GetNuclearLaunchTarget::Call(SlicArgList *args)
 
 SFN_ERROR Slic_TargetNuclearAttack::Call(SlicArgList *args)
 {
-	if(args->m_numArgs < 3)
+	if (args->Count() < 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1309,7 +1309,7 @@ SFN_ERROR Slic_TargetNuclearAttack::Call(SlicArgList *args)
 
 SFN_ERROR Slic_SetArmyDetachState::Call(SlicArgList *args)
 {
-	if(args->m_numArgs != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	Army a;
@@ -1331,7 +1331,7 @@ SFN_ERROR Slic_SetArmyDetachState::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetBorderIncursionBy::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1365,7 +1365,7 @@ SFN_ERROR Slic_GetBorderIncursionBy::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastNewProposalType::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 3)
+    if (args->Count() != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1417,7 +1417,7 @@ SFN_ERROR Slic_GetLastNewProposalArg::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastNewProposalTone::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1443,7 +1443,7 @@ SFN_ERROR Slic_GetLastNewProposalTone::Call(SlicArgList *args)
  
 SFN_ERROR Slic_GetLastResponseType::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1471,7 +1471,7 @@ SFN_ERROR Slic_GetLastResponseType::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastCounterResponseType::Call(SlicArgList *args)
 {
-	if(args->m_numArgs != 3)
+	if (args->Count() != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1522,7 +1522,7 @@ SFN_ERROR Slic_GetLastCounterResponseArg::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastThreatResponseType::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1563,7 +1563,7 @@ SFN_ERROR Slic_GetLastThreatResponseArg::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetAgreementDuration::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 3)
+    if (args->Count() != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1594,7 +1594,7 @@ SFN_ERROR Slic_GetAgreementDuration::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetNewProposalPriority::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 3)
+    if (args->Count() != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1623,12 +1623,10 @@ SFN_ERROR Slic_GetNewProposalPriority::Call(SlicArgList *args)
 // that the player has not yet researched
 SFN_ERROR Slic_GetNextAdvance::Call(SlicArgList *args)
 {
-	m_result.m_int = 0;
-	if(args->m_numArgs != 1)
+	if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
-
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -1640,7 +1638,7 @@ SFN_ERROR Slic_GetNextAdvance::Call(SlicArgList *args)
 // Returns the AdvanceDB index of 
 SFN_ERROR Slic_GetDesiredAdvanceFrom::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 4)
+    if (args->Count() != 4)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1670,7 +1668,7 @@ SFN_ERROR Slic_GetDesiredAdvanceFrom::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastBorderIncursion::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1695,7 +1693,7 @@ SFN_ERROR Slic_GetLastBorderIncursion::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetPersonalityType::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 1)
+    if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -1717,7 +1715,7 @@ SFN_ERROR Slic_GetPersonalityType::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetAtRiskCitiesValue::Call(SlicArgList *args)
 {
-	if(args->m_numArgs != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1744,7 +1742,7 @@ SFN_ERROR Slic_GetAtRiskCitiesValue::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetRelativeStrength::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1770,7 +1768,7 @@ SFN_ERROR Slic_GetRelativeStrength::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetDesireWarWith::Call(SlicArgList *args)
 {   
-    if (args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1830,7 +1828,7 @@ SFN_ERROR Slic_GetPollutionLevelPromisedTo::Call(SlicArgList *args)
 // Returns the amount of piracy income that player gets from foreigner
 SFN_ERROR Slic_GetPiracyIncomeFrom::Call(SlicArgList *args)
 {   
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1854,8 +1852,7 @@ SFN_ERROR Slic_GetPiracyIncomeFrom::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetProjectedScience::Call(SlicArgList *args)
 {
-	m_result.m_int = 0;
-    if(args->m_numArgs != 1)
+    if(args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -1878,7 +1875,7 @@ SFN_ERROR Slic_GetProjectedScience::Call(SlicArgList *args)
 // Returns 1 if player and foreigner can form an alliance, else 0
 SFN_ERROR Slic_CanFormAlliance::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1902,7 +1899,7 @@ SFN_ERROR Slic_CanFormAlliance::Call(SlicArgList *args)
 // Returns the stop advance database index, -1 if there is no such advance for whatever reason
 SFN_ERROR Slic_GetStopResearchingAdvance::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1925,7 +1922,7 @@ SFN_ERROR Slic_GetStopResearchingAdvance::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetNanoWeaponsCount::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 1)
+    if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -1943,7 +1940,7 @@ SFN_ERROR Slic_GetNanoWeaponsCount::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetBioWeaponsCount::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 1)
+    if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -1961,11 +1958,10 @@ SFN_ERROR Slic_GetBioWeaponsCount::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetNuclearWeaponsCount::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 1)
+    if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
-
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -1985,16 +1981,16 @@ SFN_ERROR Slic_FindCityToExtortFrom::Call(SlicArgList *args)
 // Returns 1 if foreigner has an embargo on player, else 0 (or -1 if no contact ?)
 SFN_ERROR Slic_GetEmbargo::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 2)
+    if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
-	PLAYER_INDEX player;
-	PLAYER_INDEX foreigner;
 	
+	PLAYER_INDEX player;
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
 
+	PLAYER_INDEX foreigner;
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -2011,8 +2007,7 @@ SFN_ERROR Slic_GetEmbargo::Call(SlicArgList *args)
 // Toggle player to have an embargo against foreigner using 1=on, 0=off
 SFN_ERROR Slic_SetEmbargo::Call(SlicArgList *args)
 {
-
-    if(args->m_numArgs != 3)
+    if (args->Count() != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -2040,11 +2035,10 @@ SFN_ERROR Slic_SetEmbargo::Call(SlicArgList *args)
 // see mapgrid.h and mapanalysis
 SFN_ERROR Slic_GetTotalValue::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 1)
+    if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
-
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -2057,7 +2051,7 @@ SFN_ERROR Slic_GetTotalValue::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetNewProposalResult::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 4)
+    if (args->Count() != 4)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -2120,7 +2114,7 @@ SFN_ERROR Slic_GetNewProposalResult::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetCounterProposalResult::Call(SlicArgList *args)
 {
-    if(args->m_numArgs != 4)
+    if (args->Count() != 4)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -2184,8 +2178,7 @@ SFN_ERROR Slic_GetCounterProposalResult::Call(SlicArgList *args)
 //INT GetMostAtRiskCity(player, foreigner, &cityvar)
 SFN_ERROR Slic_GetMostAtRiskCity::Call(SlicArgList *args)
 {
-	m_result.m_int = 0;
-	if(args->m_numArgs != 3)
+	if (args->Count() != 3)
 	return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -2197,7 +2190,7 @@ SFN_ERROR Slic_GetMostAtRiskCity::Call(SlicArgList *args)
 	if(!args->GetPlayer(1, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(args->m_argType[2] != SA_TYPE_INT_VAR) {
+	if(args->m_argValue[2].m_type != SA_TYPE_INT_VAR) {
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
@@ -2221,7 +2214,7 @@ SFN_ERROR Slic_GetMostAtRiskCity::Call(SlicArgList *args)
 // VOID DeclareWar(player, foreigner); 
 SFN_ERROR Slic_DeclareWar::Call(SlicArgList *args)
 {
-	if(args->m_numArgs != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;

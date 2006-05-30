@@ -32,12 +32,11 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "AgreementMatrix.h"
 
 #include <vector>
-using namespace std;
 
 #include "civarchive.h"
-#include "AgreementMatrix.h"
 #include "player.h"
 
 #include "diplomacyutil.h"
@@ -124,14 +123,7 @@ const ai::Agreement & AgreementMatrix::GetAgreement( const PLAYER_INDEX sender_p
 													 const PLAYER_INDEX receiver_player,
 													 const PROPOSAL_TYPE type ) const
 {
-	
-	
-	Assert(sender_player<m_maxPlayers);
-	Assert(receiver_player<m_maxPlayers);
-
-	sint32 index = (receiver_player * m_maxPlayers * PROPOSAL_MAX) +  
-		(sender_player * PROPOSAL_MAX) +							  
-		type;														  
+	size_t const index = AgreementIndex(sender_player, receiver_player, type);
 
 #ifdef _DEBUG
 	Assert(index < m_agreements.size());
@@ -168,33 +160,17 @@ sint16 AgreementMatrix::GetAgreementDuration( const PLAYER_INDEX sender_player,
 
 void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 {
-	
-	
-	
-	
-	
-	
-
-	
 	if (agreement == AgreementMatrix::s_badAgreement)
 		return;
 
-	PROPOSAL_TYPE reciprocalType;
-	sint32 reciprocalDBIndex;
-	sint32 agreementIndex;
+	size_t const firstAgreementIndex = 
+        AgreementIndex(agreement.senderId, 
+                       agreement.receiverId, 
+                       agreement.proposal.first_type
+                      );
 
-	
-	
-	
-
-	
-	agreementIndex = ( agreement.receiverId * m_maxPlayers * PROPOSAL_MAX) + 
-		(agreement.senderId * PROPOSAL_MAX) +							   
-		agreement.proposal.first_type;									   
-
-	
-	Assert(agreementIndex < m_agreements.size());
-	m_agreements[agreementIndex] = agreement;
+	Assert(firstAgreementIndex < m_agreements.size());
+	m_agreements[firstAgreementIndex] = agreement;
 
 #ifdef _DEBUG
 	if (agreement != GetAgreement(agreement.senderId, agreement.receiverId, agreement.proposal.first_type))
@@ -203,24 +179,21 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 	}
 #endif
 
+	PROPOSAL_TYPE   reciprocalType    = agreement.proposal.first_type;
+	sint32          reciprocalDBIndex;
 	
-	if(diplomacyutil_GetRecord(agreement.proposal.first_type)->GetReciprocalIndex(reciprocalDBIndex)) {
+	if (diplomacyutil_GetRecord(agreement.proposal.first_type)->GetReciprocalIndex(reciprocalDBIndex)) {
 		reciprocalType = diplomacyutil_GetProposalType(reciprocalDBIndex);
 	}	
-	else
-	{
-		
-		reciprocalType = agreement.proposal.first_type;
-	}
 
-	
-	agreementIndex = ( agreement.senderId * m_maxPlayers * PROPOSAL_MAX) +   
-		(agreement.receiverId * PROPOSAL_MAX) +							   
-		reciprocalType ;												   
-	
-	
-	Assert(agreementIndex < m_agreements.size());
-	m_agreements[agreementIndex] = agreement;
+	size_t const    firstReciprocalIndex = 
+        AgreementIndex(agreement.receiverId,
+                       agreement.senderId,
+                       reciprocalType
+                      );
+
+	Assert(firstReciprocalIndex < m_agreements.size());
+	m_agreements[firstReciprocalIndex] = agreement;
 
 #ifdef _DEBUG
 	if (agreement != GetAgreement(agreement.receiverId, agreement.senderId, reciprocalType))
@@ -230,19 +203,16 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 #endif
 
 	
-	
-	
 	if (agreement.proposal.second_type != PROPOSAL_NONE)
 	{
+		size_t const secondAgreementIndex = 
+            AgreementIndex(agreement.senderId, 
+                           agreement.receiverId,
+                           agreement.proposal.second_type
+                           );
 		
-		
-		agreementIndex = ( agreement.receiverId * m_maxPlayers * PROPOSAL_MAX) + 
-			(agreement.senderId * PROPOSAL_MAX) +							   
-			agreement.proposal.second_type;									   
-		
-		
-		Assert(agreementIndex < m_agreements.size());
-		m_agreements[agreementIndex] = agreement;
+		Assert(secondAgreementIndex < m_agreements.size());
+		m_agreements[secondAgreementIndex] = agreement;
 
 #ifdef _DEBUG
 		if (agreement != GetAgreement(agreement.senderId, agreement.receiverId, agreement.proposal.second_type))
@@ -250,25 +220,24 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 			Assert(0);
 		}
 #endif
-		
-		
+
+
 		if(diplomacyutil_GetRecord(agreement.proposal.second_type)->GetReciprocalIndex(reciprocalDBIndex)) {
 			reciprocalType = diplomacyutil_GetProposalType(reciprocalDBIndex);
 		}	
 		else
 		{
-			
 			reciprocalType = agreement.proposal.second_type;
 		}
 		
+		size_t const secondReciprocalIndex = 
+            AgreementIndex(agreement.receiverId,
+                           agreement.senderId,
+                           reciprocalType
+                          );												   
 		
-		agreementIndex = ( agreement.senderId * m_maxPlayers * PROPOSAL_MAX) +   
-			(agreement.receiverId * PROPOSAL_MAX) +							   
-			reciprocalType ;												   
-		
-		
-		Assert(agreementIndex < m_agreements.size());
-		m_agreements[agreementIndex] = agreement;
+		Assert(secondReciprocalIndex < m_agreements.size());
+		m_agreements[secondReciprocalIndex] = agreement;
 		
 #ifdef _DEBUG
 		if (agreement != GetAgreement(agreement.receiverId, agreement.senderId, reciprocalType))
@@ -464,10 +433,11 @@ sint32 AgreementMatrix::TurnsAtWar(const PLAYER_INDEX & player,
 	return (NewTurnCount::GetCurrentRound() - last_war.start);
 }
 
-void AgreementMatrix::SetAgreementFast(sint32 index, const ai::Agreement &agreement)
+void AgreementMatrix::SetAgreementFast(size_t index, const ai::Agreement &agreement)
 {
 	Assert(index < m_agreements.size());
-	if(index < m_agreements.size()) {
+	if (index < m_agreements.size()) 
+    {
 		m_agreements[index] = agreement;
 	}
 }

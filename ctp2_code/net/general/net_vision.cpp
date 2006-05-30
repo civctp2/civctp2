@@ -30,25 +30,21 @@
 
 #include "c3.h"
 #include "net_vision.h"
+
+#include "gstypes.h"        // TERRAIN_TYPES
 #include "net_util.h"
 #include "Vision.h"
-#include "player.h"
-#include "tiledmap.h"
-#include "radarmap.h"
+#include "player.h"         // g_player
+#include "tiledmap.h"       // g_tiledMap
+#include "radarmap.h"       // g_radarMap
 #include "UnseenCell.h"
 #include "TileInfo.h"
 #include "Vision.h"
 #include "TerrImprove.h"
 #include "pointerlist.h"
-
 #include "UnitActor.h"
 #include "SpriteState.h"
-
 #include "UnitRecord.h"
-
-extern Player **g_player;
-extern TiledMap *g_tiledMap;
-extern RadarMap *g_radarMap;
 
 //----------------------------------------------------------------------------
 //
@@ -68,11 +64,11 @@ extern RadarMap *g_radarMap;
 //
 //----------------------------------------------------------------------------
 NetVision::NetVision(sint32 owner, uint16 row, uint8 numRows)
-{
-	m_owner = (uint8)owner;
-	m_row = row;
-	m_numRows = numRows;
-}
+:
+    m_owner     (static_cast<uint8>(owner)),
+    m_row       (row),
+    m_numRows   (numRows)
+{ ; }
 
 //----------------------------------------------------------------------------
 //
@@ -97,11 +93,7 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 	PUSHSHORT(m_row);
 	PUSHBYTE(m_numRows);
 
-	
-	
-	
 	uint8 *ptr = NULL;
-	sint32 x, y;
 	uint8 bitPos = 0;
 	Vision *vision = g_player[m_owner]->m_vision;
 	sint32 w = vision->m_width;
@@ -109,11 +101,13 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 	if(bottom > vision->m_height)
 		bottom = vision->m_height;
 
-	for(y = m_row; y < bottom; y++) {
+	for (sint32 y = m_row; y < bottom; ++y) 
+    {
 		bitPos = 0;
 		ptr = &buf[size] + ((y - m_row) * ((w+7) / 8));
 		*ptr = 0;
-		for(x = 0; x < vision->m_width; x++) {
+		for (sint32 x = 0; x < vision->m_width; ++x) 
+        {
 			uint16 vis = vision->m_array[x][y];
 			if(vis & 0x8000) {
 				*ptr |= 1 << bitPos;
@@ -161,22 +155,19 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLSHORT(m_row);
 	PULLBYTE(m_numRows);
 
-	
-	
-	
-	uint8 *ptr = NULL;
-	sint32 x, y;
-	uint8 bitPos = 0;
-	Vision *vision = g_player[m_owner]->m_vision;
-	sint32 w = vision->m_width;
-	sint32 bottom = m_row + m_numRows;
-	if(bottom > vision->m_height)
-		bottom = vision->m_height;
+	uint8 *         ptr     = NULL;
+	uint8           bitPos  = 0;
+	Vision *        vision  = g_player[m_owner]->m_vision;
+	sint32          w       = vision->m_width;
+	sint32 const    bottom  = 
+        std::min<sint32>(m_row + m_numRows, vision->m_height);
 
-	for(y = m_row; y < bottom; y++) {
+	for (sint32 y = m_row; y < bottom; ++y) 
+    {
 		bitPos = 0;
 		ptr = &buf[pos] + ((y - m_row) * ((w+7) / 8));
-		for(x = 0; x < vision->m_width; x++) {
+		for (sint32 x = 0; x < vision->m_width; ++x) 
+        {
 			if(*ptr & (1 << bitPos)) {
 				vision->m_array[x][y] |= 0x8000;
 			} else {
@@ -214,10 +205,10 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 //
 //----------------------------------------------------------------------------
 NetUnseenCell::NetUnseenCell(UnseenCell *ucell, uint8 owner)
-{
-	m_ucell = ucell;
-	m_owner = owner;
-}
+:
+    m_ucell (ucell),
+    m_owner (owner)
+{ ; }
 
 #define k_BIO 1
 #define k_NANO 2
@@ -270,12 +261,9 @@ void NetUnseenCell::Packetize(uint8 *buf, uint16 &size)
 
 
 
-	uint8 citySize;
-	if(!m_ucell->m_actor) {
-		citySize = 0;
-	} else {
-		citySize = (uint8)m_ucell->m_citySize;
-	}
+	uint8 const citySize = (m_ucell->m_actor) 
+                           ? static_cast<uint8>(m_ucell->m_citySize) 
+                           : 0;
 	PUSHBYTE(citySize);
 
 	if(citySize > 0) {
@@ -472,7 +460,9 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLBYTE(m_ucell->m_tileInfo->m_riverPiece);
 	PULLBYTE(m_ucell->m_tileInfo->m_megaInfo);
-	PULLSHORT(m_ucell->m_tileInfo->m_terrainType);
+	uint16 terrain;
+	PULLSHORT(terrain);
+	m_ucell->m_tileInfo->m_terrainType = static_cast<uint8>(terrain);
 	PULLSHORT(m_ucell->m_tileInfo->m_tileNum);
 	for(c = 0; c < k_NUM_TRANSITIONS; c++) {
 		PULLBYTE(m_ucell->m_tileInfo->m_transitions[c]);

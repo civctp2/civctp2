@@ -43,8 +43,6 @@ STDEHANDLER(BeginTurnEvent)
 		CtpAi::BeginTurn(player);
 	} 
 	
-	sint32 year = NewTurnCount::GetCurrentYear();
-
 	return GEV_HD_Continue;
 }
 

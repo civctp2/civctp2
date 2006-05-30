@@ -1,25 +1,49 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer diplomacy handling
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected agreement index computation in NetAgreementMatrix::Unpacketize.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "network.h"
 #include "net_diplomacy.h"
+
+#include "network.h"
 #include "net_packet.h"
 #include "net_info.h"
 #include "net_util.h"
-#include "player.h"
-#include "SelItem.h"
+#include "player.h"             // g_player
+#include "SelItem.h"            // g_selected_item
 #include "Diplomat.h"
 #include "diplomattypes.h"
 #include "GameEventManager.h"
 #include "AgreementMatrix.h"
 
-extern SelectedItem *g_selected_item;
-
-extern Player **g_player;
+namespace
+{
+    uint8 const     END_MARKER  = 0xff;
+}
 
 void netdiplomacy_PacketizeArgument(DiplomacyArg &arg, uint8 *buf, uint16 &size)
 {
-	PUSHBYTE(arg.playerId);
+	PUSHBYTE(static_cast<uint8>(arg.playerId));
 	PUSHLONG(arg.cityId);
 	PUSHLONG(arg.armyId);
 	PUSHLONG(arg.agreementId);
@@ -68,8 +92,8 @@ void NetDipProposal::Packetize(uint8 *buf, uint16 &size)
 
 	PUSHLONG(m_prop.id);
 	PUSHSHORT(m_prop.priority);
-	PUSHBYTE(m_prop.senderId);
-	PUSHBYTE(m_prop.receiverId);
+	PUSHBYTE(static_cast<uint8>(m_prop.senderId));
+	PUSHBYTE(static_cast<uint8>(m_prop.receiverId));
 	netdiplomacy_PacketizeProposalData(m_prop.detail, buf, size);
 
 }
@@ -207,32 +231,35 @@ void NetDipResponse::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 void NetAgreementMatrix::Packetize(uint8 *buf, uint16 &size)
 {
-	sint32 p1, p2;
-	sint32 prop;
 	size = 0;
 
 	PUSHID(k_PACKET_DIP_AGREEMENT_MATRIX_ID);
-
 	PUSHSHORT(AgreementMatrix::s_agreements.GetMaxPlayers());
 
-	for(p1 = 0; p1 < k_MAX_PLAYERS; p1++) {
+	for (uint8 p1 = 0; p1 < k_MAX_PLAYERS; p1++) 
+	{
 		if(!g_player[p1])
 			continue;
-		for(p2 = 0; p2 < k_MAX_PLAYERS; p2++) {
+
+		for (uint8 p2 = 0; p2 < k_MAX_PLAYERS; p2++) 
+		{
 			if(!g_player[p2])
 				continue;
 			if(p2 == p1)
 				continue;
-			for(prop = sint32(PROPOSAL_NONE) + 1; prop < sint32(PROPOSAL_MAX); prop++) {
+
+			for (uint8 prop = PROPOSAL_NONE + 1; prop <PROPOSAL_MAX; ++prop) 
+			{
 				ai::Agreement ag = AgreementMatrix::s_agreements.GetAgreement(p1, p2, (PROPOSAL_TYPE)prop);
-				if(ag != AgreementMatrix::s_badAgreement) {
+				if (ag != AgreementMatrix::s_badAgreement) 
+				{
 					PUSHBYTE(p1);
 					PUSHBYTE(p2);
 					PUSHBYTE(prop);
 					
 					PUSHLONG(ag.id);
-					PUSHBYTE(ag.senderId);
-					PUSHBYTE(ag.receiverId);
+					PUSHBYTE(static_cast<uint8>(ag.senderId));
+					PUSHBYTE(static_cast<uint8>(ag.receiverId));
 					PUSHSHORT(ag.start);
 					PUSHSHORT(ag.end);
 					netdiplomacy_PacketizeProposalData(ag.proposal, buf, size);
@@ -243,45 +270,49 @@ void NetAgreementMatrix::Packetize(uint8 *buf, uint16 &size)
 		}
 	}
 	
-	PUSHBYTE(0xff);
+	PUSHBYTE(END_MARKER);
 }
 
 void NetAgreementMatrix::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 {
-	uint16 packid;
-	uint16 pos = 0;
+	uint16  packid;
+	uint16  pos = 0;
 	PULLID(packid);
 	Assert(packid == k_PACKET_DIP_AGREEMENT_MATRIX_ID);
 
-	sint32 p1, p2, prop;
-	sint16 maxPlayers;
+	sint16  maxPlayers;
 	PULLSHORT(maxPlayers);
-	if(maxPlayers != AgreementMatrix::s_agreements.GetMaxPlayers()) {
+	if (maxPlayers != AgreementMatrix::s_agreements.GetMaxPlayers()) 
+    {
 		AgreementMatrix::s_agreements.Resize(maxPlayers);
 	}
 
-	do {
-		PULLBYTE(p1);
-		if(p1 != 0xff) {
-			PULLBYTE(p2);
-			PULLBYTE(prop);
+    uint8   p1; // player, or end marker
+	PULLBYTE(p1);
 
-			ai::Agreement ag;
-			PULLLONG(ag.id);
-			PULLBYTE(ag.senderId);
-			PULLBYTE(ag.receiverId);
-			PULLSHORT(ag.start);
-			PULLSHORT(ag.end);
-			netdiplomacy_UnpacketizeProposalData(ag.proposal, buf, pos);
-			PULLLONG(ag.explainStrId);
-			PULLLONG(ag.newsStrId);
+	while (END_MARKER != p1) 
+    {
+        uint8           p2;
+        uint8           prop;
+		ai::Agreement   ag;
 
-			sint32 agIndex = ((p1 * AgreementMatrix::s_agreements.GetMaxPlayers() * PROPOSAL_MAX) +
-							  (p2 * PROPOSAL_MAX) +
-							  prop);
-			AgreementMatrix::s_agreements.SetAgreementFast(agIndex, ag);
-		}
-	} while(p1 != 0xff);
+		PULLBYTE(p2);
+		PULLBYTE(prop);
+		PULLLONG(ag.id);
+		PULLBYTE(ag.senderId);
+		PULLBYTE(ag.receiverId);
+		PULLSHORT(ag.start);
+		PULLSHORT(ag.end);
+		netdiplomacy_UnpacketizeProposalData(ag.proposal, buf, pos);
+		PULLLONG(ag.explainStrId);
+		PULLLONG(ag.newsStrId);
+
+        size_t const    agIndex = AgreementMatrix::s_agreements.AgreementIndex
+                                    (p1, p2, static_cast<PROPOSAL_TYPE>(prop));
+        AgreementMatrix::s_agreements.SetAgreementFast(agIndex, ag);
+
+        PULLBYTE(p1);
+	}
 }
 
 	

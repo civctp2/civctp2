@@ -119,12 +119,12 @@ private:
 
 	SlicModFunc *m_modFunc[mod_MAX];
 
-	PointerList<SlicSegment> *m_triggerLists[TRIGGER_LIST_MAX];
-	PointerList<SlicRecord> *m_records[k_MAX_PLAYERS];
-	sint32 m_timer[k_NUM_TIMERS];
-	SimpleDynamicArray<sint32> *m_disabledClasses;
-	PointerList<SlicObject> *m_uiExecuteObjects;
-	Message m_eyepointMessage;
+	PointerList<SlicSegment> *		m_triggerLists[TRIGGER_LIST_MAX];
+	PointerList<SlicRecord> *		m_records[k_MAX_PLAYERS];
+	sint32                          m_timer[k_NUM_TIMERS];
+	SimpleDynamicArray<sint32> *	m_disabledClasses;
+	PointerList<SlicObject> *		m_uiExecuteObjects;
+	Message							m_eyepointMessage;
 
 	MBCHAR m_triggerKey[k_MAX_TRIGGER_KEYS];
 	sint32 m_timerGranularity;
@@ -141,7 +141,7 @@ private:
 
 	char *m_loadGameName;
 	MBCHAR m_currentKeyTrigger;
-	BOOL m_blankScreen;
+	bool m_blankScreen;
 
 	bool m_atBreak;
 	SlicObject *m_breakContext;
@@ -170,17 +170,17 @@ public:
 	void Execute(SlicObject *obj);
 
 	void AddBuiltinFunctions();
-	BOOL Load(MBCHAR *filename, sint32 filenum);
+	bool Load(MBCHAR * filename, sint32 filenum);
 	void Link();
 
 	sint32 GetTutorialPlayer() const { return m_tutorialPlayer; }
 	void SetTutorialPlayer(sint32 tut) { m_tutorialPlayer = tut; }
 	void SetTutorialActive(BOOL on);
-	BOOL GetTutorialActive() const { return m_tutorialActive; }
+	bool GetTutorialActive() const { return m_tutorialActive; }
 
 	void AddTrigger(SlicSegment *trigger, TRIGGER_LIST which);
 
-	BOOL SpecialSameGoodEnabled() const;
+	bool SpecialSameGoodEnabled() const;
 
 	void SetCurrentMessage(const Message &message);
 	void GetCurrentMessage(Message &message) const;
@@ -191,19 +191,19 @@ public:
 	void AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
 						   SlicSegment *segment);
 
-	BOOL IsTimerExpired(sint32 timer);
-	void StartTimer(sint32 timer, sint32 duration);
+	bool IsTimerExpired(sint32 timer) const;
+	void StartTimer(sint32 timer, time_t duration);
 	void StopTimer(sint32 timer);
 	sint32 GetTimerGranularity() { return m_timerGranularity; }
 	void SetTimerGranularity(sint32 gran) { m_timerGranularity = gran; }
 
 	void EnableMessageClass(sint32 mclass);
 	void DisableMessageClass(sint32 mclass);
-	BOOL IsMessageClassDisabled(sint32 mclass);
+	bool IsMessageClassDisabled(sint32 mclass) const;
 
 	void SetLoadGame(char *string) { m_loadGameName = string; }
-	BOOL WaitingForLoad() { return m_loadGameName != NULL; }
-	char *GetLoadName() { return m_loadGameName; }
+	bool WaitingForLoad() const { return m_loadGameName != NULL; }
+	char *GetLoadName() const { return m_loadGameName; }
 
 	void RecreateTutorialRecord();
 
@@ -212,8 +212,8 @@ public:
 	
 	void ProcessUITriggers();
 
-	void BlankScreen(BOOL blank);
-	BOOL ShouldScreenBeBlank() { return m_blankScreen; }
+	void BlankScreen(bool blank);
+	bool ShouldScreenBeBlank() const { return m_blankScreen; }
 
 	void RunYearlyTriggers();
 	void RunPlayerTriggers(PLAYER_INDEX player);
@@ -306,8 +306,8 @@ public:
 	void RunTrigger(TRIGGER_LIST tlist, ...);
 	MBCHAR GetTriggerKey(sint32 index);
 	void SetTriggerKey(sint32 index, MBCHAR key);
-	BOOL IsKeyPressed(MBCHAR key);
-	BOOL RunKeyboardTrigger(MBCHAR key);
+	bool IsKeyPressed(MBCHAR key) const;
+	bool RunKeyboardTrigger(MBCHAR key);
 
 	void CheckPendingResearch();
 	void AddResearchOnUnblank(sint32 owner, MBCHAR *text);	
@@ -315,7 +315,7 @@ public:
 	SlicSymbolData *CheckForBuiltinWithIndex(MBCHAR *name, sint32 &index);
 
 	void AddConst(const MBCHAR *name, sint32 value);
-	BOOL FindConst(const MBCHAR *name, sint32 *value);
+	bool FindConst(const MBCHAR *name, sint32 *value) const;
 
 	void AddSymbol(SlicNamedSymbol *sym);
 	void AddStructArray(bool createSymbols, SlicStructDescription *desc, SLIC_BUILTIN which);
@@ -332,7 +332,7 @@ public:
 	void Break(SlicSegment *segment, sint32 codeOffset, SlicObject *context, SlicStack *stack,
 			   MessageData *message);
 	void Continue();
-	bool AtBreak() { return m_atBreak; }
+	bool AtBreak() const { return m_atBreak; }
 
 	void RequestBreak();
 	bool BreakRequested();

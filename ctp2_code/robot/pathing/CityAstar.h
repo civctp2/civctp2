@@ -45,6 +45,14 @@ class CityAstar : public Astar {
 
      
 public:
+	CityAstar() 
+	: 
+		Astar			(),
+		m_owner			(PLAYER_UNASSIGNED),
+		m_alliance_mask	(0),
+		m_pathRoad		(false)
+	{ ; }
+
 
     void FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
       float &cost);

@@ -638,7 +638,6 @@ extern CivPaths *g_civPaths;
 
 void StringDB::Export(MBCHAR * file)
 {
-
 	char buff[_MAX_PATH];
 	MBCHAR *path = new MBCHAR[_MAX_PATH];
 	g_civPaths->GetSpecificPath(C3DIR_GAMEDATA, path, TRUE);
@@ -648,9 +647,13 @@ void StringDB::Export(MBCHAR * file)
 
 
 	DPRINTF(k_DBG_GAMESTATE, ("%s\n", buff));
-	for(sint32 i = 0; i < m_all.size(); ++i){
-
-		c3files_fprintf(fout, "%s\t\"%s\"\n", m_all[i]->m_id, m_all[i]->m_text, m_all[i]->m_index);
+	for (size_t i = 0; i < m_all.size(); ++i)
+    {
+		c3files_fprintf(fout, "%s\t\"%s\"\t%d\n", 
+                        m_all[i]->m_id, 
+                        m_all[i]->m_text, 
+                        m_all[i]->m_index
+                       );
 	}
 
 	c3files_fclose(fout);

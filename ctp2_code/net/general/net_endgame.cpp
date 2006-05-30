@@ -81,18 +81,7 @@ void NetEndGame::Packetize(uint8 *buf, uint16 &size)
 {
 	size = 0;
 	PUSHID(k_PACKET_ENDGAME_ID);
-	EndGame *eg = g_player[m_owner]->m_endGame;
-
 	PUSHBYTE(m_owner);
-
-
-
-	
-
-
-
-
-
 }
 
 //----------------------------------------------------------------------------

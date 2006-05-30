@@ -501,7 +501,7 @@ private:
 	sint32 m_totalStartTime;
 	sint32 m_totalTimeUsed;
 	sint32 m_turnStartTime;
-	sint32 m_turnStartedAt;
+	time_t m_turnStartedAt;
 	sint32 m_bonusTime;
 	sint32 m_turnEndsAt;
 	sint32 m_extraTimePerCity;

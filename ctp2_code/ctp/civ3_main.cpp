@@ -113,7 +113,6 @@
 #include "DB.h"
 #include "BuildingRecord.h"
 #include "TerrainRecord.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "gameinit.h"
 #include "TradePool.h"
@@ -315,7 +314,7 @@ BOOL g_use_profile_process = FALSE;
 BOOL g_createDirectDrawOnSecondary = FALSE;
 
 sint32		g_god;
-uint32		g_dxver = 0;
+DWORD		g_dxver = 0;
 
 
 bool g_e3Demo = false;
@@ -946,17 +945,10 @@ sint32 sharedsurface_Initialize( void )
 	return errcode;
 }
 
-sint32 sharedsurface_Cleanup( void )
+void sharedsurface_Cleanup( void )
 {
-	Assert( !g_sharedSurface );
-	return TRUE;
-
-	if ( !g_sharedSurface ) return FALSE;
-
 	delete g_sharedSurface;
 	g_sharedSurface = NULL;
-
-	return TRUE;
 }
 
 int sprite_Initialize(void)
@@ -1385,8 +1377,8 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 																osv.dwBuildNumber,
 																osv.szCSDVersion);
 		
-		uint32 cNameSize = MAX_COMPUTERNAME_LENGTH+1;
-		MBCHAR cName[MAX_COMPUTERNAME_LENGTH+1];
+		DWORD   cNameSize = MAX_COMPUTERNAME_LENGTH+1;
+		MBCHAR  cName[MAX_COMPUTERNAME_LENGTH+1];
 
 		if (GetComputerName((LPTSTR)cName, &cNameSize))
 			fprintf(outFile, "> Computer Name: %s\n", cName);
@@ -1635,8 +1627,8 @@ void main_InitializeLogs(void)
 															osv.dwBuildNumber,
 															osv.szCSDVersion));
 	
-	uint32 cNameSize = MAX_COMPUTERNAME_LENGTH+1;
-	MBCHAR cName[MAX_COMPUTERNAME_LENGTH+1];
+	DWORD   cNameSize = MAX_COMPUTERNAME_LENGTH+1;
+	MBCHAR  cName[MAX_COMPUTERNAME_LENGTH+1];
 
 	if (GetComputerName((LPTSTR)cName, &cNameSize))
 	{

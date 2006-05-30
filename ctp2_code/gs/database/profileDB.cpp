@@ -41,12 +41,14 @@
 //   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 // - Options CityClick, EndTurnWithEmptyBuildQueues and RunInBackground
 //   removed from advance options since they do not work. (May 21st 2006 Martin Gühmann)
+// - Made automatic treaty ending an option.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "profileDB.h"
 
+#include "AgreementData.h"      // k_EXPIRATION_NEVER
 #include "c3errors.h"
 #include "Token.h"
 #include "Globals.h"
@@ -204,6 +206,7 @@ ProfileDB::ProfileDB()
     m_dontSave                          (FALSE),
     m_endTurnWithEmptyBuildQueues       (FALSE),
     m_runInBackground                   (FALSE),
+    m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
 {
@@ -364,6 +367,7 @@ ProfileDB::ProfileDB()
 	Var("CityClick", PV_BOOL, &m_cityClick, NULL, false);
 	Var("EndTurnWithEmptyBuildQueues", PV_BOOL, &m_endTurnWithEmptyBuildQueues, NULL, false);
 	Var("RunInBackground", PV_BOOL, &m_runInBackground, NULL, false);
+    Var("AutoExpireTreatyBase", PV_NUM, &m_autoExpireTreatyTurn, NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)

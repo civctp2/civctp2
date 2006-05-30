@@ -520,13 +520,14 @@ MBCHAR const * c3files_GetVolumeName(DriveIdType id)
 	drivepath[0] = id;
 
 	MBCHAR  FSName[32];
-	uint32  SerialNumber;
-	uint32  MaxComponentLen;
-	uint32  FSFlags;
+	DWORD   SerialNumber;
+	DWORD   MaxComponentLen;
+	DWORD   FSFlags;
 
 	if (GetVolumeInformation
             (drivepath, 
-             VolumeName, VOLUME_NAME_SIZE, 
+             VolumeName, 
+             VOLUME_NAME_SIZE, 
              &SerialNumber, 
              &MaxComponentLen, 
              &FSFlags, 

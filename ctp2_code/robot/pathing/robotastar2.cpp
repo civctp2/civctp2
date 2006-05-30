@@ -1,20 +1,20 @@
 
 
 #include "c3.h"
+#include "robotastar2.h"
+
 #include "c3math.h"
 #include "c3errors.h"
 #include "globals.h"
 
 
 
-#include "robotastar2.h"
 
 #include "dynarr.h"
 #include "Path.h"
 #include "UnitAstar.h"
 
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "World.h"          // g_theWorld
 #include "dynarr.h"
 #include "player.h"
 #include "RandGen.h"
@@ -26,11 +26,10 @@
 #include "Cell.h"
 #include "Diplomat.h"
 #include "DiffDB.h"
-#include "profileDB.h"
+#include "profileDB.h"      // g_theProfileDB
 
-extern  ProfileDB *g_theProfileDB; 
-extern World *g_theWorld; 
 
+uint32 const    INCURSION_PERMISSION_ALL    = 0xffffffffu;
 
 RobotAstar2 RobotAstar2::s_aiPathing;
   
@@ -197,7 +196,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	if (isspecial && maxattack == 0 && !haszoc)
 	{
 		
-		m_incursionPermission = ~(0x0);
+		m_incursionPermission = INCURSION_PERMISSION_ALL;
 	}
 	else
 	{
@@ -232,11 +231,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 		return FALSE; 
 	}  
 	
-	if (is_broken_path) { 
-		return FALSE; 
-	} 
-	
-    return TRUE; 
+	return !is_broken_path;
 }
 
 

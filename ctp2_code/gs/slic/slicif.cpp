@@ -113,7 +113,7 @@ static int s_inSegment = 0;
 static int s_parenLevel = 0;
 
 static GAME_EVENT s_currentEvent;
-static sint32 s_currentEventArgument[k_MAX_PAREN_LEVEL];
+static size_t s_currentEventArgument[k_MAX_PAREN_LEVEL];
 
 static bool s_argValuePushed = false;
 static SlicSymbolData *s_argSymbol;
@@ -2098,7 +2098,7 @@ void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
 		
 		if(type != SLIC_SYM_IVAR && type != SLIC_SYM_PLAYER && type != SLIC_SYM_LOCATION &&
 			type != SLIC_SYM_CITY && type != SLIC_SYM_UNIT && type != SLIC_SYM_ARMY) {
-			sprintf(errbuf, "Argument %d requires a symbol", s_currentEventArgument[s_parenLevel] + 1);
+			sprintf(errbuf, "Argument %u requires a symbol", s_currentEventArgument[s_parenLevel] + 1);
 			yyerror(errbuf);
 		}
 		return;
@@ -2127,7 +2127,7 @@ void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
 		return;
 	}
 	if(symType != type) {
-		sprintf(errbuf, "Type mismatch for argument %d, expected %s", s_currentEventArgument[s_parenLevel] + 1, typeName);
+		sprintf(errbuf, "Type mismatch for argument %u, expected %s", s_currentEventArgument[s_parenLevel] + 1, typeName);
 		yyerror(errbuf);
 		return;
 	}
@@ -2190,7 +2190,7 @@ void slicif_check_num_args()
 
 	if((s_currentEvent < GEV_MAX) && s_parenLevel == 1) {
 		if((s_currentEventArgument[s_parenLevel]) != g_gevManager->GetNumArgs(s_currentEvent)) {
-			sprintf(errbuf, "Wrong number of arguments for event %s, expected %d",
+			sprintf(errbuf, "Wrong number of arguments for event %s, expected %u",
 			        g_gevManager->GetEventName(s_currentEvent),
 			        g_gevManager->GetNumArgs(s_currentEvent));
 			yyerror(errbuf);

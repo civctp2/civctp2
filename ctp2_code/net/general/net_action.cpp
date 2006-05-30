@@ -37,11 +37,9 @@
 #include "net_terrain.h"
 #include "net_traderoute.h"
 #include "net_unit.h"
-
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "player.h"
-#include "SelItem.h"
+#include "World.h"                      // g_theWorld
+#include "player.h"                     // g_player
+#include "SelItem.h"                    // g_selected_item
 #include "TradeOffer.h"
 #include "Readiness.h"
 #include "installation.h"
@@ -54,46 +52,35 @@
 #include "MessagePool.h"
 #include "UnitData.h"
 #include "citydata.h"
-#include "TurnCnt.h"
+#include "TurnCnt.h"                    // g_turn
 #include "AICause.h"
 #include "Advances.h"
 #include "MaterialPool.h"
 #include "TerrImprovePool.h"
 #include "net_playerdata.h"
-#include "UnitPool.h"
+#include "UnitPool.h"                   // g_theUnitPool
 #include "Order.h"
 #include "ArmyPool.h"
-#include "tiledmap.h"
-#include "radarmap.h"
+#include "tiledmap.h"                   // g_tiledMap
+#include "radarmap.h"                   // g_radarMap
 #include "ArmyData.h"
-#include "TradeOfferPool.h"
+#include "TradeOfferPool.h"             // g_theTradeOfferPool
 #include "Agreement.h"
-#include "AgreementPool.h"
+#include "AgreementPool.h"              // g_theAgreementPool
 #include "AdvanceRecord.h"
 #include "TradePool.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "newturncount.h"
-
 #include "GameEventManager.h"
 #include "director.h"
 #include "Diplomat.h"
-
 #include "battleviewwindow.h"
 #include "c3ui.h"
 #include "aui_button.h"
+#include "gstypes.h"                    // TERRAIN_TYPES
 
 extern C3UI *g_c3ui;
-
-extern SelectedItem *g_selected_item; 
-extern World* g_theWorld;
-extern Player		**g_player; 
-extern TurnCount *g_turn;
-extern UnitPool *g_theUnitPool;
-extern TiledMap *g_tiledMap;
-extern RadarMap	*g_radarMap;
-extern TradeOfferPool *g_theTradeOfferPool;
-extern AgreementPool *g_theAgreementPool;
 
 void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
@@ -415,7 +402,6 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				break;
 			}
 
-			PLAYER_INDEX owner = unit.GetOwner();
 			if(g_selected_item->GetCurPlayer() == index) {
 				g_network.Bookmark(id);
 				unit.Settle();

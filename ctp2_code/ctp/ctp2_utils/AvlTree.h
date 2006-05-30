@@ -29,7 +29,7 @@
 #ifndef AVL_H
 #define AVL_H
 
-
+#include <algorithm>
 #include <iostream>
 #include <utility>
 #include <ostream>
@@ -617,24 +617,20 @@ AvlNode<KeyType>::Delete(KeyType              key,
       }
    }
 
-   root->myBal -= decrease;       
-
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   if (decrease) {
-      if (root->myBal) {
-         change = ReBalance(root);  
-      } else {
-         change = HEIGHT_CHANGE;   
-      }
-   } else {
+    if (decrease) 
+    {
+        root->myBal -= static_cast<short>(decrease);
+        if (root->myBal) 
+        {
+            change = ReBalance(root);  
+        } 
+        else 
+        {
+            change = HEIGHT_CHANGE;   
+        }
+   } 
+   else 
+   {
       change = HEIGHT_NOCHANGE;
    }
 
@@ -648,7 +644,7 @@ int
 AvlNode<KeyType>::Height() const {
    int  leftHeight  = (mySubtree[LEFT])  ? mySubtree[LEFT]->Height()  : 0;
    int  rightHeight = (mySubtree[RIGHT]) ? mySubtree[RIGHT]->Height() : 0;
-   return  (1 + MAX(leftHeight, rightHeight));
+   return  (1 + std::max(leftHeight, rightHeight));
 }
 
 template <class KeyType>

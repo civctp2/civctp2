@@ -73,10 +73,15 @@ void RobotAstar::Serialize(CivArchive &archive)
 {
     CHECKSERIALIZE
 
-    if (archive.IsStoring()) { 
-        archive << m_refCount;
-    } else { 
-        archive >> m_refCount; 
+    if (archive.IsStoring()) 
+    { 
+        archive << static_cast<uint32>(m_refCount);
+    } 
+    else 
+    { 
+        uint32  data;
+        archive >> data;
+        m_refCount = data; 
     }
 }
 
@@ -131,8 +136,8 @@ void RobotAstar::RecalcEntryCost(AstarPoint *parent,
 		static MapPoint tmppos;
 		tmppos.Iso2Norm(node->m_pos); 
 
-		BOOL r2 =  (*m_callback)(TRUE, (MapPointData*)&tmpprev, 
-			(MapPointData*)&tmppos, &new_entry_cost, new_is_zoc, new_entry);         
+		(void)  (*m_callback)(TRUE, (MapPointData*)&tmpprev, 
+			                 (MapPointData*)&tmppos, &new_entry_cost, new_is_zoc, new_entry);         
 	}
 }
 

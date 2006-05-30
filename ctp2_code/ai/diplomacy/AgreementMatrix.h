@@ -91,7 +91,7 @@ public:
 					  const PLAYER_INDEX & foreigner) const;
 
 	
-	void SetAgreementFast(sint32 index, const ai::Agreement &agreement);
+	void SetAgreementFast(size_t index, const ai::Agreement &agreement);
  
 	
 	sint16 GetMaxPlayers() { return m_maxPlayers; }
@@ -99,14 +99,22 @@ public:
 
 	
 	
-	sint32 AgreementIndex(const PLAYER_INDEX & sender_player,
-							     const PLAYER_INDEX & receiver_player) const
+	size_t AgreementIndex
+    (
+        PLAYER_INDEX const &    sender_player,
+		PLAYER_INDEX const &    receiver_player,
+        PROPOSAL_TYPE const &   proposalType    = PROPOSAL_NONE
+    ) const
 	{
-		
-		Assert(sender_player<m_maxPlayers);
-		Assert(receiver_player<m_maxPlayers);
-		return PROPOSAL_MAX*(receiver_player * m_maxPlayers +  
-			sender_player);						  
+		Assert((sender_player   < m_maxPlayers) &&
+               (receiver_player < m_maxPlayers) &&
+               (proposalType    < PROPOSAL_MAX)
+              );
+
+		return static_cast<size_t>
+            ((PROPOSAL_MAX * (receiver_player * m_maxPlayers) + sender_player) +
+             proposalType
+            );
 	}
 
 	

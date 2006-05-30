@@ -593,33 +593,39 @@ void SlicSegment::GetDescription(char *str, sint32 maxsize)
 
 GAME_EVENT_HOOK_DISPOSITION SlicSegment::GEVHookCallback(GAME_EVENT type, GameEventArgList *args)
 {
-	if(!IsEnabled()) return GEV_HD_Continue;
+	if (IsEnabled()) 
+    {
+	    SlicObject *so = new SlicObject(this);
+	    so->AddRef();
+        so->Snarf(args);
+        so->SetResult((sint32)GEV_HD_Continue); 
+        g_slicEngine->Execute(so);
 
-	SlicObject *so = new SlicObject(this);
-	so->AddRef();
-	so->Snarf(args);
-	so->SetResult((sint32)GEV_HD_Continue); 
-	g_slicEngine->Execute(so);
-	GAME_EVENT_HOOK_DISPOSITION disp = (GAME_EVENT_HOOK_DISPOSITION)so->GetResult();
-	so->Release();
-	Assert(disp >= GEV_HD_Continue && disp < GEV_HD_MAX);
-	if(g_slicEngine->AtBreak())
-		return GEV_HD_NeedUserInput;
+	    GAME_EVENT_HOOK_DISPOSITION disp = (GAME_EVENT_HOOK_DISPOSITION) so->GetResult();
+	    so->Release();
 
-	switch(disp) {
+	    Assert(disp >= GEV_HD_Continue && disp < GEV_HD_MAX);
+	    if (g_slicEngine->AtBreak())
+		    return GEV_HD_NeedUserInput;
+
+        switch(disp) 
+        {
+		default:
+			if (g_theProfileDB && g_theProfileDB->IsDebugSlic()) 
+            {
+				c3errors_ErrorDialog("Slic", "Bad return from event handler");
+            }
+            break;
 		case SLIC_CONST_CONTINUE:
-			return GEV_HD_Continue;
+			break;
 		case SLIC_CONST_GETINPUT:
 			return GEV_HD_NeedUserInput;
 		case SLIC_CONST_STOP:
 			return GEV_HD_Stop;
-		default:
-			if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
-
-				c3errors_ErrorDialog("Slic", "Bad return from event handler");
-			}
-			return GEV_HD_Continue;
+		}
 	}
+
+	return GEV_HD_Continue;
 }
 
 
@@ -713,7 +719,6 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 
 bool SlicSegment::GetSourceLines(sint32 &firstLineNum, sint32 &firstLineOffset, sint32 &lastLineNum)
 {
-	bool found = false;
 	uint8 *codePtr = m_code;
 	sint32 line = 0, offset;
 

@@ -67,46 +67,32 @@
 #include "SlicFunc.h"
 #include "slicfuncai.h"
 #include "SlicSymTab.h"
-#include "player.h"
-extern Player **g_player;
+#include "player.h"					// g_player
 #include "Unit.h"
-#include "CivPaths.h"           // g_civPaths
-#include "SelItem.h"
-extern SelectedItem *g_selected_item;
+#include "CivPaths.h"				// g_civPaths
+#include "SelItem.h"				// g_selected_item
 #include "TradeOffer.h"
 #include "Agreement.h"
-#include "MessagePool.h"
+#include "MessagePool.h"			// g_theMessagePool
 #include "BldQue.h"
 #include "SlicRecord.h"
-#include "UnitPool.h"
-extern UnitPool *g_theUnitPool;
-
-#include "tutorialwin.h"
-extern TutorialWin *g_tutorialWin;
-
-
+#include "UnitPool.h"				// g_theUnitPool
+#include "tutorialwin.h"			// TutorialWin
 #include "pointerlist.h"
 #include "SimpleDynArr.h"
-
-
 #include "gamefile.h"
-
 #include "tiledmap.h"
-#include "radarmap.h"
-#include "controlpanelwindow.h"
+#include "radarmap.h"				// g_radarMap
+#include "controlpanelwindow.h"		// g_controlPanel
 #include "director.h"
-
 #include "SlicConst.h"
 #include "SlicStruct.h"
 #include "SlicNamedSymbol.h"
-
 #include "SlicBuiltin.h"
 #include "SlicBuiltinEnum.h"
 #include "SlicArray.h"
-
 #include "sourcelist.h"
 #include "SlicFrame.h"
-
 #include "UnitRecord.h"
 #include "AdvanceRecord.h"
 #include "TerrainRecord.h"
@@ -118,8 +104,6 @@ extern TutorialWin *g_tutorialWin;
 #include "GovernmentRecord.h"
 #include "StrategyRecord.h"
 #include "DiplomacyRecord.h"
-
-//Added by Martin Gühmann to support the rest of the databases in the new database format.
 #include "PersonalityRecord.h"
 #include "AdvanceBranchRecord.h"
 #include "AdvanceListRecord.h"
@@ -145,32 +129,23 @@ extern TutorialWin *g_tutorialWin;
 #include "WonderMovieRecord.h"
 #include "CivilisationRecord.h"
 #include "RiskRecord.h"
-
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
-
 #include "GameEventManager.h"
-
 #include "Globals.h"
-
 #include "ResourceRecord.h"
 #include "CriticalMessagesPrefs.h"
-
 #include "messagewindow.h"
 #include "profileDB.h"
-
 #include "greatlibrary.h"
 #include "MainControlPanel.h"
 
-
-extern RadarMap *g_radarMap;
-extern ControlPanelWindow *g_controlPanel;
+extern TutorialWin *g_tutorialWin;
 
 SlicEngine *g_slicEngine = NULL;
 
 char g_slic_filename[_MAX_PATH];
 char g_tutorial_filename[_MAX_PATH];
-extern MessagePool *g_theMessagePool;
 
 namespace
 {
@@ -204,23 +179,18 @@ SlicEngine::SlicEngine()
 	m_builtin_desc          (new SlicStructDescription *[SLIC_BUILTIN_MAX]),
 	m_loadGameName          (NULL),
 	m_currentKeyTrigger     (KEY_UNDEFINED),
-	m_blankScreen           (FALSE),
+	m_blankScreen           (false),
 	m_atBreak               (false),
 	m_breakContext          (NULL),
 	m_contextStack          (new PointerList<SlicObject>),
 	m_breakRequested        (false)
 {
-	size_t i;
-	for (i = 0; i < TRIGGER_LIST_MAX; ++i) 
+	for (size_t i = 0; i < TRIGGER_LIST_MAX; ++i) 
 	{
 		m_triggerLists[i] = new PointerList<SlicSegment>;
 	}
 
-	for (i = 0; i < k_MAX_PLAYERS; ++i)
-	{
-		m_records[i] = NULL;
-	}
-
+	std::fill(m_records, m_records + k_MAX_PLAYERS, (PointerList<SlicRecord> *) NULL);
 	std::fill(m_timer, m_timer + k_NUM_TIMERS, NOT_IN_USE);
 	std::fill(m_triggerKey, m_triggerKey + k_MAX_TRIGGER_KEYS, KEY_UNDEFINED);
 	std::fill(m_builtins, m_builtins + SLIC_BUILTIN_MAX, (SlicSymbolData const *) NULL);
@@ -254,23 +224,18 @@ SlicEngine::SlicEngine(CivArchive &archive)
 	m_builtin_desc          (new SlicStructDescription *[SLIC_BUILTIN_MAX]),
 	m_loadGameName          (NULL),
 	m_currentKeyTrigger     (KEY_UNDEFINED),
-	m_blankScreen           (FALSE),
+	m_blankScreen           (false),
 	m_atBreak               (false),
 	m_breakContext          (NULL),
 	m_contextStack          (new PointerList<SlicObject>),
 	m_breakRequested        (false)
 {
-	size_t i;
-	for (i = 0; i < TRIGGER_LIST_MAX; ++i) 
+	for (size_t i = 0; i < TRIGGER_LIST_MAX; ++i) 
 	{
 		m_triggerLists[i] = new PointerList<SlicSegment>;
 	}
 
-    for (i = 0; i < k_MAX_PLAYERS; ++i)
-    {
-        m_records[i] = NULL;
-    }
-
+	std::fill(m_records, m_records + k_MAX_PLAYERS, (PointerList<SlicRecord> *) NULL);
     std::fill(m_timer, m_timer + k_NUM_TIMERS, NOT_IN_USE);
     std::fill(m_triggerKey, m_triggerKey + k_MAX_TRIGGER_KEYS, KEY_UNDEFINED);
     std::fill(m_builtins, m_builtins + SLIC_BUILTIN_MAX, (SlicSymbolData const *) NULL);
@@ -300,7 +265,7 @@ SlicEngine::~SlicEngine()
 	}
 
     while (SlicObject * obj = m_contextStack->RemoveTail())
-{
+	{
         obj->Release();
 	}
     delete m_contextStack;
@@ -371,7 +336,7 @@ SlicEngine::~SlicEngine()
     if (g_theMessagePool) 
     {
 		g_theMessagePool->NotifySlicReload();
-}
+	}
 }
 
 void SlicEngine::Serialize(CivArchive &archive)
@@ -1026,7 +991,7 @@ void SlicEngine::Link()
 
 extern "C" char slic_parser_error_text[1024];
 
-BOOL SlicEngine::Load(MBCHAR *filename, sint32 filenum)
+bool SlicEngine::Load(MBCHAR * filename, sint32 filenum)
 {
 	slicconst_Initialize();
 
@@ -1036,12 +1001,12 @@ BOOL SlicEngine::Load(MBCHAR *filename, sint32 filenum)
 	slicif_init();
 	slicif_set_file_num(filenum);
 
-	if(slicif_run_parser(filename, symStart) != SLIC_ERROR_OK) {
+	if (slicif_run_parser(filename, symStart) != SLIC_ERROR_OK) {
 		c3errors_ErrorDialog(filename, "%s", slic_parser_error_text);
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void SlicEngine::AddTrigger(SlicSegment *trigger, TRIGGER_LIST which)
@@ -1123,32 +1088,30 @@ void SlicEngine::AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
 	}
 }
 
-BOOL SlicEngine::IsTimerExpired(sint32 timer)
+bool SlicEngine::IsTimerExpired(sint32 timer) const
 {
 	Assert(timer >= 0);
 	Assert(timer < k_NUM_TIMERS);
 
-	if(timer < 0 || timer >= k_NUM_TIMERS)
-		return FALSE;
+	if (timer < 0 || timer >= k_NUM_TIMERS)
+		return false;
 
-	if(m_timer[timer] < 0)
-		return FALSE;
+	if (m_timer[timer] < 0)
+		return false;
 
-	if(time(0) >= m_timer[timer]) {
-		return TRUE;
-	}
-	return FALSE;
+	return time(0) >= static_cast<time_t>(m_timer[timer]);
 }
 		
-void SlicEngine::StartTimer(sint32 timer, sint32 duration)
+void SlicEngine::StartTimer(sint32 timer, time_t duration)
 {
 	Assert(timer >= 0);
 	Assert(timer < k_NUM_TIMERS);
 
-	if(timer < 0 || timer >= k_NUM_TIMERS)
+	if (timer < 0 || timer >= k_NUM_TIMERS)
 		return;
 
-	m_timer[timer] = time(0) + duration;
+	m_timer[timer] = static_cast<sint32>(time(0) + duration);
+    Assert(static_cast<time_t>(m_timer[timer]) == (time(0) + duration));
 }
 
 void SlicEngine::StopTimer(sint32 timer)
@@ -1159,7 +1122,7 @@ void SlicEngine::StopTimer(sint32 timer)
 	if(timer < 0 || timer >= k_NUM_TIMERS)
 		return;
 
-	m_timer[timer] = -1;
+	m_timer[timer] = NOT_IN_USE;
 }
 	
 void SlicEngine::SetTutorialActive(BOOL on)
@@ -1189,11 +1152,11 @@ void SlicEngine::SetTutorialActive(BOOL on)
 
 void SlicEngine::EnableMessageClass(sint32 mclass)
 {
-	sint32 i;
-	for(i = 0; i < m_disabledClasses->Num(); i++) {
-		if(m_disabledClasses->Access(i) == mclass) {
+	for (sint32 i = m_disabledClasses->Num() - 1; i >= 0; --i) 
+	{
+		if (m_disabledClasses->Access(i) == mclass) 
+		{
 			m_disabledClasses->DelIndex(i);
-			i--;
 		}
 	}
 }
@@ -1203,15 +1166,16 @@ void SlicEngine::DisableMessageClass(sint32 mclass)
 	m_disabledClasses->Insert(mclass);
 }
 
-BOOL SlicEngine::IsMessageClassDisabled(sint32 mclass)
+bool SlicEngine::IsMessageClassDisabled(sint32 mclass) const
 {
-	sint32 i;
-	for(i = 0; i < m_disabledClasses->Num(); i++) {
-		if(m_disabledClasses->Access(i) == mclass) {
-			return TRUE;
+	for (sint32 i = 0; i < m_disabledClasses->Num(); ++i) 
+	{
+		if (m_disabledClasses->Access(i) == mclass) 
+		{
+			return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 void SlicEngine::ProcessUITriggers()
@@ -1496,7 +1460,7 @@ void SlicEngine::RunSameGoodTriggers(const Unit &city1, const Unit &city2)
 	}
 }
 
-BOOL SlicEngine::SpecialSameGoodEnabled() const
+bool SlicEngine::SpecialSameGoodEnabled() const
 {
 	return !m_triggerLists[TRIGGER_LIST_SAME_GOOD]->IsEmpty();
 }
@@ -2373,41 +2337,14 @@ void SlicEngine::RunAgeChangeTriggers(sint32 player)
 
 void SlicEngine::RunTimerTriggers()
 {
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	sint32 i;
-	for(i = 0; i < k_NUM_TIMERS; i++)
-		if(IsTimerExpired(i))
-			{
-			m_timer[i]=-1;
+	for (sint32 i = 0; i < k_NUM_TIMERS; ++i)
+	{
+		if (IsTimerExpired(i))
+		{
+			m_timer[i] = NOT_IN_USE;
             g_gevManager->AddEvent(GEV_INSERT_Tail,GEV_TimerExpired,GEA_Int,i, GEA_End);
-			}
-
-
-	
+		}
+	}
 }
 
 void SlicEngine::RunWorkViewTriggers()
@@ -2564,31 +2501,31 @@ void SlicEngine::SetTriggerKey(sint32 index, MBCHAR key)
 		m_triggerKey[index] = key;
 }
 
-BOOL SlicEngine::IsKeyPressed(MBCHAR key)
+bool SlicEngine::IsKeyPressed(MBCHAR key) const
 {
-	if(m_currentKeyTrigger && m_currentKeyTrigger == m_triggerKey[key])
-		return TRUE;
-	else
-		return FALSE;
+	return m_currentKeyTrigger && (m_currentKeyTrigger == m_triggerKey[key]);
 }
 
-BOOL SlicEngine::RunKeyboardTrigger(MBCHAR key)
+bool SlicEngine::RunKeyboardTrigger(MBCHAR key)
 {
-	sint32 i;
-	for(i = 0; i < k_MAX_TRIGGER_KEYS; i++) {
-		if(m_triggerKey[i] == key) {
+	for (size_t i = 0; i < k_MAX_TRIGGER_KEYS; i++) 
+	{
+		if (m_triggerKey[i] == key) 
+		{
 			m_currentKeyTrigger = key;
 			RunTrigger(TRIGGER_LIST_KEY_PRESSED, ST_END);
 			m_currentKeyTrigger = KEY_UNDEFINED;
-			return TRUE;
+			return true;
 		}
 	}
-	return FALSE;
+
+	return false;
 }
 
-void SlicEngine::BlankScreen(BOOL blank)
+void SlicEngine::BlankScreen(bool blank)
 {
-	if(m_blankScreen != blank) {
+	if (m_blankScreen != blank) 
+	{
 		m_blankScreen = blank;
 		g_tiledMap->InvalidateMap();
 		g_tiledMap->Refresh();
@@ -2648,14 +2585,15 @@ void SlicEngine::AddConst(const MBCHAR *name, sint32 value)
 	m_constHash->Add(new SlicConst(name, value));
 }
 
-BOOL SlicEngine::FindConst(const MBCHAR *name, sint32 *value)
+bool SlicEngine::FindConst(const MBCHAR *name, sint32 *value) const
 {
-	SlicConst *sc = m_constHash->Access(name);
-	if(sc) {
+	SlicConst * sc = m_constHash->Access(name);
+	if (sc) 
+	{
 		*value = sc->GetValue();
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 void SlicEngine::AddStructArray(bool createSymbols, SlicStructDescription *desc, SLIC_BUILTIN which)
@@ -3139,9 +3077,7 @@ sint32 SlicEngine::CallMod(MOD_FUNC modFunc, sint32 def, ...)
 	SlicObject *obj;
 	mf->GetSegment()->Call(slicArgs, obj);
 
-	for(arg = 0; arg < slicArgs->m_numArgs; arg++) {
-		delete slicArgs->m_argValue[arg].m_symbol;
-	}
+    slicArgs->ReleaseSymbols();
 	delete slicArgs;
 
 	sint32 result = obj->GetResult();
@@ -3168,10 +3104,7 @@ sint32 SlicEngine::CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 playe
 	SlicObject *obj;
 	seg->Call(slicArgs, obj);
 
-	sint32 arg;
-	for(arg = 0; arg < slicArgs->m_numArgs; arg++) {
-		delete slicArgs->m_argValue[arg].m_symbol;
-	}
+    slicArgs->ReleaseSymbols();
 	delete slicArgs;
 
 	sint32 result = obj->GetResult();

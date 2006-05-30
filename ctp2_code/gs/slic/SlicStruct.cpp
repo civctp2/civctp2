@@ -414,7 +414,7 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 	sint32 i;
 	uint8 haveData;
 	if(archive.IsStoring()) {
-		archive.PutUINT8(m_description->GetType());
+		archive.PutUINT8(static_cast<uint8>(m_description->GetType()));
 		// Store the members. Don't store the accessors.
 		for(i = 0; i < m_description->GetNumMembers(); i++) {
 			haveData = m_members[i] != NULL;
@@ -443,7 +443,6 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 		m_members			= new SlicStructMemberData *[m_validIndexCount];
 		std::fill(m_members, m_members + m_validIndexCount, (SlicStructMemberData *) NULL);
 		for(i = 0; i < m_description->GetNumMembers(); i++) {
-			SlicStructDescription::Member *memDesc = m_description->m_members[i];
 			archive >> haveData;
 			if(haveData) {
 				CreateMember(i);

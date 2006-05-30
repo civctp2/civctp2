@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Network receiver thread
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -413,8 +413,8 @@ NET_ERR NetThread::Send(uint16 id, sint32 flags, uint8* buf, sint32 len)
 
 NET_ERR NetThread::SendCompressed(uint16 id, sint32 flags, uint8 *buf, sint32 len)
 {
-	uint32 cbufsize = (uint32)(((double)len * 1.01) + 12.5);
-	uint8 *cbuf = new uint8[cbufsize + 5];
+	uLongf  cbufsize = (uLongf)(((double)len * 1.01) + 12.5);
+	uint8 * cbuf    = new uint8[cbufsize + 5];
 
 	cbuf[0] = k_COMPRESSED_PACKET;
 	int err;
@@ -482,7 +482,7 @@ NET_ERR NetThread::Idle()
 			}
 		} else {
 			if(packet->m_buf[0] == k_COMPRESSED_PACKET) {
-				uint32 uSize = getlong(&packet->m_buf[1]);
+				uLongf uSize = getlong(&packet->m_buf[1]);
 
 				uint8 *uBuf = new uint8[uSize];
 				int err;

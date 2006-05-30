@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : turncounter handles the clockwork of turn progression
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -335,7 +335,6 @@ void TurnCount::ChooseNextActivePlayer()
 void TurnCount::EndThisTurn()
 { 
 	PLAYER_INDEX curPlayer = g_selected_item->GetCurPlayer();
-	PLAYER_INDEX visPlayer = g_selected_item->GetVisiblePlayer();
 
 #ifdef _DEBUG
 	if (g_theDiplomacyLog) g_theDiplomacyLog->EndTurn();
@@ -536,48 +535,35 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 #endif
 }
 
-void TurnCount::EndThisTurnBeginNewTurn (BOOL clientRequest)
-
+void TurnCount::EndThisTurnBeginNewTurn(BOOL clientRequest)
 {
-	if(clientRequest) {
-		if(!g_network.CurrentPlayerAckedBeginTurn()) {
-			return;
+	if (clientRequest) 
+    {
+		if (g_network.CurrentPlayerAckedBeginTurn()) 
+        {
+		    EndThisTurnBeginNewTurn(FALSE);
 		}
-
-		
-		
-		
-		PLAYER_INDEX start_player = g_selected_item->GetCurPlayer();
-
-
-
-
-
-
-
-
-		EndThisTurnBeginNewTurn(FALSE);
-		return;
 	}
+    else
+    {
+	    EndThisTurn();
 
-	EndThisTurn();
-	if(m_activePlayers <= 0) {
-		BeginNewRound();
-	} else {
-		BeginNewTurn(FALSE);
-	}
+	    if (m_activePlayers <= 0) 
+        {
+		    BeginNewRound();
+	    } 
+        else 
+        {
+		    BeginNewTurn(FALSE);
+	    }
 
-	
-	if(!g_network.IsActive() || g_selected_item->GetCurPlayer() == g_network.GetPlayerIndex()) {
-
-
-
-
-
-
-
-		g_selected_item->Refresh();
-	}
+	    if (!g_network.IsActive() || 
+            g_selected_item->GetCurPlayer() == g_network.GetPlayerIndex()
+           ) 
+        {
+		    g_selected_item->Refresh();
+	    }
+    }
 }
 
 void TurnCount::EndThisSlice()
@@ -818,7 +804,7 @@ void TurnCount::NetworkEndTurn(BOOL force)
 		return;
 
 	if (!VerifyEndTurn(force))
-		return;;
+		return;
 
 	if(g_network.IsClient()) {
 		g_network.SendAction(new NetAction(NET_ACTION_END_TURN));
@@ -830,6 +816,7 @@ void TurnCount::NetworkEndTurn(BOOL force)
 	}
 
 	return;	
+#if 0 // Unreachable
 	{
 		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_NETWORK) {
 			for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
@@ -843,30 +830,26 @@ void TurnCount::NetworkEndTurn(BOOL force)
 		}
 	}
 
-	PLAYER_INDEX start_player = g_selected_item->GetCurPlayer();
-
-	EndThisTurnBeginNewTurn(FALSE);
-
-
+    EndThisTurnBeginNewTurn(FALSE);
 
 #ifdef _DEBUG
 	extern BOOL g_doingFastRounds;
 
-	if (!g_doingFastRounds) {
-		
+	if (!g_doingFastRounds) 
+    {
 		g_tiledMap->InvalidateMix();
 		g_tiledMap->InvalidateMap();
 		g_tiledMap->Refresh();
 		g_radarMap->Update();
 	}
 #else
-	
 	g_tiledMap->InvalidateMix();
 	g_tiledMap->InvalidateMap();
 	g_tiledMap->Refresh();
 	g_radarMap->Update();
 #endif
 
+#endif // Unreachable
 }
 
 void TurnCount::RunNewYearMessages(void)
@@ -1121,8 +1104,6 @@ sint32 finite_count=0;
 			TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 		}
 
-		sint32 oldPlayer = g_selected_item->GetCurPlayer();
-
 		EndThisTurnBeginNewTurn();
 
 		if(m_isHotSeat || m_isEmail) {
@@ -1376,7 +1357,6 @@ void TurnCount::LogPlayerStats(void)
 	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetCurrentPollution());
 
-	double incomepercent = g_player[playerNum]->GetIncomePercent();
 	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetIncomePercent());
 	

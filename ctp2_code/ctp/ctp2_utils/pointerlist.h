@@ -191,26 +191,22 @@ public:
 
 	class Walker {
 	public:
-		Walker(PointerList* list) :
-			m_node(list->m_head),
-			m_list(list)
+		Walker(PointerList * list = NULL) 
+        :
+            m_node  (list ? list->m_head : NULL),
+			m_list  (list)
 		{
 		};
 
-		Walker() :
-			m_node(NULL),
-			m_list(NULL)
-		{
-		}
-
-		void SetList(PointerList *list) {
-			m_node = list->m_head;
+		void SetList(PointerList *list) 
+        {
+            m_node = list ? list->m_head : NULL;
 			m_list = list;
 		}
 		void Next() { Assert(m_node); m_node = m_node->GetNext(); }
 		void Prev() { Assert(m_node); m_node = m_node->GetPrev(); }
-		int IsValid() { return m_node != NULL; }
-		T *GetObj() { return m_node->GetObj(); }
+		bool IsValid() { return m_node != NULL; }
+		T *GetObj() { Assert(m_node); return m_node->GetObj(); }
 		T *Remove() 
 		{ 
 			T *obj = m_node->GetObj();

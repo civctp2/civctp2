@@ -50,6 +50,7 @@
 //   queues. (Oct. 22nd 2005 Martin Gühmann)
 // - Added option to allow end turn if the game runs in the background,
 //   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
+// - Made automatic treaty ending an option.
 //
 //----------------------------------------------------------------------------
 
@@ -332,6 +333,7 @@ private:
     sint32 m_cityClick;            // Opens/selects a city instead of an army.
     sint32 m_endTurnWithEmptyBuildQueues; // End turn even if there are empty build queues (human player only)
     sint32 m_runInBackground;      // Allow the application to run in the background with autoturn
+    sint32 m_autoExpireTreatyTurn; // Automatically expiry treaties after a number of turns
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;

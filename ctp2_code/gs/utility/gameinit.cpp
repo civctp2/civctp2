@@ -1357,13 +1357,8 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	sint32 diff = g_theProfileDB->GetDifficulty();
 
-	sint32 numPlayersLoaded = 0;
-
-
 	CreateBarbarians(diff);
 
-	sint32 netIndex = 0; 
-	NSPlayerInfo *nspi = NULL;
 	CIV_INDEX civ = g_theProfileDB->GetCivIndex();
 	
 	// TODO: check if the fixed index 1 is correct here, 
@@ -1377,8 +1372,6 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	s_networkSettlers[1] = 1;
 	if ( strlen(g_theProfileDB->GetLeaderName()) > 0)
 		g_player[1]->m_civilisation->AccessData()->SetLeaderName(g_theProfileDB->GetLeaderName());
-
-	sint32 firstRobot = -1;
 
 	for (i=2; i<nPlayers; i++)
 	{
@@ -2368,8 +2361,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 
 	BOOL createRobotInterface = TRUE;
-	sint32 haveRobotInterface = FALSE;
-
 	
 	SPLASH_STRING("Initializing A-star Pathing...");
 	roboinit_Initalize(archive); 
@@ -2451,7 +2442,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	if (!(&archive))
 	{
-		sint32 numPlaced;
+		sint32 numPlaced = 0;
 #ifdef _DEBUG
 		FILE *mouseFile = fopen( "__debuginit__", "r" );
 		if ( mouseFile )
