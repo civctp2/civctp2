@@ -49,10 +49,11 @@
 //   turn computed, tileimps every fifth turn. - Feb. 21st 2005 Martin Gühmann
 // - UnGroupGarrisionUnits and MoveOutofCityTransportUnits disabled,
 //   at least the later must be reconsidered as I got the feeling that we have
-//   in the city units that are waiting for being moved out. 
+//   in the city units that are waiting for being moved out.
 //    - Feb. 21st 2005 Martin Gühmann
 // - Improved AI sliders optimization. - Jul 18th 2005 Martin Gühmann
 // - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Moved settle_water check inside the GetSettleTargets method. (May 20th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2087,24 +2088,9 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 	if (player_ptr == NULL)
 		return;
 
-	
-	bool settle_water = false;
-	Unit unit;
-	list<Unit> weapon_list;
-	Assert(player_ptr->m_all_units);
-	for(sint32 i = 0; i < player_ptr->m_all_units->Num(); i++) {
-		
-		unit = player_ptr->m_all_units->Access(i);
-		if (unit.GetDBRec()->GetSettleWater())
-		{
-			settle_water = true;
-			break;
-		}
-	}
 
-	
 	SettleMap::SettleTargetList targets;
-	SettleMap::s_settleMap.GetSettleTargets(playerId, settle_water, targets);
+	SettleMap::s_settleMap.GetSettleTargets(playerId, targets);
 
 	
 	SettleMap::SettleTarget settle_target;

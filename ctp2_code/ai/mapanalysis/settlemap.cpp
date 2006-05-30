@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : City data
+// Description  : The SettleMap
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -34,22 +34,11 @@
 //
 // Modifications from the original Activision code:
 //
-// - ComputeSettleValue modified to prevent AI from trying to settle on places it cant
-// 
-//     
+// - Modified GetSettleTargets so that no settle targets are found that cannot
+//   be settled, because the player does not has any units for the tile in
+//   question. (May 20th 2006 Martin Gühmann)
+//
 //----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
 
 #include "c3.h"
 #include "settlemap.h"
@@ -67,12 +56,10 @@
 #include "mapanalysis.h"
 #include "StrategyRecord.h"
 #include "Diplomat.h"
-#include "Unit.h"
-#include "UnitRecord.h"
-#include "UnitData.h"
-#include "UnitPool.h"
 
 #include "boundingrect.h"
+#include "TerrainRecord.h"
+#include "UnitRecord.h"
 
 namespace
 {
@@ -92,6 +79,25 @@ SettleMap::SettleMap()
 {
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : SettleMap::ComputeSettleValue
+//
+// Description: Calculates a settling score for the given position, which is 
+//              independent of unit abilities to settle at a certain location.
+//              The settle score is the sum of scores of tiles in a radius of
+//              two tiles around the given position.
+//
+// Parameters : const MapPoint & pos: The position for that the settle
+//                                    score should be computed.
+//
+// Globals    : g_theWorld: The game world
+//
+// Returns    : double:     The settle score for the given map position
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 {
 	sint32 score = 0;
@@ -103,33 +109,6 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 		score += cell->GetScore();
 	}
 
-//EMOD if the cell has a score of zero, the AI won't attempt at all 4-10-2006
-//	if (g_theWorld->GetCell(pos)->GetScore() == 0) {
-//		score = 0;
-//	}
-//EMOD to allow for AI notto settle some places
-//	If Unit Get SettleType 
-//		GetCell(pos) != settletype
-//		score = 0;
-//EMOD
-//  sint32 i;
-//	const UnitRecord *rec = g_theUnitDB->Get(unit_type); 
-//	for(i = 0; i < rec->GetNumCanSettleOn(); i++) {
-//		if(!rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
-//			score = 0;
-//		}
-//	}
-// end EMOD
-//
-//	if !(rec->GetSettleLand() && g_theWorld->IsLand(pos))
-//		score = 0; 
-//	else if (rec->GetSettleMountain() && g_theWorld->IsMountain(pos))
-//		score = 0; 
-//	else if (rec->GetSettleWater() && g_theWorld->IsWater(pos))
-//		score = 0; 
-//	else if (rec->GetSettleSpace() && g_theWorld->IsSpace(pos))
-//		score = 0;
-//end EMOD
 	return score;
 }
 
@@ -222,7 +201,6 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 
 
 void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId, 
-								 const bool & settle_water,
 								 SettleMap::SettleTargetList & targets) const
 {
 	
@@ -233,7 +211,6 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	if (!rect.IsValid())
 		return;
 
-	
 	rect.Expand( 10 );
 
 	MapPoint xy_pos(0,0);
@@ -243,11 +220,57 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	sint16 rows = rect.GetMaxRows();
 	sint16 cols = rect.GetMaxCols();
 
-	
 	sint32 settle_threshold = 0;
 	(void) Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore(settle_threshold);
 
-	for (sint32 i = 0; rect.Get(i, xy_pos, rows, cols); i++)
+	Player *player_ptr = g_player[playerId];
+	Assert(player_ptr);
+	if(!player_ptr)
+		return;
+
+	sint32 numTerrain = g_theTerrainDB->NumRecords();
+	bool* settleTerrainTypes = new bool[numTerrain];
+	std::fill(settleTerrainTypes, settleTerrainTypes + numTerrain, false);
+
+	bool noSettleUnits = true;
+	Unit unit;
+	sint32 i;
+
+	Assert(player_ptr->m_all_units);
+	for(i = 0; i < player_ptr->m_all_units->Num(); ++i){
+		unit = player_ptr->m_all_units->Access(i);
+		const UnitRecord* rec = player_ptr->m_all_units->Access(i).GetDBRec();
+		
+		Assert(rec);
+		if(!rec) continue;
+
+		if(rec->GetNumCanSettleOn() > 0){
+			for(sint32 j = 0; j < rec->GetNumCanSettleOn(); ++j){
+				settleTerrainTypes[rec->GetCanSettleOnIndex(j)] = true;
+				noSettleUnits = false;
+			}
+		}
+		else{
+			for(sint32 j = 0; j < numTerrain; ++j){
+				const TerrainRecord* trec = g_theTerrainDB->Get(j);
+				if(trec->GetMovementTypeLand()                                        && rec->GetSettleLand()
+				|| trec->GetMovementTypeMountain()                                    && rec->GetSettleMountain()
+				||(trec->GetMovementTypeSea() || trec->GetMovementTypeShallowWater()) && rec->GetSettleWater()
+				|| trec->GetMovementTypeSpace()                                       && rec->GetSettleSpace()
+				){
+					settleTerrainTypes[j] = true;
+					noSettleUnits = false;
+				}
+			}
+		}
+	}
+
+	if(noSettleUnits){
+		delete settleTerrainTypes;
+		return;
+	}
+
+	for(i = 0; rect.Get(i, xy_pos, rows, cols); i++)
 	{
 		rc_pos.xy2rc(xy_pos, *g_theWorld->GetSize());
 
@@ -263,28 +286,6 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 #endif _DEBUG
 
 
-//EMOD for AI settling 5-15-2006
-		Player *player_ptr = g_player[playerId];
-		Assert(player_ptr);
-		if (player_ptr == NULL)
-			return;
-
-		bool settle_mountain = false;
-		Unit unit;
-		//list<Unit> weapon_list;
-		//Assert(player_ptr->m_all_units);
-		for(sint32 i = 0; i < player_ptr->m_all_units->Num(); i++) {
-		
-			unit = player_ptr->m_all_units->Access(i);
-			if (unit.GetDBRec()->GetSettleMountain())
-			{
-				settle_mountain = true;
-				break;
-			}
-		}
-
-///end EMOD
-		
 		if (!CanSettlePos(rc_pos))
 			continue;
 
@@ -302,13 +303,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 			continue;
 		}
 
-/////EMOD for AI Settling 
-	
-		if (!settle_mountain && g_theWorld->IsMountain(rc_pos))
-			continue;	
-////
-
-		if (!settle_water && g_theWorld->IsWater(rc_pos))
+		if(!settleTerrainTypes[g_theWorld->GetTerrainType(rc_pos)])
 			continue;
 
 #ifdef _DEBUG
@@ -322,11 +317,13 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		targets.push_back(settle_target);
 	}
 
-    Assert(!targets.empty());
-    if (targets.empty())
-    {
-        return;
-    }
+	delete settleTerrainTypes;
+
+	Assert(!targets.empty());
+	if (targets.empty())
+	{
+		return;
+	}
 
 	targets.sort(std::greater<SettleTarget>());
 
@@ -380,11 +377,11 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 			}
 
 			if (tmp_iter == iter)
-            {
+			{
 				++iter;
-            }
+			}
 			else 
-            {
+			{
 				iter = targets.erase(iter);
 				continue;
 			}

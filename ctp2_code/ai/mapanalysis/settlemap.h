@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header file
-// Description  : declarations for the SettleMap class
+// Description  : Declarations for the SettleMap class
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Removed MS version specific code.
 // - Standardised <list> import.
+// - Moved settle_water argument inside SettleMap::GetSettleTargets. (May 20th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -37,8 +41,8 @@
 
 class SettleMap;
 
-size_t const	k_minimum_settle_city_size	= 2;
-size_t const 	k_targets_per_continent 	= 25;
+size_t const    k_minimum_settle_city_size  = 2;
+size_t const    k_targets_per_continent     = 25;
 
 #include "bit_table.h"
 #include "mapgrid.h"
@@ -52,15 +56,15 @@ public:
 	struct SettleTarget
 	{
 		SettleTarget() 
-		:	m_value	(0.0),
-			m_pos	()
+		:   m_value (0.0),
+		    m_pos   ()
 		{ ; };
 
 		bool operator<(const SettleTarget & rval) const { return ( m_value < rval.m_value ); }
 		bool operator>(const SettleTarget & rval) const { return ( m_value > rval.m_value ); }
 
-		double	    m_value;
-		MapPoint	m_pos;
+		double      m_value;
+		MapPoint    m_pos;
 	};
 
 	typedef std::list<SettleTarget > SettleTargetList;
@@ -73,8 +77,7 @@ public:
 	void HandleCityGrowth(const Unit & city);
 
 	void GetSettleTargets(const PLAYER_INDEX &player, 
-						  const bool & settle_water,
-						  SettleMap::SettleTargetList & targets) const;
+	                      SettleMap::SettleTargetList & targets) const;
 	
 	bool CanSettlePos(const MapPoint & rc_pos) const;
 
@@ -82,16 +85,16 @@ public:
 	
 	double GetValue(const MapPoint & rc_pos) const;
 
-private:	
-    SettleMap();
+private:
+	SettleMap();
 	
-    double ComputeSettleValue(const MapPoint & pos) const;
+	double ComputeSettleValue(const MapPoint & pos) const;
 
-    MapGrid<double> m_settleValues;
-    Bit_Table m_invalidCells;
+	MapGrid<double> m_settleValues;
+	Bit_Table m_invalidCells;
 };
 
-#endif 
+#endif
 
 
 
