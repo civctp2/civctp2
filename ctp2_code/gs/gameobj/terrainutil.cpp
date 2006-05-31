@@ -38,6 +38,7 @@
 // - terrainutil_CanPlayerSpecialBuildAt added by E 4-1-2006
 // - Added outcommented terrainutil_HasUpgrader, terrainutil_CanBeCaptured, 
 //   terrainutil_HasColony by E (4-25-2006) fo future use
+// - implemented above and added HasMinefield by e 5-30-2006
 //
 //----------------------------------------------------------------------------
 
@@ -873,74 +874,97 @@ void terrainutil_GetDefenseBonus(const MapPoint & pos, double & terrain_bonus, d
 	}
 }
 
-//bool terrainutil_HasUpgrader(const MapPoint & pos)
-//{
-//	Cell *cell = g_theWorld->GetCell(pos);
-//
-//	
-//	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-//
-//		
-//		sint32 imp = cell->GetDBImprovement(i);
-//		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-//
-//		Assert(rec);
-//		if(rec) {
-//			
-//			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
-//			
-//			if(eff && eff->GetCanUpgrade())
-//				return true;
-//		}
-//	}
-//	return false;
-//}
+bool terrainutil_HasUpgrader(const MapPoint & pos)
+{
+	Cell *cell = g_theWorld->GetCell(pos);
 
-//bool terrainutil_CanBeCaptured(const MapPoint & pos)
-//{
-//	Cell *cell = g_theWorld->GetCell(pos);
-//
-//	
-//	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-//
-//		
-//		sint32 imp = cell->GetDBImprovement(i);
-//		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-//
-//		Assert(rec);
-//		if(rec) {
-//			
-//			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
-//			
-//			if(eff && eff->GetCanBeCaptured())
-//				return true;
-//		}
-//	}
-//	return false;
-//}
+	
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
 
-//bool terrainutil_HasColony(const MapPoint & pos)
-//{
-//	Cell *cell = g_theWorld->GetCell(pos);
-//
-//	
-//	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-//
-//		
-//		sint32 imp = cell->GetDBImprovement(i);
-//		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-//
-//		Assert(rec);
-//		if(rec) {
-//			
-//			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
-//			
-//			if(eff && eff->GetColony())
-//				return true;
-//		}
-//	}
-//	return false;
-//}
+		
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+
+		Assert(rec);
+		if(rec) {
+			
+			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+			
+			if(eff && eff->GetCanUpgrade())
+				return true;
+		}
+	}
+	return false;
+}
+
+bool terrainutil_CanBeCaptured(const MapPoint & pos)
+{
+	Cell *cell = g_theWorld->GetCell(pos);
+
+	
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+
+		
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+
+		Assert(rec);
+		if(rec) {
+			
+			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+			
+			if(eff && eff->GetCanBeCaptured())
+				return true;
+		}
+	}
+	return false;
+}
+
+bool terrainutil_HasColony(const MapPoint & pos)
+{
+	Cell *cell = g_theWorld->GetCell(pos);
+
+	
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+
+		
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+
+		Assert(rec);
+		if(rec) {
+			
+			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+			
+			if(eff && eff->GetColony())
+				return true;
+		}
+	}
+	return false;
+}
+
+bool terrainutil_HasMinefield(const MapPoint & pos)
+{
+	Cell *cell = g_theWorld->GetCell(pos);
+
+	
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+
+		
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+
+		Assert(rec);
+		if(rec) {
+			
+			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+			
+			if(eff && eff->GetMinefield())
+				return true;
+		}
+	}
+	return false;
+}
 
 bool terrainutil_HasAirfield(const MapPoint & pos)
 {
@@ -1004,7 +1028,7 @@ bool terrainutil_HasFort(const MapPoint & pos)
 			
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
 			
-			if(eff && eff->GetDefenseBonus())
+			if((eff && eff->GetDefenseBonus()) || (eff && eff->GetFort()))  //EMOD to have just a fort flag
 				return true;
 		}
 	}

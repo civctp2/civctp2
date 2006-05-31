@@ -83,9 +83,11 @@
 // - Standardized code (May 21st 2006 Martin Gühmann)
 // - Added HostileTerrain so units in terrain that has this value lose 5-27-2006 by E
 // - Added Great Merchant Gold 5-27-2006 by E
-// - Added barbariancamps to entnched barbs  5-27-2006 by E
+// - Added barbariancamps to entrenched barbs  5-27-2006 by E
 // - Added SettleBuilding check to convertcity, this way a religious unit can add 
-//   a building to the city converted. a possibilityfor using religion in Ctp2 by E 5-27-2006
+//   a building to the city converted. A possibility for using religion in Ctp2 by E 5-27-2006
+// - added tileimps that can upgrade by E 5-30-2006
+// - added minefield tileimps that deduct HP by E 5-30-2006
 //
 //----------------------------------------------------------------------------
 
@@ -973,7 +975,7 @@ void ArmyData::Sleep()
 	Unit city = g_theWorld->GetCity(m_pos);
 	for(i = m_nElements - 1; i >= 0; i--) {
 		const UnitRecord *rec = m_array[i].GetDBRec();
-		if((city.m_id != (0)) && (rec->GetNumUpgradeTo() > 0))  { 
+		if((rec->GetNumUpgradeTo() > 0) && (city.m_id != (0))) { // || (terrainutil_HasUpgrader(m_pos))))  { //add tileimps that upgrade 5-30-2006
 			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
 				sint32 oldshield = rec->GetShieldCost();
 				sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s))->GetShieldCost();
@@ -1590,14 +1592,14 @@ void ArmyData::BeginTurn()
 
 	//END EMOD barb camps
 
-	//EMOD TODO: If Hostileterrain and not fort than deduct HP from the unit
+	//EMOD: If Hostileterrain and not fort than deduct HP from the unit
 	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 	sint32 hpcost;
 	if(trec->GetHostileTerrainCost(hpcost)) { //EMOD
 		for(sint32 u = 0; u < m_nElements; u++) {
 			const UnitRecord *urec = m_array[u].GetDBRec();
 			if(!urec->GetImmuneToHostileTerrain()
-			&& !terrainutil_HasFort(m_pos)
+			&& !terrainutil_HasFort(m_pos) && !terrainutil_HasAirfield(m_pos) //added by E 5-28-2006
 			){
 				m_array[u].DeductHP(hpcost);
 			}
@@ -1608,8 +1610,28 @@ void ArmyData::BeginTurn()
 		}
 	}
 
+//EMOD TODO: If tile has tileimp that is a minefield then deduct HP
+	if(terrainutil_HasMinefield(m_pos)  
+	){
+		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
+		sint32 hpcost2;
+		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti){
+		const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
+		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
+		for(sint32 u = 0; u < m_nElements; u++) {
+			const UnitRecord *urec = m_array[u].GetDBRec();
+			if(effect->GetMinefield(hpcost) && !m_array[u].GetMovementTypeAir()) { //EMOD
+				m_array[u].DeductHP(hpcost);
+			}
+			if(m_array[u].GetHP() < 0.999){
+				m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+			}
+		}
+		}
+	}
 
-	//If diff->chokeunit and unit is surrounded
+	
+//If diff->chokeunit and unit is surrounded
 //	RadiusIterator it(cityPos, m_sizeIndex);
 //	for(it.Start(); !it.End(); it.Next()) {
 //		if(g_theWorld->GetArmy(it.Pos()), owner != m_owner
@@ -4021,6 +4043,8 @@ BOOL ArmyData::CanConvertCity(const MapPoint &point) const
 {
 	Unit city = GetAdjacentCity(point);
 	if(city.m_id == 0)
+//EMOD add unit check like in bombard
+//units then can be converted
 		return false;
 
 	for(sint32 i = 0; i < m_nElements; i++) {
@@ -5697,7 +5721,8 @@ if(numAttacks <= 0)
             defender[i].Bombard(*this, TRUE); 
         } 
     }
-    
+////////////////ORIGINAL CODE  
+///////////////Used in Unitdata::bombard is it necessary here? m_array and defender both us .bombard so why is it killing?   
     for (i = m_nElements - 1; 0 <= i; i--) { 
         if (m_array[i].GetHP() < 0.999) {
             m_array[i].KillUnit(CAUSE_REMOVE_ARMY_COUNTERBOMBARD, defender.GetOwner());  
@@ -5710,6 +5735,47 @@ if(numAttacks <= 0)
             defender[i].KillUnit(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());  
         } 
     }
+////////////////
+
+//emod
+
+/////EMOD nonlethalunits are killing units in stacks this may be needed 5-30-2006
+//	bool AlltaLethalBombard = true;
+//    for (i = m_nElements - 1; i>= 0; i--) { 
+//			if(m_array[i].GetDBRec()->GetNonLethalBombard()){
+//				AlltaLethalBombard = false;
+//				break;
+//			}
+//		}
+
+//		if(m_array[0].GetDBRec()->GetNonLethalBombard()){
+//				AllLethalBombard = false;
+//		}
+
+//	bool AllDefLethalBombard = true;
+//	for(i = 0; i < defender.Num(); i++) { 
+//		if(defender[i].GetDBRec()->GetNonLethalBombard()){
+//			AllDefLethalBombard = false;
+//			break;
+//		}
+//	} 
+
+//		if(defender[0].GetDBRec()->GetNonLethalBombard()){
+//			AllDefLethalBombard = false;
+//		}
+		
+//	if(AllDefLethalBombard){
+//      if (defender[i].GetHP() < 0.999) {
+//            defender[i].KillUnit(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());  
+//        } 
+//	} 
+		
+//	if(AlltaLethalBombard){
+//       if (m_array[i].GetHP() < 0.999) {
+//           m_array[i].KillUnit(CAUSE_REMOVE_ARMY_COUNTERBOMBARD, defender.GetOwner());  
+//       } 
+//	} 
+//end EMOD
 
 
 	for (i = 0; i< m_nElements; i++) { 

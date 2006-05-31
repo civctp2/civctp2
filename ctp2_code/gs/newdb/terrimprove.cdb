@@ -121,6 +121,7 @@ TerrainImprovement {
 		Bit(Int) BonusGoldExport            // FU
 		Bit CanBeCaptured                   // FU
 		Bit CanUpgrade                      // FU
+		Bit(Int) Minefield                      // FU
 
 		Bit ListeningPost
 		Bit Endgame

@@ -154,4 +154,7 @@ Difficulty{
 	Bit					AICityDefenderBonus					# AI population adds to city defenses
 	Bit					BarbarianCamps						# entrenched barbarians create a city
 	Bit(Int)			SectarianHappiness					# Conflicting religious, citystyles and city govts cause unhappiness
+	Bit					RevoltCasualties					#Revolting city loses 1/3 of population
+	Bit					RevoltInsurgents					#Revolting city creates barbarians
+
 }

@@ -163,6 +163,7 @@
 #include <algorithm>                    // std::min
 #include "ArmyData.h"
 #include "ArmyPool.h"
+#include "Barbarians.h"
 #include "BuildingRecord.h"
 #include "buildingutil.h"
 #include "c3errors.h"
@@ -1318,6 +1319,16 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
             }
             
         }
+	}
+	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
+
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties()) {
+		sint32 casualties = (PopCount() / 3) * -1;
+		ChangePopulation(casualties);
+	}
+
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()) {
+		Barbarians::AddBarbarians(city_pos, m_owner, TRUE);
 	}
 
 	// Modified by kaan to address bug # 12
@@ -4826,7 +4837,7 @@ BOOL CityData::IsCapitol() const
 	return buildingutil_GetDesignatesCapitol(GetEffectiveBuildings());
 }
 
-void CityData::SetCapitol(const BOOL delay_registration)
+void CityData::SetCapitol(const BOOL delay_registration)  
 {
 	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetCapitol()) {
@@ -9636,3 +9647,42 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 	return SectarianHappiness;
 }
 
+//from TiledMap::DrawCityIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, BOOL fog, RECT &popRect, >>>>
+//CityData::AddCityIcon (file)
+//	RECT		iconRect;
+//	TileSet		*tileSet = GetTileSet();
+//	sint32		xoffset = (sint32)((k_TILE_PIXEL_WIDTH*m_scale)/2);
+//	sint32		yoffset = (sint32)(k_TILE_PIXEL_HEADROOM*m_scale);
+//	POINT iconDim = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
+//	Pixel16 color;
+	
+//	if (fog)
+//		color = g_colorSet->GetDarkPlayerColor(owner);
+//	else
+//		color = g_colorSet->GetPlayerColor(owner);
+
+//	iconRect.left = popRect.right + 3;
+//	iconRect.right = iconRect.left + iconDim.x + 1;
+//	iconRect.top = popRect.top;
+//	iconRect.bottom = iconRect.top + iconDim.y + 1;
+	
+//	if (iconRect.left < 0 || iconRect.top < 0 || 
+//		iconRect.right >= surf->Width() ||
+//		iconRect.bottom >= surf->Height())
+//		return;
+//	Pixel16 *cityIcon;
+
+//	if (isWatchful) {
+//		cityIcon = tileSet->GetMapIconData(wrec->ReligionIcon()); //MAPICON_WATCHFUL
+//		Assert(cityIcon); 
+//		if (!cityIcon) return;
+//		cityIcon = tileSet->GetMapIconData(wrec->ReligionIcon());
+//		iconDim = tileSet->GetMapIconDimensions(wrec->ReligionIcon());
+
+//		color = GetColor(COLOR_YELLOW, fog);
+//		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+//		AddDirtyRectToMix(iconRect);
+
+//		iconRect.left += iconDim.x;
+//		iconRect.right += iconDim.x;
+//	}

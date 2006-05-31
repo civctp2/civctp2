@@ -1064,8 +1064,8 @@ SFN_ERROR Slic_IsCleric::Call(SlicArgList *args)
 
 	const UnitRecord *rec = unit.GetDBRec();
 
-	m_result.m_int = rec->HasIndulgenceSales() ||
-		             rec->HasConvertCities();
+	m_result.m_int = rec->GetIndulgenceSales() ||
+		             rec->GetConvertCities();
 	return SFN_ERROR_OK;
 }
 
@@ -1080,7 +1080,7 @@ SFN_ERROR Slic_IsSlaver::Call(SlicArgList *args)
 	}
 
 	const UnitRecord *rec = unit.GetDBRec();
-	m_result.m_int = rec->HasSlaveRaids() || rec->HasSettlerSlaveRaids();
+	m_result.m_int = rec->GetSlaveRaids() || rec->GetSettlerSlaveRaids();
 	return SFN_ERROR_OK;
 }
 

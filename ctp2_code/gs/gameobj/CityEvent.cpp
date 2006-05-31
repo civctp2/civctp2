@@ -237,22 +237,23 @@ STDEHANDLER(CityBuildFrontEvent)
 
 	city.CD()->BuildFront();
 
-	// EMOD attempt to fix 5-24-2006
+// EMOD attempt to fix 5-30-2006
 //	sint32 unitpop;
-//	if (g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetBuildQueType())){
-//		const UnitRecord *u = g_theUnitDB->Get(city.CD()->GetBuildQueue()->GetBuildQueType());
-//		if (u->GetPopCostsToBuild(unitpop)) {
-//			if ((city.CD()->PopCount() < unitpop) || (city.CD()->PopCount() == unitpop)) {
+//	sint32 u;
+//	for(u = 0; u < g_theUnitDB->NumRecords(); u++) {
+//		if (g_theUnitDB->Get(u)->GetPopCostsToBuild(unitpop)) {
+//			if (city.CD()->GetBuildQueue()->GetHead()->m_type = u) {
+//				if ((unitpop > city.CD()->PopCount()) || (city.CD()->PopCount() == unitpop)) {
 //				SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
 //				so->AddCity(city);
 //				so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
 //				so->AddRecipient(city.GetOwner());
 //				g_slicEngine->Execute(so);
+//				}
 //			}
 //		}
 //	}
-
-	// end EMOD for popcoststo build
+// end EMOD for popcoststo build
 
 	if (city.CD()->GetBuildQueue()->m_settler_pending) {
 		if (city.CD()->PopCount() == 1) {
@@ -668,48 +669,6 @@ STDEHANDLER(CreateWonderEvent)
 	Unit u;
 	c.CD()->GetBuildQueue()->FinishBuildFront(u);
 	SlicObject *so;
-//EMOD for visible wonders INWORK 18NOV2005
-//
-//	Cell *cell;
-//	MapPoint pos;
-//	MapPoint cityPos = c.RetPos();
-//	if wonder-showOnMap >0
-//
-//		CityInfluenceIterator it(c.RetPos(), city->GetSizeIndex());
-//
-//		for(it.Start(); !it.End(); it.Next()) 
-//		{
-//
-//			if(c.RetPos() == it.Pos())
-//				continue;
-//
-//			cell = g_theWorld->GetCell(it.Pos());
-//
-//			if(!(cell->GetCityOwner() == c))
-//				continue;
-//
-//			if(cell->GetNumImprovements() > 0)  //NOT NEEDED
-//					continue;	    //NOT NEEDED	
-//
-//			rec = g_theTerrainImprovementDB->Get(g_theWonderDB->Get(wonder)->GetShowOnMap(type));
-//			effect = terrainutil_CanPlayerBuildAt(rec, c->GetOwner(), pos);
-//
-//			Assert(effect);
-//			if(effect){
-//			{
-//				g_gevManager->AddEvent(GEV_INSERT_Tail,
-//			                      GEV_CreateImprovement,
-//			                      GEA_Player,      m_playerId,
-//			                      GEA_MapPoint,    pos,
-//			                      GEA_Int,         type,
-//			                      GEA_Int,         0,
-//			                      GEA_End);
-//			}
-//		} 
-//	} 
-// end EMOD
-
-
 
 	if(wonder == wonderutil_GetFobCityIndex()) {
 		so = new SlicObject("911ForbiddenCityPeace");

@@ -39,6 +39,10 @@ bool terrainutil_HasFort(const MapPoint & pos);
 bool terrainutil_HasRadar(const MapPoint & pos);
 bool terrainutil_HasEndgame(const MapPoint & pos);
 bool terrainutil_IsInstallation(const sint32 type);
+bool terrainutil_HasUpgrader(const MapPoint & pos); //EMOD 5-30-2006
+bool terrainutil_CanBeCaptured(const MapPoint & pos); //EMOD 5-30-2006
+bool terrainutil_HasColony(const MapPoint & pos); //EMOD 5-30-2006
+bool terrainutil_HasMinefield(const MapPoint & pos); //EMOD 5-30-2006
 
 double terrainutil_GetMaxVisionRange();
 double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint & pos);
