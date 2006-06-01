@@ -34,6 +34,14 @@
 #ifndef __MEMBER_CLASS_H__
 #define __MEMBER_CLASS_H__
 
+#include <stdio.h>          // FILE
+
+class MemberClass;
+
+#include "ctp2_inttypes.h"  // sint32, uint32
+#include "ctpdb.h"          // DATUM_TYPE, namelist, etc. 
+#include "pointerlist.h"    // PointerList
+
 class MemberClass
 {
 public:
@@ -59,7 +67,8 @@ public:
 	void ExportDataCode(FILE *outfile, char *recordName);
 	void ExportResolver(FILE *outfile, const char *recordName);
 
-	const char *GetName() { return m_name; }
+    sint32          FlagCount() const   { return (m_numBits + 31) / 32; };
+	const char *    GetName() const     { return m_name; };
 
 private:
 	char m_name[k_MAX_RECORD_NAME];

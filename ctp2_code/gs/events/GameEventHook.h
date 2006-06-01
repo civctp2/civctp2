@@ -86,7 +86,11 @@ class GameEventHook
 public:
     struct Node 
     {
-	    Node(GameEventHookCallback * cb, GAME_EVENT_PRIORITY pri) 
+	    Node
+        (
+            GameEventHookCallback * cb  = NULL, 
+            GAME_EVENT_PRIORITY     pri = GEV_PRI_Primary
+        ) 
         :   m_cb        (cb),
             m_priority  (pri)
         { ; };
@@ -114,14 +118,8 @@ public:
 #endif
 
 private:
-    GAME_EVENT_ERR      Run
-    (
-        std::list<Node>::iterator &     startAt,
-        GameEventArgList *              args, 
-        sint32 &                        resumeIndex
-    );
 
-	GAME_EVENT              m_type;
+    GAME_EVENT              m_type;
     std::list<Node>         m_callbacks;
 };
 

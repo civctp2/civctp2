@@ -470,10 +470,8 @@ template <class T> sint32 CTPDatabase<T>::Parse(const C3DIR & c3dir, const char 
 	return result;
 }
 
-template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer *lex, sint32 &index, DBPARSE_ERROR &err)
+template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer *lex, sint32 &index)
 {
-	err = DBPARSE_OK;
-
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Name) {
 		if(tok == k_Token_Int) {
@@ -482,7 +480,6 @@ template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer *lex, sint32 
 		}
 		else if(tok != k_Token_String){
 			DBERROR(("Expected record name1"));
-			err = DBPARSE_OTHER;
 			return false;
 		}
 	}
@@ -502,10 +499,8 @@ template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer *lex, sint32 
 		g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());
 		if(g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
 			index = strId | 0x80000000; 
-			err = DBPARSE_DEFER;
 			return true;
 		} else {
-			err = DBPARSE_OTHER;
 			return false;
 		}
 	}
@@ -514,15 +509,12 @@ template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer *lex, sint32 
 		return true;
 	} else {
 		index = strId | 0x80000000;
-		err = DBPARSE_DEFER;
 		return true;
 	}
 }
 
-template <class T> bool CTPDatabase<T>::GetCurrentRecordFromLexer(DBLexer *lex, sint32 &index, DBPARSE_ERROR &err)
+template <class T> bool CTPDatabase<T>::GetCurrentRecordFromLexer(DBLexer *lex, sint32 &index)
 {
-	err = DBPARSE_OK;
-
 	sint32 tok = lex->GetCurrentToken();
 	if(tok != k_Token_Name) {
 		if(tok == k_Token_Int) {
@@ -531,7 +523,6 @@ template <class T> bool CTPDatabase<T>::GetCurrentRecordFromLexer(DBLexer *lex, 
 		}
 		else if(tok != k_Token_String){
 			DBERROR(("Expected record name1"));
-			err = DBPARSE_OTHER;
 			return false;
 		}
 	}
@@ -551,10 +542,8 @@ template <class T> bool CTPDatabase<T>::GetCurrentRecordFromLexer(DBLexer *lex, 
 		g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());
 		if(g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
 			index = strId | 0x80000000; 
-			err = DBPARSE_DEFER;
 			return true;
 		} else {
-			err = DBPARSE_OTHER;
 			return false;
 		}
 	}
@@ -563,22 +552,15 @@ template <class T> bool CTPDatabase<T>::GetCurrentRecordFromLexer(DBLexer *lex, 
 		return true;
 	} else {
 		index = strId | 0x80000000;
-		err = DBPARSE_DEFER;
 		return true;
 	}
 }
 
-template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 **array, sint32 *numElements,
-														   DBPARSE_ERROR &err)
+template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 **array, sint32 *numElements)
 {
-	err = DBPARSE_OK;
-
-	
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Name) {
 		DBERROR(("Expected record name"));
-		err = DBPARSE_OTHER;
 		return false;
 	}
 
@@ -611,32 +593,24 @@ template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 
 	}
 
 	if(g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
-		err = DBPARSE_DEFER;
 		(*array)[*numElements] = (strId | 0x80000000);
 		*numElements += 1;
 		return true;
 	} else {
-		err = DBPARSE_OTHER;
 		return false;
 	}
 }
 
-template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize,
-														   DBPARSE_ERROR &err)
+template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize)
 {
-	err = DBPARSE_OK;
-	
-	
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Name) {
 		DBERROR(("Expected record name3"));
-		err = DBPARSE_OTHER;
 		return false;
 	}
 
 	if(*numElements >= maxSize) {
 		DBERROR(("too many entries"));
-		err = DBPARSE_OTHER;
 		return false;
 	}
 
@@ -659,12 +633,10 @@ template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 
 	}
 
 	if(g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
-		err = DBPARSE_DEFER;
 		array[*numElements] = (strId | 0x80000000);
 		*numElements += 1;
 		return true;
 	} else {
-		err = DBPARSE_OTHER;
 		return false;
 	}
 }

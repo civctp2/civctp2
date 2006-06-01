@@ -40,13 +40,17 @@
 #ifndef __RECORD_DESCRIPTION_H__
 #define __RECORD_DESCRIPTION_H__
 
-#define k_MAX_RECORD_NAME 256
-#define k_MAX_STRING 256
+#include <stdio.h>          // FILE
 
-#include "pointerlist.h"
+#define k_MAX_RECORD_NAME   256
+#define k_MAX_STRING        256
+class   RecordDescription;
 
-#include "Datum.h"
-#include "MemberClass.h"
+#include "ctp2_inttypes.h"  // sint32, uint32
+#include "ctpdb.h"          // DATUM_TYPE, namelist, etc. 
+#include "Datum.h"          // Datum
+#include "MemberClass.h"    // MemberClass
+#include "pointerlist.h"    // PointerList
 
 class RecordDescription
 {
@@ -60,7 +64,6 @@ public:
 				  char *subType = NULL);
 	void AddGroupedBits(char *name, struct namelist *list);
 
-// Removed by Martin Gühmann
 	void AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
 
 	void StartMemberClass(char *name);
@@ -86,22 +89,16 @@ public:
 	void ExportMemberClassDataCode(FILE *outfile);
 	void ExportResolver(FILE *outfile);
 
-#if 0
-	void ExportDBHeader(FILE *outfile);
-	
-	void ExportDBCode(FILE *outfile);
-#endif
+    sint32  FlagCount() const   { return (m_numBits + 31) / 32; };
 
 private:
-	char m_name[k_MAX_RECORD_NAME];
-	PointerList<Datum> m_datumList;
-	PointerList<MemberClass> m_memberClasses;
-
-	bool m_hasGovernmentsModified;
-
-	sint32 m_numBits;
-	bool m_addingToMemberClass;
-	DATUM_TYPE m_baseType;
+	char                        m_name[k_MAX_RECORD_NAME];
+	PointerList<Datum>          m_datumList;
+	PointerList<MemberClass>    m_memberClasses;
+	bool                        m_hasGovernmentsModified;
+	sint32                      m_numBits;
+	bool                        m_addingToMemberClass;
+	DATUM_TYPE                  m_baseType;
 };
 
 #endif

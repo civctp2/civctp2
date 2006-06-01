@@ -2,6 +2,8 @@
 #ifndef __GAME_EVENT_MANAGER_H__
 #define __GAME_EVENT_MANAGER_H__
 
+class GameEventManager;
+
 #include "GameEventTypes.h"
 #include "GameEventDescription.h"
 #include "GameEventArgument.h"
@@ -64,14 +66,14 @@ public:
     );
 
 	
-	GAME_EVENT GetEventIndex(const MBCHAR *name);
-	const char *GetEventName(GAME_EVENT ev);
+	GAME_EVENT GetEventIndex(const MBCHAR *name) const;
+	const char *GetEventName(GAME_EVENT ev) const;
 
-	const char *GetArgString(GAME_EVENT ev);
-	GAME_EVENT_ARGUMENT ArgCharToIndex(char want);
+	const char *GetArgString(GAME_EVENT ev) const;
+	static GAME_EVENT_ARGUMENT ArgCharToIndex(char want);
 
-	char ArgChar(GAME_EVENT type, sint32 index);
-	sint32 GetNumArgs(GAME_EVENT type);
+	char ArgChar(GAME_EVENT type, size_t index) const;
+	size_t GetNumArgs(GAME_EVENT type) const;
 
 	
 	void GotUserInput();
@@ -97,12 +99,12 @@ public:
 	sint32 GetNextSerial() const { return m_serial; }
 
 	
-	bool EventsPending();
+	bool EventsPending() const;
 
 	
 
 
-	char *ArgCharToName(char want);
+	static char * ArgCharToName(char want);
 
 	void NotifyResync();
 

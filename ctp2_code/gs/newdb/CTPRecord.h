@@ -46,8 +46,15 @@ protected:
 
 public:
 	StringId m_name;
+    
+    static sint32 const INDEX_INVALID   = -1;
 
-	CTPRecord() { m_index = -1; m_textName = NULL; m_name = -1;}
+	CTPRecord()
+    :
+        m_index     (INDEX_INVALID),
+        m_textName  (NULL),
+        m_name      ()
+    { };
 	virtual ~CTPRecord() { delete [] m_textName; }
 
 	sint32 GetIndex() const { return m_index; }

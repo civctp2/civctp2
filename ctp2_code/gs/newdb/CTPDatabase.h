@@ -119,7 +119,7 @@ public:
 	
 	
 	
-	inline const T *Get(sint32 index)
+	const T *Get(sint32 index)
 	{
 		Assert(index < m_numRecords);
 		if((index < 0) || (index >= m_numRecords))
@@ -135,7 +135,7 @@ public:
 	sint32 GetName(sint32 index);
 	const char *GetNameStr(sint32 index);
 	void Add(T *obj);
-	inline sint32 NumRecords() const 
+	sint32 NumRecords() const 
 	{ 
 		return m_numRecords; 
 	}
@@ -146,10 +146,10 @@ public:
 	sint32 FindTypeIndex(const char *str) const;
 	sint32 FindRecordNameIndex(const char *str) const;
 
-	bool GetRecordFromLexer(DBLexer *lex, sint32 &index, DBPARSE_ERROR &err);
-	bool GetCurrentRecordFromLexer(DBLexer *lex, sint32 &index, DBPARSE_ERROR &err);
-	bool ParseRecordInArray(DBLexer *lex, sint32 **array, sint32 *numElements, DBPARSE_ERROR &err);
-	bool ParseRecordInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize, DBPARSE_ERROR &err);
+	bool GetRecordFromLexer(DBLexer *lex, sint32 &index);
+	bool GetCurrentRecordFromLexer(DBLexer *lex, sint32 &index);
+	bool ParseRecordInArray(DBLexer *lex, sint32 **array, sint32 *numElements);
+	bool ParseRecordInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize);
 	bool ResolveReferences();
 };
 

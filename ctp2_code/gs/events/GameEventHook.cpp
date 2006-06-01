@@ -220,78 +220,52 @@ GAME_EVENT_ERR GameEventHook::Activate
     sint32 &            resumeIndex
 )
 {
-	std::list<Node>::iterator   walk = m_callbacks.begin();
+    resumeIndex = 0;
 
-    for (resumeIndex = 0; resumeIndex < startIndex; ++resumeIndex)
+	for 
+    (
+        std::list<Node>::iterator   walk = m_callbacks.begin();
+        walk != m_callbacks.end();
+        ++walk
+    )
     {
-        if (walk != m_callbacks.end())
-        {
-            ++walk;
-        }
-    }
-
-	return Run(walk, args, resumeIndex);
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : GameEventHook::Run
-//
-// Description: Execute the event handlers in the list in sequence.
-//
-// Parameters : walk            : first event handler to execute
-//              args            : parameters to pass to the event handlers
-//
-// Globals    : -
-//
-// Returns    : walk            : first event handler that has not been 
-//                                executed yet.
-//              resumeIndex     : the index of the first event handler that 
-//                                has not been executed yet.
-//              GAME_EVENT_ERR  : result of execution
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-GAME_EVENT_ERR GameEventHook::Run
-(
-    std::list<Node>::iterator & walk,
-	GameEventArgList *          args,
-	sint32 &                    resumeIndex
-)
-{
-	while (walk != m_callbacks.end())
-    {
-        Node &  running = *walk;
-        ++walk;
-        ++resumeIndex;
-
+        Node &  runningNow  = *walk;
 #if defined(_DEBUG)
-        // Scope removed deliberately, so the description is available when
-        // errors occur in GEVHookCallback.
         char desc[1024];
-	    running.m_cb->GetDescription(desc, 1024);
-	    EVENTLOG(("  %s\n", desc));
+	    runningNow.m_cb->GetDescription(desc, 1024);
 #endif //_DEBUG
 
-		GAME_EVENT_HOOK_DISPOSITION const disp =  
-            running.m_cb->GEVHookCallback(m_type, args);
+        ++resumeIndex;  // updated before execution
 
-		switch (disp) 
+        if (resumeIndex <= startIndex)
         {
-		default:
-			Assert(disp == GEV_HD_Continue);
-            // Continue execution with the next handler in the list.
-            break;
+            // No action yet
+        }
+        else
+        {
+#if defined(_DEBUG)
+	        EVENTLOG(("  %s\n", desc));
+#endif //_DEBUG
 
-		case GEV_HD_NeedUserInput:
-			return GEV_ERR_NeedUserInput;
+		    GAME_EVENT_HOOK_DISPOSITION const disp =  
+                runningNow.m_cb->GEVHookCallback(m_type, args);
 
-		case GEV_HD_Stop:
-            Assert(running.m_priority <= GEV_PRI_Primary);
-			return GEV_ERR_StopProcessing;
+		    switch (disp) 
+            {
+		    default:
+			    Assert(disp == GEV_HD_Continue);
+                // Continue execution with the next handler in the list.
+                break;
 
-        } // switch
+		    case GEV_HD_NeedUserInput:
+			    return GEV_ERR_NeedUserInput;
+
+		    case GEV_HD_Stop:
+                Assert(runningNow.m_priority <= GEV_PRI_Primary);
+			    return GEV_ERR_StopProcessing;
+
+            } // switch
+        }
     } // for
 
     return GEV_ERR_OK;	

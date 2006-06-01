@@ -334,7 +334,7 @@ GAME_EVENT_ARGUMENT GameEventManager::ArgCharToIndex(char arg)
 	}
 }
 
-const char *GameEventManager::GetArgString(GAME_EVENT ev)
+const char *GameEventManager::GetArgString(GAME_EVENT ev) const
 {
 	Assert(ev >= (GAME_EVENT)0);
 	Assert(ev < GEV_MAX);
@@ -357,66 +357,73 @@ BOOL GameEventManager::CheckArg(sint32 num, char got, char want)
 	return TRUE;
 }
 
-char GameEventManager::ArgChar(GAME_EVENT type, sint32 index)
+char GameEventManager::ArgChar(GAME_EVENT type, size_t index) const
 {
 	Assert(type >= (GAME_EVENT)0);
 	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return '\0';
 
-	GameEventDescription *desc = &g_eventDescriptions[type];
-	char *argString = desc->args;
-	sint32 count = 0;
+	size_t count = 0;
 
-	while(*argString) {
+	for 
+    (
+        char const * argString = g_eventDescriptions[type].args; 
+        *argString; 
+        ++argString
+    ) 
+    {
 		Assert(*argString == '%' || *argString == '&');
 		if(*argString != '%' && *argString != '&')
 			return '\0';
 
-		argString++;
+		++argString;
 		Assert(*argString != '\0');
 		if(*argString == '\0')
 			return '\0';
 
-		if(count == index)
+		if (count == index)
 			return *argString;
 		
-		argString++;
-		count++;
+		++count;
 	}
 
 	Assert(index > count);
 	return '\0';
 }
 
-sint32 GameEventManager::GetNumArgs(GAME_EVENT type)
+size_t GameEventManager::GetNumArgs(GAME_EVENT type) const
 {
-	Assert(type >= (GAME_EVENT)0);
-	Assert(type < GEV_MAX);
-	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
-		return -1;
+    Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
+    if ((type < (GAME_EVENT) 0) || (type >= GEV_MAX))
+        return 0;
 
-	GameEventDescription *desc = &g_eventDescriptions[type];
-	char *argString = desc->args;
-	sint32 count = 0;
+    size_t count = 0;
 
-	while(*argString) {
-		Assert(*argString == '%' || *argString == '&');
-		if(*argString != '%') {
-			
-			return count;
-		}
+    for 
+    (
+        char const * argString = g_eventDescriptions[type].args; 
+        *argString; 
+        ++argString
+    )
+    {
+        Assert(*argString == '%' || *argString == '&');
+        if (*argString != '%') 
+        {
+            break;	
+        }
 
-		argString++;
-		Assert(*argString != '\0');
-		if(*argString == '\0')
-			return count;
+        ++argString;
+        Assert(*argString != '\0');
+        if (*argString == '\0')
+        {
+            break;
+        }
 
-		argString++;
-		count++;
-	}
+        ++count;
+    }
 
-	return count;
+    return count;
 }
 	
 	
@@ -659,7 +666,7 @@ void GameEventManager::Dump()
 }
 #endif
 
-GAME_EVENT GameEventManager::GetEventIndex(const MBCHAR *name)
+GAME_EVENT GameEventManager::GetEventIndex(const MBCHAR *name) const
 {
 	GAME_EVENT e;
 	for(e = (GAME_EVENT)0; e < GEV_MAX; e = GAME_EVENT(sint32(e) + 1)) {
@@ -669,7 +676,7 @@ GAME_EVENT GameEventManager::GetEventIndex(const MBCHAR *name)
 	return GEV_MAX;
 }
 
-const char *GameEventManager::GetEventName(GAME_EVENT ev)
+const char *GameEventManager::GetEventName(GAME_EVENT ev) const
 {
 	Assert(ev >= (GAME_EVENT)0);
 	Assert(ev < GEV_MAX);
@@ -680,7 +687,7 @@ const char *GameEventManager::GetEventName(GAME_EVENT ev)
 	return g_eventDescriptions[ev].name;
 }
 
-bool GameEventManager::EventsPending()
+bool GameEventManager::EventsPending() const
 {
 	return m_eventList->GetCount() > 0;
 }
