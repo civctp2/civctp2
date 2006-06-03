@@ -122,6 +122,8 @@ TerrainImprovement {
 		Bit CanBeCaptured                   // FU
 		Bit CanUpgrade                      // FU
 		Bit(Int) Minefield                      // FU
+		Record TerrainImprovement[]     GrowsToImprovement
+		Bit(Int) TurnsToGrowth
 
 		Bit ListeningPost
 		Bit Endgame
@@ -133,6 +135,7 @@ TerrainImprovement {
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost
 		Record Resource[] EnablesGood       // Having a TI gives a city a good
+		Bit(Int) GoldHunger                   // FU
 		Bit(Int) GoldCost                   // FU
 		Int ProductionTime
 		Int TilesetIndex

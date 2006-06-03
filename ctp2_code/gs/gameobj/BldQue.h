@@ -200,6 +200,7 @@ public:
 	BuildQueue & operator= (const BuildQueue &copy);
 
 	//sint32 GetBuildQueType() const { return m_list->GetHead()->m_type; } //EMOD
+	BOOL m_popcoststobuild_pending;   //EMOD
 
 
 private:

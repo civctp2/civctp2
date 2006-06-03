@@ -975,7 +975,10 @@ void ArmyData::Sleep()
 	Unit city = g_theWorld->GetCity(m_pos);
 	for(i = m_nElements - 1; i >= 0; i--) {
 		const UnitRecord *rec = m_array[i].GetDBRec();
-		if((rec->GetNumUpgradeTo() > 0) && (city.m_id != (0))) { // || (terrainutil_HasUpgrader(m_pos))))  { //add tileimps that upgrade 5-30-2006
+		//if((rec->GetNumUpgradeTo() > 0) && ((city.m_id != 0) || (terrainutil_HasUpgrader(m_pos)))) { //added tileimps that upgrade 5-30-2006
+		if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
+		//if(rec->GetNumUpgradeTo() > 0) {
+		//	if((city.m_id != 0) || (terrainutil_HasUpgrader(m_pos))) {
 			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
 				sint32 oldshield = rec->GetShieldCost();
 				sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s))->GetShieldCost();
@@ -992,6 +995,7 @@ void ArmyData::Sleep()
 					                       GEA_Unit, m_array[i],
 					                       GEA_End);
 				}
+			//}
 			}
 		} else {
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
@@ -5738,45 +5742,6 @@ if(numAttacks <= 0)
 ////////////////
 
 //emod
-
-/////EMOD nonlethalunits are killing units in stacks this may be needed 5-30-2006
-//	bool AlltaLethalBombard = true;
-//    for (i = m_nElements - 1; i>= 0; i--) { 
-//			if(m_array[i].GetDBRec()->GetNonLethalBombard()){
-//				AlltaLethalBombard = false;
-//				break;
-//			}
-//		}
-
-//		if(m_array[0].GetDBRec()->GetNonLethalBombard()){
-//				AllLethalBombard = false;
-//		}
-
-//	bool AllDefLethalBombard = true;
-//	for(i = 0; i < defender.Num(); i++) { 
-//		if(defender[i].GetDBRec()->GetNonLethalBombard()){
-//			AllDefLethalBombard = false;
-//			break;
-//		}
-//	} 
-
-//		if(defender[0].GetDBRec()->GetNonLethalBombard()){
-//			AllDefLethalBombard = false;
-//		}
-		
-//	if(AllDefLethalBombard){
-//      if (defender[i].GetHP() < 0.999) {
-//            defender[i].KillUnit(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());  
-//        } 
-//	} 
-		
-//	if(AlltaLethalBombard){
-//       if (m_array[i].GetHP() < 0.999) {
-//           m_array[i].KillUnit(CAUSE_REMOVE_ARMY_COUNTERBOMBARD, defender.GetOwner());  
-//       } 
-//	} 
-//end EMOD
-
 
 	for (i = 0; i< m_nElements; i++) { 
 		if (m_array[i].GetDBRec()->GetCollateralTileDamage()) { 

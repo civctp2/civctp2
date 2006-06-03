@@ -117,7 +117,8 @@ BuildQueue::BuildQueue()
     m_wonderStopped     (NOTHING_THIS_TURN),
 	m_wonderComplete    (NOTHING_THIS_TURN),
 	m_frontWhenBuilt    (NULL),
-    m_settler_pending   (false)
+    m_settler_pending   (false),
+    m_popcoststobuild_pending   (false)			//EMOD
 { 
 	m_name[0] = 0;
 } 
@@ -338,6 +339,7 @@ void BuildQueue::EndTurn(void)
     m_wonderStarted     = NOTHING_THIS_TURN;
     m_wonderStopped     = NOTHING_THIS_TURN;
     m_settler_pending   = false;
+    m_popcoststobuild_pending  = false;		//EMOD
 }
 
 
@@ -406,18 +408,18 @@ bool BuildQueue::BuildFrontUnit(BOOL forceFinish)
 		   !forceFinish) {
 			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
 			   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
-				m_settler_pending = TRUE;
+				m_settler_pending = TRUE;   //this gets "sent" to CityEvent::CityBuildFrontEvent and all it does is trigger a slic object, why doesn't just work like above?
 				return false;
 			}
 		}
-		//EMOD to prevent units with POP > 1 from disbanding city  with settler_pending
+		//EMOD to prevent units with POP > 1 from disbanding city  with popcoststobuild pending
 		sint32 unitpop;
 		if(g_theUnitDB->Get(m_list->GetHead()->m_type)->GetPopCostsToBuild(unitpop) &&
-		   (cd->PopCount() == unitpop) &&
+		   ((cd->PopCount() == unitpop) || (cd->PopCount() < unitpop)) &&
 		   !forceFinish) {
 			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
 			   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
-				m_settler_pending = TRUE;
+				m_popcoststobuild_pending  = TRUE; 
 				return false;
 			}
 		}
@@ -532,6 +534,7 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
     bool is_something_built = FALSE; 
 
     m_settler_pending = FALSE;
+	m_popcoststobuild_pending = FALSE; //EMOD
 
     if (m_list->GetHead()) { 
 		DPRINTF(k_DBG_GAMESTATE, ("BuildFront: City %lx building %d,%d\n",

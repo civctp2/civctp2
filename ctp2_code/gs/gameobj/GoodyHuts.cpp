@@ -329,11 +329,8 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 
                 if (advances->GetMinPrerequisites(i, maxNovelty) <= maxNovelty)
                 {
-                    possible[nextPossible++] = i;			    
-			} else {
-				continue; //EMOD to prevent Bureaubert crash
-				}
-				//continue; 
+                    possible[nextPossible++] = i;
+                }
                 // else: too advanced
 		    }
 
@@ -392,27 +389,37 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 				    continue;   // excluded (MP, mod)
 			    if (rec->GetNumGovernmentType() > 0) 
 				    continue;   // government specific?
-
+/////////////////ORIGINAL
 			    if (advances->GetMinPrerequisites
                         (rec->GetEnableAdvanceIndex(), maxNovelty) 
-                    <= maxNovelty)  {
-				   possible[nextPossible++] = i;
-			    } else {
-				continue; //EMOD to prevent Bureaubert crash
-				}
-				// else : too advanced
-		    }
-
+                    <= maxNovelty
+                  )
+               {
+				    possible[nextPossible++] = i;
+			    }
+                // else : too advanced
+///////////////////////
+//EMOD
+//				sint32 p;
+//				for(p = 0; p < k_MAX_PLAYERS; p++) {
+//					if(g_player[p] && g_player[p]->m_advances->HasAdvance(rec->GetEnableAdvanceIndex())){
+//						m_value = i;
+//					}
+//				}
+//EMOD
+			}
+////////////////ORIGINAL
 		    if (nextPossible) 
-            {
+           {
 		        m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
 		    }
-            else
-            {
+          else
+          {
                 result  = GOODY_BOGUS;
-            }
+          }
 
 		    delete [] possible;
+
 	    }
         break;
 

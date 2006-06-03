@@ -46,8 +46,14 @@ protected:
 
 public:
 	StringId m_name;
-    
+
+#if defined(_MSC_VER) && (_MSC_VER < 1300)
+    enum { INDEX_INVALID = -1 }; // MSVC6 Compiler bug workaround
+#else
     static sint32 const INDEX_INVALID   = -1;
+#endif
+
+//  static sint32 const INDEX_INVALID   = -1;   //original
 
 	CTPRecord()
     :

@@ -130,6 +130,7 @@
 
 #include "Readiness.h"
 #include "ResourceRecord.h" //EMOD
+#include "Resources.h"
 
 #include "UnseenCell.h"
 #include "MaterialPool.h"
@@ -2130,10 +2131,12 @@ void Player::BeginTurnProduction()
 			sint32 good;
 			if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(inst.RetPos(), good))){
 				for (sint32 c=0; c < n; c++) {
-					CityData *cd = m_all_cities->Access(c).GetData()->GetCityData();
+					CityData *cd = m_all_cities->Access(i).CD();
+					//CityData *cd = m_all_cities->Access(c).GetData()->GetCityData();
 					if(!cd->IsLocalResource (good)) {
 						//cd->GetCollectingResources()->AddResource(good);
-						//cd->m_collectingResources.AddResource(good); //GetCollectingResources()->AddResource(good);
+					//	cd->m_collectingResources.AddResource(good); //GetCollectingResources()->AddResource(good);
+						//cd->AddGoodToCity(good);
 						//break;  may have to add a break like sneakattack because only one city should receive it
 					}
 				}
@@ -7262,7 +7265,9 @@ TerrainImprovement Player::CreateImprovement(sint32 dbIndex,
 			theImprovement.StartBuilding();
 		}
 	}
-
+//  if eff && eff->GetTurnsToGrowth(turns)
+//	m_turnstogrowth = turns;
+//  subtract 1 for each turn then if turnstogrowth = 0 && Growstoipm then cut imp and create imp
 	return theImprovement;
 }
 

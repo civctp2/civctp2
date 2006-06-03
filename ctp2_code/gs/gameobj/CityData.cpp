@@ -5294,6 +5294,11 @@ bool CityData::IsLocalResource(sint32 resource) const
 	return m_collectingResources[resource] > 0;
 }
 
+//sint32 CityData::AddGoodToCity (sint32 good) const
+//{
+//return m_collectingResources.AddResource[good];
+//}
+
 bool CityData::HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const
 {
 	CityInfluenceIterator it(cityPos, m_sizeIndex);
