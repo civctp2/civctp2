@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Multiplayer chat box
+// Description  : The ranking tab of the info window
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -26,6 +26,7 @@
 //
 // - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Redesigned constructor, fixed possible crash. (June 5th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -67,37 +68,30 @@ RankingTab * RankingTab::s_current_ranking_tab = NULL;
 
 
 
-RankingTab::RankingTab(ctp2_Window *parent) :
-	m_infoGraph(static_cast<LineGraph *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph"))),
-	m_rankingDropDown(static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(
-		"InfoDialog.TabGroup.Tab3.TabPanel.RankSelect.Pulldown"))),
-	m_lineOrZeroSumButton(static_cast<ctp2_Button*>(
-		aui_Ldl::GetObject("InfoDialog.TabGroup.Tab3.TabPanel.LineOrZeroSum"))),
-	m_infoPlayerList(static_cast<ctp2_ListBox *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoPlayerList")))
+RankingTab::RankingTab(ctp2_Window *parent)
+:   m_line_graph         (true), // Has to be set again
+    m_infoGraph          (static_cast<LineGraph *>(aui_Ldl::GetObject(
+                          "InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph"))),
+    m_infoGraphData      (NULL),
+    m_infoYCount         (0),
+    m_info_window        (parent),
+    m_rankingDropDown    (static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(
+                          "InfoDialog.TabGroup.Tab3.TabPanel.RankSelect.Pulldown"))),
+    m_lineOrZeroSumButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
+                          "InfoDialog.TabGroup.Tab3.TabPanel.LineOrZeroSum"))),
+    m_infoPlayerList     (static_cast<ctp2_ListBox *>(aui_Ldl::GetObject(
+                          "InfoDialog", "TabGroup.Tab3.TabPanel.InfoPlayerList")))
+//  m_rankingMilitary    (0), // Initialized seperately
+//  m_rankingEconomic    (0), // Initialized seperately
+//  m_rankingScientific  (0), // Initialized seperately
+//  m_rankingPollution   (0), // Initialized seperately
+//  m_rankingOverall     (0), // Initialized seperately
 {
 
-	
-	m_info_window = parent;
-
-	m_infoGraphData = NULL;
-
-	
-	
-	
-
-	
 	Assert(m_rankingDropDown);
-
-	
 	m_rankingDropDown->SetActionFuncAndCookie(SelectRankingActionCallback, m_info_window);
-
-	
 	m_rankingDropDown->Clear();
 
-
-	
 	uint32 counter = 0;
 	Add_Dropdown_Category("str_ldl_RANKING_MILITARY");
 	m_rankingMilitary = counter++;
@@ -105,74 +99,31 @@ RankingTab::RankingTab(ctp2_Window *parent) :
 	m_rankingEconomic = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_SCIENTIFIC");
 	m_rankingScientific = counter++;
-	//Added by Martin Gühmann
-	//str_ldl_RANKING_POLLUTION is already part of the ldl_str.txt
 	Add_Dropdown_Category("str_ldl_RANKING_POLLUTION");
 	m_rankingPollution = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_OVERALL");
 	m_rankingOverall = counter++;
 
-	
 	m_rankingDropDown->SetSelectedItem(m_rankingOverall);
 
-
-	
-	
-	
-
-	
 	Assert(m_lineOrZeroSumButton);
 
-	
 	SetLineGraph( true );
 
-	
 	m_lineOrZeroSumButton->SetActionFuncAndCookie(LineOrZeroSumButtonActionCallback, parent);
-
-	
 	m_lineOrZeroSumButton->Show();
 
-
-	
-	
-	
-
-
-	
-
-
-
 	Assert( m_infoGraph );
-
-	
 	m_infoGraph->Show();
-
-	
 	m_infoGraph->EnableYNumber(FALSE);
 	m_infoGraph->EnablePrecision(FALSE);
 
-
-	
-	
-	
 	Assert( m_infoPlayerList );
-
-	
 	m_infoPlayerList->GetHeader()->Enable( FALSE );
 
-
-	
-	
-	
-	
 	s_current_ranking_tab = this;
 
-
-	
-	
-	
 	LoadData();
-
 }
 
 
@@ -224,7 +175,7 @@ void RankingTab::SetLineGraph( bool line_graph )
 		
 		m_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_LINE_BUTTON"));
 
-	} 
+	}
 }
 
 
@@ -279,7 +230,7 @@ void RankingTab::CleanupGraph()
 		}
 		delete [] m_infoGraphData;
 		m_infoGraphData = NULL;
-        m_infoYCount    = 0;
+		m_infoYCount    = 0;
 	}
 }
 
@@ -296,7 +247,6 @@ void RankingTab::UpdateGraph()
 		category = kRankingEconomic;
 	else if (category == m_rankingScientific)
 		category = kRankingScientific;
-	//Added by Martin Gühmann
 	else if (category == m_rankingPollution)
 		category = kRankingPollution;
 
@@ -448,7 +398,6 @@ sint32 SetupRankingGraph(
 				{
 					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_KNOWLEDGE, round);
 				}
-				//Added by Martin Gühmann
 				else if (category == kRankingPollution)
 				{
 					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_POLLUTION, round);

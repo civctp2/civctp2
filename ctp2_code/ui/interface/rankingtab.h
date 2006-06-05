@@ -1,15 +1,32 @@
-
-//ranking.h
-
-//Pollution power graph added by Martin Gühmann on November the 2nd
-
-
-
-
-
-
-
- 
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : The ranking tab of the info window
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// OLD_GRAPHS
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __RankingTab_H__
@@ -27,10 +44,10 @@ class LineGraph;
 
 enum eRankingCategories
 {
-	kRankingMilitary, 
+	kRankingMilitary,
 	kRankingEconomic,
 	kRankingScientific,
-	kRankingPollution, //Added by Martin Gühmann
+	kRankingPollution,
 	kRankingOverall,
 };
 
@@ -47,40 +64,26 @@ public:
 	static void Open(void);
 	static void Close(void);
 
-	
-	
 	void LoadData();
 
 private:
 
-	
 	static RankingTab * s_current_ranking_tab;
 
-	
-	bool m_line_graph;
+	bool            m_line_graph;
+	LineGraph     * m_infoGraph;
+	double        **m_infoGraphData;
+	sint32          m_infoYCount;
+	ctp2_Window    *m_info_window;
+	ctp2_DropDown  *m_rankingDropDown;
+	ctp2_Button    *m_lineOrZeroSumButton;
+	ctp2_ListBox   *m_infoPlayerList;
 
-	
-	LineGraph * m_infoGraph;
-
-	
-	double **m_infoGraphData;
-
-	sint32 m_infoYCount;
-
-	
-	ctp2_Window *m_info_window;
-
-	
-	ctp2_DropDown	*m_rankingDropDown;	
-
-	
-	ctp2_Button *m_lineOrZeroSumButton;
-
-	
-	ctp2_ListBox *m_infoPlayerList;
-
-	//m_rankingPollution added by Martin Gühmann
-	sint32 m_rankingMilitary, m_rankingEconomic, m_rankingScientific, m_rankingPollution, m_rankingOverall;
+	sint32          m_rankingMilitary;
+	sint32          m_rankingEconomic;
+	sint32          m_rankingScientific;
+	sint32          m_rankingPollution;
+	sint32          m_rankingOverall;
 
 	
 	void Show();

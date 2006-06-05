@@ -61,7 +61,7 @@
 // - CollateralTileDamage Implemented by E 20-JAN-2006
 // - AllTerrainAsImprovement NOT impelemented in DeductMoveCost
 // - NonLethalBombard removed and put in UnitData::Bombard 15-FEB-2006  
-// - VerifyAttcak modified to prevent accidental wars - 24-MAR-2006
+// - VerifyAttack modified to prevent accidental wars - 24-MAR-2006
 // - verifyttack removed from bombard because the player should know where the point it 25-MAR-2006
 // - CanCaptureTile added to Pillage and work by E 4-12-2006
 // - CanBeGifted added to disband, allow humans to give units to AI by E 4-12-2006
@@ -86,8 +86,8 @@
 // - Added barbariancamps to entrenched barbs  5-27-2006 by E
 // - Added SettleBuilding check to convertcity, this way a religious unit can add 
 //   a building to the city converted. A possibility for using religion in Ctp2 by E 5-27-2006
-// - added tileimps that can upgrade by E 5-30-2006
-// - added minefield tileimps that deduct HP by E 5-30-2006
+// - Added tileimps that can upgrade by E 5-30-2006
+// - Added minefield tileimps that deduct HP by E 5-30-2006
 //
 //----------------------------------------------------------------------------
 
@@ -7095,7 +7095,7 @@ BOOL ArmyData::CheckSpecialUnitMove(const MapPoint &pos)
 // Parameters : MapPoint &point 
 //
 // Globals    : g_player	: player array
-//				
+//
 // Returns    : BOOL
 //
 // Remark(s)  : Added check for at war instead of other agreements
@@ -7116,13 +7116,11 @@ BOOL ArmyData::MoveIntoForeigner(const MapPoint &pos)
 //EMOD
 
 	PLAYER_INDEX   attack_owner = GetOwner(); 
-	if (AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && 
-
-//outcommented because not called?
-//	if (IsEnemy(defense_owner) && 
-//		!g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
-//		!g_player[m_owner]->WillViolatePact(defense_owner) &&
-		CanFight(defender)) { 
+	if(( attack_owner <= 0
+	||  defense_owner <= 0
+	||  AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR))
+	&& CanFight(defender)
+	){
 
 		
 		InformAI(UNIT_ORDER_FINISH_ATTACK, pos); 
