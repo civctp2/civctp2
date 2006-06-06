@@ -75,7 +75,7 @@ class Governor;
 #include "DB.h"             // StringId
 #include "mapgrid.h"
 #include "Path.h"           // Path
-#include "Player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
+#include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
 #include "SlicContext.h"    // SlicContext
 #include "StrategyRecord.h" // StrategyRecord
 
