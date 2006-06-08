@@ -135,5 +135,8 @@ Wonder {
 
 	Bit(Float) PollutionPercent
 	Bit(Float) PollutionAmount
+
+	Record Building[]    ExcludedByBuilding 
+	Record Wonder[]      ExcludedByWonder 
 }
 

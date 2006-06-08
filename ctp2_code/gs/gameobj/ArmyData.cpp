@@ -88,6 +88,10 @@
 //   a building to the city converted. A possibility for using religion in Ctp2 by E 5-27-2006
 // - Added tileimps that can upgrade by E 5-30-2006
 // - Added minefield tileimps that deduct HP by E 5-30-2006
+// - changed barbariancamps to barbariancities
+// - added new barbarian camps as a settle imp code
+// - added barbarianspawsnbarbarian
+// - changed barbariancamps to barbariancities
 //
 //----------------------------------------------------------------------------
 
@@ -185,6 +189,7 @@ extern Pollution *g_thePollution;
 #include "TerrainImprovementRecord.h"  //EMOD
 #include "MaterialPool.h"  //EMOD
 #include "BuildingRecord.h" //EMOD
+#include "Barbarians.h" //EMOD
 
 BOOL g_smokingCrack = TRUE;
 BOOL g_useOrderQueues = TRUE;
@@ -1571,7 +1576,7 @@ void ArmyData::BeginTurn()
 
 	// EMOD Barbarian Camps
 	// This should be risk level depending
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianCamps())
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianCities())
 	{
 		for(i = 0; i < m_nElements; i++) {
 			Cell *cell = g_theWorld->GetCell(m_pos);
@@ -1580,7 +1585,6 @@ void ArmyData::BeginTurn()
 			&&!g_theWorld->GetCity(m_pos)
 			&& m_owner == PLAYER_INDEX_VANDALS
 			){
-				// Why create a city here and not a camp tileimp?
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateCity,
 				                       GEA_Player, PLAYER_INDEX_VANDALS,
 				                       GEA_MapPoint, m_pos,
@@ -1591,10 +1595,40 @@ void ArmyData::BeginTurn()
 		}
 	}
 	////
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
+	{
+		for(i = 0; i < m_nElements; i++) {
+			Cell *cell = g_theWorld->GetCell(m_pos);
+			const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty());
+			//sint32 j;
+			//sint32 newimp = drec->GetBarbarianCampsIndex(j);
+			if(m_array[i].IsEntrenched()
+			&& drec->GetNumBarbarianCamps()
+			&& m_owner == PLAYER_INDEX_VANDALS
+			){
+				for(sint32 j = 0; j < drec->GetNumBarbarianCamps(); j++) {
+					sint32 newimp = drec->GetBarbarianCampsIndex(j);
+					g_player[m_owner]->CreateSpecialImprovement(newimp, m_pos, 0);
+				}
+			}
+		}
+	}
+//Barbarian leader spawn
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
+	{
+		for(i = 0; i < m_nElements; i++) {
+			Cell *cell = g_theWorld->GetCell(m_pos);
+			const UnitRecord *rec = m_array[i].GetDBRec();
+			if(m_array[i].IsEntrenched()
+			&& m_owner == PLAYER_INDEX_VANDALS
+			){
+				Barbarians::AddBarbarians(m_pos, -1, FALSE);
+			}
+		}
+	}
 
 
-
-	//END EMOD barb camps
+//END EMOD barb camps
 
 	//EMOD: If Hostileterrain and not fort than deduct HP from the unit
 	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
@@ -1614,7 +1648,7 @@ void ArmyData::BeginTurn()
 		}
 	}
 
-//EMOD TODO: If tile has tileimp that is a minefield then deduct HP
+//EMOD If tile has tileimp that is a minefield then deduct HP
 	if(terrainutil_HasMinefield(m_pos)  
 	){
 		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
@@ -8770,9 +8804,6 @@ void ArmyData::Disband()
 //			} else {
 			city.AccessData()->GetCityData()->AddShields(m_array[i].GetDBRec()->GetShieldCost() / 2);
 		}
-//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-//	}
-
 //EMOD Gift Units for Human Player 4-12-2006
 		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && (CellOwner != m_owner)){
 			if(m_array[i].GetDBRec()->GetCanBeGifted()){ // Without this, unit isn't gifted but this flag is superflous if this is an order of its own
@@ -8799,6 +8830,8 @@ void ArmyData::Disband()
 		} else {
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
+//end EMOD
+//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 	}
 
 

@@ -147,6 +147,8 @@
 //   govt flags that force specialist changes by E 5-25-2006
 // - Implemented ExcludedByBuilding and CantSell by E 5-25-2006
 // - Added IncreaseHP to AddImprovement by E 5-25-2006
+// - ExcludedbyBuilding and ExcludedbyWonder added to Wonders
+// - added AddGoodToCity function
 //
 //----------------------------------------------------------------------------
 
@@ -4028,7 +4030,7 @@ sint32 CityData::BeginTurn()
 	// Doing this means to add each turn slaves until the whole city is full of slaves.
 	// Welcome to slave uprising.
 	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetHasGulags()) {
-		if(PopCount() > SlaveCount()) {
+		if(PopCount() > SlaveCount() * 3) {
 			ChangeSpecialists(POP_SLAVE, +1);
 		}
 	}
@@ -4052,7 +4054,7 @@ sint32 CityData::BeginTurn()
 	}
 	
 	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetHasMindlessTelevision()) {
-		if(PopCount() > EntertainerCount()) {
+		if(PopCount() > EntertainerCount() * 2) {
 			ChangeSpecialists(POP_ENTERTAINER, +1);
 		}
 	}
@@ -5294,10 +5296,10 @@ bool CityData::IsLocalResource(sint32 resource) const
 	return m_collectingResources[resource] > 0;
 }
 
-//sint32 CityData::AddGoodToCity (sint32 good) const
-//{
-//return m_collectingResources.AddResource[good];
-//}
+void CityData::AddGoodToCity(sint32 good)
+{
+	 m_collectingResources.AddResource(good);
+}
 
 bool CityData::HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const
 {
@@ -6305,6 +6307,32 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		}
 	}
 	
+	// EMOD reverse of prereq - this wonder prevented by other buildings
+	// from being be built. (good for state religion etc)
+	if(rec->GetNumExcludedByBuilding() > 0) {
+		sint32 e;
+		for(e = 0; e < rec->GetNumExcludedByBuilding(); e++) {
+			sint32 b = rec->GetExcludedByBuildingIndex(e);
+			if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
+				return FALSE;
+			}
+		}
+	}
+
+		// EMOD this wonder is prevented by other wonders 
+	// to be built. (good for state religion etc)
+	if(rec->GetNumExcludedByWonder() > 0) {
+		sint32 ew;
+		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
+			sint32 b = rec->GetExcludedByWonderIndex(ew);
+			if(GetBuiltWonders() & (uint64(1) << b)){
+			//if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
+				return FALSE;
+			}
+		}
+	}
+
+
 	// Added GovernmentType flag from Units to use for Wonders
 	if(rec->GetNumGovernmentType() > 0) {
 		sint32 i;

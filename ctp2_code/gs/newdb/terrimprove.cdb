@@ -182,4 +182,5 @@ TerrainImprovement {
 	Int DisplayLevel = 0
 	# Pillage prevention
 	Bit CantPillage // FU Tileimp cannot be pillaged (E)
+	Bit SpawnsBarbarians
 }

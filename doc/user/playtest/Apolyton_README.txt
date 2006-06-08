@@ -34,6 +34,14 @@ are described briefly below, and in more detail in ChangeLog.txt
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Changelog:
+2006-06-07
+Added: CanExportGood allows for a tileimp with the colony flag and a IntBorderRadius to send a good in its radius to another city
+Changed: CanExportTileValue now works as a radius if you want only one radius IntBorderRadius should be 0
+Changed: Difficulty flag BarbarainCamps now requires a tileimp
+Added: BarbarianCities is now the difficulty flag for barbarian cities
+Added: Difficulty flag BarabariansSpawnBarbarians they spawn more barbs if they entrench
+Added: Tileimp flag SpawnBarbarians for barbcamps
+
 2006-05-27
 Added: HasGulags flag to govt. Each turn a citizen is turned to a slave in this govt
 Added: IsCapitalist flag to govt. Each turn a citizen is turned to a merchant in this govt

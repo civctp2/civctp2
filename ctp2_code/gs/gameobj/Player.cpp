@@ -78,6 +78,11 @@
 // - NeedsFeatToBuild and CivilisationOnly added to CanBuildUnit by E 5-12-2006
 // - Added Tile Imps that export values to gold and PW by E 5-18-2006
 // - Added GoldperBuildingAnywhere to wondergold by E 5-26-2006
+// - Implemented CanExportGood now a tileimp can send a good to the first available city 
+//   similar to colonies in Civ3 by E 6.7.2006
+// - Added Installation SpawnsBarbarians by E 6.7.2006
+// - CanExportCityGood and CAnExportTileVAlue not operate on a radius if you 
+//   just want one square use IntBorderRadius 0
 //
 //----------------------------------------------------------------------------
 
@@ -265,6 +270,8 @@
 #include "EventTracker.h"
 
 #include "ctp2_Window.h"
+#include "Barbarians.h" //EMOD
+#include "CityInfluenceIterator.h" //EMOD
 
 
 #include "AgreementMatrix.h"
@@ -2093,18 +2100,7 @@ void Player::BeginTurnProduction()
 		m_materialPool->AddMaterials(materialsFromFranchise);
 	}
 
-	// EMOD - Get production for TradeProduction Tile Imps  move 
-	// to beginturnproduction? removed because crash
-//	if ((0 < m_allInstallations->Num()) && (0 < n)) {
-//		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
-//			Installation inst = m_allInstallations->Access(b);
-//			const TerrainImprovementRecord *rec = inst.GetDBRec();
-//			sint32 bonus;
-//			if (rec->GetBonusProductionExport(bonus)) {
-//					m_materialPool->AddMaterials(bonus);
-//			}
-//		}
-//	}
+
 
 	// EMOD New Version 5-16-2006
 	if ((0 < m_allInstallations->Num()) && (0 < n)) {
@@ -2123,42 +2119,31 @@ void Player::BeginTurnProduction()
 				m_gold->AddGold(bpe);
 			}
 
-			if (rec->GetCanExportTileValue()) {
-				m_materialPool->AddMaterials(instcell->GetShieldsProduced());
-				m_gold->AddGold(instcell->GetGoldProduced());
-			}
+			CityInfluenceIterator it(inst.RetPos(), rec->GetIntBorderRadius());
+			for(it.Start(); !it.End(); it.Next()) {
+				Cell *radiuscell = g_theWorld->GetCell(it.Pos());
+			
+				if (rec->GetCanExportTileValue()) {
+					m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
+					m_gold->AddGold(radiuscell->GetGoldProduced());
+				}
 
-			sint32 good;
-			if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(inst.RetPos(), good))){
-				for (sint32 c=0; c < n; c++) {
-					CityData *cd = m_all_cities->Access(i).CD();
-					//CityData *cd = m_all_cities->Access(c).GetData()->GetCityData();
-					if(!cd->IsLocalResource (good)) {
-						//cd->GetCollectingResources()->AddResource(good);
-					//	cd->m_collectingResources.AddResource(good); //GetCollectingResources()->AddResource(good);
-						//cd->AddGoodToCity(good);
-						//break;  may have to add a break like sneakattack because only one city should receive it
+				sint32 good;
+				if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(it.Pos(), good))){
+					for (sint32 c=0; c < n; c++) {
+						CityData *cd = m_all_cities->Access(c).CD();
+						if(!cd->IsLocalResource (good)) {
+							cd->AddGoodToCity(good);
+							break; 
+						}
 					}
 				}
 			}
 
-			// EMOD if intborderradius is 0 then can we get rid of 
-			// the top code to gove colonies an optional radius?
-			if (rec->GetCanExportTileValueRadius()) {
-				RadiusIterator it(inst.RetPos(),rec->GetIntBorderRadius());
-				for(it.Start(); !it.End(); it.Next()) {
-					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
-					m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
-					m_gold->AddGold(radiuscell->GetGoldProduced());
-				}
-			}
 		}
 	}
 
-
-
-
-	// End EMOD
+// End EMOD
 
 	m_productionFromFranchises = 0;
 }
@@ -2187,9 +2172,18 @@ void Player::BeginTurnImprovements()  //this might only be for tileimps under co
 
 		
 	}
-	
-
-
+// EMOD - installations spawn barbarians	
+	if ((0 < m_allInstallations->Num()) && (0 < n)) {
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+			Installation inst = m_allInstallations->Access(b);
+			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			Cell *instcell = g_theWorld->GetCell(inst.RetPos());
+			if (rec->GetSpawnsBarbarians()) {
+					Barbarians::AddBarbarians(inst.RetPos(), -1, FALSE);
+			}
+		}
+	}
+//end EMOD
 
 }
 
