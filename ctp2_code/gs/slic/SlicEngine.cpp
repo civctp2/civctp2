@@ -50,6 +50,7 @@
 // - Reuse SlicSegment pool between SlicEngine sessions.
 // - Added slic civilisation database support.
 // - Added slic risk database support. (Sep 15th 2005 Martin Gühmann)
+// - Added City Capture options by E 6.09.2006
 //
 //----------------------------------------------------------------------------
 
@@ -959,6 +960,12 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_IsWater);
 	//Added by Solver
 	m_functionHash->Add(new Slic_IsOnSameContinent);
+	//Added by E
+	m_functionHash->Add(new Slic_KillCity);
+	m_functionHash->Add(new Slic_Pillage);
+	m_functionHash->Add(new Slic_Plunder);
+	m_functionHash->Add(new Slic_Liberate);
+	m_functionHash->Add(new Slic_AddGold);
 }
 
 void SlicEngine::Link()

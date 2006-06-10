@@ -33,6 +33,7 @@
 // - buildingutil_IsObsolete added so buildings can be obsolete like wonders (4-28-2006 E)
 // - buildingutil_GetEmbassiesEverywhereEvenAtWar (E)
 // - buildingutil_GetIncreaseHP (E)
+// - buildingutil_GetTreasuryInterest (E 6.8.2006)
 //
 //----------------------------------------------------------------------------
 
@@ -524,6 +525,22 @@ BOOL buildingutil_GetCommercePercent(const uint64 built_improvements,
 		if(rec->GetBrokerage()) {
 			p += double(p * wonderBrokerageIncrease);
 		}
+
+		percent += p;
+	}
+	return percent > 0;
+}
+
+
+//EMOD for Gold treasury interest for Central Banking
+BOOL buildingutil_GetTreasuryInterest(const uint64 built_improvements,
+									   double &percent, sint32 owner)
+{
+
+	percent = 0;
+	FOREACH_BUILT(GetTreasuryInterest) {
+		double p;
+		rec->GetTreasuryInterest(p);
 
 		percent += p;
 	}

@@ -59,6 +59,11 @@
 //
 //----------------------------------------------------------------------------
 
+//TO ADD NEW SLIC FUNCTIONS YOU NEED TO MODIFY
+//..\ctp2_code\gs\slic\SlicFunc.h
+//..\ctp2_code\gs\slic\slicfunc.cpp
+//..\ctp2_code\gs\slic\SlicEngine.cpp
+
 #include "c3.h"
 #include "SlicFunc.h"
 #include "slicif.h"
@@ -100,6 +105,8 @@
 #include "greatlibrary.h"
 #include "SelItem.h"
 #include "BuildingRecord.h"
+#include "buildingutil.h"	//EMOD
+#include "GovernmentRecord.h" //EMOD
 #include "AttractWindow.h"
 #include "texttab.h"
 #include "UnitData.h"
@@ -2276,7 +2283,7 @@ SFN_ERROR Slic_DoAutoUnload::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-SFN_ERROR Slic_DoLandInOcean::Call(SlicArgList *args)
+SFN_ERROR Slic_DoLandInOcean::Call(SlicArgList *args) //Disabled?
 {
     if (args->Count() > 0)
         return SFN_ERROR_NUM_ARGS;
@@ -2284,7 +2291,7 @@ SFN_ERROR Slic_DoLandInOcean::Call(SlicArgList *args)
     return SFN_ERROR_OK;
 }
 
-SFN_ERROR Slic_DoOutOfFuel::Call(SlicArgList *args)
+SFN_ERROR Slic_DoOutOfFuel::Call(SlicArgList *args) //Disabled?
 {
     if (args->Count() > 0)
         return SFN_ERROR_NUM_ARGS;
@@ -2315,7 +2322,7 @@ SFN_ERROR Slic_DoPillageOwnLand::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-SFN_ERROR Slic_DoSellImprovement::Call(SlicArgList *args)
+SFN_ERROR Slic_DoSellImprovement::Call(SlicArgList *args)  //Disabled?
 {
     if (args->Count() > 0)
         return SFN_ERROR_NUM_ARGS;
@@ -2323,7 +2330,7 @@ SFN_ERROR Slic_DoSellImprovement::Call(SlicArgList *args)
     return SFN_ERROR_OK;
 }
 
-SFN_ERROR Slic_DoCertainRevolution::Call(SlicArgList *args)
+SFN_ERROR Slic_DoCertainRevolution::Call(SlicArgList *args) //Disabled?
 {
     if (args->Count() > 0)
         return SFN_ERROR_NUM_ARGS;
@@ -7368,6 +7375,222 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
 	cd->GetHappy()->CalcHappiness(*cd, FALSE, delta_martial_law, TRUE);
+
+	return SFN_ERROR_OK;
+}
+//EMODs
+SFN_ERROR Slic_KillCity::Call(SlicArgList *args)
+{
+    if (args->Count() > 0)
+        return SFN_ERROR_NUM_ARGS;
+
+	Unit city = g_slicEngine->GetContext()->GetCity(0);
+
+	if(!g_theUnitPool->IsValid(city)) {
+		return SFN_ERROR_OK;
+	}
+
+	if(!city.GetData()->GetCityData()->CapturedThisTurn()) {
+		if(g_network.IsClient()) {
+			g_network.RequestResync(RESYNC_PROBABLE_CHEATER);
+		}
+		return SFN_ERROR_OK;
+	}
+
+	if(g_network.IsClient()) {
+		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
+	}
+	CityData *cd = city.GetData()->GetCityData();
+	sint32 PCount = cd->PopCount();
+	city.GetData()->GetCityData()->ChangePopulation(-PCount);
+	//city.GetData()->GetCityData()->Disband();
+
+    return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
+{
+    if (args->Count() > 0)
+        return SFN_ERROR_NUM_ARGS;
+
+	Unit city = g_slicEngine->GetContext()->GetCity(0);
+
+	if(!g_theUnitPool->IsValid(city)) {
+		return SFN_ERROR_OK;
+	}
+
+	if(!city.GetData()->GetCityData()->CapturedThisTurn()) {
+		if(g_network.IsClient()) {
+			g_network.RequestResync(RESYNC_PROBABLE_CHEATER);
+		}
+		return SFN_ERROR_OK;
+	}
+
+	if(g_network.IsClient()) {
+		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
+	}
+
+	sint32 pl;
+	if(!args->GetInt(0, pl))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 amt;
+	if(!args->GetInt(1, amt))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(pl < 0 || pl >= k_MAX_PLAYERS) 
+		return SFN_ERROR_OUT_OF_RANGE;
+
+	if(!g_player || !g_player[pl])
+		return SFN_ERROR_DEAD_PLAYER;
+
+	sint32 p = 0;
+	uint64 buildings = city->GetCityData()->GetEffectiveBuildings()&(((uint64)1<<(uint64)g_theBuildingDB->NumRecords())-1);
+	for(sint32 i=0; buildings!=0; i++,buildings>>=1)
+	{
+		
+		if ((buildings&0xFF) == 0) {
+			buildings>>=8;
+			i+=8;
+		}
+
+		if (buildings&1)
+		{
+
+			p += buildingutil_GetProductionCost(i);
+			city->GetCityData()->DestroyImprovement(i);
+		}
+	}
+
+	sint32 rushmod = g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier();
+	amt = p / rushmod;
+	if(amt >= 0)
+		g_player[pl]->m_gold->AddGold(amt);
+
+    return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
+{
+    if (args->Count() > 0)
+        return SFN_ERROR_NUM_ARGS;
+
+	Unit city = g_slicEngine->GetContext()->GetCity(0);
+
+	if(!g_theUnitPool->IsValid(city)) {
+		return SFN_ERROR_OK;
+	}
+
+	sint32 amt;
+	if(!args->GetInt(1, amt))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 pl;
+	if(!args->GetInt(0, pl))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(pl < 0 || pl >= k_MAX_PLAYERS) 
+		return SFN_ERROR_OUT_OF_RANGE;
+
+	if(!g_player || !g_player[pl])
+		return SFN_ERROR_DEAD_PLAYER;
+
+	if(!city.GetData()->GetCityData()->CapturedThisTurn()) {
+		if(g_network.IsClient()) {
+			g_network.RequestResync(RESYNC_PROBABLE_CHEATER);
+		}
+		return SFN_ERROR_OK;
+	}
+
+	if(g_network.IsClient()) {
+		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
+	}
+
+	sint32 p = 0;
+	uint64 buildings = city->GetCityData()->GetEffectiveBuildings()&(((uint64)1<<(uint64)g_theBuildingDB->NumRecords())-1);
+	for(sint32 i=0; buildings!=0; i++,buildings>>=1)
+	{
+		
+		if ((buildings&0xFF) == 0) {
+			buildings>>=8;
+			i+=8;
+		}
+
+		if (buildings&1)
+		{
+			p += buildingutil_GetProductionCost(i);
+			city->GetCityData()->DestroyImprovement(i);
+		}
+	}
+		
+	
+	sint32 rushmod = g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier();
+	amt = p / rushmod;
+
+
+
+
+	if(amt >= 0)
+		g_player[pl]->m_materialPool->AddMaterials(amt);
+
+    return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
+{
+    if (args->Count() > 0)
+        return SFN_ERROR_NUM_ARGS;
+
+	Unit city = g_slicEngine->GetContext()->GetCity(0);
+
+	if(!g_theUnitPool->IsValid(city)) {
+		return SFN_ERROR_OK;
+	}
+
+	if(!city.GetData()->GetCityData()->CapturedThisTurn()) {
+		if(g_network.IsClient()) {
+			g_network.RequestResync(RESYNC_PROBABLE_CHEATER);
+		}
+		return SFN_ERROR_OK;
+	}
+
+	if(g_network.IsClient()) {
+		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
+	}
+
+	//if(!args->GetInt(0, cause)) 
+	//	return GEV_HD_Continue;
+	
+	sint32 newOwner = PLAYER_INDEX_VANDALS;
+
+    city.ResetCityOwner(newOwner, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY);
+
+    return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_AddPW::Call(SlicArgList *args)
+{
+	if(args->Count() != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	sint32 pl;
+	if(!args->GetInt(0, pl))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 amt;
+	if(!args->GetInt(1, amt))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(pl < 0 || pl >= k_MAX_PLAYERS) 
+		return SFN_ERROR_OUT_OF_RANGE;
+
+	if(!g_player || !g_player[pl])
+		return SFN_ERROR_DEAD_PLAYER;
+
+	if(amt >= 0)
+		g_player[pl]->m_materialPool->AddMaterials(amt);
+	else
+		g_player[pl]->m_materialPool->AddMaterials(amt);
 
 	return SFN_ERROR_OK;
 }

@@ -1774,7 +1774,7 @@ UNIT_HOPLITE {
    EnableAdvance ADVANCE_BRONZE_WORKING
    #ObsoleteAdvance ADVANCE_GUNPOWDER
    UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINEGUNNER
+   UpgradeTo UNIT_MACHINE_GUNNER
    UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
@@ -1885,7 +1885,7 @@ UNIT_INFANTRYMAN {
    VisionRange 2
    EnableAdvance ADVANCE_GUNPOWDER
    ObsoleteAdvance ADVANCE_ADV_INFANTRY_TACTICS
-   UpgradeTo UNIT_MACHINEGUNNER
+   UpgradeTo UNIT_MACHINE_GUNNER
    UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
@@ -2926,7 +2926,7 @@ UNIT_PIKEMEN {
    VisionRange 1
    EnableAdvance ADVANCE_FEUDALISM
    ObsoleteAdvance ADVANCE_FASCISM
-   UpgradeTo UNIT_MACHINEGUNNER
+   UpgradeTo UNIT_MACHINE_GUNNER
    UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
@@ -3750,7 +3750,7 @@ UNIT_SWORDSMAN {
    VisionRange 1
    EnableAdvance ADVANCE_IRON_WORKING
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
-   UpgradeTo UNIT_MACHINEGUNNER
+   UpgradeTo UNIT_MACHINE_GUNNER
    UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
@@ -4116,7 +4116,7 @@ UNIT_WARRIOR {
    #ObsoleteAdvance ADVANCE_GUNPOWDER
    UpgradeTo UNIT_SWORDSMAN
    UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINEGUNNER
+   UpgradeTo UNIT_MACHINE_GUNNER
    UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone

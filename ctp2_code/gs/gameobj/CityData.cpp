@@ -4301,6 +4301,7 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 	
 
 		for(it.Start(); !it.End(); it.Next()) {
+			SpotFound = it.Pos();
 			//Cell *cell = g_theWorld->GetCell(it.Pos());
 			Cell *ncell = g_theWorld->GetCell(it.Pos());
 			Cell *ocell = g_theWorld->GetCell(SpotFound);
@@ -4308,12 +4309,25 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 				continue;
 
 			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-				if((!g_theWorld->GetCell(SpotFound)) ||
-				(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) {
-					SpotFound = it.Pos(); 
-				}
+				SpotFound = it.Pos();
 			}
+
+			if(ocell->GetNumDBImprovements() > ncell->GetNumDBImprovements()) { 
+				SpotFound = it.Pos();
+			}
+			if(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain()) {
+					SpotFound = it.Pos(); 
+			}
+			
 		}
+
+//			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
+//				if((!g_theWorld->GetCell(SpotFound)) ||
+//				(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) {
+//					SpotFound = it.Pos(); 
+//				}
+//			}
+//		}
 		g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), SpotFound, 0);
 	}
 
@@ -8275,6 +8289,10 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings());
 	gold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
 	//Not calculating goldhunger see calctotalupkeep?
+
+	double interest;
+	buildingutil_GetTreasuryInterest(GetEffectiveBuildings(), interest, m_owner);
+		gold += static_cast<sint32>(g_player[m_owner]->m_gold->GetLevel() * interest);
 
 
 	//EMOD to assist AI

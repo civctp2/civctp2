@@ -88,10 +88,12 @@
 //   a building to the city converted. A possibility for using religion in Ctp2 by E 5-27-2006
 // - Added tileimps that can upgrade by E 5-30-2006
 // - Added minefield tileimps that deduct HP by E 5-30-2006
-// - changed barbariancamps to barbariancities
-// - added new barbarian camps as a settle imp code
-// - added barbarianspawsnbarbarian
-// - changed barbariancamps to barbariancities
+// - changed barbariancamps to barbariancities (E 6-07-2006)
+// - added new barbarian camps as a settle imp code (E 6-07-2006)
+// - added barbarianspawsnbarbarian (E 6-07-2006)
+// - changed barbariancamps to barbariancities (E 6-07-2006)
+// - made barbarians immune to hstile terrain
+// - Implemented SpawnBarbairans units
 //
 //----------------------------------------------------------------------------
 
@@ -1626,14 +1628,28 @@ void ArmyData::BeginTurn()
 			}
 		}
 	}
-
-
 //END EMOD barb camps
+	for(i = 0; i < m_nElements; i++) {
+		Cell *cell = g_theWorld->GetCell(m_pos);
+		sint32 CellOwner = cell->GetOwner();
+		const UnitRecord *urec = m_array[i].GetDBRec();
+		if(m_array[i].IsEntrenched()
+		&& urec->GetSpawnsBarbarians()
+		&& CellOwner != m_owner
+		){ //Added to allow units settle improvements
+			Barbarians::AddBarbarians(m_pos, -1, FALSE);
+			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+		}
+	}
+
+
+//END EMOD barb spawn units
 
 	//EMOD: If Hostileterrain and not fort than deduct HP from the unit
 	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 	sint32 hpcost;
-	if(trec->GetHostileTerrainCost(hpcost)) { //EMOD
+	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) //add AI immunity?
+	{ 
 		for(sint32 u = 0; u < m_nElements; u++) {
 			const UnitRecord *urec = m_array[u].GetDBRec();
 			if(!urec->GetImmuneToHostileTerrain()
@@ -7342,7 +7358,7 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 			so = new SlicObject("BarbWar");
 		}
 		else {
-		so = new SlicObject("110bCantAttackHaveTreaty");
+		so = new SlicObject("999ATTACKWARNING");
 		}
 
 		so->AddRecipient(m_owner);

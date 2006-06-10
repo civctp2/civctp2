@@ -53,10 +53,10 @@ AGE_NAME_GENETIC		"Genetic"
 AGE_NAME_DIAMOND		"Diamond"
 #AGE_NAME_FUTURE		"The Future"
 
-YOU_BROKE_ALLIANCE "You have broken an alliance with the [player.1.civ_name_plural]."
-YOU_BROKE_CEASE_FIRE "You have broken a peace treaty with the [player.1.civ_name_plural]."
+YOU_BROKE_ALLIANCE "You have broken an alliance with the {player[1].civ_name_plural}."
+YOU_BROKE_CEASE_FIRE "You have broken a peace treaty with the {player[1].civ_name_plural}."
 DIPxxx3_AGREEMENT_END_POLLUTION "Eco Pact"
-CANT_ATTACK_ALLIES "You have an alliance with the [player.1.civ_name_plural], you cannot attack them without first breaking the alliance.  Do you wish to break the alliance now?"
+CANT_ATTACK_ALLIES "You have an alliance with the {player[1].civ_name_plural}, you cannot attack them without first breaking the alliance.  Do you wish to break the alliance now?"
 X_LAB "X-lab"
 GENE_SEQUENCER "Gene Sequencer"
 
@@ -144,11 +144,13 @@ POLLUTION_TOXIC	"Toxic"
 str_ldl_Total_City_Pollution	"Total City Pollution"
 str_ldl_Pollution_Level	"Pollution Level"
 
-
-
-CANT_ATTACK_HAVE_TREATY "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the [player.1.civ_name_plural].  Are you sure you wish to continue?"
 AT_LEAST_ONE_COULDNT_BE_EXPELLED "The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
-
+#New Messages
+ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
+CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
+BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
 
 str_ldl_RES_CHANGE_BUTTON	"Screen Size"
 str_ldl_RES_TITLE			"Screen Size"
@@ -260,7 +262,7 @@ str_ldl_CAPS_CANCEL_MOVE "CANCEL MOVE"
 str_ldl_END_TUTORIAL "END TUTORIAL"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL "Do you wish to break your treaty with the [player.1.civ_name_plural]?  You may expel the units without breaking the treaty."
+CANT_ATTACK_ALLIES_CAN_EXPEL "Do you wish to break your treaty with the {player[1].civ_name_plural}?  You may expel the units without breaking the treaty."
 
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"You need to have an embassy to demand advances."
@@ -575,8 +577,8 @@ str_tbl_ldl_upd005_tga	"upd005.tga"
 ##Network Game Messages##
 
 #NETWORK_PLAYER_LEFT "[action.1.name] has left the game.  A computer player will take control of the exiting player's empire."
-#NETWORK_PLAYER_JOINED "[action.1.name] has taken control of the [player.1.civ_name_plural]"
-#NETWORK_DIFFERENT_PLAYER_JOINED "[action.1.name] is joining as the [player.1.civ_name_plural], but that empire originally belonged to someone else.  Do you wish to eject them?"
+#NETWORK_PLAYER_JOINED "[action.1.name] has taken control of the {player[1].civ_name_plural}"
+#NETWORK_DIFFERENT_PLAYER_JOINED "[action.1.name] is joining as the {player[1].civ_name_plural}, but that empire originally belonged to someone else.  Do you wish to eject them?"
 #BUTTON_EJECT "Eject"
 #BUTTON_LET_THEM_STAY "Let Them Stay"
 #NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
@@ -609,6 +611,15 @@ ACCEPT  "Accept"
 REJECT  "Reject"
 YES		"Yes"
 NO 		"No"
+BUTTON_RAZE       "Raze"
+BUTTON_PLUNDER    "Plunder"
+BUTTON_PILLAGE    "Pillage"
+BUTTON_LIBERATE   "Liberate"
+BUTTON_ENSLAVE	  "Enslave"
+BUTTON_FREESLAVES "Free Slaves"
+BUTTON_OCCUPY     "Occupy"
+
+
 str_ldl_Abort	"Abort"
 str_ldl_Open	"Open"
 str_ldl_Close	"Close"
@@ -2633,6 +2644,13 @@ str_ldl_CP_TERRAFORM		"TERRAFORM"
 str_ldl_CP_BUILD_QUEUE_EMPTY	"Nothing Building"
 str_ldl_CP_EDIT_BUILD_QUEUE		"Edit Build\nQueue"
 
+# TILE?
+str_ldl_ImproveLand  "Land"
+str_ldl_ImproveOcean "Ocean"
+str_ldl_ImproveSpecial "Special"
+str_ldl_ImproveTerraformLand "Terraform Land"
+str_ldl_ImproveTerraformOcean "Terraform Ocean"
+
 # Domestic Management
 str_ldl_DOMESTIC_DIALOG_TITLE		"E M P I R E   M A N A G E R"
 # Cause And Effect Tab Panel
@@ -2908,12 +2926,6 @@ str_ldl_DipDetails_LeaderName			"Leader Name: {player[0].leader_name}"
 str_ldl_DipDetails_LeaderPersonality	"Leader Personality: {player[0].leaderperonality}"
 str_ldl_DipDetails_EmbassyMsg			"* Embassy required to access privileged information."
 str_ldl_DipDetails_NoEmbassy			"<No Embassy>"
-
-str_ldl_ImproveLand "Land"
-str_ldl_ImproveOcean "Ocean"
-str_ldl_ImproveSpecial "Special"
-str_ldl_ImproveTerraformLand "Terraform Land"
-str_ldl_ImproveTerraformOcean "Terraform Ocean"
 
 # Radar Map button labels.
 str_ldl_RADAR_MAP_UNITS		"Units"

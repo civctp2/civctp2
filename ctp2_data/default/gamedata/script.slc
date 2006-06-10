@@ -2916,7 +2916,50 @@ alertbox 'BarbWar' {
 		Kill();
 }
 
+alertBox '999CITYCAPTUREOPTIONS' {
+MessageClass(420);
+	Text(ID_CAPTURED_CITY_OPTIONS);
 
+	//Button(ID_BUTTON_PLUNDER) {
+	//	Plunder();
+	//	Kill();
+	//}
+
+	//Button(ID_BUTTON_PILLAGE) {
+	//	Pillage();
+	//	Kill();
+	//}
+	Button(ID_BUTTON_LIBERATE) {
+		Liberate();
+		Kill();
+	}
+	Button(ID_BUTTON_RAZE) {
+		KillCity();
+		Kill();
+	}
+	Button(ID_BUTTON_OCCUPY) {
+		Kill();
+	}
+}
+
+alertBox '999ATTACKWARNING' {
+	Text(ID_ATTACK_WARNING);
+
+	MessageType("DIPLOMATIC");
+	
+
+	Button(ID_BUTTON_NO) {
+		ClearOrders(unit[0]);
+		Kill();
+	}
+
+	Button(ID_BUTTON_YES) {
+		//BreakAlliance(player[0]);
+		DeclareWar(g.player, player[0]);
+		AddOrder(unit[0], location[0]);
+		Kill();
+	}
+}
 
 
 

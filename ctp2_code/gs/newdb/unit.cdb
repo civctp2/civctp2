@@ -620,6 +620,7 @@ Unit {
 	Bit GoodyHutExcluded			// Prevents Some Units from appearing by E
 	Bit CanHarvest					// Added by E to add Gold and Shields from terrain
 	Bit CantGroup 					// For future use to make solo moving units
+	Bit SpawnsBarbarians			// Entrenched unit spawns barbs in foreign territory
 
 	Bit Leader						// Special "king" unit
 }

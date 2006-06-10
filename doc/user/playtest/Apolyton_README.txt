@@ -34,6 +34,12 @@ are described briefly below, and in more detail in ChangeLog.txt
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Changelog:
+2006-06-09
+Added: CApture City options: Occupy, Liberate(give to barbs), and Raze
+Fixed: ShowOnMap works A LOT better
+Fixed: Barbs are not affected by hostileterrain
+Added: TreasuryInterest flag, bldgs with this flag give you gold equal to a percentage of your treasury
+
 2006-06-07
 Added: CanExportGood allows for a tileimp with the colony flag and a IntBorderRadius to send a good in its radius to another city
 Changed: CanExportTileValue now works as a radius if you want only one radius IntBorderRadius should be 0
@@ -46,7 +52,7 @@ Added: Tileimp flag SpawnBarbarians for barbcamps
 Added: HasGulags flag to govt. Each turn a citizen is turned to a slave in this govt
 Added: IsCapitalist flag to govt. Each turn a citizen is turned to a merchant in this govt
 Added: IsTechnocracy flag to govt. Each turn a citizen is turned to a scientist in this govt
-Added: IsAgraraian flag to govt. Each turn a citizen is turned toa farmer in this govt
+Added: IsAgraraian flag to govt. Each turn a citizen is turned to a farmer in this govt
 Added: HasMindlessTelevision flag to govt. Each turn a citizen is turned toa entertainer in this govt
 Added: CantSell to buildings
 Added: ExcludedbyBuilding if you have any bldgs in the list you cant build this building

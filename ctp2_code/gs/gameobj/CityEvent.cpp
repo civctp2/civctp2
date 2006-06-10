@@ -122,16 +122,23 @@ STDEHANDLER(CaptureCityEvent)
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
 		}
-		
-		if(newOwner > 0 && originalOwner > 0 && city.IsValid()) {
-			SlicObject *	so = new SlicObject("911CityNewOwner");
-			so->AddRecipient(originalOwner);
-			so->AddPlayer(originalOwner);
-			so->AddPlayer(newOwner);
+
+//		if(newOwner > 0 && originalOwner > 0 && city.IsValid()) {
+//			SlicObject *	so = new SlicObject("911CityNewOwner");
+//			so->AddRecipient(originalOwner);
+//			so->AddPlayer(originalOwner);
+//			so->AddPlayer(newOwner);
+//			so->AddCity(city);
+//			g_slicEngine->Execute(so);
+//		}		
+//EMOD Capture city options
+		if(newOwner > 0 && city.IsValid()) {
+			SlicObject *	so = new SlicObject("999CITYCAPTUREOPTIONS");
+			so->AddRecipient(newOwner);
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
 		}		
-		
+//END EMOD
 		if(g_rand->Next(100) < 
 		   g_theConstDB->CaptureCityAdvanceChance() * 100) {
 //Added by Martin Gühmann to allow city advance gaining from

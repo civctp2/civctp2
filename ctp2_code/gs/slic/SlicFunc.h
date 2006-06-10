@@ -636,7 +636,12 @@ SLICFUNC(SFR_INT, GetContinent)
 SLICFUNC(SFR_INT, IsWater)
 //New slicfunctions by Solver
 SLICFUNC(SFR_INT, IsOnSameContinent)
-
+//New slicfunctions by E
+SLICFUNC(SFR_VOID, KillCity); 
+SLICFUNC(SFR_VOID, Pillage);
+SLICFUNC(SFR_VOID, Plunder);
+SLICFUNC(SFR_VOID, Liberate);
+SLICFUNC(SFR_VOID, AddPW);  
 
 
 #endif // __SLICFUNC_H__
