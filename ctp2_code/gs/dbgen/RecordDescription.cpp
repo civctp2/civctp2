@@ -777,9 +777,19 @@ void RecordDescription::ExportParser(FILE *outfile)
 				break;
 			case DATUM_BIT_PAIR:
 				if(dat->m_bitPairDatum->m_type == DATUM_INT) {
-					fprintf(outfile, "    { NULL, NULL, NULL, &%sRecord::Get%s, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					if(!dat->m_hasValue){
+						fprintf(outfile, "    { NULL, NULL, NULL, &%sRecord::Get%s, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					}
+					else{
+						fprintf(outfile, "    { &%sRecord::Get%s, NULL, NULL, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					}
 				} else if(dat->m_bitPairDatum->m_type == DATUM_FLOAT) {
-					fprintf(outfile, "    { NULL, NULL, NULL, NULL, &%sRecord::Get%s, NULL, NULL },\n", m_name, dat->m_name);
+					if(!dat->m_hasValue){
+						fprintf(outfile, "    { NULL, NULL, NULL, NULL, &%sRecord::Get%s, NULL, NULL },\n", m_name, dat->m_name);
+					}
+					else{
+						fprintf(outfile, "    { NULL, NULL, &%sRecord::Get%s, NULL, NULL, NULL, NULL },\n", m_name, dat->m_name);
+					}
 				} else {
 					fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* %s */\n", dat->m_name);
 				}

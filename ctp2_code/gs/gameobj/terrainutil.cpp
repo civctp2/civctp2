@@ -718,7 +718,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 			}
 		}
 
-//EMOD added by E. Improvement can only be built on a tile with a certain good on it		
+		//EMOD Improvement can only be built on a tile with a certain good on it
 		if(rec->GetNumIsRestrictedToGood () == 0) {
 			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
 				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
@@ -729,32 +729,39 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		else {
 			sint32 good;
 			if (g_theWorld->GetGood(pos, good)) {
+				bool hasCorrectGood = false;
 				for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
 					if(rec->GetIsRestrictedToGoodIndex(i) == good) {
-						return true; 
+						hasCorrectGood = true;
+						break;
 					}
 				}
-				return false;
+				if(!hasCorrectGood)
+					return false;
 			}
 		}
 
-// EMOD for contiguous irrigation
-		if(rec->GetNeedsIrrigation ()) {
+		// EMOD for contiguous irrigation
+		if(rec->GetNeedsIrrigation()) {
+			bool hasIrrigation = false;
 
 			CityInfluenceIterator it(pos, 1);
 			for(it.Start(); !it.End(); it.Next()) {
-			Cell *cell = g_theWorld->GetCell(it.Pos());
+				Cell *cell = g_theWorld->GetCell(it.Pos());
 				for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++) {
-				sint32 imp = cell->GetDBImprovement(ti);
-				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-					if(!g_theWorld->IsRiver(it.Pos()) || !trec->GetNeedsIrrigation()) 
-					//{ 
-					//	return true;
-					//}
-					return false;
-				}				
+					sint32 imp = cell->GetDBImprovement(ti);
+					const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+					if(g_theWorld->IsRiver(it.Pos()) || trec->GetNeedsIrrigation()) 
+					{
+						hasIrrigation = true;
+						break;
+					}
+				}
 			}
+			if(!hasIrrigation)
+				return false;
 		}
+
 //if(g_theWorld->IsIrrigation(0, mpos) || g_theWorld->IsRiver(mpos) || g_theWorld->IsIrrigation(i, pos) || g_theWorld->IsRiver(pos)) { 
 
 //	if (rec->GetNeedsIrrigation()) {
@@ -763,7 +770,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 //	}
 
 
-//end EMOD
+	// End EMOD
 	}
 	return true;
 }

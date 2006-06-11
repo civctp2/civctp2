@@ -32,7 +32,7 @@
 str_ldl_Already_Offer	"Sie bieten dieses Gut bereits zum Kauf an. Soll das vorangegangene Angebot ersetzt werden?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"Die übrigen Nationen verneigen sich vor ihrem neuen Staatsoberhaupt: {player[1].leader_name} hat das Projekt Außerirdisches Leben erfolgreich abgeschlossen!"
+ENDGAME_WON_OTHER	"Die übrigen Nationen verneigen sich vor ihrem neuen Staatsoberhaupt: {player[0].leader_name} hat das Projekt Außerirdisches Leben erfolgreich abgeschlossen!"
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	"."
@@ -54,10 +54,10 @@ AGE_NAME_GENETIC		"Genetische Ära"
 AGE_NAME_DIAMOND		"Diamantene Ära"
 #AGE_NAME_FUTURE		"Die Zukunft"
 
-YOU_BROKE_ALLIANCE "Wir haben gegen unsere Allianzvereinbarung mit den {player[1].civ_name_plural#DAT} verstoßen."
-YOU_BROKE_CEASE_FIRE "Wir haben unser Friedensabkommen mit den {player[1].civ_name_plural#DAT} gebrochen."
+YOU_BROKE_ALLIANCE "Wir haben gegen unsere Allianzvereinbarung mit den {player[0].civ_name_plural#DAT} verstoßen."
+YOU_BROKE_CEASE_FIRE "Wir haben unser Friedensabkommen mit den {player[0].civ_name_plural#DAT} gebrochen."
 DIPxxx3_AGREEMENT_END_POLLUTION "Öko-Pakt"
-CANT_ATTACK_ALLIES "Wir haben eine Allianz mit den {player[1].civ_name_plural#DAT} geschlossen und können daher nicht angreifen, ohne dieses Bündnis vorher aufzulösen. Wollen Sie die Allianz jetzt beenden?"
+CANT_ATTACK_ALLIES "Wir haben eine Allianz mit den {player[0].civ_name_plural#DAT} geschlossen und können daher nicht angreifen, ohne dieses Bündnis vorher aufzulösen. Wollen Sie die Allianz jetzt beenden?"
 X_LAB "X-Labor"
 GENE_SEQUENCER "Genteiler"
  ###END EX_JUNK STRINGS###
@@ -146,6 +146,11 @@ str_ldl_Pollution_Level	"Verschm.-Niveau:"
 
 CANT_ATTACK_HAVE_TREATY	"Mit dieser Aktion verstoßen wir gegen unser Abkommen mit den {player[0].civ_name_plural#DAT}. Wollen Sie wirklich fortfahren?"
 AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für alle Einheiten {player[0].civ_name_plural#ARTICLE_GEN}, daher bitten sie darum, dass wir ihre Truppen so schnell wie möglich vertreiben."
+#New Messages
+ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CIV2DOVES "Die Tauben haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
+CIV2HAWKs "Die Falken verlanegen nach Krieg gegen diese Achse des Bösen!"
+BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
 
 
 str_ldl_RES_CHANGE_BUTTON	"Auflösung"
@@ -257,7 +262,7 @@ str_ldl_CAPS_CANCEL_MOVE	"Zug stornieren"
 str_ldl_END_TUTORIAL	"Einführung beenden"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL	"Wollen Sie wirklich das mit den {player[1].civ_name_plural#DAT} geschlossene Abkommen brechen? Sie können die Einheiten auch vertreiben, ohne gegen das Abkommen zu verstoßen."
+CANT_ATTACK_ALLIES_CAN_EXPEL	"Wollen Sie wirklich das mit den {player[0].civ_name_plural#DAT} geschlossene Abkommen brechen? Sie können die Einheiten auch vertreiben, ohne gegen das Abkommen zu verstoßen."
 
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"Sie müssen eine Botschaft in der betreffenden Nation besitzen, um Neuerungen fordern zu können."
@@ -584,6 +589,14 @@ ACCEPT	"Akzeptieren"
 REJECT	"Ablehnen"
 YES	"Ja"
 NO	"Nein"
+BUTTON_RAZE       "Schleifen"
+BUTTON_PLUNDER    "Plündern"
+BUTTON_PILLAGE    "Brandschatzen"
+BUTTON_LIBERATE   "Befreien"
+BUTTON_ENSLAVE	  "Verklaven"
+BUTTON_FREESLAVES "Sklaven freilassen"
+BUTTON_OCCUPY     "Besetzen"
+
 str_ldl_Abort	"Ende"
 str_ldl_Open	"Öffnen"
 str_ldl_Close	"OK"

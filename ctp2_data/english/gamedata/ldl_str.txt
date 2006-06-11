@@ -31,7 +31,7 @@
 str_ldl_Already_Offer	"You are already offering that good. Replace old offer?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"All Civilizations will now bow to a new master, [player.1.leader_name] has completed the Alien Life Project."
+ENDGAME_WON_OTHER	"All Civilizations will now bow to a new master, {player[1].leader_name} has completed the Alien Life Project."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	","
@@ -53,10 +53,10 @@ AGE_NAME_GENETIC		"Genetic"
 AGE_NAME_DIAMOND		"Diamond"
 #AGE_NAME_FUTURE		"The Future"
 
-YOU_BROKE_ALLIANCE "You have broken an alliance with the {player[1].civ_name_plural}."
-YOU_BROKE_CEASE_FIRE "You have broken a peace treaty with the {player[1].civ_name_plural}."
+YOU_BROKE_ALLIANCE "You have broken an alliance with the {player[0].civ_name_plural}."
+YOU_BROKE_CEASE_FIRE "You have broken a peace treaty with the {player[0].civ_name_plural}."
 DIPxxx3_AGREEMENT_END_POLLUTION "Eco Pact"
-CANT_ATTACK_ALLIES "You have an alliance with the {player[1].civ_name_plural}, you cannot attack them without first breaking the alliance.  Do you wish to break the alliance now?"
+CANT_ATTACK_ALLIES "You have an alliance with the {player[0].civ_name_plural}, you cannot attack them without first breaking the alliance.  Do you wish to break the alliance now?"
 X_LAB "X-lab"
 GENE_SEQUENCER "Gene Sequencer"
 
@@ -144,7 +144,7 @@ POLLUTION_TOXIC	"Toxic"
 str_ldl_Total_City_Pollution	"Total City Pollution"
 str_ldl_Pollution_Level	"Pollution Level"
 
-CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the [player.1.civ_name_plural].  Are you sure you wish to continue?"
+CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the {player[0].civ_name_plural}.  Are you sure you wish to continue?"
 AT_LEAST_ONE_COULDNT_BE_EXPELLED "The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
 #New Messages
 ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
@@ -262,7 +262,7 @@ str_ldl_CAPS_CANCEL_MOVE "CANCEL MOVE"
 str_ldl_END_TUTORIAL "END TUTORIAL"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL "Do you wish to break your treaty with the {player[1].civ_name_plural}?  You may expel the units without breaking the treaty."
+CANT_ATTACK_ALLIES_CAN_EXPEL "Do you wish to break your treaty with the {player[0].civ_name_plural}?  You may expel the units without breaking the treaty."
 
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"You need to have an embassy to demand advances."

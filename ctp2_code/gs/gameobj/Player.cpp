@@ -2134,7 +2134,7 @@ void Player::BeginTurnProduction()
 						CityData *cd = m_all_cities->Access(c).CD();
 						if(!cd->IsLocalResource (good)) {
 							cd->AddGoodToCity(good);
-							break; 
+							break;
 						}
 					}
 				}
@@ -2143,7 +2143,7 @@ void Player::BeginTurnProduction()
 		}
 	}
 
-// End EMOD
+	// End EMOD
 
 	m_productionFromFranchises = 0;
 }
@@ -7821,13 +7821,11 @@ sint32 Player::GetMaxCityCount() const
 
 
 
-
-sint32 Player::GetPollutionSizeModifier(void) const
-	{
-	return (m_advances->GetPollutionSizeModifier()) ;
-	}
-
-
+// Unused
+double Player::GetPollutionSizeModifier(void) const
+{
+	return (m_advances->GetPollutionSizeModifier());
+}
 
 
 
@@ -7839,10 +7837,12 @@ sint32 Player::GetPollutionSizeModifier(void) const
 
 
 
-sint32 Player::GetPollutionProductionModifier(void) const
-	{
-	return (m_advances->GetPollutionProductionModifier()) ;
-	}
+
+// Unused
+double Player::GetPollutionProductionModifier(void) const
+{
+	return (m_advances->GetPollutionProductionModifier());
+}
 
 	
 BOOL Player::HasAdvance(AdvanceType adv) const

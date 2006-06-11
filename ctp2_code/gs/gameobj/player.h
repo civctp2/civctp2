@@ -634,8 +634,8 @@ public:
 
 	BOOL HasAdvance(AdvanceType adv) const;
 	sint32 NumAdvances();
-	sint32 GetPollutionSizeModifier(void) const ;
-	sint32 GetPollutionProductionModifier(void) const ;
+	double GetPollutionSizeModifier(void) const;
+	double GetPollutionProductionModifier(void) const;
 	uint32 RoadAdvanceLevel() const;
 	void SetCityRoads();
 #ifdef _DEBUG

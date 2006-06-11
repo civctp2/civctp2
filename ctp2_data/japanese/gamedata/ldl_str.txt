@@ -2,7 +2,7 @@
 str_ldl_Already_Offer	"もう既に提案は聞いているぞ｡それとも新しい提案かな？"
 
 ##これが最後のチャンスだ｡99/03/07
-ENDGAME_WON_OTHER	"すべての国が､新しい統治者に服従するだろう｡[player.1.leader_name]はエイリアン ライフ プロジェクトを達成した｡"
+ENDGAME_WON_OTHER	"すべての国が､新しい統治者に服従するだろう｡{player[1].leader_name}はエイリアン ライフ プロジェクトを達成した｡"
 
 ##最後の最後の最後の追加ストリング｡99/03/05 （これで最後です）
 str_ldl_comma	","
@@ -19,10 +19,10 @@ AGE_NAME_MODERN		"近代"
 AGE_NAME_GENETIC	"遺伝子の時代"
 AGE_NAME_DIAMOND	"ダイヤモンドの時代"
 
-YOU_BROKE_ALLIANCE "[player.1.civ_name_plural]との同盟を破棄しました｡"
-YOU_BROKE_CEASE_FIRE "[player.1.civ_name_plural]との平和条約を破棄しました｡"
+YOU_BROKE_ALLIANCE "{player[0].civ_name_plural}との同盟を破棄しました｡"
+YOU_BROKE_CEASE_FIRE "{player[0].civ_name_plural}との平和条約を破棄しました｡"
 DIPxxx3_AGREEMENT_END_POLLUTION "環境汚染防止協定"
-CANT_ATTACK_ALLIES "[player.1.civ_name_plural]と同盟関係にあるため､最初に同盟を破棄しなければ､彼らを攻撃することができません｡今すぐ同盟を破棄しますか？"
+CANT_ATTACK_ALLIES "{player[0].civ_name_plural}と同盟関係にあるため､最初に同盟を破棄しなければ､彼らを攻撃することができません｡今すぐ同盟を破棄しますか？"
 X_LAB "X-lab"
 GENE_SEQUENCER "遺伝子シーケンサー"
 
@@ -112,8 +112,13 @@ str_ldl_Pollution_Level	"汚染度"
 
 
 
-CANT_ATTACK_HAVE_TREATY "この行動を続けると､[player.1.civ_name_plural]との同盟を破ることになります｡本当に実行して構いませんか？"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED "[player.1.civ_name_plural]は､我国の領土に部隊を置いておく大義名分を持っていません｡彼らはすぐに部隊を撤退すると誓っています｡"
+CANT_ATTACK_HAVE_TREATY "この行動を続けると､{player[0].civ_name_plural}との同盟を破ることになります｡本当に実行して構いませんか？"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED "{player[0].civ_name_plural}は､我国の領土に部隊を置いておく大義名分を持っていません｡彼らはすぐに部隊を撤退すると誓っています｡"
+#New Messages
+ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
+CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
+BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
 
 
 str_ldl_RES_CHANGE_BUTTON	"画面サイズ"
@@ -226,7 +231,7 @@ str_ldl_CAPS_CANCEL_MOVE "移動のキャンセル"
 str_ldl_END_TUTORIAL "チュートリアルの終了"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL "[player.1.civ_name_plural]との同盟を破棄したいのですか？ 同盟を破棄しなくても､ユニットを強制送還することはできます｡"
+CANT_ATTACK_ALLIES_CAN_EXPEL "{player[0].civ_name_plural}との同盟を破棄したいのですか？ 同盟を破棄しなくても､ユニットを強制送還することはできます｡"
 
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"進歩を要求するには大使館が必要です｡"
@@ -575,6 +580,14 @@ ACCEPT  "受け入れる"
 REJECT  "拒否する"
 YES		"はい"
 NO 		"いいえ"
+BUTTON_RAZE       "Raze"
+BUTTON_PLUNDER    "Plunder"
+BUTTON_PILLAGE    "Pillage"
+BUTTON_LIBERATE   "Liberate"
+BUTTON_ENSLAVE	  "Enslave"
+BUTTON_FREESLAVES "Free Slaves"
+BUTTON_OCCUPY     "Occupy"
+
 str_ldl_Abort	"中断"
 str_ldl_Open	"開放"
 str_ldl_Close	"閉じる"

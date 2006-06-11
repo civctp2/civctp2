@@ -121,7 +121,7 @@ TerrainImprovement {
 		Bit(Int) BonusGoldExport            // FU
 		Bit CanBeCaptured                   // FU
 		Bit CanUpgrade                      // FU
-		Bit(Int) Minefield                      // FU
+		Bit(Int) Minefield                  // FU
 		Record TerrainImprovement[]     GrowsToImprovement
 		Bit(Int) TurnsToGrowth
 
@@ -135,7 +135,7 @@ TerrainImprovement {
 		Record Advance[] ObsoleteAdvance
 		Int ProductionCost
 		Record Resource[] EnablesGood       // Having a TI gives a city a good
-		Bit(Int) GoldHunger                   // FU
+		Bit(Int) GoldHunger                 // FU
 		Bit(Int) GoldCost                   // FU
 		Int ProductionTime
 		Int TilesetIndex
@@ -181,6 +181,6 @@ TerrainImprovement {
 	# Display level (0 = ground level = under roads, > 0 = on top of roads)
 	Int DisplayLevel = 0
 	# Pillage prevention
-	Bit CantPillage // FU Tileimp cannot be pillaged (E)
-	Bit SpawnsBarbarians
+	Bit CantPillage                         // FU Tileimp cannot be pillaged (E)
+	Bit SpawnsBarbarians                    // Spawns Barbarians
 }

@@ -53,10 +53,10 @@ AGE_NAME_GENETIC		"Genetique"
 AGE_NAME_DIAMOND		"Diamant"
 #AGE_NAME_FUTURE		"Le Futur"
 
-YOU_BROKE_ALLIANCE		"Vous avez rompu une alliance avec les [player.1.civ_name_plural]."
-YOU_BROKE_CEASE_FIRE		"Vous avez rompu un traité de paix avec les  [player.1.civ_name_plural]."
+YOU_BROKE_ALLIANCE		"Vous avez rompu une alliance avec les {player[0].civ_name_plural}."
+YOU_BROKE_CEASE_FIRE		"Vous avez rompu un traité de paix avec les {player[0].civ_name_plural}."
 DIPxxx3_AGREEMENT_END_POLLUTION "Ecopacte"
-CANT_ATTACK_ALLIES		"Vous avez signé une alliance avec les [player.1.civ_name_plural]. Vous devez rompre cette alliance si vous voulez les attaquer. Voulez-vous la rompre maintenant ?"
+CANT_ATTACK_ALLIES		"Vous avez signé une alliance avec les {player[0].civ_name_plural}. Vous devez rompre cette alliance si vous voulez les attaquer. Voulez-vous la rompre maintenant ?"
 X_LAB				"X-lab"
 GENE_SEQUENCER			"Sequenceur de gènes"
 
@@ -148,6 +148,11 @@ str_ldl_Pollution_Level		"Niveau de pollution"
 
 CANT_ATTACK_HAVE_TREATY	"Cette action rompra notre traité avec les {player[0].civ_name_plural}. Voulez-vous poursuivre ?"
 AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Les {player[0].civ_name_plural} n'ont pas réussi à loger toutes leurs forces sur notre territoire. Ils ont promis de les retirer dès que possible."
+#New Messages
+ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
+CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
+BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
 
 
 str_ldl_RES_CHANGE_BUTTON	"Résolution"
@@ -260,7 +265,7 @@ str_ldl_CAPS_CANCEL_MOVE	"ANNULER COUP"
 str_ldl_END_TUTORIAL		"ARRETER DIDACTICIEL"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL	"Voulez-vous rompre votre traité avec les [player.1.civ_name_plural] ? Vous pouvez renvoyer les unités sans passer par là."
+CANT_ATTACK_ALLIES_CAN_EXPEL	"Voulez-vous rompre votre traité avec les {player[0].civ_name_plural} ? Vous pouvez renvoyer les unités sans passer par là."
 
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"Il vous faut une ambassade pour exiger des progrès."
@@ -609,6 +614,15 @@ ACCEPT	"Accepter"
 REJECT	"Refuser"
 YES	"Oui"
 NO	"Non"
+BUTTON_RAZE       "Raze"
+BUTTON_PLUNDER    "Plunder"
+BUTTON_PILLAGE    "Pillage"
+BUTTON_LIBERATE   "Liberate"
+BUTTON_ENSLAVE	  "Enslave"
+BUTTON_FREESLAVES "Free Slaves"
+BUTTON_OCCUPY     "Occupy"
+
+
 str_ldl_Abort	"Fin"
 str_ldl_Open	"Ouvrir"
 str_ldl_Close	"Fermer"

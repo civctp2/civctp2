@@ -32,7 +32,7 @@
 str_ldl_Already_Offer	"Ya estás ofreciendo esa mercancía. ¿Sustituyes la oferta anterior?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"Todos los imperios tendrán ahora que rendir homenaje al nuevo señor, [player.1.leader_name], que ha completado el Proyecto de Vida Alienígena."
+ENDGAME_WON_OTHER	"Todos los imperios tendrán ahora que rendir homenaje al nuevo señor, [player[0].leader_name], que ha completado el Proyecto de Vida Alienígena."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	"."
@@ -52,10 +52,10 @@ AGE_NAME_MODERN	"Edad Moderna"
 AGE_NAME_GENETIC	"Edad Genética"
 AGE_NAME_DIAMOND	"Edad del Diamante"
 
-YOU_BROKE_ALLIANCE	"Has incumplido una alianza con los [player.1.civ_name_plural]."
-YOU_BROKE_CEASE_FIRE	"Has roto un tratado de paz con los [player.1.civ_name_plural]."
+YOU_BROKE_ALLIANCE	"Has incumplido una alianza con los {player[0].civ_name_plural}."
+YOU_BROKE_CEASE_FIRE	"Has roto un tratado de paz con los {player[0].civ_name_plural}."
 DIPxxx3_AGREEMENT_END_POLLUTION	"Ecopacto"
-CANT_ATTACK_ALLIES	"Tienes una alianza con los [player.1.civ_name_plural]; no puedes atacarles sin romper primero la alianza. ¿Quieres romper ahora la alianza?"
+CANT_ATTACK_ALLIES	"Tienes una alianza con los {player[0].civ_name_plural}; no puedes atacarles sin romper primero la alianza. ¿Quieres romper ahora la alianza?"
 X_LAB	"Laboratorio Xenoforma"
 GENE_SEQUENCER	"Secuenciador de genes"
 
@@ -148,6 +148,11 @@ str_ldl_Pollution_Level	"Nivel de contamin."
 
 CANT_ATTACK_HAVE_TREATY	"Esta acción romperá tu tratado con los {player[0].civ_name_plural}.  ¿Quieres continuar?"
 AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Los {player[0].civ_name_plural} no encuentran alojamiento para todos sus ejércitos en nuestro territorio. Prometen retirar sus unidades tan pronto como sea posible."
+#New Messages
+ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
+CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
+BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
 
 
 str_ldl_RES_CHANGE_BUTTON	"Tamaño de pantalla"
@@ -262,7 +267,7 @@ str_ldl_CAPS_CANCEL_MOVE	"ANULAR MOVIMIENTO"
 str_ldl_END_TUTORIAL	"TERMINAR TUTORIAL"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL	"¿Quieres incumplir tu tratado con los [player.1.civ_name_plural]? Puedes expulsar a las unidades sin incumplir el tratado."
+CANT_ATTACK_ALLIES_CAN_EXPEL	"¿Quieres incumplir tu tratado con los {player[0].civ_name_plural}? Puedes expulsar a las unidades sin incumplir el tratado."
 
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"Necesitas tener una embajada para exigir adelantos."
@@ -568,6 +573,14 @@ ACCEPT	"Aceptar"
 REJECT	"Rechazar"
 YES	"Sí"
 NO	"No"
+BUTTON_RAZE       "Raze"
+BUTTON_PLUNDER    "Plunder"
+BUTTON_PILLAGE    "Pillage"
+BUTTON_LIBERATE   "Liberate"
+BUTTON_ENSLAVE	  "Enslave"
+BUTTON_FREESLAVES "Free Slaves"
+BUTTON_OCCUPY     "Occupy"
+
 str_ldl_Abort	"Cancelar"
 str_ldl_Open	"Abrir"
 str_ldl_Close	"Cerrar"

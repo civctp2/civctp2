@@ -244,17 +244,16 @@ STDEHANDLER(CityBuildFrontEvent)
 
 	city.CD()->BuildFront();
 
-// EMOD for popcoststo build attempt to fix 6-01-2006 works but you must have that pop number to build then disband
+	// EMOD for popcoststo build attempt to fix 6-01-2006 works but you must have that pop number to build then disband
 	if (city.CD()->GetBuildQueue()->m_popcoststobuild_pending) {
-			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
-			so->AddCity(city);
-			so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
-			so->AddRecipient(city.GetOwner());
-			g_slicEngine->Execute(so);
-		}
-//	}
+		SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
+		so->AddCity(city);
+		so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
+		so->AddRecipient(city.GetOwner());
+		g_slicEngine->Execute(so);
+	}
+	// End EMOD
 
-//end EMOD
 	if (city.CD()->GetBuildQueue()->m_settler_pending) {
 		if (city.CD()->PopCount() == 1) {  //Isn't this already reflected in bldque.cpp(407)? 
 			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");

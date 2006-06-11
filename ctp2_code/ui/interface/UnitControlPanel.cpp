@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit tab of the control panel
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -342,7 +342,7 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 				fuel = -1;
 				maxFuel = -1;
 			}
-			if(unit.GetDBRec()->GetCargoData()) {
+			if(unit.GetDBRec()->HasCargoData()) {
 				cargo = unit->GetNumCarried();
 			} else {
 				cargo = -1;

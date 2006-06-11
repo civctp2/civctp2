@@ -82,7 +82,7 @@ private:
 	sint32 m_size;
 	AdvanceType m_researching;
 
-	sint32	m_age;	
+	sint32	m_age;
 
 	sint32 m_theLastAdvanceEnabledThisManyAdvances; 
 	
@@ -118,13 +118,13 @@ public:
 	uint8 HasAdvance(sint32 index) const;
 	void SetHasAdvance(AdvanceType advance);
 
-	void GrantAdvance();  
+	void GrantAdvance();
 	void GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient = FALSE);
 	void GiveAdvancePlusPrerequisites(AdvanceType adv);
 	void TakeAdvance(AdvanceType adv);
 	void InitialAdvance(AdvanceType adv); 
-	sint32 GetPollutionSizeModifier(void) const ;
-	sint32 GetPollutionProductionModifier(void) const ;
+	double GetPollutionSizeModifier(void) const;
+	double GetPollutionProductionModifier(void) const;
 
 	AdvanceType GetResearching() const { return m_researching; }
 	void SetResearching(AdvanceType adv);
@@ -155,7 +155,7 @@ public:
 	sint32 TurnsToNextAdvance(AdvanceType adv = -1) const;
 
 	void AddAlienLifeAdvance();
-    
+
 	void Serialize(CivArchive &archive);
 };
 

@@ -27,10 +27,12 @@
 // - Safeguard FindLevel against infinite recursion.
 // - Speeded up goody hut advance and unit selection.
 // - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin Gühmann)
+// - Fixed GetPollutionProductionModifier (June 11nd 2005 Martin Gühmann)
+// - Fixed GetPollutionSizeModifier (June 11nd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"      
+#include "c3.h"
 #include "Advances.h"
 
 #include "AdvanceRecord.h"
@@ -786,7 +788,7 @@ uint8*
 Advances::CanOffer(Advances* otherCivAdvances, sint32 &num) const 
 {
 	
-    Assert(0<m_size);
+	Assert(0<m_size);
 	uint8* offer = new uint8[m_size];
 
 	num = 0;
@@ -815,22 +817,23 @@ Advances::CanOffer(Advances* otherCivAdvances, sint32 &num) const
 
 
 
+double Advances::GetPollutionSizeModifier(void) const
+{
+	sint32 i;
+	double bonus = 0.0;
+	double value = 0.0;
 
-sint32 Advances::GetPollutionSizeModifier(void) const
+	for(i = 0; i < m_size; i++)
 	{
-	sint32	i,
-			bonus = 0 ;
-
-	for (i=0; i<m_size; i++)
-		{
-		if (m_hasAdvance[i])
-			bonus += (sint32) g_theAdvanceDB->Get(i)->GetPollutionSizeModifier() ;
-
+		if(m_hasAdvance[i]
+		&& g_theAdvanceDB->Get(i)->GetPollutionSizeModifier(value)
+		){
+			bonus += value;
 		}
-
-	return (bonus) ;
 	}
 
+	return bonus;
+}
 
 
 
@@ -843,20 +846,24 @@ sint32 Advances::GetPollutionSizeModifier(void) const
 
 
 
-sint32 Advances::GetPollutionProductionModifier(void) const
+
+double Advances::GetPollutionProductionModifier(void) const
+{
+	sint32 i;
+	double bonus = 0.0;
+	double value = 0.0;
+
+	for(i = 0; i < m_size; i++)
 	{
-	sint32	i,
-			bonus = 0 ;
-
-	for (i=0; i<m_size; i++)
-		{
-		if (m_hasAdvance[i])
-			bonus += (sint32)g_theAdvanceDB->Get(i)->GetPollutionProductionModifier() ;
-
+		if(m_hasAdvance[i]
+		&& g_theAdvanceDB->Get(i)->GetPollutionProductionModifier(value)
+		){
+			bonus += value;
 		}
-
-	return (bonus) ;
 	}
+
+	return bonus;
+}
 
 
 sint32

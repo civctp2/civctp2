@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Build queue handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -100,8 +101,8 @@ private:
 
 	PLAYER_INDEX                m_owner;
 	Unit                        m_city;
-    sint32                      m_wonderStarted;
-    sint32                      m_wonderStopped;
+	sint32                      m_wonderStarted;
+	sint32                      m_wonderStopped;
 	MBCHAR                      m_name[256];
 
 //----------------------------------------------------------------------------
@@ -111,64 +112,65 @@ private:
 	sint32                      m_wonderComplete;
 	BuildNode *                 m_frontWhenBuilt;
 
-    void HandleProductionComplete(void);
+	void HandleProductionComplete(void);
 	void HandleProductionStart(void);
-    void HandleProductionStop(void);
+	void HandleProductionStop(void);
 #if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 	void SendMsgWormholeProbeStarted(void);
 	void SendMsgWormholeProbeComplete(void);
 #endif
-	void SendMsgWonderStarted(sint32 type) ;
-	void SendMsgWonderCompleteOwner(CityData *cd, sint32 wonder) ;
-	void SendMsgWonderCompleteEveryone(CityData *cd, sint32 wonder) ;
-	void SendMsgWonderAlmostComplete(void) ;
-	void SendMsgWonderStopped(sint32 type) ;
+	void SendMsgWonderStarted(sint32 type);
+	void SendMsgWonderCompleteOwner(CityData *cd, sint32 wonder);
+	void SendMsgWonderCompleteEveryone(CityData *cd, sint32 wonder);
+	void SendMsgWonderAlmostComplete(void);
+	void SendMsgWonderStopped(sint32 type);
 
 	friend class NetCityBuildQueue;
 
 public:
 
-    BOOL m_settler_pending;
+	bool m_settler_pending;
+	bool m_popcoststobuild_pending;   //EMOD
 
-    BuildQueue();
+	BuildQueue();
 	~BuildQueue();
 
-	void SendMsgWonderComplete(CityData *cd, sint32 wonder) ;
+	void SendMsgWonderComplete(CityData *cd, sint32 wonder);
 
 	void EndTurn();
 
-	void Clear(BOOL fromServer = FALSE) ;
-	void ClearAllButHead(BOOL fromServer = FALSE);
+	void Clear(bool fromServer = false) ;
+	void ClearAllButHead(bool fromServer = false);
 
 	void SetOwner(PLAYER_INDEX o) { m_owner = o; }
 	void SetCity(Unit &city);
 
-	bool BuildFrontUnit(BOOL forceFinish);
+	bool BuildFrontUnit(bool forceFinish);
 	bool BuildFrontBuilding();
 	bool BuildFrontWonder();
 	bool BuildFrontEndgame();
-    bool BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &pos, uint64 &built_improvements, uint64 &built_wonders, BOOL forceFinish);
+	bool BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &pos, uint64 &built_improvements, uint64 &built_wonders, bool forceFinish);
 
-	sint32 Load(const MBCHAR *file) ;
-	sint32 Save(const MBCHAR *file) ;
+	sint32 Load(const MBCHAR *file);
+	sint32 Save(const MBCHAR *file);
 
 	void RawInsertTail(sint32 cat, sint32 t, sint32 cost);
-    BOOL InsertTail(sint32 cat, sint32 t, sint32 cost);
-    void ReplaceHead(sint32 cat, sint32 item_type, sint32 cost);
+	bool InsertTail(sint32 cat, sint32 t, sint32 cost);
+	void ReplaceHead(sint32 cat, sint32 item_type, sint32 cost);
 	void Serialize(CivArchive &archive) ;
 	
 	BuildNode *GetHead(void);
 	PointerList<BuildNode> *GetList() const { return m_list; }
 
-    void ResetOwner(sint32 new_owner); 
-	void Dump(const sint32 shieldstore, MBCHAR *s) ;
+	void ResetOwner(sint32 new_owner);
+	void Dump(const sint32 shieldstore, MBCHAR *s);
 	void RemoveHead();
 	
 	
-	sint32 RemoveNode(BuildNode *node, CAUSE_REMOVE_BUILD_ITEM cause);
-	sint32 RemoveNodeByIndex(sint32 index, CAUSE_REMOVE_BUILD_ITEM cause);
-	sint32 InsertAfter(BuildNode *targetNode, BuildNode *node);
-	sint32 InsertIndex(sint32 index, BuildNode *node);
+	bool RemoveNode(BuildNode *node, CAUSE_REMOVE_BUILD_ITEM cause);
+	bool RemoveNodeByIndex(sint32 index, CAUSE_REMOVE_BUILD_ITEM cause);
+	bool InsertAfter(BuildNode *targetNode, BuildNode *node);
+	bool InsertIndex(sint32 index, BuildNode *node);
 	MBCHAR *GetName( void ) { return m_name; }
 	void SetName( MBCHAR *name );
 
@@ -180,12 +182,12 @@ public:
 
 	void RemoveObjectsOfType(sint32 cat, sint32 type, 
 							 CAUSE_REMOVE_BUILD_ITEM cause);
-	void RemoveIllegalItems(BOOL isClientAck = FALSE);
+	void RemoveIllegalItems(bool isClientAck = false);
 
-    sint32 GetLen() const;
-	BOOL DoInsertChecks(sint32 cat, sint32 t, sint32 cost);
+	sint32 GetLen() const;
+	bool DoInsertChecks(sint32 cat, sint32 t, sint32 cost);
 	sint32 GetCost(sint32 cat, sint32 t);
-	BOOL InsertBefore(BuildNode *old, sint32 cat, sint32 t);
+	bool InsertBefore(BuildNode *old, sint32 cat, sint32 t);
 
 	BuildNode *GetNodeByIndex(sint32 index);
 
@@ -199,12 +201,8 @@ public:
 
 	BuildQueue & operator= (const BuildQueue &copy);
 
-	//sint32 GetBuildQueType() const { return m_list->GetHead()->m_type; } //EMOD
-	BOOL m_popcoststobuild_pending;   //EMOD
-
-
 private:
-    void SynchroniseNetworkData(void) const;
+	void SynchroniseNetworkData(void) const;
 };
 
 

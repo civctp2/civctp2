@@ -109,19 +109,19 @@ STDEHANDLER(KillUnitRegardEvent)
 	g_theWorld->GetArmy(u.RetPos(), army);
 	bool not_at_war = (AgreementMatrix::s_agreements.TurnsAtWar(killer, u.GetOwner()) < 1);
 	if (u.GetDBRec()->GetCivilian() == true) {
-		if (not_at_war &&
-			army.Num() == 1 &&
-			diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianRegardCost() &&
-			g_theWorld->GetCell(u.RetPos())->GetCity().m_id == 0x0)
-		{
-			diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianRegardCost(cost);
+		if (not_at_war
+		&& army.Num() == 1
+		&& diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianRegardCost(cost)
+		&& g_theWorld->GetCell(u.RetPos())->GetCity().m_id == 0x0
+		){
 			g_theStringDB->GetStringID("REGARD_EVENT_ATTACKED_CIVILIANS", strId);
-			diplomat.LogRegardEvent( killer,
-				cost,
-				REGARD_EVENT_MILITARY_SAFETY,	
-				strId);
+			diplomat.LogRegardEvent(killer,
+			                        cost,
+			                        REGARD_EVENT_MILITARY_SAFETY,
+			                        strId);
 
-			if (diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianTrustCost())
+			sint32 trust_cost;
+			if (diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianTrustCost(trust_cost))
 			{
 				SlicObject *so = new SlicObject("TANoKillCivilian");
 				so->AddRecipient(killer);
@@ -129,12 +129,9 @@ STDEHANDLER(KillUnitRegardEvent)
 				so->AddPlayer(u.GetOwner());
 				g_slicEngine->Execute(so);
 
-				sint32 trust_cost;
-				diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianTrustCost(trust_cost);
 				Diplomat::ApplyGlobalTrustChange(killer, trust_cost, "Committed the war crime of killing a civilian unit.");
 			}
 
-			
 			diplomat.UpdateRegard(killer);
 		}
 	}
@@ -570,11 +567,10 @@ STDEHANDLER(PlantNukeUnit_RegardEvent)
 	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
-	if (city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
-		!city_diplomat.HasLaunchedNukes())
-	{
-		sint32 trust_cost;
-		city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost);
+	sint32 trust_cost;
+	if(city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost)
+	&&!city_diplomat.HasLaunchedNukes()
+	){
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost*3, "Committed the war crime of planting a nuke in a city first.");
 	}
 
@@ -694,17 +690,15 @@ STDEHANDLER(EmbargoRegardEvent)
 		
 		
 		sint32 regard_cost = 0;
-		if (diplomat.GetCurrentDiplomacy(foreignerId).GetEmbargoTradeRegardCost())
+		if (diplomat.GetCurrentDiplomacy(foreignerId).GetEmbargoTradeRegardCost(regard_cost))
 		{
-			diplomat.GetCurrentDiplomacy(foreignerId).GetEmbargoTradeRegardCost(regard_cost);
-				
 			StringId strId;
 			g_theStringDB->GetStringID("REGARD_EVENT_EMBARGO_TRADE", strId);
-			diplomat.LogRegardEvent(foreignerId, 
-				regard_cost, 
-				REGARD_EVENT_GOLD, 
-				strId,
-				1); 
+			diplomat.LogRegardEvent(foreignerId,
+			                        regard_cost,
+			                        REGARD_EVENT_GOLD,
+			                        strId,
+			                        1);
 		}
 	}
 
@@ -824,11 +818,10 @@ STDEHANDLER(NukeCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	if (city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
-		!city_diplomat.HasLaunchedNukes())
-	{
-		sint32 trust_cost;
-		city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost);
+	sint32 trust_cost = 0;
+	if(city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost)
+	&&!city_diplomat.HasLaunchedNukes()
+	){
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost*2, "Committed the war crime of nuking a city first.");
 	}
 
@@ -880,11 +873,10 @@ STDEHANDLER(NukeLocationUnit_RegardEvent)
 	
 	pos_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
-	if (pos_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
-		!pos_diplomat.HasLaunchedNukes())
-	{
-		sint32 trust_cost;
-		pos_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost);
+	sint32 trust_cost = 0;
+	if(pos_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost)
+	&&!pos_diplomat.HasLaunchedNukes()
+	){
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost, "Committed the war crime of using nuclear weapons first.");
 	}
 
@@ -1175,11 +1167,10 @@ STDEHANDLER(CreateParkUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	if (city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
-		!city_diplomat.HasLaunchedNanoAttack())
-	{
-		sint32 trust_cost;
-		city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost);
+	sint32 trust_cost = 0;
+	if(city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost)
+	&&!city_diplomat.HasLaunchedNanoAttack()
+	){
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost*2, "Committed the war crime of nano-attacking a city first.");
 	}
 

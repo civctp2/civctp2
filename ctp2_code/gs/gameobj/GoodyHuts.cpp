@@ -290,114 +290,113 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Choose ruin type for typeValue %d\n", m_typeValue));
 
-    if (owner == PLAYER_INDEX_VANDALS)
-    {
-        return GOODY_BOGUS;
-    }
+	if (owner == PLAYER_INDEX_VANDALS)
+	{
+		return GOODY_BOGUS;
+	}
 
-    GoodyRiskData   risk    = GoodyRiskData(g_theGameSettings, g_theRiskDB);
-    GOODY           result  = risk.Select(m_typeValue);
+	GoodyRiskData   risk    = GoodyRiskData(g_theGameSettings, g_theRiskDB);
+	GOODY           result  = risk.Select(m_typeValue);
 
-    switch (result)
-    {
-    default:
-        // No special actions
-        break;
+	switch (result)
+	{
+		default:
+			// No special actions
+			break;
 
-    case GOODY_ADVANCE:
-        {
-            Advances const *    advances     = g_player[owner]->m_advances;
-		    AdvanceType *       possible     = 
-                new AdvanceType[g_theAdvanceDB->NumRecords()];
-		    size_t              nextPossible = 0;
-            sint32 const        maxNovelty   = risk.GetMaxAdvanceLeap();
+		case GOODY_ADVANCE:
+		{
+			Advances const *    advances     = g_player[owner]->m_advances;
+			AdvanceType *       possible     = 
+			    new AdvanceType[g_theAdvanceDB->NumRecords()];
+			size_t              nextPossible = 0;
+			sint32 const        maxNovelty   = risk.GetMaxAdvanceLeap();
 
-		    for (AdvanceType i = 0; i < g_theAdvanceDB->NumRecords(); ++i) 
-            {
-                if (advances->HasAdvance(i)) 
+			for(AdvanceType i = 0; i < g_theAdvanceDB->NumRecords(); ++i)
+			{
+				if(advances->HasAdvance(i)) 
 					continue;   // known
 
-				if (g_theAdvanceDB->Get(i)->GetGoodyHutExcluded())
-				    continue;   // EMOD new flag to prevent some unts from appearing
+				if(g_theAdvanceDB->Get(i)->GetGoodyHutExcluded())
+					continue;   // EMOD new flag to prevent some unts from appearing
 
-				if ((g_theAdvanceDB->Get(i)->GetNumPrerequisites() > 0) &&
-			        (g_theAdvanceDB->Get(i)->GetPrerequisitesIndex(0) == i)
-                   )
-                    continue;   // undiscoverable
+				if(g_theAdvanceDB->Get(i)->GetNumPrerequisites() > 0
+				&& g_theAdvanceDB->Get(i)->GetPrerequisitesIndex(0) == i)
+					continue;   // undiscoverable
 
 				//remove this and use advances->m_researching ??? EMOD
 
-                if (advances->GetMinPrerequisites(i, maxNovelty) <= maxNovelty)
-                {
-                    possible[nextPossible++] = i;
-                }
-                // else: too advanced
-		    }
+				if (advances->GetMinPrerequisites(i, maxNovelty) <= maxNovelty)
+				{
+					possible[nextPossible++] = i;
+				}
+				// else: too advanced
+			}
 
-		    if (nextPossible) 
-            {
-		        m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
-		    }
-            else
-            {
-                result  = GOODY_BOGUS;
-            }
+			if (nextPossible) 
+			{
+				m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
+			}
+			else
+			{
+				result  = GOODY_BOGUS;
+			}
 
-		    delete [] possible;
-	    }
-        break;
-
-    case GOODY_GOLD:       
-		m_value = risk.GoldAmount(m_value);
+			delete [] possible;
+		}
 		break;
 
-    case GOODY_SETTLER:
-        {
-		    for (size_t i = 0; i < static_cast<size_t>(g_theUnitDB->NumRecords()); ++i) 
-            {
-			    if (g_theUnitDB->Get(i)->GetSettleLand()) 
-                {
-				    m_value = i;
-				    return GOODY_UNIT;
-			    }
-		    }
+		case GOODY_GOLD:
+			m_value = risk.GoldAmount(m_value);
+			break;
 
-            result = GOODY_BOGUS;
-        }
-        break;
+		case GOODY_SETTLER:
+		{
+			for (size_t i = 0; i < static_cast<size_t>(g_theUnitDB->NumRecords()); ++i) 
+			{
+				if (g_theUnitDB->Get(i)->GetSettleLand()) 
+				{
+					m_value = i;
+					return GOODY_UNIT;
+				}
+			}
 
-    case GOODY_UNIT:
-        {
-            Advances const *    advances     = g_player[owner]->m_advances;
-		    sint32 *            possible     = new sint32[g_theUnitDB->NumRecords()]; //EMOD changed from AdvancesDB recomended by Fromafar 4-12-2006
-		    size_t              nextPossible = 0;
-            sint32 const        maxNovelty   = risk.GetMaxUnitAdvanceLeap();
+			result = GOODY_BOGUS;
+		}
+		break;
 
-		    for (sint32 i = 0; i < g_theUnitDB->NumRecords(); ++i) 
-            {
-			    UnitRecord const * rec = g_theUnitDB->Get(i);
+		case GOODY_UNIT:
+		{
+			Advances const *    advances     = g_player[owner]->m_advances;
+			sint32 *            possible     = new sint32[g_theUnitDB->NumRecords()]; //EMOD changed from AdvancesDB recomended by Fromafar 4-12-2006
+			size_t              nextPossible = 0;
+			sint32 const        maxNovelty   = risk.GetMaxUnitAdvanceLeap();
 
-			    if (!rec->GetMovementTypeLand())
-				    continue;   // would die immediately here
-			    if (rec->GetAttack() < 1)               
-				    continue;   // defenseless?
-			    if (rec->GetGoodyHutExcluded())
-				    continue;   // EMOD new flag to prevent some unts from appearing
-			    if (rec->GetHasPopAndCanBuild())
-				    continue;   // settler, handled separately
-			    if (g_exclusions->IsUnitExcluded(i))    
-				    continue;   // excluded (MP, mod)
-			    if (rec->GetNumGovernmentType() > 0) 
-				    continue;   // government specific?
+			for (sint32 i = 0; i < g_theUnitDB->NumRecords(); ++i) 
+			{
+				UnitRecord const * rec = g_theUnitDB->Get(i);
+
+				if (!rec->GetMovementTypeLand())
+					continue;   // would die immediately here
+				if (rec->GetAttack() < 1)               
+					continue;   // defenseless?
+				if (rec->GetGoodyHutExcluded())
+					continue;   // EMOD new flag to prevent some unts from appearing
+				if (rec->GetHasPopAndCanBuild())
+					continue;   // settler, handled separately
+				if (g_exclusions->IsUnitExcluded(i))    
+					continue;   // excluded (MP, mod)
+				if (rec->GetNumGovernmentType() > 0) 
+					continue;   // government specific?
 /////////////////ORIGINAL
-			    if (advances->GetMinPrerequisites
-                        (rec->GetEnableAdvanceIndex(), maxNovelty) 
-                    <= maxNovelty
-                  )
-               {
-				    possible[nextPossible++] = i;
-			    }
-                // else : too advanced
+				if (advances->GetMinPrerequisites
+				        (rec->GetEnableAdvanceIndex(), maxNovelty) 
+				    <= maxNovelty
+				  )
+				{
+					possible[nextPossible++] = i;
+				}
+				// else : too advanced
 ///////////////////////
 //EMOD
 //				sint32 p;
@@ -409,19 +408,19 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 //EMOD
 			}
 ////////////////ORIGINAL
-		    if (nextPossible) 
-           {
-		        m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
-		    }
-          else
-          {
-                result  = GOODY_BOGUS;
-          }
+			if (nextPossible) 
+			{
+				m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
+			}
+			else
+			{
+				result  = GOODY_BOGUS;
+			}
 
-		    delete [] possible;
+			delete [] possible;
 
-	    }
-        break;
+		}
+		break;
 
 	} // switch
 
@@ -439,8 +438,8 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			so->AddRecipient(owner) ;
 			g_slicEngine->Execute(so) ;
 			DPRINTF(k_DBG_GAMESTATE, ("No soup for you!\n"));
-            
-			
+
+
 			if (g_soundManager) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if (visiblePlayer == owner) {
@@ -612,7 +611,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 
 void GoodyHut::Serialize(CivArchive &archive)
 {
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
 	if(archive.IsStoring()) {
 		archive.StoreChunk((uint8 *)&m_value, ((uint8 *)&m_typeValue)+sizeof(m_typeValue));

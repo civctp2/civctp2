@@ -4274,24 +4274,27 @@ BOOL CityData::BuildWonder(sint32 type)
 	}
 }
 
-void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now it does 3-26-2006 EMOD // No it isn't it is called in Player::AddWonder. //it doesn't look like it does :)
+void CityData::AddWonder(sint32 type)
 {
 
-	const WonderRecord* rec = wonderutil_Get(type); //added by E
+	const WonderRecord* rec = wonderutil_Get(type); // Added by E
 	MapPoint point(m_home_city.RetPos());
 
 	m_builtWonders |= (uint64(1) << (uint64)type);
 
-//EMOD wonders add borders too
+	// EMOD wonders add borders too
 	sint32 intRad;
 	sint32 sqRad;
-	//EMOD increases city borders
+	// EMOD increases city borders
 	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) {
 		GenerateBorders(point, m_owner, intRad, sqRad);
 	}
-	//end Emod
-//
-//EMOD Visible wonders 4-25-2006 
+	// End Emod
+
+	// EMOD Visible wonders 4-25-2006
+	// How does the default constructor initialize MapPoint?
+	// Does the default constructor create a valid MapPoint?
+	// If not yes, how to create an invalid MapPoint?
 	MapPoint SpotFound;
 	CityInfluenceIterator it(point, GetVisionRadius());  //m_sizeIndex 
 	
@@ -4301,13 +4304,16 @@ void CityData::AddWonder(sint32 type)  //not used? cityevent did not call it now
 	
 
 		for(it.Start(); !it.End(); it.Next()) {
-			SpotFound = it.Pos();
+//			SpotFound = it.Pos(); // Doing this means you can forget the rest
 			//Cell *cell = g_theWorld->GetCell(it.Pos());
 			Cell *ncell = g_theWorld->GetCell(it.Pos());
 			Cell *ocell = g_theWorld->GetCell(SpotFound);
 			if(point == it.Pos())
 				continue;
 
+			// These three if-statements have to be combined.
+			// Amd a SpotFound valid check is missing here.
+			// See the MapPoint class for a check.
 			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
 				SpotFound = it.Pos();
 			}
@@ -6333,13 +6339,13 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		}
 	}
 
-		// EMOD this wonder is prevented by other wonders 
+	// EMOD this wonder is prevented by other wonders 
 	// to be built. (good for state religion etc)
 	if(rec->GetNumExcludedByWonder() > 0) {
 		sint32 ew;
 		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
 			sint32 b = rec->GetExcludedByWonderIndex(ew);
-			if(GetBuiltWonders() & (uint64(1) << b)){
+			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
 			//if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
 				return FALSE;
 			}
@@ -8515,8 +8521,7 @@ bool CityData::NeedMoreFood(sint32 bonusFood, sint32 &foodMissing, bool consider
 
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
 
-	sint32 popDistance;
-	strategy.GetStopBuildingFoodBeforePopMax(popDistance);
+	sint32 popDistance = strategy.GetStopBuildingFoodBeforePopMax();
 
 	foodMissing = HowMuchMoreFoodNeeded(bonusFood, true, considerOnlyFromTerrain);
 
@@ -8667,8 +8672,7 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
 
-	sint32 timePerPop;
-	strategy.GetTurnsAcceptedForOnePop(timePerPop);
+	sint32 timePerPop = strategy.GetTurnsAcceptedForOnePop();
 
 	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
 //	DPRINTF(k_DBG_GAMESTATE, ("GrowthRate: %i\n", rec->GetGrowthRate()));

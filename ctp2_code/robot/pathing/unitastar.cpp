@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A* algorithm for units
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,11 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG
+//
+// PRINT_COSTS
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -77,7 +82,6 @@ extern World *g_theWorld;
 
 #include "A_Star_Heuristic_Cost.h"
 #include "terrainutil.h"
-
 
 DynamicArray<MapPoint> g_pixel; 
 
@@ -608,7 +612,6 @@ BOOL UnitAstar::CheckMoveIntersection(const MapPoint &prev, const MapPoint &pos,
     return FALSE; 
 }
 
-extern sint32 g_ec_called; 
 extern sint32 g_find_astar_bug;
 
 sint32 g_check; 
@@ -892,7 +895,7 @@ void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
         move_intersection &= army[i].GetMovementType();
 
         rec = g_theUnitDB->Get(army[i].GetType());
-        if (!rec->GetSpaceLaunch()) { 
+        if (!rec->HasSpaceLaunch()) { 
             m_can_space_launch = FALSE; 
         }
 
@@ -968,8 +971,6 @@ void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
 void UnitAstar::InitSearch(const MapPoint &start, const PLAYER_INDEX owner, 
     const MapPoint &dest, Path &good_path, sint32 &is_broken_path, Path &bad_path)
 {
-
-    g_ec_called = 0 ; 
 
     bad_path.Clear(); 
     good_path.Clear(); 

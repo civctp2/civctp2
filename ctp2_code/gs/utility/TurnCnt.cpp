@@ -1188,29 +1188,6 @@ void TurnCount::ChooseHappinessPlayer()
 #ifdef _DEBUG
 void TurnCount::LogPlayerStats(void)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	FILE            *logfile;
 	MBCHAR          filename[80];
 	PLAYER_INDEX    playerNum;
@@ -1231,13 +1208,10 @@ void TurnCount::LogPlayerStats(void)
 
 	CityData            *cityData;
 	Unit                city;
-	sint32              cityIndex;
-	BOOL                unknown;
 
 	for (i=0; i<cityList->Num(); i++) {
 		city = cityList->Access(i);
 		cityData = city.AccessData()->GetCityData();
-		cityIndex = g_player[playerNum]->GetCityId(city);
 
 		cityData->GetPop(citySize);
 
@@ -1252,14 +1226,9 @@ void TurnCount::LogPlayerStats(void)
 		if (cityData->GetIsRioting())
 			numCitiesRioting++;
 
-		
-		totalFood += g_player[playerNum]->CityGetNetFood(cityIndex, &unknown);
-
-		
-		totalProduction += g_player[playerNum]->CityGetNetProduction(cityIndex, &unknown);
-
-		
-		totalGold += g_player[playerNum]->CityGetNetGold(cityIndex, &unknown);
+		totalFood       += cityData->GetNetCityFood();
+		totalProduction += cityData->GetNetCityProduction();
+		totalGold       += cityData->GetNetCityGold();
 
 	}
 

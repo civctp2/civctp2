@@ -149,14 +149,14 @@ Difficulty{
 	Int					PollutionStartPopulationLevel		aka	POLLUTION_START_POPULATION_LEVEL
 	Int					PollutionProductionRatio			aka	POLLUTION_PRODUCTION_RATIO
 	Int					PollutionPopulationRatio			aka	POLLUTION_POPULATION_RATIO
-	Bit					NoAIProductionDeficit				# AI doesn't lose units
-	Bit					NoAIGoldDeficit						# AI cities don't go negative
+	Bit					NoAIProductionDeficit				# AI doesn't lose units due to production deficit
+	Bit					NoAIGoldDeficit						# AI cities don't go negative in gold
 	Bit					AICityDefenderBonus					# AI population adds to city defenses
-	Bit					BarbarianCities						# entrenched barbarians create a city
+	Bit					BarbarianCities						# Entrenched barbarians create a city
 	Bit(Int)			SectarianHappiness					# Conflicting religious, citystyles and city govts cause unhappiness
-	Bit					RevoltCasualties					#Revolting city loses 1/3 of population
-	Bit					RevoltInsurgents					#Revolting city creates barbarians
-	Record TerrainImprovement[]     BarbarianCamps			# entrenched barbarians create an imp
-	Bit					BarbarianSpawnsBarbarian			# entrenched barbs create more barbs
+	Bit					RevoltCasualties					# Revolting city loses 1/3 of population
+	Bit					RevoltInsurgents					# Revolting city creates barbarians
+	Record TerrainImprovement[]     BarbarianCamps			# Entrenched barbarians create an imp
+	Bit					BarbarianSpawnsBarbarian			# Entrenched barbs create more barbs
 
 }

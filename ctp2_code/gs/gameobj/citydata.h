@@ -660,9 +660,9 @@ public:
 	sint32 IsConvertedTo() const { return m_convertedTo; }
 
 	bool HasResource(sint32 resource) const;
-// added by E for resources Oct 2005
+	// Added by E for resources Oct 2005
 	bool HasNeededGood(sint32 resource) const;
-	void AddGoodToCity(sint32 good);	//EMOD to add goods outside of citydata 6.6.2006
+	void AddGoodToCity(sint32 good);           //EMOD to add goods outside of citydata 6.6.2006
 #ifdef CTP1_TRADE
 	const Resources *GetResources() const { return &m_resources; }
 	const Resources *GetLocalResources() const { return &m_localResources; }

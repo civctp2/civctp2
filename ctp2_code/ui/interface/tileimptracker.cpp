@@ -256,17 +256,17 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 				sint32 oldGold = cell->GetGoldProduced();
 				
 				sint32 newFood = newT->GetEnvBase()->GetFood();
-				if(cell->HasRiver() && newT->GetEnvRiver()) {
+				if(cell->HasRiver() && newT->HasEnvRiver()) {
 					newFood += newT->GetEnvRiverPtr()->GetFood();
 				}
 				
 				sint32 newProd = newT->GetEnvBase()->GetShield();
-				if(cell->HasRiver() && newT->GetEnvRiver()) {
+				if(cell->HasRiver() && newT->HasEnvRiver()) {
 					newProd += newT->GetEnvRiverPtr()->GetShield();
 				}
 				
 				sint32 newGold = newT->GetEnvBase()->GetGold();
-				if(cell->HasRiver() && newT->GetEnvRiver()) {
+				if(cell->HasRiver() && newT->HasEnvRiver()) {
 					newGold += newT->GetEnvRiverPtr()->GetGold();
 				}
 				

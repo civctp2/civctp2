@@ -89,11 +89,11 @@
 // - Added tileimps that can upgrade by E 5-30-2006
 // - Added minefield tileimps that deduct HP by E 5-30-2006
 // - changed barbariancamps to barbariancities (E 6-07-2006)
-// - added new barbarian camps as a settle imp code (E 6-07-2006)
-// - added barbarianspawsnbarbarian (E 6-07-2006)
-// - changed barbariancamps to barbariancities (E 6-07-2006)
-// - made barbarians immune to hstile terrain
-// - Implemented SpawnBarbairans units
+// - Added new barbarian camps as a settle imp code (E 6-07-2006)
+// - Added barbarianspawsnbarbarian (E 6-07-2006)
+// - Changed barbariancamps to barbariancities (E 6-07-2006)
+// - Made barbarians immune to hstile terrain (E 6-10-2006)
+// - Implemented SpawnBarbairans units (E 6-10-2006)
 //
 //----------------------------------------------------------------------------
 
@@ -185,13 +185,13 @@ extern Pollution *g_thePollution;
 #include "buildingutil.h"
 #include "Diplomat.h"
 #include "radarmap.h"
-#include "GovernmentRecord.h"   //EMOD to access government data
-#include "DifficultyRecord.h"   //EMOD
-#include "TerrImprovePool.h"    //EMOD
+#include "GovernmentRecord.h"          //EMOD to access government data
+#include "DifficultyRecord.h"          //EMOD
+#include "TerrImprovePool.h"           //EMOD
 #include "TerrainImprovementRecord.h"  //EMOD
-#include "MaterialPool.h"  //EMOD
-#include "BuildingRecord.h" //EMOD
-#include "Barbarians.h" //EMOD
+#include "MaterialPool.h"              //EMOD
+#include "BuildingRecord.h"            //EMOD
+#include "Barbarians.h"                //EMOD
 
 BOOL g_smokingCrack = TRUE;
 BOOL g_useOrderQueues = TRUE;
@@ -978,14 +978,14 @@ void ArmyData::Sleep()
 	sint32 i;
 	sint32 s;
 
-	//rec = g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType());
 	Unit city = g_theWorld->GetCity(m_pos);
 	for(i = m_nElements - 1; i >= 0; i--) {
+		// The upgrade stuff has to go into its own method
 		const UnitRecord *rec = m_array[i].GetDBRec();
+		// Actually E, I don't want to see here unfinished code.
+		// Unless you leave it here for the next months.
 		//if((rec->GetNumUpgradeTo() > 0) && ((city.m_id != 0) || (terrainutil_HasUpgrader(m_pos)))) { //added tileimps that upgrade 5-30-2006
 		if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
-		//if(rec->GetNumUpgradeTo() > 0) {
-		//	if((city.m_id != 0) || (terrainutil_HasUpgrader(m_pos))) {
 			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
 				sint32 oldshield = rec->GetShieldCost();
 				sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s))->GetShieldCost();
@@ -1002,7 +1002,6 @@ void ArmyData::Sleep()
 					                       GEA_Unit, m_array[i],
 					                       GEA_End);
 				}
-			//}
 			}
 		} else {
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
@@ -1546,7 +1545,7 @@ ArmyData::CheckActiveDefenders(MapPoint &pos, BOOL cargoPodCheck)
 void ArmyData::BeginTurn()
 {
 
-//EMOD to add Harvesting Units 5-15-2006
+	// EMOD to add Harvesting Units 5-15-2006
 
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
@@ -1576,7 +1575,7 @@ void ArmyData::BeginTurn()
 		}
 	}
 
-	// EMOD Barbarian Camps
+	// EMOD Barbarian Cities
 	// This should be risk level depending
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianCities())
 	{
@@ -1596,7 +1595,9 @@ void ArmyData::BeginTurn()
 			}
 		}
 	}
-	////
+
+	// EMOD Barbarian Camps
+	// This should be risk level depending
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
 	{
 		for(i = 0; i < m_nElements; i++) {
@@ -1615,7 +1616,8 @@ void ArmyData::BeginTurn()
 			}
 		}
 	}
-//Barbarian leader spawn
+	// Barbarian leader spawn
+	// This should be risk level depending
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
 	{
 		for(i = 0; i < m_nElements; i++) {
@@ -1628,7 +1630,8 @@ void ArmyData::BeginTurn()
 			}
 		}
 	}
-//END EMOD barb camps
+	// END EMOD barb camps
+	// This should be risk level depending
 	for(i = 0; i < m_nElements; i++) {
 		Cell *cell = g_theWorld->GetCell(m_pos);
 		sint32 CellOwner = cell->GetOwner();
@@ -1643,9 +1646,9 @@ void ArmyData::BeginTurn()
 	}
 
 
-//END EMOD barb spawn units
+	// END EMOD barb spawn units
 
-	//EMOD: If Hostileterrain and not fort than deduct HP from the unit
+	// EMOD: If Hostileterrain and not fort than deduct HP from the unit
 	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 	sint32 hpcost;
 	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) //add AI immunity?
@@ -1664,8 +1667,8 @@ void ArmyData::BeginTurn()
 		}
 	}
 
-//EMOD If tile has tileimp that is a minefield then deduct HP
-	if(terrainutil_HasMinefield(m_pos)  
+	// EMOD If tile has tileimp that is a minefield then deduct HP
+	if(terrainutil_HasMinefield(m_pos)
 	){
 		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
 		sint32 hpcost2;
@@ -1691,7 +1694,7 @@ void ArmyData::BeginTurn()
 //		if(g_theWorld->GetArmy(it.Pos()), owner != m_owner
 //			m_array[i].DeductHP(1);
 
-//END EMOD
+	// END EMOD
 
     m_flags &= ~(k_CULF_EXECUTED_THIS_TURN);
     if(m_isPirating) {//then collect gold from trade routes that this army is pirating
@@ -8363,21 +8366,21 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 	sint32  movebonus; // = g_theUnitDB->Get()->GetMoveBonus();
 	double c;
 	BOOL out_of_fuel;
-//EMOD
+	// EMOD
 	Cell *cell = g_theWorld->GetCell(pos);
 	sint32 CellOwner = cell->GetOwner();
 	sint32 j = 0;
 	sint32 imp = cell->GetDBImprovement(j);
 
 
-//end EMOD
+	// End EMOD
 	for(i = m_nElements - 1; i >= 0; i--) {
 		if(m_array[i].GetMovementTypeAir()) {
 			c = k_MOVE_AIR_COST;
-//EMOD - this code may no longer be necessay since i think this code only gets the cost of the pos and unitdata is used for the unit deduct cost
+		// EMOD - this code may no longer be necessay since i think this code only gets the cost of the pos and unitdata is used for the unit deduct cost
 		} else if(m_array[i].GetDBRec()->GetMoveBonus(movebonus)) {
 			c = movebonus;
-//end EMOD
+		// End EMOD
 		} else if(g_theWorld->IsTunnel(pos)) {
 			if(!m_array[i].GetMovementTypeLand()) {
 				sint32 icost;
@@ -8387,13 +8390,13 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 				c = cost;
 			}
 		}else if(m_array[i].Flag(k_UDF_FOUGHT_THIS_TURN)) {  // Add Blitz/multiple attacks here?
-//EMOD
+			// EMOD
 			if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {
 				c = m_array[i].GetMovementPoints();
 			}else {
 				c = cost;
 			}
-			//EMOD for having some tileimps not allowed for enemy movement like railroads 4-12-2006
+		// EMOD for having some tileimps not allowed for enemy movement like railroads 4-12-2006
 		} else if((m_array[i].GetOwner() != CellOwner) && (CellOwner > 0) && (cell->GetDBImprovement(j) > 0)) {  //this denies all?
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 			if (AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && trec->GetDeniedToEnemy()){  //i.e. RailRoads see Cell::CalcTerrainMoveCost?
@@ -8403,11 +8406,11 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 			} else {
 				c = cost;
 			}
-//end EMOD
+		// end EMOD
 		}else {
 			c = cost;
 		}
-//end EMOD
+		// end EMOD
 //original
 //			c = m_array[i].GetMovementPoints();
 //		}else {
@@ -8420,7 +8423,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 }
 
 sint32 ArmyData::Fight(CellUnitList &defender)
-{  
+{
 	Assert(defender.Num() > 0);
 	Assert(m_nElements > 0);
 	if(defender.Num() < 1 || m_nElements < 1) {
@@ -8818,9 +8821,11 @@ void ArmyData::Disband()
 //				city.AccessData()->GetCityData()->AddInfluence(rec->GetInfluencePoints());
 //				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 //			} else {
-			city.AccessData()->GetCityData()->AddShields(m_array[i].GetDBRec()->GetShieldCost() / 2);
+			city.AccessData()->GetCityData()->AddShields(m_array[i].GetDBRec()->GetShieldCost() / 2); // Shield cost should be difficulty dependent
 		}
-//EMOD Gift Units for Human Player 4-12-2006
+
+		// Should be moved into own method and own event
+		// EMOD Gift Units for Human Player 4-12-2006
 		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && (CellOwner != m_owner)){
 			if(m_array[i].GetDBRec()->GetCanBeGifted()){ // Without this, unit isn't gifted but this flag is superflous if this is an order of its own
 				sint32 newunit = m_array[i].GetType();
@@ -8834,7 +8839,8 @@ void ArmyData::Disband()
 				} else {
 					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 				}
-//EMOD merchant code
+				// Kill missing here or you creaty magically for the receiver a new unit
+		// EMOD merchant code
 		//	}else if(rec->GetMerchantGold()) {
 		//		sint32 capdis = m_owner->GetDistanceToCapitol();
 		//		sint32 merchantgold = capdis * rec->GetMerchantGold();
@@ -8846,8 +8852,8 @@ void ArmyData::Disband()
 		} else {
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
-//end EMOD
-//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+		// End EMOD
+//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); // Can go - already in else statement above
 	}
 
 

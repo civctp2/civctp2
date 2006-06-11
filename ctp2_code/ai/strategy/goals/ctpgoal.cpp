@@ -1240,7 +1240,7 @@ bool CTPGoal::Get_Totally_Complete() const
 
 	
 	
-	if (m_playerId > 0 && target_owner > 0 && goal_record->GetTargetProtectionWonder())
+	if (m_playerId > 0 && target_owner > 0 && goal_record->HasTargetProtectionWonder())
 	{
 		const WonderRecord *wonder_rec = goal_record->GetTargetProtectionWonderPtr();
 		

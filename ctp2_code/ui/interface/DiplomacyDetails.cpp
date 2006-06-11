@@ -888,19 +888,7 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
 	sint32 p = (sint32)cookie;
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
-	
-
-
-
-
-
-
-
 	sint32 x = 0;
-
-	
-	
-	
 
 	sint32 ag;
 	sint32 slot;
@@ -914,16 +902,11 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
 		const DiplomacyProposalRecord *rec = 
 			g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
 
-		if (!rec->GetImageSlot())
+		if (!rec->GetImageSlot(slot))
 			continue;
 
-		rec->GetImageSlot(slot);
-
-		
-		
 		if (p == visP)
 		{
-			
 			if (slot > 4)
 				continue;
 		}
@@ -958,19 +941,8 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
 									  &srcRect,
 									  k_AUI_BLITTER_FLAG_CHROMAKEY);
 
-			
-			
-
 			g_c3ui->UnloadImage(image);
 		}
-
-		
-		
-		
-		
-		
-		
-		
 	}
 	return AUI_ERRCODE_OK;
 }
