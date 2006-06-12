@@ -1,31 +1,31 @@
 # Microsoft Developer Studio Project File - Name="ctp2" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** DO NOT EDIT **
+# ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=CTP2 - WIN32 RELEASE
-!MESSAGE This is not a valid makefile. To build this project using NMAKE,
-!MESSAGE use the Export Makefile command and run
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "civctp.mak".
 !MESSAGE 
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "civctp.mak" CFG="CTP2 - WIN32 RELEASE"
 !MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE 
-!MESSAGE "ctp2 - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Test" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 NDebug" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Final" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Debug Browse" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Optimized Test" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - SDL Debug" (based on "Win32 (x86) Application")
-!MESSAGE "ctp2 - SDL Final" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Release" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Debug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Test" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 NDebug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Final" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Debug Browse" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Optimized Test" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - SDL Debug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - SDL Final" (basierend auf  "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -169,8 +169,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G5 /MD /W3 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include" /I "..\os\common" /I "..\os\win32" /I "..\ctp\\" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\gs\outcom" /I "..\robotcom\incom" /I "..\robot\utility" /I "..\robot\pathing" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_common" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\ui\ldl" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /Yu"c3.h" /FD /c
-# ADD CPP /nologo /G5 /MD /W1 /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include\\" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /Yu"c3.h" /FD /c
-# SUBTRACT CPP /WX /Z<none>
+# ADD CPP /nologo /G5 /MD /GX /Ox /Ot /Og /Oi /Op /Oy- /Ob2 /I "..\os\include\\" /I "..\os\common" /I "..\os\win32" /I "..\ctp\ctp2_utils\\" /I "..\ctp\ctp2_rsrc\\" /I "..\ctp\debugtools" /I "..\libs\freetype\lib" /I "..\libs\freetype\utils\\" /I "..\libs\freetype\win32\\" /I "..\libs\freetype\utils" /I "..\libs\freetype\win32" /I "..\ui\interface" /I "..\ui\netshell" /I "..\robot\utility" /I "..\robot\pathing" /I "..\robot\aibackdoor" /I "..\libs\freetype\\" /I "..\gfx\spritesys\\" /I "..\gfx\tilesys\\" /I "..\gfx\gfx_utils\\" /I "..\gs\database" /I "..\gs\fileio\\" /I "..\gs\gameobj\\" /I "..\gs\utility\\" /I "..\gs\world\\" /I "..\net\io\\" /I "..\net\general\\" /I "..\ui\aui_utils\\" /I "..\ui\aui_sdl\\" /I "..\ui\aui_directx\\" /I "..\ui\aui_ctp2\\" /I "..\ui\aui_common\\" /I "..\libs\tiff\\" /I "..\libs\anet\h\\" /I "..\mm\\" /I "..\robotcom\backdoor" /I "..\gs\slic" /I "..\gfx\layers" /I "..\mapgen" /I "..\ui\freetype" /I "..\sound" /I "..\GameWatch\gamewatch" /I "..\GameWatch\gwciv" /I "..\libs\miles" /I "..\ctp\fingerprint" /I "..\libs\zlib" /I "..\ui\slic_debug" /I "..\gs\outcom" /I "..\ctp\\" /I "..\ui\aui_common" /I "..\ui\ldl" /I "..\gs\events" /I "..\gs\newdb" /I "..\ai\diplomacy" /I "..\ai" /I "..\ai\mapanalysis" /I "..\ai\strategy\scheduler" /I "..\ai\strategy\agents" /I "..\ai\strategy\goals" /I "..\ai\strategy\squads" /I "..\ai\citymanagement" /D "__GW_USE_IMPORT" /D "__GWCIV_USE_IMPORT" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_BFR_" /Yu"c3.h" /FD /c
+# SUBTRACT CPP /WX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -217,7 +217,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                                                 exist                                                 R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                 copy                                                 C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                 R:\ctp2_project\ctp2_code\ctp\                                                	rem                         if                                                 exist                                                 R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                 copy                                                 C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                 R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                                                  exist                                                  R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                  copy                                                  C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                  R:\ctp2_project\ctp2_code\ctp\                                                 	rem                          if                                                  exist                                                  R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                  copy                                                  C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                  R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -1100,14 +1100,6 @@ SOURCE=..\gs\database\DB.cpp
 # Begin Source File
 
 SOURCE=..\gs\database\DB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\DiffDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\DiffDB.h
 # End Source File
 # Begin Source File
 
@@ -6838,42 +6830,6 @@ SOURCE=..\robot\pathing\Path.cpp
 # Begin Source File
 
 SOURCE=..\robot\pathing\Path.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\robot\pathing\RobotAstar.cpp
-
-!IF  "$(CFG)" == "ctp2 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
-
-# SUBTRACT BASE CPP /YX /Yc /Yu
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
-
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\robot\pathing\RobotAstar.h
 # End Source File
 # Begin Source File
 

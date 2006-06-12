@@ -79,7 +79,6 @@
 #include "AdvanceRecord.h"
 #include "UnitRecord.h"
 #include "EndGameObjectRecord.h"
-#include "DiffDB.h"
 #include "profileDB.h"
 #include "RegardEvent.h"
 #include "reactevent.h"
@@ -131,6 +130,7 @@ enum READINESS_LEVEL;
 #include "TurnCnt.h"
 //Added by Martin Gühmann to access the ConstDB
 #include "ConstDB.h"
+#include "DifficultyRecord.h"
 
 extern TurnCount *g_turn;
 
@@ -535,7 +535,7 @@ void CtpAi::GroupWithEscort(const Army & army)
 				 army->GetMovementType()) != army->GetMovementType())
 				continue;
 
-			unit_rec = g_theUnitDB->Get(tmp_army[0].GetType());
+			unit_rec = tmp_army[0].GetDBRec();
 			tmp_strength = static_cast<sint32>
 				(unit_rec->GetAttack() * 
 				 unit_rec->GetDefense() *
@@ -829,7 +829,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	
 	cycle++;
 	sint32 diff_cycles = 0;
-	if (g_theGameSettings->GetDifficulty() == (LEVELS_OF_DIFFICULTY - 1))
+	if (g_theGameSettings->GetDifficulty() == (g_theDifficultyDB->NumRecords() - 1))
 		diff_cycles = 2;
 
 	// Modified by Martin Gühmann so that this can be exposed to const.txt

@@ -93,7 +93,7 @@ sint32 World::GetMaxFoodFromTerrain()
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
 		food = rec->GetEnvBase()->GetFood();
-		if (rec->GetEnvRiver())
+		if (rec->HasEnvRiver())
 			food += rec->GetEnvRiverPtr()->GetFood();
 
 		if (food > max_food)
@@ -115,7 +115,7 @@ sint32 World::GetMaxShieldsFromTerrain()
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
 		prod = rec->GetEnvBase()->GetShield();
-		if (rec->GetEnvRiver())
+		if (rec->HasEnvRiver())
 			prod += rec->GetEnvRiverPtr()->GetShield();
 		if (prod > max_prod)
 			max_prod = prod;
@@ -136,7 +136,7 @@ sint32 World::GetAvgFoodFromTerrain()
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
 		food = rec->GetEnvBase()->GetFood();
-		if (rec->GetEnvRiver())
+		if (rec->HasEnvRiver())
 			food += rec->GetEnvRiverPtr()->GetFood();
 
 		avg_food += food;
@@ -159,7 +159,7 @@ sint32 World::GetAvgShieldsFromTerrain()
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
 		prod = rec->GetEnvBase()->GetShield();
-		if (rec->GetEnvRiver())
+		if (rec->HasEnvRiver())
 			prod += rec->GetEnvRiverPtr()->GetShield();
 		avg_prod += prod;
 	}
@@ -181,7 +181,7 @@ sint32 World::GetAvgGoldFromTerrain()
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		rec = g_theTerrainDB->Get(i);
 		gold = rec->GetEnvBase()->GetGold();
-		if (rec->GetEnvRiver())
+		if (rec->HasEnvRiver())
 			gold += rec->GetEnvRiverPtr()->GetGold();
 		avg_gold += gold;
 	}

@@ -45,6 +45,7 @@
 // - Added OptimizeSliders method to have a better routine for AI sliders
 //   optimisation. - Jul 18th 2005 Martin Gühmann
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
+// - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -463,7 +464,7 @@ private:
 #endif
 	
 	double m_neededFreight;
-
+	const UnitRecord * GetDBUnitRec(sint32 type) const;
 };
 
 #endif  //__GOVERNOR_H__

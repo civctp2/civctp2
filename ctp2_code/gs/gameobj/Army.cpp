@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Army interface
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -133,12 +136,12 @@ const Unit &Army::Get(sint32 i) const
 	return GetData()->Get(i);
 }
 
-BOOL Army::Insert(const Unit &id)
+bool Army::Insert(const Unit &id)
 {
 	return AccessData()->Insert(id);
 }
 
-BOOL Army::IsPresent(Unit &u)
+bool Army::IsPresent(Unit &u)
 {
 	return AccessData()->IsPresent(u);
 }
@@ -164,66 +167,66 @@ uint32 Army::GetMovementType() const
 	return GetData()->GetMovementType();
 }
 
-BOOL Army::CanEnter(const MapPoint &point) const
+bool Army::CanEnter(const MapPoint &point) const
 {
 	return AccessData()->CanEnter(point);
 }
 
 
-BOOL Army::IsAtLeastOneMoveLand() const
+bool Army::IsAtLeastOneMoveLand() const
 {
 	return AccessData()->IsAtLeastOneMoveLand();
 }
 
-BOOL Army::IsAtLeastOneMoveWater() const
+bool Army::IsAtLeastOneMoveWater() const
 {
 	return AccessData()->IsAtLeastOneMoveWater();
 }
 
-BOOL Army::IsAtLeastOneMoveShallowWater() const
+bool Army::IsAtLeastOneMoveShallowWater() const
 {
 	return AccessData()->IsAtLeastOneMoveShallowWater();
 }
 
-BOOL Army::IsAtLeastOneMoveAir() const
+bool Army::IsAtLeastOneMoveAir() const
 {
 	return AccessData()->IsAtLeastOneMoveAir();
 }
 
 
-BOOL Army::IsAtLeastOneMoveMountain() const
+bool Army::IsAtLeastOneMoveMountain() const
 {
 	return AccessData()->IsAtLeastOneMoveMountain();
 }
 
-BOOL Army::GetMovementTypeAir() const
+bool Army::GetMovementTypeAir() const
 {
 	return GetData()->GetMovementTypeAir();
 }
 
-BOOL Army::IsMovePointsEnough(double cost)
+bool Army::IsMovePointsEnough(double cost)
 {
 	return GetData()->IsMovePointsEnough(cost);
 }
 
-BOOL Army::IsIgnoresZOC() const
+bool Army::IsIgnoresZOC() const
 {
 	return GetData()->IsIgnoresZOC();
 }
 
 
-BOOL Army::CanSettle(const MapPoint &pos) const
+bool Army::CanSettle(const MapPoint &pos) const
 {
 	return GetData()->CanSettle(pos);
 }
 
-BOOL Army::CanSettle() const
+bool Army::CanSettle() const
 {
 	return GetData()->CanSettle();
 }
 
 
-BOOL Army::IsOccupiedByForeigner(const MapPoint &pos)
+bool Army::IsOccupiedByForeigner(const MapPoint &pos)
 {
 	return AccessData()->IsOccupiedByForeigner(pos);
 }
@@ -249,46 +252,46 @@ double Army::GetHPModifier()
 	return AccessData()->GetHPModifier();
 }
 
-BOOL Army::IsAsleep() const
+bool Army::IsAsleep() const
 {
 	return GetData()->IsAsleep();
 }
 
-BOOL Army::IsEntrenched() const
+bool Army::IsEntrenched() const
 {
 	return GetData()->IsEntrenched();
 }
 
-BOOL Army::IsEntrenching() const
+bool Army::IsEntrenching() const
 {
 	return GetData()->IsEntrenching();
 }
 
-BOOL Army::CanEntrench()
+bool Army::CanEntrench()
 {
 	return AccessData()->CanEntrench();
 }
 
-BOOL Army::CanPatrol() const
+bool Army::CanPatrol() const
 {
 	return GetData()->CanPatrol();
 }
 
-BOOL Army::IsPatrolling() const
+bool Army::IsPatrolling() const
 {
 	return GetData()->IsPatrolling();
 }
 
-void Army::SetPatrolling(BOOL p)
+void Army::SetPatrolling(bool p)
 {
-	Assert(FALSE);
+	Assert(false);
 	
 }
 
 
 void Army::GetActors(sint32 &n, UnitActor **moveActor, UnitActor *butnotthis)
 {
-	Assert(FALSE);
+	Assert(false);
 
 }
 
@@ -319,12 +322,12 @@ void Army::BeginTurn()
 	AccessData()->BeginTurn();
 }
 
-BOOL Army::CanFight(CellUnitList &defender)
+bool Army::CanFight(CellUnitList &defender)
 {
 	return AccessData()->CanFight(defender);
 }
 
-BOOL Army::IsVisible(sint32 player)
+bool Army::IsVisible(sint32 player)
 {
 	return AccessData()->IsVisible(player);
 }
@@ -336,56 +339,56 @@ sint32 Army::GetCost()
 }
 
 
-BOOL Army::CanFranchise(double &chance, sint32 &uindex)
+bool Army::CanFranchise(double &chance, sint32 &uindex)
 {
 	return AccessData()->CanFranchise(chance, uindex);
 }
 
-BOOL Army::CanSue(sint32 &uindex)
+bool Army::CanSue(sint32 &uindex)
 {
 	return AccessData()->CanSue(uindex);
 }
 
-BOOL Army::CanSue()
+bool Army::CanSue()
 {
 	return AccessData()->CanSue();
 }
 
-BOOL Army::CanBeSued()
+bool Army::CanBeSued()
 {
 	return AccessData()->CanBeSued();
 }
 
-BOOL Army::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount,
+bool Army::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount,
 							   sint32 &uindex)
 {
 	return AccessData()->CanCauseUnhappiness(chance, timer, amount, uindex);
 }
 
-BOOL Army::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount)
+bool Army::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount)
 {
 	return AccessData()->CanCauseUnhappiness(chance, timer, amount);
 }
 
-BOOL Army::CanPlantNuke(double &chance, double &escape_chance,
+bool Army::CanPlantNuke(double &chance, double &escape_chance,
 				  sint32 &uindex)
 {
 	return AccessData()->CanPlantNuke(chance, escape_chance, uindex);
 }
 
-BOOL Army::CanPlantNuke(double &chance, double &escape_chance)
+bool Army::CanPlantNuke(double &chance, double &escape_chance)
 {
 	return AccessData()->CanPlantNuke(chance, escape_chance);
 }
 
 
-BOOL Army::CanSlaveRaid(double &success, double &death, 
+bool Army::CanSlaveRaid(double &success, double &death, 
 						sint32 &timer, sint32 &amount)
 {
 	return AccessData()->CanSlaveRaid(success, death,
 									  timer, amount);
 }
-BOOL Army::IsSlaveRaidPossible(const MapPoint &point, 
+bool Army::IsSlaveRaidPossible(const MapPoint &point, 
 							   double &success, 
 							   double &death, 
 							   sint32 &timer, 
@@ -407,95 +410,95 @@ BOOL Army::IsSlaveRaidPossible(const MapPoint &point,
 }
 
 
-BOOL Army::CanEnslaveSettler(sint32 &uindex)
+bool Army::CanEnslaveSettler(sint32 &uindex)
 {
 	return AccessData()->CanEnslaveSettler(uindex);
 }
 
-BOOL Army::CanUndergroundRailway(double &success, double &death,
+bool Army::CanUndergroundRailway(double &success, double &death,
 								 sint32 &uindex)
 {
 	return AccessData()->CanUndergroundRailway(success, death, uindex);
 }
 
-BOOL Army::CanUndergroundRailway(double &success, double &death)
+bool Army::CanUndergroundRailway(double &success, double &death)
 {
 	return AccessData()->CanUndergroundRailway(success, death);
 }
 
-BOOL Army::CanInciteUprising(sint32 &uindex)
+bool Army::CanInciteUprising(sint32 &uindex)
 {
 	return AccessData()->CanInciteUprising(uindex);
 }
 
 
-BOOL Army::CanEstablishEmbassy(sint32 &uindex)
+bool Army::CanEstablishEmbassy(sint32 &uindex)
 {
 	return AccessData()->CanEstablishEmbassy(uindex);
 }
 
-BOOL Army::CanEstablishEmbassy()
+bool Army::CanEstablishEmbassy()
 {
 	return AccessData()->CanEstablishEmbassy();
 }
 
-BOOL Army::CanBioInfect(double &chance)
+bool Army::CanBioInfect(double &chance)
 {
 	return AccessData()->CanBioInfect(chance);
 }
 
-BOOL Army::CanNanoInfect(double &chance, sint32 &uindex)
+bool Army::CanNanoInfect(double &chance, sint32 &uindex)
 {
 	return AccessData()->CanNanoInfect(chance, uindex);
 }
 
-BOOL Army::CanNanoInfect(double &chance)
+bool Army::CanNanoInfect(double &chance)
 {
 	return AccessData()->CanNanoInfect(chance);
 }
 
-BOOL Army::CanConvertCity(double &chance, double &deathChance, sint32 &uindex)
+bool Army::CanConvertCity(double &chance, double &deathChance, sint32 &uindex)
 {
 	return AccessData()->CanConvertCity(chance, deathChance, uindex);
 }
 
-BOOL Army::CanConvertCity(double &chance, double &deathChance)
+bool Army::CanConvertCity(double &chance, double &deathChance)
 {
 	return AccessData()->CanConvertCity(chance, deathChance);
 }
 
-BOOL Army::CanConvertCity(const MapPoint &point)
+bool Army::CanConvertCity(const MapPoint &point)
 {
 	return AccessData()->CanConvertCity(point);
 }
 
 
-BOOL Army::CanReformCity(sint32 &uindex, const MapPoint &point)
+bool Army::CanReformCity(sint32 &uindex, const MapPoint &point)
 {
 	return AccessData()->CanReformCity(uindex, point);
 }
 
-BOOL Army::CanReformCity()
+bool Army::CanReformCity()
 {
 	return AccessData()->CanReformCity();
 }
 
-BOOL Army::CanSellIndulgences(sint32 &uindex)
+bool Army::CanSellIndulgences(sint32 &uindex)
 {
 	return AccessData()->CanSellIndulgences(uindex);
 }
 
-BOOL Army::CanSellIndulgences()
+bool Army::CanSellIndulgences()
 {
 	return AccessData()->CanSellIndulgences();
 }
 
-BOOL Army::CanSoothsay(sint32 &uindex)
+bool Army::CanSoothsay(sint32 &uindex)
 {
 	return AccessData()->CanSoothsay(uindex);
 }
 
-BOOL Army::CanSoothsay()
+bool Army::CanSoothsay()
 {
 	return AccessData()->CanSoothsay();
 }
@@ -515,126 +518,126 @@ BOOL Army::CanSoothsay()
 
 
 
-BOOL Army::AbleToPlantNukeTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToPlantNukeTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToPlantNukeTarget(point, uindex);
 }
 
 
-BOOL Army::AbleToMakeParkTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToMakeParkTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToMakeParkTarget(point, uindex);
 }
 
-BOOL Army::AbleToUndergroundRailwayTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToUndergroundRailwayTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToUndergroundRailwayTarget(point, uindex);
 }
 
-BOOL Army::AbleToConvertTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToConvertTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToConvertTarget(point, uindex);
 }
 
-BOOL Army::AbleToEstablishEmbassyTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToEstablishEmbassyTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToEstablishEmbassyTarget(point, uindex);
 }
 
-BOOL Army::AbleToCreateFranchiseTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToCreateFranchiseTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToCreateFranchiseTarget(point, uindex);
 }
 
-BOOL Army::AbleToAssasinateRulerTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToAssasinateRulerTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToAssasinateRulerTarget(point, uindex);
 }
 
-BOOL Army::AbleToStealTechnologyTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToStealTechnologyTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToStealTechnologyTarget(point, uindex);
 }
 
-BOOL Army::AbleToInjoinTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToInjoinTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToInjoinTarget(point, uindex);
 }
 
-BOOL Army::AbleToInciteRevolutionTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToInciteRevolutionTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToInciteRevolutionTarget(point, uindex);
 }
 
-BOOL Army::AbleToCauseUnhappinessTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToCauseUnhappinessTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToCauseUnhappinessTarget(point, uindex);
 }
 
-BOOL Army::AbleToExpelTarget(const MapPoint &point, sint32 &uindex)
+bool Army::AbleToExpelTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToExpelTarget(point, uindex);
 }
 
-BOOL Army::CanExpel()
+bool Army::CanExpel()
 {
 	return AccessData()->CanExpel();
 }
 
-BOOL Army::CanCreatePark(sint32 &uindex)
+bool Army::CanCreatePark(sint32 &uindex)
 {
 	return AccessData()->CanCreatePark(uindex);
 }
 
-BOOL Army::CanCreatePark()
+bool Army::CanCreatePark()
 {
 	return AccessData()->CanCreatePark();
 }
 
 #if 0
-BOOL Army::CanTravelRift(const MapPoint &newpos, MapPoint &dest)
+bool Army::CanTravelRift(const MapPoint &newpos, MapPoint &dest)
 {
 	return AccessData()->CanTravelRift(newpos, dest);
 }
 
-BOOL Army::CanCreateRift(sint32 &uindex)
+bool Army::CanCreateRift(sint32 &uindex)
 {
 	return AccessData()->CanCreateRift(uindex);
 }
 
-BOOL Army::CanCreateRift()
+bool Army::CanCreateRift()
 {
 	return AccessData()->CanCreateRift();
 }
 #endif
 
-BOOL Army::CanPillage(uint32 &uindex) const
+bool Army::CanPillage(uint32 &uindex) const
 {
 	return AccessData()->CanPillage(uindex);
 }
 
-BOOL Army::CanPillage() const
+bool Army::CanPillage() const
 {
 	return AccessData()->CanPillage();
 }
 
-BOOL Army::CanInjoin(sint32 &uindex)
+bool Army::CanInjoin(sint32 &uindex)
 {
 	return AccessData()->CanInjoin(uindex);
 }
 
-BOOL Army::CanInjoin()
+bool Army::CanInjoin()
 {
 	return AccessData()->CanInjoin();
 }
 
-BOOL Army::GetFirstMoveThisTurn() const
+bool Army::GetFirstMoveThisTurn() const
 {
 	return AccessData()->GetFirstMoveThisTurn();
 }
 
 
-BOOL Army::HasLeftMap() const
+bool Army::HasLeftMap() const
 {
 	return AccessData()->HasLeftMap();
 }
@@ -651,17 +654,17 @@ void Army::MinMovementPoints(double &cur) const
 }
 
 
-BOOL Army::CanBombard(const MapPoint &point)
+bool Army::CanBombard(const MapPoint &point)
 {
 	return AccessData()->CanBombard(point);
 }
 
-BOOL Army::CanBombard()
+bool Army::CanBombard()
 {
 	return AccessData()->CanBombard();
 }
 
-BOOL Army::CanInterceptTrade(uint32 &uindex) const
+bool Army::CanInterceptTrade(uint32 &uindex) const
 {
 	return AccessData()->CanInterceptTrade(uindex);
 }
@@ -744,13 +747,13 @@ void Army::ForgetPatrol()
 	AccessData()->ForgetPatrol();
 }
 
-BOOL Army::CanMoveIntoCell(const MapPoint &pos, BOOL &zocViolation)
+bool Army::CanMoveIntoCell(const MapPoint &pos, BOOL &zocViolation)
 {
 	BOOL alliedCity;
-    return AccessData()->CanMoveIntoCell(pos, zocViolation, FALSE, alliedCity);
+	return AccessData()->CanMoveIntoCell(pos, zocViolation, false, alliedCity);
 }
 
-BOOL Army::CanMoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
+bool Army::CanMoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 {
 	return AccessData()->CanMoveIntoTransport(pos, transports);
 }
@@ -760,12 +763,12 @@ sint32 Army::NumUnitsCanMoveIntoThisTransport(const Army &transports)
 	return AccessData()->NumUnitsCanMoveIntoThisTransport(*transports.AccessData());
 }
 
-BOOL Army::CanMoveIntoThisTransport(CellUnitList &transports)
+bool Army::CanMoveIntoThisTransport(CellUnitList &transports)
 {
 	return AccessData()->CanMoveIntoThisTransport(transports);
 }
 
-BOOL Army::CanMoveIntoThisTransport(const Army &transports)
+bool Army::CanMoveIntoThisTransport(const Army &transports)
 {
 	return AccessData()->CanMoveIntoThisTransport(*transports.AccessData());
 }
@@ -807,54 +810,54 @@ void Army::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_emp
     GetData()->CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty); 
 }
 
-BOOL Army::CanMove() const
+bool Army::CanMove() const
 {
 	return AccessData()->CanMove();
 }
 
 
-BOOL Army::CanBeachAssault()
+bool Army::CanBeachAssault()
 {
 	return AccessData()->CanBeachAssault();
 }
 
-BOOL Army::CanHearGossip()
+bool Army::CanHearGossip()
 {
 	return AccessData()->CanHearGossip();
 }
 
-BOOL Army::CanSlaveUprising()
+bool Army::CanSlaveUprising()
 {
 	return AccessData()->CanSlaveUprising();
 }
 
-BOOL Army::CanInciteRevolution( double &chance, double &eliteChance )
+bool Army::CanInciteRevolution( double &chance, double &eliteChance )
 {
 	return AccessData()->CanInciteRevolution( chance, eliteChance );
 }
 
-BOOL Army::CanCloak()
+bool Army::CanCloak()
 {
 	return AccessData()->CanCloak();
 }
 
 
-BOOL Army::CanCreateFranchise( double &chance )
+bool Army::CanCreateFranchise( double &chance )
 {
 	return AccessData()->CanCreateFranchise( chance );
 }
 
-BOOL Army::CanAssasinateRuler( double &chance, double &eliteChance )
+bool Army::CanAssasinateRuler( double &chance, double &eliteChance )
 {
 	return AccessData()->CanAssasinateRuler( chance, eliteChance );
 }
 
-BOOL Army::CanStealTechnology( double &randChance, double &chance )
+bool Army::CanStealTechnology( double &randChance, double &chance )
 {
 	return AccessData()->CanStealTechnology( randChance, chance );
 }
 
-BOOL Army::CanInvestigateCity( double &chance, double &eliteChance )
+bool Army::CanInvestigateCity( double &chance, double &eliteChance )
 {
 	return AccessData()->CanInvestigateCity( chance, eliteChance );
 }
@@ -864,12 +867,12 @@ void Army::SetTurnOver()
 	AccessData()->SetTurnOver();
 }
 
-BOOL Army::TurnOver() const
+bool Army::TurnOver() const
 {
 	return AccessData()->TurnOver();
 }
 
-BOOL Army::CanAdvertise() const
+bool Army::CanAdvertise() const
 {
 	return GetData()->CanAdvertise();
 }
@@ -899,12 +902,12 @@ bool Army::IsWounded(void) const
 	return GetData()->IsWounded();
 }
 
-BOOL Army::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision)
+bool Army::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & use_vision)
 {
-    return AccessData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision);
+	return AccessData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision);
 }
 
-BOOL Army::ExecutedThisTurn() const
+bool Army::ExecutedThisTurn() const
 {
 	return (AccessData()->m_flags & k_CULF_EXECUTED_THIS_TURN) != 0;
 }
@@ -914,12 +917,12 @@ void Army::InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos)
 	AccessData()->InformAI(order_type, pos);
 }
 
-BOOL Army::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost )
+bool Army::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost )
 {
 	return ArmyData::GetInciteRevolutionCost( point, attackCost );
 }
 
-BOOL Army::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost )
+bool Army::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost )
 {
 	return ArmyData::GetInciteUprisingCost( point, attackCost );
 }

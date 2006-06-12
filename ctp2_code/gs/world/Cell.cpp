@@ -340,11 +340,11 @@ sint32 Cell::GetFoodFromTerrain(sint8 terrainType) const
 	
 	sint32 food = rec->GetEnvBase()->GetFood();
 
-	if(HasCity() && rec->GetEnvCity()) {
+	if(HasCity() && rec->HasEnvCity()) {
 		food += rec->GetEnvCityPtr()->GetFood();
 	}
 
-	if(HasRiver() && rec->GetEnvRiver()) {
+	if(HasRiver() && rec->HasEnvRiver()) {
 		food += rec->GetEnvRiverPtr()->GetFood();
 	}
 
@@ -440,11 +440,11 @@ sint32 Cell::GetShieldsFromTerrain(sint8 terrainType) const
 	
     sint32 shield = rec->GetEnvBase()->GetShield();
 
-	if(HasCity() && rec->GetEnvCity()) {
+	if(HasCity() && rec->HasEnvCity()) {
 		shield += rec->GetEnvCityPtr()->GetShield();
 	}
 
-	if(HasRiver() && rec->GetEnvRiver()) {
+	if(HasRiver() && rec->HasEnvRiver()) {
 		shield += rec->GetEnvRiverPtr()->GetShield();
 	}
 
@@ -542,11 +542,11 @@ sint32 Cell::GetGoldFromTerrain(sint8 terrainType) const
 	
     sint32 gold = rec->GetEnvBase()->GetGold();
 
-	if(HasCity() && rec->GetEnvCity()) {
+	if(HasCity() && rec->HasEnvCity()) {
 		gold += rec->GetEnvCityPtr()->GetGold();
 	}
 
-	if(HasRiver() && rec->GetEnvRiver()) {
+	if(HasRiver() && rec->HasEnvRiver()) {
 		gold += rec->GetEnvRiverPtr()->GetGold();
 	}
 
@@ -623,13 +623,13 @@ sint32 Cell::GetScore() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 	
-    sint32 score = rec->GetEnvBase()->GetScore();
+	sint32 score = rec->GetEnvBase()->GetScore();
 
-	if(HasCity() && rec->GetEnvCity()) {
+	if(HasCity() && rec->HasEnvCity()) {
 		score += rec->GetEnvCityPtr()->GetScore();
 	}
 
-	if(HasRiver() && rec->GetEnvRiver()) {
+	if(HasRiver() && rec->HasEnvRiver()) {
 		score += rec->GetEnvRiverPtr()->GetScore();
 	}
 
@@ -1072,11 +1072,11 @@ void Cell::CalcTerrainMoveCost()
 	tmp = base;
 
 	sint32 m;
-	if(HasCity() && rec->GetEnvCity() && rec->GetEnvCityPtr()->GetMovement(m)) {
+	if(HasCity() && rec->HasEnvCity() && rec->GetEnvCityPtr()->GetMovement(m)) {
 		tmp = std::min(tmp, static_cast<double>(m));
 	}
 
-	if(HasRiver() && rec->GetEnvRiver() && rec->GetEnvRiverPtr()->GetMovement(m)) {
+	if(HasRiver() && rec->HasEnvRiver() && rec->GetEnvRiverPtr()->GetMovement(m)) {
 		tmp = std::min(tmp, static_cast<double>(m));
 	}
 
@@ -1129,11 +1129,11 @@ double Cell::CalcTerrainFreightCost()
 	sint32					cost	= rec->GetEnvBase()->GetFreight();
 
 	// Modifications by special situations (city, river)
-	if (HasCity() && rec->GetEnvCity()) 
+	if (HasCity() && rec->HasEnvCity()) 
 	{
 		cost = min(cost, rec->GetEnvCityPtr()->GetFreight());
 	}
-	if (HasRiver() && rec->GetEnvRiver()) 
+	if (HasRiver() && rec->HasEnvRiver()) 
 	{
 		cost = min(cost, rec->GetEnvRiverPtr()->GetFreight());
 	}

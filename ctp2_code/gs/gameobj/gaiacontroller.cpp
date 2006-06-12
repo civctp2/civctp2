@@ -148,21 +148,21 @@ void GaiaController::InitializeStatics()
 	sint32 type;
 	for (sint32 i = 0; i < g_theEndGameObjectDB->NumRecords(); i++)
 		{
-			if (g_theEndGameObjectDB->Get(i)->GetTerrainImprovement())
+			if (g_theEndGameObjectDB->Get(i)->HasTerrainImprovement())
 				{
 					terr_rec = g_theEndGameObjectDB->Get(i)->GetTerrainImprovementPtr();
 					type = terr_rec->GetIndex();
 					sm_endgameImprovements |= uint64((uint64)1 << (uint64)type);
 				}
 
-			if (g_theEndGameObjectDB->Get(i)->GetBuilding())
+			if (g_theEndGameObjectDB->Get(i)->HasBuilding())
 				{
 					building_rec = g_theEndGameObjectDB->Get(i)->GetBuildingPtr();
 					type = building_rec->GetIndex();
 					sm_endgameBuildings |= uint64((uint64)1 << (uint64)type);
 				}
 
-			if (g_theEndGameObjectDB->Get(i)->GetWonder())
+			if (g_theEndGameObjectDB->Get(i)->HasWonder())
 				{
 					wonder_rec = g_theEndGameObjectDB->Get(i)->GetWonderPtr();
 					type = wonder_rec->GetIndex();
@@ -738,8 +738,7 @@ sint16 GaiaController::NumWondersBuilt() const
 sint16 GaiaController::NumSatellitesRequired() const
 {
 	sint32 value = 0;
-	if (g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMinNeeded())
-		g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMinNeeded(value);
+	g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMinNeeded(value);
 	
 	return (sint16) value;
 }
@@ -747,8 +746,7 @@ sint16 GaiaController::NumSatellitesRequired() const
 sint16 GaiaController::MaxSatellitesAllowed() const
 {
 	sint32 value = 0;
-	if(g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMaxNeeded())
-		g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMaxNeeded(value);
+	g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMaxNeeded(value);
 
 	return (sint16) value;
 }
@@ -756,16 +754,15 @@ sint16 GaiaController::MaxSatellitesAllowed() const
 sint16 GaiaController::NumMainframesRequired() const
 {
 	sint32 value = 0;
-	if (g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex)->GetMinNeeded())
-		g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex)->GetMinNeeded(value);
+	g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex)->GetMinNeeded(value);
+
 	return (sint16) value;
 }
 
 sint16 GaiaController::NumTowersRequired() const
 {
 	sint32 value = 0;
-	if (g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinNeeded())
-		g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinNeeded(value);
+	g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinNeeded(value);
 	
 	return (sint16) value;
 }
@@ -773,8 +770,7 @@ sint16 GaiaController::NumTowersRequired() const
 double GaiaController::TowerCoverageRequired() const
 {
 	double value = 0;
-	if (g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinCoverage())
-		g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinCoverage(value);
+	g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinCoverage(value);
 	
 	return value;
 }
@@ -789,21 +785,17 @@ sint16 GaiaController::GetTowerRadius() const
 		g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex);
 
 	sint32 min_radius = 0;
-	if (tower_rec->GetMinRadius())
-		tower_rec->GetMinRadius(min_radius);
+	tower_rec->GetMinRadius(min_radius);
 
 	sint32 max_radius = 0;
-	if (tower_rec->GetMaxRadius())
-		tower_rec->GetMaxRadius(max_radius);
+	tower_rec->GetMaxRadius(max_radius);
 	Assert(max_radius);
 
 	sint32 min_satellites = 0;
-	if (satellite_rec->GetMinNeeded())
-		satellite_rec->GetMinNeeded(min_satellites);
+	satellite_rec->GetMinNeeded(min_satellites);
 
 	sint32 max_satellites = 0;
-	if (satellite_rec->GetMaxNeeded())
-		satellite_rec->GetMaxNeeded(max_satellites);
+	satellite_rec->GetMaxNeeded(max_satellites);
 	Assert(max_satellites);
 
 	sint16 add_radius = 0;
@@ -824,7 +816,7 @@ sint16 GaiaController::GetTowerRadius() const
 
 float GaiaController::GetTowerCoverage() const
 {
-	return m_percentCoverage;	
+	return m_percentCoverage;
 }
 
 
@@ -941,25 +933,22 @@ bool GaiaController::StartCountdown()
 
 sint32 GaiaController::TotalCountdownTurns() const
 {
-	
 	static sint32 max_turns_to_activate = -1;
 	sint32 turns;
-	if (max_turns_to_activate == -1)
+	if(max_turns_to_activate == -1)
+	{
+		for(sint32 i = 0; i < g_theEndGameObjectDB->NumRecords(); i++)
 		{
-			for (sint32 index = 0; index < g_theEndGameObjectDB->NumRecords(); index++)
+			if(g_theEndGameObjectDB->Get(i)->GetTurnsToActivate(turns))
+			{
+				if(turns > max_turns_to_activate)
 				{
-					if (g_theEndGameObjectDB->Get(index)->GetTurnsToActivate())
-						{
-							g_theEndGameObjectDB->Get(index)->GetTurnsToActivate(turns);
-							if (turns > max_turns_to_activate)
-							{
-								max_turns_to_activate = turns;
-							}
-						}
+					max_turns_to_activate = turns;
 				}
+			}
 		}
+	}
 
-	
 	return(max_turns_to_activate);
 }
 
@@ -1001,32 +990,28 @@ sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_
 	
 	static sint32 optimal_distance = -1;
 	if (optimal_distance < 0)
+	{
+		const EndGameObjectRecord *tower_rec = 
+			g_theEndGameObjectDB->Get(sm_towerEndgameIndex);
+		Assert(tower_rec);
+
+		sint32 min_radius = 0;
+		tower_rec->GetMinRadius(min_radius);
+
+		sint32 max_radius = 0;
+		tower_rec->GetMaxRadius(max_radius);
+
+
+		if (max_radius != 0)
 		{
-			const EndGameObjectRecord *tower_rec = 
-				g_theEndGameObjectDB->Get(sm_towerEndgameIndex);
-			Assert(tower_rec);
+			optimal_distance = 
+				(sint32) floor(1.75 * (float) min_radius + ((float)(max_radius - min_radius) / 2.0));
 
-			sint32 min_radius = 0;
-			if (tower_rec->GetMinRadius())
-				tower_rec->GetMinRadius(min_radius);
-
-			sint32 max_radius = 0;
-			if (tower_rec->GetMaxRadius())
-				tower_rec->GetMaxRadius(max_radius);
-
-
-			if (max_radius != 0)
-				{
-					
-					optimal_distance = 
-						(sint32) floor(1.75 * (float) min_radius + ((float)(max_radius - min_radius) / 2.0));
-
-					
-					optimal_distance *= optimal_distance;
-				}
-			else
-				optimal_distance = 1;
+			optimal_distance *= optimal_distance;
 		}
+		else
+			optimal_distance = 1;
+	}
 
 	
 	sint32 empire_distance =
@@ -1038,19 +1023,18 @@ sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_
 	sint32 tmp_score;
 	sint32 min_score = optimal_distance;
 	for (tower_iter = towers.begin(); tower_iter != towers.end(); tower_iter++)
+	{
+		tmp_distance = MapPoint::GetSquaredDistance(pos, *tower_iter);
+		tmp_score = optimal_distance;
+		if (tmp_distance <= optimal_distance)
+			tmp_score -= (optimal_distance - tmp_distance);
+		else
+			tmp_score -= ((tmp_distance - optimal_distance)/2 > optimal_distance ? 0 : (tmp_distance - optimal_distance)/2);
+		if (tmp_score < min_score)
 		{
-			
-			tmp_distance = MapPoint::GetSquaredDistance(pos, *tower_iter);
-			tmp_score = optimal_distance;
-			if (tmp_distance <= optimal_distance)
-				tmp_score -= (optimal_distance - tmp_distance);
-			else
-				tmp_score -= ((tmp_distance - optimal_distance)/2 > optimal_distance ? 0 : (tmp_distance - optimal_distance)/2);
-			if (tmp_score < min_score)
-				{
-					min_score = tmp_score;
-				}
+			min_score = tmp_score;
 		}
+	}
 
 	
 	sint32 max_distance = (g_theWorld->GetHeight() * g_theWorld->GetWidth()) * 
@@ -1070,12 +1054,12 @@ void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) c
 
 	for (pos.x = 0; pos.x < g_theWorld->GetWidth(); pos.x++)
 		for (pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y++)
+		{
+			if (terrainutil_CanPlayerBuildAt(rec, m_playerId, pos))
 			{
-				if (terrainutil_CanPlayerBuildAt(rec, m_playerId, pos))
-					{
-						candidates.push_back(pair<sint32,MapPoint>(-1,pos));
-					}
+				candidates.push_back(pair<sint32,MapPoint>(-1,pos));
 			}
+		}
 }
 
 

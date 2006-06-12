@@ -91,7 +91,6 @@
 #include <ltdl.h>
 #endif
 #include "C3Rand.h"
-#include "IC3RobotAstar.h"
 #include "IMapGen.h"
 
 

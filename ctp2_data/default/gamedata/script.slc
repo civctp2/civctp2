@@ -958,7 +958,7 @@ alertbox '82MercenariesHaveJoinedYourCivilisation' {
 
 alertbox '83DiscoveredAncientTreasure' {
 //	MessageType("TRADE");
-	Text(ID_DISCOVERED_ANCIENT_TREASURE) ;
+	Text(ID_DISCOVERED_ANCIENT_TREASURE);
 	Button(ID_BUTTON_CLOSE) {
 		Kill();
 	}
@@ -966,8 +966,7 @@ alertbox '83DiscoveredAncientTreasure' {
 }
 
 alertbox '84BesetByVandals' {
-	Text(ID_BESET_BY_VANDALS) ;
-	DeclareWar(g.player, player[0]);  //EMOD
+	Text(ID_BESET_BY_VANDALS);
 	Button(ID_BUTTON_CLOSE) {
 		Kill();
 	}
@@ -1233,8 +1232,7 @@ alertBox '110bCantAttackHaveTreaty' {
 	}
 
 	Button(ID_BUTTON_YES) {
-		//BreakAlliance(player[0]);
-		DeclareWar(g.player, player[0]);
+		BreakAlliance(player[0]);
 		AddOrder(unit[0], location[0]);
 		Kill();
 	}
@@ -1724,7 +1722,6 @@ messagebox '029NoMaint' {
 messagebox '033BarbarianWarning' {
 	Text(ID_BARBARIAN_WARNING) ;
 	MessageType("MILITARY");
-
 }
 
 messagebox '040GrossPolluter' {
@@ -2907,13 +2904,6 @@ messagebox '911ImminentFlood' {
 	Show();
 	Text(ID_WORLD_POLLUTION_FLOODING_IMMINENT);
 	MessageType("POLLUTION");
-}	
-
-alertbox 'BarbWar' {
-	//Text(ID_BESET_BY_VANDALS) ;
-	DeclareWar(g.player, player[0]);
-	AddOrder(unit[0], location[0]);
-		Kill();
 }
 
 alertBox '999CITYCAPTUREOPTIONS' {

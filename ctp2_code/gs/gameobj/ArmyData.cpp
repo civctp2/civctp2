@@ -7356,12 +7356,8 @@ BOOL ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 		else if(g_rand->Next(100) < g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetParliamentaryVoteChance()) {
 			so = new SlicObject("Civ2Doves");
 		}
-		else if(defense_owner == PLAYER_INDEX_VANDALS) {
-			//Diplomat::GetDiplomat(m_owner).DeclareWar(PLAYER_INDEX_VANDALS);
-			so = new SlicObject("BarbWar");
-		}
 		else {
-		so = new SlicObject("999ATTACKWARNING");
+			so = new SlicObject("999ATTACKWARNING");
 		}
 
 		so->AddRecipient(m_owner);

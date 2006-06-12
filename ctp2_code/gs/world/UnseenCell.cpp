@@ -622,11 +622,11 @@ sint32 UnseenCell::GetFoodFromTerrain() const
 	
 	sint32 food = rec->GetEnvBase()->GetFood();
 
-	if(m_cityName != NULL && rec->GetEnvCity()) {
+	if(m_cityName != NULL && rec->HasEnvCity()) {
 		food += rec->GetEnvCityPtr()->GetFood();
 	}
 
-	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->HasEnvRiver()) {
 		food += rec->GetEnvRiverPtr()->GetFood();
 	}
 
@@ -708,13 +708,13 @@ sint32 UnseenCell::GetShieldsFromTerrain() const
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
 	
-    sint32 shield = rec->GetEnvBase()->GetShield();
+	sint32 shield = rec->GetEnvBase()->GetShield();
 
-	if(m_cityName != NULL && rec->GetEnvCity()) {
+	if(m_cityName != NULL && rec->HasEnvCity()) {
 		shield += rec->GetEnvCityPtr()->GetShield();
 	}
 
-	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->HasEnvRiver()) {
 		shield += rec->GetEnvRiverPtr()->GetShield();
 	}
 
@@ -797,13 +797,13 @@ sint32 UnseenCell::GetGoldFromTerrain() const
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
 	
-    sint32 gold = rec->GetEnvBase()->GetGold();
+	sint32 gold = rec->GetEnvBase()->GetGold();
 
-	if(m_cityName != NULL && rec->GetEnvCity()) {
+	if(m_cityName != NULL && rec->HasEnvCity()) {
 		gold += rec->GetEnvCityPtr()->GetGold();
 	}
 
-	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->HasEnvRiver()) {
 		gold += rec->GetEnvRiverPtr()->GetGold();
 	}
 

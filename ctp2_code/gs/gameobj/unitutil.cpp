@@ -293,7 +293,7 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 void unitutil_ExecuteMadLaunch(Unit & unit)
 {
 	
-	if( unit.GetDBRec()->GetNuclearAttack() && 
+	if( unit.GetDBRec()->HasNuclearAttack() && 
 		g_theUnitPool->IsValid(unit->GetTargetCity()) &&
 		!unit.Flag(k_UDF_MAD_LAUNCHED)) {
 		
