@@ -459,3 +459,6 @@ NANO_TERROR_FAILED_VICTIM		"Nos scientifiques ont contrecarré un complot ennemi 
 NANO_TERROR_COMPLETE_VICTIM		"Des étrangers ont libéré un virus nano-technologique dans la ville de {city[0].name}."
 NANO_TERROR_FAILED_AGRESSOR		"Vos tentatives pour sauver la Terre ont avorté. Votre nano-attaque est un échec."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Malgré tous vos efforts, l'ennemi s'est aperçu de votre ruse. La ville que vous avez pris pour cible est immunisée contre les nano-attaques."
+
+#New Messages#
+CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders? "

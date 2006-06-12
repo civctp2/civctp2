@@ -459,3 +459,8 @@ NANO_TERROR_FAILED_VICTIM		"Our scientists have foiled an enemy plot to sabotage
 NANO_TERROR_COMPLETE_VICTIM		"Foreign dogs have unleashed a nanological virus on the city of {city[0].name}."
 NANO_TERROR_FAILED_AGRESSOR		"Your quest to save the Earth has fallen on hard times. Your nano-attack has failed."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Despite your best efforts, your enemy has foreseen your cunning nature. The city that you targeted for nano-attack is immune."
+
+
+
+#New Messages#
+CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders? "
