@@ -54,7 +54,6 @@
 #include "UnitPool.h"
 #include "pollution.h"
 #include "Score.h"
-#include "DiffDB.h"
 #include "profileDB.h"
 #include "CivilisationPool.h"
 #include "Readiness.h"

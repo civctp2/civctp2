@@ -6363,10 +6363,6 @@ SOURCE=..\gs\outcom\Ic3CivArchive.h
 
 SOURCE=..\gs\outcom\IC3Rand.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\gs\outcom\IC3RobotAstar.h
-# End Source File
 # End Group
 # End Group
 # Begin Group "net"

@@ -115,7 +115,6 @@
 #include "Order.h"
 
 #include "Diffcly.h"
-#include "DiffDB.h"
 
 #include "ArmyPool.h"
 #include "TradeOfferPool.h"

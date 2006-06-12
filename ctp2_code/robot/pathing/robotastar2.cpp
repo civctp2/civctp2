@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A-star AI pathing algorithm
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -52,7 +52,6 @@
 #include "ArmyData.h"
 #include "Cell.h"
 #include "Diplomat.h"
-#include "DiffDB.h"
 #include "profileDB.h"      // g_theProfileDB
 
 

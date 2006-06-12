@@ -121,7 +121,6 @@
 #include "ctp2_dropdown.h"
 
 #include "RiskRecord.h"
-#include "DiffDB.h"
 
 #include "Cell.h"
 #include "aicause.h"
@@ -2038,7 +2037,6 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			city.CD()->SetWonders(city.CD()->GetBuiltWonders() | ((uint64)1 << (uint64)dbindex));
 			wonderutil_AddBuilt(dbindex);
 			g_player[city->GetOwner()]->AddWonder(dbindex, city);
-			g_player[city->GetOwner()]->RegisterCreateWonder(city, dbindex);
 
 			leftList->RemoveItem(selItem->Id());
 			AddAddItem(rightList, g_theWonderDB->Get(dbindex)->GetNameText(), dbindex);
@@ -2824,10 +2822,10 @@ void ScenarioEditor::SetupGlobalControls()
 	table = new aui_StringTable(&err, "SPNewGameStrings");
 	Assert(err == AUI_ERRCODE_OK);
 	if(dd && (err == AUI_ERRCODE_OK)) {
-		for(i = 0; i < LEVELS_OF_DIFFICULTY; i++) {
+		for(i = 0; i < g_theDifficultyDB->NumRecords(); i++) {
 			
 			
-			AddDropDownItem(dd, "ScenDifficultyItem",table->GetString(i));
+			AddDropDownItem(dd, "ScenDifficultyItem", g_theDifficultyDB->Get(i)->GetNameText());
 		}
 		dd->SetSelectedItem(g_theProfileDB->GetDifficulty());
 	}
