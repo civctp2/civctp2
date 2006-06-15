@@ -747,3 +747,20 @@ RISK_VILLAGES_ONLY				"Solo rovine"
 RISK_BORING_HORDES				"Bande erranti"
 RISK_DECENT_HORDES				"Tribù agitate"
 RISK_RAGING_HORDES				"Orde di invasori"
+
+## Generic difficulty strings for compatibility reasons ##
+DIFFICULTY_0					"Principiante"
+DIFFICULTY_1					"Facile"
+DIFFICULTY_2					"Medio"
+DIFFICULTY_3					"Difficile"
+DIFFICULTY_4					"Molto difficile"
+DIFFICULTY_5					"Impossibile"
+
+## Civlike difficulty strings ##
+DIFFICULTY_SETTLER				"Colono"
+DIFFICULTY_CHIEFTAIN				"Chieftain"
+DIFFICULTY_WARLORD				"Warlord"
+DIFFICULTY_PRINCE				"Prince"
+DIFFICULTY_KING					"King"
+DIFFICULTY_EMPEROR				"Emperor"
+DIFFICULTY_DEITY				"Deity"

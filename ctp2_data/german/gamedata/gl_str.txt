@@ -748,6 +748,23 @@ RISK_BORING_HORDES				"Vagabunden"
 RISK_DECENT_HORDES				"Rastlose Stämme"
 RISK_RAGING_HORDES				"Wütende Horden"
 
+## Generic difficulty strings for compatibility reasons ##
+DIFFICULTY_0					"Sehr leicht"
+DIFFICULTY_1					"Leicht"
+DIFFICULTY_2					"Mittel"
+DIFFICULTY_3					"Schwer"
+DIFFICULTY_4					"Sehr schwer"
+DIFFICULTY_5					"Unmöglich"
+
+## Civlike difficulty strings ##
+DIFFICULTY_SETTLER				"Siedler"
+DIFFICULTY_CHIEFTAIN				"Häuptling"
+DIFFICULTY_WARLORD				"Kriegsherr"
+DIFFICULTY_PRINCE				"Prinz"
+DIFFICULTY_KING					"König"
+DIFFICULTY_EMPEROR				"Kaiser"
+DIFFICULTY_DEITY				"Gottheit"
+
 ###Removed TileImp Strings###
 #TILEIMP_ROBOTIC_DOCKS				"Produktionshangars"
 #TILEIMP_ADVANCED_ROBOTIC_DOCKS			"Großproduktionshangars"

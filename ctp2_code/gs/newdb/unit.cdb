@@ -502,7 +502,7 @@ Unit {
 
     Int ShieldHunger
     Int FoodHunger
-    Bit(Int) GoldHunger 				// Add for future possibility of gold cost per turn per unit
+    Int GoldHunger = 0					// Add for future possibility of gold cost per turn per unit
     Record Sprite DefaultSprite
 
 	
@@ -522,6 +522,8 @@ Unit {
 	Bit(Float) SpecialForcesBonus		// added by E for additional battle modifiers Dec-31-2005
 	Bit(Float) CivilianBonus			// added by E for additional battle modifiers Dec-31-2005
 	Bit(Float) GuerrillaBonus			// added by E for additional battle modifiers Dec-31-2005
+	Bit(Float) AgainstMountedBonus
+	Bit(Float) AirDefenseBonus
 
 	Bit(Int) CargoModule
 

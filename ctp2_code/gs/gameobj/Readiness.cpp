@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Readiness modifiers
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -192,8 +192,8 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 		return 0;
 
 	double unitCostGold;
-	sint32 goldHunger;
-	if(u.GetDBRec()->GetGoldHunger(goldHunger)) {
+	sint32 goldHunger = u.GetDBRec()->GetGoldHunger();
+	if(goldHunger > 0) {
 
 		if(u.GetDBRec()->GetIsSpecialForces()) {
 			unitCostGold = static_cast<double>(goldHunger) * GetSpecialForcesSupportModifier(g_player[m_owner]->GetGovernmentType());

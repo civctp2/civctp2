@@ -147,6 +147,7 @@
 #include "cursormanager.h"
 #include "network.h"
 #include "AttractWindow.h"
+#include "DifficultyRecord.h"
 
 extern C3UI *g_c3ui;
 
@@ -3298,7 +3299,7 @@ void ScenarioEditor::FogButton(aui_Control *control, uint32 action, uint32 data,
 }
 
 
-void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, char * item)
+void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, const char * item)
 {
 	
 	ctp2_ListItem *listItem = NULL;

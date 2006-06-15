@@ -348,7 +348,9 @@ sint32 terrainutil_GetBonusProductionExport(sint32 impType, const MapPoint &pos,
 	if(!effect)
 		return -1;
 
-	return effect->GetBonusProductionExport();
+	sint32 value;
+	effect->GetBonusProductionExport(value);
+	return value;
 }
 
 void terrainutil_DoVision(const MapPoint &point)
@@ -462,6 +464,7 @@ bool terrainutil_PlayerHasAdvancesForTerrain(const TerrainImprovementRecord *rec
 	}
 	return false;
 }
+
 bool terrainutil_PlayerHasAdvancesFor(const TerrainImprovementRecord *rec, sint32 pl)
 {
 	
@@ -510,7 +513,7 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 	if(!g_player[pl])
 		return false;
 
-// Added by E - Compares Improvement's GovernmentType to the Player's Government
+	// Added by E - Compares Improvement's GovernmentType to the Player's Government
 	if(rec->GetNumGovernmentType() > 0) {
 		sint32 i;
 		bool found = false;
@@ -524,7 +527,7 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 			return false;
 	}
 
-// Added by E - Compares Improvement's CultureOnly to the Player's CityStyle
+	// Added by E - Compares Improvement's CultureOnly to the Player's CityStyle
 	if(rec->GetNumCultureOnly() > 0) {
 		sint32 s;
 		bool found = false;
@@ -653,7 +656,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		return false;
 
 	if(cell->GetOwner() == -1) {
-		if(rec->GetIntBorderRadius()) {
+		if(rec->HasIntBorderRadius()) {
 			if(!g_player[pl]->IsVisible(pos)) {
 				
 				return false;
@@ -719,7 +722,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		}
 
 		//EMOD Improvement can only be built on a tile with a certain good on it
-		if(rec->GetNumIsRestrictedToGood () == 0) {
+		if(rec->GetNumIsRestrictedToGood() <= 0) {
 			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
 				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
 					return false;
@@ -967,7 +970,7 @@ bool terrainutil_HasMinefield(const MapPoint & pos)
 			
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
 			
-			if(eff && eff->GetMinefield())
+			if(eff && eff->HasMinefield())
 				return true;
 		}
 	}
@@ -1036,7 +1039,7 @@ bool terrainutil_HasFort(const MapPoint & pos)
 			
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
 			
-			if((eff && eff->GetDefenseBonus()) || (eff && eff->GetFort()))  //EMOD to have just a fort flag
+			if((eff && eff->HasDefenseBonus()) || (eff && eff->GetFort()))  //EMOD to have just a fort flag
 				return true;
 		}
 	}
@@ -1095,7 +1098,7 @@ bool terrainutil_IsInstallation(const sint32 type)
 	
 	Assert(rec);
 	if(rec) {
-		if(rec->GetIntBorderRadius())
+		if(rec->HasIntBorderRadius())
 			return true;
 
 		
@@ -1105,7 +1108,7 @@ bool terrainutil_IsInstallation(const sint32 type)
 			Assert(effect);
 			if(effect) {
 				if (effect->GetAirport() ||
-					effect->GetDefenseBonus() ||
+					effect->HasDefenseBonus() ||
 					effect->GetRadar() ||
 					effect->GetColony() ||  //EMOD
 					effect->GetListeningPost() ||
@@ -1136,9 +1139,8 @@ double terrainutil_GetMaxVisionRange()
 							rec->GetTerrainEffect(j);
 						
 						Assert(effect);
-						if(effect && effect->GetVisionRange())
+						if(effect && effect->GetVisionRange(range))
 						{
-							effect->GetVisionRange(range);
 							if (range > max_vision_range)
 								max_vision_range = range;
 						}
@@ -1160,10 +1162,10 @@ double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint &pos)
 		const TerrainImprovementRecord::Effect *eff = 
 			terrainutil_GetTerrainEffect(rec, pos);
 		Assert(eff);
-		if(eff && eff->GetVisionRange())
-			{
-				eff->GetVisionRange(range);
-			}
+		if(eff)
+		{
+			eff->GetVisionRange(range);
+		}
 	}
 	return range;
 }

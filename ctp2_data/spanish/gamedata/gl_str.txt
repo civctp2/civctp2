@@ -748,6 +748,23 @@ RISK_BORING_HORDES				"Bandas ambulantes"
 RISK_DECENT_HORDES				"Tribus inquietas"
 RISK_RAGING_HORDES				"Hordas"
 
+## Generic difficulty strings for compatibility reasons ##
+DIFFICULTY_0					"Principiante"
+DIFFICULTY_1					"Fácil"
+DIFFICULTY_2					"Medio"
+DIFFICULTY_3					"Difícil"
+DIFFICULTY_4					"Muy difícil"
+DIFFICULTY_5					"Imposible"
+
+## Civlike difficulty strings ##
+DIFFICULTY_SETTLER				"Colono"
+DIFFICULTY_CHIEFTAIN				"Chieftain"
+DIFFICULTY_WARLORD				"Warlord"
+DIFFICULTY_PRINCE				"Prince"
+DIFFICULTY_KING					"King"
+DIFFICULTY_EMPEROR				"Emperor"
+DIFFICULTY_DEITY				"Deity"
+
 ###Removed TileImp Strings###
 #TILEIMP_ROBOTIC_DOCKS				"Naves ensamblaje"
 #TILEIMP_ADVANCED_ROBOTIC_DOCKS			"Naves ensamblaje avanzadas"

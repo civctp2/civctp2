@@ -405,7 +405,7 @@ STDEHANDLER(NukeCityEvent)
 			
 			Unit u = g_player[c.GetOwner()]->m_all_units->Access(i);
 
-			if(!u.GetDBRec()->GetNuclearAttack())
+			if(!u.GetDBRec()->HasNuclearAttack())
 				continue;
 
 			if(!g_theUnitPool->IsValid(u->GetTargetCity()))
@@ -645,7 +645,6 @@ STDEHANDLER(CreateWonderEvent)
 	c.CD()->AddWonder(wonder);
 	wonderutil_AddBuilt(wonder);
 	g_player[c->GetOwner()]->AddWonder(wonder, c);
-	g_player[c->GetOwner()]->RegisterCreateWonder(c, wonder);
 
 	
 	if (c->GetOwner() == g_selected_item->GetVisiblePlayer() &&

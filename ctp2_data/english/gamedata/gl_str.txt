@@ -747,3 +747,20 @@ RISK_VILLAGES_ONLY				"Ruins Only"
 RISK_BORING_HORDES				"Bandits"
 RISK_DECENT_HORDES				"Raiders"
 RISK_RAGING_HORDES				"Marauders"
+
+## Generic difficulty strings for compatibility reasons ##
+DIFFICULTY_0					"Beginner"
+DIFFICULTY_1					"Easy"
+DIFFICULTY_2					"Medium"
+DIFFICULTY_3					"Hard"
+DIFFICULTY_4					"Very hard"
+DIFFICULTY_5					"Impossible"
+
+## Civlike difficulty strings ##
+DIFFICULTY_SETTLER				"Settler"
+DIFFICULTY_CHIEFTAIN				"Chieftain"
+DIFFICULTY_WARLORD				"Warlord"
+DIFFICULTY_PRINCE				"Prince"
+DIFFICULTY_KING					"King"
+DIFFICULTY_EMPEROR				"Emperor"
+DIFFICULTY_DEITY				"Deity"

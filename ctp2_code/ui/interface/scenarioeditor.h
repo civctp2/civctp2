@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Scenario editor
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -296,7 +299,7 @@ class ScenarioEditor {
 	void UpdatePlayerCount();
 
 	
-	void AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, char * item);
+	void AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, const char * item);
 	sint32 GetNumPlayers();
 	sint32 GetLastPlayer();
 	static void LimitPlayerChoice(aui_Control *control, uint32 action, uint32 data, void *cookie);
