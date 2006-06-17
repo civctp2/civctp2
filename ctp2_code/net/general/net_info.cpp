@@ -3,8 +3,8 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : net_info is used to propagate misc information from host to 
-//				  player(s).
-// Id           : $Id:$
+//                player(s).
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //

@@ -29,6 +29,7 @@
 //   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -136,7 +137,11 @@ class Cell {
 
 private:
 
-
+//----------------------------------------------------------------------------
+// Do not change anything in the types or order of the following variable 
+// declarations. Doing so will break reading in of save files.
+// See the Serialize implementation for more details.
+//----------------------------------------------------------------------------
 
 	uint32 m_env;
 	uint32 m_zoc;
@@ -146,21 +151,15 @@ private:
 	uint16 m_battleFlags;
 #endif
 	sint16 m_continent_number;
-	sint8 m_gf;
-	sint8 m_terrain_type;
+	sint8  m_gf;
+	sint8  m_terrain_type;
+	Unit   m_city;
+	sint8  m_cellOwner;
 
-	
-	Unit m_city;
+//----------------------------------------------------------------------------
+// Changing the order below this line should not break anything.
+//----------------------------------------------------------------------------
 
-	
-	
-	
-	sint8 m_cellOwner;
-	
-	
-
-	
-	
 	CellUnitList *m_unit_army;
 	DynamicArray<ID> *m_objects;
 
@@ -172,8 +171,6 @@ private:
 	
 #endif
 	GoodyHut *m_jabba;
-	
-	
 
 public:
 

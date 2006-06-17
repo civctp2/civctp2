@@ -98,9 +98,6 @@ int Cell::PlayerLandArea(int player)
 
 void Cell::RecalcPlayerLandArea()
 {
-	
-	
-	
 	g_theWorld->WholePlayerLandArea(m_playerLandArea);
 }
 #endif
@@ -108,40 +105,35 @@ void Cell::RecalcPlayerLandArea()
 
 
 Cell::Cell()
-
-{
-    m_env = 0;
-    m_terrain_type = (sint8)-1;
-    m_move_cost = 1; 
-#ifdef CELL_COLOR
-    m_color = 0; 
-#endif
-    m_search_count = 0; 
-    m_point = NULL; 
+:   m_env                (0),
+    m_zoc                (0),
+    m_move_cost          (1),
 #ifdef BATTLE_FLAGS
-	m_battleFlags = 0;
+    m_battleFlags        (0),
 #endif
-	
-	m_cellOwner = -1;
-	
+    m_continent_number   (0),
+    m_gf                 (0),
+    m_terrain_type       (-1),
+    m_city               (),
+    m_cellOwner          (-1),
+    m_unit_army          (NULL),
+    m_objects            (NULL),
+    m_jabba              (NULL),
+    m_search_count       (0),
+    m_point              (NULL)
+#ifdef CELL_COLOR
+,   m_color              (0)
+#endif
+{
 	m_playerLandArea[0]++;
-
-	m_unit_army = NULL;
-
-    m_gf = 0; 
-	m_zoc = 0;
-
-	m_objects = NULL;
-
-	m_jabba = NULL;
 }
 
 Cell::~Cell()
 {
-    if(m_unit_army) { 
+	if(m_unit_army) {
 		delete m_unit_army;
-        m_unit_army = NULL; 
-    } 
+		m_unit_army = NULL;
+	}
 
 	if(m_objects) {
 		delete m_objects;
@@ -157,11 +149,11 @@ Cell::~Cell()
 
 
 void Cell::Serialize(CivArchive &archive)
-	{
-	
-    CHECKSERIALIZE
+{
 
-    m_search_count = 0; 
+	CHECKSERIALIZE
+
+	m_search_count = 0;
 	if (archive.IsStoring()) {
 		archive.StoreChunk((uint8 *)&m_env, ((uint8 *)&m_cellOwner)+sizeof(m_cellOwner));
 	} else {
