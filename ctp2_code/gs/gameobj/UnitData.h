@@ -261,7 +261,7 @@ public:
 	
 	void GetPos(MapPoint &p) const { p = m_pos; };
 	MapPoint GetPos(void) { return m_pos; }
-	void SetPos(const MapPoint &p, BOOL &revealed_unexplored, BOOL &left_map);
+	void SetPos(const MapPoint &p, bool &revealed_unexplored, bool &left_map);
 	void SetPosAndNothingElse(const MapPoint &p);
 
 
@@ -340,7 +340,7 @@ public:
 	void NewGovernment(sint32 type);
 	double GetDefendersBonus() const; 
 	sint32 ImprovementCanRefuel(const Unit &u) const;     
-	sint32 DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_fuel);
+	sint32 DeductMoveCost(const Unit &me, const double cost, bool &out_of_fuel);
 	sint32 CanRustle(CellUnitList &defender) const;
 	sint32 CanConvertCity(Unit &city) const;
 	BOOL CanBombardType(const Unit & defender) const;
@@ -407,7 +407,7 @@ public:
 
 	void RemoveUnitVision();
 	void RemoveOldUnitVision(double radius);
-	void AddUnitVision(BOOL &revealed);
+	void AddUnitVision(bool &revealed);
 	void DoVision(UnitDynamicArray &revealedUnits);
 	void UndoVision();
 	void KillVision();

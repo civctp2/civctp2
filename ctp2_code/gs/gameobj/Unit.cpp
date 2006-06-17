@@ -642,7 +642,7 @@ void Unit::Launch()
 
 
 sint32 Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed, 
-                            BOOL &revealed_unexplored)
+                            bool &revealed_unexplored)
 {
 
 
@@ -668,10 +668,10 @@ sint32 Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed,
 
 
 sint32 Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed, 
-                         BOOL &revealed_unexplored)
+                         bool &revealed_unexplored)
 
 {
-	BOOL left_map;
+	bool left_map;
 	AccessData()->SetPos(p, revealed_unexplored, left_map); 
 	if(!left_map) {
 		return g_theWorld->InsertUnit(p, *this, revealed); 
@@ -823,7 +823,7 @@ sint32 Unit::IsNoZoc() const
 	return GetDBRec()->GetNoZoc();
 }
 
-sint32 Unit::DeductMoveCost(const double cost, BOOL &out_of_fuel)
+sint32 Unit::DeductMoveCost(const double cost, bool &out_of_fuel)
 {
 	return AccessData()->DeductMoveCost(*this, cost, out_of_fuel);
 
@@ -1471,7 +1471,7 @@ void Unit::RemoveUnitVision()
 	AccessData()->RemoveUnitVision();
 }
 
-void Unit::AddUnitVision(BOOL &revealed)
+void Unit::AddUnitVision(bool &revealed)
 {
 	AccessData()->AddUnitVision(revealed);
 }

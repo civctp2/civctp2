@@ -686,7 +686,7 @@ public:
     sint32 GetTotalFreight()const;
 
 
-	void AddUnitVision(const MapPoint &pnt, double range, BOOL &revealed_unexplored);
+	void AddUnitVision(const MapPoint &pnt, double range, bool &revealed_unexplored);
 	void RemoveUnitVision(const MapPoint &pnt, double range);
 	void OwnExploredArea();
     BOOL IsExplored(const MapPoint &pos) const;

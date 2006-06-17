@@ -2,6 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
+// Description  : 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -15,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -877,7 +881,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(g_theUnitPool->IsValid(u)) {
 					u.SetFlag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN);
 					if(oi && oi->m_moveCost > 0) {
-						BOOL out_of_fuel;
+						bool out_of_fuel;
 						u.DeductMoveCost(oi->m_moveCost, out_of_fuel);
 					}
 					u.ClearFlag(k_UDF_FIRST_MOVE);

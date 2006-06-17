@@ -1071,8 +1071,8 @@ SFN_ERROR Slic_IsCleric::Call(SlicArgList *args)
 
 	const UnitRecord *rec = unit.GetDBRec();
 
-	m_result.m_int = rec->GetIndulgenceSales() ||
-		             rec->GetConvertCities();
+	m_result.m_int = rec->HasIndulgenceSales() ||
+		             rec->HasConvertCities();
 	return SFN_ERROR_OK;
 }
 
@@ -1087,7 +1087,7 @@ SFN_ERROR Slic_IsSlaver::Call(SlicArgList *args)
 	}
 
 	const UnitRecord *rec = unit.GetDBRec();
-	m_result.m_int = rec->GetSlaveRaids() || rec->GetSettlerSlaveRaids();
+	m_result.m_int = rec->HasSlaveRaids() || rec->HasSettlerSlaveRaids();
 	return SFN_ERROR_OK;
 }
 
@@ -1846,7 +1846,7 @@ SFN_ERROR Slic_StealRandomAdvance::Call(SlicArgList *args)
 		if(g_theUnitPool->IsValid(u)) {
 			u.SetFlag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN);
 			if(oi && oi->m_moveCost > 0) {
-				BOOL out_of_fuel;
+				bool out_of_fuel;
 				u.DeductMoveCost(oi->m_moveCost, out_of_fuel);
 			}
 			u.ClearFlag(k_UDF_FIRST_MOVE);
@@ -1895,7 +1895,7 @@ SFN_ERROR Slic_StealSpecificAdvance::Call(SlicArgList *args)
 		if(g_theUnitPool->IsValid(u)) {
 			u.SetFlag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN);
 			if(oi && oi->m_moveCost > 0) {
-				BOOL out_of_fuel;
+				bool out_of_fuel;
 				u.DeductMoveCost(oi->m_moveCost, out_of_fuel);
 			}
 			u.ClearFlag(k_UDF_FIRST_MOVE);

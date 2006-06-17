@@ -2874,7 +2874,7 @@ void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 	UnitDynamicArray revealedUnits;
 	MapPoint opos;
 	GetPos(opos);
-	BOOL revealed_unexplored;
+	bool revealed_unexplored;
 
 	for(i = 0; i < m_nElements; i++) {
 		g_theWorld->RemoveUnitReference(opos, m_array[i]);
@@ -4707,7 +4707,7 @@ void ArmyData::Reenter()
 			
 			m_array[i]->SetPosAndNothingElse(m_reentryPos);
 			g_theWorld->InsertUnit(m_reentryPos, m_array[i], revealedUnits);
-			BOOL revealed;
+			bool revealed;
 			m_array[i]->AddUnitVision(revealed);
 		}
 
@@ -5477,7 +5477,7 @@ BOOL ArmyData::BombardCity(const MapPoint &point, BOOL doAnimations)
 				
 				g_director->AddAttackPos(m_array[i], nonConstPos);				
 		//why is the following subject to doAnimations being true?		
-				BOOL out_of_fuel;
+				bool out_of_fuel;
 
 //EMOD Multiple Attacks/Blitz removed it from only Air to a separate flag - 2-24-2006
 				//if(!m_array[i].GetDBRec()->GetMovementTypeAir()) {  //this allowed for multiple air bombard
@@ -5656,7 +5656,7 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 
       sint32 numAttacks = 0;
 	sint32 numAlive = m_nElements;
-	BOOL out_of_fuel;
+	bool out_of_fuel;
     
     for (i = m_nElements - 1; i>= 0; i--) { 
 		if(!m_array[i].CanPerformSpecialAction())
@@ -6704,7 +6704,7 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 				if(!u.IsAsleep())
 					continue;
 				if(m_array[i].CanCarry(u)) {
-					BOOL out_of_fuel;
+					bool out_of_fuel;
 					u.SetIsInTransport(m_array[i]);
 					u.DeductMoveCost(k_MOVE_ENTER_TRANSPORT_COST, out_of_fuel);
 					g_theWorld->RemoveUnitReference(m_pos, u);
@@ -7727,7 +7727,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 
 	
 	UnitDynamicArray revealedUnits;
-	BOOL revealedUnexplored = FALSE;
+	bool revealedUnexplored = false;
 
 	MapPoint oldPos = m_pos;
 	bool anyVisible = false;
@@ -7989,7 +7989,7 @@ BOOL ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 		top_src_ptr = m_array[0].GetActor();
 	}
     
-	BOOL out_of_fuel;
+	bool out_of_fuel;
 
     
     sint32 count = 0; 
@@ -8361,7 +8361,6 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 	double cost = g_theWorld->GetMoveCost(pos);   //GetEnvBase()->GetMovement() non imps for Denyenemy
 	sint32  movebonus; // = g_theUnitDB->Get()->GetMoveBonus();
 	double c;
-	BOOL out_of_fuel;
 	// EMOD
 	Cell *cell = g_theWorld->GetCell(pos);
 	sint32 CellOwner = cell->GetOwner();
@@ -8413,7 +8412,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 //			c = cost;
 //		}
 
-		out_of_fuel = FALSE;
+		bool out_of_fuel = false;
 		m_array[i].DeductMoveCost(c, out_of_fuel);
 	} 
 }
@@ -9442,7 +9441,7 @@ BOOL ArmyData::ExecuteSpecialOrder(Order *order, BOOL &keepGoing)
 			if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW)) {
 				m_array[i].ClearFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
 				if(order_rec) {
-					BOOL out_of_fuel;
+					bool out_of_fuel;
 					m_array[i].DeductMoveCost(order_rec->GetMove(), out_of_fuel);
 				}
 				m_array[i].ClearFlag(k_UDF_FIRST_MOVE);

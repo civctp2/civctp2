@@ -525,7 +525,6 @@ bool BuildQueue::BuildFrontEndgame()
 		DPRINTF(k_DBG_GAMESTATE, ("City %lx built endgame object type %d\n",
 								  m_city, m_list->GetHead()->m_type));
 		g_player[m_owner]->AddEndGameObject(m_city, m_list->GetHead()->m_type);
-		g_player[m_owner]->RegisterCreateBuilding(m_city, m_list->GetHead()->m_type);
 		return true;
 	} else {
 		return false;

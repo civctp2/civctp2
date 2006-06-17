@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Army event handlers
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -919,9 +922,9 @@ STDEHANDLER(BattleEvent)
 
 	bool const  i_died = !army.AccessData()->Fight(defender);
 	if (!i_died) 
-    { 
+	{
 		for (sint32 k = 0; k < army.Num(); k++) {
-			BOOL out_of_fuel;
+			bool out_of_fuel;
 			army[k].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(),
 								   out_of_fuel);
 		}

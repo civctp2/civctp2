@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Map visibility handling 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,7 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
+// _MSC_VER
 // - When defined, allows Microsoft C++ extensions.
 // - When not defined, generates standard C++.
 //
@@ -63,43 +64,38 @@ enum CIRCLE_OP {
 class Vision
 {
 private:
-	
+
 //----------------------------------------------------------------------------
 // Do not change anything in the types or order of the following variable 
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
-	
+
 	sint16 m_width;
 	sint16 m_height;
 	sint32 m_owner;
-	sint16 m_xyConversion;
-	BOOL   m_isYwrap;
+	sint16 m_xyConversion;   // Unused
+	BOOL   m_isYwrap;        // Unused
 	BOOL   m_amOnScreen;
-	
+
 //----------------------------------------------------------------------------
 // Changing the order below this should not break anything.
 //----------------------------------------------------------------------------
-	
-	
 
-	
-	
-	
 	uint16 **m_array;
 	UnseenCellQuadTree *m_unseenCells;
 	
 	
 
-	friend class NetVision;  
+	friend class NetVision;
 	friend class MapFile;
 	
 	
 	
 	
 
-	Vision *m_mergeFrom; 
-	BOOL m_revealedUnexplored; 
+	Vision *m_mergeFrom;
+	bool m_revealedUnexplored;
 
 	void FillCircle
 	(
@@ -117,29 +113,29 @@ private:
 #endif
 
 public:
-	Vision(sint32 owner, BOOL amOnScreen = FALSE);
+	Vision(sint32 owner, bool amOnScreen = false);
 	~Vision();
 
 	void Copy(const Vision *copy);
 
 	void AddExplored(MapPoint pos, double radius);
-    void SetTheWholeWorldExplored();
+	void SetTheWholeWorldExplored();
 	void SetTheWholeWorldUnexplored();
 	void SetTheWholeWorldUnseen();
-	BOOL IsExplored(MapPoint pos) const;
+	bool IsExplored(MapPoint pos) const;
 
 	void AddRadar(MapPoint pos, double radius);
 
-	void AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored, 
+	void AddVisible(MapPoint pos, double radius, bool &revealed_unexplored, 
 					DynamicArray<MapPoint> *removeadd = NULL);
 	void RemoveVisible(MapPoint pos, double radius,
 					   DynamicArray<MapPoint> *removeadd = NULL);
-	BOOL IsVisible(MapPoint pos) const;
+	bool IsVisible(MapPoint pos) const;
 
 	
 	
 	
-	BOOL GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell);
+	bool GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell);
 
 	inline void Convert(MapPoint &pos) const {
 		pos.y += pos.x;
@@ -161,7 +157,7 @@ public:
 	}
 
 
-	void MergeMap(Vision *src) ;									
+	void MergeMap(Vision *src);
 
 	void AddUnseen(const MapPoint &point);
 	void AddUnseen(UnseenCell *ucell); 
@@ -171,7 +167,7 @@ public:
 
 	
 	void CopyCircle(Vision *src, const MapPoint &center, sint32 radius);
-	BOOL MergePoint(sint32 x, sint32 y);
+	bool MergePoint(sint32 x, sint32 y);
 	void ModifyPoint(Vision *src, sint32 x, sint32 y);
 
 	void Serialize(CivArchive &archive);

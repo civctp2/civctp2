@@ -266,7 +266,7 @@ void UnitData::Place(const MapPoint &center_pos)
 	m_pos = center_pos;
 
 	if(!g_theUnitDB->Get(m_type)->GetIsTrader()) {
-		BOOL revealedUnexplored = FALSE;
+		bool revealedUnexplored = false;
 		SetVisible(m_owner);
 		AddUnitVision(revealedUnexplored);
 
@@ -435,9 +435,8 @@ void UnitData::SetPosAndNothingElse(const MapPoint &p)
 	g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
 }
 
-void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
-                      BOOL &left_map)
-
+void UnitData::SetPos(const MapPoint &p, bool &revealed_unexplored,
+                      bool &left_map)
 {
 	
 	if(Flag(k_UDF_IS_ENTRENCHED)) {
@@ -465,7 +464,7 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 													  g_player[m_owner]->m_government_type);
 		g_player[m_owner]->RecoveredProbe(Unit());
 	} else {
-		left_map = FALSE;
+		left_map = false;
 		AddUnitVision(revealed_unexplored);
 		
 		
@@ -506,7 +505,7 @@ void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_fuel) 
+sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fuel) 
 {
 
 	const UnitRecord *rec = g_theUnitDB->Get(m_type);
@@ -528,7 +527,7 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 
 
 
-	out_of_fuel = FALSE;
+	out_of_fuel = false;
 	if (!rec->GetNoFuelThenCrash()){
 		return FALSE;
 	} else {
@@ -538,7 +537,7 @@ sint32 UnitData::DeductMoveCost(const Unit &me, const double cost, BOOL &out_of_
 			CheckForRefuel();//refuel the unit if it's in a city, airbase, or being transported
 
 			if(m_fuel <= 0) { //refuelling failed, it's NoFuelThenCrash
-				out_of_fuel = TRUE;
+				out_of_fuel = true;
 			
 				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
 				  (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
@@ -1118,7 +1117,7 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 			UnitDynamicArray revealedUnits;
 			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
 
-			BOOL revealedUnexplored;
+			bool revealedUnexplored;
 			passenger.AddUnitVision(revealedUnexplored);
 			
 			debark.Insert(passenger );  
@@ -1182,7 +1181,7 @@ BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
             ID tmp_id = m_army.m_id;
             g_player[m_owner]->RegisterUnloadCargo(&tmp_id, passenger.GetType(), (sint32)passenger.GetHP()); 
 
-			BOOL revealedUnexplored;
+			bool revealedUnexplored;
 			passenger.AddUnitVision(revealedUnexplored);
 			
 			debark.Insert(passenger );  
@@ -2060,7 +2059,6 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
    
    m_city_data->DestroyCapitol();
  
-   BOOL revealedUnexplored;
 #if 0
 	double oldVisionRange = (g_theUnitDB->Get(m_type)->m_vision_range);
    m_vision_range = g_theUnitDB->Get(m_type)->m_vision_range;
@@ -2113,7 +2111,6 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 	   }
    }
 
-// Added by Martin Gühmann
    m_city_data->ResetCityOwner(newo);
 
    Assert(CAUSE_NEW_CITY_SETTLE != nc_cause);
@@ -2121,6 +2118,7 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 
    RemoveUnitVision(); // Now remove unit vision, the old owner knows what happend.
    m_owner = newo; // Now change owner
+   bool revealedUnexplored;
    AddUnitVision(revealedUnexplored);
 
    UnitDynamicArray revealed_units;
@@ -2171,7 +2169,6 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 		}
 	}
 
-	BOOL revealedUnexplored;
 	g_player[m_owner]->RemoveUnitReference(Unit(m_id), rem_cause, -1) ;
 
 	if(m_army.IsValid()) {
@@ -2220,6 +2217,7 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 
 	g_player[new_owner]->InsertUnitReference(me, new_cause, Unit()) ;
 
+	bool revealedUnexplored;
 	AddUnitVision(revealedUnexplored);
 	
 	m_visibility |= (1 << new_owner);
@@ -4522,14 +4520,14 @@ BOOL UnitData::IsCloaked() const
 
 void UnitData::Cloak()
 {
-    BOOL out_of_fuel; 
+    bool out_of_fuel; 
 	DeductMoveCost(Unit(m_id), g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
 	SetFlag(k_UDF_IS_CLOAKED);
 }
 
 void UnitData::Uncloak()
 {
-    BOOL out_of_fuel; 
+    bool out_of_fuel; 
 	DeductMoveCost(Unit(m_id), g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
 	ClearFlag(k_UDF_IS_CLOAKED);
 }
@@ -5658,7 +5656,7 @@ void UnitData::RemoveOldUnitVision(double oldRadius)
 	}
 }
 
-void UnitData::AddUnitVision(BOOL &revealed)
+void UnitData::AddUnitVision(bool &revealed)
 {
 	Assert(!Flag(k_UDF_VISION_ADDED));
 	if(!Flag(k_UDF_VISION_ADDED)) {

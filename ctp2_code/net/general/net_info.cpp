@@ -4,6 +4,7 @@
 // File type    : C++ source
 // Description  : net_info is used to propagate misc information from host to 
 //				  player(s).
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+//  - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -1287,7 +1290,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				wonderutil_AddBuilt(m_data);
 				if(g_player[cd->GetOwner()]) {
 					g_player[cd->GetOwner()]->AddWonder(m_data, city);
-					g_player[cd->GetOwner()]->RegisterCreateWonder(city, m_data);
 				}
 				cd->GetBuildQueue()->SendMsgWonderComplete(cd, m_data);
 			}
@@ -1388,7 +1390,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					g_network.RequestResync(RESYNC_BAD_PLAYER);
 					break;
 				}
-				BOOL revealed;
+				bool revealed;
 				unit.SetTempSlaveUnit(FALSE);
 				unit.AddUnitVision(revealed);
 				MapPoint pos;

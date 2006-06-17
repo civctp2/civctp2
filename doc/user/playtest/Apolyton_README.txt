@@ -35,7 +35,7 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Changelog:
 2006-06-09
-Added: CApture City options: Occupy, Liberate(give to barbs), and Raze
+Added: Capture City options: Occupy, Liberate(give to barbs), and Raze
 Fixed: ShowOnMap works A LOT better
 Fixed: Barbs are not affected by hostileterrain
 Added: TreasuryInterest flag, bldgs with this flag give you gold equal to a percentage of your treasury
@@ -62,7 +62,6 @@ specify which building to collect from (multiplied by population)
 Added: IncreaseHP addeed to buildings. Gives a bonus HP only when building is first built
 Fixed: IsXenophobia changed to IsXenophobic
 
-
 2006-05-24
 Fixed: Removed War from slave attacks now just regardcost
 Fixed: There is now no pop-up when you attack a barbarian
@@ -76,7 +75,6 @@ Added: a unit with SettleBuilding builds that building in in enemy city when the
 Added: Not fully tested by SectarianHappiness Int to DiffDB. Should suffer happiness if citystyles or govts are differnt than the founders
 Added: IsXenophobia to governments. If you have a govt wit this flag then city's of a different city style will lose 1 pop per turn
 Added: Barbariancamps to DiffDB. If a barb entrenches this flag wil have them create a city
-
 
 2006-05-16
 Added: Tileimps with colony and  BonusProductionExport, BonusGoldExport, CanExportTileValue flags can add shields outside player radius.
@@ -94,7 +92,6 @@ Added: OnePerCiv to Wonders. But still needs work.
 2006-05-03
 Added: UpgradeTo flag now implemented. With enough gold you can upgrade units by sleeping them in your city
 Added: flags for the difficulty dependent AI gold deficit (NoAIGoldDeficit) and units over production cheats (NoAIProductionDeficit).
-					
 
 2006-04-29
 Added: TargetsCivilians where a unit that bombs a city hits civilians not units.
@@ -171,123 +168,120 @@ Added: TotalBuildingUpkeep: building upkeep also has a negative impact by being
   this if too much hate for it but it makes gold and readiness more significant)
 
 2006-02-15
-Updated: BUGS list to reflect fixes and new discoveries
-Updated: Improved error messages in tileset.cpp
-Updated: zlib (1.2.3) and tiff (3.7.3) libraries
-Fixed: Improved dbgen error message
-Fixed: Corrected turn box computation for ship paths through cities.
-Fixed: 1.1 patch savegame compatibility fix
-Fixed: player color above player 16 and allow loading of the original color set 
-  again. Now there are only two valid number of colors for a ColorsXX.txt 
-  58 and 74 - original and source code version respectively. For the 58 color 
-  version the missing player colors are copied from the terrain colors so that 
-  the result is like in the original game
-Fixed: mistake in tileset.cpp which prevented loading of tile file
-Fixed: mis-cast in UnitControlPanel.cpp
-Fixed: Prevent useless Assert pop-up (Governor.cpp) with the debug version
-Fixed: Rreport start of wonder when deleting the first item and the second 
-  item is a wonder
-Fixed: Removed texts that have been replaced with icons
-Fixed: Removed after redistribution of contents
-Fixed: Corrected building maintenance deficit spending handling.
-Fixed: Load strings from default files if a mod misses them
-Fixed: Added token so that the default strings aren't scanned for missing strings
-Fixed, added some strings and removed some duplicated strings
-Fixed: corrected endless path computation in an AOM game
-Added: NeedsCityGood, NeedsCityGoodAll, and NeedsCityGoodAny flags
-Added: Redesigned ColorSet to prevent a crash during start-up.
-Added: to Civilisation and CityStyle databases happiness increasement flags
-Added: Message boxes are now non-modal, left click on a message in the message 
-  list, the message is opened if it is not open, otherwise it is closed, right 
-  click removes the message from list, if it is open it is closed in addition. 
-  Left clicking on another message opens that and closes the first message. 
-  Alert boxes are left as they are modal.
-Added: option to select a city first instead of an active army.
-Added: DebugSlic and GoodAnim to the advanced options.
-Added: Used option to select a city first instead of an active army. 
-  Unfortunately this doesn't quite work. But for now this should be enough.
-Added: Made the autoDebug object more conform to the standart, maybe I move its 
-  struct to seperate header and source files
-Added: Improved handling of multiple build queue actions in a turn.
-Added: Display very slow or non-growth as ---
-Added: NeedsCityGood and NeedsCityGoodAll added to CanBuildUnit, 
-  CanBuildBuilding, and CanBuild Wonder
-Added: Implemented EnablesGood for buildings, wonders and tile improvements now
-  they give goods to a city 
-Added: To ProcessFood,ProcessProduction, EfficiencyOrCrime added a check that if
-  a city has or is buying a good than you can get a bonus.   
-Added: NeedsCityGoodAnyCity allows for a unit to be built in any city if one 
-  city has the good
-Added: Sneakattack - can attack with out declaring war or be attacked, like 
-  Hidden Nationality
-Added: Sneakbombard so you can bombard without war declared
-Added: new combat modifiers based on mounted and woodship bonus (see unit.cdb 
-  for flags)
-Added: new DifficultyDB to the project however, the DifficultyDB must still be 
-  replaced
-Added: two new options to the profile database:
-- One for allowing end turns while the game is running in the background
-- One that is supposed to stop end turns if there is a city with empty build 
-    queue, doesn't work yet.
-Added: Reneralised production start reporting
-Added: Settlers can now be added to a city! 
-Added: Terrain Improvement flag CantPillage now works
-Added: NonLethalBombard - now the NLB flag doesnt destroy units (but weakens 
-  them)
-Added: CanBombardTiles - Tile Improvements can now be bombarded and destroyed
-Added: CollateralTileDamage - if unit has flag it will destroy the tile imps 
-  the unit they attack is on (lethal and nonlethal bombard) 
-Added: GoldPerCity building flag. add subtract gold based on the number of 
-  cities your empire has
-Added: OnePerCiv -  buildings can now be Small Wonders/National Projects 
+Fixed:    Mistake in tileset.cpp which prevented loading of tile file
+Fixed:    Rreport start of wonder when deleting the first item and the second 
+          item is a wonder
+Fixed:    Building mainteneance deficit spending.
+Added:    Default string loading for mods that lacks those strings.
+Added:    DoNotImportDefaults flag to prevent default string loading in 
+          updated mods.
+Fixed:    Corrected endless path computation in AOM games.
+Fixed:    ColorSet to prevent crash during start-up.
+Changed:  Changed message box behaviour:
+          - Left click on message in message list opens the message.
+          - Left click again closes the open message.
+          - Left click on another message with open message closes the
+            the open messages and opens the clicked message.
+          - Right click on message in message list deletes the message
+            irrespective it is open or closed.
+Added:    Settlers can now settle in cities and thus add an pop.
+Fixed:    If on a tile are a city and an entrenching unit the city is selected
+          first before the entrenching unit.
+Fixed:    Endless path computation observed in AOM game
+Improved: Build queue handling.
+Fixed:    Corrected building maintenance deficit spending handling.
+Fixed:    Keymap screen to get the correct keys with the right text.
+Fixed:    Report the start of a wonder when in the build queue the first
+          item is deleted and the second one is a wonder.
+Fixed:    Problems with invisible sprites.
+Fixed:    Crash related to loading of a 1.1 savegames of a mod that uses 
+          extended database slic access. However slic must still be reloaded
+          to make the game run properly.
+Changed:  Very slow growth is now diplayed as ---.
+Added:    New database flags for modders:
+- BuildingDB:
+   NeedsCityGoodAll     Building needs all the goods in that list to be built.
+   NeedsCityGood        Building can only be built with this good in the city.
+   EnablesGood          Building gives a certain good.
+   OnePerCiv            Building is limited to one city in the empire.
+   GoldPerCity          Building adds the given amount of gold to the city.
+- CityStyleDB:
+   HappyInc             CityStyle increases city happiness.
+- CivilisationDB:
+   HappyInc             Civilisation increases city happiness.
+- TerrainImprovementDB:
+   EnablesGood          Terrain Improvement gives a certain good.
+   CantPillage          Terrain Improvement cannot be pillaged.
+- UnitDB:
+   NeedsCityGoodAll     Unit needs all the goods in that list to be built.
+   NeedsCityGood        Unit can only be built with this good in the city.
+   NeedsCityGoodAnyCity Unit can only be built if a city in the empire has a 
+                        certain good.
+   Sneakattack          Unit can attack without war being declared.
+   Sneakbombard         Unit can bombard without war being declared.
+   CanBombardTiles      Unit can bombard tileimps and destroy them.
+   CollateralTileDamage Unit destroys tileimps at attack location.
+   NonLethalBombard     Unit bombard only weakens other units.
+   New combat modifers like WoodenShipBonus and WoodenShip
+- WonderDB:
+   NeedsCityGoodAll     Wonder needs all the goods in that list to be built.
+   NeedsCityGood        Wonder can only be built with this good in the city.
+   EnablesGood          Wonder gives a certain good.
 
 2005-10-23
-Fixed: Misc crashes
-Fixed: Broken/incorrect links in the great library
-Fixed: Topic display bug in great library
-Fixed: Hosting of MP games on XP machines
-Fixed: SLIC error related to missing city
-Fixed: Prediction of movement times for ships moving through cities
-Changed: Message boxes to be non-modal
-Added: Option to select a city first instead of an army
-Added: DebugSlic and GoodAnim options
-Added: Two more colour sets
+Fixed:    Misc crashes
+Fixed:    Broken/incorrect links in the great library
+Fixed:    Topic display bug in great library
+Fixed:    Hosting of MP games on XP machines
+Fixed:    SLIC error related to missing city
+Fixed:    Prediction of movement times for ships moving through cities
+Changed:  Message boxes to be non-modal
+Added:    DebugSlic option to the advance options.
+Added:    Animated good option to the advanced options.
+Added:    Two more colour sets
 
 2005-09-12
-Fixed: Bug with gold income
-Added: City limit to domestic control panel
-Changed: Information window remains open across turns
-Changed: Opening score tab of information window no longer closes other windows
-Added: Gold loss due to conversion and production loss due to franchising to national manager resource tab
-Added: Special attack window to display the cost of a special attack
-Added: Construction time to tileimp tracker window
-Fixed: Crashes when deleting tileimps
-Added: Option to end game on db error
-Fixed: MP database sync check
-Added: Female leader pictures
-Fixed: Age display in MP summary
-Fixed: Colors used on single player selection screen
+Fixed:    Bug with gold income
+Added:    City limit to domestic control panel
+Changed:  Information window remains open across turns
+Changed:  Opening score tab of information window no longer closes other 
+          windows
+Added:    Gold loss due to conversion and production loss due to franchising 
+          to national manager resource tab
+Added:    Special attack window to display the cost of a special attack
+Added:    Construction time to tileimp tracker window
+Fixed:    Crashes when deleting tileimps
+Added:    Option to end game on db error
+Fixed:    MP database sync check
+Added:    Option for female leader pictures
+Fixed:    Age display in MP summary
+Fixed:    Colors used on single player selection screen
 
 2005-08-02
-Fixed: Bugs with /importmap
-Fixed: Misc crashes
-Fixed: Updating of values caused by alteration of sliders on national management dialog
-Fixed: Bug preventing rush buying an item inserted before Capitalization or Infrastructure
-Added: Buttons linking the National, City and Build Managers
+Fixed:    Bugs with /importmap
+Fixed:    Misc crashes
+Fixed:    Updating of values caused by alteration of sliders on national 
+          management dialog
+Fixed:    Bug preventing rush buying an item inserted before Capitalization 
+          or Infrastructure
+Added:    Buttons linking the National, City and Build Managers
 
 2005-06-28
-Fixed: Crash caused by loading savegames with the wrong number of goods
-Fixed: Misc crashes
-Added: More AOM support
-Changed: Method of generating advances and units from goody huts to speed it up
-Fixed: Problem preventing play with fewer than 3 civs
-Removed: Automatic tutorial advice on low difficulty levels, since it breaks mods and generally causes problems (we have a specific tutorial button now on the main menu for those that want one)
+Fixed:    Crash caused by loading savegames with the wrong number of goods
+Fixed:    Misc crashes
+Added:    More AOM support
+Changed:  Method of generating advances and units from goody huts to speed 
+          it up
+Fixed:    Problem preventing play with fewer than 3 civs
+Removed:  Automatic tutorial advice on low difficulty levels, since it breaks 
+          mods and generally causes problems (we have a specific tutorial 
+          button now on the main menu for those that want one)
 
 2005-05-23
-Added: Brief changelog to playtest readme
-Fixed: Incorrect bonuses from goods
-Fixed: Misc crashes
-Added: Some more credits
+Added:    Brief changelog to playtest readme
+Fixed:    Incorrect bonuses from goods
+Fixed:    Misc crashes
+Added:    Some more credits
 
 2005-05-17
 Added: /debugai and /debugcells commands in chat window
@@ -684,7 +678,7 @@ Fixed: Removed an AI mental block which prevented it from placing gold improveme
   water tiles.
 
 2003-09-12
-The sound system should be in working order.
+Fixed: Sound system
 Added: Start screen shows legal mumbo jumbo.
 Fixed: Hidden goods no longer show up in the Great Library.
 Added: Pollution powergraph.
@@ -734,7 +728,7 @@ Fixed: None of the rush buy buttons is disabled anymore when there is only one t
 Added: A user interface option: Enables you to view cost and effect of all known tile 
   improvements, even if you are short on PW. To activate this option, you have to edit 
   userprofile.txt and set ShowExpensive to Yes. 
-  (Well has to be added, if the game doesn't do it automaticly.) 
+  (Well has to be added, if the game does not do it automaticly.)
   There is no in-game screen to modify this setting (not yet).
 Fixed: AI-AI-Diplomacy actually happen now.
 Added: Two new flags for the terrainDB to allow modders to customize the graphics for 

@@ -1,11 +1,32 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer unit packet handling.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "network.h"
@@ -82,7 +103,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		
 		UnpacketizeUnit(&buf[pos], unitSize, m_unitData);
 		pos += unitSize;
-		BOOL revealed_unexplored;
+		bool revealed_unexplored;
 
 		if(pnt != m_unitData->m_pos) {
 			UnitDynamicArray revealed;
@@ -90,13 +111,13 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Net: Unit %lx moved to %d,%d via unit packet\n",
 								m_unitData->m_id, newPos.x, newPos.y));
 			m_unitData->m_pos = pnt;
-			BOOL addVision = FALSE;
+			bool addVision = false;
 			if(!(oldFlags & k_UDF_TEMP_SLAVE_UNIT)) {
 				g_theWorld->RemoveUnitReference(pnt, m_unitData->m_id);
 				addVision = (m_unitData->m_flags & k_UDF_VISION_ADDED) != 0;
 				m_unitData->RemoveUnitVision();
 			} else if(!(m_unitData->m_flags & k_UDF_TEMP_SLAVE_UNIT)) {
-				addVision = TRUE;
+				addVision = true;
 			}
 			m_unitData->m_pos = newPos;
 
@@ -180,7 +201,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		
 		g_theUnitPool->HackSetKey(((uint32)uid & k_ID_KEY_MASK) + 1);
 
-		sint32 trans_t = g_theUnitDB->Get(unitType)->GetTransType();
+		sint32 trans_t = g_theUnitDB->Get(unitType)->HasTransType();
 		if(m_actorId.m_id != (0)) {
 			m_unitData = new UnitData(unitType, trans_t, uid, unitOwner,
 									  unitPos, Unit(),
@@ -414,7 +435,7 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	g_theWorld->RemoveUnitReference(ud->m_pos, u);
 	g_player[ud->GetOwner()]->RemoveUnitVision(ud->m_pos, ud->GetVisionRange());
 	ud->m_pos = m_point;
-	BOOL revealed_unexplored;
+	bool revealed_unexplored;
 	g_player[ud->GetOwner()]->AddUnitVision(ud->m_pos, ud->GetVisionRange(),
 											revealed_unexplored);
 	g_theWorld->InsertUnit(ud->m_pos, u, revealed);

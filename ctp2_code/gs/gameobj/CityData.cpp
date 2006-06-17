@@ -5133,7 +5133,7 @@ void CityData::CleanupUprising(Army &sa)
 			if(sa[i].GetHP() < 1)
 				sa.DelIndex(i);
 			else {
-				BOOL revealed;
+				bool revealed;
 				sa[i].SetTempSlaveUnit(FALSE);
 				sa[i].SetPosAndNothingElse(m_home_city.RetPos());
 				sa[i].AddUnitVision(revealed);
@@ -7458,7 +7458,7 @@ void CityData::AdjustSizeIndices()
 			if(oldVision >= 0) {
 				m_home_city->RemoveOldUnitVision(oldVision);
 			}
-			BOOL revealed;
+			bool revealed;
 			m_home_city->AddUnitVision(revealed);
 		}
 		if(m_sizeIndex < oldSizeIndex) {

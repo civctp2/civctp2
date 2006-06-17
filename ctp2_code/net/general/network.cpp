@@ -3292,18 +3292,15 @@ BOOL Network::SetupMode() const
 void Network::SetSetupArea(PLAYER_INDEX player, const MapPoint &center,
 						   sint32 radius)
 {
-	BOOL revealed;
-
 	g_player[player]->m_setupCenter = center;
 	g_player[player]->m_setupRadius = radius;
 
-	
+
+	bool revealed;
 	g_player[player]->AddUnitVision(center, radius, revealed);
 
-	
 	g_player[player]->OwnExploredArea();
 
-	
 	g_player[player]->RemoveUnitVision(center, radius);
 
 	if(player == g_selected_item->GetVisiblePlayer()) {

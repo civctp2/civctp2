@@ -3968,7 +3968,7 @@ void dh_addVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	Assert(action);
 	if (!action) return;
 
-	BOOL revealedUnexplored;
+	bool revealedUnexplored;
 
 	g_tiledMap->GetLocalVision()->AddVisible(action->vision_pos, action->vision_range, 
 												revealedUnexplored);
