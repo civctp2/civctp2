@@ -149,6 +149,8 @@
 // - Added IncreaseHP to AddImprovement by E 5-25-2006
 // - ExcludedbyBuilding and ExcludedbyWonder added to Wonders
 // - added AddGoodToCity function
+// - ExcludedbyBuilding and ExcludedbyWonder added to Units and buildings
+// - Added PrerequisiteWonder to Units and buildings
 //
 //----------------------------------------------------------------------------
 
@@ -4304,16 +4306,17 @@ void CityData::AddWonder(sint32 type)
 	
 
 		for(it.Start(); !it.End(); it.Next()) {
-//			SpotFound = it.Pos(); // Doing this means you can forget the rest
-			//Cell *cell = g_theWorld->GetCell(it.Pos());
 			Cell *ncell = g_theWorld->GetCell(it.Pos());
 			Cell *ocell = g_theWorld->GetCell(SpotFound);
 			if(point == it.Pos())
 				continue;
 
-			// These three if-statements have to be combined.
-			// Amd a SpotFound valid check is missing here.
-			// See the MapPoint class for a check.
+			//for some reason when i combined them like below it wouldn't build in water
+			// this one still only allows wonder in one spot
+			if(SpotFound.IsValid()) {
+				SpotFound = it.Pos();
+			}
+
 			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
 				SpotFound = it.Pos();
 			}
@@ -4324,16 +4327,16 @@ void CityData::AddWonder(sint32 type)
 			if(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain()) {
 					SpotFound = it.Pos(); 
 			}
-			
-		}
 
+			// this one still only allows wonder in one spot			
 //			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-//				if((!g_theWorld->GetCell(SpotFound)) ||
-//				(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) {
-//					SpotFound = it.Pos(); 
+//				if((SpotFound.IsValid())
+//				|| (ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())
+//				){
+//					SpotFound = it.Pos();
 //				}
 //			}
-//		}
+		}
 		g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), SpotFound, 0);
 	}
 
@@ -5889,7 +5892,27 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 			}
 		}
 	}
-
+	// Added by E - checks if a city has a wonder required to build the unit
+	if(rec->GetNumPrerequisiteWonder() > 0) {
+		sint32 o;
+		for(o = 0; o < rec->GetNumPrerequisiteWonder(); o++) {
+			sint32 b = rec->GetPrerequisiteWonderIndex(o);
+			if(!(GetBuiltWonders() & (uint64(1) << (uint64)b)))
+				return FALSE;
+		}
+	}
+	
+	// EMOD this wonder is prevented by other wonders 
+	// to be built. (good for state religion etc)
+	if(rec->GetNumExcludedByWonder() > 0) {
+		sint32 ew;
+		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
+			sint32 b = rec->GetExcludedByWonderIndex(ew);
+			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
+				return FALSE;
+			}
+		}
+	}
 	// Added by E - Compares Unit CityStyle to the CityStyle of the City
 	if(rec->GetNumCityStyleOnly() > 0) {
 		sint32 s;
@@ -6065,7 +6088,26 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			}
 		}
 	}
-	
+	// Added by E - checks if a city has a wonder required to build the unit
+	if(rec->GetNumPrerequisiteWonder() > 0) {
+		sint32 o;
+		for(o = 0; o < rec->GetNumPrerequisiteWonder(); o++) {
+			sint32 b = rec->GetPrerequisiteWonderIndex(o);
+			if(!(GetBuiltWonders() & (uint64(1) << (uint64)b)))
+				return FALSE;
+		}
+	}
+	// EMOD this wonder is prevented by other wonders 
+	// to be built. (good for state religion etc)
+	if(rec->GetNumExcludedByWonder() > 0) {
+		sint32 ew;
+		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
+			sint32 b = rec->GetExcludedByWonderIndex(ew);
+			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
+				return FALSE;
+			}
+		}
+	}	
 	
 	// EMOD OnePerCiv allows for buildings to be Small Wonders
 	if(rec->GetOnePerCiv()) {
@@ -6376,7 +6418,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 	// EMOD from feats but needs a number of builds to build, goes with wonders 2-24-2006
 	const WonderRecord::BuildingFeat *bf;
 
-	if(rec->GetBuilding(bf)) {
+	if(rec->GetBuildingFeat(bf)) {
 		if(bf->GetBuildingIndex()) {
 			sint32 numCities = 0;
 			sint32 c;
@@ -7862,6 +7904,15 @@ void CityData::AddImprovement(sint32 type)
 		}
 	}
 
+	//Add disband city imp here
+	//popcount
+	//disbandsettlernum
+	//if popcount > dsn
+	//   set = dsn
+	//else
+	//   set = popcount
+	//for i = 0 i < set; i++)
+	// createunit(settler#)
 
 
 	//EMOD - Add Holy City here?

@@ -55,6 +55,8 @@
 #  - CollateralTileDamage    : If a defender is on a tile then improvements cut
 #                              too
 #  - GoodyHutExcluded        : Prevents Some Units from appearing
+#  - ExcludedByWonder		 : Prevents Units being built in cities with wonder
+#  - PrerequisiteWonder      : Needs Wonder in city to be built
 #
 #-----------------------------------------------------------------------------
 
@@ -114,6 +116,8 @@ Unit {
 	Record Resource[] NeedsCityGoodCapitol	// Implemented by E
 	Record Resource[] NeedsCityGoodAnyCity	// Implemented by E
 	Record Feat[] NeedsFeatToBuild			// Implemented by E
+	Record Wonder[] PrerequisiteWonder		// Added by E to limit units to cities with certain wonders
+	Record Wonder[] ExcludedByWonder		// to prevent some units being built
 
 
 	Bit(Int) MoveBonus						// FU - Instead of specifying an imp why not define the movecost here? by E

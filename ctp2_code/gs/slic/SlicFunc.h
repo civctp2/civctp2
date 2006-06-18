@@ -642,6 +642,7 @@ SLICFUNC(SFR_VOID, Pillage);
 SLICFUNC(SFR_VOID, Plunder);
 SLICFUNC(SFR_VOID, Liberate);
 SLICFUNC(SFR_VOID, AddPW);  
+SLICFUNC(SFR_VOID, PuppetGovt); 
 
 
 #endif // __SLICFUNC_H__

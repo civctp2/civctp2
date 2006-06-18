@@ -965,7 +965,9 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_Pillage);
 	m_functionHash->Add(new Slic_Plunder);
 	m_functionHash->Add(new Slic_Liberate);
-	m_functionHash->Add(new Slic_AddGold);
+	m_functionHash->Add(new Slic_AddPW);
+//	m_functionHash->Add(new Slic_PuppetGovt);
+
 }
 
 void SlicEngine::Link()

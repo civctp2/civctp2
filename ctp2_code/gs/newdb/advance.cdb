@@ -38,7 +38,7 @@ Advance {
 	Record CityStyle[] CultureOnly //added by E -- can only research if civ has certain citystyle
 	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
 	Record Resource[] NeedsCityGoodAnyCity //FU
-      
+	Record Advance[0..4] EitherPrerequisites      //FU for fluid tech tree
 
 	Bit DeepOcean
 	Bit Capitalization

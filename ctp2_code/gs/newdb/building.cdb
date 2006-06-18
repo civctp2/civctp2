@@ -25,15 +25,17 @@
 #  - NeedsCityGoodAll     : Building requires all goods in the list to be built (E)
 #  - NeedsCityGoodAnyCity : Building requires good owned in any city of the empire (E)
 #  - EnablesGood          : Building gives good to city (E)
-#  - OnePerCiv            : Just one building allowed per civ works like a Small Wonders - (E 2-14-2006)
-#  - GoldPerCity          : Whatever this does (E)
-#  - GoldPerUnit          : Whatever this does (E)
-#  - GoldPerUnitReadiness : Whatever this does (E)
-#  - SquaredBorderRadius  : Whatever this does (E 2-28-2006)
-#  - IntBorderRadius      : Whatever this does (E 2-28-2006)
+#  - OnePerCiv            : Just one building allowed per civ works like Small Wonders - (E 2-14-2006)
+#  - GoldPerCity          : Gold cost per number of cities (E)
+#  - GoldPerUnit          : adds this (E)
+#  - GoldPerUnitReadiness : adds amount times number of units times readiness modifier (E)
+#  - SquaredBorderRadius  : increases city radius (E 2-28-2006)
+#  - IntBorderRadius      : Increases city radius (E 2-28-2006)
 #  - CivilisationOnly     : Building can only be built in the given civilisations (E)
 #  - NeedsFeatToBuild     : Building can only be built with the right feat (E)
-#  - TreasuryInterest     : FU
+#  - TreasuryInterest     : Based on stored gold
+#  - ExcludedByWonder	  : Prevents bldgs being built in cities with wonder
+#  - PrerequisiteWonder   : Needs bldgs in city to be built
 #
 #-----------------------------------------------------------------------------
 
@@ -57,6 +59,8 @@ Building {
 	Record Building[]           ConflictsWithBuilding    // FU for SectarianHappiness
 	Record Building[]           ExcludedByBuilding       // CantBuild if have this building
 	Record Government[]         ExcludedByGovernmentType // Destroyed if not of this government
+	Record Wonder[]				PrerequisiteWonder		 // Added by E to limit units to cities with certain wonders
+	Record Wonder[]				ExcludedByWonder		 // to prevent some units being built
 
 
 	Record Resource[]           RequiresGood             // Added by E -- having a bldg gives a city a good
@@ -68,6 +72,7 @@ Building {
 
 	Bit(Float)                  TreasuryInterest         // FU
 	Bit                         CantSell                 // Some Buildings Cant Be Sold
+	Bit(Int)					DisbandsCitySettlerNum	 //
 
 
 	Int ProductionCost

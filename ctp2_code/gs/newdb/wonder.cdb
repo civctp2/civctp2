@@ -52,6 +52,7 @@ Wonder {
 	Record Resource[] NeedsCityGoodAnyCity //FU
     Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
 	Record TerrainImprovement[] ShowOnMap //FU
+	Record TerrainImprovement[] ShowOnMapRadius //FU
 	Record Civilisation[] CivilisationOnly 
 	Record Feat[] NeedsFeatToBuild		// implemented by E
 
@@ -112,13 +113,13 @@ Wonder {
 	Bit StartGaiaController
 	Bit GLHidden
 
-    	Struct BuildingFeat {
-        	Record Building Building
-        	Bit(Int) Num
-        	Bit(Int) PercentCities
-    	}
+	Struct BuildingFeat {                 // From feats implemented by E 2-24-2006
+		Record Building Building
+		Bit(Int) Num
+		Bit(Int) PercentCities
+	}
 
-    	Bit(struct BuildingFeat) Building
+	Bit(struct BuildingFeat) BuildingFeat // From feats implemented by E 2-24-2006
 
     Struct BuildingGold {
         	Record Building Building
