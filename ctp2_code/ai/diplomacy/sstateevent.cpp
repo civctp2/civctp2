@@ -24,12 +24,13 @@
 //
 // Modifications from the original Activision code:
 //
-// - Exposed startegies to personalities.txt by Martin Gühmann.
+// - Exposed strategies to personalities.txt by Martin Gühmann.
 // - Fixed advice string for BuildupStrength and SeigeCities 
 //   strategies by Martin Gühmann.
 // - Added over city limit strategy by Martin Gühmann.
-// - Restored backward compartibility with old personalities.txts 
+// - Restored backward compatibility with old personalities.txts 
 //   by Martin Gühmann
+// - Activated consideration of a defined nuclear strike strategy.
 //
 //----------------------------------------------------------------------------
 
@@ -439,12 +440,14 @@ STDEHANDLER(NuclearStrike_NextSStateEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
-	AiState state;
 
-	if(diplomat.GetPersonality()->HasNuclearStrikeStrategy()){
-		state.priority = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetPriority();
-		state.dbIndex = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetStrategyIndex();
-	}
+	if (diplomat.GetPersonality()->HasNuclearStrikeStrategy())
+    {
+    	AiState state;
+		state.priority  = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetPriority();
+		state.dbIndex   = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetStrategyIndex();
+    	diplomat.ConsiderStrategicState(state);
+    }
 
 	return GEV_HD_Continue;
 }
@@ -671,11 +674,11 @@ STDEHANDLER(IslandNation_NextSStateEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
-	AiState state;
 
 	sint32 avg_cont_size = MapAnalysis::GetMapAnalysis().AverageSettledContinentSize(playerId);
 
 	if(avg_cont_size < diplomat.GetPersonality()->GetMaxIslandSize() && avg_cont_size > 0){
+	    AiState state;
 		if(diplomat.GetPersonality()->HasIslandNationStrategy()){
 			state.priority = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetPriority();		   
 			state.dbIndex = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetStrategyIndex();
@@ -709,13 +712,10 @@ STDEHANDLER(IslandNation_NextSStateEvent)
 STDEHANDLER(DefenseLevel_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
-
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
-	
 	diplomat.ClearEffectiveRegardCache();
 
 	AiState state;
@@ -728,7 +728,6 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 #define MEDIUM_DEFENSE_LEVEL	10000
 #define LOW_DEFENSE_LEVEL		5000
 #define MINIMUM_DEFENSE_LEVEL	1000
-	Player *player_ptr = g_player[playerId];
 
 	if(diplomat.GetPersonality()->HasDefenceVeryHighStrategy()
 	&& diplomat.GetPersonality()->HasDefenceHighStrategy()

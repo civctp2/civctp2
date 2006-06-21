@@ -1,39 +1,69 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Matrix of diplomatic agreements
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Decreased MSVC dependency.
+// - Generalised index computation to include proposal type.
+// - Removed unused HasAgreementIndexed function.
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __AGREEMENT_MATRIX_H__
 #define __AGREEMENT_MATRIX_H__
 
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
 
 #include <vector>
-#include "c3debugstl.h"
 
-#include "diplomattypes.h"
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
-class CivArchive; 
+class AgreementMatrix;
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
+
+#include "CivArchive.h"     // CivArchive
+#include "diplomattypes.h"  // ai::..., PROPOSAL_TYPE
+#include "player.h"         // PLAYER_INDEX
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 class AgreementMatrix
 {
 public:
 
-	
-	
-	
-
-	
-	static ai::Agreement s_badAgreement;
+    static ai::Agreement s_badAgreement;
 	static AgreementMatrix s_agreements;
 
 	typedef std::vector<ai::Agreement> AgreementVector;
@@ -94,11 +124,9 @@ public:
 	void SetAgreementFast(size_t index, const ai::Agreement &agreement);
  
 	
-	sint16 GetMaxPlayers() { return m_maxPlayers; }
+	sint16 GetMaxPlayers() const { return m_maxPlayers; }
 
 
-	
-	
 	size_t AgreementIndex
     (
         PLAYER_INDEX const &    sender_player,
@@ -112,27 +140,12 @@ public:
               );
 
 		return static_cast<size_t>
-            ((PROPOSAL_MAX * (receiver_player * m_maxPlayers) + sender_player) +
+            ((PROPOSAL_MAX * m_maxPlayers * receiver_player) + 
+             (PROPOSAL_MAX * sender_player) +
              proposalType
             );
 	}
 
-	
-	
-	
-	sint32 HasAgreementIndexed(const sint32 index,
-							   const PROPOSAL_TYPE type,
-							   const sint32 curRound) const
-	{
-		
-		const ai::Agreement & agreement = m_agreements[ index+type ];
-
-		
-		
-		return (agreement.start != -1) && ((agreement.end == -1) || (agreement.end > curRound));
-	}
-
-	
 	void ClearAgreementsInvolving(const PLAYER_INDEX playerId);
 
 private:

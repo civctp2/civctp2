@@ -47,13 +47,15 @@
 #include "Diplomat.h"
 
 
-ai::Agreement AgreementMatrix::s_badAgreement;
-AgreementMatrix AgreementMatrix::s_agreements;
+ai::Agreement       AgreementMatrix::s_badAgreement;
+AgreementMatrix     AgreementMatrix::s_agreements;
+
 
 AgreementMatrix::AgreementMatrix()
+:
+	m_agreements    (),
+	m_maxPlayers    (0)
 {
-	
-	m_maxPlayers = 0;
 }
 
 
@@ -68,16 +70,16 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 	m_agreements.swap(old_agreements);
 
 	if (m_maxPlayers > 0)
-      {
-              m_agreements.resize(m_maxPlayers * m_maxPlayers * PROPOSAL_MAX, s_badAgreement);
+    {
+        m_agreements.resize(m_maxPlayers * m_maxPlayers * PROPOSAL_MAX, s_badAgreement);
 
 		for (size_t index = 0; index < old_agreements.size(); ++index)
 		{
 			PLAYER_INDEX const	senderId	= old_agreements[index].senderId;
 			PLAYER_INDEX const	receiverId	= old_agreements[index].receiverId;
 
-			if (senderId > -1 && senderId < m_maxPlayers &&
-				receiverId > -1 && receiverId < m_maxPlayers &&
+			if (senderId >= 0 && senderId < m_maxPlayers &&
+				receiverId >= 0 && receiverId < m_maxPlayers &&
 				g_player[senderId] && !g_player[senderId]->IsDead() &&
 				g_player[receiverId] && !g_player[receiverId]->IsDead())
 			{
