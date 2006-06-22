@@ -744,35 +744,29 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 			}
 		}
 
-		// EMOD for contiguous irrigation
+// EMOD for contiguous irrigation
 		if(rec->GetNeedsIrrigation()) {
-			bool hasIrrigation = false;
-
-			CityInfluenceIterator it(pos, 1);
+			RadiusIterator it(pos, 2);
 			for(it.Start(); !it.End(); it.Next()) {
-				Cell *cell = g_theWorld->GetCell(it.Pos());
+				Cell *icell = g_theWorld->GetCell(it.Pos());
 				for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++) {
-					sint32 imp = cell->GetDBImprovement(ti);
+					sint32 imp = icell->GetDBImprovement(ti);
 					const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-					if(g_theWorld->IsRiver(it.Pos()) || trec->GetNeedsIrrigation()) 
-					{
-						hasIrrigation = true;
-						break;
+					if((!g_theWorld->IsRiver(it.Pos())) && (!trec->GetNeedsIrrigation())){  
+						return false;
 					}
 				}
 			}
-			if(!hasIrrigation)
-				return false;
 		}
 
-//if(g_theWorld->IsIrrigation(0, mpos) || g_theWorld->IsRiver(mpos) || g_theWorld->IsIrrigation(i, pos) || g_theWorld->IsRiver(pos)) { 
-
-//	if (rec->GetNeedsIrrigation()) {
-//		if(!g_theWorld->IsNextToRiver(pos.x, pos.y)) // && !g_theWorld->IsNextToIrrigation(pos.x, pos.y))
-//			return false;
-//	}
-
-
+//for PrerequisiteTileImp
+		if(rec->GetNumPrerequisiteTileImp()) {
+			for(sint32 ti = 0; ti < rec->GetNumPrerequisiteTileImp(); ti++) {
+				if(!cell->GetDBImprovement(ti)) {
+					return false;
+				}
+			}
+		}
 	// End EMOD
 	}
 	return true;
