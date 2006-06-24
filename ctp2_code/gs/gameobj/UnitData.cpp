@@ -171,7 +171,7 @@ extern QuadTree<Unit>       *g_theUnitTree;
 
 extern SoundManager         *g_soundManager;
 
-extern BOOL UnitCanCarry(sint32 dest, sint32 src);
+extern bool UnitCanCarry(sint32 dest, sint32 src, sint32 government);
 
 
 
@@ -817,7 +817,7 @@ sint32 UnitData::CanCarry(
                           ) const 
                           
 { 
-    return UnitCanCarry(m_type, src); 
+    return UnitCanCarry(m_type, src, g_player[m_owner]->GetGovernmentType()); 
 }
 
 //----------------------------------------------------------------------------

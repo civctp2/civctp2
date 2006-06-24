@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Handling of a list of Units in the same cell
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -109,23 +110,23 @@ public:
 	void KillList(CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
 	sint32 IsPresent(const Unit &u);
 
-	BOOL CanEnter(const MapPoint &pos) const;
-	BOOL HasWormholeProbe() const;
+	bool CanEnter(const MapPoint &pos) const;
+	bool HasWormholeProbe() const;
 	virtual void GetPos(MapPoint &pos) const;
 	virtual PLAYER_INDEX GetOwner() const;
-	BOOL IsAtLeastOneMoveLand() const;
-	BOOL IsAtLeastOneMoveWater() const;
-	BOOL IsAtLeastOneMoveShallowWater() const;
-	BOOL IsAtLeastOneMoveAir() const;
-	BOOL IsAtLeastOneMoveSpace() const;
-	BOOL IsAtLeastOneMoveMountain() const;
-	BOOL IsEnemy(PLAYER_INDEX player) const;
-	BOOL IsEnemy(Unit defender) const;
-	BOOL IsEnemy(CellUnitList &defender) const;
-	BOOL CanAtLeastOneCaptureCity() const;
-    BOOL CanBeExpelled(); 
+	bool IsAtLeastOneMoveLand() const;
+	bool IsAtLeastOneMoveWater() const;
+	bool IsAtLeastOneMoveShallowWater() const;
+	bool IsAtLeastOneMoveAir() const;
+	bool IsAtLeastOneMoveSpace() const;
+	bool IsAtLeastOneMoveMountain() const;
+	bool IsEnemy(PLAYER_INDEX player) const;
+	bool IsEnemy(Unit defender) const;
+	bool IsEnemy(CellUnitList &defender) const;
+	bool CanAtLeastOneCaptureCity() const;
+	bool CanBeExpelled(); 
 
-	BOOL IsVisible(PLAYER_INDEX player) const;
+	bool IsVisible(PLAYER_INDEX player) const;
 	bool GetTopVisibleUnitOfMoveType
 	(
 		PLAYER_INDEX const	looker,
@@ -138,25 +139,25 @@ public:
 		PLAYER_INDEX const	looker
 	) const;
 	
-	BOOL CanBeSued() const;
-	BOOL ExertsZOC() const;
+	bool CanBeSued() const;
+	bool ExertsZOC() const;
 
     void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 	double GetHPModifier();
 	void DoVictoryEnslavement(sint32 origOwner);
 
-	BOOL CanMoveIntoCell(const MapPoint &pos,
-						 BOOL &zocViolation,
-						 BOOL ignoreZoc,
-						 BOOL &alliedCity);
-	BOOL IsMovePointsEnough(const double cost) const;
-	BOOL IsMovePointsEnough(const MapPoint &pos);
-    BOOL GetMovementTypeAir() const; 
+	bool CanMoveIntoCell(const MapPoint &pos,
+						 bool &zocViolation,
+						 bool ignoreZoc,
+						 bool &alliedCity);
+	bool IsMovePointsEnough(const double cost) const;
+	bool IsMovePointsEnough(const MapPoint &pos);
+    bool GetMovementTypeAir() const; 
 	bool GetMovementTypeLand() const; 
-	BOOL CanBeCargoPodded() const;
-	BOOL CanSpaceLand() const;
-	BOOL CanSpaceLaunch() const;
-	BOOL IsIgnoresZOC() const;
+	bool CanBeCargoPodded() const;
+	bool CanSpaceLand() const;
+	bool CanSpaceLaunch() const;
+	bool IsIgnoresZOC() const;
 
 	void UpdateMoveIntersection();
 

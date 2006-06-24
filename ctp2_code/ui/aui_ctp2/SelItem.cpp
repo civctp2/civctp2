@@ -1704,11 +1704,11 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 					units.Insert(a[0].GetData()->GetCargoList()->Access(i));
 				}
 			}
-			BOOL zocViolation;
-			BOOL alliedCity;
+			bool zocViolation;
+			bool alliedCity;
 			if(units.Num() > 0 && units.CanMoveIntoCell(dest,
 														zocViolation,
-														FALSE,
+														false,
 														alliedCity)) {
 				if(!m_good_path)
 					m_good_path = new Path;

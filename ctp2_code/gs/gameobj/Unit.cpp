@@ -2580,69 +2580,66 @@ void Unit::CheckVisionRadius()
 	AccessData()->CheckVisionRadius();
 }
 
-BOOL UnitCanCarry(sint32 dest, sint32 src)
+bool UnitCanCarry(sint32 dest, sint32 src, sint32 government)
 { 
-	const UnitRecord *drec = g_theUnitDB->Get(dest); 
-	const UnitRecord *srec = g_theUnitDB->Get(src);
-//	const UnitRecord *drec = g_theUnitDB->Get(dest, g_player[GetOwner()]->GetGovernmentType()); // Owner has to be passed
-//	const UnitRecord *srec = g_theUnitDB->Get(src, g_player[GetOwner()]->GetGovernmentType());
-
+	const UnitRecord *drec = g_theUnitDB->Get(dest, government); 
+	const UnitRecord *srec = g_theUnitDB->Get(src, government);
 
 	if (!drec->GetCanCarry()) {
-		return FALSE; 
+		return false;
 	} 
 	
-	if (srec->GetSizeSmall()) { 
+	if (srec->GetSizeSmall()) {
 		
 		if (drec->GetCanCarrySmallLand() && srec->GetMovementTypeLand()) {
-			return TRUE; 
+			return true;
 		}
 		
 		if (drec->GetCanCarrySmallAir() && srec->GetMovementTypeAir()) {
-			return TRUE; 
+			return true; 
 		}
 		
 		if (drec->GetCanCarrySmallWater() && srec->GetMovementTypeSea()) {
-			return TRUE; 
+			return true;
 		}
 		
 		if (drec->GetCanCarrySmallSpace() && srec->GetMovementTypeSpace()) {
-			return TRUE; 
+			return true;
 		}
 	}else if (srec->GetSizeMedium()) {
 		if (drec->GetCanCarryMedLand() && srec->GetMovementTypeLand()) {
-			return TRUE; 
+			return true;
 		}
 		
 		if (drec->GetCanCarryMedAir() && srec->GetMovementTypeAir()) {
-			return TRUE; 
+			return true;
 		}
 		
 		if (drec->GetCanCarryMedWater() && srec->GetMovementTypeSea()) {
-			return TRUE; 
+			return true;
 		}
 		
 		if (drec->GetCanCarryMedSpace() && srec->GetMovementTypeSpace()) {
-			return TRUE; 
+			return true;
 		}
 	} else if (srec->GetSizeLarge()) { 
 		if (drec->GetCanCarryLargeLand() && srec->GetMovementTypeLand()) {
-			return TRUE; 
+			return true;
 		}
 		
 		if (drec->GetCanCarryLargeAir() && srec->GetMovementTypeAir()) {
-			return TRUE; 
+			return true;
 		}
 		
 		if (drec->GetCanCarryLargeWater() && srec->GetMovementTypeSea()) {
-			return TRUE; 
+			return true;
 		}
 		
 		if (drec->GetCanCarryLargeSpace() && srec->GetMovementTypeSpace()) {
-			return TRUE; 
+			return true;
 		}
 	} 
-	return FALSE; 
+	return false;
 }
 
 CityData *Unit::GetCityData() const

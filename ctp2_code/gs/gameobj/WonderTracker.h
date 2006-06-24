@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Wonder Tracker
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// HAVE_PRAGMA_ONCE
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -14,7 +44,7 @@ private:
 	uint64 m_builtWonders;
 	
 	
-    uint64 m_buildingWonders[k_MAX_PLAYERS];
+	uint64 m_buildingWonders[k_MAX_PLAYERS];
 	uint32 m_globeSatFlags;
 
 public:
@@ -30,9 +60,9 @@ public:
 	void SetBuiltWonders(uint64 built);
 	BOOL GetCityWithWonder(sint32 which, Unit &city);
 
-    void SetBuildingWonder(sint32 which, PLAYER_INDEX who);
-    void ClearBuildingWonder(sint32 which, PLAYER_INDEX who);
-    BOOL IsBuildingWonder(sint32 which, PLAYER_INDEX who);
+	void SetBuildingWonder(sint32 which, PLAYER_INDEX who);
+	void ClearBuildingWonder(sint32 which, PLAYER_INDEX who);
+	BOOL IsBuildingWonder(sint32 which, PLAYER_INDEX who);
 
 	
 	void RecomputeIsBuilding(const PLAYER_INDEX who);

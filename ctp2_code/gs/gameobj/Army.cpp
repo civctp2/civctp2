@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Army interface
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -747,9 +747,9 @@ void Army::ForgetPatrol()
 	AccessData()->ForgetPatrol();
 }
 
-bool Army::CanMoveIntoCell(const MapPoint &pos, BOOL &zocViolation)
+bool Army::CanMoveIntoCell(const MapPoint &pos, bool &zocViolation)
 {
-	BOOL alliedCity;
+	bool alliedCity;
 	return AccessData()->CanMoveIntoCell(pos, zocViolation, false, alliedCity);
 }
 

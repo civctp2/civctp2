@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Army interface
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -266,7 +266,7 @@ public:
 	void ResumePatrol();
 	void ForgetPatrol();
 
-	bool CanMoveIntoCell(const MapPoint &pos, BOOL &zocViolation);
+	bool CanMoveIntoCell(const MapPoint &pos, bool &zocViolation);
 	bool CanMoveIntoTransport(const MapPoint &pos, CellUnitList &transports);
 	sint32 NumUnitsCanMoveIntoThisTransport(const Army &transports);
 	bool CanMoveIntoThisTransport(CellUnitList &transports);

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit data
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -52,18 +55,12 @@ extern ProfileDB *g_theProfileDB;
 extern StringDB *g_theStringDB;
 
 Score::Score(PLAYER_INDEX owner)
+:   m_owner                (owner),
+    m_cities_recaptured    (0),
+    m_opponents_conquered  (0),
+    m_victory_type         (kScoreGameInProgress),
+    m_feats                (0)
 {
-	m_owner = owner;
-	m_cities_recaptured = 0;
-	m_opponents_conquered = 0;
-	m_victory_type = kScoreGameInProgress;
-	m_feats = 0;
-
-
-
-
-
-
 }
 
 Score::Score(CivArchive &archive)

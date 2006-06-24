@@ -7533,10 +7533,10 @@ void ArmyData::RevealZOCUnits(const MapPoint &pos)
 //----------------------------------------------------------------------------
 BOOL ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DIRECTION d)
 {
-	BOOL zocViolation;
-	BOOL alliedCity;
+	bool zocViolation;
+	bool alliedCity;
 
-	BOOL ignoreZoc = (order == UNIT_ORDER_FINISH_ATTACK || order == UNIT_ORDER_VICTORY_MOVE);
+	bool ignoreZoc = (order == UNIT_ORDER_FINISH_ATTACK || order == UNIT_ORDER_VICTORY_MOVE);
 
 	if(!CanMoveIntoCell(pos, zocViolation, ignoreZoc, alliedCity)) {
 		if(zocViolation && 
@@ -8973,11 +8973,11 @@ BOOL ArmyData::CanMove()
 	for(d = 0; d < (sint32)NOWHERE; d++) {
 		if(m_pos.GetNeighborPosition((WORLD_DIRECTION)d, neighbor)) {
 			if(IsMovePointsEnough(neighbor)) {
-				BOOL zocViolation;
-				BOOL alliedCity;
+				bool zocViolation;
+				bool alliedCity;
 				if(CanMoveIntoCell(neighbor,
 								   zocViolation,
-								   FALSE,
+								   false,
 								   alliedCity))
 					return TRUE;
 				else if(IsOccupiedByForeigner(neighbor))
