@@ -1133,6 +1133,7 @@ public:
 
 	void RecreateMessageIcons();
 	void ThisMeansWAR(PLAYER_INDEX defense_owner);
+	bool HasWarWith(PLAYER_INDEX otherPlayer) const;
 
 	void ResetVision();
 

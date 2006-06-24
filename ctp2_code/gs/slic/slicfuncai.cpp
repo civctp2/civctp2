@@ -1224,10 +1224,7 @@ SFN_ERROR Slic_AtWarWith::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	// Everyone is always at war with the barbarians.
-	m_result.m_int = (PLAYER_INDEX_VANDALS == player)		||
-				     (PLAYER_INDEX_VANDALS == foreigner)	||
-					 AgreementMatrix::s_agreements.HasAgreement
-						(player, foreigner, PROPOSAL_TREATY_DECLARE_WAR);
+	m_result.m_int = g_player[player]->HasWarWith(foreigner);
 
 	return SFN_ERROR_OK;
 }

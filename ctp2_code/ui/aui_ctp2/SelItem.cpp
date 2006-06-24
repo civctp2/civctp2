@@ -2199,7 +2199,7 @@ void SelectedItem::EnslaveSettler(const MapPoint &point)
         double success, death;
         sint32 timer, amount;
 	    sint32 uindex;
-        BOOL target_is_city;
+        bool target_is_city;
         Unit target_city;
         Unit home_city;
 

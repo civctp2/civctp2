@@ -10554,33 +10554,42 @@ void Player::SetDiplomaticState(const PLAYER_INDEX p, const DIPLOMATIC_STATE s)
 //ThisMeansWar is not used
 void Player::ThisMeansWAR(PLAYER_INDEX defense_owner)
 {
-	Assert(0 <= defense_owner); 
-    Assert(defense_owner < k_MAX_PLAYERS);
-    Assert(m_owner != defense_owner); 
-    Assert(g_player[m_owner]); 
-    Assert(g_player[defense_owner]); 
+	Assert(0 <= defense_owner);
+	Assert(defense_owner < k_MAX_PLAYERS);
+	Assert(m_owner != defense_owner);
+	Assert(g_player[defense_owner]);
 
-    PLAYER_INDEX attack_owner = m_owner;
+	PLAYER_INDEX attack_owner = m_owner;
 
 
 	if ((attack_owner != 0) && (defense_owner != 0) && 
 		!AgreementMatrix::s_agreements.HasAgreement(attack_owner, defense_owner, PROPOSAL_TREATY_DECLARE_WAR)) { 
 		
 		SlicObject *so = new SlicObject("128CivStartedWar");
-        so->AddCivilisation(attack_owner);
-        so->AddCivilisation(defense_owner);
-        so->AddAllRecipientsBut(attack_owner);
-        g_slicEngine->Execute(so);
-    }        
+		so->AddCivilisation(attack_owner);
+		so->AddCivilisation(defense_owner);
+		so->AddAllRecipientsBut(attack_owner);
+		g_slicEngine->Execute(so);
+	}
 
-//	}
 	sint32 oldBrokenAlliances = m_broken_alliances_and_cease_fires;
 	
 	Diplomat::GetDiplomat(m_owner).DeclareWar(defense_owner);
 
-    g_player[m_owner]->RegisterAttack(defense_owner);
-    g_player[defense_owner]->RegisterAttack(m_owner);
+	RegisterAttack(defense_owner);
+	g_player[defense_owner]->RegisterAttack(m_owner);
+}
 
+bool Player::HasWarWith(PLAYER_INDEX otherPlayer) const
+{
+	Assert(0 <= otherPlayer);
+	Assert(otherPlayer < k_MAX_PLAYERS);
+	Assert(m_owner != otherPlayer);
+
+	// Everyone is always at war with the barbarians.
+	return      m_owner <= 0
+	    ||  otherPlayer <= 0
+	    ||AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_DECLARE_WAR);
 }
 
 void player_ActivateSpaceButton(sint32 owner)

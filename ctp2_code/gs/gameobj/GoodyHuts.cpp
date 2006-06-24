@@ -354,7 +354,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 		{
 			for (size_t i = 0; i < static_cast<size_t>(g_theUnitDB->NumRecords()); ++i) 
 			{
-				if (g_theUnitDB->Get(i)->GetSettleLand()) 
+				if (g_theUnitDB->Get(i, g_player[owner]->GetGovernmentType())->GetSettleLand()) 
 				{
 					m_value = i;
 					return GOODY_UNIT;
@@ -374,7 +374,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 
 			for (sint32 i = 0; i < g_theUnitDB->NumRecords(); ++i) 
 			{
-				UnitRecord const * rec = g_theUnitDB->Get(i);
+				UnitRecord const * rec = g_theUnitDB->Get(i, g_player[owner]->GetGovernmentType());
 
 				if (!rec->GetMovementTypeLand())
 					continue;   // would die immediately here
@@ -537,7 +537,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			break;
 		case GOODY_UNIT:
 		{
-			if (g_theUnitDB->Get(m_value)->GetSettle())
+			if (g_theUnitDB->Get(m_value, g_player[owner]->GetGovernmentType())->GetSettle())
 				so = new SlicObject("81NomadsHaveJoinedYourCivilisation") ;
 			else
 				so = new SlicObject("82MercenariesHaveJoinedYourCivilisation") ;

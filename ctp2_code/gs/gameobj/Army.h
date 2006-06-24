@@ -174,7 +174,7 @@ public:
 					  sint32 &timer, sint32 &amount);
     bool IsSlaveRaidPossible(const MapPoint &point, 
 							 double &success, double &death, sint32 &timer, sint32 &amount,
-							 sint32 &uindex, BOOL &target_is_city, Unit &target_city, Unit &home_city);
+							 sint32 &uindex, bool &target_is_city, Unit &target_city, Unit &home_city);
 
 	bool CanEnslaveSettler(sint32 &uindex);
 	bool CanUndergroundRailway(double &success, double &death,

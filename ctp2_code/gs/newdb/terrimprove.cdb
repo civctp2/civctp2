@@ -121,7 +121,7 @@ TerrainImprovement {
 		Bit(Int) BonusGoldExport            // FU
 		Bit CanBeCaptured                   // FU
 		Bit CanUpgrade                      // FU
-		Bit(Int) Minefield                  // FU
+		Bit(Float) Minefield                // FU
 		Record TerrainImprovement[]     GrowsToImprovement
 		Bit(Int) TurnsToGrowth
 
@@ -171,7 +171,7 @@ TerrainImprovement {
 	Bit(Int) IntBorderRadius
 	Bit(Int) SquaredBorderRadius
 	Bit(Int) MoveBonus
-	Bit Colony                              // FU
+	Bit      Colony                         // FU
 	Bit(Int) BonusFoodExport                // FU
 	Bit(Int) BonusProductionExport          // FU
 	Bit(Int) BonusGoldExport                // FU

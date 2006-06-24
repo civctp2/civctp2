@@ -750,8 +750,9 @@ bool CellUnitList::CanBeCargoPodded() const
 {
 	sint32 i;
 	sint32 cargoPodType = -1;
+	sint32 gov = g_player[GetOwner()]->GetGovernmentType();
 	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
-		if(g_theUnitDB->Get(i)->GetCargoPod()) {
+		if(g_theUnitDB->Get(i, gov)->GetCargoPod()) {
 			cargoPodType = i;
 			break;
 		}
@@ -760,14 +761,14 @@ bool CellUnitList::CanBeCargoPodded() const
 	if(i >= g_theUnitDB->NumRecords())
 		return false;
 	
-	const UnitRecord *cargoRec = g_theUnitDB->Get(cargoPodType);
+	const UnitRecord *cargoRec = g_theUnitDB->Get(cargoPodType, gov);
 	extern bool UnitCanCarry(sint32 src, sint32 dest, sint32 government);
 	if(!cargoRec->GetCargoDataPtr())
 		return false;
 
 	for(i = 0; i < m_nElements; i++) {
 		if(cargoRec->GetCargoDataPtr()->GetMaxCargo() < m_nElements ||
-		   !UnitCanCarry(cargoPodType, m_array[i].GetType(), g_player[m_array[i].GetOwner()]->GetGovernmentType())) {
+		   !UnitCanCarry(cargoPodType, m_array[i].GetType(), gov)) {
 			return false;
 		}
 	}

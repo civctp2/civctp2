@@ -394,7 +394,7 @@ bool Army::IsSlaveRaidPossible(const MapPoint &point,
 							   sint32 &timer, 
 							   sint32 &amount,
 							   sint32 &uindex, 
-							   BOOL &target_is_city, 
+							   bool &target_is_city, 
 							   Unit &target_city, 
 							   Unit &home_city)
 {
