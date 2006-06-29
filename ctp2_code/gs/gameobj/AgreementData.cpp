@@ -1426,8 +1426,8 @@ void AgreementData::BeginTurnRecipient()
 	
 	return;
 
-	
-	if(!g_player[m_owner] || g_player[m_owner]->m_isDead)
+#if 0   // Unreachable
+    if(!g_player[m_owner] || g_player[m_owner]->m_isDead)
 		return;
 
 	switch(m_agreement) {
@@ -1479,7 +1479,7 @@ void AgreementData::BeginTurnRecipient()
 			}
 			break;
 		}
-#if 0
+
 		case AGREEMENT_TYPE_PACT_CAPTURE_CITY:
 		{
 			if(g_player[m_recipient]) {
@@ -1492,8 +1492,8 @@ void AgreementData::BeginTurnRecipient()
 			}
 			break;
 		}
-#endif
-		case AGREEMENT_TYPE_PACT_END_POLLUTION:
+
+        case AGREEMENT_TYPE_PACT_END_POLLUTION:
 		{
 			if(g_player[m_recipient]) {
 				sint32 now = g_turn->GetRound();
@@ -1538,6 +1538,7 @@ void AgreementData::BeginTurnRecipient()
 			
 			return;
 	}
+#endif
 }
 
 

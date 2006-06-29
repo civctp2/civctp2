@@ -38,8 +38,7 @@ void TerrainImprovement::RemoveAllReferences()
 			g_network.Unblock(GetOwner());
 	}
 
-	sint32 r = g_theTerrainImprovementPool->Del(*this);
-	Assert(r);
+	g_theTerrainImprovementPool->Del(*this);
 }
 
 //const TerrainImprovementRecord *TerrainImprovement::GetDBRec() const //added by E to access imps 3-1-2006

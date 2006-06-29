@@ -82,10 +82,13 @@ TerrainImprovementPool::TerrainImprovementPool(CivArchive &archive)
 //
 //----------------------------------------------------------------------------
 TerrainImprovement
-TerrainImprovementPool::Create(sint32 owner,
-							   MapPoint &point,
-							   sint32 type,
-							   sint32 extraData)
+TerrainImprovementPool::Create
+(
+    sint32 owner,
+	MapPoint const & point,
+	sint32 type,
+	sint32 extraData
+)
 {
 	TerrainImprovementRecord const *	dbTerrainImprovement	= 
 		g_theTerrainImprovementDB->Get(type);

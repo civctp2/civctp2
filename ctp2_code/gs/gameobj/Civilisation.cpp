@@ -165,7 +165,8 @@ void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner)
 	    (old_owner >= 0) && g_player[old_owner]
        ) 
     {
-		g_player[pi]->m_advances->Copy(g_player[old_owner]->m_advances);
+        delete g_player[pi]->m_advances;
+		g_player[pi]->m_advances = new Advances(*(g_player[old_owner]->m_advances));
 		g_player[pi]->m_advances->SetOwner(pi);
 		g_player[old_owner]->GiveMap(pi);
     }

@@ -19,6 +19,7 @@
 // Compiler flags
 //
 // HAVE_PRAGMA_ONCE
+// HAVE_STATIC_CONST_INIT_DECL_BUG
 //
 //----------------------------------------------------------------------------
 //
@@ -34,8 +35,10 @@
 #ifndef __CTP_RECORD_H__
 #define __CTP_RECORD_H__
 
-#include "CTPDatabase.h"
-#include "dbtypes.h"
+class CTPRecord;
+
+#include "ctp2_inttypes.h"      // sint32
+#include "dbtypes.h"            // StringId
 class DBLexer;
 
 class CTPRecord
@@ -47,13 +50,11 @@ protected:
 public:
 	StringId m_name;
 
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
-    enum { INDEX_INVALID = -1 }; // MSVC6 Compiler bug workaround
+#if defined(HAVE_STATIC_CONST_INIT_DECL_BUG)
+    enum { INDEX_INVALID = -1 }; // Compiler bug workaround
 #else
     static sint32 const INDEX_INVALID   = -1;
 #endif
-
-//  static sint32 const INDEX_INVALID   = -1;   //original
 
 	CTPRecord()
     :

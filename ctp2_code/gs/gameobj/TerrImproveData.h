@@ -68,7 +68,13 @@ typedef sint32 TERRAIN_IMPROVEMENT;
 class TerrainImprovementData : public GameObj
 {
 private:
-	sint32 m_owner;
+//----------------------------------------------------------------------------
+// Do not change anything in the types or order of the following variable 
+// declarations. Doing so will break reading in of save files.
+// See the Serialize implementation for more details.
+//----------------------------------------------------------------------------
+
+    sint32 m_owner;
 	sint32 m_type;
 	MapPoint m_point;
 	sint32 m_turnsToComplete;
@@ -76,9 +82,14 @@ private:
 	sint32 m_materialCost;
 	bool m_isComplete;
 	bool m_isBuilding;
-	sint32 m_materialBonus;
 
-	friend class NetTerrainImprovement;
+//----------------------------------------------------------------------------
+// Changing the order below this line should not break anything.
+//----------------------------------------------------------------------------
+ 
+    // sint32 m_materialBonus;
+
+    friend class NetTerrainImprovement;
 
 public:
 	TerrainImprovementData(ID id,
@@ -98,7 +109,7 @@ public:
 	BOOL AddTurn(sint32 turns);
 	sint32 PercentComplete() const;
 
-	sint32 GetBonusProductionExport() const { return m_materialBonus; } //EMOD 4-5-2006
+//	sint32 GetBonusProductionExport() const { return m_materialBonus; } //EMOD 4-5-2006
 	sint32 GetMaterialCost() const { return m_materialCost; }
 	bool IsBuilding() const { return m_isBuilding; }
 

@@ -284,12 +284,12 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 //
 // Description: Add an accomplished feat to the records
 //
-// Parameters : type            : feat identifier
-//              player          : player that accomplished the feat
-//              round           : the round in which the feat was accomplished
+// Parameters : type			: feat identifier
+//				player			: player that accomplished the feat
+//				round			: the round in which the feat was accomplished
 //
-// Globals    : g_theFeatDB     : database of feat descriptions
-//              TODO: add more globals
+// Globals    : g_theFeatDB		: database of feat descriptions
+//				TODO: add more globals
 //
 // Returns    : -
 //
@@ -419,7 +419,7 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 			if(getTotal)
 				result += sub;
 			else
-				result = max(sub, result);
+                result = std::max(sub, result);
 		}
 		walk.Next();
 	}
@@ -526,7 +526,7 @@ void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 		sint32 minCityCount = 0;
 		if(g_theFeatDB->Get(featIndex)->GetMinimumSizeOfCiv(minCityCount))
 		{
-			if(g_player[defeated]->GetMaxCityCount() >= minCityCount)
+			if (g_player[defeated]->GetMaxCityCount() >= minCityCount)
 			{
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AccomplishFeat,
 									   GEA_Int, featIndex,
@@ -561,8 +561,8 @@ bool FeatTracker::HasFeat(sint32 type) const
 //
 // Description: Handler for GEV_AccomplishFeat events.
 //
-// Parameters : gameEventType   : should be GEV_AccomplishFeat
-//              args            : list of arguments
+// Parameters : gameEventType	: should be GEV_AccomplishFeat
+//				args			: list of arguments				
 //
 // Globals    : -
 //

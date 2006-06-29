@@ -1363,7 +1363,12 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 
     if (!token_ParseFloatNext(const_token, TOKEN_CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY, m_change_currently_building_item_penalty)) return FALSE ;
 
-    m_change_currently_building_item_penalty = min(1.0, max(0.0, 1.0 - m_change_currently_building_item_penalty * 0.01)); 
+    m_change_currently_building_item_penalty = 
+        std::min(1.0, 
+                 std::max(0.0, 
+                          1.0 - m_change_currently_building_item_penalty * 0.01
+                         )
+                ); 
 
 	
 	if (!token_ParseValNext(const_token, TOKEN_CONST_TARIFF_REDUCTION, m_tariff_reduction)) return FALSE ;

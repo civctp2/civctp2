@@ -672,7 +672,7 @@ public:
 #endif
 
 	bool IsLocalResource( sint32 resource ) const;
-	bool HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const; //EMOD 4-7-2006 bool if a city has imp in radius
+	bool HasTileImpInRadius(sint32 tileimp, MapPoint const & cityPos) const; //EMOD 4-7-2006 bool if a city has imp in radius
 
 	
 	
@@ -794,7 +794,7 @@ public:
 	void SetProbeRecoveredHere(BOOL recovered);
 	BOOL GetProbeRecoveredHere() { return (BOOL)m_probeRecoveredHere; }
 
-	BOOL HasSleepingUnits();
+	bool HasSleepingUnits() const;
 
 	bool IsProtectedFromConversion();
 	sint32 GetGoldFromCapitalization() { return m_gold_from_capitalization; }

@@ -2,52 +2,37 @@
 
 #include "c3.h"
 #include "GameEventArgList.h"
+
+#include <algorithm>
+#include "Army.h"
+#include "civarchive.h"
 #include "GameEventArgument.h"
 #include "pointerlist.h"
-#include "Unit.h"
-#include "Army.h"
 #include "MapPoint.h"
-
-#include "UnitPool.h"
-#include "ArmyPool.h"
 #include "TerrImprove.h"
-#include "TerrImprovePool.h"
 #include "TradeRoute.h"
-#include "TradePool.h"
+#include "Unit.h"
 
-#include "civarchive.h"
 
 GameEventArgList::GameEventArgList(va_list *vl)
 {
-	GAME_EVENT_ARGUMENT arg;
-	for(arg = GEA_Null; arg < GEA_End; arg = (GAME_EVENT_ARGUMENT)(sint32(arg) + 1)) {
-		m_argLists[arg] = NULL;
-	}
+    std::fill(m_argLists, 
+              m_argLists + GEA_End, 
+              (PointerList<GameEventArgument> *) NULL
+             );
 
-	while(1) {
+	while(vl) {
 		GAME_EVENT_ARGUMENT arg = va_arg(*vl, GAME_EVENT_ARGUMENT);
 		Assert(arg > GEA_Null);
 		Assert(arg <= GEA_End);
-		if(arg <= GEA_Null || arg > GEA_End)
+		if(arg <= GEA_Null || arg >= GEA_End)
 			break;
-
-		if(arg == GEA_End) {
-			break;
-		}
 
 		if(!m_argLists[arg]) {
 			m_argLists[arg] = new PointerList<GameEventArgument>;
 		}
 		m_argLists[arg]->AddTail(new GameEventArgument(arg, vl));
 	}	
-}
-
-GameEventArgList::GameEventArgList()
-{
-	GAME_EVENT_ARGUMENT arg;
-	for(arg = GEA_Null; arg < GEA_End; arg = (GAME_EVENT_ARGUMENT)(sint32(arg) + 1)) {
-		m_argLists[arg] = NULL;
-	}
 }
 
 GameEventArgList::GameEventArgList(CivArchive &archive)
@@ -57,12 +42,12 @@ GameEventArgList::GameEventArgList(CivArchive &archive)
 
 GameEventArgList::~GameEventArgList()
 {
-	GAME_EVENT_ARGUMENT arg;
-	for(arg = GEA_Null; arg < GEA_End; arg = (GAME_EVENT_ARGUMENT)(sint32(arg) + 1)) {
-		if(m_argLists[arg]) {
+	for (size_t arg = 0; arg < static_cast<size_t>(GEA_End); ++arg)
+    {
+        if (m_argLists[arg]) 
+        {
 			m_argLists[arg]->DeleteAll();
 			delete m_argLists[arg];
-			m_argLists[arg] = NULL;
 		}
 	}
 }
@@ -131,13 +116,22 @@ GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType,
 	if(!m_argLists[argType])
 		return NULL;
 	 
-	PointerList<GameEventArgument>::Walker walk(m_argLists[argType]);
-	sint32 i;
-	for(i = 0; i < index && walk.IsValid(); i++) {
-		walk.Next();
-	}
-	if(i == index && walk.IsValid())
-		return walk.GetObj();
+    sint32  i = 0;
+
+	for 
+    (
+        PointerList<GameEventArgument>::Walker walk(m_argLists[argType]);
+        walk.IsValid();
+        walk.Next()
+    )
+    {
+        if (i == index)
+        {
+            return walk.GetObj();
+        }
+
+        ++i;
+    }
 
 	return NULL;
 }
@@ -159,155 +153,87 @@ sint32 GameEventArgList::GetArgCount(GAME_EVENT_ARGUMENT argType)
 
 BOOL GameEventArgList::GetCity(sint32 index, Unit &c)
 {
-	GameEventArgument *arg;
+	GameEventArgument * arg = GetArg(GEA_City, index);
 
-	if(!(arg = GetArg(GEA_City, index)))
-		return FALSE;
-
-	if(!(arg->GetCity(c)) || !g_theUnitPool->IsValid(c)) {
-		c.m_id = 0;
-		return FALSE;
-	}
-	return TRUE;
+	return arg && arg->GetCity(c) && c.IsValid();
 }
 
 BOOL GameEventArgList::GetUnit(sint32 index, Unit &u)
 {
-	GameEventArgument *arg;
+	GameEventArgument * arg = GetArg(GEA_Unit, index);
 
-	if(!(arg = GetArg(GEA_Unit, index)))
-		return FALSE;
-
-	if(!(arg->GetUnit(u)) || !g_theUnitPool->IsValid(u)) {
-		u.m_id = 0;
-		return FALSE;
-	}
-	return TRUE;
+	return arg && arg->GetUnit(u) && u.IsValid();
 }
 
 BOOL GameEventArgList::GetArmy(sint32 index, Army &a)
 {
-	GameEventArgument *arg;
-	a.m_id = 0;
-	if(!(arg = GetArg(GEA_Army, index)))
-		return FALSE;
-
-	if(!(arg->GetArmy(a)) || !g_theArmyPool->IsValid(a)) {
-		return FALSE;
-	}
-	return TRUE;
+	GameEventArgument * arg = GetArg(GEA_Army, index);
+    
+    return arg && arg->GetArmy(a) && a.IsValid();
 }
 
 
 BOOL GameEventArgList::GetInt(sint32 index, sint32 &value)
 {
-	GameEventArgument *arg;
-	BOOL res;
-	if(!(arg = GetArg(GEA_Int, index)))
-		return FALSE;
-
-	if(!(res = arg->GetInt(value)))
-		value = 0;
-	return res;
+	GameEventArgument * arg = GetArg(GEA_Int, index);
+	
+    return arg && arg->GetInt(value);
 }
 
 BOOL GameEventArgList::GetPlayer(sint32 index, sint32 &player)
 {
-	GameEventArgument *arg;
-	BOOL res;
-	if(!(arg = GetArg(GEA_Player, index)))
-		return FALSE;
+	GameEventArgument * arg = GetArg(GEA_Player, index);
 
-	if(!(res = arg->GetPlayer(player)))
-		player = -1;
-	return res;
+	return arg && arg->GetPlayer(player);
 }
 
 
-BOOL GameEventArgList::GetPos(sint32 index, MapPoint &pos)
+BOOL GameEventArgList::GetPos(sint32 index, MapPoint & pos)
 {
-	GameEventArgument *arg;
-	BOOL res;
-	if(!(arg = GetArg(GEA_MapPoint, index)))
-		return FALSE;
+	GameEventArgument * arg = GetArg(GEA_MapPoint, index);
 
-	if(!(res = arg->GetPos(pos)))
-		pos.Set(-1,-1);
-	return res;
+    return arg && arg->GetPos(pos); /// @todo Add && pos.IsValid()?
 }
 
 
 BOOL GameEventArgList::GetPath(sint32 index, Path *&path)
 {
-	GameEventArgument *arg;
-	BOOL res;
-	if(!(arg = GetArg(GEA_Path, index)))
-		return FALSE;
+	GameEventArgument * arg = GetArg(GEA_Path, index);
 
-	if(!(res = arg->GetPath(path)))
-		path = NULL;
-	return res;
+    return arg && arg->GetPath(path);
 }
 
 BOOL GameEventArgList::GetDirection(sint32 index, WORLD_DIRECTION &d)
 {
-	GameEventArgument *arg;
-	BOOL res;
-	if(!(arg = GetArg(GEA_Direction, index)))
-		return FALSE;
-
-	if(!(res = arg->GetDirection(d)))
-		d = (WORLD_DIRECTION)-1;
-	return res;
+	GameEventArgument * arg = GetArg(GEA_Direction, index);
+		
+    return arg && arg->GetDirection(d);
 }
 
 BOOL GameEventArgList::GetAdvance(sint32 index, sint32 &a)
 {
-	GameEventArgument *arg;
-	BOOL res;
-	if(!(arg = GetArg(GEA_Advance, index)))
-		return FALSE;
-
-	if(!(res = arg->GetAdvance(a)))
-		a = -1;
-	return res;
+	GameEventArgument * arg = GetArg(GEA_Advance, index);
+		
+    return arg && arg->GetAdvance(a);
 }
 
 BOOL GameEventArgList::GetWonder(sint32 index, sint32 &w)
 {
-	GameEventArgument *arg;
-	BOOL res;
-	if(!(arg = GetArg(GEA_Wonder, index)))
-		return FALSE;
-
-	if(!(res = arg->GetWonder(w)))
-		w = -1;
-	return res;
+	GameEventArgument * arg = GetArg(GEA_Wonder, index);
+		
+    return arg && arg->GetWonder(w);
 }
 
 BOOL GameEventArgList::GetImprovement(sint32 index, TerrainImprovement &imp)
 {
-	GameEventArgument *arg;
-	if(!(arg = GetArg(GEA_Improvement, index)))
-		return FALSE;
+	GameEventArgument * arg = GetArg(GEA_Improvement, index);
 
-	if(!(arg->GetImprovement(imp)) || !g_theTerrainImprovementPool->IsValid(imp.m_id)) {
-		imp.m_id = 0;
-		return FALSE;
-	}
-
-	return TRUE;
+    return arg && arg->GetImprovement(imp) && imp.IsValid();
 }
 
 BOOL GameEventArgList::GetTradeRoute(sint32 index, TradeRoute &route)
 {
-	GameEventArgument *arg;
-	if(!(arg = GetArg(GEA_TradeRoute, index)))
-		return FALSE;
-	if(!(arg->GetTradeRoute(route)) || !g_theTradePool->IsValid(route.m_id)) {
-		route.m_id = 0;
-		return FALSE;
-	}
+	GameEventArgument * arg =GetArg(GEA_TradeRoute, index);
 
-	return TRUE;
+    return arg && arg->GetTradeRoute(route) && route.IsValid();
 }

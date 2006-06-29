@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Army event handlers
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -783,29 +783,27 @@ STDEHANDLER(ArmyMoveEvent)
 
 STDEHANDLER(ClearOrdersEvent)
 {
-	GameEventArgument *armyArg = args->GetArg(GEA_Army, 0);
-	
 	Army army;
-	if(!args->GetArmy(0, army))
-		return GEV_HD_Continue;
+	if (args->GetArmy(0, army))
+    {
+		army.ClearOrders();
+    }
 
-	army.ClearOrders();
 	return GEV_HD_Continue;
 }
 
 STDEHANDLER(FinishAttackEvent)
 {
-	Army a;
-	if (!args->GetArmy(0, a)) 
+	Army        a;
+	MapPoint    pos;
+	if (    args->GetArmy(0, a)     // May return false when the whole army
+                                    // has been destroyed during the attack.
+         && args->GetPos(0, pos)
+       ) 
 	{
-		// The whole army has been destroyed in the attack.
-		return GEV_HD_Continue;
-	}
+    	a.AddOrders(UNIT_ORDER_FINISH_ATTACK, NULL, pos, 0);
+    }
 
-	MapPoint pos;
-	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
-
-	a.AddOrders(UNIT_ORDER_FINISH_ATTACK, NULL, pos, 0);
 	return GEV_HD_Continue;
 }
 
@@ -1110,7 +1108,7 @@ STDEHANDLER(MoveUnitsEvent)
 
 	a->MoveUnits(to);
 
-	sint32 old_cell_owner = g_theWorld->GetCell(from)->GetOwner();
+//	sint32 old_cell_owner = g_theWorld->GetCell(from)->GetOwner();
 	sint32 new_cell_owner = g_theWorld->GetCell(to)->GetOwner();
 	sint32 army_owner = a->GetOwner();
 

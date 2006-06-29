@@ -38,97 +38,65 @@
 //   CityData.. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Added GetAllTerrainAsImp by E 2-24-2006
+// - Corrected pollution handling.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Unit.h" 
 
-
 #include "Globals.h"
 #include "GWRecord.h"
-
-#include "ConstDB.h"
-
-#include "StrDB.h"
-
+#include "ConstDB.h"            // g_theConstDB
+#include "StrDB.h"              // g_theStringDB
 #include "DB.h"
 #include "UnitRec.h"
-
 #include "dynarr.h"
 #include "UnitDynArr.h"
-
 #include "citydata.h"
-
 #include "cellunitlist.h"
-
-#include "player.h"
+#include "player.h"             // g_player
 #include "pollution.h"
-
-#include "World.h"
-
+#include "World.h"              // g_theWorld
 #include "UnitData.h"
-
 #include "network.h"
 #include "net_info.h"
-
-#include "UnitPool.h"
-#include "RandGen.h"
-
+#include "UnitPool.h"           // g_theUnitPool
+#include "RandGen.h"            // g_rand
 #include "aui.h"
 #include "primitives.h"
-
-#include "director.h"
+#include "director.h"           // g_director
 #include "tech_wllist.h"
 #include "Readiness.h"
-
 #include "AICause.h"
-
 #include "SlicEngine.h"
 #include "HappyTracker.h"
 #include "Cell.h"
-
 #include "TradeOfferPool.h"
 #include "ArmyPool.h"
 #include "ArmyData.h"
 #include "TradeBids.h"
-#include "Cell.h"
-
-#include "SelItem.h"
-
+#include "SelItem.h"            // g_selected_item
 #include "WonderRecord.h"
-
-extern UnitPool *g_theUnitPool;
-extern World *g_theWorld;
-extern Player **g_player;
-extern ConstDB *g_theConstDB;
-extern StringDB *g_theStringDB;
-extern RandomGenerator *g_rand;
-extern Pollution *g_thePollution;
-extern Director *g_director;
-
-extern SelectedItem *g_selected_item;
-
-
-
-
 #include "gamesounds.h"
 #include "SpecialAttackInfoRecord.h"
 #include "SpecialEffectRecord.h"
-
 #include "GameEventManager.h"
 #include "unitutil.h"
 #include "ctpai.h"
-
-
 #include "gamefile.h"
 
-void Unit::KillUnit (const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
+extern Pollution *  g_thePollution;
 
-{
-	
-	UnitData *u = g_theUnitPool->GetUnit(m_id);
-	g_player[u->GetOwner()]->AdjustEventPollution(GetDBRec()->GetLaunchPollution());
+
+
+void Unit::KillUnit(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
+{ 
+    sint32  pollution;
+    if (GetDBRec()->GetDeathPollution(pollution))
+    {
+	    g_player[GetOwner()]->AdjustEventPollution(pollution);
+    }
 	
 	Unit tmp(m_id);
 	tmp.RemoveAllReferences(cause, killedBy);
@@ -185,7 +153,8 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		}
 	}
 	
-	if(GetActor() != NULL) {
+	if (GetActor()) 
+    {
 		if (cause == CAUSE_REMOVE_ARMY_PARADROP_COMPLETE 
 			|| IsBeingTransported()
 			|| cause == CAUSE_REMOVE_ARMY_DIED_IN_ATTACK
@@ -205,8 +174,6 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 				g_director->AddDeath(*this);
 				
 		}
-	} else {
-		sint32 xx=1;
 	}
 	
 	if(!g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType())->GetIsTrader()) {
@@ -276,15 +243,16 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		g_theTradeOfferPool->RemoveTradeOffersFromCity(*this);
 		g_theTradeBids->CancelBidsWithCity(*this);
 
-		if(cell->UnitArmy()) {
-			sint32 i;
-			if(cause != CAUSE_REMOVE_ARMY_NUKE) {
-				
-				
-
-				for(i = cell->UnitArmy()->Num() - 1; i >= 0; i--) {
-					if(!g_theWorld->CanEnter(pos, cell->UnitArmy()->Access(i).GetMovementType())) {
-						cell->UnitArmy()->Access(i).Kill(CAUSE_REMOVE_ARMY_ILLEGAL_CELL, -1);
+		if (cell->UnitArmy()) 
+        {
+			if (cause != CAUSE_REMOVE_ARMY_NUKE) 
+            {
+				for (sint32 i = cell->UnitArmy()->Num() - 1; i >= 0; --i) 
+                {
+                    Unit    u = cell->UnitArmy()->Access(i);
+					if (u.IsValid() && !g_theWorld->CanEnter(pos, u.GetMovementType())) 
+                    {
+						u.Kill(CAUSE_REMOVE_ARMY_ILLEGAL_CELL, -1);
 					}
 				}
 			}
@@ -310,20 +278,17 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	}
 
 	
-	r = g_theUnitPool->Del(m_id);
+	g_theUnitPool->Del(m_id);
 
 	if (is_renumber_cont) {
 		g_theWorld->NumberContinents();
 	}
-	
-	Assert(r); 
 }
 
 
 
 void Unit::FastKill()
 {
-	sint32 r;
 	if(GetActor()) {
 		if(g_director)
 			g_director->FastKill(GetActor());
@@ -332,8 +297,7 @@ void Unit::FastKill()
 		Assert(FALSE);
 	}
 
-	r = g_theUnitPool->Del(m_id);
-	Assert(r);
+	g_theUnitPool->Del(m_id);
 }
 
 BOOL Unit::IsValid() const
@@ -342,19 +306,16 @@ BOOL Unit::IsValid() const
 }
 
 sint32 Unit::GetGoldHunger() const  //EMOD
-
 {
 	return GetDBRec()->GetGoldHunger();
 }
 
 sint32 Unit::GetShieldHunger() const
-
 {
 	return GetDBRec()->GetShieldHunger();
 }
 
 sint32 Unit::GetFoodHunger() const
-
 {
 	return GetDBRec()->GetFoodHunger();
 }
@@ -374,7 +335,6 @@ const UnitRecord * Unit::GetDBRec(void) const
 }
 
 const UnitData * Unit::GetData() const
-
 {
 	return g_theUnitPool->GetUnit(m_id);
 }
@@ -430,7 +390,6 @@ std::string Unit::GetDisplayName(void) const
 }
 
 PLAYER_INDEX Unit::GetOwner() const
-
 {
 	return g_theUnitPool->GetUnit(m_id)->GetOwner();
 }
@@ -442,24 +401,21 @@ sint32 Unit::GetType() const
 
 
 void Unit::GetPos(MapPoint &pos) const 
-
 {
-	UnitData *ptr = g_theUnitPool->GetUnit(m_id);
+	UnitData const * ptr = g_theUnitPool->GetUnit(m_id);
 	ptr->GetPos(pos); 
 }
 
 MapPoint Unit::RetPos() const 
-
 {
+	UnitData const * ptr = g_theUnitPool->GetUnit(m_id);
 	MapPoint pos;
-	UnitData *ptr = g_theUnitPool->GetUnit(m_id);
 	ptr->GetPos(pos);
 	return pos;
 }
 
 
 double Unit::GetHPModifier()
-
 {
 	return g_player[GetOwner()]->GetHPModifier();
 }
@@ -470,7 +426,6 @@ double Unit::GetHP() const
 }
 
 uint32 Unit::GetOwnerBit() const
-
 {
 	return g_theUnitPool->GetUnit(m_id)->GetOwnerBit();
 }
@@ -493,7 +448,7 @@ sint32 Unit::IsIgnoresZOC() const
 
 
 BOOL Unit::NearestFriendlyCity(MapPoint &p) const
-	{
+{
 	MapPoint	unit_pos,
 				city_pos ;
 
@@ -504,13 +459,15 @@ BOOL Unit::NearestFriendlyCity(MapPoint &p) const
 
 	GetPos(unit_pos);
 	p = unit_pos;
-	n = g_player[GetOwner()]->m_all_cities->m_nElements;
+	n = g_player[GetOwner()]->m_all_cities->Num();
 	for (i=0; i<n; i++)
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
 		
-		uint32 d = max(abs(city_pos.x - unit_pos.x), abs(city_pos.y - unit_pos.y));
+        uint32 d = std::max(abs(city_pos.x - unit_pos.x), 
+                            abs(city_pos.y - unit_pos.y)
+                           );
 
 		
 		if (d<closest_distance)
@@ -523,10 +480,10 @@ BOOL Unit::NearestFriendlyCity(MapPoint &p) const
 	}
 
 	return closest_distance < 0xffffffff;
-	}
+}
 
 BOOL Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
-                                       Army *army) const
+                                       Army army) const
 {
 	MapPoint    unit_pos,
 	            city_pos;
@@ -540,13 +497,15 @@ BOOL Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
 	
 	GetPos(unit_pos);
 	p = unit_pos;
-	n = g_player[GetOwner()]->m_all_cities->m_nElements;
+	n = g_player[GetOwner()]->m_all_cities->Num();
 	for (i=0; i<n; i++)	{
 		
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 		
 		
-		uint32	d = max(abs(city_pos.x - unit_pos.x), abs(city_pos.y - unit_pos.y));
+        uint32	d = std::max(abs(city_pos.x - unit_pos.x), 
+                             abs(city_pos.y - unit_pos.y)
+                            );
 		sint32 numUnits = g_theWorld->GetCell(city_pos)->GetNumUnits();
 		if(numUnits + needRoom > k_MAX_ARMY_SIZE)
 			continue;
@@ -591,13 +550,15 @@ BOOL Unit::NearestFriendlyCity(Unit &c) const
 
 	c.m_id = (0);
 	GetPos(unit_pos);
-	n = g_player[GetOwner()]->m_all_cities->m_nElements ;
+	n = g_player[GetOwner()]->m_all_cities->Num();
 	for (i=0; i<n; i++)
 		{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
 		
-		uint32	d = max(abs(city_pos.x - unit_pos.x), abs(city_pos.y - unit_pos.y));
+        uint32	d = std::max(abs(city_pos.x - unit_pos.x), 
+                             abs(city_pos.y - unit_pos.y)
+                            );
 
 		
 		if (d<closest_distance)
@@ -624,8 +585,11 @@ BOOL Unit::NearestFriendlyCity(Unit &c) const
 
 void Unit::Launch()
 {
-	UnitData *u = g_theUnitPool->GetUnit(m_id);
-	g_player[u->GetOwner()]->AdjustEventPollution(GetDBRec()->GetLaunchPollution());
+    sint32 pollution;
+    if (GetDBRec()->GetLaunchPollution(pollution))
+    {
+		g_player[GetOwner()]->AdjustEventPollution(pollution);
+    }
 }
 
 
@@ -669,7 +633,6 @@ sint32 Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed,
 
 sint32 Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed, 
                          bool &revealed_unexplored)
-
 {
 	bool left_map;
 	AccessData()->SetPos(p, revealed_unexplored, left_map); 
@@ -691,14 +654,12 @@ double Unit::GetMaxMovePoints() const
 }
 
 double Unit::GetMovementPoints() const
-
 {
 	const UnitData *ud=GetData();
 	return ud->GetMovementPoints(); 
 }
 
 void Unit::SetMovementPoints(double m)
-
 {
 	AccessData()->SetMovementPoints(m);
 }
@@ -711,7 +672,6 @@ BOOL Unit::CanBeExpelled() const
 
 
 double Unit::GetAttack() const
-
 {
 	return GetDBRec()->GetAttack(); 
 }
@@ -722,7 +682,6 @@ double Unit::GetDefense() const
 }
 
 double Unit::GetDefense(const Unit &attacker) const
-
 {
 	return GetData()->GetDefense(attacker);
 }
@@ -733,7 +692,6 @@ double Unit::GetActiveDefenseRange() const
 }
 
 sint32 Unit::PayWages(sint32 w)
-
 {
 	return AccessData()->PayWages(w);
 }
@@ -744,7 +702,6 @@ sint32 Unit::GetWagesNeeded()
 }
 
 sint32 Unit::GetFirepower() const
-
 {
 	return GetDBRec()->GetFirepower();
 }
@@ -756,40 +713,34 @@ sint32 Unit::ExertsMartialLaw() const
 
 
 sint32 Unit::GetFirstMoveThisTurn() const
-
 {
 	return GetData()->GetFirstMoveThisTurn();
 }
 
 
 uint32 Unit::GetMovementType() const
-
 {
 	return GetDBRec()->GetMovementType();
 
 }
 
 sint32 Unit::GetMovementTypeLand() const
-
 {
 	return GetDBRec()->GetMovementTypeLand();
 }
 
 
 sint32 Unit::GetMovementTypeSea() const
-
 {
 	return GetDBRec()->GetMovementTypeSea();
 }
 
 sint32 Unit::GetMovementTypeShallowWater() const
-
 {
 	return GetDBRec()->GetMovementTypeShallowWater();
 }
 
 sint32 Unit::GetMovementTypeAir() const
-
 {
 	return GetDBRec()->GetMovementTypeAir();
 }
@@ -801,13 +752,11 @@ sint32 Unit::GetMovementTypeAir() const
 //}
 
 sint32 Unit::GetMovementTypeSpace() const
-
 {
 	return GetDBRec()->GetMovementTypeSpace();
 }
 
 sint32 Unit::GetMovementTypeMountain() const
-
 {
 	return GetDBRec()->GetMovementTypeMountain();
 }
@@ -818,7 +767,6 @@ sint32 Unit::IsSubmarine() const
 }
 
 sint32 Unit::IsNoZoc() const 
-
 {
 	return GetDBRec()->GetNoZoc();
 }
@@ -831,7 +779,6 @@ sint32 Unit::DeductMoveCost(const double cost, bool &out_of_fuel)
 
 
 void Unit::SetIsInTransport(const Unit &transport)
-
 {
 	AccessData()->SetIsInTransport(transport);
 }
@@ -907,13 +854,11 @@ bool Unit::CantGroup()const
 }
 
 sint32 Unit::ResetMovement()
-
 {
 	return AccessData()->ResetMovement();
 }
 
 void Unit::SetHP(const double newval)
-
 {
 	AccessData()->SetHP(newval); 
 }
@@ -925,7 +870,6 @@ void Unit::SetType(const sint32 type)
 }
 
 void Unit::SetHPToMax()
-
 {
    SetHP(GetDBRec()->GetMaxHP());
 }
@@ -937,13 +881,11 @@ sint32 Unit::GetFuel() const
 
 
 void Unit::SetFuel (sint32 val)
-
 {
 	AccessData()->SetFuel(val);
 }
 
 void Unit::SetFuelToMax()
-
 {
 	SetFuel(GetDBRec()->GetMaxFuel());
 }
@@ -954,19 +896,16 @@ BOOL Unit::GetUsedFuel (sint32 &fuel_remaining, sint32 &max_fuel) const
 }
 
 sint32 Unit::IsVeteran() const
-
 {
 	return GetData()->IsVeteran();
 }
 
 void Unit::SetVeteran()
-
 {
 	AccessData()->SetVeteran();
 }
 
 void Unit::UnVeteran()
-
 {
 	AccessData()->UnVeteran();
 }
@@ -987,14 +926,12 @@ sint32 Unit::CanConvertCity(Unit &city) const
 }
 
 sint32 Unit::CanBombard(CellUnitList &defender) const 
-
 {
 	return GetData()->CanBombard(defender);
 }
 
 
 sint32 Unit::CanCounterBombard(CellUnitList &defender) const
-
 {
 	return GetData()->CanCounterBombard(defender);
 }
@@ -1016,7 +953,6 @@ void Unit::Bombard(const UnitRecord *rec, Unit defender, BOOL isCounterBombardme
 }
 
 BOOL Unit::Bombard(CellUnitList &defender, BOOL isCounterBombardment)
-
 {
 	return AccessData()->Bombard(defender, isCounterBombardment);
 }
@@ -1027,7 +963,6 @@ void Unit::BombardOneRound(Unit &defender, double dbonus, double dmr)
 }
 
 void Unit::DeductHP(const double val)
-
 {
 	AccessData()->DeductHP(val);
 }
@@ -1039,25 +974,22 @@ void Unit::FightOneRound(Unit did, double defenders_bonus, double amr, double dm
 }
 
 BOOL Unit::IsFlanker() const
-
 {
 	return GetDBRec()->GetIsFlanker();
 }
 
 sint32 Unit::GetZBRange() const
-
 {
 	return GetDBRec()->GetZBRangeAttack();
 }
 
 sint32 Unit::GetCargoCapacity() const
-
 {
 	return g_theUnitPool->GetUnit(m_id)->GetCargoCapacity();
 }
 
 void Unit::GetCargoHP(sint32 &i, sint32 unit_type[100],
-                      sint32 unit_hp[100])
+                      sint32 unit_hp[100]) const
 {
 	g_theUnitPool->GetUnit(m_id)->GetCargoHP(i, unit_type, unit_hp);
 
@@ -1086,9 +1018,8 @@ sint32 Unit::GetSelect2SoundID(void)
 
 sint32 Unit::GetMoveSoundID(void)
 {
-	
 	if(!g_theUnitPool->IsValid(m_id))
-		return 0;
+		return 0;   // TODO: check whether this should be -1
 	return GetDBRec()->GetSoundMoveIndex();
 }
 
@@ -1150,7 +1081,6 @@ BOOL Unit::GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spri
 }
 
 sint32 Unit::CanCarry(Unit u) const
-
 {
 	return g_theUnitPool->GetUnit(m_id)->CanCarry(u.GetType());
 
@@ -1182,7 +1112,6 @@ BOOL Unit::IsSettleSpace() const
 }
 
 sint32 Unit::Settle()
-
 {
 	sint32 r = AccessData()->Settle();
 
@@ -1191,17 +1120,9 @@ sint32 Unit::Settle()
 
 #ifdef _DEBUG
 
-char * Unit::GetText()
+char const * Unit::GetText() const
 {
-
-
-
-	if (g_isScenario)
-	{
-		return (char *) GetName();
-	}
-	else
-		return g_theUnitPool->GetUnit(m_id)->GetText();
+    return (g_isScenario) ? GetName() : g_theUnitPool->GetUnit(m_id)->GetText();
 }
 
 void Unit::SetText(char *str)
@@ -1213,7 +1134,6 @@ void Unit::SetText(char *str)
 
 
 sint32 Unit::IsCantCaptureCity()
-
 {
 	return GetDBRec()->GetCantCaptureCity();
 }
@@ -1268,16 +1188,13 @@ void Unit::InitializeCityData()
 }
 
 void Unit::GamestateDebug()
-
 {
-
 #ifdef _DEBUG
 	AccessData()->GamestateDebug();
 #endif
 }
 
 void Unit::BeginTurnCity(UnitDynamicArray &dead)
-
 {
 	AccessData()->BeginTurnCity(*this, dead);
 }
@@ -1318,13 +1235,11 @@ uint64 Unit::GetImprovements() const
 }
 
 void Unit::SetSpriteState(SpriteState *s)
-
 {
 	AccessData()->SetSpriteState(s);
 }
 
 SpriteState * Unit::GetSpriteState() const
-
 {
 	return GetData()->GetSpriteState();
 }
@@ -1818,28 +1733,28 @@ BOOL Unit::HasForceField() const
 	return GetData()->HasForceField();
 }
 
-ORDER_RESULT Unit::InvestigateCity(Unit &c)
+ORDER_RESULT Unit::InvestigateCity(Unit c)
 {
 	return AccessData()->InvestigateCity(c);
 }
 
-ORDER_RESULT Unit::StealTechnology(Unit &c, sint32 whichAdvance)
+ORDER_RESULT Unit::StealTechnology(Unit c, sint32 whichAdvance)
 {
 	return AccessData()->StealTechnology(c, whichAdvance);
 }
 
 
-ORDER_RESULT Unit::InciteRevolution(Unit &c)
+ORDER_RESULT Unit::InciteRevolution(Unit c)
 {
 	return AccessData()->InciteRevolution(c);
 }
 
-ORDER_RESULT Unit::AssassinateRuler(Unit &c)
+ORDER_RESULT Unit::AssassinateRuler(Unit c)
 {
 	return AccessData()->AssassinateRuler(c);
 }
 
-ORDER_RESULT Unit::NullifyWalls(Unit &c)
+ORDER_RESULT Unit::NullifyWalls(Unit c)
 {
 	return AccessData()->NullifyWalls(c);
 }
@@ -2439,7 +2354,7 @@ void Unit::AddEndGameObject(sint32 type)
 	AccessData()->AddEndGameObject(type);
 }
 
-BOOL Unit::SendSlaveTo(Unit &dest)
+BOOL Unit::SendSlaveTo(Unit dest)
 {
 	return AccessData()->SendSlaveTo(dest);
 }

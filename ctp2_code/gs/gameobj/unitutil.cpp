@@ -30,8 +30,9 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "UnitRecord.h"
 #include "unitutil.h"
+
+#include "UnitRecord.h"
 #include "World.h"
 #include "SpecialAttackInfoRecord.h"
 #include "UnitActor.h"
@@ -44,9 +45,6 @@
 #include "player.h"
 #include "AICause.h"
 #include "FeatTracker.h"
-
-#include "UnitPool.h"
-extern UnitPool *g_theUnitPool;
 
 static sint32 s_maxDefenseRange;
 static sint32 s_maxVisionRange;
@@ -204,14 +202,14 @@ const SpecialAttackInfoRecord *unitutil_GetSpecialAttack(SPECATTACK attack)
 void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers, const CellUnitList &defenders, double & city_bonus, double & entrenched_bonus)
 {
 	const CityData *cityData;
-	const Cell *cell;
 	city_bonus = 0.0;
 	entrenched_bonus = 0.0;
 	const UnitRecord *rec;
 	sint32 i;
 	
-	cell = g_theWorld->GetCell(pos);
-	if(cell->GetCity().m_id != (0)) {
+	const Cell *    cell = g_theWorld->GetCell(pos);
+	if (cell->GetCity().IsValid()) 
+    {
 		cityData = cell->GetCity().GetData()->GetCityData();
 		Assert(cityData);
 
@@ -246,10 +244,9 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 {
 	const CityData *cityData;
-	const Cell *cell;
 	image_index = -1;
 
-	cell = g_theWorld->GetCell(pos);
+	const Cell *    cell = g_theWorld->GetCell(pos);
 
 	if(cell->GetCity().m_id != (0)) {
 		cityData = cell->GetCity().GetData()->GetCityData();
@@ -294,7 +291,7 @@ void unitutil_ExecuteMadLaunch(Unit & unit)
 {
 	
 	if( unit.GetDBRec()->HasNuclearAttack() && 
-		g_theUnitPool->IsValid(unit->GetTargetCity()) &&
+		unit->GetTargetCity().IsValid() &&
 		!unit.Flag(k_UDF_MAD_LAUNCHED)) {
 		
 		

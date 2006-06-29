@@ -71,7 +71,7 @@ TradeOfferData* TradeOffer::AccessData()
 
 BOOL TradeOffer::Accept(PLAYER_INDEX player, 
 			const Unit &sourceCity,
-			Unit &destCity)
+			Unit const &destCity)
 {
 	return AccessData()->Accept(player, sourceCity, destCity);
 }

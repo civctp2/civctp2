@@ -30,8 +30,9 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "CTPDatabase.h"
 #include "CTPRecord.h"
+
+#include "CTPDatabase.h"
 #include "DBLexer.h"
 #include "DBTokens.h"
 #include "StrDB.h"

@@ -46,7 +46,6 @@
 #include "Gold.h"
 #include "Readiness.h"
 #include "UnitPool.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -411,12 +410,11 @@ STDEHANDLER(FinishBeginTurnEvent)
 
 STDEHANDLER(CreateUnitEvent) 
 {
-	MapPoint pos;
-	sint32 utype;
-	sint32 cause;
-	static Unit homeCity;
-	homeCity.m_id = 0;
-	sint32 pl;
+	MapPoint    pos;
+	sint32      utype;
+	sint32      cause;
+	Unit        homeCity;
+	sint32      pl;
 
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 	args->GetCity(0, homeCity); 

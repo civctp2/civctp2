@@ -280,19 +280,18 @@ double Happy::CalcDistanceFromCapitol(CityData &cd, Player *p)
 			return 0;
 		}
 		
-		cost = m_cost_to_capitol;
-
-		
-		cost += p->m_difficulty->GetDistanceFromCapitolAdjustment();
-
-		cost = min(cost, p->GetMaxEmpireDistance());
+        cost = std::min
+                (m_cost_to_capitol + p->m_difficulty->GetDistanceFromCapitolAdjustment(),
+                 p->GetMaxEmpireDistance()
+                );
 
 	} else {
 		 cost = p->GetMaxEmpireDistance();
 	}
 
 	
-	m_dist_to_capitol = max(0.0, cost - g_theGovernmentDB->Get(p->GetGovernmentType())->GetMinEmpireDistance()); 
+    m_dist_to_capitol = 
+        std::max(0.0, cost - g_theGovernmentDB->Get(p->GetGovernmentType())->GetMinEmpireDistance()); 
 
 
 	m_empire_dist = -p->GetEmpireDistanceScale() * m_dist_to_capitol;
@@ -435,19 +434,18 @@ double Happy::CalcMartialLaw(CityData &cd, Player *p)
 
 		
 		
-		sint32 n;
-		sint32 i;
 		sint32 count = 0;
 		
-		if(a) {
-			n = a->Num();
-			for (i=0; i<n; i++) {
+		if (a) 
+        {
+			sint32 n = a->Num();
+			for (sint32 i = 0; i < n; i++) {
 				if ((*a)[i].ExertsMartialLaw()) {
 					count++; 
 				}
 			}
 		}
-		m_martial_law = min (mu, count) * me;
+        m_martial_law = std::min(mu, count) * me;
 	}
 	m_tracker->SetHappiness(HAPPY_REASON_MARTIAL_LAW, m_martial_law);
 	return m_martial_law; 
@@ -512,8 +510,7 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 					  (double)(wonderutil_GetDecreaseCrimePercentage(p->GetBuiltWonders()) / 100.0);
 		double total_crime = 0.01 * base_crime;
 		total_crime += cops * total_crime;
-		total_crime *= p->GetCrimeCoef();
-		m_crime = min(1.0, total_crime);
+        m_crime = std::min(1.0, total_crime * p->GetCrimeCoef());
 		if(m_crime < 0)
 			m_crime = 0;
 	}

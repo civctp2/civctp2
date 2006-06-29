@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // -None
 //
 //----------------------------------------------------------------------------
@@ -32,16 +32,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Advances.h"
+#include "c3.h"                 // pre-compiled header
+#include "Advances.h"           // own declarations
 
 #include "AdvanceRecord.h"
 #include "civarchive.h"
-#include "player.h"
+#include "player.h"             // g_player
 #include "WonderRecord.h"
 #include "AgeRecord.h"
-#include "StrDB.h"
-
+#include "StrDB.h"              // g_theStringDB
 #include "network.h"
 #include "net_info.h"
 #include "net_action.h"
@@ -49,88 +48,96 @@
 #include "SlicObject.h"
 #include "QuickSlic.h"
 #include "Civilisation.h"
-
 #include "AICause.h"
-#include "SelItem.h"
-
+#include "SelItem.h"            // g_selected_item
 #include "UnitActor.h"
-#include "tiledmap.h"
-
+#include "tiledmap.h"           // g_tiledMap
 #include "Unit.h"
 #include "Sci.h"
 #include "Gold.h"
-
-#include "DifficultyRecord.h"
+#include "DifficultyRecord.h"   // g_theDifficultyDB
 #include "Diffcly.h"
-#include "profileDB.h"
-#include "ConstDB.h"
-#include "RandGen.h"
+#include "profileDB.h"          // g_theProfileDB
+#include "ConstDB.h"            // g_theConstDB
+#include "RandGen.h"            // g_rand
 #include "statswindow.h"
-#include "CivilisationPool.h"
-
+#include "CivilisationPool.h"   // g_theCivilisationPool
 #include "GameSettings.h"
 #include "AgeRecord.h"
 #include "BuildingRecord.h"
 #include "UnitDynArr.h"
 #include "UnitRecord.h"
 #include "UnitData.h"
-
 #include "buildingutil.h"
 #include "wonderutil.h"
 #include "MainControlPanel.h"
-
-#include <stdexcept>    // overflow_error
+#include <stdexcept>	        // overflow_error
 
 namespace
 {
-    char const  REPORT_ADVANCE_LOOP[]   = "Advance loop detected";
+	char const	REPORT_ADVANCE_LOOP[]	= "Advance loop detected";
     char const  REPORT_ADVANCE_SELF[]   = "Advance undiscoverable";
 }
 
-extern Player** g_player;
-
-extern SelectedItem     *g_selected_item;
-extern TiledMap         *g_tiledMap;
-extern ProfileDB        *g_theProfileDB;
-extern ConstDB          *g_theConstDB;
-extern RandomGenerator  *g_rand;
-extern StringDB         *g_theStringDB ;
-extern CivilisationPool *g_theCivilisationPool;
 
 #define k_MAX_ADVANCE_TURNS 1000
 
-#define k_ADVANCES_VERSION_MAJOR	0
-#define k_ADVANCES_VERSION_MINOR	0
+#define k_ADVANCES_VERSION_MAJOR	0								
+#define k_ADVANCES_VERSION_MINOR	0								
 
 
-Advances::Advances()
+Advances::Advances(size_t a_Count)
+:
+    m_owner                                 (PLAYER_UNASSIGNED),
+    m_size                                  (a_Count),    
+	m_researching                           (-1),
+    m_age                                   (0),
+    m_theLastAdvanceEnabledThisManyAdvances (0), 
+	m_total_cost                            (0),
+	m_discovered                            (0), 
+	m_hasAdvance                            (NULL),
+	m_canResearch                           (NULL),
+	m_turnsSinceOffered                     (NULL)
 {
-	m_size = g_theAdvanceDB->NumRecords();
-	Assert(m_size);
-	m_hasAdvance = new uint8[m_size];
-	m_canResearch = new uint8[m_size];
+    Assert(m_size);
+	m_hasAdvance        = new uint8[m_size];
+	m_canResearch       = new uint8[m_size];
 	m_turnsSinceOffered = new uint16[m_size];
-	memset(m_hasAdvance, 0, m_size * sizeof(*m_hasAdvance));
-	memset(m_turnsSinceOffered, 0, m_size * sizeof(uint16));
-	m_total_cost = 0;
-	m_discovered = 0;
-	m_researching = -1;
-	m_theLastAdvanceEnabledThisManyAdvances = 0;
+
+    std::fill(m_hasAdvance, m_hasAdvance + m_size, 0);
+    std::fill(m_canResearch, m_canResearch + m_size, 0);
+    std::fill(m_turnsSinceOffered, m_turnsSinceOffered + m_size, 0);
 }
 
-Advances::Advances(sint32 num)
+Advances::Advances(Advances const & a_Original)
+:
+    m_owner                                 (a_Original.m_owner),
+    m_size                                  (a_Original.m_size),    
+	m_researching                           (a_Original.m_researching),
+    m_age                                   (a_Original.m_age),
+    m_theLastAdvanceEnabledThisManyAdvances (a_Original.m_theLastAdvanceEnabledThisManyAdvances), 
+	m_total_cost                            (a_Original.m_total_cost),
+	m_discovered                            (a_Original.m_discovered), 
+	m_hasAdvance                            (NULL),
+	m_canResearch                           (NULL),
+	m_turnsSinceOffered                     (NULL)
 {
-	m_size = num;
-	Assert(m_size);
-	m_hasAdvance = new uint8[m_size];
-	memset(m_hasAdvance, 0, m_size * sizeof(uint8));
-	m_canResearch = new uint8[m_size];
+	m_hasAdvance        = new uint8[m_size];
+	m_canResearch       = new uint8[m_size];
 	m_turnsSinceOffered = new uint16[m_size];
-	memset(m_turnsSinceOffered, 0, m_size * sizeof(uint16));
-	m_total_cost = 0;
-	m_discovered = 0;
-	m_researching = -1;
-	m_theLastAdvanceEnabledThisManyAdvances = 0;
+
+    std::copy(a_Original.m_hasAdvance, 
+              a_Original.m_hasAdvance + m_size, 
+              m_hasAdvance
+             );
+    std::copy(a_Original.m_canResearch, 
+              a_Original.m_canResearch + m_size, 
+              m_canResearch
+             );
+    std::copy(a_Original.m_turnsSinceOffered, 
+              a_Original.m_turnsSinceOffered + m_size, 
+              m_turnsSinceOffered
+             );
 }
 
 Advances::~Advances()
@@ -140,30 +147,47 @@ Advances::~Advances()
 	delete [] m_turnsSinceOffered;
 }
 
+Advances & Advances::operator = (Advances const & a_Original)
+{
+    if (this != &a_Original)
+    {
+        m_owner                                 = a_Original.m_owner;
+        m_size                                  = a_Original.m_size;   
+	    m_researching                           = a_Original.m_researching;
+        m_age                                   = a_Original.m_age;
+        m_theLastAdvanceEnabledThisManyAdvances = 
+            a_Original.m_theLastAdvanceEnabledThisManyAdvances;
+	    m_total_cost                            = a_Original.m_total_cost;
+	    m_discovered                            = a_Original.m_discovered; 
+
+        delete [] m_hasAdvance;
+	    delete [] m_canResearch;
+	    delete [] m_turnsSinceOffered;
+
+	    m_hasAdvance        = new uint8[m_size];
+	    m_canResearch       = new uint8[m_size];
+	    m_turnsSinceOffered = new uint16[m_size];
+
+        std::copy(a_Original.m_hasAdvance, 
+                  a_Original.m_hasAdvance + m_size, 
+                  m_hasAdvance
+                 );
+        std::copy(a_Original.m_canResearch, 
+                  a_Original.m_canResearch + m_size, 
+                  m_canResearch
+                 );
+        std::copy(a_Original.m_turnsSinceOffered, 
+                  a_Original.m_turnsSinceOffered + m_size, 
+                  m_turnsSinceOffered
+                 );
+    }
+
+    return *this;
+}
+
 void Advances::SetOwner(PLAYER_INDEX o)
 {
 	m_owner = o; 
-
-	m_age = 0;
-}
-
-void Advances::Copy(Advances *copy)
-{
-	*this = *copy;
-	if (m_hasAdvance) {
-		m_hasAdvance = new uint8[m_size];
-		memcpy(m_hasAdvance, copy->m_hasAdvance, m_size * sizeof(uint8));
-	}
-
-	if(m_canResearch) {
-		m_canResearch = new uint8[m_size];
-		memcpy(m_canResearch, copy->m_canResearch, m_size * sizeof(uint8));
-	}
-
-	if(m_turnsSinceOffered) {
-		m_turnsSinceOffered = new uint16[m_size];
-		memcpy(m_turnsSinceOffered, copy->m_turnsSinceOffered, m_size * sizeof(uint16));
-	}
 }
 
 uint8
@@ -452,14 +476,10 @@ void Advances::InitialAdvance(AdvanceType adv)
 }
 
 
-uint8*
-Advances::CanResearch() const
+uint8 * Advances::CanResearch() const
 {
-	
-    Assert(0 < m_size);
-	uint8* research = new uint8[m_size];
-	
-	memcpy(research, m_canResearch, m_size * sizeof(uint8));
+	uint8 *  research = new uint8[m_size];
+    std::copy(m_canResearch, m_canResearch + m_size, research);
 	return research;
 }
 
@@ -788,7 +808,7 @@ uint8*
 Advances::CanOffer(Advances* otherCivAdvances, sint32 &num) const 
 {
 	
-	Assert(0<m_size);
+    Assert(0<m_size);
 	uint8* offer = new uint8[m_size];
 
 	num = 0;
@@ -819,41 +839,27 @@ Advances::CanOffer(Advances* otherCivAdvances, sint32 &num) const
 
 double Advances::GetPollutionSizeModifier(void) const
 {
-	sint32 i;
 	double bonus = 0.0;
 	double value = 0.0;
 
-	for(i = 0; i < m_size; i++)
+	for (sint32 i = 0; i < m_size; ++i)
 	{
 		if(m_hasAdvance[i]
 		&& g_theAdvanceDB->Get(i)->GetPollutionSizeModifier(value)
 		){
 			bonus += value;
 		}
-	}
+    }
 
 	return bonus;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 double Advances::GetPollutionProductionModifier(void) const
 {
-	sint32 i;
 	double bonus = 0.0;
 	double value = 0.0;
 
-	for(i = 0; i < m_size; i++)
+	for (sint32 i = 0; i < m_size; ++i)
 	{
 		if(m_hasAdvance[i]
 		&& g_theAdvanceDB->Get(i)->GetPollutionProductionModifier(value)
@@ -983,7 +989,7 @@ Advances::DebugDumpTree()
 	{
 		// Report loops
 		DPRINTF(k_DBG_INFO, ("%s\n", REPORT_ADVANCE_LOOP));
-		for (size_t n = 0; n < m_size; ++n)
+		for (sint32 n = 0; n < m_size; ++n)
 		{
 			if (LEVEL_LOOPED == level[n])
 			{
@@ -1002,7 +1008,7 @@ Advances::DebugDumpTree()
 void
 Advances::Serialize(CivArchive& archive)
 {
-	CHECKSERIALIZE
+    CHECKSERIALIZE
 
 	if(archive.IsStoring()) {
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_discovered)+sizeof(m_discovered));
@@ -1077,12 +1083,12 @@ sint32 Advances::GetMinPrerequisites(sint32 adv, sint32 limit) const
 
 	for (sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); ++prereq)
     {
-		if ((rec->GetIndex() != rec->GetPrerequisitesIndex(prereq)) &&
-            !m_hasAdvance[rec->GetPrerequisitesIndex(prereq)]
+        sint32 const        prereqDbIndex = rec->GetPrerequisitesIndex(prereq);
+		if (    (rec->GetIndex() != prereqDbIndex) 
+             && !m_hasAdvance[prereqDbIndex]
            ) 
         {
-			totalneeded += 
-                GetMinPrerequisites(rec->GetPrerequisitesIndex(prereq), limit - 1);
+			totalneeded += GetMinPrerequisites(prereqDbIndex, limit - 1);
 
             if (totalneeded > limit)
             {

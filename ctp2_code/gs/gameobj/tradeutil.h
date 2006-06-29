@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Trade utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -32,11 +32,14 @@
 #ifndef TRADEUTIL_H__
 #define TRADEUTIL_H__
 
+
 #include "ConstDB.h"
+#include "ctp2_inttypes.h"
+#include "Unit.h"
 
-class Unit;
+sint32 const    DISTANCE_UNKNOWN    = 10000;
 
-sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 resource);
+sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sint32 resource);
 sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination);
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination);
 double inline tradeutil_GetNetTradeCosts(double costs){return(costs * g_theConstDB->GetCaravanCoef() * 0.1) + 0.5;}

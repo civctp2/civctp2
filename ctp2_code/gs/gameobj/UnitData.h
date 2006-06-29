@@ -267,14 +267,14 @@ public:
 
 	void GetInserted(const Unit &transport);
 	sint32 InsertCargo(const Unit &addme);
-	void DelFromCargo(const Unit delme);
+	void DelFromCargo(const Unit & delme);
 	sint32 GetType() const { return m_type; };
 	sint32 CanCarry(const sint32 src) const;
 	sint32 GetCargoCapacity() const;
 	sint32 GetNumCarried() const;
 	BOOL CargoHasLandUnits() const;
 	void GetCargoHP(sint32 &i, sint32 unit_type[100],
-	                sint32 unit_hp[100]);
+	                sint32 unit_hp[100]) const;
 
     BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision) const;
     BOOL CanThisCargoUnloadAt(const Unit &the_cargo, const MapPoint & old_pos, const MapPoint & new_pos, const BOOL & use_vision) const;
@@ -320,7 +320,7 @@ public:
 
 	void Serialize(CivArchive &archive) ;
 #ifdef _DEBUG
-	char *GetText(); 
+	char const * GetText() const; 
 	void SetText(char *str);
 	void GamestateDebug();
 #endif
@@ -502,20 +502,20 @@ public:
 	BOOL HasForceField() const;
 
 	BOOL StoppedBySpies(const Unit &c);
-	ORDER_RESULT InvestigateCity(Unit &c);
-	ORDER_RESULT StealTechnology(Unit &c, sint32 whichAdvance);
-	ORDER_RESULT InciteRevolution(Unit &c);
-	ORDER_RESULT AssassinateRuler(Unit &c);
-	ORDER_RESULT NullifyWalls(Unit &c);
+	ORDER_RESULT InvestigateCity(Unit c);
+	ORDER_RESULT StealTechnology(Unit c, sint32 whichAdvance);
+	ORDER_RESULT InciteRevolution(Unit c);
+	ORDER_RESULT AssassinateRuler(Unit c);
+	ORDER_RESULT NullifyWalls(Unit c);
 
 	BOOL HasBeenSpiedUpon() const;
 	void SetSpiedUpon();
 
 	void CityNullifyWalls();
 
-	ORDER_RESULT EstablishEmbassy(Unit &c);
-	ORDER_RESULT ThrowParty(Unit &c, sint32 gold);
-	void HearGossip(Unit &c);
+	ORDER_RESULT EstablishEmbassy(Unit c);
+	ORDER_RESULT ThrowParty(Unit c, sint32 gold);
+	void HearGossip(Unit c);
 
 	void CityRadiusFunc(const MapPoint &pos);
 	BOOL IsCapitol() const;

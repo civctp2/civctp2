@@ -1330,8 +1330,8 @@ MESSAGE_RESPONSE_STYLE MessageData::GetResponseStyle( void )
 
 void MessageData::SetSelectedAdvance(AdvanceType adv)
 {
-	BOOL m_advanceSet = TRUE;
-	m_advance = adv;
+	m_advanceSet = TRUE;
+	m_advance    = adv;
 }
 
 AdvanceType MessageData::GetSelectedAdvance() const

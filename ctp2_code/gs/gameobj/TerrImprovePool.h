@@ -37,7 +37,7 @@ public:
 	}
 
 	TerrainImprovement Create(sint32 owner,
-							  MapPoint &pnt,
+							  MapPoint const & pnt,
 							  sint32 type,
 							  sint32 extraData);
 	void Remove(TerrainImprovement id);

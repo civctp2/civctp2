@@ -126,12 +126,13 @@ void RecordDescription::ExportHeader(FILE *outfile)
            );
 
     // Exported class name
-    fprintf(outfile, "\nclass %sRecord;\n", m_name);
+    fprintf(outfile, "\nclass %sRecord;\n\n", m_name);
 
     // Project imports
-	fprintf(outfile, "\n#include \"CTPRecord.h\"\n");
+    fprintf(outfile, "#include \"CTPDatabase.h\"\n");
+	fprintf(outfile, "#include \"CTPRecord.h\"\n");
 	ExportForwardDeclarations(outfile);
-	fprintf(outfile, "template <class T> class CTPDatabase;\n");
+    fprintf(outfile, "class CivArchive;\n");
 
     // Declarations
 	size_t  tokenCount = 0;

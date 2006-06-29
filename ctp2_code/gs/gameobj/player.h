@@ -444,8 +444,8 @@ public:
 	void RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	                       const DEATH_EFFECT_MORALE mtype);
 
-	void RegisterInsertCargo(ID *id, const sint32 unit_type, sint32 hp);
-	void RegisterUnloadCargo(ID *id, const sint32 unit_type, sint32 hp);
+	void RegisterInsertCargo(ID id, const sint32 unit_type, sint32 hp);
+	void RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp);
 	void GroupArmy(Army &army);
 	void UngroupArmy(Army &army);
 
@@ -702,9 +702,9 @@ public:
 							  sint32 extraData,
                               const BOOL check_materials,
                               ERR_BUILD_INST &err);
-	TerrainImprovement CreateImprovement(sint32 dbIndex, MapPoint &point,
+	TerrainImprovement CreateImprovement(sint32 dbIndex, MapPoint const & point,
 										 sint32 extraData);
-	TerrainImprovement CreateSpecialImprovement(sint32 dbIndex, MapPoint &point,
+	TerrainImprovement CreateSpecialImprovement(sint32 dbIndex, MapPoint const & point,
 										 sint32 extraData);  //EMOD
 
 	void AddImprovement(TerrainImprovement imp);
@@ -755,12 +755,12 @@ public:
 	void BeginTurnWonders();
 	sint32 CalcWonderGold();
 	sint32 CalcTotalBuildingUpkeep();
-	void BuildUnit(sint32 type, Unit &city);
-	void BuildImprovement(sint32 type, Unit &city);
-	void BuildWonder(sint32 wonder, Unit &city);
-	void BuildEndGame(sint32 type, Unit &city);
+	void BuildUnit(sint32 type, Unit city);
+	void BuildImprovement(sint32 type, Unit city);
+	void BuildWonder(sint32 wonder, Unit city);
+	void BuildEndGame(sint32 type, Unit city);
 
-	BOOL ChangeCurrentlyBuildingItem(Unit &city, sint32 category, sint32 item_type);
+	BOOL ChangeCurrentlyBuildingItem(Unit city, sint32 category, sint32 item_type);
 
 	void Serialize(CivArchive &archive) ;
 
@@ -899,7 +899,6 @@ public:
 
 	double GetRationLevel() const { return 1.0; }
 
-	void BuildWonder(Unit city, sint32 wonder);
 	void AddWonder(sint32 wonder, Unit &city);
 	void RemoveWonder(sint32 wonder, BOOL destroyed);
 	uint64 GetBuiltWonders();

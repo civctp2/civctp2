@@ -26,10 +26,6 @@ STDEHANDLER(RunCombatEvent)
 
 	if(!args->GetArmy(0, army))
 		return(GEV_HD_Continue);
-
-	//
-		args->GetArmy(0, army);
-	//
 	if(!args->GetPos(0, pos))
 		return(GEV_HD_Continue);
 	if(!args->GetPlayer(0, attacker))
@@ -49,8 +45,6 @@ STDEHANDLER(RunCombatEvent)
     }
     else if (g_theCurrentBattle->IsDone()) 
     {
-           
-
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_BattleAftermath,
 							   GEA_Army, army, 
                                GEA_MapPoint, pos, 
@@ -61,13 +55,7 @@ STDEHANDLER(RunCombatEvent)
 							   GEA_Int, 1, 
 							   GEA_End
                                );
-
-
-// EMOD - Add SneakAttack here?
-
-
 		g_theCurrentBattle->KillUnits();
-//	    g_director->DecrementPendingGameActions();
 	} 
     else 
     {	
@@ -89,14 +77,14 @@ STDEHANDLER(StartCombatEvent)
 {
 	Army a;
 	MapPoint p;
-
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPos(0, p)) return GEV_HD_Continue;
 
-	Assert(!g_theCurrentBattle);
-
-	if(g_theCurrentBattle) {
-		if(g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id())) {
+	if (g_theCurrentBattle) 
+    {
+        // Close previous screen - if still open
+		if (g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id())) 
+        {
 			battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 		}
 		g_theCurrentBattle->ClearBattle();
@@ -104,19 +92,18 @@ STDEHANDLER(StartCombatEvent)
 		g_theCurrentBattle = NULL;
 	}
 
-	if(!g_theCurrentBattle) {
-		CellUnitList defender;
-		g_theWorld->GetCell(p)->GetArmy(defender);
+	CellUnitList defender;
+	g_theWorld->GetCell(p)->GetArmy(defender);
 		
-		Assert(a.Num() > 0);
-		Assert(defender.Num() > 0);
-		if (a.Num() > 0 && defender.Num() > 0 &&
-		    a.GetOwner() != defender.GetOwner()
-           ) 
-        {
-			g_theCurrentBattle = new CTP2Combat(k_COMBAT_WIDTH, k_COMBAT_HEIGHT, *a.AccessData(), defender);
-		}
+	Assert(a.Num() > 0);
+	Assert(defender.Num() > 0);
+	if (a.Num() > 0 && defender.Num() > 0 &&
+	    a.GetOwner() != defender.GetOwner()
+       ) 
+    {
+		g_theCurrentBattle = new CTP2Combat(k_COMBAT_WIDTH, k_COMBAT_HEIGHT, *a.AccessData(), defender);
 	}
+
 	return GEV_HD_Continue;
 }
 

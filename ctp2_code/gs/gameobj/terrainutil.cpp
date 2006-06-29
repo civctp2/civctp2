@@ -242,26 +242,23 @@ const TerrainImprovementRecord::Effect *terrainutil_GetTerrainEffect(const Terra
 const TerrainImprovementRecord::Effect *terrainutil_GetTerrainEffect(const TerrainImprovementRecord *rec,
 																	 sint32 terrainType)
 {
-	
-	sint32 i, j;
+	for (sint32 i = 0; i < rec->GetNumTerrainEffect(); ++i) 
+    {
+		const TerrainImprovementRecord::Effect * effect = rec->GetTerrainEffect(i);
 
-	for(i = 0; i < rec->GetNumTerrainEffect(); i++) {
-		const TerrainImprovementRecord::Effect *effect = rec->GetTerrainEffect(i);
-
-		for(j = 0; j < effect->GetNumTerrain(); j++) {
-			if(effect->GetTerrainIndex(j) == terrainType) {
-				return effect;
+        if (effect)
+        {
+		    for (sint32 j = 0; j < effect->GetNumTerrain(); ++j) 
+            {
+			    if (effect->GetTerrainIndex(j) == terrainType) 
+                {
+				    return effect;
+                }
 			}
 		}
 	}
 
-	
-	const TerrainImprovementRecord::Effect *effect;
-	if(rec->GetEffect(effect)) {
-		return effect;
-	} else {
-		return NULL;
-	}
+	return rec->GetEffectPtr();
 }
 
 const TerrainRecord::TransformData *terrainutil_GetTransformData(sint32 terrain, bool add)
@@ -513,7 +510,7 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 	if(!g_player[pl])
 		return false;
 
-	// Added by E - Compares Improvement's GovernmentType to the Player's Government
+// Added by E - Compares Improvement's GovernmentType to the Player's Government
 	if(rec->GetNumGovernmentType() > 0) {
 		sint32 i;
 		bool found = false;
@@ -527,7 +524,7 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 			return false;
 	}
 
-	// Added by E - Compares Improvement's CultureOnly to the Player's CityStyle
+// Added by E - Compares Improvement's CultureOnly to the Player's CityStyle
 	if(rec->GetNumCultureOnly() > 0) {
 		sint32 s;
 		bool found = false;
@@ -740,7 +737,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 					}
 				}
 				if(!hasCorrectGood)
-					return false;
+				return false;
 			}
 		}
 
@@ -1133,7 +1130,7 @@ double terrainutil_GetMaxVisionRange()
 							rec->GetTerrainEffect(j);
 						
 						Assert(effect);
-						if(effect && effect->GetVisionRange(range))
+						if (effect && effect->GetVisionRange(range))
 						{
 							if (range > max_vision_range)
 								max_vision_range = range;
@@ -1151,14 +1148,14 @@ double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint &pos)
 
 	sint32 range = 0;
 	Assert(rec);
-	if(rec) {
-		
+	if (rec) 
+	{
 		const TerrainImprovementRecord::Effect *eff = 
 			terrainutil_GetTerrainEffect(rec, pos);
 		Assert(eff);
-		if(eff)
+		if (eff)
 		{
-			eff->GetVisionRange(range);
+			(void) eff->GetVisionRange(range);
 		}
 	}
 	return range;
@@ -1213,7 +1210,7 @@ bool terrainutil_AdvanceEnablesImprovement(sint32 advance, sint32 imp)
 	return enables;
 }
 
-bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreCity)
+bool terrainutil_GetSomethingOwnsCell(MapPoint const & pos, sint32 owner, Unit ignoreCity)
 {
 	
 	sint32 i;
@@ -1242,7 +1239,7 @@ bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreC
 	return false;
 }
 
-void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit &ignoreCity)
+void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit ignoreCity)
 {
 	
 	

@@ -11,32 +11,19 @@
 #ifndef _MESSAGEPOOL_H_
 #define _MESSAGEPOOL_H_
 
-#include "ObjPool.h"
+class MessagePool;
+typedef sint32 MESSAGE_TYPE;
 
-#include "message.h"
-
-typedef sint32 MESSAGE_TYPE ;
-
-
+#include "civarchive.h"	// CivArchive
+#include "message.h"	// MessageData
+#include "ObjPool.h"	// ObjPool
+#include "Player.h"		// PLAYER_INDEX
 
 #define k_HACK_RECONSTITUTED_CLASS 0x72adc754
 
 class MessagePool : public ObjPool
-	{
-		
-		
-
-		
-		
-
-		
-		
-		
-
-		
-		
-
-	public:
+{
+public:
 		MessageData* AccessMessage(const Message id)
 			{
 			return ((MessageData*)Access(id)) ;
@@ -61,9 +48,6 @@ class MessagePool : public ObjPool
 		void NotifySlicReload();
 	} ;
 
-extern MessagePool	*g_theMessagePool ;
-#else
-
-class MessagePool ;
+extern MessagePool *	g_theMessagePool;
 
 #endif

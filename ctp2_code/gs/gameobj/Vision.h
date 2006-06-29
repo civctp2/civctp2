@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Map visibility handling 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,15 +18,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER
-// - When defined, allows Microsoft C++ extensions.
-// - When not defined, generates standard C++.
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
-//       between #if and #else are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -36,7 +27,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -64,37 +55,37 @@ enum CIRCLE_OP {
 class Vision
 {
 private:
-
+	
 //----------------------------------------------------------------------------
 // Do not change anything in the types or order of the following variable 
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
-
+	
 	sint16 m_width;
 	sint16 m_height;
 	sint32 m_owner;
 	sint16 m_xyConversion;   // Unused
 	BOOL   m_isYwrap;        // Unused
 	BOOL   m_amOnScreen;
-
+	
 //----------------------------------------------------------------------------
 // Changing the order below this should not break anything.
 //----------------------------------------------------------------------------
-
+	
 	uint16 **m_array;
 	UnseenCellQuadTree *m_unseenCells;
 	
 	
 
-	friend class NetVision;
+	friend class NetVision;  
 	friend class MapFile;
 	
 	
 	
 	
 
-	Vision *m_mergeFrom;
+	Vision *m_mergeFrom; 
 	bool m_revealedUnexplored;
 
 	void FillCircle
@@ -119,7 +110,7 @@ public:
 	void Copy(const Vision *copy);
 
 	void AddExplored(MapPoint pos, double radius);
-	void SetTheWholeWorldExplored();
+    void SetTheWholeWorldExplored();
 	void SetTheWholeWorldUnexplored();
 	void SetTheWholeWorldUnseen();
 	bool IsExplored(MapPoint pos) const;
@@ -137,27 +128,40 @@ public:
 	
 	bool GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell);
 
-	inline void Convert(MapPoint &pos) const {
-		pos.y += pos.x;
-		while(pos.y >= m_height) {
-			pos.y -= m_height;
+	void Convert(MapPoint &pos) const 
+    {
+        int l_ResultY   = pos.y + pos.x;
+		while (l_ResultY >= m_height) 
+        {
+			l_ResultY  -= m_height;
 		}
+        pos.y = static_cast<sint16>(l_ResultY);
 	}
 
-	inline void Unconvert(MapPoint &pos) const {
-		while(pos.x < 0)
-			pos.x += m_width;
-		while(pos.x >= m_width)
-			pos.x -= m_width;
-		
-		pos.y -= pos.x;
-		while(pos.y < 0) {
-			pos.y += m_height;
+	void Unconvert(MapPoint & pos) const 
+    {
+        int l_ResultX   = pos.x;
+
+        while (l_ResultX < 0)
+        {
+			l_ResultX += m_width;
+        }
+		while (l_ResultX >= m_width)
+        {
+			l_ResultX -= m_width;
+        }
+        pos.x = static_cast<sint16>(l_ResultX);
+
+        int l_ResultY   = pos.y - l_ResultX;
+		while (l_ResultY < 0) 
+        {
+			l_ResultY += m_height;
 		}
+        pos.y = static_cast<sint16>(l_ResultY);
 	}
 
 
-	void MergeMap(Vision *src);
+	void MergeMap(Vision *src) ;									
 
 	void AddUnseen(const MapPoint &point);
 	void AddUnseen(UnseenCell *ucell); 

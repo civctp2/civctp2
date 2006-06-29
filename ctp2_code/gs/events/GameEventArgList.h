@@ -22,8 +22,7 @@ class CivArchive;
 
 class GameEventArgList {
 public:
-	GameEventArgList(va_list *vl);
-	GameEventArgList();
+	GameEventArgList(va_list * vl = NULL);
 	GameEventArgList(CivArchive &archive);
 	~GameEventArgList();
 	void Serialize(CivArchive &archive);

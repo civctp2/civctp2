@@ -202,8 +202,8 @@ void MessagePool::DoNetwork(MessageData *newData)
 {
 	
 	return;
-
-	if(g_network.IsClient()) {
+#if 0   // Unreachable
+    if(g_network.IsClient()) {
 		Assert(newData->GetSender() == g_network.GetPlayerIndex() ||
 			   newData->GetSender() == PLAYER_INDEX_INVALID);
 		if(newData->GetSender() == g_network.GetPlayerIndex() ||
@@ -220,6 +220,7 @@ void MessagePool::DoNetwork(MessageData *newData)
 			g_network.Unblock(newData->GetSender());
 		}
 	}
+#endif
 }
 
 void MessagePool::NotifySlicReload()

@@ -224,13 +224,13 @@ enum SPECATTACK {
 #include "ID.h"
 #include "dbtypes.h"
 #include "directions.h"     // WORLD_DIRECTION
-#include "gstypes.h"
 #include "Advances.h"       // AdvanceType
 #include "AICause.h"        // CAUSE_...
 #include "HappyTracker.h"   // HAPPY_REASON
 #include "MapPoint.h"       // MapPoint
 #include "Order.h"          // ORDER_RESULT
 #include "OrderRecord.h"    // For order valid check
+#include "Player.h"         // PLAYER_INDEX
 
 class CityData;
 class UnitData;
@@ -262,8 +262,8 @@ public:
 	
 	UnitData *operator -> () const { return AccessData(); }
 #ifdef _DEBUG
-	char * GetText();
-	void SetText(char *str);
+	char const * GetText() const;
+	void SetText(char * str);
 #endif
 
 	const UnitRecord * GetDBRec() const;
@@ -285,7 +285,7 @@ public:
 	BOOL NearestFriendlyCity(MapPoint &c) const;
 	BOOL NearestFriendlyCity(Unit &u) const;
 	BOOL NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoomFor,
-	                                 Army *army) const;
+	                                 Army army) const;
 
 
 	sint32 ExertsMartialLaw() const;
@@ -359,7 +359,7 @@ public:
 	BOOL IsMovePointsEnough(const MapPoint &pos) const;
 
 	void GetCargoHP(sint32 &i, sint32 unit_type[100],
-	                sint32 unit_hp[100]);
+	                sint32 unit_hp[100]) const;
 	
 	void GetInserted (const Unit &transport);
 	BOOL InsertCargo(const Unit &addme);
@@ -584,12 +584,12 @@ public:
 	BOOL HasCityWalls() const;
 	BOOL HasForceField() const;
 
-	ORDER_RESULT InvestigateCity(Unit &c);
-	ORDER_RESULT StealTechnology(Unit &c, sint32 whichAdvance);
-	ORDER_RESULT InciteRevolution(Unit &c);
-	ORDER_RESULT AssassinateRuler(Unit &c);
-	ORDER_RESULT InvestigateReadiness(Unit &c);
-	ORDER_RESULT NullifyWalls(Unit &c);
+	ORDER_RESULT InvestigateCity(Unit c);
+	ORDER_RESULT StealTechnology(Unit c, sint32 whichAdvance);
+	ORDER_RESULT InciteRevolution(Unit c);
+	ORDER_RESULT AssassinateRuler(Unit c);
+	ORDER_RESULT InvestigateReadiness(Unit c);
+	ORDER_RESULT NullifyWalls(Unit c);
 
 	BOOL HasBeenSpiedUpon() const;
 	void SetSpiedUpon();
@@ -597,7 +597,7 @@ public:
 	void CityNullifyWalls();
 	
 	ORDER_RESULT EstablishEmbassy(Unit &c);
-	ORDER_RESULT ThrowParty(Unit &c, sint32 gold);
+	ORDER_RESULT ThrowParty(Unit c, sint32 gold);
 
 	BOOL IsCapitol() const;
 
@@ -751,7 +751,7 @@ public:
 
 	void AddEndGameObject(sint32 type);
 
-	BOOL SendSlaveTo(Unit &dest);
+	BOOL SendSlaveTo(Unit dest);
 
 	void SetFullHappinessTurns(sint32 turns);
 

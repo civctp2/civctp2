@@ -25,9 +25,11 @@
 // - #pragma once commented out.
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1200)
+
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
+
 #ifndef DB_TYPES_H__
 #define DB_TYPES_H__
 

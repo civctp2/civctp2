@@ -207,7 +207,6 @@ sint32 Pollution::AtTriggerLevel(void)
 	if(!g_theGameSettings->GetPollution())
 		return FALSE;
 
-	bool gaia = false;
 	sint32 i;
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		if(!g_player[i])
@@ -346,84 +345,57 @@ void Pollution::SetGlobalPollutionLevel(sint32 requiredPollution)
 
 
 void Pollution::BeginTurn(void)
-	{
-	sint32	gwPhaseList[] = { 0, 1, 0 } ;
-
-	
-	sint32	disasterType ;
-
-
-
-	
-
-
-
-
+{
 	if(!g_theGameSettings->GetPollution())
 		return;
 
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	if(GetRoundsToNextDisaster() < k_ROUNDS_BEFORE_DISASTER) {
+	if(GetRoundsToNextDisaster() < k_ROUNDS_BEFORE_DISASTER) 
+    {
 		WarnPlayers();
 	}
 
-
 	if (AtTriggerLevel())    
-		{
+	{
 		if (m_phase < g_thePollutionDB->NumTriggers(g_theProfileDB->GetMapSize()))
-			{
-			disasterType = g_thePollutionDB->GetDisasterType(g_theProfileDB->GetMapSize(), m_phase) ;
-			
+		{
+        	sint32	disasterType = g_thePollutionDB->GetDisasterType
+                                        (g_theProfileDB->GetMapSize(), m_phase);
 			switch (disasterType)
-				{
-				case POLLUTION_DISASTER_TYPE_OZONE :
+			{
+			case POLLUTION_DISASTER_TYPE_OZONE :
+				g_theWorld->OzoneDepletion();
+				break ;
 
-					g_theWorld->OzoneDepletion();
-					break ;
-
-				case POLLUTION_DISASTER_TYPE_FLOOD :
-					g_theWorld->GlobalWarming(m_gwPhase) ;
-					m_gwPhase++;
-					break ;
-
-				}
+			case POLLUTION_DISASTER_TYPE_FLOOD :
+				g_theWorld->GlobalWarming(m_gwPhase) ;
+				m_gwPhase++;
+				break ;
+			}
 
 			GotoNextLevel() ;
 			m_eventTriggered = TRUE ;
-			}
+		}
 
 		m_eventTriggerNextRound = 0 ;
-		}
+	}
 	else
 		m_eventTriggerNextRound-- ;
 
 
 	if(g_network.IsHost())
-		{
+	{
 		g_network.EnqueuePollution();
-		}
-
 	}
+
+}
 
 
 void Pollution::GotoNextLevel(void)
-	{
+{
 	if (m_phase < (g_thePollutionDB->NumTriggers(g_theProfileDB->GetMapSize()) - 1))
 		m_phase++ ;
 
-	}
+}
 
 
 
@@ -596,7 +568,7 @@ void pollution_NukeCell(MapPoint &pos, Cell *cell)
 	bool CutNPasteCodeIsBad = false;
 	Assert(CutNPasteCodeIsBad);
 	return;
-
+#if 0 // CtP1?
 	if(cell->GetCanDie()) {
 		
 		
@@ -639,12 +611,12 @@ void pollution_NukeCell(MapPoint &pos, Cell *cell)
 		}
 		g_tiledMap->RedrawTile(&pos);
 	}
+#endif
 }
 
 void Pollution::AddNukePollution(const MapPoint &cpos)
 {
 	MapPoint pos;
-	sint32 i;
 	Cell *centerCell = g_theWorld->GetCell(cpos);
 	if(centerCell->GetCity().m_id == 0) {
 		
@@ -656,9 +628,9 @@ void Pollution::AddNukePollution(const MapPoint &cpos)
 		
 	}
 
-	for(i = 0; i < g_theConstDB->NukeKillTiles(); i++) {
+	for (sint32 i = 0; i < g_theConstDB->NukeKillTiles(); i++) {
 		if(cpos.GetNeighborPosition((WORLD_DIRECTION)g_rand->Next(sint32(NOWHERE)), pos)) {
-			Cell *cell = g_theWorld->GetCell(pos);
+//			Cell *cell = g_theWorld->GetCell(pos);
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 								   GEV_KillTile,
 								   GEA_MapPoint, pos,

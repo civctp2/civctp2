@@ -49,6 +49,7 @@
 #include "MapPoint.h"
 
 #include "GameEventDescription.h"
+#include "UnitRecord.h"
 
 class CivArchive;
 class Path;
@@ -58,7 +59,6 @@ template <class T> class PointerList;
 class Order;
 enum CAUSE_REMOVE_ARMY;
 enum ORDER_RESULT;
-
 
 
 
@@ -186,7 +186,7 @@ public:
 
     void GroupArmy(Army &addme);
     void GroupAllUnits();
-    void GroupUnit(Unit &unit);
+    void GroupUnit(Unit unit);
     void UngroupUnits();
 
     void FastKill();
@@ -560,7 +560,7 @@ public:
     void PerformOrder(const OrderRecord * order_rec);
 
 
-    void PerformOrderHere(const OrderRecord * order_rec, const Path *path);
+    void PerformOrderHere(const OrderRecord * order_rec, const Path * path);
 
 
     bool IsObsolete() const;
@@ -604,6 +604,7 @@ public:
 
 
 private:
+    size_t CargoCountIf(UnitRecord::BoolAccessor a_Property) const;
 
 
     static sint32 *s_orderDBToEventMap;

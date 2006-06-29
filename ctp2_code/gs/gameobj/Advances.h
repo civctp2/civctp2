@@ -103,13 +103,13 @@ private:
 	friend class NetResearch;
 
 public:
-
-	Advances(sint32 num);
-	Advances();
+	Advances(size_t a_Count);
+    Advances(Advances const & a_Original);
 	virtual ~Advances();
 
+    Advances & operator = (Advances const & a_Original);
+
 	void SetOwner(PLAYER_INDEX o);
-	void Copy(Advances *oldCiv);
 
 	sint32 GetNum() const { return m_size; }
 

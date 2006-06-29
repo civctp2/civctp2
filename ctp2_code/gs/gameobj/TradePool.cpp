@@ -98,10 +98,8 @@ void TradePool::Draw(aui_Surface* surface)
 		return;
 	
 	sint32 num = m_all_routes->Num();
-	sint32 i;
-	sint32 selectionState = 0;
 
-	for(i = 0; i < num; i++) {
+    for (sint32 i = 0; i < num; i++) {
 		TradeRoute route = m_all_routes->Access(i);
 
 		

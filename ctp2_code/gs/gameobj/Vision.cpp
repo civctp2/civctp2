@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Map visibility handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -519,7 +519,7 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			}
 			// else: No action: keep counter at 0
 			if(((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
-				Cell *cell = g_theWorld->GetCell(iso);
+//				Cell *cell = g_theWorld->GetCell(iso);
 				// Added by Martin Gühmann
 				AddUnseen(iso);
 
@@ -534,11 +534,10 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			break;
 		case CIRCLE_OP_ADD_RADAR:
 		{
-			static CellUnitList army;
-			army.Clear();
+			CellUnitList army;
 			g_theWorld->GetArmy(iso, army);
-			sint32 i, n = army.Num();
-			for(i = 0; i < n; i++) {
+			sint32 n = army.Num();
+			for(sint32 i = 0; i < n; i++) {
 				army[i].SetRadar(m_owner);
 			}
 			break;

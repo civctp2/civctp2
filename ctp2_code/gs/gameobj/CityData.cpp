@@ -580,7 +580,7 @@ void CityData::Serialize(CivArchive &archive)
 	m_tradeSourceList.Serialize(archive);
 	m_tradeDestinationList.Serialize(archive);
 
-	// To check later: next 3 lines are invalid when CTP1_TRADE has been defined. See CityData.h.
+	// @todo Check later: next 3 lines are invalid when CTP1_TRADE has been defined. See CityData.h.
 	m_collectingResources.Serialize(archive);
 	m_buyingResources.Serialize(archive);
 	m_sellingResources.Serialize(archive);
@@ -689,12 +689,15 @@ void CityData::Serialize(CivArchive &archive)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-BOOL NeedsCanalTunnel(MapPoint &center_point)
+bool NeedsCanalTunnel(MapPoint const & center_point)
 {
-	if (g_theWorld->IsCanal(center_point)) {
-		return FALSE;
-		} else if (g_theWorld->IsTunnel(center_point)) {
-		return FALSE;
+	if (g_theWorld->IsCanal(center_point)) 
+    {
+		return false;
+    }
+    else if (g_theWorld->IsTunnel(center_point)) 
+    {
+		return false;
 	}
 
 	TerrainRecord const * rec = 
@@ -2172,13 +2175,13 @@ void CityData::CollectResources()
 			}
 		}
 		//EMOD enablesgood applied to terrain::effect
-		sint32 tgood;
 		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++){
 			sint32 timp = cell->GetDBImprovement(t);
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
-			if(effect->GetNumEnablesGood() > 0){
-				for(tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++){
+			if (effect)
+            {
+				for (sint32 tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++){
 					m_collectingResources.AddResource(effect->GetEnablesGoodIndex(tgood));
 				}
 			}
@@ -4394,7 +4397,7 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	const WonderRecord* wrec = NULL;
 	const BuildingRecord* irec = NULL;
 //	const EndGameRecord *egrec = NULL; // Maybe usefull later
-	uint32 oldCategory;
+	sint32 oldCategory;
 	if(m_build_queue.GetHead())
 		oldCategory = m_build_queue.GetHead()->m_category;
 	else
@@ -5002,18 +5005,14 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 		return; 
 	}
 
-	CellUnitList slaveArmy;
-	sint32 oldOwner = m_owner;
-
-	if(cause == UPRISING_CAUSE_INTERNAL)
+	if (cause == UPRISING_CAUSE_INTERNAL)
 		cause = m_doUprising;
 
 	m_doUprising = UPRISING_CAUSE_NONE;
 
-	sint32 cheapUnit;
-	cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
+	sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
 	Assert(cheapUnit >= 0);
-	if(cheapUnit < 0)
+	if (cheapUnit < 0)
 		return;
 	
 	sint32 numSlaves = SlaveCount();
@@ -5024,7 +5023,9 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 
 	if(numSlaves > k_MAX_ARMY_SIZE)
 		numSlaves = k_MAX_ARMY_SIZE;
-	sint32 i;
+
+	CellUnitList slaveArmy;
+    sint32 i;
 	for(i = 0; i < numSlaves; i++) {
 		Unit u = g_player[si]->CreateUnitNoPosition(cheapUnit,
 		                                            slaveArmy,
@@ -5037,8 +5038,6 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 		}
 	}
 	
-	Cell *cell = g_theWorld->GetCell(cpos);
-
 	Army sa = g_player[si]->GetNewArmy(CAUSE_NEW_ARMY_UPRISING); 
 	for(i = 0; i < numSlaves; i++) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AddUnitToArmy,
@@ -5061,50 +5060,52 @@ void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
 	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
 	sint32 numPossibleDefenders = cell->GetNumUnits();
 
-	CellUnitList defenders;
 
-	sint32 si = sa->GetOwner();
-
-	
-	
-	if(g_network.IsHost()) {
+	if (g_network.IsHost()) 
+    {
 		g_network.Block(oldOwner);
 		g_network.Enqueue(g_theArmyPool->AccessArmy(sa));
 		g_network.Unblock(oldOwner);
 	}
 
-	sint32 i;
-
 	bool startedBattle = false;
-	if(numPossibleDefenders > 0) {
-		for(i = 0; i < numPossibleDefenders; i++) {
-			if(cell->AccessUnit(i).GetDBRec()->GetMovementTypeLand()) {
+	if (numPossibleDefenders > 0) 
+    {
+	    CellUnitList defenders;
+		for (sint32 i = 0; i < numPossibleDefenders; ++i) 
+        {
+			if (cell->AccessUnit(i).GetDBRec()->GetMovementTypeLand()) 
+            {
 				defenders.Insert(cell->AccessUnit(i));
 			}
 		}
 
-		if(defenders.Num() > 0) {
+		if (defenders.Num() > 0) 
+        {
 			sa.Fight(defenders);
 			startedBattle = true;
 		}
-
 	}
 
-	if(cause != UPRISING_CAUSE_INCITED) {
+	if (cause != UPRISING_CAUSE_INCITED) 
+    {
 		SlicObject *so = new SlicObject("206CrisisSlaveRevolt");
 		so->AddCity(m_home_city);
 		so->AddRecipient(m_owner);
 		g_slicEngine->Execute(so);
 	}
 		
-	if(!startedBattle) {
-		CleanupUprising(sa);
-	} else {
+	if (startedBattle) 
+    {
 		sa->IncrementDontKillCount();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CleanupUprising,
 		                       GEA_Army, sa,
 		                       GEA_City, m_home_city.m_id,
 		                       GEA_End);
+	}
+    else 
+    {
+		CleanupUprising(sa);
 	}
 }
 
@@ -5324,7 +5325,7 @@ void CityData::AddGoodToCity(sint32 good)
 	 m_collectingResources.AddResource(good);
 }
 
-bool CityData::HasTileImpInRadius(sint32 tileimp, MapPoint &cityPos) const
+bool CityData::HasTileImpInRadius(sint32 tileimp, MapPoint const & cityPos) const
 {
 	CityInfluenceIterator it(cityPos, m_sizeIndex);
 
@@ -6110,10 +6111,10 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 	}	
 	
 	// EMOD OnePerCiv allows for buildings to be Small Wonders
-	if(rec->GetOnePerCiv()) {
-		sint32 numCities = 0;
-		sint32 c;
-		for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
+	if (rec->GetOnePerCiv()) 
+    {
+		for (sint32 c = 0; c < g_player[m_owner]->m_all_cities->Num(); ++c) 
+        {
 			Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
 			if(aCity.CD()->HaveImprovement(type)) {
 				return FALSE;
@@ -7179,22 +7180,23 @@ void CityData::SetProbeRecoveredHere(BOOL recovered)
 
 
 
-BOOL CityData::HasSleepingUnits(void)
+bool CityData::HasSleepingUnits(void) const
 {
-	BOOL		hasSleepingOrFortified = FALSE;
+	CellUnitList * units = g_theWorld->GetArmyPtr(m_home_city.RetPos());
 
-	CellUnitList *units = g_theWorld->GetArmyPtr(m_home_city.RetPos());
-
-	if (!units) return FALSE;
-
-	for (sint32 i=0; i<units->Num(); i++) {
-		if (units->Access(i).IsAsleep() || units->Access(i).IsEntrenched()) {
-			hasSleepingOrFortified = TRUE;
-			break;
+	if (units)
+    {
+	    for (sint32 i = 0; i <units->Num(); ++i) 
+        {
+            Unit    u = units->Access(i);
+            if (u.IsValid() && (u.IsAsleep() || u.IsEntrenched()))
+            {
+                return true;
+            }
 		}
 	}
 	
-	return hasSleepingOrFortified;
+	return false;
 }
 
 sint32 CityData::CityGrowthCoefficient()
@@ -7859,7 +7861,7 @@ void CityData::AddImprovement(sint32 type)
 //EMOD Visible Buildings 4-1-2006
 	CityInfluenceIterator it(point, m_sizeIndex); 
 	for(it.Start(); !it.End(); it.Next()) {
-		Cell *cell = g_theWorld->GetCell(it.Pos());
+//		Cell *cell = g_theWorld->GetCell(it.Pos());
 		if(point == it.Pos())
 				continue;
 		sint32 s;
@@ -8266,7 +8268,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 //EMOD these three EMODs moved inside the less than 0 to prevent multiplication of percent to zero values
 //EMOD Civilization and Citystyle bonuses
 		//gold += ceil(gold * g_player[m_owner]->GetCivilisation()->GetCommercePercent());
-
+        
 		gold += ceil(gold * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetCommercePercent());
 
 //Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
@@ -9712,7 +9714,6 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 					// Checks if ANY city has a building that conflicts 
 					// with another (mosques, churches, synagogues, etc);
 					// For State Religion Building
-					sint32 numCities = 0;
 					sint32 c;
 					for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
 						Unit aCity = g_player[m_owner]->m_all_cities->Access(c);

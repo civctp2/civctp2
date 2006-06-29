@@ -73,8 +73,8 @@ TerrainImprovementData::TerrainImprovementData(ID id,
 	m_transformType     (extraData),
 	m_materialCost      (terrainutil_GetProductionCost(type, pnt, extraData)),
     m_isComplete        (false),
-    m_isBuilding        (false),
-	m_materialBonus     (terrainutil_GetBonusProductionExport(type, pnt, extraData)) //EMOD 4-5-2006
+    m_isBuilding        (false)
+//	m_materialBonus     (terrainutil_GetBonusProductionExport(type, pnt, extraData)), //EMOD 4-5-2006
 {
 }
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Trade utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -43,7 +43,7 @@
 
 extern TradeAstar g_theTradeAstar; 
 
-sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 resource)
+sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sint32 resource)
 {
 	Assert(destination.IsValid());
 	if(!destination.IsValid()) return 0;
@@ -54,14 +54,17 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 res
 
 
 	double baseValue = g_theWorld->GetGoodValue(resource);
-	double distance = static_cast<double>(destination.CD()->GetDistanceToGood(resource));
+	double distance = static_cast<double>(destination.GetCityData()->GetDistanceToGood(resource));
 	sint32 totalValue = sint32(baseValue * distance);
 	
 	
-	
-	bool trade_pact = 
-		AgreementMatrix::s_agreements.HasAgreement(owner, destination.GetOwner(), PROPOSAL_TREATY_TRADE_PACT);
-	if (trade_pact) {
+    PLAYER_INDEX const  tradePartner    = destination.GetOwner();
+
+    if (    (owner != tradePartner)
+         && AgreementMatrix::s_agreements.HasAgreement
+                (owner, tradePartner, PROPOSAL_TREATY_TRADE_PACT)
+       )
+    {
 		totalValue = (sint32) (totalValue * 1.05);
 	}
 
@@ -70,51 +73,24 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 res
 
 sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 {
-	
-	Path path;
-	float cost;
+	Path    path;
+	float   cost;
 
-	sint32 r = g_theTradeAstar.FindPath(source.GetOwner(), source.RetPos(),
-										destination.RetPos(), path,
-										cost, FALSE);
+	if (g_theTradeAstar.FindPath
+            (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
+       )
+    {
+        return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
+    }
 
-	
-
-	
-	cost = tradeutil_GetNetTradeCosts(cost);
-	
-	if(cost < 1)
-		cost = 1;
-
-	return static_cast<sint32>(cost);
+	return DISTANCE_UNKNOWN;
 }
 
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 {
-	Path path;
-	double cost;
-
-#if 0
+	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
+                  static_cast<double>
+                    (source.RetPos().NormalizedDistance(destination.RetPos()));
 	
-	
-	
-	
-	sint32 r = g_theTradeAstar.FindPath(source.GetOwner(), source.RetPos(),
-										destination.RetPos(), path,
-										cost, FALSE);
-#endif
-
-	cost = static_cast<double>(source.RetPos().NormalizedDistance(destination.RetPos()));
-
-	
-	cost *= g_theWorld->CalcTerrainFreightCost(source.RetPos());
-
-	
-	
-	
-	cost = tradeutil_GetNetTradeCosts(cost);
-	if(cost < 1)
-		cost = 1;
-
-	return static_cast<sint32>(cost);
+    return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
