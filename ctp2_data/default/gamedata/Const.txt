@@ -21,57 +21,58 @@
 # - Added MIN_TURNS_BETWEEN_REVOLT
 # - Set back CARAVAN_COEF devision by 10 is now done inside the executable.
 #   - May 7th 2005 Martin Gühmann
+# - Implemented Apolyton Pack Values 6-27-2006
 #
 #----------------------------------------------------------------------------
 
 # all numbers are integers ranging from 0 to 100
 
-PERCENT_LAND 40 # how much of the world is land
-PERCENT_CONTINENT 50 # how much of the world tends toward big continents verses small islands
-PERCENT_HOMOGENOUS 55  ## how "clumpy" the land terrain is
+PERCENT_LAND 45 # how much of the world is land (WW from 40)
+PERCENT_CONTINENT 70 # how much of the world tends toward big continents verses small islands (WW from 50)
+PERCENT_HOMOGENOUS 5  ## how "clumpy" the land terrain is (WW from 55)
 
 # the meridians are normalize on the map at 0 to 100 - 0 is all the way north
 # and 100 is all the way south - 50 is the middle  - this works on a map of
 # any size
 
-MERIDIANA 5  # north of this is north pole
+MERIDIANA 1   # north of this is north pole (WW from 5)
 MERIDIANB 25  # north of this is north mild
-MERIDIANC 35  # north of this is north deasert
+MERIDIANC 35  # north of this is north desert
 MERIDIAND 60  # north of this is the equatioral region
-MERIDIANE 70  # north of this is south desert
-MERIDIANF 95  # north of this is the south mild, south is the south pole
+MERIDIANE 75  # north of this is south desert (WW from 70)
+MERIDIANF 99  # north of this is the south mild, south is the south pole (WW from 95)
 
-# the humidity controls the ditrabution of forest, jungle, swamp, grass, plains, desert
-#	tundra and glacier
-# A bump map is randomly generated.  The bumps range from 0 to 100.  High bumps are
-#  wet terrain, low vallies are dry terrain. 
-# What terrain is used depends on what meridian you are in
+# The humidity controls the distribution of forest, jungle, swamp, grass, plains, desert
+# tundra and glacier.
+# A bump map is randomly generated. The bumps range from 0 to 100. High bumps are
+# wet terrain, low bumps are dry terrain. 
+# What terrain is used depends on what meridian you are in.
 
-# The height value have a gausian distrabution, with middle values being the most
-# common.  The HLEVEL values should be adjusted to take into acount the intergral 
+# The height values have a gausian distribution, with middle values being the most
+# common. The HLEVEL values should be adjusted to take into account the integral 
 # of the gaussian. 
 
 # HLEVELA must be greater the HLEVELB, HLEVELB must be greater then HLEVELC etc
 
-HLEVELA 85  # above this is the wet terrain
+HLEVELA 80  # above this is the wet terrain (WW from 85)
 HLEVELB 60	# above this is sort of wet terrain
 HLEVELC 40	# below is ??? middle terrain
-HLEVELD 15  # below this is dry terrain
+HLEVELD 20  # below this is dry terrain (WW from 15)
 
-# The wet/dry slider on the custommap screen uses these values.
+# The wet/dry slider on the custom map screen uses these values.
 # The sum of all the wet values together w/ the swamp wet value will add to 100.
 # Similarly for the dry values.  Actually, swamp = 100 - (forest + grass + plains + desert).
 
-FORESTWET 40
-GRASSWET 30
-PLAINSWET 20
-DESERTWET 0
+FORESTWET 19	#WW from 40
+GRASSWET  50	#WW from 30
+PLAINSWET 30	#WW from 20
+DESERTWET  0
 # This leaves 10 for swamp.
 
-FORESTDRY 15
-GRASSDRY 30
-PLAINSDRY 50
-DESERTDRY 5
+FORESTDRY 19	#WW from 15
+GRASSDRY  50	#WW from 30
+PLAINSDRY 30	#WW from 50
+DESERTDRY  1	#WW from  5
 # This leaves 0 for swamp.
 
 # The warm/cold slider on the custommap screen uses these values.
@@ -95,109 +96,109 @@ RIVERCELLWIDTHMANYGOODS 5
 RIVERCELLHEIGHTMANYGOODS 5
 
 
-PERCENT_MOUNTAIN 5  # percetage of land with mountaint on it - this is a target only
-MOUNTAIN_CELL 5     # length of a side of a cell - one cell contains at most 1 mountain chain. 
+PERCENT_MOUNTAIN 7  # percetage of land with mountain on it - this is a target only (WW from 5)
+MOUNTAIN_CELL 4     # length of a side of a cell - one cell contains at most 1 mountain chain. (WW from 5) 
 
-PERCENT_HILLS 5     # percent of land with hills on it
-MOUNTAIN_SPREAD 25   # chance that the mountain chain spreads out
-MOUNTAIN_LENGTH 25   # average length of a mountain chain
+PERCENT_HILLS 13     # percent of land with hills on it (WW from 5)
+MOUNTAIN_SPREAD 60   # chance that the mountain chain spreads out (WW from 25)
+MOUNTAIN_LENGTH 8   # average length of a mountain chain (WW from 25)
 
-GLACIER_EXTENT 3	# number of tiles the glacier extends - should be normalized
+GLACIER_EXTENT 1	# number of tiles the glacier extends - should be normalized
 PERCENT_VOLCANO 1	# percent of deep sea floor with volcanos
 PERCENT_TRENCH 4	# percent chance that a trench is seeded - then it spreads automatically
 
-# Swamps are placed at humidity levels above what forest works out to.
+# Swamps are placed at humidity levels above what grass? works out to.
 PERCENT_FOREST 20   
-PERCENT_GRASS  40   
-PERCENT_PLAINS 25   
-PERCENT_DESERT 10   
-PERCENT_WHITE 20
-PERCENT_BROWN 20
+PERCENT_GRASS  90   #WW from 40
+PERCENT_PLAINS 35  	#WW from 25 
+PERCENT_DESERT 1   
+PERCENT_WHITE 10	#WW from 20
+PERCENT_BROWN 10	#WW from 20
 TEMPERATURE_RANGE_ADJUST 60 # Adjust the temperature height map by negative this amount at the
 		                    # poles, positive at the equator, linear scale in between
 
 NICE_RADIUS 10	# radius of effect when calculating niceness of player placement
 				# the mininum start distance between players is 2 * NICE_RADIUS
 
-PERCENT_RIVER 5 # percent of land with a river on it
-RIVER_LENGTH 15 # average river length
-RIVER_CELL_WIDTH 5   # Size of cells to be searched for river starts
-RIVER_CELL_HEIGHT 5  # (highest point in each cell)
+PERCENT_RIVER 25 # percent of land with a river on it (WW from 5)
+RIVER_LENGTH 15 # average river length (WW from 15) 
+RIVER_CELL_WIDTH 3   # Size of cells to be searched for river starts (WW from 5)
+RIVER_CELL_HEIGHT 4  # (highest point in each cell) (WW from 5)
 
-RICHNESS 50 # density of special goods in the world
+RICHNESS 65 # density of special goods in the world (WW from 50)
 
-CHANCE_LOST_AT_SEA 30 # chance of a unit being lost at sea
-VETERAN_COEF 50  #percent improvement in attack and defense of vetern units
-REVOLUTION_LEVEL 60
+CHANCE_LOST_AT_SEA 30 	# chance of a unit being lost at sea  (unused)
+VETERAN_COEF 50  		#percent improvement in attack and defense of vetern units
+REVOLUTION_LEVEL 65		# WW from 60
 DISCOVERIES_POLLUTION_SIZE_MODIFIER 0.5
 DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER 0.01
 AVERAGE_POLLUTION_TURNS	5
-POPULATION_PRODUCES_POLLUTION_THRESHOLD		16
-PRODUCTION_PRODUCES_POLLUTION_THRESHOLD		200
+POPULATION_PRODUCES_POLLUTION_THRESHOLD		16	# WW from 16 unused unless missing from diffdb text?
+PRODUCTION_PRODUCES_POLLUTION_THRESHOLD		300	# WW from 200 unused unless missing from diffdb text?
 
 MAX_EMPIRE_DIST_COST  10.0  # max distance unhappyness
-HAPPINESS_LAUNCH_COST 0.0 # cost of going into space or landing for calculation happiness
+HAPPINESS_LAUNCH_COST 0.0 # cost of going into space or landing for calculation happiness  (unused)
 
-UNIT_WORKDAY 0.15 # slider to work
-BASE_WORKDAY 1.0 # work per person when slider is zero
-UNIT_WAGES 1.0 # what does 1 notch mean
-BASE_WAGES 4.0 # gold per person when slider is zero
-UNIT_RATIONS 3.0 # what does 1 notch mean
-BASE_RATIONS 12.0 # food per person time POP_HUNGER when slider is zero
+UNIT_WORKDAY  0.25 # slider to work
+BASE_WORKDAY  1.0 # work per person when slider is zero
+UNIT_WAGES    1.0 # what does 1 notch mean
+BASE_WAGES    4.0 # gold per person when slider is zero
+UNIT_RATIONS  3.0 # what does 1 notch mean
+BASE_RATIONS  12.0 # food per person time POP_HUNGER when slider is zero
 
-CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY 25 # what percent of the sheild store is lost it the current item is changed
+CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY 25 # what percent of the shields stored is lost if the current item is changed
 
-TARIFF_REDUCTION	1		# how much to reduce tariffs by as part of a diplomatic request/agreement
-REVOLT_INFLUENCE_DISTANCE	6	# city's revolt influence radius
-PACT_CAPTURE_CITY_EXPIRES	10	# number of rounds before this agreement expires
+TARIFF_REDUCTION			1 # how much to reduce tariffs by as part of a diplomatic request/agreement
+REVOLT_INFLUENCE_DISTANCE		6	# city's revolt influence radius
+PACT_CAPTURE_CITY_EXPIRES		10	# number of rounds before this agreement expires
 # REWARD_CAPTURE_CITY_EXPIRES	10	# number of rounds before this agreement expires
-CEASE_FIRE_EXPIRES	10		# number of rounds before this agreement expires
-SHORT_CEASE_FIRE_EXPIRES	5	# number of rounds before any other agreement expires
-END_OF_GAME_YEAR_EARLY_WARNING	2200
-END_OF_GAME_YEAR				2300
+CEASE_FIRE_EXPIRES			10	# number of rounds before this agreement expires
+SHORT_CEASE_FIRE_EXPIRES		5	# number of rounds before any other agreement expires
+END_OF_GAME_YEAR_EARLY_WARNING	2100	# WW from 2200
+END_OF_GAME_YEAR			2200	# WW from 2300
 CAPTURE_CITY_FOR_GOLD_MULTIPLIER	100	# amount to multiply gold reward by
-PACT_END_POLLUTION_EXPIRES	50	# number of rounds before this agreement expires
+PACT_END_POLLUTION_EXPIRES		50	# number of rounds before this agreement expires
 LEAVE_OUR_LANDS_EXPIRES		10	# number of rounds before this agreement expires
-REDUCE_POLLUTION_EXPIRES	10	# number of rounds before this agreement expires
+REDUCE_POLLUTION_EXPIRES		10	# number of rounds before this agreement expires
 # DESTROY_ENEMY_FOR_REWARD_EXPIRES 10	# number of rounds before this agreement expires
-PATIENCE_LOST_PER_REQUEST	3	#
+PATIENCE_LOST_PER_REQUEST		3	#
 PATIENCE_REGAINED_PER_ROUND	1
 REGAIN_PATIENCE_PROBABILITY	80
 PATIENCE_LOST_THRESHOLD		5
 
 
 
-AI_GOAL_TIME_SLICE 25	# time in milliseconds for an AI frame
-AI_MAX_TIME_SLICE  250  # (in milliseconds)if the ai exceeds this time its turn is ended
-AI_TOTAL_TIME_SLICE 3000 # (in milliseconds) if the total time in time in the ai player  exceeds this its turn is ended
+AI_GOAL_TIME_SLICE 75	# time in milliseconds for an AI frame (WW from 25)
+AI_MAX_TIME_SLICE  250  # (in milliseconds)if the ai exceeds this time its turn is ended (WW from 250)
+AI_TOTAL_TIME_SLICE 4000 # (in milliseconds) if the total time in time in the ai player  exceeds this its turn is ended (WW from 3000)
 
-ENTRENCHMENT_BONUS 0.5  # defense bonus for being entrenched
-PARADROP_DISTANCE 20 # how far away can paratroopers drop?
-PARADROP_SUCCESS_PERCENT 100 # a miss results in a drop to a neighboring square
+ENTRENCHMENT_BONUS 		0.5	# defense bonus for being entrenched
+PARADROP_DISTANCE 		20	# how far away can paratroopers drop? (WW from 20)
+PARADROP_SUCCESS_PERCENT 	75	# a miss results in a drop to a neighboring square (WW from 100)
 
-ELITE_SPY_BONUS 0.0 # how much more likely elite spies are to succeed.
-CITY_SECOND_ATTEMPT_SPY_BONUS 0.5 # how much less likely a spy is to succeed on a second attempt.
-ASSASINATION_HAPPINESS_EFFECT -5 # unhappiness caused when a ruler is assasinated
+ELITE_SPY_BONUS 			0.25 # how much more likely elite spies are to succeed. (WW from 0)(unused?)
+CITY_SECOND_ATTEMPT_SPY_BONUS 	0.5 # how much less likely a spy is to succeed on a second attempt.
+ASSASINATION_HAPPINESS_EFFECT 	-5  # unhappiness caused when a ruler is assasinated
 ASSASINATION_HAPPINESS_EFFECT_TIMER 5 # how long the above lasts
-SPIED_UPON_WARINESS_TIMER 5 # How many turns a spied upon city gets increased wariness
+SPIED_UPON_WARINESS_TIMER 		5   # How many turns a spied upon city gets increased wariness
 
-MAX_PARTY_COST 500      # most than can be spent on a party
-MAX_PARTY_CHANCE 0.5    # the chance of hearing gossip at a party where the
-		                # max gold was spent.  Less gold decreases proportionally.
-GOSSIP_MAP_RADIUS 10    # When a map is revealed through gossip, a circle of
-		                # this radius appears
-HEAR_GOSSIP_CHANCE 0.02 # How likely a diplomat next to a capitol is to hear gossip
-FRANCHISE_EFFECT 0.1    # How much production a franchise steals
-TURNS_TO_SUE_FRANCHISE 0 # How many turns a lawsuit takes to expel a franchise
+MAX_PARTY_COST 		500    # most than can be spent on a party
+MAX_PARTY_CHANCE 		0.5    # the chance of hearing gossip at a party where the (unused?)
+		                	# max gold was spent.  Less gold decreases proportionally.
+GOSSIP_MAP_RADIUS 		10    	# When a map is revealed through gossip, a circle of (unused?)
+		                	# this radius appears
+HEAR_GOSSIP_CHANCE 		0.02 	# How likely a diplomat next to a capitol is to hear gossip
+FRANCHISE_EFFECT 		0.1    # How much production a franchise steals
+TURNS_TO_SUE_FRANCHISE 	0 	# How many turns a lawsuit takes to expel a franchise
 
-SLAVER_ELITE_CHANCE 0.0 # Chance of a slaver becoming elite in a successful raid
-ELITE_SLAVER_BONUS 0.0 # Bonus to success percentage an elite slaver receives
+SLAVER_ELITE_CHANCE 0.0 # Chance of a slaver becoming elite in a successful raid (unused?)
+ELITE_SLAVER_BONUS 0.0 # Bonus to success percentage an elite slaver receives (unused?)
 
-ABOLITIONIST_ELITE_CHANCE 0.0 # chance of an abolitionist becoming elite
-ELITE_ABOLITIONIST_BONUS 0.0 # Bonus an elite abolitionist receives
-WATCHFUL_CITY_SUCCESS_MODIFIER 0.5 # Multiply an abolitionist or slaver's success chance by this
-WATCHFUL_CITY_DEATH_MODIFIER 1.0 # Multiply death chance by this
-WATCHFUL_CITY_TURNS 5 # how long a city remains watchful
+ABOLITIONIST_ELITE_CHANCE 		0.25 # chance of an abolitionist becoming elite (WW from 0) (unused?)
+ELITE_ABOLITIONIST_BONUS 		0.15 # Bonus an elite abolitionist receives (WW from 0) (unused?)
+WATCHFUL_CITY_SUCCESS_MODIFIER 	0.5  # Multiply an abolitionist or slaver's success chance by this
+WATCHFUL_CITY_DEATH_MODIFIER 	1.0  # Multiply death chance by this
+WATCHFUL_CITY_TURNS 		5    # how long a city remains watchful
 
 BIO_INFECTION_TURNS 5
 NANO_INFECTION_TURNS 5
@@ -205,17 +206,17 @@ BIO_INFECTION_SPREAD_CHANCE 0.30
 NANO_INFECTION_SPREAD_CHANCE 0.20
 PLAGUE_KILL_PERCENTAGE 0.20
 
-ELITE_TERRORIST_BONUS 0.0
-TERRORIST_ELITE_CHANCE 0.0
+ELITE_TERRORIST_BONUS 0.0		# (unused?)
+TERRORIST_ELITE_CHANCE 0.0		# (unused?)
 NUKE_POPULATION_PERCENTAGE 0.75
 
 SPECIAL_ACTION_MOVE_COST 100.0
 
-CLERIC_CONVERSION_FACTOR 0.2        # cities converted by clerics send this 
-									# much of their gold each turn
-TELEVANGELIST_CONVERSION_FACTOR 0.4 # like the above, but for televangelists 
-									# and cities with televisions (cities
-									# without TV fall back to the cleric level)
+CLERIC_CONVERSION_FACTOR 0.2        	# cities converted by clerics send this 
+					 	# much of their gold each turn
+TELEVANGELIST_CONVERSION_FACTOR 0.4 	# like the above, but for televangelists 
+						# and cities with televisions (cities
+						# without TV fall back to the cleric level)
 REFORMATION_CHANCE 1.0
 REFORMATION_DEATH_CHANCE 0.0
 REFORMATION_HAPPINESS_TIME 4
@@ -232,51 +233,52 @@ SOOTHSAY_HAPPY_AMOUNT -5
 RUINS_BOX_WIDTH 6
 RUINS_BOX_HEIGHT 6
 RUINS_CHANCE_PER_BOX 1.0
-MAX_RUINS_GOLD 100
-MAX_RUINS_ADVANCE 10
-MAX_RUINS_UNIT 30
+MAX_RUINS_GOLD 100		# unused unless missing from risks text?
+MAX_RUINS_ADVANCE 10	# unused unless missing from risks text?
+MAX_RUINS_UNIT 30		# unused unless missing from risks text?
 
-UNIT_RUSH_MODIFIER 3
-IMPROVEMENT_RUSH_MODIFIER 1
-WONDER_RUSH_MODIFIER 5
-BUILDING_PRODUCTION_TO_VALUE_MODIFIER 0.5
+UNIT_RUSH_MODIFIER 3	 # unused unless missing from govern text?
+IMPROVEMENT_RUSH_MODIFIER 1	 # unused unless missing from govern text?
+WONDER_RUSH_MODIFIER 5		 # unused unless missing from govern text?
+BUILDING_PRODUCTION_TO_VALUE_MODIFIER 0.5 # unused unless missing from govern text?
 
-MONOPOLY_THRESHOLD	50		# amount goods a particular city has to have to corner the market
+MONOPOLY_THRESHOLD	50		# amount goods a particular city has to have to corner the market (unused)
 POPULATION_POLLUTION_WARNING_THRESHOLD	10	# population pollution warning message threshold
 INDUSTRIAL_POLLUTION_WARNING_THRESHOLD	10	# industrial pollution warning message threshold
 VERY_HAPPY_THRESHOLD	85			# threshold at which a city is considered "very happy"
-CITY_GROWTH_COEFFICIENT 175          # Amount of food per citizen required to grow a city
-RIOT_LEVEL              73
-POWER_POINTS_TO_MATERIALS 1  # 1 power point can be converted to x materials
+CITY_GROWTH_COEFFICIENT 175          # Amount of food per citizen required to grow a city # (unused)
+RIOT_LEVEL              65
+POWER_POINTS_TO_MATERIALS 1  # 1 power point can be converted to x materials  (unused)
 MAX_AIRLIFT_STACK_SIZE 2
 GOLD_FROM_PIRACY 30
 NO_PIRACY_EXPIRES	5
-SPACE_LAUNCH_COST 1000
-SPACE_LAND_COST 1000
+SPACE_LAUNCH_COST 1000 # (unused)
+SPACE_LAND_COST 1000 # (unused)
 
-WORMHOLE_ORBIT_HEIGHT_PERCENTAGE 10
-WORMHOLE_SPEED 10
-WORMHOLE_RETURN_TIME 5
-WORMHOLE_VISIBLE_TO_ALL_TURNS 5
+WORMHOLE_ORBIT_HEIGHT_PERCENTAGE 10 # (unused)
+WORMHOLE_SPEED 10 			# (unused)
+WORMHOLE_RETURN_TIME 5 		# (unused)
+WORMHOLE_VISIBLE_TO_ALL_TURNS 5 	# (unused)
 MAX_GOVERNMENT_CHANGE_TURNS 4
 
-POLLUTION_FORCES_ANARCHY 1500
-FOOD_TO_POLLUTION_COEF 1.0			# pollution to food ratio produced by food vats
+POLLUTION_FORCES_ANARCHY 1500	# WW from 1500
+FOOD_TO_POLLUTION_COEF 1.0		# pollution to food ratio produced by food vats
 
 
 EMANCIPATION_UNHAPPINESS_TURNS 5
 EMANCIPATION_UNHAPPINESS_AMOUNT -3
 
-CAPTURE_CITY_ADVANCE_CHANCE 0.5 # chance of gaining an advance when capturing a city (assuming they have advances you don't)
+CAPTURE_CITY_ADVANCE_CHANCE 0.5 	# chance of gaining an advance when capturing a city (assuming they have
+					# advances you don't) (unused?)
 
-CITY_HEAL_RATE 1.0
-NORMAL_HEAL_RATE 0.1
+CITY_HEAL_RATE 1.0			# WW from 1.0
+NORMAL_HEAL_RATE 0.1		# WW from 0.1
 
-LOCAL_POLLUTION_LEVEL 400
-LOCAL_POLLUTION_CHANCE 0.0005
+LOCAL_POLLUTION_LEVEL 500		# WW from 400 used for calculating dead tiles?
+LOCAL_POLLUTION_CHANCE 0.0005	# WW from .0005 used for calculating dead tiles?
 
-ASSAULT_DESTROY_BUILDING_CHANCE 0.1  # chance of an assault on a city destroying a building
-BOMBARD_DESTROY_BUILDING_CHANCE 0.1  # chance of a bombardment on a city destroying a building
+ASSAULT_DESTROY_BUILDING_CHANCE 1.0  # chance of an assault on a city destroying a building (WW from .1)
+BOMBARD_DESTROY_BUILDING_CHANCE 0.4  # chance of a bombardment on a city destroying a building (WW from .1)
 ADVANCE_CHOICES_MIN 4
 ADVANCE_CHOICES_MAX 6
 
@@ -286,7 +288,7 @@ ATTACK_CONVERTER_UNHAPPINESS_AMOUNT -3.0
 MIN_START_DISTANCE_COEFFICIENT 0.45
 MAX_START_DISTANCE_COEFFICIENT 0.6
 MAX_SAME_TILES 4
-COMBAT_VETERAN_CHANCE 0.1
+COMBAT_VETERAN_CHANCE 0.1  	# WW from .1
 
 STOP_TRADE_ROUNDS 5
 LEAVE_OUR_LANDS_ROUNDS 3
@@ -295,24 +297,24 @@ CAPTURE_CITY_ROUNDS 5
 END_POLLUTION_ROUNDS 10
 ATTACK_ENEMY_ROUNDS 10
 
-MIN_CONTINENT_START_SIZE 10
+MIN_CONTINENT_START_SIZE 10  	# WW from 10
 
 BOMBARD_KILL_POP_CHANCE 0.1
 ASSAULT_KILL_POP_CHANCE 0.4
 CAPTURE_KILL_POP_CHANCE 1.0
 
-SCALED_POP_ANCIENT		10000
-SCALED_POP_RENAISSANCE		10000
-SCALED_POP_MODERN		100000
-SCALED_POP_GENETIC		1000000
-SCALED_POP_DIAMOND		5000000
+SCALED_POP_ANCIENT		10000 # (unused)
+SCALED_POP_RENAISSANCE	10000 # (unused)
+SCALED_POP_MODERN		100000 # (unused)
+SCALED_POP_GENETIC		1000000 # (unused)
+SCALED_POP_DIAMOND		5000000 # (unused)
 
-PIRACY_KILLS_TRADER_CHANCE 80
+PIRACY_KILLS_TRADER_CHANCE 80 # (unused)
 UPRISING_CHANCE_PER_UNGUARDED_SLAVE 5
-MAX_DISBAND_SIZE 3
-MAX_REQUESTS_PER_PLAYER_PER_TURN 3
-SLAVES_PER_MILITARY_UNIT 3
-MIN_ABSOLUTE_START_DISTANCE 5
+MAX_DISBAND_SIZE 			3
+MAX_REQUESTS_PER_PLAYER_PER_TURN 4 # WW from 3
+SLAVES_PER_MILITARY_UNIT 		2 # WW from 3
+MIN_ABSOLUTE_START_DISTANCE 	5
 
 #
 # These map size settings must all be defined,
@@ -321,11 +323,11 @@ MIN_ABSOLUTE_START_DISTANCE 5
 MAP_SIZE_SMALL		26	52	2
 MAP_SIZE_MEDIUM		48	96	2
 MAP_SIZE_LARGE		64	128	2
-MAP_SIZE_GIGANTIC	70	140	2
+MAP_SIZE_GIGANTIC		70	140	2
 
-RAIL_LAUNCH_POLLUTION 50
-SPACE_FUEL_COST 5
-NON_SPACE_FUEL_COST 100
+RAIL_LAUNCH_POLLUTION 50 	# (unused)
+SPACE_FUEL_COST 5 		# (unused)
+NON_SPACE_FUEL_COST 100 	# (unused)
 
 
 #
@@ -343,25 +345,25 @@ RELATIVE_AI_SCIENCE_CHEAT_COEF 1.0
 
 NUKE_KILL_TILES 5
 
-INCITE_REVOLUTION_GOLD_COEFFICIENT 100.0
-INCITE_REVOLUTION_CAPITOL_PENALTY  5000.0
+INCITE_REVOLUTION_GOLD_COEFFICIENT 100
+INCITE_REVOLUTION_CAPITOL_PENALTY  5000
 
 INCITE_UPRISING_GOLD_COEFFICIENT 25.0
 INCITE_UPRISING_CAPITOL_PENALTY 50.0
 
 BIO_INFECTION_UNHAPPINESS -5
 
-MIN_ECO_PACT_VIOLATION_LEVEL 200
+MIN_ECO_PACT_VIOLATION_LEVEL 300
 NANO_INFECTION_TERRORIST_DEATH_CHANCE 0.25
 BIO_INFECTION_TERRORIST_DEATH_CHANCE 0.25
-FLOOD_CHANGES_COAST_TO_WATER_CHANCE 0.5
+FLOOD_CHANGES_COAST_TO_WATER_CHANCE 0.1
 AI_CHEAT_ECO_PACT_MIN 10
 AI_CHEAT_ECO_PACT_MAX 50
 
-MAX_ABSOLUTE_GROWTH_RATE 2500
-TRADE_DISTANCE_COEFFICIENT 1
+MAX_ABSOLUTE_GROWTH_RATE 2500 # unused unless missing from citysize texts?
+TRADE_DISTANCE_COEFFICIENT 1.0
 MIN_LIKE_TILES_FOR_GOOD 1
-MIN_GOOD_VALUE 0.01
+MIN_GOOD_VALUE 0.01		# WW from .01
 MAX_GOOD_VALUE 0.05
 
 PIRACY_WASTE_COEFFICIENT 0.8
@@ -373,7 +375,7 @@ BIO_INFECTION_PRODUCTION_COEF 0.2
 NANO_BUILDING_KILL_PERCENTAGE 0.3
 BASE_STARVATION_PROTECTION 3
 
-CARAVAN_COEF 0.04
+CARAVAN_COEF 0.03	# WW from .04
 
 POLLUTION_CAUSED_BY_NUKE 1000000
 

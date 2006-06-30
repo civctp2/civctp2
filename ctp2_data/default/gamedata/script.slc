@@ -27,6 +27,11 @@
 // - Added quit button to the hotseat interturn pop-up.
 // - Re-implemented messagebox '001TreatyToExpire' to warn when dip agreements
 //   are about to expire. See Diplomat::NextDiplomaticState. 
+// - Add 999ATTACKWARNING that notifies the human that war may be started
+// - Added 999CITYCAPTUREOPTIONs allows player to raze, liberate, or occupy a city
+// - Changed 128CivStartedWar from messagebox to alertbox
+// - Added but not implented 999CivStartedWarWithUs using an unused string
+//   that notifis the player that a civ declared war on him
 //
 //----------------------------------------------------------------------------
 
@@ -1866,7 +1871,7 @@ messagebox '127CapitalCityCapturedVictim' {
 	MessageType("MILITARY");
 }
 
-messagebox '128CivStartedWar' {
+alertbox  '128CivStartedWar' {
 	Text(ID_CIV_STARTED_WAR) ;
 	MessageType("MILITARY");
 }
@@ -2944,13 +2949,16 @@ alertBox '999ATTACKWARNING' {
 	}
 
 	Button(ID_BUTTON_YES) {
-		//BreakAlliance(player[0]);
 		DeclareWar(g.player, player[0]);
 		AddOrder(unit[0], location[0]);
 		Kill();
 	}
 }
 
+alertbox  '999CivStartedWarWithUs' {
+	Text(ID_POPUP_DECLARE_WAR_ANNC) ;
+	MessageType("MILITARY");
+}
 
 
 #include "feats.slc"

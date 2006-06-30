@@ -151,6 +151,7 @@
 // - added AddGoodToCity function
 // - ExcludedbyBuilding and ExcludedbyWonder added to Units and buildings
 // - Added PrerequisiteWonder to Units and buildings
+// - Added NeedsFeatToBuild to Units
 //
 //----------------------------------------------------------------------------
 
@@ -5955,7 +5956,19 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 	}
 
 	//End Resources Code
-
+	// Added by E - Compares NeedsFeatToBuild to the FeatTracker	6-27-2006	
+	if(rec->GetNumNeedsFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
+			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(f))) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return FALSE;
+	}
 
 	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, TRUE, m_home_city.m_id, rec->GetIndex()))
 		return FALSE;
